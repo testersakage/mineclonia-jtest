@@ -492,6 +492,13 @@ minetest.register_craft({
 	recipe = {"mcl_dye:yellow", "mcl_dye:red"},
 })
 
+--[[ Uncomment when crafting blue dye back into lapis is removed.
+minetest.register_craft({
+	type = "shapeless",
+	output = "mcl_dye:blue",
+	recipe = {{"mcl_flowers:cornflower"}},
+})]]
+
 -- Dye creation
 minetest.register_craft({
 	output = "mcl_dye:yellow",
@@ -558,6 +565,13 @@ minetest.register_craft({
 	output = "mcl_dye:red 2",
 	recipe = {{"mcl_flowers:rose_bush"}},
 })
+
+--[[Uncomment when crafting white dye back into bonemeal is removed
+minetest.register_craft({
+	output = "mcl_dye:white",
+	recipe = {{"mcl_flowers:lily_of_the_valley"}},
+})]]
+
 minetest.register_craft({
 	output = "mcl_dye:white",
 	recipe = {{"mcl_flowers:lily_of_the_valley"}},
