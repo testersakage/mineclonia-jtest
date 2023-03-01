@@ -154,7 +154,7 @@ local function on_place_bucket(itemstack, user, pointed_thing)
 		local node = minetest.get_node(pos)
 		local node_def = minetest.registered_nodes[node.name]
 
-		if node_def and node_def.buildable_to or minetest.get_item_group(node.name, "cauldron") == 1 then
+		if node_def and node_def.buildable_to or minetest.get_item_group(node.name, "cauldron") == 1 or minetest.get_node(pos).name == "mcl_mangrove:mangrove_roots" then
 			local result, take_bucket = get_extra_check(bucket_def.extra_check, pos, user)
 			if result then
 				local node_place = get_node_place(bucket_def.source_place, pos)
