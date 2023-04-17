@@ -208,10 +208,10 @@ minetest.register_abm({
 	neighbors = {"group:water"},
 	action = function(pos, node)
 		local harden_to = minetest.registered_nodes[node.name]._mcl_colorblocks_harden_to
-               -- It should be impossible for harden_to to be nil, but a Minetest bug might call
-               -- the ABM on the new concrete node, which isn't part of this ABM!
-        if harden_to then
-            node.name = harden_to
+			   -- It should be impossible for harden_to to be nil, but a Minetest bug might call
+			   -- the ABM on the new concrete node, which isn't part of this ABM!
+		if harden_to then
+			node.name = harden_to
 			--Fix "float" group not lowering concrete into the water by 1.
 			local water_pos = { x = pos.x, y = pos.y-1, z = pos.z }
 			local water_node = minetest.get_node(water_pos)
@@ -222,6 +222,6 @@ minetest.register_abm({
 				minetest.set_node(pos, {name = "air"})
 				minetest.check_for_falling(pos) -- Update C. Powder that stacked above so they fall down after setting air.
 			end
-        end
+		end
 	end,
 })

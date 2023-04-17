@@ -97,8 +97,8 @@ end
 function mesecon.rule2bit(findrule, allrules)
 	--get the bit of the metarule the rule is in, or bit 1
 	if (allrules[1] and
-	    allrules[1].x) or
-	    not findrule then
+		allrules[1].x) or
+		not findrule then
 		return 1
 	end
 	for m,metarule in ipairs( allrules) do

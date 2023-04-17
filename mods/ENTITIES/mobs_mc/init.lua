@@ -79,7 +79,7 @@ function mcl_mobs:spawn_abm_check(pos, node, name)
 	-- Don't spawn monsters on mycelium
 	if (node.name == "mcl_core:mycelium" or node.name == "mcl_core:mycelium_snow") and minetest.registered_entities[name].type == "monster" then
 		return true
-    --Don't Spawn mobs on stairs, slabs, or carpets
+	--Don't Spawn mobs on stairs, slabs, or carpets
 	elseif is_forbidden_node(pos, node) or is_forbidden_node(vector.add(pos, vector.new(0, 1, 0))) then
 		return true
 	-- Spawn on opaque or liquid nodes

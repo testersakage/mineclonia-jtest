@@ -44,7 +44,7 @@ end
 -- Load the characters map (characters.txt)
 --[[ File format of characters.txt:
 It's an UTF-8 encoded text file that contains metadata for all supported characters. It contains a sequence of info
-    blocks, one for each character. Each info block is made out of 3 lines:
+	blocks, one for each character. Each info block is made out of 3 lines:
 Line 1: The literal UTF-8 encoded character
 Line 2: Name of the texture file for this character minus the “.png” suffix; found in the “textures/” sub-directory
 Line 3: Currently ignored. Previously this was for the character width in pixels

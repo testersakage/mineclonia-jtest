@@ -70,7 +70,7 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 		stand_start = 0,		stand_end = 25,
 		walk_start = 25,		walk_end = 45,
 		run_start = 45,		run_end = 85,
-        punch_start = 80,  punch_end = 100,
+		punch_start = 80,  punch_end = 100,
 	},
 	view_range = 16,
 	fear_height = 0,

@@ -232,9 +232,9 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-    hud_bars[player] = nil
-    hud_levels[player] = nil
-    caches[player] = nil
+	hud_bars[player] = nil
+	hud_levels[player] = nil
+	caches[player] = nil
 end)
 
 minetest.register_on_dieplayer(function(player)

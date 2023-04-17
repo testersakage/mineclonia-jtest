@@ -17,7 +17,7 @@ mcl_mobs.register_mob("mobs_mc:polar_bear", {
 	hp_max = 30,
 	xp_min = 1,
 	xp_max = 3,
-        breath_max = -1,
+		breath_max = -1,
 	collisionbox = {-0.7, -0.01, -0.7, 0.7, 1.39, 0.7},
 	visual = "mesh",
 	mesh = "mobs_mc_polarbear.b3d",

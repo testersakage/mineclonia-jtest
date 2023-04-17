@@ -8,14 +8,14 @@ local math = math
 local table = table
 
 hb = {
-    hudtables = {},
-    -- number of registered HUD bars
-    hudbars_count = 0,
-    -- table which records which HUD bar slots have been “registered” so far; used for automatic positioning
-    registered_slots = {},
-    settings = {},
-    -- Table which contains all players with active default HUD bars (only for internal use)
-    players = {},
+	hudtables = {},
+	-- number of registered HUD bars
+	hudbars_count = 0,
+	-- table which records which HUD bar slots have been “registered” so far; used for automatic positioning
+	registered_slots = {},
+	settings = {},
+	-- Table which contains all players with active default HUD bars (only for internal use)
+	players = {},
 }
 
 function hb.load_setting(sname, stype, defaultval, valid_values)

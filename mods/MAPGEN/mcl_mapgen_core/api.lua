@@ -7,8 +7,8 @@ local logging = minetest.settings:get_bool("mcl_logging_mapgen",false)
 
 local function roundN(n, d)
 	if type(n) ~= "number" then return n end
-    local m = 10^d
-    return math.floor(n * m + 0.5) / m
+	local m = 10^d
+	return math.floor(n * m + 0.5) / m
 end
 
 minetest.register_on_generated(function(minp, maxp, blockseed)

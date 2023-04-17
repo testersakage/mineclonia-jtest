@@ -59,25 +59,25 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 				for i = 1, 4 do
 					for c = 1, #particle_colors do
 						minetest.add_particlespawner({
-    							amount = math.floor(100 / (4 * #particle_colors)),
-    							time = 1,
-    							minpos = vector.offset(ppos, 0, -1, 0),
-    							maxpos = vector.offset(ppos, 0, 1, 0),
-    							minvel = vector.new(-1.5, 0, -1.5),
-    							maxvel = vector.new(1.5, 1.5, 1.5),
-    							minacc = vector.new(0, -0.1, 0),
-    							maxacc = vector.new(0, -1, 0),
-    							minexptime = 1,
-    							maxexptime = 3,
-    							minsize = 1,
-    							maxsize = 2,
-    							collisiondetection = true,
-    							collision_removal = true,
-    							object_collision = false,
-    							vertical = false,
-    							texture = "mcl_particles_totem" .. i .. ".png^[colorize:#" .. particle_colors[c],
-    							glow = 10,
-    						})
+								amount = math.floor(100 / (4 * #particle_colors)),
+								time = 1,
+								minpos = vector.offset(ppos, 0, -1, 0),
+								maxpos = vector.offset(ppos, 0, 1, 0),
+								minvel = vector.new(-1.5, 0, -1.5),
+								maxvel = vector.new(1.5, 1.5, 1.5),
+								minacc = vector.new(0, -0.1, 0),
+								maxacc = vector.new(0, -1, 0),
+								minexptime = 1,
+								maxexptime = 3,
+								minsize = 1,
+								maxsize = 2,
+								collisiondetection = true,
+								collision_removal = true,
+								object_collision = false,
+								vertical = false,
+								texture = "mcl_particles_totem" .. i .. ".png^[colorize:#" .. particle_colors[c],
+								glow = 10,
+							})
 					end
 				end
 

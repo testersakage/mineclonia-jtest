@@ -190,8 +190,8 @@ minetest.register_entity("mcl_experience:orb", {
 		self.object:set_acceleration(gravity)
 		local xp = tonumber(staticdata)
 		self._xp = xp
-	        size = xp_to_size(xp)
-	        self.object:set_properties({
+			size = xp_to_size(xp)
+			self.object:set_properties({
 			visual_size = {x = size, y = size},
 			glow = 14,
 		})

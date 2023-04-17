@@ -6,15 +6,15 @@ local tonumber = tonumber
 local get_connected_players = minetest.get_connected_players
 
 local mcl_hbarmor = {
-    -- HUD statbar values
-    armor = {},
-    -- Stores if player's HUD bar has been initialized so far.
-    player_active = {},
-    -- Time difference in seconds between updates to the HUD armor bar.
-    -- Increase this number for slow servers.
-    tick = 0.1,
-    -- If true, the armor bar is hidden when the player does not wear any armor
-    autohide = true,
+	-- HUD statbar values
+	armor = {},
+	-- Stores if player's HUD bar has been initialized so far.
+	player_active = {},
+	-- Time difference in seconds between updates to the HUD armor bar.
+	-- Increase this number for slow servers.
+	tick = 0.1,
+	-- If true, the armor bar is hidden when the player does not wear any armor
+	autohide = true,
 }
 
 local tick_config = minetest.settings:get("mcl_hbarmor_tick")
@@ -109,7 +109,7 @@ end)
 local main_timer = 0
 local timer = 0
 minetest.register_globalstep(function(dtime)
-    --TODO: replace this by playerglobalstep API then implemented
+	--TODO: replace this by playerglobalstep API then implemented
 	main_timer = main_timer + dtime
 	timer = timer + dtime
 	if main_timer > mcl_hbarmor.tick or timer > 4 then

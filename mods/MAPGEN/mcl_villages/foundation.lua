@@ -27,7 +27,7 @@ function settlements.terraform(settlement_info, pr)
 		for j, schem in ipairs(settlements.schematic_table) do
 			if settlement_info[i]["name"] == schem["name"] then
 				schematic_data = schem
-			        break
+					break
 			end
 		end
 		local pos = settlement_info[i]["pos"]

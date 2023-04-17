@@ -28,12 +28,12 @@ mcl_mobs.register_mob("mobs_mc:vindicator", {
 	head_eye_height = 2.2,
 	curiosity = 10,
   textures = {
-      {
-          "mobs_mc_vindicator.png",
-          "blank.png", --no hat
-          "default_tool_steelaxe.png",
-          -- TODO: Glow when attacking (mobs_mc_vindicator.png)
-      },
+	  {
+		  "mobs_mc_vindicator.png",
+		  "blank.png", --no hat
+		  "default_tool_steelaxe.png",
+		  -- TODO: Glow when attacking (mobs_mc_vindicator.png)
+	  },
   },
 	visual_size = {x=2.75, y=2.75},
 	makes_footstep_sound = true,

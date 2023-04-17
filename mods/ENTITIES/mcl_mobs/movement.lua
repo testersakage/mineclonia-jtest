@@ -694,7 +694,7 @@ function mob_class:follow_flop()
 				if dist > 3
 				and self.order ~= "stand" then
 
- 					self:set_velocity(self.follow_velocity)
+					self:set_velocity(self.follow_velocity)
 
 					if self.walk_chance ~= 0 then
 						self:set_animation( "run")

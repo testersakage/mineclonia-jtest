@@ -24,12 +24,12 @@ local rabbit = {
 	visual = "mesh",
 	mesh = "mobs_mc_rabbit.b3d",
 	textures = {
-        {"mobs_mc_rabbit_brown.png"},
-        {"mobs_mc_rabbit_gold.png"},
-        {"mobs_mc_rabbit_white.png"},
-        {"mobs_mc_rabbit_white_splotched.png"},
-        {"mobs_mc_rabbit_salt.png"},
-        {"mobs_mc_rabbit_black.png"},
+		{"mobs_mc_rabbit_brown.png"},
+		{"mobs_mc_rabbit_gold.png"},
+		{"mobs_mc_rabbit_white.png"},
+		{"mobs_mc_rabbit_white_splotched.png"},
+		{"mobs_mc_rabbit_salt.png"},
+		{"mobs_mc_rabbit_black.png"},
 	},
 	sounds = {
 		random = "mobs_mc_rabbit_random",

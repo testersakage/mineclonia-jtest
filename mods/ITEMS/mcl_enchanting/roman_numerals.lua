@@ -20,15 +20,15 @@ local conversionTable = {
 
 return{
   toRoman = function(number)
-    local romanNumeral = ""
+	local romanNumeral = ""
 
-    for _,table in pairs (conversionTable) do
-      while(number >= table.number) do
-        romanNumeral = romanNumeral .. table.symbol
-        number = number - table.number
-      end
-    end
+	for _,table in pairs (conversionTable) do
+	  while(number >= table.number) do
+		romanNumeral = romanNumeral .. table.symbol
+		number = number - table.number
+	  end
+	end
 
-    return romanNumeral
+	return romanNumeral
   end
 }

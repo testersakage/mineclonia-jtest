@@ -127,7 +127,7 @@ local function param2_to_note_color(param2)
 end
 
 local function param2_to_pitch(param2)
-    return 2^((param2-12)/12)
+	return 2^((param2-12)/12)
 end
 
 function mesecon.noteblock_play(pos, param2)

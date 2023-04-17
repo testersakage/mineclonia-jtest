@@ -94,21 +94,21 @@ local function add_wear(placer, itemstack)
 end
 
 local function anti_oxidation(itemstack, placer, pointed_thing)
-    if pointed_thing.type ~= "node" then return end
+	if pointed_thing.type ~= "node" then return end
 
 	local node = minetest.get_node(pointed_thing.under)
-    local noddef = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
+	local noddef = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
 
-    if not placer:get_player_control().sneak and noddef.on_rightclick then
-        return minetest.item_place(itemstack, placer, pointed_thing)
-    end
+	if not placer:get_player_control().sneak and noddef.on_rightclick then
+		return minetest.item_place(itemstack, placer, pointed_thing)
+	end
 
-    if minetest.is_protected(pointed_thing.under, placer:get_player_name()) then
-        minetest.record_protection_violation(pointed_thing.under, placer:get_player_name())
-        return itemstack
-    end
+	if minetest.is_protected(pointed_thing.under, placer:get_player_name()) then
+		minetest.record_protection_violation(pointed_thing.under, placer:get_player_name())
+		return itemstack
+	end
 
-    if noddef._mcl_stripped_variant == nil then
+	if noddef._mcl_stripped_variant == nil then
 		for _, c in pairs(stairs) do
 			if noddef.name == "mcl_stairs:"..c[1].."_copper_"..c[2].."_cut"..c[3] then
 				minetest.swap_node(pointed_thing.under, {name="mcl_stairs:"..c[1].."_copper_"..c[4], param2=node.param2})
@@ -127,7 +127,7 @@ local function anti_oxidation(itemstack, placer, pointed_thing)
 	else
 		return itemstack
 	end
-    return itemstack
+	return itemstack
 end
 
 local function register_axe_override(axe_name)

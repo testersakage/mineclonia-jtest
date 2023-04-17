@@ -62,7 +62,7 @@ local function register_biomes()
 	In MCL2, the MC Overworld biomes are split in multiple more parts (stacked by height):
 	* The main part, this represents the land. It begins at around sea level and usually goes all the way up
 	* _ocean: For the area covered by ocean water. The y_max may vary for various beach effects.
-	          Has sand or dirt as floor.
+			  Has sand or dirt as floor.
 	* _deep_ocean: Like _ocean, but deeper and has gravel as floor
 	* _underground:
 	* Other modifiers: Some complex biomes require more layers to improve the landscape.

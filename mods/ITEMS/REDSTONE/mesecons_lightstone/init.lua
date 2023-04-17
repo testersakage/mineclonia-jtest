@@ -39,12 +39,12 @@ minetest.register_node("mesecons_lightstone:lightstone_on", {
 })
 
 minetest.register_craft({
-    output = "mesecons_lightstone:lightstone_off",
-    recipe = {
-	    {"","mesecons:redstone",""},
-	    {"mesecons:redstone","mcl_nether:glowstone","mesecons:redstone"},
-	    {"","mesecons:redstone",""},
-    }
+	output = "mesecons_lightstone:lightstone_off",
+	recipe = {
+		{"","mesecons:redstone",""},
+		{"mesecons:redstone","mcl_nether:glowstone","mesecons:redstone"},
+		{"","mesecons:redstone",""},
+	}
 })
 
 -- Add entry alias for the Help

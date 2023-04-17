@@ -40,13 +40,13 @@ minetest.register_node("mcl_villages:structblock", {drawtype="airlike",groups = 
 --
 if minetest.get_modpath("mobs_mc") then
   mcl_mobs:register_spawn("mobs_mc:villager", --name
-    {"mcl_core:stonebrickcarved"}, --nodes
-    15, --max_light
-    0, --min_light
-    20, --chance
-    7, --active_object_count
-    31000, --max_height
-    nil) --day_toggle
+	{"mcl_core:stonebrickcarved"}, --nodes
+	15, --max_light
+	0, --min_light
+	20, --chance
+	7, --active_object_count
+	31000, --max_height
+	nil) --day_toggle
 end
 --]]
 
@@ -120,7 +120,7 @@ if minetest.is_creative_enabled("") then
 		on_place = function(itemstack, placer, pointed_thing)
 			if not pointed_thing.under then return end
 			local minp = vector.subtract(	pointed_thing.under, half_map_chunk_size)
-		        local maxp = vector.add(	pointed_thing.under, half_map_chunk_size)
+				local maxp = vector.add(	pointed_thing.under, half_map_chunk_size)
 			build_a_settlement(minp, maxp, math.random(0,32767))
 		end
 	})

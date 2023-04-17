@@ -58,8 +58,8 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 	animation = {
 		stand_speed = 25,
 		stand_start = 0,
-	        stand_end = 100,
-	        walk_speed = 25,
+			stand_end = 100,
+			walk_speed = 25,
 		walk_start = 0,
 		walk_end = 100,
 		run_speed = 50,

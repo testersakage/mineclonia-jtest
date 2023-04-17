@@ -141,16 +141,16 @@ end
 function settlements.initialize_furnace(pos)
   -- find chests within radius
   local furnacepos = minetest.find_node_near(pos,
-    7, --radius
-    {"mcl_furnaces:furnace"})
+	7, --radius
+	{"mcl_furnaces:furnace"})
   -- initialize furnacepos (mts furnacepos don't have meta)
   if furnacepos
   then
-    local meta = minetest.get_meta(furnacepos)
-    if meta:get_string("infotext") ~= "furnace"
-    then
-      minetest.registered_nodes["mcl_furnaces:furnace"].on_construct(furnacepos)
-    end
+	local meta = minetest.get_meta(furnacepos)
+	if meta:get_string("infotext") ~= "furnace"
+	then
+	  minetest.registered_nodes["mcl_furnaces:furnace"].on_construct(furnacepos)
+	end
   end
 end
 -------------------------------------------------------------------------------
@@ -159,16 +159,16 @@ end
 function settlements.initialize_anvil(pos)
   -- find chests within radius
   local anvilpos = minetest.find_node_near(pos,
-    7, --radius
-    {"mcl_anvils:anvil"})
+	7, --radius
+	{"mcl_anvils:anvil"})
   -- initialize anvilpos (mts anvilpos don't have meta)
   if anvilpos
   then
-    local meta = minetest.get_meta(anvilpos)
-    if meta:get_string("infotext") ~= "anvil"
-    then
-      minetest.registered_nodes["mcl_anvils:anvil"].on_construct(anvilpos)
-    end
+	local meta = minetest.get_meta(anvilpos)
+	if meta:get_string("infotext") ~= "anvil"
+	then
+	  minetest.registered_nodes["mcl_anvils:anvil"].on_construct(anvilpos)
+	end
   end
 end
 -------------------------------------------------------------------------------

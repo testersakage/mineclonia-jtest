@@ -92,13 +92,13 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 	},
 	animation = {
 		speed_normal = 25,
-        speed_run = 50,
+		speed_run = 50,
 		stand_start = 20,
-        stand_end = 40,
+		stand_end = 40,
 		walk_start = 0,
-        walk_end = 20,
+		walk_end = 20,
 		run_start = 0,
-        run_end = 20,
+		run_end = 20,
 	},
 	on_rightclick = function(self, clicker)
 		if not self._curing and clicker and clicker:is_player() then

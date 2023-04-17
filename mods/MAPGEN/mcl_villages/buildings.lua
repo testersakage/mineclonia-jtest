@@ -6,21 +6,21 @@ function settlements.build_schematic(vm, data, va, pos, building, replace_wall, 
   -- get building node material for better integration to surrounding
   local platform_material =  mcl_vars.get_node(pos)
   if not platform_material or (platform_material.name == "air" or platform_material.name == "ignore")  then
-    return
+	return
   end
   platform_material = platform_material.name
   -- pick random material
   local material = wallmaterial[math.random(1,#wallmaterial)]
   -- schematic conversion to lua
   local schem_lua = minetest.serialize_schematic(building,
-    "lua",
-    {lua_use_comments = false, lua_num_indent_spaces = 0}).." return schematic"
+	"lua",
+	{lua_use_comments = false, lua_num_indent_spaces = 0}).." return schematic"
   -- replace material
   if replace_wall == "y" then
-    schem_lua = schem_lua:gsub("mcl_core:cobble", material)
+	schem_lua = schem_lua:gsub("mcl_core:cobble", material)
   end
   schem_lua = schem_lua:gsub("mcl_core:dirt_with_grass",
-    platform_material)
+	platform_material)
 
 --  Disable special junglewood for now.
  -- special material for spawning npcs
@@ -37,21 +37,21 @@ function settlements.build_schematic(vm, data, va, pos, building, replace_wall, 
   local possible_rotations = {"0", "90", "180", "270"}
   local rotation = possible_rotations[ math.random( #possible_rotations ) ]
   settlements.foundation(
-    pos,
-    width,
-    depth,
-    height,
-    rotation)
+	pos,
+	width,
+	depth,
+	height,
+	rotation)
   vm:set_data(data)
   -- place schematic
 
   minetest.place_schematic_on_vmanip(
-    vm,
-    pos,
-    schematic,
-    rotation,
-    nil,
-    true)
+	vm,
+	pos,
+	schematic,
+	rotation,
+	nil,
+	true)
   vm:write_to_map(true)
 end]]
 -------------------------------------------------------------------------------

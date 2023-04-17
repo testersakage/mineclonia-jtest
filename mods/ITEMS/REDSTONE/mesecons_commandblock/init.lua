@@ -200,10 +200,10 @@ local function on_place(itemstack, placer, pointed_thing)
 	end
 
 	-- Use pointed node's on_rightclick function first, if present
-    local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-    if new_stack then
-        return new_stack
-    end
+	local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if new_stack then
+		return new_stack
+	end
 
 	--local node = minetest.get_node(pointed_thing.under)
 

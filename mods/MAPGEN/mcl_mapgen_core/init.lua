@@ -136,7 +136,7 @@ end
 minetest.set_mapgen_setting("mg_flags", mg_flags_str, true)
 
 local function between(x, y, z) -- x is between y and z (inclusive)
-    return y <= x and x <= z
+	return y <= x and x <= z
 end
 
 local function in_cube(tpos,wpos1,wpos2)

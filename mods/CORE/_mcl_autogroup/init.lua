@@ -21,10 +21,10 @@ In MineClone 2, all diggable nodes have the hardness set in the custom field
 groups by this mod to create the correct digging times for nodes.  Digging
 groups are registered using the following code:
 
-    mcl_autogroup.register_diggroup("shovely")
-    mcl_autogroup.register_diggroup("pickaxey", {
-        levels = { "wood", "gold", "stone", "iron", "diamond" }
-    })
+	mcl_autogroup.register_diggroup("shovely")
+	mcl_autogroup.register_diggroup("pickaxey", {
+		levels = { "wood", "gold", "stone", "iron", "diamond" }
+	})
 
 The first line registers a simple digging group.  The second line registers a
 digging group with 5 different levels (in this case one for each material of a
@@ -42,10 +42,10 @@ the custom field "_mcl_diggroups" function to get the groupcaps.  The value of
 this field is a table which defines which groups the tool can dig and how
 efficiently.
 
-    _mcl_diggroups = {
-        handy = { speed = 1, level = 1, uses = 0 },
-        pickaxey = { speed = 1, level = 0, uses = 0 },
-    }
+	_mcl_diggroups = {
+		handy = { speed = 1, level = 1, uses = 0 },
+		pickaxey = { speed = 1, level = 0, uses = 0 },
+	}
 
 The "uses" field indicate how many uses (0 for infinite) a tool has when used on
 the specified digging group.  The "speed" field is a multiplier to the dig speed

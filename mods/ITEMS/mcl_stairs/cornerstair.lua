@@ -193,14 +193,14 @@ need to call it again!
 Usage:
 * name is the name of the node to make corner stairs for.
 * stairtiles is optional, can specify textures for inner and outer stairs. 3 data types are accepted:
-    * string: one of:
-        * "default": Use same textures as original node
-        * "woodlike": Take first frame of the original tiles, then take a triangle piece
-                      of the texture, rotate it by 90° and overlay it over the original texture
-    * table: Specify textures explicitly. Table of tiles to override textures for
-             inner and outer stairs. Table format:
-                 { tiles_def_for_outer_stair, tiles_def_for_inner_stair }
-    * nil: Equivalent to "default"
+	* string: one of:
+		* "default": Use same textures as original node
+		* "woodlike": Take first frame of the original tiles, then take a triangle piece
+					  of the texture, rotate it by 90° and overlay it over the original texture
+	* table: Specify textures explicitly. Table of tiles to override textures for
+			 inner and outer stairs. Table format:
+				 { tiles_def_for_outer_stair, tiles_def_for_inner_stair }
+	* nil: Equivalent to "default"
 ]]
 
 function mcl_stairs.cornerstair.add(name, stairtiles)

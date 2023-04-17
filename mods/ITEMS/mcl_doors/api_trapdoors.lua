@@ -98,11 +98,11 @@ function mcl_doors:register_trapdoor(name, def)
 	if not usagehelp and not def.only_redstone_can_open then
 		usagehelp = S("To open or close this trapdoor, rightclick it or send a redstone signal to it.")
 	end
-    if def.only_redstone_can_open then
-        tt_help = S("Openable by redstone power")
-    else
-        tt_help = S("Openable by players and redstone power")
-    end
+	if def.only_redstone_can_open then
+		tt_help = S("Openable by redstone power")
+	else
+		tt_help = S("Openable by players and redstone power")
+	end
 
 	-- Closed trapdoor
 

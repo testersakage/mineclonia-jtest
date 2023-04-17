@@ -26,7 +26,7 @@ keys: player name
 value:
 nil = not charging or player not existing
 number: currently charging, the number is the time from minetest.get_us_time
-             in which the charging has started
+			 in which the charging has started
 ]]
 local bow_load = {}
 

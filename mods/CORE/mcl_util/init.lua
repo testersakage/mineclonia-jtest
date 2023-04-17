@@ -644,8 +644,8 @@ end
 
 local function roundN(n, d)
 	if type(n) ~= "number" then return n end
-    local m = 10^d
-    return math.floor(n * m + 0.5) / m
+	local m = 10^d
+	return math.floor(n * m + 0.5) / m
 end
 
 local function close_enough(a,b)

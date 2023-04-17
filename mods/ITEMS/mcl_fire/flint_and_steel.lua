@@ -14,7 +14,7 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 	groups = { tool = 1, },
 	on_place = function(itemstack, user, pointed_thing)
 		-- Use pointed node's on_rightclick function first, if present
-        local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
+		local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
 		if new_stack then
 			return new_stack
 		end

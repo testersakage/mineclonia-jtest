@@ -43,13 +43,13 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 		distance = 16,
 	},
 	textures = {
-                "mobs_mc_snowman.png", --snowman texture
-                "farming_pumpkin_side.png", --top
-                "farming_pumpkin_top.png", --down
-                "farming_pumpkin_face.png", --front
-                "farming_pumpkin_side.png", --left
-                "farming_pumpkin_side.png", --right
-                "farming_pumpkin_top.png", --left
+				"mobs_mc_snowman.png", --snowman texture
+				"farming_pumpkin_side.png", --top
+				"farming_pumpkin_top.png", --down
+				"farming_pumpkin_face.png", --front
+				"farming_pumpkin_side.png", --left
+				"farming_pumpkin_side.png", --right
+				"farming_pumpkin_top.png", --left
 	},
 	gotten_texture = gotten_texture,
 	drops = {{ name = "mcl_throwing:snowball", chance = 1, min = 0, max = 15 }},
@@ -80,7 +80,7 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 		die_start = 40,
 		die_end = 50,
 		die_speed = 15,
-	        die_loop = false,
+			die_loop = false,
 	},
 	do_custom = function(self, dtime)
 		if not mobs_griefing then

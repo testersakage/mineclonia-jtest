@@ -152,7 +152,7 @@ local function get_overall_velocity(vector)
 end
 local function anglediff(a1, a2)
 	local a = a1 - a2
- 	return math.abs((a + math.pi) % (math.pi*2) - math.pi)
+	return math.abs((a + math.pi) % (math.pi*2) - math.pi)
 end
 local function clamp(num, min, max)
 	return math.min(max, math.max(num, min))

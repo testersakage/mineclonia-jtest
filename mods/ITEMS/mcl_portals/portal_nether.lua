@@ -161,18 +161,18 @@ local function find_exit(p, dx, dy, dz)
 	local dx, dy, dz = dx or DISTANCE_MAX, dy or DISTANCE_MAX, dz or DISTANCE_MAX
 	if dx < 1 or dy < 1 or dz < 1 then return false end
 
-    --y values aren't used
+	--y values aren't used
 	local x = floor(p.x)
-    --local y = floor(p.y)
-    local z = floor(p.z)
+	--local y = floor(p.y)
+	local z = floor(p.z)
 
 	local x1 = x-dx+1
-    --local y1 = y-dy+1
-    local z1 = z-dz+1
+	--local y1 = y-dy+1
+	local z1 = z-dz+1
 
-    local x2 = x+dx-1
-    --local y2 = y+dy-1
-    local z2 = z+dz-1
+	local x2 = x+dx-1
+	--local y2 = y+dy-1
+	local z2 = z+dz-1
 
 	local k1x, k2x = floor(x1/256), floor(x2/256)
 	local k1z, k2z = floor(z1/256), floor(z2/256)

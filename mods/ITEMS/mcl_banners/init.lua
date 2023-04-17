@@ -42,45 +42,45 @@ mcl_banners.colors = {
 
 
 local pattern_names = {
-      "",
-      "border",
-      "bricks",
-      "circle",
-      "creeper",
-      "cross",
-      "curly_border",
-      "diagonal_up_left",
-      "diagonal_up_right",
-      "diagonal_right",
-      "diagonal_left",
-      "flower",
-      "gradient",
-      "gradient_up",
-      "half_horizontal_bottom",
-      "half_horizontal",
-      "half_vertical",
-      "half_vertical_right",
-      "thing",
-      "rhombus",
-      "skull",
-      "small_stripes",
-      "square_bottom_left",
-      "square_bottom_right",
-      "square_top_left",
-      "square_top_right",
-      "straight_cross",
-      "stripe_bottom",
-      "stripe_center",
-      "stripe_downleft",
-      "stripe_downright",
-      "stripe_left",
-      "stripe_middle",
-      "stripe_right",
-      "stripe_top",
-      "triangle_bottom",
-      "triangle_top",
-      "triangles_bottom",
-      "triangles_top",
+	  "",
+	  "border",
+	  "bricks",
+	  "circle",
+	  "creeper",
+	  "cross",
+	  "curly_border",
+	  "diagonal_up_left",
+	  "diagonal_up_right",
+	  "diagonal_right",
+	  "diagonal_left",
+	  "flower",
+	  "gradient",
+	  "gradient_up",
+	  "half_horizontal_bottom",
+	  "half_horizontal",
+	  "half_vertical",
+	  "half_vertical_right",
+	  "thing",
+	  "rhombus",
+	  "skull",
+	  "small_stripes",
+	  "square_bottom_left",
+	  "square_bottom_right",
+	  "square_top_left",
+	  "square_top_right",
+	  "straight_cross",
+	  "stripe_bottom",
+	  "stripe_center",
+	  "stripe_downleft",
+	  "stripe_downright",
+	  "stripe_left",
+	  "stripe_middle",
+	  "stripe_right",
+	  "stripe_top",
+	  "triangle_bottom",
+	  "triangle_top",
+	  "triangles_bottom",
+	  "triangles_top",
 }
 
 local colors_reverse = {}
@@ -354,7 +354,7 @@ minetest.register_node("mcl_banners:hanging_banner", {
 
 -- for pattern_name, pattern in pairs(patterns) do
 for colorid, colortab in pairs(mcl_banners.colors) do
-    for i, pattern_name in ipairs(pattern_names) do
+	for i, pattern_name in ipairs(pattern_names) do
 	local itemid = colortab[1]
 	local desc = colortab[2]
 	local wool = colortab[3]
@@ -371,13 +371,13 @@ for colorid, colortab in pairs(mcl_banners.colors) do
 	local base
 	local finished_banner
 	if pattern_name == "" then
-	    if colorize then
+		if colorize then
 		-- Base texture with base color
 		base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:"..colorize..")^[resize:32x32"
-	    else
+		else
 		base = "mcl_banners_item_base.png^mcl_banners_item_overlay.png^[resize:32x32"
-	    end
-	    finished_banner = base
+		end
+		finished_banner = base
 	else
 		-- Banner item preview background
 		base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:#CCCCCC)^[resize:32x32"
@@ -592,7 +592,7 @@ for colorid, colortab in pairs(mcl_banners.colors) do
 		-- Add item to node alias
 		doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
 	end
-    end
+	end
 end
 
 if mod_doc then
