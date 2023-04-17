@@ -32,7 +32,6 @@ dofile(path .. "/compat.lua")
 local DEFAULT_FALL_SPEED = -9.81*1.5
 local MAX_MOB_NAME_LENGTH = 30
 
-local old_spawn_icons = minetest.settings:get_bool("mcl_old_spawn_icons",false)
 local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",true)
 local difficulty = tonumber(minetest.settings:get("mob_difficulty")) or 1.0
 
@@ -461,13 +460,7 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 	end
 
 	local invimg = "(spawn_egg.png^[multiply:" .. background_color ..")^(spawn_egg_overlay.png^[multiply:" .. overlay_color .. ")"
-	if old_spawn_icons then
-		local mobname = mob:gsub("mobs_mc:","")
-		local fn = "mobs_mc_spawn_icon_"..mobname..".png"
-		if mcl_util.file_exists(minetest.get_modpath("mobs_mc").."/textures/"..fn) then
-			invimg = fn
-		end
-	end
+
 	if addegg == 1 then
 		invimg = "mobs_chicken_egg.png^(" .. invimg ..
 			"^[mask:mobs_chicken_egg_overlay.png)"
