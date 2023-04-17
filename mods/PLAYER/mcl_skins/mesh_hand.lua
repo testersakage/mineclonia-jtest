@@ -20,7 +20,7 @@ function mcl_skins.get_skin_list()
 				id = id .. "_female"
 			}
 			table.insert(list, female)
-			
+
 			local male = {
 				texture = make_texture(base, base_color),
 				slim_arms = false,

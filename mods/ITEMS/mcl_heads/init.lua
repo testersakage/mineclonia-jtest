@@ -17,7 +17,7 @@ mcl_heads.FLOOR_DEGREES = { [0]='', '22_5', '45', '67_5', }
 -- box of head nodes
 mcl_heads.FLOOR_BOX = { -0.25, -0.5, -0.25, 0.25, 0.0, 0.25, }
 
--- floor head node nodedef template ------------------------------------------------------------------------------------
+-- floor head node nodedef template ------------------------------------------------------------------------------------
 
 --- node definition template for floor mod heads
 mcl_heads.deftemplate_floor = {
@@ -145,7 +145,7 @@ function mcl_heads.deftemplate_floor.on_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
--- wall head node nodedef template -------------------------------------------------------------------------------------
+-- wall head node nodedef template -------------------------------------------------------------------------------------
 
 --- node definition template for wall mod heads
 mcl_heads.deftemplate_wall = {
@@ -187,7 +187,7 @@ function mcl_heads.deftemplate_wall.on_rotate(pos, node, user, mode, new_param2)
 	end
 end
 
--- API functions -------------------------------------------------------------------------------------------------------
+-- API functions -------------------------------------------------------------------------------------------------------
 
 --- @class HeadDef
 --- @field name string identifier for node
@@ -252,7 +252,7 @@ function mcl_heads.register_head(head_def)
 	}))
 end
 
--- initial heads -------------------------------------------------------------------------------------------------------
+-- initial heads -------------------------------------------------------------------------------------------------------
 
 mcl_heads.register_head{
 	name = "zombie",

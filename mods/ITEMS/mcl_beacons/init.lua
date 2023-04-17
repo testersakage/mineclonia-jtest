@@ -148,7 +148,7 @@ local function remove_beacon_beam(pos)
 				minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
 				node = minetest.get_node({x=pos.x,y=y,z=pos.z})
 			end
-			
+
 			if node.name == "mcl_beacons:beacon_beam" then
 				minetest.remove_node({x=pos.x,y=y,z=pos.z})
 			end
@@ -193,9 +193,9 @@ local function effect_player(effect,pos,power_level, effect_level,player)
 end
 
 local function globalstep_function(pos,player)
-	local meta = minetest.get_meta(pos) 
+	local meta = minetest.get_meta(pos)
 	local power_level = beacon_blockcheck(pos)
-	local effect_string =  meta:get_string("effect") 
+	local effect_string =  meta:get_string("effect")
 	if meta:get_int("effect_level") == 2 and power_level < 4 then
 		return
 	else
@@ -257,7 +257,7 @@ minetest.register_node("mcl_beacons:beacon", {
 			local meta = minetest.get_meta(pos)
 			local inv = meta:get_inventory()
 			local input = inv:get_stack("input",1)
-		
+
 			if input:is_empty() then
 				return
 			end
@@ -311,7 +311,7 @@ minetest.register_node("mcl_beacons:beacon", {
 				awards.unlock(sender:get_player_name(),"mcl:beacon")
 				input:take_item()
 				inv:set_stack("input",1,input)
-				
+
 				local beam_palette_index = 0
 				remove_beacon_beam(pos)
 				for y = pos.y +1, pos.y + 201 do
@@ -320,7 +320,7 @@ minetest.register_node("mcl_beacons:beacon", {
 						minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
 						node = minetest.get_node({x=pos.x,y=y,z=pos.z})
 					end
-					
+
 
 					if  minetest.get_item_group(node.name, "glass") ~= 0 or minetest.get_item_group(node.name,"material_glass") ~= 0 then
 						beam_palette_index = get_beacon_beam(node.name)
@@ -394,7 +394,7 @@ minetest.register_abm{
 
 minetest.register_craft({
 	output = "mcl_beacons:beacon",
-	recipe = { 
+	recipe = {
 		{"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
 		{"mcl_core:glass", "mcl_mobitems:nether_star", "mcl_core:glass"},
 		{"mcl_core:obsidian", "mcl_core:obsidian", "mcl_core:obsidian"}

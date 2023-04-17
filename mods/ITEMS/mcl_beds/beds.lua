@@ -60,11 +60,11 @@ for c=1, #colors do
 		_doc_items_create_entry = create_entry,
 		inventory_image = "mcl_beds_bed_"..colorid.."_inv.png",
 		wield_image = "mcl_beds_bed_"..colorid.."_inv.png",
-						
+
 		tiles = {
 			"mcl_beds_bed_"..colorid..".png"
 		},
-		
+
 		recipe = main_recipe,
 	})
 	if mod_doc and not is_canonical then

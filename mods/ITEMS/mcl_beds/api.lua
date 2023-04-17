@@ -133,11 +133,11 @@ function mcl_beds.register_bed(name, def)
 			type = "fixed",
 			fixed = {-0.5, -0.5, -0.5, 0.5, 0.06, 0.5},
 		}
-		
+
 	minetest.register_node(name .. "_bottom", {
 		description = def.description,
 		_tt_help = S("Allows you to sleep"),
-		
+
 		_doc_items_longdesc = def._doc_items_longdesc or beddesc,
 		_doc_items_usagehelp = def._doc_items_usagehelp or beduse,
 		_doc_items_create_entry = def._doc_items_create_entry,
@@ -160,7 +160,7 @@ function mcl_beds.register_bed(name, def)
 		collision_box = common_box,
 		drop = "",
 		node_placement_prediction = "",
-		
+
 		on_place = function(itemstack, placer, pointed_thing)
 			local under = pointed_thing.under
 
@@ -226,7 +226,7 @@ function mcl_beds.register_bed(name, def)
 		on_rotate = rotate,
 	})
 
-	
+
 
 	minetest.register_node(name .. "_top", {
 		drawtype = "mesh",
@@ -244,7 +244,7 @@ function mcl_beds.register_bed(name, def)
 		drop = "",
 		selection_box = common_box,
 		collision_box = common_box,
-		
+
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			mcl_beds.on_rightclick(pos, clicker, true)
 			return itemstack

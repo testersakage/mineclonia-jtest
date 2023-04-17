@@ -41,7 +41,7 @@ local function init_simple_skins()
 		}
 		id = id + 1
 	end
-	
+
 	if #mcl_skins.simple_skins > 0 then
 		table.insert(mcl_skins.tab_names, 1, "skin")
 	else

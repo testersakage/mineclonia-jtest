@@ -469,7 +469,7 @@ for b=1, #boat_ids do
 		inventory_image = "mcl_boats_" .. id .. "_boat.png"
 		texture = "mcl_boats_texture_" .. id .. "_boat.png"
 	end
-	
+
 	minetest.register_craftitem(itemstring, {
 		description = names[b],
 		_tt_help = tt_help,
