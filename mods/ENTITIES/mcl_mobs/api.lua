@@ -430,7 +430,6 @@ minetest.register_chatcommand("clearmobs", {
 
 		local mob_name, mob_type, range
 
-		-- Param 1 resolve
 		if mob and mob ~= "" then
 			if mob == "all" then
 				all = true
@@ -439,19 +438,14 @@ minetest.register_chatcommand("clearmobs", {
 			elseif mob then
 				mob_name = mob
 			end
-			--minetest.log ("mob: [" .. mob .. "]")
 		else
-			--minetest.log("No valid first param")
 			if default then
-				--minetest.log("Use default")
 				mob_type = "monster"
 			end
 			--return
 		end
 
-		-- Param 2 resolve
 		if unsafe and unsafe ~= "" then
-			--minetest.log ("unsafe: [" .. unsafe .. "]")
 			if unsafe == "nametagged" then
 				nametagged = true
 			elseif unsafe == "tamed" then
@@ -469,29 +463,16 @@ minetest.register_chatcommand("clearmobs", {
 				local mob_match = false
 
 				if all then
-					--minetest.log("Match - All mobs specified")
 					mob_match = true
 				elseif mob_type then
-
-					--minetest.log("Match - o.type: ".. tostring(o.type))
-					--minetest.log("mob_type: ".. tostring(mob_type))
 					if mob_type == "monster" and o.type == mob_type then
-						--minetest.log("Match - monster")
 						mob_match = true
 					elseif mob_type == "passive" and o.type ~= "monster" and o.type ~= "npc" then
-						--minetest.log("Match - passive")
 						mob_match = true
-					else
-						--minetest.log("No match for type.")
 					end
 
 				elseif mob_name and (o.name == mob_name or string.find(o.name, mob_name)) then
-					--minetest.log("Match - mob_name = ".. tostring(o.name))
 					mob_match = true
-				else
-					--minetest.log("No match - o.type = ".. tostring(o.type))
-					--minetest.log("No match - mob_name = ".. tostring(o.name))
-					--minetest.log("No match - mob_type = ".. tostring(mob_name))
 				end
 
 				if mob_match then
@@ -502,24 +483,19 @@ minetest.register_chatcommand("clearmobs", {
 						if ( vector.distance(p:get_pos(),o.object:get_pos()) <= range ) then
 							in_range = true
 						else
-							--minetest.log("Out of range")
 							in_range = false
 						end
 					end
 
-					--minetest.log("o.nametag: ".. tostring(o.nametag))
 					if nametagged then
 						if o.nametag then
-							--minetest.log("Namedtagged and it has a name tag. Kill it")
 							o.object:remove()
 						end
 					elseif tamed then
 						if o.tamed then
-							--minetest.log("Tamed. Kill it")
 							o.object:remove()
 						end
 					elseif in_range and (not o.nametag or o.nametag == "") and not o.tamed then
-						--minetest.log("No nametag or tamed. Kill it")
 						o.object:remove()
 					end
 				end
