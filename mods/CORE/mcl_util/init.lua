@@ -1014,11 +1014,5 @@ function mcl_util.check_position_protection(position, player)
 end
 
 function mcl_util.get_colorwallmounted_rotation(pos)
-	local colorwallmounted_node = minetest.get_node(pos)
-	for i = 0, 32, 1 do
-		local colorwallmounted_rotation = colorwallmounted_node.param2 - (i * 8)
-		if colorwallmounted_rotation < 6 then
-			return colorwallmounted_rotation
-		end
-	end
+	return minetest.get_node(pos).param2 % 8
 end
