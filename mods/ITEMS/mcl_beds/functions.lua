@@ -123,11 +123,17 @@ local function lay_down(player, pos, bed_pos, state, skip)
 				local mobname = ent.name
 				local def = minetest.registered_entities[mobname]
 				-- Approximation of monster detection range
-				if def.is_mob and ((mobname ~= "mobs_mc:pigman" and def.type == "monster" and not monster_exceptions[mobname]) or (mobname == "mobs_mc:pigman" and ent.state == "attack")) then
-					if math.abs(bed_pos.y - obj:get_pos().y) <= 5 then
-						return false, S("You can't sleep now, monsters are nearby!")
+				if def.is_mob and (def.type == "monster" or mobname == "mobs_mc:zombified_piglin") then
+					if monster_exceptions[mobname] or
+							(mobname == "mobs_mc:zombified_piglin" and ent.state ~= "attack") then
+						-- Some exceptions do not prevent sleep. Zombie piglin only prevent sleep while they are hostile.
+					else
+						if math.abs(bed_pos.y - obj:get_pos().y) <= 5 then
+							return false, S("You can't sleep now, monsters are nearby!")
+						end
 					end
 				end
+
 			end
 		end
 	end
