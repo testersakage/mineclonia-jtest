@@ -219,7 +219,7 @@ local function on_metadata_inventory_take(pos, listname, index, stack, player)
 	if listname == "dst" then
 		furnace_activate(pos)
 		give_xp(pos, player)
-		if stack:get_name() == "mcl_stone:ingot_iron" then
+		if stack:get_name() == "mcl_core:iron_ingot" then
 			awards.unlock(player:get_player_name(), "mcl:acquireIron")
 		elseif stack:get_name() == "mcl_mobitems:cod_cooked" then
 			awards.unlock(player:get_player_name(), "mcl:cookFish")
@@ -267,7 +267,7 @@ mcl_furnaces.tpl_furnace = {
 	tiles = {
 		"default_furnace_top.png", "default_furnace_bottom.png",
 		"default_furnace_side.png", "default_furnace_side.png",
-		"default_furnace_side.png", "mcl_stone_stone.png^mcl_furnaces_furnace_front.png",
+		"default_furnace_side.png", "default_stone.png^mcl_furnaces_furnace_front.png",
 	},
 	paramtype2 = "facedir",
 	paramtype = "light",

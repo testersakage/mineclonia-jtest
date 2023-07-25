@@ -100,9 +100,9 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "mcl_blast_furnace:blast_furnace",
 	recipe = {
-		{ "mcl_stone:ingot_iron", "mcl_stone:ingot_iron", "mcl_stone:ingot_iron" },
-		{ "mcl_stone:ingot_iron", "mcl_furnaces:furnace", "mcl_stone:ingot_iron" },
-		{ "mcl_stone:stone_polished", "mcl_stone:stone_polished", "mcl_stone:stone_polished" },
+		{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot" },
+		{ "mcl_core:iron_ingot", "mcl_furnaces:furnace", "mcl_core:iron_ingot" },
+		{ "mcl_core:stone_polished", "mcl_core:stone_polished", "mcl_core:stone_polished" },
 	}
 })
 
