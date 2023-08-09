@@ -81,7 +81,7 @@ mcl_hand_range (Hand range) float 4.5 1 128
 mcl_hand_range_creative (Creative mode hand range) float 10 1 128
 
 # Creative mode dig speed in seconds
-mcl_creative_dig_speed (Creative mode dig speed) float 0.2
+mcl_creative_dig_speed (Creative mode dig speed) float 0
 
 # If enabled the hunger mechanic will be active
 mcl_enable_hunger (Hunger mechanic) bool true
