@@ -1,5 +1,3 @@
----@diagnostic disable
-
 unused_args = false
 allow_defined_top = true
 max_line_length = false
@@ -24,6 +22,7 @@ globals = {
 	"tnt",
 	"tsm_railcorridors",
 	"tga_encoder",
+	"hb",
 	"mcl_achievements",
 	"mcl_amethyst",
 	"mcl_anvils",
