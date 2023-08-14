@@ -1,14 +1,26 @@
 -- Made for MineClone 2 by Michieal.
 -- Texture made by Michieal; The model borrows the top from NathanS21's (Nathan Salapat) Lectern model; The rest of the
 -- lectern model was created by Michieal.
--- Creation date: 01/07/2023 (07JAN2023)
--- License for Code: GPL3
--- License for Media: CC-BY-SA 4
--- Copyright (C) 2023, Michieal. See: License.txt.
+-- lectern GUI code by cora
+
+local S = minetest.get_translator(minetest.get_current_modname())
+local F = minetest.formspec_escape
+
+local function get_formspec(text, title, author)
+	return "size[8,9]" ..
+	"no_prepend[]" .. mcl_vars.gui_nonbg .. mcl_vars.gui_bg_color ..
+	"style_type[button;border=false;bgimg=mcl_books_button9.png;bgimg_pressed=mcl_books_button9_pressed.png;bgimg_middle=2,2]" ..
+	"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]" ..
+	"hypertext[0,0.3;8,0.7;title;<style color=black font=normal size=24><center>"..F(title or "").."</center></style>]"..
+	"hypertext[0.75,0.8;7.25,0.5;author;<style color=black font=normal size=12>by </style><style color=#1E1E1E font=mono size=14>"..F(author or "").."</style>]"..
+	"textarea[0.75,1.24;7.20,7.5;;" .. F(text or "") .. ";]" ..
+	"button_exit[1.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"..
+	"button[4.25,7.95;3,1;take;" .. F(S("Take Book")) .. "]"
+end
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
-minetest.register_node("mcl_lectern:lectern", {
+local lectern_tpl = {
 	description = S("Lectern"),
 	_tt_help = S("Lecterns not only look good, but are job site blocks for Librarians."),
 	_doc_items_longdesc = S("Lecterns not only look good, but are job site blocks for Librarians."),
@@ -69,7 +81,52 @@ minetest.register_node("mcl_lectern:lectern", {
 		end
 		return itemstack
 	end,
-})
+}
+
+minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		if itemstack:get_name() == "mcl_books:written_book" then
+			local player_name = clicker:get_player_name()
+			if minetest.is_protected(pos, player_name) then
+				minetest.record_protection_violation(pos, player_name)
+				return
+			end
+			local im = itemstack:get_meta()
+			local nm = minetest.get_meta(pos)
+			node.name = "mcl_lectern:lectern_with_book"
+			minetest.set_node(pos,node)
+			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
+			nm:set_string("bookmeta",minetest.serialize(im:to_table()))
+			if not minetest.is_creative_enabled(player_name) then
+				itemstack:take_item()
+			end
+			return itemstack
+		end
+	end
+}))
+
+minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl,{
+	groups = table.merge(lectern_tpl.groups, {not_in_creative_inventory = 1}),
+	tiles = {"mcl_lectern_lectern_with_book.png", },
+	on_receive_fields = function(pos, formname, fields, sender)
+		local sender_name = sender:get_player_name()
+		if minetest.is_protected(pos, sender_name) then
+			minetest.record_protection_violation(pos, sender_name)
+			return
+		end
+		if fields and fields.take then
+			local is = ItemStack("mcl_books:written_book")
+			local im = is:get_meta()
+			local nm = minetest.get_meta(pos)
+			im:from_table(minetest.deserialize(nm:get_string("bookmeta")))
+			local inv = sender:get_inventory()
+			inv:add_item("main",is)
+			local node = minetest.get_node(pos)
+			node.name = "mcl_lectern:lectern"
+			minetest.set_node(pos,node)
+		end
+	end
+}))
 
 mcl_wip.register_wip_item("mcl_lectern:lectern")
 
