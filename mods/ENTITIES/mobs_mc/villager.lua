@@ -20,7 +20,6 @@ mobs_mc.villager = {}
 mobs_mc.villager_mob = {}
 
 function mobs_mc.register_villager_profession(title, record)
-
 	-- TODO should we allow overriding jobs?
 	-- If so what needs to be considered?
 	if mobs_mc.professions[title] then
