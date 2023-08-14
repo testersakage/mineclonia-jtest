@@ -95,7 +95,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			local im = itemstack:get_meta()
 			local nm = minetest.get_meta(pos)
 			node.name = "mcl_lectern:lectern_with_book"
-			minetest.set_node(pos,node)
+			minetest.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
 			nm:set_string("bookmeta",minetest.serialize(im:to_table()))
 			if not minetest.is_creative_enabled(player_name) then
@@ -125,11 +125,11 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			local inv = sender:get_inventory()
 			local node = minetest.get_node(pos)
 			local nm = minetest.get_meta(pos)
+			local vid = nm:get_string("villager")
 			inv:add_item("main",create_book(nm:get_string("bookmeta")))
 			node.name = "mcl_lectern:lectern"
-			minetest.swap_node(pos,node)
-			nm:set_string("formspec","")
-			nm:set_string("bookmeta","")
+			minetest.set_node(pos,node) --set node and reset of villager id on purpose because formspec field won't reset manually
+			nm:set_string("villager",vid)
 		end
 	end,
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
