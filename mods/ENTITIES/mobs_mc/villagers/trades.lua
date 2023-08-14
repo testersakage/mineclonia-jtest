@@ -263,7 +263,7 @@ return {
 	librarian = {
 		name = S("Librarian"),
 		texture = "mobs_mc_villager_librarian.png",
-		jobsite = "mcl_lectern:lectern",
+		jobsite = "group:lectern",
 		trades = {
 			{
 			{ { "mcl_core:paper", 24, 24 }, E(), 16, 2 },
