@@ -32,7 +32,8 @@ local lectern_tpl = {
 	drawtype = "mesh",
 	mesh = "mcl_lectern_lectern.obj",
 	tiles = {"mcl_lectern_lectern.png", },
-	groups = {handy = 1, axey = 1, flammable = 2, fire_encouragement = 5, fire_flammability = 5, solid = 1, deco_block=1},
+	drop = "mcl_lectern:lectern",
+	groups = {handy = 1, axey = 1, flammable = 2, fire_encouragement = 5, fire_flammability = 5, solid = 1, deco_block=1, lectern = 1},
 	sunlight_propagates = true,
 	is_ground_content = false,
 	node_placement_prediction = "",
@@ -105,6 +106,12 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 	end
 }))
 
+local function create_book(bookmeta)
+	local is = ItemStack("mcl_books:written_book")
+	is:get_meta():from_table(minetest.deserialize(bookmeta))
+	return is:to_string()
+end
+
 minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl,{
 	groups = table.merge(lectern_tpl.groups, {not_in_creative_inventory = 1}),
 	tiles = {"mcl_lectern_lectern_with_book.png", },
@@ -115,17 +122,20 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			return
 		end
 		if fields and fields.take then
-			local is = ItemStack("mcl_books:written_book")
-			local im = is:get_meta()
-			local nm = minetest.get_meta(pos)
-			im:from_table(minetest.deserialize(nm:get_string("bookmeta")))
 			local inv = sender:get_inventory()
-			inv:add_item("main",is)
 			local node = minetest.get_node(pos)
+			local nm = minetest.get_meta(pos)
+			inv:add_item("main",create_book(nm:get_string("bookmeta")))
 			node.name = "mcl_lectern:lectern"
-			minetest.set_node(pos,node)
+			minetest.swap_node(pos,node)
+			nm:set_string("formspec","")
+			nm:set_string("bookmeta","")
 		end
-	end
+	end,
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		local is = create_book(oldmetadata.fields.bookmeta)
+		minetest.add_item(pos,is)
+	end,
 }))
 
 mcl_wip.register_wip_item("mcl_lectern:lectern")
