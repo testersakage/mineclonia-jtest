@@ -96,6 +96,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			local nm = minetest.get_meta(pos)
 			node.name = "mcl_lectern:lectern_with_book"
 			minetest.swap_node(pos,node)
+			mesecon.receptor_on(pos, mesecon.rules.alldirs)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
 			nm:set_string("bookmeta",minetest.serialize(im:to_table()))
 			if not minetest.is_creative_enabled(player_name) then
@@ -103,7 +104,11 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			end
 			return itemstack
 		end
-	end
+	end,
+	mesecons = {receptor = {
+		state = mesecon.state.off,
+		rules = mesecon.rules.alldirs,
+	}},
 }))
 
 local function create_book(bookmeta)
@@ -130,12 +135,18 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			node.name = "mcl_lectern:lectern"
 			minetest.set_node(pos,node) --set node and reset of villager id on purpose because formspec field won't reset manually
 			nm:set_string("villager",vid)
+			mesecon.receptor_off(pos, mesecon.rules.alldirs)
 		end
 	end,
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
 		local is = create_book(oldmetadata.fields.bookmeta)
 		minetest.add_item(pos,is)
+		mesecon.receptor_off(pos, mesecon.rules.alldirs)
 	end,
+	mesecons = {receptor = {
+		state = mesecon.state.on,
+		rules = mesecon.rules.alldirs,
+	}},
 }))
 
 mcl_wip.register_wip_item("mcl_lectern:lectern")
