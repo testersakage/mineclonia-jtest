@@ -27,6 +27,7 @@ local files = {
 	"ender_dragon.lua",
 	"enderman.lua",
 	"endermite.lua",
+	"frog.lua",
 	"ghast.lua",
 	"guardian.lua",
 	"guardian_elder.lua",
