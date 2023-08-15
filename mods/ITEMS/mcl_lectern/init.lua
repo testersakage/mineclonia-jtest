@@ -120,6 +120,7 @@ end
 minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl,{
 	groups = table.merge(lectern_tpl.groups, {not_in_creative_inventory = 1}),
 	tiles = {"mcl_lectern_lectern_with_book.png", },
+	mesh = "mcl_lectern_lectern_with_book.obj",
 	on_receive_fields = function(pos, formname, fields, sender)
 		local sender_name = sender:get_player_name()
 		if minetest.is_protected(pos, sender_name) then
