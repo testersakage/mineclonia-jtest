@@ -444,6 +444,21 @@ core.register_craftitem("mcl_mobitems:nametag", {
 	groups = { tool=1 },
 })
 
+for _,color in pairs({"ochre","verdant","pearlescent"}) do
+	core.register_node("mcl_mobitems:froglight_"..color,{
+		description = S(color.." Frog Light"),
+		_doc_items_longdesc = S("Frog Lights are decorative light sources."),
+		paramtype2 = "facedir",
+		on_place = mcl_util.rotate_axis,
+		is_ground_content = false,
+		light_source = core.LIGHT_MAX,
+		tiles = {"mcl_mobitems_froglight_"..color.."_top.png","mcl_mobitems_froglight_"..color.."_top.png","mcl_mobitems_froglight_"..color.."_side.png"},
+		groups = {handy=1, },
+		--sounds = mcl_sounds.node_sound_glass_defaults(),
+		_mcl_blast_resistance = 0.3,
+		_mcl_hardness = 0.3,
+	})
+end
 core.register_alias("mobs:nametag", "mcl_mobitems:nametag")
 core.register_alias("mcl_mobs:nametag", "mcl_mobitems:nametag")
 
