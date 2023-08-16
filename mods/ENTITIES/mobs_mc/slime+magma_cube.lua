@@ -25,6 +25,12 @@ local function swamp_spawn(pos)
 	return true
 end
 
+local frogdrop = {
+	cold = "mcl_mobitems:froglight_verdant",
+	medium = "mcl_mobitems:froglight_pearlescent",
+	hot = "mcl_mobitems:froglight_ochre",
+}
+
 -- Returns a function that spawns children in a circle around pos.
 -- To be used as on_die callback.
 -- self: mob reference
@@ -508,7 +514,14 @@ magma_cube_tiny.reach = 2.5
 magma_cube_tiny.armor = 50
 magma_cube_tiny.drops = {}
 magma_cube_tiny.spawn_small_alternative = nil
-magma_cube_tiny.on_die = nil
+magma_cube_tiny.on_die = function(self, pos, cmi_cause)
+	if cmi_cause and cmi_cause.puncher then
+		local l = cmi_cause.puncher:get_luaentity()
+		if l and l.name == "mobs_mc:frog" then
+			core.add_item(pos,frogdrop[l.frogtype or "medium"])
+		end
+	end
+end
 magma_cube_tiny.sound_params.gain = magma_cube_small.sound_params.gain / 3
 
 mcl_mobs.register_mob("mobs_mc:magma_cube_tiny", magma_cube_tiny)
