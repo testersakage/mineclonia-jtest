@@ -5646,7 +5646,7 @@ end
 --
 -- Detect mapgen to select functions
 --
-if mg_name ~= "singlenode" then
+if mg_name ~= "singlenode" or minetest.get_modpath("biomegen") then
 	if not mcl_vars.superflat then
 		register_biomes()
 		register_biomelike_ores()
@@ -5737,13 +5737,16 @@ if mg_name ~= "singlenode" then
 			local pr = PseudoRandom(blockseed + 14)
 			if not (maxp.y < mcl_vars.mg_overworld_min or minp.y > mcl_vars.mg_overworld_max) then
 				local biomemap = minetest.get_mapgen_object("biomemap")
-				local swamp_biome_id = minetest.get_biome_id("MangroveSwamp")
-				local swamp_shore_id = minetest.get_biome_id("MangroveSwamp_shore")
-				local is_swamp = table.indexof(biomemap, swamp_biome_id) ~= -1
-				local is_swamp_shore = table.indexof(biomemap, swamp_shore_id) ~= -1
+				-- get_mapgen_object returns nil with lua mapgens
+				if biomemap then
+					local swamp_biome_id = minetest.get_biome_id("MangroveSwamp")
+					local swamp_shore_id = minetest.get_biome_id("MangroveSwamp_shore")
+					local is_swamp = table.indexof(biomemap, swamp_biome_id) ~= -1
+					local is_swamp_shore = table.indexof(biomemap, swamp_shore_id) ~= -1
 
-				if is_swamp or is_swamp_shore then
-					mangrove_roots_gen(gennotify, pr)
+					if is_swamp or is_swamp_shore then
+						mangrove_roots_gen(gennotify, pr)
+					end
 				end
 			end
 
