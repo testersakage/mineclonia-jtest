@@ -21,7 +21,7 @@ local seed = tonumber(minetest.get_mapgen_setting("seed"))
 local function init_strongholds()
 	local stronghold_positions = {}
 	-- Don't generate strongholds in singlenode
-	if mg_name == "singlenode" then
+	if (mg_name == "singlenode" and not minetest.get_modpath("biomegen")) then
 		return {}
 	end
 	local pr = PseudoRandom(seed)

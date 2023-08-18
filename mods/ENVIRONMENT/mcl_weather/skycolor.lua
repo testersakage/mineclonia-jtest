@@ -152,7 +152,7 @@ mcl_weather.skycolor = {
 			if dim == "overworld" then
 				local biomesky
 				local biomefog
-				if mg_name ~= "v6" and mg_name ~= "singlenode" then
+				if mg_name ~= "v6" and (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
 					local biome_index = minetest.get_biome_data(player:get_pos()).biome
 					local biome_name = minetest.get_biome_name(biome_index)
 					local biome = minetest.registered_biomes[biome_name]
@@ -228,7 +228,7 @@ mcl_weather.skycolor = {
 			elseif dim == "end" then
 				local biomesky = "#000000"
 				--local biomefog = "#A080A0"
-				if mg_name ~= "v6" and mg_name ~= "singlenode" then
+				if mg_name ~= "v6" and (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
 					local biome_index = minetest.get_biome_data(player:get_pos()).biome
 					local biome_name = minetest.get_biome_name(biome_index)
 					local biome = minetest.registered_biomes[biome_name]
@@ -251,7 +251,7 @@ mcl_weather.skycolor = {
 			elseif dim == "nether" then
 				--local biomesky = "#6EB1FF"
 				local biomefog = "#330808"
-				if mg_name ~= "v6" and mg_name ~= "singlenode" then
+				if mg_name ~= "v6" and (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
 					local biome_index = minetest.get_biome_data(player:get_pos()).biome
 					local biome_name = minetest.get_biome_name(biome_index)
 					local biome = minetest.registered_biomes[biome_name]

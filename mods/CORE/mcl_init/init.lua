@@ -97,7 +97,7 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-if not mcl_vars.superflat and not singlenode then
+if not mcl_vars.superflat and (not singlenode or minetest.get_modpath("biomegen")) then
 	-- Normal mode
 	--[[ Realm stacking (h is for height)
 	- Overworld (h>=256)

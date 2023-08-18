@@ -195,7 +195,7 @@ local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, bl
 	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_realm_barrier_overworld_end_max+1, mcl_vars.mg_overworld_min                  -1, minp, maxp, lvm_used, pr)
 
 
-	if mg_name ~= "singlenode" then
+	if (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
 		-- Bedrock
 		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_overworld_min, mcl_vars.mg_bedrock_overworld_max, minp, maxp, lvm_used, pr)
 		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_nether_bottom_min, mcl_vars.mg_bedrock_nether_bottom_max, minp, maxp, lvm_used, pr)
@@ -279,7 +279,7 @@ end
 
 mcl_mapgen_core.register_generator("world_structure", world_structure, nil, 1, false)
 
-if mg_name ~= "singlenode" then
+if mg_name ~= "singlenode" or minetest.get_modpath("biomegen") then
 	mcl_mapgen_core.register_generator("end_fixes", end_basic,nil, 9999, false)
 	mcl_mapgen_core.register_generator("set_param2_nodes", set_param2_nodes, nil, 9999, true)
 end

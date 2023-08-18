@@ -59,7 +59,7 @@ end
 
 -- Disable natural generation in singlenode.
 local mg_name = minetest.get_mapgen_setting("mg_name")
-if mg_name ~= "singlenode" then
+if mg_name ~= "singlenode" or minetest.get_modpath("biomegen") then
 	mcl_mapgen_core.register_generator("villages", nil, function(minp, maxp, blockseed)
 		if maxp.y < 0 then return end
 
