@@ -15,30 +15,28 @@ local function active_formspec(name,fire_anim,arrow_anim)
 	return table.concat({
 		"formspec_version[6]",
 		"size[11.75,10.425]",
-		"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, name)) .. "]",
-
-		mcl_formspec.get_itemslot_bg(3.5, 0.75, 1, 1),
+		"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Furnace"))) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(3.5, 0.75, 1, 1),
 		"list[context;src;3.5,0.75;1,1;]",
 
-		 "animated_image[3.5,2;1,1;"..fire_anim,
+		"animated_image[3.5,2;1,1;"..fire_anim,
 
-		mcl_formspec.get_itemslot_bg(3.5, 3.25, 1, 1),
+		mcl_formspec.get_itemslot_bg_v4(3.5, 3.25, 1, 1),
 		"list[context;fuel;3.5,3.25;1,1;]",
 
 		"animated_image[5.25,2;1.5,1;"..arrow_anim,
 
-		mcl_formspec.get_itemslot_bg(7.875, 2, 1, 1, 0.2),
+		mcl_formspec.get_itemslot_bg_v4(7.875, 2, 1, 1, 0.2),
 		"list[context;dst;7.875,2;1,1;]",
 
 		"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
-
-		mcl_formspec.get_itemslot_bg(0.375, 5.1, 9, 3),
+		mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
 		"list[current_player;main;0.375,5.1;9,3;9]",
 
-		mcl_formspec.get_itemslot_bg(0.375, 9.05, 9, 1),
+		mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
 		"list[current_player;main;0.375,9.05;9,1;]",
 
-		"image_button[7.9,0.4;1,1;craftguide_book.png;craftguide;]"..
+		"image_button[7.85,0.6;1,1;craftguide_book.png;craftguide;]"..
 		"tooltip[craftguide;"..minetest.formspec_escape(S("Recipe book")).."]"..
 
 		"listring[context;dst]",
@@ -51,32 +49,30 @@ local function active_formspec(name,fire_anim,arrow_anim)
 end
 
 local inactive_formspec = table.concat({
-	"formspec_version[4]",
+	"formspec_version[6]",
 	"size[11.75,10.425]",
 	"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Furnace"))) .. "]",
-
-	mcl_formspec.get_itemslot_bg(3.5, 0.75, 1, 1),
+	mcl_formspec.get_itemslot_bg_v4(3.5, 0.75, 1, 1),
 	"list[context;src;3.5,0.75;1,1;]",
 
 	"image[3.5,2;1,1;default_furnace_fire_bg.png]",
 
-	mcl_formspec.get_itemslot_bg(3.5, 3.25, 1, 1),
+	mcl_formspec.get_itemslot_bg_v4(3.5, 3.25, 1, 1),
 	"list[context;fuel;3.5,3.25;1,1;]",
 
 	"image[5.25,2;1.5,1;gui_furnace_arrow_bg.png^[transformR270]",
 
-	mcl_formspec.get_itemslot_bg(7.875, 2, 1, 1, 0.2),
+	mcl_formspec.get_itemslot_bg_v4(7.875, 2, 1, 1, 0.2),
 	"list[context;dst;7.875,2;1,1;]",
 
 	"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
-
-	mcl_formspec.get_itemslot_bg(0.375, 5.1, 9, 3),
+	mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
 	"list[current_player;main;0.375,5.1;9,3;9]",
 
-	mcl_formspec.get_itemslot_bg(0.375, 9.05, 9, 1),
+	mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
 	"list[current_player;main;0.375,9.05;9,1;]",
 
-	"image_button[7.9,0.4;1,1;craftguide_book.png;craftguide;]"..
+	"image_button[7.85,0.6;1,1;craftguide_book.png;craftguide;]"..
 	"tooltip[craftguide;"..minetest.formspec_escape(S("Recipe book")).."]"..
 
 	"listring[context;dst]",
@@ -104,7 +100,7 @@ end
 local function is_fuel(stack,factor)
 	local teststack = ItemStack(stack)
 	teststack:set_count(1)
-	local output, decremented_input = minetest.get_craft_result({method="fuel", width=1, items={teststack}})
+	local output, _ = minetest.get_craft_result({method="fuel", width=1, items={teststack}})
 	if output.time ~= 0 then
 		return output.time / (factor or 1)
 	end
@@ -120,7 +116,6 @@ local function is_cookable(stack,factor)
 end
 
 local function get_cook_factor(item,fgroups)
-	local idef=item:get_definition()
 	if not fgroups then return 1 end
 	for fg,ff in pairs(fgroups) do
 		if minetest.get_item_group(item:get_name(),fg) > 0 then return ff end
@@ -164,10 +159,12 @@ local function furnace_deactivate(pos)
 	end
 end
 
+--[[
 local function furnace_is_active(pos)
 	local node = minetest.get_node(pos)
 	if node.name:find("_active") then return true end
 end
+--]]
 
 local function allow_metadata_inventory_put(pos, listname, index, stack, player)
 	local name = player:get_player_name()
@@ -234,23 +231,21 @@ local function on_metadata_inventory_move(pos, from_list, from_index, to_list, t
 end
 
 local function update_formspec(pos,node)
-	local fs = inactive_formspec
 	local meta = minetest.get_meta(pos)
 	local def = minetest.registered_nodes[node.name]
 	local inv = meta:get_inventory()
 	local f = get_furnace_stacks(inv)
 	local factor = get_cook_factor(f.src,def._mcl_furnace_groups)
 	local fuel_time = is_fuel(ItemStack(meta:get_string("fuel_item")),factor)
-	local cook_time,result = is_cookable(f.src,factor)
+	local cook_time, _ = is_cookable(f.src,factor)
 	local burning_elapsed = meta:get_int("burning_elapsed")
 	local cooking_elapsed = meta:get_int("cooking_elapsed")
 	if cook_time and fuel_time then
 		local fire_anim = get_anim("mcl_furnaces_fire_animated.png",fuel_time,burning_elapsed)
 		local arrow_anim = get_anim("mcl_furnaces_arrow_animated.png",cook_time,cooking_elapsed)
-		fs = active_formspec(def.description:split("\n")[1],fire_anim,arrow_anim)
 		meta:set_string("fire_anim",fire_anim)
 		meta:set_string("arrow_anim",arrow_anim)
-		meta:set_string("formspec", fs)
+		meta:set_string("formspec", active_formspec(def.description:split("\n")[1],fire_anim,arrow_anim))
 	end
 end
 
@@ -348,7 +343,7 @@ mcl_furnaces.tpl_furnace_active = table.merge(mcl_furnaces.tpl_furnace,{
 		local inv = meta:get_inventory()
 		local f = get_furnace_stacks(inv)
 		local factor = get_cook_factor(f.src,def._mcl_furnace_groups)
-		local cook_time,result = is_cookable(f.src,factor)
+		local cook_time, _ = is_cookable(f.src,factor)
 		local burning_elapsed = meta:get_int("burning_elapsed")
 		local cooking_elapsed = meta:get_int("cooking_elapsed")
 		local new_time

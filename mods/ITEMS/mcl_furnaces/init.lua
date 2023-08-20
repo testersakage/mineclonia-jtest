@@ -1,6 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
-local F = minetest.formspec_escape
 
 mcl_furnaces = {}
 
