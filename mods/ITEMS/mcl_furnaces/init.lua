@@ -18,6 +18,7 @@ mcl_furnaces.register_furnace("furnace",{
 mcl_furnaces.register_furnace("blast_furnace",{
 	_mcl_furnace_groups = {
 		ore = 2,
+		blast_furnace_smeltable = 2,
 	},
 	normal = {
 		description = S("Blast Furnace"),
