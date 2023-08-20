@@ -6,6 +6,13 @@ local modpath = minetest.get_modpath(minetest.get_current_modname())
 dofile(modpath.."/api.lua")
 
 mcl_furnaces.register_furnace("furnace",{
+	normal = {
+		tiles = {
+			"default_furnace_top.png", "default_furnace_bottom.png",
+			"default_furnace_side.png", "default_furnace_side.png",
+			"default_furnace_side.png", "default_furnace_front.png",
+		},
+	},
 	active = {
 		tiles = {
 			"default_furnace_top.png", "default_furnace_bottom.png",
@@ -15,6 +22,7 @@ mcl_furnaces.register_furnace("furnace",{
 		},
 	},
 })
+
 mcl_furnaces.register_furnace("blast_furnace",{
 	_mcl_furnace_groups = {
 		ore = 2,
@@ -47,6 +55,7 @@ mcl_furnaces.register_furnace("blast_furnace",{
 		},
 	}
 })
+
 mcl_furnaces.register_furnace("smoker",{
 	_mcl_furnace_groups = {
 		food = 2,
