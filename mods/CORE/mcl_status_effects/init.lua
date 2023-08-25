@@ -7,6 +7,15 @@ local effect_players = {}
 	on_start = function(player,def) end,
 	on_stop = function(player,def) end,
 	on_step = functionn(player,def,data,dtime) end,
+	--function that is run every step. data is the player entry in player_effects
+	--containing by default:
+	--	{
+			time_started = --gametime when the effect was started.
+			duration = --time in seconds this instance of the effect is going to last.
+			particlespawner = --the particlespawner ID
+	--	}
+	duration = seconds,
+	--default duration for the effect
 }
 
 --]]
