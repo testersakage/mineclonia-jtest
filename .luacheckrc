@@ -166,6 +166,7 @@ globals = {
 	"mcl_sprint",
 	"mcl_spyglass",
 	"mcl_stairs",
+	"mcl_status_effects",
 	"mcl_stonecutter",
 	"mcl_strongholds",
 	"mcl_structures",
