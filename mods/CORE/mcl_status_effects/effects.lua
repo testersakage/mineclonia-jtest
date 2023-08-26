@@ -9,8 +9,8 @@ minetest.register_on_mods_loaded(function()
 		params = prms.."> <factor>",
 		privs = { debug = true },
 		func = function(pn,param)
-			local effect = param:split()[1]
-			local factor = tonumber(param:split()[2])
+			local effect = param:split(" ")[1]
+			local factor = tonumber(param:split(" ")[2])
 			if mcl_status_effects.registered_effects[effect] then
 				mcl_status_effects.start_effect(minetest.get_player_by_name(pn), effect, { factor = factor })
 				return true, "Effect ".. tostring(effect) .. " started"
@@ -54,7 +54,7 @@ mcl_status_effects.register_effect("healing",{
 		if l and l.harmed_by_heal then
 			mcl_util.deal_damage(obj, hp, {type = "magic"})
 		else
-			mcl_status_effects.add_hp(obj, hp, "healing")
+			mcl_status_effects.add_hp(obj, hp, {other = "healing"})
 		end
 	end,
 })
@@ -67,7 +67,7 @@ mcl_status_effects.register_effect("harming",{
 		if l and l.harmed_by_heal then
 			mcl_util.deal_damage(obj, hp, {type = "magic"})
 		else
-			mcl_status_effects.add_hp(obj, hp, "healing")
+			mcl_status_effects.add_hp(obj, hp, {other = "healing"})
 		end
 	end,
 })
@@ -181,7 +181,67 @@ mcl_status_effects.register_effect("leaping",{
 			l.jump_height = data.jump_height
 		end
 	end,
-	factor = 1.15,
+	factor = 2.5,
+	duration = 30,
+})
+
+mcl_status_effects.register_effect("poison",{
+	color = "#4E9331",
+	hudbar_icon = "hbhunger_icon_health_poison.png",
+	on_start = function(obj, def, data)
+		if obj:is_player() then
+			if mcl_status_effects.is_active(obj, "regeneration") then
+				data.hudbar_icon = "hbhunger_icon_regen_poison.png"
+			end
+			return
+		end
+	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			if mcl_status_effects.is_active(obj, "regeneration") then
+				data.hudbar_reset = "hudbars_icon_regenerate.png"
+			end
+			return
+		end
+	end,
+	on_step = function(obj, def, data, dtime)
+		data.timer = (data.timer or 0) + dtime
+		if data.timer < def.factor then return end
+		data.timer = 0
+		if mcl_util.get_hp(obj) - 1 > 0 then
+			mcl_util.deal_damage(obj, 1, {type = "magic"})
+		end
+	end,
+	factor = 2.5,
+	duration = 30,
+})
+
+mcl_status_effects.register_effect("regeneration",{
+	color = "#4E9331",
+	hudbar_icon = "hudbars_icon_regenerate.png",
+	on_start = function(obj, def, data)
+		if obj:is_player() then
+			if mcl_status_effects.is_active(obj, "regeneration") then
+				data.hudbar_icon = "hbhunger_icon_regen_poison.png"
+			end
+			return
+		end
+	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			if mcl_status_effects.is_active(obj, "poison") then
+				data.hudbar_reset = "hbhunger_icon_health_poison.png"
+			end
+			return
+		end
+	end,
+	on_step = function(obj, def, data, dtime)
+		data.timer = (data.timer or 0) + dtime
+		if data.timer < def.factor then return end
+		data.timer = 0
+		mcl_status_effects.add_hp(obj, 1, {other = "regeneration"})
+	end,
+	factor = 2.5,
 	duration = 30,
 })
 
