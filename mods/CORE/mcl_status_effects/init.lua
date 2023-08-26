@@ -15,27 +15,71 @@ local effect_players = {}
 			particlespawner = --the particlespawner ID
 	--	}
 	duration = seconds,
-	--default duration for the effect
+	--default duration for the effect if duration == 0 only the start function is taken into account
+	-- and the effect is considered a "one-off" instant effect like healing.
 }
 
 --]]
+function mcl_status_effects.get_hp_max(obj)
+	if obj:is_player() then
+		return obj:get_properties().hp_max
+	end
+	local l = obj:get_luaentity()
+	if l and l.is_mob then
+		return l.hp_max
+	end
+end
+
+function mcl_status_effects.get_hp(obj)
+	if obj:is_player() then
+		return obj:get_hp()
+	end
+	local l = obj:get_luaentity()
+	if l and l.is_mob then
+		return l.health
+	end
+end
+
+function mcl_status_effects.set_hp(obj, hp, reason)
+	if obj:is_player() then
+		return obj:set_hp(math.min(hp, mcl_status_effects.get_hp_max(obj)), { type = "set_hp", other = reason })
+	end
+	local l = obj:get_luaentity()
+	if l and l.is_mob then
+		l.health = math.min(hp, mcl_status_effects.get_hp_max(obj))
+		return true
+	end
+end
+
+function mcl_status_effects.add_hp(obj, hp)
+	local ohp = mcl_status_effects.get_hp(obj)
+	if ohp then
+		return mcl_status_effects.set_hp(obj, ohp + hp)
+	end
+end
+
 
 function mcl_status_effects.register_effect(name, def)
 	def.name = name
 	mcl_status_effects.registered_effects[name] = def
-	effect_players[name] = {}
+	if def.duration and def.duration > 0 then
+		effect_players[name] = {}
+	end
 end
 
-function mcl_status_effects.start_effect(object,effect, overrides)
+function mcl_status_effects.start_effect(object, effect, overrides)
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
 	if def.on_start then
 		def.on_start(object,def)
 	end
-	effect_players[effect][object] = {
-		time_started = minetest.get_gametime(),
-		duration = def.duration,
-		--particlespawner = minetest.add_particlespawner(...)
-	}
+	if def.duration and def.duration > 0 then
+		effect_players[effect][object] = {
+			time_started = minetest.get_gametime(),
+			duration = def.duration,
+			factor = def.factor or 1
+			--particlespawner = minetest.add_particlespawner(...)
+		}
+	end
 end
 
 function mcl_status_effects.stop_effect(object,effect)
@@ -92,6 +136,19 @@ mcl_status_effects.register_effect("test_step",{
 		minetest.log(def.name.." step for player .."..obj:get_player_name())
 	end,
 	duration = 10,
+})
+
+mcl_status_effects.register_effect("healing",{
+	on_start = function(obj, def)
+		local hp = math.max(1,4 * def.factor)
+		local l = obj:get_luaentity()
+		if l and l.harmed_by_heal then
+			mcl_util.deal_damage(obj, hp, {type = "magic"})
+		else
+			mcl_status_effects.add_hp(obj, hp, "healing")
+		end
+	end,
+	factor = 1,
 })
 
 minetest.register_chatcommand("start_effect",{
