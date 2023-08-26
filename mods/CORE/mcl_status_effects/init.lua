@@ -20,6 +20,30 @@ local effect_players = {}
 }
 
 --]]
+
+function mcl_status_effects.add_particlespawnerdef(obj, color)
+	if not color then return end
+	local d = 0.2
+	return minetest.add_particlespawner({
+		amount = 10,
+		time = 0,
+		minpos = vector.new(-d,1,-d),
+		maxpos = vector.new(d,2,d),
+		minvel = vector.new(0.1,0, -0.1),
+		maxvel = vector.new(0.1, 0.1,0.1),
+		minacc = vector.new(-0.1, 0,0.1),
+		maxacc = vector.new(0.1, .1, 0.1),
+		minexptime = 0.5,
+		maxexptime = 1,
+		minsize = 0.5,
+		maxsize = 1,
+		collisiondetection = false,
+		vertical = false,
+		texture = "mcl_particles_effect.png^[colorize:"..color..":127",
+		attached = obj,
+	})
+end
+
 function mcl_status_effects.get_hp_max(obj)
 	if obj:is_player() then
 		return obj:get_properties().hp_max
@@ -77,8 +101,8 @@ function mcl_status_effects.start_effect(object, effect, overrides)
 		effect_players[effect][object] = table.merge({
 			time_started = minetest.get_gametime(),
 			duration = def.duration,
-			factor = def.factor or 1
-			--particlespawner = minetest.add_particlespawner(...)
+			factor = def.factor or 1,
+			particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color),
 		},data)
 	end
 end
@@ -89,6 +113,7 @@ function mcl_status_effects.stop_effect(object, effect, data)
 	if def.on_stop then
 		def.on_stop(object, def)
 	end
+	minetest.delete_particlespawner(data.particlespawner)
 	effect_players[effect][object] = nil
 end
 
@@ -140,6 +165,7 @@ mcl_status_effects.register_effect("test_step",{
 })
 
 mcl_status_effects.register_effect("healing",{
+	color = "#F82423",
 	on_start = function(obj, def)
 		local hp = math.max(1,4 * def.factor)
 		local l = obj:get_luaentity()
@@ -153,6 +179,7 @@ mcl_status_effects.register_effect("healing",{
 })
 
 mcl_status_effects.register_effect("swiftness",{
+	color = "#7CAFC6",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
 			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:swiftness", def.factor)
@@ -179,7 +206,7 @@ mcl_status_effects.register_effect("swiftness",{
 			l.run_velocity = data.run_velocity
 		end
 	end,
-	factor = 2,
+	factor = 1.2,
 	duration = 30,
 })
 
