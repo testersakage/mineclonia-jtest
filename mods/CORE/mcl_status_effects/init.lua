@@ -44,6 +44,31 @@ function mcl_status_effects.add_particlespawnerdef(obj, color)
 	})
 end
 
+local function reorder_hud_icons(player)
+	if not player:is_player() then return end
+	local i = 1
+	for effect,v in pairs(effect_players) do
+		if v[player] and v[player].hud_icon then
+			local x = -52 * i - 2
+			i = i + 1
+			player:hud_change(v[player].hud_icon, "offset", { x = x, y = 3 })
+		end
+	end
+end
+
+function mcl_status_effects.add_hud_icon(player, icon)
+	if not player:is_player() then return end
+	local id = player:hud_add({
+		hud_elem_type = "image",
+		text = icon.."^[resize:128x128",
+		position = { x = 1, y = 0 },
+		offset = { x = -54, y = 3 },
+		scale = { x = 0.375, y = 0.375 },
+		alignment = { x = 1, y = 1 },
+		z_index = 100,
+	})
+	return id
+end
 function mcl_status_effects.get_hp_max(obj)
 	if obj:is_player() then
 		return obj:get_properties().hp_max
@@ -92,6 +117,7 @@ function mcl_status_effects.register_effect(name, def)
 end
 
 function mcl_status_effects.start_effect(object, effect, overrides)
+	if effect_players[effect][object] then return end
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
 	local data = {}
 	if def.on_start then
@@ -103,7 +129,9 @@ function mcl_status_effects.start_effect(object, effect, overrides)
 			duration = def.duration,
 			factor = def.factor or 1,
 			particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color),
+			hud_icon = mcl_status_effects.add_hud_icon(object, "mcl_potions_effect_"..def.name..".png"),
 		},data)
+		reorder_hud_icons(object)
 	end
 end
 
@@ -113,7 +141,16 @@ function mcl_status_effects.stop_effect(object, effect, data)
 	if def.on_stop then
 		def.on_stop(object, def)
 	end
-	minetest.delete_particlespawner(data.particlespawner)
+	if data.particlespawner then
+		minetest.delete_particlespawner(data.particlespawner)
+	end
+	if data.hudbar then
+		hb.change_hudbar(object, "health", nil, nil, "hudbars_icon_health.png", nil, "hudbars_bar_health.png")
+	end
+	if data.hud_icon then
+		object:hud_remove(data.hud_icon)
+		reorder_hud_icons(object)
+	end
 	effect_players[effect][object] = nil
 end
 
@@ -178,7 +215,7 @@ mcl_status_effects.register_effect("healing",{
 	factor = 1,
 })
 
-mcl_status_effects.register_effect("swiftness",{
+mcl_status_effects.register_effect("swift",{
 	color = "#7CAFC6",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
@@ -207,6 +244,38 @@ mcl_status_effects.register_effect("swiftness",{
 		end
 	end,
 	factor = 1.2,
+	duration = 30,
+})
+
+mcl_status_effects.register_effect("slow",{
+	color = "#5A6C81",
+	on_start = function(obj, def, data)
+		if obj:is_player() then
+			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:swiftness", def.factor)
+		end
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			local factor = def.factor
+			if def.factor < 0 then
+				factor = 1 / ( -def.factor)
+			end
+			data.walk_velocity = l.walk_velocity
+			data.run_velocity = l.run_speed
+			l.walk_velocity = factor * l.walk_velocity
+			l.run_velocity = factor * l.run_velocity
+		end
+	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			return playerphysics.remove_physics_factor(obj, "speed", "mcl_potions:swiftness")
+		end
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			l.walk_velocity = data.walk_velocity
+			l.run_velocity = data.run_velocity
+		end
+	end,
+	factor = 0.85,
 	duration = 30,
 })
 
