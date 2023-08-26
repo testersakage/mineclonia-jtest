@@ -118,12 +118,21 @@ function mcl_status_effects.register_effect(name, def)
 	end
 end
 
+function mcl_status_effects.is_active(obj, effect)
+	return effect_players[effect] and effect_players[effect][obj]
+end
+
 function mcl_status_effects.start_effect(object, effect, overrides)
-	if effect_players[effect][object] then return end
+	if mcl_status_effects.is_active(object, effect) then return end
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
 	local data = {}
 	if def.on_start then
 		def.on_start(object, def, data)
+	end
+	local hudbar
+	local hbicon = data.hudbar_icon or def.hudbar_icon or nil
+	if hbicon then
+		hudbar = hb.change_hudbar(object, "health", nil, nil, hbicon, nil, "hudbars_bar_health.png")
 	end
 	if def.duration and def.duration > 0 then
 		effect_players[effect][object] = table.merge({
@@ -132,22 +141,23 @@ function mcl_status_effects.start_effect(object, effect, overrides)
 			factor = def.factor or 1,
 			particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color),
 			hud_icon = mcl_status_effects.add_hud_icon(object, "mcl_potions_effect_"..def.name..".png"),
+			hudbar = hudbar,
 		},data)
 		reorder_hud_icons(object)
 	end
 end
 
 function mcl_status_effects.stop_effect(object, effect, data)
-	if not effect_players[effect][object] then return end
+	if not mcl_status_effects.is_active(object, effect) then return end
 	local def = mcl_status_effects.registered_effects[effect]
 	if def.on_stop then
-		def.on_stop(object, def)
+		def.on_stop(object, def, data)
 	end
 	if data.particlespawner then
 		minetest.delete_particlespawner(data.particlespawner)
 	end
 	if data.hudbar then
-		hb.change_hudbar(object, "health", nil, nil, "hudbars_icon_health.png", nil, "hudbars_bar_health.png")
+		hb.change_hudbar(object, "health", nil, nil, data.hudbar_reset or "hudbars_icon_health.png", nil, "hudbars_bar_health.png")
 	end
 	if data.hud_icon then
 		object:hud_remove(data.hud_icon)
