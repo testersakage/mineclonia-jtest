@@ -93,7 +93,7 @@ end
 
 function mcl_status_effects.set_hp(obj, hp, reason)
 	if obj:is_player() then
-		return obj:set_hp(math.min(hp, mcl_status_effects.get_hp_max(obj)), { type = "set_hp", other = reason })
+		return obj:set_hp(math.min(hp, mcl_status_effects.get_hp_max(obj)), table.merge({ type = "set_hp" }, reason or {}))
 	end
 	local l = obj:get_luaentity()
 	if l and l.is_mob then
@@ -102,10 +102,10 @@ function mcl_status_effects.set_hp(obj, hp, reason)
 	end
 end
 
-function mcl_status_effects.add_hp(obj, hp)
+function mcl_status_effects.add_hp(obj, hp, reason)
 	local ohp = mcl_status_effects.get_hp(obj)
 	if ohp then
-		return mcl_status_effects.set_hp(obj, ohp + hp)
+		return mcl_status_effects.set_hp(obj, ohp + hp, reason)
 	end
 end
 
