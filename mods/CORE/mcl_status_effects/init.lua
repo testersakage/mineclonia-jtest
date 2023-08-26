@@ -69,20 +69,21 @@ end
 
 function mcl_status_effects.start_effect(object, effect, overrides)
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
+	local data = {}
 	if def.on_start then
-		def.on_start(object,def)
+		def.on_start(object, def, data)
 	end
 	if def.duration and def.duration > 0 then
-		effect_players[effect][object] = {
+		effect_players[effect][object] = table.merge({
 			time_started = minetest.get_gametime(),
 			duration = def.duration,
 			factor = def.factor or 1
 			--particlespawner = minetest.add_particlespawner(...)
-		}
+		},data)
 	end
 end
 
-function mcl_status_effects.stop_effect(object,effect)
+function mcl_status_effects.stop_effect(object, effect, data)
 	if not effect_players[effect][object] then return end
 	local def = mcl_status_effects.registered_effects[effect]
 	if def.on_stop then
@@ -105,7 +106,7 @@ minetest.register_globalstep(function(dtime)
 		for object, data in pairs(objects) do
 			data.etime = ( data.etime or 0 ) + dtime
 			if data.etime > (data.duration or 0) then
-				mcl_status_effects.stop_effect(object,effect)
+				mcl_status_effects.stop_effect(object, effect, data)
 			elseif def.on_step then
 				def.on_step(object, def, data, dtime)
 			end
