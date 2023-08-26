@@ -152,6 +152,37 @@ mcl_status_effects.register_effect("healing",{
 	factor = 1,
 })
 
+mcl_status_effects.register_effect("swiftness",{
+	on_start = function(obj, def, data)
+		if obj:is_player() then
+			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:swiftness", def.factor)
+		end
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			local factor = def.factor
+			if def.factor < 0 then
+				factor = 1 / ( -def.factor)
+			end
+			data.walk_velocity = l.walk_velocity
+			data.run_velocity = l.run_speed
+			l.walk_velocity = factor * l.walk_velocity
+			l.run_velocity = factor * l.run_velocity
+		end
+	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			return playerphysics.remove_physics_factor(obj, "speed", "mcl_potions:swiftness")
+		end
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			l.walk_velocity = data.walk_velocity
+			l.run_velocity = data.run_velocity
+		end
+	end,
+	factor = 2,
+	duration = 30,
+})
+
 minetest.register_chatcommand("start_effect",{
 	func = function(pn,param)
 		if mcl_status_effects.registered_effects[param] then
