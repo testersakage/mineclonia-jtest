@@ -1,6 +1,8 @@
 mcl_status_effects = {}
 mcl_status_effects.registered_effects = {}
 local effect_players = {}
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname)
 
 --[[
 {
@@ -176,114 +178,4 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-mcl_status_effects.register_effect("test_start_stop",{
-	on_start = function(obj, def)
-		minetest.log(def.name.." started for player "..obj:get_player_name())
-	end,
-	on_stop = function(obj, def)
-		minetest.log(def.name.." stopped for player "..obj:get_player_name())
-	end
-})
-
-mcl_status_effects.register_effect("test_step",{
-	on_start = function(obj, def)
-		minetest.log(def.name.." started for player "..obj:get_player_name())
-	end,
-	on_stop = function(obj, def)
-		minetest.log(def.name.." stopped for player "..obj:get_player_name())
-	end,
-	on_step = function(obj, def, data, dtime)
-		data.timer = (data.timer or 0) + dtime
-		if data.timer < 1 then return end
-		data.timer = 0
-		minetest.log(def.name.." step for player .."..obj:get_player_name())
-	end,
-	duration = 10,
-})
-
-mcl_status_effects.register_effect("healing",{
-	color = "#F82423",
-	on_start = function(obj, def)
-		local hp = math.max(1,4 * def.factor)
-		local l = obj:get_luaentity()
-		if l and l.harmed_by_heal then
-			mcl_util.deal_damage(obj, hp, {type = "magic"})
-		else
-			mcl_status_effects.add_hp(obj, hp, "healing")
-		end
-	end,
-	factor = 1,
-})
-
-mcl_status_effects.register_effect("swift",{
-	color = "#7CAFC6",
-	on_start = function(obj, def, data)
-		if obj:is_player() then
-			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:swiftness", def.factor)
-		end
-		local l = obj:get_luaentity()
-		if l and l.is_mob then
-			local factor = def.factor
-			if def.factor < 0 then
-				factor = 1 / ( -def.factor)
-			end
-			data.walk_velocity = l.walk_velocity
-			data.run_velocity = l.run_speed
-			l.walk_velocity = factor * l.walk_velocity
-			l.run_velocity = factor * l.run_velocity
-		end
-	end,
-	on_stop = function(obj, def, data)
-		if obj:is_player() then
-			return playerphysics.remove_physics_factor(obj, "speed", "mcl_potions:swiftness")
-		end
-		local l = obj:get_luaentity()
-		if l and l.is_mob then
-			l.walk_velocity = data.walk_velocity
-			l.run_velocity = data.run_velocity
-		end
-	end,
-	factor = 1.2,
-	duration = 30,
-})
-
-mcl_status_effects.register_effect("slow",{
-	color = "#5A6C81",
-	on_start = function(obj, def, data)
-		if obj:is_player() then
-			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:swiftness", def.factor)
-		end
-		local l = obj:get_luaentity()
-		if l and l.is_mob then
-			local factor = def.factor
-			if def.factor < 0 then
-				factor = 1 / ( -def.factor)
-			end
-			data.walk_velocity = l.walk_velocity
-			data.run_velocity = l.run_speed
-			l.walk_velocity = factor * l.walk_velocity
-			l.run_velocity = factor * l.run_velocity
-		end
-	end,
-	on_stop = function(obj, def, data)
-		if obj:is_player() then
-			return playerphysics.remove_physics_factor(obj, "speed", "mcl_potions:swiftness")
-		end
-		local l = obj:get_luaentity()
-		if l and l.is_mob then
-			l.walk_velocity = data.walk_velocity
-			l.run_velocity = data.run_velocity
-		end
-	end,
-	factor = 0.85,
-	duration = 30,
-})
-
-minetest.register_chatcommand("start_effect",{
-	func = function(pn,param)
-		if mcl_status_effects.registered_effects[param] then
-			local pl = minetest.get_player_by_name(pn)
-			mcl_status_effects.start_effect(pl,param)
-		end
-	end
-})
+dofile(modpath.."/effects.lua")
