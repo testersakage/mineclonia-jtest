@@ -124,6 +124,8 @@ end
 
 function mcl_status_effects.start_effect(object, effect, overrides, restore)
 	if not restore and mcl_status_effects.is_active(object, effect) then return end
+	if mcl_status_effects.get_hp(object) <= 0 then return end
+
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
 	local data = {}
 	if def.on_start then
