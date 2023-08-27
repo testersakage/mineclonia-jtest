@@ -96,8 +96,7 @@ mcl_weather.skycolor = {
 
 	-- Wrapper for updating day/night ratio that respects night vision
 	override_day_night_ratio = function(player, ratio)
-		local meta = player:get_meta()
-		local has_night_vision = meta:get_int("night_vision") == 1
+		local has_night_vision = mcl_status_effects.is_active(player, "night_vision")
 		local arg
 		-- Apply night vision only for dark sky
 		local is_dark = minetest.get_timeofday() > 0.8 or minetest.get_timeofday() < 0.2 or mcl_weather.state ~= "none"
@@ -213,9 +212,9 @@ mcl_weather.skycolor = {
 						-- fairly complex solution around so I will explain what it's doing (now):
 						-- The light is basically derived by the distance of the current time to
 						-- 0.5 which means midday/noon. i.e. the key here is 1 - math.abs(0.5 - w)
-						-- the rest is just modifications and a minimum light level of 0.2
+						-- the rest is just modifications and a minimum light level of 0.3
 						local w = minetest.get_timeofday()
-						local light = math.max(0.2,((1 - math.abs(0.5 - w)) * lf) - 0.15)
+						local light = math.max(0.3,((1 - math.abs(0.5 - w)) * lf) - 0.15)
 						mcl_weather.skycolor.override_day_night_ratio(player, light)
 					else
 						mcl_weather.skycolor.override_day_night_ratio(player, nil)

@@ -3,7 +3,7 @@ minetest.register_on_mods_loaded(function()
 	for k,_ in pairs(mcl_status_effects.registered_effects) do
 		prms = prms .. k .. "|"
 	end
-
+	prms = prms:gsub("|$","")
 	minetest.register_chatcommand("start_effect",{
 		description = "Apply a status effect to yourself",
 		params = prms.."> <factor>",
@@ -76,15 +76,11 @@ mcl_status_effects.register_effect("night_vision",{
 	color = "#1F1FA1",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
-			local meta = obj:get_meta()
-			meta:set_int("nigh_vision",1)
 			mcl_weather.skycolor.update_sky_color({obj})
 		end
 	end,
 	on_stop = function(obj, def, data)
 		if obj:is_player() then
-			local meta = obj:get_meta()
-			meta:set_int("nigh_vision",0)
 			mcl_weather.skycolor.update_sky_color({obj})
 		end
 	end,
