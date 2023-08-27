@@ -20,6 +20,31 @@ minetest.register_on_mods_loaded(function()
 	})
 end)
 
+--missing:
+--- x - prob requires engine change
+--- e - easy to implement
+--- p - possible but probably not so easy currently
+--- h - could be done but probably hacky
+-- Haste           x?
+-- Mining Fatigue  x?
+-- Nausea          x / h (maybe with particle spawner tricks ?)
+-- Resistance      p
+-- Blindness       h
+-- Hunger          e
+-- Health Boost    e
+-- Absorption      h
+-- Saturation      e
+-- Glowing         h
+-- Levitation      e
+-- Luck            p
+-- Fatal Poison    e
+-- Slow Falling    x
+-- Conduit Power   x?
+-- Dolphin's Grace p
+-- Hero of the Village e
+-- Darkness        x
+
+
 mcl_status_effects.register_effect("test_start_stop",{
 	on_start = function(obj, def)
 		minetest.log(def.name.." started for player "..obj:get_player_name())
