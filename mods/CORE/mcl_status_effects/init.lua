@@ -122,9 +122,17 @@ function mcl_status_effects.is_active(obj, effect)
 	return effect_players[effect] and effect_players[effect][obj]
 end
 
+function mcl_status_effects.get_effect_def(effect)
+	return mcl_status_effects.registered_effects[effect]
+end
+
 function mcl_status_effects.start_effect(object, effect, overrides, restore)
 	if not restore and mcl_status_effects.is_active(object, effect) then return end
 	if mcl_status_effects.get_hp(object) <= 0 then return end
+
+	if not mcl_status_effects.registered_effects[effect] then
+		minetest.log("warning","["..tostring(minetest.get_current_modname()).."] trying to start non existent status effect: "..tostring(effect))
+		return end
 
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
 	local data = {}
@@ -199,6 +207,10 @@ function mcl_status_effects.get_active_effects(obj, stop) --players only, mob da
 		end
 	end
 	return r, i
+end
+
+function mcl_status_effects.clear_player(player)
+	mcl_status_effects.get_active_effects(player, true)
 end
 
 function mcl_status_effects.save_player_effects(player)

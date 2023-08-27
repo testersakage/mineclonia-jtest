@@ -52,11 +52,9 @@ local function hunger_effect(itemstack)
 	return itemstack
 end
 
-local function potion_effect(itemstack, placer, _, effect)
-	if mcl_potions[effect.."_func"] then
-		mcl_potions[effect.."_func"](placer, 1, 6)
-	end
-	return itemstack
+local function potion_effect(itemstack, placer, pointed_thing, effect)
+	mcl_status_effects.start_effect(placer, effect, {duration = 6, factor = 1})
+	return minetest.do_item_eat(0, "", itemstack, placer, pointed_thing)
 end
 
 mcl_sus_stew.register_stew("fire_resistance","mcl_flowers:allium",potion_effect)

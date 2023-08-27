@@ -269,7 +269,7 @@ mcl_events.register_event("raid",{
 		--minetest.log("Cond start raid")
 		local r = {}
 		for _,p in pairs(minetest.get_connected_players()) do
-			if mcl_potions.player_has_effect(p,"bad_omen") then
+			if mcl_status_effects.is_active(p,"bad_omen") then
 				local raid_pos = mcl_raids.find_village(p:get_pos())
 				if raid_pos then
 					--minetest.log("We have a raid position. Start raid")
@@ -283,7 +283,7 @@ mcl_events.register_event("raid",{
 		self.mobs = {}
 		self.health_max = 1
 		self.health = 0
-		local lv = mcl_potions.player_get_effect(minetest.get_player_by_name(self.player), "bad_omen")
+		local lv = mcl_status_effects.is_active(minetest.get_player_by_name(self.player), "bad_omen")
 		if lv and lv.factor and lv.factor > 1 then self.max_stage = 6 end
 	end,
 	cond_progress = function(self)

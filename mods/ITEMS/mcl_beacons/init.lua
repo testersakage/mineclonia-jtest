@@ -203,14 +203,8 @@ end
 local function effect_player(effect,pos,power_level, effect_level,player)
 	local distance =  vector.distance(player:get_pos(), pos)
 	if distance > (power_level+1)*10 then return end
-	if effect == "swiftness" then
-		mcl_potions.swiftness_func(player,effect_level,16)
-	elseif effect == "leaping" then
-		mcl_potions.leaping_func(player, effect_level, 16)
-	elseif effect == "strenght" then
-		mcl_potions.strength_func(player, effect_level, 16)
-	elseif effect == "regeneration" then
-		mcl_potions.regeneration_func(player, effect_level, 16)
+	if mcl_status_effects.get_effect_def(effect) then
+		mcl_status_effects.start_effect(player, effect, {duration = 16, factor = effect_level})
 	end
 end
 

@@ -360,3 +360,10 @@ minetest.register_tool("mcl_fishing:fishing_rod", {
 })
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/items.lua")
+
+minetest.register_on_item_eat(function (hp_change, replace_with_item, itemstack, user, pointed_thing)
+	if itemstack:get_name() == "mcl_fishing:pufferfish_raw" then
+		mcl_status_effects.start_effect(user, "poison", {duration = 60, factor = 1/3})
+	end
+
+end )
