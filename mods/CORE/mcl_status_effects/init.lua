@@ -122,8 +122,8 @@ function mcl_status_effects.is_active(obj, effect)
 	return effect_players[effect] and effect_players[effect][obj]
 end
 
-function mcl_status_effects.start_effect(object, effect, overrides)
-	if mcl_status_effects.is_active(object, effect) then return end
+function mcl_status_effects.start_effect(object, effect, overrides, restore)
+	if not restore and mcl_status_effects.is_active(object, effect) then return end
 	local def = table.merge(mcl_status_effects.registered_effects[effect],overrides or {})
 	local data = {}
 	if def.on_start then
@@ -131,48 +131,101 @@ function mcl_status_effects.start_effect(object, effect, overrides)
 	end
 	local hudbar
 	local hbicon = data.hudbar_icon or def.hudbar_icon or nil
-	if hbicon then
+	if object:is_player() and hbicon then
 		hudbar = hb.change_hudbar(object, "health", nil, nil, hbicon, nil, "hudbars_bar_health.png")
 	end
 	if def.duration and def.duration > 0 then
-		effect_players[effect][object] = table.merge({
-			time_started = minetest.get_gametime(),
-			duration = def.duration,
-			factor = def.factor or 1,
-			particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color),
-			hud_icon = mcl_status_effects.add_hud_icon(object, "mcl_potions_effect_"..def.name..".png"),
-			hudbar = hudbar,
-		},data)
-		reorder_hud_icons(object)
+		if not restore then
+			effect_players[effect][object] = table.merge({
+				time_started = minetest.get_gametime(),
+				duration = def.duration,
+				factor = def.factor or 1,
+			},data)
+		end
+		effect_players[effect][object].particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color)
+		if object:is_player() then
+			effect_players[effect][object].hud_icon = mcl_status_effects.add_hud_icon(object, "mcl_potions_effect_"..def.name..".png")
+			effect_players[effect][object].hudbar = hudbar
+			reorder_hud_icons(object)
+		end
+	end
+	if not object:is_player() then
+		local l = object:get_luaentity()
+		if l and l.is_mob and effect_players[effect] then
+			l.status_effects[effect] = effect_players[effect][object]
+		end
 	end
 end
 
-function mcl_status_effects.stop_effect(object, effect, data)
+function mcl_status_effects.stop_effect(object, effect)
 	if not mcl_status_effects.is_active(object, effect) then return end
 	local def = mcl_status_effects.registered_effects[effect]
+	local data = effect_players[effect][object]
 	if def.on_stop then
 		def.on_stop(object, def, data)
 	end
 	if data.particlespawner then
 		minetest.delete_particlespawner(data.particlespawner)
 	end
-	if data.hudbar then
+	if object:is_player() and data.hudbar then
 		hb.change_hudbar(object, "health", nil, nil, data.hudbar_reset or "hudbars_icon_health.png", nil, "hudbars_bar_health.png")
 	end
-	if data.hud_icon then
+	if object:is_player() and data.hud_icon then
 		object:hud_remove(data.hud_icon)
 		reorder_hud_icons(object)
+	end
+	if not object:is_player() then
+		local l = object:get_luaentity()
+		if l and l.is_mob then
+			l.status_effects[effect] = nil
+		end
 	end
 	effect_players[effect][object] = nil
 end
 
---function mcl_status_effects.save_player_effects(player)
+function mcl_status_effects.get_active_effects(obj, stop) --players only, mob data is saved in luaentity
+	local r = {}
+	local i = 0
+	for effect,obs in pairs(effect_players) do
+		for o,data in pairs (obs) do
+			if obj:is_player() and o:is_player() and obj:get_player_name() == o:get_player_name() then
+				r[effect] = table.copy(data)
+				if stop then mcl_status_effects.stop_effect(obj, effect) end
+				i = i + 1
+			end
+		end
+	end
+	return r, i
+end
 
---end
+function mcl_status_effects.save_player_effects(player)
+	local meta = player:get_meta()
+	local efs, count = mcl_status_effects.get_active_effects(player, true)
+	if count > 0 then
+		meta:set_string("status_effects",minetest.serialize(efs))
+	end
 
---function mcl_status_effects.restore_player_effects(player)
+end
+minetest.register_on_leaveplayer(mcl_status_effects.save_player_effects)
 
---end
+minetest.register_on_shutdown(function()
+	for _,pl in pairs(minetest.get_connected_players()) do
+		mcl_status_effects.save_player_effects(pl)
+	end
+end)
+
+function mcl_status_effects.restore_player_effects(player)
+	local meta = player:get_meta()
+	local efs = meta:get_string("status_effects")
+	if efs ~= "" then
+		for effect,data in pairs(minetest.deserialize(efs)) do
+			effect_players[effect][player] = data
+			mcl_status_effects.start_effect(player, effect, {}, true)
+		end
+	end
+	meta:set_string("status_effects","")
+end
+minetest.register_on_joinplayer(mcl_status_effects.restore_player_effects)
 
 minetest.register_globalstep(function(dtime)
 	for effect,objects in pairs(effect_players) do
@@ -183,6 +236,12 @@ minetest.register_globalstep(function(dtime)
 				mcl_status_effects.stop_effect(object, effect, data)
 			elseif def.on_step then
 				def.on_step(object, def, data, dtime)
+			end
+			if not object:is_player() then
+				local l = object:get_luaentity()
+				if l and l.is_mob and effect_players[effect] then
+					l.status_effects[effect] = data
+				end
 			end
 		end
 	end
