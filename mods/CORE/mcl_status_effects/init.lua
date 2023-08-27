@@ -134,7 +134,7 @@ function mcl_status_effects.start_effect(object, effect, overrides, restore)
 	if object:is_player() and hbicon then
 		hudbar = hb.change_hudbar(object, "health", nil, nil, hbicon, nil, "hudbars_bar_health.png")
 	end
-	if def.duration and def.duration > 0 then
+	if def.on_stop and def.duration and def.duration > 0 then
 		if not restore then
 			effect_players[effect][object] = table.merge({
 				time_started = minetest.get_gametime(),
@@ -213,6 +213,10 @@ minetest.register_on_shutdown(function()
 	for _,pl in pairs(minetest.get_connected_players()) do
 		mcl_status_effects.save_player_effects(pl)
 	end
+end)
+
+minetest.register_on_dieplayer(function(player, reason)
+	mcl_status_effects.get_active_effects(player, true)
 end)
 
 function mcl_status_effects.restore_player_effects(player)
