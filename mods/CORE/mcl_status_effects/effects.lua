@@ -350,6 +350,13 @@ mcl_status_effects.register_effect("fire_resistance",{
 	end,
 })
 
+-- Prevent damage to player with Fire Resistance enabled
+mcl_damage.register_modifier(function(obj, damage, reason)
+	if mcl_status_effects.is_active(obj, "fire_resistance") and not reason.flags.bypasses_magic and reason.flags.is_fire then
+		return 0
+	end
+end, -50)
+
 mcl_status_effects.register_effect("weakness",{
 	icon = "mcl_potions_effect_weak.png",
 	color = "#E49A3A",
