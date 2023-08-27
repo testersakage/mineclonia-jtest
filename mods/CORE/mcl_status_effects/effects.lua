@@ -30,6 +30,8 @@ end)
 -- Nausea          x / h (maybe with particle spawner tricks ?)
 -- Resistance      p
 -- Blindness       h
+-- strength        p
+-- weakness        p
 -- Hunger          e
 -- Health Boost    e
 -- Absorption      h
@@ -356,22 +358,6 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		return 0
 	end
 end, -50)
-
-mcl_status_effects.register_effect("weakness",{
-	icon = "mcl_potions_effect_weak.png",
-	color = "#E49A3A",
-	duration = 30,
-	on_start = function(obj, def, data)
-	end,
-})
-
-mcl_status_effects.register_effect("strongness",{
-	icon = "mcl_potions_effect_strong.png",
-	color = "#E49A3A",
-	duration = 30,
-	on_start = function(obj, def, data)
-	end,
-})
 
 mcl_status_effects.register_effect("bad_omen",{
 	color = "#E49A3A",
