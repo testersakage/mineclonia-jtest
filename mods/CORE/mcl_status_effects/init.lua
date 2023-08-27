@@ -144,7 +144,7 @@ function mcl_status_effects.start_effect(object, effect, overrides, restore)
 		end
 		effect_players[effect][object].particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color)
 		if object:is_player() then
-			effect_players[effect][object].hud_icon = mcl_status_effects.add_hud_icon(object, "mcl_potions_effect_"..def.name..".png")
+			effect_players[effect][object].hud_icon = mcl_status_effects.add_hud_icon(object, def.icon or "mcl_potions_effect_"..def.name..".png")
 			effect_players[effect][object].hudbar = hudbar
 			reorder_hud_icons(object)
 		end
@@ -172,6 +172,7 @@ function mcl_status_effects.stop_effect(object, effect)
 	end
 	if object:is_player() and data.hud_icon then
 		object:hud_remove(data.hud_icon)
+		data.hud_icon = nil
 		reorder_hud_icons(object)
 	end
 	if not object:is_player() then

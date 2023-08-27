@@ -88,7 +88,8 @@ mcl_status_effects.register_effect("night_vision",{
 	duration = 30,
 })
 
-mcl_status_effects.register_effect("swift",{
+mcl_status_effects.register_effect("swiftness",{
+	icon = "mcl_potions_effect_swift.png",
 	color = "#7CAFC6",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
@@ -120,7 +121,8 @@ mcl_status_effects.register_effect("swift",{
 	duration = 30,
 })
 
-mcl_status_effects.register_effect("slow",{
+mcl_status_effects.register_effect("slowness",{
+	icon = "mcl_potions_effect_slow.png",
 	color = "#5A6C81",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
@@ -182,6 +184,7 @@ mcl_status_effects.register_effect("leaping",{
 })
 
 mcl_status_effects.register_effect("poison",{
+	icon = "mcl_potions_effect_poisoned.png",
 	color = "#4E9331",
 	hudbar_icon = "hbhunger_icon_health_poison.png",
 	on_start = function(obj, def, data)
@@ -275,6 +278,7 @@ mcl_status_effects.register_effect("regeneration",{
 })
 
 mcl_status_effects.register_effect("invisibility",{
+	icon = "mcl_potions_effect_invisible.png",
 	color = "#7F8392",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
@@ -314,9 +318,33 @@ mcl_status_effects.register_effect("water_breathing",{
 })
 
 mcl_status_effects.register_effect("fire_resistance",{
+	icon = "mcl_potions_effect_fire_proof.png",
+	color = "#E49A3A",
+	duration = 30,
+	on_start = function(obj, def, data) --mostly implemented in mcl_burning
+		mcl_burning.extinguish(obj)
+	end,
+})
+
+mcl_status_effects.register_effect("weakness",{
+	icon = "mcl_potions_effect_weak.png",
 	color = "#E49A3A",
 	duration = 30,
 	on_start = function(obj, def, data)
-		mcl_burning.extinguish(obj)
+	end,
+})
+
+mcl_status_effects.register_effect("strongness",{
+	icon = "mcl_potions_effect_strong.png",
+	color = "#E49A3A",
+	duration = 30,
+	on_start = function(obj, def, data)
+	end,
+})
+
+mcl_status_effects.register_effect("bad_omen",{
+	color = "#E49A3A",
+	duration = 30,
+	on_start = function(obj, def, data)
 	end,
 })
