@@ -212,7 +212,40 @@ mcl_status_effects.register_effect("poison",{
 	duration = 30,
 })
 
+mcl_status_effects.register_effect("wither",{
+	icon = "mcl_potions_effect_withering.png",
+	color = "#4E9331",
+	hudbar_icon = "mcl_potions_icon_wither.png",
+	on_start = function(obj, def, data)
+		if obj:is_player() then
+			if mcl_status_effects.is_active(obj, "regeneration") then
+				data.hudbar_icon = "mcl_potions_icon_regen_wither.png"
+			end
+			return
+		end
+	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			if mcl_status_effects.is_active(obj, "regeneration") then
+				data.hudbar_reset = "hudbars_icon_regenerate.png"
+			end
+			return
+		end
+	end,
+	on_step = function(obj, def, data, dtime)
+		data.timer = (data.timer or 0) + dtime
+		if data.timer < def.factor then return end
+		data.timer = 0
+		if mcl_util.get_hp(obj) > 0 then
+			mcl_util.deal_damage(obj, 1, {type = "magic"})
+		end
+	end,
+	factor = 2.5,
+	duration = 30,
+})
+
 mcl_status_effects.register_effect("regeneration",{
+	icon = "mcl_potions_effect_regenerating.png",
 	color = "#CD5CAB",
 	hudbar_icon = "hudbars_icon_regenerate.png",
 	on_start = function(obj, def, data)
