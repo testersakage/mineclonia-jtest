@@ -21,6 +21,81 @@ local modpath = minetest.get_modpath(modname)
 	-- and the effect is considered a "one-off" instant effect like healing.
 }
 
+function mcl_potions._use_potion(item, obj, color)
+	local d = 0.1
+	local pos = obj:get_pos()
+	minetest.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})
+	minetest.add_particlespawner({
+		amount = 25,
+		time = 1,
+		minpos = {x=pos.x-d, y=pos.y+1, z=pos.z-d},
+		maxpos = {x=pos.x+d, y=pos.y+2, z=pos.z+d},
+		minvel = {x=-0.1, y=0, z=-0.1},
+		maxvel = {x=0.1, y=0.1, z=0.1},
+		minacc = {x=-0.1, y=0, z=-0.1},
+		maxacc = {x=0.1, y=.1, z=0.1},
+		minexptime = 1,
+		maxexptime = 5,
+		minsize = 0.5,
+		maxsize = 1,
+		collisiondetection = true,
+		vertical = false,
+		texture = "mcl_particles_effect.png^[colorize:"..color..":127",
+	})
+end
+
+
+function mcl_potions._extinguish_nearby_fire(pos, radius)
+	local epos = {x=pos.x, y=pos.y+0.5, z=pos.z}
+	local dnode = minetest.get_node({x=pos.x,y=pos.y-0.5,z=pos.z})
+	if minetest.get_item_group(dnode.name, "fire") ~= 0 or minetest.get_item_group(dnode.name, "lit_campfire") ~= 0 then
+		epos.y = pos.y - 0.5
+	end
+	local exting = false
+	-- No radius: Splash, extinguish epos and 4 nodes around
+	if not radius then
+		local dirs = {
+			{x=0,y=0,z=0},
+			{x=0,y=0,z=-1},
+			{x=0,y=0,z=1},
+			{x=-1,y=0,z=0},
+			{x=1,y=0,z=0},
+		}
+		for d=1, #dirs do
+			local tpos = vector.add(epos, dirs[d])
+			local node = minetest.get_node(tpos)
+			if minetest.get_item_group(node.name, "fire") ~= 0 then
+				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
+				minetest.remove_node(tpos)
+				exting = true
+			elseif minetest.get_item_group(node.name, "lit_campfire") ~= 0 then
+				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
+				local def = minetest.registered_nodes[node.name]
+				minetest.set_node(tpos, {name = def._mcl_campfires_smothered_form, param2 = node.param2})
+				exting = true
+			end
+		end
+	-- Has radius: lingering, extinguish all nodes in area
+	else
+		local nodes = minetest.find_nodes_in_area(
+			{x=epos.x-radius,y=epos.y,z=epos.z-radius},
+			{x=epos.x+radius,y=epos.y,z=epos.z+radius},
+			{"group:fire", "group:lit_campfire"})
+		for n=1, #nodes do
+			local node = minetest.get_node(nodes[n])
+			minetest.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.25, max_hear_distance = 16}, true)
+			if minetest.get_item_group(node.name, "fire") ~= 0 then
+				minetest.remove_node(nodes[n])
+			elseif minetest.get_item_group(node.name, "lit_campfire") ~= 0 then
+				local def = minetest.registered_nodes[node.name]
+				minetest.set_node(nodes[n], {name = def._mcl_campfires_smothered_form, param2 = node.param2})
+			end
+			exting = true
+		end
+	end
+	return exting
+end
+
 --]]
 
 function mcl_status_effects.add_particlespawnerdef(obj, color)

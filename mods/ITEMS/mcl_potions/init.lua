@@ -19,7 +19,6 @@ mcl_potions.INV_FACTOR = 0.50
 mcl_potions.SPLASH_FACTOR = 0.75
 mcl_potions.LINGERING_FACTOR = 0.25
 
-dofile(modpath .. "/functions.lua")
 dofile(modpath .. "/commands.lua")
 dofile(modpath .. "/splash.lua")
 dofile(modpath .. "/lingering.lua")
