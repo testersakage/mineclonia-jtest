@@ -35,7 +35,6 @@ end)
 -- Absorption      h
 -- Saturation      e
 -- Glowing         h
--- Levitation      e
 -- Luck            p
 -- Fatal Poison    e
 -- Slow Falling    x
@@ -369,7 +368,33 @@ mcl_status_effects.register_effect("strongness",{
 
 mcl_status_effects.register_effect("bad_omen",{
 	color = "#E49A3A",
-	duration = 30,
+	duration = 360,
+})
+
+mcl_status_effects.register_effect("hero_of_the_village",{
+	color = "#AAF57F",
+	duration = 360,
+})
+
+mcl_status_effects.register_effect("levitation",{
+	icon = "mcl_potions_effect_levitation.png",
+	color = "#18191D",
 	on_start = function(obj, def, data)
+		if obj:is_player() then
+			obj:set_pos(vector.offset(obj:get_pos(),0,0.2,0))
+			return playerphysics.add_physics_factor(obj, "gravity", "mcl_status_effects:levitation", -0.1)
+		end
 	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			return playerphysics.remove_physics_factor(obj, "gravity", "mcl_status_effects:levitation")
+		end
+	end,
+	on_step = function(obj, def, data, dtime)
+		data.timer = (data.timer or 0) + dtime
+		if data.timer > 1 then return end
+		data.timer = 0
+		obj:add_velocity(vector.new(0,3,0))
+	end,
+	duration = 5,
 })
