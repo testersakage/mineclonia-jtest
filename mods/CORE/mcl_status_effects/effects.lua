@@ -217,7 +217,7 @@ mcl_status_effects.register_effect("poison",{
 })
 
 mcl_status_effects.register_effect("regeneration",{
-	color = "#4E9331",
+	color = "#CD5CAB",
 	hudbar_icon = "hudbars_icon_regenerate.png",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
@@ -242,6 +242,34 @@ mcl_status_effects.register_effect("regeneration",{
 		mcl_status_effects.add_hp(obj, 1, {other = "regeneration"})
 	end,
 	factor = 2.5,
+	duration = 30,
+})
+
+mcl_status_effects.register_effect("invisibility",{
+	color = "#7F8392",
+	on_start = function(obj, def, data)
+		if obj:is_player() then
+			mcl_player.player_set_visibility(obj, false)
+			obj:set_nametag_attributes({ color = { a = 0 } })
+			return
+		end
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			data.old_size = l.visual_size
+			obj:set_properties({ visual_size = { x = 0, y = 0 } })
+		end
+	end,
+	on_stop = function(obj, def, data)
+		if obj:is_player() then
+			mcl_player.player_set_visibility(obj, true)
+			obj:set_nametag_attributes({ color = { r = 255, g = 255, b = 255, a = 255 } })
+			return
+		end
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			obj:set_properties({ visual_size = data.old_size })
+		end
+	end,
 	duration = 30,
 })
 
