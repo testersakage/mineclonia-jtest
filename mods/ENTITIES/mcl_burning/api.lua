@@ -100,6 +100,8 @@ function mcl_burning.set_on_fire(obj, burn_time)
 		return
 	end
 
+	if mcl_status_effects.is_active(obj, "fire_resistance") then return end
+
 	if obj:is_player() and not enable_damage then
 		return
 	else

@@ -273,4 +273,21 @@ mcl_status_effects.register_effect("invisibility",{
 	duration = 30,
 })
 
+mcl_status_effects.register_effect("water_breathing",{
+	color = "#2E5299",
+	on_step = function(obj, def, data, dtime)
+		if obj:get_breath() then
+			hb.hide_hudbar(obj, "breath")
+			if obj:get_breath() < 10 then obj:set_breath(10) end
+		end
+	end,
+	duration = 30,
+})
 
+mcl_status_effects.register_effect("fire_resistance",{
+	color = "#E49A3A",
+	duration = 30,
+	on_start = function(obj, def, data)
+		mcl_burning.extinguish(obj)
+	end,
+})
