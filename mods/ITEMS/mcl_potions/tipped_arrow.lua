@@ -17,7 +17,9 @@ function mcl_potions.register_arrow(name, desc, color, def)
 	}))
 
 	local ARROW_ENTITY = table.copy(minetest.registered_entities["mcl_bows:arrow_entity"])
-	ARROW_ENTITY._extra_hit_func = def.potion_fun
+	ARROW_ENTITY._extra_hit_func = function(object)
+		mcl_status_effects.start_effect(object, name, {factor = def.factor})
+	end
 	ARROW_ENTITY._itemstring = "mcl_potions:"..name.."_arrow"
 
 	minetest.register_entity("mcl_potions:"..name.."_arrow_entity", ARROW_ENTITY)
