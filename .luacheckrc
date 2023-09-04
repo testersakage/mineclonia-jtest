@@ -126,6 +126,7 @@ globals = {
 	"mcl_item_id",
 	"mcl_jukebox",
 	"mcl_lanterns",
+	"mcl_leads",
 	"mcl_lectern",
 	"mcl_lightning_rods",
 	"mcl_loom",
