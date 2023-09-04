@@ -237,6 +237,7 @@ function mcl_status_effects.start_effect(object, effect, overrides, restore)
 	if not object:is_player() then
 		local l = object:get_luaentity()
 		if l and l.is_mob and effect_players[effect] then
+			if not l.status_effects then l.status_effects = {} end
 			l.status_effects[effect] = effect_players[effect][object]
 		end
 	end
