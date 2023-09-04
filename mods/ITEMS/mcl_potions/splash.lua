@@ -10,6 +10,21 @@ local function splash_image(colorstring, opacity)
 	return "mcl_potions_splash_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_splash_bottle.png"
 end
 
+function mcl_potions.is_obj_hit(self, pos)
+	local entity
+	for _,object in pairs(minetest.get_objects_inside_radius(pos, 1.1)) do
+		entity = object:get_luaentity()
+		if entity and entity.name ~= self.object:get_luaentity().name then
+			if entity.is_mob then
+				return true
+			end
+		elseif object:is_player() and self._thrower ~= object:get_player_name() then
+			return true
+		end
+	end
+	return false
+end
+
 
 function mcl_potions.register_splash(name, descr, color, def)
 	local id = "mcl_potions:"..name.."_splash"
@@ -119,9 +134,9 @@ function mcl_potions.register_splash(name, descr, color, def)
 						local pos2 = obj:get_pos()
 						local rad = math.floor(math.sqrt((pos2.x-pos.x)^2 + (pos2.y-pos.y)^2 + (pos2.z-pos.z)^2))
 						if rad > 0 then
-							def.potion_fun(obj, redux_map[rad])
+							mcl_status_effects.start_effect(obj, name, {factor = 1.5 * redux_map[rad]})
 						else
-							def.potion_fun(obj, 1)
+							mcl_status_effects.start_effect(obj, name, {factor = 1.5 })
 						end
 					end
 				end

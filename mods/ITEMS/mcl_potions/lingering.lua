@@ -67,8 +67,7 @@ minetest.register_globalstep(function(dtime)
 
 				local entity = obj:get_luaentity()
 				if obj:is_player() or entity.is_mob then
-
-					vals.def.potion_fun(obj)
+					mcl_status_effects.start_effect(obj, vals.def.name, {})
 					-- TODO: Apply timer penalty only if the potion effect was acutally applied
 					vals.timer = vals.timer - 3.25
 
