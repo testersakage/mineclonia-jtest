@@ -442,6 +442,7 @@ local cat = table.merge (ocelot, {
 		"mobs_mc:rabbit",
 	},
 	_age = 0.0,
+	is_leadable = true,
 })
 
 ------------------------------------------------------------------------

@@ -67,6 +67,7 @@ local snow_golem = {
 		stand_start = 20, stand_end = 40, stand_speed = 25,
 		walk_start = 0, walk_end = 20, walk_speed = 25,
 	},
+	is_leadable = true,
 }
 
 ------------------------------------------------------------------------

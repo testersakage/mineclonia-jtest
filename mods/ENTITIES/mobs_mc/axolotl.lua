@@ -116,6 +116,7 @@ local axolotl = {
 	grounded_speed_factor = 0.5,
 	fixed_grounded_speed = 3.0,
 	breath_max = 300,
+	is_leadable = true,
 }
 
 ------------------------------------------------------------------------

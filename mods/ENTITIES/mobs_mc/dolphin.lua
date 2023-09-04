@@ -75,6 +75,7 @@ local dolphin = {
 	damage = 2.5,
 	attack_type = "melee",
 	_moisture = 120,
+	is_leadable = true,
 }
 
 ------------------------------------------------------------------------

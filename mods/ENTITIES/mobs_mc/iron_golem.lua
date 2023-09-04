@@ -52,6 +52,7 @@ local golem = {
 	reach = 3,
 	attacks_monsters = true,
 	attack_type = "melee",
+	is_leadable = true,
 	drops = {
 		{
 			name = "mcl_core:iron_ingot",
