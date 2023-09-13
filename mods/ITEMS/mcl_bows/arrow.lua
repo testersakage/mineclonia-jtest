@@ -1,6 +1,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local enable_pvp = minetest.settings:get_bool("enable_pvp")
+--local enable_pvp = minetest.settings:get_bool("enable_pvp")
 
 -- Time in seconds after which a stuck arrow is deleted
 local ARROW_TIMEOUT = 60
@@ -10,7 +10,7 @@ local STUCK_RECHECK_TIME = 5
 --local GRAVITY = 9.81
 
 local YAW_OFFSET = -math.pi/2
-
+--[[
 local function dir_to_pitch(dir)
 	--local dir2 = vector.normalize(dir)
 	local xz = math.abs(dir.x) + math.abs(dir.z)
@@ -30,6 +30,7 @@ local function random_arrow_positions(positions, placement)
 	end
 	return 0
 end
+--]]
 
 minetest.register_craftitem("mcl_bows:arrow", {
 	description = S("Arrow"),
@@ -76,6 +77,7 @@ local ARROW_ENTITY={
 }
 
 -- Destroy arrow entity self at pos and drops it as an item
+--[[
 local function spawn_item(self, pos)
 	if not minetest.is_creative_enabled("") then
 		local itemstring = "mcl_bows:arrow"
@@ -89,6 +91,7 @@ local function spawn_item(self, pos)
 	mcl_burning.extinguish(self.object)
 	self.object:remove()
 end
+
 
 local function damage_particles(pos, is_critical)
 	if is_critical then
@@ -109,313 +112,437 @@ local function damage_particles(pos, is_critical)
 		})
 	end
 end
+--]]
+
+function ARROW_ENTITY:hit_node()
+	local pos = self.object:get_pos()
+	local vel = self.object:get_velocity()
+	local dir
+	if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
+		-- Check for the node to which the arrow is pointing
+		if math.abs(vel.y) < 0.00001 then
+			if self._lastpos.y < pos.y then
+				dir = vector.new(0, 1, 0)
+			else
+				dir = vector.new(0, -1, 0)
+			end
+		else
+			dir = minetest.facedir_to_dir(minetest.dir_to_facedir(minetest.yaw_to_dir(self.object:get_yaw()-YAW_OFFSET)))
+		end
+	end
+
+	local dpos = vector.round(vector.new(self.object:get_pos())) -- digital pos
+	local node = minetest.get_node(dpos)
+	local bdef = minetest.registered_nodes[node.name]
+	self._stuckin = vector.add(dpos, dir)
+	local snode = minetest.get_node(self._stuckin)
+	local sdef = minetest.registered_nodes[snode.name]
+	if (bdef and bdef._on_arrow_hit) then
+		bdef._on_arrow_hit(dpos, self)
+	elseif (sdef and sdef._on_arrow_hit) then
+		sdef._on_arrow_hit(self._stuckin, self)
+	end
+end
+
+function ARROW_ENTITY:emit_particle(dtime)
+	self.particle_timer = (self.particle_timer or 0.5) - dtime
+	if self._damage >= 9 and self._in_player == false and self.particle_timer < 0 then
+		minetest.add_particlespawner({
+			amount = 20,
+			time = .2,
+			minpos = vector.new(0,0,0),
+			maxpos = vector.new(0,0,0),
+			minvel = vector.new(-0.1,-0.1,-0.1),
+			maxvel = vector.new(0.1,0.1,0.1),
+			minexptime = 0.5,
+			maxexptime = 0.5,
+			minsize = 2,
+			maxsize = 2,
+			attached = self.object,
+			collisiondetection = false,
+			vertical = false,
+			texture = "mobs_mc_arrow_particle.png",
+			glow = 1,
+		})
+	end
+end
+
+function ARROW_ENTITY:extra_hit(obj)
+	if self._extra_hit_func then
+		if self._extra_hit_func(obj) then
+			return true
+		end
+	end
+end
+
+local function get_obj_box(obj)
+	local box
+
+	if obj:is_player() then
+		box = obj:get_properties().collisionbox or {-0.5, 0.0, -0.5, 0.5, 1.0, 0.5}
+	else
+		box = obj:get_luaentity().collisionbox or {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
+	end
+
+	return box
+end
+
+--[[
+local function limit(x, min, max)
+	return math.min(math.max(x, min), max)
+end
+--]]
 
 function ARROW_ENTITY.on_step(self, dtime)
 	mcl_burning.tick(self.object, dtime, self)
 	-- mcl_burning.tick may remove object immediately
-	if not self.object:get_pos() then return end
-
-
 	local pos = self.object:get_pos()
-	local dpos = vector.round(vector.new(pos)) -- digital pos
-	local node = minetest.get_node(dpos)
+	if not pos then return end
+
+
+
+	self._old_pos = self._old_pos or pos
+	local ray = minetest.raycast(self._old_pos, pos, true, true)
+	local pointed_thing = ray:next()
 
 	self._lifetime = self._lifetime + dtime
+	self._nodechecktimer = ( self._nodechecktimer or 0.5) - dtime
+
+	-- adjust pitch when flying
+	if not self._attached then
+		local velocity = self.object:get_velocity()
+		local v_rotation = self.object:get_rotation()
+		local pitch = math.atan2(velocity.y, math.sqrt(velocity.x^2 + velocity.z^2))
+
+		self.object:set_rotation({
+			x = pitch,
+			y = v_rotation.y,
+			z = v_rotation.z
+		})
+	end
+
+	-- remove attached arrows after lifetime
 	if self._lifetime > ARROW_TIMEOUT then
 		mcl_burning.extinguish(self.object)
 		self.object:remove()
 		return
 	end
 
-	if self._stuck then
-		self._stuckrechecktimer = self._stuckrechecktimer + dtime
-		-- Drop arrow as item when it is no longer stuck
-		-- FIXME: Arrows are a bit slow to react and continue to float in mid air for a few seconds.
-		if self._stuckrechecktimer > STUCK_RECHECK_TIME then
-			local stuckin_def
-			if self._stuckin then
-				stuckin_def = minetest.registered_nodes[minetest.get_node(self._stuckin).name]
-			end
-			-- TODO: In MC, arrow just falls down without turning into an item
-			if stuckin_def and stuckin_def.walkable == false then
-				spawn_item(self, pos)
-				return
-			end
-			self._stuckrechecktimer = 0
+	-- add particles only when not attached
+	if not self._attached and not self._in_liquid then
+		self._has_particles = true
+
+		self:emit_particle(dtime)
+		--if self._tflp >= self._tool_capabilities.full_punch_interval then
+		--	if self._is_critical_hit then
+		--		nextgen_bows.particle_effect(self._old_pos, 'arrow_crit')
+		--	else
+		--		nextgen_bows.particle_effect(self._old_pos, 'arrow')
+		--	end
+		--end
+	end
+
+	-- remove attached arrows after object dies
+	if not self.object:get_attach() and self._attached_to and self._attached_to.type == 'object' then
+		self.object:remove()
+		return
+	end
+
+	-- arrow falls down when not attached to node any more
+	if self._attached_to and self._attached_to.type == 'node' and self._attached and self._nodechecktimer <= 0 then
+		local node = minetest.get_node(self._attached_to.pos)
+		self._nodechecktimer = 0.5
+
+		if not node then
+			return
 		end
-		-- Pickup arrow if player is nearby (not in Creative Mode)
-		local objects = minetest.get_objects_inside_radius(pos, 1)
-		for _,obj in ipairs(objects) do
-			if obj:is_player() then
-				if self._collectable and not minetest.is_creative_enabled(obj:get_player_name()) then
-					if obj:get_inventory():room_for_item("main", "mcl_bows:arrow") then
-						obj:get_inventory():add_item("main", "mcl_bows:arrow")
-						minetest.sound_play("item_drop_pickup", {
-							pos = pos,
-							max_hear_distance = 16,
-							gain = 1.0,
-						}, true)
-					end
-				end
-				mcl_burning.extinguish(self.object)
+
+		if node.name == 'air' then
+			self.object:set_velocity({x = 0, y = -3, z = 0})
+			self.object:set_acceleration({x = 0, y = -3, z = 0})
+			-- reset values
+			self._attached = false
+			self._attached_to.type = ''
+			self._attached_to.pos = nil
+			self.object:set_properties({collisionbox = {0, 0, 0, 0, 0, 0}})
+
+			return
+		end
+	end
+
+	while pointed_thing do
+		local ip_pos = pointed_thing.intersection_point
+		local in_pos = pointed_thing.intersection_normal
+		self.pointed_thing = pointed_thing
+
+		if pointed_thing.type == 'object'
+			and pointed_thing.ref ~= self.object
+			and pointed_thing.ref:get_hp() > 0
+			and ((pointed_thing.ref:is_player() and pointed_thing.ref:get_player_name() ~= self.user:get_player_name()) or (pointed_thing.ref:get_luaentity() and pointed_thing.ref:get_luaentity().physical and pointed_thing.ref:get_luaentity().name ~= '__builtin:item'))
+			and self.object:get_attach() == nil
+		then
+			if pointed_thing.ref:is_player() then
+				minetest.sound_play('nextgen_bows_arrow_successful_hit', {
+					to_player = self.user:get_player_name(),
+					gain = 0.3
+				})
+			else
+				minetest.sound_play('nextgen_bows_arrow_hit', {
+					to_player = self.user:get_player_name(),
+					gain = 0.6
+				})
+			end
+
+			-- store these here before punching in case pointed_thing.ref dies
+			local collisionbox = get_obj_box(pointed_thing.ref)
+			local xmin = collisionbox[1] * 100
+			local ymin = collisionbox[2] * 100
+			local zmin = collisionbox[3] * 100
+			local xmax = collisionbox[4] * 100
+			local ymax = collisionbox[5] * 100
+			local zmax = collisionbox[6] * 100
+
+			self.object:set_velocity({x = 0, y = 0, z = 0})
+			self.object:set_acceleration({x = 0, y = 0, z = 0})
+
+			-- calculate damage
+			--local target_armor_groups = pointed_thing.ref:get_armor_groups()
+			local _damage = 0
+			--[[
+			for group, base_damage in pairs(self._tool_capabilities.damage_groups) do
+				_damage = _damage
+					+ base_damage
+					* limit(self._tflp / self._tool_capabilities.full_punch_interval, 0.0, 1.0)
+					* ((target_armor_groups[group] or 0)  --+ get_3d_armor_armor(pointed_thing.ref)) / 100.0
+			end
+			--]]
+			-- crits
+			if self._is_critical_hit then
+				_damage = _damage * 2
+			end
+
+			-- knockback
+			local dir = vector.normalize(vector.subtract(self._shot_from_pos, ip_pos))
+			local distance = vector.distance(self._shot_from_pos, ip_pos)
+			local knockback = minetest.calculate_knockback(
+				pointed_thing.ref,
+				self.object,
+				self._tflp,
+				{
+					full_punch_interval = self._tool_capabilities.full_punch_interval,
+					damage_groups = {fleshy = _damage},
+				},
+				dir,
+				distance,
+				_damage
+			)
+
+			pointed_thing.ref:add_velocity({
+				x = dir.x * knockback * -1,
+				y = 7,
+				z = dir.z * knockback * -1
+			})
+
+			pointed_thing.ref:punch(
+				self.object,
+				self._tflp,
+				{
+					full_punch_interval = self._tool_capabilities.full_punch_interval,
+					damage_groups = {fleshy = _damage, knockback = knockback}
+				},
+				{
+					x = dir.x * -1,
+					y = 7,
+					z = dir.z * -1
+				}
+			)
+
+			-- already dead (entity)
+			if not pointed_thing.ref:get_luaentity() and not pointed_thing.ref:is_player() then
 				self.object:remove()
 				return
 			end
-		end
 
-	-- Check for object "collision". Done every tick (hopefully this is not too stressing)
-	else
+			-- already dead (player)
+			if pointed_thing.ref:get_hp() <= 0 then
+				-- Reset HUD bar color
+				hb.change_hudbar(pointed_thing.ref, 'health', nil, nil, 'hudbars_icon_health.png', nil, 'hudbars_bar_health.png')
 
-		if self._damage >= 9 and self._in_player == false then
-			minetest.add_particlespawner({
-				amount = 20,
-				time = .2,
-				minpos = vector.new(0,0,0),
-				maxpos = vector.new(0,0,0),
-				minvel = vector.new(-0.1,-0.1,-0.1),
-				maxvel = vector.new(0.1,0.1,0.1),
-				minexptime = 0.5,
-				maxexptime = 0.5,
-				minsize = 2,
-				maxsize = 2,
-				attached = self.object,
-				collisiondetection = false,
-				vertical = false,
-				texture = "mobs_mc_arrow_particle.png",
-				glow = 1,
-			})
-		end
-
-		local closest_object
-		local closest_distance
-
-		if self._deflection_cooloff > 0 then
-			self._deflection_cooloff = self._deflection_cooloff - dtime
-		end
-
-		local arrow_dir = self.object:get_velocity()
-		--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-		local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.1)), true, false)
-		for hitpoint in raycast do
-			if hitpoint.type == "object" then
-				-- find the closest object that is in the way of the arrow
-				local ok = false
-				if hitpoint.ref:is_player() and enable_pvp then
-					ok = true
-				elseif not hitpoint.ref:is_player() and hitpoint.ref:get_luaentity() then
-					if (hitpoint.ref:get_luaentity().is_mob or hitpoint.ref:get_luaentity()._hittable_by_projectile) then
-						ok = true
-					end
-				end
-				if ok then
-					local dist = vector.distance(hitpoint.ref:get_pos(), pos)
-					if not closest_object or not closest_distance then
-						closest_object = hitpoint.ref
-						closest_distance = dist
-					elseif dist < closest_distance then
-						closest_object = hitpoint.ref
-						closest_distance = dist
-					end
-				end
+				self.object:remove()
+				return
 			end
-		end
 
-		if closest_object then
-			local obj = closest_object
-			local is_player = obj:is_player()
-			local lua = obj:get_luaentity()
-			if obj == self._shooter and self._lifetime > 0.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
-				if obj:get_hp() > 0 then
-					-- Check if there is no solid node between arrow and object
-					local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
-					for pointed_thing in ray do
-						if pointed_thing.type == "object" and pointed_thing.ref == closest_object then
-							-- Target reached! We can proceed now.
-							break
-						elseif pointed_thing.type == "node" then
-							local nn = minetest.get_node(minetest.get_pointed_thing_position(pointed_thing)).name
-							local def = minetest.registered_nodes[nn]
-							if (not def) or def.walkable then
-								-- There's a node in the way. Delete arrow without damage
-								mcl_burning.extinguish(self.object)
-								self.object:remove()
-								return
-							end
-						end
-					end
+			-- attach arrow prepare
+			local rotation = {x = 0, y = 0, z = 0}
+			local position = {x = 0, y = 0, z = 0}
 
-					-- Punch target object but avoid hurting enderman.
-					if not lua or lua.name ~= "mobs_mc:enderman" then
-						if not self._in_player then
-							damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
-						end
-						if mcl_burning.is_burning(self.object) then
-							mcl_burning.set_on_fire(obj, 5)
-						end
-						if not self._in_player and not self._blocked then
-							obj:punch(self.object, 1.0, {
-								full_punch_interval=1.0,
-								damage_groups={fleshy=self._damage},
-							}, self.object:get_velocity())
-							if self._extra_hit_func then
-								self._extra_hit_func(obj)
-							end
-							if obj:is_player() then
-								if not mcl_shields.is_blocking(obj) then
-									local placement
-									self._placement = math.random(1, 2)
-									if self._placement == 1 then
-										placement = "front"
-									else
-										placement = "back"
-									end
-									self._in_player = true
-									if self._placement == 2 then
-										self._rotation_station = 90
-									else
-										self._rotation_station = -90
-									end
-									self._y_position = random_arrow_positions("y", placement)
-									self._x_position = random_arrow_positions("x", placement)
-									if self._y_position > 6 and self._x_position < 2 and self._x_position > -2 then
-										self._attach_parent = "Head"
-										self._y_position = self._y_position - 6
-									elseif self._x_position > 2 then
-										self._attach_parent = "Arm_Right"
-										self._y_position = self._y_position - 3
-										self._x_position = self._x_position - 2
-									elseif self._x_position < -2 then
-										self._attach_parent = "Arm_Left"
-										self._y_position = self._y_position - 3
-										self._x_position = self._x_position + 2
-									else
-										self._attach_parent = "Body"
-									end
-									self._z_rotation = math.random(-30, 30)
-									self._y_rotation = math.random( -30, 30)
-									self.object:set_attach(
-										obj, self._attach_parent,
-										vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
-										vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
-									)
-								else
-									self._blocked = true
-									self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
-								end
-								minetest.after(150, function()
-									self.object:remove()
-								end)
-							else
-								self.object:remove()
-							end
-						end
-					end
+			if in_pos.x == 1 then
+				-- x = 0
+				-- y = -90
+				-- z = 0
+				rotation.x = math.random(-10, 10)
+				rotation.y = math.random(-100, -80)
+				rotation.z = math.random(-10, 10)
 
+				position.x = xmax / 10
+				position.y = math.random(ymin, ymax) / 10
+				position.z = math.random(zmin, zmax) / 10
+			elseif in_pos.x == -1 then
+				-- x = 0
+				-- y = 90
+				-- z = 0
+				rotation.x = math.random(-10, 10)
+				rotation.y = math.random(80, 100)
+				rotation.z = math.random(-10, 10)
 
-					if is_player then
-						if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
-							-- “Ding” sound for hitting another player
-							minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
-						end
-					end
+				position.x = xmin / 10
+				position.y = math.random(ymin, ymax) / 10
+				position.z = math.random(zmin, zmax) / 10
+			elseif in_pos.y == 1 then
+				-- x = -90
+				-- y = 0
+				-- z = -180
+				rotation.x = math.random(-100, -80)
+				rotation.y = math.random(-10, 10)
+				rotation.z = math.random(-190, -170)
 
-					if not self._in_player and not self._blocked then
-						minetest.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
+				position.x = math.random(xmin, xmax) / 10
+				position.y = ymax / 10
+				position.z = math.random(zmin, zmax) / 10
+			elseif in_pos.y == -1 then
+				-- x = 90
+				-- y = 0
+				-- z = 180
+				rotation.x = math.random(80, 100)
+				rotation.y = math.random(-10, 10)
+				rotation.z = math.random(170, 190)
+
+				position.x = math.random(xmin, xmax) / 10
+				position.y = ymin / 10
+				position.z = math.random(zmin, zmax) / 10
+			elseif in_pos.z == 1 then
+				-- x = 180
+				-- y = 0
+				-- z = 180
+				rotation.x = math.random(170, 190)
+				rotation.y = math.random(-10, 10)
+				rotation.z = math.random(170, 190)
+
+				position.x = math.random(xmin, xmax) / 10
+				position.y = math.random(ymin, ymax) / 10
+				position.z = zmax / 10
+			elseif in_pos.z == -1 then
+				-- x = -180
+				-- y = 180
+				-- z = -180
+				rotation.x = math.random(-190, -170)
+				rotation.y = math.random(170, 190)
+				rotation.z = math.random(-190, -170)
+
+				position.x = math.random(xmin, xmax) / 10
+				position.y = math.random(ymin, ymax) / 10
+				position.z = zmin / 10
+			end
+
+			-- fix scaling
+			local scale = self.object:get_properties().visual_size
+			local parent_size = pointed_thing.ref:get_properties().visual_size
+			self.object:set_properties({
+				visual_size = {
+					x = scale.x / parent_size.x,
+					y = scale.y / parent_size.y,
+					z = scale.z / (parent_size.z or parent_size.x)
+				},
+			})
+			position.x = position.x / parent_size.x
+			position.y = position.y / parent_size.y
+			position.z = position.z / (parent_size.z or parent_size.x)
+
+			-- attach arrow
+			self.object:set_attach(
+				pointed_thing.ref,
+				'',
+				position,
+				rotation,
+				true
+			)
+			self._attached = true
+			self._attached_to.type = pointed_thing.type
+			self._attached_to.pos = position
+
+			local children = pointed_thing.ref:get_children()
+
+			-- remove last arrow when too many already attached
+			if #children >= 5 then
+				children[1]:remove()
+			end
+
+			return
+
+		elseif pointed_thing.type == 'node' and not self._attached then
+			local node = minetest.get_node(pointed_thing.under)
+			local node_def = minetest.registered_nodes[node.name]
+
+			if not node_def then
+				return
+			end
+
+			self._velocity = self.object:get_velocity()
+
+			if node_def.drawtype == 'liquid' and not self._is_drowning then
+				self._is_drowning = true
+				self._in_liquid = true
+				local drag = 1 / (node_def.liquid_viscosity * 6)
+				self.object:set_velocity(vector.multiply(self._velocity, drag))
+				self.object:set_acceleration({x = 0, y = -1.0, z = 0})
+
+				--nextgen_bows.particle_effect(self._old_pos, 'bubble')
+			elseif self._is_drowning then
+				self._is_drowning = false
+
+				if self._velocity then
+					self.object:set_velocity(self._velocity)
+				end
+
+				self.object:set_acceleration({x = 0, y = -9.81, z = 0})
+			end
+
+			if node_def.walkable then
+				self.object:set_velocity({x=0, y=0, z=0})
+				self.object:set_acceleration({x=0, y=0, z=0})
+				self.object:set_pos(ip_pos)
+				self.object:set_rotation(self.object:get_rotation())
+				self._attached = true
+				self._attached_to.type = pointed_thing.type
+				self._attached_to.pos = pointed_thing.under
+				self.object:set_properties({collisionbox = {-0.2, -0.2, -0.2, 0.2, 0.2, 0.2}})
+
+				-- remove last arrow when too many already attached
+				local children = {}
+
+				for k, object in ipairs(minetest.get_objects_inside_radius(pointed_thing.under, 1)) do
+					if not object:is_player() and object:get_luaentity() and object:get_luaentity().is_arrow then
+						table.insert(children ,object)
 					end
 				end
-				if not obj:is_player() then
-					mcl_burning.extinguish(self.object)
-					if self._piercing == 0 then
-						self.object:remove()
-					end
+
+				if #children >= 5 then
+					children[#children]:remove()
 				end
+
+				minetest.sound_play('nextgen_bows_arrow_hit', {
+					pos = pointed_thing.under,
+					gain = 0.6,
+					max_hear_distance = 16
+				})
+
 				return
 			end
 		end
+		pointed_thing = ray:next()
 	end
 
-	-- Check for node collision
-	if self._lastpos.x~=nil and not self._stuck then
-		local def = minetest.registered_nodes[node.name]
-		local vel = self.object:get_velocity()
-		-- Arrow has stopped in one axis, so it probably hit something.
-		-- This detection is a bit clunky, but sadly, MT does not offer a direct collision detection for us. :-(
-		if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
-			-- Check for the node to which the arrow is pointing
-			local dir
-			if math.abs(vel.y) < 0.00001 then
-				if self._lastpos.y < pos.y then
-					dir = vector.new(0, 1, 0)
-				else
-					dir = vector.new(0, -1, 0)
-				end
-			else
-				dir = minetest.facedir_to_dir(minetest.dir_to_facedir(minetest.yaw_to_dir(self.object:get_yaw()-YAW_OFFSET)))
-			end
-			self._stuckin = vector.add(dpos, dir)
-			local snode = minetest.get_node(self._stuckin)
-			local sdef = minetest.registered_nodes[snode.name]
-
-			-- If node is non-walkable, unknown or ignore, don't make arrow stuck.
-			-- This causes a deflection in the engine.
-			if not sdef or sdef.walkable == false or snode.name == "ignore" then
-				self._stuckin = nil
-				if self._deflection_cooloff <= 0 then
-					-- Lose 1/3 of velocity on deflection
-					local newvel = vector.multiply(vel, 0.6667)
-
-					self.object:set_velocity(newvel)
-					-- Reset deflection cooloff timer to prevent many deflections happening in quick succession
-					self._deflection_cooloff = 1.0
-				end
-			else
-
-				-- Node was walkable, make arrow stuck
-				self._stuck = true
-				self._lifetime = 0
-				self._stuckrechecktimer = 0
-
-				self.object:set_velocity(vector.new(0, 0, 0))
-				self.object:set_acceleration(vector.new(0, 0, 0))
-
-				minetest.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
-
-				local bdef = minetest.registered_nodes[node.name]
-				if (bdef and bdef._on_arrow_hit) then
-					bdef._on_arrow_hit(dpos, self)
-				elseif (sdef and sdef._on_arrow_hit) then
-					sdef._on_arrow_hit(self._stuckin, self)
-				end
-			end
-		elseif (def and def.liquidtype ~= "none") then
-			-- Slow down arrow in liquids
-			local v = def.liquid_viscosity
-			if not v then
-				v = 0
-			end
-			--local old_v = self._viscosity
-			self._viscosity = v
-			local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
-			if math.abs(vel.x) > 0.001 then
-				vel.x = vel.x * vpenalty
-			end
-			if math.abs(vel.z) > 0.001 then
-				vel.z = vel.z * vpenalty
-			end
-			self.object:set_velocity(vel)
-		end
-	end
-
-	-- Update yaw
-	if not self._stuck then
-		local vel = self.object:get_velocity()
-		local yaw = minetest.dir_to_yaw(vel)+YAW_OFFSET
-		local pitch = dir_to_pitch(vel)
-		self.object:set_rotation({ x = 0, y = yaw, z = pitch })
-	end
-
-	-- Update internal variable
-	self._lastpos = pos
+	self._old_pos = pos
 end
 
 -- Force recheck of stuck arrows when punched.
