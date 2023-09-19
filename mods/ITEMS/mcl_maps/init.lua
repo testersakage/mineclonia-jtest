@@ -346,13 +346,17 @@ minetest.register_globalstep(function(dtime)
 				player:set_wielded_item(wield)
 			end
 
+			local meta = wield:get_meta()
+			local id = meta:get_string("mcl_maps:id")
 			if texture ~= maps[player] then
 				player:hud_change(hud.map, "text", "[combine:140x140:0,0=mcl_maps_map_background.png:6,6=" .. texture)
+				meta:set_string("inventory_image","mcl_maps_map_texture_" .. id .. ".tga")
+				--meta:set_string("wield_image","mcl_maps_map_texture_" .. id .. ".tga") --TODO: figure out if this can be made to look better in which case the hud would be surperfluous alltogether.
+				player:set_wielded_item(wield)
 				maps[player] = texture
 			end
 
 			local pos = vector.round(player:get_pos())
-			local meta = wield:get_meta()
 			local minp = minetest.string_to_pos(meta:get_string("mcl_maps:minp"))
 			local maxp = minetest.string_to_pos(meta:get_string("mcl_maps:maxp"))
 
