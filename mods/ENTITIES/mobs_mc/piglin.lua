@@ -31,6 +31,13 @@ function mobs_mc.player_wears_gold(player)
 	end
 end
 
+local function spawn_check(pos, environmental_light, artificial_light, sky_light)
+	if artificial_light > 11 then
+		return false, "To bright"
+	end
+	return true, ""
+end
+
 --###################
 --################### piglin
 --###################
@@ -170,6 +177,7 @@ local piglin = {
 	attacks_monsters = true,
 	attack_animals = true,
 	specific_attack = { "player", "mobs_mc:hoglin" },
+	spawn_check = spawn_check,
 }
 
 mcl_mobs.register_mob("mobs_mc:piglin", piglin)
