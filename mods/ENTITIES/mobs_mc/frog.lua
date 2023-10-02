@@ -18,7 +18,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	description = S("Frog"),
 	stepheight = 3,
 	type = "animal",
-	passive = true,
+	passive = false,
 	reach = 1,
 	attack_npcs = false,
 	attack_monsters = true,
