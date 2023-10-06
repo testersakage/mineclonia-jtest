@@ -74,15 +74,17 @@ end
 
 local swamp_light_max = 7
 
-local function slime_spawn_check(pos, environmental_light, artificial_light, sky_light)
+local function slime_check_light(pos, environmental_light, artificial_light, sky_light)
 	local maxlight = swamp_light_max
 
-	-- TODO requires https://git.minetest.land/MineClone2/MineClone2/pulls/3551
-	--if is_slime_chunk(pos) then
-	--	maxlight = minetest.LIGHT_MAX + 1
-	--end
+	if in_slime_chunk(pos) then
+		maxlight = minetest.LIGHT_MAX + 1
+	end
 
-	return artificial_light <= maxlight
+	if artificial_light > maxlight then
+		return false, "To bright"
+	end
+	return true, ""
 end
 
 -- Slime
@@ -138,7 +140,6 @@ local slime_big = {
 	spawn_small_alternative = "mobs_mc:slime_small",
 	on_die = spawn_children_on_die("mobs_mc:slime_small", 1.0, 1.5),
 	use_texture_alpha = true,
-	spawn_check = slime_spawn_check,
 }
 mcl_mobs.register_mob("mobs_mc:slime_big", slime_big)
 
@@ -244,6 +245,7 @@ for slime_name,slime_chance in pairs({
 		max_height = cave_max,
 		chance = slime_chance,
 		check_position = in_slime_chunk,
+		check_light = slime_check_light,
 	})
 
 	mcl_mobs.spawn_setup({
@@ -257,6 +259,7 @@ for slime_name,slime_chance in pairs({
 		max_height = swamp_max,
 		chance = slime_chance,
 		check_position = swamp_spawn,
+		check_light = slime_check_light,
 	})
 end
 

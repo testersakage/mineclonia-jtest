@@ -139,6 +139,7 @@ function mcl_mobs.spawn_setup(def)
 	local day_toggle       = def.day_toggle
 	local on_spawn         = def.on_spawn
 	local check_position   = def.check_position
+	local check_light      = def.check_light
 
 	-- chance/spawn number override in minetest.conf for registered mob
 	local numbers = minetest.settings:get(name)
@@ -173,6 +174,7 @@ function mcl_mobs.spawn_setup(def)
 		day_toggle       = day_toggle,
 		check_position   = check_position,
 		on_spawn         = on_spawn,
+		check_light      = check_light,
 	}
 	summary_chance = summary_chance + chance
 end
@@ -295,14 +297,14 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 			end
 		elseif dimension == "overworld" then
 			if mob_type == "monster" then
-				if mob_def.spawn_check then
-					return mob_def.spawn_check(pos, gotten_light, art_light, sky_light)
+				if spawn_def.check_light then
+					return spawn_def.check_light(pos, gotten_light, art_light, sky_light)
 				elseif art_light > overworld_threshold or sky_light > overworld_sky_threshold then
 					return false,"too bright"
 				end
 			else
-				if mob_def.spawn_check then
-					return mob_def.spawn_check(pos, gotten_light, art_light, sky_light)
+				if spawn_def.check_light then
+					return mob_def.check_light(pos, gotten_light, art_light, sky_light)
 				elseif gotten_light <= overworld_passive_threshold then
 					return false, "too dark"
 				end
