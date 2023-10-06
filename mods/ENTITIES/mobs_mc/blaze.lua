@@ -11,7 +11,7 @@ local mod_target = minetest.get_modpath("mcl_target")
 --################### BLAZE
 --###################
 
-local function spawn_check(pos, environmental_light, artificial_light, sky_light)
+local function check_light(pos, environmental_light, artificial_light, sky_light)
 	if artificial_light > 11 then
 		return false, "To bright"
 	end
@@ -143,7 +143,14 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 			},
 		})
 	end,
-	spawn_check = spawn_check,
+})
+
+-- TODO confirm settings
+mcl_mobs.spawn_setup({
+	name = "mobs_mc:blaze",
+	type_of_spawning = "ground",
+	dimension = "nether",
+	check_light = check_light,
 })
 
 -- Blaze fireball

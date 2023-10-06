@@ -4,7 +4,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 
-local function spawn_check(pos, environmental_light, artificial_light, sky_light)
+local function check_light(pos, environmental_light, artificial_light, sky_light)
 	if artificial_light > 11 then
 		return false, "To bright"
 	end
@@ -60,7 +60,14 @@ mcl_mobs.register_mob("mobs_mc:silverfish", {
 	view_range = 16,
 	attack_type = "dogfight",
 	damage = 1,
-	spawn_check = spawn_check,
+})
+
+-- TODO confirm settings
+mcl_mobs.spawn_setup({
+	name = "mobs_mc:silverfish",
+	type_of_spawning = "ground",
+	dimension = "overworld",
+	check_light = check_light,
 })
 
 mcl_mobs.register_egg("mobs_mc:silverfish", S("Silverfish"), "#6d6d6d", "#313131", 0)
