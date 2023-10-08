@@ -116,8 +116,13 @@ minetest.register_entity("mcl_end:crystal_beam", {
 	_mcl_fishing_reelable = false,
 	spin = 0,
 	init = function(self, dragon, crystal)
-		self.dragon, self.crystal = dragon, crystal
-		crystal:get_luaentity().beam = self.object
+		self.dragon = dragon
+		if crystal and crystal.get_luaentity and crystal:get_luaentity() then
+			self.crystal = crystal
+			crystal:get_luaentity().beam = self.object
+		elseif crystal then
+			self.endpoint = crystal
+		end
 		dragon:get_luaentity().beam = self.object
 	end,
 	on_deactivate = function(self)
@@ -129,12 +134,14 @@ minetest.register_entity("mcl_end:crystal_beam", {
 		end
 	end,
 	on_step = function(self, dtime)
-		if self.dragon and self.dragon:get_luaentity() and self.crystal and self.crystal:get_luaentity() then
+		if self.dragon and self.dragon:get_luaentity() and ( self.crystal and self.crystal.get_luaentity and self.crystal:get_luaentity() or self.endpoint ) then
 			self.spin = self.spin + dtime * math.pi * 2 / 4
-			local dragon_pos, crystal_pos = self.dragon:get_pos(), self.crystal:get_pos()
+			local dragon_pos, crystal_pos = self.dragon:get_pos(), (self.crystal and self.crystal:get_pos() or self.endpoint)
 
 			dragon_pos.y = dragon_pos.y + 4
-			crystal_pos.y = crystal_pos.y + 2
+			if not self.endpoint then
+				crystal_pos.y = crystal_pos.y + 2
+			end
 
 			self.object:set_pos(vector.divide(vector.add(dragon_pos, crystal_pos), 2))
 			local rot = vector.dir_to_rotation(vector.direction(dragon_pos, crystal_pos))

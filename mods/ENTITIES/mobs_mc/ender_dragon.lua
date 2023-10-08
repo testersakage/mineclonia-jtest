@@ -12,7 +12,7 @@ local HEAL_AMOUNT = 2
 local function check_beam(self)
 	for _, obj in ipairs(minetest.get_objects_inside_radius(self.object:get_pos(), 80)) do
 		local luaentity = obj:get_luaentity()
-		if luaentity and luaentity.name == "mcl_end:crystal" then
+		if luaentity and luaentity.name == "mcl_end:crystal" and not luaentity.deathbeam then
 			if luaentity.beam then
 				if luaentity.beam == self.beam then
 					break
@@ -41,6 +41,38 @@ local function check_pos(self)
 		else
 			self._last_good_pos = pos
 		end
+	end
+end
+
+local function get_points_on_circle(pos, r, n, ofs)
+	local rt = {}
+	local ofs = ofs or 0
+	for i=1, n do
+		table.insert(rt,vector.offset(pos,r * math.cos(((i - 1 + ofs)/n) * (2*math.pi)),0,  r * math.sin(((i - 1 + ofs)/n) * (2*math.pi)) ))
+	end
+	return rt
+end
+
+local function death_anim(self)
+	local pp = get_points_on_circle(self.dying or self.object:get_pos(), 32, 16, self.death_anim_count)
+	if self.dying then
+		self.death_anim_count = (self.death_anim_count or 0) + 1
+		for k,v in pairs(self.deathbeams) do
+			if v and v.object and pp[k] then
+				v.object:set_pos(pp[k])
+			end
+		end
+		return
+	end
+	self.dying = self.object:get_pos()
+	self.deathbeams = {}
+	for _,v in pairs(pp) do
+		local beam = minetest.add_entity(v, "mcl_end:crystal_beam")
+		beam:set_properties({glow = 15})
+		local l = beam:get_luaentity()
+		l:init(self.object, v)
+		l.deathbeam = true
+		table.insert(self.deathbeams, l)
 	end
 end
 
@@ -89,7 +121,6 @@ mcl_mobs.register_mob("mobs_mc:enderdragon", {
 	lava_damage = 0,
 	fire_damage = 0,
 	does_not_prevent_sleep = true,
-	on_rightclick = nil,
 	attack_type = "dogshoot",
 	arrow = "mobs_mc:dragon_fireball",
 	shoot_interval = 0.5,
@@ -104,7 +135,11 @@ mcl_mobs.register_mob("mobs_mc:enderdragon", {
 	player_active_range = 128,
 	force_step = function(self, dtime)
 		self._pos_timer = (self._pos_timer or  POS_CHECK_FREQUENCY) - dtime
-		if self._pos_timer < 0 then
+		if self.dying then
+			self.object:set_pos(self.dying)
+		end
+		mcl_bossbars.update_boss(self.object, "Ender Dragon", "light_purple")
+		if self._pos_timer == nil or self._pos_timer > POS_CHECK_FREQUENCY then
 			self._pos_timer = POS_CHECK_FREQUENCY
 			check_pos(self)
 		end
@@ -129,6 +164,7 @@ mcl_mobs.register_mob("mobs_mc:enderdragon", {
 		mcl_bossbars.update_boss(self.object, "Ender Dragon", "light_purple")
 	end,
 	on_die = function(self, pos, _)
+		death_anim(self)
 		if self._portal_pos then
 			mcl_portals.spawn_gateway_portal()
 			mcl_structures.place_structure(self._portal_pos,mcl_structures.registered_structures["end_exit_portal_open"],PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
