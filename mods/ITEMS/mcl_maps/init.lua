@@ -52,7 +52,7 @@ function mcl_maps.create_map(pos)
 		local data = vm:get_data()
 		local param2data = vm:get_param2_data()
 		local area = VoxelArea:new({ MinEdge = emin, MaxEdge = emax })
-		local pixels = {}
+		local pdata = {}
 		local last_heightmap
 		for x = 1, 128 do
 			local map_x = minp.x - 1 + x
@@ -121,12 +121,14 @@ function mcl_maps.create_map(pos)
 					end
 				end
 				heightmap[z] = height or minp.y
-				pixels[z] = pixels[z] or {}
-				pixels[z][x] = color or { 0, 0, 0 }
+				table.insert(pdata, color and {r=color[1],g=color[2],b=color[3]} or {r=0,g=0,b=0})
 			end
 			last_heightmap = heightmap
 		end
-		tga_encoder.image(pixels):save(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".tga")
+		local tx = minetest.encode_png(128, 128, pdata, "9")
+		local file = assert(io.open(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".png", "w"))
+		file:write(tx)
+		file:close()
 		creating_maps[id] = nil
 	end)
 	return itemstack
@@ -137,7 +139,7 @@ function mcl_maps.load_map(id, callback)
 		return false
 	end
 
-	local texture = "mcl_maps_map_texture_" .. id .. ".tga"
+	local texture = "mcl_maps_map_texture_" .. id .. ".png"
 
 	local result = true
 
