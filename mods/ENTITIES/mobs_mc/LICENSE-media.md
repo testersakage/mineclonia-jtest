@@ -14,12 +14,15 @@ The following media licenses are used:
 Note: A “`*`” in a file name below is a placeholder which can stand for any text.
 
 ## Models
-All models were done by [22i](https://github.com/22i) and are licensed under GPLv3.
+Most models were done by [22i](https://github.com/22i) and are licensed under GPLv3.
 
 Origin of those models:
 
 * [Mod “amc”](https://github.com/22i/amc/)
 * [Repository with Blender source files for models](https://github.com/22i/minecraft-voxel-blender-models)
+
+Frog model by ElCeejo, MIT License:
+* [Mod "Animalia"](https://github.com/ElCeejo/animalia)
 
 ## Textures
 
@@ -69,10 +72,12 @@ Origin of those models:
         * `mobs_mc_chicken.png`
         * `mobs_mc_wither.png`
         * `mobs_mc_wither_skeleton.png`
-        * `mobs_mc_TEMP_wither_projectile.png`	
+        * `mobs_mc_TEMP_wither_projectile.png`
     * Gerold55
         * `mobs_mc_mooshroom_brown.png` (CC0)
         * `mobs_mc_mushroom_brown.png` (CC0)
+    *  ElCeejo
+        * `mobs_mc_frog*.png`, modified (MIT)
 
 * “Spawn egg” textures (`mobs_mc_spawn_icon_*`) by 22i
 * Llama decor (carpet) textures (`mobs_mc_llama_decor_*`) by erlehmann and rudzik8

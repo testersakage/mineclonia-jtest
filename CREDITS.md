@@ -104,6 +104,8 @@
 * tobyplowy
 * epCode
 * pixelzone
+* MrRar
+* ElCeejo
 
 ## Textures and menu images
 * XSSheep
@@ -128,6 +130,7 @@
 * SmokeyDope
 * pixelzone
 * Miguel P.L
+* ElCeejo
 
 ## Translations
 * Wuzzy
