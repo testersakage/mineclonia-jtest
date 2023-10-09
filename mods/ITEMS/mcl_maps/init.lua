@@ -28,7 +28,21 @@ local loaded_maps = {}
 
 local c_air = minetest.get_content_id("air")
 
-function mcl_maps.create_map(pos)
+local function find_map_in_inv(inv, mapid)
+	local list = inv and inv:get_list("main")
+	if not list then return end
+	for k, stack in pairs(list) do
+		local m = stack:get_meta()
+		local id = m:get_string("mcl_maps:id")
+		if id == mapid then
+			return stack, k
+		end
+	end
+end
+
+function mcl_maps.create_map(placer)
+	local pos = placer:get_pos()
+	if not pos or not placer:is_player() then return end
 	local minp = vector.multiply(vector.floor(vector.divide(pos, 128)), 128)
 	local maxp = vector.add(minp, vector.new(127, 127, 127))
 
@@ -43,7 +57,7 @@ function mcl_maps.create_map(pos)
 	tt.reload_itemstack_description(itemstack)
 
 	creating_maps[id] = true
-	minetest.emerge_area(minp, maxp, function(blockpos, action, calls_remaining)
+	minetest.emerge_area(minp, maxp, function(blockpos, action, calls_remaining, param)
 		if calls_remaining > 0 then
 			return
 		end
@@ -125,12 +139,21 @@ function mcl_maps.create_map(pos)
 			end
 			last_heightmap = heightmap
 		end
-		local tx = minetest.encode_png(128, 128, pdata, "9")
-		local file = assert(io.open(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".png", "w"))
-		file:write(tx)
-		file:close()
+		--local meta = itemstack:get_meta()
+		local tx = minetest.encode_png(128, 128, pdata, 9)
+		if param.placer and param.placer:get_pos() then
+			local inv = placer:get_inventory()
+			local stack, invpos = find_map_in_inv(inv, id)
+			if stack then
+				stack:get_meta():set_string("map_image", minetest.encode_base64(tx))
+				inv:set_stack("main", invpos, stack)
+			end
+		end
+		--local file = assert(io.open(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".png", "w"))
+		--file:write(tx)
+		--file:close()
 		creating_maps[id] = nil
-	end)
+	end, {placer = placer})
 	return itemstack
 end
 
@@ -139,7 +162,7 @@ function mcl_maps.load_map(id, callback)
 		return false
 	end
 
-	local texture = "mcl_maps_map_texture_" .. id .. ".png"
+	local texture = "mcl_maps_map_texture_" .. id .. ".tga"
 
 	local result = true
 
@@ -178,7 +201,13 @@ function mcl_maps.load_map(id, callback)
 end
 
 function mcl_maps.load_map_item(itemstack)
-	return mcl_maps.load_map(itemstack:get_meta():get_string("mcl_maps:id"))
+	local meta = itemstack:get_meta()
+	local png = meta:get_string("map_image")
+	if png ~= "" then
+		return "^[png:"..png.."^[transformR90"
+	end
+	--fallback load old tga texture
+	return mcl_maps.load_map(meta:get_string("mcl_maps:id"))
 end
 
 local function fill_map(itemstack, placer, pointed_thing)
@@ -188,7 +217,7 @@ local function fill_map(itemstack, placer, pointed_thing)
 	end
 
 	if minetest.settings:get_bool("enable_real_maps", true) then
-		local new_map = mcl_maps.create_map(placer:get_pos())
+		local new_map = mcl_maps.create_map(placer)
 		itemstack:take_item()
 		if itemstack:is_empty() then
 			return new_map
