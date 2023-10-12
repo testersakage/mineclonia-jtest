@@ -1,6 +1,12 @@
 local EF = {}
 local registered_effects = {}
 
+-- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
+local hud_elem_type_field = "type"
+if not minetest.features.hud_def_type_field then
+	hud_elem_type_field = "hud_elem_type"
+end
+
 local EFFECT_TYPES = 0
 minetest.register_on_mods_loaded(function()
 	for _,_ in pairs(EF) do
@@ -94,7 +100,7 @@ function mcl_potions.register_effect(def)
 	if def.uses_factor then
 		pdef.uses_factor = true
 		local l1 = def.lvl1_factor or 1
-		local l2 = def.lvl2_factor or 2*l1
+		local l2 = def.lvl2_factor or (2*l1)
 		if l1 < l2 then
 			pdef.level_to_factor = generate_linear_lvl_to_fac(l1, l2)
 		elseif l1 > l2 then
@@ -167,7 +173,7 @@ mcl_potions.register_effect({
 	on_hit_timer = function(object, factor, duration)
 		local entity = object:get_luaentity()
 		if object:is_player() then
-			mcl_damage.heal_player (player, 1)
+			mcl_damage.heal_player (object, 1)
 		elseif entity and entity.is_mob then
 			entity.health = math.min(entity.hp_max, entity.health + 1)
 		end
@@ -309,7 +315,7 @@ mcl_potions.register_effect({
 	particle_color = "#000000",
 	uses_factor = true,
 	lvl1_factor = 2,
-	lvl2_factor = 0.5,
+	lvl2_factor = 1,
 	timer_uses_factor = true,
 })
 
@@ -423,7 +429,7 @@ minetest.register_globalstep(function(dtime)
 				end
 			end
 
-			if EF[name][object].timer >= vals.dur then
+			if not EF[name][object] or EF[name][object].timer >= vals.dur then
 				if effect.on_end then effect.on_end(object) end
 				EF[name][object] = nil
 				if object:is_player() then
@@ -527,7 +533,7 @@ function mcl_potions._load_player_effects(player)
 		meta:set_string("_is_weak", "")
 	end
 	if legacy_water_breathing then
-		EF.water_breathing[player] = legacy_water_breating
+		EF.water_breathing[player] = legacy_water_breathing
 		meta:set_string("_is_water_breating", "")
 	end
 	if legacy_leaping then
@@ -655,13 +661,13 @@ function mcl_potions.make_invisible(obj_ref, hide)
 			mcl_player.player_set_visibility(obj_ref, true)
 			obj_ref:set_nametag_attributes({ color = { r = 255, g = 255, b = 255, a = 255 } })
 		end
-	else
+	else -- TODO make below section (and preferably other effects on mobs) rely on metadata
 		if hide then
 			local luaentity = obj_ref:get_luaentity()
-			EF.invisible[obj_ref].old_size = luaentity.visual_size
+			EF.invisibility[obj_ref].old_size = luaentity.visual_size
 			obj_ref:set_properties({ visual_size = { x = 0, y = 0 } })
 		else
-			obj_ref:set_properties({ visual_size = EF.invisible[obj_ref].old_size })
+			obj_ref:set_properties({ visual_size = EF.invisibility[obj_ref].old_size })
 		end
 	end
 end
@@ -785,11 +791,11 @@ function mcl_potions.give_effect_by_level(name, object, level, duration)
 	return mcl_potions.give_effect(name, object, factor, duration)
 end
 
-function mcl_potions.healing_func(player, hp)
-	if not player or player:get_hp() <= 0 then return false end
-	local obj = player:get_luaentity()
+function mcl_potions.healing_func(object, hp)
+	if not object or object:get_hp() <= 0 then return false end
+	local ent = object:get_luaentity()
 
-	if obj and obj.harmed_by_heal then hp = -hp end
+	if ent and ent.harmed_by_heal then hp = -hp end
 
 	if hp > 0 then
 		-- at least 1 HP
@@ -797,10 +803,10 @@ function mcl_potions.healing_func(player, hp)
 			hp = 1
 		end
 
-		if obj and obj.is_mob then
-			obj.health = math.max(obj.health + hp, obj.object:get_properties().hp_max)
-		elseif player:is_player() then
-			mcl_damage.heal_player (player, hp)
+		if ent and ent.is_mob then
+			ent.health = math.min(ent.health + hp, ent.hp_max)
+		elseif object:is_player() then
+			mcl_damage.heal_player (object, hp)
 		end
 
 	elseif hp < 0 then
@@ -808,53 +814,53 @@ function mcl_potions.healing_func(player, hp)
 			hp = -1
 		end
 
-		mcl_util.deal_damage(player, -hp, {type = "magic"})
+		mcl_util.deal_damage(object, -hp, {type = "magic"})
 	end
 end
 
-function mcl_potions.strength_func(player, factor, duration)
-	return mcl_potions.give_effect("strength", player, factor, duration)
+function mcl_potions.strength_func(object, factor, duration)
+	return mcl_potions.give_effect("strength", object, factor, duration)
 end
-function mcl_potions.leaping_func(player, factor, duration)
-	return mcl_potions.give_effect("leaping", player, factor, duration)
+function mcl_potions.leaping_func(object, factor, duration)
+	return mcl_potions.give_effect("leaping", object, factor, duration)
 end
-function mcl_potions.weakness_func(player, factor, duration)
-	return mcl_potions.give_effect("weakness", player, factor, duration)
+function mcl_potions.weakness_func(object, factor, duration)
+	return mcl_potions.give_effect("weakness", object, factor, duration)
 end
-function mcl_potions.swiftness_func(player, factor, duration)
-	return mcl_potions.give_effect("swiftness", player, factor, duration)
+function mcl_potions.swiftness_func(object, factor, duration)
+	return mcl_potions.give_effect("swiftness", object, factor, duration)
 end
-function mcl_potions.slowness_func(player, factor, duration)
-	return mcl_potions.give_effect("slowness", player, factor, duration)
-end
-
-function mcl_potions.withering_func(player, factor, duration)
-	return mcl_potions.give_effect("withering", player, factor, duration)
+function mcl_potions.slowness_func(object, factor, duration)
+	return mcl_potions.give_effect("slowness", object, factor, duration)
 end
 
-function mcl_potions.poison_func(player, factor, duration)
-	return mcl_potions.give_effect("poison", player, factor, duration)
-end
-
-function mcl_potions.regeneration_func(player, factor, duration)
-	return mcl_potions.give_effect("regeneration", player, factor, duration)
-end
-
-function mcl_potions.invisiblility_func(player, null, duration)
-	return mcl_potions.give_effect("invisibility", player, null, duration)
-end
-
-function mcl_potions.water_breathing_func(player, null, duration)
-	return mcl_potions.give_effect("water_breathing", player, null, duration)
-end
-
-function mcl_potions.fire_resistance_func(player, null, duration)
-	return mcl_potions.give_effect("fire_resistance", player, null, duration)
+function mcl_potions.withering_func(object, factor, duration)
+	return mcl_potions.give_effect("withering", object, factor, duration)
 end
 
 
-function mcl_potions.night_vision_func(player, null, duration)
-	return mcl_potions.give_effect("night_vision", player, null, duration)
+function mcl_potions.poison_func(object, factor, duration)
+	return mcl_potions.give_effect("poison", object, factor, duration)
+end
+
+function mcl_potions.regeneration_func(object, factor, duration)
+	return mcl_potions.give_effect("regeneration", object, factor, duration)
+end
+
+function mcl_potions.invisiblility_func(object, null, duration)
+	return mcl_potions.give_effect("invisibility", object, null, duration)
+end
+
+function mcl_potions.water_breathing_func(object, null, duration)
+	return mcl_potions.give_effect("water_breathing", object, null, duration)
+end
+
+function mcl_potions.fire_resistance_func(object, null, duration)
+	return mcl_potions.give_effect("fire_resistance", object, null, duration)
+end
+
+function mcl_potions.night_vision_func(object, null, duration)
+	return mcl_potions.give_effect("night_vision", object, null, duration)
 end
 
 function mcl_potions._extinguish_nearby_fire(pos, radius)
@@ -908,18 +914,6 @@ function mcl_potions._extinguish_nearby_fire(pos, radius)
 	return exting
 end
 
-function mcl_potions.bad_omen_func(player, factor, duration)
-	mcl_potions.give_effect("bad_omen", player, factor, duration)
--- 	if not EF.bad_omen[player] then
--- 		EF.bad_omen[player] = {dur = duration, timer = 0, factor = factor}
--- 	else
--- 		local victim = EF.bad_omen[player]
--- 		victim.dur = math.max(duration, victim.dur - victim.timer)
--- 		victim.timer = 0
--- 		victim.factor = factor
--- 	end
---
--- 	if player:is_player() then
--- 		potions_set_icons(player)
--- 	end
+function mcl_potions.bad_omen_func(object, factor, duration)
+	mcl_potions.give_effect("bad_omen", object, factor, duration)
 end
