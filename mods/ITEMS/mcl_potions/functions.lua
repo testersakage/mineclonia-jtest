@@ -1,5 +1,4 @@
 local EF = {}
-
 local registered_effects = {}
 
 local EFFECT_TYPES = 0
@@ -738,7 +737,7 @@ end
 -- ╚═╝░░░░░░╚═════╝░╚═╝░░╚══╝░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
 local function target_valid(object, name)
-	if object:get_hp() <= 0 then return false end
+	if not object or object:get_hp() <= 0 then return false end
 
 	local entity = object:get_luaentity()
 	if entity and entity.is_boss then return false end
@@ -787,9 +786,7 @@ function mcl_potions.give_effect_by_level(name, object, level, duration)
 end
 
 function mcl_potions.healing_func(player, hp)
-
 	if not player or player:get_hp() <= 0 then return false end
-
 	local obj = player:get_luaentity()
 
 	if obj and obj.harmed_by_heal then hp = -hp end
