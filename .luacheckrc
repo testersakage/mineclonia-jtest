@@ -191,6 +191,7 @@ globals = {
 	"mcl_worlds",
 	"mcl_zombie_sieges",
 	"mcl_lush_caves",
+	"settlements",
 }
 
 read_globals = {
@@ -213,6 +214,7 @@ read_globals = {
 			"insert_all",
 			"key_value_swap",
 			"shuffle",
+			reverse = { read_only = false },
 		}
 	},
 
