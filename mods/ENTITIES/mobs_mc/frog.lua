@@ -21,7 +21,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	passive = false,
 	reach = 1,
 	attack_npcs = false,
-	attack_monsters = true,
+	attacks_monsters = true,
 	attack_animals = false,
 	attack_type = "dogfight",
 	damage = 1,
