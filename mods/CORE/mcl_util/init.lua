@@ -2,6 +2,8 @@ local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 
 
 mcl_util = {}
 
+dofile(minetest.get_modpath(minetest.get_current_modname()).."/roman_numerals.lua")
+
 -- Updates all values in t using values from to*.
 function table.update(t, ...)
 	for _, to in ipairs {...} do
