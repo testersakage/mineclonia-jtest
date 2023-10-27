@@ -38,9 +38,8 @@ minetest.register_chatcommand("effect",{
 		if not P[1] then
 			return false, S("Missing effect parameter!")
 		elseif P[1] == "list" then
-			local regs = mcl_potions.get_registered_effects()
 			local effects = "heal"
-			for name, _ in pairs(regs) do
+			for name, _ in pairs(mcl_potions.registered_effects) do
 				effects = effects .. ", " .. name
 			end
 			return true, effects
@@ -68,9 +67,23 @@ minetest.register_chatcommand("effect",{
 			P[3] = 1.0
 		end
 
-		if get_chat_function[P[1]] then
-			get_chat_function[P[1]](minetest.get_player_by_name(name), tonumber(P[3]), tonumber(P[2]))
-			return true
+		local def = mcl_potions.registered_effects[P[1]]
+		if def then
+			if P[3] == "F" then
+				local given = mcl_potions.give_effect(P[1], minetest.get_player_by_name(name), tonumber(P[4]), tonumber(P[2]))
+				if given then
+					return true, S("@1 effect given to player @2 for @3 seconds with factor of @4.", def.description, name, P[2], P[4])
+				else
+					return false, S("Giving effect @1 to player @2 failed.", def.description, name)
+				end
+			else
+				local given = mcl_potions.give_effect_by_level(P[1], minetest.get_player_by_name(name), tonumber(P[3]), tonumber(P[2]))
+				if given then
+					return true, S("@1 effect on level @2 given to player @3 for @4 seconds.", def.description, P[3], name, P[2])
+				else
+					return false, S("Giving effect @1 to player @2 failed.", def.description, name)
+				end
+			end
 		else
 			return false, S("@1 is not an available status effect.", P[1])
 		end
