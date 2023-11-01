@@ -258,6 +258,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	else
 		armor = {immortal=1, fleshy = self.armor}
 	end
+	self.old_y = self.object:get_pos().y
 	self.object:set_armor_groups(armor)
 	self.sounds.distance = self.sounds.distance or 10
 
