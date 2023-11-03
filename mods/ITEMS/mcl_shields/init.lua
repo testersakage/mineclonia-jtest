@@ -264,7 +264,7 @@ local function handle_blocking(player)
 
 	if shield_in_hand then
 		if not_blocking then
-			minetest.after(0.25, function()
+			minetest.after(0.05, function()
 				if (not_blocking or not shield_in_offhand) and shield_in_hand and rmb then
 					player_shield.blocking = 2
 					set_shield(player, true, 2)
@@ -288,7 +288,7 @@ local function handle_blocking(player)
 			return
 		end
 		if not_blocking then
-			minetest.after(0.25, function()
+			minetest.after(0.05, function()
 				if (not_blocking or not shield_in_hand) and shield_in_offhand and rmb  and offhand_can_block then
 					player_shield.blocking = 1
 					set_shield(player, true, 1)
