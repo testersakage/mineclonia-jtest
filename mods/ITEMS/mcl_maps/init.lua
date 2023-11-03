@@ -4,13 +4,6 @@ local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
 
-local storage = minetest.get_mod_storage()
-local worldpath = minetest.get_worldpath()
-local map_textures_path = worldpath .. "/mcl_maps/"
---local last_finished_id = storage:get_int("next_id") - 1
-
-minetest.mkdir(map_textures_path)
-
 local function load_json_file(name)
 	local file = assert(io.open(modpath .. "/" .. name .. ".json", "r"))
 	local data = minetest.parse_json(file:read("*all"))
@@ -23,27 +16,32 @@ local palettes = load_json_file("palettes")
 
 local color_cache = {}
 
-local creating_maps = {}
-local loaded_maps = {}
-
 local c_air = minetest.get_content_id("air")
 
-function mcl_maps.create_map(pos)
-	local minp = vector.multiply(vector.floor(vector.divide(pos, 128)), 128)
-	local maxp = vector.add(minp, vector.new(127, 127, 127))
+local function find_map_in_inv(inv, minp)
+	local list = inv and inv:get_list("main")
+	if not list then return end
+	for k, stack in pairs(list) do
+		local m = stack:get_meta()
+		local id = m:get_string("mcl_maps:minp")
+		if id == minetest.pos_to_string(minp) then
+			return stack, k
+		end
+	end
+end
 
+function mcl_maps.create_map(placer, minp)
+	local pos = placer:get_pos()
+	if not pos or not placer:is_player() then return end
+	local minp = minp or vector.multiply(vector.floor(vector.divide(pos, 128)), 128)
+	local maxp = vector.add(minp, vector.new(127, 127, 127))
 	local itemstack = ItemStack("mcl_maps:filled_map")
 	local meta = itemstack:get_meta()
-	local next_id = storage:get_int("next_id")
-	storage:set_int("next_id", next_id + 1)
-	local id = tostring(next_id)
-	meta:set_string("mcl_maps:id", id)
 	meta:set_string("mcl_maps:minp", minetest.pos_to_string(minp))
 	meta:set_string("mcl_maps:maxp", minetest.pos_to_string(maxp))
 	tt.reload_itemstack_description(itemstack)
 
-	creating_maps[id] = true
-	minetest.emerge_area(minp, maxp, function(blockpos, action, calls_remaining)
+	minetest.emerge_area(minp, maxp, function(blockpos, action, calls_remaining, param)
 		if calls_remaining > 0 then
 			return
 		end
@@ -126,57 +124,33 @@ function mcl_maps.create_map(pos)
 			end
 			last_heightmap = heightmap
 		end
-		tga_encoder.image(pixels):save(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".tga")
-		creating_maps[id] = nil
-	end)
+		local image = tga_encoder.image(pixels)
+		image:encode({
+			compression = 'RLE',
+		})
+		local cstr = minetest.compress(image.data, "deflate", 9)
+		if param.placer and param.placer:get_pos() then
+			local inv = placer:get_inventory()
+			local stack, invpos = find_map_in_inv(inv, minp)
+			if stack then
+				stack:get_meta():set_string("mcl_maps:map_image", minetest.encode_base64(cstr))
+				inv:set_stack("main", invpos, stack)
+			end
+		end
+	end, {placer = placer})
 	return itemstack
 end
 
-function mcl_maps.load_map(id, callback)
-	if not id or id == "" or creating_maps[id] then
-		return false
+function mcl_maps.load_map_item(itemstack, placer)
+	local meta = itemstack:get_meta()
+	local mstr = meta:get_string("mcl_maps:map_image")
+	local minp = meta:get_string("mcl_maps:minp")
+	if mstr ~= "" then
+		local tga = minetest.encode_base64(minetest.decompress(minetest.decode_base64(mstr),"deflate"))
+		return "^[png:"..tga
+	elseif minp ~= "" then
+		mcl_maps.create_map(placer, minetest.string_to_pos(minp))
 	end
-
-	local texture = "mcl_maps_map_texture_" .. id .. ".tga"
-
-	local result = true
-
-	if not loaded_maps[id] then
-		if not minetest.features.dynamic_add_media_table then
-			-- minetest.dynamic_add_media() blocks in
-			-- Minetest 5.3 and 5.4 until media loads
-			loaded_maps[id] = true
-			result = minetest.dynamic_add_media(map_textures_path .. texture, function()
-			end)
-			if callback then
-				callback(texture)
-			end
-		else
-			-- minetest.dynamic_add_media() never blocks
-			-- in Minetest 5.5, callback runs after load
-			result = minetest.dynamic_add_media(map_textures_path .. texture, function()
-				loaded_maps[id] = true
-				if callback then
-					callback(texture)
-				end
-			end)
-		end
-	end
-
-	if result == false then
-		return false
-	end
-
-	if loaded_maps[id] then
-		if callback then
-			callback(texture)
-		end
-		return texture
-	end
-end
-
-function mcl_maps.load_map_item(itemstack)
-	return mcl_maps.load_map(itemstack:get_meta():get_string("mcl_maps:id"))
 end
 
 local function fill_map(itemstack, placer, pointed_thing)
@@ -186,7 +160,7 @@ local function fill_map(itemstack, placer, pointed_thing)
 	end
 
 	if minetest.settings:get_bool("enable_real_maps", true) then
-		local new_map = mcl_maps.create_map(placer:get_pos())
+		local new_map = mcl_maps.create_map(placer)
 		itemstack:take_item()
 		if itemstack:is_empty() then
 			return new_map
@@ -260,15 +234,6 @@ else
 	minetest.register_node("mcl_maps:filled_map_hand", filled_wield_def)
 end
 
-local old_add_item = minetest.add_item
-function minetest.add_item(pos, stack)
-	stack = ItemStack(stack)
-	if minetest.get_item_group(stack:get_name(), "filled_map") > 0 then
-		stack:set_name("mcl_maps:filled_map")
-	end
-	return old_add_item(pos, stack)
-end
-
 tt.register_priority_snippet(function(itemstring, _, itemstack)
 	if itemstack and minetest.get_item_group(itemstring, "filled_map") > 0 then
 		local id = itemstack:get_meta():get_string("mcl_maps:id")
@@ -335,7 +300,7 @@ end)
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(minetest.get_connected_players()) do
 		local wield = player:get_wielded_item()
-		local texture = mcl_maps.load_map_item(wield)
+		local texture = mcl_maps.load_map_item(wield, player)
 		local hud = huds[player]
 		if texture then
 			local wield_def = wield:get_definition()
