@@ -533,6 +533,11 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		end
 	end
 
+	-- check for invulnerability
+	if tflp <= invul_time then
+		return
+	end
+
 	-- healing
 	if damage <= -1 then
 		self.health = self.health - math.floor(damage)
@@ -568,7 +573,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 	if damage >= 0 then
 		-- only play hit sound and show blood effects if damage is 1 or over; lower to 0.1 to ensure armor works appropriately.
-		if damage >= 0.1 and tflp > invul_time then
+		if damage >= 0.1 then
 			-- weapon sounds
 			if weapon:get_definition().sounds ~= nil then
 
