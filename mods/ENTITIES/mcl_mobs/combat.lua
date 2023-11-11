@@ -483,6 +483,9 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	local weapon = hitter:get_wielded_item()
 	local punch_interval = 1.4
 
+	-- invulnerability time
+	local invul_time = 0.4
+
 	-- exhaust attacker
 	if is_player then
 		mcl_hunger.exhaust(hitter:get_player_name(), mcl_hunger.EXHAUST_ATTACK)
@@ -565,7 +568,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 	if damage >= 0 then
 		-- only play hit sound and show blood effects if damage is 1 or over; lower to 0.1 to ensure armor works appropriately.
-		if damage >= 0.1 then
+		if damage >= 0.1 and tflp > invul_time then
 			-- weapon sounds
 			if weapon:get_definition().sounds ~= nil then
 
@@ -602,7 +605,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			if not v then return end
 			local r = 1.4 - math.min(punch_interval, 1.4)
 			local kb = r * (math.abs(v.x)+math.abs(v.z))
-			local up = 2
+			local up = 2.75
 
 			if die==true then
 				kb=kb*2
@@ -619,7 +622,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			if tool_capabilities.damage_groups["knockback"] then
 				kb = tool_capabilities.damage_groups["knockback"]
 			else
-				kb = kb * 1.5
+				kb = kb * 2.5
 			end
 
 
@@ -629,7 +632,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			end
 			if hitter and is_player then
 				local wielditem = hitter:get_wielded_item()
-				kb = kb + 3 * mcl_enchanting.get_enchantment(wielditem, "knockback")
+				kb = kb + 10 * mcl_enchanting.get_enchantment(wielditem, "knockback")
 			elseif luaentity and luaentity._knockback then
 				kb = kb + luaentity._knockback
 			end
