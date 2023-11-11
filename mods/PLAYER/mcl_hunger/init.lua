@@ -173,7 +173,7 @@ minetest.register_globalstep(function(dtime)
 				end
 			end
 
-		elseif food_tick_timer > 0.5 and food_level == 20 and food_saturation_level > 0 then -- fast regeneration
+		elseif food_tick_timer > 4 and food_level == 20 and food_saturation_level > 0 then -- fast regeneration
 			if player_health > 0 and player_health < 20 then
 				food_tick_timer = 0
 				player:set_hp(player_health+1)
