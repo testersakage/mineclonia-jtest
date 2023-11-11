@@ -41,7 +41,7 @@ local node_def = {
 		shearsy_wool = { speed = 1, level = 0, uses = 0 },
 		shearsy_cobweb = { speed = 1, level = 0, uses = 0 },
 	},
-	range = tonumber(minetest.settings:get("mcl_hand_range")) or 4.5
+	range = tonumber(minetest.settings:get("mcl_hand_range")) or 3.5
 }
 
 -- This is for _mcl_autogroup to know about the survival hand tool capabilites
