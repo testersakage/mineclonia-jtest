@@ -460,6 +460,14 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		return
 	end
 
+	-- invulnerability time
+	local invul_time = 0.4
+
+	-- check for invulnerability
+	if tflp <= invul_time then
+		return
+	end
+
 	local is_player = hitter:is_player()
 
 	if is_player then
@@ -482,9 +490,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	-- punch interval
 	local weapon = hitter:get_wielded_item()
 	local punch_interval = 1.4
-
-	-- invulnerability time
-	local invul_time = 0.4
 
 	-- exhaust attacker
 	if is_player then
@@ -531,11 +536,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			damage = self.immune_to[n][2] or 0
 			break
 		end
-	end
-
-	-- check for invulnerability
-	if tflp <= invul_time then
-		return
 	end
 
 	-- healing
