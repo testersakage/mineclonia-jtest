@@ -460,13 +460,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		return
 	end
 
-	-- invulnerability time
-	local invul_time = 0.4
-
-	-- check for invulnerability
-	if tflp <= invul_time then
-		return
-	end
+	local time_now = minetest.get_us_time()
 
 	local is_player = hitter:is_player()
 
@@ -483,7 +477,12 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		end
 
 		-- set/update 'drop xp' timestamp if hitted by player
-		self.xp_timestamp = minetest.get_us_time()
+		self.xp_timestamp = time_now
+		
+		-- check for invulnerability time in microseconds (0.5 second)
+		if time_now - self.invul_timestamp <= 500000 then
+			return
+		end
 	end
 
 
@@ -594,6 +593,9 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 			-- do damage
 			self.health = self.health - damage
+
+			-- give invulnerability
+			self.invul_timestamp = time_now
 
 			-- skip future functions if dead, except alerting others
 			if self:check_for_death( "hit", {type = "punch", puncher = hitter}) then
