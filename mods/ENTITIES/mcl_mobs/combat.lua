@@ -467,6 +467,12 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	if is_player then
 		self.last_player_hit_time = minetest.get_gametime()
 		self.last_player_hit_name = hitter:get_player_name()
+
+		-- check for invulnerability time in microseconds (0.5 second)
+		if time_now - self.invul_timestamp <= 500000 then
+			return
+		end
+
 		-- is mob protected?
 		if self.protected and minetest.is_protected(self.object:get_pos(), hitter:get_player_name()) then
 			return
@@ -474,11 +480,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 		if minetest.is_creative_enabled(hitter:get_player_name()) then
 			self.health = 0
-		end
-
-		-- check for invulnerability time in microseconds (0.5 second)
-		if time_now - self.invul_timestamp <= 500000 then
-			return
 		end
 
 		-- set/update 'drop xp' timestamp if hitted by player
