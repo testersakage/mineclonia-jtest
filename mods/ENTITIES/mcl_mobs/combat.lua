@@ -476,13 +476,13 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			self.health = 0
 		end
 
-		-- set/update 'drop xp' timestamp if hitted by player
-		self.xp_timestamp = time_now
-		
 		-- check for invulnerability time in microseconds (0.5 second)
 		if time_now - self.invul_timestamp <= 500000 then
 			return
 		end
+
+		-- set/update 'drop xp' timestamp if hitted by player
+		self.xp_timestamp = time_now
 	end
 
 
