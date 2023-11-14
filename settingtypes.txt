@@ -73,8 +73,8 @@ mcl_craftguide_progressive_mode	(Learn crafting recipes progressively) bool true
 mcl_enable_skin_customization (Enable player skin customization) bool true
 
 # How far the player hand can reach
-# Default:3.5
-mcl_hand_range (Hand range) float 3.5 1 128
+# Default:4
+mcl_hand_range (Hand range) float 4 1 128
 
 # How far the player hand can reach in creative mode
 # Default:10
