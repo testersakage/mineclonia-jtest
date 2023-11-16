@@ -616,7 +616,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			local up = 2.75
 
 			if die==true then
-				kb=kb*2
+				kb=kb*1.25
 			end
 
 			-- if already in air then dont go up anymore when hit
