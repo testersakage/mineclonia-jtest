@@ -473,8 +473,20 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			return
 		end
 
+		local mob_pos = self.object:get_pos()
+		local player_pos = hitter:get_pos()
+		local attack_reach = 3
+		local distance_x = math.abs(mob_pos.x - player_pos.x)
+		local distance_y = math.abs(mob_pos.y - player_pos.y)
+		local distance_z = math.abs(mob_pos.z - player_pos.z)
+
+		-- is mob out of reach?
+		if distance_x > attack_reach or distance_y > attack_reach or distance_z > attack_reach then
+			return
+		end
+
 		-- is mob protected?
-		if self.protected and minetest.is_protected(self.object:get_pos(), hitter:get_player_name()) then
+		if self.protected and minetest.is_protected(mob_pos, hitter:get_player_name()) then
 			return
 		end
 
