@@ -642,7 +642,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			if tool_capabilities.damage_groups["knockback"] then
 				kb = tool_capabilities.damage_groups["knockback"]
 			else
-				kb = kb * 2.5
+				kb = kb * 1.25
 			end
 
 
