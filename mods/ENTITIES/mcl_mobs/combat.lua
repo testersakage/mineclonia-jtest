@@ -625,7 +625,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			if not v then return end
 			local r = 1.4 - math.min(punch_interval, 1.4)
 			local kb = r * (math.abs(v.x)+math.abs(v.z))
-			local up = 2.5625
+			local up = 2.625
 
 			if die==true then
 				kb=kb*1.25
