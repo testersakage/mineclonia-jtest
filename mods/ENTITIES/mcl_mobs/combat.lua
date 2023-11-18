@@ -652,7 +652,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			end
 			if hitter and is_player then
 				local wielditem = hitter:get_wielded_item()
-				kb = kb + 10 * mcl_enchanting.get_enchantment(wielditem, "knockback")
+				kb = kb + 9 * mcl_enchanting.get_enchantment(wielditem, "knockback")
 			elseif luaentity and luaentity._knockback then
 				kb = kb + luaentity._knockback
 			end
