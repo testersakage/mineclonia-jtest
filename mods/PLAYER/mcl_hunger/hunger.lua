@@ -166,7 +166,7 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 				end
 				minetest.sound_play("mcl_hunger_bite", {
 					max_hear_distance = 12,
-					gain = 1.0,
+					gain = 0.2,
 					pitch = 1 + math.random(-10, 10)*0.005,
 					object = user,
 				}, true)
