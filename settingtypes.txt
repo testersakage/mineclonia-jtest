@@ -86,7 +86,7 @@ mcl_enable_hunger (Hunger mechanic) bool true
 
 # Health regeneration delay when hunger bar is full
 # Default:4
-mcl_health_regen_delay (Health regen delay) int 4
+mcl_health_regen_delay (Health regen delay) float 4 0
 
 [Mobs]
 # If enabled, mobs will spawn naturally. This does not affect
