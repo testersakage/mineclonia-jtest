@@ -236,7 +236,7 @@ function mcl_doors:register_door(name, def)
 			meta1:set_int("is_open", 1)
 			meta2:set_int("is_open", 1)
 		end
-		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
+		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.1, max_hear_distance = 16}, true)
 	end
 
 	local function on_mesecons_signal_open(pos, node)
