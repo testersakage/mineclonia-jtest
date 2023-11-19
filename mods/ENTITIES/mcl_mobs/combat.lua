@@ -648,7 +648,14 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			end
 			if hitter and is_player then
 				local wielditem = hitter:get_wielded_item()
+				local hv = hitter:get_velocity()
 				kb = kb + 9 * mcl_enchanting.get_enchantment(wielditem, "knockback")
+				-- add player velocity to mob knockback 
+				if (dir.x > 0 and hv.x > 0) or (dir.x < 0 and hv.x < 0) then
+					if (dir.z > 0 and hv.z > 0) or (dir.z < 0 and hv.z < 0) then
+						kb = kb + ((math.abs(hv.x) + math.abs(hv.z)) * r)
+					end
+				end
 			elseif luaentity and luaentity._knockback then
 				kb = kb + luaentity._knockback
 			end
