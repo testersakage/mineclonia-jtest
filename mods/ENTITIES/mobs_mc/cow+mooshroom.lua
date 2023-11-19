@@ -28,6 +28,9 @@ local cow_def = {
 	head_yaw="z",
 	makes_footstep_sound = true,
 	walk_velocity = 1,
+	sound_params = {
+		gain = 0.15,
+	},
 	drops = {
 		{name = "mcl_mobitems:beef",
 		chance = 1,
