@@ -126,7 +126,7 @@ function mcl_experience.add_xp(player, xp)
 		else
 			minetest.sound_play("mcl_experience_level_up", {
 				to_player = name,
-				gain = 0.2,
+				gain = 0.09,
 			})
 
 			cache.last_time = current_time + 0.2
