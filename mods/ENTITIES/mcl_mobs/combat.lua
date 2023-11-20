@@ -656,7 +656,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 				local mob_mag = math.sqrt((v.x * v.x) + (v.z * v.z))
 				kb = kb + 9 * mcl_enchanting.get_enchantment(wielditem, "knockback")
 				-- add player velocity to mob knockback
-				if dir_dot > 0 and mob_mag <= player_mag * 0.8 then
+				if dir_dot > 0 and mob_mag <= player_mag * 0.625 then
 					kb = kb + ((math.abs(hv.x) + math.abs(hv.z)) * r)
 				end
 			elseif luaentity and luaentity._knockback then
