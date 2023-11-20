@@ -468,8 +468,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		self.last_player_hit_time = minetest.get_gametime()
 		self.last_player_hit_name = hitter:get_player_name()
 
+		local time_diff = time_now - self.invul_timestamp
+
 		-- check for invulnerability time in microseconds (0.5 second)
-		if time_now - self.invul_timestamp <= 500000 then
+		if time_diff <= 500000 and time_diff >= 0 then
 			return
 		end
 
