@@ -659,8 +659,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 				if dir_dot > 0 and mob_mag <= player_mag * 0.625 then
 					kb = kb + ((math.abs(hv.x) + math.abs(hv.z)) * r)
 				end
-			elseif luaentity and luaentity._knockback then
+			elseif luaentity and luaentity._knockback and die == false then
 				kb = kb + luaentity._knockback
+			elseif luaentity and luaentity._knockback and die == true then
+				kb = kb + luaentity._knockback * 0.25
 			end
 			self._kb_turn = true
 			self._turn_to=self.object:get_yaw()-1.57
