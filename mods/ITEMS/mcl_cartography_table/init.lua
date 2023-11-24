@@ -1,52 +1,88 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
+local F = minetest.formspec_escape
 
 local function refresh_cartography(pos, player)
-	local formspec = "size[9,8.75]"..
-	"label[0,4;"..minetest.formspec_escape(minetest.colorize("#313131", S("Inventory"))).."]"..
-	"label[0,-0;"..minetest.formspec_escape(minetest.colorize("#313131", S("Cartography Table"))).."]"..
-	"list[current_player;main;0,4.5;9,3;9]"..
-	mcl_formspec.get_itemslot_bg(0,4.5,9,3)..
-	"list[current_player;main;0,7.74;9,1;]"..
-	mcl_formspec.get_itemslot_bg(0,7.74,9,1)..
-	"list[nodemeta:"..pos.x..","..pos.y..","..pos.z..";input;0.5,0.7;1,1;1]"..
-	mcl_formspec.get_itemslot_bg(0.5,0.7,1,1)..
-	"image[0.1,1.3;2,2;craftguide_zoomin_icon.png^[colorize:grey]"..
-	"list[nodemeta:"..pos.x..","..pos.y..","..pos.z..";input;0.5,2.7;1,1;]"..
-	"image[1.7,1.7;1.5,1;gui_crafting_arrow.png]"..
-	mcl_formspec.get_itemslot_bg(0.5,2.7,1,1)..
-	"list[nodemeta:"..pos.x..","..pos.y..","..pos.z..";output;7.5,1.7;1,1;]"..
-	"image[7.3,1.5;1.5,1.5;mcl_formspec_itemslot.png]"..
-	"listring[]"
+	local formspec = table.concat({
+		"formspec_version[4]",
+		"size[11.75,10.425]",
+		"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Cartography Table"))) .. "]",
+
+		-- First input slot
+		mcl_formspec.get_itemslot_bg_v4(1, 0.75, 1, 1),
+		"list[nodemeta:" .. pos.x .. "," .. pos.y .. "," .. pos.z .. ";input;1,0.75;1,1;1]",
+
+		-- Cross icon
+		"image[1,2;1,1;mcl_anvils_inventory_cross.png]",
+
+		-- Second input slot
+		mcl_formspec.get_itemslot_bg_v4(1, 3.25, 1, 1),
+		"list[nodemeta:" .. pos.x .. "," .. pos.y .. "," .. pos.z .. ";input;1,3.25;1,1;]",
+
+		-- Arrow
+		"image[2.7,2;2,1;mcl_anvils_inventory_arrow.png]",
+
+		-- Output slot
+		mcl_formspec.get_itemslot_bg_v4(9.75, 2, 1, 1, 0.2),
+		"list[nodemeta:" .. pos.x .. "," .. pos.y .. "," .. pos.z .. ";output;9.75,2;1,1;]",
+
+		-- Player inventory
+		"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
+		"list[current_player;main;0.375,5.1;9,3;9]",
+
+		mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
+		"list[current_player;main;0.375,9.05;9,1;]",
+	})
+
 	local inv = minetest.get_meta(pos):get_inventory()
 	local map = inv:get_stack("input", 2)
 	local texture = mcl_maps.load_map_item(map)
 	local marker = inv:get_stack("input", 1):get_name()
+
 	if marker == "mcl_maps:empty_map" then
 		if texture then
-			formspec = formspec .. "image[4.3,0.5;3,3;mcl_maps_map_background.png] image[4.5,0.7;2.5,2.5;"..texture.."] image[3.3,1.5;3,3;mcl_maps_map_background.png] image[3.5,1.7;2.5,2.5;"..texture.."]"
+			formspec = formspec .. table.concat({
+				"image[6.125,0.5;3,3;mcl_maps_map_background.png]",
+				"image[6.375,0.75;2.5,2.5;" .. texture .. "]",
+				"image[5.125,1.5;3,3;mcl_maps_map_background.png]",
+				"image[5.375,1.75;2.5,2.5;" .. texture .. "]"
+			})
 		else
-			formspec = formspec .. "image[4.3,0.5;3,3;mcl_maps_map_background.png] image[3.3,1.5;3,3;mcl_maps_map_background.png]"
+			formspec = formspec .. table.concat({
+				"image[6.125,0.5;3,3;mcl_maps_map_background.png]",
+				"image[5.125,1.5;3,3;mcl_maps_map_background.png]"
+			})
 		end
-		if not map:is_empty() then map:set_count(2) inv:set_stack("output", 1, map) end
+		if not map:is_empty() then
+			map:set_count(2)
+			inv:set_stack("output", 1, map)
+		end
 	else
-		formspec = formspec .. "image[3.3,0.5;4,4;mcl_maps_map_background.png]"
-		if texture then formspec = formspec .. "image[3.5,0.7;3.5,3.5;"..texture.."]" end
+		formspec = formspec .. "image[5.125,0.5;4,4;mcl_maps_map_background.png]"
+		--formspec = formspec .. "box[5.125,0.5;4,4;#FFFFFF]"
+		if texture then formspec = formspec .. "image[5.375,0.75;3.5,3.5;" .. texture .. "]" end
 		if marker == "xpanes:pane_natural_flat" and not map:is_empty() then
 			if map:get_meta():get_int("locked") == 1 then
-				formspec = formspec .. "image[1.7,1.7;1,1;mcl_core_barrier.png] image[5.8,3.2;0.5,0.5;mcl_core_barrier.png]"
+				formspec = formspec .. table.concat({
+					"image[3.2,2;1,1;mcl_core_barrier.png]",
+					"image[8.375,3.75;0.5,0.5;mcl_core_barrier.png]"
+				})
 			else
-				map:get_meta():set_string("locked", 1)
+				formspec = formspec .. "image[8.375,3.75;0.5,0.5;mcl_core_barrier.png]"
+				map:get_meta():set_int("locked", 1)
 				inv:set_stack("output", 1, map)
 			end
 		end
 	end
+
 	minetest.show_formspec(player:get_player_name(), "mcl_cartography_table", formspec)
 end
 
 local allowed_to_put = {
 	--["mcl_core:paper"] = true, Requires missing features with increasing map size
 	["mcl_maps:empty_map"] = true,
-	["xpanes:pane_natural_flat"] = true
+	["mcl_panes:pane_natural_flat"] = true
 }
 
 minetest.register_node("mcl_cartography_table:cartography_table", {
