@@ -133,7 +133,7 @@ minetest.register_node("mcl_cartography_table:cartography_table", {
 	on_rightclick = function(pos, node, player, itemstack)
 		if not player:get_player_control().sneak then refresh_cartography(pos, player) end
 	end,
-	-- TODO: Drop items on dig
+	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
 })
 
 minetest.register_craft({
