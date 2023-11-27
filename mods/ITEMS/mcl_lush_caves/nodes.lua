@@ -275,6 +275,8 @@ minetest.register_node("mcl_lush_caves:spore_blossom", {
 	end)
 })
 
+local modpath = minetest.get_modpath(modname)
+
 local tpl_azalea = {
   drawtype = "nodebox",
 	node_box = {
@@ -304,6 +306,12 @@ local tpl_azalea = {
 				return true
 			end
 	end),
+  _on_bone_meal = function(itemstack, placer, pointed_thing, pos)
+		minetest.set_node(vector.offset(pos, 0, -1, 0), { name = "mcl_lush_caves:rooted_dirt" })
+    minetest.remove_node(pos)
+    minetest.place_schematic(vector.offset(pos,-2,0,-2),modpath.."/schematics/azalea1.mts","random",nil,nil,"place_center_x place_center_z")
+    return true
+  end
 }
 
 local azalea = table.merge(
