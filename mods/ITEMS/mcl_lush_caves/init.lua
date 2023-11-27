@@ -22,6 +22,7 @@ end
 
 dofile(modpath.."/nodes.lua")
 dofile(modpath.."/crafting.lua")
+dofile(modpath.."/dripleaf.lua")
 
 core.register_abm({
 	label = "Spore Blossom Particles",
