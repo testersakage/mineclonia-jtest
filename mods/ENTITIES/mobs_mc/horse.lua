@@ -148,6 +148,9 @@ local horse = {
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
+	sound_params = {
+		gain = 0.15,
+	},
 	fear_height = 4,
 	fly = false,
 	walk_chance = 60,

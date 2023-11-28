@@ -63,6 +63,9 @@ mcl_mobs.register_mob("mobs_mc:chicken", {
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
+	sound_params = {
+		gain = 0.35,
+	},
 	animation = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 20, walk_speed = 25,
