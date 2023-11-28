@@ -39,6 +39,9 @@ mcl_mobs.register_mob("mobs_mc:guardian", {
 		flop = "mobs_mc_squid_flop",
 		distance = 16,
 	},
+	sound_params = {
+		gain = 0.25,
+	},
 	animation = {
 		stand_speed = 25, walk_speed = 25, run_speed = 50,
 		stand_start = 0,		stand_end = 20,

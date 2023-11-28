@@ -40,6 +40,9 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 		base_pitch = 0.6,
 		distance = 16,
 	},
+	sound_params = {
+		gain = 0.25,
+	},
 	animation = {
 		stand_speed = 25, walk_speed = 25, run_speed = 50,
 		stand_start = 0,		stand_end = 20,
