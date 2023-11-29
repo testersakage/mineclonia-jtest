@@ -218,6 +218,19 @@ minetest.register_craftitem("mcl_lush_caves:glow_berry", {
 	_mcl_saturation = 1.2,
 })
 
+local function add_drop_azalea_flowering(drop_items)
+	local drop_flowering
+	for _, v in ipairs(drop_items) do
+		minetest.log("action", v.items[1])
+		if v.items[1] == "mcl_lush_caves:azalea" then
+			drop_flowering = table.copy(v)
+		end
+	end
+	if not drop_flowering then return end
+	-- local drop_flowering = table.copy(drop_def.items[1])
+	drop_flowering.items = {"mcl_lush_caves:azalea_flowering"}
+	table.insert(drop_items, drop_flowering)
+end
 
 local function register_leaves(subname, def)
 	def.palette = ""
@@ -225,6 +238,8 @@ local function register_leaves(subname, def)
 	local d = mcl_trees.generate_leaves_def("mcl_lush_caves:", subname, def, "mcl_lush_caves:azalea", false, {20, 16, 12, 10})
 	d.leaves_def.groups.biomecolor = nil
 	d.orphan_leaves_def.groups.biomecolor = nil
+	add_drop_azalea_flowering(d.leaves_def.drop.items)
+	add_drop_azalea_flowering(d.orphan_leaves_def.drop.items)
 	minetest.register_node(d["leaves_id"], d["leaves_def"])
 	minetest.register_node(d["orphan_leaves_id"], d["orphan_leaves_def"])
 end
