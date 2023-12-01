@@ -52,6 +52,12 @@ Please read <http://minecraft.gamepedia.com/Breaking> to learn how digging times
 * `soil_sapling=1`: Artificial soil (such as farmland) for saplings. Some saplings will not grow on this
 * `soil_sugarcane=1`: Sugar canes will grow on this near water
 * `soil_nether_wart=1`: Nether wart will grow on this
+* `soil_bamboo=1`: Bamboo will grow on this
+* `dirt=1`:
+* `dirt=2`:
+* `dirt=3`:
+* `grass_block=1`:
+* `grass_block_no_snow=1`:
 * `enderman_takable=1`: Block can be taken and placed by endermen
 * `disable_suffocation=1`: Disables suffocation for full solid cubes (1)
 * `destroys_items=1`: If an item happens to be *inside* this node, the item will be destroyed
