@@ -84,7 +84,7 @@ end
 local function overlay_tiles(orig,overlay)
 	local tiles = table.copy(orig)
 	for k,v in pairs(tiles) do
-		if v.name then
+		if type(v) == "table" and v.name then
 			tiles[k].name = tiles[k].name.."^"..overlay
 		else
 			tiles[k] = v.."^"..overlay
