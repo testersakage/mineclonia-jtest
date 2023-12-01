@@ -922,7 +922,7 @@ function mob_class:do_states_stand()
 
 			if lp.x > s.x then yaw = yaw +math.pi end
 		else
-			yaw = yaw + math.random(-0.5, 0.5)
+			yaw = yaw + math.random() - 0.5
 		end
 
 		self:set_yaw( yaw, 8)

@@ -287,7 +287,7 @@ end
 function mob_class:who_are_you_looking_at()
 	local pos = self.object:get_pos()
 
-	local stop_look_at_player_chance = math.random(833/self.curiosity)
+	local stop_look_at_player_chance = math.random(math.ceil(833/self.curiosity))
 	-- was 10000 - div by 12 for avg entities as outside loop
 
 	local stop_look_at_player = stop_look_at_player_chance == 1
@@ -309,7 +309,7 @@ function mob_class:who_are_you_looking_at()
 		if math.random(1, 30) then
 			-- For the wither this was 20/60=0.33, so probably need to rebalance and divide rates.
 			-- but frequency of check isn't good as it is costly. Making others too infrequent requires testing
-			local look_at_player_chance = math.random(math.max(1,20/self.curiosity))
+			local look_at_player_chance = math.random(math.max(1,math.ceil(20/self.curiosity)))
 
 			-- was 5000 but called in loop based on entities. so div by 12 as estimate avg of entities found,
 			-- then div by 20 as less freq lookup
