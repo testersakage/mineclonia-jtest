@@ -450,10 +450,12 @@ minetest.register_globalstep(function(dtime)
 	for _, player in pairs(minetest.get_connected_players()) do
 		local pos = player:get_pos()
 		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 47)) do
-			local lua = obj:get_luaentity()
-			if lua and lua.is_mob then
-				lua.lifetimer = math.max(20, lua.lifetimer)
-				lua.despawn_immediately = false
+			if not obj:is_player() then
+				local lua = obj:get_luaentity()
+				if lua and lua.is_mob then
+					lua.lifetimer = math.max(20, lua.lifetimer)
+					lua.despawn_immediately = false
+				end
 			end
 		end
 	end
