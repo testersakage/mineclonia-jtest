@@ -116,8 +116,19 @@ local function InitRandomizer(seed)
 	-- Chest contents randomizer
 	--pr_treasures = PseudoRandom(seed+777)
 	-- Used for cobweb generation, both noises have to reach a high value for cobwebs to appear
-	webperlin_major = PerlinNoise(934, 3, 0.6, 500)
-	webperlin_minor = PerlinNoise(834, 3, 0.6, 50)
+
+	webperlin_major = PerlinNoise({
+		seed = 934,
+		octaves = 3,
+		persistence = 0.6,
+		spread = {x = 500, y = 500, z = 500},
+	})
+	webperlin_minor = PerlinNoise({
+		seed = 834,
+		octaves = 3,
+		persistence = 0.6,
+		spread = {x = 50, y = 50, z = 50},
+	})
 end
 
 local carts_table = {}
