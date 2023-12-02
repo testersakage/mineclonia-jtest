@@ -250,6 +250,14 @@ function mcl_util.move_item(source_inventory, source_list, source_stack_id, dest
 			stack:take_item()
 			source_inventory:set_stack(source_list, source_stack_id, stack)
 			destination_inventory:add_item(destination_list, new_stack)
+			local source_location = source_inventory:get_location()
+			if source_location and source_location.type == "node" then
+				mcl_redstone.update_comparators(source_location.pos)
+			end
+			local destination_location = destination_inventory:get_location()
+			if destination_location.type == "node" then
+				mcl_redstone.update_comparators(destination_location.pos)
+			end
 			return true
 		end
 	end

@@ -1,5 +1,63 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
+local fourdirs = {
+	[0] = vector.new(0, 0, 1),
+	[1] = vector.new(1, 0, 0),
+	[2] = vector.new(0, 0, -1),
+	[3] = vector.new(-1, 0, 0),
+}
+
+function mcl_redstone.update_comparators(pos)
+	for _, dir in pairs(fourdirs) do
+		local pos2 = pos:add(dir)
+		local node2 = minetest.get_node(pos2)
+
+		if dir == minetest.fourdir_to_dir(node2.param2) and node2.name:find("mcl_comparators:comparator_") then
+			print("push update")
+			mcl_redstone._pending_updates[minetest.hash_node_position(pos2)] = pos2
+		elseif mcl_redstone._solid_opaque_tab[node2.name] then
+			local pos3 = pos2:add(dir)
+			local node3 = minetest.get_node(pos3)
+			if dir == minetest.fourdir_to_dir(node3.param2) and node3.name:find("mcl_comparators:comparator_") then
+				print("push update")
+				mcl_redstone._pending_updates[minetest.hash_node_position(pos3)] = pos3
+			end
+		end
+	end
+end
+
+local function check_inventory(pos)
+	local invnode = minetest.get_node_or_nil(pos)
+	local invnodedef = invnode and minetest.registered_nodes[invnode.name]
+
+	if not invnodedef then return false, false end
+
+	if not invnodedef.groups.container or (invnodedef.groups.container == 0) then
+		return false, invnodedef.groups.opaque and (invnodedef.groups.opaque ~= 0)
+	end
+
+	return true, minetest.get_inventory({type="node", pos=pos})
+end
+
+local function inventory_power(inv)
+	if not inv then return 0 end
+
+	local fullness, slots = 0, 0
+
+	for listname, list in pairs(inv:get_lists()) do
+		if not inv:is_empty(listname) then
+			for _, stack in pairs(list) do
+				if stack then
+					fullness = fullness + stack:get_count() / stack:get_stack_max()
+				end
+				slots = slots + 1
+			end
+		end
+	end
+
+	return (slots == 0) and 0 or math.floor(1 + (fullness / slots) * 14)
+end
+
 -- compute tile depending on state and mode
 local function get_tiles(state, mode)
 	local top = "mcl_comparators_"..state..".png^"..
@@ -121,11 +179,26 @@ for _, mode in pairs{"comp", "sub"} do
 					local back = -minetest.fourdir_to_dir(node.param2)
 					local left = minetest.fourdir_to_dir((node.param2 - 1) % 4)
 					local right = minetest.fourdir_to_dir((node.param2 + 1) % 4)
-					local rear_power = mcl_redstone.get_power(pos, back)
 					local side_power = math.max(
 						mcl_redstone.get_power(pos, left),
 						mcl_redstone.get_power(pos, right)
 					)
+					local back_pos = vector.add(pos, back)
+					local rear_power
+					local has_inv, o = check_inventory(back_pos)
+					if has_inv then
+						rear_power = inventory_power(o)
+					elseif o then
+						back_pos = vector.add(back_pos, back)
+						has_inv, o = check_inventory(back_pos)
+						if has_inv then
+							rear_power = inventory_power(o)
+						else
+							rear_power = mcl_redstone.get_power(pos, back)
+						end
+					else
+						rear_power = mcl_redstone.get_power(pos, back)
+					end
 					local output
 					if mode == "comp" then
 						output = rear_power >= side_power and rear_power or 0
