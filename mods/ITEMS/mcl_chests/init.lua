@@ -532,10 +532,12 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				inv:add_item("main", stack)
 			end
 			-- END OF LISTRING WORKAROUND
+			mcl_redstone.update_comparators(pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
+			mcl_redstone.update_comparators(pos)
 		end,
 		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
@@ -694,10 +696,12 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				double_chest_add_item(inv, other_inv, "main", stack)
 			end
 			-- END OF LISTRING WORKAROUND
+			mcl_redstone.update_comparators(pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
+			mcl_redstone.update_comparators(pos)
 		end,
 		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
@@ -861,10 +865,12 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				double_chest_add_item(other_inv, inv, "main", stack)
 			end
 			-- END OF LISTRING WORKAROUND
+			mcl_redstone.update_comparators(pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
+			mcl_redstone.update_comparators(pos)
 		end,
 		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
