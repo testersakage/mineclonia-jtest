@@ -103,10 +103,12 @@ local def_hopper = {
 	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" moves stuff to mcl_hoppers at "..minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" takes stuff from mcl_hoppers at "..minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 
@@ -283,10 +285,12 @@ local def_hopper_side = {
 	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" moves stuff to mcl_hoppers at "..minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" takes stuff from mcl_hoppers at "..minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	on_rotate = on_rotate,
 	sounds = mcl_sounds.node_sound_metal_defaults(),
