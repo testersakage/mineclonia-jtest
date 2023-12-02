@@ -222,11 +222,8 @@ local function has_room(self,pos)
 	local p1 = vector.offset(pos,cb[1],cb[2],cb[3])
 	local p2 = vector.offset(pos,cb[4],cb[5],cb[6])
 	local n = #minetest.find_nodes_in_area(p1,p2,nodes) or 0
-	if r > n then
-		minetest.log("warning","[mcl_mobs] No room for mob "..self.name.." at "..minetest.pos_to_string(vector.round(pos)))
-		return false
 	end
-	return true
+	return r <= n
 end
 
 local function spawn_check(pos,spawn_def,ignore_caps)
@@ -271,7 +268,10 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	if not ( not spawn_def.biomes or (spawn_def.biomes and biome_check(spawn_def.biomes, gotten_biome))) then return false, "biome check failed" end
 	if not (is_ground or spawn_def.type_of_spawning ~= "ground") then return false, "not on ground" end
 	if not (spawn_def.type_of_spawning ~= "ground" or not is_leaf) then return false, "leaf" end
-	if not has_room(mob_def,pos) then return false, "no room" end
+	if not has_room(mob_def,pos) then
+		minetest.log("warning","[mcl_mobs] No room for mob "..mob_def.name.." at "..minetest.pos_to_string(vector.round(pos)))
+		return false, "no room"
+	end
 	if not (spawn_def.check_position and spawn_def.check_position(pos) or true) then return false, "check_position failed" end
 	if not (not is_farm_animal(spawn_def.name) or is_grass) then return false, "farm animals only on grass" end
 	if not (spawn_def.type_of_spawning ~= "water" or is_water) then return false, "water mob only on water" end
