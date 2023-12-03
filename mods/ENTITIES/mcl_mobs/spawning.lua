@@ -205,7 +205,7 @@ end
 
 local function has_room(self,pos)
 	local cb = self.initial_properties.collisionbox
-	local nodes = {}
+	local nodes = {"air"}
 	if self.fly_in then
 		local t = type(self.fly_in)
 		if t == "table" then
@@ -214,16 +214,38 @@ local function has_room(self,pos)
 			table.insert(nodes,self.fly_in)
 		end
 	end
-	table.insert(nodes,"air")
-	local x = cb[4] - cb[1]
-	local y = cb[5] - cb[2]
-	local z = cb[6] - cb[3]
-	local r = math.ceil(x * y * z)
-	local p1 = vector.offset(pos,cb[1],cb[2],cb[3])
-	local p2 = vector.offset(pos,cb[4],cb[5],cb[6])
-	local n = #minetest.find_nodes_in_area(p1,p2,nodes) or 0
+	table.insert(nodes,"mcl_doors:trapdoor_oak")
+	-- local x = cb[4] - cb[1]
+	-- local y = cb[5] - cb[2]
+	-- local z = cb[6] - cb[3]
+	-- local r = math.ceil(x * y * z)
+	local p1 = vector.offset(pos, cb[1], 0, cb[3])
+	local p2 = vector.offset(pos, cb[4], cb[5] - cb[1], cb[6])
+	-- local nn = minetest.find_nodes_in_area(p1, p2)
+	minetest.log(dump(p1))
+	minetest.log(dump(p2))
+	for z = math.floor(p1["z"]), math.floor(p2["z"]) do
+		for y = math.floor(p1["y"]), math.floor(p2["y"]) do
+			for x = math.floor(p1["x"]), math.floor(p2["x"]) do
+				local v = vector.new(x, y, z)
+				-- minetest.log(dump(v))
+				local node = minetest.get_node(v)
+				-- minetest.log(dump(node))
+				local node_def = minetest.registered_nodes[node.name]
+				minetest.log(dump(node_def))
+			end
+		end
 	end
-	return r <= n
+	-- minetest.log("Node count: "..#nn)
+	-- local node_def = minetest.registered_nodes[nn[1]]
+	-- minetest.log(dump(node_def))
+	-- for name, count in pairs(counts) do
+	-- 	minetest.log("warning", "Node Name: "..name..", Count: "..count)
+	-- end
+	-- local n = #nn or 0
+	-- minetest.log("warning", "Volume. Mob: "..r..", Nodes: "..n)
+	-- return r <= n
+	return false
 end
 
 local function spawn_check(pos,spawn_def,ignore_caps)
@@ -397,7 +419,7 @@ local function check_timer(spawn_def, dtime)
 	return true
 end
 
-if mobs_spawn then
+if false then
 	local perlin_noise
 	local function spawn_a_mob(pos, dimension, dtime)
 		--create a disconnected clone of the spawn dictionary
