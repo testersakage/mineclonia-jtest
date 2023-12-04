@@ -66,10 +66,10 @@ mcl_mobs.register_mob("mobs_mc:glow_squid", {
 	},
 	drops = {
 		{ name = "mcl_mobitems:glow_ink_sac",
-		  chance = 1,
+		  chance = 1000,
 		  min = 1,
 		  max = 3,
-		  looting = "common", },
+		  looting = "common",},
 	},
 	visual_size = { x = 3, y = 3 },
 	makes_footstep_sound = false,

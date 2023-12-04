@@ -242,7 +242,7 @@ Fields not mentioned in this document can also be added as custom fields for the
 		-- name of item to drop.
 
 		chance = 1,
-		--chance of drop, 1 for always, 2 for 1-in-2 chance etc.
+		--chance of drop, chance of drop in percent, 1000 is 100%, 5 is 0.5%, etc..
 
 		min = 1,
 		--minimum number of items dropped.

@@ -41,8 +41,8 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	walk_velocity = 1.6,
 	run_velocity = 3, -- (was 3.2) since player can run, this is ok for a flying mob
 	drops = {
-		{name = "mcl_mobitems:gunpowder", chance = 1, min = 0, max = 2, looting = "common"},
-		{name = "mcl_mobitems:ghast_tear", chance = 10/6, min = 0, max = 1, looting = "common", looting_ignore_chance = true},
+		{name = "mcl_mobitems:gunpowder", chance = 1000, min = 0, max = 2, looting = "common"},
+		{name = "mcl_mobitems:ghast_tear", chance = 1000, min = 0, max = 1, looting = "common", looting_ignore_chance = true},
 	},
 	animation = {
 		stand_speed = 50, walk_speed = 50, run_speed = 50,

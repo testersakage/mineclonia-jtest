@@ -71,11 +71,11 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	end,
 	drops = {
 		{name = "mcl_core:iron_ingot",
-		chance = 1,
+		chance = 1000,
 		min = 3,
 		max = 5,},
 		{name = "mcl_flowers:poppy",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 2,},
 	},

@@ -44,9 +44,10 @@ local dolphin = {
 		},
 		drops = {
 			{name = "mcl_fishing:fish_raw",
-			chance = 1,
+			chance = 1000,
 			min = 0,
-			max = 1,},
+			max = 1,
+			looting = "common",},
 	},
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,

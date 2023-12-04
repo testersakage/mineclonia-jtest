@@ -39,15 +39,15 @@ mcl_mobs.register_mob("mobs_mc:polar_bear", {
 	group_attack = true,
 	attack_type = "dogfight",
 	drops = {
-		-- 3/4 chance to drop raw fish (poor approximation)
+		-- 3/4 chance to drop raw fish
 		{name = "mcl_fishing:fish_raw",
-		chance = 2,
+		chance = 750,
 		min = 0,
 		max = 2,
 		looting = "common",},
 		-- 1/4 to drop raw salmon
 		{name = "mcl_fishing:salmon_raw",
-		chance = 4,
+		chance = 250,
 		min = 0,
 		max = 2,
 		looting = "common",},

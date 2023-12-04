@@ -39,8 +39,8 @@ local strider = {
 	runaway = true,
 	drops = {
 		{name = "mcl_mobsitems:string",
-		chance = 1,
-		min = 2,
+		chance = 1000,
+		min = 0,
 		max = 5,},
 	},
 	animation = {

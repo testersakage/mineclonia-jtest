@@ -39,7 +39,7 @@ local function get_drops(self)
 	self.drops = {}
 	table.insert(self.drops,
 		{name = "mcl_mobitems:leather",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 2,
 		looting = "common",
@@ -497,7 +497,7 @@ skeleton_horse.armor = {undead = 100, fleshy = 100}
 skeleton_horse.textures = {{"blank.png", "mobs_mc_horse_skeleton.png", "blank.png"}}
 skeleton_horse.drops = {
 	{name = "mcl_mobitems:bone",
-	chance = 1,
+	chance = 1000,
 	min = 0,
 	max = 2,},
 }

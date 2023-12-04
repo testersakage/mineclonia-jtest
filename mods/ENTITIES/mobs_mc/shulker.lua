@@ -64,8 +64,8 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	does_not_prevent_sleep = true,
 	drops = {
 		{name = "mcl_mobitems:shulker_shell",
-		chance = 2,
-		min = 1,
+		chance = 500,
+		min = 0,
 		max = 1,
 		looting = "rare",
 		looting_factor = 0.0625},

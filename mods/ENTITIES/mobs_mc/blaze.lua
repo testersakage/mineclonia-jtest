@@ -56,7 +56,7 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 	pathfinding = 1,
 	drops = {
 		{name = "mcl_mobitems:blaze_rod",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 1,
 		looting = "common",},

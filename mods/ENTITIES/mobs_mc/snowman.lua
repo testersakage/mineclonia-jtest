@@ -52,7 +52,7 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
                 "farming_pumpkin_top.png", --left
 	},
 	gotten_texture = gotten_texture,
-	drops = {{ name = "mcl_throwing:snowball", chance = 1, min = 0, max = 15 }},
+	drops = {{ name = "mcl_throwing:snowball", chance = 1000, min = 0, max = 15 }},
 	visual_size = {x=3, y=3},
 	walk_velocity = 0.6,
 	run_velocity = 2,

@@ -40,11 +40,11 @@ local salmon = {
 	},
 	drops = {
 		{name = "mcl_fishing:salmon_raw",
-		chance = 1,
+		chance = 1000,
 		min = 1,
 		max = 1,},
 		{name = "mcl_bone_meal:bone_meal",
-		chance = 20,
+		chance = 50,
 		min = 1,
 		max = 1,},
 	},

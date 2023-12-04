@@ -41,7 +41,7 @@ mcl_mobs.register_mob("mobs_mc:squid", {
 	},
     drops = {
 		{name = "mcl_mobitems:ink_sac",
-		chance = 1,
+		chance = 1000,
 		min = 1,
 		max = 3,
 		looting = "common",},

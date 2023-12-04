@@ -48,19 +48,19 @@ mcl_mobs.register_mob("mobs_mc:witherskeleton", {
 	reach = 2,
 	drops = {
 		{name = "mcl_core:coal_lump",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 1,
 		looting = "common",},
 		{name = "mcl_mobitems:bone",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 2,
 		looting = "common",},
 
 		-- Head
 		{name = "mcl_heads:wither_skeleton",
-		chance = 40, -- 2.5% chance
+		chance = 25, -- 2.5% chance
 		min = 1,
 		max = 1,
 		looting = "rare",},

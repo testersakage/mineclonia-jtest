@@ -105,7 +105,7 @@ mcl_mobs.register_mob("mobs_mc:creeper", {
 	maxdrops = 2,
 	drops = {
 		{name = "mcl_mobitems:gunpowder",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 2,
 		looting = "common",},
@@ -113,7 +113,7 @@ mcl_mobs.register_mob("mobs_mc:creeper", {
 		-- Head
 		-- TODO: Only drop if killed by charged creeper
 		{name = "mcl_heads:creeper",
-		chance = 200, -- 0.5%
+		chance = 5, -- 0.5%
 		min = 1,
 		max = 1,},
 	},

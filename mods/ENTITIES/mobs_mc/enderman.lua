@@ -303,7 +303,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 	particlespawners = psdefs,
 	drops = {
 		{name = "mcl_throwing:ender_pearl",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 1,
 		looting = "common"},

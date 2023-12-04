@@ -45,13 +45,13 @@ local hoglin = {
 	drops = {
 		{
 			name = "mobs_mcitems:leather",
-			chance = 1,
+			chance = 1000,
 			min = 0,
 			max = 1,
 		},
 		{
 			name = "mcl_mobitems:porkchop",
-			chance = 1,
+			chance = 1000,
 			min = 2,
 			max = 4,
 		},

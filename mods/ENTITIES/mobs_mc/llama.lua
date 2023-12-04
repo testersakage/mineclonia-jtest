@@ -28,20 +28,20 @@ local function get_drops(self)
 	self.drops = {}
 	table.insert(self.drops,
 		{name = "mcl_mobitems:leather",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 2,
 		looting = "common",
 		})
 	if self.carpet then
 		table.insert(self.drops,{name = self.carpet,
-		chance = 1,
+		chance = 1000,
 		min = 1,
 		max = 1,})
 	end
 	if self._has_chest then
 		table.insert(self.drops,{name = "mcl_chests:chest",
-		chance = 1,
+		chance = 1000,
 		min = 1,
 		max = 1,})
 	end

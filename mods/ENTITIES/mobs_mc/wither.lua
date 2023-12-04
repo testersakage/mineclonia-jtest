@@ -99,7 +99,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 	can_despawn = false,
 	drops = {
 		{name = "mcl_mobitems:nether_star",
-		chance = 1,
+		chance = 1000,
 		min = 1,
 		max = 1},
 	},

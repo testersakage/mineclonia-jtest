@@ -48,7 +48,7 @@ mcl_mobs.register_mob("mobs_mc:guardian", {
 	drops = {
 		-- Greatly increased amounts of prismarine
 		{name = "mcl_ocean:prismarine_shard",
-		chance = 1,
+		chance = 1000,
 		min = 0,
 		max = 32,
 		looting = "common",},
@@ -57,37 +57,37 @@ mcl_mobs.register_mob("mobs_mc:guardian", {
 		-- The following drops are approximations
 		-- Fish / prismarine crystal
 		{name = "mcl_fishing:fish_raw",
-		chance = 4,
+		chance = 400,
 		min = 1,
 		max = 1,
 		looting = "common",},
 		{name = "mcl_ocean:prismarine_crystals",
-		chance = 4,
+		chance = 400,
 		min = 1,
 		max = 2,
 		looting = "common",},
 
 		-- Rare drop: fish
 		{name = "mcl_fishing:fish_raw",
-		chance = 160, -- 2.5% / 4
+		chance = 600, -- 60%
 		min = 1,
 		max = 1,
 		looting = "rare",
 		looting_factor = 0.0025,},
 		{name = "mcl_fishing:salmon_raw",
-		chance = 160,
+		chance = 250,
 		min = 1,
 		max = 1,
 		looting = "rare",
 		looting_factor = 0.0025,},
 		{name = "mcl_fishing:clownfish_raw",
-		chance = 160,
+		chance = 20,
 		min = 1,
 		max = 1,
 		looting = "rare",
 		looting_factor = 0.0025,},
 		{name = "mcl_fishing:pufferfish_raw",
-		chance = 160,
+		chance = 130,
 		min = 1,
 		max = 1,
 		looting = "rare",

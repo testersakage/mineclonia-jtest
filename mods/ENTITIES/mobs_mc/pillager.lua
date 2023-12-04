@@ -64,14 +64,14 @@ pillager = {
 	drops = {
 		{
 			name = "mcl_bows:arrow",
-			chance = 1,
+			chance = 1000,
 			min = 0,
 			max = 2,
 			looting = "common",
 		},
 		{
 			name = "mcl_bows:crossbow",
-			chance = 100 / 8.5,
+			chance = 85,
 			min = 1,
 			max = 1,
 			looting = "rare",

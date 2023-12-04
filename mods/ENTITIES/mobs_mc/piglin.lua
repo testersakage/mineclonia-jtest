@@ -74,7 +74,7 @@ local piglin = {
 	run_velocity = 2.0, -- (was 2.8) hes fast and has bow, but slower compare to hoglin
 	drops = {
 		{name = "mcl_bows:crossbow",
-		chance = 10,
+		chance = 85,
 		min = 1,
 		max = 1,},
 	},

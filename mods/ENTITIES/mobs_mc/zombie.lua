@@ -11,24 +11,24 @@ local S = minetest.get_translator("mobs_mc")
 
 local drops_common = {
 	{name = "mcl_mobitems:rotten_flesh",
-	chance = 1,
+	chance = 1000,
 	min = 0,
 	max = 2,
 	looting = "common",},
 	{name = "mcl_core:iron_ingot",
-	chance = 120, -- 2.5% / 3
+	chance = 25, -- 2.5%
 	min = 1,
 	max = 1,
 	looting = "rare",
 	looting_factor = 0.01 / 3,},
 	{name = "mcl_farming:carrot_item",
-	chance = 120, -- 2.5% / 3
+	chance = 25, -- 2.5%
 	min = 1,
 	max = 1,
 	looting = "rare",
 	looting_factor = 0.01 / 3,},
 	{name = "mcl_farming:potato_item",
-	chance = 120, -- 2.5% / 3
+	chance = 25, -- 2.5%
 	min = 1,
 	max = 1,
 	looting = "rare",
@@ -40,7 +40,7 @@ table.insert(drops_zombie, {
 	-- Zombie Head
 	-- TODO: Only drop if killed by charged creeper
 	name = "mcl_heads:zombie",
-	chance = 200, -- 0.5%
+	chance = 5, -- 0.5%
 	min = 1,
 	max = 1,
 })

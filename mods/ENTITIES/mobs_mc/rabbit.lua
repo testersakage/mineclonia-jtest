@@ -47,9 +47,9 @@ local rabbit = {
 	runaway = true,
 	jump = true,
 	drops = {
-		{name = "mcl_mobitems:rabbit", chance = 1, min = 0, max = 1, looting = "common",},
-		{name = "mcl_mobitems:rabbit_hide", chance = 1, min = 0, max = 1, looting = "common",},
-		{name = "mcl_mobitems:rabbit_foot", chance = 10, min = 0, max = 1, looting = "rare", looting_factor = 0.03,},
+		{name = "mcl_mobitems:rabbit", chance = 1000, min = 1, max = 1, looting = "common",},
+		{name = "mcl_mobitems:rabbit_hide", chance = 1000, min = 0, max = 1, looting = "common",},
+		{name = "mcl_mobitems:rabbit_foot", chance = 100, min = 1, max = 1, looting = "rare", looting_factor = 0.03,},
 	},
 	fear_height = 4,
 	animation = {

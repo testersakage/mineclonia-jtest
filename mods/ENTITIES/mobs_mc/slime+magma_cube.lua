@@ -171,7 +171,7 @@ slime_tiny.reach = 2.5
 slime_tiny.drops = {
 	-- slimeball
 	{name = "mcl_mobitems:slimeball",
-	chance = 1,
+	chance = 1000,
 	min = 0,
 	max = 2,},
 }
@@ -288,8 +288,8 @@ local magma_cube_big = {
 	armor = 53,
 	drops = {
 		{name = "mcl_mobitems:magma_cream",
-		chance = 4,
-		min = 1,
+		chance = 1000,
+		min = 0,
 		max = 1,},
 	},
 	-- TODO: Fix animations

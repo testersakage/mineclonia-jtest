@@ -92,7 +92,7 @@ function mob_class:item_drop(cooked, looting_level)
 
 	for n = 1, #self.drops do
 		local dropdef = self.drops[n]
-		local chance = 1 / dropdef.chance
+		local chance = dropdef.chance
 		local looting_type = dropdef.looting
 
 		if looting_level > 0 then
@@ -100,20 +100,20 @@ function mob_class:item_drop(cooked, looting_level)
 			if chance_function then
 				chance = chance_function(looting_level)
 			elseif looting_type == "rare" then
-				chance = chance + (dropdef.looting_factor or 0.01) * looting_level
+				chance = chance + (dropdef.looting_factor or 0.01) + (looting_level * 10)
 			end
 		end
 
 		local num = 0
 		local do_common_looting = (looting_level > 0 and looting_type == "common")
-		if math.random() < chance then
+		if math.random(1,1000) <= chance then
 			num = math.random(dropdef.min or 1, dropdef.max or 1)
 		elseif not dropdef.looting_ignore_chance then
 			do_common_looting = false
 		end
 
 		if do_common_looting then
-			num = num + math.floor(math.random(0, looting_level) + 0.5)
+			num = num + math.random(0, looting_level)
 		end
 
 		if num > 0 then

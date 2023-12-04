@@ -154,7 +154,7 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 	},
 	drops = {
 		{name = "mcl_mobitems:feather",
-		chance = 1,
+		chance = 1000,
 		min = 1,
 		max = 2,
 		looting = "common",},
