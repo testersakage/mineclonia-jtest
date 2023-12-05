@@ -12,6 +12,22 @@ local function can_build_to_two_above(pos)
 	end
 end
 
+BulkNodeStore = {}
+
+function BulkNodeStore:new()
+	local o = {data = {}}
+	setmetatable(o, self)
+	self.__index = self
+	return o
+end
+
+function BulkNodeStore:set_node(vector, node)
+	if self.data[node] == nil then
+		self.data[node] = {}
+	end
+	table.insert(self.data[node], vector)
+end
+
 minetest.register_node("mcl_lush_caves:moss", {
 	description = S("Moss"),
 	_doc_items_longdesc = S("Moss is a green block found in lush caves"),
@@ -31,12 +47,17 @@ minetest.register_node("mcl_lush_caves:moss", {
 			vector.offset(pos, x_max, 4, z_max),
 			{ "group:converts_to_moss" }
 		)
-		return mcl_lush_caves.bone_meal_moss(
+		local bulk_nodes = BulkNodeStore:new()
+		mcl_lush_caves.bone_meal_moss(
 			pos, { x=x_max, z=z_max }, nodes,
-			function(v, n) minetest.set_node(v, n) end,
+			function(v, n) bulk_nodes:set_node(v, n) end,
 			can_build_to_two_above,
 			function(a, b) return rng:next(a, b) end
 		)
+		for node, positions in pairs(bulk_nodes.data) do
+			minetest.bulk_set_node(positions, node)
+		end
+		return true
 	end,
 })
 
