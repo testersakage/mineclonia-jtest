@@ -20,6 +20,7 @@ local function vector_distance_xz(a, b)
 	)
 end
 
+dofile(modpath.."/model.lua")
 dofile(modpath.."/nodes.lua")
 
 local spore_blossom_particlespawner = {

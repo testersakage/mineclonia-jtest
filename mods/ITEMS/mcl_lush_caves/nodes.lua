@@ -2,76 +2,14 @@ local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
 
--- Return a vegetation type with the following chances
---   Tall Grass: 52.08%
---   Moss Carpet: 26.04%
---   Double Grass: 10.42%
---   Azalea: 7.29%
---   Flowering Azalea: 4.17%
-local function random_moss_vegetation()
-	local x = math.random()
-	if x < 0.5208 then
-		return "mcl_flowers:tallgrass"
-	elseif x < 0.7812 then
-		return "mcl_lush_caves:moss_carpet"
-	elseif x < 0.8854 then
-		return "mcl_flowers:double_grass"
-	elseif x < 0.9583 then
-		return "mcl_lush_caves:azalea"
-	else
-		return "mcl_lush_caves:azalea_flowering"
+local rng = PseudoRandom(os.time())
+
+local function can_build_to_two_above(pos)
+	return function()
+		return minetest.registered_nodes[
+			minetest.get_node(vector.offset(pos, 0, 2, 0)).name
+		].buildable_to
 	end
-end
-
--- sets the node at 'pos' to moss and with a 60% chance sets the node above to
--- vegatation
-local function set_moss_with_chance_vegetation(pos)
-	minetest.set_node(pos, { name = "mcl_lush_caves:moss" })
-	if math.random() < 0.6 then
-		local vegetation = random_moss_vegetation()
-		local pos_up = vector.offset(pos, 0, 1, 0)
-		if vegetation == "mcl_flowers:double_grass" then
-			local pos_up2 = vector.offset(pos, 0, 2, 0)
-			if minetest.registered_nodes[minetest.get_node(pos_up2).name].buildable_to then
-				minetest.set_node(pos_up, { name = "mcl_flowers:double_grass" })
-				minetest.set_node(pos_up2, { name = "mcl_flowers:double_grass_top" })
-			else
-				minetest.set_node(pos_up, { name = "mcl_flowers:tallgrass" })
-			end
-		else
-			minetest.set_node(pos_up, { name = vegetation })
-		end
-	end
-end
-
-function mcl_lush_caves.bone_meal_moss(itemstack, placer, pointed_thing, pos)
-	if minetest.get_node(vector.offset(pos, 0, 1, 0)).name ~= "air" then
-		return false
-	end
-
-	local x_max = math.random(2, 3)
-	local z_max = math.random(2, 3)
-	local area_positions = minetest.find_nodes_in_area_under_air(
-		vector.offset(pos, -x_max, -6, -z_max),
-		vector.offset(pos, x_max, 4, z_max),
-		{ "group:converts_to_moss" }
-	)
-
-	for _, conversion_pos in pairs(area_positions) do
-		local x_distance = math.abs(pos.x - conversion_pos.x)
-		local z_distance = math.abs(pos.z - conversion_pos.z)
-
-		if not ( x_distance == x_max and z_distance == z_max ) then
-			if x_distance == x_max or z_distance == z_max then
-				if math.random() < 0.75 then
-					set_moss_with_chance_vegetation(conversion_pos)
-				end
-			else
-				set_moss_with_chance_vegetation(conversion_pos)
-			end
-		end
-	end
-	return true
 end
 
 minetest.register_node("mcl_lush_caves:moss", {
@@ -84,7 +22,22 @@ minetest.register_node("mcl_lush_caves:moss", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
-	_on_bone_meal = mcl_lush_caves.bone_meal_moss,
+	_on_bone_meal = function(itemstack, placer, pointed_thing, pos)
+		if minetest.get_node(vector.offset(pos, 0, 1, 0)).name ~= "air" then return false end
+		local x_max = rng:next(2, 3)
+		local z_max = rng:next(2, 3)
+		local nodes = minetest.find_nodes_in_area_under_air(
+			vector.offset(pos, -x_max, -6, -z_max),
+			vector.offset(pos, x_max, 4, z_max),
+			{ "group:converts_to_moss" }
+		)
+		return mcl_lush_caves.bone_meal_moss(
+			pos, { x=x_max, z=z_max }, nodes,
+			function(v, n) minetest.set_node(v, n) end,
+			can_build_to_two_above,
+			function(a, b) return rng:next(a, b) end
+		)
+	end,
 })
 
 minetest.register_node("mcl_lush_caves:moss_carpet", {
@@ -312,7 +265,7 @@ local tpl_azalea = {
 			end
 	end),
   _on_bone_meal = function(itemstack, placer, pointed_thing, pos)
-		if math.random() > 0.45 or not mcl_trees.check_growth_simple(pos, 6) then return end
+		if rng:next(1, 100) > 45 or not mcl_trees.check_growth_simple(pos, 6) then return end
 		minetest.set_node(vector.offset(pos, 0, -1, 0), { name = "mcl_lush_caves:rooted_dirt" })
     minetest.remove_node(pos)
     minetest.place_schematic(
