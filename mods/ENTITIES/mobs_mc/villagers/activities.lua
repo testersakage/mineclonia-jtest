@@ -1,6 +1,12 @@
 local modname = minetest.get_current_modname()
 
-local allow_nav_hacks = minetest.settings:get_bool("mcl_mob_allow_nav_hacks",false)
+mcl_world_settings.register_bool(
+	"nav_hacks",
+	false,
+	"Mob navigation hacks",
+	"Enable workarounds for faulty mob navigation\n\n\tHack 1: teleport golems home if they are very far from home\n\tHack 2: villagers teleport home when night is skipped"
+)
+
 local work_dist = 4
 local gather_distance = 10
 

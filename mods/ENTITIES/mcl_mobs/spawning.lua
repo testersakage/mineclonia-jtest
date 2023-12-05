@@ -28,10 +28,28 @@ local mob_cap = {
 	total = tonumber(minetest.settings:get("mcl_mob_cap_total")) or 500,
 }
 
---do mobs spawn?
-local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
-local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
-local logging = minetest.settings:get_bool("mcl_logging_mobs_spawn",true)
+-- This is how you allow the default to be set in the main menu but allow it to be overridden per world
+mcl_world_settings.register_bool(
+	"mobs_spawn",
+	minetest.settings:get_bool("mobs_spawn", true) ~= false,
+	"Should mobs spawn?",
+	"if false then mobs no longer spawn without spawner or spawn egg"
+)
+
+mcl_world_settings.register_bool(
+	"mobs_spawn_protected",
+	minetest.settings:get_bool("mobs_spawn_protected") ~= false,
+	"Mobs spawn in protected areas",
+	"Allow mobs to spawn in protected areas. This does not affect mob spawners."
+)
+
+mcl_world_settings.register_bool(
+	"log_mob_spawn",
+	minetest.settings:get_bool("mcl_logging_mobs_spawn", true),
+	"Log Mob Spawning",
+	"Log mob spawning and despawning events"
+)
+
 local mgname = minetest.get_mapgen_setting("mgname")
 
 local noise_params = {
@@ -107,7 +125,7 @@ local spawn_dictionary = {}
 local summary_chance = 0
 
 function mcl_mobs.spawn_setup(def)
-	if not mobs_spawn then return end
+	if not mcl_world_settings.get("mobs_spawn") then return end
 
 	if not def then
 		minetest.log("warning", "Empty mob spawn setup definition")
@@ -276,7 +294,7 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	if not (not is_farm_animal(spawn_def.name) or is_grass) then return false, "farm animals only on grass" end
 	if not (spawn_def.type_of_spawning ~= "water" or is_water) then return false, "water mob only on water" end
 	if not (spawn_def.type_of_spawning ~= "lava" or is_lava) then return false, "lava mobs only on lava" end
-	if not ( not spawn_protected or not minetest.is_protected(pos, "") ) then return false, "spawn protected" end
+	if (not mcl_world_settings.get("mobs_spawn_protected")) and minetest.is_protected(pos, "") then return false, "spawn protected" end
 	if is_bedrock then return false, "no spawn on bedrock" end
 
 	local gotten_light = minetest.get_node_light(pos)
@@ -397,12 +415,12 @@ local function check_timer(spawn_def, dtime)
 	return true
 end
 
-if mobs_spawn then
 	local perlin_noise
 	local function spawn_a_mob(pos, dimension, dtime)
 		--create a disconnected clone of the spawn dictionary
 		--prevents memory leak
 		local mob_library_worker_table = table.copy(spawn_dictionary)
+		local logging = mcl_world_settings.get("log_mob_spawn")
 
 		local spawning_position_list = {}
 		local s = minetest.find_nodes_in_area_under_air(
@@ -464,33 +482,34 @@ if mobs_spawn then
 	end
 
 
-	--MAIN LOOP
+--MAIN LOOP
+local timer = 0
+minetest.register_globalstep(function(dtime)
+	if not mcl_world_settings.get("mobs_spawn") then return end
 
-	local timer = 0
-	minetest.register_globalstep(function(dtime)
-		passive_timer = passive_timer - dtime
-		timer = timer + dtime
-		if timer < 10 then return end
-		timer = 0
-		local players = minetest.get_connected_players()
-		local total_mobs = count_mobs_total_cap()
-		if total_mobs > mob_cap.total or total_mobs > #players * mob_cap.player then
-			minetest.log("action","[mcl_mobs] global mob cap reached. no cycle spawning.")
-			return
-		end --mob cap per player
-		for _, player in pairs(players) do
-			local pos = player:get_pos()
-			local dimension = mcl_worlds.pos_to_dimension(pos)
-			-- ignore void and unloaded area
-			if dimension ~= "void" and dimension ~= "default" then
-				spawn_a_mob(pos, dimension, dtime)
-			end
+	passive_timer = passive_timer - dtime
+	timer = timer + dtime
+	if timer < 10 then return end
+	timer = 0
+	local players = minetest.get_connected_players()
+	local total_mobs = count_mobs_total_cap()
+	if total_mobs > mob_cap.total or total_mobs > #players * mob_cap.player then
+		minetest.log("action","[mcl_mobs] global mob cap reached. no cycle spawning.")
+		return
+	end --mob cap per player
+	for _, player in pairs(players) do
+		local pos = player:get_pos()
+		local dimension = mcl_worlds.pos_to_dimension(pos)
+		-- ignore void and unloaded area
+		if dimension ~= "void" and dimension ~= "default" then
+			spawn_a_mob(pos, dimension, dtime)
 		end
-	end)
-end
+	end
+end)
 
 function mob_class:check_despawn(pos, dtime)
 	self.lifetimer = self.lifetimer - dtime
+	local logging = mcl_world_settings.get("log_mob_spawn")
 
 	-- Despawning: when lifetimer expires, remove mob
 	if remove_far and self:despawn_allowed() then
