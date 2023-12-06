@@ -14,13 +14,9 @@ There is a function for each data type to register settings.
 If the setting exists in the mod storage for this world then the value is not
 changed when calling the register functions.
 
-### mcl_world_settings.register_string(name, default, description, help)
+### mcl_world_settings.register(name, default, description, help)
 
 ### mcl_world_settings.register_bool(name, default, description, help)
-
-### mcl_world_settings.register_float(name, default, description, help)
-
-### mcl_world_settings.register_int(name, default, description, help)
 
 ## Un-Registering settings
 
