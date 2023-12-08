@@ -193,6 +193,7 @@ globals = {
 	"mcl_lush_caves",
 	"mcl_armor_trims",
 	"mcl_villages",
+	"mcl_settings",
 }
 
 read_globals = {

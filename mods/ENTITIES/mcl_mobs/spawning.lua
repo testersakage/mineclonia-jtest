@@ -3,12 +3,12 @@ local mob_class = mcl_mobs.mob_class
 
 local math_round     = function(x) return (x > 0) and math.floor(x + 0.5) or math.ceil(x - 0.5) end
 
-local modern_lighting = minetest.settings:get_bool("mcl_mobs_modern_lighting", true)
-local nether_threshold = tonumber(minetest.settings:get("mcl_mobs_nether_threshold")) or 11
-local end_threshold = tonumber(minetest.settings:get("mcl_mobs_end_threshold")) or 0
-local overworld_threshold = tonumber(minetest.settings:get("mcl_mobs_overworld_threshold")) or 0
-local overworld_sky_threshold = tonumber(minetest.settings:get("mcl_mobs_overworld_sky_threshold")) or 7
-local overworld_passive_threshold = tonumber(minetest.settings:get("mcl_mobs_overworld_passive_threshold")) or 7
+local modern_lighting = mcl_settings.get_bool("mcl_mobs_modern_lighting", true)
+local nether_threshold = tonumber(mcl_settings.get("mcl_mobs_nether_threshold")) or 11
+local end_threshold = tonumber(mcl_settings.get("mcl_mobs_end_threshold")) or 0
+local overworld_threshold = tonumber(mcl_settings.get("mcl_mobs_overworld_threshold")) or 0
+local overworld_sky_threshold = tonumber(mcl_settings.get("mcl_mobs_overworld_sky_threshold")) or 7
+local overworld_passive_threshold = tonumber(mcl_settings.get("mcl_mobs_overworld_passive_threshold")) or 7
 
 local PASSIVE_INTERVAL = 20
 local dbg_spawn_attempts = 0
@@ -19,19 +19,19 @@ local aoc_range = 136
 local remove_far = true
 
 local mob_cap = {
-	monster = tonumber(minetest.settings:get("mcl_mob_cap_monster")) or 70,
-	animal = tonumber(minetest.settings:get("mcl_mob_cap_animal")) or 10,
-	ambient = tonumber(minetest.settings:get("mcl_mob_cap_ambient")) or 15,
-	water = tonumber(minetest.settings:get("mcl_mob_cap_water")) or 5, --currently unused
-	water_ambient = tonumber(minetest.settings:get("mcl_mob_cap_water_ambient")) or 20, --currently unused
-	player = tonumber(minetest.settings:get("mcl_mob_cap_player")) or 75,
-	total = tonumber(minetest.settings:get("mcl_mob_cap_total")) or 500,
+	monster = tonumber(mcl_settings.get("mcl_mob_cap_monster")) or 70,
+	animal = tonumber(mcl_settings.get("mcl_mob_cap_animal")) or 10,
+	ambient = tonumber(mcl_settings.get("mcl_mob_cap_ambient")) or 15,
+	water = tonumber(mcl_settings.get("mcl_mob_cap_water")) or 5, --currently unused
+	water_ambient = tonumber(mcl_settings.get("mcl_mob_cap_water_ambient")) or 20, --currently unused
+	player = tonumber(mcl_settings.get("mcl_mob_cap_player")) or 75,
+	total = tonumber(mcl_settings.get("mcl_mob_cap_total")) or 500,
 }
 
 --do mobs spawn?
-local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
-local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
-local logging = minetest.settings:get_bool("mcl_logging_mobs_spawn",true)
+local mobs_spawn = mcl_settings.get_bool("mobs_spawn", true) ~= false
+local spawn_protected = mcl_settings.get_bool("mobs_spawn_protected") ~= false
+local logging = mcl_settings.get_bool("mcl_logging_mobs_spawn",true)
 local mgname = minetest.get_mapgen_setting("mgname")
 
 local noise_params = {
@@ -141,7 +141,7 @@ function mcl_mobs.spawn_setup(def)
 	local check_position   = def.check_position
 
 	-- chance/spawn number override in minetest.conf for registered mob
-	local numbers = minetest.settings:get(name)
+	local numbers = mcl_settings.get(name)
 	if numbers then
 		numbers = numbers:split(",")
 		chance = tonumber(numbers[1]) or chance
