@@ -9,7 +9,9 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_settings = {}
 
-local settings = Settings(minetest.get_worldpath() .. DIR_DELIM .. "mcl_settings.conf")
+local settings_file = minetest.get_worldpath() .. DIR_DELIM .. "mcl_settings.conf"
+
+local settings = Settings(settings_file)
 
 function mcl_settings.get(name, default)
 	if settings then
@@ -19,7 +21,10 @@ function mcl_settings.get(name, default)
 			if val then
 				mcl_settings.set(name, val)
 				if not settings:write() then
-					minetest.log("warning", S("Setting @1 could not be saved!", name))
+					minetest.log(
+						"warning",
+						S("Setting @1 could not be saved to world conf file at @2", name, settings_file)
+					)
 				end
 			end
 		end
@@ -38,7 +43,10 @@ function mcl_settings.get_bool(name, default)
 			if val ~= nil then
 				mcl_settings.set_bool(name, val)
 				if not settings:write() then
-					minetest.log("warning", S("Setting @1 could not be saved!", name))
+					minetest.log(
+						"warning",
+						S("Setting @1 could not be saved to world conf file at @2", name, settings_file)
+					)
 				end
 			end
 		end
@@ -55,7 +63,7 @@ function mcl_settings.set(name, value)
 	if settings:write() then
 		minetest.log("info", S("Setting @1 is set to @2", name, value))
 	else
-		minetest.log(S("warning", "Setting @1 could not be saved!", name, value))
+		minetest.log("warning", S("Setting @1 could not be saved to world conf file at @2", name, settings_file))
 	end
 end
 
@@ -65,7 +73,7 @@ function mcl_settings.set_bool(name, value)
 	if settings:write() then
 		minetest.log("info", S("Setting @1 is set to @2", name, tostring(value)))
 	else
-		minetest.log(S("warning", "Setting @1 could not be saved!", name, tostring(value)))
+		minetest.log("warning", S("Setting @1 could not be saved to world conf file at @2", name, settings_file))
 	end
 end
 
