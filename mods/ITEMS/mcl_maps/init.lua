@@ -148,7 +148,7 @@ function mcl_maps.load_map_item(itemstack, placer)
 	if mstr ~= "" then
 		local tga = minetest.encode_base64(minetest.decompress(minetest.decode_base64(mstr),"deflate"))
 		return "^[png:"..tga
-	elseif minp ~= "" then
+	elseif placer and minp ~= "" then
 		mcl_maps.create_map(placer, minetest.string_to_pos(minp))
 	end
 end
