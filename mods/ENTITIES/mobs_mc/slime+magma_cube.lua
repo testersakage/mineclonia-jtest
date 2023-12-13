@@ -109,7 +109,7 @@ local slime_big = {
 		distance = 16,
 	},
 	damage = 4,
-	reach = 3,
+	reach = 2.5,
 	armor = 100,
 	drops = {},
 	-- TODO: Fix animations
@@ -150,7 +150,7 @@ slime_small.xp_max = 2
 slime_small.collisionbox = {-0.51, -0.01, -0.51, 0.51, 1.00, 0.51}
 slime_small.visual_size = {x=6.25, y=6.25}
 slime_small.damage = 3
-slime_small.reach = 2.75
+slime_small.reach = 2.25
 slime_small.walk_velocity = 1.8
 slime_small.run_velocity = 1.8
 slime_small.jump_height = 4.3
@@ -167,7 +167,7 @@ slime_tiny.xp_max = 1
 slime_tiny.collisionbox = {-0.2505, -0.01, -0.2505, 0.2505, 0.50, 0.2505}
 slime_tiny.visual_size = {x=3.125, y=3.125}
 slime_tiny.damage = 0
-slime_tiny.reach = 2.5
+slime_tiny.reach = 2
 slime_tiny.drops = {
 	-- slimeball
 	{name = "mcl_mobitems:slimeball",
@@ -284,7 +284,7 @@ local magma_cube_big = {
 	walk_velocity = 1.5,
 	run_velocity = 1.5, -- (was 2.5) they are slow and huge
 	damage = 6,
-	reach = 3,
+	reach = 2.35,
 	armor = 53,
 	drops = {
 		{name = "mcl_mobitems:magma_cream",
@@ -332,7 +332,7 @@ magma_cube_small.xp_max = 2
 magma_cube_small.collisionbox = {-0.51, -0.01, -0.51, 0.51, 1.00, 0.51}
 magma_cube_small.visual_size = {x=6.25, y=6.25}
 magma_cube_small.damage = 3
-magma_cube_small.reach = 2.75
+magma_cube_small.reach = 2.1
 magma_cube_small.walk_velocity = .8
 magma_cube_small.run_velocity = 1.75 -- (was 2.0)
 magma_cube_small.jump_height = 6
@@ -357,7 +357,7 @@ magma_cube_tiny.walk_velocity = 1.02
 magma_cube_tiny.run_velocity = 1.02
 magma_cube_tiny.jump_height = 4
 magma_cube_tiny.damage = 3
-magma_cube_tiny.reach = 2.5
+magma_cube_tiny.reach = 2
 magma_cube_tiny.armor = 50
 magma_cube_tiny.drops = {}
 magma_cube_tiny.spawn_small_alternative = nil
