@@ -351,36 +351,22 @@ minetest.register_entity("mcl_fishing:flying_bobber_entity", flying_bobber_ENTIT
 
 mcl_throwing.register_throwable_object("mcl_fishing:flying_bobber", "mcl_fishing:flying_bobber_entity", 5)
 
--- If player leaves area, remove bobber.
-minetest.register_on_leaveplayer(function(player)
-	local objs = minetest.get_objects_inside_radius(player:get_pos(), 250)
-	for n = 1, #objs do
-		local ent = objs[n]:get_luaentity()
-		if ent then
-			if ent.player and ent.objtype=="fishing" then
-				ent.object:remove()
-			elseif ent._thrower and ent.objtype=="fishing" then
-				ent.object:remove()
+local function remove_player_bobber(player)
+	local name = player:get_player_name()
+	for _, obj in pairs(minetest.get_objects_inside_radius(player:get_pos(), 250)) do
+		if not obj:is_player() then
+			local ent = obj:get_luaentity()
+			if ent then
+				if ent.objtype=="fishing" and (ent.player == name or ent._thrower == name) then
+					ent.object:remove()
+				end
 			end
 		end
 	end
-end)
+end
 
--- If player dies, remove bobber.
-minetest.register_on_dieplayer(function(player)
-	local objs = minetest.get_objects_inside_radius(player:get_pos(), 250)
-
-	for n = 1, #objs do
-		local ent = objs[n]:get_luaentity()
-		if ent then
-			if ent.player and ent.objtype=="fishing" then
-				ent.object:remove()
-			elseif ent._thrower and ent.objtype=="fishing" then
-				ent.object:remove()
-			end
-		end
-	end
-end)
+minetest.register_on_leaveplayer(remove_player_bobber)
+minetest.register_on_dieplayer(remove_player_bobber)
 
 -- Fishing Rod
 minetest.register_tool("mcl_fishing:fishing_rod", {
