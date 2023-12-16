@@ -457,14 +457,12 @@ minetest.register_entity(":__builtin:item", {
 		local vel = self.object:get_velocity()
 
 		-- There is perhaps a cleverer way of making this physical so it bounces off the wall like swords.
-		local max_vel = 6.5 -- Faster than this and it throws it into the wall / floor and turns black because of clipping.
-
 		if vel and vel.x == 0 and vel.z == 0 and self.random_velocity > 0 then
 			local v = self.random_velocity
 
-			local x = math.random(5, max_vel) / 10 * v
+			local x = 5 + math.random() * 1.5 / 10 * v
 			if math.random(0, 10) < 5 then x = -x end
-			local z = math.random(5, max_vel) / 10 * v
+			local z = 5 + math.random() * 1.5 / 10 * v
 			if math.random(0, 10) < 5 then z = -z end
 			local y = math.random(1, 2)
 			self.object:set_velocity(vector.new(x, y, z))

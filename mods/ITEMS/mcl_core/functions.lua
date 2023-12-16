@@ -773,7 +773,7 @@ end
 
 local crobby_particle = {
 	velocity = vector.new(0,0,0),
-	size = math.random(1.3,2.5),
+	size = 1.3 + math.random() * 1.5,
 	texture = "mcl_core_crying_obsidian_tear.png",
 	collision_removal = false,
 }
