@@ -12,7 +12,7 @@ local function make_drop(pos, liquid, sound, interval, texture)
 		collision_removal = false,
 	}
 
-	local t = math.random() + math.random(1, interval)
+	local t = math.random() + mcl_util.frandom(1, interval)
 
 	minetest.after(t, function()
 		local x, z = math.random(-45, 45) / 100, math.random(-45, 45) / 100
@@ -30,7 +30,7 @@ local function make_drop(pos, liquid, sound, interval, texture)
 		minetest.after(t, function()
 			pt.acceleration = vector.new(0, -5, 0)
 			pt.collisiondetection = true
-			pt.expirationtime = math.random() + math.random(1, interval / 2)
+			pt.expirationtime = math.random() + mcl_util.frandom(1, interval / 2)
 
 			minetest.add_particle(pt)
 

@@ -36,6 +36,10 @@ function table.reverse(t)
 	end
 end
 
+function mcl_util.frandom(from, to)
+	return from + math.random() * (to - from)
+end
+
 local LOGGING_ON = minetest.settings:get_bool("mcl_logging_default", false)
 local LOG_MODULE = "[MCL2]"
 function mcl_util.mcl_log(message, module, bypass_default_logger)

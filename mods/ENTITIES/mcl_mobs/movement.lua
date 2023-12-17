@@ -281,7 +281,7 @@ function mob_class:env_danger_movement_checks(dtime)
 			self:set_velocity(0)
 			self.state = "stand"
 			self:set_animation( "stand")
-			yaw = yaw + math.random(-0.5, 0.5)
+			yaw = yaw + mcl_util.frandom(-0.5, 0.5)
 			self:set_yaw( yaw, 8)
 		end
 	else
@@ -444,7 +444,7 @@ function mob_class:replace(pos)
 	or not self.replace_what
 	or self.child == true
 	or self.object:get_velocity().y ~= 0
-	or math.random(1, self.replace_rate) > 1 then
+	or mcl_util.frandom(1, self.replace_rate) > 1 then
 		return
 	end
 
@@ -710,9 +710,9 @@ function mob_class:follow_flop()
 				if self.object:get_velocity().y < 0.1 then
 					self:mob_sound("flop")
 					self.object:set_velocity({
-						x = math.random(-FLOP_HOR_SPEED, FLOP_HOR_SPEED),
+						x = mcl_util.frandom(-FLOP_HOR_SPEED, FLOP_HOR_SPEED),
 						y = FLOP_HEIGHT,
-						z = math.random(-FLOP_HOR_SPEED, FLOP_HOR_SPEED),
+						z = mcl_util.frandom(-FLOP_HOR_SPEED, FLOP_HOR_SPEED),
 					})
 				end
 			end
@@ -840,7 +840,7 @@ function mob_class:do_states_walk()
 
 			-- Randomly turn
 			if math.random(1, 100) <= 30 then
-				yaw = yaw + math.random(-0.5, 0.5)
+				yaw = yaw + mcl_util.frandom(-0.5, 0.5)
 				yaw = self:set_yaw( yaw, 8)
 			end
 		end
@@ -849,7 +849,7 @@ function mob_class:do_states_walk()
 
 		-- otherwise randomly turn
 	elseif math.random(1, 100) <= 30 then
-		yaw = yaw + math.random(-0.5, 0.5)
+		yaw = yaw + mcl_util.frandom(-0.5, 0.5)
 		self:set_yaw( yaw, 8)
 	end
 
