@@ -6,7 +6,9 @@ local arrow_tt = arrow_def._tt_help or ""
 
 function mcl_potions.register_arrow(name, desc, color, def)
 	local tt = def._tt or ""
-	minetest.register_craftitem("mcl_potions:"..name.."_arrow",table.merge(arrow_def, {
+	local groups = {ammo=1, ammo_bow=1, brewitem=1, _mcl_potion=1}
+	if def.nocreative then groups.not_in_creative_inventory = 1 end
+	minetest.register_craftitem("mcl_potions:"..name.."_arrow", table.merge (arrow_def, {
 		description = desc,
 		_tt_help = arrow_tt .. "\n" .. tt,
 		_dynamic_tt = def._dynamic_tt,
@@ -20,35 +22,106 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		_default_potent_level = def._default_potent_level,
 		_default_extend_level = def._default_extend_level,
 		inventory_image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:"..color..":100)",
-		groups = { ammo=1, ammo_bow=1, brewitem=1, _mcl_potion=1 },
-		_extra_hit_func = function (obj)
-		    if def._effect_list then
-			local ef_level
-			local dur
-			for name, details in pairs(def._effect_list) do
-			    if details.uses_level then
-				ef_level = details.level + details.level_scaling * (potency)
-			    else
-				ef_level = details.level
-			    end
-			    if details.dur_variable then
-				dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, plus)
-				if potency>0 and details.uses_level then
-				    dur = dur / math.pow(mcl_potions.POTENT_FACTOR, potency)
-				end
-			    else
-				dur = details.dur
-			    end
-			    dur = dur * mcl_potions.SPLASH_FACTOR
-			    mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
-			end
-		    end
-		    if def.custom_effect then def.custom_effect(obj, potency+1) end
-		end
+		groups = groups,
+		_on_dispense = function(itemstack, dispenserpos, droppos, dropnode, dropdir)
+		    -- Shoot arrow
+		    local shootpos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
+		    local yaw = math.atan2(dropdir.z, dropdir.x) + YAW_OFFSET
+		    mcl_bows.shoot_arrow(itemstack:get_name(), shootpos, dropdir, yaw, nil, 19, 3)
+		end,
 	}))
 
-	local ARROW_ENTITY = table.copy(minetest.registered_entities["mcl_bows:arrow_entity"])
-	ARROW_ENTITY._itemstring = "mcl_potions:"..name.."_arrow"
+
+	-- This is a fake node, used as model for the arrow entity.
+	-- It's not supposed to be usable as item or real node.
+	-- TODO: Use a proper mesh for the arrow entity
+	minetest.register_node("mcl_potions:"..name.."_arrow_box", {
+		drawtype = "nodebox",
+		is_ground_content = false,
+		node_box = {
+			type = "fixed",
+			fixed = {
+				-- Shaft
+				{-6.5/17, -1.5/17, -1.5/17, -4.5/17, 1.5/17, 1.5/17},
+				{-4.5/17, -0.5/17, -0.5/17, 5.5/17, 0.5/17, 0.5/17},
+				{5.5/17, -1.5/17, -1.5/17, 6.5/17, 1.5/17, 1.5/17},
+				-- Tip
+				{-4.5/17, 2.5/17, 2.5/17, -3.5/17, -2.5/17, -2.5/17},
+				{-8.5/17, 0.5/17, 0.5/17, -6.5/17, -0.5/17, -0.5/17},
+				-- Fletching
+				{6.5/17, 1.5/17, 1.5/17, 7.5/17, 2.5/17, 2.5/17},
+				{7.5/17, -2.5/17, 2.5/17, 6.5/17, -1.5/17, 1.5/17},
+				{7.5/17, 2.5/17, -2.5/17, 6.5/17, 1.5/17, -1.5/17},
+				{6.5/17, -1.5/17, -1.5/17, 7.5/17, -2.5/17, -2.5/17},
+
+				{7.5/17, 2.5/17, 2.5/17, 8.5/17, 3.5/17, 3.5/17},
+				{8.5/17, -3.5/17, 3.5/17, 7.5/17, -2.5/17, 2.5/17},
+				{8.5/17, 3.5/17, -3.5/17, 7.5/17, 2.5/17, -2.5/17},
+				{7.5/17, -2.5/17, -2.5/17, 8.5/17, -3.5/17, -3.5/17},
+			}
+		},
+		tiles = arrow_image(color, 100),
+		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		sunlight_propagates = true,
+		groups = {not_in_creative_inventory=1, dig_immediate=3},
+		drop = "",
+		node_placement_prediction = "",
+		on_construct = function(pos)
+			minetest.log("error", "[mcl_potions] Trying to construct mcl_potions:"..name.."arrow_box at "..minetest.pos_to_string(pos))
+			minetest.remove_node(pos)
+		end,
+	})
+
+
+	local ARROW_ENTITY={
+		physical = true,
+		visual = "mesh",
+		mesh = "mcl_bows_arrow.obj",
+		visual_size = {x=-1, y=1},
+		textures = arrow_image(color, 100),
+		collisionbox = {-0.19, -0.125, -0.19, 0.19, 0.125, 0.19},
+		collide_with_objects = false,
+
+		_lastpos={},
+		_startpos=nil,
+		_damage=1,	-- Damage on impact
+		_stuck=false,   -- Whether arrow is stuck
+		_stucktimer=nil,-- Amount of time (in seconds) the arrow has been stuck so far
+		_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
+		_stuckin=nil,	--Position of node in which arow is stuck.
+		_shooter=nil,	-- ObjectRef of player or mob who shot it
+
+		_viscosity=0,   -- Viscosity of node the arrow is currently in
+		_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
+		_itemstring = "mcl_potions:"..name.."_arrow",
+	}
+
+	function ARROW_ENTITY._extra_hit_func (obj)
+	    if def._effect_list then
+		local ef_level
+		local dur
+		for name, details in pairs(def._effect_list) do
+		    if details.uses_level then
+			ef_level = details.level + details.level_scaling * (potency)
+		    else
+			ef_level = details.level
+		    end
+		    if details.dur_variable then
+			dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, plus)
+			if potency>0 and details.uses_level then
+			    dur = dur / math.pow(mcl_potions.POTENT_FACTOR, potency)
+			end
+		    else
+			dur = details.dur
+		    end
+		    dur = dur * mcl_potions.SPLASH_FACTOR
+		    mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
+		end
+	    end
+	    if def.custom_effect then def.custom_effect(obj, potency+1) end
+	end
 
 	minetest.register_entity("mcl_potions:"..name.."_arrow_entity", ARROW_ENTITY)
 
