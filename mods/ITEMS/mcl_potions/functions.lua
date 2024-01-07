@@ -155,6 +155,9 @@ end
 mcl_potions.register_effect({
 	name = "invisibility",
 	description = S("Invisiblity"),
+	get_tt = function(factor)
+		return S("body is invisible")
+	end,
 	on_start = function(object, factor)
 		mcl_potions.make_invisible(object, true)
 	end,
@@ -236,6 +239,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "water_breathing",
 	description = S("Water Breathing"),
+	get_tt = function(factor)
+		return S("limitless breathing under water")
+	end,
 	on_step = function(dtime, object, factor, duration)
 		if not object:is_player() then return end
 		if object:get_breath() then
@@ -314,6 +320,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "night_vision",
 	description = S("Night Vision"),
+	get_tt = function(factor)
+		return S("improved vision during the night")
+	end,
 	res_condition = function(object)
 		return (not object:is_player())
 	end,
@@ -336,6 +345,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "fire_resistance",
 	description = S("Fire Resistance"),
+	get_tt = function(factor)
+		return S("resistance to fire damage")
+	end,
 	res_condition = function(object)
 		return (not object:is_player())
 	end,
