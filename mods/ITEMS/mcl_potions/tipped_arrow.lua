@@ -5,19 +5,47 @@ local arrow_longdesc = arrow_def._doc_items_longdesc or ""
 local arrow_tt = arrow_def._tt_help or ""
 
 function mcl_potions.register_arrow(name, desc, color, def)
-
 	minetest.register_craftitem("mcl_potions:"..name.."_arrow",table.merge(arrow_def, {
 		description = desc,
 		_tt_help = arrow_tt .. "\n" .. (def.tt or ""),
 		_doc_items_longdesc = arrow_longdesc .. "\n" ..
 			S("This particular arrow is tipped and will give an effect when it hits a player or mob.") .. "\n" ..
-			(def.longdesc or ""),
+		    (def.longdesc or ""),
+		_effect_list = def._effect_list,
+		uses_level = def.uses_level,
+		has_potent = def.has_potent,
+		has_plus = def.has_plus,
+		_default_potent_level = def._default_potent_level,
+		_default_extend_level = def._default_extend_level,
 		inventory_image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:"..color..":100)",
-		groups = { ammo=1, ammo_bow=1, brewitem=1},
+		groups = { ammo=1, ammo_bow=1, brewitem=1, _mcl_potion=1 },
+		_extra_hit_func = function (obj)
+		    if def._effect_list then
+			local ef_level
+			local dur
+			for name, details in pairs(def._effect_list) do
+			    if details.uses_level then
+				ef_level = details.level + details.level_scaling * (potency)
+			    else
+				ef_level = details.level
+			    end
+			    if details.dur_variable then
+				dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, plus)
+				if potency>0 and details.uses_level then
+				    dur = dur / math.pow(mcl_potions.POTENT_FACTOR, potency)
+				end
+			    else
+				dur = details.dur
+			    end
+			    dur = dur * mcl_potions.SPLASH_FACTOR
+			    mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
+			end
+		    end
+		    if def.custom_effect then def.custom_effect(obj, potency+1) end
+		end
 	}))
 
 	local ARROW_ENTITY = table.copy(minetest.registered_entities["mcl_bows:arrow_entity"])
-	ARROW_ENTITY._extra_hit_func = def.potion_fun
 	ARROW_ENTITY._itemstring = "mcl_potions:"..name.."_arrow"
 
 	minetest.register_entity("mcl_potions:"..name.."_arrow_entity", ARROW_ENTITY)
