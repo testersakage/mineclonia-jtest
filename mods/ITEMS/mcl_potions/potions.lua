@@ -83,6 +83,7 @@ end
 -- groups - table - item groups definition -
 --   - must contain _mcl_potion=1 for tooltip to include dynamic_tt and effects
 --   - defaults to {brewitem=1, food=3, can_eat_when_full=1, _mcl_potion=1}
+-- nocreative - bool - adds a not_in_creative_inventory=1 group - defaults to false
 -- _effect_list - table - all the effects dealt by the potion in the format of tables
 -- -- the name of each sub-table should be a name of a registered effect, and fields can be the following:
 -- -- -- uses_level - bool - whether the level of the potion affects the level of the effect -
@@ -139,6 +140,7 @@ function mcl_potions.register_potion(def)
 	pdef.inventory_image = def.image or potion_image(color)
 	pdef.wield_image = pdef.inventory_image
 	pdef.groups = def.groups or {brewitem=1, food=3, can_eat_when_full=1, _mcl_potion=1}
+	if def.nocreative then pdef.groups.not_in_creative_inventory = 1 end
 
 	pdef._effect_list = {}
 	local effect
@@ -187,6 +189,7 @@ function mcl_potions.register_potion(def)
 		sdef._tt = def._tt
 		sdef._dynamic_tt = def._dynamic_tt
 		sdef._longdesc = def._longdesc
+		sdef.nocreative = def.nocreative
 		sdef.stack_max = pdef.stack_max
 		sdef._effect_list = pdef._effect_list
 		sdef.uses_level = uses_level
@@ -206,6 +209,7 @@ function mcl_potions.register_potion(def)
 		ldef._tt = def._tt
 		ldef._dynamic_tt = def._dynamic_tt
 		ldef._longdesc = def._longdesc
+		ldef.nocreative = def.nocreative
 		ldef.stack_max = pdef.stack_max
 		ldef._effect_list = pdef._effect_list
 		ldef.uses_level = uses_level
@@ -235,6 +239,7 @@ function mcl_potions.register_potion(def)
 		adef._tt = def._tt
 		adef._dynamic_tt = def._dynamic_tt
 		adef._longdesc = def._longdesc
+		adef.nocreative = def.nocreative
 		adef._effect_list = pdef._effect_list
 		adef.uses_level = uses_level
 		adef.has_potent = pdef.has_potent
@@ -258,6 +263,7 @@ mcl_potions.register_potion({
 	_longdesc = "Trolololololo",
 	stack_max = 2,
 	color = "#00AA00",
+	nocreative = true,
 	_effect_list = {
 		night_vision = {},
 		strength = {},
@@ -273,7 +279,6 @@ mcl_potions.register_potion({
 	default_extend_level = 3,
 })
 
-
 -- ██████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗
 -- ██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║
 -- ██████╔╝██║░░██║░░░██║░░░██║██║░░██║██╔██╗██║
@@ -288,6 +293,14 @@ mcl_potions.register_potion({
 -- ██████╔╝███████╗██║░░░░░██║██║░╚███║██║░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
 -- ╚═════╝░╚══════╝╚═╝░░░░░╚═╝╚═╝░░╚══╝╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
+
+minetest.register_craftitem("mcl_potions:dragon_breath", {
+	description = S("Dragon's Breath"),
+	_longdesc = S("This item is used in brewing and can be combined with splash potions to create lingering potions."),
+	image = "mcl_potions_dragon_breath.png",
+	groups = { brewitem = 1, bottle = 1 },
+	stack_max = 64,
+})
 
 mcl_potions.register_potion({
 	name = "awkward",

@@ -83,13 +83,15 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			longdesc = longdesc .. "\n" .. def.longdesc
 		end
 	end
+	local groups = {brewitem=1, bottle=1, ling_potion=1, _mcl_potion=1}
+	if def.nocreative then groups.not_in_creative_inventory = 1 end
 	minetest.register_craftitem(id, {
 		description = descr,
 		_tt_help = def.tt,
 		_doc_items_longdesc = longdesc,
 		_doc_items_usagehelp = S("Use the “Punch” key to throw it."),
 		inventory_image = lingering_image(color),
-		groups = {brewitem=1, bottle=1, ling_potion=1, _mcl_potion=1},
+		groups = groups,
 		on_use = function(item, placer, pointed_thing)
 			local velocity = 10
 			local dir = placer:get_look_dir();

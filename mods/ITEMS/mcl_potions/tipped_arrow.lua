@@ -5,7 +5,8 @@ local arrow_longdesc = arrow_def._doc_items_longdesc or ""
 local arrow_tt = arrow_def._tt_help or ""
 
 function mcl_potions.register_arrow(name, desc, color, def)
-
+	local groups = {ammo=1, ammo_bow=1, brewitem=1, _mcl_potion=1}
+	if def.nocreative then groups.not_in_creative_inventory = 1 end
 	minetest.register_craftitem("mcl_potions:"..name.."_arrow",table.merge(arrow_def, {
 		description = desc,
 		_tt_help = arrow_tt .. "\n" .. arrow_tt,
@@ -14,7 +15,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 			S("This particular arrow is tipped and will give an effect when it hits a player or mob.") .. "\n" ..
 			(def.longdesc or ""),
 		inventory_image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:"..color..":100)",
-		groups = { ammo=1, ammo_bow=1, brewitem=1},
+		groups = groups,
 	}))
 
 	local ARROW_ENTITY = table.copy(minetest.registered_entities["mcl_bows:arrow_entity"])
