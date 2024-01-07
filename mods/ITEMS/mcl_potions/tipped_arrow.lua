@@ -8,7 +8,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 
 	minetest.register_craftitem("mcl_potions:"..name.."_arrow",table.merge(arrow_def, {
 		description = desc,
-		_tt_help = arrow_tt .. "\n" .. tt,
+		_tt_help = arrow_tt .. "\n" .. arrow_tt,
 		_dynamic_tt = def._dynamic_tt,
 		_doc_items_longdesc = arrow_longdesc .. "\n" ..
 			S("This particular arrow is tipped and will give an effect when it hits a player or mob.") .. "\n" ..
