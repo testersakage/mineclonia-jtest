@@ -172,6 +172,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "poison",
 	description = S("Poison"),
+	get_tt = function(factor)
+		return S("-1 HP / @1 s", factor)
+	end,
 	res_condition = function(object)
 		local entity = object:get_luaentity()
 		return (entity and (entity.harmed_by_heal or string.find(entity.name, "spider")))
@@ -191,6 +194,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "regeneration",
 	description = S("Regeneration"),
+	get_tt = function(factor)
+		return S("+1 HP / @1 s", factor)
+	end,
 	res_condition = function(object)
 		local entity = object:get_luaentity()
 		return (entity and entity.harmed_by_heal)
@@ -245,6 +251,10 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "leaping",
 	description = S("Leaping"),
+	get_tt = function(factor)
+		if factor > 0 then return S("+@1% jumping power", math.floor(factor*100)) end
+		return S("-@1% jumping power", math.floor(-factor*100))
+	end,
 	res_condition = function(object)
 		return (not object:is_player())
 	end,
@@ -263,6 +273,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "swiftness",
 	description = S("Swiftness"),
+	get_tt = function(factor)
+		return S("+@1% running speed", math.floor(factor*100))
+	end,
 	res_condition = function(object)
 		return (not object:is_player())
 	end,
@@ -281,6 +294,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "slowness",
 	description = S("Slowness"),
+	get_tt = function(factor)
+		return S("-@1% running speed", math.floor(factor*100))
+	end,
 	res_condition = function(object)
 		return (not object:is_player())
 	end,
@@ -338,6 +354,9 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "withering",
 	description = S("Withering"),
+	get_tt = function(factor)
+		return S("-1 HP / @1 s, can kill", factor)
+	end,
 	res_condition = function(object)
 		local entity = object:get_luaentity()
 		return (entity and string.find(entity.name, "wither"))
