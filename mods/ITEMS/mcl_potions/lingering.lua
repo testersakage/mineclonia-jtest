@@ -62,19 +62,6 @@ minetest.register_globalstep(function(dtime)
 				end
 			end
 
-			-- Affect players and mobs
-			for _, obj in pairs(minetest.get_objects_inside_radius(pos, d)) do
-
-				local entity = obj:get_luaentity()
-				if obj:is_player() or entity.is_mob then
-
-					vals.def.potion_fun(obj)
-					-- TODO: Apply timer penalty only if the potion effect was acutally applied
-					vals.timer = vals.timer - 3.25
-
-				end
-			end
-
 			if vals.timer <= 0 then
 				lingering_effect_at[pos] = nil
 			end
@@ -102,7 +89,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		_doc_items_longdesc = longdesc,
 		_doc_items_usagehelp = S("Use the “Punch” key to throw it."),
 		inventory_image = lingering_image(color),
-		groups = {brewitem=1, not_in_creative_inventory=0, potion = 1},
+		groups = {brewitem=1, bottle=1, ling_potion=1, _mcl_potion=1},
 		on_use = function(item, placer, pointed_thing)
 			local velocity = 10
 			local dir = placer:get_look_dir();
