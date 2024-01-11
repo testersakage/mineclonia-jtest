@@ -508,7 +508,6 @@ end
 function mcl_stairs.register_stair_and_slab_simple(subname, sourcenode, stair_description, slab_description, double_description, corner_stair_texture_override, stair_overrides, slab_overrides)
 	mcl_stairs.register_stair_and_slab(subname, {
 		recipeitem=sourcenode,
-		groups=groups,
 		stair_description=stair_description,
 		slab_description=slab_description,
 		double_description=double_description,
