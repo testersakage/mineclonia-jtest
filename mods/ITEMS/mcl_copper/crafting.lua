@@ -33,6 +33,14 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:block_weathered_cut 4",
+	recipe = {
+		{ "mcl_copper:block_weathered", "mcl_copper:block_weathered" },
+		{ "mcl_copper:block_weathered", "mcl_copper:block_weathered" },
+	},
+})
+
+minetest.register_craft({
 	output = "mcl_copper:block_oxidized_cut 4",
 	recipe = {
 		{ "mcl_copper:block_oxidized", "mcl_copper:block_oxidized" },
@@ -41,14 +49,91 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_copper:block_weathered_cut 4",
+	output = "mcl_copper:grate 4",
 	recipe = {
-		{ "mcl_copper:block_weathered", "mcl_copper:block_weathered" },
-		{ "mcl_copper:block_weathered", "mcl_copper:block_weathered" },
-	},
+		{ "", "mcl_copper:block", "" },
+		{ "mcl_copper:block", "", "mcl_copper:block" },
+		{ "", "mcl_copper:block", "" }
+	}
 })
 
-local waxable_blocks = { "block", "block_cut", "block_exposed", "block_exposed_cut", "block_weathered", "block_weathered_cut", "block_oxidized", "block_oxidized_cut" }
+minetest.register_craft({
+	output = "mcl_copper:grate_exposed 4",
+	recipe = {
+		{ "", "mcl_copper:block_exposed", "" },
+		{ "mcl_copper:block_exposed", "", "mcl_copper:block_exposed" },
+		{ "", "mcl_copper:block_exposed", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:grate_weathered 4",
+	recipe = {
+		{ "", "mcl_copper:block_weathered", "" },
+		{ "mcl_copper:block_weathered", "", "mcl_copper:block_weathered" },
+		{ "", "mcl_copper:block_weathered", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:grate_oxidized 4",
+	recipe = {
+		{ "", "mcl_copper:block_oxidized", "" },
+		{ "mcl_copper:block_oxidized", "", "mcl_copper:block_oxidized" },
+		{ "", "mcl_copper:block_oxidized", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:waxed_grate 4",
+	recipe = {
+		{ "", "mcl_copper:waxed_block", "" },
+		{ "mcl_copper:waxed_block", "", "mcl_copper:waxed_block" },
+		{ "", "mcl_copper:waxed_block", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:waxed_grate_exposed 4",
+	recipe = {
+		{ "", "mcl_copper:waxed_block_exposed", "" },
+		{ "mcl_copper:waxed_block_exposed", "", "mcl_copper:waxed_block_exposed" },
+		{ "", "mcl_copper:waxed_block_exposed", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:waxed_grate_weathered 4",
+	recipe = {
+		{ "", "mcl_copper:waxed_block_weathered", "" },
+		{ "mcl_copper:waxed_block_weathered", "", "mcl_copper:waxed_block_weathered" },
+		{ "", "mcl_copper:waxed_block_weathered", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:waxed_grate_oxidized 4",
+	recipe = {
+		{ "", "mcl_copper:waxed_block_oxidized", "" },
+		{ "mcl_copper:waxed_block_oxidized", "", "mcl_copper:waxed_block_oxidized" },
+		{ "", "mcl_copper:waxed_block_oxidized", "" }
+	}
+})
+
+local waxable_blocks = {
+	"block",
+	"grate",
+	"block_cut",
+	"block_exposed",
+	"grate_exposed",
+	"block_exposed_cut",
+	"block_weathered",
+	"grate_weathered",
+	"block_weathered_cut",
+	"block_oxidized",
+	"grate_oxidized",
+	"block_oxidized_cut"
+}
 
 for _, w in ipairs(waxable_blocks) do
 	minetest.register_craft({
