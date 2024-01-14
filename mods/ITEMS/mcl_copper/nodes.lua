@@ -35,6 +35,8 @@ minetest.register_node("mcl_copper:block_raw", {
 	_mcl_hardness = 5,
 })
 
+-- Copper Block
+
 minetest.register_node("mcl_copper:block", {
 	description = S("Block of Copper"),
 	_doc_items_longdesc = S("A block of copper is mostly a decorative block."),
@@ -81,6 +83,8 @@ minetest.register_node("mcl_copper:block_oxidized", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
 })
+
+-- Cut Copper
 
 minetest.register_node("mcl_copper:block_cut", {
 	description = S("Cut Copper"),
@@ -132,6 +136,136 @@ minetest.register_node("mcl_copper:block_oxidized_cut", {
 	_mcl_hardness = 5,
 	_mcl_stonecutter_recipes = { "mcl_copper:block_oxidized" },
 })
+
+-- Grates
+
+minetest.register_node("mcl_copper:grate", {
+	description = S("Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Copper grate is a decorative block."),
+	tiles = {"mcl_copper_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, oxidizable = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_oxidized_variant = "mcl_copper:grate_exposed",
+	_mcl_waxed_variant = "mcl_copper:waxed_grate",
+})
+
+minetest.register_node("mcl_copper:waxed_grate", {
+	description = S("Waxed Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Copper grate is a decorative block."),
+	tiles = {"mcl_copper_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, waxed = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_stripped_variant = "mcl_copper:grate",
+})
+
+minetest.register_node("mcl_copper:grate_exposed", {
+	description = S("Exposed Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Exposed copper grate is a decorative block."),
+	tiles = {"mcl_copper_exposed_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, oxidizable = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_waxed_variant = "mcl_copper:waxed_grate_exposed",
+	_mcl_oxidized_variant = "mcl_copper:grate_weathered",
+	_mcl_stripped_variant = "mcl_copper:grate",
+})
+
+minetest.register_node("mcl_copper:waxed_grate_exposed", {
+	description = S("Waxed Exposed Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Exposed copper grate is a decorative block."),
+	tiles = {"mcl_copper_exposed_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, waxed = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_stripped_variant = "mcl_copper:grate_exposed",
+})
+
+minetest.register_node("mcl_copper:grate_weathered", {
+	description = S("Weathered Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Weathered copper grate is a decorative block."),
+	tiles = {"mcl_copper_weathered_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, oxidizable = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_stripped_variant = "mcl_copper:grate_exposed",
+	_mcl_oxidized_variant = "mcl_copper:grate_oxidized",
+	_mcl_waxed_variant = "mcl_copper:waxed_grate_weathered",
+})
+
+minetest.register_node("mcl_copper:waxed_grate_weathered", {
+	description = S("Waxed Weathered Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Weathered copper grate is a decorative block."),
+	tiles = {"mcl_copper_weathered_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, waxed = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_stripped_variant = "mcl_copper:grate_weathered",
+})
+
+minetest.register_node("mcl_copper:grate_oxidized", {
+	description = S("Oxidized Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Oxidized copper grate is a decorative block."),
+	tiles = {"mcl_copper_oxidized_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_stripped_variant = "mcl_copper:grate_weathered",
+	_mcl_waxed_variant = "mcl_copper:waxed_grate_oxidized",
+})
+
+minetest.register_node("mcl_copper:waxed_grate_oxidized", {
+	description = S("Waxed Oxidized Copper Grate"),
+	drawtype = "allfaces",
+	_doc_items_longdesc = S("Oxidized copper grate is a decorative block."),
+	tiles = {"mcl_copper_oxidized_grate.png"},
+	is_ground_content = false,
+	groups = {pickaxey = 2, building_block = 1, waxed = 1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	paramtype = "light",
+	sunlight_propagates = true,
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+	_mcl_stripped_variant = "mcl_copper:grate_oxidized",
+})
+
+-- Stairs and slabs
 
 mcl_stairs.register_slab("copper_cut", "mcl_copper:block_cut",
 	{pickaxey = 2, cut_copper = 1},
