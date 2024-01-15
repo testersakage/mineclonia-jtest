@@ -32,6 +32,19 @@ mcl_copper.register_decaychain("cut_copper",{
 	},
 })
 
+mcl_copper.register_decaychain("copper_grate",{
+	preserved_description = "Waxed ",
+	preserve_group = "preserves_copper",
+	unpreserve_callback = "_on_axe_place",
+	undecay_callback = "_on_axe_place",
+	nodes = {
+		"mcl_copper:grate",
+		"mcl_copper:grate_exposed",
+		"mcl_copper:grate_weathered",
+		"mcl_copper:grate_oxidized",
+	},
+})
+
 -- "mcl_copper:block_exposed_cut"
 
 for _,v in pairs({"stair","slab"}) do
