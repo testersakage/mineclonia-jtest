@@ -145,12 +145,13 @@ minetest.register_node("mcl_copper:grate", {
 	_doc_items_longdesc = S("Copper grate is a decorative block."),
 	tiles = {"mcl_copper_grate.png"},
 	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, oxidizable = 1},
+	groups = {pickaxey = 2, building_block = 1, grate = 1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	paramtype = "light",
 	sunlight_propagates = true,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_stonecutter_recipes = { "mcl_copper:block" },
 })
 
 minetest.register_node("mcl_copper:grate_exposed", {
@@ -159,12 +160,13 @@ minetest.register_node("mcl_copper:grate_exposed", {
 	_doc_items_longdesc = S("Exposed copper grate is a decorative block."),
 	tiles = {"mcl_copper_exposed_grate.png"},
 	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, oxidizable = 1},
+	groups = {pickaxey = 2, building_block = 1, grate = 1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	paramtype = "light",
 	sunlight_propagates = true,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_stonecutter_recipes = { "mcl_copper:block_exposed" },
 })
 
 minetest.register_node("mcl_copper:grate_weathered", {
@@ -173,12 +175,13 @@ minetest.register_node("mcl_copper:grate_weathered", {
 	_doc_items_longdesc = S("Weathered copper grate is a decorative block."),
 	tiles = {"mcl_copper_weathered_grate.png"},
 	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, oxidizable = 1},
+	groups = {pickaxey = 2, building_block = 1, grate = 1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	paramtype = "light",
 	sunlight_propagates = true,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_stonecutter_recipes = { "mcl_copper:block_weathered" },
 })
 
 minetest.register_node("mcl_copper:grate_oxidized", {
@@ -187,12 +190,13 @@ minetest.register_node("mcl_copper:grate_oxidized", {
 	_doc_items_longdesc = S("Oxidized copper grate is a decorative block."),
 	tiles = {"mcl_copper_oxidized_grate.png"},
 	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1},
+	groups = {pickaxey = 2, building_block = 1, grate = 1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	paramtype = "light",
 	sunlight_propagates = true,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_stonecutter_recipes = { "mcl_copper:block_oxidized" },
 })
 
 -- Stairs and slabs
