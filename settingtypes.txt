@@ -72,6 +72,10 @@ mcl_hand_range_creative (Creative mode hand range) float 10 1 128
 # If disabled eating food will heal instantly.
 mcl_enable_hunger (Hunger) bool true
 
+# Eating delay while holding right-click
+# Default: 1.61 s
+mcl_eating_delay (Eating delay) float 1.61 0
+
 [Mobs]
 # If enabled, mobs will spawn naturally. This does not affect
 # affect mob spawners.
