@@ -376,7 +376,7 @@ mcl_potions.register_effect({
 	name = "levitation",
 	description = S("Levitation"),
 	get_tt = function(factor)
-		return S("moves you upwards at @1 nodes/s", factor)
+		return S("moves body upwards at @1 nodes/s", factor)
 	end,
 	on_step = function(dtime, object, factor, duration)
 		local vel = object:get_velocity().y
@@ -417,7 +417,7 @@ mcl_potions.register_effect({
 	name = "health_boost",
 	description = S("Health Boost"),
 	get_tt = function(factor)
-		return S("increases HP by @1", factor)
+		return S("HP increased by @1", factor)
 	end,
 	res_condition = function(object)
 		return (not object:is_player())
@@ -581,6 +581,43 @@ mcl_potions.register_effect({
 	end,
 })
 
+mcl_potions.register_effect({
+	name = "blindness",
+	description = "Blindness",
+	get_tt = function(factor)
+		return S("impaired sight")
+	end,
+	res_condition = function(object)
+		return (not object:is_player())
+	end,
+	on_start = function(object, factor)
+		EF.blindness[object].vignette = object:hud_add({
+			hud_elem_type = "image",
+			position = {x = 0.5, y = 0.5},
+			scale = {x = -101, y = -101},
+			text = "mcl_potions_blindness_hud.png",
+			z_index = -401
+		})
+		--TODO: mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
+	end,
+	on_end = function(object)
+		--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:blindness")
+		if not EF.blindness[object] then return end
+		object:hud_remove(EF.blindness[object].vignette)
+	end,
+	particle_color = "#686868",
+	uses_factor = false,
+})
+
+--[[
+
+TODO
+]mcl_fovapi.register_modifier({
+	name = "mcl_potions:blindness",
+	fov_factor = 0.6,
+	time = 1,
+})
+--]]
 mcl_potions.register_effect({
 	name = "food_poisoning",
 	description = S("Food Poisoning"),
