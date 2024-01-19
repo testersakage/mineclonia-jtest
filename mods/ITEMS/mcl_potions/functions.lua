@@ -444,8 +444,11 @@ mcl_potions.register_effect({
 		return (not object:is_player())
 	end,
 	on_start = function(object, factor)
-		hb.change_hudbar(object, "absorption", factor, math.floor(factor/20+1)*20)
+		hb.change_hudbar(object, "absorption", factor, (math.floor(factor/20-0.05)+1)*20)
 		EF.absorption[object].absorb = factor
+	end,
+	on_load = function(object, factor)
+		minetest.after(0, function() hb.change_hudbar(object, "absorption", nil, (math.floor(factor/20-0.05)+1)*20) end)
 	end,
 	on_step = function(dtime, object, factor, duration)
 		hb.change_hudbar(object, "absorption", EF.absorption[object].absorb)
@@ -558,6 +561,15 @@ mcl_potions.register_effect({
 			z_index = -400
 		})
 	end,
+	on_load = function(object, factor)
+		EF.frost[object].vignette = object:hud_add({
+			hud_elem_type = "image",
+			position = {x = 0.5, y = 0.5},
+			scale = {x = -101, y = -101},
+			text = "mcl_potions_frost_hud.png",
+			z_index = -400
+		})
+	end,
 	on_hit_timer = function(object, factor, duration)
 		if object:is_player() or object:get_luaentity() then
 			mcl_util.deal_damage(object, 1, {type = "magic"})
@@ -600,6 +612,16 @@ mcl_potions.register_effect({
 		})
 		--TODO: mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
 	end,
+	on_load = function(object, factor)
+		EF.blindness[object].vignette = object:hud_add({
+			hud_elem_type = "image",
+			position = {x = 0.5, y = 0.5},
+			scale = {x = -101, y = -101},
+			text = "mcl_potions_blindness_hud.png",
+			z_index = -401
+		})
+		mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
+	end,
 	on_end = function(object)
 		--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:blindness")
 		if not EF.blindness[object] then return end
@@ -628,6 +650,12 @@ mcl_potions.register_effect({
 		return (not object:is_player())
 	end,
 	on_start = function(object, factor)
+		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
+		if mcl_hunger.debug then
+			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
+		end
+	end,
+	on_load = function(object, factor) -- TODO refactor and add hunger bar modifier API
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
