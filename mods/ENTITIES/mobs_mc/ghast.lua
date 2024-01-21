@@ -20,7 +20,7 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	hp_max = 10,
 	xp_min = 5,
 	xp_max = 5,
-	collisionbox = {-2, 5, -2, 2, 9, 2},
+	collisionbox = {-2, 0, -2, 2, 4, 2},
 	doll_size_override = { x = 1.05, y = 1.05 },
 	visual = "mesh",
 	mesh = "mobs_mc_ghast.b3d",
