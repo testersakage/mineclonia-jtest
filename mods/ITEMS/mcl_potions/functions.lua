@@ -417,7 +417,7 @@ mcl_potions.register_effect({
 	name = "darkness",
 	description = S("Darkness"),
 	get_tt = function(factor)
-		return S("surrounded by darkness")
+		return S("surrounded by darkness\nnot seeing anything beyond @1 nodes", factor)
 	end,
 	res_condition = function(object)
 		return (not object:is_player())
@@ -692,7 +692,7 @@ mcl_potions.register_effect({
 	name = "nausea",
 	description = S("Nausea"),
 	get_tt = function(factor)
-		return S("not feeling very well...")
+		return S("not feeling very well...\nfrequency: @1 / 1 s", factor)
 	end,
 	res_condition = function(object)
 		return (not object:is_player())
