@@ -414,6 +414,52 @@ mcl_potions.register_effect({
 })
 
 mcl_potions.register_effect({
+	name = "darkness",
+	description = S("Darkness"),
+	get_tt = function(factor)
+		return S("surrounded by darkness")
+	end,
+	res_condition = function(object)
+		return (not object:is_player())
+	end,
+	on_start = function(object, factor)
+		object:get_meta():set_int("darkness", 1)
+		mcl_weather.skycolor.update_sky_color({object})
+		object:set_sky({fog = {
+			fog_distance = 10,
+		}})
+		EF.darkness[object].flash = 0.6
+	end,
+	on_step = function(dtime, object, factor, duration)
+		if object:get_meta():get_int("night_vision") ~= 1 then
+			local flash = EF.darkness[object].flash
+			if flash < 0.1 then EF.darkness[object].flashdir = true
+			elseif flash > 0.6 then EF.darkness[object].flashdir = false end
+			flash = EF.darkness[object].flashdir and (flash + dtime) or (flash - dtime)
+			object:set_sky({fog = {
+				fog_start = flash,
+			}})
+			EF.darkness[object].flash = flash
+		else
+			object:set_sky({fog = {
+				fog_start = 0.99,
+			}})
+		end
+		mcl_weather.skycolor.update_sky_color({object})
+	end,
+	on_end = function(object)
+		object:get_meta():set_int("darkness", 0)
+		mcl_weather.skycolor.update_sky_color({object})
+		object:set_sky({fog = {
+			fog_distance = -1,
+			fog_start = -1,
+		}})
+	end,
+	particle_color = "#000000",
+	uses_factor = false,
+})
+
+mcl_potions.register_effect({
 	name = "health_boost",
 	description = S("Health Boost"),
 	get_tt = function(factor)
@@ -620,7 +666,7 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
-		mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
+		-- TODO: mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
 	end,
 	on_end = function(object)
 		--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:blindness")
@@ -656,12 +702,12 @@ mcl_potions.register_effect({
 	end,
 	on_hit_timer = function(object, factor, duration)
 		if EF.nausea[object].high then
-			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high")
-			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_low")
+			--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high")
+			--TODO: mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_low")
 			EF.nausea[object].high = false
 		else
-			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_high")
-			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
+			--TODO: mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_high")
+			--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
 			EF.nausea[object].high = true
 		end
 	end,
@@ -669,14 +715,15 @@ mcl_potions.register_effect({
 		object:set_lighting({
 			saturation = 1.0,
 		})
-		mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high")
-		mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
+		--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high")
+		--TODO: mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
 	end,
 	particle_color = "#60AA30",
 	uses_factor = false,
 	timer_uses_factor = false,
 	hit_timer_step = 1,
 })
+--[[TODO:
 mcl_fovapi.register_modifier({
 	name = "mcl_potions:nausea_high",
 	fov_factor = 2.2,
@@ -687,7 +734,7 @@ mcl_fovapi.register_modifier({
 	fov_factor = 0.2,
 	time = 1,
 })
-
+--]]
 mcl_potions.register_effect({
 	name = "food_poisoning",
 	description = S("Food Poisoning"),
