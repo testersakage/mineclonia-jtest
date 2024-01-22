@@ -113,7 +113,8 @@ mcl_weather.skycolor = {
 				arg = math.max(ratio, NIGHT_VISION_RATIO)
 			end
 		elseif has_darkness then
-			arg = 0
+			if has_night_vision then arg = 0.1
+			else arg = 0 end
 		else
 			-- Apply night vision only for dark sky
 			local is_dark = minetest.get_timeofday() > 0.8 or minetest.get_timeofday() < 0.2 or mcl_weather.state ~= "none"
