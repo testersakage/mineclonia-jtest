@@ -734,12 +734,12 @@ mcl_potions.register_effect({
 	end,
 	on_hit_timer = function(object, factor, duration)
 		if EF.nausea[object].high then
-			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high")
-			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_low")
+			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high", factor)
+			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_low", factor)
 			EF.nausea[object].high = false
 		else
-			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_high")
-			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
+			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_high", factor)
+			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low", factor)
 			EF.nausea[object].high = true
 		end
 	end,
@@ -751,9 +751,10 @@ mcl_potions.register_effect({
 		mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
 	end,
 	particle_color = "#60AA30",
-	uses_factor = false,
-	timer_uses_factor = false,
-	hit_timer_step = 1,
+	uses_factor = true,
+	lvl1_factor = 2,
+	lvl2_factor = 1,
+	timer_uses_factor = true,
 })
 mcl_fovapi.register_modifier({
 	name = "mcl_potions:nausea_high",
