@@ -143,12 +143,13 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	self.object:set_pos(vector.add(self._itemframe_pos, dir * 0.42))
 	self.object:set_rotation(vector.dir_to_rotation(dir))
 
-	if self._map_id then
-		mcl_maps.load_map(self._map_id, function(texture)
-			if self.object and self.object:get_pos() then
-				self.object:set_properties(table.merge(map_props, { textures = { texture }}))
-			end
-		end)
+	if minetest.get_item_group(self._item, "filled_map") > 0 then
+		local inv = minetest.get_meta(self._itemframe_pos):get_inventory()
+		local stack = inv:get_stack("main", 1)
+		stack:set_name("mcl_maps:filled_map")
+		inv:set_stack("main", 1, stack)
+		self._stack = stack
+		self.object:set_properties(table.merge(map_props, { textures = { mcl_maps.load_map_item(stack) }}))
 		return
 	end
 	self.object:set_properties(table.merge(base_props, { wield_item = self._item}))
