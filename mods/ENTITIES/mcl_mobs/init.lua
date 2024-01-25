@@ -330,10 +330,10 @@ mcl_mobs.arrow_class = {
 	drop = false, -- drops arrow as registered item when true
 	timer = 0,
 	switch = 0,
-	_lifetime = 150,
-	on_punch = function(self)
-		local vel = self.object:get_velocity()
-		self.object:set_velocity({x=vel.x * -1, y=vel.y * -1, z=vel.z * -1})
+	_lifetime = 7,
+	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+		local vel = self.object:get_velocity():length()
+		self.object:set_velocity({x=dir.x * vel, y=dir.y * vel, z=dir.z * vel})
 	end,
 }
 
@@ -361,7 +361,7 @@ function mcl_mobs.register_arrow(name, def)
 		initial_properties = init_props,
 		on_step = function(self, dtime)
 
-			self.timer = self.timer + 1
+			self.timer = self.timer + dtime
 
 			local pos = self.object:get_pos()
 
@@ -411,26 +411,30 @@ function mcl_mobs.register_arrow(name, def)
 			end
 
 			if self.hit_player or self.hit_mob or self.hit_object then
-				for _,player in pairs(minetest.get_objects_inside_radius(pos, 1.5)) do
-					if self.hit_player and player:is_player() then
-						self.hit_player(self, player)
+				for _,object in pairs(minetest.get_objects_inside_radius(pos, 1.5)) do
+
+					if self.hit_player and object:is_player() then
+						self.hit_player(self, object)
+						self.object:remove();
+						return
+					end
+
+					local entity = object:get_luaentity()
+
+					if entity and self.hit_mob and entity.is_mob
+					and (tostring(object) ~= self.owner_id or self.timer > 2)
+					and entity.name ~= self.object:get_luaentity().name then
+						self.hit_mob(self, object)
 						self.object:remove()
 						return
 					end
 
-					local entity = player:get_luaentity()
-					if entity then
-						if self.hit_mob	and entity.is_mob and tostring(player) ~= self.owner_id	and entity.name ~= self.object:get_luaentity().name then
-							self.hit_mob(self, player)
-							self.object:remove()
-							return
-						end
-
-						if self.hit_object and (not entity.is_mob) and tostring(player) ~= self.owner_id and entity.name ~= self.object:get_luaentity().name then
-							self.hit_object(self, player)
-							self.object:remove()
-							return
-						end
+					if entity and self.hit_object and not entity.is_mob
+					and (tostring(object) ~= self.owner_id or self.timer > 2)
+					and entity.name ~= self.object:get_luaentity().name then
+						self.hit_object(self, object)
+						self.object:remove()
+						return
 					end
 				end
 			end
