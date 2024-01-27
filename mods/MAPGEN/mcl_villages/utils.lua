@@ -284,6 +284,26 @@ function mcl_villages.substitue_materials(pos, schem_lua)
 			modified_schem_lua = modified_schem_lua:gsub(sub[1], sub[2])
 		end
 	end
+	if string.find(modified_schem_lua, mcl_villages.farm_plant_seed_name[0]) then
+		modified_schem_lua = mcl_villages.prepare_farm_field(pos, biome_name, modified_schem_lua)
+	end
 
+	return modified_schem_lua
+end
+
+function mcl_villages.prepare_farm_field(pos, biome_name, modified_schem_lua)
+	local pr = PseudoRandom(mcl_mapgen_core.get_block_seed(pos))
+	local seed_probability = mcl_villages.farm_plant_seed_probability[biome_name] or
+		mcl_villages.farm_plant_seed_probability["plains"]
+	for field in string.gmatch(modified_schem_lua, mcl_villages.farm_plant_seed_name[0] .. "\", prob=254, param2=%d+}") do
+		local random = pr:next(1, 100)
+		for id, _ in ipairs(mcl_villages.farm_plant_seed_name) do
+			if seed_probability[id] and random <= seed_probability[id] then
+				modified_schem_lua = modified_schem_lua:gsub(field,
+					mcl_villages.farm_plant_seed_name[id] .. "\", prob=254, param2=0}")
+				break
+			end
+		end
+	end
 	return modified_schem_lua
 end

@@ -65,7 +65,8 @@ mcl_villages.schematic_table = {
 	{name = "blacksmith",	mts = schem_path.."blacksmith.mts",	hwidth =	7, hdepth =  7, hheight = 13, hsize = 13, max_num = 0.055, rplc = basic_pseudobiome_villages },
 	{name = "butcher",	mts = schem_path.."butcher.mts",	hwidth = 11, hdepth =  8, hheight = 10, hsize = 14, max_num = 0.03 , rplc = basic_pseudobiome_villages },
 	{name = "church",	mts = schem_path.."church.mts",		hwidth = 13, hdepth = 13, hheight = 14, hsize = 15, max_num = 0.04 , rplc = basic_pseudobiome_villages },
-	{name = "farm",		mts = schem_path.."farm.mts",		hwidth =	7, hdepth =  7, hheight = 13, hsize = 13, max_num = 0.1  , rplc = basic_pseudobiome_villages },
+	{ name = "small_farm",   mts = schem_path .. "plains_small_farm_1.mts", hwidth = 7,  hdepth = 9,  hheight = 13, hsize = 13, max_num = 0.08,  rplc = basic_pseudobiome_villages },
+	{ name = "large_farm",   mts = schem_path .. "plains_large_farm_1.mts", hwidth = 7,  hdepth = 15, hheight = 13, hsize = 13, max_num = 0.02,  rplc = basic_pseudobiome_villages },
 	{name = "lamp",		mts = schem_path.."lamp.mts",		hwidth =	3, hdepth =  3, hheight = 13, hsize = 10, max_num = 0.1  , rplc = false											 },
 	{name = "library",	mts = schem_path.."library.mts",	hwidth = 12, hdepth = 12, hheight =  8, hsize = 13, max_num = 0.04 , rplc = basic_pseudobiome_villages },
 	{name = "medium_house",	mts = schem_path.."medium_house.mts",	hwidth =	8, hdepth = 12, hheight =  8, hsize = 14, max_num = 0.08 , rplc = basic_pseudobiome_villages },
@@ -260,4 +261,46 @@ mcl_villages.material_substitions = {
 		{ '"mcl_doors:trapdoor([^"]*)"', '"mcl_doors:trapdoor_cherry_blossom%1"' },
 		{ '"mcl_doors:wooden_door([^"]*)"', '"mcl_doors:door_cherry_blossom%1"' },
 	},
+}
+
+-- village style from https://minecraft.fandom.com/wiki/Village
+mcl_villages.style = {
+	IcePlains = "snowy",
+	IcePlainsSpikes = "snowy",
+
+	ColdTaiga = "taiga",
+	Taiga = "taiga",
+	MegaTaiga = "taiga",
+	MegaSpruceTaiga = "taiga",
+
+	Desert = "desert",
+
+	Savanna = "savanna",
+	SavannaM = "savanna",
+
+	--other use default "plains"
+}
+
+mcl_villages.farm_plant_seed_probability = {
+	-- table as key-value in format {key=valueprobility}
+	-- key = key from mcl_villages.farm_plant_seed_name
+	-- value = probability in cumulative %
+	-- if probility = 0, remove key
+	plains = { [1] = 46, [4] = 75, [5] = 94, [6] = 100 },
+	desert = { [1] = 100 },
+	savanna = { [1] = 81, [2] = 100 },
+	snowy = { [1] = 29, [4] = 36, [5] = 100 },
+	taiga = { [1] = 65, [3] = 94, [5] = 100 },
+}
+
+-- sorted by first Minecraft version (from the earliest), if there were several plants in a given version, then alphabetically
+-- if you sholud change this, remember 0 must be mcl_farming:plant_seed, all key as integer > 0 and continous range (0,1,2,3,...)
+mcl_villages.farm_plant_seed_name = {
+	[0] = "mcl_farming:plant_seed", -- must be constant
+	[1] = "mcl_farming:wheat_1",
+	[2] = "mcl_farming:melontige_1",
+	[3] = "mcl_farming:pumpkin_1",
+	[4] = "mcl_farming:carrot_1",
+	[5] = "mcl_farming:potato_1",
+	[6] = "mcl_farming:beetroot_0",
 }
