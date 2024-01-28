@@ -368,6 +368,23 @@ minetest.register_abm({
 	end,
 })
 
+minetest.register_abm({
+	label = "Turn Grass Path below solid block or liquid into Dirt",
+	nodenames = { "group:spreading_dirt_type" },
+	interval = 1,
+	chance = 1,
+	action = function(pos, node)
+		local above = { x = pos.x, y = pos.y + 1, z = pos.z }
+		local name = minetest.get_node(above).name
+		local nodedef = minetest.registered_nodes[name]
+		if name ~= "ignore" and nodedef and nodedef.groups and (
+				(nodedef.groups.opaque and nodedef.groups.opaque == 1) or
+				(nodedef.groups.liquid and nodedef.groups.liquid ~= 0)) then
+			minetest.set_node(pos, { name = "mcl_core:dirt" })
+		end
+	end,
+})
+
 local SAVANNA_INDEX = 1
 minetest.register_lbm({
 	label = "Replace legacy dry grass",
