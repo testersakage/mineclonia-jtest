@@ -1,0 +1,13 @@
+# textdomain: mcla_settings
+Can't set the setting @1, it has not been registered=
+Can't unregister the setting @1, it has not been registered=
+Display or change Mineclonia world settings=
+Registering setting @1=
+Setting @1 could not be saved!=
+Setting @1 is set to @2=
+Setting domains and names cannot contain a dot=
+The setting @1 could not be removed=
+The setting @1 has been removed=
+This may impact other buildings iof it's too big=
+Will use rectangles if this is false=
+[ help | <name> | <name> <value>]=

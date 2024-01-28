@@ -1,10 +1,43 @@
+local mod_name = minetest.get_current_modname()
+local S = minetest.get_translator(mod_name)
 
-local circles = minetest.settings:get_bool("mcl_villages_circles", true)
-local terrace = minetest.settings:get_bool("mcl_villages_terrace", true)
-local padding = tonumber(minetest.settings:get("mcl_villages_padding")) or 2
-local top_padding = tonumber(minetest.settings:get("mcl_villages_top_padding")) or 8
-local terrace_max_ext = tonumber(minetest.settings:get("mcl_villages_terrace_max_ext")) or 6
+local domain = mcl_villages.setting_domain
 
+mcla_settings.register_bool(
+	domain,
+	"circles",
+	true,
+	S("Use circles for building foundations"),
+	S("Will use rectangles if this is false")
+)
+mcla_settings.register_bool(
+	domain,
+	"terrace",
+	true,
+	S("Terrace above ground instead of having straight sides"),
+	S("Set to false to have straight sides")
+)
+mcla_settings.register(
+	domain,
+	"padding",
+	2,
+	S("Extra width to clear over ground"),
+	S("Set to zero to approximate old style")
+)
+mcla_settings.register(
+	domain,
+	"top_padding",
+	8,
+	S("Extra height to clear above building"),
+	S("Set to a big number to approximate old style")
+)
+mcla_settings.register(
+	domain,
+	"terrace_max_ext",
+	6,
+	S("Maximum width terracing is allowed to extend beyond building radius"),
+	S("This may impact other buildings iof it's too big")
+)
 
 -------------------------------------------------------------------------------
 -- function to fill empty space below baseplate when building on a hill
@@ -70,6 +103,13 @@ end
 
 -- Empty space above ground
 local function overground(pos, fwidth, fdepth, fheight)
+
+	-- Avoid globals so they reflect in game changes
+	local terrace = mcla_settings.get(domain, "terrace")
+	local padding = mcla_settings.get(domain, "padding")
+	local top_padding = mcla_settings.get(domain, "top_padding")
+	local terrace_max_ext = mcla_settings.get(domain, "terrace_max_ext")
+	local circles = mcla_settings.get(domain, "circles")
 
 	if circles then
 		local y = math.ceil(pos.y + 1)

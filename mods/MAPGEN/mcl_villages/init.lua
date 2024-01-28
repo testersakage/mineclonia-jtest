@@ -1,5 +1,6 @@
 mcl_villages = {}
 mcl_villages.modpath = minetest.get_modpath(minetest.get_current_modname())
+mcl_villages.setting_domain = "villages"
 
 local village_chance = tonumber(minetest.settings:get("mcl_villages_village_chance")) or 100
 
