@@ -11,6 +11,7 @@ mcl_dyes.colors = {
 		groups = {basecolor_white=1,   excolor_white=1,     unicolor_white=1},
 		rgb = "#d0d6d7",
 		unicolor = "white",
+		palette_index = 1,
 	},
 	["silver"] = {
 		readable_name = S("Light Grey"),
@@ -18,6 +19,7 @@ mcl_dyes.colors = {
 		rgb = "#818177",
 		unicolor = "grey",
 		mcl2 = "grey",
+		palette_index = 2,
 	},
 	["grey"] = {
 		readable_name = S("Grey"),
@@ -25,12 +27,14 @@ mcl_dyes.colors = {
 		rgb = "#383c40",
 		unicolor = "darkgrey",
 		mcl2 = "dark_grey",
+		palette_index = 15,
 	},
 	["black"] = {
 		readable_name = S("Black"),
 		groups = {basecolor_black=1,   excolor_black=1,     unicolor_black=1},
 		rgb = "#080a10",
 		unicolor = "black",
+		palette_index = 16,
 	},
 	["purple"] = {
 		readable_name = S("Purple"),
@@ -38,12 +42,14 @@ mcl_dyes.colors = {
 		rgb = "#6821a0",
 		unicolor = "violet",
 		mcl2 = "violet",
+		palette_index = 3,
 	},
 	["blue"] = {
 		readable_name = S("Blue"),
 		groups = {basecolor_blue=1,    excolor_blue=1,      unicolor_blue=1},
 		rgb = "#2e3094",
 		unicolor = "blue",
+		palette_index = 4,
 	},
 	["light_blue"] = {
 		readable_name = S("Light Blue"),
@@ -51,12 +57,14 @@ mcl_dyes.colors = {
 		rgb = "#258ec9",
 		unicolor = "light_blue",
 		mcl2 = "lightblue",
+		palette_index = 5,
 	},
 	["cyan"] = {
 		readable_name = S("Cyan"),
 		groups = {basecolor_cyan=1,    excolor_cyan=1,      unicolor_cyan=1},
 		rgb = "#167b8c",
 		unicolor = "cyan",
+		palette_index = 6,
 	},
 	["green"] = {
 		readable_name = S("Green"),
@@ -64,6 +72,7 @@ mcl_dyes.colors = {
 		rgb = "#4b5e25",
 		unicolor = "dark_green",
 		mcl2 = "dark_green",
+		palette_index = 7,
 	},
 	["lime"] = {
 		readable_name = S("Lime"),
@@ -71,42 +80,49 @@ mcl_dyes.colors = {
 		rgb = "#60ac19",
 		unicolor = "green",
 		mcl2 = "green",
+		palette_index = 8,
 	},
 	["yellow"] = {
 		readable_name = S("Yellow"),
 		groups = {basecolor_yellow=1,  excolor_yellow=1,    unicolor_yellow=1},
 		rgb = "#f1b216",
 		unicolor = "yellow",
+		palette_index = 9,
 	},
 	["brown"] = {
 		readable_name = S("Brown"),
 		groups = {basecolor_brown=1,   excolor_orange=1,    unicolor_dark_orange=1},
 		rgb = "#633d20",
 		unicolor = "dark_orange",
+		palette_index = 10,
 	},
 	["orange"] = {
 		readable_name = S("Orange"),
 		groups = {basecolor_orange=1,  excolor_orange=1,    unicolor_orange=1},
 		rgb = "#e26501",
 		unicolor = "orange",
+		palette_index = 11,
 	},
 	["red"] = {
 		readable_name = S("Red"),
 		groups = {basecolor_red=1,     excolor_red=1,       unicolor_red=1},
 		rgb = "#912222",
 		unicolor = "red",
+		palette_index = 12,
 	},
 	["magenta"] = {
 		readable_name = S("Magenta"),
 		groups = {basecolor_magenta=1, excolor_red_violet=1,unicolor_red_violet=1},
 		rgb = "#ab31a2",
 		unicolor = "red_violet",
+		palette_index = 13,
 	},
 	["pink"] = {
 		readable_name = S("Pink"),
 		groups = {basecolor_red=1,     excolor_red=1,       unicolor_light_red=1},
 		rgb = "#d56791",
 		unicolor = "light_red",
+		palette_index = 14,
 	},
 }
 
