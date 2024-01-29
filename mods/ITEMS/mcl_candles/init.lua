@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_candles")
+--local S = minetest.get_translator("mcl_candles")
 
 local candleboxes = {
 	{-1/16, -8/16, -1/16, 1/16, -2/16, 1/16},
@@ -7,69 +7,61 @@ local candleboxes = {
 	{-3/16, -8/16, -3/16, 3/16, -2/16, 3/16}
 }
 
-local cakebox = {
-	{-7/16, -8/16, -7/16, 7/16, 0, 7/16},
-	{-1/16, 0, -1/16, 1/16, 6/16, 1/16}
+--local cakebox = {
+--	{-7/16, -8/16, -7/16, 7/16, 0, 7/16},
+--	{-1/16, 0, -1/16, 1/16, 6/16, 1/16}
+--}
+
+local tpl_candle = {
+	--description = desc,
+	drawtype = "mesh",
+	groups = {
+		axey = 1, dig_by_piston = 1, handy = 1, candles = 1, unlit_candles = 1, not_solid = 1, pickaxey = 1, shearsy = 1,
+		shovely = 1, swordy = 1
+	},
+	--inventory_image = itemimg,
+	is_ground_content = false,
+	paramtype = "light",
+	paramtype2 = "color",
+	palette = "mcl_dyes_palette.png",
+	itemimg = "mcl_candles_item.png",
+	tiles = { "mcl_candles_candle.png" },
+	sounds = mcl_sounds.node_sound_defaults(),
+	sunlight_propagates = true,
+	use_texture_alpha = "clip",
+	--wield_image = itemimg,
+	_mcl_blast_resistance = 0.1,
+	_mcl_hardness = 0.1,
 }
 
-local colordefs = {
---  {name		   candledesc			  cakedesc							dye		 },
-	{nil,		   S("Candle"),			S("Cake With Candle"),			  nil		 },
-	{"black",	   S("Black Candle"),	  S("Cake With Black Candle"),		"black"	 },
-	{"blue",		S("Blue Candle"),	   S("Cake With Blue Candle"),		 "blue"	  },
-	{"brown",	   S("Brown Candle"),	  S("Cake With Brown Candle"),		"brown"	 },
-	{"cyan",		S("Cyan Candle"),	   S("Cake With Cyan Candle"),		 "cyan"	  },
-	{"green",	   S("Green Candle"),	  S("Cake With Green Candle"),		"dark_green"},
-	{"grey",		S("Grey Candle"),	   S("Cake With Grey Candle"),		 "dark_grey" },
-	{"light_blue",  S("Light Blue Candle"), S("Cake With Light Blue Candle"),   "lightblue" },
-	{"light_grey",  S("Light Grey Candle"), S("Cake With Light Grey Candle"),   "grey"	  },
-	{"lime",		S("Lime Candle"),	   S("Cake With Lime Candle"),		 "green"	 },
-	{"magenta",	 S("Magenta Candle"),	S("Cake With Magenta Candle"),	  "magenta"   },
-	{"orange",	  S("Orange Candle"),	 S("Cake With Orange Candle"),	   "orange"	},
-	{"pink",		S("Pink Candle"),	   S("Cake With Pink Candle"),		 "pink"	  },
-	{"purple",	  S("Purple Candle"),	 S("Cake With Purple Candle"),	   "violet"	},
-	{"red",		 S("Red Candle"),		S("Cake With Red Candle"),		  "red"	   },
-	{"white",	   S("White Candle"),	  S("Cake With White Candle"),		"white"	 },
-	{"yellow",	  S("Yellow Candle"),	 S("Cake With Yellow Candle"),	   "yellow"	}
+local tpl_lit_candle = {
+	--description = desc.." "..S("Lit"),
+	groups = {
+		axey = 1, dig_by_piston = 1, handy = 1, candles = 1, lit_candles = 1, not_in_creative_inventory = 1,
+		not_solid = 1, pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1
+	},
 }
-
 --local function candles_on_construct(pos) end
 
 --local function candles_on_destruct(pos) end
 
-local function candles_on_place(itemstack, placer, pointed_thing)
-	if not placer then
-		return
-	end
+function tpl_candle.on_place(itemstack, placer, pointed_thing)
+	if not placer then return end
+	if mcl_util.check_position_protection(pointed_thing.under, placer) then return end
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if rc ~= nil then return rc end
 
-	local upos = pointed_thing.under
+	local unode = minetest.get_node(pointed_thing.under)
 
-	if mcl_util.check_position_protection(upos, placer) then
-		return
-	end
-
-	local unode = minetest.get_node(upos)
-	local ncolor = unode.name:sub(26)
-	local icolor = itemstack:get_name():sub(26)
-	local samecolor = ncolor == icolor
-	local creative = minetest.is_creative_enabled(placer:get_player_name())
-
-	if unode.name:find("mcl_candles:unl") and samecolor then
-		if unode.name:find("1") then
-			minetest.set_node(upos, {name = unode.name:gsub("1", "2")})
-			if not creative then itemstack:take_item() end
-		elseif unode.name:find("2") then
-			minetest.set_node(upos, {name = unode.name:gsub("2", "3")})
-			if not creative then itemstack:take_item() end
-		elseif unode.name:find("3") then
-			minetest.set_node(upos, {name = unode.name:gsub("3", "4")})
-			if not creative then itemstack:take_item() end
-		end
-	elseif unode.name == "mcl_cake:cake" then
-		if icolor then
-			minetest.set_node(upos, {name = "mcl_candles:cake_unl_candle_"..icolor})
-		else
-			minetest.set_node(upos, {name = "mcl_candles:cake_unl_candle"})
+	local g = minetest.get_item_group(unode.name, "candles")
+	if g > 0 then
+		if g < #candleboxes then
+			unode.name = "mcl_candles:candle_"..tostring(math.min(4, g + 1))
+			unode.param2 = math.random(15)
+			minetest.swap_node(pointed_thing.under, unode)
+			if not minetest.is_creative_enabled(placer:get_player_name()) then
+				itemstack:take_item()
+			end
 		end
 	else
 		return minetest.item_place_node(itemstack, placer, pointed_thing)
@@ -78,7 +70,7 @@ local function candles_on_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-local function candles_on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+function tpl_lit_candle.on_rightclick(pos, node, clicker, itemstack, pointed_thing)
 	if not clicker then
 		return
 	end
@@ -107,92 +99,7 @@ local function candles_on_rightclick(pos, node, clicker, itemstack, pointed_thin
 	return itemstack
 end
 
-local function register_candles(index, colordefs, box)
-	local desc = colordefs[2]
-	local itemimg, litname, unlitname, texture
-
-	if colordefs[1] then
-		itemimg = "mcl_candles_item_"..colordefs[1]..".png"
-		litname = "mcl_candles:lit_candle_"..tostring(index).."_"..colordefs[1]
-		unlitname = "mcl_candles:unl_candle_"..tostring(index).."_"..colordefs[1]
-		texture = "mcl_candles_candle_"..colordefs[1]..".png"
-	else
-		itemimg = "mcl_candles_item.png"
-		litname = "mcl_candles:lit_candle_"..tostring(index)
-		unlitname = "mcl_candles:unl_candle_"..tostring(index)
-		texture = "mcl_candles_candle.png"
-	end
-
-	if index ~= 1 then
-		desc = colordefs[2].." "..tostring(index)
-		itemimg = nil
-	end
-
-	local litdefs = {
-		collision_box = {type = "fixed", fixed = box},
-		description = desc.." "..S("Lit"),
-		drawtype = "mesh",
-		drop = unlitname:gsub(tostring(index), "1").." "..tostring(index),
-		groups = {
-			axey = 1, dig_by_piston = 1, handy = 1, lit_candles = 1, not_in_creative_inventory = 1,
-			not_solid = 1, pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1
-		},
-		inventory_image = itemimg,
-		is_ground_content = false,
-		light_source = 3 * index,
-		mesh = "mcl_candles_candle_"..tostring(index)..".obj",
-		--on_construct = candles_on_construct,
-		--on_destruct = candles_on_destruct,
-		on_rightclick = candles_on_rightclick,
-		paramtype = "light",
-		selection_box = {type = "fixed", fixed = box},
-		sounds = mcl_sounds.node_sound_defaults(),
-		sunlight_propagates = true,
-		tiles = {texture},
-		use_texture_alpha = "clip",
-		wield_image = itemimg,
-		_mcl_blast_resistance = 0.1,
-		_mcl_hardness = 0.1,
-	}
-
-	local unlitdefs = {
-		collision_box = {type = "fixed", fixed = box},
-		description = desc,
-		drawtype = "mesh",
-		drop = unlitname:gsub(tostring(index), "1").." "..tostring(index),
-		groups = {
-			axey = 1, dig_by_piston = 1, handy = 1, not_solid = 1, pickaxey = 1, shearsy = 1,
-			shovely = 1, swordy = 1
-		},
-		inventory_image = itemimg,
-		is_ground_content = false,
-		mesh = "mcl_candles_candle_"..tostring(index)..".obj",
-		on_place = candles_on_place,
-		on_rightclick = candles_on_rightclick,
-		paramtype = "light",
-		selection_box = {type = "fixed", fixed = box},
-		sounds = mcl_sounds.node_sound_defaults(),
-		sunlight_propagates = true,
-		tiles = {texture},
-		use_texture_alpha = "clip",
-		wield_image = itemimg,
-		_mcl_blast_resistance = 0.1,
-		_mcl_hardness = 0.1,
-	}
-
-	minetest.register_node(litname, litdefs)
-	minetest.register_node(unlitname, unlitdefs)
-
-	if colordefs[4] then
-		minetest.register_craft({
-			output = unlitname,
-			recipe = {"mcl_candles:unl_candle_1", "mcl_dye:"..colordefs[4]},
-			type = "shapeless"
-		})
-	end
-
-end
-
+--[[
 local function cakes_on_rightclick(pos, node, clicker, itemstack, pointed_thing)
 	if not clicker then
 		return
@@ -221,7 +128,8 @@ local function cakes_on_rightclick(pos, node, clicker, itemstack, pointed_thing)
 
 	return itemstack
 end
-
+--]]
+--[[
 local function register_cakes(colordefs)
 	local desc = colordefs[3]
 	local litname, unlitname, candlename, candletexture
@@ -291,17 +199,27 @@ local function register_cakes(colordefs)
 	minetest.register_node(litname, litdefs)
 	minetest.register_node(unlitname, unlitdefs)
 end
-
-for i = 1, #candleboxes do
-	for j = 1, #colordefs do
-		register_candles(i, colordefs[j], candleboxes[i])
-	end
+--]]
+for i, box in pairs(candleboxes) do
+	local candle_n = {
+		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
+		drop = "mcl_candles:candle_1".." "..tostring(i),
+		selection_box = {type = "fixed", fixed = box},
+		collision_box = {type = "fixed", fixed = box},
+	}
+	minetest.register_node("mcl_candles:candle_"..i,table.merge(tpl_candle, candle_n,{
+		groups = table.merge(tpl_candle.groups, { candles = i, unlit_candles = i }),
+	}))
+	minetest.register_node("mcl_candles:candle_lit"..i,table.merge(tpl_candle, tpl_lit_candle, candle_n,{
+		light_source = 3 * i,
+		groups = table.merge(tpl_lit_candle.groups, { candles = i, lit_candles = i }),
+	}))
 end
-
+--[[
 for i = 1, #colordefs do
 	register_cakes(colordefs[i])
 end
-
+--]]
 minetest.register_craft({
 	output = "mcl_candles:unl_candle_1",
 	recipe = {
