@@ -57,7 +57,7 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 	if g > 0 then
 		if g < #candleboxes then
 			unode.name = "mcl_candles:candle_"..tostring(math.min(4, g + 1))
-			unode.param2 = math.random(15)
+			unode.param2 = itemstack:get_meta():get("palette_index")
 			minetest.swap_node(pointed_thing.under, unode)
 			if not minetest.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
@@ -215,16 +215,42 @@ for i, box in pairs(candleboxes) do
 		groups = table.merge(tpl_lit_candle.groups, { candles = i, lit_candles = i }),
 	}))
 end
---[[
-for i = 1, #colordefs do
-	register_cakes(colordefs[i])
+
+local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
+	local i = 0
+	local dye, candle
+	for _, stack in pairs(old_craft_grid) do
+		if minetest.get_item_group(stack:get_name(), "candles") > 0 then
+			candle = stack
+			i = i + 1
+		elseif minetest.get_item_group(stack:get_name(), "dye") > 0 then
+			dye = stack
+			i = i + 1
+		end
+	end
+	if dye and candle and i == 2 then
+		local cdef = mcl_dyes.colors[dye:get_definition()._color]
+		return minetest.itemstring_with_palette(candle, cdef.palette_index)
+	end
 end
---]]
+
+minetest.register_craft_predict(candle_craft)
+minetest.register_on_craft(candle_craft)
+
 minetest.register_craft({
-	output = "mcl_candles:unl_candle_1",
+	output = "mcl_candles:candle_1",
 	recipe = {
 		{"mcl_mobitems:string"},
 		{"mcl_honey:honeycomb"}
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "mcl_candles:candle_1",
+	recipe = {
+		"group:candles",
+		"group:dye",
 	}
 })
 
