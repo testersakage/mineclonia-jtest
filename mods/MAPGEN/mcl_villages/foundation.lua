@@ -107,8 +107,8 @@ local function overground(pos, fwidth, fdepth, fheight)
 	-- Avoid globals so they reflect in game changes
 	local terrace = mcla_settings.get(domain, "terrace")
 	local padding = mcla_settings.get(domain, "padding")
-	local top_padding = mcla_settings.get(domain, "top_padding")
-	local terrace_max_ext = mcla_settings.get(domain, "terrace_max_ext")
+	local top_padding = tonumber(mcla_settings.get(domain, "top_padding"))
+	local terrace_max_ext = tonumber(mcla_settings.get(domain, "terrace_max_ext"))
 	local circles = mcla_settings.get(domain, "circles")
 
 	if circles then
