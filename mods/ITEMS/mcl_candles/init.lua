@@ -1,4 +1,4 @@
---local S = minetest.get_translator("mcl_candles")
+local S = minetest.get_translator("mcl_candles")
 
 local candleboxes = {
 	{-1/16, -8/16, -1/16, 1/16, -2/16, 1/16},
@@ -240,7 +240,9 @@ local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
 	end
 	if dye and candle and i == 2 then
 		local cdef = mcl_dyes.colors[dye:get_definition()._color]
-		return minetest.itemstring_with_palette(candle, cdef.palette_index)
+		local r = ItemStack(minetest.itemstring_with_palette(candle, cdef.palette_index))
+		r:get_meta():set_string("description", S("@1 Candle", cdef.readable_name))
+		return r
 	end
 end
 
