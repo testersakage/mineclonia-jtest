@@ -29,6 +29,15 @@ local tpl_candle = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	sunlight_propagates = true,
 	use_texture_alpha = "clip",
+	_on_ignite = function(player, pointed_thing)
+		local n = minetest.get_node(pointed_thing.under)
+		local g = minetest.get_item_group(n.name, "candles")
+		if g > 0 then
+			n.name = "mcl_candles:candle_lit_"..tostring(g)
+			minetest.swap_node(pointed_thing.under, n)
+			return false
+		end
+	end,
 	--wield_image = itemimg,
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
@@ -210,9 +219,10 @@ for i, box in pairs(candleboxes) do
 	minetest.register_node("mcl_candles:candle_"..i,table.merge(tpl_candle, candle_n,{
 		groups = table.merge(tpl_candle.groups, { candles = i, unlit_candles = i }),
 	}))
-	minetest.register_node("mcl_candles:candle_lit"..i,table.merge(tpl_candle, tpl_lit_candle, candle_n,{
+	minetest.register_node("mcl_candles:candle_lit_"..i,table.merge(tpl_candle, tpl_lit_candle, candle_n,{
 		light_source = 3 * i,
 		groups = table.merge(tpl_lit_candle.groups, { candles = i, lit_candles = i }),
+		_on_ignite = nil,
 	}))
 end
 
