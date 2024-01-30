@@ -26,7 +26,7 @@ local tpl_candle = {
 		if g > 0 then
 			n.name = "mcl_candles:candle_lit_"..tostring(g)
 			minetest.swap_node(pointed_thing.under, n)
-			return false
+			return true
 		end
 	end,
 	_mcl_blast_resistance = 0.1,
@@ -35,10 +35,7 @@ local tpl_candle = {
 
 local tpl_lit_candle = {
 	description = S("Lit Candle"),
-	groups = {
-		axey = 1, dig_by_piston = 1, handy = 1, candles = 1, lit_candles = 1, not_in_creative_inventory = 1,
-		not_solid = 1, pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1
-	},
+	groups = { axey = 1, dig_by_piston = 1, handy = 1, candles = 1, lit_candles = 1, not_in_creative_inventory = 1, not_solid = 1, pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1 },
 }
 
 function tpl_candle.on_place(itemstack, placer, pointed_thing)
@@ -95,15 +92,17 @@ function tpl_lit_candle.on_rightclick(pos, node, clicker, itemstack, pointed_thi
 	return itemstack
 end
 
-for i, box in pairs(candleboxes) do
+for i=1,4 do
 	local candle_n = {
 		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
 		drop = "mcl_candles:candle_1".." "..tostring(i),
-		selection_box = {type = "fixed", fixed = box},
-		collision_box = {type = "fixed", fixed = box},
+		selection_box = {type = "fixed", fixed = candleboxes[i]},
+		collision_box = {type = "fixed", fixed = candleboxes[i]},
 	}
+	local creative_group
+	if i ~= 1 then creative_group = { not_in_creative_inventory = 1 } end
 	minetest.register_node("mcl_candles:candle_"..i,table.merge(tpl_candle, candle_n,{
-		groups = table.merge(tpl_candle.groups, { candles = i, unlit_candles = i }),
+		groups = table.merge(tpl_candle.groups, { candles = i, unlit_candles = i }, creative_group),
 	}))
 	minetest.register_node("mcl_candles:candle_lit_"..i,table.merge(tpl_candle, tpl_lit_candle, candle_n,{
 		light_source = 3 * i,
@@ -151,9 +150,3 @@ minetest.register_craft({
 		"group:dye",
 	}
 })
-
-for name, defs in pairs(minetest.registered_items) do
-	if name:find("mcl_candles") and name:find("unl") and not name:find("1") then
-		defs.groups.not_in_creative_inventory = 1
-	end
-end
