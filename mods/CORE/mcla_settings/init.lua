@@ -133,7 +133,6 @@ minetest.register_chatcommand("wset", {
 	func = function(name, param)
 		if param == "" then
 			for _, key in pairs(settings:get_names()) do
-				minetest.log(dump(key))
 				local domain, sname = mcla_settings.split_fullname(key)
 				minetest.chat_send_player(name, string.format("%s: %s", key, mcla_settings.get(domain, sname)))
 			end
