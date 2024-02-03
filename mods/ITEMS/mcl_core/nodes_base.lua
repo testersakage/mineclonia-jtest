@@ -176,10 +176,11 @@ minetest.register_node("mcl_core:stone_with_lapis", {
 	drop = {
 		max_items = 1,
 		items = {
-			{items = {"mcl_core:lapis 8"},rarity = 5},
-			{items = {"mcl_core:lapis 7"},rarity = 5},
-			{items = {"mcl_core:lapis 6"},rarity = 5},
-			{items = {"mcl_core:lapis 5"},rarity = 5},
+			{items = {"mcl_core:lapis 9"},rarity = 6},
+			{items = {"mcl_core:lapis 8"},rarity = 6},
+			{items = {"mcl_core:lapis 7"},rarity = 6},
+			{items = {"mcl_core:lapis 6"},rarity = 6},
+			{items = {"mcl_core:lapis 5"},rarity = 6},
 			{items = {"mcl_core:lapis 4"}},
 		}
 	},
