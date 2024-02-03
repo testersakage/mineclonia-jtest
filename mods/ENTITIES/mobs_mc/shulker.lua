@@ -28,7 +28,6 @@ local function check_spot(pos)
 	end
 	return false
 end
-local pr = PseudoRandom(os.time()*(-334))
 
 local messy_textures = {
 	grey = "mobs_mc_shulker_gray.png",
@@ -138,7 +137,7 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 				if #nodes > 0 then
 					-- Up to 64 attempts to teleport
 					for n=1, math.min(64, #nodes) do
-						local r = pr:next(1, #nodes)
+						local r = math.random(1, #nodes)
 						local nodepos = nodes[r]
 						local tg = vector.offset(nodepos,0,1,0)
 						if check_spot(tg) then
@@ -156,13 +155,13 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 			for n=1, 8 do
 				local node_ok = false
 				-- We need to add (or subtract) different random numbers to each vector component, so it couldn't be done with a nice single vector.add() or .subtract():
-				local randomCube = vector.new( pos.x + 8*(pr:next(0,16)-8), pos.y + 8*(pr:next(0,16)-8), pos.z + 8*(pr:next(0,16)-8) )
+				local randomCube = vector.new( pos.x + 8*(math.random(0,16)-8), pos.y + 8*(math.random(0,16)-8), pos.z + 8*(math.random(0,16)-8) )
 				local nodes = minetest.find_nodes_in_area_under_air(vector.subtract(randomCube, 4), vector.add(randomCube, 4), {"group:solid", "group:cracky", "group:crumbly"})
 				if nodes ~= nil then
 					if #nodes > 0 then
 						-- Up to 8 low-level (in total up to 8*8 = 64) attempts to teleport
 						for n=1, math.min(8, #nodes) do
-							local r = pr:next(1, #nodes)
+							local r = math.random(1, #nodes)
 							local nodepos = nodes[r]
 							local tg = vector.offset(nodepos,0,0.5,0)
 							if check_spot(tg) then

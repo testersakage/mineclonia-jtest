@@ -107,8 +107,6 @@ local function poisonp(tick, time, time_left, damage, exhaustion, name)
 
 end
 
-local poisonrandomizer = PseudoRandom(os.time())
-
 function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance, sound)
 	return function(itemstack, user, pointed_thing)
 		if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
@@ -194,7 +192,7 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 			if mcl_hunger.active and poisontime then
 				local do_poison = false
 				if poisonchance then
-					if poisonrandomizer:next(0,100) < poisonchance then
+					if math.random(0,100) < poisonchance then
 						do_poison = true
 					end
 				else

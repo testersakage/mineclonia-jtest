@@ -4,8 +4,6 @@ local S = minetest.get_translator("mobs_mc")
 
 local default_walk_chance = 50
 
-local pr = PseudoRandom(os.time()*10)
-
 -- Wolf
 local wolf = {
 	description = S("Wolf"),
@@ -64,7 +62,7 @@ local wolf = {
 				clicker:set_wielded_item(tool)
 			end
 			-- 1/3 chance of getting tamed
-			if pr:next(1, 3) == 1 then
+			if math.random(1, 3) == 1 then
 				local yaw = self.object:get_yaw()
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then

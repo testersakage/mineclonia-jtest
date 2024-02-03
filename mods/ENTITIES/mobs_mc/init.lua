@@ -4,8 +4,6 @@
 --License for code WTFPL and otherwise stated in readmes
 mobs_mc = {}
 
-local pr = PseudoRandom(os.time()*5)
-
 local offsets = {}
 for x=-2, 2 do
 	for z=-2, 2 do
@@ -51,7 +49,7 @@ mobs_mc.make_owner_teleport_function = function(dist, teleport_check_interval)
 				local check_offsets = table.copy(offsets)
 				-- Attempt to place mob near player. Must be placed on walkable node below a non-walkable one. Place inside that air node.
 				while #check_offsets > 0 do
-					local r = pr:next(1, #check_offsets)
+					local r = math.random(1, #check_offsets)
 					local telepos = vector.add(owner_pos, check_offsets[r])
 					local telepos_below = {x=telepos.x, y=telepos.y-1, z=telepos.z}
 					table.remove(check_offsets, r)

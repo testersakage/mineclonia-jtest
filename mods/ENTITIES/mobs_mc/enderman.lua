@@ -66,8 +66,6 @@ end
 --################### ENDERMAN
 --###################
 
-local pr = PseudoRandom(os.time()*(-334))
-
 -- Texuture overrides for enderman block. Required for cactus because it's original is a nodebox
 -- and the textures have tranparent pixels.
 local block_texture_overrides
@@ -478,7 +476,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 			local pos = self.object:get_pos()
 			local takable_nodes = minetest.find_nodes_in_area_under_air({x=pos.x-2, y=pos.y-1, z=pos.z-2}, {x=pos.x+2, y=pos.y+1, z=pos.z+2}, "group:enderman_takable")
 			if #takable_nodes >= 1 then
-				local r = pr:next(1, #takable_nodes)
+				local r = math.random(1, #takable_nodes)
 				local take_pos = takable_nodes[r]
 				local node = minetest.get_node(take_pos)
 				-- Don't destroy protected stuff.
@@ -559,7 +557,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 				if #nodes > 0 then
 					-- Up to 64 attempts to teleport
 					for n=1, math.min(64, #nodes) do
-						local r = pr:next(1, #nodes)
+						local r = math.random(1, #nodes)
 						local nodepos = nodes[r]
 						local node_ok = true
 						-- Selected node needs to have 3 nodes of free space above
@@ -589,13 +587,13 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 			for n=1, 8 do
 				local node_ok = false
 				-- We need to add (or subtract) different random numbers to each vector component, so it couldn't be done with a nice single vector.add() or .subtract():
-				local randomCube = vector.new( pos.x + 8*(pr:next(0,16)-8), pos.y + 8*(pr:next(0,16)-8), pos.z + 8*(pr:next(0,16)-8) )
+				local randomCube = vector.new( pos.x + 8*(math.random(0,16)-8), pos.y + 8*(math.random(0,16)-8), pos.z + 8*(math.random(0,16)-8) )
 				local nodes = minetest.find_nodes_in_area_under_air(vector.subtract(randomCube, 4), vector.add(randomCube, 4), {"group:solid", "group:cracky", "group:crumbly"})
 				if nodes ~= nil then
 					if #nodes > 0 then
 						-- Up to 8 low-level (in total up to 8*8 = 64) attempts to teleport
 						for n=1, math.min(8, #nodes) do
-							local r = pr:next(1, #nodes)
+							local r = math.random(1, #nodes)
 							local nodepos = nodes[r]
 							node_ok = true
 							for u=1, 3 do
@@ -634,7 +632,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 			--if (minetest.get_timeofday() * 24000) > 5001 and (minetest.get_timeofday() * 24000) < 19000 then
 			--	self:teleport(nil)
 			--else
-			if pr:next(1, 8) == 8 then --FIXME: real mc rate
+			if math.random(1, 8) == 8 then --FIXME: real mc rate
 				self:teleport(hitter)
 			end
 			self.attack=hitter
