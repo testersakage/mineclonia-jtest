@@ -146,25 +146,27 @@ function mcl_potions.register_potion(def)
 	local effect
 	local uses_level = false
 	local has_plus = false
-	for name, details in pairs(pdef._effect_list) do
-		effect = mcl_potions.registered_effects[name]
-		if effect then
-			local ulvl
-			if details.uses_level ~= nil then ulvl = details.uses_level
-			else ulvl = effect.uses_factor end
-			if ulvl then uses_level = true end
-			local durvar = true
-			if details.dur_variable ~= nil then durvar = details.dur_variable end
-			if durvar then has_plus = true end
-			pdef._effect_list[name] = {
-				uses_level = ulvl,
-				level = details.level or 1,
-				level_scaling = details.level_scaling or 1,
-				dur = details.dur or mcl_potions.DURATION,
-				dur_variable = durvar,
-			}
-		else
-			error("Unable to register potion: effect not registered")
+	if def._effect_list then
+		for name, details in pairs(def._effect_list) do
+			effect = mcl_potions.registered_effects[name]
+			if effect then
+				local ulvl
+				if details.uses_level ~= nil then ulvl = details.uses_level
+				else ulvl = effect.uses_factor end
+				if ulvl then uses_level = true end
+				local durvar = true
+				if details.dur_variable ~= nil then durvar = details.dur_variable end
+				if durvar then has_plus = true end
+				pdef._effect_list[name] = {
+					uses_level = ulvl,
+					level = details.level or 1,
+					level_scaling = details.level_scaling or 1,
+					dur = details.dur or mcl_potions.DURATION,
+					dur_variable = durvar,
+				}
+			else
+				error("Unable to register potion: effect not registered")
+			end
 		end
 	end
 	if def.uses_level ~= nil then uses_level = def.uses_level end
