@@ -89,7 +89,8 @@ local function place_path(path, pr, stair, slab)
 		end
 	end
 
-	for i, pos in ipairs(path) do
+	local prev_pos = nil
+	for _, pos in ipairs(path) do
 		-- replace decorations, grass and flowers, with air
 		local n0 = minetest.get_node(pos)
 		if n0.name ~= "air" then
@@ -102,22 +103,22 @@ local function place_path(path, pr, stair, slab)
 		local is_stair
 
 		-- TODO stairs should always face the lower node so they are easy to walk up
-		if i > 1 then
-		if pos.y < path[i - 1].y then
+		if prev_pos then
+		if pos.y < prev_pos.y then
 			-- stairs down
-			local n2 = minetest.get_node(vector.offset(path[i - 1], 0, -1, 0))
+			local n2 = minetest.get_node(vector.offset(prev_pos, 0, -1, 0))
 			is_stair = minetest.get_item_group(n2.name, "stair") ~= 0
 			if not is_stair then
 				done = true
-				local param2 = minetest.dir_to_facedir(vector.subtract(path[i - 1], pos))
+				local param2 = minetest.dir_to_facedir(vector.subtract(prev_pos, pos))
 				minetest.add_node(pos, { name = stair, param2 = param2 })
 			end
-		elseif pos.y > path[i - 1].y then
+		elseif pos.y > prev_pos.y then
 			-- stairs up
 			is_stair = minetest.get_item_group(n.name, "stair") ~= 0
 			if not is_stair then
 				done = true
-				local param2 = minetest.dir_to_facedir(vector.subtract(pos, path[i - 1]))
+				local param2 = minetest.dir_to_facedir(vector.subtract(pos, prev_pos))
 				minetest.swap_node(under_pos, { name = stair, param2 = param2 })
 			end
 		end
@@ -144,6 +145,7 @@ local function place_path(path, pr, stair, slab)
 				minetest.swap_node(over_pos, { name = "air" })
 			end
 		end
+		prev_pos = pos
 	end
 
 	-- Do lamps afterwards so we don't put them where a path will be laid
