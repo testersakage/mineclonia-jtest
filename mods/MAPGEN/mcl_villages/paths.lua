@@ -106,19 +106,18 @@ function mcl_villages.store_path_ends(minp, maxp, pos, size, blockseed, bell_pos
 		"mcl_villages:path_endpoint"
 	)
 
-	-- We store by distance because we cerate paths far away from the bell first
+	-- We store by distance because we create paths far away from the bell first
 	local dist = vector.distance(bell_pos, pos)
 
-	-- "block_" is used because lua doesn't like using integers for keys
-	if path_ends["block_" .. blockseed] == nil then
-		path_ends["block_" .. blockseed] = {}
+	if path_ends[blockseed] == nil then
+		path_ends[blockseed] = {}
 	end
-	if path_ends["block_" .. blockseed][dist] == nil then
-		path_ends["block_" .. blockseed][dist] = {}
+	if path_ends[blockseed][dist] == nil then
+		path_ends[blockseed][dist] = {}
 	end
 
 	for _, epos in pairs(path_end_nodes) do
-		table.insert(path_ends["block_" .. blockseed][dist], minetest.pos_to_string(epos))
+		table.insert(path_ends[blockseed][dist], minetest.pos_to_string(epos))
 		minetest.set_node(epos, { name = "air" })
 	end
 end
@@ -258,7 +257,7 @@ end
 function mcl_villages.paths_new(blockseed, biome_name)
 	local pr = PseudoRandom(blockseed)
 
-	if path_ends["block_" .. blockseed] == nil then
+	if path_ends[blockseed] == nil then
 		minetest.log("warning", string.format("[mcl_villages] Tried to set paths for block seed that doesn't exist %d", blockseed))
 		return
 	end
@@ -283,7 +282,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	-- get a list of reverse sorted keys, which are distances
 	local dist_keys = {}
-	for k in pairs(path_ends["block_" .. blockseed]) do
+	for k in pairs(path_ends[blockseed]) do
 		table.insert(dist_keys, k)
 	end
 	table.sort(dist_keys, function(a, b)
@@ -292,7 +291,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	for i, from in ipairs(dist_keys) do
 		-- ep == end_point
-		for _, from_ep in ipairs(path_ends["block_" .. blockseed][from]) do
+		for _, from_ep in ipairs(path_ends[blockseed][from]) do
 			local from_ep_pos = minetest.string_to_pos(from_ep)
 			local closest_pos
 			local closest_bld
@@ -321,7 +320,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 				for j = lindex, #dist_keys do
 					local to = dist_keys[j]
 					if from ~= to and connected[from .. "-" .. to] == nil and connected[to .. "-" .. from] == nil then
-						for _, to_ep in ipairs(path_ends["block_" .. blockseed][to]) do
+						for _, to_ep in ipairs(path_ends[blockseed][to]) do
 							local to_ep_pos = minetest.string_to_pos(to_ep)
 
 							local dist = vector.distance(from_ep_pos, to_ep_pos)
@@ -357,7 +356,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	-- Loop again to blow away no path nodes
 	for _, from in ipairs(dist_keys) do
-		for _, from_ep in ipairs(path_ends["block_" .. blockseed][from]) do
+		for _, from_ep in ipairs(path_ends[blockseed][from]) do
 			local from_ep_pos = minetest.string_to_pos(from_ep)
 			local no_paths_nodes = minetest.find_nodes_in_area(
 				vector.offset(from_ep_pos, -32, -32, -32),
@@ -370,5 +369,5 @@ function mcl_villages.paths_new(blockseed, biome_name)
 		end
 	end
 
-	path_ends["block_" .. blockseed] = nil
+	path_ends[blockseed] = nil
 end

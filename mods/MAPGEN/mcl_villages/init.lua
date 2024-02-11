@@ -117,7 +117,7 @@ minetest.register_node("mcl_villages:building_block", {
 		local minp = minetest.string_to_pos(meta:get_string("minp"))
 		local maxp = minetest.string_to_pos(meta:get_string("maxp"))
 		local node_type = meta:get_string("node_type")
-		local blockseed = meta:get_string("blockseed")
+		local blockseed = tonumber(meta:get_string("blockseed"))
 		local has_beds = meta:get_int("has_beds") > 0 and true or false
 		local has_jobs = meta:get_int("has_jobs") > 0 and true or false
 		local is_belltower = meta:get_int("is_belltower") > 0 and true or false
