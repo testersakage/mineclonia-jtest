@@ -317,8 +317,12 @@ function mcl_mobs.register_mob(name, def)
 
 	if minetest.get_modpath("doc_identifier") ~= nil then
 		doc.sub.identifier.register_object(name, "basics", "mobs")
-	end
 
+		doc.add_entry("mobs", name, {
+			name = def.description or name,
+			data = final_def,
+		})
+	end
 end
 
 function mcl_mobs.get_arrow_damage_func(damage, typ, shooter)

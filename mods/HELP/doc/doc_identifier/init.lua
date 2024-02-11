@@ -115,8 +115,12 @@ function doc_identifier.identify(itemstack, user, pointed_thing)
 					doc.show_entry(username, "nodes", itemstring, true)
 				end
 			-- A known registered object
-			elseif ro and doc.entry_exists (ro.category, ro.entry) then
-				doc.show_entry(username, ro.category, ro.entry, true)
+			elseif ro then
+				if doc.entry_exists("mobs", le.name) then
+					doc.show_entry(username, "mobs", le.name, true)
+				elseif doc.entry_exists (ro.category, ro.entry) then
+					doc.show_entry(username, ro.category, ro.entry, true)
+				end
 			-- Undefined object (error)
 			elseif minetest.registered_entities[le.name] == nil then
 				show_message(username, "error_unknown", le.name)
