@@ -28,10 +28,6 @@ local function overground(pos, fwidth, fdepth, fheight)
 		end
 	else
 		local count = 1
-		if not terrace then
-			count = count + 2
-		end
-
 		if terrace then
 			for y_adj = 1, pos.y + fheight + top_padding do
 				local pos1 = vector.offset(pos, -count, y_adj, -count)
