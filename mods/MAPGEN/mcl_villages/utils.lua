@@ -36,12 +36,7 @@ function mcl_villages.find_surface(pos, wait, quick)
 	end
 
 	-- check, in which direction to look for surface
-	local surface_node
-	if wait then
-		surface_node = mcl_vars.get_node(p6, true, wait_time)
-	else
-		surface_node = mcl_vars.get_node(p6)
-	end
+	local surface_node = mcl_vars.get_node(p6)
 	if surface_node.name=="air" or surface_node.name=="ignore" then
 		itter = -1
 	end
