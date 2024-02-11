@@ -1,25 +1,27 @@
---MCmobs v0.4
---maikerumine
---made for MC like Survival game
---License for code WTFPL and otherwise stated in readmes
+local S = minetest.get_translator("mobs_mc")
+local zombiefication_delay = 15
 
 local trading_items = {
-	{ itemstring = "mcl_core:obsidian", amount_min = 1, amount_max = 1 },
-	{ itemstring = "mcl_core:gravel", amount_min = 8, amount_max = 16 },
-	{ itemstring = "mcl_mobitems:leather", amount_min = 4, amount_max = 10 },
-	{ itemstring = "mcl_nether:soul_sand", amount_min = 4, amount_max = 16 },
-	{ itemstring = "mcl_nether:nether_brick", amount_min = 4, amount_max = 16 },
-	{ itemstring = "mcl_mobitems:string", amount_min = 3, amount_max = 9 },
-	{ itemstring = "mcl_nether:quartz", amount_min = 4, amount_max = 10 },
-	{ itemstring = "mcl_potions:water", amount_min = 1, amount_max = 1 },
-	{ itemstring = "mcl_core:iron_nugget", amount_min = 10, amount_max = 36 },
-	{ itemstring = "mcl_throwing:ender_pearl", amount_min = 2, amount_max = 6 },
-	{ itemstring = "mcl_potions:fire_resistance", amount_min = 1, amount_max = 1 },
-	{ itemstring = "mcl_potions:fire_resistance_splash", amount_min = 1, amount_max = 1 },
+	{ itemstring = "mcl_core:obsidian", weight = 40, amount_min = 1, amount_max = 1 },
+	{ itemstring = "mcl_core:gravel", weight = 40, amount_min = 8, amount_max = 16 },
+	{ itemstring = "mcl_mobitems:leather", weight = 40, amount_min = 4, amount_max = 10 },
+	{ itemstring = "mcl_nether:soul_sand", weight = 40, amount_min = 4, amount_max = 16 },
+	{ itemstring = "mcl_nether:nether_brick", weight = 40, amount_min = 4, amount_max = 16 },
+	{ itemstring = "mcl_mobitems:string", weight = 20, amount_min = 3, amount_max = 9 },
+	{ itemstring = "mcl_nether:quartz", weight = 20, amount_min = 4, amount_max = 10 },
+	{ itemstring = "mcl_potions:water", weight = 40, amount_min = 1, amount_max = 1 },
+	{ itemstring = "mcl_core:iron_nugget", weight = 10, amount_min = 10, amount_max = 36 },
+	{ itemstring = "mcl_throwing:ender_pearl", weight = 10, amount_min = 2, amount_max = 6 },
+	{ itemstring = "mcl_potions:fire_resistance", weight = 8, amount_min = 1, amount_max = 1 },
+	{ itemstring = "mcl_potions:fire_resistance_splash", weight = 8, amount_min = 1, amount_max = 1 },
+	{ itemstring = "mcl_books:book", weight = 5, func = function(stack, pr) mcl_enchanting.enchant(stack, "soul_speed", mcl_enchanting.random(pr, 1, mcl_enchanting.enchantments["soul_speed"].max_level)) end },
+	{ itemstring = "mcl_armor:boots_iron", weight = 8, func = function(stack, pr) mcl_enchanting.enchant(stack, "soul_speed", mcl_enchanting.random(pr, 1, mcl_enchanting.enchantments["soul_speed"].max_level)) end },
+	{ itemstring = "mcl_blackstone:blackstone", weight = 40, amount_min = 8, amount_max = 16 },
+	{ itemstring = "mcl_bows:arrow", weight = 40, amount_min = 6, amount_max = 12 },
+	{ itemstring = "mcl_core:crying_obsidian", weight = 40, amount_min = 1, amount_max = 1 },
+	{ itemstring = "mcl_fire:fire_charge", weight = 40, amount_min = 1, amount_max = 1 },
+	--{ itemstring = "FIXME:spectral_arrow", weight = 40, amount_min = 6, amount_max = 12 },
 }
-
-local S = minetest.get_translator("mobs_mc")
-local mod_bows = minetest.get_modpath("mcl_bows") ~= nil
 
 function mobs_mc.player_wears_gold(player)
 	for i=1, 6 do
@@ -38,9 +40,6 @@ local function check_light(pos, environmental_light, artificial_light, sky_light
 	return true, ""
 end
 
---###################
---################### piglin
---###################
 local piglin = {
 	description = S("Piglin"),
 	type = "monster",
@@ -97,61 +96,66 @@ local piglin = {
 	on_spawn = function(self)
 		self.weapon = self.base_texture[2]
 		self.gold_items = 0
+		self._attacked_by_player = false
 	end,
-	do_custom = function(self)
+	do_custom = function(self, dtime)
 		if mcl_worlds.pos_to_dimension(self.object:get_pos()) == "overworld" then
-			mcl_util.replace_mob(self.object, "mobs_mc:zombified_piglin")
-		elseif self.trading == true then
-			self.state = "trading"
-			self.object:set_bone_position("Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(20,-20,18))
-			self.object:set_bone_position("Head", vector.new(0,6.3,0), vector.new(-40,0,0))
+			self._zombie_timer = (self._zombie_timer or zombiefication_delay) - dtime
+			if self._zombie_timer < 0 then
+				mcl_util.replace_mob(self.object, "mobs_mc:zombified_piglin")
+				return
+			end
+		elseif self.trading then
+			self:set_state("stand")
+			mcl_util.set_bone_position(self.object, "Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(20,-20,18))
+			mcl_util.set_bone_position(self.object, "Head", vector.new(0,6.3,0), vector.new(-40,0,0))
 			self.base_texture[2] = "default_gold_ingot.png"
-			self.object:set_properties({textures = self.base_texture})
+			mcl_util.set_properties(self.object, {textures = self.base_texture})
 		else
-			self.object:set_bone_position("Wield_Item", vector.new(.5,4.5,-1.6), vector.new(90,0,20))
+			mcl_util.set_bone_position(self.object, "Wield_Item", vector.new(.5,4.5,-1.6), vector.new(90,0,20))
+			mcl_util.set_bone_position(self.object, "Head", vector.new(0,6.3,0), vector.new(0,0,0))
+			mcl_util.set_bone_position(self.object, "Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(0,0,0))
 			self.base_texture[2] = self.weapon
-			self.object:set_properties({textures = self.base_texture})
-			self.object:set_bone_position("Head", vector.new(0,6.3,0), vector.new(0,0,0))
-			self.object:set_bone_position("Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(0,0,0))
+			mcl_util.set_properties(self.object, {textures = self.base_texture})
+			self._zombie_timer = nil
 		end
 
-		if self.state ~= "attack" then
-			self._attacked_by_player = false
-		elseif self.attack:is_player() and mobs_mc.player_wears_gold(self.attack) then
-			if self._attacked_by_player == false then
-				self.state = "stand"
+		if self.attack and self.attack:is_player() and mobs_mc.player_wears_gold(self.attack) then
+			if not self._attacked_by_player then
+				self:set_state("stand")
 			end
 		end
 	end,
 	on_pick_up  = function(self, itementity)
-		local item = itementity.itemstring:split(" ")[1]
 		local it = ItemStack(itementity.itemstring)
+		local item = it:get_name()
 		if item == "mcl_core:gold_ingot" and self.state ~= "attack" and self.gold_items and self.gold_items < 3 then
 			it:take_item(1)
-			self.state = "stand"
 			self.object:set_animation({x=0,y=79})
 			self.trading = true
 			self.gold_items = self.gold_items + 1
-			self.object:set_bone_position("Wield_Item", vector.new(-1.5,4.9,1.8), vector.new(135,0,90))
-			minetest.after(5, function()
-				self.gold_items = self.gold_items - 1
-				if self.gold_items == 0 then
-					self.trading = false
-					self.state = "stand"
+			mcl_util.set_bone_position(self.object, "Wield_Item", vector.new(-1.5,4.9,1.8), vector.new(135,0,90))
+			for _,v in pairs(minetest.get_objects_inside_radius(self.object:get_pos(), 7)) do
+				if v:is_player() then self:look_at(v:get_pos()) end
+			end
+			self:set_state("stand")
+			minetest.after(5, function(self)
+				local pos
+				if self then
+					self.gold_items = self.gold_items - 1
+					if self.gold_items == 0 then
+						self.trading = false
+						self:set_state("stand")
+					end
+					pos = self and self.object and self.object:get_pos()
 				end
-				local c_pos = self.object:get_pos()
-				if c_pos then
-					self.what_traded = trading_items[math.random(#trading_items)]
-					for x = 1, math.random(self.what_traded.amount_min, self.what_traded.amount_max) do
-						local p = c_pos
-						local nn=minetest.find_nodes_in_area_under_air(vector.offset(c_pos,-1,-1,-1),vector.offset(c_pos,1,1,1),{"group:solid"})
-						if nn and #nn > 0 then
-							p = vector.offset(nn[math.random(#nn)],0,1,0)
-						end
-						minetest.add_item(p, self.what_traded.itemstring)
+				if pos then
+					local its = mcl_loot.get_loot({ stacks_min = 1, stacks_max = 1,items = trading_items }, PseudoRandom(minetest.get_gametime()))
+					if its and #its > 0 then
+						mcl_util.drop_item_stack(pos, its[1])
 					end
 				end
-			end)
+			end, self)
 		end
 		return it
 	end,
@@ -163,14 +167,12 @@ local piglin = {
 	attack_type = "dogshoot",
 	arrow = "mcl_bows:arrow_entity",
 	shoot_arrow = function(self, pos, dir)
-		if mod_bows then
-			if self.attack then
-				self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())))
-			end
-			-- 2-4 damage per arrow
-			local dmg = math.max(4, math.random(2, 8))
-			mcl_bows.shoot_arrow("mcl_bows:arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
+		if self.attack then
+			self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())))
 		end
+		-- 2-4 damage per arrow
+		local dmg = math.max(4, math.random(2, 8))
+		mcl_bows.shoot_arrow("mcl_bows:arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
 	end,
 	shoot_interval = 2,
 	shoot_offset = 1.5,
@@ -184,14 +186,13 @@ local piglin = {
 
 mcl_mobs.register_mob("mobs_mc:piglin", piglin)
 
-
 mcl_mobs.register_mob("mobs_mc:sword_piglin",table.merge(piglin,{
 	mesh = "extra_mobs_sword_piglin.b3d",
 	textures = {"extra_mobs_piglin.png", "default_tool_goldsword.png"},
 	on_spawn = function(self)
 		self.gold_items = 0
 		self.weapon = self.base_texture[2]
-		self.object:set_bone_position("Wield_Item", vector.new(0,3.9,1.3), vector.new(90,0,0))
+		mcl_util.set_bone_position(self.object, "Wield_Item", vector.new(0,3.9,1.3), vector.new(90,0,0))
 	end,
 	drops = {
 		{name = "mcl_tools:sword_gold",
@@ -277,7 +278,6 @@ mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
 	},
 }))
 
-
 mcl_mobs.register_mob("mobs_mc:piglin_brute",table.merge(piglin,{
 	description = S("Piglin Brute"),
 	xp_min = 20,
@@ -318,8 +318,6 @@ mcl_mobs.register_mob("mobs_mc:piglin_brute",table.merge(piglin,{
 		max = 1,},
 	}
 }))
-
-
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:piglin",
@@ -366,9 +364,6 @@ mcl_mobs.spawn_setup({
 	chance = 1000,
 })
 
-
-
--- spawn eggs
 mcl_mobs.register_egg("mobs_mc:piglin", S("Piglin"), "#7b4a17","#d5c381", 0)
 mcl_mobs.register_egg("mobs_mc:piglin_brute", S("Piglin Brute"), "#562b0c","#ddc89d", 0)
 mcl_mobs.register_egg("mobs_mc:zombified_piglin", S("Zombie Piglin"), "#ea9393", "#4c7129", 0)

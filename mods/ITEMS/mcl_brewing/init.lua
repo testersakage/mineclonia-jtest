@@ -29,7 +29,7 @@ local function active_brewing_formspec(fuel_percent, brew_percent)
 
 	"listring[context;stand]"..
 	"listring[current_player;main]"..
-	"listring[context:sorter]"..
+	"listring[context;sorter]"..
 	"listring[current_player;main]"..
 	"listring[context;fuel]"..
 	"listring[current_player;main]"..
@@ -265,7 +265,11 @@ local function sort_stack(stack)
 	if minetest.get_item_group(stack:get_name(), "brewing_ingredient" ) > 0 then
 		return "input"
 	end
-	return "stand"
+	for _, g in pairs({"potion", "empty_bottle", "water_bottle"}) do
+		if minetest.get_item_group(stack:get_name(), g ) > 0 then
+			return "stand"
+		end
+	end
 end
 
 local function allow_put(pos, listname, index, stack, player)
@@ -273,9 +277,16 @@ local function allow_put(pos, listname, index, stack, player)
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
 		return 0
+	end
+	local trg = sort_stack(stack, pos)
+	if listname == "stand" then
+		if trg ~= "stand" then
+			return 0
+		end
+	elseif listname == "fuel" then
+		if trg ~= "fuel" then return 0 end
 	elseif listname == "sorter" then
 		local inv = minetest.get_meta(pos):get_inventory()
-		local trg = sort_stack(stack, pos)
 		if trg then
 			local stack1 = ItemStack(stack):take_item()
 			if inv:room_for_item(trg, stack) then
@@ -313,6 +324,11 @@ end
 
 local function allow_move(pos, from_list, from_index, to_list, to_index, count, player)
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
+	local inv = minetest.get_meta(pos):get_inventory()
+	local stack = inv:get_stack(from_list, from_index)
+	local trg = sort_stack(stack, pos)
+	if trg == to_list then return count end
+	return 0
 end
 
 local function allow_take(pos, listname, index, stack, player)

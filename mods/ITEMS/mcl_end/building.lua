@@ -181,21 +181,20 @@ minetest.register_node("mcl_end:dragon_egg", {
 	end,
 })
 
+mcl_stairs.register_stair_and_slab("end_bricks", {
+	baseitem = "mcl_end:end_bricks",
+	description_stair = S("End Stone Brick Stairs"),
+	description_slab = S("End Stone Brick Slab"),
+	overrides = {_mcl_stonecutter_recipes = {"mcl_end:end_bricks","mcl_end:end_stone"}},{_mcl_stonecutter_recipes = {"mcl_end:end_bricks","mcl_end:end_stone"}}
+})
 
-mcl_stairs.register_stair_and_slab_simple("end_bricks", "mcl_end:end_bricks", S("End Stone Brick Stairs"), S("End Stone Brick Slab"), S("Double End Stone Brick Slab"),nil,{_mcl_stonecutter_recipes = {"mcl_end:end_bricks","mcl_end:end_stone"}},{_mcl_stonecutter_recipes = {"mcl_end:end_bricks","mcl_end:end_stone"}})
-
-mcl_stairs.register_stair("purpur_block", "group:purpur_block",
-		{pickaxey=1, material_stone=1},
-		{"mcl_end_purpur_block.png"},
-		S("Purpur Stairs"),
-		mcl_sounds.node_sound_stone_defaults(),	6, 1.5,
-		nil,{_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}})
-mcl_stairs.register_slab("purpur_block", "group:purpur_block",
-		{pickaxey=1, material_stone=1},
-		{"mcl_end_purpur_block.png"},
-		S("Purpur Slab"),
-		mcl_sounds.node_sound_stone_defaults(),	6, 2,
-		S("Double Purpur Slab"),{_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}})
+mcl_stairs.register_stair_and_slab("purpur_block", {
+	baseitem = "mcl_end:purpur_block",
+	description_stair = S("Purpur Stairs"),
+	description_slab = S("Purpur Slab"),
+	recipeitem = "group:purpur_block",
+	overrides = {_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}}
+})
 
 -- Crafting recipes
 minetest.register_craft({

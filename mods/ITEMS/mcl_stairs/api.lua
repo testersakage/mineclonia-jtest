@@ -117,33 +117,10 @@ local function get_stairdef_groups(nodedef)
 	return groups
 end
 
--- Register stairs.
--- Node will be called mcl_stairs:stair_<subname>
---
--- Can be called with the second argument being a table with the following
--- keys:
---
---   recipeitem, groups, tiles, description, sounds, blast_resistance,
---   hardness, corner_stair_texture_override, overrides
---
--- Or with separate arguments in that order (for backwards compatibility).
-function mcl_stairs.register_stair(subname, ...)
-	local stairdef = select(1, ...)
-	if type(stairdef) ~= "table" then
-		stairdef = {
-			recipeitem=select(1, ...),
-			groups=select(2, ...),
-			tiles=select(3, ...),
-			description=select(4, ...),
-			sounds=select(5, ...),
-			blast_resistance=select(6, ...),
-			hardness=select(7, ...),
-			corner_stair_texture_override=select(8, ...),
-			overrides=select(9, ...),
-		}
-	end
-
-	if stairdef.recipeitem then
+-- Register stair function used internally for new and old API (not exposed
+-- externally).
+local function register_stair(subname, stairdef)
+	if stairdef.recipeitem and minetest.registered_items[stairdef.recipeitem] then
 		if not stairdef.tiles then
 			stairdef.tiles = minetest.registered_items[stairdef.recipeitem].tiles
 		end
@@ -236,9 +213,9 @@ function mcl_stairs.register_stair(subname, ...)
 		_mcl_blast_resistance = stairdef.blast_resistance,
 		_mcl_hardness = stairdef.hardness,
 		placement_prevented = placement_prevented,
-	},stairdef.overrides or {}))
+	}, stairdef.overrides or {}))
 
-	if stairdef.recipeitem and stairdef.register_craft ~= false then
+	if stairdef.recipeitem and stairdef.recipeitem ~= "" then
 		minetest.register_craft({
 			output = "mcl_stairs:stair_" .. subname .. " 4",
 			recipe = {
@@ -263,37 +240,14 @@ function mcl_stairs.register_stair(subname, ...)
 end
 
 
--- Register slabs.
--- Node will be called mcl_stairs:slab_<subname>
---
--- Can be called with the second argument being a table with the following
--- keys:
---
---   recipeitem, groups, tiles, description, sounds, blast_resistance,
---   hardness, double_description, overrides
---
--- Or with separate arguments in that order (for backwards compatibility).
-function mcl_stairs.register_slab(subname, ...)
-	local stairdef = select(1, ...)
-	if type(stairdef) ~= "table" then
-		stairdef = {
-			recipeitem=select(1, ...),
-			groups=select(2, ...),
-			tiles=select(3, ...),
-			description=select(4, ...),
-			sounds=select(5, ...),
-			blast_resistance=select(6, ...),
-			hardness=select(7, ...),
-			double_description=select(8, ...),
-			overrides=select(9, ...),
-		}
-	end
-
+-- Register slab function used internally for new and old API (not exposed
+-- externally).
+function register_slab(subname, stairdef)
 	local lower_slab = "mcl_stairs:slab_"..subname
 	local upper_slab = lower_slab.."_top"
 	local double_slab = lower_slab.."_double"
 
-	if stairdef.recipeitem then
+	if stairdef.recipeitem and minetest.registered_items[stairdef.recipeitem] then
 		if not stairdef.tiles then
 			stairdef.tiles = minetest.registered_items[stairdef.recipeitem].tiles
 		end
@@ -376,7 +330,7 @@ function mcl_stairs.register_slab(subname, ...)
 			end
 			return false
 		end,
-	},stairdef.overrides or {})
+	}, stairdef.overrides or {})
 
 	minetest.register_node(":"..lower_slab, table.merge(nodedef,{
 		groups = table.merge(stairdef.groups,{slab = 1}),
@@ -434,7 +388,7 @@ function mcl_stairs.register_slab(subname, ...)
 		_mcl_blast_resistance = stairdef.blast_resistance,
 	})
 
-	if stairdef.recipeitem and stairdef.register_craft ~= false then
+	if stairdef.recipeitem and stairdef.recipeitem ~= "" then
 		minetest.register_craft({
 			output = lower_slab .. " 6",
 			recipe = {
@@ -450,61 +404,109 @@ function mcl_stairs.register_slab(subname, ...)
 	end
 end
 
+function mcl_stairs.register_stair(subname, ...)
+	if type(select(1, ...)) == "table" then
+		local stairdef = select(1, ...)
+		local ndef = minetest.registered_nodes[stairdef.baseitem]
 
--- Stair/slab registration function.
--- Nodes will be called mcl_stairs:{stair,slab}_<subname>
---
--- Can be called with the second argument being a table with the following
--- keys:
---
---   recipeitem, groups, tiles, stair_description, slab_description, sounds,
---   blast_resistance, hardness, double_description,
---   corner_stair_texture_override, stair_overrides, slab_overrides
---
--- Or with separate arguments in that order (for backwards compatibility).
-function mcl_stairs.register_stair_and_slab(subname, ...)
-	local stairdef = select(1, ...)
-	if type(stairdef) ~= "table" then
-		stairdef = {
-			recipeitem=select(1, ...),
-			groups=select(2, ...),
-			tiles=select(3, ...),
-			stair_description=select(4, ...),
-			slab_description=select(5, ...),
-			sounds=select(6, ...),
-			blast_resistance=select(7, ...),
-			hardness=select(8, ...),
-			double_description=select(9, ...),
-			corner_stair_texture_override=select(10, ...),
-			stair_overrides=select(11, ...),
-			slab_overrides=select(12, ...),
-		}
-	end
-
-	if stairdef.stair_description then
-		mcl_stairs.register_stair(subname, table.merge(stairdef, {
-			description=stairdef.stair_description,
-			overrides=stairdef.stair_overrides,
-		}))
-	end
-	if stairdef.slab_description then
-		mcl_stairs.register_slab(subname, table.merge(stairdef, {
-			description=stairdef.slab_description,
-			overrides=stairdef.slab_overrides,
-		}))
+		register_stair(subname, {
+			recipeitem = stairdef.recipeitem or stairdef.baseitem,
+			groups = table.merge(ndef.groups or {}, stairdef.groups or {}),
+			tiles = stairdef.tiles or ndef.tiles,
+			description = stairdef.description,
+			sounds = ndef.sounds,
+			blast_resistance = ndef.blast_resistance,
+			hardness = ndef.hardness,
+			overrides = stairdef.overrides,
+		})
+	else
+		register_stair(subname, {
+			recipeitem = select(1, ...),
+			groups = select(2, ...),
+			tiles = select(3, ...),
+			description = select(4, ...),
+			sounds = select(5, ...),
+			blast_resistance = select(6, ...),
+			hardness = select(7, ...),
+			corner_stair_texture_override = select(8, ...),
+			overrides = select(9, ...),
+		})
 	end
 end
 
--- Very simple registration function
--- Makes stair and slab out of a source node
-function mcl_stairs.register_stair_and_slab_simple(subname, sourcenode, stair_description, slab_description, double_description, corner_stair_texture_override, stair_overrides, slab_overrides)
-	mcl_stairs.register_stair_and_slab(subname, {
-		recipeitem=sourcenode,
-		stair_description=stair_description,
-		slab_description=slab_description,
-		double_description=double_description,
-		corner_stair_texture_override=corner_stair_texture_override,
-		stair_overrides=stair_overrides,
-		slab_overrides=slab_overrides,
+function mcl_stairs.register_slab(subname, ...)
+	if type(select(1, ...)) == "table" then
+		local stairdef = select(1, ...)
+		local ndef = minetest.registered_nodes[stairdef.baseitem]
+
+		register_slab(subname, {
+			recipeitem = stairdef.recipeitem or stairdef.baseitem,
+			groups = table.merge(ndef.groups or {}, stairdef.groups or {}),
+			tiles = stairdef.tiles or ndef.tiles,
+			description = stairdef.description,
+			double_description = S("Double @1", stairdef.description),
+			sounds = ndef.sounds,
+			blast_resistance = ndef.blast_resistance,
+			hardness = ndef.hardness,
+			overrides = stairdef.overrides,
+		})
+	else
+		register_slab(subname, {
+			recipeitem = select(1, ...),
+			groups = select(2, ...),
+			tiles = select(3, ...),
+			description = select(4, ...),
+			sounds = select(5, ...),
+			blast_resistance = select(6, ...),
+			hardness = select(7, ...),
+			double_description = select(8, ...),
+			overrides = select(9, ...),
+		})
+	end
+end
+
+
+-- Stair/slab registration function.
+function mcl_stairs.register_stair_and_slab(subname, ...)
+	if type(select(1, ...)) == "table" then
+		local stairdef = select(1, ...)
+		mcl_stairs.register_stair(subname, table.merge(stairdef, { description = stairdef.description_stair }))
+		mcl_stairs.register_slab(subname, table.merge(stairdef, { description = stairdef.description_slab }))
+		return
+	end
+
+	register_stair(subname, {
+		recipeitem = select(1, ...),
+		groups = select(2, ...),
+		tiles = select(3, ...),
+		description = select(4, ...),
+		sounds = select(6, ...),
+		blast_resistance = select(7, ...),
+		hardness = select(8, ...),
+		corner_stair_texture_override = select(10, ...),
 	})
+	register_slab(subname, {
+		recipeitem = select(1, ...),
+		groups = select(2, ...),
+		tiles = select(3, ...),
+		description = select(5, ...),
+		sounds = select(6, ...),
+		blast_resistance = select(7, ...),
+		hardness = select(8, ...),
+		double_description = select(9, ...),
+	})
+end
+
+-- Very simple registration function.
+function mcl_stairs.register_stair_and_slab_simple(subname, sourcenode, desc_stair, desc_slab, desc_double_slab, corner_stair_texture_override)
+	local def = minetest.registered_nodes[sourcenode]
+	local groups = {}
+	-- Only allow a strict set of groups to be added to stairs and slabs for more predictable results
+	local allowed_groups = { "dig_immediate", "handy", "pickaxey", "axey", "shovely", "shearsy", "shearsy_wool", "swordy", "swordy_wool" }
+	for a=1, #allowed_groups do
+		if def.groups[allowed_groups[a]] then
+			groups[allowed_groups[a]] = def.groups[allowed_groups[a]]
+		end
+	end
+	mcl_stairs.register_stair_and_slab(subname, sourcenode, groups, def.tiles, desc_stair, desc_slab, def.sounds, def._mcl_blast_resistance, def._mcl_hardness, desc_double_slab, corner_stair_texture_override)
 end

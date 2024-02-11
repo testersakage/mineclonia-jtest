@@ -117,7 +117,7 @@ minetest.register_node("mcl_blackstone:blackstone_chiseled_polished", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone","mcl_blackstone:blackstone_polished"},
+	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
 })
 minetest.register_node("mcl_blackstone:blackstone_brick_polished", {
 	description = S("Polished Blackstone Bricks"),
@@ -127,7 +127,7 @@ minetest.register_node("mcl_blackstone:blackstone_brick_polished", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone","mcl_blackstone:blackstone_polished"},
+	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
 })
 minetest.register_node("mcl_blackstone:quartz_brick", {
 	description = S("Quartz Bricks"),
@@ -180,7 +180,7 @@ minetest.register_node("mcl_blackstone:soul_fire", {
 	end,
 	on_construct=function(pos)
 		local under = minetest.get_node(vector.offset(pos,0,-1,0)).name
-		if minetest.get_item_group(under,"soul_block") > 0 then
+		if minetest.get_item_group(under, "soul_block") > 0 then
 			minetest.swap_node(pos, {name = "air"})
 		end
 	end
@@ -189,16 +189,31 @@ minetest.register_node("mcl_blackstone:soul_fire", {
 local old_onconstruct=minetest.registered_nodes["mcl_fire:fire"].on_construct
 minetest.registered_nodes["mcl_fire:fire"].on_construct=function(pos)
 	local under = minetest.get_node(vector.offset(pos,0,-1,0)).name
-	if minetest.get_item_group(under,"soul_block") > 0 then
+	if minetest.get_item_group(under, "soul_block") > 0 then
 		minetest.swap_node(pos, {name = "mcl_blackstone:soul_fire"})
 	end
 	old_onconstruct(pos)
 end
 
 --slabs/stairs
-mcl_stairs.register_stair_and_slab_simple("blackstone", "mcl_blackstone:blackstone", S("Blackstone Stair"), S("Blackstone Slab"), S("Double Blackstone Slab"),nil,{_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}},{_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}})
-mcl_stairs.register_stair_and_slab_simple("blackstone_polished", "mcl_blackstone:blackstone_polished", S("Polished Blackstone Stair"), S("Polished Blackstone Slab"), S("Polished Double Blackstone Slab"),nil,{_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone","mcl_blackstone:blackstone_polished"}},{_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone","mcl_blackstone:blackstone_polished"}})
-mcl_stairs.register_stair_and_slab_simple("blackstone_brick_polished", "mcl_blackstone:blackstone_brick_polished", S("Polished Blackstone Brick Stair"), S("Polished Blackstone Brick Slab"), S("Double Polished Blackstone Brick Slab"),nil,{_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone","mcl_blackstone:blackstone_polished"}},{_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone","mcl_blackstone:blackstone_polished"}})
+mcl_stairs.register_stair_and_slab("blackstone", {
+	baseitem = "mcl_blackstone:blackstone",
+	description_stair = S("Blackstone Stairs"),
+	description_slab = S("Blackstone Slab"),
+	overrides = {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}}, {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}}
+})
+mcl_stairs.register_stair_and_slab("blackstone_polished", {
+	baseitem = "mcl_blackstone:blackstone_polished",
+	description_stair = S("Polished Blackstone Stairs"),
+	description_slab = S("Polished Blackstone Slab"),
+	overrides = {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}, {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}
+})
+mcl_stairs.register_stair_and_slab("blackstone_brick_polished", {
+	baseitem = "mcl_blackstone:blackstone_brick_polished",
+	description_stair = S("Blackstone Brick Stairs"),
+	description_slab = S("Blackstone Brick Slab"),
+	overrides = {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}, {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}
+})
 minetest.register_alias("mcl_stairs:slab_blackstone_chiseled_polished_top", "mcl_stairs:slab_blackstone_polished_top")
 minetest.register_alias("mcl_stairs:slab_blackstone_chiseled_polished", "mcl_stairs:slab_blackstone_polished")
 minetest.register_alias("mcl_stairs:slab_blackstone_chiseled_polished_double", "mcl_stairs:slab_blackstone_polished_double")
@@ -207,7 +222,7 @@ minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished_inner", "
 minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished_outer", "mcl_stairs:stair_blackstone_polished_outer")
 
 --Wall
-mcl_walls.register_wall_def("mcl_blackstone:wall",{
+mcl_walls.register_wall_def("mcl_blackstone:wall", {
 	description = S("Blackstone Wall"),
 	source = "mcl_blackstone:blackstone",
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"},
@@ -263,15 +278,15 @@ minetest.register_abm({
 minetest.register_craft({
 	output = "mcl_blackstone:blackstone_polished 4",
 	recipe = {
-		{"mcl_blackstone:blackstone","mcl_blackstone:blackstone"},
-		{"mcl_blackstone:blackstone","mcl_blackstone:blackstone"},
+		{"mcl_blackstone:blackstone", "mcl_blackstone:blackstone"},
+		{"mcl_blackstone:blackstone", "mcl_blackstone:blackstone"},
 	}
 })
 minetest.register_craft({
 	output = "mcl_blackstone:basalt_polished 4",
 	recipe = {
-		{"mcl_blackstone:basalt","mcl_blackstone:basalt"},
-		{"mcl_blackstone:basalt","mcl_blackstone:basalt"},
+		{"mcl_blackstone:basalt", "mcl_blackstone:basalt"},
+		{"mcl_blackstone:basalt", "mcl_blackstone:basalt"},
 	}
 })
 minetest.register_craft({
@@ -284,15 +299,15 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "mcl_blackstone:blackstone_brick_polished 4",
 	recipe = {
-		{"mcl_blackstone:blackstone_polished","mcl_blackstone:blackstone_polished"},
-		{"mcl_blackstone:blackstone_polished","mcl_blackstone:blackstone_polished"},
+		{"mcl_blackstone:blackstone_polished", "mcl_blackstone:blackstone_polished"},
+		{"mcl_blackstone:blackstone_polished", "mcl_blackstone:blackstone_polished"},
 	}
 })
 minetest.register_craft({
 	output = "mcl_blackstone:quartz_brick 4",
 	recipe = {
-		{"mcl_nether:quartz_block","mcl_nether:quartz_block"},
-		{"mcl_nether:quartz_block","mcl_nether:quartz_block"},
+		{"mcl_nether:quartz_block", "mcl_nether:quartz_block"},
+		{"mcl_nether:quartz_block", "mcl_nether:quartz_block"},
 	}
 })
 minetest.register_craft({
