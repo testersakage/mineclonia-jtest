@@ -102,8 +102,8 @@ local function place_path(path, pr, stair, slab)
 		local is_stair
 
 		-- TODO stairs should always face the lower node so they are easy to walk up
-
-		if i > 1 and pos.y < path[i - 1].y then
+		if i > 1 then
+		if pos.y < path[i - 1].y then
 			-- stairs down
 			local n2 = minetest.get_node(vector.offset(path[i - 1], 0, -1, 0))
 			is_stair = minetest.get_item_group(n2.name, "stair") ~= 0
@@ -112,7 +112,7 @@ local function place_path(path, pr, stair, slab)
 				local param2 = minetest.dir_to_facedir(vector.subtract(path[i - 1], pos))
 				minetest.add_node(pos, { name = stair, param2 = param2 })
 			end
-		elseif i > 1 and pos.y > path[i - 1].y then
+		elseif pos.y > path[i - 1].y then
 			-- stairs up
 			is_stair = minetest.get_item_group(n.name, "stair") ~= 0
 			if not is_stair then
@@ -120,6 +120,7 @@ local function place_path(path, pr, stair, slab)
 				local param2 = minetest.dir_to_facedir(vector.subtract(pos, path[i - 1]))
 				minetest.swap_node(under_pos, { name = stair, param2 = param2 })
 			end
+		end
 		end
 
 		-- flat
