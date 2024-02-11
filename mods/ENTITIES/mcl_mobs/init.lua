@@ -318,10 +318,12 @@ function mcl_mobs.register_mob(name, def)
 	if minetest.get_modpath("doc_identifier") ~= nil then
 		doc.sub.identifier.register_object(name, "basics", "mobs")
 
-		doc.add_entry("mobs", name, {
-			name = def.description or name,
-			data = final_def,
-		})
+		if def.unused ~= true then
+			doc.add_entry("mobs", name, {
+				name = def.description or name,
+				data = final_def,
+			})
+		end
 	end
 end
 

@@ -1152,6 +1152,16 @@ doc.add_category("mobs", {
 				datastring = newline2(datastring)
 			end
 
+			if data.jump then
+				datastring = datastring .. S("Can Jump")
+				datastring = newline2(datastring)
+			end
+
+			if data.fly then
+				datastring = datastring .. S("Can Fly")
+				datastring = newline2(datastring)
+			end
+
 			if data.drops then
 				local count = 0
 				for _,item in ipairs(data.drops) do
@@ -1163,22 +1173,13 @@ doc.add_category("mobs", {
 					datastring = newline(datastring)
 
 					for _,item in ipairs(data.drops) do
-						datastring = datastring .. item.name
+						local itemDescription = ItemStack(item.name):get_short_description()
+						datastring = datastring .. itemDescription
 						datastring = newline(datastring)
 					end
 
 					datastring = newline2(datastring)
 				end
-			end
-
-			if data.jump then
-				datastring = datastring .. S("Can Jump")
-				datastring = newline2(datastring)
-			end
-
-			if data.fly then
-				datastring = datastring .. S("Can Fly")
-				datastring = newline2(datastring)
 			end
 
 			if data.follow then
@@ -1191,7 +1192,8 @@ doc.add_category("mobs", {
 				else
 					for i=1, #data.follow do
 						local itemstring = data.follow[i]
-						datastring = datastring .. itemstring
+						local itemDescription = ItemStack(itemstring):get_short_description()
+						datastring = datastring .. itemDescription
 						datastring = newline(datastring)
 					end
 				end

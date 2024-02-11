@@ -144,6 +144,7 @@ end
 
 -- Tamed wolf (aka “dog”)
 local dog = table.copy(wolf)
+dog.description = S("Dog")
 dog.can_despawn = false
 dog.passive = true
 dog.hp_min = 20
