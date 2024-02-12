@@ -1133,7 +1133,8 @@ doc.add_category("craftitems", {
 doc.add_category("mobs", {
 	name = S("Mobs"),
 	description = S("different mobs"),
-	build_formspec = function(data, playername)
+	build_formspec = function(d, playername)
+		local data = mcl_mobs.registered_mobs[d.name]
 		if data then
 			local datastring = ""
 
