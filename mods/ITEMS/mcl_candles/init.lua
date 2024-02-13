@@ -15,12 +15,18 @@ local tpl_candle = {
 	paramtype = "light",
 	paramtype2 = "color",
 	palette = "mcl_dyes_palette.png",
-	itemimg = "mcl_candles_item.png",
+	inventory_image = "mcl_candles_item.png",
+	wield_image = "mcl_candles_item.png",
 	tiles = { "mcl_candles_candle.png" },
 	node_placement_prediction = "",
 	sounds = mcl_sounds.node_sound_defaults(),
 	sunlight_propagates = true,
 	use_texture_alpha = "clip",
+	_on_dye_place = function(pos,color)
+		local node = minetest.get_node(pos)
+		node.param2 = mcl_dyes.colors[color].palette_index
+		minetest.swap_node(pos, node)
+	end,
 	_on_ignite = function(player, pointed_thing)
 		local n = minetest.get_node(pointed_thing.under)
 		local g = minetest.get_item_group(n.name, "candles")
