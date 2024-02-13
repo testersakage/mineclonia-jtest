@@ -17,6 +17,7 @@ local tpl_candle = {
 	palette = "mcl_dyes_palette.png",
 	itemimg = "mcl_candles_item.png",
 	tiles = { "mcl_candles_candle.png" },
+	node_placement_prediction = "",
 	sounds = mcl_sounds.node_sound_defaults(),
 	sunlight_propagates = true,
 	use_texture_alpha = "clip",
