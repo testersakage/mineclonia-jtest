@@ -246,168 +246,13 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 
 	local passenger_attach_position = vector.new(0, -1.75, 0)
 
-	function cart:on_step(dtime)
-		hopper_take_item(self, dtime)
-
-		local ctrl, player = nil, nil
-		if self._driver then
-			player = minetest.get_player_by_name(self._driver)
-			if player then
-				ctrl = player:get_player_control()
-				-- player detach
-				if ctrl.sneak then
-					detach_driver(self)
-					return
-				end
-			end
-		end
-
+	local function do_movement_step( self )
 		local vel = self.object:get_velocity()
-		local update = {}
-		if self._last_float_check == nil then
-			self._last_float_check = 0
-		else
-			self._last_float_check = self._last_float_check + dtime
-		end
-
 		local pos, rou_pos, node = self.object:get_pos()
-		local r = 0.6
-		for _, node_pos in pairs({{r, 0}, {0, r}, {-r, 0}, {0, -r}}) do
-			if minetest.get_node(vector.offset(pos, node_pos[1], 0, node_pos[2])).name == "mcl_core:cactus" then
-				detach_driver(self)
-				for d = 1, #drop do
-					minetest.add_item(pos, drop[d])
-				end
-				self.object:remove()
-				return
-			end
-		end
+		local update = {}
 
-		-- Grab mob
-		if math.random(1,20) > 15 and not self._passenger then
-			if self.name == "mcl_minecarts:minecart" then
-				local mobsnear = minetest.get_objects_inside_radius(self.object:get_pos(), 1.3)
-				for n=1, #mobsnear do
-					local mob = mobsnear[n]
-					if mob then
-						local entity = mob:get_luaentity()
-						if entity and entity.is_mob then
-							self._passenger = entity
-							mob:set_attach(self.object, "", passenger_attach_position, vector.zero())
-							break
-						end
-					end
-				end
-			end
-		elseif self._passenger then
-			local passenger_pos = self._passenger.object:get_pos()
-			if not passenger_pos then
-				self._passenger = nil
-			end
-		end
-
-		-- Drop minecart if it isn't on a rail anymore
-		if self._last_float_check >= mcl_minecarts.check_float_time then
-			pos = self.object:get_pos()
-			rou_pos = vector.round(pos)
-			node = minetest.get_node(rou_pos)
-			local g = minetest.get_item_group(node.name, "connect_to_raillike")
-			if g ~= self._railtype and self._railtype then
-				-- Detach driver
-				if player then
-					if self._old_pos then
-						self.object:set_pos(self._old_pos)
-					end
-					mcl_player.players[player].attached = nil
-					player:set_detach()
-					player:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
-				end
-
-				-- Explode if already ignited
-				if self._boomtimer then
-					mcl_explosions.explode(pos, 4, {}, self.object)
-					self.object:remove()
-					return
-				end
-
-				-- Do not drop minecart. It goes off the rails too frequently, and anyone using them for farms won't
-				-- notice and lose their iron and not bother. Not cool until fixed.
-			end
-			self._last_float_check = 0
-		end
-
-		-- Update furnace stuff
-		if self._fueltime and self._fueltime > 0 then
-			self._fueltime = self._fueltime - dtime
-			if self._fueltime <= 0 then
-				self.object:set_properties({textures =
-					{
-					"default_furnace_top.png",
-					"default_furnace_top.png",
-					"default_furnace_front.png",
-					"default_furnace_side.png",
-					"default_furnace_side.png",
-					"default_furnace_side.png",
-					"mcl_minecarts_minecart.png",
-				}})
-				self._fueltime = 0
-			end
-		end
 		local has_fuel = self._fueltime and self._fueltime > 0
-
-		-- Update TNT stuff
-		if self._boomtimer then
-			-- Explode
-			self._boomtimer = self._boomtimer - dtime
-			local pos = self.object:get_pos()
-			if self._boomtimer <= 0 then
-				mcl_explosions.explode(pos, 4, {}, self.object)
-				self.object:remove()
-				return
-			else
-				tnt.smoke_step(pos)
-			end
-		end
-		if self._blinktimer then
-			self._blinktimer = self._blinktimer - dtime
-			if self._blinktimer <= 0 then
-				self._blink = not self._blink
-				if self._blink then
-					self.object:set_properties({textures =
-					{
-					"default_tnt_top.png",
-					"default_tnt_bottom.png",
-					"default_tnt_side.png",
-					"default_tnt_side.png",
-					"default_tnt_side.png",
-					"default_tnt_side.png",
-					"mcl_minecarts_minecart.png",
-					}})
-				else
-					self.object:set_properties({textures =
-					{
-					"mcl_tnt_blink.png",
-					"mcl_tnt_blink.png",
-					"mcl_tnt_blink.png",
-					"mcl_tnt_blink.png",
-					"mcl_tnt_blink.png",
-					"mcl_tnt_blink.png",
-					"mcl_minecarts_minecart.png",
-					}})
-				end
-				self._blinktimer = tnt.BLINKTIMER
-			end
-		end
-
-		if self._punched then
-			vel = vector.add(vel, self._velocity)
-			self.object:set_velocity(vel)
-			self._old_dir.y = 0
-		elseif vector.equals(vel, {x=0, y=0, z=0}) and (not has_fuel) then
-			return
-		end
-
-		local dir, last_switch, restart_pos = nil, nil, nil
+		local dir, last_switch = nil, nil
 		if not pos then
 			pos = self.object:get_pos()
 		end
@@ -434,9 +279,6 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 				minetest.swap_node(rou_pos, newnode)
 				mesecon.receptor_on(rou_pos)
 			end
-			if node.name == "mcl_minecarts:golden_rail_on" then
-				restart_pos = rou_pos
-			end
 			if node_old.name == "mcl_minecarts:detector_rail_on" then
 				local newnode = {name="mcl_minecarts:detector_rail", param2 = node_old.param2}
 				minetest.swap_node(rou_old, newnode)
@@ -458,13 +300,17 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			return
 		end
 		self._old_vel = vector.new(vel)
-
+		local ctrl
+		if self._driver and self._driver.is_player and self._driver:is_player() then
+			ctrl = self._driver:get_player_control()
+		end
 		if self._old_pos then
 			local diff = vector.subtract(self._old_pos, pos)
 			for _,v in ipairs({"x","y","z"}) do
 				if math.abs(diff[v]) > 1.1 then
 					local expected_pos = vector.add(self._old_pos, self._old_dir)
 					dir, last_switch = mcl_minecarts:get_rail_direction(pos, self._old_dir, ctrl, self._old_switch, self._railtype)
+
 					if vector.equals(dir, {x=0, y=0, z=0}) then
 						dir = false
 						pos = vector.new(expected_pos)
@@ -548,11 +394,6 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			end
 		end
 
-		-- Give achievement when player reached a distance of 1000 nodes from the start position
-		if self._driver and (vector.distance(self._start_pos, pos) >= 1000) then
-			awards.unlock(self._driver, "mcl:onARail")
-		end
-
 
 		if update.pos or self._punched then
 			local yaw = 0
@@ -574,7 +415,6 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			return
 		end
 
-
 		local anim = {x=0, y=0}
 		if dir.y == -1 then
 			anim = {x=1, y=1}
@@ -587,14 +427,188 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		if update.pos then
 			self.object:set_pos(pos)
 		end
+	end
 
-		-- stopped on "mcl_minecarts:golden_rail_on"
-		if vector.equals(vel, {x=0, y=0, z=0}) and restart_pos then
-			local dir = mcl_minecarts:get_start_direction(restart_pos)
-			if dir then
-				mcl_minecarts:set_velocity(self, dir)
+	function cart:on_step(dtime)
+		hopper_take_item(self, dtime)
+
+		local vel = self.object:get_velocity()
+		local pos = self.object:get_pos()
+
+		-- Controls
+		local player
+		if self._driver then
+			player = minetest.get_player_by_name(self._driver)
+			if player then
+				local ctrl = player:get_player_control()
+				-- player detach
+				if ctrl.sneak then
+					detach_driver(self)
+					return
+				end
+			end
+
+			-- Give achievement when player reached a distance of 1000 nodes from the start position
+			if vector.distance(self._start_pos, pos) >= 1000 then
+				awards.unlock(self._driver, "mcl:onARail")
 			end
 		end
+
+		local has_fuel = self._fueltime and self._fueltime > 0
+		-- Go faster when punched
+		if self._punched then
+			vel = vector.add(vel, self._velocity)
+			self.object:set_velocity(vel)
+			self._old_dir.y = 0
+		elseif vector.equals(vel, {x=0, y=0, z=0}) and (not has_fuel) then
+			return
+		end
+
+		-- Drop minecart if it collides with a cactus node
+		local r = 0.6
+		for _, node_pos in pairs({{r, 0}, {0, r}, {-r, 0}, {0, -r}}) do
+			if minetest.get_node(vector.offset(pos, node_pos[1], 0, node_pos[2])).name == "mcl_core:cactus" then
+				detach_driver(self)
+				for d = 1, #drop do
+					minetest.add_item(pos, drop[d])
+				end
+				self.object:remove()
+				return
+			end
+		end
+
+		-- Debug
+		local node = minetest.get_node(pos).name
+		local dist = 0
+		if pos and self._old_pos then
+			dist = vector.distance(pos,self._old_pos)
+		end
+		if dist > 1.5 then
+			print("pos="..tostring(pos)..",dist="..tostring(dist)..",node="..tostring(node)..",old_pos="..tostring(self._old_pos)..",vel="..tostring(vel))
+		end
+		-- Rail jumps can occur when dist > 1.5, because the cart can skip over a gap in track
+
+		-- Grab mob
+		if math.random(1,20) > 15 and not self._passenger then
+			if self.name == "mcl_minecarts:minecart" then
+				local mobsnear = minetest.get_objects_inside_radius(self.object:get_pos(), 1.3)
+				for n=1, #mobsnear do
+					local mob = mobsnear[n]
+					if mob then
+						local entity = mob:get_luaentity()
+						if entity and entity.is_mob then
+							self._passenger = entity
+							mob:set_attach(self.object, "", passenger_attach_position, vector.zero())
+							break
+						end
+					end
+				end
+			end
+		elseif self._passenger then
+			local passenger_pos = self._passenger.object:get_pos()
+			if not passenger_pos then
+				self._passenger = nil
+			end
+		end
+
+		-- Drop minecart if it isn't on a rail anymore
+		if self._last_float_check == nil then
+			self._last_float_check = 0
+		else
+			self._last_float_check = self._last_float_check + dtime
+		end
+		if self._last_float_check >= mcl_minecarts.check_float_time then
+			local pos = self.object:get_pos()
+			local rou_pos = vector.round(pos)
+			local node = minetest.get_node(rou_pos)
+			local g = minetest.get_item_group(node.name, "connect_to_raillike")
+			if g ~= self._railtype and self._railtype then
+				-- Detach driver
+				if player then
+					if self._old_pos then
+						self.object:set_pos(self._old_pos)
+					end
+					mcl_player.players[player].attached = nil
+					player:set_detach()
+					player:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
+				end
+
+				-- Explode if already ignited
+				if self._boomtimer then
+					mcl_explosions.explode(pos, 4, {}, self.object)
+					self.object:remove()
+					return
+				end
+
+				-- Do not drop minecart. It goes off the rails too frequently, and anyone using them for farms won't
+				-- notice and lose their iron and not bother. Not cool until fixed.
+			end
+			self._last_float_check = 0
+		end
+
+		-- Update furnace stuff
+		if self._fueltime and self._fueltime > 0 then
+			self._fueltime = self._fueltime - dtime
+			if self._fueltime <= 0 then
+				self.object:set_properties({textures =
+					{
+					"default_furnace_top.png",
+					"default_furnace_top.png",
+					"default_furnace_front.png",
+					"default_furnace_side.png",
+					"default_furnace_side.png",
+					"default_furnace_side.png",
+					"mcl_minecarts_minecart.png",
+				}})
+				self._fueltime = 0
+			end
+		end
+
+		-- Update TNT stuff
+		if self._boomtimer then
+			-- Explode
+			self._boomtimer = self._boomtimer - dtime
+			local pos = self.object:get_pos()
+			if self._boomtimer <= 0 then
+				mcl_explosions.explode(pos, 4, {}, self.object)
+				self.object:remove()
+				return
+			else
+				tnt.smoke_step(pos)
+			end
+		end
+		if self._blinktimer then
+			self._blinktimer = self._blinktimer - dtime
+			if self._blinktimer <= 0 then
+				self._blink = not self._blink
+				if self._blink then
+					self.object:set_properties({textures =
+					{
+					"default_tnt_top.png",
+					"default_tnt_bottom.png",
+					"default_tnt_side.png",
+					"default_tnt_side.png",
+					"default_tnt_side.png",
+					"default_tnt_side.png",
+					"mcl_minecarts_minecart.png",
+					}})
+				else
+					self.object:set_properties({textures =
+					{
+					"mcl_tnt_blink.png",
+					"mcl_tnt_blink.png",
+					"mcl_tnt_blink.png",
+					"mcl_tnt_blink.png",
+					"mcl_tnt_blink.png",
+					"mcl_tnt_blink.png",
+					"mcl_minecarts_minecart.png",
+					}})
+				end
+				self._blinktimer = tnt.BLINKTIMER
+			end
+		end
+
+		do_movement_step(self)
 	end
 
 	function cart:get_staticdata()
