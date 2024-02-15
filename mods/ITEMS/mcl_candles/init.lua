@@ -70,7 +70,7 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-function tpl_lit_candle.on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+function extinguish(pos, node, clicker, itemstack, pointed_thing)
 	if not clicker then
 		return
 	end
@@ -79,24 +79,11 @@ function tpl_lit_candle.on_rightclick(pos, node, clicker, itemstack, pointed_thi
 		return
 	end
 
-	if node.name:find("unl") then
-		if itemstack:get_name():find("flint_and_steel") then
-			minetest.set_node(pos, {name = node.name:gsub("unl", "lit")})
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-				itemstack:add_wear()
-			end
-		else
-			return minetest.item_place_node(itemstack, clicker, pointed_thing)
-		end
-	elseif node.name:find("lit") then
-		if itemstack:is_empty() then
-			minetest.set_node(pos, {name = node.name:gsub("lit", "unl")})
-		else
-			return minetest.item_place_node(itemstack, clicker, pointed_thing)
-		end
+	local g = minetest.get_item_group(node.name, "lit_candles")
+	if g > 0 then
+		node.name = "mcl_candles:candle_"..tostring(g)
+		minetest.swap_node(pos, node)
 	end
-
-	return itemstack
 end
 
 for i=1,4 do
@@ -115,6 +102,7 @@ for i=1,4 do
 		light_source = 3 * i,
 		groups = table.merge(tpl_lit_candle.groups, { candles = i, lit_candles = i }),
 		_on_ignite = nil,
+		on_rightclick = extinguish,
 	}))
 end
 
