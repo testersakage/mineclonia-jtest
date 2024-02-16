@@ -52,7 +52,7 @@ Range: 4=Дальность: 4
 # Rating used for digging times
 Rating @1=Скорость добывания @1
 # @1 is minimal rating, @2 is maximum rating
-Rating @1-@2=Скорость добывания @1-@2=
+Rating @1-@2=Скорость добывания @1-@2
 The fall damage on this block is increased by @1%.=При падении на этот блок получаемый урон увеличивается на @1%.
 The fall damage on this block is reduced by @1%.=При падении на этот блок получаемый урон уменьшается на @1%.
 This block allows light to propagate with a small loss of brightness, and sunlight can even go through losslessly.=Этот блок позволяет свету распространяться с небольшой потерей яркости, а солнечный свет может проходить без потерь.
