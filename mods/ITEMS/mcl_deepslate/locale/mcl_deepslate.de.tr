@@ -23,25 +23,28 @@ Cobbled Deepslate=Bruchtiefenschiefer
 Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone.=Bruchtiefenschiefer funktioniert ähnlich wie Bruchstein, hat jedoch eine längere Abbauzeit.
 Cobbled Deepslate Stairs=Bruchtiefenschiefertreppe
 Cobbled Deepslate Slab=Bruchtiefenschieferstufe
-Double Cobbled Deepslate Slab=Doppelte Bruchtiefenschieferstufe
 Cobbled Deepslate Wall=Bruchtiefenschiefermauer
 Polished Deepslate=Polierter Tiefenschiefer
 Polished deepslate is the stone-like polished version of deepslate.=Polierter Tiefenschiefer ist eine Variante des Tiefenschiefers. Er kann als dekorativer Block verwendet werden.
 Polished Deepslate Stairs=Polierte Tiefenschiefertreppe
 Polished Deepslate Slab=Polierte Tiefenschieferstufe
-Double Polished Deepslate Slab=Doppelte Polierte Tiefenschieferstufe
 Polished Deepslate Wall=Polierte Tiefenschiefermauer
 Deepslate Bricks=Tiefenschieferziegel
 Deepslate bricks are the brick version of deepslate.=Tiefenschieferziegel ist eine Variante des Tiefenschiefers. Er kann als dekorativer Block verwendet werden.
 Deepslate Brick Stairs=
 Deepslate Brick Slab=
-Double Deepslate Brick Slab=
 Deepslate Brick Wall=
 Cracked Deepslate Bricks=Rissige Tiefenschieferziegel
 Deepslate Tiles=Tiefenschieferfliesen
 Deepslate tiles are a decorative variant of deepslate.=Tiefenschieferfliesen ist eine Variante des Tiefenschiefers. Der Block kann als dekorativer Block verwendet werden.
 Deepslate Tile Stairs=
 Deepslate Tile Slab=
-Double Deepslate Tile Slab=
+Deepslate Tiles Wall=
 Cracked Deepslate Tiles=Rissige Tiefenschieferfliesen
 Chiseled Deepslate=Gemeißelter Tiefenschiefer
+
+
+##### not used anymore #####
+
+Double Cobbled Deepslate Slab=Doppelte Bruchtiefenschieferstufe
+Double Polished Deepslate Slab=Doppelte Polierte Tiefenschieferstufe

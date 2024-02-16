@@ -1,5 +1,5 @@
 # textdomain: mcl_copper
-Preserved =
+Waxed @1=
 Copper Ingot=Lingot de cuivre
 Molten Raw Copper. It is used to craft blocks.=Cuivre brut fondu. Utilisé pour fabriquer des blocs.
 Raw Copper=Cuivre brut
@@ -24,6 +24,10 @@ Weathered Cut Copper=Cuivre taillé érodé
 Weathered cut copper is a decorative block.=Le cuivre taillé érodé est un bloc décoratif.
 Oxidized Cut Copper=Cuivre taillé oxydé
 Oxidized cut copper is a decorative block.=Le cuivre taillé oxydé est un bloc décoratif.
+
+
+##### not used anymore #####
+
 Slab of Cut Copper=Dalle de cuivre taillé
 Double Slab of Cut Copper=Double dalle de cuivre taillé
 Slab of Exposed Cut Copper=Dalle de cuivre taillé exposé

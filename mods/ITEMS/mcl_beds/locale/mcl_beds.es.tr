@@ -9,6 +9,7 @@ Sleeping allows you to skip the night. The night is skipped when all players in 
 Allows you to sleep=
 ### beds.lua ###
 Bed=Cama
+@1 Bed=
 New respawn position set!=¡Nueva posición de reaparición establecida!
 You can only sleep at night or during a thunderstorm.=Solo puedes dormir por la noche o durante tormentas eléctricas.
 You can't sleep, the bed's too far away!=¡No puedes dormir, la cama está muy lejos!

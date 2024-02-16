@@ -1,16 +1,21 @@
 # textdomain: mclx_stairs
-Lapis Lazuli Slab=Lapislazuliplatte
-Double Lapis Lazuli Slab=Doppellapislazuliplatte
 Lapis Lazuli Stairs=Lapislazulitreppe
-Slab of Gold=Goldplatte
-Double Slab of Gold=Doppelgoldplatte
-Stairs of Gold=Goldtreppe
-Slab of Iron=Eisenplatte
-Double Slab of Iron=Doppeleisenplatte
-Stairs of Iron=Eisentreppe
+Lapis Lazuli Slab=Lapislazuliplatte
+Gold Stairs=
+Gold Slab=
+Iron Stairs=
+Iron Slab=
 Cracked Stone Brick Stairs=Rissige Steinziegeltreppe
 Cracked Stone Brick Slab=Rissige Steinziegelplatte
-Double Cracked Stone Brick Slab=Doppelte rissige Steinziegelplatte
+Cracked Deepslate Brick Stairs=
+Cracked Deepslate Brick Slab=
+Cracked Deepslate Tile Stairs=
+Cracked Deepslate Tile Slab=
+End Stone Stairs=
+End Stone Slab=
+Smooth Stone Stairs=
+@1 Concrete Stairs=
+@1 Concrete Slab=
 Concrete Slab=Betonplatte
 Double Concrete Slab=Doppelte Betonplatte
 Concrete Stairs=Betontreppe
@@ -18,6 +23,14 @@ Concrete Stairs=Betontreppe
 
 ##### not used anymore #####
 
+Double Lapis Lazuli Slab=Doppellapislazuliplatte
+Slab of Gold=Goldplatte
+Double Slab of Gold=Doppelgoldplatte
+Stairs of Gold=Goldtreppe
+Slab of Iron=Eisenplatte
+Double Slab of Iron=Doppeleisenplatte
+Stairs of Iron=Eisentreppe
+Double Cracked Stone Brick Slab=Doppelte rissige Steinziegelplatte
 Oak Bark Stairs=Eichenrindentreppe
 Oak Bark Slab=Eichenrindenplatte
 Double Oak Bark Slab=Doppeleichenrindenplatte

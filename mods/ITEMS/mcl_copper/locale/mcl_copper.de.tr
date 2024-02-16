@@ -1,5 +1,5 @@
 # textdomain: mcl_copper
-Preserved =
+Waxed @1=
 Copper Ingot=Kupfer Barren
 Molten Raw Copper. It is used to craft blocks.=Geschmolzenes Rohkupfer. Es wird verwendet, um Blöcke herzustellen. 
 Raw Copper=Rohkupfer
@@ -24,6 +24,10 @@ Weathered Cut Copper=Verwitterter geschnittener Kupferblock
 Weathered cut copper is a decorative block.=Ein Verwitterter geschnittener Kupferblock ist ein dekorativer Block.
 Oxidized Cut Copper=Oxidierter geschnittener Kupferblock
 Oxidized cut copper is a decorative block.=Ein Oxidierter geschnittener Kupferblock ist ein dekorativer Block.
+
+
+##### not used anymore #####
+
 Slab of Cut Copper=Geschnittene Kupferstufe
 Double Slab of Cut Copper=Doppelte Geschnittene Kupferstufe
 Slab of Exposed Cut Copper=Angelaufene Geschnittene Kupferstufe

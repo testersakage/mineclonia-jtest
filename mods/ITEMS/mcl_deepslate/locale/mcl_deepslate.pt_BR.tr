@@ -23,25 +23,28 @@ Cobbled Deepslate=Pedregulhos de Ardósia
 Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone.=Pedregulhos de ardósia é uma variante de rocha que possui funções similares aos pedregulhos ou rochas-negra.
 Cobbled Deepslate Stairs=Escadas de Pedregulhos de Ardósia
 Cobbled Deepslate Slab=Laje de Pedregulhos de Ardósia
-Double Cobbled Deepslate Slab=Laje Dupla de Pedregulhos de Ardósia
 Cobbled Deepslate Wall=Muro de Pedregulhos de Ardósia
 Polished Deepslate=Ardósia Polida
 Polished deepslate is the stone-like polished version of deepslate.=Ardósia polida é a versão da rocha polida em ardósia.
 Polished Deepslate Stairs=Escadas de Ardósia Polida
 Polished Deepslate Slab=Laje de Ardósia Polida
-Double Polished Deepslate Slab=Laje Dupla de Ardósia Polida
 Polished Deepslate Wall=Muro de Ardósia Polida
 Deepslate Bricks=Tijolos de Ardósia
 Deepslate bricks are the brick version of deepslate.=Tijolos de ardósia são a versão em ardósia dos tijolos.
 Deepslate Brick Stairs=
 Deepslate Brick Slab=
-Double Deepslate Brick Slab=
 Deepslate Brick Wall=
 Cracked Deepslate Bricks=Tijolos de Ardósia Rachado
 Deepslate Tiles=Azulejos de Ardósia
 Deepslate tiles are a decorative variant of deepslate.=Azulejos de ardósia são variantes decorativas da ardósia.
 Deepslate Tile Stairs=
 Deepslate Tile Slab=
-Double Deepslate Tile Slab=
+Deepslate Tiles Wall=
 Cracked Deepslate Tiles=Azulejos de Ardósia Rachado
 Chiseled Deepslate=Ardósia Cinzelada
+
+
+##### not used anymore #####
+
+Double Cobbled Deepslate Slab=Laje Dupla de Pedregulhos de Ardósia
+Double Polished Deepslate Slab=Laje Dupla de Ardósia Polida

@@ -1,16 +1,21 @@
 # textdomain: mclx_stairs
-Lapis Lazuli Slab=Płyta lazurytu
-Double Lapis Lazuli Slab=Podwójna płyta lazurytu
 Lapis Lazuli Stairs=Lazurytowe schody
-Slab of Gold=Płyta złota
-Double Slab of Gold=Podwójna płyta złota
-Stairs of Gold=Złote schody
-Slab of Iron=Płyta żelaza
-Double Slab of Iron=Podwójna płyta żelaza
-Stairs of Iron=Żelazne schody
+Lapis Lazuli Slab=Płyta lazurytu
+Gold Stairs=
+Gold Slab=
+Iron Stairs=
+Iron Slab=
 Cracked Stone Brick Stairs=Schody z pękniętych ceglanych kamieni
 Cracked Stone Brick Slab=Płyta z pękniętych ceglanych kamieni
-Double Cracked Stone Brick Slab=Podwójna płyta z pękniętych ceglanych kamieni
+Cracked Deepslate Brick Stairs=
+Cracked Deepslate Brick Slab=
+Cracked Deepslate Tile Stairs=
+Cracked Deepslate Tile Slab=
+End Stone Stairs=
+End Stone Slab=
+Smooth Stone Stairs=
+@1 Concrete Stairs=
+@1 Concrete Slab=
 Concrete Slab=płyta betonu
 Double Concrete Slab=Podwójna płyta betonu
 Concrete Stairs=Betonowe schody
@@ -18,6 +23,14 @@ Concrete Stairs=Betonowe schody
 
 ##### not used anymore #####
 
+Double Lapis Lazuli Slab=Podwójna płyta lazurytu
+Slab of Gold=Płyta złota
+Double Slab of Gold=Podwójna płyta złota
+Stairs of Gold=Złote schody
+Slab of Iron=Płyta żelaza
+Double Slab of Iron=Podwójna płyta żelaza
+Stairs of Iron=Żelazne schody
+Double Cracked Stone Brick Slab=Podwójna płyta z pękniętych ceglanych kamieni
 Oak Bark Stairs=Schody z dębowej kory
 Oak Bark Slab=Płyta z dębowej kory
 Double Oak Bark Slab=Podwójna płyta z dębowej kory

@@ -1,17 +1,22 @@
 # textdomain: mclx_stairs
 ### init.lua ###
-Lapis Lazuli Slab=Losa de lapislázuli
-Double Lapis Lazuli Slab=Losa doble de lapislázuli
 Lapis Lazuli Stairs=Escaleras de lapislázuli
-Slab of Gold=Losa de oro
-Double Slab of Gold=Losa doble de oro
-Stairs of Gold=Escaleras de oro
-Slab of Iron=Losa de hierro
-Double Slab of Iron=Losa doble de hierro
-Stairs of Iron=Escaleras de hierro
+Lapis Lazuli Slab=Losa de lapislázuli
+Gold Stairs=
+Gold Slab=
+Iron Stairs=
+Iron Slab=
 Cracked Stone Brick Stairs=Escaleras de ladrillo de piedra agrietada
 Cracked Stone Brick Slab=Losa de ladrillo de piedra agrietada
-Double Cracked Stone Brick Slab=Losa doble de ladrillo de piedra agrietada
+Cracked Deepslate Brick Stairs=
+Cracked Deepslate Brick Slab=
+Cracked Deepslate Tile Stairs=
+Cracked Deepslate Tile Slab=
+End Stone Stairs=
+End Stone Slab=
+Smooth Stone Stairs=
+@1 Concrete Stairs=
+@1 Concrete Slab=
 Concrete Slab=Losa de hormigón
 Double Concrete Slab=Losa doble de hormigón
 Concrete Stairs=Escaleras de hormigón
@@ -19,6 +24,14 @@ Concrete Stairs=Escaleras de hormigón
 
 ##### not used anymore #####
 
+Double Lapis Lazuli Slab=Losa doble de lapislázuli
+Slab of Gold=Losa de oro
+Double Slab of Gold=Losa doble de oro
+Stairs of Gold=Escaleras de oro
+Slab of Iron=Losa de hierro
+Double Slab of Iron=Losa doble de hierro
+Stairs of Iron=Escaleras de hierro
+Double Cracked Stone Brick Slab=Losa doble de ladrillo de piedra agrietada
 Acacia Bark Slab=Losa de acacia
 Acacia Bark Stairs=Escaleras de acacia
 Birch Bark Slab=Losa de abedul

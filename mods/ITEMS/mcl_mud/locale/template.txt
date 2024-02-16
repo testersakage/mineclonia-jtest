@@ -7,4 +7,3 @@ Mud Bricks=
 Decorative block crafted from packed mud.=
 Mud Brick Stair=
 Mud Brick Slab=
-Double Mud Brick Slab=

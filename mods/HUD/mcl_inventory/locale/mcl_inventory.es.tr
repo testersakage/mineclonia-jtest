@@ -13,6 +13,7 @@ Mobs=Mobs
 Brewing=
 Materials=Materiales
 Survival Inventory=Inventario de supervivencia
+Not in Creative Inventory=
 ### creative.lua ###
 ### init.lua ###
 Advancements=

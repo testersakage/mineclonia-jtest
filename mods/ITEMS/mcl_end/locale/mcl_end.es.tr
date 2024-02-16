@@ -10,10 +10,8 @@ Dragon Egg=Huevo de dragón
 A dragon egg is a decorative item which can be placed.=Un huevo de dragón es un elemento decorativo que se puede colocar.
 End Stone Brick Stairs=
 End Stone Brick Slab=
-Double End Stone Brick Slab=
 Purpur Stairs=
 Purpur Slab=
-Double Purpur Slab=
 Chorus Flower=Flor de coro
 Grows on end stone=
 ### chorus_plant.lua ###

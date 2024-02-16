@@ -1,5 +1,5 @@
 # textdomain: mcl_copper
-Preserved =
+Waxed @1=
 Copper Ingot=
 Molten Raw Copper. It is used to craft blocks.=
 Raw Copper=
@@ -24,15 +24,3 @@ Weathered Cut Copper=
 Weathered cut copper is a decorative block.=
 Oxidized Cut Copper=
 Oxidized cut copper is a decorative block.=
-Slab of Cut Copper=
-Double Slab of Cut Copper=
-Slab of Exposed Cut Copper=
-Double Slab of Exposed Cut Copper=
-Slab of Weathered Cut Copper=
-Double Slab of Weathered Cut Copper=
-Slab of Oxidized Cut Copper=
-Double Slab of Oxidized Cut Copper=
-Stairs of Cut Copper=
-Stairs of Exposed Cut Copper=
-Stairs of Weathered Cut Copper=
-Stairs of Oxidized Cut Copper=

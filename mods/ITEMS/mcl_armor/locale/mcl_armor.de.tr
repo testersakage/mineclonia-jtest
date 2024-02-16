@@ -1,10 +1,6 @@
 # textdomain: mcl_armor
 This is a piece of equippable armor which reduces the amount of damage you receive.=Dies ist ein Teil einer tragbaren Rüstung, die die Menge an Schaden, den Sie erleiden, reduziert.
 To equip it, put it on the corresponding armor slot in your inventory menu.=Um es zu tragen, legen Sie es in den passenden Rüstungsplatz in ihrem Inventarmenü.
-Leather Cap=Lederkappe
-Leather Tunic=Ledertunika
-Leather Pants=Lederhose
-Leather Boots=Lederstiefel
 Golden Helmet=Goldhelm
 Golden Chestplate=Goldbrustpanzer
 Golden Leggings=Goldbeinlinge
@@ -52,6 +48,10 @@ Ingot & Crystals=
 
 ##### not used anymore #####
 
+Leather Cap=Lederkappe
+Leather Tunic=Ledertunika
+Leather Pants=Lederhose
+Leather Boots=Lederstiefel
 Chain Helmet=Kettenhelm
 Chain Chestplate=Kettenbrustpanzer
 Chain Leggings=Kettenbeinlinge

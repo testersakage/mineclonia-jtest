@@ -1,10 +1,6 @@
 # textdomain: mcl_armor
 This is a piece of equippable armor which reduces the amount of damage you receive.=Это часть надеваемой брони, уменьшающая получаемый вами урон.
 To equip it, put it on the corresponding armor slot in your inventory menu.=Чтобы надеть, поместите в соответствующий слот брони в вашем инвентаря.
-Leather Cap=Кожаный шлем
-Leather Tunic=Кожаная кираса
-Leather Pants=Кожаные поножи
-Leather Boots=Кожаные ботинки
 Golden Helmet=Золотой шлем
 Golden Chestplate=Золотая кираса
 Golden Leggings=Золотые поножи
@@ -53,6 +49,10 @@ Ingot & Crystals=
 
 ##### not used anymore #####
 
+Leather Cap=Кожаный шлем
+Leather Tunic=Кожаная кираса
+Leather Pants=Кожаные поножи
+Leather Boots=Кожаные ботинки
 Chain Helmet=Кольчужный шлем
 Chain Chestplate=Кольчуга
 Chain Leggings=Кольчужные поножи
