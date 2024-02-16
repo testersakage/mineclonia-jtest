@@ -49,7 +49,7 @@ end
 local rail_rules_long =
 {{x=-1,  y= 0, z= 0, spread=true},
  {x= 1,  y= 0, z= 0, spread=true},
- {x= 0,  y=-1, z= 0, spread=true},
+-- {x= 0,  y=-1, z= 0, spread=true},
  {x= 0,  y= 1, z= 0, spread=true},
  {x= 0,  y= 0, z=-1, spread=true},
  {x= 0,  y= 0, z= 1, spread=true},
@@ -104,6 +104,7 @@ register_rail("mcl_minecarts:golden_rail_on",
 	{
 		_doc_items_create_entry = false,
 		_rail_acceleration = 4,
+		_max_acceleration_velocity = 8,
 		mesecons = {
 			conductor = {
 				state = mesecon.state.on,

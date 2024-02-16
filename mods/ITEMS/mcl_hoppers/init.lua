@@ -335,6 +335,7 @@ local function hopper_pull_from_mc (mc_ent, dest_pos, inv_size)
 		end
 	end
 end
+mcl_hoppers.pull_from_minecart = hopper_pull_from_mc
 
 local function hopper_push_to_mc(mc_ent, dest_pos, inv_size)
 	local dest_inv = mcl_entity_invs.load_inv(mc_ent, inv_size)
