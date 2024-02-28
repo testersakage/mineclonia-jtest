@@ -1,7 +1,7 @@
 # textdomain: awards
 ### api_awards.lua ###
-Secret Award Unlocked: %s=
-Award Unlocked: %s=
+Secret Award Unlocked: @1=
+Award Unlocked: @1=
 Secret Advancement Made!=
 Goal Completed!=
 Challenge Completed!=

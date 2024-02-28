@@ -1,6 +1,6 @@
 # textdomain:awards
-Secret Award Unlocked: %s=
-Award Unlocked: %s=
+Secret Award Unlocked: @1=
+Award Unlocked: @1=
 Secret Advancement Made!=Секретное достижение получено!
 Goal Completed!=Цель выполнена!
 Challenge Completed!=Испытание выполнено!

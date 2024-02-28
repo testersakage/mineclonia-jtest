@@ -1,6 +1,6 @@
 # textdomain:awards
-Secret Award Unlocked: %s=
-Award Unlocked: %s=
+Secret Award Unlocked: @1=
+Award Unlocked: @1=
 Secret Advancement Made!=隠し進捗 更新！
 Goal Completed!=目標達成！
 Challenge Completed!=チャレンジ達成！
