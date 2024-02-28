@@ -85,8 +85,8 @@ msgstr ""
 msgid "You have not unlocked any awards."
 msgstr "Nenhuma conquista desbloqueada ainda."
 
-msgid "%s’s awards:"
-msgstr "%s das conquistas:"
+msgid "@1’s awards:"
+msgstr ""
 
 msgid "@1/@2 chat messages"
 msgstr "@1 de @2"

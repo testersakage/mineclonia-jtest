@@ -85,8 +85,8 @@ msgstr ""
 msgid "You have not unlocked any awards."
 msgstr ""
 
-msgid "%s’s awards:"
-msgstr ""
+msgid "@1’s awards:"
+msgstr "Награды @1:"
 
 msgid "@1/@2 chat messages"
 msgstr "@1/@2 сообщений чата"
