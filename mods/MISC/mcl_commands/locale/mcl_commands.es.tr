@@ -31,10 +31,3 @@ Sound name is invalid!=
 Target is invalid!!=
 ### summon.lua ###
 Only peaceful mobs allowed!=¡Solo se permiten animales pacíficos!
-
-
-##### not used anymore #####
-
-@1 committed suicide.=@1 se suicidó.
-@1 was killed by @2.=@1 fue asesinado por @2.
-Invalid usage, see /help=Uso no válido,  (Revisa el comando "/help say")

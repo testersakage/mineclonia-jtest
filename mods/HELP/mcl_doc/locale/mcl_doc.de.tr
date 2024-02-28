@@ -76,11 +76,3 @@ Block breaking strength: @1=Blockbruchstärke: @1
 This is a melee weapon which deals damage by punching.=Dies ist eine Nahkampfwaffe, die Schaden durch Schläge verursacht.
 Maximum damage: @1 HP=Maximalschaden: @1 HP
 Full punch interval: @1 s=Ausholintervall: @1 s
-
-
-##### not used anymore #####
-
-Saturation points restored: @1%.1f=Erhaltene Sättigungspunkte: @1
-This item can be repaired at an anvil with: @1.=Dieser Gegenstand kann an einem Amboss repariert werden mit: @1
-This item can be repaired at an anvil with any wooden planks.=Dieser Gegenstand kann an einem Amboss mit beliebigen Holzplanken repariert werden.
-This item can be repaired at an anvil with any item in the “@1” group.=Dieser Gegenstand kann an einem Amboss in der „@1“-Gruppe repariert werden.
