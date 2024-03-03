@@ -102,10 +102,12 @@ minetest.register_entity("mcl_chests:chest", {
 	end,
 
 	on_activate = function(self, initialization_data)
-		if initialization_data:find("^return") then
+		if initialization_data and initialization_data:find("\"###mcl_chests:chest###\"") then
 			self:initialize(unpack(minetest.deserialize(initialization_data)))
 		else
-			minetest.log("warning", debug.traceback("[mcl_chests] on_activate called without initialization_data"))
+			minetest.log("warning",
+				"[mcl_chests] on_activate called without proper initialization_data ... removing entity")
+			self.object:remove()
 		end
 	end,
 
@@ -143,13 +145,13 @@ local function create_entity(pos, node_name, textures, param2, double, sound_pre
 							entity_pos)
 	dir, entity_pos = get_entity_info(pos, param2, double, dir, entity_pos)
 	local initialization_data = minetest.serialize({pos, node_name, textures, dir, double, sound_prefix,
-		mesh_prefix, animation_type})
-	local obj = minetest.add_entity(entity_pos, "mcl_chests:chest", initialization_data) 
+		mesh_prefix, animation_type, "###mcl_chests:chest###"})
+	local obj = minetest.add_entity(entity_pos, "mcl_chests:chest", initialization_data)
 	if obj and obj:get_pos() then
 		return obj:get_luaentity()
 	else
 		minetest.log("warning", "[mcl_chests] Failed to create entity at " .. (entity_pos and minetest.pos_to_string(entity_pos, 1) or "nil"))
-	end 
+	end
 end
 mcl_chests.create_entity = create_entity
 
