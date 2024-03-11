@@ -111,6 +111,7 @@ local dropperdef = {
 			local dropnode = minetest.get_node(droppos)
 			-- Do not drop into solid nodes, unless they are containers
 			local dropnodedef = minetest.registered_nodes[dropnode.name]
+
 			if dropnodedef.walkable and not dropnodedef.groups.container then
 				return
 			end
@@ -121,10 +122,15 @@ local dropperdef = {
 					table.insert(stacks, { stack = stack, stackpos = i })
 				end
 			end
+
+			-- Pick an item to drop
+			local dropitem = nil
+			local stack = nil
+			local r = nil
 			if #stacks >= 1 then
-				local r = math.random(1, #stacks)
-				local stack = stacks[r].stack
-				local dropitem = ItemStack(stack)
+				r = math.random(1, #stacks)
+				stack = stacks[r].stack
+				dropitem = ItemStack(stack)
 				dropitem:set_count(1)
 				local stack_id = stacks[r].stackpos
 
