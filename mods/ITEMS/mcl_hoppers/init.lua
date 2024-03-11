@@ -2,6 +2,8 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 local C = minetest.colorize
 
+mcl_hoppers = {}
+
 --[[ BEGIN OF NODE DEFINITIONS ]]
 
 local mcl_hoppers_formspec = table.concat({

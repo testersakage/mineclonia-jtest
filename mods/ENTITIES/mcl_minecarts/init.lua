@@ -21,8 +21,6 @@ local function mcl_log(message)
 	end
 end
 
-<<<<<<< HEAD
-=======
 local function handle_cart_enter(self,pos)
 	local node = minetest.get_node(pos)
 
@@ -33,10 +31,10 @@ local function handle_cart_enter(self,pos)
 	end
 
 	-- Handle above-track behaviors (to ensure hoppers can transfer at least one item)
-	pos = pos + vector.new(0,1,0)
-	local node = minetest.get_node(pos)
+	local above_pos = pos + vector.new(0,1,0)
+	local node = minetest.get_node(above_pos)
 	if node_def._mcl_minecarts_on_enter_below then
-		node_def._mcl_minecarts_on_enter_below(pos, cart)
+		node_def._mcl_minecarts_on_enter_below(above_pos, cart)
 	end
 
 	-- Handle cart-specific behaviors
@@ -118,7 +116,7 @@ local function do_movement_step(self, remaining_distance)
 		staticdata.connected_at = pos
 
 		-- Enter the new node
-		handle_cart_enter(self,pos)
+		handle_cart_enter(self, pos)
 
 		-- check for hopper under the rail
 		local under_pos = pos - vector.new(0,1,0)
@@ -283,7 +281,6 @@ local function do_movement( self, dtime )
 	self._punched = false
 end
 
->>>>>>> 168437b33 (Rework in preparation to add code to pull from containers into the hopper minecart)
 local function detach_driver(self)
 	if not self._driver then
 		return
@@ -590,6 +587,9 @@ local function register_entity(entity_id, def)
 			staticdata = make_staticdata()
 			self._staticdata = staticdata
 		end
+		if (staticdata.hopper_delay or 0) > 0 then
+			staticdata.hopper_delay = staticdata.hopper_delay - dtime
+		end
 
 		local pos = self.object:get_pos()
 		--local update = {}
@@ -786,7 +786,7 @@ function mcl_minecarts.place_minecart(itemstack, pointed_thing, placer)
 		le._staticdata = make_staticdata( railtype, railpos, cart_dir )
 	end
 
-	handle_cart_enter( railpos )
+	handle_cart_enter(le, railpos)
 
 	local pname = ""
 	if placer then
@@ -858,39 +858,15 @@ Register a minecart
 * on_activate_by_rail: Called when above activator rail
 * creative: If false, don't show in Creative Inventory
 ]]
-<<<<<<< HEAD
-local function register_minecart(itemstring, entity_id, description, tt_help, longdesc, usagehelp, mesh, textures, icon, drop, on_rightclick, on_activate_by_rail, creative)
-	register_entity(entity_id, mesh, textures, drop, on_rightclick, on_activate_by_rail)
-	tt_help = (tt_help and tt_help .. "\n" or "") .. S("Sneak-click to remove")
-	register_craftitem(itemstring, entity_id, description, tt_help, longdesc, usagehelp, icon, creative)
-=======
 local function register_minecart(def)
 	register_entity(def.entity_id, def)
 	register_craftitem(def.itemstring, def.entity_id, def.description, def.tt_help, def.longdesc, def.usagehelp, def.icon, def.creative)
->>>>>>> 168437b33 (Rework in preparation to add code to pull from containers into the hopper minecart)
 	if minetest.get_modpath("doc_identifier") then
 		doc.sub.identifier.register_object(def.entity_id, "craftitems", itemstring)
 	end
 end
 
 -- Minecart
-<<<<<<< HEAD
-register_minecart(
-	"mcl_minecarts:minecart",
-	"mcl_minecarts:minecart",
-	S("Minecart"),
-	S("Vehicle for fast travel on rails"),
-	S("Minecarts can be used for a quick transportion on rails.") .. "\n" ..
-	S("Minecarts only ride on rails and always follow the tracks. At a T-junction with no straight way ahead, they turn left. The speed is affected by the rail type."),
-	S("You can place the minecart on rails. Right-click it to enter it. Punch it to get it moving.") .. "\n" ..
-	S("To obtain the minecart, punch it while holding down the sneak key.") .. "\n" ..
-	S("If it moves over a powered activator rail, you'll get ejected."),
-	"mcl_minecarts_minecart.b3d",
-	{"mcl_minecarts_minecart.png"},
-	"mcl_minecarts_minecart_normal.png",
-	{"mcl_minecarts:minecart"},
-	function(self, clicker)
-=======
 register_minecart({
 	itemstring = "mcl_minecarts:minecart",
 	entity_id = "mcl_minecarts:minecart",
@@ -907,7 +883,6 @@ register_minecart({
 	drop = {"mcl_minecarts:minecart"},
 	on_rightclick = function(self, clicker)
 		local name = clicker:get_player_name()
->>>>>>> 168437b33 (Rework in preparation to add code to pull from containers into the hopper minecart)
 		if not clicker or not clicker:is_player() then
 			return
 		end
@@ -1054,7 +1029,17 @@ register_minecart({
 	on_rightclick = nil,
 	on_activate_by_rail = nil,
 	_mcl_minecarts_on_enter = function(self,pos)
-		-- TODO: try to pull from containers into our inventory
+		local staticdata = self._staticdata
+		if (staticdata.hopper_delay or 0) > 0 then
+			return
+		end
+
+		-- try to pull from containers into our inventory
+		local inv = mcl_entity_invs.load_inv(self,5)
+		local above_pos = pos + vector.new(0,1,0)
+		mcl_util.hopper_pull_to_inventory(inv, 'main', above_pos)
+
+		staticdata.hopper_delay =  (staticdata.hopper_delay or 0) + (1/20)
 	end,
 	creative = true
 })
