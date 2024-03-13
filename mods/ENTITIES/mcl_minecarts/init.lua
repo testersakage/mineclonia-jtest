@@ -8,7 +8,7 @@ mcl_minecarts.modpath = minetest.get_modpath(modname)
 mcl_minecarts.speed_max = 10
 mcl_minecarts.check_float_time = 15
 local max_step_distance = 0.5
-local friction = 0.1
+local friction = 0.4
 
 dofile(mcl_minecarts.modpath.."/functions.lua")
 dofile(mcl_minecarts.modpath.."/rails.lua")
@@ -965,7 +965,7 @@ register_minecart({
 		end
 		local name = clicker:get_player_name()
 		if self._driver and name == self._driver then
-			detach_driver(self)
+			--detach_driver(self)
 		elseif not self._driver then
 			self._driver = name
 			self._start_pos = self.object:get_pos()
