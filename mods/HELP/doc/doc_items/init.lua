@@ -1135,6 +1135,8 @@ doc.add_category("mobs", {
 	description = S("different mobs"),
 	build_formspec = function(d, playername)
 		local data = mcl_mobs.registered_mobs[d.name]
+		local min_light = data.min_light or (data.spawn_class == "hostile" and 0) or 7
+		local max_light = data.max_light or (data.spawn_class == "hostile" and 7) or minetest.LIGHT_MAX + 1
 		if data then
 			local datastring = ""
 
@@ -1148,10 +1150,8 @@ doc.add_category("mobs", {
 				datastring = newline2(datastring)
 			end
 
-			if data.spawn_class then
-				datastring = datastring .. S("spawn class: @1", data.spawn_class)
-				datastring = newline2(datastring)
-			end
+			datastring = datastring .. S("Spawning light levels (min / max): @1 / @2", min_light, max_light)
+			datastring = newline2(datastring)
 
 			if data.jump then
 				datastring = datastring .. S("Can Jump")
