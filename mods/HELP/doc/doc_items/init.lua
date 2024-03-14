@@ -1132,7 +1132,7 @@ doc.add_category("craftitems", {
 
 doc.add_category("mobs", {
 	name = S("Mobs"),
-	description = S("different mobs"),
+	description = S("Different Mobs"),
 	build_formspec = function(d, playername)
 		local data = mcl_mobs.registered_mobs[d.name]
 		local min_light = data.min_light or (data.spawn_class == "hostile" and 0) or 7
@@ -1146,7 +1146,7 @@ doc.add_category("mobs", {
 			end
 
 			if data.type then
-				datastring = datastring .. S("Type: @1", data.type)
+				datastring = datastring .. S("Type: @1", data.type:sub(1,1):upper()..data.type:sub(2))
 				datastring = newline2(datastring)
 			end
 
@@ -1174,7 +1174,7 @@ doc.add_category("mobs", {
 				end
 
 				if count > 0 then
-					datastring = datastring .. S("drops: ")
+					datastring = datastring .. S("Drops: ")
 					datastring = newline(datastring)
 
 					for _,item in ipairs(data.drops) do
@@ -1188,7 +1188,7 @@ doc.add_category("mobs", {
 			end
 
 			if data.follow then
-				datastring = datastring .. S("follows player when these items are held:")
+				datastring = datastring .. S("Follows player when these items are held:")
 				datastring = newline(datastring)
 
 				if type(data.follow) == "string" then
