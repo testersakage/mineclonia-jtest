@@ -1154,12 +1154,16 @@ doc.add_category("mobs", {
 			datastring = newline2(datastring)
 
 			if data.jump then
-				datastring = datastring .. S("Can Jump")
+				datastring = datastring .. S("Can Jump a height of @1 nodes", data.jump_height)
 				datastring = newline2(datastring)
 			end
 
 			if data.fly then
-				datastring = datastring .. S("Can Fly")
+				if data.fly_in and ((type(data.fly_in) == "table" and table.indexof(data.fly_in, "air") ~= -1 ) or data.fly_in == "air" ) then
+					datastring = datastring .. S("Can Fly")
+				else
+					datastring = datastring .. S("Can Swim")
+				end
 				datastring = newline2(datastring)
 			end
 
