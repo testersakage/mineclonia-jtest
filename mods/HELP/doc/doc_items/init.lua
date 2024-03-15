@@ -1133,6 +1133,7 @@ doc.add_category("craftitems", {
 doc.add_category("mobs", {
 	name = S("Mobs"),
 	description = S("Different Mobs"),
+	hide_entries_by_default = true,
 	build_formspec = function(d, playername)
 		local data = mcl_mobs.registered_mobs[d.name]
 		local min_light = data.min_light or (data.spawn_class == "hostile" and 0) or 7
