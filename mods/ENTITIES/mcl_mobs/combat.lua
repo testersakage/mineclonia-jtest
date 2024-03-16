@@ -337,6 +337,9 @@ end
 -- deal damage and effects when mob punched
 function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
+	local is_player = hitter and hitter:is_player()
+	local hitter_playername = is_player and hitter:get_player_name()
+
 	if self.do_punch then
 		if self.do_punch(self, hitter, tflp, tool_capabilities, dir) == false then
 			return
@@ -349,17 +352,15 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		return
 	end
 
-	local is_player = hitter:is_player()
-
 	if is_player then
 		self.last_player_hit_time = minetest.get_gametime()
-		self.last_player_hit_name = hitter:get_player_name()
+		self.last_player_hit_name = hitter_playername
 		-- is mob protected?
-		if self.protected and minetest.is_protected(self.object:get_pos(), hitter:get_player_name()) then
+		if self.protected and minetest.is_protected(self.object:get_pos(), hitter_playername) then
 			return
 		end
 
-		if minetest.is_creative_enabled(hitter:get_player_name()) then
+		if minetest.is_creative_enabled(hitter_playername) then
 			-- Instantly kill mob after a slight delay.
 			-- Without this delay the node behind would be dug by the punch as well.
 			minetest.after(0.15, function(self)
@@ -380,7 +381,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 	-- exhaust attacker
 	if is_player then
-		mcl_hunger.exhaust(hitter:get_player_name(), mcl_hunger.EXHAUST_ATTACK)
+		mcl_hunger.exhaust(hitter_playername, mcl_hunger.EXHAUST_ATTACK)
 	end
 
 	-- calculate mob damage
@@ -434,7 +435,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 					weapon:add_wear(wear)
 					hitter:set_wielded_item(weapon)
 				end
-			end, hitter:get_player_name())
+			end, hitter_playername)
 		end
 	end
 
@@ -508,7 +509,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			if hitter then
 				luaentity = hitter:get_luaentity()
 			end
-			if hitter and is_player then
+			if is_player then
 				local wielditem = hitter:get_wielded_item()
 				kb = kb + 3 * mcl_enchanting.get_enchantment(wielditem, "knockback")
 			elseif luaentity and luaentity._knockback then
@@ -539,17 +540,16 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	end -- END if damage
 
 	-- if skittish then run away
-	if hitter and is_player and hitter:get_pos() and not die and self.runaway == true and self.state ~= "flop" then
+	if hitter and hitter:get_pos() and not die and self.runaway == true and self.state ~= "flop" then
 		self:do_runaway(hitter)
 	end
 
-	local name = hitter:get_player_name() or ""
 	-- attack puncher
 	if ( self.passive == false or self.retaliates )
 	and self.state ~= "flop"
 	and (self.child == false or self.type == "monster")
-	and hitter:get_player_name() ~= self.owner
-	and not mcl_mobs.invis[ name ] then
+	and hitter_playername ~= self.owner
+	and not mcl_mobs.invis[ hitter_playername or ""] then
 		if not die then
 			-- attack whoever punched mob
 			self:set_state("")
@@ -559,7 +559,9 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	end
 
 	-- alert others to the attack
-	self:call_group_attack(hitter)
+	if hitter and hitter:get_pos() then
+		self:call_group_attack(hitter)
+	end
 end
 
 function mob_class:do_runaway(hitter)
@@ -572,8 +574,7 @@ function mob_class:do_runaway(hitter)
 end
 
 function mob_class:call_group_attack(hitter)
-	local name = hitter:get_player_name() or ""
-	if not hitter or not hitter:get_pos() then return end
+	local name = hitter:get_player_name()
 	for _, obj in pairs(minetest.get_objects_inside_radius(hitter:get_pos(), self.view_range)) do
 		local ent = obj:get_luaentity()
 		if ent then

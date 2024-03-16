@@ -184,9 +184,10 @@ function mcl_mobs.mob_class:set_nametag(name)
 end
 
 local on_rightclick_prefix = function(self, clicker)
-	if not clicker:is_player() then return end
+	if not (clicker and clicker:is_player()) then return end
+	local playername = clicker:get_player_name()
 	local item = clicker:get_wielded_item()
-	if extended_pet_control and self.tamed and self.owner == clicker:get_player_name() then
+	if extended_pet_control and self.tamed and self.owner == playername then
 		self:toggle_sit(clicker)
 	end
 
@@ -194,7 +195,7 @@ local on_rightclick_prefix = function(self, clicker)
 	item_name = minetest.registered_aliases[item_name] or item_name
 
 	if not self.ignores_nametag and item_name == "mcl_mobitems:nametag" then
-		if self:set_nametag(item:get_meta():get_string("name")) and not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if self:set_nametag(item:get_meta():get_string("name")) and not minetest.is_creative_enabled(playername) then
 			item:take_item()
 			clicker:set_wielded_item(item)
 		end
