@@ -186,6 +186,9 @@ end
 local on_rightclick_prefix = function(self, clicker)
 	if not (clicker and clicker:is_player()) then return end
 	local playername = clicker:get_player_name()
+	if playername and playername ~= "" then
+		doc.mark_entry_as_revealed(playername, "mobs", self.name)
+	end
 	local item = clicker:get_wielded_item()
 	if extended_pet_control and self.tamed and self.owner == playername then
 		self:toggle_sit(clicker)

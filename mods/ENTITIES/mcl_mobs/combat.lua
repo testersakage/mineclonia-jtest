@@ -340,6 +340,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	local is_player = hitter and hitter:is_player()
 	local hitter_playername = is_player and hitter:get_player_name()
 
+	if hitter_playername and hitter_playername ~= "" then
+		doc.mark_entry_as_revealed(hitter_playername, "mobs", self.name)
+	end
+
 	if self.do_punch then
 		if self.do_punch(self, hitter, tflp, tool_capabilities, dir) == false then
 			return
