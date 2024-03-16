@@ -319,7 +319,7 @@ function mcl_mobs.register_mob(name, def)
 	mcl_mobs.registered_mobs[name] = final_def
 	minetest.register_entity(":"..name, final_def)
 
-	doc.sub.identifier.register_object(name, "basics", "mobs")
+	doc.sub.identifier.register_object(name, "mobs", name)
 	doc.add_entry("mobs", name, {
 		name = def.description or name,
 		data = {
