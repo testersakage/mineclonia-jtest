@@ -725,13 +725,25 @@ function mcl_util.replace_mob(obj, mob)
 	return obj
 end
 
-function mcl_util.get_pointed_thing(player, liquid)
+-- This function is essentially a wrapper around minetest.raycast to get the currently pointed at "pointed_thing"
+-- The last "ignore" argument is either a table of nodename to ignore in the raycast or a func(pointed_thing) that
+-- returns true if that position in the ray shall be discounted.
+function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
 	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
 	local def = player:get_wielded_item():get_definition()
 	local range = math.ceil(def and def.range or ItemStack():get_definition().range or tonumber(minetest.settings:get("mcl_hand_range")) or 4.5)
 	local look_dir = vector.multiply(player:get_look_dir(), range)
 	local pos2 = vector.add(pos, look_dir)
-	local ray = minetest.raycast(pos, pos2, false, liquid)
+	local ray = minetest.raycast(pos, pos2, objects, liquid)
+
+	if ignore then
+		for pointed_thing in ray do
+			if (type(ignore) == "table" and table.indexof(ignore, minetest.get_node(pointed_thing.under).name) == -1 ) or
+			(type(ignore) == "function" and not ignore(pointed_thing)) then
+				return pointed_thing
+			end
+		end
+	end
 	return ray:next()
 end
 

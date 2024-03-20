@@ -107,19 +107,13 @@ local function get_bucket_drop(itemstack, user, take_bucket)
 end
 
 local function bucket_get_pointed_thing(user)
-	local start = user:get_pos()
-	start.y = start.y + user:get_properties().eye_height
-	local look_dir = user:get_look_dir()
-	local _end = vector.add(start, vector.multiply(look_dir, 5))
-
-	local ray = minetest.raycast(start, _end, false, true)
-	for pointed_thing in ray do
+	return mcl_util.get_pointed_thing(user, false, true, function(pointed_thing)
 		local name = minetest.get_node(pointed_thing.under).name
 		local def = minetest.registered_nodes[name]
-		if not def or def.drawtype ~= "flowingliquid" then
-			return pointed_thing
+		if not def or def.drawtype == "flowingliquid" then
+			return true
 		end
-	end
+	end)
 end
 
 local function on_place_bucket(itemstack, user, _)
