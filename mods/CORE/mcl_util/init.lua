@@ -727,7 +727,9 @@ end
 
 function mcl_util.get_pointed_thing(player, liquid)
 	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
-	local look_dir = vector.multiply(player:get_look_dir(), 5)
+	local def = player:get_wielded_item():get_definition()
+	local range = math.ceil(def and def.range or ItemStack():get_definition().range or tonumber(minetest.settings:get("mcl_hand_range")) or 4.5)
+	local look_dir = vector.multiply(player:get_look_dir(), range)
 	local pos2 = vector.add(pos, look_dir)
 	local ray = minetest.raycast(pos, pos2, false, liquid)
 	return ray:next()
