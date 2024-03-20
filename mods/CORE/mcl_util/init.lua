@@ -1088,30 +1088,16 @@ local function between(x, y, z) -- x is between y and z (inclusive)
 end
 
 function mcl_util.in_cube(tpos, wpos1, wpos2)
-	local xmax=wpos2.x
-	local xmin=wpos1.x
+	local xmax = math.max(wpos1.x, wpos2.x)
+	local xmin = math.min(wpos1.x, wpos2.x)
 
-	local ymax=wpos2.y
-	local ymin=wpos1.y
+	local ymax = math.max(wpos1.y, wpos2.y)
+	local ymin = math.min(wpos1.y, wpos2.y)
 
-	local zmax=wpos2.z
-	local zmin=wpos1.z
-	if wpos1.x > wpos2.x then
-		xmax=wpos1.x
-		xmin=wpos2.x
-	end
-	if wpos1.y > wpos2.y then
-		ymax=wpos1.y
-		ymin=wpos2.y
-	end
-	if wpos1.z > wpos2.z then
-		zmax=wpos1.z
-		zmin=wpos2.z
-	end
-	if between(tpos.x, xmin, xmax) and between(tpos.y, ymin, ymax) and between(tpos.z, zmin, zmax) then
-		return true
-	end
-	return false
+	local zmax = math.max(wpos1.z, wpos2.z)
+	local zmin = math.min(wpos1.z, wpos2.z)
+
+	return between(tpos.x, xmin, xmax) and between(tpos.y, ymin, ymax) and between(tpos.z, zmin, zmax)
 end
 
 function mcl_util.traverse_tower(pos, dir, callback)
