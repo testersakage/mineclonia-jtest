@@ -1081,21 +1081,6 @@ function mcl_util.bypass_buildable_to(func)
 	end
 end
 
---Check for a protection violation in a given area.
--- Applies is_protected() to a 3D lattice of points in the defined volume. The points are spaced
--- evenly throughout the volume and have a spacing similar to, but no larger than, "interval".
-function mcl_util.check_area_protection(pos1, pos2, player, interval)
-	local name = player and player:get_player_name() or ""
-
-	local protected_pos = minetest.is_area_protected(pos1, pos2, name, interval)
-	if protected_pos then
-		minetest.record_protection_violation(protected_pos, name)
-		return true
-	end
-
-	return false
-end
-
 --Check for a protection violation on a single position.
 function mcl_util.check_position_protection(position, player)
 	local name = player and player:get_player_name() or ""
@@ -1214,48 +1199,6 @@ function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 
 	-- Write data
 	vm:set_data(data)
-	vm:write_to_map(true)
-end
-
--- Voxel manip function to replace a node type with another in a circle
--- Will also set param2 on changed nodes if provided.
-function mcl_util.circle_replace_node_vm(radius, pos, y, mat_from, mat_to, param2)
-	local c_from = minetest.get_content_id(mat_from)
-	local c_to = minetest.get_content_id(mat_to)
-
-	-- Using new as y is not relative
-	local pos1 = vector.new(pos.x - radius, y, pos.z - radius)
-	local pos2 = vector.new(pos.x + radius, y, pos.z + radius)
-
-	local vm = minetest.get_voxel_manip()
-	local emin, emax = vm:read_from_map(pos1, pos2)
-	local a = VoxelArea:new({
-		MinEdge = emin,
-		MaxEdge = emax,
-	})
-	local data = vm:get_data()
-
-	local param2data = vm:get_param2_data()
-
-	for z = -radius, radius do
-		for x = -radius, radius do
-			if x * x + z * z <= radius * radius + radius * 0.8 then
-				local vi = a:index(pos.x + x, y, pos.z + z)
-				if data[vi] == c_from then
-					data[vi] = c_to
-					if param2 then
-						param2data[vi] = param2
-					end
-				end
-			end
-		end
-	end
-
-	-- Write data
-	vm:set_data(data)
-	if param2 then
-		vm:set_param2_data(param2data)
-	end
 	vm:write_to_map(true)
 end
 
