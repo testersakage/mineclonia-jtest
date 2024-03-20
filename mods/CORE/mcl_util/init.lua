@@ -270,7 +270,7 @@ end
 -- Possible failures: No item in source slot, destination inventory full
 function mcl_util.move_item(source_inventory, source_list, source_stack_id, destination_inventory, destination_list)
 	if source_stack_id == -1 then
-		source_stack_id = mcl_util.get_first_occupied_inventory_slot(source_inventory, source_list)
+		source_stack_id =  mcl_util.get_eligible_transfer_item_slot(source_inventory, source_list)
 		if source_stack_id == nil then
 			return false
 		end
@@ -431,12 +431,6 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		end
 	end
 	return false
-end
-
--- Returns the ID of the first non-empty slot in the given inventory list
--- or nil, if inventory is empty.
-function mcl_util.get_first_occupied_inventory_slot(inventory, listname)
-	return mcl_util.get_eligible_transfer_item_slot(inventory, listname)
 end
 
 local function drop_item_stack(pos, stack)
