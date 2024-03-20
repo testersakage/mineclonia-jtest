@@ -1083,23 +1083,6 @@ function mcl_util.get_pos_p2(pos)
 	return biomedef and biomedef._mcl_palette_index or 0
 end
 
-local function between(x, y, z) -- x is between y and z (inclusive)
-	return y <= x and x <= z
-end
-
-function mcl_util.in_cube(tpos, wpos1, wpos2)
-	local xmax = math.max(wpos1.x, wpos2.x)
-	local xmin = math.min(wpos1.x, wpos2.x)
-
-	local ymax = math.max(wpos1.y, wpos2.y)
-	local ymin = math.min(wpos1.y, wpos2.y)
-
-	local zmax = math.max(wpos1.z, wpos2.z)
-	local zmin = math.min(wpos1.z, wpos2.z)
-
-	return between(tpos.x, xmin, xmax) and between(tpos.y, ymin, ymax) and between(tpos.z, zmin, zmax)
-end
-
 function mcl_util.traverse_tower(pos, dir, callback)
 	local node = minetest.get_node(pos)
 	local i = 0

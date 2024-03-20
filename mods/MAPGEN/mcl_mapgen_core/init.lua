@@ -286,6 +286,23 @@ if mg_name ~= "singlenode" or end_fixes_in_singlenode then
 end
 
 -- This should be moved to mcl_structures eventually if the dependencies can be sorted out.
+local function between(x, y, z) -- x is between y and z (inclusive)
+	return y <= x and x <= z
+end
+
+local function in_cube(tpos, wpos1, wpos2)
+	local xmax = math.max(wpos1.x, wpos2.x)
+	local xmin = math.min(wpos1.x, wpos2.x)
+
+	local ymax = math.max(wpos1.y, wpos2.y)
+	local ymin = math.min(wpos1.y, wpos2.y)
+
+	local zmax = math.max(wpos1.z, wpos2.z)
+	local zmin = math.min(wpos1.z, wpos2.z)
+
+	return between(tpos.x, xmin, xmax) and between(tpos.y, ymin, ymax) and between(tpos.z, zmin, zmax)
+end
+
 mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blockseed)
 	local gennotify = minetest.get_mapgen_object("gennotify")
 	local has = false
@@ -303,7 +320,7 @@ mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blocks
 			end
 		elseif struct.static_pos then
 			for _,p in pairs(struct.static_pos) do
-				if mcl_util.in_cube(p,minp,maxp) then
+				if in_cube(p,minp,maxp) then
 					mcl_structures.place_structure(p,struct,pr,blockseed)
 				end
 			end
