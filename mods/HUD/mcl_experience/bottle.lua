@@ -16,7 +16,7 @@ minetest.register_entity("mcl_experience:bottle",{
 		local n = node.name
 		if n ~= "air" and n ~= "mcl_portals:portal" and n ~= "mcl_portals:portal_end" and minetest.get_item_group(n, "liquid") == 0 then
 			minetest.sound_play("mcl_potions_breaking_glass", {pos = pos, max_hear_distance = 16, gain = 1})
-			mcl_experience.throw_xp(pos, math.random(3, 11))
+			mcl_experience.throw_xp(pos, math.random(3, 11) + (self._luck or 0))
 			minetest.add_particlespawner({
 				amount = 50,
 				time = 0.1,
@@ -42,7 +42,7 @@ minetest.register_entity("mcl_experience:bottle",{
 	end,
 })
 
-local function throw_xp_bottle(pos, dir, velocity)
+local function throw_xp_bottle(pos, dir, velocity, user)
 	minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
 	local obj = minetest.add_entity(pos, "mcl_experience:bottle")
 	if not obj or not obj:get_pos() then return end
@@ -50,6 +50,11 @@ local function throw_xp_bottle(pos, dir, velocity)
 	local acceleration = vector.multiply(dir, -3)
 	acceleration.y = -9.81
 	obj:set_acceleration(acceleration)
+	if user then
+		local ent = obj:get_luaentity()
+		local luck = mcl_luck.get_luck(user:get_player_name())
+		ent._luck = luck
+	end
 end
 
 minetest.register_craftitem("mcl_experience:bottle", {
@@ -57,7 +62,7 @@ minetest.register_craftitem("mcl_experience:bottle", {
 	inventory_image = "mcl_experience_bottle.png",
 	wield_image = "mcl_experience_bottle.png",
 	on_use = function(itemstack, placer, pointed_thing)
-		throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10)
+		throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10, placer)
 		if not minetest.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item()
 		end
