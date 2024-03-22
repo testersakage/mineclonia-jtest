@@ -720,6 +720,70 @@ local function make_formspec(name)
 end
 mcl_craftguide.make_formspec = make_formspec
 
+local function filter_item(item, filter, lang)
+	local def = ItemStack(item):get_definition()
+	local desc = string.lower(minetest.get_translated_string(lang or "en", def.description))
+	return string.find(item, filter, nil, true) or string.find(desc, filter, nil, true)
+end
+
+function mcl_craftguide.make_sbs_formspec(name, filter, only_craftable)
+	local linemax = 9
+	local count = 0
+	local x = 0
+	local y = 0
+	local pl = minetest.get_player_by_name(name)
+	local pinv = pl:get_inventory()
+	local lang = minetest.get_player_information(name).lang_code
+	local fs = {}
+	table.insert(fs, "formspec_version[4]")
+	table.insert(fs, "size[11.75,10.425]")
+	table.insert(fs, "scroll_container[0.375,0.375;10.75,10;recipe_container;vertical;0.1]")
+
+	for k,v in pairs(recipes_cache) do
+		--minetest.log(k)
+		local show = not only_craftable
+		if not show then
+			for l,w in pairs(v) do
+				if mcl_inventory.get_recipe_groups(pinv, w) then
+					show = true
+				end
+			end
+		end
+
+		if show and filter then
+			show = filter_item(k, filter, lang)
+		end
+
+		if show then
+			if x >= linemax then
+				x = 0
+				y = y + 1
+			end
+			table.insert(fs, string.format("item_image_button[%f,%f;%f,%f;%s;%s_inv;]",
+				x * 1.2,
+				y * 1.2,
+				1.2,
+				1.2,
+				k,
+				k))
+			x = x + 1
+			count = count + 1
+		end
+	end
+
+	table.insert(fs, "scroll_container_end[]")
+	table.insert(fs, "scrollbaroptions[arrows=show;thumbsize=30;min=0;max="..(count + 15).."]")
+	table.insert(fs, "scrollbar[11.25,0.375;0.4,10;vertical;recipe_container;]")
+
+	return table.concat(fs)
+end
+
+minetest.register_chatcommand("sbs_cg", {
+	func = function(pn, pr)
+		minetest.show_formspec(pn, "sbs_cg_test", mcl_craftguide.make_sbs_formspec(pn, pr))
+	end,
+})
+
 local function show_fs(player, name)
 	minetest.show_formspec(name, "mcl_craftguide", make_formspec(name))
 end
