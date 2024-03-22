@@ -737,7 +737,12 @@ function mcl_craftguide.make_sbs_formspec(name, filter, only_craftable)
 	local fs = {}
 	table.insert(fs, "formspec_version[4]")
 	table.insert(fs, "size[11.75,10.425]")
-	table.insert(fs, "scroll_container[0.375,0.375;10.75,10;recipe_container;vertical;0.1]")
+	table.insert(fs, "image_button[3.375,0.32;0.8,0.8;craftguide_search_icon.png;search;]")
+	table.insert(fs, "image_button[4.5,0.32;0.8,0.8;craftguide_clear_icon.png;clear;]")
+	table.insert(fs, string.format("field[0.375,0.32;2.5,1;filter;;%s]", F(filter or "")))
+	table.insert(fs, "field_close_on_enter[filter;false]")
+
+	table.insert(fs, "scroll_container[0.375,1.375;10.75,8.75;recipe_scrollbar;vertical;0.1]")
 
 	for k,v in pairs(recipes_cache) do
 		--minetest.log(k)
@@ -773,10 +778,23 @@ function mcl_craftguide.make_sbs_formspec(name, filter, only_craftable)
 
 	table.insert(fs, "scroll_container_end[]")
 	table.insert(fs, "scrollbaroptions[arrows=show;thumbsize=30;min=0;max="..(count + 15).."]")
-	table.insert(fs, "scrollbar[11.25,0.375;0.4,10;vertical;recipe_container;]")
+	table.insert(fs, "scrollbar[11.25,1.375;0.4,8.75;vertical;recipe_scrollbar;]")
 
 	return table.concat(fs)
 end
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname == "sbs_cg_test" then
+		minetest.log(dump(fields))
+		local pn = player:get_player_name()
+
+		if fields.clear then
+			minetest.show_formspec(pn, "sbs_cg_test", mcl_craftguide.make_sbs_formspec(pn))
+		elseif fields.key_enter_field == "filter" or fields.search then
+			minetest.show_formspec(pn, "sbs_cg_test", mcl_craftguide.make_sbs_formspec(pn, fields.filter))
+		end
+	end
+end)
 
 minetest.register_chatcommand("sbs_cg", {
 	func = function(pn, pr)
