@@ -9,97 +9,28 @@ local wood_groups = {
 
 local wood_sounds = mcl_sounds.node_sound_wood_defaults()
 
-local function queue()
-	return {
-		front = 1,
-		back = 1,
-		queue = {},
-		enqueue = function(self, value)
-			self.queue[self.back] = value
-			self.back = self.back + 1
-		end,
-		dequeue = function(self) local value = self.queue[self.front]
-			if not value then
-				return
-			end
-			self.queue[self.front] = nil
-			self.front = self.front + 1
-			return value
-		end,
-		size = function(self)
-			return self.back - self.front
-		end,
-	}
-end
+local function check_orphan_leaves(pos, oldnode)
 
-local function old_update_leaves(pos)
-	local pos1, pos2 = vector.offset(pos, -6, -6, -6), vector.offset(pos, 6, 6, 6)
-	local leaves = minetest.find_nodes_in_area(pos1, pos2, "group:leaves")
-	for _, lpos in pairs(leaves) do
+	if not oldnode or minetest.get_item_group(oldnode.name, "orphan_leaves") > 0 then
+		return
+	end
+
+	local level = 6
+	local r = level +1
+	local pos1, pos2 = vector.offset(pos, -r, -r, -r), vector.offset(pos, r, r, r)
+
+	-- cache = { leave_pos = level, ... }
+	local cache = {}
+	for _, lpos in pairs(minetest.find_nodes_in_area(pos1, pos2, "group:leaves")) do
 		local lnode = minetest.get_node(lpos)
-		-- skip orphan leaves and leaves which have log distance
-		if math.floor(lnode.param2 / 32) == 0 and minetest.get_item_group(lnode.name, "orphan_leaves") ~= 1 then
-			if not minetest.find_node_near(lpos, 6, "group:tree") then
-				-- manually placed leaf nodes have "no_decay" set to 1
-				-- in their node meta and will not decay automatically
-				if minetest.get_meta(lpos):get_int("no_decay") == 0 and minetest.registered_nodes[lnode.name .. "_orphan"] then
-					minetest.swap_node(lpos, { name = lnode.name .. "_orphan", param2 = lnode.param2 })
-				end
-			end
-		end
-	end
-end
-
-local function update_leaves(pos)
-	local vm = minetest.get_voxel_manip()
-	local emin, emax = vm:read_from_map(pos:offset(-7, -7, -7), pos:offset(7, 7, 7))
-	local a = VoxelArea:new{
-	    MinEdge = emin,
-	    MaxEdge = emax
-	}
-	local data = vm:get_data()
-	local param2_data = vm:get_param2_data()
-
-	local function is_leaves(pos)
-		local idx = a:index(pos.x, pos.y, pos.z)
-		local name = minetest.get_name_from_content_id(data[idx])
-		return minetest.get_item_group(name, "leaves") ~= 0
-	end
-
-	local function get_distance(pos)
-		local idx = a:index(pos.x, pos.y, pos.z)
-		local name = minetest.get_name_from_content_id(data[idx])
-		if minetest.get_item_group(name, "tree") ~= 0 then
-			return 0
-		end
-		if minetest.get_item_group(name, "orphan_leaves") ~= 0 then
-			return 7
-		end
-		if minetest.get_item_group(name, "leaves") ~= 0 then
-			return math.max(math.floor(param2_data[idx] / 32) - 1, 0)
+		if minetest.get_item_group(lnode.name, "orphan_leaves") ~= 1
+		and minetest.get_meta(lpos):get_int("no_decay") == 0
+		and minetest.registered_nodes[lnode.name .. "_orphan"] then
+			cache[tostring(lpos)] = 0
 		end
 	end
 
-	local function update_distance(pos, distance)
-		local idx = a:index(pos.x, pos.y, pos.z)
-		local name = minetest.get_name_from_content_id(data[idx])
-		local ndef = minetest.registered_nodes[name]
-
-		if distance < 7 and ndef._mcl_orphan_leaves then
-			data[idx] = minetest.get_content_id(ndef._mcl_leaves)
-		else
-			data[idx] = minetest.get_content_id(ndef._mcl_orphan_leaves)
-		end
-		param2_data[idx] = (distance + 1) * 32 + param2_data[idx] % 32
-	end
-
-	local clear_queue = queue()
-	local fill_queue = queue()
-
-	clear_queue:enqueue({ pos = pos, distance = get_distance(pos) or 0 })
-	fill_queue:enqueue({ pos = pos, distance = get_distance(pos) or 7 })
-
-	local directions = {
+	local dirs = {
 		vector.new(1, 0, 0),
 		vector.new(-1, 0, 0),
 		vector.new(0, 1, 0),
@@ -108,44 +39,58 @@ local function update_leaves(pos)
 		vector.new(0, 0, -1),
 	}
 
-	while clear_queue:size() > 0 do
-		local entry = clear_queue:dequeue()
-		local pos = entry.pos
-		local distance = entry.distance
+	local queue = {}
 
-		for _, dir in pairs(directions) do
-			local pos2 = pos:add(dir)
-			local distance2 = get_distance(pos2)
-			if distance2 then
-				if distance2 > distance and distance2 < 7 then
-					if is_leaves(pos2) then
-						update_distance(pos2, 7)
-						clear_queue:enqueue({ pos = pos2, distance = distance2 })
+	local function set_power_around(center_pos)
+		for _, dir in pairs(dirs) do
+			local lpos = center_pos:add(dir)
+			local k = tostring(lpos)
+			if cache[k] ~= nil  and (cache[k] < level) then
+				cache[k] = level
+				table.insert(queue, lpos)
+			end
+		end
+	end
+
+	-- max level around tree trunks
+	for _, tpos in pairs(minetest.find_nodes_in_area(pos1, pos2, "group:tree")) do
+		set_power_around(tpos)
+	end
+
+	-- level down to 1
+	local ptr = 1
+	while level > 0 do
+		level = level -1
+		max_ptr = #queue
+		while ptr <= max_ptr do
+			set_power_around(queue[ptr])
+			ptr = ptr +1
+		end
+	end
+
+	-- finaly check orphan leaves
+	queue = { pos }
+	ptr = 1
+	while ptr <= #queue do
+		max_ptr = #queue
+		while ptr <= max_ptr do
+			for _, dir in pairs(dirs) do
+				local lpos = queue[ptr]:add(dir)
+				local k = tostring(lpos)
+				if cache[k] ~= nil then
+					if (cache[k] <= 0) then
+						table.insert(queue, lpos)
+						local lnode = minetest.get_node(lpos)
+						--lnode.name = "mcl_trees:leaves_cherr_blossom"
+						--lnode.name = "mcl_trees:leaves_oak"
+						minetest.swap_node(lpos, { name = lnode.name .."_orphan", param2 = lnode.param2 })
 					end
-				elseif distance2 < 7 then
-					fill_queue:enqueue({ pos = pos2, distance = distance2 })
+					cache[k] = nil
 				end
 			end
+			ptr = ptr +1
 		end
 	end
-
-	while fill_queue:size() > 0 do
-		local entry = fill_queue:dequeue()
-		local pos = entry.pos
-		local neigh_distance = entry.distance + 1
-
-		for _, dir in pairs(directions) do
-			local pos2 = pos:add(dir)
-			if is_leaves(pos2) and get_distance(pos2) > neigh_distance then
-				update_distance(pos2, neigh_distance)
-				fill_queue:enqueue({ pos = pos2, distance = neigh_distance })
-			end
-		end
-	end
-
-	vm:set_data(data)
-	vm:set_param2_data(param2_data)
-	vm:write_to_map(false)
 end
 
 -- called from leaves after_place_node
@@ -155,7 +100,6 @@ local function set_placed_leaves_p2(pos)
 	if minetest.get_item_group(n.name, "biomecolor") ~= 0 then
 		palette_index = mcl_util.get_pos_p2(pos)
 	end
-
 	-- 32 represents a log distance of 0 (which means the no decay)
 	n.param2 = 32 + palette_index
 	minetest.swap_node(pos,n)
@@ -173,11 +117,7 @@ local tpl_log = {
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	on_place = mcl_util.rotate_axis,
-	on_construct = update_leaves,
-	after_destruct = function(pos)
-		old_update_leaves(pos)
-		update_leaves(pos)
-	end,
+	after_destruct = check_orphan_leaves,
 	on_rotate = screwdriver.rotate_3way,
 	_on_axe_place = mcl_trees.strip_tree,
 	_mcl_blast_resistance = 2,
@@ -204,9 +144,8 @@ local tpl_leaves = {
 		flammable = 2, fire_encouragement = 30, fire_flammability = 60,
 		compostability = 30
 	},
-	on_construct = update_leaves,
 	after_place_node = set_placed_leaves_p2,
-	after_destruct = update_leaves,
+	after_destruct = check_orphan_leaves,
 	_mcl_shears_drop = true,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0.2,
