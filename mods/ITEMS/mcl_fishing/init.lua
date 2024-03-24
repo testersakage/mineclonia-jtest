@@ -115,8 +115,8 @@ local function fish(itemstack, player, pointed_thing)
 			local junk_values = {10, 8.1, 6.1, 4.2}
 			local luck_of_the_sea = math.min(mcl_enchanting.get_enchantment(itemstack, "luck_of_the_sea"), 3)
 			local index = luck_of_the_sea + 1
-			local fish_value = fish_values[index]
-			local junk_value = junk_values[index] + fish_value
+			local fish_value = fish_values[index] - mcl_luck.get_luck(ent.player)
+			local junk_value = junk_values[index] + fish_value - mcl_luck.get_luck(ent.player)
 			if r <= fish_value then
 				items = mcl_loot.get_loot({ items = mcl_fishing.loot_fish, stacks_min = 1, stacks_max = 1 }, pr)
 				awards.unlock(player:get_player_name(), "mcl:fishyBusiness")
