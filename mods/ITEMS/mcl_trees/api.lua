@@ -24,6 +24,9 @@ local function check_orphan_leaves(pos, oldnode)
 	for _, lpos in pairs(minetest.find_nodes_in_area(pos1, pos2, "group:leaves")) do
 		local lnode = minetest.get_node(lpos)
 		if minetest.get_item_group(lnode.name, "orphan_leaves") ~= 1
+		-- skip orphan leaves and leaves which have log distance
+		and math.floor(lnode.param2 / 32) ~= 1
+		-- skip older no_decay
 		and minetest.get_meta(lpos):get_int("no_decay") == 0
 		and minetest.registered_nodes[lnode.name .. "_orphan"] then
 			cache[tostring(lpos)] = 0
@@ -59,6 +62,7 @@ local function check_orphan_leaves(pos, oldnode)
 
 	-- level down to 1
 	local ptr = 1
+	local max_ptr
 	while level > 0 do
 		level = level -1
 		max_ptr = #queue
@@ -81,8 +85,6 @@ local function check_orphan_leaves(pos, oldnode)
 					if (cache[k] <= 0) then
 						table.insert(queue, lpos)
 						local lnode = minetest.get_node(lpos)
-						--lnode.name = "mcl_trees:leaves_cherr_blossom"
-						--lnode.name = "mcl_trees:leaves_oak"
 						minetest.swap_node(lpos, { name = lnode.name .."_orphan", param2 = lnode.param2 })
 					end
 					cache[k] = nil
