@@ -290,6 +290,9 @@ end
 
 local function register_leaves(subname, def, sapling, drop_apples, sapling_chances)
 	local d = mcl_trees.generate_leaves_def("mcl_trees:", subname, def, sapling, drop_apples, sapling_chances)
+	if d["orphan_leaves_def"].tiles and #d["orphan_leaves_def"].tiles ~= 0 then
+		d["orphan_leaves_def"].tiles = { def.tiles[1] .. "^[brighten" }
+	end
 	minetest.register_node(":" .. d["leaves_id"], d["leaves_def"])
 	minetest.register_node(":" .. d["orphan_leaves_id"], d["orphan_leaves_def"])
 end
