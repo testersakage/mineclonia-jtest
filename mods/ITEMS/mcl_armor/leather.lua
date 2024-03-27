@@ -63,6 +63,8 @@ function mcl_armor.colorize_leather_armor(itemstack, colorstring)
 	return itemstack
 end
 
+local S = minetest.get_translator(minetest.get_current_modname())
+
 function mcl_armor.wash_leather_armor(itemstack)
 	if not itemstack or itemstack:get_definition().groups.armor_leather ~= 1 then
 		return
@@ -76,13 +78,13 @@ end
 
 mcl_armor.register_set({
 	name = "leather",
-	description = "Leather",
+	description = S("Leather"),
 	color = base_color,
 	descriptions = {
-		head = "Cap",
-		torso = "Tunic",
-		legs = "Pants",
-		feet = "Boots",
+		head = S("Cap"),
+		torso = S("Tunic"),
+		legs = S("Pants"),
+		feet = S("Boots"),
 	},
 	durability = 80,
 	enchantability = 15,
@@ -161,25 +163,25 @@ minetest.register_on_craft(colorizing_crafting)
 
 minetest.register_chatcommand("color_leather", {
 	params = "<color>",
-	description = "Colorize a piece of leather armor, or wash it",
+	description = S("Colorize a piece of leather armor, or wash it"),
 	privs = { debug = true, },
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if player then
 			local item = player:get_wielded_item()
 			if not item or item:get_definition().groups.armor_leather ~= 1 then
-				return false, "Not leather armor."
+				return false, S("Not leather armor.")
 			end
 			if param == "wash" then
 				player:set_wielded_item(mcl_armor.wash_leather_armor(item))
-				return true, "Washed."
+				return true, S("Washed.")
 			end
 			local colorstring = minetest.colorspec_to_colorstring(param)
 			if not colorstring then return false, "Invalid color" end
 			player:set_wielded_item(mcl_armor.colorize_leather_armor(item, colorstring))
-			return true, "Done: " .. colorstring
+			return true, S("Done: @1", colorstring)
 		else
-			return false, "Player isn't online"
+			return false, S("Player isn't online")
 		end
 	end,
 })
