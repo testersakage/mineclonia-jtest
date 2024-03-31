@@ -1356,3 +1356,16 @@ function minetest.get_natural_light(pos,tod)
 	minetest.log("error","["..tostring(minetest.get_current_modname()).."] minetest.get_natural_light would have crashed: \n https://codeberg.org/mineclonia/mineclonia/issues/17\n".. tostring(res))
 	return 0
 end
+
+local function table_merge(base, overlay)
+	for k,v in pairs(overlay) do
+		if type(base[k]) == "table" then
+			table_merge(base[k], v)
+		else
+			base[k] = v
+		end
+	end
+	return base
+end
+mcl_util.table_merge = table_merge
+
