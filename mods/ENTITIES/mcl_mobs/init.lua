@@ -492,12 +492,6 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 					return itemstack
 				end
 
-				if minetest.settings:get_bool("only_peaceful_mobs", false)
-						and minetest.registered_entities[mob].type == "monster" then
-					minetest.chat_send_player(name, S("Only peaceful mobs allowed!"))
-					return itemstack
-				end
-
 				pos.y = pos.y - 0.5
 
 				local mob = minetest.add_entity(pos, mob)
