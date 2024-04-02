@@ -403,7 +403,7 @@ local mod_table = {
 
 local function extend_dur(potionstack)
 	local def = potions[potionstack:get_name()]
-	if not def then return false end -- somehow, it initially always fails
+	if not def then return false end
 	if not def.has_plus then return false end -- bail out if can't be extended
 	local potionstack = ItemStack(potionstack)
 	local meta = potionstack:get_meta()
@@ -422,7 +422,7 @@ end
 
 local function enhance_pow(potionstack)
 	local def = potions[potionstack:get_name()]
-	if not def then return false end -- somehow, it initially always fails
+	if not def then return false end
 	if not def.has_potent then return false end -- bail out if has no potent variant
 	local potionstack = ItemStack(potionstack)
 	local meta = potionstack:get_meta()
