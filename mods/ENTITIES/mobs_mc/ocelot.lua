@@ -27,6 +27,7 @@ local ocelot = {
 	description = S("Ocelot"),
 	type = "animal",
 	spawn_class = "passive",
+	can_spawn_in_peaceful = false,
 	passive = false,
 	can_despawn = true,
 	spawn_in_group = 3,

@@ -40,6 +40,7 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	type = "monster",
 	spawn_class = "hostile",
 	attack_type = "shoot",
+	can_spawn_in_peaceful = true,
 	shoot_interval = 5.5,
 	arrow = "mobs_mc:shulkerbullet",
 	shoot_offset = 0.5,

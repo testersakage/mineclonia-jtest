@@ -14,6 +14,7 @@ local hoglin = {
 	type = "monster",
 	passive = false,
 	spawn_class = "hostile",
+	can_spawn_in_peaceful = true,
 	hp_min = 40,
 	hp_max = 40,
 	xp_min = 9,
@@ -109,6 +110,7 @@ mcl_mobs.register_mob("mobs_mc:hoglin", hoglin)
 
 mcl_mobs.register_mob("mobs_mc:zoglin",table.merge(hoglin,{
 	description = S("Zoglin"),
+	can_spawn_in_peaceful = false,
 	fire_resistant = 1,
 	textures = {"extra_mobs_zoglin.png"},
 	do_custom = function() end,
