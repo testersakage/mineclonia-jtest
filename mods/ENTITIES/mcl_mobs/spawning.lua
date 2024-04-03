@@ -31,6 +31,7 @@ local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
 local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
 local logging = minetest.settings:get_bool("mcl_logging_mobs_spawn", false)
 local mgname = minetest.get_mapgen_setting("mgname")
+local only_peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
 
 -- count how many mobs are in an area
 local function count_mobs(pos,r,mob_type)
@@ -217,6 +218,7 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	dbg_spawn_attempts = dbg_spawn_attempts + 1
 	local dimension = mcl_worlds.pos_to_dimension(pos)
 	local mob_def = minetest.registered_entities[spawn_def.name]
+	if only_peaceful and not mob_def.can_spawn_in_peaceful then	return false, "can't spawn in peaceful mode" end
 	local mob_type = mob_def.type
 	local gotten_node = minetest.get_node(pos).name
 	local gotten_biome = minetest.get_biome_data(pos)

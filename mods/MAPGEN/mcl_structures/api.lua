@@ -393,7 +393,7 @@ function mcl_structures.register_structure_spawn(def)
 		chance = def.chance or 5,
 		action = function(pos, node, active_object_count, active_object_count_wider)
 			local mobdef = minetest.registered_entities[def.name]
-			if minetest.settings:get_bool("only_peaceful_mobs", false) and mobdef.can_spawn_in_peaceful then
+			if minetest.settings:get_bool("only_peaceful_mobs", false) and not mobdef.can_spawn_in_peaceful then
 				return
 			end
 			local limit = def.limit or 7
