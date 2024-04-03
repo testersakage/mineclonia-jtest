@@ -387,7 +387,8 @@ function mob_class:on_step(dtime)
 		return
 	end
 
-	self:check_water_flow()
+	-- Handle environmental physics
+	mcl_physics.apply_entity_environmental_physics(self)
 
 	self:env_danger_movement_checks (dtime)
 

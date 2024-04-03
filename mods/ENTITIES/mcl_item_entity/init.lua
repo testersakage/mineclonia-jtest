@@ -279,17 +279,6 @@ end
 
 local time_to_live = tonumber(minetest.settings:get("item_entity_ttl")) or 300
 
-local function cxcz(o, cw, one, zero)
-	if cw < 0 then
-		table.insert(o, { [one]=1, y=0, [zero]=0 })
-		table.insert(o, { [one]=-1, y=0, [zero]=0 })
-	else
-		table.insert(o, { [one]=-1, y=0, [zero]=0 })
-		table.insert(o, { [one]=1, y=0, [zero]=0 })
-	end
-	return o
-end
-
 minetest.register_entity(":__builtin:item", {
 	initial_properties = {
 		hp_max = 1,
@@ -858,6 +847,7 @@ minetest.register_entity(":__builtin:item", {
 			self:enable_physics(true)
 			return
 		end
+		mcl_physics.apply_entity_environmental_physics(self)
 
 		-- If node is not registered or node is walkably solid and resting on nodebox
 		local nn = minetest.get_node(vector.offset(p, 0, -0.5, 0)).name
