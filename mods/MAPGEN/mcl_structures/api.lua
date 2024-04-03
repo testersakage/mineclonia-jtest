@@ -392,6 +392,10 @@ function mcl_structures.register_structure_spawn(def)
 		interval = def.interval or 60,
 		chance = def.chance or 5,
 		action = function(pos, node, active_object_count, active_object_count_wider)
+			local mobdef = minetest.registered_entities[def.name]
+			if minetest.settings:get_bool("only_peaceful_mobs", false) and mobdef.can_spawn_in_peaceful then
+				return
+			end
 			local limit = def.limit or 7
 			if active_object_count_wider > limit + mob_cap_animal then return end
 			if active_object_count_wider > mob_cap_player then return end
@@ -403,7 +407,6 @@ function mcl_structures.register_structure_spawn(def)
 					return
 				end
 			end
-			local mobdef = minetest.registered_entities[def.name]
 			if mobdef.can_spawn and not mobdef.can_spawn(p) then return end
 			minetest.add_entity(p,def.name)
 		end,
