@@ -54,7 +54,7 @@ local function update_leaves(pos, oldnode)
 		if minetest.get_item_group(name, "leaves") ~= 0
 		and minetest.get_item_group(name, "orphan_leaves") ~= 1
 		and minetest.registered_nodes[name .. "_orphan"]
-		and math.floor(param2_data[idx] / 32) ~= 1 
+		and math.floor(param2_data[idx] / 32) ~= 1
 		-- skip older no_decay
 		and minetest.get_meta(a:position(idx)):get_int("no_decay") == 0 then
 			level_cache[idx] = 0
@@ -327,6 +327,9 @@ end
 
 local function register_leaves(subname, def, sapling, drop_apples, sapling_chances)
 	local d = mcl_trees.generate_leaves_def("mcl_trees:", subname, def, sapling, drop_apples, sapling_chances)
+	if d["orphan_leaves_def"].tiles and #d["orphan_leaves_def"].tiles ~= 0 then
+		d["orphan_leaves_def"].tiles = { d["orphan_leaves_def"].tiles[1] .. "^[brighten" }
+	end
 	minetest.register_node(":" .. d["leaves_id"], d["leaves_def"])
 	minetest.register_node(":" .. d["orphan_leaves_id"], d["orphan_leaves_def"])
 end
