@@ -423,24 +423,18 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		punch_interval = tool_capabilities.full_punch_interval or 1.4
 	end
 
-	-- add weapon wear manually
-	-- Required because we have custom health handling ("health" property)
-	if minetest.is_creative_enabled("") ~= true
-	and tool_capabilities then
-		if tool_capabilities.punch_attack_uses then
-			-- Without this delay, the wear does not work. Quite hacky ...
-			minetest.after(0, function(name)
-				local player = minetest.get_player_by_name(name)
-				if not player then return end
-				local weapon = hitter:get_wielded_item(player)
-				local def = weapon:get_definition()
-				if def.tool_capabilities and def.tool_capabilities.punch_attack_uses then
-					local wear = math.floor(65535/tool_capabilities.punch_attack_uses)
-					weapon:add_wear(wear)
-					hitter:set_wielded_item(weapon)
-				end
-			end, hitter_playername)
-		end
+	-- To enable our custom health handling ("health" property) we use the
+	-- "immortal" group to disable engine damage and wear handling, so we
+	-- need to roll our own.
+	if is_player
+	and minetest.is_creative_enabled(hitter_playername) ~= true
+	and tool_capabilities
+	and tool_capabilities.punch_attack_uses
+	and tool_capabilities.punch_attack_uses > 0 then
+		local weapon = hitter:get_wielded_item()
+		local wear = math.floor(65535/tool_capabilities.punch_attack_uses)
+		weapon:add_wear(wear)
+		hitter:set_wielded_item(weapon)
 	end
 
 	local die = false
