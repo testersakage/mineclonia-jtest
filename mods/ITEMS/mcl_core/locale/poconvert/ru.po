@@ -3,15 +3,18 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-04-05 02:08+0000\n"
+"Last-Translator: Ame-chan-angel <Ame-chan-angel@users.noreply.translate."
+"codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 msgid "Stick"
 msgstr "Палка"
@@ -188,7 +191,7 @@ msgid "Mossy Stone Bricks"
 msgstr "Замшелые каменные кирпичи"
 
 msgid "Smooth Stone"
-msgstr ""
+msgstr "Гладкий камень"
 
 msgid "Granite"
 msgstr "Гранит"
@@ -233,7 +236,7 @@ msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful bl
 msgstr "Дёрн это блок земли, покрытый травой. Дёрн удобен тем, что на нём могут расти разнообразные растения. Дёрн можно превратить в грядку при помощи мотыги или в тропинку при помощи лопаты. При наличии света дёрн понемногу распространяется на блоки земли по соседству. Под непрозрачным блоком или жидкостью дёрн может превратиться обратно в землю."
 
 msgid "Dirt with Snow"
-msgstr ""
+msgstr "Земля со снегом"
 
 msgid "Grass Path"
 msgstr "Тропинка"
@@ -248,7 +251,7 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr "Мицелий это идеальная почва для грибов. В отличие от других земляных блоков, он не может быть превращён в грядку при помощи мотыги. При наличии освещения мицелий медленно распространяется по соседствующие с ним блоки земли. Под непрозрачным блоком или жидкостью со временем превращается обратно в землю."
 
 msgid "Mycelium with Snow"
-msgstr ""
+msgstr "Мицелий со снегом"
 
 msgid "Podzol"
 msgstr "Подзол"
@@ -257,7 +260,7 @@ msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are ab
 msgstr "Подзол это тип земли, встречающийся в таёжных лесах. Только несколько растений имеют способность выжить на нём."
 
 msgid "Podzol with Snow"
-msgstr ""
+msgstr "Подзол со снегом"
 
 msgid "Dirt"
 msgstr "Земля"
@@ -602,22 +605,22 @@ msgid "Void"
 msgstr "Пустота"
 
 msgid "Stone Stairs"
-msgstr ""
+msgstr "Каменные ступени"
 
 msgid "Stone Slab"
-msgstr ""
+msgstr "Каменная плита"
 
 msgid "Smooth Stone Slab"
-msgstr ""
+msgstr "Гладкая каменная плита"
 
 msgid "Andesite Stairs"
-msgstr ""
+msgstr "Андезитовые ступени"
 
 msgid "Andesite Slab"
-msgstr ""
+msgstr "Андезитовая плита"
 
 msgid "Granite Stairs"
-msgstr ""
+msgstr "Гранитные ступени"
 
 msgid "Granite Slab"
 msgstr ""
@@ -729,4 +732,3 @@ msgstr ""
 
 msgid "Birch"
 msgstr ""
-
