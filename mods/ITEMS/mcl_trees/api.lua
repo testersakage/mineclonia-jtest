@@ -32,62 +32,34 @@ local function queue()
 	}
 end
 
-local function update_leaves(pos)
+local function update_leaves(pos, oldnode)
+	if not oldnode or minetest.get_item_group(oldnode.name, "orphan_leaves") > 0 then
+		return
+	end
+
+	local level = 6
+	local r = level +1
 	local vm = minetest.get_voxel_manip()
-	local emin, emax = vm:read_from_map(pos:offset(-7, -7, -7), pos:offset(7, 7, 7))
+	local emin, emax = vm:read_from_map(pos:offset(-r, -r, -r), pos:offset(r, r, r))
 	local a = VoxelArea:new{
 	    MinEdge = emin,
 	    MaxEdge = emax
 	}
 	local data = vm:get_data()
 	local param2_data = vm:get_param2_data()
+	local level_cache = {}
 
-	local function is_leaves(pos)
-		local idx = a:index(pos.x, pos.y, pos.z)
-		if not data[idx] then
-			return false
-		end
-
+	for idx,_ in ipairs(data) do
 		local name = minetest.get_name_from_content_id(data[idx])
-		return minetest.get_item_group(name, "leaves") ~= 0
-	end
-
-	local function get_distance(pos)
-		local idx = a:index(pos.x, pos.y, pos.z)
-		if not data[idx] then
-			return 7
-		end
-
-		local name = minetest.get_name_from_content_id(data[idx])
-		if minetest.get_item_group(name, "tree") ~= 0 then
-			return 0
-		end
-		if minetest.get_item_group(name, "orphan_leaves") ~= 0 then
-			return 7
-		end
-		if minetest.get_item_group(name, "leaves") ~= 0 then
-			return math.max(math.floor(param2_data[idx] / 32) - 1, 0)
+		if minetest.get_item_group(name, "leaves") ~= 0
+		and minetest.get_item_group(name, "orphan_leaves") ~= 1
+		and minetest.registered_nodes[name .. "_orphan"]
+		and math.floor(param2_data[idx] / 32) ~= 1 
+		-- skip older no_decay
+		and minetest.get_meta(a:position(idx)):get_int("no_decay") == 0 then
+			level_cache[idx] = 0
 		end
 	end
-
-	local function update_distance(pos, distance)
-		local idx = a:index(pos.x, pos.y, pos.z)
-		local name = minetest.get_name_from_content_id(data[idx])
-		local ndef = minetest.registered_nodes[name]
-
-		if distance < 7 and ndef._mcl_orphan_leaves then
-			data[idx] = minetest.get_content_id(ndef._mcl_leaves)
-		else
-			data[idx] = minetest.get_content_id(ndef._mcl_orphan_leaves)
-		end
-		param2_data[idx] = (distance + 1) * 32 + param2_data[idx] % 32
-	end
-
-	local clear_queue = queue()
-	local fill_queue = queue()
-
-	clear_queue:enqueue({ pos = pos, distance = get_distance(pos) or 0 })
-	fill_queue:enqueue({ pos = pos, distance = get_distance(pos) or 7 })
 
 	local directions = {
 		vector.new(1, 0, 0),
@@ -98,43 +70,65 @@ local function update_leaves(pos)
 		vector.new(0, 0, -1),
 	}
 
-	while clear_queue:size() > 0 do
-		local entry = clear_queue:dequeue()
-		local pos = entry.pos
-		local distance = entry.distance
 
+	local queues = {}
+	queues[level] = queue()
+
+	local function set_level_around(center_pos)
 		for _, dir in pairs(directions) do
-			local pos2 = pos:add(dir)
-			local distance2 = get_distance(pos2)
-			if distance2 then
-				if distance2 == 0 then
-					fill_queue:enqueue({ pos = pos2, distance = distance2 })
-				elseif distance + 1 < 7 and distance2 ~= 7 then
-					if is_leaves(pos2) then
-						update_distance(pos2, 7)
-						clear_queue:enqueue({ pos = pos2, distance = distance + 1 })
+			local lpos = center_pos:add(dir)
+			local idx = a:indexp(lpos)
+			if level_cache[idx] ~= nil and level_cache[idx] < level then
+				level_cache[idx] = level
+				queues[level]:enqueue(lpos)
+			end
+		end
+	end
+
+	-- max level around tree trunks
+	for idx,_ in ipairs(data) do
+		local name = minetest.get_name_from_content_id(data[idx])
+		if minetest.get_item_group(name, "tree") ~= 0 then
+			set_level_around(a:position(idx))
+		end
+	end
+
+	-- level down to 1
+	while level > 0 do
+		level = level -1
+		queues[level] = queue()
+		while queues[level+1]:size() > 0 do
+			set_level_around(queues[level+1]:dequeue())
+		end
+	end
+
+	-- finaly check orphan leaves
+	queues = {}
+	local q = 1
+	queues[q] = queue()
+	queues[q]:enqueue(pos)
+	while queues[q]:size() > 0 do
+		queues[q+1] = queue()
+		while queues[q]:size() > 0 do
+			local qpos = queues[q]:dequeue()
+			for _, dir in pairs(directions) do
+				local lpos = qpos:add(dir)
+				local idx = a:indexp(lpos)
+				if level_cache[idx] ~= nil then
+					if level_cache[idx] <= 0 then
+						local name = minetest.get_name_from_content_id(data[idx])
+						local ndef = minetest.registered_nodes[name]
+						data[idx] = minetest.get_content_id(ndef._mcl_orphan_leaves)
+						queues[q+1]:enqueue(lpos)
 					end
+					level_cache[idx] = nil
 				end
 			end
 		end
-	end
-
-	while fill_queue:size() > 0 do
-		local entry = fill_queue:dequeue()
-		local pos = entry.pos
-		local neigh_distance = entry.distance + 1
-
-		for _, dir in pairs(directions) do
-			local pos2 = pos:add(dir)
-			if is_leaves(pos2) and get_distance(pos2) > neigh_distance then
-				update_distance(pos2, neigh_distance)
-				fill_queue:enqueue({ pos = pos2, distance = neigh_distance })
-			end
-		end
+		q = q +1
 	end
 
 	vm:set_data(data)
-	vm:set_param2_data(param2_data)
 	vm:write_to_map(false)
 end
 
@@ -163,7 +157,6 @@ local tpl_log = {
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	on_place = mcl_util.rotate_axis,
-	on_construct = update_leaves,
 	after_destruct = update_leaves,
 	on_rotate = screwdriver.rotate_3way,
 	_on_axe_place = mcl_trees.strip_tree,
@@ -305,7 +298,6 @@ function mcl_trees.generate_leaves_def(modname, subname, def, sapling, drop_appl
 
 	local l_def = table.merge(tpl_leaves, {
 		drop = get_drops(0),
-		on_construct = update_leaves,
 		after_place_node = set_placed_leaves_p2,
 		after_destruct = update_leaves,
 		_mcl_fortune_drop = { get_drops(1), get_drops(2), get_drops(3), get_drops(4) },
