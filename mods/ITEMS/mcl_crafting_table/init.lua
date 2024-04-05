@@ -3,38 +3,45 @@ local F = minetest.formspec_escape
 local C = minetest.colorize
 mcl_crafting_table = {}
 
-mcl_crafting_table.formspec = table.concat({
-	"formspec_version[4]",
-	"size[11.75,10.425]",
+local function make_formspec(name)
+	return table.concat({
+		"formspec_version[4]",
+		"size[24,10.425]",
 
-	"label[2.25,0.375;" .. F(C(mcl_formspec.label_color, S("Crafting"))) .. "]",
+		"container[0, 0]",
+		mcl_craftguide.make_sbs_formspec(name, "", true),
+		"container_end[]",
+		"container[11.75, 0]",
+		"label[2.25,0.375;" .. F(C(mcl_formspec.label_color, S("Crafting"))) .. "]",
 
-	mcl_formspec.get_itemslot_bg_v4(2.25, 0.75, 3, 3),
-	"list[current_player;craft;2.25,0.75;3,3;]",
+		mcl_formspec.get_itemslot_bg_v4(2.25, 0.75, 3, 3),
+		"list[current_player;craft;2.25,0.75;3,3;]",
 
-	"image[6.125,2;1.5,1;gui_crafting_arrow.png]",
+		"image[6.125,2;1.5,1;gui_crafting_arrow.png]",
 
-	mcl_formspec.get_itemslot_bg_v4(8.2, 2, 1, 1, 0.2),
-	"list[current_player;craftpreview;8.2,2;1,1;]",
+		mcl_formspec.get_itemslot_bg_v4(8.2, 2, 1, 1, 0.2),
+		"list[current_player;craftpreview;8.2,2;1,1;]",
 
-	"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
+		"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
 
-	mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
-	"list[current_player;main;0.375,5.1;9,3;9]",
+		mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
+		"list[current_player;main;0.375,5.1;9,3;9]",
 
-	mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
-	"list[current_player;main;0.375,9.05;9,1;]",
+		mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
+		"list[current_player;main;0.375,9.05;9,1;]",
 
-	"listring[current_player;craft]",
-	"listring[current_player;main]",
+		"listring[current_player;craft]",
+		"listring[current_player;main]",
 
-	--Crafting guide button
-	"image_button[0.325,1.95;1.1,1.1;craftguide_book.png;__mcl_craftguide;]",
-	"tooltip[__mcl_craftguide;" .. F(S("Recipe book")) .. "]",
+		--Crafting guide button
+		"image_button[0.325,1.95;1.1,1.1;craftguide_book.png;__mcl_craftguide;]",
+		"tooltip[__mcl_craftguide;" .. F(S("Recipe book")) .. "]",
 
-	"image_button[6.025,3.175;1,1;mcl_crafting_table_inv_fill.png;__mcl_crafting_fillgrid;]",
-	"tooltip[__mcl_crafting_fillgrid;" .. F(S("Fill Craft Grid")) .. "]",
-})
+		"image_button[6.025,3.175;1,1;mcl_crafting_table_inv_fill.png;__mcl_crafting_fillgrid;]",
+		"tooltip[__mcl_crafting_fillgrid;" .. F(S("Fill Craft Grid")) .. "]",
+		"container_end[]",
+	})
+end
 
 function mcl_crafting_table.has_crafting_table(player)
 	local wdef = player:get_wielded_item():get_definition()
@@ -51,8 +58,8 @@ function mcl_crafting_table.show_crafting_form(player)
 		inv:set_width("craft", 3)
 		inv:set_size("craft", 9)
 	end
-
-	minetest.show_formspec(player:get_player_name(), "main", mcl_crafting_table.formspec)
+	local name = player:get_player_name()
+	minetest.show_formspec(name, "main",  make_formspec(name))
 end
 
 minetest.register_node("mcl_crafting_table:crafting_table", {

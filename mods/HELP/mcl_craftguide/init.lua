@@ -726,7 +726,7 @@ local function filter_item(item, filter, lang)
 	return string.find(item, filter, nil, true) or string.find(desc, filter, nil, true)
 end
 
-function mcl_craftguide.make_sbs_formspec(name, filter, only_craftable)
+function mcl_craftguide.make_sbs_formspec(name, filter, nohead, only_craftable)
 	local linemax = 9
 	local count = 0
 	local x = 0
@@ -735,8 +735,10 @@ function mcl_craftguide.make_sbs_formspec(name, filter, only_craftable)
 	local pinv = pl:get_inventory()
 	local lang = minetest.get_player_information(name).lang_code
 	local fs = {}
-	table.insert(fs, "formspec_version[4]")
-	table.insert(fs, "size[11.75,10.425]")
+	if not nohead then
+		table.insert(fs, "formspec_version[4]")
+		table.insert(fs, "size[11.75,10.425]")
+	end
 	table.insert(fs, "image_button[3.375,0.32;0.8,0.8;craftguide_search_icon.png;search;]")
 	table.insert(fs, "image_button[4.5,0.32;0.8,0.8;craftguide_clear_icon.png;clear;]")
 	table.insert(fs, string.format("field[0.375,0.32;2.5,1;filter;;%s]", F(filter or "")))
