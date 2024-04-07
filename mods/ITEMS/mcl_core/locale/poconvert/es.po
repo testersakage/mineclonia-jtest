@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-04-08 06:18+0000\n"
+"Last-Translator: mugcake <mugcake@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 msgid "Stick"
 msgstr "Palo"
@@ -77,7 +78,7 @@ msgid "Emerald"
 msgstr "Esmeralda"
 
 msgid "Emeralds are used in villager trades as currency."
-msgstr ""
+msgstr "Las esmeraldas se utilizan en el comercio de los aldeanos como moneda."
 
 msgid "Lapis Lazuli"
 msgstr "Lapislázuli"
@@ -122,7 +123,7 @@ msgid "Golden apples are precious food items which can be eaten."
 msgstr "Las manzanas doradas son alimentos preciosos que se pueden comer."
 
 msgid "Enchanted Golden Apple"
-msgstr ""
+msgstr "Manzana Dorada Encantada"
 
 msgid "Stone"
 msgstr "Piedra"
@@ -188,7 +189,7 @@ msgid "Mossy Stone Bricks"
 msgstr "Ladrillo de piedra musgoso"
 
 msgid "Smooth Stone"
-msgstr ""
+msgstr "Piedra Pulida"
 
 msgid "Granite"
 msgstr "Granito"
@@ -233,7 +234,7 @@ msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful bl
 msgstr "Un bloque de hierba es tierra con una cubierta de hierba. Los bloques de hierba son bloques ingeniosos que permiten el crecimiento de todo tipo de plantas. Pueden convertirse en tierras de cultivo con una azada y convertirse en caminos de hierba con una pala. A la luz, la hierba se extiende lentamente sobre la tierra cercana. Debajo de un bloque opaco o un líquido, un bloque de hierba puede ensuciarse."
 
 msgid "Dirt with Snow"
-msgstr ""
+msgstr "Tierra con Nieve"
 
 msgid "Grass Path"
 msgstr "Camino de hierba"
@@ -248,7 +249,7 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr "El micelio es un tipo de tierra y el suelo ideal para los hongos. A diferencia de otros bloques de tipo de tierra, no se puede convertir en tierras de cultivo con una azada. A la luz, el micelio se extiende lentamente sobre la tierra cercana. Debajo de un bloque opaco o un líquido, eventualmente se convierte nuevamente en tierra."
 
 msgid "Mycelium with Snow"
-msgstr ""
+msgstr "Micelio con Nieve"
 
 msgid "Podzol"
 msgstr "Podzol"
@@ -257,7 +258,7 @@ msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are ab
 msgstr "El podzol es un tipo de tierra que se encuentra en los bosques de taiga. Solo unas pocas plantas pueden sobrevivir en él."
 
 msgid "Podzol with Snow"
-msgstr ""
+msgstr "Podsol con Nieve"
 
 msgid "Dirt"
 msgstr "Tierra"
@@ -407,10 +408,12 @@ msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance.
 msgstr "La obsidiana es un mineral extremadamente duro con una enorme resistencia a la explosión. La obsidiana se forma cuando el agua se encuentra con la lava."
 
 msgid "Crying Obsidian"
-msgstr ""
+msgstr "Obsidiana Llorosa"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
 msgstr ""
+"La obsidiana llorosa es una obsidiana luminosa que se genera como parte de "
+"los portales en ruinas."
 
 msgid "Ice"
 msgstr "Hielo"
@@ -434,7 +437,7 @@ msgid "Top Snow"
 msgstr "Nieve"
 
 msgid "Stackable"
-msgstr ""
+msgstr "Apilable"
 
 msgid "Top snow is a layer of snow. It melts near light sources other than the sun with a light level of 12 or higher."
 msgstr "La nieve es una capa de nieve. Se derrite cerca de fuentes de luz distintas al sol con un nivel 12 de luz o más."
@@ -455,10 +458,10 @@ msgid "Cactus"
 msgstr "Cactus"
 
 msgid "Grows on sand"
-msgstr ""
+msgstr "Crece en la arena"
 
 msgid "Contact damage: @1 per half second"
-msgstr ""
+msgstr "Daño por contacto: @1 por medio segundo"
 
 msgid "This is a piece of cactus commonly found in dry areas, especially deserts. Over time, cacti will grow up to 3 blocks high on sand or red sand. A cactus hurts living beings touching it with a damage of 1 HP every half second. When a cactus block is broken, all cactus blocks connected above it will break as well."
 msgstr "Este es un pedazo de cactus que se encuentra comúnmente en áreas secas, especialmente en los desiertos. Con el tiempo, los cactus crecerán hasta 3 bloques de altura en arena o arena roja. Un cactus lastima a los seres vivos al tocarlo con un daño de 1 HP cada medio segundo. Cuando un bloque de cactus se rompe, todos los bloques de cactus conectados encima también se romperán."
@@ -470,7 +473,7 @@ msgid "Sugar Canes"
 msgstr "Caña de azúcar"
 
 msgid "Grows on sand or dirt next to water"
-msgstr ""
+msgstr "Crece en la arena o en la tierra junto al agua"
 
 msgid "Sugar canes are a plant which has some uses in crafting. Sugar canes will slowly grow up to 3 blocks when they are next to water and are placed on a grass block, dirt, sand, red sand, podzol or coarse dirt. When a sugar cane is broken, all sugar canes connected above will break as well."
 msgstr "Las cañas de azúcar son una planta que tiene algunos usos en la elaboración. Las cañas de azúcar crecerán lentamente hasta 3 bloques cuando estén cerca del agua y se colocan en un bloque de césped, tierra, arena, arena roja, podzol o tierra gruesa. Cuando se rompe una caña de azúcar, todas las cañas de azúcar conectadas arriba también se romperán."
@@ -729,4 +732,3 @@ msgstr ""
 
 msgid "Birch"
 msgstr ""
-
