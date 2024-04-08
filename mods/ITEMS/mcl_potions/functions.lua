@@ -470,7 +470,7 @@ mcl_potions.register_effect({
 	name = "darkness",
 	description = S("Darkness"),
 	get_tt = function(factor)
-		return S("surrounded by darkness\nnot seeing anything beyond @1 nodes", factor)
+		return S("surrounded by darkness").."\n"..S("not seeing anything beyond @1 nodes", factor)
 	end,
 	res_condition = function(object)
 		return (not object:is_player())
@@ -758,6 +758,7 @@ mcl_potions.register_effect({
 	on_start = function(object, factor)
 		mcl_burning.extinguish(object)
 		playerphysics.add_physics_factor(object, "speed", "mcl_potions:frost", 1-factor)
+		if EF.frost[object].vignette then return end
 		EF.frost[object].vignette = object:hud_add({
 			hud_elem_type = "image",
 			position = {x = 0.5, y = 0.5},
@@ -849,7 +850,7 @@ mcl_potions.register_effect({
 	name = "nausea",
 	description = S("Nausea"),
 	get_tt = function(factor)
-		return S("not feeling very well...\nfrequency: @1 / 1 s", factor)
+		return S("not feeling very well...").."\n"..S("frequency: @1 / 1 s", factor)
 	end,
 	res_condition = function(object)
 		return (not object:is_player())
@@ -1038,7 +1039,7 @@ mcl_potions.register_effect({
 	name = "conduit_power",
 	description = S("Conduit Power"),
 	get_tt = function(factor)
-		return S("+@1% mining and attack speed in water\nlimitless breathing under water", math.floor(factor*100))
+		return S("+@1% mining and attack speed in water").."\n"..S("limitless breathing under water", math.floor(factor*100))
 	end,
 	res_condition = function(object)
 		return (not object:is_player())
