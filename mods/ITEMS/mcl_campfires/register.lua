@@ -40,3 +40,48 @@ minetest.register_craft({
 		{ "group:tree", "group:tree", "group:tree" },
 	}
 })
+
+local function get_smoketime(pos, _)
+	if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_farming:hay_block" then
+		return {
+			minexptime = 6,
+			maxexptime = 8,
+		}
+	end
+end
+
+local psdef = {
+	amount = 2,
+	time = 0,
+	minpos = vector.new(-0.25,0.25,-0.25),
+	maxpos = vector.new(0.25,0.25,0.25),
+	minvel = vector.new(-0.1,0.5,-0.1),
+	maxvel = vector.new(0.1,1.2,0.1),
+	minacc = vector.new(-0.1,0.2,-0.1),
+	maxacc = vector.new(0.1,0.5,0.1),
+	minexptime = 2.75,
+	maxexptime = 4.75,
+	minsize = 3,
+	maxsize = 5,
+	collisiondetection = true,
+	vertical = true,
+	texture = "mcl_campfires_particle_9.png",
+	texpool = {
+		{ name = "mcl_campfires_particle_1.png" },
+		{ name = "mcl_campfires_particle_2.png" },
+		{ name = "mcl_campfires_particle_3.png" },
+		{ name = "mcl_campfires_particle_4.png" },
+		{ name = "mcl_campfires_particle_5.png" },
+		{ name = "mcl_campfires_particle_6.png" },
+		{ name = "mcl_campfires_particle_7.png" },
+		{ name = "mcl_campfires_particle_8.png" },
+		{ name = "mcl_campfires_particle_9.png" },
+		{ name = "mcl_campfires_particle_10.png" },
+		{ name = "mcl_campfires_particle_11.png" },
+		{ name = "mcl_campfires_particle_11.png" },
+		{ name = "mcl_campfires_particle_12.png" },
+	}
+}
+
+mcl_node_particles.register_particlespawner("mcl_campfires:campfire_lit", psdef, get_smoketime)
+mcl_node_particles.register_particlespawner("mcl_campfires:soul_campfire_lit", psdef, get_smoketime)

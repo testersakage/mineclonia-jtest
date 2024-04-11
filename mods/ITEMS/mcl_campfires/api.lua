@@ -1,9 +1,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 mcl_campfires = {}
 
-local PARTICLE_DISTANCE = 75
-
-local player_particlespawners = {}
 local food_entities = {}
 
 local campfire_spots = {
@@ -183,15 +180,6 @@ function mcl_campfires.register_campfire(name, def)
 		groups = { handy=1, axey=1, material_wood=1, lit_campfire=1 },
 		paramtype = "light",
 		paramtype2 = "4dir",
-		on_destruct = function(pos)
-			local ph = minetest.hash_node_position(vector.round(pos))
-			for k,v in pairs(player_particlespawners) do
-				if v[ph] then
-					minetest.delete_particlespawner(v[ph])
-					player_particlespawners[k][ph] = nil
-				end
-			end
-		end,
 		on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 			if minetest.get_item_group(itemstack:get_name(), "shovel") ~= 0 then
 				local protected = mcl_util.check_position_protection(pos, player)
@@ -264,79 +252,6 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-function mcl_campfires.generate_smoke(pos)
-	local smoke_timer
-
-	if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_farming:hay_block" then
-		smoke_timer = 8
-	else
-		smoke_timer = 4.75
-	end
-
-	local ph = minetest.hash_node_position(pos)
-	for _,pl in pairs(minetest.get_connected_players()) do
-		if not player_particlespawners[pl] then player_particlespawners[pl] = {} end
-		if not player_particlespawners[pl][ph] and vector.distance(pos, pl:get_pos()) < PARTICLE_DISTANCE then
-			player_particlespawners[pl][ph] = minetest.add_particlespawner({
-				amount = 2,
-				time = 0,
-				minpos = vector.offset(pos,-0.25,0.25,-0.25),
-				maxpos = vector.offset(pos,0.25,0.25,0.25),
-				minvel = vector.new(-0.1,0.5,-0.1),
-				maxvel = vector.new(0.1,1.2,0.1),
-				minacc = vector.new(-0.1,0.2,-0.1),
-				maxacc = vector.new(0.1,0.5,0.1),
-				minexptime = smoke_timer - 2,
-				maxexptime = smoke_timer,
-				minsize = 3,
-				maxsize = 5,
-				collisiondetection = true,
-				vertical = true,
-				texture = "mcl_campfires_particle_9.png",
-				playername = pl:get_player_name(),
-				texpool = {
-					{ name = "mcl_campfires_particle_1.png" },
-					{ name = "mcl_campfires_particle_2.png" },
-					{ name = "mcl_campfires_particle_3.png" },
-					{ name = "mcl_campfires_particle_4.png" },
-					{ name = "mcl_campfires_particle_5.png" },
-					{ name = "mcl_campfires_particle_6.png" },
-					{ name = "mcl_campfires_particle_7.png" },
-					{ name = "mcl_campfires_particle_8.png" },
-					{ name = "mcl_campfires_particle_9.png" },
-					{ name = "mcl_campfires_particle_10.png" },
-					{ name = "mcl_campfires_particle_11.png" },
-					{ name = "mcl_campfires_particle_11.png" },
-					{ name = "mcl_campfires_particle_12.png" },
-				}
-			})
-		end
-	end
-
-	for pl,pt in pairs(player_particlespawners) do
-		for _,sp in pairs(pt) do
-			if not pl or not pl:get_pos() then
-				minetest.delete_particlespawner(sp)
-			elseif player_particlespawners[pl][ph] and vector.distance(pos, pl:get_pos()) > PARTICLE_DISTANCE then
-				minetest.delete_particlespawner(player_particlespawners[pl][ph])
-				player_particlespawners[pl][ph] = nil
-			end
-		end
-		if not pl or not pl:get_pos() then
-			player_particlespawners[pl] = nil
-		end
-	end
-end
-
-minetest.register_on_leaveplayer(function(player)
-	if player_particlespawners[player] then
-		for _,v in pairs(player_particlespawners[player]) do
-			minetest.delete_particlespawner(v)
-		end
-		player_particlespawners[player] = nil
-	end
-end)
-
 -- Register Visual Food Entity
 minetest.register_entity("mcl_campfires:food_entity", {
 	initial_properties = {
@@ -399,12 +314,4 @@ minetest.register_entity("mcl_campfires:food_entity", {
 		self.object:set_rotation({x = math.pi / -2, y = 0, z = 0})
 		self.object:set_armor_groups({ immortal = 1 })
 	end,
-})
-
-minetest.register_abm({
-	label = "Campfire Smoke",
-	nodenames = {"group:lit_campfire"},
-	interval = 2,
-	chance = 2,
-	action = mcl_campfires.generate_smoke,
 })
