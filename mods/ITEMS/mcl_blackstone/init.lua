@@ -377,6 +377,24 @@ mcl_torches.register_torch({
 	flame_type = 2,
 })
 
+local psdef = {
+	amount = 8,
+	time = 0,
+	minpos = vector.new(-0.1, 0.05, -0.1),
+	maxpos = vector.new(0.1, 0.15, 0.1),
+	minvel = { x = -0.01, y = 0, z = -0.01 },
+	maxvel = { x = 0.01, y = 0.1, z = 0.01 },
+	minexptime = 0.3,
+	maxexptime = 0.6,
+	minsize = 0.7,
+	maxsize = 2,
+	texture = "mcl_particles_soul_fire_flame.png",
+	glow = 12,
+}
+
+mcl_node_particles.register_particlespawner("mcl_blackstone:soul_torch", psdef)
+mcl_node_particles.register_particlespawner("mcl_blackstone:soul_torch_wall", psdef)
+
 minetest.register_craft({
 	output = "mcl_blackstone:soul_torch 4",
 	recipe = {
