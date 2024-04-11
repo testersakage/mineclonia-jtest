@@ -12,14 +12,14 @@ local function spawn_node_particles(pos, node)
 				if not active_particlespawners[player][ph] then
 					local ps = table.copy(ndef._node_particlespawner)
 					ps.playername = player:get_player_name()
-					ps.minpos = vector.add(pos, ndef._node_particlespawner.minpos)
-					ps.maxpos = vector.add(pos, ndef._node_particlespawner.maxpos)
 					ps.time = 0
 					if type(ndef._node_particlespawner_overrides) == "table" then
 						table.update(ps, ndef._node_particlespawner_overrides)
 					elseif type(ndef._node_particlespawner_overrides) == "function" then
 						table.update(ps, ndef._node_particlespawner_overrides(pos, player))
 					end
+					ps.minpos = vector.add(pos, ps.minpos)
+					ps.maxpos = vector.add(pos, ps.maxpos)
 					active_particlespawners[player][ph] = minetest.add_particlespawner(ps)
 				end
 			end

@@ -362,7 +362,7 @@ local psdef = {
 }
 
 mcl_node_particles.register_particlespawner("mcl_blackstone:soul_torch", psdef)
-mcl_node_particles.register_particlespawner("mcl_blackstone:soul_torch_wall", psdef)
+mcl_node_particles.register_particlespawner("mcl_blackstone:soul_torch_wall", psdef, mcl_torches.get_pspos)
 
 minetest.register_craft({
 	output = "mcl_blackstone:soul_torch 4",

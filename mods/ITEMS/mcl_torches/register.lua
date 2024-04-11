@@ -18,7 +18,7 @@ mcl_torches.register_torch({
 	flame_type = 1,
 })
 
-mcl_node_particles.register_particlespawner("mcl_torches:torch", {
+local psdef = {
 	amount = 8,
 	time = 0,
 	minpos = vector.new(-0.1, 0.05, -0.1),
@@ -31,7 +31,21 @@ mcl_node_particles.register_particlespawner("mcl_torches:torch", {
 	maxsize = 2,
 	texture = "mcl_particles_flame.png",
 	glow = 14,
-})
+}
+
+function mcl_torches.get_pspos(pos, _)
+	local node = minetest.get_node(pos)
+	local dir = minetest.wallmounted_to_dir(node.param2)
+	local p1 = dir * 0.1
+	local p2 = dir * 0.5
+	return {
+		minpos = vector.offset(p1, 0, 0.35, 0),
+		maxpos = vector.offset(p2, 0, 0.45, 0),
+	}
+end
+
+mcl_node_particles.register_particlespawner("mcl_torches:torch", psdef)
+mcl_node_particles.register_particlespawner("mcl_torches:torch_wall", psdef, mcl_torches.get_pspos)
 
 minetest.register_craft({
 	output = "mcl_torches:torch 4",
