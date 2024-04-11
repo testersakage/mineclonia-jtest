@@ -328,38 +328,7 @@ minetest.register_craft({
 	recipe = "mcl_nether:quartz_block",
 	cooktime = 10,
 })
---[[ Commented out for now because there the discussion how to handle this is ongoing]
---Generating
-local specialstones = { "mcl_blackstone:blackstone", "mcl_blackstone:basalt", "mcl_blackstone:soul_soil" }
-for s=1, #specialstones do
-	local node = specialstones[s]
-	minetest.register_ore({
-		ore_type       = "blob",
-		ore            = node,
-		wherein        = {"mcl_nether:netherrack"},
-		clust_scarcity = 830,
-		clust_num_ores = 28,
-		clust_size     = 3,
-		y_min          = mcl_vars.mg_nether_min,
-		y_max          = mcl_vars.mg_nether_max,
-	})
-	minetest.register_ore({
-		ore_type       = "blob",
-		ore            = node,
-		wherein        = {"mcl_nether:netherrack"},
-		clust_scarcity = 8*8*8,
-		clust_num_ores = 40,
-		clust_size     = 5,
-		y_min          = mcl_vars.mg_nether_min,
-		y_max          = mcl_vars.mg_nether_max,
-	})
-end
 
-if minetest.settings:get_bool("mcl_generate_ores", true) then
-
-end
---]]
---soul torch
 mcl_torches.register_torch({
 	name="soul_torch",
 	description=S("Soul Torch"),
