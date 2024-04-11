@@ -1,0 +1,117 @@
+local SPAWNER_RANGE = (tonumber(minetest.settings:get("active_block_range")) or 4) * 16
+local active_particlespawners = {}
+
+mcl_node_particles = {}
+
+local function spawn_node_particles(pos, node)
+	local ndef = minetest.registered_nodes[node.name]
+	local ph = minetest.hash_node_position(pos)
+	if ndef and ndef._node_particlespawner then
+		for _, player in pairs(minetest.get_connected_players()) do
+			if vector.distance(player:get_pos(), pos) < SPAWNER_RANGE then
+				if not active_particlespawners[player][ph] then
+					local ps = table.copy(ndef._node_particlespawner)
+					ps.playername = player:get_player_name()
+					ps.minpos = vector.add(pos, ndef._node_particlespawner.minpos)
+					ps.maxpos = vector.add(pos, ndef._node_particlespawner.maxpos)
+					ps.time = 0
+					active_particlespawners[player][ph] = minetest.add_particlespawner(ps)
+				end
+			end
+		end
+	end
+end
+
+local function remove_spawner_pos(pos)
+	local ph = minetest.hash_node_position(pos)
+	for pl, ps in pairs(active_particlespawners) do
+		for cph, psid in pairs(ps) do
+			if ph == cph then
+				minetest.delete_particlespawner(psid)
+				active_particlespawners[pl][cph] = nil
+			end
+		end
+	end
+end
+
+function mcl_node_particles.register_particlespawner(nodename, psdef)
+	local def = minetest.registered_nodes[nodename]
+	if def then
+		local old_od = def.on_destruct
+		minetest.override_item(nodename, {
+			groups = table.merge(def.groups, { node_particlespawner = 1 }),
+			_node_particlespawner = psdef,
+			on_destruct = function(pos)
+				remove_spawner_pos(pos)
+				if old_od then
+					return old_od(pos)
+				end
+			end
+		})
+	else
+		minetest.log("warning", "[mcl_node_particles] attempting to register "..tostring(nodename).." for a node particlespawner, however it's node definition was not found. Skipping it.")
+	end
+end
+
+mcl_player.register_globalstep_slow(function(player)
+	for ph, psid in pairs(active_particlespawners[player]) do
+		local pos = minetest.get_position_from_hash(ph)
+		if vector.distance(player:get_pos(), pos) > SPAWNER_RANGE then
+			minetest.delete_particlespawner(psid)
+			active_particlespawners[player][ph] = nil
+		end
+	end
+end)
+
+minetest.register_on_joinplayer(function(player)
+	active_particlespawners[player] = {}
+end)
+minetest.register_on_leaveplayer(function(player)
+	for k, v in pairs(active_particlespawners[player]) do
+		minetest.delete_particlespawner(v)
+	end
+	active_particlespawners[player] = nil
+end)
+
+minetest.register_abm({
+	label = "Node Particlespawners",
+	nodenames = { "group:node_particlespawner" },
+	interval = 2,
+	chance = 2,
+	action = spawn_node_particles,
+})
+
+minetest.register_on_mods_loaded(function()
+	mcl_node_particles.register_particlespawner("mcl_core:obsidian", {
+		amount = 2,
+		time = 0,
+		minpos = vector.new(-0.25,0.25,-0.25),
+		maxpos = vector.new(0.25,0.25,0.25),
+		minvel = vector.new(-0.1,0.5,-0.1),
+		maxvel = vector.new(0.1,1.2,0.1),
+		minacc = vector.new(-0.1,0.2,-0.1),
+		maxacc = vector.new(0.1,0.5,0.1),
+		minexptime = 5 - 2,
+		maxexptime = 10,
+		minsize = 3,
+		maxsize = 5,
+		collisiondetection = true,
+		vertical = true,
+		texture = "mcl_campfires_particle_9.png",
+		texpool = {
+			{ name = "mcl_campfires_particle_1.png" },
+			{ name = "mcl_campfires_particle_2.png" },
+			{ name = "mcl_campfires_particle_3.png" },
+			{ name = "mcl_campfires_particle_4.png" },
+			{ name = "mcl_campfires_particle_5.png" },
+			{ name = "mcl_campfires_particle_6.png" },
+			{ name = "mcl_campfires_particle_7.png" },
+			{ name = "mcl_campfires_particle_8.png" },
+			{ name = "mcl_campfires_particle_9.png" },
+			{ name = "mcl_campfires_particle_10.png" },
+			{ name = "mcl_campfires_particle_11.png" },
+			{ name = "mcl_campfires_particle_11.png" },
+			{ name = "mcl_campfires_particle_12.png" },
+		}
+	})
+end)
