@@ -15,6 +15,11 @@ local function spawn_node_particles(pos, node)
 					ps.minpos = vector.add(pos, ndef._node_particlespawner.minpos)
 					ps.maxpos = vector.add(pos, ndef._node_particlespawner.maxpos)
 					ps.time = 0
+					if type(ndef._node_particlespawner_overrides) == "table" then
+						table.update(ps, ndef._node_particlespawner_overrides)
+					elseif type(ndef._node_particlespawner_overrides) == "function" then
+						table.update(ps, ndef._node_particlespawner_overrides(pos, player))
+					end
 					active_particlespawners[player][ph] = minetest.add_particlespawner(ps)
 				end
 			end
@@ -34,13 +39,14 @@ local function remove_spawner_pos(pos)
 	end
 end
 
-function mcl_node_particles.register_particlespawner(nodename, psdef)
+function mcl_node_particles.register_particlespawner(nodename, psdef, ps_overrides)
 	local def = minetest.registered_nodes[nodename]
 	if def then
 		local old_od = def.on_destruct
 		minetest.override_item(nodename, {
 			groups = table.merge(def.groups, { node_particlespawner = 1 }),
 			_node_particlespawner = psdef,
+			_node_particlespawner_overrides = ps_overrides,
 			on_destruct = function(pos)
 				remove_spawner_pos(pos)
 				if old_od then
