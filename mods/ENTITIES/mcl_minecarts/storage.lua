@@ -7,7 +7,10 @@ assert(CART_BLOCK_SIZE)
 
 local cart_data = {}
 local cart_data_fail_cache = {}
-local cart_ids = storage:get_keys()
+local cart_ids = {}
+if storage.get_keys then
+	cart_ids = storage:get_keys()
+end
 
 local function get_cart_data(uuid)
 	if cart_data[uuid] then return cart_data[uuid] end
