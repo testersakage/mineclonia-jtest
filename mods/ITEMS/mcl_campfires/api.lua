@@ -255,7 +255,7 @@ minetest.register_globalstep(function(dtime)
 		local armor_feet = pl:get_inventory():get_stack("armor", 5)
 		if pl and pl:get_player_control().sneak
 		    or mcl_enchanting.has_enchantment(armor_feet, "frost_walker")
-		    or mcl_potions.has_effect(pl, "fire_proof") then
+		    or mcl_potions.has_effect(pl, "fire_resistance") then
 			return
 		end
 	end
