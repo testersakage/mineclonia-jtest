@@ -44,7 +44,7 @@ minetest.register_chatcommand("effect",{
 				end
 			end
 		elseif P[1] == "clear" then
-			mcl_potions._reset_player_effects(minetest.get_player_by_name(name))
+			mcl_potions._reset_effects(minetest.get_player_by_name(name))
 			return true, S("Effects cleared for player @1", name)
 		elseif P[1] == "remove" then
 			if not P[2] then
@@ -74,7 +74,7 @@ minetest.register_chatcommand("effect",{
 
 		local inf = P[2] == "INF"
 
-		local nopart = false
+		local nopart
 		if P[3] == "F" then
 			nopart = P[5] == "NOPART"
 		else
