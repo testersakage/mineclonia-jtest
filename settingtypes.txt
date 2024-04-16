@@ -177,6 +177,10 @@ mcl_max_bossbars (Maximum boss bars) int 5
 # Form: Image height / Image width
 fire_animation_frames (Fire animation frames) int 8
 
+# Default (minimum) light level for nodes. If left at 0 caves will be pitch black,
+# no matter how much you turn up the brightness.
+mcl_default_light_source (Default Light Level) int 0 0 15
+
 [Villages]
 # Minimum number of job sites which are placed during village generation
 mcl_villages_min_jobs (Minimum number of jobs in village) int 1

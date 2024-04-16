@@ -195,6 +195,7 @@ mcl_vars.mg_dungeons = true
 
 -- Set default stack sizes
 minetest.nodedef_default.stack_max = 64
+minetest.nodedef_default.light_source = tonumber(minetest.settings:get("mcl_default_light_source")) or 0
 minetest.craftitemdef_default.stack_max = 64
 
 -- Set random seed for all other mods (Remember to make sure no other mod calls this function)
