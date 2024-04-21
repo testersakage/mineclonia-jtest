@@ -17,38 +17,28 @@ local players = {}
 -- Returns true if the player with the given name is sprinting, false if not.
 -- Returns nil if player does not exist.
 function mcl_sprint.is_sprinting(playername)
-	if players[playername] then
-		return players[playername].sprinting
-	else
-		return nil
-	end
+	local player = minetest.get_player_by_name(playername)
+	return player and players[player] and players[player].sprinting
 end
 
 minetest.register_on_joinplayer(function(player)
-	local playerName = player:get_player_name()
-
-	players[playerName] = {
+	players[player] = {
 		sprinting = false,
 		timeOut = 0,
 		shouldSprint = false,
 		lastPos = player:get_pos(),
 		sprintDistance = 0,
 		fov = 1.0,
-		channel = minetest.mod_channel_join("mcl_sprint:" .. playerName),
 	}
 end)
-minetest.register_on_leaveplayer(function(player)
-	local playerName = player:get_player_name()
-	players[playerName] = nil
-end)
+minetest.register_on_leaveplayer(function(player) players[player] = nil end)
 
-local function setSprinting(playerName, sprinting) --Sets the state of a player (0=stopped/moving, 1=sprinting)
-	if not sprinting and not mcl_sprint.is_sprinting(playerName) then return end
-	local player = minetest.get_player_by_name(playerName)
+local function setSprinting(player, sprinting) --Sets the state of a player (0=stopped/moving, 1=sprinting)
+	if not sprinting and not players[player].sprinting then return end
 	local controls = player:get_player_control()
-	if players[playerName] then
-		players[playerName].sprinting = sprinting
-		local fov_old = players[playerName].fov
+	if players[player] then
+		players[player].sprinting = sprinting
+		local fov_old = players[player].fov
 		local fov_new = fov_old
 		local fade_time = .15
 		if sprinting == true
@@ -56,10 +46,10 @@ local function setSprinting(playerName, sprinting) --Sets the state of a player 
 		and string.find(player:get_wielded_item():get_name(), "mcl_bows:bow")
 		and player:get_wielded_item():get_name() ~= "mcl_bows:bow" then
 			if sprinting == true then
-				fov_new = math.min(players[playerName].fov + 0.05, 1.2)
+				fov_new = math.min(players[player].fov + 0.05, 1.2)
 			else
 				fov_new = .7
-				players[playerName].fade_time = .3
+				players[player].fade_time = .3
 			end
 			if sprinting == true then
 				playerphysics.add_physics_factor(player, "speed", "mcl_sprint:sprint", mcl_sprint.SPEED)
@@ -68,15 +58,14 @@ local function setSprinting(playerName, sprinting) --Sets the state of a player 
 		and player:get_wielded_item():get_name() ~= "mcl_bows:bow_0"
 		and player:get_wielded_item():get_name() ~= "mcl_bows:bow_1"
 		and player:get_wielded_item():get_name() ~= "mcl_bows:bow_2" then
-			fov_new = math.max(players[playerName].fov - 0.05, 1.0)
+			fov_new = math.max(players[player].fov - 0.05, 1.0)
 			if sprinting == false then
 				playerphysics.remove_physics_factor(player, "speed", "mcl_sprint:sprint")
 				player:set_fov(mcl_player.default_fov)
-				minetest.log("lol")
 			end
 		end
 		if fov_new ~= fov_old then
-			players[playerName].fov = fov_new
+			players[player].fov = fov_new
 			player:set_fov(fov_new, true, fade_time)
 		end
 		return true
@@ -124,27 +113,27 @@ end
 
 mcl_player.register_globalstep(function(player, dtime)
 	local playerName = player:get_player_name()
-	local playerInfo = players[playerName]
+	local playerInfo = players[player]
 	if player then
 		local ctrl = player:get_player_control()
 		--Check if the player should be sprinting
 		if ctrl.aux1 and ctrl.up and not ctrl.sneak then
-			players[playerName]["shouldSprint"] = true
+			players[player]["shouldSprint"] = true
 		else
-			players[playerName]["shouldSprint"] = false
+			players[player]["shouldSprint"] = false
 		end
 
 		local playerPos = player:get_pos()
 		--If the player is sprinting, create particles behind and cause exhaustion
 		if playerInfo["sprinting"] == true and not player:get_attach() and minetest.get_gametime() % 0.1 == 0 then
 			-- Exhaust player for sprinting
-			local lastPos = players[playerName].lastPos
+			local lastPos = players[player].lastPos
 			local dist = vector.distance({x=lastPos.x, y=0, z=lastPos.z}, {x=playerPos.x, y=0, z=playerPos.z})
-			players[playerName].sprintDistance = players[playerName].sprintDistance + dist
-			if players[playerName].sprintDistance >= 1 then
-				local superficial = math.floor(players[playerName].sprintDistance)
+			players[player].sprintDistance = players[player].sprintDistance + dist
+			if players[player].sprintDistance >= 1 then
+				local superficial = math.floor(players[player].sprintDistance)
 				mcl_hunger.exhaust(playerName, mcl_hunger.EXHAUST_SPRINT * superficial)
-				players[playerName].sprintDistance = players[playerName].sprintDistance - superficial
+				players[player].sprintDistance = players[player].sprintDistance - superficial
 			end
 
 			-- Sprint node particles
@@ -174,8 +163,8 @@ mcl_player.register_globalstep(function(player, dtime)
 		end
 
 		--Adjust player states
-		players[playerName].lastPos = playerPos
-		if players[playerName]["shouldSprint"] == true then --Stopped
+		players[player].lastPos = playerPos
+		if players[player]["shouldSprint"] == true then --Stopped
 			local sprinting
 			-- Prevent sprinting if hungry or sleeping
 			if (mcl_hunger.active and mcl_hunger.get_hunger(player) <= 6)
@@ -184,9 +173,9 @@ mcl_player.register_globalstep(function(player, dtime)
 			else
 				sprinting = true
 			end
-			setSprinting(playerName, sprinting)
-		elseif players[playerName]["shouldSprint"] == false then
-			setSprinting(playerName, false)
+			setSprinting(player, sprinting)
+		elseif players[player]["shouldSprint"] == false then
+			setSprinting(player, false)
 		end
 
 	end
