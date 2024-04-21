@@ -2,9 +2,8 @@ mcl_player = {
 	registered_globalsteps = {},
 	registered_globalsteps_slow = {},
 	players = {},
+	default_fov = 86.1 --see <https://minecraft.gamepedia.com/Options#Video_settings>>>>
 }
-
-local default_fov = 86.1 --see <https://minecraft.gamepedia.com/Options#Video_settings>>>>
 
 local tpl_playerinfo = {
 	textures = { "character.png", "blank.png", "blank.png" },
@@ -51,7 +50,7 @@ local slow_gs_timer = 0.5
 minetest.register_on_joinplayer(function(player)
 	mcl_player.players[player] = table.copy(tpl_playerinfo)
 	player:get_inventory():set_size("hand", 1)
-	player:set_fov(default_fov)
+	player:set_fov(mcl_player.default_fov)
 	for bone, pos in pairs(bone_start_positions) do
 		player:set_bone_position(bone, pos)
 	end

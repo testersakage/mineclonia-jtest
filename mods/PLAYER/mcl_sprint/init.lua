@@ -71,7 +71,8 @@ local function setSprinting(playerName, sprinting) --Sets the state of a player 
 			fov_new = math.max(players[playerName].fov - 0.05, 1.0)
 			if sprinting == false then
 				playerphysics.remove_physics_factor(player, "speed", "mcl_sprint:sprint")
-				fov_new = 1.0
+				player:set_fov(mcl_player.default_fov)
+				minetest.log("lol")
 			end
 		end
 		if fov_new ~= fov_old then
