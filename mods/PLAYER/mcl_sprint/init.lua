@@ -137,78 +137,73 @@ minetest.register_on_respawnplayer(function(player)
 	cancelClientSprinting(player:get_player_name())
 end)
 
-minetest.register_globalstep(function(dtime)
-	--Get the gametime
-	local gameTime = minetest.get_gametime()
-
-	--Loop through all connected players
-	for playerName, playerInfo in pairs(players) do
-		local player = minetest.get_player_by_name(playerName)
-		if player then
-			local ctrl = player:get_player_control()
-			--Check if the player should be sprinting
-			if players[playerName]["clientSprint"] or ctrl.aux1 and ctrl.up and not ctrl.sneak then
-				players[playerName]["shouldSprint"] = true
-			else
-				players[playerName]["shouldSprint"] = false
-			end
-
-			local playerPos = player:get_pos()
-			--If the player is sprinting, create particles behind and cause exhaustion
-			if playerInfo["sprinting"] == true and not player:get_attach() and gameTime % 0.1 == 0 then
-				-- Exhaust player for sprinting
-				local lastPos = players[playerName].lastPos
-				local dist = vector.distance({x=lastPos.x, y=0, z=lastPos.z}, {x=playerPos.x, y=0, z=playerPos.z})
-				players[playerName].sprintDistance = players[playerName].sprintDistance + dist
-				if players[playerName].sprintDistance >= 1 then
-					local superficial = math.floor(players[playerName].sprintDistance)
-					mcl_hunger.exhaust(playerName, mcl_hunger.EXHAUST_SPRINT * superficial)
-					players[playerName].sprintDistance = players[playerName].sprintDistance - superficial
-				end
-
-				-- Sprint node particles
-				local playerNode = minetest.get_node({x=playerPos["x"], y=playerPos["y"]-1, z=playerPos["z"]})
-				local def = minetest.registered_nodes[playerNode.name]
-				if def and def.walkable then
-					minetest.add_particlespawner({
-						amount = math.random(1, 2),
-						time = 1,
-						minpos = {x=-0.5, y=0.1, z=-0.5},
-						maxpos = {x=0.5, y=0.1, z=0.5},
-						minvel = {x=0, y=5, z=0},
-						maxvel = {x=0, y=5, z=0},
-						minacc = {x=0, y=-13, z=0},
-						maxacc = {x=0, y=-13, z=0},
-						minexptime = 0.1,
-						maxexptime = 1,
-						minsize = 0.5,
-						maxsize = 1.5,
-						collisiondetection = true,
-						attached = player,
-						vertical = false,
-						node = playerNode,
-						node_tile = get_top_node_tile(playerNode.param2, def.paramtype2),
-					})
-				end
-			end
-
-			--Adjust player states
-			players[playerName].lastPos = playerPos
-			if players[playerName]["shouldSprint"] == true then --Stopped
-				local sprinting
-				-- Prevent sprinting if hungry or sleeping
-				if (mcl_hunger.active and mcl_hunger.get_hunger(player) <= 6)
-				or (player:get_meta():get_string("mcl_beds:sleeping") == "true") then
-					sprinting = false
-					cancelClientSprinting(playerName)
-				else
-					sprinting = true
-				end
-				setSprinting(playerName, sprinting)
-			elseif players[playerName]["shouldSprint"] == false then
-				setSprinting(playerName, false)
-			end
-
+mcl_player.register_globalstep(function(player, dtime)
+	local playerName = player:get_player_name()
+	local playerInfo = players[playerName]
+	if player then
+		local ctrl = player:get_player_control()
+		--Check if the player should be sprinting
+		if players[playerName]["clientSprint"] or ctrl.aux1 and ctrl.up and not ctrl.sneak then
+			players[playerName]["shouldSprint"] = true
+		else
+			players[playerName]["shouldSprint"] = false
 		end
+
+		local playerPos = player:get_pos()
+		--If the player is sprinting, create particles behind and cause exhaustion
+		if playerInfo["sprinting"] == true and not player:get_attach() and minetest.get_gametime() % 0.1 == 0 then
+			-- Exhaust player for sprinting
+			local lastPos = players[playerName].lastPos
+			local dist = vector.distance({x=lastPos.x, y=0, z=lastPos.z}, {x=playerPos.x, y=0, z=playerPos.z})
+			players[playerName].sprintDistance = players[playerName].sprintDistance + dist
+			if players[playerName].sprintDistance >= 1 then
+				local superficial = math.floor(players[playerName].sprintDistance)
+				mcl_hunger.exhaust(playerName, mcl_hunger.EXHAUST_SPRINT * superficial)
+				players[playerName].sprintDistance = players[playerName].sprintDistance - superficial
+			end
+
+			-- Sprint node particles
+			local playerNode = minetest.get_node({x=playerPos["x"], y=playerPos["y"]-1, z=playerPos["z"]})
+			local def = minetest.registered_nodes[playerNode.name]
+			if def and def.walkable then
+				minetest.add_particlespawner({
+					amount = math.random(1, 2),
+					time = 1,
+					minpos = {x=-0.5, y=0.1, z=-0.5},
+					maxpos = {x=0.5, y=0.1, z=0.5},
+					minvel = {x=0, y=5, z=0},
+					maxvel = {x=0, y=5, z=0},
+					minacc = {x=0, y=-13, z=0},
+					maxacc = {x=0, y=-13, z=0},
+					minexptime = 0.1,
+					maxexptime = 1,
+					minsize = 0.5,
+					maxsize = 1.5,
+					collisiondetection = true,
+					attached = player,
+					vertical = false,
+					node = playerNode,
+					node_tile = get_top_node_tile(playerNode.param2, def.paramtype2),
+				})
+			end
+		end
+
+		--Adjust player states
+		players[playerName].lastPos = playerPos
+		if players[playerName]["shouldSprint"] == true then --Stopped
+			local sprinting
+			-- Prevent sprinting if hungry or sleeping
+			if (mcl_hunger.active and mcl_hunger.get_hunger(player) <= 6)
+			or (player:get_meta():get_string("mcl_beds:sleeping") == "true") then
+				sprinting = false
+				cancelClientSprinting(playerName)
+			else
+				sprinting = true
+			end
+			setSprinting(playerName, sprinting)
+		elseif players[playerName]["shouldSprint"] == false then
+			setSprinting(playerName, false)
+		end
+
 	end
 end)
