@@ -70,48 +70,6 @@ function mcl_hunger.reset_bars_poison_hunger(player)
 	end
 end
 
--- Poison player TODO remove this function
-local function poisonp(tick, time, time_left, damage, exhaustion, name)
-	if not mcl_hunger.active then
-		return
-	end
-	local player = minetest.get_player_by_name(name)
-	-- First check if player is still there
-	if not player then
-		return
-	end
-	-- Abort if food poisonings have been stopped
-	if mcl_hunger.poison_hunger[name] == 0 then
-		return
-	end
-	time_left = time_left + tick
-	if time_left < time then
-		minetest.after(tick, poisonp, tick, time, time_left, damage, exhaustion, name)
-	else
-		if exhaustion > 0 then
-			mcl_hunger.poison_hunger [name] = mcl_hunger.poison_hunger[name] - 1
-		end
-		if mcl_hunger.poison_hunger[name] <= 0 then
-			mcl_hunger.reset_bars_poison_hunger(player)
-		end
-	end
-
-	-- Deal damage and exhaust player
-	-- TODO: Introduce fatal poison at higher difficulties
-	--
-	-- Minecraft only verifies that the damage would not kill the
-	-- player, not whether the player's health would be reduced
-	-- below 1.0, the upshot of which is that players can be
-	-- reduced to tiny fractional damage values.
-	local rem = mcl_util.get_hp (player)
-	if rem - damage > 0 then
-	   mcl_util.deal_damage (player, damage, {type = "hunger"})
-	end
-
-	mcl_hunger.exhaust(name, exhaustion)
-
-end
-
 local poisonrandomizer = PseudoRandom(os.time())
 
 function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance)
