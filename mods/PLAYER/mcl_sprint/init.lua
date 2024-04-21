@@ -31,7 +31,6 @@ minetest.register_on_joinplayer(function(player)
 		sprinting = false,
 		timeOut = 0,
 		shouldSprint = false,
-		clientSprint = false,
 		lastPos = player:get_pos(),
 		sprintDistance = 0,
 		fov = 1.0,
@@ -42,11 +41,6 @@ minetest.register_on_leaveplayer(function(player)
 	local playerName = player:get_player_name()
 	players[playerName] = nil
 end)
-
-local function cancelClientSprinting(name)
-	players[name].channel:send_all("")
-	players[name].clientSprint = false
-end
 
 local function setSprinting(playerName, sprinting) --Sets the state of a player (0=stopped/moving, 1=sprinting)
 	if not sprinting and not mcl_sprint.is_sprinting(playerName) then return end
@@ -127,23 +121,13 @@ local function get_top_node_tile(param2, paramtype2)
 	end
 end
 
-minetest.register_on_modchannel_message(function(channel_name, sender, message)
-	if channel_name == "mcl_sprint:" .. sender then
-		players[sender].clientSprint = minetest.is_yes(message)
-	end
-end)
-
-minetest.register_on_respawnplayer(function(player)
-	cancelClientSprinting(player:get_player_name())
-end)
-
 mcl_player.register_globalstep(function(player, dtime)
 	local playerName = player:get_player_name()
 	local playerInfo = players[playerName]
 	if player then
 		local ctrl = player:get_player_control()
 		--Check if the player should be sprinting
-		if players[playerName]["clientSprint"] or ctrl.aux1 and ctrl.up and not ctrl.sneak then
+		if ctrl.aux1 and ctrl.up and not ctrl.sneak then
 			players[playerName]["shouldSprint"] = true
 		else
 			players[playerName]["shouldSprint"] = false
@@ -196,7 +180,6 @@ mcl_player.register_globalstep(function(player, dtime)
 			if (mcl_hunger.active and mcl_hunger.get_hunger(player) <= 6)
 			or (player:get_meta():get_string("mcl_beds:sleeping") == "true") then
 				sprinting = false
-				cancelClientSprinting(playerName)
 			else
 				sprinting = true
 			end
