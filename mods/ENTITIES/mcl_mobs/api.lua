@@ -99,14 +99,12 @@ function mob_class:get_staticdata()
 
 	local tmp = {}
 
-	for _,stat in pairs(self) do
-
+	for tag, stat in pairs(self) do
 		local t = type(stat)
-
 		if  t ~= "function"
 		and t ~= "nil"
 		and t ~= "userdata" then
-			tmp[_] = self[_]
+			tmp[tag] = self[tag]
 		end
 	end
 
@@ -295,6 +293,12 @@ function mob_class:mob_activate(staticdata, dtime)
 		self:set_armor_texture()
 		self._run_armor_init = true
 	end
+
+	if not self._mcl_potions then
+		self._mcl_potions = {}
+	end
+	mcl_potions._load_entity_effects(self)
+
 
 	if def.after_activate then
 		def.after_activate(self, staticdata, def, dtime)

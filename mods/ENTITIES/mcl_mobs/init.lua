@@ -130,6 +130,8 @@ mcl_mobs.mob_class = {
 	standing_on = "ignore",
 	jump_sound_cooloff = 0, -- used to prevent jump sound from being played too often in short time
 	opinion_sound_cooloff = 0, -- used to prevent sound spam of particular sound types
+	_spawner = nil,
+	_mcl_potions = {},
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
