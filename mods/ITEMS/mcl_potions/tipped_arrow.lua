@@ -117,6 +117,9 @@ function mcl_potions.register_arrow(name, desc, color, def)
 			dur = details.dur
 		    end
 		    dur = dur * mcl_potions.SPLASH_FACTOR
+		    if details.effect_stacks then
+			ef_level = ef_level + mcl_potions.get_effect_level(obj, name)
+		    end
 		    mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
 		end
 	    end
