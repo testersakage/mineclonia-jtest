@@ -822,7 +822,7 @@ end
 function mob_class:check_entity_cramming()
 	local p = self.object:get_pos()
 	if not p then return end
-	local oo = minetest.get_objects_inside_radius(p,1)
+	local oo = minetest.get_objects_inside_radius(p, 0.5)
 	local mobs = {}
 	for _,o in pairs(oo) do
 		local l = o:get_luaentity()

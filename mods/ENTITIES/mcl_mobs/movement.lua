@@ -280,26 +280,19 @@ function mob_class:is_at_water_danger()
 end
 
 function mob_class:should_get_out_of_water()
-
 	if self.breathes_in_water or self.object:get_properties().breath_max == -1 then
 		return false
 	end
 
-	if
-		(
-			minetest.registered_nodes[self.standing_in]
-			and minetest.registered_nodes[self.standing_in].drowning
-			and minetest.registered_nodes[self.standing_in].drowning > 0
-		)
-		and (
-			minetest.registered_nodes[self.standing_on]
-			and minetest.registered_nodes[self.standing_on].drowning
-			and minetest.registered_nodes[self.standing_on].drowning > 0
-		)
+	if minetest.registered_nodes[self.standing_in]
+		and minetest.registered_nodes[self.standing_in].drowning
+		and minetest.registered_nodes[self.standing_in].drowning > 0
+		and minetest.registered_nodes[self.standing_on]
+		and minetest.registered_nodes[self.standing_on].drowning
+		and minetest.registered_nodes[self.standing_on].drowning > 0
 	then
 		return true
 	end
-
 	return false
 end
 
@@ -327,7 +320,13 @@ function mob_class:get_out_of_water()
 	end
 end
 
-function mob_class:env_danger_movement_checks(dtime)
+function mob_class:env_danger_movement_checks()
+	local should_get_out_of_water = self:should_get_out_of_water()
+	if self.move_in_group ~= false and not should_get_out_of_water then
+		self:check_herd()
+	end
+
+	if not self:check_timer("env_danger_movement_checks", 0.5) then return end
 	local yaw = 0
 	if self:is_at_water_danger() and self.state ~= "attack" then
 		if math.random(1, 10) <= 6 then
@@ -337,12 +336,8 @@ function mob_class:env_danger_movement_checks(dtime)
 			yaw = yaw + math.random(-0.5, 0.5)
 			self:set_yaw( yaw, 8)
 		end
-	elseif self:should_get_out_of_water() and self.state ~= "attack" then
+	elseif should_get_out_of_water and self.state ~= "attack" then
 		self:get_out_of_water()
-	else
-		if self.move_in_group ~= false then
-			self:check_herd(dtime)
-		end
 	end
 
 	if self:is_at_cliff_or_danger() then
@@ -622,7 +617,7 @@ end
 
 -- find someone to runaway from
 function mob_class:check_runaway_from()
-	if self:check_timer("check_runaway_from", 1) then return end
+	if not self:check_timer("check_runaway_from", 1) then return end
 	if (not self.runaway_from and self.state ~= "flop") or self.state == "runaway" then
 		return
 	end
@@ -794,13 +789,10 @@ function mob_class:go_to_pos(b)
 	self:set_animation("walk")
 end
 
-local check_herd_timer = 0
-function mob_class:check_herd(dtime)
+function mob_class:check_herd()
+	if not self:check_timer("check_herd", 6) then return end
 	local pos = self.object:get_pos()
 	if not pos then return end
-	check_herd_timer = check_herd_timer + dtime
-	if check_herd_timer < 4 then return end
-	check_herd_timer = 0
 	for _,o in pairs(minetest.get_objects_inside_radius(pos,self.view_range)) do
 		local l = o:get_luaentity()
 		local p,y
