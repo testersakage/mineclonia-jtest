@@ -321,11 +321,9 @@ function mob_class:get_out_of_water()
 end
 
 function mob_class:env_danger_movement_checks()
-	local should_get_out_of_water = self:should_get_out_of_water()
-	if self.move_in_group ~= false and not should_get_out_of_water then
+	if self.move_in_group ~= false then
 		self:check_herd()
 	end
-
 	if not self:check_timer("env_danger_movement_checks", 0.5) then return end
 	local yaw = 0
 	if self:is_at_water_danger() and self.state ~= "attack" then
@@ -336,7 +334,7 @@ function mob_class:env_danger_movement_checks()
 			yaw = yaw + math.random(-0.5, 0.5)
 			self:set_yaw( yaw, 8)
 		end
-	elseif should_get_out_of_water and self.state ~= "attack" then
+	elseif self:should_get_out_of_water() and self.state ~= "attack" then
 		self:get_out_of_water()
 	end
 
@@ -791,6 +789,7 @@ end
 
 function mob_class:check_herd()
 	if not self:check_timer("check_herd", 6) then return end
+	if self:should_get_out_of_water() then return end
 	local pos = self.object:get_pos()
 	if not pos then return end
 	for _,o in pairs(minetest.get_objects_inside_radius(pos,self.view_range)) do

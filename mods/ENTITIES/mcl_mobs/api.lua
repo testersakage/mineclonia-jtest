@@ -71,7 +71,7 @@ end
 
 function mob_class:check_timer(timer, interval)
 	if not self._timers[timer] then
-		self._timers[timer] = math.random() --start with a random time to avoid many timers firing simultaneously
+		self._timers[timer] = math.random() * interval --start with a random time to avoid many timers firing simultaneously
 	end
 	if self._timers[timer] <= 0  then
 		self._timers[timer] = interval
