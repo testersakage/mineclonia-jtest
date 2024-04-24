@@ -710,15 +710,12 @@ end
 
 function mob_class:check_aggro(dtime)
 	if not self.aggro or not self.attack then return end
-	if not self._check_aggro_timer or self._check_aggro_timer > 5 then
-		self._check_aggro_timer = 0
-		if not self.attack:get_pos() or vector.distance(self.attack:get_pos(),self.object:get_pos()) > 128 then
-			self.aggro = nil
-			self.attack = nil
-			self:set_state("stand")
-		end
+	if not self:check_timer("check_aggro", 5) then return end
+	if not self.attack:get_pos() or vector.distance(self.attack:get_pos(),self.object:get_pos()) > 128 then
+		self.aggro = nil
+		self.attack = nil
+		self:set_state("stand")
 	end
-	self._check_aggro_timer = self._check_aggro_timer + dtime
 end
 
 
