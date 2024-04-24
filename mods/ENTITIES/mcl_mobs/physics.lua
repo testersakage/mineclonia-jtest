@@ -805,8 +805,7 @@ function mob_class:do_env_damage()
 		-- when e.g. climbing up stairs.
 		-- This is a bit hacky because it assumes that do_env_damage
 		-- is called roughly every second only.
-		self.suffocation_timer = self.suffocation_timer + 1
-		if self.suffocation_timer >= 3 then
+		if self:check_timer("suffocation", 1) then
 			-- 2 damage per second
 			-- TODO: Deal this damage once every 1/2 second
 			self:damage_mob("environment", 2)
@@ -817,7 +816,7 @@ function mob_class:do_env_damage()
 			end
 		end
 	else
-		self.suffocation_timer = 0
+		self._timers["suffocation"] = 1
 	end
 
 	return self:check_for_death("", {type = "unknown"})
@@ -825,21 +824,16 @@ end
 
 function mob_class:env_damage (dtime, pos)
 	-- environmental damage timer (every 1 second)
-	self.env_damage_timer = self.env_damage_timer + dtime
+	if not self:check_timer("env_damage", 1) then return end
+	self:check_entity_cramming()
 
-	if (self.state == "attack" and self.env_damage_timer > 1)
-			or self.state ~= "attack" then
-		self:check_entity_cramming()
-		self.env_damage_timer = 0
-
-		-- check for environmental damage (water, fire, lava etc.)
-		if self:do_env_damage() then
-			return true
-		end
-
-		-- node replace check (cow eats grass etc.)
-		self:replace(pos)
+	-- check for environmental damage (water, fire, lava etc.)
+	if self:do_env_damage() then
+		return true
 	end
+
+	-- node replace check (cow eats grass etc.)
+	self:replace(pos)
 end
 
 function mob_class:damage_mob(reason, damage)
