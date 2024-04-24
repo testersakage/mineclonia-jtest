@@ -130,8 +130,7 @@ function mob_class:smart_mobs(s, p, dist, dtime)
 		end -- can see target!
 	end
 
-	if (self.path.stuck_timer > stuck_timeout and not self.path.following) then
-
+	if self:check_timer("stuck_timer", stuck_timeout) and not self.path.following  then
 		use_pathfind = true
 		self.path.stuck_timer = 0
 
@@ -143,11 +142,9 @@ function mob_class:smart_mobs(s, p, dist, dtime)
 		end, self)
 	end
 
-	if (self.path.stuck_timer > stuck_path_timeout and self.path.following) then
+	if self:check_timer("stuck_path_timer", stuck_path_timeout) and self.path.following then
 
 		use_pathfind = true
-		self.path.stuck_timer = 0
-
 		minetest.after(1, function(self)
 			if not self.object:get_luaentity() then
 				return
@@ -299,7 +296,6 @@ function mob_class:smart_mobs(s, p, dist, dtime)
 			end
 
 			-- will try again in 2 seconds
-			self.path.stuck_timer = stuck_timeout - 2
 		elseif s.y < p1.y and (not self.fly) then
 			self:do_jump() --add jump to pathfinding
 			self.path.following = true
