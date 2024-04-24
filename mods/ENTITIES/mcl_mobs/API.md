@@ -427,6 +427,8 @@ These functions can be called from the entity as well as overwritten on a per-mo
 	* sets the nametag of the mob
  * mob:set_properties(property_table)
 	* works in the same way as mob.object:set_properties() would except that it will not set fields that are already set to the given value, potentially saving network bandwidth.
+ * mob:check_timer(timer, interval)
+	* This returns true if the timer identified by `timer` has reached 0 and resets it to interval, returns false otherwise. If the timer was never run before it is set to a random value < interval to avoid lots of timers firing simultaneously.
 
 #### Breeding
  * mob:feed_tame(clicker, feed_count, breed, tame, notake)
