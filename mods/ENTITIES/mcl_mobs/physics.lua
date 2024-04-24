@@ -231,38 +231,6 @@ function mob_class:get_velocity()
 	return 0
 end
 
-function mob_class:update_roll()
-	local is_Fleckenstein = self.nametag == "Fleckenstein"
-	local was_Fleckenstein = false
-
-	local rot = self.object:get_rotation()
-	rot.z = is_Fleckenstein and math.pi or 0
-	self.object:set_rotation(rot)
-
-	local cbox = table.copy(self.initial_properties.collisionbox)
-	local acbox = self.object:get_properties().collisionbox
-
-	if tonumber(cbox[2]) and tonumber(acbox[2]) and math.abs(cbox[2] - acbox[2]) > 0.1 then
-		was_Fleckenstein = true
-	end
-
-	if is_Fleckenstein ~= was_Fleckenstein then
-		local pos = self.object:get_pos()
-		pos.y = pos.y + (acbox[2] + acbox[5])
-		self.object:set_pos(pos)
-	end
-
-	if is_Fleckenstein then
-		cbox[2], cbox[5] = -cbox[5], -cbox[2]
-		self.object:set_properties({collisionbox = cbox})
-	-- This leads to child mobs having the wrong collisionbox
-	-- and seeing as it seems to be nothing but an easter egg
-	-- i've put it inside the if. Which just makes it be upside
-	-- down lol.
-	end
-
-end
-
 local function shortest_term_of_yaw_rotation(self, rot_origin, rot_target, nums)
 
 	if not rot_origin or not rot_target then
@@ -366,7 +334,6 @@ function mob_class:set_yaw(yaw, delay, dtime)
 		if self.shaking and dtime then
 			yaw = yaw + (math.random() * 2 - 1) * 5 * dtime
 		end
-		self:update_roll()
 		return yaw
 	end
 
