@@ -622,6 +622,7 @@ end
 
 -- find someone to runaway from
 function mob_class:check_runaway_from()
+	if self:check_timer("check_runaway_from", 1) then return end
 	if (not self.runaway_from and self.state ~= "flop") or self.state == "runaway" then
 		return
 	end
@@ -629,6 +630,7 @@ function mob_class:check_runaway_from()
 		self.state = "runaway"
 		self.runaway_timer = 3
 		self.following = nil
+		self:set_animation("run")
 	end
 end
 
