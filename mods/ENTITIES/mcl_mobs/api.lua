@@ -63,6 +63,23 @@ function mob_class:update_tag() --update nametag and/or the debug box
 	})
 end
 
+function mob_class:update_timers(dtime)
+	for k, v in pairs(self._timers) do
+		self._timers[k] = v - dtime
+	end
+end
+
+function mob_class:check_timer(timer, interval)
+	if not self._timers[timer] then
+		self._timers[timer] = math.random() --start with a random time to avoid many timers firing simultaneously
+	end
+	if self._timers[timer] <= 0  then
+		self._timers[timer] = interval
+		return true
+	end
+	return false
+end
+
 function mob_class:jock_to(mob, reletive_pos, rot)
 	self.jockey = mob
 	local jock = minetest.add_entity(self.object:get_pos(), mob)
@@ -384,6 +401,7 @@ function mob_class:on_step(dtime)
 		self:force_step(dtime)
 	end
 
+	self:update_timers(dtime)
 	if self:check_suspend() then return end
 
 	self:check_water_flow()

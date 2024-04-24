@@ -622,7 +622,7 @@ end
 
 -- find someone to runaway from
 function mob_class:check_runaway_from()
-	if not self.runaway_from and self.state ~= "flop" then
+	if (not self.runaway_from and self.state ~= "flop") or self.state == "runaway" then
 		return
 	end
 	if self:is_object_in_view(self.runaway_from, self.view_range, self.view_range / 2, true) then
