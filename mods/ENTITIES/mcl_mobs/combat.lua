@@ -2,7 +2,7 @@ local mob_class = mcl_mobs.mob_class
 
 local damage_enabled = minetest.settings:get_bool("enable_damage", true)
 local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
+local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
 
 local stuck_timeout = 3 -- how long before mob gets stuck in place and starts searching
 local stuck_path_timeout = 10 -- how long will mob follow path before giving up
@@ -11,12 +11,11 @@ local enable_pathfinding = true
 
 local TIME_TO_FORGET_TARGET = 15
 
-local atann = math.atan
 local function atan(x)
 	if not x or minetest.is_nan(x) then
 		return 0
 	else
-		return atann(x)
+		return math.atan(x)
 	end
 end
 
@@ -33,21 +32,18 @@ end
 mcl_mobs.effect_functions = {}
 
 function mob_class:day_docile()
-	if self.docile_by_day == false then
-		return false
-	elseif self.docile_by_day == true
-	and self.time_of_day > 0.2
-	and self.time_of_day < 0.8 then
+	if self.docile_by_day and self.time_of_day > 0.2 and self.time_of_day < 0.8 then
 		return true
 	end
+	return false
 end
 
-function mob_class:do_attack(player)
+function mob_class:do_attack(obj)
 	if self.state == "attack" or self.state == "die" then
 		return
 	end
 
-	self.attack = player
+	self.attack = obj
 	self:set_state("attack")
 
 	-- TODO: Implement war_cry sound without being annoying
@@ -57,31 +53,26 @@ function mob_class:do_attack(player)
 end
 
 -- blast damage to entities nearby
-local function entity_physics(pos,radius)
-
+local function blast_damage(pos, radius)
 	radius = radius * 2
 
-	local objs = minetest.get_objects_inside_radius(pos, radius)
-	local obj_pos, dist
+	for _, obj in pairs(minetest.get_objects_inside_radius(pos, radius)) do
 
-	for n = 1, #objs do
-
-		obj_pos = objs[n]:get_pos()
-
-		dist = vector.distance(pos, obj_pos)
+		local obj_pos = obj:get_pos()
+		local dist = vector.distance(pos, obj_pos)
 		if dist < 1 then dist = 1 end
 
 		local damage = math.floor((4 / dist) * radius)
 
 		-- punches work on entities AND players
-		objs[n]:punch(objs[n], 1.0, {
+		obj:punch(obj, 1.0, {
 			full_punch_interval = 1.0,
 			damage_groups = {fleshy = damage},
-		}, pos)
+		}, vector.direction(pos, obj_pos))
 	end
 end
 
-function mob_class:entity_physics(pos,radius) return entity_physics(pos,radius) end
+function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius) end
 
 local los_switcher = false
 local height_switcher = false
@@ -254,11 +245,7 @@ function mob_class:smart_mobs(s, p, dist, dtime)
 				else -- dig 2 blocks to make door toward player direction
 
 					local yaw1 = self.object:get_yaw() + math.pi / 2
-					local p1 = {
-						x = s.x + math.cos(yaw1),
-						y = s.y,
-						z = s.z + math.sin(yaw1)
-					}
+					local p1 = vector.offset(s, math.cos(yaw1), 0, math.sin(yaw1))
 
 					if not minetest.is_protected(p1, "") then
 
@@ -372,6 +359,7 @@ function mob_class:attack_monsters()
 		local l = obj:get_luaentity()
 		if l and l.type == "monster" and self:target_visible(pos, obj) then
 			self:do_attack(obj)
+			break
 		end
 	end
 end
@@ -412,7 +400,7 @@ function mob_class:safe_boom(pos, strength, no_remove)
 		max_hear_distance = self.sounds and self.sounds.distance or 32
 	}, true)
 	local radius = strength
-	entity_physics(pos, radius)
+	blast_damage(pos, radius)
 	mcl_mobs.effect(pos, 32, "mcl_particles_smoke.png", radius * 3, radius * 5, radius, 1, 0)
 	if not no_remove then
 		if self.is_mob then
@@ -672,6 +660,7 @@ function mob_class:do_runaway(hitter)
 	self:set_yaw( minetest.dir_to_yaw(vector.direction(hitter:get_pos(), self.object:get_pos())))
 	self:set_velocity( self.run_velocity)
 	self:set_state("runaway")
+	self:set_animation("run")
 	self.runaway_timer = 0
 	self.following = nil
 end
@@ -749,8 +738,7 @@ function mob_class:do_states_attack (dtime)
 
 	if not target_line_of_sight then
 		if self.target_time_lost then
-			local time_since_seen = os.time() - self.target_time_lost
-			if time_since_seen > TIME_TO_FORGET_TARGET then
+			if os.time() - self.target_time_lost > TIME_TO_FORGET_TARGET then
 				self.target_time_lost = nil
 				self:clear_aggro()
 				return
@@ -1069,11 +1057,10 @@ function mob_class:do_states_attack (dtime)
 		p.y = p.y + (props.collisionbox[2] + props.collisionbox[5]) / 2
 
 		if self.shoot_interval
-				and self.timer > self.shoot_interval
-				and not minetest.raycast(vector.add(p, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
-				and math.random(1, 100) <= 60 then
+			and self:check_timer("arrow_shot", self.shoot_interval + math.random())
+			and not minetest.raycast(vector.add(p, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
+			and math.random(1, 100) <= 60 then
 
-			self.timer = 0
 			self:set_animation( "shoot")
 
 			-- play shoot attack sound
@@ -1082,15 +1069,15 @@ function mob_class:do_states_attack (dtime)
 			-- Shoot arrow
 			if minetest.registered_entities[self.arrow] then
 
-				local arrow, ent
 				local v = 1
+				local arrow
 				if not self.shoot_arrow then
 					self.firing = true
-					minetest.after(1, function()
+					minetest.after(1, function(self)
 						self.firing = false
-					end)
+					end, self)
 					arrow = minetest.add_entity(p, self.arrow)
-					ent = arrow:get_luaentity()
+					local ent = arrow:get_luaentity()
 					if ent.velocity then
 						v = ent.velocity
 					end
@@ -1111,10 +1098,13 @@ function mob_class:do_states_attack (dtime)
 				vec.x = vec.x * (v / amount)
 				vec.y = vec.y * (v / amount)
 				vec.z = vec.z * (v / amount)
+
 				if self.shoot_arrow then
 					vec = vector.normalize(vec)
-					self:shoot_arrow(p, vec)
-				else
+					arrow = self:shoot_arrow(p, vec)
+				end
+
+				if arrow then
 					arrow:set_velocity(vec)
 				end
 				attacked = true
