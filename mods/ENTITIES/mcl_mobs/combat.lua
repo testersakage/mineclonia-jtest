@@ -19,16 +19,6 @@ local function atan(x)
 	end
 end
 
--- get node but use fallback for nil or unknown
-local function node_ok(pos, fallback)
-	fallback = fallback or mcl_mobs.fallback_node
-	local node = minetest.get_node_or_nil(pos)
-	if node and minetest.registered_nodes[node.name] then
-		return node
-	end
-	return minetest.registered_nodes[fallback]
-end
-
 mcl_mobs.effect_functions = {}
 
 function mob_class:day_docile()
@@ -197,91 +187,6 @@ function mob_class:smart_mobs(s, p, dist, dtime)
 		if not self.path.way then
 
 			self.path.following = false
-
-			 -- lets make way by digging/building if not accessible
-			if self.pathfinding == 2 and mobs_griefing then
-
-				-- is player higher than mob?
-				if s.y < p1.y then
-
-					-- build upwards
-					if not minetest.is_protected(s, "") then
-
-						local ndef1 = minetest.registered_nodes[self.standing_in]
-
-						if ndef1 and (ndef1.buildable_to or ndef1.groups.liquid) then
-
-								minetest.set_node(s, {name = mcl_mobs.fallback_node})
-						end
-					end
-					local props = self.object:get_properties()
-					local sheight = math.ceil(props.collisionbox[5]) + 1
-
-					-- assume mob is 2 blocks high so it digs above its head
-					s.y = s.y + sheight
-
-					-- remove one block above to make room to jump
-					if not minetest.is_protected(s, "") then
-
-						local node1 = node_ok(s, "air").name
-						local ndef1 = minetest.registered_nodes[node1]
-
-						if node1 ~= "air"
-						and node1 ~= "ignore"
-						and ndef1
-						and not ndef1.groups.level
-						and not ndef1.groups.unbreakable
-						and not ndef1.groups.liquid then
-
-							minetest.set_node(s, {name = "air"})
-							minetest.add_item(s, ItemStack(node1))
-
-						end
-					end
-
-					s.y = s.y - sheight
-					self.object:set_pos({x = s.x, y = s.y + 2, z = s.z})
-
-				else -- dig 2 blocks to make door toward player direction
-
-					local yaw1 = self.object:get_yaw() + math.pi / 2
-					local p1 = vector.offset(s, math.cos(yaw1), 0, math.sin(yaw1))
-
-					if not minetest.is_protected(p1, "") then
-
-						local node1 = node_ok(p1, "air").name
-						local ndef1 = minetest.registered_nodes[node1]
-
-						if node1 ~= "air"
-							and node1 ~= "ignore"
-							and ndef1
-							and not ndef1.groups.level
-							and not ndef1.groups.unbreakable
-							and not ndef1.groups.liquid then
-
-							minetest.add_item(p1, ItemStack(node1))
-							minetest.set_node(p1, {name = "air"})
-						end
-
-						p1.y = p1.y + 1
-						node1 = node_ok(p1, "air").name
-						ndef1 = minetest.registered_nodes[node1]
-
-						if node1 ~= "air"
-						and node1 ~= "ignore"
-						and ndef1
-						and not ndef1.groups.level
-						and not ndef1.groups.unbreakable
-						and not ndef1.groups.liquid then
-
-							minetest.add_item(p1, ItemStack(node1))
-							minetest.set_node(p1, {name = "air"})
-						end
-
-					end
-				end
-			end
-
 			-- will try again in 2 seconds
 		elseif s.y < p1.y and (not self.fly) then
 			self:do_jump() --add jump to pathfinding
