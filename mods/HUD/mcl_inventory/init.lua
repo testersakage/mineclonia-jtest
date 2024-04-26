@@ -57,15 +57,17 @@ local function set_inventory(player, armor_change_only)
 	player:set_inventory_formspec(mcl_inventory.build_survival_formspec(player))
 end
 
-function mcl_inventory.get_recipe_groups(pinv, craft)
-	local grid_width = pinv:get_width("craft")
-	if craft.width > grid_width or pinv:get_size("craft") < table.count(craft.items, function(_,v) return not ItemStack(v):is_empty()  end) then
+function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_height)
+	local grid_width = optional_width or pinv:get_width("craft")
+	local grid_height = optional_height or math.ceil(pinv:get_size("craft") / grid_width)
+	local craft_size = table.max_index(craft.items)
+	if craft.width > grid_width or math.ceil(craft_size / craft.width) > grid_height then
 		return false
 	end
 	local r = { "", "", "", "", "", "", "", "", "" }
 	local all_found = true
 	local i = 0
-	for k = 1, pinv:get_size("craft") do
+	for k = 1, craft_size do
 		local it = craft.items[k]
 		if it then
 			if it:sub(1,6) == "group:" then
