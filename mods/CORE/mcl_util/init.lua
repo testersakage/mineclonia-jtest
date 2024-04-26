@@ -36,6 +36,14 @@ function table.reverse(t)
 	end
 end
 
+function table.max_index(t)
+	local max = 0
+	for k, _ in pairs(t) do
+		if type(k) == "number" and k > max then max = k end
+	end
+	return max
+end
+
 function table.count(t, does_it_count)
 	local r = 0
 	for k, v in pairs(t) do
