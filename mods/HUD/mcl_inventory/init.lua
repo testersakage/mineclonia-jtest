@@ -64,7 +64,7 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 	if craft.width > grid_width or math.ceil(craft_size / craft.width) > grid_height then
 		return false
 	end
-	local r = { "", "", "", "", "", "", "", "", "" }
+	local r = {}
 	local all_found = true
 	local i = 0
 	for k = 1, craft_size do
@@ -82,10 +82,15 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 			else
 				all_found = false
 			end
+		else
+			r[k+i] = ""
 		end
 		-- adapt from craft width to craft grid width
 		if (k % craft.width) == 0 then
-			i = i + grid_width - craft.width
+			for index = 1, grid_width - craft.width do
+				i = i + 1
+				r[k+i] = ""
+			end
 		end
 	end
 	if all_found then
