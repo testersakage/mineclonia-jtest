@@ -101,6 +101,12 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	swims = true,
 	makes_footstep_sound = false,
 	jump = false,
+	view_range = 16,
+	dealt_effect = {
+		name = "fatigue",
+		level = 3,
+		dur = 30,
+	},
 })
 
 -- spawn eggs
