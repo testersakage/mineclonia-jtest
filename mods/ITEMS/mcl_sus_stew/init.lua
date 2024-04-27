@@ -49,23 +49,16 @@ end
 
 local eat = minetest.item_eat(6, "mcl_core:bowl")
 
-local function hunger_effect(itemstack, placer, pointed_thing)
-	mcl_hunger.item_eat(6, "mcl_core:bowl", 3.5, 0, 100)
-	return eat(itemstack, placer, pointed_thing)
-end
-
 local function potion_effect(itemstack, placer, pointed_thing,effect)
-	if mcl_potions[effect.."_func"] then
-		mcl_potions[effect.."_func"](placer, 1, 6)
-	end
+	mcl_potions.give_effect("fire_resistance", placer, 1, 4)
 	return eat(itemstack, placer, pointed_thing)
 end
 
 mcl_sus_stew.register_stew("fire_resistance","mcl_flowers:allium",potion_effect)
---mcl_sus_stew.register_stew("blindness","mcl_flowers:azure_bluet",potion_effect) -- effect not implemented
-mcl_sus_stew.register_stew("hunger","mcl_flowers:blue_orchid",hunger_effect)
+mcl_sus_stew.register_stew("blindness","mcl_flowers:azure_bluet",potion_effect)
+mcl_sus_stew.register_stew("food_poisoning","mcl_flowers:blue_orchid",potion_effect)
 mcl_sus_stew.register_stew("leaping","mcl_flowers:cornflower",potion_effect)
-mcl_sus_stew.register_stew("hunger","mcl_flowers:dandelion",hunger_effect)
+mcl_sus_stew.register_stew("food_poisoning","mcl_flowers:dandelion",potion_effect)
 mcl_sus_stew.register_stew("poison","mcl_flowers:lily_of_the_valley",potion_effect)
 mcl_sus_stew.register_stew("regeneration","mcl_flowers:oxeye_daisy",potion_effect)
 mcl_sus_stew.register_stew("night_vision","mcl_flowers:poppy",potion_effect)
@@ -73,7 +66,7 @@ mcl_sus_stew.register_stew("night_vision","mcl_flowers:poppy",potion_effect)
 --mcl_sus_stew.register_stew("weakness","mcl_flowers:tulip_pink",potion_effect) -- effect not implemented
 --mcl_sus_stew.register_stew("weakness","mcl_flowers:tulip_red",potion_effect) -- effect not implemented
 --mcl_sus_stew.register_stew("weakness","mcl_flowers:tulip_white",potion_effect) -- effect not implemented
-mcl_sus_stew.register_stew("harming","mcl_flowers:wither_rose",potion_effect) -- in place of real wither effect
+mcl_sus_stew.register_stew("withering","mcl_flowers:wither_rose",potion_effect) -- in place of real wither effect
 
 minetest.register_craftitem("mcl_sus_stew:stew",{
 	description = S("Suspicious Stew"),
