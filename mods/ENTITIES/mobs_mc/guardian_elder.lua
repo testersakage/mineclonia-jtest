@@ -102,9 +102,13 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	makes_footstep_sound = false,
 	fly_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	jump = false,
+	dealt_effect = {
+		name = "fatigue",
+		level = 3,
+		dur = 30,
+	},
 })
 
--- spawn eggs
 mcl_mobs.register_egg("mobs_mc:guardian_elder", S("Elder Guardian"), "#ceccba", "#747693", 0)
 
 
