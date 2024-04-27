@@ -109,7 +109,7 @@ local function fish(itemstack, player, pointed_thing)
 		end
 		if ent and ent._dive == true then
 			local items
-			local pr = PseudoRandom(os.time() * math.random(1, 100))
+			local pr = PseudoRandom(math.random(0, 32767))
 			local r = pr:next(1, 100)
 			local fish_values = {85, 84.8, 84.7, 84.5}
 			local junk_values = {10, 8.1, 6.1, 4.2}
