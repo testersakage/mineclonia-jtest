@@ -220,6 +220,7 @@ read_globals = {
 			reverse = { read_only = false },
 			count = { read_only = false },
 			random_element = { read_only = false },
+			max_index = { read_only = false },
 		}
 	},
 
