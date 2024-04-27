@@ -147,7 +147,7 @@ minetest.register_on_item_eat(function (_, _, itemstack, user)
 	-- 60% chance of poisoning with poisonous potato
 	if itemstack:get_name() == "mcl_farming:potato_item_poison" then
 		if math.random(1,10) >= 6 then
-			mcl_potions.poison_func(user, 1, 5)
+			mcl_potions.give_effect_by_level("poison", user, 1, 5)
 		end
 	end
 

@@ -3,6 +3,52 @@ mcl_sus_stew.registered_stews = {}
 local item_effect = {}
 local S = minetest.get_translator(minetest.get_current_modname())
 
+--                                          ____________________________
+--_________________________________________/    Variables & Functions    \_________
+
+local eat = minetest.item_eat(6, "mcl_core:bowl") --6 hunger points, player receives mcl_core:bowl after eating
+
+local flower_effect = {
+	[ "mcl_flowers:allium" ] = "fire_resistance",
+	[ "mcl_flowers:lily_of_the_valley" ] = "poison",
+	[ "mcl_flowers:blue_orchid" ] = "food_poisoning",
+	[ "mcl_flowers:dandelion" ] = "food_poisoning",
+	[ "mcl_flowers:cornflower" ] = "jump",
+	[ "mcl_flowers:oxeye_daisy" ] = "regeneration",
+	[ "mcl_flowers:poppy" ] = "night_vision"
+}
+
+local effects = {
+	[ "fire_resistance" ] = function(itemstack, placer, pointed_thing)
+		mcl_potions.give_effect("fire_resistance", placer, 1, 4)
+		return eat(itemstack, placer, pointed_thing)
+	end,
+	[ "poison" ] = function(itemstack, placer, pointed_thing)
+		mcl_potions.give_effect_by_level("poison", placer, 1, 12)
+		return eat(itemstack, placer, pointed_thing)
+	end,
+
+	[ "food_poisoning" ] = function(itemstack, placer, pointed_thing, player)
+		mcl_potions.give_effect_by_level("food_poisoning", placer, 10, 12)
+		return eat(itemstack, placer, pointed_thing)
+	end,
+
+	["jump"] = function(itemstack, placer, pointed_thing)
+		mcl_potions.give_effect_by_level("leaping", placer, 1, 6)
+		return eat(itemstack, placer, pointed_thing)
+	end,
+
+	["regeneration"] = function(itemstack, placer, pointed_thing)
+		mcl_potions.give_effect_by_level("regeneration", placer, 1, 8)
+		return eat(itemstack, placer, pointed_thing)
+	end,
+
+	["night_vision"] = function(itemstack, placer, pointed_thing)
+		mcl_potions.give_effect("night_vision", placer, 1, 5)
+		return eat(itemstack, placer, pointed_thing)
+	end,
+}
+
 local function get_random_effect()
 	local keys = {}
 	for k in pairs(mcl_sus_stew.registered_stews) do

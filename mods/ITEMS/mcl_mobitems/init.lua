@@ -536,6 +536,6 @@ minetest.register_craft({
 
 minetest.register_on_item_eat(function (_, _, itemstack, user, _)	-- poisoning with spider eye
 	if itemstack:get_name() == "mcl_mobitems:spider_eye" then
-		mcl_potions.poison_func(user, 1, 4)
+		mcl_potions.give_effect_by_level("poison", user, 1, 4)
 	end
 end)
