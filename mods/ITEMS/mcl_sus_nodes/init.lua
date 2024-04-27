@@ -26,7 +26,7 @@ function mcl_sus_nodes.get_random_item(pos)
 	local meta = minetest.get_meta(pos)
 	local struct = meta:get_string("structure")
 	local structdef = mcl_structures.registered_structures[struct]
-	local pr = PseudoRandom(minetest.hash_node_position(pos))
+	local pr = PseudoRandom(minetest.hash_node_position(pos) % 32768)
 	if struct ~= "" and structdef and structdef.loot and structdef.loot["SUS"] then
 		local lootitems = mcl_loot.get_multi_loot(structdef.loot["SUS"], pr)
 		if #lootitems > 0 then

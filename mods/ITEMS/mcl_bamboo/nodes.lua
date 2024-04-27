@@ -16,7 +16,7 @@ local boxes = {
 }
 
 function mcl_bamboo.grow(pos)
-	local pr = PseudoRandom(minetest.hash_node_position(pos))
+	local pr = PseudoRandom(minetest.hash_node_position(pos) % 32768)
 	local max_height = pr:next(12,16)
 	local bottom = mcl_util.traverse_tower(pos,-1)
 	local top,h = mcl_util.traverse_tower(bottom,1)

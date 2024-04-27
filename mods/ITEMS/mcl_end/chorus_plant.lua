@@ -446,7 +446,7 @@ end
 
 --- ABM ---
 local seed = minetest.get_mapgen_setting("seed")
-local pr = PseudoRandom(seed)
+local pr = PseudoRandom(seed % 32768)
 minetest.register_abm({
 	label = "Chorus plant growth",
 	nodenames = { "mcl_end:chorus_flower" },

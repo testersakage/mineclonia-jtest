@@ -245,7 +245,7 @@ minetest.register_on_dignode(function(pos, node)
 	end
 end)
 
-local grass_spread_randomizer = PseudoRandom(minetest.get_mapgen_setting("seed"))
+local grass_spread_randomizer = PseudoRandom(minetest.get_mapgen_setting("seed") % 32768)
 
 function mcl_core.get_grass_palette_index(pos)
 	local biome_data = minetest.get_biome_data(pos)
