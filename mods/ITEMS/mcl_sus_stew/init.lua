@@ -99,10 +99,10 @@ local function hunger_effect(itemstack)
 end
 
 local function potion_effect(itemstack, placer, _, effect)
-	if mcl_potions[effect.."_func"] then
-		mcl_potions[effect.."_func"](placer, 1, 6)
-	end
-	return itemstack
+    if mcl_potions.registered_effects[effect] then
+	mcl_potions.give_effect (effect, placer, 1, 6)
+    end
+    return itemstack
 end
 
 mcl_sus_stew.register_stew("fire_resistance","mcl_flowers:allium",potion_effect)
