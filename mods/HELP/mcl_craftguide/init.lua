@@ -607,8 +607,8 @@ local function get_recipe_fs(data, iY, player)
 		local pinv = player:get_inventory()
 		if mcl_inventory.get_recipe_groups(pinv, recipe, width, height) then
 			fs[#fs + 1] = string.format("image_button[%f,%f;%f,%f;%s;%s_inv;%s]",
-				8.5,
-				7.2,
+				output_X + 2.7,
+				iY + 2.2,
 				1.1,
 				1.1,
 				"mcl_crafting_guide_craft.png",
