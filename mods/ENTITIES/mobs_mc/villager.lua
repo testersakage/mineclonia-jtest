@@ -105,9 +105,7 @@ function mobs_mc.villager_mob:on_rightclick(clicker)
 	self:stand_still()
 end
 
-function mobs_mc.villager_mob:do_custom(dtime)
-	self:check_summon(dtime)
-
+function mobs_mc.villager_mob:stand_near_players()
 	-- Check infrequently to keep CPU load low
 	if self:check_timer("player_scan", PLAYER_SCAN_INTERVAL) then
 		local selfpos = self.object:get_pos()
@@ -127,7 +125,11 @@ function mobs_mc.villager_mob:do_custom(dtime)
 			self.jump = true
 		end
 	end
+end
 
+function mobs_mc.villager_mob:do_custom(dtime)
+	self:check_summon(dtime)
+	self:stand_near_players()
 	self:do_activity(dtime)
 end
 
