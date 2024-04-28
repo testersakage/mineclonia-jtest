@@ -1,11 +1,6 @@
 local S = minetest.get_translator("mobs_mc")
 local WOOL_REPLACE_RATE = 80
 local gotten_texture = { "blank.png", "mobs_mc_sheep.png" }
-local rainbow_colors = {}
-
-for k, v in pairs(mcl_dyes.colors) do
-	table.insert(rainbow_colors, "unicolor_"..v.unicolor)
-end
 
 local function unicolor_to_wool(unicolor_group)
 	local d = mcl_dyes.unicolor_to_dye(unicolor_group)
@@ -144,34 +139,6 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 			self.object:set_properties({ textures = self.base_texture })
 			self.drops = get_sheep_drops(self.color)
 			self.initial_color_set = true
-		end
-
-		local is_kay27 = self.object:get_properties().nametag == "kay27"
-
-		if self.color_change_timer then
-			local old_color = self.color
-			if is_kay27 then
-				self.color_change_timer = self.color_change_timer - dtime
-				if self.color_change_timer < 0 then
-					self.color_change_timer = 0.5
-					self.color_index = (self.color_index + 1) % #rainbow_colors
-					self.color = rainbow_colors[self.color_index + 1]
-					table.shuffle(rainbow_colors)
-				end
-			else
-				self.color_change_timer = nil
-				self.color_index = nil
-				self.color = self.initial_color
-			end
-
-			if old_color ~= self.color then
-				self.base_texture = sheep_texture(self.color)
-				self.object:set_properties({textures = self.base_texture})
-			end
-		elseif is_kay27 then
-			self.initial_color = self.color
-			self.color_change_timer = 0
-			self.color_index = -1
 		end
 	end,
 
