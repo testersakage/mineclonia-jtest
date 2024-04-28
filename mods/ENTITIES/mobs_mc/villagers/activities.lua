@@ -421,17 +421,13 @@ end
 
 function mobs_mc.villager_mob:check_summon(dtime)
 	-- TODO has selpt in last 20?
-	if self._summon_timer and self._summon_timer > 30 then
+	if self:check_timer("summon_golem", 37) then
 		local pos = self.object:get_pos()
-		self._summon_timer = 0
 		if has_golem(pos) then return end
 		if not self:monsters_near() then return end
 		if not self:has_summon_participants() then return end
 		self:summon_golem()
-	elseif self._summon_timer == nil  then
-		self._summon_timer = 0
 	end
-	self._summon_timer = self._summon_timer + dtime
 end
 
 function mobs_mc.villager_mob:has_traded()
@@ -779,23 +775,20 @@ function mobs_mc.villager_mob:do_activity(dtime)
 		return
 	end
 
-	self._bed_timer = (self._bed_timer or (math.random() * 5)) - dtime
-	if self._bed_timer < 0 then
-		self._bed_timer_interval = 5
+	if self:check_timer("bed_search", self._bed_search_interval) then
 		if not self:check_bed() then
-			self:take_bed()
-			self._bed_timer_interval = math.min(20,self._bed_timer_interval + 1)
+			if not self:take_bed() then
+				self._bed_search_interval = math.min(self._bed_search_interval + 5, 300)
+				-- since this is pretty expensive: if no bed is found increment search interval by 5 each time with cap at 5 minutes
+			end
 		end
-		self._bed_timer = self._bed_timer_interval + math.random() * 5
 	end
 
 	if (not self:should_sleep()) and self.order == SLEEP then
 		self.order = nil
 	end
 
-	self._activity_timer = (self._activity_timer or math.random() * 5) - dtime
-	if self._activity_timer < 0 then
-		self._activity_timer = 10 + math.random() * 10
+	if self:check_timer("activity_check", 13) then
 		-- Only check in day or during thunderstorm but wandered_too_far code won't work
 		local wandered_too_far = false
 		if self:check_bed() then

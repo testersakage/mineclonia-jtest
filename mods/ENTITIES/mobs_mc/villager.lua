@@ -255,6 +255,7 @@ table.update(mobs_mc.villager_mob, {
 	pick_up = pick_up,
 	can_open_doors = true,
 	_player_scan_timer = 0,
+	_bed_search_interval = 10,
 	_trading_players = {},
 	runaway_from = {
 		"mobs_mc:zombie",
