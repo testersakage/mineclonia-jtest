@@ -27,6 +27,7 @@ local RUNAWAY = "runaway"
 function mobs_mc.villager_mob:stand_still()
 	self.walk_chance = 0
 	self.jump = false
+	self:set_state("stand")
 end
 
 function mobs_mc.villager_mob:get_badge_textures()
