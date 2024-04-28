@@ -47,3 +47,4 @@ Zombie view range: -50%=
 Skeleton view range: -50%=
 Creeper view range: -50%=
 Durability: @1=
+...stacks=
