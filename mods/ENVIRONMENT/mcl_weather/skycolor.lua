@@ -3,8 +3,6 @@ local NIGHT_VISION_RATIO = 0.45
 
 local water_color = "#3F76E4"
 
-local mg_name = minetest.get_mapgen_setting("mg_name")
-
 function mcl_weather.set_sky_box_clear(player, sky, fog)
 	local pos = player:get_pos()
 	if minetest.get_item_group(minetest.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name, "water") ~= 0 then return end
@@ -152,15 +150,13 @@ mcl_weather.skycolor = {
 			if dim == "overworld" then
 				local biomesky
 				local biomefog
-				if mg_name ~= "v6" and (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
-					local biome_index = minetest.get_biome_data(player:get_pos()).biome
-					local biome_name = minetest.get_biome_name(biome_index)
-					local biome = minetest.registered_biomes[biome_name]
-					if biome then
-						--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
-						biomesky = biome._mcl_skycolor
-						biomefog = biome._mcl_fogcolor
-					end
+				local biome_index = minetest.get_biome_data(player:get_pos()).biome
+				local biome_name = minetest.get_biome_name(biome_index)
+				local biome = minetest.registered_biomes[biome_name]
+				if biome then
+					--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
+					biomesky = biome._mcl_skycolor
+					biomefog = biome._mcl_fogcolor
 				end
 				if (mcl_weather.state == "none") then
 					-- Clear weather
@@ -228,15 +224,13 @@ mcl_weather.skycolor = {
 			elseif dim == "end" then
 				local biomesky = "#000000"
 				--local biomefog = "#A080A0"
-				if mg_name ~= "v6" and (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
-					local biome_index = minetest.get_biome_data(player:get_pos()).biome
-					local biome_name = minetest.get_biome_name(biome_index)
-					local biome = minetest.registered_biomes[biome_name]
-					if biome then
-						--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
-						biomesky = biome._mcl_skycolor
-						--biomefog = biome._mcl_fogcolor -- The End biomes seemingly don't use the fog colour, despite having this value according to the wiki. The sky colour is seemingly used for both sky and fog?
-					end
+				local biome_index = minetest.get_biome_data(player:get_pos()).biome
+				local biome_name = minetest.get_biome_name(biome_index)
+				local biome = minetest.registered_biomes[biome_name]
+				if biome then
+					--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
+					biomesky = biome._mcl_skycolor
+					--biomefog = biome._mcl_fogcolor -- The End biomes seemingly don't use the fog colour, despite having this value according to the wiki. The sky colour is seemingly used for both sky and fog?
 				end
 				local t = "mcl_playerplus_end_sky.png"
 				player:set_sky({ type = "skybox",
@@ -251,15 +245,13 @@ mcl_weather.skycolor = {
 			elseif dim == "nether" then
 				--local biomesky = "#6EB1FF"
 				local biomefog = "#330808"
-				if mg_name ~= "v6" and (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) then
-					local biome_index = minetest.get_biome_data(player:get_pos()).biome
-					local biome_name = minetest.get_biome_name(biome_index)
-					local biome = minetest.registered_biomes[biome_name]
-					if biome then
-						--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
-						--biomesky = biome._mcl_skycolor -- The Nether biomes seemingly don't use the sky colour, despite having this value according to the wiki. The fog colour is used for both sky and fog.
-						biomefog = biome._mcl_fogcolor
-					end
+				local biome_index = minetest.get_biome_data(player:get_pos()).biome
+				local biome_name = minetest.get_biome_name(biome_index)
+				local biome = minetest.registered_biomes[biome_name]
+				if biome then
+					--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
+					--biomesky = biome._mcl_skycolor -- The Nether biomes seemingly don't use the sky colour, despite having this value according to the wiki. The fog colour is used for both sky and fog.
+					biomefog = biome._mcl_fogcolor
 				end
 				mcl_weather.set_sky_color(player, {
 					type = "regular",

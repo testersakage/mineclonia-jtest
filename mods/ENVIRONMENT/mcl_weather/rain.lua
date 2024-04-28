@@ -1,8 +1,6 @@
 local PARTICLES_COUNT_RAIN = 500
 local PARTICLES_COUNT_THUNDER = 900
 
-local mgname = minetest.get_mapgen_setting("mg_name")
-
 mcl_weather.rain = {
 	-- max rain particles created at time
 	particles_count = PARTICLES_COUNT_RAIN,
@@ -43,7 +41,6 @@ local textures = {"weather_pack_rain_raindrop_1.png", "weather_pack_rain_raindro
 
 function mcl_weather.has_rain(pos)
 	if not mcl_worlds.has_weather(pos) then return false end
-	if  (mgname == "singlenode" and not minetest.get_modpath("biomegen")) or mgname == "v6" then return true end
 	local bd = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]
 	if bd and bd._mcl_biome_type == "hot" then return false end
 	if not mcl_weather.can_see_outdoors(pos) then

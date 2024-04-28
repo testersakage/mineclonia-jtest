@@ -1,4 +1,5 @@
 local mod_storage = minetest.get_mod_storage()
+local normal_vars_in_singlenode = false
 
 -- Some global variables (don't overwrite them!)
 mcl_vars = {}
@@ -97,7 +98,7 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-if not mcl_vars.superflat and (not singlenode or minetest.get_modpath("biomegen")) then
+if not mcl_vars.superflat and (not singlenode or normal_vars_in_singlenode) then
 	-- Normal mode
 	--[[ Realm stacking (h is for height)
 	- Overworld (h>=256)

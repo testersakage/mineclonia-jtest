@@ -1,5 +1,6 @@
 -- Generate strongholds.
 
+local generate_in_singlenode = false
 -- A total of 128 strongholds are generated in rings around the world origin.
 -- This is the list of rings, starting with the innermost ring first.
 local stronghold_rings = {
@@ -21,7 +22,7 @@ local seed = tonumber(minetest.get_mapgen_setting("seed"))
 local function init_strongholds()
 	local stronghold_positions = {}
 	-- Don't generate strongholds in singlenode
-	if (mg_name == "singlenode" and not minetest.get_modpath("biomegen")) then
+	if (mg_name == "singlenode" and not generate_in_singlenode) then
 		return {}
 	end
 	local pr = PseudoRandom(seed)

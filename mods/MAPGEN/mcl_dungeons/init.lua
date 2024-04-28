@@ -3,9 +3,10 @@
 mcl_dungeons = {}
 
 local mg_name = minetest.get_mapgen_setting("mg_name")
+local generate_in_singlenode = false
 
 -- Are dungeons disabled?
-if mcl_vars.mg_dungeons == false or (mg_name == "singlenode" and not minetest.get_modpath("biomegen")) then
+if mcl_vars.mg_dungeons == false or (mg_name == "singlenode" and not generate_in_singlenode) then
 	return
 end
 

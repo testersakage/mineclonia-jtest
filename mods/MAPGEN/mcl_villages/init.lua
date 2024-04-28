@@ -2,6 +2,7 @@ mcl_villages = {}
 mcl_villages.modpath = minetest.get_modpath(minetest.get_current_modname())
 
 local village_chance = tonumber(minetest.settings:get("mcl_villages_village_chance")) or 100
+local generate_in_singlenode = false
 
 dofile(mcl_villages.modpath.."/const.lua")
 dofile(mcl_villages.modpath.."/utils.lua")
@@ -59,7 +60,7 @@ end
 
 -- Disable natural generation in singlenode.
 local mg_name = minetest.get_mapgen_setting("mg_name")
-if mg_name ~= "singlenode" or minetest.get_modpath("biomegen") then
+if mg_name ~= "singlenode" or generate_in_singlenode then
 	mcl_mapgen_core.register_generator("villages", nil, function(minp, maxp, blockseed)
 		if maxp.y < 0 then return end
 

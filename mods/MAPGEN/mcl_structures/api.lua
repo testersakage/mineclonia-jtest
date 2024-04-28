@@ -13,8 +13,6 @@ local mob_cap_animal = tonumber(minetest.settings:get("mcl_mob_cap_animal")) or 
 
 local logging = minetest.settings:get_bool("mcl_logging_structures",true)
 
-local mg_name = minetest.get_mapgen_setting("mg_name")
-
 local rotations = {
 	"0",
 	"90",
@@ -398,7 +396,7 @@ function mcl_structures.register_structure_spawn(def)
 			local p = vector.offset(pos,0,1,0)
 			if minetest.get_node(p).name ~= "air" then return end
 			if minetest.get_meta(pos):get_string("spawnblock") == "" then return end
-			if (mg_name ~= "singlenode" or minetest.get_modpath("biomegen")) and def.biomes then
+			if def.biomes then
 				if table.indexof(def.biomes,minetest.get_biome_name(minetest.get_biome_data(p).biome)) == -1 then
 					return
 				end
