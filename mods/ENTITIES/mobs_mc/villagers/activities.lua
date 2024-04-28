@@ -636,6 +636,7 @@ function mobs_mc.villager_mob:do_work()
 	if self.child then
 		return
 	end
+	if not self:check_timer("do_work", 15) then return end
 
 	if self:validate_jobsite() then
 
@@ -711,27 +712,32 @@ function mobs_mc.villager_mob:go_to_town_bell()
 end
 
 function mobs_mc.villager_mob:sleep_over()
-	local p = self.object:get_pos()
-	local distance_to_closest_bed = 1000
-	local closest_bed
-	local nn2 = minetest.find_nodes_in_area(
-		vector.offset(p, -VIL_DIST, -VIL_DIST, -VIL_DIST),
-		vector.offset(p, VIL_DIST, VIL_DIST, VIL_DIST),
-		{ "group:bed" }
-	)
+	if self:check_timer("sleep_over", self._sleep_over_interval) then
+		local p = self.object:get_pos()
+		local distance_to_closest_bed = 1000
+		local closest_bed
+		local nn2 = minetest.find_nodes_in_area(
+			vector.offset(p, -VIL_DIST, -VIL_DIST, -VIL_DIST),
+			vector.offset(p, VIL_DIST, VIL_DIST, VIL_DIST),
+			{ "group:bed" }
+		)
 
-	if nn2 then
-		for a, b in pairs(nn2) do
-			local distance_to_bed = vector.distance(p, b)
-			if distance_to_closest_bed > distance_to_bed then
-				closest_bed = b
-				distance_to_closest_bed = distance_to_bed
+		if nn2 then
+			for a, b in pairs(nn2) do
+				local distance_to_bed = vector.distance(p, b)
+				if distance_to_closest_bed > distance_to_bed then
+					closest_bed = b
+					distance_to_closest_bed = distance_to_bed
+				end
 			end
+		else
+			self._sleep_over_interval = math.min(self._sleep_over_interval + 5, 300)
+			--this function is fairly expensive, increase interval by 5 if nothing is found (cap at 5 minutes)
 		end
-	end
 
-	if closest_bed and distance_to_closest_bed >= 3 then
-		self:gopath(closest_bed)
+		if closest_bed and distance_to_closest_bed >= 3 then
+			self:gopath(closest_bed)
+		end
 	end
 end
 

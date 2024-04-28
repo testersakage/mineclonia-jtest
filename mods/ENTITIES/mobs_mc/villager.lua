@@ -108,15 +108,8 @@ end
 function mobs_mc.villager_mob:do_custom(dtime)
 	self:check_summon(dtime)
 
-	if not self._player_scan_timer then
-		self._player_scan_timer = 0
-	end
-	self._player_scan_timer = self._player_scan_timer + dtime
-
 	-- Check infrequently to keep CPU load low
-	if self._player_scan_timer > PLAYER_SCAN_INTERVAL then
-
-		self._player_scan_timer = 0
+	if self:check_timer("player_scan", PLAYER_SCAN_INTERVAL) then
 		local selfpos = self.object:get_pos()
 		local objects = minetest.get_objects_inside_radius(selfpos, PLAYER_SCAN_RADIUS)
 		local has_player = false
@@ -256,6 +249,7 @@ table.update(mobs_mc.villager_mob, {
 	can_open_doors = true,
 	_player_scan_timer = 0,
 	_bed_search_interval = 10,
+	_sleep_over_interval = 10,
 	_trading_players = {},
 	runaway_from = {
 		"mobs_mc:zombie",
