@@ -36,7 +36,7 @@ minetest.register_node("mcl_core:stone_with_coal", {
 	_doc_items_longdesc = S("Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."),
 	_doc_items_hidden = false,
 	tiles = {"mcl_core_coal_ore.png"},
-	groups = {pickaxey=1, building_block=1, material_stone=1, xp=1, blast_furnace_smeltable=1},
+	groups = {pickaxey=1, building_block=1, material_stone=1, xp=1, smeltable=1},
 	drop = "mcl_core:coal_lump",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
@@ -49,7 +49,7 @@ minetest.register_node("mcl_core:stone_with_iron", {
 	description = S("Iron Ore"),
 	_doc_items_longdesc = S("Some iron contained in stone, it is prety common and can be found below sea level."),
 	tiles = {"mcl_core_iron_ore.png"},
-	groups = {pickaxey=3, building_block=1, material_stone=1, blast_furnace_smeltable=1},
+	groups = {pickaxey=3, building_block=1, material_stone=1, smeltable=1},
 	drop = "mcl_raw_ores:raw_iron",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
@@ -63,7 +63,7 @@ minetest.register_node("mcl_core:stone_with_gold", {
 	description = S("Gold Ore"),
 	_doc_items_longdesc = S("This stone contains pure gold, a rare metal."),
 	tiles = {"mcl_core_gold_ore.png"},
-	groups = {pickaxey=4, building_block=1, material_stone=1, blast_furnace_smeltable=1},
+	groups = {pickaxey=4, building_block=1, material_stone=1, smeltable=1},
 	drop = "mcl_raw_ores:raw_gold",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
@@ -87,7 +87,7 @@ minetest.register_node("mcl_core:stone_with_redstone", {
 	description = S("Redstone Ore"),
 	_doc_items_longdesc = S("Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."),
 	tiles = {"mcl_core_redstone_ore.png"},
-	groups = {pickaxey=4, building_block=1, material_stone=1, xp=7, blast_furnace_smeltable=1},
+	groups = {pickaxey=4, building_block=1, material_stone=1, xp=7, smeltable=1},
 	drop = {
 		items = {
 			max_items = 1,
@@ -129,7 +129,7 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 	tiles = {"mcl_core_redstone_ore.png"},
 	paramtype = "light",
 	light_source = 9,
-	groups = {pickaxey=4, not_in_creative_inventory=1, material_stone=1, xp=7, blast_furnace_smeltable=1},
+	groups = {pickaxey=4, not_in_creative_inventory=1, material_stone=1, xp=7, smeltable=1},
 	drop = {
 		items = {
 			max_items = 1,
@@ -167,7 +167,7 @@ minetest.register_node("mcl_core:stone_with_lapis", {
 	description = S("Lapis Lazuli Ore"),
 	_doc_items_longdesc = S("Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."),
 	tiles = {"mcl_core_lapis_ore.png"},
-	groups = {pickaxey=3, building_block=1, material_stone=1, xp=6, blast_furnace_smeltable=1},
+	groups = {pickaxey=3, building_block=1, material_stone=1, xp=6, smeltable=1},
 	drop = {
 		max_items = 1,
 		items = {
@@ -189,7 +189,7 @@ minetest.register_node("mcl_core:stone_with_emerald", {
 	description = S("Emerald Ore"),
 	_doc_items_longdesc = S("Emerald ore is the ore of emeralds. It is very rare and can be found alone, not in clusters."),
 	tiles = {"mcl_core_emerald_ore.png"},
-	groups = {pickaxey=4, building_block=1, material_stone=1, xp=6, blast_furnace_smeltable=1},
+	groups = {pickaxey=4, building_block=1, material_stone=1, xp=6, smeltable=1},
 	drop = "mcl_core:emerald",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
@@ -202,7 +202,7 @@ minetest.register_node("mcl_core:stone_with_diamond", {
 	description = S("Diamond Ore"),
 	_doc_items_longdesc = S("Diamond ore is rare and can be found in clusters near the bottom of the world."),
 	tiles = {"mcl_core_diamond_ore.png"},
-	groups = {pickaxey=4, building_block=1, material_stone=1, xp=4, blast_furnace_smeltable=1},
+	groups = {pickaxey=4, building_block=1, material_stone=1, xp=4, smeltable=1},
 	drop = "mcl_core:diamond",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,

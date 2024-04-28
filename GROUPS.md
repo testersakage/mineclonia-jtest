@@ -215,8 +215,8 @@ These groups are used mostly for informational purposes
 * `building_block=1`: Block is a building block
 * `deco_block=1`: Block is a decorational block
 
-* `blast_furnace_smeltable=1` : Item or node is smeltable by a blast furnace
-* `smoker_cookable=1` : Food is cookable by a smoker.
+* `smeltable=1` : Item or node is smeltable by a regular furnace or a blast furnace
+* `cookable=1` : Food is cookable by a regular furnace or a smoker.
 
 * `attaches_to_base=1`: This node can attach to the base of other nodes.
 * `attaches_to_side=1`: This node can attach to the sides of other nodes.

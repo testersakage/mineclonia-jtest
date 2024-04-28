@@ -23,5 +23,5 @@ mcl_campfires.register_campfire("mcl_campfires:campfire", {
 * lightlevel - the level of light the campfire emits.
 * damage - amount of damage the campfire deals when the player stands on it.
 
-## Cooking Items
-To allow an item to be cooked on the campfire, it must first have a registered cooked variant. To allow placing the item on the campfire to be cooked, add `campfire_cookable = 1` into the item groups list.
+## Item cookabilit
+To allow placing an item on the campfire to be cooked, it needs to have `cookable = 1` set in the item groups list.

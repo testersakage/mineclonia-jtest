@@ -8,7 +8,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		description = description,
 		_doc_items_longdesc = longdesc,
 		inventory_image = texture..".png",
-		groups = { craftitem = 1, blast_furnace_smeltable = 1 },
+		groups = { craftitem = 1, smeltable = 1 },
 	})
 
 	minetest.register_node(raw_ingot.."_block", {
@@ -16,7 +16,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		_doc_items_longdesc = block_longdesc,
 		tiles = { texture.."_block.png" },
 		is_ground_content = false,
-		groups = { pickaxey = 2, building_block = 1, blast_furnace_smeltable = 1 },
+		groups = { pickaxey = 2, building_block = 1, smeltable = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5,

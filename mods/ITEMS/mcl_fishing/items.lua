@@ -6,7 +6,7 @@ minetest.register_craftitem("mcl_fishing:fish_raw", {
 	inventory_image = "mcl_fishing_fish_raw.png",
 	on_place = minetest.item_eat(2),
 	on_secondary_use = minetest.item_eat(2),
-	groups = { food=2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
+	groups = { food=2, eatable = 2, cookable = 1 },
 	_mcl_saturation = 0.4,
 })
 
@@ -26,7 +26,7 @@ minetest.register_craftitem("mcl_fishing:salmon_raw", {
 	inventory_image = "mcl_fishing_salmon_raw.png",
 	on_place = minetest.item_eat(2),
 	on_secondary_use = minetest.item_eat(2),
-	groups = { food=2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
+	groups = { food=2, eatable = 2, cookable = 1 },
 	_mcl_saturation = 0.4,
 })
 

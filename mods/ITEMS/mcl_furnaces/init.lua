@@ -562,7 +562,7 @@ mcl_furnaces.tpl_furnace_node_normal = table.merge(mcl_furnaces.tpl_furnace_node
 })
 
 mcl_furnaces.tpl_furnace_node_active = table.merge(mcl_furnaces.tpl_furnace_node,{
-	groups = { pickaxey = 1, container = 4, deco_block = 1, material_stone = 1, furnace = 1, furnace_active = 1, not_in_creative_inventory = 1 },
+	groups = table.merge(mcl_furnaces.tpl_furnace_node.groups, {furnace_active = 1, not_in_creative_inventory = 1}),
 	_doc_items_create_entry = false,
 	light_source = LIGHT_ACTIVE_FURNACE,
 })

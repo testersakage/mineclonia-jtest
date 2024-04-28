@@ -2,7 +2,7 @@ local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
 
 mcl_furnaces.register_furnace("mcl_smoker:smoker", {
-	cook_group = "smoker_cookable",
+	cook_group = "cookable",
 	factor = 2,
 	node_normal = {
 		description = S("Smoker"),

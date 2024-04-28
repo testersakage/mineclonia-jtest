@@ -84,7 +84,7 @@ end
 
 -- on_rightclick function to take items that are cookable in a campfire, and put them in the campfire inventory
 function mcl_campfires.take_item(pos, node, player, itemstack)
-	if minetest.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
+	if minetest.get_item_group(itemstack:get_name(), "cookable") ~= 0 then
 		local cookable = minetest.get_craft_result({method = "cooking", width = 1, items = {itemstack}})
 		if cookable then
 			local ph = minetest.hash_node_position(vector.round(pos))
@@ -208,7 +208,7 @@ function mcl_campfires.register_campfire(name, def)
 					minetest.set_node(pos, node)
 					minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				end
-			elseif minetest.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
+			elseif minetest.get_item_group(itemstack:get_name(), "cookable") ~= 0 then
 				mcl_campfires.take_item(pos, node, player, itemstack)
 			elseif itemstack and player and pointed_thing then
 				minetest.item_place_node(itemstack, player, pointed_thing)

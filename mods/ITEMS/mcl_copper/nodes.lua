@@ -14,7 +14,7 @@ minetest.register_node("mcl_copper:stone_with_copper", {
 	description = S("Copper Ore"),
 	_doc_items_longdesc = S("Some copper contained in stone, it is pretty common and can be found below sea level."),
 	tiles = {"default_stone.png^mcl_copper_ore.png"},
-	groups = {pickaxey = 3, building_block = 1, material_stone = 1, blast_furnace_smeltable=1},
+	groups = {pickaxey = 3, building_block = 1, material_stone = 1, smeltable=1},
 	drop = {
 		max_items = 1,
 		items = {
@@ -37,7 +37,7 @@ minetest.register_node("mcl_copper:block_raw", {
 	_doc_items_longdesc = S("A block used for compact raw copper storage."),
 	tiles = {"mcl_copper_block_raw.png"},
 	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, blast_furnace_smeltable = 1 },
+	groups = {pickaxey = 2, building_block = 1, smeltable = 1 },
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,

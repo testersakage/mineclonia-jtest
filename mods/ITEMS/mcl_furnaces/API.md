@@ -5,7 +5,7 @@ Registeres a new type of furnace
 
 ### Furnace definition
 {
-	cook_group = "blast_furnace_smeltable", --optional: itemgroup this furnace is restricted to
+	cook_group = "smeltable", --optional: itemgroup this furnace is restricted to
 	factor = 2, --optional: cook time factor when using cook_group
 	node_normal = { -- node definition overrides of the normal furnace node (node_basename)
 		tiles = {}, --...
