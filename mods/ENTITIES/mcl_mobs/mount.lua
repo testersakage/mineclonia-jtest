@@ -92,21 +92,13 @@ local function force_detach(player)
 
 end
 
-minetest.register_on_leaveplayer(function(player)
-	force_detach(player)
-end)
-
 minetest.register_on_shutdown(function()
-	local players = minetest.get_connected_players()
-	for i = 1, #players do
-		force_detach(players[i])
+	for _, player in pairs(minetest.get_connected_players()) do
+		force_detach(player)
 	end
 end)
-
-minetest.register_on_dieplayer(function(player)
-	force_detach(player)
-	return true
-end)
+minetest.register_on_leaveplayer(force_detach)
+minetest.register_on_dieplayer(force_detach)
 
 function mcl_mobs.attach(entity, player)
 
