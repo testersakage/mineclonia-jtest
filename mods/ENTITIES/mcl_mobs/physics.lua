@@ -6,19 +6,14 @@ local DEATH_DELAY = 0.5
 
 local PATHFINDING = "gowp"
 local mobs_drop_items = minetest.settings:get_bool("mobs_drop_items") ~= false
-local show_health = false
 
 -- get node but use fallback for nil or unknown
 local node_ok = function(pos, fallback)
-
 	fallback = fallback or mcl_mobs.fallback_node
-
 	local node = minetest.get_node_or_nil(pos)
-
 	if node and minetest.registered_nodes[node.name] then
 		return node
 	end
-
 	return minetest.registered_nodes[fallback]
 end
 
@@ -80,11 +75,8 @@ function mob_class:object_in_range(object)
 end
 
 function mob_class:item_drop(cooked, looting_level)
-
 	if not mobs_drop_items then return end
-
 	looting_level = looting_level or 0
-
 	if (self.child and self.type ~= "monster") then
 		return
 	end
@@ -201,21 +193,17 @@ end
 -- move mob in facing direction
 function mob_class:set_velocity(v)
 	local c_x, c_y = 0, 0
-
 	-- can mob be pushed, if so calculate direction
 	if self.pushable or self.mob_pushable then
 		c_x, c_y = unpack(self:collision())
 	end
-
 	-- halt mob if it has been ordered to stay
 	if self.order == "stand" or self.order == "sit" then
 	  self.acc=vector.new(0,0,0)
 	  return
 	end
-
 	local yaw = (self.object:get_yaw() or 0) + self.rotate
 	local vv = self.object:get_velocity()
-
 	if vv and yaw then
 		self.acc = vector.new(((math.sin(yaw) * -v) + c_x) * .4, 0, ((math.cos(yaw) * v) + c_y) * .4)
 	end
@@ -227,7 +215,6 @@ function mob_class:get_velocity()
 	if v then
 		return (v.x * v.x + v.z * v.z) ^ 0.5
 	end
-
 	return 0
 end
 
@@ -277,15 +264,9 @@ end
 -- set and return valid yaw
 function mob_class:set_yaw(yaw, delay, dtime)
 	if self.noyaw then return end
-
 	if self.state ~= PATHFINDING then
 		self._turn_to = yaw
 	end
-
-	--mcl_log("Yaw is: \t\t" .. tostring(math.deg(yaw)))
-	--mcl_log("self.object:get_yaw() is: \t" .. tostring(math.deg(self.object:get_yaw())))
-
-	--clamp our yaw to a 360 range
 	if math.deg(self.object:get_yaw()) > 360 then
 		self.object:set_yaw(math.rad(0))
 	elseif math.deg(self.object:get_yaw()) < 0 then
@@ -314,7 +295,6 @@ function mob_class:set_yaw(yaw, delay, dtime)
 	end
 
 	local ddtime = 0.05 --set_tick_rate
-
 	if dtime then
 		ddtime = dtime
 	end
@@ -327,7 +307,6 @@ function mob_class:set_yaw(yaw, delay, dtime)
 	end
 
 	delay = delay or 0
-
 	yaw = self.object:get_yaw()
 
 	if delay == 0 then
@@ -350,10 +329,8 @@ end
 
 -- are we flying in what we are suppose to? (taikedz)
 function mob_class:flight_check()
-
 	local nod = self.standing_in
 	local def = minetest.registered_nodes[nod]
-
 	if not def then return false end -- nil check
 
 	local fly_in
@@ -364,19 +341,16 @@ function mob_class:flight_check()
 	else
 		return false
 	end
-
 	for _,checknode in pairs(fly_in) do
 		if nod == checknode or nod == "ignore" then
 			return true
 		end
 	end
-
 	return false
 end
 
 -- check if mob is dead or only hurt
 function mob_class:check_for_death(cause, cmi_cause)
-
 	if self.state == "die" then
 		return true
 	end
@@ -391,11 +365,8 @@ function mob_class:check_for_death(cause, cmi_cause)
 
 	-- still got some health?
 	if self.health > 0 then
-
 		-- make sure health isn't higher than max
-		if self.health > self.object:get_properties().hp_max then
-			self.health = self.object:get_properties().hp_max
-		end
+		self.health = math.min(self.health, self.object:get_properties().hp_max)
 
 		-- play damage sound if health was reduced and make mob flash red.
 		if damaged then
@@ -407,21 +378,6 @@ function mob_class:check_for_death(cause, cmi_cause)
 			end, self)
 			self:mob_sound("damage")
 		end
-
-		-- backup nametag so we can show health stats
-		if not self.nametag2 then
-			self.nametag2 = self.nametag or ""
-		end
-
-		if show_health
-		and (cmi_cause and cmi_cause.type == "punch") then
-
-			self.htimer = 2
-			self.nametag = "♥ " .. self.health .. " / " .. self.object:get_properties().hp_max
-
-			self:update_tag()
-		end
-
 		return false
 	end
 
@@ -459,19 +415,15 @@ function mob_class:check_for_death(cause, cmi_cause)
 				end
 			end
 		end
-
-
 	end
 
 	-- execute custom death function
 	if self.on_die then
-
 		local pos = self.object:get_pos()
 		local on_die_exit = self.on_die(self, pos, cmi_cause)
 		if on_die_exit ~= true then
 			death_handle(self)
 		end
-
 		if on_die_exit == true then
 			self:set_state("die")
 			self:safe_remove()
@@ -571,15 +523,6 @@ function mob_class:do_env_damage()
 		self.htimer = self.htimer - 1
 	end
 
-	-- reset nametag after showing health stats
-	if self.htimer < 1 and self.nametag2 then
-
-		self.nametag = self.nametag2
-		self.nametag2 = nil
-
-		self:update_tag()
-	end
-
 	local pos = self.object:get_pos()
 	if not pos then return end
 
@@ -592,7 +535,6 @@ function mob_class:do_env_damage()
 	end
 
 	local sunlight = minetest.get_natural_light(pos, self.time_of_day)
-
 	-- bright light harms mob
 	if self.light_damage ~= 0 and (sunlight or 0) > 12 then
 		if self:deal_light_damage(pos, self.light_damage) then
@@ -693,7 +635,6 @@ function mob_class:do_env_damage()
 				return true
 			end
 		end
-
 	-- fire damage
 	elseif self.fire_damage > 0
 	and self:is_in_node("group:fire") then
@@ -710,7 +651,6 @@ function mob_class:do_env_damage()
 				return true
 			end
 		end
-
 	-- damage_per_second node check
 	elseif nodef.damage_per_second ~= 0 and not nodef.groups.lava and not nodef.groups.fire then
 
@@ -722,7 +662,6 @@ function mob_class:do_env_damage()
 			return true
 		end
 	end
-
 	-- Drowning damage
 	if self.object:get_properties().breath_max ~= -1 then
 		local drowning = false
@@ -734,9 +673,7 @@ function mob_class:do_env_damage()
 			drowning = true
 		end
 		if drowning then
-
 			self.breath = math.max(0, self.breath - 1)
-
 			mcl_mobs.effect(pos, 2, "bubble.png", nil, nil, 1, nil)
 			if self.breath <= 0 then
 				local dmg
@@ -756,16 +693,13 @@ function mob_class:do_env_damage()
 			self.breath = math.min(self.object:get_properties().breath_max, self.breath + 1)
 		end
 	end
-
 	--- suffocation inside solid node
-	-- FIXME: Redundant with mcl_playerplus
 	if (self.suffocation == true)
 	and (nodef.walkable == nil or nodef.walkable == true)
 	and (nodef.collision_box == nil or nodef.collision_box.type == "regular")
 	and (nodef.node_box == nil or nodef.node_box.type == "regular")
 	and (nodef.groups.disable_suffocation ~= 1)
 	and (nodef.groups.opaque == 1) then
-
 		-- Short grace period before starting to take suffocation damage.
 		-- This is different from players, who take damage instantly.
 		-- This has been done because mobs might briefly be inside solid nodes
@@ -785,7 +719,6 @@ function mob_class:do_env_damage()
 	else
 		self._timers["suffocation"] = 1
 	end
-
 	return self:check_for_death("", {type = "unknown"})
 end
 
@@ -793,12 +726,10 @@ function mob_class:env_damage (dtime, pos)
 	-- environmental damage timer (every 1 second)
 	if not self:check_timer("env_damage", 1) then return end
 	self:check_entity_cramming()
-
 	-- check for environmental damage (water, fire, lava etc.)
 	if self:do_env_damage() then
 		return true
 	end
-
 	-- node replace check (cow eats grass etc.)
 	self:replace(pos)
 end
@@ -853,7 +784,6 @@ end
 -- falling and fall damage
 -- returns true if mob died
 function mob_class:falling(pos)
-
 	if self.fly and self.state ~= "die" then
 		return
 	end
@@ -866,14 +796,12 @@ function mob_class:falling(pos)
 
 	-- floating in water (or falling)
 	if v.y > 0 then
-
 		-- apply gravity when moving up
 		self.object:set_acceleration({
 			x = 0,
 			y = self.fall_speed,
 			z = 0
 		})
-
 	elseif v.y <= 0 and v.y > self.fall_speed then
 
 		-- fall downwards at set speed
@@ -888,9 +816,7 @@ function mob_class:falling(pos)
 	end
 
 	if minetest.registered_nodes[node_ok(pos).name].groups.lava then
-
 		if self.floats_on_lava == 1 then
-
 			self.object:set_acceleration({
 				x = 0,
 				y = -self.fall_speed / (math.max(1, v.y) ^ 2),
@@ -898,18 +824,15 @@ function mob_class:falling(pos)
 			})
 		end
 	end
-
 	-- in water then float up
 	if minetest.registered_nodes[node_ok(pos).name].groups.water then
 		local cbox = self.object:get_properties().collisionbox
 		if self.floats == 1 and minetest.registered_nodes[node_ok(vector.offset(pos,0,cbox[5] -0.25,0)).name].groups.water then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
-
 		-- Reset fall damage when falling into water first.
 		self.reset_fall_damage = 1
 	else
-
 		-- fall damage onto solid ground
 		if self.fall_damage == 1
 		and self.object:get_velocity().y == 0 then
@@ -941,10 +864,8 @@ function mob_class:check_water_flow()
 		nn = node.name
 		def = minetest.registered_nodes[nn]
 	end
-
 	-- Move item around on flowing liquids
 	if def and def.liquidtype == "flowing" then
-
 		--[[ Get flowing direction (function call from flowlib), if there's a liquid.
 		NOTE: According to Qwertymine, flowlib.quickflow is only reliable for liquids with a flowing distance of 7.
 		Luckily, this is exactly what we need if we only care about water, which has this flowing distance. ]]
@@ -957,7 +878,6 @@ function mob_class:check_water_flow()
 			local newv = vector.multiply(vec, f)
 			self.object:set_acceleration({x = 0, y = 0, z = 0})
 			self.object:set_velocity({x = newv.x, y = -0.22, z = newv.z})
-
 			self.physical_state = true
 			self._flowing = true
 			self.object:set_properties({
