@@ -963,10 +963,10 @@ function mob_class:do_states_attack (dtime)
 		p.y = p.y + (props.collisionbox[2] + props.collisionbox[5]) / 2
 
 		if self.shoot_interval
-			and self:check_timer("arrow_shot", self.shoot_interval + math.random())
+			and self.timer > self.shoot_interval
 			and not minetest.raycast(vector.add(p, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
 			and math.random(1, 100) <= 60 then
-
+			self.timer = 0
 			self:set_animation( "shoot")
 
 			-- play shoot attack sound
