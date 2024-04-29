@@ -5,47 +5,35 @@ local crash_threshold = 6.5 -- ignored if enable_crash=false
 
 
 local node_ok = function(pos, fallback)
-
 	fallback = fallback or mcl_mobs.fallback_node
-
 	local node = minetest.get_node_or_nil(pos)
-
 	if node and minetest.registered_nodes[node.name] then
 		return node
 	end
-
 	return {name = fallback}
 end
 
 
 local function node_is(pos)
-
 	local node = node_ok(pos)
-
 	if node.name == "air" then
 		return "air"
 	end
-
 	if minetest.get_item_group(node.name, "lava") ~= 0 then
 		return "lava"
 	end
-
 	if minetest.get_item_group(node.name, "liquid") ~= 0 then
 		return "liquid"
 	end
-
 	if minetest.registered_nodes[node.name].walkable == true then
 		return "walkable"
 	end
-
 	return "other"
 end
 
 
 local function get_sign(i)
-
 	i = i or 0
-
 	if i == 0 then
 		return 0
 	else
@@ -55,10 +43,8 @@ end
 
 
 local function get_velocity(v, yaw, y)
-
 	local x = -math.sin(yaw) * v
 	local z =  math.cos(yaw) * v
-
 	return {x = x, y = y, z = z}
 end
 
@@ -69,18 +55,13 @@ end
 
 
 local function force_detach(player)
-
 	local attached_to = player:get_attach()
-
 	if not attached_to then
 		return
 	end
 
 	local entity = attached_to:get_luaentity()
-
-	if entity.driver
-	and entity.driver == player then
-
+	if entity.driver and entity.driver == player then
 		entity.driver = nil
 	end
 
@@ -101,9 +82,7 @@ minetest.register_on_leaveplayer(force_detach)
 minetest.register_on_dieplayer(force_detach)
 
 function mcl_mobs.attach(entity, player)
-
 	local attach_at, eye_offset
-
 	entity.player_rotation = entity.player_rotation or {x = 0, y = 0, z = 0}
 	entity.driver_attach_at = entity.driver_attach_at or {x = 0, y = 0, z = 0}
 	entity.driver_eye_offset = entity.driver_eye_offset or {x = 0, y = 0, z = 0}
@@ -144,32 +123,14 @@ end
 
 
 function mcl_mobs.detach(player, offset)
-
 	force_detach(player)
-
 	mcl_player.player_set_animation(player, "stand" , 30)
-
-	--local pos = player:get_pos()
-
-	--pos = {x = pos.x + offset.x, y = pos.y + 0.2 + offset.y, z = pos.z + offset.z}
-
 	player:add_velocity(vector.new(math.random(-6,6),math.random(5,8),math.random(-6,6))) --throw the rider off
-
-	--[[
-	minetest.after(0.1, function(name, pos)
-		local player = minetest.get_player_by_name(name)
-		if player then
-			player:set_pos(pos)
-		end
-	end, player:get_player_name(), pos)
-	]]--
 end
 
 
 function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
-
 	local rot_view = 0
-
 	if entity.player_rotation.y == 90 then
 		rot_view = math.pi/2
 	end
@@ -201,40 +162,32 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 			if ctrl.jump then
 				velo.y = velo.y + 1
 				if velo.y > entity.accel then velo.y = entity.accel end
-
 			elseif velo.y > 0 then
 				velo.y = velo.y - 0.1
 				if velo.y < 0 then velo.y = 0 end
 			end
-
 			if ctrl.sneak then
 				velo.y = velo.y - 1
 				if velo.y < -entity.accel then velo.y = -entity.accel end
-
 			elseif velo.y < 0 then
 				velo.y = velo.y + 0.1
 				if velo.y > 0 then velo.y = 0 end
 			end
-
 		else
-
 			if ctrl.jump then
 				if velo.y == 0 then
 					velo.y = velo.y + entity.jump_height
 					acce_y = acce_y + (acce_y * 3) + 1
 				end
 			end
-
 		end
 	end
 
 	-- if not moving then set animation and return
 	if entity.v == 0 and velo.x == 0 and velo.y == 0 and velo.z == 0 then
-
 		if stand_anim then
 			entity:set_animation(stand_anim)
 		end
-
 		return
 	end
 
@@ -243,9 +196,7 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 	end
 
 	local s = get_sign(entity.v)
-
 	entity.v = entity.v - 0.02 * s
-
 	if s ~= get_sign(entity.v) then
 
 		entity.object:set_velocity({x = 0, y = 0, z = 0})
@@ -254,11 +205,9 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 	end
 
 	local max_spd = entity.max_speed_reverse
-
 	if get_sign(entity.v) >= 0 then
 		max_spd = entity.max_speed_forward
 	end
-
 	if math.abs(entity.v) > max_spd then
 		entity.v = entity.v - get_sign(entity.v)
 	end
@@ -266,31 +215,22 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 	local p = entity.object:get_pos()
 	local new_velo
 	local new_acce = {x = 0, y = -9.8, z = 0}
-
 	p.y = p.y - 0.5
-
 	local ni = node_is(p)
 	local v = entity.v
 
 	if ni == "air" then
-
 		if can_fly == true then
 			new_acce.y = 0
 		end
-
 	elseif ni == "liquid" or ni == "lava" then
-
 		if ni == "lava" and entity.lava_damage ~= 0 then
-
 			entity.lava_counter = (entity.lava_counter or 0) + dtime
-
 			if entity.lava_counter > 1 then
-
 				minetest.sound_play("default_punch", {
 					object = entity.object,
 					max_hear_distance = 5
 				}, true)
-
 				entity.object:punch(entity.object, 1.0, {
 					full_punch_interval = 1.0,
 					damage_groups = {fleshy = entity.lava_damage}
@@ -302,12 +242,9 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 
 		if entity.terrain_type == 2
 		or entity.terrain_type == 3 then
-
 			new_acce.y = 0
 			p.y = p.y + 1
-
 			if node_is(p) == "liquid" then
-
 				if velo.y >= 5 then
 					velo.y = 5
 				elseif velo.y < 0 then
@@ -336,16 +273,12 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 
 	-- CRASH!
 	if enable_crash then
-
 		local intensity = entity.v2 - v
-
 		if intensity >= crash_threshold then
-
 			entity.object:punch(entity.object, 1.0, {
 				full_punch_interval = 1.0,
 				damage_groups = {fleshy = intensity}
 			}, nil)
-
 		end
 	end
 
@@ -364,14 +297,12 @@ function mcl_mobs.fly_drive(entity, dtime, speed, shoots, arrow, moving_anim, st
 			y = dir.y * speed + 2,
 			z = dir.z * speed
 		})
-
 	elseif ctrl.down then
 		entity.object:set_velocity({
 			x = -dir.x * speed,
 			y = dir.y * speed + 2,
 			z = -dir.z * speed
 		})
-
 	elseif not ctrl.down or ctrl.up or ctrl.jump then
 		entity.object:set_velocity({x = 0, y = -2, z = 0})
 	end
@@ -399,13 +330,9 @@ function mcl_mobs.fly_drive(entity, dtime, speed, shoots, arrow, moving_anim, st
 			obj:remove()
 		end
 	end
-
-	-- change animation if stopped
 	if velo.x == 0 and velo.y == 0 and velo.z == 0 then
-
 		entity:set_animation(stand_anim)
 	else
-		-- moving animation
 		entity:set_animation(moving_anim)
 	end
 end
