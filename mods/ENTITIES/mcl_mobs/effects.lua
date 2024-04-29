@@ -223,8 +223,6 @@ function mob_class:set_animation(anim, fixed_frame)
 		return
 	end
 
-
-
 	if self:flight_check() and self.fly and anim == "walk" then anim = "fly" end
 
 	self._current_animation = self._current_animation or ""
