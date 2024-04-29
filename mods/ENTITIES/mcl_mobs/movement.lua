@@ -431,9 +431,8 @@ function mob_class:do_jump()
 				})
 			end, self, v)
 
-			if self.jump_sound_cooloff <= 0 then
+			if self:check_timer("jump_sound_cooloff", self.jump_sound_cooloff) then
 				self:mob_sound("jump")
-				self.jump_sound_cooloff = 0.5
 			end
 		else
 			self.facing_fence = true
