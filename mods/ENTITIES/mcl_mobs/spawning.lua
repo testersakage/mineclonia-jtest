@@ -217,7 +217,7 @@ local function has_room(self,pos)
 end
 
 local function spawn_check(pos,spawn_def,ignore_caps)
-	if not spawn_def then return end
+	if not spawn_def or not pos then return end
 	dbg_spawn_attempts = dbg_spawn_attempts + 1
 	local dimension = mcl_worlds.pos_to_dimension(pos)
 	local mob_def = minetest.registered_entities[spawn_def.name]
@@ -384,6 +384,108 @@ local function check_timer(spawn_def, dtime)
 	return true
 end
 
+local MOB_SPAWN_ZONE_INNER = 24
+local MOB_SPAWN_ZONE_OUTER = 128
+
+
+local SPAWN_MAPGEN_LIMIT  = 30911
+local SPAWN_DISTANCE_CDF_PWL = {
+	{0.000,0.00},
+	{0.083,0.40},
+	{0.416,0.75},
+	{1.000,1.00},
+}
+-- Calculate the inverse of a piecewise linear function f(x). Line segments are represented as two
+-- adjacent points specified as { x, f(x) }. At least 2 points are required. If there are most solutions,
+-- the one with a lower x value will be chosen.
+local function inverse_pwl(fx, f)
+	if fx < f[1][2] then
+		return f[1][1]
+	end
+	for i=2,#f do
+		local x0,fx0 = unpack(f[i-1])
+		local x1,fx1 = unpack(f[i  ])
+		if fx < fx1 then
+			return (fx - fx0) * (x1 - x0) / (fx1 - fx0) + x0
+		end
+	end
+	return f[#f][1]
+end
+
+
+local two_pi = 2 * math.pi
+local function math_round(x) return (x > 0) and math.floor(x + 0.5) or math.ceil(x - 0.5) end
+
+local function get_next_mob_spawn_pos(pos)
+	-- Select a distance such that distances closer to the player are selected much more often than
+	-- those further away from the player.
+	local fx = (math.random(1,10000)-1) / 10000
+	local x = inverse_pwl(fx, SPAWN_DISTANCE_CDF_PWL)
+	local distance = x * (MOB_SPAWN_ZONE_OUTER - MOB_SPAWN_ZONE_INNER) + MOB_SPAWN_ZONE_INNER
+	--print("Using spawn distance of "..tostring(distance).."  fx="..tostring(fx)..",x="..tostring(x))
+
+	-- TODO Floor xoff and zoff and add 0.5 so it tries to spawn in the middle of the square. Less failed attempts.
+	-- Use spherical coordinates https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates
+	local theta = math.random() * two_pi
+	local phi = math.random() * two_pi
+	local xoff = math_round(distance * math.sin(theta) * math.cos(phi))
+	local yoff = math_round(distance * math.cos(theta))
+	local zoff = math_round(distance * math.sin(theta) * math.sin(phi))
+	local goal_pos = vector.offset(pos, xoff, yoff, zoff)
+
+	if not ( math.abs(goal_pos.x) <= SPAWN_MAPGEN_LIMIT and math.abs(pos.y) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.z) <= SPAWN_MAPGEN_LIMIT ) then
+		return nil
+	end
+
+	-- Calculate upper/lower y limits
+	local R1 = MOB_SPAWN_ZONE_OUTER
+	local d = vector.distance( pos, vector.new( goal_pos.x, pos.y, goal_pos.z ) ) -- distance from player to projected point on horizontal plane
+	local y1 = math.sqrt( R1*R1 - d*d ) -- absolue value of distance to outer sphere
+
+	local y_min
+	local y_max
+	if d >= MOB_SPAWN_ZONE_INNER then
+		-- Outer region, y range has both ends on the outer sphere
+		y_min = pos.y - y1
+		y_max = pos.y + y1
+	else
+		-- Inner region, y range spans between inner and outer spheres
+		local R2 = MOB_SPAWN_ZONE_INNER
+		local y2 = math.sqrt( R2*R2 - d*d )
+		if goal_pos.y > pos. y then
+			-- Upper hemisphere
+			y_min = pos.y + y2
+			y_max = pos.y + y1
+		else
+			-- Lower hemisphere
+			y_min = pos.y - y1
+			y_max = pos.y - y2
+		end
+	end
+	y_min = math_round(y_min)
+	y_max = math_round(y_max)
+
+	local spawning_position_list = minetest.find_nodes_in_area_under_air(
+			{x = goal_pos.x, y = y_min, z = goal_pos.z},
+			{x = goal_pos.x, y = y_max, z = goal_pos.z},
+			{"group:solid", "group:water", "group:lava"}
+	) or {}
+
+	-- Select only the locations at a valid distance
+	local valid_positions = {}
+	for _,check_pos in ipairs(spawning_position_list) do
+		local dist = vector.distance(pos, check_pos)
+		if dist >= MOB_SPAWN_ZONE_INNER and dist <= MOB_SPAWN_ZONE_OUTER then
+			table.insert(valid_positions, check_pos)
+		end
+	end
+
+	if #valid_positions == 0 then return end
+	return valid_positions[math.random(#valid_positions)]
+
+end
+
+
 if mobs_spawn then
 	local cumulative_chance = nil
 	local mob_library_worker_table = nil
@@ -402,25 +504,11 @@ if mobs_spawn then
 	local function spawn_a_mob(pos, dimension, dtime)
 		--create a disconnected clone of the spawn dictionary
 		--prevents memory leak
+
 		local mob_library_worker_table = table.copy(spawn_dictionary)
-
-		local spawning_position_list = {}
-		local s = minetest.find_nodes_in_area_under_air(
-			vector.offset(pos,-32,-32,-32),
-			vector.offset(pos,32,32,32),
-			{"group:opaque","group:water","group:lava"}
-		)
-		for _,v in pairs(s) do
-			local dst = vector.distance(pos,v)
-			if dst >= 25 and dst < 32 then table.insert(spawning_position_list,v) end
-		end
-
-		if #spawning_position_list <= 0 then return end
-
-		local spawning_position = spawning_position_list[math.random(1, #spawning_position_list)]
+		local spawning_position = get_next_mob_spawn_pos(pos)
 
 		local spawn_loop_counter = #mob_library_worker_table
-
 		--use random weighted choice with replacement to grab a mob, don't exclude any possibilities
 		--shuffle table once every loop to provide equal inclusion probability to all mobs
 		--repeat grabbing a mob to maintain existing spawn rates
