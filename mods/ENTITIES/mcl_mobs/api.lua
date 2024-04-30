@@ -404,7 +404,10 @@ function mob_class:on_step(dtime)
 	end
 
 	self:update_timers(dtime)
-	if self:check_suspend() then return end
+	if self:check_suspend() then
+		self.object:set_velocity(vector.zero()) --stop movement otherwise mobs keep moving continuously
+		return
+	end
 
 	self:check_water_flow()
 
