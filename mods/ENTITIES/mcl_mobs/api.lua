@@ -212,13 +212,15 @@ function mob_class:mob_activate(staticdata, dtime)
 		return
 	end
 
-	local tmp = minetest.deserialize(staticdata)
+	if staticdata then
+		local tmp = minetest.deserialize(staticdata)
 
-	if tmp then
-		for _,stat in pairs(tmp) do
-			self[_] = stat
+		if tmp then
+			for _,stat in pairs(tmp) do
+				self[_] = stat
+			end
+			self.state = nil
 		end
-		self.state = nil
 	end
 
 	if peaceful_mode and not self.persist_in_peaceful then
