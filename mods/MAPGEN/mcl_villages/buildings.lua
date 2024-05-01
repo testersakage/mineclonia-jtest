@@ -82,15 +82,6 @@ local function init_nodes(p1, p2, size, rotation, pr)
 			mcl_villages.fill_chest(pos, pr)
 		end
 	end
-
-	-- Do old chest nodes after
-	local nodes = construct_node(p1, p2, "mcl_chests:chest")
-	if nodes and #nodes > 0 then
-		for p=1, #nodes do
-			local pos = nodes[p]
-			mcl_villages.fill_chest(pos, pr)
-		end
-	end
 end
 
 local function layout_town(minp, maxp, pr, input_settlement_info)

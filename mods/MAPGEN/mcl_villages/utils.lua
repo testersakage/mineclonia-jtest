@@ -99,15 +99,6 @@ end
 -- fill chests
 -------------------------------------------------------------------------------
 function mcl_villages.fill_chest(pos, pr)
-	-- initialize chest (mts chests don't have meta)
-	local meta = minetest.get_meta(pos)
-	if meta:get_string("infotext") ~= "Chest" then
-		-- For MineClone2 0.70 or before
-		-- minetest.registered_nodes["mcl_chests:chest"].on_construct(pos)
-		--
-		-- For MineClone2 after commit 09ab1482b5 (the new entity chests)
-		minetest.registered_nodes["mcl_chests:chest_small"].on_construct(pos)
-	end
 	-- fill chest
 	local inv = minetest.get_inventory( {type="node", pos=pos} )
 
@@ -143,42 +134,6 @@ function mcl_villages.fill_chest(pos, pr)
 	mcl_loot.fill_inventory(inv, "main", items, pr)
 end
 
--------------------------------------------------------------------------------
--- initialize furnace
--------------------------------------------------------------------------------
-function mcl_villages.initialize_furnace(pos)
-	-- find chests within radius
-	local furnacepos = minetest.find_node_near(pos,
-		7, --radius
-		{"mcl_furnaces:furnace"})
-	-- initialize furnacepos (mts furnacepos don't have meta)
-	if furnacepos
-	then
-		local meta = minetest.get_meta(furnacepos)
-		if meta:get_string("infotext") ~= "furnace"
-		then
-			minetest.registered_nodes["mcl_furnaces:furnace"].on_construct(furnacepos)
-		end
-	end
-end
--------------------------------------------------------------------------------
--- initialize anvil
--------------------------------------------------------------------------------
-function mcl_villages.initialize_anvil(pos)
-	-- find chests within radius
-	local anvilpos = minetest.find_node_near(pos,
-		7, --radius
-		{"mcl_anvils:anvil"})
-	-- initialize anvilpos (mts anvilpos don't have meta)
-	if anvilpos
-	then
-		local meta = minetest.get_meta(anvilpos)
-		if meta:get_string("infotext") ~= "anvil"
-		then
-			minetest.registered_nodes["mcl_anvils:anvil"].on_construct(anvilpos)
-		end
-	end
-end
 -------------------------------------------------------------------------------
 -- randomize table
 -------------------------------------------------------------------------------

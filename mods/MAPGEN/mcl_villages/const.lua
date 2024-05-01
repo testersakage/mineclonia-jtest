@@ -10,13 +10,10 @@ mcl_villages.surface_mat = {}
 function mcl_villages.grundstellungen()
 	mcl_villages.surface_mat = mcl_villages.Set {
 		"mcl_core:dirt_with_grass",
-		--"mcl_core:dry_dirt_with_grass",
 		"mcl_core:dirt_with_grass_snow",
-		--"mcl_core:dirt_with_dry_grass",
 		"mcl_core:podzol",
 		"mcl_core:sand",
 		"mcl_core:redsand",
-		--"mcl_core:silver_sand",
 		"mcl_core:snow"
 	}
 
