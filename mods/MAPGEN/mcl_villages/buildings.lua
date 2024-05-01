@@ -4,6 +4,7 @@ local placement_priority = minetest.settings:get("mcl_villages_placement_priorit
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
+local ABANDONED_VILLAGE_CHANCE = 2 -- chance in % that a village will be abandoned
 -------------------------------------------------------------------------------
 -- initialize settlement_info
 -------------------------------------------------------------------------------
@@ -275,7 +276,11 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 
 	table.insert(shuffled_settlement_info, 1, bell_info)
 
-	return layout_town(minp, maxp, pr, shuffled_settlement_info)
+	local nfo = layout_town(minp, maxp, pr, shuffled_settlement_info)
+	if nfo and pr:next(1,100) <= ABANDONED_VILLAGE_CHANCE then
+		nfo.abandoned = true
+	end
+	return nfo
 end
 
 function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
@@ -292,7 +297,13 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 			placement_pos = vector.offset(pos, 0, settlement_info[i]["yadjust"], 0)
 		end
 
-		local schem_lua = mcl_villages.substitue_materials(pos, settlement_info[i]["schem_lua"], pr)
+		local schem_lua
+		if settlement_info.abandoned then
+			schem_lua = mcl_villages.substitue_abandoned(pos, settlement_info[i]["schem_lua"], pr)
+		end
+
+		schem_lua = mcl_villages.substitue_materials(pos, schem_lua, pr)
+
 		local schematic = loadstring(schem_lua)()
 
 		local is_belltower = building_all_info["name"] == "belltower"
@@ -335,6 +346,7 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 			meta:set_int("is_belltower", is_belltower and 1 or 0)
 			meta:set_string("infotext", S("The timer for this @1 has not run yet!", stype))
 			meta:set_string("bell_pos", minetest.pos_to_string(bell_pos))
+			meta:set_int("is_abandoned", settlement_info.abandoned and 1 or 0)
 			local timer = minetest.get_node_timer(pos)
 			if is_belltower then
 				timer:start(4.0)
@@ -346,7 +358,7 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 end
 
 -- Complete things that don't work when run in mapgen
-function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has_jobs, is_belltower, bell_pos)
+function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has_jobs, is_belltower, bell_pos, is_abandoned)
 
 	if (not bell_pos) or bell_pos == "" then
 		minetest.log(
@@ -369,12 +381,13 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 		local biome_name = minetest.get_biome_name(biome_data.biome)
 
 		mcl_villages.paths_new(blockseed, biome_name)
-
-		local l = minetest.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
-		if l then
-			l._home = bell
-		else
-			minetest.log("warning", "Could not create a golem!")
+		if not is_abandoned then
+			local l = minetest.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
+			if l then
+				l._home = bell
+			else
+				minetest.log("warning", "Could not create a golem!")
+			end
 		end
 
 		spawn_cats(bell)
@@ -386,22 +399,25 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 		for _, bed in pairs(beds) do
 			local bed_node = minetest.get_node(bed)
 			local bed_group = core.get_item_group(bed_node.name, "bed")
-
 			-- We only spawn at bed bottoms
 			-- 1 is bottom, 2 is top
 			if bed_group == 1 then
-				local m = minetest.get_meta(bed)
-				m:set_string("bell_pos", minetest.pos_to_string(bell))
-				if m:get_string("villager") == "" then
-					local v = minetest.add_entity(bed, "mobs_mc:villager")
-					if v then
-						local l = v:get_luaentity()
-						l._bed = bed
-						l._bell = bell
-						m:set_string("villager", l._id)
-						m:set_string("infotext", S("A villager sleeps here"))
-					else
-						minetest.log("warning", "Could not create a villager!")
+				if is_abandoned then
+					minetest.add_entity(bed, "mobs_mc:zombie")
+				else
+					local m = minetest.get_meta(bed)
+					m:set_string("bell_pos", minetest.pos_to_string(bell))
+					if m:get_string("villager") == "" then
+						local v = minetest.add_entity(bed, "mobs_mc:villager")
+						if v then
+							local l = v:get_luaentity()
+							l._bed = bed
+							l._bell = bell
+							m:set_string("villager", l._id)
+							m:set_string("infotext", S("A villager sleeps here"))
+						else
+							minetest.log("warning", "Could not create a villager!")
+						end
 					end
 				end
 			end

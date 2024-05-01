@@ -199,6 +199,22 @@ function plant_fields(pos, biome_name, schem_lua, pr)
 	return modified_schem_lua
 end
 
+function rm_plants(pos, schem_lua, pr)
+	local modified_schem_lua = schem_lua
+
+	for _, crop in ipairs(mcl_villages.get_crop_types()) do
+		if string.find(modified_schem_lua, "mcl_villages:crop_" .. crop) then
+			for count = 1, 8 do
+				local name = "mcl_villages:crop_" .. crop .. "_" .. count
+				local replacement = "air"
+				modified_schem_lua = modified_schem_lua:gsub(name, replacement)
+			end
+		end
+	end
+
+	return modified_schem_lua
+end
+
 -- Load a schema and replace nodes in it based on biome
 function mcl_villages.substitue_materials(pos, schem_lua, pr)
 	local modified_schem_lua = schem_lua
@@ -215,5 +231,17 @@ function mcl_villages.substitue_materials(pos, schem_lua, pr)
 		modified_schem_lua = plant_fields(pos, biome_name, modified_schem_lua, pr)
 	end
 
+	return modified_schem_lua
+end
+
+function mcl_villages.substitue_abandoned(pos, schem_lua, pr)
+	local modified_schem_lua = schem_lua
+
+	for _, sub in pairs(mcl_villages.abandoned_substitutions) do
+		modified_schem_lua = modified_schem_lua:gsub(sub[1], sub[2])
+	end
+	if string.find(modified_schem_lua, "mcl_villages:crop_") then
+		modified_schem_lua = rm_plants(pos, modified_schem_lua, pr)
+	end
 	return modified_schem_lua
 end

@@ -226,3 +226,9 @@ mcl_villages.material_substitions = {
 		{ '"mcl_stairs:stair_oak([^"]*)"', '"mcl_stairs:stair_cherry_blossom%1"' },
 	},
 }
+
+mcl_villages.abandoned_substitutions = {
+	{ "mcl_core:cobble", "mcl_core:mossycobble" },
+	{ "mcl_core:glass", "mcl_core:glass_brown" },
+	{ "mcl_panes:pane_natural_flat", "mcl_panes:pane_brown_flat" },
+}
