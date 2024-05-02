@@ -403,7 +403,7 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 			-- 1 is bottom, 2 is top
 			if bed_group == 1 then
 				if is_abandoned then
-					minetest.add_entity(bed, "mobs_mc:zombie")
+					minetest.add_entity(bed, "mobs_mc:villager_zombie")
 				else
 					local m = minetest.get_meta(bed)
 					m:set_string("bell_pos", minetest.pos_to_string(bell))
