@@ -231,4 +231,9 @@ mcl_villages.abandoned_substitutions = {
 	{ "mcl_core:cobble", "mcl_core:mossycobble" },
 	{ "mcl_core:glass", "mcl_core:glass_brown" },
 	{ "mcl_panes:pane_natural_flat", "mcl_panes:pane_brown_flat" },
+	{ '"mcl_doors:door_oak([^"]*)"', '"air"' },
+	{ '"mcl_torches:torch([^"]*)"', '"air"' },
+	{ "mcl_ocean:sea_lantern", "air" },
+	{ "mcl_lanterns:lantern_floor", "air" },
+	{ "mcl_lanterns:lantern_ceiling", "air" },
 }

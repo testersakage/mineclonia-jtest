@@ -139,7 +139,7 @@ local function place_lamp(pos, pr)
 	)
 end
 
-local function place_path(path, pr, stair, slab)
+local function place_path(path, pr, stair, slab, is_abandoned)
 
 	-- Smooth out bumps in path or stairs can look naf
 	for i = 2, #path - 1 do
@@ -229,24 +229,26 @@ local function place_path(path, pr, stair, slab)
 		end
 	end
 
-	-- Do lamps afterwards so we don't put them where a path will be laid
-	for _, pos in ipairs(path) do
-		if minetest.get_node_light(pos, 0) < light_threshold then
-			local nn = minetest.find_nodes_in_area_under_air(
-				vector.offset(pos, -1, -1, -1),
-				vector.offset(pos, 1, 1, 1),
-				{ "group:material_sand", "group:material_stone", "group:grass_block", "group:wood_slab" }
-			)
-			for _, npos in ipairs(nn) do
-				local node = minetest.get_node(npos)
-				if node.name ~= "mcl_core:grass_path" and minetest.get_item_group(node.name, "stair") == 0 then
-					if minetest.get_item_group(node.name, "wood_slab") ~= 0 then
-						local over_pos = vector.offset(npos, 0, 1, 0)
-						minetest.add_node(over_pos, { name = "mcl_torches:torch", param2 = 1 })
-					else
-						place_lamp(npos, pr)
+	if not is_abandoned then
+		-- Do lamps afterwards so we don't put them where a path will be laid
+		for _, pos in ipairs(path) do
+			if minetest.get_node_light(pos, 0) < light_threshold then
+				local nn = minetest.find_nodes_in_area_under_air(
+					vector.offset(pos, -1, -1, -1),
+					vector.offset(pos, 1, 1, 1),
+					{ "group:material_sand", "group:material_stone", "group:grass_block", "group:wood_slab" }
+				)
+				for _, npos in ipairs(nn) do
+					local node = minetest.get_node(npos)
+					if node.name ~= "mcl_core:grass_path" and minetest.get_item_group(node.name, "stair") == 0 then
+						if minetest.get_item_group(node.name, "wood_slab") ~= 0 then
+							local over_pos = vector.offset(npos, 0, 1, 0)
+							minetest.add_node(over_pos, { name = "mcl_torches:torch", param2 = 1 })
+						else
+							place_lamp(npos, pr)
+						end
+						break
 					end
-					break
 				end
 			end
 		end
@@ -255,7 +257,7 @@ end
 
 -- Work out which end points should be connected
 -- works from the outside of the village in
-function mcl_villages.paths_new(blockseed, biome_name)
+function mcl_villages.paths_new(blockseed, biome_name, is_abandoned)
 	local pr = PseudoRandom(blockseed)
 
 	if path_ends["block_" .. blockseed] == nil then
@@ -337,7 +339,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 				if closest_pos then
 					local path = minetest.find_path(from_ep_pos, closest_pos, 64, 1, 1)
 					if path and #path > 0 then
-						place_path(path, pr, stair, slab)
+						place_path(path, pr, stair, slab, is_abandoned)
 						connected[from .. "-" .. closest_bld] = 1
 					else
 						minetest.log(

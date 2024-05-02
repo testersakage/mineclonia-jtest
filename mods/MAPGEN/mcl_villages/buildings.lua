@@ -380,7 +380,7 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 		local biome_data = minetest.get_biome_data(bell_pos)
 		local biome_name = minetest.get_biome_name(biome_data.biome)
 
-		mcl_villages.paths_new(blockseed, biome_name)
+		mcl_villages.paths_new(blockseed, biome_name, is_abandoned)
 		if not is_abandoned then
 			local l = minetest.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
 			if l then
