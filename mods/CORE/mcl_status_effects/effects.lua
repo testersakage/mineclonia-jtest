@@ -91,9 +91,9 @@ mcl_status_effects.register_effect("harming",{
 		local hp = def.factor or -6
 		local l = obj:get_luaentity()
 		if l and l.harmed_by_heal then
-			mcl_util.deal_damage(obj, hp, {type = "magic"})
-		else
 			mcl_status_effects.add_hp(obj, hp, {other = "healing"})
+		else
+			mcl_util.deal_damage(obj, hp, {type = "magic"})
 		end
 	end,
 })
@@ -152,7 +152,7 @@ mcl_status_effects.register_effect("slowness",{
 	color = "#5A6C81",
 	on_start = function(obj, def, data)
 		if obj:is_player() then
-			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:swiftness", def.factor)
+			return playerphysics.add_physics_factor(obj, "speed", "mcl_potions:slowness", def.factor)
 		end
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
@@ -168,7 +168,7 @@ mcl_status_effects.register_effect("slowness",{
 	end,
 	on_stop = function(obj, def, data)
 		if obj:is_player() then
-			return playerphysics.remove_physics_factor(obj, "speed", "mcl_potions:swiftness")
+			return playerphysics.remove_physics_factor(obj, "speed", "mcl_potions:slowness")
 		end
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
