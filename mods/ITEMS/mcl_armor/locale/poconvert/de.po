@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-05-04 21:18+0000\n"
+"Last-Translator: fnetX <otto@codeberg.org>\n"
+"Language-Team: German <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_armor/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.5.2\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
 msgstr "Dies ist ein Teil einer tragbaren Rüstung, die die Menge an Schaden, den Sie erleiden, reduziert."
@@ -32,16 +33,16 @@ msgid "Golden Boots"
 msgstr "Goldstiefel"
 
 msgid "Chainmail Helmet"
-msgstr ""
+msgstr "Kettenpanzerhelm"
 
 msgid "Chainmail Chestplate"
-msgstr ""
+msgstr "Kettenpanzerbrustplatte"
 
 msgid "Chainmail Leggings"
-msgstr ""
+msgstr "Kettenpanzerhose"
 
 msgid "Chainmail Boots"
-msgstr ""
+msgstr "Kettenpanzerstiefel"
 
 msgid "Iron Helmet"
 msgstr "Eisenhelm"
@@ -68,70 +69,74 @@ msgid "Diamond Boots"
 msgstr "Diamantstiefel"
 
 msgid "Netherite Helmet"
-msgstr ""
+msgstr "Netherithelm"
 
 msgid "Netherite Chestplate"
-msgstr ""
+msgstr "Netheritharnisch"
 
 msgid "Netherite Leggings"
-msgstr ""
+msgstr "Netheritbeinschutz"
 
 msgid "Netherite Boots"
-msgstr ""
+msgstr "Netheritstiefel"
 
 msgid "Projectile Protection"
-msgstr ""
+msgstr "Schusssicherheit"
 
 msgid "Reduces projectile damage."
-msgstr ""
+msgstr "Reduziert Schaden von Projektilen."
 
 msgid "Blast Protection"
-msgstr ""
+msgstr "Explosionsschutz"
 
 msgid "Reduces explosion damage and knockback."
-msgstr ""
+msgstr "Reduziert Explosionsschaden und Rückstoß."
 
 msgid "Fire Protection"
-msgstr ""
+msgstr "Feuerschutz"
 
 msgid "Reduces fire damage."
-msgstr ""
+msgstr "Reduziert Feuerschaden."
 
 msgid "Protection"
-msgstr ""
+msgstr "Schutz"
 
 msgid "Reduces most types of damage by 4% for each level."
-msgstr ""
+msgstr "Reduziert die meisten Arten von Schaden um 4% pro Level."
 
 msgid "Feather Falling"
-msgstr ""
+msgstr "Federfall"
 
 msgid "Reduces fall damage."
-msgstr ""
+msgstr "Reduziert Fallschaden."
 
 msgid "Aqua Affinity"
-msgstr ""
+msgstr "Wasseraffinität"
 
 msgid "Increases underwater mining speed."
-msgstr ""
+msgstr "Erhöht die Abbaugeschwindigkeit unter Wasser."
 
 msgid "Curse of Binding"
-msgstr ""
+msgstr "Fluch der Bindung"
 
 msgid "Item cannot be removed from armor slots except due to death, breaking or in Creative Mode."
 msgstr ""
+"Der Gegenstand kann nicht aus Rüstungsslots genommen werden, außer durch "
+"Tod, Zerbruch oder im Kreativmodus."
 
 msgid "Thorns"
-msgstr ""
+msgstr "Dornen"
 
 msgid "Reflects some of the damage taken when hit, at the cost of reducing durability with each proc."
 msgstr ""
+"Reflektiert einen Teil des Schadens sobald getroffen, jedoch auf Kosten der "
+"Haltbarkeit."
 
 msgid "Elytra"
-msgstr ""
+msgstr "Elytren"
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "Schmiedevorlage"
 
 msgid "@1 Armor Trim"
 msgstr ""
@@ -147,4 +152,3 @@ msgstr ""
 
 msgid "Ingot & Crystals"
 msgstr ""
-
