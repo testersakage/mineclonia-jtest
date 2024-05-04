@@ -7,7 +7,6 @@ local function potion_image(colorstring, overlay, texture, opacity)
 		opacity = 127
 	end
 	return overlay.."^[colorize:"..(colorstring or "#00FF00")..":"..tostring(opacity).."^"..texture
-	--return "mcl_potions_potion_overlay.png^[colorize:"..(colorstring or "#00FF00")..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
 end
 
 local arrow_def = minetest.registered_items["mcl_bows:arrow"]
@@ -80,7 +79,9 @@ local function get_drink_potion_func(def, variant)
 			return itemstack
 		end
 
-		if def.effect then def.effects = { [def.effect] = true } end
+		if def.effects == nil then
+			def.effects = { [def.name] = true }
+		end
 
 		for effect, v in pairs(def.effects or def[variant].effects or {}) do
 			local efdata = { factor = def[variant].factor or def.factor or 1, duration = def[variant].duration or def.duration or 0 }
@@ -157,7 +158,6 @@ mcla_potions.register_potion({
 	name = "healing",
 	description = S("Healing"),
 	longdesc = S("Instantly heals."),
-	effect = "healing",
 	color = "#F82423",
 	potion = {
 		_tt = S("+4 HP"),
@@ -173,7 +173,6 @@ mcla_potions.register_potion({
 	name = "harming",
 	description = S("Harming"),
 	longdesc = S("Instantly deals damage."),
-	effect = "harming",
 	color = "#430A09",
 	potion = {
 		factor = 6,
@@ -249,6 +248,7 @@ mcla_potions.register_potion({
 	longdesc = S("Regenerates health over time."),
 	color = "#CD5CAB",
 	potion = {
+		duration = 10,
 		factor = 2.5,
 	},
 })
