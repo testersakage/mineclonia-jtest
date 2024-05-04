@@ -4,6 +4,11 @@ local effect_players = {}
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
+-- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
+local hud_elem_type_field = "type"
+if not minetest.features.hud_def_type_field then
+	hud_elem_type_field = "hud_elem_type"
+end
 --[[
 {
 	on_start = function(player,def) end,
@@ -129,6 +134,7 @@ local function reorder_hud_icons(player)
 			local x = -52 * i - 2
 			i = i + 1
 			player:hud_change(v[player].hud_icon, "offset", { x = x, y = 3 })
+			player:hud_change(v[player].hud_text, "offset", { x = x, y = 4 })
 		end
 	end
 end
@@ -136,7 +142,7 @@ end
 function mcl_status_effects.add_hud_icon(player, icon)
 	if not player:is_player() then return end
 	local id = player:hud_add({
-		hud_elem_type = "image",
+		[hud_elem_type_field] = "image",
 		text = icon.."^[resize:128x128",
 		position = { x = 1, y = 0 },
 		offset = { x = -54, y = 3 },
@@ -144,7 +150,18 @@ function mcl_status_effects.add_hud_icon(player, icon)
 		alignment = { x = 1, y = 1 },
 		z_index = 100,
 	})
-	return id
+	local textid = player:hud_add({
+		[hud_elem_type_field] = "text",
+		text = "",
+		position = { x = 1, y = 3 },
+		offset = { x = -54, y = 3 },
+		scale = { x = 50, y = 15 },
+		alignment = { x = 1, y = 1 },
+		number = 0xFFFFFF,
+		style = 1,
+		z_index = 101,
+	})
+	return id, textid
 end
 function mcl_status_effects.get_hp_max(obj)
 	if obj:is_player() then
@@ -229,7 +246,7 @@ function mcl_status_effects.start_effect(object, effect, overrides, restore)
 		end
 		effect_players[effect][object].particlespawner = mcl_status_effects.add_particlespawnerdef(object, def.color)
 		if object:is_player() then
-			effect_players[effect][object].hud_icon = mcl_status_effects.add_hud_icon(object, def.icon or "mcl_potions_effect_"..def.name..".png")
+			effect_players[effect][object].hud_icon, effect_players[effect][object].hud_text = mcl_status_effects.add_hud_icon(object, def.icon or "mcl_potions_effect_"..def.name..".png")
 			effect_players[effect][object].hudbar = hudbar
 			reorder_hud_icons(object)
 		end
@@ -337,6 +354,8 @@ minetest.register_globalstep(function(dtime)
 				if l and l.is_mob and effect_players[effect] then
 					l.status_effects[effect] = data
 				end
+			elseif data.hud_text then
+				object:hud_change(data.hud_text, "text", (data.time_started + data.duration) - os.time() )
 			end
 		end
 	end
