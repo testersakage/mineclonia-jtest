@@ -181,8 +181,7 @@ function mcl_inventory.reset_craft_grid(player)
 	local inv = player:get_inventory()
 	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
 		return_fields(player, "craft")
-		inv:set_width("craft", 2)
-		inv:set_size("craft", 4)
+		minetest.chat_send_player(player:get_player_name(), "Crafting table out of range!")
 	end
 end
 
