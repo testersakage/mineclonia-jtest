@@ -54,7 +54,7 @@ local DEFAULT_NODE_PHYSICS = {
 local function apply_node_physics(node, vel, staticdata, entity)
 	local node_def = minetest.registered_nodes[node.name] or {}
 	local node_physics = node_def._mcl_physics or DEFAULT_NODE_PHYSICS
-	local pos = entity.object:get_pos()
+	local pos = entity.is_player and entity:is_player() and entity:get_pos() or entity.object and entity.object:get_pos()
 
 	local node_physics_effect = node_physics.effect
 	if node_physics_effect then

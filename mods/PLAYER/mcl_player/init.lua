@@ -169,6 +169,12 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 end, -200)
 
+mcl_player.register_globalstep(function(player)
+	-- Apply enviornmental physics effects
+	local v, _ = mcl_physics.get_environment_effect(player:get_pos(), player:get_velocity(), {}, 1, player)
+	if v then player:add_velocity(v) end
+end)
+
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 dofile(modpath.."/animations.lua")
 dofile(modpath.."/compat.lua")
