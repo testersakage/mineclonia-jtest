@@ -1,5 +1,4 @@
 # textdomain: mcl_banners
-### init.lua ###
 White Banner=Estandarte blanco
 White=Blanco
 Grey Banner=Estandarte gris
@@ -82,10 +81,4 @@ Special Banner Pattern=
 @1 Base Indented=Zócalo sangrada (@1)
 @1 Chief Indented=Sangrado del encabezado (@1)
 And one additional layer=Y una capa adicional
-### patterncraft.lua ###
 And @1 additional layers=Y @1 capas adicionales
-
-
-##### not used anymore #####
-
-Purple=Morado

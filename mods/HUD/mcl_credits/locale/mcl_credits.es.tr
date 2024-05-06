@@ -1,5 +1,4 @@
 # textdomain: mcl_credits
-### init.lua ###
 A faithful Open Source clone of Minecraft=
 Sneak to skip=
 Jump to speed up (additionally sprint)=
@@ -10,7 +9,6 @@ Creator of MineClone=
 Active Contributors=
 Previous Contributors=
 Original Mod Authors=
-### people.lua ###
 3D Models=
 Textures and menu images=
 Translations=
