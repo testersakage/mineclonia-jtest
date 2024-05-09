@@ -124,7 +124,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 	attack_exception = function(p)
 		local ent = p:get_luaentity()
 		if p:is_player() then return false end
-		if not ent or not ent.is_mob or ent.harmed_by_heal or string.find(ent.name, "ghast") then return true
+		if not ent or not ent.is_mob or ent.harmed_by_heal or ent.name == "mobs_mc:ghast" then return true
 		else return false end
 	end,
 
@@ -395,7 +395,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 	do_punch = function(self, hitter, tflp, tool_capabilities, dir)
 		if self._spawning or hitter == self.object then return false end
 		local ent = hitter:get_luaentity()
-		if ent and self._arrow_resistant and (string.find(ent.name, "arrow") or string.find(ent.name, "rocket")) then return false end
+		if ent and self._arrow_resistant and ent._is_arrow then return false end
 		wither_unstuck(self)
 		return true
 	end,
