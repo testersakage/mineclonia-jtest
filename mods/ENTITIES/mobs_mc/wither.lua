@@ -1,8 +1,3 @@
---MCmobs v0.4
---maikerumine
---made for MC like Survival game
---License for code WTFPL and otherwise stated in readmes
-
 local S = minetest.get_translator("mobs_mc")
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 local follow_spawner = minetest.settings:get_bool("wither_follow_spawner") ~= false
@@ -18,10 +13,6 @@ local function atan(x)
 		return math.atan(x)
 	end
 end
-
---###################
---################### WITHER
---###################
 
 local function wither_unstuck(self)
 	local pos = self.object:get_pos()
