@@ -9,8 +9,3 @@ Redstone=Redstone
 Powered Redstone Spot (@1)=Spot Redstone alimenté (@1)
 Redstone Trail (@1)=Sentier Redstone (@1)
 Powered Redstone Trail (@1)=Sentier Redstone alimenté (@1)
-
-
-##### not used anymore #####
-
-Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills. An easy way to power a redstone trail is by placing a redstone torch.=Placez du redstone sur le sol pour construire un sentier de redstone. Les sentiers se connecteront automatiquement et pourront également traverser des collines. Un moyen facile d'alimenter une piste de redstone est de placer une torche de redstone.

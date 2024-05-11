@@ -9,14 +9,3 @@ Stone Pressure Plate=Steindruckplatte
 A stone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else.=Eine Steindruckplatte ist eine Redstonekomponente, die ihre benachbarten Blöcke mit Redstoneenergie versorgt, solange sich ein Spieler oder Mob auf ihm befindet. Sie wird von nichts anderem ausgelöst.
 Polished Blackstone Pressure Plate=
 A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else.=
-
-
-##### not used anymore #####
-
-Oak Pressure Plate=Eichendruckplatte
-Acacia Pressure Plate=Akaziendruckplatte
-Birch Pressure Plate=Birkendruckplatte
-Dark Oak Pressure Plate=Schwarzeichendruckplatte
-Spruce Pressure Plate=Fichtendruckplatte
-Jungle Pressure Plate=Dschungeldruckplatte
-A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it.=Eine Holzdruckplatte ist eine Redstonekomponente, die ihre benachbarten Blöcke mit Redstoneenergie versorgt, solange sich ein beliebiges bewegliches Objekt (wie Gegenstände, Spieler und Mobs) auf ihm befindet.
