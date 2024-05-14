@@ -6,6 +6,9 @@ Registeres a new type of furnace
 ### Furnace definition
 {
 	cook_group = "smeltable", --optional: itemgroup this furnace is restricted to
+		possible choices are "smeltable" and "cookable".  Items to  be processed by
+		this furnace should have either attribute set to `1` in the groups of the item
+		registration.
 	factor = 2, --optional: cook time factor when using cook_group
 	node_normal = { -- node definition overrides of the normal furnace node (node_basename)
 		tiles = {}, --...
