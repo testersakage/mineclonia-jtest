@@ -129,26 +129,6 @@ local function entity_physics(pos, radius--[[, drops]])
 	end
 end
 	
-
-minetest.register_node(":mcl:invis_tnt", {
-		tiles = {"blank.png"},
-		drawtype = "airlike",
-		walkable = false,
-		drop = "",
-		pointable = false,
-		buildable_to = true,
-		groups = {not_in_creative_inventory = 1},
-		on_construct = function(pos)
-			--minetest.sound_play("tnt_ignite", {pos = pos}, true)
-			minetest.get_node_timer(pos):start(0.1)
-			--minetest.check_for_falling(pos)
-		end,
-		on_timer = function(pos, elapsed)
-			entity_physics(pos, damage_radius)
-			minetest.set_node(pos, {name = 'air'})
-		end
-	})	
-	
 	--=================--
 	--===Wind Charge===--
 	--=================--
