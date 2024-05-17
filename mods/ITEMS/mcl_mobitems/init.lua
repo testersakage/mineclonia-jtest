@@ -190,6 +190,15 @@ minetest.register_craftitem("mcl_mobitems:blaze_rod", {
 	groups = { craftitem = 1 },
 })
 
+minetest.register_craftitem("mcl_mobitems:breeze_rod", {
+	description = S("Blaze Rod"),
+	_doc_items_longdesc = S("This is a crafting item dropped from dead breezes."),
+	wield_image = "mcl_mobitems_breeze_rod.png",
+	inventory_image = "mcl_mobitems_breeze_rod.png",
+	groups = { craftitem = 1 },
+})
+
+
 minetest.register_craftitem("mcl_mobitems:blaze_powder", {
 	description = S("Blaze Powder"),
 	_doc_items_longdesc = S("This item is mainly used for crafting."),
