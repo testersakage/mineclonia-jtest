@@ -1,3 +1,6 @@
+local cooldown_time = 1 -- Cooldown
+mcl_charges_cooldown_data = {}
+	
 	local S = minetest.get_translator("mcl_charges")
 	
 	--=================================================--
@@ -160,6 +163,19 @@ local function mcl_charge(name, descr, def)
 
 		on_place = function(itemstack, placer, pointed_thing)
 
+
+local player_name = placer:get_player_name()
+      local pos = placer:getpos()
+      local dir = placer:get_look_dir()
+
+      local playername = placer:get_player_name()
+      if mcl_charges_cooldown_data[playername] == nil then
+          mcl_charges_cooldown_data[playername] = 0
+      end
+
+      local ig_time = minetest.get_gametime()
+      if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
+       mcl_charges_cooldown_data[playername] = ig_time
 			--weapons_shot(itemstack, placer, pointed_thing, def.velocity, name)
 			local velocity = 30
 			local dir = placer:get_look_dir()
@@ -182,9 +198,21 @@ local ent = obj:get_luaentity() ; ent.posthrow = playerpos
 			itemstack:take_item()
 
 			return itemstack
+					 else
+        local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
+      	end
 		end,
 		on_secondary_use = function(itemstack, placer, pointed_thing)
 
+		 local playername = placer:get_player_name()
+      if mcl_charges_cooldown_data[playername] == nil then
+          mcl_charges_cooldown_data[playername] = 0
+      end
+
+      local ig_time = minetest.get_gametime()
+      if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
+       mcl_charges_cooldown_data[playername] = ig_time
+
 			--weapons_shot(itemstack, placer, pointed_thing, def.velocity, name)
 			local velocity = 30
 			local dir = placer:get_look_dir()
@@ -207,6 +235,11 @@ local ent = obj:get_luaentity() ; ent.posthrow = playerpos
 			itemstack:take_item()
 
 			return itemstack
+				else
+        local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
+       
+
+	end
 		end,
 		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
 		-- Throw fire charge
