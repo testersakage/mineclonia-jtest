@@ -111,7 +111,6 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		if wielditem:get_name() ~= "mcl_mobitems:carrot_on_a_stick" then
 			if self:feed_tame(clicker, 1, true, false) then return end
 		end
-		if mcl_mobs.protect(self, clicker) then return end
 
 		if self.child then
 			return
@@ -186,10 +185,6 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 
 			mcl_mobs.attach(self, clicker)
 			return
-
-		-- Capture pig
-		elseif not self.driver and clicker:get_wielded_item():get_name() ~= "" then
-			mcl_mobs.capture_mob(self, clicker, 0, 5, 60, false, nil)
 		end
 	end,
 

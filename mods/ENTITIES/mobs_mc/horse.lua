@@ -272,10 +272,6 @@ local horse = {
 			return
 		end
 
-		if mcl_mobs.protect(self, clicker) then
-			return
-		end
-
 		if self.tamed and not self.child and self.owner == clicker:get_player_name() then
 			if self.driver and clicker == self.driver then
 				mcl_mobs.detach(clicker, {x = 1, y = 0, z = 1})

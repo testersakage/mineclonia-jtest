@@ -83,10 +83,7 @@ local rabbit = {
 		{"mcl_farming:carrot_1", "air", 0},
 	},
 	on_rightclick = function(self, clicker)
-		-- Feed, tame protect or capture
 		if self:feed_tame(clicker, 1, true, false) then return end
-		if mcl_mobs.protect(self, clicker) then return end
-		if mcl_mobs.capture_mob(self, clicker, 0, 50, 80, false, nil) then return end
 	end,
 	do_custom = function(self)
 		-- Easter egg: Change texture if rabbit is named “Toast”

@@ -13,18 +13,6 @@ local function mcl_log (message)
 	end
 end
 
--- No-op in MCL2 (capturing mobs is not possible).
--- Provided for compability with Mobs Redo
-function mcl_mobs.capture_mob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
-	return false
-end
-
-
--- No-op in MCL2 (protecting mobs is not possible).
-function mcl_mobs.protect(self, clicker)
-	return false
-end
-
 function mob_class:use_shears(new_textures, shears_stack)
 	if minetest.get_item_group(shears_stack:get_name(), "shears") > 0 then
 		self.object:set_properties({ textures = new_textures })

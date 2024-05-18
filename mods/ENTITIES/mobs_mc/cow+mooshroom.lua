@@ -60,11 +60,7 @@ local cow_def = {
 	},
 	on_rightclick = function(self, clicker)
 		if self:feed_tame(clicker, 1, true, false) then return end
-		if mcl_mobs.protect(self, clicker) then return end
-
-		if self.child then
-			return
-		end
+		if self.child then return end
 
 		local item = clicker:get_wielded_item()
 		if item:get_name() == "mcl_buckets:bucket_empty" and clicker:get_inventory() then
@@ -81,7 +77,6 @@ local cow_def = {
 			end
 			return
 		end
-		mcl_mobs.capture_mob(self, clicker, 0, 5, 60, false, nil)
 	end,
 	follow = "mcl_farming:wheat_item",
 	view_range = 10,
@@ -99,11 +94,8 @@ mcl_mobs.register_mob("mobs_mc:mooshroom", table.merge(cow_def, {
 	textures = { {"mobs_mc_mooshroom.png", "mobs_mc_mushroom_red.png"}, {"mobs_mc_mooshroom_brown.png", "mobs_mc_mushroom_brown.png" } },
 	on_rightclick = function(self, clicker)
 		if self:feed_tame(clicker, 1, true, false) then return end
-		if mcl_mobs.protect(self, clicker) then return end
+		if self.child then return end
 
-		if self.child then
-			return
-		end
 		local item = clicker:get_wielded_item()
 		-- Use shears to get mushrooms and turn mooshroom into cow
 		if minetest.get_item_group(item:get_name(), "shears") > 0 then
@@ -148,7 +140,6 @@ mcl_mobs.register_mob("mobs_mc:mooshroom", table.merge(cow_def, {
 				minetest.add_item(pos, {name = "mcl_mushrooms:mushroom_stew"})
 			end
 		end
-		mcl_mobs.capture_mob(self, clicker, 0, 5, 60, false, nil)
 	end,
 
 	on_lightning_strike = function(self, pos, pos2, objects)
