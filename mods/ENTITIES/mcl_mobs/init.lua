@@ -160,7 +160,6 @@ dofile(path .. "/api.lua")
 dofile(path .. "/breeding.lua")
 dofile(path .. "/spawning.lua")
 dofile(path .. "/mount.lua")
-dofile(path .. "/compat.lua")
 
 -- get node but use fallback for nil or unknown
 local node_ok = function(pos, fallback)
