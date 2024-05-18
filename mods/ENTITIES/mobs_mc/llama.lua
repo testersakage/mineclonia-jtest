@@ -142,8 +142,6 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			return
 		end
 
-		if mcl_mobs.protect(self, clicker) then return end
-
 		if self.tamed and not self.child and self.owner == clicker:get_player_name() then
 			if minetest.get_item_group(item:get_name(), "carpet") == 1 and self:set_carpet(item, clicker) then
 				return

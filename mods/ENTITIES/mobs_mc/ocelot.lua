@@ -134,9 +134,6 @@ table.update(cat,{
 	},
 	on_rightclick = function(self, clicker)
 		if self:feed_tame(clicker, 1, true, false) then return end
-		if mcl_mobs.capture_mob(self, clicker, 0, 60, 5, false, nil) then return end
-		if mcl_mobs.protect(self, clicker) then return end
-
 		if self.child then return end
 
 		-- Toggle sitting order

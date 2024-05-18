@@ -144,7 +144,6 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 
 	on_rightclick = function(self, clicker)
 		if self:feed_tame(clicker, 1, true, false) then return end
-		if mcl_mobs.protect(self, clicker) then return end
 
 		local item = clicker:get_wielded_item()
 		-- Dye sheep
