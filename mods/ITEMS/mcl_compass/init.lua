@@ -293,6 +293,8 @@ minetest.register_node("mcl_compass:lodestone",{
 				itemstack:set_name("mcl_compass:" .. frame .. "_lodestone")
 			end
 		end
+
+		return itemstack
 	end,
 	tiles = {
 		"lodestone_top.png",

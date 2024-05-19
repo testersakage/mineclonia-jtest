@@ -135,7 +135,7 @@ local function commandblock_action_off(pos, node)
 	end
 end
 
-local function on_rightclick(pos, _, player, _, _)
+local function on_rightclick(pos, _, player)
 	if not command_blocks_activated then
 		minetest.chat_send_player(player:get_player_name(), msg_not_activated)
 		return

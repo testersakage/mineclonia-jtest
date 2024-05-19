@@ -238,7 +238,7 @@ minetest.register_node("mcl_enchanting:table", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey = 2, deco_block = 1},
 	on_rotate = rotate,
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
+	on_rightclick = function(pos, _, clicker)
 		local player_meta = clicker:get_meta()
 		--local table_meta = minetest.get_meta(pos)
 		--local num_bookshelves = table_meta:get_int("mcl_enchanting:num_bookshelves")

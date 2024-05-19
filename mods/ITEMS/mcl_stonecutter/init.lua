@@ -234,7 +234,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 		local form = show_stonecutter_formspec()
 		meta:set_string("formspec", form)
 	end,
-	on_rightclick = function(pos, _, player, _)
+	on_rightclick = function(pos, _, player)
 		if not player:get_player_control().sneak then
 			update_stonecutter_slots(pos)
 		end

@@ -18,10 +18,10 @@ for i=0, 3 do
 				local pn = clicker:get_player_name()
 				if minetest.is_protected(pos, pn) then
 					minetest.record_protection_violation(pos, pn)
-					return false
+					return itemstack
 				end
-				if clicker:get_wielded_item():get_name() == "mcl_bone_meal:bone_meal" then
-					return false
+				if itemstack:get_name() == "mcl_bone_meal:bone_meal" then
+					return itemstack
 				end
 			end
 			if berries_to_drop then

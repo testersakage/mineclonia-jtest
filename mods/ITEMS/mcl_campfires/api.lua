@@ -213,6 +213,8 @@ function mcl_campfires.register_campfire(name, def)
 			elseif itemstack and player and pointed_thing then
 				minetest.item_place_node(itemstack, player, pointed_thing)
 			end
+
+			return itemstack
 		end,
 		drop = "",
 		light_source = def.lightlevel,

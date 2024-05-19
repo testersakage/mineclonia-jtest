@@ -22,6 +22,8 @@ for i=0,4 do
 				awards.unlock(player:get_player_name(), "mcl:notQuiteNineLives")
 			end
 		end
+
+		return itemstack
 	end
 
 

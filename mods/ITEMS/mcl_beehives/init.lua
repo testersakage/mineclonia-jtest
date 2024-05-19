@@ -46,6 +46,8 @@ local honey_harvest = function(pos, node, player, itemstack)
 		node.name = original_block
 		minetest.swap_node(pos, node)
 	end
+
+	return itemstack
 end
 
 -- Dig Function for Beehives

@@ -292,8 +292,8 @@ minetest.register_node("mcl_mobspawners:spawner", {
 	end,
 
 	on_rightclick = function(pos, _, clicker, itemstack, _)
-		if not clicker:is_player() then return end
-		if minetest.get_item_group(itemstack:get_name(),"spawn_egg") == 0 then return end
+		if not clicker:is_player() then return itemstack end
+		if minetest.get_item_group(itemstack:get_name(),"spawn_egg") == 0 then return itemstack end
 		local name = clicker:get_player_name()
 		local privs = minetest.get_player_privs(name)
 		if minetest.is_protected(pos, name) then

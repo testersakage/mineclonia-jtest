@@ -176,12 +176,12 @@ minetest.register_node("mcl_jukebox:jukebox", {
 		inv:set_size("main", 1)
 	end,
 	on_rightclick= function(pos, _, clicker, itemstack, _)
-		if not clicker then return end
+		if not clicker then return itemstack end
 		local cname = clicker:get_player_name()
 		local ph = minetest.hash_node_position(pos)
 		if minetest.is_protected(pos, cname) then
 			minetest.record_protection_violation(pos, cname)
-			return
+			return itemstack
 		end
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()

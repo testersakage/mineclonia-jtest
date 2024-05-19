@@ -37,7 +37,7 @@ minetest.register_node("mcl_flowerpots:flower_pot", {
 		local name = clicker:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
-			return
+			return itemstack
 		end
 		local item = clicker:get_wielded_item():get_name()
 		if mcl_flowerpots.registered_pots[item] then
@@ -46,6 +46,8 @@ minetest.register_node("mcl_flowerpots:flower_pot", {
 				itemstack:take_item()
 			end
 		end
+
+		return itemstack
 	end,
 })
 

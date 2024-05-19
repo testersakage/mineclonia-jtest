@@ -160,7 +160,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 				minetest.sound_play("mcl_potions_bottle_pour",
 					{pos=pos, gain=0.5, max_hear_range=16},true)
 			end
-			return outcome
+			return outcome or itemstack
 		end,
 	})
 
