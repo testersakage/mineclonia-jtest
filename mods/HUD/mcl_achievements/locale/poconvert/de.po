@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-05-21 19:25+0000\n"
+"PO-Revision-Date: 2024-05-21 23:40+0000\n"
 "Last-Translator: Kyoushi <Kyoushi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: German <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/de/>\n"
@@ -69,7 +69,7 @@ msgid "Craft a bookshelf."
 msgstr "Fertigen Sie ein Bücherregal."
 
 msgid "Isn't It Iron Pick"
-msgstr "Stetes Eisen höhlt den Stein!"
+msgstr "Mit Eisen hackt’s sich besser!"
 
 msgid "Craft a iron pickaxe using sticks and iron."
 msgstr "Stelle eine Eisenspitzhacke aus Stöcken und Eisenbarren her."
@@ -167,10 +167,10 @@ msgid "Kill a monster."
 msgstr "Töte ein Monster."
 
 msgid "We Need to Go Deeper"
-msgstr "Tiefer, immer tiefer!"
+msgstr "Wir müssen tiefer graben!"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
-msgstr "Benutzen Sie Obsidian und ein Feuerzeug, um ein Netherportal zu errichten."
+msgstr "Benutze Obsidian und ein Feuerzeug, um ein Netherportal zu errichten."
 
 msgid "The End?"
 msgstr "Das Ende?"
@@ -227,7 +227,7 @@ msgid "Catch an Axolotl with a bucket!"
 msgstr "Fange einen Axolotl mit einem Eimer!"
 
 msgid "Withering Heights"
-msgstr "Alles verwelkt"
+msgstr "Welkkommen zurück!"
 
 msgid "Summon the wither from the dead."
 msgstr "Beschwöre den Wither von den Toten herauf."
@@ -248,7 +248,7 @@ msgstr ""
 "Tipp: Fange einen Kabeljau, Lachs, Clownfisch oder Kugelfisch."
 
 msgid "Country Lode, Take Me Home"
-msgstr "Zuhause ist wo der Leitstein ist"
+msgstr "Geteiltes Leit ist halbes Leit"
 
 msgid "Use a compass on a Lodestone."
 msgstr "Benutze einen Kompass mit einem Leitstein."
