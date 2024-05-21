@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-05-20 21:00+0000\n"
+"PO-Revision-Date: 2024-05-21 19:25+0000\n"
 "Last-Translator: j-r <j-r@users.noreply.translate.codeberg.org>\n"
 "Language-Team: German <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/de/>\n"
@@ -735,7 +735,10 @@ msgid "The world is made entirely out of blocks (voxels, to be precise). Blocks 
 msgstr "Die Welt besteht aus Blöcken (oder Voxeln, um genau zu sein). Blöcke können mit den richtigen Werkzeugen gebaut oder entfernt werden."
 
 msgid "Blocks can have a wide range of different properties which determine mining times, behavior, looks, shape, and much more. Their properties include:"
-msgstr "Blöcke haben eine Reihe an verschiedenen Eigenschaften, die die Abbauzeit, ihr Verhalten, Aussehen, Form und vieles mehr beeinflussen. Zu ihren Eigenschaften zählen:"
+msgstr ""
+"Blöcke haben eine Reihe an verschiedenen Eigenschaften, die ihre Abbauzeit, "
+"Verhalten, Aussehen, Form und vieles mehr beeinflussen. Zu ihren "
+"Eigenschaften zählen:"
 
 msgid "• Collidable: Collidable blocks can not be passed through; players can walk on them. Non-collidable blocks can be passed through freely"
 msgstr "• Kollisionsfähig: Kollisionsfähige Blöcke können nicht passiert werden, Spieler können auf ihnen gehen. Nicht kollisionsfähige Blöcke können frei passiert werden"
@@ -1368,7 +1371,9 @@ msgid "• Griefing: Destroying the buildings of other players against their wil
 msgstr "• Griefen: Gebäude anderer Spieler gegen ihren Willen zerstören"
 
 msgid "• Protection: Mechanism to own areas of the world, which only allows the owners to modify blocks inside"
-msgstr "• Schutz: Mechanismus, um Eigentum an Gebieten in der der Welt zu erlangen, wodurch nur der Eigentümer die Blöcke verändern kann"
+msgstr ""
+"• Schutz: Mechanismus, um Eigentum an Gebieten in der Welt zu erlangen, "
+"wodurch nur der Eigentümer die Blöcke verändern kann"
 
 msgid "Technical terms:"
 msgstr "Technische Begriffe:"
