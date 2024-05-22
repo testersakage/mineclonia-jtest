@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-05-21 23:40+0000\n"
+"PO-Revision-Date: 2024-05-22 06:30+0000\n"
 "Last-Translator: j-r <j-r@users.noreply.translate.codeberg.org>\n"
 "Language-Team: German <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/de/>\n"
@@ -33,7 +33,7 @@ msgid "Use 8 cobblestones to craft a furnace."
 msgstr "Benutzen Sie 8 Kopfsteinpflaster, um einen Ofen zu fertigen."
 
 msgid "Time to Farm!"
-msgstr "Bauernzeit"
+msgstr "Bauernzeit!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
 msgstr "Benutzen Sie eine Werkbank, um eine Holzhacke aus Holzplanken und Stöcken zu fertigen."
@@ -69,7 +69,7 @@ msgid "Craft a bookshelf."
 msgstr "Fertigen Sie ein Bücherregal."
 
 msgid "Isn't It Iron Pick"
-msgstr "Mit Eisen hackt’s sich besser!"
+msgstr "Mit Eisen hackt’s sich besser"
 
 msgid "Craft a iron pickaxe using sticks and iron."
 msgstr "Stelle eine Eisenspitzhacke aus Stöcken und Eisenbarren her."
@@ -167,7 +167,7 @@ msgid "Kill a monster."
 msgstr "Töte ein Monster."
 
 msgid "We Need to Go Deeper"
-msgstr "Wir müssen tiefer graben!"
+msgstr "Wir müssen tiefer graben"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr "Benutze Obsidian und ein Feuerzeug, um ein Netherportal zu errichten."
@@ -227,7 +227,7 @@ msgid "Catch an Axolotl with a bucket!"
 msgstr "Fange einen Axolotl mit einem Eimer!"
 
 msgid "Withering Heights"
-msgstr "Welkkommen zurück!"
+msgstr "Welkkommen zurück"
 
 msgid "Summon the wither from the dead."
 msgstr "Beschwöre den Wither von den Toten herauf."
@@ -311,7 +311,7 @@ msgstr ""
 "verzaubertes Werkzeug."
 
 msgid "Wax On"
-msgstr "Wachs rauf!"
+msgstr "Wachs rauf"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr ""
@@ -319,7 +319,7 @@ msgstr ""
 "Witterungseinflüssen zu schützen."
 
 msgid "Wax Off"
-msgstr "Wachs runter!"
+msgstr "Wachs runter"
 
 msgid "Scrape wax off of a copper block."
 msgstr "Kratze Wachs von einem Kupferblock ab."
@@ -395,7 +395,7 @@ msgid "Hero of the Village"
 msgstr "Der Dorfheld"
 
 msgid "Successfully defend a village from a raid"
-msgstr "Verteidige ein Dorf erfolgreich gegen einen Überfall."
+msgstr "Verteidige ein Dorf erfolgreich gegen einen Überfall"
 
 msgid "Voluntary Exile"
 msgstr "Freiwilliges Exil"
