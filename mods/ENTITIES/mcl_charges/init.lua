@@ -167,7 +167,7 @@ local ent = obj:get_luaentity() ; ent.posthrow = playerpos
 
 			local obj = minetest.add_entity({
 				x = playerpos.x + dir.x,
-				y = playerpos.y + 2 + dir.y,
+				y = playerpos.y + 1.3 + dir.y,
 				z = playerpos.z + dir.z
 			}, "mcl_charges:" .. name .. "_flying")
 
