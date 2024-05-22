@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-05-22 06:30+0000\n"
+"PO-Revision-Date: 2024-05-23 07:18+0000\n"
 "Last-Translator: j-r <j-r@users.noreply.translate.codeberg.org>\n"
 "Language-Team: German <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_bamboo/de/>\n"
@@ -18,25 +18,27 @@ msgid "Bamboo Raft"
 msgstr "Bambusfloß"
 
 msgid "Chest Bamboo Raft"
-msgstr ""
+msgstr "Bambustruhenfloß"
 
 msgid "Bamboo"
-msgstr ""
+msgstr "Bambus"
 
 msgid "Bamboo Plant"
-msgstr ""
+msgstr "Bambuspflanze"
 
 msgid "Bamboo Mosaic Plank"
-msgstr ""
+msgstr "Bambusmosaik"
 
 msgid "Scaffolding"
-msgstr ""
+msgstr "Gerüst"
 
 msgid "Scaffolding is a temporary structure to easily climb up while building that is easily removed"
 msgstr ""
+"Ein Gerüst ist eine Struktur, die vorübergehend aufgebaut wird, leicht zu "
+"ersteigen ist, und leicht wieder abgebaut werden kann"
 
 msgid "Scaffolding horizontal"
-msgstr ""
+msgstr "Horizontales Gerüst"
 
 msgid "Scaffolding block..."
 msgstr ""
