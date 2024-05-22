@@ -190,13 +190,13 @@ local ent = obj:get_luaentity() ; ent.posthrow = playerpos
 		end,
 		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
 		local shootpos = vector.add(pos, vector.multiply(dropdir, 0.51))
-		local wind_charge = minetest.add_entity(shootpos, "mcl_charges:".. name .. "_flying")
-		if wind_charge and wind_charge:get_pos() then
-			local ent_wind = wind_charge:get_luaentity()
-			ent_wind._shot_from_dispenser = true
-			local v = ent_wind.velocity or 20
-			wind_charge:set_velocity(vector.multiply(dropdir, v))
-			ent_wind.switch = 1
+		local charge = minetest.add_entity(shootpos, "mcl_charges:".. name .. "_flying")
+		if charge and charge:get_pos() then
+			local ent_charge = charge:get_luaentity()
+			ent_charge._shot_from_dispenser = true
+			local v = ent_charge.velocity or 20
+			charge:set_velocity(vector.multiply(dropdir, v))
+			ent_charge.switch = 1
 		end
 		stack:take_item()
 	end,
@@ -233,11 +233,18 @@ minetest.register_entity("mcl_charges:" .. name .. "_flying", {
 				self.object:remove()
 		end
 		if self.hit_player or self.hit_mob or self.hit_object then
-				for _,player in pairs(minetest.get_objects_inside_radius(pos, 0.9)) do
+				for _,player in pairs(minetest.get_objects_inside_radius(pos, 0.6)) do
 					if self.hit_player and player:is_player() then
 						self.hit_player(self, player)
-						return
-					end
+						def.hit_player_alt(self, pos)
+						minetest.after(0.01, function()
+							if self.object:get_luaentity() then
+        							self.object:remove()
+							end
+						end)
+						
+					return
+				end
 
 					local entity = player:get_luaentity()
 					if entity then
@@ -276,6 +283,110 @@ mcl_charge("wind_charge", "Wind Charge", {
 	wind_burst(pos, damage_radius)
 	add_effects(pos, radius, drops)
 	minetest.sound_play("tnt_explode", { pos = pos, gain = 1.0, max_hear_distance }, true)
+			local pos = self.object:get_pos()
+       		local node = minetest.get_node(pos)
+        	local param2_value = minetest.get_node(pos).param2
+-- Trapdoors
+				if node.name == "mcl_doors:trapdoor_acacia" then
+        				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_acacia_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_acacia_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_acacia", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_bamboo" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_bamboo_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_bamboo_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_bamboo", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_birch" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_birch_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_birch_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_birch", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_cherry_blossom" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_cherry_blossom_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_cherry_blossom_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_cherry_blossom", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_crimson" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_crimson_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_crimson_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_crimson", param2 = param2_value})
+       			end
+        		if node.name == "mcl_doors:trapdoor_dark_oak" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_dark_oak_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_dark_oak_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_dark_oak", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_jungle" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_jungle_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_jungle_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_jungle", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_mangrove" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_mangrove_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_mangrove_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_mangrove", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_oak" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_oak_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_oak_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_oak", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_spruce" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_spruce_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_spruce_open" then
+				minetest.swap_node(pos, {name = "mcl_doors:trapdoor_spruce", param2 = param2_value})
+       			end
+       			if node.name == "mcl_doors:trapdoor_warped" then
+        			minetest.swap_node(pos, {name = "mcl_doors:trapdoor_warped_open", param2 = param2_value})
+        		end
+   				if node.name == "mcl_doors:trapdoor_warped_open" then
+					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_warped", param2 = param2_value})
+       			end
+-- Buttons
+				if node.name == "mesecons_button:button_acacia_off" then
+    				mesecon.push_button(pos, node)
+    			end
+   				if node.name == "mesecons_button:button_bamboo_off" then
+        			mesecon.push_button(pos, node)
+   				end
+       			if node.name == "mesecons_button:button_birch_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_cherry_blossom_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_crimson_off" then
+        			mesecon.push_button(pos, node)
+        		end
+        		if node.name == "mesecons_button:button_dark_oak_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_jungle_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_mangrove_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_oak_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_spruce_off" then
+        			mesecon.push_button(pos, node)
+        		end
+       			if node.name == "mesecons_button:button_warped_off" then
+        			mesecon.push_button(pos, node)
+        		end
 	end,
 	hit_player_alt = function(self, pos)
 	local pos_dir = {x = pos.x, dir, y = pos.y, dir, z = pos.z, dir}
