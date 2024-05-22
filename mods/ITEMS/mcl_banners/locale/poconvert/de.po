@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-05-21 23:40+0000\n"
-"Last-Translator: Kyoushi <Kyoushi@users.noreply.translate.codeberg.org>\n"
+"PO-Revision-Date: 2024-05-23 07:18+0000\n"
+"Last-Translator: j-r <j-r@users.noreply.translate.codeberg.org>\n"
 "Language-Team: German <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/de/>\n"
 "Language: de\n"
@@ -18,67 +18,67 @@ msgid "White Banner"
 msgstr "Weißes Banner"
 
 msgid "White"
-msgstr "weiß"
+msgstr "Weißer"
 
 msgid "Grey Banner"
 msgstr "Graues Banner"
 
 msgid "Grey"
-msgstr "grau"
+msgstr "Grauer"
 
 msgid "Light Grey Banner"
 msgstr "Hellgraues Banner"
 
 msgid "Light Grey"
-msgstr "hellgrau"
+msgstr "Hellgrauer"
 
 msgid "Black Banner"
 msgstr "Schwarzes Banner"
 
 msgid "Black"
-msgstr "schwarz"
+msgstr "Schwarzer"
 
 msgid "Red Banner"
 msgstr "Rotes Banner"
 
 msgid "Red"
-msgstr "rot"
+msgstr "Roter"
 
 msgid "Yellow Banner"
 msgstr "Gelbes Banner"
 
 msgid "Yellow"
-msgstr "gelb"
+msgstr "Gelber"
 
 msgid "Green Banner"
 msgstr "Grünes Banner"
 
 msgid "Green"
-msgstr "grün"
+msgstr "Grüner"
 
 msgid "Cyan Banner"
 msgstr "Türkises Banner"
 
 msgid "Cyan"
-msgstr "türkis"
+msgstr "Türkiser"
 
 msgid "Blue Banner"
 msgstr "Blaues Banner"
 
 msgid "Blue"
-msgstr "blau"
+msgstr "Blauer"
 
 msgid "Magenta Banner"
 msgstr "Magenta Banner"
 
 msgid "Magenta"
-msgstr "magenta"
+msgstr "Magenta"
 
 msgid "Orange Banner"
 msgstr "Orange Banner"
 
 msgid "Orange"
-msgstr "orange"
+msgstr "Oranger"
 
 msgid "Purple Banner"
 msgstr "Violettes Banner"
@@ -90,27 +90,26 @@ msgid "Brown Banner"
 msgstr "Braunes Banner"
 
 msgid "Brown"
-msgstr "braun"
+msgstr "Brauner"
 
 msgid "Pink Banner"
 msgstr "Rosa Banner"
 
 msgid "Pink"
-msgstr "rosa"
+msgstr "Rosa"
 
 msgid "Lime Banner"
 msgstr "Lindgrünes Banner"
 
 msgid "Lime"
-msgstr "lindgrün"
+msgstr "Hellgrüner"
 
 msgid "Light Blue Banner"
 msgstr "Hellblaues Banner"
 
 msgid "Light Blue"
-msgstr "hellblau"
+msgstr "Hellblauer"
 
-#, fuzzy
 msgid "Banner"
 msgstr "Banner"
 
