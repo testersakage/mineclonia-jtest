@@ -104,20 +104,22 @@ end
 mcl_itemframes.update_entity = update_entity
 
 --Node functions
-function mcl_itemframes.tpl_node.on_rightclick(pos, node, clicker, pstack, pointed_thing)
-	local itemstack = pstack:take_item()
-	local inv = minetest.get_meta(pos):get_inventory()
+function mcl_itemframes.tpl_node.on_rightclick(pos, node, clicker, ostack, pointed_thing)
 	local name = clicker:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
-		return
+		return ostack
 	end
+	local pstack = ItemStack(ostack)
+	local itemstack = pstack:take_item()
+	local inv = minetest.get_meta(pos):get_inventory()
 	drop_item(pos)
 	inv:set_stack("main", 1, itemstack)
 	update_entity(pos)
 	if not minetest.is_creative_enabled(clicker:get_player_name()) then
 		return pstack
 	end
+	return ostack
 end
 
 mcl_itemframes.tpl_node.on_destruct = remove_entity
