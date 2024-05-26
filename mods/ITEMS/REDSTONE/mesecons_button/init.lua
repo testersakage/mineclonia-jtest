@@ -145,6 +145,11 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 		_doc_items_usagehelp = buttonuse,
 		on_place = on_button_place,
 		node_placement_prediction = "",
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				mesecon.push_button(pos, node)
+			end
+		end,
 		on_rightclick = function(pos, node)
 			mesecon.push_button(pos, node)
 		end,
