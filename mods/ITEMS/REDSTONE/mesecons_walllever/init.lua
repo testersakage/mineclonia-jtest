@@ -59,6 +59,13 @@ minetest.register_node("mesecons_walllever:wall_lever_off", {
 	_tt_help = S("Provides redstone power while it's turned on"),
 	_doc_items_longdesc = S("A lever is a redstone component which can be flipped on and off. It supplies redstone power to adjacent blocks while it is in the “on” state."),
 	_doc_items_usagehelp = S("Use the lever to flip it on or off."),
+	on_punch = function(pos, node, puncher)
+		if not puncher:is_player() then
+			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_on", param2=node.param2})
+			mesecon.receptor_on(pos, lever_get_output_rules(node))
+			minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16}, true)
+		end
+	end,
 	on_rightclick = function(pos, node)
 		minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_on", param2=node.param2})
 		mesecon.receptor_on(pos, lever_get_output_rules(node))
@@ -164,6 +171,13 @@ minetest.register_node("mesecons_walllever:wall_lever_on", {
 	is_ground_content = false,
 	drop = "mesecons_walllever:wall_lever_off",
 	_doc_items_create_entry = false,
+	on_punch = function(pos, node, puncher)
+		if not puncher:is_player() then
+			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_off", param2=node.param2})
+			mesecon.receptor_off(pos, lever_get_output_rules(node))
+			minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16}, true)
+		end
+	end,
 	on_rightclick = function(pos, node)
 		minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_off", param2=node.param2})
 		mesecon.receptor_off(pos, lever_get_output_rules(node))
