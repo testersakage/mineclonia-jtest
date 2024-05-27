@@ -10,7 +10,7 @@ local S = minetest.get_translator("mcl_charges")
 	
 --Wind Charge Particle effects
 wind_burst_spawner = {
-	texture = "wind_burst_1.png",
+	texture = "mcl_charges_wind_burst_1.png",
 	texpool = {},
 	amount = 6,
 	time = 0.2,
@@ -28,13 +28,13 @@ wind_burst_spawner = {
 }
 for i=1,2 do
 	table.insert(wind_burst_spawner.texpool, {
-		name = "wind_burst_"..i..".png",
+		name = "mcl_charges_wind_burst_"..i..".png",
 		animation={type="vertical_frames", aspect_w=8, aspect_h=8, length=1},
 	})
 end
 -- Chorus flower destruction effects
 function mcl_charges.chorus_flower_effects(pos, radius, drops)
-	local tex = "mcl_end_chorus_flower_1.png", "mcl_end_chorus_flower_2.png", "mcl_end_chorus_flower_3.png"
+	local tex = "mcl_end_chorus_flower_1.png", "mcl_end_chorus_flower_2.png", "mcl_end_chorus_flower_3.png", "mcl_end_chorus_flower_34.png", "mcl_end_chorus_flower_5.png", "mcl_end_chorus_flower_6.png", "mcl_end_chorus_flower_7.png", "mcl_end_chorus_flower_8.png", "mcl_end_chorus_flower_9.png", "mcl_end_chorus_flower_10.png"
 	local most = 0
 		minetest.add_particlespawner({
 			amount = 10,
@@ -54,7 +54,7 @@ function mcl_charges.chorus_flower_effects(pos, radius, drops)
 end
 -- decorated pot destruction effects
 function mcl_charges.pot_effects(pos, radius, drops)
-	local tex = "mcl_pottery_sherds_pot_1.png", "mcl_pottery_sherds_pot_2.png", "mcl_pottery_sherds_pot_3.png"
+	local tex = "mcl_pottery_sherds_pot_1.png", "mcl_pottery_sherds_pot_2.png", "mcl_pottery_sherds_pot_3.png", "mcl_pottery_sherds_pot_4.png", "mcl_pottery_sherds_pot_5.png", "mcl_pottery_sherds_pot_6.png", "mcl_pottery_sherds_pot_7.png", "mcl_pottery_sherds_pot_8.png", "mcl_pottery_sherds_pot_9.png", "mcl_pottery_sherds_pot_10.png"
 	local most = 0
 		minetest.add_particlespawner({
 			amount = 10,
@@ -74,7 +74,7 @@ function mcl_charges.pot_effects(pos, radius, drops)
 end
 -- Initial knockback function	
 function mcl_charges.wind_burst_velocity(pos1, pos2, old_vel, power)
-
+	
 		if vector.equals(pos1, pos2) then
 	return old_vel
 end
@@ -105,44 +105,44 @@ local radius = 2
 -- Wind Burst registry
 function mcl_charges.wind_burst(pos, radius)
 	local objs = minetest.get_objects_inside_radius(pos, radius)
-	for _, obj in pairs(objs) do
-		local obj_pos = obj:get_pos()
-		local dist = math.max(1, vector.distance(pos, obj_pos))
-		local damage = (0 / dist) * radius
-			if obj:is_player() then
-				local dir = vector.normalize(vector.subtract(obj_pos, pos))
-				local moveoff = vector.multiply(dir, math.random(1.5, 1.8) / dist * RADIUS)
-				obj:add_velocity(moveoff)
-				obj:set_hp(obj:get_hp() - damage)
-			else
-		local luaobj = obj:get_luaentity()
-			if luaobj then
-				local do_damage = false
-				local do_knockback = true
-				local entity_drops = {}
-				local objdef = minetest.registered_entities[luaobj.name]
-				if objdef and objdef.on_blast then
-					do_damage, do_knockback, entity_drops = objdef.on_blast(luaobj, damage)
-				end
-				if do_knockback then
-					local obj_vel = obj:get_velocity()
-					obj:set_velocity(mcl_charges.wind_burst_velocity(pos, obj_pos, obj_vel, radius * 3))
-				end
-				if do_damage then
-					if not obj:get_armor_groups().immortal then
-						obj:punch(node, 1.0, {
-							full_punch_interval = 1.0,
-							damage_groups = {fleshy = damage},
-						}, nil)
+		for _, obj in pairs(objs) do
+			local obj_pos = obj:get_pos()
+			local dist = math.max(1, vector.distance(pos, obj_pos))
+			local damage = (0 / dist) * radius
+				if obj:is_player() then
+					local dir = vector.normalize(vector.subtract(obj_pos, pos))
+					local moveoff = vector.multiply(dir, math.random(1.5, 1.8) / dist * RADIUS)
+						obj:add_velocity(moveoff)
+						obj:set_hp(obj:get_hp() - damage)
+				else
+					local luaobj = obj:get_luaentity()
+						if luaobj then
+							local do_damage = false
+							local do_knockback = true
+							local entity_drops = {}
+							local objdef = minetest.registered_entities[luaobj.name]
+								if objdef and objdef.on_blast then
+									do_damage, do_knockback, entity_drops = objdef.on_blast(luaobj, damage)
+								end
+									if do_knockback then
+										local obj_vel = obj:get_velocity()
+											obj:set_velocity(mcl_charges.wind_burst_velocity(pos, obj_pos, obj_vel, radius * 3))
+								end
+									if do_damage then
+										if not obj:get_armor_groups().immortal then
+											obj:punch(node, 1.0, {
+											full_punch_interval = 1.0,
+											damage_groups = {fleshy = damage},
+											}, nil)
+										end
+								end
+									for _, item in pairs(entity_drops) do
+										add_drop(drops, item)
+									end
+							end
 					end
-				end
-				for _, item in pairs(entity_drops) do
-					add_drop(drops, item)
-				end
 			end
-		end
 	end
-end
 --throwable charge registry
 function register_charge(name, descr, def)
  	minetest.register_craftitem("mcl_charges:" .. name .. "", {
@@ -154,92 +154,75 @@ function register_charge(name, descr, def)
 
 
 local player_name = placer:get_player_name()
-      local pos = placer:getpos()
-      local dir = placer:get_look_dir()
-
-      local playername = placer:get_player_name()
-      if mcl_charges_cooldown_data[playername] == nil then
-          mcl_charges_cooldown_data[playername] = 0
-      end
-
-      local ig_time = minetest.get_gametime()
-      if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
-       mcl_charges_cooldown_data[playername] = ig_time
+      	local pos = placer:getpos()
+     	local dir = placer:get_look_dir()
+		local playername = placer:get_player_name()
+     		if mcl_charges_cooldown_data[playername] == nil then
+          		mcl_charges_cooldown_data[playername] = 0
+      		end
+		
+				local ig_time = minetest.get_gametime()
+      				if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
+       					mcl_charges_cooldown_data[playername] = ig_time
        
-			local velocity = 30
-			local dir = placer:get_look_dir()
-			local playerpos = placer:get_pos()
-
-			local obj = minetest.add_entity({
-				x = playerpos.x + dir.x,
-				y = playerpos.y + 1.3 + dir.y,
-				z = playerpos.z + dir.z
-			}, "mcl_charges:" .. name .. "_flying")
-
-			local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-			local acc = {x = 0, y = 0, z = 0}
-
-			obj:set_velocity(vec)
-			obj:set_acceleration(acc)
-
-local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-
-			itemstack:take_item()
-
-			return itemstack
-					 else
-        local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
+							local velocity = 30
+							local dir = placer:get_look_dir()
+							local playerpos = placer:get_pos()
+							local obj = minetest.add_entity({
+								x = playerpos.x + dir.x,
+								y = playerpos.y + 1.3 + dir.y,
+								z = playerpos.z + dir.z
+								}, "mcl_charges:" .. name .. "_flying")
+							local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
+							local acc = {x = 0, y = 0, z = 0}
+								obj:set_velocity(vec)
+								obj:set_acceleration(acc)
+									local ent = obj:get_luaentity() ; ent.posthrow = playerpos
+								itemstack:take_item()
+							return itemstack
+					else
+       					local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
+      		end
+end,
+on_secondary_use = function(itemstack, placer, pointed_thing)
+	local playername = placer:get_player_name()
+    	if mcl_charges_cooldown_data[playername] == nil then
+        	mcl_charges_cooldown_data[playername] = 0
       	end
-		end,
-		on_secondary_use = function(itemstack, placer, pointed_thing)
 
-		 local playername = placer:get_player_name()
-      if mcl_charges_cooldown_data[playername] == nil then
-          mcl_charges_cooldown_data[playername] = 0
-      end
-
-      local ig_time = minetest.get_gametime()
-      if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
-       mcl_charges_cooldown_data[playername] = ig_time
-
-			local velocity = 30
-			local dir = placer:get_look_dir()
-			local playerpos = placer:get_pos()
-
-			local obj = minetest.add_entity({
-				x = playerpos.x + dir.x,
-				y = playerpos.y + 2 + dir.y,
-				z = playerpos.z + dir.z
-			}, "mcl_charges:" .. name .. "_flying")
-
-			local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-			local acc = {x = 0, y = 0, z = 0}
-
-			obj:set_velocity(vec)
-			obj:set_acceleration(acc)
-
-local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-
-			itemstack:take_item()
-
-			return itemstack
+      	local ig_time = minetest.get_gametime()
+      		if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
+       			mcl_charges_cooldown_data[playername] = ig_time
+					local velocity = 30
+					local dir = placer:get_look_dir()
+					local playerpos = placer:get_pos()
+					local obj = minetest.add_entity({
+						x = playerpos.x + dir.x,
+						y = playerpos.y + 2 + dir.y,
+						z = playerpos.z + dir.z
+						}, "mcl_charges:" .. name .. "_flying")
+					local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
+					local acc = {x = 0, y = 0, z = 0}
+						obj:set_velocity(vec)
+						obj:set_acceleration(acc)
+					local ent = obj:get_luaentity() ; ent.posthrow = playerpos
+						itemstack:take_item()
+					return itemstack
 				else
-        local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
-       
-
-	end
-		end,
-		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
-		local shootpos = vector.add(pos, vector.multiply(dropdir, 0.51))
-		local charge = minetest.add_entity(shootpos, "mcl_charges:" .. name .. "_flying")
+        			local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))   
+			end
+end,
+_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
+	local shootpos = vector.add(pos, vector.multiply(dropdir, 0.51))
+	local charge = minetest.add_entity(shootpos, "mcl_charges:" .. name .. "_flying")
 		if charge and charge:get_pos() then
 			local ent_charge = charge:get_luaentity()
-			ent_charge._shot_from_dispenser = true
+				ent_charge._shot_from_dispenser = true
 			local v = ent_charge.velocity or 20
-			charge:set_velocity(vector.multiply(dropdir, v))
-			ent_charge.switch = 1
-		end
-		stack:take_item()
+				charge:set_velocity(vector.multiply(dropdir, v))
+				ent_charge.switch = 1
+			end
+				stack:take_item()
 	end,
 })
 -- Entity registry
