@@ -9,24 +9,28 @@ mcl_charges = {}
 local S = minetest.get_translator("mcl_charges")
 	
 --Wind Charge Particle effects
-function mcl_charges.add_effects(pos, radius, drops)
-	local texture = "mcl_particles_smoke.png"
-	local most = 0
-		minetest.add_particlespawner({
-			amount = 64,
-			time = 0.3,
-			minpos = vector.subtract(pos, radius / 2),
-			maxpos = vector.add(pos, radius / 2),
-			minvel = vector.new(-1, 0, -1),
-			maxvel = vector.new(1, 2, 1),
-			minacc = vector.new(0, -10, 0),
-			minexptime = 0.8,
-			maxexptime = 2.0,
-			minsize = radius * 0.66,
-			maxsize = radius * 3,
-			texture = texture,
-			collisiondetection = true,
-		})
+wind_burst_spawner = {
+	texture = "wind_burst_1.png",
+	texpool = {},
+	amount = 6,
+	time = 0.2,
+	minvel = vector.zero(),
+	maxvel = vector.zero(),
+	minacc = vector.new(-0.2, 0.0, -0.2),
+	maxacc = vector.new(0.2, 0.1, 0.2),
+	minexptime = 0.95,
+	maxexptime = 0.95,
+	minsize = 12.0,
+	maxsize= 18.0,
+	glow = 1,
+	collisiondetection = true,
+	collision_removal = true,
+}
+for i=1,2 do
+	table.insert(wind_burst_spawner.texpool, {
+		name = "wind_burst_"..i..".png",
+		animation={type="vertical_frames", aspect_w=8, aspect_h=8, length=1},
+	})
 end
 -- Chorus flower destruction effects
 function mcl_charges.chorus_flower_effects(pos, radius, drops)
