@@ -246,7 +246,6 @@ register_charge("wind_charge", "Wind Charge", {
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
-				end
         		end
         		if node.name == "mcl_doors:door_crimson_b_1" then
         			minetest.swap_node(pos, {name = "mcl_doors:door_crimson_b_2", param2 = np2})
