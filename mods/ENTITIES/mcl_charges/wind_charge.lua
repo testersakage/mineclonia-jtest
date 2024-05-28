@@ -331,8 +331,17 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.dig_node(pos)
 					mcl_charges.chorus_flower_effects(pos, radius)
 				end
+				if node.name == "mcl_end:chorus_flower_dead" then
+					minetest.swap_node(pos, {name = "air"})
+					minetest.add_item(pos, {name = "mcl_end:chorus_flower"})
+					mcl_charges.chorus_flower_effects(pos, radius)
+				end
 				if node.name == "mcl_pottery_sherds:pot" then
-					minetest.dig_node(pos)
+					minetest.swap_node(pos, {name = "air"})
+					minetest.add_item(pos, {name = "mcl_core:brick"})
+					minetest.add_item(pos, {name = "mcl_core:brick"})
+					minetest.add_item(pos, {name = "mcl_core:brick"})
+					minetest.add_item(pos, {name = "mcl_core:brick"})
 					mcl_charges.pot_effects(pos, radius)
 				end
 				if node.name == "mesecons_walllever:wall_lever_off" then
