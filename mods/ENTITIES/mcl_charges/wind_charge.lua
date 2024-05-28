@@ -102,7 +102,7 @@ register_charge("wind_charge", "Wind Charge", {
 						meta2:set_int("is_open", 1)
 					end
 				end
- 				if node.name == "mcl_doors:door_bamboo_b_2" then
+				if node.name == "mcl_doors:door_bamboo_b_2" then
 					minetest.swap_node(pos, {name = "mcl_doors:door_bamboo_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_bamboo_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
@@ -116,7 +116,7 @@ register_charge("wind_charge", "Wind Charge", {
 					end
 				end
 				if node.name == "mcl_doors:door_bamboo_t_1" then
- 					minetest.swap_node(posBelow, {name = "mcl_doors:door_bamboo_b_2", param2 = np2})
+					minetest.swap_node(posBelow, {name = "mcl_doors:door_bamboo_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_bamboo_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
 						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
@@ -208,7 +208,7 @@ register_charge("wind_charge", "Wind Charge", {
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_b_2" then
 				minetest.swap_node(pos, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
- 					minetest.set_node(posAbove, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
+				minetest.set_node(posAbove, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
 						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
@@ -221,7 +221,7 @@ register_charge("wind_charge", "Wind Charge", {
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_t_1" then
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_cherry_blossom_b_2", param2 = np2})
- 					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_2", param2 = np2})
+					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
 						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
@@ -232,7 +232,7 @@ register_charge("wind_charge", "Wind Charge", {
 						meta2:set_int("is_open", 1)
 					end
 				end
- 				if node.name == "mcl_doors:door_cherry_blossom_t_2" then
+				if node.name == "mcl_doors:door_cherry_blossom_t_2" then
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
@@ -287,7 +287,7 @@ register_charge("wind_charge", "Wind Charge", {
 				if node.name == "mcl_doors:door_crimson_t_2" then
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_crimson_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_crimson_t_1", param2 = np2})
- 					if meta1:get_int("is_open") == 1 then
+					if meta1:get_int("is_open") == 1 then
 						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
@@ -504,7 +504,7 @@ register_charge("wind_charge", "Wind Charge", {
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
- 				end
+				end
 				if node.name == "mcl_doors:door_spruce_b_1" then
 					minetest.swap_node(pos, {name = "mcl_doors:door_spruce_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_spruce_t_2", param2 = np2})
@@ -531,7 +531,7 @@ register_charge("wind_charge", "Wind Charge", {
 						meta2:set_int("is_open", 1)
 					end
 				end
- 				if node.name == "mcl_doors:door_spruce_t_1" then
+				if node.name == "mcl_doors:door_spruce_t_1" then
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_spruce_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_spruce_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
@@ -544,7 +544,7 @@ register_charge("wind_charge", "Wind Charge", {
 						meta2:set_int("is_open", 1)
 					end
 				end
- 				if node.name == "mcl_doors:door_spruce_t_2" then
+				if node.name == "mcl_doors:door_spruce_t_2" then
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_spruce_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_spruce_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
@@ -557,7 +557,7 @@ register_charge("wind_charge", "Wind Charge", {
 						meta2:set_int("is_open", 1)
 					end
 				end
- 				if node.name == "mcl_doors:door_warped_b_1" then
+				if node.name == "mcl_doors:door_warped_b_1" then
 					minetest.swap_node(pos, {name = "mcl_doors:door_warped_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_warped_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
@@ -597,7 +597,7 @@ register_charge("wind_charge", "Wind Charge", {
 					end
 				end
 				if node.name == "mcl_doors:door_warped_t_2" then
- 					minetest.swap_node(posBelow, {name = "mcl_doors:door_warped_b_1", param2 = np2})
+					minetest.swap_node(posBelow, {name = "mcl_doors:door_warped_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_warped_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
 						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
@@ -631,12 +631,12 @@ register_charge("wind_charge", "Wind Charge", {
 				if node.name == "mcl_doors:trapdoor_cherry_blossom" then
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_cherry_blossom_open", param2 = param2_value})
 				end
- 				if node.name == "mcl_doors:trapdoor_cherry_blossom_open" then
+				if node.name == "mcl_doors:trapdoor_cherry_blossom_open" then
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_cherry_blossom", param2 = param2_value})
 				end
 				if node.name == "mcl_doors:trapdoor_crimson" then
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_crimson_open", param2 = param2_value})
- 				end
+				end
 				if node.name == "mcl_doors:trapdoor_crimson_open" then
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_crimson", param2 = param2_value})
 				end
@@ -653,7 +653,7 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_jungle", param2 = param2_value})
 				end
 				if node.name == "mcl_doors:trapdoor_mangrove" then
- 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_mangrove_open", param2 = param2_value})
+					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_mangrove_open", param2 = param2_value})
 				end
 				if node.name == "mcl_doors:trapdoor_mangrove_open" then
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_mangrove", param2 = param2_value})
@@ -727,7 +727,7 @@ register_charge("wind_charge", "Wind Charge", {
 				end
 				if node.name == "mesecons_walllever:wall_lever_on" then
 					minetest.punch_node(pos)
-				end	
+				end
 	end,
 	hit_player_alt = function(self, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
