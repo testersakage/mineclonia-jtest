@@ -36,10 +36,7 @@ for i=1,2 do
 	})
 end
 -- Chorus flower destruction effects
-function mcl_charges.chorus_flower_effects(pos, radius, drops)
-	local tex = "mcl_end_chorus_flower_1.png", "mcl_end_chorus_flower_2.png", "mcl_end_chorus_flower_3.png", 
-				"mcl_end_chorus_flower_34.png", "mcl_end_chorus_flower_5.png", "mcl_end_chorus_flower_6.png", 
-				"mcl_end_chorus_flower_7.png", "mcl_end_chorus_flower_8.png", "mcl_end_chorus_flower_9.png", "mcl_end_chorus_flower_10.png"
+function mcl_charges.chorus_flower_effects(pos, radius)
 		minetest.add_particlespawner({
 			amount = 10,
 			time = 0.3,
@@ -52,15 +49,12 @@ function mcl_charges.chorus_flower_effects(pos, radius, drops)
 			maxexptime = 2.0,
 			minsize = radius * 0.66,
 			maxsize = radius * 1.00,
-			texpool = {tex},
+			texpool = {"mcl_end_chorus_flower_1.png", "mcl_end_chorus_flower_2.png", "mcl_end_chorus_flower_3.png", "mcl_end_chorus_flower_34.png", "mcl_end_chorus_flower_5.png", "mcl_end_chorus_flower_6.png", "mcl_end_chorus_flower_7.png", "mcl_end_chorus_flower_8.png", "mcl_end_chorus_flower_9.png", "mcl_end_chorus_flower_10.png"},
 			collisiondetection = true,
 		})
 end
 -- decorated pot destruction effects
-function mcl_charges.pot_effects(pos, radius, drops)
-	local tex = "mcl_pottery_sherds_pot_1.png", "mcl_pottery_sherds_pot_2.png", "mcl_pottery_sherds_pot_3.png", 
-				"mcl_pottery_sherds_pot_4.png", "mcl_pottery_sherds_pot_5.png", "mcl_pottery_sherds_pot_6.png", 
-				"mcl_pottery_sherds_pot_7.png", "mcl_pottery_sherds_pot_8.png", "mcl_pottery_sherds_pot_9.png", "mcl_pottery_sherds_pot_10.png"
+function mcl_charges.pot_effects(pos, radius)
 		minetest.add_particlespawner({
 			amount = 10,
 			time = 0.3,
@@ -73,7 +67,7 @@ function mcl_charges.pot_effects(pos, radius, drops)
 			maxexptime = 2.0,
 			minsize = radius * 0.66,
 			maxsize = radius * 1.00,
-			texpool = {tex},
+			texpool = {"mcl_pottery_sherds_pot_1.png", "mcl_pottery_sherds_pot_2.png", "mcl_pottery_sherds_pot_3.png", "mcl_pottery_sherds_pot_4.png", "mcl_pottery_sherds_pot_5.png", "mcl_pottery_sherds_pot_6.png", "mcl_pottery_sherds_pot_7.png", "mcl_pottery_sherds_pot_8.png", "mcl_pottery_sherds_pot_9.png", "mcl_pottery_sherds_pot_10.png"},
 			collisiondetection = true,
 		})
 end
@@ -119,12 +113,10 @@ function mcl_charges.wind_burst(pos, radius)
 				else
 					local luaobj = obj:get_luaentity()
 						if luaobj then
-							local do_damage = false
 							local do_knockback = true
-							local entity_drops = {}
 							local objdef = minetest.registered_entities[luaobj.name]
 								if objdef and objdef.on_blast then
-									do_damage, do_knockback, entity_drops = objdef.on_blast(luaobj, damage)
+									do_knockback = objdef.on_blast(luaobj, damage)
 								end
 									if do_knockback then
 										local obj_vel = obj:get_velocity()
