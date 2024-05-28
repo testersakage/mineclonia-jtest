@@ -152,6 +152,11 @@ function mcl_fences.register_fence_gate(id, fence_gate_name, texture, groups, ha
 					{-0.5, -3/16, -1/16, 0.5, 0.5, 1/16},   --gate
 				}
 		},
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				punch_gate(pos, node)
+			end
+		end,
 		on_rightclick = function(pos, node, clicker)
 			punch_gate(pos, node)
 		end,
@@ -221,6 +226,11 @@ function mcl_fences.register_fence_gate(id, fence_gate_name, texture, groups, ha
 		on_rotate = on_rotate,
 		on_rightclick = function(pos, node, clicker)
 			punch_gate(pos, node)
+		end,
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				punch_gate(pos, node)
+			end
 		end,
 		sounds = sounds,
 		_mcl_blast_resistance = blast_resistance,
