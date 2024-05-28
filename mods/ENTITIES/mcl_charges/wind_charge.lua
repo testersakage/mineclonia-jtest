@@ -21,593 +21,139 @@ register_charge("wind_charge", "Wind Charge", {
 		minetest.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
 		local pos = self.object:get_pos()
 		local node = minetest.get_node(pos)
-		local posAbove = {x = pos.x, y = pos.y + 1, z = pos.z}
-		local posBelow = {x = pos.x, y = pos.y - 1, z = pos.z}
 		local param2_value = minetest.get_node(pos).param2
-		local p2 = param2_value
-		local meta1 = minetest.get_meta(pos)
-		pos.y = pos.y+1
-		local meta2 = minetest.get_meta(pos)
-		pos.y = pos.y-1
-		local params = {}
-			if meta1:get_int("is_open") == 0 and meta2:get_int("is_mirrored") == 0 or meta1:get_int("is_open") == 1 and meta2:get_int("is_mirrored") == 1 then
-				params = {1,2,3,0}
-			else
-				params = {3,0,1,2}
-			end
-		local np2 = params[p2+1]
 -- Doors: There are 4 functions per door. Two to open and two to close. One for each the top and bottom.
 				if node.name == "mcl_doors:door_acacia_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_acacia_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_acacia_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_acacia_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_acacia_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_acacia_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_acacia_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_acacia_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_acacia_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_acacia_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_acacia_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_acacia_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_bamboo_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_bamboo_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_bamboo_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_bamboo_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_bamboo_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_bamboo_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_bamboo_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_bamboo_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_bamboo_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_bamboo_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_bamboo_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_bamboo_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_birch_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_birch_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_birch_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_birch_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_birch_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_birch_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_birch_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_birch_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_birch_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_birch_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_birch_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_birch_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_cherry_blossom_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_cherry_blossom_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_b_2" then
-				minetest.swap_node(pos, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
-				minetest.set_node(posAbove, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_cherry_blossom_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_crimson_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_crimson_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_crimson_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_crimson_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_crimson_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_crimson_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_crimson_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_crimson_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_crimson_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_crimson_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_crimson_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_crimson_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_dark_oak_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_dark_oak_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_dark_oak_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_dark_oak_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_dark_oak_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_dark_oak_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_dark_oak_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_dark_oak_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_dark_oak_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_dark_oak_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_dark_oak_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_dark_oak_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_jungle_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_jungle_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_jungle_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_jungle_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_jungle_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_jungle_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_jungle_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_jungle_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_jungle_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_jungle_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_jungle_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_jungle_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_mangrove_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_mangrove_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_mangrove_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_mangrove_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_mangrove_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_mangrove_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_mangrove_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_mangrove_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_mangrove_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_mangrove_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_mangrove_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_mangrove_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_oak_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_oak_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_oak_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_oak_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_oak_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_oak_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_oak_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_oak_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_oak_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_oak_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_oak_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_oak_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_spruce_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_spruce_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_spruce_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_spruce_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_spruce_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_spruce_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_spruce_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_spruce_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_spruce_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_spruce_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_spruce_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_spruce_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_warped_b_1" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_warped_b_2", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_warped_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_warped_b_2" then
-					minetest.swap_node(pos, {name = "mcl_doors:door_warped_b_1", param2 = np2})
-					minetest.set_node(posAbove, {name = "mcl_doors:door_warped_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_warped_t_1" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_warped_b_2", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_warped_t_2", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 				if node.name == "mcl_doors:door_warped_t_2" then
-					minetest.swap_node(posBelow, {name = "mcl_doors:door_warped_b_1", param2 = np2})
-					minetest.set_node(pos, {name = "mcl_doors:door_warped_t_1", param2 = np2})
-					if meta1:get_int("is_open") == 1 then
-						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 0)
-						meta2:set_int("is_open", 0)
-					else
-						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-						meta1:set_int("is_open", 1)
-						meta2:set_int("is_open", 1)
-					end
+					minetest.punch_node(pos)
 				end
 -- Trapdoors: 2 functions. One for opening and one for closing
 				if node.name == "mcl_doors:trapdoor_acacia" then
@@ -675,6 +221,73 @@ register_charge("wind_charge", "Wind Charge", {
 				end
 				if node.name == "mcl_doors:trapdoor_warped_open" then
 					minetest.swap_node(pos, {name = "mcl_doors:trapdoor_warped", param2 = param2_value})
+				end
+-- Gates
+				if node.name == "mcl_fences:acacia_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:acacia_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:bamboo_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:bamboo_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:birch_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:birch_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:cherry_blossom_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:cherry_blossom_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:crimson_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:crimson_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:dark_oak_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:dark_oak_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:jungle_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:jungle_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:mangrove_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:mangrove_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:oak_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:oak_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:spruce_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:spruce_fence_gate_open" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:warped_fence_gate" then
+					minetest.punch_node(pos)
+				end
+				if node.name == "mcl_fences:warped_fence_gate_open" then
+					minetest.punch_node(pos)
 				end
 -- Buttons:
 				if node.name == "mesecons_button:button_acacia_off" then
