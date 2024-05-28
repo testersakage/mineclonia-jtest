@@ -9,6 +9,20 @@ local S = minetest.get_translator("mobs_mc")
 
 
 
+local drop_music_disc = mcl_damage.register_on_death(function(obj, reason)
+	-- Drop a random music disc when killed by skeleton or stray
+	local luaentity = reason.direct:get_luaentity()
+	if luaentity and luaentity.name:find("arrow") then
+		local shooter_luaentity = luaentity._shooter and luaentity._shooter:get_luaentity()
+		if shooter_luaentity and (shooter_luaentity.name == "mobs_mc:skeleton" or shooter_luaentity.name == "mobs_mc:stray") then
+			local loot = mcl_jukebox.get_random_creeper_loot()
+			if loot then
+				minetest.add_item(obj:get_pos(), loot)
+			end
+		end
+	end
+end)
+
 mcl_mobs.register_mob("mobs_mc:creeper", {
 	type = "monster",
 	description = S("Creeper"),
@@ -87,21 +101,7 @@ mcl_mobs.register_mob("mobs_mc:creeper", {
 			end
 		end
 	end,
-	on_die = function(self, pos, cmi_cause)
-		-- Drop a random music disc when killed by skeleton or stray
-		if cmi_cause and cmi_cause.type == "punch" then
-			local luaentity = cmi_cause.puncher and cmi_cause.puncher:get_luaentity()
-			if luaentity and luaentity.name:find("arrow") then
-				local shooter_luaentity = luaentity._shooter and luaentity._shooter:get_luaentity()
-				if shooter_luaentity and (shooter_luaentity.name == "mobs_mc:skeleton" or shooter_luaentity.name == "mobs_mc:stray") then
-					local loot = mcl_jukebox.get_random_creeper_loot()
-					if loot then
-						minetest.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
-					end
-				end
-			end
-		end
-	end,
+	on_die = drop_music_disc,
 	maxdrops = 2,
 	drops = {
 		{name = "mcl_mobitems:gunpowder",
@@ -211,21 +211,7 @@ mcl_mobs.register_mob("mobs_mc:creeper_charged", {
 			end
 		end
 	end,
-	on_die = function(self, pos, cmi_cause)
-		-- Drop a random music disc when killed by skeleton or stray
-		if cmi_cause and cmi_cause.type == "punch" then
-			local luaentity = cmi_cause.puncher and cmi_cause.puncher:get_luaentity()
-			if luaentity and luaentity.name:find("arrow") then
-				local shooter_luaentity = luaentity._shooter and luaentity._shooter:get_luaentity()
-				if shooter_luaentity and (shooter_luaentity.name == "mobs_mc:skeleton" or shooter_luaentity.name == "mobs_mc:stray") then
-					local loot = mcl_jukebox.get_random_creeper_loot()
-					if loot then
-						minetest.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
-					end
-				end
-			end
-		end
-	end,
+	on_die = drop_music_disc,
 	on_lightning_strike = function(self, pos, pos2, objects)
 		 mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
 		 return true
