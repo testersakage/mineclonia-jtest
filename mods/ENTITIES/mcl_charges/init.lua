@@ -20,7 +20,7 @@ wind_burst_spawner = {
 	maxexptime = 0.95,
 	minsize = 12.0,
 	maxsize= 18.0,
-	glow = 1,
+	glow = 100,
 	collisiondetection = true,
 	collision_removal = true,
 }
