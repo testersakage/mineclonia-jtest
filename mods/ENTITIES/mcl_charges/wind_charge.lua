@@ -29,8 +29,6 @@ register_charge("wind_charge", "Wind Charge", {
 		pos.y = pos.y+1
 		local meta2 = minetest.get_meta(pos)
 		pos.y = pos.y-1
-		local sound_open = minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
-		local sound_close = minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 		local params = {}
 			if meta1:get_int("is_open") == 0 and meta2:get_int("is_mirrored") == 0 or meta1:get_int("is_open") == 1 and meta2:get_int("is_mirrored") == 1 then
 				params = {1,2,3,0}
@@ -43,11 +41,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_acacia_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_acacia_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -56,11 +54,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_acacia_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_acacia_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -69,11 +67,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_acacia_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_acacia_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -82,11 +80,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_acacia_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_acacia_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -95,11 +93,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_bamboo_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_bamboo_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -108,11 +106,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_bamboo_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_bamboo_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -121,11 +119,11 @@ register_charge("wind_charge", "Wind Charge", {
  					minetest.swap_node(posBelow, {name = "mcl_doors:door_bamboo_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_bamboo_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -134,11 +132,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_bamboo_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_bamboo_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -147,11 +145,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_birch_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_birch_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -160,11 +158,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_birch_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_birch_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -173,11 +171,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_birch_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_birch_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -186,11 +184,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_birch_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_birch_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -199,24 +197,24 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_cherry_blossom_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_cherry_blossom_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_b_2" then
-  					minetest.swap_node(pos, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
+				minetest.swap_node(pos, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
  					minetest.set_node(posAbove, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -225,11 +223,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_cherry_blossom_b_2", param2 = np2})
  					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -238,11 +236,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_cherry_blossom_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_cherry_blossom_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -251,11 +249,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_crimson_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_crimson_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -264,11 +262,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_crimson_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_crimson_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -277,11 +275,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_crimson_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_crimson_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -290,11 +288,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_crimson_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_crimson_t_1", param2 = np2})
  					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -303,11 +301,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_dark_oak_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_dark_oak_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -316,11 +314,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_dark_oak_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_dark_oak_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -329,11 +327,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_dark_oak_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_dark_oak_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -342,11 +340,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_dark_oak_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_dark_oak_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -355,11 +353,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_jungle_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_jungle_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -368,11 +366,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_jungle_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_jungle_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -381,11 +379,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_jungle_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_jungle_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -394,11 +392,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_jungle_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_jungle_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -407,11 +405,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_mangrove_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_mangrove_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -420,11 +418,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_mangrove_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_mangrove_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -433,11 +431,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_mangrove_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_mangrove_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -446,11 +444,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_mangrove_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_mangrove_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -459,11 +457,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_oak_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_oak_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -472,11 +470,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_oak_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_oak_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -485,11 +483,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_oak_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_oak_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -498,11 +496,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_oak_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_oak_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -511,11 +509,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_spruce_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_spruce_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -524,11 +522,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_spruce_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_spruce_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -537,11 +535,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_spruce_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_spruce_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -550,11 +548,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_spruce_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_spruce_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -563,11 +561,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_warped_b_2", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_warped_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -576,11 +574,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(pos, {name = "mcl_doors:door_warped_b_1", param2 = np2})
 					minetest.set_node(posAbove, {name = "mcl_doors:door_warped_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -589,11 +587,11 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.swap_node(posBelow, {name = "mcl_doors:door_warped_b_2", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_warped_t_2", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
@@ -602,11 +600,11 @@ register_charge("wind_charge", "Wind Charge", {
  					minetest.swap_node(posBelow, {name = "mcl_doors:door_warped_b_1", param2 = np2})
 					minetest.set_node(pos, {name = "mcl_doors:door_warped_t_1", param2 = np2})
 					if meta1:get_int("is_open") == 1 then
-						sound_close
+						minetest.sound_play("doors_door_close", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 0)
 						meta2:set_int("is_open", 0)
 					else
-						sound_open
+						minetest.sound_play("doors_door_open", { pos = pos, gain = 0.4, max_hear_distance = 10 }, true)
 						meta1:set_int("is_open", 1)
 						meta2:set_int("is_open", 1)
 					end
