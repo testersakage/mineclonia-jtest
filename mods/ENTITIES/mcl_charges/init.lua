@@ -49,7 +49,7 @@ function mcl_charges.chorus_flower_effects(pos, radius)
 			maxexptime = 2.0,
 			minsize = radius * 0.66,
 			maxsize = radius * 1.00,
-			texpool = {"mcl_end_chorus_flower_1.png", "mcl_end_chorus_flower_2.png", "mcl_end_chorus_flower_3.png", "mcl_end_chorus_flower_34.png", "mcl_end_chorus_flower_5.png", "mcl_end_chorus_flower_6.png", "mcl_end_chorus_flower_7.png", "mcl_end_chorus_flower_8.png", "mcl_end_chorus_flower_9.png", "mcl_end_chorus_flower_10.png"},
+			texpool = {"mcl_end_chorus_flower_1.png", "mcl_end_chorus_flower_2.png", "mcl_end_chorus_flower_3.png", "mcl_end_chorus_flower_4.png", "mcl_end_chorus_flower_5.png", "mcl_end_chorus_flower_6.png", "mcl_end_chorus_flower_7.png", "mcl_end_chorus_flower_8.png", "mcl_end_chorus_flower_9.png", "mcl_end_chorus_flower_10.png"},
 			collisiondetection = true,
 		})
 end
