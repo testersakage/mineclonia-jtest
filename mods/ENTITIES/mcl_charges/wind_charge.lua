@@ -21,11 +21,11 @@ register_charge("wind_charge", "Wind Charge", {
 		minetest.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
 		local pos = self.object:get_pos()
 		local node = minetest.get_node(pos)
-        local posAbove = {x = pos.x, y = pos.y + 1, z = pos.z}
+		local posAbove = {x = pos.x, y = pos.y + 1, z = pos.z}
 		local posBelow = {x = pos.x, y = pos.y - 1, z = pos.z}
-        local param2_value = minetest.get_node(pos).param2
-        local p2 = param2_value
-        local meta1 = minetest.get_meta(pos)
+		local param2_value = minetest.get_node(pos).param2
+		local p2 = param2_value
+		local meta1 = minetest.get_meta(pos)
 		pos.y = pos.y+1
 		local meta2 = minetest.get_meta(pos)
 		pos.y = pos.y-1
