@@ -3,7 +3,12 @@ local modpath = minetest.get_modpath(modname)
 
 -- Cooldown time and global storing of cooldown
 local cooldown_time = 1
-mcl_charges_cooldown_data = {}
+mcl_charges_cooldown = {}
+if minetest.global_exists("mcl_charges_cooldown") == false then
+	minetest.register_globalstep(function(dtime)
+		minetest.set_global_exists("mcl_charges_cooldown", {})
+	end)
+end
 mcl_charges = {}
 local S = minetest.get_translator("mcl_charges")
 --Wind Charge Particle effects
@@ -136,58 +141,55 @@ function register_charge(name, descr, def)
 		inventory_image = "mcl_charges_" .. name .. ".png",
 
 		on_place = function(itemstack, placer, pointed_thing)
-
-		local playername = placer:get_player_name()
-		if mcl_charges_cooldown_data[playername] == nil then
-			mcl_charges_cooldown_data[playername] = 0
-		end
-		local ig_time = minetest.get_gametime()
-				if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
-					mcl_charges_cooldown_data[playername] = ig_time
-							local velocity = 30
-							local dir = placer:get_look_dir()
-							local playerpos = placer:get_pos()
-							local obj = minetest.add_entity({
-								x = playerpos.x + dir.x,
-								y = playerpos.y + 1.3 + dir.y,
-								z = playerpos.z + dir.z
-								}, "mcl_charges:" .. name .. "_flying")
-							local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-							local acc = {x = 0, y = 0, z = 0}
-								obj:set_velocity(vec)
-								obj:set_acceleration(acc)
-									local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-								itemstack:take_item()
-							return itemstack
-					else
-						local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
-					end
-end,
-on_secondary_use = function(itemstack, placer, pointed_thing)
-	local playername = placer:get_player_name()
-	if mcl_charges_cooldown_data[playername] == nil then
-		mcl_charges_cooldown_data[playername] = 0
-	end
-		local ig_time = minetest.get_gametime()
-		if ig_time - mcl_charges_cooldown_data[playername] >= cooldown_time then
-			mcl_charges_cooldown_data[playername] = ig_time
+			local playername = placer:get_player_name()
+			if mcl_charges_cooldown[playername] == nil then
+				mcl_charges_cooldown[playername] = 0
+			end
+		local current_time = minetest.get_gametime()
+			if current_time - mcl_charges_cooldown[playername] >= cooldown_time then
+				mcl_charges_cooldown[playername] = current_time
 					local velocity = 30
+					local dir = placer:get_look_dir()
+					local playerpos = placer:get_pos()
+					local obj = minetest.add_entity({
+						x = playerpos.x + dir.x,
+						y = playerpos.y + 1.3 + dir.y,
+						z = playerpos.z + dir.z
+					}, "mcl_charges:" .. name .. "_flying")
+					local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
+					local acc = {x = 0, y = 0, z = 0}
+					obj:set_velocity(vec)
+					obj:set_acceleration(acc)
+					local ent = obj:get_luaentity() ; ent.posthrow = playerpos
+					itemstack:take_item()
+				return itemstack
+		end
+	end,
+on_secondary_use = function(itemstack, placer, pointed_thing)
+		local playername = placer:get_player_name()
+		if mcl_charges_cooldown[playername] == nil then
+			mcl_charges_cooldown[playername] = 0
+		end
+	local current_time = minetest.get_gametime()
+		if current_time - mcl_charges_cooldown[playername] >= cooldown_time then
+			mcl_charges_cooldown[playername] = current_time
+				local velocity = 30
 					local dir = placer:get_look_dir()
 					local playerpos = placer:get_pos()
 					local obj = minetest.add_entity({
 						x = playerpos.x + dir.x,
 						y = playerpos.y + 2 + dir.y,
 						z = playerpos.z + dir.z
-						}, "mcl_charges:" .. name .. "_flying")
+					}, "mcl_charges:" .. name .. "_flying")
 					local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
 					local acc = {x = 0, y = 0, z = 0}
-						obj:set_velocity(vec)
-						obj:set_acceleration(acc)
+					obj:set_velocity(vec)
+					obj:set_acceleration(acc)
 					local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-						itemstack:take_item()
-					return itemstack
-				else
-					local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_cooldown_data[playername]))
+					itemstack:take_item()
+				return itemstack
+			--[[	else
+					local remaining_cooldown = math.ceil(cooldown_time - (ig_time - mcl_charges_mcl_charges_cooldown[playername]))]]
 			end
 end,
 _on_dispense = function(stack, pos, droppos, dropnode, dropdir)
