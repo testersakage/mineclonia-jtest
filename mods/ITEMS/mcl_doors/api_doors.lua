@@ -298,6 +298,12 @@ function mcl_doors:register_door(name, def)
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		sounds = def.sounds,
 
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				on_mesecons_signal_open(pos, node)
+			end
+		end,
+
 		after_destruct = function(bottom, oldnode)
 			local meta_bottom = minetest.get_meta(bottom)
 			if meta_bottom:get_int("rotation") == 1 then
@@ -369,6 +375,12 @@ function mcl_doors:register_door(name, def)
 		_mcl_hardness = def._mcl_hardness,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		sounds = def.sounds,
+
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				on_mesecons_signal_open_top(pos, node)
+			end
+		end,
 
 		after_destruct = function(top, oldnode)
 			local meta_top = minetest.get_meta(top)
@@ -442,6 +454,12 @@ function mcl_doors:register_door(name, def)
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		sounds = def.sounds,
 
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				on_mesecons_signal_close(pos, node)
+			end
+		end,
+
 		after_destruct = function(bottom, oldnode)
 			local meta_bottom = minetest.get_meta(bottom)
 			if meta_bottom:get_int("rotation") == 1 then
@@ -513,6 +531,12 @@ function mcl_doors:register_door(name, def)
 		_mcl_hardness = def._mcl_hardness,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		sounds = def.sounds,
+
+		on_punch = function(pos, node, puncher)
+			if not puncher:is_player() then
+				on_mesecons_signal_close(pos, node)
+			end
+		end,
 
 		after_destruct = function(top, oldnode)
 			local meta_top = minetest.get_meta(top)
