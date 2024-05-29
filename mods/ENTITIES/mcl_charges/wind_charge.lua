@@ -335,41 +335,7 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.set_node(pos, {name="mcl_fences:warped_fence_gate", param1=node.param1, param2=node.param2})
 					meta2:set_int("state", 0)
 				end
--- Buttons:
-				if node.name == "mesecons_button:button_acacia_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_bamboo_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_birch_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_cherry_blossom_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_crimson_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_dark_oak_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_jungle_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_mangrove_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_oak_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_spruce_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_button:button_warped_off" then
-					minetest.punch_node(pos)
-				end
--- Bell, Chorus flower, Decorated Pot, and Wall Lever:
+-- Bell, Chorus flower, and Decorated Pot:
 				if node.name == "mcl_bells:bell" then
 					mcl_bells.ring_once(pos)
 				end
@@ -389,12 +355,6 @@ register_charge("wind_charge", "Wind Charge", {
 					minetest.add_item(pos, {name = "mcl_core:brick"})
 					minetest.add_item(pos, {name = "mcl_core:brick"})
 					mcl_charges.pot_effects(pos, radius)
-				end
-				if node.name == "mesecons_walllever:wall_lever_off" then
-					minetest.punch_node(pos)
-				end
-				if node.name == "mesecons_walllever:wall_lever_on" then
-					minetest.punch_node(pos)
 				end
 	end,
 	hit_player_alt = function(self, pos)
