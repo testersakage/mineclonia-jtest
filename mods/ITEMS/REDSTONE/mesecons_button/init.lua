@@ -145,11 +145,6 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 		_doc_items_usagehelp = buttonuse,
 		on_place = on_button_place,
 		node_placement_prediction = "",
-		on_punch = function(pos, node, puncher)
-			if not puncher:is_player() then
-				mesecon.push_button(pos, node)
-			end
-		end,
 		on_rightclick = function(pos, node)
 			mesecon.push_button(pos, node)
 		end,
@@ -165,6 +160,11 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 				mesecon.push_button(pos, node)
 				return true
 			end
+		end,
+		_on_wind_charge_hit = function(pos, arrowent)
+			local node = minetest.get_node(pos)
+				mesecon.push_button(pos, node)
+			return true
 		end,
 		_mcl_button_basename = basename,
 		_mcl_button_timer = button_timer,
