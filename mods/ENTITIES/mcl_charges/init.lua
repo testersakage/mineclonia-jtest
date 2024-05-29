@@ -215,9 +215,14 @@ minetest.register_entity("mcl_charges:" .. name .. "_flying", {
 			local pos = self.object:get_pos()
 			local node = minetest.get_node(pos)
 			local n = node.name
+			local dpos = vector.round(vector.new(pos)) -- digital pos
 				if n ~= "air" then
 					def.hit_node(self, pos, node)
 					self.object:remove()
+				end
+				local bdef = minetest.registered_nodes[node.name]
+				if (bdef and bdef._on_wind_charge_hit) then
+					bdef._on_wind_charge_hit(dpos, self)
 				end
 					if self.hit_player or self.hit_mob or self.hit_object then
 						for _,player in pairs(minetest.get_objects_inside_radius(pos, 0.6)) do
