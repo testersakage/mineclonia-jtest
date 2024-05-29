@@ -59,13 +59,6 @@ minetest.register_node("mesecons_walllever:wall_lever_off", {
 	_tt_help = S("Provides redstone power while it's turned on"),
 	_doc_items_longdesc = S("A lever is a redstone component which can be flipped on and off. It supplies redstone power to adjacent blocks while it is in the “on” state."),
 	_doc_items_usagehelp = S("Use the lever to flip it on or off."),
-	on_punch = function(pos, node, puncher)
-		if not puncher:is_player() then
-			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_on", param2=node.param2})
-			mesecon.receptor_on(pos, lever_get_output_rules(node))
-			minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16}, true)
-		end
-	end,
 	on_rightclick = function(pos, node)
 		minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_on", param2=node.param2})
 		mesecon.receptor_on(pos, lever_get_output_rules(node))
@@ -151,6 +144,13 @@ minetest.register_node("mesecons_walllever:wall_lever_off", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_on_wind_charge_hit = function(pos, arrowent)
+		local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_on", param2=node.param2})
+			mesecon.receptor_on(pos, lever_get_output_rules(node))
+			minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16}, true)
+		return true
+	end,
 })
 minetest.register_node("mesecons_walllever:wall_lever_on", {
 	drawtype = "mesh",
@@ -171,13 +171,6 @@ minetest.register_node("mesecons_walllever:wall_lever_on", {
 	is_ground_content = false,
 	drop = "mesecons_walllever:wall_lever_off",
 	_doc_items_create_entry = false,
-	on_punch = function(pos, node, puncher)
-		if not puncher:is_player() then
-			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_off", param2=node.param2})
-			mesecon.receptor_off(pos, lever_get_output_rules(node))
-			minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16, pitch=0.9}, true)
-		end
-	end,
 	on_rightclick = function(pos, node)
 		minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_off", param2=node.param2})
 		mesecon.receptor_off(pos, lever_get_output_rules(node))
@@ -191,6 +184,13 @@ minetest.register_node("mesecons_walllever:wall_lever_on", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_on_wind_charge_hit = function(pos, arrowent)
+		local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_off", param2=node.param2})
+			mesecon.receptor_off(pos, lever_get_output_rules(node))
+			minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16, pitch=0.9}, true)
+		return true
+	end,
 })
 
 minetest.register_craft({
