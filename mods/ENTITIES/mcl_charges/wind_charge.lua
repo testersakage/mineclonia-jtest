@@ -22,138 +22,140 @@ register_charge("wind_charge", "Wind Charge", {
 		local pos = self.object:get_pos()
 		local node = minetest.get_node(pos)
 		local param2_value = minetest.get_node(pos).param2
+		local meta2 = minetest.get_meta(pos)
+		local state2 = meta2:get_int("state")
 -- Doors: There are 4 functions per door. Two to open and two to close. One for each the top and bottom.
 				if node.name == "mcl_doors:door_acacia_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_acacia_t_1", "mcl_doors:door_acacia_b_2", "mcl_doors:door_acacia_t_2")
 				end
 				if node.name == "mcl_doors:door_acacia_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_acacia_t_2", "mcl_doors:door_acacia_b_1", "mcl_doors:door_acacia_t_1")
 				end
 				if node.name == "mcl_doors:door_acacia_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_acacia_b_1", "mcl_doors:door_acacia_t_2", "mcl_doors:door_acacia_b_2")
 				end
 				if node.name == "mcl_doors:door_acacia_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_acacia_b_2", "mcl_doors:door_acacia_t_1", "mcl_doors:door_acacia_b_1")
 				end
 				if node.name == "mcl_doors:door_bamboo_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_bamboo_t_1", "mcl_doors:door_bamboo_b_2", "mcl_doors:door_bamboo_t_2")
 				end
 				if node.name == "mcl_doors:door_bamboo_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_bamboo_t_2", "mcl_doors:door_bamboo_b_1", "mcl_doors:door_bamboo_t_1")
 				end
 				if node.name == "mcl_doors:door_bamboo_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_bamboo_b_1", "mcl_doors:door_bamboo_t_2", "mcl_doors:door_bamboo_b_2")
 				end
 				if node.name == "mcl_doors:door_bamboo_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_bamboo_b_2", "mcl_doors:door_bamboo_t_1", "mcl_doors:door_bamboo_b_1")
 				end
 				if node.name == "mcl_doors:door_birch_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_birch_t_1", "mcl_doors:door_birch_b_2", "mcl_doors:door_birch_t_2")
 				end
 				if node.name == "mcl_doors:door_birch_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_birch_t_2", "mcl_doors:door_birch_b_1", "mcl_doors:door_birch_t_1")
 				end
 				if node.name == "mcl_doors:door_birch_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_birch_b_1", "mcl_doors:door_birch_t_2", "mcl_doors:door_birch_b_2")
 				end
 				if node.name == "mcl_doors:door_birch_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_birch_b_2", "mcl_doors:door_birch_t_1", "mcl_doors:door_birch_b_1")
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_cherry_blossom_t_1", "mcl_doors:door_cherry_blossom_b_2", "mcl_doors:door_cherry_blossom_t_2")
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_cherry_blossom_t_2", "mcl_doors:door_cherry_blossom_b_1", "mcl_doors:door_cherry_blossom_t_1")
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_cherry_blossom_b_1", "mcl_doors:door_cherry_blossom_t_2", "mcl_doors:door_cherry_blossom_b_2")
 				end
 				if node.name == "mcl_doors:door_cherry_blossom_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_cherry_blossom_b_2", "mcl_doors:door_cherry_blossom_t_1", "mcl_doors:door_cherry_blossom_b_1")
 				end
 				if node.name == "mcl_doors:door_crimson_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_crimson_t_1", "mcl_doors:door_crimson_b_2", "mcl_doors:door_crimson_t_2")
 				end
 				if node.name == "mcl_doors:door_crimson_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_crimson_t_2", "mcl_doors:door_crimson_b_1", "mcl_doors:door_crimson_t_1")
 				end
 				if node.name == "mcl_doors:door_crimson_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_crimson_b_1", "mcl_doors:door_crimson_t_2", "mcl_doors:door_crimson_b_2")
 				end
 				if node.name == "mcl_doors:door_crimson_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_crimson_b_2", "mcl_doors:door_crimson_t_1", "mcl_doors:door_crimson_b_1")
 				end
 				if node.name == "mcl_doors:door_dark_oak_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_dark_oak_t_1", "mcl_doors:door_dark_oak_b_2", "mcl_doors:door_dark_oak_t_2")
 				end
 				if node.name == "mcl_doors:door_dark_oak_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_dark_oak_t_2", "mcl_doors:door_dark_oak_b_1", "mcl_doors:door_dark_oak_t_1")
 				end
 				if node.name == "mcl_doors:door_dark_oak_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_dark_oak_b_1", "mcl_doors:door_dark_oak_t_2", "mcl_doors:door_dark_oak_b_2")
 				end
 				if node.name == "mcl_doors:door_dark_oak_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_dark_oak_b_2", "mcl_doors:door_dark_oak_t_1", "mcl_doors:door_dark_oak_b_1")
 				end
 				if node.name == "mcl_doors:door_jungle_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_jungle_t_1", "mcl_doors:door_jungle_b_2", "mcl_doors:door_jungle_t_2")
 				end
 				if node.name == "mcl_doors:door_jungle_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_jungle_t_2", "mcl_doors:door_jungle_b_1", "mcl_doors:door_jungle_t_1")
 				end
 				if node.name == "mcl_doors:door_jungle_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_jungle_b_1", "mcl_doors:door_jungle_t_2", "mcl_doors:door_jungle_b_2")
 				end
 				if node.name == "mcl_doors:door_jungle_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_jungle_b_2", "mcl_doors:door_jungle_t_1", "mcl_doors:door_jungle_b_1")
 				end
 				if node.name == "mcl_doors:door_mangrove_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_mangrove_t_1", "mcl_doors:door_mangrove_b_2", "mcl_doors:door_mangrove_t_2")
 				end
 				if node.name == "mcl_doors:door_mangrove_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_mangrove_t_2", "mcl_doors:door_mangrove_b_1", "mcl_doors:door_mangrove_t_1")
 				end
 				if node.name == "mcl_doors:door_mangrove_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_mangrove_b_1", "mcl_doors:door_mangrove_t_2", "mcl_doors:door_mangrove_b_2")
 				end
 				if node.name == "mcl_doors:door_mangrove_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_mangrove_b_2", "mcl_doors:door_mangrove_t_1", "mcl_doors:door_mangrove_b_1")
 				end
 				if node.name == "mcl_doors:door_oak_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_oak_t_1", "mcl_doors:door_oak_b_2", "mcl_doors:door_oak_t_2")
 				end
 				if node.name == "mcl_doors:door_oak_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_oak_t_2", "mcl_doors:door_oak_b_1", "mcl_doors:door_oak_t_1")
 				end
 				if node.name == "mcl_doors:door_oak_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_oak_b_1", "mcl_doors:door_oak_t_2", "mcl_doors:door_oak_b_2")
 				end
 				if node.name == "mcl_doors:door_oak_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_oak_b_2", "mcl_doors:door_oak_t_1", "mcl_doors:door_oak_b_1")
 				end
 				if node.name == "mcl_doors:door_spruce_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_spruce_t_1", "mcl_doors:door_spruce_b_2", "mcl_doors:door_spruce_t_2")
 				end
 				if node.name == "mcl_doors:door_spruce_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_spruce_t_2", "mcl_doors:door_spruce_b_1", "mcl_doors:door_spruce_t_1")
 				end
 				if node.name == "mcl_doors:door_spruce_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_spruce_b_1", "mcl_doors:door_spruce_t_2", "mcl_doors:door_spruce_b_2")
 				end
 				if node.name == "mcl_doors:door_spruce_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_spruce_b_2", "mcl_doors:door_spruce_t_1", "mcl_doors:door_spruce_b_1")
 				end
 				if node.name == "mcl_doors:door_warped_b_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_warped_t_1", "mcl_doors:door_warped_b_2", "mcl_doors:door_warped_t_2")
 				end
 				if node.name == "mcl_doors:door_warped_b_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, 1, "mcl_doors:door_warped_t_2", "mcl_doors:door_warped_b_1", "mcl_doors:door_warped_t_1")
 				end
 				if node.name == "mcl_doors:door_warped_t_1" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_warped_b_1", "mcl_doors:door_warped_t_2", "mcl_doors:door_warped_b_2")
 				end
 				if node.name == "mcl_doors:door_warped_t_2" then
-					minetest.punch_node(pos)
+					on_open_close(pos, -1, "mcl_doors:door_warped_b_2", "mcl_doors:door_warped_t_1", "mcl_doors:door_warped_b_1")
 				end
 -- Trapdoors: 2 functions. One for opening and one for closing
 				if node.name == "mcl_doors:trapdoor_acacia" then
@@ -224,70 +226,114 @@ register_charge("wind_charge", "Wind Charge", {
 				end
 -- Gates
 				if node.name == "mcl_fences:acacia_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:acacia_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:acacia_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:acacia_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:bamboo_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:bamboo_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:bamboo_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:bamboo_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:birch_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:birch_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:birch_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:birch_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:cherry_blossom_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:cherry_blossom_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:cherry_blossom_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:cherry_blossom_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:crimson_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:crimson_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:crimson_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:crimson_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:dark_oak_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:dark_oak_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:dark_oak_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:dark_oak_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:jungle_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:jungle_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:jungle_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:jungle_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:mangrove_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:mangrove_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:mangrove_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:mangrove_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:oak_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:oak_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:oak_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:oak_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:spruce_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:spruce_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:spruce_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:spruce_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 				if node.name == "mcl_fences:warped_fence_gate" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:warped_fence_gate_open", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 1)
 				end
 				if node.name == "mcl_fences:warped_fence_gate_open" then
-					minetest.punch_node(pos)
+					minetest.sound_play(sound_open, {gain = sound_gain_open, max_hear_distance = 10, pos = pos}, true)
+					minetest.set_node(pos, {name="mcl_fences:warped_fence_gate", param1=node.param1, param2=node.param2})
+					meta2:set_int("state", 0)
 				end
 -- Buttons:
 				if node.name == "mesecons_button:button_acacia_off" then
@@ -353,7 +399,7 @@ register_charge("wind_charge", "Wind Charge", {
 	end,
 	hit_player_alt = function(self, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
-		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
+		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10))
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 			v.y = pr:next(-9, -4) / 10
 				minetest.add_particlespawner(table.merge(wind_burst_spawner, {
@@ -366,7 +412,7 @@ register_charge("wind_charge", "Wind Charge", {
 	end,
 	hit_mob_alt = function(self, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
-		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
+		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10))
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 			v.y = pr:next(-9, -4) / 10
 				minetest.add_particlespawner(table.merge(wind_burst_spawner, {
