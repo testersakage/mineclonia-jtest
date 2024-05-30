@@ -23,7 +23,6 @@ register_charge("wind_charge", "Wind Charge", {
 		local node = minetest.get_node(pos)
 		local param2_value = minetest.get_node(pos).param2
 		local meta2 = minetest.get_meta(pos)
-		local state2 = meta2:get_int("state")
 -- Doors: There are 4 functions per door. Two to open and two to close. One for each the top and bottom.
 				if node.name == "mcl_doors:door_acacia_b_1" then
 					on_open_close(pos, 1, "mcl_doors:door_acacia_t_1", "mcl_doors:door_acacia_b_2", "mcl_doors:door_acacia_t_2")
