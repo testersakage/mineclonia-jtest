@@ -312,6 +312,11 @@ end
 		end,
 
 		on_rightclick = on_rightclick,
+		_on_wind_charge_hit = function(pos)
+			local node = minetest.get_node(pos)
+				on_mesecons_signal_open(pos, node)
+			return true
+		end,
 
 		mesecons = { effector = {
 			action_on = on_mesecons_signal_open,
@@ -383,6 +388,11 @@ end
 		end,
 
 		on_rightclick = on_rightclick,
+		_on_wind_charge_hit = function(pos)
+			local node = minetest.get_node(pos)
+				on_mesecons_signal_open_top(pos, node)
+			return true
+		end,
 
 		mesecons = { effector = {
 			action_on = on_mesecons_signal_open_top,
@@ -456,6 +466,11 @@ end
 		end,
 
 		on_rightclick = on_rightclick,
+		_on_wind_charge_hit = function(pos)
+			local node = minetest.get_node(pos)
+				on_mesecons_signal_close(pos, node)
+			return true
+		end,
 
 		mesecons = { effector = {
 			action_off = on_mesecons_signal_close,
@@ -527,6 +542,11 @@ end
 		end,
 
 		on_rightclick = on_rightclick,
+		_on_wind_charge_hit = function(pos)
+			local node = minetest.get_node(pos)
+				on_mesecons_signal_close_top(pos, node)
+			return true
+		end,
 
 		mesecons = { effector = {
 			action_off = on_mesecons_signal_close_top,
