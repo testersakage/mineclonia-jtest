@@ -161,7 +161,7 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 				return true
 			end
 		end,
-		_on_wind_charge_hit = function(pos, arrowent)
+		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
 				mesecon.push_button(pos, node)
 			return true
