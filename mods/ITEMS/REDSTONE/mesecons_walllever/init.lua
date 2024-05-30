@@ -144,7 +144,7 @@ minetest.register_node("mesecons_walllever:wall_lever_off", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_on_wind_charge_hit = function(pos, arrowent)
+	_on_wind_charge_hit = function(pos)
 		local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_on", param2=node.param2})
 			mesecon.receptor_on(pos, lever_get_output_rules(node))
@@ -184,7 +184,7 @@ minetest.register_node("mesecons_walllever:wall_lever_on", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_on_wind_charge_hit = function(pos, arrowent)
+	_on_wind_charge_hit = function(pos)
 		local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mesecons_walllever:wall_lever_off", param2=node.param2})
 			mesecon.receptor_off(pos, lever_get_output_rules(node))
