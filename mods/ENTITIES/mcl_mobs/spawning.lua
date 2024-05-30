@@ -92,76 +92,37 @@ end
 --this is where all of the spawning information is kept
 local spawn_dictionary = {}
 
+local spawn_defaults = {
+	dimension = "overworld",
+	type_of_spawning = "ground",
+	min_light = 7,
+	max_light = minetest.LIGHT_MAX + 1,
+	chance = 1000,
+	aoc = aoc_range,
+	min_height = -31000,
+	max_height = 31000,
+}
+
+local spawn_defaults_meta = { __INDEX = spawn_defaults }
+
 function mcl_mobs.spawn_setup(def)
 	if not mobs_spawn then return end
 
-	if not def then
-		minetest.log("warning", "Empty mob spawn setup definition")
-		return
-	end
-
-	local name = def.name
-	if not name then
-		minetest.log("warning", "Missing mob name")
-		return
-	end
+	assert(def, "Empty spawn setup definition from mod: "..tostring(minetest.get_current_modname()))
+	assert(def.name, "Missing mob name from from mod: "..tostring(minetest.get_current_modname()))
 
 	local mob_def = minetest.registered_entities[def.name]
-	if not mob_def then
-		minetest.log("warning","spawn definition with invalid entity: "..tostring(def.name))
-		return
-	end
-
+	assert(mob_def, "spawn definition with invalid entity: "..tostring(def.name))
 	if peaceful_mode and not mob_def.persist_in_peaceful then return end
+	assert(def.chance > 0, "Chance shouldn't be less than 1 (mob name: " .. def.name ..")")
 
-	local dimension        = def.dimension or "overworld"
-	local type_of_spawning = def.type_of_spawning or "ground"
-	local biomes           = def.biomes
-	local biomes_except    = def.biomes_except
-	local min_light        = def.min_light or mob_def.min_light or (mob_def.spawn_class == "hostile" and 0) or 7
-	local max_light        = def.max_light or mob_def.max_light or (mob_def.spawn_class == "hostile" and 7) or minetest.LIGHT_MAX + 1
-	local chance           = def.chance or 1000
-	local aoc              = def.aoc or aoc_range
-	local min_height       = def.min_height or mcl_vars["mg_"..dimension.."_min"] or -31000
-	local max_height       = def.max_height or mcl_vars["mg_"..dimension.."_max"] or 31000
-	local day_toggle       = def.day_toggle
-	local on_spawn         = def.on_spawn
-	local check_position   = def.check_position
+	setmetatable(def, spawn_defaults_meta)
+	def.min_light        = def.min_light or mob_def.min_light or (mob_def.spawn_class == "hostile" and 0)
+	def.max_light        = def.max_light or mob_def.max_light or (mob_def.spawn_class == "hostile" and 7)
+	def.min_height       = def.min_height or mcl_vars["mg_"..def.dimension.."_min"]
+	def.max_height       = def.max_height or mcl_vars["mg_"..def.dimension.."_max"]
 
-	-- chance/spawn number override in minetest.conf for registered mob
-	local numbers = minetest.settings:get(name)
-	if numbers then
-		numbers = numbers:split(",")
-		chance = tonumber(numbers[1]) or chance
-		aoc = tonumber(numbers[2]) or aoc
-		if chance == 0 then
-			minetest.log("warning", string.format("[mcl_mobs] %s has spawning disabled", name))
-			return
-		end
-		minetest.log("action", string.format("[mcl_mobs] Chance setting for %s changed to %s (total: %s)", name, chance, aoc))
-	end
-
-	if chance < 1 then
-		chance = 1
-		minetest.log("warning", "Chance shouldn't be less than 1 (mob name: " .. name ..")")
-	end
-
-	spawn_dictionary[#spawn_dictionary + 1] = {
-		name             = name,
-		dimension        = dimension,
-		type_of_spawning = type_of_spawning,
-		biomes           = biomes,
-		biomes_except    = biomes_except,
-		min_light        = min_light,
-		max_light        = max_light,
-		chance           = chance,
-		aoc              = aoc,
-		min_height       = min_height,
-		max_height       = max_height,
-		day_toggle       = day_toggle,
-		check_position   = check_position,
-		on_spawn         = on_spawn,
-	}
+	table.insert(spawn_dictionary, def)
 end
 
 function mcl_mobs.get_mob_light_level(mob,dim)
