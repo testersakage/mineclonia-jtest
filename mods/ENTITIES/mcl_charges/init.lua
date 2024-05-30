@@ -201,9 +201,9 @@ _on_dispense = function(stack, pos, droppos, dropnode, dropdir)
 minetest.register_entity("mcl_charges:" .. name .. "_flying", {
 	initial_properties = {
 		visual = "mesh",
-		mesh = "wind_charge_test3.obj",
+		mesh = name..".obj",
 		visual_size = {x=2, y=1.5},
-		textures = {"mcl_charges_" .. name .. "_test.png"},
+		textures = {"mcl_charges_" .. name .. "_entity.png"},
 		hp_max = 20,
 		collisionbox = {-0.1,-0.1,-0.1, 0.1,0.0,0.1},
 		collide_with_objects = true,
