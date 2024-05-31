@@ -314,7 +314,9 @@ end
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
+			if not node.name == "mcl_doors:iron_door_b_1" then
 				on_mesecons_signal_open(pos, node)
+			end
 			return true
 		end,
 
@@ -390,7 +392,9 @@ end
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
+			if not node.name == "mcl_doors:iron_door_t_1" then
 				on_mesecons_signal_open_top(pos, node)
+			end
 			return true
 		end,
 
@@ -468,7 +472,9 @@ end
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
+			if not node.name == "mcl_doors:iron_door_b_2" then
 				on_mesecons_signal_close(pos, node)
+			end
 			return true
 		end,
 
@@ -544,7 +550,9 @@ end
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
+			if not node.name == "mcl_doors:iron_door_t_2" then
 				on_mesecons_signal_close_top(pos, node)
+			end
 			return true
 		end,
 
