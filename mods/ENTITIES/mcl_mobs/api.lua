@@ -307,10 +307,8 @@ function mob_class:mob_activate(staticdata, dtime)
 
 	if not self.wears_armor and self.armor_list then
 		self.armor_list = nil
-	end
-
-	if not self._run_armor_init and self.wears_armor then
-		self.armor_list={helmet="",chestplate="",boots="",leggings=""}
+	elseif not self._run_armor_init and self.wears_armor then
+		self.armor_list = { head = "", torso = "", feet = "", legs = "" }
 		self:set_armor_texture()
 		self._run_armor_init = true
 	end
