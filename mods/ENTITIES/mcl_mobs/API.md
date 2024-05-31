@@ -700,7 +700,7 @@ position.
  * 'offset' position table containing offset values
 
 
-`mcl_mobs.drive(self, move_animation, stand_animation, can_fly, dtime)`
+`mob:drive(move_animation, stand_animation, can_fly, dtime)`
 
 This function allows an attached player to move the mob around and animate it at
 same time.

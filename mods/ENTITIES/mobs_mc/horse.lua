@@ -176,7 +176,7 @@ local horse = {
 		end
 
 		if self.driver and self._saddle then
-			mcl_mobs.drive(self, "walk", "stand", false, dtime)
+			self:drive("walk", "stand", false, dtime)
 			return false
 		end
 		return true
@@ -233,7 +233,7 @@ local horse = {
 				temper_increase = 10
 			elseif not self.driver then
 				self.object:set_properties({stepheight = 1.1})
-				mcl_mobs.attach(self, clicker)
+				self:attach(clicker)
 				self.buck_off_time = 40 -- TODO how long does it take in minecraft?
 				if self.temper > 100 then
 					self.tamed = true -- NOTE taming can only be finished by riding the horse
@@ -281,7 +281,7 @@ local horse = {
 				return
 			elseif not self.driver and self._saddle then
 				self.object:set_properties({stepheight = 1.1})
-				mcl_mobs.attach(self, clicker)
+				self:attach(clicker)
 			end
 		end
 	end,

@@ -111,7 +111,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		end
 
 		if self.driver then
-			mcl_mobs.drive(self, "walk", "stand", false, dtime)
+			self:drive("walk", "stand", false, dtime)
 			return false
 		end
 
@@ -150,7 +150,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 				mcl_mobs.detach(clicker, {x = 1, y = 0, z = 1})
 			elseif not self.driver then
 				self.object:set_properties({stepheight = 1.1})
-				mcl_mobs.attach(self, clicker)
+				self:attach(clicker)
 			end
 		end
 	end,

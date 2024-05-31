@@ -1,9 +1,5 @@
 local mob_class = mcl_mobs.mob_class
 
-local enable_crash = false
-local crash_threshold = 6.5 -- ignored if enable_crash=false
-
-
 local node_ok = function(pos, fallback)
 	fallback = fallback or mcl_mobs.fallback_node
 	local node = minetest.get_node_or_nil(pos)
@@ -12,7 +8,6 @@ local node_ok = function(pos, fallback)
 	end
 	return {name = fallback}
 end
-
 
 local function node_is(pos)
 	local node = node_ok(pos)
@@ -81,33 +76,33 @@ end)
 minetest.register_on_leaveplayer(force_detach)
 minetest.register_on_dieplayer(force_detach)
 
-function mcl_mobs.attach(entity, player)
+function mob_class:attach(player)
 	local attach_at, eye_offset
-	entity.player_rotation = entity.player_rotation or {x = 0, y = 0, z = 0}
-	entity.driver_attach_at = entity.driver_attach_at or {x = 0, y = 0, z = 0}
-	entity.driver_eye_offset = entity.driver_eye_offset or {x = 0, y = 0, z = 0}
-	entity.driver_scale = entity.driver_scale or {x = 1, y = 1}
+	self.player_rotation = self.player_rotation or {x = 0, y = 0, z = 0}
+	self.driver_attach_at = self.driver_attach_at or {x = 0, y = 0, z = 0}
+	self.driver_eye_offset = self.driver_eye_offset or {x = 0, y = 0, z = 0}
+	self.driver_scale = self.driver_scale or {x = 1, y = 1}
 
 	local rot_view = 0
 
-	if entity.player_rotation.y == 90 then
+	if self.player_rotation.y == 90 then
 		rot_view = math.pi/2
 	end
 
-	attach_at = entity.driver_attach_at
-	eye_offset = entity.driver_eye_offset
-	entity.driver = player
+	attach_at = self.driver_attach_at
+	eye_offset = self.driver_eye_offset
+	self.driver = player
 
 	force_detach(player)
 
-	player:set_attach(entity.object, "", attach_at, entity.player_rotation)
+	player:set_attach(self.object, "", attach_at, self.player_rotation)
 	mcl_player.players[player].attached = true
 	player:set_eye_offset(eye_offset, {x = 0, y = 0, z = 0})
 
 	player:set_properties({
 		visual_size = {
-			x = entity.driver_scale.x,
-			y = entity.driver_scale.y
+			x = self.driver_scale.x,
+			y = self.driver_scale.y
 		}
 	})
 
@@ -118,7 +113,7 @@ function mcl_mobs.attach(entity, player)
 		end
 	end, player:get_player_name())
 
-	player:set_look_horizontal(entity.object:get_yaw() - rot_view)
+	player:set_look_horizontal(self.object:get_yaw() - rot_view)
 end
 
 
@@ -129,46 +124,46 @@ function mcl_mobs.detach(player, offset)
 end
 
 
-function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
+function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 	local rot_view = 0
-	if entity.player_rotation.y == 90 then
+	if self.player_rotation.y == 90 then
 		rot_view = math.pi/2
 	end
 
 	local acce_y = 0
-	local velo = entity.object:get_velocity()
+	local velo = self.object:get_velocity()
 
-	entity.v = get_v(velo) * get_sign(entity.v)
+	self.v = get_v(velo) * get_sign(self.v)
 
-	if entity.driver then
-		local ctrl = entity.driver:get_player_control()
+	if self.driver then
+		local ctrl = self.driver:get_player_control()
 		if ctrl.up then
 
-			entity.v = entity.v + entity.accel / 10 * entity.run_velocity / 2.6
+			self.v = self.v + self.accel / 10 * self.run_velocity / 2.6
 
 		elseif ctrl.down then
 
-			if entity.max_speed_reverse == 0 and entity.v == 0 then
+			if self.max_speed_reverse == 0 and self.v == 0 then
 				return
 			end
 
-			entity.v = entity.v - entity.accel / 10
+			self.v = self.v - self.accel / 10
 		end
 
-		entity.object:set_yaw(entity.driver:get_look_horizontal() - entity.rotate)
+		self.object:set_yaw(self.driver:get_look_horizontal() - self.rotate)
 
 		if can_fly then
 
 			if ctrl.jump then
 				velo.y = velo.y + 1
-				if velo.y > entity.accel then velo.y = entity.accel end
+				if velo.y > self.accel then velo.y = self.accel end
 			elseif velo.y > 0 then
 				velo.y = velo.y - 0.1
 				if velo.y < 0 then velo.y = 0 end
 			end
 			if ctrl.sneak then
 				velo.y = velo.y - 1
-				if velo.y < -entity.accel then velo.y = -entity.accel end
+				if velo.y < -self.accel then velo.y = -self.accel end
 			elseif velo.y < 0 then
 				velo.y = velo.y + 0.1
 				if velo.y > 0 then velo.y = 0 end
@@ -176,7 +171,7 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 		else
 			if ctrl.jump then
 				if velo.y == 0 then
-					velo.y = velo.y + entity.jump_height
+					velo.y = velo.y + self.jump_height
 					acce_y = acce_y + (acce_y * 3) + 1
 				end
 			end
@@ -184,64 +179,64 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 	end
 
 	-- if not moving then set animation and return
-	if entity.v == 0 and velo.x == 0 and velo.y == 0 and velo.z == 0 then
+	if self.v == 0 and velo.x == 0 and velo.y == 0 and velo.z == 0 then
 		if stand_anim then
-			entity:set_animation(stand_anim)
+			self:set_animation(stand_anim)
 		end
 		return
 	end
 
 	if moving_anim then
-		entity:set_animation(moving_anim)
+		self:set_animation(moving_anim)
 	end
 
-	local s = get_sign(entity.v)
-	entity.v = entity.v - 0.02 * s
-	if s ~= get_sign(entity.v) then
+	local s = get_sign(self.v)
+	self.v = self.v - 0.02 * s
+	if s ~= get_sign(self.v) then
 
-		entity.object:set_velocity({x = 0, y = 0, z = 0})
-		entity.v = 0
+		self.object:set_velocity({x = 0, y = 0, z = 0})
+		self.v = 0
 		return
 	end
 
-	local max_spd = entity.max_speed_reverse
-	if get_sign(entity.v) >= 0 then
-		max_spd = entity.max_speed_forward
+	local max_spd = self.max_speed_reverse
+	if get_sign(self.v) >= 0 then
+		max_spd = self.max_speed_forward
 	end
-	if math.abs(entity.v) > max_spd then
-		entity.v = entity.v - get_sign(entity.v)
+	if math.abs(self.v) > max_spd then
+		self.v = self.v - get_sign(self.v)
 	end
 
-	local p = entity.object:get_pos()
+	local p = self.object:get_pos()
 	local new_velo
 	local new_acce = {x = 0, y = -9.8, z = 0}
 	p.y = p.y - 0.5
 	local ni = node_is(p)
-	local v = entity.v
+	local v = self.v
 
 	if ni == "air" then
 		if can_fly == true then
 			new_acce.y = 0
 		end
 	elseif ni == "liquid" or ni == "lava" then
-		if ni == "lava" and entity.lava_damage ~= 0 then
-			entity.lava_counter = (entity.lava_counter or 0) + dtime
-			if entity.lava_counter > 1 then
+		if ni == "lava" and self.lava_damage ~= 0 then
+			self.lava_counter = (self.lava_counter or 0) + dtime
+			if self.lava_counter > 1 then
 				minetest.sound_play("default_punch", {
-					object = entity.object,
+					object = self.object,
 					max_hear_distance = 5
 				}, true)
-				entity.object:punch(entity.object, 1.0, {
+				self.object:punch(self.object, 1.0, {
 					full_punch_interval = 1.0,
-					damage_groups = {fleshy = entity.lava_damage}
+					damage_groups = {fleshy = self.lava_damage}
 				}, nil)
 
-				entity.lava_counter = 0
+				self.lava_counter = 0
 			end
 		end
 
-		if entity.terrain_type == 2
-		or entity.terrain_type == 3 then
+		if self.terrain_type == 2
+		or self.terrain_type == 3 then
 			new_acce.y = 0
 			p.y = p.y + 1
 			if node_is(p) == "liquid" then
@@ -254,9 +249,9 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 				end
 			else
 				if math.abs(velo.y) < 1 then
-					local pos = entity.object:get_pos()
+					local pos = self.object:get_pos()
 					pos.y = math.floor(pos.y) + 0.5
-					entity.object:set_pos(pos)
+					self.object:set_pos(pos)
 					velo.y = 0
 				end
 			end
@@ -265,24 +260,12 @@ function mcl_mobs.drive(entity, moving_anim, stand_anim, can_fly, dtime)
 		end
 	end
 
-	new_velo = get_velocity(v, entity.object:get_yaw() - rot_view, velo.y)
+	new_velo = get_velocity(v, self.object:get_yaw() - rot_view, velo.y)
 	new_acce.y = new_acce.y + acce_y
 
-	entity.object:set_velocity(new_velo)
-	entity.object:set_acceleration(new_acce)
-
-	-- CRASH!
-	if enable_crash then
-		local intensity = entity.v2 - v
-		if intensity >= crash_threshold then
-			entity.object:punch(entity.object, 1.0, {
-				full_punch_interval = 1.0,
-				damage_groups = {fleshy = intensity}
-			}, nil)
-		end
-	end
-
-	entity.v2 = v
+	self.object:set_velocity(new_velo)
+	self.object:set_acceleration(new_acce)
+	self.v2 = v
 end
 
 function mcl_mobs.fly_drive(entity, dtime, speed, shoots, arrow, moving_anim, stand_anim)
@@ -337,9 +320,7 @@ function mcl_mobs.fly_drive(entity, dtime, speed, shoots, arrow, moving_anim, st
 	end
 end
 
-mcl_mobs.mob_class.drive = mcl_mobs.drive
 mcl_mobs.mob_class.fly_drive = mcl_mobs.fly_drive
-mcl_mobs.mob_class.attach = mcl_mobs.attach
 
 function mob_class:on_detach_child(child)
 	if self.detach_child then
