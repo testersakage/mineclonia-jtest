@@ -75,6 +75,7 @@ function mob_class:object_in_range(object)
 end
 
 function mob_class:drop_armor()
+	if not self.armor_list then return end
 	for k, v in pairs(self.armor_list) do
 		if v ~= "" then
 			mcl_util.drop_item_stack(self.object:get_pos(), ItemStack(v))
