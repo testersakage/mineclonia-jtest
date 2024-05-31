@@ -83,9 +83,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 
 		-- if driver present allow control of horse
 		if self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
-
-			mcl_mobs.drive(self, "walk", "stand", false, dtime)
-
+			self:drive("walk", "stand", false, dtime)
 			return false -- skip rest of mob functions
 		end
 
@@ -183,7 +181,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		elseif not self.driver and self.saddle == "yes" then
 			-- Ride pig if it has a saddle
 
-			mcl_mobs.attach(self, clicker)
+			self:attach(clicker)
 			return
 		end
 	end,
