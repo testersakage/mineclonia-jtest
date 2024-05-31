@@ -74,6 +74,15 @@ function mob_class:object_in_range(object)
 	return p1 and p2 and (vector.distance(p1, p2) <= dist)
 end
 
+function mob_class:drop_armor()
+	for k, v in pairs(self.armor_list) do
+		if v ~= "" then
+			mcl_util.drop_item_stack(self.object:get_pos(), ItemStack(v))
+			self.armor_list[k] = ""
+		end
+	end
+end
+
 function mob_class:item_drop(cooked, looting_level)
 	if not mobs_drop_items then return end
 	looting_level = looting_level or 0
@@ -135,7 +144,7 @@ function mob_class:item_drop(cooked, looting_level)
 			end
 		end
 	end
-
+	self:drop_armor()
 	self.drops = {}
 end
 
