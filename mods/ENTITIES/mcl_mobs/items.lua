@@ -68,7 +68,7 @@ function mob_class:check_item_pickup()
 
 				if self.wears_armor and minetest.get_item_group(itemname, "armor") > 0 and def._mcl_armor_element then
 					if self.armor_list[def._mcl_armor_element] == "" then
-						self.armor_list[def._mcl_armor_element] = itemname
+						self.armor_list[def._mcl_armor_element] = stack:to_string()
 						o:remove()
 						self:set_armor_texture()
 					end
