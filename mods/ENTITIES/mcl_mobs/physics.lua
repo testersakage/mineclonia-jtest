@@ -86,8 +86,7 @@ function mob_class:item_drop(cooked, looting_level)
 
 	self.drops = self.drops or {}
 
-	for n = 1, #self.drops do
-		local dropdef = self.drops[n]
+	for _, dropdef in pairs(self.drops) do
 		local chance = 1 / dropdef.chance
 		local looting_type = dropdef.looting
 
@@ -114,12 +113,8 @@ function mob_class:item_drop(cooked, looting_level)
 
 		if num > 0 then
 			item = dropdef.name
-
 			if cooked then
-
-				local output = minetest.get_craft_result({
-					method = "cooking", width = 1, items = {item}})
-
+				local output = minetest.get_craft_result({ method = "cooking", width = 1, items = {item}})
 				if output and output.item and not output.item:is_empty() then
 					item = output.item:get_name()
 				end
@@ -130,7 +125,6 @@ function mob_class:item_drop(cooked, looting_level)
 			end
 
 			if obj and obj:get_luaentity() then
-
 				obj:set_velocity({
 					x = math.random(-10, 10) / 9,
 					y = 6,
@@ -179,7 +173,7 @@ end
 
 function mob_class:slow_mob()
 	local d = 0.85
-	if self:check_dying() then d = 0.92 end
+	if self.state == "die" then d = 0.92 end
 
 	if self.object then
 		local v = self.object:get_velocity()
@@ -219,7 +213,6 @@ function mob_class:get_velocity()
 end
 
 local function shortest_term_of_yaw_rotation(self, rot_origin, rot_target, nums)
-
 	if not rot_origin or not rot_target then
 		return
 	end
@@ -231,8 +224,6 @@ local function shortest_term_of_yaw_rotation(self, rot_origin, rot_target, nums)
 		if math.abs(rot_origin-rot_target)<180 then
 			if nums then
 				return rot_target-rot_origin
-			else
-				return 1
 			end
 		else
 			if nums then
@@ -251,12 +242,10 @@ local function shortest_term_of_yaw_rotation(self, rot_origin, rot_target, nums)
 		else
 			if nums then
 				return (rot_target-(rot_origin-360))
-			else
-				return 1
 			end
 		end
 	end
-
+	return 1
 end
 
 
@@ -527,7 +516,6 @@ function mob_class:do_env_damage()
 	if not pos then return end
 
 	self.time_of_day = minetest.get_timeofday()
-
 	-- remove mob if beyond map limits
 	if not within_limits(pos, 0) then
 		self:safe_remove()
@@ -599,9 +587,7 @@ function mob_class:do_env_damage()
 	if self.water_damage > 0
 	and nodef.groups.water then
 		self:damage_mob("environment", self.water_damage)
-
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png", nil, nil, 1, nil)
-
 		if self:check_for_death("water", {type = "environment",
 				pos = pos, node = self.standing_in}) then
 			return true
@@ -611,9 +597,7 @@ function mob_class:do_env_damage()
 	and (nodef2.groups.fire) then
 
 		if self.fire_damage ~= 0 then
-
 			self:damage_mob("environment", self.fire_damage)
-
 			if self:check_for_death("fire", {type = "environment",
 					pos = pos, node = self.standing_in}) then
 				return true
@@ -624,9 +608,7 @@ function mob_class:do_env_damage()
 	and self:is_in_node("group:lava") then
 
 		if self.lava_damage ~= 0 then
-
 			self:damage_mob("environment", self.lava_damage)
-
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
 			mcl_burning.set_on_fire(self.object, 10)
 
@@ -784,16 +766,13 @@ end
 -- falling and fall damage
 -- returns true if mob died
 function mob_class:falling(pos)
-	if self.fly and self.state ~= "die" then
-		return
-	end
+	if self.fly and self.state ~= "die" then return	end
 
 	local v = self.object:get_velocity()
 	if self._just_portaled then
 		self.reset_fall_damage = 1
 		return false -- mob has teleported through portal - it's 99% not falling
 	end
-
 	-- floating in water (or falling)
 	if v.y > 0 then
 		-- apply gravity when moving up
@@ -803,7 +782,6 @@ function mob_class:falling(pos)
 			z = 0
 		})
 	elseif v.y <= 0 and v.y > self.fall_speed then
-
 		-- fall downwards at set speed
 		self.object:set_acceleration({
 			x = 0,
@@ -893,7 +871,7 @@ function mob_class:check_water_flow()
 end
 
 function mob_class:check_dying()
-	if ((self.state and self.state=="die") or self:check_for_death()) and not self.animation.die_end then
+	if ((self.state and self.state == "die") or self:check_for_death()) and not self.animation.die_end then
 		if self.object then
 			local rot = self.object:get_rotation()
 			rot.z = ((math.pi/2-rot.z)*.2)+rot.z
