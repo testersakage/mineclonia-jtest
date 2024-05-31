@@ -268,60 +268,6 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 	self.v2 = v
 end
 
-function mcl_mobs.fly_drive(entity, dtime, speed, shoots, arrow, moving_anim, stand_anim)
-	local ctrl = entity.driver:get_player_control()
-	local velo = entity.object:get_velocity()
-	local dir = entity.driver:get_look_dir()
-	local yaw = entity.driver:get_look_horizontal() + 1.57 -- offset fix between old and new commands
-
-	if ctrl.up then
-		entity.object:set_velocity({
-			x = dir.x * speed,
-			y = dir.y * speed + 2,
-			z = dir.z * speed
-		})
-	elseif ctrl.down then
-		entity.object:set_velocity({
-			x = -dir.x * speed,
-			y = dir.y * speed + 2,
-			z = -dir.z * speed
-		})
-	elseif not ctrl.down or ctrl.up or ctrl.jump then
-		entity.object:set_velocity({x = 0, y = -2, z = 0})
-	end
-
-	entity.object:set_yaw(yaw + math.pi + math.pi / 2 - entity.rotate)
-
-	-- firing arrows
-	if ctrl.LMB and ctrl.sneak and shoots then
-
-		local pos = entity.object:get_pos()
-		local obj = minetest.add_entity({
-			x = pos.x + 0 + dir.x * 2.5,
-			y = pos.y + 1.5 + dir.y,
-			z = pos.z + 0 + dir.z * 2.5}, arrow)
-
-		local ent = obj:get_luaentity()
-		if ent then
-			ent.switch = 1 -- for mob specific arrows
-			ent.owner_id = tostring(entity.object) -- so arrows dont hurt entity you are riding
-			local vec = {x = dir.x * 6, y = dir.y * 6, z = dir.z * 6}
-			local yaw = entity.driver:get_look_horizontal()
-			obj:set_yaw(yaw + math.pi / 2)
-			obj:set_velocity(vec)
-		else
-			obj:remove()
-		end
-	end
-	if velo.x == 0 and velo.y == 0 and velo.z == 0 then
-		entity:set_animation(stand_anim)
-	else
-		entity:set_animation(moving_anim)
-	end
-end
-
-mcl_mobs.mob_class.fly_drive = mcl_mobs.fly_drive
-
 function mob_class:on_detach_child(child)
 	if self.detach_child then
 		if self.detach_child(self, child) then
