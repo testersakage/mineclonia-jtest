@@ -711,20 +711,6 @@ same time.
  * 'can_fly'		 if true then jump and sneak controls will allow mob to fly up and down
  * 'dtime'			tick time used inside drive function
 
-
-`mcl_mobs.fly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)`
-
-This function allows an attached player to fly the mob around using directional
-controls.
-
- * 'self'			mob information
- * 'dtime'			tick time used inside fly function
- * 'speed'			speed of flight
- * 'can_shoot'		true if mob can fire arrow (sneak and left mouse button fires)
- * 'arrow_entity'	name of arrow entity used for firing
- * 'move_animation'string containing name of pre-defined animation e.g. "walk" or "fly" etc.
- * 'stand_animation' string containing name of pre-defined animation e.g. "stand" or "blink" etc.
-
 Note: animation names above are from the pre-defined animation lists inside mob
 registry without extensions.
 
