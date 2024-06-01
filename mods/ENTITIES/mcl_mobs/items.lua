@@ -15,7 +15,11 @@ local function get_armor_texture(obj, armor_name)
 	if armor_name=="blank.png" then
 		return "blank.png"
 	end
-	return def._mcl_armor_texture(obj, stack).."^"
+	local t = def._mcl_armor_texture or ""
+	if type(def._mcl_armor_texture) == "function" then
+		t = def._mcl_armor_texture(obj, stack)
+	end
+	return t.."^"
 end
 
 function mob_class:set_armor_texture()
