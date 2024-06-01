@@ -513,20 +513,11 @@ end
 -- should mob follow what I'm holding ?
 function mob_class:follow_holding(clicker)
 	if self.nofollow then return false end
-
 	if mcl_mobs.invis[clicker:get_player_name()] then
 		return false
 	end
-
 	local item = clicker:get_wielded_item()
-	local t = type(self.follow)
-
-	-- single item
-	if t == "string"
-	and item:get_name() == self.follow then
-		return true
-	-- multiple items
-	elseif t == "table" and in_list(self.follow, item:get_name()) then
+	if in_list(self.follow, item:get_name()) then
 		return true
 	end
 	return false
@@ -546,7 +537,6 @@ function mob_class:replace(pos)
 	local what, with, y_offset
 
 	if type(self.replace_what[1]) == "table" then
-
 		local num = math.random(#self.replace_what)
 
 		what = self.replace_what[num][1] or ""
