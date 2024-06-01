@@ -586,7 +586,8 @@ These functions can be called from the entity as well as overwritten on a per-mo
 	* Sets armor textures from mob.armor_list
  * mob:check_item_pickup()
 	* Checks and makes the mob pick up nearby item entities
-
+ * mob:is_drop(itemstack)
+	* returns true if the given itemstack is dropped by the mob
 #### Mount
  * mob:on_detach_child(child)
 	* Kicks out "driver" (rider) if mob is a child and runs custom detach_child function.
