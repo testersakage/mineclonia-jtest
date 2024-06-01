@@ -78,7 +78,7 @@ local cow_def = {
 			return
 		end
 	end,
-	follow = "mcl_farming:wheat_item",
+	follow = { "mcl_farming:wheat_item" },
 	view_range = 10,
 	fear_height = 4,
 }
