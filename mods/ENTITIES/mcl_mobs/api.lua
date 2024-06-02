@@ -366,7 +366,7 @@ function mob_class:do_states(dtime)
 	end
 end
 
-local function update_timers (self, dtime)
+local function update_attack_timers (self, dtime)
 	if self.pause_timer > 0 then
 		self.pause_timer = self.pause_timer - dtime
 		return true
@@ -390,6 +390,11 @@ function mob_class:on_step(dtime)
 	if not mcl_mobs.check_vector(pos) or self.removed then
 		self:safe_remove()
 		return
+	end
+
+	if self:check_timer("update_lifetimer", 1) then
+		self.lifetimer = math.max(20, self.lifetimer)
+		self.despawn_immediately = false
 	end
 
 	if self:check_despawn(pos, dtime) then return true end
@@ -450,7 +455,7 @@ function mob_class:on_step(dtime)
 		end
 	end
 
-	if update_timers(self, dtime) then return end
+	if update_attack_timers(self, dtime) then return end
 
 	self:check_particlespawners(dtime)
 	self:check_item_pickup()
@@ -475,23 +480,6 @@ function mob_class:on_step(dtime)
 		return false
 	end
 end
-
-local timer = 0
-minetest.register_globalstep(function(dtime)
-	timer = timer + dtime
-	if timer < 1 then return end
-	for _, player in pairs(minetest.get_connected_players()) do
-		local pos = player:get_pos()
-		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 47)) do
-			local lua = obj:get_luaentity()
-			if lua and lua.is_mob then
-				lua.lifetimer = math.max(20, lua.lifetimer)
-				lua.despawn_immediately = false
-			end
-		end
-	end
-	timer = 0
-end)
 
 minetest.register_chatcommand("clearmobs",{
 	privs = { maphack = true },
