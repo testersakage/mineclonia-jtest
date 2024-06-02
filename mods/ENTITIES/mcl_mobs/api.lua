@@ -406,6 +406,8 @@ function mob_class:on_step(dtime)
 		self:force_step(dtime)
 	end
 
+	if mobs_debug then self:update_tag() end
+
 	self:update_timers(dtime)
 	if self:check_suspend() then
 		self.object:set_velocity(vector.zero()) --stop movement otherwise mobs keep moving continuously
@@ -421,8 +423,6 @@ function mob_class:on_step(dtime)
 		-- mcl_burning.tick may remove object immediately
 		if not self.object:get_pos() then return end
 	end
-
-	if mobs_debug then self:update_tag() end
 
 	if self.state == "die" then return end
 
