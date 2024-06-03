@@ -1,6 +1,6 @@
 local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
 
-mcl_util = {}
+mineclonia = {}
 
 -- Updates all values in t using values from to*.
 function table.update(t, ...)
@@ -55,7 +55,7 @@ function table.random_element(t)
 	return t[rk], rk
 end
 
-function mcl_util.get_luaentity_by_id(id)
+function mineclonia.get_luaentity_by_id(id)
 	for _, e in pairs(minetest.luaentities) do
 		if e._id == id then return e end
 	end
@@ -63,7 +63,7 @@ end
 
 local LOGGING_ON = minetest.settings:get_bool("mcl_logging_default", false)
 local LOG_MODULE = "[MCL2]"
-function mcl_util.mcl_log(message, module, bypass_default_logger)
+function mineclonia.mcl_log(message, module, bypass_default_logger)
 	local selected_module = LOG_MODULE
 	if module then
 		selected_module = module
@@ -73,7 +73,7 @@ function mcl_util.mcl_log(message, module, bypass_default_logger)
 	end
 end
 
-function mcl_util.file_exists(name)
+function mineclonia.file_exists(name)
 	if type(name) ~= "string" then return end
 	local f = io.open(name)
 	if not f then
@@ -99,7 +99,7 @@ This function is a simplified version of minetest.rotate_and_place.
 The Minetest function is seen as inappropriate because this includes mirror
 images of possible orientations, causing problems with pillar shadings.
 ]]
-function mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing, infinitestacks, invert_wall)
+function mineclonia.rotate_axis_and_place(itemstack, placer, pointed_thing, infinitestacks, invert_wall)
 	local unode = minetest.get_node_or_nil(pointed_thing.under)
 	if not unode then
 		return
@@ -158,9 +158,9 @@ end
 
 -- Wrapper of above function for use as `on_place` callback (Recommended).
 -- Similar to minetest.rotate_node.
-function mcl_util.rotate_axis(itemstack, placer, pointed_thing)
+function mineclonia.rotate_axis(itemstack, placer, pointed_thing)
 	if placer and placer:is_player() then
-		mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing,
+		mineclonia.rotate_axis_and_place(itemstack, placer, pointed_thing,
 			minetest.is_creative_enabled(placer:get_player_name()),
 			placer:get_player_control().sneak)
 	end
@@ -170,7 +170,7 @@ end
 
 -- Determine if pointer (player) is pointing above the middle of a pointed thing
 -- Used when placing slabs and stairs.
-function mcl_util.is_pointing_above_middle(pointer, pointed_thing)
+function mineclonia.is_pointing_above_middle(pointer, pointed_thing)
 	if
 		not pointer
 		or not pointer:is_player()
@@ -212,7 +212,7 @@ end
 -- * pos: Position of the node to investigate
 -- * param2: param2 of that node
 -- * side: Which "half" the investigated node is. "left" or "right"
-function mcl_util.get_double_container_neighbor_pos(pos, param2, side)
+function mineclonia.get_double_container_neighbor_pos(pos, param2, side)
 	if side == "right" then
 		if param2 == 0 then
 			return {x = pos.x - 1, y = pos.y, z = pos.z}
@@ -246,7 +246,7 @@ end
 --- condition: Function which takes an itemstack and returns true if it matches the desired item condition.
 ---            If set to nil, the slot of the first item stack will be taken unconditionally.
 -- dst_inventory and dst_list can also be nil if condition is nil.
-function mcl_util.get_eligible_transfer_item_slot(src_inventory, src_list, dst_inventory, dst_list, condition)
+function mineclonia.get_eligible_transfer_item_slot(src_inventory, src_list, dst_inventory, dst_list, condition)
 	local size = src_inventory:get_size(src_list)
 	local stack
 	for i = 1, size do
@@ -273,9 +273,9 @@ end
 
 -- Returns true on success and false on failure
 -- Possible failures: No item in source slot, destination inventory full
-function mcl_util.move_item(source_inventory, source_list, source_stack_id, destination_inventory, destination_list)
+function mineclonia.move_item(source_inventory, source_list, source_stack_id, destination_inventory, destination_list)
 	if source_stack_id == -1 then
-		source_stack_id = mcl_util.get_first_occupied_inventory_slot(source_inventory, source_list)
+		source_stack_id = mineclonia.get_first_occupied_inventory_slot(source_inventory, source_list)
 		if source_stack_id == nil then
 			return false
 		end
@@ -306,7 +306,7 @@ end
 --- source_stack_id (optional): The inventory position ID of the source inventory to take the item from (-1 for slot of the first valid item; -1 is default)
 --- destination_list (optional): List name of the destination inventory. Default is normally "main"; "src" for furnace
 -- Returns true on success and false on failure.
-function mcl_util.move_item_container(source_pos, destination_pos, source_list, source_stack_id, destination_list)
+function mineclonia.move_item_container(source_pos, destination_pos, source_list, source_stack_id, destination_list)
 	local dpos = table.copy(destination_pos)
 	local spos = table.copy(source_pos)
 	local snode = minetest.get_node(spos)
@@ -323,7 +323,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 	-- Normalize double container by forcing to always use the left segment first
 	local function normalize_double_container(pos, node, ctype)
 		if ctype == 6 then
-			pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
+			pos = mineclonia.get_double_container_neighbor_pos(pos, node.param2, "right")
 			if not pos then
 				return false
 			end
@@ -371,15 +371,15 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		if dctype == 3 then
 			cond = is_not_shulker_box
 		end
-		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
+		source_stack_id = mineclonia.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
 		if not source_stack_id then
 			-- Try again if source is a double container
 			if sctype == 5 then
-				spos = mcl_util.get_double_container_neighbor_pos(spos, snode.param2, "left")
+				spos = mineclonia.get_double_container_neighbor_pos(spos, snode.param2, "left")
 				smeta = minetest.get_meta(spos)
 				sinv = smeta:get_inventory()
 
-				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
+				source_stack_id = mineclonia.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
 				if not source_stack_id then
 					return false
 				end
@@ -415,15 +415,15 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		end
 		if destination_list then
 			-- Move item
-			local ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
+			local ok = mineclonia.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
 
 			-- Try transfer to neighbor node if transfer failed and double container
 			if not ok and dctype == 5 then
-				dpos = mcl_util.get_double_container_neighbor_pos(dpos, dnode.param2, "left")
+				dpos = mineclonia.get_double_container_neighbor_pos(dpos, dnode.param2, "left")
 				dmeta = minetest.get_meta(dpos)
 				dinv = dmeta:get_inventory()
 
-				ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
+				ok = mineclonia.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
 			end
 
 			-- Update furnace
@@ -440,8 +440,8 @@ end
 
 -- Returns the ID of the first non-empty slot in the given inventory list
 -- or nil, if inventory is empty.
-function mcl_util.get_first_occupied_inventory_slot(inventory, listname)
-	return mcl_util.get_eligible_transfer_item_slot(inventory, listname)
+function mineclonia.get_first_occupied_inventory_slot(inventory, listname)
+	return mineclonia.get_eligible_transfer_item_slot(inventory, listname)
 end
 
 local function drop_item_stack(pos, stack)
@@ -450,9 +450,9 @@ local function drop_item_stack(pos, stack)
 	minetest.add_item(vector.add(pos, drop_offset), stack)
 end
 
-mcl_util.drop_item_stack = drop_item_stack
+mineclonia.drop_item_stack = drop_item_stack
 
-function mcl_util.drop_items_from_meta_container(lists)
+function mineclonia.drop_items_from_meta_container(lists)
 	if type(lists) ~= "table" then
 	--this check is provided as compatibility to the old (pre 0.90) behavior which would essentially always assume "main" as the list to drop
 		lists = { (lists or "main") }
@@ -483,7 +483,7 @@ end
 
 -- Returns true if item (itemstring or ItemStack) can be used as a furnace fuel.
 -- Returns false otherwise
-function mcl_util.is_fuel(item)
+function mineclonia.is_fuel(item)
 	return minetest.get_craft_result({method = "fuel", width = 1, items = {item}}).time ~= 0
 end
 
@@ -494,7 +494,7 @@ end
 --    * If it returns a string, placement is allowed, but will place this itemstring as a node instead
 --    * pos, node: Position and node table of plant node
 --    * itemstack: Itemstack to place
-function mcl_util.generate_on_place_plant_function(condition)
+function mineclonia.generate_on_place_plant_function(condition)
 	return function(itemstack, placer, pointed_thing)
 		if pointed_thing.type ~= "node" then
 			-- no interaction possible with entities
@@ -504,7 +504,7 @@ function mcl_util.generate_on_place_plant_function(condition)
 		-- Call on_rightclick if the pointed node defines it
 		local node = minetest.get_node(pointed_thing.under)
 		if placer and placer:is_player() and not placer:get_player_control().sneak then
-			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+			local rc = mineclonia.call_on_rightclick(itemstack, placer, pointed_thing)
 			if rc ~= nil then return rc end
 		end
 
@@ -542,7 +542,7 @@ end
 
 -- adjust the y level of an object to the center of its collisionbox
 -- used to get the origin position of entity explosions
-function mcl_util.get_object_center(obj)
+function mineclonia.get_object_center(obj)
 	local collisionbox = obj:get_properties().collisionbox
 	local pos = obj:get_pos()
 	local ymin = collisionbox[2]
@@ -551,7 +551,7 @@ function mcl_util.get_object_center(obj)
 	return pos
 end
 
-function mcl_util.get_color(colorstr)
+function mineclonia.get_color(colorstr)
 	local mc_color = mcl_colors[colorstr:upper()]
 	if mc_color then
 		colorstr = mc_color
@@ -564,7 +564,7 @@ function mcl_util.get_color(colorstr)
 	end
 end
 
-function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
+function mineclonia.call_on_rightclick(itemstack, player, pointed_thing)
 	-- Call on_rightclick if the pointed node defines it
 	if pointed_thing and pointed_thing.type == "node" then
 		local pos = pointed_thing.under
@@ -579,7 +579,7 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 	end
 end
 
-function mcl_util.calculate_durability(itemstack)
+function mineclonia.calculate_durability(itemstack)
 	local unbreaking_level = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
 	local armor_uses = minetest.get_item_group(itemstack:get_name(), "mcl_armor_uses")
 
@@ -609,12 +609,12 @@ function mcl_util.calculate_durability(itemstack)
 	return uses or 0
 end
 
-function mcl_util.use_item_durability(itemstack, n)
-	local uses = mcl_util.calculate_durability(itemstack)
+function mineclonia.use_item_durability(itemstack, n)
+	local uses = mineclonia.calculate_durability(itemstack)
 	itemstack:add_wear(65535 / uses * n)
 end
 
-function mcl_util.deal_damage(target, damage, mcl_reason)
+function mineclonia.deal_damage(target, damage, mcl_reason)
 	if not mcl_reason.flags then
 		mcl_damage.finish_reason(mcl_reason)
 	end
@@ -658,7 +658,7 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 	end
 end
 
-function mcl_util.get_hp(obj)
+function mineclonia.get_hp(obj)
 	local luaentity = obj:get_luaentity()
 
 	if luaentity and luaentity.is_mob then
@@ -668,7 +668,7 @@ function mcl_util.get_hp(obj)
 	end
 end
 
-function mcl_util.get_inventory(object, create)
+function mineclonia.get_inventory(object, create)
 	if object:is_player() then
 		return object:get_inventory()
 	else
@@ -683,7 +683,7 @@ function mcl_util.get_inventory(object, create)
 	end
 end
 
-function mcl_util.get_wielded_item(object)
+function mineclonia.get_wielded_item(object)
 	if object:is_player() then
 		return object:get_wielded_item()
 	else
@@ -692,7 +692,7 @@ function mcl_util.get_wielded_item(object)
 	end
 end
 
-function mcl_util.get_object_name(object)
+function mineclonia.get_object_name(object)
 	if object:is_player() then
 		return object:get_player_name()
 	else
@@ -706,7 +706,7 @@ function mcl_util.get_object_name(object)
 	end
 end
 
-function mcl_util.replace_mob(obj, mob)
+function mineclonia.replace_mob(obj, mob)
 	if not obj or not obj:get_pos() then return end
 	local l = obj:get_luaentity()
 	if not l.is_mob then return end
@@ -726,7 +726,7 @@ function mcl_util.replace_mob(obj, mob)
 	return obj
 end
 
-function mcl_util.get_pointed_thing(player, liquid)
+function mineclonia.get_pointed_thing(player, liquid)
 	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
 	local look_dir = vector.multiply(player:get_look_dir(), 5)
 	local pos2 = vector.add(pos, look_dir)
@@ -814,14 +814,14 @@ local test_p2, _ = props_changed(test_properties_set1, test_properties_set2)
 assert(not test_p1)
 assert(test_p2)
 
-function mcl_util.set_properties(obj, props)
+function mineclonia.set_properties(obj, props)
 	local changed, p = props_changed(props, obj:get_properties())
 	if changed then
 		obj:set_properties(p)
 	end
 end
 
-function mcl_util.set_bone_position(obj, bone, pos, rot)
+function mineclonia.set_bone_position(obj, bone, pos, rot)
 	--TODO: starting with minetest 5.9 this makes deprecation warnings since "set/get_bone_overrides" using radians is now preferred.
 	-- Initial attempts of fixing this (978c97586ef66453162d652265b92bce20e1cd3b) did not work - figure out why.
 	local current_pos, current_rot = obj:get_bone_position(bone)
@@ -839,7 +839,7 @@ end
 ---You have to make sure that the nodes you return true for have `buildable_to = true`.
 -- Arguemnt is a function with the node name as argument. it should return true if the
 -- node should not replace a "buildable_to" node.
-function mcl_util.bypass_buildable_to(func)
+function mineclonia.bypass_buildable_to(func)
 	--------------------------
 	-- MINETEST CODE: UTILS --
 	--------------------------
@@ -1072,7 +1072,7 @@ end
 --Check for a protection violation in a given area.
 -- Applies is_protected() to a 3D lattice of points in the defined volume. The points are spaced
 -- evenly throughout the volume and have a spacing similar to, but no larger than, "interval".
-function mcl_util.check_area_protection(pos1, pos2, player, interval)
+function mineclonia.check_area_protection(pos1, pos2, player, interval)
 	local name = player and player:get_player_name() or ""
 
 	local protected_pos = minetest.is_area_protected(pos1, pos2, name, interval)
@@ -1085,7 +1085,7 @@ function mcl_util.check_area_protection(pos1, pos2, player, interval)
 end
 
 --Check for a protection violation on a single position.
-function mcl_util.check_position_protection(position, player)
+function mineclonia.check_position_protection(position, player)
 	local name = player and player:get_player_name() or ""
 
 	if minetest.is_protected(position, name) then
@@ -1096,11 +1096,11 @@ function mcl_util.check_position_protection(position, player)
 	return false
 end
 
-function mcl_util.safe_place(pos, node, player, itemstack)
+function mineclonia.safe_place(pos, node, player, itemstack)
 	local name = player and player:get_player_name() or ""
 	local nnode = node or (itemstack and {name = itemstack:get_name()}) or nil
 	if not nnode then return itemstack end
-	if mcl_util.check_position_protection(pos,player) then return itemstack end
+	if mineclonia.check_position_protection(pos,player) then return itemstack end
 
 	minetest.set_node(pos, nnode)
 
@@ -1111,7 +1111,7 @@ function mcl_util.safe_place(pos, node, player, itemstack)
 	return itemstack or true
 end
 
-function mcl_util.get_pos_p2(pos)
+function mineclonia.get_pos_p2(pos)
 	local biomedef = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]
 	return biomedef and biomedef._mcl_palette_index or 0
 end
@@ -1120,7 +1120,7 @@ local function between(x, y, z) -- x is between y and z (inclusive)
 	return y <= x and x <= z
 end
 
-function mcl_util.in_cube(tpos, wpos1, wpos2)
+function mineclonia.in_cube(tpos, wpos1, wpos2)
 	local xmax=wpos2.x
 	local xmin=wpos1.x
 
@@ -1147,7 +1147,7 @@ function mcl_util.in_cube(tpos, wpos1, wpos2)
 	return false
 end
 
-function mcl_util.traverse_tower(pos, dir, callback)
+function mineclonia.traverse_tower(pos, dir, callback)
 	local node = minetest.get_node(pos)
 	local i = 0
 	while minetest.get_node(pos).name == node.name do
@@ -1161,7 +1161,7 @@ function mcl_util.traverse_tower(pos, dir, callback)
 end
 
 -- Voxel manip function to replace a node type with another in an area
-function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
+function mineclonia.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 	local c_to = minetest.get_content_id(mat_to)
 
 	local group_name
@@ -1207,7 +1207,7 @@ end
 
 -- Voxel manip function to replace a node type with another in a circle
 -- Will also set param2 on changed nodes if provided.
-function mcl_util.circle_replace_node_vm(radius, pos, y, mat_from, mat_to, param2)
+function mineclonia.circle_replace_node_vm(radius, pos, y, mat_from, mat_to, param2)
 	local c_from = minetest.get_content_id(mat_from)
 	local c_to = minetest.get_content_id(mat_to)
 
@@ -1248,7 +1248,7 @@ function mcl_util.circle_replace_node_vm(radius, pos, y, mat_from, mat_to, param
 end
 
 -- Voxel manip function to change nodes if they don't match in an area.
-function mcl_util.bulk_set_node_vm(pos1, pos2, mat_to)
+function mineclonia.bulk_set_node_vm(pos1, pos2, mat_to)
 	local c_to = minetest.get_content_id(mat_to)
 
 	local vm = minetest.get_voxel_manip()
@@ -1278,7 +1278,7 @@ end
 
 -- Voxel manip function to change nodes if they don't match in a circle.
 -- Will also set param2 on changed nodes if provided.
-function mcl_util.circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
+function mineclonia.circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
 	local c_to = minetest.get_content_id(mat_to)
 
 	-- Using new as y is not relative
@@ -1326,7 +1326,7 @@ end
 -- The biome for the position will be used to select the top and filler layers.
 -- The shape is slightly altered for sandy top layers.
 -- The radius of the top layer is max(fwidth, fdepth) / 2 + ground_padding
-function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
+function mineclonia.create_ground_turnip(pos, fwidth, fdepth)
 
 	local biome_data = minetest.get_biome_data(pos)
 	local biome_name = minetest.get_biome_name(biome_data.biome)
@@ -1375,7 +1375,7 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 			radius = radius + 1
 		end
 
-		mcl_util.circle_bulk_set_node_vm(radius, pos, y, mat, grass_idx)
+		mineclonia.circle_bulk_set_node_vm(radius, pos, y, mat, grass_idx)
 		y = y - 1
 	end
 
@@ -1390,7 +1390,7 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 			break
 		end
 
-		mcl_util.circle_bulk_set_node_vm(radius, pos, y, filler)
+		mineclonia.circle_bulk_set_node_vm(radius, pos, y, filler)
 		y = y - 1
 	end
 end

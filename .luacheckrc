@@ -8,6 +8,7 @@ ignore = {
 }
 globals = {
 	"minetest", "core",
+	"mineclonia",
 	"doc",
 	"tt",
 	"mesecon",
