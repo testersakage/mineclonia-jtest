@@ -7,7 +7,7 @@ mcl_util = {}
 
 mcl_util.get_luaentity_by_id = mineclonia.get_luaentity_by_id
 
-mcl_util.mcl_log = mineclonia.mcl_log
+mcl_util.mcl_log = mineclonia.log
 
 mcl_util.file_exists = mineclonia.file_exists
 

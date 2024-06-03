@@ -62,8 +62,8 @@ function mineclonia.get_luaentity_by_id(id)
 end
 
 local LOGGING_ON = minetest.settings:get_bool("mcl_logging_default", false)
-local LOG_MODULE = "[MCL2]"
-function mineclonia.mcl_log(message, module, bypass_default_logger)
+local LOG_MODULE = "[Mineclonia]"
+function mineclonia.log(message, module, bypass_default_logger)
 	local selected_module = LOG_MODULE
 	if module then
 		selected_module = module
