@@ -66,7 +66,7 @@ local function check_object_hit(self, pos, dmg)
 				self.object:remove()
 				return true
 			elseif (entity.is_mob == true or entity._hittable_by_projectile) and (self._thrower ~= object) then
-				local pl = minetest.get_player_by_name(self._thrower)
+				local pl = self._thrower and self._thrower.is_player and self._thrower or type(self._thrower) == "string" and minetest.get_player_by_name(self._thrower)
 				if pl then
 					object:punch(pl, 1.0, {
 						full_punch_interval = 1.0,
