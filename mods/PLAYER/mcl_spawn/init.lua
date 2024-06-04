@@ -5,7 +5,7 @@ local mg_name = minetest.get_mapgen_setting("mg_name")
 local storage = minetest.get_mod_storage()
 
 local function mcl_log (message)
-	mcl_util.mcl_log (message, "[Spawn]")
+
 end
 
 -- Parameters
