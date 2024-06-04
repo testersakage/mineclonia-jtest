@@ -3,7 +3,6 @@ mcl_events.registered_events = {}
 local disabled_events = minetest.settings:get("mcl_disabled_events")
 if disabled_events then	disabled_events = disabled_events:split(",")
 else disabled_events = {} end
-local DBG = minetest.settings:get_bool("mcl_logging_event_api",false)
 local active_events = {}
 
 local event_tpl = {
@@ -19,13 +18,6 @@ local event_tpl = {
 	cond_progress = function(event) end, --return next stage
 	cond_complete = function(event) end, --return success
 }
-
-local function mcl_log(m,l)
-	if DBG then
-		if not l then l = "action" end
-		minetest.log(l,"[mcl_events] "..m)
-	end
-end
 
 function mcl_events.register_event(name,def)
 	if table.indexof(disabled_events,name) ~= -1 then return end
@@ -44,7 +36,6 @@ local function addbars(self)
 end
 
 local function start_event(p,e)
-	mcl_log("[mcl_events] Event started: "..e.readable_name.." at "..minetest.pos_to_string(vector.round(p.pos)))
 	local idx = #active_events + 1
 	active_events[idx] = table.copy(e)
 	setmetatable(active_events[idx],{__index = event_tpl})
@@ -60,7 +51,6 @@ local function start_event(p,e)
 end
 
 local function finish_event(self,idx)
-	mcl_log("[mcl_events] Finished: "..self.readable_name.." at "..minetest.pos_to_string(vector.round(self.pos)))
 	if self.on_complete then self:on_complete() end
 	for _,b in pairs(self.bars) do
 		mcl_bossbars.remove_bar(b)
@@ -83,7 +73,6 @@ function check_events(dtime)
 			if p == true then
 				ae.stage = ae.stage + 1
 				if ae:on_stage_begin() == true then
-					mcl_log("[mcl_events] Event "..ae.readable_name.." at "..minetest.pos_to_string(vector.round(ae.pos)).." failed at stage_begin of stage "..ae.stage )
 					active_events[idx] = nil
 				end
 			elseif tonumber(p) then
@@ -111,8 +100,6 @@ function check_events(dtime)
 				end
 				if start then
 					start_event(p,e)
-				elseif DBG then
-					mcl_log("[mcl_events] Event "..e.readable_name.." already active at "..minetest.pos_to_string(vector.round(p.pos)))
 				end
 			end
 		end
@@ -123,7 +110,6 @@ function check_events(dtime)
 			if ae.pos and vector.distance(pl:get_pos(),ae.pos) < 64 then player_near = true end
 		end
 		if ae.pos and not player_near then
-			mcl_log("[mcl_events] Event "..ae.readable_name.." at "..minetest.pos_to_string(vector.round(ae.pos)).." aborted - no players near." )
 			active_events[idx] = nil
 		end
 	end
