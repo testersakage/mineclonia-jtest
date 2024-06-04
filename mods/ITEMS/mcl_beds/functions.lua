@@ -6,10 +6,6 @@ local allow_nav_hacks = minetest.settings:get_bool("mcl_mob_allow_nav_hacks", fa
 local player_in_bed = 0
 local is_sp = minetest.is_singleplayer()
 
-local function mcl_log (message)
-	mcl_util.mcl_log (message, "[Beds]")
-end
-
 -- Helper functions
 
 local function get_look_yaw(pos)
@@ -332,17 +328,7 @@ end
 function mcl_beds.get_bed_bottom (pos)
 	local node = minetest.get_node(pos)
 	local dir = minetest.facedir_to_dir(node.param2)
-	mcl_log("Dir: " .. tostring(dir))
 	local bed_bottom = vector.add(pos, -dir)
-	mcl_log("bed_bottom: " .. tostring(bed_bottom))
-
-	local bed_bottom_node = minetest.get_node(bed_bottom)
-	if bed_bottom_node then
-		mcl_log("Bed bottom node name:" .. bed_bottom_node.name)
-	else
-		mcl_log("Didn't get bed bottom")
-	end
-
 	return bed_bottom
 end
 
