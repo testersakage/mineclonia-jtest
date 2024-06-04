@@ -282,7 +282,7 @@ end
 
 local function is_rmb_conflicting_node(nodename)
 	local nodedef = minetest.registered_nodes[nodename]
-	return nodedef.on_rightclick
+	return nodedef and nodedef.on_rightclick
 end
 
 local function handle_blocking(player)
