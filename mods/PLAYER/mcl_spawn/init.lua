@@ -3,10 +3,6 @@ mcl_spawn = {}
 local S = minetest.get_translator(minetest.get_current_modname())
 local storage = minetest.get_mod_storage()
 
-local function mcl_log (message)
-
-end
-
 local start_pos = minetest.setting_get_pos("static_spawnpoint") or {x = 0, y = 8, z = 0}
 
 -- Bed spawning offsets
@@ -128,27 +124,18 @@ function mcl_spawn.set_spawn_pos(player, pos, message)
 		meta:set_string("mcl_beds:spawn", minetest.pos_to_string(pos))
 
 		-- Set player ownership on bed
-		local bed_node = minetest.get_node(pos)
 		local bed_meta = minetest.get_meta(pos)
 
 		local bed_bottom = mcl_beds.get_bed_bottom (pos)
 		local bed_bottom_meta = minetest.get_meta(bed_bottom)
 
 		if bed_meta then
-			if bed_node then
-				mcl_log("Bed name: " .. bed_node.name)
-			end
-
-			mcl_log("Setting bed meta: " .. player:get_player_name())
 			bed_meta:set_string("player", player:get_player_name())
 
 			-- Pass in villager as arg. Shouldn't know about villagers
 			if bed_bottom_meta then
-				mcl_log("Removing villager from bed bottom meta")
 				bed_bottom_meta:set_string("villager", "")
 				bed_bottom_meta:set_string("infotext", "")
-			else
-				mcl_log("Cannot remove villager from bed bottom meta")
 			end
 
 
@@ -156,11 +143,8 @@ function mcl_spawn.set_spawn_pos(player, pos, message)
 			if oldpos and oldpos ~= pos then
 				local old_bed_meta = minetest.get_meta(oldpos)
 				if old_bed_meta then
-					mcl_log("Removing old bed meta")
 					old_bed_meta:set_string("player", "")
 				end
-			else
-				mcl_log("No old bed meta to remove or same as current")
 			end
 		end
 
@@ -212,10 +196,7 @@ function mcl_spawn.get_player_spawn_pos(player)
 			end
 		end
 
-
-
 		-- Find spawning position on/near the bed free of solid or damaging blocks iterating a square spiral 15x15:
-
 		local dir = minetest.facedir_to_dir(minetest.get_node(pos).param2)
 		local offset
 		for _, o in ipairs(node_search_list) do
