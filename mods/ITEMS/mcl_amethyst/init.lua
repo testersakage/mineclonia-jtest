@@ -52,7 +52,7 @@ minetest.register_node("mcl_amethyst:calcite",{
 	_mcl_blast_resistance = 0.75,
 })
 
--- Tinied Glass
+-- Tinted Glass
 minetest.register_node("mcl_amethyst:tinted_glass",{
 	description = S("Tinted Glass"),
 	_doc_items_longdesc = S("Tinted Glass is a type of glass which blocks lights while it is visually transparent."),
