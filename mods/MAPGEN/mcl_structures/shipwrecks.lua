@@ -155,7 +155,8 @@ mcl_structures.register_structure("shipwreck",{
 		local sand = minetest.find_nodes_in_area_under_air(vector.offset(pos, -64, -2, -64), vector.offset(pos, 64, 5, 64), {"mcl_core:sand", "mcl_core:gravel", "mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol"})
 		local chests = minetest.find_nodes_in_area_under_air(vector.offset(pos, -8, -7, -8), vector.offset(pos, 8, 8, 8), {"mcl_chests:chest_small"})
 		if sand and #sand > 0 then
-			local ppos = sand[pr:next(1,#sand)]
+			table.shuffle(sand)
+			local ppos = sand[pr:next(1,math.min(#sand, 6400))]
 			local depth = pr:next(1,4)
 			local cpos = vector.offset(ppos, 0, -depth, 0)
 			minetest.set_node(cpos, {name = "mcl_chests:chest_small"})
