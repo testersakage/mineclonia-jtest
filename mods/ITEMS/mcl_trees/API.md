@@ -65,6 +65,7 @@ All features can be disabled by setting them to false, nil will assume default v
 	},
 	tree_schems_2x2 = {                        -- Table with the same format as above containing schematics to be grown from 2x2 saplings, no attempts to grow a 2x2 tree will be made if this is absent.
 		{ file = "filename",width=7,height=11 },
+		{ file = "filename",width=7,height=11, can_grow = function(pos) return true end }, --can_grow function should return true if the given schematic is allowed to grow here
 	},
 	tree = {},                                 -- overrides for the tree/log node definition
 	leaves = {},                               -- overrides for the leaves node definition

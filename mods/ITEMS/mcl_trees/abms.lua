@@ -101,19 +101,20 @@ function mcl_trees.check_growth_giant(pos, height)
 	return true
 end
 
-local function check_schem_growth(pos, file, giant)
-	if file then
+local function check_schem_growth(pos, schemdef, giant)
+	if schemdef and schemdef.file then
 		local schem = loadstring(
-			minetest.serialize_schematic(file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
+			minetest.serialize_schematic(schemdef.file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
 				.. " return schematic"
 		)()
-		if schem then
-			local h = schem.size.y
-			if giant then
-				return mcl_trees.check_growth_giant(pos, h)
-			else
-				return mcl_trees.check_growth_simple(pos, h)
-			end
+		if not schem then return false end
+		if schemdef and schemdef.can_grow and not schemdef.can_grow(pos, schemdef, giant) then return false end
+
+		local h = schem.size.y
+		if giant then
+			return mcl_trees.check_growth_giant(pos, h)
+		else
+			return mcl_trees.check_growth_simple(pos, h)
 		end
 	end
 
@@ -137,7 +138,7 @@ function mcl_trees.grow_tree(pos, node)
 		if tbt then
 			table.shuffle(mcl_trees.woods[name].tree_schems_2x2)
 			schem = mcl_trees.woods[name].tree_schems_2x2[1]
-			can_grow = check_schem_growth(ne, schem.file, true)
+			can_grow = check_schem_growth(ne, schem, true)
 			place_at = ne
 		end
 	end
@@ -145,7 +146,7 @@ function mcl_trees.grow_tree(pos, node)
 	if not tbt and mcl_trees.woods[name].tree_schems then
 		table.shuffle(mcl_trees.woods[name].tree_schems)
 		schem = mcl_trees.woods[name].tree_schems[1]
-		can_grow = check_schem_growth(place_at, schem.file, false)
+		can_grow = check_schem_growth(place_at, schem, false)
 	end
 
 	if not schem then return end
