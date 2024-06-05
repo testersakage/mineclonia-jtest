@@ -676,7 +676,7 @@ minetest.register_tool("mcl_tools:mace", {
 				if pointed_thing.type == "object" then
 					local entity = pointed_thing.ref
 					if not entity:is_player() or entity:get_luaentity() then
-					        cancel_fall_damage(user)
+						cancel_fall_damage(user)
 						entity:punch(user, 1.6, {
 						full_punch_interval = 1.6,
 						damage_groups = {fleshy = total_damage},
