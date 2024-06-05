@@ -115,19 +115,8 @@ local function attach_object(self, obj)
 end
 
 local function detach_object(obj, change_pos)
-	if not obj or not obj:get_pos() then return end
-	obj:set_detach()
-	obj:set_properties({visual_size = get_visual_size(obj)})
-	if obj:is_player() then
-		mcl_player.players[obj].attached = nil
-		obj:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
-		mcl_player.player_set_animation(obj, "stand" , 30)
-	else
-		obj:get_luaentity()._old_visual_size = nil
-	end
-	if change_pos then
-		 obj:set_pos(vector.add(obj:get_pos(), vector.new(0, 0.2, 0)))
-	end
+	if change_pos then change_pos = vector.new(0, 0.2, 0) end
+	return mcl_util.detach_object(obj, change_pos)
 end
 
 --

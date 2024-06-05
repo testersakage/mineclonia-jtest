@@ -1405,3 +1405,29 @@ function minetest.get_natural_light(pos,tod)
 	minetest.log("error","["..tostring(minetest.get_current_modname()).."] minetest.get_natural_light would have crashed: \n https://codeberg.org/mineclonia/mineclonia/issues/17\n".. tostring(res))
 	return 0
 end
+
+local function get_visual_size(obj)
+	return obj:is_player() and {x = 1, y = 1, z = 1} or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
+end
+
+function mcl_util.detach_object(obj, change_pos, callback)
+	if not obj or not obj:get_pos() then return end
+	obj:set_detach()
+	obj:set_properties({visual_size = get_visual_size(obj)})
+	if obj:is_player() then
+		mcl_player.players[obj].attached = nil
+		obj:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
+		mcl_player.player_set_animation(obj, "stand" , 30)
+	else
+		obj:get_luaentity()._old_visual_size = nil
+	end
+	if change_pos then
+		 obj:set_pos(vector.add(obj:get_pos(), change_pos))
+	end
+	if callback then
+		minetest.after(0.1, function(obj)
+			if not obj or not obj:get_pos() then return end
+			callback(obj)
+		end, obj)
+	end
+end
