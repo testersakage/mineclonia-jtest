@@ -56,3 +56,5 @@ function mcl_trees.check_2by2_saps(pos, node)
 		end
 	end
 end
+
+function mcl_trees.has_flowers(pos)	return minetest.find_node_near(pos, 7, {"group:flower"}) end

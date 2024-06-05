@@ -12,7 +12,7 @@ mcl_trees.register_wood("mangrove",{
 		{file = modpath.."/schematics/mcl_mangrove_tree_3.mts",},
 		{file = modpath.."/schematics/mcl_mangrove_tree_4.mts",},
 		{file = modpath.."/schematics/mcl_mangrove_tree_5.mts", offset = vector.new(1,0,1)},
-		{file = modpath.."/schematics/mcl_mangrove_bee_nest.mts", offset = vector.new(0,0,1)},
+		{file = modpath.."/schematics/mcl_mangrove_bee_nest.mts", offset = vector.new(0,0,1), can_grow = mcl_trees.has_flowers},
 	},
 	tree = { tiles = {"mcl_mangrove_log_top.png", "mcl_mangrove_log_top.png","mcl_mangrove_log.png" }},
 	bark = { tiles = {"mcl_mangrove_log.png"}},
