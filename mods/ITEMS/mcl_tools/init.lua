@@ -36,6 +36,7 @@ local shovel_longdesc = S("Shovels are tools for digging coarse blocks, such as 
 local shovel_use = S("To turn a grass block into a grass path, hold the shovel in your hand, then use (rightclick) the top or side of a grass block. This only works when there's air above the grass block.")
 local shears_longdesc = S("Shears are tools to shear sheep and to mine a few block types. Shears are a special mining tool and can be used to obtain the original item from grass, leaves and similar blocks that require cutting.")
 local shears_use = S("To shear sheep or carve faceless pumpkins, use the “place” key on them. Faces can only be carved at the side of faceless pumpkins. Mining works as usual, but the drops are different for a few blocks.")
+local mace_longdesc = S("The mace is a slow melee weapon that deals incredible damage. “dig” key to use it. This weapon has a cooldown of 1.6 seconds, but if you fall the mace will deal more damage than if you are on the ground. The further you fall the more damage done. If you hit a mob or player then you will receive no fall damage, but beware. If you miss you will die. ")
 
 local wield_scale = mcl_vars.tool_wield_scale
 
@@ -644,8 +645,9 @@ function cancel_fall_damage(player)
 end
 minetest.register_tool("mcl_tools:mace", {
 	description = S("Mace"),
+	_doc_items_longdesc = mace_longdesc,
 	inventory_image = "mcl_tools_mace.png",
-	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10 },
+	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10, sword=1 },
 	tool_capabilities = {
 		full_punch_interval = 1.6,
 		max_drop_level = 1,
@@ -674,15 +676,15 @@ minetest.register_tool("mcl_tools:mace", {
 					cancel_fall_damage(user)
 					local entity = pointed_thing.ref
 					if not entity:is_player() or entity:get_luaentity() then
-						entity:punch(entity, 1.6, {
+						entity:punch(user, 1.6, {
 						full_punch_interval = 1.6,
 						damage_groups = {fleshy = total_damage},
 					}, nil)
-				end
+ 				end
 				if entity:is_player() then
-					entity:punch(entity, 1.6, {
+					entity:punch(user, 1.6, {
 					full_punch_interval = 1.6,
-					damage_groups = {fleshy = -6 * fall_distance / 6},
+					damage_groups = {fleshy = -6 * fall_distance / 6.5},
 				}, nil)
 			end
 		end
@@ -690,7 +692,7 @@ minetest.register_tool("mcl_tools:mace", {
 		if pointed_thing.type == "object" then
 			local entity = pointed_thing.ref
 			if entity:is_player() or entity:get_luaentity() then
-				entity:punch(entity, 1.6, {
+				entity:punch(user, 1.6, {
 				full_punch_interval = 1.6,
 				damage_groups = {fleshy = 6},
 				}, nil)
