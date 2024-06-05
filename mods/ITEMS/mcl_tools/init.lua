@@ -1,3 +1,11 @@
+--Mace Cooldown
+local cooldown_time = 1.6
+mcl_tools_cooldown = {}
+if minetest.global_exists("mcl_tools_cooldown") == false then
+	minetest.register_globalstep(function(dtime)
+		minetest.set_global_exists("mcl_tools_cooldown", {})
+	end)
+end
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
@@ -625,5 +633,74 @@ minetest.register_tool("mcl_tools:shears", {
 	},
 })
 
+--Mace
+function cancel_fall_damage(player)
+	if player and player:is_player() then
+		player:set_armor_groups({immortal=1})
+		minetest.after(1.0, function()
+			player:set_armor_groups({fleshy=100})
+		end)
+	end
+end
+minetest.register_tool("mcl_tools:mace", {
+	description = S("Mace"),
+	inventory_image = "mcl_tools_mace.png",
+	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10 },
+	tool_capabilities = {
+		full_punch_interval = 1.6,
+		max_drop_level = 1,
+		groupcaps = {
+			snappy = {times = {1.5, 0.9, 0.4}, uses = 50, maxlevel = 3},
+		},
+		damage_groups = {fleshy = 5},
+	},
+	_mcl_toollike_wield = true,
+
+	on_use = function(itemstack, user, pointed_thing)
+		local playername = user:get_player_name()
+		if mcl_tools_cooldown[playername] == nil then
+			mcl_tools_cooldown[playername] = 0
+		end
+		local current_time = minetest.get_gametime()
+		if current_time - mcl_tools_cooldown[playername] >= cooldown_time then
+			mcl_tools_cooldown[playername] = current_time
+			local damage_multiplier = -1.6
+			local fall_distance = user:get_velocity().y
+			local base_damage = 6
+			local additional_damage = fall_distance * damage_multiplier
+			local total_damage = base_damage * additional_damage
+			if fall_distance < 0 then
+				if pointed_thing.type == "object" then
+					cancel_fall_damage(user)
+					local entity = pointed_thing.ref
+					if not entity:is_player() or entity:get_luaentity() then
+						entity:punch(entity, 1.6, {
+						full_punch_interval = 1.6,
+						damage_groups = {fleshy = total_damage},
+					}, nil)
+				end
+				if entity:is_player() then
+					entity:punch(entity, 1.6, {
+					full_punch_interval = 1.6,
+					damage_groups = {fleshy = -6 * fall_distance / 6},
+				}, nil)
+			end
+		end
+		else
+		if pointed_thing.type == "object" then
+			local entity = pointed_thing.ref
+			if entity:is_player() or entity:get_luaentity() then
+				entity:punch(entity, 1.6, {
+				full_punch_interval = 1.6,
+				damage_groups = {fleshy = 6},
+				}, nil)
+			end
+		end
+	end
+		itemstack:add_wear(65535 / 500)
+		return itemstack
+	end
+end,
+})
 
 dofile(modpath.."/crafting.lua")
