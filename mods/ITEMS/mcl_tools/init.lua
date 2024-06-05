@@ -635,16 +635,16 @@ minetest.register_tool("mcl_tools:shears", {
 })
 
 --Mace
-function cancel_fall_damage(player)
-	if player and player:is_player() then
-		player:set_armor_groups({immortal=1})
-		minetest.after(1.0, function()
-			player:set_armor_groups({fleshy=100})
+local function cancel_fall_damage(user)
+	if--[[ player and]] user:is_player() then
+		user:set_armor_groups({immortal=1})
+		minetest.after(2.0, function()
+			user:set_armor_groups({fleshy=100})
 		end)
 	end
 end
 minetest.register_tool("mcl_tools:mace", {
-	description = S("Mace"),
+	description = "" ..minetest.colorize(mcl_colors.DARK_PURPLE, S("Mace")),--S("Mace"),
 	_doc_items_longdesc = mace_longdesc,
 	inventory_image = "mcl_tools_mace.png",
 	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10, sword=1 },
@@ -656,6 +656,7 @@ minetest.register_tool("mcl_tools:mace", {
 		},
 		damage_groups = {fleshy = 5},
 	},
+	_repair_material = "mcl_mobitems:breeze_rod",
 	_mcl_toollike_wield = true,
 
 	on_use = function(itemstack, user, pointed_thing)
@@ -673,15 +674,16 @@ minetest.register_tool("mcl_tools:mace", {
 			local total_damage = base_damage * additional_damage
 			if fall_distance < 0 then
 				if pointed_thing.type == "object" then
-					cancel_fall_damage(user)
 					local entity = pointed_thing.ref
 					if not entity:is_player() or entity:get_luaentity() then
+					        cancel_fall_damage(user)
 						entity:punch(user, 1.6, {
 						full_punch_interval = 1.6,
 						damage_groups = {fleshy = total_damage},
 					}, nil)
  				end
 				if entity:is_player() then
+					cancel_fall_damage(user)
 					entity:punch(user, 1.6, {
 					full_punch_interval = 1.6,
 					damage_groups = {fleshy = -6 * fall_distance / 6.5},
