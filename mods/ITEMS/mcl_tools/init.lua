@@ -636,7 +636,7 @@ minetest.register_tool("mcl_tools:shears", {
 
 --Mace
 local function cancel_fall_damage(user)
-	if--[[ player and]] user:is_player() then
+	if user:is_player() then
 		user:set_armor_groups({immortal=1})
 		minetest.after(2.0, function()
 			user:set_armor_groups({fleshy=100})
@@ -707,4 +707,5 @@ minetest.register_tool("mcl_tools:mace", {
 end,
 })
 
+dofile(modpath.."/heavy_core.lua")
 dofile(modpath.."/crafting.lua")
