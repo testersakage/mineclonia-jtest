@@ -232,6 +232,13 @@ minetest.register_craft({
 		{ "mcl_core:iron_ingot", "" },
 	}
 })
+minetest.register_craft({
+	output = "mcl_tools:mace",
+	recipe = {
+		{ "", "mcl_tools:heavy_core" },
+		{ "", "mcl_mobitems:breeze_rod" },
+	}
+})
 
 minetest.register_craft({
 	type = "fuel",
