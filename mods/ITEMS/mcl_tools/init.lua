@@ -635,14 +635,6 @@ minetest.register_tool("mcl_tools:shears", {
 })
 
 --Mace
-local function cancel_fall_damage(user)
-	if user:is_player() then
-		user:set_armor_groups({immortal=1})
-		minetest.after(2.0, function()
-			user:set_armor_groups({fleshy=100})
-		end)
-	end
-end
 minetest.register_tool("mcl_tools:mace", {
 	description = "" ..minetest.colorize(mcl_colors.DARK_PURPLE, S("Mace")),--S("Mace"),
 	_doc_items_longdesc = mace_longdesc,
@@ -660,52 +652,72 @@ minetest.register_tool("mcl_tools:mace", {
 	_mcl_toollike_wield = true,
 
 	on_use = function(itemstack, user, pointed_thing)
-		local playername = user:get_player_name()
-		if mcl_tools_cooldown[playername] == nil then
-			mcl_tools_cooldown[playername] = 0
+		if mcl_tools.mace_cooldown[user] == nil then
+			mcl_tools.mace_cooldown[user] = mcl_tools.mace_cooldown[user] or 0
 		end
 		local current_time = minetest.get_gametime()
-		if current_time - mcl_tools_cooldown[playername] >= cooldown_time then
-			mcl_tools_cooldown[playername] = current_time
+		if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
+			mcl_tools.mace_cooldown[user] = current_time
 			local damage_multiplier = -1.6
 			local fall_distance = user:get_velocity().y
 			local base_damage = 6
+			local entity = pointed_thing.ref
 			local additional_damage = fall_distance * damage_multiplier
 			local total_damage = base_damage * additional_damage
 			if fall_distance < 0 then
 				if pointed_thing.type == "object" then
-					local entity = pointed_thing.ref
+					mcl_damage.register_modifier(function(obj, damage, reason)
+						if reason.type == "fall" then
+							local pos = obj:get_pos()
+							local velocity = obj:get_velocity() or obj:get_player_velocity() or {x=0,y=-10,z=0}
+							local v_axis_max = math.max(math.abs(velocity.x), math.abs(velocity.y), math.abs(velocity.z))
+							local step = {x = velocity.x / v_axis_max, y = velocity.y / v_axis_max, z = velocity.z / v_axis_max}
+							for i = 1, math.ceil(v_axis_max/5)+1 do
+								if entity then
+									if entity:get_luaentity() then
+										return 0
+									end
+								end
+								pos = vector.add(pos, step)
+							end
+						end
+					end, -200)
 					if not entity:is_player() or entity:get_luaentity() then
-						cancel_fall_damage(user)
 						entity:punch(user, 1.6, {
-						full_punch_interval = 1.6,
-						damage_groups = {fleshy = total_damage},
-					}, nil)
- 				end
-				if entity:is_player() then
-					cancel_fall_damage(user)
-					entity:punch(user, 1.6, {
-					full_punch_interval = 1.6,
-					damage_groups = {fleshy = -6 * fall_distance / 6.5},
-				}, nil)
+							full_punch_interval = 1.6,
+							damage_groups = {fleshy = total_damage},
+						}, nil)
+ 					end
+					if entity:is_player() then
+						entity:punch(user, 1.6, {
+							full_punch_interval = 1.6,
+							damage_groups = {fleshy = -6 * fall_distance / 6.5},
+						}, nil)
+					end
+				end
+				else
+				if pointed_thing.type == "object" then
+					local entity = pointed_thing.ref
+					if entity:is_player() or entity:get_luaentity() then
+						entity:punch(user, 1.6, {
+							full_punch_interval = 1.6,
+							damage_groups = {fleshy = 6},
+						}, nil)
+					end
+				end
+			end
+			if user:get_meta():get_string("gamemode") == "survival" then 
+			itemstack:add_wear(65535 / 500)
+			return itemstack
+			else
 			end
 		end
-		else
-		if pointed_thing.type == "object" then
-			local entity = pointed_thing.ref
-			if entity:is_player() or entity:get_luaentity() then
-				entity:punch(user, 1.6, {
-				full_punch_interval = 1.6,
-				damage_groups = {fleshy = 6},
-				}, nil)
-			end
-		end
-	end
-		itemstack:add_wear(65535 / 500)
-		return itemstack
-	end
-end,
+	end,
 })
 
 dofile(modpath.."/heavy_core.lua")
 dofile(modpath.."/crafting.lua")
+
+minetest.register_on_leaveplayer(function(user)
+	mcl_tools.mace_cooldown[user] = 0 
+end)
