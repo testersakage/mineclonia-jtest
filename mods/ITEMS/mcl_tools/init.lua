@@ -668,7 +668,7 @@ minetest.register_tool("mcl_tools:mace", {
 							local v_axis_max = math.max(math.abs(velocity.x), math.abs(velocity.y), math.abs(velocity.z))
 							local step = {x = velocity.x / v_axis_max, y = velocity.y / v_axis_max, z = velocity.z / v_axis_max}
 							for i = 1, math.ceil(v_axis_max/5)+1 do
-								if entity then
+								if entity and user:get_wielded_item("mcl_tools:mace") and mcl_tools.mace_cooldown[user] == current_time then
 									if entity:get_luaentity() then
 										return 0
 									end
