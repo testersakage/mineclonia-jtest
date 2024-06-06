@@ -273,3 +273,31 @@ function mob_class:toggle_sit(clicker,p)
 		glow = minetest.LIGHT_MAX,
 	})
 end
+
+function mob_class:break_in(player)
+	self.temper = self.temper or (math.random(100))
+	if not self.tamed then
+		local item = player:get_wielded_item()
+		local temper_increase = 0
+		if self._temper_increase and self._temper_increase[item:get_name()] then
+			temper_increase = self.temper_increase[item]
+			item:take_item()
+			player:set_wielded_item(item)
+		elseif not self.driver then
+			self.object:set_properties({stepheight = 1.1})
+			self:attach(player)
+			self.buck_off_time = 40 -- TODO how long does it take in minecraft?
+			if self.temper > 100 then
+				self.tamed = true -- NOTE taming can only be finished by riding the horse
+				if not self.owner or self.owner == "" then
+					self.owner = player:get_player_name()
+				end
+			end
+			temper_increase = 5
+		elseif self.driver and self.driver == player then
+			mcl_mobs.detach(player, vector.new(0, 0, 1))
+		end
+		self.temper = self.temper + temper_increase
+		return true
+	end
+end

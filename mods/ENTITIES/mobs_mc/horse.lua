@@ -116,6 +116,13 @@ local horse = {
 		"mcl_core:apple_gold",
 		"mcl_farming:carrot_item_gold",
 	},
+	_temper_increase = {
+		["mcl_core:sugar"] = 3,
+		["mcl_farming:wheat_item"] = 3,
+		["mcl_core:apple"] = 3,
+	    ["mcl_farming:carrot_item_gold"] = 5,
+		["mcl_core:apple_gold"] = 10
+	},
 	passive = true,
 	hp_min = 15,
 	hp_max = 30,
@@ -218,36 +225,7 @@ local horse = {
 			end
 		end
 
-		self.temper = self.temper or (math.random(1,100))
-		if not self.tamed then
-			local temper_increase = 0
-			if (iname == "mcl_core:sugar") then
-				temper_increase = 3
-			elseif (iname == "mcl_farming:wheat_item") then
-				temper_increase = 3
-			elseif (iname == "mcl_core:apple") then
-				temper_increase = 3
-			elseif (iname == "mcl_farming:carrot_item_gold") then
-				temper_increase = 5
-			elseif (iname == "mcl_core:apple_gold") then
-				temper_increase = 10
-			elseif not self.driver then
-				self.object:set_properties({stepheight = 1.1})
-				self:attach(clicker)
-				self.buck_off_time = 40 -- TODO how long does it take in minecraft?
-				if self.temper > 100 then
-					self.tamed = true -- NOTE taming can only be finished by riding the horse
-					if not self.owner or self.owner == "" then
-						self.owner = clicker:get_player_name()
-					end
-				end
-				temper_increase = 5
-			elseif self.driver and self.driver == clicker then
-				mcl_mobs.detach(clicker, {x = 1, y = 0, z = 1})
-			end
-			self.temper = self.temper + temper_increase
-			return
-		end
+		if self:break_in(clicker) then return end
 
 		if can_breed(self.name) then
 			if (iname == "mcl_core:apple_gold") then
@@ -279,7 +257,7 @@ local horse = {
 				return
 			elseif minetest.get_item_group(iname, "horse_armor") > 0 and can_equip_horse_armor(self.name) and not self.driver and self:set_armor(clicker) then
 				return
-			elseif not self.driver and self._saddle then
+			elseif not self.driver then
 				self.object:set_properties({stepheight = 1.1})
 				self:attach(clicker)
 			end
