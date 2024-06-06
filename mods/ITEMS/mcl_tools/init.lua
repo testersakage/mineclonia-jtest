@@ -1,15 +1,10 @@
 --Mace Cooldown
 local cooldown_time = 1.6
-mcl_tools_cooldown = {}
-if minetest.global_exists("mcl_tools_cooldown") == false then
-	minetest.register_globalstep(function(dtime)
-		minetest.set_global_exists("mcl_tools_cooldown", {})
-	end)
-end
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
 mcl_tools = {}
+mcl_tools.mace_cooldown = {}
 
 -- mods/default/tools.lua
 
