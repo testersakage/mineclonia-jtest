@@ -131,14 +131,12 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		end
 
 		local item = clicker:get_wielded_item()
-		if item:get_name() == "mcl_farming:hay_block" and self:feed_tame(clicker, 1, true, false) then
+		if self:break_in(clicker) then
 			return
 		elseif item:get_name() == "mcl_chests:chest" and self:set_chest(item, clicker) then
 			return
 		elseif self._has_chest and clicker:get_player_control().sneak then
 			mcl_entity_invs.show_inv_form(self,clicker," - Strength "..math.floor(self._inv_size / 3))
-			return
-		elseif self:feed_tame(clicker, 1, false, true) then
 			return
 		end
 
