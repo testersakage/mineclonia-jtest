@@ -686,7 +686,7 @@ minetest.register_tool("mcl_tools:mace", {
 					end
 				end
 			end
-			if not minetest.is_creative_enabled(user:get_player_name()) or user:get_meta():get_string("gamemode") == "survival" then
+			if not minetest.is_creative_enabled(user:get_player_name()) then
 			itemstack:add_wear(65535 / 500)
 			return itemstack
 			else
