@@ -10,7 +10,6 @@ local S = minetest.get_translator("mcl_mobs")
 mcl_mobs.invis = {}
 
 local remove_far = true
-local mobs_debug = minetest.settings:get_bool("mobs_debug", false) -- Shows helpful debug info above each mob
 local spawn_logging = minetest.settings:get_bool("mcl_logging_mobs_spawn", false)
 local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
 
@@ -28,38 +27,13 @@ function mob_class:safe_remove()
 	end,self.object)
 end
 
-function mob_class:update_tag() --update nametag and/or the debug box
-	local tag
-	if mobs_debug then
-		local name = self.name
-		if self.nametag and self.nametag ~= "" then
-			name = self.nametag
-		end
-		local profession = ""
-		if self.name == "mobs_mc:villager" then
-			profession = "profession = "..tostring(self._profession).."\n"
-		end
-		tag = "name = '"..tostring(name).."'\n"..
-		profession..
-		"state = '"..tostring(self.state).."'\n"..
-		"order = '"..tostring(self.order).."'\n"..
-		"attack = "..tostring(self.attack).."\n"..
-		"health = "..tostring(self.health).."\n"..
-		"breath = "..tostring(self.breath).."\n"..
-		"gotten = "..tostring(self.gotten).."\n"..
-		"tamed = "..tostring(self.tamed).."\n"..
-		"owner = "..tostring(self.owner).."\n"..
-		"horny = "..tostring(self.horny).."\n"..
-		"hornytimer = "..tostring(self.hornytimer).."\n"..
-		"runaway_timer = "..tostring(self.runaway_timer).."\n"..
-		"following = "..tostring(self.following).."\n"..
-		"lifetimer = "..tostring(self.lifetimer)
-	else
-		tag = self.nametag
-	end
+function mob_class:get_nametag()
+	return self.nametag or ""
+end
 
+function mob_class:update_tag() --update nametag and/or the debug box
 	self:set_properties({
-		nametag = tag,
+		nametag = self:get_nametag(),
 	})
 end
 
@@ -399,14 +373,13 @@ function mob_class:on_step(dtime)
 
 	if self:check_despawn(pos, dtime) then return true end
 
+	self:update_tag()
 	self:slow_mob()
 	if self:falling(pos) then return end
 
 	if self.force_step then
 		self:force_step(dtime)
 	end
-
-	if mobs_debug then self:update_tag() end
 
 	self:update_timers(dtime)
 	if self:check_suspend() then
