@@ -647,20 +647,21 @@ minetest.register_tool("mcl_tools:mace", {
 	_mcl_toollike_wield = true,
 
 	on_use = function(itemstack, user, pointed_thing)
-			local username = user:get_player_name()
 			local damage_multiplier = -1.6
 			local fall_distance = user:get_velocity().y
 			local base_damage = 6
 			mcl_tools.entity = pointed_thing.ref
+			local additional_damage = fall_distance * damage_multiplier
+			local total_damage = base_damage * additional_damage
 			if pointed_thing.type == "object" then
-				if mcl_tools.mace_cooldown[username] == nil then
-					mcl_tools.mace_cooldown[username] = mcl_tools.mace_cooldown[username] or 0
+				if mcl_tools.mace_cooldown[user] == nil then
+					mcl_tools.mace_cooldown[user] = mcl_tools.mace_cooldown[user] or 0
 				end
 				local current_time = minetest.get_gametime()
-				if current_time - mcl_tools.mace_cooldown[username] >= cooldown_time then
-					mcl_tools.mace_cooldown[username] = current_time
+				if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
+					mcl_tools.mace_cooldown[user] = current_time
 					if fall_distance < 0 then
-						if mcl_tools.entity:is_player() and mcl_tools.entity:get_luaentity() then
+						if mcl_tools.entity:is_player() or mcl_tools.entity:get_luaentity() then
 							mcl_tools.entity:punch(user, 1.6, {
 							full_punch_interval = 1.6,
 							damage_groups = {fleshy = -6 * fall_distance / 6.5},
@@ -692,8 +693,7 @@ end)
 
 -- By Cora
 mcl_damage.register_modifier(function(obj, damage, reason)
-	objname = obj:get_player_name()
-	if reason.type == "fall" and mcl_tools.mace_cooldown[objname] and minetest.get_gametime() - mcl_tools.mace_cooldown[objname] < 2 then
+	if reason.type == "fall" and mcl_tools.mace_cooldown[obj] and minetest.get_gametime() - mcl_tools.mace_cooldown[obj] < 2 then
 			return 0
 	end
 end)
