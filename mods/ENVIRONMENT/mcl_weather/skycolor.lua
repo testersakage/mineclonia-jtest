@@ -1,4 +1,5 @@
 local mods_loaded = false
+local NIGHT_RATIO = 0.2
 local NIGHT_VISION_RATIO = 0.45
 
 local water_color = "#3F76E4"
@@ -168,7 +169,7 @@ mcl_weather.skycolor = {
 					player:set_sun({visible = true, sunrise_visible = true})
 					player:set_moon({visible = true})
 					player:set_stars({visible = true})
-					mcl_weather.skycolor.override_day_night_ratio(player, nil)
+					mcl_weather.skycolor.override_day_night_ratio(player, NIGHT_RATIO)
 				elseif not has_weather then
 					local day_color = mcl_weather.skycolor.get_sky_layer_color(0.15)
 					local dawn_color = mcl_weather.skycolor.get_sky_layer_color(0.27)
@@ -219,7 +220,7 @@ mcl_weather.skycolor = {
 						-- 0.5 which means midday/noon. i.e. the key here is 1 - math.abs(0.5 - w)
 						-- the rest is just modifications and a minimum light level of 0.2
 						local w = minetest.get_timeofday()
-						local light = math.max(0.2,((1 - math.abs(0.5 - w)) * lf) - 0.15)
+						local light = math.max(NIGHT_RATIO,((1 - math.abs(0.5 - w)) * lf) - 0.15)
 						mcl_weather.skycolor.override_day_night_ratio(player, light)
 					else
 						mcl_weather.skycolor.override_day_night_ratio(player, nil)
