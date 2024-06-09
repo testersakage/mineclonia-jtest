@@ -1,5 +1,5 @@
 local S = minetest.get_translator(modname)
-local heavy_core_longdesc = S("Solid Blocks of Steel. These are only forged if those worthy defeat the trials that await them.")
+local heavy_core_longdesc = S("Solid Blocks of Steel. These are only forged if those that are brave enough can defeat the trials that await them.")
 
 minetest.register_node("mcl_tools:heavy_core", {
     description = "" ..minetest.colorize(mcl_colors.DARK_PURPLE, S("Heavy Core")),
