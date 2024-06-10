@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-07 05:36+0000\n"
+"PO-Revision-Date: 2024-06-11 04:15+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/hu/>\n"
@@ -215,47 +215,49 @@ msgid "Charge a Respawn Anchor to the maximum."
 msgstr "Töltsd fel a lélekhorgonyt a maximumra."
 
 msgid "What A Deal!"
-msgstr ""
+msgstr "Micsoda üzlet!"
 
 msgid "Successfully trade with a Villager."
-msgstr ""
+msgstr "Sikeres kereskedés egy falubelivel."
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "Taktikus horgászat"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "Fogj egy halat... horgászbot nélkül!"
 
 msgid "The Cutest Predator"
-msgstr ""
+msgstr "A legcukibb ragadozó"
 
 msgid "Catch an Axolotl with a bucket!"
-msgstr ""
+msgstr "Kapj el vödörrel egy axolotl-t!"
 
 msgid "Withering Heights"
-msgstr ""
+msgstr "Sorvasztó szelek"
 
 msgid "Summon the wither from the dead."
-msgstr ""
+msgstr "Idézd meg a Sorvasztót a holtak közül."
 
 msgid "Free the End"
-msgstr ""
+msgstr "Szabadíts fel a Véget"
 
 msgid "Kill the ender dragon. Good Luck!"
-msgstr ""
+msgstr "Öld meg a Végzetsárkányt. Sok szerencsét!"
 
 msgid "Fishy Business"
-msgstr ""
+msgstr "Kifogni az aranyhalat"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
 msgstr ""
+"Fogj egy halat.\n"
+"Tipp: Fogj halat, lazacot, bohóchalat vagy gömbhalat."
 
 msgid "Country Lode, Take Me Home"
-msgstr ""
+msgstr "Magnetit hazahív"
 
 msgid "Use a compass on a Lodestone."
-msgstr ""
+msgstr "Használd az iránytűt egy magnetittel."
 
 msgid "Serious Dedication"
 msgstr ""
