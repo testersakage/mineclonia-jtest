@@ -81,22 +81,5 @@ function mcl_deepslate.register_variants(name, defs)
 	end
 end
 
-function mcl_deepslate.register_deepslate_variant(name, defs)
-	mcl_deepslate.register_variants(name,table.update({
-		basename = "deepslate",
-		basetiles = "mcl_deepslate",
-	}, defs))
-end
-
-function mcl_deepslate.register_tuff_variant(name, defs)
-	mcl_deepslate.register_variants(name,table.update({
-		basename = "tuff",
-		basetiles = "mcl_deepslate_tuff",
-		basedef = {
-			_mcl_hardness = 1.5,
-		},
-	}, defs))
-end
-
 dofile(modpath.."/deepslate.lua")
 dofile(modpath.."/tuff.lua")

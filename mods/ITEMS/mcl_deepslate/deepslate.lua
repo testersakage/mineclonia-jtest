@@ -1,6 +1,13 @@
 local cobble = "mcl_deepslate:deepslate_cobbled"
 local S = mcl_deepslate.translator
 
+local function register_deepslate_variant(name, defs)
+	mcl_deepslate.register_variants(name,table.update({
+		basename = "deepslate",
+		basetiles = "mcl_deepslate",
+	}, defs))
+end
+
 minetest.register_node("mcl_deepslate:deepslate", {
 	description = S("Deepslate"),
 	_doc_items_longdesc = S("Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone."),
@@ -58,7 +65,7 @@ mcl_deepslate.register_deepslate_ore("redstone_lit", S("Lit Deepslate Redstone O
 })
 mcl_deepslate.register_deepslate_ore("copper", S("Deepslate Copper Ore"), nil, "mcl_copper:stone_with_copper")
 
-mcl_deepslate.register_deepslate_variant("cobbled", {
+register_deepslate_variant("cobbled", {
 	node = {
 		description = S("Cobbled Deepslate"),
 		_doc_items_longdesc = S("Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone."),
@@ -78,7 +85,7 @@ mcl_deepslate.register_deepslate_variant("cobbled", {
 	},
 })
 
-mcl_deepslate.register_deepslate_variant("polished", {
+register_deepslate_variant("polished", {
 	node = {
 		description = S("Polished Deepslate"),
 		_doc_items_longdesc = S("Polished deepslate is the stone-like polished version of deepslate."),
@@ -99,7 +106,7 @@ mcl_deepslate.register_deepslate_variant("polished", {
 	}
 })
 
-mcl_deepslate.register_deepslate_variant("bricks", {
+register_deepslate_variant("bricks", {
 	node = {
 		description = S("Deepslate Bricks"),
 		_doc_items_longdesc = S("Deepslate bricks are the brick version of deepslate."),
@@ -123,7 +130,7 @@ mcl_deepslate.register_deepslate_variant("bricks", {
 	}
 })
 
-mcl_deepslate.register_deepslate_variant("tiles", {
+register_deepslate_variant("tiles", {
 	node = {
 		description = S("Deepslate Tiles"),
 		_doc_items_longdesc = S("Deepslate tiles are a decorative variant of deepslate."),
@@ -147,7 +154,7 @@ mcl_deepslate.register_deepslate_variant("tiles", {
 	}
 })
 
-mcl_deepslate.register_deepslate_variant("chiseled", {
+register_deepslate_variant("chiseled", {
 	node = {
 		description = S("Chiseled Deepslate"),
 		_doc_items_longdesc = S("Deepslate tiles are a decorative variant of deepslate."),

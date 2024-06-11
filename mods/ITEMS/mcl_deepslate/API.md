@@ -1,8 +1,6 @@
 # mcl_deepslate
 
 `mcl_deepslate.register_variants(name, def)`
-`mcl_deepslate.register_deepslate_variant(name, def)`
-`mcl_deepslate.register_tuff_variant(name, def)`
 
 ## Variant definition
 

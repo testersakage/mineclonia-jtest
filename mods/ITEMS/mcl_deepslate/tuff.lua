@@ -1,5 +1,15 @@
 local S = mcl_deepslate.translator
 
+local function register_tuff_variant(name, defs)
+	mcl_deepslate.register_variants(name,table.update({
+		basename = "tuff",
+		basetiles = "mcl_deepslate_tuff",
+		basedef = {
+			_mcl_hardness = 1.5,
+		},
+	}, defs))
+end
+
 minetest.register_node("mcl_deepslate:tuff", {
 	description = S("Tuff"),
 	_doc_items_longdesc = S("Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."),
@@ -35,7 +45,7 @@ minetest.register_node("mcl_deepslate:tuff_chiseled_bricks", {
     _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_bricks", },
 })
 
-mcl_deepslate.register_tuff_variant("", {
+register_tuff_variant("", {
     stair = {
         description = S("Tuff Stairs"),
         _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", },
@@ -50,7 +60,7 @@ mcl_deepslate.register_tuff_variant("", {
     },
 })
 
-mcl_deepslate.register_tuff_variant("polished", {
+register_tuff_variant("polished", {
     node = {
         description = S("Polished Tuff"),
         _doc_items_longdesc = S("Polished tuff is a polished variant of the tuff block."),
@@ -71,7 +81,7 @@ mcl_deepslate.register_tuff_variant("polished", {
     },
 })
 
-mcl_deepslate.register_tuff_variant("bricks", {
+register_tuff_variant("bricks", {
     node = {
         description = S("Tuff Bricks"),
         _doc_items_longdesc = S("Tuff bricks are a brick variant of tuff."),
