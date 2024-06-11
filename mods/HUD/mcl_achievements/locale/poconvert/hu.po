@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-11 04:15+0000\n"
+"PO-Revision-Date: 2024-06-11 23:36+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/hu/>\n"
@@ -254,71 +254,80 @@ msgstr ""
 "Tipp: Fogj halat, lazacot, bohóchalat vagy gömbhalat."
 
 msgid "Country Lode, Take Me Home"
-msgstr "Magnetit hazahív"
+msgstr "Mágneskő, mutass utat"
 
 msgid "Use a compass on a Lodestone."
-msgstr "Használd az iránytűt egy magnetittel."
+msgstr "Használd az iránytűt egy mágneskővel."
 
 msgid "Serious Dedication"
-msgstr ""
+msgstr "Komoly elhatározás"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
 msgstr ""
+"Fejlessz fel egy kapát Netherite fémrúddal, majd értékeld át eddigi életed."
 
 msgid "Local Brewery"
-msgstr ""
+msgstr "Helyi sörfőzde"
 
 msgid "Brew a Potion.\n"
 "Hint: Take a potion or glass bottle out of the brewing stand."
 msgstr ""
+"Főzz egy bájitalt.\n"
+"Tipp: Vegyél ki egy bájitalt vagy üvegpalackot a főzőállványból."
 
 msgid "Enchanter"
-msgstr ""
+msgstr "Varázsló"
 
 msgid "Enchant an item using an Enchantment Table."
-msgstr ""
+msgstr "Varázsolj el egy tárgyat egy varázsasztal segítségével."
 
 msgid "Bring Home the Beacon"
-msgstr ""
+msgstr "Hozd haza a jelzőfényt"
 
 msgid "Use a beacon."
-msgstr ""
+msgstr "Használd a jelzőfényt."
 
 msgid "Beaconator"
-msgstr ""
+msgstr "Jelzőmester"
 
 msgid "Use a fully powered beacon."
-msgstr ""
+msgstr "Használj egy teljesen feltöltött jelzőfényt."
 
 msgid "The End... Again..."
-msgstr ""
+msgstr "A Vég ... már megint..."
 
 msgid "Respawn the Ender Dragon."
-msgstr ""
+msgstr "Támaszd fel a Végsárkányt."
 
 msgid "Bee Our Guest"
-msgstr ""
+msgstr "Barátaink a méhek"
 
 msgid "Use a campfire to collect a bottle of honey from a beehive without aggrivating the bees inside."
 msgstr ""
+"Tábortűz segítségével gyűjts egy üveg mézet a méhkaptárból anélkül, hogy a "
+"méheket felizgatnád."
 
 msgid "Total Beelocation"
-msgstr ""
+msgstr "Méhköltöztetés"
 
 msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr ""
+"Mozgass el egy méhkaptárt, amelyben 3 méh van, egy selyemérintéssel "
+"elvarázsolt eszközzel."
 
 msgid "Wax On"
-msgstr ""
+msgstr "Fel a viaszt"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr ""
+"Használj méhviaszt egy rézblokkon, hogy megvédd azt az időjárás "
+"viszontagságaitól."
 
 msgid "Wax Off"
-msgstr ""
+msgstr "Le a viasszal"
 
 msgid "Scrape wax off of a copper block."
-msgstr ""
+msgstr "Kapard le a méhviaszt a rézblokkról."
 
 msgid "Crafting a New Look"
 msgstr ""
