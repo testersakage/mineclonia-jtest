@@ -4328,7 +4328,7 @@ local function register_decorations()
 			biomes = {"CherryGrove"},
 			y_min = 1,
 			y_max = mcl_vars.mg_overworld_max,
-			schematic = mod_cherry_blossom.."/schematics/mcl_cherry_blossom_tree_beehive_"..i..".mts",
+			schematic = mod_cherry_blossom.."/schematics/mcl_cherry_blossom_tree_bee_nest_"..i..".mts",
 			flags = "place_center_x, place_center_z",
 			rotation = "random",
 		})
