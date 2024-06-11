@@ -57,4 +57,7 @@ function mcl_trees.check_2by2_saps(pos, node)
 	end
 end
 
-function mcl_trees.has_flowers(pos)	return minetest.find_node_near(pos, 2, {"group:flower"}) end
+function mcl_trees.has_flowers(pos)
+	local flowers = minetest.find_nodes_in_area(vector.offset(pos,-2, 0 ,-2), vector.offset(pos, 2, 0, 2), {"group:flower"})
+	return flowers and #flowers > 0
+end
