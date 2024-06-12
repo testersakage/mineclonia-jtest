@@ -50,7 +50,16 @@ minetest.register_abm({
 	neighbors = {"group:soil_sapling","group:soil_propagule"},
 	interval = 35,
 	chance = 5,
-	action = mcl_trees.grow_tree,
+	action = function(pos, node)
+		-- instead of checking if there are no non-transparent nodes between the sapling and the sky,
+		-- which would be too laborious in an abm, check if the node would be in full daylight at noon.
+		if minetest.get_node_light(pos) <= 7 and minetest.get_node_light(pos, 0.5) < minetest.LIGHT_MAX then
+			minetest.remove_node(pos)
+			minetest.add_item(pos, node)
+		else
+			mcl_trees.grow_tree(pos, node)
+		end
+	end,
 })
 
 minetest.register_lbm({
