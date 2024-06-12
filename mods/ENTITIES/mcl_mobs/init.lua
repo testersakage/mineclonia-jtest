@@ -313,7 +313,7 @@ function mcl_mobs.register_mob(name, def)
 	}),mcl_mobs.mob_class_meta)
 
 	mcl_mobs.registered_mobs[name] = final_def
-	minetest.register_entity(name, final_def)
+	minetest.register_entity(":"..name, final_def)
 
 	if minetest.get_modpath("doc_identifier") ~= nil then
 		doc.sub.identifier.register_object(name, "basics", "mobs")
