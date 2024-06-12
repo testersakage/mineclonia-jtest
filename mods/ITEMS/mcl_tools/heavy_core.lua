@@ -16,4 +16,6 @@ minetest.register_node("mcl_tools:heavy_core", {
         	{-0.25, -0.5, -0.25, 0.25, 0.0, 0.25},
         },
     },
+    _mcl_hardness = 10,
+    _mcl_blast_resistance = 30,
 })
