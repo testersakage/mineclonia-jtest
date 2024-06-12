@@ -3855,7 +3855,7 @@ local function register_decorations()
 		rotation = "random",
 	})
 	minetest.register_decoration({
-		name = "mcl_biomes:mangrove_tree_4",
+		name = "mcl_biomes:mangrove_tree_5",
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
 		sidelen = 80,
