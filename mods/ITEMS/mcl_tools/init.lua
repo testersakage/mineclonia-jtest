@@ -647,12 +647,8 @@ minetest.register_tool("mcl_tools:mace", {
 	_mcl_toollike_wield = true,
 
 	on_use = function(itemstack, user, pointed_thing)
-			local damage_multiplier = -1.6
 			local fall_distance = user:get_velocity().y
-			local base_damage = 6
 			mcl_tools.entity = pointed_thing.ref
-			local additional_damage = fall_distance * damage_multiplier
-			local total_damage = base_damage * additional_damage
 			if pointed_thing.type == "object" then
 				if mcl_tools.mace_cooldown[user] == nil then
 					mcl_tools.mace_cooldown[user] = mcl_tools.mace_cooldown[user] or 0
