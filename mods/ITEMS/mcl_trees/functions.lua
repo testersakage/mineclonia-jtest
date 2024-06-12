@@ -112,6 +112,8 @@ local diagonals = {
 
 function mcl_trees.check_2by2_saps(pos, node)
 	local n = node.name
+	-- quick check if at all there are sufficient saplings nearby
+	if #minetest.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) == 0 then return end
 	-- we need to check 4 possible 2x2 squares on the x/z plane each uniquely defined by one of the
 	-- diagonals of the position we're checking:
 	for _,v in pairs(diagonals) do
