@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-11 23:36+0000\n"
+"PO-Revision-Date: 2024-06-13 07:59+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/hu/>\n"
@@ -330,79 +330,83 @@ msgid "Scrape wax off of a copper block."
 msgstr "Kapard le a méhviaszt a rézblokkról."
 
 msgid "Crafting a New Look"
-msgstr ""
+msgstr "Egy új megjelenés"
 
 msgid "Craft a trimmed armor at a Smithing Table"
-msgstr ""
+msgstr "Készíts egy testreszabott páncélt a kovácsasztalnál"
 
 msgid "Smithing with Style"
-msgstr ""
+msgstr "Stílusos kovácsmunka"
 
 msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Silence, Vex, Tide, Wayfinder"
 msgstr ""
+"Alkalmazd legalább egyszer ezeket a kovácssablonokat: Spire, Snout, Rib, "
+"Ward, Silence, Vex, Tide, Wayfinder."
 
 msgid "Dispense With This"
-msgstr ""
+msgstr "Ezzel adagolj"
 
 msgid "Place a dispenser."
-msgstr ""
+msgstr "Helyezz el egy hajítóládát."
 
 msgid "Pork Chop"
-msgstr ""
+msgstr "Sertésszelet"
 
 msgid "Eat a cooked porkchop."
-msgstr ""
+msgstr "Egyél egy főtt sertésszeletet."
 
 msgid "Rabbit Season"
-msgstr ""
+msgstr "Nyúlszezon"
 
 msgid "Eat a cooked rabbit."
-msgstr ""
+msgstr "Egyél sült nyulat."
 
 msgid "Iron Belly"
-msgstr ""
+msgstr "Vasgyomor"
 
 msgid "Get really desperate and eat rotten flesh."
-msgstr ""
+msgstr "Legyél igazán kétségbeesett és egyél rothadt húst."
 
 msgid "Pot Planter"
-msgstr ""
+msgstr "Kiskertész"
 
 msgid "Place a flower pot."
-msgstr ""
+msgstr "Helyezz el egy virágcserepet."
 
 msgid "The Haggler"
-msgstr ""
+msgstr "A gyűjtő"
 
 msgid "Mine emerald ore."
-msgstr ""
+msgstr "Smaragd kristály bányászata."
 
 msgid "Stone Age"
-msgstr ""
+msgstr "Kőkor"
 
 msgid "Mine a stone with new pickaxe."
-msgstr ""
+msgstr "Bányássz követ csákánnyal."
 
 msgid "Hot Stuff"
-msgstr ""
+msgstr "Forró téma"
 
 msgid "Put lava in a bucket."
-msgstr ""
+msgstr "Töltsd meg a vödröt lávával."
 
 msgid "Ice Bucket Challenge"
-msgstr ""
+msgstr "Jegesvödör kihívás"
 
 msgid "Obtain an obsidian block."
-msgstr ""
+msgstr "Szerezz egy obszidián tömböt."
 
 msgid "Hero of the Village"
-msgstr ""
+msgstr "A falu hőse"
 
 msgid "Successfully defend a village from a raid"
-msgstr ""
+msgstr "Védj meg sikeresen egy falut a támadástól"
 
 msgid "Voluntary Exile"
-msgstr ""
+msgstr "Önkéntes száműzetés"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
+"Öld meg a rablók vezérét. Talán fontold meg, hogy egyelőre távol maradsz a "
+"helyi falvaktól..."
