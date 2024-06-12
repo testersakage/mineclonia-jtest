@@ -110,7 +110,7 @@ local diagonals = {
 	vector.new(-1,0,-1),
 }
 
-function mcl_trees.check_2by2_saps(pos, node)
+local function check_2by2_saps(pos, node)
 	local n = node.name
 	-- quick check if at all there are sufficient saplings nearby
 	if #minetest.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) == 0 then return end
@@ -148,7 +148,7 @@ function mcl_trees.grow_tree(pos, node)
 	local place_at = pos
 
 	if mcl_trees.woods[name].tree_schems_2x2  then
-		tbt, ne = mcl_trees.check_2by2_saps(pos, node)
+		tbt, ne = check_2by2_saps(pos, node)
 		if tbt then
 			table.shuffle(mcl_trees.woods[name].tree_schems_2x2)
 			schem = mcl_trees.woods[name].tree_schems_2x2[1]
