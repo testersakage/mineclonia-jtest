@@ -280,7 +280,7 @@ function mob_class:break_in(player)
 		local item = player:get_wielded_item()
 		local temper_increase = 0
 		if self._temper_increase and self._temper_increase[item:get_name()] then
-			temper_increase = self.temper_increase[item]
+			temper_increase = self._temper_increase[item:get_name()]
 			item:take_item()
 			player:set_wielded_item(item)
 		elseif not self.driver then
