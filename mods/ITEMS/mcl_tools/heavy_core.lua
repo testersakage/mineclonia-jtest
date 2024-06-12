@@ -1,4 +1,4 @@
-local S = minetest.get_translator(modname)
+local S = minetest.get_translator("mcl_tools")
 local heavy_core_longdesc = S("Solid Blocks of Steel. These are only forged if those that are brave enough can defeat the trials that await them.")
 
 minetest.register_node("mcl_tools:heavy_core", {
@@ -12,8 +12,8 @@ minetest.register_node("mcl_tools:heavy_core", {
     drawtype = "nodebox",
     node_box = {
         type = "fixed",
-        fixed = {
-        	{-0.25, -0.5, -0.25, 0.25, 0.0, 0.25},
+            fixed = {
+              {-0.25, -0.5, -0.25, 0.25, 0.0, 0.25},
         },
     },
     _mcl_hardness = 10,
