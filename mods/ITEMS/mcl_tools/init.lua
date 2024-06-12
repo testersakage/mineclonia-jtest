@@ -662,7 +662,7 @@ minetest.register_tool("mcl_tools:mace", {
 							full_punch_interval = 1.6,
 							damage_groups = {fleshy = -6 * fall_distance / 6.5},
 							}, nil)
- 						end
+						end
 					else
 					if mcl_tools.entity:is_player() or mcl_tools.entity:get_luaentity() then
 						mcl_tools.entity:punch(user, 1.6, {
