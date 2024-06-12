@@ -27,6 +27,82 @@ function mcl_trees.rotate_climbable(pos, node, user, mode)
 	return false
 end
 
+-- Check if a node stops a tree from growing.  Torches, plants, wood, tree,
+-- leaves and dirt does not affect tree growth.
+local function node_stops_growth(node)
+	if node.name == "air" then
+		return false
+	end
+
+	local def = minetest.registered_nodes[node.name]
+	if not def then
+		return true
+	end
+
+	local groups = def.groups
+	if not groups then
+		return true
+	end
+	if (groups.plant or 0) ~= 0 or
+			(groups.torch or 0) ~= 0 or
+			(groups.dirt or 0) ~= 0 or
+			(groups.dig_by_water or 0) ~= 0 or
+			(groups.tree or 0) ~= 0 or
+			(groups.bark or 0) ~= 0 or
+			(groups.leaves or 0) ~= 0 or
+			(groups.wood or 0) ~= 0 then
+		return false
+	end
+
+	return true
+end
+
+-- Check the center column starting one node above the sapling
+function mcl_trees.check_growth_simple(pos, height)
+	for y = 1, height - 1 do
+		local np = vector.offset(pos, 0, y, 0)
+		if node_stops_growth(minetest.get_node(np)) then
+			return false
+		end
+	end
+	return true
+end
+
+-- check 6x6 area starting at sapling level
+-- Assumes pos is "north east" sapling
+function mcl_trees.check_growth_giant(pos, height)
+	for x = -3, 2 do
+		for z = -3, 2 do
+			for y = 0, height - 1 do
+				local np = vector.offset(pos, x, y, z)
+				if node_stops_growth(minetest.get_node(np)) then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+local function check_schem_growth(pos, file, giant)
+	if file then
+		local schem = loadstring(
+			minetest.serialize_schematic(file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
+				.. " return schematic"
+		)()
+		if schem then
+			local h = schem.size.y
+			if giant then
+				return mcl_trees.check_growth_giant(pos, h)
+			else
+				return mcl_trees.check_growth_simple(pos, h)
+			end
+		end
+	end
+
+	return false
+end
+
 local diagonals = {
 	vector.new(1,0,1),
 	vector.new(-1,0,1),
@@ -54,5 +130,68 @@ function mcl_trees.check_2by2_saps(pos, node)
 			end --find northeasternmost node
 			return {d,xp,zp}, ne
 		end
+	end
+end
+
+function mcl_trees.grow_tree(pos, node)
+	local name = node.name:gsub("mcl_trees:sapling_", "")
+	if node.name:find("propagule") then
+		name = "mangrove"
+	end
+	if not mcl_trees.woods[name] or ( not mcl_trees.woods[name].tree_schems and not mcl_trees.woods[name].tree_schems_2x2 ) then
+		return
+	end
+
+	local schem, can_grow, tbt, ne
+	local place_at = pos
+
+	if mcl_trees.woods[name].tree_schems_2x2  then
+		tbt, ne = mcl_trees.check_2by2_saps(pos, node)
+		if tbt then
+			table.shuffle(mcl_trees.woods[name].tree_schems_2x2)
+			schem = mcl_trees.woods[name].tree_schems_2x2[1]
+			can_grow = check_schem_growth(ne, schem.file, true)
+			place_at = ne
+		end
+	end
+
+	if not tbt and mcl_trees.woods[name].tree_schems then
+		table.shuffle(mcl_trees.woods[name].tree_schems)
+		schem = mcl_trees.woods[name].tree_schems[1]
+		can_grow = check_schem_growth(place_at, schem.file, false)
+	end
+
+	if not schem then return end
+
+	if can_grow then
+
+		local offset = schem.offset
+		minetest.remove_node(pos)
+		if tbt then
+			for _, v in pairs(tbt) do
+				minetest.remove_node(v)
+			end
+
+			place_at = ne
+
+			-- Assume trunk is in the center of the schema.
+			-- Overide this in tree_schems if it isn't.
+			if not offset then
+				offset = vector.new(1, 0, 1)
+			end
+		end
+
+		if offset then
+			place_at = vector.subtract(place_at, offset)
+		end
+
+		minetest.place_schematic(
+			place_at,
+			schem.file,
+			"random",
+			nil,
+			false,
+			{ place_center_x = true, place_center_y = false, place_center_z = true }
+		)
 	end
 end
