@@ -1,9 +1,7 @@
 mcl_spawn = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
-local storage = minetest.get_mod_storage()
-
-local start_pos = minetest.setting_get_pos("static_spawnpoint") or {x = 0, y = 8, z = 0}
+local start_pos = minetest.setting_get_pos("static_spawnpoint") or vector.new(0,minetest.get_spawn_level(0, 0),0)
 
 -- Bed spawning offsets
 local node_search_list =
@@ -21,10 +19,6 @@ local node_search_list =
 	--[[B]]	{x =  0, y = 1, z =  0},	--
 	--[[C]]	{x =  0, y = 1, z =  1},	--
 	}
-
-local success = true --storage:get_int("mcl_spawn_success")==1
-local wsp = minetest.string_to_pos(storage:get_string("mcl_spawn_world_spawn_point")) or {} -- world spawn position
-
 
 local function get_far_node(pos)
 	local node = minetest.get_node(pos)
@@ -73,14 +67,6 @@ end
 
 
 function mcl_spawn.get_world_spawn_pos()
-	local ssp = minetest.setting_get_pos("static_spawnpoint")
-	if ssp then
-		return ssp
-	end
-	if success then
-		return wsp
-	end
-	--minetest.log("action", "[mcl_spawn] Failed to determine dynamic world spawn!")
 	return start_pos
 end
 
