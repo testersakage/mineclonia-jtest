@@ -528,17 +528,19 @@ function mcl_trees.register_wood(name, p)
 
 	if p.stairs == nil or type(p.stairs) == "table" then
 		p.stairs = p.stairs or {}
-		mcl_stairs.register_stair(name, {
+		mcl_stairs.register_stair(name, table.merge({
 			baseitem="mcl_trees:wood_"..name,
 			description = S("@1 Stairs", rname),
 			groups = { wood_stairs = 1 },
-		})
-		mcl_stairs.register_stair(name.."_bark", {
-			baseitem="mcl_trees:bark_"..name,
-			description = S("@1 Bark Stairs", rname),
-			groups = { bark_stairs = 1 },
-			recipeitem=bark_stairs and "mcl_trees:bark_"..name or ""
-		})
+		}, p.stairs))
+		if p.bark == nil or type(p.bark) == "table"  then
+			mcl_stairs.register_stair(name.."_bark", table.merge({
+				baseitem="mcl_trees:bark_"..name,
+				description = S("@1 Bark Stairs", rname),
+				groups = { bark_stairs = 1 },
+				recipeitem=bark_stairs and "mcl_trees:bark_"..name or ""
+			}, p.stairs))
+		end
 	end
 
 	if p.slab == nil or type(p.slab) == "table" then
@@ -549,12 +551,14 @@ function mcl_trees.register_wood(name, p)
 			groups = { wood_slab = 1 },
 			register_stair_and_slab = false
 		})
-		mcl_stairs.register_slab(name.."_bark", {
-			baseitem="mcl_trees:bark_"..name,
-			description = S("@1 Bark Slab", rname),
-			groups = { bark_slab = 1 },
-			recipeitem=bark_stairs and "mcl_trees:bark_"..name or ""
-		})
+		if p.bark == nil or type(p.bark) == "table" then
+			mcl_stairs.register_slab(name.."_bark", table.merge({
+				baseitem="mcl_trees:bark_"..name,
+				description = S("@1 Bark Slab", rname),
+				groups = { bark_slab = 1 },
+				recipeitem=bark_stairs and "mcl_trees:bark_"..name or ""
+			}, p.slab))
+		end
 	end
 	if p.sign_color and ( p.sign == nil or type(p.sign) == "table" ) then
 		mcl_signs.register_sign(name,p.sign_color,table.merge({
