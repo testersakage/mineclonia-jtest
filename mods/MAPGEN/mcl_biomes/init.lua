@@ -25,6 +25,7 @@ mcl_biomes = {}
 --
 
 local OCEAN_MIN = -15
+local OCEAN_MAX = 0
 local DEEP_OCEAN_MAX = OCEAN_MIN - 1
 local DEEP_OCEAN_MIN = -31
 
@@ -51,6 +52,47 @@ local function register_classic_superflat_biome()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
+end
+
+local tpl_biome = {}
+local tpl_ocean = table.merge(tpl_biome, {
+	y_min = OCEAN_MIN,
+	y_max = OCEAN_MAX,
+})
+local tpl_deep_ocean = table.merge(tpl_biome, {
+	y_min = DEEP_OCEAN_MIN,
+	y_max = DEEP_OCEAN_MAX,
+	depth_top = 2,
+	depth_filler = 3,
+	depth_riverbed = 2,
+	vertical_blend = 5,
+	_mcl_skycolor = ocean_skycolor,
+	_mcl_fogcolor = overworld_fogcolor
+})
+local tpl_underground = table.merge(tpl_biome, {
+	y_min = mcl_vars.mg_overworld_min_old,
+	y_max = DEEP_OCEAN_MIN - 1,
+})
+local tpl_deep_underground = table.merge(tpl_biome, {
+	node_stone = "mcl_deepslate:deepslate",
+	y_min = mcl_vars.mg_overworld_min,
+	y_max = mcl_vars.mg_overworld_min_old,
+})
+
+function mcl_biomes.register_biomestack(name, def)
+	local n = { name = name }
+
+	local ocean = {
+		node_top = (def.ocean or def.biome).node_top,
+		node_filler = (def.ocean or def.biome).node_filler,
+		node_riverbed = (def.ocean or def.biome).node_riverbed,
+	}
+
+	minetest.register_biome(table.merge(def.biome, n))
+	minetest.register_biome(table.merge(def.biome, tpl_ocean, ocean, def.ocean or {}, n))
+	minetest.register_biome(table.merge(def.biome, tpl_deep_ocean, ocean, def.deep_ocean or {}, n))
+	minetest.register_biome(table.merge(def.biome, tpl_underground, def.underground or {}, n))
+	minetest.register_biome(table.merge(def.biome, tpl_deep_underground, def.deep_underground or {}, n))
 end
 
 -- All mapgens except flat and singlenode
@@ -104,7 +146,6 @@ local function register_biomes()
 	-- IMPORTANT: Don't forget to add new Overworld biomes to this list!
 	local overworld_biomes = {
 		"IcePlains",
-		"IcePlainsSpikes",
 		"ColdTaiga",
 		"ExtremeHills",
 		"ExtremeHillsM",
@@ -137,45 +178,32 @@ local function register_biomes()
 		"MangroveSwamp",
 	}
 
-
-	-- Ice Plains Spikes (rare)
-	minetest.register_biome({
-		name = "IcePlainsSpikes",
-		node_top = "mcl_core:snowblock",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_water_top = "mcl_core:ice",
-		depth_water_top = 1,
-		node_river_water = "mcl_core:ice",
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 24,
-		heat_point = -5,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 2,
-		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "IcePlainsSpikes_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 2,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_river_water = "mcl_core:ice",
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 24,
-		heat_point = -5,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 2,
-		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("IcePlainsSpikes",{
+		biome = {
+			node_top = "mcl_core:snowblock",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_water_top = "mcl_core:ice",
+			depth_water_top = 1,
+			node_river_water = "mcl_core:ice",
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 24,
+			heat_point = -5,
+			_mcl_biome_type = "snowy",
+			_mcl_palette_index = 2,
+			_mcl_skycolor = "#7FA1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			node_filler = "mcl_core:gravel",
+			node_river_water = "mcl_core:ice",
+			node_riverbed = "mcl_core:sand",
+		}
 	})
 
 	-- Cold Taiga
