@@ -28,6 +28,7 @@ mcl_trees.register_wood("oak",{
 		tiles = {"default_sapling.png"},
 		inventory_image = "default_sapling.png",
 		wield_image = "default_sapling.png",
+		_after_grow=mcl_trees.sapling_add_bee_nest,
 	},
 	door = {
 		inventory_image = "doors_item_wood.png",
@@ -171,5 +172,8 @@ mcl_trees.register_wood("birch",{
 	},
 	leaves = {
 		color = "#68a55f",
+	},
+	sapling = {
+		_after_grow=mcl_trees.sapling_add_bee_nest,
 	},
 })

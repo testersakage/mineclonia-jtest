@@ -20,6 +20,7 @@ mcl_trees.register_wood("cherry_blossom",{
 		tiles = {"mcl_cherry_blossom_sapling.png"},
 		inventory_image = "mcl_cherry_blossom_sapling.png",
 		wield_image = "mcl_cherry_blossom_sapling.png",
+		_after_grow = mcl_trees.sapling_add_bee_nest,
 	},
 	potted_sapling = {
 		image = "mcl_cherry_blossom_sapling.png",
