@@ -14,7 +14,6 @@ mcl_trees.register_wood("oak",{
 		{ file = modpath.."/schematics/mcl_core_oak_large_4.mts"},
 		{ file = modpath.."/schematics/mcl_core_oak_swamp.mts"},
 		{ file = modpath.."/schematics/mcl_core_oak_v6.mts"},
-		{ file = modpath.."/schematics/mcl_core_oak_classic_bee_nest.mts"},
 		{ file = modpath.."/schematics/mcl_core_oak_classic.mts"},
 	},
 	tree = { tiles = {"default_tree_top.png", "default_tree_top.png","default_tree.png"} },
@@ -166,7 +165,6 @@ mcl_trees.register_wood("birch",{
 	readable_name = S("Birch"),
 	sign_color="#AA907A",
 	tree_schems = {
-		{ file = modpath.."/schematics/mcl_core_birch_bee_nest.mts"},
 		{ file = modpath.."/schematics/mcl_core_birch.mts"},
 		{ file = modpath.."/schematics/mcl_core_birch_tall.mts"},
 	},
