@@ -195,5 +195,10 @@ function mcl_trees.grow_tree(pos, node)
 			false,
 			{ place_center_x = true, place_center_y = false, place_center_z = true }
 		)
+
+		local after_grow = minetest.registered_nodes[node.name]._after_grow
+		if after_grow then
+			after_grow(pos)
+		end
 	end
 end
