@@ -182,7 +182,8 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 		attached_node = 1, deco_block = 1,
 		dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1,
 		flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-		plant = 1, double_plant = 1, non_mycelium_plant = 1, compostability = 65
+		plant = 1, double_plant = 1, non_mycelium_plant = 1, flower = 1,
+		compostability = 65
 	},
 	on_place = function(itemstack, placer, pointed_thing)
 		-- We can only place on nodes
