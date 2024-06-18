@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-18 14:01+0000\n"
+"PO-Revision-Date: 2024-06-19 01:43+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/hu/>\n"
@@ -138,49 +138,49 @@ msgid "Some coal contained in stone, it is very common and can be found inside s
 msgstr ""
 
 msgid "Iron Ore"
-msgstr ""
+msgstr "Vasérc"
 
 msgid "Some iron contained in stone, it is prety common and can be found below sea level."
 msgstr ""
 
 msgid "Gold Ore"
-msgstr ""
+msgstr "Aranyérc"
 
 msgid "This stone contains pure gold, a rare metal."
 msgstr ""
 
 msgid "Redstone Ore"
-msgstr ""
+msgstr "Vöröskő-érc"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
 msgstr ""
 
 msgid "Lit Redstone Ore"
-msgstr ""
+msgstr "Világító vöröskő-érc"
 
 msgid "Lapis Lazuli Ore"
-msgstr ""
+msgstr "Lazuritérc"
 
 msgid "Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."
 msgstr ""
 
 msgid "Emerald Ore"
-msgstr ""
+msgstr "Smaragdérc"
 
 msgid "Emerald ore is the ore of emeralds. It is very rare and can be found alone, not in clusters."
 msgstr ""
 
 msgid "Diamond Ore"
-msgstr ""
+msgstr "Gyémántérc"
 
 msgid "Diamond ore is rare and can be found in clusters near the bottom of the world."
 msgstr ""
 
 msgid "Stone Bricks"
-msgstr ""
+msgstr "Kőtégla"
 
 msgid "Chiseled Stone Bricks"
-msgstr ""
+msgstr "Vésett kőtégla"
 
 msgid "Cracked Stone Bricks"
 msgstr "Repedezett kőtégla"
@@ -303,55 +303,55 @@ msgid "Chiseled sandstone is a decorative building block."
 msgstr ""
 
 msgid "Smooth Sandstone"
-msgstr ""
+msgstr "Finom homokkő"
 
 msgid "Smooth sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Red Sand"
-msgstr ""
+msgstr "Vöröshomok"
 
 msgid "Red sand is found in large quantities in mesa biomes."
 msgstr ""
 
 msgid "Red Sandstone"
-msgstr ""
+msgstr "Vöröshomokkő"
 
 msgid "Red sandstone is compressed red sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Cut Red Sandstone"
-msgstr ""
+msgstr "Csiszolt vöröshomokkő"
 
 msgid "Cut red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Chiseled Red Sandstone"
-msgstr ""
+msgstr "Vésett vöröshomokkő"
 
 msgid "Chiseled red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Smooth Red Sandstone"
-msgstr ""
+msgstr "Finom vöröshomokkő"
 
 msgid "Smooth red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Clay"
-msgstr ""
+msgstr "Agyag"
 
 msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
 msgstr ""
 
 msgid "Brick Block"
-msgstr ""
+msgstr "Téglablokk"
 
 msgid "Brick blocks are a good building material for building solid houses and can take quite a punch."
 msgstr ""
 
 msgid "Bedrock"
-msgstr ""
+msgstr "Alapkő"
 
 msgid "Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode."
 msgstr ""
@@ -360,10 +360,10 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr ""
 
 msgid "Cobblestone"
-msgstr "Kockakő"
+msgstr "Kőtörmelék"
 
 msgid "Mossy Cobblestone"
-msgstr "Mohás kockakő"
+msgstr "Mohás kő"
 
 msgid "Block of Coal"
 msgstr "Szénblokk"
@@ -408,19 +408,19 @@ msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance.
 msgstr ""
 
 msgid "Crying Obsidian"
-msgstr ""
+msgstr "Könnyező obszidián"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
 msgstr ""
 
 msgid "Ice"
-msgstr ""
+msgstr "Jég"
 
 msgid "Ice is a solid block usually found in cold areas. It melts near block light sources at a light level of 12 or higher. When it melts or is broken while resting on top of another block, it will turn into a water source."
 msgstr ""
 
 msgid "Packed Ice"
-msgstr ""
+msgstr "Tömör jég"
 
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr ""
@@ -429,13 +429,13 @@ msgid "Frosted ice is a short-lived solid block. It melts into a water source wi
 msgstr ""
 
 msgid "Frosted Ice"
-msgstr ""
+msgstr "Fagyott jég"
 
 msgid "Top Snow"
-msgstr ""
+msgstr "Hóréteg"
 
 msgid "Stackable"
-msgstr ""
+msgstr "Pakolható"
 
 msgid "Top snow is a layer of snow. It melts near light sources other than the sun with a light level of 12 or higher."
 msgstr ""
@@ -447,13 +447,13 @@ msgid "This block can only be placed on full solid blocks and on another top sno
 msgstr ""
 
 msgid "Snow"
-msgstr ""
+msgstr "Hó"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
 msgstr ""
 
 msgid "Cactus"
-msgstr ""
+msgstr "Kaktusz"
 
 msgid "Grows on sand"
 msgstr ""
@@ -468,7 +468,7 @@ msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr ""
 
 msgid "Sugar Canes"
-msgstr ""
+msgstr "Cukornád"
 
 msgid "Grows on sand or dirt next to water"
 msgstr ""
@@ -480,19 +480,19 @@ msgid "Sugar canes can only be placed top of other sugar canes and on top of blo
 msgstr ""
 
 msgid "Ladder"
-msgstr ""
+msgstr "Létra"
 
 msgid "A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."
 msgstr ""
 
 msgid "Vines"
-msgstr ""
+msgstr "Indák"
 
 msgid "Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."
 msgstr ""
 
 msgid "Glass"
-msgstr ""
+msgstr "Üveg"
 
 msgid "A decorative and mostly transparent block."
 msgstr ""
@@ -504,16 +504,16 @@ msgid "Stained Glass"
 msgstr ""
 
 msgid "@1 Stained Glass"
-msgstr ""
+msgstr "@1 Festett üveg"
 
 msgid "Flowing Water"
-msgstr ""
+msgstr "Folyóvíz"
 
 msgid "Water Source"
-msgstr ""
+msgstr "Vízforrás"
 
 msgid "Water"
-msgstr ""
+msgstr "Víz"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
 msgstr ""
@@ -531,13 +531,13 @@ msgid "• When water is directly below lava, the water turns into stone."
 msgstr ""
 
 msgid "Flowing Lava"
-msgstr ""
+msgstr "Folyékony láva"
 
 msgid "A lava source sets fire to a couple of air blocks above when they're next to a flammable block."
 msgstr ""
 
 msgid "Lava Source"
-msgstr ""
+msgstr "Lávaforrás"
 
 msgid "Lava is hot and rather dangerous. Don't touch it, it will hurt you a lot and it is hard to get out."
 msgstr ""
@@ -552,19 +552,19 @@ msgid "• When lava is directly above water, the water turns into stone."
 msgstr ""
 
 msgid "Bone Block"
-msgstr ""
+msgstr "Csontblokk"
 
 msgid "Bone blocks are decorative blocks and a compact storage of bone meal."
 msgstr ""
 
 msgid "Slime Block"
-msgstr ""
+msgstr "Nyálkablokk"
 
 msgid "Slime blocks are very bouncy and prevent fall damage."
 msgstr ""
 
 msgid "Cobweb"
-msgstr ""
+msgstr "Pókháló"
 
 msgid "Slows down movement"
 msgstr ""
@@ -573,13 +573,13 @@ msgid "Cobwebs can be walked through, but significantly slow you down."
 msgstr ""
 
 msgid "Dead Bush"
-msgstr ""
+msgstr "Száraz bokor"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "Határoló"
 
 msgid "Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."
 msgstr ""
@@ -588,10 +588,10 @@ msgid "When you hold a barrier in hand, you reveal all placed barriers in a shor
 msgstr ""
 
 msgid "Realm Barrier"
-msgstr ""
+msgstr "Birodalmi határ"
 
 msgid "Light"
-msgstr ""
+msgstr "Fény"
 
 msgid "Lights are invisible blocks. They are used to light up adventure maps and the like."
 msgstr ""
@@ -600,112 +600,112 @@ msgid "When you hold a light in hand, you reveal all placed lights in a short di
 msgstr ""
 
 msgid "Void"
-msgstr ""
+msgstr "Semmi"
 
 msgid "Stone Stairs"
-msgstr ""
+msgstr "Kőlépcső"
 
 msgid "Stone Slab"
-msgstr ""
+msgstr "Kőlap"
 
 msgid "Smooth Stone Slab"
-msgstr ""
+msgstr "Sima kőlap"
 
 msgid "Andesite Stairs"
-msgstr ""
+msgstr "Andezitlépcső"
 
 msgid "Andesite Slab"
-msgstr ""
+msgstr "Andezitlap"
 
 msgid "Granite Stairs"
-msgstr ""
+msgstr "Gránitlépcső"
 
 msgid "Granite Slab"
-msgstr ""
+msgstr "Gránitlap"
 
 msgid "Diorite Stairs"
-msgstr ""
+msgstr "Dioritlépcső"
 
 msgid "Diorite Slab"
-msgstr ""
+msgstr "Dioritlap"
 
 msgid "Cobblestone Stairs"
-msgstr ""
+msgstr "Kőtörmeléklépcső"
 
 msgid "Cobblestone Slab"
-msgstr ""
+msgstr "Kőtörmeléklap"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr ""
+msgstr "Mohás kőlépcső"
 
 msgid "Mossy Cobblestone Slab"
-msgstr ""
+msgstr "Mohás kőtörmeléklap"
 
 msgid "Brick Stairs"
-msgstr ""
+msgstr "Téglalépcső"
 
 msgid "Brick Slab"
-msgstr ""
+msgstr "Téglalap"
 
 msgid "Sandstone Stairs"
-msgstr ""
+msgstr "Homokkőlépcső"
 
 msgid "Sandstone Slab"
-msgstr ""
+msgstr "Homokkőlap"
 
 msgid "Smooth Sandstone Stairs"
-msgstr ""
+msgstr "Finom homokkőlépcső"
 
 msgid "Smooth Sandstone Slab"
-msgstr ""
+msgstr "Finom homokkőlap"
 
 msgid "Cut Sandstone Stairs"
-msgstr ""
+msgstr "Csiszolt homokkőlépcső"
 
 msgid "Cut Sandstone Slab"
-msgstr ""
+msgstr "Csiszolt homokkőlap"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "Vöröshomokkő-lépcső"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "Vöröshomokkő-lap"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "Finom vöröshomokkő-lépcső"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "Finom vöröshomokkő-lap"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "Csiszolt vöröshomokkő-lépcső"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "Csiszolt vöröshomokkő-lap"
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "Kőtégla-lépcső"
 
 msgid "Stone Brick Slab"
-msgstr ""
+msgstr "Kőtégla-lap"
 
 msgid "Polished Andesite Stairs"
-msgstr ""
+msgstr "Csiszolt andezitlépcső"
 
 msgid "Polished Andesite Slab"
-msgstr ""
+msgstr "Csiszolt andezitlap"
 
 msgid "Polished Granite Stairs"
-msgstr ""
+msgstr "Csiszolt gránitlépcső"
 
 msgid "Polished Granite Slab"
-msgstr ""
+msgstr "Csiszolt gránitlap"
 
 msgid "Polished Diorite Stairs"
-msgstr ""
+msgstr "Csiszolt dioritlépcső"
 
 msgid "Polished Diorite Slab"
-msgstr ""
+msgstr "Csiszolt dioritlap"
 
 msgid "Mossy Stone Brick Stairs"
 msgstr ""
@@ -714,19 +714,19 @@ msgid "Mossy Stone Brick Slab"
 msgstr ""
 
 msgid "Oak"
-msgstr ""
+msgstr "Tölgy"
 
 msgid "Dark Oak"
-msgstr ""
+msgstr "Fekete tölgy"
 
 msgid "Jungle"
-msgstr ""
+msgstr "Dzsungel"
 
 msgid "Spruce"
-msgstr ""
+msgstr "Lucfenyő"
 
 msgid "Acacia"
-msgstr ""
+msgstr "Akác"
 
 msgid "Birch"
-msgstr ""
+msgstr "Nyírfa"
