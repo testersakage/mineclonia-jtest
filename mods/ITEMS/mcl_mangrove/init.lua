@@ -166,7 +166,7 @@ minetest.register_node("mcl_mangrove:propagule", {
 		fixed = {-5/16, -0.5, -5/16, 5/16, 0.5, 5/16}
 	},
 	groups = {
-		plant = 1, sapling = 1, non_mycelium_plant = 1, attached_node = 1,
+		plant = 1, sapling = 1, flower = 1, non_mycelium_plant = 1, attached_node = 1,
 		deco_block = 1, dig_immediate = 3, dig_by_water = 0, dig_by_piston = 1,
 		destroy_by_lava_flow = 1, compostability = 30
 	},
