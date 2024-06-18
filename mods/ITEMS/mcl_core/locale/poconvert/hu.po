@@ -3,135 +3,136 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-06-18 14:01+0000\n"
+"Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.5.5\n"
 
 msgid "Stick"
-msgstr ""
+msgstr "Bot"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
 msgstr ""
 
 msgid "Paper"
-msgstr ""
+msgstr "Papír"
 
 msgid "Paper is used to craft books and maps."
 msgstr ""
 
 msgid "Coal"
-msgstr ""
+msgstr "Szén"
 
 msgid "“Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things."
 msgstr ""
 
 msgid "Charcoal"
-msgstr ""
+msgstr "Faszén"
 
 msgid "Charcoal is an alternative furnace fuel created by cooking wood in a furnace. It has the same burning time as coal and also shares many of its crafting recipes, but it can not be used to create coal blocks."
 msgstr ""
 
 msgid "Iron Nugget"
-msgstr ""
+msgstr "Vasrög"
 
 msgid "Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."
 msgstr ""
 
 msgid "Gold Nugget"
-msgstr ""
+msgstr "Aranyrög"
 
 msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."
 msgstr ""
 
 msgid "Diamond"
-msgstr ""
+msgstr "Gyémánt"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr ""
 
 msgid "Clay Ball"
-msgstr ""
+msgstr "Agyag"
 
 msgid "Clay balls are a raw material, mainly used to create bricks in the furnace."
 msgstr ""
 
 msgid "Iron Ingot"
-msgstr ""
+msgstr "Vasrúd"
 
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Gold Ingot"
-msgstr ""
+msgstr "Aranyrúd"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Emerald"
-msgstr ""
+msgstr "Smaragd"
 
 msgid "Emeralds are used in villager trades as currency."
 msgstr ""
 
 msgid "Lapis Lazuli"
-msgstr ""
+msgstr "Lazúrkő"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr ""
 
 msgid "Brick"
-msgstr ""
+msgstr "Tégla"
 
 msgid "Bricks are used to craft brick blocks."
 msgstr ""
 
 msgid "Flint"
-msgstr ""
+msgstr "Kovakő"
 
 msgid "Flint is a raw material."
 msgstr ""
 
 msgid "Sugar"
-msgstr ""
+msgstr "Cukor"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
 msgstr ""
 
 msgid "Bowl"
-msgstr ""
+msgstr "Tál"
 
 msgid "Bowls are mainly used to hold tasty soups."
 msgstr ""
 
 msgid "Apple"
-msgstr ""
+msgstr "Alma"
 
 msgid "Apples are food items which can be eaten."
 msgstr ""
 
 msgid "Golden Apple"
-msgstr ""
+msgstr "Aranyalma"
 
 msgid "Golden apples are precious food items which can be eaten."
 msgstr ""
 
 msgid "Enchanted Golden Apple"
-msgstr ""
+msgstr "Elvarázsolt aranyalma"
 
 msgid "Stone"
-msgstr ""
+msgstr "Kő"
 
 msgid "One of the most common blocks in the world, almost the entire underground consists of stone. It sometimes contains ores. Stone may be created when water meets lava."
 msgstr ""
 
 msgid "Coal Ore"
-msgstr ""
+msgstr "Szénérc"
 
 msgid "Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."
 msgstr ""
@@ -182,121 +183,121 @@ msgid "Chiseled Stone Bricks"
 msgstr ""
 
 msgid "Cracked Stone Bricks"
-msgstr ""
+msgstr "Repedezett kőtégla"
 
 msgid "Mossy Stone Bricks"
-msgstr ""
+msgstr "Mohás kőtégla"
 
 msgid "Smooth Stone"
-msgstr ""
+msgstr "Sima kő"
 
 msgid "Granite"
-msgstr ""
+msgstr "Gránit"
 
 msgid "Granite is an igneous rock."
 msgstr ""
 
 msgid "Polished Granite"
-msgstr ""
+msgstr "Csiszolt gránit"
 
 msgid "Polished granite is a decorative building block made from granite."
 msgstr ""
 
 msgid "Andesite"
-msgstr ""
+msgstr "Andezit"
 
 msgid "Andesite is an igneous rock."
 msgstr ""
 
 msgid "Polished Andesite"
-msgstr ""
+msgstr "Csiszolt andezit"
 
 msgid "Polished andesite is a decorative building block made from andesite."
 msgstr ""
 
 msgid "Diorite"
-msgstr ""
+msgstr "Diorit"
 
 msgid "Diorite is an igneous rock."
 msgstr ""
 
 msgid "Polished Diorite"
-msgstr ""
+msgstr "Csiszolt diorit"
 
 msgid "Polished diorite is a decorative building block made from diorite."
 msgstr ""
 
 msgid "Grass Block"
-msgstr ""
+msgstr "Fűblokk"
 
 msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful blocks which allow the growth of all sorts of plants. They can be turned into farmland with a hoe and turned into grass paths with a shovel. In light, the grass slowly spreads onto dirt nearby. Under an opaque block or a liquid, a grass block may turn back to dirt."
 msgstr ""
 
 msgid "Dirt with Snow"
-msgstr ""
+msgstr "Havas föld"
 
 msgid "Grass Path"
-msgstr ""
+msgstr "Füves út"
 
 msgid "Grass paths are a decorative variant of grass blocks. Their top has a different color and they are a bit lower than grass blocks, making them useful to build footpaths. Grass paths can be created with a shovel. A grass path turns into dirt when it is below a solid block."
 msgstr ""
 
 msgid "Mycelium"
-msgstr ""
+msgstr "Micélium"
 
 msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other dirt-type blocks, it can not be turned into farmland with a hoe. In light, mycelium slowly spreads over nearby dirt. Under an opaque block or a liquid, it eventually turns back into dirt."
 msgstr ""
 
 msgid "Mycelium with Snow"
-msgstr ""
+msgstr "Havas micélium"
 
 msgid "Podzol"
-msgstr ""
+msgstr "Erdőtalaj"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
 msgstr ""
 
 msgid "Podzol with Snow"
-msgstr ""
+msgstr "Havas erdőtalaj"
 
 msgid "Dirt"
-msgstr ""
+msgstr "Föld"
 
 msgid "Dirt acts as a soil for a few plants. When in light, this block may grow a grass or mycelium cover if such blocks are nearby."
 msgstr ""
 
 msgid "Coarse Dirt"
-msgstr ""
+msgstr "Durva talaj"
 
 msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."
 msgstr ""
 
 msgid "Gravel"
-msgstr ""
+msgstr "Kavics"
 
 msgid "This block consists of a couple of loose stones and can't support itself."
 msgstr ""
 
 msgid "Sand"
-msgstr ""
+msgstr "Homok"
 
 msgid "Sand is found in large quantities at beaches and deserts."
 msgstr ""
 
 msgid "Sandstone"
-msgstr ""
+msgstr "Homokkő"
 
 msgid "Sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Cut Sandstone"
-msgstr ""
+msgstr "Csiszolt homokkő"
 
 msgid "Cut sandstone is a decorative building block."
 msgstr ""
 
 msgid "Chiseled Sandstone"
-msgstr ""
+msgstr "Vésett homokkő"
 
 msgid "Chiseled sandstone is a decorative building block."
 msgstr ""
@@ -359,49 +360,49 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr ""
 
 msgid "Cobblestone"
-msgstr ""
+msgstr "Kockakő"
 
 msgid "Mossy Cobblestone"
-msgstr ""
+msgstr "Mohás kockakő"
 
 msgid "Block of Coal"
-msgstr ""
+msgstr "Szénblokk"
 
 msgid "Blocks of coal are useful as a compact storage of coal and very useful as a furnace fuel. A block of coal is as efficient as 10 coal."
 msgstr ""
 
 msgid "Block of Iron"
-msgstr ""
+msgstr "Vasblokk"
 
 msgid "A block of iron is mostly a decorative block but also useful as a compact storage of iron ingots."
 msgstr ""
 
 msgid "Block of Gold"
-msgstr ""
+msgstr "Aranyblokk"
 
 msgid "A block of gold is mostly a shiny decorative block but also useful as a compact storage of gold ingots."
 msgstr ""
 
 msgid "Block of Diamond"
-msgstr ""
+msgstr "Gyémántblokk"
 
 msgid "A block of diamond is mostly a shiny decorative block but also useful as a compact storage of diamonds."
 msgstr ""
 
 msgid "Lapis Lazuli Block"
-msgstr ""
+msgstr "Lazúrkőblokk"
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
 msgstr ""
 
 msgid "Block of Emerald"
-msgstr ""
+msgstr "Smaragdblokk"
 
 msgid "A block of emerald is mostly a shiny decorative block but also useful as a compact storage of emeralds."
 msgstr ""
 
 msgid "Obsidian"
-msgstr ""
+msgstr "Obszidián"
 
 msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance. Obsidian is formed when water meets lava."
 msgstr ""
