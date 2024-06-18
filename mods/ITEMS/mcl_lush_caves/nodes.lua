@@ -392,6 +392,7 @@ local azalea_flowering = table.merge(
 			"mcl_lush_caves_azalea_flowering_side.png",
 			"mcl_lush_caves_azalea_flowering_side.png",
 		},
+		groups = table.merge(tpl_azalea.groups, {flower = 1}),
 })
 azalea_flowering.groups.compostability = 85
 minetest.register_node("mcl_lush_caves:azalea_flowering", azalea_flowering)
