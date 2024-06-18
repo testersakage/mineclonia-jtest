@@ -166,7 +166,6 @@ mcl_trees.register_wood("birch",{
 	sign_color="#AA907A",
 	tree_schems = {
 		{ file = modpath.."/schematics/mcl_core_birch.mts"},
-		{ file = modpath.."/schematics/mcl_core_birch_tall.mts"},
 	},
 	leaves = {
 		color = "#68a55f",
