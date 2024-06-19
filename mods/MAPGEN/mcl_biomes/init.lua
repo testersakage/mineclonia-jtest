@@ -9,7 +9,7 @@ local mod_mcl_mushrooms = minetest.get_modpath("mcl_mushrooms")
 local mod_mcl_mangrove = minetest.get_modpath("mcl_mangrove")
 local mod_cherry_blossom = minetest.get_modpath("mcl_cherry_blossom")
 
-local beach_skycolor = "#78A7FF" -- This is the case for all beach biomes except for the snowy ones! Those beaches will have their own colour instead of this one.
+--local beach_skycolor = "#78A7FF" -- This is the case for all beach biomes except for the snowy ones! Those beaches will have their own colour instead of this one.
 local ocean_skycolor = "#7BA4FF" -- This is the case for all ocean biomes except for non-deep frozen oceans! Those oceans will have their own colour instead of this one.
 local overworld_fogcolor = "#C0D8FF"
 
@@ -55,6 +55,7 @@ local function register_classic_superflat_biome()
 end
 
 local tpl_biome = {}
+local tpl_beach = {}
 local tpl_ocean = table.merge(tpl_biome, {
 	y_min = OCEAN_MIN,
 	y_max = OCEAN_MAX,
@@ -80,19 +81,20 @@ local tpl_deep_underground = table.merge(tpl_biome, {
 })
 
 function mcl_biomes.register_biomestack(name, def)
-	local n = { name = name }
-
 	local ocean = {
 		node_top = (def.ocean or def.biome).node_top,
 		node_filler = (def.ocean or def.biome).node_filler,
 		node_riverbed = (def.ocean or def.biome).node_riverbed,
 	}
 
-	minetest.register_biome(table.merge(def.biome, n))
-	minetest.register_biome(table.merge(def.biome, tpl_ocean, ocean, def.ocean or {}, n))
-	minetest.register_biome(table.merge(def.biome, tpl_deep_ocean, ocean, def.deep_ocean or {}, n))
-	minetest.register_biome(table.merge(def.biome, tpl_underground, def.underground or {}, n))
-	minetest.register_biome(table.merge(def.biome, tpl_deep_underground, def.deep_underground or {}, n))
+	minetest.register_biome(table.merge(def.biome, { name = name }))
+	minetest.register_biome(table.merge(def.biome, tpl_ocean, ocean, def.ocean or {}, { name = name.."_ocean" }))
+	minetest.register_biome(table.merge(def.biome, tpl_deep_ocean, ocean, def.deep_ocean or {}, { name = name.."_deep_ocean" }))
+	minetest.register_biome(table.merge(def.biome, tpl_underground, def.underground or {}, { name = name.."_underground" }))
+	minetest.register_biome(table.merge(def.biome, tpl_deep_underground, def.deep_underground or {}, { name = name.."_deep_underground" }))
+	if def.beach then
+		minetest.register_biome(table.merge(def.biome, tpl_beach, def.beach or {}, { name = name.."_beach" }))
+	end
 end
 
 -- All mapgens except flat and singlenode
@@ -142,42 +144,6 @@ local function register_biomes()
 
 	]]
 
-	-- List of Overworld biomes without modifiers.
-	-- IMPORTANT: Don't forget to add new Overworld biomes to this list!
-	local overworld_biomes = {
-		"IcePlains",
-		"ColdTaiga",
-		"ExtremeHills",
-		"ExtremeHillsM",
-		"ExtremeHills+",
-		"Taiga",
-		"MegaTaiga",
-		"MegaSpruceTaiga",
-		"StoneBeach",
-		"Plains",
-		"SunflowerPlains",
-		"Forest",
-		"FlowerForest",
-		"BirchForest",
-		"BirchForestM",
-		"RoofedForest",
-		"Swampland",
-		"Jungle",
-		"JungleM",
-		"JungleEdge",
-		"JungleEdgeM",
-		"BambooJungle",
-		"MushroomIsland",
-		"Desert",
-		"Savanna",
-		"SavannaM",
-		"Mesa",
-		"MesaBryce",
-		"MesaPlateauF",
-		"MesaPlateauFM",
-		"MangroveSwamp",
-	}
-
 	mcl_biomes.register_biomestack("IcePlainsSpikes",{
 		biome = {
 			node_top = "mcl_core:snowblock",
@@ -206,47 +172,46 @@ local function register_biomes()
 		}
 	})
 
-	-- Cold Taiga
-	minetest.register_biome({
-		name = "ColdTaiga",
-		node_dust = "mcl_core:snow",
-		node_top = "mcl_core:dirt_with_grass_snow",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 3,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 58,
-		heat_point = 8,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 3,
-		_mcl_skycolor = "#839EFF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("ColdTaiga",{
+		biome = {
+			node_dust = "mcl_core:snow",
+			node_top = "mcl_core:dirt_with_grass_snow",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 3,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 58,
+			heat_point = 8,
+			_mcl_biome_type = "snowy",
+			_mcl_palette_index = 3,
+			_mcl_skycolor = "#839EFF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			node_riverbed = "mcl_core:sand",
+			y_max = -5,
+		},
+		beach = {
+			node_dust = "mcl_core:snow",
+			node_top = "mcl_core:sand",
+			depth_top = 2,
+			node_water_top = "mcl_core:ice",
+			depth_water_top = 1,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = 2,
+		},
 	})
 
-	-- A cold beach-like biome, implemented as low part of Cold Taiga
-	minetest.register_biome({
-		name = "ColdTaiga_beach",
-		node_dust = "mcl_core:snow",
-		node_top = "mcl_core:sand",
-		depth_top = 2,
-		node_water_top = "mcl_core:ice",
-		depth_water_top = 1,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = 2,
-		humidity_point = 58,
-		heat_point = 8,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 3,
-		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
 	-- Water part of the beach. Added to prevent snow being on the ice.
 	minetest.register_biome({
 		name = "ColdTaiga_beach_water",
@@ -267,210 +232,150 @@ local function register_biomes()
 		_mcl_skycolor = "#7FA1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
-		name = "ColdTaiga_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -5,
-		humidity_point = 58,
-		heat_point = 8,
-		vertical_blend = 1,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 3,
-		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+
+	mcl_biomes.register_biomestack("MegaTaiga",{
+		biome = {
+			node_top = "mcl_core:podzol",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 76,
+			heat_point = 10,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 4,
+			_mcl_skycolor = "#7CA3FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+		},
 	})
 
-	-- Mega Pine Taiga
-	minetest.register_biome({
-		name = "MegaTaiga",
-		node_top = "mcl_core:podzol",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 76,
-		heat_point = 10,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 4,
-		_mcl_skycolor = "#7CA3FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "MegaTaiga_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 76,
-		heat_point = 10,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 4,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("MegaSpruceTaiga",{
+		biome = {
+			node_top = "mcl_core:podzol",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 100,
+			heat_point = 8,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 5,
+			_mcl_skycolor = "#7DA3FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			node_riverbed = "mcl_core:sand",
+		}
 	})
 
-	-- Mega Spruce Taiga
-	minetest.register_biome({
-		name = "MegaSpruceTaiga",
-		node_top = "mcl_core:podzol",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 100,
-		heat_point = 8,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 5,
-		_mcl_skycolor = "#7DA3FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "MegaSpruceTaiga_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 100,
-		heat_point = 8,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 5,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-	-- Extreme Hills
-	-- Sparsely populated grasslands with little tallgras and trees.
-	minetest.register_biome({
-		name = "ExtremeHills",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 4,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 4,
-		y_min = 4,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 10,
-		heat_point = 45,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 6,
-		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "ExtremeHills_beach",
-		node_top = "mcl_core:sand",
-		depth_top = 2,
-		depth_water_top = 1,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 4,
-		y_min = -4,
-		y_max = 3,
-		humidity_point = 10,
-		heat_point = 45,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 6,
-		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "ExtremeHills_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 4,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 4,
-		y_min = OCEAN_MIN,
-		y_max = -5,
-		vertical_blend = 1,
-		humidity_point = 10,
-		heat_point = 45,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 6,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("ExtremeHills",{
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 4,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 4,
+			y_min = 4,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 10,
+			heat_point = 45,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 6,
+			_mcl_skycolor = "#7DA2FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 4,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 4,
+			y_min = OCEAN_MIN,
+			y_max = -5,
+		},
+		beach = {
+			node_top = "mcl_core:sand",
+			depth_top = 2,
+			depth_water_top = 1,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 4,
+			y_min = -4,
+			y_max = 3,
+		}
 	})
 
-	-- Extreme Hills M
-	-- Just gravel.
-	minetest.register_biome({
-		name = "ExtremeHillsM",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:gravel",
-		depth_riverbed = 3,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 0,
-		heat_point = 25,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 7,
-		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("ExtremeHillsM",{
+		biome = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:gravel",
+			depth_riverbed = 3,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 0,
+			heat_point = 25,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 7,
+			_mcl_skycolor = "#7DA2FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 3,
+		},
 	})
-	minetest.register_biome({
-		name = "ExtremeHillsM_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 3,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 0,
-		heat_point = 25,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 7,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-	-- Extreme Hills+
-	-- This biome is near-identical to Extreme Hills on the surface but has snow-covered mountains with spruce/oak
-	-- forests above a certain height.
-	minetest.register_biome({
-		name = "ExtremeHills+",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 4,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 4,
-		y_min = 1,
-		y_max = 41,
-		humidity_point = 24,
-		heat_point = 25,
-		vertical_blend = 6,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 8,
-		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("ExtremeHills+",{
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 4,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 4,
+			y_min = 1,
+			y_max = 41,
+			humidity_point = 24,
+			heat_point = 25,
+			vertical_blend = 6,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 8,
+			_mcl_skycolor = "#7DA2FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 4,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 4,
+		},
 	})
 	---- Sub-biome for Extreme Hills+ for those snow forests
 	minetest.register_biome({
@@ -492,149 +397,97 @@ local function register_biomes()
 		_mcl_skycolor = "#7DA2FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
-		name = "ExtremeHills+_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 4,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 4,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 24,
-		heat_point = 25,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 8,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+
+	mcl_biomes.register_biomestack("StoneBeach",{
+		biome = {
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 1,
+			y_min = -7,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 0,
+			heat_point = 8,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 9,
+			_mcl_skycolor = "#7DA2FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 1,
+			y_max = -8,
+			vertical_blend = 2,
+		}
 	})
 
-	-- Stone beach
-	-- Just stone.
-	-- Not neccessarily a beach at all, only named so according to MC
-	minetest.register_biome({
-		name = "StoneBeach",
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 1,
-		y_min = -7,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 0,
-		heat_point = 8,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 9,
-		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("IcePlains",{
+		biome = {
+			node_dust = "mcl_core:snow",
+			node_top = "mcl_core:dirt_with_grass_snow",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_water_top = "mcl_core:ice",
+			depth_water_top = 2,
+			node_river_water = "mcl_core:ice",
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 24,
+			heat_point = 8,
+			_mcl_biome_type = "snowy",
+			_mcl_palette_index = 10,
+			_mcl_skycolor = "#7FA1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		}
 	})
 
-	minetest.register_biome({
-		name = "StoneBeach_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 1,
-		y_min = OCEAN_MIN,
-		y_max = -8,
-		vertical_blend = 2,
-		humidity_point = 0,
-		heat_point = 8,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 9,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-	-- Ice Plains
-	minetest.register_biome({
-		name = "IcePlains",
-		node_dust = "mcl_core:snow",
-		node_top = "mcl_core:dirt_with_grass_snow",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_water_top = "mcl_core:ice",
-		depth_water_top = 2,
-		node_river_water = "mcl_core:ice",
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 24,
-		heat_point = 8,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 10,
-		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "IcePlains_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 24,
-		heat_point = 8,
-		_mcl_biome_type = "snowy",
-		_mcl_palette_index = 10,
-		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-	-- Plains
-	minetest.register_biome({
-		name = "Plains",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 3,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 39,
-		heat_point = 58,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 0,
-		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Plains_beach",
-		node_top = "mcl_core:sand",
-		depth_top = 2,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 0,
-		y_max = 2,
-		humidity_point = 39,
-		heat_point = 58,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 0,
-		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Plains_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -1,
-		humidity_point = 39,
-		heat_point = 58,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 0,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Plains", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 3,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 39,
+			heat_point = 58,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 0,
+			_mcl_skycolor = "#78A7FF",
+			_mcl_fogcolor = overworld_fogcolor,
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_max = -1,
+		},
+		beach = {
+			node_top = "mcl_core:sand",
+			depth_top = 2,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 0,
+			y_max = 2,
+		}
 	})
 
 	minetest.register_biome({
@@ -655,364 +508,285 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 
-	-- Sunflower Plains
-	minetest.register_biome({
-		name = "SunflowerPlains",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 4,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 28,
-		heat_point = 45,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 11,
-		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "SunflowerPlains_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:dirt",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 28,
-		heat_point = 45,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 11,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("SunflowerPlains", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 4,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 28,
+			heat_point = 45,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 11,
+			_mcl_skycolor = "#78A7FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:dirt",
+			depth_riverbed = 2,
+		}
 	})
 
-	-- Taiga
-	minetest.register_biome({
-		name = "Taiga",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 4,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 58,
-		heat_point = 22,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 12,
-		_mcl_skycolor = "#7DA3FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Taiga_beach",
-		node_top = "mcl_core:sand",
-		depth_top = 2,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 1,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = 3,
-		humidity_point = 58,
-		heat_point = 22,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 12,
-		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Taiga_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 58,
-		heat_point = 22,
-		_mcl_biome_type = "cold",
-		_mcl_palette_index = 12,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Taiga", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 4,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 58,
+			heat_point = 22,
+			_mcl_biome_type = "cold",
+			_mcl_palette_index = 12,
+			_mcl_skycolor = "#7DA3FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
+		beach = {
+			node_top = "mcl_core:sand",
+			depth_top = 2,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 1,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = 3,
+		},
 	})
 
-	-- Forest
-	minetest.register_biome({
-		name = "Forest",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 61,
-		heat_point = 45,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 13,
-		_mcl_skycolor = "#79A6FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Forest_beach",
-		node_top = "mcl_core:sand",
-		depth_top = 2,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 1,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = -1,
-		y_max = 0,
-		humidity_point = 61,
-		heat_point = 45,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 13,
-		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Forest_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -2,
-		humidity_point = 61,
-		heat_point = 45,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 13,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Forest", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 61,
+			heat_point = 45,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 13,
+			_mcl_skycolor = "#79A6FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -2,
+		},
+		beach = {
+			node_top = "mcl_core:sand",
+			depth_top = 2,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 1,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = -1,
+			y_max = 0,
+		}
 	})
 
-	-- Flower Forest
-	minetest.register_biome({
-		name = "FlowerForest",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 3,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 44,
-		heat_point = 32,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 14,
-		_mcl_skycolor = "#79A6FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "FlowerForest_beach",
-		node_top = "mcl_core:sand",
-		depth_top = 2,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 1,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = -2,
-		y_max = 2,
-		humidity_point = 44,
-		heat_point = 32,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 14,
-		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "FlowerForest_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -3,
-		humidity_point = 44,
-		heat_point = 32,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 14,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("FlowerForest", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 3,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 44,
+			heat_point = 32,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 14,
+			_mcl_skycolor = "#79A6FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -3,
+		},
+		beach = {
+			node_top = "mcl_core:sand",
+			depth_top = 2,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 1,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = -2,
+			y_max = 2,
+		}
 	})
 
-	-- Birch Forest
-	minetest.register_biome({
-		name = "BirchForest",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 78,
-		heat_point = 31,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 15,
-		_mcl_skycolor = "#7AA5FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "BirchForest_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 78,
-		heat_point = 31,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 15,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("BirchForest", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 78,
+			heat_point = 31,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 15,
+			_mcl_skycolor = "#7AA5FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
 	})
 
-	-- Birch Forest M
-	minetest.register_biome({
-		name = "BirchForestM",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 77,
-		heat_point = 27,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 16,
-		_mcl_skycolor = "#7AA5FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "BirchForestM_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 77,
-		heat_point = 27,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 16,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("BirchForestM", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 77,
+			heat_point = 27,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 16,
+			_mcl_skycolor = "#7AA5FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		}
 	})
 
-	-- Desert
-	minetest.register_biome({
-		name = "Desert",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		node_stone = "mcl_core:sandstone",
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 26,
-		heat_point = 94,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 17,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Desert_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 26,
-		heat_point = 94,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 17,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Desert", {
+		biome = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			node_stone = "mcl_core:sandstone",
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 26,
+			heat_point = 94,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 17,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		}
 	})
 
-	-- Roofed Forest
-	minetest.register_biome({
-		name = "RoofedForest",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 94,
-		heat_point = 27,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 18,
-		_mcl_skycolor = "#79A6FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "RoofedForest_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 94,
-		heat_point = 27,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 18,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("RoofedForest", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 94,
+			heat_point = 27,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 18,
+			_mcl_skycolor = "#79A6FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
 	})
 
-	-- Mesa: Starts with a couple of sand-covered layers (the "sandlevel"),
-	-- followed by terracotta with colorful (but imperfect) strata
-	minetest.register_biome({
-		name = "Mesa",
-		node_top = "mcl_colorblocks:hardened_clay",
-		depth_top = 1,
-		node_filler = "mcl_colorblocks:hardened_clay",
-		node_riverbed = "mcl_core:redsand",
-		depth_riverbed = 1,
-		node_stone = "mcl_colorblocks:hardened_clay",
-		y_min = 11,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 0,
-		heat_point = 100,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 19,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Mesa", {
+		biome = {
+			node_top = "mcl_colorblocks:hardened_clay",
+			depth_top = 1,
+			node_filler = "mcl_colorblocks:hardened_clay",
+			node_riverbed = "mcl_core:redsand",
+			depth_riverbed = 1,
+			node_stone = "mcl_colorblocks:hardened_clay",
+			y_min = 11,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 0,
+			heat_point = 100,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 19,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 3,
+			node_filler = "mcl_core:sand",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -5,
+			vertical_blend = 1,
+		}
 	})
 	-- Helper biome for the red sand at the bottom of Mesas.
 	minetest.register_biome({
@@ -1033,42 +807,36 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
-		name = "Mesa_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 3,
-		node_filler = "mcl_core:sand",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -5,
-		vertical_blend = 1,
-		humidity_point = 0,
-		heat_point = 100,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 19,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
 
 	-- Mesa Bryce: Variant of Mesa, but with perfect strata and a much smaller red sand desert
-	minetest.register_biome({
-		name = "MesaBryce",
-		node_top = "mcl_colorblocks:hardened_clay",
-		depth_top = 1,
-		node_filler = "mcl_colorblocks:hardened_clay",
-		node_riverbed = "mcl_colorblocks:hardened_clay",
-		depth_riverbed = 1,
-		node_stone = "mcl_colorblocks:hardened_clay",
-		y_min = 4,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = -5,
-		heat_point = 100,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 20,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("MesaBryce", {
+		biome = {
+			node_top = "mcl_colorblocks:hardened_clay",
+			depth_top = 1,
+			node_filler = "mcl_colorblocks:hardened_clay",
+			node_riverbed = "mcl_colorblocks:hardened_clay",
+			depth_riverbed = 1,
+			node_stone = "mcl_colorblocks:hardened_clay",
+			y_min = 4,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = -5,
+			heat_point = 100,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 20,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 3,
+			node_filler = "mcl_core:sand",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -5,
+			vertical_blend = 1,
+		},
 	})
 	minetest.register_biome({
 		name = "MesaBryce_sandlevel",
@@ -1088,46 +856,38 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
-		name = "MesaBryce_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 3,
-		node_filler = "mcl_core:sand",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -5,
-		vertical_blend = 1,
-		humidity_point = -5,
-		heat_point = 100,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 20,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-
 
 	-- Mesa Plateau F
 	-- Identical to Mesa below Y=30. At Y=30 and above there is a "dry" oak forest
-	minetest.register_biome({
-		name = "MesaPlateauF",
-		node_top = "mcl_colorblocks:hardened_clay",
-		depth_top = 1,
-		node_filler = "mcl_colorblocks:hardened_clay",
-		node_riverbed = "mcl_core:redsand",
-		depth_riverbed = 1,
-		node_stone = "mcl_colorblocks:hardened_clay",
-		y_min = 11,
-		y_max = 29,
-		humidity_point = 0,
-		heat_point = 60,
-		vertical_blend = 0, -- we want a sharp transition
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 21,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("MesaPlateauF", {
+		biome = {
+			node_top = "mcl_colorblocks:hardened_clay",
+			depth_top = 1,
+			node_filler = "mcl_colorblocks:hardened_clay",
+			node_riverbed = "mcl_core:redsand",
+			depth_riverbed = 1,
+			node_stone = "mcl_colorblocks:hardened_clay",
+			y_min = 11,
+			y_max = 29,
+			humidity_point = 0,
+			heat_point = 60,
+			vertical_blend = 0, -- we want a sharp transition
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 21,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 3,
+			node_filler = "mcl_core:sand",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -6,
+			vertical_blend = 1,
+		},
 	})
 	-- The oak forest plateau of this biome.
 	-- This is a plateau for grass blocks, dry shrubs, tall grass, coarse dirt and oaks.
@@ -1168,46 +928,40 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
-		name = "MesaPlateauF_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 3,
-		node_filler = "mcl_core:sand",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -6,
-		vertical_blend = 1,
-		humidity_point = 0,
-		heat_point = 60,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 21,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
 
 	-- Mesa Plateau FM
 	-- Dryer and more "chaotic"/"weathered down" variant of MesaPlateauF:
 	-- oak forest is less dense, more coarse dirt, more erratic terrain, vertical blend, more red sand layers,
 	-- red sand as ores, red sandstone at sandlevel
-	minetest.register_biome({
-		name = "MesaPlateauFM",
-		node_top = "mcl_colorblocks:hardened_clay",
-		depth_top = 1,
-		node_filler = "mcl_colorblocks:hardened_clay",
-		node_riverbed = "mcl_core:redsand",
-		depth_riverbed = 2,
-		node_stone = "mcl_colorblocks:hardened_clay",
-		y_min = 12,
-		y_max = 29,
-		humidity_point = -5,
-		heat_point = 60,
-		vertical_blend = 5,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 22,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("MesaPlateauFM", {
+		biome = {
+			node_top = "mcl_colorblocks:hardened_clay",
+			depth_top = 1,
+			node_filler = "mcl_colorblocks:hardened_clay",
+			node_riverbed = "mcl_core:redsand",
+			depth_riverbed = 2,
+			node_stone = "mcl_colorblocks:hardened_clay",
+			y_min = 12,
+			y_max = 29,
+			humidity_point = -5,
+			heat_point = 60,
+			vertical_blend = 5,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 22,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 3,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 3,
+			y_min = OCEAN_MIN,
+			y_max = -8,
+			vertical_blend = 2,
+		},
 	})
 	-- Grass plateau
 	minetest.register_biome({
@@ -1248,501 +1002,362 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
-		name = "MesaPlateauFM_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 3,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 3,
-		y_min = OCEAN_MIN,
-		y_max = -8,
-		vertical_blend = 2,
-		humidity_point = -5,
-		heat_point = 60,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 22,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
 
-	-- Savanna
-	minetest.register_biome({
-		name = "Savanna",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 36,
-		heat_point = 79,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 1,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Savanna_beach",
-		node_top = "mcl_core:sand",
-		depth_top = 3,
-		node_filler = "mcl_core:sandstone",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = -1,
-		y_max = 0,
-		humidity_point = 36,
-		heat_point = 79,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 1,
-		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Savanna_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -2,
-		humidity_point = 36,
-		heat_point = 79,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 1,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Savanna", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 36,
+			heat_point = 79,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 1,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -2,
+		},
+		beach = {
+			node_top = "mcl_core:sand",
+			depth_top = 3,
+			node_filler = "mcl_core:sandstone",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = -1,
+			y_max = 0,
+		}
 	})
 
 	-- Savanna M
 	-- Changes to Savanna: Coarse Dirt. No sand beach. No oaks.
 	-- Otherwise identical to Savanna
-	minetest.register_biome({
-		name = "SavannaM",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:coarse_dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 48,
-		heat_point = 100,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 23,
-		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "SavannaM_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 48,
-		heat_point = 100,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 23,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("SavannaM", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:coarse_dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 48,
+			heat_point = 100,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 1,
+			_mcl_skycolor = "#6EB1FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
 	})
 
-	-- Jungle
-	minetest.register_biome({
-		name = "Jungle",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 88,
-		heat_point = 81,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 24,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Jungle_shore",
-		node_top = "mcl_core:dirt",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = -2,
-		y_max = 0,
-		humidity_point = 88,
-		heat_point = 81,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 24,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Jungle_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -3,
-		vertical_blend = 1,
-		humidity_point = 88,
-		heat_point = 81,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 24,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Jungle", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 88,
+			heat_point = 81,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 24,
+			_mcl_skycolor = "#77A8FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -3,
+			vertical_blend = 1,
+		},
+		beach = {
+			node_top = "mcl_core:dirt",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = -2,
+			y_max = 0,
+		},
 	})
 
 	-- Jungle M
 	-- Like Jungle but with even more dense vegetation
-	minetest.register_biome({
-		name = "JungleM",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 92,
-		heat_point = 81,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 25,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "JungleM_shore",
-		node_top = "mcl_core:dirt",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = -2,
-		y_max = 0,
-		humidity_point = 92,
-		heat_point = 81,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 25,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "JungleM_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -3,
-		vertical_blend = 1,
-		humidity_point = 92,
-		heat_point = 81,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 25,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("JungleM", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 92,
+			heat_point = 81,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 25,
+			_mcl_skycolor = "#77A8FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -3,
+			vertical_blend = 1,
+		},
+		beach = {
+			node_top = "mcl_core:dirt",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = -2,
+			y_max = 0,
+		}
 	})
 
-	-- Bamboo Jungle
-	minetest.register_biome({
-		name = "BambooJungle",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 90,
-		heat_point = 79,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 26,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("BambooJungle", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 90,
+			heat_point = 79,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 26,
+			_mcl_skycolor = "#77A8FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
 	})
 
-	minetest.register_biome({
-		name = "BambooJungle_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 90,
-		heat_point = 79,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 26,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-	-- Jungle Edge
-	minetest.register_biome({
-		name = "JungleEdge",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 88,
-		heat_point = 76,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 26,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "JungleEdge_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 2,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 88,
-		heat_point = 76,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 26,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("JungleEdge", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 88,
+			heat_point = 76,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 26,
+			_mcl_skycolor = "#77A8FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 2,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
 	})
 
 	-- Jungle Edge M (very rare).
 	-- Almost identical to Jungle Edge. Has deeper dirt. Melons spawn here a lot.
 	-- This biome occours directly between Jungle M and Jungle Edge but also has a small border to Jungle.
 	-- This biome is very small in general.
-	minetest.register_biome({
-		name = "JungleEdgeM",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 4,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = mcl_vars.mg_overworld_max,
-		humidity_point = 90,
-		heat_point = 79,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 26,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "JungleEdgeM_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 4,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 90,
-		heat_point = 79,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 26,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("JungleEdgeM", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 4,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = mcl_vars.mg_overworld_max,
+			humidity_point = 90,
+			heat_point = 79,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 26,
+			_mcl_skycolor = "#77A8FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 4,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		}
 	})
 
-	-- Mangrove swamp
-	minetest.register_biome({
-		name = "MangroveSwamp",
-		node_top = "mcl_mud:mud",
-		depth_top = 1,
-		node_filler = "mcl_mud:mud",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:dirt",
-		depth_riverbed = 2,
-		y_min = 1,
-		-- Note: Limited in height!
-		y_max = 27,
-		humidity_point = 95,
-		heat_point = 94,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 27,
-		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+
+	mcl_biomes.register_biomestack("MangroveSwamp", {
+		biome = {
+			node_top = "mcl_mud:mud",
+			depth_top = 1,
+			node_filler = "mcl_mud:mud",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:dirt",
+			depth_riverbed = 2,
+			y_min = 1,
+			-- Note: Limited in height!
+			y_max = 27,
+			humidity_point = 95,
+			heat_point = 94,
+			_mcl_biome_type = "hot",
+			_mcl_palette_index = 27,
+			_mcl_skycolor = "#78A7FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:dirt",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:gravel",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -6,
+			vertical_blend = 1,
+		},
+		beach = {
+			node_top = "mcl_mud:mud",
+			depth_top = 1,
+			node_filler = "mcl_mud:mud",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:dirt",
+			depth_riverbed = 2,
+			y_min = -5,
+			y_max = 0,
+		},
 	})
-	minetest.register_biome({
-		name = "MangroveSwamp_shore",
-		node_top = "mcl_mud:mud",
-		depth_top = 1,
-		node_filler = "mcl_mud:mud",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:dirt",
-		depth_riverbed = 2,
-		y_min = -5,
-		y_max = 0,
-		humidity_point = 95,
-		heat_point = 94,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 27,
-		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "MangroveSwamp_ocean",
-		node_top = "mcl_core:dirt",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:gravel",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -6,
-		vertical_blend = 1,
-		humidity_point = 95,
-		heat_point = 94,
-		_mcl_biome_type = "hot",
-		_mcl_palette_index = 27,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	-- Swampland
-	minetest.register_biome({
-		name = "Swampland",
-		node_top = "mcl_core:dirt_with_grass",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		-- Note: Limited in height!
-		y_max = 23,
-		humidity_point = 90,
-		heat_point = 50,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 28,
-		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Swampland_shore",
-		node_top = "mcl_core:dirt",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = -5,
-		y_max = 0,
-		humidity_point = 90,
-		heat_point = 50,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 28,
-		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "Swampland_ocean",
-		node_top = "mcl_core:sand",
-		depth_top = 1,
-		node_filler = "mcl_core:sand",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = -6,
-		vertical_blend = 1,
-		humidity_point = 90,
-		heat_point = 50,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 28,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("Swampland", {
+		biome = {
+			node_top = "mcl_core:dirt_with_grass",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			-- Note: Limited in height!
+			y_max = 23,
+			humidity_point = 90,
+			heat_point = 50,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 28,
+			_mcl_skycolor = "#78A7FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:sand",
+			depth_top = 1,
+			node_filler = "mcl_core:sand",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = OCEAN_MIN,
+			y_max = -6,
+			vertical_blend = 1,
+		},
+		beach = {
+			node_top = "mcl_core:dirt",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = -5,
+			y_max = 0,
+		}
 	})
 
-	-- Mushroom Island / Mushroom Island Shore (rare)
-	-- Not neccessarily an island at all, only named after Minecraft's biome
-	minetest.register_biome({
-		name = "MushroomIsland",
-		node_top = "mcl_core:mycelium",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 4,
-		-- Note: Limited in height!
-		y_max = 20,
-		vertical_blend = 1,
-		humidity_point = 106,
-		heat_point = 50,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 29,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-
-	minetest.register_biome({
-		name = "MushroomIslandShore",
-		node_top = "mcl_core:mycelium",
-		depth_top = 1,
-		node_filler = "mcl_core:dirt",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = 1,
-		y_max = 3,
-		humidity_point = 106,
-		heat_point = 50,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 29,
-		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
-	})
-	minetest.register_biome({
-		name = "MushroomIsland_ocean",
-		node_top = "mcl_core:gravel",
-		depth_top = 1,
-		node_filler = "mcl_core:gravel",
-		depth_filler = 3,
-		node_riverbed = "mcl_core:sand",
-		depth_riverbed = 2,
-		y_min = OCEAN_MIN,
-		y_max = 0,
-		humidity_point = 106,
-		heat_point = 50,
-		_mcl_biome_type = "medium",
-		_mcl_palette_index = 29,
-		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+	mcl_biomes.register_biomestack("MushroomIsland", {
+		biome = {
+			node_top = "mcl_core:mycelium",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 4,
+			-- Note: Limited in height!
+			y_max = 20,
+			vertical_blend = 1,
+			humidity_point = 106,
+			heat_point = 50,
+			_mcl_biome_type = "medium",
+			_mcl_palette_index = 29,
+			_mcl_skycolor = "#77A8FF",
+			_mcl_fogcolor = overworld_fogcolor
+		},
+		ocean = {
+			node_top = "mcl_core:gravel",
+			depth_top = 1,
+			node_filler = "mcl_core:gravel",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+		},
+		beach = {
+			node_top = "mcl_core:mycelium",
+			depth_top = 1,
+			node_filler = "mcl_core:dirt",
+			depth_filler = 3,
+			node_riverbed = "mcl_core:sand",
+			depth_riverbed = 2,
+			y_min = 1,
+			y_max = 3,
+		}
 	})
 
 	minetest.register_biome({
@@ -1818,7 +1433,7 @@ local function register_biomes()
 		node_riverbed = "mcl_core:sand",
 		node_cave_liquid = "mcl_core:water_source",
 		depth_riverbed = 2,
-		y_min = -57,
+		y_min = -128,
 		y_max = -21,
 		vertical_blend = 1,
 		humidity_point = 83,
@@ -1826,55 +1441,7 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 	})
-	-- Add deep ocean and underground biomes automatically.
-	for i=1, #overworld_biomes do
-		local biome = overworld_biomes[i]
 
-		-- Deep Ocean
-		minetest.register_biome({
-			name = biome .. "_deep_ocean",
-			heat_point = minetest.registered_biomes[biome].heat_point,
-			humidity_point = minetest.registered_biomes[biome].humidity_point,
-			y_min = DEEP_OCEAN_MIN,
-			y_max = DEEP_OCEAN_MAX,
-			node_top = minetest.registered_biomes[biome.."_ocean"].node_top,
-			depth_top = 2,
-			node_filler = minetest.registered_biomes[biome.."_ocean"].node_filler,
-			depth_filler = 3,
-			node_riverbed = minetest.registered_biomes[biome.."_ocean"].node_riverbed,
-			depth_riverbed = 2,
-			vertical_blend = 5,
-			_mcl_biome_type = minetest.registered_biomes[biome]._mcl_biome_type,
-			_mcl_palette_index = minetest.registered_biomes[biome]._mcl_palette_index,
-			_mcl_skycolor = ocean_skycolor,
-			_mcl_fogcolor = overworld_fogcolor
-		})
-
-		-- Underground biomes are used to identify the underground and to prevent nodes from the surface
-		-- (sand, dirt) from leaking into the underground.
-		minetest.register_biome({
-			name = biome .. "_underground",
-			heat_point = minetest.registered_biomes[biome].heat_point,
-			humidity_point = minetest.registered_biomes[biome].humidity_point,
-			y_min = mcl_vars.mg_overworld_min_old,
-			y_max = DEEP_OCEAN_MIN - 1,
-			_mcl_biome_type = minetest.registered_biomes[biome]._mcl_biome_type,
-			_mcl_palette_index = minetest.registered_biomes[biome]._mcl_palette_index,
-			_mcl_skycolor = minetest.registered_biomes[biome]._mcl_skycolor,
-			_mcl_fogcolor = minetest.registered_biomes[biome]._mcl_fogcolor,
-		})
-		minetest.register_biome({
-			name = biome .. "_deep_underground",
-			heat_point = minetest.registered_biomes[biome].heat_point,
-			humidity_point = minetest.registered_biomes[biome].humidity_point,
-			node_stone = "mcl_deepslate:deepslate",
-			y_min = mcl_vars.mg_overworld_min,
-			y_max = mcl_vars.mg_overworld_min_old,
-			_mcl_biome_type = minetest.registered_biomes[biome]._mcl_biome_type,
-			_mcl_palette_index = minetest.registered_biomes[biome]._mcl_palette_index,
-		})
-
-	end
 end
 
 -- Register ores which are limited by biomes. For all mapgens except flat and singlenode.
