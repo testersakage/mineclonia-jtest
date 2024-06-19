@@ -218,3 +218,10 @@ function mcl_trees.add_bee_nest(pos)
 		end
 	end
 end
+
+function mcl_trees.sapling_add_bee_nest(pos)
+	if #minetest.find_nodes_in_area(vector.offset(pos,-2, 0 ,-2), vector.offset(pos, 2, 0, 2), {"group:flower"}) == 0 then return end
+	if math.random(20) == 1 then
+		mcl_trees.add_bee_nest(pos)
+	end
+end
