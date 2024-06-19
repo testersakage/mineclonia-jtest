@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-19 01:43+0000\n"
+"PO-Revision-Date: 2024-06-19 18:41+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/hu/>\n"
@@ -57,7 +57,7 @@ msgid "Diamonds are precious minerals and useful to create the highest tier of a
 msgstr ""
 
 msgid "Clay Ball"
-msgstr "Agyag"
+msgstr "Agyagkupac"
 
 msgid "Clay balls are a raw material, mainly used to create bricks in the furnace."
 msgstr ""
@@ -150,13 +150,13 @@ msgid "This stone contains pure gold, a rare metal."
 msgstr ""
 
 msgid "Redstone Ore"
-msgstr "Vöröskő-érc"
+msgstr "Vöröskőérc"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
 msgstr ""
 
 msgid "Lit Redstone Ore"
-msgstr "Világító vöröskő-érc"
+msgstr "Világító vöröskőérc"
 
 msgid "Lapis Lazuli Ore"
 msgstr "Lazuritérc"
@@ -189,7 +189,7 @@ msgid "Mossy Stone Bricks"
 msgstr "Mohás kőtégla"
 
 msgid "Smooth Stone"
-msgstr "Sima kő"
+msgstr "Csiszolt kő"
 
 msgid "Granite"
 msgstr "Gránit"
@@ -609,7 +609,7 @@ msgid "Stone Slab"
 msgstr "Kőlap"
 
 msgid "Smooth Stone Slab"
-msgstr "Sima kőlap"
+msgstr "Csiszolt kőlap"
 
 msgid "Andesite Stairs"
 msgstr "Andezitlépcső"
