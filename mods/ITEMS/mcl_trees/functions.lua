@@ -202,3 +202,19 @@ function mcl_trees.grow_tree(pos, node)
 		end
 	end
 end
+
+local nest_dirs = {vector.new(1, 0, 0), vector.new(-1, 0, 0), vector.new(0, 0, -1)}
+
+function mcl_trees.add_bee_nest(pos)
+	local col = vector.add(pos, nest_dirs[math.random(3)])
+	for i = 2, 8 do
+		local nestpos = vector.offset(col, 0, i -1 , 0)
+		local abovename = minetest.get_node(vector.offset(col, 0, i, 0)).name
+		if minetest.get_node(nestpos).name == "air" and
+				(minetest.get_item_group(abovename, "leaves") > 0 or minetest.get_item_group(abovename, "tree") > 0) then
+			minetest.set_node(nestpos, {name = "mcl_beehives:bee_nest"})
+			-- TODO: spawn bee mobs in nest
+			return
+		end
+	end
+end
