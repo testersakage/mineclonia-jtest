@@ -86,12 +86,13 @@ function mcl_biomes.register_biomestack(name, def)
 		node_filler = (def.ocean or def.biome).node_filler,
 		node_riverbed = (def.ocean or def.biome).node_riverbed,
 	}
-
+	local def_copy =table.copy(def.biome)
+	def_copy.node_top = nil
 	minetest.register_biome(table.merge(def.biome, { name = name }))
-	minetest.register_biome(table.merge(def.biome, tpl_ocean, ocean, def.ocean or {}, { name = name.."_ocean" }))
-	minetest.register_biome(table.merge(def.biome, tpl_deep_ocean, ocean, def.deep_ocean or {}, { name = name.."_deep_ocean", node_top = "" }))
-	minetest.register_biome(table.merge(def.biome, tpl_underground, def.underground or {}, { name = name.."_underground", node_top = "" }))
-	minetest.register_biome(table.merge(def.biome, tpl_deep_underground, def.deep_underground or {}, { name = name.."_deep_underground", node_top = "" }))
+	minetest.register_biome(table.merge(def_copy, tpl_ocean, ocean, def.ocean or {}, { name = name.."_ocean" }))
+	minetest.register_biome(table.merge(def_copy, tpl_deep_ocean, ocean, def.deep_ocean or {}, { name = name.."_deep_ocean" }))
+	minetest.register_biome(table.merge(def_copy, tpl_underground, def.underground or {}, { name = name.."_underground" }))
+	minetest.register_biome(table.merge(def_copy, tpl_deep_underground, def.deep_underground or {}, { name = name.."_deep_underground" }))
 	if def.beach then
 		minetest.register_biome(table.merge(def.biome, tpl_beach, def.beach or {}, { name = name.."_beach" }))
 	end
