@@ -55,8 +55,50 @@ end
 
 mcl_structures.register_structure("end_shrine",{
 	static_pos = init_strongholds(),
+	sidelen = 32,
 	filenames = {
 		minetest.get_modpath("mcl_structures").."/schematics/mcl_structures_end_portal_room_simple.mts"
+	},
+	loot = {
+		["mcl_chests:chest_small" ] ={{
+			stacks_min = 2,
+			stacks_max = 3,
+			items = {
+				{ itemstring = "mcl_core:apple", weight = 15, amount_min = 1, amount_max = 3 },
+				{ itemstring = "mcl_farming:bread", weight = 15, amount_min = 1, amount_max = 3 },
+				{ itemstring = "mcl_core:iron_ingot", weight = 10, amount_min = 1, amount_max = 5 },
+				{ itemstring = "mcl_throwing:ender_pearl", weight = 10, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mesecons:wire_00000000_off", weight = 5, amount_min = 4, amount_max = 9 },
+				{ itemstring = "mcl_core:gold_ingot", weight = 5, amount_min = 1, amount_max = 3 },
+
+				{ itemstring = "mcl_tools:pick_iron", weight = 5, amount_min = 1, amount_max=3 },
+				{ itemstring = "mcl_tools:sword_iron", weight = 5, amount_min = 1, amount_max=3 },
+
+				{ itemstring = "mcl_armor:helmet_iron", weight = 5, amount_min = 1, amount_max=3 },
+				{ itemstring = "mcl_armor:chestplate_iron", weight = 5, amount_min = 1, amount_max=3 },
+				{ itemstring = "mcl_armor:leggings_iron", weight = 5, amount_min = 1, amount_max=3 },
+				{ itemstring = "mcl_armor:boots_iron", weight = 5, amount_min = 1, amount_max=3 },
+
+				{ itemstring = "mcl_core:diamond", weight = 3, amount_min = 1, amount_max = 3 },
+
+				{ itemstring = "mcl_jukebox:record_7", weight = 1, },
+				{ itemstring = "mcl_books:book", weight = 1, func = function(stack, pr)
+					mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr)
+				end },
+				{ itemstring = "mcl_mobitems:saddle", weight = 1, },
+				{ itemstring = "mcl_mobitems:iron_horse_armor", weight = 1, },
+				{ itemstring = "mcl_mobitems:gold_horse_armor", weight = 1, },
+				{ itemstring = "mcl_mobitems:diamond_horse_armor", weight = 1, },
+				{ itemstring = "mcl_core:apple_gold", weight = 1, },
+			}
+		},
+		{
+			stacks_min = 1,
+			stacks_max = 1,
+			items = {
+				{ itemstring = "mcl_armor:eye", weight = 1, amount_min = 1, amount_max = 1 },
+			}
+		}}
 	},
 	after_place = function(pos,def,pr,blockseed,p1,p2,size,rotation)
 		local p1 = vector.subtract(pos,size)
