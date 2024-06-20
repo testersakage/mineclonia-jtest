@@ -30,7 +30,7 @@ minetest.register_decoration({
 })
 
 
-minetest.register_biome({
+mcl_biomes.register_cavebiome("Nether", "mcl_nether:netherrack", {
 	name = "Nether",
 	node_filler = "mcl_nether:netherrack",
 	node_stone = "mcl_nether:netherrack",
@@ -47,22 +47,9 @@ minetest.register_biome({
 	_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#330808"
-})
+}, false, { "mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:glowstone","mcl_nether:magma"})
 
-minetest.register_decoration({
-	deco_type = "simple",
-	place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:glowstone","mcl_nether:magma"},
-	sidelen = 16,
-	fill_ratio = 10,
-	biomes = { "Nether" },
-	y_min = mcl_vars.mg_lava_nether_max,
-	y_max = mcl_vars.mg_nether_deco_max,
-	decoration = "mcl_nether:netherrack",
-	flags = "all_floors",
-	param2 = 0,
-})
-
-minetest.register_biome({
+mcl_biomes.register_cavebiome("SoulsandValley", "mcl_blackstone:soul_soil", {
 	name = "SoulsandValley",
 	node_filler = "mcl_nether:netherrack",
 	node_stone = "mcl_nether:netherrack",
@@ -78,19 +65,7 @@ minetest.register_biome({
 	_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#1B4745"
-})
-minetest.register_decoration({
-	deco_type = "simple",
-	place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_nether:magma"},
-	sidelen = 16,
-	fill_ratio = 10,
-	biomes = { "SoulsandValley" },
-	y_min = mcl_vars.mg_lava_nether_max,
-	y_max = mcl_vars.mg_nether_deco_max,
-	decoration = "mcl_blackstone:soul_soil",
-	flags = "all_floors, all_ceilings",
-	param2 = 0,
-})
+}, true, {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_nether:magma"})
 
 minetest.register_ore({
 	ore_type       = "blob",
@@ -113,7 +88,8 @@ minetest.register_ore({
 		flags = "defaults",
 	}
 })
-minetest.register_biome({
+
+mcl_biomes.register_cavebiome("CrimsonForest", "mcl_crimson:crimson_nylium", {
 	name = "CrimsonForest",
 	node_filler = "mcl_nether:netherrack",
 	node_stone = "mcl_nether:netherrack",
@@ -129,20 +105,9 @@ minetest.register_biome({
 	_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#330303"
-})
-minetest.register_decoration({
-	deco_type = "simple",
-	place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:magma","mcl_blackstone:blackstone"},
-	sidelen = 16,
-	fill_ratio = 10,
-	biomes = { "CrimsonForest" },
-	y_min = mcl_vars.mg_lava_nether_max,
-	y_max = mcl_vars.mg_nether_deco_max,
-	decoration = "mcl_crimson:crimson_nylium",
-	flags = "all_floors",
-	param2 = 0,
-})
-minetest.register_biome({
+}, false, {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:magma","mcl_blackstone:blackstone"})
+
+mcl_biomes.register_cavebiome("WarpedForest", "mcl_crimson:warped_nylium", {
 	name = "WarpedForest",
 	node_filler = "mcl_nether:netherrack",
 	node_stone = "mcl_nether:netherrack",
@@ -158,20 +123,9 @@ minetest.register_biome({
 	_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#1A051A"
-})
-minetest.register_decoration({
-	deco_type = "simple",
-	place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:magma","mcl_blackstone:blackstone"},
-	sidelen = 16,
-	fill_ratio = 10,
-	biomes = { "WarpedForest" },
-	y_min = mcl_vars.mg_lava_nether_max,
-	y_max = mcl_vars.mg_nether_deco_max,
-	decoration = "mcl_crimson:warped_nylium",
-	flags = "all_floors",
-	param2 = 0,
-})
-minetest.register_biome({
+}, false, {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:magma","mcl_blackstone:blackstone"})
+
+mcl_biomes.register_cavebiome("BasaltDelta", "mcl_blackstone:basalt", {
 	name = "BasaltDelta",
 	node_filler = "mcl_nether:netherrack",
 	node_stone = "mcl_nether:netherrack",
@@ -187,20 +141,7 @@ minetest.register_biome({
 	_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#685F70"
-})
-
-minetest.register_decoration({
-	deco_type = "simple",
-	place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_blackstone:blackstone","mcl_nether:magma"},
-	sidelen = 16,
-	fill_ratio = 10,
-	biomes = { "BasaltDelta" },
-	y_min = mcl_vars.mg_lava_nether_max,
-	y_max = mcl_vars.mg_nether_deco_max,
-	decoration = "mcl_blackstone:basalt",
-	flags = "all_floors",
-	param2 = 0,
-})
+}, false, {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_blackstone:blackstone","mcl_nether:magma"})
 
 minetest.register_ore({
 ore_type       = "blob",
@@ -223,9 +164,6 @@ noise_params = {
 	flags = "defaults",
 }
 })
-
-
-
 
 -- Soul sand
 minetest.register_ore({

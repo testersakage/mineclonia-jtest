@@ -89,12 +89,33 @@ function mcl_biomes.register_biomestack(name, def)
 
 	minetest.register_biome(table.merge(def.biome, { name = name }))
 	minetest.register_biome(table.merge(def.biome, tpl_ocean, ocean, def.ocean or {}, { name = name.."_ocean" }))
-	minetest.register_biome(table.merge(def.biome, tpl_deep_ocean, ocean, def.deep_ocean or {}, { name = name.."_deep_ocean" }))
-	minetest.register_biome(table.merge(def.biome, tpl_underground, def.underground or {}, { name = name.."_underground" }))
-	minetest.register_biome(table.merge(def.biome, tpl_deep_underground, def.deep_underground or {}, { name = name.."_deep_underground" }))
+	minetest.register_biome(table.merge(def.biome, tpl_deep_ocean, ocean, def.deep_ocean or {}, { name = name.."_deep_ocean", node_top = "" }))
+	minetest.register_biome(table.merge(def.biome, tpl_underground, def.underground or {}, { name = name.."_underground", node_top = "" }))
+	minetest.register_biome(table.merge(def.biome, tpl_deep_underground, def.deep_underground or {}, { name = name.."_deep_underground", node_top = "" }))
 	if def.beach then
 		minetest.register_biome(table.merge(def.biome, tpl_beach, def.beach or {}, { name = name.."_beach" }))
 	end
+end
+
+function mcl_biomes.register_cavebiome(name, groundcover, def, ceiling, place_on)
+	def.name = def.name or name
+	local flags = "all_floors"
+	if ceiling then
+		flags = flags..", all_ceilings"
+	end
+	minetest.register_biome(def)
+	minetest.register_decoration({
+		deco_type = "simple",
+		place_on = place_on or { def.node_top, def.node_dust },
+		sidelen = 16,
+		fill_ratio = 10,
+		biomes = { name },
+		y_min = def.y_min or mcl_vars.mg_overworld_min,
+		y_max = def.y_max or mcl_vars.mg_overworld_min_old,
+		decoration = groundcover,
+		flags = flags,
+		param2 = 0,
+	})
 end
 
 -- All mapgens except flat and singlenode
@@ -1360,7 +1381,7 @@ local function register_biomes()
 		}
 	})
 
-	minetest.register_biome({
+	mcl_biomes.register_cavebiome("DeepDark", "mcl_sculk:sculk", {
 		name = "DeepDark",
 		node_top = "mcl_sculk:sculk",
 		depth_top = 1,
@@ -1371,23 +1392,11 @@ local function register_biomes()
 		y_min = mcl_vars.mg_overworld_min,
 		y_max = mcl_vars.mg_overworld_min_old,
 		humidity_point = 0,
-		heat_point = 60,
+		heat_point = 61,
 		vertical_blend = 8,
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
-	})
-	minetest.register_decoration({
-		deco_type = "simple",
-		place_on = table.merge(stonelike, {"mcl_deepslate:deepslate"}),
-		sidelen = 16,
-		fill_ratio = 10,
-		biomes = { "DeepDark" },
-		y_min = mcl_vars.mg_overworld_min,
-		y_max = mcl_vars.mg_overworld_min_old,
-		decoration = "mcl_sculk:sculk",
-		flags = "all_floors",
-		param2 = 0,
-	})
+	}, false, {"mcl_core:stone", "mcl_deepslate:deepslate"})
 
 	minetest.register_biome({
 		name = "LushCaves",
