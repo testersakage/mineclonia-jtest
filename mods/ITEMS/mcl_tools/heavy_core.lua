@@ -10,6 +10,7 @@ minetest.register_node("mcl_tools:heavy_core", {
     sounds = mcl_sounds.node_sound_stone_defaults(),
     paramtype2 = "facedir",
     drawtype = "nodebox",
+    use_texture_alpha = "clip",
     node_box = {
         type = "fixed",
             fixed = {
