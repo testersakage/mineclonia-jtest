@@ -1,7 +1,7 @@
 mcl_spawn = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
-local start_pos = minetest.setting_get_pos("static_spawnpoint") or vector.new(0,minetest.get_spawn_level(0, 0),0)
+local start_pos = minetest.setting_get_pos("static_spawnpoint") or vector.new(0, 0 ,0)
 
 -- Bed spawning offsets
 local node_search_list =
