@@ -133,6 +133,12 @@ msgstr "Vara de blaze"
 msgid "This is a crafting component dropped from dead blazes."
 msgstr "Este es un componente de artesanía caído de llamas muertas."
 
+msgid "Breeze Rod"
+msgstr ""
+
+msgid "This is a crafting item dropped from breezes."
+msgstr ""
+
 msgid "Blaze Powder"
 msgstr "Polvo de blaze"
 

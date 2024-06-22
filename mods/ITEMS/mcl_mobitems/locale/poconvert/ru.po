@@ -133,6 +133,12 @@ msgstr "Огненный стержень"
 msgid "This is a crafting component dropped from dead blazes."
 msgstr "Это материал для крафта, выпадающий из ифрита."
 
+msgid "Breeze Rod"
+msgstr ""
+
+msgid "This is a crafting item dropped from breezes."
+msgstr ""
+
 msgid "Blaze Powder"
 msgstr "Огненный порошок"
 

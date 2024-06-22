@@ -82,11 +82,14 @@ msgstr "Temps de cuisson : @1"
 msgid "Burning time: @1"
 msgstr "Temps de combustion : @1"
 
-msgid "Usage @1 of @2"
-msgstr "Usage @1 de @2"
+msgid "Usages"
+msgstr ""
 
-msgid "Recipe @1 of @2"
-msgstr "Recette @1 de @2"
+msgid "Recipes"
+msgstr ""
+
+msgid "@1 of @2"
+msgstr ""
 
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "La recette est trop grande pour être affichée (@1x@2)"
