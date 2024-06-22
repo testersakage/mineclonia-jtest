@@ -77,7 +77,7 @@ function mcl_deepslate.register_variants(name, defs)
 	end
 
 	if defs.node and defs.wall then
-		mcl_walls.register_wall("mcl_deepslate:"..defs.basename.."_"..name.."wall", defs.wall.description, main_itemstring, nil, nil, nil, nil, defs.wall)
+		mcl_walls.register_wall("mcl_deepslate:"..defs.basename..name.."wall", defs.wall.description, main_itemstring, nil, nil, nil, nil, defs.wall)
 	end
 end
 
