@@ -1,10 +1,13 @@
-Minetest 0.4 mod: dye
-======================
+# mcl_dyes
+
+* Originally forked from MTG dye by Wuzzy
+* Global color table / color API added by cora
+
+## Minetest 0.4 mod: dye
 
 See init.lua for documentation.
 
-License of source code:
----------------------------------------
+### License of source code:
 Copyright (C) 2012 Perttu Ahola (celeron55) <celeron55@gmail.com>
 
 This program is free software. It comes without any warranty, to
