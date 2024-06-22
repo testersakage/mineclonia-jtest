@@ -102,20 +102,21 @@ register_tuff_variant("bricks", {
     },
 })
 
-local tuff_variants = {"tuff", "polished", "bricks"}
-for i = 1, 2 do
-    local s = "mcl_deepslate:tuff_"..tuff_variants[i]
-    minetest.register_craft({
-        output = "mcl_deepslate:tuff_"..tuff_variants[i+1].." 4",
-		recipe = { { s, s }, { s, s } }
-    })
-end
+minetest.register_craft({
+	output = "mcl_deepslate:tuff_polished 4",
+	recipe = { { "mcl_deepslate:tuff", "mcl_deepslate:tuff" }, { "mcl_deepslate:tuff", "mcl_deepslate:tuff" } }
+})
+
+minetest.register_craft({
+	output = "mcl_deepslate:tuff_bricks 4",
+	recipe = { { "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished" }, { "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished" } }
+})
 
 minetest.register_craft({
 	output = "mcl_deepslate:tuff_chiseled",
 	recipe = {
-		{ "mcl_stairs:slab_tuff" },
-		{ "mcl_stairs:slab_tuff" },
+		{ "mcl_stairs:slab_tuff_polished" },
+		{ "mcl_stairs:slab_tuff_polished" },
 	},
 })
 
