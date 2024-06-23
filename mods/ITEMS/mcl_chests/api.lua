@@ -426,10 +426,14 @@ local function protection_check_put(side) return function(pos, listname, index, 
 		return 0
 	-- BEGIN OF LISTRING WORKAROUND
 	elseif listname == "input" then
+		local inv = minetest.get_inventory({ type = "node", pos = pos })
 		local other_pos = get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, side)
 		local other_inv = minetest.get_inventory({ type = "node", pos = other_pos })
-		local inv = minetest.get_inventory({ type = "node", pos = pos })
-		return limit_put(stack, other_inv, inv)
+		if side == "left" then
+			return limit_put(stack, inv, other_inv)
+		else
+			return limit_put(stack, other_inv, inv)
+		end
 	-- END OF LISTRING WORKAROUND
 	else
 		return stack:get_count()
@@ -447,7 +451,11 @@ local function log_inventory_put_double(side) return function(pos, listname, ind
 
 		inv:set_stack("input", 1, nil)
 
-		double_chest_add_item(inv, other_inv, "main", stack)
+		if side == "left" then
+			double_chest_add_item(inv, other_inv, "main", stack)
+		else
+			double_chest_add_item(other_inv, inv, "main", stack)
+		end
 	end
 	-- END OF LISTRING WORKAROUND
 end end
@@ -467,6 +475,25 @@ function mcl_chests.register_chest(basename, d)
 	local drop_items_chest = mcl_util.drop_items_from_meta_container("main")
 
 	if not d.groups then d.groups = {} end
+
+	if not d.on_rightclick_left then
+		d.on_rightclick_left = d.on_rightclick
+	end
+	if not d.on_rightclick_right then
+		d.on_rightclick_right = d.on_rightclick
+	end
+	--[[local on_rightclick_side = {
+		left = d.on_rightclick_left or d.on_rightclick,
+		right = d.on_rightclick_right or d.on_rightclick,
+	}]]
+
+	if not d.sounds or type(d.sounds) ~= "table" then
+		d.sounds = { nil, "default_chest" }
+	end
+
+	if not d.sounds[2] then
+		d.sounds[2] = "default_chest"
+	end
 
 	-- The basename of the "canonical" version of the node, if set (e.g.: trapped_chest_on → trapped_chest).
 	-- Used to get a shared formspec ID and to swap the node back to the canonical version in on_construct.
@@ -528,7 +555,8 @@ function mcl_chests.register_chest(basename, d)
 
 
 
-	-- Register
+	-- Dummy inventory node
+	-- Will turn into names.small.a when placed down
 	minetest.register_node("mcl_chests:" .. basename, {
 		description = d.desc,
 		_tt_help = d.tt_help,
@@ -541,7 +569,7 @@ function mcl_chests.register_chest(basename, d)
 		use_texture_alpha = "opaque",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		sounds = d.sounds,
+		sounds = d.sounds[1],
 		groups = groups_inv,
 		on_construct = function(pos, node)
 			local node = minetest.get_node(pos)
@@ -567,7 +595,7 @@ function mcl_chests.register_chest(basename, d)
 		tiles = { "blank.png^[resize:16x16" },
 		use_texture_alpha = "clip",
 		_chest_entity_textures = small_textures,
-		_chest_entity_sound = "default_chest",
+		_chest_entity_sound = d.sounds[2],
 		_chest_entity_mesh = "mcl_chests_chest",
 		_chest_entity_animation_type = "chest",
 		_mcl_baseitem = "mcl_chests:"..basename,
@@ -576,7 +604,7 @@ function mcl_chests.register_chest(basename, d)
 		drop = d.drop,
 		groups = groups_small,
 		is_ground_content = false,
-		sounds = d.sounds,
+		sounds = d.sounds[1],
 		on_construct = function(pos)
 			local param2 = minetest.get_node(pos).param2
 			local meta = minetest.get_meta(pos)
@@ -612,18 +640,18 @@ function mcl_chests.register_chest(basename, d)
 				minetest.swap_node(pos, { name = names.right.a, param2 = param2 })
 				local p = get_double_container_neighbor_pos(pos, param2, "right")
 				minetest.swap_node(p, { name = names.left.a, param2 = param2 })
-				create_entity(p, names.left.a, double_textures, param2, true, "default_chest",
+				create_entity(p, names.left.a, double_textures, param2, true, d.sounds[2],
 					"mcl_chests_chest", "chest")
 			elseif minetest.get_node(get_double_container_neighbor_pos(pos, param2, "left")).name ==
 					names.small.a then
 				minetest.swap_node(pos, { name = names.left.a, param2 = param2 })
-				create_entity(pos, names.left.a, double_textures, param2, true, "default_chest",
+				create_entity(pos, names.left.a, double_textures, param2, true, d.sounds[2],
 					"mcl_chests_chest", "chest")
 				local p = get_double_container_neighbor_pos(pos, param2, "left")
 				minetest.swap_node(p, { name = names.right.a, param2 = param2 })
 			else
 				minetest.swap_node(pos, { name = names.small.a, param2 = param2 })
-				create_entity(pos, names.small.a, small_textures, param2, false, "default_chest",
+				create_entity(pos, names.small.a, small_textures, param2, false, d.sounds[2],
 					"mcl_chests_chest", "chest")
 			end
 		end,
@@ -678,7 +706,7 @@ function mcl_chests.register_chest(basename, d)
 				d.on_rightclick(pos, node, clicker)
 			end
 
-			player_chest_open(clicker, pos, names.small.a, small_textures, node.param2, false, "default_chest",
+			player_chest_open(clicker, pos, names.small.a, small_textures, node.param2, false, d.sounds[2],
 				"mcl_chests_chest")
 		end,
 
@@ -698,7 +726,7 @@ function mcl_chests.register_chest(basename, d)
 		tiles = { "blank.png^[resize:16x16" },
 		use_texture_alpha = "clip",
 		_chest_entity_textures = double_textures,
-		_chest_entity_sound = "default_chest",
+		_chest_entity_sound = d.sounds[2],
 		_chest_entity_mesh = "mcl_chests_chest",
 		_chest_entity_animation_type = "chest",
 		_mcl_baseitem = "mcl_chests:"..basename,
@@ -707,7 +735,7 @@ function mcl_chests.register_chest(basename, d)
 		groups = groups_left,
 		drop = d.drop,
 		is_ground_content = false,
-		sounds = d.sounds,
+		sounds = d.sounds[1],
 		on_construct = construct_double_chest("left", names),
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
@@ -780,7 +808,7 @@ function mcl_chests.register_chest(basename, d)
 				d.on_rightclick_left(pos, node, clicker)
 			end
 
-			player_chest_open(clicker, pos, names.left.a, double_textures, node.param2, true, "default_chest",
+			player_chest_open(clicker, pos, names.left.a, double_textures, node.param2, true, d.sounds[2],
 				"mcl_chests_chest")
 		end,
 		mesecons = d.mesecons,
@@ -800,7 +828,7 @@ function mcl_chests.register_chest(basename, d)
 		groups = groups_right,
 		drop = d.drop,
 		is_ground_content = false,
-		sounds = d.sounds,
+		sounds = d.sounds[1],
 		on_construct = construct_double_chest("right", names),
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
@@ -873,7 +901,7 @@ function mcl_chests.register_chest(basename, d)
 				d.on_rightclick_right(pos, node, clicker)
 			end
 
-			player_chest_open(clicker, pos_other, left_name, double_textures, node.param2, true, "default_chest",
+			player_chest_open(clicker, pos_other, names.left.a, double_textures, node.param2, true, d.sounds[2],
 				"mcl_chests_chest")
 		end,
 		mesecons = d.mesecons,
