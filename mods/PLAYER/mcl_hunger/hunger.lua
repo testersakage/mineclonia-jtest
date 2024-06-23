@@ -143,7 +143,7 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 
 			local pos = user:get_pos()
 			local def = minetest.registered_items[itemname]
-	
+
 			mcl_hunger.eat_effects(user, itemname, pos, hunger_change, def)
 
 			if mcl_hunger.active and hunger_change then

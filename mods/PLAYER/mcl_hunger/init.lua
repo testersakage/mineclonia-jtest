@@ -285,7 +285,6 @@ minetest.register_globalstep(function(dtime)
 			mcl_hunger.eat_internal[player_name].is_eating_no_padding = true
 
 			local control = player:get_player_control()
-			local inv = player:get_inventory()
 			local current_itemstack = player:get_wielded_item()
 
 			if not eat_start_timers[player] then
@@ -368,9 +367,9 @@ minetest.register_globalstep(function(dtime)
 						mcl_hunger.eat_internal[player_name]._custom_wrapper and
 						mcl_hunger.eat_internal[player_name]._custom_itemstack == current_itemstack then
 
-						mcl_hunger.eat_internal[player_name]._custom_wrapper(player_name)
+							mcl_hunger.eat_internal[player_name]._custom_wrapper(player_name)
 
-						player:get_inventory():set_stack("main", player:get_wield_index(), itemstack)
+							player:get_inventory():set_stack("main", player:get_wield_index(), current_itemstack)
 					end
 
 					clear_eat_internal_and_timers(player, player_name)

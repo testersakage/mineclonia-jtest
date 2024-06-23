@@ -123,19 +123,7 @@ minetest.register_craftitem("mcl_mobitems:cooked_rabbit", {
 	_mcl_saturation = 6.0,
 })
 
--- Reset food poisoning and status effects
-local function drink_milk(itemstack, player, pointed_thing)
-	local bucket = minetest.do_item_eat(0, "mcl_buckets:bucket_empty", itemstack, player, pointed_thing)
-	-- Check if we were allowed to drink this (eat delay check)
-	if mcl_hunger.active and (bucket:get_name() ~= "mcl_mobitems:milk_bucket" or minetest.is_creative_enabled(player:get_player_name())) then
-		mcl_hunger.stop_poison(player)
-	end
-	mcl_potions._reset_player_effects(player)
-	return bucket
-end
-
 local function drink_milk_delayed(itemstack, player, pointed_thing)
-
 	if pointed_thing.type == "node" then
 		local node = minetest.get_node(pointed_thing.under)
 		if player and not player:get_player_control().sneak then
@@ -155,7 +143,7 @@ local function drink_milk_delayed(itemstack, player, pointed_thing)
 			mcl_hunger.stop_poison(player)
 		end
 		mcl_potions._reset_player_effects(player)
-		return bucket
+		return itemstack
 	end
 
 	-- Wrapper for handling mcl_hunger delayed eating
