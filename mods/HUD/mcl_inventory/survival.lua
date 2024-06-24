@@ -228,23 +228,35 @@ local function sort_stack(stack)
 	return "craft"
 end
 
+local function find_empty_main_inv_slot(inv)
+	for i, stack in pairs(inv:get_list("main")) do
+		if i > 9 and stack:is_empty() then return i end
+	end
+end
+
 minetest.register_on_player_inventory_action(function(player, action, inv, info)
 	if action == "move" and info.to_list == "sorter" then
 		local stack = inv:get_stack(info.to_list, info.to_index)
-		local trg = sort_stack(stack)
-		if trg == "armor" then
-			local newstack = mcl_armor.equip(stack, player, true)
-			if newstack and not newstack:is_empty() then
-				if inv:get_stack(info.from_list, info.from_index):is_empty() then
-					inv:set_stack(info.from_list, info.from_index, newstack)
-				elseif inv:room_for_item(info.from_list, newstack) then
-					inv:add_item(info.from_list, newstack)
-				end
-			end
+		local empty_main = find_empty_main_inv_slot(inv)
+		if info.from_list == "main" and info.from_index <= 9 and empty_main then --hotbar to inv
+			inv:set_stack("main", empty_main, stack)
+			inv:set_stack("sorter", 1, ItemStack(""))
 		else
-			inv:add_item(trg, stack)
+			local trg = sort_stack(stack)
+			if trg == "armor" then
+				local newstack = mcl_armor.equip(stack, player, true)
+				if newstack and not newstack:is_empty() then
+					if inv:get_stack(info.from_list, info.from_index):is_empty() then
+						inv:set_stack(info.from_list, info.from_index, newstack)
+					elseif inv:room_for_item(info.from_list, newstack) then
+						inv:add_item(info.from_list, newstack)
+					end
+				end
+			else
+				inv:add_item(trg, stack)
+			end
+			inv:set_stack("sorter", 1, ItemStack(""))
 		end
-		inv:set_stack("sorter", 1, ItemStack(""))
 	end
 end)
 
