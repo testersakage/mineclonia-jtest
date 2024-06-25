@@ -375,10 +375,10 @@ local function limit_put_list(stack, list)
 	return stack
 end
 
-local function limit_put(stack, inv1, inv2)
+local function limit_put(stack, top_inv, bottom_inv)
 	local leftover = ItemStack(stack)
-	leftover = limit_put_list(leftover, inv1:get_list("main"))
-	leftover = limit_put_list(leftover, inv2:get_list("main"))
+	leftover = limit_put_list(leftover, top_inv:get_list("main"))
+	leftover = limit_put_list(leftover, bottom_inv:get_list("main"))
 	return stack:get_count() - leftover:get_count()
 end
 
@@ -392,8 +392,28 @@ local function close_forms(canonical_basename, pos)
 	end
 end
 
+local function get_chest_inventories(pos, side)
+	local node = minetest.get_node(pos)
+	local meta = minetest.get_meta(pos)
+	local inv = meta:get_inventory()
+
+	local pos_other = get_double_container_neighbor_pos(pos, node.param2, side)
+	local meta_other = minetest.get_meta(pos_other)
+	local inv_other = meta_other:get_inventory()
+
+	local top_inv, bottom_inv
+	if side == "left" then
+		top_inv = inv
+		bottom_inv = inv_other
+	else
+		top_inv = inv_other
+		bottom_inv = inv
+	end
+	return top_inv, bottom_inv
+end
+
 -- Functions used in double chest registration code
--- ================================================
+---------------------------------------------------
 -- The `return function` wrapping is necessary to avoid stacking up parameters.
 -- `side` is either "left" or "right".
 
@@ -435,14 +455,8 @@ local function protection_check_put(side) return function(pos, listname, index, 
 		return 0
 	-- BEGIN OF LISTRING WORKAROUND
 	elseif listname == "input" then
-		local inv = minetest.get_inventory({ type = "node", pos = pos })
-		local other_pos = get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, side)
-		local other_inv = minetest.get_inventory({ type = "node", pos = other_pos })
-		if side == "left" then
-			return limit_put(stack, inv, other_inv)
-		else
-			return limit_put(stack, other_inv, inv)
-		end
+		local top_inv, bottom_inv = get_chest_inventories(pos, side)
+		return limit_put(stack, top_inv, bottom_inv)
 	-- END OF LISTRING WORKAROUND
 	else
 		return stack:get_count()
@@ -454,17 +468,9 @@ local function log_inventory_put_double(side) return function(pos, listname, ind
 		" moves stuff to chest at " .. minetest.pos_to_string(pos))
 	-- BEGIN OF LISTRING WORKAROUND
 	if listname == "input" then
-		local inv = minetest.get_inventory({ type = "node", pos = pos })
-		local other_pos = get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, side)
-		local other_inv = minetest.get_inventory({ type = "node", pos = other_pos })
-
-		inv:set_stack("input", 1, nil)
-
-		if side == "left" then
-			double_chest_add_item(inv, other_inv, "main", stack)
-		else
-			double_chest_add_item(other_inv, inv, "main", stack)
-		end
+		local top_inv, bottom_inv = get_chest_inventories(pos, side)
+		top_inv:set_stack("input", 1, nil)
+		double_chest_add_item(top_inv, bottom_inv, "main", stack)
 	end
 	-- END OF LISTRING WORKAROUND
 end end
