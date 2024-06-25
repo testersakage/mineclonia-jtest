@@ -24,11 +24,11 @@ mcl_banners.colors = {
 	-- [ID] = { banner description, wool, unified dyes color group, overlay color, dye, color name for emblazonings }
 	["unicolor_white"] =      {"white",      S("White Banner"),      "mcl_wool:white", mcl_dyes.colors.white.rgb, "mcl_dyes:white", S("White") },
 	["unicolor_darkgrey"] =   {"grey",       S("Grey Banner"),       "mcl_wool:grey", mcl_dyes.colors.grey.rgb, "mcl_dyes:dark_grey", S("Grey") },
-	["unicolor_grey"] =       {"silver",     S("Light Grey Banner"), "mcl_wool:silver", mcl_dyes.colors.silver.rgb, "mcl_dyes:grey", S("Light Grey") },
+	["unicolor_grey"] =       {"silver",     S("Light Grey Banner"), "mcl_wool:silver", mcl_dyes.colors.silver.rgb, "mcl_dyes:silver", S("Light Grey") },
 	["unicolor_black"] =      {"black",      S("Black Banner"),      "mcl_wool:black", mcl_dyes.colors.black.rgb, "mcl_dyes:black", S("Black") },
 	["unicolor_red"] =        {"red",        S("Red Banner"),        "mcl_wool:red", mcl_dyes.colors.red.rgb, "mcl_dyes:red", S("Red") },
 	["unicolor_yellow"] =     {"yellow",     S("Yellow Banner"),     "mcl_wool:yellow", mcl_dyes.colors.yellow.rgb, "mcl_dyes:yellow", S("Yellow") },
-	["unicolor_dark_green"] = {"green",      S("Green Banner"),      "mcl_wool:green", mcl_dyes.colors.green.rgb, "mcl_dyes:dark_green", S("Green") },
+	["unicolor_dark_green"] = {"green",      S("Green Banner"),      "mcl_wool:green", mcl_dyes.colors.green.rgb, "mcl_dyes:green", S("Green") },
 	["unicolor_cyan"] =       {"cyan",       S("Cyan Banner"),       "mcl_wool:cyan", mcl_dyes.colors.cyan.rgb, "mcl_dyes:cyan", S("Cyan") },
 	["unicolor_blue"] =       {"blue",       S("Blue Banner"),       "mcl_wool:blue", mcl_dyes.colors.blue.rgb, "mcl_dyes:blue", S("Blue") },
 	["unicolor_red_violet"] = {"magenta",    S("Magenta Banner"),    "mcl_wool:magenta", mcl_dyes.colors.magenta.rgb, "mcl_dyes:magenta", S("Magenta")},
@@ -38,10 +38,10 @@ mcl_banners.colors = {
 	["unicolor_dark_orange"] ={"brown",      S("Brown Banner"),      "mcl_wool:brown", mcl_dyes.colors.brown.rgb, "mcl_dyes:brown", S("Brown") },
 	["unicolor_pink"] =       {"pink",       S("Pink Banner"),       "mcl_wool:pink", mcl_dyes.colors.pink.rgb, "mcl_dyes:pink", S("Pink") },
 	["unicolor_light_red"] =  {"pink",       S("Pink Banner"),       "mcl_wool:pink", mcl_dyes.colors.pink.rgb, "mcl_dyes:pink", S("Pink") },
-	["unicolor_lime"] =       {"lime",       S("Lime Banner"),       "mcl_wool:lime", mcl_dyes.colors.lime.rgb, "mcl_dyes:green", S("Lime") },
-	["unicolor_green"] =      {"lime",       S("Lime Banner"),       "mcl_wool:lime", mcl_dyes.colors.lime.rgb, "mcl_dyes:green", S("Lime") },
+	["unicolor_lime"] =       {"lime",       S("Lime Banner"),       "mcl_wool:lime", mcl_dyes.colors.lime.rgb, "mcl_dyes:lime", S("Lime") },
+	["unicolor_green"] =      {"lime",       S("Lime Banner"),       "mcl_wool:lime", mcl_dyes.colors.lime.rgb, "mcl_dyes:lime", S("Lime") },
 	--the duplicate lines for brown/dark_orange, lime/green and pink/light_red are needed because mcl_banners previously used the wrong unicolor color names
-	["unicolor_light_blue"] = {"light_blue", S("Light Blue Banner"), "mcl_wool:light_blue", mcl_dyes.colors.light_blue.rgb, "mcl_dyes:lightblue", S("Light Blue") },
+	["unicolor_light_blue"] = {"light_blue", S("Light Blue Banner"), "mcl_wool:light_blue", mcl_dyes.colors.light_blue.rgb, "mcl_dyes:light_blue", S("Light Blue") },
 }
 
 
