@@ -413,11 +413,6 @@ local function get_chest_inventories(pos, side)
 	return top_inv, bottom_inv
 end
 
--- Functions used in double chest registration code
--- ------------------------------------------------
--- The `return function` wrapping is necessary to avoid stacking up parameters.
--- `side` is either "left" or "right".
-
 local function construct_double_chest(side, names) return function(pos)
 	local n = minetest.get_node(pos)
 	local param2 = n.param2
