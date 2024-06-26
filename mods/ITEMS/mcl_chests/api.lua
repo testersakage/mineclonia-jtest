@@ -4,19 +4,6 @@ local C = minetest.colorize
 
 local get_double_container_neighbor_pos = mcl_util.get_double_container_neighbor_pos
 
--- Recursively merge tables with eachother
-local function table_merge(tbl, ...)
-	local t = table.copy(tbl)
-	for k,v in pairs(...) do
-		if type(t[k]) == "table" and type(v) == "table" then
-			table_merge(t[k], v)
-		else
-			t[k] = v
-		end
-	end
-	return t
-end
-
 -- Chest Entity
 -- ------------
 -- This is necessary to show the chest as an animated mesh, as Minetest doesn't support assigning animated meshes to
@@ -564,8 +551,8 @@ function mcl_chests.register_chest(basename, d)
 	local double_textures = d.tiles.double
 
 	-- Construct groups
-	local groups_inv = table_merge({ deco_block = 1 }, d.groups)
-	local groups_small = table_merge(groups_inv, {
+	local groups_inv = table.merge({ deco_block = 1 }, d.groups)
+	local groups_small = table.merge(groups_inv, {
 		handy = 1,
 		axey = 1,
 		container = 2,
@@ -575,11 +562,11 @@ function mcl_chests.register_chest(basename, d)
 		chest_entity = 1,
 		not_in_creative_inventory = 1
 	}, d.groups)
-	local groups_left = table_merge(groups_small, {
+	local groups_left = table.merge(groups_small, {
 		double_chest = 1,
 		container = 5,
 	}, d.groups)
-	local groups_right = table_merge(groups_small, {
+	local groups_right = table.merge(groups_small, {
 		-- In a double chest, the entity is assigned to the left side, but not the right one.
 		chest_entity = 0,
 		double_chest = 2,
