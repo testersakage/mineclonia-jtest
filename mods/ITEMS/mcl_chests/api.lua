@@ -476,6 +476,36 @@ local function log_inventory_put_double(side) return function(pos, listname, ind
 	-- END OF LISTRING WORKAROUND
 end end
 
+local function get_double_chest_formspec(pos, pos_other, name, basename, right_half)
+	local listring_pos = right_half and pos_other or pos
+	return table.concat({
+		"formspec_version[4]",
+		"size[11.75,14.15]",
+
+		"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, name)) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(0.375, 0.75, 9, 3),
+		sf("list[nodemeta:%s,%s,%s;main;0.375,0.75;9,3;]", pos_other.x, pos_other.y, pos_other.z),
+		mcl_formspec.get_itemslot_bg_v4(0.375, 4.5, 9, 3),
+		sf("list[nodemeta:%s,%s,%s;main;0.375,4.5;9,3;]", pos.x, pos.y, pos.z),
+		"label[0.375,8.45;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(0.375, 8.825, 9, 3),
+		"list[current_player;main;0.375,8.825;9,3;9]",
+
+		mcl_formspec.get_itemslot_bg_v4(0.375, 12.775, 9, 1),
+		"list[current_player;main;0.375,12.775;9,1;]",
+
+		--BEGIN OF LISTRING WORKAROUND
+		"listring[current_player;main]",
+		sf("listring[nodemeta:%s,%s,%s;input]", listring_pos.x, listring_pos.y, listring_pos.z),
+		--END OF LISTRING WORKAROUND
+
+		"listring[current_player;main]" ..
+		sf("listring[nodemeta:%s,%s,%s;main]", pos_other.x, pos_other.y, pos_other.z),
+		"listring[current_player;main]",
+		sf("listring[nodemeta:%s,%s,%s;main]", pos.x, pos.y, pos.z),
+	})
+end
+
 -- This is a helper function to register regular chests (both small and double variants).
 -- Some parameters here are only utilized by trapped chests.
 function mcl_chests.register_chest(basename, d)
@@ -790,35 +820,8 @@ function mcl_chests.register_chest(basename, d)
 				name = S("Large Chest")
 			end
 
-			minetest.show_formspec(clicker:get_player_name(),
-				sf("mcl_chests:%s_%s_%s_%s", d.canonical_basename, pos.x, pos.y, pos.z),
-				table.concat({
-					"formspec_version[4]",
-					"size[11.75,14.15]",
-
-					"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, name)) .. "]",
-					mcl_formspec.get_itemslot_bg_v4(0.375, 0.75, 9, 3),
-					sf("list[nodemeta:%s,%s,%s;main;0.375,0.75;9,3;]", pos.x, pos.y, pos.z),
-					mcl_formspec.get_itemslot_bg_v4(0.375, 4.5, 9, 3),
-					sf("list[nodemeta:%s,%s,%s;main;0.375,4.5;9,3;]", pos_other.x, pos_other.y, pos_other.z),
-					"label[0.375,8.45;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
-					mcl_formspec.get_itemslot_bg_v4(0.375, 8.825, 9, 3),
-					"list[current_player;main;0.375,8.825;9,3;9]",
-
-					mcl_formspec.get_itemslot_bg_v4(0.375, 12.775, 9, 1),
-					"list[current_player;main;0.375,12.775;9,1;]",
-
-					--BEGIN OF LISTRING WORKAROUND
-					"listring[current_player;main]",
-					sf("listring[nodemeta:%s,%s,%s;input]", pos.x, pos.y, pos.z),
-					--END OF LISTRING WORKAROUND
-
-					"listring[current_player;main]" ..
-					sf("listring[nodemeta:%s,%s,%s;main]", pos.x, pos.y, pos.z),
-					"listring[current_player;main]",
-					sf("listring[nodemeta:%s,%s,%s;main]", pos_other.x, pos_other.y, pos_other.z),
-				})
-			)
+			minetest.show_formspec(clicker:get_player_name(), sf("mcl_chests:%s_%s_%s_%s", basename, pos.x, pos.y, pos.z),
+				get_double_chest_formspec(pos, pos_other, name, d.basename))
 
 			if d.on_rightclick_left then
 				d.on_rightclick_left(pos, node, clicker)
@@ -883,35 +886,8 @@ function mcl_chests.register_chest(basename, d)
 				name = S("Large Chest")
 			end
 
-			minetest.show_formspec(clicker:get_player_name(),
-				sf("mcl_chests:%s_%s_%s_%s", d.canonical_basename, pos.x, pos.y, pos.z),
-				table.concat({
-					"formspec_version[4]",
-					"size[11.75,14.15]",
-
-					"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, name)) .. "]",
-					mcl_formspec.get_itemslot_bg_v4(0.375, 0.75, 9, 3),
-					sf("list[nodemeta:%s,%s,%s;main;0.375,0.75;9,3;]", pos_other.x, pos_other.y, pos_other.z),
-					mcl_formspec.get_itemslot_bg_v4(0.375, 4.5, 9, 3),
-					sf("list[nodemeta:%s,%s,%s;main;0.375,4.5;9,3;]", pos.x, pos.y, pos.z),
-					"label[0.375,8.45;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
-					mcl_formspec.get_itemslot_bg_v4(0.375, 8.825, 9, 3),
-					"list[current_player;main;0.375,8.825;9,3;9]",
-
-					mcl_formspec.get_itemslot_bg_v4(0.375, 12.775, 9, 1),
-					"list[current_player;main;0.375,12.775;9,1;]",
-
-					--BEGIN OF LISTRING WORKAROUND
-					"listring[current_player;main]",
-					sf("listring[nodemeta:%s,%s,%s;input]", pos_other.x, pos_other.y, pos_other.z),
-					--END OF LISTRING WORKAROUND
-
-					"listring[current_player;main]" ..
-					sf("listring[nodemeta:%s,%s,%s;main]", pos_other.x, pos_other.y, pos_other.z),
-					"listring[current_player;main]",
-					sf("listring[nodemeta:%s,%s,%s;main]", pos.x, pos.y, pos.z),
-				})
-			)
+			minetest.show_formspec(clicker:get_player_name(), sf("mcl_chests:%s_%s_%s_%s", basename, pos.x, pos.y, pos.z),
+				get_double_chest_formspec(pos, pos_other, name, d.basename, true))
 
 			if d.on_rightclick_right then
 				d.on_rightclick_right(pos, node, clicker)
