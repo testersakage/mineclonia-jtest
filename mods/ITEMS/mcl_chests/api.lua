@@ -903,7 +903,7 @@ function mcl_chests.register_chest(basename, d)
 
 					--BEGIN OF LISTRING WORKAROUND
 					"listring[current_player;main]",
-					sf("listring[nodemeta:%s,%s,%s;input]", pos.x, pos.y, pos.z),
+					sf("listring[nodemeta:%s,%s,%s;input]", pos_other.x, pos_other.y, pos_other.z),
 					--END OF LISTRING WORKAROUND
 
 					"listring[current_player;main]" ..
