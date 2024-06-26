@@ -2,43 +2,8 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 local C = minetest.colorize
 
--- Shulker boxes
-local boxtypes = {
-	white = S("White Shulker Box"),
-	grey = S("Light Grey Shulker Box"),
-	orange = S("Orange Shulker Box"),
-	cyan = S("Cyan Shulker Box"),
-	magenta = S("Magenta Shulker Box"),
-	violet = S("Purple Shulker Box"),
-	lightblue = S("Light Blue Shulker Box"),
-	blue = S("Blue Shulker Box"),
-	yellow = S("Yellow Shulker Box"),
-	brown = S("Brown Shulker Box"),
-	green = S("Lime Shulker Box"),
-	dark_green = S("Green Shulker Box"),
-	pink = S("Pink Shulker Box"),
-	red = S("Red Shulker Box"),
-	dark_grey = S("Grey Shulker Box"),
-	black = S("Black Shulker Box"),
-}
-
-local shulker_mob_textures = {
-	white = "mobs_mc_shulker_white.png",
-	grey = "mobs_mc_shulker_silver.png",
-	orange = "mobs_mc_shulker_orange.png",
-	cyan = "mobs_mc_shulker_cyan.png",
-	magenta = "mobs_mc_shulker_magenta.png",
-	violet = "mobs_mc_shulker_purple.png",
-	lightblue = "mobs_mc_shulker_light_blue.png",
-	blue = "mobs_mc_shulker_blue.png",
-	yellow = "mobs_mc_shulker_yellow.png",
-	brown = "mobs_mc_shulker_brown.png",
-	green = "mobs_mc_shulker_lime.png",
-	dark_green = "mobs_mc_shulker_green.png",
-	pink = "mobs_mc_shulker_pink.png",
-	red = "mobs_mc_shulker_red.png",
-	dark_grey = "mobs_mc_shulker_gray.png",
-	black = "mobs_mc_shulker_black.png",
+local messy_textures = {
+	grey = "mobs_mc_shulker_gray.png",
 }
 
 local canonical_shulker_color = "violet"
@@ -94,8 +59,10 @@ local function get_shulker_stack(pos)
 	return boxitem
 end
 
-for color, desc in pairs(boxtypes) do
-	local mob_texture = shulker_mob_textures[color]
+for c, cdef in pairs(mcl_dyes.colors) do
+	local mob_texture = messy_textures[c] or "mobs_mc_shulker_"..c..".png"
+	local color = cdef.mcl2 or c --use the "legacy" colorname if present to preserve all itemstrings
+	local desc = S("@1 Shulker Box", cdef.readable_name)
 	local is_canonical = color == canonical_shulker_color
 	local longdesc, usagehelp, create_entry, entry_name
 	if doc then
