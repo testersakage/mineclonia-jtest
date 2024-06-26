@@ -34,6 +34,7 @@ local function formspec_shulker_box(name)
 		"listring[current_player;main]",
 	})
 end
+mcl_chests.formspec_shulker_box = formspec_shulker_box
 
 local function set_shulkerbox_meta(nmeta, imeta)
 	local name = imeta:get_string("name")
@@ -304,14 +305,3 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 		return itemstack
 	end
 end)
-
-minetest.register_lbm({
-	label = "Update shulker box formspecs (0.72.0)",
-	name = "mcl_chests:update_shulker_box_formspecs_0_72_0",
-	nodenames = { "group:shulker_box" },
-	run_at_every_load = false,
-	action = function(pos, node)
-		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", formspec_shulker_box(meta:get_string("name")))
-	end,
-})
