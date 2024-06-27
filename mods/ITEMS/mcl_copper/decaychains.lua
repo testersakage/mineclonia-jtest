@@ -65,7 +65,7 @@ end
 
 local function register_unpreserve(nodename,od,def)
 	local nd = table.copy(od)
-	nd.description = S("Waxed @1", nd.description)
+	nd.description = nd.description and S("Waxed @1", nd.description) or S("Waxed "..nodename)
 	nd[def.unpreserve_callback]  = function(itemstack, clicker, pointed_thing)
 		if pointed_thing then
 			return unpreserve(itemstack, clicker, pointed_thing)

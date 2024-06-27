@@ -45,6 +45,21 @@ for _, v in pairs({ "on", "off" }) do
 		},
 	})
 end
+
+for _, v in pairs({"", "_open"}) do
+	mcl_copper.register_decaychain("copper_trapdoor"..v,{
+		preserve_group = "preserves_copper",
+		unpreserve_callback = "_on_axe_place",
+		undecay_callback = "_on_axe_place",
+		nodes = { --order is significant
+			"mcl_copper:trapdoor"..v,
+			"mcl_copper:trapdoor_exposed"..v,
+			"mcl_copper:trapdoor_weathered"..v,
+			"mcl_copper:trapdoor_oxidized"..v,
+		},
+	})
+end
+
 -- "mcl_copper:block_exposed_cut"
 
 for _,v in pairs({"stair","slab"}) do
