@@ -151,6 +151,19 @@ for n, desc in pairs(n_desc) do
 		}},
 	})
 
+	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n, {
+		description = S("@1 Copper Trapdoor", desc),
+		groups = { copper = 1, pickaxey = 2, building_block = 1 },
+		only_redstone_can_open = false,
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		sound_close = "doors_steel_door_close",
+		sound_open = "doors_steel_door_open",
+		tile_front = "mcl_copper_trapdoor"..n..".png",
+		tile_side = "mcl_copper_trapdoor"..n.."_side.png",
+		wield_image = "mcl_copper_trapdoor"..n..".png",
+		_mcl_blast_resistance = 3,
+		_mcl_hardness = 3
+	})
 end
 
 mcl_stairs.register_stair_and_slab("copper_cut", {
