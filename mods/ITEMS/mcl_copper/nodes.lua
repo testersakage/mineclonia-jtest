@@ -115,10 +115,23 @@ for n, desc in pairs(n_desc) do
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
 		is_ground_content = false,
 		light_source = bulb_light[n],
-		groups = {pickaxey = 2, building_block = 1 },
+		groups = {pickaxey = 2, building_block = 1, not_in_creative_inventory = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5,
+		mesecons = {effector = {
+			action_off = function(pos)
+				local timer = minetest.get_node_timer(pos)
+				timer:start(0.2)
+			end,
+			rules = mesecon.rules.alldirs,
+		}},
+		on_timer = function (pos)
+			local node = minetest.get_node(pos)
+			node.name = "mcl_copper:bulb"..n.."_off"
+			minetest.swap_node(pos, node)
+			return false
+		end,
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
 		description = S("@1 Copper Bulb Off", desc),
@@ -129,6 +142,13 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5,
+		mesecons = {effector = {
+			action_on = function(pos, node)
+				node.name = "mcl_copper:bulb"..n.."_on"
+				minetest.swap_node(pos,node)
+			end,
+			rules = mesecon.rules.alldirs,
+		}},
 	})
 
 	mcl_panes.register_pane("copper_bars"..n, {
