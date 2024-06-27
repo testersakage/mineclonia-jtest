@@ -135,8 +135,7 @@ local function get_entity_info(pos, param2, double, dir, entity_pos)
 	return dir, get_entity_pos(pos, dir, double)
 end
 
-local function create_entity(pos, node_name, textures, param2, double, sound_prefix, mesh_prefix, animation_type, dir,
-							entity_pos)
+local function create_entity(pos, node_name, textures, param2, double, sound_prefix, mesh_prefix, animation_type, dir, entity_pos)
 	dir, entity_pos = get_entity_info(pos, param2, double, dir, entity_pos)
 	local initialization_data = minetest.serialize({pos, node_name, textures, dir, double, sound_prefix,
 		mesh_prefix, animation_type, "###mcl_chests:chest###"})
@@ -437,15 +436,22 @@ local function log_inventory_put_double(side) return function(pos, listname, ind
 		" moves stuff to chest at " .. minetest.pos_to_string(pos))
 	-- BEGIN OF LISTRING WORKAROUND
 	if listname == "input" then
-		local top_inv, bottom_inv = get_chest_inventories(pos, side)
-		top_inv:set_stack("input", 1, nil)
-		double_chest_add_item(top_inv, bottom_inv, "main", stack)
+		local inv = minetest.get_inventory({ type = "node", pos = pos })
+		local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, side)
+		local other_inv = minetest.get_inventory({ type = "node", pos = other_pos })
+
+		inv:set_stack("input", 1, nil)
+
+		if side == "left" then
+			double_chest_add_item(inv, other_inv, "main", stack)
+		else
+			double_chest_add_item(other_inv, inv, "main", stack)
+		end
 	end
 	-- END OF LISTRING WORKAROUND
 end end
 
 local function get_double_chest_formspec(pos, pos_other, name, basename, right_half)
-	local listring_pos = right_half and pos or pos_other
 	return table.concat({
 		"formspec_version[4]",
 		"size[11.75,14.15]",
@@ -464,7 +470,7 @@ local function get_double_chest_formspec(pos, pos_other, name, basename, right_h
 
 		--BEGIN OF LISTRING WORKAROUND
 		"listring[current_player;main]",
-		string.format("listring[nodemeta:%s,%s,%s;input]", listring_pos.x, listring_pos.y, listring_pos.z),
+		string.format("listring[nodemeta:%s,%s,%s;input]", pos.x, pos.y, pos.z),
 		--END OF LISTRING WORKAROUND
 
 		"listring[current_player;main]" ..
@@ -777,7 +783,7 @@ function mcl_chests.register_chest(basename, d)
 				name = S("Large Chest")
 			end
 
-			minetest.show_formspec(clicker:get_player_name(), string.format("mcl_chests:%s_%s_%s_%s", basename, pos.x, pos.y, pos.z), get_double_chest_formspec(pos, pos_other, name, d.basename))
+			minetest.show_formspec(clicker:get_player_name(), string.format("mcl_chests:%s_%s_%s_%s", basename, pos.x, pos.y, pos.z), get_double_chest_formspec(pos_other, pos, name, d.basename))
 
 			if d.on_rightclick_left then
 				d.on_rightclick_left(pos, node, clicker)
