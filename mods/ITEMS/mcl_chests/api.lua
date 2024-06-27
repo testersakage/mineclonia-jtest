@@ -2,8 +2,6 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 local C = minetest.colorize
 
-local get_double_container_neighbor_pos = mcl_util.get_double_container_neighbor_pos
-
 -- Chest Entity
 -- ------------
 -- This is necessary to show the chest as an animated mesh, as Minetest doesn't support assigning animated meshes to
@@ -271,14 +269,14 @@ local function chest_update_after_close(pos)
 			"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_left")
 		mesecon.receptor_off(pos, mesecon.rules.pplate)
 
-		local pos_other = get_double_container_neighbor_pos(pos, node.param2, "left")
+		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
 		minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_right", param2 = node.param2 })
 		mesecon.receptor_off(pos_other, mesecon.rules.pplate)
 	elseif node.name == "mcl_chests:trapped_chest_on_right" then
 		minetest.swap_node(pos, { name = "mcl_chests:trapped_chest_right", param2 = node.param2 })
 		mesecon.receptor_off(pos, mesecon.rules.pplate)
 
-		local pos_other = get_double_container_neighbor_pos(pos, node.param2, "right")
+		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 		minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_left", param2 = node.param2 })
 		find_or_create_entity(pos_other, "mcl_chests:trapped_chest_left", mcl_chests.tiles.chest_trapped_double,
 			node.param2, true, "default_chest", "mcl_chests_chest", "chest")
@@ -373,7 +371,7 @@ local function get_chest_inventories(pos, side)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 
-	local pos_other = get_double_container_neighbor_pos(pos, node.param2, side)
+	local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, side)
 	local meta_other = minetest.get_meta(pos_other)
 	local inv_other = meta_other:get_inventory()
 
@@ -391,7 +389,7 @@ end
 local function construct_double_chest(side, names) return function(pos)
 	local n = minetest.get_node(pos)
 	local param2 = n.param2
-	local p = get_double_container_neighbor_pos(pos, param2, side)
+	local p = mcl_util.get_double_container_neighbor_pos(pos, param2, side)
 	-- Turn into a small chest if the neighbor is gone
 	if not p or minetest.get_node(p).name ~= names[side].cr then
 		n.name = names.small.a
@@ -408,7 +406,7 @@ local function destruct_double_chest(side, names, canonical_basename, small_text
 	close_forms(canonical_basename, pos)
 
 	local param2 = n.param2
-	local p = get_double_container_neighbor_pos(pos, param2, side)
+	local p = mcl_util.get_double_container_neighbor_pos(pos, param2, side)
 	if not p or minetest.get_node(p).name ~= names[side].r then
 		return
 	end
@@ -447,7 +445,7 @@ local function log_inventory_put_double(side) return function(pos, listname, ind
 end end
 
 local function get_double_chest_formspec(pos, pos_other, name, basename, right_half)
-	local listring_pos = right_half and pos_other or pos
+	local listring_pos = right_half and pos or pos_other
 	return table.concat({
 		"formspec_version[4]",
 		"size[11.75,14.15]",
@@ -655,19 +653,19 @@ function mcl_chests.register_chest(basename, d)
 			-- END OF LISTRING WORKAROUND
 
 			-- Combine into a double chest if neighbouring another small chest
-			if minetest.get_node(get_double_container_neighbor_pos(pos, param2, "right")).name ==
+			if minetest.get_node(mcl_util.get_double_container_neighbor_pos(pos, param2, "right")).name ==
 					names.small.a then
 				minetest.swap_node(pos, { name = names.right.a, param2 = param2 })
-				local p = get_double_container_neighbor_pos(pos, param2, "right")
+				local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "right")
 				minetest.swap_node(p, { name = names.left.a, param2 = param2 })
 				create_entity(p, names.left.a, double_textures, param2, true, d.sounds[2],
 					"mcl_chests_chest", "chest")
-			elseif minetest.get_node(get_double_container_neighbor_pos(pos, param2, "left")).name ==
+			elseif minetest.get_node(mcl_util.get_double_container_neighbor_pos(pos, param2, "left")).name ==
 					names.small.a then
 				minetest.swap_node(pos, { name = names.left.a, param2 = param2 })
 				create_entity(pos, names.left.a, double_textures, param2, true, d.sounds[2],
 					"mcl_chests_chest", "chest")
-				local p = get_double_container_neighbor_pos(pos, param2, "left")
+				local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "left")
 				minetest.swap_node(p, { name = names.right.a, param2 = param2 })
 			else
 				minetest.swap_node(pos, { name = names.small.a, param2 = param2 })
@@ -766,7 +764,7 @@ function mcl_chests.register_chest(basename, d)
 		_mcl_hardness = d.hardness,
 
 		on_rightclick = function(pos, node, clicker)
-			local pos_other = get_double_container_neighbor_pos(pos, node.param2, "left")
+			local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
 			local above_node = minetest.get_node(vector.offset(pos, 0, 1, 0))
 			local above_node_other = minetest.get_node(vector.offset(pos_other, 0, 1, 0))
 
@@ -823,7 +821,7 @@ function mcl_chests.register_chest(basename, d)
 		_mcl_hardness = d.hardness,
 
 		on_rightclick = function(pos, node, clicker)
-			local pos_other = get_double_container_neighbor_pos(pos, node.param2, "right")
+			local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 			local above_def = minetest.registered_nodes[
 				minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
 			]
