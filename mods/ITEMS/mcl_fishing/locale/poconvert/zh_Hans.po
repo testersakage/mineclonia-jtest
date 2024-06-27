@@ -3,19 +3,18 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_fishing x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-29 13:07+0000\n"
-"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
-"mineclonia/mcl_fishing/zh_Hans/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: mtt_convert 0.1.0\n"
 
 msgid "Fishing Rod"
-msgstr "鱼竿"
+msgstr ""
 
 msgid "Catches fish in water"
 msgstr ""
@@ -27,37 +26,37 @@ msgid "Rightclick to launch the bobber. When it sinks right-click again to reel 
 msgstr ""
 
 msgid "Raw Fish"
-msgstr "生鱼"
+msgstr ""
 
 msgid "Raw fish is obtained by fishing and is a food item which can be eaten safely. Cooking it improves its nutritional value."
 msgstr ""
 
 msgid "Cooked Fish"
-msgstr "煎鱼"
+msgstr ""
 
 msgid "Mmh, fish! This is a healthy food item."
 msgstr ""
 
 msgid "Raw Salmon"
-msgstr "生鲑鱼"
+msgstr ""
 
 msgid "Raw salmon is obtained by fishing and is a food item which can be eaten safely. Cooking it improves its nutritional value."
 msgstr ""
 
 msgid "Cooked Salmon"
-msgstr "煎鲑鱼"
+msgstr ""
 
 msgid "This is a healthy food item which can be eaten."
 msgstr ""
 
 msgid "Clownfish"
-msgstr "小丑鱼"
+msgstr ""
 
 msgid "Clownfish may be obtained by fishing (and luck) and is a food item which can be eaten safely."
 msgstr ""
 
 msgid "Pufferfish"
-msgstr "河豚"
+msgstr ""
 
 msgid "Very poisonous"
 msgstr ""
