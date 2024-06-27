@@ -27,7 +27,7 @@ msgid "Goal Completed!"
 msgstr "达成目标！"
 
 msgid "Challenge Completed!"
-msgstr ""
+msgstr "完成挑战！"
 
 msgid "Advancement Made!"
 msgstr ""
