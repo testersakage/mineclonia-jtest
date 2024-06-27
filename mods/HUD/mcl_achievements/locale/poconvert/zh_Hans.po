@@ -3,24 +3,25 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-06-28 05:51+0000\n"
+"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_achievements/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.5.5\n"
 
 msgid "Benchmarking"
 msgstr ""
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr ""
+msgstr "使用4块木板合成一方工作台。"
 
 msgid "Time to Mine!"
-msgstr ""
+msgstr "挖矿时间到！"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr ""
@@ -32,16 +33,16 @@ msgid "Use 8 cobblestones to craft a furnace."
 msgstr ""
 
 msgid "Time to Farm!"
-msgstr ""
+msgstr "播种时间到！"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
 msgstr ""
 
 msgid "Bake Bread"
-msgstr ""
+msgstr "烘焙面包"
 
 msgid "Use wheat to craft a bread."
-msgstr ""
+msgstr "用小麦制作面包。"
 
 msgid "The Lie"
 msgstr ""
@@ -53,7 +54,7 @@ msgid "Getting an Upgrade"
 msgstr ""
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr ""
+msgstr "用木棍和鹅卵石制作石镐。"
 
 msgid "Time to Strike!"
 msgstr ""
@@ -74,10 +75,10 @@ msgid "Craft a iron pickaxe using sticks and iron."
 msgstr ""
 
 msgid "DIAMONDS!"
-msgstr ""
+msgstr "钻石！"
 
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "从地上捡起一颗钻石。"
 
 msgid "Into Fire"
 msgstr ""
