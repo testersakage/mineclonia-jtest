@@ -151,20 +151,6 @@ for n, desc in pairs(n_desc) do
 		}},
 	})
 
-	mcl_panes.register_pane("copper_bars"..n, {
-		description = S("@1 Copper Bars", desc),
-		_doc_items_longdesc = S("@1 Copper bars neatly connect to their neighbors as you build them.", desc),
-		textures = {"mcl_copper_pane_copper"..n..".png","mcl_copper_pane_copper"..n..".png","mcl_copper_pane_copper"..n..".png"},
-		groups = { pickaxey=1 },
-		sounds = mcl_sounds.node_sound_metal_defaults(),
-		use_texture_alpha = "clip",
-		recipe = {
-			{"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
-			{"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
-		},
-		_mcl_blast_resistance = 6,
-		_mcl_hardness = 5,
-	})
 end
 
 mcl_stairs.register_stair_and_slab("copper_cut", {
