@@ -18,18 +18,33 @@ mcl_copper.register_decaychain("copper",{
 	},
 })
 
-mcl_copper.register_decaychain("cut_copper",{
-	preserve_group = "preserves_copper",
-	unpreserve_callback = "_on_axe_place",
-	undecay_callback = "_on_axe_place",
-	nodes = { --order is significant
-		"mcl_copper:block_cut",
-		"mcl_copper:block_exposed_cut",
-		"mcl_copper:block_weathered_cut",
-		"mcl_copper:block_oxidized_cut",
-	},
-})
+for _, v in pairs({ "chiseled", "grate", "cut" }) do
+	mcl_copper.register_decaychain(v.."_copper",{
+		preserve_group = "preserves_copper",
+		unpreserve_callback = "_on_axe_place",
+		undecay_callback = "_on_axe_place",
+		nodes = { --order is significant
+			"mcl_copper:block_"..v,
+			"mcl_copper:block_exposed_"..v,
+			"mcl_copper:block_weathered_"..v,
+			"mcl_copper:block_oxidized_"..v,
+		},
+	})
+end
 
+for _, v in pairs({ "on", "off" }) do
+	mcl_copper.register_decaychain("copper_bulb_"..v,{
+		preserve_group = "preserves_copper",
+		unpreserve_callback = "_on_axe_place",
+		undecay_callback = "_on_axe_place",
+		nodes = { --order is significant
+			"mcl_copper:bulb_"..v,
+			"mcl_copper:bulb_exposed_"..v,
+			"mcl_copper:bulb_weathered_"..v,
+			"mcl_copper:bulb_oxidized_"..v,
+		},
+	})
+end
 -- "mcl_copper:block_exposed_cut"
 
 for _,v in pairs({"stair","slab"}) do

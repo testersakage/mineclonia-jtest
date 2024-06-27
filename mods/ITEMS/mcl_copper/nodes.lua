@@ -43,103 +43,109 @@ minetest.register_node("mcl_copper:block_raw", {
 	_mcl_hardness = 5,
 })
 
-minetest.register_node("mcl_copper:block", {
-	description = S("Block of Copper"),
-	_doc_items_longdesc = S("A block of copper is mostly a decorative block."),
-	tiles = {"mcl_copper_block.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 3,
-})
+local n_desc = {
+	[""] = "",
+	["_exposed"] = S("Exposed"),
+	["_weathered"] = S("Weathered"),
+	["_oxidized"] = S("Oxidized"),
+}
 
-minetest.register_node("mcl_copper:block_exposed", {
-	description = S("Exposed Copper"),
-	_doc_items_longdesc = S("Exposed copper is a decorative block."),
-	tiles = {"mcl_copper_exposed.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, affected_by_lightning = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_on_lightning_strike = on_lightning_strike,
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-})
+local bulb_light = {
+	[""] = 14,
+	["_exposed"] = 12,
+	["_weathered"] = 10,
+	["_oxidized"] = 7,
+}
 
-minetest.register_node("mcl_copper:block_weathered", {
-	description = S("Weathered Copper"),
-	_doc_items_longdesc = S("Weathered copper is a decorative block."),
-	tiles = {"mcl_copper_weathered.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, affected_by_lightning = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_on_lightning_strike = on_lightning_strike,
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-})
+for n, desc in pairs(n_desc) do
+	local bdesc = desc
+	if n == "" then
+		bdesc = S("Block of")
+	end
+	minetest.register_node("mcl_copper:block"..n, {
+		description = S("@1 Copper", bdesc),
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", bdesc),
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) ..".png"},
+		is_ground_content = false,
+		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 3,
+	})
 
-minetest.register_node("mcl_copper:block_oxidized", {
-	description = S("Oxidized Copper"),
-	_doc_items_longdesc = S("Oxidized copper is a decorative block."),
-	tiles = {"mcl_copper_oxidized.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, affected_by_lightning = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_on_lightning_strike = on_lightning_strike,
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-})
+	minetest.register_node("mcl_copper:block"..n.."_cut", {
+		description = S("@1 Cut Copper", desc),
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_cut.png"},
+		is_ground_content = false,
+		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 5,
+		_mcl_stonecutter_recipes = { "mcl_copper:block"..n }
+	})
 
-minetest.register_node("mcl_copper:block_cut", {
-	description = S("Cut Copper"),
-	_doc_items_longdesc = S("Cut copper is a decorative block."),
-	tiles = {"mcl_copper_block_cut.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, cut_copper = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-	_mcl_stonecutter_recipes = { "mcl_copper:block" },
-})
+	minetest.register_node("mcl_copper:block"..n.."_chiseled", {
+		description = S("@1 Chiseled Copper", desc),
+		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc),
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_chiseled.png"},
+		is_ground_content = false,
+		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 5,
+		_mcl_stonecutter_recipes = { "mcl_copper:block"..n.."_cut" }
+	})
+	minetest.register_node("mcl_copper:block"..n.."_grate", {
+		description = S("@1 Grate Copper", desc),
+		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc),
+		drawtype = "allfaces_optional",
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_grate.png"},
+		use_texture_alpha = "blend",
+		is_ground_content = false,
+		groups = {pickaxey = 2, building_block = 1 },
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 5,
+	})
 
-minetest.register_node("mcl_copper:block_exposed_cut", {
-	description = S("Exposed Cut Copper"),
-	_doc_items_longdesc = S("Exposed cut copper is a decorative block."),
-	tiles = {"mcl_copper_exposed_cut.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, cut_copper = 1, affected_by_lightning = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_on_lightning_strike = on_lightning_strike,
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-	_mcl_stonecutter_recipes = { "mcl_copper:block_exposed" },
-})
+	minetest.register_node("mcl_copper:bulb"..n.."_on", {
+		description = S("@1 Copper Bulb", desc),
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
+		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
+		is_ground_content = false,
+		light_source = bulb_light[n],
+		groups = {pickaxey = 2, building_block = 1 },
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 5,
+	})
+	minetest.register_node("mcl_copper:bulb"..n.."_off", {
+		description = S("@1 Copper Bulb Off", desc),
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
+		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_off.png"},
+		is_ground_content = false,
+		groups = {pickaxey = 2, building_block = 1 },
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 5,
+	})
 
-minetest.register_node("mcl_copper:block_weathered_cut", {
-	description = S("Weathered Cut Copper"),
-	_doc_items_longdesc = S("Weathered cut copper is a decorative block."),
-	tiles = {"mcl_copper_weathered_cut.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, cut_copper = 1, affected_by_lightning = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_on_lightning_strike = on_lightning_strike,
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-	_mcl_stonecutter_recipes = { "mcl_copper:block_weathered" },
-})
-
-minetest.register_node("mcl_copper:block_oxidized_cut", {
-	description = S("Oxidized Cut Copper"),
-	_doc_items_longdesc = S("Oxidized cut copper is a decorative block."),
-	tiles = {"mcl_copper_oxidized_cut.png"},
-	is_ground_content = false,
-	groups = {pickaxey = 2, building_block = 1, stonecuttable = 1, cut_copper = 1, affected_by_lightning = 1},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_on_lightning_strike = on_lightning_strike,
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 5,
-	_mcl_stonecutter_recipes = { "mcl_copper:block_oxidized" },
-})
+	mcl_panes.register_pane("copper_bars"..n, {
+		description = S("@1 Copper Bars", desc),
+		_doc_items_longdesc = S("@1 Copper bars neatly connect to their neighbors as you build them.", desc),
+		textures = {"mcl_copper_pane_copper"..n..".png","mcl_copper_pane_copper"..n..".png","mcl_copper_pane_copper"..n..".png"},
+		groups = { pickaxey=1 },
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		use_texture_alpha = "clip",
+		recipe = {
+			{"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+			{"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+		},
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 5,
+	})
+end
 
 mcl_stairs.register_stair_and_slab("copper_cut", {
 	baseitem = "mcl_copper:block_cut",
