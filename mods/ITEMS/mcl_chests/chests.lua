@@ -1,6 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
---local F = minetest.formspec_escape
---local C = minetest.colorize
 local get_double_container_neighbor_pos = mcl_util.get_double_container_neighbor_pos
 
 local chestusage = S("To access its inventory, rightclick it. When broken, the items will drop out.")
@@ -99,10 +97,6 @@ mcl_chests.register_chest("trapped_chest", {
 })
 
 mcl_chests.register_chest("trapped_chest_on", {
-	desc = nil,
-	longdesc = nil,
-	usagehelp = nil,
-	tt_help = nil,
 	tiles = traptiles,
 	groups = {
 		handy = 1,
@@ -120,9 +114,6 @@ mcl_chests.register_chest("trapped_chest_on", {
 			rules = mesecon.rules.pplate,
 		},
 	},
-	on_rightclick = nil,
-	on_rightclick_left = nil,
-	on_rightclick_right = nil,
 	drop = "trapped_chest",
 	canonical_basename = "trapped_chest"
 })
