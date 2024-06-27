@@ -3,97 +3,94 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-01 22:45+0000\n"
-"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
-"mineclonia/mcl_achievements/zh_Hans/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: mtt_convert 0.1.0\n"
 
 msgid "Benchmarking"
-msgstr "始方工作台"
+msgstr ""
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr "使用4块木板合成一方工作台。"
+msgstr ""
 
 msgid "Time to Mine!"
-msgstr "挖矿时间到！"
+msgstr ""
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr "在工作台上，用木板和木棍制作木镐。"
+msgstr ""
 
 msgid "Hot Topic"
-msgstr "热度很高"
+msgstr ""
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr "用 8 块鹅卵石制作一台熔炉。"
+msgstr ""
 
 msgid "Time to Farm!"
-msgstr "播种时间到！"
+msgstr ""
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr "在工作台上，用木板和木棍制作一柄木锄头。"
+msgstr ""
 
 msgid "Bake Bread"
-msgstr "烘焙面包"
+msgstr ""
 
 msgid "Use wheat to craft a bread."
-msgstr "用小麦制作面包。"
+msgstr ""
 
 msgid "The Lie"
 msgstr ""
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr "用小麦、糖、牛奶和鸡蛋合成蛋糕。"
+msgstr ""
 
 msgid "Getting an Upgrade"
-msgstr "升级"
+msgstr ""
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr "用木棍和鹅卵石制作石镐。"
+msgstr ""
 
 msgid "Time to Strike!"
-msgstr "是时候出击了！"
+msgstr ""
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr "在工作台上，使用木板和木棍制作一把木剑。"
+msgstr ""
 
 msgid "Librarian"
-msgstr "图书馆理员"
+msgstr ""
 
 msgid "Craft a bookshelf."
-msgstr "制作一个书架。"
+msgstr ""
 
 msgid "Isn't It Iron Pick"
 msgstr ""
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr "用木棍和铁器制作铁镐。"
+msgstr ""
 
 msgid "DIAMONDS!"
-msgstr "钻石！"
+msgstr ""
 
 msgid "Pick up a diamond from the floor."
-msgstr "从地上捡起一颗钻石。"
+msgstr ""
 
 msgid "Into Fire"
-msgstr "火中取栗"
+msgstr ""
 
 msgid "Pick up a blaze rod from the floor."
-msgstr "从地上捡起一根烈焰棒。"
+msgstr ""
 
 msgid "Cow Tipper"
-msgstr "斗牛士"
+msgstr ""
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
 msgstr ""
-"从地上捡起皮革。\n"
-"提示：奶牛部分动物死后有几率掉落皮革。"
 
 msgid "Getting Wood"
 msgstr ""
@@ -101,8 +98,6 @@ msgstr ""
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
-"从地上捡起一个木头物品。\n"
-"提示：一直敲击树干，直到它弹出方块。"
 
 msgid "Who is Cutting Onions?"
 msgstr ""
@@ -114,7 +109,7 @@ msgid "Hidden in the Depths"
 msgstr ""
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr "从地上捡起一个古代碎片。"
+msgstr ""
 
 msgid "The Next Generation"
 msgstr ""
@@ -124,34 +119,30 @@ msgid "Hold the Dragon Egg.\n"
 msgstr ""
 
 msgid "Sky's the Limit"
-msgstr "九霄天外"
+msgstr ""
 
 msgid "Find the elytra and prepare to fly above and beyond!"
-msgstr "找到鞘翅，准备上天揽月！"
+msgstr ""
 
 msgid "Acquire Hardware"
-msgstr "获取硬件"
+msgstr ""
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
 msgstr ""
-"从熔炉的输出槽中取出铁锭。\n"
-"提示：要冶炼铁锭，请将燃料（如煤）和铁矿石放入熔炉中。"
 
 msgid "Delicious Fish"
-msgstr "年年有鱼"
+msgstr ""
 
 msgid "Take a cooked fish from a furnace.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
-"从熔炉中煎熟一条鱼。\n"
-"提示：用鱼竿钓鱼，在熔炉里煮熟。"
 
 msgid "On A Rail"
-msgstr "在铁轨上"
+msgstr ""
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
-msgstr "乘坐矿车，至少行进1000米。"
+msgstr ""
 
 msgid "Sniper Duel"
 msgstr ""
@@ -160,10 +151,10 @@ msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distanc
 msgstr ""
 
 msgid "Monster Hunter"
-msgstr "怪物猎人"
+msgstr ""
 
 msgid "Kill a monster."
-msgstr "杀死一头怪物。"
+msgstr ""
 
 msgid "We Need to Go Deeper"
 msgstr ""
@@ -172,7 +163,7 @@ msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
 
 msgid "The End?"
-msgstr "结束了？"
+msgstr ""
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
@@ -192,10 +183,10 @@ msgid "Use a Totem of Undying to cheat death."
 msgstr ""
 
 msgid "Sweet Dreams"
-msgstr "晚安好梦"
+msgstr ""
 
 msgid "Sleep in a bed to change your respawn point."
-msgstr "睡在床上，改变重生点。"
+msgstr ""
 
 msgid "Not Quite \"Nine\" Lives"
 msgstr ""
@@ -204,10 +195,10 @@ msgid "Charge a Respawn Anchor to the maximum."
 msgstr ""
 
 msgid "What A Deal!"
-msgstr "真是太划算了！"
+msgstr ""
 
 msgid "Successfully trade with a Villager."
-msgstr "成功与村民交易。"
+msgstr ""
 
 msgid "Tactical Fishing"
 msgstr ""
@@ -222,7 +213,7 @@ msgid "Catch an Axolotl with a bucket!"
 msgstr ""
 
 msgid "Withering Heights"
-msgstr "呼啸山庄"
+msgstr ""
 
 msgid "Summon the wither from the dead."
 msgstr ""
@@ -284,25 +275,25 @@ msgid "Respawn the Ender Dragon."
 msgstr ""
 
 msgid "Bee Our Guest"
-msgstr "与蜂共舞"
+msgstr ""
 
 msgid "Use a campfire to collect a bottle of honey from a beehive without aggrivating the bees inside."
 msgstr ""
 
 msgid "Total Beelocation"
-msgstr "举巢搬迁"
+msgstr ""
 
 msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr ""
 
 msgid "Wax On"
-msgstr "涂蜡"
+msgstr ""
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr ""
 
 msgid "Wax Off"
-msgstr "脱蜡"
+msgstr ""
 
 msgid "Scrape wax off of a copper block."
 msgstr ""
@@ -332,13 +323,13 @@ msgid "Eat a cooked porkchop."
 msgstr ""
 
 msgid "Rabbit Season"
-msgstr "可爱兔兔"
+msgstr ""
 
 msgid "Eat a cooked rabbit."
-msgstr "吃掉一只煮熟的兔子。"
+msgstr ""
 
 msgid "Iron Belly"
-msgstr "铁胃"
+msgstr ""
 
 msgid "Get really desperate and eat rotten flesh."
 msgstr ""
@@ -356,31 +347,31 @@ msgid "Mine emerald ore."
 msgstr ""
 
 msgid "Stone Age"
-msgstr "石器时代"
+msgstr ""
 
 msgid "Mine a stone with new pickaxe."
 msgstr ""
 
 msgid "Hot Stuff"
-msgstr "热门产品"
+msgstr ""
 
 msgid "Put lava in a bucket."
 msgstr ""
 
 msgid "Ice Bucket Challenge"
-msgstr "冰桶挑战"
+msgstr ""
 
 msgid "Obtain an obsidian block."
 msgstr ""
 
 msgid "Hero of the Village"
-msgstr "村中好汉"
+msgstr ""
 
 msgid "Successfully defend a village from a raid"
 msgstr ""
 
 msgid "Voluntary Exile"
-msgstr "自愿流亡"
+msgstr ""
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
