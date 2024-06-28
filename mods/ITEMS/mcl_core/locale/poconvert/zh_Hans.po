@@ -3,153 +3,155 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-06-28 05:51+0000\n"
+"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_core/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.5.5\n"
 
 msgid "Stick"
-msgstr ""
+msgstr "木棍"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
-msgstr ""
+msgstr "用途广泛的制作材料；大量物品的原料。"
 
 msgid "Paper"
-msgstr ""
+msgstr "纸张"
 
 msgid "Paper is used to craft books and maps."
-msgstr ""
+msgstr "纸张用于制作书籍和地图。"
 
 msgid "Coal"
-msgstr ""
+msgstr "煤炭"
 
 msgid "“Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things."
-msgstr ""
+msgstr "通过挖掘煤矿获得，可以到地下采集。煤炭是标准炉燃料，也可用于制造火炬、煤块等"
+"。"
 
 msgid "Charcoal"
-msgstr ""
+msgstr "木炭"
 
 msgid "Charcoal is an alternative furnace fuel created by cooking wood in a furnace. It has the same burning time as coal and also shares many of its crafting recipes, but it can not be used to create coal blocks."
 msgstr ""
 
 msgid "Iron Nugget"
-msgstr ""
+msgstr "铁块"
 
 msgid "Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."
 msgstr ""
 
 msgid "Gold Nugget"
-msgstr ""
+msgstr "金块"
 
 msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."
 msgstr ""
 
 msgid "Diamond"
-msgstr ""
+msgstr "钻石"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr ""
 
 msgid "Clay Ball"
-msgstr ""
+msgstr "粘土球"
 
 msgid "Clay balls are a raw material, mainly used to create bricks in the furnace."
 msgstr ""
 
 msgid "Iron Ingot"
-msgstr ""
+msgstr "铁锭"
 
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Gold Ingot"
-msgstr ""
+msgstr "金锭"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Emerald"
-msgstr ""
+msgstr "绿宝石"
 
 msgid "Emeralds are used in villager trades as currency."
 msgstr ""
 
 msgid "Lapis Lazuli"
-msgstr ""
+msgstr "青金石"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr ""
 
 msgid "Brick"
-msgstr ""
+msgstr "砖块"
 
 msgid "Bricks are used to craft brick blocks."
 msgstr ""
 
 msgid "Flint"
-msgstr ""
+msgstr "燧石"
 
 msgid "Flint is a raw material."
 msgstr ""
 
 msgid "Sugar"
-msgstr ""
+msgstr "糖"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
 msgstr ""
 
 msgid "Bowl"
-msgstr ""
+msgstr "碗"
 
 msgid "Bowls are mainly used to hold tasty soups."
 msgstr ""
 
 msgid "Apple"
-msgstr ""
+msgstr "苹果"
 
 msgid "Apples are food items which can be eaten."
 msgstr ""
 
 msgid "Golden Apple"
-msgstr ""
+msgstr "金苹果"
 
 msgid "Golden apples are precious food items which can be eaten."
 msgstr ""
 
 msgid "Enchanted Golden Apple"
-msgstr ""
+msgstr "魔法金苹果"
 
 msgid "Stone"
-msgstr ""
+msgstr "石头"
 
 msgid "One of the most common blocks in the world, almost the entire underground consists of stone. It sometimes contains ores. Stone may be created when water meets lava."
 msgstr ""
 
 msgid "Coal Ore"
-msgstr ""
+msgstr "煤矿石"
 
 msgid "Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."
 msgstr ""
 
 msgid "Iron Ore"
-msgstr ""
+msgstr "铁矿石"
 
 msgid "Some iron contained in stone, it is prety common and can be found below sea level."
 msgstr ""
 
 msgid "Gold Ore"
-msgstr ""
+msgstr "金矿石"
 
 msgid "This stone contains pure gold, a rare metal."
 msgstr ""
 
 msgid "Redstone Ore"
-msgstr ""
+msgstr "红石矿石"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
 msgstr ""
@@ -158,91 +160,91 @@ msgid "Lit Redstone Ore"
 msgstr ""
 
 msgid "Lapis Lazuli Ore"
-msgstr ""
+msgstr "青金石矿石"
 
 msgid "Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."
 msgstr ""
 
 msgid "Emerald Ore"
-msgstr ""
+msgstr "翡翠矿石"
 
 msgid "Emerald ore is the ore of emeralds. It is very rare and can be found alone, not in clusters."
 msgstr ""
 
 msgid "Diamond Ore"
-msgstr ""
+msgstr "钻石矿石"
 
 msgid "Diamond ore is rare and can be found in clusters near the bottom of the world."
 msgstr ""
 
 msgid "Stone Bricks"
-msgstr ""
+msgstr "石砖"
 
 msgid "Chiseled Stone Bricks"
-msgstr ""
+msgstr "雕纹砂岩砖"
 
 msgid "Cracked Stone Bricks"
-msgstr ""
+msgstr "裂纹石砖"
 
 msgid "Mossy Stone Bricks"
-msgstr ""
+msgstr "苔藓石砖"
 
 msgid "Smooth Stone"
-msgstr ""
+msgstr "光滑石头"
 
 msgid "Granite"
-msgstr ""
+msgstr "花岗岩"
 
 msgid "Granite is an igneous rock."
 msgstr ""
 
 msgid "Polished Granite"
-msgstr ""
+msgstr "抛光花岗岩"
 
 msgid "Polished granite is a decorative building block made from granite."
 msgstr ""
 
 msgid "Andesite"
-msgstr ""
+msgstr "安山岩"
 
 msgid "Andesite is an igneous rock."
 msgstr ""
 
 msgid "Polished Andesite"
-msgstr ""
+msgstr "抛光安山岩"
 
 msgid "Polished andesite is a decorative building block made from andesite."
 msgstr ""
 
 msgid "Diorite"
-msgstr ""
+msgstr "闪长岩"
 
 msgid "Diorite is an igneous rock."
-msgstr ""
+msgstr "一种火成岩。"
 
 msgid "Polished Diorite"
-msgstr ""
+msgstr "抛光闪长石"
 
 msgid "Polished diorite is a decorative building block made from diorite."
 msgstr ""
 
 msgid "Grass Block"
-msgstr ""
+msgstr "草块"
 
 msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful blocks which allow the growth of all sorts of plants. They can be turned into farmland with a hoe and turned into grass paths with a shovel. In light, the grass slowly spreads onto dirt nearby. Under an opaque block or a liquid, a grass block may turn back to dirt."
 msgstr ""
 
 msgid "Dirt with Snow"
-msgstr ""
+msgstr "掺雪泥土"
 
 msgid "Grass Path"
-msgstr ""
+msgstr "草径"
 
 msgid "Grass paths are a decorative variant of grass blocks. Their top has a different color and they are a bit lower than grass blocks, making them useful to build footpaths. Grass paths can be created with a shovel. A grass path turns into dirt when it is below a solid block."
 msgstr ""
 
 msgid "Mycelium"
-msgstr ""
+msgstr "菌丝"
 
 msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other dirt-type blocks, it can not be turned into farmland with a hoe. In light, mycelium slowly spreads over nearby dirt. Under an opaque block or a liquid, it eventually turns back into dirt."
 msgstr ""
@@ -251,106 +253,107 @@ msgid "Mycelium with Snow"
 msgstr ""
 
 msgid "Podzol"
-msgstr ""
+msgstr "灰化土"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
 msgstr ""
 
 msgid "Podzol with Snow"
-msgstr ""
+msgstr "掺雪灰化土"
 
 msgid "Dirt"
-msgstr ""
+msgstr "泥土"
 
 msgid "Dirt acts as a soil for a few plants. When in light, this block may grow a grass or mycelium cover if such blocks are nearby."
-msgstr ""
+msgstr "泥土是可供植物生长的土壤。光线充足的条件下，泥土上可能会长出草丛，或被菌丝体"
+"覆盖。"
 
 msgid "Coarse Dirt"
-msgstr ""
+msgstr "砂土"
 
 msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."
 msgstr ""
 
 msgid "Gravel"
-msgstr ""
+msgstr "沙砾"
 
 msgid "This block consists of a couple of loose stones and can't support itself."
 msgstr ""
 
 msgid "Sand"
-msgstr ""
+msgstr "沙子"
 
 msgid "Sand is found in large quantities at beaches and deserts."
 msgstr ""
 
 msgid "Sandstone"
-msgstr ""
+msgstr "砂岩"
 
 msgid "Sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Cut Sandstone"
-msgstr ""
+msgstr "切割砂岩"
 
 msgid "Cut sandstone is a decorative building block."
 msgstr ""
 
 msgid "Chiseled Sandstone"
-msgstr ""
+msgstr "雕纹砂岩"
 
 msgid "Chiseled sandstone is a decorative building block."
 msgstr ""
 
 msgid "Smooth Sandstone"
-msgstr ""
+msgstr "光滑砂岩"
 
 msgid "Smooth sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Red Sand"
-msgstr ""
+msgstr "红沙"
 
 msgid "Red sand is found in large quantities in mesa biomes."
 msgstr ""
 
 msgid "Red Sandstone"
-msgstr ""
+msgstr "红砂石"
 
 msgid "Red sandstone is compressed red sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Cut Red Sandstone"
-msgstr ""
+msgstr "切制红砂石"
 
 msgid "Cut red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Chiseled Red Sandstone"
-msgstr ""
+msgstr "雕纹红砂石"
 
 msgid "Chiseled red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Smooth Red Sandstone"
-msgstr ""
+msgstr "光滑红砂石"
 
 msgid "Smooth red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Clay"
-msgstr ""
+msgstr "黏土"
 
 msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
 msgstr ""
 
 msgid "Brick Block"
-msgstr ""
+msgstr "砖块"
 
 msgid "Brick blocks are a good building material for building solid houses and can take quite a punch."
 msgstr ""
 
 msgid "Bedrock"
-msgstr ""
+msgstr "基岩"
 
 msgid "Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode."
 msgstr ""
@@ -359,67 +362,67 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr ""
 
 msgid "Cobblestone"
-msgstr ""
+msgstr "鹅卵石"
 
 msgid "Mossy Cobblestone"
-msgstr ""
+msgstr "苔藓鹅卵石"
 
 msgid "Block of Coal"
-msgstr ""
+msgstr "煤块"
 
 msgid "Blocks of coal are useful as a compact storage of coal and very useful as a furnace fuel. A block of coal is as efficient as 10 coal."
 msgstr ""
 
 msgid "Block of Iron"
-msgstr ""
+msgstr "铁块"
 
 msgid "A block of iron is mostly a decorative block but also useful as a compact storage of iron ingots."
 msgstr ""
 
 msgid "Block of Gold"
-msgstr ""
+msgstr "金块"
 
 msgid "A block of gold is mostly a shiny decorative block but also useful as a compact storage of gold ingots."
 msgstr ""
 
 msgid "Block of Diamond"
-msgstr ""
+msgstr "钻石块"
 
 msgid "A block of diamond is mostly a shiny decorative block but also useful as a compact storage of diamonds."
 msgstr ""
 
 msgid "Lapis Lazuli Block"
-msgstr ""
+msgstr "青金石块"
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
 msgstr ""
 
 msgid "Block of Emerald"
-msgstr ""
+msgstr "翡翠块"
 
 msgid "A block of emerald is mostly a shiny decorative block but also useful as a compact storage of emeralds."
 msgstr ""
 
 msgid "Obsidian"
-msgstr ""
+msgstr "黑曜石"
 
 msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance. Obsidian is formed when water meets lava."
 msgstr ""
 
 msgid "Crying Obsidian"
-msgstr ""
+msgstr "哭泣的黑曜石"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
 msgstr ""
 
 msgid "Ice"
-msgstr ""
+msgstr "冰块"
 
 msgid "Ice is a solid block usually found in cold areas. It melts near block light sources at a light level of 12 or higher. When it melts or is broken while resting on top of another block, it will turn into a water source."
 msgstr ""
 
 msgid "Packed Ice"
-msgstr ""
+msgstr "浮冰"
 
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr ""
@@ -428,7 +431,7 @@ msgid "Frosted ice is a short-lived solid block. It melts into a water source wi
 msgstr ""
 
 msgid "Frosted Ice"
-msgstr ""
+msgstr "霜冰"
 
 msgid "Top Snow"
 msgstr ""
@@ -446,16 +449,16 @@ msgid "This block can only be placed on full solid blocks and on another top sno
 msgstr ""
 
 msgid "Snow"
-msgstr ""
+msgstr "雪"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
 msgstr ""
 
 msgid "Cactus"
-msgstr ""
+msgstr "仙人掌"
 
 msgid "Grows on sand"
-msgstr ""
+msgstr "长在沙土上"
 
 msgid "Contact damage: @1 per half second"
 msgstr ""
@@ -467,7 +470,7 @@ msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr ""
 
 msgid "Sugar Canes"
-msgstr ""
+msgstr "甘蔗"
 
 msgid "Grows on sand or dirt next to water"
 msgstr ""
@@ -479,7 +482,7 @@ msgid "Sugar canes can only be placed top of other sugar canes and on top of blo
 msgstr ""
 
 msgid "Ladder"
-msgstr ""
+msgstr "梯子"
 
 msgid "A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."
 msgstr ""
@@ -491,7 +494,7 @@ msgid "Vines are climbable blocks which can be placed on the sides of solid full
 msgstr ""
 
 msgid "Glass"
-msgstr ""
+msgstr "玻璃"
 
 msgid "A decorative and mostly transparent block."
 msgstr ""
@@ -500,19 +503,19 @@ msgid "Stained glass is a decorative and mostly transparent block which comes in
 msgstr ""
 
 msgid "Stained Glass"
-msgstr ""
+msgstr "有色玻璃"
 
 msgid "@1 Stained Glass"
 msgstr ""
 
 msgid "Flowing Water"
-msgstr ""
+msgstr "活水"
 
 msgid "Water Source"
-msgstr ""
+msgstr "水源"
 
 msgid "Water"
-msgstr ""
+msgstr "水"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
 msgstr ""
@@ -530,7 +533,7 @@ msgid "• When water is directly below lava, the water turns into stone."
 msgstr ""
 
 msgid "Flowing Lava"
-msgstr ""
+msgstr "流动的岩浆"
 
 msgid "A lava source sets fire to a couple of air blocks above when they're next to a flammable block."
 msgstr ""
@@ -563,22 +566,22 @@ msgid "Slime blocks are very bouncy and prevent fall damage."
 msgstr ""
 
 msgid "Cobweb"
-msgstr ""
+msgstr "蛛网"
 
 msgid "Slows down movement"
-msgstr ""
+msgstr "减缓移动速度"
 
 msgid "Cobwebs can be walked through, but significantly slow you down."
 msgstr ""
 
 msgid "Dead Bush"
-msgstr ""
+msgstr "枯死灌木丛"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "屏障"
 
 msgid "Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."
 msgstr ""
@@ -599,133 +602,133 @@ msgid "When you hold a light in hand, you reveal all placed lights in a short di
 msgstr ""
 
 msgid "Void"
-msgstr ""
+msgstr "虚空"
 
 msgid "Stone Stairs"
-msgstr ""
+msgstr "石梯"
 
 msgid "Stone Slab"
-msgstr ""
+msgstr "石阶"
 
 msgid "Smooth Stone Slab"
-msgstr ""
+msgstr "光滑石阶"
 
 msgid "Andesite Stairs"
-msgstr ""
+msgstr "安山岩楼梯"
 
 msgid "Andesite Slab"
-msgstr ""
+msgstr "安山岩台阶"
 
 msgid "Granite Stairs"
-msgstr ""
+msgstr "花岗岩楼梯"
 
 msgid "Granite Slab"
-msgstr ""
+msgstr "花岗岩台阶"
 
 msgid "Diorite Stairs"
-msgstr ""
+msgstr "闪长岩楼梯"
 
 msgid "Diorite Slab"
-msgstr ""
+msgstr "闪长岩台阶"
 
 msgid "Cobblestone Stairs"
-msgstr ""
+msgstr "鹅卵石楼梯"
 
 msgid "Cobblestone Slab"
-msgstr ""
+msgstr "鹅卵石台阶"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr ""
+msgstr "苔藓鹅卵石楼梯"
 
 msgid "Mossy Cobblestone Slab"
-msgstr ""
+msgstr "苔藓鹅卵石台阶"
 
 msgid "Brick Stairs"
-msgstr ""
+msgstr "砖楼梯"
 
 msgid "Brick Slab"
-msgstr ""
+msgstr "砖台阶"
 
 msgid "Sandstone Stairs"
-msgstr ""
+msgstr "砂岩楼梯"
 
 msgid "Sandstone Slab"
-msgstr ""
+msgstr "砂岩台阶"
 
 msgid "Smooth Sandstone Stairs"
-msgstr ""
+msgstr "光滑砂岩楼梯"
 
 msgid "Smooth Sandstone Slab"
-msgstr ""
+msgstr "光滑砂岩台阶"
 
 msgid "Cut Sandstone Stairs"
-msgstr ""
+msgstr "切削砂岩楼梯"
 
 msgid "Cut Sandstone Slab"
-msgstr ""
+msgstr "切削砂岩台阶"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "红砂岩楼梯"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "红砂岩台阶"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "光滑红砂岩楼梯"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "光滑红砂岩台阶"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "切制红砂岩楼梯"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "切制红砂岩台阶"
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "石砖楼梯"
 
 msgid "Stone Brick Slab"
-msgstr ""
+msgstr "石砖台阶"
 
 msgid "Polished Andesite Stairs"
-msgstr ""
+msgstr "抛光安山岩楼梯"
 
 msgid "Polished Andesite Slab"
-msgstr ""
+msgstr "抛光安山岩台阶"
 
 msgid "Polished Granite Stairs"
-msgstr ""
+msgstr "抛光花岗岩楼梯"
 
 msgid "Polished Granite Slab"
-msgstr ""
+msgstr "抛光花岗岩台阶"
 
 msgid "Polished Diorite Stairs"
-msgstr ""
+msgstr "抛光闪长岩楼梯"
 
 msgid "Polished Diorite Slab"
-msgstr ""
+msgstr "抛光闪长岩台阶"
 
 msgid "Mossy Stone Brick Stairs"
-msgstr ""
+msgstr "苔藓石砖楼梯"
 
 msgid "Mossy Stone Brick Slab"
-msgstr ""
+msgstr "苔藓石砖台阶"
 
 msgid "Oak"
-msgstr ""
+msgstr "橡树"
 
 msgid "Dark Oak"
-msgstr ""
+msgstr "深色橡木"
 
 msgid "Jungle"
-msgstr ""
+msgstr "丛林"
 
 msgid "Spruce"
-msgstr ""
+msgstr "云杉"
 
 msgid "Acacia"
-msgstr ""
+msgstr "洋槐"
 
 msgid "Birch"
-msgstr ""
+msgstr "桦树"
