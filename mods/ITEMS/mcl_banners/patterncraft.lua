@@ -250,6 +250,16 @@ local patterns = {
 		{ d, e, d },
 		{ e, e, e },
 	},
+	["flow"] = {
+		name = NS("@1 Flow"),
+		type = "shapeless",
+		{ e, "mcl_banners:pattern_flow", d },
+	},
+	["guster"] = {
+		name = NS("@1 Guster"),
+		type = "shapeless",
+		{ e, "mcl_banners:pattern_guster", d },
+	},
 }
 mcl_banners.patterns = patterns
 

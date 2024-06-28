@@ -87,6 +87,8 @@ local pattern_names = {
       "triangles_top",
       "globe",
       "piglin",
+      "guster",
+      "flow",
 }
 
 local colors_reverse = {}
