@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-27 15:06+0000\n"
+"PO-Revision-Date: 2024-06-28 05:51+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/awards/zh_Hans/>\n"
@@ -15,10 +15,10 @@ msgstr ""
 "X-Generator: Weblate 5.5.5\n"
 
 msgid "Secret Award Unlocked: @1"
-msgstr ""
+msgstr "已解锁私密奖励：@1"
 
 msgid "Award Unlocked: @1"
-msgstr ""
+msgstr "奖励解锁：@1"
 
 msgid "Secret Advancement Made!"
 msgstr ""
@@ -36,7 +36,7 @@ msgid "[c|clear|disable|enable]"
 msgstr ""
 
 msgid "Show, clear, disable or enable your awards"
-msgstr ""
+msgstr "显示、清除、禁用或启用奖励"
 
 msgid "All your awards and statistics have been cleared. You can now start again."
 msgstr ""
@@ -84,16 +84,16 @@ msgid "Error: No award available."
 msgstr ""
 
 msgid "You have not unlocked any awards."
-msgstr ""
+msgstr "未解锁任何奖励。"
 
 msgid "@1’s awards:"
-msgstr ""
+msgstr "@1的奖励："
 
 msgid "@1/@2 chat messages"
-msgstr ""
+msgstr "@1/@2 聊天信息"
 
 msgid "Send a chat message"
-msgstr ""
+msgstr "发送一条消息"
 
 msgid "Chat @1 times"
 msgstr ""
@@ -117,10 +117,10 @@ msgid "Die @1 times of @2"
 msgstr ""
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "死亡@1次。"
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "挖矿@1次"
 
 msgid "@1/@2 dug"
 msgstr ""
@@ -156,13 +156,13 @@ msgid "@1/@2 crafted"
 msgstr ""
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "合成：@1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "合成：@1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "合成@1项"
 
 msgid "Craft @1 items."
 msgstr ""
