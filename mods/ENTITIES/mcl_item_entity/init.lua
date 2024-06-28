@@ -46,6 +46,17 @@ mcl_item_entity.register_pickup_achievement("mcl_nether:ancient_debris", "mcl:hi
 mcl_item_entity.register_pickup_achievement("mcl_end:dragon_egg", "mcl:PickUpDragonEgg")
 mcl_item_entity.register_pickup_achievement("mcl_armor:elytra", "mcl:skysTheLimit")
 
+local function cxcz(o, cw, one, zero)
+	if cw < 0 then
+		table.insert(o, { [one]=1, y=0, [zero]=0 })
+		table.insert(o, { [one]=-1, y=0, [zero]=0 })
+	else
+		table.insert(o, { [one]=-1, y=0, [zero]=0 })
+		table.insert(o, { [one]=1, y=0, [zero]=0 })
+	end
+	return o
+end
+
 mcl_player.register_globalstep(function(player)
 	if player:get_hp() > 0 or not minetest.settings:get_bool("enable_damage") then
 		local pos = player:get_pos()
