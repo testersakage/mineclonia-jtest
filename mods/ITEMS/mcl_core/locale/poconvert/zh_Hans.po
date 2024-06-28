@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-28 05:51+0000\n"
+"PO-Revision-Date: 2024-06-28 07:37+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_core/zh_Hans/>\n"
@@ -43,7 +43,7 @@ msgid "Iron Nugget"
 msgstr "铁块"
 
 msgid "Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."
-msgstr ""
+msgstr "小块铁矿熔炼物，主要用于制作金锭。"
 
 msgid "Gold Nugget"
 msgstr "金块"
@@ -55,13 +55,13 @@ msgid "Diamond"
 msgstr "钻石"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
-msgstr ""
+msgstr "珍贵的矿物，可用于制造顶级盔甲或工具。"
 
 msgid "Clay Ball"
 msgstr "粘土球"
 
 msgid "Clay balls are a raw material, mainly used to create bricks in the furnace."
-msgstr ""
+msgstr "在熔炉中制造砖块的原料。"
 
 msgid "Iron Ingot"
 msgstr "铁锭"
@@ -79,7 +79,7 @@ msgid "Emerald"
 msgstr "绿宝石"
 
 msgid "Emeralds are used in villager trades as currency."
-msgstr ""
+msgstr "与村民交易时可当作货币。"
 
 msgid "Lapis Lazuli"
 msgstr "青金石"
@@ -97,13 +97,13 @@ msgid "Flint"
 msgstr "燧石"
 
 msgid "Flint is a raw material."
-msgstr ""
+msgstr "一种原材料。"
 
 msgid "Sugar"
 msgstr "糖"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
-msgstr ""
+msgstr "来自甘蔗，用于制作甜食。"
 
 msgid "Bowl"
 msgstr "碗"
@@ -115,13 +115,13 @@ msgid "Apple"
 msgstr "苹果"
 
 msgid "Apples are food items which can be eaten."
-msgstr ""
+msgstr "可食用，解饥饿。"
 
 msgid "Golden Apple"
 msgstr "金苹果"
 
 msgid "Golden apples are precious food items which can be eaten."
-msgstr ""
+msgstr "珍贵食品。"
 
 msgid "Enchanted Golden Apple"
 msgstr "魔法金苹果"
