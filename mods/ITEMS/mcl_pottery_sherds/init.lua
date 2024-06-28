@@ -23,6 +23,9 @@ mcl_pottery_sherds.defs = {
 	["shelter"] = { description = S("Shelter") },
 	["skull"] = { description = S("Skull") },
 	["snort"] = { description = S("Snort") },
+	["flow"] = { description = S("Flow") },
+	["guster"] = { description = S("Guster") },
+	["scrape"] = { description = S("Scrape") },
 }
 
 local pot_face_positions = {
