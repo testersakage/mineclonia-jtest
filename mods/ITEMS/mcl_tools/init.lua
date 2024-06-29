@@ -659,6 +659,7 @@ minetest.register_tool("mcl_tools:mace", {
 				end
 				local current_time = minetest.get_gametime()
 				if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
+					local wind_burst = mcl_enchanting.get_enchantment(itemstack, "wind_burst")
 					local density = mcl_enchanting.get_enchantment(itemstack, "density") or 0
 					mcl_tools.mace_cooldown[user] = current_time
 					if fall_distance < 0 then
@@ -674,6 +675,9 @@ minetest.register_tool("mcl_tools:mace", {
 						full_punch_interval = 1.6,
 						damage_groups = {fleshy = 6},
 						}, nil)
+					end
+					if wind_burst then
+						user:add_velocity(vector.new(0, 0.5 * wind_burst))
 					end
 				end
 			end
