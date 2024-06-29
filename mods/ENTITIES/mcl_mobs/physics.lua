@@ -564,11 +564,8 @@ function mob_class:do_env_damage()
 	self.standing_in = node_ok(pos, "air").name
 	self.standing_on = node_ok(pos2, "air").name
 
-	local pos3 = {x=pos.x, y=pos.y + cbox[5] , z=pos.z}
-	self.standing_under = node_ok(pos3, "air").name
-
-	local pos4 = vector.offset(pos, 0, cbox[5] - 0.5, 0)
-	self.head_in = node_ok(pos4, "air").name
+	local pos_head = vector.offset(pos, 0, cbox[5] - 0.5, 0)
+	self.head_in = node_ok(pos_head, "air").name
 
 	-- don't fall when on ignore, just stand still
 	if self.standing_in == "ignore" then
@@ -580,8 +577,7 @@ function mob_class:do_env_damage()
 
 	local nodef = minetest.registered_nodes[self.standing_in]
 	local nodef2 = minetest.registered_nodes[self.standing_on]
-	local nodef3 = minetest.registered_nodes[self.standing_under]
-	local nodef4 = minetest.registered_nodes[self.head_in]
+	local head_nodedef = minetest.registered_nodes[self.head_in]
 
 	-- rain
 	if self.rain_damage > 0 then
@@ -662,10 +658,10 @@ function mob_class:do_env_damage()
 	if self.object:get_properties().breath_max ~= -1 then
 		local drowning = false
 		if self.breathes_in_water then
-			if minetest.get_item_group(self.standing_in, "water") == 0 then
+			if minetest.get_item_group(self.head_in, "water") == 0 then
 				drowning = true
 			end
-		elseif nodef.drowning > 0 and (nodef3.drowning > 0 or minetest.get_item_group(self.standing_under, "solid") > 0) then
+		elseif head_nodedef.drowning > 0 then
 			drowning = true
 		end
 		if drowning then
@@ -673,8 +669,8 @@ function mob_class:do_env_damage()
 			mcl_mobs.effect(pos, 2, "bubble.png", nil, nil, 1, nil)
 			if self.breath <= 0 then
 				local dmg
-				if nodef.drowning > 0 then
-					dmg = nodef.drowning
+				if head_nodedef.drowning > 0 then
+					dmg = head_nodedef.drowning
 				else
 					dmg = 4
 				end
@@ -682,7 +678,7 @@ function mob_class:do_env_damage()
 				self:damage_mob("environment", dmg)
 			end
 			if self:check_for_death("drowning", {type = "environment",
-					pos = pos, node = self.standing_in}) then
+					pos = pos, node = self.head_in}) then
 				return true
 			end
 		else
@@ -691,11 +687,11 @@ function mob_class:do_env_damage()
 	end
 	--- suffocation inside solid node
 	if (self.suffocation == true)
-	and (nodef4.walkable == nil or nodef4.walkable == true)
-	and (nodef4.collision_box == nil or nodef4.collision_box.type == "regular")
-	and (nodef4.node_box == nil or nodef4.node_box.type == "regular")
-	and (nodef4.groups.disable_suffocation ~= 1)
-	and (nodef4.groups.opaque == 1) then
+	and (head_nodedef.walkable == nil or head_nodedef.walkable == true)
+	and (head_nodedef.collision_box == nil or head_nodedef.collision_box.type == "regular")
+	and (head_nodedef.node_box == nil or head_nodedef.node_box.type == "regular")
+	and (head_nodedef.groups.disable_suffocation ~= 1)
+	and (head_nodedef.groups.opaque == 1) then
 		-- Short grace period before starting to take suffocation damage.
 		-- This is different from players, who take damage instantly.
 		-- This has been done because mobs might briefly be inside solid nodes
@@ -708,7 +704,7 @@ function mob_class:do_env_damage()
 			self:damage_mob("environment", 2)
 
 			if self:check_for_death("suffocation", {type = "environment",
-					pos = pos, node = self.standing_in}) then
+					pos = pos, node = self.head_in}) then
 				return true
 			end
 		end
