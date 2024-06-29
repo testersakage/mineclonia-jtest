@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-29 10:18+0000\n"
+"PO-Revision-Date: 2024-06-29 13:07+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_farming/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.1\n"
 
 msgid "Beetroot Seeds"
 msgstr "甜菜种子"
@@ -78,16 +78,16 @@ msgid "Mature carrot plants are ready to be harvested for carrots. They won't gr
 msgstr ""
 
 msgid "Carrot"
-msgstr ""
+msgstr "胡萝卜"
 
 msgid "Carrots can be eaten and planted. Pigs and rabbits like carrots."
-msgstr ""
+msgstr "可以食用或种植。猪和兔子很喜欢胡萝卜。"
 
 msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmland to plant the carrot. It grows in sunlight and grows faster on hydrated farmland. Rightclick an animal to feed it."
 msgstr ""
 
 msgid "Golden Carrot"
-msgstr ""
+msgstr "金萝卜"
 
 msgid "A golden carrot is a precious food item which can be eaten. It is really, really filling!"
 msgstr ""
@@ -102,28 +102,28 @@ msgid "Use the hoe on a cultivatable block (by rightclicking it) to turn it into
 msgstr ""
 
 msgid "Wood Hoe"
-msgstr ""
+msgstr "木锄头"
 
 msgid "Uses: @1"
 msgstr ""
 
 msgid "Stone Hoe"
-msgstr ""
+msgstr "石锄头"
 
 msgid "Iron Hoe"
-msgstr ""
+msgstr "铁锄头"
 
 msgid "Golden Hoe"
-msgstr ""
+msgstr "金锄头"
 
 msgid "Diamond Hoe"
-msgstr ""
+msgstr "钻石锄头"
 
 msgid "Netherite Hoe"
 msgstr ""
 
 msgid "Melon Seeds"
-msgstr ""
+msgstr "瓜籽"
 
 msgid "Grows into a melon stem which in turn grows melons. Chickens like melon seeds."
 msgstr ""
@@ -132,7 +132,7 @@ msgid "Place the melon seeds on farmland (which can be created with a hoe) to pl
 msgstr ""
 
 msgid "Melon"
-msgstr ""
+msgstr "甜瓜"
 
 msgid "A melon is a block which can be grown from melon stems, which in turn are grown from melon seeds. It can be harvested for melon slices."
 msgstr ""
@@ -174,7 +174,7 @@ msgid "Mature potato plants are ready to be harvested for potatoes. They won't g
 msgstr ""
 
 msgid "Potato"
-msgstr ""
+msgstr "马铃薯"
 
 msgid "Potatoes are food items which can be eaten, cooked in the furnace and planted. Pigs like potatoes."
 msgstr ""
@@ -192,22 +192,22 @@ msgid "Poisonous Potato"
 msgstr ""
 
 msgid "60% chance of poisoning"
-msgstr ""
+msgstr "六成中毒几率"
 
 msgid "This potato doesn't look too healthy. You can eat it to restore hunger points, but there's a 60% chance it will poison you briefly."
 msgstr ""
 
 msgid "Pumpkin Seeds"
-msgstr ""
+msgstr "南瓜籽"
 
 msgid "Grows into a pumpkin stem which in turn grows pumpkins. Chickens like pumpkin seeds."
-msgstr ""
+msgstr "可长成南瓜蔓，南蔓茎会结出南瓜。鸡喜欢吃南瓜籽。"
 
 msgid "Place the pumpkin seeds on farmland (which can be created with a hoe) to plant a pumpkin stem. Pumpkin stems grow in sunlight and grow faster on hydrated farmland. When mature, the stem attempts to grow a pumpkin next to it. Rightclick an animal to feed it pumpkin seeds."
 msgstr ""
 
 msgid "Premature Pumpkin Stem"
-msgstr ""
+msgstr "早熟南瓜蔓"
 
 msgid "Pumpkin stems grow on farmland in 8 stages. On hydrated farmland, the growth is a bit quicker. Mature pumpkin stems are able to grow pumpkins."
 msgstr ""
@@ -216,7 +216,7 @@ msgid "Premature Pumpkin Stem (Stage @1)"
 msgstr ""
 
 msgid "Mature Pumpkin Stem"
-msgstr ""
+msgstr "成熟南瓜蔓"
 
 msgid "A mature pumpkin stem attempts to grow a pumpkin at one of its four adjacent blocks. A pumpkin can only grow on top of farmland, dirt or a grass block. When a pumpkin is next to a pumpkin stem, the pumpkin stem immediately bends and connects to the pumpkin. A connected pumpkin stem can't grow another pumpkin. As soon all pumpkins around the stem have been removed, it loses the connection and is ready to grow another pumpkin."
 msgstr ""
@@ -231,25 +231,25 @@ msgid "To carve a face into the pumpkin, use the shears on the side you want to 
 msgstr ""
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "南瓜"
 
 msgid "A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds."
-msgstr ""
+msgstr "可作为头盔佩戴。南瓜籽可长成南瓜蔓，南瓜蔓可长出南瓜。"
 
 msgid "Jack o'Lantern"
-msgstr ""
+msgstr "杰克南瓜灯"
 
 msgid "A jack o'lantern is a traditional Halloween decoration made from a pumpkin. It glows brightly."
-msgstr ""
+msgstr "传统的万圣节装饰品，由南瓜制成。发出明亮的光芒。"
 
 msgid "Pumpkin Pie"
-msgstr ""
+msgstr "南瓜饼"
 
 msgid "A pumpkin pie is a tasty food item which can be eaten."
-msgstr ""
+msgstr "美味食品。"
 
 msgid "Farmland"
-msgstr ""
+msgstr "农田"
 
 msgid "Surface for crops"
 msgstr ""
@@ -270,25 +270,25 @@ msgid "Sweet Berry Bush (Stage @1)"
 msgstr ""
 
 msgid "Sweet Berry"
-msgstr ""
+msgstr "甜浆果"
 
 msgid "Wheat Seeds"
-msgstr ""
+msgstr "小麦种子"
 
 msgid "Grows into a wheat plant. Chickens like wheat seeds."
-msgstr ""
+msgstr "种植后长出小麦。鸡喜欢吃小麦种子。"
 
 msgid "Premature Wheat Plant"
-msgstr ""
+msgstr "早熟小麦植株"
 
 msgid "Premature Wheat Plant (Stage @1)"
-msgstr ""
+msgstr "早熟小麦植株（阶段@1）"
 
 msgid "Mature Wheat Plant"
-msgstr ""
+msgstr "成熟小麦植株"
 
 msgid "Wheat"
-msgstr ""
+msgstr "小麦"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
 msgstr ""
@@ -297,13 +297,13 @@ msgid "Use the “Place” key on an animal to try to feed it wheat."
 msgstr ""
 
 msgid "Cookie"
-msgstr ""
+msgstr "饼干"
 
 msgid "Bread"
-msgstr ""
+msgstr "面包"
 
 msgid "Hay Bale"
-msgstr ""
+msgstr "干草捆"
 
 msgid "Hay bales are decorative blocks made from wheat."
 msgstr ""
