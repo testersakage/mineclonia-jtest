@@ -567,6 +567,9 @@ function mob_class:do_env_damage()
 	local pos3 = {x=pos.x, y=pos.y + cbox[5] , z=pos.z}
 	self.standing_under = node_ok(pos3, "air").name
 
+	local pos4 = vector.offset(pos, 0, cbox[5] - 0.5, 0)
+	self.head_in = node_ok(pos4, "air").name
+
 	-- don't fall when on ignore, just stand still
 	if self.standing_in == "ignore" then
 		self.object:set_velocity({x = 0, y = 0, z = 0})
@@ -578,6 +581,7 @@ function mob_class:do_env_damage()
 	local nodef = minetest.registered_nodes[self.standing_in]
 	local nodef2 = minetest.registered_nodes[self.standing_on]
 	local nodef3 = minetest.registered_nodes[self.standing_under]
+	local nodef4 = minetest.registered_nodes[self.head_in]
 
 	-- rain
 	if self.rain_damage > 0 then
@@ -687,11 +691,11 @@ function mob_class:do_env_damage()
 	end
 	--- suffocation inside solid node
 	if (self.suffocation == true)
-	and (nodef.walkable == nil or nodef.walkable == true)
-	and (nodef.collision_box == nil or nodef.collision_box.type == "regular")
-	and (nodef.node_box == nil or nodef.node_box.type == "regular")
-	and (nodef.groups.disable_suffocation ~= 1)
-	and (nodef.groups.opaque == 1) then
+	and (nodef4.walkable == nil or nodef4.walkable == true)
+	and (nodef4.collision_box == nil or nodef4.collision_box.type == "regular")
+	and (nodef4.node_box == nil or nodef4.node_box.type == "regular")
+	and (nodef4.groups.disable_suffocation ~= 1)
+	and (nodef4.groups.opaque == 1) then
 		-- Short grace period before starting to take suffocation damage.
 		-- This is different from players, who take damage instantly.
 		-- This has been done because mobs might briefly be inside solid nodes
