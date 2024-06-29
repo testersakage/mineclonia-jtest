@@ -658,7 +658,7 @@ function mob_class:do_env_damage()
 	if self.object:get_properties().breath_max ~= -1 then
 		local drowning = false
 		if self.breathes_in_water then
-			if minetest.get_item_group(self.head_in, "water") == 0 then
+			if minetest.get_item_group(self.standing_in, "water") == 0 then
 				drowning = true
 			end
 		elseif head_nodedef.drowning > 0 then
