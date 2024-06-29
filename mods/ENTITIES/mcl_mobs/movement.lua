@@ -308,7 +308,8 @@ function mob_class:env_danger_movement_checks()
 	if self.move_in_group ~= false then
 		self:check_herd()
 	end
-	if not self:check_timer("env_danger_movement_checks", 0.5) then return end
+	--if not self:check_timer("env_danger_movement_checks", 0.1) then return end
+	-- TODO: if this doesn't happen often enough mobs frequently jump into danger
 	local yaw = 0
 	if self:is_at_water_danger() and self.state ~= "attack" then
 		if math.random(1, 10) <= 6 then
