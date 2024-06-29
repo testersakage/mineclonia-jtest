@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-28 07:37+0000\n"
+"PO-Revision-Date: 2024-06-29 10:18+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_core/zh_Hans/>\n"
@@ -175,7 +175,7 @@ msgid "Diamond Ore"
 msgstr "钻石矿石"
 
 msgid "Diamond ore is rare and can be found in clusters near the bottom of the world."
-msgstr ""
+msgstr "很稀有，可在世界底层大量开采。"
 
 msgid "Stone Bricks"
 msgstr "石砖"
@@ -196,25 +196,25 @@ msgid "Granite"
 msgstr "花岗岩"
 
 msgid "Granite is an igneous rock."
-msgstr ""
+msgstr "一种火成岩。"
 
 msgid "Polished Granite"
 msgstr "抛光花岗岩"
 
 msgid "Polished granite is a decorative building block made from granite."
-msgstr ""
+msgstr "由花岗岩制成的装饰性建筑块。"
 
 msgid "Andesite"
 msgstr "安山岩"
 
 msgid "Andesite is an igneous rock."
-msgstr ""
+msgstr "一种火成岩。"
 
 msgid "Polished Andesite"
 msgstr "抛光安山岩"
 
 msgid "Polished andesite is a decorative building block made from andesite."
-msgstr ""
+msgstr "由安山岩制成的装饰性建筑块。"
 
 msgid "Diorite"
 msgstr "闪长岩"
@@ -226,13 +226,16 @@ msgid "Polished Diorite"
 msgstr "抛光闪长石"
 
 msgid "Polished diorite is a decorative building block made from diorite."
-msgstr ""
+msgstr "由闪长岩制成的装饰性建筑块。"
 
 msgid "Grass Block"
 msgstr "草块"
 
 msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful blocks which allow the growth of all sorts of plants. They can be turned into farmland with a hoe and turned into grass paths with a shovel. In light, the grass slowly spreads onto dirt nearby. Under an opaque block or a liquid, a grass block may turn back to dirt."
 msgstr ""
+"有草覆盖的泥土。草块是资源丰富，可供各种植物生长。可以用锄开垦农田，也可以用"
+"铲子变成草道。在光照下，草块慢慢地蔓延到附近的泥土上。在不透明的块或液体下，"
+"草块可能会变回泥土。"
 
 msgid "Dirt with Snow"
 msgstr "掺雪泥土"
@@ -250,13 +253,13 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr ""
 
 msgid "Mycelium with Snow"
-msgstr ""
+msgstr "掺雪菌丝"
 
 msgid "Podzol"
 msgstr "灰化土"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
-msgstr ""
+msgstr "一种在针叶林中发现的泥土。只有少数植物能在上面生存。"
 
 msgid "Podzol with Snow"
 msgstr "掺雪灰化土"
@@ -272,19 +275,19 @@ msgid "Coarse Dirt"
 msgstr "砂土"
 
 msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."
-msgstr ""
+msgstr "可供某些植物生长的土壤。类似于泥土，但它永远不会长出覆盖物。"
 
 msgid "Gravel"
 msgstr "沙砾"
 
 msgid "This block consists of a couple of loose stones and can't support itself."
-msgstr ""
+msgstr "该方块由几块松散的石头组成，无法支撑自己。"
 
 msgid "Sand"
 msgstr "沙子"
 
 msgid "Sand is found in large quantities at beaches and deserts."
-msgstr ""
+msgstr "在海滩和沙漠中大量涌现。"
 
 msgid "Sandstone"
 msgstr "砂岩"
