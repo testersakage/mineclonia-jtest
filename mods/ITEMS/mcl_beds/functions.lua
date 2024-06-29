@@ -116,13 +116,13 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		for _, obj in pairs(minetest.get_objects_inside_radius(bed_pos, 8)) do
 			if obj and not obj:is_player() then
 				local ent = obj:get_luaentity()
-				local mobname = ent.name
-				local def = minetest.registered_entities[mobname]
-				-- Approximation of monster detection range
-				if def.is_mob and prevents_sleep(def,ent) then
-				--((mobname ~= "mobs_mc:pigman" and def.type == "monster" and not monster_exceptions[mobname]) or (mobname == "mobs_mc:pigman" and ent.state == "attack")) then
-					if math.abs(bed_pos.y - obj:get_pos().y) <= 5 then
-						return false, S("You can't sleep now, monsters are nearby!")
+				if ent then
+					local mobname = ent.name
+					local def = minetest.registered_entities[mobname]
+					if def.is_mob and prevents_sleep(def,ent) then
+						if math.abs(bed_pos.y - obj:get_pos().y) <= 5 then
+							return false, S("You can't sleep now, monsters are nearby!")
+						end
 					end
 				end
 			end
