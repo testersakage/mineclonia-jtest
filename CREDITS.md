@@ -13,14 +13,14 @@
 ## Active Contributors
 * codiac
 * ShadowRoi
-* nixnoxus
 * DragonWrangler1
-* laireia
-* the-real-herowl
+* nixnoxus
 * JoseDouglas26
-* Eliy21
-* AFCMS
 * amino
+* Jürgen Rühle
+* teknomunk
+* AFCMS
+* Eliy21
 
 ## Previous Contributors
 * Lizzy Fleckenstein
