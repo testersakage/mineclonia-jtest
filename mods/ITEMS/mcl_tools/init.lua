@@ -659,12 +659,13 @@ minetest.register_tool("mcl_tools:mace", {
 				end
 				local current_time = minetest.get_gametime()
 				if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
+					local density = mcl_enchanting.get_enchantment(itemstack, "density") or 0
 					mcl_tools.mace_cooldown[user] = current_time
 					if fall_distance < 0 then
 						if mcl_tools.entity:is_player() or mcl_tools.entity:get_luaentity() then
 							mcl_tools.entity:punch(user, 1.6, {
 							full_punch_interval = 1.6,
-							damage_groups = {fleshy = -6 * fall_distance / 5.5},
+							damage_groups = {fleshy = -6 * fall_distance / 5.5 + (0.5 * density * fall_distance)},
 							}, nil)
 						end
 					else
