@@ -3,11 +3,17 @@ local S = minetest.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
 
 local function can_open(pos, player)
-	local ph = minetest.hash_node_position(vector.round(pos))
-	if mcl_vaults.storage:get(ph..player:get_player_name()) == "looted" then
+	local m = minetest.get_meta(pos)
+	if m:get(player:get_player_name()) == "looted" then
 		return false
 	end
 	return true
+end
+
+local function set_visited(pos, player)
+	local m = minetest.get_meta(pos)
+	m:set_string(player:get_player_name(), "looted")
+	m:mark_as_private(player:get_player_name())
 end
 
 local function eject_items(pos, name, list)
@@ -133,8 +139,7 @@ function mcl_vaults.register_vault(name, def)
 		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			if itemstack:get_name() == def.key and can_open(pos, clicker) then
-				local ph = minetest.hash_node_position(vector.round(pos))
-				mcl_vaults.storage:set_string(ph..clicker:get_player_name(), "looted")
+				set_visited(pos, clicker)
 				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)

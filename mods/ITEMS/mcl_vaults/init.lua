@@ -1,5 +1,5 @@
 mcl_vaults = {
-	storage = minetest.get_mod_storage()
+	registered_vaults = {}
 }
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
