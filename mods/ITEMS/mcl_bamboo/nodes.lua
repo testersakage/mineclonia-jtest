@@ -139,7 +139,7 @@ local function can_place_on(node)
 		return false
 	end
 
-	for _, j in ipairs(allowed_base_groups) do
+	for _, j in pairs(allowed_base_groups) do
 		if minetest.get_item_group(node.name, j) > 0 then
 			return true
 		end
