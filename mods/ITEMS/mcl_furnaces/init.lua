@@ -245,7 +245,7 @@ end
 
 function mcl_furnaces.furnace_reset_delta_time(pos)
 	local meta = minetest.get_meta(pos)
-	local time_speed = tonumber(minetest.settings:get("time_speed") or 72)
+	local time_speed = tonumber(minetest.settings:get("time_speed")) or 72
 	if (time_speed < 0.1) then
 		return
 	end
