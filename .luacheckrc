@@ -186,6 +186,7 @@ globals = {
 	"mcl_buttons",
 	"mcl_tt",
 	"mcl_util",
+	"mcl_vaults",
 	"mcl_villages",
 	"mcl_void_damage",
 	"mcl_walls",
