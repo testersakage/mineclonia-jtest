@@ -35,6 +35,9 @@ local tpl = {
 }
 
 function mcl_vaults.register_vault(name, def)
+	assert(type(name) == "string", "[mcl_vaults] trying to register vault without a valid (string) name")
+	assert(def.loot, "[mcl_vaults] vault "..tostring(name).." does not define a loot table.")
+
 	minetest.register_node("mcl_vaults:"..name, table.merge(tpl, {
 
 	}, def.node_off))
