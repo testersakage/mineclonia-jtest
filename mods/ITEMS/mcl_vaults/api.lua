@@ -29,7 +29,7 @@ local tpl = {
 	_tt_help = S("Ejects loot when opened with the key"),
 	_doc_items_longdesc = S("A vault ejects loot when opened with the right key. It can only be opnend once by each player."),
 	_doc_items_usagehelp = S("A vault ejects loot when opened with the right key. It can only be opnend once by each player."),
-	groups = {pickaxey=1, material_stone=1, deco_block=1},
+	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1},
 	is_ground_content = false,
 	drop = "",
 	_mcl_hardness = 50,
@@ -40,7 +40,7 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	initial_properties = {
 		physical = false,
 		visual = "wielditem",
-		visual_size = {x=0.30, y=0.30},
+		visual_size = {x=0.28, y=0.28},
 		collisionbox = {0,0,0,0,0,0},
 		pointable = true,
 		static_save = false,
@@ -54,6 +54,10 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	on_step = function(self, dtime)
 		self._timer = (self._timer or SHOWITEM_INTERVAL) - dtime
 		if self._timer < 0 then
+			if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "vault") == 0 then
+				self.object:remove()
+				return
+			end
 			self._timer = SHOWITEM_INTERVAL
 			self:_next_item()
 		end
@@ -61,7 +65,6 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	on_activate = function(self, staticdata, dtime_s)
 		local s = minetest.deserialize(staticdata)
 		if s and s.loot then
-			minetest.log("lol2")
 			self._loot = s.loot
 			self:_next_item()
 			self.object:set_armor_groups({ immortal = 1 })
