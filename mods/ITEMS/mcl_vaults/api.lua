@@ -102,7 +102,7 @@ function mcl_vaults.register_vault(name, def)
 			if itemstack:get_name() == "mcl_vaults:trial_key" and can_open(pos, clicker) then
 				local ph = minetest.hash_node_position(vector.round(pos))
 				mcl_vaults.storage:set_string(ph..clicker:get_player_name(), "looted")
-				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PseudoRandom(os.time())))
+				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)
 				if not minetest.is_creative_enabled(clicker:get_player_name()) then
