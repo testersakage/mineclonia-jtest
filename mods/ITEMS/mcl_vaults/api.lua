@@ -30,7 +30,7 @@ local tpl = {
 	groups = {pickaxey=1, material_stone=1, deco_block=1},
 	is_ground_content = false,
 	drop = "",
-	_mcl_hardness = 30,
+	_mcl_hardness = 50,
 	_mcl_blast_resitance = 50,
 }
 
