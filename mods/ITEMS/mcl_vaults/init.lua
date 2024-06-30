@@ -8,6 +8,7 @@ local modpath = minetest.get_modpath(modname)
 dofile(modpath.."/api.lua")
 
 mcl_vaults.register_vault("vault",{
+	key = "mcl_vaults:trial_key",
 	node_off = {
 		tiles = { "mcl_vaults_vault_top_off.png", "mcl_vaults_vault_bottom.png",
 			"mcl_vaults_vault_side_off.png", "mcl_vaults_vault_side_off.png",

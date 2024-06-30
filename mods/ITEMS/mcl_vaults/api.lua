@@ -99,7 +99,7 @@ function mcl_vaults.register_vault(name, def)
 			create_display_item(pos, def.loot)
 		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-			if itemstack:get_name() == "mcl_vaults:trial_key" and can_open(pos, clicker) then
+			if itemstack:get_name() == def.key and can_open(pos, clicker) then
 				local ph = minetest.hash_node_position(vector.round(pos))
 				mcl_vaults.storage:set_string(ph..clicker:get_player_name(), "looted")
 				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time())))
