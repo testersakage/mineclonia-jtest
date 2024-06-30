@@ -96,18 +96,37 @@ local function create_display_item(pos, def)
 	return minetest.add_entity(pos, "mcl_vaults:item_entity", minetest.serialize({loot = def.loot, name = def.name, pos = pos}))
 end
 
+function mcl_vaults.activate(pos)
+	local node = minetest.get_node(pos)
+	local def = minetest.registered_nodes[node.name]
+	if def and def._mcl_vault_name and minetest.get_item_group(node.name, "vault") == 1 then
+		node.name = "mcl_vaults:"..def._mcl_vault_name.."_on"
+		minetest.swap_node(pos, node)
+		create_display_item(pos, mcl_vaults.registered_vaults[def._mcl_vault_name])
+	end
+end
+
 function mcl_vaults.register_vault(name, def)
 	assert(type(name) == "string", "[mcl_vaults] trying to register vault without a valid (string) name")
 	assert(def.loot, "[mcl_vaults] vault "..tostring(name).." does not define a loot table.")
 	def.name = name
+	mcl_vaults.registered_vaults[name] = def
 
 	minetest.register_node("mcl_vaults:"..name, table.merge(tpl, {
+		_mcl_vault_name = name,
+		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+			if itemstack:get_name() == def.key and can_open(pos, clicker) then
+				mcl_vaults.activate(pos)
+			end
+		end
 	}, def.node_off))
 	minetest.register_node("mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
+		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 3 }),
 	}, def.node_ejecting))
 
 	minetest.register_node("mcl_vaults:"..name.."_on", table.merge(tpl, {
+		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 2 }),
 		on_construct = function(pos)
 			create_display_item(pos, def)
