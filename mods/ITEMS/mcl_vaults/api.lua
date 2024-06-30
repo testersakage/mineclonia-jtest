@@ -3,7 +3,10 @@ local S = minetest.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
 
 local function can_open(pos, player)
-	--check if player already opened this vault
+	local ph = minetest.hash_node_position(vector.round(pos))
+	if mcl_vaults.storage:get(ph..player:get_player_name()) == "looted" then
+		return false
+	end
 	return true
 end
 
@@ -97,6 +100,8 @@ function mcl_vaults.register_vault(name, def)
 		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			if itemstack:get_name() == "mcl_vaults:trial_key" and can_open(pos, clicker) then
+				local ph = minetest.hash_node_position(vector.round(pos))
+				mcl_vaults.storage:set_string(ph..clicker:get_player_name(), "looted")
 				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PseudoRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)

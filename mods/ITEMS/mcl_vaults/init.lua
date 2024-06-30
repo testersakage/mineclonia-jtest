@@ -1,4 +1,6 @@
-mcl_vaults = {}
+mcl_vaults = {
+	storage = minetest.get_mod_storage()
+}
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 --local S = minetest.get_translator(modname)
