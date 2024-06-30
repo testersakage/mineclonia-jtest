@@ -3,6 +3,7 @@ local S = minetest.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
 
 local function can_open(pos, player)
+	--check if player already opened this vault
 	return true
 end
 
@@ -54,7 +55,7 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	on_step = function(self, dtime)
 		self._timer = (self._timer or SHOWITEM_INTERVAL) - dtime
 		if self._timer < 0 then
-			if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "vault") == 0 then
+			if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "vault") <= 1 then
 				self.object:remove()
 				return
 			end
@@ -84,12 +85,13 @@ function mcl_vaults.register_vault(name, def)
 	assert(def.loot, "[mcl_vaults] vault "..tostring(name).." does not define a loot table.")
 
 	minetest.register_node("mcl_vaults:"..name, table.merge(tpl, {
-
 	}, def.node_off))
 	minetest.register_node("mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
+		groups = table.merge(tpl.groups, { vault = 3 }),
 	}, def.node_ejecting))
 
 	minetest.register_node("mcl_vaults:"..name.."_on", table.merge(tpl, {
+		groups = table.merge(tpl.groups, { vault = 2 }),
 		on_construct = function(pos)
 			create_display_item(pos, def.loot)
 		end,
