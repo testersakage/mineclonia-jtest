@@ -55,6 +55,11 @@ minetest.register_entity("mcl_vaults:item_entity", {
 			wield_item = i,
 		})
 	end,
+	_check_players_near = function(self)
+		for _, v in pairs(minetest.get_objects_inside_radius(self._pos, 5)) do
+			if v:is_player() and can_open(self._pos, v) then return true end
+		end
+	end,
 	on_step = function(self, dtime)
 		self._timer = (self._timer or SHOWITEM_INTERVAL) - dtime
 		if self._timer < 0 then
@@ -64,11 +69,19 @@ minetest.register_entity("mcl_vaults:item_entity", {
 			end
 			self._timer = SHOWITEM_INTERVAL
 			self:_next_item()
+			if not self:_check_players_near() then
+				local node = minetest.get_node(self._pos)
+				node.name = "mcl_vaults:"..self._vault_name
+				minetest.swap_node(self._pos, node)
+				self.object:remove()
+			end
 		end
 	end,
 	on_activate = function(self, staticdata, dtime_s)
 		local s = minetest.deserialize(staticdata)
 		if s and s.loot then
+			self._pos = s.pos
+			self._vault_name = s.name
 			self._loot = s.loot
 			self:_next_item()
 			self.object:set_armor_groups({ immortal = 1 })
@@ -79,13 +92,14 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	end,
 })
 
-local function create_display_item(pos, loot)
-	return minetest.add_entity(pos, "mcl_vaults:item_entity", minetest.serialize({loot = loot}))
+local function create_display_item(pos, def)
+	return minetest.add_entity(pos, "mcl_vaults:item_entity", minetest.serialize({loot = def.loot, name = def.name, pos = pos}))
 end
 
 function mcl_vaults.register_vault(name, def)
 	assert(type(name) == "string", "[mcl_vaults] trying to register vault without a valid (string) name")
 	assert(def.loot, "[mcl_vaults] vault "..tostring(name).." does not define a loot table.")
+	def.name = name
 
 	minetest.register_node("mcl_vaults:"..name, table.merge(tpl, {
 	}, def.node_off))
@@ -96,7 +110,7 @@ function mcl_vaults.register_vault(name, def)
 	minetest.register_node("mcl_vaults:"..name.."_on", table.merge(tpl, {
 		groups = table.merge(tpl.groups, { vault = 2 }),
 		on_construct = function(pos)
-			create_display_item(pos, def.loot)
+			create_display_item(pos, def)
 		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			if itemstack:get_name() == def.key and can_open(pos, clicker) then
