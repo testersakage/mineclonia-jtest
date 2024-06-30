@@ -6,10 +6,15 @@ local function can_open(pos, player)
 	return true
 end
 
-local function eject_items(pos, list)
-	if not list or #list == 0 then return end
+local function eject_items(pos, name, list)
+	if not list or #list == 0 then
+		local node = minetest.get_node(pos)
+		node.name = "mcl_vaults:"..name
+		minetest.swap_node(pos, node)
+		return
+	end
 	minetest.add_item(vector.offset(pos, 0, 0.5, 0), table.remove(list))
-	minetest.after(0.5, eject_items, pos, list)
+	minetest.after(0.5, eject_items, pos, name, list)
 end
 
 minetest.register_craftitem("mcl_vaults:trial_key", {
@@ -40,7 +45,7 @@ function mcl_vaults.register_vault(name, def)
 	minetest.register_node("mcl_vaults:"..name.."_on", table.merge(tpl, {
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			if itemstack:get_name() == "mcl_vaults:trial_key" and can_open(pos, clicker) then
-				eject_items(pos, mcl_loot.get_multi_loot(def.loot, PseudoRandom(os.time())))
+				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PseudoRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)
 				if not minetest.is_creative_enabled(clicker:get_player_name()) then
