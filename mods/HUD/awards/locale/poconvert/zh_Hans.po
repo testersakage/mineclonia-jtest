@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-28 05:51+0000\n"
+"PO-Revision-Date: 2024-06-30 10:37+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/awards/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.1\n"
 
 msgid "Secret Award Unlocked: @1"
 msgstr "已解锁私密奖励：@1"
@@ -42,19 +42,19 @@ msgid "All your awards and statistics have been cleared. You can now start again
 msgstr ""
 
 msgid "You have disabled awards."
-msgstr ""
+msgstr "已禁用奖励。"
 
 msgid "You have enabled awards."
-msgstr ""
+msgstr "已启用奖励。"
 
 msgid "<award ID>"
 msgstr ""
 
 msgid "Show details of an award"
-msgstr ""
+msgstr "显示奖励明细"
 
 msgid "Award not found."
-msgstr ""
+msgstr "未发现奖励。"
 
 msgid "<name>"
 msgstr ""
