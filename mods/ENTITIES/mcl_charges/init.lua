@@ -72,7 +72,7 @@ function mcl_charges.pot_effects(pos, radius)
 		})
 end
 -- knockback function
-function vlf_charges.wind_burst_velocity(pos1, pos2, old_vel, power)
+function mcl_charges.wind_burst_velocity(pos1, pos2, old_vel, power)
 	if vector.equals(pos1, pos2) then
 		return old_vel
 	end
@@ -92,7 +92,7 @@ end
 local RADIUS = 4
 
 -- Wind Burst registry
-function vlf_charges.wind_burst(pos, radius)
+function mcl_charges.wind_burst(pos, radius)
 	for _, obj in ipairs(minetest.get_objects_inside_radius(pos, radius)) do
 		local obj_pos = obj:get_pos()
 		local dist = math.max(1, vector.distance(pos, obj_pos))
@@ -102,7 +102,7 @@ function vlf_charges.wind_burst(pos, radius)
 		else
 			local luaobj = obj:get_luaentity()
 			if luaobj and (not minetest.registered_entities[luaobj.name].on_blast or minetest.registered_entities[luaobj.name].on_blast(luaobj, 0)) then
-				obj:set_velocity(vlf_charges.wind_burst_velocity(pos, obj_pos, obj:get_velocity(), radius * 3))
+				obj:set_velocity(mcl_charges.wind_burst_velocity(pos, obj_pos, obj:get_velocity(), radius * 3))
 			end
 		end
 	end
