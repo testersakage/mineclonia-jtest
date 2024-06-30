@@ -39,7 +39,7 @@ mcl_vaults.register_vault("vault",{
 				{ itemstring = "mcl_shields:shield", weight = 300, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_bows:bow", weight = 300, func = function(stack, pr) mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
 				{ itemstring = "mcl_charges:wind_charge", weight = 23, amount_min = 4, amount_max = 12 },
-				{ itemstring = "mcl_core:diamond", weight = 23, amount_min = 4, amount_max = 2 },
+				{ itemstring = "mcl_core:diamond", weight = 23, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_farming:carrot_item_gold", weight = 200, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_farming:carrot_item_gold", weight = 200, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_books:book", weight = 1, func = function(stack, pr)	mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
