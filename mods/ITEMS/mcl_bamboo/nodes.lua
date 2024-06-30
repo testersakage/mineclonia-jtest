@@ -130,6 +130,24 @@ local adjacents = {
 	vector.new(-1,0,0),
 }
 
+local allowed_base_groups = { "solid", "slab_top" }
+
+local function can_place_on(node)
+	local def = minetest.registered_nodes[node.name]
+
+	if not def then
+		return false
+	end
+
+	for _, j in ipairs(allowed_base_groups) do
+		if minetest.get_item_group(node.name, j) > 0 then
+			return true
+		end
+	end
+
+	return false
+end
+
 minetest.register_node("mcl_bamboo:scaffolding", {
 	description = S("Scaffolding"),
 	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
@@ -187,11 +205,11 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 			local bottom = mcl_util.traverse_tower(ptd.under,-1)
 			local top,h = mcl_util.traverse_tower(bottom,1)
 			local ppos = vector.offset(top,0,1,0)
-			if h <= SCAFFOLD_HEIGHT_LIMIT and  minetest.get_item_group(minetest.get_node(vector.offset(bottom,0,-1,0)).name, "solid") > 0 and minetest.get_node(ppos).name == "air" then
+			if h <= SCAFFOLD_HEIGHT_LIMIT and can_place_on(minetest.get_node(vector.offset(bottom,0,-1,0))) and minetest.get_node(ppos).name == "air" then
 				itemstack = mcl_util.safe_place(ppos, node, placer, itemstack) or itemstack
 			end
 
-		elseif minetest.get_item_group(node.name,"solid") > 0 and minetest.get_node(ptd.above).name == "air" then --place on solid
+		elseif can_place_on(node) and minetest.get_node(ptd.above).name == "air" then
 			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding"}, placer, itemstack) or itemstack
 			minetest.check_single_for_falling(ptd.above)
 		end
