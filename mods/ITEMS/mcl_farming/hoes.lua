@@ -44,12 +44,12 @@ local hoe_on_place_function = function(wear_divisor)
 			if nstack then return nstack end
 		end
 
-		if create_soil(pointed_thing.under, user:get_inventory()) then
-			if not no_wear and not minetest.is_creative_enabled(user:get_player_name()) then
-				itemstack:add_wear(65535/wear_divisor)
-			end
-			return itemstack
+		no_wear = no_wear or create_soil(pointed_thing.under, user:get_inventory())
+
+		if not no_wear and not minetest.is_creative_enabled(user:get_player_name()) then
+			itemstack:add_wear(65535/wear_divisor)
 		end
+		return itemstack
 	end
 end
 
