@@ -78,7 +78,7 @@ end
 
 mcl_tools.tool_place_funcs = {}
 
-for _,tool in pairs({"shovel","shears","axe","sword","pick","hoe"}) do
+for _,tool in pairs({"shovel","shears","axe","sword","pick"}) do
 	mcl_tools.tool_place_funcs[tool] = function(itemstack,placer,pointed_thing)
 		return on_tool_place(itemstack,placer,pointed_thing,tool)
 	end
