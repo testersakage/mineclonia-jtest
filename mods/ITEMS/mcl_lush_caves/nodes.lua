@@ -122,6 +122,8 @@ minetest.register_node("mcl_lush_caves:hanging_roots", {
 	_doc_items_longdesc = S("Hanging roots"),
 	paramtype = "light",
 	on_place = function(itemstack, placer, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc then return rc end
 		if pointed_thing.type ~= "node" then
 			return itemstack
 		end
