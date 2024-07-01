@@ -121,6 +121,14 @@ minetest.register_node("mcl_lush_caves:hanging_roots", {
 	_doc_items_entry_name = S("Hanging roots"),
 	_doc_items_longdesc = S("Hanging roots"),
 	paramtype = "light",
+	on_place = function(itemstack, placer, pointed_thing)
+		if pointed_thing.type ~= "node" then
+			return itemstack
+		end
+		if pointed_thing.under.y < pointed_thing.above.y then
+			return minetest.item_place(itemstack, placer, pointed_thing)
+		end
+	end
 	--paramtype2 = "meshoptions",
 	--place_param2 = 3,
 	sunlight_propagates = true,
