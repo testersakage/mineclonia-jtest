@@ -229,7 +229,6 @@ minetest.register_node("mcl_lush_caves:rooted_dirt", {
 	_mcl_hardness = 0.5,
 	_on_hoe_place = function(itemstack, placer, pointed_thing)
 		local below = vector.offset(pointed_thing.under, 0, -1, 0)
-		minetest.log(minetest.get_node(below).name)
 		if minetest.get_node(below).name == "mcl_lush_caves:hanging_roots" then
 			minetest.remove_node(below)
 			if not minetest.is_creative_enabled(placer:get_player_name()) then
