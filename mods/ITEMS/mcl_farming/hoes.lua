@@ -6,20 +6,16 @@ local function create_soil(pos, inv)
 	end
 	local node = minetest.get_node(pos)
 	local name = node.name
-	local above = vector.offset(pos, 0, 1, 0)
-	local above_node = minetest.get_node(above)
+	local above = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
 	if minetest.get_item_group(name, "cultivatable") == 2 then
-		if above_node.name == "air" then
+		if above.name == "air" then
 			node.name = "mcl_farming:soil"
 			minetest.set_node(pos, node)
 			minetest.sound_play("default_dig_crumbly", { pos = pos, gain = 0.5 }, true)
 			return true
 		end
 	elseif minetest.get_item_group(name, "cultivatable") == 1 then
-		if above_node.name == "air" then
-			if name == "mcl_lush_caves:rooted_dirt" then
-				minetest.add_item(above, ItemStack("mcl_lush_caves:hanging_roots"))
-			end
+		if above.name == "air" then
 			node.name = "mcl_core:dirt"
 			minetest.set_node(pos, node)
 			minetest.sound_play("default_dig_crumbly", { pos = pos, gain = 0.6 }, true)
