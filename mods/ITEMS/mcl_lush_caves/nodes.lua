@@ -125,12 +125,11 @@ minetest.register_node("mcl_lush_caves:hanging_roots", {
 		if pointed_thing.type ~= "node" then
 			return itemstack
 		end
-		if pointed_thing.under.y < pointed_thing.above.y then
+		if pointed_thing.under.y > pointed_thing.above.y then
 			return minetest.item_place(itemstack, placer, pointed_thing)
 		end
-	end
-	--paramtype2 = "meshoptions",
-	--place_param2 = 3,
+	end,
+	node_placement_prediction = "",
 	sunlight_propagates = true,
 	walkable = false,
 	drawtype = "plantlike",
