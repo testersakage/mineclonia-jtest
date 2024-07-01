@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-29 10:18+0000\n"
+"PO-Revision-Date: 2024-07-01 22:45+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_achievements/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.1\n"
 
 msgid "Benchmarking"
 msgstr "始方工作台"
@@ -63,7 +63,7 @@ msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
 msgstr "在工作台上，使用木板和木棍制作一把木剑。"
 
 msgid "Librarian"
-msgstr "图书馆员"
+msgstr "图书馆理员"
 
 msgid "Craft a bookshelf."
 msgstr "制作一个书架。"
@@ -84,10 +84,10 @@ msgid "Into Fire"
 msgstr "火中取栗"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr "从地上捡起一根火焰棒。"
+msgstr "从地上捡起一根烈焰棒。"
 
 msgid "Cow Tipper"
-msgstr ""
+msgstr "斗牛士"
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
@@ -172,7 +172,7 @@ msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
 
 msgid "The End?"
-msgstr ""
+msgstr "结束了？"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
@@ -222,7 +222,7 @@ msgid "Catch an Axolotl with a bucket!"
 msgstr ""
 
 msgid "Withering Heights"
-msgstr ""
+msgstr "呼啸山庄"
 
 msgid "Summon the wither from the dead."
 msgstr ""
@@ -284,25 +284,25 @@ msgid "Respawn the Ender Dragon."
 msgstr ""
 
 msgid "Bee Our Guest"
-msgstr ""
+msgstr "与蜂共舞"
 
 msgid "Use a campfire to collect a bottle of honey from a beehive without aggrivating the bees inside."
 msgstr ""
 
 msgid "Total Beelocation"
-msgstr ""
+msgstr "举巢搬迁"
 
 msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr ""
 
 msgid "Wax On"
-msgstr ""
+msgstr "涂蜡"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr ""
 
 msgid "Wax Off"
-msgstr ""
+msgstr "脱蜡"
 
 msgid "Scrape wax off of a copper block."
 msgstr ""
