@@ -440,6 +440,9 @@ function mob_class:do_jump()
 		end
 		return true
 	end
+
+	self.jump_count = 0
+
 	return false
 end
 
@@ -886,9 +889,11 @@ function mob_class:do_states_stand()
 	if self.order == "sit" then
 		self:set_animation( "sit")
 		self:set_velocity(0)
+		self:slow_mob()
 	else
 		self:set_animation( "stand")
 		self:set_velocity(0)
+		self:slow_mob()
 	end
 
 	-- npc's ordered to stand stay standing
