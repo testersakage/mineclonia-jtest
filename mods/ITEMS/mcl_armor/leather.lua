@@ -42,13 +42,13 @@ end
 
 function mcl_armor.colorize_leather_armor(itemstack, colorstring)
 	if not itemstack or minetest.get_item_group(itemstack:get_name(), "armor_leather") == 0 then
-		return
+		return itemstack
 	end
 	local color = color_string_to_table(colorstring)
 	colorstring = minetest.colorspec_to_colorstring(color)
 	local meta = itemstack:get_meta()
 	local old_color = meta:get_string("mcl_armor:color")
-	if old_color == colorstring then return
+	if old_color == colorstring then return itemstack
 	elseif old_color ~= "" then
 		color = calculate_color(
 			color_string_to_table(minetest.colorspec_to_colorstring(old_color)),
