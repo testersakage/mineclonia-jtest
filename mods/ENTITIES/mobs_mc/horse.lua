@@ -8,14 +8,18 @@ local base_drop = {
 	looting = "common",
 }
 
-local function horse_extra_texture(horse)
+local function horse_extra_texture(horse, cstring)
 	local base = horse._naked_texture or horse.base_texture[2]
 	local saddle = horse._saddle
 	local chest  = horse._chest
 	local armor = horse._horse_armor
 	local textures = {}
 	if armor and minetest.get_item_group(armor, "horse_armor") > 0 then
-		textures[2] = base .. "^" .. minetest.registered_items[armor]._horse_overlay_image
+		if cstring then
+			textures[2] = base .. "^(" .. minetest.registered_items[armor]._horse_overlay_image:gsub(".png$", "_desat.png").."^[multiply:"..cstring..")"
+		else
+			textures[2] = base .. "^" .. minetest.registered_items[armor]._horse_overlay_image
+		end
 	else
 		textures[2] = base
 	end
@@ -286,6 +290,11 @@ local horse = {
 		local w = clicker:get_wielded_item()
 		local iname = w:get_name()
 		if iname ~= self._horse_armor then
+			local cstring
+			if minetest.get_item_group(iname, "armor_leather") > 0 then
+				local m = w:get_meta()
+				cstring = m:get_string("mcl_armor:color")
+			end
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				w:take_item()
 				clicker:set_wielded_item(w)
@@ -303,7 +312,7 @@ local horse = {
 			if not self._naked_texture then
 				self._naked_texture = self.base_texture[2]
 			end
-			local tex = horse_extra_texture(self)
+			local tex = horse_extra_texture(self, cstring)
 			self.base_texture = tex
 			self.object:set_properties({textures = self.base_texture})
 			local def = w:get_definition()
