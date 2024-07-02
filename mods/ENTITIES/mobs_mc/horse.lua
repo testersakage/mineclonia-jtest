@@ -293,7 +293,8 @@ local horse = {
 			local cstring
 			if minetest.get_item_group(iname, "armor_leather") > 0 then
 				local m = w:get_meta()
-				cstring = m:get_string("mcl_armor:color")
+				local cs = m:get_string("mcl_armor:color")
+				cstring = cs ~= "" and cs or nil
 			end
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				w:take_item()
