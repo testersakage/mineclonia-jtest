@@ -819,8 +819,9 @@ function mob_class:falling(pos)
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 			local v = self.object:get_velocity()
 			if v.y > 2 then
-				self.object:set_acceleration(vector.new(0, 1, 0))
-				self.object:set_velocity(vector.new(0, 2, 0))
+				local a = self.object:get_velocity()
+				self.object:set_acceleration(vector.new(a.x, 1, a.z))
+				self.object:set_velocity(vector.new(v.x, 2, v.y))
 			elseif v.y < -2 then
 				self:slow_mob()
 			end

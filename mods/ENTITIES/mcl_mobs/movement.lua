@@ -394,9 +394,7 @@ function mob_class:do_jump()
 
 			v.y = self.jump_height + 0.1 * 3
 
-			if in_water then
-				v = vector.multiply(v, vector.new(1.5, 1.7, 1.5))
-			elseif self:can_jump_cliff() then
+			if not in_water and self:can_jump_cliff() then
 				v = vector.multiply(v, vector.new(2.8, 1, 2.8))
 			end
 
