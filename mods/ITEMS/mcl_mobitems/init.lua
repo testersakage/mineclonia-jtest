@@ -360,7 +360,7 @@ minetest.register_craftitem("mcl_mobitems:leather_horse_armor", {
 		_mcl_armor_equip = "mcl_armor_equip_leather",
 	},
 	stack_max = 1,
-	groups = { horse_armor = 88 },
+	groups = { horse_armor = 88, armor_leather = 2 },
 })
 
 
@@ -554,6 +554,12 @@ minetest.register_craft({
 	recipe = {{"mcl_mobitems:leather","","mcl_mobitems:leather",},
 		{"mcl_mobitems:leather","mcl_mobitems:leather","mcl_mobitems:leather",},
 		{"mcl_mobitems:leather","","mcl_mobitems:leather",}},
+})
+
+minetest.register_craft({
+	output = "mcl_mobitems:leather_horse_armor",
+	type = "shapeless",
+	recipe = {"mcl_mobitems:leather_horse_armor", "group:dye" },
 })
 
 minetest.register_on_item_eat(function (hp_change, replace_with_item, itemstack, user, pointed_thing)	-- poisoning with spider eye
