@@ -400,7 +400,7 @@ return {
 			{
 			--{ { "FIXME: scute", 4, 4 }, E() },
 			{ E(8, 10), { "mcl_mobitems:saddle", 1, 1 } },
-			--FIXME: { { "mcl_core:emerald", 6, 6 }, { "mcl_mobitems:leather_horse_armor", 1, 1 } },
+			{ { "mcl_core:emerald", 6, 6 }, { "mcl_mobitems:leather_horse_armor", 1, 1 } },
 			},
 
 			{
