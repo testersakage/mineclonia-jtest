@@ -817,6 +817,13 @@ function mob_class:falling(pos)
 		local cbox = self.object:get_properties().collisionbox
 		if self.floats == 1 and minetest.registered_nodes[node_ok(vector.offset(pos,0,cbox[5] -0.25,0)).name].groups.water then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
+			local v = self.object:get_velocity()
+			if v.y > 2 then
+				self.object:set_acceleration(vector.new(0, 1, 0))
+				self.object:set_velocity(vector.new(0, 2, 0))
+			elseif v.y < -2 then
+				self:slow_mob()
+			end
 		end
 		-- Reset fall damage when falling into water first.
 		self.reset_fall_damage = 1
