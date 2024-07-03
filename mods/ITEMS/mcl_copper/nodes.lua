@@ -94,7 +94,7 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		_mcl_stonecutter_recipes = { "mcl_copper:block"..n.."_cut" }
+		_mcl_stonecutter_recipes = { "mcl_copper:block"..n, "mcl_copper:block"..n.."_cut" }
 	})
 	minetest.register_node("mcl_copper:block"..n.."_grate", {
 		description = S("@1 Copper Grate", desc),
@@ -107,6 +107,7 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
+		_mcl_stonecutter_recipes = { "mcl_copper:block"..n }
 	})
 
 	minetest.register_node("mcl_copper:bulb"..n.."_on", {
