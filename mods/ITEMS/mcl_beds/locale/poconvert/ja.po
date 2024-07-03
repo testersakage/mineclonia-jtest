@@ -40,6 +40,9 @@ msgstr "ベッド"
 msgid "@1 Bed"
 msgstr ""
 
+msgid "New respawn position set!"
+msgstr "新たなリスポーン地点を設定しました！"
+
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr "眠れるのは夜間か雷雨のときだけです。"
 
@@ -105,9 +108,6 @@ msgstr ""
 
 msgid "Hey! Would you guys mind sleeping?"
 msgstr ""
-
-msgid "New respawn position set!"
-msgstr "新たなリスポーン地点を設定しました！"
 
 msgid "Respawn Anchor"
 msgstr "リスポーンアンカー"

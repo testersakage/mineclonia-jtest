@@ -40,6 +40,9 @@ msgstr "Seng"
 msgid "@1 Bed"
 msgstr ""
 
+msgid "New respawn position set!"
+msgstr "Nyt genopståelsespunkt sat!"
+
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr "Du kan kun sover om natten eller under et tordenvejr."
 
@@ -105,9 +108,6 @@ msgstr ""
 
 msgid "Hey! Would you guys mind sleeping?"
 msgstr ""
-
-msgid "New respawn position set!"
-msgstr "Nyt genopståelsespunkt sat!"
 
 msgid "Respawn Anchor"
 msgstr "Genopståelsesanker"

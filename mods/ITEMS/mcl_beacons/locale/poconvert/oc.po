@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.0\n"
 
-msgid "Beacon"
-msgstr ""
-
 msgid "Beacon:"
 msgstr ""
 

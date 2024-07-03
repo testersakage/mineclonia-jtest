@@ -8,6 +8,7 @@ Sleeping allows you to skip the night. The night is skipped when all players in 
 Allows you to sleep=
 Bed=
 @1 Bed=
+New respawn position set!=
 You can only sleep at night or during a thunderstorm.=
 You can't sleep, the bed's too far away!=
 This bed is already occupied!=
@@ -30,5 +31,4 @@ You exceeded the maximum number of messages per 10 seconds!=
 You are missing the 'shout' privilege! It's required in order to talk in chat...=
 Sorry, but you have to wait @1 seconds until you may use this button again!=
 Hey! Would you guys mind sleeping?=
-New respawn position set!=
 Respawn Anchor=
