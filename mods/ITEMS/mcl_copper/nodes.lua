@@ -97,7 +97,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n.."_cut" }
 	})
 	minetest.register_node("mcl_copper:block"..n.."_grate", {
-		description = S("@1 Grate Copper", desc),
+		description = S("@1 Copper Grate", desc),
 		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc),
 		drawtype = "allfaces_optional",
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_grate.png"},
@@ -110,7 +110,7 @@ for n, desc in pairs(n_desc) do
 	})
 
 	minetest.register_node("mcl_copper:bulb"..n.."_on", {
-		description = S("@1 Copper Bulb", desc),
+		description = S("@1 Copper Bulb On", desc),
 		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
 		is_ground_content = false,
@@ -134,7 +134,7 @@ for n, desc in pairs(n_desc) do
 		end,
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
-		description = S("@1 Copper Bulb Off", desc),
+		description = S("@1 Copper Bulb", desc),
 		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_off.png"},
 		is_ground_content = false,
