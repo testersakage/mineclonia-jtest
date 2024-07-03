@@ -81,7 +81,7 @@ for n, desc in pairs(n_desc) do
 		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
-		_mcl_hardness = 5,
+		_mcl_hardness = 3,
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n }
 	})
 
@@ -93,7 +93,7 @@ for n, desc in pairs(n_desc) do
 		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
-		_mcl_hardness = 5,
+		_mcl_hardness = 3,
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n.."_cut" }
 	})
 	minetest.register_node("mcl_copper:block"..n.."_grate", {
@@ -106,7 +106,7 @@ for n, desc in pairs(n_desc) do
 		groups = {pickaxey = 2, building_block = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
-		_mcl_hardness = 5,
+		_mcl_hardness = 3,
 	})
 
 	minetest.register_node("mcl_copper:bulb"..n.."_on", {
@@ -118,7 +118,7 @@ for n, desc in pairs(n_desc) do
 		groups = {pickaxey = 2, building_block = 1, not_in_creative_inventory = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
-		_mcl_hardness = 5,
+		_mcl_hardness = 3,
 		mesecons = {effector = {
 			action_off = function(pos)
 				local timer = minetest.get_node_timer(pos)
@@ -141,7 +141,7 @@ for n, desc in pairs(n_desc) do
 		groups = {pickaxey = 2, building_block = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
-		_mcl_hardness = 5,
+		_mcl_hardness = 3,
 		mesecons = {effector = {
 			action_on = function(pos, node)
 				node.name = "mcl_copper:bulb"..n.."_on"
