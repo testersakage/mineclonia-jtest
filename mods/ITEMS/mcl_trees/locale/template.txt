@@ -18,6 +18,7 @@ The stripped wood of an @1 tree.=
 @1 Leaves=
 @1 leaves are grown from @2 trees.=
 @1 Fence=
+@1 Fence Gate=
 @1 Door=
 @1 Trapdoor=
 @1 Stairs=
