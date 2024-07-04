@@ -4,7 +4,6 @@ minetest.register_node("mcl_blackstone:blackstone", {
 	description = S("Blackstone"),
 	tiles = {"mcl_blackstone_top.png", "mcl_blackstone_top.png", "mcl_blackstone_side.png"},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	is_ground_content = false,
 	groups = {cracky = 3, pickaxey=1, material_stone=1, cobble=1, stonecuttable=1, building_block=1},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
@@ -13,7 +12,6 @@ minetest.register_node("mcl_blackstone:blackstone_gilded", {
 	description = S("Gilded Blackstone"),
 	tiles = {"mcl_blackstone_gilded.png"},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	is_ground_content = false,
 	groups = {cracky = 3, pickaxey=1, material_stone=1, xp=1, building_block=1},
 	drop = {
 		max_items = 1,
@@ -41,7 +39,6 @@ minetest.register_node("mcl_blackstone:nether_gold", {
 	description = S("Nether Gold Ore"),
 	tiles = {"mcl_nether_gold_ore.png"},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	is_ground_content = false,
 	groups = {cracky = 3, pickaxey=1, material_stone=1, xp=1, building_block=1},
 	drop = {
 		max_items = 1,
@@ -78,7 +75,6 @@ minetest.register_node("mcl_blackstone:basalt", {
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
 	on_rotate = screwdriver.rotate_3way,
-	is_ground_content = false,
 	groups = {cracky = 3, pickaxey=1, material_stone=1, stonecuttable=1, building_block=1},
 	_mcl_blast_resistance = 4.2,
 	_mcl_hardness = 1.25,
@@ -146,7 +142,6 @@ minetest.register_node("mcl_blackstone:quartz_brick", {
 minetest.register_node("mcl_blackstone:soul_soil", {
 	description = S("Soul Soil"),
 	tiles = {"mcl_blackstone_soul_soil.png"},
-	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	groups = { cracky=3, handy=1, shovely=1, soul_block=1, soil_fungus=1, building_block=1},
 	_mcl_blast_resistance = 0.5,
