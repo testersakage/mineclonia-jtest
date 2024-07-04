@@ -32,6 +32,7 @@ end
 
 ---Return items in the given inventory list (name) to the main inventory, or drop them if there is no space left.
 local function return_fields(player, name)
+	if not player or not player:get_pos() then return end -- make sure player is still there
 	local inv = player:get_inventory()
 
 	local list = inv:get_list(name)
@@ -178,6 +179,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 minetest.register_craft_predict(function(itemstack, player, old_craft_grid, inv)
+	if not player or not player:get_pos() then return end -- can apparently be called when player has already left !?
 	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
 		return_fields(player, "craft")
 		minetest.chat_send_player(player:get_player_name(), "Crafting table out of range!")
