@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-01 02:30+0000\n"
+"PO-Revision-Date: 2024-07-04 16:26+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_core/zh_Hans/>\n"
@@ -322,31 +322,31 @@ msgid "Red Sand"
 msgstr "红沙"
 
 msgid "Red sand is found in large quantities in mesa biomes."
-msgstr ""
+msgstr "在平顶山群落中有大量红沙。"
 
 msgid "Red Sandstone"
 msgstr "红砂石"
 
 msgid "Red sandstone is compressed red sand and is a rather soft kind of stone."
-msgstr ""
+msgstr "压缩红沙后形成，是一种相当柔软的石头。"
 
 msgid "Cut Red Sandstone"
 msgstr "切制红砂石"
 
 msgid "Cut red sandstone is a decorative building block."
-msgstr ""
+msgstr "切割红砂岩是一种美化型建筑块。"
 
 msgid "Chiseled Red Sandstone"
 msgstr "雕纹红砂石"
 
 msgid "Chiseled red sandstone is a decorative building block."
-msgstr ""
+msgstr "一种美化型建筑块。"
 
 msgid "Smooth Red Sandstone"
 msgstr "光滑红砂石"
 
 msgid "Smooth red sandstone is a decorative building block."
-msgstr ""
+msgstr "一种美化型建筑块。"
 
 msgid "Clay"
 msgstr "黏土"
@@ -380,19 +380,19 @@ msgid "Block of Coal"
 msgstr "煤块"
 
 msgid "Blocks of coal are useful as a compact storage of coal and very useful as a furnace fuel. A block of coal is as efficient as 10 coal."
-msgstr ""
+msgstr "不可多得的熔炉燃料，可用作压缩型煤炭储存。一单位煤块相当于十单位煤炭。"
 
 msgid "Block of Iron"
 msgstr "铁块"
 
 msgid "A block of iron is mostly a decorative block but also useful as a compact storage of iron ingots."
-msgstr ""
+msgstr "主要当作美化型方块，也可作为铁锭的压缩物省出空间。"
 
 msgid "Block of Gold"
 msgstr "金块"
 
 msgid "A block of gold is mostly a shiny decorative block but also useful as a compact storage of gold ingots."
-msgstr ""
+msgstr "主要当作美化型方块，也可作为金锭的压缩物腾出空间。"
 
 msgid "Block of Diamond"
 msgstr "钻石块"
@@ -431,7 +431,7 @@ msgid "Ice is a solid block usually found in cold areas. It melts near block lig
 msgstr ""
 
 msgid "Packed Ice"
-msgstr "浮冰"
+msgstr "压缩冰"
 
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr ""
@@ -443,10 +443,10 @@ msgid "Frosted Ice"
 msgstr "霜冰"
 
 msgid "Top Snow"
-msgstr ""
+msgstr "残雪"
 
 msgid "Stackable"
-msgstr ""
+msgstr "可堆叠物品"
 
 msgid "Top snow is a layer of snow. It melts near light sources other than the sun with a light level of 12 or higher."
 msgstr ""
@@ -497,7 +497,7 @@ msgid "A piece of ladder which allows you to climb vertically. Ladders can only 
 msgstr ""
 
 msgid "Vines"
-msgstr ""
+msgstr "藤蔓"
 
 msgid "Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."
 msgstr ""
@@ -584,7 +584,7 @@ msgid "Cobwebs can be walked through, but significantly slow you down."
 msgstr ""
 
 msgid "Dead Bush"
-msgstr "枯死灌木丛"
+msgstr "枯灌木丛"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr ""
@@ -728,7 +728,7 @@ msgid "Oak"
 msgstr "橡树"
 
 msgid "Dark Oak"
-msgstr "深色橡木"
+msgstr "深色橡树"
 
 msgid "Jungle"
 msgstr "丛林"
