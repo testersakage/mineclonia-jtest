@@ -1,12 +1,5 @@
 local S = minetest.get_translator("mcl_blackstone")
 
-
-local on_rotate
-if minetest.get_modpath("screwdriver") then
-	on_rotate = screwdriver.rotate_3way
-end
-
---Blocks
 minetest.register_node("mcl_blackstone:blackstone", {
 	description = S("Blackstone"),
 	tiles = {"mcl_blackstone_top.png", "mcl_blackstone_top.png", "mcl_blackstone_side.png"},
@@ -72,7 +65,7 @@ minetest.register_node("mcl_blackstone:basalt_polished", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	is_ground_content = false,
 	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1},
 	_mcl_blast_resistance = 4.2,
@@ -84,7 +77,7 @@ minetest.register_node("mcl_blackstone:basalt", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	is_ground_content = false,
 	groups = {cracky = 3, pickaxey=1, material_stone=1, stonecuttable=1, building_block=1},
 	_mcl_blast_resistance = 4.2,
@@ -207,7 +200,6 @@ minetest.registered_nodes["mcl_fire:fire"].on_construct=function(pos)
 	old_onconstruct(pos)
 end
 
---slabs/stairs
 mcl_stairs.register_stair_and_slab("blackstone", {
 	baseitem = "mcl_blackstone:blackstone",
 	description_stair = S("Blackstone Stairs"),
@@ -233,14 +225,11 @@ minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished", "mcl_st
 minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished_inner", "mcl_stairs:stair_blackstone_polished_inner")
 minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished_outer", "mcl_stairs:stair_blackstone_polished_outer")
 
---Wall
 mcl_walls.register_wall_def("mcl_blackstone:wall", {
 	description = S("Blackstone Wall"),
 	source = "mcl_blackstone:blackstone",
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"},
 })
-
---lavacooling
 
 minetest.register_abm({
 	label = "Lava cooling (basalt)",
@@ -286,7 +275,6 @@ minetest.register_abm({
 	end,
 })
 
---crafting
 minetest.register_craft({
 	output = "mcl_blackstone:blackstone_polished 4",
 	recipe = {
@@ -323,38 +311,6 @@ minetest.register_craft({
 	}
 })
 
---[[ Commented out for now because there the discussion how to handle this is ongoing]
---Generating
-local specialstones = { "mcl_blackstone:blackstone", "mcl_blackstone:basalt", "mcl_blackstone:soul_soil" }
-for s=1, #specialstones do
-	local node = specialstones[s]
-	minetest.register_ore({
-		ore_type       = "blob",
-		ore            = node,
-		wherein        = {"mcl_nether:netherrack"},
-		clust_scarcity = 830,
-		clust_num_ores = 28,
-		clust_size     = 3,
-		y_min          = mcl_vars.mg_nether_min,
-		y_max          = mcl_vars.mg_nether_max,
-	})
-	minetest.register_ore({
-		ore_type       = "blob",
-		ore            = node,
-		wherein        = {"mcl_nether:netherrack"},
-		clust_scarcity = 8*8*8,
-		clust_num_ores = 40,
-		clust_size     = 5,
-		y_min          = mcl_vars.mg_nether_min,
-		y_max          = mcl_vars.mg_nether_max,
-	})
-end
-
-if minetest.settings:get_bool("mcl_generate_ores", true) then
-
-end
---]]
---soul torch
 mcl_torches.register_torch({
 	name="soul_torch",
 	description=S("Soul Torch"),
