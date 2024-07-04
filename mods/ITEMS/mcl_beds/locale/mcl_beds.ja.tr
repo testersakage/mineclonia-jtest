@@ -8,7 +8,6 @@ Sleeping allows you to skip the night. The night is skipped when all players in 
 Allows you to sleep=睡眠を許可する
 Bed=ベッド
 @1 Bed=
-New respawn position set!=新たなリスポーン地点を設定しました！
 You can only sleep at night or during a thunderstorm.=眠れるのは夜間か雷雨のときだけです。
 You can't sleep, the bed's too far away!=ベッドが遠くて、寝られません！
 This bed is already occupied!=このベッドは、すでに占有されてます！
@@ -31,4 +30,5 @@ You exceeded the maximum number of messages per 10 seconds!=
 You are missing the 'shout' privilege! It's required in order to talk in chat...=
 Sorry, but you have to wait @1 seconds until you may use this button again!=
 Hey! Would you guys mind sleeping?=
+New respawn position set!=新たなリスポーン地点を設定しました！
 Respawn Anchor=リスポーンアンカー
