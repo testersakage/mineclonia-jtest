@@ -338,8 +338,8 @@ There are also two different rotation modes. In “square mode”, the rotation 
 • Toggle minimap rotation mode: [Shift]+[F9]=• [Shift]+[F9] - Переключение вращения миникарты
 Camera=Камера
 There are 3 different views which determine the way you see the world. The modes are:=Есть 3 различных способа видеть мир:
-• 1: First-person view (default)=• 1: вид от первого лица (по умолчанию);
-• 2: Third-person view from behind=• 2: вид от третьего лица сзади;
+• 1: First-person view (default)=• 1: вид от первого лица (по умолчанию)
+• 2: Third-person view from behind=• 2: вид от третьего лица сзади
 • 3: Third-person view from the front=• 3: вид от третьего лица спереди.
 These camera modes can be toggled between by default pressing [F7].=
 To zoom in the camera, you can use the Spyglass item.=
