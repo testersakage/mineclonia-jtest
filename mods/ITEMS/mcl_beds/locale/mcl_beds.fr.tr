@@ -8,6 +8,7 @@ Sleeping allows you to skip the night. The night is skipped when all players in 
 Allows you to sleep=Vous permet de dormir
 Bed=Lit
 @1 Bed=
+New respawn position set!=Nouvelle position de réapparition définie!
 You can only sleep at night or during a thunderstorm.=Vous ne pouvez dormir que la nuit ou pendant un orage.
 You can't sleep, the bed's too far away!=Vous ne pouvez pas dormir, le lit est trop loin!
 This bed is already occupied!=Ce lit est déjà occupé!
@@ -30,5 +31,4 @@ You exceeded the maximum number of messages per 10 seconds!=
 You are missing the 'shout' privilege! It's required in order to talk in chat...=
 Sorry, but you have to wait @1 seconds until you may use this button again!=
 Hey! Would you guys mind sleeping?=
-New respawn position set!=Nouvelle position de réapparition définie!
 Respawn Anchor=Ancre de réapparition

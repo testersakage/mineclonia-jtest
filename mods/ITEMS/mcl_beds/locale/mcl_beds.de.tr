@@ -8,6 +8,7 @@ Sleeping allows you to skip the night. The night is skipped when all players in 
 Allows you to sleep=Zum Einschafen
 Bed=Bett
 @1 Bed=@1 Bett
+New respawn position set!=Neue Wiedereinstiegsposition gesetzt!
 You can only sleep at night or during a thunderstorm.=Sie können nur nachts oder während eines Gewittersturms schlafen.
 You can't sleep, the bed's too far away!=Sie können nicht schlafen, das Bett ist zu weit weg!
 This bed is already occupied!=Dieses Bett ist schon belegt!
@@ -30,5 +31,4 @@ You exceeded the maximum number of messages per 10 seconds!=Sie haben die maxima
 You are missing the 'shout' privilege! It's required in order to talk in chat...=Ihnen fehlt das 'shout' Privileg! Es wird benötigt, um im Chat reden zu können...
 Sorry, but you have to wait @1 seconds until you may use this button again!=Sie müssen leider noch @1 Sekunden warten, bevor sie diesen Knopf erneut benutzen können!
 Hey! Would you guys mind sleeping?=Hey, würdet Ihr bitte zu Bett gehen?
-New respawn position set!=Neue Wiedereinstiegsposition gesetzt!
 Respawn Anchor=Seelenanker
