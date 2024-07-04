@@ -682,7 +682,7 @@ local entity_standing = {
 minetest.register_entity("mcl_banners:standing_banner", entity_standing)
 
 local entity_hanging = table.copy(entity_standing)
-entity_hanging.mesh = "amc_banner_hanging.b3d"
+entity_hanging.initial_properties.mesh = "amc_banner_hanging.b3d"
 minetest.register_entity("mcl_banners:hanging_banner", entity_hanging)
 
 -- FIXME: Prevent entity destruction by /clearobjects
