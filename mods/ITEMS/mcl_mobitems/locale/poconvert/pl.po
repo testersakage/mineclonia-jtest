@@ -133,6 +133,12 @@ msgstr "Płomienna różdżka"
 msgid "This is a crafting component dropped from dead blazes."
 msgstr "Jest to materiał do wytwarzania wypadający z martwych płomyków."
 
+msgid "Breeze Rod"
+msgstr ""
+
+msgid "This is a crafting item dropped from breezes."
+msgstr ""
+
 msgid "Blaze Powder"
 msgstr "Płomienny proszek"
 
