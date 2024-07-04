@@ -133,12 +133,6 @@ msgstr "Bâton de Blaze"
 msgid "This is a crafting component dropped from dead blazes."
 msgstr "Il s'agit d'un composant d'artisanat tombé des Blazes morts."
 
-msgid "Breeze Rod"
-msgstr ""
-
-msgid "This is a crafting item dropped from breezes."
-msgstr ""
-
 msgid "Blaze Powder"
 msgstr "Poudre de Blaze"
 

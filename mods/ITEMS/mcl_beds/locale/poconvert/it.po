@@ -40,6 +40,9 @@ msgstr ""
 msgid "@1 Bed"
 msgstr ""
 
+msgid "New respawn position set!"
+msgstr ""
+
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr ""
 
@@ -104,9 +107,6 @@ msgid "Sorry, but you have to wait @1 seconds until you may use this button agai
 msgstr ""
 
 msgid "Hey! Would you guys mind sleeping?"
-msgstr ""
-
-msgid "New respawn position set!"
 msgstr ""
 
 msgid "Respawn Anchor"

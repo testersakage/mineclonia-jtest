@@ -10,7 +10,7 @@ Air=Luft
 Yes=Ja
 No=Nein
 # List separator (e.g. “one, two, three”)
-, =,
+, =, 
 Unknown item (@1)=Unbekannter Gegenstand (@1)
 unknown=unbekannt
 1 second=1 Sekunde
@@ -114,7 +114,7 @@ This block will drop the following items when mined: @1.=Dieser Block wird nach 
 This block will randomly drop one of the following when mined: @1.=Dieser Block wird nach dem Abbauen zufällig eines von den folgenden Dingen abwerfen: @1.
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=Dieser Block nach dem Abbauen wird zufällig bis zu @1 Abwürfe von den folgenden möglichen Abwürfen abwerfen: @2.
 # Final list separator (e.g. “One, two and three”)
- and = und
+ and = und 
 # Item count times item name
 @1×@2=@1×@2
 # Itemname (<0.5%)

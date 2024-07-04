@@ -254,7 +254,7 @@ local function allow_metadata_inventory_move(pos, from_list, from_index, to_list
 end
 
 minetest.register_node("mcl_beacons:beacon", {
-	description = S"Beacon",
+	description = S("Beacon"),
 	drawtype = "mesh",
 	collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
 	mesh = "mcl_beacon.b3d",

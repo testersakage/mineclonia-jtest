@@ -40,6 +40,9 @@ msgstr "Bett"
 msgid "@1 Bed"
 msgstr "@1 Bett"
 
+msgid "New respawn position set!"
+msgstr "Neue Wiedereinstiegsposition gesetzt!"
+
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr "Sie können nur nachts oder während eines Gewittersturms schlafen."
 
@@ -105,9 +108,6 @@ msgstr "Sie müssen leider noch @1 Sekunden warten, bevor sie diesen Knopf erneu
 
 msgid "Hey! Would you guys mind sleeping?"
 msgstr "Hey, würdet Ihr bitte zu Bett gehen?"
-
-msgid "New respawn position set!"
-msgstr "Neue Wiedereinstiegsposition gesetzt!"
 
 msgid "Respawn Anchor"
 msgstr "Seelenanker"

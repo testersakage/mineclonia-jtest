@@ -58,12 +58,6 @@ msgstr ""
 msgid "Smooth Stone Stairs"
 msgstr ""
 
-msgid "Terracotta Stairs"
-msgstr ""
-
-msgid "Terracotta Slab"
-msgstr ""
-
 msgid "@1 Concrete Stairs"
 msgstr ""
 
@@ -85,6 +79,12 @@ msgstr "Losa doble de hormigón"
 msgid "Concrete Stairs"
 msgstr "Escaleras de hormigón"
 
+msgid "Terracotta Slab"
+msgstr ""
+
 msgid "Double Terracotta Slab"
+msgstr ""
+
+msgid "Terracotta Stairs"
 msgstr ""
 
