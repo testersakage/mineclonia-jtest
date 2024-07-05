@@ -67,6 +67,9 @@ function mcl_core.grow_reeds(pos, node)
 	local name = minetest.get_node(pos).name
 	if minetest.get_item_group(name, "soil_sugarcane") ~= 0 then
 		if minetest.find_node_near(pos, 1, {"group:water"}) == nil and minetest.find_node_near(pos, 1, {"group:frosted_ice"}) == nil then
+			minetest.remove_node(vector.offset(pos,0,1,0))
+			minetest.add_item(vector.offset(pos,0,1,0), "mcl_core:reeds")
+			minetest.check_for_falling(vector.offset(pos,0,2,0))
 			return
 		end
 		pos.y = pos.y+1
