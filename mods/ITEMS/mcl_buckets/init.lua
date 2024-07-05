@@ -238,9 +238,7 @@ function mcl_buckets.register_liquid(def)
 
 	mcl_buckets.buckets[def.bucketname] = def
 
-	if def.bucketname == nil or def.bucketname == "" then
-		error(string.format("[mcl_bucket] Invalid itemname then registering [%s]!", def.name))
-	end
+	assert(def.bucketname and def.bucketname ~= "", string.format("[mcl_bucket] Invalid itemname then registering [%s]!", def.name))
 
 	minetest.register_craftitem(def.bucketname, {
 		description = def.name,
