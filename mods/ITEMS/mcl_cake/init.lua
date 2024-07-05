@@ -143,9 +143,7 @@ local register_slice = function(level, nodebox, desc)
 		_mcl_hardness = 0.5,
 	})
 
-	if minetest.get_modpath("doc") then
-		doc.add_entry_alias("nodes", "mcl_cake:cake", "nodes", "mcl_cake:cake_"..level)
-	end
+	doc.add_entry_alias("nodes", "mcl_cake:cake", "nodes", "mcl_cake:cake_"..level)
 end
 
 register_slice(6, slice_6, S("Cake (6 Slices Left)"))
