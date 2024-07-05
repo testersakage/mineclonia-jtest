@@ -36,10 +36,7 @@ function mcl_cocoas.grow(pos)
 	return false
 end
 
--- Cocoa definition
--- 1st stage
-local crop_def = {
-	description = S("Premature Cocoa Pod"),
+local tpl_cocoa = {
 	_doc_items_create_entry = true,
 	_doc_items_longdesc = S("Cocoa pods grow on the side of jungle trees in 3 stages."),
 	drawtype = "mesh",
@@ -49,19 +46,6 @@ local crop_def = {
 	paramtype = "light",
 	sunlight_propagates = true,
 	paramtype2 = "facedir",
-	drop = "mcl_cocoas:cocoa_beans",
-	collision_box = {
-		type = "fixed",
-		fixed = {
-			{-0.125, -0.0625, 0.1875, 0.125, 0.25, 0.4375},  -- Pod
-		},
-	},
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.125, -0.0625, 0.1875, 0.125, 0.5, 0.5},  -- Pod
-		},
-	},
 	groups = {
 		handy = 1, axey = 1,
 		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
@@ -82,50 +66,39 @@ local crop_def = {
 	end,
 }
 
--- 2nd stage
-minetest.register_node("mcl_cocoas:cocoa_1", table.copy(crop_def))
-
-crop_def.description = S("Medium Cocoa Pod")
-crop_def._doc_items_create_entry = false
-crop_def.groups.cocoa = 2
-crop_def.mesh = "mcl_cocoas_cocoa_stage_1.obj"
-crop_def.tiles = {"mcl_cocoas_cocoa_stage_1.png"}
-crop_def.collision_box = {
-	type = "fixed",
-	fixed = {
-		{-0.1875, -0.1875, 0.0625, 0.1875, 0.25, 0.4375},  -- Pod
-	},
-}
-crop_def.selection_box = {
-	type = "fixed",
-	fixed = {
-		{-0.1875, -0.1875, 0.0625, 0.1875, 0.5, 0.5},
-	},
+local boxes = {
+	{-0.125, -0.0625, 0.1875, 0.125, 0.25, 0.4375},
+	{-0.1875, -0.1875, 0.0625, 0.1875, 0.25, 0.4375},
+	{-0.25, -0.3125, -0.0625, 0.25, 0.25, 0.4375},
 }
 
-minetest.register_node("mcl_cocoas:cocoa_2", table.copy(crop_def))
+local descs = {
+	S("Premature Cocoa Pod"),
+	S("Medium Cocoa Pod"),
+	S("Mature Cocoa Pod")
+}
 
--- Final stage
-crop_def.description = S("Mature Cocoa Pod")
-crop_def._doc_items_longdesc = S("A mature cocoa pod grew on a jungle tree to its full size and it is ready to be harvested for cocoa beans. It won't grow any further.")
-crop_def._doc_items_create_entry = true
-crop_def.groups.cocoa = 3
-crop_def.mesh = "mcl_cocoas_cocoa_stage_2.obj"
-crop_def.tiles = {"mcl_cocoas_cocoa_stage_2.png"}
-crop_def.collision_box = {
-	type = "fixed",
-	fixed = {
-		{-0.25, -0.3125, -0.0625, 0.25, 0.25, 0.4375},  -- Pod
-	},
-}
-crop_def.selection_box = {
-	type = "fixed",
-	fixed = {
-		{-0.25, -0.3125, -0.0625, 0.25, 0.5, 0.5},
-	},
-}
-crop_def.drop = "mcl_cocoas:cocoa_beans 3"
-minetest.register_node("mcl_cocoas:cocoa_3", table.copy(crop_def))
+for i=1,3 do
+	local drop = "mcl_cocoas:cocoa_beans"
+	if i == 3 then drop =  "mcl_cocoas:cocoa_beans 3" end
+	minetest.register_node("mcl_cocoas:cocoa_"..i, table.merge(tpl_cocoa, {
+		description = descs[i],
+		_doc_items_create_entry = false,
+		groups = table.merge(tpl_cocoa.groups, { cocoa = i }),
+		mesh = "mcl_cocoas_cocoa_stage_"..(i - 1)..".obj",
+		tiles = {"mcl_cocoas_cocoa_stage_"..(i - 1)..".png"},
+		collision_box = {
+			type = "fixed",
+			fixed = { boxes[i] },
+		},
+		selection_box = {
+			type = "fixed",
+			fixed = { boxes[i] },
+		},
+		drop = drop,
+	}))
+
+end
 
 minetest.register_craftitem("mcl_cocoas:cocoa_beans", {
 	description = S("Cocoa Beans"),
@@ -142,7 +115,6 @@ minetest.register_craftitem("mcl_cocoas:cocoa_beans", {
 minetest.register_abm({
 		label = "Cocoa pod growth",
 		nodenames = {"mcl_cocoas:cocoa_1", "mcl_cocoas:cocoa_2"},
-		-- Same as potatoes
 		-- TODO: Tweak/balance the growth speed
 		interval = 50,
 		chance = 20,
@@ -150,7 +122,7 @@ minetest.register_abm({
 			mcl_cocoas.grow(pos)
 		end
 })
--- Add entry aliases for the Help
+
 if minetest.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_cocoas:cocoa_1", "nodes", "mcl_cocoas:cocoa_2")
 end
