@@ -1,8 +1,4 @@
---[[
-#!#!#!#Cake mod created by Jordan4ibanez#!#!#
-#!#!#!#Released under CC Attribution-ShareAlike 3.0 Unported #!#!#
-]]--
-
+-- by Jordan4ibanez#!#!#
 local CAKE_HUNGER_POINTS = 2
 
 local S = minetest.get_translator(minetest.get_current_modname())
@@ -58,14 +54,12 @@ minetest.register_node("mcl_cake:cake", {
 	},
 	drop = "",
 	on_rightclick = function(pos, _, clicker, _)
-		-- Cake is subject to protection
 		local name = clicker:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
 		local newcake = minetest.do_item_eat(2, ItemStack("mcl_cake:cake_6"), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
-		-- Check if we were allowed to eat
 		if newcake:get_name() ~= "mcl_cake:cake" or minetest.is_creative_enabled(clicker:get_player_name()) then
 			minetest.add_node(pos,{type="node",name="mcl_cake:cake_6",param2=0})
 		end
@@ -78,7 +72,7 @@ minetest.register_node("mcl_cake:cake", {
 	_mcl_hardness = 0.5,
 })
 
-local register_slice = function(level, nodebox, desc)
+local function register_slice(level, nodebox, desc)
 	local this = "mcl_cake:cake_"..level
 	local after_eat = "mcl_cake:cake_"..(level-1)
 	local on_rightclick
@@ -90,13 +84,11 @@ local register_slice = function(level, nodebox, desc)
 				return
 			end
 			local newcake = minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(after_eat), ItemStack(this), clicker, {type="nothing"})
-			-- Check if we were allowed to eat
 			if newcake:get_name() ~= this or minetest.is_creative_enabled(clicker:get_player_name()) then
 				minetest.add_node(pos,{type="node",name=after_eat,param2=0})
 			end
 		end
 	else
-		-- Last slice
 		on_rightclick = function(pos, _, clicker, _)
 			local name = clicker:get_player_name()
 			if minetest.is_protected(pos, name) then
@@ -104,7 +96,6 @@ local register_slice = function(level, nodebox, desc)
 				return
 			end
 			local newcake = minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack("mcl:cake:cake 0"), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
-			-- Check if we were allowed to eat
 			if newcake:get_name() ~= this or minetest.is_creative_enabled(clicker:get_player_name()) then
 				minetest.remove_node(pos)
 				minetest.check_for_falling(pos)
