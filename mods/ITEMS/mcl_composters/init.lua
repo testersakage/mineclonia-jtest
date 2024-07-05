@@ -1,12 +1,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
---
--- Composter mod, adds composters.
---
 -- Copyleft 2022 by kabou
--- GNU General Public Licence 3.0
---
-
 local composter_description = S(
 	"Composter"
 )
@@ -65,14 +59,10 @@ local function composter_add_item(pos, node, player, itemstack, _)
 				max_hear_distance = 16,
 			}, true)
 		end
-		-- calculate leveling up chance
 		local rand = math.random(0,100)
 		if chance >= rand then
-			-- get current compost level
 			local level = minetest.registered_nodes[node.name]["_mcl_compost_level"]
-			-- spawn green particles above new layer
 			mcl_bone_meal.add_bone_meal_particle(vector.offset(pos, 0, level/8, 0))
-			-- update composter block
 			if level < 7 then
 				level = level + 1
 			else
@@ -84,8 +74,6 @@ local function composter_add_item(pos, node, player, itemstack, _)
 				gain= 0.4,
 				max_hear_distance = 16,
 			}, true)
-			-- a full composter becomes ready for harvest after one second
-			-- the block will get updated by the node timer callback set in node reg def
 			if level == 7 then
 				local timer = minetest.get_node_timer(pos)
 				timer:start(1)
@@ -233,10 +221,6 @@ local function on_hopper_in(pos, downpos)
 end
 
 
---- Register empty composter node.
---
--- This is the craftable base model that can be placed in an inventory.
---
 minetest.register_node("mcl_composters:composter", {
 	description = composter_description,
 	_tt_help = S("Converts organic items into bonemeal"),
@@ -266,10 +250,6 @@ minetest.register_node("mcl_composters:composter", {
 	_on_hopper_in = on_hopper_in,
 })
 
---- Template function for composters with compost.
---
--- For each fill level a custom node is registered.
---
 local function register_filled_composter(level)
 	local id = "mcl_composters:composter_"..level
 	minetest.register_node(id, {
@@ -301,20 +281,13 @@ local function register_filled_composter(level)
 		_on_hopper_in = on_hopper_in,
 	})
 
-	-- Add entry aliases for the Help
-	if minetest.get_modpath("doc") then
-		doc.add_entry_alias("nodes", "mcl_composters:composter", "nodes", id)
-	end
+	doc.add_entry_alias("nodes", "mcl_composters:composter", "nodes", id)
 end
 
---- Register filled composters (7 levels).
---
 for level = 1, 7 do
 	register_filled_composter(level)
 end
 
---- Register composter that is ready to be harvested.
---
 minetest.register_node("mcl_composters:composter_ready", {
 	description = S("Composter") .. "(" .. S("ready for harvest") .. ")",
 	_doc_items_create_entry = false,
@@ -343,7 +316,6 @@ minetest.register_node("mcl_composters:composter_ready", {
 	_on_hopper_out = on_hopper_out,
 })
 
--- Add entry aliases for the Help
 if minetest.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_composters:composter",
 		"nodes", "mcl_composters:composter_ready" )
