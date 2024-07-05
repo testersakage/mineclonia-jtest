@@ -7,11 +7,8 @@ local max_title_length = 64
 
 local bookshelf_inv = minetest.settings:get_bool("mcl_bookshelf_inventories", true)
 
-local header = ""
-if minetest.get_modpath("mcl_init") then
-	header = "no_prepend[]" .. mcl_vars.gui_nonbg .. mcl_vars.gui_bg_color ..
+local header = "no_prepend[]" .. mcl_vars.gui_nonbg .. mcl_vars.gui_bg_color ..
 		"style_type[button;border=false;bgimg=mcl_books_button9.png;bgimg_pressed=mcl_books_button9_pressed.png;bgimg_middle=2,2]"
-end
 
 -- Book
 minetest.register_craftitem("mcl_books:book", {
