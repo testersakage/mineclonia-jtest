@@ -309,25 +309,3 @@ minetest.register_abm({
 		end
 	end,
 })
-
-minetest.register_abm({
-	label = "Lava cooling (blackstone)",
-	nodenames = {"group:lava"},
-	neighbors = {"mcl_core:packed_ice"},
-	interval = 1,
-	chance = 1,
-	min_y = mcl_vars.mg_end_min,
-	action = function(pos, node)
-		local water = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "mcl_core:packed_ice")
-		local lavatype = minetest.registered_nodes[node.name].liquidtype
-		for w=1, #water do
-			if water[w].y < pos.y and water[w].x == pos.x and water[w].z == pos.z then
-				minetest.set_node(water[w], {name="mcl_blackstone:blackstone"})
-			elseif lavatype == "flowing" and water[w].y == pos.y and (water[w].x == pos.x or water[w].z == pos.z) then
-				minetest.set_node(pos, {name="mcl_blackstone:blackstone"})
-			elseif lavatype == "flowing" and water[w].y > pos.y and water[w].x == pos.x and water[w].z == pos.z then
-				minetest.set_node(pos, {name="mcl_blackstone:blackstone"})
-			end
-		end
-	end,
-})
