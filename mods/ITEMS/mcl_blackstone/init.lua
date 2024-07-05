@@ -220,6 +220,23 @@ minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished", "mcl_st
 minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished_inner", "mcl_stairs:stair_blackstone_polished_inner")
 minetest.register_alias("mcl_stairs:stair_blackstone_chiseled_polished_outer", "mcl_stairs:stair_blackstone_polished_outer")
 
+mcl_torches.register_torch({
+	name="soul_torch",
+	description=S("Soul Torch"),
+	doc_items_longdesc = S("Torches are light sources which can be placed at the side or on the top of most blocks."),
+	doc_items_hidden = false,
+	icon="soul_torch_on_floor.png",
+	tiles = {{
+		name = "soul_torch_on_floor_animated.png",
+		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 3.3}
+	}},
+	light = 12, --soul torches are a bit dimmer than normal torches
+	groups = {dig_immediate = 3, deco_block = 1},
+	sounds = mcl_sounds.node_sound_wood_defaults(),
+	particles = true,
+	flame_type = 2,
+})
+
 mcl_walls.register_wall_def("mcl_blackstone:wall", {
 	description = S("Blackstone Wall"),
 	source = "mcl_blackstone:blackstone",
@@ -260,23 +277,6 @@ minetest.register_craft({
 		{"mcl_nether:quartz_block", "mcl_nether:quartz_block"},
 		{"mcl_nether:quartz_block", "mcl_nether:quartz_block"},
 	}
-})
-
-mcl_torches.register_torch({
-	name="soul_torch",
-	description=S("Soul Torch"),
-	doc_items_longdesc = S("Torches are light sources which can be placed at the side or on the top of most blocks."),
-	doc_items_hidden = false,
-	icon="soul_torch_on_floor.png",
-	tiles = {{
-		name = "soul_torch_on_floor_animated.png",
-		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 3.3}
-	}},
-	light = 12, --soul torches are a bit dimmer than normal torches
-	groups = {dig_immediate = 3, deco_block = 1},
-	sounds = mcl_sounds.node_sound_wood_defaults(),
-	particles = true,
-	flame_type = 2,
 })
 
 minetest.register_craft({
