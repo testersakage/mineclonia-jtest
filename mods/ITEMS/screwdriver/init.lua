@@ -38,8 +38,6 @@ function screwdriver.rotate_3way(pos, node, _, mode, _)
 	return false
 end
 
--- For attached wallmounted nodes: returns true if rotation is valid
--- simplified version of minetest:builtin/game/falling.lua#L148.
 local function check_attached_node(pos, rotation)
 	local d = minetest.wallmounted_to_dir(rotation)
 	local p2 = vector.add(pos, d)
@@ -91,7 +89,6 @@ function screwdriver.rotate.wallmounted(pos, node, mode)
 	local other = node.param2 - rotation
 	rotation = wallmounted_tbl[mode][rotation] or 0
 	if minetest.get_item_group(node.name, "attached_node") ~= 0 then
-		-- find an acceptable orientation
 		for _ = 1, 5 do
 			if not check_attached_node(pos, rotation) then
 				rotation = wallmounted_tbl[mode][rotation] or 0
@@ -105,7 +102,6 @@ end
 
 screwdriver.rotate.colorwallmounted = screwdriver.rotate.wallmounted
 
--- Handles rotation
 function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 	if pointed_thing.type ~= "node" then
 		return
@@ -124,7 +120,6 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 	if not ndef then
 		return itemstack
 	end
-	-- can we rotate this paramtype2?
 	local fn = screwdriver.rotate[ndef.paramtype2]
 	if not fn and not ndef.on_rotate then
 		return itemstack
@@ -138,9 +133,7 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 		new_param2 = node.param2
 	end
 
-	-- Node provides a handler, so let the handler decide instead if the node can be rotated
 	if ndef.on_rotate then
-		-- Copy pos and node because callback can modify it
 		local result = ndef.on_rotate(vector.new(pos),
 				{name = node.name, param1 = node.param1, param2 = node.param2},
 				user, mode, new_param2)
@@ -171,7 +164,6 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 	return itemstack
 end
 
--- Screwdriver
 minetest.register_tool("screwdriver:screwdriver", {
 	description = S("Screwdriver"),
 	inventory_image = "screwdriver.png",
