@@ -1,7 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
--- Cauldron mod, adds cauldrons.
-
 local function sound_place(itemname, pos)
 	local def = minetest.registered_nodes[itemname]
 	if def and def.sounds and def.sounds.place then
@@ -16,7 +14,6 @@ local function sound_take(itemname, pos)
 	end
 end
 
--- Convenience function because the cauldron nodeboxes are very similar
 local function create_cauldron_nodebox(water_level)
 	local floor_y
 	if water_level == 0 then	-- empty
@@ -48,7 +45,6 @@ local function create_cauldron_nodebox(water_level)
 	}
 end
 
--- Empty cauldron
 minetest.register_node("mcl_cauldrons:cauldron", {
 	description = S("Cauldron"),
 	_tt_help = S("Stores water"),
@@ -97,7 +93,6 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 	end,
 })
 
--- Template function for cauldrons with water
 local function register_filled_cauldron(water_level, description, liquid)
 	local id = "mcl_cauldrons:cauldron_"..water_level
 	local water_tex
@@ -163,13 +158,9 @@ local function register_filled_cauldron(water_level, description, liquid)
 		end,
 	})
 
-	-- Add entry aliases for the Help
-	if minetest.get_modpath("doc") then
-		doc.add_entry_alias("nodes", "mcl_cauldrons:cauldron", "nodes", id)
-	end
+	doc.add_entry_alias("nodes", "mcl_cauldrons:cauldron", "nodes", id)
 end
 
--- Filled cauldrons (3 levels)
 for i=1,3 do
 	register_filled_cauldron(i, S("Cauldron (@1/3 Water)", i))
 	register_filled_cauldron(i, S("Cauldron (@1/3 Lava)", i),"lava")
@@ -206,7 +197,7 @@ minetest.register_globalstep(function(dtime)
 		if n and not minetest.get_node(n).name:find("lava") then
 			cauldron_extinguish(pl,n)
 		elseif n and minetest.get_node(n).name:find("lava") then
-				mcl_burning.set_on_fire(pl, 5)
+			mcl_burning.set_on_fire(pl, 5)
 		end
 	end
 	for _,ent in pairs(minetest.luaentities) do
