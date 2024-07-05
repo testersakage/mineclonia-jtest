@@ -69,50 +69,49 @@ minetest.register_node("mcl_amethyst:tinted_glass",{
 
 -- Amethyst Cluster
 local bud_def = {
-	{
-		size          = "small",
+	small = {
 		description   = S("Small Amethyst Bud"),
-		long_desc     = S("Small Amethyst Bud is the first growth of amethyst bud."),
+		_doc_items_longdesc = S("Small Amethyst Bud is the first growth of amethyst bud."),
 		light_source  = 3,
-		next_stage    = "mcl_amethyst:medium_amethyst_bud",
-		selection_box = { -4/16, -7/16, -4/16, 4/16, -3/16, 4/16 },
+		_mcl_amethyst_next_grade = "mcl_amethyst:medium_amethyst_bud",
+		selection_box = {
+			type = "fixed",
+			fixed = { -4/16, -7/16, -4/16, 4/16, -3/16, 4/16 },
+		}
 	},
-	{
-		size          = "medium",
+	medium = {
 		description   = S("Medium Amethyst Bud"),
-		long_desc     = S("Medium Amethyst Bud is the second growth of amethyst bud."),
+		_doc_items_longdesc = S("Medium Amethyst Bud is the second growth of amethyst bud."),
 		light_source  = 4,
-		next_stage    = "mcl_amethyst:large_amethyst_bud",
-		selection_box = { -4.5/16, -8/16, -4.5/16, 4.5/16, -2/16, 4.5/16 },
+		_mcl_amethyst_next_grade = "mcl_amethyst:large_amethyst_bud",
+		selection_box = {
+			type = "fixed",
+			fixed = { -4.5/16, -8/16, -4.5/16, 4.5/16, -2/16, 4.5/16 },
+		}
 	},
-	{
-		size          = "large",
+	large = {
 		description   = S("Large Amethyst Bud"),
-		long_desc     = S("Large Amethyst Bud is the third growth of amethyst bud."),
+		_doc_items_longdesc = S("Large Amethyst Bud is the third growth of amethyst bud."),
 		light_source  = 5,
-		next_stage    = "mcl_amethyst:amethyst_cluster",
-		selection_box = { -4.5/16, -8/16, -4.5/16, 4.5/16, -1/16, 4.5/16 },
+		_mcl_amethyst_next_grade = "mcl_amethyst:amethyst_cluster",
+		selection_box = {
+			type = "fixed",
+			fixed = { -4.5/16, -8/16, -4.5/16, 4.5/16, -1/16, 4.5/16 },
+		},
 	},
 }
 
-for _, def in pairs(bud_def) do
-	local size = def.size
-	local name = "mcl_amethyst:" .. size .. "_amethyst_bud"
-	local tile = "mcl_amethyst_amethyst_bud_" .. size .. ".png"
-	local inventory_image = "mcl_amethyst_amethyst_bud_" .. size .. ".png"
-	minetest.register_node(name, {
-		description = def.description,
-		_doc_items_longdesc = def.longdesc,
+for size, def in pairs(bud_def) do
+	minetest.register_node("mcl_amethyst:" .. size .. "_amethyst_bud", table.merge(def, {
 		drop = "",
-		tiles = {tile},
-		inventory_image = inventory_image,
+		tiles = { 	"mcl_amethyst_amethyst_bud_" .. size .. ".png" },
+		inventory_image = "mcl_amethyst_amethyst_bud_" .. size .. ".png",
 		paramtype1 = "light",
 		paramtype2 = "wallmounted",
 		drawtype = "plantlike",
 		use_texture_alpha = "clip",
 		sunlight_propagates = true,
 		walkable = false,
-		light_source = def.light_source,
 		groups = {
 			destroy_by_lava_flow = 1,
 			dig_by_piston = 1,
@@ -122,15 +121,10 @@ for _, def in pairs(bud_def) do
 			attached_node = 1,
 		},
 		sounds = sounds,
-		selection_box = {
-			type = "fixed",
-			fixed = def.selection_box
-		},
 		_mcl_hardness = 1.5,
 		_mcl_blast_resistance = 1.5,
 		_mcl_silk_touch_drop = true,
-		_mcl_amethyst_next_grade = def.next_stage,
-	})
+	}))
 end
 
 minetest.register_node("mcl_amethyst:amethyst_cluster",{
