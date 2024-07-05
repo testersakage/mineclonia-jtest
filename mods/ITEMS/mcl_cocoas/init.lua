@@ -2,16 +2,13 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_cocoas = {}
 
--- Place cocoa
 local function cocoa_place(itemstack, placer, pt, plantname)
-	-- check if pointing at a node
 	if not pt or pt.type ~= "node" then
 		return
 	end
 
 	local under = minetest.get_node(pt.under)
 
-	-- return if any of the nodes are not registered
 	if not minetest.registered_nodes[under.name] then
 		return
 	end
@@ -19,21 +16,17 @@ local function cocoa_place(itemstack, placer, pt, plantname)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pt)
 	if rc then return rc end
 
-	-- Check if pointing at jungle tree
 	if under.name ~= "mcl_trees:tree_jungle"
 	or minetest.get_node(pt.above).name ~= "air" then
 		return
 	end
 
-	-- Determine cocoa direction
 	local clickdir = vector.subtract(pt.under, pt.above)
 
-	-- Did user click on the SIDE of a jungle tree?
 	if clickdir.y ~= 0 then
 		return
 	end
 
-	-- Add the node, set facedir and remove 1 item from the itemstack
 	minetest.set_node(pt.above, {name = plantname, param2 = minetest.dir_to_facedir(clickdir)})
 
 	minetest.sound_play("default_place_node", {pos = pt.above, gain = 1.0}, true)
@@ -41,7 +34,6 @@ local function cocoa_place(itemstack, placer, pt, plantname)
 	if not minetest.is_creative_enabled(placer:get_player_name()) then
 		itemstack:take_item()
 	end
-
 	return itemstack
 end
 
@@ -58,8 +50,6 @@ function mcl_cocoas.grow(pos)
 	return false
 end
 
--- Cocoa definition
--- 1st stage
 local crop_def = {
 	description = S("Premature Cocoa Pod"),
 	_doc_items_create_entry = true,
@@ -103,7 +93,6 @@ local crop_def = {
 	end,
 }
 
--- 2nd stage
 minetest.register_node("mcl_cocoas:cocoa_1", table.copy(crop_def))
 
 crop_def.description = S("Medium Cocoa Pod")
@@ -126,7 +115,6 @@ crop_def.selection_box = {
 
 minetest.register_node("mcl_cocoas:cocoa_2", table.copy(crop_def))
 
--- Final stage
 crop_def.description = S("Mature Cocoa Pod")
 crop_def._doc_items_longdesc = S("A mature cocoa pod grew on a jungle tree to its full size and it is ready to be harvested for cocoa beans. It won't grow any further.")
 crop_def._doc_items_create_entry = true
@@ -172,7 +160,6 @@ minetest.register_abm({
 		end
 }	)
 
--- Add entry aliases for the Help
 if minetest.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_cocoas:cocoa_1", "nodes", "mcl_cocoas:cocoa_2")
 end
