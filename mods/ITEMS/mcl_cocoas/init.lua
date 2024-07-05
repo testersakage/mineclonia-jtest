@@ -2,46 +2,24 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_cocoas = {}
 
--- Place cocoa
 local function cocoa_place(itemstack, placer, pt, plantname)
-	-- check if pointing at a node
-	if not pt or pt.type ~= "node" then
-		return
-	end
-
-	local under = minetest.get_node(pt.under)
-
-	-- return if any of the nodes are not registered
-	if not minetest.registered_nodes[under.name] then
-		return
-	end
-
+	if not pt or pt.type ~= "node" then	return end
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pt)
 	if rc then return rc end
-
-	-- Check if pointing at jungle tree
+	local under = minetest.get_node(pt.under)
 	if under.name ~= "mcl_trees:tree_jungle"
 	or minetest.get_node(pt.above).name ~= "air" then
 		return
 	end
 
-	-- Determine cocoa direction
 	local clickdir = vector.subtract(pt.under, pt.above)
-
-	-- Did user click on the SIDE of a jungle tree?
-	if clickdir.y ~= 0 then
-		return
-	end
-
+	if clickdir.y ~= 0 then return end
 	-- Add the node, set facedir and remove 1 item from the itemstack
 	minetest.set_node(pt.above, {name = plantname, param2 = minetest.dir_to_facedir(clickdir)})
-
 	minetest.sound_play("default_place_node", {pos = pt.above, gain = 1.0}, true)
-
 	if not minetest.is_creative_enabled(placer:get_player_name()) then
 		itemstack:take_item()
 	end
-
 	return itemstack
 end
 
