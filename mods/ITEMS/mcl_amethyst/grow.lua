@@ -1,4 +1,4 @@
-local interval = 10
+local interval = 68
 local chance = 5
 
 local function grow(pos, node)
