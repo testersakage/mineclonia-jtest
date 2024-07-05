@@ -1,13 +1,9 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-
 local peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
-
 local explosion_strength = 6
-
 local directions = {
 	{x = 1}, {x = -1}, {z = 1}, {z = -1}
 }
-
 local dimensions = {"x", "y", "z"}
 
 for _, dir in pairs(directions) do

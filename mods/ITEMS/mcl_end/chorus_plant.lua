@@ -1,12 +1,5 @@
--- Chorus plants
--- This includes chorus flowers, chorus plant stem nodes and chorus fruit
-
 local S = minetest.get_translator(minetest.get_current_modname())
-
---- Plant parts ---
-
 local MAX_FLOWER_AGE = 5 -- Maximum age of chorus flower before it dies
-
 local chorus_flower_box = {
 	type = "fixed",
 	fixed = {
@@ -18,13 +11,11 @@ local chorus_flower_box = {
 	}
 }
 
--- Helper function
 local function round(num, idp)
 	local mult = 10^(idp or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
 
--- This is a list of nodes that SHOULD NOT call their detach function
 local no_detach = {}
 
 -- This detaches all chorus plants that are/were attached
@@ -36,7 +27,6 @@ function mcl_end.detach_chorus_plant(start_pos, digger)
 		return
 	end
 
-	-- This node SHOULD be detached, make sure no others are
 	no_detach = {}
 
 	local neighbors = {
@@ -143,10 +133,6 @@ minetest.register_node("mcl_end:chorus_flower", {
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
-		--[[ Part 1: Check placement rules. Placement is legal if one of the following
-		conditions is met:
-		1) On top of end stone or chorus plant
-		2) On top of air and horizontally adjacent to exactly 1 chorus plant ]]
 		local pos
 		local def = minetest.registered_nodes[node_under.name]
 		if def and def.buildable_to then
@@ -159,10 +145,8 @@ minetest.register_node("mcl_end:chorus_flower", {
 		local below = {x=pos.x, y=pos.y-1, z=pos.z}
 		local node_below = minetest.get_node(below)
 		local plant_ok = false
-		-- Condition 1
 		if node_below.name == "mcl_end:chorus_plant" or node_below.name == "mcl_end:end_stone" then
 			plant_ok = true
-		-- Condition 2
 		elseif node_below.name == "air" then
 			local around = {
 				{ x= 1, y=0, z= 0 },
@@ -186,7 +170,6 @@ minetest.register_node("mcl_end:chorus_flower", {
 			end
 		end
 		if plant_ok then
-			-- Placement OK! Proceed normally
 			local it, suc = minetest.item_place_node(itemstack, placer, pointed_thing)
 			if suc then
 				minetest.sound_play(mcl_sounds.node_sound_wood_defaults().place, {pos = pos}, true)
@@ -270,9 +253,6 @@ minetest.register_node("mcl_end:chorus_plant", {
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
-		--[[ Part 1: Check placement rules. Placement is legal if this
-		condition is met:
-		- placed on end stone or any chorus node ]]
 		local pos_place, node_check
 		local def = minetest.registered_nodes[node_under.name]
 		if def and def.buildable_to then
@@ -287,7 +267,6 @@ minetest.register_node("mcl_end:chorus_plant", {
 			plant_ok = true
 		end
 		if plant_ok then
-			-- Placement OK! Proceed normally
 			local it, suc = minetest.item_place_node(itemstack, placer, pointed_thing)
 			if suc then
 				minetest.sound_play(mcl_sounds.node_sound_wood_defaults().place, {pos = pos_place}, true)
@@ -303,10 +282,8 @@ minetest.register_node("mcl_end:chorus_plant", {
 	_mcl_hardness = 0.4,
 })
 
--- Grow a complete chorus plant at pos
 function mcl_end.grow_chorus_plant(pos, node, pr)
 	local flowers = { pos }
-	-- Plant initial flower (if it isn't there already)
 	if not node then
 		node = minetest.get_node(pos)
 	end
@@ -457,27 +434,21 @@ minetest.register_abm({
 	end,
 })
 
---- Chorus fruit ---
-
 -- Attempt to randomly teleport the player within a 8×8×8 box around. Rules:
 -- * Not in solid blocks.
 -- * Not in liquids.
 -- * Always on top of a solid block
 -- * Maximum attempts: 16
 --
--- Returns true on success.
 local function random_teleport(player)
 	local pos = player:get_pos()
-	-- 16 attempts to find a suitable position
 	for _ = 1, 16 do
-		-- Teleportation box
 		local x,y,z
 		x = math.random(round(pos.x)-8, round(pos.x)+8)
 		y = math.random(math.ceil(pos.y)-8, math.ceil(pos.y)+8)
 		z = math.random(round(pos.z)-8, round(pos.z)+8)
 		local node_cache = {}
 		local ground_level = false
-		-- Scan nodes from selected position until we hit ground
 		for t=0, 16 do
 			local tpos = {x=x, y=y-t, z=z}
 			local tnode = minetest.get_node(tpos)
@@ -491,7 +462,6 @@ local function random_teleport(player)
 				break
 			end
 		end
-		-- Ground found? Then let's check if the player has enough room
 		if ground_level and #node_cache >= 1 then
 			local streak = 0
 			local last_was_walkable = true
@@ -499,7 +469,6 @@ local function random_teleport(player)
 				local tpos = node_cache[c].pos
 				local tnode = node_cache[c].node
 				local tdef = minetest.registered_nodes[tnode.name]
-				-- Player needs a space of 2 safe non-liquid nodes on top of a walkable node
 				if not tdef.walkable and tdef.liquidtype == "none" and tdef.damage_per_second <= 0 then
 					if (streak == 0 and last_was_walkable) or (streak > 0) then
 						streak = streak + 1
@@ -509,7 +478,6 @@ local function random_teleport(player)
 				end
 				last_was_walkable = tdef.walkable
 				if streak >= 2 then
-					-- JACKPOT! Now we can teleport.
 					local goal = {x=tpos.x, y=tpos.y-1.5, z=tpos.z}
 					player:set_pos(goal)
 					minetest.sound_play({name="mcl_end_teleport", gain=0.8}, {pos=goal, max_hear_distance=16}, true)
@@ -521,7 +489,6 @@ local function random_teleport(player)
 	return false
 end
 
--- Randomly teleport player and update hunger
 local eat_chorus_fruit = function(itemstack, player, pointed_thing)
 	local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 	if rc then return rc end

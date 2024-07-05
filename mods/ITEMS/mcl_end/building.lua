@@ -1,12 +1,5 @@
--- Building blocks and decorative nodes
 local S = minetest.get_translator(minetest.get_current_modname())
-
-local mod_screwdriver = minetest.get_modpath("screwdriver")
-
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
+local on_rotate = screwdriver.rotate_3way
 
 minetest.register_node("mcl_end:end_stone", {
 	description = S("End Stone"),
@@ -196,7 +189,6 @@ mcl_stairs.register_stair_and_slab("purpur_block", {
 	overrides = {_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}}
 })
 
--- Crafting recipes
 minetest.register_craft({
 	output = "mcl_end:end_bricks 4",
 	recipe = {
