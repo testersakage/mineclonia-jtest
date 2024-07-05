@@ -290,22 +290,13 @@ minetest.register_craft({
 
 minetest.register_abm({
 	label = "Lava cooling (basalt)",
-	nodenames = {"group:lava"},
+	nodenames = { "mcl_core:lava_flowing", "mcl_nether:nether_lava_flowing" },
 	neighbors = {"mcl_core:ice"},
 	interval = 1,
 	chance = 1,
-	min_y = mcl_vars.mg_end_min,
-	action = function(pos, node)
-		local water = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "mcl_core:ice")
-		local lavatype = minetest.registered_nodes[node.name].liquidtype
-		for w=1, #water do
-			if water[w].y < pos.y and water[w].x == pos.x and water[w].z == pos.z then
-				minetest.set_node(water[w], {name="mcl_blackstone:basalt"})
-			elseif lavatype == "flowing" and water[w].y == pos.y and (water[w].x == pos.x or water[w].z == pos.z) then
-				minetest.set_node(pos, {name="mcl_blackstone:basalt"})
-			elseif lavatype == "flowing" and water[w].y > pos.y and water[w].x == pos.x and water[w].z == pos.z then
-				minetest.set_node(pos, {name="mcl_blackstone:basalt"})
-			end
+	action = function(pos)
+		if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_blackstone:soul_soil" then
+			minetest.set_node(pos, { name = "mcl_blackstone:basalt" })
 		end
 	end,
 })
