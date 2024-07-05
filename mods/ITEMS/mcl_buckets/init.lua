@@ -18,13 +18,11 @@ minetest.register_craft({
 	},
 })
 
-
 mcl_buckets = {
 	liquids = {},
 	buckets = {},
 }
 
--- Sound helper functions for placing and taking liquids
 local function sound_place(itemname, pos)
 	local def = minetest.registered_nodes[itemname]
 	if def and def.sounds and def.sounds.place then
@@ -92,10 +90,7 @@ local function get_extra_check(check, pos, user)
 end
 
 local function get_bucket_drop(itemstack, user, take_bucket)
-	-- Handle bucket item and inventory stuff
 	if take_bucket and not minetest.is_creative_enabled(user:get_player_name()) then
-		-- Add empty bucket and put it into inventory, if possible.
-		-- Drop empty bucket otherwise.
 		local new_bucket = ItemStack("mcl_buckets:bucket_empty")
 		if itemstack:get_count() == 1 then
 			return new_bucket
@@ -133,16 +128,12 @@ end
 local function on_place_bucket(itemstack, user, _)
 	local pointed_thing = bucket_get_pointed_thing(user)
 
-	-- Must be pointing to node
 	if not pointed_thing or pointed_thing.type ~= "node" then
 		return
 	end
 
-	-- Call on_rightclick if the pointed node defines it
 	local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
-	if new_stack then
-		return new_stack
-	end
+	if new_stack then return new_stack end
 
 	local def = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
 	if def and def._on_bucket_place then
@@ -183,16 +174,12 @@ end
 local function on_place_bucket_empty(itemstack, user, _)
 	local pointed_thing = bucket_get_pointed_thing(user)
 
-	-- Must be pointing to node
 	if not pointed_thing or pointed_thing.type ~= "node" then
 		return itemstack
 	end
 
-	-- Call on_rightclick if the pointed node defines it
 	local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
-	if new_stack then
-		return new_stack
-	end
+	if new_stack then return new_stack end
 
 	local new_bucket = false
 	local under = pointed_thing.under
@@ -207,7 +194,6 @@ local function on_place_bucket_empty(itemstack, user, _)
 		end
 		local liquid_def = mcl_buckets.liquids[node_name]
 		if liquid_def then
-			-- Fill bucket, but not in Creative Mode
 			if not minetest.is_creative_enabled(user:get_player_name()) then
 				new_bucket = ItemStack({name = liquid_def.bucketname})
 				if liquid_def.on_take then
@@ -270,7 +256,7 @@ function mcl_buckets.register_liquid(def)
 			local buildable = minetest.registered_nodes[dropnode.name].buildable_to or dropnode.name == "mcl_portals:portal"
 			if not buildable then return stack end
 			local result, take_bucket = get_extra_check(def.extra_check, droppos, nil)
-			if result then -- Fail placement of liquid if result is false
+			if result then
 				place_liquid(droppos, get_node_place(def.source_place, droppos))
 			end
 			if take_bucket then
@@ -300,18 +286,14 @@ minetest.register_craftitem("mcl_buckets:bucket_empty", {
 		local liquiddef = mcl_buckets.liquids[dropnode.name]
 		local new_bucket
 		if liquiddef and liquiddef.bucketname and (dropnode.name  == liquiddef.source_take) then
-			-- Fill bucket
 			new_bucket = ItemStack({name = liquiddef.bucketname})
 			sound_take(dropnode.name, droppos)
 			collect_liquid = true
 		end
 		if collect_liquid then
 			minetest.set_node(droppos, {name="air"})
-
-			-- Fill bucket with liquid
 			stack = new_bucket
 		else
-			-- No liquid found: Drop empty bucket
 			minetest.add_item(droppos, stack)
 			stack:take_item()
 		end
