@@ -31,9 +31,6 @@ minetest.register_node("mcl_amethyst:budding_amethyst_block",{
 	_mcl_blast_resistance = 1.5,
 })
 
-mcl_wip.register_wip_item("mcl_amethyst:budding_amethyst_block")
-
--- Amethyst Shard
 minetest.register_craftitem("mcl_amethyst:amethyst_shard",{
 	description = S("Amethyst Shard"),
 	_doc_items_longdesc = S("An amethyst shard is a crystalline mineral."),
