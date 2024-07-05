@@ -1,14 +1,6 @@
--- See README.txt for licensing and other information.
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
 local modpath = minetest.get_modpath(modname)
-
--- Compatibility with old bucket mod
-minetest.register_alias("bucket:bucket_empty", "mcl_buckets:bucket_empty")
-minetest.register_alias("bucket:bucket_water", "mcl_buckets:bucket_water")
-minetest.register_alias("bucket:bucket_lava", "mcl_buckets:bucket_lava")
-
-local mod_doc = minetest.get_modpath("doc")
 
 minetest.register_craft({
 	output = "mcl_buckets:bucket_empty 1",
@@ -160,17 +152,14 @@ local function on_place_bucket(itemstack, user, _)
 				local node_place = get_node_place(bucket_def.source_place, pos)
 				local player_name = user:get_player_name()
 
-				-- Check protection
 				if minetest.is_protected(pos, player_name) then
 					minetest.record_protection_violation(pos, player_name)
 					return itemstack
 				end
 
-				-- Place liquid
 				place_liquid(pos, node_place)
 
-				-- Update doc mod
-				if mod_doc and doc.entry_exists("nodes", node_place) then
+				if doc.entry_exists("nodes", node_place) then
 					doc.mark_entry_as_revealed(user:get_player_name(), "nodes", node_place)
 				end
 			end
@@ -217,14 +206,12 @@ local function on_place_bucket_empty(itemstack, user, _)
 			minetest.set_node(under, {name="air"})
 			sound_take(node_name, under)
 
-			if mod_doc and doc.entry_exists("nodes", node_name) then
+			if doc.entry_exists("nodes", node_name) then
 				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", node_name)
 			end
 			if new_bucket then
 				return give_bucket(new_bucket, itemstack, user)
 			end
-		else
-			minetest.log("error", string.format("[mcl_buckets] Node [%s] has invalid group [_mcl_bucket_pointable]!", node_name))
 		end
 		return itemstack
 	else
