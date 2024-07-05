@@ -1,11 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
---[[
-  mcl_clock, renew of the renew of the mcl_clock mod
-
-  Original from Echo, here: http://forum.minetest.net/viewtopic.php?id=3795
-]]--
-
 mcl_clock = {}
 
 -- This is the itemstring of the default clock item. It is used for the default inventory image, help entries, and the like
@@ -15,12 +9,10 @@ mcl_clock.old_time = -1
 
 local clock_frames = 64
 
--- Timer for random clock spinning
 local random_timer = 0.0
-local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Increase if there are performance problems
+local random_timer_trigger = 1.0
 local random_frame = math.random(0, clock_frames-1)
 
--- Image of all possible faces
 mcl_clock.images = {}
 for frame=0, clock_frames-1 do
 	local sframe = tostring(frame)
@@ -117,14 +109,12 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
--- Immediately set correct clock time after crafting
 minetest.register_on_craft(function(itemstack)
 	if itemstack:get_name() == mcl_clock.stereotype then
 		itemstack:set_name("mcl_clock:clock_"..mcl_clock.get_clock_frame())
 	end
 end)
 
--- Clock recipe
 minetest.register_craft({
 	output = mcl_clock.stereotype,
 	recipe = {
@@ -134,10 +124,8 @@ minetest.register_craft({
 	}
 })
 
--- Clock tool
 mcl_clock.register_item(mcl_clock.stereotype, mcl_clock.images[1], true, 1)
 
--- Faces
 for a=0,clock_frames-1,1 do
 	local b = a
 	if b > 31 then
