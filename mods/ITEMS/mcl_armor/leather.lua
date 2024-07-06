@@ -168,7 +168,7 @@ minetest.register_chatcommand("color_leather", {
 		local player = minetest.get_player_by_name(name)
 		if player then
 			local item = player:get_wielded_item()
-			if not item or item:get_definition().groups.armor_leather == 0 then
+			if not item or  minetest.get_item_group(item:get_name(), "armor_leather") == 0 then
 				return false, S("Not leather armor.")
 			end
 			if param == "wash" then
