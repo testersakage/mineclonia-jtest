@@ -403,7 +403,14 @@ function mobs_mc.villager_mob:summon_golem()
 	for _,n in pairs(nn) do
 		local up = minetest.find_nodes_in_area(vector.offset(n,0,1,0),vector.offset(n,0,3,0),{"air"})
 		if up and #up >= 3 then
-			local obj = minetest.add_entity(vector.offset(n,0,1,0),"mobs_mc:iron_golem")
+			local floor = minetest.get_node(n).name
+			local obj
+			if floor == "mcl_core:water_source" or floor == "mcl_core:water_flowing" then
+				obj = minetest.add_entity(vector.offset(n,0,-0.5,0),"mobs_mc:iron_golem")
+			else
+				obj = minetest.add_entity(vector.offset(n,0,0.5,0),"mobs_mc:iron_golem")
+			end
+
 			local ent = obj:get_luaentity()
 			if ent then
 				local bell = self:get_bell()
