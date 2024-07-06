@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-06 07:57+0000\n"
+"PO-Revision-Date: 2024-07-06 11:43+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mobs_mc/hu/>\n"
@@ -36,7 +36,7 @@ msgid "Mooshroom"
 msgstr "Múúmba"
 
 msgid "Creeper"
-msgstr "Creeper"
+msgstr "Lopodzó"
 
 msgid "Dolphin"
 msgstr "Delfin"
@@ -69,46 +69,46 @@ msgid "Hoglin"
 msgstr "Hoglin"
 
 msgid "Zoglin"
-msgstr ""
+msgstr "Zoglin"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Bébi Hoglin"
 
 msgid "Horse"
-msgstr ""
+msgstr "Ló"
 
 msgid "Skeleton Horse"
-msgstr ""
+msgstr "Csontváz Ló"
 
 msgid "Zombie Horse"
-msgstr ""
+msgstr "Zombi Ló"
 
 msgid "Donkey"
-msgstr ""
+msgstr "Szamár"
 
 msgid "Mule"
-msgstr ""
+msgstr "Öszvér"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Vas Golem"
 
 msgid "Llama"
-msgstr ""
+msgstr "Láma"
 
 msgid "Ocelot"
 msgstr ""
 
 msgid "Cat"
-msgstr ""
+msgstr "Macska"
 
 msgid "Parrot"
-msgstr ""
+msgstr "Papagáj"
 
 msgid "Pig"
-msgstr ""
+msgstr "Malac"
 
 msgid "Piglin"
-msgstr ""
+msgstr "Piglin"
 
 msgid "Zombiefied Piglin"
 msgstr ""
@@ -117,13 +117,13 @@ msgid "Piglin Brute"
 msgstr ""
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Élőhalott Piglin"
 
 msgid "Pillager"
 msgstr ""
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "Jegesmedve"
 
 msgid "Rabbit"
 msgstr "Nyúl"
@@ -138,7 +138,7 @@ msgid "Sheep"
 msgstr "Bárány"
 
 msgid "Shulker"
-msgstr ""
+msgstr "Sulker"
 
 msgid "Silverfish"
 msgstr "Ezüsthal"
@@ -147,7 +147,7 @@ msgid "Skeleton"
 msgstr "Csontváz"
 
 msgid "Stray"
-msgstr ""
+msgstr "Jégjáró"
 
 msgid "Wither Skeleton"
 msgstr "Sorvasztott csontváz"
@@ -156,7 +156,7 @@ msgid "Slime"
 msgstr "Zselé"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "Magma Kocka"
 
 msgid "Snow Golem"
 msgstr "Hógólem"
@@ -180,7 +180,7 @@ msgid "Tropical Fish"
 msgstr "Trópusi Hal"
 
 msgid "Tropical fish"
-msgstr ""
+msgstr "Trópusi Hal"
 
 msgid "Vex"
 msgstr ""
@@ -198,19 +198,19 @@ msgid "Vindicator"
 msgstr ""
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "Villámsújtott"
 
 msgid "@1 sleeps here"
 msgstr "@1 itt alszik"
 
 msgid "A villager sleeps here"
-msgstr ""
+msgstr "Itt alszik egy falusi"
 
 msgid "@1 works here"
-msgstr ""
+msgstr "@1 itt dolgozik"
 
 msgid "A villager works here"
-msgstr "Itt dolgozik  egy falubeli"
+msgstr "Itt dolgozik egy falubeli"
 
 msgid "Unemployed"
 msgstr "Munkanélküli"
