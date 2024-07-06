@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-06 11:43+0000\n"
+"PO-Revision-Date: 2024-07-06 21:19+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mobs_mc/hu/>\n"
@@ -36,7 +36,7 @@ msgid "Mooshroom"
 msgstr "Múúmba"
 
 msgid "Creeper"
-msgstr "Lopodzó"
+msgstr "Lopódzó"
 
 msgid "Dolphin"
 msgstr "Delfin"
@@ -57,22 +57,22 @@ msgid "Ghast Fireball"
 msgstr "Tűzgolyó"
 
 msgid "Glow Squid"
-msgstr "Tintahal"
+msgstr "Fénylő Tintahal"
 
 msgid "Guardian"
 msgstr "Őrszem"
 
 msgid "Elder Guardian"
-msgstr "Vén őrszem"
+msgstr "Vén Őrszem"
 
 msgid "Hoglin"
-msgstr "Hoglin"
+msgstr "Varacskos"
 
 msgid "Zoglin"
-msgstr "Zoglin"
+msgstr "Zord Varacskos"
 
 msgid "Baby Hoglin"
-msgstr "Bébi Hoglin"
+msgstr "Varacskos Malac"
 
 msgid "Horse"
 msgstr "Ló"
@@ -90,13 +90,13 @@ msgid "Mule"
 msgstr "Öszvér"
 
 msgid "Iron Golem"
-msgstr "Vas Golem"
+msgstr "Vas Gólem"
 
 msgid "Llama"
 msgstr "Láma"
 
 msgid "Ocelot"
-msgstr ""
+msgstr "Párducmacska"
 
 msgid "Cat"
 msgstr "Macska"
@@ -108,19 +108,19 @@ msgid "Pig"
 msgstr "Malac"
 
 msgid "Piglin"
-msgstr "Piglin"
+msgstr "Malacfej"
 
 msgid "Zombiefied Piglin"
-msgstr ""
+msgstr "Zombi Malacfej"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "Durva Malacfej"
 
 msgid "Zombie Piglin"
 msgstr "Élőhalott Piglin"
 
 msgid "Pillager"
-msgstr ""
+msgstr "Rabló"
 
 msgid "Polar Bear"
 msgstr "Jegesmedve"
@@ -138,7 +138,7 @@ msgid "Sheep"
 msgstr "Bárány"
 
 msgid "Shulker"
-msgstr "Sulker"
+msgstr "Kagylapuló"
 
 msgid "Silverfish"
 msgstr "Ezüsthal"
@@ -150,7 +150,7 @@ msgid "Stray"
 msgstr "Jégjáró"
 
 msgid "Wither Skeleton"
-msgstr "Sorvasztott csontváz"
+msgstr "Sorvasztó Csontváz"
 
 msgid "Slime"
 msgstr "Zselé"
@@ -171,19 +171,19 @@ msgid "Squid"
 msgstr "Tintahal"
 
 msgid "Strider"
-msgstr ""
+msgstr "Álomfutó"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Álomfutócska"
 
 msgid "Tropical Fish"
 msgstr "Trópusi Hal"
 
 msgid "Tropical fish"
-msgstr "Trópusi Hal"
+msgstr "Trópusi hal"
 
 msgid "Vex"
-msgstr ""
+msgstr "Bosszancs"
 
 msgid "Villager"
 msgstr "Falusi"
@@ -192,13 +192,13 @@ msgid "Evoker"
 msgstr "Idéző"
 
 msgid "Illusioner"
-msgstr ""
+msgstr "Szemfényvesztő"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "Védelmező"
 
 msgid "Zombie Villager"
-msgstr "Villámsújtott"
+msgstr "Zombi Falulakó"
 
 msgid "@1 sleeps here"
 msgstr "@1 itt alszik"
