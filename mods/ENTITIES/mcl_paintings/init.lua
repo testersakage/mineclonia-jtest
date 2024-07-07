@@ -100,9 +100,28 @@ function painting_entity:on_punch(puncher, time_from_last_punch, tool_capabiliti
 	end
 end
 
+local function size_to_minmax_entity(size)
+	return -size/2, size/2
+end
+
 function painting_entity:set_motive()
+	local box
+	local exmin, exmax = size_to_minmax_entity(self._xsize)
+	local eymin, eymax = size_to_minmax_entity(self._ysize)
+	if self._yaw then
+		local wallm = minetest.dir_to_wallmounted(minetest.yaw_to_dir(self._yaw))
+		if wallm == 2 then
+			box = { -3/128, eymin, exmin, 1/64, eymax, exmax }
+		elseif wallm == 3 then
+			box = { -1/64, eymin, exmin, 3/128, eymax, exmax }
+		elseif wallm == 4 then
+			box = { exmin, eymin, -3/128, exmax, eymax, 1/64 }
+		elseif wallm == 5 then
+			box = { exmin, eymin, -1/64, exmax, eymax, 3/128 }
+		end
+	end
 	self.object:set_properties({
-		--selectionbox = box,
+		selectionbox = box,
 		visual_size = vector.new(self._xsize, self._ysize, 1/32 ),
 		textures = { wood, wood, wood, wood, self._motive, wood },
 	})
@@ -123,8 +142,32 @@ minetest.register_craftitem("mcl_paintings:painting", {
 		if mcl_util.check_position_protection(ppos, placer) then return itemstack end
 
 		local m, x, y = get_random_painting(4, 4)
-		minetest.add_entity(ppos, "mcl_paintings:painting", minetest.serialize({
-			_yaw = minetest.dir_to_yaw(vector.direction(pointed_thing.under, pointed_thing.above)),
+		local _, exmax = size_to_minmax_entity(x)
+		local _, eymax = size_to_minmax_entity(y)
+		local pexmax
+		local peymax = eymax - 0.5
+		local n
+		local dir = vector.direction(pointed_thing.under, pointed_thing.above)
+		if dir.x < 0 or dir.z > 0 then
+			pexmax = -exmax + 0.5
+			n = -1
+		else
+			pexmax = exmax - 0.5
+			n = 1
+		end
+		local pposa = vector.subtract(ppos, vector.multiply(dir, 0.5-5/256))
+		local ppos2
+		if dir.z ~= 0 then
+			pposa = vector.add(pposa, {x=pexmax, y=peymax, z=0})
+			ppos2 = vector.add(ppos, {x = (x-1)*n, y = y-1, z = 0})
+		else
+			pposa = vector.add(pposa, {x=0, y=peymax, z=pexmax})
+			ppos2 = vector.add(ppos, {x = 0, y = y-1, z = (x-1)*n})
+		end
+		if mcl_util.check_position_protection(ppos2, placer) then return itemstack end
+
+		minetest.add_entity(pposa, "mcl_paintings:painting", minetest.serialize({
+			_yaw = minetest.dir_to_yaw(dir),
 			_pos = ppos,
 			_motive = m,
 			_xsize = x,
