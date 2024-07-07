@@ -48,6 +48,18 @@ local painting_entity = {
 	_ysize = 1,
 }
 
+local function convert_old_motive(self, motive)
+	if tonumber(motive) then
+		for _, v in pairs(mcl_paintings.registered_paintings) do
+			if v.width == self._xsize and v.height == self._ysize and v.oldid == motive then
+				return v.file
+			end
+		end
+		return false
+	end
+	return motive
+end
+
 function painting_entity:on_activate(staticdata)
 	self.object:set_armor_groups({immortal = 1})
 	if staticdata and staticdata ~= "" then
@@ -55,12 +67,9 @@ function painting_entity:on_activate(staticdata)
 		if data then
 			self._yaw = data._yaw
 			self._pos = data._pos
-			self._motive = data._motive
 			self._xsize = data._xsize
 			self._ysize = data._ysize
-			if tonumber(self._motive) then
-				self._motive = mcl_paintings.old_motives[self._motive]
-			end
+			self._motive = convert_old_motive(self, data._motive)
 			if not self._motive then
 				self.object:remove()
 				return
@@ -215,37 +224,32 @@ minetest.register_craftitem("mcl_paintings:painting", {
 	end,
 })
 
-mcl_paintings.register_painting({ name = "swords", width = 2, height = 2 })
-mcl_paintings.register_painting({ name = "mcla", width = 4, height = 3 })
-mcl_paintings.register_painting({ name = "axe", width = 2, height = 1 })
-mcl_paintings.register_painting({ name = "banner_blue_gold", width = 1, height = 2 })
-mcl_paintings.register_painting({ name = "banner_green_gold", width = 1, height = 2 })
-mcl_paintings.register_painting({ name = "book", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "book_squid_cards", width = 4, height = 2 })
-mcl_paintings.register_painting({ name = "bottles", width = 2, height = 1 })
-mcl_paintings.register_painting({ name = "cards", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "crossedswords", width = 2, height = 2 })
-mcl_paintings.register_painting({ name = "darktower", width = 4, height = 4 })
-mcl_paintings.register_painting({ name = "desert", width = 2, height = 1 })
-mcl_paintings.register_painting({ name = "forest", width = 2, height = 1 })
-mcl_paintings.register_painting({ name = "house", width = 4, height = 4 })
-mcl_paintings.register_painting({ name = "gentle", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "irises", width = 4, height = 3 })
-mcl_paintings.register_painting({ name = "mcl2", width = 4, height = 3 })
-mcl_paintings.register_painting({ name = "jungle", width = 4, height = 3 })
-mcl_paintings.register_painting({ name = "knives", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "mordor", width = 4, height = 3 })
-mcl_paintings.register_painting({ name = "pans", width = 2, height = 1 })
-mcl_paintings.register_painting({ name = "sandcastle", width = 2, height = 2 })
-mcl_paintings.register_painting({ name = "searose", width = 2, height = 2 })
-mcl_paintings.register_painting({ name = "shield", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "snowmountain", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "snowtrees", width = 2, height = 2 })
-mcl_paintings.register_painting({ name = "squid", width = 1, height = 1 })
-mcl_paintings.register_painting({ name = "waterfall", width = 4, height = 4 })
-mcl_paintings.register_painting({ name = "timberframe", width = 2, height = 2 })
-mcl_paintings.register_painting({ name = "young_man", width = 1, height = 2 })
-
+mcl_paintings.register_painting({ name = "swords", width = 2, height = 2, oldid = 1 })
+mcl_paintings.register_painting({ name = "axe", width = 2, height = 1, oldid = 2  })
+mcl_paintings.register_painting({ name = "banner_blue_gold", width = 1, height = 2, oldid = 2 })
+mcl_paintings.register_painting({ name = "banner_green_gold", width = 1, height = 2, oldid = 1 })
+mcl_paintings.register_painting({ name = "book", width = 1, height = 1, oldid = 4 })
+mcl_paintings.register_painting({ name = "book_squid_cards", width = 4, height = 2, oldid = 1 })
+mcl_paintings.register_painting({ name = "bottles", width = 2, height = 1, oldid = 1 })
+mcl_paintings.register_painting({ name = "cards", width = 1, height = 1, oldid = 5 })
+mcl_paintings.register_painting({ name = "crossedswords", width = 2, height = 2, oldid = 5 })
+mcl_paintings.register_painting({ name = "darktower", width = 4, height = 4, oldid = 2 })
+mcl_paintings.register_painting({ name = "desert", width = 2, height = 1, oldid = 5 })
+mcl_paintings.register_painting({ name = "forest", width = 2, height = 1, oldid = 4 })
+mcl_paintings.register_painting({ name = "house", width = 4, height = 4, oldid = 3 })
+mcl_paintings.register_painting({ name = "gentle", width = 1, height = 1, oldid = 3 })
+mcl_paintings.register_painting({ name = "jungle", width = 4, height = 3, oldid = 2 })
+mcl_paintings.register_painting({ name = "knives", width = 1, height = 1, oldid = 7 })
+mcl_paintings.register_painting({ name = "mordor", width = 4, height = 3, oldid = 4 })
+mcl_paintings.register_painting({ name = "pans", width = 2, height = 1, oldid = 3 })
+mcl_paintings.register_painting({ name = "sandcastle", width = 2, height = 2, oldid = 4 })
+mcl_paintings.register_painting({ name = "searose", width = 2, height = 2, oldid = 2 })
+mcl_paintings.register_painting({ name = "shield", width = 1, height = 1, oldid = 6 })
+mcl_paintings.register_painting({ name = "snowmountain", width = 1, height = 1, oldid = 2 })
+mcl_paintings.register_painting({ name = "snowtrees", width = 2, height = 2, oldid = 3 })
+mcl_paintings.register_painting({ name = "squid", width = 1, height = 1, oldid = 1  })
+mcl_paintings.register_painting({ name = "timberframe", width = 2, height = 2, oldid = 1 })
+mcl_paintings.register_painting({ name = "waterfall", width = 4, height = 4, oldid = 1 })
 
 minetest.register_craft({
 	output = "mcl_paintings:painting",
