@@ -1312,9 +1312,9 @@ for color, desc in pairs(boxtypes) do
 		end
 	end
 
-	local small_name = "mcl_chests:" .. color .. "_shulker_box_small"
+	local small_name = "mcl_chests:" .. mcl_dyes.colors[color].mcl2 .. "_shulker_box_small"
 
-	minetest.register_node("mcl_chests:" .. color .. "_shulker_box", {
+	minetest.register_node("mcl_chests:" .. mcl_dyes.colors[color].mcl2 .. "_shulker_box", {
 		description = desc,
 		_tt_help = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents"),
 		_doc_items_create_entry = create_entry,
@@ -1506,7 +1506,7 @@ for color, desc in pairs(boxtypes) do
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = "mcl_chests:"..color.."_shulker_box",
+		output = "mcl_chests:" .. mcl_dyes.colors[color].mcl2 .. "_shulker_box",
 		recipe = { "group:shulker_box", "mcl_dyes:"..color }
 	})
 end
