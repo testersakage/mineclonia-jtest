@@ -402,10 +402,13 @@ function mobs_mc.villager_mob:summon_golem()
 	table.shuffle(nn)
 	for _,n in pairs(nn) do
 		local up = minetest.find_nodes_in_area(vector.offset(n,0,1,0),vector.offset(n,0,3,0),{"air"})
-		if up and #up >= 3 then
-			local floor = minetest.get_node(n).name
+		local down = minetest.find_nodes_in_area(vector.offset(n,0,0,0),vector.offset(n,0,-1,0),{"group:water"})
+		local floor = minetest.get_node(n).name
+		local floor_is_water = (floor == "mcl_core:water_source" or floor == "mcl_core:water_flowing")
+		if floor_is_water and down and #down == 1
+		or not floor_is_water and up and #up >= 3 then
 			local obj
-			if floor == "mcl_core:water_source" or floor == "mcl_core:water_flowing" then
+			if floor_is_water then
 				obj = minetest.add_entity(vector.offset(n,0,-0.5,0),"mobs_mc:iron_golem")
 			else
 				obj = minetest.add_entity(vector.offset(n,0,0.5,0),"mobs_mc:iron_golem")
