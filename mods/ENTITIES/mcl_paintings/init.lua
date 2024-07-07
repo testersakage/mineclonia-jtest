@@ -141,38 +141,77 @@ minetest.register_craftitem("mcl_paintings:painting", {
 		local ppos = pointed_thing.above
 		if mcl_util.check_position_protection(ppos, placer) then return itemstack end
 
-		local m, x, y = get_random_painting(4, 4)
-		local _, exmax = size_to_minmax_entity(x)
-		local _, eymax = size_to_minmax_entity(y)
-		local pexmax
-		local peymax = eymax - 0.5
-		local n
+		local xmax
+		local ymax = 4
+		local xmaxes = {}
+		local ymaxed = false
 		local dir = vector.direction(pointed_thing.under, pointed_thing.above)
-		if dir.x < 0 or dir.z > 0 then
-			pexmax = -exmax + 0.5
-			n = -1
-		else
-			pexmax = exmax - 0.5
-			n = 1
+		local negative = dir.x < 0 or dir.z > 0
+		-- Check maximum possible painting size
+		local t
+		for y=0,3 do
+		for x=0,3 do
+			local k = x
+			if negative then
+				k = -k
+			end
+			if dir.z ~= 0 then
+				t = {x=k,y=y,z=0}
+			else
+				t = {x=0,y=y,z=k}
+			end
+			local unode = minetest.get_node(vector.add(pointed_thing.under, t))
+			local anode = minetest.get_node(vector.add(ppos, t))
+			local udef = minetest.registered_nodes[unode.name]
+			local adef = minetest.registered_nodes[anode.name]
+			if (not (udef and udef.walkable)) or (not adef or adef.walkable) then
+				xmaxes[y+1] = x
+				if x == 0 and not ymaxed then
+					ymax = y
+					ymaxed = true
+				end
+				break
+			end
 		end
-		local pposa = vector.subtract(ppos, vector.multiply(dir, 0.5-5/256))
-		local ppos2
-		if dir.z ~= 0 then
-			pposa = vector.add(pposa, {x=pexmax, y=peymax, z=0})
-			ppos2 = vector.add(ppos, {x = (x-1)*n, y = y-1, z = 0})
-		else
-			pposa = vector.add(pposa, {x=0, y=peymax, z=pexmax})
-			ppos2 = vector.add(ppos, {x = 0, y = y-1, z = (x-1)*n})
+		if not xmaxes[y] then
+			xmaxes[y] = 4
 		end
-		if mcl_util.check_position_protection(ppos2, placer) then return itemstack end
+		end
+		xmax = math.max(unpack(xmaxes))
 
-		minetest.add_entity(pposa, "mcl_paintings:painting", minetest.serialize({
-			_yaw = minetest.dir_to_yaw(dir),
-			_pos = ppos,
-			_motive = m,
-			_xsize = x,
-			_ysize = y,
-		}))
+		local m, x, y = get_random_painting(xmax, ymax)
+		if x and y and m then
+			local _, exmax = size_to_minmax_entity(x)
+			local _, eymax = size_to_minmax_entity(y)
+			local pexmax
+			local peymax = eymax - 0.5
+			local n
+			if negative then
+				pexmax = -exmax + 0.5
+				n = -1
+			else
+				pexmax = exmax - 0.5
+				n = 1
+			end
+			local pposa = vector.subtract(ppos, vector.multiply(dir, 0.5-5/256))
+			local ppos2
+			if dir.z ~= 0 then
+				pposa = vector.add(pposa, {x=pexmax, y=peymax, z=0})
+				ppos2 = vector.add(ppos, {x = (x-1)*n, y = y-1, z = 0})
+			else
+				pposa = vector.add(pposa, {x=0, y=peymax, z=pexmax})
+				ppos2 = vector.add(ppos, {x = 0, y = y-1, z = (x-1)*n})
+			end
+			if mcl_util.check_position_protection(ppos2, placer) then return itemstack end
+
+			minetest.add_entity(pposa, "mcl_paintings:painting", minetest.serialize({
+				_yaw = minetest.dir_to_yaw(dir),
+				_pos = ppos,
+				_motive = m,
+				_xsize = x,
+				_ysize = y,
+			}))
+		end
 	end,
 })
 
