@@ -48,16 +48,17 @@ local painting_entity = {
 	_ysize = 1,
 }
 
-local function convert_old_motive(self, motive)
-	if tonumber(motive) then
+local function convert_old_motive(self, data)
+	if tonumber(data._motive) then
 		for _, v in pairs(mcl_paintings.registered_paintings) do
-			if v.width == self._xsize and v.height == self._ysize and v.oldid == motive then
+			if v.width == self._xsize and v.height == self._ysize and v.oldid == data._motive then
+				self._yaw = minetest.wallmounted_to_dir(minetest.dir_to_yaw(self._facing))
 				return v.file
 			end
 		end
 		return false
 	end
-	return motive
+	return data._motive
 end
 
 function painting_entity:on_activate(staticdata)
@@ -69,7 +70,7 @@ function painting_entity:on_activate(staticdata)
 			self._pos = data._pos
 			self._xsize = data._xsize
 			self._ysize = data._ysize
-			self._motive = convert_old_motive(self, data._motive)
+			self._motive = convert_old_motive(self, data)
 			if not self._motive then
 				self.object:remove()
 				return
@@ -81,7 +82,7 @@ end
 
 function painting_entity:get_staticdata()
 	local data = {
-		_facing = self._facing,
+		_yaw = self._yaw,
 		_pos = self._pos,
 		_motive = self._motive,
 		_xsize = self._xsize,
