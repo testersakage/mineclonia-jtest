@@ -1,7 +1,5 @@
 mcl_paintings = {
 	registered_paintings = {},
-	old_motives = {},
-	texture_size = 16,
 }
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
@@ -15,13 +13,6 @@ function mcl_paintings.register_painting(def)
 	end
 	table.insert(mcl_paintings.registered_paintings, def)
 end
---[[
-local function get_painting(name)
-	for _, v in pairs(mcl_paintings.registered_paintings) do
-		if v.name == name or not name then return v.file end
-	end
-end
---]]
 
 local function get_random_painting(x, y)
 	table.shuffle(mcl_paintings.registered_paintings)
