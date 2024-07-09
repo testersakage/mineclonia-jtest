@@ -68,7 +68,8 @@ function painting_entity:on_activate(staticdata)
 			self._xsize = data._xsize
 			self._ysize = data._ysize
 			self._motive = convert_old_motive(self, data)
-			if not self._motive then
+			local def = mcl_paintings.get_painting(self._motive)
+			if not self._motive or not def or def.remove then
 				self.object:remove()
 				return
 			end
