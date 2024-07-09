@@ -14,6 +14,12 @@ function mcl_paintings.register_painting(def)
 	table.insert(mcl_paintings.registered_paintings, def)
 end
 
+function mcl_paintings.get_painting(name)
+	for _, v in pairs(mcl_paintings.registered_paintings) do
+		if v.name == name or v.file == name then return v end
+	end
+end
+
 local function get_random_painting(x, y)
 	table.shuffle(mcl_paintings.registered_paintings)
 	for _, v in pairs(mcl_paintings.registered_paintings) do
