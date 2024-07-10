@@ -29,15 +29,13 @@ end
 -- LEVER
 minetest.register_node("mesecons_walllever:wall_lever_off", {
 	drawtype = "mesh",
-	tiles = {
-		"jeija_wall_lever_lever_light_on.png",
-	},
+	tiles = {"default_cobble.png^mesecons_walllever_lever.png"},
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
-	inventory_image = "jeija_wall_lever.png",
-	wield_image = "jeija_wall_lever.png",
+	inventory_image = "mesecons_walllever_lever_inv.png",
+	wield_image = "mesecons_walllever_lever_inv.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	mesh = "jeija_wall_lever_off.obj",
+	mesh = "mesecons_walllever_lever_off.obj",
 	sunlight_propagates = true,
 	walkable = false,
 	selection_box = {
@@ -154,13 +152,11 @@ minetest.register_node("mesecons_walllever:wall_lever_off", {
 })
 minetest.register_node("mesecons_walllever:wall_lever_on", {
 	drawtype = "mesh",
-	tiles = {
-		"jeija_wall_lever_lever_light_on.png",
-	},
+	tiles = {"default_cobble.png^lever.png"},
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	paramtype = "light",
 	paramtype2 = "facedir",
-	mesh = "jeija_wall_lever_on.obj",
+	mesh = "mesecons_walllever_lever_on.obj",
 	sunlight_propagates = true,
 	walkable = false,
 	selection_box = {
