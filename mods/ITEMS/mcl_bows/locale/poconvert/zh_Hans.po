@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_bows x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-06-30 10:37+0000\n"
+"PO-Revision-Date: 2024-07-10 13:00+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_bows/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Arrow"
 msgstr "箭"
@@ -39,7 +39,7 @@ msgid "To use arrows as ammunition for a bow, just put them anywhere in your inv
 msgstr ""
 
 msgid "Bow"
-msgstr ""
+msgstr "弓"
 
 msgid "Bows are ranged weapons to shoot arrows at your foes."
 msgstr ""
@@ -54,7 +54,7 @@ msgid "The speed and damage of the arrow increases the longer you charge. The re
 msgstr ""
 
 msgid "Crossbow"
-msgstr ""
+msgstr "弩"
 
 msgid "Crossbows are ranged weapons to shoot arrows at your foes."
 msgstr ""
