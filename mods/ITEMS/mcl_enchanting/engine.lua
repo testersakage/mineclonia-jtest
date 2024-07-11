@@ -31,7 +31,7 @@ function mcl_enchanting.load_enchantments(itemstack, enchantments)
 		mcl_enchanting.unload_enchantments(itemstack)
 		for enchantment, level in pairs(enchantments or mcl_enchanting.get_enchantments(itemstack)) do
 			local enchantment_def = mcl_enchanting.enchantments[enchantment]
-			if enchantment_def.on_enchant then
+			if enchantment_def and enchantment_def.on_enchant then
 				enchantment_def.on_enchant(itemstack, level)
 			end
 		end
@@ -60,8 +60,11 @@ function mcl_enchanting.get_enchantment_description(enchantment, level)
 end
 
 function mcl_enchanting.get_colorized_enchantment_description(enchantment, level)
-	return minetest.colorize(mcl_enchanting.enchantments[enchantment].curse and mcl_colors.RED or mcl_colors.GRAY,
-		mcl_enchanting.get_enchantment_description(enchantment, level))
+	if mcl_enchanting.enchantments[enchantment] then
+		return minetest.colorize(mcl_enchanting.enchantments[enchantment].curse and mcl_colors.RED or mcl_colors.GRAY,
+			mcl_enchanting.get_enchantment_description(enchantment, level))
+	end
+	return ""
 end
 
 function mcl_enchanting.get_enchanted_itemstring(itemname)
