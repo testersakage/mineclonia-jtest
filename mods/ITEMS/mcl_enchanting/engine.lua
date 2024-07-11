@@ -200,30 +200,32 @@ function mcl_enchanting.combine(itemstack, combine_with)
 	local incompatible_enchants = 0
 	for enchantment, combine_level in pairs(mcl_enchanting.get_enchantments(combine_with)) do
 		local enchantment_def = mcl_enchanting.enchantments[enchantment]
-		local enchantment_level = enchantments[enchantment]
-		if enchantment_level then -- The enchantment already exist in the provided item
-			if enchantment_level == combine_level then
-				enchantment_level = math.min(enchantment_level + 1, enchantment_def.max_level)
-			else
-				enchantment_level = math.max(enchantment_level, combine_level)
-			end
-			any_new_enchantment = any_new_enchantment or ( enchantment_level ~= enchantments[enchantment] )
-		elseif mcl_enchanting.item_supports_enchantment(itemname, enchantment) then -- this is a new enchantement to try to add
-			local supported = true
-			for incompatible in pairs(enchantment_def.incompatible) do
-				if enchantments[incompatible] then
-					incompatible_enchants = incompatible_enchants + 1
-					supported = false
-					break
+		if enchantment_def then
+			local enchantment_level = enchantments[enchantment]
+			if enchantment_level then -- The enchantment already exist in the provided item
+				if enchantment_level == combine_level then
+					enchantment_level = math.min(enchantment_level + 1, enchantment_def.max_level)
+				else
+					enchantment_level = math.max(enchantment_level, combine_level)
+				end
+				any_new_enchantment = any_new_enchantment or ( enchantment_level ~= enchantments[enchantment] )
+			elseif mcl_enchanting.item_supports_enchantment(itemname, enchantment) then -- this is a new enchantement to try to add
+				local supported = true
+				for incompatible in pairs(enchantment_def.incompatible) do
+					if enchantments[incompatible] then
+						incompatible_enchants = incompatible_enchants + 1
+						supported = false
+						break
+					end
+				end
+				if supported then
+					enchantment_level = combine_level
+					any_new_enchantment = true
 				end
 			end
-			if supported then
-				enchantment_level = combine_level
-				any_new_enchantment = true
+			if enchantment_level and enchantment_level > 0 then
+				enchantments[enchantment] = enchantment_level
 			end
-		end
-		if enchantment_level and enchantment_level > 0 then
-			enchantments[enchantment] = enchantment_level
 		end
 	end
 	local level_requirement = 0
