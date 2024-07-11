@@ -138,7 +138,49 @@ end
 
 minetest.register_entity("mcl_paintings:painting", painting_entity)
 
-function mcl_paintings.spawn_painting(ppos, dir, def)
+local function get_maxes(pointed_thing)
+	local xmax
+	local ymax = 4
+	local xmaxes = {}
+	local ymaxed = false
+	local dir = vector.direction(pointed_thing.under, pointed_thing.above)
+	local negative = dir.x < 0 or dir.z > 0
+	-- Check maximum possible painting size
+	local t
+	for y=0,3 do
+	for x=0,3 do
+		local k = x
+		if negative then
+			k = -k
+		end
+		if dir.z ~= 0 then
+			t = {x=k,y=y,z=0}
+		else
+			t = {x=0,y=y,z=k}
+		end
+		local unode = minetest.get_node(vector.add(pointed_thing.under, t))
+		local anode = minetest.get_node(vector.add(pointed_thing.above, t))
+		local udef = minetest.registered_nodes[unode.name]
+		local adef = minetest.registered_nodes[anode.name]
+		if (not (udef and udef.walkable)) or (not adef or adef.walkable) then
+			xmaxes[y+1] = x
+			if x == 0 and not ymaxed then
+				ymax = y
+				ymaxed = true
+			end
+			break
+		end
+	end
+	if not xmaxes[y] then
+		xmaxes[y] = 4
+	end
+	end
+	xmax = math.max(unpack(xmaxes))
+	return xmax, ymax
+end
+
+function mcl_paintings.spawn_painting(pointed_thing, def)
+	local dir = vector.direction(pointed_thing.under, pointed_thing.above)
 	local x, y, m = def.width, def.height, def.file
 	if x and y and m then
 		local negative = dir.x < 0 or dir.z > 0
@@ -151,7 +193,7 @@ function mcl_paintings.spawn_painting(ppos, dir, def)
 		else
 			pexmax = exmax - 0.5
 		end
-		local pposa = vector.subtract(ppos, vector.multiply(dir, 0.5-5/256))
+		local pposa = vector.subtract(pointed_thing.above, vector.multiply(dir, 0.5-5/256))
 		if dir.z ~= 0 then
 			pposa = vector.add(pposa, {x=pexmax, y=peymax, z=0})
 		else
@@ -160,7 +202,7 @@ function mcl_paintings.spawn_painting(ppos, dir, def)
 
 		return minetest.add_entity(pposa, "mcl_paintings:painting", minetest.serialize({
 			_yaw = minetest.dir_to_yaw(dir),
-			_pos = ppos,
+			_pos = pointed_thing.above,
 			_motive = m,
 			_xsize = x,
 			_ysize = y,
@@ -176,48 +218,9 @@ minetest.register_craftitem("mcl_paintings:painting", {
 		if pointed_thing.type ~= "node" then return itemstack end
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
-		local ppos = pointed_thing.above
-		if mcl_util.check_position_protection(ppos, placer) then return itemstack end
-
-		local xmax
-		local ymax = 4
-		local xmaxes = {}
-		local ymaxed = false
-		local dir = vector.direction(pointed_thing.under, pointed_thing.above)
-		local negative = dir.x < 0 or dir.z > 0
-		-- Check maximum possible painting size
-		local t
-		for y=0,3 do
-		for x=0,3 do
-			local k = x
-			if negative then
-				k = -k
-			end
-			if dir.z ~= 0 then
-				t = {x=k,y=y,z=0}
-			else
-				t = {x=0,y=y,z=k}
-			end
-			local unode = minetest.get_node(vector.add(pointed_thing.under, t))
-			local anode = minetest.get_node(vector.add(ppos, t))
-			local udef = minetest.registered_nodes[unode.name]
-			local adef = minetest.registered_nodes[anode.name]
-			if (not (udef and udef.walkable)) or (not adef or adef.walkable) then
-				xmaxes[y+1] = x
-				if x == 0 and not ymaxed then
-					ymax = y
-					ymaxed = true
-				end
-				break
-			end
-		end
-		if not xmaxes[y] then
-			xmaxes[y] = 4
-		end
-		end
-		xmax = math.max(unpack(xmaxes))
-
-		mcl_paintings.spawn_painting(ppos, dir, get_random_painting(xmax, ymax))
+		if mcl_util.check_position_protection(pointed_thing.above, placer) then return itemstack end
+		local xmax, ymax = get_maxes(pointed_thing)
+		mcl_paintings.spawn_painting(pointed_thing, get_random_painting(xmax, ymax))
 	end,
 })
 
