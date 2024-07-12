@@ -107,6 +107,13 @@ screwdriver.rotate.colorwallmounted = screwdriver.rotate.wallmounted
 
 -- Handles rotation
 function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
+	if pointed_thing.type == "object" then
+		local l = pointed_thing.ref:get_luaentity()
+		if l and l._on_rotate then
+			return l:_on_rotate(itemstack, user, pointed_thing, mode, uses)
+		end
+	end
+
 	if pointed_thing.type ~= "node" then
 		return
 	end

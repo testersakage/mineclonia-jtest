@@ -26,3 +26,5 @@ To use it, add the `on_rotate` function to the node definition.
 Called after the rotation has been completed
 
  * `pos`: Position of the node that the screwdriver was used on
+
+`luaentity:_on_rotate(itemstack, user, pointed_thing, mode, uses)` - If present in the entity this method is called when a screwdriver is used on it
