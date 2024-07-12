@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-04 16:26+0000\n"
+"PO-Revision-Date: 2024-07-12 10:23+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_core/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Stick"
 msgstr "木棍"
@@ -563,13 +563,13 @@ msgid "• When lava is directly above water, the water turns into stone."
 msgstr ""
 
 msgid "Bone Block"
-msgstr ""
+msgstr "骨块"
 
 msgid "Bone blocks are decorative blocks and a compact storage of bone meal."
 msgstr ""
 
 msgid "Slime Block"
-msgstr ""
+msgstr "黏液块"
 
 msgid "Slime blocks are very bouncy and prevent fall damage."
 msgstr ""
@@ -701,22 +701,22 @@ msgid "Stone Brick Slab"
 msgstr "石砖台阶"
 
 msgid "Polished Andesite Stairs"
-msgstr "抛光安山岩楼梯"
+msgstr "磨制安山岩楼梯"
 
 msgid "Polished Andesite Slab"
-msgstr "抛光安山岩台阶"
+msgstr "磨制安山岩台阶"
 
 msgid "Polished Granite Stairs"
-msgstr "抛光花岗岩楼梯"
+msgstr "磨制花岗岩楼梯"
 
 msgid "Polished Granite Slab"
-msgstr "抛光花岗岩台阶"
+msgstr "磨制花岗岩台阶"
 
 msgid "Polished Diorite Stairs"
-msgstr "抛光闪长岩楼梯"
+msgstr "磨制闪长岩楼梯"
 
 msgid "Polished Diorite Slab"
-msgstr "抛光闪长岩台阶"
+msgstr "磨制闪长岩台阶"
 
 msgid "Mossy Stone Brick Stairs"
 msgstr "苔藓石砖楼梯"
