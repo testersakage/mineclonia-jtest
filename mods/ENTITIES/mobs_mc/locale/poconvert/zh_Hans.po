@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-12 10:23+0000\n"
+"PO-Revision-Date: 2024-07-13 13:18+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mobs_mc/zh_Hans/>\n"
@@ -21,7 +21,7 @@ msgid "Bat"
 msgstr "蝙蝠"
 
 msgid "Blaze"
-msgstr ""
+msgstr "烈焰人"
 
 msgid "Chicken"
 msgstr "鸡"
@@ -111,13 +111,13 @@ msgid "Piglin"
 msgstr "猪灵"
 
 msgid "Zombiefied Piglin"
-msgstr ""
+msgstr "僵尸猪灵"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "猪灵蛮兵"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "僵尸猪灵"
 
 msgid "Pillager"
 msgstr "掠夺者"
@@ -129,172 +129,172 @@ msgid "Rabbit"
 msgstr "兔子"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "杀手兔"
 
 msgid "Salmon"
-msgstr ""
+msgstr "鲑鱼"
 
 msgid "Sheep"
 msgstr "羊"
 
 msgid "Shulker"
-msgstr ""
+msgstr "潜影"
 
 msgid "Silverfish"
-msgstr ""
+msgstr "蠹虫"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "骷髅"
 
 msgid "Stray"
-msgstr ""
+msgstr "流浪者"
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "凋灵骷髅"
 
 msgid "Slime"
-msgstr ""
+msgstr "史莱姆"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "岩浆怪"
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "雪傀儡"
 
 msgid "Spider"
-msgstr ""
+msgstr "蜘蛛"
 
 msgid "Cave Spider"
-msgstr ""
+msgstr "洞穴蜘蛛"
 
 msgid "Squid"
-msgstr ""
+msgstr "鱿鱼"
 
 msgid "Strider"
-msgstr ""
+msgstr "炽足兽"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "小炽足兽"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "热带鱼"
 
 msgid "Tropical fish"
-msgstr ""
+msgstr "热带鱼"
 
 msgid "Vex"
-msgstr ""
+msgstr "恼鬼"
 
 msgid "Villager"
-msgstr ""
+msgstr "村民"
 
 msgid "Evoker"
-msgstr ""
+msgstr "唤魔者"
 
 msgid "Illusioner"
-msgstr ""
+msgstr "幻术师"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "卫道士"
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "僵尸村民"
 
 msgid "@1 sleeps here"
-msgstr ""
+msgstr "@1在此就寝"
 
 msgid "A villager sleeps here"
 msgstr "村民就寝之处"
 
 msgid "@1 works here"
-msgstr ""
+msgstr "@1在此工作"
 
 msgid "A villager works here"
-msgstr ""
+msgstr "村民打工之地"
 
 msgid "Unemployed"
-msgstr ""
+msgstr "失业人员"
 
 msgid "Farmer"
-msgstr ""
+msgstr "农夫"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "渔夫"
 
 msgid "Fletcher"
-msgstr ""
+msgstr "制箭师"
 
 msgid "Shepherd"
-msgstr ""
+msgstr "羊倌"
 
 msgid "Librarian"
 msgstr "图书馆理员"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "制图师"
 
 msgid "Armorer"
-msgstr ""
+msgstr "盔甲匠"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "皮匠"
 
 msgid "Butcher"
-msgstr ""
+msgstr "屠夫"
 
 msgid "Weapon Smith"
-msgstr ""
+msgstr "武器制造商"
 
 msgid "Tool Smith"
-msgstr ""
+msgstr "工具商人"
 
 msgid "Cleric"
-msgstr ""
+msgstr "牧师"
 
 msgid "Mason"
-msgstr ""
+msgstr "石匠"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "傻子"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "漫游商人"
 
 msgid "Novice"
-msgstr ""
+msgstr "新手"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "学徒"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "工匠"
 
 msgid "Expert"
-msgstr ""
+msgstr "专家"
 
 msgid "Master"
-msgstr ""
+msgstr "大师"
 
 msgid "Witch"
-msgstr ""
+msgstr "女巫"
 
 msgid "Wither"
-msgstr ""
+msgstr "凋灵"
 
 msgid "Wolf"
-msgstr ""
+msgstr "狼"
 
 msgid "Zombie"
-msgstr ""
+msgstr "僵尸"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "小僵尸"
 
 msgid "Husk"
-msgstr ""
+msgstr "尸壳"
 
 msgid "Baby Husk"
-msgstr ""
+msgstr "小尸壳"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "僵尸猪灵"
