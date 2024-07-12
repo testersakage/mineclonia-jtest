@@ -152,7 +152,7 @@ minetest.register_node("mesecons_walllever:wall_lever_off", {
 })
 minetest.register_node("mesecons_walllever:wall_lever_on", {
 	drawtype = "mesh",
-	tiles = {"default_cobble.png^lever.png"},
+	tiles = {"default_cobble.png^mesecons_walllever_lever.png"},
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	paramtype = "light",
 	paramtype2 = "facedir",
