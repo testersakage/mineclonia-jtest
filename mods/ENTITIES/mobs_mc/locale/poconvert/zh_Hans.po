@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-12 09:24+0000\n"
+"PO-Revision-Date: 2024-07-12 10:23+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mobs_mc/zh_Hans/>\n"
@@ -42,37 +42,37 @@ msgid "Dolphin"
 msgstr "海豚"
 
 msgid "Ender Dragon"
-msgstr ""
+msgstr "末影龙"
 
 msgid "Enderman"
-msgstr ""
+msgstr "末影人"
 
 msgid "Endermite"
-msgstr ""
+msgstr "末影螨"
 
 msgid "Ghast"
-msgstr ""
+msgstr "恶魂"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "恶魂火球"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "发光鱿鱼"
 
 msgid "Guardian"
-msgstr ""
+msgstr "守卫者"
 
 msgid "Elder Guardian"
-msgstr ""
+msgstr "末影守卫"
 
 msgid "Hoglin"
-msgstr ""
+msgstr "疣猪兽"
 
 msgid "Zoglin"
-msgstr ""
+msgstr "僵尸疣猪兽"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "幼体僵尸疣猪兽"
 
 msgid "Horse"
 msgstr "马"
@@ -120,13 +120,13 @@ msgid "Zombie Piglin"
 msgstr ""
 
 msgid "Pillager"
-msgstr ""
+msgstr "掠夺者"
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "北极熊"
 
 msgid "Rabbit"
-msgstr ""
+msgstr "兔子"
 
 msgid "Killer Bunny"
 msgstr ""
@@ -135,7 +135,7 @@ msgid "Salmon"
 msgstr ""
 
 msgid "Sheep"
-msgstr ""
+msgstr "羊"
 
 msgid "Shulker"
 msgstr ""
