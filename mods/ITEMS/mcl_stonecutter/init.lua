@@ -1,7 +1,3 @@
---|||||||||||||||||||||||
---||||| STONECUTTER |||||
---|||||||||||||||||||||||
-
 mcl_stonecutter = {}
 
 local S = minetest.get_translator("mcl_stonecutter")
@@ -36,7 +32,6 @@ end
 
 minetest.register_on_mods_loaded(mcl_stonecutter.refresh_recipes)
 
--- formspecs
 local function show_stonecutter_formspec(input)
 	local cut_items = {}
 	local x_len = 0.1
@@ -59,7 +54,6 @@ local function show_stonecutter_formspec(input)
 	"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Stonecutter"))) .. "]"..
 
 	mcl_formspec.get_itemslot_bg_v4(1.375,1.5,1,1,0)..
-	--mcl_formspec.get_itemslot_bg_v4(0.5,1,1,1,0,"mcl_loom_itemslot_bg_banner.png")..
 	"list[context;input;1.375,1.5;1,1;]"..
 
 	"box[3.275,0.75;5.2,3.5;"..mcl_colors.DARK_GRAY.."]"..
@@ -87,7 +81,6 @@ local function show_stonecutter_formspec(input)
 	return formspec
 end
 
--- Updates the formspec
 local function update_stonecutter_slots(pos,str)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
