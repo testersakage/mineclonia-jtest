@@ -278,6 +278,8 @@ function mcl_buckets.register_liquid(def)
 			end
 			return stack
 		end,
+		_mcl_burntime = def._mcl_burntime,
+		_mcl_fuel_replacements = def._mcl_fuel_replacements
 	})
 end
 

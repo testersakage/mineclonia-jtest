@@ -25,7 +25,9 @@ if mod_mcl_core then
 		name = S("Lava Bucket"),
 		longdesc = S("A bucket can be used to collect and release liquids. This one is filled with hot lava, safely contained inside. Use with caution."),
 		usagehelp = S("Get in a safe distance and place the bucket to empty it and create a lava source at this spot. Don't burn yourself!"),
-		tt_help = S("Places a lava source")
+		tt_help = S("Places a lava source"),
+		_mcl_burntime = 1000,
+		_mcl_fuel_replacements = {{"mcl_buckets:bucket_lava", "mcl_buckets:bucket_empty"}}
 	})
 
 	-- Water bucket
@@ -71,10 +73,3 @@ if mod_mclx_core then
 		groups = { water_bucket = 1 },
 	})
 end
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_buckets:bucket_lava",
-	burntime = 1000,
-	replacements = {{"mcl_buckets:bucket_lava", "mcl_buckets:bucket_empty"}},
-})

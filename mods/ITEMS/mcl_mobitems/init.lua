@@ -196,6 +196,7 @@ minetest.register_craftitem("mcl_mobitems:breeze_rod", {
 	wield_image = "mcl_mobitems_breeze_rod.png",
 	inventory_image = "mcl_mobitems_breeze_rod.png",
 	groups = { craftitem = 1 },
+	_mcl_burntime = 120
 })
 
 minetest.register_craftitem("mcl_mobitems:blaze_powder", {
@@ -517,12 +518,6 @@ minetest.register_craft({
 	output = "mcl_mobitems:cooked_porkchop",
 	recipe = "mcl_mobitems:porkchop",
 	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_mobitems:blaze_rod",
-	burntime = 120,
 })
 
 minetest.register_craft({
