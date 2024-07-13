@@ -241,30 +241,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:pick_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:shovel_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:sword_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:axe_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
 	type = "cooking",
 	output = "mcl_core:gold_nugget",
 	recipe = "mcl_tools:sword_gold",
@@ -318,28 +294,4 @@ minetest.register_craft({
 	output = "mcl_core:iron_nugget",
 	recipe = "mcl_tools:pick_iron",
 	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:pick_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:shovel_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:sword_wood",
-	burntime = 10,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_tools:axe_wood",
-	burntime = 10,
 })

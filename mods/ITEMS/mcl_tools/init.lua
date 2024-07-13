@@ -106,6 +106,7 @@ minetest.register_tool("mcl_tools:pick_wood", {
 	_mcl_diggroups = {
 		pickaxey = { speed = 2, level = 1, uses = 60 }
 	},
+	_mcl_burntime = 10
 })
 minetest.register_tool("mcl_tools:pick_stone", {
 	description = S("Stone Pickaxe"),
@@ -238,6 +239,7 @@ minetest.register_tool("mcl_tools:shovel_wood", {
 	_mcl_diggroups = {
 		shovely = { speed = 2, level = 2, uses = 60 }
 	},
+	_mcl_burntime = 10
 })
 minetest.register_tool("mcl_tools:shovel_stone", {
 	description = S("Stone Shovel"),
@@ -369,6 +371,7 @@ minetest.register_tool("mcl_tools:axe_wood", {
 	_mcl_diggroups = {
 		axey = { speed = 2, level = 1, uses = 60 }
 	},
+	_mcl_burntime = 10
 })
 minetest.register_tool("mcl_tools:axe_stone", {
 	description = S("Stone Axe"),
@@ -497,6 +500,7 @@ minetest.register_tool("mcl_tools:sword_wood", {
 		swordy = { speed = 2, level = 1, uses = 60 },
 		swordy_cobweb = { speed = 2, level = 1, uses = 60 }
 	},
+	_mcl_burntime = 10
 })
 minetest.register_tool("mcl_tools:sword_stone", {
 	description = S("Stone Sword"),

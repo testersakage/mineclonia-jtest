@@ -153,6 +153,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 	end,
 	groups = {weapon=1,weapon_ranged=1,bow=1,enchantability=1},
 	_mcl_uses = 385,
+	_mcl_burntime = 15
 })
 
 -- Iterates through player inventory and resets all the bows in "charging" state back to their original stage
@@ -374,12 +375,6 @@ if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") the
 		}
 	})
 end
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:bow",
-	burntime = 15,
-})
 
 -- Add entry aliases for the Help
 if minetest.get_modpath("doc") then

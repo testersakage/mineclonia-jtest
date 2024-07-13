@@ -241,6 +241,7 @@ for level=0, 2 do
 			return itemstack
 		end,
 		_mcl_uses = 385,
+		_mcl_burntime = 15
 	})
 end
 
@@ -428,12 +429,6 @@ if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") the
 		}
 	})
 end
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:crossbow",
-	burntime = 15,
-})
 
 -- Add entry aliases for the Help
 if minetest.get_modpath("doc") then

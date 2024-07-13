@@ -86,6 +86,7 @@ minetest.register_tool("mcl_farming:hoe_wood", {
 	_mcl_diggroups = {
 		hoey = { speed = 2, level = 1, uses = 60 }
 	},
+	_mcl_burntime = 10
 })
 
 minetest.register_craft({
@@ -103,11 +104,6 @@ minetest.register_craft({
 		{"mcl_core:stick", ""},
 		{"mcl_core:stick", ""}
 	}
-})
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_farming:hoe_wood",
-	burntime = 10,
 })
 
 minetest.register_tool("mcl_farming:hoe_stone", {

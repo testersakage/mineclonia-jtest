@@ -356,6 +356,7 @@ minetest.register_tool("mcl_fishing:fishing_rod", {
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_uses = 65,
 	_mcl_toollike_wield = true,
+	_mcl_burntime = 15
 })
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/items.lua")

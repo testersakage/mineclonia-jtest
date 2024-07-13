@@ -95,8 +95,4 @@ minetest.register_craft({
 		{"mcl_mobitems:string","","mcl_core:stick"},
 	}
 })
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:fishing_rod",
-	burntime = 15,
-})
+
