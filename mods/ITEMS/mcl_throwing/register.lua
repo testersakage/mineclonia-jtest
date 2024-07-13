@@ -2,7 +2,6 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 local mod_target = minetest.get_modpath("mcl_target")
 
--- The snowball entity
 local snowball_ENTITY={
 	initial_properties = {
 		physical = false,
@@ -36,7 +35,6 @@ local egg_ENTITY={
 	_lastpos={},
 }
 
--- Ender pearl entity
 local pearl_ENTITY={
 	initial_properties = {
 		physical = false,
@@ -102,7 +100,6 @@ local function snowball_particles(pos, vel)
 	})
 end
 
--- Snowball on_step()--> called when snowball is moving.
 local function snowball_on_step(self, dtime)
 	self.timer = self.timer + dtime
 	local pos = self.object:get_pos()
@@ -110,7 +107,6 @@ local function snowball_on_step(self, dtime)
 	local node = minetest.get_node(pos)
 	local def = minetest.registered_nodes[node.name]
 
-	-- Destroy when hitting a solid node
 	if self._lastpos.x~=nil then
 		if (def and def.walkable) or not def then
 			minetest.sound_play("mcl_throwing_snowball_impact_hard", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
@@ -171,7 +167,6 @@ local function egg_on_step(self, dtime)
 		end
 	end
 
-	-- Destroy when hitting a mob or player (no chick spawning)
 	if check_object_hit(self, pos, 0) then
 		minetest.sound_play("mcl_throwing_egg_impact", { pos = self.object:get_pos(), max_hear_distance=10, gain=0.5 }, true)
 		self.object:remove()
@@ -186,7 +181,6 @@ local function pearl_tp(player, pos)
 	player:set_hp(player:get_hp() - 5, { type = "fall", from = "mod" })
 end
 
--- Movement function of ender pearl
 local function pearl_on_step(self, dtime)
 	self.timer = self.timer + dtime
 	local pos = self.object:get_pos()
@@ -195,7 +189,6 @@ local function pearl_on_step(self, dtime)
 	local nn = node.name
 	local def = minetest.registered_nodes[node.name]
 
-	-- Destroy when hitting a solid node
 	if self._lastpos.x~=nil then
 		local walkable = (def and def.walkable)
 
@@ -207,19 +200,13 @@ local function pearl_on_step(self, dtime)
 		elseif walkable or nn == "mcl_core:vine" or nn == "mcl_core:deadbush" or minetest.get_item_group(nn, "flower") ~= 0 or minetest.get_item_group(nn, "sapling") ~= 0 or minetest.get_item_group(nn, "plant") ~= 0 or minetest.get_item_group(nn, "mushroom") ~= 0 or not def then
 			local player = self._thrower and minetest.get_player_by_name(self._thrower)
 			if player then
-				-- Teleport and hurt player
-
-				-- First determine good teleport position
 				local dir = {x=0, y=0, z=0}
 
 				local v = self.object:get_velocity()
 				if walkable then
 					local vc = table.copy(v) -- vector for calculating
-					-- Node is walkable, we have to find a place somewhere outside of that node
 					vc = vector.normalize(vc)
 
-					-- Zero-out the two axes with a lower absolute value than
-					-- the axis with the strongest force
 					local lv, ld
 					lv, ld = math.abs(vc.y), "y"
 					if math.abs(vc.x) > lv then
@@ -232,23 +219,16 @@ local function pearl_on_step(self, dtime)
 					if ld ~= "y" then vc.y = 0 end
 					if ld ~= "z" then vc.z = 0 end
 
-					-- Final tweaks to the teleporting pos, based on direction
-					-- Impact from the side
 					dir.x = vc.x * -1
 					dir.z = vc.z * -1
 
-					-- Special case: top or bottom of node
 					if vc.y > 0 then
-						-- We need more space when impact is from below
 						dir.y = -2.3
 					elseif vc.y < 0 then
-						-- Standing on top
 						dir.y = 0.5
 					end
 				end
-				-- If node was not walkable, no modification to pos is made.
 
-				-- Final teleportation position
 				local telepos = vector.add(pos, dir)
 				local telenode = minetest.get_node(telepos)
 
@@ -264,7 +244,6 @@ local function pearl_on_step(self, dtime)
 				end
 
 				local oldpos = player:get_pos()
-				-- Teleport and hurt player, detach if attached
 				if player:get_attach() then
 					mcl_util.detach_object(player, false, function(player)
 						pearl_tp(player, telepos)
@@ -273,7 +252,6 @@ local function pearl_on_step(self, dtime)
 					pearl_tp(player, telepos)
 				end
 
-				-- 10% chance to spawn endermite at the player's origin
 				if math.random(10) == 1 then
 					minetest.add_entity(oldpos, "mobs_mc:endermite")
 				end
@@ -300,7 +278,6 @@ minetest.register_entity("mcl_throwing:ender_pearl_entity", pearl_ENTITY)
 
 local how_to_throw = S("Use the punch key to throw.")
 
--- Snowball
 minetest.register_craftitem("mcl_throwing:snowball", {
 	description = S("Snowball"),
 	_tt_help = S("Throwable"),
@@ -313,7 +290,6 @@ minetest.register_craftitem("mcl_throwing:snowball", {
 	_on_dispense = mcl_throwing.dispense_function,
 })
 
--- Egg
 minetest.register_craftitem("mcl_throwing:egg", {
 	description = S("Egg"),
 	_tt_help = S("Throwable").."\n"..S("Chance to hatch chicks when broken"),
@@ -327,7 +303,6 @@ minetest.register_craftitem("mcl_throwing:egg", {
 	groups = { craftitem = 1 },
 })
 
--- Ender Pearl
 minetest.register_craftitem("mcl_throwing:ender_pearl", {
 	description = S("Ender Pearl"),
 	_tt_help = S("Throwable").."\n"..minetest.colorize(mcl_colors.YELLOW, S("Teleports you on impact for cost of 5 HP")),

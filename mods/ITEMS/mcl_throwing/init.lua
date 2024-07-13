@@ -2,10 +2,6 @@ mcl_throwing = {}
 
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
---
--- Snowballs and other throwable items
---
-
 local GRAVITY = tonumber(minetest.settings:get("movement_gravity"))
 
 local entity_mapping = {}
@@ -36,7 +32,6 @@ function mcl_throwing.throw(throw_item, pos, dir, velocity, thrower)
 	return obj
 end
 
--- Throw item
 function mcl_throwing.get_player_throw_function(_, velocity)
 	local function func(item, player, _)
 		local playerpos = player:get_pos()
@@ -51,15 +46,12 @@ function mcl_throwing.get_player_throw_function(_, velocity)
 end
 
 function mcl_throwing.dispense_function(stack, dispenserpos, _, _, dropdir)
-	-- Launch throwable item
 	local shootpos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 	mcl_throwing.throw(stack:get_name(), shootpos, dropdir)
 end
 
--- Staticdata handling because objects may want to be reloaded
 function mcl_throwing.get_staticdata(self)
 	local thrower
-	-- Only save thrower if it's a player name
 	if type(self._thrower) == "string" then
 		thrower = self._thrower
 	end
