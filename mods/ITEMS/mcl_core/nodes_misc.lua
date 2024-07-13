@@ -156,18 +156,13 @@ minetest.register_node("mcl_core:deadbush", {
 	},
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
+	_mcl_burntime = 5
 })
 
 mcl_flowerpots.register_potted_flower("mcl_core:deadbush", {
 	name = "deadbush",
 	desc = S("Dead Bush"),
 	image = "default_dry_shrub.png",
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_core:deadbush",
-	burntime = 5,
 })
 
 minetest.register_node("mcl_core:barrier", {

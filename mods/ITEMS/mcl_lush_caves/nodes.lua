@@ -357,6 +357,7 @@ local tpl_azalea = {
 	sunlight_propagates = true,
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
+	_mcl_burntime = 5,
 	use_texture_alpha = "clip",
 	node_placement_prediction = "",
 	on_place = mcl_util.generate_on_place_plant_function(function(pos, node, itemstack)
@@ -416,15 +417,3 @@ local azalea_flowering = table.merge(
 })
 azalea_flowering.groups.compostability = 85
 minetest.register_node("mcl_lush_caves:azalea_flowering", azalea_flowering)
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_lush_caves:azalea",
-	burntime = 32,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_lush_caves:azalea_flowering",
-	burntime = 32,
-})
