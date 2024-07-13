@@ -22,9 +22,6 @@ function tnt.ignite(pos)
 	return e
 end
 
----Add smoke particle of entity at pos.
----
----Intended to be called every step.
 function tnt.smoke_step(pos)
 	minetest.add_particle({
 		pos                = vector.offset(pos, 0, 0.5, 0),
@@ -114,7 +111,6 @@ minetest.register_node("mcl_tnt:tnt", {
 local TNT = {
 	initial_properties = {
 		physical = true, -- Collides with things
-		--weight = -100,
 		collisionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5 },
 		visual = "cube",
 		textures = {
@@ -127,7 +123,6 @@ local TNT = {
 		},
 	},
 	description = S("TNT"),
-	-- Initial value for our timer
 	timer = 0,
 	blinktimer = 0,
 	tnt_knockback = true,
@@ -137,7 +132,6 @@ local TNT = {
 }
 
 function TNT:check_water_flow(p)
-	-- Add water flowing for TNT
 	local node, nn, def
 	node = minetest.get_node_or_nil(p)
 	if node then
@@ -145,18 +139,13 @@ function TNT:check_water_flow(p)
 		def = minetest.registered_nodes[nn]
 	end
 
-	-- Move item around on flowing liquids
 	if def and def.liquidtype == "flowing" then
 
-		--[[ Get flowing direction (function call from flowlib), if there's a liquid.
-		NOTE: According to Qwertymine, flowlib.quickflow is only reliable for liquids with a flowing distance of 7.
-		Luckily, this is exactly what we need if we only care about water, which has this flowing distance. ]]
 		local vec = flowlib.quick_flow(p, node)
 		-- Just to make sure we don't manipulate the speed for no reason
 		if vec.x ~= 0 or vec.y ~= 0 or vec.z ~= 0 then
 			-- Minecraft Wiki: Flowing speed is "about 1.39 meters per second"
 			local f = 1.39
-			-- Set new item moving speed into the direciton of the liquid, keeping vertical acceleration untouched
 			local newv = vector.multiply(vec, f)
 			local yaccel = self.object:get_acceleration().y
 			self.object:set_acceleration({x = 0, y = yaccel, z = 0})
@@ -170,7 +159,6 @@ function TNT:check_water_flow(p)
 			return
 		end
 	elseif self._flowing == true then
-		-- Disable flowing physics if not on/in flowing liquid
 		self._flowing = false
 		return
 	end
@@ -184,55 +172,6 @@ function TNT:on_activate(_, _)
 	self.object:set_acceleration(vector.new(0, -10, 0))
 	self.object:set_texture_mod("^mcl_tnt_blink.png")
 end
-
---[[local function add_effects(pos, radius, drops)
-	minetest.add_particlespawner({
-		amount = 64,
-		time = 0.5,
-		minpos = vector.subtract(pos, radius / 2),
-		maxpos = vector.add(pos, radius / 2),
-		minvel = vector.new(-10, -10, -10),
-		maxvel = vector.new(10, 10, 10),
-		minacc = vector.new(),
-		maxacc = vector.new(),
-		minexptime = 1,
-		maxexptime = 2.5,
-		minsize = radius * 1,
-		maxsize = radius * 3,
-		texture = "mcl_particles_smoke.png",
-	})
-
-	-- we just dropped some items. Look at the items entities and pick
-	-- one of them to use as texture
-	local texture = "mcl_particles_smoke.png" --fallback texture
-	local most = 0
-	for name, stack in pairs(drops) do
-		local count = stack:get_count()
-		if count > most then
-			most = count
-			local def = minetest.registered_nodes[name]
-			if def and def.tiles and def.tiles[1] then
-				texture = def.tiles[1]
-			end
-		end
-	end
-
-	minetest.add_particlespawner({
-		amount = 32,
-		time = 0.1,
-		minpos = vector.subtract(pos, radius / 2),
-		maxpos = vector.add(pos, radius / 2),
-		minvel = vector.new(-3, 0, -3),
-		maxvel = vector.new(3, 5, 3),
-		minacc = vector.new(0, -10, 0),
-		minexptime = 0.8,
-		maxexptime = 2.0,
-		minsize = radius * 0.66,
-		maxsize = radius * 2,
-		texture = texture,
-		collisiondetection = true,
-	})
-end]]
 
 function TNT:on_step(dtime, _)
 	local pos = self.object:get_pos()
