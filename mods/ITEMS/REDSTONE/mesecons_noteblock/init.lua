@@ -50,6 +50,7 @@ S("The note block will only play a note when it is below air, otherwise, it stay
 	}},
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
+	_mcl_burntime = 15
 })
 
 minetest.register_craft({
@@ -59,12 +60,6 @@ minetest.register_craft({
 		{"group:wood", "mesecons:redstone", "group:wood"},
 		{"group:wood", "group:wood", "group:wood"},
 	}
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mesecons_noteblock:noteblock",
-	burntime = 15
 })
 
 local soundnames_piano = {

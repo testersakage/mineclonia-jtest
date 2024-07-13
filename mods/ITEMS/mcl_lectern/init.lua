@@ -26,6 +26,7 @@ minetest.register_node("mcl_lectern:lectern", {
 	node_placement_prediction = "",
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 2,
+	_mcl_burntime = 15,
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -85,10 +86,4 @@ minetest.register_craft({
 		{"", "mcl_books:bookshelf", ""},
 		{"", "group:wood_slab", ""},
 	}
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_lectern:lectern",
-	burntime = 15,
 })

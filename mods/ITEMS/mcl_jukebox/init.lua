@@ -266,12 +266,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 	end,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 2,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_jukebox:jukebox",
-	burntime = 15,
+	_mcl_burntime = 15
 })
 
 mcl_jukebox.register_record({
