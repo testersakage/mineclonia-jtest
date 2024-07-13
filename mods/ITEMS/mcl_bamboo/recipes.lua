@@ -34,11 +34,6 @@ minetest.register_craft({
 			 {"group:bamboo_tree", "", "group:bamboo_tree"}}
 })
 
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_bamboo:scaffolding",
-	burntime = 20
-})
 
 minetest.register_craft({
 	type = "fuel",
@@ -48,15 +43,10 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "fuel",
-	recipe = "mcl_bamboo:bamboo_mosaic",
-	burntime = 7.5,
-})
-
-minetest.register_craft({
-	type = "fuel",
 	recipe = "mcl_stairs:slab_bamboo_mosaic",
 	burntime = 7.5,
 })
+
 minetest.register_craft({
 	type = "fuel",
 	recipe = "mcl_stairs:stair_bamboo_mosaic",

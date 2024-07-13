@@ -121,6 +121,7 @@ minetest.register_node("mcl_bamboo:bamboo_mosaic",  {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 2,
+	_mcl_burntime = 15
 })
 
 local adjacents = {
@@ -181,6 +182,7 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
+	_mcl_burntime = 2.5,
 	on_place = function(itemstack, placer, ptd)
 		if not placer or not placer:is_player() then
 			return itemstack
