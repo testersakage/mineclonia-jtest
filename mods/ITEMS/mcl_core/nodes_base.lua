@@ -738,6 +738,7 @@ minetest.register_node("mcl_core:coalblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_burntime = 800
 })
 
 minetest.register_node("mcl_core:ironblock", {

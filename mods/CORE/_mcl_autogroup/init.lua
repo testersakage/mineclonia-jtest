@@ -399,6 +399,15 @@ local function overwrite()
 				tool_capabilities = toolcaps
 			})
 		end
+
+		if tdef._mcl_burntime and tdef._mcl_burntime > 0 then
+			minetest.register_craft({
+				type = "fuel",
+				recipe = tname,
+				burntime = tdef._mcl_burntime,
+				replacements = tdef._mcl_fue_replacements
+			})
+		end
 	end
 end
 

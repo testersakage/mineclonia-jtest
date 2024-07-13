@@ -13,7 +13,7 @@ minetest.register_craftitem("mcl_core:stick", {
 	inventory_image = "default_stick.png",
 	groups = { craftitem=1, stick=1 },
 	_mcl_toollike_wield = true,
-	_mcl_burntime = 0.5
+	_mcl_burntime = 5
 })
 
 minetest.register_craftitem("mcl_core:paper", {
@@ -29,7 +29,7 @@ minetest.register_craftitem("mcl_core:coal_lump", {
 	_doc_items_hidden = false,
 	inventory_image = "default_coal_lump.png",
 	groups = { craftitem=1, coal=1 },
-	_mcl_burntime = 8
+	_mcl_burntime = 80
 })
 
 minetest.register_craftitem("mcl_core:charcoal_lump", {
@@ -38,7 +38,7 @@ minetest.register_craftitem("mcl_core:charcoal_lump", {
 	_doc_items_hidden = false,
 	inventory_image = "mcl_core_charcoal.png",
 	groups = { craftitem=1, coal=1 },
-	_mcl_burntime = 8
+	_mcl_burntime = 80
 })
 
 minetest.register_craftitem("mcl_core:iron_nugget", {
@@ -124,7 +124,7 @@ minetest.register_craftitem("mcl_core:bowl",{
 	_doc_items_longdesc = S("Bowls are mainly used to hold tasty soups."),
 	inventory_image = "mcl_core_bowl.png",
 	groups = { craftitem = 1 },
-	_mcl_burntime = 1
+	_mcl_burntime = 10
 })
 
 minetest.register_craftitem("mcl_core:apple", {

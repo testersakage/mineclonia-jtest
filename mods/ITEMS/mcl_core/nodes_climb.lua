@@ -76,6 +76,7 @@ minetest.register_node("mcl_core:ladder", {
 
 	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
+	_mcl_burntime = 15,
 	on_rotate = rotate_climbable,
 })
 
