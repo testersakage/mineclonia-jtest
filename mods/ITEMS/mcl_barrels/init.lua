@@ -149,6 +149,7 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 	on_destruct = close_forms,
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
+	_mcl_burntime = 15
 })
 
 minetest.register_node("mcl_barrels:barrel_open", {
@@ -213,10 +214,4 @@ minetest.register_craft({
 		{ "group:wood", "",                "group:wood" },
 		{ "group:wood", "group:wood_slab", "group:wood" },
 	},
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_barrels:barrel_closed",
-	burntime = 15,
 })

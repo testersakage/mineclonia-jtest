@@ -92,6 +92,7 @@ minetest.register_node("mcl_beehives:beehive", {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
+	_mcl_burntime = 15,
 	drop = "",
 	after_dig_node = dig_hive,
 })
@@ -149,6 +150,7 @@ minetest.register_node("mcl_beehives:bee_nest", {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
+	_mcl_burntime = 15,
 	drop = "",
 	after_dig_node = dig_hive,
 })
@@ -201,18 +203,6 @@ minetest.register_craft({
 		{ "mcl_honey:honeycomb", "mcl_honey:honeycomb", "mcl_honey:honeycomb" },
 		{ "group:wood", "group:wood", "group:wood" },
 	},
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:bee_nest",
-	burntime = 15,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:beehive",
-	burntime = 15,
 })
 
 -- Temporary ABM to update honey levels

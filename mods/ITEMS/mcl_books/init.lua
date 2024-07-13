@@ -331,6 +331,7 @@ minetest.register_node("mcl_books:bookshelf", {
 	_mcl_blast_resistance = 1.5,
 	_mcl_hardness = 1.5,
 	_mcl_silk_touch_drop = true,
+	_mcl_burntime = 15,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
@@ -367,10 +368,4 @@ minetest.register_craft({
 		{ "mcl_books:book", "mcl_books:book", "mcl_books:book" },
 		{ "group:wood",     "group:wood",     "group:wood" },
 	}
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_books:bookshelf",
-	burntime = 15,
 })
