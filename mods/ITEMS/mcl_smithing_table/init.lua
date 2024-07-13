@@ -290,7 +290,8 @@ minetest.register_node("mcl_smithing_table:table", {
 	end,
 
 	_mcl_blast_resistance = 2.5,
-	_mcl_hardness = 2.5
+	_mcl_hardness = 2.5,
+	_mcl_burntime = 15
 })
 
 
@@ -301,12 +302,6 @@ minetest.register_craft({
 		{ "group:wood", "group:wood", "" },
 		{ "group:wood", "group:wood", "" }
 	},
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_smithing_table:table",
-	burntime = 15,
 })
 
 -- this is the exact same as mcl_smithing_table.upgrade_item_netherite , in case something relies on the old function

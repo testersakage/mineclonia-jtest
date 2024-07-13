@@ -160,6 +160,7 @@ minetest.register_node("mcl_loom:loom", {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
+	_mcl_burntime = 15,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
@@ -250,12 +251,6 @@ minetest.register_craft({
 		{ "mcl_mobitems:string", "mcl_mobitems:string", "" },
 		{ "group:wood", "group:wood", "" },
 	}
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_loom:loom",
-	burntime = 15,
 })
 
 minetest.register_lbm({

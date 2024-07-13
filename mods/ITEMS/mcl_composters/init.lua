@@ -32,12 +32,6 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_composters:composter",
-	burntime = 15,
-})
-
 --- Fill the composter when rightclicked.
 --
 -- `on_rightclick` handler for composter blocks of all fill levels except
@@ -267,6 +261,7 @@ minetest.register_node("mcl_composters:composter", {
 	_mcl_hardness = 0.6,
 	_mcl_blast_resistance = 0.6,
 	_mcl_compost_level = 0,
+	_mcl_burntime = 15,
 	on_rightclick = composter_add_item,
 	_on_hopper_in = on_hopper_in,
 })
