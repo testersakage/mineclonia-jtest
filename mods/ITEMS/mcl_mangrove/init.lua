@@ -129,6 +129,7 @@ minetest.register_node("mcl_mangrove:mangrove_roots", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0.7,
 	_mcl_hardness = 0.7,
+	_mcl_burntime = 15,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = { "mcl_mangrove:mangrove_roots 1", "mcl_mangrove:mangrove_roots 2", "mcl_mangrove:mangrove_roots 3", "mcl_mangrove:mangrove_roots 4" },
 	_on_bucket_place = function(itemstack,placer,pointed_thing)
@@ -335,12 +336,6 @@ minetest.register_craft({
 	recipe = {
 		{"mcl_mangrove:mangrove_roots", "mcl_mud:mud",},
 	}
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_mangrove:mangrove_roots",
-	burntime = 15,
 })
 
 local adjacents = {

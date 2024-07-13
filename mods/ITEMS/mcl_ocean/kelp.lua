@@ -606,6 +606,7 @@ minetest.register_node("mcl_ocean:dried_kelp_block", {
 	on_rotate = on_rotate,
 	_mcl_hardness = 0.5,
 	_mcl_blast_resistance = 2.5,
+	_mcl_burntime = 200
 })
 
 minetest.register_craft({
@@ -627,11 +628,6 @@ minetest.register_craft({
 		{ "mcl_ocean:dried_kelp_block" },
 	},
 	output = "mcl_ocean:dried_kelp 9",
-})
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_ocean:dried_kelp_block",
-	burntime = 200,
 })
 
 --------------------------------------------------------------------------------
