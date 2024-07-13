@@ -56,6 +56,7 @@ local function get_shulker_stack(pos)
 	local boxitem_meta = boxitem:get_meta()
 	boxitem_meta:set_string("description", meta:get_string("description"))
 	boxitem_meta:set_string("name", meta:get_string("name"))
+	boxitem_meta:set_string("inv", data)
 	boxitem:set_metadata(data)
 	return boxitem
 end
@@ -121,12 +122,20 @@ for c, cdef in pairs(mcl_dyes.colors) do
 		end,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			local nmeta = minetest.get_meta(pos)
-			local imetadata = itemstack:get_metadata()
-			local iinv_main = minetest.deserialize(imetadata)
+			local imeta = itemstack:get_meta()
+
+			-- Convert old itemstacks to not use get_metadata()
+			if not imeta:contains("inv") and
+					(itemstack:get_metadata() ~= "") then
+				imeta:set_string("inv", itemstack:get_metadata())
+				itemstack:set_metadata("") -- clear
+			end
+
+			local iinv_main = minetest.deserialize(imeta:get_string("inv"))
 			local ninv = nmeta:get_inventory()
 			ninv:set_list("main", iinv_main)
 			ninv:set_size("main", 9 * 3)
-			set_shulkerbox_meta(nmeta, itemstack:get_meta())
+			set_shulkerbox_meta(nmeta, imeta)
 
 			if minetest.is_creative_enabled(placer:get_player_name()) then
 				if not ninv:is_empty("main") then
@@ -143,11 +152,11 @@ for c, cdef in pairs(mcl_dyes.colors) do
 			if minetest.registered_nodes[dropnode.name].buildable_to then
 				minetest.set_node(droppos, { name = small_name, param2 = minetest.dir_to_facedir(dropdir) })
 				local ninv = minetest.get_inventory({ type = "node", pos = droppos })
-				local imetadata = stack:get_metadata()
-				local iinv_main = minetest.deserialize(imetadata)
+				local imeta = stack:get_meta()
+				local iinv_main = minetest.deserialize(imeta:get_string("inv"))
 				ninv:set_list("main", iinv_main)
 				ninv:set_size("main", 9 * 3)
-				set_shulkerbox_meta(minetest.get_meta(droppos), stack:get_meta())
+				set_shulkerbox_meta(minetest.get_meta(droppos), imeta)
 				stack:take_item()
 			end
 			return stack
@@ -199,12 +208,20 @@ for c, cdef in pairs(mcl_dyes.colors) do
 		end,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			local nmeta = minetest.get_meta(pos)
-			local imetadata = itemstack:get_metadata()
-			local iinv_main = minetest.deserialize(imetadata)
+			local imeta = itemstack:get_meta()
+
+			-- Convert old itemstacks to not use get_metadata()
+			if not imeta:contains("inv") and
+					(itemstack:get_metadata() ~= "") then
+				imeta:set_string("inv", itemstack:get_metadata())
+				itemstack:set_metadata("") -- clear
+			end
+
+			local iinv_main = minetest.deserialize(imeta:get_string("inv"))
 			local ninv = nmeta:get_inventory()
 			ninv:set_list("main", iinv_main)
 			ninv:set_size("main", 9 * 3)
-			set_shulkerbox_meta(nmeta, itemstack:get_meta())
+			set_shulkerbox_meta(nmeta, imeta)
 
 			if minetest.is_creative_enabled(placer:get_player_name()) then
 				if not ninv:is_empty("main") then
