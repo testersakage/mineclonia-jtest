@@ -494,6 +494,7 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 		_doc_items_entry_name = helpname,
 		_doc_items_longdesc = longdesc,
 		_doc_items_usagehelp = usagehelp,
+		_mcl_burntime = 60,
 		inventory_image = inventory_image,
 		liquids_pointable = true,
 		groups = { boat = 1, transport = 1},
@@ -568,9 +569,3 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 		})
 	end
 end
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:boat",
-	burntime = 20,
-})

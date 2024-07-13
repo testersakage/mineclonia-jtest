@@ -45,6 +45,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_color = color,
 		_mcl_hardness = 0.8,
 		_mcl_blast_resistance = 0.8,
+		_mcl_burntime = 5
 	})
 	minetest.register_node("mcl_wool:"..color.."_carpet", {
 		description = S("@1 Carpet", colordef.readable_name),
@@ -69,6 +70,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_color = color,
 		_mcl_hardness = 0.1,
 		_mcl_blast_resistance = 0.1,
+		_mcl_burntime = 3.35
 	})
 
 	if mod_doc and not is_canonical then
@@ -94,16 +96,4 @@ minetest.register_craft({
 		{ "mcl_mobitems:string", "mcl_mobitems:string" },
 		{ "mcl_mobitems:string", "mcl_mobitems:string" },
 	},
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:wool",
-	burntime = 5,
-})
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:carpet",
-	-- Original value: 3.35
-	burntime = 3,
 })
