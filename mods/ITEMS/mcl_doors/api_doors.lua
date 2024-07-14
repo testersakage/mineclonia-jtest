@@ -106,6 +106,7 @@ function mcl_doors:register_door(name, def)
 		_tt_help = tt_help,
 		_doc_items_longdesc = longdesc,
 		_doc_items_usagehelp = usagehelp,
+		_mcl_burntime = def._mcl_burntime,
 		inventory_image = def.inventory_image,
 		groups = craftitem_groups,
 		on_place = function(itemstack, placer, pointed_thing)

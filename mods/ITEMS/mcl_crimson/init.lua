@@ -90,7 +90,7 @@ local nether_wood_groups = { handy = 1, axey = 1, material_wood = 1, }
 
 mcl_trees.register_wood("crimson",{
 	readable_name=S("Crimson"),
-	sign = {_mcl_burntime = 0},
+	sign = {_mcl_burntime = 0 },
 	sign_color="#810000",
 	boat=false,
 	chest_boat=false,
@@ -141,11 +141,15 @@ mcl_trees.register_wood("crimson",{
 		wield_image = "mcl_crimson_crimson_trapdoor.png",
 		_mcl_burntime = 0
 	},
+	button = { _mcl_burntime = 0 },
+	pressure_plate = { _mcl_burntime = 0 },
+	stairs = { _mcl_burntime = 0 },
+	slab = { _mcl_burntime = 0}
 })
 
 mcl_trees.register_wood("warped",{
 	readable_name=S("Warped"),
-	sign = {_mcl_burntime = 0},
+	sign = {_mcl_burntime = 0 },
 	sign_color="#0E4C4C",
 	boat=false,
 	chest_boat=false,
@@ -196,6 +200,10 @@ mcl_trees.register_wood("warped",{
 		wield_image = "mcl_crimson_warped_trapdoor.png",
 		_mcl_burntime = 0
 	},
+	button = { _mcl_burntime = 0 },
+	pressure_plate = { _mcl_burntime = 0 },
+	stairs = { _mcl_burntime = 0 },
+	slab = { _mcl_burntime = 0}
 })
 
 minetest.register_node("mcl_crimson:warped_fungus", {
