@@ -134,7 +134,7 @@ end
 --		By default, is triggered by all entities
 -- longdesc:	Customized long description for the in-game help (if omitted, a dummy text is used)
 
-function mesecon.register_pressure_plate(basename, description, textures_off, textures_on, image_w, image_i, recipe, sounds, plusgroups, activated_by, longdesc)
+function mesecon.register_pressure_plate(basename, description, textures_off, textures_on, image_w, image_i, recipe, sounds, plusgroups, activated_by, longdesc, burntime)
 	local groups_off = table.copy(plusgroups)
 	groups_off.attached_node = 1
 	groups_off.dig_by_piston = 1
@@ -183,6 +183,7 @@ function mesecon.register_pressure_plate(basename, description, textures_off, te
 		mesecons = {receptor = { state = mesecon.state.off, rules = mesecon.rules.pplate }},
 		_doc_items_longdesc = longdesc,
 		_tt_help = tt,
+		_mcl_burntime = burntime,
 	},{
 		node_box = pp_box_on,
 		selection_box = pp_box_on,

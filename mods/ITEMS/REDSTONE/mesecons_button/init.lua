@@ -96,7 +96,7 @@ end
 
 local buttonuse = S("Use the button to push it.")
 
-function mesecon.register_button(basename, description, texture, recipeitem, sounds, plusgroups, button_timer, push_by_arrow, longdesc, button_sound)
+function mesecon.register_button(basename, description, texture, recipeitem, sounds, plusgroups, button_timer, push_by_arrow, longdesc, button_sound, burntime)
 	local groups_off = table.copy(plusgroups)
 	groups_off.attached_node=1
 	groups_off.dig_by_water=1
@@ -171,6 +171,7 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
+		_mcl_burntime = burntime
 	})
 
 	minetest.register_node(":mesecons_button:button_"..basename.."_on", {

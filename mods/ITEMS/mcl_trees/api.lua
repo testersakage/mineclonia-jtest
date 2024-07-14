@@ -199,6 +199,7 @@ local tpl_log = {
 	_on_axe_place = mcl_trees.strip_tree,
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
+	_mcl_burntime = 15
 }
 local tpl_wood = {
 	_doc_items_hidden = false,
@@ -207,6 +208,7 @@ local tpl_wood = {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 2,
+	_mcl_burntime = 15
 }
 local tpl_leaves = {
 	_doc_items_hidden = false,
@@ -265,6 +267,7 @@ local tpl_sapling = {
 	node_placement_prediction = "",
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
+	_mcl_burntime = 5
 }
 
 local tpl_door = {
@@ -273,6 +276,7 @@ local tpl_door = {
 	groups = {handy=1,axey=1, material_wood=1, flammable=-1},
 	_mcl_hardness = 3,
 	_mcl_blast_resistance = 3,
+	_mcl_burntime = 10,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 }
 local tpl_trapdoor = {
@@ -281,6 +285,7 @@ local tpl_trapdoor = {
 	groups = {handy=1,axey=1, mesecon_effector_on=1, material_wood=1, flammable=-1},
 	_mcl_hardness = 3,
 	_mcl_blast_resistance = 3,
+	_mcl_burntime = 15,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 }
 
@@ -460,7 +465,7 @@ function mcl_trees.register_wood(name, p)
 	end
 	if p.fence == nil or type(p.fence) == "table" then
 		p.fence = p.fence or {}
-		mcl_fences.register_fence(name.."_fence", p.fence.description or S("@1 Fence", rname), p.fence.tiles and p.fence.tiles[1] or "mcl_fences_fence_"..name..".png", p.fence.groups or table.merge(wood_groups,{fence_wood = 1}), p.fence._mcl_blast_hardness or 2, p.fence._mcl_blast_resistance or 3 , p.fence.connects_to or {"group:fence_wood","group:fence"}, p.fence.sounds or wood_sounds)
+		mcl_fences.register_fence(name.."_fence", p.fence.description or S("@1 Fence", rname), p.fence.tiles and p.fence.tiles[1] or "mcl_fences_fence_"..name..".png", p.fence.groups or table.merge(wood_groups,{fence_wood = 1}), p.fence._mcl_blast_hardness or 2, p.fence._mcl_blast_resistance or 3 , p.fence.connects_to or {"group:fence_wood","group:fence"}, p.fence.sounds or wood_sounds, 15)
 		minetest.register_craft({
 			output = "mcl_fences:"..name.."_fence 3",
 			recipe = {
@@ -471,7 +476,7 @@ function mcl_trees.register_wood(name, p)
 	end
 	if p.fence_gate == nil or type(p.fence_gate) == "table" then
 		p.fence_gate = p.fence_gate or {}
-		mcl_fences.register_fence_gate(name.."_fence", p.fence_gate.description or S("@1 Fence Gate", rname), p.fence_gate.tiles and p.fence_gate.tiles[1] or "mcl_fences_fence_"..name..".png", p.fence_gate.groups or table.merge(wood_groups,{fence_wood = 1}), p.fence_gate._mcl_blast_hardness or 2, p.fence_gate._mcl_blast_resistance or 3,  p.fence_gate.sounds or wood_sounds, p.fence_gate.sound_open, p.fence_gate.sound_close, p.fence_gate.sound_gain_open, p.fence_gate.sound_gain_close)
+		mcl_fences.register_fence_gate(name.."_fence", p.fence_gate.description or S("@1 Fence Gate", rname), p.fence_gate.tiles and p.fence_gate.tiles[1] or "mcl_fences_fence_"..name..".png", p.fence_gate.groups or table.merge(wood_groups,{fence_wood = 1}), p.fence_gate._mcl_blast_hardness or 2, p.fence_gate._mcl_blast_resistance or 3,  p.fence_gate.sounds or wood_sounds, p.fence_gate.sound_open, p.fence_gate.sound_close, p.fence_gate.sound_gain_open, p.fence_gate.sound_gain_close, 15)
 		minetest.register_craft({
 			output = "mcl_fences:"..name.."_fence_gate",
 			recipe = {
@@ -495,11 +500,6 @@ function mcl_trees.register_wood(name, p)
 				{"mcl_trees:wood_"..name, "mcl_trees:wood_"..name}
 			}
 		})
-		minetest.register_craft({
-			type = "fuel",
-			recipe = "mcl_doors:door_"..name,
-			burntime = 10,
-		})
 	end
 	if p.trapdoor == nil or type(p.trapdoor) == "table" then
 		mcl_doors:register_trapdoor("mcl_doors:trapdoor_"..name,table.merge(tpl_trapdoor, {
@@ -515,11 +515,6 @@ function mcl_trees.register_wood(name, p)
 				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
 			}
 		})
-		minetest.register_craft({
-			type = "fuel",
-			recipe = "mcl_doors:trapdoor_"..name,
-			burntime = 15,
-		})
 	end
 
 	if p.stairs == nil or type(p.stairs) == "table" then
@@ -528,13 +523,15 @@ function mcl_trees.register_wood(name, p)
 			baseitem="mcl_trees:wood_"..name,
 			description = S("@1 Stairs", rname),
 			groups = { wood_stairs = 1 },
+			_mcl_burntime = 15
 		}, p.stairs))
 		if p.bark == nil or type(p.bark) == "table"  then
 			mcl_stairs.register_stair(name.."_bark", table.merge({
 				baseitem="mcl_trees:bark_"..name,
 				description = S("@1 Bark Stairs", rname),
 				groups = { bark_stairs = 1 },
-				recipeitem=bark_stairs and "mcl_trees:bark_"..name or ""
+				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
+				_mcl_burntime = 15
 			}, p.stairs))
 		end
 	end
@@ -545,20 +542,23 @@ function mcl_trees.register_wood(name, p)
 			baseitem="mcl_trees:wood_"..name,
 			description = S("@1 Slab", rname),
 			groups = { wood_slab = 1 },
-			register_stair_and_slab = false
+			register_stair_and_slab = false,
+			_mcl_burntime = 15
 		})
 		if p.bark == nil or type(p.bark) == "table" then
 			mcl_stairs.register_slab(name.."_bark", table.merge({
 				baseitem="mcl_trees:bark_"..name,
 				description = S("@1 Bark Slab", rname),
 				groups = { bark_slab = 1 },
-				recipeitem=bark_stairs and "mcl_trees:bark_"..name or ""
+				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
+				_mcl_burntime = 15
 			}, p.slab))
 		end
 	end
 	if p.sign_color and ( p.sign == nil or type(p.sign) == "table" ) then
 		mcl_signs.register_sign(name,p.sign_color,table.merge({
 			description = S("@1 Sign", rname),
+			_mcl_burntime = 10
 		}, p.sign or {}))
 		minetest.register_craft({
 			output = "mcl_signs:wall_sign_"..name.." 3",
@@ -567,12 +567,6 @@ function mcl_trees.register_wood(name, p)
 				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
 				{"","mcl_core:stick",""},
 			}
-		})
-
-		minetest.register_craft({
-			type = "fuel",
-			recipe = "mcl_signs:wall_sign_"..name,
-			burntime = 10,
 		})
 	end
 
@@ -588,13 +582,9 @@ function mcl_trees.register_wood(name, p)
 			mcl_sounds.node_sound_wood_defaults(),
 			{axey=1, material_wood=1},
 			nil,
-			S("A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."))
-
-		minetest.register_craft({
-			type = "fuel",
-			recipe = "mesecons_pressureplates:pressure_plate_"..name.."_off",
-			burntime = 15
-		})
+			S("A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."),
+			15
+		)
 	end
 	if p.button == nil or type(p.button) == "table" then
 		mesecon.register_button(
@@ -607,13 +597,9 @@ function mcl_trees.register_wood(name, p)
 			1.5,
 			true,
 			S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
-			"mesecons_button_push_wood")
-
-		minetest.register_craft({
-			type = "fuel",
-			recipe = "mesecons_button:button_"..name.."_off",
-			burntime = 5,
-		})
+			"mesecons_button_push_wood",
+			15
+		)
 	end
 
 	if (p.sapling == nil or type(p.sapling) == "table") and (p.potted_sapling == nil or type(p.potted_sapling) == "table") then

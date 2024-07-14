@@ -20,7 +20,7 @@ local cz2 = {-2/16, -0.5, 2/16, 2/16, 1.01, 0.5} --unten(quer) z
 
 mcl_fences = {}
 
-function mcl_fences.register_fence(id, fence_name, texture, groups, hardness, blast_resistance, connects_to, sounds)
+function mcl_fences.register_fence(id, fence_name, texture, groups, hardness, blast_resistance, connects_to, sounds, burntime)
 	local cgroups = table.copy(groups)
 	if cgroups == nil then cgroups = {} end
 	cgroups.fence = 1
@@ -66,12 +66,13 @@ function mcl_fences.register_fence(id, fence_name, texture, groups, hardness, bl
 		sounds = sounds,
 		_mcl_blast_resistance = blast_resistance,
 		_mcl_hardness = hardness,
+		_mcl_burntime = burntime
 	})
 
 	return fence_id
 end
 
-function mcl_fences.register_fence_gate(id, fence_gate_name, texture, groups, hardness, blast_resistance, sounds, sound_open, sound_close, sound_gain_open, sound_gain_close)
+function mcl_fences.register_fence_gate(id, fence_gate_name, texture, groups, hardness, blast_resistance, sounds, sound_open, sound_close, sound_gain_open, sound_gain_close, burntime)
 	local meta2
 	local state2 = 0
 
@@ -230,6 +231,7 @@ function mcl_fences.register_fence_gate(id, fence_gate_name, texture, groups, ha
 		sounds = sounds,
 		_mcl_blast_resistance = blast_resistance,
 		_mcl_hardness = hardness,
+		_mcl_burntime = burntime,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
 				punch_gate(pos, node)

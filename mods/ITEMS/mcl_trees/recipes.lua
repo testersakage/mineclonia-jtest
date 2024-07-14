@@ -25,25 +25,7 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "fuel",
-	recipe = "group:tree",
-	burntime = 15,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:bark",
-	burntime = 15,
-})
-
-minetest.register_craft({
-	type = "fuel",
 	recipe = "mcl_trees:ladder",
-	burntime = 15,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:wood",
 	burntime = 15,
 })
 
@@ -65,17 +47,6 @@ minetest.register_craft({
 	burntime = 5,
 })
 
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:bark_stairs",
-	burntime = 15,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:bark_slab",
-	burntime = 8,
-})
 
 minetest.register_craft({
 	output = "mcl_trees:bowl 4",
