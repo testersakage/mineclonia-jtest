@@ -448,7 +448,7 @@ for colorid, colortab in pairs(mcl_banners.colors) do
 		-- Used for crafting.
 		groups = groups,
 		stack_max = 16,
-
+		_mcl_burntime = 15,
 		on_place = function(itemstack, placer, pointed_thing)
 			local above = pointed_thing.above
 			local under = pointed_thing.under
@@ -697,10 +697,3 @@ minetest.register_lbm({
 		respawn_banner_entity(pos, node)
 	end,
 })
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:banner",
-	burntime = 15,
-})
-
