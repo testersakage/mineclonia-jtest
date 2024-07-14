@@ -188,6 +188,7 @@ minetest.register_craftitem("mcl_mobitems:blaze_rod", {
 	wield_image = "mcl_mobitems_blaze_rod.png",
 	inventory_image = "mcl_mobitems_blaze_rod.png",
 	groups = { craftitem = 1 },
+	_mcl_burntime = 120
 })
 
 minetest.register_craftitem("mcl_mobitems:breeze_rod", {
@@ -196,7 +197,6 @@ minetest.register_craftitem("mcl_mobitems:breeze_rod", {
 	wield_image = "mcl_mobitems_breeze_rod.png",
 	inventory_image = "mcl_mobitems_breeze_rod.png",
 	groups = { craftitem = 1 },
-	_mcl_burntime = 120
 })
 
 minetest.register_craftitem("mcl_mobitems:blaze_powder", {
