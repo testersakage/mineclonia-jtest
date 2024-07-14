@@ -83,6 +83,7 @@ minetest.register_node("mesecons_solarpanel:solar_panel_off", {
 	end,
 	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
+	_mcl_burntime = 15
 })
 
 minetest.register_craft({
@@ -221,12 +222,6 @@ minetest.register_abm({
 			mesecon.receptor_off(pos, mesecon.rules.pplate)
 		end
 	end,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mesecons_solarpanel:solar_panel_off",
-	burntime = 15
 })
 
 if minetest.get_modpath("doc") then
