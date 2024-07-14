@@ -417,6 +417,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
+		_mcl_burntime = 15
 	})
 
 	local function close_forms(canonical_basename, pos)
@@ -1086,18 +1087,6 @@ minetest.register_craft({
 		{ "group:wood", "",           "group:wood" },
 		{ "group:wood", "group:wood", "group:wood" },
 	},
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_chests:chest",
-	burntime = 15,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mcl_chests:trapped_chest",
-	burntime = 15,
 })
 
 minetest.register_node("mcl_chests:ender_chest", {
