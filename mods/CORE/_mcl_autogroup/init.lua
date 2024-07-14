@@ -405,7 +405,7 @@ local function overwrite()
 				type = "fuel",
 				recipe = tname,
 				burntime = tdef._mcl_burntime,
-				replacements = tdef._mcl_fue_replacements
+				replacements = tdef._mcl_fuel_replacements
 			})
 		end
 	end
