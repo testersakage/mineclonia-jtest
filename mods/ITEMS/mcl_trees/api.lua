@@ -543,7 +543,7 @@ function mcl_trees.register_wood(name, p)
 			description = S("@1 Slab", rname),
 			groups = { wood_slab = 1 },
 			register_stair_and_slab = false,
-			_mcl_burntime = 15
+			_mcl_burntime = 7.5
 		})
 		if p.bark == nil or type(p.bark) == "table" then
 			mcl_stairs.register_slab(name.."_bark", table.merge({
@@ -551,7 +551,7 @@ function mcl_trees.register_wood(name, p)
 				description = S("@1 Bark Slab", rname),
 				groups = { bark_slab = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
-				_mcl_burntime = 15
+				_mcl_burntime = 7.5
 			}, p.slab))
 		end
 	end
@@ -598,7 +598,7 @@ function mcl_trees.register_wood(name, p)
 			true,
 			S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
 			"mesecons_button_push_wood",
-			15
+			5
 		)
 	end
 
