@@ -90,6 +90,7 @@ local nether_wood_groups = { handy = 1, axey = 1, material_wood = 1, }
 
 mcl_trees.register_wood("crimson",{
 	readable_name=S("Crimson"),
+	sign = {_mcl_burntime = 0},
 	sign_color="#810000",
 	boat=false,
 	chest_boat=false,
@@ -98,43 +99,53 @@ mcl_trees.register_wood("crimson",{
 	tree = {
 		tiles = {"crimson_hyphae.png", "crimson_hyphae.png","crimson_hyphae_side.png" },
 		groups = table.merge(nether_wood_groups,{tree = 1}),
+		_mcl_burntime = 0
 	},
 	bark = {
 		tiles = {"crimson_hyphae_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
+		_mcl_burntime = 0
 	},
 	wood = {
 		tiles = {"crimson_hyphae_wood.png"},
 		groups = table.merge(nether_wood_groups,{wood = 1}),
+		_mcl_burntime = 0
 	},
 	stripped = {
 		tiles = {"stripped_crimson_stem_top.png", "stripped_crimson_stem_top.png","stripped_crimson_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1}),
+		_mcl_burntime = 0
 	},
 	stripped_bark = {
 		tiles = {"stripped_crimson_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
+		_mcl_burntime = 0
 	},
 	fence = {
 		tiles = { "mcl_crimson_crimson_fence.png" },
+		_mcl_burntime = 0
 	},
 	fence_gate = {
 		tiles = { "mcl_crimson_crimson_fence.png" },
+		_mcl_burntime = 0
 	},
 	door = {
 		inventory_image = "mcl_crimson_crimson_door.png",
 		tiles_bottom = {"mcl_crimson_crimson_door_bottom.png","mcl_doors_door_crimson_side_upper.png"},
 		tiles_top = {"mcl_crimson_crimson_door_top.png","mcl_doors_door_crimson_side_upper.png"},
+		_mcl_burntime = 0
 	},
 	trapdoor = {
 		tile_front = "mcl_crimson_crimson_trapdoor.png",
 		tile_side = "mcl_crimson_crimson_trapdoor_side.png",
 		wield_image = "mcl_crimson_crimson_trapdoor.png",
+		_mcl_burntime = 0
 	},
 })
 
 mcl_trees.register_wood("warped",{
 	readable_name=S("Warped"),
+	sign = {_mcl_burntime = 0},
 	sign_color="#0E4C4C",
 	boat=false,
 	chest_boat=false,
@@ -143,38 +154,47 @@ mcl_trees.register_wood("warped",{
 	tree = {
 		tiles = {"warped_hyphae.png", "warped_hyphae.png","warped_hyphae_side.png" },
 		groups = table.merge(nether_wood_groups,{tree = 1}),
+		_mcl_burntime = 0
 	},
 	bark = {
 		tiles = {"warped_hyphae_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
+		_mcl_burntime = 0
 	},
 	wood = {
 		tiles = {"warped_hyphae_wood.png"},
 		groups = table.merge(nether_wood_groups,{wood = 1}),
+		_mcl_burntime = 0
 	},
 	stripped = {
 		tiles = {"stripped_warped_stem_top.png", "stripped_warped_stem_top.png","stripped_warped_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1}),
+		_mcl_burntime = 0
 	},
 	stripped_bark = {
 		tiles = {"stripped_warped_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
+		_mcl_burntime = 0
 	},
 	fence = {
 		tiles = { "mcl_crimson_warped_fence.png" },
+		_mcl_burntime = 0
 	},
 	fence_gate = {
 		tiles = { "mcl_crimson_warped_fence.png" },
+		_mcl_burntime = 0
 	},
 	door = {
 		inventory_image = "mcl_crimson_warped_door.png",
 		tiles_bottom = {"mcl_crimson_warped_door_bottom.png","mcl_doors_door_warped_side_upper.png"},
 		tiles_top = {"mcl_crimson_warped_door_top.png","mcl_doors_door_warped_side_upper.png"},
+		_mcl_burntime = 0
 	},
 	trapdoor = {
 		tile_front = "mcl_crimson_warped_trapdoor.png",
 		tile_side = "mcl_crimson_warped_trapdoor_side.png",
 		wield_image = "mcl_crimson_warped_trapdoor.png",
+		_mcl_burntime = 0
 	},
 })
 
