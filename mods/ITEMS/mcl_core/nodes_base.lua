@@ -43,6 +43,7 @@ minetest.register_node("mcl_core:stone_with_coal", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_core:coal_lump"
 })
 
 minetest.register_node("mcl_core:stone_with_iron", {
@@ -56,6 +57,7 @@ minetest.register_node("mcl_core:stone_with_iron", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_core:iron_ingot"
 })
 
 
@@ -70,6 +72,7 @@ minetest.register_node("mcl_core:stone_with_gold", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_core:gold_ingot"
 })
 
 local redstone_timer = 68.28
@@ -113,6 +116,7 @@ minetest.register_node("mcl_core:stone_with_redstone", {
 		max_count = 5,
 	},
 	_mcl_ore_lit = "mcl_core:stone_with_redstone_lit",
+	_mcl_cooking_output = "mesecons:redstone"
 })
 
 local function redstone_ore_reactivate(pos, node, puncher, pointed_thing)
@@ -183,6 +187,7 @@ minetest.register_node("mcl_core:stone_with_lapis", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_core:lapis"
 })
 
 minetest.register_node("mcl_core:stone_with_emerald", {
@@ -196,6 +201,7 @@ minetest.register_node("mcl_core:stone_with_emerald", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_core:emerald"
 })
 
 minetest.register_node("mcl_core:stone_with_diamond", {
@@ -209,6 +215,7 @@ minetest.register_node("mcl_core:stone_with_diamond", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_core:diamond"
 })
 
 minetest.register_node("mcl_core:stonebrick", {

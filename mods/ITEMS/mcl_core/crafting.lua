@@ -226,20 +226,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:iron_nugget",
-	recipe = "mcl_mobitems:iron_horse_armor",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:gold_nugget",
-	recipe = "mcl_mobitems:gold_horse_armor",
-	cooktime = 10,
-})
-
-minetest.register_craft({
 	output = "mcl_core:sandstone",
 	recipe = {
 		{"mcl_core:sand", "mcl_core:sand"},
@@ -433,20 +419,6 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "mcl_core:iron_ingot",
-	recipe = "mcl_core:stone_with_iron",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:gold_ingot",
-	recipe = "mcl_core:stone_with_gold",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
 	output = "mcl_core:brick",
 	recipe = "mcl_core:clay_lump",
 	cooktime = 10,
@@ -456,33 +428,5 @@ minetest.register_craft({
 	type = "cooking",
 	output = "mcl_core:charcoal_lump",
 	recipe = "group:tree",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:coal_lump",
-	recipe = "mcl_core:stone_with_coal",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:diamond",
-	recipe = "mcl_core:stone_with_diamond",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:emerald",
-	recipe = "mcl_core:stone_with_emerald",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:lapis",
-	recipe = "mcl_core:stone_with_lapis",
 	cooktime = 10,
 })

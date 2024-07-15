@@ -171,22 +171,14 @@ function mcl_armor.register_set(def)
 			_mcl_armor_element = name,
 			_mcl_armor_texture = get_armor_texture(textures, name, modname, itemname, itemstring),
 			_mcl_upgradable = def._mcl_upgradable,
-			_mcl_upgrade_item = upgrade_item
+			_mcl_upgrade_item = upgrade_item,
+			_mcl_cooking_output = def.cook_material
 		})
 
 		if def.craft_material then
 			minetest.register_craft({
 				output = itemstring,
 				recipe = element.craft(def.craft_material),
-			})
-		end
-
-		if def.cook_material then
-			minetest.register_craft({
-				type = "cooking",
-				output = def.cook_material,
-				recipe = itemstring,
-				cooktime = 10,
 			})
 		end
 	end

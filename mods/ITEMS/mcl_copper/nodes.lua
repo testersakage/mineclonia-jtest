@@ -29,7 +29,7 @@ minetest.register_node("mcl_copper:stone_with_copper", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
-
+	_mcl_cooking_output = "mcl_copper:copper_ingot"
 })
 
 minetest.register_node("mcl_copper:block_raw", {

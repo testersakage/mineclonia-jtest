@@ -379,7 +379,8 @@ minetest.register_craftitem("mcl_mobitems:iron_horse_armor", {
 		_mcl_armor_equip = "mcl_armor_equip_iron",
 	},
 	stack_max = 1,
-	groups = { horse_armor = 80 },
+	groups = { horse_armor = 85 },
+	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 
 
@@ -393,7 +394,8 @@ minetest.register_craftitem("mcl_mobitems:gold_horse_armor", {
 		_mcl_armor_equip = "mcl_armor_equip_iron",
 	},
 	stack_max = 1,
-	groups = { horse_armor = 72 },
+	groups = { horse_armor = 60 },
+	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 
 minetest.register_craftitem("mcl_mobitems:diamond_horse_armor", {

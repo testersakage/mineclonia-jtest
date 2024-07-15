@@ -44,7 +44,8 @@ minetest.register_node("mcl_nether:quartz_ore", {
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
-	_mcl_fortune_drop = mcl_core.fortune_drop_ore
+	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
+	_mcl_cooking_output = "mcl_nether:quartz"
 })
 
 minetest.register_node("mcl_nether:ancient_debris", {
@@ -56,7 +57,8 @@ minetest.register_node("mcl_nether:ancient_debris", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 30,
-	_mcl_silk_touch_drop = true
+	_mcl_silk_touch_drop = true,
+	_mcl_cooking_output = "mcl_nether:netherite_scrap"
 })
 
 minetest.register_node("mcl_nether:netheriteblock", {
@@ -371,20 +373,6 @@ minetest.register_craft({
 		{"mcl_nether:nether_brick", "mcl_nether:netherbrick", "mcl_nether:nether_brick"},
 		{"mcl_nether:nether_brick", "mcl_nether:netherbrick", "mcl_nether:nether_brick"},
 	}
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_nether:quartz",
-	recipe = "mcl_nether:quartz_ore",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_nether:netherite_scrap",
-	recipe = "mcl_nether:ancient_debris",
-	cooktime = 10,
 })
 
 minetest.register_craft({

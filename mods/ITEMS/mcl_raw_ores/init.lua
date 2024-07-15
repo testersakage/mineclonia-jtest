@@ -9,6 +9,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		_doc_items_longdesc = longdesc,
 		inventory_image = texture..".png",
 		groups = { craftitem = 1, blast_furnace_smeltable = 1 },
+		_mcl_cooking_output = "mcl_core:"..ore.."_ingot"
 	})
 
 	minetest.register_node(raw_ingot.."_block", {
@@ -29,13 +30,6 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 			{ raw_ingot, raw_ingot, raw_ingot },
 			{ raw_ingot, raw_ingot, raw_ingot },
 		},
-	})
-
-	minetest.register_craft({
-		type = "cooking",
-		output = "mcl_core:"..ore.."_ingot",
-		recipe = raw_ingot,
-		cooktime = 10,
 	})
 
 	minetest.register_craft({

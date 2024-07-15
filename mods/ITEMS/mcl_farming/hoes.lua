@@ -164,6 +164,7 @@ minetest.register_tool("mcl_farming:hoe_iron", {
 	_mcl_diggroups = {
 		hoey = { speed = 6, level = 4, uses = 251 }
 	},
+	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 
 minetest.register_craft({
@@ -181,13 +182,6 @@ minetest.register_craft({
 		{"mcl_core:stick", ""},
 		{"mcl_core:stick", ""}
 	}
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:iron_nugget",
-	recipe = "mcl_farming:hoe_iron",
-	cooktime = 10,
 })
 
 minetest.register_tool("mcl_farming:hoe_gold", {
@@ -209,6 +203,7 @@ minetest.register_tool("mcl_farming:hoe_gold", {
 	_mcl_diggroups = {
 		hoey = { speed = 12, level = 2, uses = 33 }
 	},
+	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 
 minetest.register_craft({
@@ -226,15 +221,6 @@ minetest.register_craft({
 		{"mcl_core:stick", ""},
 		{"mcl_core:stick", ""}
 	}
-})
-
-
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:gold_nugget",
-	recipe = "mcl_farming:hoe_gold",
-	cooktime = 10,
 })
 
 minetest.register_tool("mcl_farming:hoe_diamond", {

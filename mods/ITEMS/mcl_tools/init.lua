@@ -149,6 +149,7 @@ minetest.register_tool("mcl_tools:pick_iron", {
 	_mcl_diggroups = {
 		pickaxey = { speed = 6, level = 4, uses = 251 }
 	},
+	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 minetest.register_tool("mcl_tools:pick_gold", {
 	description = S("Golden Pickaxe"),
@@ -170,6 +171,7 @@ minetest.register_tool("mcl_tools:pick_gold", {
 	_mcl_diggroups = {
 		pickaxey = { speed = 12, level = 2, uses = 33 }
 	},
+	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 minetest.register_tool("mcl_tools:pick_diamond", {
 	description = S("Diamond Pickaxe"),
@@ -282,6 +284,7 @@ minetest.register_tool("mcl_tools:shovel_iron", {
 	_mcl_diggroups = {
 		shovely = { speed = 6, level = 4, uses = 251 }
 	},
+	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 minetest.register_tool("mcl_tools:shovel_gold", {
 	description = S("Golden Shovel"),
@@ -303,6 +306,7 @@ minetest.register_tool("mcl_tools:shovel_gold", {
 	_mcl_diggroups = {
 		shovely = { speed = 12, level = 2, uses = 33 }
 	},
+	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 minetest.register_tool("mcl_tools:shovel_diamond", {
 	description = S("Diamond Shovel"),
@@ -413,6 +417,7 @@ minetest.register_tool("mcl_tools:axe_iron", {
 	_mcl_diggroups = {
 		axey = { speed = 6, level = 4, uses = 251 }
 	},
+	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 minetest.register_tool("mcl_tools:axe_gold", {
 	description = S("Golden Axe"),
@@ -433,6 +438,7 @@ minetest.register_tool("mcl_tools:axe_gold", {
 	_mcl_diggroups = {
 		axey = { speed = 12, level = 2, uses = 33 }
 	},
+	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 minetest.register_tool("mcl_tools:axe_diamond", {
 	description = S("Diamond Axe"),
@@ -543,6 +549,7 @@ minetest.register_tool("mcl_tools:sword_iron", {
 		swordy = { speed = 6, level = 4, uses = 251 },
 		swordy_cobweb = { speed = 6, level = 4, uses = 251 }
 	},
+	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 minetest.register_tool("mcl_tools:sword_gold", {
 	description = S("Golden Sword"),
@@ -564,6 +571,7 @@ minetest.register_tool("mcl_tools:sword_gold", {
 		swordy = { speed = 12, level = 2, uses = 33 },
 		swordy_cobweb = { speed = 12, level = 2, uses = 33 }
 	},
+	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 minetest.register_tool("mcl_tools:sword_diamond", {
 	description = S("Diamond Sword"),
