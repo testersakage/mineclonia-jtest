@@ -408,6 +408,16 @@ local function overwrite()
 				replacements = tdef._mcl_fuel_replacements
 			})
 		end
+
+		if tdef._mcl_cooking_output and type(tdef._mcl_cooking_output) == "string" then
+			minetest.register_craft({
+				type = "cooking",
+				recipe = tname,
+				output = tdef._mcl_cooking_output,
+				cooktime = tdef._mcl_cooktime or 10,
+				replacements = tdef._mcl_cooking_replacements
+			})
+		end
 	end
 end
 
