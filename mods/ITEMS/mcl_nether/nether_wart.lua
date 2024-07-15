@@ -121,12 +121,9 @@ minetest.register_craftitem("mcl_nether:nether_wart_item", {
 		local soilpos = table.copy(placepos)
 		soilpos.y = soilpos.y - 1
 
-		-- Check for correct soil type
 		local chk = minetest.get_item_group(minetest.get_node(soilpos).name, "soil_nether_wart")
 		if chk and chk ~= 0 then
-			-- Check if node above soil node allows placement
 			if minetest.registered_items[minetest.get_node(placepos).name].buildable_to then
-				-- Place nether wart
 				minetest.sound_play({name="default_place_node", gain=1.0}, {pos=placepos}, true)
 				minetest.set_node(placepos, {name="mcl_nether:nether_wart_0", param2 = 3})
 
@@ -173,8 +170,6 @@ minetest.register_abm({
 	end
 })
 
-if minetest.get_modpath("doc") then
-	for i=1,2 do
-		doc.add_entry_alias("nodes", "mcl_nether:nether_wart_0", "nodes", "mcl_nether:nether_wart_"..i)
-	end
+for i=1,2 do
+	doc.add_entry_alias("nodes", "mcl_nether:nether_wart_0", "nodes", "mcl_nether:nether_wart_"..i)
 end

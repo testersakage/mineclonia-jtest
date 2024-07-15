@@ -74,8 +74,6 @@ minetest.register_node("mcl_nether:netheriteblock", {
 	_mcl_silk_touch_drop = true,
 })
 
--- For eternal fire on top of netherrack and magma blocks
--- (this code does not require a dependency on mcl_fire)
 local function eternal_after_destruct(pos)
 	pos.y = pos.y + 1
 	if minetest.get_node(pos).name == "mcl_fire:eternal_fire" then
@@ -110,7 +108,6 @@ minetest.register_node("mcl_nether:netherrack", {
 	_mcl_hardness = 0.4,
 	_mcl_cooking_output = "mcl_nether:netherbrick",
 
-	-- Eternal fire on top
 	after_destruct = eternal_after_destruct,
 	_on_ignite = eternal_on_ignite,
 	_on_bone_meal = function(_, _, _, _ ,pos , _)
@@ -129,13 +126,11 @@ minetest.register_node("mcl_nether:magma", {
 	light_source = 3,
 	groups = {pickaxey=1, building_block=1, material_stone=1, fire=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	-- From walkover mod
 	on_walk_over = function(_, _, player)
 		local armor_feet = player:get_inventory():get_stack("armor", 5)
 		if player and player:get_player_control().sneak or (minetest.global_exists("mcl_enchanting") and mcl_enchanting.has_enchantment(armor_feet, "frost_walker")) or (minetest.global_exists("mcl_potions") and mcl_potions.player_has_effect(player, "fire_proof")) then
 			return
 		end
-		-- Hurt players standing on top of this block
 		if player:get_hp() > 0 then
 			mcl_util.deal_damage(player, 1, {type = "hot_floor"})
 		end
@@ -143,7 +138,6 @@ minetest.register_node("mcl_nether:magma", {
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 
-	-- Eternal fire on top
 	after_destruct = eternal_after_destruct,
 	_on_ignite = eternal_on_ignite,
 })
@@ -164,7 +158,6 @@ minetest.register_node("mcl_nether:soul_sand", {
 })
 
 mcl_player.register_globalstep_slow(function(player)
-	-- Standing on soul sand or soul soil?
 	if minetest.get_item_group(mcl_player.players[player].nodes.stand, "soul_block") > 0 then
 		-- TODO: Tweak walk speed
 		-- TODO: Also slow down mobs
@@ -173,7 +166,6 @@ mcl_player.register_globalstep_slow(function(player)
 		-- If player wears Soul Speed boots, increase speed
 		if soul_speed > 0 then
 			playerphysics.add_physics_factor(player, "speed", "mcl_playerplus:soul_sand", soul_speed * 0.105 + 1.3)
-		-- otherwise walk slower on soul sand
 		elseif mcl_player.players[player].nodes.stand == "mcl_nether:soul_sand" then
 			playerphysics.add_physics_factor(player, "speed", "mcl_playerplus:soul_sand", 0.4)
 		else
@@ -326,7 +318,6 @@ mcl_fences.register_fence_def("nether_brick_fence", {
 	_mcl_fences_output_amount = 6
 })
 
-
 minetest.register_craftitem("mcl_nether:glowstone_dust", {
 	description = S("Glowstone Dust"),
 	_doc_items_longdesc = S("Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."),
@@ -364,7 +355,7 @@ minetest.register_craftitem("mcl_nether:netherbrick", {
 
 minetest.register_craftitem("mcl_nether:netherite_upgrade_template", {
 	description	  = S("Netherite Upgrade Template"),
-	--_tt_help = S("Netherite Upgrade Template").."\n\n"..
+	_tt_help = S("Netherite Upgrade Template").."\n\n"..
 	minetest.colorize(mcl_colors.GRAY, S("Applies to:")).."\n"..minetest.colorize(mcl_colors.BLUE, " "..S("Diamond Armor")).."\n"..
 	minetest.colorize(mcl_colors.BLUE, " "..S("Diamond Tools")).."\n"..
 	minetest.colorize(mcl_colors.GRAY, S("Ingredients:")).."\n"..minetest.colorize(mcl_colors.BLUE, " "..S("Netherite Ingot")),
