@@ -8,6 +8,7 @@ minetest.register_craftitem("mcl_fishing:fish_raw", {
 	on_secondary_use = minetest.item_eat(2),
 	groups = { food=2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 0.4,
+	_mcl_cooking_output = "mcl_fishing:fish_cooked"
 })
 
 minetest.register_craftitem("mcl_fishing:fish_cooked", {
@@ -28,6 +29,7 @@ minetest.register_craftitem("mcl_fishing:salmon_raw", {
 	on_secondary_use = minetest.item_eat(2),
 	groups = { food=2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 0.4,
+	_mcl_cooking_output = "mcl_fishing:salmon_cooked"
 })
 
 minetest.register_craftitem("mcl_fishing:salmon_cooked", {
@@ -63,20 +65,6 @@ minetest.register_craftitem("mcl_fishing:pufferfish_raw", {
 	on_secondary_use = eat_pufferfish,
 	groups = { food=2, eatable=1, brewitem = 1 },
 	_mcl_saturation = 0.2,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_fishing:salmon_cooked",
-	recipe = "mcl_fishing:salmon_raw",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_fishing:fish_cooked",
-	recipe = "mcl_fishing:fish_raw",
-	cooktime = 10,
 })
 
 minetest.register_craft({

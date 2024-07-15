@@ -564,6 +564,7 @@ minetest.register_craftitem("mcl_ocean:kelp", {
 	wield_image = "mcl_ocean_kelp_item.png",
 	on_place = kelp.kelp_on_place,
 	groups = {deco_block = 1, compostability = 30, smoker_cookable = 1, campfire_cookable = 1},
+	_mcl_cooking_output = "mcl_ocean:dried_kelp"
 })
 
 if mod_doc then
@@ -609,12 +610,6 @@ minetest.register_node("mcl_ocean:dried_kelp_block", {
 	_mcl_burntime = 200
 })
 
-minetest.register_craft({
-	type = "cooking",
-	recipe = "mcl_ocean:kelp",
-	output = "mcl_ocean:dried_kelp",
-	cooktime = 10,
-})
 minetest.register_craft({
 	recipe = {
 		{ "mcl_ocean:dried_kelp","mcl_ocean:dried_kelp","mcl_ocean:dried_kelp" },

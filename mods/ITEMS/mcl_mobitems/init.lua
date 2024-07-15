@@ -21,6 +21,7 @@ minetest.register_craftitem("mcl_mobitems:mutton", {
 	on_secondary_use = minetest.item_eat(2),
 	groups = { food = 2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.2,
+	_mcl_cooking_output = "mcl_mobitems:cooked_mutton"
 })
 
 minetest.register_craftitem("mcl_mobitems:cooked_mutton", {
@@ -43,6 +44,7 @@ minetest.register_craftitem("mcl_mobitems:beef", {
 	on_secondary_use = minetest.item_eat(3),
 	groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.8,
+	_mcl_cooking_output = "mcl_mobitems:cooked_beef"
 })
 
 minetest.register_craftitem("mcl_mobitems:cooked_beef", {
@@ -66,6 +68,7 @@ minetest.register_craftitem("mcl_mobitems:chicken", {
 	on_secondary_use = minetest.item_eat(2),
 	groups = { food = 2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.2,
+	_mcl_cooking_output = "mcl_mobitems:cooked_chicken"
 })
 
 minetest.register_craftitem("mcl_mobitems:cooked_chicken", {
@@ -88,6 +91,7 @@ minetest.register_craftitem("mcl_mobitems:porkchop", {
 	on_secondary_use = minetest.item_eat(3),
 	groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.8,
+	_mcl_cooking_output = "mcl_mobitems:cooked_porkchop"
 })
 
 minetest.register_craftitem("mcl_mobitems:cooked_porkchop", {
@@ -110,6 +114,7 @@ minetest.register_craftitem("mcl_mobitems:rabbit", {
 	on_secondary_use = minetest.item_eat(3),
 	groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.8,
+	_mcl_cooking_output = "mcl_mobitems:cooked_rabbit"
 })
 
 minetest.register_craftitem("mcl_mobitems:cooked_rabbit", {
@@ -500,41 +505,6 @@ minetest.register_craft({
 	type = "shapeless",
 	output = "mcl_mobitems:magma_cream",
 	recipe = {"mcl_mobitems:blaze_powder", "mcl_mobitems:slimeball"},
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_mobitems:cooked_mutton",
-	recipe = "mcl_mobitems:mutton",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_mobitems:cooked_rabbit",
-	recipe = "mcl_mobitems:rabbit",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_mobitems:cooked_chicken",
-	recipe = "mcl_mobitems:chicken",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_mobitems:cooked_beef",
-	recipe = "mcl_mobitems:beef",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_mobitems:cooked_porkchop",
-	recipe = "mcl_mobitems:porkchop",
-	cooktime = 10,
 })
 
 minetest.register_craft({

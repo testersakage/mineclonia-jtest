@@ -105,6 +105,7 @@ minetest.register_craftitem("mcl_farming:potato_item", {
 	inventory_image = "farming_potato.png",
 	groups = {food = 2, eatable = 1, compostability = 65, smoker_cookable = 1, campfire_cookable = 1},
 	_mcl_saturation = 0.6,
+	_mcl_cooking_output = "mcl_farming:potato_item_baked",
 	on_secondary_use = minetest.item_eat(1),
 	on_place = function(itemstack, placer, pointed_thing)
 		local new = mcl_farming:place_seed(itemstack, placer, pointed_thing, "mcl_farming:potato_1")
@@ -135,13 +136,6 @@ minetest.register_craftitem("mcl_farming:potato_item_poison", {
 	on_secondary_use = minetest.item_eat(2),
 	groups = { food = 2, eatable = 2 },
 	_mcl_saturation = 1.2,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_farming:potato_item_baked",
-	recipe = "mcl_farming:potato_item",
-	cooktime = 10,
 })
 
 mcl_farming:add_plant("plant_potato", "mcl_farming:potato", {"mcl_farming:potato_1", "mcl_farming:potato_2", "mcl_farming:potato_3", "mcl_farming:potato_4", "mcl_farming:potato_5", "mcl_farming:potato_6", "mcl_farming:potato_7"}, 19.75, 20)
