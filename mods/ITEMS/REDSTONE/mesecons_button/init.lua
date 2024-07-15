@@ -168,10 +168,9 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 		end,
 		_mcl_button_basename = basename,
 		_mcl_button_timer = button_timer,
-
+		_mcl_burntime = burntime,
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
-		_mcl_burntime = burntime
 	})
 
 	minetest.register_node(":mesecons_button:button_"..basename.."_on", {
@@ -221,6 +220,7 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 			end
 		end,
 
+		_mcl_burntime = burntime,
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 	})

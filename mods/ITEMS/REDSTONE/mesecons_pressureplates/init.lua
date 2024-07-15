@@ -172,6 +172,7 @@ function mesecon.register_pressure_plate(basename, description, textures_off, te
 		is_ground_content = false,
 		pressureplate_basename = basename,
 		pressureplate_activated_by = activated_by,
+		_mcl_burntime = burntime,
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 	},{
@@ -183,7 +184,6 @@ function mesecon.register_pressure_plate(basename, description, textures_off, te
 		mesecons = {receptor = { state = mesecon.state.off, rules = mesecon.rules.pplate }},
 		_doc_items_longdesc = longdesc,
 		_tt_help = tt,
-		_mcl_burntime = burntime,
 	},{
 		node_box = pp_box_on,
 		selection_box = pp_box_on,

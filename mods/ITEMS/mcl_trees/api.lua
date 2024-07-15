@@ -584,7 +584,7 @@ function mcl_trees.register_wood(name, p)
 			{axey=1, material_wood=1},
 			nil,
 			S("A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."),
-			p.pressure_plate._mcl_burntime or 15
+			p.pressure_plate and p.pressure_plate._mcl_burntime or 15
 		)
 	end
 	if p.button == nil or type(p.button) == "table" then
@@ -600,7 +600,7 @@ function mcl_trees.register_wood(name, p)
 			true,
 			S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
 			"mesecons_button_push_wood",
-			p.button._mcl_burntime or 5
+			p.button and p.button._mcl_burntime or 5
 		)
 	end
 
