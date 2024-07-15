@@ -542,7 +542,7 @@ function mcl_trees.register_wood(name, p)
 
 	if p.slab == nil or type(p.slab) == "table" then
 		p.slab = p.slab or {}
-		mcl_stairs.register_slab(name, {
+		mcl_stairs.register_slab(name, table.merge({
 			baseitem="mcl_trees:wood_"..name,
 			description = S("@1 Slab", rname),
 			groups = { wood_slab = 1 },
@@ -550,7 +550,7 @@ function mcl_trees.register_wood(name, p)
 			overrides = {
 				_mcl_burntime = 7.5,
 			},
-		})
+		}, p.slab))
 		if p.bark == nil or type(p.bark) == "table" then
 			mcl_stairs.register_slab(name.."_bark", table.merge({
 				baseitem="mcl_trees:bark_"..name,
