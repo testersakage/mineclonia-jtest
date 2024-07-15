@@ -1,8 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-
-local mod_doc = minetest.get_modpath("doc")
-
--- List of supported surfaces for seagrass
 local surfaces = {
 	{ "dirt", "mcl_core:dirt" },
 	{ "sand", "mcl_core:sand", 1 },
@@ -29,7 +25,6 @@ local function seagrass_on_place(itemstack, placer, pointed_thing)
 		return itemstack
 	end
 
-	-- Placement rules:
 	-- Seagrass can only be placed on top of dirt inside water
 	local g_above_water = minetest.get_item_group(node_above.name, "water")
 	if not (g_above_water ~= 0 and def_above.liquidtype == "source") then
@@ -46,7 +41,6 @@ local function seagrass_on_place(itemstack, placer, pointed_thing)
 		return itemstack
 	end
 
-	-- Select a seagrass node
 	if node_under.name == "mcl_core:dirt" then
 		node_under.name = "mcl_ocean:seagrass_dirt"
 	elseif node_under.name == "mcl_core:sand" then
@@ -60,7 +54,6 @@ local function seagrass_on_place(itemstack, placer, pointed_thing)
 	end
 	node_under.param2 = minetest.registered_items[node_under.name].place_param2 or 3
 	if node_under.param2 < 8 and math.random(1,2) == 1 then
-		-- Random horizontal displacement
 		node_under.param2 = node_under.param2 + 8
 	end
 	local def_node = minetest.registered_items[node_under.name]
@@ -84,8 +77,6 @@ minetest.register_craftitem("mcl_ocean:seagrass", {
 	on_place = seagrass_on_place,
 	groups = {deco_block = 1, compostability = 30},
 })
-
--- Seagrass nodes: seagrass on a surface node
 
 for s=1, #surfaces do
 	local def = minetest.registered_nodes[surfaces[s][2]]
@@ -144,14 +135,10 @@ for s=1, #surfaces do
 		_mcl_hardness = 0,
 		_mcl_blast_resistance = 0,
 	})
-	if mod_doc and surfaces[s][1] ~= "dirt" then
-		doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "nodes", "mcl_ocean:seagrass_"..surfaces[s][1])
-	end
+	doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "nodes", "mcl_ocean:seagrass_"..surfaces[s][1])
 end
 
-if mod_doc then
-	doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "craftitems", "mcl_ocean:seagrass")
-end
+doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "craftitems", "mcl_ocean:seagrass")
 
 minetest.register_lbm({
 	label = "Fix incorrect seagrass",

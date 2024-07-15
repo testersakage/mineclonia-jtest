@@ -8,11 +8,10 @@
 -- However, because of the plantlike_rooted hack, we'll just allow it for now.
 
 local S = minetest.get_translator(minetest.get_current_modname())
-local mod_doc = minetest.get_modpath("doc")
 
 -- Kelp API
 --------------------------------------------------------------------------------
-
+mcl_ocean = mcl_ocean or {}
 local kelp = {}
 mcl_ocean.kelp = kelp
 
@@ -35,38 +34,27 @@ kelp.ROLL_GROWTH_PRECISION = 1
 kelp.ROLL_GROWTH_NUMERATOR = 216 * kelp.TICK
 kelp.ROLL_GROWTH_DENOMINATOR = 100 * 1200
 
--- Sounds used to dig and place kelp.
 kelp.leaf_sounds = mcl_sounds.node_sound_leaves_defaults()
 
--- is age in the growable range?
 function kelp.is_age_growable(age)
 	return age >= 0 and age < kelp.MAX_AGE
 end
 
 
--- Is this water?
--- Returns the liquidtype, if indeed water.
 function kelp.is_submerged(node)
 	local g = minetest.get_item_group(node.name, "water")
 	if g > 0 and g <= 3  then
-		-- Expected only "source" and "flowing" from water liquids
 		return minetest.registered_nodes[node.name].liquidtype
 	end
 	return false
 end
 
 
--- Is the water downward flowing?
--- (kelp can grow/be placed inside downward flowing water)
 function kelp.is_downward_flowing(pos, node, pos_above, node_above, __is_above__)
-	-- Function params: (pos[, node]) or (node, pos_above) or (node, node_above)
 	local node = node or minetest.get_node(pos)
 
 	local result = (math.floor(node.param2 / 8) % 2) == 1
 	if not (result or __is_above__) then
-		-- If not, also check node above.
-		-- (this is needed due a weird quirk in the definition of "downwards flowing"
-		-- liquids in Minetest)
 		local pos_above = pos_above or {x=pos.x,y=pos.y+1,z=pos.z}
 		local node_above = node_above or minetest.get_node(pos_above)
 		result = kelp.is_submerged(node_above)
@@ -76,13 +64,8 @@ function kelp.is_downward_flowing(pos, node, pos_above, node_above, __is_above__
 end
 
 
--- Will node fall at that position?
--- This only checks if a node would fall, meaning that node need not be at pos.
 function kelp.is_falling(pos, node, is_falling, pos_bottom, node_bottom, def_bottom)
-	-- Optional params: is_falling, pos_bottom, node_bottom, def_bottom
-
 	-- NOTE: Modified from check_single_for_falling in builtin.
-	-- Please update accordingly.
 	local nodename = node.name
 
 	if is_falling == false or
@@ -91,7 +74,6 @@ function kelp.is_falling(pos, node, is_falling, pos_bottom, node_bottom, def_bot
 	end
 
 	local pos_bottom = pos_bottom or {x = pos.x, y = pos.y - 1, z = pos.z}
-	-- get_node_or_nil: Only fall if node below is loaded
 	local node_bottom = node_bottom or minetest.get_node_or_nil(pos_bottom)
 	local nodename_bottom = node_bottom.name
 	local def_bottom = def_bottom or node_bottom and minetest.registered_nodes[nodename_bottom]
@@ -100,14 +82,12 @@ function kelp.is_falling(pos, node, is_falling, pos_bottom, node_bottom, def_bot
 	end
 
 	local same = nodename == nodename_bottom
-	-- Let leveled nodes fall if it can merge with the bottom node
 	if same and def_bottom.paramtype2 == "leveled" and
 			minetest.get_node_level(pos_bottom) <
 			minetest.get_node_max_level(pos_bottom) then
 		return true
 	end
 
-	-- Otherwise only if the bottom node is considered "fall through"
 	if not same and
 			(not def_bottom.walkable or def_bottom.buildable_to) and
 			(minetest.get_item_group(nodename, "float") == 0 or
@@ -119,33 +99,22 @@ function kelp.is_falling(pos, node, is_falling, pos_bottom, node_bottom, def_bot
 end
 
 
--- Roll initial age for kelp.
 function kelp.roll_init_age(min, max)
-	-- Optional params
 	return math.random(min or kelp.MIN_AGE, (max or kelp.MAX_AGE)-1)
 end
 
-
 -- Converts param2 to kelp height.
--- For the special case where the max param2 is reached, interpret that as the
--- 16th kelp stem.
 function kelp.get_height(param2)
 	return math.floor(param2 / 16) + math.floor(param2 % 16 / 8)
 end
 
-
--- Obtain pos and node of the tip of kelp.
 function kelp.get_tip(pos, height)
-	-- Optional params: height
 	local height = height or kelp.get_height(minetest.get_node(pos).param2)
 	local pos_tip = {x=pos.x, y=pos.y+height+1, z=pos.z}
 	return pos_tip, minetest.get_node(pos_tip), height
 end
 
-
--- Obtain position of the first kelp unsubmerged.
 function kelp.find_unsubmerged(pos, node, height)
-	-- Optional params: node, height
 	local node = node or minetest.get_node(pos)
 	local height = height or ((node.param2 >= 0 and node.param2 < 16) and 1) or kelp.get_height(node.param2)
 
@@ -161,10 +130,7 @@ function kelp.find_unsubmerged(pos, node, height)
 	return nil, nil, height, height
 end
 
-
--- Obtain next param2.
 function kelp.next_param2(param2)
-	-- param2 max value is 255, so adding to 256 causes overflow.
 	return math.min(param2+16 - param2 % 16, 255);
 end
 
@@ -185,7 +151,6 @@ local function retrieve_age (pos)
 	return age
 end
 
--- Initialise a kelp's age.
 function kelp.init_age(pos)
 	local age = retrieve_age(pos)
 	if not age then
@@ -195,10 +160,7 @@ function kelp.init_age(pos)
 	return age
 end
 
--- Apply next kelp height. The surface is swapped. so on_construct is skipped.
 function kelp.next_height(pos, node, pos_tip, node_tip, submerged, downward_flowing)
-	-- Modified params: node
-	-- Optional params: node, set_node, pos_tip, node_tip, submerged, downward_flowing
 	local node = node or minetest.get_node(pos)
 	local pos_tip = pos_tip
 	local node_tip = node_tip or (pos_tip and minetest.get_node(pos_tip))
@@ -209,11 +171,9 @@ function kelp.next_height(pos, node, pos_tip, node_tip, submerged, downward_flow
 		(submerged or kelp.is_submerged(node_tip)
 		 and kelp.is_downward_flowing(pos_tip, node_tip))
 
-	-- Liquid source: Grow normally.
 	node.param2 = kelp.next_param2(node.param2)
 	minetest.swap_node(pos, node)
 
-	-- Flowing liquid: Grow 1 step, but also turn the tip node into a liquid source.
 	if downward_flowing then
 		local alt_liq = minetest.registered_nodes[node_tip.name].liquid_alternative_source
 		if alt_liq and minetest.registered_nodes[alt_liq] then
@@ -225,7 +185,6 @@ function kelp.next_height(pos, node, pos_tip, node_tip, submerged, downward_flow
 end
 
 
--- Grow next kelp.
 function kelp.next_grow(age, pos, node, pos_tip, node_tip, submerged, downward_flowing)
 	local node = node or minetest.get_node(pos)
 	local pos_tip = pos_tip
@@ -234,7 +193,6 @@ function kelp.next_grow(age, pos, node, pos_tip, node_tip, submerged, downward_f
 		pos_tip,node_tip = kelp.get_tip(pos)
 	end
 
-	-- New kelp must also be submerged in water.
 	local downward_flowing = downward_flowing or kelp.is_downward_flowing(pos_tip, node_tip)
 	if not (submerged or kelp.is_submerged(node_tip)) then
 		return
@@ -246,9 +204,7 @@ function kelp.next_grow(age, pos, node, pos_tip, node_tip, submerged, downward_f
 end
 
 
--- Drops the items for detached kelps.
 function kelp.detach_drop(pos, height)
-	-- Optional params: height
 	local height = height or kelp.get_height(minetest.get_node(pos).param2)
 	local y = pos.y
 	local walk_pos = {x=pos.x, z=pos.z}
@@ -269,10 +225,8 @@ function kelp.detach_dig(dig_pos, pos, drop, node, height)
 
 	local node = node or minetest.get_node(pos)
 	local height = height or kelp.get_height(node.param2)
-	-- pos.y points to the surface, offset needed to point to the first kelp.
 	local new_height = dig_pos.y - (pos.y+1)
 
-	-- Digs the entire kelp.
 	if new_height <= 0 then
 		if drop then
 			kelp.detach_drop(dig_pos, height)
@@ -282,7 +236,6 @@ function kelp.detach_dig(dig_pos, pos, drop, node, height)
 			param=node.param,
 			param2=0 })
 
-	-- Digs the kelp beginning at a height.
 	else
 		if drop then
 			kelp.detach_drop(dig_pos, height - new_height)
@@ -291,20 +244,13 @@ function kelp.detach_dig(dig_pos, pos, drop, node, height)
 	end
 end
 
-
---------------------------------------------------------------------------------
--- Kelp callback functions
---------------------------------------------------------------------------------
-
-function kelp.surface_on_dig(pos, node, digger) ---@diagnostic disable-line: unused-local
+function kelp.surface_on_dig(pos, node, _)
 	kelp.detach_dig(pos, pos, true, node)
 end
 
 function kelp.surface_after_dig_node(pos, node)
 	return minetest.set_node(pos, {name=minetest.registered_nodes[node.name].node_dig_prediction})
 end
-
-
 
 local function detach_unsubmerged(pos)
 	local node = minetest.get_node(pos)
@@ -336,8 +282,6 @@ end
 
 function kelp.surface_on_destruct(pos)
 	local node = minetest.get_node(pos)
-	-- on_falling callback. Activated by pistons for falling nodes too.
-	-- I'm not sure this works. I think piston digs water and the unsubmerged nature drops kelp.
 	if kelp.is_falling(pos, node) then
 		kelp.detach_drop(pos, kelp.get_height(node.param2))
 	end
@@ -346,7 +290,6 @@ end
 
 
 function kelp.surface_on_mvps_move(pos, node, oldpos, nodemeta) ---@diagnostic disable-line: unused-local
-	-- Pistons moving falling nodes will have already activated on_falling callback.
 	kelp.detach_dig(pos, pos, minetest.get_item_group(node.name, "falling_node") ~= 1, node)
 end
 
@@ -378,18 +321,15 @@ function kelp.kelp_on_place(itemstack, placer, pointed_thing)
 
 
 	local pos_tip, node_tip, def_tip, new_surface, height
-	-- Kelp must also be placed on the top/tip side of the surface/kelp
 	if pos_under.y >= pos_above.y then
 		return itemstack
 	end
 
-	-- When placed on kelp.
 	if minetest.get_item_group(nu_name, "kelp") == 1 then
 		height = kelp.get_height(node_under.param2)
 		pos_tip,node_tip = kelp.get_tip(pos_under, height)
 		def_tip = minetest.registered_nodes[node_tip.name]
 
-	-- When placed on surface.
 	else
 		new_surface = false
 		for _,surface in pairs(kelp.surfaces) do
@@ -400,7 +340,6 @@ function kelp.kelp_on_place(itemstack, placer, pointed_thing)
 				break
 			end
 		end
-		-- Surface must support kelp
 		if not new_surface then
 			return itemstack
 		end
@@ -411,18 +350,15 @@ function kelp.kelp_on_place(itemstack, placer, pointed_thing)
 		height = 0
 	end
 
-	-- Next kelp must also be submerged in water.
 	local submerged = kelp.is_submerged(node_tip)
 	if not submerged then
 		return itemstack
 	end
 
-	-- Play sound, place surface/kelp and take away an item
 	local def_node = minetest.registered_items[nu_name]
 	if def_node.sounds then
 		minetest.sound_play(def_node.sounds.place, { gain = 0.5, pos = pos_under }, true)
 	end
-	-- TODO: get rid of rooted plantlike hack
 	if height < 16 then
 		kelp.next_height(pos_under, node_under, pos_tip, node_tip, def_tip, submerged)
 	else
@@ -441,11 +377,6 @@ function kelp.lbm_register(pos)
 	kelp.init_age(pos)
 end
 
---------------------------------------------------------------------------------
--- Kelp registration API
---------------------------------------------------------------------------------
-
--- List of supported surfaces for seagrass and kelp.
 kelp.surfaces = {
 	{ name="dirt",    nodename="mcl_core:dirt",    },
 	{ name="sand",    nodename="mcl_core:sand",    },
@@ -454,14 +385,11 @@ kelp.surfaces = {
 }
 kelp.registered_surfaces = {}
 
--- Commented properties are the ones obtained using register_kelp_surface.
--- If you define your own properties, it overrides the default ones.
 kelp.surface_deftemplate = {
 	drawtype = "plantlike_rooted",
 	paramtype = "light",
 	paramtype2 = "leveled",
 	place_param2 = 16,
-	--tiles = def.tiles,
 	special_tiles = {
 		{
 		image = "mcl_ocean_kelp_plant.png",
@@ -469,7 +397,6 @@ kelp.surface_deftemplate = {
 		tileable_vertical = true,
 		}
 	},
-	--inventory_image = "("..def.tiles[1]..")^mcl_ocean_kelp_item.png",
 	wield_image = "mcl_ocean_kelp_item.png",
 	selection_box = {
 		type = "fixed",
@@ -478,32 +405,23 @@ kelp.surface_deftemplate = {
 			{ -0.5, 0.5, -0.5, 0.5, 1.5, 0.5 },
 		},
 	},
-	-- groups.falling_node = is_falling,
 	groups = { dig_immediate = 3, deco_block = 1, plant = 1, kelp = 1, },
-	--sounds = sounds,
-	--node_dig_prediction = nodename,
 	on_construct = kelp.surface_on_construct,
 	on_destruct = kelp.surface_on_destruct,
 	on_dig = kelp.surface_on_dig,
 	after_dig_node = kelp.surface_after_dig_node,
 	mesecon = { on_mvps_move = kelp.surface_on_mvps_move, },
 	drop = "", -- drops are handled in on_dig
-	--_mcl_falling_node_alternative = is_falling and nodename or nil,
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
 }
 
--- Commented properties are the ones obtained using register_kelp_surface.
 kelp.surface_docs = {
-	-- entry_id_orig = nodename,
 	_doc_items_entry_name = S("Kelp"),
 	_doc_items_longdesc = S("Kelp grows inside water on top of dirt, sand or gravel."),
-	--_doc_items_create_entry = doc_create,
 	_doc_items_image = "mcl_ocean_kelp_item.png",
 }
 
--- Creates new surfaces.
--- NOTE: surface_deftemplate will be modified in-place.
 function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 	local name = surface.name
 	local nodename = surface.nodename
@@ -521,11 +439,10 @@ function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 		surface_deftemplate._doc_items_longdesc = surface_docs._doc_items_longdesc
 		surface_deftemplate._doc_items_create_entry = true
 		surface_deftemplate._doc_items_image = surface_docs._doc_items_image
-		-- Sets the first surface as the docs' entry ID
 		if not surface_docs.entry_id_orig then
 			surface_docs.entry_id_orig = nodename
 		end
-	elseif mod_doc then
+	else
 		doc.add_entry_alias("nodes", surface_docs.entry_id_orig, "nodes", surfacename)
 	end
 
@@ -545,15 +462,10 @@ function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 	minetest.register_node(surfacename, surface_deftemplate)
 end
 
--- Kelp surfaces nodes ---------------------------------------------------------
-
--- Dirt must be registered first, for the docs
 kelp.register_kelp_surface(kelp.surfaces[1], table.copy(kelp.surface_deftemplate), kelp.surface_docs)
 for i=2, #kelp.surfaces do
 	kelp.register_kelp_surface(kelp.surfaces[i], table.copy(kelp.surface_deftemplate), kelp.surface_docs)
 end
-
--- Kelp item -------------------------------------------------------------------
 
 minetest.register_craftitem("mcl_ocean:kelp", {
 	description = S("Kelp"),
@@ -566,13 +478,8 @@ minetest.register_craftitem("mcl_ocean:kelp", {
 	_mcl_cooking_output = "mcl_ocean:dried_kelp"
 })
 
-if mod_doc then
-	doc.add_entry_alias("nodes", kelp.surface_docs.entry_id_orig, "craftitems", "mcl_ocean:kelp")
-end
+doc.add_entry_alias("nodes", kelp.surface_docs.entry_id_orig, "craftitems", "mcl_ocean:kelp")
 
--- Dried kelp ------------------------------------------------------------------
-
--- TODO: This is supposed to be eaten very fast
 minetest.register_craftitem("mcl_ocean:dried_kelp", {
 	description = S("Dried Kelp"),
 	_doc_items_longdesc = S("Dried kelp is a food item."),
@@ -584,12 +491,6 @@ minetest.register_craftitem("mcl_ocean:dried_kelp", {
 	_mcl_saturation = 0.6,
 })
 
-
-local mod_screwdriver = minetest.get_modpath("screwdriver")
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
 
 minetest.register_node("mcl_ocean:dried_kelp_block", {
 	description = S("Dried Kelp Block"),
@@ -603,7 +504,7 @@ minetest.register_node("mcl_ocean:dried_kelp_block", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	_mcl_hardness = 0.5,
 	_mcl_blast_resistance = 2.5,
 	_mcl_burntime = 200
@@ -624,11 +525,6 @@ minetest.register_craft({
 	output = "mcl_ocean:dried_kelp 9",
 })
 
---------------------------------------------------------------------------------
--- Kelp ABM + LBM's
---------------------------------------------------------------------------------
-
-
 minetest.register_lbm({
 	label = "Kelp initialise",
 	name = "mcl_ocean:kelp_init_83",
@@ -646,14 +542,6 @@ minetest.register_abm({
 	action = detach_unsubmerged, --surface_unsubmerged_abm,
 })
 
-
--- 50% growth over a minute https://minecraft.fandom.com/wiki/Tutorials/Kelp_farming
--- 14% chance every random tick
--- On average, blocks are updated every 68.27 seconds (1365.33 game ticks)
--- 1 in 7 every 68
--- 1 in 28 every 17
--- 1 in 21 every 22
--- https://minecraft.fandom.com/wiki/Tick#Random_tick
 minetest.register_abm({
 	label = "Kelp growth",
 	nodenames = { "group:kelp" },

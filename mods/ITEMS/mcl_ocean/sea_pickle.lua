@@ -1,7 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local mod_doc = minetest.get_modpath("doc")
-
 local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 	if level == nil then level=1 end
 	if pointed_thing.type ~= "node" or not placer then
@@ -31,9 +29,7 @@ local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 	if minetest.get_item_group(node_above.name, "water") ~= 0 then
 		submerged = true
 	end
-	-- Place
 	if node_under.name == "mcl_ocean:dead_brain_coral_block" then
-		-- Place on suitable coral block
 		if submerged then
 			node_under.name = "mcl_ocean:sea_pickle_"..level.."_dead_brain_coral_block"
 		else
@@ -41,7 +37,6 @@ local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 		end
 		minetest.set_node(pos_under, node_under)
 	elseif minetest.get_item_group(node_under.name, "sea_pickle") ~= 0 then
-		-- Grow by 1 stage
 		local def = minetest.registered_nodes[node_under.name]
 		if def and def._mcl_sea_pickle_next then
 			node_under.name = def._mcl_sea_pickle_next
@@ -57,8 +52,6 @@ local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 	end
 	return itemstack
 end
-
--- Sea Pickle on brain coral
 
 local sounds_coral_plant = mcl_sounds.node_sound_leaves_defaults({footstep = mcl_sounds.node_sound_dirt_defaults().footstep})
 local ontop = "dead_brain_coral_block"
@@ -147,7 +140,6 @@ for s=1,4 do
 			dig_immediate = 3, deco_block = 1, sea_pickle = 1,
 			not_in_creative_inventory=nici, compostability = 65
 		},
-		-- Light level: 6 at size 1, +3 for each additional stage
 		light_source = math.min(6 + (s-1)*3, minetest.LIGHT_MAX),
 		selection_box = {
 			type = "fixed",
@@ -207,13 +199,11 @@ for s=1,4 do
 		_mcl_blast_resistance = 0,
 	})
 
-	if mod_doc then
-		if s == 1 then
-			doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_1_off_"..ontop)
-		else
-			doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_off_"..ontop)
-			doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_"..ontop)
-		end
+	if s == 1 then
+		doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_1_off_"..ontop)
+	else
+		doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_off_"..ontop)
+		doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_"..ontop)
 	end
 end
 
@@ -224,20 +214,16 @@ minetest.register_abm({
 	chance = 5,
 	catch_up = false,
 	action = function(pos, node)
-		-- Check if it's lit
 		local state = minetest.get_item_group(node.name, "sea_pickle")
-		-- Check for water
 		local checknode = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
 		local def = minetest.registered_nodes[node.name]
 		if minetest.get_item_group(checknode.name, "water") ~= 0 then
-			-- Sea pickle is unlit
 			if state == 2 then
 				node.name = def._mcl_sea_pickle_on
 				minetest.set_node(pos, node)
 				return
 			end
 		else
-			-- Sea pickle is lit
 			if state == 1 then
 				node.name = def._mcl_sea_pickle_off
 				minetest.set_node(pos, node)

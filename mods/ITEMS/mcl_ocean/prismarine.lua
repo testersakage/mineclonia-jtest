@@ -1,5 +1,3 @@
--- Nodes
-
 local S = minetest.get_translator(minetest.get_current_modname())
 
 minetest.register_node("mcl_ocean:sea_lantern", {
@@ -34,7 +32,6 @@ minetest.register_node("mcl_ocean:prismarine", {
 	description = S("Prismarine"),
 	_doc_items_longdesc = S("Prismarine is used as a building block. It slowly changes its color."),
 	is_ground_content = false,
-	-- Texture should have 22 frames for smooth transitions.
 	tiles = {{name="mcl_ocean_prismarine_anim.png", animation={type="vertical_frames", aspect_w=32, aspect_h=32, length=45.0}}},
 	groups = {pickaxey=1, building_block=1, material_stone=1, stonecuttable = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
@@ -83,8 +80,6 @@ mcl_stairs.register_stair_and_slab("prismarine_dark", {
 	overrides = {_mcl_stonecutter_recipes = { "mcl_ocean:prismarine_dark" }},{_mcl_stonecutter_recipes = { "mcl_ocean:prismarine_dark" }}
 })
 
--- Craftitems
-
 minetest.register_craftitem("mcl_ocean:prismarine_crystals", {
 	description = S("Prismarine Crystals"),
 	_doc_items_longdesc = doc.sub.items.temp.craftitem,
@@ -98,8 +93,6 @@ minetest.register_craftitem("mcl_ocean:prismarine_shard", {
 	inventory_image = "mcl_ocean_prismarine_shard.png",
 	groups = { craftitem = 1 },
 })
-
--- Crafting
 
 minetest.register_craft({
 	output = "mcl_ocean:sea_lantern",
