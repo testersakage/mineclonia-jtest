@@ -150,6 +150,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 	end,
 	groups = {weapon=1,weapon_ranged=1,crossbow=1,enchantability=1},
 	_mcl_uses = 326,
+	_mcl_burntime = 15
 })
 
 minetest.register_tool("mcl_bows:crossbow_loaded", {
@@ -178,6 +179,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 	end,
 	groups = {weapon=1,weapon_ranged=1,crossbow=5,enchantability=1,not_in_creative_inventory=1},
 	_mcl_uses = 326,
+	_mcl_burntime = 15
 })
 
 -- Iterates through player inventory and resets all the bows in "charging" state back to their original stage
@@ -241,7 +243,6 @@ for level=0, 2 do
 			return itemstack
 		end,
 		_mcl_uses = 385,
-		_mcl_burntime = 15
 	})
 end
 
