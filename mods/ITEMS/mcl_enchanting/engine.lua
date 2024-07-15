@@ -13,6 +13,10 @@ function mcl_enchanting.get_enchantments(itemstack)
 	return minetest.deserialize(itemstack:get_meta():get_string("mcl_enchanting:enchantments")) or {}
 end
 
+function mcl_enchanting.is_curse(enchantment)
+	return mcl_enchanting.enchantments[enchantment] and mcl_enchanting.enchantments[enchantment].curse
+end
+
 function mcl_enchanting.unload_enchantments(itemstack)
 	local itemdef = itemstack:get_definition()
 	local meta = itemstack:get_meta()
