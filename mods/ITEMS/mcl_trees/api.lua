@@ -199,7 +199,8 @@ local tpl_log = {
 	_on_axe_place = mcl_trees.strip_tree,
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
-	_mcl_burntime = 15
+	_mcl_burntime = 15,
+	_mcl_cooking_output = "mcl_core:charcoal_lump"
 }
 local tpl_wood = {
 	_doc_items_hidden = false,

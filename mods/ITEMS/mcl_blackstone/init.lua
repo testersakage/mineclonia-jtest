@@ -314,18 +314,6 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:gold_ingot",
-	recipe = "mcl_blackstone:blackstone_gilded",
-	cooktime = 10,
-})
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_nether:quartz_smooth",
-	recipe = "mcl_nether:quartz_block",
-	cooktime = 10,
-})
 --[[ Commented out for now because there the discussion how to handle this is ongoing]
 --Generating
 local specialstones = { "mcl_blackstone:blackstone", "mcl_blackstone:basalt", "mcl_blackstone:soul_soil" }

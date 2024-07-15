@@ -72,24 +72,3 @@ minetest.register_craft({
 		{ "mcl_copper:block_raw" },
 	},
 })
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_copper:copper_ingot",
-	recipe = "mcl_copper:raw_copper",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_copper:copper_ingot",
-	recipe = "mcl_copper:stone_with_copper",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_copper:block",
-	recipe = "mcl_copper:block_raw",
-	cooktime = 90,
-})

@@ -99,12 +99,14 @@ mcl_trees.register_wood("crimson",{
 	tree = {
 		tiles = {"crimson_hyphae.png", "crimson_hyphae.png","crimson_hyphae_side.png" },
 		groups = table.merge(nether_wood_groups,{tree = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	bark = {
 		tiles = {"crimson_hyphae_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	wood = {
 		tiles = {"crimson_hyphae_wood.png"},
@@ -114,12 +116,14 @@ mcl_trees.register_wood("crimson",{
 	stripped = {
 		tiles = {"stripped_crimson_stem_top.png", "stripped_crimson_stem_top.png","stripped_crimson_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	stripped_bark = {
 		tiles = {"stripped_crimson_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	fence = {
 		tiles = { "mcl_crimson_crimson_fence.png" },
@@ -158,12 +162,14 @@ mcl_trees.register_wood("warped",{
 	tree = {
 		tiles = {"warped_hyphae.png", "warped_hyphae.png","warped_hyphae_side.png" },
 		groups = table.merge(nether_wood_groups,{tree = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	bark = {
 		tiles = {"warped_hyphae_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	wood = {
 		tiles = {"warped_hyphae_wood.png"},
@@ -173,12 +179,14 @@ mcl_trees.register_wood("warped",{
 	stripped = {
 		tiles = {"stripped_warped_stem_top.png", "stripped_warped_stem_top.png","stripped_warped_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	stripped_bark = {
 		tiles = {"stripped_warped_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
-		_mcl_burntime = 0
+		_mcl_burntime = 0,
+		_mcl_cooking_output = nil
 	},
 	fence = {
 		tiles = { "mcl_crimson_warped_fence.png" },

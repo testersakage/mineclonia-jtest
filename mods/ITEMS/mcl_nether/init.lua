@@ -442,20 +442,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:cracked_nether_brick",
-	recipe = "mcl_core:netherbrick",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_nether:quartz_smooth",
-	recipe = "mcl_nether:quartz_block",
-	cooktime = 10,
-})
-
-minetest.register_craft({
 	output = "mcl_nether:nether_wart_block",
 	recipe = {
 		{"mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item"},

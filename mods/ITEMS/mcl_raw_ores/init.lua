@@ -33,13 +33,6 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 	})
 
 	minetest.register_craft({
-		type = "cooking",
-		output = "mcl_core:"..ore.."block",
-		recipe = raw_ingot.."_block",
-		cooktime = 90,
-	})
-
-	minetest.register_craft({
 		output = raw_ingot.." 9",
 		recipe = {
 			{ raw_ingot.."_block" },
