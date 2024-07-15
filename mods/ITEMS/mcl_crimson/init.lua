@@ -143,8 +143,8 @@ mcl_trees.register_wood("crimson",{
 	},
 	button = { _mcl_burntime = 0 },
 	pressure_plate = { _mcl_burntime = 0 },
-	stairs = { _mcl_burntime = 0 },
-	slab = { _mcl_burntime = 0}
+	stairs = { overrides = { _mcl_burntime = 0 }},
+	slab = { overrides = { _mcl_burntime = 0 }},
 })
 
 mcl_trees.register_wood("warped",{
@@ -202,8 +202,8 @@ mcl_trees.register_wood("warped",{
 	},
 	button = { _mcl_burntime = 0 },
 	pressure_plate = { _mcl_burntime = 0 },
-	stairs = { _mcl_burntime = 0 },
-	slab = { _mcl_burntime = 0}
+	stairs = { overrides = { _mcl_burntime = 0 }},
+	slab = { overrides = { _mcl_burntime = 0 }},
 })
 
 minetest.register_node("mcl_crimson:warped_fungus", {
