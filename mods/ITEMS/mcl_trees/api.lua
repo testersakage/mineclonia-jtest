@@ -523,7 +523,9 @@ function mcl_trees.register_wood(name, p)
 			baseitem="mcl_trees:wood_"..name,
 			description = S("@1 Stairs", rname),
 			groups = { wood_stairs = 1 },
-			_mcl_burntime = 15
+			overrides = {
+				_mcl_burntime = 15
+			},
 		}, p.stairs))
 		if p.bark == nil or type(p.bark) == "table"  then
 			mcl_stairs.register_stair(name.."_bark", table.merge({
@@ -531,7 +533,9 @@ function mcl_trees.register_wood(name, p)
 				description = S("@1 Bark Stairs", rname),
 				groups = { bark_stairs = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
-				_mcl_burntime = 15
+				overrides = {
+					_mcl_burntime = 15
+				},
 			}, p.stairs))
 		end
 	end
@@ -543,7 +547,9 @@ function mcl_trees.register_wood(name, p)
 			description = S("@1 Slab", rname),
 			groups = { wood_slab = 1 },
 			register_stair_and_slab = false,
-			_mcl_burntime = 7.5
+			overrides = {
+				_mcl_burntime = 7.5,
+			},
 		})
 		if p.bark == nil or type(p.bark) == "table" then
 			mcl_stairs.register_slab(name.."_bark", table.merge({
@@ -551,7 +557,9 @@ function mcl_trees.register_wood(name, p)
 				description = S("@1 Bark Slab", rname),
 				groups = { bark_slab = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
-				_mcl_burntime = 7.5
+				overrides = {
+					_mcl_burntime = 7.5,
+				},
 			}, p.slab))
 		end
 	end
