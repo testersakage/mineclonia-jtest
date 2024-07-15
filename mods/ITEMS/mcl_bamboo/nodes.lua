@@ -39,6 +39,7 @@ local bamboo_def = {
 	drop = "mcl_bamboo:bamboo",
 	inventory_image = "mcl_bamboo_bamboo_shoot.png",
 	wield_image = "mcl_bamboo_bamboo_shoot.png",
+	_mcl_burntime = 2.5,
 	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1.5,
 	node_placement_prediction = "",

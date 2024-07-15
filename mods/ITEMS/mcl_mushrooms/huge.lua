@@ -153,6 +153,8 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 		block.groups.huge_mushroom = species_id
 		block.groups.huge_mushroom_cap = s
 
+		block._mcl_burntime = 15
+
 		-- bin is a binary string with 6 digits. Each digit stands for the
 		-- texture of one of the sides, in the same order as the tiles parameter.
 		-- 0 = pores; 1 = cap.
