@@ -65,18 +65,20 @@ local ontop = "dead_brain_coral_block"
 local canonical = "mcl_ocean:sea_pickle_1_"..ontop
 
 for s=1,4 do
-	local desc, doc_desc, doc_use, doc_create, tt_help, nici, img, img_off, on_place
+	local desc, doc_desc, doc_use, doc_create, tt_help, nici, img, img_off, on_place, cookoutput
 	if s == 1 then
 		desc = S("Sea Pickle")
 		doc_desc = S("Sea pickles grow on dead brain coral blocks and provide light when underwater. They come in 4 sizes that vary in brightness.")
 		doc_use = S("It can only be placed on top of dead brain coral blocks. Placing a sea pickle on another sea pickle will make it grow and brighter.")
 		tt_help = S("Glows in the water").."\n"..S("4 possible sizes").."\n"..S("Grows on dead brain coral block")
 		img = "mcl_ocean_sea_pickle_item.png"
+		cookoutput = "mcl_dyes:lime"
 		on_place = sea_pickle_on_place
 	else
 		doc_create = false
 		nici = 1
 		img = "mcl_ocean_"..ontop..".png^(mcl_ocean_sea_pickle_"..s.."_anim.png^[verticalframe:2:1)"
+		cookoutput = nil
 	end
 	img_off = "mcl_ocean_"..ontop..".png^mcl_ocean_sea_pickle_"..s.."_off.png"
 	local next_on, next_off
@@ -169,6 +171,7 @@ for s=1,4 do
 		_mcl_sea_pickle_next = next_on,
 		_mcl_hardness = 0,
 		_mcl_blast_resistance = 0,
+		_mcl_cooking_output = cookoutput,
 		_on_bone_meal = on_bone_meal,
 	})
 

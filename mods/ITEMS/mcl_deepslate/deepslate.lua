@@ -70,6 +70,7 @@ register_deepslate_variant("cobbled", {
 		description = S("Cobbled Deepslate"),
 		_doc_items_longdesc = S("Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone."),
 		groups = { cobble = 1, stonecuttable = 1 },
+		_mcl_cooking_output = "mcl_deepslate:deepslate"
 	},
 	stair = {
 		description = S("Cobbled Deepslate Stairs"),
@@ -112,6 +113,7 @@ register_deepslate_variant("bricks", {
 		_doc_items_longdesc = S("Deepslate bricks are the brick version of deepslate."),
 		groups = { stonecuttable = 1 },
 		_mcl_stonecutter_recipes = { "mcl_deepslate:deepslate_cobbled", "mcl_deepslate:deepslate_polished", "mcl_deepslate:deepslate_bricks", },
+		_mcl_cooking_output = "mcl_deepslate:deepslate_bricks_cracked"
 	},
 	stair = {
 		description = S("Deepslate Brick Stairs"),
@@ -136,6 +138,7 @@ register_deepslate_variant("tiles", {
 		_doc_items_longdesc = S("Deepslate tiles are a decorative variant of deepslate."),
 		groups = { stonecuttable = 1 },
 		_mcl_stonecutter_recipes = { "mcl_deepslate:deepslate_cobbled", "mcl_deepslate:deepslate_polished", "mcl_deepslate:deepslate_bricks", },
+		_mcl_cooking_output = "mcl_deepslate:deepslate_tiles_cracked"
 	},
 	stair = {
 		description = S("Deepslate Tile Stairs"),
@@ -170,22 +173,6 @@ for i = 1, 3 do
 		recipe = { { s, s }, { s, s } }
 	})
 end
-
-for _, p in pairs({ "bricks", "tiles" }) do
-	minetest.register_craft({
-		type = "cooking",
-		output = "mcl_deepslate:deepslate_"..p.."_cracked",
-		recipe = "mcl_deepslate:deepslate_"..p,
-		cooktime = 10,
-	})
-end
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_deepslate:deepslate",
-	recipe = cobble,
-	cooktime = 10,
-})
 
 minetest.register_craft({
 	output = "mcl_deepslate:deepslate_chiseled",

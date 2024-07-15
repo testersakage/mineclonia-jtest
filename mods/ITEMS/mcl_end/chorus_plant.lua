@@ -545,6 +545,7 @@ minetest.register_craftitem("mcl_end:chorus_fruit", {
 	on_secondary_use = eat_chorus_fruit,
 	groups = { food = 2, transport = 1, eatable = 4, can_eat_when_full = 1 },
 	_mcl_saturation = 2.4,
+	_mcl_cooking_output = "mcl_end:chorus_fruit_popped"
 })
 
 minetest.register_craftitem("mcl_end:chorus_fruit_popped", {
@@ -554,12 +555,3 @@ minetest.register_craftitem("mcl_end:chorus_fruit_popped", {
 	inventory_image = "mcl_end_chorus_fruit_popped.png",
 	groups = { craftitem = 1 },
 })
-
---- Crafting ---
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_end:chorus_fruit_popped",
-	recipe = "mcl_end:chorus_fruit",
-	cooktime = 10,
-})
-

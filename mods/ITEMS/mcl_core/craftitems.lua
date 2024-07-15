@@ -68,6 +68,7 @@ minetest.register_craftitem("mcl_core:clay_lump", {
 	_doc_items_hidden = false,
 	inventory_image = "default_clay_lump.png",
 	groups = { craftitem=1 },
+	_mcl_cooking_output = "mcl_core:brick"
 })
 
 minetest.register_craftitem("mcl_core:iron_ingot", {

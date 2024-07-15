@@ -108,6 +108,7 @@ minetest.register_node("mcl_nether:netherrack", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
+	_mcl_cooking_output = "mcl_nether:brick",
 
 	-- Eternal fire on top
 	after_destruct = eternal_after_destruct,
@@ -196,6 +197,7 @@ local nether_brick = {
 
 minetest.register_node("mcl_nether:nether_brick", table.merge(nether_brick,{
 	groups = {pickaxey=1, building_block=1, material_stone=1, stonecuttable = 1},
+	_mcl_cooking_output = "mcl_nether:cracked_nether_brick"
 }))
 
 minetest.register_node("mcl_nether:red_nether_brick", table.merge(nether_brick,{
@@ -239,6 +241,7 @@ minetest.register_node("mcl_nether:quartz_block", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
+	_mcl_cooking_output = "mcl_nether:quartz_smooth"
 })
 
 minetest.register_node("mcl_nether:quartz_chiseled", {
@@ -405,13 +408,6 @@ minetest.register_craft({
 		{"mcl_mobitems:magma_cream", "mcl_mobitems:magma_cream"},
 		{"mcl_mobitems:magma_cream", "mcl_mobitems:magma_cream"},
 	}
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_nether:netherbrick",
-	recipe = "mcl_nether:netherrack",
-	cooktime = 10,
 })
 
 minetest.register_craft({

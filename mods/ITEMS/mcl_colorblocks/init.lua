@@ -64,6 +64,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		_mcl_blast_resistance = 4.2,
 		_mcl_hardness = 1.25,
+		_mcl_cooking_output = "mcl_colorblocks:glazed_terracotta_"..color
 	})
 
 	minetest.register_node("mcl_colorblocks:concrete_powder_"..color, {
@@ -147,13 +148,6 @@ for color,colordef in pairs(mcl_dyes.colors) do
 			"mcl_core:gravel", "mcl_dyes:"..color, "mcl_core:gravel",
 			"mcl_core:sand", "mcl_core:gravel", "mcl_core:sand",
 		}
-	})
-
-	minetest.register_craft({
-		type = "cooking",
-		output = "mcl_colorblocks:glazed_terracotta_"..color,
-		recipe = "mcl_colorblocks:hardened_clay_"..color,
-		cooktime = 10,
 	})
 end
 

@@ -89,6 +89,7 @@ minetest.register_node("mcl_blackstone:basalt", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1, stonecuttable = 1},
 	_mcl_blast_resistance = 4.2,
 	_mcl_hardness = 1.25,
+	_mcl_cooking_output = "mcl_blackstone:basalt_smooth"
 })
 minetest.register_node("mcl_blackstone:basalt_smooth", {
 	description = S("Smooth Basalt"),
@@ -129,6 +130,7 @@ minetest.register_node("mcl_blackstone:blackstone_brick_polished", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
+	--_mcl_cooking_output = "mcl_blackstone:blackstone_brick_polished_cracked"
 })
 minetest.register_node("mcl_blackstone:quartz_brick", {
 	description = S("Quartz Bricks"),

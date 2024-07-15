@@ -385,45 +385,6 @@ minetest.register_craft({
 	additional_wear = -mcl_core.repair,
 })
 
---
--- Cooking recipes
---
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:glass",
-	recipe = "group:sand",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:stone",
-	recipe = "mcl_core:cobble",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:stone_smooth",
-	recipe = "mcl_core:stone",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:stonebrickcracked",
-	recipe = "mcl_core:stonebrick",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:brick",
-	recipe = "mcl_core:clay_lump",
-	cooktime = 10,
-})
-
 minetest.register_craft({
 	type = "cooking",
 	output = "mcl_core:charcoal_lump",

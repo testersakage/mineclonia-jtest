@@ -24,6 +24,7 @@ minetest.register_node("mcl_core:stone", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_silk_touch_drop = true,
+	_mcl_cooking_output = "mcl_core:stone_smooth",
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
 		if awards and awards.unlock and digger and digger:is_player() then
 			awards.unlock(digger:get_player_name(), "mcl:stoneAge")
@@ -228,6 +229,7 @@ minetest.register_node("mcl_core:stonebrick", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = { "mcl_core:stone" },
+	_mcl_cooking_output = "mcl_core:stonebrickcracked"
 })
 
 minetest.register_node("mcl_core:stonebrickcarved", {
@@ -539,6 +541,7 @@ minetest.register_node("mcl_core:sand", {
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_mcl_cooking_output = "mcl_core:glass"
 })
 
 minetest.register_node("mcl_core:sandstone", {
@@ -550,6 +553,7 @@ minetest.register_node("mcl_core:sandstone", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
+	_mcl_cooking_output = "mcl_core:sandstonesmooth2"
 })
 
 minetest.register_node("mcl_core:sandstonesmooth", {
@@ -599,6 +603,7 @@ minetest.register_node("mcl_core:redsand", {
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_mcl_cooking_output = "mcl_core:glass"
 })
 
 minetest.register_node("mcl_core:redsandstone", {
@@ -609,6 +614,7 @@ minetest.register_node("mcl_core:redsandstone", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
+	_mcl_cooking_output = "mcl_core:redsandstonesmooth2"
 })
 
 minetest.register_node("mcl_core:redsandstonesmooth", {
@@ -660,6 +666,7 @@ minetest.register_node("mcl_core:clay", {
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_silk_touch_drop = true,
+	_mcl_cooking_output = "mcl_colorblocks:hardened_clay"
 })
 
 minetest.register_node("mcl_core:brick_block", {
@@ -723,6 +730,7 @@ minetest.register_node("mcl_core:cobble", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 2,
+	_mcl_cooking_output = "mcl_core:stone"
 })
 
 minetest.register_node("mcl_core:mossycobble", {
