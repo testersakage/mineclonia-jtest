@@ -637,10 +637,7 @@ minetest.register_craft({
 	}
 })
 
--- Add entry alias for the Help
-if minetest.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_furnaces:furnace", "nodes", "mcl_furnaces:furnace_active")
-end
+doc.add_entry_alias("nodes", "mcl_furnaces:furnace", "nodes", "mcl_furnaces:furnace_active")
 
 minetest.register_lbm({
 	label = "Update Furnace formspecs and invs to allow new sneak+click behavior",
