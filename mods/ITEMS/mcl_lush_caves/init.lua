@@ -248,18 +248,6 @@ mcl_mapgen_core.register_generator("lush_caves",nil, function(minp, maxp, blocks
 end, 99999, true)
 --]]
 
-minetest.register_craft({
-		type = "fuel",
-		recipe = "mcl_lush_caves:azalea",
-		burntime = 5,
-})
-
-minetest.register_craft({
-		type = "fuel",
-		recipe = "mcl_lush_caves:azalea_flowering",
-		burntime = 5,
-})
-
 mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea", {
 	name = "azalea",
 	desc = S("Azalea Plant"),

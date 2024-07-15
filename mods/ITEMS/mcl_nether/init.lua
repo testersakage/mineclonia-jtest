@@ -374,12 +374,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	type = "fuel",
-	recipe = "group:fence_wood",
-	burntime = 15,
-})
-
-minetest.register_craft({
 	type = "cooking",
 	output = "mcl_nether:quartz",
 	recipe = "mcl_nether:quartz_ore",

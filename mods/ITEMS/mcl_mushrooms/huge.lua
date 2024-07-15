@@ -173,12 +173,6 @@ local longdesc_brown = S("Huge brown mushroom blocks are the cap parts of huge b
 local longdesc_brown_stem = S("The stem part of a huge brown mushroom.")
 register_mushroom("brown", 2, brown, S("Huge Brown Mushroom Block"), S("Huge Brown Mushroom Stem"), S("Huge Brown Mushroom All-Faces Stem"), longdesc_brown, longdesc_brown_stem)
 
-minetest.register_craft({
-	type = "fuel",
-	recipe = "group:huge_mushroom",
-	burntime = 15,
-})
-
 -- Legacy support
 local colors = { "red", "brown" }
 for c=1, 2 do
