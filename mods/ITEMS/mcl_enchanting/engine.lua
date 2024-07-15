@@ -64,7 +64,7 @@ function mcl_enchanting.get_colorized_enchantment_description(enchantment, level
 		return minetest.colorize(mcl_enchanting.enchantments[enchantment].curse and mcl_colors.RED or mcl_colors.GRAY,
 			mcl_enchanting.get_enchantment_description(enchantment, level))
 	end
-	return ""
+	return minetest.colorize(mcl_colors.DARK_GRAY, S("Unknown Enchantment")..": "..tostring(enchantment))
 end
 
 function mcl_enchanting.get_enchanted_itemstring(itemname)
