@@ -1,6 +1,9 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-minetest.register_node("mclx_core:river_water_source", table.merge(minetest.registered_nodes["mcl_core:water_source"], {
+local water_s = minetest.registered_nodes["mcl_core:water_source"]
+local water_f = minetest.registered_nodes["mcl_core:water_flowing"]
+minetest.register_node("mclx_core:river_water_source", table.merge(water_s, {
 	description = S("River Water Source"),
+	groups = table.merge(water_s.groups, {river_water = water_s.groups.water}),
 	liquid_range = 2,
 	waving = 3,
 	liquid_alternative_flowing = "mclx_core:river_water_flowing",
@@ -22,8 +25,9 @@ minetest.register_node("mclx_core:river_water_source", table.merge(minetest.regi
 	},
 }))
 
-minetest.register_node("mclx_core:river_water_flowing", table.merge(minetest.registered_nodes["mcl_core:water_flowing"], {
+minetest.register_node("mclx_core:river_water_flowing", table.merge(water_f, {
 	description = S("Flowing River Water"),
+	groups = table.merge(water_f.groups, {river_water = water_f.groups.water}),
 	liquid_range = 2,
 	waving = 3,
 	liquid_alternative_flowing = "mclx_core:river_water_flowing",
