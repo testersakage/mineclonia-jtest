@@ -2,8 +2,6 @@ mcl_stairs = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
--- Core mcl_stairs API
-
 local function place_slab_normal(itemstack, placer, pointed_thing)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc then return rc end
@@ -12,7 +10,6 @@ local function place_slab_normal(itemstack, placer, pointed_thing)
 	local origname = place:get_name()
 	local origdef = minetest.registered_nodes[origname]
 
-	--local placer_pos = placer:get_pos()
 	if placer
 		and mcl_util.is_pointing_above_middle(placer, pointed_thing)
 		and origdef and origdef._mcl_other_slab_half
@@ -110,8 +107,7 @@ local function get_stairdef_groups(nodedef)
 	return groups
 end
 
--- Register stair function used internally for new and old API (not exposed
--- externally).
+-- Register stair function used internally for new and old API (not exposed externally).
 local function register_stair(subname, stairdef)
 	if stairdef.recipeitem and minetest.registered_items[stairdef.recipeitem] then
 		if not stairdef.tiles then
@@ -240,8 +236,7 @@ function mcl_stairs.get_base_itemstring(itemstring)
 	return is
 end
 
--- Register slab function used internally for new and old API (not exposed
--- externally).
+-- Register slab function used internally for new and old API (not exposed externally).
 local function register_slab(subname, stairdef)
 	local lower_slab = "mcl_stairs:slab_"..subname
 	local upper_slab = lower_slab.."_top"
@@ -380,7 +375,6 @@ local function register_slab(subname, stairdef)
 	minetest.register_node(":"..upper_slab, topdef)
 
 
-	-- Double slab node
 	local dgroups = table.copy(stairdef.groups)
 	dgroups.not_in_creative_inventory = 1
 	dgroups.not_in_craft_guide = 1
@@ -407,8 +401,6 @@ local function register_slab(subname, stairdef)
 		})
 
 	end
-
-	-- Help alias for the upper slab
 	if minetest.get_modpath("doc") then
 		doc.add_entry_alias("nodes", lower_slab, "nodes", upper_slab)
 	end
@@ -503,7 +495,6 @@ function mcl_stairs.register_slab(subname, ...)
 	end
 end
 
--- Stair/slab registration function.
 function mcl_stairs.register_stair_and_slab(subname, ...)
 	if type(select(1, ...)) == "table" then
 		local stairdef = select(1, ...)
@@ -534,7 +525,6 @@ function mcl_stairs.register_stair_and_slab(subname, ...)
 	})
 end
 
--- Very simple registration function.
 function mcl_stairs.register_stair_and_slab_simple(subname, sourcenode, desc_stair, desc_slab, desc_double_slab, corner_stair_texture_override)
 	local def = minetest.registered_nodes[sourcenode]
 	local groups = {}

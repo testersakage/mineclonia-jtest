@@ -1,8 +1,4 @@
--- Corner stairs handling
-
 -- This code originally copied from the [mcstair] mod and merged into this mod.
--- This file is licensed under CC0.
-
 mcl_stairs.cornerstair = {}
 
 local function get_stair_param(node)
@@ -795,5 +791,4 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		doc.add_entry_alias("nodes", name, "nodes", name.."_outer")
 	end
 end
-
 
