@@ -1,5 +1,3 @@
--- By EliasFleckenstein03 and Code-Sploit
-
 local S = minetest.get_translator("mcl_smithing_table")
 local F = minetest.formspec_escape
 local C = minetest.colorize
@@ -19,10 +17,8 @@ local smithing_materials = {
 	["mcl_nether:quartz"] = "quartz"
 }
 
----Function to upgrade diamond tool/armor to netherite tool/armor
 function mcl_smithing_table.upgrade_item(itemstack)
 	local def = itemstack:get_definition()
-
 	if not def or not def._mcl_upgradable then
 		return
 	end
@@ -36,11 +32,8 @@ function mcl_smithing_table.upgrade_item(itemstack)
 	itemstack:set_name(upgrade_item)
 	mcl_armor.reload_trim_inv_image(itemstack)
 
-	-- Reload the ToolTips of the tool
-
 	tt.reload_itemstack_description(itemstack)
 
-	-- Only return itemstack if upgrade was successfull
 	return itemstack
 end
 
@@ -66,15 +59,12 @@ local formspec = table.concat({
 	mcl_formspec.get_itemslot_bg_v4(9.125, 2.3,1,1),
 	"list[context;upgraded_item;9.125, 2.3;1,1;]",
 
-	-- Player Inventory
-
 	mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3),
 	"list[current_player;main;0.375,5.1;9,3;9]",
 
 	mcl_formspec.get_itemslot_bg_v4(0.375, 9.05, 9, 1),
 	"list[current_player;main;0.375,9.05;9,1;]",
 
-	-- Listrings
 	"listring[context;upgraded_item]",
 	"listring[current_player;main]",
 	"listring[context;sorter]",
@@ -99,13 +89,11 @@ local achievement_trims = {
 }
 
 function mcl_smithing_table.upgrade_trimmed(itemstack, color_mineral, template)
-	--get information required
 	local material_name = color_mineral:get_name()
 	material_name = smithing_materials[material_name]
 
 	local overlay = template:get_name():gsub("mcl_armor:","")
 
-	--trimming process
 	if minetest.get_item_group(template:get_name(), "smithing_template") > 0 then
 		mcl_armor.trim(itemstack, overlay, material_name)
 		tt.reload_itemstack_description(itemstack)
@@ -249,7 +237,6 @@ minetest.register_node("mcl_smithing_table:table", {
 		end
 
 		if listname == "upgraded_item" then
-			-- ToDo: make epic sound
 			minetest.sound_play("mcl_smithing_table_upgrade", { pos = pos, max_hear_distance = 16 })
 
 			if stack:get_name() == "mcl_farming:hoe_netherite" then
@@ -304,10 +291,7 @@ minetest.register_craft({
 	},
 })
 
--- this is the exact same as mcl_smithing_table.upgrade_item_netherite , in case something relies on the old function
-function mcl_smithing_table.upgrade_item_netherite(itemstack)
-	return mcl_smithing_table.upgrade_item(itemstack)
-end
+mcl_smithing_table.upgrade_item_netherite = mcl_smithing_table.upgrade_item --compat
 
 minetest.register_lbm({
 	label = "Update smithing table formspecs and invs to allow new sneak+click behavior",
