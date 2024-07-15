@@ -102,6 +102,8 @@ function mcl_enchanting.item_supports_enchantment(itemname, enchantment, early)
 		return false
 	end
 	local enchantment_def = mcl_enchanting.enchantments[enchantment]
+	if not enchantment_def then return false end
+
 	if mcl_enchanting.is_book(itemname) then
 		return true, (not enchantment_def.treasure)
 	end
