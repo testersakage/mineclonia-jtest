@@ -98,6 +98,13 @@ chances are good that it works out of the box.
 * Change player physics: `PLAYER/playerphysics`
 * Select random treasures: `CORE/mcl_loot`
 * Get flowing direction of liquids: `CORE/flowlib`
+#### Item Definitions
+These can be applied to all item registrations:
+* `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack).
+	Shall return the changed itemstack and optionally as a second value a table of fields to be applied to the item entity
+
+#### Node Definitions
+These can be applied to all node registrations.
 * `on_walk_over` callback for nodes: `CORE/walkover`
 * `_on_arrow_hit` callback when node is hit by an arrow: function(pos, arrow_luaentity)
 * `_on_dye_place` callback when node is rickclicked with a dye: function(pos, color_name)
