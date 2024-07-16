@@ -130,7 +130,16 @@ minetest.register_node("mcl_blackstone:blackstone_brick_polished", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
-	--_mcl_cooking_output = "mcl_blackstone:blackstone_brick_polished_cracked"
+	_mcl_cooking_output = "mcl_blackstone:blackstone_brick_polished_cracked"
+})
+minetest.register_node("mcl_blackstone:blackstone_brick_polished_cracked", {
+	description = S("Cracked Polished Blackstone Bricks"),
+	tiles = {"mcl_blackstone_polished_bricks_cracked.png"},
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	is_ground_content = false,
+	groups = {cracky = 3, pickaxey=1, material_stone=1},
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 1.5,
 })
 minetest.register_node("mcl_blackstone:quartz_brick", {
 	description = S("Quartz Bricks"),
