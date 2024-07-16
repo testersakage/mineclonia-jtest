@@ -1503,11 +1503,10 @@ for color, desc in pairs(boxtypes) do
 		doc.add_entry_alias("nodes", "mcl_chests:" .. canonical_shulker_color .. "_shulker_box_small", "nodes",
 			"mcl_chests:" .. color .. "_shulker_box_small")
 	end
-
 	minetest.register_craft({
 		type = "shapeless",
 		output = "mcl_chests:"..color.."_shulker_box",
-		recipe = { "group:shulker_box", "mcl_dyes:"..color }
+		recipe = { "group:shulker_box", "mcl_dyes:"..mcl_dyes.mcl2_to_color(color) }
 	})
 end
 
