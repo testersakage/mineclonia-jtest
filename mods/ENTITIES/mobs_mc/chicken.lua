@@ -35,6 +35,8 @@ mcl_mobs.register_mob("mobs_mc:chicken", {
 
 	makes_footstep_sound = true,
 	walk_velocity = 1,
+	run_velocity = 1.5,
+	follow_velocity = 1.5,
 	jump_height = 1.5,
 	drops = {
 		{name = "mcl_mobitems:chicken",
@@ -66,13 +68,13 @@ mcl_mobs.register_mob("mobs_mc:chicken", {
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
-		walk_start = 0, walk_end = 20, walk_speed = 25,
+		walk_start = 0, walk_end = 20, walk_speed = 40,
 		run_start = 0, run_end = 20, run_speed = 50,
 	},
-	child_animations = {
+	_child_animations = {
 		stand_start = 31, stand_end = 31,
-		walk_start = 31, walk_end = 51, walk_speed = 37,
-		run_start = 31, run_end = 51, run_speed = 75,
+		walk_start = 31, walk_end = 51, walk_speed = 80,
+		run_start = 31, run_end = 51, run_speed = 80,
 	},
 	follow = {
 		"mcl_farming:wheat_seeds",

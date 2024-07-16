@@ -40,8 +40,8 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	owner = "",
 	order = "follow",
 	floats = 0,
-	walk_velocity = 0.6,
-	run_velocity = 1.2,
+	walk_velocity = 0.3,
+	run_velocity = 1,
 	-- Approximation
 	damage = 14,
 	knock_back = false,
@@ -82,11 +82,10 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	},
 	fall_damage = 0,
 	animation = {
-		stand_speed = 15, walk_speed = 15, run_speed = 25, punch_speed = 15,
-		stand_start = 0,		stand_end = 0,
-		walk_start = 0,		walk_end = 40,
-		run_start = 40,		run_end = 80,
-		punch_start = 80,  punch_end = 90,
+		stand_start = 0, stand_end = 0, stand_speed = 15,
+		walk_start = 40, walk_end = 80, walk_speed = 25,
+		run_start = 40, run_end = 80, run_speed = 25,
+		punch_start = 80, punch_end = 90, punch_speed = 5,
 	},
 	jump = false,
 	do_custom = function(self, dtime)

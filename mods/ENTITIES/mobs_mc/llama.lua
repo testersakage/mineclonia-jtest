@@ -66,10 +66,10 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		{"blank.png", "blank.png", "mobs_mc_llama.png"},
 	},
 	makes_footstep_sound = true,
-	runaway = false,
+	runaway = true,
 	walk_velocity = 1,
-	run_velocity = 4.4,
-	follow_velocity = 4.4,
+	run_velocity = 1.5,
+	follow_velocity = 1.5,
 	floats = 1,
 	drops = {
 		{name = "mcl_mobitems:leather",
@@ -87,7 +87,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
-		walk_start = 0, walk_end = 40, walk_speed = 35,
+		walk_start = 0, walk_end = 40, walk_speed = 50,
 		run_start = 0, run_end = 40, run_speed = 50,
 	},
 	child_animations = {
