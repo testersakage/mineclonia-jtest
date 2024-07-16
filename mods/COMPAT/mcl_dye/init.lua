@@ -6,7 +6,7 @@ mcl_dye.add_bone_meal_particle = mcl_bone_meal.add_bone_meal_particle
 
 mcl_dye.mcl2dyes_translate = {}
 for k, v in pairs(mcl_dyes.colors) do
-	mcl_dye.mcl2dyes_translate["mcl_dye:"..v.mcl2] = "mcl_dyes:"..k
+	mcl_dye.mcl2dyes_translate["mcl_dye:"..(v.mcl2 or k)] = "mcl_dyes:"..k
 end
 
 -- Override of minetest.register_craft rewrites crafing recipes that use mcl2 item names to use the mcla eqivalents.
