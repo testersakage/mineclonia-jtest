@@ -17,13 +17,6 @@ minetest.register_node("mcl_colorblocks:hardened_clay", {
 	_mcl_hardness = 1.25,
 })
 
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_colorblocks:hardened_clay",
-	recipe = "mcl_core:clay",
-	cooktime = 10,
-})
-
 local on_rotate
 if minetest.get_modpath("screwdriver") then
 	on_rotate = screwdriver.rotate_simple

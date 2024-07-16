@@ -47,23 +47,25 @@ minetest.register_node("mcl_deepslate:deepslate_reinforced", {
 	_mcl_hardness = 55,
 })
 
-mcl_deepslate.register_deepslate_ore("coal", S("Deepslate Coal Ore"))
-mcl_deepslate.register_deepslate_ore("iron", S("Deepslate Iron Ore"))
-mcl_deepslate.register_deepslate_ore("gold", S("Deepslate Gold Ore"))
-mcl_deepslate.register_deepslate_ore("emerald", S("Deepslate Emerald Ore"))
-mcl_deepslate.register_deepslate_ore("diamond", S("Deepslate Diamond Ore"))
-mcl_deepslate.register_deepslate_ore("lapis", S("Deepslate Lapis Lazuli Ore"))
+mcl_deepslate.register_deepslate_ore("coal", S("Deepslate Coal Ore"), {_mcl_cooking_output = "mcl_core:coal"})
+mcl_deepslate.register_deepslate_ore("iron", S("Deepslate Iron Ore"), {_mcl_cooking_output = "mcl_core:iron_ingot"})
+mcl_deepslate.register_deepslate_ore("gold", S("Deepslate Gold Ore"), {_mcl_cooking_output = "mcl_core:gold_ingot"})
+mcl_deepslate.register_deepslate_ore("emerald", S("Deepslate Emerald Ore"), {_mcl_cooking_output = "mcl_core:emerald"})
+mcl_deepslate.register_deepslate_ore("diamond", S("Deepslate Diamond Ore"), {_mcl_cooking_output = "mcl_core:diamond"})
+mcl_deepslate.register_deepslate_ore("lapis", S("Deepslate Lapis Lazuli Ore"), {_mcl_cooking_output = "mcl_core:lapis"})
 mcl_deepslate.register_deepslate_ore("redstone", S("Deepslate Redstone Ore"), {
 	_mcl_ore_lit = "mcl_deepslate:deepslate_with_redstone_lit",
 	_mcl_ore_unlit = "mcl_deepslate:deepslate_with_redstone",
+	_mcl_cooking_output = "mesecons:redstone"
 })
 mcl_deepslate.register_deepslate_ore("redstone_lit", S("Lit Deepslate Redstone Ore"), {
 	tiles = { "mcl_deepslate_redstone_ore.png" },
 	_mcl_ore_lit = "mcl_deepslate:deepslate_with_redstone_lit",
 	_mcl_ore_unlit = "mcl_deepslate:deepslate_with_redstone",
 	_mcl_silk_touch_drop = { "mcl_deepslate:deepslate_with_redstone" },
+	_mcl_cooking_output = nil,
 })
-mcl_deepslate.register_deepslate_ore("copper", S("Deepslate Copper Ore"), nil, "mcl_copper:stone_with_copper")
+mcl_deepslate.register_deepslate_ore("copper", S("Deepslate Copper Ore"), {_mcl_cooking_output = "mcl_copper:copper_ingot"}, "mcl_copper:stone_with_copper")
 
 register_deepslate_variant("cobbled", {
 	node = {

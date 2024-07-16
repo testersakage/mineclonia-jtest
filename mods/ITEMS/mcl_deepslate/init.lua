@@ -13,7 +13,6 @@ function mcl_deepslate.register_deepslate_ore(item, desc, extra, basename)
 	def._doc_items_longdesc = S("@1 is a variant of @2 that can generate in deepslate and tuff blobs.", desc, def.description)
 	def.description = desc
 	def.tiles = { "mcl_deepslate_" .. item .. "_ore.png" }
-	def._mcl_cooking_output = minetest.get_craft_result({method = "cooking", width = 1, items = {basename}}).item:to_string()
 
 	table.update(def,extra or {})
 

@@ -384,10 +384,3 @@ minetest.register_craft({
 	type = "toolrepair",
 	additional_wear = -mcl_core.repair,
 })
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_core:charcoal_lump",
-	recipe = "group:tree",
-	cooktime = 10,
-})
