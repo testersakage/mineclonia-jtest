@@ -142,6 +142,8 @@ minetest.register_node("mcl_sponges:sponge_wet", {
 	on_place = place_wet_sponge,
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
+	_mcl_cooking_output = "mcl_sponges:sponge",
+	_mcl_cooking_replacements = {{"mcl_buckets:bucket_empty", "mcl_buckets:bucket_water"}}
 })
 
 if minetest.get_modpath("mclx_core") then
@@ -157,22 +159,10 @@ if minetest.get_modpath("mclx_core") then
 		on_place = place_wet_sponge,
 		_mcl_blast_resistance = 0.6,
 		_mcl_hardness = 0.6,
-	})
-
-	minetest.register_craft({
-		type = "cooking",
-		output = "mcl_sponges:sponge",
-		recipe = "mcl_sponges:sponge_wet_river_water",
-		cooktime = 10,
+		_mcl_cooking_output = "mcl_sponges:sponge",
+		_mcl_cooking_replacements = {{"mcl_buckets:bucket_empty", "mcl_buckets:bucket_river_water"}}
 	})
 end
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mcl_sponges:sponge",
-	recipe = "mcl_sponges:sponge_wet",
-	cooktime = 10,
-})
 
 minetest.register_abm({
 	label = "Sponge water absorbtion",
