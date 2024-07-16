@@ -456,21 +456,6 @@ minetest.register_entity(":__builtin:item", {
 			return
 		end
 
-		if minetest.get_item_group(stack:get_name(), "compass") > 0 then
-			self.is_compass = true
-			if string.find(stack:get_name(), "_lodestone") then
-				stack:set_name("mcl_compass:18_lodestone")
-			elseif string.find(stack:get_name(), "_recovery") then
-				stack:set_name("mcl_compass:18_recovery")
-			else
-				stack:set_name("mcl_compass:18")
-			end
-		end
-
-		if minetest.get_item_group(stack:get_name(), "clock") > 0 then
-			self.is_clock = true
-		end
-
 		local count = stack:get_count()
 		local max_count = stack:get_stack_max()
 		if count > max_count then
