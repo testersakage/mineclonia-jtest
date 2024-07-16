@@ -203,8 +203,8 @@ table.update(mobs_mc.villager_mob, {
 		"mobs_mc_villager.png", --hat
 	},
 	makes_footstep_sound = true,
-	walk_velocity = 1.2,
-	run_velocity = 2.4,
+	walk_velocity = 1,
+	run_velocity = 1.5,
 	drops = {},
 	can_despawn = false,
 	-- TODO: sounds
@@ -215,15 +215,15 @@ table.update(mobs_mc.villager_mob, {
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
-		walk_start = 0, walk_end = 40, walk_speed = 25,
+		walk_start = 0, walk_end = 40, walk_speed = 35,
 		run_start = 0, run_end = 40, run_speed = 25,
 		head_shake_start = 60, head_shake_end = 70, head_shake_loop = false,
 		head_nod_start = 50, head_nod_end = 60, head_nod_loop = false,
 	},
-	child_animations = {
+	_child_animations = {
 		stand_start = 71, stand_end = 71,
-		walk_start = 71, walk_end = 111, walk_speed = 37,
-		run_start = 71, run_end = 111, run_speed = 37,
+		walk_start = 71, walk_end = 111, walk_speed = 60,
+		run_start = 71, run_end = 111, run_speed = 50,
 		head_shake_start = 131, head_shake_end = 141, head_shake_loop = false,
 		head_nod_start = 121, head_nod_end = 131, head_nod_loop = false,
 	},

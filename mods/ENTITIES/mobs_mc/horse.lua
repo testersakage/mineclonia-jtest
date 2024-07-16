@@ -88,16 +88,13 @@ local horse = {
 	mesh = "mobs_mc_horse.b3d",
 	visual_size = {x=3.0, y=3.0},
 	collisionbox = {-0.69825, -0.01, -0.69825, 0.69825, 1.59, 0.69825},
+	runaway = true,
+	_runaway_run_velocity = 2,
+	follow_velocity = 1.5,
 	animation = {
-		stand_speed = 25,
-		stand_start = 0,
-		stand_end = 0,
-		walk_speed = 25,
-		walk_start = 0,
-		walk_end = 40,
-		run_speed = 60,
-		run_start = 0,
-		run_end = 40,
+		stand_start = 0, stand_end = 0, stand_speed = 25,
+		walk_start = 0, walk_end = 40, walk_speed = 25,
+		run_start = 0, run_end = 40, run_speed = 50,
 	},
 	textures = horse_textures,
 	sounds = {
@@ -145,8 +142,14 @@ local horse = {
 
 		if not self._horse_speed then
 			self._horse_speed = math.random(486, 1457)/100
-		elseif self.run_velocity ~= self._horse_speed then
-			self.run_velocity = self._horse_speed
+		end
+
+		if self.driver then
+			if self.run_velocity ~= self._horse_speed then
+				self.run_velocity = self._horse_speed
+			end
+		else
+			self.run_velocity = self._runaway_run_velocity
 		end
 
 		if not self.v2 then

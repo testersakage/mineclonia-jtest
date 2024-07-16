@@ -27,7 +27,10 @@ local cow_def = {
 	curiosity = 2,
 	head_yaw="z",
 	makes_footstep_sound = true,
-	walk_velocity = 1,
+	walk_velocity = 0.7,
+	run_velocity = 1.5,
+	follow_velocity = 1.5,
+	walk_chance = 15,
 	drops = {
 		{name = "mcl_mobitems:beef",
 		chance = 1,
@@ -50,13 +53,13 @@ local cow_def = {
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
-		walk_start = 0, walk_end = 40, walk_speed = 30,
+		walk_start = 0, walk_end = 40, walk_speed = 40,
 		run_start = 0, run_end = 40, run_speed = 40,
 	},
-	child_animations = {
+	_child_animations = {
 		stand_start = 41, stand_end = 41,
-		walk_start = 41, walk_end = 81, walk_speed = 45,
-		run_start = 41, run_end = 81, run_speed = 60,
+		walk_start = 41, walk_end = 81, walk_speed = 80,
+		run_start = 41, run_end = 81, run_speed = 80,
 	},
 	on_rightclick = function(self, clicker)
 		if self:feed_tame(clicker, 1, true, false) then return end

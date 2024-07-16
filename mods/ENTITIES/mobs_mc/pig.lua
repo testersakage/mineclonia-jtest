@@ -26,8 +26,8 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 	head_yaw="z",
 	makes_footstep_sound = true,
 	walk_velocity = 1,
-	run_velocity = 3,
-	follow_velocity = 3.4,
+	run_velocity = 1.5,
+	follow_velocity = 1.5,
 	drops = {
 		{name = "mcl_mobitems:porkchop",
 		chance = 1,
@@ -45,13 +45,13 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
-		walk_start = 0, walk_end = 40, walk_speed = 60,
-		run_start = 0, run_end = 40, run_speed = 90,
+		walk_start = 0, walk_end = 40, walk_speed = 55,
+		run_start = 0, run_end = 40, run_speed = 55,
 	},
-	child_animations = {
+	_child_animations = {
 		stand_start = 41, stand_end = 41,
 		walk_start = 41, walk_end = 81, walk_speed = 90,
-		run_start = 41, run_end = 81, run_speed = 135,
+		run_start = 41, run_end = 81, run_speed = 90,
 	},
 	follow = {
 		"mcl_farming:potato_item",
