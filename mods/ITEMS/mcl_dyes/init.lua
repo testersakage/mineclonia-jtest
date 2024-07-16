@@ -11,7 +11,6 @@ mcl_dyes.colors = {
 		groups = {basecolor_white=1,   excolor_white=1,     unicolor_white=1},
 		rgb = "#d0d6d7",
 		unicolor = "white",
-		mcl2 = "white",
 	},
 	["silver"] = {
 		readable_name = S("Light Grey"),
@@ -32,7 +31,6 @@ mcl_dyes.colors = {
 		groups = {basecolor_black=1,   excolor_black=1,     unicolor_black=1},
 		rgb = "#080a10",
 		unicolor = "black",
-		mcl2 = "black",
 	},
 	["purple"] = {
 		readable_name = S("Purple"),
@@ -46,7 +44,6 @@ mcl_dyes.colors = {
 		groups = {basecolor_blue=1,    excolor_blue=1,      unicolor_blue=1},
 		rgb = "#2e3094",
 		unicolor = "blue",
-		mcl2 = "blue",
 	},
 	["light_blue"] = {
 		readable_name = S("Light Blue"),
@@ -60,7 +57,6 @@ mcl_dyes.colors = {
 		groups = {basecolor_cyan=1,    excolor_cyan=1,      unicolor_cyan=1},
 		rgb = "#167b8c",
 		unicolor = "cyan",
-		mcl2 = "cyan",
 	},
 	["green"] = {
 		readable_name = S("Green"),
@@ -81,42 +77,36 @@ mcl_dyes.colors = {
 		groups = {basecolor_yellow=1,  excolor_yellow=1,    unicolor_yellow=1},
 		rgb = "#f1b216",
 		unicolor = "yellow",
-		mcl2 = "yellow",
 	},
 	["brown"] = {
 		readable_name = S("Brown"),
 		groups = {basecolor_brown=1,   excolor_orange=1,    unicolor_dark_orange=1},
 		rgb = "#633d20",
 		unicolor = "dark_orange",
-		mcl2 = "brown",
 	},
 	["orange"] = {
 		readable_name = S("Orange"),
 		groups = {basecolor_orange=1,  excolor_orange=1,    unicolor_orange=1},
 		rgb = "#e26501",
 		unicolor = "orange",
-		mcl2 = "orange",
 	},
 	["red"] = {
 		readable_name = S("Red"),
 		groups = {basecolor_red=1,     excolor_red=1,       unicolor_red=1},
 		rgb = "#912222",
 		unicolor = "red",
-		mcl2 = "red",
 	},
 	["magenta"] = {
 		readable_name = S("Magenta"),
 		groups = {basecolor_magenta=1, excolor_red_violet=1,unicolor_red_violet=1},
 		rgb = "#ab31a2",
 		unicolor = "red_violet",
-		mcl2 = "magenta",
 	},
 	["pink"] = {
 		readable_name = S("Pink"),
 		groups = {basecolor_red=1,     excolor_red=1,       unicolor_light_red=1},
 		rgb = "#d56791",
 		unicolor = "light_red",
-		mcl2 = "pink",
 	},
 }
 
