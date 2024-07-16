@@ -1298,7 +1298,8 @@ end
 
 for color, desc in pairs(boxtypes) do
 	local mob_texture = shulker_mob_textures[color]
-	local is_canonical = color == canonical_shulker_color
+	local oldcolor = mcl_dyes.colors[color].mcl2
+	local is_canonical = oldcolor == canonical_shulker_color
 	local longdesc, usagehelp, create_entry, entry_name
 	if mod_doc then
 		if is_canonical then
@@ -1312,9 +1313,9 @@ for color, desc in pairs(boxtypes) do
 		end
 	end
 
-	local small_name = "mcl_chests:" .. mcl_dyes.colors[color].mcl2 .. "_shulker_box_small"
+	local small_name = "mcl_chests:" .. oldcolor .. "_shulker_box_small"
 
-	minetest.register_node("mcl_chests:" .. mcl_dyes.colors[color].mcl2 .. "_shulker_box", {
+	minetest.register_node("mcl_chests:" .. oldcolor .. "_shulker_box", {
 		description = desc,
 		_tt_help = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents"),
 		_doc_items_create_entry = create_entry,
@@ -1463,7 +1464,7 @@ for color, desc in pairs(boxtypes) do
 				items[i] = stack:to_string()
 			end
 			local data = minetest.serialize(items)
-			local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
+			local boxitem = ItemStack("mcl_chests:" .. oldcolor .. "_shulker_box")
 			local boxitem_meta = boxitem:get_meta()
 			boxitem_meta:set_string("description", meta:get_string("description"))
 			boxitem_meta:set_string("name", meta:get_string("name"))
@@ -1499,14 +1500,14 @@ for color, desc in pairs(boxtypes) do
 
 	if mod_doc and not is_canonical then
 		doc.add_entry_alias("nodes", "mcl_chests:" .. canonical_shulker_color .. "_shulker_box", "nodes",
-			"mcl_chests:" .. color .. "_shulker_box")
+			"mcl_chests:" .. oldcolor .. "_shulker_box")
 		doc.add_entry_alias("nodes", "mcl_chests:" .. canonical_shulker_color .. "_shulker_box_small", "nodes",
-			"mcl_chests:" .. color .. "_shulker_box_small")
+			"mcl_chests:" .. oldcolor .. "_shulker_box_small")
 	end
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = "mcl_chests:" .. mcl_dyes.colors[color].mcl2 .. "_shulker_box",
+		output = "mcl_chests:" .. oldcolor .. "_shulker_box",
 		recipe = { "group:shulker_box", "mcl_dyes:"..color }
 	})
 end
