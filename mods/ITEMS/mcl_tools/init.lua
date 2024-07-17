@@ -129,7 +129,7 @@ function mcl_tools.register_set(material, tools, overrides)
 			punch_attack_uses = material.uses / 2
 		end
 
-		-- Temporary solution. Planning an API for mcl_smithing_table so tools and armors can
+		-- Temporary solution. I'm planning an API for mcl_smithing_table so tools and armors can
 		-- use _mcl_upgradable_with directly.
 		if overrides and overrides._mcl_upgradable_with then
 			upgradable = true
