@@ -183,7 +183,7 @@ end
 
 function mob_class:slow_mob()
 	local d = 0.85
-	if self.state == "die" then d = 0.92 end
+	if self:check_dying() then d = 0.92 end
 
 	if self.object then
 		local v = self.object:get_velocity()
