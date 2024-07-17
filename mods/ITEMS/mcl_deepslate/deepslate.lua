@@ -47,7 +47,7 @@ minetest.register_node("mcl_deepslate:deepslate_reinforced", {
 	_mcl_hardness = 55,
 })
 
-mcl_deepslate.register_deepslate_ore("coal", S("Deepslate Coal Ore"), {_mcl_cooking_output = "mcl_core:coal"})
+mcl_deepslate.register_deepslate_ore("coal", S("Deepslate Coal Ore"), {_mcl_cooking_output = "mcl_core:coal_lump"})
 mcl_deepslate.register_deepslate_ore("iron", S("Deepslate Iron Ore"), {_mcl_cooking_output = "mcl_core:iron_ingot"})
 mcl_deepslate.register_deepslate_ore("gold", S("Deepslate Gold Ore"), {_mcl_cooking_output = "mcl_core:gold_ingot"})
 mcl_deepslate.register_deepslate_ore("emerald", S("Deepslate Emerald Ore"), {_mcl_cooking_output = "mcl_core:emerald"})
