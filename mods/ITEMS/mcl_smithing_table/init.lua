@@ -152,8 +152,10 @@ end
 
 minetest.register_node("mcl_smithing_table:table", {
 	description = S("Smithing Table"),
-	-- ToDo: Add _doc_items_longdesc and _doc_items_usagehelp
-
+	_doc_items_longdesc = S("A smithing table is a utility block used to alter tools and armor at the cost of a smithing template and the appropriate material. This is the only way to obtain trimmed armor or upgrade diamond equipment with netherite. It also serves as a toolsmith's job site block."),
+	_doc_items_usagehelp = S("Rightclick on a smithing table to access its interface. Put armor or tools in the upper left slot. The top right slot is reserved for mineral items. The bottom slot is for smithing templates. To upgrade your diamond armor and tools to netherite, the netherite upgrade template is required.").."\n"..
+	S("To trim your armor, you need a mineral item and a smithing template. Each piece of armor can be given an trimming pattern. The items are consumed after trimming and the armor piece receives the pattern defined by the template.").."\n\n"..
+	S("List of mineral items:\n• Amethyst Shard\n• Copper Ingot\n• Diamond\n• Emerald\n• Gold Ingot\n• Iron Ingot\n• Lapis Lazuli\n• Netherite Ingot\n• Quartz\n• Redstone"),
 	groups = { pickaxey = 2, deco_block = 1 },
 
 	tiles = {
