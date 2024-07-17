@@ -108,7 +108,7 @@ minetest.register_node("mcl_nether:netherrack", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
-	_mcl_cooking_output = "mcl_nether:brick",
+	_mcl_cooking_output = "mcl_nether:netherbrick",
 
 	-- Eternal fire on top
 	after_destruct = eternal_after_destruct,
