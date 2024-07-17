@@ -115,8 +115,7 @@ end
 
 function mcl_tools.register_set(material, tools, overrides)
 	local mod = minetest.get_current_modname()
-	local toolname = ""
-	local punch_attack_uses = 0
+	local toolname, punch_attack_uses
 	local upgradable = false
 	local upgrade_item = ""
 
