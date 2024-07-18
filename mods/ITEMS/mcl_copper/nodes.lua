@@ -176,6 +176,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_blast_resistance = 3,
 		_mcl_hardness = 3
 	})
+	mcl_wip.register_wip_item("mcl_copper:door"..n)
 end
 
 mcl_stairs.register_stair_and_slab("copper_cut", {
