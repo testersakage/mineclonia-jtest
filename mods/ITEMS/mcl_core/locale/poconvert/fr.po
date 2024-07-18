@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-18 14:18+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Stick"
 msgstr "Bâton"
@@ -188,7 +190,7 @@ msgid "Mossy Stone Bricks"
 msgstr "Pierre Taillée Moussue"
 
 msgid "Smooth Stone"
-msgstr ""
+msgstr "Pierre lisse"
 
 msgid "Granite"
 msgstr "Granite"
@@ -233,7 +235,7 @@ msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful bl
 msgstr "Un bloc d'herbe est de la terre avec une couverture d'herbe. Les blocs d'herbe sont des blocs ingénieux qui permettent la croissance de toutes sortes de plantes. Ils peuvent être transformés en terres agricoles avec une houe et transformés en chemins d'herbe avec une pelle. À la lumière, l'herbe se propage lentement sur la terre à proximité. Sous un bloc opaque ou un liquide, un bloc d'herbe peut redevenir terre."
 
 msgid "Dirt with Snow"
-msgstr ""
+msgstr "Terre enneigée"
 
 msgid "Grass Path"
 msgstr "Chemin d'Herbe"
@@ -248,7 +250,7 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr "Le mycélium est un type de terre et le sol idéal pour les champignons. Contrairement à d'autres blocs de terre, il ne peut pas être transformé en terres agricoles avec une houe. À la lumière, le mycélium se répand lentement sur la terre voisine. Sous un bloc opaque ou un liquide, il finit par redevenir de la terre."
 
 msgid "Mycelium with Snow"
-msgstr ""
+msgstr "Mycélium enneigé"
 
 msgid "Podzol"
 msgstr "Podzol"
@@ -257,7 +259,7 @@ msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are ab
 msgstr "Le podzol est un type de terre trouvé dans les forêts de la taïga. Seules quelques plantes peuvent y survivre."
 
 msgid "Podzol with Snow"
-msgstr ""
+msgstr "Podzol enneigé"
 
 msgid "Dirt"
 msgstr "Terre"
@@ -503,7 +505,7 @@ msgid "Stained Glass"
 msgstr "Verre teinté"
 
 msgid "@1 Stained Glass"
-msgstr ""
+msgstr "Vitre teintée @1"
 
 msgid "Flowing Water"
 msgstr "Eau qui coule"
@@ -602,67 +604,67 @@ msgid "Void"
 msgstr "Néant"
 
 msgid "Stone Stairs"
-msgstr ""
+msgstr "Escalier en roche"
 
 msgid "Stone Slab"
-msgstr ""
+msgstr "Dalle en roche"
 
 msgid "Smooth Stone Slab"
-msgstr ""
+msgstr "Dalle en roche lisse"
 
 msgid "Andesite Stairs"
-msgstr ""
+msgstr "Escaliers en andésite"
 
 msgid "Andesite Slab"
-msgstr ""
+msgstr "Dalle en andésite"
 
 msgid "Granite Stairs"
-msgstr ""
+msgstr "Escaliers en granite"
 
 msgid "Granite Slab"
-msgstr ""
+msgstr "Dalle en granite"
 
 msgid "Diorite Stairs"
-msgstr ""
+msgstr "Escaliers en diorite"
 
 msgid "Diorite Slab"
-msgstr ""
+msgstr "Dalle en diorite"
 
 msgid "Cobblestone Stairs"
-msgstr ""
+msgstr "Escaliers en pierre"
 
 msgid "Cobblestone Slab"
-msgstr ""
+msgstr "Dalle en pierre"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr ""
+msgstr "Escalier en pierre moussue"
 
 msgid "Mossy Cobblestone Slab"
-msgstr ""
+msgstr "Dalle en pierre moussue"
 
 msgid "Brick Stairs"
-msgstr ""
+msgstr "Escalier en brique"
 
 msgid "Brick Slab"
-msgstr ""
+msgstr "Dalle en brique"
 
 msgid "Sandstone Stairs"
-msgstr ""
+msgstr "Escalier en grès"
 
 msgid "Sandstone Slab"
-msgstr ""
+msgstr "Dalle en grès"
 
 msgid "Smooth Sandstone Stairs"
-msgstr ""
+msgstr "Escalier en grès lisse"
 
 msgid "Smooth Sandstone Slab"
-msgstr ""
+msgstr "Dalle en grès lisse"
 
 msgid "Cut Sandstone Stairs"
-msgstr ""
+msgstr "Escalier en grès taillée"
 
 msgid "Cut Sandstone Slab"
-msgstr ""
+msgstr "Dalle en grès taillée"
 
 msgid "Red Sandstone Stairs"
 msgstr ""
@@ -729,4 +731,3 @@ msgstr ""
 
 msgid "Birch"
 msgstr ""
-
