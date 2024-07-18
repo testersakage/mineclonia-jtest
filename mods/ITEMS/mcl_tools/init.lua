@@ -95,6 +95,10 @@ local function get_tool_diggroups(material, toolname)
 	return diggroups
 end
 
+---Need comments
+---@param material table
+---@param tools table
+---@param overrides table|nil
 function mcl_tools.register_set(material, tools, overrides)
 	local mod = minetest.get_current_modname()
 	local toolname, punch_attack_uses
@@ -108,11 +112,13 @@ function mcl_tools.register_set(material, tools, overrides)
 			punch_attack_uses = material.uses / 2
 		end
 
-		if defs.tool_capabilities then
+		if defs.tool_capabilities and type(defs.tool_capabilities) == "table" then
 			table.merge(defs.tool_capabilities, {
 				max_drop_level = material.max_drop_level,
 				punch_attack_uses = punch_attack_uses
 			})
+		else
+			-- Suggestion?
 		end
 
 		minetest.register_tool(toolname, table.merge({
