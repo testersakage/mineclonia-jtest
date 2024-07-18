@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-18 14:18+0000\n"
+"PO-Revision-Date: 2024-07-18 14:57+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -667,22 +667,22 @@ msgid "Cut Sandstone Slab"
 msgstr "Dalle en grès taillée"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "Escaliers en grès rouge"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "Dalle en grès rouge"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "Escaliers en grès rouge lisse"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "Dalle en grès rouge lisse"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "Escaliers en grès rouge taillée"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "Dalle en grès rouge taillée"
 
 msgid "Stone Brick Stairs"
 msgstr ""
