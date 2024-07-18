@@ -98,49 +98,36 @@ end
 function mcl_tools.register_set(material, tools, overrides)
 	local mod = minetest.get_current_modname()
 	local toolname, punch_attack_uses
-	local upgradable = false
-	local upgrade_item = ""
 
 	for tool, defs in pairs(tools) do
 		toolname = mod..":"..tool.."_"..material.name
 
-		if tool:find("sword") then
+		if tool == "sword" then
 			punch_attack_uses = material.uses
 		else
 			punch_attack_uses = material.uses / 2
 		end
 
-		-- Temporary solution. I'm planning an API for mcl_smithing_table so tools and armors can
-		-- use _mcl_upgradable_with directly.
-		if overrides and overrides._mcl_upgradable_with then
-			upgradable = true
-			if overrides._mcl_upgradable_with:find("netherite") then
-				upgrade_item = toolname:gsub(tool, "netherite")
-			end
+		if defs.tool_capabilities then
+			table.merge(defs.tool_capabilities, {
+				max_drop_level = material.max_drop_level,
+				punch_attack_uses = punch_attack_uses
+			})
 		end
 
 		minetest.register_tool(toolname, table.merge({
-			description = defs.description,
 			_doc_items_longdesc = long_descs[tool],
-			_doc_items_usagehelp = tool.doc_items_usagehelp,
-			inventory_image = defs.image,
 			wield_scale = wield_scale,
 			groups = table.merge(groups[tool], material.groups),
-			tool_capabilities = table.merge({
-				max_drop_level = material.max_drop_level,
-				punch_attack_uses = punch_attack_uses
-			}, defs.toolcaps),
 			sound = { breaks = "default_tool_breaks" },
 			on_place = mcl_tools.tool_place_funcs[tool],
 			_repair_material = material.material,
 			_mcl_toollike_wield = true,
 			_mcl_diggroups = get_tool_diggroups(material, tool),
-			_mcl_upgradable = upgradable,
-			_mcl_upgrade_item = upgrade_item
-		}, overrides))
+		}, defs, overrides))
 
 		if material.craftable then
-			if tool:find("pick") then
+			if tool == "pick" then
 				minetest.register_craft({
 					output = toolname,
 					recipe = {
@@ -149,7 +136,7 @@ function mcl_tools.register_set(material, tools, overrides)
 						{ "", "mcl_core:stick", "" }
 					}
 				})
-			elseif tool:find("sword") then
+			elseif tool == "sword" then
 				minetest.register_craft({
 					output = toolname,
 					recipe = {
@@ -158,7 +145,7 @@ function mcl_tools.register_set(material, tools, overrides)
 						{ "mcl_core:stick" }
 					}
 				})
-			elseif tool:find("axe") then
+			elseif tool == "axe" then
 				minetest.register_craft({
 					output = toolname,
 					recipe = {
@@ -176,7 +163,7 @@ function mcl_tools.register_set(material, tools, overrides)
 						{ "", "mcl_core:stick", "" }
 					}
 				})
-			elseif tool:find("shovel") then
+			elseif tool == "shovel" then
 				minetest.register_craft({
 					output = toolname,
 					recipe = {
@@ -185,7 +172,7 @@ function mcl_tools.register_set(material, tools, overrides)
 						{ "mcl_core:stick" }
 					}
 				})
-			elseif tool:find("hoe") then
+			elseif tool == "hoe" then
 				minetest.register_craft({
 					output = toolname,
 					recipe = {

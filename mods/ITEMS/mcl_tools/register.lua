@@ -16,7 +16,7 @@ mcl_tools.register_set({
     ["pick"] = {
         description = S("Wooden Pickaxe"),
         image = "default_tool_woodpick.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 2 }
         }
@@ -25,7 +25,7 @@ mcl_tools.register_set({
         description = S("Wooden Shovel"),
         _doc_items_usagehelp = shovel_use,
         image = "default_tool_woodshovel.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 2 }
         }
@@ -33,7 +33,7 @@ mcl_tools.register_set({
     ["sword"] = {
         description = S("Wooden Sword"),
         image = "default_tool_woodsword.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 4 }
         }
@@ -41,7 +41,7 @@ mcl_tools.register_set({
     ["axe"] = {
         description = S("Wooden Axe"),
         image = "default_tool_woodaxe.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1.25,
             damage_groups = { fleshy = 2 }
         }
@@ -56,13 +56,13 @@ mcl_tools.register_set({
     uses = 132,
     level = 3,
     speed = 4,
-    groups = { dig_class_speed = 3, enchantability = 5 },
-    max_drop_level = 3
+    max_drop_level = 3,
+    groups = { dig_class_speed = 3, enchantability = 5 }
 }, {
     ["pick"] = {
         description = S("Stone Pickaxe"),
         image = "default_tool_stonepick.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 3 }
         }
@@ -71,7 +71,7 @@ mcl_tools.register_set({
         description = S("Stone Shovel"),
         _doc_items_usagehelp = shovel_use,
         image = "default_tool_stoneshovel.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 3 }
         }
@@ -79,7 +79,7 @@ mcl_tools.register_set({
     ["sword"] = {
         description = S("Stone Sword"),
         image = "default_tool_stonesword.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 5 }
         }
@@ -87,7 +87,7 @@ mcl_tools.register_set({
     ["axe"] = {
         description = S("Stone Axe"),
         image = "default_tool_stoneaxe.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1.25,
             damage_groups = { fleshy = 9 }
         }
@@ -102,13 +102,13 @@ mcl_tools.register_set({
     uses = 251,
     level = 4,
     speed = 6,
-    groups = { dig_class_speed = 4, enchantability = 14 },
-    max_drop_level = 4
+    max_drop_level = 4,
+    groups = { dig_class_speed = 4, enchantability = 14 }
 }, {
     ["pick"] = {
         description = S("Iron Pickaxe"),
         image = "default_tool_steelpick.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 4 }
         }
@@ -117,7 +117,7 @@ mcl_tools.register_set({
         description = S("Iron Shovel"),
         _doc_items_usagehelp = shovel_use,
         image = "default_tool_steelshovel.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 4 }
         }
@@ -125,7 +125,7 @@ mcl_tools.register_set({
     ["sword"] = {
         description = S("Iron Sword"),
         image = "default_tool_steelsword.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 6 }
         }
@@ -133,7 +133,7 @@ mcl_tools.register_set({
     ["axe"] = {
         description = S("Iron Axe"),
         image = "default_tool_steelaxe.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1.11111111,
             damage_groups = { fleshy = 9 }
         }
@@ -148,13 +148,13 @@ mcl_tools.register_set({
     uses = 33,
     level = 2,
     speed = 12,
-    groups = { dig_class_speed = 6, enchantability = 22 },
-    max_drop_level = 2
+    max_drop_level = 2,
+    groups = { dig_class_speed = 6, enchantability = 22 }
 }, {
     ["pick"] = {
         description = S("Golden Pickaxe"),
         image = "default_tool_goldpick.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 2 }
         }
@@ -163,7 +163,7 @@ mcl_tools.register_set({
         description = S("Golden Shovel"),
         _doc_items_usagehelp = shovel_use,
         image = "default_tool_goldshovel.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 2 }
         }
@@ -171,7 +171,7 @@ mcl_tools.register_set({
     ["sword"] = {
         description = S("Golden Sword"),
         image = "default_tool_goldsword.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 4 }
         }
@@ -179,7 +179,7 @@ mcl_tools.register_set({
     ["axe"] = {
         description = S("Golden Axe"),
         image = "default_tool_goldaxe.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 7 }
         }
@@ -194,43 +194,51 @@ mcl_tools.register_set({
     uses = 1562,
     level = 5,
     speed = 8,
-    groups = { dig_class_speed = 5, enchantability = 10 },
-    max_drop_level = 5
+    max_drop_level = 5,
+    groups = { dig_class_speed = 5, enchantability = 10 }
 }, {
     ["pick"] = {
         description = S("Diamond Pickaxe"),
         image = "default_tool_diamondpick.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 5 }
-        }
+        },
+        _mcl_upgradable = true,
+        _mcl_upgrade_item = "mcl_tools:pick_netherite"
     },
     ["shovel"] = {
         description = S("Diamond Shovel"),
         _doc_items_usagehelp = shovel_use,
         image = "default_tool_diamondshovel.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 5 }
-        }
+        },
+        _mcl_upgradable = true,
+        _mcl_upgrade_item = "mcl_tools:shovel_netherite"
     },
     ["sword"] = {
         description = S("Diamond Sword"),
         image = "default_tool_diamondsword.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 7 }
-        }
+        },
+        _mcl_upgradable = true,
+        _mcl_upgrade_item = "mcl_tools:sword_netherite"
     },
     ["axe"] = {
         description = S("Diamond Axe"),
         image = "default_tool_diamondaxe.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 9 }
-        }
+        },
+        _mcl_upgradable = true,
+        _mcl_upgrade_item = "mcl_tools:axe_netherite"
     }
-}, { _mcl_upgradable_with = "mcl_nether:netherite_ingot" })
+})
 
 --Netherite Set
 mcl_tools.register_set({
@@ -240,13 +248,13 @@ mcl_tools.register_set({
     uses = 2031,
     level = 6,
     speed = 9.5,
-    groups = { dig_class_speed = 6, enchantability = 10, fire_immune = 1 },
-    max_drop_level = 5
+    max_drop_level = 5,
+    groups = { dig_class_speed = 6, enchantability = 10, fire_immune = 1 }
 }, {
     ["pick"] = {
         description = S("Netherite Pickaxe"),
         image = "default_tool_netheritepick.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 6 }
         }
@@ -255,7 +263,7 @@ mcl_tools.register_set({
         description = S("Netherite Shovel"),
         _doc_items_usagehelp = shovel_use,
         image = "default_tool_netheriteshovel.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 6 }
         }
@@ -263,7 +271,7 @@ mcl_tools.register_set({
     ["sword"] = {
         description = S("Netherite Sword"),
         image = "default_tool_netheritesword.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 9 }
         }
@@ -271,7 +279,7 @@ mcl_tools.register_set({
     ["axe"] = {
         description = S("Netherite Axe"),
         image = "default_tool_netheriteaxe.png",
-        toolcaps = {
+        tool_capabilities = {
             full_punch_interval = 1,
             damage_groups = { fleshy = 10 }
         }
