@@ -119,6 +119,7 @@ function mcl_tools.register_set(material, tools, overrides)
 			})
 		else
 			-- Suggestion?
+			return
 		end
 
 		minetest.register_tool(toolname, table.merge({
