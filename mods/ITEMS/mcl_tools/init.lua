@@ -4,24 +4,6 @@ local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
 mcl_tools = {}
 
-
--- mods/default/tools.lua
-
---
--- Tool definition
---
-
---[[
-dig_speed_class group:
-- 1: Painfully slow
-- 2: Very slow
-- 3: Slow
-- 4: Fast
-- 5: Very fast
-- 6: Extremely fast
-- 7: Instantaneous
-]]
-
 -- Help texts
 local long_descs = {
 	["pick"] = S("Pickaxes are mining tools to mine hard blocks, such as stone. A pickaxe can also be used as weapon, but it is rather inefficient."),
