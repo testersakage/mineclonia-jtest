@@ -234,9 +234,10 @@ for _, item in pairs(compass_types) do
 			inventory_image = string.format(img_fmt, i),
 			wield_image = string.format(img_fmt, i),
 			groups = {compass = i + 1, tool = 1, disable_repair = 1},
-			_on_set_item_entity = function(itemstack)
+			_on_set_item_entity = function(itemstack, entity)
+				entity.is_compass = true
 				itemstack:set_name(string.format(name_fmt, stereotype_frame))
-				return itemstack, { is_compass = true }
+				return itemstack
 			end
 		}
 		if i == stereotype_frame then
