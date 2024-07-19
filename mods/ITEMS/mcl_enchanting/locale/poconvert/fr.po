@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-19 23:35+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_enchanting/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Bane of Arthropods"
 msgstr "Fléau des arthropodes"
@@ -59,7 +61,7 @@ msgid "Fortune"
 msgstr "Fortune"
 
 msgid "Increases certain block drops."
-msgstr "Multiplie les items droppés"
+msgstr "Augmente les ressources obtenues par le minage."
 
 msgid "Frost Walker"
 msgstr "Semelles givrantes"
@@ -185,7 +187,7 @@ msgid "Sweeping Edge"
 msgstr "Affilage"
 
 msgid "Increases sweeping attack damage."
-msgstr "Augmente les dégâts de l'épée"
+msgstr "Augmente les dégâts de balayage."
 
 msgid "Unbreaking"
 msgstr "Solidité"
@@ -197,13 +199,13 @@ msgid "Inventory"
 msgstr "Inventaire"
 
 msgid "@1 Lapis Lazuli"
-msgstr "@1 Lapis Lazuli"
+msgstr "@1 Lapis-lazuli"
 
 msgid "@1 Enchantment Levels"
 msgstr "@1 Niveaux d'enchantement"
 
 msgid "Level requirement: @1"
-msgstr "Niveau requis: @1"
+msgstr "Niveau requis : @1"
 
 msgid "Enchant an item"
 msgstr "Enchanter un objet"
@@ -212,7 +214,7 @@ msgid "<player> <enchantment> [<level>]"
 msgstr "<joueur> <enchantement> [<niveau>]"
 
 msgid "Usage: /enchant <player> <enchantment> [<level>]"
-msgstr "Usage: /enchant <joueur> <enchantement> [<niveau>]"
+msgstr "Usage : /enchant <joueur> <enchantement> [<niveau>]"
 
 msgid "Player '@1' cannot be found."
 msgstr "Le joueur '@1' est introuvable."
@@ -245,7 +247,7 @@ msgid "Forcefully enchant an item"
 msgstr "Enchantement forcé d'un objet"
 
 msgid "Usage: /forceenchant <player> <enchantment> [<level>]"
-msgstr "Usage: /forceenchant <joueur> <enchantrment> [<niveau>]"
+msgstr "Usage : /forceenchant <joueur> <enchantrment> [<niveau>]"
 
 msgid "The target item is not enchantable."
 msgstr "L'objet cible n'est pas enchantable."
@@ -285,4 +287,3 @@ msgstr "Après avoir finalement sélectionné un enchantement ; cliquer gauche l
 
 msgid "Enchant"
 msgstr "Enchantement"
-
