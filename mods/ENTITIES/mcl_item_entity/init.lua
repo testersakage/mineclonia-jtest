@@ -390,6 +390,7 @@ minetest.register_entity(":__builtin:item", {
 			-- Destroy entity
 			-- This just prevents this section to be run again because object:remove() doesn't remove the item immediately.
 			self.target = checkpos
+			self.itemstring = ""
 			self:safe_remove()
 
 			-- Stop the object
@@ -610,6 +611,7 @@ minetest.register_entity(":__builtin:item", {
 		self.random_velocity = 0
 		self:set_item(own_stack:to_string())
 
+		entity.itemstring = ""
 		entity._removed = true
 		entity.object:remove()
 		return true
