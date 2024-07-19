@@ -101,7 +101,7 @@ chances are good that it works out of the box.
 #### Item Definitions
 These can be applied to all item registrations:
 * `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack, luaentity).
-	Shall return the changed itemstack.
+	Shall return the changed itemstack and optionally as second return value a table of object properties to be applied to the object when the new item is set.
 
 #### Node Definitions
 These can be applied to all node registrations.

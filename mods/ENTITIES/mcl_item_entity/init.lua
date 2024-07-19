@@ -463,8 +463,10 @@ minetest.register_entity(":__builtin:item", {
 		end
 
 		local def = stack:get_definition()
+		local props_overrides = {}
 		if def._on_set_item_entity then
-			local s = def._on_set_item_entity(stack, self)
+			local s
+			s, props_overrides = def._on_set_item_entity(stack, self)
 			if s then
 				stack = s
 			end
@@ -475,13 +477,13 @@ minetest.register_entity(":__builtin:item", {
 		local wield_scale = (def and type(def.wield_scale) == "table" and tonumber(def.wield_scale.x)) or 1
 		local c = s
 		s = s / wield_scale
-		self.object:set_properties({
+		self.object:set_properties(table.merge({
 			wield_item = stack:get_name(),
 			visual_size = {x = s, y = s},
 			collisionbox = {-c, -c, -c, c, c, c},
 			infotext = def.description,
 			glow = def.light_source,
-		})
+		}, props_overrides))
 		if item_drop_settings.random_item_velocity == true and self.age < 1 then
 			minetest.after(0, self.apply_random_vel, self)
 		end
