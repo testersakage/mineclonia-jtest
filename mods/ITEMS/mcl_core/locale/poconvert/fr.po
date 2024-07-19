@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-18 14:57+0000\n"
+"PO-Revision-Date: 2024-07-19 16:30+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -82,7 +82,7 @@ msgid "Emeralds are used in villager trades as currency."
 msgstr "Les émeraudes sont utilisées pour faire des échanges avec les villageois."
 
 msgid "Lapis Lazuli"
-msgstr "Lapis Lazuli"
+msgstr "Lapis-lazuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Les lapis-lazuli sont nécessaires pour enchanter des objets sur une table d'enchantement."
@@ -520,7 +520,7 @@ msgid "Water is abundant in oceans and also appears in a few springs in the grou
 msgstr "L'eau est abondante dans les océans et apparaît également dans quelques sources dans le sol. Vous pouvez nager facilement dans l'eau, mais vous devez de temps en temps reprendre votre souffle."
 
 msgid "Water interacts with lava in various ways:"
-msgstr "L'eau interagit avec la lave de différentes manières:"
+msgstr "L'eau interagit avec la lave de différentes manières :"
 
 msgid "• When water is directly above or horizontally next to a lava source, the lava turns into obsidian."
 msgstr "• Lorsque l'eau est directement au-dessus ou horizontalement à côté d'une source de lave, la lave se transforme en obsidienne."
@@ -544,7 +544,7 @@ msgid "Lava is hot and rather dangerous. Don't touch it, it will hurt you a lot 
 msgstr "La lave est chaude et plutôt dangereuse. Ne le touchez pas, cela vous fera beaucoup de mal et il est difficile d'en sortir."
 
 msgid "Lava interacts with water various ways:"
-msgstr "La lave interagit avec l'eau de différentes manières:"
+msgstr "La lave interagit avec l'eau de différentes manières :"
 
 msgid "• When a lava source is directly below or horizontally next to water, the lava turns into obsidian."
 msgstr "• Lorsqu'une source de lave se trouve directement sous ou horizontalement à côté de l'eau, la lave se transforme en obsidienne."
@@ -685,49 +685,49 @@ msgid "Cut Red Sandstone Slab"
 msgstr "Dalle en grès rouge taillée"
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "Escalier en pierre taillée"
 
 msgid "Stone Brick Slab"
-msgstr ""
+msgstr "Dalle en pierre taillée"
 
 msgid "Polished Andesite Stairs"
-msgstr ""
+msgstr "Escalier en andésite polie"
 
 msgid "Polished Andesite Slab"
-msgstr ""
+msgstr "Dalle en andésite polie"
 
 msgid "Polished Granite Stairs"
-msgstr ""
+msgstr "Escalier en granite polie"
 
 msgid "Polished Granite Slab"
-msgstr ""
+msgstr "Dalle en granite polie"
 
 msgid "Polished Diorite Stairs"
-msgstr ""
+msgstr "Escalier en diorite polie"
 
 msgid "Polished Diorite Slab"
-msgstr ""
+msgstr "Dalle en diorite polie"
 
 msgid "Mossy Stone Brick Stairs"
-msgstr ""
+msgstr "Escalier en pierre taillée moussue"
 
 msgid "Mossy Stone Brick Slab"
-msgstr ""
+msgstr "Dalle en pierre taillée moussue"
 
 msgid "Oak"
-msgstr ""
+msgstr "Chêne"
 
 msgid "Dark Oak"
-msgstr ""
+msgstr "Chêne noir"
 
 msgid "Jungle"
-msgstr ""
+msgstr "Acajou"
 
 msgid "Spruce"
-msgstr ""
+msgstr "Sapin"
 
 msgid "Acacia"
-msgstr ""
+msgstr "Acacia"
 
 msgid "Birch"
-msgstr ""
+msgstr "Bouleau"
