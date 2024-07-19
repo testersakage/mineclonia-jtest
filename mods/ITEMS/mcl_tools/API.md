@@ -49,7 +49,7 @@ Each subtable must contain individual information for each tool. All definitions
 
 * `tool_capabilities`: a table that must contain the following fields:
     * `full_punch_interval`: an integer or float number that determines, in seconds, the amount of time for the punch to do maximum damage when the tool is used as a weapon.
-    * `damage_groups`:
+    * `damage_groups`: a table containing the total damage applied to certain groups of entities. Mineclonia uses the fleshy group (e.g. {fleshy = 9}).
 
 ##### `overrides`
 The `overrides` table is optional. The use of this table is intended to use special fields in all tools in the set. An example of the use of `overrides` is the wooden tool set. These tools can be used as fuel. To do this, they use the `_mcl_burntime` field which is passed to all tools through `overrides`.
