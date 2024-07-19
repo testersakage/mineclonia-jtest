@@ -112,15 +112,10 @@ function mcl_tools.register_set(material, tools, overrides)
 			punch_attack_uses = material.uses / 2
 		end
 
-		if defs.tool_capabilities and type(defs.tool_capabilities) == "table" then
-			table.merge(defs.tool_capabilities, {
-				max_drop_level = material.max_drop_level,
-				punch_attack_uses = punch_attack_uses
-			})
-		else
-			-- Suggestion?
-			return
-		end
+		table.merge(defs.tool_capabilities, {
+			max_drop_level = material.max_drop_level,
+			punch_attack_uses = punch_attack_uses
+		})
 
 		minetest.register_tool(toolname, table.merge({
 			_doc_items_longdesc = long_descs[tool],
