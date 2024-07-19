@@ -47,7 +47,9 @@ Each subtable must contain individual information for each tool. All definitions
 * `description`: must contain the description relating to the tool (e.g. S(<span style="color:gold">"Iron Pickaxe"</span>)).
 * `inventory_image`: also a string with the name of the texture that should be used in the inventory. If omitted, the function will attempt to search for a texture with a default name. The pattern followed is: <span style="color:green">**mod_name**</span><span style="color:red"> **..** </span><span style="color:gold">**"_"**</span><span style="color:red"> **..** </span><span style="color:green">**tool_name**</span><span style="color:red"> **..** </span><span style="color:gold">**"_"**</span><span style="color:red"> **..** </span><span style="color:green">**material_name**</span><span style="color:red"> **..** </span><span style="color:gold">**".png"**</span>
 
-* `tool_capabilities`:
+* `tool_capabilities`: a table that must contain the following fields:
+    * `full_punch_interval`: an integer or float number that determines, in seconds, the amount of time for the punch to do maximum damage when the tool is used as a weapon.
+    * `damage_groups`: 
 
 ##### `overrides`
 The `overrides` table is optional. The use of this table is intended to use special fields in all tools in the set. An example of the use of `overrides` is the wooden tool set. These tools can be used as fuel. To do this, they use the `_mcl_burntime` field which is passed to all tools through `overrides`.
