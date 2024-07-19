@@ -104,7 +104,6 @@ function mcl_tools.register_set(material, tools, overrides)
 	local toolname, punch_attack_uses
 
 	for tool, defs in pairs(tools) do
-		assert(type(tool) == "string", "Missing tool name.")
 		toolname = mod..":"..tool.."_"..material.name
 
 		if tool == "sword" then
