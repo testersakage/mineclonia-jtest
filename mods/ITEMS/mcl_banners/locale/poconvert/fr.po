@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-17 21:28+0000\n"
+"PO-Revision-Date: 2024-07-19 23:35+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -31,7 +31,7 @@ msgid "Light Grey Banner"
 msgstr "Bannière Gris Clair"
 
 msgid "Light Grey"
-msgstr "Gris Clair"
+msgstr "Gris clair"
 
 msgid "Black Banner"
 msgstr "Bannière Noir"
@@ -67,7 +67,7 @@ msgid "Blue Banner"
 msgstr "Bannière Bleue"
 
 msgid "Blue"
-msgstr "Blue"
+msgstr "Bleu"
 
 msgid "Magenta Banner"
 msgstr "Bannière Magenta"
@@ -103,13 +103,13 @@ msgid "Lime Banner"
 msgstr "Bannière Vert Clair"
 
 msgid "Lime"
-msgstr "Vert Clair"
+msgstr "Vert clair"
 
 msgid "Light Blue Banner"
 msgstr "Bannière Bleue Clair"
 
 msgid "Light Blue"
-msgstr "Bleu Clair"
+msgstr "Bleu clair"
 
 msgid "Banner"
 msgstr "Bannière"
@@ -121,7 +121,11 @@ msgid "Use crafting to draw a pattern on top of the banner. Emblazoned banners c
 msgstr "Utilisez l'artisanat pour dessiner un motif sur le dessus de la bannière. Les bannières blasonnées peuvent être à nouveau blasonnées pour combiner différents motifs. Vous pouvez dessiner jusqu'à 12 couches sur une bannière de cette façon. Si la bannière comprend un dégradé, seulement 3 couches sont possibles."
 
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
-msgstr "Vous pouvez copier le motif d'une bannière en plaçant deux bannières de la même couleur dans la grille de fabrication: l'une doit être décorée, l'autre doit être propre. Enfin, vous pouvez utiliser une bannière sur un chaudron avec de l'eau pour laver sa couche la plus haute."
+msgstr ""
+"Vous pouvez copier le motif d'une bannière en plaçant deux bannières de la "
+"même couleur dans la grille de fabrication : l'une doit être décorée, "
+"l'autre doit être propre. Enfin, vous pouvez utiliser une bannière sur un "
+"chaudron avec de l'eau pour laver sa couche la plus haute."
 
 msgid "@1 Banner"
 msgstr "@1 Bannière"
@@ -194,10 +198,10 @@ msgid "@1 Thing Charge"
 msgstr "Chose (@1)"
 
 msgid "@1 Globe Charge"
-msgstr ""
+msgstr "@1 Charge de Globe"
 
 msgid "@1 Piglin Charge"
-msgstr ""
+msgstr "@1 Carge de Piglin"
 
 msgid "@1 Lozenge"
 msgstr "Rhombus (@1)"
