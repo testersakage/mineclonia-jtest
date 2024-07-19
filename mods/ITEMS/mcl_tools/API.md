@@ -16,7 +16,7 @@ This table must contain this information:
 * `craftable`: a boolean value to define whether the set can be crafted normally at the crafting table. Recommended to use false only for a set of tools that are only obtained through upgrades or through looting.
 * `material`: a string containing the itemstring or group of items that can be used to craft and/or repair tools (e.g. <span style="color:gold">"mcl_core:iron_ingot"</span> or <span style="color:gold">"group:wood"</span>).
 * `uses`: an integer with the total number of uses that the material can provide for the tools.
-* `level`: an integer that contains the tool's tier level. This number determines whether certain blocks will drop items.
+* `level`:
     ###### Mineclonia materials level
     * <span style="color:sienna">**1: wood**</span>
     * <span style="color:gold">**2: gold**</span>
@@ -24,8 +24,8 @@ This table must contain this information:
     * <span style="color:gainsboro">**4: iron**</span>
     * <span style="color:cyan">**5: diamond**</span>
     * <span style="color:black">**6: netherite**</span>
-* `speed`:
-* `max_drop_level`:
+* `speed`: an integer or float number which acts as a multiplier for the group's digging speed. If omitted, it will receive the value 1, defined by _mcl_autogroup.
+* `max_drop_level`: an integer that contains the tool's tier level. This number determines whether certain blocks will drop items. For example, blocks that require level 3 tools will only drop items when dug by level 3 or higher tools.
 * `groups`: a table containing common groups relating to the material. Groups are common to all registered tools in the set.
 
 ##### `tools`
@@ -49,7 +49,7 @@ Each subtable must contain individual information for each tool. All definitions
 
 * `tool_capabilities`: a table that must contain the following fields:
     * `full_punch_interval`: an integer or float number that determines, in seconds, the amount of time for the punch to do maximum damage when the tool is used as a weapon.
-    * `damage_groups`: 
+    * `damage_groups`:
 
 ##### `overrides`
 The `overrides` table is optional. The use of this table is intended to use special fields in all tools in the set. An example of the use of `overrides` is the wooden tool set. These tools can be used as fuel. To do this, they use the `_mcl_burntime` field which is passed to all tools through `overrides`.
