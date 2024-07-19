@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_tt x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-19 23:35+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_tt/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Painfully slow"
 msgstr "Péniblement lent"
@@ -29,22 +31,22 @@ msgid "Very fast"
 msgstr "Très rapide"
 
 msgid "Extremely fast"
-msgstr "Extremement rapide"
+msgstr "Extrêmement rapide"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "Instantané"
 
 msgid "Unlimited uses"
 msgstr "Utilisations illimitées"
 
 msgid "Mining speed: @1"
-msgstr "Vitesse de minage: @1"
+msgstr "Vitesse de minage : @1"
 
 msgid "Mining durability: @1"
-msgstr "Durabilité de minage: @1"
+msgstr "Durabilité de minage : @1"
 
 msgid "Block breaking strength: @1"
-msgstr "Résistance à la rupture: @1"
+msgstr "Résistance de rupture de bloc : @1"
 
 msgid "Damage: @1"
 msgstr "Dégâts: @1"
@@ -119,10 +121,10 @@ msgid "Feet armor"
 msgstr "Armure de pieds"
 
 msgid "Armor points: @1"
-msgstr "Points d'armure: @1"
+msgstr "Point d'armure : @1"
 
 msgid "Armor durability: @1"
-msgstr "Durabilité d'armure: @1"
+msgstr "Durabilité de l'armure : @1"
 
 msgid "Protection: @1%"
 msgstr "Protection: @1%"
@@ -156,4 +158,3 @@ msgstr "Distance de vue de Creeper: -50%"
 
 msgid "Durability: @1"
 msgstr "Durabilité : @1"
-
