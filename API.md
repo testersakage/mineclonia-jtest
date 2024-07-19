@@ -100,8 +100,8 @@ chances are good that it works out of the box.
 * Get flowing direction of liquids: `CORE/flowlib`
 #### Item Definitions
 These can be applied to all item registrations:
-* `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack).
-	Shall return the changed itemstack and optionally as a second value a table of fields to be applied to the item entity
+* `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack, luaentity).
+	Shall return the changed itemstack.
 
 #### Node Definitions
 These can be applied to all node registrations.
