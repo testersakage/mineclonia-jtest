@@ -1,5 +1,7 @@
 --local S = minetest.get_translator(minetest.get_current_modname())
 
+local random = mcl_random.random
+
 -- wrapper for minetest.item_eat (this way we make sure other mods can't break this one)
 function minetest.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
@@ -107,8 +109,6 @@ local function poisonp(tick, time, time_left, damage, exhaustion, name)
 
 end
 
-local poisonrandomizer = PseudoRandom(os.time())
-
 function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance, sound)
 	return function(itemstack, user, pointed_thing)
 		if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
@@ -130,7 +130,7 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 				minetest.sound_play("survival_thirst_drink", {
 					max_hear_distance = 12,
 					gain = 1.0,
-					pitch = 1 + math.random(-10, 10)*0.005,
+					pitch = 1 + random(-10, 10)*0.005,
 					object = user,
 				}, true)
 			else
@@ -148,10 +148,10 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 					for i = 0, math.min(math.max(8, hunger_change*2), 25) do
 						minetest.add_particle({
 							pos = { x = pos.x, y = pos.y, z = pos.z },
-							velocity = vector.add(v, { x = math.random(-1, 1), y = math.random(1, 2), z = math.random(-1, 1) }),
-							acceleration = { x = 0, y = math.random(-9, -5), z = 0 },
+							velocity = vector.add(v, { x = random(-1, 1), y = random(1, 2), z = random(-1, 1) }),
+							acceleration = { x = 0, y = random(-9, -5), z = 0 },
 							expirationtime = 1,
-							size = math.random(1, 2),
+							size = random(1, 2),
 							collisiondetection = true,
 							vertical = false,
 							texture = "[combine:3x3:" .. -i .. "," .. -i .. "=" .. texture,
@@ -161,7 +161,7 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 				minetest.sound_play("mcl_hunger_bite", {
 					max_hear_distance = 12,
 					gain = 1.0,
-					pitch = 1 + math.random(-10, 10)*0.005,
+					pitch = 1 + random(-10, 10)*0.005,
 					object = user,
 				}, true)
 			end
@@ -194,7 +194,7 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 			if mcl_hunger.active and poisontime then
 				local do_poison = false
 				if poisonchance then
-					if poisonrandomizer:next(0,100) < poisonchance then
+					if random(0,100, name) < poisonchance then
 						do_poison = true
 					end
 				else
