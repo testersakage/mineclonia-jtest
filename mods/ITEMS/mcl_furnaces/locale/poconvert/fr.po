@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_furnaces x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-17 21:28+0000\n"
+"PO-Revision-Date: 2024-07-19 23:35+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -31,7 +31,7 @@ msgid "Furnaces cook or smelt several items, using a furnace fuel, into somethin
 msgstr "Les fours cuisent ou fondent plusieurs articles, en utilisant un combustible de four, dans quelque chose d'autre."
 
 msgid "Use the furnace to open the furnace menu."
-msgstr ""
+msgstr "Utilisez le four pour ouvrir le menu du four."
 
 msgid "Place a furnace fuel in the lower slot and the source material in the upper slot."
 msgstr ""
@@ -39,7 +39,7 @@ msgstr ""
 "dans la fente supérieure."
 
 msgid "The furnace will slowly use its fuel to smelt the item."
-msgstr ""
+msgstr "Le four utilise lentement son combustible pour fondre l'objet."
 
 msgid "The result will be placed into the output slot at the right side."
 msgstr "Le résultat sera placé dans l'emplacement de sortie situé à droite."
