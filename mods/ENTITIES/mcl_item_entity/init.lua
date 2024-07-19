@@ -464,7 +464,11 @@ minetest.register_entity(":__builtin:item", {
 
 		local def = stack:get_definition()
 		if def._on_set_item_entity then
-			stack, overrides = def._on_set_item_entity(stack)
+			local s, overrides = def._on_set_item_entity(stack)
+			if s then
+				stack = s
+				table.update(self, overrides)
+			end
 		end
 
 		self.itemstring = stack:to_string()
