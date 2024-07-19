@@ -19,7 +19,7 @@ This table must contain this information:
 * `level`:
 * `speed`:
 * `max_drop_level`:
-* `groups`:
+* `groups`: a table containing common groups relating to the material. Groups are common to all registered tools in the set.
 
 ##### `tools`
 This table contains subtables, indexed by tool names according to the following format:
@@ -36,7 +36,12 @@ Mineclonia has five tool names that are recognized by this API:
 * <span style="color:firebrick">**shovel**</span>
 * <span style="color:firebrick">**sword**</span>
 
-Each subtable must contain individual information for each tool. All definitions in the material and overrides tables apply to all tools in the set. However, the definitions of these subtables only apply to the tool relative to the tool name.
+Each subtable must contain individual information for each tool. All definitions in the material and overrides tables apply to all tools in the set. However, the definitions of these subtables only apply to the tool relative to the tool name. All subtables must contain the following fields:
+* `description`: must contain the description relating to the tool (e.g. S(<span style="color:gold">"Iron Pickaxe"</span>)).
+* `inventory_image`: also a string with the name of the texture that should be used in the inventory. If omitted, the function will attempt to search for a texture with a default name. The pattern followed is: <span style="color:green">**mod_name**</span><span style="color:red"> **..** </span><span style="color:gold">**"_"**</span><span style="color:red"> **..** </span><span style="color:green">**tool_name**</span><span style="color:red"> **..** </span><span style="color:gold">**"_"**</span><span style="color:red"> **..** </span><span style="color:green">**material_name**</span><span style="color:red"> **..** </span><span style="color:gold">**".png"**</span>
+
+* `tool_capabilities`: 
+
 ##### `overrides`
 
 ## Credits
