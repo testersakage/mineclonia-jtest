@@ -7,5 +7,5 @@ Pushable by mobs=Poussable par les mobs
 Pushable by players=Poussable par les joueurs
 Stone Pressure Plate=Plaque de pression en pierre
 A stone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else.=Une plaque de pression en pierre est un composant de redstone qui alimente ses blocs environnants en puissance de redstone pendant qu'un joueur ou un mob se tient au-dessus. Il n'est déclenché par rien d'autre.
-Polished Blackstone Pressure Plate=
-A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else.=
+Polished Blackstone Pressure Plate=Plaque de Pression en Pierre Noire Taillée
+A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else.=Une plaque de pression en pierre noire taillée est un composant de redstone qui fournit à ses blocs environnants de la puissance de redstone lorsqu'un joueur ou un mob se tient dessus. Elle n'est pas déclenchée par quoi que ce soit d'autre.

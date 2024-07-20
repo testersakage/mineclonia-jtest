@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-05 23:46+0000\n"
+"Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Stick"
 msgstr "Bot"
@@ -359,7 +360,7 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr ""
 
 msgid "Cobblestone"
-msgstr "Kőtörmelék"
+msgstr "Zúzottkő"
 
 msgid "Mossy Cobblestone"
 msgstr "Mohás kő"
@@ -629,16 +630,16 @@ msgid "Diorite Slab"
 msgstr "Dioritlap"
 
 msgid "Cobblestone Stairs"
-msgstr "Kőtörmeléklépcső"
+msgstr "Zúzottkő lépcső"
 
 msgid "Cobblestone Slab"
-msgstr "Kőtörmeléklap"
+msgstr "Zúzottkő lap"
 
 msgid "Mossy Cobblestone Stairs"
 msgstr "Mohás kőlépcső"
 
 msgid "Mossy Cobblestone Slab"
-msgstr "Mohás kőtörmeléklap"
+msgstr "Mohás kőlap"
 
 msgid "Brick Stairs"
 msgstr "Téglalépcső"
@@ -729,4 +730,3 @@ msgstr "Akác"
 
 msgid "Birch"
 msgstr "Nyírfa"
-

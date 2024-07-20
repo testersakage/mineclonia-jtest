@@ -9,7 +9,6 @@ Hand=Hånd
 Air=Luft
 Yes=Ja
 No=Nej
-# List separator (e.g. “one, two, three”)
 , = ,
 Unknown item (@1)=ukendt genstand (@1)
 unknown=ukendt
@@ -39,7 +38,6 @@ Mining ratings:=Udvindelsesvurdering
 Toughness level: @1=Hårdhedsgrad: @1
 Range: @1=Rækkevidde: @1
 Range: 4=Rækkevidde: 4
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=Rækkevidde: @1 (@2)
 This tool can serve as a smelting fuel with a burning time of @1.=Dette værktøj virker som brændstof til at smelte og har en brændetid på @1.
 This block can serve as a smelting fuel with a burning time of @1.=Denne blok virker som brændstof til at smelte og har en brændetid på @1.
@@ -113,15 +111,10 @@ This block will drop the following when mined: @1.=Denne blok dropper følgende 
 This block will drop the following items when mined: @1.=Denne blok dropper følgende genstande når den udvindes: @1.
 This block will randomly drop one of the following when mined: @1.=Denne blok dropper en vilkårlig af følgende genstande når den udvindes: @1.
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=Denne blok dropper et vilkårligt antal op til @1 af følgende mulige ting når den udvindes: @2.
-# Final list separator (e.g. “One, two and three”)
  and = and
-# Item count times item name
 @1×@2=@1x@2
-# Itemname (<0.5%)
 @1 (<0.5%)= @1 (<0.5%)
-# Itemname (ca. 25%)
 @1 (ca. @2%)=@1 (ca. @2%)
-# Itemname (25%)
 @1 (@2%)=@1 (@2%)
 Tools and weapons=Værktøj og våben
 Item reference of all wieldable tools and weapons=Genstandsreference til alt værktøj og alle våden man kan bære.
@@ -131,15 +124,3 @@ Miscellaneous items=Diverse genstande
 Item reference of items which are neither blocks, tools or weapons (esp. crafting items)=Genstandsreference til genstanse som hverken er blokke, værktøj eller våben (især håndværksmateriale)
 A transparent block, basically empty space. It is usually left behind after digging something.=En gennemsigtig blok, egentlig bare tom luft. Det efterlades typisk efter at have gravet.
 Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand.=Når du ikke anvender en genstand, bruger du din hånd som fungerer som et værktøj med sine egne egenskaber. Når du anvender en genstand som ikke er et værktøj til udvinding eller våben virker det som om du bruger din hånd.
-
-
-##### not used anymore #####
-
-Using it as fuel turns it into: @1.=At bruge det som brændstof laver det om til: @1.
-Mining level: @1=Udvindingsevneevne: @1
-Rating @1=Vurdering: @1
-Rating @1-@2=Vurdering @1-@2
-any level=hvilketsomhelst level
-level 0=level 0
-level 0-@1=level 0-@1
-• @1: @2, @3=• @1: @2, @3

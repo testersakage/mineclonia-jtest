@@ -1,7 +1,6 @@
 # textdomain: mcl_doc_basics
 Advanced usage=
 Advanced information which may be nice to know, but is not crucial to gameplay=
-# MCL2 extensions
 Creative Mode=
 Enabling Creative Mode in MineClone 2 applies the following changes:=
 • You keep the things you've placed=
@@ -196,7 +195,7 @@ Items have several properties, including the following:=
 • Pointing range: How close things must be to be pointed while wielding this item=
 • Group memberships: See “Basics > Groups”=
 • May be used for crafting or cooking=
-Inventory=
+Inventory=Eszköztár
 Inventories are used to store item stacks. There are other uses, such as crafting. An inventory consists of a rectangular grid of item slots. Each item slot can either be empty or hold one item stack. Item stacks can be moved freely between most slots.=
 You have your own inventory which is called your “player inventory”, you can open it with the inventory key (default: [I]).=
 Blocks can also have their own inventory, e.g. chests and furnaces.=
@@ -261,7 +260,7 @@ Almost all blocks can be built (or placed). Building is very simple and has no d
 To build your wielded block, point at a block in the world and right-click. If this is not possible because the pointed block has a special right-click action, hold down the sneak key before right-clicking.=
 Blocks can almost always be built at pointable blocks. One exception are blocks attached to the floor; these can only be built on the floor.=
 Normally, blocks are built in front of the pointed side of the pointed block. A few blocks are different: When you try to build at them, they are replaced.=
-Crafting=
+Crafting=Barkácsolás
 Crafting is the task of combining several items to form a new item.=
 To craft something, you need one or more items, a crafting grid (C) and a crafting recipe. A crafting grid is like a normal inventory which can also be used for crafting. Items need to be put in a certain pattern into the crafting grid. Next to the crafting grid is an output slot (O). Here the result will appear when you placed items correctly. This is just a preview, not the actual item.=
 The crafting grid you have inside your inventory is 2x2, limiting the amount of potential recipes you can craft. To craft recipes that require a 3x3 grid you will need a crafting table.=

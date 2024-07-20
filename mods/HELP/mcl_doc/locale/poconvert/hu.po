@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-13 13:18+0000\n"
+"Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
 msgstr ""
@@ -113,49 +114,49 @@ msgid "When this block falls deeper than 1 block, it causes damage to any player
 msgstr ""
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Gyémántcsákány"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Vascsákány"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Kőcsákány"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Aranycsákány"
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Facsákány"
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Gyémántfejsze"
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Vasfejsze"
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Kőfejsze"
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Aranyfejsze"
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Fafejsze"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Gyémántlapát"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Vaslapát"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Kőlapát"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Aranylapát"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Falapát"
 
 msgid "This block can be mined by any tool instantly."
 msgstr ""
@@ -243,4 +244,3 @@ msgstr ""
 
 msgid "Full punch interval: @1 s"
 msgstr ""
-

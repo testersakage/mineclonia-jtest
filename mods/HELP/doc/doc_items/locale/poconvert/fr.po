@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-19 23:35+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"doc_items/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "This is a decorational block."
 msgstr "C'est un bloc de décoration."
@@ -95,7 +97,7 @@ msgid "• @1: @2 HP"
 msgstr "• @1 : @2 PV"
 
 msgid "Full punch interval: @1 s"
-msgstr "Intervalle de frappe : @1"
+msgstr "Interval de coup : @1 s"
 
 msgid "This block can be mined by any mining tool in half a second."
 msgstr "Ce bloc peut être miné avec n'importe quel outil de minage en une demi-seconde."
@@ -116,7 +118,9 @@ msgid "This block can not be destroyed by ordinary mining tools."
 msgstr "Ce bloc ne peut pas être détruit avec les outils de minage ordinaires."
 
 msgid "This block can be mined by mining tools which match any of the following mining ratings and its toughness level."
-msgstr "Ce bloc peut être miné avec les outils de minages qui ont les notes de minage et les niveaux de robustesse suivants :"
+msgstr ""
+"Ce bloc peut être extrait par des outils miniers qui correspondent à l'une "
+"des classifications minières suivantes et à son niveau de résistance."
 
 msgid "Mining ratings:"
 msgstr "Notes de minage :"
@@ -143,7 +147,7 @@ msgid "This item can serve as a smelting fuel with a burning time of @1."
 msgstr "Cet objet peut servir de combustible pendant @1."
 
 msgid " Using it as fuel turns it into: @1."
-msgstr ""
+msgstr " L'utiliser comme carburant le transforme en : @1."
 
 msgid "Itemstring: \"@1\""
 msgstr "Identifiant d'objet : \"@1\""
@@ -212,7 +216,7 @@ msgid "Pointable: No"
 msgstr "Pointable : Non"
 
 msgid "This block is a liquid with these properties:"
-msgstr "Ce bloc est un liquide aux proprités suivantes :"
+msgstr "Ce bloc est un liquide aux propriétés suivantes :"
 
 msgid "• Renewable"
 msgstr "• Renouvelable"
@@ -230,25 +234,29 @@ msgid "• Viscosity: @1"
 msgstr "• Viscosité : @1"
 
 msgid "This block causes a damage of @1 hit points per second."
-msgstr "Ce bloc cause des domages de @1 points de vie par seconde."
+msgstr "Ce bloc cause des dommages de @1 points de vie par seconde."
 
 msgid "This block causes a damage of @1 hit point per second."
-msgstr "Ce bloc cause des domages de @1 point de vie par seconde."
+msgstr "Ce bloc cause des dommages de @1 point de vie par seconde."
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit points every 2 seconds."
-msgstr "Ce bloc réduit votre souffle et cause des domages de noyade de @1 points de vie toutes les 2 secondes."
+msgstr ""
+"Ce bloc réduit votre souffle et cause des dommages de noyade de @1 points de "
+"vie toutes les 2 secondes."
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit point every 2 seconds."
-msgstr "Ce bloc réduit votre souffle et cause des domages de noyade de @1 point de vie toutes les 2 secondes."
+msgstr ""
+"Ce bloc réduit votre souffle et cause des dommages de noyade de @1 point de "
+"vie toutes les 2 secondes."
 
 msgid "The fall damage on this block is increased by @1%."
-msgstr "Les domages de chute sur ce bloc sont augmentés de @1%."
+msgstr "Les dommages de chute sur ce bloc sont augmentés de @1%."
 
 msgid "This block negates all fall damage."
-msgstr "Ce bloc annule tous les domages de chute."
+msgstr "Ce bloc annule tous les dommages de chute."
 
 msgid "The fall damage on this block is reduced by @1%."
-msgstr "Les domages de chute sur ce bloc sont réduits de @1%."
+msgstr "Les dommages de chute sur ce bloc sont réduits de @1%."
 
 msgid "You can not jump while standing on this block."
 msgstr "Vous ne pouvez pas sauter en étant sur ce bloc."
@@ -275,7 +283,7 @@ msgid "Mining this block is completely silent."
 msgstr "Miner ce bloc est complètement silencieux."
 
 msgid "Building this block is completely silent."
-msgstr "Construire ce bloc est complètement silentieux"
+msgstr "Construire ce bloc est complètement silencieux."
 
 msgid "This block is affected by gravity and can fall."
 msgstr "Ce bloc est affecté par la gravité et peut tomber."
@@ -305,7 +313,7 @@ msgid "This block is a light source with a light level of @1."
 msgstr "Ce bloc est une source de lumière de niveau @1."
 
 msgid "This block glows faintly with a light level of @1."
-msgstr "Ce bloc brille xxx avec une lumière de niveau @1."
+msgstr "Ce bloc brille faiblement avec une lumière de niveau @1."
 
 msgid "This block allows light to propagate with a small loss of brightness, and sunlight can even go through losslessly."
 msgstr "Ce bloc laisse passer la lumière avec une petite perte de luminosité, et la lumière du soleil peut la traverser sans perte."
@@ -314,7 +322,7 @@ msgid "This block allows light to propagate with a small loss of brightness."
 msgstr "Ce bloc laisse passer la lumière avec une petite perte de luminosité."
 
 msgid "This block allows sunlight to propagate without loss in brightness."
-msgstr "The bloc laisse passer la lumière du soleil sans perte de luminosité."
+msgstr "Ce bloc laisse passer la lumière du soleil sans perte de luminosité."
 
 msgid "Unknown Node"
 msgstr "Nœud inconnu"
@@ -347,7 +355,9 @@ msgid "This block will randomly drop one of the following when mined: @1."
 msgstr "Ce bloc laissera tomber de manière aléatoire un des éléments suivants lorsque miné : @1."
 
 msgid "This block will randomly drop up to @1 drops of the following possible drops when mined: @2."
-msgstr "Ce bloc laissera tomber de manière aléatoire jusqu'à @1 des éléments suivants lorque miné : @2."
+msgstr ""
+"Ce bloc laissera tomber de manière aléatoire jusqu'à @1 des éléments "
+"suivants lorsque miné : @2."
 
 msgid " and "
 msgstr " et "
@@ -387,4 +397,3 @@ msgstr "Un bloc transparent, tout simplement un espace vide. Il apparaît géné
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr "Quand vous ne maniez aucun objet, vous utilisez la main qui se comporte comme un outil avec ses propres capacités. Lorsque vous maniez un objet qui n'est pas un outil ou une arme il se comportera comme si c'était la main."
-

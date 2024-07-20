@@ -9,7 +9,6 @@ Hand=Ręka
 Air=Powietrze
 Yes=Tak
 No=Nie
-# List separator (e.g. “one, two, three”)
 , =, 
 Unknown item (@1)=Nieznany przedmiot (@1)
 unknown=nieznane
@@ -39,7 +38,6 @@ Mining ratings:=Klasyfikacja kopania
 Toughness level: @1=Poziom twardości: @1
 Range: @1=Zasięg: @1
 Range: 4=Zasięg: 4
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=Zasięg @1 (@2)
 This tool can serve as a smelting fuel with a burning time of @1.=To narzędzie może być wykorzystany jako paliwo do przetapiania z czasem palenia @1.
 This block can serve as a smelting fuel with a burning time of @1.=Ten blok może być wykorzystany jako paliwo do przetapiania z czasem palenia @1.
@@ -113,15 +111,10 @@ This block will drop the following when mined: @1.=Z tego bloku wypadną następ
 This block will drop the following items when mined: @1.=Z tego bloku wypadną następujące przedmioty po wykopaniu: @1.
 This block will randomly drop one of the following when mined: @1.=Z tego bloku wypadnie losowo jedna z następujących rzeczy po wykopaniu: @1.
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=Z tego bloku losowo wypadnie maksymalnie @1 rzeczy spośród tego zbioru: @2.
-# Final list separator (e.g. “One, two and three”)
  and = oraz 
-# Item count times item name
 @1×@2=@1×@2
-# Itemname (<0.5%)
 @1 (<0.5%)=@1 (<0.5%)
-# Itemname (ca. 25%)
 @1 (ca. @2%)=@1 (ca. @2%)
-# Itemname (25%)
 @1 (@2%)=@1 (@2%)
 Tools and weapons=Narzędzia i bronie
 Item reference of all wieldable tools and weapons=Informacje na temat wszystkich narzędzi i broni możliwych do trzymania.
@@ -131,15 +124,3 @@ Miscellaneous items=Różne rzeczy
 Item reference of items which are neither blocks, tools or weapons (esp. crafting items)=Informacje na temat wszystkich rzeczy, które nie są blokami, narzędziami i broniami (głównie materiały do wytwarzania)
 A transparent block, basically empty space. It is usually left behind after digging something.=Przezroczysty blok, praktycznie puste miejsce. Jest zwykle pozostawiany po wykopaniu czegoś.
 Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand.=Gdy nie trzymasz żadnego przedmiotu używasz swojej ręki która działa jak narzędzie ze swoimi własnościami. Gdy trzymasz przedmiot, który nie jest narzędziem do kopania lub bronią, będzie się ono zachowywało jakby było ręką.
-
-
-##### not used anymore #####
-
-Using it as fuel turns it into: @1.=Używanie tego jako paliwa zamienia to w: @1.
-Mining level: @1=Poziom kopania: @1
-Rating @1=Klasyfikacja @1
-Rating @1-@2=Klasyfikacja od @1 do @2
-any level=dowolny poziom
-level 0=poziom 0
-level 0-@1=poziom 0-@1
-• @1: @2, @3=• @1: @2, @3

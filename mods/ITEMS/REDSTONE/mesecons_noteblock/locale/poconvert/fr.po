@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mesecons_noteblock x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-20 18:56+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mesecons_noteblock/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Note Block"
 msgstr "Bloc de notes"
@@ -23,56 +25,58 @@ msgid "A note block is a musical block which plays one of many musical notes and
 msgstr "Un bloc de notes est un bloc musical qui joue l'une des nombreuses notes de musique et différents instruments lorsqu'il est frappé ou alimenté en redstone."
 
 msgid "Use the note block to choose the next musical note (there are 25 semitones, or 2 octaves). The intrument played depends on the material of the block below the note block:"
-msgstr "Utilisez le bloc de notes pour choisir la prochaine note de musique (il y a 25 demi-tons ou 2 octaves). L'instrument joué dépend du matériau du bloc situé sous le bloc de notes:"
+msgstr ""
+"Utilisez le bloc de notes pour choisir la prochaine note de musique (il y a "
+"25 demi-tons ou 2 octaves). L'instrument joué dépend du matériau du bloc "
+"situé sous le bloc de notes :"
 
 msgid "• Glass: Sticks"
-msgstr "• Glass: Sticks"
+msgstr "• Vitre : Bâtons"
 
 msgid "• Wood: Bass guitar"
-msgstr "• Bois: Guitare Basse"
+msgstr "• Bois : Guitare Basse"
 
 msgid "• Stone: Bass drum"
-msgstr "• Pierre: Grosse caisse"
+msgstr "• Pierre : Grosse caisse"
 
 msgid "• Sand or gravel: Snare drum"
-msgstr "• Sable ou gravier: Caisse claire"
+msgstr "• Sable ou gravier : Caisse claire"
 
 msgid "• Block of Gold: Bell"
-msgstr "• Bloc d'OR: Cloche"
+msgstr "• Bloc d'or : Cloche"
 
 msgid "• Clay: Flute"
-msgstr "• Argile: Flûte"
+msgstr "• Argile : Flûte"
 
 msgid "• Packed Ice: Chime"
-msgstr "• Glace tassée: Carillon"
+msgstr "• Glace tassée : Carillon"
 
 msgid "• Wool: Guitar"
-msgstr "• Laine: Guitare"
+msgstr "• Laine : Guitare"
 
 msgid "• Bone Block: Xylophne"
-msgstr "• Bloc osseux: Xylophne"
+msgstr "• Bloc osseux : Xylophne"
 
 msgid "• Block of Iron: Iron xylophne"
-msgstr "• Bloc de fer: Xylophone en fer"
+msgstr "• Bloc de fer : Xylophone en fer"
 
 msgid "• Soul Sand: Cow bell"
-msgstr "• Soul Sand: Cloche de vache"
+msgstr "• Sable des âmes : Cloche de vache"
 
 msgid "• Pumpkin: Didgeridoo"
-msgstr "• Citrouille: Didgeridoo"
+msgstr "• Citrouille : Didjeridoo"
 
 msgid "• Block of Emerald: Square wave"
-msgstr "• Bloc d'émeraude: Onde carrée"
+msgstr "• Bloc d'émeraude : Onde carrée"
 
 msgid "• Hay Bale: Banjo"
-msgstr "• Hay Bale: Banjo"
+msgstr "• Botte de paille : Banjo"
 
 msgid "• Glowstone: Electric piano"
-msgstr "• Glowstone: Piano Electrique"
+msgstr "• Pierre lumineuse : Piano Électrique"
 
 msgid "• Anything else: Piano"
-msgstr "• Autres: Piano"
+msgstr "• Autres : Piano"
 
 msgid "The note block will only play a note when it is below air, otherwise, it stays silent."
 msgstr "Le bloc de notes ne jouera une note que lorsqu'il est sous l'air, sinon il reste silencieux."
-

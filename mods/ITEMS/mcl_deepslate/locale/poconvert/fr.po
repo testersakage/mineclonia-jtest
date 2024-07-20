@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-19 23:35+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_deepslate/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Deepslate"
 msgstr "Ardoise des abîmes"
@@ -23,10 +25,12 @@ msgid "Infested Deepslate"
 msgstr "Ardoise des abîmes infestée"
 
 msgid "Reinforced Deepslate"
-msgstr ""
+msgstr "Ardoise des abîmes renforcée"
 
 msgid "Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode."
 msgstr ""
+"L'ardoise des abîmes renforcée est un bloc très dur, indestructible même par "
+"les explosions du wither. Il est impossible de l'obtenir en mode survie."
 
 msgid "Deepslate Coal Ore"
 msgstr "Minerai de charbon de l'ardoise des abîmes"
@@ -92,13 +96,13 @@ msgid "Deepslate bricks are the brick version of deepslate."
 msgstr "L'ardoise des abîmes taillée est la version brique de l'ardoise des abîmes."
 
 msgid "Deepslate Brick Stairs"
-msgstr ""
+msgstr "Escalier en ardoise des abîmes taillée"
 
 msgid "Deepslate Brick Slab"
-msgstr ""
+msgstr "Dalle en ardoise des abîmes taillée"
 
 msgid "Deepslate Brick Wall"
-msgstr ""
+msgstr "Muret d'ardoise des abîmes taillée"
 
 msgid "Cracked Deepslate Bricks"
 msgstr "Ardoise des abîmes taillée craquelée"
@@ -110,13 +114,13 @@ msgid "Deepslate tiles are a decorative variant of deepslate."
 msgstr "L'ardoise des abîmes carrelée est une variante décorative de l'ardoise des abîmes."
 
 msgid "Deepslate Tile Stairs"
-msgstr ""
+msgstr "Escalier en ardoise des abîmes carrelée"
 
 msgid "Deepslate Tile Slab"
-msgstr ""
+msgstr "Dalle en ardoise des abîmes carrelée"
 
 msgid "Deepslate Tiles Wall"
-msgstr ""
+msgstr "Muret en ardoise des abîmes carrelée"
 
 msgid "Cracked Deepslate Tiles"
 msgstr "Ardoise des abîmes carrelée craquelée"
@@ -128,62 +132,66 @@ msgid "@1 is a variant of @2 that can generate in deepslate and tuff blobs."
 msgstr "Le @1 est une variante de @2 qui apparaît dans l'ardoise des abîmes et les filons de tuf."
 
 msgid "@1 are a cracked variant."
-msgstr ""
+msgstr "@1 sont une variante fissurée."
 
 msgid "Tuff"
 msgstr "Tuf"
 
 msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
 msgstr ""
+"Le tuf est une roche ornementale formée à partir de cendres volcaniques, qui "
+"se trouve dans des nappes souterraines sous Y=16."
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "Tuf sculpté"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
-msgstr ""
+msgstr "Le tuf sculpté est une variante sculptée du tuf."
 
 msgid "Chiseled Tuff Bricks"
-msgstr ""
+msgstr "Tuf taillé sculpté"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr ""
+"Le tuf taillé sculpté est une variante du tuf sculpté présentant une grande "
+"brique au centre du bloc, avec des motifs géométriques au-dessus et en "
+"dessous."
 
 msgid "Tuff Stairs"
-msgstr ""
+msgstr "Escalier en tuf"
 
 msgid "Tuff Slab"
-msgstr ""
+msgstr "Dalle en tuf"
 
 msgid "Tuff Wall"
-msgstr ""
+msgstr "Muret en tuf"
 
 msgid "Polished Tuff"
-msgstr ""
+msgstr "Tuf poli"
 
 msgid "Polished tuff is a polished variant of the tuff block."
-msgstr ""
+msgstr "Le tuf poli est une variante polie du bloc de tuf."
 
 msgid "Polished Tuff Stairs"
-msgstr ""
+msgstr "Escalier de tuf poli"
 
 msgid "Polished Tuff Slab"
-msgstr ""
+msgstr "Dalle en tuf poli"
 
 msgid "Polished Tuff Wall"
-msgstr ""
+msgstr "Muret de tuf poli"
 
 msgid "Tuff Bricks"
-msgstr ""
+msgstr "Tuf taillé"
 
 msgid "Tuff bricks are a brick variant of tuff."
-msgstr ""
+msgstr "Le tuf taillé est une variante taillée du tuf."
 
 msgid "Tuff Bricks Stairs"
-msgstr ""
+msgstr "Escalier en tuf taillé"
 
 msgid "Tuff Bricks Slab"
-msgstr ""
+msgstr "Dalle de tuf taillé"
 
 msgid "Tuff Bricks Wall"
-msgstr ""
-
+msgstr "Muret de tuf taillé"
