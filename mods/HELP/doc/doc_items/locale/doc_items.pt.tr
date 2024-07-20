@@ -9,7 +9,6 @@ Hand=Mão
 Air=Ár
 Yes=Sim
 No=Não
-# List separator (e.g. “one, two, three”)
 , =,
 Unknown item (@1)=Item desconhecido (@1)
 unknown=desconhecido
@@ -39,7 +38,6 @@ Mining ratings:=Classificações de mineração:
 Toughness level: @1=
 Range: @1=Alcance: @1
 Range: 4=Range: 4
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=Alcance: @1 (@2)
 This tool can serve as a smelting fuel with a burning time of @1.=Essa ferramenta pode servir como combustível de fundição com um tempo de queima de @1.
 This block can serve as a smelting fuel with a burning time of @1.=Esse bloco pode servir como combustível de fundição com um tempo de queima de @1.
@@ -113,15 +111,10 @@ This block will drop the following when mined: @1.=Esse bloco irá deixar cair o
 This block will drop the following items when mined: @1.=
 This block will randomly drop one of the following when mined: @1.=
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=
-# Final list separator (e.g. “One, two and three”)
  and = e
-# Item count times item name
 @1×@2=
-# Itemname (<0.5%)
 @1 (<0.5%)=@1 (<0.5%)
-# Itemname (ca. 25%)
 @1 (ca. @2%)=
-# Itemname (25%)
 @1 (@2%)=@1 (@2%)
 Tools and weapons=Ferramentas e armas
 Item reference of all wieldable tools and weapons=Referência de item de todas as ferramentas e armas que podem ser usadas
@@ -131,19 +124,3 @@ Miscellaneous items=Itens variados
 Item reference of items which are neither blocks, tools or weapons (esp. crafting items)=Referência de itens que não são blocos, ferramentas ou armas (especialmente itens de criação)
 A transparent block, basically empty space. It is usually left behind after digging something.=Um bloco transparente, basicamente um vazio. Isso geralmente fica no lugar de um bloco removido.
 Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand.=Sempre que você não estiver empunhando nenhum item, você usa a mão que atua como uma ferramentacom caracteristicas próprias. Quando você está empunhando um item que não é uma ferramenta de mineração ou uma arma, ele se comportará como se fosse a mão.
-
-
-##### not used anymore #####
-
-Using it as fuel turns it into: @1.= Usar isso como combustivel o transforma em: @1.
-%@1×@2=%@1×@2
-Mining level: @1=Nível de mineração: @1
-Rating @1=Classificação @1
-Rating @1-@2=Classificação @1-@2
-This block will drop the following items when mined: %s.=Esse bloco soltará os seguintes itens quando minerados: %s.
-This block will drop the following when mined: %s.=Esse bloco irá deixar cair o seguinte quando extraído: %s.
-This block will randomly drop one of the following when mined: %s.=Esse bloco irá deixar cair aleatoriamente um dos seguintes quando extraído: %s.
-This block will randomly drop up to %d drops of the following possible drops when mined: %s.=Esse bloco irá cair aleatoriamente %d vezes das seguintes possíveis formas quando extraído: %s.
-any level=qualquer nível
-level 0=nível 0
-level 0-@1=nivel 0-@1

@@ -9,7 +9,6 @@ Hand=Hand
 Air=Luft
 Yes=Ja
 No=Nein
-# List separator (e.g. “one, two, three”)
 , =, 
 Unknown item (@1)=Unbekannter Gegenstand (@1)
 unknown=unbekannt
@@ -39,7 +38,6 @@ Mining ratings:=Grabewertungen:
 Toughness level: @1=Härtegrad: @1
 Range: @1=Reichweite: @1
 Range: 4=Reichweite: 4
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=Reichweite: @1 (@2)
 This tool can serve as a smelting fuel with a burning time of @1.=Dieses Werkzeug kann als Brennstoff mit einer Brenndauer von @1 dienen.
 This block can serve as a smelting fuel with a burning time of @1.=Dieser Block kann als Brennstoff mit einer Brenndauer von @1 dienen.
@@ -113,15 +111,10 @@ This block will drop the following when mined: @1.=Dieser Block wird nach dem Ab
 This block will drop the following items when mined: @1.=Dieser Block wird nach dem Abbauen die folgenden Gegenstände abwerfen: @1.
 This block will randomly drop one of the following when mined: @1.=Dieser Block wird nach dem Abbauen zufällig eines von den folgenden Dingen abwerfen: @1.
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=Dieser Block nach dem Abbauen wird zufällig bis zu @1 Abwürfe von den folgenden möglichen Abwürfen abwerfen: @2.
-# Final list separator (e.g. “One, two and three”)
  and = und 
-# Item count times item name
 @1×@2=@1×@2
-# Itemname (<0.5%)
 @1 (<0.5%)=@1 (<0,5%)
-# Itemname (ca. 25%)
 @1 (ca. @2%)=@1 (ca. @2%)
-# Itemname (25%)
 @1 (@2%)=@1 (@2%)
 Tools and weapons=Werkzeuge und Waffen
 Item reference of all wieldable tools and weapons=Gegenstandsreferenz aller tragbaren Werkzeugen und Waffen
@@ -131,15 +124,3 @@ Miscellaneous items=Sonstige Gegenstände
 Item reference of items which are neither blocks, tools or weapons (esp. crafting items)=Gegenstandsreferenz aller Gegenstände, welche weder Blöcke, Werkzeuge oder Waffen sind (insb. Fertigungsgegenstände)
 A transparent block, basically empty space. It is usually left behind after digging something.=Ein transparenter Block, praktisch leerer Raum. Er wird üblicherweise hinterlassen, nachdem man etwas ausgegraben hat.
 Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand.=Wenn Sie keinen Gegenstand halten, benutzen Sie die Hand, welches als ein Werkzeug mit seinen eigenen Fägihkeiten dient. Wenn Sie einen Gegenstand halten, der kein Grabewerkzeug oder eine Waffe ist, wird er sich verhalten als wäre er die Hand.
-
-
-##### not used anymore #####
-
-Using it as fuel turns it into: @1.= Wird dieser Gegenstand als Brennstoff verwendet, verwandelt er sich zu: @1.
-Mining level: @1=Grabestufe: @1
-Rating @1=Wertung @1
-Rating @1-@2=Wertung @1-@2
-any level=beliebige Stufe
-level 0=Stufe 0
-level 0-@1=Stufen 0-@1
-• @1: @2, @3=• @1: @2, @3
