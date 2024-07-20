@@ -115,8 +115,41 @@ function mcl_mobs.spawn_child(pos, mob_type)
 	return child
 end
 
+function mob_class:check_grow_up(dtime)
+	if not self.child then return end
+	self._grow_up_timer = (self._grow_up_timer or self._grow_up_time) - dtime
+	if  self._grow_up_timer > 0 then return end
+	self._grow_up_timer = nil
+	self:grow_up()
+end
+
+function mob_class:grow_up()
+	if not self.child then return end
+
+	self.child = nil
+	self:set_properties({
+		textures = self.base_texture,
+		mesh = self.base_mesh,
+		visual_size = self.base_size or self.initial_properties.visual_size or { x = 1, y = 1, z = 1 },
+		collisionbox = self.base_colbox,
+		selectionbox = self.base_selbox,
+	})
+	self.animation = mcl_mobs.registered_mobs[self.name].animation
+	self:set_animation("stand")
+	if self.on_grown then
+		self.on_grown(self)
+	else
+		-- jump when fully grown so as not to fall into ground
+		self.object:set_velocity({
+			x = 0,
+			y = self.jump_height,
+			z = 0
+		})
+	end
+end
+
 function mob_class:check_breeding()
-	if self.child == true then
+	if false or self.child == true then
 		-- When a child, hornytimer is used to count age until adulthood
 		self.hornytimer = self.hornytimer + 1
 		if self.hornytimer >= CHILD_GROW_TIME then
@@ -125,7 +158,7 @@ function mob_class:check_breeding()
 			self:set_properties({
 				textures = self.base_texture,
 				mesh = self.base_mesh,
-				visual_size = self.base_size,
+				visual_size = self.base_size or self.initial_properties.visual_size or { x = 1, y = 1, z = 1 },
 				collisionbox = self.base_colbox,
 				selectionbox = self.base_selbox,
 			})

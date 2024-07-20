@@ -430,7 +430,7 @@ function mob_class:on_step(dtime, moveresult)
 	self:check_water_flow()
 
 	if not self.driver then
-	   self:env_danger_movement_checks (dtime)
+		self:env_danger_movement_checks (dtime)
 	end
 
 	if not self.fire_resistant then
@@ -444,29 +444,30 @@ function mob_class:on_step(dtime, moveresult)
 	if should_drive then
 	   self:check_smooth_rotation (dtime)
 
-	   -- Called only to reset the swivel.
-	   self:check_head_swivel (dtime, true)
-	   self:drive ("walk", "stand", false, dtime, moveresult)
-	   self:env_damage (dtime, pos)
-	   self:check_particlespawners(dtime)
-	   self:check_item_pickup()
+		-- Called only to reset the swivel.
+		self:check_head_swivel (dtime, true)
+		self:drive ("walk", "stand", false, dtime, moveresult)
+		self:env_damage (dtime, pos)
+		self:check_particlespawners(dtime)
+		self:check_item_pickup()
 	else
-	   self:follow_player() -- Mob following code.
-	   self:set_animation_speed()
-	   self:check_smooth_rotation(dtime)
-	   self:check_head_swivel(dtime)
+		self:follow_player() -- Mob following code.
+		self:set_animation_speed()
+		self:check_smooth_rotation(dtime)
+		self:check_head_swivel(dtime)
 
-	   self:set_armor_texture()
-	   self:check_runaway_from()
+		self:set_armor_texture()
+		self:check_runaway_from()
 
-	   self:attack_players_and_npcs()
-	   self:attack_monsters()
-	   self:attack_specific()
+		self:attack_players_and_npcs()
+		self:attack_monsters()
+		self:attack_specific()
 
-	   self:check_breeding()
-	   self:check_aggro(dtime)
+		self:check_breeding()
+		self:check_grow_up(dtime)
+		self:check_aggro(dtime)
 
-	   -- Expel drivers riding submerged mobs.
+		-- Expel drivers riding submerged mobs.
 	   self:expel_underwater_drivers ()
 	end
 
