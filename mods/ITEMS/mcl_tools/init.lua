@@ -9,27 +9,72 @@ mcl_tools.set = {
 	["axe"] = {
 		longdesc = S("An axe is your tool of choice to cut down trees, wood-based blocks and other blocks. Axes deal a lot of damage as well, but they are rather slow."),
 		groups = { axe = 1, tool = 1 },
-		diggroups = { axey = {} }
+		diggroups = { axey = {} },
+		craft_shapes = {
+			{
+				{ "material", "material" },
+				{ "mcl_core:stick", "material" },
+				{ "mcl_core:stick", "" }
+			},
+			{
+				{ "material", "material" },
+				{ "material", "mcl_core:stick" },
+				{ "", "mcl_core:stick" }
+			}
+		}
 	},
 	["hoe"] = {
 		longdesc = S("Hoes are essential tools for growing crops. They are used to create farmland in order to plant seeds on it. Hoes can also be used as very weak weapons in a pinch."),
 		groups = { hoe = 1, tool = 1 },
-		diggroups = { hoey = {} }
+		diggroups = { hoey = {} },
+		craft_shapes = {
+			{
+				{ "material", "material" },
+				{ "mcl_core:stick", "" },
+				{ "mcl_core:stick", "" }
+			},
+			{
+				{ "material", "material" },
+				{ "", "mcl_core:stick" },
+				{ "", "mcl_core:stick" }
+			}
+		}
 	},
 	["pick"] = {
 		longdesc = S("Pickaxes are mining tools to mine hard blocks, such as stone. A pickaxe can also be used as weapon, but it is rather inefficient."),
 		groups = { pickaxe = 1, tool = 1 },
-		diggroups = { pickaxey = {} }
+		diggroups = { pickaxey = {} },
+		craft_shapes = {
+			{
+				{ "material", "material", "material" },
+				{ "", "mcl_core:stick", "" },
+				{ "", "mcl_core:stick", "" }
+			}
+		}
 	},
 	["shovel"] = {
 		longdesc = S("Shovels are tools for digging coarse blocks, such as dirt, sand and gravel. They can also be used to turn grass blocks to grass paths. Shovels can be used as weapons, but they are very weak."),
 		groups = { shovel = 1, tool = 1 },
-		diggroups = { shovely = {} }
+		diggroups = { shovely = {} },
+		craft_shapes = {
+			{
+				{ "material" },
+				{ "mcl_core:stick" },
+				{ "mcl_core:stick" }
+			}
+		}
 	},
 	["sword"] = {
 		longdesc = S("Swords are great in melee combat, as they are fast, deal high damage and can endure countless battles. Swords can also be used to cut down a few particular blocks, such as cobwebs."),
 		groups = { sword = 1, weapon = 1 },
-		diggroups = { swordy = {}, swordy_cobweb = {} }
+		diggroups = { swordy = {}, swordy_cobweb = {} },
+		craft_shapes = {
+			{
+				{ "material" },
+				{ "material" },
+				{ "mcl_core:stick" }
+			}
+		}
 	}
 }
 
@@ -99,6 +144,36 @@ local function get_tool_diggroups(material, toolname)
 	return diggroups
 end
 
+local function replace_material_tag(shape, material)
+	local recipe = table.copy(shape)
+
+	for _, line in ipairs(recipe) do
+		for count, tag in ipairs(line) do
+			if tag == "material" then
+				line[count] = material
+			end
+		end
+	end
+
+	return recipe
+end
+
+---comment
+---@param tool string
+---@param longdesc any
+---@param groups table
+---@param diggroups table
+function mcl_tools.add_to_set(tool, longdesc, groups, diggroups, craft_shapes)
+	if not mcl_tools.set[tool] then
+		mcl_tools.set[tool] = {
+			longdesc = longdesc,
+			groups = groups,
+			diggroups = diggroups,
+			craft_shapes = craft_shapes
+		}
+	end
+end
+
 ---Need comments
 ---@param material table
 ---@param tools table
@@ -133,68 +208,12 @@ function mcl_tools.register_set(material, tools, overrides)
 		}, defs, overrides))
 
 		if material.craftable then
-			if tool == "pick" then
-				minetest.register_craft({
-					output = toolname,
-					recipe = {
-						{ material.material, material.material, material.material },
-						{ "", "mcl_core:stick", "" },
-						{ "", "mcl_core:stick", "" }
-					}
-				})
-			elseif tool == "sword" then
-				minetest.register_craft({
-					output = toolname,
-					recipe = {
-						{ material.material },
-						{ material.material },
-						{ "mcl_core:stick" }
-					}
-				})
-			elseif tool == "axe" then
-				minetest.register_craft({
-					output = toolname,
-					recipe = {
-						{ material.material, material.material },
-						{ material.material, "mcl_core:stick" },
-						{ "", "mcl_core:stick" }
-					},
-				})
+			for _, shapes in ipairs(mcl_tools.set[tool].craft_shapes) do
+				local recipe = replace_material_tag(shapes, material.material)
 
 				minetest.register_craft({
 					output = toolname,
-					recipe = {
-						{ material.material, material.material, },
-						{ "mcl_core:stick", material.material },
-						{ "mcl_core:stick", "" }
-					}
-				})
-			elseif tool == "shovel" then
-				minetest.register_craft({
-					output = toolname,
-					recipe = {
-						{ material.material },
-						{ "mcl_core:stick" },
-						{ "mcl_core:stick" }
-					}
-				})
-			elseif tool == "hoe" then
-				minetest.register_craft({
-					output = toolname,
-					recipe = {
-						{ material.material, material.material },
-						{ "", "mcl_core:stick" },
-						{ "", "mcl_core:stick" }
-					},
-				})
-
-				minetest.register_craft({
-					output = toolname,
-					recipe = {
-						{ material.material, material.material, },
-						{ "mcl_core:stick", "" },
-						{ "mcl_core:stick", "" }
-					}
+					recipe = recipe
 				})
 			end
 		end
