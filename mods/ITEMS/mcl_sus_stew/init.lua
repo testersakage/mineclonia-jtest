@@ -47,18 +47,16 @@ function mcl_sus_stew.register_stew(name,recipe_item,effect_func)
 	})
 end
 
-local eat = minetest.item_eat(6, "mcl_core:bowl")
-
 local function hunger_effect(itemstack, placer, pointed_thing)
 	mcl_hunger.item_eat(6, "mcl_core:bowl", 3.5, 0, 100)
-	return eat(itemstack, placer, pointed_thing)
+	return itemstack
 end
 
 local function potion_effect(itemstack, placer, pointed_thing,effect)
 	if mcl_potions[effect.."_func"] then
 		mcl_potions[effect.."_func"](placer, 1, 6)
 	end
-	return eat(itemstack, placer, pointed_thing)
+	return itemstack
 end
 
 mcl_sus_stew.register_stew("fire_resistance","mcl_flowers:allium",potion_effect)
