@@ -262,6 +262,12 @@ msgstr ""
 msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor."
 msgstr "Colóquelo en un caballo para ponerle la armadura de caballo. Los burros y las mulas no pueden usar armadura de caballo."
 
+msgid "Leather Horse Armor"
+msgstr ""
+
+msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
+msgstr ""
+
 msgid "Iron Horse Armor"
 msgstr "Armadura de hierro para caballo"
 

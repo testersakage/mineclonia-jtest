@@ -256,6 +256,12 @@ msgstr "Gezackter Fuß (@1)"
 msgid "@1 Chief Indented"
 msgstr "Gezacktes Haupt (@1)"
 
+msgid "@1 Flow"
+msgstr ""
+
+msgid "@1 Guster"
+msgstr ""
+
 msgid "And one additional layer"
 msgstr "Und eine zusätzliche Schicht"
 

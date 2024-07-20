@@ -37,6 +37,9 @@ msgstr "Грибная корова"
 msgid "Creeper"
 msgstr "Крипер"
 
+msgid "Charged Creeper"
+msgstr ""
+
 msgid "Dolphin"
 msgstr "Дельфин"
 
@@ -151,11 +154,29 @@ msgstr "Странник"
 msgid "Wither Skeleton"
 msgstr "Скелет-иссушитель"
 
-msgid "Slime"
-msgstr "Слизень"
+msgid "Slime - big"
+msgstr ""
+
+msgid "Slime - small"
+msgstr ""
+
+msgid "Slime - tiny"
+msgstr ""
+
+msgid "Magma Cube - big"
+msgstr ""
+
+msgid "Magma Cube - small"
+msgstr ""
+
+msgid "Magma Cube - tiny"
+msgstr ""
 
 msgid "Magma Cube"
 msgstr "Лавовый куб"
+
+msgid "Slime"
+msgstr "Слизень"
 
 msgid "Snow Golem"
 msgstr "Снежный голем"
@@ -282,6 +303,9 @@ msgstr "Иссушитель"
 
 msgid "Wolf"
 msgstr "Волк"
+
+msgid "Dog"
+msgstr ""
 
 msgid "Zombie"
 msgstr "Зомби"

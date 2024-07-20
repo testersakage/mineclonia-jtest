@@ -37,6 +37,9 @@ msgstr "Svamp"
 msgid "Creeper"
 msgstr "Creeper"
 
+msgid "Charged Creeper"
+msgstr ""
+
 msgid "Dolphin"
 msgstr "Delfin"
 
@@ -151,11 +154,29 @@ msgstr "Omstrejfer"
 msgid "Wither Skeleton"
 msgstr "Wither-skelet"
 
-msgid "Slime"
-msgstr "Slimklump"
+msgid "Slime - big"
+msgstr ""
+
+msgid "Slime - small"
+msgstr ""
+
+msgid "Slime - tiny"
+msgstr ""
+
+msgid "Magma Cube - big"
+msgstr ""
+
+msgid "Magma Cube - small"
+msgstr ""
+
+msgid "Magma Cube - tiny"
+msgstr ""
 
 msgid "Magma Cube"
 msgstr "Magmakube"
+
+msgid "Slime"
+msgstr "Slimklump"
 
 msgid "Snow Golem"
 msgstr "Snegolem"
@@ -282,6 +303,9 @@ msgstr "Wither"
 
 msgid "Wolf"
 msgstr "Ulv"
+
+msgid "Dog"
+msgstr ""
 
 msgid "Zombie"
 msgstr "Zombie"

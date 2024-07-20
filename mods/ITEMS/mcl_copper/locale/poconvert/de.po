@@ -40,51 +40,45 @@ msgstr "Rohkupferblock"
 msgid "A block used for compact raw copper storage."
 msgstr "Ein Block für die kompakte Lagerung von Rohkupfer."
 
-msgid "Block of Copper"
-msgstr "Kupferblock"
+msgid "Exposed"
+msgstr ""
 
-msgid "A block of copper is mostly a decorative block."
-msgstr "Ein Kupferblock wird meistens als dekorativer Block verwendet."
+msgid "Weathered"
+msgstr ""
 
-msgid "Exposed Copper"
-msgstr "Angelaufener Kupferblock"
+msgid "Oxidized"
+msgstr ""
 
-msgid "Exposed copper is a decorative block."
-msgstr "Ein Angelaufener Kupferblock ist ein dekorativer Block."
+msgid "Block of"
+msgstr ""
 
-msgid "Weathered Copper"
-msgstr "Verwitterter Kupferblock"
+msgid "@1 Copper"
+msgstr ""
 
-msgid "Weathered copper is a decorative block."
-msgstr "Ein Verwitterter Kupferblock ist ein dekorativer Block."
+msgid "@1 copper is mostly a decorative block."
+msgstr ""
 
-msgid "Oxidized Copper"
-msgstr "Oxidierter Kupferblock"
+msgid "@1 Cut Copper"
+msgstr ""
 
-msgid "Oxidized copper is a decorative block."
-msgstr "Ein Oxidierter Kupferblockist ist ein dekorativer Block."
+msgid "@1 Chiseled Copper"
+msgstr ""
 
-msgid "Cut Copper"
-msgstr "Geschnittener Kupferblock"
+msgid "@1 Chiseled copper is mostly a decorative block."
+msgstr ""
 
-msgid "Cut copper is a decorative block."
-msgstr "Ein Geschnittener Kupferblock ist ein dekorativer Block."
+msgid "@1 Copper Grate"
+msgstr ""
 
-msgid "Exposed Cut Copper"
-msgstr "Angelaufener geschnittener Kupferblock"
+msgid "@1 Copper Bulb On"
+msgstr ""
 
-msgid "Exposed cut copper is a decorative block."
-msgstr "Ein Angelaufener geschnittener Kupferblock ist ein dekorativer Block."
+msgid "@1 Copper Bulb"
+msgstr ""
 
-msgid "Weathered Cut Copper"
-msgstr "Verwitterter geschnittener Kupferblock"
+msgid "@1 Copper Trapdoor"
+msgstr ""
 
-msgid "Weathered cut copper is a decorative block."
-msgstr "Ein Verwitterter geschnittener Kupferblock ist ein dekorativer Block."
-
-msgid "Oxidized Cut Copper"
-msgstr "Oxidierter geschnittener Kupferblock"
-
-msgid "Oxidized cut copper is a decorative block."
-msgstr "Ein Oxidierter geschnittener Kupferblock ist ein dekorativer Block."
+msgid "@1 Copper Door"
+msgstr ""
 

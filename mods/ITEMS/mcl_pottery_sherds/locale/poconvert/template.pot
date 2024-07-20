@@ -73,6 +73,15 @@ msgstr ""
 msgid "Snort"
 msgstr ""
 
+msgid "Flow"
+msgstr ""
+
+msgid "Guster"
+msgstr ""
+
+msgid "Scrape"
+msgstr ""
+
 msgid "@1 Pottery Sherd"
 msgstr ""
 

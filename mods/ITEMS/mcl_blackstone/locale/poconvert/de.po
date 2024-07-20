@@ -40,6 +40,9 @@ msgstr "Gemeißelter polierter Schwarzstein"
 msgid "Polished Blackstone Bricks"
 msgstr "Polierter Schwarzsteinziegel"
 
+msgid "Cracked Polished Blackstone Bricks"
+msgstr ""
+
 msgid "Quartz Bricks"
 msgstr "Quartz Ziegel"
 

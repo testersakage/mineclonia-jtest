@@ -256,6 +256,12 @@ msgstr "@1 гребешки снизу"
 msgid "@1 Chief Indented"
 msgstr "@1 гребешки сверху"
 
+msgid "@1 Flow"
+msgstr ""
+
+msgid "@1 Guster"
+msgstr ""
+
 msgid "And one additional layer"
 msgstr "И один дополнительный слой"
 

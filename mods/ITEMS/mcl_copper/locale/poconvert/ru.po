@@ -40,51 +40,45 @@ msgstr "Блок необработанной меди"
 msgid "A block used for compact raw copper storage."
 msgstr "Блок используется для компактного хранения необработанной меди."
 
-msgid "Block of Copper"
-msgstr "Медный блок"
+msgid "Exposed"
+msgstr ""
 
-msgid "A block of copper is mostly a decorative block."
-msgstr "Медный блок — это декоративный блок."
+msgid "Weathered"
+msgstr ""
 
-msgid "Exposed Copper"
-msgstr "Потемневший медный блок"
+msgid "Oxidized"
+msgstr ""
 
-msgid "Exposed copper is a decorative block."
-msgstr "Потемневший медный блок это декоративный блок."
+msgid "Block of"
+msgstr ""
 
-msgid "Weathered Copper"
-msgstr "Состаренный медный блок"
+msgid "@1 Copper"
+msgstr ""
 
-msgid "Weathered copper is a decorative block."
-msgstr "Состаренный медный блок это декоративный блок."
+msgid "@1 copper is mostly a decorative block."
+msgstr ""
 
-msgid "Oxidized Copper"
-msgstr "Окисленный медный блок"
+msgid "@1 Cut Copper"
+msgstr ""
 
-msgid "Oxidized copper is a decorative block."
-msgstr "Окисленный медный блок это декоративный блок."
+msgid "@1 Chiseled Copper"
+msgstr ""
 
-msgid "Cut Copper"
-msgstr "Резной медный блок"
+msgid "@1 Chiseled copper is mostly a decorative block."
+msgstr ""
 
-msgid "Cut copper is a decorative block."
-msgstr "Резной медный блок это декоративный блок."
+msgid "@1 Copper Grate"
+msgstr ""
 
-msgid "Exposed Cut Copper"
-msgstr "Потемневший резной медный блок"
+msgid "@1 Copper Bulb On"
+msgstr ""
 
-msgid "Exposed cut copper is a decorative block."
-msgstr "Потемневший резной медный блок это декоративный блок."
+msgid "@1 Copper Bulb"
+msgstr ""
 
-msgid "Weathered Cut Copper"
-msgstr "Состаренный резной медный блок"
+msgid "@1 Copper Trapdoor"
+msgstr ""
 
-msgid "Weathered cut copper is a decorative block."
-msgstr "Состаренный резной медный блок это декоративный блок."
-
-msgid "Oxidized Cut Copper"
-msgstr "Окисленный резной медный блок"
-
-msgid "Oxidized cut copper is a decorative block."
-msgstr "Окисленный резной медный блок это декоративный блок."
+msgid "@1 Copper Door"
+msgstr ""
 

@@ -256,6 +256,12 @@ msgstr "@1 ząbkowany dolny"
 msgid "@1 Chief Indented"
 msgstr "@1 ząbkowany górny"
 
+msgid "@1 Flow"
+msgstr ""
+
+msgid "@1 Guster"
+msgstr ""
+
 msgid "And one additional layer"
 msgstr "I jedna dodatkowa warstwa"
 

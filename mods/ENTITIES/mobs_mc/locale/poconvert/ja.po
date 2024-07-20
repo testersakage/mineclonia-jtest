@@ -37,6 +37,9 @@ msgstr "ムーシュルーム"
 msgid "Creeper"
 msgstr "クリーパー"
 
+msgid "Charged Creeper"
+msgstr ""
+
 msgid "Dolphin"
 msgstr "イルカ"
 
@@ -151,11 +154,29 @@ msgstr "ストレイ"
 msgid "Wither Skeleton"
 msgstr "ウィザースケルトン"
 
-msgid "Slime"
-msgstr "スライム"
+msgid "Slime - big"
+msgstr ""
+
+msgid "Slime - small"
+msgstr ""
+
+msgid "Slime - tiny"
+msgstr ""
+
+msgid "Magma Cube - big"
+msgstr ""
+
+msgid "Magma Cube - small"
+msgstr ""
+
+msgid "Magma Cube - tiny"
+msgstr ""
 
 msgid "Magma Cube"
 msgstr "マグマキューブ"
+
+msgid "Slime"
+msgstr "スライム"
 
 msgid "Snow Golem"
 msgstr "スノーゴーレム"
@@ -282,6 +303,9 @@ msgstr "ウィザー"
 
 msgid "Wolf"
 msgstr "オオカミ"
+
+msgid "Dog"
+msgstr ""
 
 msgid "Zombie"
 msgstr "ゾンビ"

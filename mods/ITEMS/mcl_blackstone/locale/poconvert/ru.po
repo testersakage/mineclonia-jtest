@@ -40,6 +40,9 @@ msgstr "Резной полированный чернокамень"
 msgid "Polished Blackstone Bricks"
 msgstr "Полированные чернокаменные кирпичи"
 
+msgid "Cracked Polished Blackstone Bricks"
+msgstr ""
+
 msgid "Quartz Bricks"
 msgstr "Кварцевые кирпичи"
 

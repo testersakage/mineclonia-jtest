@@ -40,6 +40,9 @@ msgstr ""
 msgid "Polished Blackstone Bricks"
 msgstr ""
 
+msgid "Cracked Polished Blackstone Bricks"
+msgstr ""
+
 msgid "Quartz Bricks"
 msgstr ""
 

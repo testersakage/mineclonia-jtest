@@ -37,6 +37,9 @@ msgstr "Champivaca"
 msgid "Creeper"
 msgstr "Creeper"
 
+msgid "Charged Creeper"
+msgstr ""
+
 msgid "Dolphin"
 msgstr "Delfín"
 
@@ -151,11 +154,29 @@ msgstr "Esqueleto glacial"
 msgid "Wither Skeleton"
 msgstr "Esqueleto del Wither"
 
-msgid "Slime"
-msgstr "Slime"
+msgid "Slime - big"
+msgstr ""
+
+msgid "Slime - small"
+msgstr ""
+
+msgid "Slime - tiny"
+msgstr ""
+
+msgid "Magma Cube - big"
+msgstr ""
+
+msgid "Magma Cube - small"
+msgstr ""
+
+msgid "Magma Cube - tiny"
+msgstr ""
 
 msgid "Magma Cube"
 msgstr "Cubo de Magma"
+
+msgid "Slime"
+msgstr "Slime"
 
 msgid "Snow Golem"
 msgstr "Golem de nieve"
@@ -282,6 +303,9 @@ msgstr "Wither"
 
 msgid "Wolf"
 msgstr "Lobo"
+
+msgid "Dog"
+msgstr ""
 
 msgid "Zombie"
 msgstr "Zombi"

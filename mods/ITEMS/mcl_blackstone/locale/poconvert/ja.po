@@ -40,6 +40,9 @@ msgstr "模様入りの磨かれたブラックストーン"
 msgid "Polished Blackstone Bricks"
 msgstr "磨かれたブラックストーンレンガ"
 
+msgid "Cracked Polished Blackstone Bricks"
+msgstr ""
+
 msgid "Quartz Bricks"
 msgstr "クォーツレンガ"
 

@@ -262,6 +262,12 @@ msgstr ""
 msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor."
 msgstr ""
 
+msgid "Leather Horse Armor"
+msgstr ""
+
+msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
+msgstr ""
+
 msgid "Iron Horse Armor"
 msgstr ""
 

@@ -37,6 +37,9 @@ msgstr "Vachairòla"
 msgid "Creeper"
 msgstr "Creeper"
 
+msgid "Charged Creeper"
+msgstr ""
+
 msgid "Dolphin"
 msgstr "Daufin"
 
@@ -151,11 +154,29 @@ msgstr "Trainabiaça"
 msgid "Wither Skeleton"
 msgstr "Squeleta Sechaire"
 
-msgid "Slime"
-msgstr "Slime"
+msgid "Slime - big"
+msgstr ""
+
+msgid "Slime - small"
+msgstr ""
+
+msgid "Slime - tiny"
+msgstr ""
+
+msgid "Magma Cube - big"
+msgstr ""
+
+msgid "Magma Cube - small"
+msgstr ""
+
+msgid "Magma Cube - tiny"
+msgstr ""
 
 msgid "Magma Cube"
 msgstr "Cube de Magmà"
+
+msgid "Slime"
+msgstr "Slime"
 
 msgid "Snow Golem"
 msgstr "Golem d'Ivèrn"
@@ -282,6 +303,9 @@ msgstr "Le Sechaire"
 
 msgid "Wolf"
 msgstr "Lop"
+
+msgid "Dog"
+msgstr ""
 
 msgid "Zombie"
 msgstr "Zombia"

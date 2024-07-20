@@ -40,51 +40,45 @@ msgstr ""
 msgid "A block used for compact raw copper storage."
 msgstr ""
 
-msgid "Block of Copper"
+msgid "Exposed"
 msgstr ""
 
-msgid "A block of copper is mostly a decorative block."
+msgid "Weathered"
 msgstr ""
 
-msgid "Exposed Copper"
+msgid "Oxidized"
 msgstr ""
 
-msgid "Exposed copper is a decorative block."
+msgid "Block of"
 msgstr ""
 
-msgid "Weathered Copper"
+msgid "@1 Copper"
 msgstr ""
 
-msgid "Weathered copper is a decorative block."
+msgid "@1 copper is mostly a decorative block."
 msgstr ""
 
-msgid "Oxidized Copper"
+msgid "@1 Cut Copper"
 msgstr ""
 
-msgid "Oxidized copper is a decorative block."
+msgid "@1 Chiseled Copper"
 msgstr ""
 
-msgid "Cut Copper"
+msgid "@1 Chiseled copper is mostly a decorative block."
 msgstr ""
 
-msgid "Cut copper is a decorative block."
+msgid "@1 Copper Grate"
 msgstr ""
 
-msgid "Exposed Cut Copper"
+msgid "@1 Copper Bulb On"
 msgstr ""
 
-msgid "Exposed cut copper is a decorative block."
+msgid "@1 Copper Bulb"
 msgstr ""
 
-msgid "Weathered Cut Copper"
+msgid "@1 Copper Trapdoor"
 msgstr ""
 
-msgid "Weathered cut copper is a decorative block."
-msgstr ""
-
-msgid "Oxidized Cut Copper"
-msgstr ""
-
-msgid "Oxidized cut copper is a decorative block."
+msgid "@1 Copper Door"
 msgstr ""
 

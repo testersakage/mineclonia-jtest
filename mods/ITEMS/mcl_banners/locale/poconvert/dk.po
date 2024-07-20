@@ -256,6 +256,12 @@ msgstr "@1 savtakker i bunden"
 msgid "@1 Chief Indented"
 msgstr "@1 savtakker i toppen"
 
+msgid "@1 Flow"
+msgstr ""
+
+msgid "@1 Guster"
+msgstr ""
+
 msgid "And one additional layer"
 msgstr "Og ét yderligere lag"
 

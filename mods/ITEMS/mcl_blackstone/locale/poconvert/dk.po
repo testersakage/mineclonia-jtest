@@ -40,6 +40,9 @@ msgstr "Majslet poleret sortsten"
 msgid "Polished Blackstone Bricks"
 msgstr "Poleret sortsten-mursten"
 
+msgid "Cracked Polished Blackstone Bricks"
+msgstr ""
+
 msgid "Quartz Bricks"
 msgstr "Qvarts-mursten"
 

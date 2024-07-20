@@ -256,6 +256,12 @@ msgstr "@1 下に波形 "
 msgid "@1 Chief Indented"
 msgstr "@1 上に波形"
 
+msgid "@1 Flow"
+msgstr ""
+
+msgid "@1 Guster"
+msgstr ""
+
 msgid "And one additional layer"
 msgstr "さらにレイヤーを1枚追加"
 
