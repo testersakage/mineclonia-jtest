@@ -44,6 +44,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	dogshoot_count_max =1.8,
 	max_drops = 3,
 	drops = {
+		-- TODO: drops some useful potions
 		{name = "mcl_potions:glass_bottle", chance = 8, min = 0, max = 2, looting = "common",},
 		{name = "mcl_nether:glowstone_dust", chance = 8, min = 0, max = 2, looting = "common",},
 		{name = "mcl_mobitems:gunpowder", chance = 8, min = 0, max = 2, looting = "common",},
@@ -79,28 +80,20 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 })
 
 -- potion projectile (EXPERIMENTAL)
+-- TODO: throw varies of potions based on range and/or when player still didn't have the effect
 mcl_mobs.register_arrow("mobs_mc:potion_arrow", {
 	visual = "sprite",
 	visual_size = {x = 0.5, y = 0.5},
-	--textures = {"vessels_glass_bottle.png"},  --TODO fix to else if default
-	textures = {"mcl_potions_dragon_breath.png"},
+	textures = {"mcl_potions_splash_overlay.png^[colorize:#4E9331:127^mcl_potions_splash_bottle.png"},
 	velocity = 6,
 
-	-- direct hit, no fire... just plenty of pain
-	hit_player = mcl_mobs.get_arrow_damage_func(2, "mob"),
-	hit_mob = mcl_mobs.get_arrow_damage_func(2, "mob"),
+	-- direct hit, no poison... just plenty of pain
+	hit_player = mcl_mobs.get_arrow_damage_func(4, "mob"),
+	hit_mob = mcl_mobs.get_arrow_damage_func(4, "mob"),
 
-	-- node hit, bursts into flame
+	-- node hit, splash poison
 	hit_node = function(self, pos, node)
-		local p = vector.offset(pos,0,1,0)
-		if minetest.get_node(p).name == "air" then
-			minetest.set_node(p, {name = "mcl_fire:fire"})
-		else
-			local p = minetest.find_node_near(p,1,{"air"})
-			if p then
-				minetest.set_node(p, {name = "mcl_fire:fire"})
-			end
-		end
+		minetest.add_entity(pos, "mcl_potions:poison_2_splash_flying")
 	end
 })
 
