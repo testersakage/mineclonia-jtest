@@ -3,18 +3,20 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-07-20 18:56+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Axolotl"
-msgstr ""
+msgstr "Axolotl"
 
 msgid "Bat"
 msgstr "Chauve-souris"
@@ -53,10 +55,10 @@ msgid "Ghast"
 msgstr "Ghast"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "Boule de feu de Ghast"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "Poulpe luisant"
 
 msgid "Guardian"
 msgstr "Gardien"
@@ -65,13 +67,13 @@ msgid "Elder Guardian"
 msgstr "Gardien de l'Elder"
 
 msgid "Hoglin"
-msgstr ""
+msgstr "Hoglin"
 
 msgid "Zoglin"
-msgstr ""
+msgstr "Zoglin"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Bébé Hoglin"
 
 msgid "Horse"
 msgstr "Cheval"
@@ -98,7 +100,7 @@ msgid "Ocelot"
 msgstr "Ocelot"
 
 msgid "Cat"
-msgstr ""
+msgstr "Chat"
 
 msgid "Parrot"
 msgstr "Perroquet"
@@ -107,16 +109,16 @@ msgid "Pig"
 msgstr "Cochon"
 
 msgid "Piglin"
-msgstr ""
+msgstr "Piglin"
 
 msgid "Zombiefied Piglin"
-msgstr ""
+msgstr "Piglin zombifié"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "Piglin barbare"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Piglin zombie"
 
 msgid "Pillager"
 msgstr "Pilleur"
@@ -170,13 +172,13 @@ msgid "Squid"
 msgstr "Poulpe"
 
 msgid "Strider"
-msgstr ""
+msgstr "Arpenteur"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Bébé arpenteur"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Poisson Tropical"
 
 msgid "Tropical fish"
 msgstr "Poisson tropical"
@@ -200,19 +202,19 @@ msgid "Zombie Villager"
 msgstr "Zombie Villageois"
 
 msgid "@1 sleeps here"
-msgstr ""
+msgstr "@1 dort ici"
 
 msgid "A villager sleeps here"
-msgstr ""
+msgstr "Un villageois dort ici"
 
 msgid "@1 works here"
-msgstr ""
+msgstr "@1 travaille ici"
 
 msgid "A villager works here"
-msgstr ""
+msgstr "Un villageois travaille ici"
 
 msgid "Unemployed"
-msgstr ""
+msgstr "Sans emploi"
 
 msgid "Farmer"
 msgstr "Fermier"
@@ -251,28 +253,28 @@ msgid "Cleric"
 msgstr "Clerc"
 
 msgid "Mason"
-msgstr ""
+msgstr "maçon"
 
 msgid "Nitwit"
 msgstr "Crétin"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Marchand ambulant"
 
 msgid "Novice"
-msgstr ""
+msgstr "Novice"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Apprenti"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Compagnon"
 
 msgid "Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "Master"
-msgstr ""
+msgstr "Maître"
 
 msgid "Witch"
 msgstr "Sorcière"
@@ -287,14 +289,13 @@ msgid "Zombie"
 msgstr "Zombie"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Bébé zombie"
 
 msgid "Husk"
 msgstr "Zombie Momifié"
 
 msgid "Baby Husk"
-msgstr ""
+msgstr "Bébé zombie momifié"
 
 msgid "Zombified Piglin"
-msgstr ""
-
+msgstr "Piglin Zombifié"
