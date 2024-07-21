@@ -1,7 +1,5 @@
 local S = minetest.get_translator("mcl_tools")
 
-local shovel_use = S("To turn a grass block into a grass path, hold the shovel in your hand, then use (rightclick) the top or side of a grass block. This only works when there's air above the grass block.")
-
 --Wood Set
 mcl_tools.register_set({
     name = "wood",
@@ -23,7 +21,6 @@ mcl_tools.register_set({
     },
     ["shovel"] = {
         description = S("Wooden Shovel"),
-        _doc_items_usagehelp = shovel_use,
         inventory_image = "default_tool_woodshovel.png",
         tool_capabilities = {
             full_punch_interval = 1,
@@ -69,7 +66,6 @@ mcl_tools.register_set({
     },
     ["shovel"] = {
         description = S("Stone Shovel"),
-        _doc_items_usagehelp = shovel_use,
         inventory_image = "default_tool_stoneshovel.png",
         tool_capabilities = {
             full_punch_interval = 1,
@@ -115,7 +111,6 @@ mcl_tools.register_set({
     },
     ["shovel"] = {
         description = S("Iron Shovel"),
-        _doc_items_usagehelp = shovel_use,
         inventory_image = "default_tool_steelshovel.png",
         tool_capabilities = {
             full_punch_interval = 1,
@@ -161,7 +156,6 @@ mcl_tools.register_set({
     },
     ["shovel"] = {
         description = S("Golden Shovel"),
-        _doc_items_usagehelp = shovel_use,
         inventory_image = "default_tool_goldshovel.png",
         tool_capabilities = {
             full_punch_interval = 1,
@@ -209,7 +203,6 @@ mcl_tools.register_set({
     },
     ["shovel"] = {
         description = S("Diamond Shovel"),
-        _doc_items_usagehelp = shovel_use,
         inventory_image = "default_tool_diamondshovel.png",
         tool_capabilities = {
             full_punch_interval = 1,
@@ -261,7 +254,6 @@ mcl_tools.register_set({
     },
     ["shovel"] = {
         description = S("Netherite Shovel"),
-        _doc_items_usagehelp = shovel_use,
         inventory_image = "default_tool_netheriteshovel.png",
         tool_capabilities = {
             full_punch_interval = 1,

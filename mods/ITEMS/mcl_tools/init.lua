@@ -25,6 +25,7 @@ mcl_tools.set = {
 	},
 	["hoe"] = {
 		longdesc = S("Hoes are essential tools for growing crops. They are used to create farmland in order to plant seeds on it. Hoes can also be used as very weak weapons in a pinch."),
+		usagehelp = S("Use the hoe on a cultivatable block (by rightclicking it) to turn it into farmland. Dirt, grass blocks and grass paths are cultivatable blocks. Using a hoe on coarse dirt turns it into dirt."),
 		groups = { hoe = 1, tool = 1 },
 		diggroups = { hoey = {} },
 		craft_shapes = {
@@ -54,6 +55,7 @@ mcl_tools.set = {
 	},
 	["shovel"] = {
 		longdesc = S("Shovels are tools for digging coarse blocks, such as dirt, sand and gravel. They can also be used to turn grass blocks to grass paths. Shovels can be used as weapons, but they are very weak."),
+		usagehelp = S("To turn a grass block into a grass path, hold the shovel in your hand, then use (rightclick) the top or side of a grass block. This only works when there's air above the grass block."),
 		groups = { shovel = 1, tool = 1 },
 		diggroups = { shovely = {} },
 		craft_shapes = {
@@ -160,17 +162,10 @@ end
 
 ---comment
 ---@param tool string
----@param longdesc any
----@param groups table
----@param diggroups table
-function mcl_tools.add_to_set(tool, longdesc, groups, diggroups, craft_shapes)
+---@param defs table
+function mcl_tools.add_to_set(tool, defs)
 	if not mcl_tools.set[tool] then
-		mcl_tools.set[tool] = {
-			longdesc = longdesc,
-			groups = groups,
-			diggroups = diggroups,
-			craft_shapes = craft_shapes
-		}
+		mcl_tools.set[tool] = defs
 	end
 end
 
@@ -198,6 +193,7 @@ function mcl_tools.register_set(material, tools, overrides)
 
 		minetest.register_tool(toolname, table.merge({
 			_doc_items_longdesc = mcl_tools.set[tool].longdesc,
+			_doc_items_usagehelp = mcl_tools.set[tool].usagehelp,
 			wield_scale = wield_scale,
 			groups = table.merge(mcl_tools.set[tool].groups, material.groups),
 			sound = { breaks = "default_tool_breaks" },
