@@ -353,7 +353,7 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 				{ 18000, 3, 2, mcl_worlds.layer_to_y(29), mcl_worlds.layer_to_y(32) },
 				{ 28000, 1, 1, mcl_worlds.layer_to_y(31), mcl_worlds.layer_to_y(32) },
 			},
-			["stone"] = {
+			["copper"] = {
 				{ 830, 5, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(39) },
 				{ 1660, 4, 2, mcl_worlds.layer_to_y(40), mcl_worlds.layer_to_y(63) },
 			}
