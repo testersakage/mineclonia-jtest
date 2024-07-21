@@ -165,7 +165,9 @@ function mob_class:check_breeding()
 	and self.hornytimer <= HORNY_TIME then
 		local pos = self.object:get_pos()
 
-		mcl_mobs.effect({x = pos.x, y = pos.y + 1, z = pos.z}, 8, "heart.png", 3, 4, 1, 0.1)
+        if (self.hornytimer % 20) == 0.0 then
+            mcl_mobs.effect({x = pos.x, y = pos.y + 1, z = pos.z}, 8, "heart.png", 3, 4, 1, 0.1)
+        end
 
 		local num = 0
 		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 3)) do
