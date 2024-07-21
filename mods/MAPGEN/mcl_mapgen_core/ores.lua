@@ -372,6 +372,9 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 		end
 
 		for name, defs in pairs(ore) do
+			if name == "copper" and stone == "stone" then
+				modname = "mcl_copper"
+			end
 			register_ore_mg(modname..":"..stone.."_with_"..name, wherein, defs)
 		end
 	end
