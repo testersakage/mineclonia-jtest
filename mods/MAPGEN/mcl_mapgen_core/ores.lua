@@ -1,8 +1,5 @@
-
 local deepslate_max = mcl_worlds.layer_to_y(16)
 local deepslate_min = mcl_vars.mg_overworld_min
-
-local copper_mod = minetest.get_modpath("mcl_copper")
 
 local mountains = {
 	"ExtremeHills", "ExtremeHills_beach", "ExtremeHills_ocean", "ExtremeHills_deep_ocean", "ExtremeHills_underground",
@@ -256,7 +253,6 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 	local stonelike = { "mcl_core:stone", "mcl_core:diorite", "mcl_core:andesite", "mcl_core:granite" }
 
 	local function register_ore_mg(ore, wherein, defs)
-		defs[6] = defs[6] or ""
 		minetest.register_ore({
 			ore_type       = "scatter",
 			ore            = ore,
@@ -306,6 +302,9 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 			},
 			["emerald"] = {
 				{ 16384, 1, 1, mcl_worlds.layer_to_y(4), deepslate_max, mountains },
+			},
+			["copper"] = {
+				{ 830, 5, 3, deepslate_min, deepslate_max },
 			}
 		},
 		["stone"] = {
@@ -353,17 +352,13 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 				{ 14000, 4, 3, mcl_worlds.layer_to_y(25), mcl_worlds.layer_to_y(28) },
 				{ 18000, 3, 2, mcl_worlds.layer_to_y(29), mcl_worlds.layer_to_y(32) },
 				{ 28000, 1, 1, mcl_worlds.layer_to_y(31), mcl_worlds.layer_to_y(32) },
+			},
+			["stone"] = {
+				{ 830, 5, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(39) },
+				{ 1660, 4, 2, mcl_worlds.layer_to_y(40), mcl_worlds.layer_to_y(63) },
 			}
 		}
 	}
-
-	if copper_mod then
-		ore_mapgen["deepslate"]["copper"] = {{ 830, 5, 3, deepslate_min, deepslate_max }}
-		ore_mapgen["stone"]["copper"] = {
-			{ 830, 5, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(39) },
-			{ 1660, 4, 2, mcl_worlds.layer_to_y(40), mcl_worlds.layer_to_y(63) }
-		}
-	end
 
 	for stone, ore in pairs(ore_mapgen) do
 		local modname, wherein
