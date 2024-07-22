@@ -91,7 +91,6 @@ end
 
 local RADIUS = 4
 
--- Wind Burst registry
 function mcl_charges.wind_burst(pos, radius)
 	for _, obj in ipairs(minetest.get_objects_inside_radius(pos, radius)) do
 		local obj_pos = obj:get_pos()
@@ -101,12 +100,19 @@ function mcl_charges.wind_burst(pos, radius)
 			obj:add_velocity(vector.multiply(vector.normalize(vector.subtract(obj_pos, pos)), math.random(1.8, 2.0) / dist * RADIUS))
 		else
 			local luaobj = obj:get_luaentity()
-			if luaobj and (not minetest.registered_entities[luaobj.name].on_blast or minetest.registered_entities[luaobj.name].on_blast(luaobj, 0)) then
-				obj:set_velocity(mcl_charges.wind_burst_velocity(pos, obj_pos, obj:get_velocity(), radius * 3))
+			if luaobj then
+				local is_builtin_item = luaobj.name == "__builtin:item"
+				if luaobj.is_mob or is_builtin_item then
+					local entity_def = minetest.registered_entities[luaobj.name]
+					if not entity_def.on_blast or entity_def.on_blast(luaobj, 0) then
+						obj:set_velocity(mcl_charges.wind_burst_velocity(pos, obj_pos, obj:get_velocity(), radius * 3))
+					end
+				end
 			end
 		end
 	end
 end
+
 --throwable charge registry
 function register_charge(name, descr, def)
 	minetest.register_craftitem("mcl_charges:" .. name .. "", {
