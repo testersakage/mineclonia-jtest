@@ -40,16 +40,6 @@ local function atan(x)
 	end
 end
 
--- get node but use fallback for nil or unknown
-local node_ok = function(pos, fallback)
-	fallback = fallback or mcl_mobs.fallback_node
-	local node = minetest.get_node_or_nil(pos)
-	if node and minetest.registered_nodes[node.name] then
-		return node
-	end
-	return minetest.registered_nodes[fallback]
-end
-
 -- Returns true is node can deal damage to self
 function mob_class:is_node_dangerous(nodename)
 	local nn = nodename
@@ -193,9 +183,9 @@ function mob_class:can_jump_cliff()
 	local pos_far = vector.offset(pos, dir_x * 2, -0.5, dir_z * 2)
 	local pos_far2 = vector.offset(pos, dir_x * 3, -0.5, dir_z * 3)
 
-	local nodLow = node_ok(pos_low, "air")
-	local nodFar = node_ok(pos_far, "air")
-	local nodFar2 = node_ok(pos_far2, "air")
+	local nodLow = mcl_mobs.node_ok(pos_low, "air")
+	local nodFar = mcl_mobs.node_ok(pos_far, "air")
+	local nodFar2 = mcl_mobs.node_ok(pos_far2, "air")
 
 	if minetest.registered_nodes[nodLow.name]
 	and minetest.registered_nodes[nodLow.name].walkable ~= true
@@ -370,9 +360,9 @@ function mob_class:do_jump()
 
 	-- what is mob standing on?
 	local cbox = self.object:get_properties().collisionbox
-	local nod = node_ok(vector.offset(pos, 0, cbox[2] - 0.2, 0))
+	local nod =  mcl_mobs.node_ok(vector.offset(pos, 0, cbox[2] - 0.2, 0))
 
-	local in_water = minetest.get_item_group(node_ok(pos).name, "water") > 0
+	local in_water = minetest.get_item_group( mcl_mobs.node_ok(pos).name, "water") > 0
 
 	if minetest.registered_nodes[nod.name].walkable == false and not in_water then
 		return false
@@ -1143,7 +1133,7 @@ function mob_class:swim_or_jump()
 
 				local p = self.object:get_pos()
 				local cbox = self.object:get_properties().collisionbox
-				local sdef = minetest.registered_nodes[node_ok(vector.add(p, vector.new(0, cbox[2] - 0.2, 0))).name]
+				local sdef = minetest.registered_nodes[mcl_mobs.node_ok(vector.add(p, vector.new(0, cbox[2] - 0.2, 0))).name]
 				-- Flop on ground
 				if sdef and sdef.walkable then
 					if self.object:get_velocity().y < 0.1 then

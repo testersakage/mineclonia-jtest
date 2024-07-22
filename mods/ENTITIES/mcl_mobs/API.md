@@ -76,7 +76,7 @@ Fields not mentioned in this document can also be added as custom fields for the
 	fly = false,
 	-- when true allows your mob to fly around instead of walking.
 
-	fly_in = { "mcl_core:water_source" },
+	fly_in = { "air" },
 	-- holds the node name or a table of node names in which the mob flies around in. The special name '__airlike' stands for all nodes with 'walkable=false' that are not liquids
 
 	fly_velocity = 4,
@@ -503,7 +503,7 @@ These functions can be called from the entity as well as overwritten on a per-mo
  * mob:check_runaway_from()
 	* Checks if there are objects the mob should run away from
  * mob:follow_player()
-	* Follow player if owner or holding item, if fish outta water then flop
+	* Follow player if owner or holding item
  * mob:go_to_pos(b)
 	* Turn in direction of pos and start moving forward.
  * mob:check_herd(dtime)

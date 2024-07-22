@@ -7,16 +7,6 @@ local DEATH_DELAY = 0.5
 local PATHFINDING = "gowp"
 local mobs_drop_items = minetest.settings:get_bool("mobs_drop_items") ~= false
 
--- get node but use fallback for nil or unknown
-local node_ok = function(pos, fallback)
-	fallback = fallback or mcl_mobs.fallback_node
-	local node = minetest.get_node_or_nil(pos)
-	if node and minetest.registered_nodes[node.name] then
-		return node
-	end
-	return minetest.registered_nodes[fallback]
-end
-
 -- check if within physical map limits (-30911 to 30927)
 local function within_limits(pos, radius)
 	local wmin, wmax = -30912, 30928
@@ -266,7 +256,7 @@ function mob_class:set_yaw(yaw, delay, dtime)
 	if self.state ~= PATHFINDING then
 		self._turn_to = yaw
 	end
-minetest.log("set_yaw: " .. self.order .. ", " .. self.state .. ", " .. debug.traceback())
+--minetest.log("set_yaw: " .. self.order .. ", " .. self.state .. ", " .. debug.traceback())
 	if math.deg(self.object:get_yaw()) > 360 then
 		self.object:set_yaw(math.rad(0))
 	elseif math.deg(self.object:get_yaw()) < 0 then
@@ -874,15 +864,15 @@ function mob_class:falling(pos)
 		return false -- mob has teleported through portal - it's 99% not falling
 	end
 
-	if minetest.registered_nodes[node_ok(pos).name].groups.lava then
+	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].groups.lava then
 		if self.floats_on_lava == 1 then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
 	end
 	-- in water then float up
-	if minetest.registered_nodes[node_ok(pos).name].groups.water then
+	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].groups.water then
 		local cbox = self.object:get_properties().collisionbox
-		if self.floats == 1 and minetest.registered_nodes[node_ok(vector.offset(pos,0,cbox[5] -0.25,0)).name].groups.water then
+		if self.floats == 1 and minetest.registered_nodes[mcl_mobs.node_ok(vector.offset(pos,0,cbox[5] -0.25,0)).name].groups.water then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
 		-- Reset fall damage when falling into water first.
@@ -891,7 +881,7 @@ function mob_class:falling(pos)
 		-- fall damage onto solid ground
 		if self.fall_damage == 1
 		and self.object:get_velocity().y == 0 then
-			local n = node_ok(vector.offset(pos,0,-1,0)).name
+			local n = mcl_mobs.node_ok(vector.offset(pos,0,-1,0)).name
 			-- init old_y to current height if not set.
 			local d = (self.old_y or self.object:get_pos().y) - self.object:get_pos().y
 
@@ -961,7 +951,7 @@ end
 function mob_class:check_suspend()
 	if not self:player_in_active_range() then
 		local pos = self.object:get_pos()
-		local node_under = node_ok(vector.offset(pos,0,-1,0)).name
+		local node_under = mcl_mobs.node_ok(vector.offset(pos,0,-1,0)).name
 		local acc = self.object:get_acceleration()
 		self:set_animation( "stand", true)
 		if acc.y > 0 or node_under ~= "air" then

@@ -145,6 +145,16 @@ function mcl_mobs.check_vector(v)
 	return v and v.x and v.y and v.z and not minetest.is_nan(v.x) and not minetest.is_nan(v.y) and not minetest.is_nan(v.z) and tonumber(v.x) and tonumber(v.y) and tonumber(v.z)
 end
 
+-- get node but use fallback for nil or unknown
+function mcl_mobs.node_ok(pos, fallback)
+	fallback = fallback or mcl_mobs.fallback_node
+	local node = minetest.get_node_or_nil(pos)
+	if node and minetest.registered_nodes[node.name] then
+		return node
+	end
+	return { name = fallback, param1 = 0, param2 = 0 }
+end
+
 --api and helpers
 -- effects: sounds and particles mostly
 dofile(path .. "/effects.lua")
@@ -166,16 +176,6 @@ dofile(path .. "/api.lua")
 dofile(path .. "/breeding.lua")
 dofile(path .. "/spawning.lua")
 dofile(path .. "/mount.lua")
-
--- get node but use fallback for nil or unknown
-local node_ok = function(pos, fallback)
-	fallback = fallback or mcl_mobs.fallback_node
-	local node = minetest.get_node_or_nil(pos)
-	if node and minetest.registered_nodes[node.name] then
-		return node
-	end
-	return minetest.registered_nodes[fallback]
-end
 
 function mcl_mobs.mob_class:set_nametag(name)
 	if name ~= "" then
@@ -411,7 +411,7 @@ function mcl_mobs.register_arrow(name, def)
 			end
 
 			if self.hit_node then
-				local node = node_ok(pos).name
+				local node =  mcl_mobs.node_ok(pos).name
 				if minetest.registered_nodes[node].walkable then
 					self.hit_node(self, pos, node)
 					if self.drop == true then

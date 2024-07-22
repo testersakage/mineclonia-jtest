@@ -1,16 +1,7 @@
 local mob_class = mcl_mobs.mob_class
 
-local node_ok = function(pos, fallback)
-	fallback = fallback or mcl_mobs.fallback_node
-	local node = minetest.get_node_or_nil(pos)
-	if node and minetest.registered_nodes[node.name] then
-		return node
-	end
-	return {name = fallback}
-end
-
 local function node_is(pos)
-	local node = node_ok(pos)
+	local node = mcl_mobs.node_ok(pos)
 	if node.name == "air" then
 		return "air"
 	end

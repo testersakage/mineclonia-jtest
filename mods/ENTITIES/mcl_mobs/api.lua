@@ -329,7 +329,7 @@ function mob_class:set_state(state)
 end
 
 -- returns true if mob has died
--- which only happens happens if a mob explodes itself as part of an attack
+-- which only happens if a mob explodes itself as part of an attack
 function mob_class:do_states(dtime)
 	--minetest.log("state: " .. self.state .. ", order: " .. self.order .. ", mob: " .. self.name)
 	if self.state == PATHFINDING then
@@ -399,10 +399,10 @@ function mob_class:on_step(dtime, moveresult)
 	local p = vector.copy(pos)
 	p.y = p.y + y_level + 0.25 -- foot level
 	local pos2 = vector.offset(pos, 0, -1, 0)
-	self.standing_in = node_ok(p, "air").name
-	self.standing_on = node_ok(pos2, "air").name
+	self.standing_in =  mcl_mobs.node_ok(p, "air").name
+	self.standing_on =  mcl_mobs.node_ok(pos2, "air").name
 	local pos_head = vector.offset(p, 0, cbox[5] - 0.5, 0)
-	self.head_in = node_ok(pos_head, "air").name
+	self.head_in =  mcl_mobs.node_ok(pos_head, "air").name
 
 	if self:falling(pos) then return end
 
