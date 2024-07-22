@@ -361,21 +361,23 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 	}
 
 	for stone, ore in pairs(ore_mapgen) do
-		local modname, wherein
-
-		if stone == "deepslate" then
-			modname = "mcl_deepslate"
-			wherein = { "mcl_deepslate:deepslate", "mcl_deepslate:tuff" }
-		elseif stone == "stone" then
-			modname = "mcl_core"
-			wherein = stonelike
-		end
+		local modname = ""
+		local wherein
 
 		for name, defs in pairs(ore) do
-			if name == "copper" and stone == "stone" then
-				modname = "mcl_copper"
+			if stone == "deepslate" then
+				modname = "mcl_deepslate"
+				wherein = { "mcl_deepslate:deepslate", "mcl_deepslate:tuff" }
+			elseif stone == "stone" then
+				modname = "mcl_core"
+				wherein = stonelike
+				if name == "copper" then
+					modname = "mcl_copper"
+				end
 			end
-			register_ore_mg(modname..":"..stone.."_with_"..name, wherein, defs)
+			for _, def in pairs(defs) do
+				register_ore_mg(modname..":"..stone.."_with_"..name, wherein, def)
+			end
 		end
 	end
 end
