@@ -36,6 +36,17 @@ local function horse_extra_texture(horse, cstring)
 	return textures
 end
 
+local function attach_driver(self, clicker)
+	self.object:set_properties({stepheight = 1.1})
+	self.object:set_properties({selectionbox = {0,0,0,0,0,0}})
+	self:attach(clicker)
+end
+
+local function detach_driver(self)
+	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
+	mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+end
+
 local can_equip_horse_armor = function(entity_id)
 	return entity_id == "mobs_mc:horse" or entity_id == "mobs_mc:skeleton_horse" or entity_id == "mobs_mc:zombie_horse"
 end
@@ -149,6 +160,10 @@ local horse = {
 		end
 
 		if self.driver then
+			local ctrl = self.driver:get_player_control()
+			if ctrl and ctrl.sneak then
+				detach_driver(self)
+			end
 			if self.run_velocity ~= self._horse_speed then
 				self.run_velocity = self._horse_speed
 			end
@@ -178,7 +193,7 @@ local horse = {
 
 		if self.driver and not self.tamed and self.buck_off_time <= 0 then
 			if math.random() < 0.2 then
-				mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+				detach_driver(self)
 				-- TODO bucking animation
 			else
 				self.buck_off_time = 20
@@ -202,7 +217,7 @@ local horse = {
 
 	on_die = function(self, pos)
 		if self.driver then
-			mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+			detach_driver(self)
 		end
 	end,
 
@@ -262,15 +277,12 @@ local horse = {
 		end
 
 		if self.tamed and not self.child and self.owner == clicker:get_player_name() then
-			if self.driver and clicker == self.driver then
-				mcl_mobs.detach(clicker, {x = 1, y = 0, z = 1})
-			elseif not self.driver and iname == "mcl_mobitems:saddle" and self:set_saddle(clicker) then
+			if not self.driver and iname == "mcl_mobitems:saddle" and self:set_saddle(clicker) then
 				return
 			elseif minetest.get_item_group(iname, "horse_armor") > 0 and can_equip_horse_armor(self.name) and not self.driver and self:set_armor(clicker) then
 				return
 			elseif not self.driver then
-				self.object:set_properties({stepheight = 1.1})
-				self:attach(clicker)
+				attach_driver(self, clicker)
 			end
 		end
 	end,
