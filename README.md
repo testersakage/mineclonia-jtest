@@ -106,6 +106,8 @@ To contribute or report issues, head there.
 
 * Codeberg: <https://codeberg.org/mineclonia/mineclonia>
 * ContentDB: <https://content.minetest.net/packages/ryvnf/mineclonia/>
+* Discord:  https://discord.gg/WAwpPWHTXZ
+* Matrix: #mineclonia:matrix.org
 
 ## Project description
 The main goal of **Mineclonia** is to be a stable and performant clone of
