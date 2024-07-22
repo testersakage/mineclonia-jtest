@@ -7,6 +7,12 @@ local mountains = {
 	"ExtremeHillsM", "ExtremeHillsM_ocean", "ExtremeHillsM_deep_ocean", "ExtremeHillsM_underground",
 }
 
+local mesa = {
+	"Mesa", "Mesa_sandlevel", "Mesa_ocean", "MesaBryce", "MesaBryce_sandlevel",
+	"MesaBryce_ocean", "MesaPlateauF", "MesaPlateauF_sandlevel", "MesaPlateauF_ocean",
+	"MesaPlateauFM", "MesaPlateauFM_sandlevel", "MesaPlateauFM_ocean",
+}
+
 --Clay
 minetest.register_ore({
 	ore_type       = "blob",
@@ -327,6 +333,7 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 				{ 4775, 5, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(30) },
 				{ 6560, 7, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(30) },
 				{ 13000, 4, 2, mcl_worlds.layer_to_y(31), mcl_worlds.layer_to_y(33) },
+				{ 3333, 5, 3, mcl_worlds.layer_to_y(32), mcl_worlds.layer_to_y(79), mesa }
 			},
 			["diamond"] = {
 				{ 10000, 4, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(12) },
@@ -356,7 +363,10 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 			["copper"] = {
 				{ 830, 5, 3, mcl_vars.mg_overworld_min, mcl_worlds.layer_to_y(39) },
 				{ 1660, 4, 2, mcl_worlds.layer_to_y(40), mcl_worlds.layer_to_y(63) },
-			}
+			},
+			["emerald"] = {
+				{ 16384, 1, 1, mcl_worlds.layer_to_y(4), mcl_worlds.layer_to_y(32), mountains }
+			},
 		}
 	}
 
