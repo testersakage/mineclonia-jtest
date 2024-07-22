@@ -243,9 +243,9 @@ function mob_class:check_breeding()
 							return
 						end
 					end
-					local child = mcl_mobs.spawn_child(pos, parent1.name)
-					if child then
-						local ent_c = child:get_luaentity()
+					local child = mcl_mobs.spawn_child(parent1.object:get_pos(), parent1.name)
+					local ent_c = child:get_luaentity()
+					if ent_c then
 						-- Use texture of one of the parents
 						local p = math.random(1, 2)
 						if p == 1 then
@@ -253,11 +253,6 @@ function mob_class:check_breeding()
 						else
 							ent_c.base_texture = parent2.base_texture
 						end
-						ent_c:set_properties({
-							textures = ent_c.base_texture
-						})
-						ent_c.tamed = true
-						ent_c.owner = parent1.owner
 					end
 				end, self, ent, pos)
 				break
