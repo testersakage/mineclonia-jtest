@@ -668,7 +668,7 @@ minetest.register_tool("mcl_tools:mace", {
 			local current_time = minetest.get_gametime()
 			if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
 				local wind_burst = mcl_enchanting.get_enchantment(itemstack, "wind_burst")
-				local density_add = (mcl_enchanting.get_enchantment(itemstack, "density") or 0) * 0.5 * fall_distance
+				local density_add = mcl_enchanting.get_enchantment(itemstack, "density") * 0.5 * fall_distance
 				mcl_tools.mace_cooldown[user] = current_time
 				if fall_distance < 0 then
 					if obj:is_player() or obj:get_luaentity() then
@@ -677,7 +677,7 @@ minetest.register_tool("mcl_tools:mace", {
 						damage_groups = {fleshy = -6 * fall_distance / 5.5 + density_add},
 						}, nil)
 					end
-					if wind_burst then
+					if wind_burst > 0 then
 						local v = user:get_velocity()
 						user:set_velocity(vector.new(v.x, 0, v.z))
 						-- set vertical V to 0  first otherwise this is highly dependent on falling speed
