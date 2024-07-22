@@ -673,8 +673,8 @@ minetest.register_tool("mcl_tools:mace", {
 				if fall_distance < 0 then
 					if obj:is_player() or obj:get_luaentity() then
 						obj:punch(user, 1.6, {
-						full_punch_interval = 1.6,
-						damage_groups = {fleshy = -6 * fall_distance / 5.5 + density_add},
+							full_punch_interval = 1.6,
+							damage_groups = {fleshy = -6 * fall_distance / 5.5 + density_add},
 						}, nil)
 					end
 					if wind_burst > 0 then
@@ -686,8 +686,8 @@ minetest.register_tool("mcl_tools:mace", {
 				else
 					if obj:is_player() or obj:get_luaentity() then
 						obj:punch(user, 1.6, {
-						full_punch_interval = 1.6,
-						damage_groups = {fleshy = 6},
+							full_punch_interval = 1.6,
+							damage_groups = {fleshy = 6},
 						}, nil)
 					end
 				end
