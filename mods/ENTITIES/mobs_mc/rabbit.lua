@@ -86,6 +86,7 @@ local rabbit = {
 		if self:feed_tame(clicker, 1, true, false) then return end
 	end,
 	do_custom = function(self)
+		-- TODO this is a silly thing to run all the time, if it's wanted it should be done by overriding set_nametag
 		-- Easter egg: Change texture if rabbit is named “Toast”
 		local nametag = self.object:get_properties().nametag
 		if nametag == "Toast" and not self._has_toast_texture then

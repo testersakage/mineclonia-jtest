@@ -189,7 +189,7 @@ function mob_class:slow_mob()
 		local v = self.object:get_velocity()
 		if v then
 			--diffuse object velocity
-			self.object:set_velocity({x = v.x*d, y = v.y, z = v.z*d})
+			self.object:set_velocity({x = v.x*d, y = v.y*d, z = v.z*d})
 		end
 	end
 end
@@ -266,6 +266,7 @@ function mob_class:set_yaw(yaw, delay, dtime)
 	if self.state ~= PATHFINDING then
 		self._turn_to = yaw
 	end
+minetest.log("set_yaw: " .. self.order .. ", " .. self.state .. ", " .. debug.traceback())
 	if math.deg(self.object:get_yaw()) > 360 then
 		self.object:set_yaw(math.rad(0))
 	elseif math.deg(self.object:get_yaw()) < 0 then
@@ -329,8 +330,16 @@ function mcl_mobs.yaw(self, yaw, delay, dtime)
 end
 
 -- are we flying in what we are suppose to? (taikedz)
-function mob_class:flight_check()
+function mob_class:flight_check(pos)
 	local nod = self.standing_in
+
+	if pos then
+		local node = minetest.get_node_or_nil(pos)
+		if node then
+			nod = node.name
+		end
+	end
+
 	local def = minetest.registered_nodes[nod]
 	if not def then return false end -- nil check
 
@@ -342,11 +351,54 @@ function mob_class:flight_check()
 	else
 		return false
 	end
+
+	-- flowers and such
+	if minetest.get_item_group(nod, "deco_block") > 0 and not def.walkable then
+		return true
+	end
+
 	for _,checknode in pairs(fly_in) do
 		if nod == checknode or nod == "ignore" then
 			return true
 		end
 	end
+	return false
+end
+
+function mob_class:swim_check(pos)
+	local nod = self.standing_in
+
+	if pos then
+		local node = minetest.get_node_or_nil(pos)
+		if node then
+			nod = node.name
+		end
+	end
+	local def = minetest.registered_nodes[nod]
+	if not def then
+		return false
+	end
+
+	local swims_in
+	if type(self.swims_in) == "string" then
+		swims_in = { self.swims_in }
+	elseif type(self.swims_in) == "table" then
+		swims_in = self.swims_in
+	else
+		return false
+	end
+
+	-- flowers and such
+	if minetest.get_item_group(nod, "deco_block") > 0 and not def.walkable then
+		return true
+	end
+
+	for _, checknode in pairs(swims_in) do
+		if nod == checknode or nod == "ignore" then
+			return true
+		end
+	end
+
 	return false
 end
 
@@ -452,9 +504,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 
 	self:set_velocity(0)
 	if self.object then
-		local acc = self.object:get_acceleration()
-		acc.x, acc.y, acc.z = 0, self.fall_speed, 0
-		self.object:set_acceleration(acc)
+		self.object:set_acceleration(vector.new(0, self.fall_speed, 0))
 	end
 
 	local length
@@ -552,22 +602,6 @@ function mob_class:do_env_damage()
 			end
 		end
 	end
-
-	local cbox = self.object:get_properties().collisionbox
-	local y_level = cbox[2]
-
-	if self.child then
-		y_level = cbox[2] * 0.5
-	end
-
-	-- what is mob standing in?
-	pos.y = pos.y + y_level + 0.25 -- foot level
-	local pos2 = {x=pos.x, y=pos.y-1, z=pos.z}
-	self.standing_in = node_ok(pos, "air").name
-	self.standing_on = node_ok(pos2, "air").name
-
-	local pos_head = vector.offset(pos, 0, cbox[5] - 0.5, 0)
-	self.head_in = node_ok(pos_head, "air").name
 
 	-- don't fall when on ignore, just stand still
 	if self.standing_in == "ignore" then
@@ -668,7 +702,12 @@ function mob_class:do_env_damage()
 		end
 		if drowning then
 			self.breath = math.max(0, self.breath - 1)
-			mcl_mobs.effect(pos, 2, "bubble.png", nil, nil, 1, nil)
+			-- Only show bubbles if getting close to drowning
+			-- Mainly because of dolphins
+			if self.breath <= 20 then
+				mcl_mobs.effect(pos, 2, "bubble.png", nil, nil, 1, nil)
+			end
+
 			if self.breath <= 0 then
 				local dmg
 				if head_nodedef.drowning > 0 then
@@ -775,10 +814,48 @@ function mob_class:check_entity_cramming()
 	end
 end
 
+function mob_class:should_swim()
+	local pos = self.object:get_pos()
+	if self:flight_check() and self:flight_check(vector.offset(pos, 0, 1, 0)) then
+		return true
+	end
+
+	return false
+end
+
+function mob_class:should_flap()
+	local pos = self.object:get_pos()
+	if self:flight_check() and self:flight_check(vector.offset(pos, 0, -1, 0)) then
+		return true
+	end
+
+	return false
+end
+
+function mob_class:fly_or_walk_anim()
+	if self.animation and self.animation.fly_start and self.animation.fly_end then
+		return "fly"
+	end
+
+	return "walk"
+end
+
+-- Axolotl should have different anims for swimming and walking ...
+function mob_class:swim_or_walk_anim()
+	if self.animation and self.animation.swim_start and self.animation.swim_end then
+		return "swim"
+	end
+
+	return "walk"
+end
+
 -- falling and fall damage
 -- returns true if mob died
 function mob_class:falling(pos)
 	if self.fly and self.state ~= "die" then return	end
+	if self.swims and self.state ~= "die" then
+		return
+	end
 
 	local v = self.object:get_velocity()
 	-- floating in water (or falling)

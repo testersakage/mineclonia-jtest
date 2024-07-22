@@ -626,7 +626,6 @@ function mob_class:do_states_attack (dtime)
 	local yaw
 	local attacked
 	local s = self.object:get_pos()
-	local p = self.attack:get_pos() or s
 
 	-- stop attacking if player invisible or out of range
 	if not self.attack
@@ -638,6 +637,9 @@ function mob_class:do_states_attack (dtime)
 		self:clear_aggro()
 		return
 	end
+
+	-- Needs to be after self.attack check above
+	local p = self.attack:get_pos() or s
 
 	local target_line_of_sight = self:target_visible(s)
 

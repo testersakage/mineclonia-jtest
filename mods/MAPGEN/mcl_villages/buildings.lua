@@ -665,13 +665,13 @@ function mcl_villages.post_process_village(blockseed)
 				mcl_villages.forced_blocks[minetest.pos_to_string(bed_pos)] = minetest.get_us_time()
 			end
 			local m = minetest.get_meta(bed_pos)
-			m:set_string("bell_pos", minetest.pos_to_string(bell_pos))
+			m:set_string("bell_pos", minetest.pos_to_string(bell))
 			if m:get_string("villager") == "" then
 				local v = minetest.add_entity(vector.offset(bed_pos, 0, 0.06, 0), "mobs_mc:villager")
 				if v then
 					local l = v:get_luaentity()
 					l._bed = bed_pos
-					l._bell = bell_pos
+					l._bell = bell
 					m:set_string("villager", l._id)
 					m:set_string("infotext", S("A villager sleeps here"))
 

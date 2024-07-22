@@ -65,7 +65,7 @@ Fields not mentioned in this document can also be added as custom fields for the
 	-- has a 0-100 chance value your mob will walk from standing, set to 0 for jumping mobs only.
 
 	jump = true,
-	-- when true allows your mob to jump updwards.
+	-- when true allows your mob to jump upwards.
 
 	jump_height = 1,
 	-- holds the height your mob can jump, 0 to disable jumping.
@@ -77,7 +77,19 @@ Fields not mentioned in this document can also be added as custom fields for the
 	-- when true allows your mob to fly around instead of walking.
 
 	fly_in = { "mcl_core:water_source" },
-	-- holds the node name or a table of node names in which the mob flies (or swims) around in. The special name '__airlike' stands for all nodes with 'walkable=false' that are not liquids
+	-- holds the node name or a table of node names in which the mob flies around in. The special name '__airlike' stands for all nodes with 'walkable=false' that are not liquids
+
+	fly_velocity = 4,
+	-- speed the mob flies at
+
+	swims = false,
+	-- when true allows your mob to swim instead of walk
+
+	swim_velocity = 1,
+	-- the speed a mob can swim at
+
+    swims_in = { "mcl_core:water_source", "mclx_core:river_water_source", 'mcl_core:water_flowing', 'mclx_core:river_water_flowing' },
+	-- Liquids the mob can swim in
 
 	runaway = false,
 	-- if true causes animals to turn and run away when hit.
@@ -490,7 +502,7 @@ These functions can be called from the entity as well as overwritten on a per-mo
 	* Replaces node at position if node replacement is configured for this mob
  * mob:check_runaway_from()
 	* Checks if there are objects the mob should run away from
- * mob:follow_flop()
+ * mob:follow_player()
 	* Follow player if owner or holding item, if fish outta water then flop
  * mob:go_to_pos(b)
 	* Turn in direction of pos and start moving forward.

@@ -162,6 +162,14 @@ local function has_room(self,pos)
 			table.insert(nodes,self.fly_in)
 		end
 	end
+	if self.swims_in then
+		local t = type(self.swims_in)
+		if t == "table" then
+			nodes = table.copy(self.swims_in)
+		elseif t == "string" then
+			table.insert(nodes,self.swims_in)
+		end
+	end
 	table.insert(nodes,"air")
 	local x = cb[4] - cb[1]
 	local y = cb[5] - cb[2]

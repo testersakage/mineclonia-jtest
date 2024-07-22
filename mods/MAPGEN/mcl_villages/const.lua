@@ -40,9 +40,9 @@ function mcl_villages.grundstellungen()
 
 	if water_villages then
 		mcl_villages.surface_mat["mcl_core:water_source"] = true
-		mcl_villages.surface_mat["mcl_core:river_water_source"] = true
+		mcl_villages.surface_mat["mclx_core:river_water_source"] = true
 		mcl_villages.surface_mat["mcl_core:water_flowing"] = true
-		mcl_villages.surface_mat["mcl_core:river_water_flowing"] = true
+		mcl_villages.surface_mat["mclx_core:river_water_flowing"] = true
 	end
 end
 

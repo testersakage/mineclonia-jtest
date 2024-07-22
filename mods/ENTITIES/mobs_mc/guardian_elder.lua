@@ -98,9 +98,8 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 		looting = "rare",
 		looting_factor = 0.01 / 4,},
 	},
-	fly = true,
+	swims = true,
 	makes_footstep_sound = false,
-	fly_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	jump = false,
 })
 

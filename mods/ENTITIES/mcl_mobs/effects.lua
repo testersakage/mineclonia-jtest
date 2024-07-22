@@ -223,8 +223,6 @@ function mob_class:set_animation(anim, fixed_frame)
 		return
 	end
 
-	if self:flight_check() and self.fly and anim == "walk" then anim = "fly" end
-
 	self._current_animation = self._current_animation or ""
 
 	if (anim == self._current_animation
@@ -264,6 +262,11 @@ end
 
 function mob_class:who_are_you_looking_at()
 	local pos = self.object:get_pos()
+
+	if self.order == "sleep" then
+		self._locked_object = nil
+		return
+	end
 
 	local stop_look_at_player_chance = math.random(833/self.curiosity)
 	-- was 10000 - div by 12 for avg entities as outside loop

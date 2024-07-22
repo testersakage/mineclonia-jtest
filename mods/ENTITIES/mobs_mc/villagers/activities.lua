@@ -4,7 +4,7 @@ local allow_nav_hacks = minetest.settings:get_bool("mcl_mob_allow_nav_hacks",fal
 local work_dist = 4
 local gather_distance = 10
 
-local VIL_DIST = 48
+local VIL_DIST = 96
 local RESETTLE_DISTANCE = VIL_DIST * 2 -- If a mob is transported this far from home, it gives up bed and job and resettles
 
 local S = minetest.get_translator(modname)
@@ -254,8 +254,10 @@ function mobs_mc.villager_mob:go_home(sleep)
 	end
 
 	if vector.distance(self.object:get_pos(),b) < 2 then
-		if sleep then
+		if self:should_sleep() then
 			self.order = SLEEP
+			self:look_at(b)
+			-- TODO instead of look_at use set_rotation to lay on bed???
 		end
 	else
 		if sleep and self.order == SLEEP then
@@ -281,44 +283,13 @@ function mobs_mc.villager_mob:go_home(sleep)
 	end
 end
 
-local function get_ground_below_floating_object(float_pos)
-	local pos = float_pos
-	repeat
-		pos = vector.offset(pos, 0, -1, 0)
-		local node = minetest.get_node(pos)
-	until node.name ~= "air"
-
-	-- If pos is 1 below float_pos, then just return float_pos as there is no air below it
-	if pos.y == float_pos.y - 1 then
-		return float_pos
-	end
-
-	return pos
-end
-
 function mobs_mc.villager_mob:get_bell()
 	if not self._bell then
 		local p = self.object:get_pos()
-		local nn = minetest.find_nodes_in_area(
-			vector.offset(p, -VIL_DIST, -VIL_DIST, -VIL_DIST),
-			vector.offset(p, VIL_DIST, VIL_DIST, VIL_DIST),
-			{ "mcl_bells:bell" }
-		)
+		local a_bell = minetest.find_node_near(p, VIL_DIST, { "mcl_bells:bell" }, true)
 
-		local closest_bell
-		local closest_bell_dist = 1000
-
-		for _, n in pairs(nn) do
-			local target_point = get_ground_below_floating_object(n)
-			local dist = vector.distance(self.object:get_pos(), target_point)
-			if dist < closest_bell_dist then
-				closest_bell_dist = dist
-				closest_bell = target_point
-			end
-		end
-
-		if closest_bell then
-			self._bell = vector.offset(closest_bell, 0, 1, 0)
+		if a_bell then
+			self._bell = vector.offset(a_bell, 0, -2, 0)
 		end
 	end
 
@@ -338,7 +309,9 @@ function mobs_mc.villager_mob:take_bed()
 			local m = minetest.get_meta(closest_block)
 			local owner = m:get_string("villager")
 			if owner and owner ~= "" and owner ~= self._id then
-				if self.order == "stand" then self.order = nil end
+				if self.order == "stand" then
+					self.order = nil
+				end
 				return
 			end
 
@@ -368,7 +341,9 @@ function mobs_mc.villager_mob:take_bed()
 			self:gopath(closest_block,function() end)
 		end
 	else
-		if self.order == "stand" then self.order = nil end
+		if self.order == "stand" then
+			self.order = nil
+		end
 	end
 end
 
@@ -535,7 +510,9 @@ function mobs_mc.villager_mob:look_for_job(requested_jobsites)
 end
 
 function mobs_mc.villager_mob:get_a_job()
-	if self.order == WORK then self.order = nil end
+	if self.order == WORK then
+		self.order = nil
+	end
 
 	local requested_jobsites = mobs_mc.jobsites
 	if self:has_traded() then
@@ -638,6 +615,7 @@ function mobs_mc.villager_mob:do_work()
 	if not self:check_timer("do_work", 15) then return end
 
 	if self:validate_jobsite() then
+		self.jump = false
 
 		local jobsite = self._jobsite
 		local distance_to_jobsite = vector.distance(self.object:get_pos(), jobsite)
@@ -716,8 +694,8 @@ function mobs_mc.villager_mob:sleep_over()
 		local distance_to_closest_bed = 1000
 		local closest_bed
 		local nn2 = minetest.find_nodes_in_area(
-			vector.offset(p, -VIL_DIST, -VIL_DIST, -VIL_DIST),
-			vector.offset(p, VIL_DIST, VIL_DIST, VIL_DIST),
+			vector.offset(p, -VIL_DIST, -VIL_DIST / 2, -VIL_DIST),
+			vector.offset(p, VIL_DIST, VIL_DIST / 2, VIL_DIST),
 			{ "group:bed" }
 		)
 
@@ -793,7 +771,7 @@ function mobs_mc.villager_mob:do_activity(dtime)
 		self.order = nil
 	end
 
-	if self:check_timer("activity_check", 13) then
+	if self:check_timer("activity_check", 1) then
 		-- Only check in day or during thunderstorm but wandered_too_far code won't work
 		local wandered_too_far = false
 		if self:check_bed() then

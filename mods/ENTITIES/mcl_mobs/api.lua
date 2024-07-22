@@ -64,15 +64,22 @@ function mob_class:jock_to(mob, reletive_pos, rot)
 	return jock
 end
 
+--[[
+NOTE: This function is not called when something is about to despawn.
+
+It is called every 18 seconds.
+
+DO NOT change the state of the mob in this function!
+
+Edit the copied state so it's serialized in the state you need to.
+]]
 function mob_class:get_staticdata()
 	local pos = self.object:get_pos()
 	if not mcl_mobs.check_vector(pos) then
 		self.object:remove()
 		return
 	end
-	for _,p in pairs(minetest.get_connected_players()) do
-		self:remove_particlespawners(p:get_player_name())
-	end
+
 	-- remove mob when out of range unless tamed
 	if remove_far
 	and self:despawn_allowed()
@@ -83,10 +90,6 @@ function mob_class:get_staticdata()
 
 		return "remove"-- nil
 	end
-
-	self.attack = nil
-	self.following = nil
-	self:set_state("stand")
 
 	local tmp = {}
 
@@ -193,8 +196,11 @@ function mob_class:mob_activate(staticdata, dtime)
 			for _,stat in pairs(tmp) do
 				self[_] = stat
 			end
-			self.state = nil
 		end
+	end
+
+	if not self.state then
+		self:set_state("stand")
 	end
 
 	if peaceful_mode and not self.persist_in_peaceful then
@@ -318,13 +324,14 @@ function mob_class:set_state(state)
 	if self.state == "die" then
 		return
 	end
+	--minetest.log("set_state: " .. state .. ", " .. debug.traceback())
 	self.state = state
 end
 
 -- returns true if mob has died
+-- which only happens happens if a mob explodes itself as part of an attack
 function mob_class:do_states(dtime)
-	--if self.can_open_doors then check_doors(self) end
-
+	--minetest.log("state: " .. self.state .. ", order: " .. self.order .. ", mob: " .. self.name)
 	if self.state == PATHFINDING then
 		self:check_gowp(dtime)
 	elseif self.state == "walk" then
@@ -335,6 +342,10 @@ function mob_class:do_states(dtime)
 		if self:do_states_attack(dtime) then
 			return true
 		end
+	elseif self.state == "fly" then
+		self:do_states_fly()
+	elseif self.state == "swim" or self.state == "flop" then
+		self:do_states_swim()
 	else
 		self:do_states_stand()
 	end
@@ -377,6 +388,24 @@ function mob_class:on_step(dtime, moveresult)
 	self:slow_mob()
 	if not (moveresult and moveresult.touching_ground) and self:falling(pos) then return end
 
+	-- Get nodes early for use in other functions
+	local cbox = self.object:get_properties().collisionbox
+	local y_level = cbox[2]
+
+	if self.child then
+		y_level = cbox[2] * 0.5
+	end
+
+	local p = vector.copy(pos)
+	p.y = p.y + y_level + 0.25 -- foot level
+	local pos2 = vector.offset(pos, 0, -1, 0)
+	self.standing_in = node_ok(p, "air").name
+	self.standing_on = node_ok(pos2, "air").name
+	local pos_head = vector.offset(p, 0, cbox[5] - 0.5, 0)
+	self.head_in = node_ok(pos_head, "air").name
+
+	if self:falling(pos) then return end
+
 	if self.force_step then
 		self:force_step(dtime)
 	end
@@ -399,7 +428,7 @@ function mob_class:on_step(dtime, moveresult)
 
 	if self.state == "die" then return end
 
-	self:follow_flop() -- Mob following code.
+	self:follow_player() -- Mob following code.
 
 	self:set_animation_speed()
 	self:check_smooth_rotation(dtime)
