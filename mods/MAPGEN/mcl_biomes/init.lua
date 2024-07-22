@@ -2207,22 +2207,6 @@ end
 
 -- Register ores which are limited by biomes. For all mapgens except flat and singlenode.
 local function register_biome_ores()
-	-- Emeralds
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "mcl_core:stone_with_emerald",
-		wherein        = stonelike,
-		clust_scarcity = 16384,
-		clust_num_ores = 1,
-		clust_size     = 1,
-		y_min          = mcl_worlds.layer_to_y(4),
-		y_max          = mcl_worlds.layer_to_y(32),
-		biomes         = {
-			"ExtremeHills", "ExtremeHills_beach", "ExtremeHills_ocean", "ExtremeHills_deep_ocean", "ExtremeHills_underground",
-			"ExtremeHills+", "ExtremeHills+_ocean", "ExtremeHills+_deep_ocean", "ExtremeHills+_underground",
-			"ExtremeHillsM", "ExtremeHillsM_ocean", "ExtremeHillsM_deep_ocean", "ExtremeHillsM_underground",
-		},
-	})
 
 	-- Rarely replace stone with stone monster eggs.
 	minetest.register_ore({
@@ -2239,22 +2223,6 @@ local function register_biome_ores()
 			"ExtremeHills+", "ExtremeHills+_ocean", "ExtremeHills+_deep_ocean", "ExtremeHills+_underground",
 			"ExtremeHillsM", "ExtremeHillsM_ocean", "ExtremeHillsM_deep_ocean", "ExtremeHillsM_underground",
 		},
-	})
-
-	-- Bonus gold spawn in Mesa
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = "mcl_core:stone_with_gold",
-		wherein        = stonelike,
-		clust_scarcity = 3333,
-		clust_num_ores = 5,
-		clust_size     = 3,
-		y_min          = mcl_worlds.layer_to_y(32),
-		y_max          = mcl_worlds.layer_to_y(79),
-		biomes         = { "Mesa", "Mesa_sandlevel", "Mesa_ocean",
-				"MesaBryce", "MesaBryce_sandlevel", "MesaBryce_ocean",
-				"MesaPlateauF", "MesaPlateauF_sandlevel", "MesaPlateauF_ocean",
-				"MesaPlateauFM", "MesaPlateauFM_sandlevel", "MesaPlateauFM_ocean", },
 	})
 
 	--nether gold
