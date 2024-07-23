@@ -147,9 +147,8 @@ local tpl_fence_gate_close = {
 		}
 	},
 	on_construct = function(pos)
-		meta2 = minetest.get_meta(pos)
-		meta2:set_int("state", 0)
-		state2 = 0
+		local meta = minetest.get_meta(pos)
+		meta:set_int("state", 0)
 	end,
 	mesecons = {effector = {
 		action_on = (function(pos, node)
@@ -268,11 +267,11 @@ function mcl_fences.register_fence_gate(name, definitions)
 
 		end
 		if not definitions.wield_image then
-			wield_image = "mcl_fences_fence_gate_mask.png^"..definitions.tiles[1]..
+			definitions.wield_image = "mcl_fences_fence_gate_mask.png^"..definitions.tiles[1]..
 			"^mcl_fences_fence_gate_mask.png^[makealpha:255,126,126"
 		end
 	end
-	
+
 	minetest.register_node(":"..gate_id, table.merge(tpl_fence_gate_close, {
 		groups = cgroups_closed,
 	}, definitions))
