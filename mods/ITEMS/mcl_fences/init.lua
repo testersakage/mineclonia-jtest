@@ -31,11 +31,9 @@ local tpl_fence = {
 }
 
 function mcl_fences.register_fence(name, definitions)
-	local cgroups = table.copy(definitions.groups) or {}
-
-	cgroups.fence = 1
-	cgroups.deco_block = 1
-
+	definitions.groups.deco_block = 1
+	definitions.groups.fence = 1
+	
 	if definitions.connects_to == nil then
 		definitions.connects_to = {}
 	else
@@ -58,7 +56,6 @@ function mcl_fences.register_fence(name, definitions)
 	table.insert(definitions.connects_to, fence_id)
 
 	minetest.register_node(":"..fence_id, table.merge(tpl_fence, {
-		groups = cgroups,
 		node_box = {
 			type = "connected",
 			fixed = {p},
