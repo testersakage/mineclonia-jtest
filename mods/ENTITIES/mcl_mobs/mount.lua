@@ -139,6 +139,12 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 		local ctrl = self.driver:get_player_control()
 		if ctrl.up then
 
+			if ctrl.left then
+				rot_view = rot_view - 70
+			elseif ctrl.right then
+				rot_view = rot_view + 70
+			end
+
 			self.v = self.v + self.accel / 10 * self.run_velocity / 2.6
 
 		elseif ctrl.down then
@@ -147,6 +153,22 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 				return
 			end
 
+			if ctrl.left then
+				rot_view = rot_view + 70
+			elseif ctrl.right then
+				rot_view = rot_view - 70
+			end
+
+			self.v = self.v - self.accel / 10
+
+		elseif ctrl.left then
+
+			rot_view = rot_view - 80
+			self.v = self.v - self.accel / 10
+
+		elseif ctrl.right then
+
+			rot_view = rot_view + 80
 			self.v = self.v - self.accel / 10
 
 		else
