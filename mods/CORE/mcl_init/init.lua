@@ -98,6 +98,12 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
+mcl_vars.mg_water_level = minetest.get_mapgen_setting("water_level")
+mcl_vars.mg_ocean_min = mcl_vars.mg_water_level - 16
+mcl_vars.mg_ocean_max = mcl_vars.mg_water_level - 1
+mcl_vars.mg_ocean_deep_min = mcl_vars.mg_water_level - 32
+mcl_vars.mg_ocean_deep_max = mcl_vars.mg_ocean_min - 1
+
 if not mcl_vars.superflat and (not singlenode or normal_vars_in_singlenode) then
 	-- Normal mode
 	--[[ Realm stacking (h is for height)
