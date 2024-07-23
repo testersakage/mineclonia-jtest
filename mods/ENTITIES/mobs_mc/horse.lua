@@ -44,7 +44,7 @@ end
 
 local function detach_driver(self)
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
-	mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+	if self.driver then mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1}) end
 end
 
 local can_equip_horse_armor = function(entity_id)
@@ -168,6 +168,9 @@ local horse = {
 				self.run_velocity = self._horse_speed
 			end
 		else
+			if self._saddle then
+				detach_driver(self)
+			end
 			self.run_velocity = self._runaway_velocity
 		end
 
