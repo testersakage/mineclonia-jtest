@@ -33,7 +33,7 @@ local tpl_fence = {
 function mcl_fences.register_fence(name, definitions)
 	definitions.groups.deco_block = 1
 	definitions.groups.fence = 1
-	
+
 	if definitions.connects_to == nil then
 		definitions.connects_to = {}
 	else
