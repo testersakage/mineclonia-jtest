@@ -2,17 +2,15 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
 
 -- Red Nether Brick Fence
-
-mcl_fences.register_fence_and_fence_gate(
-	"red_nether_brick_fence",
-	S("Red Nether Brick Fence"), S("Red Nether Brick Fence Gate"),
-	"mcl_fences_fence_red_nether_brick.png",
-	{pickaxey=1, deco_block=1, fence_nether_brick=1, not_in_creative_inventory=not extra_nodes and 1 or 0},
-	minetest.registered_nodes["mcl_nether:red_nether_brick"]._mcl_hardness,
-	minetest.registered_nodes["mcl_nether:red_nether_brick"]._mcl_blast_resistance,
-	{"group:fence_nether_brick"},
-	mcl_sounds.node_sound_stone_defaults(), "mcl_fences_nether_brick_fence_gate_open", "mcl_fences_nether_brick_fence_gate_close", 1, 1,
-	"mcl_fences_fence_gate_red_nether_brick.png")
+mcl_fences.register_fence("red_nether_brick_fence", {
+	description = S("Red Nether Brick Fence"),
+	tiles = { "mcl_fences_fence_red_nether_brick.png" },
+	groups = { pickaxey = 1, fence_nether_brick = 1, not_in_creative_inventory = not extra_nodes and 1 or 0 },
+	connects_to = { "group:fence_nether_brick" },
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 2,
+})
 
 mcl_fences.register_fence_gate(
 	"nether_brick_fence",
@@ -26,13 +24,6 @@ mcl_fences.register_fence_gate(
 -- Crafting
 
 if extra_nodes then
-	minetest.register_craft({
-		output = "mclx_fences:red_nether_brick_fence 6",
-		recipe = {
-			{"mcl_nether:red_nether_brick", "mcl_nether:netherbrick", "mcl_nether:red_nether_brick"},
-			{"mcl_nether:red_nether_brick", "mcl_nether:netherbrick", "mcl_nether:red_nether_brick"},
-		}
-	})
 
 	minetest.register_craft({
 		output = "mclx_fences:red_nether_brick_fence_gate",

@@ -20,33 +20,45 @@ local cz2 = {-2/16, -0.5, 2/16, 2/16, 1.01, 0.5} --unten(quer) z
 
 mcl_fences = {}
 
-function mcl_fences.register_fence(id, fence_name, texture, groups, hardness, blast_resistance, connects_to, sounds, burntime)
-	local cgroups = table.copy(groups)
-	if cgroups == nil then cgroups = {} end
+local tpl_fence = {
+	_doc_items_longdesc = S("Fences are structures which block the way. Fences will connect to each other and solid blocks. They cannot be jumped over with a simple jump."),
+	paramtype = "light",
+	is_ground_content = false,
+	connect_sides = { "front", "back", "left", "right" },
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+
+}
+
+function mcl_fences.register_fence(name, definitions)
+	local cgroups = table.copy(definitions.groups) or {}
+
 	cgroups.fence = 1
 	cgroups.deco_block = 1
-	if connects_to == nil then
-		connects_to = {}
+
+	if definitions.connects_to == nil then
+		definitions.connects_to = {}
 	else
-		connects_to = table.copy(connects_to)
+		definitions.connects_to = table.copy(definitions.connects_to)
 	end
-	local fence_id = ":mcl_fences:"..id
-	table.insert(connects_to, "group:solid")
-	table.insert(connects_to, "group:fence_gate")
-	table.insert(connects_to, fence_id)
-	minetest.register_node(fence_id, {
-		description = fence_name,
-		_doc_items_longdesc = S("Fences are structures which block the way. Fences will connect to each other and solid blocks. They cannot be jumped over with a simple jump."),
-		tiles = {texture},
-		inventory_image = "mcl_fences_fence_mask.png^" .. texture .. "^mcl_fences_fence_mask.png^[makealpha:255,126,126",
-		wield_image = "mcl_fences_fence_mask.png^" .. texture .. "^mcl_fences_fence_mask.png^[makealpha:255,126,126",
-		paramtype = "light",
-		is_ground_content = false,
+
+	if definitions.tiles and definitions.tiles[1] then
+		if not definitions.inventory_image then
+			definitions.inventory_image = "mcl_fences_fence_mask.png^"..definitions.tiles[1].."^mcl_fences_fence_mask.png^[makealpha:255,126,126"
+		end
+
+		if not definitions.wield_image then
+			definitions.wield_image = "mcl_fences_fence_mask.png^"..definitions.tiles[1].."^mcl_fences_fence_mask.png^[makealpha:255,126,126"
+		end
+	end
+
+	local fence_id = "mcl_fences:"..name
+	table.insert(definitions.connects_to, "group:solid")
+	table.insert(definitions.connects_to, "group:fence_gate")
+	table.insert(definitions.connects_to, fence_id)
+
+	minetest.register_node(":"..fence_id, table.merge(tpl_fence, {
 		groups = cgroups,
-		sunlight_propagates = true,
-		drawtype = "nodebox",
-		connect_sides = { "front", "back", "left", "right" },
-		connects_to = connects_to,
 		node_box = {
 			type = "connected",
 			fixed = {p},
@@ -63,11 +75,25 @@ function mcl_fences.register_fence(id, fence_name, texture, groups, hardness, bl
 			connect_left = {cx1},
 			connect_right = {cx2},
 		},
-		sounds = sounds,
-		_mcl_blast_resistance = blast_resistance,
-		_mcl_hardness = hardness,
-		_mcl_burntime = burntime
-	})
+	}, definitions))
+
+	if definitions._mcl_fences_baseitem then
+		local stick = "mcl_core:stick"
+		local material = definitions._mcl_fences_baseitem
+		local amount = definitions._mcl_fences_output_amount or 3
+
+		if definitions._mcl_fences_stickreplacer then
+			stick = definitions._mcl_fences_stickreplacer
+		end
+
+		minetest.register_craft({
+			output = fence_id.." "..tostring(amount),
+			recipe = {
+				{ material, stick, material },
+				{ material, stick, material }
+			}
+		})
+	end
 
 	return fence_id
 end

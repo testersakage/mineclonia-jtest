@@ -466,13 +466,16 @@ function mcl_trees.register_wood(name, p)
 	end
 	if p.fence == nil or type(p.fence) == "table" then
 		p.fence = p.fence or {}
-		mcl_fences.register_fence(name.."_fence", p.fence.description or S("@1 Fence", rname), p.fence.tiles and p.fence.tiles[1] or "mcl_fences_fence_"..name..".png", p.fence.groups or table.merge(wood_groups,{fence_wood = 1}), p.fence._mcl_blast_hardness or 2, p.fence._mcl_blast_resistance or 3 , p.fence.connects_to or {"group:fence_wood","group:fence"}, p.fence.sounds or wood_sounds, p.fence._mcl_burntime or 15)
-		minetest.register_craft({
-			output = "mcl_fences:"..name.."_fence 3",
-			recipe = {
-				{"mcl_trees:wood_"..name, "mcl_core:stick", "mcl_trees:wood_"..name},
-				{"mcl_trees:wood_"..name, "mcl_core:stick", "mcl_trees:wood_"..name},
-			}
+		mcl_fences.register_fence(name.."_fence", {
+			description = p.fence.description or S("@1 Fence", rname),
+			tiles = p.fence.tiles or { "mcl_fences_fence_"..name..".png" },
+			groups = p.fence.groups or table.merge(wood_groups, { fence_wood = 1 }),
+			connects_to = p.fence.connects_to or { "group:fence_wood", "group:fence" },
+			sounds = p.fence.sounds or wood_sounds,
+			_mcl_blast_resistance = p.fence._mcl_blast_resistance or 3,
+			_mcl_hardness = p.fence._mcl_hardness or 2,
+			_mcl_burntime = p.fence._mcl_burntime or 15,
+			_mcl_fences_baseitem = "mcl_trees:wood_"..name
 		})
 	end
 	if p.fence_gate == nil or type(p.fence_gate) == "table" then

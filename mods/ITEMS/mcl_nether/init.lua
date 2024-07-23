@@ -313,7 +313,18 @@ mcl_stairs.register_stair_and_slab("red_nether_brick", {
 })
 
 -- Nether Brick Fence (without fence gate!)
-mcl_fences.register_fence("nether_brick_fence", S("Nether Brick Fence"), "mcl_fences_fence_nether_brick.png", {pickaxey=1, deco_block=1, fence_nether_brick=1}, 2, 30, {"group:fence_nether_brick"}, mcl_sounds.node_sound_stone_defaults())
+mcl_fences.register_fence("nether_brick_fence", {
+	description = S("Nether Brick Fence"),
+	tiles = { "mcl_fences_fence_nether_brick.png" },
+	groups = { pickaxey = 1, fence_nether_brick = 1 },
+	connects_to = { "group:fence_nether_brick" },
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 2,
+	_mcl_fences_baseitem = "mcl_nether:nether_brick",
+	_mcl_fences_stickreplacer = "mcl_nether:netherbrick",
+	_mcl_fences_output_amount = 6
+})
 
 
 minetest.register_craftitem("mcl_nether:glowstone_dust", {
@@ -368,14 +379,6 @@ minetest.register_craft({
         {"mcl_core:diamond", "mcl_nether:netherrack","mcl_core:diamond"},
         {"mcl_core:diamond","mcl_core:diamond","mcl_core:diamond"},
     }
-})
-
-minetest.register_craft({
-	output = "mcl_fences:nether_brick_fence 6",
-	recipe = {
-		{"mcl_nether:nether_brick", "mcl_nether:netherbrick", "mcl_nether:nether_brick"},
-		{"mcl_nether:nether_brick", "mcl_nether:netherbrick", "mcl_nether:nether_brick"},
-	}
 })
 
 minetest.register_craft({
