@@ -148,6 +148,12 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 			end
 
 			self.v = self.v - self.accel / 10
+
+		else
+			self.v = 0
+			self:set_velocity(0)
+			self:set_state("stand")
+			self:set_animation("stand")
 		end
 
 		self.object:set_yaw(self.driver:get_look_horizontal() - self.rotate)
