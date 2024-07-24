@@ -11,7 +11,7 @@ local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 -- TODO delete logging functions and all uses of them before MR
 local log_flying = false
 local log_swimming = false
-local log_walking = true
+local log_walking = false
 
 local function walk_log(msg)
 	if log_walking then
@@ -399,7 +399,7 @@ function mob_class:do_jump()
 		then
 
 			local dir_x, dir_z = self:forward_directions()
-			-- Exstensive testing to get this to work  ...
+			-- Extensive testing to get this to work  ...
 			local v = vector.new(dir_x, self.jump_height + 0.5 * 10, dir_z)
 
 			if not in_water and self:can_jump_cliff() then
