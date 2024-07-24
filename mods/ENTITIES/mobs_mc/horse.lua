@@ -37,6 +37,7 @@ local function horse_extra_texture(horse, cstring)
 end
 
 local function attach_driver(self, clicker)
+	mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
 	self.object:set_properties({stepheight = 1.1})
 	self.object:set_properties({selectionbox = {0,0,0,0,0,0}})
 	self:attach(clicker)
