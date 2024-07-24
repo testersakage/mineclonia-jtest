@@ -43,19 +43,20 @@ end
 local function punch_gate(pos, node)
 	local meta = minetest.get_meta(pos)
 	local state = meta:get_int("state")
-	local defs = minetest.registered_nodes[node.name]
+	-- Needs repair
+	--local defs = minetest.registered_nodes[node.name]
 	local sounddefs = {}
 
 	if state == 1 then
 		state = 0
 		sounddefs.spec = "doors_fencegate_close"
 		sounddefs.gain = 0.3
-		play_sound(pos, defs._mcl_fences_sounds.close or sounddefs)
+		play_sound(pos, sounddefs)
 	else
 		state = 1
 		sounddefs.spec = "doors_fencegate_open"
 		sounddefs.gain = 0.3
-		play_sound(pos, defs._mcl_fences_sounds.open or sounddefs)
+		play_sound(pos, sounddefs)
 	end
 	update_gate(pos, node)
 	meta:set_int("state", state)
