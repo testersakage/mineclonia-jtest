@@ -5,6 +5,7 @@
 	"diagnostics": {
 		"disable": [
 			"lowercase-global",
+			"redefined-local",
 		]
 	},
 	"diagnostics.globals": [
