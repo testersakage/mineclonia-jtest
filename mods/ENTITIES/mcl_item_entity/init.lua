@@ -206,7 +206,7 @@ function minetest.handle_node_drops(pos, drops, digger)
 		end
 		local drop_item = ItemStack(item)
 		drop_item:set_count(1)
-		for i=1,count do
+		for _=1, count do
 			local dpos = table.copy(pos)
 			-- Apply offset for plantlike_rooted nodes because of their special shape
 			if nodedef and nodedef.drawtype == "plantlike_rooted" and nodedef.walkable then
@@ -260,7 +260,7 @@ end
 local old_mt_node_dig = minetest.node_dig
 function minetest.node_dig(pos, node, digger)
 	local wielded = digger and digger:is_player() and digger:get_wielded_item()
-	local def = core.registered_nodes[node.name]
+	local def = minetest.registered_nodes[node.name]
 	if wielded and def then
 		local wdef = wielded:get_definition()
 		local tp = wielded:get_tool_capabilities()
@@ -534,7 +534,7 @@ minetest.register_entity(":__builtin:item", {
 		return data
 	end,
 
-	on_activate = function(self, staticdata, dtime_s)
+	on_activate = function(self, staticdata, _)
 		if string.sub(tostring(staticdata), 1, string.len("return")) == "return" then
 			local data = minetest.deserialize(staticdata)
 			if data and type(data) == "table" then
