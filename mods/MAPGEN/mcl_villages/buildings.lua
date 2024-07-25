@@ -484,7 +484,14 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 		grid = true
 	end
 
-	return layout_town(minp, maxp, pr, shuffled_settlement_info, grid), grid
+	local output_settlement_info, grid = layout_town(minp, maxp, pr, shuffled_settlement_info, grid), grid
+	if output_settlement_info and #output_settlement_info <= 2 and #output_settlement_info < #shuffled_settlement_info then
+		minetest.log("warning",
+			string.format("[mcl_villages] Cannot build village at %s - %s, only %d locations",
+			minetest.pos_to_string(minp), minetest.pos_to_string(maxp), #output_settlement_info))
+		return nil, false
+	end
+	return output_settlement_info, grid
 end
 
 function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
