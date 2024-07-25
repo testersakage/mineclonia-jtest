@@ -278,7 +278,7 @@ local function allow_put(pos, listname, index, stack, player)
 		minetest.record_protection_violation(pos, name)
 		return 0
 	end
-	local trg = sort_stack(stack, pos)
+	local trg = sort_stack(stack)
 	if listname == "stand" then
 		if trg ~= "stand" then
 			return 0
@@ -303,7 +303,7 @@ end
 local function on_put(pos, listname, index, stack, player)
 	if listname == "sorter" then
 		local inv = minetest.get_meta(pos):get_inventory()
-		inv:add_item(sort_stack(stack, pos), stack)
+		inv:add_item(sort_stack(stack), stack)
 		inv:set_stack("sorter", 1, ItemStack(""))
 	end
 	local meta = minetest.get_meta(pos)
@@ -326,7 +326,7 @@ local function allow_move(pos, from_list, from_index, to_list, to_index, count, 
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
 	local inv = minetest.get_meta(pos):get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
-	local trg = sort_stack(stack, pos)
+	local trg = sort_stack(stack)
 	if trg == to_list then return count end
 	return 0
 end
