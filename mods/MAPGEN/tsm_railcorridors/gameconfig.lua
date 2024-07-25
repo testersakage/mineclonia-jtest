@@ -15,7 +15,7 @@ tsm_railcorridors.nodes = {
 }
 
 -- This generates dark oak wood in mesa biomes and oak wood everywhere else.
-function tsm_railcorridors.nodes.corridor_woods_function(pos, node)
+function tsm_railcorridors.nodes.corridor_woods_function(_, node)
 	if minetest.get_item_group(node.name, "hardened_clay") ~= 0 then
 		return "mcl_trees:wood_dark_oak", "mcl_fences:dark_oak_fence"
 	else
@@ -25,7 +25,7 @@ end
 
 tsm_railcorridors.carts = { "mcl_minecarts:chest_minecart" }
 
-function tsm_railcorridors.on_construct_cart(pos, cart, pr_carts)
+function tsm_railcorridors.on_construct_cart(_, cart, pr_carts)
 	local l = cart:get_luaentity()
 	local inv = mcl_entity_invs.load_inv(l,27)
 	local items = tsm_railcorridors.get_treasures(pr_carts)
@@ -36,7 +36,7 @@ end
 -- Fallback function. Returns a random treasure. This function is called for chests
 -- only if the Treasurer mod is not found.
 -- pr: A PseudoRandom object
-function tsm_railcorridors.get_default_treasure(pr)
+function tsm_railcorridors.get_default_treasure(_)
 	-- UNUSED IN MINECLONE 2!
 end
 

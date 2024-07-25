@@ -599,6 +599,7 @@ end
 -- This is one short part of a corridor line. It can be one straight section or it goes up or down.
 -- It digs out the corridor and places wood structs and torches using the helper function dig_corridor_function,
 -- then it places rails, chests, and other goodies.
+---@diagnostic disable-next-line: unused-local
 local function create_corridor_section(waypoint, axis, sign, up_or_down, up_or_down_next, up_or_down_prev, up, wood, post, first_or_final, damage, no_spawner)
 	local segamount = 3
 	if up_or_down then
@@ -871,7 +872,7 @@ local function create_corridor_line(waypoint, axis, sign, length, wood, post, da
 		wp, no_spawner = create_corridor_section(wp,a,s, ud, udn, udp, up, wood, post, first_or_final, damage, no_spawner)
 		if wp == false then return end
 		-- Fork in the road? If so, starts 2-3 new corridor lines and terminates the current one.
-		if pr:next() < probability_fork then
+		if wp and pr:next() < probability_fork then
 			-- 75% chance to fork off in 3 directions (making a crossing)
 			-- 25% chance to fork off in 2 directions (making a t-junction)
 			local is_crossing = pr:next(0, 3) < 3
@@ -891,7 +892,7 @@ local function create_corridor_line(waypoint, axis, sign, length, wood, post, da
 				{a2, not s}, -- to the other side
 				{a, s}, -- straight ahead
 			}
-			for f=1, forks do
+			for _= 1, forks do
 				local r = pr:next(1, #fork_dirs)
 				create_corridor_line(wp, fork_dirs[r][1], fork_dirs[r][2], pr:next(way_min,way_max), wood, post, damage, no_spawner)
 				table.remove(fork_dirs, r)
@@ -1094,7 +1095,7 @@ mcl_structures.register_structure("mineshaft",{
 	sidelen = 32,
 	y_max = 40,
 	y_min = mcl_vars.mg_overworld_min,
-	place_func = function(pos,def,pr,blockseed)
+	place_func = function(pos, _, pr, blockseed)
 		local r = pr:next(-50,-10)
 		local p = vector.offset(pos,0,r,0)
 		if p.y < mcl_vars.mg_overworld_min + 5 then
@@ -1102,7 +1103,7 @@ mcl_structures.register_structure("mineshaft",{
 		end
 		if p.y > -10 then return true end
 		InitRandomizer(blockseed)
-		create_corridor_system(p, pr)
+		create_corridor_system(p)
 		return true
 	end,
 
