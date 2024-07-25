@@ -73,12 +73,10 @@ local function init_nodes(p1, p2, size, rotation, pr)
 	end
 
 	-- Do new chest nodes first
-	local cnodes = construct_node(p1, p2, "mcl_chests:chest_small")
-
-	if cnodes and #cnodes > 0 then
-		for p = 1, #cnodes do
-			local pos = cnodes[p]
-			mcl_villages.fill_chest(pos, pr)
+	local nodes = construct_node(p1, p2, "mcl_chests:chest_small")
+	if nodes and #nodes > 0 then
+		for p=1, #nodes do
+			mcl_villages.fill_chest(nodes[p], pr)
 		end
 	end
 
@@ -86,8 +84,7 @@ local function init_nodes(p1, p2, size, rotation, pr)
 	local nodes = construct_node(p1, p2, "mcl_chests:chest")
 	if nodes and #nodes > 0 then
 		for p=1, #nodes do
-			local pos = nodes[p]
-			mcl_villages.fill_chest(pos, pr)
+			mcl_villages.fill_chest(nodes[p], pr)
 		end
 	end
 end
@@ -294,9 +291,7 @@ local function layout_circles(pr, input_settlement_info, settlement_info, center
 			end
 
 			local ptx, ptz = center.x + r * math.cos(angle), center.z + r * math.sin(angle)
-			ptx = mcl_villages.round(ptx, 0)
-			ptz = mcl_villages.round(ptz, 0)
-			local pos1 = vector.new(ptx, center_surface.y, ptz)
+			local pos1 = vector.new(math.floor(ptx + 0.5), center_surface.y, math.floor(ptz + 0.5))
 
 			local chunk_number = mcl_vars.get_chunk_number(pos1)
 			local pos_surface, surface_material
@@ -393,14 +388,8 @@ local function add_building(base_settlement_info, building_info, count_buildings
 	table.insert(base_settlement_info, cur_schem)
 
 	count_buildings[cur_schem["name"]] = count_buildings[cur_schem["name"]] + 1
-
-	if cur_schem["num_jobs"] then
-		count_buildings.num_jobs = count_buildings.num_jobs + cur_schem["num_jobs"]
-	end
-
-	if cur_schem["num_beds"] then
-		count_buildings.num_beds = count_buildings.num_beds + cur_schem["num_beds"]
-	end
+	count_buildings.num_jobs = count_buildings.num_jobs + (cur_schem["num_jobs"] or 0)
+	count_buildings.num_beds = count_buildings.num_beds + (cur_schem["num_beds"] or 0)
 end
 
 local function info_for_building(bld_name, schem_table)
@@ -658,8 +647,7 @@ function mcl_villages.post_process_village(blockseed)
 		local has_beds = building["num_beds"] and building["num_beds"] ~= nil
 		local has_jobs = building["num_jobs"] and building["num_jobs"] ~= nil
 
-		local minp = building["minp"]
-		local maxp = building["maxp"]
+		local minp, maxp = building["minp"], building["maxp"]
 
 		if has_jobs then
 			local jobsites = minetest.find_nodes_in_area(minp, maxp, mobs_mc.jobsites)

@@ -48,16 +48,12 @@ end
 local function load_schema(name, mts)
 	local schem_lua = minetest.serialize_schematic(mts, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
 		.. " return schematic"
-
 	local schematic = loadstring(schem_lua)()
-
-	local data = {
+	return {
 		name = name,
 		size = schematic.size,
 		schem_lua = schem_lua,
 	}
-
-	return data
 end
 
 local all_optional = { "yadjust", "no_ground_turnip", "no_clearance" }

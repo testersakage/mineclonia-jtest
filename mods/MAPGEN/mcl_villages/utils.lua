@@ -11,13 +11,6 @@ function mcl_villages.shallowCopy(original)
 	end
 	return copy
 end
---
---
---
-function mcl_villages.round(num, numDecimalPlaces)
-	local mult = 10^(numDecimalPlaces or 0)
-	return math.floor(num * mult + 0.5) / mult
-end
 
 -------------------------------------------------------------------------------
 -- function to find surface block y coordinate

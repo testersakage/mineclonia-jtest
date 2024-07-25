@@ -9,8 +9,7 @@ dofile(mcl_villages.modpath.."/utils.lua")
 dofile(mcl_villages.modpath.."/foundation.lua")
 dofile(mcl_villages.modpath.."/buildings.lua")
 dofile(mcl_villages.modpath.."/paths.lua")
-
-dofile(mcl_villages.modpath .. "/api.lua")
+dofile(mcl_villages.modpath.."/api.lua")
 
 --
 -- load settlements on server
