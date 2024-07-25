@@ -49,8 +49,11 @@ local function convert_old_motive(self, data)
 	if tonumber(data._motive) then
 		for _, v in pairs(mcl_paintings.registered_paintings) do
 			if v.width == self._xsize and v.height == self._ysize and v.oldid == data._motive then
-				self._yaw = minetest.wallmounted_to_dir(minetest.dir_to_yaw(self._facing))
-				return v.file
+				local dir = self._facing
+				if type(dir) == "table" then
+					self._yaw = minetest.wallmounted_to_dir(minetest.dir_to_yaw(dir))
+					return v.file
+				end
 			end
 		end
 		return false
@@ -180,6 +183,7 @@ local function get_maxes(pointed_thing)
 end
 
 function mcl_paintings.spawn_painting(pointed_thing, def)
+	if not def then return end -- prevent crash
 	local dir = vector.direction(pointed_thing.under, pointed_thing.above)
 	local x, y, m = def.width, def.height, def.file
 	if x and y and m then
