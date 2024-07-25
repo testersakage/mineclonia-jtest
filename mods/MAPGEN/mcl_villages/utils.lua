@@ -16,25 +16,18 @@ end
 -- function to find surface block y coordinate
 -- returns surface postion
 -------------------------------------------------------------------------------
-function mcl_villages.find_surface(pos, wait, quick)
+function mcl_villages.find_surface(pos, _, quick)
 	local p6 = vector.new(pos)
 	local cnt = 0
 	local itter = 1 -- look up
 	local cnt_max = 200
-	local wait_time = 10000000
 
 	if quick then
 		cnt_max = 20
-		wait_time = 2000000
 	end
 
 	-- check, in which direction to look for surface
-	local surface_node
-	if wait then
-		surface_node = mcl_vars.get_node(p6, true, wait_time)
-	else
-		surface_node = mcl_vars.get_node(p6)
-	end
+	local surface_node = mcl_vars.get_node(p6)
 
 	if
 		surface_node.name == "air"
