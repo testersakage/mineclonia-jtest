@@ -80,7 +80,7 @@ end
 -------------------------------------------------------------------------------
 function mcl_villages.check_distance(settlement_info, building_pos, building_size)
 	local distance
-	for i, built_house in ipairs(settlement_info) do
+	for _, built_house in ipairs(settlement_info) do
 		distance = math.sqrt(
 			((building_pos.x - built_house["pos"].x)*(building_pos.x - built_house["pos"].x))+
 			((building_pos.z - built_house["pos"].z)*(building_pos.z - built_house["pos"].z)))
@@ -207,7 +207,7 @@ function mcl_villages.check_radius_distance(settlement_info, building_pos, schem
 
 	local r1 = ((math.max(schem["size"]["x"], schem["size"]["z"])) / 2) + terrace_max_ext
 
-	for i, built_house in ipairs(settlement_info) do
+	for _, built_house in ipairs(settlement_info) do
 		local r2 = ((math.max(built_house["size"]["x"], built_house["size"]["z"])) / 2) + terrace_max_ext
 		local distance = vector.distance(building_pos, built_house["pos"])
 
@@ -218,7 +218,7 @@ function mcl_villages.check_radius_distance(settlement_info, building_pos, schem
 	return true, 0
 end
 
-function plant_fields(pos, biome_name, schem_lua, pr)
+function plant_fields(_, biome_name, schem_lua, pr)
 	local modified_schem_lua = schem_lua
 
 	local map_name = mcl_villages.biome_map[biome_name] or "plains"
