@@ -130,10 +130,10 @@ local function place_lamp(pos, pr)
 	local schematic = loadstring(schem_lua)()
 
 	minetest.place_schematic(
-		vector.offset(pos, 0, 1, 0),
+		vector.offset(pos, 0, building_all_info.yadjust or 0, 0),
 		schematic,
 		"0",
-		nil,
+		{["air"] = "ignore"}, -- avoid destroying stairs etc.
 		true,
 		{ place_center_x = true, place_center_y = false, place_center_z = true }
 	)
