@@ -110,6 +110,7 @@ end
 
 local doTileDrops = minetest.settings:get_bool("mcl_doTileDrops", true)
 
+---@diagnostic disable-next-line: duplicate-set-field
 function minetest.handle_node_drops(pos, drops, digger)
 	-- NOTE: This function override allows digger to be nil.
 	-- This means there is no digger. This is a special case which allows this function to be called
