@@ -186,7 +186,7 @@ local tpl_fence_gates_open = {
 	end
 }
 
-function mcl_fences.register_fence(name, definitions)
+function mcl_fences.register_fence_def(name, definitions)
     local fence_name = "mcl_fences:"..name
 
     if not definitions.groups then
@@ -226,7 +226,7 @@ function mcl_fences.register_fence(name, definitions)
     return fence_name
 end
 
-function mcl_fences.register_fence_gate(name, definitions)
+function mcl_fences.register_fence_gate_def(name, definitions)
     local fence_gate_name = "mcl_fences:"..name.."_gate"
     local fence_gate_name_open = fence_gate_name.."_open"
 
@@ -281,11 +281,57 @@ function mcl_fences.register_fence_gate(name, definitions)
 	return fence_gate_name, fence_gate_name_open
 end
 
-function mcl_fences.register_fence_and_fence_gate(name, commondefs, fencedefs, gatedefs)
+function mcl_fences.register_fence_and_fence_gate_def(name, commondefs, fencedefs, gatedefs)
 	local fence, gate, gate_open
 
-	fence = mcl_fences.register_fence(name, table.merge(commondefs, fencedefs))
-	gate, gate_open = mcl_fences.register_fence_gate(name, table.merge(commondefs, gatedefs))
+	fence = mcl_fences.register_fence_def(name, table.merge(commondefs, fencedefs))
+	gate, gate_open = mcl_fences.register_fence_gate_def(name, table.merge(commondefs, gatedefs))
 
 	return fence, gate, gate_open
+end
+
+-- Support for old definitions
+
+function mcl_fences.register_fence(id, fence_name, texture, groups, hardness, blast_resistance, connects_to, sounds, burntime)
+	return mcl_fences.register_fence_def(id, {
+		description = fence_name,
+		tiles = { texture },
+		groups = groups,
+		_mcl_blast_resistance = blast_resistance,
+		_mcl_hardness = hardness,
+		connects_to = connects_to,
+		sounds = sounds,
+		_mcl_burntime = burntime
+	})
+end
+
+function mcl_fences.register_fence_gate(id, fence_gate_name, texture, groups, hardness, blast_resistance, sounds, sound_open, sound_close, sound_gain_open, sound_gain_close, burntime)
+	return mcl_fences.register_fence_gate_def(id, {
+		description = fence_gate_name,
+		tiles = { texture },
+		groups = groups,
+		_mcl_blast_resistance = blast_resistance,
+		_mcl_hardness = hardness,
+		sounds = sounds,
+		_mcl_burntime = burntime,
+		_mcl_fences_sounds = {
+			open = {
+				spec = sound_open,
+				gain = sound_gain_open
+			},
+			close = {
+				spec = sound_close,
+				gain = sound_gain_close
+			}
+		}
+	})
+end
+
+function mcl_fences.register_fence_and_fence_gate(id, fence_name, fence_gate_name, texture_fence, groups, hardness, blast_resistance, connects_to, sounds, sound_open, sound_close, sound_gain_open, sound_gain_close, texture_fence_gate)
+	if texture_fence_gate == nil then
+		texture_fence_gate = texture_fence
+	end
+	local fence_id = mcl_fences.register_fence(id, fence_name, texture_fence, groups, hardness, blast_resistance, connects_to, sounds)
+	local gate_id, open_gate_id = mcl_fences.register_fence_gate(id, fence_gate_name, texture_fence_gate, groups, hardness, blast_resistance, sounds, sound_open, sound_close, sound_gain_open, sound_gain_close)
+	return fence_id, gate_id, open_gate_id
 end
