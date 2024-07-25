@@ -459,7 +459,7 @@ function mcl_trees.register_wood(name, p)
 				_doc_items_longdesc = S("@1 leaves are grown from @2 trees.", rname, rname),
 				tiles = { minetest.get_current_modname().."_leaves_"..name..".png"},
 			}, p.leaves or {} ),
-			p.saplingdrop or "mcl_trees:sapling_"..name,
+			p.saplingdrop or ( "mcl_trees:sapling_"..name ),
 			p.drop_apples or false,
 			p.sapling_chances or {20, 16, 12, 10}
 		)
