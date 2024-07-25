@@ -466,7 +466,7 @@ function mcl_trees.register_wood(name, p)
 	end
 	if p.fence == nil or type(p.fence) == "table" then
 		p.fence = p.fence or {}
-		mcl_fences.register_fence(name.."_fence", {
+		mcl_fences.register_fence_def(name.."_fence", {
 			description = p.fence.description or S("@1 Fence", rname),
 			tiles = p.fence.tiles or { "mcl_fences_fence_"..name..".png" },
 			groups = p.fence.groups or table.merge(wood_groups, { fence_wood = 1 }),
@@ -480,7 +480,7 @@ function mcl_trees.register_wood(name, p)
 	end
 	if p.fence_gate == nil or type(p.fence_gate) == "table" then
 		p.fence_gate = p.fence_gate or {}
-		mcl_fences.register_fence_gate(name.."_fence", {
+		mcl_fences.register_fence_gate_def(name.."_fence", {
 			description = p.fence_gate.description or S("@1 Fence Gate", rname),
 			tiles = p.fence_gate.tiles or { "mcl_fences_fence_"..name..".png" },
 			groups = p.fence_gate.groups or table.merge(wood_groups,{fence_wood = 1}),

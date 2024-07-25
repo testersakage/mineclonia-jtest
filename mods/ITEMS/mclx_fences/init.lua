@@ -2,7 +2,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
 
 -- Red Nether Brick Fence and Red Nether Brick Fence Gate
-mcl_fences.register_fence_and_fence_gate("red_nether_brick_fence", {
+mcl_fences.register_fence_and_fence_gate_def("red_nether_brick_fence", {
 	tiles = { "mcl_fences_fence_red_nether_brick.png" },
 	groups = { pickaxey = 1, fence_nether_brick = 1, not_in_creative_inventory = not extra_nodes and 1 or 0 },
 	sounds = mcl_sounds.node_sound_stone_defaults(),
@@ -27,7 +27,7 @@ mcl_fences.register_fence_and_fence_gate("red_nether_brick_fence", {
 })
 
 -- Nether Brick Fence Gate
-mcl_fences.register_fence_gate("nether_brick_fence", {
+mcl_fences.register_fence_gate_def("nether_brick_fence", {
 	description = S("Nether Brick Fence Gate"),
 	tiles = { "mcl_fences_fence_gate_nether_brick.png" },
 	groups = { pickaxey = 1, fence_nether_brick = 1, not_in_creative_inventory = not extra_nodes and 1 or 0 },

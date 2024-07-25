@@ -313,7 +313,7 @@ mcl_stairs.register_stair_and_slab("red_nether_brick", {
 })
 
 -- Nether Brick Fence (without fence gate!)
-mcl_fences.register_fence("nether_brick_fence", {
+mcl_fences.register_fence_def("nether_brick_fence", {
 	description = S("Nether Brick Fence"),
 	tiles = { "mcl_fences_fence_nether_brick.png" },
 	groups = { pickaxey = 1, fence_nether_brick = 1 },
