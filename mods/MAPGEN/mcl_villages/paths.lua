@@ -216,8 +216,8 @@ local function place_path(path, pr, stair, slab)
 				and minetest.get_item_group(n.name, "dirtifies_below_solid") == 0
 				then
 					minetest.swap_node(under_pos, { name = "mcl_core:grass_path" })
-				end
 			end
+		end
 
 		-- Clear space for villagers to walk
 		for j = 1, 2 do
@@ -257,8 +257,9 @@ end
 -- works from the outside of the village in
 function mcl_villages.paths_new(blockseed, biome_name)
 	local pr = PseudoRandom(blockseed)
+	local pathends = path_ends["block_" .. blockseed]
 
-	if path_ends["block_" .. blockseed] == nil then
+	if pathends == nil then
 		minetest.log("warning", string.format("[mcl_villages] Tried to set paths for block seed that doesn't exist %d", blockseed))
 		return
 	end
@@ -283,7 +284,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	-- get a list of reverse sorted keys, which are distances
 	local dist_keys = {}
-	for k in pairs(path_ends["block_" .. blockseed]) do
+	for k in pairs(pathends) do
 		table.insert(dist_keys, k)
 	end
 	table.sort(dist_keys, function(a, b)
@@ -292,7 +293,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	for i, from in ipairs(dist_keys) do
 		-- ep == end_point
-		for _, from_ep in ipairs(path_ends["block_" .. blockseed][from]) do
+		for _, from_ep in ipairs(pathends[from]) do
 			local from_ep_pos = minetest.string_to_pos(from_ep)
 			local closest_pos
 			local closest_bld
@@ -301,8 +302,8 @@ function mcl_villages.paths_new(blockseed, biome_name)
 			local ok = true
 			if from == 0 then
 				local path_nodes = minetest.find_nodes_in_area(
-					vector.offset(from_ep_pos, 1, 0, 1),
 					vector.offset(from_ep_pos, -1, 0, -1),
+					vector.offset(from_ep_pos, 1, 0, 1),
 					"mcl_core:grass_path"
 				)
 				if path_nodes and #path_nodes then
@@ -321,7 +322,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 				for j = lindex, #dist_keys do
 					local to = dist_keys[j]
 					if from ~= to and connected[from .. "-" .. to] == nil and connected[to .. "-" .. from] == nil then
-						for _, to_ep in ipairs(path_ends["block_" .. blockseed][to]) do
+						for _, to_ep in ipairs(pathends[to]) do
 							local to_ep_pos = minetest.string_to_pos(to_ep)
 
 							local dist = vector.distance(from_ep_pos, to_ep_pos)
@@ -341,7 +342,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 						connected[from .. "-" .. closest_bld] = 1
 					else
 						minetest.log(
-							"warning",
+							"info",
 							string.format(
 								"[mcl_villages] No path from %s to %s, distance %d",
 								minetest.pos_to_string(from_ep_pos),
@@ -357,7 +358,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	-- Loop again to blow away no path nodes
 	for _, from in ipairs(dist_keys) do
-		for _, from_ep in ipairs(path_ends["block_" .. blockseed][from]) do
+		for _, from_ep in ipairs(pathends[from]) do
 			local from_ep_pos = minetest.string_to_pos(from_ep)
 			local no_paths_nodes = minetest.find_nodes_in_area(
 				vector.offset(from_ep_pos, -32, -32, -32),
