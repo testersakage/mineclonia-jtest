@@ -230,7 +230,7 @@ function mcl_vars.add_chunk(pos)
 end
 function mcl_vars.is_generated(pos)
 	local n = mcl_vars.get_chunk_number(pos) -- unsigned int
-	for i, d in pairs(chunks) do
+	for _, d in pairs(chunks) do
 		if n <= d[2] then
 			return (n >= d[1])
 		end
@@ -274,7 +274,7 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 		interval = 10,
 		min_y = void_regen_min_y,
 		max_y = void_regen_max_y,
-		action = function(pos, node)
+		action = function(pos)
 			local pos1, pos2 = get_mapchunk_area(pos)
 			local h = minetest.hash_node_position(pos1)
 			if void_replaced[h] then
