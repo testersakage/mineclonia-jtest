@@ -369,7 +369,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
 		if not source_stack_id then
 			-- Try again if source is a double container
-			if sctype == 5 then
+			if snode and sctype == 5 then
 				spos = mcl_util.get_double_container_neighbor_pos(spos, snode.param2, "left")
 				smeta = minetest.get_meta(spos)
 				sinv = smeta:get_inventory()
@@ -413,7 +413,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 			local ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
 
 			-- Try transfer to neighbor node if transfer failed and double container
-			if not ok and dctype == 5 then
+			if dnode and not ok and dctype == 5 then
 				dpos = mcl_util.get_double_container_neighbor_pos(dpos, dnode.param2, "left")
 				dmeta = minetest.get_meta(dpos)
 				dinv = dmeta:get_inventory()
@@ -452,7 +452,7 @@ function mcl_util.drop_items_from_meta_container(lists)
 	--this check is provided as compatibility to the old (pre 0.90) behavior which would essentially always assume "main" as the list to drop
 		lists = { (lists or "main") }
 	end
-	return function(pos, oldnode, oldmetadata)
+	return function(pos, _, oldmetadata)
 		if oldmetadata and oldmetadata.inventory then
 			for _,listname in pairs(lists) do
 				-- process in after_dig_node callback
@@ -853,8 +853,8 @@ function mcl_util.bypass_buildable_to(func)
 	end
 
 	-- Returns a logging function. For empty names, does not log.
-	local function make_log(name)
-		return name ~= "" and minetest.log or function() end
+	local function log(name, ...)
+		return name ~= "" and minetest.log(...)
 	end
 
 	local function check_attached_node(p, n, group_rating)
@@ -917,7 +917,6 @@ function mcl_util.bypass_buildable_to(func)
 		local above = pointed_thing.above
 		local oldnode_above = minetest.get_node_or_nil(above)
 		local playername = user_name(placer)
-		local log = make_log(playername)
 
 		if not oldnode_under or not oldnode_above then
 			log("info", playername .. " tried to place"
@@ -1363,7 +1362,7 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 		radius = radius + 1
 	end
 
-	for count2 = 1, 2 do
+	for _ = 1, 2 do
 		if not needs_support then
 			radius = radius + 2
 		else
@@ -1378,7 +1377,7 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 		radius = radius + 2
 	end
 
-	for count3 = 1, 5 do
+	for _ = 1, 5 do
 		radius = radius - 1
 
 		if radius <= 2 then
