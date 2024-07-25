@@ -463,7 +463,7 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 	for i = 1, num_wells do
 		local windex = pr:next(1, #mcl_villages.schematic_wells)
 		local cur_schem = table.copy(mcl_villages.schematic_wells[windex])
-		table.insert(base_settlement_info, cur_schem)
+		table.insert(base_settlement_info, pr:next(1, #base_settlement_info), cur_schem)
 	end
 
 	local shuffled_settlement_info
