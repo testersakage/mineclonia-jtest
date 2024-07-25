@@ -149,7 +149,7 @@ function minetest.handle_node_drops(pos, drops, digger)
 	* table: Drop every itemstring in this table when dug by shears _mcl_silk_touch_drop
 	]]
 
-	local enchantments = tool and mcl_enchanting.get_enchantments(tool, "silk_touch")
+	local enchantments = tool and mcl_enchanting.get_enchantments(tool)
 
 	local silk_touch_drop = false
 	local nodedef = minetest.registered_nodes[dug_node.name]
