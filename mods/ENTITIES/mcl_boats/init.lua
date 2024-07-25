@@ -167,8 +167,7 @@ function boat.on_rightclick(self, clicker)
 	attach_object(self, clicker)
 end
 
-
-function boat.on_activate(self, staticdata, dtime_s)
+function boat.on_activate(self, staticdata)
 	self.object:set_armor_groups({fleshy = 125})
 	local data = minetest.deserialize(staticdata)
 	if type(data) == "table" then
@@ -222,6 +221,7 @@ function boat.on_death(self, killer)
 	self._passenger = nil
 end
 
+---@diagnostic disable-next-line: unused-local
 function boat.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
 	if damage > 0 then
 		self._regen_timer = 0
@@ -538,6 +538,7 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 			end
 			return itemstack
 		end,
+		---@diagnostic disable-next-line: unused-local
 		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
 			local below = {x=droppos.x, y=droppos.y-1, z=droppos.z}
 			local belownode = minetest.get_node(below)
