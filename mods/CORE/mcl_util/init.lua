@@ -858,7 +858,7 @@ function mcl_util.bypass_buildable_to(func)
 	end
 
 	local function check_attached_node(p, n, group_rating)
-		local def = core.registered_nodes[n.name]
+		local def = minetest.registered_nodes[n.name]
 		local d = vector.zero()
 		if group_rating == 3 then
 			-- always attach to floor
@@ -877,11 +877,11 @@ function mcl_util.bypass_buildable_to(func)
 				-- to voxelmanip placing a wallmounted node without resetting a
 				-- pre-existing param2 value that is out-of-range for facedir.
 				-- The fallback vector corresponds to param2 = 0.
-				d = core.facedir_to_dir(n.param2) or vector.new(0, 0, 1)
+				d = minetest.facedir_to_dir(n.param2) or vector.new(0, 0, 1)
 			elseif (def.paramtype2 == "4dir" or
 				def.paramtype2 == "color4dir") then
 				-- Similar to facedir handling
-				d = core.fourdir_to_dir(n.param2) or vector.new(0, 0, 1)
+				d = minetest.fourdir_to_dir(n.param2) or vector.new(0, 0, 1)
 			end
 		elseif def.paramtype2 == "wallmounted" or
 			def.paramtype2 == "colorwallmounted" then
@@ -890,13 +890,13 @@ function mcl_util.bypass_buildable_to(func)
 
 			-- The fallback vector here is used for the same reason as
 			-- for facedir nodes.
-			d = core.wallmounted_to_dir(n.param2) or vector.new(0, 1, 0)
+			d = minetest.wallmounted_to_dir(n.param2) or vector.new(0, 1, 0)
 		else
 			d.y = -1
 		end
 		local p2 = vector.add(p, d)
-		local nn = core.get_node(p2).name
-		local def2 = core.registered_nodes[nn]
+		local nn = minetest.get_node(p2).name
+		local def2 = minetest.registered_nodes[nn]
 		if def2 and not def2.walkable then
 			return false
 		end
