@@ -6,7 +6,7 @@ local colorize
 if minetest.colorize then
 	colorize = minetest.colorize
 else
-	colorize = function(color, text) return text end
+	colorize = function(_, text) return text end
 end
 
 doc = {}
@@ -154,12 +154,12 @@ function doc.mark_entry_as_viewed(playername, category_id, entry_id)
 		return
 	end
 	if doc.data.players[playername].stored_data.viewed[category_id] == nil then
-		doc.data.players[playername].stored_data.viewed[category_id] = {}
-		doc.data.players[playername].stored_data.viewed_count[category_id] = 0
+		doc.data.players[playername].stored_data.viewed[category_id] = {} ---@diagnostic disable-line: need-check-nil
+		doc.data.players[playername].stored_data.viewed_count[category_id] = 0 ---@diagnostic disable-line: need-check-nil
 	end
 	if doc.entry_exists(category_id, entry_id) and doc.data.players[playername].stored_data.viewed[category_id][entry_id] ~= true then
-		doc.data.players[playername].stored_data.viewed[category_id][entry_id] = true
-		doc.data.players[playername].stored_data.viewed_count[category_id] = doc.data.players[playername].stored_data.viewed_count[category_id] + 1
+		doc.data.players[playername].stored_data.viewed[category_id][entry_id] = true ---@diagnostic disable-line: need-check-nil
+		doc.data.players[playername].stored_data.viewed_count[category_id] = doc.data.players[playername].stored_data.viewed_count[category_id] + 1 ---@diagnostic disable-line: need-check-nil
 		-- Needed because viewed entries get a different color
 		doc.data.players[playername].entry_textlist_needs_updating = true
 	end
@@ -173,12 +173,12 @@ function doc.mark_entry_as_revealed(playername, category_id, entry_id)
 		return
 	end
 	if doc.data.players[playername].stored_data.revealed[category_id] == nil then
-		doc.data.players[playername].stored_data.revealed[category_id] = {}
-		doc.data.players[playername].stored_data.revealed_count[category_id] = doc.get_entry_count(category_id) - doc.data.categories[category_id].hidden_count
+		doc.data.players[playername].stored_data.revealed[category_id] = {} ---@diagnostic disable-line: need-check-nil
+		doc.data.players[playername].stored_data.revealed_count[category_id] = doc.get_entry_count(category_id) - doc.data.categories[category_id].hidden_count ---@diagnostic disable-line: need-check-nil
 	end
 	if doc.entry_exists(category_id, entry_id) and entry.hidden and doc.data.players[playername].stored_data.revealed[category_id][entry_id] ~= true then
-		doc.data.players[playername].stored_data.revealed[category_id][entry_id] = true
-		doc.data.players[playername].stored_data.revealed_count[category_id] = doc.data.players[playername].stored_data.revealed_count[category_id] + 1
+		doc.data.players[playername].stored_data.revealed[category_id][entry_id] = true ---@diagnostic disable-line: need-check-nil
+		doc.data.players[playername].stored_data.revealed_count[category_id] = doc.data.players[playername].stored_data.revealed_count[category_id] + 1 ---@diagnostic disable-line: need-check-nil
 		-- Needed because a new entry is added to the list of visible entries
 		doc.data.players[playername].entry_textlist_needs_updating = true
 		-- Notify player of entry revelation
@@ -334,7 +334,7 @@ function doc.set_category_order(categories)
 		reverse_categories[categories[cid]] = cid
 	end
 	doc.data.category_order = categories
-	for cid, cat in pairs(doc.data.categories) do
+	for cid, _ in pairs(doc.data.categories) do
 		if reverse_categories[cid] == nil then
 			table.insert(doc.data.category_order, cid)
 		end
@@ -458,7 +458,7 @@ doc.entry_builders.text_and_gallery = function(data, playername)
 	-- Only add the gallery if images are in the data, otherwise, the text widget gets all of the space
 	if data.images ~= nil then
 		local gallery
-		gallery, stolen_height = doc.widgets.gallery(data.images, playername, nil, doc.FORMSPEC.ENTRY_END_Y + 0.2, nil, nil, nil, nil, false)
+		gallery, stolen_height = doc.widgets.gallery(data.images, playername, nil, doc.FORMSPEC.ENTRY_END_Y + 0.2, nil, nil, nil, nil, false) ---@diagnostic disable-line: cast-local-type
 		formstring = formstring .. gallery
 	end
 	formstring = formstring .. doc.widgets.text(data.text,
@@ -634,7 +634,7 @@ function doc.save_to_file()
 	end
 end
 
-minetest.register_on_leaveplayer(function(player)
+minetest.register_on_leaveplayer(function(_)
 	doc.save_to_file()
 end)
 
@@ -734,7 +734,7 @@ S("Recommended mods: doc_basics, doc_items, doc_identifier, doc_encyclopedia.")
 	return formstring
 end
 
-function doc.formspec_error_hidden(category_id, entry_id)
+function doc.formspec_error_hidden(_, _)
 	local formstring = "size[8,6]textarea[0.25,0;8,6;;"
 	formstring = formstring .. minetest.formspec_escape(
 	colorize(COLOR_ERROR, S("Error: Access denied.")) .. "\n\n" ..
@@ -802,7 +802,7 @@ function doc.get_sorted_entry_names(cid)
 	-- Helper function to extract the entry ID out of the output table
 	local extract = function(entry_table)
 		local eids = {}
-		for k,v in pairs(entry_table) do
+		for _, v in pairs(entry_table) do
 			local eid = v.eid
 			table.insert(eids, eid)
 		end
@@ -894,7 +894,7 @@ function doc.formspec_category(id, playername)
 	return formstring
 end
 
-function doc.formspec_entry_navigation(category_id, entry_id)
+function doc.formspec_entry_navigation(category_id, _)
 	if doc.get_entry_count(category_id) < 1 then
 		return ""
 	end
@@ -925,14 +925,16 @@ function doc.formspec_entry(category_id, entry_id, playername)
 
 		local category = doc.data.categories[category_id]
 		local entry = get_entry(category_id, entry_id)
-		local ename = entry.name
-		if ename == nil or ename == "" then
-			ename = S("Nameless entry (@1)", entry_id)
+		if entry then
+			local ename = entry.name
+			if ename == nil or ename == "" then
+				ename = S("Nameless entry (@1)", entry_id)
+			end
+			formstring = "style_type[textarea;textcolor=#FFFFFF]"
+			formstring = formstring .. "label[0,0;"..minetest.formspec_escape(S("Help > @1 > @2", category.def.name, ename)).."]"
+			formstring = formstring .. category.def.build_formspec(entry.data, playername)
+			formstring = formstring .. doc.formspec_entry_navigation(category_id, entry_id)
 		end
-		formstring = "style_type[textarea;textcolor=#FFFFFF]"
-		formstring = formstring .. "label[0,0;"..minetest.formspec_escape(S("Help > @1 > @2", category.def.name, ename)).."]"
-		formstring = formstring .. category.def.build_formspec(entry.data, playername)
-		formstring = formstring .. doc.formspec_entry_navigation(category_id, entry_id)
 	end
 	return formstring
 end
@@ -1111,7 +1113,7 @@ minetest.register_chatcommand("helpform", {
 	params = "",
 	description = S("Open a window providing help entries about Minetest and more"),
 	privs = {},
-	func = function(playername, param)
+	func = function(playername, _)
 		doc.show_doc(playername)
 	end,
 	}
@@ -1167,7 +1169,7 @@ minetest.register_on_joinplayer(function(player)
 
 	-- Add button for Inventory++
 	if minetest.get_modpath("inventory_plus") ~= nil then
-		inventory_plus.register_button(player, "doc_inventory_plus", S("Help"))
+		inventory_plus.register_button(player, "doc_inventory_plus", S("Help")) ---@diagnostic disable-line: undefined-global
 	end
 end)
 
@@ -1178,7 +1180,7 @@ end
 
 -- Unified Inventory
 if minetest.get_modpath("unified_inventory") ~= nil then
-	unified_inventory.register_button("doc", {
+	unified_inventory.register_button("doc", { ---@diagnostic disable-line: undefined-global
 		type = "image",
 		image = "doc_button_icon_hires.png",
 		tooltip = S("Help"),
@@ -1188,7 +1190,7 @@ end
 
 -- sfinv_buttons
 if minetest.get_modpath("sfinv_buttons") ~= nil then
-	sfinv_buttons.register_button("doc", {
+	sfinv_buttons.register_button("doc", { ---@diagnostic disable-line: undefined-global
 		image = "doc_button_icon_lores.png",
 		tooltip = S("Collection of help texts"),
 		title = S("Help"),
@@ -1206,7 +1208,7 @@ minetest.register_chatcommand("help_reveal", {
 	params = "",
 	description = S("Reveal all hidden help entries to you"),
 	privs = { help_reveal = true },
-	func = function(name, param)
+	func = function(name, _)
 		doc.mark_all_entries_as_revealed(name)
 	end,
 })
