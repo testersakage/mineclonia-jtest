@@ -166,7 +166,7 @@ function mcl_portals.end_teleport(obj, pos)
 			target = mcl_spawn.get_player_spawn_pos(obj)
 		end
 
-		target = target or mcl_spawn.get_world_spawn_pos(obj)
+		target = target or mcl_spawn.get_world_spawn_pos()
 	else
 		-- End portal in any other dimension:
 		-- Teleport to the End at a fixed position.
@@ -204,7 +204,7 @@ function mcl_portals.end_teleport(obj, pos)
 	end
 end
 
-function mcl_portals.end_portal_teleport(pos, node)
+function mcl_portals.end_portal_teleport(pos, node) ---@diagnostic disable-line: unused-local
 	for _,obj in pairs(minetest.get_objects_inside_radius(pos, 1)) do
 		local lua_entity = obj:get_luaentity() --maikerumine added for objects to travel
 		if obj:is_player() or lua_entity then
@@ -241,7 +241,7 @@ if minetest.get_modpath("screwdriver") then
 	rotate_frame_eye = false
 end
 
-local function after_place_node(pos, placer, itemstack, pointed_thing)
+local function after_place_node(pos, placer, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
 	local node = minetest.get_node(pos)
 	if node then
 		node.param2 = (node.param2+2) % 4
