@@ -1,6 +1,82 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 local doc_mod = minetest.get_modpath("doc")
 
+local concrete_descriptions = {
+	white = S("White Concrete"),
+	silver = S("Light Grey Concrete"),
+	grey = S("Grey Concrete"),
+	black = S("Black Concrete"),
+	purple = S("Purple Concrete"),
+	blue = S("Blue Concrete"),
+	light_blue = S("Light Blue Concrete"),
+	cyan = S("Cyan Concrete"),
+	green = S("Green Concrete"),
+	lime = S("Lime Concrete"),
+	yellow = S("Yellow Concrete"),
+	brown = S("Brown Concrete"),
+	orange = S("Orange Concrete"),
+	red = S("Red Concrete"),
+	magenta = S("Magenta Concrete"),
+	pink = S("Pink Concrete"),
+}
+
+local concrete_poweder_descriptions = {
+	white = S("White Concrete Powder"),
+	silver = S("Light Grey Concrete Powder"),
+	grey = S("Grey Concrete Powder"),
+	black = S("Black Concrete Powder"),
+	purple = S("Purple Concrete Powder"),
+	blue = S("Blue Concrete Powder"),
+	light_blue = S("Light Blue Concrete Powder"),
+	cyan = S("Cyan Concrete Powder"),
+	green = S("Green Concrete Powder"),
+	lime = S("Lime Concrete Powder"),
+	yellow = S("Yellow Concrete Powder"),
+	brown = S("Brown Concrete Powder"),
+	orange = S("Orange Concrete Powder"),
+	red = S("Red Concrete Powder"),
+	magenta = S("Magenta Concrete Powder"),
+	pink = S("Pink Concrete Powder"),
+}
+
+local terracotta_descriptions = {
+	white = S("White Terracotta"),
+	silver = S("Light Grey Terracotta"),
+	grey = S("Grey Terracotta"),
+	black = S("Black Terracotta"),
+	purple = S("Purple Terracotta"),
+	blue = S("Blue Terracotta"),
+	light_blue = S("Light Blue Terracotta"),
+	cyan = S("Cyan Terracotta"),
+	green = S("Green Terracotta"),
+	lime = S("Lime Terracotta"),
+	yellow = S("Yellow Terracotta"),
+	brown = S("Brown Terracotta"),
+	orange = S("Orange Terracotta"),
+	red = S("Red Terracotta"),
+	magenta = S("Magenta Terracotta"),
+	pink = S("Pink Terracotta"),
+}
+
+local glazed_terracotta_descriptions = {
+	white = S("White Glazed Terracotta"),
+	silver = S("Light Grey Glazed Terracotta"),
+	grey = S("Grey Glazed Terracotta"),
+	black = S("Black Glazed Terracotta"),
+	purple = S("Purple Glazed Terracotta"),
+	blue = S("Blue Glazed Terracotta"),
+	light_blue = S("Light Blue Glazed Terracotta"),
+	cyan = S("Cyan Glazed Terracotta"),
+	green = S("Green Glazed Terracotta"),
+	lime = S("Lime Glazed Terracotta"),
+	yellow = S("Yellow Glazed Terracotta"),
+	brown = S("Brown Glazed Terracotta"),
+	orange = S("Orange Glazed Terracotta"),
+	red = S("Red Glazed Terracotta"),
+	magenta = S("Magenta Glazed Terracotta"),
+	pink = S("Pink Glazed Terracotta"),
+}
+
 local hc_desc = S("Terracotta is a basic building material. It comes in many different colors.")
 local gt_desc = S("Glazed terracotta is a decorative block with a complex pattern. It can be rotated by placing it in different directions.")
 local cp_desc = S("Concrete powder is used for creating concrete, but it can also be used as decoration itself. It comes in different colors. Concrete powder turns into concrete of the same color when it comes in contact with water.")
@@ -26,10 +102,10 @@ local canonical_color = "yellow"
 
 for color,colordef in pairs(mcl_dyes.colors) do
 	local is_canonical = color == canonical_color
-	local sdesc_hc = S("@1 Terracotta", colordef.readable_name)
-	local sdesc_gt = S("@1 Glazed Terracotta", colordef.readable_name)
-	local sdesc_cp = S("@1 Concrete Powder", colordef.readable_name)
-	local sdesc_c = S("@1 Concrete", colordef.readable_name)
+	local sdesc_hc = terracotta_descriptions[color]
+	local sdesc_gt = glazed_terracotta_descriptions[color]
+	local sdesc_cp = concrete_poweder_descriptions[color]
+	local sdesc_c = concrete_descriptions[color]
 	local ldesc_hc, ldesc_gt, ldesc_cp, ldesc_c
 	local create_entry
 	local ename_hc, ename_gt, ename_cp, ename_c
