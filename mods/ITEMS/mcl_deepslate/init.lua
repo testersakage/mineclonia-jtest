@@ -7,7 +7,7 @@ local S = mcl_deepslate.translator
 
 function mcl_deepslate.register_deepslate_ore(item, desc, extra, basename)
 	local nodename = "mcl_deepslate:deepslate_with_"..item
-	local basename = basename or "mcl_core:stone_with_" .. item
+	local basename = basename or ("mcl_core:stone_with_" .. item)
 
 	local def = table.copy(minetest.registered_nodes[basename])
 	def._doc_items_longdesc = S("@1 is a variant of @2 that can generate in deepslate and tuff blobs.", desc, def.description)
