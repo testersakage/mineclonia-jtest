@@ -14,10 +14,10 @@ function mcl_villages.initialize_settlement_info(pr)
 		num_beds = 0,
 	}
 
-	for k, v in pairs(mcl_villages.schematic_houses) do
+	for _, v in pairs(mcl_villages.schematic_houses) do
 		count_buildings[v["name"]] = 0
 	end
-	for k, v in pairs(mcl_villages.schematic_jobs) do
+	for _, v in pairs(mcl_villages.schematic_jobs) do
 		count_buildings[v["name"]] = 0
 	end
 
@@ -47,12 +47,12 @@ end
 
 local function spawn_cats(pos)
 	local sp=minetest.find_nodes_in_area_under_air(vector.offset(pos,-20,-20,-20),vector.offset(pos,20,20,20),{"group:opaque"})
-	for i=1,math.random(5) do
+	for _ = 1, math.random(5) do
 		minetest.add_entity(vector.offset(sp[math.random(#sp)],0,1,0),"mobs_mc:cat")
 	end
 end
 
-local function init_nodes(p1, p2, size, rotation, pr)
+local function init_nodes(p1, p2, _, _, pr)
 
 	for _, n in pairs(minetest.find_nodes_in_area(p1, p2, { "group:wall" })) do
 		mcl_walls.update_wall(n)
@@ -175,7 +175,7 @@ local squares = {
 	{ x = 3, z = -3 },
 }
 
-local function layout_grid(pr, input_settlement_info, settlement_info, center)
+local function layout_grid(_, input_settlement_info, settlement_info, _)
 
 	local bell_schem = settlement_info[1]
 	record_building(bell_schem)
@@ -226,7 +226,7 @@ local function layout_grid(pr, input_settlement_info, settlement_info, center)
 				else
 					local col
 					-- sometimes this is a table with keys, and sometimes not ...
-					for k, v in pairs(collisons) do
+					for _, v in pairs(collisons) do
 						col = v
 						break
 					end
@@ -460,7 +460,7 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 
 	-- Based on number of villagers
 	local num_wells = pr:next(1, math.ceil(count_buildings.num_beds / 10))
-	for i = 1, num_wells do
+	for _ = 1, num_wells do
 		local windex = pr:next(1, #mcl_villages.schematic_wells)
 		local cur_schem = table.copy(mcl_villages.schematic_wells[windex])
 		table.insert(base_settlement_info, pr:next(1, #base_settlement_info), cur_schem)
@@ -601,7 +601,7 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 
 		for _, bed in pairs(beds) do
 			local bed_node = minetest.get_node(bed)
-			local bed_group = core.get_item_group(bed_node.name, "bed")
+			local bed_group = minetest.get_item_group(bed_node.name, "bed")
 
 			-- We only spawn at bed bottoms
 			-- 1 is bottom, 2 is top
@@ -669,7 +669,7 @@ function mcl_villages.post_process_village(blockseed)
 
 			for _, bed_pos in pairs(bld_beds) do
 				local bed_node = minetest.get_node(bed_pos)
-				local bed_group = core.get_item_group(bed_node.name, "bed")
+				local bed_group = minetest.get_item_group(bed_node.name, "bed")
 
 				-- We only spawn at bed bottoms
 				-- 1 is bottom, 2 is top
