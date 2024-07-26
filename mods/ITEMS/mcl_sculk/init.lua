@@ -79,13 +79,13 @@ local function set_node_xp(pos,xp)
 	return meta:set_int("xp",xp)
 end
 
-local function sculk_after_dig_node(pos, oldnode, oldmetadata, digger)
+local function sculk_after_dig_node(pos, oldnode, oldmetadata, digger) ---@diagnostic disable-line: unused-local
 	-- Check if node will yield its useful drop by the digger's tool
 	if digger and digger:is_player() then
 		local tool = digger:get_wielded_item()
 
 		if mcl_autogroup.can_harvest(oldnode.name, tool:get_name(), digger) then
-			if tool and mcl_enchanting.get_enchantments(tool, "silk_touch").silk_touch then
+			if tool and mcl_enchanting.get_enchantments(tool).silk_touch then
 				-- Don't drop experience when mined with silk touch
 				return
 			end
@@ -97,9 +97,11 @@ local function sculk_after_dig_node(pos, oldnode, oldmetadata, digger)
 		xp = 1
 	end
 	local obs = mcl_experience.throw_xp(pos,xp)
-	for _,v in pairs(obs) do
-		local l = v:get_luaentity()
-		l._sculkdrop = true
+	if obs then
+		for _,v in pairs(obs) do
+			local l = v:get_luaentity()
+			l._sculkdrop = true
+		end
 	end
 end
 
