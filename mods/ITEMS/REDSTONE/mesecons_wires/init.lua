@@ -139,8 +139,7 @@ local selectionbox =
 }
 
 -- go to the next nodeid (ex.: 01000011 --> 01000100)
-local function nid_inc() end
-function nid_inc(nid)
+local function nid_inc(nid)
 	local i = 0
 	while nid[i-1] ~= 1 do
 		nid[i] = (nid[i] ~= 1) and 1 or 0

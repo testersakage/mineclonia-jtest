@@ -9,7 +9,7 @@ end
 --Rules rotation Functions:
 function mesecon.rotate_rules_right(rules)
 	local nr = {}
-	for i, rule in ipairs(rules) do
+	for _, rule in ipairs(rules) do
 		table.insert(nr, {
 			x = -rule.z,
 			y =  rule.y,
@@ -22,7 +22,7 @@ end
 
 function mesecon.rotate_rules_left(rules)
 	local nr = {}
-	for i, rule in ipairs(rules) do
+	for _, rule in ipairs(rules) do
 		table.insert(nr, {
 			x =  rule.z,
 			y =  rule.y,
@@ -35,7 +35,7 @@ end
 
 function mesecon.rotate_rules_down(rules)
 	local nr = {}
-	for i, rule in ipairs(rules) do
+	for _, rule in ipairs(rules) do
 		table.insert(nr, {
 			x = -rule.y,
 			y =  rule.x,
@@ -48,7 +48,7 @@ end
 
 function mesecon.rotate_rules_up(rules)
 	local nr = {}
-	for i, rule in ipairs(rules) do
+	for _, rule in ipairs(rules) do
 		table.insert(nr, {
 			x =  rule.y,
 			y = -rule.x,
@@ -239,7 +239,7 @@ function mesecon.mergetable(source, dest)
 	for k, v in pairs(source) do
 		rval[k] = dest[k] or mesecon.tablecopy(v)
 	end
-	for i, v in ipairs(source) do
+	for _, v in ipairs(source) do
 		table.insert(rval, mesecon.tablecopy(v))
 	end
 
@@ -248,7 +248,7 @@ end
 
 function mesecon.join_table(t1, t2)
 	local rval = mesecon.tablecopy(t2)
-	for i, v in ipairs(t1) do
+	for _, v in ipairs(t1) do
 		table.insert(rval, mesecon.tablecopy(v))
 	end
 	return rval
@@ -284,7 +284,7 @@ end
 -- File writing / reading utilities
 local wpath = minetest.get_worldpath()
 function mesecon.file2table(filename)
-	local f = io.open(wpath..DIR_DELIM..filename, "r")
+	local f = io.open(wpath.."/"..filename, "r")
 	if f == nil then return {} end
 	local t = f:read("*all")
 	f:close()
@@ -293,9 +293,11 @@ function mesecon.file2table(filename)
 end
 
 function mesecon.table2file(filename, table)
-	local f = io.open(wpath..DIR_DELIM..filename, "w")
-	f:write(minetest.serialize(table))
-	f:close()
+	local f = io.open(wpath.."/"..filename, "w")
+	if f then
+		f:write(minetest.serialize(table))
+		f:close()
+	end
 end
 
 -- Block position "hashing" (convert to integer) functions for voxelmanip cache
@@ -337,12 +339,14 @@ end
 -- Finishes a VoxelManipulator-based transaction, freeing the VMs and map data
 -- and writing back any modified areas.
 function mesecon.vm_commit()
-	for hash, tbl in pairs(vm_cache) do
-		if tbl.dirty then
-			local vm = tbl.vm
-			vm:set_data(tbl.data)
-			vm:write_to_map()
-			vm:update_map()
+	if vm_cache then
+		for _, tbl in pairs(vm_cache) do
+			if tbl.dirty then
+				local vm = tbl.vm
+				vm:set_data(tbl.data)
+				vm:write_to_map()
+				vm:update_map()
+			end
 		end
 	end
 	vm_cache = nil
@@ -357,7 +361,7 @@ end
 -- Gets the cache entry covering a position, populating it if necessary.
 local function vm_get_or_create_entry(pos)
 	local hash = hash_blockpos(pos)
-	local tbl = vm_cache[hash]
+	local tbl = vm_cache[hash] ---@diagnostic disable-line: need-check-nil
 	if not tbl then
 		local vm = minetest.get_voxel_manip(pos, pos)
 		local min_pos, max_pos = vm:get_emerged_area()

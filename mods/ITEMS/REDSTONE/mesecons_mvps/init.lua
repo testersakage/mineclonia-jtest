@@ -216,7 +216,7 @@ function mesecon.mvps_push(pos, dir, maximum, player_name, piston_pos)
 end
 
 function mesecon.mvps_pull_single(pos, dir, maximum, player_name, piston_pos)
-	local nodes = mesecon.mvps_get_stack(pos, dir, maximum, player_name, piston_pos)
+	local nodes = mesecon.mvps_get_stack(pos, dir, maximum, player_name)
 
 	if not nodes then return end
 	-- ensure sticky pistons; even without slimeblocks attached adhere to the unpullable rule.
@@ -230,7 +230,7 @@ end
 -- pos: pos of mvps; stackdir: direction of building the stack
 -- movedir: direction of actual movement
 -- maximum: maximum nodes to be pushed
-function mesecon.mvps_push_or_pull(pos, stackdir, movedir, maximum, player_name, piston_pos)
+function mesecon.mvps_push_or_pull(pos, _, movedir, maximum, player_name, piston_pos)
 	local nodes, dig_nodes, has_loop, too_many = mesecon.mvps_get_stack(pos, movedir, maximum, piston_pos)
 
 	if has_loop or too_many then
