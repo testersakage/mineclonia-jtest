@@ -296,7 +296,7 @@ end
 -- Kelp callback functions
 --------------------------------------------------------------------------------
 
-function kelp.surface_on_dig(pos, node, digger)
+function kelp.surface_on_dig(pos, node, digger) ---@diagnostic disable-line: unused-local
 	kelp.detach_dig(pos, pos, true, node)
 end
 
@@ -345,7 +345,7 @@ end
 
 
 
-function kelp.surface_on_mvps_move(pos, node, oldpos, nodemeta)
+function kelp.surface_on_mvps_move(pos, node, oldpos, nodemeta) ---@diagnostic disable-line: unused-local
 	-- Pistons moving falling nodes will have already activated on_falling callback.
 	kelp.detach_dig(pos, pos, minetest.get_item_group(node.name, "falling_node") ~= 1, node)
 end
@@ -412,7 +412,6 @@ function kelp.kelp_on_place(itemstack, placer, pointed_thing)
 	end
 
 	-- Next kelp must also be submerged in water.
-	local downward_flowing = kelp.is_downward_flowing(pos_tip, node_tip)
 	local submerged = kelp.is_submerged(node_tip)
 	if not submerged then
 		return itemstack
@@ -425,7 +424,7 @@ function kelp.kelp_on_place(itemstack, placer, pointed_thing)
 	end
 	-- TODO: get rid of rooted plantlike hack
 	if height < 16 then
-		kelp.next_height(pos_under, node_under, pos_tip, node_tip, def_tip, submerged, downward_flowing)
+		kelp.next_height(pos_under, node_under, pos_tip, node_tip, def_tip, submerged)
 	else
 		minetest.add_item(pos_tip, "mcl_ocean:kelp")
 	end
@@ -536,7 +535,7 @@ function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 	sounds.place = kelp.leaf_sounds.place
 
 	surface_deftemplate.tiles = surface_deftemplate.tiles or def_tiles
-	surface_deftemplate.inventory_image = surface_deftemplate.inventory_image or "("..def_tiles[1]..")^mcl_ocean_kelp_item.png"
+	surface_deftemplate.inventory_image = surface_deftemplate.inventory_image or ("("..def_tiles[1]..")^mcl_ocean_kelp_item.png")
 	surface_deftemplate.sounds = surface_deftemplate.sound or sounds
 	local falling_node = minetest.get_item_group(nodename, "falling_node")
 	surface_deftemplate.node_dig_prediction = surface_deftemplate.node_dig_prediction or nodename
