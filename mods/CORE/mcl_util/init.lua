@@ -852,7 +852,6 @@ function mcl_util.bypass_buildable_to(func)
 		return user and user:get_player_name() or ""
 	end
 
-	-- Returns a logging function. For empty names, does not log.
 	local function log(name, ...)
 		return name ~= "" and minetest.log(...)
 	end
