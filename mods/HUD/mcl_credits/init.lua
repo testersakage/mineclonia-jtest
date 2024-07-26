@@ -66,13 +66,13 @@ function mcl_credits.show(player)
 		[hud_elem_type_field] = "image",
 		text = "mineclonia_logo.png",
 		scale = {x = 1, y = 1},
-	}, huds, 300, 0)
+	}, huds, 300)
 	add_hud_element({
 		[hud_elem_type_field] = "text",
 		text = mcl_credits.description,
 		number = 0x757575,
 		scale = {x = 5, y = 5},
-	}, huds, 350, 0)
+	}, huds, 350)
 	local y = 450
 	for _, group in ipairs(mcl_credits.people) do
 		add_hud_element({
@@ -80,7 +80,7 @@ function mcl_credits.show(player)
 			text = group[1],
 			number = group[2],
 			scale = {x = 3, y = 3},
-		}, huds, y, 0)
+		}, huds, y)
 		y = y + 25
 		for _, name in ipairs(group[3]) do
 			y = y + 25
@@ -89,7 +89,7 @@ function mcl_credits.show(player)
 				text = name,
 				number = 0xFFFFFF,
 				scale = {x = 1, y = 1},
-			}, huds, y, 0)
+			}, huds, y)
 		end
 		y = y + 200
 	end
@@ -116,7 +116,7 @@ minetest.register_on_leaveplayer(function(player)
 	mcl_credits.players[player:get_player_name()] = nil
 end)
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function(_)
 	for _, huds in pairs(mcl_credits.players) do
 		local player = huds.player
 		local control = player:get_player_control()
@@ -156,7 +156,7 @@ end)
 
 minetest.register_chatcommand("endcredits", {
 	description = S("Show the Mineclonia end credits"),
-	func = function(name, param)
+	func = function(name, _)
 		mcl_credits.show(minetest.get_player_by_name(name))
 
 		return true
