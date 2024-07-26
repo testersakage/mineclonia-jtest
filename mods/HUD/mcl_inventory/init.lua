@@ -44,7 +44,7 @@ local function return_fields(player, name)
 	end
 end
 
-local function set_inventory(player, armor_change_only)
+local function set_inventory(player)
 	if minetest.is_creative_enabled(player:get_player_name()) then
 		mcl_inventory.set_creative_formspec(player)
 		return
@@ -91,7 +91,7 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 		end
 		-- adapt from craft width to craft grid width
 		if (k % craft.width) == 0 then
-			for index = 1, grid_width - craft.width do
+			for _ = 1, grid_width - craft.width do
 				i = i + 1
 				r[k+i] = ""
 			end
@@ -137,7 +137,7 @@ function mcl_inventory.fill_grid(player)
 	local inv = player:get_inventory()
 	local itcounts = {}
 	local invcounts = {}
-	for idx, stack in pairs(inv:get_list("craft")) do
+	for _, stack in pairs(inv:get_list("craft")) do
 		local name = stack:get_name()
 		if name ~= "" then
 			itcounts[name] = (itcounts[name] or 0) + 1
@@ -148,14 +148,14 @@ function mcl_inventory.fill_grid(player)
 		local name = tstack:get_name()
 		if itcounts[name] and invcounts[name] then
 			local it = ItemStack(name)
-			it:set_count(math.min(tstack:get_stack_max() - tstack:get_count(), math.floor(invcounts[name] / itcounts[name] or 1)))
+			it:set_count(math.min(tstack:get_stack_max() - tstack:get_count(), math.floor(invcounts[name] / (itcounts[name] or 1))))
 			tstack:add_item(inv:remove_item("main", it))
 			inv:set_stack("craft", idx, tstack)
 		end
 	end
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+minetest.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_crafting_fillgrid then
 		mcl_inventory.fill_grid(player)
 	end
@@ -173,7 +173,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-minetest.register_craft_predict(function(itemstack, player, old_craft_grid, inv)
+minetest.register_craft_predict(function(itemstack, player, old_craft_grid, inv) ---@diagnostic disable-line: unused-local
 	if not player or not player:get_pos() then return end -- can apparently be called when player has already left !?
 	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
 		return_fields(player, "craft")
@@ -236,6 +236,6 @@ end
 
 mcl_player.register_on_visual_change(mcl_inventory.update_inventory_formspec)
 
-mcl_gamemode.register_on_gamemode_change(function(p, old_gm, gm)
+mcl_gamemode.register_on_gamemode_change(function(p, old_gm, gm) ---@diagnostic disable-line: unused-local
 	set_inventory(p)
 end)
