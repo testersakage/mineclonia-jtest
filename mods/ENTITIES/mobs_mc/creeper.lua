@@ -42,7 +42,7 @@ local creeper_defs = {
 	animation = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 40, walk_speed = 48,
-		run_start = 40, run_end = 80, run_speed = 48,
+		run_start = 0, run_end = 40, run_speed = 48,
 		hurt_start = 110, hurt_end = 139,
 		death_start = 140, death_end = 189,
 		look_start = 50, look_end = 108,
