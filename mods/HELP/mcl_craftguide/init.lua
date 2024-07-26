@@ -417,8 +417,7 @@ local function get_tooltip(item, groups, cooktime, burntime)
 				groupstr[c] = C(gcol, groups[i])
 			end
 
-			groupstr = table.concat(groupstr, ", ")
-			tooltip = S("Any item belonging to the groups: @1", groupstr)
+			tooltip = S("Any item belonging to the groups: @1", table.concat(groupstr, ", "))
 		end
 	else
 		tooltip = minetest.registered_items[item].description
@@ -456,7 +455,8 @@ local function get_recipe_fs(data, iY, player)
 	end
 
 	local rows = math.ceil(table.maxn(recipe.items) / width)
-	local rightest, btn_size, s_btn_size = 0, 1.1
+	local rightest, btn_size = 0, 1.1
+	local s_btn_size
 	local btn_lab = data.show_usages and S("Usages") or S("Recipes")
 	local text_y = iY + 3.3 + (0.8 / 4)
 
@@ -720,23 +720,21 @@ local function make_formspec(name)
 end
 mcl_craftguide.make_formspec = make_formspec
 
-local function show_fs(player, name)
+local function show_fs(_, name)
 	minetest.show_formspec(name, "mcl_craftguide", make_formspec(name))
 end
 
 mcl_craftguide.add_search_filter("groups", function(item, groups)
 	local itemdef = minetest.registered_items[item]
-	local has_groups = true
 
 	for i = 1, #groups do
 		local group = groups[i]
 		if not itemdef.groups[group] then
-			has_groups = nil
-			break
+			return
 		end
 	end
 
-	return has_groups
+	return true
 end)
 
 local function search(data)
@@ -1139,7 +1137,7 @@ function mcl_craftguide.show(name)
 	minetest.show_formspec(name, "mcl_craftguide", make_formspec(name))
 end
 
-doc.sub.items.register_factoid(nil, "groups", function(itemstring, def)
+doc.sub.items.register_factoid(nil, "groups", function(_, def)
 	if def._repair_material then
 		local mdef = minetest.registered_items[def._repair_material]
 		if mdef and mdef.description and mdef.description ~= "" then
