@@ -65,7 +65,7 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	end,
 	replace_what = {"mcl_flowers:poppy"},
 	replace_with = {"air"},
-	on_replace = function(self, pos, oldnode, newnode)
+	on_replace = function(self, _, oldnode, _)
 		if not self.got_poppy and oldnode.name == "mcl_flowers:poppy" then
 			self._got_poppy=true
 			return
@@ -234,11 +234,11 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 		if ok then
 			-- Remove the nodes
 			minetest.remove_node(pos)
-			core.check_for_falling(pos)
+			minetest.check_for_falling(pos)
 			for i=1, 4 do
 				local cpos = vector.add(pos, checks[c][i])
 				minetest.remove_node(cpos)
-				core.check_for_falling(cpos)
+				minetest.check_for_falling(cpos)
 			end
 			-- Summon iron golem
 			local place
