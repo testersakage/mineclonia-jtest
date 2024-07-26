@@ -24,7 +24,7 @@ function mcl_structures.is_disabled(structname)
 	return table.indexof(disabled_structures,structname) ~= -1
 end
 
-local function ecb_place(blockpos, action, calls_remaining, param)
+local function ecb_place(blockpos, action, calls_remaining, param) ---@diagnostic disable-line: unused-local
 	if calls_remaining >= 1 then return end
 	minetest.place_schematic(param.pos, param.schematic, param.rotation, param.replacements, param.force_placement, param.flags)
 	if param.after_placement_callback and param.p1 and param.p2 then
@@ -66,11 +66,11 @@ function mcl_structures.get_struct(file)
 		minetest.log("error", "[mcl_structures] Could not open this struct: "..localfile)
 		return nil
 	end
-
-	local allnode = file:read("*a")
-	file:close()
-
-	return allnode
+	if file then
+		local allnode = file:read("*a")
+		file:close()
+		return allnode
+	end
 end
 
 -- Call on_construct on pos.
@@ -115,7 +115,7 @@ function mcl_structures.construct_nodes(p1,p2,nodes)
 	end
 end
 
-local function construct_nodes(pos,def,pr)
+local function construct_nodes(pos, def)
 	return mcl_structures.construct_nodes(vector.offset(pos,-def.sidelen/2,0,-def.sidelen/2),vector.offset(pos,def.sidelen/2,def.sidelen,def.sidelen/2),def.construct_nodes)
 end
 
@@ -231,12 +231,12 @@ local function process_queue()
 end
 --]]
 
-function mcl_structures.spawn_mobs(mob,spawnon,p1,p2,pr,n,water)
+function mcl_structures.spawn_mobs(mob, spawnon, p1 ,p2 ,_ ,n , water)
 	n = n or 1
 	local sp = {}
 	if water then
 		local nn = minetest.find_nodes_in_area(p1,p2,spawnon)
-		for k,v in pairs(nn) do
+		for _, v in pairs(nn) do
 			if minetest.get_item_group(minetest.get_node(vector.offset(v,0,1,0)).name,"water") > 0 then
 				table.insert(sp,v)
 			end
@@ -256,7 +256,7 @@ function mcl_structures.spawn_mobs(mob,spawnon,p1,p2,pr,n,water)
 	end
 end
 
-function mcl_structures.place_structure(pos, def, pr, blockseed, rot)
+function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 	if not def then	return end
 	local log_enabled = logging and not def.terrain_feature
 	local y_offset = 0
@@ -294,16 +294,16 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, rot)
 		local file = def.filenames[r]
 		if file then
 			local rot = rotations[pr:next(1,#rotations)]
-			local ap = function(pos,def,pr,blockseed) end
+			local ap = function(pos,def,pr,blockseed) end ---@diagnostic disable-line: unused-local
 
 			if def.daughters then
-				ap = function(pos,def,pr,blockseed)
+				ap = function(pos,def,pr,blockseed) ---@diagnostic disable-line: unused-local
 					for _,d in pairs(def.daughters) do
 						local p = vector.add(pos,d.pos)
 						local rot = d.rot or 0
 						mcl_structures.place_schematic(p, d.files[pr:next(1,#d.files)], rot, nil, true, "place_center_x,place_center_z",function()
-							if def.loot then generate_loot(pp,def,pr,blockseed) end
-							if def.construct_nodes then construct_nodes(pp,def,pr,blockseed) end
+							if def.loot then generate_loot(pp,def,pr) end
+							if def.construct_nodes then construct_nodes(pp,def) end
 							if def.after_place then
 								def.after_place(pos,def,pr)
 							end
@@ -313,12 +313,12 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, rot)
 			elseif def.after_place then
 				ap = def.after_place
 			end
-			mcl_structures.place_schematic(pp, file, rot,  def.replacements, true, "place_center_x,place_center_z",function(p1, p2, size, rotation)
+			mcl_structures.place_schematic(pp, file, rot,  def.replacements, true, "place_center_x,place_center_z",function(p1, p2, size, rotation) ---@diagnostic disable-line: unused-local
 				if not def.daughters then
-					if def.loot then generate_loot(pp,def,pr,blockseed) end
-					if def.construct_nodes then construct_nodes(pp,def,pr,blockseed) end
+					if def.loot then generate_loot(pp,def,pr) end
+					if def.construct_nodes then construct_nodes(pp,def) end
 				end
-				return ap(pp,def,pr,blockseed,p1,p2,size,rotation)
+				return ap(pp, def, pr, blockseed)
 			end,pr)
 			if log_enabled then
 				minetest.log("info","[mcl_structures] "..def.name.." placed at "..minetest.pos_to_string(pp))
@@ -327,8 +327,8 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, rot)
 		end
 	elseif def.place_func and def.place_func(pp,def,pr,blockseed) then
 		if not def.after_place or ( def.after_place  and def.after_place(pp,def,pr,blockseed) ) then
-			if def.loot then generate_loot(pp,def,pr,blockseed) end
-			if def.construct_nodes then construct_nodes(pp,def,pr,blockseed) end
+			if def.loot then generate_loot(pp,def,pr) end
+			if def.construct_nodes then construct_nodes(pp, def) end
 			if log_enabled then
 				minetest.log("info","[mcl_structures] "..def.name.." placed at "..minetest.pos_to_string(pp))
 			end
@@ -389,7 +389,7 @@ function mcl_structures.register_structure_spawn(def)
 		max_y = def.y_max or 31000,
 		interval = def.interval or 60,
 		chance = def.chance or 5,
-		action = function(pos, node, active_object_count, active_object_count_wider)
+		action = function(pos, _, _, active_object_count_wider)
 			local limit = def.limit or 7
 			if active_object_count_wider > limit + mob_cap_animal then return end
 			if active_object_count_wider > mob_cap_player then return end
