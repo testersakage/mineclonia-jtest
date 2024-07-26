@@ -47,7 +47,7 @@ end
 local function groups_to_string(grouptable, filter)
 	local gstring = ""
 	local groups_count = 0
-	for id, value in pairs(grouptable) do
+	for id, _ in pairs(grouptable) do
 		if (filter == nil or filter[id] == true) then
 			-- Readable group name
 			if groups_count > 0 then
@@ -597,7 +597,7 @@ doc.add_category("nodes", {
 			end
 			datastring = newline2(datastring)
 			if not forbidden_core_factoids.liquid and liquid then
-				datastring = newline(datastring, false)
+				datastring = newline(datastring)
 				datastring = datastring .. S("This block is a liquid with these properties:") .. "\n"
 				local range, renew, viscos
 				if data.def.liquid_range then range = data.def.liquid_range else range = 8 end
@@ -1038,7 +1038,7 @@ doc.add_category("tools", {
 					realuses = uses * math.pow(3, maxlevel)
 				end
 				if v.times and #v.times > 1 then
-					for rating, time in pairs(v.times) do
+					for _, time in pairs(v.times) do
 						local realtime = time / maxlevel
 						if mintime == nil or realtime < mintime then
 							mintime = realtime
@@ -1134,7 +1134,7 @@ doc.add_category("mobs", {
 	name = S("Mobs"),
 	description = S("Different Mobs"),
 	hide_entries_by_default = true,
-	build_formspec = function(d, playername)
+	build_formspec = function(d, _)
 		local data = mcl_mobs.registered_mobs[d.name]
 		local min_light = data.min_light or (data.spawn_class == "hostile" and 0) or 7
 		local max_light = data.max_light or (data.spawn_class == "hostile" and 7) or minetest.LIGHT_MAX + 1
@@ -1169,10 +1169,7 @@ doc.add_category("mobs", {
 			end
 
 			if data.drops then
-				local count = 0
-				for _,item in ipairs(data.drops) do
-					count = count + 1
-				end
+				local count = #data.drops
 
 				if count > 0 then
 					datastring = datastring .. S("Drops: ")
@@ -1249,7 +1246,7 @@ local function gather_descs()
 		if def.tool_capabilities then
 			local groupcaps = def.tool_capabilities.groupcaps
 			if groupcaps then
-				for k,v in pairs(groupcaps) do
+				for k, _ in pairs(groupcaps) do
 					if mininggroups[k] ~= true then
 						mininggroups[k] = true
 					end
@@ -1261,7 +1258,7 @@ local function gather_descs()
 		local crafts = minetest.get_all_craft_recipes(id)
 		if crafts then
 			for c=1,#crafts do
-				for k,v in pairs(crafts[c].items) do
+				for _, v in pairs(crafts[c].items) do
 					if string.sub(v,1,6) == "group:" then
 						local groupstring = string.sub(v,7,-1)
 						local groups = string.split(groupstring, ",")
@@ -1410,7 +1407,7 @@ local function reveal_items_in_inventory(player)
 	end
 end
 
-minetest.register_on_dignode(function(pos, oldnode, digger)
+minetest.register_on_dignode(function(_, oldnode, digger)
 	if digger == nil then return end
 	local playername = digger:get_player_name()
 	if playername and playername ~= "" and oldnode then
@@ -1419,7 +1416,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	end
 end)
 
-minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
+minetest.register_on_punchnode(function(_, node, puncher, _)
 	if puncher == nil then return end
 	local playername = puncher:get_player_name()
 	if playername and playername ~= "" and node then
@@ -1427,7 +1424,7 @@ minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 	end
 end)
 
-minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
+minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
 	if placer == nil then return end
 	local playername = placer:get_player_name()
 	if playername and playername ~= "" and itemstack and not itemstack:is_empty() then
@@ -1435,7 +1432,7 @@ minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack
 	end
 end)
 
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv) ---@diagnostic disable-line: unused-local
 	if player == nil then return end
 	local playername = player:get_player_name()
 	if playername and playername ~= "" and itemstack and not itemstack:is_empty() then
@@ -1443,7 +1440,7 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 	end
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
+minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info) ---@diagnostic disable-line: unused-local
 	if player == nil then return end
 	local playername = player:get_player_name()
 	local itemstack
@@ -1455,7 +1452,7 @@ minetest.register_on_player_inventory_action(function(player, action, inventory,
 	end
 end)
 
-minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, user, pointed_thing)
+minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, user, pointed_thing) ---@diagnostic disable-line: unused-local
 	if user == nil then return end
 	local playername = user:get_player_name()
 	if playername and playername ~= "" and itemstack and not itemstack:is_empty() then
