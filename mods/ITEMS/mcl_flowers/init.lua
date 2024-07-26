@@ -8,7 +8,7 @@ mcl_flowers.registered_simple_flowers = {}
 local smallflowerlongdesc = S("This is a small flower. Small flowers are mainly used for dye production and can also be potted.")
 mcl_flowers.plant_usage_help = S("It can only be placed on a block on which it would also survive.")
 
-function mcl_flowers.on_bone_meal(itemstack,placer,pointed_thing,pos,n)
+function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 	if n.name == "mcl_flowers:rose_bush" or n.name == "mcl_flowers:rose_bush_top" then
 		minetest.add_item(pos, "mcl_flowers:rose_bush")
 		return true
@@ -46,7 +46,7 @@ end
 local scan_area = 9
 local spawn_on = { "mcl_core:dirt", "group:grass_block" }
 
-function mcl_flowers.on_bone_meal_simple(itemstack, placer, pointed_thing, pos, n)
+function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
 	if n.name ~= "mcl_flowers:wither_rose" then
 		local nn = minetest.find_nodes_in_area_under_air(
 			vector.offset(pos, -scan_area, -3, -scan_area),
@@ -84,7 +84,7 @@ function mcl_flowers.get_palette_color_from_pos(pos)
 end
 
 -- on_place function for flowers
-mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function(pos, node, itemstack)
+mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function(pos, _, itemstack)
 	local below = {x=pos.x, y=pos.y-1, z=pos.z}
 	local soil_node = minetest.get_node_or_nil(below)
 	if not soil_node then return false end
@@ -313,10 +313,10 @@ function mcl_flowers.add_large_plant(name, def)
 			fixed = { -selbox_radius, -0.5, -selbox_radius, selbox_radius, selbox_top_height, selbox_radius },
 		},
 		tiles = def.tiles_top,
-		drop = def.bottom.drop or "mcl_flowers:"..name,
+		drop = def.bottom.drop or ( "mcl_flowers:"..name ),
 		_mcl_shears_drop = def.bottom._mcl_shears_drop,
 		_mcl_fortune_drop = def.bottom._mcl_fortune_drop,
-		after_destruct = function(pos, oldnode)
+		after_destruct = function(pos, _)
 			-- Remove bottom half of flower (if it exists)
 			local top = pos
 			local bottom = { x = top.x, y = top.y - 1, z = top.z }
