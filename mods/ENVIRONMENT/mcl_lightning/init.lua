@@ -58,7 +58,7 @@ end
 local function choose_pos(pos)
 	if not pos then
 		local playerlist = minetest.get_connected_players()
-		local playercount = table.getn(playerlist)
+		local playercount = #playerlist
 
 		-- nobody on
 		if playercount == 0 then
@@ -169,7 +169,7 @@ function mcl_lightning.strike_func(pos, pos2, objects)
 
 				local angle, posadd
 				angle = math.random(0, math.pi*2)
-				for i=1,3 do
+				for _= 1, 3 do
 					posadd = { x=math.cos(angle),y=0,z=math.sin(angle) }
 					posadd = vector.normalize(posadd)
 					local mob = minetest.add_entity(vector.add(pos2, posadd), "mobs_mc:skeleton")
