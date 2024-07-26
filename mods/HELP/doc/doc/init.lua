@@ -183,10 +183,6 @@ function doc.mark_entry_as_revealed(playername, category_id, entry_id)
 		doc.data.players[playername].entry_textlist_needs_updating = true
 		-- Notify player of entry revelation
 		if doc.data.players[playername].stored_data.notify_on_reveal == true then
-			if minetest.get_modpath("central_message") ~= nil then
-				local cat = doc.data.categories[category_id]
-				cmsg.push_message_player(minetest.get_player_by_name(playername), S("New help entry unlocked: @1 > @2", cat.def.name, entry.name))
-			end
 			-- To avoid sound spamming, don't play sound more than once per second
 			local last_sound = doc.data.players[playername].last_reveal_sound
 			if last_sound == nil or os.difftime(os.time(), last_sound) >= 1 then
@@ -229,12 +225,7 @@ function doc.mark_all_entries_as_revealed(playername)
 	else
 		msg = S("All help entries are already revealed.")
 	end
-	-- Notify
-	if minetest.get_modpath("central_message") ~= nil then
-		cmsg.push_message_player(minetest.get_player_by_name(playername), msg)
-	else
-		minetest.chat_send_player(playername, msg)
-	end
+	minetest.chat_send_player(playername, msg)
 end
 
 -- Returns true if the specified entry has been viewed by the player
