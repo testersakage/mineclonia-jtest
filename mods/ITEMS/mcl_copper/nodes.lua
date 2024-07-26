@@ -44,10 +44,42 @@ minetest.register_node("mcl_copper:block_raw", {
 })
 
 local n_desc = {
-	[""] = "",
-	["_exposed"] = S("Exposed"),
-	["_weathered"] = S("Weathered"),
-	["_oxidized"] = S("Oxidized"),
+	[""] = {
+		block = S("Block of Copper"),
+		cut = S("Cut Copper"),
+		chiseled = S("Chiseled Copper"),
+		grate = S("Copper Grate"),
+		bulb = S("Copper Bulb"),
+		door = S("Copper Door"),
+		trapdoor = S("Copper Trapdoor"),
+	},
+	["_exposed"] = {
+		block = S("Exposed Block of Copper"),
+		cut = S("Exposed Cut Copper"),
+		chiseled = S("Exposed Chiseled Copper"),
+		grate = S("Exposed Copper Grate"),
+		bulb = S("Exposed Copper Bulb"),
+		door = S("Exposed Copper Door"),
+		trapdoor = S("Exposed Copper Trapdoor"),
+	},
+	["_weathered"] = {
+		block = S("Weathered Block of copper"),
+		cut = S("Weathered Cut Copper"),
+		chiseled = S("Weathered Chiseled Copper"),
+		grate = S("Weathered Copper Grate"),
+		bulb = S("Weathered Copper Bulb"),
+		door = S("Weathered Copper Door"),
+		trapdoor = S("Weathered Copper Trapdoor"),
+	},
+	["_oxidized"] = {
+		block = S("Oxidized Block of copper"),
+		cut = S("Oxidized Cut Copper"),
+		chiseled = S("Oxidized Chiseled Copper"),
+		grate = S("Oxidized Copper Grate"),
+		bulb = S("Oxidized Copper Bulb"),
+		door = S("Oxidized Copper Door"),
+		trapdoor = S("Oxidized Copper Trapdoor"),
+	},
 }
 
 local bulb_light = {
@@ -58,13 +90,9 @@ local bulb_light = {
 }
 
 for n, desc in pairs(n_desc) do
-	local bdesc = desc
-	if n == "" then
-		bdesc = S("Block of")
-	end
 	minetest.register_node("mcl_copper:block"..n, {
-		description = S("@1 Copper", bdesc),
-		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", bdesc),
+		description = desc.block,
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc.block),
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) ..".png"},
 		is_ground_content = false,
 		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
@@ -74,8 +102,8 @@ for n, desc in pairs(n_desc) do
 	})
 
 	minetest.register_node("mcl_copper:block"..n.."_cut", {
-		description = S("@1 Cut Copper", desc),
-		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
+		description = desc.cut,
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc.cut),
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_cut.png"},
 		is_ground_content = false,
 		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
@@ -86,8 +114,8 @@ for n, desc in pairs(n_desc) do
 	})
 
 	minetest.register_node("mcl_copper:block"..n.."_chiseled", {
-		description = S("@1 Chiseled Copper", desc),
-		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc),
+		description = desc.chiseled,
+		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc.chiseled),
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_chiseled.png"},
 		is_ground_content = false,
 		groups = {pickaxey = 2, building_block = 1, stonecuttable = 1},
@@ -97,8 +125,8 @@ for n, desc in pairs(n_desc) do
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n, "mcl_copper:block"..n.."_cut" }
 	})
 	minetest.register_node("mcl_copper:block"..n.."_grate", {
-		description = S("@1 Copper Grate", desc),
-		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc),
+		description = desc.grate,
+		_doc_items_longdesc = S("@1 Chiseled copper is mostly a decorative block.", desc.grate),
 		drawtype = "allfaces_optional",
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_grate.png"},
 		use_texture_alpha = "blend",
@@ -111,8 +139,8 @@ for n, desc in pairs(n_desc) do
 	})
 
 	minetest.register_node("mcl_copper:bulb"..n.."_on", {
-		description = S("@1 Copper Bulb On", desc),
-		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
+		description = desc.bulb,
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc.bulb),
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
 		is_ground_content = false,
 		light_source = bulb_light[n],
@@ -135,8 +163,8 @@ for n, desc in pairs(n_desc) do
 		end,
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
-		description = S("@1 Copper Bulb", desc),
-		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc),
+		description = desc.bulb,
+		_doc_items_longdesc = S("@1 copper is mostly a decorative block.", desc.bulb),
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_off.png"},
 		is_ground_content = false,
 		groups = {pickaxey = 2, building_block = 1 },
@@ -153,7 +181,7 @@ for n, desc in pairs(n_desc) do
 	})
 
 	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n, {
-		description = S("@1 Copper Trapdoor", desc),
+		description = desc.trapdoor,
 		groups = { copper = 1, pickaxey = 2, building_block = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		sound_close = "doors_steel_door_close",
@@ -165,7 +193,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3
 	})
 	mcl_doors:register_door("mcl_copper:door"..n, {
-		description = S("@1 Copper Door", desc),
+		description = desc.door,
 		groups = { door = 1, copper = 1, pickaxey = 2, building_block = 1},
 		inventory_image = "mcl_copper_door"..n..".png",
 		sounds = mcl_sounds.node_sound_metal_defaults(),
