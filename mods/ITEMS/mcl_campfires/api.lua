@@ -22,7 +22,7 @@ end
 local function drop_items(pos)
 	local ph = minetest.hash_node_position(vector.round(pos))
 	if food_entities[ph] then
-		for k,v in pairs(food_entities[ph]) do
+		for _, v in pairs(food_entities[ph]) do
 			if v and v.object and v.object:get_pos() then
 				v.object:remove()
 				minetest.add_item(pos, v._item)
@@ -47,8 +47,7 @@ local function campfire_drops(pos, digger, drops, nodename)
 end
 
 local function on_blast(pos)
-	local node = minetest.get_node(pos)
-	drop_items(pos, node)
+	drop_items(pos)
 	minetest.remove_node(pos)
 end
 
@@ -60,7 +59,7 @@ end
 
 local function delete_entities(ph)
 	if not food_entities[ph] then return end
-	for k,v in pairs(food_entities[ph]) do
+	for _, v in pairs(food_entities[ph]) do
 		if v and v.object then
 			v:remove()
 		end
@@ -83,7 +82,7 @@ local function get_free_spot(ph)
 end
 
 -- on_rightclick function to take items that are cookable in a campfire, and put them in the campfire inventory
-function mcl_campfires.take_item(pos, node, player, itemstack)
+function mcl_campfires.take_item(pos, _, player, itemstack)
 	if minetest.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
 		local cookable = minetest.get_craft_result({method = "cooking", width = 1, items = {itemstack}})
 		if cookable then
@@ -126,7 +125,7 @@ function mcl_campfires.register_campfire(name, def)
 		groups = { handy=1, axey=1, material_wood=1, not_in_creative_inventory=1, campfire=1, },
 		paramtype = "light",
 		paramtype2 = "4dir",
-		_on_ignite = function(player, node)
+		_on_ignite = function(_, node)
 			mcl_campfires.light_campfire(node.under)
 			return true
 		end,
@@ -147,7 +146,7 @@ function mcl_campfires.register_campfire(name, def)
 		},
 		_mcl_blast_resistance = 2,
 		_mcl_hardness = 2,
-		after_dig_node = function(pos, node, oldmeta, digger)
+		after_dig_node = function(pos, _, _, digger)
 			campfire_drops(pos, digger, def.drops, name.."_lit")
 		end,
 	})
@@ -228,7 +227,7 @@ function mcl_campfires.register_campfire(name, def)
 		_mcl_blast_resistance = 2,
 		_mcl_hardness = 2,
 		on_blast = on_blast,
-		after_dig_node = function(pos, node, _, digger)
+		after_dig_node = function(pos, _, _, digger)
 			drop_items(pos)
 			campfire_drops(pos, digger, def.drops, name.."_lit")
 		end,
