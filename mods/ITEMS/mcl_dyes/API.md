@@ -5,7 +5,7 @@ This table contains all the colors indexed by cannonical color name:
 ```lua
 {
 	["colorname"] = {
-		readable_name, --the translated "readable" name of the color to be used in descriptions
+		readable_name, -- the untranslated "readable" name of the color to be used in descriptions
 		groups, -- table of the color groups including legacy "unicolor"
 		rgb, -- hex RGB value of the color
 		unicolor, --the name of the color in the "unicolor" format

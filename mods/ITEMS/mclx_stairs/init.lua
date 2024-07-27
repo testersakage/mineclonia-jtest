@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local D = mcl_util.get_translatable_string_dumper(S)
 local doc_mod = minetest.get_modpath("doc")
 local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
 
@@ -95,16 +96,16 @@ local canonical_color = "yellow"
 for name,cdef in pairs(mcl_dyes.colors) do
 	local is_canonical = name == canonical_color
 	mcl_stairs.register_stair_and_slab("concrete_"..name, {
-		description_stair = S("@1 Concrete Stairs", cdef.readable_name),
-		description_slab = S("@1 Concrete Slab", cdef.readable_name),
+		description_stair = D(cdef.readable_name .. " Concrete Stairs"),
+		description_slab = D(cdef.readable_name .. " Concrete Slab"),
 		groups={not_in_creative_inventory=extra_nodes and 0 or 1},
 		baseitem="mcl_colorblocks:concrete_"..name,
 		recipeitem=extra_nodes and "mcl_colorblocks:concrete_"..name or "",
 	})
 
 	mcl_stairs.register_stair_and_slab("hardened_clay_"..name, {
-		description_stair = S("@1 Terracotta Stairs", cdef.readable_name),
-		description_slab = S("@1 Terracotta Slab", cdef.readable_name),
+		description_stair = D(cdef.readable_name .. " Terracotta Stairs"),
+		description_slab = D(cdef.readable_name .. " Terracotta Slab"),
 		groups={not_in_creative_inventory=extra_nodes and 0 or 1},
 		baseitem="mcl_colorblocks:hardened_clay_"..name,
 		recipeitem=extra_nodes and "mcl_colorblocks:hardened_clay_"..name or "",

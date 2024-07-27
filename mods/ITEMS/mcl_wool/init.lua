@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local D = mcl_util.get_translatable_string_dumper(S)
 local mod_doc = minetest.get_modpath("doc")
 
 -- Backwards compatibility with jordach's 16-color wool mod
@@ -34,7 +35,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 	end
 
 	minetest.register_node("mcl_wool:"..color, {
-		description = S("@1 Wool", colordef.readable_name),
+		description = D(colordef.readable_name .. " Wool"),
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = name_wool,
 		_doc_items_longdesc = longdesc_wool,
@@ -48,7 +49,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_mcl_burntime = 5
 	})
 	minetest.register_node("mcl_wool:"..color.."_carpet", {
-		description = S("@1 Carpet", colordef.readable_name),
+		description = D(colordef.readable_name .. " Carpet"),
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = name_carpet,
 		_doc_items_longdesc = longdesc_carpet,
@@ -97,3 +98,5 @@ minetest.register_craft({
 		{ "mcl_mobitems:string", "mcl_mobitems:string" },
 	},
 })
+
+D(nil)

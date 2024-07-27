@@ -1,118 +1,119 @@
 mcl_dyes = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
+local D = mcl_util.get_translatable_string_dumper(S)
 
 -- Common color table to be used by other mods. The "mcl2" field if present
 -- represents the name of the color in mcl2 if it is different. This is used
 -- in the mcl_dye compat mod to adabt the recipes.
 mcl_dyes.colors = {
 	["white"] = {
-		readable_name = S("White"),
+		readable_name = "White",
 		groups = {basecolor_white=1,   excolor_white=1,     unicolor_white=1},
 		rgb = "#d0d6d7",
 		unicolor = "white",
 		mcl2 = "white",
 	},
 	["silver"] = {
-		readable_name = S("Light Grey"),
+		readable_name = "Light Grey",
 		groups = {basecolor_grey=1,    excolor_grey=1,      unicolor_grey=1},
 		rgb = "#818177",
 		unicolor = "grey",
 		mcl2 = "grey",
 	},
 	["grey"] = {
-		readable_name = S("Grey"),
+		readable_name = "Grey",
 		groups = {basecolor_grey=1,    excolor_darkgrey=1,  unicolor_darkgrey=1},
 		rgb = "#383c40",
 		unicolor = "darkgrey",
 		mcl2 = "dark_grey",
 	},
 	["black"] = {
-		readable_name = S("Black"),
+		readable_name = "Black",
 		groups = {basecolor_black=1,   excolor_black=1,     unicolor_black=1},
 		rgb = "#080a10",
 		unicolor = "black",
 		mcl2 = "black",
 	},
 	["purple"] = {
-		readable_name = S("Purple"),
+		readable_name = "Purple",
 		groups = {basecolor_magenta=1, excolor_violet=1,    unicolor_violet=1},
 		rgb = "#6821a0",
 		unicolor = "violet",
 		mcl2 = "violet",
 	},
 	["blue"] = {
-		readable_name = S("Blue"),
+		readable_name = "Blue",
 		groups = {basecolor_blue=1,    excolor_blue=1,      unicolor_blue=1},
 		rgb = "#2e3094",
 		unicolor = "blue",
 		mcl2 = "blue",
 	},
 	["light_blue"] = {
-		readable_name = S("Light Blue"),
+		readable_name = "Light Blue",
 		groups = {basecolor_blue=1,    excolor_blue=1,      unicolor_light_blue=1},
 		rgb = "#258ec9",
 		unicolor = "light_blue",
 		mcl2 = "lightblue",
 	},
 	["cyan"] = {
-		readable_name = S("Cyan"),
+		readable_name = "Cyan",
 		groups = {basecolor_cyan=1,    excolor_cyan=1,      unicolor_cyan=1},
 		rgb = "#167b8c",
 		unicolor = "cyan",
 		mcl2 = "cyan",
 	},
 	["green"] = {
-		readable_name = S("Green"),
+		readable_name = "Green",
 		groups = {basecolor_green=1,   excolor_green=1,     unicolor_dark_green=1},
 		rgb = "#4b5e25",
 		unicolor = "dark_green",
 		mcl2 = "dark_green",
 	},
 	["lime"] = {
-		readable_name = S("Lime"),
+		readable_name = "Lime",
 		groups = {basecolor_green=1,   excolor_green=1,     unicolor_green=1},
 		rgb = "#60ac19",
 		unicolor = "green",
 		mcl2 = "green",
 	},
 	["yellow"] = {
-		readable_name = S("Yellow"),
+		readable_name = "Yellow",
 		groups = {basecolor_yellow=1,  excolor_yellow=1,    unicolor_yellow=1},
 		rgb = "#f1b216",
 		unicolor = "yellow",
 		mcl2 = "yellow",
 	},
 	["brown"] = {
-		readable_name = S("Brown"),
+		readable_name = "Brown",
 		groups = {basecolor_brown=1,   excolor_orange=1,    unicolor_dark_orange=1},
 		rgb = "#633d20",
 		unicolor = "dark_orange",
 		mcl2 = "brown",
 	},
 	["orange"] = {
-		readable_name = S("Orange"),
+		readable_name = "Orange",
 		groups = {basecolor_orange=1,  excolor_orange=1,    unicolor_orange=1},
 		rgb = "#e26501",
 		unicolor = "orange",
 		mcl2 = "orange",
 	},
 	["red"] = {
-		readable_name = S("Red"),
+		readable_name = "Red",
 		groups = {basecolor_red=1,     excolor_red=1,       unicolor_red=1},
 		rgb = "#912222",
 		unicolor = "red",
 		mcl2 = "red",
 	},
 	["magenta"] = {
-		readable_name = S("Magenta"),
+		readable_name = "Magenta",
 		groups = {basecolor_magenta=1, excolor_red_violet=1,unicolor_red_violet=1},
 		rgb = "#ab31a2",
 		unicolor = "red_violet",
 		mcl2 = "magenta",
 	},
 	["pink"] = {
-		readable_name = S("Pink"),
+		readable_name = "Pink",
 		groups = {basecolor_red=1,     excolor_red=1,       unicolor_light_red=1},
 		rgb = "#d56791",
 		unicolor = "light_red",
@@ -137,7 +138,7 @@ end
 for k,v in pairs(mcl_dyes.colors) do
 	minetest.register_craftitem("mcl_dyes:" .. k, {
 		inventory_image = "mcl_dye_white.png^(mcl_dye_mask.png^[colorize:"..v.rgb..")",
-		description = S("@1 Dye", v.readable_name),
+		description = D(v.readable_name .. " Dye"),
 		_doc_items_longdesc = S("This item is a dye which is used for dyeing and crafting."),
 		_doc_items_usagehelp = S("Rightclick on a sheep to dye its wool. Other things are dyed by crafting."),
 		groups = table.update({craftitem = 1, dye = 1}, v.groups),
@@ -335,3 +336,6 @@ minetest.register_craft({
 	output = "mcl_dyes:orange 2",
 	recipe = {"mcl_dyes:yellow", "mcl_dyes:red"},
 })
+
+-- close file
+D(nil)

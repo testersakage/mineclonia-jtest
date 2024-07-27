@@ -1,5 +1,6 @@
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
+local D = mcl_util.get_translatable_string_dumper(S)
 local mod_doc = minetest.get_modpath("doc")
 
 --maps normalized base color name to non-standard texture color names
@@ -249,5 +250,5 @@ pane(S("Glass Pane"), "mcl_core:glass", "_natural") -- triggers special case
 
 -- Stained Glass Panes
 for k,v in pairs(mcl_dyes.colors) do
-	pane(S("@1 Glass Pane", v.readable_name), "mcl_core:glass_"..k, "_"..k)
+	pane(D(v.readable_name .. " Glass Pane"), "mcl_core:glass_"..k, "_"..k)
 end
