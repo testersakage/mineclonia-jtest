@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local D = mcl_util.get_dynamic_translator()
 
 local messy_textures = { --translator table for the bed texture filenames names not adhering to the common color names of mcl_dyes
 	["lightblue"] = "light_blue",
@@ -27,7 +28,7 @@ for color, colordef in pairs(mcl_dyes.colors) do
 	end
 	-- Register bed
 	mcl_beds.register_bed("mcl_beds:bed_"..color, {
-		description = S("@1 Bed", colordef.readable_name),
+		description = D(colordef.readable_name .. " Bed"),
 		_doc_items_entry_name = entry_name,
 		_doc_items_create_entry = create_entry,
 		inventory_image = "mcl_beds_bed_"..texcol.."_inv.png",
