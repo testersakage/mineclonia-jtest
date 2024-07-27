@@ -1,4 +1,20 @@
 # textdomain: mcl_core
+Yellow Stained Glass=
+Lime Stained Glass=
+Grey Stained Glass=
+White Stained Glass=
+Red Stained Glass=
+Magenta Stained Glass=
+Blue Stained Glass=
+Light Blue Stained Glass=
+Light Grey Stained Glass=
+Black Stained Glass=
+Green Stained Glass=
+Pink Stained Glass=
+Cyan Stained Glass=
+Brown Stained Glass=
+Orange Stained Glass=
+Purple Stained Glass=
 Stick=Bot
 Sticks are a very versatile crafting material; used in countless crafting recipes.=
 Paper=Papír
@@ -162,7 +178,6 @@ Glass=Üveg
 A decorative and mostly transparent block.=
 Stained glass is a decorative and mostly transparent block which comes in various different colors.=
 Stained Glass=
-@1 Stained Glass=@1 Festett üveg
 Flowing Water=Folyóvíz
 Water Source=Vízforrás
 Water=Víz
@@ -238,3 +253,8 @@ Jungle=Dzsungel
 Spruce=Lucfenyő
 Acacia=Akác
 Birch=Nyírfa
+
+
+##### not used anymore #####
+
+@1 Stained Glass=@1 Festett üveg

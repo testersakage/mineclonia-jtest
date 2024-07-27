@@ -1,4 +1,20 @@
 # textdomain: mcl_core
+Yellow Stained Glass=
+Lime Stained Glass=
+Grey Stained Glass=
+White Stained Glass=
+Red Stained Glass=
+Magenta Stained Glass=
+Blue Stained Glass=
+Light Blue Stained Glass=
+Light Grey Stained Glass=
+Black Stained Glass=
+Green Stained Glass=
+Pink Stained Glass=
+Cyan Stained Glass=
+Brown Stained Glass=
+Orange Stained Glass=
+Purple Stained Glass=
 Stick=Stock
 Sticks are a very versatile crafting material; used in countless crafting recipes.=Stöcke sind ein vielseitiges Material, sie werden in zahllosen Fertigungsrezepten gebraucht.
 Paper=Papier
@@ -162,7 +178,6 @@ Glass=Glas
 A decorative and mostly transparent block.=Ein Dekoblock, der größtenteils transparent ist.
 Stained glass is a decorative and mostly transparent block which comes in various different colors.=Buntglas ist ein dekorativer und größtenteils durchsichtiger Block, der in verschiedenen Farben daherkommt.
 Stained Glass=Buntglas
-@1 Stained Glass=@1 getöntes Glas
 Flowing Water=Fließendes Wasser
 Water Source=Wasserquelle
 Water=Wasser
@@ -238,3 +253,8 @@ Jungle=
 Spruce=
 Acacia=
 Birch=
+
+
+##### not used anymore #####
+
+@1 Stained Glass=@1 getöntes Glas

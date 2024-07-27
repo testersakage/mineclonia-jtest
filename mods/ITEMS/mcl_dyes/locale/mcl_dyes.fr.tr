@@ -1,4 +1,26 @@
 # textdomain: mcl_dyes
+Yellow Dye=
+Lime Dye=
+Grey Dye=
+White Dye=
+Red Dye=
+Magenta Dye=
+Blue Dye=
+Light Blue Dye=
+Light Grey Dye=
+Black Dye=
+Green Dye=
+Pink Dye=
+Cyan Dye=
+Brown Dye=
+Orange Dye=
+Purple Dye=
+This item is a dye which is used for dyeing and crafting.=Cet objet est un colorant utilisé pour la teinture et l'artisanat.
+Rightclick on a sheep to dye its wool. Other things are dyed by crafting.=Clic droit sur un mouton pour teindre sa laine. D'autres choses sont teintes par l'artisanat.
+
+
+##### not used anymore #####
+
 White=Blanc
 Light Grey=Gris clair
 Grey=Gris
@@ -16,5 +38,3 @@ Red=Rouge
 Magenta=Magenta
 Pink=Rose
 @1 Dye=Teinture @1
-This item is a dye which is used for dyeing and crafting.=Cet objet est un colorant utilisé pour la teinture et l'artisanat.
-Rightclick on a sheep to dye its wool. Other things are dyed by crafting.=Clic droit sur un mouton pour teindre sa laine. D'autres choses sont teintes par l'artisanat.

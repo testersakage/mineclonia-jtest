@@ -7,7 +7,22 @@ In this world, going to bed won't skip the night, but it will skip thunderstorms
 Sleeping allows you to skip the night. The night is skipped when all players in this world went to sleep. The night is skipped after sleeping for a few seconds. Thunderstorms can be skipped in the same manner.=Dormir vous permet de sauter la nuit. La nuit est sautée lorsque tous les joueurs de ce monde se sont endormis. La nuit est sautée après avoir dormi quelques secondes. Les orages peuvent être évités de la même manière.
 Allows you to sleep=Vous permet de dormir
 Bed=Lit
-@1 Bed=@1 Lit
+Yellow Bed=
+Lime Bed=
+Grey Bed=
+White Bed=
+Red Bed=
+Magenta Bed=
+Blue Bed=
+Light Blue Bed=
+Light Grey Bed=
+Black Bed=
+Green Bed=
+Pink Bed=
+Cyan Bed=
+Brown Bed=
+Orange Bed=
+Purple Bed=
 You can only sleep at night or during a thunderstorm.=Vous ne pouvez dormir que la nuit ou pendant un orage.
 You can't sleep, the bed's too far away!=Vous ne pouvez pas dormir, le lit est trop loin !
 This bed is already occupied!=Ce lit est déjà occupé !
@@ -32,3 +47,8 @@ Sorry, but you have to wait @1 seconds until you may use this button again!=Dés
 Hey! Would you guys mind sleeping?=Hé ! Ça vous dérangerait de dormir ?
 New respawn position set!=Nouvelle position de réapparition définie !
 Respawn Anchor=Ancre de réapparition
+
+
+##### not used anymore #####
+
+@1 Bed=@1 Lit

@@ -1,11 +1,26 @@
 # textdomain: xpanes
+Yellow Glass Pane=
+Lime Glass Pane=
+Grey Glass Pane=
+White Glass Pane=
+Red Glass Pane=
+Magenta Glass Pane=
+Blue Glass Pane=
+Light Blue Glass Pane=
+Light Grey Glass Pane=
+Black Glass Pane=
+Green Glass Pane=
+Pink Glass Pane=
+Cyan Glass Pane=
+Brown Glass Pane=
+Orange Glass Pane=
+Purple Glass Pane=
 Glass panes are thin layers of glass which neatly connect to their neighbors as you build them.=Szyby są cienkimi warstwami szkła które łączą się z sąsiadującymi blokami podczas budowania.
 Stained glass panes are thin layers of stained glass which neatly connect to their neighbors as you build them. They come in many different colors.=Kolorowe szyby są cienkimi warstwami kolorowego szkła które łączą się z sąsiadującymi blokami podczas budowania. Można je pokolorować na wiele kolorów.
 Stained Glass Pane=Kolorowa szyba
 Iron Bars=Żelazne kraty
 Iron bars neatly connect to their neighbors as you build them.=Żelazne kraty łączą się z sąsiadującymi blokami podczas budowania.
 Glass Pane=Szyba
-@1 Glass Pane=
 
 
 ##### not used anymore #####
