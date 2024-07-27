@@ -510,18 +510,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_mobitems:slimeball 9",
-	recipe = {{"mcl_core:slimeblock"}},
-})
-
-minetest.register_craft({
-	output = "mcl_core:slimeblock",
-	recipe = {{"mcl_mobitems:slimeball","mcl_mobitems:slimeball","mcl_mobitems:slimeball",},
-		{"mcl_mobitems:slimeball","mcl_mobitems:slimeball","mcl_mobitems:slimeball",},
-		{"mcl_mobitems:slimeball","mcl_mobitems:slimeball","mcl_mobitems:slimeball",}},
-})
-
-minetest.register_craft({
 	output = "mcl_mobitems:leather_horse_armor",
 	recipe = {{"mcl_mobitems:leather","","mcl_mobitems:leather",},
 		{"mcl_mobitems:leather","mcl_mobitems:leather","mcl_mobitems:leather",},

@@ -96,7 +96,7 @@ minetest.register_node("mcl_core:slimeblock", {
 		end
 		return connected, false
 	end,
-
+	_mcl_square_crafting = { item = "mcl_mobitems:slimeball", amount = 9, reversible = true }
 })
 
 minetest.register_node("mcl_core:cobweb", {
