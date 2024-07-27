@@ -252,3 +252,5 @@ pane(S("Glass Pane"), "mcl_core:glass", "_natural") -- triggers special case
 for k,v in pairs(mcl_dyes.colors) do
 	pane(D(v.readable_name .. " Glass Pane"), "mcl_core:glass_"..k, "_"..k)
 end
+
+D(nil)
