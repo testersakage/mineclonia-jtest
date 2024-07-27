@@ -225,6 +225,8 @@ minetest.register_craftitem("mcl_paintings:painting", {
 		if mcl_util.check_position_protection(pointed_thing.above, placer) then return itemstack end
 		local xmax, ymax = get_maxes(pointed_thing)
 		mcl_paintings.spawn_painting(pointed_thing, get_random_painting(xmax, ymax))
+		itemstack:take_item()
+		return itemstack
 	end,
 })
 
