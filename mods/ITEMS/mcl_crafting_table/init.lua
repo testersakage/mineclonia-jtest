@@ -75,15 +75,8 @@ minetest.register_node("mcl_crafting_table:crafting_table", {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
-	_mcl_burntime = 15
-})
-
-minetest.register_craft({
-	output = "mcl_crafting_table:crafting_table",
-	recipe = {
-		{ "group:wood", "group:wood" },
-		{ "group:wood", "group:wood" }
-	},
+	_mcl_burntime = 15,
+	_mcl_square_crafting = { item = "group:wood", amount = 4 }
 })
 
 minetest.register_alias("crafting:workbench", "mcl_crafting_table:crafting_table")
