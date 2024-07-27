@@ -1,4 +1,5 @@
 local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
+local dev_dump_translatable_strings =  minetest.settings:get_bool("mcl_dev_dump_translatable_strings", false)
 
 mcl_util = {}
 
@@ -1424,5 +1425,32 @@ function mcl_util.detach_object(obj, change_pos, callback)
 			if not obj or not obj:get_pos() then return end
 			callback(obj)
 		end, obj)
+	end
+end
+
+
+-- Create translator wrapper to dump translatable strings into a file
+-- computed_translatable_strings.lua in the current mod's directory if boolean
+-- setting mcl_dev_dump_translatable_strings is true
+--
+-- Call wrapper with argument nil to close file after mod finished loading to
+-- avoid process running out of file descriptors
+function mcl_util.get_translatable_string_dumper(translator)
+	if dev_dump_translatable_strings then
+		local filename = minetest.get_modpath(minetest.get_current_modname()) .. "/computed_translatable_strings.lua"
+		os.remove(filename)
+		local file = io.open(filename, "w")
+		return function(s, ...)
+			if s then
+				file:write("NS(" .. dump(s) .. ")\n")
+				return translator(s, ...)
+			else
+				file:close()
+			end
+		end
+	else
+		return function(s, ...)
+			return s and translator(s, ...)
+		end
 	end
 end
