@@ -29,6 +29,7 @@ minetest.register_node("mcl_core:bone_block", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
+	_mcl_square_crafting = { item = "mcl_core:granite", amount = 9, reversible = true }
 })
 
 minetest.register_node("mcl_core:slimeblock", {

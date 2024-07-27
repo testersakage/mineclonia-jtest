@@ -14,6 +14,7 @@ minetest.register_node("mcl_amethyst:amethyst_block",{
 	sounds = sounds,
 	_mcl_hardness = 1.5,
 	_mcl_blast_resistance = 1.5,
+	_mcl_square_crafting = { item = "mcl_amethyst:amethyst_shard", amount = 4 }
 })
 
 minetest.register_node("mcl_amethyst:budding_amethyst_block",{
@@ -175,14 +176,6 @@ minetest.register_node("mcl_amethyst:amethyst_cluster",{
 })
 
 -- Register Crafts
-minetest.register_craft({
-	output = "mcl_amethyst:amethyst_block",
-	recipe = {
-		{"mcl_amethyst:amethyst_shard", "mcl_amethyst:amethyst_shard"},
-		{"mcl_amethyst:amethyst_shard", "mcl_amethyst:amethyst_shard"},
-	},
-})
-
 minetest.register_craft({
 	output = "mcl_amethyst:tinted_glass 2",
 	recipe = {

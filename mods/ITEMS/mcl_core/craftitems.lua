@@ -75,14 +75,16 @@ minetest.register_craftitem("mcl_core:iron_ingot", {
 	description = S("Iron Ingot"),
 	_doc_items_longdesc = S("Molten iron. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_steel_ingot.png",
-	groups = { craftitem=1 },
+	groups = { craftitem = 1 },
+	_mcl_square_crafting = { item = "mcl_core:iron_nugget", amount = 9, reversible = true }
 })
 
 minetest.register_craftitem("mcl_core:gold_ingot", {
 	description = S("Gold Ingot"),
 	_doc_items_longdesc = S("Molten gold. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_gold_ingot.png",
-	groups = { craftitem=1 },
+	groups = { craftitem = 1 },
+	_mcl_square_crafting = { item = "mcl_core:gold_nugget", amount = 9, reversible = true }
 })
 
 minetest.register_craftitem("mcl_core:emerald", {

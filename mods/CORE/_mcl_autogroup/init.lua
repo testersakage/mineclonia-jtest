@@ -342,6 +342,23 @@ function mcl_autogroup.get_wear(toolname, diggroup)
 	return math.ceil(65535 / uses)
 end
 
+local function get_recipe(amount, item)
+	if amount == 4 then
+		return {
+			{ item, item },
+			{ item, item }
+		}
+	elseif amount == 9 then
+		return {
+			{ item, item, item },
+			{ item, item, item },
+			{ item, item, item }
+		}
+	else
+		return {}
+	end
+end
+
 local function overwrite()
 	for nname, ndef in pairs(minetest.registered_nodes) do
 		local newgroups = table.copy(ndef.groups)
@@ -417,6 +434,23 @@ local function overwrite()
 				cooktime = tdef._mcl_cooktime or 10,
 				replacements = tdef._mcl_cooking_replacements
 			})
+		end
+
+		if tdef._mcl_square_crafting and type(tdef._mcl_square_crafting) == "table" then
+			local amount = tdef._mcl_square_crafting.amount
+			local item = tdef._mcl_square_crafting.item
+
+			minetest.register_craft({
+				output = tname,
+				recipe = get_recipe(amount, item)
+			})
+
+			if tdef._mcl_square_crafting.reversible then
+				minetest.register_craft({
+					output = item.." "..tostring(amount),
+					recipe = {{tname}}
+				})
+			end
 		end
 	end
 end

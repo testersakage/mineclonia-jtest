@@ -57,46 +57,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_core:sandstonesmooth 4",
-	recipe = {
-		{"mcl_core:sandstone","mcl_core:sandstone"},
-		{"mcl_core:sandstone","mcl_core:sandstone"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:redsandstonesmooth 4",
-	recipe = {
-		{"mcl_core:redsandstone","mcl_core:redsandstone"},
-		{"mcl_core:redsandstone","mcl_core:redsandstone"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:granite_smooth 4",
-	recipe = {
-		{"mcl_core:granite", "mcl_core:granite"},
-		{"mcl_core:granite", "mcl_core:granite"}
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_core:andesite_smooth 4",
-	recipe = {
-		{"mcl_core:andesite", "mcl_core:andesite"},
-		{"mcl_core:andesite", "mcl_core:andesite"}
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_core:diorite_smooth 4",
-	recipe = {
-		{"mcl_core:diorite", "mcl_core:diorite"},
-		{"mcl_core:diorite", "mcl_core:diorite"}
-	},
-})
-
-minetest.register_craft({
 	type = "shapeless",
 	output = "mcl_core:granite",
 	recipe = {"mcl_core:diorite", "mcl_nether:quartz"},
@@ -124,136 +84,10 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_core:bone_block",
-	recipe = {
-		{ "mcl_bone_meal:bone_meal", "mcl_bone_meal:bone_meal", "mcl_bone_meal:bone_meal" },
-		{ "mcl_bone_meal:bone_meal", "mcl_bone_meal:bone_meal", "mcl_bone_meal:bone_meal" },
-		{ "mcl_bone_meal:bone_meal", "mcl_bone_meal:bone_meal", "mcl_bone_meal:bone_meal" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_bone_meal:bone_meal 9",
-	recipe = {
-		{ "mcl_core:bone_block" },
-	},
-})
-
-minetest.register_craft({
 	output = "mcl_core:stick 4",
 	recipe = {
 		{"group:wood"},
 		{"group:wood"},
-	}
-})
-
-
-
-minetest.register_craft({
-	output = "mcl_core:coalblock",
-	recipe = {
-		{"mcl_core:coal_lump", "mcl_core:coal_lump", "mcl_core:coal_lump"},
-		{"mcl_core:coal_lump", "mcl_core:coal_lump", "mcl_core:coal_lump"},
-		{"mcl_core:coal_lump", "mcl_core:coal_lump", "mcl_core:coal_lump"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:coal_lump 9",
-	recipe = {
-		{"mcl_core:coalblock"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:ironblock",
-	recipe = {
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:iron_ingot 9",
-	recipe = {
-		{"mcl_core:ironblock"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:goldblock",
-	recipe = {
-		{"mcl_core:gold_ingot", "mcl_core:gold_ingot", "mcl_core:gold_ingot"},
-		{"mcl_core:gold_ingot", "mcl_core:gold_ingot", "mcl_core:gold_ingot"},
-		{"mcl_core:gold_ingot", "mcl_core:gold_ingot", "mcl_core:gold_ingot"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:gold_ingot 9",
-	recipe = {
-		{"mcl_core:goldblock"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:gold_nugget 9",
-	recipe = {{"mcl_core:gold_ingot"}},
-})
-
-minetest.register_craft({
-	output = "mcl_core:iron_nugget 9",
-	recipe = {{"mcl_core:iron_ingot"}},
-})
-
-minetest.register_craft({
-	output = "mcl_core:gold_ingot",
-	recipe = {
-		{"mcl_core:gold_nugget", "mcl_core:gold_nugget", "mcl_core:gold_nugget"},
-		{"mcl_core:gold_nugget", "mcl_core:gold_nugget", "mcl_core:gold_nugget"},
-		{"mcl_core:gold_nugget", "mcl_core:gold_nugget", "mcl_core:gold_nugget"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:iron_ingot",
-	recipe = {
-		{"mcl_core:iron_nugget", "mcl_core:iron_nugget", "mcl_core:iron_nugget"},
-		{"mcl_core:iron_nugget", "mcl_core:iron_nugget", "mcl_core:iron_nugget"},
-		{"mcl_core:iron_nugget", "mcl_core:iron_nugget", "mcl_core:iron_nugget"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:sandstone",
-	recipe = {
-		{"mcl_core:sand", "mcl_core:sand"},
-		{"mcl_core:sand", "mcl_core:sand"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:redsandstone",
-	recipe = {
-		{"mcl_core:redsand", "mcl_core:redsand"},
-		{"mcl_core:redsand", "mcl_core:redsand"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:clay",
-	recipe = {
-		{"mcl_core:clay_lump", "mcl_core:clay_lump"},
-		{"mcl_core:clay_lump", "mcl_core:clay_lump"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:brick_block",
-	recipe = {
-		{"mcl_core:brick", "mcl_core:brick"},
-		{"mcl_core:brick", "mcl_core:brick"},
 	}
 })
 
@@ -270,62 +104,6 @@ minetest.register_craft({
 		{"mcl_core:stick", "", "mcl_core:stick"},
 		{"mcl_core:stick", "mcl_core:stick", "mcl_core:stick"},
 		{"mcl_core:stick", "", "mcl_core:stick"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:stonebrick 4",
-	recipe = {
-		{"mcl_core:stone", "mcl_core:stone"},
-		{"mcl_core:stone", "mcl_core:stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:lapisblock",
-	recipe = {
-		{"mcl_core:lapis", "mcl_core:lapis", "mcl_core:lapis"},
-		{"mcl_core:lapis", "mcl_core:lapis", "mcl_core:lapis"},
-		{"mcl_core:lapis", "mcl_core:lapis", "mcl_core:lapis"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:lapis 9",
-	recipe = {
-		{"mcl_core:lapisblock"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:emeraldblock",
-	recipe = {
-		{"mcl_core:emerald", "mcl_core:emerald", "mcl_core:emerald"},
-		{"mcl_core:emerald", "mcl_core:emerald", "mcl_core:emerald"},
-		{"mcl_core:emerald", "mcl_core:emerald", "mcl_core:emerald"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:emerald 9",
-	recipe = {
-		{"mcl_core:emeraldblock"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:diamondblock",
-	recipe = {
-		{"mcl_core:diamond", "mcl_core:diamond", "mcl_core:diamond"},
-		{"mcl_core:diamond", "mcl_core:diamond", "mcl_core:diamond"},
-		{"mcl_core:diamond", "mcl_core:diamond", "mcl_core:diamond"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:diamond 9",
-	recipe = {
-		{"mcl_core:diamondblock"},
 	}
 })
 
@@ -350,14 +128,6 @@ minetest.register_craft({
 	recipe = {
 		{"group:wood", "", "group:wood"},
 		{"", "group:wood", ""},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_core:snowblock",
-	recipe = {
-		{"mcl_throwing:snowball", "mcl_throwing:snowball"},
-		{"mcl_throwing:snowball", "mcl_throwing:snowball"},
 	}
 })
 
