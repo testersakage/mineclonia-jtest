@@ -1431,20 +1431,41 @@ end
 
 -- Create translator wrapper to dump translatable strings into a file
 -- computed_translatable_strings.lua in the current mod's directory if boolean
--- setting mcl_dev_dump_translatable_strings is true
+-- setting mcl_dev_dump_translatable_strings is true.
 --
--- Call wrapper with argument nil to close file after mod finished loading to
--- avoid process running out of file descriptors
+-- computed_translatable_strings.lua is then used normally by the
+-- mod_translation_updater.py script to update the translation files; it is not
+-- needed at runtime (the wrapped translator is doing all the required work).
+--
+-- Call the wrapper with argument nil to delete the old and create the new file
+-- after mod finished loading.
 function mcl_util.get_translatable_string_dumper(translator)
 	if dev_dump_translatable_strings then
 		local filename = minetest.get_modpath(minetest.get_current_modname()) .. "/computed_translatable_strings.lua"
-		os.remove(filename)
-		local file = io.open(filename, "w")
+		local strings = {}
 		return function(s, ...)
 			if s then
-				file:write("NS(" .. dump(s) .. ")\n")
+				table.insert(strings, s)
 				return translator(s, ...)
 			else
+				table.sort(strings)
+				local remove_rc, remove_error = os.remove(filename)
+				local file, open_error = io.open(filename, "w")
+				if not file then
+					error("[mcl_util.get_translatable_string_dumper] Can't (re)create " .. filename .. " because '" .. tostring(open_error) .. "'" .. (not remove_rc and (". Deletion of old file failed with '" .. remove_error .. "'")) .. ".")
+				end
+				file:write("-- AUTOMATICALLY GENERATED FILE - DO NOT EDIT\n")
+				file:write("--\n")
+				file:write("-- Note that this file is not needed at runtime and doesn't need to be included from init.lua\n")
+				file:write("--\n")
+				file:write("-- see mcl_util.get_translatable_string_dumper for details\n")
+				file:write("\nlocal function NS(s) return s end\n\n")
+
+				-- actually write the translatable strings
+				for _, str in ipairs(strings) do
+					file:write("NS(" .. dump(str) .. ")\n")
+				end
+
 				file:close()
 			end
 		end
