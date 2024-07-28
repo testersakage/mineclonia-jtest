@@ -48,9 +48,7 @@ end
 local function detach_driver(self)
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
 	if self.driver then
-		if extended_pet_control and self.order == "roam" then
-			self:toggle_sit(self.driver)
-		end
+		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
 		mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
 	end
 end
@@ -288,7 +286,9 @@ local horse = {
 		end
 
 		if self.tamed and not self.child and self.owner == clicker:get_player_name() then
-			if not self.driver and iname == "mcl_mobitems:saddle" and self:set_saddle(clicker) then
+			if not self.driver and self._saddle and clicker:get_player_control().sneak then
+				return
+			elseif not self.driver and iname == "mcl_mobitems:saddle" and self:set_saddle(clicker) then
 				return
 			elseif minetest.get_item_group(iname, "horse_armor") > 0 and can_equip_horse_armor(self.name) and not self.driver and self:set_armor(clicker) then
 				return
