@@ -200,6 +200,7 @@ function mcl_doors:register_door(name, def)
 
 			return itemstack
 		end,
+		_mcl_rectangle_crafting = def._mcl_rectangle_crafting
 	})
 
 	local tt = def.tiles_top

@@ -414,14 +414,8 @@ function mcl_trees.register_wood(name, p)
 			tiles = p.tree and p.tree.tiles and {p.tree.tiles[3]} or { minetest.get_current_modname().."_log_"..name..".png"},
 			is_ground_content = false,
 			_mcl_stripped_variant = "mcl_trees:bark_stripped_"..name,
+			_mcl_rectangle_crafting = { item = "mcl_trees:tree_"..name, width = 2, height = 2, amount = 3 }
 		}, p.bark or {}))
-		minetest.register_craft({
-			output = "mcl_trees:bark_"..name.." 3",
-			recipe = {
-				{ "mcl_trees:tree_"..name, "mcl_trees:tree_"..name },
-				{ "mcl_trees:tree_"..name, "mcl_trees:tree_"..name },
-			}
-		})
 	end
 
 	if p.stripped == nil or type(p.stripped) == "table" then
@@ -439,6 +433,7 @@ function mcl_trees.register_wood(name, p)
 			_doc_items_longdesc = S("The stripped wood of an @1 tree.", rname),
 			tiles = { minetest.get_current_modname().."_stripped_"..name.."_side.png"},
 			is_ground_content = false,
+			_mcl_rectangle_crafting = { item = "mcl_trees:stripped_"..name, width = 2, height = 2, amount = 3 }
 		}, p.stripped_bark or {}))
 	end
 
@@ -491,16 +486,9 @@ function mcl_trees.register_wood(name, p)
 			description = S("@1 Door", rname),
 			inventory_image = "mcl_doors_door_"..name..".png",
 			tiles_bottom = {"mcl_doors_door_"..name.."_lower.png", "mcl_doors_door_"..name.."_side_lower.png"},
-			tiles_top = {"mcl_doors_door_"..name.."_upper.png", "mcl_doors_door_"..name.."_side_upper.png"}
+			tiles_top = {"mcl_doors_door_"..name.."_upper.png", "mcl_doors_door_"..name.."_side_upper.png"},
+			_mcl_rectangle_crafting = { item = "mcl_trees:wood_"..name, width = 2, height = 3, amount = 3 }
 		}, p.door or {}))
-		minetest.register_craft({
-			output = "mcl_doors:door_"..name.." 3",
-			recipe = {
-				{"mcl_trees:wood_"..name, "mcl_trees:wood_"..name},
-				{"mcl_trees:wood_"..name, "mcl_trees:wood_"..name},
-				{"mcl_trees:wood_"..name, "mcl_trees:wood_"..name}
-			}
-		})
 	end
 	if p.trapdoor == nil or type(p.trapdoor) == "table" then
 		mcl_doors:register_trapdoor("mcl_doors:trapdoor_"..name,table.merge(tpl_trapdoor, {
@@ -508,14 +496,8 @@ function mcl_trees.register_wood(name, p)
 			tile_front = "mcl_doors_trapdoor_"..name..".png",
 			tile_side = "mcl_doors_trapdoor_"..name.."_side.png",
 			wield_image = "mcl_doors_trapdoor_"..name..".png",
+			_mcl_rectangle_crafting = { item = "mcl_trees:wood_"..name, width = 3, height = 2, amount = 2 }
 		}, p.trapdoor or {}))
-		minetest.register_craft({
-			output = "mcl_doors:trapdoor_"..name.." 2",
-			recipe = {
-				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
-				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
-			}
-		})
 	end
 
 	if p.stairs == nil or type(p.stairs) == "table" then
@@ -524,9 +506,7 @@ function mcl_trees.register_wood(name, p)
 			baseitem="mcl_trees:wood_"..name,
 			description = S("@1 Stairs", rname),
 			groups = { wood_stairs = 1 },
-			overrides = {
-				_mcl_burntime = 15
-			},
+			overrides = { _mcl_burntime = 15 },
 		}, p.stairs))
 		if p.bark == nil or type(p.bark) == "table"  then
 			mcl_stairs.register_stair(name.."_bark", table.merge({
@@ -534,9 +514,7 @@ function mcl_trees.register_wood(name, p)
 				description = S("@1 Bark Stairs", rname),
 				groups = { bark_stairs = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
-				overrides = {
-					_mcl_burntime = 15
-				},
+				overrides = { _mcl_burntime = 15 },
 			}, p.stairs))
 		end
 	end
@@ -548,9 +526,7 @@ function mcl_trees.register_wood(name, p)
 			description = S("@1 Slab", rname),
 			groups = { wood_slab = 1 },
 			register_stair_and_slab = false,
-			overrides = {
-				_mcl_burntime = 7.5,
-			},
+			overrides = { _mcl_burntime = 7.5 },
 		}, p.slab))
 		if p.bark == nil or type(p.bark) == "table" then
 			mcl_stairs.register_slab(name.."_bark", table.merge({
@@ -558,9 +534,7 @@ function mcl_trees.register_wood(name, p)
 				description = S("@1 Bark Slab", rname),
 				groups = { bark_slab = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
-				overrides = {
-					_mcl_burntime = 7.5,
-				},
+				overrides = { _mcl_burntime = 7.5 },
 			}, p.slab))
 		end
 	end

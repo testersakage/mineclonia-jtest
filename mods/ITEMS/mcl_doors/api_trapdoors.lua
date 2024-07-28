@@ -139,6 +139,7 @@ function mcl_doors:register_trapdoor(name, def)
 		_mcl_hardness = def._mcl_hardness,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		_mcl_burntime = def._mcl_burntime,
+		_mcl_rectangle_crafting = def._mcl_rectangle_crafting,
 		sounds = def.sounds,
 		node_box = {
 			type = "fixed",
