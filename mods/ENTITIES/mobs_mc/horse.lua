@@ -1,5 +1,7 @@
 local S = minetest.get_translator("mobs_mc")
 
+local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
+
 local base_drop = {
 	name = "mcl_mobitems:leather",
 	chance = 1,
@@ -45,7 +47,12 @@ end
 
 local function detach_driver(self)
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
-	if self.driver then mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1}) end
+	if self.driver then
+		if extended_pet_control and self.order == "roam" then
+			self:toggle_sit(self.driver)
+		end
+		mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+	end
 end
 
 local can_equip_horse_armor = function(entity_id)
