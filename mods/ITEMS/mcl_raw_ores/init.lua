@@ -21,22 +21,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5,
-	})
-
-	minetest.register_craft({
-		output = raw_ingot.."_block",
-		recipe = {
-			{ raw_ingot, raw_ingot, raw_ingot },
-			{ raw_ingot, raw_ingot, raw_ingot },
-			{ raw_ingot, raw_ingot, raw_ingot },
-		},
-	})
-
-	minetest.register_craft({
-		output = raw_ingot.." 9",
-		recipe = {
-			{ raw_ingot.."_block" },
-		},
+		_mcl_square_crafting = { item = raw_ingot, amount = 9, reversible = true }
 	})
 end
 
