@@ -138,15 +138,6 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
-	output = 'mcl_core:packed_ice 1',
-	recipe = {
-		{'mcl_core:ice', 'mcl_core:ice', 'mcl_core:ice'},
-		{'mcl_core:ice', 'mcl_core:ice', 'mcl_core:ice'},
-		{'mcl_core:ice', 'mcl_core:ice', 'mcl_core:ice'},
-	}
-})
-
 --
 -- Crafting (tool repair)
 --

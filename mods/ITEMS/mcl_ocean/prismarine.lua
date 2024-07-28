@@ -40,7 +40,7 @@ minetest.register_node("mcl_ocean:prismarine", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_square_crafting = { item = "mcl_ocean:prismarine_shard", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_ocean:prismarine_shard", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_ocean:prismarine_brick", {
@@ -52,7 +52,7 @@ minetest.register_node("mcl_ocean:prismarine_brick", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 1.5,
 	_mcl_hardness = 1.5,
-	_mcl_square_crafting = { item = "mcl_ocean:prismarine_shard", amount = 9 }
+	_mcl_rectangle_crafting = { item = "mcl_ocean:prismarine_shard", width = 3, height = 3 }
 })
 
 minetest.register_node("mcl_ocean:prismarine_dark", {

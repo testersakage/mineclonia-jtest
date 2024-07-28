@@ -77,7 +77,7 @@ minetest.register_node("mcl_blackstone:basalt_polished", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1},
 	_mcl_blast_resistance = 4.2,
 	_mcl_hardness = 1.25,
-	_mcl_square_crafting = { item = "mcl_blackstone:basalt", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_blackstone:basalt", width = 2, height = 2 }
 })
 minetest.register_node("mcl_blackstone:basalt", {
 	description = S("Basalt"),
@@ -111,7 +111,7 @@ minetest.register_node("mcl_blackstone:blackstone_polished", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 2,
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"},
-	_mcl_square_crafting = { item = "mcl_blackstone:blackstone", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_blackstone:blackstone", width = 2, height = 2 }
 })
 minetest.register_node("mcl_blackstone:blackstone_chiseled_polished", {
 	description = S("Chiseled Polished Blackstone"),
@@ -133,7 +133,7 @@ minetest.register_node("mcl_blackstone:blackstone_brick_polished", {
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
 	_mcl_cooking_output = "mcl_blackstone:blackstone_brick_polished_cracked",
-	_mcl_square_crafting = { item = "mcl_blackstone:blackstone_polished", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_blackstone:blackstone_polished", width = 2, height = 2 }
 })
 minetest.register_node("mcl_blackstone:blackstone_brick_polished_cracked", {
 	description = S("Cracked Polished Blackstone Bricks"),
@@ -152,7 +152,7 @@ minetest.register_node("mcl_blackstone:quartz_brick", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1},
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
-	_mcl_square_crafting = { item = "mcl_nether:quartz_block", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_nether:quartz_block", width = 2, height = 2 }
 })
 minetest.register_node("mcl_blackstone:soul_soil", {
 	description = S("Soul Soil"),

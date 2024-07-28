@@ -45,7 +45,8 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_color = color,
 		_mcl_hardness = 0.8,
 		_mcl_blast_resistance = 0.8,
-		_mcl_burntime = 5
+		_mcl_burntime = 5,
+		_mcl_rectangle_crafting = { item = "mcl_mobitems:string", width = 2, height = 2 }
 	})
 	minetest.register_node("mcl_wool:"..color.."_carpet", {
 		description = S("@1 Carpet", colordef.readable_name),

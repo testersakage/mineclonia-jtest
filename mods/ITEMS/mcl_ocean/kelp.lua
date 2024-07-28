@@ -608,7 +608,7 @@ minetest.register_node("mcl_ocean:dried_kelp_block", {
 	_mcl_hardness = 0.5,
 	_mcl_blast_resistance = 2.5,
 	_mcl_burntime = 200,
-	_mcl_square_crafting = { item = "mcl_ocean:dried_kelp", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_ocean:dried_kelp", width = 3, height = 3, reversible = true }
 })
 
 --------------------------------------------------------------------------------

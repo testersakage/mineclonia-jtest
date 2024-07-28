@@ -9,22 +9,13 @@ mcl_doors:register_door("mcl_doors:iron_door", {
 	groups = {pickaxey=1, mesecon_effector_on=1},
 	_mcl_hardness = 5,
 	_mcl_blast_resistance = 5,
+	_mcl_rectangle_crafting = { item = "mcl_core:iron_ingot", width = 2, height = 3 },
 	tiles_bottom = {"mcl_doors_door_iron_lower.png^[transformFX", "mcl_doors_door_iron_side_lower.png"},
 	tiles_top = {"mcl_doors_door_iron_upper.png^[transformFX", "mcl_doors_door_iron_side_upper.png"},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	sound_open = "doors_steel_door_open",
 	sound_close = "doors_steel_door_close",
-
 	only_redstone_can_open = true,
-})
-
-minetest.register_craft({
-	output = "mcl_doors:iron_door 3",
-	recipe = {
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"}
-	}
 })
 
 mcl_doors:register_trapdoor("mcl_doors:iron_trapdoor", {
@@ -36,17 +27,9 @@ mcl_doors:register_trapdoor("mcl_doors:iron_trapdoor", {
 	groups = {pickaxey=1, mesecon_effector_on=1},
 	_mcl_hardness = 5,
 	_mcl_blast_resistance = 5,
+	_mcl_rectangle_crafting = { item = "mcl_core:iron_ingot", width = 2, height = 2 },
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	sound_open = "doors_steel_door_open",
 	sound_close = "doors_steel_door_close",
-
 	only_redstone_can_open = true,
-})
-
-minetest.register_craft({
-	output = "mcl_doors:iron_trapdoor",
-	recipe = {
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-	}
 })

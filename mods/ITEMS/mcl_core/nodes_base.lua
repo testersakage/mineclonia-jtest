@@ -230,7 +230,7 @@ minetest.register_node("mcl_core:stonebrick", {
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = { "mcl_core:stone" },
 	_mcl_cooking_output = "mcl_core:stonebrickcracked",
-	_mcl_square_crafting = { item = "mcl_core:stone", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:stone", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:stonebrickcarved", {
@@ -298,7 +298,7 @@ minetest.register_node("mcl_core:granite_smooth", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = { "mcl_core:granite" },
-	_mcl_square_crafting = { item = "mcl_core:granite", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:granite", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:andesite", {
@@ -321,7 +321,7 @@ minetest.register_node("mcl_core:andesite_smooth", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = { "mcl_core:andesite" },
-	_mcl_square_crafting = { item = "mcl_core:andesite", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:andesite", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:diorite", {
@@ -344,7 +344,7 @@ minetest.register_node("mcl_core:diorite_smooth", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = { "mcl_core:diorite" },
-	_mcl_square_crafting = { item = "mcl_core:diorite", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:diorite", width = 2, height = 2 }
 })
 
 -- Grass Block
@@ -558,7 +558,7 @@ minetest.register_node("mcl_core:sandstone", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_cooking_output = "mcl_core:sandstonesmooth2",
-	_mcl_square_crafting = { item = "mcl_core:sand", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:sand", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:sandstonesmooth", {
@@ -571,7 +571,7 @@ minetest.register_node("mcl_core:sandstonesmooth", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 2,
 	_mcl_stonecutter_recipes = { "mcl_core:sandstone" },
-	_mcl_square_crafting = { item = "mcl_core:sandstone", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:sandstone", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:sandstonecarved", {
@@ -621,7 +621,7 @@ minetest.register_node("mcl_core:redsandstone", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_cooking_output = "mcl_core:redsandstonesmooth2",
-	_mcl_square_crafting = { item = "mcl_core:redsand", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:redsand", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:redsandstonesmooth", {
@@ -634,7 +634,7 @@ minetest.register_node("mcl_core:redsandstonesmooth", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
-	_mcl_square_crafting = { item = "mcl_core:redsandstone", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:redsandstone", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:redsandstonecarved", {
@@ -675,7 +675,7 @@ minetest.register_node("mcl_core:clay", {
 	_mcl_hardness = 0.6,
 	_mcl_silk_touch_drop = true,
 	_mcl_cooking_output = "mcl_colorblocks:hardened_clay",
-	_mcl_square_crafting = { item = "mcl_core:clay_lump", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:clay_lump", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_core:brick_block", {
@@ -688,7 +688,7 @@ minetest.register_node("mcl_core:brick_block", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 2,
-	_mcl_square_crafting = { item = "mcl_core:brick", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_core:brick", width = 2, height = 2 }
 })
 
 
@@ -764,7 +764,7 @@ minetest.register_node("mcl_core:coalblock", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
 	_mcl_burntime = 800,
-	_mcl_square_crafting = { item = "mcl_core:coal_lump", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_core:coal_lump", width = 3, height = 3,  reversible = true }
 })
 
 minetest.register_node("mcl_core:ironblock", {
@@ -776,7 +776,7 @@ minetest.register_node("mcl_core:ironblock", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-	_mcl_square_crafting = { item = "mcl_core:iron_ingot", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_core:iron_ingot", width = 3, height = 3, reversible = true }
 })
 
 minetest.register_node("mcl_core:goldblock", {
@@ -788,7 +788,7 @@ minetest.register_node("mcl_core:goldblock", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 3,
-	_mcl_square_crafting = { item = "mcl_core:gold_ingot", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_core:gold_ingot", width = 3, height = 3, reversible = true }
 })
 
 minetest.register_node("mcl_core:diamondblock", {
@@ -800,7 +800,7 @@ minetest.register_node("mcl_core:diamondblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-	_mcl_square_crafting = { item = "mcl_core:diamond", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_core:diamond", width = 3, height = 3, reversible = true }
 })
 
 minetest.register_node("mcl_core:lapisblock", {
@@ -812,7 +812,7 @@ minetest.register_node("mcl_core:lapisblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
-	_mcl_square_crafting = { item = "mcl_core:lapis", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_core:lapis", width = 3, height = 3, reversible = true }
 })
 
 minetest.register_node("mcl_core:emeraldblock", {
@@ -824,7 +824,7 @@ minetest.register_node("mcl_core:emeraldblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-	_mcl_square_crafting = { item = "mcl_core:emerald", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_core:emerald", width = 3, height = 3, reversible = true }
 })
 
 minetest.register_node("mcl_core:obsidian", {
@@ -884,6 +884,7 @@ minetest.register_node("mcl_core:packed_ice", {
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
+	_mcl_rectangle_crafting = { item = "mcl_core:ice", width = 3, height = 3 }
 })
 
 -- Frosted Ice (4 nodes)
@@ -1084,7 +1085,7 @@ minetest.register_node("mcl_core:snowblock", {
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_mcl_silk_touch_drop = true,
-	_mcl_square_crafting = { item = "mcl_throwing:snowball", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_throwing:snowball", width = 2, height = 2 }
 })
 
 -- Add entry aliases for the Help

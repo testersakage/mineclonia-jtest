@@ -29,7 +29,7 @@ minetest.register_node("mcl_end:end_bricks", {
 	_mcl_blast_resistance = 9,
 	_mcl_hardness = 3,
 	_mcl_stonecutter_recipes = {"mcl_end:end_stone"},
-	_mcl_square_crafting = { item = "mcl_end:end_stone", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_end:end_stone", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_end:purpur_block", {
@@ -41,7 +41,7 @@ minetest.register_node("mcl_end:purpur_block", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_square_crafting = { item = "mcl_end:chorus_fruit_popped", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_end:chorus_fruit_popped", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_end:purpur_pillar", {

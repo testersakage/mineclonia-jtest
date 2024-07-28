@@ -342,21 +342,15 @@ function mcl_autogroup.get_wear(toolname, diggroup)
 	return math.ceil(65535 / uses)
 end
 
-local function get_recipe(amount, item)
-	if amount == 4 then
-		return {
-			{ item, item },
-			{ item, item }
-		}
-	elseif amount == 9 then
-		return {
-			{ item, item, item },
-			{ item, item, item },
-			{ item, item, item }
-		}
-	else
-		return {}
+local function get_recipe(width, height, item)
+	local recipe = {}
+	for i = 1, height do
+		recipe[i] = {}
+		for j = 1, width do
+			recipe[i][j] = item
+		end
 	end
+	return recipe
 end
 
 local function overwrite()
@@ -436,17 +430,21 @@ local function overwrite()
 			})
 		end
 
-		if tdef._mcl_square_crafting and type(tdef._mcl_square_crafting) == "table" then
-			local amount = tdef._mcl_square_crafting.amount
-			local item = tdef._mcl_square_crafting.item
+		if tdef._mcl_rectangle_crafting and type(tdef._mcl_rectangle_crafting) == "table" then
+			local width = tdef._mcl_rectangle_crafting.width
+			local height = tdef._mcl_rectangle_crafting.height
+			local item = tdef._mcl_rectangle_crafting.item
+			local amount = tdef._mcl_rectangle_crafting.amount or 1
 
 			minetest.register_craft({
-				output = tname,
-				recipe = get_recipe(amount, item),
-				replacements = tdef._mcl_square_crafting.replacements
+				output = tname.." "..tostring(amount),
+				recipe = get_recipe(width, height, item),
+				replacements = tdef._mcl_rectangle_crafting.replacements
 			})
 
-			if tdef._mcl_square_crafting.reversible then
+			amount = width * height
+
+			if tdef._mcl_rectangle_crafting.reversible then
 				minetest.register_craft({
 					output = item.." "..tostring(amount),
 					recipe = {{tname}}

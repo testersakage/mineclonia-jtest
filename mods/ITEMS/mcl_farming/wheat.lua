@@ -177,7 +177,7 @@ minetest.register_node("mcl_farming:hay_block", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_mcl_square_crafting = { item = "mcl_farming:wheat_item", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_farming:wheat_item", width = 3, height = 3, reversible = true }
 })
 
 if minetest.get_modpath("doc") then

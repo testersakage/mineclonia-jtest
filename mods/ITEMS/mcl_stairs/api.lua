@@ -330,6 +330,7 @@ local function register_slab(subname, stairdef)
 		end,
 		_mcl_hardness = stairdef.hardness,
 		_mcl_blast_resistance = stairdef.blast_resistance,
+		_mcl_rectangle_crafting = { item = stairdef.recipeitem, width = 3, height = 1, amount = 6 },
 		_mcl_other_slab_half = upper_slab,
 		on_rotate = function(pos, node, user, mode, param2)
 			-- Flip slab
@@ -397,16 +398,6 @@ local function register_slab(subname, stairdef)
 		_mcl_hardness = stairdef.hardness,
 		_mcl_blast_resistance = stairdef.blast_resistance,
 	})
-
-	if stairdef.recipeitem and stairdef.recipeitem ~= "" then
-		minetest.register_craft({
-			output = lower_slab .. " 6",
-			recipe = {
-				{stairdef.recipeitem, stairdef.recipeitem, stairdef.recipeitem},
-			},
-		})
-
-	end
 
 	-- Help alias for the upper slab
 	if minetest.get_modpath("doc") then

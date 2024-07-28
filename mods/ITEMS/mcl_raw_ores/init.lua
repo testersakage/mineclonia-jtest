@@ -21,7 +21,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5,
-		_mcl_square_crafting = { item = raw_ingot, amount = 9, reversible = true }
+		_mcl_rectangle_crafting = { item = raw_ingot, width = 3, height = 3, reversible = true }
 	})
 end
 

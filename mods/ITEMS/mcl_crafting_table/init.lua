@@ -76,7 +76,7 @@ minetest.register_node("mcl_crafting_table:crafting_table", {
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
 	_mcl_burntime = 15,
-	_mcl_square_crafting = { item = "group:wood", amount = 4 }
+	_mcl_rectangle_crafting = { item = "group:wood", width = 2, height = 2 }
 })
 
 minetest.register_alias("crafting:workbench", "mcl_crafting_table:crafting_table")

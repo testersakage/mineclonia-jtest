@@ -41,7 +41,7 @@ minetest.register_node("mcl_copper:block_raw", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-	_mcl_square_crafting = { item = "mcl_copper:raw_copper", amount = 9 }
+	_mcl_rectangle_crafting = { item = "mcl_copper:raw_copper", width = 3, height = 3, reversible = true }
 })
 
 local n_desc = {
@@ -64,7 +64,8 @@ for n, desc in pairs(n_desc) do
 	if n == "" then
 		bdesc = S("Block of")
 		sqr_craft.item = "mcl_copper:copper_ingot"
-		sqr_craft.amount = 9
+		sqr_craft.width = 3
+		sqr_craft.height = 3
 		sqr_craft.reversible = true
 	else
 		sqr_craft = nil
@@ -91,7 +92,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n },
-		_mcl_square_crafting = { item = "mcl_copper:block"..n, amount = 4 }
+		_mcl_square_crafting = { item = "mcl_copper:block"..n, width = 2, height = 2 }
 	})
 
 	minetest.register_node("mcl_copper:block"..n.."_chiseled", {

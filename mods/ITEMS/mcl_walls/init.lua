@@ -259,16 +259,8 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		sounds = sounds,
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 2,
+		_mcl_rectangle_crafting = { item = source, width = 3, height = 2, amount = 6 }
 	}, overrides or {}))
-	if source then
-		minetest.register_craft({
-			output = nodename .. " 6",
-			recipe = {
-				{source, source, source},
-				{source, source, source},
-			}
-		})
-	end
 end
 
 function mcl_walls.register_wall_def(name,def)

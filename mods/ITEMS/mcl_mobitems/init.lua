@@ -243,6 +243,7 @@ minetest.register_craftitem("mcl_mobitems:leather", {
 	wield_image = "mcl_mobitems_leather.png",
 	inventory_image = "mcl_mobitems_leather.png",
 	groups = { craftitem = 1 },
+	_mcl_rectangle_crafting = { item = "mcl_mobitems:rabbit_hide", width = 2, height = 2 }
 })
 
 minetest.register_craftitem("mcl_mobitems:feather", {
@@ -439,15 +440,6 @@ minetest.register_alias("mcl_mobs:nametag", "mcl_mobitems:nametag")
 -----------
 -- Crafting
 -----------
-
-minetest.register_craft({
-	output = "mcl_mobitems:leather",
-	recipe = {
-		{ "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide" },
-		{ "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide" },
-	}
-})
-
 minetest.register_craft({
 	output = "mcl_mobitems:blaze_powder 2",
 	recipe = {{"mcl_mobitems:blaze_rod"}},

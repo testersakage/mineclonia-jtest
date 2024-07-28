@@ -31,7 +31,7 @@ minetest.register_node("mcl_honey:honeycomb_block", {
 	groups = { handy = 1, deco_block = 1 },
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
-	_mcl_square_crafting = { item = "mcl_honey:honeycomb", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_honey:honeycomb", width = 2, height = 2 }
 })
 
 -- Honey
@@ -68,7 +68,7 @@ minetest.register_node("mcl_honey:honey_block", {
 	},
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
-	_mcl_square_crafting = { item = "mcl_honey:honey_bottle", amount = 4, replacements = craft_replacements },
+	_mcl_rectangle_crafting = { item = "mcl_honey:honey_bottle", width = 2, height = 2, replacements = craft_replacements },
 	mvps_sticky = function(pos, node, piston_pos)
 		local connected = {}
 		for n, v in ipairs(alldirs) do

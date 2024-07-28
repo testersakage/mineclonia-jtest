@@ -47,7 +47,7 @@ local melon_base_def = {
 		max_count = 7,
 		cap = 9,
 	},
-	_mcl_square_crafting = { item = "mcl_farming:melon_item", amount = 9 }
+	_mcl_rectangle_crafting = { item = "mcl_farming:melon_item", width = 3, height = 3 }
 }
 
 -- Drop proabilities for melon stem

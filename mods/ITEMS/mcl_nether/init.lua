@@ -32,7 +32,7 @@ minetest.register_node("mcl_nether:glowstone", {
 		max_count = 4,
 		cap = 4,
 	},
-	_mcl_square_crafting = { item = "mcl_nether:glowstone_dust", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_nether:glowstone_dust", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_nether:quartz_ore", {
@@ -73,7 +73,7 @@ minetest.register_node("mcl_nether:netheriteblock", {
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 50,
 	_mcl_silk_touch_drop = true,
-	_mcl_square_crafting = { item = "mcl_nether:netherite_ingot", amount = 9, reversible = true }
+	_mcl_rectangle_crafting = { item = "mcl_nether:netherite_ingot", width = 3, height = 3, reversible = true }
 })
 
 -- For eternal fire on top of netherrack and magma blocks
@@ -148,7 +148,7 @@ minetest.register_node("mcl_nether:magma", {
 	-- Eternal fire on top
 	after_destruct = eternal_after_destruct,
 	_on_ignite = eternal_on_ignite,
-	_mcl_square_crafting = { item = "mcl_mobitems:magma_cream", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_mobitems:magma_cream", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_nether:soul_sand", {
@@ -201,7 +201,7 @@ local nether_brick = {
 minetest.register_node("mcl_nether:nether_brick", table.merge(nether_brick,{
 	groups = {pickaxey=1, building_block=1, material_stone=1, stonecuttable = 1},
 	_mcl_cooking_output = "mcl_nether:cracked_nether_brick",
-	_mcl_square_crafting = { item = "mcl_nether:netherbrick", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_nether:netherbrick", width = 2, height = 2 }
 }))
 
 minetest.register_node("mcl_nether:red_nether_brick", table.merge(nether_brick,{
@@ -234,7 +234,7 @@ minetest.register_node("mcl_nether:nether_wart_block", {
 	),
 	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1,
-	_mcl_square_crafting = { item = "mcl_nether:nether_wart_item", amount = 9 }
+	_mcl_rectangle_crafting = { item = "mcl_nether:nether_wart_item", width = 3, height = 3 }
 })
 
 minetest.register_node("mcl_nether:quartz_block", {
@@ -247,7 +247,7 @@ minetest.register_node("mcl_nether:quartz_block", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_cooking_output = "mcl_nether:quartz_smooth",
-	_mcl_square_crafting = { item = "mcl_nether:quartz", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_nether:quartz", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_nether:quartz_chiseled", {

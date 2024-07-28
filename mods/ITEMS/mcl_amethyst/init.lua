@@ -14,7 +14,7 @@ minetest.register_node("mcl_amethyst:amethyst_block",{
 	sounds = sounds,
 	_mcl_hardness = 1.5,
 	_mcl_blast_resistance = 1.5,
-	_mcl_square_crafting = { item = "mcl_amethyst:amethyst_shard", amount = 4 }
+	_mcl_rectangle_crafting = { item = "mcl_amethyst:amethyst_shard", width = 2, height = 2 }
 })
 
 minetest.register_node("mcl_amethyst:budding_amethyst_block",{
