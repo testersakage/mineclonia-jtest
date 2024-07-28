@@ -59,16 +59,13 @@ local bulb_light = {
 }
 
 for n, desc in pairs(n_desc) do
-	local sqr_craft = {}
+	local rect_craft
 	local bdesc = desc
 	if n == "" then
 		bdesc = S("Block of")
-		sqr_craft.item = "mcl_copper:copper_ingot"
-		sqr_craft.width = 3
-		sqr_craft.height = 3
-		sqr_craft.reversible = true
+		rect_craft = { item = "mcl_copper:copper_ingot", width = 3, height = 3, reversible = true }
 	else
-		sqr_craft = nil
+		rect_craft = nil
 	end
 	minetest.register_node("mcl_copper:block"..n, {
 		description = S("@1 Copper", bdesc),
@@ -79,7 +76,7 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		_mcl_square_crafting = sqr_craft
+		_mcl_rectangle_crafting = rect_craft
 	})
 
 	minetest.register_node("mcl_copper:block"..n.."_cut", {
@@ -92,7 +89,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n },
-		_mcl_square_crafting = { item = "mcl_copper:block"..n, width = 2, height = 2 }
+		_mcl_rectangle_crafting = { item = "mcl_copper:block"..n, width = 2, height = 2 }
 	})
 
 	minetest.register_node("mcl_copper:block"..n.."_chiseled", {
