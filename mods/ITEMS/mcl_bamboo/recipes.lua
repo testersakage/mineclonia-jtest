@@ -11,23 +11,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_trees:tree_bamboo",
-	recipe = {
-		{"group:bamboo_tree","group:bamboo_tree","group:bamboo_tree"},
-		{"group:bamboo_tree","group:bamboo_tree","group:bamboo_tree"},
-		{"group:bamboo_tree","group:bamboo_tree","group:bamboo_tree"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_trees:wood_bamboo",
-	recipe = {
-		{"group:bamboo_tree","group:bamboo_tree"},
-		{"group:bamboo_tree","group:bamboo_tree"},
-	}
-})
-
-minetest.register_craft({
 	output = "mcl_bamboo:scaffolding 6",
 	recipe = {{"group:bamboo_tree", "mcl_mobitems:string", "group:bamboo_tree"},
 			 {"group:bamboo_tree", "", "group:bamboo_tree"},
