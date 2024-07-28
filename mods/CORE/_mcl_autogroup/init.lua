@@ -442,7 +442,8 @@ local function overwrite()
 
 			minetest.register_craft({
 				output = tname,
-				recipe = get_recipe(amount, item)
+				recipe = get_recipe(amount, item),
+				replacements = tdef._mcl_square_crafting.replacements
 			})
 
 			if tdef._mcl_square_crafting.reversible then

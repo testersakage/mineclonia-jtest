@@ -40,6 +40,7 @@ minetest.register_node("mcl_end:purpur_block", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_square_crafting = { item = "mcl_end:chorus_fruit_popped", amount = 4 }
 })
 
 minetest.register_node("mcl_end:purpur_pillar", {
@@ -202,14 +203,6 @@ minetest.register_craft({
 	recipe = {
 		{"mcl_end:end_stone", "mcl_end:end_stone"},
 		{"mcl_end:end_stone", "mcl_end:end_stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_end:purpur_block 4",
-	recipe = {
-		{"mcl_end:chorus_fruit_popped", "mcl_end:chorus_fruit_popped",},
-		{"mcl_end:chorus_fruit_popped", "mcl_end:chorus_fruit_popped",},
 	}
 })
 

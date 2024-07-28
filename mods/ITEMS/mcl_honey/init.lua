@@ -5,6 +5,12 @@
 -- Variables
 local S = minetest.get_translator(minetest.get_current_modname())
 local alldirs = {{x=0,y=0,z=1}, {x=1,y=0,z=0}, {x=0,y=0,z=-1}, {x=-1,y=0,z=0}, {x=0,y=-1,z=0}, {x=0,y=1,z=0}}
+local craft_replacements = {
+	{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+	{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+	{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+	{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+}
 
 -- Honeycomb
 minetest.register_craftitem("mcl_honey:honeycomb", {
@@ -25,6 +31,7 @@ minetest.register_node("mcl_honey:honeycomb_block", {
 	groups = { handy = 1, deco_block = 1 },
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
+	_mcl_square_crafting = { item = "mcl_honey:honeycomb", amount = 4 }
 })
 
 -- Honey
@@ -61,6 +68,7 @@ minetest.register_node("mcl_honey:honey_block", {
 	},
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
+	_mcl_square_crafting = { item = "mcl_honey:honey_bottle", amount = 4, replacements = craft_replacements },
 	mvps_sticky = function(pos, node, piston_pos)
 		local connected = {}
 		for n, v in ipairs(alldirs) do
@@ -98,27 +106,6 @@ minetest.register_node("mcl_honey:honey_block", {
 })
 
 -- Crafting
-minetest.register_craft({
-	output = "mcl_honey:honeycomb_block",
-	recipe = {
-		{ "mcl_honey:honeycomb", "mcl_honey:honeycomb" },
-		{ "mcl_honey:honeycomb", "mcl_honey:honeycomb" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_honey:honey_block",
-	recipe = {
-		{ "mcl_honey:honey_bottle", "mcl_honey:honey_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_honey:honey_bottle" },
-	},
-	replacements = {
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-	},
-})
 
 minetest.register_craft({
 	output = "mcl_honey:honey_bottle 4",

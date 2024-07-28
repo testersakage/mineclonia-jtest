@@ -46,7 +46,8 @@ local melon_base_def = {
 		min_count = 3,
 		max_count = 7,
 		cap = 9,
-	}
+	},
+	_mcl_square_crafting = { item = "mcl_farming:melon_item", amount = 9 }
 }
 
 -- Drop proabilities for melon stem
@@ -145,15 +146,6 @@ minetest.register_craftitem("mcl_farming:melon_item", {
 minetest.register_craft({
 	output = "mcl_farming:melon_seeds",
 	recipe = {{"mcl_farming:melon_item"}}
-})
-
-minetest.register_craft({
-	output = "mcl_farming:melon",
-	recipe = {
-		{"mcl_farming:melon_item", "mcl_farming:melon_item", "mcl_farming:melon_item"},
-		{"mcl_farming:melon_item", "mcl_farming:melon_item", "mcl_farming:melon_item"},
-		{"mcl_farming:melon_item", "mcl_farming:melon_item", "mcl_farming:melon_item"},
-	}
 })
 
 if minetest.get_modpath("doc") then

@@ -43,6 +43,7 @@ minetest.register_node("mcl_mud:mud_bricks", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 1.5,
+	_mcl_square_crafting = { item = "mcl_mud:packed_mud", amount = 4 }
 })
 
 mcl_stairs.register_stair_and_slab("mud_brick", {
@@ -59,15 +60,5 @@ minetest.register_craft({
 	recipe = {
 		"mcl_mud:mud",
 		"mcl_farming:wheat_item",
-	}
-})
-
--- mud bricks
-minetest.register_craft({
-	type = "shaped",
-	output = "mcl_mud:mud_bricks 4",
-	recipe = {
-		{"mcl_mud:packed_mud", "mcl_mud:packed_mud"},
-		{"mcl_mud:packed_mud", "mcl_mud:packed_mud"}
 	}
 })
