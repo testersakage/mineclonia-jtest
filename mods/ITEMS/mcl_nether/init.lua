@@ -213,6 +213,7 @@ minetest.register_node("mcl_nether:red_nether_brick", table.merge(nether_brick,{
 local chiseled_nether_brick = table.copy(nether_brick)
 chiseled_nether_brick.description = S("Chiseled Nether Brick Block")
 chiseled_nether_brick.tiles = {"mcl_nether_chiseled_nether_bricks.png"}
+chiseled_nether_brick._mcl_rectangle_crafting = { item = "mcl_stairs:netherbrick_slab", width = 1, height = 2 }
 minetest.register_node("mcl_nether:chiseled_nether_brick", chiseled_nether_brick)
 
 local cracked_nether_brick = table.copy(nether_brick)
@@ -260,6 +261,7 @@ minetest.register_node("mcl_nether:quartz_chiseled", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_nether:quartz_block" },
+	_mcl_rectangle_crafting = { item = "mcl_stairs:slab_quartzblock", width = 1, height = 2 }
 })
 
 minetest.register_node("mcl_nether:quartz_pillar", {
@@ -275,7 +277,9 @@ minetest.register_node("mcl_nether:quartz_pillar", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_nether:quartz_block" },
+	_mcl_rectangle_crafting = { item = "mcl_nether:quartz_block", width = 1, height = 2, amount = 2 }
 })
+
 minetest.register_node("mcl_nether:quartz_smooth", {
 	description = S("Smooth Quartz"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
@@ -385,14 +389,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_nether:quartz_pillar 2",
-	recipe = {
-		{"mcl_nether:quartz_block"},
-		{"mcl_nether:quartz_block"},
-	}
-})
-
-minetest.register_craft({
 	output = "mcl_nether:red_nether_brick",
 	recipe = {
 		{"mcl_nether:nether_wart_item", "mcl_nether:netherbrick"},
@@ -404,14 +400,6 @@ minetest.register_craft({
 	recipe = {
 		{"mcl_nether:netherbrick", "mcl_nether:nether_wart_item"},
 		{"mcl_nether:nether_wart_item", "mcl_nether:netherbrick"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_nether:chiseled_nether_brick",
-	recipe = {
-		{"mcl_stairs:netherbrick_slab"},
-		{"mcl_stairs:netherbrick_slab"},
 	}
 })
 

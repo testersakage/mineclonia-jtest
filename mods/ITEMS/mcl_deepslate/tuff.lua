@@ -31,6 +31,7 @@ minetest.register_node("mcl_deepslate:tuff_chiseled", {
     _mcl_blast_resistance = 6,
     _mcl_hardness = 1.5,
     _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", },
+    _mcl_rectangle_crafting = { item = "mcl_stairs:slab_tuff", width = 1, height = 2 }
 })
 
 minetest.register_node("mcl_deepslate:tuff_chiseled_bricks", {
@@ -43,6 +44,7 @@ minetest.register_node("mcl_deepslate:tuff_chiseled_bricks", {
     _mcl_blast_resistance = 6,
     _mcl_hardness = 1.5,
     _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_bricks", },
+    _mcl_rectangle_crafting = { item = "mcl_stairs:slab_tuff_bricks", width = 1, height = 2 }
 })
 
 register_tuff_variant("", {
@@ -66,6 +68,7 @@ register_tuff_variant("polished", {
         _doc_items_longdesc = S("Polished tuff is a polished variant of the tuff block."),
         groups = { stonecuttable = 1 },
         _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", },
+        _mcl_rectangle_crafting = { item = "mcl_deepslate:tuff", width = 2, height = 2 }
     },
     stair = {
         description = S("Polished Tuff Stairs"),
@@ -87,6 +90,7 @@ register_tuff_variant("bricks", {
         _doc_items_longdesc = S("Tuff bricks are a brick variant of tuff."),
         groups = { stonecuttable = 1 },
         _mcl_stonecutter_recipes = { "mcl_deepslate:tuff_polished", },
+        _mcl_rectangle_crafting = { item = "mcl_deepslate:tuff_polished", width = 2, height = 2 }
     },
     stair = {
         description = S("Tuff Bricks Stairs"),
@@ -100,30 +104,4 @@ register_tuff_variant("bricks", {
         description = S("Tuff Bricks Wall"),
         _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished", },
     },
-})
-
-minetest.register_craft({
-	output = "mcl_deepslate:tuff_polished 4",
-	recipe = { { "mcl_deepslate:tuff", "mcl_deepslate:tuff" }, { "mcl_deepslate:tuff", "mcl_deepslate:tuff" } }
-})
-
-minetest.register_craft({
-	output = "mcl_deepslate:tuff_bricks 4",
-	recipe = { { "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished" }, { "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished" } }
-})
-
-minetest.register_craft({
-	output = "mcl_deepslate:tuff_chiseled",
-	recipe = {
-		{ "mcl_stairs:slab_tuff_polished" },
-		{ "mcl_stairs:slab_tuff_polished" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_deepslate:tuff_chiseled_bricks",
-	recipe = {
-		{ "mcl_stairs:slab_tuff_bricks" },
-		{ "mcl_stairs:slab_tuff_bricks" },
-	},
 })

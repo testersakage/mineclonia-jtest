@@ -166,14 +166,7 @@ register_deepslate_variant("chiseled", {
 	node = {
 		description = S("Chiseled Deepslate"),
 		_doc_items_longdesc = S("Deepslate tiles are a decorative variant of deepslate."),
-		_mcl_stonecutter_recipes = { "mcl_deepslate:deepslate_cobbled", }
+		_mcl_stonecutter_recipes = { "mcl_deepslate:deepslate_cobbled" },
+		_mcl_rectangle_crafting = { item = "mcl_stairs:slab_deepslate_cobbled", width = 1, height = 2 }
 	}
-})
-
-minetest.register_craft({
-	output = "mcl_deepslate:deepslate_chiseled",
-	recipe = {
-		{ "mcl_stairs:slab_deepslate_cobbled" },
-		{ "mcl_stairs:slab_deepslate_cobbled" },
-	},
 })

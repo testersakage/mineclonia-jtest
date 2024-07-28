@@ -56,6 +56,7 @@ minetest.register_node("mcl_end:purpur_pillar", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_rectangle_crafting = { item = "mcl_stairs:slab_purpur_block", width = 1, height = 2 }
 })
 
 minetest.register_node("mcl_end:end_rod", {

@@ -243,6 +243,7 @@ minetest.register_node("mcl_core:stonebrickcarved", {
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = { "mcl_core:stone", "mcl_core:stonebrick" },
+	_mcl_rectangle_crafting = { item = "mcl_stairs:slab_stonebrick", width = 1, height = 2 }
 })
 
 minetest.register_node("mcl_core:stonebrickcracked", {
@@ -584,6 +585,7 @@ minetest.register_node("mcl_core:sandstonecarved", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:sandstone" },
+	_mcl_rectangle_crafting = { item = "mcl_stairs:slab_sandstone", width = 1, height = 2 }
 })
 
 minetest.register_node("mcl_core:sandstonesmooth2", {
@@ -647,6 +649,7 @@ minetest.register_node("mcl_core:redsandstonecarved", {
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
+	_mcl_rectangle_crafting = { item = "mcl_stairs:slab_redsandstone", width = 1, height = 2 }
 })
 
 minetest.register_node("mcl_core:redsandstonesmooth2", {
