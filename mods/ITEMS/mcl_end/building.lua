@@ -29,6 +29,7 @@ minetest.register_node("mcl_end:end_bricks", {
 	_mcl_blast_resistance = 9,
 	_mcl_hardness = 3,
 	_mcl_stonecutter_recipes = {"mcl_end:end_stone"},
+	_mcl_square_crafting = { item = "mcl_end:end_stone", amount = 4 }
 })
 
 minetest.register_node("mcl_end:purpur_block", {
@@ -198,14 +199,6 @@ mcl_stairs.register_stair_and_slab("purpur_block", {
 })
 
 -- Crafting recipes
-minetest.register_craft({
-	output = "mcl_end:end_bricks 4",
-	recipe = {
-		{"mcl_end:end_stone", "mcl_end:end_stone"},
-		{"mcl_end:end_stone", "mcl_end:end_stone"},
-	}
-})
-
 minetest.register_craft({
 	output = "mcl_end:end_rod 4",
 	recipe = {

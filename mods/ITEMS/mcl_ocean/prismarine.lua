@@ -40,6 +40,7 @@ minetest.register_node("mcl_ocean:prismarine", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_square_crafting = { item = "mcl_ocean:prismarine_shard", amount = 4 }
 })
 
 minetest.register_node("mcl_ocean:prismarine_brick", {
@@ -51,6 +52,7 @@ minetest.register_node("mcl_ocean:prismarine_brick", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 1.5,
 	_mcl_hardness = 1.5,
+	_mcl_square_crafting = { item = "mcl_ocean:prismarine_shard", amount = 9 }
 })
 
 minetest.register_node("mcl_ocean:prismarine_dark", {
@@ -107,23 +109,6 @@ minetest.register_craft({
 		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_shard"},
 		{"mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_crystals"},
 		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_shard"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_ocean:prismarine",
-	recipe = {
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_ocean:prismarine_brick",
-	recipe = {
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
 	}
 })
 
