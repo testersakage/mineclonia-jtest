@@ -216,22 +216,7 @@ minetest.register_node("mesecons_torch:redstoneblock", {
 	}},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-})
-
-minetest.register_craft({
-	output = "mesecons_torch:redstoneblock",
-	recipe = {
-		{"mesecons:wire_00000000_off","mesecons:wire_00000000_off","mesecons:wire_00000000_off"},
-		{"mesecons:wire_00000000_off","mesecons:wire_00000000_off","mesecons:wire_00000000_off"},
-		{"mesecons:wire_00000000_off","mesecons:wire_00000000_off","mesecons:wire_00000000_off"},
-	}
-})
-
-minetest.register_craft({
-	output = "mesecons:wire_00000000_off 9",
-	recipe = {
-		{"mesecons_torch:redstoneblock"},
-	}
+	_mcl_rectangle_crafting = { item = "mesecons:redstone", width = 3, height = 3, reversible = true }
 })
 
 if minetest.get_modpath("doc") then

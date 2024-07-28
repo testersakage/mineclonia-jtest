@@ -27,7 +27,7 @@ mcl_doors:register_trapdoor("mcl_doors:iron_trapdoor", {
 	groups = {pickaxey=1, mesecon_effector_on=1},
 	_mcl_hardness = 5,
 	_mcl_blast_resistance = 5,
-	_mcl_rectangle_crafting = { item = "mcl_core:iron_ingot", width = 2, height = 2, amount = 2 },
+	_mcl_rectangle_crafting = { item = "mcl_core:iron_ingot", width = 2, height = 2 },
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	sound_open = "doors_steel_door_open",
 	sound_close = "doors_steel_door_close",
