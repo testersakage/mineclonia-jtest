@@ -180,6 +180,12 @@ local function set_placed_leaves_p2(pos)
 	minetest.swap_node(pos,n)
 end
 
+-- exposed for backwards compatibility with mods using 'mcl_core.update_leaves'
+function mcl_trees.update_leaves(pos)
+	update_far_away_leaves(pos)
+	update_leaves(pos, 0)
+end
+
 local tpl_log = {
 	_doc_items_hidden = false,
 	paramtype2 = "facedir",

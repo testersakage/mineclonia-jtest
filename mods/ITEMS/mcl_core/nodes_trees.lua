@@ -174,3 +174,9 @@ mcl_trees.register_wood("birch",{
 		_after_grow=mcl_trees.sapling_add_bee_nest,
 	},
 })
+
+-- Some mods use this function as tree/log on_destruct to get leaf decay. So
+-- this is provided for backwards compatibility.
+function mcl_core.update_leaves(pos, oldnode)
+	mcl_trees.update_leaves(pos)
+end
