@@ -59,6 +59,7 @@ local rod_def = {
 	end,
 
 	_mcl_blast_resistance = 0,
+	_mcl_rectangle_crafting = { item = "mcl_copper:copper_ingot", width = 1, height = 3 }
 }
 
 minetest.register_node("mcl_lightning_rods:rod", rod_def)
@@ -75,6 +76,8 @@ rod_def_a.mesecons = {
 		rules = mesecon.rules.alldirs,
 	},
 }
+
+rod_def_a._mcl_rectangle_crafting = nil
 
 rod_def_a.on_timer = function(pos, elapsed)
 	local node = minetest.get_node(pos)
@@ -106,12 +109,3 @@ mcl_lightning.register_on_strike(function(pos, pos2, objects)
 
 	return lr, nil
 end)
-
-minetest.register_craft({
-	output = "mcl_lightning_rods:rod",
-	recipe = {
-		{ "", "mcl_copper:copper_ingot", "" },
-		{ "", "mcl_copper:copper_ingot", "" },
-		{ "", "mcl_copper:copper_ingot", "" },
-	},
-})
