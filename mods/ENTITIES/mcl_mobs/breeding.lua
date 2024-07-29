@@ -237,6 +237,26 @@ function mob_class:check_breeding()
 	end
 end
 
+function mob_class:stay()
+	self.order = "sit"
+	self:set_state("stand")
+	self.walk_chance = 0
+	self.jump = false
+	if self.animation.sit_start then
+		self:set_animation("sit")
+	else
+		self:set_animation("stand")
+	end
+end
+
+function mob_class:roam()
+	self.order = "roam"
+	self:set_state("stand")
+	self.walk_chance = 50
+	self.jump = true
+	self:set_animation("stand")
+end
+
 function mob_class:toggle_sit(clicker,p)
 	if not self.tamed or self.child  or self.owner ~= clicker:get_player_name() then
 		return
@@ -245,22 +265,10 @@ function mob_class:toggle_sit(clicker,p)
 	local particle
 	if not self.order or self.order == "" or self.order == "sit" then
 		particle = "mobs_mc_wolf_icon_roam.png"
-		self.order = "roam"
-		self:set_state("stand")
-		self.walk_chance = 50
-		self.jump = true
-		self:set_animation("stand")
+		self:roam()
 	else
 		particle = "mobs_mc_wolf_icon_sit.png"
-		self.order = "sit"
-		self:set_state("stand")
-		self.walk_chance = 0
-		self.jump = false
-		if self.animation.sit_start then
-			self:set_animation("sit")
-		else
-			self:set_animation("stand")
-		end
+		self:stay()
 	end
 	local pp = vector.new(0,1.4,0)
 	if p then pp = vector.offset(pp,0,p,0) end
