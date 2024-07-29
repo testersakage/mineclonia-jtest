@@ -285,6 +285,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if (not fields.submit and not fields.key_enter) or (not fields.commands) then
 			return
 		end
+		fields.commands = fields.commands:sub(1, 65536)
 
 		local privs = minetest.get_player_privs(player:get_player_name())
 		if not privs.maphack then
