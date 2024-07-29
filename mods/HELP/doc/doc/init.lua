@@ -1,14 +1,5 @@
 local S = minetest.get_translator("doc")
 local F = function(f) return minetest.formspec_escape(S(f)) end
-
--- Compability for 0.4.14 or earlier
-local colorize
-if minetest.colorize then
-	colorize = minetest.colorize
-else
-	colorize = function(_, text) return text end
-end
-
 doc = {}
 
 -- Some informational variables
@@ -726,7 +717,7 @@ function doc.formspec_error_no_categories()
 	local formstring = "size[8,6]textarea[0.25,0;8,6;;"
 	formstring = formstring ..
 	minetest.formspec_escape(
-		colorize(COLOR_ERROR, S("Error: No help available.")) .. "\n\n" ..
+		minetest.colorize(COLOR_ERROR, S("Error: No help available.")) .. "\n\n" ..
 S("No categories have been registered, but they are required to provide help.").."\n"..
 S("The Documentation System [doc] does not come with help contents on its own, it needs additional mods to add help content. Please make sure such mods are enabled on for this world, and try again.")) .. "\n\n" ..
 S("Recommended mods: doc_basics, doc_items, doc_identifier, doc_encyclopedia.")
@@ -737,7 +728,7 @@ end
 function doc.formspec_error_hidden(_, _)
 	local formstring = "size[8,6]textarea[0.25,0;8,6;;"
 	formstring = formstring .. minetest.formspec_escape(
-	colorize(COLOR_ERROR, S("Error: Access denied.")) .. "\n\n" ..
+	minetest.colorize(COLOR_ERROR, S("Error: Access denied.")) .. "\n\n" ..
 	S("Access to the requested entry has been denied; this entry is secret. You may unlock access by progressing in the game. Figure out on your own how to unlock this entry."))
 	formstring = formstring .. ";]button_exit[3,5;2,1;okay;"..F("OK").."]"
 	return formstring
@@ -875,10 +866,10 @@ function doc.formspec_category(id, playername)
 				local new = total - viewed - hidden
 				-- TODO/FIXME: Check if number of hidden/viewed entries is always correct
 				if viewed < total then
-					formstring = formstring .. colorize(COLOR_NOT_VIEWED, minetest.formspec_escape(S("New entries: @1", new)))
+					formstring = formstring .. minetest.colorize(COLOR_NOT_VIEWED, minetest.formspec_escape(S("New entries: @1", new)))
 					if hidden > 0 then
 						formstring = formstring .. "\n"
-						formstring = formstring .. colorize(COLOR_HIDDEN, minetest.formspec_escape(S("Hidden entries: @1", hidden))).."]"
+						formstring = formstring .. minetest.colorize(COLOR_HIDDEN, minetest.formspec_escape(S("Hidden entries: @1", hidden))).."]"
 					else
 						formstring = formstring .. "]"
 					end
