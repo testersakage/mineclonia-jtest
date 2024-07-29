@@ -247,6 +247,16 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 			new_acce.y = 0
 		end
 	elseif ni == "liquid" or ni == "lava" then
+		-- sink when touching water
+		if velo.y >= 0 then
+			velo.y = velo.y - 1.5
+		end
+		-- when float up then detach driver and let mount roam
+		local cbox = self.object:get_properties().collisionbox
+		if minetest.registered_nodes[node_ok(vector.offset(p,0,cbox[5] -0.25,0)).name].groups.water then
+			force_detach(self.driver)
+			self:roam()
+		end
 		if ni == "lava" and self.lava_damage ~= 0 then
 			self.lava_counter = (self.lava_counter or 0) + dtime
 			if self.lava_counter > 1 then
