@@ -89,7 +89,10 @@ function mcl_entity_invs.show_inv_form(ent,player,text)
 	end
 	ent._inv = mcl_entity_invs.load_inv(ent,ent._inv_size)
 	open_invs[ent] = open_invs[ent] + 1
-
+	ent._inv_open = true
+	if ent.is_mob then
+		ent:stay()
+	end
 	local playername = player:get_player_name()
 
 	minetest.show_formspec(playername, ent._inv_id, load_default_formspec (ent, text))
@@ -118,6 +121,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if open_invs[k] < 1 then
 				mcl_entity_invs.save_inv(k)
 				open_invs[k] = nil
+				k._inv_open = nil
+				if k.is_mob then
+					k:roam()
+				end
 			end
 		end
 	end
@@ -137,6 +144,7 @@ function mcl_entity_invs.register_inv(entity_name,show_name,size,no_on_righclick
 			self._inv_id = d._inv_id
 			self._items = d._items
 			self._inv_size = d._inv_size
+			self._inv_open = nil
 		else
 			self._inv_id="entity_inv_"..minetest.sha1(minetest.get_gametime()..minetest.pos_to_string(self.object:get_pos())..tostring(math.random()))
 			--gametime and position for collision safety and math.random salt to protect against position brute-force
