@@ -11,6 +11,7 @@
 	},
 	"diagnostics.globals": [
 		"minetest",
+		"core",
 		"dump",
 		"dump2",
 		"Raycast",
