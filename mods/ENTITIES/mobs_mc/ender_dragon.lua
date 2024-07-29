@@ -122,7 +122,7 @@ mcl_mobs.register_mob("mobs_mc:enderdragon", {
 		end
 		self._beam_timer = self._beam_timer + dtime
 	end,
-	on_die = function(self, pos, cmi_cause)
+	on_die = function(self, pos, _)
 		if self._portal_pos then
 			mcl_portals.spawn_gateway_portal()
 			mcl_structures.place_structure(self._portal_pos,mcl_structures.registered_structures["end_exit_portal_open"],PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
@@ -159,7 +159,7 @@ mcl_mobs.register_arrow("mobs_mc:dragon_fireball", {
 	end,
 
 	-- node hit, explode
-	hit_node = function(self, pos, node)
+	hit_node = function(self, pos, _)
 		mcl_mobs.mob_class.boom(self,pos, 2)
 	end
 })
