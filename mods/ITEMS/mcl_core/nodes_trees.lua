@@ -131,8 +131,8 @@ mcl_trees.register_wood("spruce",{
 		color = "#2bbb0f",
 	},
 	sapling = {
-		_after_grow = function(pos, schemdef)
-			if schemdef and schemdef.file and schemdef.file:find("huge") then
+		_after_grow = function(pos, _, is_2by2)
+			if is_2by2 then
 				local nn = minetest.find_nodes_in_area_under_air(vector.offset(pos,-6,-6,-6), vector.offset(pos, 6, 6, 6), {"group:dirt"})
 				table.sort(nn, function(a, b) return vector.distance(pos, a) < vector.distance(pos, b) end)
 				for i = 1, math.random(2, #nn) do
