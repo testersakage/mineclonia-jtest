@@ -1164,32 +1164,6 @@ minetest.register_on_joinplayer(function(player)
 	end
 end)
 
----[[ Add buttons for inventory mods ]]
-local button_action = function(player)
-	doc.show_doc(player:get_player_name())
-end
-
--- Unified Inventory
-if minetest.get_modpath("unified_inventory") ~= nil then
-	unified_inventory.register_button("doc", { ---@diagnostic disable-line: undefined-global
-		type = "image",
-		image = "doc_button_icon_hires.png",
-		tooltip = S("Help"),
-		action = button_action,
-	})
-end
-
--- sfinv_buttons
-if minetest.get_modpath("sfinv_buttons") ~= nil then
-	sfinv_buttons.register_button("doc", { ---@diagnostic disable-line: undefined-global
-		image = "doc_button_icon_lores.png",
-		tooltip = S("Collection of help texts"),
-		title = S("Help"),
-		action = button_action,
-	})
-end
-
-
 minetest.register_privilege("help_reveal", {
 	description = S("Allows you to reveal all hidden help entries with /help_reveal"),
 	give_to_singleplayer = false
