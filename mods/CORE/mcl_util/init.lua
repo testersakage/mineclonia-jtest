@@ -1,5 +1,4 @@
 local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
-local dev_dump_translatable_strings =  minetest.settings:get_bool("mcl_dev_dump_translatable_strings", false)
 
 mcl_util = {}
 
@@ -1439,34 +1438,17 @@ end
 --
 -- Call the wrapper with argument nil to delete the old and create the new file
 -- after mod finished loading.
+--
+if minetest.get_modpath("mcla_generate_translation_strings") then
+	mcla_generated_translations = {}
+end
 function mcl_util.get_translatable_string_dumper(translator)
-	if dev_dump_translatable_strings then
-		local filename = minetest.get_modpath(minetest.get_current_modname()) .. "/computed_translatable_strings.lua"
-		local strings = {}
+	if minetest.get_modpath("mcla_generate_translation_strings") then
 		return function(s, ...)
 			if s then
-				table.insert(strings, s)
+				mcla_generated_translations[minetest.get_current_modname()] = mcla_generated_translations[minetest.get_current_modname()] or {}
+				table.insert(mcla_generated_translations[minetest.get_current_modname()], s)
 				return translator(s, ...)
-			else
-				table.sort(strings)
-				local remove_rc, remove_error = os.remove(filename)
-				local file, open_error = io.open(filename, "w")
-				if not file then
-					error("[mcl_util.get_translatable_string_dumper] Can't (re)create " .. filename .. " because '" .. tostring(open_error) .. "'" .. (not remove_rc and (". Deletion of old file failed with '" .. remove_error .. "'")) .. ".")
-				end
-				file:write("-- AUTOMATICALLY GENERATED FILE - DO NOT EDIT\n")
-				file:write("--\n")
-				file:write("-- Note that this file is not needed at runtime and doesn't need to be included from init.lua\n")
-				file:write("--\n")
-				file:write("-- see mcl_util.get_translatable_string_dumper for details\n")
-				file:write("\nlocal function NS(s) return s end\n\n")
-
-				-- actually write the translatable strings
-				for _, str in ipairs(strings) do
-					file:write("NS(" .. dump(str) .. ")\n")
-				end
-
-				file:close()
 			end
 		end
 	else
