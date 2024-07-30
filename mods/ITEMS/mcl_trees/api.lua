@@ -127,8 +127,8 @@ local function update_leaves(pos, old_distance)
 
 	while clear_queue:size() > 0 do
 		local entry = clear_queue:dequeue()
-		local pos = entry.pos
-		local distance = entry.distance
+		local pos = entry.pos ---@diagnostic disable-line: need-check-nil
+		local distance = entry.distance ---@diagnostic disable-line: need-check-nil
 
 		for _, dir in pairs(directions) do
 			local pos2 = pos:add(dir)
@@ -149,8 +149,8 @@ local function update_leaves(pos, old_distance)
 
 	while fill_queue:size() > 0 do
 		local entry = fill_queue:dequeue()
-		local pos = entry.pos
-		local distance2 = entry.distance + 1
+		local pos = entry.pos ---@diagnostic disable-line: need-check-nil
+		local distance2 = entry.distance + 1 ---@diagnostic disable-line: need-check-nil
 
 		for _, dir in pairs(directions) do
 			local pos2 = pos:add(dir)
@@ -256,12 +256,12 @@ local tpl_sapling = {
 		local meta = minetest.get_meta(pos)
 		meta:set_int("stage", 0)
 	end,
-	on_place = mcl_util.generate_on_place_plant_function(function(pos, node)
+	on_place = mcl_util.generate_on_place_plant_function(function(pos, _)
 		local node_below = minetest.get_node_or_nil(vector.offset(pos,0,-1,0))
 		if not node_below then return false end
 		return minetest.get_item_group(node_below.name, "soil_sapling") > 1
 	end),
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+	_on_bone_meal = function(itemstack, placer, pointed_thing, pos, node) ---@diagnostic disable-line: unused-local
 		if math.random() > 0.45 then return end --sapling has a 45% chance to grow when bone mealing
 		return mcl_trees.grow_tree(pos,node)
 	end,
@@ -661,7 +661,7 @@ end)
 
 local function get_stairs_nodes()
 	local r = {}
-	for n,def in pairs(minetest.registered_nodes) do
+	for n, _ in pairs(minetest.registered_nodes) do
 		if n:find("_stair") or n:find("_slab") then
 			table.insert(r,n)
 		end
@@ -671,12 +671,12 @@ end
 
 minetest.register_on_mods_loaded(function()
 	mcl_structures.register_structure("stairs_test", {
-	place_func = function(pos,def,pr)
+	place_func = function(pos, _, _)
 		local stairs = get_stairs_nodes()
 		local s = math.ceil(math.sqrt(#stairs))
 		local x = 1
 		local y = 1
-		for i,n in pairs(stairs) do
+		for _, n in pairs(stairs) do
 			if x > s then x=1 y = y + 1 end
 			minetest.set_node(vector.offset(pos,x,y,0),{name=n})
 			x = x + 1
