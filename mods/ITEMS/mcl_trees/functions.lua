@@ -198,7 +198,7 @@ function mcl_trees.grow_tree(pos, node)
 
 		local after_grow = minetest.registered_nodes[node.name]._after_grow
 		if after_grow then
-			after_grow(pos)
+			after_grow(place_at, schem)
 		end
 	end
 end
