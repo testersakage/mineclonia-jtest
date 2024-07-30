@@ -12,17 +12,6 @@ local S = minetest.get_translator("mobs_mc")
 local walk_dist = 40
 local tele_dist = 80
 
-local function crack_overlay(self)
-	local base = "mobs_mc_iron_golem.png"
-	local o = "^[opacity:180)"
-	local t
-	if self.health >= 75 then t = base
-	elseif self.health >= 50 then t = base.."^(mobs_mc_iron_golem_crack_low.png"..o
-	elseif self.health >= 25 then t = base.."^(mobs_mc_iron_golem_crack_medium.png"..o
-	else t = base.."^(mobs_mc_iron_golem_crack_high.png"..o end
-	self.object:set_properties({textures={t}})
-end
-
 mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	description = S("Iron Golem"),
 	type = "npc",
@@ -100,7 +89,7 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	},
 	jump = false,
 	do_custom = function(self, dtime)
-		crack_overlay(self)
+		self:crack_overlay()
 		self.home_timer = (self.home_timer or 0) + dtime
 
 		if self.home_timer > 10 then
@@ -138,6 +127,16 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 
 			return
 		end
+	end,
+	crack_overlay = function(self)
+		local base = "mobs_mc_iron_golem.png"
+		local o = "^[opacity:180)"
+		local t
+		if self.health >= 75 then t = base
+		elseif self.health >= 50 then t = base.."^(mobs_mc_iron_golem_crack_low.png"..o
+		elseif self.health >= 25 then t = base.."^(mobs_mc_iron_golem_crack_medium.png"..o
+		else t = base.."^(mobs_mc_iron_golem_crack_high.png"..o end
+		self:set_properties({textures={t}})
 	end,
 })
 
