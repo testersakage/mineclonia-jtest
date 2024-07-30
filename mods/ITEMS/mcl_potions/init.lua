@@ -193,7 +193,7 @@ local function set_node_empty_bottle(itemstack, placer, pointed_thing, newitemst
 end
 
 -- used for water bottles and river water bottles
-local function dispense_water_bottle(stack, pos, droppos)
+local function dispense_water_bottle(stack, _, droppos)
 	local node = minetest.get_node(droppos)
 	if node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
 		-- convert dirt/coarse dirt to mud
@@ -369,7 +369,7 @@ local enhancement_table = {}
 local extension_table = {}
 local potions = {}
 
-for i, potion in ipairs({"healing","harming","swiftness","slowness",
+for _, potion in ipairs({"healing","harming","swiftness","slowness",
 	 "leaping","poison","regeneration","invisibility","fire_resistance",
 	 -- "weakness","strength",
 	 "water_breathing","night_vision", "withering"}) do
@@ -390,7 +390,7 @@ for i, potion in ipairs({"healing","harming","swiftness","slowness",
 
 end
 
-for i, potion in ipairs({"awkward", "mundane", "thick", "water"}) do
+for _, potion in ipairs({"awkward", "mundane", "thick", "water"}) do
 	table.insert(potions, potion)
 end
 
@@ -422,7 +422,7 @@ local inversion_table = {
 local splash_table = {}
 local lingering_table = {}
 
-for i, potion in ipairs(potions) do
+for _, potion in ipairs(potions) do
 	splash_table["mcl_potions:"..potion] = "mcl_potions:"..potion.."_splash"
 	lingering_table["mcl_potions:"..potion.."_splash"] = "mcl_potions:"..potion.."_lingering"
 end
