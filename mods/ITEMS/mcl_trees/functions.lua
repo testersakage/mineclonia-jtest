@@ -146,7 +146,7 @@ function mcl_trees.grow_tree(pos, node)
 
 	local schem, can_grow, tbt, ne
 	local place_at = pos
-
+	local is_2by2 = false
 	if mcl_trees.woods[name].tree_schems_2x2  then
 		tbt, ne = check_2by2_saps(pos, node)
 		if tbt then
@@ -154,6 +154,7 @@ function mcl_trees.grow_tree(pos, node)
 			schem = mcl_trees.woods[name].tree_schems_2x2[1]
 			can_grow = check_schem_growth(ne, schem.file, true)
 			place_at = ne
+			is_2by2 = true
 		end
 	end
 
@@ -198,7 +199,7 @@ function mcl_trees.grow_tree(pos, node)
 
 		local after_grow = minetest.registered_nodes[node.name]._after_grow
 		if after_grow then
-			after_grow(place_at, schem)
+			after_grow(place_at, schem, is_2by2)
 		end
 	end
 end
