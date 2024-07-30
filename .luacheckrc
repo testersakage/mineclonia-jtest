@@ -201,6 +201,7 @@ globals = {
 	"mcl_villages",
 	"AreaStore",
 	"vector",
+	"mcla_generated_translations",
 }
 
 read_globals = {

@@ -1347,6 +1347,41 @@ function mcl_util.detach_object(obj, change_pos, callback)
 	end
 end
 
+-- Create a translator that supports dynamic generation of translatable strings.
+--
+-- The function returned by `get_dynamic_translator` can be used just like the
+-- standard translator created by `minetest.get_translator`. The recommended
+-- name is `D`, but - in contrast to the standard translator - the name used in
+-- the source files is not important.
+--
+-- While the standard translation tools extract string constants from the source
+-- files themselves, the extended translation workflow records all values passed
+-- to the dynamic translator *during mod load time*.
+--
+-- The extended workflow includes the standard tooling and both can be used
+-- together in the same mod. If a textdomain is not specified when creating the
+-- dynamic translator, `minetest.get_current_modname()` is used as the
+-- textdomain for that particular invocation. So API mods using this mechanism
+-- can create translatable strings in the textdomain of their calling mods.
+if minetest.get_modpath("mcla_generate_translation_strings") then
+	mcla_generated_translations = {}
+	function mcl_util.get_dynamic_translator(textdomain)
+		return function(s, ...)
+			local mod = textdomain or minetest.get_current_modname()
+			mcla_generated_translations[mod] = mcla_generated_translations[mod] or {}
+			table.insert(mcla_generated_translations[mod], s)
+			return minetest.translate(mod, s, ...)
+		end
+	end
+else
+	function mcl_util.get_dynamic_translator(textdomain)
+		return function(s, ...)
+			local mod = textdomain or minetest.get_current_modname()
+			return minetest.translate(mod, s, ...)
+		end
+	end
+end
+
 function mcl_util.float_random(from, to)
 	to = to or 1
 	return from + ( math.random() * ( to - from ))
