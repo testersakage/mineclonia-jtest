@@ -173,7 +173,7 @@ local function set_layers(data, area, content_id, check, min, max, minp, maxp, l
 end
 
 -- Below the bedrock, generate air/void
-local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, blockseed)
+local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, blockseed) ---@diagnostic disable-line: unused-local
 	local lvm_used = false
 	local pr = PseudoRandom(blockseed)
 
@@ -217,11 +217,11 @@ local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, bl
 	local deco = false
 	local ores = false
 	if minp.y >  mcl_vars.mg_nether_deco_max - 64 and maxp.y <  mcl_vars.mg_nether_max + 128 then
-		deco = {min=mcl_vars.mg_nether_deco_max,max=mcl_vars.mg_nether_max}
+		deco = {min=mcl_vars.mg_nether_deco_max,max=mcl_vars.mg_nether_max} ---@diagnostic disable-line: cast-local-type
 	end
 	if minp.y <  mcl_vars.mg_nether_min + 10 or maxp.y <  mcl_vars.mg_nether_min + 60 then
-		deco = {min=mcl_vars.mg_nether_min - 10,max=mcl_vars.mg_nether_min + 20}
-		ores = {min=mcl_vars.mg_nether_min - 10,max=mcl_vars.mg_nether_min + 20}
+		deco = {min=mcl_vars.mg_nether_min - 10,max=mcl_vars.mg_nether_min + 20} ---@diagnostic disable-line: cast-local-type
+		ores = {min=mcl_vars.mg_nether_min - 10,max=mcl_vars.mg_nether_min + 20} ---@diagnostic disable-line: cast-local-type
 	end
 	return lvm_used, lvm_used, deco, ores
 end
@@ -231,7 +231,7 @@ local biome_id_p2 = {}
 local biomecolor_nodes = {}
 
 minetest.register_on_mods_loaded(function()
-	for n, d in pairs(minetest.registered_nodes) do
+	for n, _ in pairs(minetest.registered_nodes) do
 		if minetest.get_item_group(n, "biomecolor") > 0 then
 			table.insert(biomecolor_nodes, n)
 		end
@@ -241,7 +241,7 @@ minetest.register_on_mods_loaded(function()
 	end
 end)
 
-local function set_param2_nodes(vm, data, data2, emin, emax, area, minp, maxp, blockseed)
+local function set_param2_nodes(vm, data, data2, emin, emax, area, minp, maxp, blockseed) ---@diagnostic disable-line: unused-local
 	if emin.y > mcl_vars.mg_overworld_max or emax.y < mcl_vars.mg_overworld_min then return end
 	local biomemap = minetest.get_mapgen_object("biomemap")
 	if not biomemap then return end
@@ -261,12 +261,12 @@ end
 
 
 -- End block fixes:
-local function end_basic(vm, data, data2, emin, emax, area, minp, maxp, blockseed)
+local function end_basic(vm, data, data2, emin, emax, area, minp, maxp, blockseed) ---@diagnostic disable-line: unused-local
 	if maxp.y < mcl_vars.mg_end_min or minp.y > mcl_vars.mg_end_max then return end
 	for z = minp.z, maxp.z do
 	for y = minp.y, maxp.y do
 		local vi = area:index(minp.x, y, z)
-		for x = minp.x, maxp.x do
+		for _ = minp.x, maxp.x do
 			if data[vi] == c_water then
 				data[vi] = c_air
 			end
