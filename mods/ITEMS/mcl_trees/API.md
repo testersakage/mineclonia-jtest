@@ -73,6 +73,7 @@ All features can be disabled by setting them to false, nil will assume default v
 	saplingdrop = "itemstring",                -- custom itemstring to drop instead of the API sapling
 	planks = {},                               -- overrides for the planks node definition
 	sapling = {},                              -- overrides for the sapling node definition
+		-- special field: _after_grow = function(pos, schematic_def), this is called when a sapling of this type grows.
 	potted_sapling = {},                       -- mcl_flowerpot definition or empty/nil for defaults
 	fence = {},                                -- overrides for the fence node definition
 	fence_gate = {},                           -- overrides for the fence gate node definition
