@@ -13,7 +13,7 @@ local walk_dist = 40
 local tele_dist = 80
 
 local function crack_overlay(self)
-	local base = self.object:get_properties().textures[1]
+	local base = "mobs_mc_iron_golem.png"
 	local o = "^[opacity:180)"
 	local t
 	if self.health >= 75 then t = base
@@ -118,6 +118,23 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 					end)
 				end
 			end
+		end
+	end,
+	on_rightclick = function(self, clicker)
+		if not clicker or not clicker:is_player() then
+			return
+		end
+
+		local item = clicker:get_wielded_item()
+				
+		if item:get_name() == "mcl_core:iron_ingot" then
+			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+				item:take_item()
+				clicker:set_wielded_item(item)
+			end
+			if self.health <= 75 then self.health = self.health + 25
+			else self.health = 100 end
+			return
 		end
 	end,
 })
