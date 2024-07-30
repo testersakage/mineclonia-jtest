@@ -45,7 +45,7 @@ local function particles(pointed_thing, texture)
 	})
 end
 
-local function unpreserve(itemstack, clicker, pointed_thing)
+local function unpreserve(itemstack, _, pointed_thing)
 	local node = minetest.get_node(pointed_thing.under)
 	local unpreserved = node.name:gsub("_preserved","")
 	if minetest.registered_nodes[unpreserved] then
@@ -55,7 +55,7 @@ local function unpreserve(itemstack, clicker, pointed_thing)
 	return itemstack
 end
 
-local function undecay(itemstack, clicker, pointed_thing)
+local function undecay(itemstack, _, pointed_thing)
 	local node = minetest.get_node(pointed_thing.under)
 	node.name = mcl_copper.get_undecayed(node.name)
 	minetest.swap_node(pointed_thing.under,node)
@@ -75,7 +75,7 @@ local function register_unpreserve(nodename,od,def)
 	-- Update appropriate stonecutter recipes for the preserved variant
 	if nd._mcl_stonecutter_recipes then
 		local new_recipes = {}
-		for k,v in pairs(nd._mcl_stonecutter_recipes) do
+		for _, v in pairs(nd._mcl_stonecutter_recipes) do
 			table.insert(new_recipes, v.."_preserved")
 		end
 		nd._mcl_stonecutter_recipes = new_recipes
