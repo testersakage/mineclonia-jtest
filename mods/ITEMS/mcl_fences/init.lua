@@ -42,7 +42,7 @@ local function play_sound(pos, node, state)
 	minetest.sound_play(spec, { gain = gain, max_hear_distance = 16, pos = pos }, true)
 end
 
-local function punch_gate(pos, node, clicker)
+local function punch_gate(pos, node)
 	local meta = minetest.get_meta(pos)
 	local state = meta:get_int("state")
 
