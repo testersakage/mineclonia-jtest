@@ -4,7 +4,7 @@ local allow_nav_hacks = minetest.settings:get_bool("mcl_mob_allow_nav_hacks",fal
 local work_dist = 4
 local gather_distance = 10
 
-local VIL_DIST = 96
+local VIL_DIST = 48
 local RESETTLE_DISTANCE = VIL_DIST * 2 -- If a mob is transported this far from home, it gives up bed and job and resettles
 
 local S = minetest.get_translator(modname)
@@ -771,7 +771,7 @@ function mobs_mc.villager_mob:do_activity(dtime)
 		self.order = nil
 	end
 
-	if self:check_timer("activity_check", 1) then
+	if self:check_timer("activity_check", 13) then
 		-- Only check in day or during thunderstorm but wandered_too_far code won't work
 		local wandered_too_far = false
 		if self:check_bed() then
