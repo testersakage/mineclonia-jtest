@@ -317,7 +317,7 @@ mcl_fences.register_fence_def("nether_brick_fence", {
 	description = S("Nether Brick Fence"),
 	tiles = { "mcl_fences_fence_nether_brick.png" },
 	groups = { pickaxey = 1, fence_nether_brick = 1 },
-	connects_to = { "group:fence_nether_brick" },
+	connects_to = { "group:fence_nether_brick", "group:solid" },
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 2,
