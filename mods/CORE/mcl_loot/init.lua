@@ -44,7 +44,7 @@ function mcl_loot.get_loot(loot_definitions, pr)
 	--local stacks_max = loot_definitions.stacks_max or 1
 
 	local stacks = pr:next(loot_definitions.stacks_min, loot_definitions.stacks_max)
-	for s=1, stacks do
+	for _ = 1, stacks do
 		local r = pr:next(1, total_weight)
 
 		local accumulated_weight = 0

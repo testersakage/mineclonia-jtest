@@ -186,7 +186,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 			local rdir_z = raydirs[i].z
 			local rstr = (0.7 + math.random() * 0.6) * strength
 
-			for r = 0, math.ceil(radius * (1.0 / STEP_LENGTH)) do
+			for _ = 0, math.ceil(radius * (1.0 / STEP_LENGTH)) do
 				local npos_x = math.floor(rpos_x + 0.5)
 				local npos_y = math.floor(rpos_y + 0.5)
 				local npos_z = math.floor(rpos_z + 0.5)
@@ -254,7 +254,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 				-- Count number of rays from collision box which are unobstructed
 				local count = N_EXPOSURE_RAYS
 
-				for i = 1, N_EXPOSURE_RAYS do
+				for _ = 1, N_EXPOSURE_RAYS do
 					local rpos_x = opos.x + math.random() * x_len - x_len / 2
 					local rpos_y = opos.y + math.random() * y_len - y_len / 2
 					local rpos_z = opos.z + math.random() * z_len - z_len / 2
@@ -266,7 +266,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 					rdir_y = rdir_y / rdir_len
 					rdir_z = rdir_z / rdir_len
 
-					for i = 0, rdir_len / STEP_LENGTH do
+					for _ = 0, rdir_len / STEP_LENGTH do
 						rpos_x = rpos_x + rdir_x * STEP_LENGTH
 						rpos_y = rpos_y + rdir_y * STEP_LENGTH
 						rpos_z = rpos_z + rdir_z * STEP_LENGTH
