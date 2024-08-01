@@ -99,7 +99,7 @@ local function convert_mtg_groups(nname)
 	return groups, hardness
 end
 
-for nname, ndef in pairs(minetest.registered_nodes) do
+for nname, _ in pairs(minetest.registered_nodes) do
 	local newgroups, newhardness = convert_mtg_groups(nname)
 
 	minetest.override_item(nname, {
@@ -180,7 +180,7 @@ local function get_digtimes(group, can_harvest, speed, efficiency)
 
 	local digtimes = {}
 
-	for index, hardness in pairs(hardness_values[group]) do
+	for _, hardness in pairs(hardness_values[group]) do
 		local digtime = (hardness or 0) / speed
 		if can_harvest then
 			digtime = digtime * 1.5

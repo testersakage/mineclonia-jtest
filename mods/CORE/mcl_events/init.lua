@@ -11,12 +11,12 @@ local event_tpl = {
 	percent = 100,
 	bars = {},
 	completed = false,
-	cond_start = function(event) end, --return table of positions
-	on_step = function(event) end,
-	on_start = function(event) end,
-	on_stage_begin = function(event) end,
-	cond_progress = function(event) end, --return next stage
-	cond_complete = function(event) end, --return success
+	cond_start = function() end, --return table of positions
+	on_step = function() end,
+	on_start = function() end,
+	on_stage_begin = function() end,
+	cond_progress = function() end, --return next stage
+	cond_complete = function() end, --return success
 }
 
 function mcl_events.register_event(name,def)
@@ -119,7 +119,7 @@ minetest.register_globalstep(check_events)
 
 mcl_info.register_debug_field("Active Events",{
 	level = 4,
-	func = function(pl,pos)
+	func = function()
 		return tostring(#active_events)
 	end
 })

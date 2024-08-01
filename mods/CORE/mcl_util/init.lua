@@ -95,7 +95,7 @@ This function is a simplified version of minetest.rotate_and_place.
 The Minetest function is seen as inappropriate because this includes mirror
 images of possible orientations, causing problems with pillar shadings.
 ]]
-function mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing, infinitestacks, invert_wall)
+function mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing, infinitestacks, _)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc then return rc end
 
