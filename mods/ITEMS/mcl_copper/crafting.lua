@@ -152,6 +152,23 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craft({
+	output = "mcl_copper:door 3",
+	recipe = {
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:trapdoor 2",
+	recipe = {
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" }
+	}
+})
+
 local waxable_blocks = { "block", "block_cut", "block_exposed", "block_exposed_cut", "block_weathered", "block_weathered_cut", "block_oxidized", "block_oxidized_cut" }
 
 for _, w in ipairs(waxable_blocks) do
