@@ -294,6 +294,7 @@ end
 mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blockseed)
 	local gennotify = minetest.get_mapgen_object("gennotify")
 	local has = false
+	local block_pr = PcgRandom(blockseed + 42)
 	for _,struct in pairs(mcl_structures.registered_structures) do
 		if struct.deco_id then
 			for _, pos in pairs(gennotify["decoration#"..struct.deco_id] or {}) do
