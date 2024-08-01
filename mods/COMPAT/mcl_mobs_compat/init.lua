@@ -1,18 +1,14 @@
 -- No-op in MCL2 (capturing mobs is not possible).
 -- Provided for compability with Mobs Redo
-function mcl_mobs.capture_mob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
-	return false
-end
+function mcl_mobs.capture_mob() return false end
 
 -- No-op in MCL2 (protecting mobs is not possible).
-function mcl_mobs.protect(self, clicker)
-	return false
-end
+function mcl_mobs.protect() return false end
 
 -- this is to make the register_mob and register egg functions commonly used by mods not break
 -- when they use the weird old : notation AND self as first argument
 local oldregmob = mcl_mobs.register_mob
-function mcl_mobs.register_mob(self,name,def)
+function mcl_mobs.register_mob(self,name,def) ---@diagnostic disable-line: duplicate-set-field
 	if type(self) == "string" then
 		def = name
 		name = self
@@ -20,7 +16,7 @@ function mcl_mobs.register_mob(self,name,def)
 	return oldregmob(name,def)
 end
 local oldregegg = mcl_mobs.register_egg
-function mcl_mobs.register_egg(self, mob, desc, background_color, overlay_color, addegg, no_creative)
+function mcl_mobs.register_egg(self, mob, desc, background_color, overlay_color, addegg, no_creative) ---@diagnostic disable-line: duplicate-set-field
 	if type(self) == "string" then
 		no_creative = addegg
 		addegg = overlay_color
@@ -33,7 +29,7 @@ function mcl_mobs.register_egg(self, mob, desc, background_color, overlay_color,
 end
 
 local oldregarrow = mcl_mobs.register_mob
-function mcl_mobs.register_mob(self,name,def)
+function mcl_mobs.register_arrow(self,name,def) ---@diagnostic disable-line: duplicate-set-field
 	if type(self) == "string" then
 		def = name
 		name = self
@@ -41,7 +37,7 @@ function mcl_mobs.register_mob(self,name,def)
 	return oldregarrow(name,def)
 end
 
-function mcl_mobs.spawn_specific(name, dimension, type_of_spawning, biomes, min_light, max_light, interval, chance, aoc, min_height, max_height, day_toggle, on_spawn)
+function mcl_mobs.spawn_specific(name, dimension, type_of_spawning, biomes, min_light, max_light, _, chance, aoc, min_height, max_height, day_toggle, on_spawn)
 	mcl_mobs.spawn_setup({
 		name             = name,
 		dimension        = dimension,
