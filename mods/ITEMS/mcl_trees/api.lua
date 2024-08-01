@@ -384,7 +384,7 @@ function mcl_trees.register_wood(name, p)
 	if p.tree == nil or type(p.tree) == "table" then
 		local def = table.merge(tpl_log,{
 			tiles = { minetest.get_current_modname().."_log_"..name.."_top.png",  "mcl_core_log_"..name.."_top.png", "mcl_core_log_"..name..".png"},
-			_mcl_stripped_variant = "mcl_trees:stripped_"..name,
+			_mcl_stripped_variant = (p.stripped == nil or type(p.stripped) == "table") and "mcl_trees:stripped_"..name,
 		},p.tree or {})
 		def.description = def.description or D(rname .. " Log")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The trunk of a " .. rname .. " tree.")
@@ -411,7 +411,7 @@ function mcl_trees.register_wood(name, p)
 			_doc_items_longdesc = S("This is a decorative block surrounded by the bark of a tree trunk."),
 			tiles = p.tree and p.tree.tiles and {p.tree.tiles[3]} or { minetest.get_current_modname().."_log_"..name..".png"},
 			is_ground_content = false,
-			_mcl_stripped_variant = "mcl_trees:bark_stripped_"..name,
+			_mcl_stripped_variant = (p.stripped_bark == nil or type(p.stripped_bark) == "table") and "mcl_trees:bark_stripped_"..name,
 		}, p.bark or {})
 		def.description = def.description or D(rname .. " Bark")
 		minetest.register_node(":mcl_trees:bark_"..name,def)
