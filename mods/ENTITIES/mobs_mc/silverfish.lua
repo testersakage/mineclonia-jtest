@@ -4,7 +4,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 
-local function check_light(pos, environmental_light, artificial_light, sky_light)
+local function check_light(_, _, artificial_light, _)
 	if artificial_light > 11 then
 		return false, "To bright"
 	end

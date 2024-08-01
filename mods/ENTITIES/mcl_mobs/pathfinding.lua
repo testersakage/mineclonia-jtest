@@ -209,7 +209,7 @@ function mob_class:do_pathfind_action(action)
 	end
 end
 
-function mob_class:check_gowp(dtime)
+function mob_class:check_gowp()
 	local p = self.object:get_pos()
 	-- no destination
 	if not p or not self._target then

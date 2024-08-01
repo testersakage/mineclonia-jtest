@@ -84,7 +84,7 @@ local creeper_defs = {
 			end
 		end
 	end,
-	on_die = function(self, pos, cmi_cause)
+	on_die = function(_, pos, cmi_cause)
 		-- Drop a random music disc when killed by skeleton or stray
 		if cmi_cause and cmi_cause.type == "punch" then
 			local luaentity = cmi_cause.puncher and cmi_cause.puncher:get_luaentity()
@@ -137,7 +137,7 @@ mcl_mobs.register_mob("mobs_mc:creeper_charged", table.merge(creeper_defs, {
 	explosion_damage_radius = 8,
 	explosion_timer = 1.5,
 
-	on_lightning_strike = function(self, pos, pos2, objects)
+	on_lightning_strike = function(self)
 		 mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
 		 return true
 	end,

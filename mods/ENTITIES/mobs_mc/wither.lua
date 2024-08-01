@@ -383,7 +383,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 		end
 	end,
 
-	do_punch = function(self, hitter, tflp, tool_capabilities, dir)
+	do_punch = function(self, hitter, tflp, tool_capabilities, dir) ---@diagnostic disable-line: unused-local
 		if self._spawning or hitter == self.object then return false end
 		local ent = hitter:get_luaentity()
 		if ent and self._arrow_resistant and ent._is_arrow then return false end
@@ -435,7 +435,7 @@ mcl_mobs.register_arrow("mobs_mc:wither_skull", {
 	velocity = 7,
 	rotate = 90,
 	_lifetime = 350,
-	on_punch = function(self) end,
+	on_punch = function() end,
 
 	-- direct hit
 	hit_player = function(self, player)
@@ -463,7 +463,7 @@ mcl_mobs.register_arrow("mobs_mc:wither_skull", {
 	end,
 
 	-- node hit, explode
-	hit_node = function(self, pos, node)
+	hit_node = function(self, pos)
 		mcl_mobs.mob_class.boom(self,pos, 1, false, true)
 	end
 })
@@ -482,7 +482,7 @@ mcl_mobs.register_arrow("mobs_mc:wither_skull_strong", {
 	velocity = 4,
 	rotate = 90,
 	_lifetime = 500,
-	on_punch = function(self) end,
+	on_punch = function() end,
 
 	-- direct hit
 	hit_player = function(self, player)
@@ -514,7 +514,7 @@ mcl_mobs.register_arrow("mobs_mc:wither_skull_strong", {
 	end,
 
 	-- node hit, explode
-	hit_node = function(self, pos, node)
+	hit_node = function(self, pos)
 		if mobs_griefing and not minetest.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, { drop_chance = 1.0, max_blast_resistance = 0, }, self.object)
 		else

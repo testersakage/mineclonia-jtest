@@ -68,7 +68,7 @@ local los_switcher = false
 local height_switcher = false
 
 -- path finding and smart mob routine by rnd, line_of_sight and other edits by Elkien3
-function mob_class:smart_mobs(s, p, dist, dtime)
+function mob_class:smart_mobs(s, _, _, dtime)
 
 	local stepheight = self.object:get_properties().stepheight
 	local s1 = self.path.lastpos
@@ -598,7 +598,7 @@ function mob_class:call_group_attack(hitter)
 	end
 end
 
-function mob_class:check_aggro(dtime)
+function mob_class:check_aggro()
 	if not self.aggro or not self.attack then return end
 	if not self:check_timer("check_aggro", 5) then return end
 	if not self.attack:get_pos() or vector.distance(self.attack:get_pos(),self.object:get_pos()) > 128 then

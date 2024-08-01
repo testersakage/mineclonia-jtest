@@ -11,7 +11,7 @@ local mod_target = minetest.get_modpath("mcl_target")
 --################### BLAZE
 --###################
 
-local function check_light(pos, environmental_light, artificial_light, sky_light)
+local function check_light(_, _, artificial_light, _)
 	if artificial_light > 11 then
 		return false, "To bright"
 	end
@@ -158,7 +158,7 @@ mcl_mobs.register_arrow("mobs_mc:blaze_fireball", {
 	hit_player = mcl_mobs.get_arrow_damage_func(5, "fireball"),
 	hit_mob = mcl_mobs.get_arrow_damage_func(5, "fireball"),
 
-	hit_object = function(self, object)
+	hit_object = function(_, object)
 		local lua = object:get_luaentity()
 		if lua then
 			if lua.name == "mcl_minecarts:tnt_minecart" then

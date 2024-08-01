@@ -112,7 +112,7 @@ register_rail("mcl_minecarts:golden_rail_on",
 				rules = rail_rules_long,
 			},
 			effector = {
-				action_on = function(pos, node)
+				action_on = function(pos, _)
 					local dir = mcl_minecarts:get_start_direction(pos)
 					if not dir then return end
 					local objs = minetest.get_objects_inside_radius(pos, 1)
@@ -167,7 +167,7 @@ register_rail("mcl_minecarts:activator_rail_on",
 			},
 			effector = {
 				-- Activate minecarts
-				action_on = function(pos, node)
+				action_on = function(pos, _)
 					local pos2 = { x = pos.x, y =pos.y + 1, z = pos.z }
 					local objs = minetest.get_objects_inside_radius(pos2, 1)
 					for _, o in pairs(objs) do

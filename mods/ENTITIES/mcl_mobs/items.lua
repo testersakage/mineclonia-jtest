@@ -85,7 +85,7 @@ function mob_class:check_item_pickup()
 						self:set_armor_texture()
 					end
 				elseif self.pick_up then
-					for k,v in pairs(self.pick_up) do
+					for _, v in pairs(self.pick_up) do
 						if self.on_pick_up and itemname == v then
 							local r = self.on_pick_up(self,l)
 							if r and r.is_empty and not r:is_empty() then

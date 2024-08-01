@@ -143,7 +143,7 @@ minetest.register_entity("mcl_paintings:painting", {
 		}
 		return minetest.serialize(data)
 	end,
-	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage) ---@diagnostic disable-line: unused-local
 		-- Drop as item on punch
 		if puncher and puncher:is_player() then
 			local kname = puncher:get_player_name()
@@ -224,7 +224,7 @@ minetest.register_craftitem("mcl_paintings:painting", {
 			xmax = math.max(unpack(xmaxes))
 
 			local xsize, ysize = xmax, ymax
-			xsize, ysize = shrink_painting(xsize, ysize)
+			xsize, ysize = shrink_painting(xsize, ysize) ---@diagnostic disable-line: cast-local-type
 			if not xsize then
 				return itemstack
 			end

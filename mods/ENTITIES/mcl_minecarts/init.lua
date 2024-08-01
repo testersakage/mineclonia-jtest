@@ -51,7 +51,7 @@ end
 
 local activate_normal_minecart = detach_driver
 
-local function hopper_take_item(self, dtime)
+local function hopper_take_item(self)
 	local pos = self.object:get_pos()
 	if not pos then return end
 
@@ -59,7 +59,7 @@ local function hopper_take_item(self, dtime)
 
 	local above_pos = vector.offset(pos, 0, 0.9, 0)
 
-	for k, v in pairs(minetest.get_objects_inside_radius(above_pos, 1.25)) do
+	for _, v in pairs(minetest.get_objects_inside_radius(above_pos, 1.25)) do
 		local ent = v:get_luaentity()
 		local taken_items = false
 
@@ -151,7 +151,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		_mcl_fishing_reelable = true,
 	}
 
-	function cart:on_activate(staticdata, dtime_s)
+	function cart:on_activate(staticdata, _)
 		-- Initialize
 		local data = minetest.deserialize(staticdata)
 		if type(data) == "table" then
@@ -170,7 +170,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		end
 	end
 
-	function cart:on_punch(puncher, time_from_last_punch, tool_capabilities, direction)
+	function cart:on_punch(puncher, time_from_last_punch, tool_capabilities, _)
 		local pos = self.object:get_pos()
 		if not self._railtype then
 			local node = minetest.get_node(vector.floor(pos)).name
@@ -247,7 +247,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 	local passenger_attach_position = vector.new(0, -1.75, 0)
 
 	function cart:on_step(dtime)
-		hopper_take_item(self, dtime)
+		hopper_take_item(self)
 
 		local ctrl, player = nil, nil
 		if self._driver then
@@ -678,7 +678,7 @@ local function register_craftitem(itemstring, entity_id, description, tt_help, l
 
 			return mcl_minecarts.place_minecart(itemstack, pointed_thing, placer)
 		end,
-		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
+		_on_dispense = function(stack, _, droppos, dropnode, _)
 			-- Place minecart as entity on rail. If there's no rail, just drop it.
 			local placed
 			if minetest.get_item_group(dropnode.name, "rail") ~= 0 then

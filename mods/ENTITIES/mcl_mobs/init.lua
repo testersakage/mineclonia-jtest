@@ -116,7 +116,7 @@ mcl_mobs.mob_class = {
 	max_light = minetest.LIGHT_MAX + 1,
 	does_not_prevent_sleep = false,
 	prevents_sleep_when_hostile = false,
-	attack_exception = function(p) return false end,
+	attack_exception = function() return false end,
 	player_active_range = tonumber(minetest.settings:get("mcl_mob_active_range")) or 48,
 	persist_in_peaceful = true,
 	wears_armor = false,
@@ -235,6 +235,8 @@ local function within_limits(pos, radius)
 end
 
 mcl_mobs.spawning_mobs = {}
+-- For some reason this triggers duplicate_field; TODO: figure out why
+---@diagnostic disable-next-line: duplicate-set-field
 function mcl_mobs.register_mob(name, def)
 	local def = table.copy(def)
 	if not def.description then
@@ -375,7 +377,7 @@ function mcl_mobs.register_arrow(name, def)
 
 	minetest.register_entity(name,  setmetatable(table.merge({
 		initial_properties = init_props,
-		on_step = function(self, dtime)
+		on_step = function(self)
 
 			self.timer = self.timer + 1
 
@@ -455,8 +457,8 @@ function mcl_mobs.register_arrow(name, def)
 	}, def), mcl_mobs.arrow_class_meta))
 end
 
--- Register spawn eggs
-
+-- For some reason this triggers duplicate_field; TODO: figure out why
+---@diagnostic disable-next-line: duplicate-set-field
 function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addegg, no_creative)
 	local grp = {spawn_egg = 1}
 	-- do NOT add this egg to creative inventory (e.g. dungeon master)
