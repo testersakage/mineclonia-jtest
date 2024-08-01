@@ -12,7 +12,7 @@ mcl_fences.register_fence_and_fence_gate_def("red_nether_brick_fence", {
 	_mcl_fences_stickreplacer = "mcl_nether:netherbrick",
 }, {
 	description = S("Red Nether Brick Fence"),
-	connects_to = { "group:fence_nether_brick" },
+	connects_to = { "group:fence_nether_brick", "group:solid" },
 }, {
 	description = S("Red Nether Brick Fence Gate"),
 	_mcl_fences_sounds = {
