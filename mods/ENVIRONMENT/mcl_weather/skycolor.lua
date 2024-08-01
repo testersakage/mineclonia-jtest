@@ -67,7 +67,7 @@ mcl_weather.skycolor = {
 	layer_names = {},
 
 	-- To layer to colors table
-	add_layer = function(layer_name, layer_color, instant_update)
+	add_layer = function(layer_name, layer_color, _)
 		mcl_weather.skycolor.colors[layer_name] = layer_color
 		table.insert(mcl_weather.skycolor.layer_names, layer_name)
 		mcl_weather.skycolor.force_update = true

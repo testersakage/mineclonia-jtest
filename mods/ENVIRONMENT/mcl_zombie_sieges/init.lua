@@ -27,7 +27,7 @@ mcl_events.register_event("zombie_siege",{
 	health_max = 1,
 	exclusive_to_area = 128,
 	enable_bossbar = false,
-	cond_start  = function(self)
+	cond_start  = function()
 		local r = {}
 
 		local t = minetest.get_timeofday()
@@ -52,7 +52,7 @@ mcl_events.register_event("zombie_siege",{
 	cond_progress = function(self)
 		local m = {}
 		local h = 0
-		for k,o in pairs(self.mobs) do
+		for _, o in pairs(self.mobs) do
 			if o and o:get_pos() then
 				local l = o:get_luaentity()
 				h = h + l.health
@@ -68,7 +68,7 @@ mcl_events.register_event("zombie_siege",{
 	on_stage_begin = spawn_zombies,
 	cond_complete = function(self)
 		local m = {}
-		for k,o in pairs(self.mobs) do
+		for _, o in pairs(self.mobs) do
 			if o and o:get_pos() then
 				table.insert(m,o)
 			end
