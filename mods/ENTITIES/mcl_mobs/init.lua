@@ -235,7 +235,7 @@ local function within_limits(pos, radius)
 end
 
 mcl_mobs.spawning_mobs = {}
--- For some reason this triggers duplicate_field; TODO: figure out why
+-- overwritten in COMPAT for compatbilitiy with old mcl_mobs / mobs_redo
 ---@diagnostic disable-next-line: duplicate-set-field
 function mcl_mobs.register_mob(name, def)
 	local def = table.copy(def)
@@ -357,7 +357,8 @@ mcl_mobs.arrow_class = {
 
 mcl_mobs.arrow_class_meta = {__index = mcl_mobs.arrow_class}
 
--- register arrow for shoot attack
+-- overwritten in COMPAT for compatbilitiy with old mcl_mobs / mobs_redo
+---@diagnostic disable-next-line: duplicate-set-field
 function mcl_mobs.register_arrow(name, def)
 	if not name or not def then return end -- errorcheck
 
@@ -457,7 +458,7 @@ function mcl_mobs.register_arrow(name, def)
 	}, def), mcl_mobs.arrow_class_meta))
 end
 
--- For some reason this triggers duplicate_field; TODO: figure out why
+-- Overwritten in COMPAT for compatibility with old mcl_mobs/mobs_redo
 ---@diagnostic disable-next-line: duplicate-set-field
 function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addegg, no_creative)
 	local grp = {spawn_egg = 1}
