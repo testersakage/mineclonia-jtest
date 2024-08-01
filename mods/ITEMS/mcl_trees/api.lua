@@ -466,21 +466,21 @@ function mcl_trees.register_wood(name, p)
 	end
 	if p.fence == nil or type(p.fence) == "table" then
 		p.fence = p.fence or {}
-		mcl_fences.register_fence_def(name.."_fence", {
+		mcl_fences.register_fence_def(name.."_fence", table.merge({
 			description = p.fence.description or S("@1 Fence", rname),
 			tiles = p.fence.tiles or { "mcl_fences_fence_"..name..".png" },
 			groups = p.fence.groups or table.merge(wood_groups, { fence_wood = 1 }),
-			connects_to = p.fence.connects_to,
+			connects_to = p.fence.connects_to or { "group:fence_wood", "group:solid" },
 			sounds = p.fence.sounds or wood_sounds,
 			_mcl_blast_resistance = p.fence._mcl_blast_resistance or 3,
 			_mcl_hardness = p.fence._mcl_hardness or 2,
 			_mcl_burntime = p.fence._mcl_burntime or 15,
 			_mcl_fences_baseitem = "mcl_trees:wood_"..name
-		})
+		}, p.fence))
 	end
 	if p.fence_gate == nil or type(p.fence_gate) == "table" then
 		p.fence_gate = p.fence_gate or {}
-		mcl_fences.register_fence_gate_def(name.."_fence", {
+		mcl_fences.register_fence_gate_def(name.."_fence", table.merge({
 			description = p.fence_gate.description or S("@1 Fence Gate", rname),
 			tiles = p.fence_gate.tiles or { "mcl_fences_fence_"..name..".png" },
 			groups = p.fence_gate.groups or table.merge(wood_groups,{fence_wood = 1}),
@@ -498,7 +498,7 @@ function mcl_trees.register_wood(name, p)
 				}
 			},
 			_mcl_burntime = p.fence_gate._mcl_burntime or 15,
-			_mcl_fences_baseitem = "mcl_trees:wood_"..name})
+			_mcl_fences_baseitem = "mcl_trees:wood_"..name}, p.fence_gate))
 	end
 	if p.door == nil or type(p.door) == "table" then
 		mcl_doors:register_door("mcl_doors:door_"..name,table.merge(tpl_door, {
