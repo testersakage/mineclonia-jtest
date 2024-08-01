@@ -57,6 +57,7 @@ globals = {
 	"mcl_campfires",
 	"mcl_cartography_table",
 	"mcl_cauldrons",
+	"mcl_charges",
 	"mcl_cherry_blossom",
 	"mcl_chests",
 	"mcl_clock",
