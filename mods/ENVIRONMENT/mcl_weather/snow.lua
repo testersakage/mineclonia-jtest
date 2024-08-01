@@ -118,7 +118,7 @@ minetest.register_abm({
 	interval = 27,
 	chance = 33,
 	min_y = mcl_vars.mg_overworld_min,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		if (mcl_weather.state ~= "rain" and mcl_weather.state ~= "thunder" and mcl_weather.state ~= "snow")
 		or not mcl_weather.has_snow(pos)
 		or node.name == "mcl_core:snowblock" then

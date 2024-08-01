@@ -157,7 +157,7 @@ function mcl_weather.rain.clear()
 	end
 end
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	if mcl_weather.state ~= "rain" then
 		return false
 	end
@@ -213,7 +213,7 @@ if mcl_weather.allow_abm then
 		nodenames = {"mcl_fire:fire"},
 		interval = 2.0,
 		chance = 2,
-		action = function(pos, node, active_object_count, active_object_count_wider)
+		action = function(pos)
 			-- Fire is extinguished if in rain or one of 4 neighbors is in rain
 			if mcl_weather.rain.raining and mcl_weather.rain.extinguish_fire then
 				local around = {
@@ -241,7 +241,7 @@ if mcl_weather.allow_abm then
 		nodenames = {"mcl_cauldrons:cauldron", "mcl_cauldrons:cauldron_1", "mcl_cauldrons:cauldron_2"},
 		interval = 56.0,
 		chance = 1,
-		action = function(pos, node, active_object_count, active_object_count_wider)
+		action = function(pos, node)
 			-- Rain is equivalent to a water bottle
 			if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) and mcl_weather.has_rain(pos) then
 				if node.name == "mcl_cauldrons:cauldron" then
@@ -265,7 +265,7 @@ if mcl_weather.allow_abm then
 		nodenames = {"mcl_farming:soil"},
 		interval = 22.0,
 		chance = 3,
-		action = function(pos, node, active_object_count, active_object_count_wider)
+		action = function(pos, node)
 			if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) and mcl_weather.has_rain(pos) then
 				if node.name == "mcl_farming:soil" then
 					minetest.set_node(pos, {name="mcl_farming:soil_wet"})

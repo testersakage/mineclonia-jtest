@@ -5,7 +5,7 @@ mcl_weather.thunder = {
 	init_done = false,
 }
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	if mcl_weather.get_weather() ~= "thunder" then
 		return false
 	end

@@ -73,7 +73,7 @@ local oban_layers = {
 local oban_def = table.copy(minetest.registered_entities["mcl_banners:standing_banner"])
 oban_def.initial_properties.visual_size = { x=1, y=1 }
 local old_step = oban_def.on_step
-oban_def.on_step = function(self,dtime)
+oban_def.on_step = function(self)
 	if not self.object:get_attach() then return self.object:remove() end
 	if old_step then return old_step(self.dtime) end
 end
@@ -118,7 +118,7 @@ function mcl_raids.promote_to_raidcaptain(c) -- object
 end
 
 function mcl_raids.is_raidcaptain_near(pos)
-	for k,v in pairs(minetest.get_objects_inside_radius(pos,32)) do
+	for _, v in pairs(minetest.get_objects_inside_radius(pos,32)) do
 		local l = v:get_luaentity()
 		if l and l._raidcaptain then return true end
 	end
@@ -170,15 +170,17 @@ function mcl_raids.spawn_raid(event)
 				w = extra_wave
 			end
 			for m,c in pairs(w) do
-				for i=1,c do
+				for _ = 1, c do
 					local p = vector.offset(spawn_pos,0,1,0)
 					local mob = mcl_mobs.spawn(p,m)
-					local l = mob:get_luaentity()
-					if l then
-						l.raidmob = true
-						event.health_max = event.health_max + l.health
-						table.insert(event.mobs,mob)
-						l:gopath(pos)
+					if mob then
+						local l = mob:get_luaentity()
+						if l then
+							l.raidmob = true
+							event.health_max = event.health_max + l.health
+							table.insert(event.mobs,mob)
+							l:gopath(pos)
+						end
 					end
 				end
 			end
@@ -235,7 +237,7 @@ end
 local function check_mobs(self)
 	local m = {}
 	local h = 0
-	for k,o in pairs(self.mobs) do
+	for _, o in pairs(self.mobs) do
 		if o and o:get_pos() then
 			local l = o:get_luaentity()
 			h = h + l.health
@@ -243,7 +245,7 @@ local function check_mobs(self)
 		end
 	end
 	if #m == 0 then --if no valid mobs in table search if there are any (reloaded ones) in the area
-		for k,o in pairs(minetest.get_objects_inside_radius(self.pos,64)) do
+		for _, o in pairs(minetest.get_objects_inside_radius(self.pos,64)) do
 			local l = o:get_luaentity()
 			if l and l.raidmob then
 				local l = o:get_luaentity()
@@ -263,7 +265,7 @@ mcl_events.register_event("raid",{
 	health_max = 1,
 	exclusive_to_area = 128,
 	enable_bossbar = true,
-	cond_start  = function(self)
+	cond_start  = function()
 		--minetest.log("Cond start raid")
 		local r = {}
 		for _,p in pairs(minetest.get_connected_players()) do
@@ -308,7 +310,7 @@ mcl_events.register_event("raid",{
 
 minetest.register_chatcommand("raidcap",{
 	privs = {debug = true},
-	func = function(pname,param)
+	func = function(pname)
 		local c = minetest.add_entity(minetest.get_player_by_name(pname):get_pos(),"mobs_mc:pillager")
 		mcl_raids.promote_to_raidcaptain(c)
 	end,
@@ -316,10 +318,10 @@ minetest.register_chatcommand("raidcap",{
 
 minetest.register_chatcommand("dump_banner_layers",{
 	privs = {debug = true},
-	func = function(pname,param)
+	func = function(pname)
 		local p = minetest.get_player_by_name(pname)
 		mcl_raids.drop_obanner(vector.offset(p:get_pos(),1,1,1))
-		for k,v in pairs(minetest.get_objects_inside_radius(p:get_pos(),5)) do
+		for _, v in pairs(minetest.get_objects_inside_radius(p:get_pos(),5)) do
 			local l = v:get_luaentity()
 			if l and l.name == "mcl_banners:standing_banner" then
 				minetest.log(dump(l._base_color))
