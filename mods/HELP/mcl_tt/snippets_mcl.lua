@@ -20,10 +20,7 @@ tt.register_snippet(function(itemstring)
 	if feet > 0 then
 		s = s .. S("Feet armor")
 	end
-	if s == "" then
-		s = nil
-	end
-	return s
+	return s ~= "" and s or nil
 end)
 tt.register_snippet(function(itemstring, _, itemstack)
 	--local def = minetest.registered_items[itemstring]
@@ -43,10 +40,7 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	if use > 0 then
 		s = s .. S("Armor durability: @1", use)
 	end
-	if s == "" then
-		s = nil
-	end
-	return s
+	return s ~= "" and s or nil
 end)
 -- Horse armor
 tt.register_snippet(function(itemstring)
@@ -68,10 +62,7 @@ tt.register_snippet(function(itemstring)
 		end
 		s = s .. S("Saturation points: +@1", string.format("%.1f", def._mcl_saturation))
 	end
-	if s == "" then
-		s = nil
-	end
-	return s
+	return s ~= "" and s or nil
 end)
 
 tt.register_snippet(function(itemstring)
