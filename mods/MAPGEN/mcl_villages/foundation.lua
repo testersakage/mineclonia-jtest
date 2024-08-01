@@ -73,7 +73,7 @@ function mcl_villages.terraform_new(settlement_info, grid)
 	local fheight, fwidth, fdepth
 
 	-- Do ground first so that we can clear overhang for lower buildings
-	for i, schematic_data in ipairs(settlement_info) do
+	for _, schematic_data in ipairs(settlement_info) do
 		local pos = vector.copy(schematic_data["pos"])
 		fwidth = schematic_data["size"]["x"]
 		fdepth = schematic_data["size"]["z"]
@@ -83,7 +83,7 @@ function mcl_villages.terraform_new(settlement_info, grid)
 		end
 	end
 
-	for i, schematic_data in ipairs(settlement_info) do
+	for _, schematic_data in ipairs(settlement_info) do
 		local pos = vector.copy(schematic_data["pos"])
 
 		fwidth = schematic_data["size"]["x"]

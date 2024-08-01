@@ -188,7 +188,7 @@ function mcl_villages.get_weighted_crop(biome, crop_type, pr)
 
 	local rand = pr:next(1, 99)
 
-	for i, rec in ipairs(weighted_crops[biome][crop_type]) do
+	for _, rec in ipairs(weighted_crops[biome][crop_type]) do
 		local weight = rec.total
 		local node = rec.node
 
@@ -196,8 +196,6 @@ function mcl_villages.get_weighted_crop(biome, crop_type, pr)
 			return node
 		end
 	end
-
-	return
 end
 
 function mcl_villages.register_crop(crop_def)

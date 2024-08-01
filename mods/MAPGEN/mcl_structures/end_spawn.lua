@@ -4,7 +4,7 @@ local modpath = minetest.get_modpath(modname)
 
 mcl_structures.register_structure("end_spawn_obsidian_platform",{
 	static_pos ={mcl_vars.mg_end_platform_pos},
-	place_func = function(pos,def,pr)
+	place_func = function(pos, _, _)
 		local obby = minetest.find_nodes_in_area(vector.offset(pos,-2,0,-2),vector.offset(pos,2,0,2),{"air","mcl_end:end_stone"})
 		local air = minetest.find_nodes_in_area(vector.offset(pos,-2,1,-2),vector.offset(pos,2,3,2),{"air","mcl_end:end_stone"})
 		minetest.bulk_set_node(obby,{name="mcl_core:obsidian"})
@@ -18,10 +18,10 @@ mcl_structures.register_structure("end_exit_portal",{
 	filenames = {
 		modpath.."/schematics/mcl_structures_end_exit_portal.mts"
 	},
-	after_place = function(pos,def,pr,blockseed)
+	after_place = function(pos, _, _, blockseed)
 		local p1 = vector.offset(pos,-16,-16,-16)
 		local p2 = vector.offset(pos,16,21,16)
-		minetest.emerge_area(p1,p2,function(blockpos, action, calls_remaining, param)
+		minetest.emerge_area(p1,p2,function(_, _, calls_remaining)
 			if calls_remaining > 0 then return end
 			minetest.bulk_set_node(minetest.find_nodes_in_area(p1,p2,{"mcl_portals:portal_end"}),{name="air"})
 			local obj = minetest.add_entity(vector.offset(pos,3, 11, 3), "mobs_mc:enderdragon")
@@ -42,7 +42,7 @@ mcl_structures.register_structure("end_exit_portal_open",{
 	filenames = {
 		modpath.."/schematics/mcl_structures_end_exit_portal.mts"
 	},
-	after_place  = function(pos,def,pr)
+	after_place  = function(pos, _, _)
 		local p1 = vector.offset(pos,-16,-16,-16)
 		local p2 = vector.offset(pos,16,16,16)
 		minetest.fix_light(p1,p2)
@@ -97,12 +97,12 @@ end
 
 mcl_structures.register_structure("end_spike",{
 	static_pos =get_points_on_circle(vector.offset(mcl_vars.mg_end_exit_portal_pos,0,-20,0),43,10),
-	place_func = function(pos,def,pr)
+	place_func = function(pos, _,pr)
 		local d = pr:next(6,12)
 		local h = d * pr:next(4,6)
 		local p1 = vector.offset(pos, -d / 2, 0, -d / 2)
 		local p2 = vector.offset(pos, d / 2, h + d, d / 2)
-		minetest.emerge_area(p1, p2, function(blockpos, action, calls_remaining, param)
+		minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
 			if calls_remaining ~= 0 then return end
 			local s = make_endspike(pos,d,h)
 			minetest.set_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})

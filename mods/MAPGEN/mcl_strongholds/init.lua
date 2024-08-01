@@ -33,7 +33,7 @@ local function init_strongholds()
 		local angle = pr:next()
 		-- Scale angle to 0 .. 2*math.pi
 		angle = (angle / 32767) * (math.pi*2)
-		for a=1, ring.amount do
+		for _ = 1, ring.amount do
 			local dist = pr:next(ring.min, ring.max)
 			local y
 			if mcl_vars.superflat then
@@ -100,7 +100,7 @@ mcl_structures.register_structure("end_shrine",{
 			}
 		}}
 	},
-	after_place = function(pos,def,pr,blockseed,p1,p2,size,rotation)
+	after_place = function(pos, _, pr, _, _, _, size, _)
 		local p1 = vector.subtract(pos,size)
 		local p2 = vector.add(pos,size)
 		local spawners = minetest.find_nodes_in_area(p1, p2, "mcl_mobspawners:spawner")

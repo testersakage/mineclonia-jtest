@@ -12,7 +12,7 @@ local noisemap = PerlinNoiseMap({
 local c_end_stone = minetest.get_content_id("mcl_end:end_stone")
 local y_offset = -2
 
-mcl_mapgen_core.register_generator("end_island", function(vm, data, data2, emin, emax, area, minp, maxp, blockseed)
+mcl_mapgen_core.register_generator("end_island", function(_, data, _, _, _, area, minp, maxp, _)
 	if maxp.y < (-27025 + y_offset) or minp.y > (-27000 + y_offset + 4) or maxp.x < -width or minp.x > width  or maxp.z < -width or minp.z > width then
 		return
 	end

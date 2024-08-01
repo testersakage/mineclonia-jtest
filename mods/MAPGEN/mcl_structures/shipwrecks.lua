@@ -150,7 +150,7 @@ mcl_structures.register_structure("shipwreck",{
 	y_min = mcl_vars.mg_overworld_min,
 	filenames = schems,
 	y_offset = function(pr) return pr:next(-4,-2) end,
-	after_place = function(p,def,pr)
+	after_place = function(p, _, pr)
 		local pos = vector.new(p.x, 1, p.z)
 		local sand = minetest.find_nodes_in_area_under_air(vector.offset(pos, -64, -2, -64), vector.offset(pos, 64, 5, 64), {"mcl_core:sand", "mcl_core:gravel", "mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol"})
 		local chests = minetest.find_nodes_in_area_under_air(vector.offset(pos, -8, -7, -8), vector.offset(pos, 8, 8, 8), {"mcl_chests:chest_small"})
@@ -184,13 +184,13 @@ mcl_structures.register_structure("shipwreck",{
 					{ itemstring = "mcl_core:coal_lump", weight = 6, amount_min = 2, amount_max = 8 },
 					{ itemstring = "mcl_mobitems:rotten_flesh", weight = 5, amount_min = 5, amount_max = 24 },
 					{ itemstring = "mcl_farming:potato_item", weight = 3, amount_min = 1, amount_max = 5 },
-					{ itemstring = "mcl_armor:helmet_leather_enchanted", weight = 3, func = function(stack, pr)
+					{ itemstring = "mcl_armor:helmet_leather_enchanted", weight = 3, func = function(stack, _)
 							mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}) end },
-					{ itemstring = "mcl_armor:chestplate_leather_enchanted", weight = 3, func = function(stack, pr)
+					{ itemstring = "mcl_armor:chestplate_leather_enchanted", weight = 3, func = function(stack, _)
 							mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}) end },
-					{ itemstring = "mcl_armor:leggings_leather_enchanted", weight = 3, func = function(stack, pr)
+					{ itemstring = "mcl_armor:leggings_leather_enchanted", weight = 3, func = function(stack, _)
 							mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}) end },
-					{ itemstring = "mcl_armor:boots_leather_enchanted", weight = 3, func = function(stack, pr)
+					{ itemstring = "mcl_armor:boots_leather_enchanted", weight = 3, func = function(stack, _)
 							mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}) end },
 					{ itemstring = "mcl_bamboo:bamboo", weight = 2, amount_min = 1, amount_max = 3 },
 					{ itemstring = "mcl_farming:pumpkin", weight = 2, amount_min = 1, amount_max = 3 },
@@ -253,7 +253,7 @@ mcl_structures.register_structure("ocean_temple",{
 		modpath .. "/schematics/mcl_structures_ocean_temple_2.mts",
 	},
 	y_offset = function(pr) return pr:next(-2,0) end,
-	after_place = function(p,def,pr)
+	after_place = function(p, _, pr)
 		local p1 = vector.offset(p,-9,0,-9)
 		local p2 = vector.offset(p,9,32,9)
 		mcl_structures.spawn_mobs("mobs_mc:guardian",spawnon,p1,p2,pr,5,true)
