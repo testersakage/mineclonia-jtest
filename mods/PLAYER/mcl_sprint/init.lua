@@ -136,7 +136,7 @@ minetest.register_on_respawnplayer(function(player)
 	cancelClientSprinting(player:get_player_name())
 end)
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	--Get the gametime
 	local gameTime = minetest.get_gametime()
 

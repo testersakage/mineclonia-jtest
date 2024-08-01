@@ -123,7 +123,7 @@ minetest.register_on_respawnplayer(function(player)
 end)
 
 -- PvP combat exhaustion
-minetest.register_on_punchplayer(function(victim, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+minetest.register_on_punchplayer(function(victim, puncher, time_from_last_punch, tool_capabilities, dir, damage) ---@diagnostic disable-line: unused-local
 	if puncher:is_player() then
 		mcl_hunger.exhaust(puncher:get_player_name(), mcl_hunger.EXHAUST_ATTACK)
 	end
@@ -251,7 +251,7 @@ mcl_player.register_globalstep(function(player, dtime)
 	end
 end)
 
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	--[[ Swimming: Cause exhaustion.
 	NOTE: As of 0.4.15, it only counts as swimming when you are with the feet inside the liquid!
 	Head alone does not count. We respect that for now. ]]
