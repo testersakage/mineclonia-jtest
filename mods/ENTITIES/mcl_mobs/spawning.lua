@@ -286,7 +286,7 @@ local function spawn_group(p,mob,spawn_on,group_max,group_min)
 		nn = {}
 		table.insert(nn,p)
 	end
-	for i = 1, math.random(group_min,group_max) do
+	for _ = 1, math.random(group_min,group_max) do
 		local sp = vector.offset(nn[math.random(#nn)],0,1,0)
 		if spawn_check(nn[math.random(#nn)],mob,true) then
 			if mob.type_of_spawning == "water" then
@@ -333,7 +333,7 @@ end
 local passive_timer = PASSIVE_INTERVAL
 
 --timer function to check if passive mobs should spawn (only every 20 secs unlike other mob spawn classes)
-local function check_timer(spawn_def, dtime)
+local function check_timer(spawn_def)
 	local mob_def = minetest.registered_entities[spawn_def.name]
 	if mob_def and mob_def.spawn_class == "passive" then
 		if passive_timer > 0 then
@@ -448,21 +448,21 @@ end
 
 
 if mobs_spawn then
-	local cumulative_chance = nil
-	local mob_library_worker_table = nil
+	local cumulative_chance
+	local mob_library_worker_table
 	local function initialize_spawn_data()
 		if not mob_library_worker_table then
 			mob_library_worker_table = table.copy(spawn_dictionary)
 		end
 		if not cumulative_chance then
 			cumulative_chance = 0
-			for k, v in pairs(mob_library_worker_table) do
+			for _, v in pairs(mob_library_worker_table) do
 				cumulative_chance = cumulative_chance + v.chance
 			end
 		end
 	end
 
-	local function spawn_a_mob(pos, dimension, dtime)
+	local function spawn_a_mob(pos, _, _)
 		--create a disconnected clone of the spawn dictionary
 		--prevents memory leak
 
@@ -498,7 +498,7 @@ if mobs_spawn then
 				local mob_type = minetest.registered_entities[spawn_def.name].type
 				if spawn_check(spawning_position,spawn_def) then
 
-					if can_spawn(spawn_def,spawning_position) and check_timer(spawn_def, dtime) then
+					if can_spawn(spawn_def,spawning_position) and check_timer(spawn_def) then
 						--everything is correct, spawn mob
 						if spawn_in_group and ( mob_type ~= "monster" or math.random(5) == 1 ) then
 							if logging then
@@ -607,13 +607,13 @@ minetest.register_chatcommand("spawn_mob",{
 
 						local number_tag = string.find(value, "NUM")
 						if number_tag then
-							value = tonumber(string.sub(value, 4, -1))
+							value = tonumber(string.sub(value, 4, -1)) ---@diagnostic disable-line: cast-local-type
 						end
 
 						if value == "true" then
-							value = true
+							value = true ---@diagnostic disable-line: cast-local-type
 						elseif value == "false" then
-							value = false
+							value = false ---@diagnostic disable-line: cast-local-type
 						end
 
 						if not mob_entity[variable] then
@@ -663,7 +663,7 @@ minetest.register_chatcommand("spawncheck",{
 
 minetest.register_chatcommand("mobstats",{
 	privs = { debug = true },
-	func = function(n,param)
+	func = function(n, _)
 		minetest.chat_send_player(n,dump(dbg_spawn_counts))
 		local pos = minetest.get_player_by_name(n):get_pos()
 		minetest.chat_send_player(n,"mobs within 32 radius of player:"..count_mobs(pos,32))

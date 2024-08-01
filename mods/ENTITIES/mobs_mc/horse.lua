@@ -224,7 +224,7 @@ local horse = {
 		return true
 	end,
 
-	on_die = function(self, pos)
+	on_die = function(self)
 		if self.driver then
 			detach_driver(self)
 		end

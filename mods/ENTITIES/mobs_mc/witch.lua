@@ -92,7 +92,7 @@ mcl_mobs.register_arrow("mobs_mc:potion_arrow", {
 	hit_mob = mcl_mobs.get_arrow_damage_func(4, "mob"),
 
 	-- node hit, splash poison
-	hit_node = function(self, pos, node)
+	hit_node = function(_, pos, _)
 		minetest.add_entity(pos, "mcl_potions:poison_2_splash_flying")
 	end
 })

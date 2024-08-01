@@ -130,7 +130,7 @@ function mob_class:item_drop(cooked, looting_level)
 				end
 			end
 
-			for x = 1, num do
+			for _ = 1, num do
 				obj = minetest.add_item(pos, ItemStack(item .. " " .. 1))
 			end
 
@@ -222,7 +222,7 @@ function mob_class:get_velocity()
 	return 0
 end
 
-local function shortest_term_of_yaw_rotation(self, rot_origin, rot_target, nums)
+local function shortest_term_of_yaw_rotation(_, rot_origin, rot_target, nums)
 	if not rot_origin or not rot_target then
 		return
 	end
@@ -283,6 +283,7 @@ function mob_class:set_yaw(yaw, delay, dtime)
 	local target_shortest_path_nums = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), yaw, true)
 
 	--turn in the shortest path possible toward our target. if we are attacking, don't dance.
+	if not target_shortest_path then return end
 	if (math.abs(target_shortest_path) > 50 and not self._kb_turn) and (self.attack and self.attack:get_pos() or self.following and self.following:get_pos()) then
 		if self.following then
 			target_shortest_path = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.following:get_pos())), true)
@@ -298,6 +299,7 @@ function mob_class:set_yaw(yaw, delay, dtime)
 		ddtime = dtime
 	end
 
+	if not target_shortest_path_nums then return end
 	if math.abs(target_shortest_path_nums) > 10 then
 		self.object:set_yaw(self.object:get_yaw()+(target_shortest_path*(3.6*ddtime)))
 		if self.acc and mcl_mobs.check_vector(self.acc) then
@@ -714,7 +716,7 @@ function mob_class:do_env_damage()
 	return self:check_for_death("", {type = "unknown"})
 end
 
-function mob_class:env_damage (dtime, pos)
+function mob_class:env_damage (_, pos)
 	-- environmental damage timer (every 1 second)
 	if not self:check_timer("env_damage", 1) then return end
 	self:check_entity_cramming()

@@ -166,7 +166,7 @@ end
 function mob_class:remove_particlespawners(pn)
 	if not active_particlespawners[pn] then return end
 	if not active_particlespawners[pn][self.object] then return end
-	for k,v in pairs(active_particlespawners[pn][self.object]) do
+	for _, v in pairs(active_particlespawners[pn][self.object]) do
 		minetest.delete_particlespawner(v)
 	end
 end
@@ -310,7 +310,7 @@ function mob_class:who_are_you_looking_at()
 	end
 end
 
-function mob_class:check_head_swivel(dtime)
+function mob_class:check_head_swivel()
 	if not self.head_swivel or type(self.head_swivel) ~= "string" then return end
 
 	self:who_are_you_looking_at()
@@ -387,7 +387,7 @@ minetest.register_on_leaveplayer(function(player)
 	local pn = player:get_player_name()
 	if not active_particlespawners[pn] then return end
 	for _,m in pairs(active_particlespawners[pn]) do
-		for k,v in pairs(m) do
+		for _, v in pairs(m) do
 			minetest.delete_particlespawner(v)
 		end
 	end

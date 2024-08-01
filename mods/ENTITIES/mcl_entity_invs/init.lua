@@ -11,13 +11,13 @@ local function check_distance(inv,player,count)
 end
 
 local inv_callbacks = {
-	allow_take = function(inv, listname, index, stack, player)
+	allow_take = function(inv, _, _, stack, player)
 		return check_distance(inv,player,stack:get_count())
 	end,
-	allow_move = function(inv, from_list, from_index, to_list, to_index, count, player)
+	allow_move = function(inv, _, _, _, _, count, player)
 		return check_distance(inv,player,count)
 	end,
-	allow_put = function(inv, listname, index, stack, player)
+	allow_put = function(inv, _, _, stack, player)
 		return check_distance(inv,player,stack:get_count())
 	end,
 }
@@ -101,7 +101,7 @@ end
 local function drop_inv(ent)
 	if not ent._items then return end
 	local pos = ent.object:get_pos()
-	for i,it in pairs(ent._items) do
+	for _, it in pairs(ent._items) do
 		local p = vector.add(pos,vector.new(math.random() - 0.5, math.random()-0.5, math.random()-0.5))
 		minetest.add_item(p,it)
 	end
@@ -114,8 +114,8 @@ local function on_remove(self,killer,oldf)
 	if oldf then return oldf(self,killer) end
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
-	for k,v in pairs(open_invs) do
+minetest.register_on_player_receive_fields(function(_, formname, _)
+	for k, _ in pairs(open_invs) do
 		if formname == k._inv_id then
 			open_invs[k] = open_invs[k] - 1
 			if open_invs[k] < 1 then

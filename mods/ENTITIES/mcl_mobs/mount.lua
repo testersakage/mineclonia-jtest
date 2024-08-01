@@ -120,7 +120,11 @@ end
 function mcl_mobs.detach(player, offset)
 	force_detach(player)
 	mcl_player.player_set_animation(player, "stand" , 30)
-	player:add_velocity(vector.new(math.random(-6,6),math.random(5,8),math.random(-6,6))) --throw the rider off
+	if offset then
+		player:set_pos(vector.add(player:get_pos(), offset))
+	else
+		player:add_velocity(vector.new(math.random(-6,6),math.random(5,8),math.random(-6,6))) --throw the rider off
+	end
 end
 
 

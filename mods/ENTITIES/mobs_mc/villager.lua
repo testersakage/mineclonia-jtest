@@ -118,7 +118,7 @@ function mobs_mc.villager_mob:stand_near_players()
 end
 
 function mobs_mc.villager_mob:do_custom(dtime)
-	self:check_summon(dtime)
+	self:check_summon()
 	self:stand_near_players()
 	self:do_activity(dtime)
 end
@@ -143,7 +143,7 @@ function mobs_mc.villager_mob:on_spawn()
 	self:set_textures()
 end
 
-function mobs_mc.villager_mob:on_die(pos, cmi_cause)
+function mobs_mc.villager_mob:on_die(_, cmi_cause)
 	-- Close open trade formspecs and give input back to players
 	local trading_players = self._trading_players
 	if trading_players then
@@ -178,7 +178,7 @@ function mobs_mc.villager_mob:on_die(pos, cmi_cause)
 	end
 end
 
-function mobs_mc.villager_mob:on_lightning_strike(pos, pos2, objects)
+function mobs_mc.villager_mob:on_lightning_strike()
 	 mcl_util.replace_mob(self.object, "mobs_mc:witch")
 	 return true
 end

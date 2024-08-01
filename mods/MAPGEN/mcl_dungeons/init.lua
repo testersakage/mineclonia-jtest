@@ -87,7 +87,7 @@ local loottable =
 	}
 }
 
-local function ecb_spawn_dungeon(blockpos, action, calls_remaining, param)
+local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 	if calls_remaining >= 1 then return end
 
 	local p1, _, dim, pr = param.p1, param.p2, param.dim, param.pr
@@ -224,7 +224,7 @@ local function ecb_spawn_dungeon(blockpos, action, calls_remaining, param)
 	-- If it failed again, tough luck! We stick with only 1 chest spawned.
 	local lastRandom
 	local secondChance = true -- second chance is still available
-	for i=1, totalChests do
+	for _ = 1, totalChests do
 		local r = pr:next(1, totalChestSlots)
 		if r == lastRandom and secondChance then
 			-- Oops! Same slot selected. Try again.
@@ -366,7 +366,7 @@ local function dungeons_nodes(minp, maxp, blockseed)
 	local ymin, ymax = math.max(min_y, minp.y),  math.min(max_y, maxp.y)
 	if ymax < ymin then return false end
 	local pr = PseudoRandom(blockseed)
-	for a=1, attempts do
+	for _ = 1, attempts do
 		local dim = dungeonsizes[pr:next(1, #dungeonsizes)]
 		if ymin <= ymax - dim.y - 1 then
 			local x = pr:next(minp.x, maxp.x-dim.x-1)

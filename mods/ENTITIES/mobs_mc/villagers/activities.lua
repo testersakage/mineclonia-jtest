@@ -128,7 +128,7 @@ function mobs_mc.villager_mob:find_closest_bed()
 		{ "group:bed" }
 	)
 	if nn2 then
-		for a,b in pairs(nn2) do
+		for _, b in pairs(nn2) do
 			local bed_node = minetest.get_node(b)
 			local bed_name = bed_node.name
 			local is_bed_bottom = string.find(bed_name,"_bottom")
@@ -157,7 +157,7 @@ function mobs_mc.villager_mob:find_closest_bed()
 	local closest_block
 
 	if unclaimed_beds then
-		for i,b in pairs(unclaimed_beds) do
+		for _, b in pairs(unclaimed_beds) do
 			local distance_to_block = vector.distance(p, b)
 			if not distance_to_closest_block or distance_to_closest_block > distance_to_block then
 				closest_block = b
@@ -179,7 +179,7 @@ function mobs_mc.villager_mob:find_closest_unclaimed_block(p, requested_block_ty
 	local distance_to_closest_block
 	local closest_block
 
-	for i,n in pairs(nn) do
+	for _, n in pairs(nn) do
 		local m = minetest.get_meta(n)
 		if m:get_string("villager") == "" or m:get_string("villager") == self._id then
 			local distance_to_block = vector.distance(p, n)
@@ -263,7 +263,7 @@ function mobs_mc.villager_mob:go_home(sleep)
 			return
 		end
 
-		self:gopath(b,function(self,b)
+		self:gopath(b,function(self, _)
 			local b = self._bed
 
 			if not b then
@@ -365,7 +365,7 @@ function mobs_mc.villager_mob:take_bed()
 			end
 			return true
 		else
-			self:gopath(closest_block,function(self) end)
+			self:gopath(closest_block,function() end)
 		end
 	else
 		if self.order == "stand" then self.order = nil end
@@ -429,7 +429,7 @@ function mobs_mc.villager_mob:summon_golem()
 	end
 end
 
-function mobs_mc.villager_mob:check_summon(dtime)
+function mobs_mc.villager_mob:check_summon()
 	-- TODO has selpt in last 20?
 	if self:check_timer("summon_golem", 37) then
 		local pos = self.object:get_pos()
@@ -446,7 +446,7 @@ function mobs_mc.villager_mob:has_traded()
 	end
 	local cur_trades_tab = minetest.deserialize(self._trades)
 	if cur_trades_tab and type(cur_trades_tab) == "table" then
-		for trader, trades in pairs(cur_trades_tab) do
+		for _, trades in pairs(cur_trades_tab) do
 			if trades.traded_once then
 				return true
 			end
@@ -463,7 +463,7 @@ function mobs_mc.villager_mob:unlock_trades()
 
 	local trades = minetest.deserialize(self._trades)
 	if trades and type(trades) == "table" then
-		for trader, trade in pairs(trades) do
+		for _, trade in pairs(trades) do
 			local trade_tier_too_high = trade.tier > self._max_trade_tier
 			if not trade_tier_too_high then
 				if trade["locked"] == true then
@@ -575,7 +575,6 @@ function mobs_mc.villager_mob:retrieve_my_jobsite()
 	if n.name == "ignore" or m:get_string("villager") == self._id then
 		return n
 	end
-	return
 end
 
 function mobs_mc.villager_mob:remove_job()
@@ -670,7 +669,7 @@ function mobs_mc.villager_mob:do_work()
 			)
 
 			for _, job_pos in pairs(n) do
-				local gp = self:gopath(job_pos, function(self, job_pos)
+				local gp = self:gopath(job_pos, function(self, _)
 					if not self then
 						return false
 					end
@@ -733,7 +732,7 @@ function mobs_mc.villager_mob:sleep_over()
 		)
 
 		if nn2 then
-			for a, b in pairs(nn2) do
+			for _, b in pairs(nn2) do
 				local distance_to_bed = vector.distance(p, b)
 				if distance_to_closest_bed > distance_to_bed then
 					closest_bed = b

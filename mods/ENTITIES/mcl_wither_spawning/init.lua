@@ -6,9 +6,11 @@ local peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
 
 local function load_schem(filename)
 	local file = io.open(modpath .. "/schems/" .. filename, "r")
-	local data = minetest.deserialize(file:read())
-	file:close()
-	return data
+	if file then
+		local data = minetest.deserialize(file:read())
+		file:close()
+		return data
+	end
 end
 
 local wither_spawn_schems = {}

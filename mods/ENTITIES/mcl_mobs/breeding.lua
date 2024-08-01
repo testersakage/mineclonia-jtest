@@ -15,7 +15,7 @@ function mob_class:use_shears(new_textures, shears_stack)
 	return shears_stack
 end
 
-function mob_class:_on_dispense(dropitem, pos, droppos, dropnode, dropdir)
+function mob_class:_on_dispense(dropitem)
 	local item = dropitem.get_name and dropitem:get_name() or dropitem
 	if self.follow and ((type(self.follow) == "table" and table.indexof(self.follow, item) ~= -1) or item == self.follow) then
 		if self:feed_tame(nil, 1, true, false) then
@@ -217,19 +217,21 @@ function mob_class:check_breeding()
 						end
 					end
 					local child = mcl_mobs.spawn_child(pos, parent1.name)
-					local ent_c = child:get_luaentity()
-					-- Use texture of one of the parents
-					local p = math.random(1, 2)
-					if p == 1 then
-						ent_c.base_texture = parent1.base_texture
-					else
-						ent_c.base_texture = parent2.base_texture
+					if child then
+						local ent_c = child:get_luaentity()
+						-- Use texture of one of the parents
+						local p = math.random(1, 2)
+						if p == 1 then
+							ent_c.base_texture = parent1.base_texture
+						else
+							ent_c.base_texture = parent2.base_texture
+						end
+						ent_c:set_properties({
+							textures = ent_c.base_texture
+						})
+						ent_c.tamed = true
+						ent_c.owner = parent1.owner
 					end
-					ent_c:set_properties({
-						textures = ent_c.base_texture
-					})
-					ent_c.tamed = true
-					ent_c.owner = parent1.owner
 				end, self, ent, pos)
 				break
 			end

@@ -118,7 +118,7 @@ local skeleton = {
 	dogshoot_switch = 1,
 	dogshoot_count_max =1.8,
 	harmed_by_heal = true,
-	on_die = function(self, pos, cmi_cause)
+	on_die = function(_, pos, cmi_cause)
 		if cmi_cause and cmi_cause.puncher then
 			local l = cmi_cause.puncher:get_luaentity()
 			if l and  l._is_arrow and l._shooter and l._shooter:is_player() and vector.distance(pos,l._startpos) > 20 then
@@ -155,7 +155,7 @@ table.insert(stray.drops, {
 	looting = "rare",
 	looting_chance_function = function(lvl)
 		local chance = 0.5
-		for i = 1, lvl do
+		for _ = 1, lvl do
 			if chance > 1 then
 				return 1
 			end

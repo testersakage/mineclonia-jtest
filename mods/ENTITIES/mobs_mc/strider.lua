@@ -116,7 +116,7 @@ local strider = {
 		return true
 	end,
 
-	on_die = function(self, pos)
+	on_die = function(self)
 
 		-- drop saddle when horse is killed while riding
 		-- also detach from horse properly

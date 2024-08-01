@@ -118,7 +118,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		return true
 	end,
 
-	on_die = function(self, pos)
+	on_die = function(self, _)
 		if self.driver then
 			mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
 		end

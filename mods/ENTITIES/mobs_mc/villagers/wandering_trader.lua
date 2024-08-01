@@ -25,7 +25,7 @@ end
 
 local function get_random_sapling()
 	local r = {}
-	for k, v in pairs(mcl_trees.woods) do
+	for k, _ in pairs(mcl_trees.woods) do
 		local sap = "mcl_trees:sapling_"..k
 		if minetest.registered_nodes[sap] then
 			table.insert(r, sap)
@@ -101,23 +101,23 @@ local function get_wandering_trades()
 	local speci = table.copy(mobs_mc.wandering_trader.trades_special_table)
 	local ordin = table.copy(mobs_mc.wandering_trader.trades_ordinary_table)
 	local t = {}
-	for i=1,2 do
+	for _ = 1, 2 do
 		table.insert(t, table.remove(purch, math.random(#purch)))
 		table.insert(t, table.remove(speci, math.random(#speci)))
 	end
-	for i=1,5 do
+	for _ = 1, 5 do
 		table.insert(t, table.remove(ordin, math.random(#ordin)))
 	end
 	return { t }
 end
 
-function wandering_trader:do_custom(dtime)
+function wandering_trader:do_custom()
 	if os.time() - self._spawn_time > max_lifetime then
 		self:safe_remove()
 	end
 end
 
-function wandering_trader:on_spawn(dtime)
+function wandering_trader:on_spawn()
 	if self._id then
 		self:set_textures()
 		for _, lid in pairs(self._llamas) do
@@ -268,7 +268,7 @@ end
 
 minetest.register_chatcommand("spawn_wandering_trader", {
 	privs = { debug = true, },
-	func = function(pn, pr)
+	func = function(_, _)
 		minetest.log("current wandering trader spawn chance: "..tostring(current_chance))
 		if attempt_trader_spawn(true) then
 			minetest.log("wandering trader spawned")

@@ -128,7 +128,7 @@ mcl_mobs.register_arrow("mobs_mc:fireball", {
 		mcl_mobs.mob_class.boom(self,self.object:get_pos(), 1, true)
 	end,
 
-	hit_node = function(self, pos, node)
+	hit_node = function(self, pos, _)
 		mcl_mobs.mob_class.boom(self,pos, 1, true)
 	end
 })

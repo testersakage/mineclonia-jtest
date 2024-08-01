@@ -66,7 +66,7 @@ local function func_or_it(item)
 	end
 end
 
-function mobs_mc.villager_mob:init_trades(inv)
+function mobs_mc.villager_mob:init_trades()
 	local profession = mobs_mc.professions[self._profession]
 	local trade_tiers = profession.trades
 	if trade_tiers == nil then
@@ -487,7 +487,7 @@ local function update_offer(inv, player, sound)
 	-- BEGIN OF SPECIAL HANDLING OF COMPASS
 	-- TODO: Remove these check functions when compass and clock are implemented
 	-- as single items.
-	local function check_special(special_item, group, wanted1, wanted2, input1, input2)
+	local function check_special(special_item, group, wanted1, _, input1, input2)
 		if minetest.registered_aliases[special_item] then
 			special_item = minetest.registered_aliases[special_item]
 		end
@@ -602,7 +602,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if not inv then
 				return
 			end
-			for i, trade in pairs(minetest.deserialize(trader._trades)) do
+			for i, _ in pairs(minetest.deserialize(trader._trades)) do
 				if fields["trade_" .. i] then
 					trader:set_trade(player, inv, i)
 					update_offer(inv, player, false)
@@ -706,7 +706,7 @@ local trade_inventory = {
 		end
 		return 0
 	end,
-	allow_put = function(inv, listname, index, stack, player)
+	allow_put = function(_, listname, _, stack, player)
 		if listname == "input" then
 			if not trader_exists(player:get_player_name()) then
 				return 0
@@ -717,10 +717,10 @@ local trade_inventory = {
 			return 0
 		end
 	end,
-	on_put = function(inv, listname, index, stack, player)
+	on_put = function(inv, _, _, _, player)
 		update_offer(inv, player, true)
 	end,
-	on_move = function(inv, from_list, from_index, to_list, to_index, count, player)
+	on_move = function(inv, from_list, _, to_list, _, _, player)
 		if from_list == "output" and to_list == "input" then
 			inv:remove_item("input", inv:get_stack("wanted", 1))
 			local wanted2 = inv:get_stack("wanted", 2)
@@ -733,7 +733,7 @@ local trade_inventory = {
 		end
 		update_offer(inv, player, true)
 	end,
-	on_take = function(inv, listname, index, stack, player)
+	on_take = function(inv, listname, _, _, player)
 		local accept
 		local name = player:get_player_name()
 		if listname == "output" then
