@@ -84,6 +84,38 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craft({
+	output = "mcl_copper:block_chiseled",
+	recipe = {
+		{ "mcl_stairs:slab_copper_cut" },
+		{ "mcl_stairs:slab_copper_cut" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:block_exposed_chiseled",
+	recipe = {
+		{ "mcl_stairs:slab_copper_exposed_cut" },
+		{ "mcl_stairs:slab_copper_exposed_cut" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:block_weathered_chiseled",
+	recipe = {
+		{ "mcl_stairs:slab_copper_weathered_cut" },
+		{ "mcl_stairs:slab_copper_weathered_cut" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:block_oxidized_chiseled",
+	recipe = {
+		{ "mcl_stairs:slab_copper_oxidized_cut" },
+		{ "mcl_stairs:slab_copper_oxidized_cut" }
+	}
+})
+
 local waxable_blocks = { "block", "block_cut", "block_exposed", "block_exposed_cut", "block_weathered", "block_weathered_cut", "block_oxidized", "block_oxidized_cut" }
 
 for _, w in ipairs(waxable_blocks) do
