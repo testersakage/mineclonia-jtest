@@ -157,7 +157,7 @@ local function update_player_textures(player)
 	-- before callbacks run
 	minetest.after(0.1, function()
 		if player:is_player() then
-			for i, func in ipairs(mcl_player.registered_on_visual_change) do
+			for _, func in ipairs(mcl_player.registered_on_visual_change) do
 				func(player)
 			end
 		end
@@ -238,7 +238,7 @@ local function set_swimming(player, anim, anim_speed)
 	mcl_util.set_properties(player, player_props_swimming)
 end
 
-mcl_player.register_globalstep(function(player, dtime)
+mcl_player.register_globalstep(function(player)
 	local name = player:get_player_name()
 	local model_name = mcl_player.players[player].model
 	local model = model_name and mcl_player.registered_player_models[model_name]
@@ -429,7 +429,7 @@ mcl_player.register_globalstep(function(player, dtime)
 	end
 end)
 
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	-- Underwater: Spawn bubble particles
 	if not mcl_player.players[player].pspawner_underwater and minetest.get_item_group(mcl_player.players[player].nodes.head, "water") > 0 then
 		mcl_player.players[player].pspawner_underwater = minetest.add_particlespawner({

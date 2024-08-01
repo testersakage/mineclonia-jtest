@@ -101,13 +101,13 @@ minetest.register_globalstep(function(dtime)
 end)
 
 --cache nodes near the player according to offsets defined above
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	for k, v in pairs(nodeinfo_pos) do
 		mcl_player.players[player].nodes[k] = node_ok(vector.add(player:get_pos(), v))
 	end
 end)
 
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	-- Is player suffocating inside node? (Only for solid full opaque cube type nodes
 	-- without group disable_suffocation=1)
 	-- if swimming, check the feet node instead, because the head node will be above the player when swimming
@@ -130,14 +130,14 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 end)
 
 -- Don't change HP if the player falls in the water or through End Portal:
-mcl_damage.register_modifier(function(obj, damage, reason)
+mcl_damage.register_modifier(function(obj, _, reason)
 	if reason.type == "fall" then
 		local pos = obj:get_pos()
 		local node = minetest.get_node(pos)
 		local velocity = obj:get_velocity() or obj:get_player_velocity() or {x=0,y=-10,z=0}
 		local v_axis_max = math.max(math.abs(velocity.x), math.abs(velocity.y), math.abs(velocity.z))
 		local step = {x = velocity.x / v_axis_max, y = velocity.y / v_axis_max, z = velocity.z / v_axis_max}
-		for i = 1, math.ceil(v_axis_max/5)+1 do -- trace at least 1/5 of the way per second
+		for _ = 1, math.ceil(v_axis_max/5)+1 do -- trace at least 1/5 of the way per second
 			if not node or node.name == "ignore" then
 				minetest.get_voxel_manip():read_from_map(pos, pos)
 				node = minetest.get_node(pos)

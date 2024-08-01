@@ -45,7 +45,7 @@ function minetest.do_item_eat(hp_change, replace_with_item, itemstack, user, poi
 	return itemstack
 end
 
-function mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
+function mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, _)
 	local item = itemstack:get_name()
 	local def = mcl_hunger.registered_foods[item]
 	if not def then
@@ -57,9 +57,8 @@ function mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_t
 		def.saturation = hp_change
 		def.replace = replace_with_item
 	end
-	local func = mcl_hunger.item_eat(def.saturation, def.replace, def.poisontime,
-		def.poison, def.exhaust, def.poisonchance, def.sound)
-	return func(itemstack, user, pointed_thing)
+	local func = mcl_hunger.item_eat(def.saturation, def.replace, def.poisontime, def.poison, def.exhaust, def.poisonchance)
+	return func(itemstack, user)
 end
 
 -- Reset HUD bars after food poisoning
@@ -109,8 +108,8 @@ end
 
 local poisonrandomizer = PseudoRandom(os.time())
 
-function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance, sound)
-	return function(itemstack, user, pointed_thing)
+function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance)
+	return function(itemstack, user)
 		if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 		local itemname = itemstack:get_name()
 		local creative = minetest.is_creative_enabled(user:get_player_name())
@@ -231,7 +230,7 @@ end
 
 if mcl_hunger.active then
 	-- player-action based hunger changes
-	minetest.register_on_dignode(function(pos, oldnode, player)
+	minetest.register_on_dignode(function(_, _, player)
 		-- is_fake_player comes from the pipeworks, we are not interested in those
 		if not player or not player:is_player() or player.is_fake_player == true then
 			return
