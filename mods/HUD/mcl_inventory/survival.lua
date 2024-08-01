@@ -19,7 +19,7 @@ function mcl_inventory.register_survival_inventory_tab(def)
 	end
 
 	if not def.access then
-		function def.access(player)
+		function def.access(_)
 			return true
 		end
 	end
@@ -33,15 +33,15 @@ end
 
 local player_current_tab = {}
 
-minetest.register_on_joinplayer(function(player, last_login)
+minetest.register_on_joinplayer(function(player)
 	player_current_tab[player] = "main"
 end)
 
-minetest.register_on_leaveplayer(function(player, timed_out)
+minetest.register_on_leaveplayer(function(player)
 	player_current_tab[player] = nil
 end)
 
-local function build_page(player, content, inventory, tabname)
+local function build_page(_, content, inventory, tabname)
 	local tab_buttons = "style_type[image;noclip=true]"
 
 	if #mcl_inventory.registered_survival_inventory_tabs ~= 1 then
@@ -192,8 +192,11 @@ function mcl_inventory.build_survival_formspec(player)
 			break
 		end
 	end
+	local form
 
-	local form = build_page(player, tab_def.build(player), tab_def.show_inventory, tab)
+	if tab_def then
+		form = build_page(player, tab_def.build(player), tab_def.show_inventory, tab)
+	end
 
 	return form
 end
@@ -268,7 +271,7 @@ minetest.register_on_player_inventory_action(function(player, action, inv, info)
 	end
 end)
 
-minetest.register_allow_player_inventory_action(function(player, action, inv, info)
+minetest.register_allow_player_inventory_action(function(_, action, inv, info)
 	if info.to_list == "sorter" or info.from_list == "sorter" or info.listname == "sorter" then
 		if action == "put" or action == "take" then return 0 end
 		local stack = inv:get_stack(info.from_list, info.from_index)

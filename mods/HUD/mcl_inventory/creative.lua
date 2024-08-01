@@ -190,13 +190,13 @@ end
 local function init(player)
 	local playername = player:get_player_name()
 	minetest.create_detached_inventory("creative_" .. playername, {
-		allow_move = function(inv, from_list, from_index, to_list, to_index, count, player)
+		allow_move = function()
 			return 0
 		end,
-		allow_put = function(inv, listname, index, stack, player)
+		allow_put = function()
 			return 0
 		end,
-		allow_take = function(inv, listname, index, stack, player)
+		allow_take = function(_, _, _, _, player)
 			if minetest.is_creative_enabled(player:get_player_name()) then
 				return -1
 			else
@@ -209,14 +209,14 @@ end
 
 -- Create the trash field
 local trash = minetest.create_detached_inventory("trash", {
-	allow_put = function(inv, listname, index, stack, player)
+	allow_put = function(_, _, _, stack, player)
 		if minetest.is_creative_enabled(player:get_player_name()) then
 			return stack:get_count()
 		else
 			return 0
 		end
 	end,
-	on_put = function(inv, listname, index, stack, player)
+	on_put = function(inv, listname, index)
 		inv:set_stack(listname, index, "")
 	end,
 })
@@ -732,7 +732,7 @@ end)
 
 
 
-minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack)
+minetest.register_on_placenode(function(_, _, placer, _, itemstack)
 	if placer and minetest.is_creative_enabled(placer:get_player_name()) then
 		-- Place infinite nodes, except for shulker boxes
 		local group = minetest.get_item_group(itemstack:get_name(), "shulker_box")
@@ -742,6 +742,7 @@ end)
 
 local old_mt_handle_node_drops = minetest.handle_node_drops
 
+---@diagnostic disable-next-line: duplicate-set-field
 function minetest.handle_node_drops(pos, drops, digger)
 	if digger and minetest.is_creative_enabled(digger:get_player_name()) then
 		if not digger or not digger:is_player() then
@@ -778,7 +779,7 @@ minetest.register_on_joinplayer(function(player)
 	mcl_inventory.set_creative_formspec(player)
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
+minetest.register_on_player_inventory_action(function(player, action, _, inventory_info)
 	if minetest.is_creative_enabled(player:get_player_name()) and get_stack_size(player) == 64 and action == "put" and
 		inventory_info.listname == "main" then
 		local stack = inventory_info.stack

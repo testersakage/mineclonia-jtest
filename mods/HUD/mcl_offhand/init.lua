@@ -54,7 +54,7 @@ local function offhand_get_count(player)
 	return mcl_offhand.get_offhand(player):get_count()
 end
 
-minetest.register_on_joinplayer(function(player, last_login)
+minetest.register_on_joinplayer(function(player)
 	mcl_offhand[player] = {
 		hud = {},
 		last_wear = offhand_get_wear(player),
@@ -92,7 +92,7 @@ local function update_wear_bar(player, itemstack)
 	player:hud_change(wear_bar, "offset", {x = -320 - (20 - player:hud_get(wear_bar).scale.x / 2), y = -13})
 end
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	for _, player in pairs(minetest.get_connected_players()) do
 		local itemstack = mcl_offhand.get_offhand(player)
 		local offhand_item = itemstack:get_name()
@@ -190,7 +190,7 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-minetest.register_allow_player_inventory_action(function(player, action, inventory, inventory_info)
+minetest.register_allow_player_inventory_action(function(_, action, inventory, inventory_info)
 	if action == "move" and inventory_info.to_list == "offhand" then
 		local itemstack = inventory:get_stack(inventory_info.from_list, inventory_info.from_index)
 		if minetest.get_item_group(itemstack:get_name(), "offhand_item") <= 0  then
@@ -201,7 +201,7 @@ minetest.register_allow_player_inventory_action(function(player, action, invento
 	end
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
+minetest.register_on_player_inventory_action(function(player, action, _, inventory_info)
 	local from_offhand = inventory_info.from_list == "offhand"
 	local to_offhand = inventory_info.to_list == "offhand"
 	if action == "move" and from_offhand or to_offhand then

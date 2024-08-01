@@ -19,7 +19,7 @@ if tonumber(tick_config) then
 end
 
 
-local function must_hide(playername, arm)
+local function must_hide(_, arm)
 	return arm == 0
 end
 

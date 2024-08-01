@@ -475,7 +475,7 @@ awards.register_achievement("mcl:lots_of_trimming", {
 	icon = "silence_armor_trim_smithing_template.png",
 	type = "Advancement",
 	group = "Adventure",
-	on_unlock = function(name, awdef)
+	on_unlock = function(name)
 		-- delete json that is no longer needed
 		minetest.get_player_by_name(name):get_meta():set_string("mcl_smithing_table:achievement_trims", "")
 	end,
@@ -550,7 +550,7 @@ if non_pc_achievements then
 end
 
 -- Show achievements formspec when the button was pressed
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+minetest.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_achievements then
 		local name = player:get_player_name()
 		awards.show_to(name, name, nil, false)
