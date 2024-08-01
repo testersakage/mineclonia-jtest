@@ -150,19 +150,19 @@ minetest.register_chatcommand("whereami", {
 
 mcl_info.register_debug_field("Node feet",{
 	level = 4,
-	func = function(pl,pos)
+	func = function(_, pos)
 		return nodeinfo(pos)
 	end
 })
 mcl_info.register_debug_field("Node below",{
 	level = 4,
-	func = function(pl,pos)
+	func = function(_, pos)
 		return nodeinfo(vector.offset(pos,0,-1,0))
 	end
 })
 mcl_info.register_debug_field("Biome",{
 	level = 3,
-	func = function(pl,pos)
+	func = function(_, pos)
 		local biome_data = minetest.get_biome_data(pos)
 		local biome = biome_data and minetest.get_biome_name(biome_data.biome) or "No biome"
 		if biome_data then
@@ -174,14 +174,14 @@ mcl_info.register_debug_field("Biome",{
 
 mcl_info.register_debug_field("Coords", {
 	level = 2,
-	func = function(pl, pos)
+	func = function(_, pos)
 		return string.format("x:%.1f y:%.1f z:%.1f", pos.x, pos.y, pos.z)
 	end
 })
 
 mcl_info.register_debug_field("Location", {
 	level = 1,
-	func = function(pl, pos)
+	func = function(_, pos)
 		-- overworld
 		if (pos.y >= mcl_vars.mg_overworld_min) and (pos.y <= mcl_vars.mg_overworld_max) then
 			return string.format("Overworld: x:%.1f y:%.1f z:%.1f", pos.x, pos.y, pos.z)

@@ -153,19 +153,19 @@ local function get_killer_message(obj, messages, reason)
 	return reason.source and (get_item_killer_message(obj, messages, reason) or get_plain_killer_message(obj, messages, reason))
 end
 
-local function get_assist_message(obj, messages, reason)
+local function get_assist_message(obj, messages, _)
 	if messages.assist and mcl_death_messages.assist[obj] then
 		return S(messages.assist, mcl_util.get_object_name(obj), mcl_death_messages.assist[obj].name)
 	end
 end
 
-local function get_plain_message(obj, messages, reason)
+local function get_plain_message(obj, messages, _)
 	if messages.plain then
 		return S(messages.plain, mcl_util.get_object_name(obj))
 	end
 end
 
-local function get_fallback_message(obj, messages, reason)
+local function get_fallback_message(obj, _, reason)
 	return "mcl_death_messages.messages." .. reason.type .. " " .. mcl_util.get_object_name(obj)
 end
 

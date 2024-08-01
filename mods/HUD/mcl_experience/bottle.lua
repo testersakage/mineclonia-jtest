@@ -10,7 +10,7 @@ minetest.register_entity("mcl_experience:bottle",{
 		collisionbox = {-0.1, -0.1, -0.1, 0.1, 0.1, 0.1},
 		pointable = false,
 	},
-	on_step = function(self, dtime)
+	on_step = function(self, _)
 		local pos = self.object:get_pos()
 		local node = minetest.get_node(pos)
 		local n = node.name
@@ -56,7 +56,7 @@ minetest.register_craftitem("mcl_experience:bottle", {
 	description = S("Bottle o' Enchanting"),
 	inventory_image = "mcl_experience_bottle.png",
 	wield_image = "mcl_experience_bottle.png",
-	on_use = function(itemstack, placer, pointed_thing)
+	on_use = function(itemstack, placer, _)
 		throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10)
 		if not minetest.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item()
