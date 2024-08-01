@@ -116,6 +116,42 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craft({
+	output = "mcl_copper:bulb_off 4",
+	recipe = {
+		{ "", "mcl_copper:block", "" },
+		{ "mcl_copper:block", "mcl_mobitems:blaze_rod", "mcl_copper:block" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:bulb_exposed_off 4",
+	recipe = {
+		{ "", "mcl_copper:block_exposed", "" },
+		{ "mcl_copper:block_exposed", "mcl_mobitems:blaze_rod", "mcl_copper:block_exposed" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:bulb_weathered_off 4",
+	recipe = {
+		{ "", "mcl_copper:block_weathered", "" },
+		{ "mcl_copper:block_weathered", "mcl_mobitems:blaze_rod", "mcl_copper:block_weathered" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:bulb_oxidized_off 4",
+	recipe = {
+		{ "", "mcl_copper:block_oxidized", "" },
+		{ "mcl_copper:block_oxidized", "mcl_mobitems:blaze_rod", "mcl_copper:block_oxidized" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
 local waxable_blocks = { "block", "block_cut", "block_exposed", "block_exposed_cut", "block_weathered", "block_weathered_cut", "block_oxidized", "block_oxidized_cut" }
 
 for _, w in ipairs(waxable_blocks) do
