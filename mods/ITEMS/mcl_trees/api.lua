@@ -470,6 +470,7 @@ function mcl_trees.register_wood(name, p)
 			description = p.fence.description or S("@1 Fence", rname),
 			tiles = p.fence.tiles or { "mcl_fences_fence_"..name..".png" },
 			groups = p.fence.groups or table.merge(wood_groups, { fence_wood = 1 }),
+			connects_to = p.fence.connects_to or {},
 			sounds = p.fence.sounds or wood_sounds,
 			_mcl_blast_resistance = p.fence._mcl_blast_resistance or 3,
 			_mcl_hardness = p.fence._mcl_hardness or 2,
