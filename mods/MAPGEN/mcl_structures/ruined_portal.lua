@@ -4,7 +4,7 @@ local modpath = minetest.get_modpath(modname)
 local function get_replacements(b,c,pr)
 	local r = {}
 	if not b then return r end
-	for k,v in pairs(b) do
+	for _, v in pairs(b) do
 		if pr:next(1,100) < c then table.insert(r,v) end
 	end
 	return r
@@ -30,7 +30,7 @@ local def = {
 		modpath.."/schematics/mcl_structures_ruined_portal_6.mts",
 		modpath.."/schematics/mcl_structures_ruined_portal_99.mts",
 	},
-	after_place = function(pos, def, pr)
+	after_place = function(pos, _, pr)
 		local p1 = vector.offset(pos,-9, -1, -9)
 		local p2 = vector.offset(pos,9, 16 ,9)
 		local gold = minetest.find_nodes_in_area(p1,p2,{"mcl_core:goldblock"})

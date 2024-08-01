@@ -10,7 +10,7 @@ function mcl_villages.paths(settlement_info)
 	local distance
 	starting_point = settlement_info[1]["pos"]
 
-	for o,p in pairs(settlement_info) do
+	for o, _ in pairs(settlement_info) do
 
 		end_point = settlement_info[o]["pos"]
 		if starting_point ~= end_point then
@@ -99,7 +99,7 @@ function mcl_villages.dump_path_ends()
 end
 
 -- Insert end points in to the nested tables
-function mcl_villages.store_path_ends(minp, maxp, pos, size, blockseed, bell_pos)
+function mcl_villages.store_path_ends(minp, maxp, pos, _, blockseed, bell_pos)
 	local path_end_nodes = minetest.find_nodes_in_area(
 		vector.offset(minp, -4, -4, -4),
 		vector.offset(maxp, 4, 4, 4),

@@ -60,7 +60,7 @@ mcl_structures.register_structure("pillager_outpost",{
 			}
 		}}
 	},
-	after_place = function(p,def,pr)
+	after_place = function(p, _, pr)
 		local p1 = vector.offset(p,-9,0,-9)
 		local p2 = vector.offset(p,9,32,9)
 		mcl_structures.spawn_mobs("mobs_mc:pillager",spawnon,p1,p2,pr,5)

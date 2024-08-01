@@ -51,7 +51,7 @@ local function build_a_settlement(minp, maxp, blockseed)
 	end
 end
 
-local function ecb_village(blockpos, action, calls_remaining, param)
+local function ecb_village(_, _, calls_remaining, param)
 	if calls_remaining >= 1 then return end
 	local minp, maxp, blockseed = param.minp, param.maxp, param.blockseed
 	build_a_settlement(minp, maxp, blockseed)
@@ -105,7 +105,7 @@ minetest.register_node("mcl_villages:village_block", {
 	-- Somethings don't work reliably when done in the map building
 	-- so we use a timer to run them later when they work more reliably
 	-- e.g. spawning mobs, running minetest.find_path
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos, _)
 		local meta = minetest.get_meta(pos)
 		local blockseed = meta:get_string("blockseed")
 		local node_type = meta:get_string("node_type")
@@ -125,7 +125,7 @@ minetest.register_node("mcl_villages:building_block", {
 	-- Somethings don't work reliably when done in the map building
 	-- so we use a timer to run them later when they work more reliably
 	-- e.g. spawning mobs, running minetest.find_path
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos, _)
 		local meta = minetest.get_meta(pos)
 		local minp = minetest.string_to_pos(meta:get_string("minp"))
 		local maxp = minetest.string_to_pos(meta:get_string("maxp"))
@@ -156,7 +156,7 @@ minetest.register_abm({
 	nodenames = { "group:bed" },
 	interval = 180,
 	chance = 2,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		local bell_pos = minetest.pos_to_string(pos)
 		if
 			mcl_villages.forced_blocks[bell_pos]
