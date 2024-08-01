@@ -19,6 +19,7 @@ mcl_trees.register_wood("bamboo",{
 	sapling = false,
 	potted_sapling = false,
 	leaves = false,
+	wood_amount = 2,
 	tree = {
 		description = S("Block of Bamboo"),
 		_doc_items_longdesc = block_doc,
