@@ -161,10 +161,26 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:block_chiseled_preserved",
+	recipe = {
+		{ "mcl_stairs:slab_copper_cut_preserved" },
+		{ "mcl_stairs:slab_copper_cut_preserved" }
+	}
+})
+
+minetest.register_craft({
 	output = "mcl_copper:block_exposed_chiseled",
 	recipe = {
 		{ "mcl_stairs:slab_copper_exposed_cut" },
 		{ "mcl_stairs:slab_copper_exposed_cut" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:block_exposed_chiseled_preserved",
+	recipe = {
+		{ "mcl_stairs:slab_copper_exposed_cut_preserved" },
+		{ "mcl_stairs:slab_copper_exposed_cut_preserved" }
 	}
 })
 
@@ -177,6 +193,14 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:block_weathered_chiseled_preserved",
+	recipe = {
+		{ "mcl_stairs:slab_copper_weathered_cut_preserved" },
+		{ "mcl_stairs:slab_copper_weathered_cut_preserved" }
+	}
+})
+
+minetest.register_craft({
 	output = "mcl_copper:block_oxidized_chiseled",
 	recipe = {
 		{ "mcl_stairs:slab_copper_oxidized_cut" },
@@ -185,10 +209,27 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:block_oxidized_chiseled_preserved",
+	recipe = {
+		{ "mcl_stairs:slab_copper_oxidized_cut_preserved" },
+		{ "mcl_stairs:slab_copper_oxidized_cut_preserved" }
+	}
+})
+
+minetest.register_craft({
 	output = "mcl_copper:bulb_off 4",
 	recipe = {
 		{ "", "mcl_copper:block", "" },
 		{ "mcl_copper:block", "mcl_mobitems:blaze_rod", "mcl_copper:block" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:bulb_off_preserved 4",
+	recipe = {
+		{ "", "mcl_copper:block_preserved", "" },
+		{ "mcl_copper:block_preserved", "mcl_mobitems:blaze_rod", "mcl_copper:block_preserved" },
 		{ "", "mesecons:redstone", "" }
 	}
 })
@@ -203,6 +244,15 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:bulb_exposed_off_preserved 4",
+	recipe = {
+		{ "", "mcl_copper:block_exposed_preserved", "" },
+		{ "mcl_copper:block_exposed_preserved", "mcl_mobitems:blaze_rod", "mcl_copper:block_exposed_preserved" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
 	output = "mcl_copper:bulb_weathered_off 4",
 	recipe = {
 		{ "", "mcl_copper:block_weathered", "" },
@@ -212,10 +262,28 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:bulb_weathered_off_preserved 4",
+	recipe = {
+		{ "", "mcl_copper:block_weathered_preserved", "" },
+		{ "mcl_copper:block_weathered_preserved", "mcl_mobitems:blaze_rod", "mcl_copper:block_weathered_preserved" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
 	output = "mcl_copper:bulb_oxidized_off 4",
 	recipe = {
 		{ "", "mcl_copper:block_oxidized", "" },
 		{ "mcl_copper:block_oxidized", "mcl_mobitems:blaze_rod", "mcl_copper:block_oxidized" },
+		{ "", "mesecons:redstone", "" }
+	}
+})
+
+minetest.register_craft({
+	output = "mcl_copper:bulb_oxidized_off_preserved 4",
+	recipe = {
+		{ "", "mcl_copper:block_oxidized_preserved", "" },
+		{ "mcl_copper:block_oxidized_preserved", "mcl_mobitems:blaze_rod", "mcl_copper:block_oxidized_preserved" },
 		{ "", "mesecons:redstone", "" }
 	}
 })
