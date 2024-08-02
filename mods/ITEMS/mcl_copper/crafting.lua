@@ -25,10 +25,26 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:block_cut_preserved 4",
+	recipe = {
+		{ "mcl_copper:block_preserved", "mcl_copper:block_preserved" },
+		{ "mcl_copper:block_preserved", "mcl_copper:block_preserved" },
+	},
+})
+
+minetest.register_craft({
 	output = "mcl_copper:block_exposed_cut 4",
 	recipe = {
 		{ "mcl_copper:block_exposed", "mcl_copper:block_exposed" },
 		{ "mcl_copper:block_exposed", "mcl_copper:block_exposed" },
+	},
+})
+
+minetest.register_craft({
+	output = "mcl_copper:block_exposed_cut_preserved 4",
+	recipe = {
+		{ "mcl_copper:block_exposed_preserved", "mcl_copper:block_exposed_preserved" },
+		{ "mcl_copper:block_exposed_preserved", "mcl_copper:block_exposed_preserved" },
 	},
 })
 
@@ -41,10 +57,26 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:block_oxidized_cut_preserved 4",
+	recipe = {
+		{ "mcl_copper:block_oxidized_preserved", "mcl_copper:block_oxidized_preserved" },
+		{ "mcl_copper:block_oxidized_preserved", "mcl_copper:block_oxidized_preserved" },
+	},
+})
+
+minetest.register_craft({
 	output = "mcl_copper:block_weathered_cut 4",
 	recipe = {
 		{ "mcl_copper:block_weathered", "mcl_copper:block_weathered" },
 		{ "mcl_copper:block_weathered", "mcl_copper:block_weathered" },
+	},
+})
+
+minetest.register_craft({
+	output = "mcl_copper:block_weathered_cut_preserved 4",
+	recipe = {
+		{ "mcl_copper:block_weathered_preserved", "mcl_copper:block_weathered_preserved" },
+		{ "mcl_copper:block_weathered_preserved", "mcl_copper:block_weathered_preserved" },
 	},
 })
 
