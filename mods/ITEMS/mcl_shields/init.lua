@@ -73,7 +73,7 @@ minetest.register_entity("mcl_shields:shield_entity", {
 	_blocking = false,
 	_shield_number = 2,
 	_texture_copy = "",
-	on_step = function(self, dtime, moveresult)
+	on_step = function(self, _, _)
 		local player = self.object:get_attach()
 		if not player then
 			self.object:remove()
@@ -163,7 +163,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 
 	if not minetest.is_creative_enabled(obj:get_player_name()) and damage >= 3 then
-		shieldstack:add_wear(65535 / durability)
+		shieldstack:add_wear(65535 / durability) ---@diagnostic disable-line: need-check-nil
 		if blocking == 2 then
 			obj:set_wielded_item(shieldstack)
 		else
@@ -426,7 +426,7 @@ local function update_shield_hud(player, blocking, shieldstack)
 	end
 end
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	for _, player in pairs(minetest.get_connected_players()) do
 
 		handle_blocking(player)
@@ -528,7 +528,7 @@ local function to_shield_texture(banner_texture)
 	:gsub("mcl_banners", "mcl_shield_pattern")
 end
 
-local function craft_banner_on_shield(itemstack, player, old_craft_grid, craft_inv)
+local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	if not string.find(itemstack:get_name(), "mcl_shields:shield_") then
 		return itemstack
 	end

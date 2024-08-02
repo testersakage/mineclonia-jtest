@@ -3,12 +3,12 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local tt_help = S("Flight Duration:")
 local description = S("Firework Rocket")
 
-local function register_rocket(n, duration, force)
+local function register_rocket(n, duration, _)
 	minetest.register_craftitem("mcl_fireworks:rocket_" .. n, {
 		description = description,
 		_tt_help = tt_help .. " " .. duration,
 		inventory_image = "mcl_fireworks_rocket.png",
-		on_use = function(itemstack, user, pointed_thing)
+		on_use = function(itemstack, user)
 			local elytra = mcl_player.players[user].elytra
 			if elytra.active and elytra.rocketing <= 0 then
 				elytra.rocketing = duration

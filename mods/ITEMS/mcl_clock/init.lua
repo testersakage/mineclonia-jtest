@@ -97,7 +97,7 @@ minetest.register_globalstep(function(dtime)
 	mcl_clock.old_time = now
 	mcl_clock.random_frame = random_frame
 
-	for p, player in pairs(minetest.get_connected_players()) do
+	for _, player in pairs(minetest.get_connected_players()) do
 		for s, stack in pairs(player:get_inventory():get_list("main")) do
 			local frame
 			-- Clocks do not work in certain zones

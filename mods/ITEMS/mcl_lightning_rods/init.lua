@@ -76,7 +76,7 @@ rod_def_a.mesecons = {
 	},
 }
 
-rod_def_a.on_timer = function(pos, elapsed)
+rod_def_a.on_timer = function(pos)
 	local node = minetest.get_node(pos)
 
 	if node.name == "mcl_lightning_rods:rod_powered" then --has not been dug
@@ -90,7 +90,7 @@ end
 
 minetest.register_node("mcl_lightning_rods:rod_powered", rod_def_a)
 
-mcl_lightning.register_on_strike(function(pos, pos2, objects)
+mcl_lightning.register_on_strike(function(pos)
 	local lr = minetest.find_nodes_in_area_under_air(vector.offset(pos, -64, -32, -64), vector.offset(pos, 64, 64, 64), { "group:attracts_lightning" }, true)
 	lr = (lr and #lr > 0 and lr[1]) or false
 	if lr then

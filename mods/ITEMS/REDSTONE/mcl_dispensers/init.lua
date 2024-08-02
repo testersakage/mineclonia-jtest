@@ -65,7 +65,7 @@ end
 local dispenserdef = {
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -74,7 +74,7 @@ local dispenserdef = {
 			return count
 		end
 	end,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -83,7 +83,7 @@ local dispenserdef = {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -284,7 +284,7 @@ horizontal_def._doc_items_usagehelp = S("Place the dispenser in one of 6 possibl
 	S("• Spawn eggs: Will summon the mob they contain") .. "\n" ..
 	S("• Other items: Are simply dropped")
 
-function horizontal_def.after_place_node(pos, placer, itemstack, pointed_thing)
+function horizontal_def.after_place_node(pos, placer, _, _)
 	setup_dispenser(pos)
 	orientate_dispenser(pos, placer)
 end
@@ -345,7 +345,7 @@ minetest.register_lbm({
 	label = "Update dispenser formspecs (0.60.0)",
 	name = "mcl_dispensers:update_formspecs_0_60_0",
 	nodenames = { "mcl_dispensers:dispenser", "mcl_dispensers:dispenser_down", "mcl_dispensers:dispenser_up" },
-	action = function(pos, node)
+	action = function(pos)
 		setup_dispenser(pos)
 		minetest.log("action", "[mcl_dispenser] Node formspec updated at " .. minetest.pos_to_string(pos))
 	end,

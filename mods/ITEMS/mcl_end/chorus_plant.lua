@@ -106,7 +106,7 @@ function mcl_end.detach_chorus_plant(start_pos, digger)
 	no_detach = {}
 end
 
-function mcl_end.check_detach_chorus_plant(pos, oldnode, oldmetadata, digger)
+function mcl_end.check_detach_chorus_plant(pos, _, _, digger)
 	mcl_end.detach_chorus_plant(pos, digger)
 end
 
@@ -403,7 +403,7 @@ function mcl_end.grow_chorus_plant_step(pos, node, pr)
 				elseif branching == true then
 					branches = pr:next(0, 3)
 				end
-				for b=1, branches do
+				for _ = 1, branches do
 					local next_branch = pr:next(1, #around)
 					local branch = vector.add(pos, around[next_branch])
 					local below_branch = vector.add(branch, {x=0,y=-1,z=0})
@@ -452,7 +452,7 @@ minetest.register_abm({
 	nodenames = { "mcl_end:chorus_flower" },
 	interval = 35.0,
 	chance = 4.0,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		mcl_end.grow_chorus_plant_step(pos, node, pr)
 	end,
 })
@@ -469,7 +469,7 @@ minetest.register_abm({
 local function random_teleport(player)
 	local pos = player:get_pos()
 	-- 16 attempts to find a suitable position
-	for a=1, 16 do
+	for _ = 1, 16 do
 		-- Teleportation box
 		local x,y,z
 		x = math.random(round(pos.x)-8, round(pos.x)+8)

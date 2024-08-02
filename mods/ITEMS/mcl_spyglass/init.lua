@@ -54,14 +54,14 @@ controls.register_on_press(function(player, key)
 	end
 end)
 
-controls.register_on_release(function(player, key, time)
+controls.register_on_release(function(player, key)
 	if key ~= "RMB" and key ~= "zoom" then return end
 	local ctrl = player:get_player_control()
 	if key == "RMB" and ctrl.zoom or key == "zoom" and ctrl.place then return end
 	remove_scope(player)
 end)
 
-controls.register_on_hold(function(player, key, time)
+controls.register_on_hold(function(player, key)
 	if key ~= "RMB" and key ~= "zoom" then return end
 	local wielditem = player:get_wielded_item()
 	if wielditem:get_name() == "mcl_spyglass:spyglass" then

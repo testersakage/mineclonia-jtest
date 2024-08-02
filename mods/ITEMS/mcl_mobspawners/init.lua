@@ -125,7 +125,7 @@ end
 
 -- Spawn mobs around pos
 -- NOTE: The node is timer-based, rather than ABM-based.
-local function spawn_mobs(pos, elapsed)
+local function spawn_mobs(pos)
 
 	-- get meta
 	local meta = minetest.get_meta(pos)
@@ -196,7 +196,7 @@ local function spawn_mobs(pos, elapsed)
 	end
 
 	-- count mob objects of same type in area
-	for k, obj in ipairs(objs) do
+	for _, obj in ipairs(objs) do
 
 		ent = obj:get_luaentity()
 
@@ -223,7 +223,7 @@ local function spawn_mobs(pos, elapsed)
 		if spawn_count_overrides[mob] then
 			max = spawn_count_overrides[mob]
 		end
-		for a=1, max do
+		for _ = 1, max do
 			if #air <= 0 then
 				-- We're out of space! Stop spawning
 				break
@@ -295,7 +295,7 @@ minetest.register_node("mcl_mobspawners:spawner", {
 		return new_itemstack
 	end,
 
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+	on_rightclick = function(pos, _, clicker, itemstack, _)
 		if not clicker:is_player() then return end
 		if minetest.get_item_group(itemstack:get_name(),"spawn_egg") == 0 then return end
 		local name = clicker:get_player_name()
@@ -357,7 +357,7 @@ doll_def.get_staticdata = function(self)
 	return self._mob
 end
 
-doll_def.on_activate = function(self, staticdata, dtime_s)
+doll_def.on_activate = function(self, staticdata)
 	local mob = staticdata
 	if mob == "" or mob == nil then
 		mob = default_mob
@@ -380,7 +380,7 @@ doll_def.on_step = function(self, dtime)
 	end
 end
 
-doll_def.on_punch = function(self, hitter) end
+doll_def.on_punch = function() end
 
 minetest.register_entity("mcl_mobspawners:doll", doll_def)
 
@@ -390,7 +390,7 @@ minetest.register_lbm({
 	name = "mcl_mobspawners:respawn_entities",
 	nodenames = { "mcl_mobspawners:spawner" },
 	run_at_every_load = true,
-	action = function(pos, node)
+	action = function(pos)
 		respawn_doll(pos)
 	end,
 })

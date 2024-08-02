@@ -179,7 +179,7 @@ minetest.register_craftitem("mcl_books:written_book", {
 for i = 1, 8 do
 	local rc = {}
 	table.insert(rc, "mcl_books:written_book")
-	for j = 1, i do	table.insert(rc, "mcl_books:writable_book") end
+	for _ = 1, i do	table.insert(rc, "mcl_books:writable_book") end
 
 	minetest.register_craft({
 		type = "shapeless",
@@ -188,7 +188,7 @@ for i = 1, 8 do
 	})
 end
 
-local function craft_copy_book(itemstack, player, old_craft_grid, craft_inv)
+local function craft_copy_book(itemstack, player, old_craft_grid, _)
 	if itemstack:get_name() ~= "mcl_books:written_book" then
 		return
 	end
@@ -246,7 +246,7 @@ local function on_blast(pos)
 end
 
 -- Simple protection checking functions
-local function protection_check_move(pos, from_list, from_index, to_list, to_index, count, player)
+local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
@@ -256,7 +256,7 @@ local function protection_check_move(pos, from_list, from_index, to_list, to_ind
 	end
 end
 
-local function protection_check_put_take(pos, listname, index, stack, player)
+local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
@@ -268,7 +268,7 @@ local function protection_check_put_take(pos, listname, index, stack, player)
 	end
 end
 
-local function bookshelf_gui(pos, node, clicker)
+local function bookshelf_gui(pos, _, clicker)
 	if not bookshelf_inv then return end
 	local name = minetest.get_meta(pos):get_string("name")
 
@@ -337,21 +337,21 @@ minetest.register_node("mcl_books:bookshelf", {
 		local inv = meta:get_inventory()
 		inv:set_size("main", 9 * 3)
 	end,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
+	after_place_node = function(pos, _, itemstack, _)
 		minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 	end,
 	allow_metadata_inventory_move = protection_check_move,
 	allow_metadata_inventory_take = protection_check_put_take,
 	allow_metadata_inventory_put = protection_check_put_take,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" moves stuff in bookshelf at " .. minetest.pos_to_string(pos))
 	end,
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" moves stuff to bookshelf at " .. minetest.pos_to_string(pos))
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" takes stuff from bookshelf at " .. minetest.pos_to_string(pos))
 	end,

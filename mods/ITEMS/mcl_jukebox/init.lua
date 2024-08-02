@@ -170,7 +170,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 		local inv = meta:get_inventory()
 		inv:set_size("main", 1)
 	end,
-	on_rightclick= function(pos, node, clicker, itemstack, pointed_thing)
+	on_rightclick= function(pos, _, clicker, itemstack, _)
 		if not clicker then return end
 		local cname = clicker:get_player_name()
 		local ph = minetest.hash_node_position(pos)
@@ -213,7 +213,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 		end
 		return itemstack
 	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -222,7 +222,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 			return count
 		end
 	end,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -231,7 +231,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -240,7 +240,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 			return stack:get_count()
 		end
 	end,
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+	after_dig_node = function(pos, _, oldmetadata, digger)
 		local name = digger:get_player_name()
 		local meta = minetest.get_meta(pos)
 		local meta2 = meta

@@ -1,6 +1,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local function create_soil(pos, inv)
+local function create_soil(pos)
 	if pos == nil then
 		return false
 	end

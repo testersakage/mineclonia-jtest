@@ -66,7 +66,7 @@ local dropperdef = {
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -75,7 +75,7 @@ local dropperdef = {
 			return count
 		end
 	end,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -84,7 +84,7 @@ local dropperdef = {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -160,7 +160,7 @@ horizontal_def.description = S("Dropper")
 horizontal_def._tt_help = S("9 inventory slots") .. "\n" .. S("Drops item when powered by redstone power")
 horizontal_def._doc_items_longdesc = S("A dropper is a redstone component and a container with 9 inventory slots which, when supplied with redstone power, drops an item or puts it into a container in front of it.")
 horizontal_def._doc_items_usagehelp = S("Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item.")
-function horizontal_def.after_place_node(pos, placer, itemstack, pointed_thing)
+function horizontal_def.after_place_node(pos, placer, _, _)
 	setup_dropper(pos)
 	orientate_dropper(pos, placer)
 end
@@ -223,7 +223,7 @@ minetest.register_lbm({
 	label = "Update dropper formspecs (0.60.0)",
 	name = "mcl_droppers:update_formspecs_0_60_0",
 	nodenames = { "mcl_droppers:dropper", "mcl_droppers:dropper_down", "mcl_droppers:dropper_up" },
-	action = function(pos, node)
+	action = function(pos)
 		setup_dropper(pos)
 		minetest.log("action", "[mcl_droppers] Node formspec updated at " .. minetest.pos_to_string(pos))
 	end,

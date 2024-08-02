@@ -114,7 +114,7 @@ local function rotation_level_to_yaw(rotation_level)
 	return (rotation_level * (math.pi/8)) + math.pi
 end
 
-local function on_dig_banner(pos, node, digger)
+local function on_dig_banner(pos, _, digger)
 	-- Check protection
 	local name = digger:get_player_name()
 	if minetest.is_protected(pos, name) then
@@ -256,7 +256,9 @@ local function respawn_banner_entity(pos, node, force)
 	-- Set rotation
 	local rotation_level = meta:get_int("rotation_level")
 	local final_yaw = rotation_level_to_yaw(rotation_level)
-	banner_entity:set_yaw(final_yaw)
+	if banner_entity then
+		banner_entity:set_yaw(final_yaw)
+	end
 end
 
 -- Banner nodes.
@@ -303,7 +305,7 @@ S("You can copy the pattern of a banner by placing two banners of the same color
 	end,
 	_mcl_hardness = 1,
 	_mcl_blast_resistance = 1,
-	on_rotate = function(pos, node, user, mode, param2)
+	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
 			local meta = minetest.get_meta(pos)
 			local rot = meta:get_int("rotation_level")
@@ -347,7 +349,7 @@ minetest.register_node("mcl_banners:hanging_banner", {
 	end,
 	_mcl_hardness = 1,
 	_mcl_blast_resistance = 1,
-	on_rotate = function(pos, node, user, mode, param2)
+	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
 			local r = screwdriver.rotate.wallmounted(pos, node, mode)
 			node.param2 = r
@@ -373,8 +375,8 @@ minetest.register_node("mcl_banners:hanging_banner", {
 })
 
 -- for pattern_name, pattern in pairs(patterns) do
-for colorid, colortab in pairs(mcl_banners.colors) do
-    for i, pattern_name in ipairs(pattern_names) do
+for _, colortab in pairs(mcl_banners.colors) do
+    for _, pattern_name in ipairs(pattern_names) do
 	local itemid = colortab[1]
 	local desc = S("@1 Banner", mcl_dyes.colors[itemid].readable_name)
 	local wool = colortab[3]

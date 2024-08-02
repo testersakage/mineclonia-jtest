@@ -90,7 +90,7 @@ local function get_arrow(player)
 	return arrow_stack, arrow_stack_id
 end
 
-local function player_shoot_arrow(itemstack, player, power, damage, is_critical)
+local function player_shoot_arrow(_, player, power, damage, is_critical)
 	local arrow_stack, arrow_stack_id = get_arrow(player)
 	local arrow_itemstring
 	local has_infinity_enchantment = mcl_enchanting.has_enchantment(player:get_wielded_item(), "infinity")
@@ -139,7 +139,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 	stack_max = 1,
 	range = 4,
 	-- Trick to disable digging as well
-	on_use = function() return end,
+	on_use = function() end,
 	on_place = function(itemstack, player, pointed_thing)
 		local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 		if rc then return rc end
@@ -199,7 +199,7 @@ for level=0, 2 do
 		range = 0, -- Pointing range to 0 to prevent punching with bow :D
 		groups = {not_in_creative_inventory=1, not_in_craft_guide=1, bow=1, enchantability=1},
 		-- Trick to disable digging as well
-		on_use = function() return end,
+		on_use = function() end,
 		on_drop = function(itemstack, dropper, pos)
 			reset_bow_state(dropper)
 			itemstack:get_meta():set_string("active", "")
@@ -221,7 +221,7 @@ for level=0, 2 do
 end
 
 
-controls.register_on_release(function(player, key, time)
+controls.register_on_release(function(player, key)
 	if key~="RMB" and key~="zoom" then return end
 	--local inv = minetest.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
@@ -287,7 +287,7 @@ controls.register_on_release(function(player, key, time)
 	end
 end)
 
-controls.register_on_hold(function(player, key, time)
+controls.register_on_hold(function(player, key)
 	local name = player:get_player_name()
 	local creative = minetest.is_creative_enabled(name)
 	if (key ~= "RMB" and key ~= "zoom") or not (creative or get_arrow(player)) then
@@ -337,7 +337,7 @@ controls.register_on_hold(function(player, key, time)
 	end
 end)
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	for _, player in pairs(minetest.get_connected_players()) do
 		local name = player:get_player_name()
 		local wielditem = player:get_wielded_item()

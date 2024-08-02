@@ -21,14 +21,14 @@ local function register_infested_block(name, description)
 		_mcl_silk_touch_drop = {name},
 		_mcl_hardness = olddef._mcl_hardness / 2,
 		_mcl_blast_resistance = 0.75,
-		after_dig_node = function (pos, oldnode, oldmetadata, digger)
+		after_dig_node = function (pos, _, _, digger)
 			local itemstack = digger:get_wielded_item()
 			if not mcl_enchanting.has_enchantment(itemstack, "silk_touch")
 			and not minetest.is_creative_enabled("") then
 				minetest.add_entity(pos, "mobs_mc:silverfish")
 			end
 		end,
-		on_blast = function (pos, intensity)
+		on_blast = function (pos, _)
 			minetest.remove_node(pos)
 			if not minetest.is_creative_enabled("") then
 				minetest.add_entity(pos, "mobs_mc:silverfish")

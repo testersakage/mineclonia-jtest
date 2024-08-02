@@ -39,7 +39,7 @@ minetest.register_node("mcl_core:cactus", {
 		},
 	},
 	-- Only allow to place cactus on sand or cactus
-	on_place = mcl_util.generate_on_place_plant_function(function(pos, node)
+	on_place = mcl_util.generate_on_place_plant_function(function(pos)
 		local node_below = minetest.get_node_or_nil({x=pos.x,y=pos.y-1,z=pos.z})
 		if not node_below then return false end
 		return (node_below.name == "mcl_core:cactus" or minetest.get_item_group(node_below.name, "sand") == 1)
@@ -55,7 +55,7 @@ mcl_flowerpots.register_potted_cube("mcl_core:cactus", {
 	image = "mcl_flowerpots_cactus.png",
 })
 
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	-- Am I near a cactus?
 	local pos = player:get_pos()
 	local near = minetest.find_node_near(pos, 1, "mcl_core:cactus")
@@ -112,7 +112,7 @@ minetest.register_node("mcl_core:reeds", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	node_placement_prediction = "",
 	drop = "mcl_core:reeds", -- to prevent color inheritation
-	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, place_node)
+	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _)
 		local soil_pos = {x=place_pos.x, y=place_pos.y-1, z=place_pos.z}
 		local soil_node = minetest.get_node_or_nil(soil_pos)
 		if not soil_node then return false end

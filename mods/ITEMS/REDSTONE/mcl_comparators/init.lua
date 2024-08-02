@@ -4,7 +4,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 local function comparator_get_output_rules(node)
 	local rules = {{x = -1, y = 0, z = 0, spread=true}}
-	for i = 0, node.param2 do
+	for _ = 0, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules
@@ -18,7 +18,7 @@ local function comparator_get_input_rules(node)
 		{x = 0, y = 0, z = -1},  -- side
 		{x = 0, y = 0, z =  1},  -- side
 	}
-	for i = 0, node.param2 do
+	for _ = 0, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules

@@ -45,7 +45,7 @@ local function resolve_commands(commands, pos)
 
 	local nearest, farthest = nil, nil
 	local min_distance, max_distance = math.huge, -1
-	for index, player in pairs(players) do
+	for _, player in pairs(players) do
 		local distance = vector.distance(pos, player:get_pos())
 		if distance < min_distance then
 			min_distance = distance
@@ -135,7 +135,7 @@ local function commandblock_action_off(pos, node)
 	end
 end
 
-local function on_rightclick(pos, node, player, itemstack, pointed_thing)
+local function on_rightclick(pos, _, player, _, _)
 	if not command_blocks_activated then
 		minetest.chat_send_player(player:get_player_name(), msg_not_activated)
 		return

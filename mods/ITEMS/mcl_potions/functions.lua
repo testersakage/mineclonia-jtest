@@ -114,7 +114,7 @@ local is_player, entity, meta
 minetest.register_globalstep(function(dtime)
 
 	-- Check for invisible players
-	for player, vals in pairs(EF.invisible) do
+	for player, _ in pairs(EF.invisible) do
 
 		EF.invisible[player].timer = EF.invisible[player].timer + dtime
 
@@ -134,7 +134,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for withering players
-	for player, vals in pairs(EF.withering) do
+	for player, _ in pairs(EF.withering) do
 
 		is_player = player:is_player()
 		entity = player:get_luaentity()
@@ -161,7 +161,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for poisoned players
-	for player, vals in pairs(EF.poisoned) do
+	for player, _ in pairs(EF.poisoned) do
 
 		is_player = player:is_player()
 		entity = player:get_luaentity()
@@ -190,7 +190,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for regenerating players
-	for player, vals in pairs(EF.regenerating) do
+	for player, _ in pairs(EF.regenerating) do
 
 		is_player = player:is_player()
 		entity = player:get_luaentity()
@@ -226,7 +226,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for water breathing players
-	for player, vals in pairs(EF.water_breathing) do
+	for player, _ in pairs(EF.water_breathing) do
 
 		if player:is_player() then
 
@@ -253,7 +253,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for leaping players
-	for player, vals in pairs(EF.leaping) do
+	for player, _ in pairs(EF.leaping) do
 
 		if player:is_player() then
 
@@ -276,7 +276,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for swift players
-	for player, vals in pairs(EF.swift) do
+	for player, _ in pairs(EF.swift) do
 
 		if player:is_player() then
 
@@ -299,7 +299,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for Night Vision equipped players
-	for player, vals in pairs(EF.night_vision) do
+	for player, _ in pairs(EF.night_vision) do
 
 		if player:is_player() then
 
@@ -323,7 +323,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for Fire Proof players
-	for player, vals in pairs(EF.fire_proof) do
+	for player, _ in pairs(EF.fire_proof) do
 
 		if player:is_player() then
 
@@ -347,7 +347,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for Weak players
-	for player, vals in pairs(EF.weak) do
+	for player, _ in pairs(EF.weak) do
 
 		if player:is_player() then
 
@@ -368,7 +368,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	-- Check for Strong players
-	for player, vals in pairs(EF.strong) do
+	for player, _ in pairs(EF.strong) do
 
 		if player:is_player() then
 
@@ -389,7 +389,7 @@ minetest.register_globalstep(function(dtime)
 	end
 
 		-- Check for Bad Omen
-	for player, vals in pairs(EF.bad_omen) do
+	for player, _ in pairs(EF.bad_omen) do
 
 		is_player = player:is_player()
 
@@ -411,7 +411,7 @@ minetest.register_globalstep(function(dtime)
 end)
 
 -- Prevent damage to player with Fire Resistance enabled
-mcl_damage.register_modifier(function(obj, damage, reason)
+mcl_damage.register_modifier(function(obj, _, reason)
 	if EF.fire_proof[obj] and not reason.flags.bypasses_magic and reason.flags.is_fire then
 		return 0
 	end
@@ -656,7 +656,7 @@ function mcl_potions.make_invisible(obj_ref, hide)
 end
 
 
-function mcl_potions._use_potion(item, obj, color)
+function mcl_potions._use_potion(_, obj, color)
 	local d = 0.1
 	local pos = obj:get_pos()
 	minetest.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})
@@ -962,7 +962,7 @@ function mcl_potions.regeneration_func(player, factor, duration)
 end
 
 
-function mcl_potions.invisiblility_func(player, null, duration)
+function mcl_potions.invisiblility_func(player, _, duration)
 
 	if not player or player:get_hp() <= 0 then return false end
 
@@ -989,7 +989,7 @@ function mcl_potions.invisiblility_func(player, null, duration)
 
 end
 
-function mcl_potions.water_breathing_func(player, null, duration)
+function mcl_potions.water_breathing_func(player, _, duration)
 
 	if not player or player:get_hp() <= 0 then return false end
 
@@ -1016,7 +1016,7 @@ function mcl_potions.water_breathing_func(player, null, duration)
 end
 
 
-function mcl_potions.fire_resistance_func(player, null, duration)
+function mcl_potions.fire_resistance_func(player, _, duration)
 
 	if not player or player:get_hp() <= 0 then return false end
 
@@ -1042,7 +1042,7 @@ function mcl_potions.fire_resistance_func(player, null, duration)
 end
 
 
-function mcl_potions.night_vision_func(player, null, duration)
+function mcl_potions.night_vision_func(player, _, duration)
 
 	if not player or player:get_hp() <= 0 then return false end
 

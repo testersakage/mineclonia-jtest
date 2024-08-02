@@ -43,7 +43,7 @@ minetest.register_craft({
 -- parameters are the standard parameters passed to `on_rightclick`.
 -- returns the remaining itemstack.
 --
-local function composter_add_item(pos, node, player, itemstack, pointed_thing)
+local function composter_add_item(pos, node, player, itemstack, _)
 	if not player or (player:get_player_control() and player:get_player_control().sneak) then
 		return itemstack
 	end
@@ -122,7 +122,7 @@ end
 -- parameterss are the standard parameters passed to `on_rightclick`.
 -- returns itemstack (unchanged in this function).
 --
-local function composter_harvest(pos, node, player, itemstack, pointed_thing)
+local function composter_harvest(pos, _, player, itemstack, _)
 	if not player or (player:get_player_control() and player:get_player_control().sneak) then
 		return itemstack
 	end
@@ -222,7 +222,7 @@ local function on_hopper_in(pos, downpos)
 					if level < 7 then
 						level = level + 1
 					else
-						level = "ready"
+						level = "ready" ---@diagnostic disable-line: cast-local-type
 					end
 					minetest.swap_node(downpos, {name = "mcl_composters:composter_" .. level})
 				end

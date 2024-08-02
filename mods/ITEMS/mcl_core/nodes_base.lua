@@ -25,7 +25,7 @@ minetest.register_node("mcl_core:stone", {
 	_mcl_hardness = 1.5,
 	_mcl_silk_touch_drop = true,
 	_mcl_cooking_output = "mcl_core:stone_smooth",
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+	after_dig_node = function(_, _, _, digger)
 		if awards and awards.unlock and digger and digger:is_player() then
 			awards.unlock(digger:get_player_name(), "mcl:stoneAge")
 		end
@@ -152,7 +152,7 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 	on_punch = redstone_ore_reactivate,
 	on_walk_over = redstone_ore_reactivate, -- Uses walkover mod
 	-- Turn back to normal node after some time has passed
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos)
 		local nodedef = minetest.registered_nodes[minetest.get_node(pos).name]
 		minetest.swap_node(pos, {name=nodedef._mcl_ore_unlit})
 	end,
@@ -433,7 +433,7 @@ minetest.register_abm({
 	nodenames = {"group:mycelium"},
 	interval = 2,
 	chance = 30,
-	action = function(pos, node)
+	action = function(pos)
 		for _,player in pairs(minetest.get_connected_players()) do
 			if vector.distance(player:get_pos(), pos) < PARTICLE_ABM_DISTANCE then
 				minetest.add_particlespawner({
@@ -820,7 +820,7 @@ minetest.register_node("mcl_core:obsidian", {
 	groups = {pickaxey=5, building_block=1, material_stone=1},
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 50,
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+	after_dig_node = function(_, _, _, digger)
 		if awards and awards.unlock and digger and digger:is_player() then
 			awards.unlock(digger:get_player_name(), "mcl:obsidian")
 		end
@@ -850,7 +850,7 @@ minetest.register_node("mcl_core:ice", {
 	drop = "",
 	sounds = mcl_sounds.node_sound_ice_defaults(),
 	node_dig_prediction = "mcl_core:water_source",
-	after_dig_node = function(pos, oldnode)
+	after_dig_node = function(pos)
 		mcl_core.melt_ice(pos)
 	end,
 	_mcl_blast_resistance = 0.5,
@@ -916,7 +916,7 @@ for i=0,3 do
 			local timer = minetest.get_node_timer(pos)
 			timer:start(1.5)
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			local ice_near = minetest.find_nodes_in_area(
 				{ x = pos.x - 1, y = pos.y - 1, z = pos.z - 1 },
 				{ x = pos.x + 1, y = pos.y + 1, z = pos.z + 1 },
@@ -1037,7 +1037,7 @@ for i=1,8 do
 		drawtype = drawtype,
 		walkable = walkable,
 		floodable = true,
-		on_flood = function(pos, oldnode, newnode)
+		on_flood = function(pos)
 			local npos = {x=pos.x, y=pos.y-1, z=pos.z}
 			local node = minetest.get_node(npos)
 			mcl_core.clear_snow_dirt(npos, node)

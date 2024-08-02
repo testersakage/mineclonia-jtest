@@ -88,7 +88,7 @@ minetest.register_node("mcl_tnt:tnt", {
 			e:get_luaentity().timer = tnt.BOOMTIMER - (0.5 + math.random())
 		end
 	end,
-	_on_ignite = function(player, pointed_thing)
+	_on_ignite = function(_, pointed_thing)
 		tnt.ignite(pointed_thing.under)
 		return true
 	end,
@@ -96,14 +96,14 @@ minetest.register_node("mcl_tnt:tnt", {
 		tnt.ignite(pos)
 		return true
 	end,
-	_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
+	_on_dispense = function(stack, _, droppos, dropnode)
 		-- Place and ignite TNT
 		if minetest.registered_nodes[dropnode.name].buildable_to then
 			minetest.set_node(droppos, { name = stack:get_name() })
 			tnt.ignite(droppos)
 		end
 	end,
-	_on_arrow_hit = function(pos, arrowent)
+	_on_arrow_hit = function(_, arrowent)
 		if mcl_burning.is_burning(arrowent.object) then
 			tnt.ignite(arrowent._stuckin)
 		end

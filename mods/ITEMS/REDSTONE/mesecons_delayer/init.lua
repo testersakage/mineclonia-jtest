@@ -6,7 +6,7 @@ local DEFAULT_DELAY = DELAYS[1]
 -- Function that get the input/output rules of the delayer
 local function delayer_get_output_rules(node)
 	local rules = {{x = -1, y = 0, z = 0, spread=true}}
-	for i = 0, node.param2 do
+	for _ = 0, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules
@@ -14,7 +14,7 @@ end
 
 local function delayer_get_input_rules(node)
 	local rules = {{x = 1, y = 0, z = 0}}
-	for i = 0, node.param2 do
+	for _ = 0, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules
@@ -27,7 +27,7 @@ local function delayer_get_sides(node)
 		{x = 0, y = 0, z = -1},
 		{x = 0, y = 0, z =  1},
 	}
-	for i = 0, node.param2 do
+	for _ = 0, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules

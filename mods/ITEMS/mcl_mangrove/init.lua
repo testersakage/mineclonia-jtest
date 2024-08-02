@@ -19,7 +19,7 @@ mcl_trees.register_wood("mangrove",{
 	leaves = {
 		tiles = { "mcl_mangrove_leaves.png" },
 		color = "#6a7039",
-		_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+		_on_bone_meal = function(_, _, _, pos)
 			local upos = vector.offset(pos, 0,-1,0)
 			return minetest.get_node(upos).name == "air" and minetest.set_node(upos, {name="mcl_mangrove:hanging_propagule_1"})
 		end,
@@ -179,10 +179,10 @@ minetest.register_node("mcl_mangrove:propagule", {
 	node_placement_prediction = "",
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+	_on_bone_meal = function(_, _, _, pos, node)
 		return mcl_trees.grow_tree(pos, node)
 	end,
-	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, place_node,stack)
+	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _,stack)
 		local under = vector.offset(place_pos,0,-1,0)
 		local snn = minetest.get_node_or_nil(under).name
 		if not snn then return false end
@@ -351,7 +351,7 @@ minetest.register_abm({
 	neighbors = {"group:water"},
 	interval = 5,
 	chance = 5,
-	action = function(pos,value)
+	action = function(pos)
 		for _,v in pairs(adjacents) do
 			local n = minetest.get_node(vector.add(pos,v)).name
 			if minetest.get_item_group(n,"water") > 0 then

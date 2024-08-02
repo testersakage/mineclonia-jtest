@@ -41,10 +41,10 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 			if n.name == "mclx_core:river_water_source" then
 				water = n.name
 			elseif n.name == "mclx_core:river_water_flowing" then
-				water = nil
+				water = nil ---@diagnostic disable-line: cast-local-type
 			end
 			if mcl_worlds.pos_to_dimension(pos) == "nether" then
-				water = nil
+				water = nil ---@diagnostic disable-line: cast-local-type
 				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 			end
 			if water then
@@ -71,7 +71,7 @@ for techname, fishname in pairs(fish_names) do
 		_mcl_buckets_fish = techname,
 		on_place = on_place_fish,
 		on_secondary_use = on_place_fish,
-		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
+		_on_dispense = function(stack, _, droppos)
 			return on_place_fish(stack, nil, {above=droppos})
 		end,
 	})

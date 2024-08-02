@@ -120,7 +120,7 @@ local function fix_stack_size(stack)
 	return count
 end
 
-local function clear_cost(meta, cost) meta:set_string("mcl_anvil:xp_cost", "") end
+local function clear_cost(meta, _) meta:set_string("mcl_anvil:xp_cost", "") end
 
 local function add_cost(meta, cost)
 	local old = meta:get_int("mcl_anvil:xp_cost")
@@ -180,7 +180,7 @@ local function update_anvil_slots(meta, player)
 			-- Big repair bonus
 			-- TODO: Combine tool enchantments
 			local distinguished, tool, material = distinguish_tool_and_material(input1, input2)
-			if distinguished then
+			if distinguished and tool and material then
 				local tooldef = tool:get_definition()
 				local repair = tooldef._repair_material
 				local has_correct_material = false
@@ -401,7 +401,7 @@ local anvildef = {
 	_mcl_after_falling = damage_anvil_by_falling,
 
 	after_dig_node = drop_contents,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -416,7 +416,7 @@ local anvildef = {
 		end
 		return stack:get_count()
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -427,7 +427,7 @@ local anvildef = {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -446,11 +446,11 @@ local anvildef = {
 			return count
 		end
 	end,
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, _, _, _, player)
 		local meta = minetest.get_meta(pos)
 		update_anvil_slots(meta, player)
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	on_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if from_list == "output" and to_list == "input" then
 			local inv = meta:get_inventory()
@@ -480,7 +480,7 @@ local anvildef = {
 			end
 		end
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local meta = minetest.get_meta(pos)
 		if listname == "output" then
 			local inv = meta:get_inventory()
@@ -501,7 +501,7 @@ local anvildef = {
 			if not input1:is_empty() and not input2:is_empty() then
 				-- Take as many items as needed
 				local distinguished, tool, material = distinguish_tool_and_material(input1, input2)
-				if distinguished then
+				if distinguished and tool and material then
 					-- Tool + material: Take tool and as many materials as needed
 					local materials_used = get_consumed_materials(tool, material)
 					material:set_count(material:get_count() - materials_used)
@@ -553,7 +553,7 @@ local anvildef = {
 		local form = get_anvil_formspec()
 		meta:set_string("formspec", form)
 	end,
-	on_receive_fields = function(pos, formname, fields, sender)
+	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
 		if minetest.is_protected(pos, sender_name) then
 			minetest.record_protection_violation(pos, sender_name)
@@ -627,7 +627,7 @@ minetest.register_lbm({
 	name = "mcl_anvils:update_formspec_0_60_0",
 	nodenames = { "group:anvil" },
 	run_at_every_load = false,
-	action = function(pos, node)
+	action = function(pos)
 		local meta = minetest.get_meta(pos)
 		local set_name = meta:get_string("set_name")
 		meta:set_string("formspec", get_anvil_formspec(set_name))

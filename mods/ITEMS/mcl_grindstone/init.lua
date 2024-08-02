@@ -188,7 +188,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = { pickaxey = 1, deco_block = 1 },
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -197,7 +197,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -208,7 +208,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, _, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -227,11 +227,11 @@ minetest.register_node("mcl_grindstone:grindstone", {
 			return count
 		end
 	end,
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos)
 		local meta = minetest.get_meta(pos)
 		update_grindstone_slots(meta)
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	on_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count)
 		local meta = minetest.get_meta(pos)
 		if from_list == "output" and to_list == "input" then
 			local inv = meta:get_inventory()
@@ -245,7 +245,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 		end
 		update_grindstone_slots(meta)
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, listname, _, stack)
 		local meta = minetest.get_meta(pos)
 		if listname == "output" then
 			local xp_earnt = 0
@@ -287,7 +287,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 		inv:set_size("output", 1)
 		meta:set_string("formspec", grindstone_formspec)
 	end,
-	on_rightclick = function(pos, node, player, itemstack)
+	on_rightclick = function(pos, _, player)
 		if player and player:is_player() and not player:get_player_control().sneak then
 			local meta = minetest.get_meta(pos)
 			update_grindstone_slots(meta)

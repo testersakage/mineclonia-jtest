@@ -45,11 +45,11 @@ local function get_far_node(pos, itemstack) --code from minetest dev wiki: https
 	if node.name == "ignore" then
 		local tstamp = tonumber(itemstack:get_meta():get_string("last_forceload"))
 		if tstamp == nil then --this is only relevant for new lodestone compasses, the ones that have never performes a forceload yet
-			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t"))))
-			tstamp = tonumber(os.time(os.date("!*t")))
+			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t")))) ---@diagnostic disable-line: param-type-mismatch
+			tstamp = tonumber(os.time(os.date("!*t"))) ---@diagnostic disable-line: param-type-mismatch
 		end
-		if tonumber(os.time(os.date("!*t"))) - tstamp > 180 then --current time in secounds - old time in secounds, if it is over 180 (3 mins): forceload
-			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t"))))
+		if tonumber(os.time(os.date("!*t"))) - tstamp > 180 then ---@diagnostic disable-line: param-type-mismatch
+			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t")))) ---@diagnostic disable-line: param-type-mismatch
 			minetest.get_voxel_manip():read_from_map(pos, pos)
 			node = minetest.get_node(pos)
 		else
@@ -283,7 +283,7 @@ minetest.register_alias("mcl_compass:compass", "mcl_compass:" .. stereotype_fram
 
 minetest.register_node("mcl_compass:lodestone",{
 	description=S("Lodestone"),
-	on_rightclick = function(pos, node, player, itemstack)
+	on_rightclick = function(pos, _, player, itemstack)
 		local name = itemstack.get_name(itemstack)
 		if string.find(name,"mcl_compass:") then
 			if name ~= "mcl_compass:lodestone" then

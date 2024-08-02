@@ -142,7 +142,7 @@ minetest.register_entity("mcl_chests:chest", {
 		end
 	end,
 
-	on_step = function(self, dtime)
+	on_step = function(self)
 		if not self:check() then
 			self.object:remove()
 		end
@@ -167,7 +167,7 @@ local function find_entity(pos)
 	end
 end
 
-local function get_entity_info(pos, param2, double, dir, entity_pos)
+local function get_entity_info(pos, param2, double, dir, _)
 	dir = dir or minetest.facedir_to_dir(param2)
 	return dir, get_entity_pos(pos, dir, double)
 end
@@ -248,7 +248,7 @@ local function player_chest_open(player, pos, node_name, textures, param2, doubl
 end
 
 -- Simple protection checking functions
-local function protection_check_move(pos, from_list, from_index, to_list, to_index, count, player)
+local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
@@ -258,7 +258,7 @@ local function protection_check_move(pos, from_list, from_index, to_list, to_ind
 	end
 end
 
-local function protection_check_put_take(pos, listname, index, stack, player)
+local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
@@ -411,12 +411,12 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		paramtype2 = "facedir",
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		groups = { deco_block = 1 },
-		on_construct = function(pos, node)
+		on_construct = function(pos, _)
 			local node = minetest.get_node(pos)
 			node.name = small_name
 			minetest.set_node(pos, node)
 		end,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, _, itemstack, _)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
 		_mcl_burntime = 15
@@ -520,7 +520,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 					"chest")
 			end
 		end,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, _, itemstack,  _)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
 		after_dig_node = drop_items_chest,
@@ -528,11 +528,11 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = protection_check_put_take,
-		on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff in chest at " .. minetest.pos_to_string(pos))
 		end,
-		on_metadata_inventory_put = function(pos, listname, index, stack, player)
+		on_metadata_inventory_put = function(pos, listname, _, stack, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. minetest.pos_to_string(pos))
 			-- BEGIN OF LISTRING WORKAROUND
@@ -542,7 +542,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 			-- END OF LISTRING WORKAROUND
 		end,
-		on_metadata_inventory_take = function(pos, listname, index, stack, player)
+		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
 		end,
@@ -632,7 +632,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 			create_entity(pos, left_name, left_textures, param2, true, "default_chest", "mcl_chests_chest", "chest")
 		end,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, _, itemstack, _)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
 		on_destruct = function(pos)
@@ -657,7 +657,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_blast = on_chest_blast,
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
-		allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 			local name = player:get_player_name()
 			if minetest.is_protected(pos, name) then
 				minetest.record_protection_violation(pos, name)
@@ -684,11 +684,11 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				return stack:get_count()
 			end
 		end,
-		on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff in chest at " .. minetest.pos_to_string(pos))
 		end,
-		on_metadata_inventory_put = function(pos, listname, index, stack, player)
+		on_metadata_inventory_put = function(pos, listname, _, stack, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. minetest.pos_to_string(pos))
 			-- BEGIN OF LISTRING WORKAROUND
@@ -703,7 +703,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 			-- END OF LISTRING WORKAROUND
 		end,
-		on_metadata_inventory_take = function(pos, listname, index, stack, player)
+		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
 		end,
@@ -800,7 +800,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				minetest.swap_node(pos, n)
 			end
 		end,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, _, itemstack, _)
 			minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
 		on_destruct = function(pos)
@@ -825,7 +825,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_blast = on_chest_blast,
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
-		allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 			local name = player:get_player_name()
 			if minetest.is_protected(pos, name) then
 				minetest.record_protection_violation(pos, name)
@@ -850,11 +850,11 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				return stack:get_count()
 			end
 		end,
-		on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff in chest at " .. minetest.pos_to_string(pos))
 		end,
-		on_metadata_inventory_put = function(pos, listname, index, stack, player)
+		on_metadata_inventory_put = function(pos, listname, _, stack, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. minetest.pos_to_string(pos))
 			-- BEGIN OF LISTRING WORKAROUND
@@ -869,7 +869,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 			-- END OF LISTRING WORKAROUND
 		end,
-		on_metadata_inventory_take = function(pos, listname, index, stack, player)
+		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
 		end,
@@ -985,14 +985,14 @@ register_chest("trapped_chest",
 			rules = trapped_chest_mesecons_rules,
 		},
 	},
-	function(pos, node, clicker)
+	function(pos, node, _)
 		minetest.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 		end
 		mesecon.receptor_on(pos, trapped_chest_mesecons_rules)
 	end,
-	function(pos, node, clicker)
+	function(pos, node, _)
 		local meta = minetest.get_meta(pos)
 		meta:set_int("players", 1)
 
@@ -1007,7 +1007,7 @@ register_chest("trapped_chest",
 		minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
 		mesecon.receptor_on(pos_other, trapped_chest_mesecons_rules)
 	end,
-	function(pos, node, clicker)
+	function(pos, node, _)
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 
 		minetest.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
@@ -1187,7 +1187,7 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 		player_chest_open(clicker, pos, "mcl_chests:ender_chest_small", ender_chest_texture, node.param2, false,
 			"mcl_chests_enderchest", "mcl_chests_chest")
 	end,
-	on_receive_fields = function(pos, formname, fields, sender)
+	on_receive_fields = function(_, _, fields, sender)
 		if fields.quit then
 			player_chest_close(sender)
 		end
@@ -1347,7 +1347,7 @@ for color, desc in pairs(boxtypes) do
 			node.name = small_name
 			minetest.set_node(pos, node)
 		end,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, placer, itemstack, _)
 			local nmeta = minetest.get_meta(pos)
 			local imetadata = itemstack:get_metadata()
 			local iinv_main = minetest.deserialize(imetadata)
@@ -1366,7 +1366,7 @@ for color, desc in pairs(boxtypes) do
 				return nil
 			end
 		end,
-		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
+		_on_dispense = function(stack, _, droppos, dropnode, dropdir)
 			-- Place shulker box as node
 			local def = minetest.registered_nodes[dropnode.name]
 			if def and def.buildable_to then
@@ -1424,7 +1424,7 @@ for color, desc in pairs(boxtypes) do
 			inv:set_size("main", 9*3)
 			create_entity(pos, small_name, {mob_texture}, minetest.get_node(pos).param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
 		end,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, placer, itemstack, _)
 			if not placer or not placer:is_player() then
 				return itemstack
 			end
@@ -1451,7 +1451,7 @@ for color, desc in pairs(boxtypes) do
 			player_chest_open(clicker, pos, small_name, { mob_texture }, node.param2, false, "mcl_chests_shulker",
 				"mcl_chests_shulker", true)
 		end,
-		on_receive_fields = function(pos, formname, fields, sender)
+		on_receive_fields = function(_, _, fields, sender)
 			if fields.quit then
 				player_chest_close(sender)
 			end
@@ -1481,7 +1481,7 @@ for color, desc in pairs(boxtypes) do
 		end,
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
-		allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		allow_metadata_inventory_put = function(pos, _, _, stack, player)
 			local name = player:get_player_name()
 			if minetest.is_protected(pos, name) then
 				minetest.record_protection_violation(pos, name)
@@ -1522,7 +1522,7 @@ minetest.register_craft({
 })
 
 -- Save metadata of shulker box when used in crafting
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+minetest.register_on_craft(function(itemstack, _, old_craft_grid, _)
 	if minetest.get_item_group(itemstack:get_name(), "shulker_box") ~= 1 then
 		return
 	end
@@ -1592,7 +1592,7 @@ minetest.register_lbm({
 	nodenames = { "mcl_chests:trapped_chest_on_small", "mcl_chests:trapped_chest_on_left",
 		"mcl_chests:trapped_chest_on_right" },
 	run_at_every_load = true,
-	action = function(pos, node)
+	action = function(pos)
 		minetest.log("action", "[mcl_chests] Disabled active trapped chest on load: " .. minetest.pos_to_string(pos))
 		chest_update_after_close(pos)
 	end,
@@ -1603,7 +1603,7 @@ minetest.register_lbm({
 	name = "mcl_chests:update_shulker_box_formspecs_0_72_0",
 	nodenames = { "group:shulker_box" },
 	run_at_every_load = false,
-	action = function(pos, node)
+	action = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", formspec_shulker_box(meta:get_string("name")))
 	end,
@@ -1614,7 +1614,7 @@ minetest.register_lbm({
 	name = "mcl_chests:replace_old_ender_form",
 	nodenames = { "mcl_chests:ender_chest_small" },
 	run_at_every_load = false,
-	action = function(pos, node)
+	action = function(pos)
 		minetest.get_meta(pos):set_string("formspec", "")
 	end,
 })

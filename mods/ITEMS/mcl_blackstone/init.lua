@@ -185,7 +185,7 @@ minetest.register_node("mcl_blackstone:soul_fire", {
 	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston = 1, destroys_items = 1, set_on_fire=8},
 	floodable = true,
 	drop = "",
-	on_flood = function(pos, oldnode, newnode)
+	on_flood = function(pos, _, newnode)
 		if minetest.get_item_group(newnode.name, "water") > 0 then
 			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
@@ -249,7 +249,7 @@ minetest.register_abm({
 	interval = 1,
 	chance = 1,
 	min_y = mcl_vars.mg_end_min,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		local water = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "mcl_core:ice")
 		local lavatype = minetest.registered_nodes[node.name].liquidtype
 		for w=1, #water do
@@ -271,7 +271,7 @@ minetest.register_abm({
 	interval = 1,
 	chance = 1,
 	min_y = mcl_vars.mg_end_min,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		local water = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "mcl_core:packed_ice")
 		local lavatype = minetest.registered_nodes[node.name].liquidtype
 		for w=1, #water do

@@ -89,7 +89,7 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 
 				-- Replace the side of a mushroom node. Returns the new node.
 				-- Or nil, if unchanged.
-				local function replace_side(pos, node, side)
+				local function replace_side(_, node, side)
 					local bin = string.sub(node.name, -6)
 					if string.sub(bin, side, side) == "1" then
 						local new_bin

@@ -1,6 +1,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local on_place = mcl_util.generate_on_place_plant_function(function(place_pos, place_node)
+local on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _)
 	local soil_node = minetest.get_node_or_nil({x=place_pos.x, y=place_pos.y-1, z=place_pos.z})
 	if not soil_node then return false end
 	local snn = soil_node.name -- soil node name
@@ -26,7 +26,7 @@ local tt_help = S("Grows on podzol, mycelium and other blocks").."\n"..S("Spread
 
 local usagehelp = S("This mushroom can be placed on mycelium and podzol at any light level. It can also be placed on blocks which are both solid and opaque, as long as the light level at daytime is not higher than 12.")
 
-local function on_bone_meal(itemstack,placer,pointed_thing,pos,n)
+local function on_bone_meal(_, _, _, pos, n)
 	if math.random(1, 100) > 40 then return false end --40% chance
 
 	local bn = minetest.get_node(vector.offset(pos,0,-1,0)).name

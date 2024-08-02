@@ -7,7 +7,7 @@ local rules_flat = {
 }
 local function get_rules_flat(node)
 	local rules = rules_flat
-	for i=1, node.param2 do
+	for _ = 1, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules
@@ -142,7 +142,7 @@ mesecon.register_node("mcl_observers:observer", {
 				timer:start(mcl_vars.redstone_tick)
 			end
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			observer_scan(pos)
 			return true
 		end,
@@ -167,7 +167,7 @@ mesecon.register_node("mcl_observers:observer", {
 			local timer = minetest.get_node_timer(pos)
 			timer:start(mcl_vars.redstone_tick)
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name = "mcl_observers:observer_off", param2 = node.param2})
 			mesecon.receptor_off(pos, get_rules_flat(node))
@@ -203,7 +203,7 @@ mesecon.register_node("mcl_observers:observer_down", {
 				timer:start(mcl_vars.redstone_tick)
 			end
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			observer_scan(pos)
 			return true
 		end,
@@ -226,7 +226,7 @@ mesecon.register_node("mcl_observers:observer_down", {
 			local timer = minetest.get_node_timer(pos)
 			timer:start(mcl_vars.redstone_tick)
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name = "mcl_observers:observer_down_off", param2 = node.param2})
 			mesecon.receptor_off(pos, rules_down)
@@ -262,7 +262,7 @@ mesecon.register_node("mcl_observers:observer_up", {
 				timer:start(mcl_vars.redstone_tick)
 			end
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			observer_scan(pos)
 			return true
 		end,
@@ -285,7 +285,7 @@ mesecon.register_node("mcl_observers:observer_up", {
 			local timer = minetest.get_node_timer(pos)
 			timer:start(mcl_vars.redstone_tick)
 		end,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos)
 			minetest.swap_node(pos, {name = "mcl_observers:observer_up_off"})
 			mesecon.receptor_off(pos, rules_up)
 			return true

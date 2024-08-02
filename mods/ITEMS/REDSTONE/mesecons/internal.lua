@@ -397,9 +397,9 @@ function mesecon.turnon(pos, link)
 			end
 
 			mesecon.swap_node_force(f.pos, mesecon.get_conductor_on(node, f.link))
-		elseif mesecon.is_effector(node.name) then
+		elseif mesecon.is_effector(node.name) then ---@diagnostic disable-line: need-check-nil
 			mesecon.changesignal(f.pos, node, f.link, mesecon.state.on, depth)
-			if mesecon.is_effector_off(node.name) then
+			if mesecon.is_effector_off(node.name) then ---@diagnostic disable-line: need-check-nil
 				mesecon.activate(f.pos, node, f.link, depth)
 			end
 		end
@@ -453,7 +453,7 @@ function mesecon.turnoff(pos, link)
 				-- Check if an onstate receptor is connected. If that is the case,
 				-- abort this turnoff process by returning false. `receptor_off` will
 				-- discard all the changes that we made in the voxelmanip:
-				for _, l in pairs(mesecon.rules_link_rule_all_inverted(f.pos, r)) do
+				for _, _ in pairs(mesecon.rules_link_rule_all_inverted(f.pos, r)) do
 					if is_receptor_on(mesecon.get_node_force(np).name) then
 						return false
 					end
@@ -466,7 +466,7 @@ function mesecon.turnoff(pos, link)
 			end
 
 			mesecon.swap_node_force(f.pos, mesecon.get_conductor_off(node, f.link))
-		elseif mesecon.is_effector(node.name) then
+		elseif mesecon.is_effector(node.name) then ---@diagnostic disable-line: need-check-nil
 			table.insert(signals, {
 				pos = f.pos,
 				node = node,
@@ -575,19 +575,19 @@ function mesecon.is_powered(pos, rule, depth, sourcepos, home_pos)
 		sourcepos = {}
 	end
 
-	local function power_walk(pos, home_pos, sourcepos, rulenames, rule, depth)
+	local function power_walk(pos, home_pos, sourcepos, rulenames, _, depth)
 		local spread = false
 		for _, rname in pairs(rulenames) do
 			local np = vector.add(pos, rname)
 			local nn = mesecon.get_node_force(np)
 			if (mesecon.is_conductor_on (nn, mesecon.invertRule(rname))
-			or is_receptor_on (nn.name)) then
+			or is_receptor_on (nn.name)) then ---@diagnostic disable-line: need-check-nil
 				if not vector.equals(home_pos, np) then
 					local rulez = mesecon.get_any_outputrules(nn)
 					local spread_tmp = false
 					for r=1, #rulez do
-						if vector.equals(mesecon.invertRule(rname), rulez[r]) then
-							if rulez[r].spread then
+						if vector.equals(mesecon.invertRule(rname), rulez[r]) then ---@diagnostic disable-line: need-check-nil
+							if rulez[r].spread then ---@diagnostic disable-line: need-check-nil
 								spread_tmp = true
 							end
 						end
@@ -599,7 +599,7 @@ function mesecon.is_powered(pos, rule, depth, sourcepos, home_pos)
 						end
 					end
 				end
-			elseif depth == 0 and minetest.get_item_group(nn.name, "opaque") == 1 then
+			elseif depth == 0 and minetest.get_item_group(nn.name, "opaque") == 1 then ---@diagnostic disable-line: need-check-nil
 				local more_sourcepos = mesecon.is_powered(np, nil, depth + 1, sourcepos, home_pos)
 				if more_sourcepos and #more_sourcepos > 0 then
 					mesecon.mergetable(sourcepos, more_sourcepos)

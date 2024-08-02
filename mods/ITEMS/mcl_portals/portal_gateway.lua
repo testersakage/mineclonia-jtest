@@ -87,7 +87,7 @@ local function teleport(pos, obj)
 	local minp = vector.subtract(dest_portal, vector.new(5, 40, 5))
 	local maxp = vector.add(dest_portal, vector.new(5, 10, 5))
 	preparing[pos_str] = true
-	minetest.emerge_area(minp, maxp, function(blockpos, action, calls_remaining, param)
+	minetest.emerge_area(minp, maxp, function(_, _, calls_remaining)
 		if calls_remaining < 1 then
 			if obj and obj:is_player() or obj:get_luaentity() then
 				obj:set_pos(find_destination_pos(minp, maxp) or vector.add(dest_portal, vector.new(0, 3.5, 0)))

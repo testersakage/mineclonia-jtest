@@ -132,7 +132,7 @@ local function get_sherd_desc(face)
 	return S("@1 Pottery Sherd", mcl_pottery_sherds.defs[face].description)
 end
 
-tt.register_snippet(function(itemstring, toolcaps, stack)
+tt.register_snippet(function(_, _, stack)
 	if not stack then return nil end
 	local meta = stack:get_meta()
 	local faces = minetest.deserialize(meta:get_string("pot_faces"))
@@ -170,12 +170,12 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 	drop = "",
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
+	after_place_node = function(pos, _, itemstack, _)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("pot_faces",itemstack:get_meta():get_string("pot_faces"))
 		update_entities(pos)
 	end,
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+	after_dig_node = function(pos)
 		update_entities(pos,true)
 	end,
 	on_destruct = function(pos)
@@ -186,7 +186,7 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 		tt.reload_itemstack_description(it)
 		minetest.add_item(pos, it)
 	end,
-	on_rotate = function(pos, _,  _, mode, new_param2)
+	on_rotate = function(_, _,  _, mode, _)
 		if mode == screwdriver.ROTATE_AXIS then
 			return false
 		end
@@ -205,7 +205,7 @@ local function get_sherd_name(itemstack)
 	return r
 end
 
-local function get_craft(itemstack, player, old_craft_grid, craft_inv)
+local function get_craft(itemstack, _, old_craft_grid, _)
 	if itemstack:get_name() ~= "mcl_pottery_sherds:pot" then return end
 	if old_craft_grid[1][2] == "mcl_core:brick" then return end
 	local meta = itemstack:get_meta()

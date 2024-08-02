@@ -12,7 +12,7 @@ local pp_box_on = {
 	fixed = { -7/16, -8/16, -7/16, 7/16, -7.5/16, 7/16 },
 }
 
-local function pp_on_timer(pos, elapsed)
+local function pp_on_timer(pos)
 	local node = minetest.get_node(pos)
 	local basename = minetest.registered_nodes[node.name].pressureplate_basename
 	local activated_by = minetest.registered_nodes[node.name].pressureplate_activated_by
@@ -78,7 +78,7 @@ local function pp_on_timer(pos, elapsed)
 
 	if node.name == basename .. "_on" then
 		local disable = true
-		for k, obj in pairs(objs) do
+		for _, obj in pairs(objs) do
 			if
 				obj_does_activate(obj, activated_by) and
 				obj_touching_plate_pos(obj, pos)
@@ -103,7 +103,7 @@ local function pp_on_timer(pos, elapsed)
 			end
 		end
 	elseif node.name == basename .. "_off" then
-		for k, obj in pairs(objs) do
+		for _, obj in pairs(objs) do
 			if
 				obj_does_activate(obj, activated_by) and
 				obj_touching_plate_pos(obj, pos)

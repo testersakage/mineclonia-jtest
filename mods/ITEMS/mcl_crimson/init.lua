@@ -19,7 +19,7 @@ local nether_plants = {
 	},
 }
 
-local place_fungus = mcl_util.generate_on_place_plant_function(function(pos, node)
+local place_fungus = mcl_util.generate_on_place_plant_function(function(pos)
 	return minetest.get_item_group(minetest.get_node(vector.offset(pos,0,-1,0)).name, "soil_fungus") > 0
 end)
 
@@ -36,7 +36,7 @@ local function spread_nether_plants(pos,node)
 	end
 end
 
-local function on_bone_meal(itemstack,user,pt,pos,node)
+local function on_bone_meal(_, _, pt, _, node)
 	if pt.type ~= "node" then return end
 	if node.name == "mcl_crimson:warped_nylium" or node.name == "mcl_crimson:crimson_nylium" then
 		spread_nether_plants(pt.under,node)
@@ -234,7 +234,7 @@ minetest.register_node("mcl_crimson:warped_fungus", {
 	},
 	node_placement_prediction = "",
 	on_place = place_fungus,
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+	_on_bone_meal = function(_, _, _, pos)
 		if minetest.get_node_or_nil(vector.offset(pos,0,-1,0)).name == "mcl_crimson:warped_nylium" then
 			if math.random() > 0.40 then return end --fungus has a 40% chance to grow when bone mealing
 			if check_for_bedrock(pos) then return false end
@@ -313,7 +313,7 @@ local function register_vines(name, def, extra_groups)
 		},
 		_mcl_blast_resistance = 0.2,
 		_mcl_hardness = 0.2,
-		_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+		_on_bone_meal = function(_, _, _, pos)
 			grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
 		end
 	}, def or {}))
@@ -451,7 +451,7 @@ minetest.register_node("mcl_crimson:crimson_fungus", {
 	},
 	node_placement_prediction = "",
 	on_place = place_fungus,
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+	_on_bone_meal = function(_, _, _, pos)
 		if minetest.get_node(vector.offset(pos,0,-1,0)).name == "mcl_crimson:crimson_nylium" then
 			if math.random() > 0.40 then return end --fungus has a 40% chance to grow when bone mealing
 			if check_for_bedrock(pos) then return false end

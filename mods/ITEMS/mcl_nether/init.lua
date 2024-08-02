@@ -76,7 +76,7 @@ minetest.register_node("mcl_nether:netheriteblock", {
 
 -- For eternal fire on top of netherrack and magma blocks
 -- (this code does not require a dependency on mcl_fire)
-local function eternal_after_destruct(pos, oldnode)
+local function eternal_after_destruct(pos)
 	pos.y = pos.y + 1
 	if minetest.get_node(pos).name == "mcl_fire:eternal_fire" then
 		minetest.remove_node(pos)
@@ -113,7 +113,7 @@ minetest.register_node("mcl_nether:netherrack", {
 	-- Eternal fire on top
 	after_destruct = eternal_after_destruct,
 	_on_ignite = eternal_on_ignite,
-	_on_bone_meal = function(itemstack,placer,pt,pos,node)
+	_on_bone_meal = function(_, _, _, _ ,pos , _)
 		local n = minetest.find_node_near(pos,1,{"mcl_crimson:warped_nylium","mcl_crimson:crimson_nylium"})
 		if n then
 			minetest.set_node(pos,minetest.get_node(n))
@@ -130,7 +130,7 @@ minetest.register_node("mcl_nether:magma", {
 	groups = {pickaxey=1, building_block=1, material_stone=1, fire=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	-- From walkover mod
-	on_walk_over = function(loc, nodeiamon, player)
+	on_walk_over = function(_, _, player)
 		local armor_feet = player:get_inventory():get_stack("armor", 5)
 		if player and player:get_player_control().sneak or (minetest.global_exists("mcl_enchanting") and mcl_enchanting.has_enchantment(armor_feet, "frost_walker")) or (minetest.global_exists("mcl_potions") and mcl_potions.player_has_effect(player, "fire_proof")) then
 			return
@@ -163,7 +163,7 @@ minetest.register_node("mcl_nether:soul_sand", {
 	_mcl_hardness = 0.5,
 })
 
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	-- Standing on soul sand or soul soil?
 	if minetest.get_item_group(mcl_player.players[player].nodes.stand, "soul_block") > 0 then
 		-- TODO: Tweak walk speed

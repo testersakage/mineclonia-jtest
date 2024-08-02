@@ -27,7 +27,7 @@ minetest.register_node("mcl_target:target_off", {
 			rules = mesecon.rules.alldirs,
 		},
 	},
-	_on_arrow_hit = function(pos, arrowent)
+	_on_arrow_hit = function(pos, _)
 		mcl_target.hit(pos, 1) --10 redstone ticks
 	end,
 	_mcl_blast_resistance = 0.5,
@@ -43,7 +43,7 @@ minetest.register_node("mcl_target:target_on", {
 	sounds = mcl_sounds.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.1},
 	}),
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos, _)
 		local node = minetest.get_node(pos)
 		if node.name == "mcl_target:target_on" then --has not been dug
 			minetest.set_node(pos, {name="mcl_target:target_off"})

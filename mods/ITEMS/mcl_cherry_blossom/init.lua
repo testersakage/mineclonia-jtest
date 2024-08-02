@@ -80,7 +80,7 @@ minetest.register_node("mcl_cherry_blossom:pink_petals",{
 	inventory_image = "mcl_cherry_blossom_pink_petals_inv.png",
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,n)
+	_on_bone_meal = function(_, _, _ , pos, n)
 		minetest.add_item(pos,n.name)
 	end
 })
@@ -114,7 +114,7 @@ minetest.register_abm({
 	nodenames = {"mcl_trees:leaves_cherry_blossom"},
 	interval = 25,
 	chance = 2,
-	action = function(pos, node)
+	action = function(pos)
 		if minetest.get_node(vector.offset(pos, 0, -1, 0)).name ~= "air" then return end
 		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)

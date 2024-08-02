@@ -49,7 +49,7 @@ function mcl_maps.create_map(pos)
 	tt.reload_itemstack_description(itemstack)
 
 	creating_maps[id] = true
-	minetest.emerge_area(minp, maxp, function(blockpos, action, calls_remaining)
+	minetest.emerge_area(minp, maxp, function(_, _, calls_remaining)
 		if calls_remaining > 0 then
 			return
 		end
@@ -299,7 +299,7 @@ minetest.register_craft({
 	recipe = { "group:filled_map", "mcl_maps:empty_map" },
 })
 
-local function on_craft(itemstack, player, old_craft_grid, craft_inv)
+local function on_craft(itemstack, _, old_craft_grid, _)
 	if itemstack:get_name() == "mcl_maps:filled_map" then
 		for _, stack in pairs(old_craft_grid) do
 			if minetest.get_item_group(stack:get_name(), "filled_map") > 0 then
@@ -338,7 +338,7 @@ minetest.register_on_leaveplayer(function(player)
 	huds[player] = nil
 end)
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function(_)
 	for _, player in pairs(minetest.get_connected_players()) do
 		local wield = player:get_wielded_item()
 		local texture = mcl_maps.load_map_item(wield)

@@ -70,7 +70,7 @@ minetest.register_globalstep(function (dtime)
 
 	-- sort actions into two categories:
 	-- those toexecute now (actions_now) and those to execute later (mesecon.queue.actions)
-	for i, ac in ipairs(actions) do
+	for _, ac in ipairs(actions) do
 		if ac.time > 0 then
 			ac.time = ac.time - dtime -- executed later
 			table.insert(mesecon.queue.actions, ac)

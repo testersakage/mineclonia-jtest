@@ -89,7 +89,7 @@ local function get_armor_texture(textures, name, modname, itemname, itemstring)
 	local core_texture = textures[name] or modname .. "_" .. itemname .. ".png"
 	if type(core_texture) == "function" then return core_texture end
 	mcl_armor.trims.core_textures[itemstring] = core_texture
-	local func = function(obj, itemstack)
+	local func = function(_, itemstack)
 		local overlay = itemstack:get_meta():get_string("mcl_armor:trim_overlay")
 		local stack_name = mcl_grindstone.remove_enchant_name(itemstack) -- gets original itemstring if enchanted, no need to store (nearly) identical values
 		local core_armor_texture = mcl_armor.trims.core_textures[stack_name]
@@ -325,7 +325,7 @@ function mcl_armor.reload_trim_inv_image(itemstack)
 	meta:set_string("inventory_image", def.inventory_image .. inv_overlay)
 end
 
-tt.register_snippet(function(itemstring, toolcaps, stack)
+tt.register_snippet(function(_, _, stack)
 	if not stack then return nil end
 	local meta = stack:get_meta()
 	if not mcl_armor.is_trimmed(stack) then return nil end

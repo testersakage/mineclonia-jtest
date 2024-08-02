@@ -178,7 +178,7 @@ local function register_stair(subname, stairdef)
 
 			return place_stair(itemstack, placer, pointed_thing)
 		end,
-		on_rotate = function(pos, node, user, mode, param2)
+		on_rotate = function(pos, node, _, mode)
 			-- Flip stairs vertically
 			if mode == screwdriver.ROTATE_AXIS then
 				local minor = node.param2
@@ -331,7 +331,7 @@ local function register_slab(subname, stairdef)
 		_mcl_hardness = stairdef.hardness,
 		_mcl_blast_resistance = stairdef.blast_resistance,
 		_mcl_other_slab_half = upper_slab,
-		on_rotate = function(pos, node, user, mode, param2)
+		on_rotate = function(pos, node, _, mode)
 			-- Flip slab
 			if mode == screwdriver.ROTATE_AXIS then
 				node.name = upper_slab
@@ -360,7 +360,7 @@ local function register_slab(subname, stairdef)
 	topdef._doc_items_usagehelp = nil
 	topdef.drop = lower_slab
 	topdef._mcl_other_slab_half = lower_slab
-	function topdef.on_rotate(pos, node, user, mode, param2)
+	function topdef.on_rotate(pos, node, _, mode)
 		-- Flip slab
 		if mode == screwdriver.ROTATE_AXIS then
 			node.name = lower_slab

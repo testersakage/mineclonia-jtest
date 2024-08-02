@@ -489,7 +489,7 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		stairs = {name, name.."_outer", name.."_inner"},
 		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
 		on_place = nil,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
+		after_place_node = function(pos, _, _, pointed_thing)
 			local node = minetest.get_node(pos)
 			local ceiling = false
 			if pointed_thing.under.y > pointed_thing.above.y then
