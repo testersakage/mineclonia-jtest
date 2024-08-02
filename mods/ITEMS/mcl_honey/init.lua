@@ -61,7 +61,7 @@ minetest.register_node("mcl_honey:honey_block", {
 	},
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
-	mvps_sticky = function(pos, node, piston_pos)
+	mvps_sticky = function(pos, _, piston_pos)
 		local connected = {}
 		for n, v in ipairs(alldirs) do
 			local neighbor_pos = vector.add(pos, v)

@@ -44,7 +44,7 @@ local function set_moss_with_chance_vegetation(pos)
 	end
 end
 
-function mcl_lush_caves.bone_meal_moss(itemstack, placer, pointed_thing, pos)
+function mcl_lush_caves.bone_meal_moss(_, _, _, pos)
 	if minetest.get_node(vector.offset(pos, 0, 1, 0)).name ~= "air" then
 		return false
 	end
@@ -178,7 +178,7 @@ minetest.register_node("mcl_lush_caves:cave_vines", {
 	_mcl_blast_resistance = 0,
 	_mcl_blast_hardness = 0,
 	drop = "",
-	_on_bone_meal = function(itemstack, placer, pointed_thing, pos)
+	_on_bone_meal = function(_, _, _, pos)
 		minetest.set_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
 		return true
 	end,
@@ -227,7 +227,7 @@ minetest.register_node("mcl_lush_caves:rooted_dirt", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_on_hoe_place = function(itemstack, placer, pointed_thing)
+	_on_hoe_place = function(_, placer, pointed_thing)
 		local below = vector.offset(pointed_thing.under, 0, -1, 0)
 		if minetest.get_node(below).name == "mcl_lush_caves:hanging_roots" then
 			minetest.remove_node(below)
@@ -323,7 +323,7 @@ minetest.register_node("mcl_lush_caves:spore_blossom", {
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	node_placement_prediction = "",
-	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, place_node,stack)
+	on_place = mcl_util.generate_on_place_plant_function(function(place_pos)
 		local above = vector.offset(place_pos,0,1,0)
 		local snn = minetest.get_node_or_nil(above).name
 		if not snn then return false end
@@ -360,14 +360,14 @@ local tpl_azalea = {
 	_mcl_burntime = 5,
 	use_texture_alpha = "clip",
 	node_placement_prediction = "",
-	on_place = mcl_util.generate_on_place_plant_function(function(pos, node, itemstack)
+	on_place = mcl_util.generate_on_place_plant_function(function(pos)
 			local floor_name = minetest.get_node_or_nil(vector.offset(pos, 0, -1, 0)).name
 			if not floor_name then return false end
 			if minetest.get_item_group(floor_name, "soil_sapling") > 0 or floor_name == "mcl_lush_caves:rooted_dirt" or floor_name == "mcl_mangrove:mangrove_mud_roots" or floor_name == "mcl_mud:mud" or floor_name == "mcl_core:clay" then
 				return true
 			end
 	end),
-	_on_bone_meal = function(itemstack, placer, pointed_thing, pos)
+	_on_bone_meal = function(_, _, _, pos)
 		if math.random() > 0.45 or not mcl_trees.check_growth_simple(pos, 6) then return end
 		minetest.set_node(vector.offset(pos, 0, -1, 0), { name = "mcl_lush_caves:rooted_dirt" })
 		minetest.remove_node(pos)

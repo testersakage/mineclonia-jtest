@@ -195,7 +195,7 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 		}},
 		_mcl_button_basename = basename,
 		_mcl_button_timer = button_timer,
-		on_timer = function(pos, elapsed)
+		on_timer = function(pos, _)
 			local node = minetest.get_node(pos)
 			if node.name=="mesecons_button:button_"..basename.."_on" then --has not been dug
 				-- Is button pushable by arrow?

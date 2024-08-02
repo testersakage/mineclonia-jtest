@@ -27,7 +27,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 		_doc_items_usagehelp = S("Use the “Punch” key to throw it."),
 		inventory_image = splash_image(color),
 		groups = {brewitem=1, not_in_creative_inventory=0, potion = 1},
-		on_use = function(item, placer, pointed_thing)
+		on_use = function(item, placer)
 			local velocity = 10
 			local dir = placer:get_look_dir();
 			local pos = placer:get_pos();
@@ -42,7 +42,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 			return item
 		end,
 		stack_max = 1,
-		_on_dispense = function(stack, dispenserpos, droppos, dropnode, dropdir)
+		_on_dispense = function(_, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
@@ -65,7 +65,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 			collisionbox = {-0.1,-0.1,-0.1,0.1,0.1,0.1},
 			pointable = false,
 		},
-		on_step = function(self, dtime)
+		on_step = function(self)
 			local pos = self.object:get_pos()
 			local node = minetest.get_node(pos)
 			local n = node.name

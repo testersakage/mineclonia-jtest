@@ -69,7 +69,7 @@ local def_hopper = {
 	end,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -78,7 +78,7 @@ local def_hopper = {
 			return count
 		end
 	end,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -87,7 +87,7 @@ local def_hopper = {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -96,15 +96,15 @@ local def_hopper = {
 			return stack:get_count()
 		end
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" moves stuff in mcl_hoppers at "..minetest.pos_to_string(pos))
 	end,
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" moves stuff to mcl_hoppers at "..minetest.pos_to_string(pos))
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" takes stuff from mcl_hoppers at "..minetest.pos_to_string(pos))
 	end,
@@ -241,7 +241,7 @@ local def_hopper_side = {
 	end,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -250,7 +250,7 @@ local def_hopper_side = {
 			return count
 		end
 	end,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -259,7 +259,7 @@ local def_hopper_side = {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -268,15 +268,15 @@ local def_hopper_side = {
 			return stack:get_count()
 		end
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" moves stuff in mcl_hoppers at "..minetest.pos_to_string(pos))
 	end,
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" moves stuff to mcl_hoppers at "..minetest.pos_to_string(pos))
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name()..
 				" takes stuff from mcl_hoppers at "..minetest.pos_to_string(pos))
 	end,
@@ -367,11 +367,11 @@ minetest.register_abm({
 	nodenames = {"mcl_hoppers:hopper","mcl_hoppers:hopper_side"},
 	interval = 0.5,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		local objs = minetest.get_objects_inside_radius(pos, 3)
 
 		if objs and #objs > 0 then
-			for k,v in pairs(objs) do
+			for _, v in pairs(objs) do
 				local entity = v:get_luaentity()
 				if entity and entity.name then
 					if entity.name == "mcl_minecarts:hopper_minecart" or entity.name == "mcl_minecarts:chest_minecart"then
@@ -407,7 +407,7 @@ minetest.register_abm({
 	nodenames = {"mcl_hoppers:hopper","mcl_hoppers:hopper_side"},
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		local abovenode = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
 		if not minetest.registered_items[abovenode.name] then return end
 		-- Don't bother checking item enties if node above is a container (should save some CPU)
@@ -481,7 +481,7 @@ minetest.register_abm({
 	neighbors = { "group:container" },
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		hopper_suck(pos)
 		local to_pos = vector.offset(pos, 0, -1, 0)
 		hopper_push(pos, to_pos)
@@ -494,7 +494,7 @@ minetest.register_abm({
 	neighbors = { "group:container" },
 	interval = 1.0,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		hopper_suck(pos)
 		-- Determine to which side the hopper is facing, get nodes
 		local face = minetest.get_node(pos).param2
@@ -538,7 +538,7 @@ minetest.register_lbm({
 	name = "mcl_hoppers:update_formspec_0_60_0",
 	nodenames = { "group:hopper" },
 	run_at_every_load = false,
-	action = function(pos, node)
+	action = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", mcl_hoppers_formspec)
 	end,

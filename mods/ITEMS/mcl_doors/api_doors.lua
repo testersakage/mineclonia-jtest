@@ -241,10 +241,10 @@ function mcl_doors:register_door(name, def)
 		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
 	end
 
-	local function on_mesecons_signal_open(pos, node)
+	local function on_mesecons_signal_open(pos, _)
 		on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
 	end
-	local function on_mesecons_signal_close(pos, node)
+	local function on_mesecons_signal_close(pos, _)
 		if not mesecon.is_powered({x=pos.x,y=pos.y+1,z=pos.z}) then
 			on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
 		end
@@ -270,7 +270,7 @@ function mcl_doors:register_door(name, def)
 	local on_rightclick
 	-- Disable on_rightclick if this is a redstone-only door
 	if not def.only_redstone_can_open then
-		on_rightclick = function(pos, node, clicker)
+		on_rightclick = function(pos, _, clicker)
 			if check_player_priv(pos, clicker) then
 				on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
 			end
@@ -299,7 +299,7 @@ function mcl_doors:register_door(name, def)
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		sounds = def.sounds,
 
-		after_destruct = function(bottom, oldnode)
+		after_destruct = function(bottom, _)
 			local meta_bottom = minetest.get_meta(bottom)
 			if meta_bottom:get_int("rotation") == 1 then
 				meta_bottom:set_int("rotation", 0)
@@ -325,7 +325,7 @@ function mcl_doors:register_door(name, def)
 			action_on = on_mesecons_signal_open,
 		}},
 
-		on_rotate = function(bottom, node, user, mode, param2)
+		on_rotate = function(bottom, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_bottom = minetest.get_meta(bottom)
 				meta_bottom:set_int("rotation", 1)
@@ -349,7 +349,7 @@ function mcl_doors:register_door(name, def)
 	if def.only_redstone_can_open then
 		on_rightclick = nil
 	else
-		on_rightclick = function(pos, node, clicker)
+		on_rightclick = function(pos, _, clicker)
 			if check_player_priv(pos, clicker) then
 				on_open_close(pos, -1, name.."_b_1", name.."_t_2", name.."_b_2")
 			end
@@ -404,7 +404,7 @@ function mcl_doors:register_door(name, def)
 			rules = mesecon.rules.flat,
 		}},
 
-		on_rotate = function(top, node, user, mode, param2)
+		on_rotate = function(top, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_top = minetest.get_meta(top)
 				meta_top:set_int("rotation", 1)
@@ -428,7 +428,7 @@ function mcl_doors:register_door(name, def)
 	if def.only_redstone_can_open then
 		on_rightclick = nil
 	else
-		on_rightclick = function(pos, node, clicker)
+		on_rightclick = function(pos, _, clicker)
 			if check_player_priv(pos, clicker) then
 				on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
 			end
@@ -457,7 +457,7 @@ function mcl_doors:register_door(name, def)
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		sounds = def.sounds,
 
-		after_destruct = function(bottom, oldnode)
+		after_destruct = function(bottom, _)
 			local meta_bottom = minetest.get_meta(bottom)
 			if meta_bottom:get_int("rotation") == 1 then
 				meta_bottom:set_int("rotation", 0)
@@ -483,7 +483,7 @@ function mcl_doors:register_door(name, def)
 			action_off = on_mesecons_signal_close,
 		}},
 
-		on_rotate = function(bottom, node, user, mode, param2)
+		on_rotate = function(bottom, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_bottom = minetest.get_meta(bottom)
 				meta_bottom:set_int("rotation", 1)
@@ -507,7 +507,7 @@ function mcl_doors:register_door(name, def)
 	if def.only_redstone_can_open then
 		on_rightclick = nil
 	else
-		on_rightclick = function(pos, node, clicker)
+		on_rightclick = function(pos, _, clicker)
 			if check_player_priv(pos, clicker) then
 				on_open_close(pos, -1, name.."_b_2", name.."_t_1", name.."_b_1")
 			end
@@ -562,7 +562,7 @@ function mcl_doors:register_door(name, def)
 			rules = mesecon.rules.flat,
 		}},
 
-		on_rotate = function(top, node, user, mode, param2)
+		on_rotate = function(top, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_top = minetest.get_meta(top)
 				meta_top:set_int("rotation", 1)

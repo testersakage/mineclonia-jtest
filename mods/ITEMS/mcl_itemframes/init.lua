@@ -104,7 +104,7 @@ end
 mcl_itemframes.update_entity = update_entity
 
 --Node functions
-function mcl_itemframes.tpl_node.on_rightclick(pos, node, clicker, ostack, pointed_thing)
+function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 	local name = clicker:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)

@@ -21,7 +21,7 @@ end
 
 local on_rotate
 if minetest.get_modpath("screwdriver") then
-	on_rotate = function(pos, node, user, mode, param2)
+	on_rotate = function(pos, node, _, mode, _)
 		-- Flip trapdoor vertically
 		if mode == screwdriver.ROTATE_AXIS then
 			local minor = node.param2
@@ -79,7 +79,7 @@ function mcl_doors:register_trapdoor(name, def)
 
 	local on_rightclick
 	if not def.only_redstone_can_open then
-		on_rightclick = function(pos, node, clicker)
+		on_rightclick = function(pos, _, _)
 			punch(pos)
 		end
 	end
@@ -146,7 +146,7 @@ function mcl_doors:register_trapdoor(name, def)
 			{-8/16, -8/16, -8/16, 8/16, -5/16, 8/16},},
 		},
 		mesecons = {effector = {
-			action_on = (function(pos, node)
+			action_on = (function(pos)
 				punch(pos)
 			end),
 		}},
@@ -228,7 +228,7 @@ function mcl_doors:register_trapdoor(name, def)
 		},
 		on_rightclick = on_rightclick,
 		mesecons = {effector = {
-			action_off = (function(pos, node)
+			action_off = (function(pos)
 				punch(pos)
 			end),
 		}},

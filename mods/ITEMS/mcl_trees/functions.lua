@@ -17,7 +17,7 @@ function mcl_trees.strip_tree(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-function mcl_trees.rotate_climbable(pos, node, user, mode)
+function mcl_trees.rotate_climbable(pos, node, _, mode)
 	if mode == screwdriver.ROTATE_FACE then
 		local r = screwdriver.rotate.wallmounted(pos, node, mode)
 		node.param2 = r

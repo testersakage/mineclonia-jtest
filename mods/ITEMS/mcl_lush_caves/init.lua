@@ -27,7 +27,7 @@ minetest.register_abm({
 	nodenames = {"mcl_lush_caves:spore_blossom"},
 	interval = 25,
 	chance = 10,
-	action = function(pos, node)
+	action = function(pos)
 		if minetest.get_node(vector.offset(pos, 0, -1, 0)).name ~= "air" then return end
 		for _,pl in pairs(minetest.get_connected_players()) do
 			if vector.distance(pos,pl:get_pos()) < PARTICLE_DISTANCE then
@@ -55,7 +55,7 @@ minetest.register_abm({
 	end
 })
 
-function mcl_lush_caves.makelake(pos,def,pr)
+function mcl_lush_caves.makelake(pos, _, pr)
 	local p1 = vector.offset(pos,-8,-4,-8)
 	local p2 = vector.offset(pos,8,4,8)
 	local nn = minetest.find_nodes_in_area_under_air(p1,p2,{"group:solid"})
@@ -73,8 +73,8 @@ function mcl_lush_caves.makelake(pos,def,pr)
 		--]]
 	end
 	local nnn = minetest.find_nodes_in_area(p1,p2,{"mcl_core:water_source"})
-	for k,v in pairs(nnn) do
-		for kk,vv in pairs(adjacents) do
+	for _, v in pairs(nnn) do
+		for _, vv in pairs(adjacents) do
 			local pp = vector.add(v,vv)
 			local an = minetest.get_node(pp)
 			if an.name ~= "mcl_core:water_source" then
@@ -123,7 +123,7 @@ end
 -- Azalea tree voxel manipulator buffer
 local data = {}
 
-function mcl_lush_caves.makeazalea(pos, def, pr)
+function mcl_lush_caves.makeazalea(pos, _, pr)
 	local distance = {x = 4, y = 40, z = 4}
 	local airup = minetest.find_nodes_in_area_under_air(vector.offset(pos, 0, distance.y, 0), pos, {"mcl_core:dirt_with_grass"})
 	if #airup == 0 then return end
@@ -180,7 +180,7 @@ minetest.register_abm({
 	nodenames = {"mcl_lush_caves:cave_vines_lit","mcl_lush_caves:cave_vines"},
 	interval = 180,
 	chance = 5,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		local pd1 = vector.offset(pos,0,-1,0)
 		local pd2 = vector.offset(pos,0,-2,0)
 		node.name = "mcl_lush_caves:cave_vines"

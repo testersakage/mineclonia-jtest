@@ -203,7 +203,7 @@ function mcl_beds.register_bed(name, def)
 
 		on_destruct = kick_player_after_destruct,
 
-		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		on_rightclick = function(pos, _, clicker, itemstack, _)
 			mcl_beds.on_rightclick(pos, clicker, false)
 			return itemstack
 		end,
@@ -229,7 +229,7 @@ function mcl_beds.register_bed(name, def)
 		selection_box = common_box,
 		collision_box = common_box,
 
-		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		on_rightclick = function(pos, _, clicker, itemstack, _)
 			mcl_beds.on_rightclick(pos, clicker, true)
 			return itemstack
 		end,

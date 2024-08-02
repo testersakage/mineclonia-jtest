@@ -107,7 +107,7 @@ for s=1,4 do
 			{ x = -1, y =  0, z = -1 },
 		}
 
-		for k, v in pairs(possible_position) do
+		for _, v in pairs(possible_position) do
 			sea_pickle_on_place(
 				ItemStack("mcl_ocean:sea_pickle"),
 				placer,
@@ -116,7 +116,7 @@ for s=1,4 do
 		end
 	end
 
-	local function on_bone_meal(itemstack, placer, pointed_thing, pos, node)
+	local function on_bone_meal(_, placer, pointed_thing, pos, node)
 		if pointed_thing.type ~= "node" then return end
 		if 4 ~= s then
 			node.name = "mcl_ocean:sea_pickle_" .. (s + 1) .. "_" .. ontop
@@ -223,7 +223,7 @@ minetest.register_abm({
 	interval = 17,
 	chance = 5,
 	catch_up = false,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		-- Check if it's lit
 		local state = minetest.get_item_group(node.name, "sea_pickle")
 		-- Check for water

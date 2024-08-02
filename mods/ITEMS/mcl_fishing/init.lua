@@ -224,7 +224,7 @@ function bobber_ENTITY:on_step(dtime)
 			self.object:set_acceleration({x=0,y=0,z=0})
 		end
 		if self._dive then
-			for i=1,2 do
+			for _ = 1, 2 do
 					-- Spray bubbles when there's a fish.
 					minetest.add_particle({
 						pos = {x=epos["x"]+math.random(-1,1)*math.random()/2,y=epos["y"]+0.1,z=epos["z"]+math.random(-1,1)*math.random()/2},

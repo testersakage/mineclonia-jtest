@@ -62,7 +62,7 @@ function mcl_enchanting.update_groupcaps(itemstack)
 
 		-- Increase the number of uses depending on the unbreaking level
 		-- of the tool.
-		for group, capability in pairs(tool_capabilities.groupcaps) do
+		for _, capability in pairs(tool_capabilities.groupcaps) do
 			capability.uses = capability.uses * (1 + unbreaking)
 		end
 

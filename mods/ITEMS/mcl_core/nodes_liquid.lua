@@ -6,11 +6,6 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local WATER_VISC = 1
 local LAVA_VISC = 7
 local LIGHT_LAVA = minetest.LIGHT_MAX
-local USE_TEXTURE_ALPHA = true
-
-if minetest.features.use_texture_alpha_string_modes then
-	USE_TEXTURE_ALPHA = "blend"
-end
 
 minetest.register_node("mcl_core:water_flowing", {
 	description = S("Flowing Water"),
@@ -32,7 +27,7 @@ minetest.register_node("mcl_core:water_flowing", {
 	},
 	sounds = mcl_sounds.node_sound_water_defaults(),
 	is_ground_content = false,
-	use_texture_alpha = USE_TEXTURE_ALPHA,
+	use_texture_alpha = "blend",
 	paramtype = "light",
 	paramtype2 = "flowingliquid",
 	walkable = false,
@@ -79,7 +74,7 @@ S("• When water is directly below lava, the water turns into stone."),
 	},
 	sounds = mcl_sounds.node_sound_water_defaults(),
 	is_ground_content = false,
-	use_texture_alpha = USE_TEXTURE_ALPHA,
+	use_texture_alpha = "blend",
 	paramtype = "light",
 	walkable = false,
 	pointable = false,
@@ -228,7 +223,7 @@ if minetest.settings:get("mcl_node_particles") == "full" then
 		nodenames = {"group:lava_source"},
 		interval = 8.0,
 		chance = 20,
-		action = function(pos, node)
+		action = function(pos)
 			local apos = {x=pos.x, y=pos.y+1, z=pos.z}
 			local anode = minetest.get_node(apos)
 			-- Only emit partiles when directly below lava

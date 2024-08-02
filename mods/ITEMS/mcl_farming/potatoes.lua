@@ -140,7 +140,7 @@ minetest.register_craftitem("mcl_farming:potato_item_poison", {
 
 mcl_farming:add_plant("plant_potato", "mcl_farming:potato", {"mcl_farming:potato_1", "mcl_farming:potato_2", "mcl_farming:potato_3", "mcl_farming:potato_4", "mcl_farming:potato_5", "mcl_farming:potato_6", "mcl_farming:potato_7"}, 19.75, 20)
 
-minetest.register_on_item_eat(function (hp_change, replace_with_item, itemstack, user, pointed_thing)
+minetest.register_on_item_eat(function (_, _, itemstack, user)
 
 	-- 60% chance of poisoning with poisonous potato
 	if itemstack:get_name() == "mcl_farming:potato_item_poison" then

@@ -1,6 +1,6 @@
 local S = minetest.get_translator("mcl_copper")
 
-local function on_lightning_strike(pos, pos1, pos2)
+local function on_lightning_strike(pos, _, pos2)
 	local node = minetest.get_node(pos)
 	if vector.distance(pos, pos2) <= 1 then
 		node.name = mcl_copper.get_undecayed(node.name, 4)

@@ -113,7 +113,7 @@ tt.register_priority_snippet(function(_, _, itemstack)
 	end
 end)
 
-for name, element in pairs(mcl_armor.elements) do
+for _, element in pairs(mcl_armor.elements) do
 	local modname = minetest.get_current_modname()
 	local itemname = modname .. ":" .. element.name .. "_leather"
 	minetest.register_craft({
@@ -135,7 +135,7 @@ for name, element in pairs(mcl_armor.elements) do
 	})
 end
 
-local function colorizing_crafting(itemstack, player, old_craft_grid, craft_inv)
+local function colorizing_crafting(itemstack, _, old_craft_grid, _)
 	if minetest.get_item_group(itemstack:get_name(), "armor_leather") == 0 then
 		return
 	end

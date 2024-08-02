@@ -26,7 +26,7 @@ end
 shuffle_table(adjacents)
 
 local function has_flammable(pos)
-	for k,v in pairs(adjacents) do
+	for _,v in pairs(adjacents) do
 		local p=vector.add(pos,v)
 		local n=minetest.get_node_or_nil(p)
 		if n and minetest.get_item_group(n.name, "flammable") ~= 0 then
@@ -81,7 +81,7 @@ minetest.register_node("mcl_fire:fire", {
 	damage_per_second = 1,
 	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston=1, destroys_items=1, set_on_fire=8},
 	floodable = true,
-	on_flood = function(pos, oldnode, newnode)
+	on_flood = function(pos, _, newnode)
 		if minetest.get_item_group(newnode.name, "water") ~= 0 then
 			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
@@ -129,7 +129,7 @@ minetest.register_node("mcl_fire:eternal_fire", {
 	damage_per_second = 1,
 	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston = 1, destroys_items = 1, set_on_fire=8},
 	floodable = true,
-	on_flood = function(pos, oldnode, newnode)
+	on_flood = function(pos, _, newnode)
 		if minetest.get_item_group(newnode.name, "water") ~= 0 then
 			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
@@ -258,7 +258,7 @@ end)
 local function check_aircube(p1,p2)
 	local nds=minetest.find_nodes_in_area(p1,p2,{"air"})
 	shuffle_table(nds)
-	for k,v in pairs(nds) do
+	for _, v in pairs(nds) do
 		if has_flammable(v) then return v end
 	end
 end
@@ -285,7 +285,7 @@ minetest.register_abm({
 	interval = 3,
 	chance = 1,
 	catch_up = false,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		minetest.remove_node(pos)
 		minetest.sound_play("fire_extinguish_flame",
 			{pos = pos, max_hear_distance = 16, gain = 0.15}, true)

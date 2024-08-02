@@ -95,7 +95,7 @@ local crop_def = {
 	on_rotate = false,
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 0.2,
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,n)
+	_on_bone_meal = function(_, _, _, pos, n)
 		if n.name == "mcl_cocoas:cocoa_1" or n.name == "mcl_cocoas:cocoa_2" then
 			return mcl_cocoas.grow(pos)
 		end
@@ -167,7 +167,7 @@ minetest.register_abm({
 		-- TODO: Tweak/balance the growth speed
 		interval = 50,
 		chance = 20,
-		action = function(pos, node)
+		action = function(pos)
 			mcl_cocoas.grow(pos)
 		end
 }	)

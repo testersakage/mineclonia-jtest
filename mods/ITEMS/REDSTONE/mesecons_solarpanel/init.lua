@@ -32,7 +32,7 @@ minetest.register_node("mesecons_solarpanel:solar_panel_on", {
 		state = mesecon.state.on,
 		rules = mesecon.rules.pplate,
 	}},
-	on_rightclick = function(pos, node, clicker, pointed_thing)
+	on_rightclick = function(pos, _, clicker)
 		local protname = clicker:get_player_name()
 		if minetest.is_protected(pos, protname) then
 			minetest.record_protection_violation(pos, protname)
@@ -72,7 +72,7 @@ minetest.register_node("mesecons_solarpanel:solar_panel_off", {
 		state = mesecon.state.off,
 		rules = mesecon.rules.pplate,
 	}},
-	on_rightclick = function(pos, node, clicker, pointed_thing)
+	on_rightclick = function(pos, _, clicker)
 		local protname = clicker:get_player_name()
 		if minetest.is_protected(pos, protname) then
 			minetest.record_protection_violation(pos, protname)
@@ -100,7 +100,7 @@ minetest.register_abm({
 	nodenames = {"mesecons_solarpanel:solar_panel_off"},
 	interval = 1,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		if sunlight_visible(pos) then
 			minetest.set_node(pos, {name="mesecons_solarpanel:solar_panel_on", param2=node.param2})
 			mesecon.receptor_on(pos, mesecon.rules.pplate)
@@ -113,7 +113,7 @@ minetest.register_abm({
 	nodenames = {"mesecons_solarpanel:solar_panel_on"},
 	interval = 1,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		if not sunlight_visible(pos) then
 			minetest.set_node(pos, {name="mesecons_solarpanel:solar_panel_off", param2=node.param2})
 			mesecon.receptor_off(pos, mesecon.rules.pplate)
@@ -147,7 +147,7 @@ minetest.register_node("mesecons_solarpanel:solar_panel_inverted_on", {
 		state = mesecon.state.on,
 		rules = mesecon.rules.pplate,
 	}},
-	on_rightclick = function(pos, node, clicker, pointed_thing)
+	on_rightclick = function(pos, _, clicker)
 		local protname = clicker:get_player_name()
 		if minetest.is_protected(pos, protname) then
 			minetest.record_protection_violation(pos, protname)
@@ -185,7 +185,7 @@ minetest.register_node("mesecons_solarpanel:solar_panel_inverted_off", {
 		state = mesecon.state.off,
 		rules = mesecon.rules.pplate,
 	}},
-	on_rightclick = function(pos, node, clicker, pointed_thing)
+	on_rightclick = function(pos, _, clicker)
 		local protname = clicker:get_player_name()
 		if minetest.is_protected(pos, protname) then
 			minetest.record_protection_violation(pos, protname)
@@ -203,7 +203,7 @@ minetest.register_abm({
 	nodenames = {"mesecons_solarpanel:solar_panel_inverted_off"},
 	interval = 1,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		if not sunlight_visible(pos) then
 			minetest.set_node(pos, {name="mesecons_solarpanel:solar_panel_inverted_on", param2=node.param2})
 			mesecon.receptor_on(pos, mesecon.rules.pplate)
@@ -216,7 +216,7 @@ minetest.register_abm({
 	nodenames = {"mesecons_solarpanel:solar_panel_inverted_on"},
 	interval = 1,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		if sunlight_visible(pos) then
 			minetest.set_node(pos, {name="mesecons_solarpanel:solar_panel_inverted_off", param2=node.param2})
 			mesecon.receptor_off(pos, mesecon.rules.pplate)

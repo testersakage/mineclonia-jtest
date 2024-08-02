@@ -33,7 +33,7 @@ minetest.register_node("mcl_flowerpots:flower_pot", {
 	inventory_image = "mcl_flowerpots_flowerpot_inventory.png",
 	groups = { dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1 },
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	on_rightclick = function(pos, node, clicker, itemstack)
+	on_rightclick = function(pos, _, clicker, itemstack)
 		local name = clicker:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -77,7 +77,7 @@ function mcl_flowerpots.register_potted_flower(name, def)
 		is_ground_content = false,
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2 },
 		sounds = mcl_sounds.node_sound_stone_defaults(),
-		on_rightclick = function(pos, item, clicker)
+		on_rightclick = function(pos, _, clicker)
 			local player_name = clicker:get_player_name()
 			if minetest.is_protected(pos, player_name) then
 				minetest.record_protection_violation(pos, player_name)
@@ -117,7 +117,7 @@ function mcl_flowerpots.register_potted_cube(name, def)
 		is_ground_content = false,
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2 },
 		sounds = mcl_sounds.node_sound_stone_defaults(),
-		on_rightclick = function(pos, item, clicker)
+		on_rightclick = function(pos, _, clicker)
 			local player_name = ""
 			if clicker:is_player() then
 				player_name = clicker:get_player_name()

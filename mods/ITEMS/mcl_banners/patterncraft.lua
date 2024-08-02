@@ -280,7 +280,7 @@ for colorid, colortab in pairs(mcl_banners.colors) do
 end
 
 local dye_to_itemid_mapping = {}
-for colorid, colortab in pairs(mcl_banners.colors) do
+for _, colortab in pairs(mcl_banners.colors) do
 	dye_to_itemid_mapping[colortab[5]] = colortab[1]
 end
 
@@ -452,7 +452,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			end
 			-- Everything matched! We found our pattern!
 			if pattern_ok then
-				matching_pattern = pattern_name
+				matching_pattern = pattern_name ---@diagnostic disable-line: cast-local-type
 				break
 			end
 
@@ -479,7 +479,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			end
 			-- Ladies and Gentlemen, we have a winner!
 			if no_mismatches_so_far then
-				matching_pattern = pattern_name
+				matching_pattern = pattern_name ---@diagnostic disable-line: cast-local-type
 				break
 			end
 		end
@@ -527,10 +527,10 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 end)
 
 -- Register crafting recipes for all the patterns
-for pattern_name, pattern in pairs(patterns) do
+for _, pattern in pairs(patterns) do
 	-- Shaped and fixed recipes
 	if pattern.type == nil then
-		for colorid, colortab in pairs(mcl_banners.colors) do
+		for _, colortab in pairs(mcl_banners.colors) do
 			local banner = "mcl_banners:banner_item_"..colortab[1]
 			local bannered = false
 			local recipe = {}
@@ -554,7 +554,7 @@ for pattern_name, pattern in pairs(patterns) do
 		end
 	-- Shapeless recipes
 	elseif pattern.type == "shapeless" then
-		for colorid, colortab in pairs(mcl_banners.colors) do
+		for _, colortab in pairs(mcl_banners.colors) do
 			local banner = "mcl_banners:banner_item_"..colortab[1]
 			local orig = pattern[1]
 			local recipe = {}
@@ -576,7 +576,7 @@ for pattern_name, pattern in pairs(patterns) do
 end
 
 -- Register crafting recipe for copying the banner pattern
-for colorid, colortab in pairs(mcl_banners.colors) do
+for _, colortab in pairs(mcl_banners.colors) do
 	local banner = "mcl_banners:banner_item_"..colortab[1]
 	minetest.register_craft({
 		type = "shapeless",

@@ -136,7 +136,7 @@ local tpl_fence_gates = {
 		end),
 	}},
 	on_rotate = on_rotate,
-	on_rightclick = function(pos, node, clicker)
+	on_rightclick = function(pos, node, _)
 		punch_gate(pos, node)
 	end,
 	_on_wind_charge_hit = function(pos)
@@ -170,7 +170,7 @@ local tpl_fence_gates_open = {
 		type = "fixed",
 		fixed = {{ -0.5, -0.1875, -0.0625, 0.5, 0.5, 0.0625 }}
 	},
-	on_rightclick = function(pos, node, clicker)
+	on_rightclick = function(pos, node, _)
 		punch_gate(pos, node)
 	end,
 	mesecons = {effector = {

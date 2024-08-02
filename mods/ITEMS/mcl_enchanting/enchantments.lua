@@ -94,7 +94,7 @@ mcl_enchanting.enchantments.depth_strider = {
 	anvil_book_factor = 2,
 }
 
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	if minetest.get_item_group(mcl_player.players[player].nodes.feet, "liquid") ~= 0 and mcl_enchanting.get_enchantment(player:get_inventory():get_stack("armor", 5), "depth_strider") then
 		local boots = player:get_inventory():get_stack("armor", 5)
 		local depth_strider = mcl_enchanting.get_enchantment(boots, "depth_strider")
@@ -152,7 +152,7 @@ mcl_enchanting.enchantments.fire_aspect = {
 	anvil_book_factor = 2,
 }
 
-minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+minetest.register_on_punchplayer(function(player, hitter)
 	if hitter and hitter:is_player() then
 		local wielditem = hitter:get_wielded_item()
 		if wielditem then

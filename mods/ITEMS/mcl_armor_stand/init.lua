@@ -75,7 +75,7 @@ minetest.register_node("mcl_armor_stand:armor_stand", {
 	on_destruct = function(pos)
 		drop_inventory(pos)
 	end,
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+	on_rightclick = function(pos, node, clicker, itemstack, _)
 		local protname = clicker:get_player_name()
 
 		if minetest.is_protected(pos, protname) then
@@ -85,7 +85,7 @@ minetest.register_node("mcl_armor_stand:armor_stand", {
 
 		return mcl_armor.equip(itemstack, get_stand_entity(pos, node).object, true)
 	end,
-	on_rotate = function(pos, node, user, mode)
+	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
 			node.param2 = (node.param2 + 1) % 4
 			minetest.swap_node(pos, node)
@@ -117,7 +117,7 @@ minetest.register_entity("mcl_armor_stand:armor_entity", {
 		migrate_inventory(self.inventory)
 		mcl_armor.update(self.object)
 	end,
-	on_step = function(self, dtime)
+	on_step = function(self)
 		if minetest.get_node(self.node_pos).name ~= "mcl_armor_stand:armor_stand" then
 			self.object:remove()
 		end

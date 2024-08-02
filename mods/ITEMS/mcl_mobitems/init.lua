@@ -534,7 +534,7 @@ minetest.register_craft({
 	recipe = {"mcl_mobitems:leather_horse_armor", "group:dye" },
 })
 
-minetest.register_on_item_eat(function (hp_change, replace_with_item, itemstack, user, pointed_thing)	-- poisoning with spider eye
+minetest.register_on_item_eat(function (_, _, itemstack, user, _)	-- poisoning with spider eye
 	if itemstack:get_name() == "mcl_mobitems:spider_eye" then
 		mcl_potions.poison_func(user, 1, 4)
 	end

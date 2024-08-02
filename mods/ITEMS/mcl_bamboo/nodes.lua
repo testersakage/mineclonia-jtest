@@ -43,7 +43,7 @@ local bamboo_def = {
 	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1.5,
 	node_placement_prediction = "",
-	on_place = mcl_util.generate_on_place_plant_function(function(pos, node)
+	on_place = mcl_util.generate_on_place_plant_function(function(pos)
 		local node_below = minetest.get_node(vector.offset(pos,0,-1,0))
 		local bamboo_below = minetest.get_item_group(node_below.name, "bamboo_tree") > 0
 		return (minetest.get_item_group(node_below.name, "soil_bamboo") > 0 or bamboo_below),(bamboo_below and node_below.param2 or math.random(0,3))
@@ -58,7 +58,7 @@ local bamboo_def = {
 		end
 		minetest.swap_node(pos,node)
 	end,
-	_on_bone_meal = function(itemstack,placer,pointed_thing,pos,node)
+	_on_bone_meal = function(_, _, _, pos)
 		return mcl_bamboo.grow(pos)
 	end,
 }
@@ -218,8 +218,8 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 		end
 		return itemstack
 	end,
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
-		mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(pos,dir,node)
+	after_dig_node = function(pos, _, _, digger)
+		mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(pos, _, node)
 			if node.name ~= "mcl_bamboo:scaffolding" then return true end
 			if mcl_util.safe_place(pos, {name = "air"}, digger) then
 				if not minetest.is_creative_enabled(digger:get_player_name()) then
@@ -231,7 +231,7 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 			end
 		end)
 	end,
-	_mcl_after_falling = function(pos, depth)
+	_mcl_after_falling = function(pos, _)
 		if minetest.get_node(pos).name == "mcl_bamboo:scaffolding" then
 			mcl_util.safe_place(pos,{name = "mcl_bamboo:scaffolding"})
 		end

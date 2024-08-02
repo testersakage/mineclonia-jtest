@@ -272,7 +272,7 @@ local function sort_stack(stack)
 	end
 end
 
-local function allow_put(pos, listname, index, stack, player)
+local function allow_put(pos, listname, _, stack, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
@@ -300,7 +300,7 @@ local function allow_put(pos, listname, index, stack, player)
 	return stack:get_count()
 end
 
-local function on_put(pos, listname, index, stack, player)
+local function on_put(pos, listname, _, stack, _)
 	if listname == "sorter" then
 		local inv = minetest.get_meta(pos):get_inventory()
 		inv:add_item(sort_stack(stack), stack)
@@ -322,7 +322,7 @@ local function on_put(pos, listname, index, stack, player)
 	--some code here to enforce only potions getting placed on stands
 end
 
-local function allow_move(pos, from_list, from_index, to_list, to_index, count, player)
+local function allow_move(pos, from_list, from_index, to_list, _, count, _)
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
 	local inv = minetest.get_meta(pos):get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
@@ -331,7 +331,7 @@ local function allow_move(pos, from_list, from_index, to_list, to_index, count, 
 	return 0
 end
 
-local function allow_take(pos, listname, index, stack, player)
+local function allow_take(pos, listname, _, stack, player)
 	if listname == "sorter" then return 0 end
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
@@ -380,7 +380,7 @@ end
 local function hopper_out(pos, to_pos)
 	local sinv = minetest.get_inventory({type="node", pos = pos})
 	local dinv = minetest.get_inventory({type="node", pos = to_pos})
-	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", function(itemstack)
+	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", function()
 		return true
 	end)
 	if slot_id then
@@ -421,7 +421,7 @@ local tpl_brewing_stand = {
 		local form = brewing_formspec
 		meta:set_string("formspec", form)
 	end,
-	on_receive_fields = function(pos, formname, fields, sender)
+	on_receive_fields = function(pos, _, _, sender)
 		local sender_name = sender:get_player_name()
 		if minetest.is_protected(pos, sender_name) then
 			minetest.record_protection_violation(pos, sender_name)
@@ -736,7 +736,7 @@ minetest.register_lbm({
 	name = "mcl_brewing:update_coolsneak",
 	nodenames = { "group:brewing_stand" },
 	run_at_every_load = false,
-	action = function(pos, node)
+	action = function(pos)
 		local m = minetest.get_meta(pos)
 		m:get_inventory():set_size("sorter", 1)
 		m:set_string("formspec", brewing_formspec)

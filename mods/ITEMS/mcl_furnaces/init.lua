@@ -90,7 +90,7 @@ local function get_inactive_formspec(name)
 end
 
 
-function mcl_furnaces.receive_fields(pos, formname, fields, sender)
+function mcl_furnaces.receive_fields(_, _, fields, sender)
 	if fields.craftguide then
 		mcl_craftguide.show(sender:get_player_name())
 	end
@@ -190,7 +190,7 @@ function mcl_furnaces.allow_metadata_inventory_put(pos, listname, index, stack, 
 	end
 end
 
-function mcl_furnaces.allow_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, count, player)
+function mcl_furnaces.allow_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, _, player)
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
@@ -198,7 +198,7 @@ function mcl_furnaces.allow_metadata_inventory_move(pos, from_list, from_index, 
 	return mcl_furnaces.allow_metadata_inventory_put(pos, to_list, to_index, stack, player)
 end
 
-function mcl_furnaces.allow_metadata_inventory_take(pos, listname, index, stack, player)
+function mcl_furnaces.allow_metadata_inventory_take(pos, listname, _, stack, player)
 	if listname == "sorter" then return 0 end
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
@@ -208,7 +208,7 @@ function mcl_furnaces.allow_metadata_inventory_take(pos, listname, index, stack,
 	return stack:get_count()
 end
 
-function mcl_furnaces.on_metadata_inventory_take(pos, listname, index, stack, player)
+function mcl_furnaces.on_metadata_inventory_take(pos, listname, _, stack, player)
 	-- Award smelting achievements
 	if listname == "dst" then
 		if stack:get_name() == "mcl_core:iron_ingot" then
@@ -220,13 +220,13 @@ function mcl_furnaces.on_metadata_inventory_take(pos, listname, index, stack, pl
 	end
 end
 
-function mcl_furnaces.on_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, count, player)
+function mcl_furnaces.on_metadata_inventory_move(pos, from_list, _, _, _, _, player)
 	if from_list == "dst" then
 		mcl_furnaces.give_xp(pos, player)
 	end
 end
 
-function mcl_furnaces.on_metadata_inventory_put(pos, listname, index, stack, player)
+function mcl_furnaces.on_metadata_inventory_put(pos, listname, _, stack, _)
 	if listname == "sorter" then
 		local inv = minetest.get_meta(pos):get_inventory()
 		inv:add_item(sort_stack(stack, pos), stack)
@@ -469,7 +469,7 @@ mcl_furnaces.furnace_node_timer = mcl_furnaces.get_timer_function()
 mcl_furnaces.on_rotate = screwdriver.rotate_simple
 
 -- Returns true if itemstack is fuel, but not for lava bucket if destination already has one
-function mcl_furnaces.is_transferrable_fuel(itemstack, src_inventory, src_list, dst_inventory, dst_list)
+function mcl_furnaces.is_transferrable_fuel(itemstack, _, _, dst_inventory, dst_list)
 	if mcl_util.is_fuel(itemstack) then
 		if itemstack:get_name() == "mcl_buckets:bucket_lava" then
 			return dst_inventory:is_empty(dst_list)

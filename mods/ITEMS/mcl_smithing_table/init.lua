@@ -137,7 +137,7 @@ local function reset_upgraded_item(pos)
 	inv:set_stack("upgraded_item", 1, upgraded_item)
 end
 
-local function sort_stack(stack, pos)
+local function sort_stack(stack, _)
 	if minetest.get_item_group(stack:get_name(), "smithing_template") > 0 or minetest.get_item_group(stack:get_name(), "upgrade_template") > 0 then
 		return "template"
 	elseif mcl_smithing_table.is_smithing_mineral(stack:get_name()) then
@@ -182,7 +182,7 @@ minetest.register_node("mcl_smithing_table:table", {
 
 	after_dig_node = mcl_util.drop_items_from_meta_container({"upgrade_item", "mineral", "template"}),
 
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, listname, _, stack, _)
 		local r = 0
 		if listname == "upgrade_item" then
 			if (minetest.get_item_group(stack:get_name(),"armor") > 0
@@ -216,11 +216,11 @@ minetest.register_node("mcl_smithing_table:table", {
 		return r
 	end,
 
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function()
 		return 0
 	end,
 
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		if listname == "sorter" then return 0 end
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
@@ -231,7 +231,7 @@ minetest.register_node("mcl_smithing_table:table", {
 		end
 	end,
 
-	on_metadata_inventory_put =  function(pos, listname, index, stack, player)
+	on_metadata_inventory_put =  function(pos, listname, _, stack)
 		if listname == "sorter" then
 			local inv = minetest.get_meta(pos):get_inventory()
 			inv:add_item(sort_stack(stack, pos), stack)
@@ -239,7 +239,7 @@ minetest.register_node("mcl_smithing_table:table", {
 		end
 		reset_upgraded_item(pos)
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local inv = minetest.get_meta(pos):get_inventory()
 
 		local function take_item(listname)
@@ -314,7 +314,7 @@ minetest.register_lbm({
 	name = "mcl_smithing_table:update_coolsneak",
 	nodenames = { "mcl_smithing_table:table" },
 	run_at_every_load = false,
-	action = function(pos, node)
+	action = function(pos)
 		local m = minetest.get_meta(pos)
 		m:get_inventory():set_size("sorter", 1)
 		m:set_string("formspec", formspec)

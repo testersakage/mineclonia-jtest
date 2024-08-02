@@ -8,7 +8,7 @@ minetest.register_abm({
 	interval = 1,
 	chance = 1,
 	min_y = mcl_vars.mg_end_min,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		local water = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "group:water")
 
 		local lavatype = minetest.registered_nodes[node.name].liquidtype
@@ -44,7 +44,7 @@ minetest.register_abm({
 --
 
 -- Functions
-function mcl_core.grow_cactus(pos, node)
+function mcl_core.grow_cactus(pos, _)
 	pos.y = pos.y-1
 	local name = minetest.get_node(pos).name
 	if minetest.get_item_group(name, "sand") ~= 0 then
@@ -62,7 +62,7 @@ function mcl_core.grow_cactus(pos, node)
 	end
 end
 
-function mcl_core.grow_reeds(pos, node)
+function mcl_core.grow_reeds(pos, _)
 	pos.y = pos.y-1
 	local name = minetest.get_node(pos).name
 	if minetest.get_item_group(name, "soil_sugarcane") ~= 0 then
@@ -149,7 +149,7 @@ minetest.register_abm({
 	neighbors = {"group:water"},
 	interval = 1,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		liquid_flow_action(pos, "water", function(pos)
 			drop_attached_node(pos)
 			minetest.dig_node(pos)
@@ -164,7 +164,7 @@ minetest.register_abm({
 	neighbors = {"group:lava"},
 	interval = 1,
 	chance = 5,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		liquid_flow_action(pos, "lava", function(pos)
 			minetest.remove_node(pos)
 			minetest.sound_play("builtin_item_lava", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
@@ -190,7 +190,7 @@ minetest.register_abm({
 	nodenames = {"mcl_core:cactus"},
 	interval = 1,
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos)
 		for _, object in pairs(minetest.get_objects_inside_radius(pos, 1.1)) do
 			local entity = object:get_luaentity()
 			local dst = vector.distance(object:get_pos(), pos)
@@ -314,7 +314,7 @@ minetest.register_abm({
 	interval = 8,
 	chance = 50,
 	catch_up = false,
-	action = function(pos, node)
+	action = function(pos, _)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 		local name = minetest.get_node(above).name
 		-- Kill grass/mycelium when below opaque block or liquid
@@ -325,7 +325,7 @@ minetest.register_abm({
 })
 
 -- Turn Grass Path and similar nodes to Dirt if a solid node is placed above it
-minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
+minetest.register_on_placenode(function(pos, newnode)
 	if minetest.get_item_group(newnode.name, "solid") ~= 0 or
 			minetest.get_item_group(newnode.name, "dirtifier") ~= 0 then
 		local below = {x=pos.x, y=pos.y-1, z=pos.z}
@@ -342,7 +342,7 @@ minetest.register_abm({
 	neighbors = {"group:solid"},
 	interval = 8,
 	chance = 50,
-	action = function(pos, node)
+	action = function(pos)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 		local name = minetest.get_node(above).name
 		local nodedef = minetest.registered_nodes[name]
@@ -380,7 +380,6 @@ minetest.register_lbm({
 		end
 		node.param2 = SAVANNA_INDEX
 		minetest.set_node(pos, node)
-		return
 	end,
 })
 
@@ -392,10 +391,10 @@ minetest.register_abm({
 	nodenames = {"mcl_core:vine"},
 	interval = 47,
 	chance = 4,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 
 		-- Add vines below pos (if empty)
-		local function spread_down(origin, target, dir, node)
+		local function spread_down(_, target, _, node)
 			if math.random(1, 2) == 1 then
 				if minetest.get_node(target).name == "air" then
 					minetest.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
@@ -404,7 +403,7 @@ minetest.register_abm({
 		end
 
 		-- Add vines above pos if it is backed up
-		local function spread_up(origin, target, dir, node)
+		local function spread_up(origin, target, _, node)
 			local vines_in_area = minetest.find_nodes_in_area({x=origin.x-4, y=origin.y-1, z=origin.z-4}, {x=origin.x+4, y=origin.y+1, z=origin.z+4}, "mcl_core:vine")
 			-- Less then 4 vines blocks around the ticked vines block (remember the ticked block is counted by above function as well)
 			if #vines_in_area < 5 then
@@ -677,7 +676,7 @@ minetest.register_abm({
 	nodenames = {"mcl_core:crying_obsidian"},
 	interval = 5,
 	chance = 10,
-	action = function(pos, node)
+	action = function(pos)
 		minetest.after(math.random(0.1,1.5),function()
 			local pt = table.copy(crobby_particle)
 			pt.acceleration = vector.new(0,0,0)
@@ -734,7 +733,7 @@ function mcl_core.strip_tree(itemstack, placer, pointed_thing)
 	return itemstack,true
 end
 
-function mcl_core.bone_meal_grass(itemstack,placer,pointed_thing)
+function mcl_core.bone_meal_grass(_, _, pointed_thing)
 	local flowers_table_plains = {
 		"mcl_flowers:dandelion",
 		"mcl_flowers:dandelion",
@@ -803,7 +802,7 @@ function mcl_core.bone_meal_grass(itemstack,placer,pointed_thing)
 end
 
 -- Show positions of barriers when player is wielding a barrier
-mcl_player.register_globalstep_slow(function(player, dtime)
+mcl_player.register_globalstep_slow(function(player)
 	local wi = player:get_wielded_item():get_name()
 	if wi == "mcl_core:barrier" or wi == "mcl_core:realm_barrier" or minetest.get_item_group(wi, "light_block") ~= 0 then
 		local pos = vector.round(player:get_pos())

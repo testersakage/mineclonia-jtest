@@ -67,7 +67,7 @@ minetest.register_node("mcl_crafting_table:crafting_table", {
 		"crafting_workbench_side.png", "crafting_workbench_front.png", "crafting_workbench_front.png" },
 	paramtype2 = "facedir",
 	groups = { handy = 1, axey = 1, deco_block = 1, material_wood = 1, flammable = -1, crafting_table = 9 },
-	on_rightclick = function(pos, node, player, itemstack)
+	on_rightclick = function(_, _, player)
 		if not player:get_player_control().sneak then
 			mcl_crafting_table.show_crafting_form(player)
 		end

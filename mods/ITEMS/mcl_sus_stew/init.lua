@@ -25,7 +25,7 @@ local function eat_stew(itemstack, placer, pointed_thing)
 	end
 end
 
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+minetest.register_on_craft(function(itemstack, _, old_craft_grid, _)
 	if itemstack:get_name() ~= "mcl_sus_stew:stew" then return end
 	for f,e in pairs(item_effect) do
 		for _,it in pairs(old_craft_grid) do
@@ -47,12 +47,12 @@ function mcl_sus_stew.register_stew(name,recipe_item,effect_func)
 	})
 end
 
-local function hunger_effect(itemstack, placer, pointed_thing)
+local function hunger_effect(itemstack)
 	mcl_hunger.item_eat(6, "mcl_core:bowl", 3.5, 0, 100)
 	return itemstack
 end
 
-local function potion_effect(itemstack, placer, pointed_thing,effect)
+local function potion_effect(itemstack, placer, _, effect)
 	if mcl_potions[effect.."_func"] then
 		mcl_potions[effect.."_func"](placer, 1, 6)
 	end

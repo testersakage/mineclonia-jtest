@@ -312,7 +312,7 @@ end
 -- The flag 'destroying_portal' is used to avoid this function being called
 -- recursively through callbacks in 'bulk_set_node'.
 local destroying_portal = false
-local function destroy_portal(pos, node)
+local function destroy_portal(pos, _)
 	if destroying_portal then
 		return
 	end
@@ -450,7 +450,7 @@ end
 
 -- Scan emerged area and build a portal at a suitable spot. If no suitable spot
 -- is found, then it will build the portal at a random location.
-local function portal_emerge_area(blockpos, action, calls_remaining, param)
+local function portal_emerge_area(_, _, calls_remaining, param)
 	if param.done_flag or calls_remaining ~= 0 then
 		return
 	end
@@ -498,7 +498,7 @@ local function portal_emerge_area(blockpos, action, calls_remaining, param)
 	end
 
 	-- 5 attempts to find a random spot which is not protected.
-	for i = 1, 5 do
+	for _ = 1, 5 do
 		local pos = vector.new(target.x, math.random(minpos.y, maxpos.y), target.z)
 		if can_place_portal(pos, player_name) then
 			finalize(obj, pos, param2, true)
@@ -562,9 +562,9 @@ local function teleport(obj)
 	local linked_portal = get_linked_portal(dim, target)
 	if linked_portal then
 		local linked_node = minetest.get_node(linked_portal)
-		finalize_teleport(obj, linked_portal, node.param2, linked_node.param2)
+		finalize_teleport(obj, linked_portal, node.param2, linked_node.param2) ---@diagnostic disable-line: need-check-nil
 	elseif obj:is_player() then -- Generate portal and teleport.
-		local param2 = node.param2
+		local param2 = node.param2 ---@diagnostic disable-line: need-check-nil
 		local y_min = search_y_min[dim]
 		local y_max = search_y_max[dim]
 		local minpos = vector.new(target.x - 16, y_min, target.z - 16)
@@ -654,7 +654,7 @@ end
 minetest.override_item("mcl_core:obsidian", {
 	_doc_items_longdesc = longdesc,
 	_doc_items_usagehelp = usagehelp,
-	on_destruct = function(pos, node)
+	on_destruct = function(pos, _)
 		local function check_remove(pos, param2)
 			local node = minetest.get_node(pos)
 			if node.name == "mcl_portals:portal" and (not param2 or node.param2 % 2 == param2) then
@@ -763,7 +763,7 @@ minetest.register_node("mcl_portals:portal", {
 	on_rotate = on_rotate,
 	_mcl_hardness = -1,
 	_mcl_blast_resistance = 0,
-	_on_walk_through = function(pos, node, player)
+	_on_walk_through = function(pos, node, _)
 		emit_portal_particles(pos, node)
 		teleport_objs_in_portal(pos)
 	end,
@@ -773,7 +773,7 @@ minetest.register_chatcommand("dumpportals", {
 	description = S("Dump coordinates of registered portals"),
 	privs = { debug = true },
 	params = "[nether | overworld]",
-	func = function(name, param)
+	func = function(_, param)
 		if param ~= "nether" and param ~= "overworld" then
 			return false, S("Invalid dimension argument.")
 		end

@@ -40,7 +40,7 @@ if mod_mcl_core then
 		longdesc = S("A bucket can be used to collect and release liquids. This one is filled with water."),
 		usagehelp = S("Place it to empty the bucket and create a water source."),
 		tt_help = S("Places a water source"),
-		extra_check = function(pos, placer)
+		extra_check = function(pos, _)
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then
 				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
@@ -62,7 +62,7 @@ if mod_mclx_core then
 		longdesc = S("A bucket can be used to collect and release liquids. This one is filled with river water."),
 		usagehelp = S("Place it to empty the bucket and create a river water source."),
 		tt_help = S("Places a river water source"),
-		extra_check = function(pos, placer)
+		extra_check = function(pos, _)
 			-- Evaporate water if used in Nether
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then

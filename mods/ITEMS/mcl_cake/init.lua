@@ -57,7 +57,7 @@ minetest.register_node("mcl_cake:cake", {
 		cake = 7, food = 2, no_eat_delay = 1, compostability = 100
 	},
 	drop = "",
-	on_rightclick = function(pos, node, clicker, itemstack)
+	on_rightclick = function(pos, _, clicker, _)
 		-- Cake is subject to protection
 		local name = clicker:get_player_name()
 		if minetest.is_protected(pos, name) then
@@ -83,7 +83,7 @@ local register_slice = function(level, nodebox, desc)
 	local after_eat = "mcl_cake:cake_"..(level-1)
 	local on_rightclick
 	if level > 1 then
-		on_rightclick = function(pos, node, clicker, itemstack)
+		on_rightclick = function(pos, _, clicker, _)
 			local name = clicker:get_player_name()
 			if minetest.is_protected(pos, name) then
 				minetest.record_protection_violation(pos, name)
@@ -97,7 +97,7 @@ local register_slice = function(level, nodebox, desc)
 		end
 	else
 		-- Last slice
-		on_rightclick = function(pos, node, clicker, itemstack)
+		on_rightclick = function(pos, _, clicker, _)
 			local name = clicker:get_player_name()
 			if minetest.is_protected(pos, name) then
 				minetest.record_protection_violation(pos, name)

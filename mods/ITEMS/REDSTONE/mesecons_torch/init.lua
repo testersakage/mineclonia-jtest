@@ -155,7 +155,7 @@ overheated_def.description = S("Redstone Torch (overheated)")
 mcl_torches.register_torch(overheated_def)
 
 local overheated_override = {
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos)
 		if not mesecon.is_powered(pos) then
 			local node = minetest.get_node(pos)
 			torch_action_off(pos, node)
@@ -181,7 +181,7 @@ local on_def = {
 mcl_torches.register_torch(on_def)
 
 local on_override = {
-	on_destruct = function(pos, oldnode)
+	on_destruct = function(pos)
 		local node = minetest.get_node(pos)
 		torch_action_on(pos, node)
 	end,

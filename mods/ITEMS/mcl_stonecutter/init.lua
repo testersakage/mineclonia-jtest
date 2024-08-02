@@ -43,7 +43,7 @@ local function show_stonecutter_formspec(input)
 	local y_len = 0.1
 	local count = 0
 	if recipes[input] then
-		for k,v in pairs(recipes[input]) do
+		for _, v in pairs(recipes[input]) do
 			if x_len > 5 then
 				y_len = y_len + 1
 				x_len = 0.1
@@ -154,7 +154,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	_mcl_hardness = 3.5,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -169,7 +169,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 			return stack:get_count()
 		end
 	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -188,7 +188,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 			return count
 		end
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	on_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, _)
 		local meta = minetest.get_meta(pos)
 		if from_list == "output" and to_list == "input" then
 			local inv = meta:get_inventory()
@@ -202,7 +202,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 		end
 		update_stonecutter_slots(pos)
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
 		if minetest.is_protected(pos, name) then
 			minetest.record_protection_violation(pos, name)
@@ -213,10 +213,10 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 			return stack:get_count()
 		end
 	end,
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos)
 		update_stonecutter_slots(pos)
 	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, listname, _, stack, _)
 		local meta = minetest.get_meta(pos)
 		if listname == "output" then
 			local inv = meta:get_inventory()
@@ -234,19 +234,19 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 		local form = show_stonecutter_formspec()
 		meta:set_string("formspec", form)
 	end,
-	on_rightclick = function(pos, node, player, itemstack)
+	on_rightclick = function(pos, _, player, _)
 		if not player:get_player_control().sneak then
 			update_stonecutter_slots(pos)
 		end
 	end,
-	on_receive_fields = function(pos, formname, fields, sender)
+	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
 		if minetest.is_protected(pos, sender_name) then
 			minetest.record_protection_violation(pos, sender_name)
 			return
 		end
 		if fields then
-			for k,v in pairs(fields) do
+			for k, _ in pairs(fields) do
 				if tostring(k) then
 					local str = k:gsub("^item_button_","")
 					local def = minetest.registered_nodes[str]

@@ -32,7 +32,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 
 	if inv then
-		for name, element in pairs(mcl_armor.elements) do
+		for _, element in pairs(mcl_armor.elements) do
 			local itemstack = inv:get_stack("armor", element.index)
 			if not itemstack:is_empty() then
 				local itemname = itemstack:get_name()

@@ -2,7 +2,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 local lever_get_output_rules = mesecon.rules.buttonlike_get
 
-local function on_rotate(pos, node, user, mode)
+local function on_rotate(pos, node, _, mode)
 	if mode == screwdriver.ROTATE_FACE then
 		if node.param2 == 10 then
 			node.param2 = 13

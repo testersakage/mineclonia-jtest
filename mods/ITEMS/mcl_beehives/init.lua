@@ -7,7 +7,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local abm_nodes = { "mcl_beehives:beehive", "mcl_beehives:bee_nest" }
 
 -- Function to allow harvesting honey and honeycomb from the beehive and bee nest.
-local honey_harvest = function(pos, node, player, itemstack, pointed_thing)
+local honey_harvest = function(pos, node, player, itemstack)
 	local inv = player:get_inventory()
 	local shears = minetest.get_item_group(player:get_wielded_item():get_name(), "shears") > 0
 	local bottle = player:get_wielded_item():get_name() == "mcl_potions:glass_bottle"
@@ -49,7 +49,7 @@ local honey_harvest = function(pos, node, player, itemstack, pointed_thing)
 end
 
 -- Dig Function for Beehives
-local dig_hive = function(pos, node, oldmetadata, digger)
+local dig_hive = function(pos, node, _, digger)
 	local wield_item = digger:get_wielded_item()
 	local beehive = string.find(node.name, "mcl_beehives:beehive")
 	local beenest = string.find(node.name, "mcl_beehives:bee_nest")
@@ -211,7 +211,7 @@ minetest.register_abm({
 	nodenames = abm_nodes, --Register for all levels but 5 so honeyed hives aren't constantly updating themselves
 	interval = 75, --This is similar to what the situation would be for 2 bees (~5 to reach flower, 20 to harvest pollen, ~5 to return, 120 to process).
 	chance = 1,
-	action = function(pos, node, active_object_count, active_object_count_wider)
+	action = function(pos, node)
 		local flower = minetest.find_node_near(pos, 5, "group:flower")
 		local tod = minetest.get_timeofday() * 24000 --Bees need to sleep (note in Minecraft, they don't in the Nether/End, which is ridiculous)
 		if tod > 6000 and tod < 18000 and flower and mcl_weather.get_weather() ~= "rain" then

@@ -707,7 +707,7 @@ minetest.register_on_leaveplayer(function(player)
 	mcl_tools.mace_cooldown[player] = nil
 end)
 
-mcl_damage.register_modifier(function(obj, damage, reason)
+mcl_damage.register_modifier(function(obj, _, reason)
 	if reason.type == "fall" and mcl_tools.mace_cooldown[obj] and minetest.get_gametime() - mcl_tools.mace_cooldown[obj] < 2 then
 		return 0
 	end
