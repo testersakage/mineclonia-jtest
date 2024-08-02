@@ -4,6 +4,7 @@ max_line_length = false
 redefined = false
 ignore = {
 	--this is used intentionally in the codebase sometimes
+	"131", --unused global
 	"512", -- Loop can be executed at most once.
 }
 globals = {
