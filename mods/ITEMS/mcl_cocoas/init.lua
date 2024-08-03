@@ -95,6 +95,7 @@ local crop_def = {
 	on_rotate = false,
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 0.2,
+	_mcl_basenode = "mcl_cocoas:cocoa_beans",
 	_on_bone_meal = function(_, _, _, pos, n)
 		if n.name == "mcl_cocoas:cocoa_1" or n.name == "mcl_cocoas:cocoa_2" then
 			return mcl_cocoas.grow(pos)
@@ -170,8 +171,7 @@ minetest.register_abm({
 		action = function(pos)
 			mcl_cocoas.grow(pos)
 		end
-}	)
-
+})
 -- Add entry aliases for the Help
 if minetest.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_cocoas:cocoa_1", "nodes", "mcl_cocoas:cocoa_2")
