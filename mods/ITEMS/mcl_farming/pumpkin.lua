@@ -102,6 +102,7 @@ for s=1,7 do
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		_mcl_blast_resistance = 0,
 		_on_bone_meal = on_bone_meal,
+		_mcl_basenode = "mcl_farming:pumpkin_seeds",
 	})
 end
 
@@ -112,6 +113,7 @@ local stem_def = {
 	tiles = {"mcl_farming_pumpkin_stem_disconnected.png^[colorize:#FFA800:127"},
 	wield_image = "mcl_farming_pumpkin_stem_disconnected.png^[colorize:#FFA800:127",
 	inventory_image = "mcl_farming_pumpkin_stem_disconnected.png^[colorize:#FFA800:127",
+	_mcl_basenode = "mcl_farming:pumpkin_seeds",
 }
 
 -- Template for pumpkin
