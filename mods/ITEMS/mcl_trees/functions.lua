@@ -39,10 +39,7 @@ local function node_stops_growth(node)
 		return true
 	end
 
-	local groups = def.groups
-	if not groups then
-		return true
-	end
+	local groups = def.groups or {}
 	if (groups.plant or 0) ~= 0 or
 			(groups.torch or 0) ~= 0 or
 			(groups.dirt or 0) ~= 0 or
@@ -50,7 +47,8 @@ local function node_stops_growth(node)
 			(groups.tree or 0) ~= 0 or
 			(groups.bark or 0) ~= 0 or
 			(groups.leaves or 0) ~= 0 or
-			(groups.wood or 0) ~= 0 then
+			(groups.wood or 0) ~= 0 or
+			def.buildable_to then
 		return false
 	end
 
