@@ -131,8 +131,10 @@ function minetest.handle_node_drops(pos, drops, digger)
 	local dug_node = minetest.get_node(pos)
 	local tooldef
 	local tool
+	local is_book
 	if digger and digger:is_player() then
 		tool = digger:get_wielded_item()
+		is_book = tool:get_name() == "mcl_enchanting:book_enchanted"
 		tooldef = minetest.registered_items[tool:get_name()]
 
 		if not mcl_autogroup.can_harvest(dug_node.name, tool:get_name(), digger) then
@@ -162,7 +164,7 @@ function minetest.handle_node_drops(pos, drops, digger)
 		else
 			drops = nodedef._mcl_shears_drop
 		end
-	elseif tool and enchantments.silk_touch and nodedef._mcl_silk_touch_drop then
+	elseif tool and not is_book and enchantments.silk_touch and nodedef._mcl_silk_touch_drop then
 		silk_touch_drop = true
 		if nodedef._mcl_silk_touch_drop == true then
 			drops = { dug_node.name }
@@ -171,7 +173,7 @@ function minetest.handle_node_drops(pos, drops, digger)
 		end
 	end
 
-	if tool and nodedef._mcl_fortune_drop and enchantments.fortune then
+	if tool and not is_book and nodedef._mcl_fortune_drop and enchantments.fortune then
 		local fortune_level = enchantments.fortune
 		local fortune_drop = nodedef._mcl_fortune_drop
 		local simple_drop = nodedef._mcl_fortune_drop.drop_without_fortune
