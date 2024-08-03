@@ -3,7 +3,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local tt_help = S("Flight Duration:")
 local description = S("Firework Rocket")
 
-function mcl_fireworks.use_rocket(itemstack, user, pointed_thing, duration, force)
+local function use_rocket(itemstack, user, pointed_thing, duration, force)
 	local elytra = mcl_player.players[user].elytra
 	if elytra.active and elytra.rocketing <= 0 then
 		elytra.rocketing = duration
@@ -28,10 +28,10 @@ local function register_rocket(n, duration, force)
 		_tt_help = tt_help .. " " .. duration,
 		inventory_image = "mcl_fireworks_rocket.png",
 		on_use = function(itemstack, user, pointed_thing)
-			return mcl_fireworks.use_rocket(itemstack, user, pointed_thing, duration, force)
+			return use_rocket(itemstack, user, pointed_thing, duration, force)
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
-			return mcl_fireworks.use_rocket(itemstack, user, pointed_thing, duration, force)
+			return use_rocket(itemstack, user, pointed_thing, duration, force)
 		end,
 	})
 end
