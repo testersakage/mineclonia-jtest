@@ -253,6 +253,9 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 	local sbgroups = { structblock = 1, not_in_creative_inventory=1 }
 	if def.flags then flags = def.flags end
 	def.name = name
+	if not def.noise_params and def.chunk_probability then
+		def.fill_ratio = def.fill_ratio or 1.1/80/80 -- aim for 1 per chunk, control via chunk probability
+	end
 	if nospawn then
 		sbgroups.structblock = nil
 		sbgroups.structblock_lbm = 1
