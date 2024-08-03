@@ -23,8 +23,10 @@ local function register_infested_block(name, description)
 		_mcl_blast_resistance = 0.75,
 		after_dig_node = function (pos, _, _, digger)
 			local itemstack = digger:get_wielded_item()
-			if not mcl_enchanting.has_enchantment(itemstack, "silk_touch")
-			and not minetest.is_creative_enabled("") then
+			local silk_touch = mcl_enchanting.has_enchantment(itemstack, "silk_touch")
+			local is_book = itemstack:get_name() == "mcl_enchanting:book_enchanted"
+			if not minetest.is_creative_enabled("") and (is_book and silk_touch)
+			or not minetest.is_creative_enabled("") and (not is_book and not silk_touch) then
 				minetest.add_entity(pos, "mobs_mc:silverfish")
 			end
 		end,

@@ -36,7 +36,8 @@ local function campfire_drops(pos, digger, drops, nodename)
 	local wield_item = digger:get_wielded_item()
 	local inv = digger:get_inventory()
 	if not minetest.is_creative_enabled(digger:get_player_name()) then
-		if mcl_enchanting.has_enchantment(wield_item, "silk_touch") then
+		local is_book = wield_item:get_name() == "mcl_enchanting:book_enchanted"
+		if mcl_enchanting.has_enchantment(wield_item, "silk_touch") and not is_book then
 			minetest.add_item(pos, nodename)
 		else
 			minetest.add_item(pos, drops)
