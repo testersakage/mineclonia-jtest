@@ -159,6 +159,7 @@ These groups are used mostly for informational purposes
 * `pane=1`: Node is a “pane”-like node glass pane or iron bars
 * `bed=1`: Bed
 * `door=1`: Door
+* `crafting_table`: Crafting tables. The group rating is equal to the amount of allowed crafting slots.
 * `trapdoor=1`: Closed trapdoor
 * `trapdoor=2`: Open trapdoor
 * `glass=1`: Glass (full cubes only)
