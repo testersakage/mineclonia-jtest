@@ -70,6 +70,7 @@ for i=1,7 do
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		_mcl_blast_resistance = 0,
 		_on_bone_meal = on_bone_meal,
+		_mcl_basenode = "mcl_farming:wheat_seeds",
 	})
 end
 
@@ -108,7 +109,8 @@ minetest.register_node("mcl_farming:wheat", {
 		min_count = 1,
 		max_count = 6,
 		cap = 7
-	}
+	},
+	_mcl_basenode = "mcl_farming:wheat_seeds",
 })
 
 mcl_farming:add_plant("plant_wheat", "mcl_farming:wheat", {"mcl_farming:wheat_1", "mcl_farming:wheat_2", "mcl_farming:wheat_3", "mcl_farming:wheat_4", "mcl_farming:wheat_5", "mcl_farming:wheat_6", "mcl_farming:wheat_7"}, 25, 20)
