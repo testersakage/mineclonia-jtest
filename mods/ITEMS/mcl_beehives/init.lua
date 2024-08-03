@@ -66,7 +66,7 @@ local dig_hive = function(pos, node, _, digger)
 		end
 	elseif beenest then
 		if not is_creative then
-			if silk_touch then
+			if silk_touch and wield_item:get_name() ~= "mcl_enchanting:book_enchanted" then
 				minetest.add_item(pos, "mcl_beehives:bee_nest")
 				awards.unlock(digger:get_player_name(), "mcl:total_beelocation")
 			else
