@@ -285,6 +285,18 @@ if mg_name ~= "singlenode" or end_fixes_in_singlenode then
 	mcl_mapgen_core.register_generator("set_param2_nodes", set_param2_nodes, nil, 9999, true)
 end
 
+local function remove_structblock(pos)
+	local bd = minetest.get_biome_data(pos)
+	if bd and bd.biome then
+		local b = minetest.get_biome_name(bd.biome)
+		local def = minetest.registered_biomes[b]
+		if def and def.node_dust then
+			minetest.set_node(pos, { name = def.node_dust })
+			return
+		end
+	end
+	minetest.remove_node(pos)
+end
 -- This should be moved to mcl_structures eventually if the dependencies can be sorted out.
 local function in_cube(tpos, wpos1, wpos2)
 	local minp, maxp = vector.sort(wpos1, wpos2)
@@ -300,7 +312,7 @@ mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blocks
 			for _, pos in pairs(gennotify["decoration#"..struct.deco_id] or {}) do
 				local pr = PcgRandom(minetest.hash_node_position(pos) + 42)
 				local realpos = vector.offset(pos,0,1,0)
-				minetest.remove_node(realpos)
+				remove_structblock(realpos)
 				if struct.chunk_probability == nil or (not has and pr:next(1,struct.chunk_probability) == 1 ) then
 					mcl_structures.place_structure(realpos,struct,pr,blockseed)
 					has=true
