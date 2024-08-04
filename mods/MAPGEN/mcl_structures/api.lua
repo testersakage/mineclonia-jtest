@@ -277,7 +277,7 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 					y_max = def.y_max,
 					y_min = def.y_min
 				})
-				minetest.register_node(":"..structblock, {drawtype="airlike", walkable = false, pointable = false,groups = sbgroups,sunlight_propagates = true,})
+				minetest.register_node(":"..structblock, {drawtype="airlike", walkable = false, pointable = false,groups = sbgroups, sunlight_propagates = true, paramtype = "light"})
 				def.structblock = structblock
 				def.deco_id = minetest.get_decoration_id("mcl_structures:deco_"..name)
 				minetest.set_gen_notify({decoration=true}, { def.deco_id })
