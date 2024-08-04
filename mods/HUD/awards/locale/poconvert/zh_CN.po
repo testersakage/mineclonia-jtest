@@ -3,11 +3,12 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-07-08 10:28+0000\n"
-"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
+"PO-Revision-Date: 2024-08-03 14:45+0000\n"
+"Last-Translator: RadonPrunus <RadonPrunus@users.noreply.translate.codeberg."
+"org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/awards/zh_Hans/>\n"
-"Language: zh_Hans\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +22,7 @@ msgid "Award Unlocked: @1"
 msgstr "奖励解锁：@1"
 
 msgid "Secret Advancement Made!"
-msgstr ""
+msgstr "完成私密成就！"
 
 msgid "Goal Completed!"
 msgstr "达成目标！"
@@ -30,16 +31,16 @@ msgid "Challenge Completed!"
 msgstr "完成挑战！"
 
 msgid "Advancement Made!"
-msgstr ""
+msgstr "完成成就！"
 
 msgid "[c|clear|disable|enable]"
-msgstr ""
+msgstr "[c|clear|disable|enable]"
 
 msgid "Show, clear, disable or enable your awards"
 msgstr "显示、清除、禁用或启用奖励"
 
 msgid "All your awards and statistics have been cleared. You can now start again."
-msgstr ""
+msgstr "您的所有奖励和统计数据都已清除。您现在可以重新开始。"
 
 msgid "You have disabled awards."
 msgstr "已禁用奖励。"
@@ -48,7 +49,7 @@ msgid "You have enabled awards."
 msgstr "已启用奖励。"
 
 msgid "<award ID>"
-msgstr ""
+msgstr "<award ID>"
 
 msgid "Show details of an award"
 msgstr "显示奖励明细"
@@ -57,31 +58,31 @@ msgid "Award not found."
 msgstr "未发现奖励。"
 
 msgid "<name>"
-msgstr ""
+msgstr "<name>"
 
 msgid "Get the awards statistics for the given player or yourself"
-msgstr ""
+msgstr "获取已选择的玩家或你自己的奖励统计数据"
 
 msgid "Error: No achivements available."
 msgstr "错误：无可用成就。"
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "(Secret Award)"
 msgstr ""
 
 msgid "Unlock this award to find out what it is."
-msgstr ""
+msgstr "解锁此奖项以了解详情。"
 
 msgid "@1 (unlocked)"
-msgstr ""
+msgstr "@1 (已解锁)"
 
 msgid "You've disabled awards. Type /awards enable to reenable."
-msgstr ""
+msgstr "您已禁用奖励。输入指令 /awards enable 以重新启用。"
 
 msgid "Error: No award available."
-msgstr ""
+msgstr "错误：无可用的奖励。"
 
 msgid "You have not unlocked any awards."
 msgstr "未解锁任何奖励。"
@@ -99,7 +100,7 @@ msgid "Chat @1 times"
 msgstr ""
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2已加入"
 
 msgid "Join once"
 msgstr ""
