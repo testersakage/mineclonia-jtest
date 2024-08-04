@@ -1,6 +1,5 @@
 # textdomain: doc
 This is the help.=Dette er hjælpen.
-New help entry unlocked: @1 > @2=Ny hjælpeindtastning låst op: @1 > @2
 All help entries revealed!=Alle hjælpeindtastninger afsløret!
 All help entries are already revealed.=Alle hjælpeindtasterninger er allerede afsløret.
 Category list=Kategoriliste
@@ -26,3 +25,8 @@ Help=Hjælp
 Collection of help texts=Samling at hjælpetekster.
 Allows you to reveal all hidden help entries with /help_reveal=Gør dig i stand til at afsløre alle skjulte hjælpeindtaster med /help_reveal
 Reveal all hidden help entries to you=Afslør alle gemte hjælpeindtastninger for dig.
+
+
+##### not used anymore #####
+
+New help entry unlocked: @1 > @2=Ny hjælpeindtastning låst op: @1 > @2
