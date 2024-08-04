@@ -5,8 +5,7 @@ local BLAZE_SPAWNER_MAX_LIGHT = 11
 
 mcl_structures.register_structure("nether_outpost",{
 	place_on = {"mcl_nether:netherrack","mcl_crimson:crimson_nylium","mcl_crimson:warped_nylium","mcl_blackstone:basalt","mcl_blackstone:soul_soil","mcl_blackstone:blackstone","mcl_nether:soul_sand"},
-	fill_ratio = 0.01,
-	chunk_probability = 900,
+	chunk_probability = 23,
 	flags = "all_floors",
 	biomes = {"Nether","SoulsandValley","WarpedForest","CrimsonForest","BasaltDelta"},
 	sidelen = 24,
@@ -30,8 +29,7 @@ local nbridges = {
 }
 mcl_structures.register_structure("nether_bridge",{
 	place_on = {"mcl_nether:nether_lava_source","mcl_nether:netherrack","mcl_crimson:crimson_nylium","mcl_crimson:warped_nylium","mcl_blackstone:basalt","mcl_blackstone:soul_soil","mcl_blackstone:blackstone","mcl_nether:soul_sand","mcl_core:bedrock"},
-	fill_ratio = 0.01,
-	chunk_probability = 500,
+	chunk_probability = 13,
 	flags = "all_floors",
 	sidelen = 38,
 	solid_ground = false,
@@ -49,8 +47,7 @@ mcl_structures.register_structure("nether_bridge",{
 
 mcl_structures.register_structure("nether_outpost_with_bridges",{
 	place_on = {"mcl_nether:netherrack","mcl_crimson:crimson_nylium","mcl_crimson:warped_nylium","mcl_blackstone:basalt","mcl_blackstone:soul_soil","mcl_blackstone:blackstone","mcl_nether:soul_sand","mcl_nether:nether_lava_source"},
-	fill_ratio = 0.01,
-	chunk_probability = 1300,
+	chunk_probability = 33,
 	flags = "all_floors",
 	biomes = {"Nether","SoulsandValley","WarpedForest","CrimsonForest","BasaltDelta"},
 	sidelen = 24,
@@ -114,7 +111,7 @@ mcl_structures.register_structure_spawn({
 mcl_structures.register_structure("nether_bulwark",{
 	place_on = {"mcl_nether:netherrack","mcl_crimson:crimson_nylium","mcl_crimson:warped_nylium","mcl_blackstone:basalt","mcl_blackstone:soul_soil","mcl_blackstone:blackstone","mcl_nether:soul_sand"},
 	fill_ratio = 0.01,
-	chunk_probability = 900,
+	chunk_probability = 25,
 	flags = "all_floors",
 	biomes = {"Nether","SoulsandValley","WarpedForest","CrimsonForest"},
 	sidelen = 36,
