@@ -58,9 +58,6 @@ msgstr "ガスト"
 msgid "Ghast Fireball"
 msgstr ""
 
-msgid "Glow Squid"
-msgstr ""
-
 msgid "Guardian"
 msgstr "ガーディアン"
 
@@ -74,6 +71,9 @@ msgid "Zoglin"
 msgstr ""
 
 msgid "Baby Hoglin"
+msgstr ""
+
+msgid "Sneak to dismount"
 msgstr ""
 
 msgid "Horse"
@@ -189,6 +189,9 @@ msgstr "洞窟グモ"
 
 msgid "Squid"
 msgstr "イカ"
+
+msgid "Glow Squid"
+msgstr ""
 
 msgid "Strider"
 msgstr ""

@@ -58,9 +58,6 @@ msgstr "Òrra"
 msgid "Ghast Fireball"
 msgstr ""
 
-msgid "Glow Squid"
-msgstr "Pofre Lusent"
-
 msgid "Guardian"
 msgstr "Gardian"
 
@@ -74,6 +71,9 @@ msgid "Zoglin"
 msgstr ""
 
 msgid "Baby Hoglin"
+msgstr ""
+
+msgid "Sneak to dismount"
 msgstr ""
 
 msgid "Horse"
@@ -189,6 +189,9 @@ msgstr "Aranha Venimósa"
 
 msgid "Squid"
 msgstr "Pofre"
+
+msgid "Glow Squid"
+msgstr "Pofre Lusent"
 
 msgid "Strider"
 msgstr "Trèva"

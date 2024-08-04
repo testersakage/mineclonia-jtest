@@ -58,9 +58,6 @@ msgstr "Ghast"
 msgid "Ghast Fireball"
 msgstr "Bola de fuego de Ghast"
 
-msgid "Glow Squid"
-msgstr "Calamar luminoso"
-
 msgid "Guardian"
 msgstr "Guardián"
 
@@ -75,6 +72,9 @@ msgstr "Zoglin"
 
 msgid "Baby Hoglin"
 msgstr "Bebe Hoglin"
+
+msgid "Sneak to dismount"
+msgstr ""
 
 msgid "Horse"
 msgstr "Caballo"
@@ -189,6 +189,9 @@ msgstr "Araña de las cuevas"
 
 msgid "Squid"
 msgstr "Calamar"
+
+msgid "Glow Squid"
+msgstr "Calamar luminoso"
 
 msgid "Strider"
 msgstr "Lavagante"

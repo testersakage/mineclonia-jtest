@@ -58,9 +58,6 @@ msgstr "Ghast"
 msgid "Ghast Fireball"
 msgstr "Boule de feu de Ghast"
 
-msgid "Glow Squid"
-msgstr "Poulpe luisant"
-
 msgid "Guardian"
 msgstr "Gardien"
 
@@ -75,6 +72,9 @@ msgstr "Zoglin"
 
 msgid "Baby Hoglin"
 msgstr "Bébé Hoglin"
+
+msgid "Sneak to dismount"
+msgstr ""
 
 msgid "Horse"
 msgstr "Cheval"
@@ -189,6 +189,9 @@ msgstr "Araignée venimeuse"
 
 msgid "Squid"
 msgstr "Poulpe"
+
+msgid "Glow Squid"
+msgstr "Poulpe luisant"
 
 msgid "Strider"
 msgstr "Arpenteur"

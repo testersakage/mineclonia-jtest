@@ -58,9 +58,6 @@ msgstr "Гаст"
 msgid "Ghast Fireball"
 msgstr ""
 
-msgid "Glow Squid"
-msgstr "Светящийся спрут"
-
 msgid "Guardian"
 msgstr "Страж"
 
@@ -74,6 +71,9 @@ msgid "Zoglin"
 msgstr "Зоглин"
 
 msgid "Baby Hoglin"
+msgstr ""
+
+msgid "Sneak to dismount"
 msgstr ""
 
 msgid "Horse"
@@ -189,6 +189,9 @@ msgstr "Пещерный паук"
 
 msgid "Squid"
 msgstr "Спрут"
+
+msgid "Glow Squid"
+msgstr "Светящийся спрут"
 
 msgid "Strider"
 msgstr "Страйдер"

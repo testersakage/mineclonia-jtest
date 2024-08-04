@@ -58,9 +58,6 @@ msgstr "Ghast"
 msgid "Ghast Fireball"
 msgstr ""
 
-msgid "Glow Squid"
-msgstr ""
-
 msgid "Guardian"
 msgstr "Wächter"
 
@@ -74,6 +71,9 @@ msgid "Zoglin"
 msgstr ""
 
 msgid "Baby Hoglin"
+msgstr ""
+
+msgid "Sneak to dismount"
 msgstr ""
 
 msgid "Horse"
@@ -189,6 +189,9 @@ msgstr "Höhlenspinne"
 
 msgid "Squid"
 msgstr "Tintenfisch"
+
+msgid "Glow Squid"
+msgstr ""
 
 msgid "Strider"
 msgstr ""
