@@ -28,7 +28,7 @@ function mcl_mobs.register_egg(self, mob, desc, background_color, overlay_color,
 	return oldregegg(mob, desc, background_color, overlay_color, addegg, no_creative)
 end
 
-local oldregarrow = mcl_mobs.register_mob
+local oldregarrow = mcl_mobs.register_arrow
 function mcl_mobs.register_arrow(self,name,def) ---@diagnostic disable-line: duplicate-set-field
 	if type(self) == "string" then
 		def = name
