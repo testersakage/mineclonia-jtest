@@ -2,7 +2,6 @@ mcl_structures.registered_structures = {}
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
---local place_queue = {}
 local disabled_structures = minetest.settings:get("mcl_disabled_structures")
 if disabled_structures then	disabled_structures = disabled_structures:split(",")
 else disabled_structures = {} end
