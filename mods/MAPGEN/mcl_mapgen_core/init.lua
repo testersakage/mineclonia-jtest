@@ -286,6 +286,7 @@ if mg_name ~= "singlenode" or end_fixes_in_singlenode then
 end
 
 local function remove_structblock(pos)
+	if mcl_structures.DBG then return end
 	local bd = minetest.get_biome_data(pos)
 	if bd and bd.biome then
 		local b = minetest.get_biome_name(bd.biome)
