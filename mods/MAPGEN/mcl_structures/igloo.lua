@@ -145,9 +145,8 @@ end
 
 mcl_structures.register_structure("igloo",{
 	place_on = {"mcl_core:snowblock","mcl_core:snow","group:grass_block_snow"},
-	fill_ratio = 0.01,
 	sidelen = 16,
-	chunk_probability = 250,
+	chunk_probability = 7,
 	solid_ground = true,
 	make_foundation = true,
 	y_max = mcl_vars.mg_overworld_max,
