@@ -17,7 +17,6 @@ mcl_charges.register_charge("wind_charge", "Wind Charge", {
 			maxpos = vector.offset(pos, 0.8, 0.8, 0.8),
 		}))
 		minetest.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
-		local pos = self.object:get_pos()
 
 		if node.name == "mcl_bells:bell" then
 			mcl_bells.ring_once(pos)
