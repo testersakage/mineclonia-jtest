@@ -3,63 +3,65 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_dyes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-08-05 03:53+0000\n"
+"Last-Translator: JoseDouglas26 <JoseDouglas26@users.noreply.translate."
+"codeberg.org>\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_dyes/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "White"
-msgstr ""
+msgstr "Branco"
 
 msgid "Light Grey"
-msgstr ""
+msgstr "Cinza-claro"
 
 msgid "Grey"
-msgstr ""
+msgstr "Cinza"
 
 msgid "Black"
-msgstr ""
+msgstr "Preto"
 
 msgid "Purple"
 msgstr ""
 
 msgid "Blue"
-msgstr ""
+msgstr "Azul"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "Azul-claro"
 
 msgid "Cyan"
-msgstr ""
+msgstr "Ciano"
 
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "Lime"
-msgstr ""
+msgstr "Lima"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Amarelo"
 
 msgid "Brown"
-msgstr ""
+msgstr "Marrom"
 
 msgid "Orange"
-msgstr ""
+msgstr "Laranja"
 
 msgid "Red"
-msgstr ""
+msgstr "Vermelho"
 
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 msgid "Pink"
-msgstr ""
+msgstr "Rosa"
 
 msgid "@1 Dye"
 msgstr ""
@@ -69,4 +71,3 @@ msgstr ""
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
 msgstr ""
-
