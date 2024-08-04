@@ -1,5 +1,5 @@
 # textdomain: mesecons_delayer
-Transmits redstone power only in one direction=
+Transmits redstone power only in one direction=Trasmette la corrente di pietrarossa in una sola direzione
 Delays signal=
 Output locks when getting active redstone repeater signal from the side=
 Redstone repeaters are versatile redstone components with multiple purposes: 1. They only allow signals to travel in one direction. 2. They delay the signal. 3. Optionally, they can lock their output in one state.=

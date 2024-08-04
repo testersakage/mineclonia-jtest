@@ -1,5 +1,5 @@
 # textdomain: mesecons_solarpanel
-Daylight Sensor=
+Daylight Sensor=Sensore della Luce Diurna
 Provides redstone power when in sunlight=
 Can be inverted=
 Daylight sensors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted.=

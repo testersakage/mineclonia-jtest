@@ -1,5 +1,5 @@
 # textdomain: mcl_potions
-<effect> <duration> [<factor>]=
+<effect> <duration> [<factor>]=<effetto> <durata> [<fattore>]
 Add a status effect to yourself. Arguments: <effect>: name of status effect, e.g. poison. <duration>: duration in seconds. <factor>: effect strength multiplier (1 @= 100%)=
 Missing effect parameter!=
 Missing or invalid duration parameter!=

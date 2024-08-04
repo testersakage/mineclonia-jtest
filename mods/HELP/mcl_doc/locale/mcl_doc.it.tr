@@ -1,5 +1,5 @@
 # textdomain: mcl_doc
-Water can flow into this block and cause it to drop as an item.=
+Water can flow into this block and cause it to drop as an item.=L'acqua può scorrere in questo blocco e causarne la caduta come oggetto.
 This block can be turned into dirt with a hoe.=
 This block can be turned into farmland with a hoe.=
 This block can be turned into grass path with a shovel.=
@@ -60,7 +60,7 @@ This block drops itself when mined by shears.=
 @1×@2=
 This blocks drops the following when mined by shears: @1=
 , =
-Painfully slow=
+Painfully slow=Dolorosamente lento
 Very slow=
 Slow=
 Fast=

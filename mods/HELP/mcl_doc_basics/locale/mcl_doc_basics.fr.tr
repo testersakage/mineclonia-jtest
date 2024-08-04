@@ -1,7 +1,6 @@
 # textdomain: mcl_doc_basics
 Advanced usage=Utilisation avancée
 Advanced information which may be nice to know, but is not crucial to gameplay=Informations avancées qui peuvent être agréables à connaître, mais qui ne sont pas cruciales pour le gameplay
-# MCL2 extensions
 Creative Mode=Mode Creatif
 Enabling Creative Mode in MineClone 2 applies the following changes:=L'activation du mode créatif dans MineClone 2 applique les modifications suivantes :
 • You keep the things you've placed=• Vous gardez les choses que vous avez placées
@@ -309,7 +308,7 @@ Saturation decreases by doing things which exhaust you (highest exhaustion first
 • Jumping=• Sauter
 • Mining a block=• Miner un bloc
 Other actions, like walking, do not exaust you.=D'autres actions, comme la marche, ne vous épuisent pas.
-Mobs=Mobs
+Mobs=Créatures
 Mobs are the living beings in the world. This includes animals and monsters.=Les mobs sont les êtres vivants du monde. Cela inclut les animaux et les monstres.
 Mobs appear randomly throughout the world. This is called “spawning”. Each mob kind appears on particular block types at a given light level. The height also plays a role. Peaceful mobs tend to spawn at daylight while hostile ones prefer darkness. Most mobs can spawn on any solid block but some mobs only spawn on particular blocks (like grass blocks).=Les mobs apparaissent de manière aléatoire à travers le monde. C'est ce qu'on appelle l'"apparition". Chaque type de mob apparaît sur des types de blocs particuliers à un niveau de lumière donné. La hauteur joue également un rôle. Les mobs pacifiques ont tendance à apparaître à la lumière du jour tandis que les hostiles préfèrent l'obscurité. La plupart des mobs peuvent apparaître sur n'importe quel bloc solide, mais certains n'apparaissent que sur des blocs particuliers (comme les blocs d'herbe).
 Like players, mobs have hit points and sometimes armor points, too (which means you need better weapons to deal any damage at all). Also like players, hostile mobs can attack directly or at a distance. Mobs may drop random items after they die.=Comme les joueurs, les monstres ont aussi des points de vie et parfois des points d'armure (ce qui signifie que vous avez besoin de meilleures armes pour infliger des dégâts). Comme les joueurs, les monstres hostiles peuvent attaquer directement ou à distance. Les mobs peuvent déposer des objets aléatoires après leur mort.

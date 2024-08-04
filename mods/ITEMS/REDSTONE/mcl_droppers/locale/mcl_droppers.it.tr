@@ -1,6 +1,6 @@
 # textdomain: mcl_droppers
-Dropper=
-Inventory=
+Dropper=Gettatore
+Inventory=Inventario
 9 inventory slots=
 Drops item when powered by redstone power=
 A dropper is a redstone component and a container with 9 inventory slots which, when supplied with redstone power, drops an item or puts it into a container in front of it.=

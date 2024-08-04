@@ -1,5 +1,5 @@
 # textdomain: mcl_portals
-End Portal=
+End Portal=Portale dell'End
 Used to construct end portals=
 An End portal teleports creatures and objects to the mysterious End dimension (and back!).=
 Hop into the portal to teleport. Entering an End portal in the Overworld teleports you to a fixed position in the End dimension and creates a 5×5 obsidian platform at your destination. End portals in the End will lead back to your spawn point in the Overworld.=

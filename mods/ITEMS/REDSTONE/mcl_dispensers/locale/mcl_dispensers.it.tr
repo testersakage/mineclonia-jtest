@@ -1,6 +1,6 @@
 # textdomain: mcl_dispensers
-Dispenser=
-Inventory=
+Dispenser=Distributore
+Inventory=Inventario
 9 inventory slots=
 Launches item when powered by redstone power=
 A dispenser is a block which acts as a redstone component which, when powered with redstone power, dispenses an item. It has a container with 9 inventory slots.=
