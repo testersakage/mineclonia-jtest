@@ -11,6 +11,7 @@ local mob_cap_player = tonumber(minetest.settings:get("mcl_mob_cap_player")) or 
 local mob_cap_animal = tonumber(minetest.settings:get("mcl_mob_cap_animal")) or 10
 
 local logging = minetest.settings:get_bool("mcl_logging_structures",true)
+mcl_structures.DBG = false
 
 local rotations = {
 	"0",
@@ -276,7 +277,14 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 					y_max = def.y_max,
 					y_min = def.y_min
 				})
-				minetest.register_node(":"..structblock, {drawtype="airlike", walkable = false, pointable = false,groups = sbgroups, sunlight_propagates = true, paramtype = "light"})
+				local dbg_add = {}
+				if mcl_structures.DBG then
+					dbg_add = {
+						drawtype = "normal",
+						pointable = true,
+					}
+				end
+				minetest.register_node(":"..structblock, table.merge({drawtype="airlike", walkable = false, pointable = false, groups = sbgroups, sunlight_propagates = true, paramtype = "light"}, dbg_add))
 				def.structblock = structblock
 				def.deco_id = minetest.get_decoration_id("mcl_structures:deco_"..name)
 				minetest.set_gen_notify({decoration=true}, { def.deco_id })
@@ -317,15 +325,17 @@ function mcl_structures.register_structure_spawn(def)
 end
 
 --lbm for secondary structures (structblock included in base structure)
-minetest.register_lbm({
-	name = "mcl_structures:struct_lbm",
-	run_at_every_load = true,
-	nodenames = {"group:structblock_lbm"},
-	action = function(pos, node)
-		minetest.remove_node(pos)
-		local name = node.name:gsub("mcl_structures:structblock_","")
-		local def = mcl_structures.registered_structures[name]
-		if not def then return end
-		mcl_structures.place_structure(pos)
-	end
-})
+if not mcl_structures.DBG then
+	minetest.register_lbm({
+		name = "mcl_structures:struct_lbm",
+		run_at_every_load = true,
+		nodenames = {"group:structblock_lbm"},
+		action = function(pos, node)
+			minetest.remove_node(pos)
+			local name = node.name:gsub("mcl_structures:structblock_","")
+			local def = mcl_structures.registered_structures[name]
+			if not def then return end
+			mcl_structures.place_structure(pos)
+		end
+	})
+end
