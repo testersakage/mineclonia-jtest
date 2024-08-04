@@ -5,13 +5,12 @@ local spawnon = {"mcl_core:stripped_oak","mcl_stairs:slab_birchwood_top"}
 
 mcl_structures.register_structure("pillager_outpost",{
 	place_on = {"group:grass_block","group:dirt","mcl_core:dirt_with_grass","group:sand"},
-	fill_ratio = 0.01,
 	flags = "place_center_x, place_center_z",
 	solid_ground = true,
 	make_foundation = true,
 	sidelen = 32,
 	y_offset = 0,
-	chunk_probability = 600,
+	chunk_probability = 15,
 	y_max = mcl_vars.mg_overworld_max,
 	y_min = 1,
 	biomes = { "Desert", "Plains", "Savanna", "IcePlains", "Taiga" },
