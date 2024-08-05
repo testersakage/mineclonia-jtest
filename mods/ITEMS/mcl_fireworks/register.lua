@@ -3,7 +3,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local tt_help = S("Flight Duration:")
 local description = S("Firework Rocket")
 
-local function use_rocket(itemstack, user, pointed_thing, duration, force)
+local function use_rocket(itemstack, user, _, duration, _)
 	local elytra = mcl_player.players[user].elytra
 	if elytra.active and elytra.rocketing <= 0 then
 		elytra.rocketing = duration
