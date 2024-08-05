@@ -1,6 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local tt_help = S("Flight Duration:")
 local description = S("Firework Rocket")
 
 local function use_rocket(itemstack, user, _, duration, _)
@@ -12,7 +11,7 @@ local function use_rocket(itemstack, user, _, duration, _)
 		end
 		minetest.sound_play("mcl_fireworks_rocket", {pos = user:get_pos()})
 	elseif elytra.active then
-		minetest.chat_send_player(user:get_player_name(), S("@1s power left. Not using rocket.", math.round(elytra.rocketing, 1)))
+		minetest.chat_send_player(user:get_player_name(), S("@1s power left. Not using rocket.", string.format("%.1f", elytra.rocketing)))
 	elseif minetest.get_item_group(user:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0 then
 		minetest.chat_send_player(user:get_player_name(), S("Elytra not deployed. Jump while falling down to deploy."))
 	else
@@ -25,7 +24,7 @@ end
 local function register_rocket(n, duration, force)
 	minetest.register_craftitem("mcl_fireworks:rocket_" .. n, {
 		description = description,
-		_tt_help = tt_help .. " " .. duration,
+		_tt_help = S("Flight Duration: @1s", string.format("%.1f", duration)),
 		inventory_image = "mcl_fireworks_rocket.png",
 		on_use = function(itemstack, user, pointed_thing)
 			return use_rocket(itemstack, user, pointed_thing, duration, force)
