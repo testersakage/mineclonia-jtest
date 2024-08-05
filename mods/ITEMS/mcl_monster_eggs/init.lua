@@ -6,7 +6,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 mcl_monster_eggs = {}
 
 -- Template function for registering monster egg blocks
-local function register_infested_block(name, description)
+local function register_infested_block(name, description, overrides)
 
 	local olddef = minetest.registered_nodes[name]
 	local newdef = table.merge(olddef, {
@@ -39,7 +39,7 @@ local function register_infested_block(name, description)
 	})
 	newdef._mcl_stonecutter_recipes = nil
 	local base = name:gsub("^[_%w]*:", "")
-	minetest.register_node(":mcl_monster_eggs:monster_egg_"..base, newdef)
+	minetest.register_node(":mcl_monster_eggs:monster_egg_"..base, table.merge(newdef, overrides))
 end
 
 mcl_monster_eggs.register_infested_block = register_infested_block
