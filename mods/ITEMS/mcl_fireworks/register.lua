@@ -2,8 +2,9 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 local description = S("Firework Rocket")
 
-local function use_rocket(itemstack, user, _, duration, _)
+local function use_rocket(itemstack, user, duration)
 	local elytra = mcl_player.players[user].elytra
+	local text
 	if elytra.active and elytra.rocketing <= 0 then
 		elytra.rocketing = duration
 		if not minetest.is_creative_enabled(user:get_player_name()) then
@@ -11,11 +12,14 @@ local function use_rocket(itemstack, user, _, duration, _)
 		end
 		minetest.sound_play("mcl_fireworks_rocket", {pos = user:get_pos()})
 	elseif elytra.active then
-		minetest.chat_send_player(user:get_player_name(), S("@1s power left. Not using rocket.", string.format("%.1f", elytra.rocketing)))
+		text = S("@1s power left. Not using rocket.", string.format("%.1f", elytra.rocketing))
+		mcl_title.set(user, "actionbar", { text = text, color = "white", stay = 60 })
 	elseif minetest.get_item_group(user:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0 then
-		minetest.chat_send_player(user:get_player_name(), S("Elytra not deployed. Jump while falling down to deploy."))
+		text = S("Elytra not deployed. Jump while falling down to deploy.")
+		mcl_title.set(user, "actionbar", { text = text, color = "white", stay = 60 })
 	else
-		minetest.chat_send_player(user:get_player_name(), S("Elytra not equipped."))
+		text = S("Elytra not equipped.")
+		mcl_title.set(user, "actionbar", { text = text, color = "white", stay = 60 })
 	end
 	return itemstack
 end
@@ -27,10 +31,10 @@ local function register_rocket(n, duration, force)
 		_tt_help = S("Flight Duration: @1s", string.format("%.1f", duration)),
 		inventory_image = "mcl_fireworks_rocket.png",
 		on_use = function(itemstack, user, pointed_thing)
-			return use_rocket(itemstack, user, pointed_thing, duration, force)
+			return use_rocket(itemstack, user, duration)
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
-			return use_rocket(itemstack, user, pointed_thing, duration, force)
+			return use_rocket(itemstack, user, duration)
 		end,
 	})
 end
