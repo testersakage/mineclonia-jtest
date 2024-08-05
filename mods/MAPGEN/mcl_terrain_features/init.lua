@@ -17,25 +17,19 @@ local function airtower(pos,tbl,h)
 end
 
 local function makelake(pos,size,liquid,placein,border,pr,noair)
-	local p1 = vector.offset(pos,-size,-1,-size)
-	local p2 = vector.offset(pos,size,-1,size)
+	local p1, p2 = vector.offset(pos,-size,-1,-size), vector.offset(pos,size,-1,size)
 	minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
 		if calls_remaining ~= 0 then return end
 		local nn = minetest.find_nodes_in_area(p1,p2,placein)
-		table.sort(nn,function(a, b)
-		   return vector.distance(vector.new(pos.x,0,pos.z), a) < vector.distance(vector.new(pos.x,0,pos.z), b)
-		end)
 		if not nn[1] then return end
-		local y = pos.y - pr:next(1,2)
-		local lq = {}
-		local air = {}
-		local r = pr:next(1,#nn)
-		if r > #nn then return end
+		table.sort(nn,function(a, b)
+		   return vector.distance(pos, a) < vector.distance(pos, b)
+		end)
+		local lq, air = {}, {}
+		local r = pr:next(math.ceil(#nn/4),#nn)
 		for i=1,r do
-			if nn[i].y == y then
-				airtower(nn[i],air,55)
-				table.insert(lq,nn[i])
-			end
+			airtower(nn[i],air,10)
+			table.insert(lq,nn[i])
 		end
 		mcl_util.bulk_swap_node(lq,{name=liquid})
 		mcl_util.bulk_swap_node(air,{name="air"})
@@ -45,7 +39,6 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 			for _, vv in pairs(adjacents) do
 				local pp = vector.add(v,vv)
 				local an = minetest.get_node(pp)
-				local un = minetest.get_node(vector.offset(pp,0,1,0))
 				if not border then
 					if minetest.get_item_group(an.name,"solid") > 0 then
 						border = an.name
@@ -58,8 +51,9 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 				end
 				if not noair and an.name ~= liquid then
 					table.insert(br,pp)
+					local un = minetest.get_node(vector.offset(pp,0,1,0))
 					if un.name ~= liquid then
-						airtower(pp,air,55)
+						airtower(pp,air,10)
 					end
 				end
 			end
@@ -167,6 +161,9 @@ mcl_structures.register_structure("lavapool",{
 		persist = 0.001,
 		flags = "absvalue",
 	},
+	spawn_by = "air", -- this should not be necessary, but we had pools spawn underground
+	check_offset = 1,
+	num_spawn_by = 5,
 	flags = "place_center_x, place_center_z, force_placement",
 	y_max = mcl_vars.mg_overworld_max,
 	y_min = minetest.get_mapgen_setting("water_level"),
@@ -187,6 +184,9 @@ mcl_structures.register_structure("water_lake",{
 		persist = 0.001,
 		flags = "absvalue",
 	},
+	spawn_by = "air", -- this should not be necessary, but we had pools spawn underground
+	check_offset = 1,
+	num_spawn_by = 5,
 	flags = "place_center_x, place_center_z, force_placement",
 	y_max = mcl_vars.mg_overworld_max,
 	y_min = minetest.get_mapgen_setting("water_level"),
@@ -208,6 +208,9 @@ mcl_structures.register_structure("water_lake_mangrove_swamp",{
 		persist = 0.001,
 		flags = "absvalue",
 	},
+	spawn_by = "air", -- this should not be necessary, but we had pools spawn underground
+	check_offset = 1,
+	num_spawn_by = 5,
 	flags = "place_center_x, place_center_z, force_placement",
 	y_max = mcl_vars.mg_overworld_max,
 	y_min = minetest.get_mapgen_setting("water_level"),
