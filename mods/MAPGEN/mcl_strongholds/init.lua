@@ -100,9 +100,9 @@ mcl_structures.register_structure("end_shrine",{
 			}
 		}}
 	},
-	after_place = function(pos, _, pr, _, _, _, size, _)
-		local p1 = vector.subtract(pos,size)
-		local p2 = vector.add(pos,size)
+	after_place = function(pos, def, pr)
+		local p1 = vector.subtract(pos, (def.sidelen or 12) /2 )
+		local p2 = vector.add(pos, (def.sidelen or 12) / 2)
 		local spawners = minetest.find_nodes_in_area(p1, p2, "mcl_mobspawners:spawner")
 		for s=1, #spawners do
 			--local meta = minetest.get_meta(spawners[s])
