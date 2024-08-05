@@ -110,7 +110,6 @@ mcl_structures.register_structure_spawn({
 
 mcl_structures.register_structure("nether_bulwark",{
 	place_on = {"mcl_nether:netherrack","mcl_crimson:crimson_nylium","mcl_crimson:warped_nylium","mcl_blackstone:basalt","mcl_blackstone:soul_soil","mcl_blackstone:blackstone","mcl_nether:soul_sand"},
-	fill_ratio = 0.01,
 	chunk_probability = 25,
 	flags = "all_floors",
 	biomes = {"Nether","SoulsandValley","WarpedForest","CrimsonForest"},
