@@ -55,7 +55,6 @@ minetest.register_node("mcl_cherry_blossom:pink_petals",{
 	paramtype2 = "facedir",
 	walkable = false,
 	sunlight_propagates = true,
-	buildable_to = true,
 	floodable = true,
 	pointable = true,
 	drawtype = "nodebox",
