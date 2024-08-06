@@ -287,7 +287,7 @@ local horse = {
 		end
 
 		if self.tamed and not self.child and self.owner == clicker:get_player_name() then
-			if not self.driver and self._saddle and clicker:get_player_control().sneak then
+			if not self.driver and clicker:get_player_control().sneak then
 				return
 			elseif not self.driver and iname == "mcl_mobitems:saddle" and self:set_saddle(clicker) then
 				return
