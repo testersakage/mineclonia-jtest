@@ -1,5 +1,7 @@
 local S = minetest.get_translator("mobs_mc")
 
+local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
+
 -- table mapping unified color names to non-conforming color names in carpet texture filenames
 local messytextures = {
 	grey = "gray",
@@ -28,6 +30,21 @@ local function get_drops(self)
 		max = 1,})
 	end
 	return drops
+end
+
+local function attach_driver(self, clicker)
+	mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
+	self.object:set_properties({stepheight = 1.1})
+	self.object:set_properties({selectionbox = {0,0,0,0,0,0}})
+	self:attach(clicker)
+end
+
+local function detach_driver(self)
+	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
+	if self.driver then
+		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
+		mcl_mobs.detach(self.driver, {x = 0, y = 0, z = 0})
+	end
 end
 
 mcl_mobs.register_mob("mobs_mc:llama", {
@@ -111,6 +128,11 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		end
 
 		if self.driver then
+			local ctrl = self.driver:get_player_control()
+			if ctrl and ctrl.sneak then
+				detach_driver(self)
+			end
+
 			self:drive("walk", "stand", false, dtime)
 			return false
 		end
@@ -120,7 +142,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 
 	on_die = function(self, _)
 		if self.driver then
-			mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+			detach_driver(self)
 		end
 
 	end,
@@ -144,11 +166,8 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			if minetest.get_item_group(item:get_name(), "carpet") == 1 and self:set_carpet(item, clicker) then
 				return
 			end
-			if self.driver and clicker == self.driver then
-				mcl_mobs.detach(clicker, {x = 1, y = 0, z = 1})
-			elseif not self.driver then
-				self.object:set_properties({stepheight = 1.1})
-				self:attach(clicker)
+			if not self.driver then
+				attach_driver(self, clicker)
 			end
 		end
 	end,
