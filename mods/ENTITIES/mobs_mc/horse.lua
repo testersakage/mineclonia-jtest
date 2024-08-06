@@ -46,6 +46,7 @@ local function attach_driver(self, clicker)
 end
 
 local function detach_driver(self)
+	self.object:set_properties({stepheight = 0.6})
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
 	if self.driver then
 		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
