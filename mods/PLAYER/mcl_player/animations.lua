@@ -274,9 +274,6 @@ mcl_player.register_globalstep(function(player)
 			local parent_yaw = math.deg(parent:get_yaw())
 			mcl_util.set_bone_position(player, "Head_Control", nil, vector.new(pitch, -limit_vel_yaw(yaw, parent_yaw) + parent_yaw, 0))
 			mcl_util.set_bone_position(player,"Body_Control", nil, vector.zero())
-		else
-			mcl_util.set_bone_position(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
-			mcl_util.set_bone_position(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 		end
 	else
 		local walking = control.up or control.down or control.left or control.right
@@ -308,6 +305,8 @@ mcl_player.register_globalstep(function(player)
 			mcl_util.set_properties(player, player_props_elytra)
 		elseif walking and (math.abs(velocity.x) > 0.35 or math.abs(velocity.z) > 0.35) then --walking
 			mcl_util.set_properties(player, player_props_normal)
+			mcl_util.set_bone_position(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
+			mcl_util.set_bone_position(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 			local no_arm_moving = minetest.get_item_group(wielded_itemname, "bow") > 0 or
 				minetest.get_item_group(wielded_itemname, "crossbow") > 0 or
 				mcl_shields.wielding_shield(player, 1) or
