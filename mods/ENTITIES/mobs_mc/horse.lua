@@ -50,7 +50,7 @@ local function detach_driver(self)
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
 	if self.driver then
 		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
-		mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+		mcl_mobs.detach(self.driver, {x=0, y=0, z=0})
 	end
 end
 
