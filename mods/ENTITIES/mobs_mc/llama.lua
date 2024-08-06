@@ -133,9 +133,6 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			if ctrl and ctrl.sneak then
 				detach_driver(self)
 			end
-
-			self:drive("walk", "stand", false, dtime)
-			return false
 		end
 
 		return true
