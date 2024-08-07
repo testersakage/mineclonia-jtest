@@ -31,6 +31,9 @@ Fields not mentioned in this document can also be added as custom fields for the
 	persist_in_peaceful = false,
 	-- Default is false for monsters and true for all other mobs. If false mob will immediately be removed in peaceful mode.
 
+	persistent = false,
+	-- if ture this mob will not despawn
+
 	hp_min = 1,
 	-- the minimum health value the mob can spawn with.
 
