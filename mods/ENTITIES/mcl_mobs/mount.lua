@@ -308,6 +308,7 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 	self.object:set_velocity(new_velo)
 	self.object:set_acceleration(new_acce)
 	self.v2 = v
+	self:set_animation_speed(self.animation.run_speed)
 end
 
 function mob_class:on_detach_child(child)
