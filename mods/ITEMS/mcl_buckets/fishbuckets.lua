@@ -31,7 +31,7 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 
 	local fish = itemstack:get_definition()._mcl_buckets_fish
 	if fish_names[fish] then
-		local o = minetest.add_entity(pos, "mobs_mc:" .. fish)
+		local o = minetest.add_entity(pos, "mobs_mc:" .. fish, minetest.serialize({ persistent = true }))
 		if o and o:get_pos() then
 			local props = itemstack:get_meta():get_string("properties")
 			if props ~= "" then
