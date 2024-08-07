@@ -370,7 +370,7 @@ function mob_class:set_animation_speed(custom_speed)
 		if self.frame_speed_multiplier then
 			local v2 = math.abs(v.x)+math.abs(v.z)
 			if v2 > 0.5 then
-				self.object:set_animation_frame_speed((v2*0.833/math.max(1,self.run_velocity))*speed*self.frame_speed_multiplier)
+				self.object:set_animation_frame_speed((v2/math.max(1,self.run_velocity))*speed*self.frame_speed_multiplier)
 			else
 				self.object:set_animation_frame_speed(25)
 			end
