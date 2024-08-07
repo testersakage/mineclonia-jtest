@@ -401,7 +401,7 @@ function mob_class:on_step(dtime)
 
 	self:follow_flop() -- Mob following code.
 
-	self:set_animation_speed() -- set animation speed relitive to velocity
+	self:set_animation_speed()
 	self:check_smooth_rotation(dtime)
 	self:check_head_swivel(dtime)
 
