@@ -482,9 +482,9 @@ local donkey = table.merge(horse, {
 	spawn_in_group = 3,
 	spawn_in_group_min = 1,
 	animation = {
-		speed_normal = 25,
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 40,
+		run_speed = 50
 	},
 	sounds = {
 		random = "mobs_mc_donkey_random",
