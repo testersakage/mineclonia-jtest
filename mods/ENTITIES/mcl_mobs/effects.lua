@@ -363,6 +363,7 @@ function mob_class:check_head_swivel()
 	mcl_util.set_bone_position(self.object,self.head_swivel, vector.new(0,self.bone_eye_height,self.horizontal_head_height), final_rotation)
 end
 
+-- set animation speed relative to velocity
 function mob_class:set_animation_speed(custom_speed)
 	local speed = custom_speed or self.animation.walk_speed or 25
 	local v = self.object:get_velocity()
