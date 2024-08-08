@@ -248,7 +248,7 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 		end
 		-- when float up then detach driver and let mount roam
 		local cbox = self.object:get_properties().collisionbox
-		if minetest.registered_nodes[node_ok(vector.offset(p,0,cbox[5] -0.25,0)).name].groups.water then
+		if minetest.registered_nodes[mcl_mobs.node_ok(vector.offset(p,0,cbox[5] -0.25,0)).name].groups.water then
 			force_detach(self.driver)
 			self:roam()
 		end
