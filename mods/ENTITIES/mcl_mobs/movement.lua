@@ -397,10 +397,9 @@ function mob_class:do_jump()
 			and minetest.get_item_group(nod.name, "fence_gate") == 0
 			and minetest.get_item_group(nod.name, "wall") == 0
 		then
-
 			local dir_x, dir_z = self:forward_directions()
 			-- Extensive testing to get this to work  ...
-			local v = vector.new(dir_x, self.jump_height + 0.5 * 10, dir_z)
+			local v = vector.new(dir_x, self.jump_height + 0.5 * 6, dir_z)
 
 			if not in_water and self:can_jump_cliff() then
 				v = vector.multiply(v, vector.new(2.8, 1, 2.8))
