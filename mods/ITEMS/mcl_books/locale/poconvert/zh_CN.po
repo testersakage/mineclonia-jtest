@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_books x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-06 13:18+0000\n"
+"PO-Revision-Date: 2024-08-08 10:18+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_books/zh_Hans/>\n"
@@ -57,7 +57,7 @@ msgid "A book can hold up to 4500 characters. The title length is limited to 64 
 msgstr ""
 
 msgid "Enter book title:"
-msgstr ""
+msgstr "输入书名："
 
 msgid "Sign and Close"
 msgstr ""
