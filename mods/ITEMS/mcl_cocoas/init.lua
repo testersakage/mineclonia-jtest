@@ -97,7 +97,6 @@ for i=1,3 do
 		},
 		drop = drop,
 	}))
-
 end
 
 minetest.register_craftitem("mcl_cocoas:cocoa_beans", {
@@ -123,6 +122,4 @@ minetest.register_abm({
 		end
 })
 
-if minetest.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_cocoas:cocoa_1", "nodes", "mcl_cocoas:cocoa_2")
-end
+doc.add_entry_alias("nodes", "mcl_cocoas:cocoa_1", "nodes", "mcl_cocoas:cocoa_2")
