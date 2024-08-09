@@ -385,7 +385,7 @@ minetest.register_entity(":__builtin:item", {
 		local one = ItemStack(itemstack)
 		one:set_count(1)
 		local leftovers
-		if inv:contains_item("offhand", one) and inv:room_for_item("offhand", one) then
+		if not inv:is_empty("offhand") and inv:room_for_item("offhand", one) then
 			leftovers = inv:add_item("offhand", itemstack)
 		else
 			leftovers = inv:add_item("main", itemstack)
