@@ -382,17 +382,16 @@ minetest.register_entity(":__builtin:item", {
 
 		-- Add what we can to the inventory
 		local itemstack = ItemStack(self.itemstring)
-		local one = ItemStack(itemstack)
-		one:set_count(1)
-		local leftovers
-		if not inv:is_empty("offhand") and inv:room_for_item("offhand", one) then
-			leftovers = inv:add_item("offhand", itemstack)
-		else
-			leftovers = inv:add_item("main", itemstack)
+
+		local count = itemstack:get_count()
+		if not inv:is_empty("offhand") then
+		  itemstack = inv:add_item("offhand", itemstack)
 		end
+		local leftovers = inv:add_item("main", itemstack)
+
 		self:check_pickup_achievements(player)
 
-		if leftovers:get_count() < itemstack:get_count() then
+		if leftovers:get_count() < count then
 			-- play sound if something was picked up
 			minetest.sound_play("item_drop_pickup", {
 				pos = player:get_pos(),
