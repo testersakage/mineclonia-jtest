@@ -70,7 +70,7 @@ local function remove_hud(player, hud)
 	end
 end
 
-function rgb_to_hex(r, g, b)
+local function rgb_to_hex(r, g, b)
 	return string.format("%02x%02x%02x", r, g, b)
 end
 
