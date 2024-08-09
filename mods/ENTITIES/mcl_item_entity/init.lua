@@ -382,8 +382,14 @@ minetest.register_entity(":__builtin:item", {
 
 		-- Add what we can to the inventory
 		local itemstack = ItemStack(self.itemstring)
-		local leftovers = inv:add_item("main", itemstack )
-
+		local one = ItemStack(itemstack)
+		one:set_count(1)
+		local leftovers
+		if inv:contains_item("offhand", one) and inv:room_for_item("offhand", one) then
+			leftovers = inv:add_item("offhand", itemstack)
+		else
+			leftovers = inv:add_item("main", itemstack)
+		end
 		self:check_pickup_achievements(player)
 
 		if leftovers:get_count() < itemstack:get_count() then
