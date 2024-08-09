@@ -30,9 +30,9 @@ local function offhand_hud(player, texture)
 	return player:hud_add({
 		[hud_elem_type_field] = "image",
 		position = {x = 0.1, y = 0.90},
-		scale = {x = 25, y = 25},
+		scale = {x = 3, y = 3},
 		z_index = -200,
-		text = texture or "blank.png",
+		text = texture .. "^[resize:128x128" or "blank.png",
 	})
 end
 
@@ -52,7 +52,7 @@ local function update_offhand_hud(player, texture)
 		if not hud then
 			offhand_huds[player] = offhand_hud(player, texture)
 		end
-		player:hud_change(offhand_huds[player], "text", texture)
+		player:hud_change(offhand_huds[player], "text", texture .. "^[resize:128x128")
 	end
 end
 
