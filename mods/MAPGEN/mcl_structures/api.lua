@@ -381,7 +381,7 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 end
 
 function mcl_structures.register_structure_spawn(def)
-	--name,y_min,y_max,spawnon,biomes,chance,interval,limit
+	--name,y_min,y_max,spawnon,biomes,chance,interval,limit,underwater
 	minetest.register_abm({
 		label = "Spawn "..def.name,
 		nodenames = def.spawnon,
@@ -394,7 +394,7 @@ function mcl_structures.register_structure_spawn(def)
 			if active_object_count_wider > limit + mob_cap_animal then return end
 			if active_object_count_wider > mob_cap_player then return end
 			local p = vector.offset(pos,0,1,0)
-			if minetest.get_node(p).name ~= "air" then return end
+			if not def.underwater and minetest.get_node(p).name ~= "air" then return end
 			if minetest.get_meta(pos):get_string("spawnblock") == "" then return end
 			if def.biomes then
 				if table.indexof(def.biomes,minetest.get_biome_name(minetest.get_biome_data(p).biome)) == -1 then

@@ -307,6 +307,7 @@ mcl_structures.register_structure_spawn({
 	interval = 60,
 	limit = 9,
 	spawnon = spawnon,
+	underwater = true
 })
 
 mcl_structures.register_structure_spawn({
@@ -317,4 +318,5 @@ mcl_structures.register_structure_spawn({
 	interval = 60,
 	limit = 4,
 	spawnon = spawnon,
+	underwater = true
 })
