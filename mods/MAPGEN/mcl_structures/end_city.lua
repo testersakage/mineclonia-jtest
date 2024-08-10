@@ -10,7 +10,7 @@ local function spawn_shulkers(pos,def,pr)
 
 	local guard = minetest.find_node_near(pos,def.sidelen,{"mcl_itemframes:frame"})
 	if guard then
-		minetest.add_entity(vector.offset(guard,0,-1.5,0),"mobs_mc:shulker")
+		minetest.add_entity(vector.offset(guard,0,-0.5,0),"mobs_mc:shulker")
 	end
 end
 
