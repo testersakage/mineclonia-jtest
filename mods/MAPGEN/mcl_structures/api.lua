@@ -249,7 +249,7 @@ function mcl_structures.spawn_mobs(mob, spawnon, p1 ,p2 ,_ ,n , water)
 		if not peaceful and i <= n then
 			local pos = vector.offset(node,0,1,0)
 			if pos then
-				minetest.add_entity(pos,mob)
+				minetest.add_entity(vector.offset(pos,0,-0.5,0),mob)
 			end
 		end
 		minetest.get_meta(node):set_string("spawnblock","yes")
@@ -403,7 +403,7 @@ function mcl_structures.register_structure_spawn(def)
 			end
 			local mobdef = minetest.registered_entities[def.name]
 			if mobdef.can_spawn and not mobdef.can_spawn(p) then return end
-			minetest.add_entity(p,def.name)
+			minetest.add_entity(vector.offset(p,0,-0.5,0),def.name)
 		end,
 	})
 end
