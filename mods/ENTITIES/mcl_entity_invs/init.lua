@@ -10,6 +10,14 @@ local function check_distance(inv,player,count)
 	return 0
 end
 
+local function save_on_action(inv)
+	local l = inv:get_location()
+	local ent = mcl_entity_invs.get_entity_by_invname(l.name)
+	if ent then
+		mcl_entity_invs.save_inv(ent)
+	end
+end
+
 local inv_callbacks = {
 	allow_take = function(inv, _, _, stack, player)
 		return check_distance(inv,player,stack:get_count())
@@ -20,7 +28,16 @@ local inv_callbacks = {
 	allow_put = function(inv, _, _, stack, player)
 		return check_distance(inv,player,stack:get_count())
 	end,
+	on_put = save_on_action,
+	on_take = save_on_action,
+	on_move = save_on_action,
 }
+
+function mcl_entity_invs.get_entity_by_invname(name)
+	for _, ent in pairs(minetest.luaentities) do
+		if name and name == ent._inv_id then return ent end
+	end
+end
 
 function mcl_entity_invs.load_inv(ent,size)
 	if not ent._inv_id then return end
@@ -38,10 +55,12 @@ end
 function mcl_entity_invs.save_inv(ent)
 	if ent._inv then
 		ent._items = {}
-		for i,it in ipairs(ent._inv:get_list("main")) do
-			ent._items[i] = it:to_string()
+		local list = ent._inv  and ent._inv:get_list("main")
+		if list then
+			for i,it in ipairs(list) do
+				ent._items[i] = it:to_string()
+			end
 		end
-		minetest.remove_detached_inventory(ent._inv_id)
 		ent._inv = nil
 	end
 end
@@ -119,7 +138,7 @@ minetest.register_on_player_receive_fields(function(_, formname, _)
 		if formname == k._inv_id then
 			open_invs[k] = open_invs[k] - 1
 			if open_invs[k] < 1 then
-				mcl_entity_invs.save_inv(k)
+				minetest.remove_detached_inventory(k._inv_id)
 				open_invs[k] = nil
 				k._inv_open = nil
 			end
