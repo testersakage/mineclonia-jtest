@@ -172,14 +172,19 @@ function mob_class:collision()
 end
 
 function mob_class:slow_mob()
-	local d = 0.85
+	local d = 0.75
 	if self:check_dying() then d = 0.92 end
 
 	if self.object then
 		local v = self.object:get_velocity()
 		if v then
 			--diffuse object velocity
-			self.object:set_velocity({x = v.x*d, y = v.y*d, z = v.z*d})
+			local y = v.y
+			if y > 0 then
+				y = y * d
+			end
+
+			self.object:set_velocity({ x = v.x * d, y = y, z = v.z * d })
 		end
 	end
 end
