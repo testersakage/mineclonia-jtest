@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-08-11 01:18+0000\n"
+"Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
 msgstr ""
@@ -188,13 +189,13 @@ msgid "This block drops itself when mined by shears."
 msgstr ""
 
 msgid "@1×@2"
-msgstr ""
+msgstr "@1×@2"
 
 msgid "This blocks drops the following when mined by shears: @1"
 msgstr ""
 
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "Painfully slow"
 msgstr ""
@@ -230,17 +231,16 @@ msgid "Mining durability: @1"
 msgstr ""
 
 msgid "This tool is capable of mining."
-msgstr ""
+msgstr "Esta herramienta puede minar."
 
 msgid "Block breaking strength: @1"
 msgstr ""
 
 msgid "This is a melee weapon which deals damage by punching."
-msgstr ""
+msgstr "Es un arma cuerpo a cuerpo que causa daño al golpear."
 
 msgid "Maximum damage: @1 HP"
 msgstr ""
 
 msgid "Full punch interval: @1 s"
-msgstr ""
-
+msgstr "Intervalo de golpe: @1 s"
