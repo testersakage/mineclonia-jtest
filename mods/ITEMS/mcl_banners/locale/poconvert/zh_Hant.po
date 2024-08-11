@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-08-11 12:06+0000\n"
+"Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
+"projects/mineclonia/mcl_banners/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "White Banner"
 msgstr ""
@@ -41,25 +42,25 @@ msgid "Red Banner"
 msgstr ""
 
 msgid "Red"
-msgstr ""
+msgstr "紅色"
 
 msgid "Yellow Banner"
 msgstr ""
 
 msgid "Yellow"
-msgstr ""
+msgstr "黃色"
 
 msgid "Green Banner"
 msgstr ""
 
 msgid "Green"
-msgstr ""
+msgstr "綠色"
 
 msgid "Cyan Banner"
 msgstr ""
 
 msgid "Cyan"
-msgstr ""
+msgstr "青色"
 
 msgid "Blue Banner"
 msgstr ""
@@ -71,13 +72,13 @@ msgid "Magenta Banner"
 msgstr ""
 
 msgid "Magenta"
-msgstr ""
+msgstr "洋紅色"
 
 msgid "Orange Banner"
 msgstr ""
 
 msgid "Orange"
-msgstr ""
+msgstr "橘色"
 
 msgid "Purple Banner"
 msgstr ""
@@ -89,19 +90,19 @@ msgid "Brown Banner"
 msgstr ""
 
 msgid "Brown"
-msgstr ""
+msgstr "棕色"
 
 msgid "Pink Banner"
 msgstr ""
 
 msgid "Pink"
-msgstr ""
+msgstr "粉紅色"
 
 msgid "Lime Banner"
 msgstr ""
 
 msgid "Lime"
-msgstr ""
+msgstr "淺綠色"
 
 msgid "Light Blue Banner"
 msgstr ""
