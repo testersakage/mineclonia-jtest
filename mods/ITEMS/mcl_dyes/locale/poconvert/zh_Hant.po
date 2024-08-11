@@ -21,7 +21,7 @@ msgid "Light Grey"
 msgstr "淺灰色"
 
 msgid "Grey"
-msgstr ""
+msgstr "灰色"
 
 msgid "Black"
 msgstr ""
