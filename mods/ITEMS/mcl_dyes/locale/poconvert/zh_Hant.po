@@ -33,7 +33,7 @@ msgid "Blue"
 msgstr "藍色"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "淺藍色"
 
 msgid "Cyan"
 msgstr ""
