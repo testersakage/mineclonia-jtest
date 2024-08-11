@@ -24,7 +24,7 @@ msgid "Grey"
 msgstr "灰色"
 
 msgid "Black"
-msgstr ""
+msgstr "黑色"
 
 msgid "Purple"
 msgstr ""
