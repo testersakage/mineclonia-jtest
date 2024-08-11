@@ -27,7 +27,8 @@ local function get_random_sapling()
 	local r = {}
 	for k, _ in pairs(mcl_trees.woods) do
 		local sap = "mcl_trees:sapling_"..k
-		if minetest.registered_nodes[sap] then
+		local def = minetest.registered_nodes[sap]
+		if def and not def._unobtainable then
 			table.insert(r, sap)
 		end
 	end
