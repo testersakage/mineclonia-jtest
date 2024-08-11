@@ -28,7 +28,7 @@ msgid "Goal Completed!"
 msgstr "Tujuan Selesai!"
 
 msgid "Challenge Completed!"
-msgstr ""
+msgstr "Tantangan Selesai!"
 
 msgid "Advancement Made!"
 msgstr ""
