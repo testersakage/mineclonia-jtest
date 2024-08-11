@@ -19,7 +19,7 @@ msgid "Secret Award Unlocked: @1"
 msgstr "Penghargaan Rahasia Terbuka: @1"
 
 msgid "Award Unlocked: @1"
-msgstr ""
+msgstr "Penghargaan Terbuka: @1"
 
 msgid "Secret Advancement Made!"
 msgstr ""
