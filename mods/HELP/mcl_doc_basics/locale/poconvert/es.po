@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 01:18+0000\n"
+"PO-Revision-Date: 2024-08-12 07:19+0000\n"
 "Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -1228,7 +1228,7 @@ msgid "Liquids are often not pointable. But some special items are able to point
 msgstr ""
 
 msgid "Light"
-msgstr ""
+msgstr "Luz"
 
 msgid "As the world is entirely block-based, so is the light in the world. Each block has its own brightness. The brightness of a block is expressed in a “light level” which ranges from 0 (total darkness) to 15 (as bright as the sun)."
 msgstr ""
