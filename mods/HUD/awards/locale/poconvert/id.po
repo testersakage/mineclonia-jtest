@@ -3,9 +3,8 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 12:10+0000\n"
-"Last-Translator: Just_Playing <Just_Playing@users.noreply.translate.codeberg."
-"org>\n"
+"PO-Revision-Date: 2024-08-11 16:56+0000\n"
+"Last-Translator: Just Playing <JPlay2@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Indonesian <https://translate.codeberg.org/projects/"
 "mineclonia/awards/id/>\n"
 "Language: id\n"
@@ -16,10 +15,10 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "Secret Award Unlocked: @1"
-msgstr "Penghargaan Rahasia Terbuka: @1"
+msgstr "Penghargaan Rahasia Terbuka : @1"
 
 msgid "Award Unlocked: @1"
-msgstr "Penghargaan Terbuka: @1"
+msgstr "Penghargaan Terbuka : @1"
 
 msgid "Secret Advancement Made!"
 msgstr "Pencapaian Rahasia Telah Dibuat!"
@@ -34,151 +33,157 @@ msgid "Advancement Made!"
 msgstr "Pencapaian Telah Dibuat!"
 
 msgid "[c|clear|disable|enable]"
-msgstr ""
+msgstr "[c|clear (Hapus)|disable (Nonaktifkan)|enable (Aktifkan)]"
 
 msgid "Show, clear, disable or enable your awards"
-msgstr ""
+msgstr "Tampilkan, hapus, nonaktifkan, atau aktifkan penghargaan Anda"
 
 msgid "All your awards and statistics have been cleared. You can now start again."
 msgstr ""
+"Semua penghargaan dan statistik Anda telah dihapus. Sekarang Anda dapat "
+"memulai lagi."
 
 msgid "You have disabled awards."
-msgstr ""
+msgstr "Anda telah menonaktifkan penghargaan."
 
 msgid "You have enabled awards."
-msgstr ""
+msgstr "Anda telah mengaktifkan penghargaan."
 
 msgid "<award ID>"
-msgstr ""
+msgstr "<ID Penghargaan>"
 
 msgid "Show details of an award"
-msgstr ""
+msgstr "Tampilkan detail penghargaan"
 
 msgid "Award not found."
-msgstr ""
+msgstr "Penghargaan tidak ditemukan."
 
 msgid "<name>"
-msgstr ""
+msgstr "<Nama>"
 
 msgid "Get the awards statistics for the given player or yourself"
 msgstr ""
+"Dapatkan statistik penghargaan untuk pemain yang diberikan atau diri Anda "
+"sendiri"
 
 msgid "Error: No achivements available."
-msgstr ""
+msgstr "Kesalahan : Tidak ada pencapaian tersedia."
 
 msgid "OK"
-msgstr ""
+msgstr "Oke"
 
 msgid "(Secret Award)"
-msgstr ""
+msgstr "(Penghargaan Rahasia)"
 
 msgid "Unlock this award to find out what it is."
-msgstr ""
+msgstr "Buka penghargaan ini untuk mengetahuinya."
 
 msgid "@1 (unlocked)"
-msgstr ""
+msgstr "@1 (Terbuka)"
 
 msgid "You've disabled awards. Type /awards enable to reenable."
 msgstr ""
+"Anda telah menonaktifkan penghargaan. Ketik '/awards enable' untuk "
+"mengaktifkannya kembali."
 
 msgid "Error: No award available."
-msgstr ""
+msgstr "Kesalahan : Tidak ada penghargaan yang tersedia."
 
 msgid "You have not unlocked any awards."
-msgstr ""
+msgstr "Anda belum membuka penghargaan apa pun."
 
 msgid "@1’s awards:"
-msgstr ""
+msgstr "Penghargaan @1 :"
 
 msgid "@1/@2 chat messages"
-msgstr ""
+msgstr "@1 / @2 Pesan Obrolan"
 
 msgid "Send a chat message"
-msgstr ""
+msgstr "Kirim pesan obrolan"
 
 msgid "Chat @1 times"
-msgstr ""
+msgstr "Obrolan @1 kali"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1 / @2 Bergabung"
 
 msgid "Join once"
-msgstr ""
+msgstr "Bergabung sekali"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Bergabung @1 kali"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1 / @2 Kematian"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Mati sekali dari @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Mati @1 kali, dari @2"
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "Mati @1 kali."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Menggali @1 kali"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1 / @2 Digali"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Gali : @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Gali : @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Menggali @1 blok."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Menggali @1 blok."
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1 / @2 Ditempatkan"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Taruh : @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Taruh : @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Menaruh @1 blok."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Menaruh @1 blok."
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "@1 / @2 Dibuat"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "Buat : @1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "Buat : @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Membuat @1 barang"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Membuat @1 barang."
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "@1 / @2 Dimakan"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "Makan @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "Makan @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "Makan @1 makanan"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "Makan @1 makanan."
