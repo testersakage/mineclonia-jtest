@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mesecons_pistons x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 10:48+0000\n"
+"PO-Revision-Date: 2024-08-11 10:49+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mesecons_pistons/zh_Hant/>\n"
@@ -27,7 +27,7 @@ msgid "A piston is a redstone component with a pusher which pushes the block or 
 msgstr ""
 
 msgid "Sticky Piston"
-msgstr ""
+msgstr "黏性活塞"
 
 msgid "Pushes or pulls block when powered by redstone power"
 msgstr ""
