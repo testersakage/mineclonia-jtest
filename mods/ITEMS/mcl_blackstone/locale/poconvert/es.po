@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_blackstone x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 01:18+0000\n"
+"PO-Revision-Date: 2024-08-11 10:47+0000\n"
 "Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_blackstone/es/>\n"
@@ -54,28 +54,30 @@ msgid "Eternal Soul Fire"
 msgstr "Fuego eterno de almas"
 
 msgid "Blackstone Stairs"
-msgstr ""
+msgstr "Escaleras de piedra negra"
 
 msgid "Blackstone Slab"
-msgstr ""
+msgstr "Losa de piedra negra"
 
 msgid "Polished Blackstone Stairs"
-msgstr ""
+msgstr "Escaleras de piedra negra pulida"
 
 msgid "Polished Blackstone Slab"
-msgstr ""
+msgstr "Losa de piedra negra pulida"
 
 msgid "Blackstone Brick Stairs"
-msgstr ""
+msgstr "Escaleras de ladrillos de piedra negra pulida"
 
 msgid "Blackstone Brick Slab"
-msgstr ""
+msgstr "Losa de ladrillos de piedra negra pulida"
 
 msgid "Blackstone Wall"
-msgstr ""
+msgstr "Pared de piedra negra"
 
 msgid "Soul Torch"
-msgstr ""
+msgstr "Antorcha del almas"
 
 msgid "Torches are light sources which can be placed at the side or on the top of most blocks."
 msgstr ""
+"Las antorchas son fuentes de luz que se pueden colocar a un lado o encima de "
+"la mayoría de los bloques."
