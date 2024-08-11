@@ -24,6 +24,7 @@ mcl_trees.register_wood("bamboo",{
 			compostability = 30
 		},
 		on_place = place_bamboosap,
+		_unobtainable = true,
 		_on_bone_meal = function(_, _, _, pos, _)
 			minetest.set_node(pos,{name=mcl_bamboo.bamboo_itemstrings[math.random(#mcl_bamboo.bamboo_itemstrings)]})
 			mcl_bamboo.grow(pos)
