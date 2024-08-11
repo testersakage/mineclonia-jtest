@@ -30,7 +30,7 @@ msgid "Purple"
 msgstr "紫色"
 
 msgid "Blue"
-msgstr ""
+msgstr "藍色"
 
 msgid "Light Blue"
 msgstr ""
