@@ -3,414 +3,471 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-08-11 16:56+0000\n"
+"Last-Translator: Just Playing <JPlay2@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Indonesian <https://translate.codeberg.org/projects/"
+"mineclonia/doc_items/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "This is a decorational block."
-msgstr ""
+msgstr "Ini adalah blok dekorasi."
 
 msgid "This block is a building block for creating various buildings."
-msgstr ""
+msgstr "Blok ini adalah blok bangunan untuk membuat berbagai macam bangunan."
 
 msgid "This item is primarily used for crafting other items."
-msgstr ""
+msgstr "Barang ini terutama digunakan untuk membuat barang lainnya."
 
 msgid "Hold it in your hand, then leftclick to eat it."
-msgstr ""
+msgstr "Pegang di tangan Anda, lalu klik kiri untuk memakannya."
 
 msgid "Hold it in your hand, then leftclick to eat it. But why would you want to do this?"
 msgstr ""
+"Pegang di tangan Anda, lalu klik kiri untuk memakannya. Tapi mengapa Anda "
+"ingin melakukan ini?"
 
 msgid "This block's rotation is affected by the way you place it: Place it on the floor or ceiling for a vertical orientation; place it at the side for a horizontal orientation. Sneaking while placing it leads to a perpendicular orientation instead."
 msgstr ""
+"Rotasi balok ini dipengaruhi oleh cara Anda meletakkannya : Letakkan di "
+"lantai atau langit-langit untuk orientasi vertikal ; letakkan di samping "
+"untuk orientasi horizontal. Jongkok saat meletakkannya mengarah ke orientasi "
+"tegak lurus."
 
 msgid "Hand"
-msgstr ""
+msgstr "Tangan"
 
 msgid "Air"
-msgstr ""
+msgstr "Udara"
 
 msgid "Yes"
-msgstr ""
+msgstr "Iya"
 
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "Unknown item (@1)"
-msgstr ""
+msgstr "Barang tidak dikenal (@1)"
 
 msgid "unknown"
-msgstr ""
+msgstr "Tidak dikenal"
 
 msgid "1 second"
-msgstr ""
+msgstr "1 detik"
 
 msgid "@1 seconds"
-msgstr ""
+msgstr "@1 detik"
 
 msgid "• @1: @2"
-msgstr ""
+msgstr "• @1 : @2"
 
 msgid "• @1, rating @2: @3 s - @4 s"
-msgstr ""
+msgstr "• @1, peringkat @2 : @3 d - @4 d"
 
 msgid "• @1, rating @2: @3 s"
-msgstr ""
+msgstr "• @1, peringkat @2 : @3 d"
 
 msgid "• @1, level @2: @3 uses"
-msgstr ""
+msgstr "• @1, level @2 : @3 penggunaan"
 
 msgid "• @1, level @2: Unlimited"
-msgstr ""
+msgstr "• @1, level @2 : Tidak terbatas"
 
 msgid "This tool is capable of mining."
-msgstr ""
+msgstr "Alat ini mampu digunakan untuk menggali."
 
 msgid "Maximum toughness levels:"
-msgstr ""
+msgstr "Tingkat ketangguhan maksimum :"
 
 msgid "Mining times:"
-msgstr ""
+msgstr "Waktu Penggalian :"
 
 msgid "Mining durability:"
-msgstr ""
+msgstr "Daya tahan Penggalian :"
 
 msgid "This is a melee weapon which deals damage by punching."
 msgstr ""
+"Ini adalah senjata jarak dekat yang menimbulkan kerusakan dengan cara "
+"memukul."
 
 msgid "Maximum damage per hit:"
-msgstr ""
+msgstr "Kerusakan maksimum per pukulan :"
 
 msgid "• @1: @2 HP"
-msgstr ""
+msgstr "• @1 : @2 HP"
 
 msgid "Full punch interval: @1 s"
-msgstr ""
+msgstr "Interval pukulan penuh : @1 s"
 
 msgid "This block can be mined by any mining tool in half a second."
 msgstr ""
+"Blok ini dapat digali oleh alat penggalian apa pun dalam waktu setengah "
+"detik."
 
 msgid "This block can be mined by any mining tool immediately."
-msgstr ""
+msgstr "Blok ini dapat segera digali oleh alat penggalian apa pun."
 
 msgid "This block can not be mined by ordinary mining tools."
-msgstr ""
+msgstr "Blok ini tidak dapat digali dengan alat penggalian biasa."
 
 msgid "This block can be destroyed by any mining tool in half a second."
 msgstr ""
+"Blok ini dapat dihancurkan oleh alat penggalian apa pun dalam waktu setengah "
+"detik."
 
 msgid "This block can be destroyed by any mining tool immediately."
-msgstr ""
+msgstr "Blok ini dapat langsung dihancurkan oleh alat penggalian apa pun."
 
 msgid "This block can not be destroyed by ordinary mining tools."
-msgstr ""
+msgstr "Blok ini tidak dapat dihancurkan oleh alat penggalian biasa."
 
 msgid "This block can be mined by mining tools which match any of the following mining ratings and its toughness level."
 msgstr ""
+"Blok ini dapat digali dengan alat yang sesuai dengan salah satu dari "
+"peringkat penambangan dan tingkat ketangguhannya berikut."
 
 msgid "Mining ratings:"
-msgstr ""
+msgstr "Peringkat penggalian :"
 
 msgid "Toughness level: @1"
-msgstr ""
+msgstr "Tingkat ketangguhan : @1"
 
 msgid "Range: @1"
-msgstr ""
+msgstr "Jangkauan : @1"
 
 msgid "Range: 4"
-msgstr ""
+msgstr "Jangkauan : 4"
 
 msgid "Range: @1 (@2)"
-msgstr ""
+msgstr "Jangkauan : @1 (@2)"
 
 msgid "This tool can serve as a smelting fuel with a burning time of @1."
 msgstr ""
+"Alat ini dapat berfungsi sebagai bahan bakar peleburan dengan waktu "
+"pembakaran @1."
 
 msgid "This block can serve as a smelting fuel with a burning time of @1."
 msgstr ""
+"Blok ini dapat berfungsi sebagai bahan bakar peleburan dengan waktu "
+"pembakaran @1."
 
 msgid "This item can serve as a smelting fuel with a burning time of @1."
 msgstr ""
+"Barang ini dapat berfungsi sebagai bahan bakar peleburan dengan waktu "
+"pembakaran @1."
 
 msgid " Using it as fuel turns it into: @1."
-msgstr ""
+msgstr " Menggunakannya sebagai bahan bakar mengubahnya menjadi : @1."
 
 msgid "Itemstring: \"@1\""
-msgstr ""
+msgstr "String Barang : \"@1\""
 
 msgid "Description: @1"
-msgstr ""
+msgstr "Deskripsi : @1"
 
 msgid "Usage help: @1"
-msgstr ""
+msgstr "Bantuan penggunaan : @1"
 
 msgid "Maximum stack size: @1"
-msgstr ""
+msgstr "Ukuran tumpukan maksimum : @1"
 
 msgid "This block points to liquids."
-msgstr ""
+msgstr "Blok ini menunjuk ke cairan."
 
 msgid "This tool points to liquids."
-msgstr ""
+msgstr "Alat ini menunjuk ke cairan."
 
 msgid "This item points to liquids."
-msgstr ""
+msgstr "Barang ini menunjuk ke cairan."
 
 msgid "Punches with this block don't work as usual; melee combat and mining are either not possible or work differently."
 msgstr ""
+"Pukulan dengan blok ini tidak berfungsi seperti biasa; pertarungan jarak "
+"dekat dan penggalian tidak dapat dilakukan atau bekerja secara berbeda."
 
 msgid "Punches with this tool don't work as usual; melee combat and mining are either not possible or work differently."
 msgstr ""
+"Pukulan dengan alat ini tidak berfungsi seperti biasa; pertarungan jarak "
+"dekat dan penggalian tidak dapat dilakukan atau bekerja secara berbeda."
 
 msgid "Punches with this item don't work as usual; melee combat and mining are either not possible or work differently."
 msgstr ""
+"Pukulan dengan item ini tidak berfungsi seperti biasa; pertarungan jarak "
+"dekat dan penggalian tidak dapat dilakukan atau berfungsi secara berbeda."
 
 msgid "This block belongs to the @1 group."
-msgstr ""
+msgstr "Blok ini milik grup @1."
 
 msgid "This tool belongs to the @1 group."
-msgstr ""
+msgstr "Alat ini termasuk dalam grup @1."
 
 msgid "This item belongs to the @1 group."
-msgstr ""
+msgstr "Alat ini termasuk dalam grup @1."
 
 msgid "This block belongs to these groups: @1."
-msgstr ""
+msgstr "Blok ini milik grup berikut: @1."
 
 msgid "This tool belongs to these groups: @1."
-msgstr ""
+msgstr "Alat ini milik grup berikut: @1."
 
 msgid "This item belongs to these groups: @1."
-msgstr ""
+msgstr "Barang ini milik grup berikut: @1."
 
 msgid "Blocks"
-msgstr ""
+msgstr "Blok"
 
 msgid "Item reference of blocks and other things which are capable of occupying space"
-msgstr ""
+msgstr "Referensi barang dari blok dan hal lain yang mampu menempati ruang"
 
 msgid "Collidable: @1"
-msgstr ""
+msgstr "Dapat ditabrak : @1"
 
 msgid "Pointable: Yes"
-msgstr ""
+msgstr "Dapat ditunjuk : Iya"
 
 msgid "Pointable: Only by special items"
-msgstr ""
+msgstr "Dapat ditunjuk : Hanya dengan item khusus"
 
 msgid "Pointable: No"
-msgstr ""
+msgstr "Dapat ditunjuk : Tidak"
 
 msgid "This block is a liquid with these properties:"
-msgstr ""
+msgstr "Blok ini adalah sebuah cairan dengan sifat-sifat berikut:"
 
 msgid "• Renewable"
-msgstr ""
+msgstr "• Terbarukan (Tidak habis-habis)"
 
 msgid "• Not renewable"
-msgstr ""
+msgstr "• Tidak dapat diperbarui (Dapat Habis)"
 
 msgid "• No flowing"
-msgstr ""
+msgstr "• Tidak mengalir"
 
 msgid "• Flowing range: @1"
-msgstr ""
+msgstr "• Jangkauan aliran : @1"
 
 msgid "• Viscosity: @1"
-msgstr ""
+msgstr "• Viskositas : @1"
 
 msgid "This block causes a damage of @1 hit points per second."
-msgstr ""
+msgstr "Blok ini menyebabkan kerusakan @1 poin hit per detik."
 
 msgid "This block causes a damage of @1 hit point per second."
-msgstr ""
+msgstr "Blok ini menyebabkan kerusakan @1 poin hit per detik."
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit points every 2 seconds."
 msgstr ""
+"Blok ini mengurangi nafas Anda dan menyebabkan kerusakan tenggelam sebesar @"
+"1 poin hit setiap 2 detik."
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit point every 2 seconds."
 msgstr ""
+"Blok ini mengurangi nafas Anda dan menyebabkan kerusakan tenggelam sebesar @"
+"1 poin hit setiap 2 detik."
 
 msgid "The fall damage on this block is increased by @1%."
-msgstr ""
+msgstr "Kerusakan akibat jatuh pada balok ini meningkat sebesar @1%."
 
 msgid "This block negates all fall damage."
-msgstr ""
+msgstr "Blok ini menghilangkan semua kerusakan akibat terjatuh."
 
 msgid "The fall damage on this block is reduced by @1%."
-msgstr ""
+msgstr "Kerusakan akibat terjatuh pada balok ini berkurang @1%."
 
 msgid "You can not jump while standing on this block."
-msgstr ""
+msgstr "Anda tidak dapat melompat sambil berdiri di blok ini."
 
 msgid "This block can be climbed."
-msgstr ""
+msgstr "Blok ini dapat dipanjat."
 
 msgid "This block will make you bounce off with an elasticity of @1%."
-msgstr ""
+msgstr "Blok ini akan membuat Anda memantul dengan elastisitas @1%."
 
 msgid "This block is slippery."
-msgstr ""
+msgstr "Blok ini licin."
 
 msgid "This block is completely silent when walked on, mined or built."
-msgstr ""
+msgstr "Blok ini sepenuhnya senyap saat diinjak, digali, atau ditaruh."
 
 msgid "This block is completely silent when mined or built."
-msgstr ""
+msgstr "Blok ini sepenuhnya senyap saat digali atau ditaruh."
 
 msgid "Walking on this block is completely silent."
-msgstr ""
+msgstr "Berjalan di blok ini benar-benar senyap."
 
 msgid "Mining this block is completely silent."
-msgstr ""
+msgstr "Menggali blok ini sepenuhnya senyap."
 
 msgid "Building this block is completely silent."
-msgstr ""
+msgstr "Penaruhan blok ini sepenuhnya senyap."
 
 msgid "This block is affected by gravity and can fall."
-msgstr ""
+msgstr "Blok ini dipengaruhi oleh gravitasi dan dapat terjatuh."
 
 msgid "Building another block at this block will place it inside and replace it."
 msgstr ""
+"Membangun blok lain di blok ini akan menempatkannya di dalam dan "
+"menggantinya."
 
 msgid "Falling blocks can go through this block; they destroy it when doing so."
 msgstr ""
+"Balok yang jatuh dapat menembus balok ini; balok tersebut akan hancur saat "
+"jatuh."
 
 msgid "This block will drop as an item when a falling block ends up inside it."
 msgstr ""
+"Balok ini akan jatuh sebagai suatu barang ketika blok yang jatuh berakhir di "
+"dalamnya."
 
 msgid "This block is destroyed when a falling block ends up inside it."
-msgstr ""
+msgstr "Blok ini hancur ketika blok yang jatuh berakhir di dalamnya."
 
 msgid "This block will drop as an item when it is not attached to a surrounding block."
 msgstr ""
+"Blok ini akan jatuh sebagai barang saat tidak melekat pada blok di "
+"sekelilingnya."
 
 msgid "This block will drop as an item when no collidable block is below it."
 msgstr ""
+"Blok ini akan dijatuhkan sebagai barang ketika tidak ada blok yang dapat "
+"ditabrakkan di bawahnya."
 
 msgid "Liquids can flow into this block and destroy it."
-msgstr ""
+msgstr "Cairan dapat mengalir ke blok ini dan dapat menghancurkannya."
 
 msgid "This block is a light source with a light level of @1."
-msgstr ""
+msgstr "Blok ini adalah sumber cahaya dengan tingkat cahaya @1."
 
 msgid "This block glows faintly with a light level of @1."
-msgstr ""
+msgstr "Blok ini bersinar redup dengan tingkat cahaya @1."
 
 msgid "This block allows light to propagate with a small loss of brightness, and sunlight can even go through losslessly."
 msgstr ""
+"Blok ini memungkinkan cahaya menyebar dengan sedikit kehilangan kecerahan, "
+"dan sinar matahari bahkan dapat menembusnya tanpa kehilangan apa pun."
 
 msgid "This block allows light to propagate with a small loss of brightness."
 msgstr ""
+"Blok ini memungkinkan cahaya merambat dengan sedikit kehilangan kecerahan."
 
 msgid "This block allows sunlight to propagate without loss in brightness."
 msgstr ""
+"Blok ini memungkinkan sinar matahari menyebar tanpa kehilangan kecerahan."
 
 msgid "Unknown Node"
-msgstr ""
+msgstr "Node Tidak Dikenal"
 
 msgid "This block connects to this block: @1."
-msgstr ""
+msgstr "Blok ini terhubung ke blok ini : @1."
 
 msgid "This block connects to these blocks: @1."
-msgstr ""
+msgstr "Blok ini terhubung ke blok berikut : @1."
 
 msgid "This block connects to blocks of the @1 group."
-msgstr ""
+msgstr "Blok ini terhubung ke blok grup @1."
 
 msgid "This block connects to blocks of the following groups: @1."
-msgstr ""
+msgstr "Blok ini terhubung ke blok grup berikut : @1."
 
 msgid "This block won't drop anything when mined."
-msgstr ""
+msgstr "Blok ini tidak akan menjatuhkan apa pun saat digali."
 
 msgid "This block will drop the following when mined: @1×@2."
-msgstr ""
+msgstr "Blok ini akan menjatuhkan hal berikut saat digali: @1×@2."
 
 msgid "This block will drop the following when mined: @1."
-msgstr ""
+msgstr "Blok ini akan menjatuhkan hal berikut ketika digali : @1."
 
 msgid "This block will drop the following items when mined: @1."
-msgstr ""
+msgstr "Blok ini akan menjatuhkan item berikut saat digali : @1."
 
 msgid "This block will randomly drop one of the following when mined: @1."
 msgstr ""
+"Blok ini secara acak akan menjatuhkan salah satu hal berikut ketika digali : "
+"@1."
 
 msgid "This block will randomly drop up to @1 drops of the following possible drops when mined: @2."
 msgstr ""
+"Blok ini akan secara acak menjatuhkan hingga @1 dari kemungkinan jumlah yang "
+"dijatuhkan berikut saat digali : @2."
 
 msgid " and "
-msgstr ""
+msgstr " dan "
 
 msgid "@1×@2"
-msgstr ""
+msgstr "@1×@2"
 
 msgid "@1 (<0.5%)"
-msgstr ""
+msgstr "@1 (<0.5%)"
 
 msgid "@1 (ca. @2%)"
-msgstr ""
+msgstr "@1 (ca. @2%)"
 
 msgid "@1 (@2%)"
-msgstr ""
+msgstr "@1 (@2%)"
 
 msgid "Tools and weapons"
-msgstr ""
+msgstr "Alat dan Senjata"
 
 msgid "Item reference of all wieldable tools and weapons"
-msgstr ""
+msgstr "Referensi item dari semua alat dan senjata yang dapat digunakan"
 
 msgid "Durability: @1 uses"
-msgstr ""
+msgstr "Daya tahan : @1 kali pemakaian"
 
 msgid "Durability: @1"
-msgstr ""
+msgstr "Daya tahan : @1"
 
 msgid "Miscellaneous items"
-msgstr ""
+msgstr "Barang-barang lain"
 
 msgid "Item reference of items which are neither blocks, tools or weapons (esp. crafting items)"
 msgstr ""
+"Referensi barang untuk barang yang bukan blok, alat, atau senjata (khususnya "
+"barang kerajinan)"
 
 msgid "Mobs"
-msgstr ""
+msgstr "Massa"
 
 msgid "Different Mobs"
-msgstr ""
+msgstr "Massa yang Berbeda"
 
 msgid "Type: @1"
-msgstr ""
+msgstr "Tipe : @1"
 
 msgid "Spawning light levels (min / max): @1 / @2"
-msgstr ""
+msgstr "Tingkat cahaya pemijahan (min / maks) : @1 / @2"
 
 msgid "Can Jump a height of @1 nodes"
-msgstr ""
+msgstr "Dapat melompat setinggi @1 node"
 
 msgid "Can Fly"
-msgstr ""
+msgstr "Dapat Terbang"
 
 msgid "Can Swim"
-msgstr ""
+msgstr "Dapat Berenang"
 
 msgid "Drops: "
-msgstr ""
+msgstr "Menjatuhkan : "
 
 msgid "Follows player when these items are held:"
-msgstr ""
+msgstr "Mengikuti pemain saat barang berikut dipegang :"
 
 msgid "A transparent block, basically empty space. It is usually left behind after digging something."
 msgstr ""
+"Blok transparan, pada dasarnya ruang kosong. Biasanya tertinggal setelah "
+"menggali sesuatu."
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr ""
+"Setiap kali Anda tidak menggunakan benda apa pun, Anda menggunakan tangan "
+"yang bertindak sebagai alat dengan kemampuannya sendiri. Ketika Anda "
+"menggunakan benda yang bukan alat penggalian atau senjata, benda tersebut "
+"akan berperilaku seolah-olah tidak memiliki kemampuan untuk menambang."
