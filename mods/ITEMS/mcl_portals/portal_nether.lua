@@ -390,7 +390,9 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 		obj:set_look_horizontal(obj:get_look_horizontal() + new_look)
 	end
 
+	-- Teleport
 	obj:set_pos(vector.offset(pos,0,-0.5,0))
+
 	if obj:is_player() then
 		minetest.sound_play("mcl_portals_teleport", {pos = pos, gain = 0.5, max_hear_distance = 1}, true)
 		mcl_worlds.dimension_change(obj)
@@ -398,7 +400,7 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 	else
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
-			l._just_portaled = 5
+			l._just_portaled = 10 -- wait 10 second before able to teleport again
 		end
 	end
 
@@ -584,9 +586,14 @@ end
 
 local function initiate_teleport(obj)
 	local creative = minetest.is_creative_enabled(obj:is_player() and obj:get_player_name() or nil)
-	minetest.after(creative and 0 or TELEPORT_DELAY, function()
-		teleport(obj)
-	end)
+	local l = obj:get_luaentity()
+	if l and l.is_mob and not l._just_portaled then
+		teleport(obj) -- mobs always teleported instantly
+	elseif obj:is_player() then
+		minetest.after(creative and 0 or TELEPORT_DELAY, function()
+			teleport(obj)
+		end)
+	end
 end
 
 local function teleport_objs_in_portal(pos)
