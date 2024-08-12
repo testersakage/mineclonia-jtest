@@ -3,54 +3,55 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
+"projects/mineclonia/mcl_core/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Stick"
-msgstr ""
+msgstr "木棒"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
 msgstr ""
 
 msgid "Paper"
-msgstr ""
+msgstr "紙"
 
 msgid "Paper is used to craft books and maps."
 msgstr ""
 
 msgid "Coal"
-msgstr ""
+msgstr "煤炭"
 
 msgid "“Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things."
 msgstr ""
 
 msgid "Charcoal"
-msgstr ""
+msgstr "木炭"
 
 msgid "Charcoal is an alternative furnace fuel created by cooking wood in a furnace. It has the same burning time as coal and also shares many of its crafting recipes, but it can not be used to create coal blocks."
 msgstr ""
 
 msgid "Iron Nugget"
-msgstr ""
+msgstr "鐵粒"
 
 msgid "Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."
 msgstr ""
 
 msgid "Gold Nugget"
-msgstr ""
+msgstr "金粒"
 
 msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."
 msgstr ""
 
 msgid "Diamond"
-msgstr ""
+msgstr "鑽石"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr ""
@@ -68,13 +69,13 @@ msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Gold Ingot"
-msgstr ""
+msgstr "金錠"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Emerald"
-msgstr ""
+msgstr "綠寶石"
 
 msgid "Emeralds are used in villager trades as currency."
 msgstr ""
@@ -98,31 +99,31 @@ msgid "Flint is a raw material."
 msgstr ""
 
 msgid "Sugar"
-msgstr ""
+msgstr "糖"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
 msgstr ""
 
 msgid "Bowl"
-msgstr ""
+msgstr "碗"
 
 msgid "Bowls are mainly used to hold tasty soups."
 msgstr ""
 
 msgid "Apple"
-msgstr ""
+msgstr "蘋果"
 
 msgid "Apples are food items which can be eaten."
 msgstr ""
 
 msgid "Golden Apple"
-msgstr ""
+msgstr "金蘋果"
 
 msgid "Golden apples are precious food items which can be eaten."
 msgstr ""
 
 msgid "Enchanted Golden Apple"
-msgstr ""
+msgstr "附魔金蘋果"
 
 msgid "Stone"
 msgstr ""
@@ -143,7 +144,7 @@ msgid "Some iron contained in stone, it is prety common and can be found below s
 msgstr ""
 
 msgid "Gold Ore"
-msgstr ""
+msgstr "金礦石"
 
 msgid "This stone contains pure gold, a rare metal."
 msgstr ""
@@ -191,7 +192,7 @@ msgid "Smooth Stone"
 msgstr ""
 
 msgid "Granite"
-msgstr ""
+msgstr "花崗岩"
 
 msgid "Granite is an igneous rock."
 msgstr ""
@@ -203,7 +204,7 @@ msgid "Polished granite is a decorative building block made from granite."
 msgstr ""
 
 msgid "Andesite"
-msgstr ""
+msgstr "安山岩"
 
 msgid "Andesite is an igneous rock."
 msgstr ""
@@ -215,7 +216,7 @@ msgid "Polished andesite is a decorative building block made from andesite."
 msgstr ""
 
 msgid "Diorite"
-msgstr ""
+msgstr "閃長岩"
 
 msgid "Diorite is an igneous rock."
 msgstr ""
@@ -272,13 +273,13 @@ msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it
 msgstr ""
 
 msgid "Gravel"
-msgstr ""
+msgstr "礫石"
 
 msgid "This block consists of a couple of loose stones and can't support itself."
 msgstr ""
 
 msgid "Sand"
-msgstr ""
+msgstr "沙"
 
 msgid "Sand is found in large quantities at beaches and deserts."
 msgstr ""
@@ -308,13 +309,13 @@ msgid "Smooth sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Red Sand"
-msgstr ""
+msgstr "紅沙"
 
 msgid "Red sand is found in large quantities in mesa biomes."
 msgstr ""
 
 msgid "Red Sandstone"
-msgstr ""
+msgstr "紅砂岩"
 
 msgid "Red sandstone is compressed red sand and is a rather soft kind of stone."
 msgstr ""
@@ -377,7 +378,7 @@ msgid "A block of iron is mostly a decorative block but also useful as a compact
 msgstr ""
 
 msgid "Block of Gold"
-msgstr ""
+msgstr "金方塊"
 
 msgid "A block of gold is mostly a shiny decorative block but also useful as a compact storage of gold ingots."
 msgstr ""
