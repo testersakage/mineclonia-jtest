@@ -145,8 +145,16 @@ stray.textures = {
 		"mcl_bows_bow_0.png",
 	},
 }
+stray.shoot_arrow = function(self, pos, dir)
+	if mod_bows then
+		if self.attack then
+			self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())))
+		end
+		local dmg = math.random(3, 4)
+		mcl_bows.shoot_arrow("mcl_potions:slowness_2_arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
+	end
+end
 -- TODO: different sound (w/ echo)
--- TODO: stray's arrow inflicts slowness status
 table.insert(stray.drops, {
 	name = "mcl_potions:slowness_arrow",
 	chance = 2,
