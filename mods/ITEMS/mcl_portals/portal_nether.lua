@@ -390,7 +390,7 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 		obj:set_look_horizontal(obj:get_look_horizontal() + new_look)
 	end
 
-	obj:set_pos(pos)
+	obj:set_pos(vector.offset(pos,0,-0.5,0))
 	if obj:is_player() then
 		minetest.sound_play("mcl_portals_teleport", {pos = pos, gain = 0.5, max_hear_distance = 1}, true)
 		mcl_worlds.dimension_change(obj)
