@@ -39,6 +39,7 @@ local spider = {
 	docile_by_day = true,
 	attack_type = "dogfight",
 	pathfinding = 1,
+	always_climb = true,
 	damage = 2,
 	reach = 2,
 	hp_min = 16,

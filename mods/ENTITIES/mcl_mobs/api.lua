@@ -444,6 +444,11 @@ function mob_class:on_step(dtime)
 	if self:env_damage (dtime, pos) then return end
 	if self:do_states(dtime) then return end
 
+	--mobs that can climb over stuff
+	if self.always_climb and self:node_infront_ok(pos, 0).name ~= "air" then
+		self:climb()
+	end
+
 	if self.jump_sound_cooloff > 0 then
 		self.jump_sound_cooloff = self.jump_sound_cooloff - dtime
 	end
