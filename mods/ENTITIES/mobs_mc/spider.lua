@@ -39,7 +39,6 @@ local spider = {
 	docile_by_day = true,
 	attack_type = "dogfight",
 	pathfinding = 1,
-	always_climb = true,
 	damage = 2,
 	reach = 2,
 	hp_min = 16,
@@ -89,6 +88,8 @@ local spider = {
 	run_velocity = 1.45, -- (was 2.4) a bit slower, they arent much different from running skeletons
 	jump = true,
 	jump_height = 4,
+	always_climb = true,
+	fear_height = 0,
 	view_range = 16,
 	floats = 1,
 	drops = {
@@ -98,7 +99,6 @@ local spider = {
 		end},
 	},
 	specific_attack = { "player", "mobs_mc:iron_golem" },
-	fear_height = 4,
 	animation = {
 		stand_speed = 10,
 		walk_speed = 25,
