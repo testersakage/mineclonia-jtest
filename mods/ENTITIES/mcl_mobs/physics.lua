@@ -172,7 +172,7 @@ function mob_class:collision()
 end
 
 function mob_class:slow_mob()
-	local d = 0.75
+	local d = 0.80
 	if self:check_dying() then d = 0.92 end
 
 	if self.object then
