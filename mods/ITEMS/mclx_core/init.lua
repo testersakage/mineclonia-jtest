@@ -134,3 +134,27 @@ mcl_walls.register_wall_def("mclx_core:granitesmoothbrick", {
 	groups = extra_nodes and { pickaxey = 1 } or { not_in_creative_inventory = 1 },
 	_mcl_stonecutter_recipes = { "mcl_core:granite_smooth", "mclx_core:granite_smoothbrick" },
 })
+
+minetest.register_craft({
+	output = "mclx_core:andesite_smoothbrick 4",
+	recipe = {
+		{ "mcl_core:andesite_smooth", "mcl_core:andesite_smooth" },
+		{ "mcl_core:andesite_smooth", "mcl_core:andesite_smooth" }
+	}
+})
+
+minetest.register_craft({
+	output = "mclx_core:diorite_smoothbrick 4",
+	recipe = {
+		{ "mcl_core:diorite_smooth", "mcl_core:diorite_smooth" },
+		{ "mcl_core:diorite_smooth", "mcl_core:diorite_smooth" }
+	}
+})
+
+minetest.register_craft({
+	output = "mclx_core:granite_smoothbrick 4",
+	recipe = {
+		{ "mcl_core:granite_smooth", "mcl_core:granite_smooth" },
+		{ "mcl_core:granite_smooth", "mcl_core:granite_smooth" }
+	}
+})
