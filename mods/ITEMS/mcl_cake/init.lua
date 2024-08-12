@@ -64,10 +64,10 @@ minetest.register_node("mcl_cake:cake", {
 			minetest.record_protection_violation(pos, name)
 			return
 		end
-		minetest.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		-- Check if we were allowed to eat
 		if node.name == "mcl_cake:cake" or minetest.is_creative_enabled(clicker:get_player_name()) then
 			minetest.add_node(pos,{type="node",name="mcl_cake:cake_6",param2=0})
+			minetest.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		end
 	end,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
@@ -89,10 +89,10 @@ local register_slice = function(level, nodebox, desc)
 				minetest.record_protection_violation(pos, name)
 				return
 			end
-			minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(this), clicker, {type="nothing"})
 			-- Check if we were allowed to eat
 			if node.name == this or minetest.is_creative_enabled(clicker:get_player_name()) then
 				minetest.add_node(pos,{type="node",name=after_eat,param2=0})
+				minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(this), clicker, {type="nothing"})
 			end
 		end
 	else
@@ -103,11 +103,11 @@ local register_slice = function(level, nodebox, desc)
 				minetest.record_protection_violation(pos, name)
 				return
 			end
-			minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
 			-- Check if we were allowed to eat
 			if node.name == this or minetest.is_creative_enabled(clicker:get_player_name()) then
 				minetest.remove_node(pos)
 				minetest.check_for_falling(pos)
+				minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
 			end
 		end
 	end
