@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doors x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
+"projects/mineclonia/mcl_doors/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "This door is a 2-block high barrier which can be opened or closed by hand or by redstone power."
 msgstr ""
@@ -41,7 +42,7 @@ msgid "To open or close this trapdoor, rightclick it or send a redstone signal t
 msgstr ""
 
 msgid "Iron Door"
-msgstr ""
+msgstr "鐵門"
 
 msgid "Iron doors are 2-block high barriers which can only be opened or closed by a redstone signal, but not by hand."
 msgstr ""
@@ -50,7 +51,7 @@ msgid "To open or close an iron door, supply its lower half with a redstone sign
 msgstr ""
 
 msgid "Iron Trapdoor"
-msgstr ""
+msgstr "鐵活板門"
 
 msgid "Iron trapdoors are horizontal barriers which can only be opened and closed by redstone signals, but not by hand. They occupy the upper or lower part of a block, depending on how they have been placed. When open, they can be climbed like a ladder."
 msgstr ""
