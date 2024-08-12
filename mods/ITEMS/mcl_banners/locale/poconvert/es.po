@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 01:18+0000\n"
+"PO-Revision-Date: 2024-08-13 17:09+0000\n"
 "Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/es/>\n"
@@ -18,67 +18,67 @@ msgid "White Banner"
 msgstr "Estandarte blanco"
 
 msgid "White"
-msgstr "Blanco"
+msgstr "blanco"
 
 msgid "Grey Banner"
 msgstr "Estandarte gris"
 
 msgid "Grey"
-msgstr "Gris"
+msgstr "gris"
 
 msgid "Light Grey Banner"
 msgstr "Estandarte gris claro"
 
 msgid "Light Grey"
-msgstr "Gris claro"
+msgstr "gris claro"
 
 msgid "Black Banner"
 msgstr "Estandarte negro"
 
 msgid "Black"
-msgstr "Negro"
+msgstr "negro"
 
 msgid "Red Banner"
 msgstr "Estandarte roja"
 
 msgid "Red"
-msgstr "Rojo"
+msgstr "rojo"
 
 msgid "Yellow Banner"
 msgstr "Estandarte amarilla"
 
 msgid "Yellow"
-msgstr "Amarillo"
+msgstr "amarillo"
 
 msgid "Green Banner"
 msgstr "Estandarte verde"
 
 msgid "Green"
-msgstr "Verde"
+msgstr "verde"
 
 msgid "Cyan Banner"
 msgstr "Estandarte cian"
 
 msgid "Cyan"
-msgstr "Cian"
+msgstr "cian"
 
 msgid "Blue Banner"
 msgstr "Estandarte azul"
 
 msgid "Blue"
-msgstr "Azul"
+msgstr "azul"
 
 msgid "Magenta Banner"
 msgstr "Estandarte magenta"
 
 msgid "Magenta"
-msgstr "Magenta"
+msgstr "magenta"
 
 msgid "Orange Banner"
 msgstr "Estandarte naranja"
 
 msgid "Orange"
-msgstr "Naranja"
+msgstr "naranja"
 
 msgid "Purple Banner"
 msgstr "Estandarte morada"
@@ -90,25 +90,25 @@ msgid "Brown Banner"
 msgstr "Estandarte marrón"
 
 msgid "Brown"
-msgstr "Marrón"
+msgstr "marrón"
 
 msgid "Pink Banner"
 msgstr "Estandarte rosa"
 
 msgid "Pink"
-msgstr "Rosa"
+msgstr "rosa"
 
 msgid "Lime Banner"
 msgstr "Estandarte verde lima"
 
 msgid "Lime"
-msgstr "Verde lima"
+msgstr "verde lima"
 
 msgid "Light Blue Banner"
 msgstr "Estandarte azul claro"
 
 msgid "Light Blue"
-msgstr "Azul claro"
+msgstr "azul claro"
 
 msgid "Banner"
 msgstr "Estandarte"
