@@ -57,59 +57,77 @@ end
 
 local groups = { pickaxey = 1, building_block = 1, material_stone = 1, stonecuttable = 1 }
 
-minetest.register_node(":mcl_core:andesite_smoothbrick", {
+minetest.register_node("mclx_core:andesite_smoothbrick", {
 	description = S("Smooth Andesite Bricks"),
 	_doc_items_longdesc = S("Smooth andesite bricks are decorative bricks made from smooth andesite."),
-	tiles = { "mcl_core_andesite_bricks.png" },
+	tiles = { "mclx_core_andesite_bricks.png" },
 	groups = extra_nodes and groups or table.merge(groups, { not_in_creative_inventory = 1 }),
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_stonecutter_recipes = { "mcl_core:andesite_smooth" }
+	_mcl_stonecutter_recipes = { "mcl_core:andesite", "mcl_core:andesite_smooth" }
 })
 
-minetest.register_node(":mcl_core:diorite_smoothbrick", {
+minetest.register_node("mclx_core:diorite_smoothbrick", {
 	description = S("Smooth Diorite Bricks"),
 	_doc_items_longdesc = S("Smooth diorite bricks are decorative bricks made from smooth diorite."),
-	tiles = { "mcl_core_diorite_bricks.png" },
+	tiles = { "mclx_core_diorite_bricks.png" },
 	groups = extra_nodes and groups or table.merge(groups, { not_in_creative_inventory = 1 }),
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_stonecutter_recipes = { "mcl_core:diorite_smooth" }
+	_mcl_stonecutter_recipes = { "mcl_core:diorite", "mcl_core:diorite_smooth" }
 })
 
-minetest.register_node(":mcl_core:granite_smoothbrick", {
+minetest.register_node("mclx_core:granite_smoothbrick", {
 	description = S("Smooth Granite Bricks"),
 	_doc_items_longdesc = S("Smooth granite bricks are decorative bricks made from smooth granite."),
-	tiles = { "mcl_core_granite_bricks.png" },
+	tiles = { "mclx_core_granite_bricks.png" },
 	groups = extra_nodes and groups or table.merge(groups, { not_in_creative_inventory = 1 }),
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
-	_mcl_stonecutter_recipes = { "mcl_core:granite_smooth" }
+	_mcl_stonecutter_recipes = { "mcl_core:granite", "mcl_core:granite_smooth" }
 })
 
 mcl_stairs.register_stair_and_slab("andesite_smoothbrick", {
-	baseitem = "mcl_core:andesite_smoothbrick",
+	baseitem = "mclx_core:andesite_smoothbrick",
 	description_stair = S("Smooth Andesite Bricks Stairs"),
 	description_slab = S("Smooth Andesite Bricks Slab"),
 	groups = not extra_nodes and { not_in_creative_inventory = 1 },
-	overrides = {_mcl_stonecutter_recipes = { "mcl_core:andesite_smoothbrick" }},
+	overrides = {_mcl_stonecutter_recipes = { "mcl_core:andesite", "mcl_core:andesite_smooth", "mclx_core:andesite_smoothbrick" }},
 })
 
 mcl_stairs.register_stair_and_slab("diorite_smoothbrick", {
-	baseitem = "mcl_core:diorite_smoothbrick",
+	baseitem = "mclx_core:diorite_smoothbrick",
 	description_stair = S("Smooth Diorite Bricks Stairs"),
 	description_slab = S("Smooth Diorite Bricks Slab"),
 	groups = not extra_nodes and { not_in_creative_inventory = 1 },
-	overrides = {_mcl_stonecutter_recipes = { "mcl_core:diorite_smoothbrick" }},
+	overrides = {_mcl_stonecutter_recipes = { "mcl_core:diorite", "mcl_core:diorite_smooth", "mclx_core:diorite_smoothbrick" }},
 })
 
 mcl_stairs.register_stair_and_slab("granite_smoothbrick", {
-	baseitem = "mcl_core:granite_smoothbrick",
+	baseitem = "mclx_core:granite_smoothbrick",
 	description_stair = S("Smooth Granite Bricks Stairs"),
 	description_slab = S("Smooth Granite Bricks Slab"),
 	groups = not extra_nodes and { not_in_creative_inventory = 1 },
-	overrides = {_mcl_stonecutter_recipes = { "mcl_core:granite_smoothbrick" }},
+	overrides = {_mcl_stonecutter_recipes = { "mcl_core:granite", "mcl_core:granite_smooth", "mclx_core:granite_smoothbrick" }},
+})
+
+mcl_walls.register_wall_def("mclx_core:andesitesmoothbrick", {
+	description = S("Smooth Andesite Bricks Wall"),
+	source = "mclx_core:andesite_smoothbrick",
+	_mcl_stonecutter_recipes = { "mcl_core:andesite_smooth", "mclx_core:andesite_smoothbrick" },
+})
+
+mcl_walls.register_wall_def("mclx_core:dioritesmoothbrick", {
+	description = S("Smooth Diorite Bricks Wall"),
+	source = "mclx_core:diorite_smoothbrick",
+	_mcl_stonecutter_recipes = { "mcl_core:diorite_smooth", "mclx_core:diorite_smoothbrick" },
+})
+
+mcl_walls.register_wall_def("mclx_core:granitesmoothbrick", {
+	description = S("Smooth Granite Bricks Wall"),
+	source = "mclx_core:granite_smoothbrick",
+	_mcl_stonecutter_recipes = { "mcl_core:granite_smooth", "mclx_core:granite_smoothbrick" },
 })
