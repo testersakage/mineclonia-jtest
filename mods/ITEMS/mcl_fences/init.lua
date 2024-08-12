@@ -35,8 +35,11 @@ local function update_gate(pos, node)
 end
 
 local function play_sound(pos, node, state)
+	local sounddefs = {}
 	local defs = minetest.registered_nodes[node.name]
-	local sounddefs = defs._mcl_fences_sounds[state]
+	if defs and defs._mcl_fences_sounds then
+		sounddefs = defs._mcl_fences_sounds[state]
+	end
 	local spec = sounddefs.spec or ("doors_fencegate_"..state)
 	local gain = sounddefs.gain or 0.3
 	minetest.sound_play(spec, { gain = gain, max_hear_distance = 16, pos = pos }, true)
@@ -45,7 +48,6 @@ end
 local function punch_gate(pos, node)
 	local meta = minetest.get_meta(pos)
 	local state = meta:get_int("state")
-
 	if state == 1 then
 		state = 0
 		play_sound(pos, node, "close")
