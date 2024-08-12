@@ -1424,3 +1424,30 @@ function mcl_util.detach_object(obj, change_pos, callback)
 		end, obj)
 	end
 end
+
+function mcl_util.register_setting_number(name, default, descr)
+
+	local def =
+		tonumber(minetest.settings:get("mcla_" .. name, minetest.settings:get("mcl_" .. name), tonumber(default)))
+
+	world_settings.register_number("mcla", name, def, descr)
+end
+
+function mcl_util.register_setting_string(name, default, descr)
+
+	local def = minetest.settings:get("mcla_" .. name, minetest.settings:get("mcl_" .. name, default))
+
+	world_settings.register_string("mcla", name, def, descr)
+end
+
+function mcl_util.register_setting_bool(name, default, descr)
+
+	local def = minetest.settings:get_bool("mcla_" .. name, minetest.settings:get_bool("mcl_" .. name, default))
+
+	world_settings.register_bool("mcla", name, def, descr)
+end
+
+function mcl_util.get_setting(name)
+	return world_settings.get("mcla", name)
+end
+

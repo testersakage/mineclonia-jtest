@@ -196,6 +196,7 @@ globals = {
 	"mcl_armor_trims",
 	"mcl_villages",
 	"AreaStore",
+	"world_settings",
 }
 
 read_globals = {

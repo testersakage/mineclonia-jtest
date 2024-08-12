@@ -12,8 +12,8 @@ under the LGPLv2.1 license.
 
 mcl_explosions = {}
 
-local mod_fire = minetest.get_modpath("mcl_fire")
-local explosions_griefing = minetest.settings:get_bool("mcl_explosions_griefing", true)
+local S = minetest.get_translator(minetest.get_current_modname())
+mcl_util.register_setting_bool("explosions_griefing", true, S("Explosions destroy blocks"))
 
 -- Saved sphere explosion shapes for various radiuses
 local sphere_shapes = {}
@@ -176,7 +176,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 	local grief_protected = info.grief_protected
 
 	-- Trace rays for environment destruction
-	if info.griefing and explosions_griefing then
+	if info.griefing and mcl_util.get_setting("explosions_griefing") then
 		for i = 1, #raydirs do
 			local rpos_x = pos.x
 			local rpos_y = pos.y
@@ -350,7 +350,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 			end
 		end
 		if remove then
-			if mod_fire and fire and math.random(1, 3) == 1 then
+			if fire and math.random(1, 3) == 1 then
 				table.insert(fires, minetest.get_position_from_hash(hash))
 			else
 				table.insert(airs, minetest.get_position_from_hash(hash))
