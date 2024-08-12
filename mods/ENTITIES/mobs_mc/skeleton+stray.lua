@@ -135,45 +135,44 @@ mcl_mobs.register_mob("mobs_mc:skeleton", skeleton)
 --################### STRAY
 --###################
 
-local stray = table.copy(skeleton)
-stray.description = S("Stray")
-stray.mesh = "mobs_mc_skeleton.b3d"
-stray.textures = {
-	{
-		"mobs_mc_stray_overlay.png",
-		"mobs_mc_stray.png",
-		"mcl_bows_bow_0.png",
-	},
-}
-stray.shoot_arrow = function(self, pos, dir)
-	if mod_bows then
-		if self.attack then
-			self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())))
-		end
-		local dmg = math.random(3, 4)
-		mcl_bows.shoot_arrow("mcl_potions:slowness_2_arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
-	end
-end
 -- TODO: different sound (w/ echo)
-table.insert(stray.drops, {
-	name = "mcl_potions:slowness_arrow",
-	chance = 2,
-	min = 1,
-	max = 1,
-	looting = "rare",
-	looting_chance_function = function(lvl)
-		local chance = 0.5
-		for _ = 1, lvl do
-			if chance > 1 then
-				return 1
+mcl_mobs.register_mob("mobs_mc:stray", table.merge(skeleton, {
+	description = S("Stray"),
+	mesh = "mobs_mc_skeleton.b3d",
+	textures = {
+		{
+			"mobs_mc_stray_overlay.png",
+			"mobs_mc_stray.png",
+			"mcl_bows_bow_0.png",
+		},
+	},
+	shoot_arrow = function(self, pos, dir)
+		if mod_bows then
+			if self.attack then
+				self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())))
 			end
-			chance = chance + (1 - chance) / 2
+			local dmg = math.random(3, 4)
+			mcl_bows.shoot_arrow("mcl_potions:slowness_2_arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
 		end
-		return chance
 	end,
-})
-
-mcl_mobs.register_mob("mobs_mc:stray", stray)
+	drops = table.insert(skeleton.drops, {
+		name = "mcl_potions:slowness_arrow",
+		chance = 2,
+		min = 1,
+		max = 1,
+		looting = "rare",
+		looting_chance_function = function(lvl)
+			local chance = 0.5
+			for _ = 1, lvl do
+				if chance > 1 then
+					return 1
+				end
+				chance = chance + (1 - chance) / 2
+			end
+			return chance
+		end,
+	})
+}))
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:skeleton",
