@@ -156,7 +156,7 @@ mcl_mobs.register_mob("mobs_mc:stray", table.merge(skeleton, {
 		end
 	end,
 	drops = table.insert(skeleton.drops, {
-		name = "mcl_potions:slowness_arrow",
+		name = "mcl_potions:slowness_2_arrow",
 		chance = 2,
 		min = 1,
 		max = 1,
