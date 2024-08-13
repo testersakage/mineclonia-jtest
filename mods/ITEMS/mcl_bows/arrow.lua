@@ -390,27 +390,27 @@ function ARROW_ENTITY.on_step(self, dtime)
 			end
 		else
 		    if (def and def.liquidtype ~= "none") then
-			-- Slow down arrow in liquids
-			local v = def.liquid_viscosity
-			if not v then
-				v = 0
+				-- Slow down arrow in liquids
+				local v = def.liquid_viscosity
+				if not v then
+					v = 0
+				end
+				--local old_v = self._viscosity
+				self._viscosity = v
+				local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
+				if math.abs(vel.x) > 0.001 then
+					vel.x = vel.x * vpenalty
+				end
+				if math.abs(vel.z) > 0.001 then
+					vel.z = vel.z * vpenalty
+				end
+				self.object:set_velocity(vel)
 			end
-			--local old_v = self._viscosity
-			self._viscosity = v
-			local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
-			if math.abs(vel.x) > 0.001 then
-				vel.x = vel.x * vpenalty
+			-- Set fire to arrows which pass through lava or fire.
+			local fireaspect = def and def.groups.set_on_fire
+			if fireaspect and fireaspect > 0 then
+				mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
 			end
-			if math.abs(vel.z) > 0.001 then
-				vel.z = vel.z * vpenalty
-			end
-			self.object:set_velocity(vel)
-		    end
-		    -- Set fire to arrows which pass through lava or fire.
-		    local fireaspect = def and def.groups.set_on_fire
-		    if fireaspect and fireaspect > 0 then
-			mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
-		    end
 		end
 	end
 
