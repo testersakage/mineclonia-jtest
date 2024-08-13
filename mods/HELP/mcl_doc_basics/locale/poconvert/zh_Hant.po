@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-13 17:09+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_doc_basics/zh_Hant/>\n"
@@ -798,7 +798,7 @@ msgid "Normally, blocks are built in front of the pointed side of the pointed bl
 msgstr ""
 
 msgid "Crafting"
-msgstr ""
+msgstr "合成"
 
 msgid "Crafting is the task of combining several items to form a new item."
 msgstr ""
