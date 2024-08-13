@@ -60,7 +60,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		"mcl_mobitems:carrot_on_a_stick"
 	},
 	view_range = 8,
-	on_lightning_strike = function(self)
+	_on_lightning_strike = function(self)
 		 mcl_util.replace_mob(self.object, "mobs_mc:zombified_piglin")
 		 return true
 	end,
