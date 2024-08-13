@@ -406,8 +406,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 				self.object:set_velocity(vel)
 			end
 			-- Set fire to arrows which pass through lava or fire.
-			local fireaspect = def and def.groups.set_on_fire
-			if fireaspect and fireaspect > 0 then
+			if minetest.get_item_group(node.name, "set_on_fire") > 0 then
 				mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
 			end
 		end
