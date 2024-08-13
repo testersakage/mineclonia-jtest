@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-13 17:09+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mobs_mc/zh_Hant/>\n"
@@ -78,13 +78,13 @@ msgid "Sneak to dismount"
 msgstr "潛行以停止騎乘"
 
 msgid "Horse"
-msgstr ""
+msgstr "馬"
 
 msgid "Skeleton Horse"
-msgstr ""
+msgstr "骷髏馬"
 
 msgid "Zombie Horse"
-msgstr ""
+msgstr "殭屍馬"
 
 msgid "Donkey"
 msgstr ""
@@ -102,13 +102,13 @@ msgid "Ocelot"
 msgstr ""
 
 msgid "Cat"
-msgstr ""
+msgstr "貓"
 
 msgid "Parrot"
 msgstr ""
 
 msgid "Pig"
-msgstr ""
+msgstr "豬"
 
 msgid "Piglin"
 msgstr ""
@@ -138,7 +138,7 @@ msgid "Salmon"
 msgstr ""
 
 msgid "Sheep"
-msgstr ""
+msgstr "羊"
 
 msgid "Shulker"
 msgstr ""
