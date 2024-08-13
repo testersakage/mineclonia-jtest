@@ -137,7 +137,7 @@ mcl_mobs.register_mob("mobs_mc:creeper_charged", table.merge(creeper_defs, {
 	explosion_damage_radius = 8,
 	explosion_timer = 1.5,
 
-	on_lightning_strike = function(self)
+	_on_lightning_strike = function(self)
 		 mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
 		 return true
 	end,

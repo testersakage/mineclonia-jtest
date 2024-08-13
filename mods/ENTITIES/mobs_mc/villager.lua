@@ -178,7 +178,7 @@ function mobs_mc.villager_mob:on_die(_, cmi_cause)
 	end
 end
 
-function mobs_mc.villager_mob:on_lightning_strike()
+function mobs_mc.villager_mob:_on_lightning_strike()
 	 mcl_util.replace_mob(self.object, "mobs_mc:witch")
 	 return true
 end
