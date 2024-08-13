@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 12:06+0000\n"
+"PO-Revision-Date: 2024-08-13 17:09+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_armor/zh_Hant/>\n"
@@ -21,16 +21,16 @@ msgid "To equip it, put it on the corresponding armor slot in your inventory men
 msgstr ""
 
 msgid "Leather Cap"
-msgstr ""
+msgstr "皮革帽子"
 
 msgid "Leather Tunic"
-msgstr ""
+msgstr "皮革上衣"
 
 msgid "Leather Pants"
-msgstr ""
+msgstr "皮革褲子"
 
 msgid "Leather Boots"
-msgstr ""
+msgstr "皮革靴子"
 
 msgid "Colorize a piece of leather armor, or wash it"
 msgstr ""
@@ -48,16 +48,16 @@ msgid "Player isn't online"
 msgstr ""
 
 msgid "Golden Helmet"
-msgstr ""
+msgstr "金頭盔"
 
 msgid "Golden Chestplate"
-msgstr ""
+msgstr "金胸甲"
 
 msgid "Golden Leggings"
-msgstr ""
+msgstr "金護腿"
 
 msgid "Golden Boots"
-msgstr ""
+msgstr "金靴子"
 
 msgid "Chainmail Helmet"
 msgstr ""
