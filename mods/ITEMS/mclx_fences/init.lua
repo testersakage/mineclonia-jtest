@@ -71,12 +71,12 @@ for wood, defs in pairs(mcl_trees.woods) do
 		_mcl_burntime = basedefs._mcl_burntime,
 		_mcl_fences_baseitem = "mcl_trees:tree_"..wood
 	}, {
-		description = S("@1 Wood Fence", defs.readable_name),
+		description = S("@1 Bark Fence", defs.readable_name),
 		connects_to = { "group:fence_wood", "group:solid" },
 		_mcl_stripped_variant = "mcl_fences:wood_stripped_"..wood,
 		_mcl_fences_output_amount = 8
 	}, {
-		description = S("@1 Wood Fence Gate", defs.readable_name),
+		description = S("@1 Bark Fence Gate", defs.readable_name),
 		_mcl_stripped_variant = "mcl_fences:wood_stripped_"..wood.."_gate",
 		_mcl_fences_output_amount = 4
 	})
