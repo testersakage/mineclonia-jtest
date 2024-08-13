@@ -1,21 +1,36 @@
 local S = minetest.get_translator("mcl_bundles")
 
 local function use_bundle(itemstack, placer, pointed_thing)
-    if pointed_thing.type ~= "object" then
-        return
-    end
-    local player_inv = placer:get_inventory()
-    local lentity = pointed_thing.ref:get_luaentity()
     local stack_name = itemstack:get_name()
+    local is_filled = stack_name:find("_filled")
+    local player_inv = placer:get_inventory()
+    if pointed_thing.type ~= "object" then
+        if is_filled then
+            local pos = pointed_thing.under or placer:get_pos()
+            local data = minetest.deserialize(itemstack:get_metadata())
+            for _, itemstring in pairs(data) do
+                minetest.add_item(pos, ItemStack(itemstring))
+            end
+            itemstack:take_item()
+            player_inv:add_item("main", ItemStack(stack_name:gsub("_filled", "")))
+        end
+        return itemstack
+    end
+    local lentity = pointed_thing.ref:get_luaentity()
     if lentity and lentity.name == "__builtin:item" then
-        local data = {}
-        table.insert(data, lentity.itemstring)
+        local data, new_stack
         lentity._removed = true
-        if not stack_name:find("_filled") then
-            local new_stack = ItemStack(stack_name.."_filled")
+        if not is_filled then
+            data = {}
+            table.insert(data, lentity.itemstring)
+            new_stack = ItemStack(stack_name.."_filled")
             new_stack:set_metadata(minetest.serialize(data))
             player_inv:add_item("main", new_stack)
             itemstack:take_item()
+        else
+            data = minetest.deserialize(itemstack:get_metadata())
+            table.insert(data, lentity.itemstring)
+            itemstack:set_metadata(minetest.serialize(data))
         end
     end
     return itemstack
