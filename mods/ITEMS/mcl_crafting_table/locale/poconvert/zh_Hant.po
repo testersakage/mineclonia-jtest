@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_crafting_table x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-13 17:09+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_crafting_table/zh_Hant/>\n"
@@ -15,22 +15,22 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "Crafting"
-msgstr ""
+msgstr "合成"
 
 msgid "Inventory"
 msgstr "物品欄"
 
 msgid "Recipe book"
-msgstr ""
+msgstr "配方手冊"
 
 msgid "Fill Craft Grid"
-msgstr ""
+msgstr "填滿合成欄位"
 
 msgid "Crafting Table"
-msgstr ""
+msgstr "合成台"
 
 msgid "3×3 crafting grid"
-msgstr ""
+msgstr "3×3 合成欄"
 
 msgid "A crafting table is a block which grants you access to a 3×3 crafting grid which allows you to perform advanced crafts."
 msgstr ""
