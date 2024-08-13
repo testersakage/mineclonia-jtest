@@ -119,7 +119,12 @@ mcl_mobs.register_mob("mobs_mc:creeper", table.merge(creeper_defs, {
 	explosion_strength = 3,
 	explosion_radius = 3.5,
 	explosion_damage_radius = 3.5,
-	explosion_timer = 2.5 -- (was 1.5) This was way too fast compare to mc,
+	explosion_timer = 2.5, -- (was 1.5) This was way too fast compare to mc,
+
+	_on_lightning_strike = function(self)
+		 mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
+		 return true
+	end,
 }))
 
 mcl_mobs.register_mob("mobs_mc:creeper_charged", table.merge(creeper_defs, {
@@ -137,10 +142,6 @@ mcl_mobs.register_mob("mobs_mc:creeper_charged", table.merge(creeper_defs, {
 	explosion_damage_radius = 8,
 	explosion_timer = 1.5,
 
-	_on_lightning_strike = function(self)
-		 mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
-		 return true
-	end,
 
 	--Having trouble when fire is placed with lightning
 	fire_resistant = true,
