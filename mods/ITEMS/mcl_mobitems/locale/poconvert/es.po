@@ -3,21 +3,22 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-08-13 17:09+0000\n"
+"Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_mobitems/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Rotten Flesh"
 msgstr "Carne podrida"
 
 msgid "80% chance of food poisoning"
-msgstr ""
+msgstr "80% de probabilidad de intoxicación alimentaria"
 
 msgid "Yuck! This piece of flesh clearly has seen better days. If you're really desperate, you can eat it to restore a few hunger points, but there's a 80% chance it causes food poisoning, which increases your hunger for a while."
 msgstr "¡Qué asco! Este pedazo de carne claramente ha tenido días mejores. Si está realmente estas desesperado, puedes comerlo para restablecer algunos puntos de hambre, pero hay un 80% de posibilidades de que cause intoxicación alimentaria, lo que aumenta su hambre por un tiempo."
@@ -50,7 +51,7 @@ msgid "Raw Chicken"
 msgstr "Pollo crudo"
 
 msgid "30% chance of food poisoning"
-msgstr ""
+msgstr "30% de probabilidad de intoxicación alimentaria"
 
 msgid "Raw chicken is a food item which is not safe to consume. You can eat it to restore a few hunger points, but there's a 30% chance to suffer from food poisoning, which increases your hunger rate for a while. Cooking raw chicken will make it safe to eat and increases its nutritional value."
 msgstr "El pollo crudo es un alimento que no es seguro consumir. Puedes comerlo para restaurar algunos puntos de hambre, pero hay un 30% de posibilidades de sufrir intoxicación alimentaria, lo que aumenta su tasa de hambre por un tiempo. Cocinar pollo crudo hará que sea seguro comerlo y aumentará su valor nutricional."
@@ -89,19 +90,22 @@ msgid "Milk"
 msgstr "Leche"
 
 msgid "Removes all status effects"
-msgstr ""
+msgstr "Elimina todos los efectos de estado"
 
 msgid "Milk is very refreshing and can be obtained by using a bucket on a cow. Drinking it will remove all status effects, but restores no hunger points."
 msgstr ""
+"La leche es muy refrescante y se puede obtener clicando con un cubo sobre "
+"una vaca. Beberlo eliminará todos los efectos de estado, pero no restaurará "
+"los puntos de hambre."
 
 msgid "Use the placement key to drink the milk."
-msgstr ""
+msgstr "Utiliza la tecla de colocación para beber la leche."
 
 msgid "Spider Eye"
 msgstr "Ojo de araña"
 
 msgid "Poisonous"
-msgstr ""
+msgstr "Venenoso"
 
 msgid "Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."
 msgstr "Los ojos de araña se utilizan principalmente en la elaboración. Si estás realmente desesperado, puedes comerte un ojo de araña, pero te envenenará brevemente."
@@ -120,6 +124,9 @@ msgstr "Saco de tinta"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
 msgstr ""
+"Este ítem lo sueltan los calamares cuando mueren. La tinta de calamar se "
+"puede utilizar como ingrediente para elaborar libros con plumas o tinte "
+"negro."
 
 msgid "String"
 msgstr "Cuerda"
@@ -134,7 +141,7 @@ msgid "This is a crafting component dropped from dead blazes."
 msgstr "Este es un componente de artesanía caído de llamas muertas."
 
 msgid "Breeze Rod"
-msgstr ""
+msgstr "Vara de Breeze"
 
 msgid "This is a crafting item dropped from breezes."
 msgstr ""
@@ -309,4 +316,3 @@ msgstr ""
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr ""
-
