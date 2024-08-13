@@ -385,8 +385,11 @@ function ARROW_ENTITY.on_step(self, dtime)
 				elseif (sdef and sdef._on_arrow_hit) then
 					sdef._on_arrow_hit(self._stuckin, self)
 				end
+				-- Extinguish this stuck arrow.
+				mcl_burning.extinguish (self.object)
 			end
-		elseif (def and def.liquidtype ~= "none") then
+		else
+		    if (def and def.liquidtype ~= "none") then
 			-- Slow down arrow in liquids
 			local v = def.liquid_viscosity
 			if not v then
@@ -402,6 +405,12 @@ function ARROW_ENTITY.on_step(self, dtime)
 				vel.z = vel.z * vpenalty
 			end
 			self.object:set_velocity(vel)
+		    end
+		    -- Set fire to arrows which pass through lava or fire.
+		    local fireaspect = def and def.groups.set_on_fire
+		    if fireaspect and fireaspect > 0 then
+			mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
+		    end
 		end
 	end
 
