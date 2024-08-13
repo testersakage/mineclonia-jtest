@@ -8,7 +8,11 @@ minetest.register_craftitem("mcl_bundles:bundle", {
     --_doc_items_longdesc = S(""),
     --_doc_items_usagehelp = S(""),
     groups = { tool = 1 },
-    pointabilities = {},
+    pointabilities = {
+        objects = {
+            ["__builtin:item"] = true
+        }
+    },
     on_place = use_bundle,
     on_secondary_use = use_bundle,
     tiles = { "mcl_bundles_bundle.png" },
@@ -18,9 +22,22 @@ minetest.register_craftitem("mcl_bundles:bundle", {
 minetest.register_craftitem("mcl_bundles:bundle_filled", {
     description = S("Bundle"),
     groups = { not_in_creative_inventory = 1 },
-    pointabilities = {},
+    pointabilities = {
+        objects = {
+            ["__builtin:item"] = true
+        }
+    },
     on_place = use_bundle,
     on_secondary_use = use_bundle,
     tiles = { "mcl_bundles_bundle_filled.png" },
     stack_max = 1
+})
+
+minetest.register_craft({
+    output = "mcl_bundles:bundle",
+    recipe = {
+        {"mcl_mobitems:rabbit_hide", "mcl_mobitems:string", "mcl_mobitems:rabbit_hide"},
+        {"mcl_mobitems:rabbit_hide", "", "mcl_mobitems:rabbit_hide"},
+        {"mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide"}
+    }
 })
