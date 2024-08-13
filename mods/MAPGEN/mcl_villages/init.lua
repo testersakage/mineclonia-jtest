@@ -300,7 +300,7 @@ mcl_villages.register_building({
 	name = "fletcher_tiny",
 	mts = schem_path .. "bogner.mts",
 	num_others = 8,
-    max_jobs = 5,
+	max_jobs = 6,
 	yadjust = 0,
 })
 
@@ -308,7 +308,7 @@ mcl_villages.register_building({
 	name = "fletcher",
 	mts = schem_path .. "new_villages/fletcher.mts",
 	num_others = 8,
-	min_jobs = 6,
+	min_jobs = 7,
 	yadjust = 1,
 })
 
