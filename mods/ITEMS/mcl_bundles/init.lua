@@ -9,7 +9,7 @@ end
 
 local function check_for_room(bundlestack, itemstack)
     local meta = bundlestack:get_meta()
-    local stack_points = meta:get_int("stack_points") or 0
+    local stack_points = meta:get_int("stack_points")
     local new_sp = stack_points + get_stack_points(itemstack)
     if new_sp <= MAX_STACK_POINTS then
         meta:set_int("stack_points", new_sp)
@@ -92,7 +92,7 @@ end
 
 minetest.register_craftitem("mcl_bundles:bundle", {
     description = S("Bundle"),
-    --_doc_items_longdesc = S(""),
+    _doc_items_longdesc = S("A bundle is an item that can store up to a stack's worth of mixed item types within itself in a single inventory slot."),
     --_doc_items_usagehelp = S(""),
     groups = { tool = 1 },
     pointabilities = {
