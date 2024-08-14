@@ -83,6 +83,7 @@ function mob_class:check_item_pickup()
 						self.armor_list[def._mcl_armor_element] = stack:to_string()
 						o:remove()
 						self:set_armor_texture()
+						self.persistent = true
 					end
 				elseif self.pick_up then
 					for _, v in pairs(self.pick_up) do
