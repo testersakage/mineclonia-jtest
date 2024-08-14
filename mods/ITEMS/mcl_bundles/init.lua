@@ -1,16 +1,17 @@
 local S = minetest.get_translator("mcl_bundles")
 local MAX_STACK_POINTS = 256
 
-local function get_stack_points(itemstack)
+local function get_stack_points(itemstring)
+    local itemstack = ItemStack(itemstring)
     local count = itemstack:get_count()
     local stack_max = itemstack:get_stack_max()
     return (64 / stack_max) * count
 end
 
-local function check_for_room(bundlestack, itemstack)
+local function room_on_bundle(bundlestack, itemstring)
     local meta = bundlestack:get_meta()
     local stack_points = meta:get_int("stack_points")
-    local new_sp = stack_points + get_stack_points(itemstack)
+    local new_sp = stack_points + get_stack_points(itemstring)
     if new_sp <= MAX_STACK_POINTS then
         meta:set_int("stack_points", new_sp)
         return true
@@ -19,12 +20,10 @@ local function check_for_room(bundlestack, itemstack)
 end
 
 local function entity_to_stack(pointed_thing)
-    if pointed_thing.type == "object" then
-        local lentity = pointed_thing.ref:get_luaentity()
-        if lentity and lentity.name == "__builtin:item" then
-            if lentity.itemstring then
-                return ItemStack(lentity.itemstring), lentity
-            end
+    local lentity = pointed_thing.ref:get_luaentity()
+    if lentity and lentity.name == "__builtin:item" then
+        if lentity.itemstring then
+            return lentity, lentity.itemstring
         end
     end
     return nil
@@ -34,58 +33,68 @@ local function is_filled(bundlestack)
     return bundlestack:get_name():find("_filled")
 end
 
-local function check_room_on_inv(player, itemstring)
-    local inv = player:get_inventory()
-    local stack = ItemStack(itemstring)
-    return inv and inv:room_for_item("main", stack), inv
+local function get_bundle_inv(bundlestack)
+    local meta = bundlestack:get_meta()
+    local inv = meta:get_string("inventory")
+    if inv ~= "" then return minetest.deserialize(inv) end
+    return {}
 end
 
-local function fill_bundle(bundlestack, itemstack, player)
+local function fill_bundle(bundlestack, itemstring, player)
+    local inv = player:get_inventory()
     local old_name = bundlestack:get_name()
-    local data = minetest.deserialize(bundlestack:get_metadata())
-    table.insert(data or {}, itemstack)
-    local room, inv = check_room_on_inv(player, old_name)
+    local bundle_inv = get_bundle_inv(bundlestack)
+    table.insert(bundle_inv, itemstring)
+    local inv_data = minetest.serialize(bundle_inv)
     if not is_filled(bundlestack) then
-        if room then inv:add_item("main", ItemStack(old_name.."_filled")) end
-        bundlestack:take_item()
+        local new_stack = ItemStack(old_name.."_filled")
+        new_stack:get_meta():set_string("inventory", inv_data)
+        if inv:room_for_item("main", new_stack) then
+            inv:add_item("main", new_stack)
+        else
+            minetest.add_item(player:get_pos(), new_stack)
+        end
+    else
+        bundlestack:get_meta():set_string("inventory", inv_data)
     end
-    bundlestack:set_metadata(minetest.serialize(data))
+    bundlestack:take_item()
     return bundlestack
 end
 
 local function unfill_bundle(bundlestack, player)
-    local old_name = bundlestack:get_name()
     local inv = player:get_inventory()
-    local items = minetest.deserialize(bundlestack:get_metadata())
-    if items then
-        for _, item in pairs(items) do
-            local stack = ItemStack(item)
-            if inv:room_for_item("main", stack) then
-                inv:add_item("main", stack)
-            else
-                minetest.add_item(player:get_pos(), stack)
-            end
+    local bundle_inv = get_bundle_inv(bundlestack)
+    local new_stack = ItemStack(bundlestack:get_name():gsub("_filled", ""))
+    for _, items in pairs(bundle_inv) do
+        local stack = ItemStack(items)
+        if inv:room_for_item("main", stack) then
+            inv:add_item("main", stack)
+        else
+            minetest.add_item(player:get_pos(), stack)
         end
     end
-    bundlestack:set_name(old_name:gsub("_filled", ""))
+    bundlestack:get_meta():set_string("inventory", "")
+    bundlestack:take_item()
+    if inv:room_for_item("main", new_stack) then
+        inv:add_item("main", new_stack)
+    end
+    -- ToDo: check for room on player's hands
     return bundlestack
 end
 
 local function use_bundle(itemstack, placer, pointed_thing)
-    local item_stack, lentity = entity_to_stack(pointed_thing)
-    if item_stack then
-        if check_for_room(itemstack, item_stack) then
+    if pointed_thing.type == "object" then
+        local lentity, itemstring = entity_to_stack(pointed_thing)
+        if room_on_bundle(itemstack, itemstring) then
             lentity._removed = true
-            return fill_bundle(itemstack, item_stack, placer)
+            return fill_bundle(itemstack, itemstring, placer)
         end
-    end
-    if pointed_thing.type ~= "node" then
-        if is_filled(itemstack) then
-            return unfill_bundle(itemstack, placer)
-        end
-    else
+    elseif pointed_thing.type == "node" then
         local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
         if rc then return rc end
+        if is_filled(itemstack) then return unfill_bundle(itemstack, placer) end
+    else
+        if is_filled(itemstack) then return unfill_bundle(itemstack, placer) end
     end
     return itemstack
 end
