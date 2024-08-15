@@ -40,8 +40,8 @@ function mob_class:set_armor_texture()
 		if string.sub(texture, -1,-1) == "^" then
 			texture=string.sub(texture,1,-2)
 		end
-		if self.base_texture[self.wears_armor] then
-			self.base_texture[self.wears_armor]=texture
+		if self.base_texture[self.wears_armor and 1] then
+			self.base_texture[self.wears_armor and 1]=texture
 		end
 		self:set_properties({textures=self.base_texture})
 
