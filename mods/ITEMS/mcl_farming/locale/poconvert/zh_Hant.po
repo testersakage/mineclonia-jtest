@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_farming/zh_Hant/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "Beetroot Seeds"
-msgstr ""
+msgstr "甜菜種子"
 
 msgid "Grows into a beetroot plant. Chickens like beetroot seeds."
 msgstr ""
@@ -45,7 +45,7 @@ msgid "A mature beetroot plant is a farming plant which is ready to be harvested
 msgstr ""
 
 msgid "Beetroot"
-msgstr ""
+msgstr "甜菜根"
 
 msgid "Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too."
 msgstr ""
@@ -120,7 +120,7 @@ msgid "Diamond Hoe"
 msgstr ""
 
 msgid "Netherite Hoe"
-msgstr ""
+msgstr "獄髓鋤"
 
 msgid "Melon Seeds"
 msgstr ""
@@ -132,7 +132,7 @@ msgid "Place the melon seeds on farmland (which can be created with a hoe) to pl
 msgstr ""
 
 msgid "Melon"
-msgstr ""
+msgstr "西瓜"
 
 msgid "A melon is a block which can be grown from melon stems, which in turn are grown from melon seeds. It can be harvested for melon slices."
 msgstr ""
@@ -174,7 +174,7 @@ msgid "Mature potato plants are ready to be harvested for potatoes. They won't g
 msgstr ""
 
 msgid "Potato"
-msgstr ""
+msgstr "馬鈴薯"
 
 msgid "Potatoes are food items which can be eaten, cooked in the furnace and planted. Pigs like potatoes."
 msgstr ""
@@ -231,7 +231,7 @@ msgid "To carve a face into the pumpkin, use the shears on the side you want to 
 msgstr ""
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "南瓜"
 
 msgid "A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds."
 msgstr ""
@@ -249,7 +249,7 @@ msgid "A pumpkin pie is a tasty food item which can be eaten."
 msgstr ""
 
 msgid "Farmland"
-msgstr ""
+msgstr "耕地"
 
 msgid "Surface for crops"
 msgstr ""
@@ -288,7 +288,7 @@ msgid "Mature Wheat Plant"
 msgstr ""
 
 msgid "Wheat"
-msgstr ""
+msgstr "小麥"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
 msgstr ""
