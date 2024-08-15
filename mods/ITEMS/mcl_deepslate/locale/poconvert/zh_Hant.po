@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_deepslate/zh_Hant/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "Deepslate"
-msgstr ""
+msgstr "深板岩"
 
 msgid "Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone."
 msgstr ""
@@ -132,13 +132,13 @@ msgid "@1 are a cracked variant."
 msgstr ""
 
 msgid "Tuff"
-msgstr ""
+msgstr "凝灰岩"
 
 msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
 msgstr ""
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "浮雕凝灰岩"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
 msgstr ""
@@ -153,25 +153,25 @@ msgid "Tuff Stairs"
 msgstr ""
 
 msgid "Tuff Slab"
-msgstr ""
+msgstr "凝灰岩半磚"
 
 msgid "Tuff Wall"
-msgstr ""
+msgstr "凝灰岩牆"
 
 msgid "Polished Tuff"
-msgstr ""
+msgstr "拋光凝灰岩"
 
 msgid "Polished tuff is a polished variant of the tuff block."
 msgstr ""
 
 msgid "Polished Tuff Stairs"
-msgstr ""
+msgstr "拋光凝灰岩階梯"
 
 msgid "Polished Tuff Slab"
-msgstr ""
+msgstr "拋光凝灰岩半磚"
 
 msgid "Polished Tuff Wall"
-msgstr ""
+msgstr "拋光凝灰岩牆"
 
 msgid "Tuff Bricks"
 msgstr ""
