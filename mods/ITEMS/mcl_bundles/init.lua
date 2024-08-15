@@ -41,6 +41,10 @@ local function get_bundle_inv(bundlestack)
 end
 
 local function fill_bundle(bundlestack, itemstring, player)
+    -- TODO:
+    --  Fix bugs and clean up the code
+    --  Add sounds
+    --  Add bar to filled bundle
     local inv = player:get_inventory()
     local old_name = bundlestack:get_name()
     local bundle_inv = get_bundle_inv(bundlestack)
@@ -62,6 +66,9 @@ local function fill_bundle(bundlestack, itemstring, player)
 end
 
 local function unfill_bundle(bundlestack, player)
+    -- TODO:
+    --  Fix bugs and clean up the code
+    --  Add sounds
     local inv = player:get_inventory()
     local bundle_inv = get_bundle_inv(bundlestack)
     local new_stack = ItemStack(bundlestack:get_name():gsub("_filled", ""))
@@ -78,11 +85,14 @@ local function unfill_bundle(bundlestack, player)
     if inv:room_for_item("main", new_stack) then
         inv:add_item("main", new_stack)
     end
-    -- ToDo: check for room on player's hands
+    -- TODO:
+    --  Check for room on player's hands
     return bundlestack
 end
 
 local function use_bundle(itemstack, placer, pointed_thing)
+    -- TODO:
+    --  Fix bugs and clean up the code
     if pointed_thing.type == "object" then
         local lentity, itemstring = entity_to_stack(pointed_thing)
         if room_on_bundle(itemstack, itemstring) then
@@ -102,6 +112,8 @@ end
 minetest.register_craftitem("mcl_bundles:bundle", {
     description = S("Bundle"),
     _doc_items_longdesc = S("A bundle is an item that can store up to a stack's worth of mixed item types within itself in a single inventory slot."),
+    -- TODO:
+    --  Proper documentation
     --_doc_items_usagehelp = S(""),
     groups = { tool = 1 },
     pointabilities = {
