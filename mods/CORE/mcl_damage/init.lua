@@ -95,6 +95,15 @@ end
 function mcl_damage.finish_reason(mcl_reason)
 	mcl_reason.source = mcl_reason.source or mcl_reason.direct
 	mcl_reason.flags = mcl_damage.types[mcl_reason.type] or {}
+
+	if mcl_reason.source then
+	    if not mcl_reason.source:is_player () then
+		local entity = mcl_reason.source:get_luaentity ()
+		if entity.is_mob then
+		    mcl_reason.mob_name = entity.name
+		end
+	    end
+	end
 end
 
 function mcl_damage.from_mt(mt_reason)

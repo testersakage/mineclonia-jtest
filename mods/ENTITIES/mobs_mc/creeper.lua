@@ -37,7 +37,8 @@ local creeper_defs = {
 		{name = "mcl_heads:creeper",
 		chance = 200, -- 0.5%
 		min = 1,
-		max = 1,},
+		max = 1,
+		mob_head = 1, },
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
