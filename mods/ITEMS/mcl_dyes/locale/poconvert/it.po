@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_dyes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-14 08:16+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: Pietro Cappuccino <erisMT@users.noreply.translate.codeberg."
 "org>\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -22,52 +22,54 @@ msgid "Light Grey"
 msgstr "Grigio Chiaro"
 
 msgid "Grey"
-msgstr ""
+msgstr "Grigio"
 
 msgid "Black"
-msgstr ""
+msgstr "Nero"
 
 msgid "Purple"
-msgstr ""
+msgstr "Viola"
 
 msgid "Blue"
-msgstr ""
+msgstr "Blu"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "Azzurro"
 
 msgid "Cyan"
-msgstr ""
+msgstr "Ciano"
 
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "Lime"
-msgstr ""
+msgstr "Lime"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Giallo"
 
 msgid "Brown"
-msgstr ""
+msgstr "Marrone"
 
 msgid "Orange"
-msgstr ""
+msgstr "Arancione"
 
 msgid "Red"
-msgstr ""
+msgstr "Rosso"
 
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 msgid "Pink"
-msgstr ""
+msgstr "Rosa"
 
 msgid "@1 Dye"
-msgstr ""
+msgstr "Colorante @1"
 
 msgid "This item is a dye which is used for dyeing and crafting."
-msgstr ""
+msgstr "Questo oggetto è un colorante utilizzato per tingere ed assemblare."
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
 msgstr ""
+"Clicca col tasto destro su una pecora per tingerne la lana. Degli altri "
+"materiali sono tinti attraverso l'assemblaggio."
