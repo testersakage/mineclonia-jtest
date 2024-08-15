@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 01:18+0000\n"
+"PO-Revision-Date: 2024-08-16 07:49+0000\n"
 "Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mobs_mc/es/>\n"
@@ -120,7 +120,7 @@ msgid "Piglin Brute"
 msgstr "Piglin Bruto"
 
 msgid "Zombie Piglin"
-msgstr "Hombrecerdo Zombi"
+msgstr "Piglin Zombi"
 
 msgid "Pillager"
 msgstr "Saqueador"
@@ -186,19 +186,19 @@ msgid "Spider"
 msgstr "Araña"
 
 msgid "Cave Spider"
-msgstr "Araña de las cuevas"
+msgstr "Araña de cueva"
 
 msgid "Squid"
 msgstr "Calamar"
 
 msgid "Glow Squid"
-msgstr "Calamar luminoso"
+msgstr "Calamar brillante"
 
 msgid "Strider"
-msgstr "Lavagante"
+msgstr "Strider"
 
 msgid "Baby Strider"
-msgstr "Bebé Lavagante"
+msgstr "Bebé Strider"
 
 msgid "Tropical Fish"
 msgstr "Pez Tropical"
@@ -207,7 +207,7 @@ msgid "Tropical fish"
 msgstr "Pez tropical"
 
 msgid "Vex"
-msgstr "Ánima"
+msgstr "Vex"
 
 msgid "Villager"
 msgstr "Aldeano"
@@ -276,7 +276,7 @@ msgid "Cleric"
 msgstr "Clérigo"
 
 msgid "Mason"
-msgstr "Mason"
+msgstr "Albañil"
 
 msgid "Nitwit"
 msgstr "Holgazán"
