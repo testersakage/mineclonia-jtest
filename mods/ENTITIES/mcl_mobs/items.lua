@@ -24,15 +24,19 @@ end
 
 function mob_class:set_armor_texture()
 	if self.armor_list then
-		local chestplate=minetest.registered_items[self.armor_list.torso] or {name=""}
-		local boots=minetest.registered_items[self.armor_list.feet] or {name=""}
-		local leggings=minetest.registered_items[self.armor_list.legs] or {name=""}
-		local helmet=minetest.registered_items[self.armor_list.head] or {name=""}
+		local chestplate=minetest.registered_items[ItemStack(self.armor_list.torso):get_name()]  or {name=""}
+		local boots=minetest.registered_items[ItemStack(self.armor_list.feet):get_name()] or {name=""}
+		local leggings=minetest.registered_items[ItemStack(self.armor_list.legs):get_name()] or {name=""}
+		local helmet=minetest.registered_items[ItemStack(self.armor_list.head):get_name()] or {name=""}
 
 		if helmet.name=="" and chestplate.name=="" and leggings.name=="" and boots.name=="" then
 			helmet={name="blank.png"}
 		end
-		local texture = get_armor_texture(self.object, chestplate.name)..get_armor_texture(self.object, helmet.name)..get_armor_texture(self.object, boots.name)..get_armor_texture(self.object, leggings.name)
+
+		local texture = get_armor_texture(self.object, chestplate.name)
+		..get_armor_texture(self.object, helmet.name)
+		..get_armor_texture(self.object, boots.name)
+		..get_armor_texture(self.object, leggings.name)
 		if string.sub(texture, -1,-1) == "^" then
 			texture=string.sub(texture,1,-2)
 		end
