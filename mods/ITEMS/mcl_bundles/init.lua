@@ -19,7 +19,7 @@ local function room_on_bundle(bundlestack, itemstring)
     return false
 end
 
-local function entity_to_stack(pointed_thing)
+local function entity_to_string(pointed_thing)
     local lentity = pointed_thing.ref:get_luaentity()
     if lentity and lentity.name == "__builtin:item" then
         if lentity.itemstring then
@@ -79,21 +79,19 @@ local function unfill_bundle(bundlestack, player)
             minetest.add_item(player:get_pos(), stack)
         end
     end
-    bundlestack:get_meta():set_string("inventory", "")
-    bundlestack:take_item()
+    bundlestack:clear()
     if inv:room_for_item("main", new_stack) then
-        inv:add_item("main", new_stack)
+        return new_stack
+    else
+        minetest.add_item(player:get_pos(), new_stack)
     end
-    -- TODO:
-    --  Check for room on player's hands
-    return bundlestack
 end
 
 local function use_bundle(itemstack, placer, pointed_thing)
     -- TODO:
     --  Fix bugs and clean up the code
     if pointed_thing.type == "object" then
-        local lentity, itemstring = entity_to_stack(pointed_thing)
+        local lentity, itemstring = entity_to_string(pointed_thing)
         if room_on_bundle(itemstack, itemstring) then
             lentity._removed = true
             return fill_bundle(itemstack, itemstring, placer)
