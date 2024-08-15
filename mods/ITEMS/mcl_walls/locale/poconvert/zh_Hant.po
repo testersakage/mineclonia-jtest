@@ -3,54 +3,55 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_walls x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
+"Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
+"projects/mineclonia/mcl_walls/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: mtt_convert 0.1.0\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "A piece of wall. It cannot be jumped over with a simple jump. When multiple of these are placed to next to each other, they will automatically build a nice wall structure."
 msgstr ""
 
 msgid "Cobblestone Wall"
-msgstr ""
+msgstr "鵝卵石牆"
 
 msgid "Mossy Cobblestone Wall"
-msgstr ""
+msgstr "青苔鵝卵石牆"
 
 msgid "Andesite Wall"
-msgstr ""
+msgstr "安山岩牆"
 
 msgid "Granite Wall"
-msgstr ""
+msgstr "花崗岩牆"
 
 msgid "Diorite Wall"
-msgstr ""
+msgstr "閃長岩牆"
 
 msgid "Brick Wall"
-msgstr ""
+msgstr "紅磚牆"
 
 msgid "Sandstone Wall"
-msgstr ""
+msgstr "砂岩牆"
 
 msgid "Red Sandstone Wall"
-msgstr ""
+msgstr "紅砂岩牆"
 
 msgid "Stone Brick Wall"
-msgstr ""
+msgstr "石磚牆"
 
 msgid "Mossy Stone Brick Wall"
-msgstr ""
+msgstr "青苔石磚牆"
 
 msgid "Prismarine Wall"
-msgstr ""
+msgstr "海磷石牆"
 
 msgid "End Stone Brick Wall"
-msgstr ""
+msgstr "終界石磚牆"
 
 msgid "Nether Brick Wall"
 msgstr ""
