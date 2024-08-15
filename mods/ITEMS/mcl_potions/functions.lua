@@ -800,6 +800,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "hunger",
 	description = S("Hunger"),
+	icon = "mcl_potions_effect_food_poisoning.png",
 	get_tt = function(factor)
 		return S("exhausts by @1 per second", factor)
 	end,
