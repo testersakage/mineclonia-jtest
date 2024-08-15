@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-14 17:37+0000\n"
+"PO-Revision-Date: 2024-08-15 05:31+0000\n"
 "Last-Translator: Pietro Cappuccino <erisMT@users.noreply.translate.codeberg."
 "org>\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -25,67 +25,67 @@ msgid "Time to Mine!"
 msgstr "A Scavare!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr ""
+msgstr "Usa assi e bastoni per assemblare un piccone."
 
 msgid "Hot Topic"
 msgstr "Tema Scottante"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr ""
+msgstr "Assembla una fornace con otto blocchi di pietre."
 
 msgid "Time to Farm!"
 msgstr "A Zappare!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr ""
+msgstr "Usa assi e bastoni per assemblare una zappa."
 
 msgid "Bake Bread"
 msgstr "Il Pane Quotidiano"
 
 msgid "Use wheat to craft a bread."
-msgstr ""
+msgstr "Trasforma il grano in pane."
 
 msgid "The Lie"
-msgstr "La Torta Non E' Una Bugia"
+msgstr "La Torta Non E' una Bugia"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr ""
+msgstr "Produci una torta utilizzando: grano, zucchero, latte ed uova."
 
 msgid "Getting an Upgrade"
 msgstr "Salto Di Qualità"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr ""
+msgstr "Assembla un piccone migliore."
 
 msgid "Time to Strike!"
 msgstr "Inizia la Lotta!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr ""
+msgstr "Usa delle assi ed un bastone per assemblare una spada."
 
 msgid "Librarian"
 msgstr "Bibliotecario"
 
 msgid "Craft a bookshelf."
-msgstr ""
+msgstr "Assembla una libreria per potenziare il tuo tavolo degli incantesimi."
 
 msgid "Isn't It Iron Pick"
 msgstr "Scintillante Piccone Metallico"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr ""
+msgstr "Assembla un piccone di ferro utilizzando bastoni e ferro."
 
 msgid "DIAMONDS!"
 msgstr "DIAMANTI!"
 
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "Raccogli un diamante dal pavimento."
 
 msgid "Into Fire"
 msgstr "Nel Fuoco"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr ""
+msgstr "Raccogli una verga di blaze dal pavimento."
 
 msgid "Cow Tipper"
 msgstr "Ribalta la Mucca"
@@ -93,6 +93,9 @@ msgstr "Ribalta la Mucca"
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
 msgstr ""
+"Raccogli del cuoio dal pavimento.\n"
+"Suggerimento: Le mucche ed alcuni altri animali hanno una probabilità di "
+"rilasciare del cuoio, quando vengono uccisi."
 
 msgid "Getting Wood"
 msgstr "Duro Come il Legno"
@@ -100,18 +103,21 @@ msgstr "Duro Come il Legno"
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
+"Raccogli un elemento di legno dal pavimento.\n"
+"Suggerimento: Picchia il tronco di un albero finché non viene lanciato fuori "
+"come elemento."
 
 msgid "Who is Cutting Onions?"
 msgstr "Chi Ha Tagliato una Cipolla?"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "Raccogli dell'ossidiana piangente dal pavimento."
 
 msgid "Hidden in the Depths"
 msgstr "Celati in Profondità"
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr ""
+msgstr "Raccogli dei Detriti Antichi dal pavimento."
 
 msgid "The Next Generation"
 msgstr "La Nuova Generazione"
@@ -119,12 +125,14 @@ msgstr "La Nuova Generazione"
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
+"Impugna l'Uovo di Drago\n"
+"Suggerimento: Raccogli l'uovo dal pavimento e mettilo net tuo inventario."
 
 msgid "Sky's the Limit"
 msgstr "Nel Blu Dipinto di Blu"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
-msgstr ""
+msgstr "Trova le elitre e preparati a volare al di sopra ed oltre!"
 
 msgid "Acquire Hardware"
 msgstr "Ferri del Mestiere"
