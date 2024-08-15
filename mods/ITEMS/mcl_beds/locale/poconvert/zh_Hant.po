@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_beds/zh_Hant/>\n"
@@ -42,25 +42,25 @@ msgid "@1 Bed"
 msgstr "@1床"
 
 msgid "You can only sleep at night or during a thunderstorm."
-msgstr ""
+msgstr "你只能夠在晚上或雷雨時睡覺。"
 
 msgid "You can't sleep, the bed's too far away!"
-msgstr ""
+msgstr "你無法睡覺，床太遠了！"
 
 msgid "This bed is already occupied!"
-msgstr ""
+msgstr "此床已經被佔用了！"
 
 msgid "You have to stop moving before going to bed!"
-msgstr ""
+msgstr "你需要在睡覺前停止移動！"
 
 msgid "You can't sleep now, monsters are nearby!"
-msgstr ""
+msgstr "你現在無法睡覺，怪物就在附近！"
 
 msgid "You can't sleep, the bed is obstructed!"
-msgstr ""
+msgstr "你無法睡覺，床被堵住了！"
 
 msgid "It's too dangerous to sleep here!"
-msgstr ""
+msgstr "在這裏睡覺太危險了！"
 
 msgid "Leave bed"
 msgstr "下床"
@@ -69,10 +69,10 @@ msgid "Abort sleep"
 msgstr "中止睡覺"
 
 msgid "Chat:"
-msgstr ""
+msgstr "聊天："
 
 msgid "send!"
-msgstr ""
+msgstr "傳送！"
 
 msgid "Players in bed: @1/@2"
 msgstr "玩家已上床：@1／@2"
@@ -84,13 +84,13 @@ msgid "You're sleeping."
 msgstr "你正在睡覺。"
 
 msgid "You will fall asleep when all players are in bed."
-msgstr ""
+msgstr "當所有玩家都上床睡覺時你就會睡著。"
 
 msgid "You will fall asleep when @1% of all players are in bed."
-msgstr ""
+msgstr "當 @1% 的玩家都上床睡覺時你就會睡著。"
 
 msgid "You're in bed."
-msgstr ""
+msgstr "你在床上。"
 
 msgid "@1/@2 players currently in bed."
 msgstr "@1／@2 名玩家目前正在床上。"
@@ -108,7 +108,7 @@ msgid "Hey! Would you guys mind sleeping?"
 msgstr ""
 
 msgid "New respawn position set!"
-msgstr ""
+msgstr "新的重生位置已設定！"
 
 msgid "Respawn Anchor"
 msgstr "重生錨"
