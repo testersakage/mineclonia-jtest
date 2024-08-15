@@ -58,16 +58,15 @@ local function fill_bundle(bundlestack, itemstring, player)
         else
             minetest.add_item(player:get_pos(), new_stack)
         end
+        bundlestack:take_item()
     else
         bundlestack:get_meta():set_string("inventory", inv_data)
     end
-    bundlestack:take_item()
     return bundlestack
 end
 
 local function unfill_bundle(bundlestack, player)
     -- TODO:
-    --  Fix bugs and clean up the code
     --  Add sounds
     local inv = player:get_inventory()
     local bundle_inv = get_bundle_inv(bundlestack)
