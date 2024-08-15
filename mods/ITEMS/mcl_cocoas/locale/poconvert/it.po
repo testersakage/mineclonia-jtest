@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_cocoas x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-14 08:15+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: Pietro Cappuccino <erisMT@users.noreply.translate.codeberg."
 "org>\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -16,23 +16,23 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "Premature Cocoa Pod"
-msgstr "Fava di Cacao Prematura"
+msgstr "Fave di Cacao Premature"
 
 msgid "Cocoa pods grow on the side of jungle trees in 3 stages."
 msgstr ""
 "Le fave di cacao crescono sul lato degli alberi della giungla in 3 stadi."
 
 msgid "Medium Cocoa Pod"
-msgstr ""
+msgstr "Fave di Cacao Medie"
 
 msgid "Mature Cocoa Pod"
-msgstr ""
+msgstr "Fave di Cacao Mature"
 
 msgid "A mature cocoa pod grew on a jungle tree to its full size and it is ready to be harvested for cocoa beans. It won't grow any further."
 msgstr ""
 
 msgid "Cocoa Beans"
-msgstr ""
+msgstr "Fave di Cacao"
 
 msgid "Grows at the side of jungle trees"
 msgstr ""
