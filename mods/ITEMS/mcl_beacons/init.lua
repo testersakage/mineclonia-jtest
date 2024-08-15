@@ -1,12 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
---[[
-there are strings in meta, which are being used to see which effect will be given to the player(s)
-Valid strings:
-	swiftness
-	leaping
-	strength
-	regeneration
-]]--
 
 mcl_beacons = {
 	blocks ={"mcl_core:diamondblock","mcl_core:ironblock","mcl_core:goldblock","mcl_core:emeraldblock","mcl_nether:netheriteblock"},
@@ -221,30 +213,17 @@ local function allow_metadata_inventory_move()
 	return 0
 end
 
-local effect_symbols = {
-    swiftness = "mcl_potions_effect_swift.png",
-    leaping = "mcl_potions_effect_leaping.png",
-    strength = "mcl_potions_effect_strong.png",
-    regeneration = "mcl_potions_effect_regenerating.png",
-}
-
-local effect_names = {
-    swiftness = S("Swiftness"),
-    leaping = S("Leaping"),
-    strength = S("Strength"),
-    regeneration = S("Regeneration"),
-}
-
 local open_beacons = {}
 
 local function upgrade_effect_level_button (oldmeta)
     local effect = oldmeta:get_string ("effect")
     if effect and effect ~= "" then
-	local tooltip = (effect_names[effect] or "???") .. " II"
-	return ("image_button[9.5,3.5;1,1;"
-		.. (effect_symbols[effect] or "unknown.png")
+	local pdef = mcl_potions.registered_effects[effect] or { }
+	local tooltip = (pdef.description or "???") .. " II"
+	return ("image_button[8.5,3.5;1,1;"
+		.. (pdef.icon or "unknown.png")
 		.. ";upgrade_ii;]"
-		.. "tooltip[9.5,3.5;1,1;" .. tooltip .. "]")
+		.. "tooltip[8.5,3.5;1,1;" .. tooltip .. "]")
     else
 	return ""
     end
@@ -259,10 +238,12 @@ local function generate_beacon_formspec (pos, meta)
 	    .. "image[1,3;1,1;custom_beacon_symbol_3.png]"
 	    .. "image[1,4.5;1,1;custom_beacon_symbol_2.png]"
 	    .. "image[6,3.5;1,1;custom_beacon_symbol_1.png]"
-	    .. "image_button[3.2,1.5;1,1;mcl_potions_effect_swift.png;swiftness;]"
-	    .. "image_button[3.2,3;1,1;mcl_potions_effect_leaping.png;leaping;]"
-	    .. "image_button[3.2,4.5;1,1;mcl_potions_effect_strong.png;strength;]"
-	    .. "image_button[8.2,3.5;1,1;mcl_potions_effect_regenerating.png;regeneration;]"
+	    .. "image_button[2.5,1.5;1,1;mcl_potions_effect_swift.png;swiftness;]"
+	    .. "image_button[3.5,1.5;1,1;mcl_potions_effect_haste.png;haste;]"
+	    .. "image_button[2.5,3;1,1;mcl_potions_effect_resistance.png;resistance;]"
+	    .. "image_button[3.5,3;1,1;mcl_potions_effect_leaping.png;leaping;]"
+	    .. "image_button[3.0,4.5;1,1;mcl_potions_effect_strong.png;strength;]"
+	    .. "image_button[7.5,3.5;1,1;mcl_potions_effect_regenerating.png;regeneration;]"
 	    .. upgrade_effect_level_button (meta)
 	    .. "item_image[1,7;1,1;mcl_core:diamond]"
 	    .. "item_image[2.2,7;1,1;mcl_core:emerald]"
@@ -323,7 +304,6 @@ minetest.register_node("mcl_beacons:beacon", {
 })
 
 mesecon.register_mvps_stopper("mcl_beacons:beacon")
-mcl_wip.register_wip_item("mcl_beacons:beacon")
 
 function mcl_beacons.register_beaconblock (itemstring)--API function for other mods
 	table.insert(mcl_beacons.blocks, itemstring)
@@ -420,7 +400,8 @@ local function apply_beacon_formspec (sender, formname, fields)
 	return
     end
     if (fields.swiftness or fields.regeneration or fields.leaping
-	or fields.strength or fields.upgrade_ii) then
+	or fields.strength or fields.upgrade_ii or fields.resistance
+	or fields.haste) then
 	local power_level = beacon_blockcheck (pos)
 
 	if minetest.is_protected (pos, sender_name) then
@@ -458,8 +439,20 @@ local function apply_beacon_formspec (sender, formname, fields)
 		meta:set_int ("effect_level", 1)
 	    end
 	    successful = true
+	elseif fields.haste then
+	    meta:set_string ("effect", "haste")
+	    if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+		meta:set_int ("effect_level", 1)
+	    end
+	    successful = true
 	elseif fields.leaping and power_level >= 2 then
 	    meta:set_string ("effect", "leaping")
+	    if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+		meta:set_int ("effect_level", 1)
+	    end
+	    successful = true
+	elseif fields.resistance and power_level >= 2 then
+	    meta:set_string ("effect", "resistance")
 	    if minetest.get_meta (pos):get_int ("effect_level") < 1 then
 		meta:set_int ("effect_level", 1)
 	    end

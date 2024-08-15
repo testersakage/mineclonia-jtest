@@ -393,7 +393,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "swiftness",
 	description = S("Swiftness"),
-	icon = "mcl_potions_effect_speed.png",
+	icon = "mcl_potions_effect_swift.png",
 	get_tt = function(factor)
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
