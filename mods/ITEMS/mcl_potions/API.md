@@ -125,7 +125,6 @@ You can't register effects going by these names, because they are already used:
 * `regeneration`
 * `strength`
 * `weakness`
-* `weakness`
 * `dolphin_grace`
 * `leaping`
 * `slow_falling`
@@ -147,7 +146,7 @@ You can't register effects going by these names, because they are already used:
 * `frost`
 * `blindness`
 * `nausea`
-* `food_poisoning`
+* `hunger`
 * `saturation`
 * `haste`
 * `fatigue`
