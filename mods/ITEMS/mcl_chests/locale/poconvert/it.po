@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_chests x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-13 17:09+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: Pietro Cappuccino <erisMT@users.noreply.translate.codeberg."
 "org>\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -22,7 +22,7 @@ msgid "Inventory"
 msgstr "Inventario"
 
 msgid "Large Chest"
-msgstr ""
+msgstr "Baule Grande"
 
 msgid "To access its inventory, rightclick it. When broken, the items will drop out."
 msgstr ""
@@ -31,7 +31,7 @@ msgid "Chests are containers which provide 27 inventory slots. Chests can be tur
 msgstr ""
 
 msgid "27 inventory slots"
-msgstr ""
+msgstr "27 scompartimenti d'inventario"
 
 msgid "Can be combined to a large chest"
 msgstr ""
@@ -79,7 +79,7 @@ msgid "Purple Shulker Box"
 msgstr ""
 
 msgid "Light Blue Shulker Box"
-msgstr ""
+msgstr "Scatola di Shulker Azzurra"
 
 msgid "Blue Shulker Box"
 msgstr ""
