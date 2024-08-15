@@ -64,7 +64,8 @@ mcl_mobs.register_mob("mobs_mc:witherskeleton", {
 		chance = 40, -- 2.5% chance
 		min = 1,
 		max = 1,
-		looting = "rare",},
+		looting = "rare",
+		mob_head = true,},
 	},
 	animation = {
 		stand_start = 0,

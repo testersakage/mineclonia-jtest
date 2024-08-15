@@ -38,11 +38,11 @@ local drops_common = {
 local drops_zombie = table.copy(drops_common)
 table.insert(drops_zombie, {
 	-- Zombie Head
-	-- TODO: Only drop if killed by charged creeper
 	name = "mcl_heads:zombie",
 	chance = 200, -- 0.5%
 	min = 1,
 	max = 1,
+	mob_head = true,
 })
 
 local zombie = {
