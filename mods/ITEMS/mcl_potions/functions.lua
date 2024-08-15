@@ -50,7 +50,7 @@ local function generate_linear_fac_to_lvl(l1, l2)
 end
 
 local function generate_rational_lvl_to_fac(l1, l2)
-	local a = (l1 - l2) / 1.5
+	local a = (l1 - l2) * 2
 	local b = 2*l2 - l1
 	return function(level)
 		if level == 0 then return 0 end
@@ -217,6 +217,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "poison",
 	description = S("Poison"),
+	icon = "mcl_potions_effect_poisoned.png",
 	get_tt = function(factor)
 		return S("-1 HP / @1 s", factor)
 	end,
@@ -239,6 +240,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "regeneration",
 	description = S("Regeneration"),
+	icon = "mcl_potions_effect_regenerating.png",
 	get_tt = function(factor)
 		return S("+1 HP / @1 s", factor)
 	end,
@@ -264,6 +266,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "strength",
 	description = S("Strength"),
+	icon = "mcl_potions_effect_strong.png",
 	get_tt = function(factor)
 		return S("+@1% melee damage", 100*(factor-1))
 	end,
@@ -275,6 +278,7 @@ mcl_potions.register_effect({
 
 mcl_potions.register_effect({
 	name = "weakness",
+	icon = "mcl_potions_effect_weak.png",
 	description = S("Weakness"),
 	get_tt = function(factor)
 		return S("-@1% melee damage", 100*(1-factor))
@@ -389,6 +393,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "swiftness",
 	description = S("Swiftness"),
+	icon = "mcl_potions_effect_speed.png",
 	get_tt = function(factor)
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
@@ -410,6 +415,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "slowness",
 	description = S("Slowness"),
+	icon = "mcl_potions_effect_slow.png",
 	get_tt = function(factor)
 		return S("-@1% running speed", math.floor(factor*100))
 	end,
@@ -647,6 +653,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "fire_resistance",
 	description = S("Fire Resistance"),
+	icon = "mcl_potions_effect_fire_proof.png",
 	get_tt = function(factor)
 		return S("resistance to fire damage")
 	end,
@@ -770,7 +777,6 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
-		mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
 	end,
 	on_load = function(object, factor)
 		EF.blindness[object].vignette = object:hud_add({
@@ -780,21 +786,16 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
-		mcl_fovapi.apply_modifier(object, "mcl_potions:blindness")
 	end,
 	on_end = function(object)
-		mcl_fovapi.remove_modifier(object, "mcl_potions:blindness")
 		if not EF.blindness[object] then return end
 		object:hud_remove(EF.blindness[object].vignette)
 	end,
 	particle_color = "#686868",
 	uses_factor = false,
 })
-mcl_fovapi.register_modifier({
-	name = "mcl_potions:blindness",
-	fov_factor = 0.6,
-	time = 1,
-})
+
+-- TODO: FOV changes for the foregoing two effects.
 
 mcl_potions.register_effect({
 	name = "hunger",
@@ -845,12 +846,9 @@ mcl_potions.register_effect({
 	end,
 	on_hit_timer = function(object, factor, duration)
 		if EF.nausea[object].high then
-			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high", factor)
-			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_low", factor)
 			EF.nausea[object].high = false
 		else
-			mcl_fovapi.apply_modifier(object, "mcl_potions:nausea_high", factor)
-			mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low", factor)
+
 			EF.nausea[object].high = true
 		end
 	end,
@@ -858,24 +856,13 @@ mcl_potions.register_effect({
 		object:set_lighting({
 			saturation = 1.0,
 		})
-		mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_high")
-		mcl_fovapi.remove_modifier(object, "mcl_potions:nausea_low")
+
 	end,
 	particle_color = "#60AA30",
 	uses_factor = true,
 	lvl1_factor = 2,
 	lvl2_factor = 1,
 	timer_uses_factor = true,
-})
-mcl_fovapi.register_modifier({
-	name = "mcl_potions:nausea_high",
-	fov_factor = 2.2,
-	time = 1,
-})
-mcl_fovapi.register_modifier({
-	name = "mcl_potions:nausea_low",
-	fov_factor = 0.2,
-	time = 1,
 })
 
 mcl_potions.register_effect({
@@ -930,6 +917,8 @@ function mcl_potions.hf_update_internal(hand, object)
 	local meta = hand:get_meta()
 	local h_fac = mcl_potions.get_total_haste(object)
 	local f_fac = mcl_potions.get_total_fatigue(object)
+	-- Reset the capabilities of the hand to its default.
+	meta:set_tool_capabilities ()
 	local toolcaps = hand:get_tool_capabilities()
 	meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
 	return hand
@@ -1036,7 +1025,7 @@ function mcl_potions.update_haste_and_fatigue(player)
 		if f_fac ~= 1 then meta:set_float("mcl_potions:fatigue", 1 - f_fac)
 		else meta:set_string("mcl_potions:fatigue", "") end
 		meta:set_tool_capabilities()
-		mcl_enchanting.update_groupcaps(item)
+		mcl_enchanting.update_groupcaps(item, true)
 		if h_fac == 0 and f_fac == 1 then
 			player:set_wielded_item(item)
 			return
@@ -1273,9 +1262,12 @@ minetest.register_globalstep(function(dtime)
 			if not object or not EF[name][object] or EF[name][object].timer >= vals.dur or not object:get_pos() then
 				if effect.on_end then effect.on_end(object) end
 				EF[name][object] = nil
+				if item_speed_effects[effect] then
+				    item_speed_effects[effect][object] = nil
+				end
 				if effect.after_end then effect.after_end(object) end
 				if object:is_player() then
-					meta = object:get_meta()
+					local meta = object:get_meta()
 					meta:set_string("mcl_potions:_EF_"..name, "")
 					potions_set_hud(object)
 				else
@@ -1328,7 +1320,7 @@ function mcl_potions._reset_haste_fatigue_item_meta(player)
 			meta:set_string("mcl_potions:haste", "")
 			meta:set_string("mcl_potions:fatigue", "")
 			meta:set_tool_capabilities()
-			mcl_enchanting.update_groupcaps(item)
+			mcl_enchanting.update_groupcaps(item, true)
 		end
 	end
 	inv:set_lists(lists)
@@ -1354,6 +1346,9 @@ function mcl_potions._reset_effects(object, set_hud)
 	for name, effect in pairs(registered_effects) do
 		if EF[name][object] and effect.on_end then effect.on_end(object) end
 		if effect.after_end then table.insert(removed_effects, effect.after_end) end
+	end
+	for name, tbl in pairs (item_speed_effects) do
+	    tbl[object] = nil
 	end
 
 	mcl_potions._clear_cached_effect_data(object)
@@ -1534,6 +1529,9 @@ function mcl_potions.clear_effect(object, effect)
 		if def.on_end then def.on_end(object) end
 		EF[effect][object] = nil
 		if def.after_end then def.after_end(object) end
+	end
+	if item_speed_effects[effect] then
+	    item_speed_effects[effect][object] = nil
 	end
 	if not object:is_player() then return end
 	potions_set_hud(object)
@@ -1756,6 +1754,7 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 	end
 
 	if object:is_player() then potions_set_hud(object) end
+	return true
 end
 
 function mcl_potions.give_effect_by_level(name, object, level, duration, no_particles)

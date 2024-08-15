@@ -100,7 +100,7 @@ minetest.register_globalstep(function(dtime)
 					end
 
 					if vals.def.custom_effect
-						and vals.def.custom_effect(obj, (vals.potency+1) * mcl_potions.LINGERING_FACTOR, plus) then
+						and vals.def.custom_effect(obj, (vals.potency+1) * mcl_potions.LINGERING_FACTOR, vals.plus) then
 							applied = true
 					end
 
@@ -164,7 +164,6 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			end
 			return item
 		end,
-		stack_max = 1,
 		_on_dispense = function(_, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}

@@ -7,21 +7,6 @@ local S = minetest.get_translator(minetest.get_current_modname())
 -- ╚█████╔╝██║░░██║██║░░██║░░░██║░░░  ╚█████╔╝╚█████╔╝██║░╚═╝░██║██║░╚═╝░██║██║░░██║██║░╚███║██████╔╝██████╔╝
 -- ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░  ░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░╚═════╝░
 
-
-local get_chat_function = {}
-
-get_chat_function["poison"] = mcl_potions.poison_func
-get_chat_function["regeneration"] = mcl_potions.regeneration_func
-get_chat_function["invisibility"] = mcl_potions.invisiblility_func
-get_chat_function["fire_resistance"] = mcl_potions.fire_resistance_func
-get_chat_function["night_vision"] = mcl_potions.night_vision_func
-get_chat_function["water_breathing"] = mcl_potions.water_breathing_func
-get_chat_function["leaping"] = mcl_potions.leaping_func
-get_chat_function["swiftness"] = mcl_potions.swiftness_func
-get_chat_function["heal"] = mcl_potions.healing_func
-get_chat_function["bad_omen"] = mcl_potions.bad_omen_func
-get_chat_function["withering"] = mcl_potions.withering_func
-
 minetest.register_chatcommand("effect",{
 	params = S("<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"),
 	description = S("Add a status effect to yourself. Arguments: <effect>: name of status effect. Passing \"list\" as effect name lists available effects. Passing \"heal\" as effect name heals (or harms) by amount designed by the next parameter. Passing \"clear\" as effect name removes all effects. Passing \"remove\" as effect name removes the effect named by the next parameter. <duration>: duration in seconds. Passing \"INF\" as duration makes the effect infinite. (<heal-amount>: amount of healing when the effect is \"heal\", passing a negative value subtracts health. <effect>: name of a status effect to be removed when using \"remove\" as the previous parameter.) <level>: effect power determinant, bigger level results in more powerful effect for effects that depend on the level (no changes for other effects), defaults to 1, pass F to use low-level factor instead. <factor>: effect strength modifier, can mean different things depending on the effect, no changes for effects that do not depend on level/factor. NOPART at the end means no particles will be shown for this effect."),
@@ -87,7 +72,7 @@ minetest.register_chatcommand("effect",{
 
 		local inf = P[2] == "INF"
 
-		local nopart = false
+		local nopart
 		if P[3] == "F" then
 			nopart = P[5] == "NOPART"
 		else

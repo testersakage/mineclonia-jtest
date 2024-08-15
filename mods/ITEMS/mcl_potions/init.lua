@@ -385,17 +385,7 @@ local awkward_table = {
 	["mcl_mobitems:ghast_tear"] = "mcl_potions:regeneration",
 	["mcl_mobitems:spider_eye"] = "mcl_potions:poison",
 	["mcl_mobitems:rabbit_foot"] = "mcl_potions:leaping",
-
-	["mcl_flowers:fourleaf_clover"] = "mcl_potions:luck",
-	["mcl_farming:potato_item_poison"] = "mcl_potions:nausea",
 	["mcl_mobitems:phantom_membrane"] = "mcl_potions:slow_falling", -- TODO add phantom membranes
-	["mcl_core:apple_gold"] = "mcl_potions:resistance",
-
-	-- TODO darkness - sculk?
-	-- TODO absorption - water element?
-	-- TODO turtle master - earth element?
-	-- TODO frost - frost element?
-	-- TODO haste - air element?
 }
 -- API
 -- register a potion recipe brewed from awkward potion
@@ -433,10 +423,7 @@ end
 mcl_potions.register_ingredient_potion("mcl_potions:mundane", mundane_table)
 
 local thick_table = {
-	["mcl_crimson:shroomlight"] = "mcl_potions:glowing",
-	["mcl_mobitems:nether_star"] = "mcl_potions:ominous",
-	["mcl_mobitems:ink_sac"] = "mcl_potions:blindness",
-	["mcl_farming:carrot_item_gold"] = "mcl_potions:saturation",
+    -- Nothing here but crickets...
 }
 -- API
 -- register a potion recipe brewed from thick potion
@@ -491,11 +478,6 @@ local inversion_table = {
 	["mcl_potions:night_vision"] = "mcl_potions:invisibility",
 	["mcl_potions:poison"] = "mcl_potions:harming",
 	["mcl_potions:luck"] = "mcl_potions:bad_luck",
-	["mcl_potions:haste"] = "mcl_potions:fatigue",
-	["mcl_potions:saturation"] = "mcl_potions:food_poisoning",
-	["mcl_potions:slow_falling"] = "mcl_potions:levitation",
-	["mcl_potions:absorption"] = "mcl_potions:health_boost",
-	["mcl_potions:glowing"] = "mcl_potions:darkness", -- TODO remove after adding a direct recipe?
 }
 -- API
 function mcl_potions.register_inversion_recipe(input, output)

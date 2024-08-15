@@ -39,7 +39,7 @@ function mcl_enchanting.load_enchantments(itemstack, enchantments)
 				enchantment_def.on_enchant(itemstack, level)
 			end
 		end
-		mcl_enchanting.update_groupcaps(itemstack)
+		mcl_enchanting.update_groupcaps(itemstack, false)
 	end
 	tt.reload_itemstack_description(itemstack)
 end
@@ -61,7 +61,7 @@ function mcl_enchanting.get_enchantment_description(enchantment, level)
 	local enchantment_def = mcl_enchanting.enchantments[enchantment]
 	if enchantment_def then
 		return enchantment_def.name ..
-			(enchantment_def.max_level == 1 and "" or " " .. mcl_enchanting.roman_numerals.toRoman(level))
+			(enchantment_def.max_level == 1 and "" or " " .. mcl_util.to_roman(level))
 	end
 	return S("Unknown Enchantment")..": "..tostring(enchantment)
 end
@@ -287,7 +287,7 @@ local function get_after_use_callback(itemdef)
 		-- one too.
 		return function(itemstack, user, node, digparams)
 			itemdef.after_use(itemstack, user, node, digparams)
-			mcl_enchanting.update_groupcaps(itemstack)
+			mcl_enchanting.update_groupcaps(itemstack, false)
 		end
 	end
 
@@ -299,7 +299,7 @@ local function get_after_use_callback(itemdef)
 		end
 
 		--local enchantments = mcl_enchanting.get_enchantments(itemstack)
-		mcl_enchanting.update_groupcaps(itemstack)
+		mcl_enchanting.update_groupcaps(itemstack, false)
 	end
 end
 

@@ -297,7 +297,6 @@ mcl_events.register_event("raid",{
 	on_complete = function(self)
 		awards.unlock(self.player,"mcl:hero_of_the_village")
 		mcl_potions.clear_effect(minetest.get_player_by_name(self.player),"bad_omen")
-		make_firework(self.pos,os.time())
 	end,
 })
 

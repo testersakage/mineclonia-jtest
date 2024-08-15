@@ -335,17 +335,10 @@ end
 
 -- deal damage and effects when mob punched
 function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
-
-	if is_player then
-		-- is mob out of reach?
-		if vector.distance(mob_pos, player_pos) > 3 then
-			return
-		end
-		-- is mob protected?
-		if self.protected and minetest.is_protected(mob_pos, hitter:get_player_name()) then
-			return
-		end
-
+	local is_player = hitter and hitter:is_player()
+	local hitter_playername = is_player and hitter:get_player_name()
+	if hitter_playername and hitter_playername ~= "" then
+		doc.mark_entry_as_revealed(hitter_playername, "mobs", self.name)
 		mcl_potions.update_haste_and_fatigue(hitter)
 	end
 

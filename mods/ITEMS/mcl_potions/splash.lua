@@ -56,7 +56,6 @@ function mcl_potions.register_splash(name, descr, color, def)
 			end
 			return item
 		end,
-		stack_max = 1,
 		_on_dispense = function(_, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}

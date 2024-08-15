@@ -170,18 +170,10 @@ local function clear_obstructed_beam(pos)
 	return false
 end
 
-local function effect_player(effect,pos,power_level, effect_level,player)
+local function effect_player(effect, pos, power_level, effect_level,player)
 	local distance =  vector.distance(player:get_pos(), pos)
 	if distance > (power_level+1)*10 then return end
-	if effect == "swiftness" then
-		mcl_potions.swiftness_func(player,effect_level,16)
-	elseif effect == "leaping" then
-		mcl_potions.leaping_func(player, effect_level, 16)
-	elseif effect == "strength" then
-		mcl_potions.strength_func(player, effect_level, 16)
-	elseif effect == "regeneration" then
-		mcl_potions.regeneration_func(player, effect_level, 16)
-	end
+	mcl_potions.give_effect_by_level (effect, player, effect_level, 16)
 end
 
 local function apply_effects_to_all_players(pos)
@@ -203,7 +195,7 @@ local function apply_effects_to_all_players(pos)
             if not clear_obstructed_beam (pos) then
                 effect_player (effect_string, pos, power_level,
 			       effect_level, player)
-		if secondary and power_level == 4 then
+		if secondary and secondary ~= "" and power_level == 4 then
 		    effect_player (secondary, pos, power_level,
 				   1, player)
 		end
@@ -427,7 +419,6 @@ local function apply_beacon_formspec (sender, formname, fields)
     if not pos or minetest.get_node (pos).name ~= "mcl_beacons:beacon" then
 	return
     end
-    local meta = minetest.get_meta (pos)
     if (fields.swiftness or fields.regeneration or fields.leaping
 	or fields.strength or fields.upgrade_ii) then
 	local power_level = beacon_blockcheck (pos)

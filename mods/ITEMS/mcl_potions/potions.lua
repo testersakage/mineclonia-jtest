@@ -14,24 +14,6 @@ end
 local how_to_drink = S("Use the “Place” key to drink it.")
 local potion_intro = S("Drinking a potion gives you a particular effect or set of effects.")
 
-local function time_string(dur)
-	if not dur then
-		return nil
-	end
-	return math.floor(dur/60)..string.format(":%02d",math.floor(dur % 60))
-end
-local function perc_string(num)
-
-	local rem = math.floor((num-1.0)*100 + 0.1) % 5
-	local out = math.floor((num-1.0)*100 + 0.1) - rem
-
-	if (num - 1.0) < 0 then
-		return out.."%"
-	else
-		return "+"..out.."%"
-	end
-end
-
 
 -- ██████╗░███████╗░██████╗░██╗░██████╗████████╗███████╗██████╗░
 -- ██╔══██╗██╔════╝██╔════╝░██║██╔════╝╚══██╔══╝██╔════╝██╔══██╗
@@ -47,25 +29,6 @@ end
 -- ██║░░░░░╚█████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
 -- ╚═╝░░░░░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
-
-function return_on_use(def, effect, dur)
-	return function (itemstack, user, pointed_thing)
-		if pointed_thing.type == "node" then
-			local rc = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
-			if rc then return rc end
-		elseif pointed_thing.type == "object" then
-			return itemstack
-		end
-
-		def.on_use(user, effect, dur)
-		local old_name, old_count = itemstack:get_name(), itemstack:get_count()
-		itemstack = minetest.do_item_eat(0, "mcl_potions:glass_bottle", itemstack, user, pointed_thing)
-		if old_name ~= itemstack:get_name() or old_count ~= itemstack:get_count() then
-			mcl_potions._use_potion(itemstack, user, def.color)
-		end
-		return itemstack
-	end
-end
 
 local function generate_on_use(effects, color, on_use, custom_effect)
 	return function(itemstack, user, pointed_thing)
@@ -108,7 +71,7 @@ local function generate_on_use(effects, color, on_use, custom_effect)
 		if custom_effect then custom_effect(user, potency+1, plus) end
 
 		itemstack = minetest.do_item_eat(0, "mcl_potions:glass_bottle", itemstack, user, pointed_thing)
-		if itemstack then mcl_potions._use_potion(user, color) end
+		if itemstack then mcl_potions._use_potion(itemstack, user, color) end
 
 		return itemstack
 	end
@@ -311,35 +274,6 @@ function mcl_potions.register_potion(def)
 	mcl_potions.registered_potions[modname..":"..name] = internal_def
 end
 
-mcl_potions.register_potion({
-	name = "trolling",
-	desc_prefix = S("Mighty"),
-	desc_suffix = S("of Trolling"),
-	_tt = "trololo",
-	_dynamic_tt = function(level)
-		return "trolololoooololo"
-	end,
-	_longdesc = "Trolololololo",
-	stack_max = 2,
-	color = "#00AA00",
-	nocreative = true,
-	_effect_list = {
-		night_vision = {},
-		strength = {},
-		swiftness = {
-			uses_level = false,
-			level = 2,
-		},
-		poison = {
-			dur = 10,
-		},
-	},
-	default_potent_level = 5,
-	default_extend_level = 3,
-	custom_splash_effect = mcl_potions._extinguish_nearby_fire,
-	has_arrow = true,
-})
-
 -- ██████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗
 -- ██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║
 -- ██████╔╝██║░░██║░░░██║░░░██║██║░░██║██╔██╗██║
@@ -468,7 +402,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "withering",
-	desc_suffix = S("of Withering"),
+	desc_suffix = S("of Decay"),
 	_tt = nil,
 	_longdesc = S("Applies the withering effect which deals damage at a regular interval and can kill."),
 	color = "#292929",
@@ -575,92 +509,8 @@ mcl_potions.register_potion({
 })
 
 mcl_potions.register_potion({
-	name = "levitation",
-	desc_suffix = S("of Levitation"),
-	_tt = nil,
-	_longdesc = S("Floats body slowly upwards."),
-	color = "#420E7E",
-	_effect_list = {
-		levitation = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "darkness",
-	desc_suffix = S("of Darkness"),
-	_tt = nil,
-	_longdesc = S("Surrounds with darkness."),
-	color = "#000000",
-	_effect_list = {
-		darkness = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "glowing",
-	desc_suffix = S("of Glowing"),
-	_tt = nil,
-	_longdesc = S("Highlights for others to see."),
-	color = "#FFFF77",
-	_effect_list = {
-		glowing = {},
-	},
-	has_arrow = false, -- TODO add a spectral arrow instead (in mcl_bows?)
-})
-
-mcl_potions.register_potion({
-	name = "health_boost",
-	desc_suffix = S("of Health Boost"),
-	_tt = nil,
-	_longdesc = S("Increases health."),
-	color = "#BE1919",
-	_effect_list = {
-		health_boost = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "absorption",
-	desc_suffix = S("of Absorption"),
-	_tt = nil,
-	_longdesc = S("Absorbs some incoming damage."),
-	color = "#B59500",
-	_effect_list = {
-		absorption = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "resistance",
-	desc_suffix = S("of Resistance"),
-	_tt = nil,
-	_longdesc = S("Decreases damage taken."),
-	color = "#2552A5",
-	_effect_list = {
-		resistance = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "resistance",
-	desc_suffix = S("of Resistance"),
-	_tt = nil,
-	_longdesc = S("Decreases damage taken."),
-	color = "#2552A5",
-	_effect_list = {
-		resistance = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
 	name = "turtle_master",
-	desc_suffix = S("of Turtle Master"),
+	desc_suffix = S("of the Turtle Master"),
 	_tt = nil,
 	_longdesc = S("Decreases damage taken at the cost of speed."),
 	color = "#255235",
@@ -703,81 +553,6 @@ mcl_potions.register_potion({
 })
 
 mcl_potions.register_potion({
-	name = "blindness",
-	desc_suffix = S("of Blindness"),
-	_tt = nil,
-	_longdesc = S("Impairs sight."),
-	color = "#586868",
-	_effect_list = {
-		blindness = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "nausea",
-	desc_suffix = S("of Nausea"),
-	_tt = nil,
-	_longdesc = S("Disintegrates senses."),
-	color = "#715C7F",
-	_effect_list = {
-		nausea = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "food_poisoning",
-	desc_suffix = S("of Food Poisoning"),
-	_tt = nil,
-	_longdesc = S("Moves bowels too fast."),
-	color = "#83A061",
-	_effect_list = {
-		food_poisoning = {
-			dur = mcl_potions.DURATION_POISON,
-			effect_stacks = true,
-		},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "saturation",
-	desc_suffix = S("of Saturation"),
-	_tt = nil,
-	_longdesc = S("Satisfies hunger."),
-	color = "#CEAE29",
-	_effect_list = {
-		saturation = {dur=mcl_potions.DURATION_POISON},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "haste",
-	desc_suffix = S("of Haste"),
-	_tt = nil,
-	_longdesc = S("Increases digging and attack speed."),
-	color = "#FFFF00",
-	_effect_list = {
-		haste = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
-	name = "fatigue",
-	desc_suffix = S("of Fatigue"),
-	_tt = nil,
-	_longdesc = S("Decreases digging and attack speed."),
-	color = "#64643D",
-	_effect_list = {
-		fatigue = {},
-	},
-	has_arrow = true,
-})
-
-mcl_potions.register_potion({
 	name = "ominous",
 	desc_prefix = S("Ominous"),
 	_tt = nil,
@@ -793,8 +568,6 @@ mcl_potions.register_potion({
 	has_splash = false,
 	has_lingering = false,
 })
-
-
 
 
 -- COMPAT CODE

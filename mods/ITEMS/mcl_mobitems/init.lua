@@ -135,7 +135,7 @@ local function drink_milk(itemstack, player, pointed_thing)
 	if mcl_hunger.active and (bucket:get_name() ~= "mcl_mobitems:milk_bucket" or minetest.is_creative_enabled(player:get_player_name())) then
 		mcl_hunger.stop_poison(player)
 	end
-	mcl_potions._reset_player_effects(player)
+	mcl_potions._reset_effects(player)
 	return bucket
 end
 
