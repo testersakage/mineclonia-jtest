@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_tools x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-13 17:09+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_tools/zh_Hant/>\n"
@@ -60,7 +60,7 @@ msgid "Diamond Pickaxe"
 msgstr ""
 
 msgid "Netherite Pickaxe"
-msgstr ""
+msgstr "獄髓鎬"
 
 msgid "Wooden Shovel"
 msgstr ""
@@ -78,7 +78,7 @@ msgid "Diamond Shovel"
 msgstr ""
 
 msgid "Netherite Shovel"
-msgstr ""
+msgstr "獄髓鏟"
 
 msgid "Wooden Axe"
 msgstr ""
@@ -96,25 +96,25 @@ msgid "Diamond Axe"
 msgstr ""
 
 msgid "Netherite Axe"
-msgstr ""
+msgstr "獄髓斧"
 
 msgid "Wooden Sword"
-msgstr ""
+msgstr "木劍"
 
 msgid "Stone Sword"
-msgstr ""
+msgstr "石劍"
 
 msgid "Iron Sword"
-msgstr ""
+msgstr "鐵劍"
 
 msgid "Golden Sword"
 msgstr "金劍"
 
 msgid "Diamond Sword"
-msgstr ""
+msgstr "鑽石劍"
 
 msgid "Netherite Sword"
-msgstr ""
+msgstr "獄髓劍"
 
 msgid "Shears"
 msgstr ""
