@@ -1062,7 +1062,7 @@ end)
 -- ██║░░██║╚██████╔╝██████╦╝
 -- ╚═╝░░╚═╝░╚═════╝░╚═════╝░
 
-hb.register_hudbar("absorption", 0xFFFFFF, S("Absorption"), {bar = "[fill:2x16:#B59500", icon = "mcl_potions_icon_absorb.png"}, 0, 0, 0, false)
+hb.register_hudbar("absorption", 0xFFFFFF, S("Absorption"), {bar = "[fill:2x16:#B59500", icon = "mcl_potions_icon_absorb.png"}, 0, 0, false)
 
 local hp_hudbar_modifiers = {}
 
