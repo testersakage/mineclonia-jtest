@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-12 07:19+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_core/zh_Hant/>\n"
@@ -87,13 +87,13 @@ msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr ""
 
 msgid "Brick"
-msgstr ""
+msgstr "紅磚頭"
 
 msgid "Bricks are used to craft brick blocks."
 msgstr ""
 
 msgid "Flint"
-msgstr ""
+msgstr "燧石"
 
 msgid "Flint is a raw material."
 msgstr ""
@@ -126,7 +126,7 @@ msgid "Enchanted Golden Apple"
 msgstr "附魔金蘋果"
 
 msgid "Stone"
-msgstr ""
+msgstr "石頭"
 
 msgid "One of the most common blocks in the world, almost the entire underground consists of stone. It sometimes contains ores. Stone may be created when water meets lava."
 msgstr ""
@@ -243,7 +243,7 @@ msgid "Grass paths are a decorative variant of grass blocks. Their top has a dif
 msgstr ""
 
 msgid "Mycelium"
-msgstr ""
+msgstr "菌絲土"
 
 msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other dirt-type blocks, it can not be turned into farmland with a hoe. In light, mycelium slowly spreads over nearby dirt. Under an opaque block or a liquid, it eventually turns back into dirt."
 msgstr ""
@@ -252,7 +252,7 @@ msgid "Mycelium with Snow"
 msgstr ""
 
 msgid "Podzol"
-msgstr ""
+msgstr "灰壤"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
 msgstr ""
@@ -261,7 +261,7 @@ msgid "Podzol with Snow"
 msgstr ""
 
 msgid "Dirt"
-msgstr ""
+msgstr "泥土"
 
 msgid "Dirt acts as a soil for a few plants. When in light, this block may grow a grass or mycelium cover if such blocks are nearby."
 msgstr ""
@@ -285,7 +285,7 @@ msgid "Sand is found in large quantities at beaches and deserts."
 msgstr ""
 
 msgid "Sandstone"
-msgstr ""
+msgstr "砂岩"
 
 msgid "Sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
@@ -339,7 +339,7 @@ msgid "Smooth red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Clay"
-msgstr ""
+msgstr "黏土"
 
 msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
 msgstr ""
@@ -351,7 +351,7 @@ msgid "Brick blocks are a good building material for building solid houses and c
 msgstr ""
 
 msgid "Bedrock"
-msgstr ""
+msgstr "基岩"
 
 msgid "Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode."
 msgstr ""
@@ -360,7 +360,7 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr ""
 
 msgid "Cobblestone"
-msgstr ""
+msgstr "鵝卵石"
 
 msgid "Mossy Cobblestone"
 msgstr ""
@@ -402,13 +402,13 @@ msgid "A block of emerald is mostly a shiny decorative block but also useful as 
 msgstr ""
 
 msgid "Obsidian"
-msgstr ""
+msgstr "黑曜石"
 
 msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance. Obsidian is formed when water meets lava."
 msgstr ""
 
 msgid "Crying Obsidian"
-msgstr ""
+msgstr "哭泣的黑曜石"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
 msgstr ""
@@ -435,7 +435,7 @@ msgid "Top Snow"
 msgstr ""
 
 msgid "Stackable"
-msgstr ""
+msgstr "可堆疊物品"
 
 msgid "Top snow is a layer of snow. It melts near light sources other than the sun with a light level of 12 or higher."
 msgstr ""
@@ -447,13 +447,13 @@ msgid "This block can only be placed on full solid blocks and on another top sno
 msgstr ""
 
 msgid "Snow"
-msgstr ""
+msgstr "雪"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
 msgstr ""
 
 msgid "Cactus"
-msgstr ""
+msgstr "仙人掌"
 
 msgid "Grows on sand"
 msgstr ""
@@ -486,13 +486,13 @@ msgid "A piece of ladder which allows you to climb vertically. Ladders can only 
 msgstr ""
 
 msgid "Vines"
-msgstr ""
+msgstr "藤蔓"
 
 msgid "Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."
 msgstr ""
 
 msgid "Glass"
-msgstr ""
+msgstr "玻璃"
 
 msgid "A decorative and mostly transparent block."
 msgstr ""
@@ -513,7 +513,7 @@ msgid "Water Source"
 msgstr ""
 
 msgid "Water"
-msgstr ""
+msgstr "水"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
 msgstr ""
@@ -564,7 +564,7 @@ msgid "Slime blocks are very bouncy and prevent fall damage."
 msgstr ""
 
 msgid "Cobweb"
-msgstr ""
+msgstr "蜘蛛網"
 
 msgid "Slows down movement"
 msgstr ""
@@ -579,7 +579,7 @@ msgid "Dead bushes are unremarkable plants often found in dry areas. They can be
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "屏障"
 
 msgid "Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."
 msgstr ""
@@ -600,7 +600,7 @@ msgid "When you hold a light in hand, you reveal all placed lights in a short di
 msgstr ""
 
 msgid "Void"
-msgstr ""
+msgstr "虛空"
 
 msgid "Stone Stairs"
 msgstr ""
