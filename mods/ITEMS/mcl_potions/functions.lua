@@ -839,11 +839,9 @@ function mcl_potions.poison_func(player, factor, duration)
 	return mcl_potions.give_effect("poison", player, factor, duration)
 end
 
-
 function mcl_potions.regeneration_func(player, factor, duration)
 	return mcl_potions.give_effect("regeneration", player, factor, duration)
 end
-
 
 function mcl_potions.invisiblility_func(player, null, duration)
 	return mcl_potions.give_effect("invisibility", player, null, duration)
