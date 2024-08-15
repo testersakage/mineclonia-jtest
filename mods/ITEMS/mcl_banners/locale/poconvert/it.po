@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-14 08:15+0000\n"
+"PO-Revision-Date: 2024-08-15 18:36+0000\n"
 "Last-Translator: Pietro Cappuccino <erisMT@users.noreply.translate.codeberg."
 "org>\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -22,10 +22,10 @@ msgid "White"
 msgstr "Bianco"
 
 msgid "Grey Banner"
-msgstr ""
+msgstr "Stendardo Grigio"
 
 msgid "Grey"
-msgstr ""
+msgstr "Grigio"
 
 msgid "Light Grey Banner"
 msgstr ""
@@ -37,49 +37,49 @@ msgid "Black Banner"
 msgstr ""
 
 msgid "Black"
-msgstr ""
+msgstr "Nero"
 
 msgid "Red Banner"
 msgstr ""
 
 msgid "Red"
-msgstr ""
+msgstr "Rosso"
 
 msgid "Yellow Banner"
 msgstr ""
 
 msgid "Yellow"
-msgstr ""
+msgstr "Giallo"
 
 msgid "Green Banner"
 msgstr ""
 
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "Cyan Banner"
 msgstr ""
 
 msgid "Cyan"
-msgstr ""
+msgstr "Ciano"
 
 msgid "Blue Banner"
 msgstr ""
 
 msgid "Blue"
-msgstr ""
+msgstr "Blu"
 
 msgid "Magenta Banner"
 msgstr ""
 
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 msgid "Orange Banner"
 msgstr ""
 
 msgid "Orange"
-msgstr ""
+msgstr "Arancione"
 
 msgid "Purple Banner"
 msgstr ""
@@ -91,25 +91,25 @@ msgid "Brown Banner"
 msgstr ""
 
 msgid "Brown"
-msgstr ""
+msgstr "Marrone"
 
 msgid "Pink Banner"
 msgstr ""
 
 msgid "Pink"
-msgstr ""
+msgstr "Rosa"
 
 msgid "Lime Banner"
 msgstr ""
 
 msgid "Lime"
-msgstr ""
+msgstr "Lime"
 
 msgid "Light Blue Banner"
-msgstr ""
+msgstr "Stendardo Azzurro"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "Azzurro"
 
 msgid "Banner"
 msgstr ""
