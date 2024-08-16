@@ -204,6 +204,7 @@ end
 mcl_potions.register_effect({
 	name = "invisibility",
 	description = S("Invisiblity"),
+	icon = "mcl_potions_effect_invisible.png",
 	get_tt = function(factor)
 		return S("body is invisible")
 	end,
