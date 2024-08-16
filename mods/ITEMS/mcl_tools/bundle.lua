@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_bundles")
+local S = minetest.get_translator("mcl_tools")
 local MAX_STACK_POINTS = 256
 
 local function get_stack_points(itemstring)
@@ -97,7 +97,7 @@ local function use_bundle(itemstack, placer, pointed_thing)
     return itemstack
 end
 
-minetest.register_craftitem("mcl_bundles:bundle", {
+minetest.register_tool("mcl_tools:bundle", {
     description = S("Bundle"),
     _doc_items_longdesc = S("A bundle is an item that can store up to a stack's worth of mixed item types within itself in a single inventory slot."),
     _doc_items_usagehelp = S("Right-click on items dropped on the ground to collect them. To empty the bundle, use it to point to a node or point to nothing."),
@@ -109,12 +109,12 @@ minetest.register_craftitem("mcl_bundles:bundle", {
     },
     on_place = use_bundle,
     on_secondary_use = use_bundle,
-    inventory_image = "mcl_bundles_bundle.png",
-    wield_image = "mcl_bundles_bundle.png",
+    inventory_image = "mcl_tools_bundle.png",
+    wield_image = "mcl_tools_bundle.png",
     stack_max = 16
 })
 
-minetest.register_craftitem("mcl_bundles:bundle_filled", {
+minetest.register_tool("mcl_tools:bundle_filled", {
     description = S("Bundle"),
     groups = { not_in_creative_inventory = 1 },
     pointabilities = {
@@ -122,18 +122,17 @@ minetest.register_craftitem("mcl_bundles:bundle_filled", {
             ["__builtin:item"] = true
         }
     },
+    wear_color = {
+        blend = "linear",
+        color_stops = {
+            [0.0] = "#3A7DFF",
+            [0.5] = "#3FAE51",
+            [1.0] = "#BA1E1E"
+        }
+    },
     on_place = use_bundle,
     on_secondary_use = use_bundle,
-    inventory_image = "mcl_bundles_bundle_filled.png",
-    wield_image = "mcl_bundles_bundle_filled.png",
+    inventory_image = "mcl_tools_bundle_filled.png",
+    wield_image = "mcl_tools_bundle_filled.png",
     stack_max = 1
-})
-
-minetest.register_craft({
-    output = "mcl_bundles:bundle",
-    recipe = {
-        {"mcl_mobitems:rabbit_hide", "mcl_mobitems:string", "mcl_mobitems:rabbit_hide"},
-        {"mcl_mobitems:rabbit_hide", "", "mcl_mobitems:rabbit_hide"},
-        {"mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide"}
-    }
 })

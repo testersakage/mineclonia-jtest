@@ -700,8 +700,10 @@ minetest.register_tool("mcl_tools:mace", {
 	end,
 })
 
+dofile(modpath.."/bundle.lua")
 dofile(modpath.."/heavy_core.lua")
 dofile(modpath.."/crafting.lua")
+
 
 minetest.register_on_leaveplayer(function(player)
 	mcl_tools.mace_cooldown[player] = nil

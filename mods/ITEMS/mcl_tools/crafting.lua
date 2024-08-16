@@ -239,3 +239,13 @@ minetest.register_craft({
 		{ "", "mcl_mobitems:breeze_rod" },
 	}
 })
+
+-- Bundle
+minetest.register_craft({
+    output = "mcl_tools:bundle",
+    recipe = {
+        {"mcl_mobitems:rabbit_hide", "mcl_mobitems:string", "mcl_mobitems:rabbit_hide"},
+        {"mcl_mobitems:rabbit_hide", "", "mcl_mobitems:rabbit_hide"},
+        {"mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide"}
+    }
+})
