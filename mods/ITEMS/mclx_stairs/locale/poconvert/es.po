@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-16 07:49+0000\n"
+"PO-Revision-Date: 2024-08-17 07:41+0000\n"
 "Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mclx_stairs/es/>\n"
@@ -42,40 +42,40 @@ msgid "Cracked Deepslate Brick Stairs"
 msgstr "Escaleras de ladrillo de pizarra profunda agrietadas"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr ""
+msgstr "Losa de ladrillo de pizarra profunda agrietada"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr ""
+msgstr "Escaleras de baldosas de pizarra profunda agrietadas"
 
 msgid "Cracked Deepslate Tile Slab"
-msgstr ""
+msgstr "Losa de baldosas de pizarra profunda agrietada"
 
 msgid "End Stone Stairs"
-msgstr ""
+msgstr "Escaleras de piedra del End"
 
 msgid "End Stone Slab"
-msgstr ""
+msgstr "Losa de piedra del End"
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "Escaleras de piedra lisa"
 
 msgid "Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota"
 
 msgid "Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota"
 
 msgid "@1 Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón @1"
 
 msgid "@1 Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón @1"
 
 msgid "@1 Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota @1"
 
 msgid "@1 Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota @1"
 
 msgid "Concrete Slab"
 msgstr "Losa de hormigón"
@@ -87,4 +87,4 @@ msgid "Concrete Stairs"
 msgstr "Escaleras de hormigón"
 
 msgid "Double Terracotta Slab"
-msgstr ""
+msgstr "Losa doble de terracota"
