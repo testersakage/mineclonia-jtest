@@ -745,7 +745,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "hero_of_village",
 	description = S("Hero of the Village"),
-	particle_color = "#006D2A",
+	particle_color = "#44FF44",
 })
 
 mcl_potions.register_effect({

@@ -68,6 +68,7 @@ end
 -- required parameters in def:
 -- name - string - potion name in code
 -- optional parameters in def:
+-- desc_whole - translated string - overrides entire potion name, including the word "Potion"
 -- desc_prefix - translated string - part of visible potion name, comes before the word "Potion"
 -- desc_suffix - translated string - part of visible potion name, comes after the word "Potion"
 -- _tt - translated string - custom tooltip text
@@ -114,7 +115,9 @@ function mcl_potions.register_potion(def)
 		error("Unable to register potion: name is not a string")
 	end
 	local pdef = {}
-	if def.desc_prefix and def.desc_suffix then
+	if def.desc_whole then
+		pdef.description = def.desc_whole
+	elseif def.desc_prefix and def.desc_suffix then
 		pdef.description = S("@1 Potion @2", def.desc_prefix, def.desc_suffix)
 	elseif def.desc_prefix then
 		pdef.description = S("@1 Potion", def.desc_prefix)
@@ -561,7 +564,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "ominous",
-	desc_prefix = S("Ominous"),
+	desc_whole = S("Ominous Bottle"),
 	_tt = nil,
 	_longdesc = S("Attracts danger."),
 	image = table.concat({
@@ -570,7 +573,7 @@ mcl_potions.register_potion({
 		"^mcl_potions_potion_bottle.png",
 	}),
 	_effect_list = {
-		bad_omen = {dur = 6000},
+		bad_omen = {dur = 6000, dur_variable = false,},
 	},
 	has_splash = false,
 	has_lingering = false,

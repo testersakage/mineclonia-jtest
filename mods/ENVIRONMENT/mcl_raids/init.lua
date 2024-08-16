@@ -258,13 +258,11 @@ mcl_events.register_event("raid",{
 	exclusive_to_area = 128,
 	enable_bossbar = true,
 	cond_start  = function()
-		--minetest.log("Cond start raid")
 		local r = {}
 		for _,p in pairs(minetest.get_connected_players()) do
 			if mcl_potions.has_effect(p,"bad_omen") then
 				local raid_pos = mcl_raids.find_village(p:get_pos())
 				if raid_pos then
-					--minetest.log("We have a raid position. Start raid")
 					table.insert(r,{ player = p:get_player_name(), pos = raid_pos })
 				end
 			end
@@ -276,7 +274,7 @@ mcl_events.register_event("raid",{
 		self.health_max = 1
 		self.health = 0
 		local lv = mcl_potions.get_effect_level(minetest.get_player_by_name(self.player), "bad_omen")
-		if lv and lv.factor and lv.factor > 1 then self.max_stage = 6 end
+		if lv and lv > 1 then self.max_stage = 6 end
 	end,
 	cond_progress = function(self)
 		if not is_player_near(self) then return false end
@@ -295,8 +293,13 @@ mcl_events.register_event("raid",{
 		return self.stage >= self.max_stage and #self.mobs < 1
 	end,
 	on_complete = function(self)
-		awards.unlock(self.player,"mcl:hero_of_the_village")
-		mcl_potions.clear_effect(minetest.get_player_by_name(self.player),"bad_omen")
+	    local player = minetest.get_player_by_name (self.player)
+	    awards.unlock (self.player,"mcl:hero_of_the_village")
+
+	    if player then
+		mcl_potions.clear_effect (player, "bad_omen")
+		mcl_potions.give_effect ("hero_of_village", player, 0, false)
+	    end
 	end,
 })
 
