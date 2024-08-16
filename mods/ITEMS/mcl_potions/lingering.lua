@@ -164,7 +164,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			end
 			return item
 		end,
-		_on_dispense = function(_, dispenserpos, _, _, dropdir)
+		_on_dispense = function(item, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
