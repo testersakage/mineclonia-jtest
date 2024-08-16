@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-11 12:06+0000\n"
+"PO-Revision-Date: 2024-08-16 07:50+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.codeberg.org/"
 "projects/mineclonia/mcl_banners/zh_Hant/>\n"
@@ -15,103 +15,103 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "White Banner"
-msgstr ""
+msgstr "白色旗幟"
 
 msgid "White"
-msgstr ""
+msgstr "白色"
 
 msgid "Grey Banner"
-msgstr ""
+msgstr "灰色旗幟"
 
 msgid "Grey"
-msgstr ""
+msgstr "灰色"
 
 msgid "Light Grey Banner"
-msgstr ""
+msgstr "淺灰色旗幟"
 
 msgid "Light Grey"
-msgstr ""
+msgstr "淺灰色"
 
 msgid "Black Banner"
-msgstr ""
+msgstr "黑色旗幟"
 
 msgid "Black"
-msgstr ""
+msgstr "黑色"
 
 msgid "Red Banner"
-msgstr ""
+msgstr "紅色旗幟"
 
 msgid "Red"
 msgstr "紅色"
 
 msgid "Yellow Banner"
-msgstr ""
+msgstr "黃色旗幟"
 
 msgid "Yellow"
 msgstr "黃色"
 
 msgid "Green Banner"
-msgstr ""
+msgstr "綠色旗幟"
 
 msgid "Green"
 msgstr "綠色"
 
 msgid "Cyan Banner"
-msgstr ""
+msgstr "青色旗幟"
 
 msgid "Cyan"
 msgstr "青色"
 
 msgid "Blue Banner"
-msgstr ""
+msgstr "藍色旗幟"
 
 msgid "Blue"
-msgstr ""
+msgstr "藍色"
 
 msgid "Magenta Banner"
-msgstr ""
+msgstr "洋紅色旗幟"
 
 msgid "Magenta"
 msgstr "洋紅色"
 
 msgid "Orange Banner"
-msgstr ""
+msgstr "橘色旗幟"
 
 msgid "Orange"
 msgstr "橘色"
 
 msgid "Purple Banner"
-msgstr ""
+msgstr "紫色旗幟"
 
 msgid "Violet"
 msgstr ""
 
 msgid "Brown Banner"
-msgstr ""
+msgstr "棕色旗幟"
 
 msgid "Brown"
 msgstr "棕色"
 
 msgid "Pink Banner"
-msgstr ""
+msgstr "粉紅色旗幟"
 
 msgid "Pink"
 msgstr "粉紅色"
 
 msgid "Lime Banner"
-msgstr ""
+msgstr "淺綠色旗幟"
 
 msgid "Lime"
 msgstr "淺綠色"
 
 msgid "Light Blue Banner"
-msgstr ""
+msgstr "淺藍色旗幟"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "淺藍色"
 
 msgid "Banner"
-msgstr ""
+msgstr "旗幟"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns using a lot of dye in crafting."
 msgstr ""
@@ -123,19 +123,19 @@ msgid "You can copy the pattern of a banner by placing two banners of the same c
 msgstr ""
 
 msgid "@1 Banner"
-msgstr ""
+msgstr "@1旗幟"
 
 msgid "Preview Banner"
-msgstr ""
+msgstr "預覽旗幟"
 
 msgid "Paintable decoration"
-msgstr ""
+msgstr "可塗裝裝飾"
 
 msgid "Can be used to craft special banner designs on the loom"
 msgstr ""
 
 msgid "Special Banner Pattern"
-msgstr ""
+msgstr "特殊旗幟圖案"
 
 msgid "@1 Bordure"
 msgstr ""
