@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-15 05:31+0000\n"
+"PO-Revision-Date: 2024-08-17 07:41+0000\n"
 "Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc/es/>\n"
@@ -15,31 +15,35 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
-msgstr ""
+msgstr "El agua puede entrar en este bloque y hacer que caiga como una ítem."
 
 msgid "This block can be turned into dirt with a hoe."
-msgstr ""
+msgstr "Este bloque se puede convertir en tierra con una azada."
 
 msgid "This block can be turned into farmland with a hoe."
-msgstr ""
+msgstr "Este bloque se puede convertir en tierra de cultivo con una azada."
 
 msgid "This block can be turned into grass path with a shovel."
-msgstr ""
+msgstr "Este bloque se puede convertir en un camino de césped con una pala."
 
 msgid "This block acts as a soil for all saplings."
-msgstr ""
+msgstr "Este bloque actúa como suelo para todos los arbolitos."
 
 msgid "This block acts as a soil for some saplings."
-msgstr ""
+msgstr "Este bloque sirve de suelo para algunos brotes de arbol."
 
 msgid "Sugar canes will grow on this block."
-msgstr ""
+msgstr "En este bloque puede crecer cañas de azúcar."
 
 msgid "Nether wart will grow on this block."
-msgstr ""
+msgstr "En este bloque puede crecer una verruga del Nether."
 
 msgid "This block quickly decays when there is no wood block of any species within a distance of @1. When decaying, it disappears and may drop one of its regular drops. The block does not decay when the block has been placed by a player."
 msgstr ""
+"Este bloque se desintegra rápidamente cuando no hay bloques de madera de "
+"ningún tipo a menos de @1 de él. Cuando se descompone, desaparece y puede "
+"liberar uno de sus objetos habituales. El bloque no se desintegra cuando lo "
+"coloca un jugador."
 
 msgid "This block quickly decays and disappears when there is no wood block of any species within a distance of @1. The block does not decay when the block has been placed by a player."
 msgstr ""
