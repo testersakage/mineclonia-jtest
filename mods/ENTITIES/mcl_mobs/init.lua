@@ -41,7 +41,6 @@ mcl_mobs.mob_class = {
 	order = "",
 	jump_height = 4, -- was 6
 	rotate = 0, --  0=front, 90=side, 180=back, 270=side2
-	lifetimer = 57.73,
 	xp_min = 0,
 	xp_max = 0,
 	xp_timestamp = 0,

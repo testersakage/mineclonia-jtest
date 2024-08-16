@@ -18,6 +18,12 @@ local dbg_spawn_counts = {}
 local aoc_range = 136
 local remove_far = true
 
+local timer_light = 30
+local timer_dark = 10
+local timer_light_level = 3
+local instant_despawn_range = 128
+local random_despawn_range = 32
+
 local mob_cap = {
 	monster = tonumber(minetest.settings:get("mcl_mob_cap_monster")) or 70,
 	animal = tonumber(minetest.settings:get("mcl_mob_cap_animal")) or 10,
@@ -556,25 +562,48 @@ if mobs_spawn then
 end
 
 function mob_class:check_despawn(pos, dtime)
-	self.lifetimer = self.lifetimer - dtime
-
-	-- Despawning: when lifetimer expires, remove mob
 	if remove_far and self:despawn_allowed() then
-		if self.despawn_immediately or self.lifetimer <= 0 then
-			if logging then
-				minetest.log("action", "[mcl_mobs] Mob "..self.name.." despawns at "..minetest.pos_to_string(pos, 1) .. " lifetimer ran out")
-			end
-			mcl_burning.extinguish(self.object)
-			self:safe_remove()
-			return true
-		elseif self.lifetimer <= 10 then
-			if math.random(10) < 4 then
-				self.despawn_immediately = true
-			else
-				self.lifetimer = 20
+		local min_dist = 10000
+		local my_pos = self.object:get_pos()
+
+		-- hmm is it better to loop through local objects or connected players?
+		for obj in minetest.objects_inside_radius(my_pos, 128) do
+			if obj:is_player() then
+				local dist = vector.distance(obj:get_pos(), my_pos)
+				min_dist = math.min(min_dist, dist)
 			end
 		end
+
+		if min_dist > instant_despawn_range then
+			self:kill_me("no players within " .. instant_despawn_range)
+			return true
+		elseif min_dist > random_despawn_range then
+			if self.lifetimer then
+				self.lifetimer = self.lifetimer - dtime
+			else
+				if minetest.get_node_light(my_pos) < timer_light_level then
+					self.lifetimer = timer_dark
+				else
+					self.lifetimer = timer_light
+				end
+			end
+
+			if self.lifetimer <= 0 and math.random(1, 100) < 4 then
+				self:kill_me("player distance timeout and random chance")
+				return true
+			end
+		else
+			self.lifetimer = nil
+		end
 	end
+end
+
+function mob_class:kill_me(msg)
+	if logging then
+		minetest.log("action", "[mcl_mobs] Mob " .. self.name .. " despawns because " .. msg)
+	end
+
+	self:safe_remove()
 end
 
 minetest.register_chatcommand("spawn_mob",{

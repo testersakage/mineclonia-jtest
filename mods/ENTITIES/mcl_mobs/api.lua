@@ -9,8 +9,6 @@ local S = minetest.get_translator("mcl_mobs")
 -- Invisibility mod check
 mcl_mobs.invis = {}
 
-local remove_far = true
-local spawn_logging = minetest.settings:get_bool("mcl_logging_mobs_spawn", false)
 local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
 
 function mob_class:set_properties(prop)
@@ -78,17 +76,6 @@ function mob_class:get_staticdata()
 	if not mcl_mobs.check_vector(pos) then
 		self.object:remove()
 		return
-	end
-
-	-- remove mob when out of range unless tamed
-	if remove_far
-	and self:despawn_allowed()
-	and self.lifetimer <= 20 then
-		if spawn_logging then
-			minetest.log("action", "[mcl_mobs] Mob "..tostring(self.name).." despawns at "..minetest.pos_to_string(vector.round(pos)) .. " - out of range")
-		end
-
-		return "remove"-- nil
 	end
 
 	local tmp = {}
@@ -375,11 +362,6 @@ function mob_class:on_step(dtime, moveresult)
 	if not mcl_mobs.check_vector(pos) or self.removed then
 		self:safe_remove()
 		return
-	end
-
-	if self:check_timer("update_lifetimer", 1) then
-		self.lifetimer = math.max(20, self.lifetimer)
-		self.despawn_immediately = false
 	end
 
 	if self:check_despawn(pos, dtime) then return true end
