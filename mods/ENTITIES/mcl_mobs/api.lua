@@ -92,12 +92,16 @@ function mob_class:get_staticdata()
 		end
 	end
 
-	tmp._mcl_potions = self._mcl_potions
-	if tmp._mcl_potions then
+	if self._mcl_potions then
+	    tmp._mcl_potions = self._mcl_potions
+	    if tmp._mcl_potions then
 		for name_raw, data in pairs(tmp._mcl_potions) do
-			local def = mcl_potions.registered_effects[name_raw:match("^_EF_(.+)$")]
-			if def and def.on_save_effect then def.on_save_effect(self.object) end
+		    local def = mcl_potions.registered_effects[name_raw:match("^_EF_(.+)$")]
+		    if def and def.on_save_effect then def.on_save_effect(self.object) end
 		end
+	    end
+	else
+	    tmp._mcl_potions = {}
 	end
 
 	return minetest.serialize(tmp)

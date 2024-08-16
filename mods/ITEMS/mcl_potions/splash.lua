@@ -165,7 +165,6 @@ function mcl_potions.register_splash(name, descr, color, def)
 					end
 				end
 				self.object:remove()
-
 			end
 		end,
 	})

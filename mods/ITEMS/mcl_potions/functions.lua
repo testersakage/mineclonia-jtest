@@ -318,13 +318,18 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("limitless breathing under water")
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO add support for breath setting for mobs
-	end,
 	on_step = function(dtime, object, factor, duration)
 		if object:get_breath() then
 			hb.hide_hudbar(object, "breath")
 			if object:get_breath() < 10 then object:set_breath(10) end
+		else
+		    local entity = object:get_luaentity ()
+		    if entity and entity.is_mob then
+			-- This should apply to waterborne creatures
+			-- also:
+			-- https://minecraft.wiki/w/Water_Breathing.
+			entity:reset_breath ()
+		    end
 		end
 	end,
 	particle_color = "#2E5299",
@@ -1279,7 +1284,10 @@ minetest.register_globalstep(function(dtime)
 				else
 					local ent = object:get_luaentity()
 					if ent then
-						ent._mcl_potions["_EF_"..name] = nil
+					    if not ent._mcl_potions then
+						ent._mcl_potions = {}
+					    end
+					    ent._mcl_potions["_EF_"..name] = nil
 					end
 				end
 			elseif object:is_player() then
@@ -1293,6 +1301,9 @@ minetest.register_globalstep(function(dtime)
 				end
 			else
 				local ent = object:get_luaentity()
+				if not ent._mcl_potions then
+				    ent._mcl_potions = {}
+				end
 				if ent then
 					ent._mcl_potions["_EF_"..name] = EF[name][object]
 				end

@@ -322,7 +322,6 @@ function mcl_mobs.register_mob(name, def)
 			return self:mob_activate(staticdata, dtime)
 		end,
 		_spawner = def._spawner,
-		_mcl_potions = {},
 	}),mcl_mobs.mob_class_meta)
 
 	mcl_mobs.registered_mobs[name] = final_def

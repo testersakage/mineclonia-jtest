@@ -655,7 +655,7 @@ function mob_class:do_env_damage()
 	and (nodef2.groups.fire) then
 
 		if self.fire_damage ~= 0 then
-			self:damage_mob("environment", self.fire_damage)
+			self:damage_mob("hot_floor", self.fire_damage)
 			if self:check_for_death("fire", {type = "environment",
 					pos = pos, node = self.standing_in}) then
 				return true
@@ -666,7 +666,7 @@ function mob_class:do_env_damage()
 	and self:is_in_node("group:lava") then
 
 		if self.lava_damage ~= 0 then
-			self:damage_mob("environment", self.lava_damage)
+			self:damage_mob("lava", self.lava_damage)
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
 			mcl_burning.set_on_fire(self.object, 10)
 
@@ -681,7 +681,7 @@ function mob_class:do_env_damage()
 
 		if self.fire_damage ~= 0 then
 
-			self:damage_mob("environment", self.fire_damage)
+			self:damage_mob("in_fire", self.fire_damage)
 
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
 			mcl_burning.set_on_fire(self.object, 5)
