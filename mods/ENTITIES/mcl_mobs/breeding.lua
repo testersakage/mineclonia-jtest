@@ -54,7 +54,6 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake)
 		consume_food = true
 		self.horny = true
 		self.persistent = true
-		self._luck = mcl_luck.get_luck(clicker:get_player_name())
 	end
 
 	self:update_tag()
@@ -204,7 +203,7 @@ function mob_class:check_breeding()
 						return
 					end
 
-					mcl_experience.throw_xp(pos, math.random(1, 7) + (parent1._luck or 0) + (parent2._luck or 0))
+					mcl_experience.throw_xp(pos, math.random(1, 7))
 
 					if parent1.on_breed then
 						if parent1.on_breed(parent1, parent2) == false then

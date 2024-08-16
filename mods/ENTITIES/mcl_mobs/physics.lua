@@ -572,6 +572,13 @@ function mob_class:is_in_node(itemstring) --can be group:...
 	if nn and #nn > 0 then return true end
 end
 
+function mob_class:reset_breath ()
+    local max = self.object:get_properties ().breath_max
+    if max ~= -1 then
+	self.breath = max
+    end
+end
+
 -- environmental damage (water, lava, fire, light etc.)
 function mob_class:do_env_damage()
 	-- feed/tame text timer (so mob 'full' messages dont spam chat)

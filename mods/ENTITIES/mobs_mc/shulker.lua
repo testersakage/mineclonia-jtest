@@ -205,7 +205,7 @@ mcl_mobs.register_arrow("mobs_mc:shulkerbullet", {
 	    mcl_mobs.get_arrow_damage_func (4) (self, player)
 	end,
 	hit_mob = function (self, mob)
-	    mcl_potions.give_effect_by_level ("levitation", player, 1, 10)
+	    mcl_potions.give_effect_by_level ("levitation", mob, 1, 10)
 	    mcl_mobs.get_arrow_damage_func (4) (self, mob)
 	end,
 	hit_node = function(self, _)

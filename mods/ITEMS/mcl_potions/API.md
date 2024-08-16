@@ -168,6 +168,7 @@ def = {
     icon = string -- file name of the effect icon in HUD - defaults to one based on name
     res_condition = function(object) -- returning true if target is to be resistant to the effect
     on_start = function(object, factor) -- called when dealing the effect
+	on_reject = function(object, factor) -- called when give_effect refuses to deal an effect of a lower level than already exists
     on_load = function(object, factor) -- called on_joinplayer and on_activate
     on_step = function(dtime, object, factor, duration) -- running every step for all objects with this effect
     on_hit_timer = function(object, factor, duration) -- if defined runs a hit_timer depending on timer_uses_factor value
@@ -267,7 +268,6 @@ def = {
         dur_variable = bool, -- whether variants of the potion should have the length of this effect changed -
 -- -- --   - defaults to true
 -- -- --   - if at least one effect has this set to true, the potion has a "plus" variant
-        effect_stacks = bool, -- whether the effect stacks - defaults to false
     }
     uses_level = bool, -- whether the potion should come at different levels -
 --   - defaults to true if uses_level is true for at least one effect, else false

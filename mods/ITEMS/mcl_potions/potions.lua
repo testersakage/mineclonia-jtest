@@ -61,9 +61,6 @@ local function generate_on_use(effects, color, on_use, custom_effect)
 			else
 				dur = details.dur
 			end
-			if details.effect_stacks then
-				ef_level = ef_level + mcl_potions.get_effect_level(user, name)
-			end
 			mcl_potions.give_effect_by_level(name, user, ef_level, dur)
 		end
 
@@ -117,7 +114,6 @@ end
 -- custom_on_use - function(user, level) - called when the potion is drunk, returns true on success
 -- custom_effect - function(object, level, plus) - called when the potion effects are applied, returns true on success
 -- custom_splash_effect - function(pos, level) - called when the splash potion explodes, returns true on success
--- custom_linger_effect - function(pos, radius, level) - called on the lingering potion step, returns true on success
 function mcl_potions.register_potion(def)
 	local modname = minetest.get_current_modname()
 	local name = def.name
@@ -138,9 +134,6 @@ function mcl_potions.register_potion(def)
 		pdef.description = S("Strange Potion")
 	end
 	pdef._tt_help = def._tt
-	if def._tt and def.effect_stacks then
-		pdef._tt_help = pdef._tt_help .. "\n" .. S("Stacks the effect")
-	end
 	pdef._dynamic_tt = def._dynamic_tt
 	local potion_longdesc = def._longdesc
 	if def._effect_list then
@@ -176,7 +169,6 @@ function mcl_potions.register_potion(def)
 					level_scaling = details.level_scaling or 1,
 					dur = details.dur or mcl_potions.DURATION,
 					dur_variable = durvar,
-					effect_stacks = details.effect_stacks and true or false
 				}
 			else
 				error("Unable to register potion: effect not registered")
@@ -196,6 +188,7 @@ function mcl_potions.register_potion(def)
 	end
 	pdef.on_place = on_use
 	pdef.on_secondary_use = on_use
+	pdef._mcl_filter_description = mcl_potions.filter_potion_description
 
 	local internal_def = table.copy(pdef)
 	minetest.register_craftitem(modname..":"..name, pdef)
@@ -272,6 +265,26 @@ function mcl_potions.register_potion(def)
 	end
 
 	mcl_potions.registered_potions[modname..":"..name] = internal_def
+end
+
+function mcl_potions.filter_potion_description (itemstack, orig_desc)
+    local meta = itemstack:get_meta ()
+    local potency = meta:get_int("mcl_potions:potion_potent")
+    local plus = meta:get_int("mcl_potions:potion_plus")
+    if potency > 0 then
+	local sym_potency = mcl_util.to_roman(potency+1)
+	orig_desc = orig_desc .. " ".. sym_potency
+    end
+    if plus > 0 then
+	local sym_plus = " "
+	local i = plus
+	while i>0 do
+	    i = i - 1
+	    sym_plus = sym_plus .. "+"
+	end
+	orig_desc = orig_desc .. sym_plus
+    end
+    return orig_desc
 end
 
 -- ██████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗

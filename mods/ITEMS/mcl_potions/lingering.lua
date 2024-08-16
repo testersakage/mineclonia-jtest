@@ -9,10 +9,48 @@ local function lingering_image(colorstring, opacity)
 	return "mcl_potions_splash_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_lingering_bottle.png"
 end
 
-local lingering_effect_at = {}
+local lingering_effects_at = {}
 
-local function add_lingering_effect(pos, color, def, is_water, potency, plus)
-	lingering_effect_at[pos] = {color = color, timer = 30, def = def, is_water = is_water, potency = potency, plus = plus}
+local function potency_to_level (potency)
+    return (potency + 1) * mcl_potions.LINGERING_FACTOR
+end
+
+local function add_lingering_effects (pos, color, effects, is_water, texture,
+				      duration, custom_effect, potency, plus)
+    local tbl = lingering_effects_at[pos]
+    if not tbl then
+	tbl = { }
+	lingering_effects_at[pos] = tbl
+    end
+
+    table.insert (tbl, { color = color, lifespan = duration,
+			 timer = duration,
+			 is_water = is_water,
+			 effects = effects,
+			 texture = texture,
+			 -- The next three fields are only material if
+			 -- custom_effect is set.
+			 custom_effect = custom_effect,
+			 level = potency_to_level (potency),
+			 plus = plus, })
+end
+
+local function def_to_effect_list (def, potency, plus)
+    local effects = {}
+
+    -- Calculate factors and lengths for each effect defined.
+    if not def._effect_list then
+	return effects
+    end
+    for name, details in pairs (def._effect_list) do
+	effects[name] = {}
+	effects[name].level = mcl_potions.level_from_details (details,
+							      potency)
+	effects[name].dur
+	    = mcl_potions.duration_from_details (details, potency, plus,
+						 mcl_potions.LINGERING_FACTOR)
+    end
+    return effects
 end
 
 local function linger_particles(pos, d, texture, color)
@@ -35,85 +73,81 @@ local function linger_particles(pos, d, texture, color)
 	})
 end
 
+local function particle_texture (name, def)
+    if name == "water" then
+	return "mcl_particles_droplet_bottle.png"
+    else
+	if def.instant then
+	    return "mcl_particles_instant_effect.png"
+	else
+	    return "mcl_particles_effect.png"
+	end
+    end
+end
+
 local lingering_timer = 0
 minetest.register_globalstep(function(dtime)
-
 	lingering_timer = lingering_timer + dtime
 	if lingering_timer >= 1 then
+	    for pos, lists in pairs(lingering_effects_at) do
+		local rem = 0
+		for i, vals in ipairs (lists) do
+		    vals.timer = vals.timer - lingering_timer
+		    local d = 4 * (vals.timer / vals.lifespan)
+		    local texture = vals.texture
+		    local deduct_time = false
+		    linger_particles(pos, d, texture, vals.color)
 
-		for pos, vals in pairs(lingering_effect_at) do
-
-			vals.timer = vals.timer - lingering_timer
-			local d = 4 * (vals.timer / 30.0)
-			local texture
-			if vals.is_water then
-				texture = "mcl_particles_droplet_bottle.png"
-			elseif vals.def.instant then
-				texture = "mcl_particles_instant_effect.png"
-			else
-				texture = "mcl_particles_effect.png"
+		    -- Extinguish fire if water bottle
+		    if vals.is_water then
+			if mcl_potions._water_effect (pos, d) then
+			    deduct_time = true
 			end
-			linger_particles(pos, d, texture, vals.color)
+		    end
 
--- 			-- Extinguish fire if water bottle
--- 			if vals.is_water then
--- 				if mcl_potions._extinguish_nearby_fire(pos, d) then
--- 					vals.timer = vals.timer - 3.25
--- 				end
--- 			end
-
-			if vals.def.while_lingering and vals.def.while_lingering(pos, d, vals.potency+1) then
-				vals.timer = vals.timer - 3.25
-			end
-
-			-- Affect players and mobs
-			for _, obj in pairs(minetest.get_objects_inside_radius(pos, d)) do
-
-				local entity = obj:get_luaentity()
-				if obj:is_player() or entity and entity.is_mob then
-					local applied = false
-					if vals.def._effect_list then
-						local ef_level
-						local dur
-						for name, details in pairs(vals.def._effect_list) do
-							if details.uses_level then
-								ef_level = details.level + details.level_scaling * (vals.potency)
-							else
-								ef_level = details.level
-							end
-							if details.dur_variable then
-								dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, vals.plus)
-								if vals.potency>0 and details.uses_level then
-									dur = dur / math.pow(mcl_potions.POTENT_FACTOR, vals.potency)
-								end
-								dur = dur * mcl_potions.LINGERING_FACTOR
-							else
-								dur = details.dur
-							end
-							if details.effect_stacks then
-								ef_level = ef_level + mcl_potions.get_effect_level(obj, name)
-							end
-							if mcl_potions.give_effect_by_level(name, obj, ef_level, dur) then
-								applied = true
-							end
-						end
-					end
-
-					if vals.def.custom_effect
-						and vals.def.custom_effect(obj, (vals.potency+1) * mcl_potions.LINGERING_FACTOR, vals.plus) then
-							applied = true
-					end
-
-					if applied then vals.timer = vals.timer - 3.25 end
+		    -- Affect players and mobs
+		    for _, obj in pairs (minetest.get_objects_inside_radius(pos, d)) do
+			local entity = obj:get_luaentity()
+			if obj:is_player() or entity and entity.is_mob then
+			    if vals.is_water then
+				if entity and entity.water_damage then
+				    obj:punch (obj, 1.0, { full_punch_interval = 1.0,
+							   damage_groups = {water_vulnerable=1}, },
+					       nil)
+				    deduct_time = true
 				end
+			    else
+				for name, effect in pairs (vals.effects) do
+				    mcl_potions.give_effect_by_level (name, obj, effect.level,
+								      effect.dur)
+				    deduct_time = true
+				end
+				if vals.custom_effect
+				    and vals.custom_effect (obj, vals.level,
+							    vals.plus) then
+				    deduct_time = true
+				end
+			    end
 			end
+		    end
 
-			if vals.timer <= 0 then
-				lingering_effect_at[pos] = nil
-			end
+		    if deduct_time then
+			vals.timer = vals.timer - 3.25
+		    end
 
+		    if vals.timer <= 0 then
+			lists[i] = nil
+		    else
+			rem = rem + 1
+		    end
 		end
-		lingering_timer = 0
+
+		-- Do no more extant entries exist?
+		if rem == 0 then
+		    lingering_effects_at[pos] = nil
+		end
+	    end
+	    lingering_timer = 0
 	end
 end)
 
@@ -135,6 +169,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		description = descr,
 		_tt_help = def._tt,
 		_dynamic_tt = def._dynamic_tt,
+		_mcl_filter_description = mcl_potions.filter_potion_description,
 		_doc_items_longdesc = longdesc,
 		_doc_items_usagehelp = S("Use the “Punch” key to throw it."),
 		stack_max = def.stack_max,
@@ -146,10 +181,11 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		_default_extend_level = def._default_extend_level,
 		inventory_image = lingering_image(color),
 		groups = groups,
+		_mcl_filter_description = mcl_potions.filter_potion_description,
 		on_use = function(item, placer, pointed_thing)
 			local velocity = 10
 			local dir = placer:get_look_dir();
-			local pos = placer:getpos();
+			local pos = placer:get_pos();
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
 			local obj = minetest.add_entity({x=pos.x+dir.x,y=pos.y+2+dir.y,z=pos.z+dir.z}, id.."_flying")
 			obj:set_velocity({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
@@ -200,23 +236,23 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			if mod_target and n == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
 			end
-			if n ~= "air" and n ~= "mcl_portals:portal" and n ~= "mcl_portals:portal_end" and g == 0 or mcl_potions.is_obj_hit(self, pos) then
-				minetest.sound_play("mcl_potions_breaking_glass", {pos = pos, max_hear_distance = 16, gain = 1})
+			if ((n ~= "air"
+			     and n ~= "mcl_portals:portal"
+			     and n ~= "mcl_portals:portal_end"
+			     and g == 0)
+			    or mcl_potions.is_obj_hit(self, pos)) then
+			    minetest.sound_play("mcl_potions_breaking_glass",
+						{pos = pos, max_hear_distance = 16, gain = 1})
 				local potency = self._potency or 0
 				local plus = self._plus or 0
-				add_lingering_effect(pos, color, def, name == "water", potency, plus)
-				local texture
-				if name == "water" then
-					texture = "mcl_particles_droplet_bottle.png"
-				else
-					if def.instant then
-						texture = "mcl_particles_instant_effect.png"
-					else
-						texture = "mcl_particles_effect.png"
-					end
-				end
-				linger_particles(pos, d, texture, color)
-				if def.on_splash then def.on_splash(pos, potency+1) end
+				local effects = def_to_effect_list (def, potency, plus)
+				local texture = particle_texture (name, def)
+
+				add_lingering_effects (pos, color, effects, name == "water",
+						       texture, 30, def.custom_effect, potency,
+						       plus)
+				linger_particles (pos, d, texture, color)
+				if def.on_splash then def.on_splash (pos, potency+1) end
 				self.object:remove()
 			end
 		end,

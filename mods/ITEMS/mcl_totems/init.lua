@@ -94,6 +94,16 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 					end
 				end
 
+				-- Status effects; see
+				-- https://minecraft.wiki/w/Totem_of_Undying
+				--
+				-- Totems also clear all effects
+				-- before applying theirs.
+				mcl_potions._reset_effects (obj, true)
+				mcl_potions.give_effect_by_level ("regeneration", obj, 2, 45);
+				mcl_potions.give_effect ("fire_resistance", obj, 1, 40);
+				mcl_potions.give_effect_by_level ("absorption", obj, 2, 5);
+
 				-- Big totem overlay
 				if not hud_totem[obj] then
 					hud_totem[obj] = obj:hud_add({

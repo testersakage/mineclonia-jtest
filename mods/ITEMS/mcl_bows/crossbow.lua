@@ -299,7 +299,7 @@ controls.register_on_press(function(player, key)
 		-- Fully charged
 		local is_critical = false
 		speed = BOW_MAX_SPEED
-		local r = math.random(1,5) + mcl_luck.get_luck(player:get_player_name())
+		local r = math.random(1,5)
 		if r > 4 then
 			-- 20% chance for critical hit (by default)
 			damage = 10 + math.floor((r-5)/5) -- mega crit (over crit) with high luck

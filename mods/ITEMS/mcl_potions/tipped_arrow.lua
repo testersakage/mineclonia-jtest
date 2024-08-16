@@ -19,6 +19,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		description = desc,
 		_tt_help = arrow_tt .. "\n" .. tt,
 		_dynamic_tt = def._dynamic_tt,
+		_mcl_filter_description = mcl_potions.filter_potion_description,
 		_doc_items_longdesc = arrow_longdesc .. "\n" ..
 			S("This particular arrow is tipped and will give an effect when it hits a player or mob.") .. "\n" ..
 		    (def.longdesc or ""),
@@ -87,23 +88,10 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		local dur
 
 		for name, details in pairs(def._effect_list) do
-		    if details.uses_level then
-			ef_level = details.level + details.level_scaling * (potency)
-		    else
-			ef_level = details.level
-		    end
-		    if details.dur_variable then
-			dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, plus)
-			if potency>0 and details.uses_level then
-			    dur = dur / math.pow(mcl_potions.POTENT_FACTOR, potency)
-			end
-		    else
-			dur = details.dur
-		    end
-		    dur = dur * mcl_potions.SPLASH_FACTOR
-		    if details.effect_stacks then
-			ef_level = ef_level + mcl_potions.get_effect_level(obj, name)
-		    end
+		    ef_level = mcl_potions.level_from_details (details, potency)
+		    dur = mcl_potions.duration_from_details (details, potency,
+							     plus,
+							     mcl_potions.SPLASH_FACTOR)
 		    mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
 		end
 	    end

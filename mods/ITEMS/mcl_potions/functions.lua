@@ -152,6 +152,7 @@ function mcl_potions.register_effect(def)
 	pdef.get_tt = def.get_tt
 	pdef.res_condition = def.res_condition
 	pdef.on_start = def.on_start
+	pdef.on_reject = def.on_reject
 	pdef.on_load = def.on_load
 	pdef.on_step = def.on_step
 	pdef.on_hit_timer = def.on_hit_timer
@@ -628,12 +629,19 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("absorbs up to @1 incoming damage", factor)
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO dmg modifiers don't work for mobs
-	end,
 	on_start = function(object, factor)
 		hb.change_hudbar(object, "absorption", factor, (math.floor(factor/20-0.05)+1)*20)
 		EF.absorption[object].absorb = factor
+	end,
+	on_reject = function (object, factor)
+	    -- Remaining absorption health might fall short of what
+	    -- this level provides, despite the currently active
+	    -- effect being nominally superior.
+	    if EF.absorption[object].absorb < factor then
+		hb.change_hudbar(object, "absorption", factor, (math.floor(factor/20-0.05)+1)*20)
+		EF.absorption[object].absorb = factor
+		return true
+	    end
 	end,
 	on_load = function(object, factor)
 		minetest.after(0, function() hb.change_hudbar(object, "absorption", nil, (math.floor(factor/20-0.05)+1)*20) end)
@@ -649,6 +657,7 @@ mcl_potions.register_effect({
 	lvl1_factor = 4,
 	lvl2_factor = 8,
 	damage_modifier = "",
+	modifier_priority = 300,
 	modifier_func = function(damage, effect_vals)
 		local absorb = effect_vals.absorb
 		local carryover = 0
@@ -669,9 +678,6 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("resistance to fire damage")
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO dmg modifiers don't work for mobs
-	end,
 	particle_color = "#E49A3A",
 	uses_factor = false,
 	damage_modifier = "is_fire",
@@ -682,9 +688,6 @@ mcl_potions.register_effect({
 	description = S("Resistance"),
 	get_tt = function(factor)
 		return S("resist @1% of incoming damage", math.floor(factor*100))
-	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO dmg modifiers don't work for mobs
 	end,
 	particle_color = "#2552A5",
 	uses_factor = true,
@@ -704,13 +707,8 @@ mcl_potions.register_effect({
 		return (not object:is_player()) -- TODO what should it do for mobs?
 	end,
 	on_start = function(object, factor)
-		mcl_luck.apply_luck_modifier(object:get_player_name(), "mcl_potions:luck", factor)
-	end,
-	on_load = function(object, factor)
-		mcl_luck.apply_luck_modifier(object:get_player_name(), "mcl_potions:luck", factor)
-	end,
-	on_end = function(object)
-		mcl_luck.remove_luck_modifier(object:get_player_name(), "mcl_potions:luck")
+		-- TODO: Luck that only influences loot tables as in
+		-- Minecraft.
 	end,
 	uses_factor = true,
 })
@@ -723,13 +721,8 @@ mcl_potions.register_effect({
 		return (not object:is_player()) -- TODO what should it do for mobs?
 	end,
 	on_start = function(object, factor)
-		mcl_luck.apply_luck_modifier(object:get_player_name(), "mcl_potions:bad_luck", -factor)
-	end,
-	on_load = function(object, factor)
-		mcl_luck.apply_luck_modifier(object:get_player_name(), "mcl_potions:bad_luck", -factor)
-	end,
-	on_end = function(object)
-		mcl_luck.remove_luck_modifier(object:get_player_name(), "mcl_potions:bad_luck")
+	    -- TODO: Bad Luck that only influences loot tables as in
+	    -- Minecraft.
 	end,
 	uses_factor = true,
 })
@@ -1723,6 +1716,28 @@ function mcl_potions.register_generic_resistance_predicate(predicate)
 	end
 end
 
+function mcl_potions.level_from_details (details, potency)
+    if details.uses_level then
+	return details.level + details.level_scaling * potency
+    end
+    return details.level
+end
+
+function mcl_potions.duration_from_details (details, potency, plus, attenuation)
+    local dur
+
+    if details.dur_variable then
+	dur = (details.dur * math.pow (mcl_potions.PLUS_FACTOR, plus)
+	       / (potency > 0 and details.uses_level and
+		  math.pow (mcl_potions.POTENT_FACTOR, potency)
+		  or 1)
+	       * attenuation)
+    else
+	dur = details.dur
+    end
+    return dur
+end
+
 local function target_valid(object, name)
 	if not object or object:get_hp() <= 0 then return false end
 
@@ -1758,7 +1773,7 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 		present.no_particles = no_particles
 		if not edef.uses_factor or (edef.uses_factor and
 			(not edef.inv_factor and factor >= present.factor
-			or edef.inv_factor and factor <= present.factor)) then
+			 or edef.inv_factor and factor <= present.factor)) then
 				present.dur = math.max(duration, present.dur - present.timer)
 				present.timer = 0
 				if edef.uses_factor then
@@ -1770,7 +1785,15 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 					present.dur = math.huge
 				end
 		else
-			return false
+		    -- on_reject must be called at all events if it
+		    -- exists, as it will attempt to restore the
+		    -- benefits afforded by `factor' if those afforded
+		    -- by `object' have already been spent.  This is
+		    -- solely applicable to Absorption AFAICT.
+		    if edef.on_reject then
+			return edef.on_reject (object, factor)
+		    end
+		    return false
 		end
 	end
 
@@ -1860,7 +1883,7 @@ function mcl_potions.night_vision_func(object, null, duration)
 	return mcl_potions.give_effect("night_vision", object, null, duration)
 end
 
-function mcl_potions._extinguish_nearby_fire(pos, radius)
+function mcl_potions._water_effect(pos, radius)
 	local epos = {x=pos.x, y=pos.y+0.5, z=pos.z}
 	local dnode = minetest.get_node({x=pos.x,y=pos.y-0.5,z=pos.z})
 	if minetest.get_item_group(dnode.name, "fire") ~= 0 or minetest.get_item_group(dnode.name, "lit_campfire") ~= 0 then
@@ -1907,6 +1930,32 @@ function mcl_potions._extinguish_nearby_fire(pos, radius)
 			end
 			exting = true
 		end
+	end
+	-- Search for entities in the vicinity that are on fire and
+	-- extinguish them.  Damage those entities which are
+	-- vulnerable to water.  Clear suffocation counters of
+	-- Axolotls.
+	local aa = vector.subtract (pos, { x = radius / 2, y = 1, z = radius / 2, })
+	local bb = vector.add (pos, { x = radius / 2, y = 1, z = radius / 2, })
+	for obj in minetest.objects_in_area (aa, bb) do
+	    local entity = obj:get_luaentity (obj)
+
+	    if mcl_burning.is_burning (obj) then
+		mcl_burning.extinguish (obj)
+		exting = true
+	    end
+
+	    if entity and entity.is_mob then
+		if entity.water_damage > 0 then
+		    obj:punch (obj, 1.0, { full_punch_interval = 1.0,
+					   damage_groups = {water_vulnerable=1}, },
+			       nil)
+		    exting = true
+		elseif entity.name == "mobs_mc:axolotl" then
+		    entity:reset_breath ()
+		    exting = true
+		end
+	    end
 	end
 	return exting
 end
