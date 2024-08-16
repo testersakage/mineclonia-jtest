@@ -9,13 +9,13 @@ local function get_stack_points(itemstring)
 end
 
 local function room_on_bundle(bundlestack)
-    local meta = bundlestack:get_meta()
-    local stack_points = meta:get_int("stack_points")
+    local meta_bs = bundlestack:get_meta()
+    local stack_points = meta_bs:get_int("stack_points")
     return stack_points < MAX_STACK_POINTS
 end
 
-local function entity_to_string(pointed_thing)
-    local lentity = pointed_thing.ref:get_luaentity()
+local function entity_to_string(pointed_thing_ref)
+    local lentity = pointed_thing_ref:get_luaentity()
     if lentity and lentity.name == "__builtin:item" then
         if lentity.itemstring then
             return lentity, lentity.itemstring
@@ -37,22 +37,20 @@ end
 
 local function fill_bundle(bundlestack, itemstring, player)
     -- TODO:
-    --  Clean up the code
     --  Add sounds
     --  Add bar to filled bundle
-    local inv = player:get_inventory()
-    local old_name = bundlestack:get_name()
+    local player_inv = player:get_inventory()
     local bundle_inv = get_bundle_inv(bundlestack)
     table.insert(bundle_inv, itemstring)
     local stack_points = get_stack_points(itemstring)
     local inv_data = minetest.serialize(bundle_inv)
     if not is_filled(bundlestack) then
-        local new_stack = ItemStack(old_name.."_filled")
+        local new_stack = ItemStack(bundlestack:get_name().."_filled")
         local meta_ns = new_stack:get_meta()
         meta_ns:set_string("inventory", inv_data)
         meta_ns:set_int("stack_points", stack_points)
-        if inv:room_for_item("main", new_stack) then
-            inv:add_item("main", new_stack)
+        if player_inv:room_for_item("main", new_stack) then
+            player_inv:add_item("main", new_stack)
         else
             minetest.add_item(player:get_pos(), new_stack)
         end
@@ -88,10 +86,8 @@ local function unfill_bundle(bundlestack, player)
 end
 
 local function use_bundle(itemstack, placer, pointed_thing)
-    -- TODO:
-    -- Clean up the code
     if pointed_thing.type == "object" then
-        local lentity, itemstring = entity_to_string(pointed_thing)
+        local lentity, itemstring = entity_to_string(pointed_thing.ref)
         if room_on_bundle(itemstack) then
             lentity._removed = true
             return fill_bundle(itemstack, itemstring, placer)
