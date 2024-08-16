@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-08-16 07:50+0000\n"
+"Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc_basics/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Advanced usage"
 msgstr ""
@@ -20,7 +21,7 @@ msgid "Advanced information which may be nice to know, but is not crucial to gam
 msgstr ""
 
 msgid "Creative Mode"
-msgstr ""
+msgstr "Kreatív Mód"
 
 msgid "Enabling Creative Mode in MineClone 2 applies the following changes:"
 msgstr ""
@@ -368,97 +369,111 @@ msgid "A generic Internet Relay Chat channel for everything related to Minetest 
 msgstr ""
 
 msgid "Basics"
-msgstr ""
+msgstr "Alapok"
 
 msgid "Everything you need to know to get started with playing"
 msgstr ""
 
 msgid "Quick start"
-msgstr ""
+msgstr "Gyorstalpaló"
 
 msgid "This is a very brief introduction to the basic gameplay."
 msgstr ""
 
 msgid "How to play:"
-msgstr ""
+msgstr "Játékmenet:"
 
 msgid "• Punch a tree trunk until it breaks and collect wood"
-msgstr ""
+msgstr "• Ütögess egy fát amíg ki nem törik, majd szedd fel a fahasábot"
 
 msgid "• Place the wood into the 2×2 grid (your “crafting grid”) in your inventory menu and craft 4 wood planks"
 msgstr ""
+"• Tedd a fahasábot az eszköztárad 2x2 méretű négyzetrácsába (ez a saját "
+"barkácsrácsod), ezzel 4 deszkát készíthetsz"
 
 msgid "• Place them in a 2×2 shape in the crafting grid to craft a crafting table"
 msgstr ""
+"• Tedd a deszkákat 2x2-es alakzatban a rácsra, hogy egy barkácsasztalt "
+"készíthess"
 
 msgid "• Place the crafting table on the ground"
-msgstr ""
+msgstr "• Helyezd a barkácsasztalt a földre"
 
 msgid "• Rightclick it for a 3×3 crafting grid"
 msgstr ""
+"• Jobb gombbal kattints a barkácsasztalra, hogy egy 3x3-as barkácsrácshoz "
+"juss"
 
 msgid "• Use the crafting guide (book icon) to learn all the possible crafting recipes"
 msgstr ""
+"• A Barkácsútmutató (könyv ikon) segítségével megtanulhatod az összes "
+"barkács receptet"
 
 msgid "• Craft a wooden pickaxe so you can dig stone"
-msgstr ""
+msgstr "• Készíts facsákányt, hogy követ törhess"
 
 msgid "• Different tools break different kinds of blocks. Try them out!"
 msgstr ""
+"• A különböző eszközökkel más és más típusú blokkokat tudsz hatékonyan "
+"fejteni. Próbáld ki őket!"
 
 msgid "• Read entries in this help to learn the rest"
-msgstr ""
+msgstr "• További tippekhez olvasd át ennek a Súgónak a bejegyzéseit"
 
 msgid "• Continue playing as you wish. There's no real goal, but you may want to check the advancements available from the inventory screen. Have fun!"
 msgstr ""
+"• Folytasd a játékot kedved szerint. Habár nincs egy konkrét kitűzött célja, "
+"segíthet, ha az eszköztárban elérhető kihívásokat átnézed. Jó szórakozást!"
 
 msgid "For the default controls, see the next section [Controls]."
-msgstr ""
+msgstr "A játék irányítását a következő rész [Vezérlés] tárgyalja."
 
 msgid "Controls"
-msgstr ""
+msgstr "Vezérlés"
 
 msgid "These are the default controls (which can be remapped in the 'Change keys' dialog):"
 msgstr ""
+"Ezek az irányítás alap beállításai (a ‘Gombok beállítása’ menüben "
+"megváltoztathatod):"
 
 msgid "Basic movement:"
-msgstr ""
+msgstr "Mozgás:"
 
 msgid "• Moving the mouse around: Look around"
-msgstr ""
+msgstr "• Egér mozgatása: körbetekintés"
 
 msgid "• W: Move forwards"
-msgstr ""
+msgstr "• W: Előre lép"
 
 msgid "• A: Move to the left"
-msgstr ""
+msgstr "• A: Balra lép"
 
 msgid "• D: Move to the right"
-msgstr ""
+msgstr "• D: Jobbra lép"
 
 msgid "• S: Move backwards"
-msgstr ""
+msgstr "• S: Hátra lép"
 
 msgid "• E: Sprint (aux1)"
-msgstr ""
+msgstr "• E: Futás (aux1)"
 
 msgid "While standing on solid ground:"
-msgstr ""
+msgstr "Stabil talajon:"
 
 msgid "• Space: Jump"
-msgstr ""
+msgstr "• Szóköz: Ugrik"
 
 msgid "• Shift: Sneak"
-msgstr ""
+msgstr "• Shift: Oson"
 
 msgid "While on a ladder, swimming in a liquid or fly mode is active"
-msgstr ""
+msgstr "Létrán állva, vízben vagy más folyadékban úszva illetve repülési módban"
 
 msgid "• Space: Move up"
-msgstr ""
+msgstr "• Szóköz: Felfele mozog"
 
 msgid "• Shift: Move down"
-msgstr ""
+msgstr "• Shift: Lefele mozog"
 
 msgid "Extended movement (requires privileges):"
 msgstr ""
@@ -1404,4 +1419,3 @@ msgstr ""
 
 msgid "MineClonia is a game that is built on top of the Minetest engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
 msgstr ""
-
