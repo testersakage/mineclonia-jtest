@@ -1740,7 +1740,8 @@ function mcl_potions.duration_from_details (details, potency, plus, attenuation)
     if details.dur_variable then
 	dur = (details.dur * math.pow (mcl_potions.PLUS_FACTOR, plus)
 	       / (potency > 0 and details.uses_level and
-		  math.pow (mcl_potions.POTENT_FACTOR, potency)
+		  math.pow (details.potent_factor
+			    or mcl_potions.POTENT_FACTOR, potency)
 		  or 1)
 	       * attenuation)
     else

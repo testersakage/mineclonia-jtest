@@ -133,20 +133,10 @@ tt.register_snippet(function(itemstring, _, itemstack)
 		local ef_tt
 		for name, details in pairs(effects) do
 			effect = mcl_potions.registered_effects[name]
-			if details.dur_variable then
-				dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, plus) * sl_factor
-				if potency > 0 and details.uses_level then
-					dur = dur / math.pow(mcl_potions.POTENT_FACTOR, potency)
-				end
-			else
-				dur = details.dur
-			end
+			dur = mcl_potions.duration_from_details (details, potency,
+								 plus, sl_factor)
 			timestamp = math.floor(dur/60)..string.format(":%02d",math.floor(dur % 60))
-			if details.uses_level then
-				ef_level = details.level + details.level_scaling * (potency)
-			else
-				ef_level = details.level
-			end
+			ef_level = mcl_potions.level_from_details (details, potency)
 			if ef_level > 1 then roman_lvl = " ".. mcl_util.to_roman(ef_level)
 			else roman_lvl = "" end
 			s = s.. effect.description.. roman_lvl.. " (".. timestamp.. ")\n"

@@ -5,7 +5,8 @@ local S = minetest.get_translator(modname)
 mcl_potions = {}
 
 -- duration effects of redstone are a factor of 8/3
--- duration effects of glowstone are a time factor of 1/2
+-- duration effects of glowstone are a time factor of 1/2, expect with
+-- slowness
 -- splash potion duration effects are reduced by a factor of 3/4
 
 mcl_potions.POTENT_FACTOR = 2

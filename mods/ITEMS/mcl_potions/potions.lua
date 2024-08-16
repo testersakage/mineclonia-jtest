@@ -48,20 +48,10 @@ local function generate_on_use(effects, color, on_use, custom_effect)
 		local ef_level
 		local dur
 		for name, details in pairs(effects) do
-			if details.uses_level then
-				ef_level = details.level + details.level_scaling * (potency)
-			else
-				ef_level = details.level
-			end
-			if details.dur_variable then
-				dur = details.dur * math.pow(mcl_potions.PLUS_FACTOR, plus)
-				if potency>0 and details.uses_level then
-					dur = dur / math.pow(mcl_potions.POTENT_FACTOR, potency)
-				end
-			else
-				dur = details.dur
-			end
-			mcl_potions.give_effect_by_level(name, user, ef_level, dur)
+		    ef_level = mcl_potions.level_from_details (details, potency)
+		    dur = mcl_potions.duration_from_details (details, potency,
+							     plus, 1.0)
+		    mcl_potions.give_effect_by_level(name, user, ef_level, dur)
 		end
 
 		if on_use then on_use(user, potency+1) end
@@ -101,7 +91,7 @@ end
 -- -- -- dur_variable - bool - whether variants of the potion should have the length of this effect changed -
 -- -- --   - defaults to true
 -- -- --   - if at least one effect has this set to true, the potion has a "plus" variant
--- -- -- effect_stacks - bool - whether the effect stacks - defaults to false
+-- -- -- potent_factor - int - factor which raised to the power of the effect level provides a value by which to divide the duration of a potent effect; defaults to POTENT_FACTOR
 -- uses_level - bool - whether the potion should come at different levels -
 --   - defaults to true if uses_level is true for at least one effect, else false
 -- drinkable - bool - defaults to true
@@ -145,7 +135,8 @@ function mcl_potions.register_potion(def)
 	local color = def.color or "#0000FF"
 	pdef.inventory_image = def.image or potion_image(color)
 	pdef.wield_image = pdef.inventory_image
-	pdef.groups = def.groups or {brewitem=1, food=3, can_eat_when_full=1, _mcl_potion=1}
+	pdef.groups = def.groups or {brewitem=1, food=3, can_eat_when_full=1,
+				     _mcl_potion=1, potion = 1, }
 	if def.nocreative then pdef.groups.not_in_creative_inventory = 1 end
 
 	pdef._effect_list = {}
@@ -169,6 +160,7 @@ function mcl_potions.register_potion(def)
 					level_scaling = details.level_scaling or 1,
 					dur = details.dur or mcl_potions.DURATION,
 					dur_variable = durvar,
+					potent_factor = details.potent_factor,
 				}
 			else
 				error("Unable to register potion: effect not registered")
@@ -263,7 +255,6 @@ function mcl_potions.register_potion(def)
 		mcl_potions.register_arrow(name, arr_desc, color, adef)
 		internal_def.has_arrow = true
 	end
-
 	mcl_potions.registered_potions[modname..":"..name] = internal_def
 end
 
@@ -395,7 +386,10 @@ mcl_potions.register_potion({
 	_longdesc = S("Decreases walking speed."),
 	color = "#5A6C81",
 	_effect_list = {
-		slowness = {dur=mcl_potions.DURATION_INV},
+	    slowness = {dur=mcl_potions.DURATION_INV,
+			-- Slowness IV should last 20 seconds.
+			potent_factor = math.pow (4.5, 1/3),
+	    },
 	},
 	default_potent_level = 4,
 	has_arrow = true,

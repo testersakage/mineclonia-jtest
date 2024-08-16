@@ -265,7 +265,8 @@ local function sort_stack(stack)
 	if minetest.get_item_group(stack:get_name(), "brewing_ingredient" ) > 0 then
 		return "input"
 	end
-	for _, g in pairs({"potion", "empty_bottle", "water_bottle"}) do
+	for _, g in pairs({"potion", "splash_potion", "ling_potion",
+			   "empty_bottle", "water_bottle"}) do
 		if minetest.get_item_group(stack:get_name(), g ) > 0 then
 			return "stand"
 		end

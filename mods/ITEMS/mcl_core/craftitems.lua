@@ -153,7 +153,7 @@ local function eat_gapple(itemstack, placer, pointed_thing)
 	if itemstack:get_name() == "mcl_core:apple_gold_enchanted" then
 		regen_duration, absorption = 20, 4
 		mcl_potions.give_effect("fire_resistance", placer, 1, 300)
-		mcl_potions.give_effect("resistance", placer, 1, 300)
+		mcl_potions.give_effect_by_level("resistance", placer, 1, 300)
 	end
 	mcl_potions.give_effect_by_level("absorption", placer, absorption, 120)
 	mcl_potions.give_effect_by_level("regeneration", placer, 2, regen_duration)

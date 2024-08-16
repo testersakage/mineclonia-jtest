@@ -180,7 +180,13 @@ local function set_inv_search(filter, player)
 		def.description ~= "" then
 		local name = string.lower(def.name)
 		if filter_item (name, def.description, lang, filter) then
-		    table.insert(creative_list, name)
+		    if def.groups._mcl_potion == 1 then
+			local stack = ItemStack (name)
+			tt.reload_itemstack_description (stack)
+			table.insert(creative_list, stack:to_string ())
+		    else
+			table.insert(creative_list, name)
+		    end
 		end
 		if def.groups._mcl_potion == 1 then
 		    if def.has_potent then
