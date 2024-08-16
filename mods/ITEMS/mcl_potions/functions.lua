@@ -1645,7 +1645,7 @@ function mcl_potions.make_invisible(obj_ref, hide)
 end
 
 
-function mcl_potions._use_potion(_, obj, color)
+function mcl_potions._use_potion(obj, color)
 	local d = 0.1
 	local pos = obj:get_pos()
 	minetest.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})

@@ -30,7 +30,7 @@ local potion_intro = S("Drinking a potion gives you a particular effect or set o
 -- ╚═╝░░░░░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
 
-local function generate_on_use(effects, color, on_use, custom_effect)
+local function generate_on_use(vanish, effects, color, on_use, custom_effect)
 	return function(itemstack, user, pointed_thing)
 		if pointed_thing.type == "node" then
 			if user and not user:get_player_control().sneak then
@@ -57,8 +57,18 @@ local function generate_on_use(effects, color, on_use, custom_effect)
 		if on_use then on_use(user, potency+1) end
 		if custom_effect then custom_effect(user, potency+1, plus) end
 
-		itemstack = minetest.do_item_eat(0, "mcl_potions:glass_bottle", itemstack, user, pointed_thing)
-		if itemstack then mcl_potions._use_potion(itemstack, user, color) end
+		-- Certain potions, e.g. ominous bottles, are meant to
+		-- vanish after consumption rather than to be replaced
+		-- by glass bottles.
+		local replacement
+		if vanish then
+		    replacement = nil
+		else
+		    replacement = "mcl_potions:glass_bottle"
+		end
+		itemstack = minetest.do_item_eat(0, replacement, itemstack,
+						 user, pointed_thing)
+		if vanish or itemstack then mcl_potions._use_potion(user, color) end
 
 		return itemstack
 	end
@@ -96,6 +106,7 @@ end
 -- uses_level - bool - whether the potion should come at different levels -
 --   - defaults to true if uses_level is true for at least one effect, else false
 -- drinkable - bool - defaults to true
+-- vanishing - bool - if drunk, vanish instead of restoring a glass bottle to inventory
 -- has_splash - bool - defaults to true
 -- has_lingering - bool - defaults to true
 -- has_arrow - bool - defaults to false
@@ -133,7 +144,9 @@ function mcl_potions.register_potion(def)
 		potion_longdesc = potion_intro .. "\n" .. def._longdesc
 	end
 	pdef._doc_items_longdesc = potion_longdesc
-	if def.drinkable ~= false then pdef._doc_items_usagehelp = how_to_drink end
+	if def.drinkable ~= false then
+	    pdef._doc_items_usagehelp = how_to_drink
+	end
 	pdef.stack_max = def.stack_max or 1
 	local color = def.color or "#0000FF"
 	pdef.inventory_image = def.image or potion_image(color)
@@ -179,7 +192,8 @@ function mcl_potions.register_potion(def)
 	pdef.has_plus = has_plus
 	local on_use
 	if def.drinkable ~= false then
-		on_use = generate_on_use(pdef._effect_list, color, def.custom_on_use, def.custom_effect)
+	    on_use = generate_on_use (def.vanishing, pdef._effect_list,
+				      color, def.custom_on_use, def.custom_effect)
 	end
 	pdef.on_place = on_use
 	pdef.on_secondary_use = on_use
@@ -577,6 +591,7 @@ mcl_potions.register_potion({
 	},
 	has_splash = false,
 	has_lingering = false,
+	vanishing = true,
 })
 
 
