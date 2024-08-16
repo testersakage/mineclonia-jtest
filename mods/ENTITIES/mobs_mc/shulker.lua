@@ -200,8 +200,14 @@ mcl_mobs.register_arrow("mobs_mc:shulkerbullet", {
 	homing = true,
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
-	hit_player = mcl_mobs.get_arrow_damage_func(4),
-	hit_mob = mcl_mobs.get_arrow_damage_func(4),
+	hit_player = function (self, player)
+	    mcl_potions.give_effect_by_level ("levitation", player, 1, 10)
+	    mcl_mobs.get_arrow_damage_func (4) (self, player)
+	end,
+	hit_mob = function (self, mob)
+	    mcl_potions.give_effect_by_level ("levitation", player, 1, 10)
+	    mcl_mobs.get_arrow_damage_func (4) (self, mob)
+	end,
 	hit_node = function(self, _)
 		self.object:remove()
 	end
