@@ -36,9 +36,6 @@ local function get_bundle_inv(bundlestack)
 end
 
 local function fill_bundle(bundlestack, itemstring, player)
-    -- TODO:
-    --  Add sounds
-    --  Add bar to filled bundle
     local player_inv = player:get_inventory()
     local bundle_inv = get_bundle_inv(bundlestack)
     table.insert(bundle_inv, itemstring)
@@ -64,8 +61,6 @@ local function fill_bundle(bundlestack, itemstring, player)
 end
 
 local function unfill_bundle(bundlestack, player)
-    -- TODO:
-    --  Add sounds
     local inv = player:get_inventory()
     local bundle_inv = get_bundle_inv(bundlestack)
     local new_stack = ItemStack(bundlestack:get_name():gsub("_filled", ""))
@@ -105,9 +100,7 @@ end
 minetest.register_craftitem("mcl_bundles:bundle", {
     description = S("Bundle"),
     _doc_items_longdesc = S("A bundle is an item that can store up to a stack's worth of mixed item types within itself in a single inventory slot."),
-    -- TODO:
-    --  Proper documentation
-    --_doc_items_usagehelp = S(""),
+    _doc_items_usagehelp = S("Right-click on items dropped on the ground to collect them. To empty the bundle, use it to point to a node or point to nothing."),
     groups = { tool = 1 },
     pointabilities = {
         objects = {
