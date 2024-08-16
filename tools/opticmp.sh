@@ -11,6 +11,8 @@ find ../mods/ -name "*.png"| while read f; do
 	if [ $saved -gt $cutoff ]; then
 		mv $tmp/$of $f
 		echo $f $saved bytes saved
+	else
+		rm $tmp/$of
 	fi
 done
 
