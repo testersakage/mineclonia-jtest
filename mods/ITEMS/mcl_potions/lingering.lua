@@ -181,7 +181,6 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		_default_extend_level = def._default_extend_level,
 		inventory_image = lingering_image(color),
 		groups = groups,
-		_mcl_filter_description = mcl_potions.filter_potion_description,
 		on_use = function(item, placer, pointed_thing)
 			local velocity = 10
 			local dir = placer:get_look_dir();
