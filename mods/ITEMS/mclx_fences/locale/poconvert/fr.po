@@ -22,3 +22,15 @@ msgstr "Porte de Barrière en Brique Rouge du Nether"
 msgid "Nether Brick Fence Gate"
 msgstr "Porte de Barrière en Brique du Nether"
 
+msgid "@1 Bark Fence"
+msgstr ""
+
+msgid "@1 Bark Fence Gate"
+msgstr ""
+
+msgid "Stripped @1 Wood Fence"
+msgstr ""
+
+msgid "Stripped @1 Wood Fence Gate"
+msgstr ""
+

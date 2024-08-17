@@ -73,9 +73,6 @@ msgstr ""
 msgid "Baby Hoglin"
 msgstr ""
 
-msgid "Sneak to dismount"
-msgstr ""
-
 msgid "Horse"
 msgstr "ウマ"
 
@@ -90,6 +87,9 @@ msgstr "ロバ"
 
 msgid "Mule"
 msgstr "ラバ"
+
+msgid "Sneak to dismount"
+msgstr ""
 
 msgid "Iron Golem"
 msgstr "アイアンゴーレム"

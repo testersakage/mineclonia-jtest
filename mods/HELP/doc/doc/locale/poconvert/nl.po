@@ -16,9 +16,6 @@ msgstr ""
 msgid "This is the help."
 msgstr ""
 
-msgid "New help entry unlocked: @1 > @2"
-msgstr ""
-
 msgid "All help entries revealed!"
 msgstr ""
 
@@ -83,9 +80,6 @@ msgid "Open a window providing help entries about Minetest and more"
 msgstr ""
 
 msgid "Help"
-msgstr ""
-
-msgid "Collection of help texts"
 msgstr ""
 
 msgid "Allows you to reveal all hidden help entries with /help_reveal"

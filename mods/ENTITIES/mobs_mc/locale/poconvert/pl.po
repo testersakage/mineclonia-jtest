@@ -73,9 +73,6 @@ msgstr ""
 msgid "Baby Hoglin"
 msgstr ""
 
-msgid "Sneak to dismount"
-msgstr ""
-
 msgid "Horse"
 msgstr ""
 
@@ -89,6 +86,9 @@ msgid "Donkey"
 msgstr ""
 
 msgid "Mule"
+msgstr ""
+
+msgid "Sneak to dismount"
 msgstr ""
 
 msgid "Iron Golem"

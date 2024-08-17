@@ -16,9 +16,6 @@ msgstr ""
 msgid "This is the help."
 msgstr "To jest pomoc."
 
-msgid "New help entry unlocked: @1 > @2"
-msgstr "Nowy wpis pomocniczy odblokowany: @1 > @2"
-
 msgid "All help entries revealed!"
 msgstr "Wszystkie wpisy pomocnicze odkryte!"
 
@@ -84,9 +81,6 @@ msgstr "Otwórz okno aby zobaczyć wpisy pomocnicze na temat Minetest i innych r
 
 msgid "Help"
 msgstr "Pomoc"
-
-msgid "Collection of help texts"
-msgstr "Kolekcja tekstów pomocniczych."
 
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "Pozwala odkryć wszystkie wpisy pomocnicze przy użyciu /help_reveal"

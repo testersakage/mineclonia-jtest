@@ -16,9 +16,6 @@ msgstr ""
 msgid "This is the help."
 msgstr "Ceci est l'aide."
 
-msgid "New help entry unlocked: @1 > @2"
-msgstr "Nouvelles pages d'aide débloquées : @1 > @2"
-
 msgid "All help entries revealed!"
 msgstr "Toutes les pages d'aide ont été découvertes !"
 
@@ -84,9 +81,6 @@ msgstr "Ouvrir une fenêtre contenant les pages d'aides à propos de Minetest"
 
 msgid "Help"
 msgstr "Aide"
-
-msgid "Collection of help texts"
-msgstr "Collection des textes d'aide"
 
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "Vous permet de découvrir toutes les pages d'aide cachées avec /help_reveal"

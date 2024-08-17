@@ -22,3 +22,15 @@ msgstr "Puerta de ladrillo abisal rojo"
 msgid "Nether Brick Fence Gate"
 msgstr "Puerta de ladrillo abisal"
 
+msgid "@1 Bark Fence"
+msgstr ""
+
+msgid "@1 Bark Fence Gate"
+msgstr ""
+
+msgid "Stripped @1 Wood Fence"
+msgstr ""
+
+msgid "Stripped @1 Wood Fence Gate"
+msgstr ""
+

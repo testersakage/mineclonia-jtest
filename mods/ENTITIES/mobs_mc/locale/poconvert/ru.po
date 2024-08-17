@@ -73,9 +73,6 @@ msgstr "Зоглин"
 msgid "Baby Hoglin"
 msgstr ""
 
-msgid "Sneak to dismount"
-msgstr ""
-
 msgid "Horse"
 msgstr "Лошадь"
 
@@ -90,6 +87,9 @@ msgstr "Ослик"
 
 msgid "Mule"
 msgstr "Мул"
+
+msgid "Sneak to dismount"
+msgstr ""
 
 msgid "Iron Golem"
 msgstr "Железный голем"
