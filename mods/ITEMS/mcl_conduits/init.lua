@@ -77,7 +77,7 @@ end
 
 function mcl_conduits.player_effect(player)
     if minetest.get_item_group(mcl_player.players[player].nodes.feet, "water") == 0 then return end
-    mcl_potions.give_effect ("conduit_power", player, 1, 17)
+    mcl_potions.give_effect_by_level ("conduit_power", player, 1, 17)
 end
 
 function mcl_conduits.conduit_damage(ent)
