@@ -103,8 +103,9 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 	on_rightclick = function(self, clicker)
 		if not self._curing and clicker and clicker:is_player() then
 			local wielditem = clicker:get_wielded_item()
-			-- ToDo: Only cure if zombie villager has the weakness effect
-			if wielditem:get_name() == "mcl_core:apple_gold" then
+			if wielditem:get_name() == "mcl_core:apple_gold"
+			    and mcl_potions.has_effect (self.object,
+							"weakness") then
 				wielditem:take_item()
 				clicker:set_wielded_item(wielditem)
 				self._curing = math.random(3 * 60, 5 * 60)
@@ -121,6 +122,10 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 				local villager_obj = mcl_util.replace_mob(obj, "mobs_mc:villager")
 				if villager_obj then
 					self._curing = nil
+					local villager = villager_obj:get_luaentity()
+					villager._profession = "unemployed"
+					-- Give this villager 10 seconds of nausea.
+					mcl_potions.give_effect ("nausea", villager_obj, 1, 10, false)
 					return false
 				end
 			end

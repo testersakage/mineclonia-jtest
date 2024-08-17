@@ -847,20 +847,17 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("not feeling very well...").."\n"..S("frequency: @1 / 1 s", factor)
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
 		object:set_lighting({
 			saturation = -1.0,
 		})
 	end,
 	on_hit_timer = function(object, factor, duration)
-		if EF.nausea[object].high then
-			EF.nausea[object].high = false
+		if EF.nausea[object].nauseated then
+			EF.nausea[object].nauseated = false
 		else
 
-			EF.nausea[object].high = true
+			EF.nausea[object].nauseated = true
 		end
 	end,
 	on_end = function(object)
