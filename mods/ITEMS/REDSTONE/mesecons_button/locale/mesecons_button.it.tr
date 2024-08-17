@@ -1,7 +1,7 @@
 # textdomain: mesecons_button
 Use the button to push it.=Utilizzare il pulsante per premerlo.
-Provides redstone power when pushed=
-Push duration: @1s=
+Provides redstone power when pushed=Fornisce la corrente di pietrarossa quando viene premuto
+Push duration: @1s=Durata di pressione: @1s
 Pushable by arrow=
 Stone Button=
 A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second.=

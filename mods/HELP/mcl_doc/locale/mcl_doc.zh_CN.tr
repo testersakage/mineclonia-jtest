@@ -11,7 +11,7 @@ This block quickly decays when there is no wood block of any species within a di
 This block quickly decays and disappears when there is no wood block of any species within a distance of @1. The block does not decay when the block has been placed by a player.=
 This plant can only grow on grass blocks and dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher.=
 This plant can grow on grass blocks, podzol, dirt and coarse dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher.=
-This block is flammable.=
+This block is flammable.=物块可燃。
 This block destroys any item it touches.=
 To eat it, wield it, then rightclick.=
 You can eat this even when your hunger bar is full.=

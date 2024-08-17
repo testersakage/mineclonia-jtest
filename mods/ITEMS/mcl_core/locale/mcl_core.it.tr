@@ -1,7 +1,7 @@
 # textdomain: mcl_core
 Stick=Bastone
-Sticks are a very versatile crafting material; used in countless crafting recipes.=
-Paper=
+Sticks are a very versatile crafting material; used in countless crafting recipes.=I bastoni sono un materiale da assemblaggio davvero versatile; utili in un numero incalcolabile di ricette d'assemblaggio.
+Paper=Carta
 Paper is used to craft books and maps.=
 Coal=
 “Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things.=
@@ -20,7 +20,7 @@ Molten iron. It is used to craft armor, tools, and whatnot.=
 Gold Ingot=
 Molten gold. It is used to craft armor, tools, and whatnot.=
 Emerald=
-Emeralds are used in villager trades as currency.=
+Emeralds are used in villager trades as currency.=Gli smeraldi vengono utilizzati negli scambi coi villici come valuta.
 Lapis Lazuli=
 Lapis Lazuli are required for enchanting items on an enchanting table.=
 Brick=

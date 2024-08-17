@@ -1,8 +1,7 @@
 # textdomain: mcl_doc_basics
 Advanced usage=Utilizzo avanzato
-Advanced information which may be nice to know, but is not crucial to gameplay=
-# MCL2 extensions
-Creative Mode=
+Advanced information which may be nice to know, but is not crucial to gameplay=Informazioni avanzate che possono essere utili da conoscere, ma che non sono cruciali per durante il gioco
+Creative Mode=Modalità Creativa
 Enabling Creative Mode in MineClone 2 applies the following changes:=
 • You keep the things you've placed=
 • Creative inventory is available to obtain most items easily=
@@ -132,7 +131,7 @@ How to play:=
 • Craft a wooden pickaxe so you can dig stone=
 • Different tools break different kinds of blocks. Try them out!=
 • Read entries in this help to learn the rest=• Leggete le voci in questa guida per imparare il resto
-• Continue playing as you wish. There's no real goal, but you may want to check the advancements available from the inventory screen. Have fun!=
+• Continue playing as you wish. There's no real goal, but you may want to check the advancements available from the inventory screen. Have fun!=• Continua a giocare a tuo piacimento. Non c'è un vero obiettivo, ma potresti voler controllare i progressi disponibili dalla schermata dell'inventario. Divertiti!
 For the default controls, see the next section [Controls].=
 Controls=Controlli
 These are the default controls (which can be remapped in the 'Change keys' dialog):=

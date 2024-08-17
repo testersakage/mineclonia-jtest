@@ -1,7 +1,7 @@
 # textdomain: mesecons_pressureplates
 A pressure plate is a redstone component which supplies its surrounding blocks with redstone power while someone or something rests on top of it.=Una piastra a pressione è un componente di pietrarossa che fornisce la corrente di pietrarossa ai blocchi adiacenti mentre qualcuno o qualcosa si trova sopra di essa.
-Provides redstone power when pushed=
-Pushable by players, mobs and objects=
+Provides redstone power when pushed=Fornisce la corrente di pietrarossa quando viene premuto
+Pushable by players, mobs and objects=Premibile da giocatori, mob ed oggetti
 Pushable by players and mobs=
 Pushable by mobs=
 Pushable by players=

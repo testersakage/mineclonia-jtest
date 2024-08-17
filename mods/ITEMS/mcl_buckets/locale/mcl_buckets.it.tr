@@ -1,7 +1,7 @@
 # textdomain: mcl_buckets
 Bucket of @1=Secchio di @1
-This bucket is filled with water and @1.=
-Place it to empty the bucket and place a @1. Obtain by right clicking on a @2 with a bucket of water.=
+This bucket is filled with water and @1.=Questo secchio è riempito con acqua e @1.
+Place it to empty the bucket and place a @1. Obtain by right clicking on a @2 with a bucket of water.=Piazzalo per rovesciare il secchio e piazzare un @1. Ottenuto cliccando col tasto destro su di un @2 con un secchio d'acqua.
 Places a water source and a @1.=
 Empty Bucket=
 A bucket can be used to collect and release liquids.=
