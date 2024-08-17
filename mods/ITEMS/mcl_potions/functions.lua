@@ -935,7 +935,7 @@ mcl_potions.register_effect({
 		return S("saturates by @1 per second", factor)
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    if object.is_player () then
+	    if object:is_player () then
 		mcl_hunger.set_hunger(object, math.min(mcl_hunger.get_hunger(object)+dtime*factor, 20))
 		mcl_hunger.saturate(object:get_player_name(), dtime*factor)
 	    end
