@@ -282,8 +282,9 @@ local function generate_beacon_formspec (pos, meta)
 			      pos.x, pos.y, pos.z)
 	    .. mcl_formspec.get_itemslot_bg(1,9,9,3)
 	    .. "list[current_player;main;1,9;9,3;9]"
+		.. "listring[]"
 	    .. mcl_formspec.get_itemslot_bg(1,12.5,9,1)
-	    .. "list[current_player;main;1,12.5;9,1;]")
+	    .. "list[current_player;main;1,12.5;9,1;]"
 end
 
 minetest.register_node("mcl_beacons:beacon", {
