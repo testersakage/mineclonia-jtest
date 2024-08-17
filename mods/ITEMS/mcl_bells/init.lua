@@ -12,7 +12,14 @@ function mcl_bells.ring_once(pos)
 	for _,o in pairs(vv) do
 		local entity = o:get_luaentity()
 		if entity and entity.type and entity.type == "npc" then
-			entity._last_alarm = alarm_time
+		    entity._last_alarm = alarm_time
+		end
+
+		if entity and entity.is_mob and entity.raidmob then
+		    local distance = vector.distance (o:get_pos (), pos)
+		    if distance <= 48 then
+			mcl_potions.give_effect ("glowing", o, o, 1, 3)
+		    end
 		end
 	end
 end
@@ -47,7 +54,3 @@ minetest.register_node("mcl_bells:bell", {
 		rules = mesecon.rules.flat,
 	}},
 })
-
-if has_mcl_wip then
-	mcl_wip.register_wip_item("mcl_bells:bell")
-end
