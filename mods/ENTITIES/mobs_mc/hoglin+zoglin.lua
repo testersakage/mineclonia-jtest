@@ -85,7 +85,12 @@ local hoglin = {
 	end,
 	do_custom = function(self)
 		if mcl_worlds.pos_to_dimension(self.object:get_pos()) == "overworld" then
-			mcl_util.replace_mob(self.object, "mobs_mc:zoglin")
+		    local object
+			= mcl_util.replace_mob(self.object, "mobs_mc:zoglin")
+		    if object then
+			mcl_potions.give_effect ("nausea", object, 1,
+						 10, false)
+		    end
 		end
 	end,
 	on_rightclick = function(self, clicker)
