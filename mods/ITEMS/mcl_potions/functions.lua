@@ -513,24 +513,29 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("improved vision during the night")
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
+	    if object:is_player () then
 		object:get_meta():set_int("night_vision", 1)
 		mcl_weather.skycolor.update_sky_color({object})
+	    end
 	end,
 	on_load = function(object, factor)
+	    if object:is_player () then
 		object:get_meta():set_int("night_vision", 1)
 		mcl_weather.skycolor.update_sky_color({object})
+	    end
 	end,
 	on_step = function(dtime, object, factor, duration)
+	    if object:is_player () then
 		mcl_weather.skycolor.update_sky_color({object})
+	    end
 	end,
 	on_end = function(object)
+	    if object:is_player () then
 		local meta = object:get_meta()
 		meta:set_int("night_vision", 0)
 		mcl_weather.skycolor.update_sky_color({object})
+	    end
 	end,
 	particle_color = "#1F1FA1",
 	uses_factor = false,
@@ -542,18 +547,18 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("surrounded by darkness").."\n"..S("not seeing anything beyond @1 nodes", factor)
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
+	    if object:is_player () then
 		object:get_meta():set_int("darkness", 1)
 		mcl_weather.skycolor.update_sky_color({object})
 		object:set_sky({fog = {
 			fog_distance = factor,
 		}})
 		EF.darkness[object].flash = 0.6
+	    end
 	end,
 	on_step = function(dtime, object, factor, duration)
+	    if object:is_player () then
 		if object:get_meta():get_int("night_vision") ~= 1 then
 			local flash = EF.darkness[object].flash
 			if flash < 0.2 then EF.darkness[object].flashdir = true
@@ -569,14 +574,17 @@ mcl_potions.register_effect({
 			}})
 		end
 		mcl_weather.skycolor.update_sky_color({object})
+	    end
 	end,
 	on_end = function(object)
+	    if object:is_player () then
 		object:get_meta():set_int("darkness", 0)
 		mcl_weather.skycolor.update_sky_color({object})
 		object:set_sky({fog = {
 			fog_distance = -1,
 			fog_start = -1,
 		}})
+	    end
 	end,
 	particle_color = "#000000",
 	uses_factor = true,
@@ -656,14 +664,16 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("HP increased by @1", factor)
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob HP modifier API?
-	end,
 	on_start = function(object, factor)
+	    if object:is_player () then
+		-- TODO can mob "physics" overrides also affect hp?
 		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT+factor})
+	    end
 	end,
 	on_end = function(object)
+	    if object:is_player () then
 		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT})
+	    end
 	end,
 	particle_color = "#FF2222",
 	uses_factor = true,
@@ -751,9 +761,6 @@ mcl_potions.register_effect({
 	name = "luck",
 	description = S("Luck"),
 	particle_color = "#7BFF42",
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
 		-- TODO: Luck that only influences loot tables as in
 		-- Minecraft.
@@ -765,9 +772,6 @@ mcl_potions.register_effect({
 	name = "bad_luck",
 	description = S("Bad Luck"),
 	particle_color = "#887343",
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
 	    -- TODO: Bad Luck that only influences loot tables as in
 	    -- Minecraft.
@@ -819,10 +823,8 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("impaired sight")
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
+	    if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
 			[hud_elem_type_field] = "image",
 			position = {x = 0.5, y = 0.5},
@@ -830,8 +832,10 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
+	    end
 	end,
 	on_load = function(object, factor)
+	    if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
 			[hud_elem_type_field] = "image",
 			position = {x = 0.5, y = 0.5},
@@ -839,10 +843,13 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
+	    end
 	end,
 	on_end = function(object)
+	    if object:is_player () then
 		if not EF.blindness[object] then return end
 		object:hud_remove(EF.blindness[object].vignette)
+	    end
 	end,
 	particle_color = "#686868",
 	uses_factor = false,
@@ -857,26 +864,31 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("exhausts by @1 per second", factor)
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_start = function(object, factor)
+	    if object:is_player () then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
 		end
+	    end
 	end,
 	on_load = function(object, factor) -- TODO refactor and add hunger bar modifier API
+	    if object:is_player () then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
 		end
+	    end
 	end,
 	on_step = function(dtime, object, factor, duration)
+	    if object:is_player () then
 		mcl_hunger.exhaust(object:get_player_name(), dtime*factor)
+	    end
 	end,
 	on_end = function(object)
+	    if object:is_player () then
 		mcl_hunger.reset_bars_poison_hunger(object)
+	    end
 	end,
 	particle_color = "#83A061",
 	uses_factor = true,
@@ -922,12 +934,11 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("saturates by @1 per second", factor)
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO what should it do for mobs?
-	end,
 	on_step = function(dtime, object, factor, duration)
+	    if object.is_player () then
 		mcl_hunger.set_hunger(object, math.min(mcl_hunger.get_hunger(object)+dtime*factor, 20))
 		mcl_hunger.saturate(object:get_player_name(), dtime*factor)
+	    end
 	end,
 	particle_color = "#CEAE29",
 	uses_factor = true,
@@ -988,13 +999,16 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("+@1% mining and attack speed", math.floor(factor*100))
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob API support
+	on_start = function (object, factor)
+	    if object:is_player () then
+		mcl_potions.update_haste_and_fatigue (object, factor)
+	    end
 	end,
-	on_start = mcl_potions.update_haste_and_fatigue,
 	after_end = function(object)
+	    if object:is_player () then
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
+	    end
 	end,
 	particle_color = "#FFFF00",
 	uses_factor = true,
@@ -1009,13 +1023,16 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("-@1% mining and attack speed", math.floor((1-factor)*100))
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob API support
+	on_start = function (object, factor)
+	    if object:is_player () then
+		mcl_potions.update_haste_and_fatigue (object, factor)
+	    end
 	end,
-	on_start = mcl_potions.update_haste_and_fatigue,
 	after_end = function(object)
+	    if object:is_player () then
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
+	    end
 	end,
 	particle_color = "#64643D",
 	uses_factor = true,
@@ -1030,10 +1047,11 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("+@1% mining and attack speed in water").."\n"..S("limitless breathing under water", math.floor(factor*100))
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob API support
+	on_start = function (object, factor)
+	    if object:is_player () then
+		mcl_potions.update_haste_and_fatigue (object, factor)
+	    end
 	end,
-	on_start = mcl_potions.update_haste_and_fatigue,
 	on_step = function(dtime, object, factor, duration)
 		if not object:is_player() then return end
 		local node = minetest.get_node_or_nil(object:get_pos())
@@ -1065,27 +1083,25 @@ mcl_potions.register_effect({
 function mcl_potions.update_haste_and_fatigue(player)
     local h_fac = mcl_potions.get_total_haste(player)
     local f_fac = mcl_potions.get_total_fatigue(player)
-    if player:is_player () then
-	if mcl_gamemode.get_gamemode(player) == "creative" then return end
-	local item = player:get_wielded_item()
-	local meta = item:get_meta()
-	local item_haste = meta:get_float("mcl_potions:haste")
-	local item_fatig = 1 - meta:get_float("mcl_potions:fatigue")
-	if item_haste ~= h_fac or item_fatig ~= f_fac then
-	    if h_fac ~= 0 then meta:set_float("mcl_potions:haste", h_fac)
-	    else meta:set_string("mcl_potions:haste", "") end
-	    if f_fac ~= 1 then meta:set_float("mcl_potions:fatigue", 1 - f_fac)
-	    else meta:set_string("mcl_potions:fatigue", "") end
-	    meta:set_tool_capabilities()
-	    mcl_enchanting.update_groupcaps(item, true)
-	    if h_fac == 0 and f_fac == 1 then
-		player:set_wielded_item(item)
-		return
-	    end
-	    local toolcaps = item:get_tool_capabilities()
-	    meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
+    if mcl_gamemode.get_gamemode(player) == "creative" then return end
+    local item = player:get_wielded_item()
+    local meta = item:get_meta()
+    local item_haste = meta:get_float("mcl_potions:haste")
+    local item_fatig = 1 - meta:get_float("mcl_potions:fatigue")
+    if item_haste ~= h_fac or item_fatig ~= f_fac then
+	if h_fac ~= 0 then meta:set_float("mcl_potions:haste", h_fac)
+	else meta:set_string("mcl_potions:haste", "") end
+	if f_fac ~= 1 then meta:set_float("mcl_potions:fatigue", 1 - f_fac)
+	else meta:set_string("mcl_potions:fatigue", "") end
+	meta:set_tool_capabilities()
+	mcl_enchanting.update_groupcaps(item, true)
+	if h_fac == 0 and f_fac == 1 then
 	    player:set_wielded_item(item)
+	    return
 	end
+	local toolcaps = item:get_tool_capabilities()
+	meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
+	player:set_wielded_item(item)
     end
     haste_fatigue_hand_update(player, h_fac, f_fac)
 end
