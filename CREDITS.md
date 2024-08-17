@@ -12,7 +12,6 @@
 
 ## Active Contributors
 * codiac
-* ShadowRoi
 * DragonWrangler1
 * nixnoxus
 * JoseDouglas26
@@ -20,11 +19,10 @@
 * amino
 * Jürgen Rühle
 * teknomunk
-* AFCMS
-* Eliy21
 
 ## Previous Contributors
 * Lizzy Fleckenstein
+* AFCMS
 * NO11
 * Brandon
 * kay27
@@ -48,6 +46,7 @@
 * Nils Dagsson Moskopp
 * ChrisPHP
 * 3raven
+* ShadowRoi
 
 ## Original Mod Authors
 * Wuzzy

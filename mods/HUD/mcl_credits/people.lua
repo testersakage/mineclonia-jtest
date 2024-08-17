@@ -14,7 +14,6 @@ return {
 	}},
 	{S("Active Contributors"), 0xF84355, {
 		"codiac",
-		"ShadowRoi",
 		"DragonWrangler1",
 		"nixnoxus",
 		"JoseDouglas26",
@@ -22,11 +21,10 @@ return {
 		"amino",
 		"Jürgen Rühle",
 		"teknomunk",
-		"AFCMS",
-		"Eliy21",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
+		"AFCMS",
 		"NO11",
 		"Brandon",
 		"kay27",
@@ -50,6 +48,7 @@ return {
 		"Nils Dagsson Moskopp",
 		"ChrisPHP",
 		"3raven",
+		"ShadowRoi",
 	}},
 	{S("Original Mod Authors"), 0xA60014, {
 		"Wuzzy",
