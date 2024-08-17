@@ -44,8 +44,48 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	},
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,
-    swims = true,
+	swims = true,
 	breathes_in_water = false,
+	fly = true,
+	fly_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
+	_player_check_time = 0,
+	follow_holding = function (_) return true end,
+	follow_velocity = 4.6,
+	do_custom = function (self, dtime)
+	local pos = self.object:get_pos ()
+	local closest_player, cur_dist
+
+	if  self._player_check_time < 0.3 then
+		self._player_check_time = self._player_check_time + dtime
+		return
+	end
+	self._player_check_time = 0
+
+	-- Cling to the current player if still swimming.
+	if self.following and self:object_in_follow_range (self.following)
+		and mcl_player.players[self.following].is_swimming then
+		closest_player = self.following
+	else
+		for _, object in pairs (minetest.get_objects_inside_radius (pos, 15)) do
+		if object:is_player ()
+			and mcl_player.players[object].is_swimming then
+			local distance = vector.distance (pos, object:get_pos ())
+			if not closest_player or cur_dist > distance then
+			closest_player = object
+			cur_dist = distance
+			end
+		end
+		end
+	end
+
+	if closest_player then
+		self.following = closest_player
+		mcl_potions.give_effect ("dolphin_grace", closest_player, 1, 5)
+	else
+		self.following = nil
+	end
+	end,
+	breathes_in_water = true,
 	jump = false,
 	view_range = 16,
 	fear_height = 4,
