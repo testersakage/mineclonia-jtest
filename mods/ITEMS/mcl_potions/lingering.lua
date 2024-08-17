@@ -16,7 +16,8 @@ local function potency_to_level (potency)
 end
 
 local function add_lingering_effects (pos, color, effects, is_water, texture,
-				      duration, custom_effect, potency, plus)
+				      duration, custom_effect, potency, plus,
+				      initial_radius)
     local tbl = lingering_effects_at[pos]
     if not tbl then
 	tbl = { }
@@ -28,10 +29,12 @@ local function add_lingering_effects (pos, color, effects, is_water, texture,
 			 is_water = is_water,
 			 effects = effects,
 			 texture = texture,
+			 initial_radius = initial_radius,
 			 -- The next three fields are only material if
 			 -- custom_effect is set.
 			 custom_effect = custom_effect,
-			 level = potency_to_level (potency),
+			 level = (potency
+				  and potency_to_level (potency)),
 			 plus = plus, })
 end
 
@@ -73,6 +76,22 @@ local function linger_particles(pos, d, texture, color)
 	})
 end
 
+function mcl_potions.add_lingering_effect (pos, name, duration, level,
+					   initial_radius)
+    local def = mcl_potions.registered_effects[name]
+
+    if not def then
+	return
+    end
+    add_lingering_effects (pos, def.particle_color,
+			   { [name] = { dur = duration,
+					level = level, }, },
+			   false, "mcl_particles_effect.png", duration,
+			   nil, nil, nil, initial_radius)
+    linger_particles (pos, initial_radius, "mcl_particles_effect.png",
+		      def.particle_color or "#000000")
+end
+
 local function particle_texture (name, def)
     if name == "water" then
 	return "mcl_particles_droplet_bottle.png"
@@ -93,7 +112,8 @@ minetest.register_globalstep(function(dtime)
 		local rem = 0
 		for i, vals in ipairs (lists) do
 		    vals.timer = vals.timer - lingering_timer
-		    local d = 4 * (vals.timer / vals.lifespan)
+		    local d = (vals.initial_radius
+			       * (vals.timer / vals.lifespan))
 		    local texture = vals.texture
 		    local deduct_time = false
 		    linger_particles(pos, d, texture, vals.color)
@@ -249,7 +269,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 
 				add_lingering_effects (pos, color, effects, name == "water",
 						       texture, 30, def.custom_effect, potency,
-						       plus)
+						       plus, d)
 				linger_particles (pos, d, texture, color)
 				if def.on_splash then def.on_splash (pos, potency+1) end
 				self.object:remove()

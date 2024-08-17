@@ -1841,6 +1841,18 @@ function mcl_potions.give_effect_by_level(name, object, level, duration, no_part
 	return mcl_potions.give_effect(name, object, factor, duration, no_particles)
 end
 
+function mcl_potions.all_effects (object)
+    local val = {}
+
+    for name, _ in pairs (registered_effects) do
+	if EF[name][object] then
+	    val[name] = EF[name][object]
+	end
+    end
+
+    return val
+end
+
 function mcl_potions.healing_func(object, hp)
 	if not object or object:get_hp() <= 0 then return false end
 	local ent = object:get_luaentity()

@@ -99,7 +99,17 @@ local creeper_defs = {
 				end
 			end
 		end
-	end
+	end,
+	on_attack = function (self)
+	    -- Dissipate active status effects.
+	    local pos = self.object:get_pos ()
+	    for name, val in pairs (mcl_potions.all_effects (self.object)) do
+		local level = mcl_potions.get_effect_level (self.object,
+							    name)
+		mcl_potions.add_lingering_effect (pos, name, val.dur / 2,
+						  level, 2.5)
+	    end
+	end,
 }
 
 
