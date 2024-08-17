@@ -948,7 +948,7 @@ mcl_potions.register_effect({
 	res_condition = function(object)
 		return (not object:is_player()) -- TODO needs mob API support
 	end,
-	on_start = haste_fatigue_hand_update,
+	on_start = mcl_potions.update_haste_and_fatigue,
 	after_end = function(object)
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
@@ -969,7 +969,7 @@ mcl_potions.register_effect({
 	res_condition = function(object)
 		return (not object:is_player()) -- TODO needs mob API support
 	end,
-	on_start = haste_fatigue_hand_update,
+	on_start = mcl_potions.update_haste_and_fatigue,
 	after_end = function(object)
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
@@ -990,7 +990,7 @@ mcl_potions.register_effect({
 	res_condition = function(object)
 		return (not object:is_player()) -- TODO needs mob API support
 	end,
-	on_start = haste_fatigue_hand_update,
+	on_start = mcl_potions.update_haste_and_fatigue,
 	on_step = function(dtime, object, factor, duration)
 		if not object:is_player() then return end
 		local node = minetest.get_node_or_nil(object:get_pos())
@@ -1008,8 +1008,8 @@ mcl_potions.register_effect({
 		end
 	end,
 	after_end = function(object)
-		haste_fatigue_hand_update(object)
-		mcl_potions._reset_haste_fatigue_item_meta(object)
+	    haste_fatigue_hand_update(object)
+	    mcl_potions._reset_haste_fatigue_item_meta(object)
 	end,
 	particle_color = "#1FB1BA",
 	uses_factor = true,
@@ -1020,6 +1020,7 @@ mcl_potions.register_effect({
 
 -- implementation of haste and fatigue effects
 function mcl_potions.update_haste_and_fatigue(player)
+    if player:is_player () then
 	if mcl_gamemode.get_gamemode(player) == "creative" then return end
 	local item = player:get_wielded_item()
 	local meta = item:get_meta()
@@ -1028,21 +1029,22 @@ function mcl_potions.update_haste_and_fatigue(player)
 	local h_fac = mcl_potions.get_total_haste(player)
 	local f_fac = mcl_potions.get_total_fatigue(player)
 	if item_haste ~= h_fac or item_fatig ~= f_fac then
-		if h_fac ~= 0 then meta:set_float("mcl_potions:haste", h_fac)
-		else meta:set_string("mcl_potions:haste", "") end
-		if f_fac ~= 1 then meta:set_float("mcl_potions:fatigue", 1 - f_fac)
-		else meta:set_string("mcl_potions:fatigue", "") end
-		meta:set_tool_capabilities()
-		mcl_enchanting.update_groupcaps(item, true)
-		if h_fac == 0 and f_fac == 1 then
-			player:set_wielded_item(item)
-			return
-		end
-		local toolcaps = item:get_tool_capabilities()
-		meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
+	    if h_fac ~= 0 then meta:set_float("mcl_potions:haste", h_fac)
+	    else meta:set_string("mcl_potions:haste", "") end
+	    if f_fac ~= 1 then meta:set_float("mcl_potions:fatigue", 1 - f_fac)
+	    else meta:set_string("mcl_potions:fatigue", "") end
+	    meta:set_tool_capabilities()
+	    mcl_enchanting.update_groupcaps(item, true)
+	    if h_fac == 0 and f_fac == 1 then
 		player:set_wielded_item(item)
+		return
+	    end
+	    local toolcaps = item:get_tool_capabilities()
+	    meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
+	    player:set_wielded_item(item)
 	end
-	haste_fatigue_hand_update(player, h_fac, f_fac)
+    end
+    haste_fatigue_hand_update(player, h_fac, f_fac)
 end
 minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 	mcl_potions.update_haste_and_fatigue(puncher)
