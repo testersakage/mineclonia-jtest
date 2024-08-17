@@ -1,7 +1,7 @@
 # textdomain: mcl_mobitems
 Rotten Flesh=Carne Marcia
-80% chance of food poisoning=
-Yuck! This piece of flesh clearly has seen better days. If you're really desperate, you can eat it to restore a few hunger points, but there's a 80% chance it causes food poisoning, which increases your hunger for a while.=
+80% chance of food poisoning=80% di probabilità di intossicazione alimentare
+Yuck! This piece of flesh clearly has seen better days. If you're really desperate, you can eat it to restore a few hunger points, but there's a 80% chance it causes food poisoning, which increases your hunger for a while.=Bleah! Questo pezzo di carne ha chiaramente visto tempi migliori. Se sei davvero disperata(o), puoi mangiarlo per ripristinare qualche punto di fame, ma c'è un 80% di probabilità che causi l'intossicazione alimentare, che aumenta la tua fame per un pò di tempo.
 Raw Mutton=
 Raw mutton is the flesh from a sheep and can be eaten safely. Cooking it will greatly increase its nutritional value.=
 Cooked Mutton=

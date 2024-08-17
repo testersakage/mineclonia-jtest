@@ -1,5 +1,5 @@
 # textdomain: mcl_weather
-Gives ability to control weather=
+Gives ability to control weather=获得控制天气的能力
 Changes the weather to the specified parameter.=
 Error: No weather specified.=
 Error: Invalid parameters.=

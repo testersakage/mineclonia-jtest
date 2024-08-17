@@ -1,5 +1,5 @@
 # textdomain: mcl_beacons
-Beacon:=
+Beacon=信标
+Beacon:=信标：
 Primary Power:=
 Inventory:=
-Beacon=
