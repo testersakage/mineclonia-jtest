@@ -1255,60 +1255,89 @@ end
 -- ╚█████╔╝██║░░██║███████╗╚█████╔╝██║░╚██╗███████╗██║░░██║
 -- ░╚════╝░╚═╝░░╚═╝╚══════╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
 
+local function add_spawner(obj, color)
+    local d = 0.2
+    return minetest.add_particlespawner({
+	    amount = 10.0,
+	    time = 0,
+	    attached = obj,
+	    minpos = {x = -d, y = 1, z = -d},
+	    maxpos = {x = d, y = 2, z = d},
+	    minvel = {x = -0.1, y = 0, z = -0.1},
+	    maxvel = {x = 0.1, y = 0.1, z = 0.1},
+	    minacc = {x = -0.1, y = 0, z = -0.1},
+	    maxacc = {x = 0.1, y = .1, z = 0.1},
+	    minexptime = 0.5,
+	    maxexptime = 1,
+	    minsize = 0.5,
+	    maxsize = 1,
+	    collisiondetection = false,
+	    vertical = false,
+	    texture = "mcl_particles_effect.png^[colorize:"..color..":127",
+    })
+end
+
 minetest.register_globalstep(function(dtime)
 	for name, effect in pairs(registered_effects) do
-		for object, vals in pairs(EF[name]) do
-			if vals.dur ~= math.huge then EF[name][object].timer = vals.timer + dtime end
+	    for object, vals in pairs(EF[name]) do
+		if vals.dur ~= math.huge then EF[name][object].timer = vals.timer + dtime end
 
-			if object:get_pos() and not vals.no_particles then mcl_potions._add_spawner(object, effect.particle_color) end
-			if effect.on_step then effect.on_step(dtime, object, vals.factor, vals.dur) end
-			if effect.on_hit_timer then
-				EF[name][object].hit_timer = (vals.hit_timer or 0) + dtime
-				if EF[name][object].hit_timer >= vals.step then
-					effect.on_hit_timer(object, vals.factor, vals.dur)
-					if EF[name][object] then EF[name][object].hit_timer = 0 end
-				end
-			end
-
-			if not object or not EF[name][object] or EF[name][object].timer >= vals.dur or not object:get_pos() then
-				if effect.on_end then effect.on_end(object) end
-				EF[name][object] = nil
-				if item_speed_effects[effect] then
-				    item_speed_effects[effect][object] = nil
-				end
-				if effect.after_end then effect.after_end(object) end
-				if object:is_player() then
-					local meta = object:get_meta()
-					meta:set_string("mcl_potions:_EF_"..name, "")
-					potions_set_hud(object)
-				else
-					local ent = object:get_luaentity()
-					if ent then
-					    if not ent._mcl_potions then
-						ent._mcl_potions = {}
-					    end
-					    ent._mcl_potions["_EF_"..name] = nil
-					end
-				end
-			elseif object:is_player() then
-				if vals.dur == math.huge then
-					object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
-						"text", "∞")
-				else
-					local dur = math.round(vals.dur-vals.timer)
-					object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
-						"text", math.floor(dur/60)..string.format(":%02d",math.floor(dur % 60)))
-				end
-			else
-				local ent = object:get_luaentity()
-				if not ent._mcl_potions then
-				    ent._mcl_potions = {}
-				end
-				if ent then
-					ent._mcl_potions["_EF_"..name] = EF[name][object]
-				end
-			end
+		if not vals.no_particles and not vals.spawner then
+		    vals.spawner
+			= add_spawner (object, effect.particle_color)
 		end
+
+		if effect.on_step then effect.on_step(dtime, object, vals.factor, vals.dur) end
+		if effect.on_hit_timer then
+		    EF[name][object].hit_timer = (vals.hit_timer or 0) + dtime
+		    if EF[name][object].hit_timer >= vals.step then
+			effect.on_hit_timer(object, vals.factor, vals.dur)
+			if EF[name][object] then EF[name][object].hit_timer = 0 end
+		    end
+		end
+
+		if not object or not EF[name][object] or EF[name][object].timer >= vals.dur or not object:get_pos() then
+		    if vals.spawner then
+			minetest.delete_particlespawner (vals.spawner)
+		    end
+		    if effect.on_end then effect.on_end(object) end
+		    EF[name][object] = nil
+		    if item_speed_effects[effect] then
+			item_speed_effects[effect][object] = nil
+		    end
+		    if effect.after_end then effect.after_end(object) end
+		    if object:is_player() then
+			local meta = object:get_meta()
+			meta:set_string("mcl_potions:_EF_"..name, "")
+			potions_set_hud(object)
+		    else
+			local ent = object:get_luaentity()
+			if ent then
+			    if not ent._mcl_potions then
+				ent._mcl_potions = {}
+			    end
+			    ent._mcl_potions["_EF_"..name] = nil
+			end
+		    end
+		elseif object:is_player() then
+		    if vals.dur == math.huge then
+			object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
+					  "text", "∞")
+		    else
+			local dur = math.round(vals.dur-vals.timer)
+			object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
+					  "text", math.floor(dur/60)..string.format(":%02d",math.floor(dur % 60)))
+		    end
+		else
+		    local ent = object:get_luaentity()
+		    if not ent._mcl_potions then
+			ent._mcl_potions = {}
+		    end
+		    if ent then
+			ent._mcl_potions["_EF_"..name] = EF[name][object]
+		    end
+		end
+	    end
 	end
 end)
 
@@ -1361,8 +1390,14 @@ function mcl_potions._reset_effects(object, set_hud)
 
 	local removed_effects = {}
 	for name, effect in pairs(registered_effects) do
-		if EF[name][object] and effect.on_end then effect.on_end(object) end
-		if effect.after_end then table.insert(removed_effects, effect.after_end) end
+	    local val = EF[name][object]
+	    if val and effect.on_end then
+		effect.on_end (object)
+	    end
+	    if val and val.spawner then
+		minetest.delete_particlespawner (val.spawner)
+	    end
+	    if effect.after_end then table.insert(removed_effects, effect.after_end) end
 	end
 	for name, tbl in pairs (item_speed_effects) do
 	    tbl[object] = nil
@@ -1386,8 +1421,13 @@ function mcl_potions._save_player_effects(player)
 	local meta = player:get_meta()
 
 	for name, effect in pairs(registered_effects) do
-		if effect.on_save_effect and EF[name][player] then effect.on_save_effect(player) end
-		meta:set_string("mcl_potions:_EF_"..name, minetest.serialize(EF[name][player]))
+	    if EF[name][player] then
+		EF[name][player].spawner = nil
+		if effect.on_save_effect then
+		    effect.on_save_effect(player)
+		end
+	    end
+	    meta:set_string("mcl_potions:_EF_"..name, minetest.serialize(EF[name][player]))
 	end
 end
 
@@ -1550,8 +1590,12 @@ function mcl_potions.clear_effect(object, effect)
 		return false
 	end
 	local def = registered_effects[effect]
-	if EF[effect][object] then
+	local effect = EF[effect][object]
+	if effect then
 		if def.on_end then def.on_end(object) end
+		if effect.spawner then
+		    minetest.delete_particlespawner (def.spawner)
+		end
 		EF[effect][object] = nil
 		if def.after_end then def.after_end(object) end
 	end
@@ -1667,30 +1711,6 @@ function mcl_potions._use_potion(obj, color)
 		texture = "mcl_particles_effect.png^[colorize:"..color..":127",
 	})
 end
-
-
-function mcl_potions._add_spawner(obj, color)
-	local d = 0.2
-	local pos = obj:get_pos()
-	minetest.add_particlespawner({
-		amount = 1,
-		time = 1,
-		minpos = {x=pos.x-d, y=pos.y+1, z=pos.z-d},
-		maxpos = {x=pos.x+d, y=pos.y+2, z=pos.z+d},
-		minvel = {x=-0.1, y=0, z=-0.1},
-		maxvel = {x=0.1, y=0.1, z=0.1},
-		minacc = {x=-0.1, y=0, z=-0.1},
-		maxacc = {x=0.1, y=.1, z=0.1},
-		minexptime = 0.5,
-		maxexptime = 1,
-		minsize = 0.5,
-		maxsize = 1,
-		collisiondetection = false,
-		vertical = false,
-		texture = "mcl_particles_effect.png^[colorize:"..color..":127",
-	})
-end
-
 
 
 -- ██████╗░░█████╗░░██████╗███████╗  ██████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗
