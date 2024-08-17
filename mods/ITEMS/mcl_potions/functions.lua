@@ -1020,14 +1020,14 @@ mcl_potions.register_effect({
 
 -- implementation of haste and fatigue effects
 function mcl_potions.update_haste_and_fatigue(player)
+    local h_fac = mcl_potions.get_total_haste(player)
+    local f_fac = mcl_potions.get_total_fatigue(player)
     if player:is_player () then
 	if mcl_gamemode.get_gamemode(player) == "creative" then return end
 	local item = player:get_wielded_item()
 	local meta = item:get_meta()
 	local item_haste = meta:get_float("mcl_potions:haste")
 	local item_fatig = 1 - meta:get_float("mcl_potions:fatigue")
-	local h_fac = mcl_potions.get_total_haste(player)
-	local f_fac = mcl_potions.get_total_fatigue(player)
 	if item_haste ~= h_fac or item_fatig ~= f_fac then
 	    if h_fac ~= 0 then meta:set_float("mcl_potions:haste", h_fac)
 	    else meta:set_string("mcl_potions:haste", "") end
