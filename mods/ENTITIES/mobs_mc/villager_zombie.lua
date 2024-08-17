@@ -120,12 +120,14 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 			if self._curing <= 0 then
 				local villager_obj = mcl_util.replace_mob(obj, "mobs_mc:villager")
 				if villager_obj then
-					local villager = villager_obj:get_luaentity()
-					villager._profession = "unemployed"
+					self._curing = nil
 					return false
 				end
 			end
 		end
+	end,
+	on_mob_replace = function(self, new_ent)
+		new_ent._profession = self._profession
 	end,
 	sunlight_damage = 2,
 	ignited_by_sunlight = true,
