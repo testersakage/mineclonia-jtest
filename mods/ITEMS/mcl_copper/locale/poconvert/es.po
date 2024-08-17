@@ -3,82 +3,84 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-08-11 10:47+0000\n"
+"Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_copper/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Waxed @1"
-msgstr ""
+msgstr "@1 encerado"
 
 msgid "Copper Ingot"
-msgstr ""
+msgstr "Lingote de cobre"
 
 msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr ""
+msgstr "Cobre crudo fundido. Se utiliza para craftear bloques."
 
 msgid "Raw Copper"
-msgstr ""
+msgstr "Cobre crudo"
 
 msgid "Raw Copper. Mine a Copper Ore to get it."
-msgstr ""
+msgstr "Cobre crudo. Pica un mineral de cobre para conseguirlo."
 
 msgid "Copper Ore"
-msgstr ""
+msgstr "Mineral de cobre"
 
 msgid "Some copper contained in stone, it is pretty common and can be found below sea level."
 msgstr ""
+"Algo de cobre se encuentra en la piedra, está bastante extendido y se puede "
+"encontrar por debajo del nivel del mar."
 
 msgid "Block of Raw Copper"
-msgstr ""
+msgstr "Bloque de cobre crudo"
 
 msgid "A block used for compact raw copper storage."
-msgstr ""
+msgstr "Un bloque utilizado para el almacenamiento compacto de cobre crudo."
 
 msgid "Exposed"
-msgstr ""
+msgstr "expuesto"
 
 msgid "Weathered"
-msgstr ""
+msgstr "degradado"
 
 msgid "Oxidized"
-msgstr ""
+msgstr "oxidado"
 
 msgid "Block of"
-msgstr ""
+msgstr "Bloque de"
 
 msgid "@1 Copper"
-msgstr ""
+msgstr "Cobre @1"
 
 msgid "@1 copper is mostly a decorative block."
-msgstr ""
+msgstr "El cobre @1 es principalmente un bloque decorativo."
 
 msgid "@1 Cut Copper"
-msgstr ""
+msgstr "Cobre cortado @1"
 
 msgid "@1 Chiseled Copper"
-msgstr ""
+msgstr "Cobre cincelado @1"
 
 msgid "@1 Chiseled copper is mostly a decorative block."
-msgstr ""
+msgstr "El cobre cincelado @1 es principalmente un bloque decorativo."
 
 msgid "@1 Copper Grate"
-msgstr ""
+msgstr "Rejilla de cobre @1"
 
 msgid "@1 Copper Bulb On"
-msgstr ""
+msgstr "Bombilla de cobre encendida @1"
 
 msgid "@1 Copper Bulb"
-msgstr ""
+msgstr "Bombilla de cobre @1"
 
 msgid "@1 Copper Trapdoor"
-msgstr ""
+msgstr "Trampilla de cobre @1"
 
 msgid "@1 Copper Door"
-msgstr ""
-
+msgstr "Puerta de cobre @1"

@@ -3,21 +3,22 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mesecons_noteblock x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-08-16 07:49+0000\n"
+"Last-Translator: Gaemy <Gaemy@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mesecons_noteblock/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "Note Block"
 msgstr "Bloque musical"
 
 msgid "Plays a musical note when powered by redstone power"
-msgstr ""
+msgstr "Toca una nota musical cuando recibe una señal de redstone"
 
 msgid "A note block is a musical block which plays one of many musical notes and different intruments when it is punched or supplied with redstone power."
 msgstr "Un bloque de notas es un bloque musical que reproduce una de las muchas notas musicales e instrumentos diferentes cuando se golpea o se le suministra energía de redstone."
@@ -38,41 +39,40 @@ msgid "• Sand or gravel: Snare drum"
 msgstr "• Arena o grava: tambor"
 
 msgid "• Block of Gold: Bell"
-msgstr ""
+msgstr "• Bloque de oro: Campana"
 
 msgid "• Clay: Flute"
-msgstr ""
+msgstr "• Arcilla: Flauta"
 
 msgid "• Packed Ice: Chime"
-msgstr ""
+msgstr "• Hielo compacto: Timbre"
 
 msgid "• Wool: Guitar"
-msgstr ""
+msgstr "• Lana: Guitarra"
 
 msgid "• Bone Block: Xylophne"
-msgstr ""
+msgstr "• Bloque de huesos: Xilófono"
 
 msgid "• Block of Iron: Iron xylophne"
-msgstr ""
+msgstr "• Bloque de Hierro: Xilófono de Hierro"
 
 msgid "• Soul Sand: Cow bell"
-msgstr ""
+msgstr "• Arena de almas: Campana de vaca"
 
 msgid "• Pumpkin: Didgeridoo"
-msgstr ""
+msgstr "- Calabaza: Didgeridoo"
 
 msgid "• Block of Emerald: Square wave"
-msgstr ""
+msgstr "- Bloque esmeralda: onda cuadrada"
 
 msgid "• Hay Bale: Banjo"
-msgstr ""
+msgstr "• Bloque de heno: Banjo"
 
 msgid "• Glowstone: Electric piano"
-msgstr ""
+msgstr "• Piedra luminosa: piano eléctrico"
 
 msgid "• Anything else: Piano"
 msgstr "• Cualquier otra cosa: piano"
 
 msgid "The note block will only play a note when it is below air, otherwise, it stays silent."
 msgstr "El bloque de notas solo reproducirá una nota cuando esté debajo del aire, de lo contrario, permanecerá en silencio."
-
