@@ -316,16 +316,11 @@ local output_table = { }
 -- registers a potion that can be combined with multiple ingredients for different outcomes
 -- out_table contains the recipes for those outcomes
 function mcl_potions.register_ingredient_potion(input, out_table)
-	if output_table[input] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(input) ~= "string" then
-		error("Invalid argument! input must be a string")
-	end
-	if type(out_table) ~= "table" then
-		error("Invalid argument! out_table must be a table")
-	end
-	output_table[input] = out_table
+    assert (not output_table[input],
+	    "Attempt to register the same ingredient twice!")
+    assert (type(input) == "string", "input must be a string")
+    assert (type(out_table) == "table", "out_table must be a table")
+    output_table[input] = out_table
 end
 
 local water_table = {
@@ -345,16 +340,11 @@ local water_table = {
 -- API
 -- register a potion recipe brewed from water
 function mcl_potions.register_water_brew(ingr, potion)
-	if water_table[ingr] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(ingr) ~= "string" then
-		error("Invalid argument! ingr must be a string")
-	end
-	if type(potion) ~= "string" then
-		error("Invalid argument! potion must be a string")
-	end
-	water_table[ingr] = potion
+    assert (not water_table[ingr],
+	    "Attempt to register the same ingredient twice!")
+    assert (type(ingr) == "string", "ingr must be a string")
+    assert (type(potion) == "string", "potion must be a string")
+    water_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:river_water", water_table)
 mcl_potions.register_ingredient_potion("mcl_potions:water", water_table)
@@ -374,16 +364,11 @@ local awkward_table = {
 -- API
 -- register a potion recipe brewed from awkward potion
 function mcl_potions.register_awkward_brew(ingr, potion)
-	if awkward_table[ingr] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(ingr) ~= "string" then
-		error("Invalid argument! ingr must be a string")
-	end
-	if type(potion) ~= "string" then
-		error("Invalid argument! potion must be a string")
-	end
-	awkward_table[ingr] = potion
+    assert (not water_table[ingr],
+	    "Attempt to register the same ingredient twice!")
+    assert (type(ingr) == "string", "ingr must be a string")
+    assert (type(potion) == "string", "potion must be a string")
+    awkward_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:awkward", awkward_table)
 
@@ -393,16 +378,11 @@ local mundane_table = {
 -- API
 -- register a potion recipe brewed from mundane potion
 function mcl_potions.register_mundane_brew(ingr, potion)
-	if mundane_table[ingr] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(ingr) ~= "string" then
-		error("Invalid argument! ingr must be a string")
-	end
-	if type(potion) ~= "string" then
-		error("Invalid argument! potion must be a string")
-	end
-	mundane_table[ingr] = potion
+    assert (not mundane_table[ingr],
+	    "Attempt to register the same ingredient twice!")
+    assert (type(ingr) == "string", "ingr must be a string")
+    assert (type(potion) == "string", "potion must be a string")
+    mundane_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:mundane", mundane_table)
 
@@ -412,16 +392,11 @@ local thick_table = {
 -- API
 -- register a potion recipe brewed from thick potion
 function mcl_potions.register_thick_brew(ingr, potion)
-	if thick_table[ingr] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(ingr) ~= "string" then
-		error("Invalid argument! ingr must be a string")
-	end
-	if type(potion) ~= "string" then
-		error("Invalid argument! potion must be a string")
-	end
-	thick_table[ingr] = potion
+    assert (not awkward_table[ingr],
+	    "Attempt to register the same ingredient twice!")
+    assert (type(ingr) == "string", "ingr must be a string")
+    assert (type(potion) == "string", "potion must be a string")
+    thick_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:thick", thick_table)
 
@@ -432,16 +407,11 @@ local mod_table = { }
 -- registers a brewing recipe altering the potion using a table
 -- this is supposed to substitute one item with another
 function mcl_potions.register_table_modifier(ingr, modifier)
-	if mod_table[ingr] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(ingr) ~= "string" then
-		error("Invalid argument! ingr must be a string")
-	end
-	if type(modifier) ~= "table" then
-		error("Invalid argument! modifier must be a table")
-	end
-	mod_table[ingr] = modifier
+    assert (not mod_table[ingr],
+	    "Attempt to register the same ingredient twice!")
+    assert (type(ingr) == "string", "ingr must be a string")
+    assert (type(modifier) == "table", "modifier must be a table")
+    mod_table[ingr] = modifier
 end
 
 minetest.register_on_mods_loaded(function()
@@ -465,16 +435,11 @@ local inversion_table = {
 }
 -- API
 function mcl_potions.register_inversion_recipe(input, output)
-	if inversion_table[input] then
-		error("Attempt to register the same input twice!")
-	end
-	if type(input) ~= "string" then
-		error("Invalid argument! input must be a string")
-	end
-	if type(output) ~= "string" then
-		error("Invalid argument! output must be a string")
-	end
-	inversion_table[input] = output
+    assert (not inversion_table[input],
+	    "Attempt to register the same input twice!")
+    assert (type (input) == string, "input must be a string")
+    assert (type (output) == string, "output must be a string")
+    inversion_table[input] = output
 end
 local function fill_inversion_table() -- autofills with splash and lingering inversion recipes
 	local filling_table = { }
@@ -511,16 +476,11 @@ local meta_mod_table = { }
 -- registers a brewing recipe altering the potion using a function
 -- this is supposed to be a recipe that changes metadata only
 function mcl_potions.register_meta_modifier(ingr, mod_func)
-	if meta_mod_table[ingr] then
-		error("Attempt to register the same ingredient twice!")
-	end
-	if type(ingr) ~= "string" then
-		error("Invalid argument! ingr must be a string")
-	end
-	if type(mod_func) ~= "function" then
-		error("Invalid argument! mod_func must be a function")
-	end
-	meta_mod_table[ingr] = mod_func
+    assert (not meta_mod_table[ingr],
+	    "Attempt to register the same ingredient twice!")
+    assert (type (ingr) == "string", "ingr must be a string")
+    assert (type (mod_func) == "function", "mod_func must be a function")
+    meta_mod_table[ingr] = mod_func
 end
 
 local function extend_dur(potionstack)

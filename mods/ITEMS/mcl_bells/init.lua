@@ -2,8 +2,6 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_bells = {}
 
-local has_mcl_wip = minetest.get_modpath("mcl_wip")
-
 function mcl_bells.ring_once(pos)
 	local alarm_time = (minetest.get_timeofday() * 24000) % 24000
 
