@@ -388,7 +388,7 @@ mcl_potions.register_effect({
 		if node and minetest.registered_nodes[node.name]
 			and minetest.get_item_group(node.name, "liquid") ~= 0 then
 		    add_physics_factor (object, "speed", "walk_velocity",
-					"mcl_potions:dolphin", 2)
+					"mcl_potions:dolphin", 1.6)
 		else
 		    remove_physics_factor (object, "speed", "walk_velocity",
 					   "mcl_potions:dolphin")
