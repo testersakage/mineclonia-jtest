@@ -1,6 +1,5 @@
 # textdomain: doc
 This is the help.=Esta es la ayuda.
-New help entry unlocked: @1 > @2=Nueva página de ayuda desbloqueada: @1 > @2
 All help entries revealed!=¡Todas las páginas de ayuda descubiertas!
 All help entries are already revealed.=Todas las página de ayuda ya están descubiertas.
 Category list=Lista de categorías
@@ -23,6 +22,11 @@ Help > @1 > (No Entry)=Ayuda > @1 > (Sin página)
 Help > @1 > @2=Ayuda > @1 > @2
 Open a window providing help entries about Minetest and more=Abra una ventana que contenga páginas de ayuda sobre Minetest
 Help=Ayuda
-Collection of help texts=Colección de textos de ayuda
 Allows you to reveal all hidden help entries with /help_reveal=Le permite descubrir todas las páginas de ayuda ocultas con /help_reveal
 Reveal all hidden help entries to you=Le revela todas las páginas de ayuda ocultas
+
+
+##### not used anymore #####
+
+New help entry unlocked: @1 > @2=Nueva página de ayuda desbloqueada: @1 > @2
+Collection of help texts=Colección de textos de ayuda

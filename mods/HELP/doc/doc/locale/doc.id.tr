@@ -1,6 +1,5 @@
 # textdomain: doc
 This is the help.=Ini adalah Bantuan.
-New help entry unlocked: @1 > @2=Entri bantuan baru dibuka: @1 > @2
 All help entries revealed!=Semua entri bantuan terungkap!
 All help entries are already revealed.=Semua entri bantuan sudah terungkap.
 Category list=Daftar kategori
@@ -23,6 +22,11 @@ Help > @1 > (No Entry)=Bantuan > @1 > (Tidak Ada Entri)
 Help > @1 > @2=Bantuan > @1 > @2
 Open a window providing help entries about Minetest and more=Buka jendela yang menyediakan entri bantuan tentang Minetest dan lainnya
 Help=Bantuan
-Collection of help texts=Koleksi teks bantuan
 Allows you to reveal all hidden help entries with /help_reveal=Memperbolehkan Anda untuk mengungkapkan semua entri bantuan tersembunyi dengan '/help_reveal'
 Reveal all hidden help entries to you=Mengungkapkan semua entri bantuan tersembunyi kepada Anda
+
+
+##### not used anymore #####
+
+New help entry unlocked: @1 > @2=Entri bantuan baru dibuka: @1 > @2
+Collection of help texts=Koleksi teks bantuan

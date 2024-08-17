@@ -22,13 +22,13 @@ Help > @1 > (No Entry)=Ajuda > @1 > (Nenhuma Entrada)
 Help > @1 > @2=Ajuda > @1 > @2
 Open a window providing help entries about Minetest and more=Abra uma janela fornecendo entradas de ajuda sobre o Minetest e mais
 Help=Ajuda
-Collection of help texts=Coleção de textos de ajuda
 Allows you to reveal all hidden help entries with /help_reveal=Permite revelar todas as entradas de ajuda ocultas com /help_reveal
 Reveal all hidden help entries to you=Revela todas as entradas de ajuda ocultas para você
 
 
 ##### not used anymore #####
 
+Collection of help texts=Coleção de textos de ajuda
 New help entry unlocked: @1 > @2=Nova entrada de ajuda desbloqueada: @1 > @2
 All entries read.=Todas as entradas lidas.
 Currently all entries in this category are hidden from you.\\nUnlock new entries by progressing in the game.=Atualmente, todas as entradas nessa categoria estão ocultas a você.\\nDesbloqueie novas entradas progredindo no jogo.
