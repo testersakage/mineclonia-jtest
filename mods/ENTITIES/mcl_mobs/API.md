@@ -566,6 +566,8 @@ These functions can be called from the entity as well as overwritten on a per-mo
 	* Checks if mob is currently dying and applies "falling to the side" rotation
  * mob:check_suspend()
 	* Checks and suspends mob if needed.
+ * mob:on_mob_replace(new_entity)
+	* called when this mob is replaced with another one (implemented in mcl_util)
 
 #### Effects
  * mcl_mobs.effect(pos, amount, texture, min_size, max_size, radius, gravity, glow, go_down)
