@@ -76,9 +76,8 @@ local function check_conduit(pos)
 end
 
 function mcl_conduits.player_effect(player)
-	if minetest.get_item_group(mcl_player.players[player].nodes.feet, "water") == 0 then return end
-	mcl_potions.water_breathing_func(player, 2, 13)
-	mcl_potions.swiftness_func(player, 2, 13)
+    if minetest.get_item_group(mcl_player.players[player].nodes.feet, "water") == 0 then return end
+    mcl_potions.give_effect ("conduit_power", player, 1, 17)
 end
 
 function mcl_conduits.conduit_damage(ent)
