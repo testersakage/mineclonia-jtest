@@ -188,6 +188,10 @@ function mobs_mc.villager_mob:_on_lightning_strike()
 	 return true
 end
 
+function mobs_mc.villager_mob:on_mob_replace(new_ent)
+	new_ent._profession = self._profession
+end
+
 table.update(mobs_mc.villager_mob, {
 	description = S("Villager"),
 	type = "npc",
