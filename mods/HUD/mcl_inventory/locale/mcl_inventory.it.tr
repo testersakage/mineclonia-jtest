@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
 Building Blocks=Blocchi da Costruzione
-Decoration Blocks=Blocchi Decorativi
-Redstone=Pietrarossa
+Decoration Blocks=
+Redstone=
 Transportation=
 Miscellaneous=
 Search Items=
@@ -13,12 +13,12 @@ Brewing=
 Materials=
 Survival Inventory=
 Not in Creative Inventory=
-Advancements=Progressi
+Advancements=
 Switch stack size=
 @1 / @2=
-Recipe book=Libro delle ricette
+Recipe book=
 Help=
 Select player skin=
 Crafting=Assemblaggio
 Fill Craft Grid=
-Achievements=Imprese
+Achievements=
