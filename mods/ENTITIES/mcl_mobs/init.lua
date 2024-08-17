@@ -317,6 +317,7 @@ function mcl_mobs.register_mob(name, def)
 			self:set_properties({
 				collide_with_objects = false,
 			})
+			self._physics_factors = {}
 
 			self._timers = {}
 			return self:mob_activate(staticdata, dtime)

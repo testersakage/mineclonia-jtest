@@ -336,22 +336,62 @@ mcl_potions.register_effect({
 	uses_factor = false,
 })
 
+function add_physics_factor (object, player_name, mob_field,
+			     id, factor, mob_field2, mob_field3)
+    -- mob_field2 and 3 are for cases where two or more mob properties
+    -- must be adjusted, such as walk_velocity and run_velocity and
+    -- their ilk.
+    if object:is_player () then
+	playerphysics.add_physics_factor (object, player_name,
+					  id, factor)
+    else
+	local entity = object:get_luaentity ()
+	if entity and entity.is_mob then
+	    entity:add_physics_factor (mob_field, id, factor)
+	    if mob_field2 then
+		entity:add_physics_factor (mob_field2, id, factor)
+		if mob_field3 then
+		    entity:add_physics_factor (mob_field3, id, factor)
+		end
+	    end
+	end
+    end
+end
+
+function remove_physics_factor (object, player_name, mob_field,
+				id, mob_field2, mob_field3)
+    if object:is_player () then
+	playerphysics.remove_physics_factor (object, player_name, id)
+    else
+	local entity = object:get_luaentity ()
+	if entity and entity.is_mob then
+	    entity:remove_physics_factor (mob_field, id)
+	    if mob_field2 then
+		entity:remove_physics_factor (mob_field2, id)
+		if mob_field3 then
+		    entity:remove_physics_factor (mob_field3, id)
+		end
+	    end
+	end
+    end
+end
+
 mcl_potions.register_effect({
 	name = "dolphin_grace",
 	description = S("Dolphin's Grace"),
 	get_tt = function(factor)
 		return S("swimming gracefully")
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob physics factor API
-	end,
 	on_hit_timer = function(object, factor, duration)
 		local node = minetest.get_node_or_nil(object:get_pos())
+		-- TODO: apply this only to swimming for mobs.
 		if node and minetest.registered_nodes[node.name]
 			and minetest.get_item_group(node.name, "liquid") ~= 0 then
-				playerphysics.add_physics_factor(object, "speed", "mcl_potions:dolphin", 2)
+		    add_physics_factor (object, "speed", "walk_velocity",
+					"mcl_potions:dolphin", 2)
 		else
-			playerphysics.remove_physics_factor(object, "speed", "mcl_potions:dolphin", 2)
+		    remove_physics_factor (object, "speed", "walk_velocity",
+					   "mcl_potions:dolphin")
 		end
 	end,
 	particle_color = "#6AABFD",
@@ -367,14 +407,13 @@ mcl_potions.register_effect({
 		if factor > 0 then return S("+@1% jumping power", math.floor(factor*100)) end
 		return S("-@1% jumping power", math.floor(-factor*100))
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob physics factor API
-	end,
 	on_start = function(object, factor)
-		playerphysics.add_physics_factor(object, "jump", "mcl_potions:leaping", 1+factor)
+	    add_physics_factor (object, "jump", "jump_height",
+				"mcl_potions:leaping", 1 + factor)
 	end,
 	on_end = function(object)
-		playerphysics.remove_physics_factor(object, "jump", "mcl_potions:leaping")
+	    remove_physics_factor (object, "jump", "jump_height",
+				   "mcl_potions:leaping")
 	end,
 	particle_color = "#22FF4C",
 	uses_factor = true,
@@ -388,18 +427,22 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("decreases gravity effects")
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob physics factor API
-	end,
 	on_start = function(object, factor)
-		playerphysics.add_physics_factor(object, "gravity", "mcl_potions:slow_falling", 0.5)
+	    add_physics_factor (object, "gravity", "fall_speed",
+				"mcl_potions:slow_falling", 0.5)
 	end,
 	on_step = function(dtime, object, factor, duration)
-		local vel = object:get_velocity().y
-		if vel < -3 then object:add_velocity(vector.new(0,-3-vel,0)) end
+	    local vel = object:get_velocity()
+
+	    if vel then
+		if vel.y < -3 then
+		    object:add_velocity(vector.new(0,-3-vel.y,0))
+		end
+	    end
 	end,
 	on_end = function(object)
-		playerphysics.remove_physics_factor(object, "gravity", "mcl_potions:slow_falling")
+	    remove_physics_factor (object, "gravity", "fall_speed",
+				   "mcl_potions:slow_falling")
 	end,
 	particle_color = "#ACCCFF",
 })
@@ -411,14 +454,14 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob physics factor API
-	end,
 	on_start = function(object, factor)
-		playerphysics.add_physics_factor(object, "speed", "mcl_potions:swiftness", 1+factor)
+	    add_physics_factor (object, "speed", "walk_velocity",
+				"mcl_potions:swiftness", 1 + factor,
+				"run_velocity")
 	end,
 	on_end = function(object)
-		playerphysics.remove_physics_factor(object, "speed", "mcl_potions:swiftness")
+	    remove_physics_factor (object, "speed", "walk_velocity",
+				   "mcl_potions:swiftness", "run_velocity")
 	end,
 	particle_color = "#7CAFC6",
 	uses_factor = true,
@@ -433,14 +476,14 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("-@1% running speed", math.floor(factor*100))
 	end,
-	res_condition = function(object)
-		return (not object:is_player()) -- TODO needs mob physics factor API
-	end,
 	on_start = function(object, factor)
-		playerphysics.add_physics_factor(object, "speed", "mcl_potions:slowness", 1-factor)
+	    add_physics_factor (object, "speed", "walk_velocity",
+				"mcl_potions:slowness", 1 - factor,
+				"run_velocity")
 	end,
 	on_end = function(object)
-		playerphysics.remove_physics_factor(object, "speed", "mcl_potions:slowness")
+	    remove_physics_factor (object, "speed", "walk_velocity",
+				   "mcl_potions:slowness", "run_velocity")
 	end,
 	particle_color = "#5A6C81",
 	uses_factor = true,
