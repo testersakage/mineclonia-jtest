@@ -73,9 +73,6 @@ msgstr "Zord Varacskos"
 msgid "Baby Hoglin"
 msgstr "Varacskos Malac"
 
-msgid "Sneak to dismount"
-msgstr ""
-
 msgid "Horse"
 msgstr "Ló"
 
@@ -90,6 +87,9 @@ msgstr "Szamár"
 
 msgid "Mule"
 msgstr "Öszvér"
+
+msgid "Sneak to dismount"
+msgstr ""
 
 msgid "Iron Golem"
 msgstr "Vas Gólem"

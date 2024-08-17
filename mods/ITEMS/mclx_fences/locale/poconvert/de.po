@@ -22,3 +22,15 @@ msgstr "Rotes Netherziegelzauntor"
 msgid "Nether Brick Fence Gate"
 msgstr "Netherziegelzauntor"
 
+msgid "@1 Bark Fence"
+msgstr ""
+
+msgid "@1 Bark Fence Gate"
+msgstr ""
+
+msgid "Stripped @1 Wood Fence"
+msgstr ""
+
+msgid "Stripped @1 Wood Fence Gate"
+msgstr ""
+
