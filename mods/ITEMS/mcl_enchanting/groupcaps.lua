@@ -60,7 +60,7 @@ function mcl_enchanting.update_groupcaps(itemstack, ignore_hash)
 	local groupcaps = get_efficiency_groupcaps(name, efficiency)
 	local hash = itemstack:get_meta():get_string("groupcaps_hash")
 
-	if not hash or hash ~= groupcaps.hash then
+	if ignore_hash or not hash or hash ~= groupcaps.hash then
 		local tool_capabilities = itemstack:get_tool_capabilities()
 		tool_capabilities.groupcaps = table.copy(groupcaps.values)
 
