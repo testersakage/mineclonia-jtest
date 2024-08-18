@@ -865,7 +865,7 @@ mcl_potions.register_effect({
 		return S("exhausts by @1 per second", factor)
 	end,
 	on_start = function(object, factor)
-	    if object:is_player () then
+	    if object:is_player () and mcl_hunger.active then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
@@ -873,7 +873,7 @@ mcl_potions.register_effect({
 	    end
 	end,
 	on_load = function(object, factor) -- TODO refactor and add hunger bar modifier API
-	    if object:is_player () then
+	    if object:is_player () and mcl_hunger.active then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
@@ -881,12 +881,12 @@ mcl_potions.register_effect({
 	    end
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    if object:is_player () then
+	    if object:is_player () and mcl_hunger.active then
 		mcl_hunger.exhaust(object:get_player_name(), dtime*factor)
 	    end
 	end,
 	on_end = function(object)
-	    if object:is_player () then
+	    if object:is_player () and mcl_hunger.active then
 		mcl_hunger.reset_bars_poison_hunger(object)
 	    end
 	end,
