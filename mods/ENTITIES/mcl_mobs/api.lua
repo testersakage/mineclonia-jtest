@@ -359,7 +359,7 @@ local function update_attack_timers (self, dtime)
 	end
 end
 
-function mob_class:on_step(dtime)
+function mob_class:on_step(dtime, moveresult)
 	local pos = self.object:get_pos()
 	if not mcl_mobs.check_vector(pos) or self.removed then
 		self:safe_remove()
@@ -375,7 +375,7 @@ function mob_class:on_step(dtime)
 
 	self:update_tag()
 	self:slow_mob()
-	if self:falling(pos) then return end
+	if not (moveresult and moveresult.touching_ground) and self:falling(pos) then return end
 
 	if self.force_step then
 		self:force_step(dtime)
