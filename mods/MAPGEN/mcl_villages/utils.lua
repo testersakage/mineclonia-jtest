@@ -240,7 +240,7 @@ function plant_fields(_, biome_name, schem_lua, pr)
 end
 
 -- Load a schema and replace nodes in it based on biome
-function mcl_villages.substitue_materials(pos, schem_lua, pr)
+function mcl_villages.substitute_materials(pos, schem_lua, pr)
 	local modified_schem_lua = schem_lua
 	local biome_data = minetest.get_biome_data(pos)
 	local biome_name = minetest.get_biome_name(biome_data.biome)
