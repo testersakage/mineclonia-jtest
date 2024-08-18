@@ -515,7 +515,7 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 			placement_pos = vector.offset(pos, 0, settlement_info[i]["yadjust"], 0)
 		end
 
-		local schem_lua = mcl_villages.substitue_materials(pos, settlement_info[i]["schem_lua"], pr)
+		local schem_lua = mcl_villages.substitute_materials(pos, settlement_info[i]["schem_lua"], pr)
 		local schematic = loadstring(schem_lua)()
 
 		local is_belltower = building_all_info["name"] == "belltower"
@@ -526,10 +526,11 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 			placement_pos,
 			schematic,
 			"random",
-			nil,
+			{ ["mcl_core:dirt_with_grass"]=schematic.surface_mat or "mcl_core:dirt" },
 			true,
 			{ place_center_x = true, place_center_y = false, place_center_z = true }
 		)
+		-- TODO: use minetest.after(1) to check for dropped flowers/plants in y=0?
 
 		local x_adj = math.ceil(size.x / 2)
 		local z_adj = math.ceil(size.z / 2)
