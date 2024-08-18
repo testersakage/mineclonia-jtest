@@ -390,7 +390,6 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 	end,
 	deal_damage = function(self, damage, mcl_reason)
 		if self._spawning then return end
-		if self._arrow_resistant and mcl_reason.type == "magic" then return end
 		wither_unstuck(self)
 		self.health = self.health - damage
 	end,
