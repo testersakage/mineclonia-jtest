@@ -9,8 +9,129 @@ local S = minetest.get_translator("mobs_mc")
 --################### WITCH
 --###################
 
+local potion_props = {
+    visual = "wielditem",
+    visual_size = { x = 0.3 / 5, y = 0.3 / 5, },
+    physical = false,
+    pointable = false,
+    wield_item = "mcl_potions:water",
+}
 
+local witch_potion_entity = {
+    initial_properties = potion_props,
+    on_step = function (self, dtime)
+	local parent = self.object:get_attach ()
+	if not parent then
+	    self.object:remove ()
+	    return
+	end
+    end,
+}
 
+local witch_base_drops = {
+    {name = "mcl_potions:glass_bottle", chance = 8, min = 0, max = 2, looting = "common",},
+    {name = "mcl_nether:glowstone_dust", chance = 8, min = 0, max = 2, looting = "common",},
+    {name = "mcl_mobitems:gunpowder", chance = 8, min = 0, max = 2, looting = "common",},
+    {name = "mesecons:redstone", chance = 8, min = 0, max = 2, looting = "common",},
+    {name = "mcl_mobitems:spider_eye", chance = 8, min = 0, max = 2, looting = "common",},
+    {name = "mcl_core:sugar", chance = 8, min = 0, max = 2, looting = "common",},
+    {name = "mcl_core:stick", chance = 4, min = 0, max = 2, looting = "common",},
+}
+
+minetest.register_entity ("mobs_mc:witch_potion", witch_potion_entity)
+
+local function witch_equip_potion (self, potion)
+    self:add_physics_factor ("walk_velocity", "mobs_mc:witch_potion_penalty", 0.75)
+    self:add_physics_factor ("run_velocity", "mobs_mc:witch_potion_penalty", 0.75)
+
+    self._held_potion = potion
+    local object = minetest.add_entity (self.object:get_pos (),
+					"mobs_mc:witch_potion")
+    local v
+    if object then
+	object:set_properties ({ wield_item = potion, })
+	object:set_attach (self.object, "body",
+			   { x = 0, y = 1.65, z = 1.2, },
+			   vector.zero ())
+	self._held_potion_object = object
+    end
+    -- Must wait 1.5 seconds before consuming this potion.
+    self._witch_potion_check = 0
+    -- Arrange that there be a chance of the potion being dropped with
+    -- this witch.
+    local copy = table.copy (witch_base_drops)
+    copy[#copy] = { name = potion, chance = 11, min = 1, max = 1, }
+    self.drops = copy
+end
+
+local function witch_consume_potion (self, potion)
+    self:remove_physics_factor ("walk_velocity", "mobs_mc:witch_potion_penalty")
+    self:remove_physics_factor ("run_velocity", "mobs_mc:witch_potion_penalty")
+    mcl_potions.consume_potion (self.object, potion, 0, 0)
+    if self._held_potion_object then
+	self._held_potion_object:remove ()
+	self._held_potion_object = nil
+    end
+    -- Reset the timer.
+    self._witch_potion_check = 0
+    self._held_potion = nil
+    -- Play a sound.
+    local sound = {
+	max_hear_distance = 12,
+	gain = 1.0,
+	pitch = 1 + math.random (-10, 10) * 0.005,
+	object = self.object,
+    }
+    minetest.sound_play ("survival_thirst_drink", sound, true)
+    self.drops = witch_base_drops
+end
+
+local witch_potion_items = {
+    {
+	potion = "mcl_potions:water_breathing",
+	test = function (self)
+	    local head_nodedef = minetest.registered_nodes[self.head_in]
+	    return (not mcl_potions.has_effect (self.object,
+						"water_breathing")
+		    and head_nodedef and head_nodedef.drowning > 0)
+	end,
+	chance = 15,
+    },
+    {
+	potion = "mcl_potions:fire_resistance",
+	test = function (self)
+	    return (mcl_burning.is_burning (self.object)
+		    and not mcl_potions.has_effect (self.object,
+						    "fire_resistance"))
+	end,
+	chance = 15,
+    },
+    {
+	potion = "mcl_potions:healing",
+	test = function (self)
+	    return self.health < self.object:get_properties ().hp_max
+	end,
+	chance = 5,
+    },
+    {
+	potion = "mcl_potions:swiftness",
+	test = function (self)
+	    if self.attack then
+		if mcl_potions.has_effect (self.object, "swiftness") then
+		    return false
+		end
+		local pos = self.attack:get_pos ()
+		local dist
+		    = pos and vector.distance (pos, self.object:get_pos ())
+		if pos and dist > 11 then
+		    return true
+		end
+		return false
+	    end
+	end,
+	chance = 50,
+    },
+}
 
 mcl_mobs.register_mob("mobs_mc:witch", {
 	description = S("Witch"),
@@ -37,22 +158,15 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	pathfinding = 1,
 	group_attack = true,
 	attack_type = "dogshoot",
-	arrow = "mobs_mc:potion_arrow",
 	shoot_interval = 2.5,
 	shoot_offset = 1,
 	dogshoot_switch = 1,
-	dogshoot_count_max =1.8,
+	dogshoot_count_max = 1.8,
+	shooter_avoid_enemy = true,
+	strafes = true,
+	_shoot_while_strafing = false,
 	max_drops = 3,
-	drops = {
-		-- TODO: drops some useful potions
-		{name = "mcl_potions:glass_bottle", chance = 8, min = 0, max = 2, looting = "common",},
-		{name = "mcl_nether:glowstone_dust", chance = 8, min = 0, max = 2, looting = "common",},
-		{name = "mcl_mobitems:gunpowder", chance = 8, min = 0, max = 2, looting = "common",},
-		{name = "mesecons:redstone", chance = 8, min = 0, max = 2, looting = "common",},
-		{name = "mcl_mobitems:spider_eye", chance = 8, min = 0, max = 2, looting = "common",},
-		{name = "mcl_core:sugar", chance = 8, min = 0, max = 2, looting = "common",},
-		{name = "mcl_core:stick", chance = 4, min = 0, max = 2, looting = "common",},
-	},
+	drops = witch_base_drops,
 	-- TODO: sounds
 	animation = {
 		speed_normal = 30,
@@ -72,29 +186,81 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	},
 	view_range = 16,
 	fear_height = 4,
+	avoid_distance = 6,
+	_witch_potion_check = 0,
 	deal_damage = function(self, damage, mcl_reason)
 		local factor = 1
 		if mcl_reason.type == "magic" then factor = 0.15 end
 		self.health = self.health - factor*damage
 	end,
-})
+	do_custom = function (self, dtime)
+	    -- Check for potions to consume every minecraft tick.
+	    if self._held_potion then
+		self._witch_potion_check = self._witch_potion_check + dtime
+		if self._witch_potion_check < 1.5 then
+		    return
+		end
+		-- Finish consuming this potion.
+		witch_consume_potion (self, self._held_potion)
+	    end
+	    self._witch_potion_check = self._witch_potion_check + dtime
+	    if self._witch_potion_check < 0.05 then
+		return
+	    end
+	    self._witch_potion_check = 0
+	    for _, item in ipairs (witch_potion_items) do
+		local random = math.random (1, 100)
+		if item.chance >= random and item.test (self) then
+		    witch_equip_potion (self, item.potion)
+		    break
+		end
+	    end
+	end,
+	shoot_arrow = function(self, p, vec)
+	    local effect_potion = "mcl_potions:harming_splash"
+	    local target_hp, target_pos
 
--- potion projectile (EXPERIMENTAL)
--- TODO: throw varies of potions based on range and/or when player still didn't have the effect
-mcl_mobs.register_arrow("mobs_mc:potion_arrow", {
-	visual = "sprite",
-	visual_size = {x = 0.5, y = 0.5},
-	textures = {"mcl_potions_splash_overlay.png^[colorize:#4E9331:127^mcl_potions_splash_bottle.png"},
-	velocity = 6,
+	    if not self.attack or self._held_potion then
+		return
+	    end
 
-	-- direct hit, no poison... just plenty of pain
-	hit_player = mcl_mobs.get_arrow_damage_func(4, "mob"),
-	hit_mob = mcl_mobs.get_arrow_damage_func(4, "mob"),
+	    -- Throw splash potions of harming at players by default.
+	    -- If they've yet to receive poison and are at 4 hearts or
+	    -- better, throw poison, and if they are beyond 8 blocks,
+	    -- try to slow them with slowness potion.  If players
+	    -- approach too near, disable them with weakness 25% of
+	    -- the time.
+	    target_hp = self.attack:is_player () and self.attack:get_hp ()
+	    target_pos = self.attack:get_pos ()
+	    if not target_hp then
+		local entity = self.attack:get_luaentity ()
+		target_hp = entity.is_mob and entity.health or 0
+	    end
 
-	-- node hit, splash poison
-	hit_node = function(_, pos, _)
-		minetest.add_entity(pos, "mcl_potions:poison_splash_flying")
-	end
+	    -- Ref: https://minecraft.fandom.com/wiki/Witch#Behavior
+	    local pos = self.object:get_pos ()
+	    local dist = vector.distance (target_pos, pos)
+	    if dist >= 8
+		and not mcl_potions.has_effect (self.attack, "slowness") then
+		effect_potion = "mcl_potions:slowness_splash"
+	    elseif target_hp >= 8 and not mcl_potions.has_effect (self.attack,
+								  "poison") then
+		effect_potion = "mcl_potions:poison_splash"
+	    elseif dist <= 3
+		and not mcl_potions.has_effect (self.attack, "weakness")
+		and math.random (1, 4) == 1 then
+		effect_potion = "mcl_potions:weakness_splash"
+	    end
+
+	    -- Adjust for deceleration and entity movement.
+	    local eye_height = self.attack:get_properties ().eye_height or 0
+	    target_pos = target_pos + self.attack:get_velocity ()
+	    target_pos.y = target_pos.y + eye_height
+	    local d = vector.subtract (target_pos, p)
+	    d.y = d.y + vector.length (d) * 0.2
+	    mcl_potions.throw_splash (effect_potion, vector.normalize (d), p,
+				      self.object, 0, 0)
+	end,
 })
 
 mcl_mobs.spawn_setup({

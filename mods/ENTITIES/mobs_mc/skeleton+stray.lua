@@ -151,11 +151,11 @@ mcl_mobs.register_mob("mobs_mc:stray", table.merge(skeleton, {
 				self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())))
 			end
 			local dmg = math.random(3, 4)
-			mcl_bows.shoot_arrow("mcl_potions:slowness_2_arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
+			mcl_bows.shoot_arrow("mcl_potions:slowness_arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
 		end
 	end,
 	drops = table.insert(skeleton.drops, {
-		name = "mcl_potions:slowness_2_arrow",
+		name = "mcl_potions:slowness_arrow",
 		chance = 2,
 		min = 1,
 		max = 1,

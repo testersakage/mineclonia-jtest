@@ -245,21 +245,19 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			visual_size = {x=w/2,y=w/2},
 			collisionbox = {-0.1,-0.1,-0.1,0.1,0.1,0.1},
 			pointable = false,
+			physical = true,
+			collide_with_objects = false,
 		},
-		on_step = function(self)
+		on_step = function(self, dtime, moveresult)
 			local pos = self.object:get_pos()
-			local node = minetest.get_node(pos)
-			local n = node.name
-			local g = minetest.get_item_group(n, "liquid")
-			local d = 4
-			if mod_target and n == "mcl_target:target_off" then
-				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
-			end
-			if ((n ~= "air"
-			     and n ~= "mcl_portals:portal"
-			     and n ~= "mcl_portals:portal_end"
-			     and g == 0)
-			    or mcl_potions.is_obj_hit(self, pos)) then
+			local velocity = self.object:get_velocity ()
+			local d, val = 4, mcl_potions.detect_hit (self, pos,
+								  moveresult,
+								  velocity)
+			if val then
+			    if val.target and mod_target then
+				mcl_target.hit (val.target, 0.4) --4 redstone ticks
+			    end
 			    minetest.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})
 				local potency = self._potency or 0

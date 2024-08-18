@@ -74,6 +74,23 @@ local function generate_on_use(vanish, effects, color, on_use, custom_effect)
 	end
 end
 
+function mcl_potions.consume_potion (mob, id, potency, plus)
+    local def = registered_potions[id]
+    local ef_level, dur
+    if not def then
+	return
+    end
+    for name, details in pairs (def._effect_list) do
+	ef_level = mcl_potions.level_from_details (details, potency)
+	dur = mcl_potions.duration_from_details (details, potency,
+						 plus, 1.0)
+	mcl_potions.give_effect_by_level (name, mob, ef_level, dur)
+    end
+    if def.custom_effect then
+	def.custom_effect (mob, potency + 1, plus)
+    end
+end
+
 -- API - registers a potion
 -- required parameters in def:
 -- name - string - potion name in code
@@ -272,6 +289,7 @@ function mcl_potions.register_potion(def)
 		mcl_potions.register_arrow(name, arr_desc, color, adef)
 		internal_def.has_arrow = true
 	end
+	internal_def.custom_effect = def.custom_effect
 	mcl_potions.registered_potions[modname..":"..name] = internal_def
 end
 

@@ -1704,25 +1704,42 @@ end)
 -- ██║░░░░░╚██████╔╝██║░╚███║╚█████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
 -- ╚═╝░░░░░░╚═════╝░╚═╝░░╚══╝░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
-function mcl_potions.is_obj_hit(self, pos)
-
-	local entity
-	for _,object in pairs(minetest.get_objects_inside_radius(pos, 1.1)) do
-
-		entity = object:get_luaentity()
-
-		if entity and entity.name ~= self.object:get_luaentity().name then
-
-			if entity.is_mob then
-				return true
-			end
-
-		elseif object:is_player() and self._thrower ~= object:get_player_name() then
-			return true
+function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
+    local val
+    for _, item in ipairs (moveresult.collisions) do
+	if item.type == "node" then
+	    -- Detect targets.
+	    local node = minetest.get_node (item.node_pos)
+	    if node and node.name == "mcl_target:target_off" then
+		val = { target = item.node_pos, }
+	    elseif node then
+		-- Next, detect walkable nodes.
+		local def = minetest.registered_nodes[node.name]
+		if def.walkable then
+		    val = val or {}
 		end
-
+	    end
 	end
-	return false
+    end
+    -- Mobs and objects are currently non-colliding, so supplement the
+    -- move results with a raycast as in mcl_bows.
+    if not val then
+	local raycast = minetest.raycast (pos, vector.add (pos, velocity * 0.1),
+					  true, false)
+	for hitpoint in raycast do
+	    if hitpoint.type == "object" and hitpoint.ref ~= obj then
+		if hitpoint.ref:is_player ()
+		    or (hitpoint.ref:get_luaentity ()
+			and hitpoint.ref:get_luaentity ().is_mob) then
+		    val = {}
+		    break
+		end
+	    else
+		break
+	    end
+	end
+    end
+    return val
 end
 
 

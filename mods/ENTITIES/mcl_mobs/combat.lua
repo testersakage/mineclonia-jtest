@@ -945,10 +945,14 @@ function mob_class:do_states_attack (dtime)
 
 		--strafe back and fourth
 
-		--stay away from player so as to shoot them
+		--stay away from players so as to shoot them
 		if dist < self.avoid_distance and self.shooter_avoid_enemy then
-			self:set_animation( "shoot")
-			stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
+		    if self._shoot_while_strafing ~= false then
+			self:set_animation ("shoot")
+		    else
+			self:set_animation ("run")
+		    end
+		    stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
 		end
 
 		if self.strafes then
@@ -960,7 +964,7 @@ function mob_class:do_states_attack (dtime)
 			end
 			self.acc = vector.add(vector.multiply(vector.rotate_around_axis(vector.direction(s, p), vector.new(0,1,0), self.strafe_direction), 0.3*self.walk_velocity), stay_away_from_player)
 		else
-			self:set_velocity( 0)
+		    self:set_velocity (0)
 		end
 
 		local p = self.object:get_pos()
@@ -972,13 +976,13 @@ function mob_class:do_states_attack (dtime)
 			and not minetest.raycast(vector.add(p, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
 			and math.random(1, 100) <= 60 then
 			self.timer = 0
-			self:set_animation( "shoot")
+			self:set_animation ("shoot")
 
 			-- play shoot attack sound
 			self:mob_sound("shoot_attack")
 
 			-- Shoot arrow
-			if minetest.registered_entities[self.arrow] then
+			if minetest.registered_entities[self.arrow] or self.shoot_arrow then
 
 				local v = 1
 				local arrow
