@@ -1,5 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local extra_nodes = false and minetest.settings:get_bool("mcl_extra_nodes", true)
+local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
 
 -- Red Nether Brick Fence and Red Nether Brick Fence Gate
 mcl_fences.register_fence_and_fence_gate_def("red_nether_brick_fence", {
