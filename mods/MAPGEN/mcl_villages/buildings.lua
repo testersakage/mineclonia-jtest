@@ -16,9 +16,11 @@ function mcl_villages.initialize_settlement_info(pr)
 
 	for _, v in pairs(mcl_villages.schematic_houses) do
 		count_buildings[v["name"]] = 0
+		if v["group"] then count_buildings[v["group"]] = 0 end
 	end
 	for _, v in pairs(mcl_villages.schematic_jobs) do
 		count_buildings[v["name"]] = 0
+		if v["group"] then count_buildings[v["group"]] = 0 end
 	end
 
 	return count_buildings
@@ -362,6 +364,9 @@ local function add_building(base_settlement_info, building_info, count_buildings
 	count_buildings[cur_schem["name"]] = count_buildings[cur_schem["name"]] + 1
 	count_buildings.num_jobs = count_buildings.num_jobs + (cur_schem["num_jobs"] or 0)
 	count_buildings.num_beds = count_buildings.num_beds + (cur_schem["num_beds"] or 0)
+	if cur_schem["group"] then
+		count_buildings[cur_schem["group"]] = count_buildings[cur_schem["group"]] + 1
+	end
 end
 
 local function info_for_building(bld_name, schem_table)
@@ -398,8 +403,8 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 			and (building_info["max_jobs"] == nil or count_buildings.number_of_jobs <= building_info["max_jobs"])
 			and (
 				building_info["num_others"] == nil
-				or count_buildings[building_info["name"]] == 0
-				or building_info["num_others"] * count_buildings[building_info["name"]] < count_buildings.num_jobs
+				or count_buildings[building_info["group"] or building_info["name"]] == 0
+				or building_info["num_others"] * count_buildings[building_info["group"] or building_info["name"]] < count_buildings.num_jobs
 			)
 		then
 			add_building(base_settlement_info, building_info, count_buildings)
@@ -422,8 +427,8 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 			and (building_info["max_jobs"] == nil or count_buildings.number_of_jobs <= building_info["max_jobs"])
 			and (
 				building_info["num_others"] == nil
-				or count_buildings[building_info["name"]] == 0
-				or building_info["num_others"] * count_buildings[building_info["name"]] < count_buildings.num_jobs
+				or count_buildings[building_info["group"] or building_info["name"]] == 0
+				or building_info["num_others"] * count_buildings[building_info["group"] or building_info["name"]] < count_buildings.num_jobs
 			)
 		then
 			add_building(base_settlement_info, building_info, count_buildings)

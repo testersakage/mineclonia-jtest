@@ -104,6 +104,10 @@ these jobs sites.
 
   This is used to influence the ratio of buildings in a village.
 
+group
+
+: If a group is set, the num_others restriction is applied to the entire group.
+
 is_mandatory
 
 : This ensures that each village will have at least one of these buildings.
