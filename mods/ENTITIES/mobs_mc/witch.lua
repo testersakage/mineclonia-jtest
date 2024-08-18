@@ -47,7 +47,6 @@ local function witch_equip_potion (self, potion)
     self._held_potion = potion
     local object = minetest.add_entity (self.object:get_pos (),
 					"mobs_mc:witch_potion")
-    local v
     if object then
 	object:set_properties ({ wield_item = potion, })
 	object:set_attach (self.object, "body",
