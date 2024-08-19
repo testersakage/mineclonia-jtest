@@ -33,11 +33,10 @@ local creeper_defs = {
 		looting = "common",},
 
 		-- Head
-		-- TODO: Only drop if killed by charged creeper
 		{name = "mcl_heads:creeper",
-		chance = 200, -- 0.5%
-		min = 1,
-		max = 1,},
+		 chance = 200, -- 0.5%
+		 min = 1,
+		 max = 1},
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
@@ -98,6 +97,14 @@ local creeper_defs = {
 				end
 			end
 		end
+	end,
+	on_attack = function (self)
+	    -- Dissipate active status effects.
+	    mcl_potions.for_each_effect (self.object, function (effect_name, effect)
+		mcl_potions.apply_lingering_effect (self.object:get_pos (),
+						    effect.dur / 2,
+						    effect_name)
+	    end)
 	end
 }
 

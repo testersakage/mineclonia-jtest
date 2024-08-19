@@ -11,8 +11,8 @@ end
 
 local lingering_effect_at = {}
 
-local function add_lingering_effect(pos, color, def, is_water, _)
-	lingering_effect_at[pos] = {color = color, timer = 30, def = def, is_water = is_water}
+local function add_lingering_effect(pos, duration, color, def, is_water, _)
+	lingering_effect_at[pos] = {color = color, timer = duration, def = def, is_water = is_water}
 end
 
 local function linger_particles(pos, d, texture, color)
@@ -53,7 +53,7 @@ minetest.register_globalstep(function(dtime)
 			else
 				texture = "mcl_particles_effect.png"
 			end
-			linger_particles(pos, d, texture, vals.color)
+			linger_particles(pos, 4, texture, vals.color)
 
 			-- Extinguish fire if water bottle
 			if vals.is_water then
@@ -84,7 +84,39 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
+local function apply_lingering_effect (pos, duration, color, def, texture, is_water)
+    add_lingering_effect(pos, duration, color, def, is_water)
+    linger_particles(pos, 4, texture, color)
 
+    if is_water then
+	mcl_potions._extinguish_nearby_fire (pos, duration)
+    end
+end
+
+local lingering_effects = { }
+
+function mcl_potions.apply_lingering_effect (pos, duration, name)
+    if name == "water" then
+	apply_lingering_effect (pos, name)
+    end
+    if not lingering_effects[name] then
+	minetest.log ("warning", "Applying nonexistent lingering effect " .. name)
+	return
+    end
+    local def = lingering_effects[name].def
+    local color = lingering_effects[name].color
+    local texture
+    if name == "water" then
+	texture = "mcl_particles_droplet_bottle.png"
+    else
+	if def.instant then
+	    texture = "mcl_particles_instant_effect.png"
+	else
+	    texture = "mcl_particles_effect.png"
+	end
+    end
+    apply_lingering_effect (pos, duration, color, def, texture, false)
+end
 
 function mcl_potions.register_lingering(name, descr, color, def)
 
@@ -146,13 +178,11 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			local node = minetest.get_node(pos)
 			local n = node.name
 			local g = minetest.get_item_group(n, "liquid")
-			local d = 4
 			if mod_target and n == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
 			end
 			if n ~= "air" and n ~= "mcl_portals:portal" and n ~= "mcl_portals:portal_end" and g == 0 or mcl_potions.is_obj_hit(self, pos) then
 				minetest.sound_play("mcl_potions_breaking_glass", {pos = pos, max_hear_distance = 16, gain = 1})
-				add_lingering_effect(pos, color, def, name == "water")
 				local texture
 				if name == "water" then
 					texture = "mcl_particles_droplet_bottle.png"
@@ -163,12 +193,12 @@ function mcl_potions.register_lingering(name, descr, color, def)
 						texture = "mcl_particles_effect.png"
 					end
 				end
-				linger_particles(pos, d, texture, color)
-				if name == "water" then
-					mcl_potions._extinguish_nearby_fire(pos, d)
-				end
+
+				apply_lingering_effect (pos, 30, color, def,
+							texture, name == "water")
 				self.object:remove()
 			end
 		end,
 	})
+	lingering_effects[name] = { def = def, color = color, }
 end

@@ -12,6 +12,21 @@ EF.fire_proof = {}
 EF.bad_omen = {}
 EF.withering = {}
 
+local name_map = {
+    invisible = "invisibility",
+    poisoned = "poison",
+    regenerating = "regeneration",
+    strong = "strength",
+    weak = "weakness",
+    water_breathing = "water_breathing",
+    leaping = "leaping",
+    swift = "swiftness",
+    night_vision = "night_vision",
+    fire_proof = "fire_resistance",
+    bad_omen = "bad_omen",
+    withering = "withering",
+}
+
 local EFFECT_TYPES = 0
 for _,_ in pairs(EF) do
 	EFFECT_TYPES = EFFECT_TYPES + 1
@@ -85,6 +100,19 @@ local function potions_set_icons(player)
 		end
 	end
 
+end
+
+function mcl_potions.for_each_effect (object, callback)
+    for effect_name, effect in pairs(EF) do
+	effect_name = name_map[effect_name]
+	if effect_name and effect[object] then
+	    if (effect[effect_name] == "swift"
+		and EF.swift[object].is_slow) then
+		effect_name = "slow"
+	    end
+	    callback (effect_name, effect[object])
+	end
+    end
 end
 
 local function potions_set_hud(player)
