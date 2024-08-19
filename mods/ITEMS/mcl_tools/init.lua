@@ -161,8 +161,8 @@ local function replace_material_tag(shape, material)
 	return recipe
 end
 
-local function register_tool(modname, setname, materialdefs, toolname, tooldefs, overrides)
-	local itemstring = modname..":"..toolname.."_"..setname
+local function register_tool(setname, materialdefs, toolname, tooldefs, overrides)
+	local itemstring = "mcl_tools:"..toolname.."_"..setname
 	local commondefs = mcl_tools.commondefs[toolname]
 	local tooldefs = table.merge({
 		_doc_items_longdesc = commondefs.longdesc,
@@ -192,11 +192,10 @@ end
 
 ---Used to add a new tool to all existing material sets. See [API.md](API.md) for more information.
 ---@param toolname string
+---@param commondefs table
 ---@param tools table
 ---@param overrides table|nil
 function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
-	local modname = minetest.get_current_modname()
-
 	if not mcl_tools.commondefs[toolname] then
 		mcl_tools.commondefs[toolname] = commondefs
 	end
@@ -205,7 +204,7 @@ function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
 		local materialdefs = mcl_tools.sets[setname]
 		local tooldefs = tools[setname]
 
-		register_tool(modname, setname, materialdefs, toolname, tooldefs, overrides)
+		register_tool(setname, materialdefs, toolname, tooldefs, overrides)
 	end
 end
 
@@ -219,10 +218,8 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 		mcl_tools.sets[setname] = materialdefs
 	end
 
-	local modname = minetest.get_current_modname()
-
 	for tool, defs in pairs(tools) do
-		register_tool(modname, setname, materialdefs, tool, defs, overrides)
+		register_tool(setname, materialdefs, tool, defs, overrides)
 	end
 end
 
