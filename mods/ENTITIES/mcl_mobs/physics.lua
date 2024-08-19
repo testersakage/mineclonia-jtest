@@ -942,8 +942,10 @@ function mob_class:check_water_flow()
 	end
 end
 
-function mob_class:check_dying()
-	if ((self.state and self.state == "die") or self:check_for_death()) and not self.animation.die_end then
+function mob_class:check_dying(reason, cmi_cause)
+    if ((self.state and self.state == "die")
+	or self:check_for_death(reason, cmi_cause))
+	and not self.animation.die_end then
 		if self.object then
 			local rot = self.object:get_rotation()
 			rot.z = ((math.pi/2-rot.z)*.2)+rot.z
