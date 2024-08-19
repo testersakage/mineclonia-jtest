@@ -1712,6 +1712,8 @@ end)
 
 function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
     local val
+    local entity = obj:get_luaentity ()
+    local in_thrower_body = entity and not entity._exited_thrower
     for _, item in ipairs (moveresult.collisions) do
 	if item.type == "node" then
 	    -- Detect targets.
@@ -1729,20 +1731,39 @@ function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
     end
     -- Mobs and objects are currently non-colliding, so supplement the
     -- move results with a raycast as in mcl_bows.
-    if not val then
+    if not val or in_thrower_body then
 	local raycast = minetest.raycast (pos, vector.add (pos, velocity * 0.1),
 					  true, false)
+	local still_inside = false
+	local thrower = entity._thrower
+
+	-- If the thrower should be a string, try to look up the
+	-- player by that name.
+	if type (thrower) == "string" then
+	    thrower = minetest.get_player_by_name (thrower)
+	end
+
 	for hitpoint in raycast do
 	    if hitpoint.type == "object" and hitpoint.ref ~= obj then
 		if hitpoint.ref:is_player ()
 		    or (hitpoint.ref:get_luaentity ()
 			and hitpoint.ref:get_luaentity ().is_mob) then
-		    val = {}
-		    break
+		    -- Don't return the thrower if the potion was
+		    -- launched from within it and has not yet
+		    -- exited.
+		    if in_thrower_body and hitpoint.ref == thrower then
+			still_inside = true
+		    else
+			val = {}
+		    end
 		end
 	    else
 		break
 	    end
+	end
+
+	if entity then
+	    entity._exited_thrower = not still_inside
 	end
     end
     return val

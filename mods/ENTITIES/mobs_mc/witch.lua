@@ -199,6 +199,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	avoid_distance = 6,
 	_witch_potion_check = 0,
 	do_attack = function (self, obj)
+	    local l = obj:get_luaentity ()
 	    -- Raid participants should never attack comrades in arms.
 	    if self.raidmob and l and l.raidmob then
 		return

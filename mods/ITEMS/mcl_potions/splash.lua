@@ -86,7 +86,8 @@ function mcl_potions.register_splash(name, descr, color, def)
 			local d = 0.1
 			local redux_map = {7/8,0.5,0.25}
 			local velocity = self.object:get_velocity ()
-			local val = mcl_potions.detect_hit (self, pos,
+			local val = mcl_potions.detect_hit (self.object,
+							    pos,
 							    moveresult,
 							    velocity)
 

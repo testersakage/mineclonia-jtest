@@ -251,7 +251,8 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		on_step = function(self, dtime, moveresult)
 			local pos = self.object:get_pos()
 			local velocity = self.object:get_velocity ()
-			local d, val = 4, mcl_potions.detect_hit (self, pos,
+			local d, val = 4, mcl_potions.detect_hit (self.object,
+								  pos,
 								  moveresult,
 								  velocity)
 			if val then
