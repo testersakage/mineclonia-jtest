@@ -441,18 +441,7 @@ function mobs_mc.villager_mob:check_summon()
 end
 
 function mobs_mc.villager_mob:has_traded()
-	if not self._trades then
-		return false
-	end
-	local cur_trades_tab = minetest.deserialize(self._trades)
-	if cur_trades_tab and type(cur_trades_tab) == "table" then
-		for _, trades in pairs(cur_trades_tab) do
-			if trades.traded_once then
-				return true
-			end
-		end
-	end
-	return false
+	return self._trade_xp and self._trade_xp > 0
 end
 
 function mobs_mc.villager_mob:unlock_trades()
@@ -645,6 +634,7 @@ function mobs_mc.villager_mob:do_work()
 	if self.child then
 		return
 	end
+
 	if not self:check_timer("do_work", 15) then return end
 
 	if self:validate_jobsite() then
@@ -686,7 +676,7 @@ function mobs_mc.villager_mob:do_work()
 				end
 			end
 		end
-	elseif self._profession == "unemployed" or self:has_traded() then
+	else
 		self:get_a_job()
 	end
 end
