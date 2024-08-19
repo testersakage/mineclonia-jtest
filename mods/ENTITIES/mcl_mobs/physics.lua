@@ -781,10 +781,6 @@ function mob_class:falling(pos)
 	if self.fly and self.state ~= "die" then return	end
 
 	local v = self.object:get_velocity()
-	if self._just_portaled then
-		self.reset_fall_damage = 1
-		return false -- mob has teleported through portal - it's 99% not falling
-	end
 	-- floating in water (or falling)
 	if v.y > 0 and v.y < -self.fall_speed then
 		-- when moving up, always use gravity
@@ -796,14 +792,14 @@ function mob_class:falling(pos)
 		-- stop accelerating once max fall speed hit
 		self.object:set_acceleration(vector.zero())
 	end
+	if self._just_portaled then
+		self.reset_fall_damage = 1
+		return false -- mob has teleported through portal - it's 99% not falling
+	end
 
 	if minetest.registered_nodes[node_ok(pos).name].groups.lava then
 		if self.floats_on_lava == 1 then
-			self.object:set_acceleration({
-				x = 0,
-				y = -self.fall_speed / (math.max(1, v.y) ^ 2),
-				z = 0
-			})
+			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
 	end
 	-- in water then float up
