@@ -162,7 +162,7 @@ local function replace_material_tag(shape, material)
 end
 
 local function register_tool(setname, materialdefs, toolname, tooldefs, overrides)
-	local itemstring = "mcl_tools:"..toolname.."_"..setname
+	local itemstring = ":mcl_tools:"..toolname.."_"..setname
 	local commondefs = mcl_tools.commondefs[toolname]
 	local tooldefs = table.merge({
 		_doc_items_longdesc = commondefs.longdesc,
