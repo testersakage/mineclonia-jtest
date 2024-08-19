@@ -74,7 +74,7 @@ function mob_class:drop_armor()
 	end
 end
 
-function mob_class:item_drop(cooked, looting_level)
+function mob_class:item_drop(cooked, looting_level, cmi_cause)
 	if not mobs_drop_items then return end
 	looting_level = looting_level or 0
 	if (self.child and self.type ~= "monster") then
@@ -89,6 +89,16 @@ function mob_class:item_drop(cooked, looting_level)
 	for _, dropdef in pairs(self.drops) do
 		local chance = 1 / dropdef.chance
 		local looting_type = dropdef.looting
+
+		-- Always drop mob heads when killed by a charged creeper explosion.
+		if (dropdef.mob_head and cmi_cause
+		    and cmi_cause.type == "explosion"
+		    and cmi_cause.direct
+		    and not cmi_cause.direct:is_player ()
+		    and (cmi_cause.direct:get_luaentity ().name
+			 == "mobs_mc:creeper_charged")) then
+		    chance = 1
+		end
 
 		if looting_level > 0 then
 			local chance_function = dropdef.looting_chance_function
@@ -438,7 +448,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 		end
 
 		if cause == "lava" or cause == "fire" then
-			self:item_drop(true, 0)
+			self:item_drop(true, 0, cmi_cause)
 		else
 			local wielditem = ItemStack()
 			if cause == "hit" then
@@ -449,7 +459,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 			end
 			local cooked = mcl_burning.is_burning(self.object) or mcl_enchanting.has_enchantment(wielditem, "fire_aspect")
 			local looting = mcl_enchanting.get_enchantment(wielditem, "looting")
-			self:item_drop(cooked, looting)
+			self:item_drop(cooked, looting, cmi_cause)
 			if killed_by_player then
 				if self.type == "monster" or self.name == "mobs_mc:zombified_piglin" and self.last_player_hit_name then
 					awards.unlock(self.last_player_hit_name, "mcl:monsterHunter")

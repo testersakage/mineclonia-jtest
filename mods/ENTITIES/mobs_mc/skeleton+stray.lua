@@ -68,12 +68,11 @@ local skeleton = {
 		max = 2,
 		looting = "common",},
 
-		-- Head
-		-- TODO: Only drop if killed by charged creeper
 		{name = "mcl_heads:skeleton",
-		chance = 200, -- 0.5% chance
-		min = 1,
-		max = 1,},
+		 chance = 200, -- 0.5% chance
+		 min = 1,
+		 max = 1,
+		 mob_head = true,},
 	},
 	animation = {
 		stand_speed = 15,
