@@ -197,12 +197,68 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	fear_height = 4,
 	avoid_distance = 6,
 	_witch_potion_check = 0,
+	do_attack = function (self, obj)
+	    -- Raid participants should never attack comrades in arms.
+	    if self.raidmob and l and l.raidmob then
+		return
+	    end
+	    mcl_mobs.mob_class.do_attack (self, obj)
+	end,
+	attack_players_and_npcs = function (self)
+	end,
+	attack_specific = function (self)
+	    local attack_players = self:attack_players_allowed ()
+	    if self.state == "attack" then
+		-- A target has already been selected.
+		return
+	    end
+
+	    -- Ordinary witches only attack players, but witches
+	    -- spawned in raids also seek out nearby illagers
+	    -- participating in raids to heal them.
+
+	    local pos = self.object:get_pos ()
+	    local objs
+		= minetest.get_objects_inside_radius (pos, self.view_range)
+	    table.shuffle (objs)
+	    for _, obj in pairs (objs) do
+		if self:line_of_sight (pos, obj:get_pos(), 2) then
+		    local l = obj:get_luaentity ()
+		    if attack_players and obj:is_player ()
+			and (not self._player_cooldown or not self.raidmob) then
+			minetest.log ("action", "Attacking player")
+			self:do_attack (obj)
+			break
+		    elseif self.raidmob and l and l.raidmob
+			and (l.name == "mobs_mc:pillager"
+			     or l.name == "mobs_mc:vindicator"
+			     or l.name == "mobs_mc:evoker") then
+			if not self._illager_cooldown then
+			    -- Prohibit selecting illager targets
+			    -- again for a period of 5 seconds.
+			    self._illager_cooldown = 0
+			    self:do_attack (obj)
+			    break
+			end
+		    end
+		end
+	    end
+	end,
 	deal_damage = function(self, damage, mcl_reason)
 		local factor = 1
 		if mcl_reason.type == "magic" then factor = 0.15 end
 		self.health = self.health - factor*damage
 	end,
 	do_custom = function (self, dtime)
+	    -- Increment illager cooldown period and ascertain whether
+	    -- it has elapsed.  Minecraft's period appears to be 200
+	    -- ticks divided by two, i.e., 5 seconds.
+	    if self._illager_cooldown then
+		self._illager_cooldown = self._illager_cooldown + dtime
+		if self._illager_cooldown >= 5 then
+		    self._illager_cooldown = nil
+		end
+	    end
 	    -- Check for potions to consume every minecraft tick.
 	    if self._held_potion then
 		self._witch_potion_check = self._witch_potion_check + dtime
@@ -239,17 +295,30 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	    -- try to slow them with slowness potion.  If players
 	    -- approach too near, disable them with weakness 25% of
 	    -- the time.
+	    local entity
 	    target_hp = self.attack:is_player () and self.attack:get_hp ()
 	    target_pos = self.attack:get_pos ()
 	    if not target_hp then
-		local entity = self.attack:get_luaentity ()
+		entity = self.attack:get_luaentity ()
 		target_hp = entity.is_mob and entity.health or 0
 	    end
 
 	    -- Ref: https://minecraft.fandom.com/wiki/Witch#Behavior
 	    local pos = self.object:get_pos ()
 	    local dist = vector.distance (target_pos, pos)
-	    if dist >= 8
+	    if entity
+		and (entity.name == "mobs_mc:pillager"
+		     or entity.name == "mobs_mc:vindicator"
+		     or entity.name == "mobs_mc:evoker") then
+		-- If it's a raid mob who is being attacked, give it
+		-- either regeneration or instant health subject to
+		-- its remaining health.
+		if target_hp and target_hp <= 4.0 then
+		    effect_potion = "mcl_potions:healing_splash"
+		else
+		    effect_potion = "mcl_potions:regeneration_splash"
+		end
+	    elseif dist >= 8
 		and not mcl_potions.has_effect (self.attack, "slowness") then
 		effect_potion = "mcl_potions:slowness_splash"
 	    elseif target_hp >= 8 and not mcl_potions.has_effect (self.attack,
@@ -263,7 +332,9 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 
 	    -- Adjust for deceleration and entity movement.
 	    local eye_height = self.attack:get_properties ().eye_height or 0
-	    local pos_adj = target_pos + self.attack:get_velocity ()
+	    local movement = self.attack:get_velocity ()
+	    movement.y = 0 -- But don't compensate for vertical movement.
+	    local pos_adj = target_pos + movement
 
 	    -- But never throw potions behind oneself.
 	    if not check_behind (self, pos, pos_adj) then
@@ -291,7 +362,5 @@ mcl_mobs.spawn_setup({
 	chance = 200,
 })
 
--- spawn eggs
 mcl_mobs.register_egg("mobs_mc:witch", S("Witch"), "#340000", "#51a03e", 0)
-
 mcl_wip.register_wip_item("mobs_mc:witch")

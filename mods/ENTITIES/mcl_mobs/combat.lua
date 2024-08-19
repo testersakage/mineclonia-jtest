@@ -202,16 +202,23 @@ function mob_class:smart_mobs(s, _, _, dtime)
 	end
 end
 
-function mob_class:attack_players_and_npcs()
+function mob_class:attack_players_allowed ()
 	if not damage_enabled or
-	peaceful_mode or
-	self.state == "attack" or
-	self.passive or
-	self:day_docile() or
-	self.type ~= "monster" or
-	not self.attack_type
-	then return end
+	    peaceful_mode or
+	    self.state == "attack" or
+	    self.passive or
+	    self:day_docile() or
+	    self.type ~= "monster" or
+	    not self.attack_type then
+	    return false
+	end
+	return true
+end
 
+function mob_class:attack_players_and_npcs()
+	if not self:attack_players_allowed () then
+	    return
+	end
 	local pos = self.object:get_pos()
 	local objs = minetest.get_objects_inside_radius(pos, self.view_range)
 	for _,obj in pairs(objs) do

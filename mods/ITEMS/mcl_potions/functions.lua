@@ -1658,7 +1658,7 @@ function mcl_potions.clear_effect(object, effect)
 	if effect then
 		if def.on_end then def.on_end(object) end
 		if effect.spawner then
-		    minetest.delete_particlespawner (def.spawner)
+		    minetest.delete_particlespawner (effect.spawner)
 		end
 		EF[effect][object] = nil
 		if def.after_end then def.after_end(object) end

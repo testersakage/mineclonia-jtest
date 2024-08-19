@@ -107,8 +107,7 @@ function mcl_raids.promote_to_raidcaptain(c) -- object
 			if cmi_cause and cmi_cause.type == "punch" and cmi_cause.puncher:is_player() then
 				awards.unlock(cmi_cause.puncher:get_player_name(), "mcl:voluntary_exile")
 				local lv = mcl_potions.get_effect_level(cmi_cause.puncher, "bad_omen")
-				if not lv then lv = 0
-				else lv = lv.factor end
+				if not lv then lv = 0 end
 				lv = math.max(5,lv + 1)
 				mcl_potions.give_effect_by_level("bad_omen", cmi_cause.puncher, lv, 6000)
 			end
