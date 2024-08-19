@@ -151,6 +151,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	hp_max = 26,
 	xp_min = 5,
 	xp_max = 5,
+	spawn_in_group = 1,
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
 	doll_size_override = { x = 0.95, y = 0.95 },
 	visual = "mesh",
