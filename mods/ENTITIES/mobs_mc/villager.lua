@@ -75,17 +75,22 @@ function mobs_mc.villager_mob:on_rightclick(clicker)
 		return
 	end
 
-	if self:validate_jobsite() and self.order ~= "work" then
-		minetest.log("warning","[mobs_mc] villager has jobsite but doesn't work")
-	end
-
 	self:init_trader_vars()
 	local name = clicker:get_player_name()
 	self._trading_players[name] = true
 
-	if self._trades == nil or self._trades == false then
-		self:init_trades()
+	-- Make sure old villagers have minimal XP for current level
+	-- Probably should be somewhere else ...
+	if self._trade_xp == nil then
+		if self._max_trade_tier and self._max_trade_tier > 1 then
+			self._trade_xp = mobs_mc.villager_mob.tier_xp[self._max_trade_tier - 1]
+		else
+			self._trade_xp = 0
+		end
 	end
+
+	self:init_trades()
+
 	self:update_max_tradenum()
 	if self._trades == false then
 		return
@@ -236,6 +241,8 @@ table.update(mobs_mc.villager_mob, {
 	_bed = nil,
 	_id = nil,
 	_profession = "unemployed",
+	_max_trade_tier = 1,
+	_trade_xp = 0,
 	look_at_player = true,
 	pick_up = pick_up,
 	can_open_doors = true,

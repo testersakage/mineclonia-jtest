@@ -18,6 +18,13 @@ local tiernames = {
 	S("Master")
 }
 
+mobs_mc.villager_mob.tier_xp = {
+	10,
+	70,
+	150,
+	250,
+}
+
 local function move_stack(inv1, list1, inv2, list2, stack, pos)
 	if stack and inv1:contains_item(list1, stack) and inv2:room_for_item(list2, stack) then
 		return inv2:add_item(list2, inv1:remove_item(list1, stack))
@@ -66,13 +73,24 @@ local function func_or_it(item)
 	end
 end
 
-function mobs_mc.villager_mob:init_trades()
-	local profession = mobs_mc.professions[self._profession]
-	local trade_tiers = profession.trades
+function mobs_mc.villager_mob:init_trades(trade_tiers)
+	if not trade_tiers then
+		local profession = mobs_mc.professions[self._profession]
+		trade_tiers = profession.trades
+	end
+
 	if trade_tiers == nil then
 		-- Empty trades
 		self._trades = false
 		return
+	end
+
+	-- from wiki "... a villager with no experience resets its trades every so often"
+	local change_trades = (not self:has_traded()) and math.random(1, 10) == 10
+	local cur_trades
+
+	if self._trades and not change_trades then
+		cur_trades = minetest.deserialize(self._trades)
 	end
 
 	local max_tier = #trade_tiers
@@ -86,34 +104,58 @@ function mobs_mc.villager_mob:init_trades()
 			local offered_item = func_or_it(trade[2][1])
 			local offered_count = math.random(trade[2][2], trade[2][3])
 
-			local offered_stack = ItemStack({name = offered_item, count = offered_count})
-			if mcl_enchanting.is_enchanted(offered_item) then
-				if mcl_enchanting.is_book(offered_item) then
-					offered_stack = mcl_enchanting.enchant_uniform_randomly(offered_stack, {"soul_speed"})
-				else
-					mcl_enchanting.enchant_randomly(offered_stack, math.random(5, 19), false, false, true)
-					mcl_enchanting.unload_enchantments(offered_stack)
-				end
-			end
-
-			local wanted = { wanted1_item .. " " ..wanted1_count }
+			-- the idea here is to spot when things have changed in the trades and reflect them in the UI
+			local wanted = { wanted1_item .. " " .. wanted1_count }
+			local trade_str = table.concat(
+				{ tiernum, wanted1_item, trade[1][2], trade[1][3], offered_item, trade[2][2], trade[2][3] },
+				"-"
+			)
 			if trade[1][4] then
 				local wanted2_item = trade[1][4]
 				local wanted2_count = math.random(trade[1][5], trade[1][6])
-				table.insert(wanted, wanted2_item .. " " ..wanted2_count)
+				table.insert(wanted, wanted2_item .. " " .. wanted2_count)
+				trade_str = trade_str .. table.concat({ wanted2_item, trade[1][5], trade[1][6] }, "-")
 			end
 
-			table.insert(trades, {
-				wanted = wanted,
-				offered = offered_stack:to_table(),
-				tier = tiernum, -- tier of this trade
-				traded_once = false, -- true if trade was traded at least once
-				trade_counter = 0, -- how often the this trade was mate after the last time it got unlocked
-				locked = false, -- if this trade is locked. Locked trades can't be used
-			})
+			local record
+
+			if cur_trades and type(cur_trades) == "table" then
+				for _, cur_trade in pairs(cur_trades) do
+					if cur_trade.trade_str and cur_trade.trade_str == trade_str then
+						record = cur_trade
+						break
+					end
+				end
+			end
+
+			if not record then
+				local offered_stack = ItemStack({ name = offered_item, count = offered_count })
+				if mcl_enchanting.is_enchanted(offered_item) then
+					if mcl_enchanting.is_book(offered_item) then
+						offered_stack = mcl_enchanting.enchant_uniform_randomly(offered_stack, { "soul_speed" })
+					else
+						mcl_enchanting.enchant_randomly(offered_stack, math.random(5, 19), false, false, true)
+						mcl_enchanting.unload_enchantments(offered_stack)
+					end
+				end
+
+				record = {
+					wanted = wanted,
+					offered = offered_stack:to_table(),
+					tier = tiernum, -- tier of this trade
+					trade_counter = 0, -- how often the this trade was made after the last time it got unlocked
+					locked = false, -- if this trade is locked. Locked trades can't be used
+					max_trades = trade[3] or 12,
+					xp = trade[4] or 1,
+					trade_str = trade_str,
+				}
+			end
+
+			table.insert(trades, record)
 		end
 	end
 	self._trades = minetest.serialize(trades)
+	-- Why is this deserialize here?
 	minetest.deserialize(self._trades)
 end
 
@@ -452,13 +494,16 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 		h = h + button_buffer
 	end
 
-	local header =
-		string.format(
-			fs_header_template,
-			F(minetest.colorize("#313131", profession .. " - " .. tiername)),
-			(50/250)*5.9,
-			h * 10
-		)
+	local xp_str = ""
+	if self._max_trade_tier < 5 then
+		xp_str = " - " .. self._trade_xp .. "/" .. mobs_mc.villager_mob.tier_xp[self._max_trade_tier] .. " xp"
+	end
+
+	local header = string.format(
+		fs_header_template,
+		F(minetest.colorize("#313131", profession .. " - " .. tiername .. xp_str)),
+		h * 10
+	)
 
 	if self._notiers then
 		header = string.format(fs_header_template, F(minetest.colorize("#313131", profession)), h * 10)
@@ -768,93 +813,40 @@ local trade_inventory = {
 			local tradenum = player_tradenum[name]
 
 			local trades
-			trader._traded = true
 			if trader and trader._trades then
 				trades = minetest.deserialize(trader._trades)
 			end
 			if trades then
 				local trade = trades[tradenum]
-				local unlock_stuff = false
-				if not trade.traded_once then
-					-- Unlock all the things if something was traded
-					-- for the first time ever
-					unlock_stuff = true
-					trade.traded_once = true
-				elseif trade.trade_counter == 0 and math.random(1,5) == 1 then
-					-- Otherwise, 20% chance to unlock if used freshly reset trade
-					unlock_stuff = true
-				end
-
-				local emeralds
-				if wanted1:get_name() == "mcl_core:emerald" then
-					emeralds = wanted1:get_count()
-				elseif wanted2:get_name() == "mcl_core:emerald" then
-					emeralds = wanted2:get_count()
-				else
-					local offered = inv:get_stack("offered", 1)
-					emeralds = offered:get_name() == "mcl_core:emerald" and offered:get_count() or 0
-				end
-				local xp = 2 + math.ceil(emeralds / (64/4)) -- 1..64 emeralds = 3..6 xp
-
+				local player_xp = math.random(3, 6)
 				local update_formspec = false
-				if unlock_stuff then
-					-- First-time trade unlock all trades and unlock next trade tier
-					if trade.tier + 1 > trader._max_trade_tier then
+
+				if trader._max_trade_tier < 5 then
+					trader._trade_xp = trader._trade_xp + trade.xp
+					update_formspec = true
+
+					-- Level up
+					if trader._trade_xp >= mobs_mc.villager_mob.tier_xp[trader._max_trade_tier] then
 						trader._max_trade_tier = trader._max_trade_tier + 1
-						if trader._max_trade_tier > 5 then
-							trader._max_trade_tier =  5
-						end
 						trader:set_textures()
 						trader:update_max_tradenum()
-						update_formspec = true
-						xp = xp + 5
-					end
-
-					for t=1, #trades do
-						trades[t].locked = false
-						trades[t].trade_counter = 0
-					end
-					trader._locked_trades = 0
-					-- Also heal trader for unlocking stuff
-					-- TODO: Replace by Regeneration I
-					trader.health = math.min((trader.object:get_properties().hp_max or 20), trader.health + 4)
-				end
-
-				if not minetest.is_creative_enabled(player:get_player_name()) then
-					mcl_experience.throw_xp(trader.object:get_pos(), xp)
-				end
-
-				trade.trade_counter = trade.trade_counter + 1
-				-- Semi-randomly lock trade for repeated trade (not if there's only 1 trade)
-				if trader._max_tradenum > 1 then
-					if trade.trade_counter >= 12 then
-						trade.locked = true
-					elseif trade.trade_counter >= 2 then
-						local r = math.random(1, math.random(4, 10))
-						if r == 1 then
-							trade.locked = true
-						end
-					end
-				end
-
-				if trade.locked then
-					inv:set_stack("output", 1, "")
-					update_formspec = true
-					trader._locked_trades = trader._locked_trades + 1
-					-- Check if we managed to lock ALL available trades. Rare but possible.
-					if trader._locked_trades >= trader._max_tradenum then
-						-- Emergency unlock! Unlock all other trades except the current one
-						for t=1, #trades do
-							if t ~= tradenum then
-								trades[t].locked = false
-								trades[t].trade_counter = 0
-							end
-						end
-						trader._locked_trades = 1
+						player_xp = player_xp + 5
 						-- Also heal trader for unlocking stuff
 						-- TODO: Replace by Regeneration I
 						trader.health = math.min((trader.object:get_properties().hp_max or 20), trader.health + 4)
 					end
+				end
+
+				if not minetest.is_creative_enabled(player:get_player_name()) then
+					mcl_experience.throw_xp(trader.object:get_pos(), player_xp)
+				end
+
+				trade.trade_counter = trade.trade_counter + 1
+				if trade.trade_counter >= trade.max_trades then
+					trade.locked = true
+					inv:set_stack("output", 1, "")
+					update_formspec = true
+					trader._locked_trades = trader._locked_trades + 1
 				end
 				trader._trades = minetest.serialize(trades)
 				if update_formspec then
