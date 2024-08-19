@@ -1201,6 +1201,8 @@ local function potions_set_hudbar(player)
 	hb.change_hudbar(player, "health", nil, nil, "hudbars_icon_health.png", nil, "hudbars_bar_health.png")
 end
 
+local enable_damage = minetest.settings:get_bool("enable_damage")
+
 local icon_ids = {}
 
 local function potions_init_icons(player)
@@ -1242,7 +1244,11 @@ local function potions_init_icons(player)
 		})
 		table.insert(icon_ids[name], id)
 	end
-	hb.init_hudbar(player, "absorption")
+	-- Health HUD bars should be concealed when damage is
+	-- disabled.
+	if enable_damage then
+	    hb.init_hudbar (player, "absorption")
+	end
 end
 
 local function potions_set_icons(player)
