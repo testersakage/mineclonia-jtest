@@ -132,6 +132,16 @@ local witch_potion_items = {
     },
 }
 
+local function check_behind (self, obj_pos, target_pos)
+    local look_dir = self.object:get_yaw ()
+    local v = { z = math.cos (look_dir), y = 0, x = -math.sin (look_dir), }
+    v = vector.normalize (v)
+    local x = vector.direction (obj_pos, target_pos)
+
+    -- Dot product.
+    return vector.dot (v, x) <= 0
+end
+
 mcl_mobs.register_mob("mobs_mc:witch", {
 	description = S("Witch"),
 	type = "monster",
@@ -253,7 +263,13 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 
 	    -- Adjust for deceleration and entity movement.
 	    local eye_height = self.attack:get_properties ().eye_height or 0
-	    target_pos = target_pos + self.attack:get_velocity ()
+	    local pos_adj = target_pos + self.attack:get_velocity ()
+
+	    -- But never throw potions behind oneself.
+	    if not check_behind (self, pos, pos_adj) then
+		target_pos = pos_adj
+	    end
+
 	    target_pos.y = target_pos.y + eye_height
 	    local d = vector.subtract (target_pos, p)
 	    d.y = d.y + vector.length (d) * 0.2
