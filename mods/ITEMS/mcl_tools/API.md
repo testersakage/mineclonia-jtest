@@ -16,7 +16,7 @@ Registers a complete set of tools based on a material.
     - level: _integer_
     - speed: _number_ which acts as a multiplier for the group's digging speed. If omitted, it will receive the value 1, defined by _mcl_autogroup.
     - max_drop_level: _integer_ that contains the tool's tier level. This number determines whether certain blocks will drop items.
-    - groups: _table_
+    - groups: _table_ containing groups for all tools on the set. Tools typically use the `dig_speed_class` and `enchantability` groups. Other groups can be determined from this table.
 
 - `tools`: _table_ that can contain the following fields:
 
@@ -26,15 +26,22 @@ Registers a complete set of tools based on a material.
     - ["axe"]: _table_ containing **axe** definitions;
     - ["hoe"]: _table_ containing **hoe** definitions;
 
-- `overrides`(**optional**): _table_
+- `overrides`(**optional**): _table_ containing optional parameters for all tools in the set (e.g. _mcl_cooking_output, _doc_items_hidden).
 
 ### `mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)`:
 Adds a new tool to existing material sets.
 
 - `toolname`: _string_ with the name of the tool (for example **shovel**).
-- `commondefs`: _table_
+- `commondefs`: _table_ that can contain the following fields:
+
+    - `longdesc`: _string_
+    - `usagehelp`: _string_
+    - `groups`: _table_
+    - `diggroups`: _table_
+    - `craft_shapes`: _table_
+
 - `tools`: _table_ that can contain the same fiels as `tools` from `register_set`.
-- `overrides` (**optional**): _table_
+- `overrides` (**optional**): _table_ that can contain the same fiels as `overrides` from `register_set`.
 
 ## Licenses
 * `default_shears_cut.ogg` from [Free Sound](https://freesound.org/people/SmartWentCody/sounds/179015/) by SmartWentCody, CC-BY-SA 3.0.
