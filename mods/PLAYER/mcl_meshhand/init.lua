@@ -128,7 +128,7 @@ minetest.override_item("", {
 			if stack:get_count() <= 0 then
 				stack = ItemStack(name)
 			end
-			inv:set_stack("main", placer:get_wield_index(), stack)
+			return stack
 		end
 	end,
 })
