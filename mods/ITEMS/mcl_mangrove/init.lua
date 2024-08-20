@@ -102,6 +102,7 @@ for _,root in pairs(propagule_water_nodes) do
 		_mcl_hardness = 0,
 		_mcl_blast_resistance = 0,
 		_mcl_silk_touch_drop = true,
+		_mcl_basenode = "mcl_mangrove:propagule",
 	})
 
 end
@@ -225,6 +226,7 @@ minetest.register_node("mcl_mangrove:hanging_propagule_1", {
 	tiles = {"mcl_mangrove_propagule_hanging.png"},
 	inventory_image = "mcl_mangrove_propagule.png",
 	wield_image = "mcl_mangrove_propagule.png",
+	_mcl_basenode = "mcl_mangrove:propagule",
 })
 
 
@@ -270,6 +272,7 @@ local wlroots = {
 		handy = 1, hoey = 1, water=4, liquid=3, puts_out_fire=1, dig_by_piston = 1, deco_block = 1,  not_in_creative_inventory=1 },
 	_mcl_blast_resistance = 100,
 	_mcl_hardness = -1, -- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
+	_mcl_basenode = "mcl_mangrove:mangrove_roots",
 	on_construct = function(pos)
 		local dim = mcl_worlds.pos_to_dimension(pos)
 		if dim == "nether" then
