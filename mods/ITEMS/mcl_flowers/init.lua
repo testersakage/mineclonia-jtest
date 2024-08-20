@@ -316,6 +316,7 @@ function mcl_flowers.add_large_plant(name, def)
 		drop = def.bottom.drop or ( "mcl_flowers:"..name ),
 		_mcl_shears_drop = def.bottom._mcl_shears_drop,
 		_mcl_fortune_drop = def.bottom._mcl_fortune_drop,
+		_mcl_basenode = "mcl_flowers:"..name,
 		after_destruct = function(pos, _)
 			-- Remove bottom half of flower (if it exists)
 			local top = pos
