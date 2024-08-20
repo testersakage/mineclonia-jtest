@@ -232,6 +232,20 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	if mt_reason.mcl_damage then
 	   return hp_change
 	end
+
+	-- Detect damage from hazardous nodes and deduct the full
+	-- amount of the damage, rather than hp_change, which is
+	-- restricted to the player's remaining health and may be
+	-- attenuated by armor or other protection.
+
+	if mt_reason.type == "node_damage" and mt_reason.node then
+	   local nodedef = minetest.registered_nodes[mt_reason.node]
+
+	   if nodedef.damage_per_second then
+	      hp_change = -nodedef.damage_per_second
+	   end
+	end
+
 	if hp_change < 0 then
 	   if player:get_hp() <= 0 then
 	      return 0
