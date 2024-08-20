@@ -92,7 +92,7 @@ function mcl_charges.wind_burst(pos, radius)
 		local dist = math.max(1, vector.distance(pos, obj_pos))
 
 		if obj:is_player() then
-			obj:add_velocity(vector.multiply(vector.normalize(vector.subtract(obj_pos, pos)), math.random(1.8, 2.0) / dist * RADIUS))
+			obj:add_velocity(vector.multiply(vector.normalize(vector.subtract(obj_pos, pos)), mcl_util.float_random(1.8, 2.0) / dist * RADIUS))
 		else
 			local luaobj = obj:get_luaentity()
 			if luaobj then

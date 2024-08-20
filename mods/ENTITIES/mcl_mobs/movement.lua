@@ -899,7 +899,7 @@ function mob_class:do_states_stand()
 				yaw = yaw + math.pi
 			end
 		else
-			yaw = yaw + math.random(-YAW_RAD, YAW_RAD)
+			yaw = yaw + mcl_util.float_random(-YAW_RAD, YAW_RAD)
 		end
 		self:set_yaw(yaw, 8)
 		--[[	else
@@ -1161,7 +1161,7 @@ function mob_class:turn_away(delay)
 	end
 
 	local yaw = self.object:get_yaw() or 0
-	local turn = math.random(YAW_RAD / 2, YAW_RAD)
+	local turn = mcl_util.float_random(YAW_RAD / 2, YAW_RAD)
 	if math.random() < 0.5 then
 		turn = -turn
 	end

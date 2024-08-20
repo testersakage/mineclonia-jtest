@@ -243,7 +243,7 @@ local function spawn_mobs(pos)
 	end
 
 	-- Spawn attempt done. Next spawn attempt much later
-	timer:start(math.random(10, 39.95))
+	timer:start(mcl_util.float_random(10, 39.95))
 
 end
 

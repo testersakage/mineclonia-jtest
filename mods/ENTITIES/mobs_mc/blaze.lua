@@ -97,11 +97,14 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 			mcl_burning.set_on_fire(self.attack, 5)
 		end
 		local pos = self.object:get_pos()
+
+		if not self:check_timer("blaze_particles", mcl_util.float_random(0.5, 2)) then return end
+
 		minetest.add_particle({
-			pos = {x=pos.x+math.random(-0.7,0.7)*math.random()/2,y=pos.y+math.random(0.7,1.2),z=pos.z+math.random(-0.7,0.7)*math.random()/2},
-			velocity = {x=0, y=math.random(1,1), z=0},
+			pos = {x = pos.x+mcl_util.float_random(-0.7,0.7) * math.random()/2, y = pos.y+mcl_util.float_random(0.7,1.2), z = pos.z+mcl_util.float_random(-0.7,0.7) * math.random()/2},
+			velocity = {x=0, y = mcl_util.float_random(0.5, 2), z=0},
 			expirationtime = math.random(),
-			size = math.random(1, 4),
+			size = mcl_util.float_random(1, 4),
 			collisiondetection = true,
 			vertical = false,
 			texture = "mcl_particles_smoke_anim.png^[colorize:#2c2c2c:255",
@@ -113,10 +116,10 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 			},
 		})
 		minetest.add_particle({
-			pos = {x=pos.x+math.random(-0.7,0.7)*math.random()/2,y=pos.y+math.random(0.7,1.2),z=pos.z+math.random(-0.7,0.7)*math.random()/2},
-			velocity = {x=0, y=math.random(1,1), z=0},
+			pos = {x = pos.x+mcl_util.float_random(-0.7,0.7)* math.random()/2, y = pos.y+mcl_util.float_random(0.7,1.2), z = pos.z+mcl_util.float_random(-0.7,0.7) * math.random()/2},
+			velocity = {x=0, y = mcl_util.float_random(0.5, 2), z=0},
 			expirationtime = math.random(),
-			size = math.random(1, 4),
+			size = mcl_util.float_random(1, 4),
 			collisiondetection = true,
 			vertical = false,
 			texture = "mcl_particles_smoke_anim.png^[colorize:#424242:255",
@@ -128,10 +131,10 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 			},
 		})
 		minetest.add_particle({
-			pos = {x=pos.x+math.random(-0.7,0.7)*math.random()/2,y=pos.y+math.random(0.7,1.2),z=pos.z+math.random(-0.7,0.7)*math.random()/2},
-			velocity = {x=0, y=math.random(1,1), z=0},
+			pos = {x = pos.x+mcl_util.float_random(-0.7,0.7)*math.random()/2, y = pos.y+mcl_util.float_random(0.7,1.2), z = pos.z+mcl_util.float_random(-0.7,0.7)*math.random()/2},
+			velocity = {x=0, y = mcl_util.float_random(0.5,2), z=0},
 			expirationtime = math.random(),
-			size = math.random(1, 4),
+			size = mcl_util.float_random(1, 4),
 			collisiondetection = true,
 			vertical = false,
 			texture = "mcl_particles_smoke_anim.png^[colorize:#0f0f0f:255",
