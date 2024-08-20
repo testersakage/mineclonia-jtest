@@ -162,7 +162,7 @@ local function replace_material_tag(shape, material)
 end
 
 local function register_tool(setname, materialdefs, toolname, tooldefs, overrides)
-	local itemstring = ":mcl_tools:"..toolname.."_"..setname
+	local itemstring = "mcl_tools:"..toolname.."_"..setname
 	local commondefs = mcl_tools.commondefs[toolname]
 	local tooldefs = table.merge({
 		_doc_items_longdesc = commondefs.longdesc,
@@ -204,7 +204,7 @@ function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
 		local materialdefs = mcl_tools.sets[setname]
 		local tooldefs = tools[setname]
 
-		register_tool(setname, materialdefs, toolname, tooldefs, overrides)
+		register_tool(":"..setname, materialdefs, toolname, tooldefs, overrides)
 	end
 end
 
@@ -219,7 +219,7 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 	end
 
 	for tool, defs in pairs(tools) do
-		register_tool(setname, materialdefs, tool, defs, overrides)
+		register_tool(":"..setname, materialdefs, tool, defs, overrides)
 	end
 end
 

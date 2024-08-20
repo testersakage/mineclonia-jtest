@@ -26,14 +26,14 @@ Registers a complete set of tools based on a material.
     - ["axe"]: _table_ containing **axe** definitions;
     - ["hoe"]: _table_ containing **hoe** definitions;
 
-- `overrides`(**optional**): _table_ 
+- `overrides`(**optional**): _table_
 
 ### `mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)`:
 Adds a new tool to existing material sets.
 
 - `toolname`: _string_ with the name of the tool (for example **shovel**).
 - `commondefs`: _table_
-- `tools`: _table_
+- `tools`: _table_ that can contain the same fiels as `tools` from `register_set`.
 - `overrides` (**optional**): _table_
 
 ## Licenses
