@@ -18,7 +18,7 @@ Registers a complete set of tools based on a material.
     - max_drop_level: _integer_ that contains the tool's tier level. This number determines whether certain blocks will drop items.
     - groups: _table_ containing groups for all tools on the set. Tools typically use the `dig_speed_class` and `enchantability` groups. Other groups can be determined from this table.
 
-- `tools`: _table_ that can contain the following fields (See the Examples section in the tools subsection):
+- `tools`: _table_ that can contain the following fields (see the Examples section in the tools for register_set subsection):
 
     - ["pick"]: _table_ containing **pickaxe** definitions;
     - ["shovel"]: _table_ containing **shovel** definitions;
@@ -40,7 +40,7 @@ Adds a new tool to existing material sets.
     - `diggroups`: _table_ containing the diggroups for this tool type (e.g hoey, swordy, swordy_cobweb).
     - `craft_shapes`: _table_ containing craft shapes for the tool (see examples in the Examples section).
 
-- `tools`: _table_ that can contain the same fiels as `tools` from `register_set`.
+- `tools`: _table_ that contains values ​​similar to that of `tools` from `register_set` but indexed by material names (see Example section in the tools for add_to_sets subsection).
 - `overrides` (**optional**): _table_ that can contain the same fiels as `overrides` from `register_set`.
 
 ## Examples
@@ -59,10 +59,12 @@ groups = { dig_class_speed = 6, enchantability = 10, fire_immune = 1 }
 groups = { pickaxe = 1, tool = 1 }
 ```
 
-### `tools`:
+### `tools` on `register_set`:
 
 ```lua
--- Definitions for Wooden Pickaxe. If any of these fields are omitted, problems may occur using the tool.
+-- If any of these fields are omitted, problems may occur using the tool.
+-- Note Note that in register_set the tools field contains definitions for tools of a common material.
+-- Definitions for Wooden Pickaxe.
 ["pick"] = {
     description = S("Wooden Pickaxe"),
     inventory_image = "default_tool_woodpick.png",
@@ -70,7 +72,41 @@ groups = { pickaxe = 1, tool = 1 }
         full_punch_interval = 0.83333333,
         damage_groups = { fleshy = 2 }
     }
+},
+-- Definitions for Wooden Shovel.
+["shovel"] = {
+    description = S("Wooden Shovel"),
+    inventory_image = "default_tool_woodshovel.png",
+    tool_capabilities = {
+        full_punch_interval = 1,
+        damage_groups = { fleshy = 2 }
+    }
 }
+```
+
+### `tools` on `add_to_sets`:
+
+```lua
+-- Hypothetical use case for hammer addition
+-- Definitions for Wooden Hammer.
+["wood"] = {
+    description = S("Wooden Hammer"),
+    inventory_image = "default_tool_woodhammer.png",
+    tool_capabilities = {
+        full_punch_interval = 0.83333333,
+        damage_groups = { fleshy = 4 }
+    }
+},
+-- Definitions for Iron Hammer.
+["iron"] = {
+    description = S("Iron Hammer"),
+    inventory_image = "default_tool_ironhammer.png",
+    tool_capabilities = {
+        full_punch_interval = 1,
+        damage_groups = { fleshy = 6 }
+    }
+}
+
 ```
 
 ### `craft_shapes`:
