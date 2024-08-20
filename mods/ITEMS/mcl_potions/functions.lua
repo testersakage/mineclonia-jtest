@@ -1648,23 +1648,23 @@ function mcl_potions.get_total_fatigue(object)
 	return accum_factor
 end
 
-function mcl_potions.clear_effect(object, effect)
-	if not EF[effect] then
+function mcl_potions.clear_effect(object, effectname)
+	if not EF[effectname] then
 		minetest.log("warning", "[mcl_potions] Tried to remove an effect that is not registered: " .. dump(effect))
 		return false
 	end
 	local def = registered_effects[effect]
-	local effect = EF[effect][object]
+	local effect = EF[effectname][object]
 	if effect then
 		if def.on_end then def.on_end(object) end
 		if effect.spawner then
 		    minetest.delete_particlespawner (effect.spawner)
 		end
-		EF[effect][object] = nil
+		EF[effectname][object] = nil
 		if def.after_end then def.after_end(object) end
 	end
-	if item_speed_effects[effect] then
-	    item_speed_effects[effect][object] = nil
+	if item_speed_effects[effectname] then
+	    item_speed_effects[effectname][object] = nil
 	end
 	if not object:is_player() then return end
 	potions_set_hud(object)
