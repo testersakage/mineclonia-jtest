@@ -228,7 +228,6 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 		    local l = obj:get_luaentity ()
 		    if attack_players and obj:is_player ()
 			and (not self._player_cooldown or not self.raidmob) then
-			minetest.log ("action", "Attacking player")
 			self:do_attack (obj)
 			break
 		    elseif self.raidmob and l and l.raidmob
