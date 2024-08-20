@@ -64,7 +64,7 @@ local function calculate_xp(stack)
 	local xp = 0
 	local enchants = mcl_enchanting.get_enchantments(stack)
 	for enchant, level in pairs(enchants) do
-		if level > 0 and mcl_enchanting.is_curse(enchant) then
+		if level > 0 and not mcl_enchanting.is_curse(enchant) then
 			-- Add a bit of uniform randomisation
 			xp = xp + math.random(7, 13) * level
 		end
