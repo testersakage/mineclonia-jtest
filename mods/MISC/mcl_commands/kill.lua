@@ -16,7 +16,7 @@ local function handle_kill_command(suspect, victim)
 	end
 	-- DIE!
 	mcl_damage.damage_player (victimref, mcl_damage.get_hp (victimref),
-				  {_mcl_type = "out_of_world"})
+				  { type = "out_of_world", })
 	-- Log
 	if suspect ~= victim then
 		minetest.log("action", string.format("%s killed %s using /kill", suspect, victim))
