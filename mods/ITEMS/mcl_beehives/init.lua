@@ -113,6 +113,7 @@ for l = 1, 4 do
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		_mcl_blast_resistance = 0.6,
 		_mcl_hardness = 0.6,
+		_mcl_basenode = "mcl_beehives:beehive",
 		drop = "",
 		after_dig_node = dig_hive,
 	})
@@ -131,6 +132,7 @@ minetest.register_node("mcl_beehives:beehive_5", {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
+	_mcl_basenode = "mcl_beehives:beehive",
 	on_rightclick = honey_harvest,
 	drop = "",
 	after_dig_node = dig_hive,
@@ -171,6 +173,7 @@ for i = 1, 4 do
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		_mcl_blast_resistance = 0.3,
 		_mcl_hardness = 0.3,
+		_mcl_basenode = "mcl_beehives:bee_nest",
 		drop = "",
 		after_dig_node = dig_hive,
 	})
@@ -190,6 +193,7 @@ minetest.register_node("mcl_beehives:bee_nest_5", {
 	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
 	_mcl_honey_level = 5,
+	_mcl_basenode = "mcl_beehives:bee_nest",
 	on_rightclick = honey_harvest,
 	drop = "",
 	after_dig_node = dig_hive,
