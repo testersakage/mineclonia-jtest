@@ -13,7 +13,7 @@ Registers a complete set of tools based on a material.
     - craftable: _boolean_ that determines whether tools can be crafted at the crafting table (false for netherite tools).
     - material: _string_ with the name or group of items used as crafting/repair material for tools.
     - uses: _integer_ number of tool uses.
-    - level: _integer_ 
+    - level: _integer_ that indicates which levels of the group the tool can harvest.
     - speed: _number_ which acts as a multiplier for the group's digging speed. If omitted, it will receive the value 1, defined by _mcl_autogroup.
     - max_drop_level: _integer_ that contains the tool's tier level. This number determines whether certain blocks will drop items.
     - groups: _table_ containing groups for all tools on the set. Tools typically use the `dig_speed_class` and `enchantability` groups. Other groups can be determined from this table.

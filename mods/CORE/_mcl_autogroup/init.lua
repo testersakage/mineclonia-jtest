@@ -54,7 +54,7 @@ on that digging group.
 The "level" field indicates which levels of the group the tool can harvest.  A
 level of 0 means that the tool cannot harvest blocks of that node.  A level of 1
 or above means that the tool can harvest nodes with that level or below.  See
-"mcl_tools/init.lua" for examples on how "_mcl_diggroups" is used in practice.
+"mcl_farming/hoes.lua" for examples on how "_mcl_diggroups" is used in practice.
 
 Information about the mod
 -------------------------
