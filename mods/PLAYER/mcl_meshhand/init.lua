@@ -114,13 +114,19 @@ minetest.override_item("", {
 	tool_capabilities = mcl_meshhand.survival_hand_tool_caps,
 	on_place = function(_, placer, pointed_thing)
 		if minetest.is_creative_enabled(placer:get_player_name()) then
-			local inv = placer:get_inventory()
 			local name = minetest.get_node(pointed_thing.under).name
 			local stack = ItemStack(name)
+			if minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
+				local def = stack:get_definition()
+				if not def._mcl_basenode then return end
+				name = def._mcl_basenode
+				stack = ItemStack(name)
+			end
+			local inv = placer:get_inventory()
 			stack:set_count(stack:get_stack_max())
 			stack = inv:remove_item("main", stack)
 			if stack:get_count() <= 0 then
-				stack = ItemStack(minetest.get_node(pointed_thing.under).name)
+				stack = ItemStack(name)
 			end
 			inv:set_stack("main", placer:get_wield_index(), stack)
 		end
