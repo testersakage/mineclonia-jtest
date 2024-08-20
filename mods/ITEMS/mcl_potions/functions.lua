@@ -1653,7 +1653,7 @@ function mcl_potions.clear_effect(object, effectname)
 		minetest.log("warning", "[mcl_potions] Tried to remove an effect that is not registered: " .. dump(effect))
 		return false
 	end
-	local def = registered_effects[effect]
+	local def = registered_effects[effectname]
 	local effect = EF[effectname][object]
 	if effect then
 		if def.on_end then def.on_end(object) end
