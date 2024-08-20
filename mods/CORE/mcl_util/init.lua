@@ -649,7 +649,11 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 	local armorgroups = target:get_armor_groups()
 
 	if hp > 0 and armorgroups and not armorgroups.immortal then
-		target:set_hp(hp - damage, {_mcl_reason = mcl_reason})
+	   if target:is_player () then
+	      mcl_damage.damage_player (target, damage, mcl_reason)
+	   else
+	      target:set_hp (hp - damage, {_mcl_reason = mcl_reason})
+	   end
 	end
 end
 
@@ -658,6 +662,8 @@ function mcl_util.get_hp(obj)
 
 	if luaentity and luaentity.is_mob then
 		return luaentity.health
+	elseif obj:is_player () then
+	   return mcl_damage.get_hp (obj)
 	else
 		return obj:get_hp()
 	end

@@ -183,7 +183,7 @@ end
 
 local function pearl_tp(player, pos)
 	player:set_pos(pos)
-	player:set_hp(player:get_hp() - 5, { type = "fall", from = "mod" })
+	mcl_damage.damage_player (player, 5, { type = "fall", })
 end
 
 -- Movement function of ender pearl

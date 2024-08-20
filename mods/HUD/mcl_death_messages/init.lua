@@ -200,7 +200,7 @@ mcl_damage.register_on_death(function(obj, reason)
 end)
 
 mcl_damage.register_on_damage(function(obj, damage, reason)
-	if obj:get_hp() - damage > 0 then
+      if mcl_util.get_hp (obj) - damage > 0 then
 		if reason.source then
 			mcl_death_messages.assist[obj] = {name = mcl_util.get_object_name(reason.source), timeout = 5}
 		else

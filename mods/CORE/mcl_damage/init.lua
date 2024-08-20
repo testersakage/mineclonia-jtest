@@ -143,29 +143,153 @@ function mcl_damage.register_type(name, def)
 	mcl_damage.types[name] = def
 end
 
+--- Player damage.
+
+--- An independent floating point health statistic is associated with
+--- players which is synchronized with the engine HP whenever damage
+--- is sustained or healing takes place.  If the engine HP changes
+--- independently of this statistic, the change is adjusted by the
+--- statistic.
+
+function mcl_damage.damage_player (player, amount, mcl_reason)
+   if not mcl_reason.flags then
+      mcl_damage.finish_reason (mcl_reason)
+   end
+   if amount < 0 then
+      mcl_damage.heal_player (player, -amount)
+   end
+
+   local meta = player:get_meta ()
+   local mcl_health = meta:get_float ("mcl_health")
+   local engine_hp = player:get_hp ()
+
+   -- It's probably wise to be cautious and verify that the engine and
+   -- internal HPs match.
+
+   if math.ceil (mcl_health) ~= engine_hp then
+      minetest.log ("warning", ("Engine health of player "
+				.. player:get_player_name ()
+				.. " disagrees with MCL health "
+				.. mcl_health ..""))
+      -- Reset internal health to the engine value.
+      mcl_health = engine_hp
+   end
+   amount = mcl_damage.run_modifiers (player, amount, mcl_reason)
+   mcl_health = math.max (0, mcl_health - amount)
+   meta:set_float ("mcl_health", mcl_health)
+
+   mcl_health = math.ceil (mcl_health)
+   if mcl_health < engine_hp then
+      player:set_hp (mcl_health, { type = "set_hp", mcl_damage = true,
+				   _mcl_reason = mcl_reason, })
+   end
+end
+
+function mcl_damage.heal_player (player, amount)
+   if amount < 0 then
+      return
+   end
+
+   local meta = player:get_meta ()
+   local mcl_health = meta:get_float ("mcl_health")
+   local engine_hp = player:get_hp ()
+   if math.ceil (mcl_health) ~= engine_hp then
+      minetest.log ("warning", ("Engine health of player "
+				.. player:get_player_name ()
+				.. " disagrees with MCL health "
+				.. mcl_health ..""))
+      -- Reset internal health to the engine value.
+      mcl_health = engine_hp
+   end
+   mcl_health = math.min (player:get_properties ().hp_max,
+			  mcl_health + amount)
+   meta:set_float ("mcl_health", mcl_health)
+
+   mcl_health = math.ceil (mcl_health)
+   if mcl_health > engine_hp then
+      player:set_hp (mcl_health, { type = "set_hp", mcl_damage = true, })
+   end
+end
+
+function mcl_damage.get_hp (player)
+   local meta = player:get_meta ()
+   local mcl_health = meta:get_float ("mcl_health")
+   local engine_hp = player:get_hp ()
+   if math.ceil (mcl_health) ~= engine_hp then
+      minetest.log ("warning", ("Engine health of player "
+				.. player:get_player_name ()
+				.. " disagrees with MCL health "
+				.. mcl_health ..""))
+      -- Reset internal health to the engine value.
+      mcl_health = engine_hp
+   end
+   return mcl_health
+end
+
 minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	if not damage_enabled then return 0 end
-	if hp_change < 0 then
-		if player:get_hp() <= 0 then
-			return 0
-		end
-		hp_change = -mcl_damage.run_modifiers(player, -hp_change, mcl_damage.from_mt(mt_reason))
+	-- Take engine damage modifications from mcl_damage at face value.
+	if mt_reason.mcl_damage then
+	   return hp_change
 	end
-	return hp_change
+	if hp_change < 0 then
+	   if player:get_hp() <= 0 then
+	      return 0
+	   end
+	   hp_change = -mcl_damage.run_modifiers (player, -hp_change,
+						  mcl_damage.from_mt (mt_reason))
+	end
+
+	-- Apply this as internal damage.
+	local meta = player:get_meta ()
+	local mcl_health = meta:get_float ("mcl_health")
+	local engine_hp = player:get_hp ()
+
+	-- It's probably wise to be cautious and verify that the
+	-- engine and internal HPs match.
+
+	if math.ceil (mcl_health) ~= engine_hp then
+	   minetest.log ("warning", ("Engine health of player "
+				     .. player:get_player_name ()
+				     .. " disagrees with MCL health "
+				     .. mcl_health ..""))
+	   -- Reset internal health to the engine value.
+	   mcl_health = engine_hp
+	end
+
+	-- Deduct engine damage.
+	mcl_health = math.max (0, mcl_health + hp_change)
+	meta:set_float ("mcl_health", mcl_health)
+
+	-- Return the difference in engine damage.
+	return math.ceil (mcl_health) - engine_hp
 end, true)
 
-minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
-	if not damage_enabled then return 0 end
-	if player:get_hp() > 0 then
-		mt_reason.approved = true
-		if hp_change < 0 then
-			mcl_damage.run_damage_callbacks(player, -hp_change, mcl_damage.from_mt(mt_reason))
-		end
-	end
-end, false)
+minetest.register_on_punchplayer (function (player, hitter, _, _, _, damage)
+      -- Inflict the Minetest-computed damage by means of
+      -- mcl_damage.damage_player.
+      if damage > 0 then
+	 local mcl_reason = { type = "generic", }
+	 mcl_damage.from_punch (mcl_reason, hitter)
+	 mcl_damage.damage_player (player, damage, mcl_reason)
+	 return true
+      end
+end)
+
+minetest.register_on_joinplayer (function (player, _)
+      -- Convert the player's engine HP into a floating point internal
+      -- value if none already exists.
+      local meta = player:get_meta ()
+      if meta:get_float ("mcl_health") == 0 then
+	 meta:set_float ("mcl_health", player:get_hp ())
+      end
+end)
 
 minetest.register_on_dieplayer(function(player, mt_reason)
-	mcl_damage.run_death_callbacks(player, mcl_damage.from_mt(mt_reason))
+      -- Clear the internal HP of players who die.
+      local meta = player:get_meta ()
+      meta:set_float ("mcl_health", 0)
+      mcl_damage.run_death_callbacks(player, mcl_damage.from_mt(mt_reason))
 end)
 
 minetest.register_on_mods_loaded(function()

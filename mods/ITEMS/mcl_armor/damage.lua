@@ -105,6 +105,5 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 
 	mcl_armor.update(obj)
-
-	return math.floor(damage + 0.5)
+	return damage
 end, 0)
