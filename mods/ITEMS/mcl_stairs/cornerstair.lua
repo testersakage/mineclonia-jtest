@@ -761,6 +761,7 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		stairs = {name, name.."_outer", name.."_inner"},
 		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
 		_mcl_hardness = node_def._mcl_hardness,
+		_mcl_basenode = name,
 		on_rotate = false,
 		placement_prevented = placement_prevented_outer,
 	})
@@ -786,6 +787,7 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		stairs = {name, name.."_outer", name.."_inner"},
 		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
 		_mcl_hardness = node_def._mcl_hardness,
+		_mcl_basenode = name,
 		on_rotate = false,
 		placement_prevented = placement_prevented_inner,
 	})
