@@ -87,7 +87,7 @@ groups = { pickaxe = 1, tool = 1 }
 ### `tools` on `add_to_sets`:
 
 ```lua
--- Hypothetical use case for hammer addition
+-- Hypothetical use case for hammer addition.
 -- Definitions for Wooden Hammer.
 ["wood"] = {
     description = S("Wooden Hammer"),
@@ -106,7 +106,6 @@ groups = { pickaxe = 1, tool = 1 }
         damage_groups = { fleshy = 6 }
     }
 }
-
 ```
 
 ### `craft_shapes`:
