@@ -13,7 +13,7 @@ Registers a complete set of tools based on a material.
     - craftable: _boolean_ that determines whether tools can be crafted at the crafting table (false for netherite tools).
     - material: _string_ with the name or group of items used as crafting/repair material for tools.
     - uses: _integer_ number of tool uses.
-    - level: _integer_
+    - level: _integer_ 
     - speed: _number_ which acts as a multiplier for the group's digging speed. If omitted, it will receive the value 1, defined by _mcl_autogroup.
     - max_drop_level: _integer_ that contains the tool's tier level. This number determines whether certain blocks will drop items.
     - groups: _table_ containing groups for all tools on the set. Tools typically use the `dig_speed_class` and `enchantability` groups. Other groups can be determined from this table.
@@ -35,7 +35,7 @@ Adds a new tool to existing material sets.
 - `commondefs`: _table_ that can contain the following fields:
 
     - `longdesc`: _string_ containing a long description for the tool type (used on _doc_items_longdesc).
-    - `usagehelp`: _string_
+    - `usagehelp`: _string_ containing an explanation of how to use the tool (used on _doc_items_usagehelp).
     - `groups`: _table_ containing groups related to the tool type (e.g. hoe, sword, pickaxe) and a group to determine whether it is a tool or a weapon(tool or weapon).
     - `diggroups`: _table_ containing the diggroups for this tool type (e.g hoey, swordy, swordy_cobweb).
     - `craft_shapes`: _table_ containing craft shapes for the tool (see examples in the Examples section).
@@ -93,6 +93,21 @@ craft_shapes = {
 		{ "", "mcl_core:stick" }
 	}
 }
+```
+
+### `longdesc` and `usagehelp`:
+
+```lua
+-- longdesc and usagehelp for axes.
+longdesc = S("An axe is your tool of choice to cut down trees, wood-based blocks and other blocks. Axes deal a lot of damage as well, but they are rather slow. Axes can be used to strip bark and hyphae from trunks. They can also be used to scrape blocks made of copper, reducing their oxidation stage or removing wax from waxed variants."),
+usagehelp = S("To strip bark from trunks and hyphae, use the ax by right-clicking on them. To reduce an oxidation stage from a block made of copper or remove wax from waxed variants, right-click on them. Doors and trapdoors also require you to hold down the sneak key while using the axe.")
+```
+
+### `diggroups`
+
+```lua
+-- diggroups for swords.
+diggroups = { swordy = {}, swordy_cobweb = {} }
 ```
 
 ## Licenses
