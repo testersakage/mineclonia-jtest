@@ -111,5 +111,12 @@ mcl_gamemode.register_on_gamemode_change(mcl_meshhand.update_player)
 -- This is needed to deal damage when punching mobs
 -- with random items in hand in survival mode
 minetest.override_item("", {
-	tool_capabilities = mcl_meshhand.survival_hand_tool_caps
+	tool_capabilities = mcl_meshhand.survival_hand_tool_caps,
+	on_place = function(_, placer, pointed_thing)
+		if minetest.is_creative_enabled(placer:get_player_name()) then
+			local stack = ItemStack(minetest.get_node(pointed_thing.under).name)
+			local inv = placer:get_inventory()
+			inv:set_stack("main", placer:get_wield_index(), stack)
+		end
+	end,
 })

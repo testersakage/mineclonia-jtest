@@ -38,11 +38,14 @@ function mcl_offhand.place(placer, pointed_thing)
 	return false
 end
 
+local old_hand_op = minetest.registered_items[""].on_place
 minetest.override_item("", {
 	on_place = function(itemstack, placer, pointed_thing)
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
-		mcl_offhand.place(placer, pointed_thing)
+		if not mcl_offhand.place(placer, pointed_thing) and old_hand_op then
+			return old_hand_op(itemstack, placer, pointed_thing)
+		end
 	end
 })
 
