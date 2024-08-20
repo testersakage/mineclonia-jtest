@@ -415,7 +415,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 	-- healing
 	if damage <= -1 then
-		self.health = self.health - math.floor(damage)
+		self.health = self.health - damage
 		return
 	end
 
