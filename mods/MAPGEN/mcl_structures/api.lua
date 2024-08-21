@@ -113,6 +113,7 @@ function mcl_structures.construct_nodes(p1,p2,nodes)
 	for _,p in pairs(nn) do
 		mcl_structures.init_node_construct(p)
 	end
+	return nn
 end
 
 local function construct_nodes(pos, def)
