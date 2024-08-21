@@ -141,7 +141,7 @@ function wandering_trader:on_rightclick(clicker)
 	local name = clicker:get_player_name()
 	self._trading_players[name] = true
 
-	if self._trade_xp == nil then
+	if self._trade_xp == nil or self._trades == nil then
 		self._max_trade_tier = 5
 		self._trade_xp = 255
 		self:init_trades(get_wandering_trades())
