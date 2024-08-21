@@ -145,8 +145,8 @@ end
 
 --- Player damage.
 
-local function emulate_damage_tick (player, fall_damage)
-   minetest.sound_play (fall_damage and "player_fall_damage" or "player_damage",
+local function emulate_damage_tick (player)
+   minetest.sound_play ("player_damage",
 			{ to_player = player:get_player_name (), gain = 0.5, },
 			true)
 end
@@ -287,7 +287,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 
 	-- Return the difference in engine damage.
 	local difference = math.ceil (mcl_health) - engine_hp
-	if difference == 0 and hp_change < 0 then
+	if mt_reason.type ~= "fall" and difference == 0 and hp_change < 0 then
 	   emulate_damage_tick (player)
 	end
 	return difference
