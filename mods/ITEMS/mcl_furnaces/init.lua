@@ -596,6 +596,7 @@ function mcl_furnaces.register_furnace(nodename, def)
 	minetest.register_node(nodename.."_active", table.merge(mcl_furnaces.tpl_furnace_node_active,{
 		on_timer = timer_func,
 		drop = nodename,
+		_mcl_baseitem = nodename,
 	},def.node_active))
 end
 
