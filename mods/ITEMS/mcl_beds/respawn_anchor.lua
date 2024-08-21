@@ -39,6 +39,7 @@ for i=0,4 do
 			_mcl_hardness = 22.5,
 			sounds= mcl_sounds.node_sound_stone_defaults(),
 			use_texture_alpha = "blend",
+			_mcl_baseitem = "mcl_beds:respawn_anchor",
 		})
 		mesecon.register_mvps_stopper("mcl_beds:respawn_anchor")
 	else
@@ -56,6 +57,7 @@ for i=0,4 do
 			groups = {pickaxey=1, material_stone=1, not_in_creative_inventory=1},
 			_mcl_hardness = 22.5,
 			sounds= mcl_sounds.node_sound_stone_defaults(),
+			_mcl_baseitem = "mcl_beds:respawn_anchor",
 			drop = {
 				max_items = 1,
 				items = {
