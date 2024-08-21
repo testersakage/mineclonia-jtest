@@ -236,7 +236,7 @@ function mcl_beds.register_bed(name, def)
 
 		on_rotate = rotate,
 		after_destruct = destruct_bed,
-		_mcl_basenode = name .. "_bottom",
+		_mcl_baseitem = name .. "_bottom",
 	})
 
 	minetest.register_alias(name, name .. "_bottom")

@@ -54,7 +54,7 @@ for i=1, 7 do
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		_mcl_blast_resistance = 0,
 		_on_bone_meal = on_bone_meal,
-		_mcl_basenode = "mcl_farming:potato_item",
+		_mcl_baseitem = "mcl_farming:potato_item",
 	})
 end
 
@@ -96,7 +96,7 @@ minetest.register_node("mcl_farming:potato", {
 		max_count = 4,
 		cap = 5
 	},
-	_mcl_basenode = "mcl_farming:potato_item",
+	_mcl_baseitem = "mcl_farming:potato_item",
 })
 
 minetest.register_craftitem("mcl_farming:potato_item", {

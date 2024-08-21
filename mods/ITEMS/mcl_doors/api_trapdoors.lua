@@ -220,7 +220,7 @@ function mcl_doors:register_trapdoor(name, def)
 		groups = groups_open,
 		_mcl_hardness = def._mcl_hardness,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_basenode = name,
+		_mcl_baseitem = name,
 		sounds = def.sounds,
 		drop = name,
 		node_box = {

@@ -43,7 +43,7 @@ minetest.register_node("mcl_farming:beetroot_0", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_on_bone_meal = on_bone_meal,
-	_mcl_basenode = "mcl_farming:beetroot_seeds",
+	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
 minetest.register_node("mcl_farming:beetroot_1", {
@@ -69,7 +69,7 @@ minetest.register_node("mcl_farming:beetroot_1", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_on_bone_meal = on_bone_meal,
-	_mcl_basenode = "mcl_farming:beetroot_seeds",
+	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
 minetest.register_node("mcl_farming:beetroot_2", {
@@ -95,7 +95,7 @@ minetest.register_node("mcl_farming:beetroot_2", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_on_bone_meal = on_bone_meal,
-	_mcl_basenode = "mcl_farming:beetroot_seeds",
+	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
 minetest.register_node("mcl_farming:beetroot", {
@@ -149,7 +149,7 @@ minetest.register_node("mcl_farming:beetroot", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_on_bone_meal = on_bone_meal,
-	_mcl_basenode = "mcl_farming:beetroot_seeds",
+	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
 minetest.register_craftitem("mcl_farming:beetroot_item", {

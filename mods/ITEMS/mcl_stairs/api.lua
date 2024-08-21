@@ -360,7 +360,7 @@ local function register_slab(subname, stairdef)
 	topdef._doc_items_usagehelp = nil
 	topdef.drop = lower_slab
 	topdef._mcl_other_slab_half = lower_slab
-	topdef._mcl_basenode = lower_slab
+	topdef._mcl_baseitem = lower_slab
 	function topdef.on_rotate(pos, node, _, mode)
 		-- Flip slab
 		if mode == screwdriver.ROTATE_AXIS then
@@ -397,7 +397,7 @@ local function register_slab(subname, stairdef)
 		drop = lower_slab .. " 2",
 		_mcl_hardness = stairdef.hardness,
 		_mcl_blast_resistance = stairdef.blast_resistance,
-		_mcl_basenode = lower_slab,
+		_mcl_baseitem = lower_slab,
 	})
 
 	if stairdef.recipeitem and stairdef.recipeitem ~= "" then
