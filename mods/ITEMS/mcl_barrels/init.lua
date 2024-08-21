@@ -194,6 +194,7 @@ minetest.register_node("mcl_barrels:barrel_open", {
 	on_destruct = close_forms,
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
+	_mcl_baseitem = "mcl_barrels:barrel_closed",
 })
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
