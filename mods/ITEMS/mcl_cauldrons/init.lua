@@ -130,6 +130,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		drop = "mcl_cauldrons:cauldron",
 		_mcl_hardness = 2,
 		_mcl_blast_resistance = 2,
+		_mcl_baseitem = "mcl_cauldrons:cauldron",
 		_on_bucket_place_empty  = function(itemstack,placer,pointed_thing)
 			local n,s
 			if id == "mcl_cauldrons:cauldron_3" then
