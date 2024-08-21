@@ -27,23 +27,6 @@ end
 -------------------------------------------------------------------------------
 -- evaluate settlement_info and place schematics
 -------------------------------------------------------------------------------
--- Initialize node
-local function construct_node(p1, p2, name)
-	local r = minetest.registered_nodes[name]
-	if r then
-		if r.on_construct then
-			local nodes = minetest.find_nodes_in_area(p1, p2, name)
-			for p=1, #nodes do
-				local pos = nodes[p]
-				r.on_construct(pos)
-			end
-			return nodes
-		end
-		minetest.log("warning", "[mcl_villages] No on_construct defined for node name " .. name)
-		return
-	end
-	minetest.log("warning", "[mcl_villages] Attempt to 'construct' inexistant nodes: " .. name)
-end
 
 local function spawn_cats(pos)
 	local sp=minetest.find_nodes_in_area_under_air(vector.offset(pos,-20,-20,-20),vector.offset(pos,20,20,20),{"group:opaque"})
@@ -53,18 +36,18 @@ local function spawn_cats(pos)
 end
 
 local function init_nodes(p1, p2, _, _, pr)
-
 	for _, n in pairs(minetest.find_nodes_in_area(p1, p2, { "group:wall" })) do
 		mcl_walls.update_wall(n)
 	end
 
-	construct_node(p1, p2, "mcl_itemframes:frame")
-	construct_node(p1, p2, "mcl_itemframes:glow_frame")
-	construct_node(p1, p2, "mcl_furnaces:furnace")
-	construct_node(p1, p2, "mcl_anvils:anvil")
-
-	construct_node(p1, p2, "mcl_books:bookshelf")
-	construct_node(p1, p2, "mcl_armor_stand:armor_stand")
+	mcl_structures.construct_nodes(p1, p2, {
+		"mcl_itemframes:item_frame",
+		"mcl_itemframes:glow_item_frame",
+		"mcl_furnaces:furnace",
+		"mcl_anvils:anvil",
+		"mcl_books:bookshelf",
+		"mcl_armor_stand:armor_stand",
+	})
 
 	-- Support mods with custom job sites
 	local job_sites = minetest.find_nodes_in_area(p1, p2, mobs_mc.jobsites)
@@ -72,20 +55,9 @@ local function init_nodes(p1, p2, _, _, pr)
 		mcl_structures.init_node_construct(v)
 	end
 
-	-- Do new chest nodes first
-	local nodes = construct_node(p1, p2, "mcl_chests:chest_small")
-	if nodes and #nodes > 0 then
-		for p=1, #nodes do
-			mcl_villages.fill_chest(nodes[p], pr)
-		end
-	end
-
-	-- Do old chest nodes after
-	local nodes = construct_node(p1, p2, "mcl_chests:chest")
-	if nodes and #nodes > 0 then
-		for p=1, #nodes do
-			mcl_villages.fill_chest(nodes[p], pr)
-		end
+	local nodes = mcl_structures.construct_nodes(p1, p2, { "mcl_chests:chest_small", "mcl_chests:chest" }) or {}
+	for p=1, #nodes do
+		mcl_villages.fill_chest(nodes[p], pr)
 	end
 end
 
