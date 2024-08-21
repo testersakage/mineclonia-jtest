@@ -461,6 +461,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		paramtype = "light",
 		paramtype2 = "facedir",
 		drop = drop,
+		_mcl_baseitem = "mcl_chests:"..basename,
 		groups = {
 			handy = 1,
 			axey = 1,
@@ -609,6 +610,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_chest_entity_animation_type = "chest",
 		paramtype = "light",
 		paramtype2 = "facedir",
+		_mcl_baseitem = "mcl_chests:"..basename,
 		groups = {
 			handy = 1,
 			axey = 1,
@@ -773,6 +775,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		drawtype = "nodebox",
 		paramtype = "light",
 		paramtype2 = "facedir",
+		_mcl_baseitem = "mcl_chests:"..basename,
 		node_box = {
 			type = "fixed",
 			fixed = { -0.5, -0.5, -0.4375, 0.4375, 0.375, 0.4375 },
@@ -1141,6 +1144,7 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = animate_chests and "nodebox" or "mesh",
 	mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
+	_mcl_baseitem = "mcl_chests:ender_chest",
 	node_box = animate_chests and {
 		type = "fixed",
         fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
@@ -1398,6 +1402,7 @@ for color, desc in pairs(boxtypes) do
 		_chest_entity_sound = "mcl_chests_shulker",
 		_chest_entity_mesh = "mcl_chests_shulker",
 		_chest_entity_animation_type = "shulker",
+		_mcl_baseitem = "mcl_chests:" .. color .. "_shulker_box",
 		groups = {
 			handy = 1,
 			pickaxey = 1,
