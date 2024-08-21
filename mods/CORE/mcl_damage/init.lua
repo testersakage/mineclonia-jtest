@@ -145,6 +145,12 @@ end
 
 --- Player damage.
 
+local function emulate_damage_tick (player, fall_damage)
+   minetest.sound_play (fall_damage and "player_fall_damage" or "player_damage",
+			{ to_player = player:get_player_name (), gain = 0.5, },
+			true)
+end
+
 --- An independent floating point health statistic is associated with
 --- players which is synchronized with the engine HP whenever damage
 --- is sustained or healing takes place.  If the engine HP changes
@@ -182,6 +188,10 @@ function mcl_damage.damage_player (player, amount, mcl_reason)
    if mcl_health < engine_hp then
       player:set_hp (mcl_health, { type = "set_hp", mcl_damage = true,
 				   _mcl_reason = mcl_reason, })
+   elseif amount > 0 then
+      -- Play a damage sound to the player.  Minetest affords games no
+      -- control over the tilt animation, unfortunately.
+      emulate_damage_tick (player, false)
    end
 end
 
@@ -276,7 +286,11 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	meta:set_float ("mcl_health", mcl_health)
 
 	-- Return the difference in engine damage.
-	return math.ceil (mcl_health) - engine_hp
+	local difference = math.ceil (mcl_health) - engine_hp
+	if difference == 0 and hp_change < 0 then
+	   emulate_damage_tick (player)
+	end
+	return difference
 end, true)
 
 minetest.register_on_punchplayer (function (player, hitter, _, _, _, damage)
