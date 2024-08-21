@@ -148,6 +148,7 @@ function mcl_torches.register_torch(def)
 
 	local groups_wall = table.copy(groups)
 	groups_wall.torch = 2
+	groups_wall.not_in_creative_inventory = 1
 
 	local walldef = {
 		drawtype = "mesh",
@@ -162,6 +163,7 @@ function mcl_torches.register_torch(def)
 		groups = groups_wall,
 		drop = def.drop or itemstring,
 		use_texture_alpha = "clip",
+		_mcl_baseitem = itemstring,
 		selection_box = {
 			type = "wallmounted",
 			wall_side = {-0.5, -0.3, -0.1, -0.2, 0.325, 0.1},
