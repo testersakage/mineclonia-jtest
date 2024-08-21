@@ -326,8 +326,8 @@ mcl_potions.register_effect({
 	uses_factor = false,
 })
 
-function add_physics_factor (object, player_name, mob_field,
-			     id, factor, mob_field2, mob_field3)
+local function add_physics_factor (object, player_name, mob_field,
+				   id, factor, mob_field2, mob_field3)
     -- mob_field2 and 3 are for cases where two or more mob properties
     -- must be adjusted, such as walk_velocity and run_velocity and
     -- their ilk.
@@ -348,8 +348,8 @@ function add_physics_factor (object, player_name, mob_field,
     end
 end
 
-function remove_physics_factor (object, player_name, mob_field,
-				id, mob_field2, mob_field3)
+local function remove_physics_factor (object, player_name, mob_field,
+				      id, mob_field2, mob_field3)
     if object:is_player () then
 	playerphysics.remove_physics_factor (object, player_name, id)
     else
