@@ -118,8 +118,8 @@ minetest.override_item("", {
 			local stack = ItemStack(name)
 			if minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
 				local def = stack:get_definition()
-				if not def._mcl_basenode then return end
-				name = def._mcl_basenode
+				if not def._mcl_baseitem then return end
+				name = def._mcl_baseitem
 				stack = ItemStack(name)
 			end
 			local inv = placer:get_inventory()

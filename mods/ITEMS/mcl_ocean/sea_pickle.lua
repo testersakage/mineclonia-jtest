@@ -169,7 +169,7 @@ for s=1,4 do
 		on_place = on_place,
 		_mcl_sea_pickle_off = "mcl_ocean:sea_pickle_"..s.."_off_"..ontop,
 		_mcl_sea_pickle_next = next_on,
-		_mcl_basenode = "mcl_ocean:sea_pickle_1_dead_brain_coral_block",
+		_mcl_baseitem = "mcl_ocean:sea_pickle_1_dead_brain_coral_block",
 		_mcl_hardness = 0,
 		_mcl_blast_resistance = 0,
 		_mcl_cooking_output = cookoutput,
@@ -204,7 +204,7 @@ for s=1,4 do
 		end,
 		_mcl_sea_pickle_on = "mcl_ocean:sea_pickle_"..s.."_"..ontop,
 		_mcl_sea_pickle_next = next_off,
-		_mcl_basenode = "mcl_ocean:sea_pickle_1_dead_brain_coral_block",
+		_mcl_baseitem = "mcl_ocean:sea_pickle_1_dead_brain_coral_block",
 		_mcl_hardness = 0,
 		_mcl_blast_resistance = 0,
 	})
