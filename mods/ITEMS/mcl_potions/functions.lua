@@ -127,21 +127,11 @@ end
 function mcl_potions.register_effect(def)
 	local modname = minetest.get_current_modname()
 	local name = def.name
-	if name == nil then
-		error("Unable to register effect: name is nil")
-	end
-	if type(name) ~= "string" then
-		error("Unable to register effect: name is not a string")
-	end
-	if name == "list" or name == "heal" or name == "remove" or name == "clear" then
-		error("Unable to register effect: " .. name .. " is a reserved word")
-	end
-	if registered_effects[name] then
-		error("Effect named "..name.." already registered!")
-	end
-	if not def.description or type(def.description) ~= "string" then
-		error("Unable to register effect: description is not a string")
-	end
+	assert(name ~= nil, "Unable to register effect: name is nil")
+	assert(type(name) == "string", "Unable to register effect: name is not a string")
+	assert(name ~= "list" and name ~= "heal" and name ~= "remove" and name ~= "clear", "Unable to register effect: " .. name .. " is a reserved word")
+	assert(not registered_effects[name], "Effect named "..name.." already registered!")
+	assert(def.description and type(def.description) == "string", "Unable to register effect: description is not a string")
 	local pdef = {}
 	pdef.description = def.description
 	if not def.icon then
@@ -183,10 +173,10 @@ function mcl_potions.register_effect(def)
 	end
 	if def.on_hit_timer then
 		if def.timer_uses_factor then
-			if not def.uses_factor then error("Uses factor but does not use factor?") end
+			assert(def.uses_factor, "Uses factor but does not use factor?")
 			pdef.timer_uses_factor = true
 		else
-			if not def.hit_timer_step then error("If hit_timer does not use factor, hit_timer_step must be defined") end
+			assert(def.hit_timer_step, "If hit_timer does not use factor, hit_timer_step must be defined")
 			pdef.timer_uses_factor = false
 			pdef.hit_timer_step = def.hit_timer_step
 		end
@@ -1140,9 +1130,9 @@ local hp_hudbar_modifiers = {}
 -- icon - string - name of the icon to which the modifier should change the HP hudbar heart
 -- priority - signed int - lower gets checked first, and first fulfilled predicate applies its modifier
 function mcl_potions.register_hp_hudbar_modifier(def)
-	if type(def.predicate) ~= "function" then error("Predicate must be a function") end
-	if not def.icon then error("No icon provided") end
-	if not def.priority then error("No priority provided") end
+	assert(type(def.predicate) == "function", "Predicate must be a function")
+	assert(def.icon, "No icon provided")
+	assert(def.priority, "No priority provided")
 	table.insert(hp_hudbar_modifiers, {
 		predicate = def.predicate,
 		icon = def.icon,
@@ -1842,11 +1832,8 @@ local registered_res_predicates = {}
 -- E.g. some entity could be resistant to all (or some) effects under specific conditions
 -- predicate - function(object, effect_name) - return true if resists effect
 function mcl_potions.register_generic_resistance_predicate(predicate)
-	if type(predicate) == "function" then
-		table.insert(registered_res_predicates, predicate)
-	else
-		error("Attempted to register non-function as a predicate")
-	end
+	assert(type(predicate) == "function", "Attempted to register non-function as a predicate")
+	table.insert(registered_res_predicates, predicate)
 end
 
 function mcl_potions.level_from_details (details, potency)
