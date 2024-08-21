@@ -299,6 +299,7 @@ local function register_filled_composter(level)
 		on_rightclick = composter_add_item,
 		on_timer = composter_ready,
 		_on_hopper_in = on_hopper_in,
+		_mcl_baseitem = "mcl_composters:composter",
 	})
 
 	-- Add entry aliases for the Help
@@ -341,6 +342,7 @@ minetest.register_node("mcl_composters:composter_ready", {
 	_mcl_compost_level = 7,
 	on_rightclick = composter_harvest,
 	_on_hopper_out = on_hopper_out,
+	_mcl_baseitem = "mcl_composters:composter",
 })
 
 -- Add entry aliases for the Help
