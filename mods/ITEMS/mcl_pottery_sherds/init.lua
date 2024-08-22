@@ -147,6 +147,15 @@ tt.register_snippet(function(_, _, stack)
 	return table.concat(facedescs, "\n")
 end)
 
+local function get_itemstack_from_node(pos)
+	local meta = minetest.get_meta(pos)
+	local it = ItemStack("mcl_pottery_sherds:pot")
+	local im = it:get_meta()
+	im:set_string("pot_faces", meta:get_string("pot_faces"))
+	tt.reload_itemstack_description(it)
+	return it
+end
+
 minetest.register_node("mcl_pottery_sherds:pot", {
 	description = S("Decorated Pot"),
 	_doc_items_longdesc = S("Pots are decorative blocks."),
@@ -170,6 +179,7 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 	drop = "",
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
+	_mcl_baseitem = get_itemstack_from_node,
 	after_place_node = function(pos, _, itemstack, _)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("pot_faces",itemstack:get_meta():get_string("pot_faces"))
@@ -179,11 +189,7 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 		update_entities(pos,true)
 	end,
 	on_destruct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local it = ItemStack("mcl_pottery_sherds:pot")
-		local im = it:get_meta()
-		im:set_string("pot_faces", meta:get_string("pot_faces"))
-		tt.reload_itemstack_description(it)
+		local it = get_itemstack_from_node(pos)
 		minetest.add_item(pos, it)
 	end,
 	on_rotate = function(_, _,  _, mode, _)
