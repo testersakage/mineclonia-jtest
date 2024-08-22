@@ -25,13 +25,11 @@ local function wither_unstuck(self)
 			local name = minetest.get_node(npos).name
 			if name ~= "air" then
 				local ndef = minetest.registered_nodes[name]
-				if ndef and ndef._mcl_hardness and ndef._mcl_hardness >= 0 then
+				if ndef and ndef._mcl_hardness and ndef._mcl_hardness >= 0 and ( ndef.can_dig == nil or ndef.can_dig(npos) )then
+					minetest.remove_node(npos)
 					local drops = minetest.get_node_drops(name, "")
-					if minetest.dig_node(npos) then
-						for _, item in ipairs(drops) do
-							if type(item) ~= "string" then
-								item = item:get_name() .. item:get_count()
-							end
+					if drops then
+						for _, item in pairs(drops) do
 							minetest.add_item(npos, item)
 						end
 					end
