@@ -119,7 +119,7 @@ function mcl_charges.register_charge(name, descr, def)
 			if mcl_charges_cooldown[playername] == nil then
 				mcl_charges_cooldown[playername] = 0
 			end
-		local current_time = minetest.get_gametime()
+			local current_time = minetest.get_gametime()
 			if current_time - mcl_charges_cooldown[playername] >= cooldown_time then
 				mcl_charges_cooldown[playername] = current_time
 				local velocity = 30
@@ -135,7 +135,9 @@ function mcl_charges.register_charge(name, descr, def)
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-				itemstack:take_item()
+				if not minetest.is_creative_enabled(placer:get_player_name()) then
+					itemstack:take_item()
+				end
 				return itemstack
 			end
 		end,
@@ -160,7 +162,9 @@ function mcl_charges.register_charge(name, descr, def)
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-				itemstack:take_item()
+				if not minetest.is_creative_enabled(placer:get_player_name()) then
+					itemstack:take_item()
+				end
 				return itemstack
 			end
 		end,
