@@ -1386,7 +1386,22 @@ for color, desc in pairs(boxtypes) do
 			return stack
 		end,
 	})
-
+	local function get_shulker_stack(pos)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		local items = {}
+		for i = 1, inv:get_size("main") do
+			local stack = inv:get_stack("main", i)
+			items[i] = stack:to_string()
+		end
+		local data = minetest.serialize(items)
+		local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
+		local boxitem_meta = boxitem:get_meta()
+		boxitem_meta:set_string("description", meta:get_string("description"))
+		boxitem_meta:set_string("name", meta:get_string("name"))
+		boxitem:set_metadata(data)
+		return boxitem
+	end
 	minetest.register_node(small_name, {
 		description = desc,
 		_tt_help = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents"),
@@ -1402,7 +1417,7 @@ for color, desc in pairs(boxtypes) do
 		_chest_entity_sound = "mcl_chests_shulker",
 		_chest_entity_mesh = "mcl_chests_shulker",
 		_chest_entity_animation_type = "shulker",
-		_mcl_baseitem = "mcl_chests:" .. color .. "_shulker_box",
+		_mcl_baseitem = get_shulker_stack,
 		groups = {
 			handy = 1,
 			pickaxey = 1,
@@ -1462,20 +1477,9 @@ for color, desc in pairs(boxtypes) do
 			end
 		end,
 		on_destruct = function(pos)
+			local boxitem = get_shulker_stack(pos)
 			local meta = minetest.get_meta(pos)
 			local inv = meta:get_inventory()
-			local items = {}
-			for i = 1, inv:get_size("main") do
-				local stack = inv:get_stack("main", i)
-				items[i] = stack:to_string()
-			end
-			local data = minetest.serialize(items)
-			local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
-			local boxitem_meta = boxitem:get_meta()
-			boxitem_meta:set_string("description", meta:get_string("description"))
-			boxitem_meta:set_string("name", meta:get_string("name"))
-			boxitem:set_metadata(data)
-
 			if minetest.is_creative_enabled("") then
 				if not inv:is_empty("main") then
 					minetest.add_item(pos, boxitem)
