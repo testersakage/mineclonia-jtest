@@ -292,6 +292,7 @@ minetest.register_node("mcl_portals:end_portal_frame_eye", {
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
+	_mcl_baseitem = "mcl_portals:end_portal_frame",
 	node_box = {
 		type = "fixed",
 		fixed = {
