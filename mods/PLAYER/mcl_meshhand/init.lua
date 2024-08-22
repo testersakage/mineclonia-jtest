@@ -116,19 +116,21 @@ minetest.override_item("", {
 		if minetest.is_creative_enabled(placer:get_player_name()) then
 			local name = minetest.get_node(pointed_thing.under).name
 			local stack = ItemStack(name)
-			if minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
-				local def = stack:get_definition()
+			local def = stack:get_definition()
+			if type(def._mcl_baseitem) == "function" then
+				stack = def._mcl_baseitem(pointed_thing.under)
+			elseif minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
 				if not def.drop and not def._mcl_baseitem then return end
 				name = def._mcl_baseitem or def.drop
 				stack = ItemStack(name)
 			end
 			local inv = placer:get_inventory()
 			stack:set_count(stack:get_stack_max())
-			stack = inv:remove_item("main", stack)
-			if stack:get_count() <= 0 then
-				stack = ItemStack(name)
+			local istack = inv:remove_item("main", stack)
+			if istack:get_count() <= 0 then
+				return stack
 			end
-			return stack
+			return istack
 		end
 	end,
 })
