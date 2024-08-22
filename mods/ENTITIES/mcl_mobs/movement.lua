@@ -399,7 +399,7 @@ function mob_class:do_jump()
 		then
 			local dir_x, dir_z = self:forward_directions()
 			-- Extensive testing to get this to work  ...
-			local v = vector.new(dir_x, self.jump_height + 0.5 * 8, dir_z)
+			local v = vector.new(dir_x, self.jump_height + 0.5 * 10, dir_z)
 
 			if not in_water and self:can_jump_cliff() then
 				v = vector.multiply(v, vector.new(2.8, 1, 2.8))
