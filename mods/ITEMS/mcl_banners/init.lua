@@ -261,6 +261,10 @@ local function respawn_banner_entity(pos, node, force)
 	end
 end
 
+local function get_banner_stack(pos)
+	local inv = minetest.get_meta(pos):get_inventory()
+	return inv:get_stack("banner", 1)
+end
 -- Banner nodes.
 -- These are an invisible nodes which are only used to destroy the banner entity.
 -- All the important banner information (such as color) is stored in the entity.
@@ -305,6 +309,7 @@ S("You can copy the pattern of a banner by placing two banners of the same color
 	end,
 	_mcl_hardness = 1,
 	_mcl_blast_resistance = 1,
+	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
 			local meta = minetest.get_meta(pos)
@@ -349,6 +354,7 @@ minetest.register_node("mcl_banners:hanging_banner", {
 	end,
 	_mcl_hardness = 1,
 	_mcl_blast_resistance = 1,
+	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
 			local r = screwdriver.rotate.wallmounted(pos, node, mode)
