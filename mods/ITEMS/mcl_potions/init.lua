@@ -328,6 +328,47 @@ function mcl_potions.register_ingredient_potion(input, out_table)
     output_table[input] = out_table
 end
 
+local function potion_has_splash (potion)
+    return potion == "mcl_potions:water"
+	or (potions[potion] and potions[potion].has_splash)
+end
+
+local function potion_has_lingering (potion)
+    return potion == "mcl_potions:water"
+	or (potions[potion] and potions[potion].has_lingering)
+end
+
+local function complete_output_table (input, out_table, copy)
+    -- Generate entries for splash and lingering variants of `input'.
+    local tbl_splash = {}
+    local tbl_lingering = {}
+
+    if not potion_has_splash (input)
+	and not potion_has_lingering (input) then
+	return
+    end
+
+    for k, v in pairs (out_table) do
+	if potion_has_splash (v) then
+	    tbl_splash[k] = v .. "_splash"
+	end
+
+	if potion_has_lingering (v) then
+	    tbl_lingering[k] = v .. "_lingering"
+	end
+    end
+    copy[input .. "_lingering"] = tbl_lingering
+    copy[input .. "_splash"] = tbl_splash
+end
+
+minetest.register_on_mods_loaded (function ()
+	local copy = {}
+	for k, v in pairs (output_table) do
+	    complete_output_table (k, v, copy)
+	end
+	output_table = table.merge (output_table, copy)
+end)
+
 local water_table = {
 	["mcl_nether:nether_wart_item"] = "mcl_potions:awkward",
 	["mcl_potions:fermented_spider_eye"] = "mcl_potions:weakness",
@@ -532,49 +573,14 @@ local function enhance_pow(potionstack)
 end
 mcl_potions.register_meta_modifier("mcl_nether:glowstone_dust", enhance_pow)
 
-
 -- Find an alchemical recipe for given ingredient and potion
 -- returns outcome
 function mcl_potions.get_alchemy(ingr, pot)
-	local registered = pot:get_name ()
-	local itemdef = minetest.registered_items[registered]
-	local potiondef = potions[itemdef._base_potion or registered]
-	local potion = registered
-	local is_splash, is_lingering
-
-	-- This might be a splash or lingering potion; if so, use the
-	-- base potion.
-	if itemdef._base_potion then
-	    potion = itemdef._base_potion
-	    is_splash = minetest.get_item_group (registered, "splash_potion") > 0
-	    is_lingering = minetest.get_item_group (registered, "ling_potion") > 0
-	    if potion == "mcl_potions:water" then
-		-- mcl_potions:water is not a true potion, and must be
-		-- special cased.
-		potiondef = { has_splash = true, has_lingering = true, }
-	    end
-	end
-
+	local potion = pot:get_name ()
 	local brew_selector = output_table[potion]
 	if brew_selector and brew_selector[ingr] then
 		local meta = pot:get_meta():to_table()
 		local name = brew_selector[ingr]
-
-		-- Might the input be a lingering or a splash potion?
-		if is_lingering then
-		    if potiondef and potiondef.has_lingering then
-			name = name .. "_lingering"
-		    else
-			return false
-		    end
-		elseif is_splash then
-		    if potiondef and potiondef.has_splash then
-			name = name .. "_splash"
-		    else
-			return false
-		    end
-		end
-
 		local alchemy = ItemStack(name)
 		local metaref = alchemy:get_meta()
 		metaref:from_table(meta)
@@ -588,22 +594,6 @@ function mcl_potions.get_alchemy(ingr, pot)
 		local brew = brew_selector[potion]
 		if brew then
 			local meta = pot:get_meta():to_table()
-
-			-- Might the input be a lingering or a splash potion?
-			if is_lingering then
-			    if potiondef and potiondef.has_lingering then
-				brew = brew .. "_lingering"
-			    else
-				return false
-			    end
-			elseif is_splash then
-			    if potiondef and potiondef.has_splash then
-				brew = brew .. "_splash"
-			    else
-				return false
-			    end
-			end
-
 			local alchemy = ItemStack(brew)
 			local metaref = alchemy:get_meta()
 			metaref:from_table(meta)
