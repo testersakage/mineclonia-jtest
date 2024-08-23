@@ -564,14 +564,10 @@ end
 function mob_class:check_despawn(pos, dtime)
 	if remove_far and self:despawn_allowed() then
 		local min_dist = 10000
-		local my_pos = self.object:get_pos()
 
-		-- hmm is it better to loop through local objects or connected players?
-		for obj in minetest.objects_inside_radius(my_pos, 128) do
-			if obj:is_player() then
-				local dist = vector.distance(obj:get_pos(), my_pos)
-				min_dist = math.min(min_dist, dist)
-			end
+		for _, player in pairs(minetest.get_connected_players()) do
+			local dist = vector.distance(player:get_pos(), pos)
+			min_dist = math.min(min_dist, dist)
 		end
 
 		if min_dist > instant_despawn_range then
@@ -581,7 +577,7 @@ function mob_class:check_despawn(pos, dtime)
 			if self.lifetimer then
 				self.lifetimer = self.lifetimer - dtime
 			else
-				if minetest.get_node_light(my_pos) < timer_light_level then
+				if minetest.get_node_light(pos) < timer_light_level then
 					self.lifetimer = timer_dark
 				else
 					self.lifetimer = timer_light
