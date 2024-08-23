@@ -99,140 +99,115 @@ local function brewable(inv)
 	return false
 end
 
+local BREW_TIME = 10 -- all brews brew the same
+local BURN_TIME = BREW_TIME * 20
+
+local function take_fuel (pos, meta, inv)
+    -- only allow blaze powder fuel
+    local fuel_name, fuel_count
+    fuel_name = inv:get_stack ("fuel", 1):get_name ()
+    fuel_count = inv:get_stack ("fuel", 1):get_count ()
+
+    if fuel_name == "mcl_mobitems:blaze_powder" then -- Grab another fuel
+	if (fuel_count-1) ~= 0 then
+	    inv:set_stack("fuel", 1, fuel_name.." "..(fuel_count-1))
+	else
+	    inv:set_stack("fuel", 1, "")
+	end
+	return BURN_TIME -- New value of fuel_timer_new
+    else -- no fuel available
+	return 0
+    end
+end
 
 local function brewing_stand_timer(pos, elapsed)
 	-- Inizialize metadata
 	local meta = minetest.get_meta(pos)
 
-	local fuel_timer = meta:get_float("fuel_timer") or 0
-	local BREW_TIME = 20 -- all brews brew the same
-	local BURN_TIME = BREW_TIME * 10
-
-	--local input_item = meta:get_string("input_item") or ""
-	local stand_timer = meta:get_float("stand_timer") or 0
-	local fuel = meta:get_float("fuel") or 0
-	local inv = meta:get_inventory()
-
-	--local input_list, stand_list, fuel_list
+	-- Number of seconds of fuel remaining to be consumed.
+	local fuel_timer = meta:get_float ("fuel_timer_new")
+	local stand_timer = meta:get_float ("stand_timer")
+	local inv = meta:get_inventory ()
 	local brew_output, d
-	local input_count, fuel_name, fuel_count, formspec, fuel_percent, brew_percent
+	local input_count, formspec, fuel_percent, brew_percent
 
-	local update = true
+	brew_output = brewable(inv)
+	if brew_output then
+	    fuel_timer = fuel_timer - elapsed
+	    stand_timer = stand_timer + elapsed
 
-	while update do
+	    if fuel_timer <= 0 then -- Is more fuel required?
+		fuel_timer = take_fuel (pos, meta, inv)
+	    end
 
-		update = false
+	    -- If enough fuel remains, continue.
+	    if fuel_timer > 0 then
+		d = 0.5
+		minetest.add_particlespawner({
+			amount = 4,
+			time = 1,
+			minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
+			maxpos = {x=pos.x+d, y=pos.y+2, z=pos.z+d},
+			minvel = {x=-0.1, y=0, z=-0.1},
+			maxvel = {x=0.1, y=0.5, z=0.1},
+			minacc = {x=-0.05, y=0, z=-0.05},
+			maxacc = {x=0.05, y=.1, z=0.05},
+			minexptime = 1,
+			maxexptime = 2,
+			minsize = 0.5,
+			maxsize = 2,
+			collisiondetection = true,
+			vertical = false,
+			texture = "mcl_brewing_bubble_sprite.png",
+		})
 
-		--input_list = inv:get_list("input")
-		--stand_list = inv:get_list("stand")
-		--fuel_list = inv:get_list("fuel")
+		-- Replace the stand item with the brew result
+		if stand_timer >= BREW_TIME then
+		    input_count = inv:get_stack("input",1):get_count()
+		    if (input_count-1) ~= 0 then
+			local stack
+			    = inv:get_stack("input",1):get_name().." "..(input_count-1)
+			inv:set_stack("input", 1, stack)
+		    else
+			inv:set_stack("input", 1, "")
+		    end
 
-		-- TODO ... fix this.  Goal is to reset the process if the stand changes
-		-- for i=1, inv:get_size("stand", i) do -- reset the process due to change
-		-- 	local _name = inv:get_stack("stand", i):get_name()
-		-- 	if  _name ~= stand_items[i] then
-		-- 		stand_timer = 0
-		-- 		stand_items[i] = _name
-		-- 		update = true -- need to update the stand with new data
-		--    return 1
-		-- 	end
-		-- end
-
-		brew_output = brewable(inv)
-		if fuel ~= 0 and brew_output then
-
-			fuel_timer = fuel_timer + elapsed
-			stand_timer = stand_timer + elapsed
-
-			if fuel_timer >= BURN_TIME then --replace with more fuel
-				fuel = 0 --force a new fuel grab
-				fuel_timer = 0
+		    for i=1, inv:get_size("stand") do
+			if brew_output[i] then
+			    minetest.sound_play("mcl_brewing_complete",
+						{pos=pos, gain=0.4, max_hear_range=6}, true)
+			    local stack = ItemStack (brew_output[i])
+			    -- Indicate to hoppers that this is the
+			    -- output of a batch of potions.  See:
+			    -- https://minecraft.fandom.com/wiki/Brewing_Stand#Brewing
+			    stack:get_meta ():set_int ("batch_output", 1)
+			    inv:set_stack ("stand", i, stack)
+			    minetest.sound_play("mcl_potions_bottle_pour",
+						{pos=pos, gain=0.6, max_hear_range=6}, true)
 			end
-
-			d = 0.5
-			minetest.add_particlespawner({
-				amount = 4,
-				time = 1,
-				minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
-				maxpos = {x=pos.x+d, y=pos.y+2, z=pos.z+d},
-				minvel = {x=-0.1, y=0, z=-0.1},
-				maxvel = {x=0.1, y=0.5, z=0.1},
-				minacc = {x=-0.05, y=0, z=-0.05},
-				maxacc = {x=0.05, y=.1, z=0.05},
-				minexptime = 1,
-				maxexptime = 2,
-				minsize = 0.5,
-				maxsize = 2,
-				collisiondetection = true,
-				vertical = false,
-				texture = "mcl_brewing_bubble_sprite.png",
-			})
-
-			-- Replace the stand item with the brew result
-			if stand_timer >= BREW_TIME then
-
-				input_count = inv:get_stack("input",1):get_count()
-				if (input_count-1) ~= 0 then
-					inv:set_stack("input",1,inv:get_stack("input",1):get_name().." "..(input_count-1))
-				else
-					inv:set_stack("input",1,"")
-				end
-
-				for i=1, inv:get_size("stand") do
-					if brew_output[i] then
-						minetest.sound_play("mcl_brewing_complete", {pos=pos, gain=0.4, max_hear_range=6}, true)
-						inv:set_stack("stand", i, brew_output[i])
-						minetest.sound_play("mcl_potions_bottle_pour", {pos=pos, gain=0.6, max_hear_range=6}, true)
-					end
-				end
-				stand_timer = 0
-				update = false -- stop the update if brew is complete
-			end
-
-		elseif fuel == 0 then  --get more fuel from fuel_list
-
-			-- only allow blaze powder fuel
-			fuel_name = inv:get_stack("fuel",1):get_name()
-			fuel_count = inv:get_stack("fuel",1):get_count()
-
-			if fuel_name == "mcl_mobitems:blaze_powder" then -- Grab another fuel
-
-				if (fuel_count-1) ~= 0 then
-					inv:set_stack("fuel",1,fuel_name.." "..(fuel_count-1))
-				else
-					inv:set_stack("fuel",1,"")
-				end
-				update = true
-				fuel = 1
-			else -- no fuel available
-				update = false
-			end
-
+		    end
+		    stand_timer = 0
 		end
-
-		elapsed = 0
+	    end
 	end
 
-	--update formspec
-	formspec = brewing_formspec
+	-- The formspec must be updated after each change.
+	fuel_percent = 100 - math.ceil(fuel_timer/BURN_TIME*100 % BURN_TIME)
+	brew_percent = math.floor(stand_timer/BREW_TIME*100)
+	formspec = active_brewing_formspec(fuel_percent, brew_percent*1 % 100)
 
-	local result = false
-
-	if fuel_timer ~= 0 then
-		fuel_percent = math.floor(fuel_timer/BURN_TIME*100 % BURN_TIME)
-		brew_percent = math.floor(stand_timer/BREW_TIME*100)
-		formspec = active_brewing_formspec(fuel_percent, brew_percent*1 % 100)
-		result = true
-	else
-		minetest.get_node_timer(pos):stop()
+	local value = true
+	-- If the stand becomes inactive, as when no fuel remains or
+	-- no valid recipe exists, cancel the timer.
+	if fuel_timer <= 0 or not brew_output then
+		minetest.get_node_timer (pos):stop ()
+		value = false
 	end
 
-	meta:set_float("fuel_timer", fuel_timer)
+	meta:set_float("fuel_timer_new", fuel_timer)
 	meta:set_float("stand_timer", stand_timer)
-	meta:set_float("fuel", fuel)
 	meta:set_string("formspec", formspec)
-
-	return result
+	return value
 end
 
 local drop_contents = mcl_util.drop_items_from_meta_container({"fuel", "input", "stand"})
@@ -301,25 +276,55 @@ local function allow_put(pos, listname, _, stack, player)
 	return stack:get_count()
 end
 
-local function on_put(pos, listname, _, stack, _)
+local function on_put(pos, listname, index, stack, _)
+	local meta = minetest.get_meta (pos)
+	local inv = meta:get_inventory ()
+
 	if listname == "sorter" then
-		local inv = minetest.get_meta(pos):get_inventory()
-		inv:add_item(sort_stack(stack), stack)
+		-- Set the `batch_output' parameter of any new item
+		-- inserted to zero so that hoppers may not mistake
+		-- them for completed potions.
+		local item_meta = stack:get_meta ()
+		if item_meta:get_int ("batch_output", 0) ~= 0 then
+		    item_meta:set_int ("batch_output", 0)
+		end
+		listname = sort_stack (stack)
+		inv:add_item(listname, stack)
 		inv:set_stack("sorter", 1, ItemStack(""))
 	end
-	local meta = minetest.get_meta(pos)
-	local inv = meta:get_inventory()
-	local str = ""
-	local stack
-	for i=1, inv:get_size("stand") do
-		stack = inv:get_stack("stand", i)
-		if not stack:is_empty() then
-			str = str.."1"
-		else str = str.."0"
-		end
+
+	if listname == "fuel" then
+	    -- Refuel immediately if no fuel remains.
+	    local fuel_timer = meta:get_float ("fuel_timer_new")
+	    if fuel_timer <= 0 then
+		fuel_timer = take_fuel (pos, meta, inv)
+		meta:set_float ("fuel_timer_new", fuel_timer)
+	    end
 	end
-	minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
-	minetest.get_node_timer(pos):start(1.0)
+
+	if listname == "stand" then
+		-- Set the `batch_output' parameter of any new item
+		-- inserted to zero so that hoppers may not mistake
+		-- them for completed potions.
+		local item_meta = stack:get_meta ()
+		if item_meta:get_int ("batch_output", 0) ~= 0 then
+		    item_meta:set_int ("batch_output", 0)
+		    inv:set_stack (listname, index, stack)
+		    return
+		end
+
+		local str = ""
+		local stack
+		for i=1, inv:get_size("stand") do
+		    stack = inv:get_stack("stand", i)
+		    if not stack:is_empty() then
+			str = str.."1"
+		    else str = str.."0"
+		    end
+		end
+		minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
+	end
+	minetest.get_node_timer (pos):start (1.0)
 	--some code here to enforce only potions getting placed on stands
 end
 
@@ -358,10 +363,15 @@ local function hopper_in(pos, to_pos)
 			minetest.get_node_timer(to_pos):start(1.0)
 		else
 			local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "main", dinv, "stand", function(itemstack)
-				local n = itemstack:get_name()
-				return minetest.get_item_group(n, "water_bottle") > 0
+				return sort_stack (itemstack) == "stand"
 			end)
 			if slot_id then
+				-- Strip "batch_output" properties from brewing stand input.
+				local stack = sinv:get_stack ("main", slot_id)
+				if stack and stack:get_meta ():get_int ("batch_output") ~= 0 then
+				    stack:get_meta ():set_int ("batch_output", 0)
+				    sinv:set_stack ("main", slot_id, stack)
+				end
 				mcl_util.move_item(sinv, "main", slot_id, dinv, "stand")
 				minetest.get_node_timer(to_pos):start(1.0)
 			end
@@ -381,8 +391,9 @@ end
 local function hopper_out(pos, to_pos)
 	local sinv = minetest.get_inventory({type="node", pos = pos})
 	local dinv = minetest.get_inventory({type="node", pos = to_pos})
-	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", function()
-		return true
+	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", function(stack)
+		local item_meta = stack:get_meta ()
+		return item_meta:get_int ("batch_output") ~= 0
 	end)
 	if slot_id then
 		mcl_util.move_item(sinv, "stand", slot_id, dinv, "main")
@@ -742,5 +753,24 @@ minetest.register_lbm({
 		local m = minetest.get_meta(pos)
 		m:get_inventory():set_size("sorter", 1)
 		m:set_string("formspec", brewing_formspec)
+	end,
+})
+
+minetest.register_lbm({
+	label = "Update fuel timers to new non-inverted format",
+	name = "mcl_brewing:update_inverted_fueltimer",
+	nodenames = { "group:brewing_stand" },
+	run_at_every_load = false,
+	action = function(pos)
+	    local m = minetest.get_meta (pos)
+	    local old_fuel = m:get_int ("fuel")
+	    local old_burntime = m:get_int ("fuel_timer")
+
+	    if old_fuel ~= 0 then
+		m:set_int ("fuel_timer_new", old_burntime - BURN_TIME)
+	    end
+	    -- Clear obsolete fields.
+	    m:set_int ("fuel", 0)
+	    m:set_int ("fuel_timer", 0)
 	end,
 })
