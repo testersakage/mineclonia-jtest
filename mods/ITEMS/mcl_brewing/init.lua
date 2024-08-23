@@ -175,12 +175,7 @@ local function brewing_stand_timer(pos, elapsed)
 			if brew_output[i] then
 			    minetest.sound_play("mcl_brewing_complete",
 						{pos=pos, gain=0.4, max_hear_range=6}, true)
-			    local stack = ItemStack (brew_output[i])
-			    -- Indicate to hoppers that this is the
-			    -- output of a batch of potions.  See:
-			    -- https://minecraft.fandom.com/wiki/Brewing_Stand#Brewing
-			    stack:get_meta ():set_int ("batch_output", 1)
-			    inv:set_stack ("stand", i, stack)
+			    inv:set_stack ("stand", i, brew_output[i])
 			    minetest.sound_play("mcl_potions_bottle_pour",
 						{pos=pos, gain=0.6, max_hear_range=6}, true)
 			end
@@ -281,13 +276,6 @@ local function on_put(pos, listname, index, stack, _)
 	local inv = meta:get_inventory ()
 
 	if listname == "sorter" then
-		-- Set the `batch_output' parameter of any new item
-		-- inserted to zero so that hoppers may not mistake
-		-- them for completed potions.
-		local item_meta = stack:get_meta ()
-		if item_meta:get_int ("batch_output", 0) ~= 0 then
-		    item_meta:set_int ("batch_output", 0)
-		end
 		listname = sort_stack (stack)
 		inv:add_item(listname, stack)
 		inv:set_stack("sorter", 1, ItemStack(""))
@@ -303,16 +291,6 @@ local function on_put(pos, listname, index, stack, _)
 	end
 
 	if listname == "stand" then
-		-- Set the `batch_output' parameter of any new item
-		-- inserted to zero so that hoppers may not mistake
-		-- them for completed potions.
-		local item_meta = stack:get_meta ()
-		if item_meta:get_int ("batch_output", 0) ~= 0 then
-		    item_meta:set_int ("batch_output", 0)
-		    inv:set_stack (listname, index, stack)
-		    return
-		end
-
 		local str = ""
 		local stack
 		for i=1, inv:get_size("stand") do
@@ -381,12 +359,6 @@ local function hopper_in(pos, to_pos)
 				return sort_stack (itemstack) == "stand"
 			end)
 			if slot_id then
-				-- Strip "batch_output" properties from brewing stand input.
-				local stack = sinv:get_stack ("main", slot_id)
-				if stack and stack:get_meta ():get_int ("batch_output") ~= 0 then
-				    stack:get_meta ():set_int ("batch_output", 0)
-				    sinv:set_stack ("main", slot_id, stack)
-				end
 				mcl_util.move_item(sinv, "main", slot_id, dinv, "stand")
 				minetest.get_node_timer(to_pos):start(1.0)
 			end
@@ -406,10 +378,7 @@ end
 local function hopper_out(pos, to_pos)
 	local sinv = minetest.get_inventory({type="node", pos = pos})
 	local dinv = minetest.get_inventory({type="node", pos = to_pos})
-	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", function(stack)
-		local item_meta = stack:get_meta ()
-		return item_meta:get_int ("batch_output") ~= 0
-	end)
+	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", nil)
 	if slot_id then
 		mcl_util.move_item(sinv, "stand", slot_id, dinv, "main")
 	end
