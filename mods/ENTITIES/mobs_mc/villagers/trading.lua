@@ -215,8 +215,8 @@ position[0.5,0.5]
 label[7.5,0.3;%s]
 style_type[label;textcolor=white]
 
-background[6.3,0.55;5.9,0.2;crafting_creative_bg_dark.png]
-background[6.3,0.55;%s,0.2;hudbars_bar_breath.png]
+background[6.3,0.55;5.9,0.2;mcl_inventory_bar.png]
+background[6.3,0.55;%s,0.2;mcl_inventory_bar_fill.png]
 
 scrollbaroptions[min=1;max=%i;thumbsize=1]
 scrollbar[3.3,0.05;0.4,9.1;vertical;trade_scroller;1]
@@ -494,14 +494,18 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 		h = h + button_buffer
 	end
 
-	local xp_str = ""
-	if self._max_trade_tier < 5 then
-		xp_str = " - " .. self._trade_xp .. "/" .. mobs_mc.villager_mob.tier_xp[self._max_trade_tier] .. " xp"
+	local prev_tier = mobs_mc.villager_mob.tier_xp[self._max_trade_tier-1] or 0
+	local bar_val = self._trade_xp - prev_tier
+	local bar_max = (mobs_mc.villager_mob.tier_xp[self._max_trade_tier] or mobs_mc.villager_mob.tier_xp[4]) - prev_tier
+	if self._max_trade_tier == 5 then
+		bar_val = 1
+		bar_max = 1
 	end
 
 	local header = string.format(
 		fs_header_template,
-		F(minetest.colorize("#313131", profession .. " - " .. tiername .. xp_str)),
+		F(minetest.colorize("#313131", profession .. " - " .. tiername)),
+		(bar_val/bar_max) * 5.9,
 		h * 10
 	)
 
