@@ -163,7 +163,8 @@ end
 
 -- Trade spec templates, some with args to use with string.format
 -- arg 1 = %s = title
--- arg 2 = %i = scroller max val
+-- arg 2 = %s = total xp width
+-- arg 3 = %i = scroller max val
 local fs_header_template = [[
 formspec_version[6]
 size[15.2,9.3]
@@ -171,6 +172,9 @@ position[0.5,0.5]
 
 label[7.5,0.3;%s]
 style_type[label;textcolor=white]
+
+background[6.3,0.55;5.9,0.2;crafting_creative_bg_dark.png]
+background[6.3,0.55;%s,0.2;hudbars_bar_breath.png]
 
 scrollbaroptions[min=1;max=%i;thumbsize=1]
 scrollbar[3.3,0.05;0.4,9.1;vertical;trade_scroller;1]
@@ -449,7 +453,12 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 	end
 
 	local header =
-		string.format(fs_header_template, F(minetest.colorize("#313131", profession .. " - " .. tiername)), h * 10)
+		string.format(
+			fs_header_template,
+			F(minetest.colorize("#313131", profession .. " - " .. tiername)),
+			(50/250)*5.9,
+			h * 10
+		)
 
 	if self._notiers then
 		header = string.format(fs_header_template, F(minetest.colorize("#313131", profession)), h * 10)
