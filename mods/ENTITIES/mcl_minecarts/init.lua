@@ -753,11 +753,11 @@ register_minecart(
 			self._start_pos = self.object:get_pos()
 			mcl_player.players[clicker].attached = true
 			clicker:set_attach(self.object, "", {x=0, y=-1.75, z=-2}, {x=0, y=0, z=0})
+			clicker:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
 			minetest.after(0.2, function(name)
 				local player = minetest.get_player_by_name(name)
 				if player then
 					mcl_player.player_set_animation(player, "sit" , 30)
-					player:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
 					mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
 				end
 			end, name)
