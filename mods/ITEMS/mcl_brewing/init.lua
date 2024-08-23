@@ -133,15 +133,14 @@ local function brewing_stand_timer(pos, elapsed)
 
 	brew_output = brewable(inv)
 	if brew_output then
-	    fuel_timer = fuel_timer - elapsed
-	    stand_timer = stand_timer + elapsed
-
 	    if fuel_timer <= 0 then -- Is more fuel required?
 		fuel_timer = take_fuel (pos, meta, inv)
 	    end
 
 	    -- If enough fuel remains, continue.
 	    if fuel_timer > 0 then
+		fuel_timer = fuel_timer - elapsed
+		stand_timer = stand_timer + elapsed
 		d = 0.5
 		minetest.add_particlespawner({
 			amount = 4,
@@ -192,7 +191,8 @@ local function brewing_stand_timer(pos, elapsed)
 	end
 
 	-- The formspec must be updated after each change.
-	fuel_percent = 100 - math.ceil(fuel_timer/BURN_TIME*100 % BURN_TIME)
+	fuel_percent = 100 - math.floor (math.max (fuel_timer, 0)
+					 / BURN_TIME * 100)
 	brew_percent = math.floor(stand_timer/BREW_TIME*100)
 	formspec = active_brewing_formspec(fuel_percent, brew_percent*1 % 100)
 
@@ -328,6 +328,21 @@ local function on_put(pos, listname, index, stack, _)
 	--some code here to enforce only potions getting placed on stands
 end
 
+local function on_take (pos, listname, _, _, _)
+	local meta = minetest.get_meta(pos)
+	local inv = meta:get_inventory()
+	local str = ""
+	for i=1, inv:get_size("stand") do
+		local stack = inv:get_stack("stand", i)
+		if not stack:is_empty() then
+			str = str.."1"
+		else str = str.."0"
+		end
+	end
+	minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
+	minetest.get_node_timer(pos):start(1.0)
+end
+
 local function allow_move(pos, from_list, from_index, to_list, _, count, _)
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
 	local inv = minetest.get_meta(pos):get_inventory()
@@ -337,7 +352,7 @@ local function allow_move(pos, from_list, from_index, to_list, _, count, _)
 	return 0
 end
 
-local function allow_take(pos, listname, _, stack, player)
+local function allow_take (pos, listname, _, stack, player)
 	if listname == "sorter" then return 0 end
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
@@ -423,7 +438,7 @@ local tpl_brewing_stand = {
 	allow_metadata_inventory_put = allow_put,
 	allow_metadata_inventory_move = allow_move,
 	on_metadata_inventory_put = on_put,
-	on_metadata_inventory_take = on_put,
+	on_metadata_inventory_take = on_take,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()

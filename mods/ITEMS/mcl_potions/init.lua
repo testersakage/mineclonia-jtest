@@ -280,6 +280,8 @@ mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
 	tt=S("Extinguishes fire and hurts some mobs"),
 	longdesc=S("A throwable water bottle that will shatter on impact, where it extinguishes nearby fire and hurts mobs that are vulnerable to water."),
 	no_effect=true,
+	base_potion = "mcl_potions:water",
+	stack_max = 1,
 	on_splash = function (pos, _)
 	    mcl_potions._water_effect (pos, 4)
 	end,
@@ -288,6 +290,8 @@ mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
 mcl_potions.register_lingering("water", S("Lingering Water Bottle"), "#0022FF", {
 	tt=S("Extinguishes fire and hurts some mobs"),
 	longdesc=S("A throwable water bottle that will shatter on impact, where it creates a cloud of water vapor that lingers on the ground for a while. This cloud extinguishes fire and hurts mobs that are vulnerable to water."),
+	base_potion = "mcl_potions:water",
+	stack_max = 1,
 	no_effect=true,
 	effect=1
 })
@@ -313,8 +317,9 @@ minetest.register_craft({
 local output_table = { }
 
 -- API
--- registers a potion that can be combined with multiple ingredients for different outcomes
--- out_table contains the recipes for those outcomes
+-- registers a potion that can be combined with multiple ingredients
+-- for different outcomes out_table contains the recipes for those
+-- outcomes
 function mcl_potions.register_ingredient_potion(input, out_table)
     assert (not output_table[input],
 	    "Attempt to register the same ingredient twice!")
@@ -484,7 +489,9 @@ function mcl_potions.register_meta_modifier(ingr, mod_func)
 end
 
 local function extend_dur(potionstack)
-	local def = potions[potionstack:get_name()]
+	local name = potionstack:get_name ()
+	local item_def = minetest.registered_items[name]
+	local def = potions[item_def._base_potion or name]
 	if not def then return false end
 	if not def.has_plus then return false end -- bail out if can't be extended
 	local potionstack = ItemStack(potionstack)
@@ -504,7 +511,9 @@ end
 mcl_potions.register_meta_modifier("mesecons:wire_00000000_off", extend_dur)
 
 local function enhance_pow(potionstack)
-	local def = potions[potionstack:get_name()]
+	local name = potionstack:get_name ()
+	local item_def = minetest.registered_items[name]
+	local def = potions[item_def._base_potion or name]
 	if not def then return false end
 	if not def.has_potent then return false end -- bail out if has no potent variant
 	local potionstack = ItemStack(potionstack)
@@ -527,21 +536,74 @@ mcl_potions.register_meta_modifier("mcl_nether:glowstone_dust", enhance_pow)
 -- Find an alchemical recipe for given ingredient and potion
 -- returns outcome
 function mcl_potions.get_alchemy(ingr, pot)
-	local brew_selector = output_table[pot:get_name()]
+	local registered = pot:get_name ()
+	local itemdef = minetest.registered_items[registered]
+	local potiondef = potions[itemdef._base_potion or registered]
+	local potion = registered
+	local is_splash, is_lingering
+
+	-- This might be a splash or lingering potion; if so, use the
+	-- base potion.
+	if itemdef._base_potion then
+	    potion = itemdef._base_potion
+	    is_splash = minetest.get_item_group (registered, "splash_potion") > 0
+	    is_lingering = minetest.get_item_group (registered, "ling_potion") > 0
+	    if potion == "mcl_potions:water" then
+		-- mcl_potions:water is not a true potion, and must be
+		-- special cased.
+		potiondef = { has_splash = true, has_lingering = true, }
+	    end
+	end
+
+	local brew_selector = output_table[potion]
 	if brew_selector and brew_selector[ingr] then
 		local meta = pot:get_meta():to_table()
-		local alchemy = ItemStack(brew_selector[ingr])
+		local name = brew_selector[ingr]
+
+		-- Might the input be a lingering or a splash potion?
+		if is_lingering then
+		    if potiondef and potiondef.has_lingering then
+			name = name .. "_lingering"
+		    else
+			return false
+		    end
+		elseif is_splash then
+		    if potiondef and potiondef.has_splash then
+			name = name .. "_splash"
+		    else
+			return false
+		    end
+		end
+
+		local alchemy = ItemStack(name)
 		local metaref = alchemy:get_meta()
 		metaref:from_table(meta)
+
 		tt.reload_itemstack_description(alchemy)
 		return alchemy
 	end
 
 	brew_selector = mod_table[ingr]
 	if brew_selector then
-		local brew = brew_selector[pot:get_name()]
+		local brew = brew_selector[potion]
 		if brew then
 			local meta = pot:get_meta():to_table()
+
+			-- Might the input be a lingering or a splash potion?
+			if is_lingering then
+			    if potiondef and potiondef.has_lingering then
+				brew = brew .. "_lingering"
+			    else
+				return false
+			    end
+			elseif is_splash then
+			    if potiondef and potiondef.has_splash then
+				brew = brew .. "_splash"
+			    else
+				return false
+			    end
+			end
+
 			local alchemy = ItemStack(brew)
 			local metaref = alchemy:get_meta()
 			metaref:from_table(meta)
@@ -552,7 +614,10 @@ function mcl_potions.get_alchemy(ingr, pot)
 
 	if meta_mod_table[ingr] then
 		local brew_func = meta_mod_table[ingr]
-		if brew_func then return brew_func(pot) end
+		local alchemy = brew_func (pot)
+		if brew_func then
+		    return alchemy
+		end
 	end
 
 	return false

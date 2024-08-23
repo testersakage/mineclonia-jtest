@@ -210,7 +210,8 @@ function mcl_potions.register_potion(def)
 	pdef._mcl_filter_description = mcl_potions.filter_potion_description
 
 	local internal_def = table.copy(pdef)
-	minetest.register_craftitem(modname..":"..name, pdef)
+	local itemname = modname .. ":" .. name
+	minetest.register_craftitem (itemname, pdef)
 
 	if def.has_splash or def.has_splash == nil then
 		local splash_desc = S("Splash @1", pdef.description)
@@ -228,6 +229,7 @@ function mcl_potions.register_potion(def)
 		sdef._default_extend_level = pdef._default_extend_level
 		sdef.custom_effect = def.custom_effect
 		sdef.on_splash = def.custom_splash_effect
+		sdef.base_potion = itemname
 		if not def._effect_list then sdef.instant = true end
 		mcl_potions.register_splash(name, splash_desc, color, sdef)
 		internal_def.has_splash = true
@@ -250,6 +252,7 @@ function mcl_potions.register_potion(def)
 		ldef.custom_effect = def.custom_effect
 		ldef.on_splash = def.custom_splash_effect
 		ldef.while_lingering = def.custom_linger_effect
+		ldef.base_potion = itemname
 		if not def._effect_list then ldef.instant = true end
 		mcl_potions.register_lingering(name, ling_desc, color, ldef)
 		internal_def.has_lingering = true

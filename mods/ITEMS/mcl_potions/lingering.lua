@@ -197,6 +197,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		uses_level = def.uses_level,
 		has_potent = def.has_potent,
 		has_plus = def.has_plus,
+		_base_potion = def.base_potion,
 		_default_potent_level = def._default_potent_level,
 		_default_extend_level = def._default_extend_level,
 		inventory_image = lingering_image(color),

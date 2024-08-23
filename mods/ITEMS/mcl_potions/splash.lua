@@ -37,6 +37,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 		has_plus = def.has_plus,
 		_default_potent_level = def._default_potent_level,
 		_default_extend_level = def._default_extend_level,
+		_base_potion = def.base_potion,
 		inventory_image = splash_image(color),
 		groups = groups,
 		on_use = function(item, placer, pointed_thing)
