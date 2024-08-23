@@ -10,6 +10,11 @@
 -- these items should be implemented as single items, then everything
 -- will be much easier.
 
+-- TRADES FORMAT: { {"item", qty, qty}, {"item", qty, qty}, max_trade, xp }
+-- item				- name of item or emerald
+-- qty				- item quantity used for math.random
+-- max_trades	- available stock
+-- xp					- amount of xp gained by trader to level up
 
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
