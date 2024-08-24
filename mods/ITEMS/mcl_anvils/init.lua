@@ -394,7 +394,6 @@ local anvildef = {
 		},
 	},
 	selection_box = anvilbox,
-	collision_box = anvilbox,
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 5,
