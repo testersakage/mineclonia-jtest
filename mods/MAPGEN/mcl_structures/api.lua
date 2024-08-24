@@ -209,13 +209,13 @@ local function foundation(ground_p1,ground_p2,pos,sidelen)
 	end
 
 	local stone,filler,top,dust = get_foundation_nodes(ground_p1,ground_p2,pos,sidelen,node_stone)
-	minetest.bulk_set_node(top,{name=node_top},node_stone)
+	mcl_util.bulk_swap_node(top,{name=node_top},node_stone)
 
 	if node_dust then
-		minetest.bulk_set_node(dust,{name=node_dust})
+		mcl_util.bulk_swap_node(dust,{name=node_dust})
 	end
-	minetest.bulk_set_node(filler,{name=node_filler})
-	minetest.bulk_set_node(stone,{name=node_stone})
+	mcl_util.bulk_swap_node(filler,{name=node_filler})
+	mcl_util.bulk_swap_node(stone,{name=node_stone})
 end
 ]]
 
