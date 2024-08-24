@@ -114,6 +114,10 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		run_start = 41, run_end = 81, run_speed = 75,
 	},
 	follow = { "mcl_farming:wheat_item", "mcl_farming:hay_block" },
+	_temper_increase = {
+		["mcl_farming:wheat_item"] = 3,
+	  ["mcl_farming:hay_block"] = 6
+	},
 	view_range = 16,
 	do_custom = function(self, dtime)
 		if not self.v3 then
@@ -126,6 +130,23 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			self.driver_attach_at = {x = 0, y = 12.7, z = -5}
 			self.driver_eye_offset = {x = 0, y = 6, z = 0}
 			self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
+		end
+
+		if self.driver and not self.tamed and self.buck_off_time <= 0 then
+			if math.random() < 0.2 then
+				detach_driver(self)
+				-- TODO bucking animation
+			else
+				self.buck_off_time = 20
+			end
+		end
+
+		if self.buck_off_time then
+			if self.driver then
+				self.buck_off_time = self.buck_off_time - 1
+			else
+				self.buck_off_time = nil
+			end
 		end
 
 		if self.driver then
@@ -159,6 +180,19 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			return
 		elseif self._has_chest and clicker:get_player_control().sneak then
 			mcl_entity_invs.show_inv_form(self,clicker," - Strength "..math.floor(self._inv_size / 3))
+			return
+		end
+
+		local feed_count = 0
+		local breed = false
+		if (item:get_name() == "mcl_farming:wheat_item") then
+			feed_count = 1
+		elseif (item:get_name() == "mcl_farming:hay_block") then
+			feed_count = 1
+			breed = true
+		end
+		if feed_count > 0 then
+			self:feed_tame(clicker, feed_count, breed, false)
 			return
 		end
 
