@@ -36,7 +36,7 @@ local function hut_placement_callback(pos,def,_)
 			table.insert(tree,leg)
 		end
 	end
-	minetest.bulk_set_node(tree, {name = "mcl_trees:tree_oak", param2 = 2})
+	mcl_util.bulk_swap_node(tree, {name = "mcl_trees:tree_oak", param2 = 2})
 	spawn_witch(p1,p2)
 end
 

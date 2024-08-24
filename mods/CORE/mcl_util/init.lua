@@ -1259,6 +1259,45 @@ function mcl_util.circle_replace_node_vm(radius, pos, y, mat_from, mat_to, param
 	vm:write_to_map(true)
 end
 
+-- Like minetest.bulk_set_node but do not call node callbacks. Parameter light
+-- determines if light calculations should happen.
+function mcl_util.bulk_swap_node(positions, node, light)
+	if #positions <= 0 then
+		return
+	end
+
+	local min = positions[1]
+	local max = positions[1]
+	for _, pos in pairs(positions) do
+		min.x = math.min(min.x, pos.x)
+		min.y = math.min(min.y, pos.y)
+		min.z = math.min(min.z, pos.z)
+		max.x = math.max(max.x, pos.x)
+		max.y = math.max(max.y, pos.y)
+		max.z = math.max(max.z, pos.z)
+	end
+
+	local c_to = minetest.get_content_id(node.name)
+	local vm = minetest.get_voxel_manip()
+	local emin, emax = vm:read_from_map(min, max)
+	local a = VoxelArea:new({
+		MinEdge = emin,
+		MaxEdge = emax,
+	})
+	local data = vm:get_data()
+	local param2_data = vm:get_param2_data()
+
+	for _, pos in pairs(positions) do
+		local ind = a:indexp(pos)
+		data[ind] = c_to
+		param2_data[ind] = node.param2 or 0
+	end
+
+	vm:set_data(data)
+	vm:set_param2_data(data)
+	vm:write_to_map(light)
+end
+
 -- Voxel manip function to change nodes if they don't match in an area.
 function mcl_util.bulk_set_node_vm(pos1, pos2, mat_to)
 	local c_to = minetest.get_content_id(mat_to)

@@ -366,8 +366,8 @@ local function Platform(p, radius, node, node2)
 			end
 		end
 	end
-	minetest.bulk_set_node(n1,node)
-	minetest.bulk_set_node(n2,node2)
+	mcl_util.bulk_swap_node(n1,node)
+	mcl_util.bulk_swap_node(n2,node2)
 end
 
 -- Chests
