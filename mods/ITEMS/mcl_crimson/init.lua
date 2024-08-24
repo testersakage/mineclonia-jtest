@@ -86,7 +86,7 @@ function grow_vines(pos, amount, vine, dir, max_age)
 	return amount
 end
 
-local nether_wood_groups = { handy = 1, axey = 1, material_wood = 1, }
+local nether_wood_groups = { handy = 1, axey = 1, material_wood = 1, building_block = 1}
 
 mcl_trees.register_wood("crimson",{
 	readable_name=S("Crimson"),
