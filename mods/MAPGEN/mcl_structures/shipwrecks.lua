@@ -159,7 +159,7 @@ mcl_structures.register_structure("shipwreck",{
 			local ppos = sand[pr:next(1,math.min(#sand, 6400))]
 			local depth = pr:next(1,4)
 			local cpos = vector.offset(ppos, 0, -depth, 0)
-			minetest.set_node(cpos, {name = "mcl_chests:chest_small"})
+			minetest.swap_node(cpos, {name = "mcl_chests:chest_small"})
 			minetest.registered_nodes["mcl_chests:chest_small"].on_construct(cpos)
 			mcl_loot.fill_inventory(minetest.get_meta(cpos):get_inventory(), "main", mcl_loot.get_multi_loot(buried_treasure, pr), pr)
 			if chests and #chests > 0 then

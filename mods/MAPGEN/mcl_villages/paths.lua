@@ -119,7 +119,7 @@ function mcl_villages.store_path_ends(minp, maxp, pos, _, blockseed, bell_pos)
 
 	for _, epos in pairs(path_end_nodes) do
 		table.insert(path_ends["block_" .. blockseed][dist], minetest.pos_to_string(epos))
-		minetest.set_node(epos, { name = "air" })
+		minetest.swap_node(epos, { name = "air" })
 	end
 end
 

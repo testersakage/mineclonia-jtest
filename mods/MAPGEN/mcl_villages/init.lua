@@ -109,7 +109,7 @@ minetest.register_node("mcl_villages:village_block", {
 		local meta = minetest.get_meta(pos)
 		local blockseed = meta:get_string("blockseed")
 		local node_type = meta:get_string("node_type")
-		minetest.set_node(pos, { name = node_type })
+		minetest.swap_node(pos, { name = node_type })
 		mcl_villages.post_process_village(blockseed)
 		return false
 	end,
@@ -136,7 +136,7 @@ minetest.register_node("mcl_villages:building_block", {
 		local is_belltower = meta:get_int("is_belltower") > 0 and true or false
 		local bell_pos = minetest.string_to_pos(meta:get_string("bell_pos"))
 		minetest.get_node_timer(pos):stop()
-		minetest.set_node(pos, { name = node_type })
+		minetest.swap_node(pos, { name = node_type })
 		mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has_jobs, is_belltower, bell_pos)
 		return false
 	end,

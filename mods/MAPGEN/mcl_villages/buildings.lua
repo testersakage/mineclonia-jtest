@@ -529,7 +529,7 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 
 	mcl_villages.paths_new(blockseed, biome_name)
 
-	minetest.set_node(bell_center_pos, { name = "mcl_villages:village_block" })
+	minetest.swap_node(bell_center_pos, { name = "mcl_villages:village_block" })
 	local meta = minetest.get_meta(bell_center_pos)
 	meta:set_string("blockseed", blockseed)
 	meta:set_string("node_type", bell_center_node_type)

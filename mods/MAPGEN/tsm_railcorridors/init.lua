@@ -155,7 +155,7 @@ local function SetNodeIfCanBuild(pos, node, check_above, can_replace_rail)
 			name == tsm_railcorridors.nodes.torch_floor or
 			(can_replace_rail and name == tsm_railcorridors.nodes.rail)
 			) then
-		minetest.set_node(pos, node)
+		minetest.swap_node(pos, node)
 		return true
 	else
 		return false
@@ -258,13 +258,13 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 					if replace_air_only ~= true then
 						-- Cut into wood structures (post/wood)
 						if post and (xi == p.x or zi == p.z) and thisnode.name == post then
-							minetest.set_node({x=xi,y=yi,z=zi}, node)
+							minetest.swap_node({x=xi,y=yi,z=zi}, node)
 							built = true
 						elseif wood and (xi == p.x or zi == p.z) and thisnode.name == wood then
 							local topnode = minetest.get_node({x=xi,y=yi+1,z=zi})
 							local topdef = minetest.registered_nodes[topnode.name]
 							if topdef and topdef.walkable and topnode.name ~= wood then
-								minetest.set_node({x=xi,y=yi,z=zi}, node)
+								minetest.swap_node({x=xi,y=yi,z=zi}, node)
 								-- Check for torches around the wood and schedule them
 								-- for removal
 								if node.name == "air" then
@@ -295,7 +295,7 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 	for c=1, #cleanup_torches do
 		local check = minetest.get_node(cleanup_torches[c])
 		if check.name == tsm_railcorridors.nodes.torch_wall or check.name == tsm_railcorridors.nodes.torch_floor then
-			minetest.set_node(cleanup_torches[c], node)
+			minetest.swap_node(cleanup_torches[c], node)
 		end
 	end
 	return built_all
@@ -357,10 +357,10 @@ local function Platform(p, radius, node, node2)
 			local np, np2 = NeedsPlatform({x=xi,y=p.y,z=zi})
 			if np then
 				if np2 then
-					--minetest.set_node({x=xi,y=p.y-1,z=zi}, node2)
+					--minetest.swap_node({x=xi,y=p.y-1,z=zi}, node2)
 					table.insert(n1,{x=xi,y=p.y-1,z=zi})
 				else
-					--minetest.set_node({x=xi,y=p.y-1,z=zi}, node)
+					--minetest.swap_node({x=xi,y=p.y-1,z=zi}, node)
 					table.insert(n2,{x=xi,y=p.y-1,z=zi})
 				end
 			end
