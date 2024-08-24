@@ -132,7 +132,7 @@ mcl_structures.register_structure("end_shrine",{
 				-- 50% stonebrick (no change necessary)
 			end
 			if bricktype then
-				minetest.set_node(bricks[b], { name = bricktype })
+				minetest.swap_node(bricks[b], { name = bricktype })
 			end
 		end
 
@@ -149,7 +149,7 @@ mcl_structures.register_structure("end_shrine",{
 				elseif stair.name == "mcl_stairs:stair_stonebrick_inner" then
 					stair.name = "mcl_stairs:stair_stonebrickmossy_inner"
 				end
-				minetest.set_node(stairs[s], stair)
+				minetest.swap_node(stairs[s], stair)
 			elseif r_type <= 50 then -- 20% cracky
 				if stair.name == "mcl_stairs:stair_stonebrick" then
 					stair.name = "mcl_stairs:stair_stonebrickcracked"
@@ -158,7 +158,7 @@ mcl_structures.register_structure("end_shrine",{
 				elseif stair.name == "mcl_stairs:stair_stonebrick_inner" then
 					stair.name = "mcl_stairs:stair_stonebrickcracked_inner"
 				end
-				minetest.set_node(stairs[s], stair)
+				minetest.swap_node(stairs[s], stair)
 			end
 			-- 50% no change
 		end
@@ -173,7 +173,7 @@ mcl_structures.register_structure("end_shrine",{
 				if eyes < #frames then
 					local frame_node = minetest.get_node(frames[f])
 					frame_node.name = "mcl_portals:end_portal_frame_eye"
-					minetest.set_node(frames[f], frame_node)
+					minetest.swap_node(frames[f], frame_node)
 				end
 			end
 		end

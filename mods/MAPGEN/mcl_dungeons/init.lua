@@ -338,7 +338,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 			facedir = minetest.dir_to_facedir(vector.subtract(pos, face_to))
 		end
 
-		minetest.set_node(pos, {name="mcl_chests:chest", param2=facedir})
+		minetest.swap_node(pos, {name="mcl_chests:chest", param2=facedir})
 		local meta = minetest.get_meta(pos)
 		minetest.log("info", "[mcl_dungeons] Filling chest " .. tostring(c) .. " at " .. minetest.pos_to_string(pos))
 		mcl_loot.fill_inventory(meta:get_inventory(), "main", mcl_loot.get_multi_loot(loottable, pr), pr)
@@ -349,7 +349,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 	for s=#spawner_posses, 1, -1 do
 		local sp = spawner_posses[s]
 		-- ... and place it and select a random mob
-		minetest.set_node(sp, {name = "mcl_mobspawners:spawner"})
+		minetest.swap_node(sp, {name = "mcl_mobspawners:spawner"})
 		local mobs = {
 			"mobs_mc:zombie",
 			"mobs_mc:zombie",

@@ -42,7 +42,7 @@ mcl_structures.register_structure("desert_well",{
 			if #sus_poss > 0 then
 				table.shuffle(sus_poss)
 				for i = 1,pr:next(1,#sus_poss) do
-					minetest.set_node(sus_poss[i],{name="mcl_sus_nodes:sand"})
+					minetest.swap_node(sus_poss[i],{name="mcl_sus_nodes:sand"})
 					local meta = minetest.get_meta(sus_poss[i])
 					meta:set_string("structure","desert_well")
 				end

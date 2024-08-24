@@ -11,7 +11,7 @@ local function set_node_no_bedrock(pos, node)
 	if not pos then return end
 	local n = minetest.get_node(pos)
 	if n.name == "mcl_core:bedrock" then return end
-	return minetest.set_node(pos,node)
+	return minetest.swap_node(pos,node)
 end
 
 local function makegeode(pos, _, pr)
