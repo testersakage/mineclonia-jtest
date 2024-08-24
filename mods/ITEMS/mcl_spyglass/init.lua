@@ -10,6 +10,7 @@ minetest.register_tool("mcl_spyglass:spyglass",{
 	description = S("Spyglass"),
 	_doc_items_longdesc = S("A spyglass is an item that can be used for zooming in on specific locations."),
 	inventory_image = "mcl_spyglass.png",
+	groups = {tool = 1},
 	stack_max = 1,
 	_mcl_toollike_wield = true,
 })
