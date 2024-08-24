@@ -37,7 +37,7 @@ function mobs_mc.villager_mob:get_badge_textures()
 	end
 
 	if self._profession == "unemployed" or self._profession == "nitwit" then return t end
-	local tier = self._max_trade_tier or 1
+	local tier = self._trade_tier or 1
 	return {
 		t .. "^" .. badges[tier]
 	}
@@ -453,7 +453,7 @@ function mobs_mc.villager_mob:unlock_trades()
 	local trades = minetest.deserialize(self._trades)
 	if trades and type(trades) == "table" then
 		for _, trade in pairs(trades) do
-			local trade_tier_too_high = trade.tier > self._max_trade_tier
+			local trade_tier_too_high = trade.tier > self._trade_tier
 			if not trade_tier_too_high then
 				if trade["locked"] == true then
 					trade.locked = false
