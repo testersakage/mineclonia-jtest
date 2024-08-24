@@ -118,7 +118,7 @@ minetest.register_node("mcl_bamboo:bamboo_mosaic",  {
 	_doc_items_hidden = false,
 	tiles = {"mcl_bamboo_bamboo_plank_mosaic.png"},
 	is_ground_content = false,
-	groups = {handy = 1, axey = 1, flammable = 3, fire_encouragement = 5, fire_flammability = 20},
+	groups = {handy = 1, axey = 1, building_block = 1, flammable = 3, fire_encouragement = 5, fire_flammability = 20},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 2,
