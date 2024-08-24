@@ -20,7 +20,7 @@ minetest.register_node("mcl_lectern:lectern", {
 	drawtype = "mesh",
 	mesh = "mcl_lectern_lectern.obj",
 	tiles = {"mcl_lectern_lectern.png", },
-	groups = {handy = 1, axey = 1, flammable = 2, fire_encouragement = 5, fire_flammability = 5, solid = 1},
+	groups = {handy = 1, axey = 1, flammable = 2, fire_encouragement = 5, fire_flammability = 5, solid = 1, deco_block=1},
 	sunlight_propagates = true,
 	is_ground_content = false,
 	node_placement_prediction = "",

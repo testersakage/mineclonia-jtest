@@ -302,7 +302,7 @@ minetest.register_node("mcl_compass:lodestone",{
 		"lodestone_side3.png",
 		"lodestone_side4.png"
 	},
-	groups = {pickaxey=1, material_stone=1},
+	groups = {pickaxey=1, material_stone=1, deco_block=1},
 	_mcl_hardness = 1.5,
 	_mcl_blast_resistance = 6,
 	sounds = mcl_sounds.node_sound_stone_defaults()

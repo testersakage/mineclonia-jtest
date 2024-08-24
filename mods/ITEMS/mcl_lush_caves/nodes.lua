@@ -144,7 +144,7 @@ minetest.register_node("mcl_lush_caves:hanging_roots", {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
 		},
 	},
-	groups = {handy=1, plant=1, flammable=2, fire_encouragement=30, fire_flammability=60, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, compostability=30, attached_node=4},
+	groups = {handy=1, plant=1, flammable=2, fire_encouragement=30, fire_flammability=60, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, compostability=30, attached_node=4, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_mcl_blast_hardness = 0,
@@ -173,7 +173,7 @@ minetest.register_node("mcl_lush_caves:cave_vines", {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
 		},
 	},
-	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1},
+	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_mcl_blast_hardness = 0,
@@ -206,7 +206,7 @@ minetest.register_node("mcl_lush_caves:cave_vines_lit", {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
 		},
 	},
-	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1},
+	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_mcl_blast_hardness = 1,
@@ -314,7 +314,7 @@ minetest.register_node("mcl_lush_caves:spore_blossom", {
 	drawtype = "plantlike",
 	param2type = "meshoptions",
 	place_param2 = 4,
-	groups = {handy = 1, plant = 1},
+	groups = {handy = 1, plant = 1, deco_block = 1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	selection_box = {
 		type = "fixed",

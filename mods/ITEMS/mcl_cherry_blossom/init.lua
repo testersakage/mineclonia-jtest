@@ -68,6 +68,7 @@ minetest.register_node("mcl_cherry_blossom:pink_petals",{
 		attached_node=1,
 		dig_by_piston=1,
 		compostability = 30,
+		deco_block=1
 		--not_in_creative_inventory=1,
 	},
 	use_texture_alpha = "clip",

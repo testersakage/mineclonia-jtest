@@ -35,7 +35,7 @@ for i=0,4 do
 			},
 			is_ground_content = false,
 			on_rightclick = rightclick,
-			groups = {pickaxey=1, material_stone=1},
+			groups = {pickaxey=1, material_stone=1, deco_block=1},
 			_mcl_hardness = 22.5,
 			sounds= mcl_sounds.node_sound_stone_defaults(),
 			use_texture_alpha = "blend",

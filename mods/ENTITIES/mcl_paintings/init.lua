@@ -169,6 +169,7 @@ minetest.register_entity("mcl_paintings:painting", {
 minetest.register_craftitem("mcl_paintings:painting", {
 	description = S("Painting"),
 	inventory_image = "mcl_paintings_painting.png",
+	groups = {deco_block = 1},
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.type ~= "node" then
 			return itemstack
