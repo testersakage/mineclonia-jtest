@@ -198,7 +198,7 @@ local tpl_log = {
 local tpl_wood = {
 	_doc_items_hidden = false,
 	is_ground_content = false,
-	groups = table.merge(wood_groups,{wood = 1}),
+	groups = table.merge(wood_groups,{wood = 1, building_block = 1}),
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 2,
