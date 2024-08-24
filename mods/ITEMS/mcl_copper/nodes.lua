@@ -154,7 +154,7 @@ for n, desc in pairs(n_desc) do
 
 	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n, {
 		description = S("@1 Copper Trapdoor", desc),
-		groups = { copper = 1, pickaxey = 2, building_block = 1 },
+		groups = { copper = 1, pickaxey = 2, deco_block = 1 },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		sound_close = "doors_steel_door_close",
 		sound_open = "doors_steel_door_open",
