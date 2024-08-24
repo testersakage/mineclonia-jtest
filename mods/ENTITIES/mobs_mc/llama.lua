@@ -133,6 +133,8 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			if ctrl and ctrl.sneak then
 				detach_driver(self)
 			end
+		else
+			detach_driver(self)
 		end
 
 		return true
