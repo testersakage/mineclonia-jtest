@@ -143,30 +143,30 @@ end
 --	If function(pos_to_check, content_id_at_this_pos), will set node only if returns true.
 -- min, max: Minimum and maximum Y levels of the layers to set
 -- minp, maxp: minp, maxp of the on_generated
--- lvm_used: Set to true if any node in this on_generated has been set before.
 --
--- returns true if any node was set and lvm_used otherwise
-local function set_layers(data, area, content_id, check, min, max, minp, maxp, lvm_used, pr)
-	if (maxp.y >= min and minp.y <= max) then
-		for z =minp.z, maxp.z do
-		for y = math.max(min, minp.y), math.min(max, maxp.y) do
-			local vi = area:index(minp.x, y, z)
-			for x = minp.x, maxp.x do
-				if check then
-					if type(check) == "function" and check(x, y, z, data[vi], pr) then
-						data[vi] = content_id
-						lvm_used = true
-					elseif check == data[vi] then
-						data[vi] = content_id
-						lvm_used = true
-					end
-				else
-					data[vi] = content_id
-					lvm_used = true
-				end
-				vi = vi + 1
+-- returns true if any node was set
+local function set_layers(data, area, content_id, check, min, max, minp, maxp, pr)
+	if maxp.y < min or minp.y > max then return false end
+	local lvm_used = false
+	if not check then
+		for p_pos in area:iter(minp.x, math.max(min, minp.y), minp.z, maxp.x, math.min(max, maxp.y), maxp.z) do
+			data[p_pos] = content_id
+			lvm_used = true
+		end
+	elseif type(check) == "function" then
+		for p_pos in area:iter(minp.x, math.max(min, minp.y), minp.z, maxp.x, math.min(max, maxp.y), maxp.z) do
+			local pos = area:position(p_pos)
+			if check(pos.x, pos.y, pos.z, data[p_pos], pr) then
+				data[p_pos] = content_id
+				lvm_used = true
 			end
 		end
+	else
+		for p_pos in area:iter(minp.x, math.max(min, minp.y), minp.z, maxp.x, math.min(max, maxp.y), maxp.z) do
+			if check == data[p_pos] then
+				data[p_pos] = content_id
+				lvm_used = true
+			end
 		end
 	end
 	return lvm_used
@@ -174,48 +174,47 @@ end
 
 -- Below the bedrock, generate air/void
 local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, blockseed) ---@diagnostic disable-line: unused-local
-	local lvm_used = false
 	local pr = PseudoRandom(blockseed)
+	local lvm_used = false
 
 	-- The Void below the Nether:
-	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mapgen_edge_min                     , mcl_vars.mg_nether_min                     -1, minp, maxp, lvm_used, pr)
+	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mapgen_edge_min                     , mcl_vars.mg_nether_min                     -1, minp, maxp, pr) or lvm_used
 
 	-- [[ THE NETHER:					mcl_vars.mg_nether_min			       mcl_vars.mg_nether_max							]]
 
-	-- The Air on the Nether roof, https://git.minetest.land/MineClone2/MineClone2/issues/1186
-	lvm_used = set_layers(data, area, c_air		 , nil, mcl_vars.mg_nether_max			   +1, mcl_vars.mg_nether_max + 128                 , minp, maxp, lvm_used, pr)
+	-- The Air on the Nether roof, https://git.minetest.land/VoxeLibre/VoxeLibre/issues/1186
+	lvm_used = set_layers(data, area, c_air		 , nil, mcl_vars.mg_nether_max			   +1, mcl_vars.mg_nether_max + 128                 , minp, maxp, pr) or lvm_used
 	-- The Void above the Nether below the End:
-	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_nether_max + 128               +1, mcl_vars.mg_end_min                        -1, minp, maxp, lvm_used, pr)
+	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_nether_max + 128               +1, mcl_vars.mg_end_min                        -1, minp, maxp, pr) or lvm_used
 
 	-- [[ THE END:						mcl_vars.mg_end_min			       mcl_vars.mg_end_max							]]
 
 	-- The Void above the End below the Realm barrier:
-	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_end_max                        +1, mcl_vars.mg_realm_barrier_overworld_end_min-1, minp, maxp, lvm_used, pr)
+	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_end_max                        +1, mcl_vars.mg_realm_barrier_overworld_end_min-1, minp, maxp, pr) or lvm_used
 	-- Realm barrier between the Overworld void and the End
-	lvm_used = set_layers(data, area, c_realm_barrier, nil, mcl_vars.mg_realm_barrier_overworld_end_min  , mcl_vars.mg_realm_barrier_overworld_end_max  , minp, maxp, lvm_used, pr)
+	lvm_used = set_layers(data, area, c_realm_barrier, nil, mcl_vars.mg_realm_barrier_overworld_end_min  , mcl_vars.mg_realm_barrier_overworld_end_max  , minp, maxp, pr) or lvm_used
 	-- The Void above Realm barrier below the Overworld:
-	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_realm_barrier_overworld_end_max+1, mcl_vars.mg_overworld_min                  -1, minp, maxp, lvm_used, pr)
+	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_realm_barrier_overworld_end_max+1, mcl_vars.mg_overworld_min                  -1, minp, maxp, pr) or lvm_used
 
 
-	if (mg_name ~= "singlenode" or bedrock_in_singlenode) then
+	if mg_name ~= "singlenode" or bedrock_in_singlenode then
 		-- Bedrock
-		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_overworld_min, mcl_vars.mg_bedrock_overworld_max, minp, maxp, lvm_used, pr)
-		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_nether_bottom_min, mcl_vars.mg_bedrock_nether_bottom_max, minp, maxp, lvm_used, pr)
-		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_nether_top_min, mcl_vars.mg_bedrock_nether_top_max, minp, maxp, lvm_used, pr)
+		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_overworld_min, mcl_vars.mg_bedrock_overworld_max, minp, maxp, pr) or lvm_used
+		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_nether_bottom_min, mcl_vars.mg_bedrock_nether_bottom_max, minp, maxp, pr) or lvm_used
+		lvm_used = set_layers(data, area, c_bedrock, bedrock_check, mcl_vars.mg_bedrock_nether_top_min, mcl_vars.mg_bedrock_nether_top_max, minp, maxp, pr) or lvm_used
 
 		-- Flat Nether
 		if mg_name == "flat" then
-			lvm_used = set_layers(data, area, c_air, nil, mcl_vars.mg_flat_nether_floor, mcl_vars.mg_flat_nether_ceiling, minp, maxp, lvm_used, pr)
+			lvm_used = set_layers(data, area, c_air, nil, mcl_vars.mg_flat_nether_floor, mcl_vars.mg_flat_nether_ceiling, minp, maxp, pr) or lvm_used
 		end
 
 		-- Big lava seas by replacing air below a certain height
 		if mcl_vars.mg_lava then
-			lvm_used = set_layers(data, area, c_lava, c_air, mcl_vars.mg_overworld_min, mcl_vars.mg_lava_overworld_max, minp, maxp, lvm_used, pr)
-			lvm_used = set_layers(data, area, c_nether_lava, c_air, mcl_vars.mg_nether_min, mcl_vars.mg_lava_nether_max, minp, maxp, lvm_used, pr)
+			lvm_used = set_layers(data, area, c_lava, c_air, mcl_vars.mg_overworld_min, mcl_vars.mg_lava_overworld_max, minp, maxp, pr) or lvm_used
+			lvm_used = set_layers(data, area, c_nether_lava, c_air, mcl_vars.mg_nether_min, mcl_vars.mg_lava_nether_max, minp, maxp, pr) or lvm_used
 		end
 	end
-	local deco = false
-	local ores = false
+	local deco, ores = false, false
 	if minp.y >  mcl_vars.mg_nether_deco_max - 64 and maxp.y <  mcl_vars.mg_nether_max + 128 then
 		deco = {min=mcl_vars.mg_nether_deco_max,max=mcl_vars.mg_nether_max} ---@diagnostic disable-line: cast-local-type
 	end
@@ -286,29 +285,6 @@ if mg_name ~= "singlenode" or end_fixes_in_singlenode then
 	mcl_mapgen_core.register_generator("set_param2_nodes", set_param2_nodes, nil, 9999, true)
 end
 
--- This should be moved to mcl_structures eventually if the dependencies can be sorted out.
-mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blockseed)
-	local gennotify = minetest.get_mapgen_object("gennotify")
-	local has = false
-	for _,struct in pairs(mcl_structures.registered_structures) do
-		local pr = PseudoRandom(blockseed + 42)
-		if struct.deco_id then
-			for _, pos in pairs(gennotify["decoration#"..struct.deco_id] or {}) do
-				local realpos = vector.offset(pos,0,1,0)
-				minetest.remove_node(realpos)
-				minetest.fix_light(vector.offset(pos,-1,-1,-1),vector.offset(pos,1,3,1))
-				if struct.chunk_probability == nil or (not has and pr:next(1,struct.chunk_probability) == 1 ) then
-					mcl_structures.place_structure(realpos,struct,pr,blockseed)
-					has=true
-				end
-			end
-		elseif struct.static_pos then
-			for _,p in pairs(struct.static_pos) do
-				if mcl_util.in_cube(p,minp,maxp) then
-					mcl_structures.place_structure(p,struct,pr,blockseed)
-				end
-			end
-		end
-	end
-	return false, false, false
-end, 100, false)
+-- Initialize structures mod
+vl_structures.register(mcl_mapgen_core)
+

@@ -1,7 +1,7 @@
 local registered_generators = {}
 
 local lvm, nodes, param2 = 0, 0, 0
-local lvm_buffer = {}
+local lvm_buffer, lb2 = {}, {}
 
 local seed = minetest.get_mapgen_setting("seed")
 
@@ -15,28 +15,20 @@ end
 
 minetest.register_on_generated(function(minp, maxp, blockseed)
 	local t1 = os.clock()
-	local p1, p2 = {x=minp.x, y=minp.y, z=minp.z}, {x=maxp.x, y=maxp.y, z=maxp.z}
 	if lvm > 0 then
 		local lvm_used, shadow, deco_used, deco_table, ore_used, ore_table = false, false, false, {}, false, {}
-		local lb2 = {} -- param2
 		local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
-		local e1, e2 = {x=emin.x, y=emin.y, z=emin.z}, {x=emax.x, y=emax.y, z=emax.z}
-		local data2
+		local area = VoxelArea(emin, emax)
 		local data = vm:get_data(lvm_buffer)
-		if param2 > 0 then
-			data2 = vm:get_param2_data(lb2)
-		end
-		local area = VoxelArea:new({MinEdge=e1, MaxEdge=e2})
+		local data2 = param2 > 0 and vm:get_param2_data(lb2)
 
 		for _, rec in ipairs(registered_generators) do
 			if rec.vf then
+				local p1, p2 = vector.copy(minp), vector.copy(maxp) -- defensive copies
+				local e1, e2 = vector.copy(emin), vector.copy(emax) -- defensive copies
 				local lvm_used0, shadow0, deco, ore = rec.vf(vm, data, data2, e1, e2, area, p1, p2, blockseed)
-				if lvm_used0 then
-					lvm_used = true
-				end
-				if shadow0 then
-					shadow = true
-				end
+				lvm_used = lvm_used or lvm_used0
+				shadow = shadow or shadow0
 				if deco and type(deco) == "table" then
 					deco_table = deco
 				elseif deco then
@@ -66,7 +58,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			elseif ore_used then
 				minetest.generate_ores(vm)
 			end
-			vm:calc_lighting(p1, p2, shadow)
+			vm:calc_lighting(minp, maxp, shadow)
 			vm:write_to_map()
 			vm:update_liquids()
 		end
@@ -75,6 +67,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	if nodes > 0 then
 		for _, rec in ipairs(registered_generators) do
 			if rec.nf then
+				local p1, p2 = vector.copy(minp), vector.copy(maxp) -- defensive copies
 				rec.nf(p1, p2, blockseed)
 			end
 		end
@@ -129,6 +122,55 @@ function mcl_mapgen_core.unregister_generator(id)
 	if rec.needs_param2 then param2 = param2 - 1 end
 	--if rec.needs_level0 then level0 = level0 - 1 end
 end
+
+-- Try to make decorations more deterministic in order, by sorting by priority and name
+-- At least for low-priority this should make map seeds more comparable, but
+-- adding for example a new structure can still change everything that comes
+-- later, because currently decoration blockseeds are incremented sequentially
+-- c.f., https://github.com/minetest/minetest/issues/14919
+local pending_decorations = {}
+function mcl_mapgen_core.register_decoration(def, callback)
+	if pending_decorations == nil then
+		minetest.log("warning", "Decoration registered after mapgen: "..tostring(def.name))
+		minetest.register_decoration(def)
+		if callback ~= nil then callback() end
+		return
+	end
+	def = table.copy(def) -- defensive deep copy, needed for water lily
+	def.callback = callback
+	table.insert(pending_decorations, def)
+end
+local function sort_decorations()
+	local keys, map = {}, {}
+	for i, def in pairs(pending_decorations) do
+		local name = def.name
+		-- we try to generate fallback names to make order more deterministic
+		name = name or (def.decoration and string.format("%s:%04d", def.decoration, i))
+		if not name and type(def.schematic) == "string" then
+			local sc = string.split(def.schematic, "/")
+			name = string.format("%s:%04d", sc[#sc], i)
+		end
+		if not name and type(def.schematic) == "table" and def.schematic.data then
+			name = ""
+			for _, v in ipairs(def.schematic.data) do
+				if v.name then name = name .. v.name .. ":" end
+			end
+			name = name .. string.format("%04d", i)
+		end
+		name = name or string.format("%04d", i)
+		local prio = (def.priority or 1000) + i/1000
+		local key = string.format("%08.3f:%s", prio, name)
+		table.insert(keys, key)
+		map[key] = def
+	end
+	table.sort(keys)
+	for _, key in ipairs(keys) do
+		minetest.register_decoration(map[key])
+		if map[key].callback then map[key].callback() end
+	end
+	pending_decorations = nil -- as we will not run again
+end
+minetest.register_on_mods_loaded(sort_decorations)
 
 function mcl_mapgen_core.get_block_seed(pos)
 	return ((seed + minetest.hash_node_position(pos)) * 0x9e3779b1) % 0x100000000

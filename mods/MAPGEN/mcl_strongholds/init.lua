@@ -53,9 +53,9 @@ local function init_strongholds()
 	return stronghold_positions
 end
 
-mcl_structures.register_structure("end_shrine",{
+vl_structures.register_structure("end_shrine",{
 	static_pos = init_strongholds(),
-	sidelen = 32,
+	prepare = { tolerance = -1, foundation = false, clear = false },
 	filenames = {
 		minetest.get_modpath("mcl_structures").."/schematics/mcl_structures_end_portal_room_simple.mts"
 	},
@@ -100,9 +100,7 @@ mcl_structures.register_structure("end_shrine",{
 			}
 		}}
 	},
-	after_place = function(pos, def, pr)
-		local p1 = vector.subtract(pos, (def.sidelen or 12) /2 )
-		local p2 = vector.add(pos, (def.sidelen or 12) / 2)
+	after_place = function(pos, def, pr, p1, p2, size, rotation)
 		local spawners = minetest.find_nodes_in_area(p1, p2, "mcl_mobspawners:spawner")
 		for s=1, #spawners do
 			--local meta = minetest.get_meta(spawners[s])
