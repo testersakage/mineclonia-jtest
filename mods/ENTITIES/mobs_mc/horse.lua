@@ -175,9 +175,7 @@ local horse = {
 				self.run_velocity = self._horse_speed
 			end
 		else
-			if self._saddle then
-				detach_driver(self)
-			end
+			detach_driver(self)
 			self.run_velocity = self._runaway_velocity
 		end
 
