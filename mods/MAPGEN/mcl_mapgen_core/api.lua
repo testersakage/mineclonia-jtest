@@ -129,15 +129,25 @@ end
 -- later, because currently decoration blockseeds are incremented sequentially
 -- c.f., https://github.com/minetest/minetest/issues/14919
 local pending_decorations = {}
+local gennotify_map = {}
 function mcl_mapgen_core.register_decoration(def, callback)
+	def = table.copy(def) -- defensive deep copy, needed for water lily
+	if def.gen_callback and not def.name then error("gen_callback requires a named decoration.") end
+	if callback then error("Callbacks have been redesigned.") end
 	if pending_decorations == nil then
-		minetest.log("warning", "Decoration registered after mapgen: "..tostring(def.name))
+		minetest.log("warning", "Decoration registered after mapgen core initialization: "..tostring(def.name))
 		minetest.register_decoration(def)
-		if callback ~= nil then callback() end
+		if def.gen_callback then
+			def.deco_id = minetest.get_decoration_id(def.name)
+			if not def.deco_id then
+				error("Failed to get the decoration id for "..tostring(key))
+			else
+				minetest.set_gen_notify({decoration = true}, {def.deco_id})
+				gennotify_map["decoration#" .. def.deco_id] = def
+			end
+		end
 		return
 	end
-	def = table.copy(def) -- defensive deep copy, needed for water lily
-	def.callback = callback
 	table.insert(pending_decorations, def)
 end
 local function sort_decorations()
@@ -165,13 +175,43 @@ local function sort_decorations()
 	end
 	table.sort(keys)
 	for _, key in ipairs(keys) do
-		minetest.register_decoration(map[key])
-		if map[key].callback then map[key].callback() end
+		local def = map[key]
+		local deco_id = minetest.register_decoration(def)
+		if not deco_id then
+			error("Failed to register decoration"..tostring(key))
+		end
+		if def.gen_callback then
+			deco_id = minetest.get_decoration_id(def.name)
+			if not deco_id then
+				error("Failed to get the decoration id for "..tostring(key))
+			else
+				minetest.set_gen_notify({decoration = true}, {deco_id})
+				gennotify_map["decoration#" .. deco_id] = def
+			end
+		end
 	end
 	pending_decorations = nil -- as we will not run again
 end
+
+mcl_mapgen_core.register_generator("Gennotify callbacks", nil, function(minp, maxp, blockseed)
+	local pr = PcgRandom(blockseed + seed + 48214) -- constant seed offset
+	local gennotify = minetest.get_mapgen_object("gennotify")
+	for key, def in pairs(gennotify_map) do
+		local t = gennotify[key]
+		if t and #t > 0 then
+			-- Fisher-Yates shuffle, using pr
+			for i = 1, #t-1 do
+				local r = pr:next(i,#t)
+				t[i], t[r] = t[r], t[i]
+			end
+			def.gen_callback(t, minp, maxp, blockseed)
+		end
+	end
+end)
+
 minetest.register_on_mods_loaded(sort_decorations)
 
 function mcl_mapgen_core.get_block_seed(pos)
 	return ((seed + minetest.hash_node_position(pos)) * 0x9e3779b1) % 0x100000000
 end
+

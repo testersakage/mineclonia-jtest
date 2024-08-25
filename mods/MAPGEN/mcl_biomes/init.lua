@@ -8,10 +8,7 @@ local mod_mcl_blackstone = minetest.get_modpath("mcl_blackstone")
 local mod_mcl_mangrove = minetest.get_modpath("mcl_mangrove")
 local mod_cherry_blossom = minetest.get_modpath("mcl_cherry_blossom")
 
--- these are registered asynchronously
-local deco_ids_fungus = {}
-local deco_ids_trees = {}
-local deco_id_chorus_plant
+local worldseed = minetest.get_mapgen_setting("seed")
 
 local beach_skycolor = "#78A7FF" -- This is the case for all beach biomes except for the snowy ones! Those beaches will have their own colour instead of this one.
 local ocean_skycolor = "#7BA4FF" -- This is the case for all ocean biomes except for non-deep frozen oceans! Those oceans will have their own colour instead of this one.
@@ -3123,6 +3120,36 @@ local function register_coral_decos(ck)
 	})
 end
 
+--- Fix light for mushroom lights after generation
+local function fix_light_8_gennotify(t, minp, maxp, blockseed)
+	for _, pos in ipairs(t) do
+		minetest.fix_light(vector.offset(pos, -8, -8, -8), vector.offset(pos, 8, 8, 8))
+	end
+end
+--- Grow mangrove roots after generation
+local swamp_biome_id, swamp_shore_id
+local function mangrove_root_gennotify(t, minp, maxp, blockseed)
+	for _, pos in ipairs(t) do
+		local nn = minetest.find_nodes_in_area(vector.offset(pos, -8, -1, -8), vector.offset(pos, 8, 0, 8), {"mcl_mangrove:mangrove_roots"})
+		if nn and #nn > 0 then
+			local pr = PcgRandom(blockseed + worldseed + 38327)
+			for _, v in pairs(nn) do
+				local l = pr:next(2, 16)
+				local n = minetest.get_node(vector.offset(v, 0, -1, 0)).name
+				if minetest.get_item_group(n, "water") > 0 then
+					local wl = "mcl_mangrove:water_logged_roots"
+					if n:find("river") then wl = "mcl_mangrove:river_water_logged_roots" end
+					minetest.bulk_set_node(minetest.find_nodes_in_area(v, vector.offset(v, 0, -l, 0), {"group:water"}), {name = wl})
+				elseif n == "mcl_mud:mud" then
+					minetest.bulk_set_node(minetest.find_nodes_in_area(v, vector.offset(v, 0, -l, 0), {"mcl_mud:mud"}), {name = "mcl_mangrove:mangrove_mud_roots"})
+				elseif n == "air" then
+					minetest.bulk_set_node(minetest.find_nodes_in_area(v, vector.offset(v, 0, -l, 0), {"air"}), {name = "mcl_mangrove:mangrove_roots"})
+				end
+			end
+		end
+	end
+end
+
 local function register_decorations()
 	--Deep Dark
 	mcl_mapgen_core.register_decoration({
@@ -3789,11 +3816,8 @@ local function register_decorations()
 		schematic = mod_mcl_mangrove.."/schematics/mcl_mangrove_tree_1.mts",
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:mangrove_tree_1")
-		table.insert(deco_ids_trees, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = mangrove_root_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_2",
 		deco_type = "schematic",
@@ -3806,11 +3830,8 @@ local function register_decorations()
 		schematic = mod_mcl_mangrove.."/schematics/mcl_mangrove_tree_2.mts",
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:mangrove_tree_2")
-		table.insert(deco_ids_trees, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = mangrove_root_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_3",
 		deco_type = "schematic",
@@ -3823,11 +3844,8 @@ local function register_decorations()
 		schematic = mod_mcl_mangrove.."/schematics/mcl_mangrove_tree_3.mts",
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:mangrove_tree_3")
-		table.insert(deco_ids_trees, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = mangrove_root_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_4",
 		deco_type = "schematic",
@@ -3840,11 +3858,8 @@ local function register_decorations()
 		schematic = mod_mcl_mangrove.."/schematics/mcl_mangrove_tree_4.mts",
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:mangrove_tree_4")
-		table.insert(deco_ids_trees, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = mangrove_root_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_5",
 		deco_type = "schematic",
@@ -3857,11 +3872,8 @@ local function register_decorations()
 		schematic = mod_mcl_mangrove.."/schematics/mcl_mangrove_tree_5.mts",
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:mangrove_tree_5")
-		table.insert(deco_ids_trees, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = mangrove_root_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		name = "mcl_biomes:mangrove_bee_nest",
 		deco_type = "schematic",
@@ -3884,11 +3896,8 @@ local function register_decorations()
 		rotation = "random",
 		spawn_by = "group:flower",
 		priority = 1550,
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:mangrove_bee_nest")
-		table.insert(deco_ids_trees, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = mangrove_root_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_mud:mud"},
@@ -5321,11 +5330,8 @@ local function register_dimension_decorations()
 		schematic = mod_mcl_crimson.."/schematics/warped_fungus_1.mts",
 		size = vector.new(5, 11, 5),
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:warped_tree1")
-		table.insert(deco_ids_fungus, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = fix_light_8_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:warped_tree2",
@@ -5339,11 +5345,8 @@ local function register_dimension_decorations()
 		schematic = mod_mcl_crimson.."/schematics/warped_fungus_2.mts",
 		size = vector.new(5, 6, 5),
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:warped_tree2")
-		table.insert(deco_ids_fungus, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = fix_light_8_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:warped_tree3",
@@ -5357,11 +5360,8 @@ local function register_dimension_decorations()
 		schematic = mod_mcl_crimson.."/schematics/warped_fungus_3.mts",
 		size = vector.new(5, 12, 5),
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:warped_tree3")
-		table.insert(deco_ids_fungus, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = fix_light_8_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:warped_nylium","mcl_crimson:twisting_vines"},
@@ -5420,11 +5420,8 @@ local function register_dimension_decorations()
 		schematic = mod_mcl_crimson.."/schematics/crimson_fungus_1.mts",
 		size = vector.new(5, 8, 5),
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:crimson_tree1")
-		table.insert(deco_ids_fungus, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = fix_light_8_gennotify,
+	})
 	minetest.register_alias("mcl_biomes:crimson_tree", "mcl_biomes:crimson_tree1") -- legacy inconsistency, fixed 08/2024
 	mcl_mapgen_core.register_decoration({
 		deco_type = "schematic",
@@ -5439,11 +5436,8 @@ local function register_dimension_decorations()
 		schematic = mod_mcl_crimson.."/schematics/crimson_fungus_2.mts",
 		size = vector.new(5, 12, 5),
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:crimson_tree2")
-		table.insert(deco_ids_fungus, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = fix_light_8_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:crimson_tree3",
@@ -5457,11 +5451,8 @@ local function register_dimension_decorations()
 		schematic = mod_mcl_crimson.."/schematics/crimson_fungus_3.mts",
 		size = vector.new(7, 13, 7),
 		rotation = "random",
-	}, function()
-		local f = minetest.get_decoration_id("mcl_biomes:crimson_tree3")
-		table.insert(deco_ids_fungus, f)
-		minetest.set_gen_notify({decoration = true}, {f})
-	end)
+		gen_callback = fix_light_8_gennotify,
+	})
 	mcl_mapgen_core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:warped_nylium","mcl_crimson:weeping_vines","mcl_nether:netherrack"},
@@ -5672,10 +5663,19 @@ local function register_dimension_decorations()
 		decoration = "mcl_end:chorus_flower",
 		height = 1,
 		biomes = { "End", "EndMidlands", "EndHighlands", "EndBarrens", "EndSmallIslands" },
-	},function()
-		deco_id_chorus_plant = minetest.get_decoration_id("mcl_biomes:chorus_plant")
-		minetest.set_gen_notify({decoration = true}, {deco_id_chorus_plant})
-	end)
+		gen_callback = function(t)
+			for _, pos in ipairs(t) do
+				local x, y, z = pos.x, pos.y, pos.z
+				if x < -10 or x > 10 or z < -10 or z > 10 then
+					local realpos = vector.new(x, y + 1, z)
+					local node = minetest.get_node(realpos)
+					if node and node.name == "mcl_end:chorus_flower" then
+						mcl_end.grow_chorus_plant(realpos, node, pr)
+					end
+				end
+			end
+		end,
+	})
 	-- TODO: End cities
 end
 
@@ -5702,73 +5702,3 @@ end
 register_dimension_biomes()
 register_dimension_ores()
 register_dimension_decorations()
-
-local function mangrove_roots_gen(gennotify, pr)
-	for _, f in pairs(deco_ids_trees) do
-		for _, pos in ipairs(gennotify["decoration#" .. f] or {}) do
-			local nn = minetest.find_nodes_in_area(vector.offset(pos, -8, -1, -8), vector.offset(pos, 8, 0, 8), {"mcl_mangrove:mangrove_roots"})
-			for _, v in pairs(nn) do
-				local l = pr:next(2, 16)
-				local n = minetest.get_node(vector.offset(v, 0, -1, 0)).name
-				if minetest.get_item_group(n, "water") > 0 then
-					local wl = "mcl_mangrove:water_logged_roots"
-					if n:find("river") then
-						wl = "mcl_mangrove:river_water_logged_roots"
-					end
-					minetest.bulk_set_node(minetest.find_nodes_in_area(v, vector.offset(v, 0, -l, 0), {"group:water"}), {name = wl})
-				elseif n == "mcl_mud:mud" then
-					minetest.bulk_set_node(minetest.find_nodes_in_area(v, vector.offset(v, 0, -l, 0), {"mcl_mud:mud"}), {name = "mcl_mangrove:mangrove_mud_roots"})
-				elseif n == "air" then
-					minetest.bulk_set_node(minetest.find_nodes_in_area(v, vector.offset(v, 0, -l, 0), {"air"}), {name = "mcl_mangrove:mangrove_roots"})
-				end
-			end
-		end
-	end
-end
-
-local function chorus_gen (gennotify, pr)
-	for _, pos in ipairs(gennotify["decoration#" .. deco_id_chorus_plant] or {}) do
-		local x, y, z = pos.x, pos.y, pos.z
-		if x < -10 or x > 10 or z < -10 or z > 10 then
-			local realpos = vector.new(x, y + 1, z)
-			local node = minetest.get_node(realpos)
-			if node and node.name == "mcl_end:chorus_flower" then
-				mcl_end.grow_chorus_plant(realpos, node, pr)
-			end
-		end
-	end
-end
-
-local function crimson_warped_gen(gennotify)
-	for _, f in pairs(deco_ids_fungus) do
-		for _, pos in ipairs(gennotify["decoration#" .. f] or {}) do
-			minetest.fix_light(vector.offset(pos, -8, -8, -8), vector.offset(pos, 8, 8, 8))
-		end
-	end
-end
-
-if deco_id_chorus_plant or deco_ids_fungus or deco_ids_trees then
-	mcl_mapgen_core.register_generator("chorus_grow", nil, function(minp, maxp, blockseed)
-		local gennotify = minetest.get_mapgen_object("gennotify")
-		local pr = PseudoRandom(blockseed + 14)
-		if not (maxp.y < mcl_vars.mg_overworld_min or minp.y > mcl_vars.mg_overworld_max) then
-			local biomemap = minetest.get_mapgen_object("biomemap")
-			-- get_mapgen_object returns nil with lua mapgens
-			if biomemap then
-				local swamp_biome_id = minetest.get_biome_id("MangroveSwamp")
-				local swamp_shore_id = minetest.get_biome_id("MangroveSwamp_shore")
-				if table.indexof(biomemap, swamp_biome_id) ~= -1 or table.indexof(biomemap, swamp_shore_id) ~= -1 then
-					mangrove_roots_gen(gennotify, pr)
-				end
-			end
-		end
-
-		if not (maxp.y < mcl_vars.mg_end_min or minp.y > mcl_vars.mg_end_max) then
-			chorus_gen(gennotify, pr)
-		end
-
-		if not (maxp.y < mcl_vars.mg_nether_min or minp.y > mcl_vars.mg_nether_max) then
-			crimson_warped_gen(gennotify)
-		end
-	end)
-end
