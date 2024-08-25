@@ -40,6 +40,7 @@ local function set_shulker_color(obj, color)
 	obj:set_properties({
 		textures = { tx },
 	})
+	obj._color = color
 end
 
 -- animation 45-80 is transition between passive and attack stance
@@ -92,20 +93,19 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	walk_velocity = 0,
 	run_velocity = 0,
 	noyaw = true,
-	color = "purple",
+	_color = "purple",
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = false,
 	after_activate = function(self)
-		if self.color then
-			set_shulker_color(self, self.color)
+		if self._color then
+			set_shulker_color(self, self._color)
 		end
 	end,
 	on_rightclick = function(self,clicker)
 		if clicker:is_player() then
 			local wstack = clicker:get_wielded_item()
 			if minetest.get_item_group(wstack:get_name(),"dye") > 0 then
-				self.color = minetest.registered_items[wstack:get_name()]._color
-				set_shulker_color(self.object, self.color)
+				set_shulker_color(self, minetest.registered_items[wstack:get_name()]._color)
 				if not minetest.is_creative_enabled(clicker:get_player_name()) then
 					wstack:take_item()
 					clicker:set_wielded_item(wstack)
