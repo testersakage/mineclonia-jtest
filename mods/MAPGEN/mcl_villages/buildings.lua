@@ -37,12 +37,12 @@ local function spawn_cats(pos)
 	end
 end
 
-local function init_nodes(p1, p2, _, _, pr)
+local function init_nodes(p1, p2, pr)
 	for _, n in pairs(minetest.find_nodes_in_area(p1, p2, { "group:wall" })) do
 		mcl_walls.update_wall(n)
 	end
 
-	mcl_structures.construct_nodes(p1, p2, {
+	vl_structures.construct_nodes(p1, p2, {
 		"mcl_itemframes:item_frame",
 		"mcl_itemframes:glow_item_frame",
 		"mcl_furnaces:furnace",
@@ -54,10 +54,10 @@ local function init_nodes(p1, p2, _, _, pr)
 	-- Support mods with custom job sites
 	local job_sites = minetest.find_nodes_in_area(p1, p2, mobs_mc.jobsites)
 	for _, v in pairs(job_sites) do
-		mcl_structures.init_node_construct(v)
+		vl_structures.init_node_construct(v)
 	end
 
-	local nodes = mcl_structures.construct_nodes(p1, p2, { "mcl_chests:chest_small", "mcl_chests:chest" }) or {}
+	local nodes = vl_structures.construct_nodes(p1, p2, { "mcl_chests:chest_small", "mcl_chests:chest" }) or {}
 	for p=1, #nodes do
 		mcl_villages.fill_chest(nodes[p], pr)
 	end
@@ -149,7 +149,7 @@ local squares = {
 	{ x = 3, z = -3 },
 }
 
-local function layout_grid(_, input_settlement_info, settlement_info, _)
+local function layout_grid(vm, _, input_settlement_info, settlement_info, _)
 
 	local bell_schem = settlement_info[1]
 	record_building(bell_schem)
@@ -181,7 +181,7 @@ local function layout_grid(_, input_settlement_info, settlement_info, _)
 			iter = iter + 1
 
 			local pos = vector.new(next_x, center_surface.y, next_z)
-			local pos_surface, surface_material = mcl_villages.find_surface(pos)
+			local pos_surface, surface_material = vl_terraforming.find_level_vm(vm, pos, cur_schem.size)
 
 			if pos_surface then
 				pos_surface = vector.round(pos_surface)
@@ -235,14 +235,10 @@ local function layout_grid(_, input_settlement_info, settlement_info, _)
 	end
 end
 
-local function layout_circles(pr, input_settlement_info, settlement_info, center)
+local function layout_circles(vm, pr, input_settlement_info, settlement_info, center)
 	local center_surface = settlement_info[1].pos
 	local size = #input_settlement_info
 	local max_dist = 20 + (size * 3)
-
-	-- Cache for chunk surfaces
-	local chunks = {}
-	chunks[mcl_vars.get_chunk_number(center)] = true
 
 	for i = 2, size do
 		local cur_schem = input_settlement_info[i]
@@ -267,15 +263,7 @@ local function layout_circles(pr, input_settlement_info, settlement_info, center
 			local ptx, ptz = center.x + r * math.cos(angle), center.z + r * math.sin(angle)
 			local pos1 = vector.new(math.floor(ptx + 0.5), center_surface.y, math.floor(ptz + 0.5))
 
-			local chunk_number = mcl_vars.get_chunk_number(pos1)
-			local pos_surface, surface_material
-
-			if chunks[chunk_number] then
-				pos_surface, surface_material = mcl_villages.find_surface(pos1, false, true)
-			else
-				chunks[chunk_number] = true
-				pos_surface, surface_material = mcl_villages.find_surface(pos1, true, true)
-			end
+			local pos_surface, surface_material = vl_terraforming.find_level_vm(vm, pos1, cur_schem.size)
 
 			if pos_surface then
 				local distance_to_other_buildings_ok, next_step =
@@ -309,7 +297,7 @@ local function layout_circles(pr, input_settlement_info, settlement_info, center
 	end
 end
 
-local function layout_town(minp, maxp, pr, input_settlement_info, grid)
+local function layout_town(vm, minp, maxp, pr, input_settlement_info, grid)
 	local settlement_info = {}
 	local xdist = math.abs(minp.x - maxp.x)
 	local zdist = math.abs(minp.z - maxp.z)
@@ -322,7 +310,7 @@ local function layout_town(minp, maxp, pr, input_settlement_info, grid)
 	)
 
 	-- find center_surface of village
-	local center_surface, surface_material = mcl_villages.find_surface(center, true)
+	local center_surface, surface_material = vl_terraforming.find_level_vm(vm, center, vector.new(1,1,1))
 
 	-- build settlement around center
 	if not center_surface then
@@ -349,9 +337,9 @@ local function layout_town(minp, maxp, pr, input_settlement_info, grid)
 	table.insert(settlement_info, bell_info)
 
 	if grid then
-		layout_grid(pr, input_settlement_info, settlement_info, center)
+		layout_grid(vm, pr, input_settlement_info, settlement_info, center)
 	else
-		layout_circles(pr, input_settlement_info, settlement_info, center)
+		layout_circles(vm, pr, input_settlement_info, settlement_info, center)
 	end
 
 	return settlement_info
@@ -377,7 +365,7 @@ local function info_for_building(bld_name, schem_table)
 	end
 end
 
-function mcl_villages.create_site_plan_new(minp, maxp, pr)
+function mcl_villages.create_site_plan(vm, minp, maxp, pr)
 	local base_settlement_info = {}
 
 	-- initialize all settlement_info table
@@ -461,7 +449,7 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 		grid = true
 	end
 
-	local output_settlement_info, grid = layout_town(minp, maxp, pr, shuffled_settlement_info, grid), grid
+	local output_settlement_info, grid = layout_town(vm, minp, maxp, pr, shuffled_settlement_info, grid), grid
 	if output_settlement_info and #output_settlement_info <= 2 and #output_settlement_info < #shuffled_settlement_info then
 		minetest.log("warning",
 			string.format("[mcl_villages] Cannot build village at %s - %s, only %d locations",
@@ -471,9 +459,8 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 	return output_settlement_info, grid
 end
 
-function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
-
-	local bell_pos = vector.copy(settlement_info[1]["pos"])
+function mcl_villages.place_schematics(vm, settlement_info, pr, blockseed)
+	local bell_pos = settlement_info[1]["pos"]
 	local bell_center_pos
 	local bell_center_node_type
 
@@ -483,8 +470,9 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 		local placement_pos = vector.copy(settlement_info[i]["pos"])
 
 		-- Allow adjusting y axis
-		if settlement_info[i]["yadjust"] then
-			placement_pos = vector.offset(pos, 0, settlement_info[i]["yadjust"], 0)
+		local yadjust = settlement_info[i]["yadjust"] or 0
+		if yadjust then
+			placement_pos = vector.offset(pos, 0, yadjust, 0)
 		end
 
 		local schem_lua = mcl_villages.substitute_materials(pos, settlement_info[i]["schem_lua"], pr)
@@ -494,7 +482,8 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 
 		local size = schematic.size
 
-		minetest.place_schematic(
+		minetest.place_schematic_on_vmanip(
+			vm,
 			placement_pos,
 			schematic,
 			"random",
@@ -502,40 +491,66 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 			true,
 			{ place_center_x = true, place_center_y = false, place_center_z = true }
 		)
-		-- TODO: use minetest.after(1) to check for dropped flowers/plants in y=0?
+		local x_adj = math.floor((size.x - 1) * 0.5)
+		local z_adj = math.floor((size.z - 1) * 0.5)
+		local minp = vector.offset(placement_pos, -x_adj, -yadjust, -z_adj)
+		local maxp = vector.offset(placement_pos, size.x, size.y, size.z)
 
-		local x_adj = math.ceil(size.x / 2)
-		local z_adj = math.ceil(size.z / 2)
-		local minp = vector.offset(placement_pos, -x_adj, 0, -z_adj)
-		local maxp = vector.offset(placement_pos, x_adj, size.y, z_adj)
+		-- to help pathing, increase the height of no_path areas
+		local p = vector.zero()
+		for z = minp.z,maxp.z do
+			p.z = z
+			for x = minp.x,maxp.x do
+				p.x = x
+				for y = minp.y,maxp.y-1 do
+					p.y = y
+					local n = vm:get_node_at(p)
+					if n and n.name == "mcl_villages:no_paths" then
+						p.y = y+1
+						n = vm:get_node_at(p)
+						if n and n.name == "air" then
+							vm:set_node_at(p, {name="mcl_villages:no_paths"})
+						end
+					end
+				end
+			end
+		end
+		-- TODO: use minetest.after(1) to check for dropped flowers/plants in y=0?
 
 		building_all_info.size = size
 		building_all_info.minp = minp
 		building_all_info.maxp = maxp
 
-		init_nodes(minp, maxp, size, nil, pr)
+		mcl_villages.store_path_ends(vm, minp, maxp, pos, size, blockseed, bell_pos)
 
-		mcl_villages.store_path_ends(minp, maxp, pos, size, blockseed, bell_pos)
-
-		if  is_belltower then
+		if is_belltower then
 			bell_center_pos = pos
 			local center_node = minetest.get_node(pos)
 			bell_center_node_type = center_node.name
 		end
 	end
 
+	vm:write_to_map(true) -- for path finder and light
+
 	local biome_data = minetest.get_biome_data(bell_pos)
 	local biome_name = minetest.get_biome_name(biome_data.biome)
+	mcl_villages.paths(blockseed, biome_name)
 
-	mcl_villages.paths_new(blockseed, biome_name)
+	for i, building in ipairs(settlement_info) do
+		init_nodes(building.minp, building.maxp, pr)
+	end
 
+	-- this will run delayed actions, such as spawning mobs
 	minetest.set_node(bell_center_pos, { name = "mcl_villages:village_block" })
 	local meta = minetest.get_meta(bell_center_pos)
 	meta:set_string("blockseed", blockseed)
 	meta:set_string("node_type", bell_center_node_type)
 	meta:set_string("infotext", S("The timer for this @1 has not run yet!", bell_center_node_type))
-	local timer = minetest.get_node_timer(bell_center_pos)
-	timer:start(1.0)
+	minetest.get_node_timer(bell_center_pos):start(1.0)
+
+	-- read back any changes (fixme: would be better if we would not need this often.
+	--local emin, emax = vm:get_emerged_area()
+	--vm:read_from_map(emin, emax)
 end
 
 -- TODO This should be removed in the future once all villages using it have been generated.
@@ -562,7 +577,7 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 		local biome_data = minetest.get_biome_data(bell_pos)
 		local biome_name = minetest.get_biome_name(biome_data.biome)
 
-		mcl_villages.paths_new(blockseed, biome_name)
+		mcl_villages.paths(blockseed, biome_name)
 
 		local l = minetest.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
 		if l then
@@ -689,6 +704,32 @@ function mcl_villages.post_process_village(blockseed)
 			else
 				minetest.log("info", "bed already owned by " .. m:get_string("villager"))
 			end
+		end
+	end
+end
+
+-- Terraform for an entire village
+function mcl_villages.terraform(vm, settlement, pr)
+	-- TODO: sort top-down, then bottom-up, or opposite?
+	-- we make the foundations 2 node wider than necessary, to have one node for path laying
+	for i, building in ipairs(settlement) do
+		if not building.no_clearance then
+			local pos, size = building.pos, building.size
+			pos = vector.offset(pos, -math.floor(size.x/2), 0, -math.floor(size.z/2))
+			vl_terraforming.clearance_vm(vm, pos.x-1, pos.y, pos.z-1, size.x+2, size.y, size.z+2, 2, building.surface_mat or { name = "mcl_core:dirt" }, building.dust_mat, pr)
+		end
+	end
+	for i, building in ipairs(settlement) do
+		if not building.no_ground_turnip then
+			local pos, size = building.pos, building.size
+			local surface_mat = building.surface_mat or { name = "mcl_core:dirt_with_grass" }
+			local platform_mat = building.platform_mat or { name = "mcl_core:dirt" }
+			local stone_mat = building.stone_mat or { name = "mcl_core:stone" }
+			local dust_mat = building.dust_mat
+			building.platform_mat = platform_mat -- remember for use in schematic placement
+			building.stone_mat = stone_mat
+			pos = vector.offset(pos, -math.floor((size.x-1)/2), 0, -math.floor((size.z-1)/2))
+			vl_terraforming.foundation_vm(vm, pos.x-2, pos.y, pos.z-2, size.x+4, -5, size.z+4, 2, surface_mat, platform_mat, stone_mat, dust_mat, pr)
 		end
 	end
 end

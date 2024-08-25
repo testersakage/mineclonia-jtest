@@ -99,27 +99,33 @@ function mcl_villages.dump_path_ends()
 end
 
 -- Insert end points in to the nested tables
-function mcl_villages.store_path_ends(minp, maxp, pos, _, blockseed, bell_pos)
-	local path_end_nodes = minetest.find_nodes_in_area(
-		vector.offset(minp, -4, -4, -4),
-		vector.offset(maxp, 4, 4, 4),
-		"mcl_villages:path_endpoint"
-	)
-
-	-- We store by distance because we cerate paths far away from the bell first
+function mcl_villages.store_path_ends(lvm, minp, maxp, pos, _, blockseed, bell_pos)
+	-- We store by distance because we create paths far away from the bell first
 	local dist = vector.distance(bell_pos, pos)
-
-	-- "block_" is used because lua doesn't like using integers for keys
-	if path_ends["block_" .. blockseed] == nil then
-		path_ends["block_" .. blockseed] = {}
+	local id = "block_" .. blockseed -- cannot use integers as keys
+	local tab = path_ends[id]
+	if not tab then
+		tab = {}
+		path_ends[id] = tab
 	end
-	if path_ends["block_" .. blockseed][dist] == nil then
-		path_ends["block_" .. blockseed][dist] = {}
-	end
-
-	for _, epos in pairs(path_end_nodes) do
-		table.insert(path_ends["block_" .. blockseed][dist], minetest.pos_to_string(epos))
-		minetest.set_node(epos, { name = "air" })
+	if tab[dist] == nil then tab[dist] = {} end
+	-- TODO: improve, use LVM data instead of nodes
+	local v = vector.zero()
+	local i = 0
+	for zi = minp.z-2, maxp.z+2 do
+		v.z = zi
+		for yi = minp.y-2, maxp.y+2 do
+			v.y = yi
+			for xi = minp.x-2, maxp.x+2 do
+				v.x = xi
+				local n = lvm:get_node_at(v)
+				if n and n.name == "mcl_villages:path_endpoint" then
+					i = i + 1
+					table.insert(tab[dist], minetest.pos_to_string(v))
+					lvm:set_node_at(v, { name = "air" })
+				end
+			end
+		end
 	end
 end
 
@@ -276,7 +282,7 @@ end
 
 -- Work out which end points should be connected
 -- works from the outside of the village in
-function mcl_villages.paths_new(blockseed, biome_name)
+function mcl_villages.paths(blockseed, biome_name)
 	local pr = PseudoRandom(blockseed)
 	local pathends = path_ends["block_" .. blockseed]
 

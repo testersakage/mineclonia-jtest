@@ -6,7 +6,6 @@ local generate_in_singlenode = false
 
 dofile(mcl_villages.modpath.."/const.lua")
 dofile(mcl_villages.modpath.."/utils.lua")
-dofile(mcl_villages.modpath.."/foundation.lua")
 dofile(mcl_villages.modpath.."/buildings.lua")
 dofile(mcl_villages.modpath.."/paths.lua")
 dofile(mcl_villages.modpath.."/api.lua")
@@ -25,29 +24,25 @@ minetest.register_alias("mcl_villages:structblock", "air")
 -- on map generation, try to build a settlement
 --
 local function build_a_settlement(minp, maxp, blockseed)
-	if mcl_villages.village_exists(blockseed) then
-		return
-	end
+	if mcl_villages.village_exists(blockseed) then return end
+	local pr = PcgRandom(blockseed)
+	local vm = VoxelManip(minp, maxp)
 
-	local pr = PseudoRandom(blockseed)
+	local settlement, grid = mcl_villages.create_site_plan(vm, minp, maxp, pr)
 
-	local settlement_info, grid = mcl_villages.create_site_plan_new(minp, maxp, pr)
+	if not settlement then return end
 
-	if not settlement_info then
-		return
-	end
-
-	mcl_villages.terraform_new(settlement_info, grid)
-	mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
+	mcl_villages.terraform(vm, settlement, pr)
+	mcl_villages.place_schematics(vm, settlement, pr, blockseed)
 
 	-- TODO when run here minetest.find_path regularly fails :(
-	--mcl_villages.paths_new(blockseed)
+	--mcl_villages.paths(blockseed)
 	--minetest.log("info", "Completed village for " .. minetest.pos_to_string(minp))
 
-	mcl_villages.add_village(blockseed, settlement_info)
+	mcl_villages.add_village(blockseed, settlement)
 
 	for _, on_village_placed_callback in pairs(mcl_villages.on_village_placed) do
-		on_village_placed_callback(settlement_info, blockseed)
+		on_village_placed_callback(settlement, blockseed)
 	end
 end
 
@@ -63,18 +58,14 @@ if mg_name ~= "singlenode" or generate_in_singlenode then
 	mcl_mapgen_core.register_generator("villages", nil, function(minp, maxp, blockseed)
 		if maxp.y < 0 then return end
 
-		if village_chance == 0 then
-			return
-		end
-		local pr = PseudoRandom(blockseed)
+		if village_chance == 0 then return end
+		local pr = PcgRandom(blockseed)
 		if pr:next(1, village_chance) == 1 then
-			local big_minp = vector.offset(minp, -16, -16, -16)
-			local big_maxp = vector.offset(maxp, 16, 16, 16)
 			minetest.emerge_area(
-				vector.copy(big_minp),
-				vector.copy(big_maxp),
+				vector.offset(minp, -16, -16, -16),
+				vector.offset(maxp, 16, 16, 16),
 				ecb_village,
-				{ minp = vector.copy(minp), maxp = vector.copy(maxp), blockseed = blockseed }
+				{ minp = minp, maxp = maxp, blockseed = blockseed }
 			)
 		end
 	end)
@@ -88,7 +79,12 @@ minetest.register_on_mods_loaded(function()
 			local pos = vector.round(pl:get_pos())
 			local minp = vector.subtract(pos, mcl_villages.half_map_chunk_size)
 			local maxp = vector.add(pos, mcl_villages.half_map_chunk_size)
-			build_a_settlement(minp, maxp, math.random(0,32767))
+			minetest.emerge_area(
+				vector.offset(minp, -16, -16, -16),
+				vector.offset(maxp, 16, 16, 16),
+				ecb_village,
+				{ minp = minp, maxp = maxp, blockseed = math.random(0,32767) }
+			)
 		else
 			return olfunc(pn,p)
 		end
