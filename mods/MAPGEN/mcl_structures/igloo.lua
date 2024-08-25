@@ -80,7 +80,7 @@ local function igloo_callback(cpos,def,pr,p1,p2,size,rotation)
 	vl_structures.place_schematic(bpos, -1, path, rotation, {
 		force_place = true,
 		prepare = { tolerance = -1, foundation = false, clear = false },
-		after_place = function(p1, p2)
+		after_place = function(_, _, pr, p1, p2)
 			-- Generate ladder to basement
 			local ladder = {name="mcl_core:ladder", param2=minetest.dir_to_wallmounted(tdir)}
 			-- TODO: use voxelmanip?
