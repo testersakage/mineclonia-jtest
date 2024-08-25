@@ -69,12 +69,10 @@ local warm_oceans = {
 	"JungleM_deep_ocean",
 }
 
-local function place_sus_nodes(pos,def,pr,susnode,replace_nodes)
-	local hl = def.sidelen / 2
-	local p1 = vector.offset(pos,-hl,-hl,-hl)
-	local p2 = vector.offset(pos,hl,hl,hl)
+local function place_sus_nodes(pos,def,pr,p1,p2,susnode,replace_nodes)
 	if minetest.registered_nodes["mcl_sus_nodes:"..susnode] then
-		local sus_poss = minetest.find_nodes_in_area(vector.offset(p1,0,-3,0), vector.offset(p2,0,-hl+2,0), replace_nodes)
+		-- note: p1.y-3 to p1.y+2 is not a typo.
+		local sus_poss = minetest.find_nodes_in_area(vector.new(p1.x,p1.y-3,p1.z), vector.new(p2.x,p1.y+2,p2.z), replace_nodes)
 		if #sus_poss > 0 then
 			table.shuffle(sus_poss)
 			for i = 1,pr:next(1,math.min(250,#sus_poss)) do
@@ -90,23 +88,19 @@ local cold = {
 	place_on = {"group:sand","mcl_core:gravel","mcl_core:dirt","mcl_core:clay","group:material_stone"},
 	spawn_by = {"mcl_core:water_source"},
 	num_spawn_by = 2,
-	fill_ratio = 0.01,
 	flags = "place_center_x, place_center_z, force_placement",
-	solid_ground = true,
-	make_foundation = true,
 	y_offset = -1,
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = -2,
 	biomes = cold_oceans,
-	chunk_probability = 400,
-	sidelen = 10,
+	chunk_probability = 10,
 	filenames = {
 		modpath.."/schematics/mcl_structures_ocean_ruins_cold_1.mts",
 		modpath.."/schematics/mcl_structures_ocean_ruins_cold_2.mts",
 		modpath.."/schematics/mcl_structures_ocean_ruins_cold_3.mts",
 	},
-	after_place = function(pos,def,pr)
-		place_sus_nodes(pos,def,pr,"gravel",{"mcl_core:gravel","mcl_core:sand","mcl_core:stone"})
+	after_place = function(pos,def,pr,p1,p2)
+		place_sus_nodes(pos,def,pr,p1,p2,"gravel",{"mcl_core:gravel","mcl_core:sand","mcl_core:stone"})
 	end,
 	loot = {
 		["mcl_chests:chest_small" ] = {
@@ -152,13 +146,13 @@ local cold = {
 				{ itemstring = "mcl_tools:axe_iron", weight = 1 },
 				}
 			}
-		},
+		}
 	},
 }
 
 local warm = table.merge(cold,{
-	after_place = function(pos,def,pr)
-		place_sus_nodes(pos,def,pr,"sand",{"mcl_core:sand","mcl_core:gravel","mcl_core:stone","mcl_core:sandstone"})
+	after_place = function(pos,def,pr,p1,p2)
+		place_sus_nodes(pos,def,pr,p1,p2,"sand",{"mcl_core:sand","mcl_core:gravel","mcl_core:stone","mcl_core:sandstone"})
 	end,
 	biomes = warm_oceans,
 	filenames = {
@@ -189,5 +183,5 @@ local warm = table.merge(cold,{
 	}),
 })
 
-mcl_structures.register_structure("cold_ocean_ruins",cold)
-mcl_structures.register_structure("warm_ocean_ruins",warm)
+vl_structures.register_structure("cold_ocean_ruins",cold)
+vl_structures.register_structure("warm_ocean_ruins",warm)

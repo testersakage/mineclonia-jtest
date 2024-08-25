@@ -1,4 +1,5 @@
 local modname = minetest.get_current_modname()
+local S = minetest.get_translator(modname)
 local modpath = minetest.get_modpath(modname)
 
 local peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
@@ -24,14 +25,16 @@ local function spawn_witch(p1,p2)
 	end
 end
 
-local function hut_placement_callback(pos,def,_)
-	local hl = def.sidelen / 2
-	local p1 = vector.offset(pos,-hl,-hl,-hl)
-	local p2 = vector.offset(pos,hl,hl,hl)
-	local legs = minetest.find_nodes_in_area(vector.offset(pos,-hl,0,-hl),vector.offset(pos,hl,0,hl), {"mcl_core:tree","mcl_trees:tree_oak"})
+local function hut_placement_callback(pos,def,pr,p1,p2)
+	-- p1.y is the bottom slice only, not a typo, we look for the hut legs
+	local legs = minetest.find_nodes_in_area(p1,vector.new(p2.x,p1.y,p2.z), "mcl_trees:tree_oak")
 	local tree = {}
+	-- TODO: port leg generation to VoxelManip?
 	for _,leg in pairs(legs) do
-		while minetest.get_item_group(mcl_vars.get_node(vector.offset(leg,0,-1,0)).name, "water") ~= 0 do
+		while true do
+			local name = minetest.get_node(vector.offset(leg,0,-1,0)).name
+			if name == "ignore" then break end
+			if name ~= "air" and minetest.get_item_group(name, "water") == 0 then break end
 			leg = vector.offset(leg,0,-1,0)
 			table.insert(tree,leg)
 		end
@@ -40,14 +43,16 @@ local function hut_placement_callback(pos,def,_)
 	spawn_witch(p1,p2)
 end
 
-mcl_structures.register_structure("witch_hut",{
-	place_on = {"group:sand","group:grass_block","mcl_core:water_source","group:dirt"},
-	fill_ratio = 0.01,
-	flags = "place_center_x, place_center_z, liquid_surface, force_placement",
-	sidelen = 8,
-	chunk_probability = 300,
+vl_structures.register_structure("witch_hut",{
+	place_on = {"mcl_core:water_source","group:sand","group:grass_block","group:dirt","mclx_core:river_water_source"},
+	spawn_by = {"mcl_core:water_source","mclx_core:river_water_source"},
+	check_offset = -1,
+	num_spawn_by = 3,
+	flags = "place_center_x, place_center_z, all_surfaces",
+	chunk_probability = 8,
+	prepare = { mode="under_air", tolerance=4, clear_bottom=3, padding=0, corners=1, foundation=false },
 	y_max = mcl_vars.mg_overworld_max,
-	y_min = -4,
+	y_min = -5,
 	y_offset = 0,
 	biomes = { "Swampland", "Swampland_ocean", "Swampland_shore" },
 	filenames = { modpath.."/schematics/mcl_structures_witch_hut.mts" },

@@ -31,6 +31,7 @@ local function makegeode(pos, _, pr)
 		table.sort(nn,function(a, b)
 			   return vector.distance(pos, a) < vector.distance(pos, b)
 		end)
+		--if not nn[1] then return end
 
 		for i=1,pr:next(1, math.max(2, #nn - math.ceil(#nn/5) )) do
 			set_node_no_bedrock(nn[i],{name="mcl_amethyst:amethyst_block"})
@@ -57,8 +58,8 @@ local function makegeode(pos, _, pr)
 			if all_amethyst then set_node_no_bedrock(v,{name="air"}) end
 		end
 
-		for _,v in pairs(calcite) do
-			for _,vv in pairs(minetest.find_nodes_in_area(vector.offset(v,-1,-1,-1),vector.offset(v,1,1,1),{"group:material_stone"})) do
+		for _, v in pairs(calcite) do
+			for _, vv in pairs(minetest.find_nodes_in_area(vector.offset(v,-1,-1,-1),vector.offset(v,1,1,1),{"group:material_stone"})) do
 				set_node_no_bedrock(vv,{name="mcl_blackstone:basalt_smooth"})
 			end
 		end
@@ -74,7 +75,7 @@ local function makegeode(pos, _, pr)
 	return true
 end
 
-mcl_structures.register_structure("geode",{
+vl_structures.register_structure("geode",{
 	place_on = {"group:material_stone"},
 	noise_params = {
 		offset = 0,

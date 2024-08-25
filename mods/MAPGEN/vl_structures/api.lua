@@ -132,8 +132,8 @@ function vl_structures.place_structure(pos, def, pr, blockseed, rot)
 	end
 end
 
-local EMPTY_SCHEMATIC = { size = {x = 1, y = 1, z = 1}, data = { { name = "ignore" } } }
--- local EMPTY_SCHEMATIC = { size = {x = 0, y = 0, z = 0}, data = { } }
+-- local EMPTY_SCHEMATIC = { size = {x = 1, y = 1, z = 1}, data = { { name = "ignore" } } }
+local EMPTY_SCHEMATIC = { size = {x = 0, y = 0, z = 0}, data = { } }
 
 --- Register a structure
 -- @param name string: Structure name
@@ -188,7 +188,7 @@ mcl_mapgen_core.register_generator("structures", nil, function(minp, maxp, block
 		if struct.deco_id then
 			for _, pos in pairs(gennotify["decoration#"..struct.deco_id] or {}) do
 				local pr = PcgRandom(minetest.hash_node_position(pos) + worldseed + RANDOM_SEED_OFFSET)
-				if struct.chunk_probability == nil or (not has and pr:next(0, 1e9) * 1e-9 * struct.chunk_probability <= structure_boost) then
+				if struct.chunk_probability == nil or pr:next(0, 1e9) * 1e-9 * struct.chunk_probability <= structure_boost then
 					vl_structures.place_structure(vector_offset(pos, 0, 1, 0), struct, pr, blockseed)
 					break -- allow only one per gennotify, e.g., on multiple surfaces
 				end

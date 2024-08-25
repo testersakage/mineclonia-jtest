@@ -2,13 +2,10 @@ local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 -- Ancient Hermitage - mini ancient city
 
-mcl_structures.register_structure("ancient_hermitage",{
+vl_structures.register_structure("ancient_hermitage",{
 	place_on = {"mcl_deepslate:deepslate","mcl_sculk:sculk"},
-	fill_ratio = 0.01,
 	flags = "all_floors",
-	solid_ground = true,
-	make_foundation = true,
-	chunk_probability = 5, --high prob since placement underground is relatively unlikely
+	chunk_probability = 3, --high prob since placement underground is relatively unlikely
 	y_max = mcl_vars.mg_overworld_min + 72,
 	y_min = mcl_vars.mg_overworld_min + 12,
 	biomes = { "DeepDark" },

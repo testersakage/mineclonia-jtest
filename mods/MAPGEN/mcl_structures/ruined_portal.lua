@@ -12,14 +12,11 @@ end
 
 local def = {
 	place_on = {"group:grass_block","group:dirt","mcl_core:dirt_with_grass","group:grass_block","group:sand","group:grass_block_snow","mcl_core:snow"},
-	fill_ratio = 0.006,
 	flags = "place_center_x, place_center_z, all_floors",
-	solid_ground = true,
-	make_foundation = true,
-	chunk_probability = 800,
+	prepare = { padding = 0, corners = 3, tolerance = 15, foundation = true, clear = true, clear_top = 0 },
+	chunk_probability = 20,
 	y_max = mcl_vars.mg_overworld_max,
 	y_min = 1,
-	sidelen = 10,
 	y_offset = -5,
 	filenames = {
 		modpath.."/schematics/mcl_structures_ruined_portal_1.mts",
@@ -30,9 +27,7 @@ local def = {
 		modpath.."/schematics/mcl_structures_ruined_portal_6.mts",
 		modpath.."/schematics/mcl_structures_ruined_portal_99.mts",
 	},
-	after_place = function(pos, _, pr)
-		local p1 = vector.offset(pos,-9, -1, -9)
-		local p2 = vector.offset(pos,9, 16 ,9)
+	after_place = function(pos,def,pr,p1,p2)
 		local gold = minetest.find_nodes_in_area(p1,p2,{"mcl_core:goldblock"})
 		local lava = minetest.find_nodes_in_area(p1,p2,{"mcl_core:lava_source"})
 		local rack = minetest.find_nodes_in_area(p1,p2,{"mcl_nether:netherrack"})
@@ -102,8 +97,8 @@ local def = {
 		}}
 	}
 }
-mcl_structures.register_structure("ruined_portal_overworld",def)
-mcl_structures.register_structure("ruined_portal_nether",table.merge(def,{
+vl_structures.register_structure("ruined_portal_overworld",def)
+vl_structures.register_structure("ruined_portal_nether",table.merge(def,{
 	y_min = mcl_vars.mg_lava_nether_max +10,
 	y_max = mcl_vars.mg_nether_max - 15,
 	place_on = {"mcl_nether:netherrack","group:soul_block","mcl_blackstone:basalt,mcl_blackstone:blackstone","mcl_crimson:crimson_nylium","mcl_crimson:warped_nylium"}

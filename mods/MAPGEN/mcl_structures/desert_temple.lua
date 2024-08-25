@@ -1,15 +1,12 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
-local function temple_placement_callback(pos,def, pr)
-	local hl = def.sidelen / 2
-	local p1 = vector.offset(pos,-hl,-hl,-hl)
-	local p2 = vector.offset(pos,hl,hl,hl)
+local function temple_placement_callback(pos,def,pr,p1,p2)
 	-- Delete cacti leftovers:
 	local cactus_nodes = minetest.find_nodes_in_area_under_air(p1, p2, "mcl_core:cactus")
 	if cactus_nodes and #cactus_nodes > 0 then
 		for _, pos in pairs(cactus_nodes) do
-			local node_below = minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z})
+			local node_below = minetest.get_node(vector.offset(pos,0,-1,0))
 			if node_below and node_below.name == "mcl_core:sandstone" then
 				minetest.swap_node(pos, {name="air"})
 			end
@@ -30,7 +27,8 @@ local function temple_placement_callback(pos,def, pr)
 		end
 	end
 	if minetest.registered_nodes["mcl_sus_nodes:sand"] then
-		local sus_poss = minetest.find_nodes_in_area(vector.offset(p1,0,-5,0), vector.offset(p2,0,-hl+5,0), {"mcl_core:sand","mcl_core:sandstone","mcl_core:redsand","mcl_core:redsandstone"})
+		-- p1.y-5 to p1.y+5 is not a typo
+		local sus_poss = minetest.find_nodes_in_area(vector.new(p1.x,p1.y-5,p1.z), vector.new(p2.x,p1.y+5,p2.z), {"mcl_core:sand","mcl_core:sandstone","mcl_core:redsand","mcl_core:redsandstone"})
 		if #sus_poss > 0 then
 			table.shuffle(sus_poss)
 			for i = 1,pr:next(1,math.min(250,#sus_poss)) do
@@ -42,15 +40,12 @@ local function temple_placement_callback(pos,def, pr)
 	end
 end
 
-mcl_structures.register_structure("desert_temple",{
+vl_structures.register_structure("desert_temple",{
 	place_on = {"group:sand"},
-	fill_ratio = 0.01,
 	flags = "place_center_x, place_center_z",
-	solid_ground = true,
-	make_foundation = true,
-	sidelen = 18,
 	y_offset = -12,
-	chunk_probability = 300,
+	prepare = { padding = 3, corners = 3, foundation = true, clear = false },
+	chunk_probability = 18,
 	y_max = mcl_vars.mg_overworld_max,
 	y_min = 1,
 	biomes = { "Desert" },
