@@ -34,6 +34,14 @@ local messy_textures = {
 	grey = "mobs_mc_shulker_gray.png",
 }
 
+local function set_shulker_color(obj, color)
+	local tx = "mobs_mc_shulker_"..color..".png"
+	if messy_textures[color] then tx = messy_textures[color] end
+	obj:set_properties({
+		textures = { tx },
+	})
+end
+
 -- animation 45-80 is transition between passive and attack stance
 mcl_mobs.register_mob("mobs_mc:shulker", {
 	description = S("Shulker"),
@@ -84,18 +92,20 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	walk_velocity = 0,
 	run_velocity = 0,
 	noyaw = true,
+	color = "purple",
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = false,
+	after_activate = function(self)
+		if self.color then
+			set_shulker_color(self, self.color)
+		end
+	end,
 	on_rightclick = function(self,clicker)
 		if clicker:is_player() then
 			local wstack = clicker:get_wielded_item()
 			if minetest.get_item_group(wstack:get_name(),"dye") > 0 then
-				local color = minetest.registered_items[wstack:get_name()]._color
-				local tx = "mobs_mc_shulker_"..color..".png"
-				if messy_textures[color] then tx = messy_textures[color] end
-				self.object:set_properties({
-					textures = { tx },
-				})
+				self.color = minetest.registered_items[wstack:get_name()]._color
+				set_shulker_color(self.object, self.color)
 				if not minetest.is_creative_enabled(clicker:get_player_name()) then
 					wstack:take_item()
 					clicker:set_wielded_item(wstack)
