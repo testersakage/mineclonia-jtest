@@ -941,12 +941,11 @@ mcl_potions.LONGEST_MINING_TIME = LONGEST_MINING_TIME
 mcl_potions.LONGEST_PUNCH_INTERVAL = LONGEST_PUNCH_INTERVAL
 
 function mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac)
-	if f_fac == 0 then
-		local fpi = toolcaps.full_punch_interval
-		toolcaps.full_punch_interval = fpi > LONGEST_PUNCH_INTERVAL and fpi or LONGEST_PUNCH_INTERVAL
-	else
-		toolcaps.full_punch_interval = toolcaps.full_punch_interval / (1+h_fac) / f_fac
-	end
+	local interval = toolcaps.full_punch_interval
+	local h_level = registered_effects.haste.factor_to_level (h_fac)
+	local f_level = registered_effects.fatigue.factor_to_level (f_fac)
+	interval = interval * (1.0 + 0.1 * (-h_level + f_level))
+	toolcaps.full_punch_interval = math.min (interval, LONGEST_PUNCH_INTERVAL)
 	for name, group in pairs(toolcaps.groupcaps) do
 		local t = group.times
 		for i=1, #t do
