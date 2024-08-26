@@ -1345,7 +1345,10 @@ minetest.register_globalstep(function(dtime)
 		    EF[name][object].hit_timer = (vals.hit_timer or 0) + dtime
 		    if EF[name][object].hit_timer >= vals.step then
 			effect.on_hit_timer(object, vals.factor, vals.dur)
-			if EF[name][object] then EF[name][object].hit_timer = 0 end
+			if EF[name][object] then
+			    EF[name][object].hit_timer
+				= EF[name][object].hit_timer - vals.step
+			end
 		    end
 		end
 
