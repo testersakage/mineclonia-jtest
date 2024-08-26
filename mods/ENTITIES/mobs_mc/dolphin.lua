@@ -50,16 +50,14 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	fly_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	_player_check_time = 0,
 	follow_holding = function (_) return true end,
-	follow_velocity = 4.6,
+	follow_velocity = 4.8,
 	do_custom = function (self, dtime)
 	local pos = self.object:get_pos ()
 	local closest_player, cur_dist
 
-	if  self._player_check_time < 0.3 then
-		self._player_check_time = self._player_check_time + dtime
+    if not self:check_timer ("player_check", 0.3) then
 		return
-	end
-	self._player_check_time = 0
+    end
 
 	-- Cling to the current player if still swimming.
 	if self.following and self:object_in_follow_range (self.following)
