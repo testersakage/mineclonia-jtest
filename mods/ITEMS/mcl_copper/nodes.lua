@@ -127,12 +127,6 @@ for n, desc in pairs(n_desc) do
 			end,
 			rules = mesecon.rules.alldirs,
 		}},
-		on_timer = function (pos)
-			local node = minetest.get_node(pos)
-			node.name = "mcl_copper:bulb"..n.."_off"
-			minetest.swap_node(pos, node)
-			return false
-		end,
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
 		description = S("@1 Copper Bulb", desc),
