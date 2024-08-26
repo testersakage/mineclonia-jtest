@@ -45,7 +45,7 @@ function mobs_mc.villager_mob:update_max_tradenum()
 	local trades = minetest.deserialize(self._trades)
 	for t=1, #trades do
 		local trade = trades[t]
-		if trade.tier > self._trade_tier then
+		if trade.tier > self._max_trade_tier then
 			self._max_tradenum = t - 1
 			return
 		end
@@ -54,8 +54,8 @@ function mobs_mc.villager_mob:update_max_tradenum()
 end
 
 function mobs_mc.villager_mob:init_trader_vars()
-	if not self._trade_tier then
-		self._trade_tier = 1
+	if not self._max_trade_tier then
+		self._max_trade_tier = 1
 	end
 	if not self._locked_trades then
 		self._locked_trades = 0
@@ -394,7 +394,7 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 
 	player_trading_with[playername] = self
 
-	local tiername = tiernames[self._trade_tier] or S("Master")
+	local tiername = tiernames[self._max_trade_tier] or S("Master")
 
 	local formspec = ""
 
@@ -413,7 +413,7 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 
 		local row_str = ""
 		if last_tier ~= trade.tier then
-			if trade.tier > self._trade_tier then
+			if trade.tier > self._max_trade_tier then
 				break
 			end
 
@@ -494,10 +494,10 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 		h = h + button_buffer
 	end
 
-	local prev_tier = mobs_mc.villager_mob.tier_xp[self._trade_tier-1] or 0
+	local prev_tier = mobs_mc.villager_mob.tier_xp[self._max_trade_tier-1] or 0
 	local bar_val = self._trade_xp - prev_tier
-	local bar_max = (mobs_mc.villager_mob.tier_xp[self._trade_tier] or mobs_mc.villager_mob.tier_xp[4]) - prev_tier
-	if self._trade_tier == 5 then
+	local bar_max = (mobs_mc.villager_mob.tier_xp[self._max_trade_tier] or mobs_mc.villager_mob.tier_xp[4]) - prev_tier
+	if self._max_trade_tier == 5 then
 		bar_val = 1
 		bar_max = 1
 	end
@@ -825,13 +825,13 @@ local trade_inventory = {
 				local player_xp = math.random(3, 6)
 				local update_formspec = false
 
-				if trader._trade_tier < 5 then
+				if trader._max_trade_tier < 5 then
 					trader._trade_xp = trader._trade_xp + trade.xp
 					update_formspec = true
 
 					-- Level up
-					if trader._trade_xp >= mobs_mc.villager_mob.tier_xp[trader._trade_tier] then
-						trader._trade_tier = trader._trade_tier + 1
+					if trader._trade_xp >= mobs_mc.villager_mob.tier_xp[trader._max_trade_tier] then
+						trader._max_trade_tier = trader._max_trade_tier + 1
 						trader:set_textures()
 						trader:update_max_tradenum()
 						player_xp = player_xp + 5

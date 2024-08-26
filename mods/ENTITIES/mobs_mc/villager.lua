@@ -82,8 +82,8 @@ function mobs_mc.villager_mob:on_rightclick(clicker)
 	-- Make sure old villagers have minimal XP for current level
 	-- Probably should be somewhere else ...
 	if self._trade_xp == nil then
-		if self._trade_tier and self._trade_tier > 1 then
-			self._trade_xp = mobs_mc.villager_mob.tier_xp[self._trade_tier - 1]
+		if self._max_trade_tier and self._max_trade_tier > 1 then
+			self._trade_xp = mobs_mc.villager_mob.tier_xp[self._max_trade_tier - 1]
 		else
 			self._trade_xp = 0
 		end
@@ -241,7 +241,7 @@ table.update(mobs_mc.villager_mob, {
 	_bed = nil,
 	_id = nil,
 	_profession = "unemployed",
-	_trade_tier = 1,
+	_max_trade_tier = 1,
 	_trade_xp = 0,
 	look_at_player = true,
 	pick_up = pick_up,
