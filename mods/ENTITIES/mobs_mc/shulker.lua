@@ -66,7 +66,6 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	pushable = false,
 	mob_pushable = false,
 	-- TODO: sounds
-	-- TODO: Make shulker dye-able
 	visual_size = {x=3, y=3},
 	walk_chance = 10,
 	knock_back = false,
