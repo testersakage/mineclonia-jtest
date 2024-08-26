@@ -161,6 +161,11 @@ local function replace_material_tag(shape, material)
 	return recipe
 end
 
+local function get_punch_uses(toolname, materialdefs)
+	if toolname == "sword" then return materialdefs.uses end
+	return materialdefs.uses / 2
+end
+
 local function register_tool(setname, materialdefs, toolname, tooldefs, overrides)
 	local mod = minetest.get_current_modname()
 	local itemstring = mod..":"..toolname.."_"..setname
@@ -172,6 +177,10 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		_mcl_toollike_wield = true,
 		_repair_material = materialdefs.material,
 		groups = table.merge(commondefs.groups, materialdefs.groups),
+		tool_capabilities = table.merge(tooldefs.tool_capabilities, {
+			max_drop_level = materialdefs.max_drop_level,
+			punch_attack_uses = get_punch_uses(toolname, materialdefs)
+		}),
 		on_place = mcl_tools.tool_place_funcs[toolname],
 		sound = { breaks = "default_tool_breaks" },
 		wield_scale = wield_scale
