@@ -34,13 +34,13 @@ local messy_textures = {
 	grey = "mobs_mc_shulker_gray.png",
 }
 
-local function set_shulker_color(obj, color)
+local function set_shulker_color(self, color)
 	local tx = "mobs_mc_shulker_"..color..".png"
 	if messy_textures[color] then tx = messy_textures[color] end
-	obj:set_properties({
+	self.object:set_properties({
 		textures = { tx },
 	})
-	obj._color = color
+	self._color = color
 end
 
 -- animation 45-80 is transition between passive and attack stance
