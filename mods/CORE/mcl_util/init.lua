@@ -1435,10 +1435,6 @@ function mcl_util.detach_object(obj, change_pos, callback)
 end
 
 function mcl_util.float_random(from, to)
-	assert(tonumber(from), "[mcl_util] mcl_util.float_random called without valid(number) argument(s)")
-	if not to then
-		to = from
-		from = 1
-	end
+	to = to or 1
 	return from + ( math.random() * ( to - from ))
 end
