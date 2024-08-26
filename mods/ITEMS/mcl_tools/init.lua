@@ -170,6 +170,8 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 	local mod = minetest.get_current_modname()
 	local itemstring = mod..":"..toolname.."_"..setname
 	local commondefs = mcl_tools.commondefs[toolname]
+	local tcs = table.copy(tooldefs.tool_capabilities or {})
+	tooldefs.tool_capabilities = nil
 	local tooldefs = table.merge({
 		_doc_items_longdesc = commondefs.longdesc,
 		_doc_items_usagehelp = commondefs.usagehelp,
@@ -177,7 +179,7 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		_mcl_toollike_wield = true,
 		_repair_material = materialdefs.material,
 		groups = table.merge(commondefs.groups, materialdefs.groups),
-		tool_capabilities = table.merge(tooldefs.tool_capabilities, {
+		tool_capabilities = table.merge(tcs, {
 			max_drop_level = materialdefs.max_drop_level,
 			punch_attack_uses = get_punch_uses(toolname, materialdefs)
 		}),
