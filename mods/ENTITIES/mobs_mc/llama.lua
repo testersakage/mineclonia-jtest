@@ -113,13 +113,14 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		walk_start = 41, walk_end = 81, walk_speed = 50,
 		run_start = 41, run_end = 81, run_speed = 75,
 	},
+	-- TODO remove follow if "Lead" PR got merged
 	follow = { "mcl_farming:wheat_item", "mcl_farming:hay_block" },
 	_temper_increase = {
 		["mcl_farming:wheat_item"] = 3,
 	  ["mcl_farming:hay_block"] = 6
 	},
 	view_range = 16,
-	do_custom = function(self, dtime)
+	do_custom = function(self)
 		if not self.v3 then
 			local vsize = self.object:get_properties().visual_size
 			self.v3 = 0
@@ -160,39 +161,39 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 
 		return true
 	end,
-
 	on_die = function(self, _)
 		if self.driver then
 			detach_driver(self)
 		end
-
 	end,
-
 	on_rightclick = function(self, clicker)
 		if not clicker or not clicker:is_player() then
 			return
 		end
 
 		local item = clicker:get_wielded_item()
-		if self:break_in(clicker) then
+		local breed = false
+		local heal = 0
+
+		if self:break_in(clicker) then return end
+
+		if item:get_name() == "mcl_chests:chest" and self:set_chest(item, clicker) then
 			return
-		elseif item:get_name() == "mcl_chests:chest" and self:set_chest(item, clicker) then
-			return
-		elseif self._has_chest and clicker:get_player_control().sneak then
+		end
+
+		if self._has_chest and clicker:get_player_control().sneak then
 			mcl_entity_invs.show_inv_form(self,clicker," - Strength "..math.floor(self._inv_size / 3))
 			return
 		end
 
-		local feed_count = 0
-		local breed = false
 		if (item:get_name() == "mcl_farming:wheat_item") then
-			feed_count = 1
+			heal = 2
 		elseif (item:get_name() == "mcl_farming:hay_block") then
-			feed_count = 1
+			heal = 10
 			breed = true
 		end
-		if feed_count > 0 then
-			self:feed_tame(clicker, feed_count, breed, false)
+		if heal > 0 then
+			self:feed_tame(clicker, heal, breed, false)
 			return
 		end
 
@@ -245,7 +246,6 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			end
 		end
 	end,
-
 	on_breed = function(parent1, parent2)
 		local pos = parent1.object:get_pos()
 		local child, parent
