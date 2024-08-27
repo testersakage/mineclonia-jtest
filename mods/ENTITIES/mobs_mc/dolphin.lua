@@ -45,7 +45,6 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,
 	swims = true,
-	breathes_in_water = false,
 	fly = true,
 	fly_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	_player_check_time = 0,
