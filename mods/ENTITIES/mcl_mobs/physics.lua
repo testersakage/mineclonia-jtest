@@ -479,9 +479,6 @@ function mob_class:check_for_death(cause, cmi_cause)
 	if self.on_die then
 		local pos = self.object:get_pos()
 		local on_die_exit = self.on_die(self, pos, cmi_cause)
-		if on_die_exit ~= true then
-			death_handle(self)
-		end
 		if on_die_exit == true then
 			self:set_state("die")
 			self:safe_remove()
