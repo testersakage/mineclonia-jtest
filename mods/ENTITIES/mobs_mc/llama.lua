@@ -117,7 +117,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 	follow = { "mcl_farming:wheat_item", "mcl_farming:hay_block" },
 	_temper_increase = {
 		["mcl_farming:wheat_item"] = 3,
-	  ["mcl_farming:hay_block"] = 6
+		["mcl_farming:hay_block"] = 6
 	},
 	view_range = 16,
 	do_custom = function(self)

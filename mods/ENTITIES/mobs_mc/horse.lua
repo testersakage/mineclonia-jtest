@@ -136,7 +136,7 @@ local horse = {
 		["mcl_core:sugar"] = 3,
 		["mcl_farming:wheat_item"] = 3,
 		["mcl_core:apple"] = 3,
-	  ["mcl_farming:carrot_item_gold"] = 5,
+		["mcl_farming:carrot_item_gold"] = 5,
 		["mcl_core:apple_gold"] = 10
 	},
 	passive = true,
