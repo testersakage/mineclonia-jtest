@@ -200,6 +200,9 @@ function mob_class:mob_activate(staticdata, dtime)
 
 	if not self.state then
 		self:set_state("stand")
+	elseif self.state == "die" then
+		self:safe_remove()
+		return
 	end
 
 	if peaceful_mode and not self.persist_in_peaceful then
