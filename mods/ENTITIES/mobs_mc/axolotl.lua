@@ -10,14 +10,12 @@ local axolotl = {
 	hp_max = 14,
 	xp_min = 1,
 	xp_max = 7,
-
 	head_swivel = "head.control",
 	bone_eye_height = -1,
 	head_eye_height = -0.5,
 	horizontal_head_height = 0,
 	curiosity = 10,
 	head_yaw="z",
-
 	armor = 100,
 	rotate = 180,
 	spawn_in_group_min = 1,
@@ -39,20 +37,17 @@ local axolotl = {
 		random = "mobs_mc_axolotl",
 		damage = "mobs_mc_axolotl_hurt",
 		distance = 16,
-		},
+	},
 	animation = {-- Stand: 1-20; Walk: 20-60; Swim: 61-81
 		stand_start = 61, stand_end = 81, stand_speed = 15,
 		walk_start = 61, walk_end = 81, walk_speed = 15,
 		run_start = 61, run_end = 81, run_speed = 20,
 	},
-
 	follow = {
-		"mcl_fishing:clownfish_raw"
+		"mcl_buckets:bucket_tropical_fish"
 	},
-
 	view_range = 16,
 	fear_height = 4,
-
 	on_rightclick = function(self, clicker)
 		local bn = clicker:get_wielded_item():get_name()
 		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
@@ -76,7 +71,15 @@ local axolotl = {
 	reach = 2,
 	attack_type = "dogfight",
 	attack_animals = true,
-	specific_attack = { "mobs_mc:cod", "mobs_mc:salmon", "mobs_mc:tropical_fish", "mobs_mc:guardian", "mobs_mc:elder_guardian", "mobs_mc:squid", "mobs_mc:glow_squid" },
+	specific_attack = {
+		"mobs_mc:cod",
+		"mobs_mc:salmon",
+		"mobs_mc:tropical_fish",
+		"mobs_mc:guardian",
+		"mobs_mc:elder_guardian",
+		"mobs_mc:squid",
+		"mobs_mc:glow_squid"
+	},
 	runaway = true,
 }
 
