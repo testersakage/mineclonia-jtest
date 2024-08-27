@@ -11,16 +11,12 @@ local S = minetest.get_translator("mobs_mc")
 
 local default_walk_chance = 70
 
-local follow = {
+local food = {
 	"mcl_fishing:fish_raw",
 	"mcl_fishing:salmon_raw",
 	"mcl_fishing:clownfish_raw",
 	"mcl_fishing:pufferfish_raw",
 }
-
-local function is_food(itemstring)
-	return table.indexof(follow, itemstring) ~= -1
-end
 
 -- Ocelot
 local ocelot = {
@@ -73,7 +69,6 @@ local ocelot = {
 		run_start = 51, run_end = 91, run_speed = 160,
 		sit_start = 101, sit_end = 101,
 	},
-	follow = follow,
 	view_range = 12,
 	attack_type = "dogfight",
 	pathfinding = 1,
@@ -85,7 +80,7 @@ local ocelot = {
 		if self.child then return end
 		-- Try to tame ocelot (mobs:feed_tame is intentionally NOT used)
 		local item = clicker:get_wielded_item()
-		if is_food(item:get_name()) then
+		if table.indexof(food, item:get_name()) ~= -1 then
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				item:take_item()
 				clicker:set_wielded_item(item)
@@ -133,7 +128,8 @@ table.update(cat,{
 		distance = 16,
 	},
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 1, true, false) then return end
+		local item = clicker:get_wielded_item()
+		if table.indexof(food, item:get_name()) ~= -1 and self:feed_tame(clicker, 4, true, false) then return end
 		if self.child then return end
 
 		-- Toggle sitting order

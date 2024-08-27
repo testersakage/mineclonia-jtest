@@ -62,7 +62,7 @@ local cow_def = {
 		run_start = 41, run_end = 81, run_speed = 80,
 	},
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 1, true, false) then return end
+		if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
 		if self.child then return end
 
 		local item = clicker:get_wielded_item()
@@ -96,7 +96,7 @@ mcl_mobs.register_mob("mobs_mc:mooshroom", table.merge(cow_def, {
 	spawn_in_group = 8,
 	textures = { {"mobs_mc_mooshroom.png", "mobs_mc_mushroom_red.png"}, {"mobs_mc_mooshroom_brown.png", "mobs_mc_mushroom_brown.png" } },
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 1, true, false) then return end
+		if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
 		if self.child then return end
 
 		local item = clicker:get_wielded_item()

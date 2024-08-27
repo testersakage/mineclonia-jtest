@@ -180,12 +180,6 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 	makes_footstep_sound = false,
 	fear_height = 0,
 	view_range = 16,
-	follow = {
-		"mcl_farming:wheat_seeds",
-		"mcl_farming:melon_seeds",
-		"mcl_farming:pumpkin_seeds",
-		"mcl_farming:beetroot_seeds",
-	},
 	on_rightclick = function(self, clicker)
 		if self._doomed then return end
 		local item = clicker:get_wielded_item()
@@ -202,7 +196,13 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 			return
 		end
 		-- Feed to tame, but not breed
-		if self:feed_tame(clicker, 1, false, true) then return end
+		local food = {
+			"mcl_farming:wheat_seeds",
+			"mcl_farming:melon_seeds",
+			"mcl_farming:pumpkin_seeds",
+			"mcl_farming:beetroot_seeds",
+		}
+		if table.indexof(food, item:get_name()) ~= -1 and self:feed_tame(clicker, 4, false, true) then return end
 		perch(self,clicker)
 	end,
 	do_custom = function(self,dtime)

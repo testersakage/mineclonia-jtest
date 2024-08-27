@@ -26,51 +26,49 @@ function mob_class:_on_dispense(dropitem)
 end
 
 function mob_class:feed_tame(clicker, heal, breed, tame, notake)
-	if not self.follow then	return false end
-	if clicker == nil or self.nofollow or self:follow_holding(clicker) then
-		local consume_food = false
-		if clicker and tame and not self.child then
-			if not self.owner or self.owner == "" then
-				self.tamed = true
-				self.owner = clicker:get_player_name()
-				consume_food = true
-			end
-		end
+	local consume_food = false
 
-		if self.health < self.object:get_properties().hp_max and not consume_food then
+	if clicker and tame and not self.child then
+		if not self.owner or self.owner == "" then
+			self.tamed = true
+			self.owner = clicker:get_player_name()
 			consume_food = true
-			self.health = math.min(self.health + heal, self.object:get_properties().hp_max)
-			if self.htimer < 1 then
-				self.htimer = 5
-			end
-			self.object:set_hp(self.health)
 		end
-
-		if not consume_food and self.child == true then
-			consume_food = true
-			self.hornytimer = self.hornytimer + ((CHILD_GROW_TIME - self.hornytimer) * 0.1)
-		end
-
-		if breed and not consume_food and self.hornytimer == 0 and not self.horny then
-			consume_food = true
-			self.horny = true
-			self.persistent = true
-		end
-
-		self:update_tag()
-		if clicker and consume_food then
-			if not minetest.is_creative_enabled(clicker:get_player_name()) and not notake then
-				local item = clicker:get_wielded_item()
-				item:take_item()
-				clicker:set_wielded_item(item)
-			end
-			self:mob_sound("eat", nil, true)
-		else
-			self:mob_sound("random", true)
-		end
-		return consume_food
 	end
-	return false
+
+	if self.health < self.object:get_properties().hp_max and not consume_food then
+		consume_food = true
+		self.health = math.min(self.health + heal, self.object:get_properties().hp_max)
+		if self.htimer < 1 then
+			self.htimer = 5
+		end
+		self.object:set_hp(self.health)
+	end
+
+	if not consume_food and self.child == true then
+		consume_food = true
+		self.hornytimer = self.hornytimer + ((CHILD_GROW_TIME - self.hornytimer) * 0.1)
+	end
+
+	if breed and not consume_food and self.hornytimer == 0 and not self.horny then
+		consume_food = true
+		self.horny = true
+		self.persistent = true
+	end
+
+	self:update_tag()
+	if clicker and consume_food then
+		if not minetest.is_creative_enabled(clicker:get_player_name()) and not notake then
+			local item = clicker:get_wielded_item()
+			item:take_item()
+			clicker:set_wielded_item(item)
+		end
+		self:mob_sound("eat", nil, true)
+	else
+		self:mob_sound("random", true)
+	end
+
+	return consume_food
 end
 
 function mcl_mobs.spawn_child(pos, mob_type)

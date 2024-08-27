@@ -104,18 +104,16 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 			return
 		end
 
-		local wielditem = clicker:get_wielded_item()
+		local item = clicker:get_wielded_item()
+
 		-- Feed pig
-		if wielditem:get_name() ~= "mcl_mobitems:carrot_on_a_stick" then
-			if self:feed_tame(clicker, 1, true, false) then return end
+		if self:follow_holding(clicker) then
+			if item:get_name() ~= "mcl_mobitems:carrot_on_a_stick" and self:feed_tame(clicker, 4, true, false) then return end
 		end
 
-		if self.child then
-			return
-		end
+		if self.child then return end
 
 		-- Put saddle on pig
-		local item = clicker:get_wielded_item()
 		if item:get_name() == "mcl_mobitems:saddle" and self.saddle ~= "yes" then
 			self.base_texture = {
 				"mobs_mc_pig.png", -- base

@@ -86,7 +86,7 @@ mcl_mobs.register_mob("mobs_mc:chicken", {
 	fear_height = 4,
 
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 1, true, false) then return end
+		if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
 	end,
 
 	do_custom = function(self, dtime)

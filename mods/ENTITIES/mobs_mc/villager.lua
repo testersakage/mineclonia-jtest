@@ -51,8 +51,12 @@ end
 
 --[------[ MOB REGISTRATION AND SPAWNING ]-------]
 
-local pick_up = { "mcl_farming:bread", "mcl_farming:carrot_item", "mcl_farming:beetroot_item" , "mcl_farming:potato_item" }
-
+local pick_up = {
+	"mcl_farming:bread",
+	"mcl_farming:carrot_item",
+	"mcl_farming:beetroot_item",
+	"mcl_farming:potato_item"
+}
 
 function mobs_mc.villager_mob:on_pick_up(itementity)
 	local clicker
@@ -63,7 +67,7 @@ function mobs_mc.villager_mob:on_pick_up(itementity)
 		end
 	end
 	if clicker and not self.horny then
-		self:feed_tame(clicker, 1, true, false, true)
+		self:feed_tame(clicker, 4, true, false, true)
 		it:take_item(1)
 	end
 	return it
@@ -232,8 +236,6 @@ table.update(mobs_mc.villager_mob, {
 		head_shake_start = 131, head_shake_end = 141, head_shake_loop = false,
 		head_nod_start = 121, head_nod_end = 131, head_nod_loop = false,
 	},
-	follow = pick_up,
-	nofollow = true,
 	view_range = 16,
 	fear_height = 4,
 	jump = true,

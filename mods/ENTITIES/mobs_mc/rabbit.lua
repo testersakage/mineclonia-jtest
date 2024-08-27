@@ -83,7 +83,7 @@ local rabbit = {
 		{"mcl_farming:carrot_1", "air", 0},
 	},
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 1, true, false) then return end
+		if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
 	end,
 	do_custom = function(self)
 		-- TODO this is a silly thing to run all the time, if it's wanted it should be done by overriding set_nametag

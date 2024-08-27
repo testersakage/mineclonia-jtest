@@ -6,6 +6,26 @@ local default_walk_chance = 50
 
 local pr = PseudoRandom(os.time()*10)
 
+local food = {} -- [item_name] = heal
+food["mcl_fishing:pufferfish_raw"] = 1
+food["mcl_fishing:clownfish_raw"] = 1
+food["mcl_mobitems:chicken"] = 2
+food["mcl_mobitems:mutton"] = 2
+food["mcl_fishing:fish_raw"] = 2
+food["mcl_fishing:salmon_raw"] = 2
+food["mcl_mobitems:porkchop"] = 3
+food["mcl_mobitems:beef"] = 3
+food["mcl_mobitems:rabbit"] = 3
+food["mcl_mobitems:rotten_flesh"] = 4
+food["mcl_mobitems:cooked_rabbit"] = 5
+food["mcl_fishing:fish_cooked"] = 5
+food["mcl_mobitems:cooked_mutton"] = 6
+food["mcl_mobitems:cooked_chicken"] = 6
+food["mcl_fishing:salmon_cooked"] = 6
+food["mcl_mobitems:cooked_porkchop"] = 8
+food["mcl_mobitems:cooked_beef"] = 8
+food["mcl_mobitems:rabbit_stew"] = 10
+
 -- Wolf
 local wolf = {
 	description = S("Wolf"),
@@ -50,18 +70,19 @@ local wolf = {
 	reach = 2,
 	attack_type = "dogfight",
 	fear_height = 4,
-	follow = { "mcl_mobitems:bone" },
 	on_rightclick = function(self, clicker)
 		-- Try to tame wolf (intentionally does NOT use mcl_mobs.feed_tame)
-		local tool = clicker:get_wielded_item()
+		local item = clicker:get_wielded_item()
+
+		if food[item:get_name()] ~= nil and self:feed_tame(clicker, food[item:get_name()], true, false) then return end
 
 		local dog, ent
-		if tool:get_name() == "mcl_mobitems:bone" then
+		if item:get_name() == "mcl_mobitems:bone" then
 
 			minetest.sound_play("mobs_mc_wolf_take_bone", {object=self.object, max_hear_distance=16}, true)
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-				tool:take_item()
-				clicker:set_wielded_item(tool)
+				item:take_item()
+				clicker:set_wielded_item(item)
 			end
 			-- 1/3 chance of getting tamed
 			if pr:next(1, 3) == 1 then
@@ -158,23 +179,15 @@ dog.owner_loyal = true
 dog.follow_velocity = 3.2
 -- Automatically teleport dog to owner
 dog.do_custom = mobs_mc.make_owner_teleport_function(12)
-dog.follow = {
-	"mcl_mobitems:rabbit", "mcl_mobitems:cooked_rabbit",
-	"mcl_mobitems:mutton", "mcl_mobitems:cooked_mutton",
-	"mcl_mobitems:beef", "mcl_mobitems:cooked_beef",
-	"mcl_mobitems:chicken", "mcl_mobitems:cooked_chicken",
-	"mcl_mobitems:porkchop", "mcl_mobitems:cooked_porkchop",
-	"mcl_mobitems:rotten_flesh",
-}
 dog.attack_animals = nil
 dog.specific_attack = nil
 
 dog.on_rightclick = function(self, clicker)
 	local item = clicker:get_wielded_item()
 
-	if self:feed_tame(clicker, 1, true, false) then
-		return
-	elseif minetest.get_item_group(item:get_name(), "dye") == 1 then
+	if food[item:get_name()] ~= nil and self:feed_tame(clicker, food[item:get_name()], true, false) then return end
+
+	if minetest.get_item_group(item:get_name(), "dye") == 1 then
 		-- Dye (if possible)
 		for group, _ in pairs(colors) do
 			-- Check if color is supported

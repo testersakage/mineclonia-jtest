@@ -61,7 +61,7 @@ local axolotl = {
 			awards.unlock(clicker:get_player_name(), "mcl:cutestPredator")
 			return
 		end
-		if self:feed_tame(clicker, 1, true, false) then return end
+		if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
 	end,
 	makes_footstep_sound = false,
 	swims = true,

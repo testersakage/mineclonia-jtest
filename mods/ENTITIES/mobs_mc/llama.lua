@@ -113,8 +113,6 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 		walk_start = 41, walk_end = 81, walk_speed = 50,
 		run_start = 41, run_end = 81, run_speed = 75,
 	},
-	-- TODO remove follow if "Lead" PR got merged
-	follow = { "mcl_farming:wheat_item", "mcl_farming:hay_block" },
 	_temper_increase = {
 		["mcl_farming:wheat_item"] = 3,
 		["mcl_farming:hay_block"] = 6

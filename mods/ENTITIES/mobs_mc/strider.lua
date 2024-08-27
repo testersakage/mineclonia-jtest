@@ -54,7 +54,10 @@ local strider = {
 		walk_start = 1,
 		walk_end = 20,
 	},
-	follow = { "mcl_crimson:warped_fungus" },
+	follow = {
+		"mcl_crimson:warped_fungus",
+		"mcl_mobitems:warped_fungus_on_a_stick"
+	},
 	lava_damage = 0,
 	fire_damage = 0,
 	light_damage = 0,
@@ -132,17 +135,16 @@ local strider = {
 			return
 		end
 
-		local wielditem = clicker:get_wielded_item()
+		local item = clicker:get_wielded_item()
 
-		if wielditem:get_name() == "mcl_crimson:warped_fungus" then
-			if self:feed_tame(clicker, 1, true, true) then return end
+		if item:get_name() == "mcl_crimson:warped_fungus" then
+			if self:feed_tame(clicker, 4, true, true) then return end
 		end
 
 		if self.child then
 			return
 		end
 
-		local item = clicker:get_wielded_item()
 		if item:get_name() == "mcl_mobitems:saddle" and self.saddle ~= "yes" then
 			self.base_texture = {
 				"extra_mobs_strider.png",

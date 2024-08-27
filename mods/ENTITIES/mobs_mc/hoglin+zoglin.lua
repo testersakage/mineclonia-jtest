@@ -54,7 +54,6 @@ local hoglin = {
 		"mcl_beds:respawn_anchor_charged_3",
 		"mcl_beds:respawn_anchor_charged_4",
 	},
-	follow = {"mcl_crimson:crimson_fungus"},
 	drops = {
 		{
 			name = "mobs_mcitems:leather",
@@ -90,7 +89,8 @@ local hoglin = {
 		end
 	end,
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 1, true, false) then return end
+		local item = clicker:get_wielded_item()
+		if (item:get_name() == "mcl_crimson:crimson_fungus") and self:feed_tame(clicker, 4, true, false) then return end
 	end,
 	attack_animals = true,
 }
