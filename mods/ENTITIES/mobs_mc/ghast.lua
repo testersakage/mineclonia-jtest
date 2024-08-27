@@ -111,6 +111,7 @@ mcl_mobs.register_arrow("mobs_mc:fireball", {
 	_is_fireball = true,
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
+	redirectable = true,
 	hit_player = function(self, player)
 		mcl_mobs.get_arrow_damage_func(6, "fireball")(self, player)
 		local p = self.object:get_pos()

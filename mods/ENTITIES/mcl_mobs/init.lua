@@ -36,7 +36,7 @@ mcl_mobs.mob_class = {
 	fly_limit = 25,
 	fly_chance = 55,
 	swims = false,
-    swims_in = { "mcl_core:water_source", "mclx_core:river_water_source", 'mcl_core:water_flowing', 'mclx_core:river_water_flowing' },
+	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source", 'mcl_core:water_flowing', 'mclx_core:river_water_flowing' },
 	owner = "",
 	order = "",
 	jump_height = 4, -- was 6
@@ -353,10 +353,20 @@ mcl_mobs.arrow_class = {
 	drop = false, -- drops arrow as registered item when true
 	timer = 0,
 	switch = 0,
-	_lifetime = 150,
-	on_punch = function(self)
-		local vel = self.object:get_velocity()
-		self.object:set_velocity({x=vel.x * -1, y=vel.y * -1, z=vel.z * -1})
+	_lifetime = 1500,
+	redirectable = false,
+	on_punch = function(self, puncher)
+		if self.redirectable then
+			local uv -- Direction in which the puncher is staring.
+			if puncher:is_player () then
+				uv = puncher:get_look_dir ()
+			end
+			if uv then
+				uv = uv * vector.length (self.object:get_velocity ())
+				self.object:set_velocity (uv)
+				self.owner_id = tostring (puncher)
+			end
+		end
 	end,
 }
 
@@ -381,7 +391,7 @@ function mcl_mobs.register_arrow(name, def)
 
 	init_props.automatic_face_movement_dir = def.rotate and (def.rotate - (math.pi / 180))
 
-	minetest.register_entity(name,  setmetatable(table.merge({
+	minetest.register_entity(name, setmetatable(table.merge({
 		initial_properties = init_props,
 		on_step = function(self)
 
@@ -407,6 +417,11 @@ function mcl_mobs.register_arrow(name, def)
 					size = def.tail_size or 5,
 					glow = def.glow or 0,
 				})
+			end
+
+			-- Should this be on fire?
+			if self._is_fireball then
+				mcl_burning.set_on_fire (self.object, 5)
 			end
 
 			if self.hit_node then
@@ -435,27 +450,58 @@ function mcl_mobs.register_arrow(name, def)
 			end
 
 			if self.hit_player or self.hit_mob or self.hit_object then
-				for _,player in pairs(minetest.get_objects_inside_radius(pos, 1.5)) do
+				local raycast
+				= minetest.raycast (pos, pos + self.object:get_velocity () * 0.1)
+				local ok = false
+				local closest_object
+				local closest_distance
+				for hitpoint in raycast do
+				if hitpoint.type == "object" and hitpoint.ref ~= self.object then
+					local player = hitpoint.ref
 					if self.hit_player and player:is_player() then
-						self.hit_player(self, player)
-						self.object:remove()
-						return
-					end
-
-					local entity = player:get_luaentity()
-					if entity then
-						if self.hit_mob	and entity.is_mob and tostring(player) ~= self.owner_id	and entity.name ~= self.object:get_luaentity().name then
-							self.hit_mob(self, player)
-							self.object:remove()
-							return
+						ok = true
+					else
+						local entity = player:get_luaentity()
+						if (entity
+							and self.hit_mob
+							and entity.is_mob
+							and tostring(player) ~= self.owner_id
+							and entity.name ~= self.object:get_luaentity().name) then
+							ok = true
 						end
 
-						if self.hit_object and (not entity.is_mob) and tostring(player) ~= self.owner_id and entity.name ~= self.object:get_luaentity().name then
-							self.hit_object(self, player)
-							self.object:remove()
-							return
+							if (entity
+								and self.hit_object
+								and (not entity.is_mob)
+								and tostring(player) ~= self.owner_id
+								and entity.name ~= self.object:get_luaentity().name) then
+								ok = true
+							end
+						end
+
+						if ok then
+							local dist = vector.distance (player:get_pos (), pos)
+							if not closest_object or dist < closest_distance then
+								closest_object = hitpoint.ref
+								closest_distance = dist
+							end
 						end
 					end
+				end
+				-- If an object has been struck, call the
+				-- appropriate function.
+				if closest_object then
+					local entity = closest_object:get_luaentity ()
+					if closest_object:is_player () then
+						self:hit_player (closest_object)
+					elseif entity then
+						if entity.is_mob then
+						self:hit_mob (closest_object)
+						else
+						self:hit_object (closest_object)
+						end
+					end
+					self.object:remove ()
 				end
 			end
 			self.lastpos = pos
