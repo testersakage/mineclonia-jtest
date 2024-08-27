@@ -530,19 +530,20 @@ function mob_class:check_for_death(cause, cmi_cause)
 	end
 
 
-	-- Remove body after a few seconds and drop stuff
+	-- Remove body after a few seconds
 	local kill = function(self)
 		if not self.object:get_luaentity() then
 			return
 		end
 
-		death_handle(self)
 		local dpos = self.object:get_pos()
 		local cbox = self.object:get_properties().collisionbox
 		local yaw = self.object:get_rotation().y
 		self:safe_remove()
 		mcl_mobs.death_effect(dpos, yaw, cbox, not self.instant_death)
 	end
+
+	death_handle(self)
 	if length <= 0 then
 		kill(self)
 	else
