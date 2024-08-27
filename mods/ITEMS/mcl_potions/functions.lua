@@ -251,8 +251,8 @@ mcl_potions.register_effect({
 		if object:is_player() then
 			mcl_damage.heal_player (object, 1)
 		elseif entity and entity.is_mob then
-		    local hp_max = object:get_properties ().hp_max
-		    entity.health = math.min(hp_max, entity.health + 1)
+			local hp_max = object:get_properties ().hp_max
+			entity.health = math.min(hp_max, entity.health + 1)
 		end
 	end,
 	particle_color = "#CD5CAB",
@@ -313,13 +313,13 @@ mcl_potions.register_effect({
 			hb.hide_hudbar(object, "breath")
 			if object:get_breath() < 10 then object:set_breath(10) end
 		else
-		    local entity = object:get_luaentity ()
-		    if entity and entity.is_mob then
+			local entity = object:get_luaentity ()
+			if entity and entity.is_mob then
 			-- This should apply to waterborne creatures
 			-- also:
 			-- https://minecraft.wiki/w/Water_Breathing.
 			entity:reset_breath ()
-		    end
+			end
 		end
 	end,
 	particle_color = "#2E5299",
@@ -328,42 +328,42 @@ mcl_potions.register_effect({
 
 local function add_physics_factor (object, player_name, mob_field,
 				   id, factor, mob_field2, mob_field3)
-    -- mob_field2 and 3 are for cases where two or more mob properties
-    -- must be adjusted, such as walk_velocity and run_velocity and
-    -- their ilk.
-    if object:is_player () then
+	-- mob_field2 and 3 are for cases where two or more mob properties
+	-- must be adjusted, such as walk_velocity and run_velocity and
+	-- their ilk.
+	if object:is_player () then
 	playerphysics.add_physics_factor (object, player_name,
 					  id, factor)
-    else
+	else
 	local entity = object:get_luaentity ()
 	if entity and entity.is_mob then
-	    entity:add_physics_factor (mob_field, id, factor)
-	    if mob_field2 then
+		entity:add_physics_factor (mob_field, id, factor)
+		if mob_field2 then
 		entity:add_physics_factor (mob_field2, id, factor)
 		if mob_field3 then
-		    entity:add_physics_factor (mob_field3, id, factor)
+			entity:add_physics_factor (mob_field3, id, factor)
 		end
-	    end
+		end
 	end
-    end
+	end
 end
 
 local function remove_physics_factor (object, player_name, mob_field,
-				      id, mob_field2, mob_field3)
-    if object:is_player () then
+					  id, mob_field2, mob_field3)
+	if object:is_player () then
 	playerphysics.remove_physics_factor (object, player_name, id)
-    else
+	else
 	local entity = object:get_luaentity ()
 	if entity and entity.is_mob then
-	    entity:remove_physics_factor (mob_field, id)
-	    if mob_field2 then
+		entity:remove_physics_factor (mob_field, id)
+		if mob_field2 then
 		entity:remove_physics_factor (mob_field2, id)
 		if mob_field3 then
-		    entity:remove_physics_factor (mob_field3, id)
+			entity:remove_physics_factor (mob_field3, id)
 		end
-	    end
+		end
 	end
-    end
+	end
 end
 
 mcl_potions.register_effect({
@@ -377,10 +377,10 @@ mcl_potions.register_effect({
 		-- TODO: apply this only to swimming for mobs.
 		if node and minetest.registered_nodes[node.name]
 			and minetest.get_item_group(node.name, "liquid") ~= 0 then
-		    add_physics_factor (object, "speed", "walk_velocity",
+			add_physics_factor (object, "speed", "walk_velocity",
 					"mcl_potions:dolphin", 1.6)
 		else
-		    remove_physics_factor (object, "speed", "walk_velocity",
+			remove_physics_factor (object, "speed", "walk_velocity",
 					   "mcl_potions:dolphin")
 		end
 	end,
@@ -398,11 +398,11 @@ mcl_potions.register_effect({
 		return S("-@1% jumping power", math.floor(-factor*100))
 	end,
 	on_start = function(object, factor)
-	    add_physics_factor (object, "jump", "jump_height",
+		add_physics_factor (object, "jump", "jump_height",
 				"mcl_potions:leaping", 1 + factor)
 	end,
 	on_end = function(object)
-	    remove_physics_factor (object, "jump", "jump_height",
+		remove_physics_factor (object, "jump", "jump_height",
 				   "mcl_potions:leaping")
 	end,
 	particle_color = "#22FF4C",
@@ -418,20 +418,20 @@ mcl_potions.register_effect({
 		return S("decreases gravity effects")
 	end,
 	on_start = function(object, factor)
-	    add_physics_factor (object, "gravity", "fall_speed",
+		add_physics_factor (object, "gravity", "fall_speed",
 				"mcl_potions:slow_falling", 0.5)
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    local vel = object:get_velocity()
+		local vel = object:get_velocity()
 
-	    if vel then
+		if vel then
 		if vel.y < -3 then
-		    object:add_velocity(vector.new(0,-3-vel.y,0))
+			object:add_velocity(vector.new(0,-3-vel.y,0))
 		end
-	    end
+		end
 	end,
 	on_end = function(object)
-	    remove_physics_factor (object, "gravity", "fall_speed",
+		remove_physics_factor (object, "gravity", "fall_speed",
 				   "mcl_potions:slow_falling")
 	end,
 	particle_color = "#ACCCFF",
@@ -445,12 +445,12 @@ mcl_potions.register_effect({
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
-	    add_physics_factor (object, "speed", "walk_velocity",
+		add_physics_factor (object, "speed", "walk_velocity",
 				"mcl_potions:swiftness", 1 + factor,
 				"run_velocity")
 	end,
 	on_end = function(object)
-	    remove_physics_factor (object, "speed", "walk_velocity",
+		remove_physics_factor (object, "speed", "walk_velocity",
 				   "mcl_potions:swiftness", "run_velocity")
 	end,
 	particle_color = "#7CAFC6",
@@ -467,12 +467,12 @@ mcl_potions.register_effect({
 		return S("-@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
-	    add_physics_factor (object, "speed", "walk_velocity",
+		add_physics_factor (object, "speed", "walk_velocity",
 				"mcl_potions:slowness", 1 - factor,
 				"run_velocity")
 	end,
 	on_end = function(object)
-	    remove_physics_factor (object, "speed", "walk_velocity",
+		remove_physics_factor (object, "speed", "walk_velocity",
 				   "mcl_potions:slowness", "run_velocity")
 	end,
 	particle_color = "#5A6C81",
@@ -504,28 +504,28 @@ mcl_potions.register_effect({
 		return S("improved vision during the night")
 	end,
 	on_start = function(object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		object:get_meta():set_int("night_vision", 1)
 		mcl_weather.skycolor.update_sky_color({object})
-	    end
+		end
 	end,
 	on_load = function(object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		object:get_meta():set_int("night_vision", 1)
 		mcl_weather.skycolor.update_sky_color({object})
-	    end
+		end
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    if object:is_player () then
+		if object:is_player () then
 		mcl_weather.skycolor.update_sky_color({object})
-	    end
+		end
 	end,
 	on_end = function(object)
-	    if object:is_player () then
+		if object:is_player () then
 		local meta = object:get_meta()
 		meta:set_int("night_vision", 0)
 		mcl_weather.skycolor.update_sky_color({object})
-	    end
+		end
 	end,
 	particle_color = "#1F1FA1",
 	uses_factor = false,
@@ -538,17 +538,17 @@ mcl_potions.register_effect({
 		return S("surrounded by darkness").."\n"..S("not seeing anything beyond @1 nodes", factor)
 	end,
 	on_start = function(object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		object:get_meta():set_int("darkness", 1)
 		mcl_weather.skycolor.update_sky_color({object})
 		object:set_sky({fog = {
 			fog_distance = factor,
 		}})
 		EF.darkness[object].flash = 0.6
-	    end
+		end
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    if object:is_player () then
+		if object:is_player () then
 		if object:get_meta():get_int("night_vision") ~= 1 then
 			local flash = EF.darkness[object].flash
 			if flash < 0.2 then EF.darkness[object].flashdir = true
@@ -564,17 +564,17 @@ mcl_potions.register_effect({
 			}})
 		end
 		mcl_weather.skycolor.update_sky_color({object})
-	    end
+		end
 	end,
 	on_end = function(object)
-	    if object:is_player () then
+		if object:is_player () then
 		object:get_meta():set_int("darkness", 0)
 		mcl_weather.skycolor.update_sky_color({object})
 		object:set_sky({fog = {
 			fog_distance = -1,
 			fog_start = -1,
 		}})
-	    end
+		end
 	end,
 	particle_color = "#000000",
 	uses_factor = true,
@@ -618,7 +618,7 @@ mcl_potions.register_effect({
 							player:hud_change(hud_id, "scale", {x = scale, y = scale})
 						else
 							EF.glowing[object].waypoints[player] = player:hud_add({
-								hud_elem_type = "image_waypoint",
+								[hud_elem_type_field] = "image_waypoint",
 								position = {x = 0.5, y = 0.5},
 								scale = {x = scale, y = scale},
 								text = "mcl_potions_glow_waypoint.png",
@@ -655,15 +655,15 @@ mcl_potions.register_effect({
 		return S("HP increased by @1", factor)
 	end,
 	on_start = function(object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		-- TODO can mob "physics" overrides also affect hp?
 		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT+factor})
-	    end
+		end
 	end,
 	on_end = function(object)
-	    if object:is_player () then
+		if object:is_player () then
 		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT})
-	    end
+		end
 	end,
 	particle_color = "#FF2222",
 	uses_factor = true,
@@ -682,14 +682,14 @@ mcl_potions.register_effect({
 		EF.absorption[object].absorb = factor
 	end,
 	on_reject = function (object, factor)
-	    -- Remaining absorption health might fall short of what
-	    -- this level provides, despite the currently active
-	    -- effect being nominally superior.
-	    if EF.absorption[object].absorb < factor then
+		-- Remaining absorption health might fall short of what
+		-- this level provides, despite the currently active
+		-- effect being nominally superior.
+		if EF.absorption[object].absorb < factor then
 		hb.change_hudbar(object, "absorption", factor, (math.floor(factor/20-0.05)+1)*20)
 		EF.absorption[object].absorb = factor
 		return true
-	    end
+		end
 	end,
 	on_load = function(object, factor)
 		minetest.after(0, function() hb.change_hudbar(object, "absorption", nil, (math.floor(factor/20-0.05)+1)*20) end)
@@ -763,8 +763,8 @@ mcl_potions.register_effect({
 	description = S("Bad Luck"),
 	particle_color = "#887343",
 	on_start = function(object, factor)
-	    -- TODO: Bad Luck that only influences loot tables as in
-	    -- Minecraft.
+		-- TODO: Bad Luck that only influences loot tables as in
+		-- Minecraft.
 	end,
 	uses_factor = true,
 })
@@ -814,7 +814,7 @@ mcl_potions.register_effect({
 		return S("impaired sight")
 	end,
 	on_start = function(object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
 			[hud_elem_type_field] = "image",
 			position = {x = 0.5, y = 0.5},
@@ -822,10 +822,10 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
-	    end
+		end
 	end,
 	on_load = function(object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
 			[hud_elem_type_field] = "image",
 			position = {x = 0.5, y = 0.5},
@@ -833,13 +833,13 @@ mcl_potions.register_effect({
 			text = "mcl_potions_blindness_hud.png",
 			z_index = -401
 		})
-	    end
+		end
 	end,
 	on_end = function(object)
-	    if object:is_player () then
+		if object:is_player () then
 		if not EF.blindness[object] then return end
 		object:hud_remove(EF.blindness[object].vignette)
-	    end
+		end
 	end,
 	particle_color = "#686868",
 	uses_factor = false,
@@ -855,30 +855,30 @@ mcl_potions.register_effect({
 		return S("exhausts by @1 per second", factor)
 	end,
 	on_start = function(object, factor)
-	    if object:is_player () and mcl_hunger.active then
+		if object:is_player () and mcl_hunger.active then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
 		end
-	    end
+		end
 	end,
 	on_load = function(object, factor) -- TODO refactor and add hunger bar modifier API
-	    if object:is_player () and mcl_hunger.active then
+		if object:is_player () and mcl_hunger.active then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
 			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
 		end
-	    end
+		end
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    if object:is_player () and mcl_hunger.active then
+		if object:is_player () and mcl_hunger.active then
 		mcl_hunger.exhaust(object:get_player_name(), dtime*factor)
-	    end
+		end
 	end,
 	on_end = function(object)
-	    if object:is_player () and mcl_hunger.active then
+		if object:is_player () and mcl_hunger.active then
 		mcl_hunger.reset_bars_poison_hunger(object)
-	    end
+		end
 	end,
 	particle_color = "#83A061",
 	uses_factor = true,
@@ -925,10 +925,10 @@ mcl_potions.register_effect({
 		return S("saturates by @1 per second", factor)
 	end,
 	on_step = function(dtime, object, factor, duration)
-	    if object:is_player () then
+		if object:is_player () then
 		mcl_hunger.set_hunger(object, math.min(mcl_hunger.get_hunger(object)+dtime*factor, 20))
 		mcl_hunger.saturate(object:get_player_name(), dtime*factor)
-	    end
+		end
 	end,
 	particle_color = "#CEAE29",
 	uses_factor = true,
@@ -989,15 +989,15 @@ mcl_potions.register_effect({
 		return S("+@1% mining and attack speed", math.floor(factor*100))
 	end,
 	on_start = function (object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		mcl_potions.update_haste_and_fatigue (object, factor)
-	    end
+		end
 	end,
 	after_end = function(object)
-	    if object:is_player () then
+		if object:is_player () then
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
-	    end
+		end
 	end,
 	particle_color = "#FFFF00",
 	uses_factor = true,
@@ -1013,15 +1013,15 @@ mcl_potions.register_effect({
 		return S("-@1% mining and attack speed", math.floor((1-factor)*100))
 	end,
 	on_start = function (object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		mcl_potions.update_haste_and_fatigue (object, factor)
-	    end
+		end
 	end,
 	after_end = function(object)
-	    if object:is_player () then
+		if object:is_player () then
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
-	    end
+		end
 	end,
 	particle_color = "#64643D",
 	uses_factor = true,
@@ -1037,9 +1037,9 @@ mcl_potions.register_effect({
 		return S("+@1% mining and attack speed in water").."\n"..S("limitless breathing under water", math.floor(factor*100))
 	end,
 	on_start = function (object, factor)
-	    if object:is_player () then
+		if object:is_player () then
 		mcl_potions.update_haste_and_fatigue (object, factor)
-	    end
+		end
 	end,
 	on_step = function(dtime, object, factor, duration)
 		if not object:is_player() then return end
@@ -1058,8 +1058,8 @@ mcl_potions.register_effect({
 		end
 	end,
 	after_end = function(object)
-	    haste_fatigue_hand_update(object)
-	    mcl_potions._reset_haste_fatigue_item_meta(object)
+		haste_fatigue_hand_update(object)
+		mcl_potions._reset_haste_fatigue_item_meta(object)
 	end,
 	particle_color = "#1FB1BA",
 	uses_factor = true,
@@ -1070,14 +1070,14 @@ mcl_potions.register_effect({
 
 -- implementation of haste and fatigue effects
 function mcl_potions.update_haste_and_fatigue(player)
-    local h_fac = mcl_potions.get_total_haste(player)
-    local f_fac = mcl_potions.get_total_fatigue(player)
-    if mcl_gamemode.get_gamemode(player) == "creative" then return end
-    local item = player:get_wielded_item()
-    local meta = item:get_meta()
-    local item_haste = meta:get_float("mcl_potions:haste")
-    local item_fatig = 1 - meta:get_float("mcl_potions:fatigue")
-    if item_haste ~= h_fac or item_fatig ~= f_fac then
+	local h_fac = mcl_potions.get_total_haste(player)
+	local f_fac = mcl_potions.get_total_fatigue(player)
+	if mcl_gamemode.get_gamemode(player) == "creative" then return end
+	local item = player:get_wielded_item()
+	local meta = item:get_meta()
+	local item_haste = meta:get_float("mcl_potions:haste")
+	local item_fatig = 1 - meta:get_float("mcl_potions:fatigue")
+	if item_haste ~= h_fac or item_fatig ~= f_fac then
 	if h_fac ~= 0 then meta:set_float("mcl_potions:haste", h_fac)
 	else meta:set_string("mcl_potions:haste", "") end
 	if f_fac ~= 1 then meta:set_float("mcl_potions:fatigue", 1 - f_fac)
@@ -1085,14 +1085,14 @@ function mcl_potions.update_haste_and_fatigue(player)
 	meta:set_tool_capabilities()
 	mcl_enchanting.update_groupcaps(item, true)
 	if h_fac == 0 and f_fac == 1 then
-	    player:set_wielded_item(item)
-	    return
+		player:set_wielded_item(item)
+		return
 	end
 	local toolcaps = item:get_tool_capabilities()
 	meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
 	player:set_wielded_item(item)
-    end
-    haste_fatigue_hand_update(player, h_fac, f_fac)
+	end
+	haste_fatigue_hand_update(player, h_fac, f_fac)
 end
 minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 	mcl_potions.update_haste_and_fatigue(puncher)
@@ -1236,7 +1236,7 @@ local function potions_init_icons(player)
 	-- Health HUD bars should be concealed when damage is
 	-- disabled.
 	if enable_damage then
-	    hb.init_hudbar (player, "absorption")
+		hb.init_hudbar (player, "absorption")
 	end
 end
 
@@ -1309,91 +1309,91 @@ end
 -- ░╚════╝░╚═╝░░╚═╝╚══════╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
 
 local function add_spawner(obj, color)
-    local d = 0.2
-    return minetest.add_particlespawner({
-	    amount = 10.0,
-	    time = 0,
-	    attached = obj,
-	    minpos = {x = -d, y = 1, z = -d},
-	    maxpos = {x = d, y = 2, z = d},
-	    minvel = {x = -0.1, y = 0, z = -0.1},
-	    maxvel = {x = 0.1, y = 0.1, z = 0.1},
-	    minacc = {x = -0.1, y = 0, z = -0.1},
-	    maxacc = {x = 0.1, y = .1, z = 0.1},
-	    minexptime = 0.5,
-	    maxexptime = 1,
-	    minsize = 0.5,
-	    maxsize = 1,
-	    collisiondetection = false,
-	    vertical = false,
-	    texture = "mcl_particles_effect.png^[colorize:"..color..":127",
-    })
+	local d = 0.2
+	return minetest.add_particlespawner({
+		amount = 10.0,
+		time = 0,
+		attached = obj,
+		minpos = {x = -d, y = 1, z = -d},
+		maxpos = {x = d, y = 2, z = d},
+		minvel = {x = -0.1, y = 0, z = -0.1},
+		maxvel = {x = 0.1, y = 0.1, z = 0.1},
+		minacc = {x = -0.1, y = 0, z = -0.1},
+		maxacc = {x = 0.1, y = .1, z = 0.1},
+		minexptime = 0.5,
+		maxexptime = 1,
+		minsize = 0.5,
+		maxsize = 1,
+		collisiondetection = false,
+		vertical = false,
+		texture = "mcl_particles_effect.png^[colorize:"..color..":127",
+	})
 end
 
 minetest.register_globalstep(function(dtime)
 	for name, effect in pairs(registered_effects) do
-	    for object, vals in pairs(EF[name]) do
+		for object, vals in pairs(EF[name]) do
 		if vals.dur ~= math.huge then EF[name][object].timer = vals.timer + dtime end
 
 		if not vals.no_particles and not vals.spawner then
-		    vals.spawner
+			vals.spawner
 			= add_spawner (object, effect.particle_color)
 		end
 
 		if effect.on_step then effect.on_step(dtime, object, vals.factor, vals.dur) end
 		if effect.on_hit_timer then
-		    EF[name][object].hit_timer = (vals.hit_timer or 0) + dtime
-		    if EF[name][object].hit_timer >= vals.step then
+			EF[name][object].hit_timer = (vals.hit_timer or 0) + dtime
+			if EF[name][object].hit_timer >= vals.step then
 			effect.on_hit_timer(object, vals.factor, vals.dur)
 			if EF[name][object] then
-			    EF[name][object].hit_timer
+				EF[name][object].hit_timer
 				= EF[name][object].hit_timer - vals.step
 			end
-		    end
+			end
 		end
 
 		if not object or not EF[name][object] or EF[name][object].timer >= vals.dur or not object:get_pos() then
-		    if vals.spawner then
+			if vals.spawner then
 			minetest.delete_particlespawner (vals.spawner)
-		    end
-		    if effect.on_end then effect.on_end(object) end
-		    EF[name][object] = nil
-		    if item_speed_effects[effect] then
+			end
+			if effect.on_end then effect.on_end(object) end
+			EF[name][object] = nil
+			if item_speed_effects[effect] then
 			item_speed_effects[effect][object] = nil
-		    end
-		    if effect.after_end then effect.after_end(object) end
-		    if object:is_player() then
+			end
+			if effect.after_end then effect.after_end(object) end
+			if object:is_player() then
 			local meta = object:get_meta()
 			meta:set_string("mcl_potions:_EF_"..name, "")
 			potions_set_hud(object)
-		    else
+			else
 			local ent = object:get_luaentity()
 			if ent then
-			    if not ent._mcl_potions then
+				if not ent._mcl_potions then
 				ent._mcl_potions = {}
-			    end
-			    ent._mcl_potions["_EF_"..name] = nil
+				end
+				ent._mcl_potions["_EF_"..name] = nil
 			end
-		    end
+			end
 		elseif object:is_player() then
-		    if vals.dur == math.huge then
+			if vals.dur == math.huge then
 			object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
 					  "text", "∞")
-		    else
+			else
 			local dur = math.round(vals.dur-vals.timer)
 			object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
 					  "text", math.floor(dur/60)..string.format(":%02d",math.floor(dur % 60)))
-		    end
+			end
 		else
-		    local ent = object:get_luaentity()
-		    if not ent._mcl_potions then
+			local ent = object:get_luaentity()
+			if not ent._mcl_potions then
 			ent._mcl_potions = {}
-		    end
-		    if ent then
+			end
+			if ent then
 			ent._mcl_potions["_EF_"..name] = EF[name][object]
-		    end
+			end
 		end
-	    end
+		end
 	end
 end)
 
@@ -1446,17 +1446,17 @@ function mcl_potions._reset_effects(object, set_hud)
 
 	local removed_effects = {}
 	for name, effect in pairs(registered_effects) do
-	    local val = EF[name][object]
-	    if val and effect.on_end then
+		local val = EF[name][object]
+		if val and effect.on_end then
 		effect.on_end (object)
-	    end
-	    if val and val.spawner then
+		end
+		if val and val.spawner then
 		minetest.delete_particlespawner (val.spawner)
-	    end
-	    if effect.after_end then table.insert(removed_effects, effect.after_end) end
+		end
+		if effect.after_end then table.insert(removed_effects, effect.after_end) end
 	end
 	for name, tbl in pairs (item_speed_effects) do
-	    tbl[object] = nil
+		tbl[object] = nil
 	end
 
 	mcl_potions._clear_cached_effect_data(object)
@@ -1477,13 +1477,13 @@ function mcl_potions._save_player_effects(player)
 	local meta = player:get_meta()
 
 	for name, effect in pairs(registered_effects) do
-	    if EF[name][player] then
+		if EF[name][player] then
 		EF[name][player].spawner = nil
 		if effect.on_save_effect then
-		    effect.on_save_effect(player)
+			effect.on_save_effect(player)
 		end
-	    end
-	    meta:set_string("mcl_potions:_EF_"..name, minetest.serialize(EF[name][player]))
+		end
+		meta:set_string("mcl_potions:_EF_"..name, minetest.serialize(EF[name][player]))
 	end
 end
 
@@ -1650,13 +1650,13 @@ function mcl_potions.clear_effect(object, effectname)
 	if effect then
 		if def.on_end then def.on_end(object) end
 		if effect.spawner then
-		    minetest.delete_particlespawner (effect.spawner)
+			minetest.delete_particlespawner (effect.spawner)
 		end
 		EF[effectname][object] = nil
 		if def.after_end then def.after_end(object) end
 	end
 	if item_speed_effects[effectname] then
-	    item_speed_effects[effectname][object] = nil
+		item_speed_effects[effectname][object] = nil
 	end
 	if not object:is_player() then return end
 	potions_set_hud(object)
@@ -1703,27 +1703,27 @@ end)
 -- ╚═╝░░░░░░╚═════╝░╚═╝░░╚══╝░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
 function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
-    local val
-    local entity = obj:get_luaentity ()
-    local in_thrower_body = entity and not entity._exited_thrower
-    for _, item in ipairs (moveresult.collisions) do
+	local val
+	local entity = obj:get_luaentity ()
+	local in_thrower_body = entity and not entity._exited_thrower
+	for _, item in ipairs (moveresult.collisions) do
 	if item.type == "node" then
-	    -- Detect targets.
-	    local node = minetest.get_node (item.node_pos)
-	    if node and node.name == "mcl_target:target_off" then
+		-- Detect targets.
+		local node = minetest.get_node (item.node_pos)
+		if node and node.name == "mcl_target:target_off" then
 		val = { target = item.node_pos, }
-	    elseif node then
+		elseif node then
 		-- Next, detect walkable nodes.
 		local def = minetest.registered_nodes[node.name]
 		if def.walkable then
-		    val = val or {}
+			val = val or {}
 		end
-	    end
+		end
 	end
-    end
-    -- Mobs and objects are currently non-colliding, so supplement the
-    -- move results with a raycast as in mcl_bows.
-    if not val or in_thrower_body then
+	end
+	-- Mobs and objects are currently non-colliding, so supplement the
+	-- move results with a raycast as in mcl_bows.
+	if not val or in_thrower_body then
 	local raycast = minetest.raycast (pos, vector.add (pos, velocity * 0.1),
 					  true, false)
 	local still_inside = false
@@ -1732,33 +1732,33 @@ function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
 	-- If the thrower should be a string, try to look up the
 	-- player by that name.
 	if type (thrower) == "string" then
-	    thrower = minetest.get_player_by_name (thrower)
+		thrower = minetest.get_player_by_name (thrower)
 	end
 
 	for hitpoint in raycast do
-	    if hitpoint.type == "object" and hitpoint.ref ~= obj then
+		if hitpoint.type == "object" and hitpoint.ref ~= obj then
 		if hitpoint.ref:is_player ()
-		    or (hitpoint.ref:get_luaentity ()
+			or (hitpoint.ref:get_luaentity ()
 			and hitpoint.ref:get_luaentity ().is_mob) then
-		    -- Don't return the thrower if the potion was
-		    -- launched from within it and has not yet
-		    -- exited.
-		    if in_thrower_body and hitpoint.ref == thrower then
+			-- Don't return the thrower if the potion was
+			-- launched from within it and has not yet
+			-- exited.
+			if in_thrower_body and hitpoint.ref == thrower then
 			still_inside = true
-		    else
+			else
 			val = {}
-		    end
+			end
 		end
-	    else
+		else
 		break
-	    end
+		end
 	end
 
 	if entity then
-	    entity._exited_thrower = not still_inside
+		entity._exited_thrower = not still_inside
 	end
-    end
-    return val
+	end
+	return val
 end
 
 
@@ -1839,26 +1839,26 @@ function mcl_potions.register_generic_resistance_predicate(predicate)
 end
 
 function mcl_potions.level_from_details (details, potency)
-    if details.uses_level then
+	if details.uses_level then
 	return details.level + details.level_scaling * potency
-    end
-    return details.level
+	end
+	return details.level
 end
 
 function mcl_potions.duration_from_details (details, potency, plus, attenuation)
-    local dur
+	local dur
 
-    if details.dur_variable then
+	if details.dur_variable then
 	dur = (details.dur * math.pow (mcl_potions.PLUS_FACTOR, plus)
-	       / (potency > 0 and details.uses_level and
+		   / (potency > 0 and details.uses_level and
 		  math.pow (details.potent_factor
-			    or mcl_potions.POTENT_FACTOR, potency)
+				or mcl_potions.POTENT_FACTOR, potency)
 		  or 1)
-	       * attenuation)
-    else
+		   * attenuation)
+	else
 	dur = details.dur
-    end
-    return dur
+	end
+	return dur
 end
 
 local function target_valid(object, name)
@@ -1908,15 +1908,15 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 					present.dur = math.huge
 				end
 		else
-		    -- on_reject must be called at all events if it
-		    -- exists, as it will attempt to restore the
-		    -- benefits afforded by `factor' if those afforded
-		    -- by `object' have already been spent.  This is
-		    -- solely applicable to Absorption AFAICT.
-		    if edef.on_reject then
+			-- on_reject must be called at all events if it
+			-- exists, as it will attempt to restore the
+			-- benefits afforded by `factor' if those afforded
+			-- by `object' have already been spent.  This is
+			-- solely applicable to Absorption AFAICT.
+			if edef.on_reject then
 			return edef.on_reject (object, factor)
-		    end
-		    return false
+			end
+			return false
 		end
 	end
 
@@ -1934,15 +1934,15 @@ function mcl_potions.give_effect_by_level(name, object, level, duration, no_part
 end
 
 function mcl_potions.all_effects (object)
-    local val = {}
+	local val = {}
 
-    for name, _ in pairs (registered_effects) do
+	for name, _ in pairs (registered_effects) do
 	if EF[name][object] then
-	    val[name] = EF[name][object]
+		val[name] = EF[name][object]
 	end
-    end
+	end
 
-    return val
+	return val
 end
 
 function mcl_potions.healing_func(object, hp)
@@ -1959,7 +1959,7 @@ function mcl_potions.healing_func(object, hp)
 
 		local hp_max = object:get_properties ().hp_max
 		if ent and ent.is_mob then
-		    ent.health = math.min (ent.health + hp, hp_max)
+			ent.health = math.min (ent.health + hp, hp_max)
 		elseif object:is_player() then
 			mcl_damage.heal_player (object, hp)
 		end
@@ -2073,24 +2073,24 @@ function mcl_potions._water_effect(pos, radius)
 	local aa = vector.subtract (pos, { x = radius / 2, y = 1, z = radius / 2, })
 	local bb = vector.add (pos, { x = radius / 2, y = 1, z = radius / 2, })
 	for obj in minetest.objects_in_area (aa, bb) do
-	    local entity = obj:get_luaentity (obj)
+		local entity = obj:get_luaentity (obj)
 
-	    if mcl_burning.is_burning (obj) then
+		if mcl_burning.is_burning (obj) then
 		mcl_burning.extinguish (obj)
 		exting = true
-	    end
-
-	    if entity and entity.is_mob then
-		if entity.water_damage > 0 then
-		    obj:punch (obj, 1.0, { full_punch_interval = 1.0,
-					   damage_groups = {water_vulnerable=1}, },
-			       nil)
-		    exting = true
-		elseif entity.name == "mobs_mc:axolotl" then
-		    entity:reset_breath ()
-		    exting = true
 		end
-	    end
+
+		if entity and entity.is_mob then
+		if entity.water_damage > 0 then
+			obj:punch (obj, 1.0, { full_punch_interval = 1.0,
+					   damage_groups = {water_vulnerable=1}, },
+				   nil)
+			exting = true
+		elseif entity.name == "mobs_mc:axolotl" then
+			entity:reset_breath ()
+			exting = true
+		end
+		end
 	end
 	return exting
 end

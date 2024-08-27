@@ -88,85 +88,85 @@ function mcl_potions.register_splash(name, descr, color, def)
 			local redux_map = {7/8,0.5,0.25}
 			local velocity = self.object:get_velocity ()
 			local val = mcl_potions.detect_hit (self.object,
-							    pos,
-							    moveresult,
-							    velocity)
+								pos,
+								moveresult,
+								velocity)
 
 			if val then
-			    if val.target and mod_target then
+				if val.target and mod_target then
 				mcl_target.hit (val.target, 0.4) --4 redstone ticks
-			    end
-			    minetest.sound_play("mcl_potions_breaking_glass",
+				end
+				minetest.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})
-			    local texture, acc
-			    if name == "water" then
+				local texture, acc
+				if name == "water" then
 				texture = "mcl_particles_droplet_bottle.png"
 				acc = {x=0, y=-GRAVITY, z=0}
-			    else
-				if def.instant then
-				    texture = "mcl_particles_instant_effect.png"
 				else
-				    texture = "mcl_particles_effect.png"
+				if def.instant then
+					texture = "mcl_particles_instant_effect.png"
+				else
+					texture = "mcl_particles_effect.png"
 				end
 				acc = {x=0, y=0, z=0}
-			    end
-			    minetest.add_particlespawner({
-				    amount = 50,
-				    time = 0.1,
-				    minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
-				    maxpos = {x=pos.x+d, y=pos.y+0.5+d, z=pos.z+d},
-				    minvel = {x=-2, y=0, z=-2},
-				    maxvel = {x=2, y=2, z=2},
-				    minacc = acc,
-				    maxacc = acc,
-				    minexptime = 0.5,
-				    maxexptime = 1.25,
-				    minsize = 1,
-				    maxsize = 2,
-				    collisiondetection = true,
-				    vertical = false,
-				    texture = texture.."^[colorize:"..color..":127"
-			    })
+				end
+				minetest.add_particlespawner({
+					amount = 50,
+					time = 0.1,
+					minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
+					maxpos = {x=pos.x+d, y=pos.y+0.5+d, z=pos.z+d},
+					minvel = {x=-2, y=0, z=-2},
+					maxvel = {x=2, y=2, z=2},
+					minacc = acc,
+					maxacc = acc,
+					minexptime = 0.5,
+					maxexptime = 1.25,
+					minsize = 1,
+					maxsize = 2,
+					collisiondetection = true,
+					vertical = false,
+					texture = texture.."^[colorize:"..color..":127"
+				})
 
-			    local potency = self._potency or 0
-			    local plus = self._plus or 0
+				local potency = self._potency or 0
+				local plus = self._plus or 0
 
-			    if def.on_splash then def.on_splash(pos, potency+1) end
-			    for _,obj in pairs(minetest.get_objects_inside_radius(pos, 4)) do
+				if def.on_splash then def.on_splash(pos, potency+1) end
+				for _,obj in pairs(minetest.get_objects_inside_radius(pos, 4)) do
 
 				local entity = obj:get_luaentity()
 				if obj:is_player() or entity and entity.is_mob then
 
-				    local pos2 = obj:get_pos()
-				    local rad = math.floor(math.sqrt((pos2.x-pos.x)^2 + (pos2.y-pos.y)^2 + (pos2.z-pos.z)^2))
+					local pos2 = obj:get_pos()
+					local rad = math.floor(math.sqrt((pos2.x-pos.x)^2 + (pos2.y-pos.y)^2 + (pos2.z-pos.z)^2))
 
-				    if def._effect_list then
+					if def._effect_list then
 					local ef_level
 					local dur
 					for name, details in pairs(def._effect_list) do
-					    ef_level = mcl_potions.level_from_details (details, potency)
-					    dur = mcl_potions.duration_from_details (details, potency,
-										     plus,
-										     mcl_potions.SPLASH_FACTOR)
-					    if rad > 0 then
+						ef_level = mcl_potions.level_from_details (details, potency)
+						dur = mcl_potions.duration_from_details (details, potency,
+											 plus,
+											 mcl_potions.SPLASH_FACTOR)
+						if rad > 0 then
 						mcl_potions.give_effect_by_level(name, obj, ef_level, redux_map[rad]*dur)
-					    else
+						else
 						mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
-					    end
+						end
 					end
-				    end
+					end
 
-				    if def.custom_effect then
+					if def.custom_effect then
 					local power = (potency+1) * mcl_potions.SPLASH_FACTOR
 					if rad > 0 then
-					    def.custom_effect(obj, redux_map[rad] * power, plus)
+						def.custom_effect(obj, redux_map[rad] * power, plus)
 					else
-					    def.custom_effect(obj, power, plus)
+						def.custom_effect(obj, power, plus)
 					end
-				    end
+					end
 				end
-			    end
-			    self.object:remove()
+				end
+				self.object:remove()
 			end
 		end,
 	})
@@ -176,23 +176,23 @@ end
 -- player and is to be serialized properly.
 function mcl_potions.throw_splash (potionname, dir, pos, thrower,
 				   potency, plus)
-    if not minetest.registered_items[potionname] then
+	if not minetest.registered_items[potionname] then
 	minetest.log ("action", "Throwing nonexistent potion " .. potionname)
 	return
-    end
-    local obj
+	end
+	local obj
 	= minetest.add_entity ({x=pos.x+dir.x,y=pos.y+dir.y,z=pos.z+dir.z},
-	                       potionname .. "_flying")
-    if not obj then
+						   potionname .. "_flying")
+	if not obj then
 	return
-    end
-    local velocity = 10
-    obj:set_velocity ({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
-    obj:set_acceleration ({x=dir.x*-3, y=-9.8, z=dir.z*-3})
-    local ent = obj:get_luaentity ()
-    ent._thrower = thrower
-    ent._potency = potency
-    ent._plus = plus
-    ent._effect_list = minetest.registered_items[potionname]._effect_list
-    minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+	end
+	local velocity = 10
+	obj:set_velocity ({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
+	obj:set_acceleration ({x=dir.x*-3, y=-9.8, z=dir.z*-3})
+	local ent = obj:get_luaentity ()
+	ent._thrower = thrower
+	ent._potency = potency
+	ent._plus = plus
+	ent._effect_list = minetest.registered_items[potionname]._effect_list
+	minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
 end

@@ -48,10 +48,10 @@ local function generate_on_use(vanish, effects, color, on_use, custom_effect)
 		local ef_level
 		local dur
 		for name, details in pairs(effects) do
-		    ef_level = mcl_potions.level_from_details (details, potency)
-		    dur = mcl_potions.duration_from_details (details, potency,
-							     plus, 1.0)
-		    mcl_potions.give_effect_by_level(name, user, ef_level, dur)
+			ef_level = mcl_potions.level_from_details (details, potency)
+			dur = mcl_potions.duration_from_details (details, potency,
+								 plus, 1.0)
+			mcl_potions.give_effect_by_level(name, user, ef_level, dur)
 		end
 
 		if on_use then on_use(user, potency+1) end
@@ -62,9 +62,9 @@ local function generate_on_use(vanish, effects, color, on_use, custom_effect)
 		-- by glass bottles.
 		local replacement
 		if vanish then
-		    replacement = nil
+			replacement = nil
 		else
-		    replacement = "mcl_potions:glass_bottle"
+			replacement = "mcl_potions:glass_bottle"
 		end
 		itemstack = minetest.do_item_eat(0, replacement, itemstack,
 						 user, pointed_thing)
@@ -75,20 +75,20 @@ local function generate_on_use(vanish, effects, color, on_use, custom_effect)
 end
 
 function mcl_potions.consume_potion (mob, id, potency, plus)
-    local def = registered_potions[id]
-    local ef_level, dur
-    if not def then
+	local def = registered_potions[id]
+	local ef_level, dur
+	if not def then
 	return
-    end
-    for name, details in pairs (def._effect_list) do
+	end
+	for name, details in pairs (def._effect_list) do
 	ef_level = mcl_potions.level_from_details (details, potency)
 	dur = mcl_potions.duration_from_details (details, potency,
 						 plus, 1.0)
 	mcl_potions.give_effect_by_level (name, mob, ef_level, dur)
-    end
-    if def.custom_effect then
+	end
+	if def.custom_effect then
 	def.custom_effect (mob, potency + 1, plus)
-    end
+	end
 end
 
 -- API - registers a potion
@@ -158,14 +158,14 @@ function mcl_potions.register_potion(def)
 	end
 	pdef._doc_items_longdesc = potion_longdesc
 	if def.drinkable ~= false then
-	    pdef._doc_items_usagehelp = how_to_drink
+		pdef._doc_items_usagehelp = how_to_drink
 	end
 	pdef.stack_max = def.stack_max or 1
 	local color = def.color or "#0000FF"
 	pdef.inventory_image = def.image or potion_image(color)
 	pdef.wield_image = pdef.inventory_image
 	pdef.groups = def.groups or {brewitem=1, food=3, can_eat_when_full=1,
-				     _mcl_potion=1, potion = 1, }
+					 _mcl_potion=1, potion = 1, }
 	if def.nocreative then pdef.groups.not_in_creative_inventory = 1 end
 
 	pdef._effect_list = {}
@@ -202,8 +202,8 @@ function mcl_potions.register_potion(def)
 	pdef.has_plus = has_plus
 	local on_use
 	if def.drinkable ~= false then
-	    on_use = generate_on_use (def.vanishing, pdef._effect_list,
-				      color, def.custom_on_use, def.custom_effect)
+		on_use = generate_on_use (def.vanishing, pdef._effect_list,
+					  color, def.custom_on_use, def.custom_effect)
 	end
 	pdef.on_place = on_use
 	pdef.on_secondary_use = on_use
@@ -290,23 +290,23 @@ function mcl_potions.register_potion(def)
 end
 
 function mcl_potions.filter_potion_description (itemstack, orig_desc)
-    local meta = itemstack:get_meta ()
-    local potency = meta:get_int("mcl_potions:potion_potent")
-    local plus = meta:get_int("mcl_potions:potion_plus")
-    if potency > 0 then
+	local meta = itemstack:get_meta ()
+	local potency = meta:get_int("mcl_potions:potion_potent")
+	local plus = meta:get_int("mcl_potions:potion_plus")
+	if potency > 0 then
 	local sym_potency = mcl_util.to_roman(potency+1)
 	orig_desc = orig_desc .. " ".. sym_potency
-    end
-    if plus > 0 then
+	end
+	if plus > 0 then
 	local sym_plus = " "
 	local i = plus
 	while i>0 do
-	    i = i - 1
-	    sym_plus = sym_plus .. "+"
+		i = i - 1
+		sym_plus = sym_plus .. "+"
 	end
 	orig_desc = orig_desc .. sym_plus
-    end
-    return orig_desc
+	end
+	return orig_desc
 end
 
 -- ██████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗
@@ -417,10 +417,10 @@ mcl_potions.register_potion({
 	_longdesc = S("Decreases walking speed."),
 	color = "#5A6C81",
 	_effect_list = {
-	    slowness = {dur=mcl_potions.DURATION_INV,
+		slowness = {dur=mcl_potions.DURATION_INV,
 			-- Slowness IV should last 20 seconds.
 			potent_factor = math.pow (4.5, 1/3),
-	    },
+		},
 	},
 	default_potent_level = 4,
 	has_arrow = true,

@@ -12,19 +12,19 @@ end
 local lingering_effects_at = {}
 
 local function potency_to_level (potency)
-    return (potency + 1) * mcl_potions.LINGERING_FACTOR
+	return (potency + 1) * mcl_potions.LINGERING_FACTOR
 end
 
 local function add_lingering_effects (pos, color, effects, is_water, texture,
-				      duration, custom_effect, potency, plus,
-				      initial_radius)
-    local tbl = lingering_effects_at[pos]
-    if not tbl then
+					  duration, custom_effect, potency, plus,
+					  initial_radius)
+	local tbl = lingering_effects_at[pos]
+	if not tbl then
 	tbl = { }
 	lingering_effects_at[pos] = tbl
-    end
+	end
 
-    table.insert (tbl, { color = color, lifespan = duration,
+	table.insert (tbl, { color = color, lifespan = duration,
 			 timer = duration,
 			 is_water = is_water,
 			 effects = effects,
@@ -39,21 +39,21 @@ local function add_lingering_effects (pos, color, effects, is_water, texture,
 end
 
 local function def_to_effect_list (def, potency, plus)
-    local effects = {}
+	local effects = {}
 
-    -- Calculate factors and lengths for each effect defined.
-    if not def._effect_list then
+	-- Calculate factors and lengths for each effect defined.
+	if not def._effect_list then
 	return effects
-    end
-    for name, details in pairs (def._effect_list) do
+	end
+	for name, details in pairs (def._effect_list) do
 	effects[name] = {}
 	effects[name].level = mcl_potions.level_from_details (details,
-							      potency)
+								  potency)
 	effects[name].dur
-	    = mcl_potions.duration_from_details (details, potency, plus,
+		= mcl_potions.duration_from_details (details, potency, plus,
 						 mcl_potions.LINGERING_FACTOR)
-    end
-    return effects
+	end
+	return effects
 end
 
 local function linger_particles(pos, d, texture, color)
@@ -78,96 +78,96 @@ end
 
 function mcl_potions.add_lingering_effect (pos, name, duration, level,
 					   initial_radius)
-    local def = mcl_potions.registered_effects[name]
+	local def = mcl_potions.registered_effects[name]
 
-    if not def then
+	if not def then
 	return
-    end
-    add_lingering_effects (pos, def.particle_color,
+	end
+	add_lingering_effects (pos, def.particle_color,
 			   { [name] = { dur = duration,
 					level = level, }, },
 			   false, "mcl_particles_effect.png", duration,
 			   nil, nil, nil, initial_radius)
-    linger_particles (pos, initial_radius, "mcl_particles_effect.png",
-		      def.particle_color or "#000000")
+	linger_particles (pos, initial_radius, "mcl_particles_effect.png",
+			  def.particle_color or "#000000")
 end
 
 local function particle_texture (name, def)
-    if name == "water" then
+	if name == "water" then
 	return "mcl_particles_droplet_bottle.png"
-    else
-	if def.instant then
-	    return "mcl_particles_instant_effect.png"
 	else
-	    return "mcl_particles_effect.png"
+	if def.instant then
+		return "mcl_particles_instant_effect.png"
+	else
+		return "mcl_particles_effect.png"
 	end
-    end
+	end
 end
 
 local lingering_timer = 0
 minetest.register_globalstep(function(dtime)
 	lingering_timer = lingering_timer + dtime
 	if lingering_timer >= 1 then
-	    for pos, lists in pairs(lingering_effects_at) do
+		for pos, lists in pairs(lingering_effects_at) do
 		local rem = 0
 		for i, vals in ipairs (lists) do
-		    vals.timer = vals.timer - lingering_timer
-		    local d = (vals.initial_radius
-			       * (vals.timer / vals.lifespan))
-		    local texture = vals.texture
-		    local deduct_time = false
-		    linger_particles(pos, d, texture, vals.color)
+			vals.timer = vals.timer - lingering_timer
+			local d = (vals.initial_radius
+				   * (vals.timer / vals.lifespan))
+			local texture = vals.texture
+			local deduct_time = false
+			linger_particles(pos, d, texture, vals.color)
 
-		    -- Extinguish fire if water bottle
-		    if vals.is_water then
+			-- Extinguish fire if water bottle
+			if vals.is_water then
 			if mcl_potions._water_effect (pos, d) then
-			    deduct_time = true
+				deduct_time = true
 			end
-		    end
+			end
 
-		    -- Affect players and mobs
-		    for _, obj in pairs (minetest.get_objects_inside_radius(pos, d)) do
+			-- Affect players and mobs
+			for _, obj in pairs (minetest.get_objects_inside_radius(pos, d)) do
 			local entity = obj:get_luaentity()
 			if obj:is_player() or entity and entity.is_mob then
-			    if vals.is_water then
+				if vals.is_water then
 				if entity and entity.water_damage then
-				    obj:punch (obj, 1.0, { full_punch_interval = 1.0,
+					obj:punch (obj, 1.0, { full_punch_interval = 1.0,
 							   damage_groups = {water_vulnerable=1}, },
-					       nil)
-				    deduct_time = true
+						   nil)
+					deduct_time = true
 				end
-			    else
+				else
 				for name, effect in pairs (vals.effects) do
-				    mcl_potions.give_effect_by_level (name, obj, effect.level,
-								      effect.dur)
-				    deduct_time = true
+					mcl_potions.give_effect_by_level (name, obj, effect.level,
+									  effect.dur)
+					deduct_time = true
 				end
 				if vals.custom_effect
-				    and vals.custom_effect (obj, vals.level,
-							    vals.plus) then
-				    deduct_time = true
+					and vals.custom_effect (obj, vals.level,
+								vals.plus) then
+					deduct_time = true
 				end
-			    end
+				end
 			end
-		    end
+			end
 
-		    if deduct_time then
+			if deduct_time then
 			vals.timer = vals.timer - 3.25
-		    end
+			end
 
-		    if vals.timer <= 0 then
+			if vals.timer <= 0 then
 			lists[i] = nil
-		    else
+			else
 			rem = rem + 1
-		    end
+			end
 		end
 
 		-- Do no more extant entries exist?
 		if rem == 0 then
-		    lingering_effects_at[pos] = nil
+			lingering_effects_at[pos] = nil
 		end
-	    end
-	    lingering_timer = 0
+		end
+		lingering_timer = 0
 	end
 end)
 
@@ -226,13 +226,13 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
 			local obj = minetest.add_entity(pos, id.."_flying")
 			if obj and obj:get_pos() then
-			    local velocity = 22
-			    obj:set_velocity({x=dropdir.x*velocity,y=dropdir.y*velocity,z=dropdir.z*velocity})
-			    obj:set_acceleration({x=dropdir.x*-3, y=-9.8, z=dropdir.z*-3})
-			    local ent = obj:get_luaentity()
-			    ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
-			    ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
-			    ent._effect_list = def._effect_list
+				local velocity = 22
+				obj:set_velocity({x=dropdir.x*velocity,y=dropdir.y*velocity,z=dropdir.z*velocity})
+				obj:set_acceleration({x=dropdir.x*-3, y=-9.8, z=dropdir.z*-3})
+				local ent = obj:get_luaentity()
+				ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
+				ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
+				ent._effect_list = def._effect_list
 			end
 		end
 	})
@@ -257,10 +257,10 @@ function mcl_potions.register_lingering(name, descr, color, def)
 								  moveresult,
 								  velocity)
 			if val then
-			    if val.target and mod_target then
+				if val.target and mod_target then
 				mcl_target.hit (val.target, 0.4) --4 redstone ticks
-			    end
-			    minetest.sound_play("mcl_potions_breaking_glass",
+				end
+				minetest.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})
 				local potency = self._potency or 0
 				local plus = self._plus or 0
@@ -268,8 +268,8 @@ function mcl_potions.register_lingering(name, descr, color, def)
 				local texture = particle_texture (name, def)
 
 				add_lingering_effects (pos, color, effects, name == "water",
-						       texture, 30, def.custom_effect, potency,
-						       plus, d)
+							   texture, 30, def.custom_effect, potency,
+							   plus, d)
 				linger_particles (pos, d, texture, color)
 				if def.on_splash then def.on_splash (pos, potency+1) end
 				self.object:remove()

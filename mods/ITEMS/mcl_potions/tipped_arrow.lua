@@ -22,7 +22,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		_mcl_filter_description = mcl_potions.filter_potion_description,
 		_doc_items_longdesc = arrow_longdesc .. "\n" ..
 			S("This particular arrow is tipped and will give an effect when it hits a player or mob.") .. "\n" ..
-		    (def.longdesc or ""),
+			(def.longdesc or ""),
 		_effect_list = def._effect_list,
 		uses_level = def.uses_level,
 		has_potent = def.has_potent,
@@ -38,20 +38,20 @@ function mcl_potions.register_arrow(name, desc, color, def)
 	ARROW_ENTITY._itemstring = "mcl_potions:"..name.."_arrow"
 
 	function ARROW_ENTITY._extra_hit_func (obj)
-	    local potency, plus = 0, 0
-	    if def._effect_list then
+		local potency, plus = 0, 0
+		if def._effect_list then
 		local ef_level
 		local dur
 
 		for name, details in pairs(def._effect_list) do
-		    ef_level = mcl_potions.level_from_details (details, potency)
-		    dur = mcl_potions.duration_from_details (details, potency,
-							     plus,
-							     mcl_potions.SPLASH_FACTOR)
-		    mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
+			ef_level = mcl_potions.level_from_details (details, potency)
+			dur = mcl_potions.duration_from_details (details, potency,
+								 plus,
+								 mcl_potions.SPLASH_FACTOR)
+			mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
 		end
-	    end
-	    if def.custom_effect then def.custom_effect(obj, potency+1) end
+		end
+		if def.custom_effect then def.custom_effect(obj, potency+1) end
 	end
 
 	minetest.register_entity("mcl_potions:"..name.."_arrow_entity", ARROW_ENTITY)

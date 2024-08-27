@@ -283,7 +283,7 @@ mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
 	base_potion = "mcl_potions:water",
 	stack_max = 1,
 	on_splash = function (pos, _)
-	    mcl_potions._water_effect (pos, 4)
+		mcl_potions._water_effect (pos, 4)
 	end,
 	effect=1
 })
@@ -321,50 +321,50 @@ local output_table = { }
 -- for different outcomes out_table contains the recipes for those
 -- outcomes
 function mcl_potions.register_ingredient_potion(input, out_table)
-    assert (not output_table[input],
-	    "Attempt to register the same ingredient twice!")
-    assert (type(input) == "string", "input must be a string")
-    assert (type(out_table) == "table", "out_table must be a table")
-    output_table[input] = out_table
+	assert (not output_table[input],
+		"Attempt to register the same ingredient twice!")
+	assert (type(input) == "string", "input must be a string")
+	assert (type(out_table) == "table", "out_table must be a table")
+	output_table[input] = out_table
 end
 
 local function potion_has_splash (potion)
-    return potion == "mcl_potions:water"
+	return potion == "mcl_potions:water"
 	or (potions[potion] and potions[potion].has_splash)
 end
 
 local function potion_has_lingering (potion)
-    return potion == "mcl_potions:water"
+	return potion == "mcl_potions:water"
 	or (potions[potion] and potions[potion].has_lingering)
 end
 
 local function complete_output_table (input, out_table, copy)
-    -- Generate entries for splash and lingering variants of `input'.
-    local tbl_splash = {}
-    local tbl_lingering = {}
+	-- Generate entries for splash and lingering variants of `input'.
+	local tbl_splash = {}
+	local tbl_lingering = {}
 
-    if not potion_has_splash (input)
+	if not potion_has_splash (input)
 	and not potion_has_lingering (input) then
 	return
-    end
+	end
 
-    for k, v in pairs (out_table) do
+	for k, v in pairs (out_table) do
 	if potion_has_splash (v) then
-	    tbl_splash[k] = v .. "_splash"
+		tbl_splash[k] = v .. "_splash"
 	end
 
 	if potion_has_lingering (v) then
-	    tbl_lingering[k] = v .. "_lingering"
+		tbl_lingering[k] = v .. "_lingering"
 	end
-    end
-    copy[input .. "_lingering"] = tbl_lingering
-    copy[input .. "_splash"] = tbl_splash
+	end
+	copy[input .. "_lingering"] = tbl_lingering
+	copy[input .. "_splash"] = tbl_splash
 end
 
 minetest.register_on_mods_loaded (function ()
 	local copy = {}
 	for k, v in pairs (output_table) do
-	    complete_output_table (k, v, copy)
+		complete_output_table (k, v, copy)
 	end
 	output_table = table.merge (output_table, copy)
 end)
@@ -386,11 +386,11 @@ local water_table = {
 -- API
 -- register a potion recipe brewed from water
 function mcl_potions.register_water_brew(ingr, potion)
-    assert (not water_table[ingr],
-	    "Attempt to register the same ingredient twice!")
-    assert (type(ingr) == "string", "ingr must be a string")
-    assert (type(potion) == "string", "potion must be a string")
-    water_table[ingr] = potion
+	assert (not water_table[ingr],
+		"Attempt to register the same ingredient twice!")
+	assert (type(ingr) == "string", "ingr must be a string")
+	assert (type(potion) == "string", "potion must be a string")
+	water_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:river_water", water_table)
 mcl_potions.register_ingredient_potion("mcl_potions:water", water_table)
@@ -410,11 +410,11 @@ local awkward_table = {
 -- API
 -- register a potion recipe brewed from awkward potion
 function mcl_potions.register_awkward_brew(ingr, potion)
-    assert (not water_table[ingr],
-	    "Attempt to register the same ingredient twice!")
-    assert (type(ingr) == "string", "ingr must be a string")
-    assert (type(potion) == "string", "potion must be a string")
-    awkward_table[ingr] = potion
+	assert (not water_table[ingr],
+		"Attempt to register the same ingredient twice!")
+	assert (type(ingr) == "string", "ingr must be a string")
+	assert (type(potion) == "string", "potion must be a string")
+	awkward_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:awkward", awkward_table)
 
@@ -424,25 +424,25 @@ local mundane_table = {
 -- API
 -- register a potion recipe brewed from mundane potion
 function mcl_potions.register_mundane_brew(ingr, potion)
-    assert (not mundane_table[ingr],
-	    "Attempt to register the same ingredient twice!")
-    assert (type(ingr) == "string", "ingr must be a string")
-    assert (type(potion) == "string", "potion must be a string")
-    mundane_table[ingr] = potion
+	assert (not mundane_table[ingr],
+		"Attempt to register the same ingredient twice!")
+	assert (type(ingr) == "string", "ingr must be a string")
+	assert (type(potion) == "string", "potion must be a string")
+	mundane_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:mundane", mundane_table)
 
 local thick_table = {
-    -- Nothing here but crickets...
+	-- Nothing here but crickets...
 }
 -- API
 -- register a potion recipe brewed from thick potion
 function mcl_potions.register_thick_brew(ingr, potion)
-    assert (not awkward_table[ingr],
-	    "Attempt to register the same ingredient twice!")
-    assert (type(ingr) == "string", "ingr must be a string")
-    assert (type(potion) == "string", "potion must be a string")
-    thick_table[ingr] = potion
+	assert (not awkward_table[ingr],
+		"Attempt to register the same ingredient twice!")
+	assert (type(ingr) == "string", "ingr must be a string")
+	assert (type(potion) == "string", "potion must be a string")
+	thick_table[ingr] = potion
 end
 mcl_potions.register_ingredient_potion("mcl_potions:thick", thick_table)
 
@@ -453,11 +453,11 @@ local mod_table = { }
 -- registers a brewing recipe altering the potion using a table
 -- this is supposed to substitute one item with another
 function mcl_potions.register_table_modifier(ingr, modifier)
-    assert (not mod_table[ingr],
-	    "Attempt to register the same ingredient twice!")
-    assert (type(ingr) == "string", "ingr must be a string")
-    assert (type(modifier) == "table", "modifier must be a table")
-    mod_table[ingr] = modifier
+	assert (not mod_table[ingr],
+		"Attempt to register the same ingredient twice!")
+	assert (type(ingr) == "string", "ingr must be a string")
+	assert (type(modifier) == "table", "modifier must be a table")
+	mod_table[ingr] = modifier
 end
 
 minetest.register_on_mods_loaded(function()
@@ -481,11 +481,11 @@ local inversion_table = {
 }
 -- API
 function mcl_potions.register_inversion_recipe(input, output)
-    assert (not inversion_table[input],
-	    "Attempt to register the same input twice!")
-    assert (type (input) == string, "input must be a string")
-    assert (type (output) == string, "output must be a string")
-    inversion_table[input] = output
+	assert (not inversion_table[input],
+		"Attempt to register the same input twice!")
+	assert (type (input) == string, "input must be a string")
+	assert (type (output) == string, "output must be a string")
+	inversion_table[input] = output
 end
 local function fill_inversion_table() -- autofills with splash and lingering inversion recipes
 	local filling_table = { }
@@ -522,11 +522,11 @@ local meta_mod_table = { }
 -- registers a brewing recipe altering the potion using a function
 -- this is supposed to be a recipe that changes metadata only
 function mcl_potions.register_meta_modifier(ingr, mod_func)
-    assert (not meta_mod_table[ingr],
-	    "Attempt to register the same ingredient twice!")
-    assert (type (ingr) == "string", "ingr must be a string")
-    assert (type (mod_func) == "function", "mod_func must be a function")
-    meta_mod_table[ingr] = mod_func
+	assert (not meta_mod_table[ingr],
+		"Attempt to register the same ingredient twice!")
+	assert (type (ingr) == "string", "ingr must be a string")
+	assert (type (mod_func) == "function", "mod_func must be a function")
+	meta_mod_table[ingr] = mod_func
 end
 
 local function extend_dur(potionstack)
@@ -606,7 +606,7 @@ function mcl_potions.get_alchemy(ingr, pot)
 		local brew_func = meta_mod_table[ingr]
 		local alchemy = brew_func (pot)
 		if brew_func then
-		    return alchemy
+			return alchemy
 		end
 	end
 
