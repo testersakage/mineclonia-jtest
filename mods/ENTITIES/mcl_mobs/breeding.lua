@@ -25,7 +25,7 @@ function mob_class:_on_dispense(dropitem)
 	end
 end
 
-function mob_class:feed_tame(clicker, feed_count, breed, tame, notake)
+function mob_class:feed_tame(clicker, heal, breed, tame, notake)
 	if not self.follow then	return false end
 	if clicker == nil or self.nofollow or self:follow_holding(clicker) then
 		local consume_food = false
@@ -39,7 +39,7 @@ function mob_class:feed_tame(clicker, feed_count, breed, tame, notake)
 
 		if self.health < self.object:get_properties().hp_max and not consume_food then
 			consume_food = true
-			self.health = math.min(self.health + 4, self.object:get_properties().hp_max)
+			self.health = math.min(self.health + heal, self.object:get_properties().hp_max)
 			if self.htimer < 1 then
 				self.htimer = 5
 			end
@@ -52,13 +52,9 @@ function mob_class:feed_tame(clicker, feed_count, breed, tame, notake)
 		end
 
 		if breed and not consume_food and self.hornytimer == 0 and not self.horny then
-			self.food = (self.food or 0) + 1
 			consume_food = true
-			if self.food >= feed_count then
-				self.food = 0
-				self.horny = true
-				self.persistent = true
-			end
+			self.horny = true
+			self.persistent = true
 		end
 
 		self:update_tag()

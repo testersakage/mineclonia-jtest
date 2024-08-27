@@ -446,7 +446,7 @@ These functions can be called from the entity as well as overwritten on a per-mo
 	* This returns true if the timer identified by `timer` has reached 0 and resets it to interval, returns false otherwise. If the timer was never run before it is set to a random value < interval to avoid lots of timers firing simultaneously.
 
 #### Breeding
- * mob:feed_tame(clicker, feed_count, breed, tame, notake)
+ * mob:feed_tame(clicker, heal, breed, tame, notake)
  * mob:toggle_sit(clicker,p)
 
 #### Combat
