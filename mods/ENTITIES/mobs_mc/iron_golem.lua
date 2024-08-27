@@ -73,14 +73,18 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 		return false
 	end,
 	drops = {
-		{name = "mcl_core:iron_ingot",
-		chance = 1,
-		min = 3,
-		max = 5,},
-		{name = "mcl_flowers:poppy",
-		chance = 1,
-		min = 0,
-		max = 2,},
+		{
+			name = "mcl_core:iron_ingot",
+			chance = 1,
+			min = 3,
+			max = 5,
+		},
+		{
+			name = "mcl_flowers:poppy",
+			chance = 1,
+			min = 0,
+			max = 2,
+		},
 	},
 	fall_damage = 0,
 	animation = {
@@ -117,16 +121,12 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 		end
 
 		local item = clicker:get_wielded_item()
-
-		if item:get_name() == "mcl_core:iron_ingot" and self.health < 100 then
+		if item:get_name() == "mcl_core:iron_ingot" and self.health < self.object:get_properties().hp_max then
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				item:take_item()
 				clicker:set_wielded_item(item)
 			end
-
-			if self.health <= 75 then self.health = self.health + 25
-			else self.health = 100 end
-
+			self.health = math.min(self.health + 25, self.object:get_properties().hp_max)
 			return
 		end
 	end,
