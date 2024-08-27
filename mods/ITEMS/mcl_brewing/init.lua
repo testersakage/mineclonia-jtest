@@ -103,21 +103,21 @@ local BREW_TIME = 10 -- all brews brew the same
 local BURN_TIME = BREW_TIME * 20
 
 local function take_fuel (pos, meta, inv)
-    -- only allow blaze powder fuel
-    local fuel_name, fuel_count
-    fuel_name = inv:get_stack ("fuel", 1):get_name ()
-    fuel_count = inv:get_stack ("fuel", 1):get_count ()
+	-- only allow blaze powder fuel
+	local fuel_name, fuel_count
+	fuel_name = inv:get_stack ("fuel", 1):get_name ()
+	fuel_count = inv:get_stack ("fuel", 1):get_count ()
 
-    if fuel_name == "mcl_mobitems:blaze_powder" then -- Grab another fuel
+	if fuel_name == "mcl_mobitems:blaze_powder" then -- Grab another fuel
 	if (fuel_count-1) ~= 0 then
-	    inv:set_stack("fuel", 1, fuel_name.." "..(fuel_count-1))
+		inv:set_stack("fuel", 1, fuel_name.." "..(fuel_count-1))
 	else
-	    inv:set_stack("fuel", 1, "")
+		inv:set_stack("fuel", 1, "")
 	end
 	return BURN_TIME -- New value of fuel_timer_new
-    else -- no fuel available
+	else -- no fuel available
 	return 0
-    end
+	end
 end
 
 local function brewing_stand_timer(pos, elapsed)
@@ -133,12 +133,12 @@ local function brewing_stand_timer(pos, elapsed)
 
 	brew_output = brewable(inv)
 	if brew_output then
-	    if fuel_timer <= 0 then -- Is more fuel required?
+		if fuel_timer <= 0 then -- Is more fuel required?
 		fuel_timer = take_fuel (pos, meta, inv)
-	    end
+		end
 
-	    -- If enough fuel remains, continue.
-	    if fuel_timer > 0 then
+		-- If enough fuel remains, continue.
+		if fuel_timer > 0 then
 		fuel_timer = fuel_timer - elapsed
 		stand_timer = stand_timer + elapsed
 		d = 0.5
@@ -162,27 +162,27 @@ local function brewing_stand_timer(pos, elapsed)
 
 		-- Replace the stand item with the brew result
 		if stand_timer >= BREW_TIME then
-		    input_count = inv:get_stack("input",1):get_count()
-		    if (input_count-1) ~= 0 then
+			input_count = inv:get_stack("input",1):get_count()
+			if (input_count-1) ~= 0 then
 			local stack
-			    = inv:get_stack("input",1):get_name().." "..(input_count-1)
+				= inv:get_stack("input",1):get_name().." "..(input_count-1)
 			inv:set_stack("input", 1, stack)
-		    else
+			else
 			inv:set_stack("input", 1, "")
-		    end
+			end
 
-		    for i=1, inv:get_size("stand") do
+			for i=1, inv:get_size("stand") do
 			if brew_output[i] then
-			    minetest.sound_play("mcl_brewing_complete",
+				minetest.sound_play("mcl_brewing_complete",
 						{pos=pos, gain=0.4, max_hear_range=6}, true)
-			    inv:set_stack ("stand", i, brew_output[i])
-			    minetest.sound_play("mcl_potions_bottle_pour",
+				inv:set_stack ("stand", i, brew_output[i])
+				minetest.sound_play("mcl_potions_bottle_pour",
 						{pos=pos, gain=0.6, max_hear_range=6}, true)
 			end
-		    end
-		    stand_timer = 0
+			end
+			stand_timer = 0
 		end
-	    end
+		end
 	end
 
 	-- The formspec must be updated after each change.
@@ -282,23 +282,23 @@ local function on_put(pos, listname, index, stack, _)
 	end
 
 	if listname == "fuel" then
-	    -- Refuel immediately if no fuel remains.
-	    local fuel_timer = meta:get_float ("fuel_timer_new")
-	    if fuel_timer <= 0 then
+		-- Refuel immediately if no fuel remains.
+		local fuel_timer = meta:get_float ("fuel_timer_new")
+		if fuel_timer <= 0 then
 		fuel_timer = take_fuel (pos, meta, inv)
 		meta:set_float ("fuel_timer_new", fuel_timer)
-	    end
+		end
 	end
 
 	if listname == "stand" then
 		local str = ""
 		local stack
 		for i=1, inv:get_size("stand") do
-		    stack = inv:get_stack("stand", i)
-		    if not stack:is_empty() then
+			stack = inv:get_stack("stand", i)
+			if not stack:is_empty() then
 			str = str.."1"
-		    else str = str.."0"
-		    end
+			else str = str.."0"
+			end
 		end
 		minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
 	end
@@ -746,15 +746,15 @@ minetest.register_lbm({
 	nodenames = { "group:brewing_stand" },
 	run_at_every_load = false,
 	action = function(pos)
-	    local m = minetest.get_meta (pos)
-	    local old_fuel = m:get_int ("fuel")
-	    local old_burntime = m:get_int ("fuel_timer")
+		local m = minetest.get_meta (pos)
+		local old_fuel = m:get_int ("fuel")
+		local old_burntime = m:get_int ("fuel_timer")
 
-	    if old_fuel ~= 0 then
+		if old_fuel ~= 0 then
 		m:set_int ("fuel_timer_new", old_burntime - BURN_TIME)
-	    end
-	    -- Clear obsolete fields.
-	    m:set_int ("fuel", 0)
-	    m:set_int ("fuel_timer", 0)
+		end
+		-- Clear obsolete fields.
+		m:set_int ("fuel", 0)
+		m:set_int ("fuel_timer", 0)
 	end,
 })
