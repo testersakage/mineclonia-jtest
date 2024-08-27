@@ -389,9 +389,6 @@ Fields not mentioned in this document can also be added as custom fields for the
 	ignited_by_sunlight = false,
 	-- If true the mod will burn at daytime. (Takes sunlight_damage per second)
 
-	nofollow = false,
-	--Do not follow players when they wield the "follow" item. For mobs (like villagers) that are bred in a different way.
-
 	pick_up = { "mcl_core:apple" },
 	--table of itemstrings the mob will pick up (e.g. for breeding)
 

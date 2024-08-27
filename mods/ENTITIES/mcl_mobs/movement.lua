@@ -526,7 +526,6 @@ end
 
 -- should mob follow what I'm holding ?
 function mob_class:follow_holding(clicker)
-	if self.nofollow then return false end
 	if mcl_mobs.invis[clicker:get_player_name()] then
 		return false
 	end
