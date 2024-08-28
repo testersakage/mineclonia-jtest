@@ -52,9 +52,12 @@ end
 function mcl_heads.deftemplate.on_rotate(pos, node, user, mode)
 	if mode == screwdriver.ROTATE_AXIS then
 		node.name = node.name .. "_wall"
-		node.param2 = minetest.dir_to_wallmounted(minetest.facedir_to_dir(node.param2))
-		minetest.set_node(pos, node)
-		return true
+		local dir = minetest.facedir_to_dir(node.param2)
+		if dir then
+			node.param2 = minetest.dir_to_wallmounted(dir)
+			minetest.set_node(pos, node)
+			return true
+		end
 	end
 	local ctrl = user:get_player_control()
 	if ctrl and ctrl.sneak then
