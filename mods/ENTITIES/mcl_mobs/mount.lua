@@ -248,6 +248,11 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 	local ni = node_is(p)
 	local v = self.v
 
+	-- slowed when submerged with water
+	if minetest.registered_nodes[mcl_mobs.node_ok(vector.offset(p,0,1,0)).name].groups.water then
+		v = v * 0.75
+	end
+
 	if ni == "air" then
 		if can_fly == true then
 			new_acce.y = 0
@@ -255,7 +260,7 @@ function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
 	elseif ni == "liquid" or ni == "lava" then
 		-- sink when touching water
 		if velo.y >= 0 then
-			velo.y = velo.y - 1.5
+			velo.y = velo.y - 2
 		end
 		-- when float up then detach driver and let mount roam
 		local cbox = self.object:get_properties().collisionbox
