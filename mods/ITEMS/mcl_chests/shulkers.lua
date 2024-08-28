@@ -9,6 +9,7 @@ local messy_textures = {
 local canonical_shulker_color = "violet"
 local normal_canonical_name = "mcl_chests:" .. canonical_shulker_color .. "_shulker_box"
 local small_canonical_name = normal_canonical_name .. "_small"
+local num_tt_stacks = 5 --number of stacks to show in shulker tooltip
 
 --WARNING: after formspec v4 update, old shulker boxes will need to be placed again to get the new formspec
 local function formspec_shulker_box(name)
@@ -43,26 +44,31 @@ local function set_shulkerbox_meta(nmeta, imeta)
 	nmeta:set_string("formspec", formspec_shulker_box(name))
 end
 
-local function get_shulker_stack(pos)
-	local meta = minetest.get_meta(pos)
-	local inv = meta:get_inventory()
-	local items = {}
-	for i = 1, inv:get_size("main") do
-		local stack = inv:get_stack("main", i)
-		items[i] = stack:to_string()
+
+tt.register_snippet(function(itemstring, _ , itemstack)
+	if itemstack and minetest.get_item_group(itemstring, "shulker_box") > 0 then
+		local meta = itemstack:get_meta()
+		local iv = minetest.deserialize(meta:get_string("inv"))
+		local d = ""
+		local i = 0
+		for _, v in pairs(iv) do
+			local stack = ItemStack(v)
+			if not stack:is_empty() then
+				if i < num_tt_stacks then
+					d = d .. "\n " ..(stack:get_short_description() or stack:get_description()) .. ( stack:get_count() > 1 and (" x"..stack:get_count()) or "" )
+				end
+				i = i + 1
+			end
+		end
+		if d ~= "" and i - num_tt_stacks > 0 then
+			d = d .. "\n and "..tostring(i - num_tt_stacks).." more"
+		end
+		return d, mcl_colors.WHITE
 	end
-	local data = minetest.serialize(items)
-	local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
-	local boxitem_meta = boxitem:get_meta()
-	boxitem_meta:set_string("description", meta:get_string("description"))
-	boxitem_meta:set_string("name", meta:get_string("name"))
-	boxitem_meta:set_string("inv", data)
-	boxitem:set_metadata(data)
-	return boxitem
-end
+end)
 
 for c, cdef in pairs(mcl_dyes.colors) do
-	local mob_texture = messy_textures[c] or "mobs_mc_shulker_"..c..".png"
+	local mob_texture = messy_textures[c] or ("mobs_mc_shulker_"..c..".png")
 	local color = cdef.mcl2 or c --use the "legacy" colorname if present to preserve all itemstrings
 	local desc = S("@1 Shulker Box", cdef.readable_name)
 	local is_canonical = color == canonical_shulker_color
@@ -88,6 +94,24 @@ for c, cdef in pairs(mcl_dyes.colors) do
 
 	local normal_name = "mcl_chests:" .. color .. "_shulker_box"
 	local small_name = normal_name .. "_small"
+
+	local function get_shulker_stack(pos)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		local items = {}
+		for i = 1, inv:get_size("main") do
+			local stack = inv:get_stack("main", i)
+			items[i] = stack:to_string()
+		end
+		local data = minetest.serialize(items)
+		local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
+		local boxitem_meta = boxitem:get_meta()
+		boxitem_meta:set_string("name", meta:get_string("name"))
+		boxitem_meta:set_string("inv", data)
+		boxitem:set_metadata(data)
+		tt.reload_itemstack_description(boxitem)
+		return boxitem
+	end
 
 	minetest.register_node(normal_name, {
 		description = desc,
