@@ -5,6 +5,7 @@ local C = minetest.colorize
 local sf = string.format
 
 local mod_doc = minetest.get_modpath("doc")
+local shulker_num_tt_stacks = 5
 
 -- Christmas chest setup
 local it_is_christmas = false
@@ -1302,6 +1303,26 @@ local function set_shulkerbox_meta(nmeta, imeta)
 	nmeta:set_string("formspec", formspec_shulker_box(name))
 end
 
+tt.register_snippet(function(itemstring, _ , itemstack)
+	if itemstack and minetest.get_item_group(itemstring, "shulker_box") > 0 then
+		local d = ""
+		local i = 0
+		for _, v in ipairs(minetest.deserialize(itemstack:get_metadata())) do
+			local stack = ItemStack(v)
+			if not stack:is_empty() then
+				if i < shulker_num_tt_stacks then
+					d = d .. "\n " ..(stack:get_short_description() or stack:get_description()) .. ( stack:get_count() > 1 and (" x"..stack:get_count()) or "" )
+				end
+				i = i + 1
+			end
+		end
+		if d ~= "" and i - shulker_num_tt_stacks > 0 then
+			d = d .. "\n "..S("and @1 more",tostring(i - shulker_num_tt_stacks))
+		end
+		return d, mcl_colors.WHITE
+	end
+end)
+
 for color, desc in pairs(boxtypes) do
 	local mob_texture = shulker_mob_textures[color]
 	local is_canonical = color == canonical_shulker_color
@@ -1397,11 +1418,12 @@ for color, desc in pairs(boxtypes) do
 		local data = minetest.serialize(items)
 		local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
 		local boxitem_meta = boxitem:get_meta()
-		boxitem_meta:set_string("description", meta:get_string("description"))
 		boxitem_meta:set_string("name", meta:get_string("name"))
-		boxitem:set_metadata(data)
+		boxitem_meta:set_string("", data)
+		tt.reload_itemstack_description(boxitem)
 		return boxitem
 	end
+
 	minetest.register_node(small_name, {
 		description = desc,
 		_tt_help = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents"),
