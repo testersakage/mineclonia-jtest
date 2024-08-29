@@ -93,7 +93,7 @@ mcl_trees.register_wood("jungle",{
 		tiles = { "default_jungleleaves.png" },
 		color = "#30bb0b",
 	},
-	sapling_chances = {40, 26, 32, 24, 10},
+	sapling_chances = {40, 36, 32, 24, 10},
 	wood = { tiles = {"default_junglewood.png"}},
 	sapling = {
 		tiles = {"default_junglesapling.png"},
