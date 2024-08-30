@@ -1787,23 +1787,6 @@ function mcl_potions._use_potion(obj, color)
 	local d = 0.1
 	local pos = obj:get_pos()
 	minetest.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})
-	minetest.add_particlespawner({
-		amount = 25,
-		time = 1,
-		minpos = {x=pos.x-d, y=pos.y+1, z=pos.z-d},
-		maxpos = {x=pos.x+d, y=pos.y+2, z=pos.z+d},
-		minvel = {x=-0.1, y=0, z=-0.1},
-		maxvel = {x=0.1, y=0.1, z=0.1},
-		minacc = {x=-0.1, y=0, z=-0.1},
-		maxacc = {x=0.1, y=.1, z=0.1},
-		minexptime = 1,
-		maxexptime = 5,
-		minsize = 0.5,
-		maxsize = 1,
-		collisiondetection = true,
-		vertical = false,
-		texture = "mcl_particles_effect.png^[colorize:"..color..":127",
-	})
 end
 
 
