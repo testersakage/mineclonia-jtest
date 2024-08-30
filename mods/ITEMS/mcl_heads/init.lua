@@ -51,9 +51,9 @@ end
 
 function mcl_heads.deftemplate.on_rotate(pos, node, user, mode)
 	if mode == screwdriver.ROTATE_AXIS then
-		node.name = node.name .. "_wall"
 		local dir = minetest.facedir_to_dir(node.param2)
 		if dir then
+			node.name = node.name .. "_wall"
 			node.param2 = minetest.dir_to_wallmounted(dir)
 			minetest.set_node(pos, node)
 			return true
