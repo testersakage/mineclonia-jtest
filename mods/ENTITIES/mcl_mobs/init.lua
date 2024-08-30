@@ -322,6 +322,10 @@ function mcl_mobs.register_mob(name, def)
 			self._physics_factors = {}
 
 			self._timers = {}
+
+			-- Cache this frequently tested attribute, for
+			-- `get_properties' is very expensive.
+			self._cannot_drown = self.object:get_properties ().breath_max == -1
 			return self:mob_activate(staticdata, dtime)
 		end,
 		_spawner = def._spawner,

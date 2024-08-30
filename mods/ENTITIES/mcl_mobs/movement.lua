@@ -61,7 +61,7 @@ end
 
 -- Returns true if node is a water hazard to this mob
 function mob_class:is_node_waterhazard(nodename)
-	if self.swims or self.breathes_in_water or self.object:get_properties().breath_max == -1 then
+	if self.swims or self.breathes_in_water or self._cannot_drown then
 		return false
 	end
 
@@ -97,7 +97,7 @@ function mob_class:target_visible(origin, target)
 	local origin_eye_pos = vector.offset(origin, 0, self.head_eye_height, 0)
 
 	local targ_head_height, targ_feet_height
-	local cbox = self.object:get_properties().collisionbox
+	local cbox = self.initial_properties.collisionbox
 	if target:is_player() then
 		targ_head_height = vector.offset(target_pos, 0, cbox[5], 0)
 		targ_feet_height = target_pos -- Cbox would put feet under ground which interferes with ray
@@ -217,7 +217,7 @@ function mob_class:is_at_cliff_or_danger()
 		return false
 	end
 
-	local cbox = self.object:get_properties().collisionbox
+	local cbox = self.initial_properties.collisionbox
 	local dir_x, dir_z = self:forward_directions()
 	local pos = self.object:get_pos()
 
@@ -244,11 +244,11 @@ function mob_class:is_at_cliff_or_danger()
 end
 
 function mob_class:is_at_water_danger()
-	if self._jumping_cliff or self.swims or self.fly or self.object:get_properties().breath_max == -1 then
+	if self._jumping_cliff or self.swims or self.fly or self._cannot_drown then
 		return false
 	end
 
-	local cbox = self.object:get_properties().collisionbox
+	local cbox = self.initial_properties.collisionbox
 	local pos = self.object:get_pos()
 	local infront = self:node_infront_ok(pos, -1)
 	local height = cbox[5] - cbox[2]
@@ -270,7 +270,7 @@ function mob_class:is_at_water_danger()
 end
 
 function mob_class:should_get_out_of_water()
-	if self.breathes_in_water or self.object:get_properties().breath_max == -1 or self.swims then
+	if self.breathes_in_water or self._cannot_drown or self.swims then
 		return false
 	end
 
@@ -381,7 +381,7 @@ function mob_class:do_jump()
 	local pos = self.object:get_pos()
 
 	-- what is mob standing on?
-	local cbox = self.object:get_properties().collisionbox
+	local cbox = self.initial_properties.collisionbox
 	local nod =  mcl_mobs.node_ok(vector.offset(pos, 0, cbox[2] - 0.2, 0))
 
 	local in_water = minetest.get_item_group( mcl_mobs.node_ok(pos).name, "water") > 0
@@ -759,7 +759,7 @@ function mob_class:do_states_walk()
 	-- is there something I need to avoid?
 	if (self.water_damage > 0
 			and self.lava_damage > 0)
-			or self.object:get_properties().breath_max ~= -1 then
+			or not self._cannot_drown then
 		lp = minetest.find_node_near(s, 1, {"group:water", "group:lava"})
 	elseif self.water_damage > 0 then
 		lp = minetest.find_node_near(s, 1, {"group:water"})
@@ -1109,7 +1109,7 @@ function mob_class:swim_or_jump()
 			y = -y
 		elseif
 			not self:swim_check(vector.offset(s, 0, 1, 0))
-			or (self.object:get_properties().breath_max == -1 and not self:swim_check(vector.offset(s, 0, 2, 0)))
+			or (self._cannot_drown and not self:swim_check(vector.offset(s, 0, 2, 0)))
 		then
 			swim_log("don't swim up")
 			y = -y
@@ -1152,7 +1152,7 @@ function mob_class:swim_or_jump()
 				self.object:set_acceleration({ x = 0, y = DEFAULT_FALL_SPEED, z = 0 })
 
 				local p = self.object:get_pos()
-				local cbox = self.object:get_properties().collisionbox
+				local cbox = self.initial_properties.collisionbox
 				local sdef = minetest.registered_nodes[mcl_mobs.node_ok(vector.add(p, vector.new(0, cbox[2] - 0.2, 0))).name]
 				-- Flop on ground
 				if sdef and sdef.walkable then

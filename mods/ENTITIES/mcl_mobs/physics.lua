@@ -698,7 +698,7 @@ function mob_class:do_env_damage()
 		end
 	end
 	-- Drowning damage
-	if self.object:get_properties().breath_max ~= -1 then
+	if not self._cannot_drown then
 		local drowning = false
 		if self.breathes_in_water then
 			if minetest.get_item_group(self.standing_in, "water") == 0 then
@@ -881,14 +881,15 @@ function mob_class:falling(pos)
 		return false -- mob has teleported through portal - it's 99% not falling
 	end
 
-	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].groups.lava then
+	local name = mcl_mobs.node_ok(pos).name
+	if minetest.registered_nodes[name].groups.lava then
 		if self.floats_on_lava == 1 then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
 	end
 	-- in water then float up
-	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].groups.water then
-		local cbox = self.object:get_properties().collisionbox
+	if minetest.registered_nodes[name].groups.water then
+		local cbox = self.initial_properties.collisionbox
 		if self.floats == 1 and minetest.registered_nodes[mcl_mobs.node_ok(vector.offset(pos,0,cbox[5] -0.25,0)).name].groups.water then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
@@ -896,8 +897,7 @@ function mob_class:falling(pos)
 		self.reset_fall_damage = 1
 	else
 		-- fall damage onto solid ground
-		if self.fall_damage == 1
-		and self.object:get_velocity().y == 0 then
+		if self.fall_damage == 1 and v.y == 0 then
 			local n = mcl_mobs.node_ok(vector.offset(pos,0,-1,0)).name
 			-- init old_y to current height if not set.
 			local d = (self.old_y or self.object:get_pos().y) - self.object:get_pos().y

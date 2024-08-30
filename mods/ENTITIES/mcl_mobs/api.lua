@@ -311,9 +311,19 @@ end
 
 function mob_class:forward_directions()
 	local yaw = self.object:get_yaw()
-	local cbox = self.object:get_properties().collisionbox
+	local cbox = self.initial_properties.collisionbox
+
+	-- This function appears to be called oftener than yaw
+	-- changes, and caching the result yields a performance
+	-- uplift.
+	if self._last_fw_yaw == yaw then
+	   return self._last_fw_dir.dir_x, self._last_fw_dir.dir_z
+	end
+
 	local dir_x = -math.sin(yaw) * (cbox[4] + 0.5)
 	local dir_z = math.cos(yaw) * (cbox[4] + 0.5)
+	self._last_fw_yaw = yaw
+	self._last_fw_dir = { dir_x = dir_x, dir_z = dir_z, }
 
 	return dir_x, dir_z
 end
@@ -390,8 +400,6 @@ function mob_class:on_step(dtime, moveresult)
 	local should_drive = self:should_drive ()
 
 	if self:check_despawn(pos, dtime) then return true end
-
-	self:update_tag()
 
 	if not should_drive or self.steer_class ~= "follow_item" then
 	   self:slow_mob ()
