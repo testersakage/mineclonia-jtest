@@ -1307,7 +1307,7 @@ tt.register_snippet(function(itemstring, _ , itemstack)
 	if itemstack and minetest.get_item_group(itemstring, "shulker_box") > 0 then
 		local d = ""
 		local i = 0
-		for _, v in ipairs(minetest.deserialize(itemstack:get_metadata())) do
+		for _, v in ipairs(minetest.deserialize(itemstack:get_meta():get_string(""))) do
 			local stack = ItemStack(v)
 			if not stack:is_empty() then
 				if i < shulker_num_tt_stacks then
@@ -1374,7 +1374,7 @@ for color, desc in pairs(boxtypes) do
 		end,
 		after_place_node = function(pos, placer, itemstack, _)
 			local nmeta = minetest.get_meta(pos)
-			local imetadata = itemstack:get_metadata()
+			local imetadata = itemstack:get_meta():get_string("")
 			local iinv_main = minetest.deserialize(imetadata)
 			local ninv = nmeta:get_inventory()
 			ninv:set_list("main", iinv_main)
@@ -1397,7 +1397,7 @@ for color, desc in pairs(boxtypes) do
 			if def and def.buildable_to then
 				minetest.set_node(droppos, { name = small_name, param2 = minetest.dir_to_facedir(dropdir) })
 				local ninv = minetest.get_inventory({ type = "node", pos = droppos })
-				local imetadata = stack:get_metadata()
+				local imetadata = stack:get_meta():get_string("")
 				local iinv_main = minetest.deserialize(imetadata)
 				ninv:set_list("main", iinv_main)
 				ninv:set_size("main", 9 * 3)
@@ -1472,7 +1472,7 @@ for color, desc in pairs(boxtypes) do
 			end
 
 			local nmeta = minetest.get_meta(pos)
-			local imetadata = itemstack:get_metadata()
+			local imetadata = itemstack:get_meta():get_string("")
 			local iinv_main = minetest.deserialize(imetadata)
 			local ninv = nmeta:get_inventory()
 			ninv:set_list("main", iinv_main)
