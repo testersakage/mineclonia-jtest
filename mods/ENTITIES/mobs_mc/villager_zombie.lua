@@ -128,6 +128,7 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 	end,
 	on_mob_replace = function(self, new_ent)
 		new_ent._profession = self._profession
+		new_ent._id = self._id
 	end,
 	sunlight_damage = 2,
 	ignited_by_sunlight = true,

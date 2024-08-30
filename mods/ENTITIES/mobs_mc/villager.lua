@@ -194,6 +194,7 @@ end
 
 function mobs_mc.villager_mob:on_mob_replace(new_ent)
 	new_ent._profession = self._profession
+	new_ent._id = self._id
 end
 
 table.update(mobs_mc.villager_mob, {
