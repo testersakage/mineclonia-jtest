@@ -1,5 +1,5 @@
 # textdomain: mcl_mobs
-Remove all, nametagged or tamed mobs within the specified distance or everywhere. When unspecified remove all mobs except tamed and nametagged ones.=
+Remove all, nametagged or tamed mobs within the specified distance or everywhere. When unspecified remove all mobs except tamed and nametagged ones.=移除指定距離內或各處的所有已被標籤名稱或馴服的生物。如果未指定，則移除除已被馴服和標籤名稱的生物之外的所有生物。
 Invalid syntax.=
 This allows you to place a single mob.=
 Just place it where you want the mob to appear. Animals will spawn tamed, unless you hold down the sneak key while placing. If you place this on a mob spawner, you change the mob it spawns.=

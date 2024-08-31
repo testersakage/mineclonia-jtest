@@ -8,29 +8,19 @@ Copper Ore=铜矿石
 Some copper contained in stone, it is pretty common and can be found below sea level.=
 Block of Raw Copper=粗铜块
 A block used for compact raw copper storage.=
-Exposed=
-Weathered=
-Oxidized=
-Block of=
-@1 Copper=
-@1 copper is mostly a decorative block.=
-@1 Cut Copper=
-@1 Chiseled Copper=
-@1 Chiseled copper is mostly a decorative block.=
-@1 Copper Grate=
-@1 Copper Bulb On=
-@1 Copper Bulb=
-@1 Copper Trapdoor=
-@1 Copper Door=
-
-
-##### not used anymore #####
-
 Block of Copper=铜块
+A block of copper is mostly a decorative block.=
 Exposed Copper=斑驳铜块
+Exposed copper is a decorative block.=
 Weathered Copper=锈蚀铜块
+Weathered copper is a decorative block.=
 Oxidized Copper=氧化铜块
+Oxidized copper is a decorative block.=
 Cut Copper=切制铜块
+Cut copper is a decorative block.=
 Exposed Cut Copper=斑驳切制铜块
+Exposed cut copper is a decorative block.=
 Weathered Cut Copper=锈蚀切制铜块
+Weathered cut copper is a decorative block.=
 Oxidized Cut Copper=氧化切制铜块
+Oxidized cut copper is a decorative block.=

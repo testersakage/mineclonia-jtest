@@ -9,7 +9,6 @@ Hand=Tangan
 Air=Udara
 Yes=Iya
 No=Tidak
-# List separator (e.g. “one, two, three”)
 , =, 
 Unknown item (@1)=Barang tidak dikenal (@1)
 unknown=Tidak dikenal
@@ -39,7 +38,6 @@ Mining ratings:=Peringkat penggalian :
 Toughness level: @1=Tingkat ketangguhan : @1
 Range: @1=Jangkauan : @1
 Range: 4=Jangkauan : 4
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=Jangkauan : @1 (@2)
 This tool can serve as a smelting fuel with a burning time of @1.=Alat ini dapat berfungsi sebagai bahan bakar peleburan dengan waktu pembakaran @1.
 This block can serve as a smelting fuel with a burning time of @1.=Blok ini dapat berfungsi sebagai bahan bakar peleburan dengan waktu pembakaran @1.
@@ -75,8 +73,8 @@ This block is a liquid with these properties:=Blok ini adalah sebuah cairan deng
 • Viscosity: @1=• Viskositas : @1
 This block causes a damage of @1 hit points per second.=Blok ini menyebabkan kerusakan @1 poin hit per detik.
 This block causes a damage of @1 hit point per second.=Blok ini menyebabkan kerusakan @1 poin hit per detik.
-This block decreases your breath and causes a drowning damage of @1 hit points every 2 seconds.=Blok ini mengurangi nafas Anda dan menyebabkan kerusakan tenggelam sebesar @@1 poin hit setiap 2 detik.
-This block decreases your breath and causes a drowning damage of @1 hit point every 2 seconds.=Blok ini mengurangi nafas Anda dan menyebabkan kerusakan tenggelam sebesar @@1 poin hit setiap 2 detik.
+This block decreases your breath and causes a drowning damage of @1 hit points every 2 seconds.=Blok ini mengurangi nafas Anda dan menyebabkan kerusakan tenggelam sebesar @1 poin hit setiap 2 detik.
+This block decreases your breath and causes a drowning damage of @1 hit point every 2 seconds.=Blok ini mengurangi nafas Anda dan menyebabkan kerusakan tenggelam sebesar @1 poin hit setiap 2 detik.
 The fall damage on this block is increased by @1%.=Kerusakan akibat jatuh pada blok ini meningkat sebesar @1%.
 This block negates all fall damage.=Blok ini menghilangkan semua kerusakan akibat terjatuh.
 The fall damage on this block is reduced by @1%.=Kerusakan akibat terjatuh pada blok ini berkurang @1%.
@@ -113,15 +111,10 @@ This block will drop the following when mined: @1.=Blok ini akan menjatuhkan hal
 This block will drop the following items when mined: @1.=Blok ini akan menjatuhkan item berikut saat digali : @1.
 This block will randomly drop one of the following when mined: @1.=Blok ini secara acak akan menjatuhkan salah satu hal berikut ketika digali : @1.
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=Blok ini akan secara acak menjatuhkan hingga @1 dari kemungkinan jumlah yang dijatuhkan berikut saat digali : @2.
-# Final list separator (e.g. “One, two and three”)
  and = dan 
-# Item count times item name
 @1×@2=@1×@2
-# Itemname (<0.5%)
 @1 (<0.5%)=@1 (<0.5%)
-# Itemname (ca. 25%)
 @1 (ca. @2%)=@1 (ca. @2%)
-# Itemname (25%)
 @1 (@2%)=@1 (@2%)
 Tools and weapons=Alat dan Senjata
 Item reference of all wieldable tools and weapons=Referensi item dari semua alat dan senjata yang dapat digunakan
