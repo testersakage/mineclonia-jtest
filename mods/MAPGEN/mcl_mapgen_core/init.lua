@@ -274,8 +274,7 @@ local function end_basic(vm, data, data2, emin, emax, area, minp, maxp, blocksee
 		end
 	end
 	end
-	vm:set_lighting({day=15, night=15}, emin, emax)
-	return true
+	return true, false -- necessary so lighting is correctly initialized
 end
 
 
