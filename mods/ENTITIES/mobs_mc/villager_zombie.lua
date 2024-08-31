@@ -132,6 +132,7 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 			new_ent._id = self._id
 			new_ent._jobsite = self._jobsite
 			new_ent._bed = self._bed
+			new_ent._cured_zombie = true
 			new_ent:set_textures()
 		end
 	end,
