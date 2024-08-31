@@ -79,7 +79,7 @@ end
 
 -- Check each player and run callbacks
 minetest.register_globalstep(function(dtime)
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		for _, func in pairs(mcl_player.registered_globalsteps) do
 			if mcl_player.players[player] then
 				func(player, dtime)
@@ -90,7 +90,7 @@ minetest.register_globalstep(function(dtime)
 	slow_gs_timer = slow_gs_timer - dtime
 	if slow_gs_timer > 0 then return end
 	slow_gs_timer = 0.5
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		for _, func in pairs(mcl_player.registered_globalsteps_slow) do
 			if mcl_player.players[player] then
 				func(player, dtime)
