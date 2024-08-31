@@ -30,7 +30,7 @@ local potion_intro = S("Drinking a potion gives you a particular effect or set o
 -- ╚═╝░░░░░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
 
-local function generate_on_use(vanish, effects, color, on_use, custom_effect)
+local function generate_on_use(vanish, effects, _, on_use, custom_effect)
 	return function(itemstack, user, pointed_thing)
 		if pointed_thing.type == "node" then
 			if user and not user:get_player_control().sneak then
@@ -68,7 +68,7 @@ local function generate_on_use(vanish, effects, color, on_use, custom_effect)
 		end
 		itemstack = minetest.do_item_eat(0, replacement, itemstack,
 						 user, pointed_thing)
-		if vanish or itemstack then mcl_potions._use_potion(user, color) end
+		if vanish or itemstack then mcl_potions._use_potion(user) end
 
 		return itemstack
 	end

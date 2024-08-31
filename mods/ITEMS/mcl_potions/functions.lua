@@ -1,11 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 local EF = {}
 mcl_potions.registered_effects = {}
 local registered_effects = mcl_potions.registered_effects -- shorthand ref
@@ -196,13 +190,13 @@ mcl_potions.register_effect({
 	name = "invisibility",
 	description = S("Invisiblity"),
 	icon = "mcl_potions_effect_invisible.png",
-	get_tt = function(factor)
+	get_tt = function(_)
 		return S("body is invisible")
 	end,
-	on_start = function(object, factor)
+	on_start = function(object, _)
 		mcl_potions.make_invisible(object, true)
 	end,
-	on_load = function(object, factor)
+	on_load = function(object, _)
 		mcl_potions.make_invisible(object, true)
 	end,
 	on_end = function(object)
@@ -223,7 +217,7 @@ mcl_potions.register_effect({
 		local entity = object:get_luaentity()
 		return (entity and (entity.harmed_by_heal or string.find(entity.name, "spider")))
 	end,
-	on_hit_timer = function(object, factor, duration)
+	on_hit_timer = function(object, _, _)
 		if mcl_util.get_hp(object) - 1 > 0 then
 			mcl_util.deal_damage(object, 1, {type = "magic"})
 		end
@@ -246,7 +240,7 @@ mcl_potions.register_effect({
 		local entity = object:get_luaentity()
 		return (entity and entity.harmed_by_heal)
 	end,
-	on_hit_timer = function(object, factor, duration)
+	on_hit_timer = function(object)
 		local entity = object:get_luaentity()
 		if object:is_player() then
 			mcl_damage.heal_player (object, 1)
@@ -290,7 +284,7 @@ mcl_potions.register_effect({
 
 -- implementation of strength and weakness effects
 -- mobs have this implemented in mcl_mobs/combat.lua in mob_class:on_punch()
-mcl_damage.register_modifier(function(object, damage, reason)
+mcl_damage.register_modifier(function(_, damage, reason)
 	if reason.direct and reason.direct == reason.source then
 		local hitter = reason.direct
 		local strength = EF.strength[hitter]
@@ -305,10 +299,10 @@ end, 0)
 mcl_potions.register_effect({
 	name = "water_breathing",
 	description = S("Water Breathing"),
-	get_tt = function(factor)
+	get_tt = function()
 		return S("limitless breathing under water")
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object)
 		if object:get_breath() then
 			hb.hide_hudbar(object, "breath")
 			if object:get_breath() < 10 then object:set_breath(10) end
@@ -369,10 +363,10 @@ end
 mcl_potions.register_effect({
 	name = "dolphin_grace",
 	description = S("Dolphin's Grace"),
-	get_tt = function(factor)
+	get_tt = function()
 		return S("swimming gracefully")
 	end,
-	on_hit_timer = function(object, factor, duration)
+	on_hit_timer = function(object)
 		local node = minetest.get_node_or_nil(object:get_pos())
 		-- TODO: apply this only to swimming for mobs.
 		if node and minetest.registered_nodes[node.name]
@@ -414,14 +408,14 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "slow_falling",
 	description = S("Slow Falling"),
-	get_tt = function(factor)
+	get_tt = function()
 		return S("decreases gravity effects")
 	end,
-	on_start = function(object, factor)
+	on_start = function(object)
 		add_physics_factor (object, "gravity", "fall_speed",
 				"mcl_potions:slow_falling", 0.5)
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object)
 		local vel = object:get_velocity()
 
 		if vel then
@@ -487,7 +481,7 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("moves body upwards at @1 nodes/s", factor)
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object, factor)
 		local vel = object:get_velocity().y
 		if vel<factor then object:add_velocity(vector.new(0,factor,0)) end
 	end,
@@ -500,22 +494,22 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "night_vision",
 	description = S("Night Vision"),
-	get_tt = function(factor)
+	get_tt = function()
 		return S("improved vision during the night")
 	end,
-	on_start = function(object, factor)
+	on_start = function(object)
 		if object:is_player () then
 		object:get_meta():set_int("night_vision", 1)
 		mcl_weather.skycolor.update_sky_color({object})
 		end
 	end,
-	on_load = function(object, factor)
+	on_load = function(object)
 		if object:is_player () then
 		object:get_meta():set_int("night_vision", 1)
 		mcl_weather.skycolor.update_sky_color({object})
 		end
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object)
 		if object:is_player () then
 		mcl_weather.skycolor.update_sky_color({object})
 		end
@@ -547,7 +541,7 @@ mcl_potions.register_effect({
 		EF.darkness[object].flash = 0.6
 		end
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(dtime, object)
 		if object:is_player () then
 		if object:get_meta():get_int("night_vision") ~= 1 then
 			local flash = EF.darkness[object].flash
@@ -592,13 +586,13 @@ local abs = math.abs
 mcl_potions.register_effect({
 	name = "glowing",
 	description = S("Glowing"),
-	get_tt = function(factor)
+	get_tt = function()
 		return S("more visible at all times")
 	end,
-	on_start = function(object, factor)
+	on_start = function(object)
 		EF.glowing[object].waypoints = {}
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object)
 		local pos = object:get_pos()
 		if not pos then return end
 		local x, y, z = pos.x, pos.y, pos.z
@@ -694,7 +688,7 @@ mcl_potions.register_effect({
 	on_load = function(object, factor)
 		minetest.after(0, function() hb.change_hudbar(object, "absorption", nil, (math.floor(factor/20-0.05)+1)*20) end)
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object)
 		hb.change_hudbar(object, "absorption", EF.absorption[object].absorb)
 	end,
 	on_end = function(object)
@@ -723,7 +717,7 @@ mcl_potions.register_effect({
 	name = "fire_resistance",
 	description = S("Fire Resistance"),
 	icon = "mcl_potions_effect_fire_proof.png",
-	get_tt = function(factor)
+	get_tt = function()
 		return S("resistance to fire damage")
 	end,
 	particle_color = "#E49A3A",
@@ -751,7 +745,7 @@ mcl_potions.register_effect({
 	name = "luck",
 	description = S("Luck"),
 	particle_color = "#7BFF42",
-	on_start = function(object, factor)
+	on_start = function()
 		-- TODO: Luck that only influences loot tables as in
 		-- Minecraft.
 	end,
@@ -762,7 +756,7 @@ mcl_potions.register_effect({
 	name = "bad_luck",
 	description = S("Bad Luck"),
 	particle_color = "#887343",
-	on_start = function(object, factor)
+	on_start = function()
 		-- TODO: Bad Luck that only influences loot tables as in
 		-- Minecraft.
 	end,
@@ -772,7 +766,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "bad_omen",
 	description = S("Bad Omen"),
-	get_tt = function(factor)
+	get_tt = function()
 		return S("danger is imminent")
 	end,
 	particle_color = "#472331",
@@ -795,7 +789,7 @@ mcl_potions.register_effect({
 		local entity = object:get_luaentity()
 		return (entity and string.find(entity.name, "wither"))
 	end,
-	on_hit_timer = function(object, factor, duration)
+	on_hit_timer = function(object)
 		if object:is_player() or object:get_luaentity() then
 			mcl_util.deal_damage(object, 1, {type = "magic"})
 		end
@@ -810,10 +804,10 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "blindness",
 	description = "Blindness",
-	get_tt = function(factor)
+	get_tt = function()
 		return S("impaired sight")
 	end,
-	on_start = function(object, factor)
+	on_start = function(object)
 		if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
 			[hud_elem_type_field] = "image",
@@ -824,7 +818,7 @@ mcl_potions.register_effect({
 		})
 		end
 	end,
-	on_load = function(object, factor)
+	on_load = function(object)
 		if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
 			[hud_elem_type_field] = "image",
@@ -854,7 +848,7 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("exhausts by @1 per second", factor)
 	end,
-	on_start = function(object, factor)
+	on_start = function(object)
 		if object:is_player () and mcl_hunger.active then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
@@ -862,7 +856,7 @@ mcl_potions.register_effect({
 		end
 		end
 	end,
-	on_load = function(object, factor) -- TODO refactor and add hunger bar modifier API
+	on_load = function(object) -- TODO refactor and add hunger bar modifier API
 		if object:is_player () and mcl_hunger.active then
 		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		if mcl_hunger.debug then
@@ -870,7 +864,7 @@ mcl_potions.register_effect({
 		end
 		end
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(dtime, object, factor)
 		if object:is_player () and mcl_hunger.active then
 		mcl_hunger.exhaust(object:get_player_name(), dtime*factor)
 		end
@@ -892,12 +886,12 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("not feeling very well...").."\n"..S("frequency: @1 / 1 s", factor)
 	end,
-	on_start = function(object, factor)
+	on_start = function(object)
 		object:set_lighting({
 			saturation = -1.0,
 		})
 	end,
-	on_hit_timer = function(object, factor, duration)
+	on_hit_timer = function(object)
 		if EF.nausea[object].nauseated then
 			EF.nausea[object].nauseated = false
 		else
@@ -924,7 +918,7 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("saturates by @1 per second", factor)
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(dtime, object, factor)
 		if object:is_player () then
 		mcl_hunger.set_hunger(object, math.min(mcl_hunger.get_hunger(object)+dtime*factor, 20))
 		mcl_hunger.saturate(object:get_player_name(), dtime*factor)
@@ -946,7 +940,7 @@ function mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac)
 	local f_level = registered_effects.fatigue.factor_to_level (f_fac)
 	interval = interval * (1.0 + 0.1 * (-h_level + f_level))
 	toolcaps.full_punch_interval = math.min (interval, LONGEST_PUNCH_INTERVAL)
-	for name, group in pairs(toolcaps.groupcaps) do
+	for _, group in pairs(toolcaps.groupcaps) do
 		local t = group.times
 		for i=1, #t do
 			if f_fac == 0 then
@@ -988,9 +982,9 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("+@1% mining and attack speed", math.floor(factor*100))
 	end,
-	on_start = function (object, factor)
+	on_start = function (object)
 		if object:is_player () then
-		mcl_potions.update_haste_and_fatigue (object, factor)
+		mcl_potions.update_haste_and_fatigue (object)
 		end
 	end,
 	after_end = function(object)
@@ -1012,9 +1006,9 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("-@1% mining and attack speed", math.floor((1-factor)*100))
 	end,
-	on_start = function (object, factor)
+	on_start = function (object)
 		if object:is_player () then
-		mcl_potions.update_haste_and_fatigue (object, factor)
+		mcl_potions.update_haste_and_fatigue (object)
 		end
 	end,
 	after_end = function(object)
@@ -1036,12 +1030,12 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("+@1% mining and attack speed in water").."\n"..S("limitless breathing under water", math.floor(factor*100))
 	end,
-	on_start = function (object, factor)
+	on_start = function (object)
 		if object:is_player () then
-		mcl_potions.update_haste_and_fatigue (object, factor)
+		mcl_potions.update_haste_and_fatigue (object)
 		end
 	end,
-	on_step = function(dtime, object, factor, duration)
+	on_step = function(_, object)
 		if not object:is_player() then return end
 		local node = minetest.get_node_or_nil(object:get_pos())
 		if node and minetest.registered_nodes[node.name]
@@ -1092,12 +1086,12 @@ function mcl_potions.update_haste_and_fatigue(player)
 	meta:set_tool_capabilities(mcl_potions.apply_haste_fatigue(toolcaps, h_fac, f_fac))
 	player:set_wielded_item(item)
 	end
-	haste_fatigue_hand_update(player, h_fac, f_fac)
+	haste_fatigue_hand_update(player)
 end
-minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
+minetest.register_on_punchnode(function(_, _, puncher)
 	mcl_potions.update_haste_and_fatigue(puncher)
 end)
-minetest.register_on_punchplayer(function(player, hitter)
+minetest.register_on_punchplayer(function(_, hitter)
 	if not hitter:is_player() then return end -- TODO implement haste and fatigue support for mobs?
 	mcl_potions.update_haste_and_fatigue(hitter)
 end)
@@ -1430,7 +1424,7 @@ end
 mcl_gamemode.register_on_gamemode_change(mcl_potions._reset_haste_fatigue_item_meta)
 
 function mcl_potions._clear_cached_effect_data(object)
-	for name, effect in pairs(EF) do
+	for _, effect in pairs(EF) do
 		effect[object] = nil
 	end
 	if not object:is_player() then return end
@@ -1455,7 +1449,7 @@ function mcl_potions._reset_effects(object, set_hud)
 		end
 		if effect.after_end then table.insert(removed_effects, effect.after_end) end
 	end
-	for name, tbl in pairs (item_speed_effects) do
+	for _, tbl in pairs (item_speed_effects) do
 		tbl[object] = nil
 	end
 
@@ -1783,8 +1777,7 @@ function mcl_potions.make_invisible(obj_ref, hide)
 end
 
 
-function mcl_potions._use_potion(obj, color)
-	local d = 0.1
+function mcl_potions._use_potion(obj)
 	local pos = obj:get_pos()
 	minetest.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})
 end
