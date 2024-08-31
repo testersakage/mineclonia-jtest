@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-06 13:18+0000\n"
+"PO-Revision-Date: 2024-08-30 14:13+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_achievements/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7\n"
 
 msgid "Benchmarking"
 msgstr "始方工作台"
@@ -105,7 +105,7 @@ msgstr ""
 "提示：一直敲击树干，直到它弹出方块。"
 
 msgid "Who is Cutting Onions?"
-msgstr ""
+msgstr "谁在切洋葱？"
 
 msgid "Pick up a crying obsidian from the floor."
 msgstr ""
@@ -154,7 +154,7 @@ msgid "Travel by minecart for at least 1000 meters from your starting point in a
 msgstr "乘坐矿车，至少行进1000米。"
 
 msgid "Sniper Duel"
-msgstr ""
+msgstr "弓弩对决"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
 msgstr ""
@@ -166,7 +166,7 @@ msgid "Kill a monster."
 msgstr "杀死一头怪物。"
 
 msgid "We Need to Go Deeper"
-msgstr ""
+msgstr "向深处进发"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
@@ -179,7 +179,7 @@ msgid "Or the beginning?\n"
 msgstr ""
 
 msgid "The Nether"
-msgstr ""
+msgstr "下界"
 
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
@@ -198,7 +198,7 @@ msgid "Sleep in a bed to change your respawn point."
 msgstr "睡在床上，改变重生点。"
 
 msgid "Not Quite \"Nine\" Lives"
-msgstr ""
+msgstr "不只有九条命"
 
 msgid "Charge a Respawn Anchor to the maximum."
 msgstr ""
@@ -210,7 +210,7 @@ msgid "Successfully trade with a Villager."
 msgstr "成功与村民交易。"
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "天才钓鱼佬"
 
 msgid "Catch a fish... without a fishing rod!"
 msgstr ""
@@ -234,17 +234,19 @@ msgid "Kill the ender dragon. Good Luck!"
 msgstr ""
 
 msgid "Fishy Business"
-msgstr ""
+msgstr "捕鱼大业"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
 msgstr ""
+"捕一条鱼。\n"
+"提示：鲑鱼、小丑鱼或河豚均可。"
 
 msgid "Country Lode, Take Me Home"
-msgstr ""
+msgstr "臣心一片磁针石，不指南方不肯休"
 
 msgid "Use a compass on a Lodestone."
-msgstr ""
+msgstr "在磁石上校正指南针。"
 
 msgid "Serious Dedication"
 msgstr ""
