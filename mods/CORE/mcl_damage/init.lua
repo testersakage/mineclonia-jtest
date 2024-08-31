@@ -98,11 +98,11 @@ function mcl_damage.finish_reason(mcl_reason)
 
 	if mcl_reason.source then
 	    if not mcl_reason.source:is_player () then
-		local entity = mcl_reason.source:get_luaentity ()
-		if entity.is_mob then
-		    mcl_reason.mob_name = entity.name
+			local entity = mcl_reason.source:get_luaentity ()
+			if entity and entity.is_mob then
+				mcl_reason.mob_name = entity.name
+			end
 		end
-	    end
 	end
 end
 
