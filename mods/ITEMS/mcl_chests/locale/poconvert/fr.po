@@ -109,12 +109,15 @@ msgstr "Boîte de Shulter Noire"
 msgid "Shulker Box"
 msgstr "Boîte de Shulter"
 
+msgid "Can be carried around with its contents"
+msgstr "Peut être transporté avec son contenu"
+
+msgid "and @1 more"
+msgstr ""
+
 msgid "A shulker box is a portable container which provides 27 inventory slots for any item except shulker boxes. Shulker boxes keep their inventory when broken, so shulker boxes as well as their contents can be taken as a single item. Shulker boxes come in many different colors."
 msgstr "Une boîte shulker est un conteneur portable qui fournit 27 emplacements d'inventaire pour tout article, à l'exception des boîtes shulker. Les boîtes Shulker conservent leur inventaire lorsqu'elles sont brisées, de sorte que les boîtes Shulker ainsi que leur contenu peuvent être considérés comme un seul élément. Les boîtes Shulker sont disponibles dans de nombreuses couleurs différentes."
 
 msgid "To access the inventory of a shulker box, place and right-click it. To take a shulker box and its contents with you, just break and collect it, the items will not fall out. Place the shulker box again to be able to retrieve its contents."
 msgstr "Pour accéder à l'inventaire d'une boîte shulker, placez-la et cliquez dessus avec le bouton droit. Pour emporter une boîte shulker et son contenu, il suffit de la casser et de la récupérer, les objets ne tomberont pas. Replacez la boîte shulker pour pouvoir récupérer son contenu."
-
-msgid "Can be carried around with its contents"
-msgstr "Peut être transporté avec son contenu"
 

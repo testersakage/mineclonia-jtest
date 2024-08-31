@@ -22,15 +22,3 @@ msgstr "Furtka z czerwonej netherowej cegły"
 msgid "Nether Brick Fence Gate"
 msgstr "Furtka z netherowej cegły"
 
-msgid "@1 Bark Fence"
-msgstr ""
-
-msgid "@1 Bark Fence Gate"
-msgstr ""
-
-msgid "Stripped @1 Wood Fence"
-msgstr ""
-
-msgid "Stripped @1 Wood Fence Gate"
-msgstr ""
-
