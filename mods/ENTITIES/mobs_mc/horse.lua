@@ -128,18 +128,15 @@ local horse = {
 	walk_chance = 60,
 	view_range = 16,
 	follow = {
-		"mcl_core:apple",
-		"mcl_core:sugar",
-		"mcl_farming:wheat_item",
-		"mcl_farming:hay_block",
-		"mcl_core:apple_gold",
 		"mcl_farming:carrot_item_gold",
+		"mcl_core:apple_gold",
+		"mcl_core:apple_gold_enchanted",
 	},
 	_temper_increase = {
 		["mcl_core:sugar"] = 3,
 		["mcl_farming:wheat_item"] = 3,
 		["mcl_core:apple"] = 3,
-	    ["mcl_farming:carrot_item_gold"] = 5,
+	  ["mcl_farming:carrot_item_gold"] = 5,
 		["mcl_core:apple_gold"] = 10
 	},
 	passive = true,
@@ -219,13 +216,11 @@ local horse = {
 		end
 		return true
 	end,
-
 	on_die = function(self)
 		if self.driver then
 			detach_driver(self)
 		end
 	end,
-
 	on_rightclick = function(self, clicker)
 		if not clicker or not clicker:is_player() then
 			return
@@ -259,7 +254,7 @@ local horse = {
 		if self:break_in(clicker) then return end
 
 		if can_breed(self.name) then
-			if (iname == "mcl_core:apple_gold") then
+			if (iname == "mcl_core:apple_gold") or (iname == "mcl_core:apple_gold_enchanted") then
 				heal = 10
 			elseif (iname == "mcl_farming:carrot_item_gold") then
 				heal = 4
@@ -268,6 +263,7 @@ local horse = {
 				return
 			end
 		end
+
 		if (iname == "mcl_core:sugar") then
 			heal = 1
 		elseif (iname == "mcl_farming:wheat_item") then
@@ -376,7 +372,6 @@ local horse = {
 			})
 		end
 	end,
-
 	on_breed = function(parent1, parent2)
 		local pos = parent1.object:get_pos()
 		local child = mcl_mobs.spawn_child(pos, parent1.name)
@@ -432,10 +427,12 @@ local skeleton_horse = table.merge(horse, {
 	armor = {undead = 100, fleshy = 100},
 	textures = {{"blank.png", "mobs_mc_horse_skeleton.png", "blank.png"}},
 	drops = {
-		{name = "mcl_mobitems:bone",
-		chance = 1,
-		min = 0,
-		max = 2,},
+		{
+			name = "mcl_mobitems:bone",
+			chance = 1,
+			min = 0,
+			max = 2,
+		},
 	},
 	sounds = {
 		random = "mobs_mc_skeleton_random",
@@ -447,6 +444,7 @@ local skeleton_horse = table.merge(horse, {
 	},
 	harmed_by_heal = true,
 })
+
 mcl_mobs.register_mob("mobs_mc:skeleton_horse", skeleton_horse)
 
 mcl_mobs.register_mob("mobs_mc:zombie_horse", table.merge(skeleton_horse, {
