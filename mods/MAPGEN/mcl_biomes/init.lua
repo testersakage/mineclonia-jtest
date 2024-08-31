@@ -5663,8 +5663,8 @@ local function register_dimension_decorations()
 		decoration = "mcl_end:chorus_flower",
 		height = 1,
 		biomes = { "End", "EndMidlands", "EndHighlands", "EndBarrens", "EndSmallIslands" },
-		gen_callback = function(t,p1,p2,blockseed)
-			local pr = PseudoRandom(blockseed + 14)
+		gen_callback = function(t, minp, maxp, blockseed)
+			local pr = PcgRandom(blockseed + mg_seed + 99682)
 			for _, pos in ipairs(t) do
 				local x, y, z = pos.x, pos.y, pos.z
 				if x < -10 or x > 10 or z < -10 or z > 10 then
