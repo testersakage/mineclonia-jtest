@@ -495,10 +495,10 @@ function mcl_mobs.register_arrow(name, def)
 					if closest_object:is_player () then
 						self:hit_player (closest_object)
 					elseif entity then
-						if entity.is_mob then
-						self:hit_mob (closest_object)
-						else
-						self:hit_object (closest_object)
+						if entity.is_mob and self.hit_mob then
+							self:hit_mob (closest_object)
+						elseif self.hit_object then
+							self:hit_object (closest_object)
 						end
 					end
 					self.object:remove ()
