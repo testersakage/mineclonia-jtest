@@ -1306,25 +1306,27 @@ end
 local shulker_tt_empty = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents")
 
 tt.register_snippet(function(itemstring, _ , itemstack)
-	if itemstack and minetest.get_item_group(itemstring, "shulker_box") > 0 then
-		local d = ""
-		local i = 0
-		for _, v in ipairs(minetest.deserialize(itemstack:get_meta():get_string(""))) do
-			local stack = ItemStack(v)
-			if not stack:is_empty() then
-				if i < shulker_num_tt_stacks then
-					d = d .. "\n " ..(stack:get_short_description() or stack:get_description()) .. ( stack:get_count() > 1 and (" x"..stack:get_count()) or "" )
+	if minetest.get_item_group(itemstring, "shulker_box") > 0 then
+		if itemstack then
+			local d = ""
+			local i = 0
+			for _, v in ipairs(minetest.deserialize(itemstack:get_meta():get_string(""))) do
+				local stack = ItemStack(v)
+				if not stack:is_empty() then
+					if i < shulker_num_tt_stacks then
+						d = d .. "\n " ..(stack:get_short_description() or stack:get_description()) .. ( stack:get_count() > 1 and (" x"..stack:get_count()) or "" )
+					end
+					i = i + 1
 				end
-				i = i + 1
+			end
+			if d ~= "" and i - shulker_num_tt_stacks > 0 then
+				d = d .. "\n "..S("and @1 more",tostring(i - shulker_num_tt_stacks))
+			end
+			if i > 0 then
+				return d, mcl_colors.GREEN
 			end
 		end
-		if d ~= "" and i - shulker_num_tt_stacks > 0 then
-			d = d .. "\n "..S("and @1 more",tostring(i - shulker_num_tt_stacks))
-		end
-		if i == 0 then
-			return shulker_tt_empty, mcl_colors.GREEN
-		end
-		return d, mcl_colors.GREEN
+		return shulker_tt_empty, mcl_colors.GREEN
 	end
 end)
 
