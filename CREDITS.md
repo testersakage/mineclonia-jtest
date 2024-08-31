@@ -19,6 +19,7 @@
 * amino
 * Jürgen Rühle
 * teknomunk
+* kno10
 
 ## Previous Contributors
 * Lizzy Fleckenstein

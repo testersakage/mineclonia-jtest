@@ -21,6 +21,7 @@ return {
 		"amino",
 		"Jürgen Rühle",
 		"teknomunk",
+		"kno10",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
