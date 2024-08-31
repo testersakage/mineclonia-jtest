@@ -147,8 +147,6 @@ minetest.register_globalstep(function(dtime)
 		local food_saturation_level = mcl_hunger.get_saturation(player)
 		local player_health = mcl_damage.get_hp (player)
 
-		local max_tick_timer = tonumber(minetest.settings:get("mcl_health_regen_delay")) or 0.5
-
 		if food_tick_timer > 4.0 then
 			food_tick_timer = 0
 
