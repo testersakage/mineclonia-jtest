@@ -1303,8 +1303,7 @@ local function set_shulkerbox_meta(nmeta, imeta)
 	nmeta:set_string("formspec", formspec_shulker_box(name))
 end
 
-local shulker_tt = S("Can be carried around with its contents")
-local shulker_tt_empty = S("27 inventory slots").."\n"..shulker_tt
+local shulker_tt_empty = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents")
 
 tt.register_snippet(function(itemstring, _ , itemstack)
 	if itemstack and minetest.get_item_group(itemstring, "shulker_box") > 0 then
@@ -1325,7 +1324,7 @@ tt.register_snippet(function(itemstring, _ , itemstack)
 		if i == 0 then
 			return shulker_tt_empty, mcl_colors.GREEN
 		end
-		return minetest.colorize(mcl_colors.GREEN, shulker_tt).."\n"..minetest.colorize(mcl_colors.WHITE, d), false
+		return d, mcl_colors.WHITE
 	end
 end)
 
