@@ -1324,7 +1324,7 @@ tt.register_snippet(function(itemstring, _ , itemstack)
 		if i == 0 then
 			return shulker_tt_empty, mcl_colors.GREEN
 		end
-		return d, mcl_colors.WHITE
+		return d, mcl_colors.GREEN
 	end
 end)
 
