@@ -102,7 +102,6 @@ mcl_mobs.mob_class = {
 	facing_fence = false,
 	is_mob = true,
 	pushable = true,
-	mob_pushable = true,
 	avoid_distance = 9,
 	ignores_nametag = false,
 	rain_damage = 0,
