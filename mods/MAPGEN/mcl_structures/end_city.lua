@@ -28,7 +28,7 @@ vl_structures.register_structure("end_shipwreck",{
 	after_place = function(pos,def,pr,p1,p2)
 		local fr = minetest.find_nodes_in_area(p1,p2,{"mcl_itemframes:item_frame"})
 		if #fr > 0 and mcl_itemframes then
-			mcl_itemframes.update_item_entity(fr[1],minetest.get_node(fr))
+			mcl_itemframes.update_item_entity(fr[1],minetest.get_node(fr[1]))
 		end
 		return spawn_shulkers(pos,def,pr,p1,p2)
 	end,
