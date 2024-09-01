@@ -124,6 +124,8 @@ mcl_mobs.mob_class = {
 	player_active_range = tonumber(minetest.settings:get("mcl_mob_active_range")) or 48,
 	persist_in_peaceful = true,
 	wears_armor = false,
+	steer_class = "controls",
+	steer_item = nil,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

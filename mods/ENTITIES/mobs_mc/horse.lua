@@ -1,4 +1,5 @@
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
 local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
 
@@ -127,6 +128,7 @@ local horse = {
 	fly = false,
 	walk_chance = 60,
 	view_range = 16,
+	steer_class = "controls",
 	follow = {
 		"mcl_farming:carrot_item_gold",
 		"mcl_core:apple_gold",
@@ -149,6 +151,9 @@ local horse = {
 	jump = true,
 	jump_height = 5.75,
 	drops = { base_drop },
+	should_drive = function (self)
+		return self._saddle and mob_class.should_drive (self)
+	end,
 	on_spawn = function(self)
 		local tex = horse_extra_texture(self)
 		self.object:set_properties({textures = tex})
@@ -210,10 +215,6 @@ local horse = {
 			end
 		end
 
-		if self.driver and self._saddle then
-			self:drive("walk", "stand", false, dtime)
-			return false
-		end
 		return true
 	end,
 	on_die = function(self)

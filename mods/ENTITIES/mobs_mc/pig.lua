@@ -60,36 +60,12 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		"mcl_mobitems:carrot_on_a_stick"
 	},
 	view_range = 8,
+	steer_class = "follow_item",
+	steer_item  = "mcl_mobitems:carrot_on_a_stick",
 	_on_lightning_strike = function(self)
 		 mcl_util.replace_mob(self.object, "mobs_mc:zombified_piglin")
 		 return true
 	end,
-	do_custom = function(self, dtime)
-
-		-- set needed values if not already present
-		if not self.v3 then
-			local vsize = self.object:get_properties().visual_size
-			self.v3 = 0
-			self.max_speed_forward = 4
-			self.max_speed_reverse = 2
-			self.accel = 4
-			self.terrain_type = 3
-			self.driver_attach_at = {x = 0.0, y = 6.5, z = -3.75}
-			self.driver_eye_offset = {x = 0, y = 3, z = 0}
-			self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
-			self.base_texture = self.texture_list[1]
-			self.object:set_properties({textures = self.base_texture})
-		end
-
-		-- if driver present allow control of horse
-		if self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
-			self:drive("walk", "stand", false, dtime)
-			return false -- skip rest of mob functions
-		end
-
-		return true
-	end,
-
 	on_die = function(self)
 
 		-- drop saddle when horse is killed while riding
@@ -144,16 +120,9 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 			return
 		end
 
-			-- Should make pig go faster when right clicked with carrot on a stick.
-			-- FIXME: needs work on the going faster part.
-		--[[if self.driver and clicker == self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
-			if not self.v3 then
-				self.v3 = 0
-				self.max_speed_forward = 100
-				self.accel = 10
-			end
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-
+		-- Accelerate pig when right clicked with carrot on a stick.
+		if self.driver and clicker == self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
+			if self:hog_boost () and not minetest.is_creative_enabled(clicker:get_player_name()) then
 				local inv = self.driver:get_inventory()
 				-- 26 uses
 				if wielditem:get_wear() > 63000 then
@@ -168,7 +137,8 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 				end
 				inv:set_stack("main",self.driver:get_wield_index(), wielditem)
 			end
-		end]]
+			return
+		end
 
 		-- Mount or detach player
 		if self.driver and clicker == self.driver then -- and self.driver:get_wielded_item():get_name() ~= "mcl_mobitems:carrot_on_a_stick" then -- Note: This is for when the ability to make the pig go faster is implemented

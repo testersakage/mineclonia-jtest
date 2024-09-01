@@ -67,6 +67,8 @@ local strider = {
 	fire_resistant = true,
 	floats_on_lava = 1,
 	floats = 0,
+	steer_class = "follow_item",
+	steer_item = "mcl_mobitems:warped_fungus_on_a_stick",
 	can_spawn = function(pos)
 		local l = minetest.find_node_near(pos,2,{"mcl_nether:nether_lava_source","mcl_nether:nether_lava_flowing"})
 		return l ~= nil
@@ -104,21 +106,6 @@ local strider = {
 			self.driver_eye_offset = {x = 0, y = 10, z = 0}
 			self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
 		end
-
-		-- if driver present allow control of horse
-		if self.driver then
-			if self.driver:get_wielded_item():get_name() == "mcl_mobitems:warped_fungus_on_a_stick" then
-				self:drive("walk", "stand", false, dtime)
-			end
-			local pos = self.object:get_pos()
-			local v = self.object:get_velocity()
-			self.object:set_velocity(vector.new(v.x,0,v.z))
-			local l = minetest.find_node_near(pos,2,{"group:lava"})
-			if l then self.object:set_pos(vector.new(pos.x,l.y+0.5,pos.z)) end
-			return false -- skip rest of mob functions
-		end
-
-		return true
 	end,
 
 	on_die = function(self)

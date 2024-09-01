@@ -383,11 +383,16 @@ function mob_class:on_step(dtime, moveresult)
 		self:safe_remove()
 		return
 	end
+	local should_drive = self:should_drive ()
 
 	if self:check_despawn(pos, dtime) then return true end
 
 	self:update_tag()
-	self:slow_mob()
+
+	if not should_drive or self.steer_class ~= "follow_item" then
+	   self:slow_mob ()
+	end
+
 	if not (moveresult and moveresult.touching_ground) and self:falling(pos) then return end
 
 	-- Get nodes early for use in other functions
@@ -406,7 +411,7 @@ function mob_class:on_step(dtime, moveresult)
 	local pos_head = vector.offset(p, 0, cbox[5] - 0.5, 0)
 	self.head_in =  mcl_mobs.node_ok(pos_head, "air").name
 
-	if self:falling(pos) then return end
+	self:falling (pos)
 
 	if self.force_step then
 		self:force_step(dtime)
@@ -420,7 +425,9 @@ function mob_class:on_step(dtime, moveresult)
 
 	self:check_water_flow()
 
-	self:env_danger_movement_checks (dtime)
+	if not self.driver then
+	   self:env_danger_movement_checks (dtime)
+	end
 
 	if not self.fire_resistant then
 		mcl_burning.tick(self.object, dtime, self)
@@ -430,26 +437,40 @@ function mob_class:on_step(dtime, moveresult)
 
 	if self.state == "die" then return end
 
-	self:follow_player() -- Mob following code.
+	if should_drive then
+	   self:check_smooth_rotation (dtime)
 
-	self:set_animation_speed()
-	self:check_smooth_rotation(dtime)
-	self:check_head_swivel(dtime)
+	   -- Called only to reset the swivel.
+	   self:check_head_swivel (dtime, true)
+	   self:drive ("walk", "stand", false, dtime, moveresult)
+	   self:env_damage (dtime, pos)
+	   self:check_particlespawners(dtime)
+	   self:check_item_pickup()
+	else
+	   self:follow_player() -- Mob following code.
+	   self:set_animation_speed()
+	   self:check_smooth_rotation(dtime)
+	   self:check_head_swivel(dtime)
 
-	self:set_armor_texture()
-	self:check_runaway_from()
+	   self:set_armor_texture()
+	   self:check_runaway_from()
 
-	self:attack_players_and_npcs()
-	self:attack_monsters()
-	self:attack_specific()
+	   self:attack_players_and_npcs()
+	   self:attack_monsters()
+	   self:attack_specific()
 
-	self:check_breeding()
-	self:check_aggro(dtime)
+	   self:check_breeding()
+	   self:check_aggro(dtime)
+	end
 
 	if self.do_custom then
 		if self.do_custom(self, dtime) == false then
 			return
 		end
+	end
+
+	if should_drive then
+	   return
 	end
 
 	if self._just_portaled then
@@ -459,7 +480,9 @@ function mob_class:on_step(dtime, moveresult)
 		end
 	end
 
-	if update_attack_timers(self, dtime) then return end
+	if update_attack_timers(self, dtime) then
+	   return
+	end
 
 	self:check_particlespawners(dtime)
 	self:check_item_pickup()
@@ -476,13 +499,15 @@ function mob_class:on_step(dtime, moveresult)
 	if self:do_states(dtime) then return end
 
 	--mobs that can climb over stuff
-	if self.always_climb and self:node_infront_ok(pos, 0).name ~= "air" then
+	if self.always_climb
+	   and self:node_infront_ok(pos, 0).name ~= "air" then
 		self:climb()
 	end
 
 	if self.jump_sound_cooloff > 0 then
 		self.jump_sound_cooloff = self.jump_sound_cooloff - dtime
 	end
+
 	self:do_jump()
 
 	if not self.object:get_luaentity() then
