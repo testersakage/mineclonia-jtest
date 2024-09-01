@@ -367,6 +367,10 @@ function ARROW_ENTITY.on_step(self, dtime)
 					-- Reset deflection cooloff timer to prevent many deflections happening in quick succession
 					self._deflection_cooloff = 1.0
 				end
+				-- Set fire to arrows which pass through lava or fire.
+				if minetest.get_item_group(node.name, "set_on_fire") > 0 then
+					mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
+				end
 			else
 
 				-- Node was walkable, make arrow stuck
