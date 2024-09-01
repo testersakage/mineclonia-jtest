@@ -119,8 +119,120 @@ function mcl_mobs.detach(player, offset)
 	end
 end
 
+function mob_class:should_drive ()
+	if self.steer_class == "controls" then
+		return self.driver ~= nil
+	else
+		if not self.driver then
+			return nil
+		end
+		local item = self.driver:get_wielded_item ()
+		local itemname = item and item:get_name ()
+		return self.steer_item == nil or itemname == self.steer_item
+	end
+end
 
-function mob_class:drive(moving_anim, stand_anim, can_fly, dtime)
+function mob_class:drive(moving_anim, stand_anim, can_fly, dtime, moveresult)
+   if self.steer_class == "controls" then
+	   self:drive_controls (moving_anim, stand_anim, can_fly, dtime, moveresult)
+   elseif self.steer_class == "follow_item" then
+	   self:drive_follow (moving_anim, stand_anim, dtime, moveresult)
+   end
+end
+
+function mob_class:hog_boost ()
+	if self._drive_boost_elapsed ~= nil then
+		return false
+	end
+	self._drive_boost_elapsed = 0
+	self._drive_boost_total = (math.random (841) + 140) / 20.0
+	return true
+end
+
+-- Pig-like steering for ridden mobs.
+function mob_class:drive_follow (moving_anim, stand_anim, dtime, moveresult)
+	local dir = self.driver:get_look_horizontal ()
+	-- Move forward but steer the pig in the direction the
+	-- driver is facing.
+	local pos = self.object:get_pos ()
+	local jump = self:check_jump (pos, moveresult)
+
+	self.object:set_yaw (dir - self.rotate)
+	local elapsed, total
+
+	if self._drive_boost_elapsed then
+		self._drive_boost_elapsed = self._drive_boost_elapsed + dtime
+		if self._drive_boost_elapsed > self._drive_boost_total then
+			self._drive_boost_elapsed = nil
+		else
+			elapsed = self._drive_boost_elapsed
+			total = self._drive_boost_total
+		end
+	end
+
+	if self._drive_jump_time then
+		self._drive_jump_time = self._drive_jump_time + dtime
+		local v = self.object:get_velocity ()
+		if self._drive_jump_time < 1 and v.y ~= 0 then
+			-- Keep attempting to move forward.
+			v.x = self._jump_vector.x
+			v.z = self._jump_vector.z
+			self.object:set_velocity (v)
+			return
+		end
+	end
+
+	self._drive_jump_time = nil
+	self._jump_vector = nil
+
+	local velocity = self.run_velocity
+	if elapsed then
+		local f = 1.0 + 1.5 * math.sin (elapsed / total * math.pi)
+		velocity = velocity * f
+	end
+
+	-- Detach the driver if submerged.
+	local headin = minetest.registered_nodes[self.head_in]
+
+	if headin.groups.water then
+	   force_detach (self.driver)
+	   self:roam ()
+	   return
+	end
+
+	local standin = minetest.registered_nodes[self.standing_in]
+	local standon = minetest.registered_nodes[self.standing_on]
+	local old_velocity = self.object:get_velocity ()
+
+	if not jump then
+		local v, acc
+		if self.floats_on_lava and standin.groups.lava then
+			-- If this mob is meant to walk on lava, and
+			-- it is below the surface, ascend slowly.
+			acc = vector.new (0, -self.fall_speed / 16, 0)
+			v = get_velocity (velocity, dir, old_velocity.y)
+		elseif self.floats_on_lava and standon.groups.lava then
+			v = get_velocity (velocity, dir, old_velocity.y * 0.175)
+			acc = vector.zero ()
+		else
+			v = get_velocity (velocity, dir, old_velocity.y)
+			acc = {x = 0, y = self.fall_speed, z = 0,}
+		end
+		self.object:set_velocity (v)
+		self.object:set_acceleration (acc)
+		self.acc = nil
+		self:set_animation (moving_anim)
+	else
+		local v = get_velocity (velocity, dir, self.jump_height)
+		self.object:set_velocity (v)
+		self._jump_vector = v
+		self._drive_jump_time = 0
+		self.acc = nil
+	end
+	self:set_animation_speed ()
+end
+
+function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 	local rot_view = 0
 	if self.player_rotation.y == 90 then
 		rot_view = math.pi/2

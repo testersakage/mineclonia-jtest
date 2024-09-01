@@ -344,6 +344,28 @@ function mob_class:env_danger_movement_checks()
 	end
 end
 
+function mob_class:check_jump (self_pos, moveresult)
+	local max_y = nil
+
+	-- Read the height of every colliding node in moveresult,
+	-- and the node above.
+	for _, item in ipairs (moveresult.collisions) do
+		if item.type == "node"
+			and (item.new_velocity.x ~= item.old_velocity.x
+			     or item.new_velocity.z ~= item.old_velocity.z) then
+			local pos = item.node_pos
+			local boxes = minetest.get_node_boxes ("collision_box", pos)
+			if pos.y > self_pos.y then
+				for _, box in ipairs (boxes) do
+					max_y = math.max (max_y or 0, pos.y + box[2], pos.y + box[5])
+				end
+			end
+		end
+	end
+	return max_y and (max_y > self_pos.y)
+		and (max_y - self_pos.y > self.object:get_properties ().stepheight)
+end
+
 -- jump if facing a solid node (not fences or gates)
 function mob_class:do_jump()
 	if not self.jump

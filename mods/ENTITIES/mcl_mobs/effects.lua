@@ -313,10 +313,14 @@ function mob_class:who_are_you_looking_at()
 	end
 end
 
-function mob_class:check_head_swivel()
+function mob_class:check_head_swivel(dtime, clear)
 	if not self.head_swivel or type(self.head_swivel) ~= "string" then return end
 
-	self:who_are_you_looking_at()
+	if clear then
+	   self._locked_object = nil
+	else
+	   self:who_are_you_looking_at ()
+	end
 
 	local final_rotation = vector.zero()
 
