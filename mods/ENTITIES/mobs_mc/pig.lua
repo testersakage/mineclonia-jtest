@@ -124,6 +124,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		if self.driver and clicker == self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
 			if self:hog_boost () and not minetest.is_creative_enabled(clicker:get_player_name()) then
 				local inv = self.driver:get_inventory()
+				local wielditem = clicker:get_wielded_item ()
 				-- 26 uses
 				if wielditem:get_wear() > 63000 then
 					-- Break carrot on a stick
