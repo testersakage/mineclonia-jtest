@@ -364,28 +364,6 @@ local MOB_SPAWN_ZONE_OUTER = 128
 
 
 local SPAWN_MAPGEN_LIMIT  = 30911
-local SPAWN_DISTANCE_CDF_PWL = {
-	{0.000,0.00},
-	{0.083,0.40},
-	{0.416,0.75},
-	{1.000,1.00},
-}
--- Calculate the inverse of a piecewise linear function f(x). Line segments are represented as two
--- adjacent points specified as { x, f(x) }. At least 2 points are required. If there are most solutions,
--- the one with a lower x value will be chosen.
-local function inverse_pwl(fx, f)
-	if fx < f[1][2] then
-		return f[1][1]
-	end
-	for i=2,#f do
-		local x0,fx0 = unpack(f[i-1])
-		local x1,fx1 = unpack(f[i  ])
-		if fx < fx1 then
-			return (fx - fx0) * (x1 - x0) / (fx1 - fx0) + x0
-		end
-	end
-	return f[#f][1]
-end
 
 
 local two_pi = 2 * math.pi
@@ -393,22 +371,22 @@ local function math_round(x) return (x > 0) and math.floor(x + 0.5) or math.ceil
 
 local function get_next_mob_spawn_pos(pos)
 	-- Select a distance such that distances closer to the player are selected much more often than
-	-- those further away from the player.
-	local fx = (math.random(1,10000)-1) / 10000
-	local x = inverse_pwl(fx, SPAWN_DISTANCE_CDF_PWL)
-	local distance = x * (MOB_SPAWN_ZONE_OUTER - MOB_SPAWN_ZONE_INNER) + MOB_SPAWN_ZONE_INNER
+	-- those further away from the player. This does produce a concentration at INNER (24 blocks)
+	local distance = math.random()^2 * (MOB_SPAWN_ZONE_OUTER - MOB_SPAWN_ZONE_INNER) + MOB_SPAWN_ZONE_INNER
 	--print("Using spawn distance of "..tostring(distance).."  fx="..tostring(fx)..",x="..tostring(x))
 
-	-- TODO Floor xoff and zoff and add 0.5 so it tries to spawn in the middle of the square. Less failed attempts.
-	-- Use spherical coordinates https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates
-	local theta = math.random() * two_pi
-	local phi = math.random() * two_pi
-	local xoff = math_round(distance * math.sin(theta) * math.cos(phi))
-	local yoff = math_round(distance * math.cos(theta))
-	local zoff = math_round(distance * math.sin(theta) * math.sin(phi))
+	-- Choose a random direction. Rejection sampling is simple and fast (1-2 tries usually)
+	local xoff, yoff, zoff, dd
+	repeat
+	       xoff, yoff, zoff = math.random() * 2 - 1, math.random() * 2 - 1, math.random() * 2 - 1
+	       dd = xoff*xoff + yoff*yoff + zoff*zoff
+	until (dd <= 1 and dd >= 1e-6) -- outside of uniform ball, retry
+	dd = distance / math.sqrt(dd) -- distance scaling factor
+	xoff, yoff, zoff = xoff * dd, yoff * dd, zoff * dd
+	
 	local goal_pos = vector.offset(pos, xoff, yoff, zoff)
 
-	if not ( math.abs(goal_pos.x) <= SPAWN_MAPGEN_LIMIT and math.abs(pos.y) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.z) <= SPAWN_MAPGEN_LIMIT ) then
+	if not ( math.abs(goal_pos.x) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.y) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.z) <= SPAWN_MAPGEN_LIMIT ) then
 		return nil
 	end
 
