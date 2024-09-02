@@ -54,9 +54,9 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	local pos = self.object:get_pos ()
 	local closest_player, cur_dist
 
-    if not self:check_timer ("player_check", 0.3) then
+	if not self:check_timer ("player_check", 0.3) then
 		return
-    end
+	end
 
 	-- Cling to the current player if still swimming.
 	if self.following and self:object_in_follow_range (self.following)
