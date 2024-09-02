@@ -271,7 +271,22 @@ local function allow_put(pos, listname, _, stack, player)
 	return stack:get_count()
 end
 
-local function on_put(pos, listname, index, stack, _)
+local function start_stand_if_not_empty(pos)
+	local meta = minetest.get_meta(pos)
+	local inv = meta:get_inventory()
+	local str = ""
+	for i=1, inv:get_size("stand") do
+		local stack = inv:get_stack("stand", i)
+		if not stack:is_empty() then
+			str = str.."1"
+		else str = str.."0"
+		end
+	end
+	minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
+	minetest.get_node_timer(pos):start(1.0)
+end
+
+local function on_put(pos, listname, _, stack, _)
 	local meta = minetest.get_meta (pos)
 	local inv = meta:get_inventory ()
 
@@ -291,34 +306,10 @@ local function on_put(pos, listname, index, stack, _)
 	end
 
 	if listname == "stand" then
-		local str = ""
-		local stack
-		for i=1, inv:get_size("stand") do
-			stack = inv:get_stack("stand", i)
-			if not stack:is_empty() then
-			str = str.."1"
-			else str = str.."0"
-			end
-		end
-		minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
+		start_stand_if_not_empty(pos)
+		return
 	end
 	minetest.get_node_timer (pos):start (1.0)
-	--some code here to enforce only potions getting placed on stands
-end
-
-local function on_take (pos, listname, _, _, _)
-	local meta = minetest.get_meta(pos)
-	local inv = meta:get_inventory()
-	local str = ""
-	for i=1, inv:get_size("stand") do
-		local stack = inv:get_stack("stand", i)
-		if not stack:is_empty() then
-			str = str.."1"
-		else str = str.."0"
-		end
-	end
-	minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
-	minetest.get_node_timer(pos):start(1.0)
 end
 
 local function allow_move(pos, from_list, from_index, to_list, _, count, _)
@@ -407,7 +398,7 @@ local tpl_brewing_stand = {
 	allow_metadata_inventory_put = allow_put,
 	allow_metadata_inventory_move = allow_move,
 	on_metadata_inventory_put = on_put,
-	on_metadata_inventory_take = on_take,
+	on_metadata_inventory_take = start_stand_if_not_empty,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
