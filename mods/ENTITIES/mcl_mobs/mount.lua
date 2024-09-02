@@ -132,6 +132,19 @@ function mob_class:should_drive ()
 	end
 end
 
+function mob_class:expel_underwater_drivers ()
+	-- Detach the driver if submerged.
+	if self.driver then
+		local headin = minetest.registered_nodes[self.head_in]
+
+		if headin.groups.water then
+			force_detach (self.driver)
+			self:roam ()
+			return
+		end
+	end
+end
+
 function mob_class:drive(moving_anim, stand_anim, can_fly, dtime, moveresult)
    if self.steer_class == "controls" then
 	   self:drive_controls (moving_anim, stand_anim, can_fly, dtime, moveresult)

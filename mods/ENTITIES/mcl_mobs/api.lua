@@ -461,6 +461,9 @@ function mob_class:on_step(dtime, moveresult)
 
 	   self:check_breeding()
 	   self:check_aggro(dtime)
+
+	   -- Expel drivers riding submerged mobs.
+	   self:expel_underwater_drivers ()
 	end
 
 	if self.do_custom then
