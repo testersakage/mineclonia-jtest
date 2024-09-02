@@ -162,6 +162,9 @@ mcl_damage.register_modifier(function(obj, _, reason)
 				if node.name == "mcl_core:vine" then
 					return 0
 				end
+				if node.name == "mcl_powder_snow:powder_snow" then
+					return 0
+				end
 			end
 			pos = vector.add(pos, step)
 			node = minetest.get_node(pos)
