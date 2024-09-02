@@ -204,20 +204,20 @@ end
 
 function mob_class:attack_players_allowed ()
 	if not damage_enabled or
-	    peaceful_mode or
-	    self.state == "attack" or
-	    self.passive or
-	    self:day_docile() or
-	    self.type ~= "monster" or
-	    not self.attack_type then
-	    return false
+		peaceful_mode or
+		self.state == "attack" or
+		self.passive or
+		self:day_docile() or
+		self.type ~= "monster" or
+		not self.attack_type then
+			return false
 	end
 	return true
 end
 
 function mob_class:attack_players_and_npcs()
 	if not self:attack_players_allowed () then
-	    return
+		return
 	end
 	local pos = self.object:get_pos()
 	local objs = minetest.get_objects_inside_radius(pos, self.view_range)
@@ -954,12 +954,12 @@ function mob_class:do_states_attack (dtime)
 
 		--stay away from players so as to shoot them
 		if dist < self.avoid_distance and self.shooter_avoid_enemy then
-		    if self._shoot_while_strafing ~= false then
-			self:set_animation ("shoot")
-		    else
-			self:set_animation ("run")
-		    end
-		    stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
+			if self._shoot_while_strafing ~= false then
+				self:set_animation ("shoot")
+			else
+				self:set_animation ("run")
+			end
+			stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
 		end
 
 		if self.strafes then
