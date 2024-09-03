@@ -138,6 +138,7 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 		if freezing_players[name].time_in_snow > 5 then
 			show_freezing_hud(player, 3)
 			mcl_damage.damage_player(player, 0.5, {type = "freeze"})
+			hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png")
 		elseif freezing_players[name].time_in_snow == 3 then
 			show_freezing_hud(player, 2)
 		elseif freezing_players[name].time_in_snow == 1 then
@@ -157,6 +158,7 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 			if freezing_players[name].time_in_snow == 1 then
 				show_freezing_hud(player, 1)
 			elseif freezing_players[name].time_in_snow == 3 then
+				hb.change_hudbar(player, "health", nil, nil, "hudbars_icon_health.png")
 				show_freezing_hud(player, 2)
 			end
 		end
