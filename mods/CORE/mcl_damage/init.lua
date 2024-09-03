@@ -10,6 +10,7 @@ mcl_damage = {
 		hot_floor = {is_fire = true},
 		in_wall = {bypasses_armor = true},
 		drown = {bypasses_armor = true},
+		freeze = {bypasses_armor = true},
 		starve = {bypasses_armor = true, bypasses_magic = true},
 		cactus = {},
 		sweet_berry = {},

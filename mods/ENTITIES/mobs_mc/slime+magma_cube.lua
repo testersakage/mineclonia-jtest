@@ -309,6 +309,7 @@ local magma_cube_big = {
 		walk_end = 20,
 	},
 	water_damage = 0,
+	_freeze_damage = 5,
 	lava_damage = 0,
         fire_damage = 0,
 	light_damage = 0,

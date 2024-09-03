@@ -61,45 +61,96 @@ local freezing_stages =
 	"freezing_3.png",
 }
 
-local function show_freezing_hud(player, level)
-
-	-- alignment and offset dosent work for some reason
-	-- player:hud_add(
-	-- {
-	-- 	type = "image",
-	-- 	position = {x = 0.5, y = 0.5},
-	-- 	scale = {x = 2, y = 2},
-	-- 	text = freezing_stages[level],
-	-- 	z_index = 4,
-	-- })
-end
-
 -- key value pair
 -- key: name of player
 -- value: number of seconds the player spent in powder snow
 local freezing_players = {}
 
+local function show_freezing_hud(player, level)
+	local player_name = player:get_player_name()
+	local freezing_data = freezing_players[player_name]
+	if freezing_data and #freezing_data.hud_ids > 0 then
+		for _, hud_id in pairs(freezing_data.hud_ids) do
+			player:hud_remove(hud_id)
+		end
+	end
+
+	freezing_data.hud_ids[1] = player:hud_add({
+		hud_elem_type = "image",
+		position = {x = 0, y = 0},
+		scale = {x = 2, y = 2},
+		text = freezing_stages[level],
+		alignment = {x = 1, y = 1},
+		offset = {x = 0, y = 0},
+		z_index = 4,
+	})
+
+	freezing_data.hud_ids[2] = player:hud_add({
+		hud_elem_type = "image",
+		position = {x = 1, y = 0},
+		scale = {x = 2, y = 2},
+		text = freezing_stages[level] .. "^[transform4",
+		alignment = {x = -1, y = 1},
+		offset = {x = 0, y = 0},
+		z_index = 4,
+	})
+
+	freezing_data.hud_ids[3] = player:hud_add({
+		hud_elem_type = "image",
+		position = {x = 0, y = 1},
+		scale = {x = 2, y = 2},
+		text = freezing_stages[level] .. "^[transform6",
+		alignment = {x = 1, y = -1},
+		offset = {x = 0, y = 0},
+		z_index = 4,
+	})
+
+	freezing_data.hud_ids[4] = player:hud_add({
+		hud_elem_type = "image",
+		position = {x = 1, y = 1},
+		scale = {x = 2, y = 2},
+		text = freezing_stages[level] .. "^[transform6^[transform4",
+		alignment = {x = -1, y = -1},
+		offset = {x = 0, y = 0},
+		z_index = 4,
+	})
+end
+
 mcl_player.register_globalstep_slow(function(player, dtime)
 	local name = player:get_player_name()
-	if minetest.get_node(player:get_pos()).name == "mcl_powder_snow:powder_snow" then
-		freezing_players[name] = (freezing_players[name] or 0) + 0.5
+	local player_pos = player:get_pos()
+	local freezing_data = freezing_players[name]
+	if minetest.get_node(player_pos).name == "mcl_powder_snow:powder_snow" then
+		if not freezing_data then
+			freezing_players[name] = {time_in_snow = 0, hud_ids = {}}
+		end
 
-		if freezing_players[name] > 5 then
+		freezing_players[name].time_in_snow = freezing_players[name].time_in_snow + 0.5
+
+		if freezing_players[name].time_in_snow == 5 then
 			show_freezing_hud(player, 3)
-		elseif freezing_players[name] > 3 then
+			mcl_damage.damage_player(player, 0.5, {type = "freeze"})
+		elseif freezing_players[name].time_in_snow == 3 then
 			show_freezing_hud(player, 2)
-		elseif freezing_players[name] > 1 then
+		elseif freezing_players[name].time_in_snow == 1 then
 			show_freezing_hud(player, 1)
 		end
-		
-		if freezing_players[name] > 5 then
-			mcl_damage.damage_player(player, 0.5, {type = "in_wall"})
-		end
-	elseif freezing_players[player:get_player_name()] then
-		freezing_players[name] = freezing_players[name] - 0.5
+	elseif freezing_players[name] then
+		freezing_players[name].time_in_snow = freezing_players[name].time_in_snow - 0.5
 
-		if freezing_players[name] <= 0 then
+		if freezing_players[name].time_in_snow <= 0 then
+			if #freezing_players[name].hud_ids > 0 then
+				for _, hud_id in pairs(freezing_players[name].hud_ids) do
+					player:hud_remove(hud_id)
+				end
+			end
 			freezing_players[name] = nil
+		else
+			if freezing_players[name].time_in_snow == 1 then
+				show_freezing_hud(player, 1)
+			elseif freezing_players[name].time_in_snow == 3 then
+				show_freezing_hud(player, 2)
+			end
 		end
 	end
 end)
