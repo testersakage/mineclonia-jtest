@@ -117,12 +117,15 @@ local skeleton = {
 	dogshoot_switch = 1,
 	dogshoot_count_max =1.8,
 	harmed_by_heal = true,
-	on_die = function(_, pos, cmi_cause)
+	on_die = function(self, pos, cmi_cause)
 		if cmi_cause and cmi_cause.puncher then
 			local l = cmi_cause.puncher:get_luaentity()
 			if l and  l._is_arrow and l._shooter and l._shooter:is_player() and vector.distance(pos,l._startpos) > 20 then
 				awards.unlock(l._shooter:get_player_name(), "mcl:snipeSkeleton")
 			end
+		elseif cmi_cause and cmi_cause.type == "freeze" then
+			mcl_util.replace_mob(self.object, "mobs_mc:stray")
+			return true
 		end
 	end,
 }
@@ -138,6 +141,7 @@ mcl_mobs.register_mob("mobs_mc:skeleton", skeleton)
 mcl_mobs.register_mob("mobs_mc:stray", table.merge(skeleton, {
 	description = S("Stray"),
 	mesh = "mobs_mc_skeleton.b3d",
+	_freeze_damage = 0,
 	textures = {
 		{
 			"mobs_mc_stray_overlay.png",

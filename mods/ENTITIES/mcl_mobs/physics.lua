@@ -686,6 +686,14 @@ function mob_class:do_env_damage()
 				return true
 			end
 		end
+	elseif self._freeze_damage > 0
+	and self:is_in_node("mcl_powder_snow:powder_snow") then
+		self:damage_mob("freeze", self._freeze_damage)
+
+		if self:check_for_death("freeze", {type = "freeze",
+				pos = pos, node = self.standing_in}) then
+			return true
+		end
 	-- damage_per_second node check
 	elseif nodef.damage_per_second ~= 0 and not nodef.groups.lava and not nodef.groups.fire then
 
@@ -884,6 +892,10 @@ function mob_class:falling(pos)
 		if self.floats_on_lava == 1 then
 			self.object:set_acceleration(vector.new(0, -self.fall_speed / (math.max(1, v.y) ^ 2), 0))
 		end
+	end
+
+	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].name == "mcl_powder_snow:powder_snow" then
+		self.reset_fall_damage = 1
 	end
 	-- in water then float up
 	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].groups.water then
