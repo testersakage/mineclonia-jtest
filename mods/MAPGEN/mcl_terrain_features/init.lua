@@ -353,3 +353,38 @@ mcl_structures.register_structure("lavadelta",{
 		return true
 	end
 })
+
+-- Powder snow traps
+mcl_structures.register_structure("powder_snow_trap", {
+	place_on = {"mcl_core:snowblock", "mcl_core:snow", "group:grass_block_snow"},
+	sidelen = 80,
+	noise_params = {
+		offset = 0.00040,
+		scale = 0.001,
+		spread = {x = 500, y = 500, z = 500},
+		seed = 2137,
+		octaves = 4,
+		persist = 0.67,
+	},
+	biomes = {"IcePlainsSpikes, ColdTaiga, ColdTaiga_beach, IcePlains"},
+	y_min = 1,
+	y_max = mcl_vars.mg_overworld_max,
+	place_func = function(pos)
+		local width  = math.random(6)
+		local length = math.random(6)
+		local depth  = math.random(4)
+
+		local solid_nodes = {}
+		for i = 0, width do
+			for j = 0, length do
+				for k = 0, width do
+					if minetest.get_item_group(minetest.get_node(vector.offset(pos, i, k, j)).name, "solid") > 0 then
+						table.insert(solid_nodes, vector.offset(pos, i, k, j))
+					end
+				end
+			end
+		end
+
+		minetest.bulk_set_node(solid_nodes, {name = "mcl_powder_snow:powder_snow"})
+	end
+})
