@@ -115,7 +115,7 @@ end
 
 local function player_has_leather_armor(player)
 	local armor_list = player:get_inventory():get_list("armor")
-	for i = 1, 4 do
+	for i = 2, 5 do
 		if minetest.get_item_group(armor_list[i]:get_name(), "armor_leather") == 1 then
 			return true
 		end
