@@ -203,6 +203,10 @@ function mob_class:mob_activate(staticdata, dtime)
 	elseif self.state == "die" then
 		self:safe_remove()
 		return
+	elseif self.state == "attack" then
+		if not self.attack or not self.attack.get_pos or not self.attack:get_pos() then
+			self:set_state("stand")
+		end
 	end
 
 	if peaceful_mode and not self.persist_in_peaceful then
