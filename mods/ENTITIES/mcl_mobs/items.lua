@@ -1,7 +1,7 @@
 local mob_class = mcl_mobs.mob_class
 
 local function player_near(pos)
-	for _,o in pairs(minetest.get_objects_inside_radius(pos,2)) do
+	for o in minetest.objects_inside_radius(pos, 2) do
 		if o:is_player() then return true end
 	end
 end
@@ -75,7 +75,7 @@ function mob_class:check_item_pickup()
 	if self.pick_up and #self.pick_up > 0 or self.wears_armor then
 		local p = self.object:get_pos()
 		if not p then return end
-		for _,o in pairs(minetest.get_objects_inside_radius(p,2)) do
+		for o in minetest.objects_inside_radius(p, 2) do
 			local l=o:get_luaentity()
 			if l and l.name == "__builtin:item" and not player_near(p) and not self:is_drop(ItemStack(l.itemstring)) then
 				local stack = ItemStack(l.itemstring)

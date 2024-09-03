@@ -347,8 +347,7 @@ function mesecon.mvps_move_objects(pos, dir, nodestack)
 	-- Move object at tip of stack, pushpos is position at tip of stack
 	local pushpos = vector.add(pos, vector.multiply(dir, #nodestack))
 
-	local objects = minetest.get_objects_inside_radius(pushpos, 1.15)
-	for _, obj in ipairs(objects) do
+	for obj in minetest.objects_inside_radius(pushpos, 1.15) do
 		table.insert(objects_to_move, obj)
 	end
 
@@ -357,8 +356,7 @@ function mesecon.mvps_move_objects(pos, dir, nodestack)
 		-- If gravity positive and dir horizontal, push players standing on the stack
 		for _, n in ipairs(nodestack) do
 			local p_above = vector.add(n.pos, {x=0, y=1, z=0})
-			local objects = minetest.get_objects_inside_radius(p_above, 1.15)
-			for _, obj in ipairs(objects) do
+			for obj in minetest.objects_inside_radius(p_above, 1.15) do
 				table.insert(objects_to_move, obj)
 			end
 		end

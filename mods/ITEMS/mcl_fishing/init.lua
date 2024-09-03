@@ -301,7 +301,7 @@ local function flying_bobber_on_step(self, dtime)
 		return
 	end
 
-	for _, obj in pairs(minetest.get_objects_inside_radius(pos, 0.4)) do
+	for obj in minetest.objects_inside_radius(pos, 0.4) do
 		local ent = obj:get_luaentity()
 		if ent and ent._mcl_fishing_hookable then
 			bobbers[player] = minetest.add_entity(ent.object:get_pos(), "mcl_fishing:bobber_entity")

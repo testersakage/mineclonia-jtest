@@ -324,10 +324,9 @@ end)
 
 --Text entity handling
 function mcl_signs.get_text_entity (pos, force_remove)
-	local objects = minetest.get_objects_inside_radius(pos, 0.5)
 	local text_entity
 	local i = 0
-	for _, v in pairs(objects) do
+	for v in minetest.objects_inside_radius(pos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and ent.name == "mcl_signs:text" then
 			i = i + 1

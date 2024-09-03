@@ -368,31 +368,27 @@ minetest.register_abm({
 	interval = 0.5,
 	chance = 1,
 	action = function(pos)
-		local objs = minetest.get_objects_inside_radius(pos, 3)
-
-		if objs and #objs > 0 then
-			for _, v in pairs(objs) do
-				local entity = v:get_luaentity()
-				if entity and entity.name then
-					if entity.name == "mcl_minecarts:hopper_minecart" or entity.name == "mcl_minecarts:chest_minecart"then
-						local hm_pos = entity.object:get_pos()
-						local DIST_FROM_MC = 1.5
-						if (hm_pos.y == pos.y + 1)
-								and (hm_pos.x >= pos.x - DIST_FROM_MC and hm_pos.x <= pos.x + DIST_FROM_MC)
-								and (hm_pos.z >= pos.z - DIST_FROM_MC and hm_pos.z <= pos.z + DIST_FROM_MC) then
-							if entity.name == "mcl_minecarts:hopper_minecart" then
-								hopper_pull_from_mc(entity, pos, 5)
-							elseif entity.name == "mcl_minecarts:chest_minecart" then
-								hopper_pull_from_mc(entity, pos, 27)
-							end
-						elseif (hm_pos.y == pos.y - 1)
+		for v in minetest.objects_inside_radius(pos, 3) do
+			local entity = v:get_luaentity()
+			if entity and entity.name then
+				if entity.name == "mcl_minecarts:hopper_minecart" or entity.name == "mcl_minecarts:chest_minecart"then
+					local hm_pos = entity.object:get_pos()
+					local DIST_FROM_MC = 1.5
+					if (hm_pos.y == pos.y + 1)
 							and (hm_pos.x >= pos.x - DIST_FROM_MC and hm_pos.x <= pos.x + DIST_FROM_MC)
 							and (hm_pos.z >= pos.z - DIST_FROM_MC and hm_pos.z <= pos.z + DIST_FROM_MC) then
-							if entity.name == "mcl_minecarts:hopper_minecart" then
-								hopper_push_to_mc(entity, pos, 5)
-							elseif entity.name == "mcl_minecarts:chest_minecart" then
-								hopper_push_to_mc(entity, pos, 27)
-							end
+						if entity.name == "mcl_minecarts:hopper_minecart" then
+							hopper_pull_from_mc(entity, pos, 5)
+						elseif entity.name == "mcl_minecarts:chest_minecart" then
+							hopper_pull_from_mc(entity, pos, 27)
+						end
+					elseif (hm_pos.y == pos.y - 1)
+						and (hm_pos.x >= pos.x - DIST_FROM_MC and hm_pos.x <= pos.x + DIST_FROM_MC)
+						and (hm_pos.z >= pos.z - DIST_FROM_MC and hm_pos.z <= pos.z + DIST_FROM_MC) then
+						if entity.name == "mcl_minecarts:hopper_minecart" then
+							hopper_push_to_mc(entity, pos, 5)
+						elseif entity.name == "mcl_minecarts:chest_minecart" then
+							hopper_push_to_mc(entity, pos, 27)
 						end
 					end
 				end
@@ -417,7 +413,7 @@ minetest.register_abm({
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 
-		for _,object in pairs(minetest.get_objects_inside_radius(pos, 2)) do
+		for object in minetest.objects_inside_radius(pos, 2) do
 			if not object:is_player() and object:get_luaentity() and object:get_luaentity().name == "__builtin:item" and not object:get_luaentity()._removed then
 				if inv and inv:room_for_item("main", ItemStack(object:get_luaentity().itemstring)) then
 					-- Item must get sucked in when the item just TOUCHES the block above the hopper

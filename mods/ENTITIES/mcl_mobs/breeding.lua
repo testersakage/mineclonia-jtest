@@ -164,7 +164,7 @@ function mob_class:check_breeding()
         end
 
 		local num = 0
-		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 3)) do
+		for obj in minetest.objects_inside_radius(pos, 3) do
 			local ent = obj:get_luaentity()
 			-- check for same animal with different colour
 			local canmate = false

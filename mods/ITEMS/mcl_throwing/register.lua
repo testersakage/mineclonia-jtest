@@ -55,7 +55,7 @@ local pearl_ENTITY={
 }
 
 local function check_object_hit(self, pos, dmg)
-	for _,object in pairs(minetest.get_objects_inside_radius(pos, 1.5)) do
+	for object in minetest.objects_inside_radius(pos, 1.5) do
 
 		local entity = object:get_luaentity()
 

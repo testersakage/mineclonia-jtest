@@ -74,11 +74,9 @@ local function pp_on_timer(pos)
 		return false
 	end
 
-	local objs = minetest.get_objects_inside_radius(pos, 1)
-
 	if node.name == basename .. "_on" then
 		local disable = true
-		for _, obj in pairs(objs) do
+		for obj in minetest.objects_inside_radius(pos, 1) do
 			if
 				obj_does_activate(obj, activated_by) and
 				obj_touching_plate_pos(obj, pos)
@@ -103,7 +101,7 @@ local function pp_on_timer(pos)
 			end
 		end
 	elseif node.name == basename .. "_off" then
-		for _, obj in pairs(objs) do
+		for obj in minetest.objects_inside_radius(pos, 1) do
 			if
 				obj_does_activate(obj, activated_by) and
 				obj_touching_plate_pos(obj, pos)

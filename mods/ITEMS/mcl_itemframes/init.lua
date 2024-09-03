@@ -47,7 +47,7 @@ mcl_itemframes.tpl_entity = {
 }
 --Utility functions
 local function find_entity(pos)
-	for _,o in pairs(minetest.get_objects_inside_radius(pos, 0.45)) do
+	for o in minetest.objects_inside_radius(pos, 0.45) do
 		local l = o:get_luaentity()
 		if l and l.name == "mcl_itemframes:item" then
 			return l

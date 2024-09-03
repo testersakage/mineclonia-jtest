@@ -191,7 +191,7 @@ minetest.register_abm({
 	interval = 1,
 	chance = 1,
 	action = function(pos)
-		for _, object in pairs(minetest.get_objects_inside_radius(pos, 1.1)) do
+		for object in minetest.objects_inside_radius(pos, 1.1) do
 			local entity = object:get_luaentity()
 			local dst = vector.distance(object:get_pos(), pos)
 			if entity and entity.name == "__builtin:item" and dst <= 0.9 then

@@ -204,9 +204,9 @@ function mcl_portals.end_teleport(obj, pos)
 	end
 end
 
-function mcl_portals.end_portal_teleport(pos, node) ---@diagnostic disable-line: unused-local
-	for _,obj in pairs(minetest.get_objects_inside_radius(pos, 1)) do
-		local lua_entity = obj:get_luaentity() --maikerumine added for objects to travel
+function mcl_portals.end_portal_teleport(pos)
+	for obj in minetest.objects_inside_radius(pos, 1) do
+		local lua_entity = obj:get_luaentity()
 		if obj:is_player() or lua_entity then
 			local objpos = obj:get_pos()
 			if objpos == nil then

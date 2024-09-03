@@ -306,19 +306,18 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 			self._melee_timer = 0
 			local pos = table.copy(s)
 			pos.y = pos.y + 2
-			local objs = minetest.get_objects_inside_radius(pos, self.reach)
 			local hit_some = false
-			for n = 1, #objs do
-				objs[n]:punch(objs[n], 1.0, {
+			for obj in minetest.objects_inside_radius(pos, self.reach) do
+				obj:punch(obj, 1.0, {
 					full_punch_interval = 1.0,
 					damage_groups = {fleshy = 4},
 				}, pos)
-				local ent = objs[n]:get_luaentity()
-				if objs[n]:is_player() or (ent and ent ~= self and (not ent._shooter or ent._shooter ~= self)) then
-					mcl_util.deal_damage(objs[n], 8, {type = "magic"})
+				local ent = obj:get_luaentity()
+				if obj:is_player() or (ent and ent ~= self and (not ent._shooter or ent._shooter ~= self)) then
+					mcl_util.deal_damage(obj, 8, {type = "magic"})
 					hit_some = true
 				end
-				mcl_potions.give_effect("withering", objs[n], 2, 10)
+				mcl_potions.give_effect("withering", obj, 2, 10)
 			end
 			if hit_some then
 				mcl_mobs.effect(pos, 32, "mcl_particles_soul_fire_flame.png", 5, 10, self.reach, 1, 0)

@@ -146,8 +146,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 			self._stuckrechecktimer = 0
 		end
 		-- Pickup arrow if player is nearby (not in Creative Mode)
-		local objects = minetest.get_objects_inside_radius(pos, 1)
-		for _,obj in ipairs(objects) do
+		for obj in minetest.objects_inside_radius(pos, 1) do
 			if obj:is_player() then
 				if self._collectable and not minetest.is_creative_enabled(obj:get_player_name()) then
 					if obj:get_inventory():room_for_item("main", "mcl_bows:arrow") then

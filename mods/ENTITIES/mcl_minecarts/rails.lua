@@ -25,9 +25,8 @@ local function register_rail(itemstring, tiles, def_extras, creative)
 		after_destruct = function(pos)
 			-- Scan for minecarts in this pos and force them to execute their "floating" check.
 			-- Normally, this will make them drop.
-			local objs = minetest.get_objects_inside_radius(pos, 1)
-			for o=1, #objs do
-				local le = objs[o]:get_luaentity()
+			for obj in minetest.objects_inside_radius(pos, 1) do
+				local le = obj:get_luaentity()
 				if le then
 					-- All entities in this mod are minecarts, so this works
 					if string.sub(le.name, 1, 14) == "mcl_minecarts:" then
@@ -115,8 +114,7 @@ register_rail("mcl_minecarts:golden_rail_on",
 				action_on = function(pos, _)
 					local dir = mcl_minecarts:get_start_direction(pos)
 					if not dir then return end
-					local objs = minetest.get_objects_inside_radius(pos, 1)
-					for _, o in pairs(objs) do
+					for o in minetest.objects_inside_radius(pos, 1) do
 						local l = o:get_luaentity()
 						local v = o:get_velocity()
 						if l and string.sub(l.name, 1, 14) == "mcl_minecarts:"
@@ -169,8 +167,7 @@ register_rail("mcl_minecarts:activator_rail_on",
 				-- Activate minecarts
 				action_on = function(pos, _)
 					local pos2 = { x = pos.x, y =pos.y + 1, z = pos.z }
-					local objs = minetest.get_objects_inside_radius(pos2, 1)
-					for _, o in pairs(objs) do
+					for o in minetest.objects_inside_radius(pos2, 1) do
 						local l = o:get_luaentity()
 						if l and string.sub(l.name, 1, 14) == "mcl_minecarts:" and l.on_activate_by_rail then
 							l:on_activate_by_rail()

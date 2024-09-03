@@ -17,8 +17,7 @@ for _, dir in pairs(directions) do
 end
 
 local function find_crystal(pos)
-	local objects = minetest.get_objects_inside_radius(pos, 0)
-	for _, obj in pairs(objects) do
+	for obj in minetest.objects_inside_radius(pos, 0) do
 		local luaentity = obj:get_luaentity()
 		if luaentity and luaentity.name == "mcl_end:crystal" then
 			return luaentity
@@ -65,7 +64,7 @@ local function spawn_crystal(pos)
 		crystals[i] = find_crystal(crystal_pos)
 		if not crystals[i] then return end
 	end
-	for _,o in pairs(minetest.get_objects_inside_radius(pos,64)) do
+	for o in minetest.objects_inside_radius(pos, 64) do
 		local l = o:get_luaentity()
 		if l and l.name == "mobs_mc:enderdragon" then return end
 		if not peaceful then

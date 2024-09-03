@@ -486,7 +486,7 @@ function mob_class:is_object_in_view(object_list, object_range, node_range, turn
 	local s = self.object:get_pos()
 	local min_dist = object_range + 1
 	local object_pos
-	for _, object in pairs(minetest.get_objects_inside_radius(s, object_range)) do
+	for object in minetest.objects_inside_radius(s, object_range) do
 		local name = ""
 		if object:is_player() then
 			if not (mcl_mobs.invis[ object:get_player_name() ]
@@ -726,7 +726,7 @@ function mob_class:check_herd()
 	if self:should_get_out_of_water() then return end
 	local pos = self.object:get_pos()
 	if not pos then return end
-	for _,o in pairs(minetest.get_objects_inside_radius(pos,self.view_range)) do
+	for o in minetest.objects_inside_radius(pos, self.view_range) do
 		local l = o:get_luaentity()
 		local p,y
 		if l and l.is_mob and l.name == self.name then
@@ -900,11 +900,10 @@ function mob_class:do_states_stand()
 	local yaw = self.object:get_yaw() or 0
 
 	if math.random(1, 4) == 1 then
-		local objs = minetest.get_objects_inside_radius(s, 3)
 		local lp
-		for n = 1, #objs do
-			if objs[n]:is_player() then
-				lp = objs[n]:get_pos()
+		for obj in minetest.objects_inside_radius(s, 3) do
+			if obj:is_player() then
+				lp = obj:get_pos()
 				break
 			end
 		end

@@ -3,7 +3,7 @@ mcl_entity_invs = {}
 local open_invs = {}
 
 local function check_distance(inv,player,count)
-	for _,o in pairs(minetest.get_objects_inside_radius(player:get_pos(),5)) do
+	for o in minetest.objects_inside_radius(player:get_pos(), 5) do
 		local l = o:get_luaentity()
 		if l and l._inv_id and inv:get_location().name == l._inv_id then return count end
 	end

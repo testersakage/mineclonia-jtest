@@ -223,10 +223,9 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 
 	-- Entities in radius of explosion
 	local punch_radius = 2 * strength
-	local objs = minetest.get_objects_inside_radius(pos, punch_radius)
 
 	-- Trace rays for entity damage
-	for _, obj in pairs(objs) do
+	for obj in minetest.objects_inside_radius(pos, punch_radius) do
 		local ent = obj:get_luaentity()
 
 		-- Ignore items to lower lag

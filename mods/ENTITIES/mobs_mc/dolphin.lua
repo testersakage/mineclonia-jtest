@@ -63,15 +63,15 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 		and mcl_player.players[self.following].is_swimming then
 		closest_player = self.following
 	else
-		for _, object in pairs (minetest.get_objects_inside_radius (pos, 15)) do
-		if object:is_player ()
-			and mcl_player.players[object].is_swimming then
-			local distance = vector.distance (pos, object:get_pos ())
-			if not closest_player or cur_dist > distance then
-			closest_player = object
-			cur_dist = distance
+		for object in minetest.objects_inside_radius(pos, 15) do
+			if object:is_player ()
+				and mcl_player.players[object].is_swimming then
+				local distance = vector.distance (pos, object:get_pos ())
+				if not closest_player or cur_dist > distance then
+				closest_player = object
+				cur_dist = distance
+				end
 			end
-		end
 		end
 	end
 

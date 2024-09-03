@@ -288,7 +288,7 @@ function mob_class:who_are_you_looking_at()
 
 			local look_at_player = look_at_player_chance == 1
 
-			for _, obj in pairs(minetest.get_objects_inside_radius(pos, 8)) do
+			for obj in minetest.objects_inside_radius(pos, 8) do
 				if obj:is_player() and vector.distance(pos,obj:get_pos()) < 4 then
 					self._locked_object = obj
 					break

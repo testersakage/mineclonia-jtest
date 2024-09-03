@@ -11,7 +11,7 @@ end
 
 -- Find a stand entity or spawn one
 local function get_stand_entity(pos, node)
-	for _, obj in ipairs(minetest.get_objects_inside_radius(pos, 0)) do
+	for obj in minetest.objects_inside_radius(pos, 0) do
 		local luaentity = obj:get_luaentity()
 		if luaentity and luaentity.name == "mcl_armor_stand:armor_entity" then
 			return luaentity

@@ -132,39 +132,37 @@ function mcl_potions.register_splash(name, descr, color, def)
 				local plus = self._plus or 0
 
 				if def.on_splash then def.on_splash(pos, potency+1) end
-				for _,obj in pairs(minetest.get_objects_inside_radius(pos, 4)) do
+				for obj in minetest.objects_inside_radius(pos, 4) do
 
-				local entity = obj:get_luaentity()
-				if obj:is_player() or entity and entity.is_mob then
+					local entity = obj:get_luaentity()
+					if obj:is_player() or entity and entity.is_mob then
 
-					local pos2 = obj:get_pos()
-					local rad = math.floor(math.sqrt((pos2.x-pos.x)^2 + (pos2.y-pos.y)^2 + (pos2.z-pos.z)^2))
+						local pos2 = obj:get_pos()
+						local rad = math.floor(math.sqrt((pos2.x-pos.x)^2 + (pos2.y-pos.y)^2 + (pos2.z-pos.z)^2))
 
-					if def._effect_list then
-					local ef_level
-					local dur
-					for name, details in pairs(def._effect_list) do
-						ef_level = mcl_potions.level_from_details (details, potency)
-						dur = mcl_potions.duration_from_details (details, potency,
-											 plus,
-											 mcl_potions.SPLASH_FACTOR)
-						if rad > 0 then
-						mcl_potions.give_effect_by_level(name, obj, ef_level, redux_map[rad]*dur)
-						else
-						mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
+						if def._effect_list then
+							local ef_level
+							local dur
+							for name, details in pairs(def._effect_list) do
+								ef_level = mcl_potions.level_from_details (details, potency)
+								dur = mcl_potions.duration_from_details (details, potency, plus, mcl_potions.SPLASH_FACTOR)
+								if rad > 0 then
+									mcl_potions.give_effect_by_level(name, obj, ef_level, redux_map[rad]*dur)
+								else
+									mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
+								end
+							end
+						end
+
+						if def.custom_effect then
+							local power = (potency+1) * mcl_potions.SPLASH_FACTOR
+							if rad > 0 then
+								def.custom_effect(obj, redux_map[rad] * power, plus)
+							else
+								def.custom_effect(obj, power, plus)
+							end
 						end
 					end
-					end
-
-					if def.custom_effect then
-					local power = (potency+1) * mcl_potions.SPLASH_FACTOR
-					if rad > 0 then
-						def.custom_effect(obj, redux_map[rad] * power, plus)
-					else
-						def.custom_effect(obj, power, plus)
-					end
-					end
-				end
 				end
 				self.object:remove()
 			end

@@ -18,7 +18,7 @@ local function deal_falling_damage(self, _)
 		self._startpos = pos
 	end
 	self._hit = self._hit or {}
-	for _, obj in ipairs(minetest.get_objects_inside_radius(pos, 1)) do
+	for obj in minetest.objects_inside_radius(pos, 1) do
 		local entity = obj:get_luaentity()
 		if entity and entity.name == "__builtin:item" then
 			obj:remove()

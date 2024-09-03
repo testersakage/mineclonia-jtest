@@ -147,8 +147,7 @@ local function on_destruct_banner(pos, hanging)
 	end
 	-- Find this node's banner entity and remove it
 	local checkpos = vector.add(pos, offset)
-	local objects = minetest.get_objects_inside_radius(checkpos, 0.5)
-	for _, v in ipairs(objects) do
+	for v in minetest.objects_inside_radius(checkpos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and ent.name == nodename then
 			v:remove()
@@ -237,8 +236,7 @@ local function respawn_banner_entity(pos, node, force)
 	end
 	-- Check if a banner entity already exists
 	local bpos = vector.add(pos, offset)
-	local objects = minetest.get_objects_inside_radius(bpos, 0.5)
-	for _, v in ipairs(objects) do
+	for v in minetest.objects_inside_radius(bpos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and (ent.name == "mcl_banners:standing_banner" or ent.name == "mcl_banners:hanging_banner") then
 			if force then

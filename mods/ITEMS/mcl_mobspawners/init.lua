@@ -17,14 +17,13 @@ local function get_mob_textures(mob)
 end
 
 local function find_doll(pos)
-	for  _,obj in pairs(minetest.get_objects_inside_radius(pos, 0.5)) do
+	for obj in minetest.objects_inside_radius(pos, 0.5) do
 		if not obj:is_player() then
 			if obj and obj:get_luaentity().name == "mcl_mobspawners:doll" then
 				return obj
 			end
 		end
 	end
-	return nil
 end
 
 local function spawn_doll(pos)
@@ -150,7 +149,6 @@ local function spawn_mobs(pos)
 	end
 
 	-- check objects inside 8×8 area around spawner
-	local objs = minetest.get_objects_inside_radius(pos, 8)
 	local count = 0
 	local ent
 
@@ -161,9 +159,8 @@ local function spawn_mobs(pos)
 	if pla > 0 then
 
 		local in_range = 0
-		local objs = minetest.get_objects_inside_radius(pos, pla)
 
-		for _,oir in pairs(objs) do
+		for oir in minetest.objects_inside_radius(pos, pla) do
 
 			if oir:is_player() then
 
@@ -196,8 +193,7 @@ local function spawn_mobs(pos)
 	end
 
 	-- count mob objects of same type in area
-	for _, obj in ipairs(objs) do
-
+	for obj in minetest.objects_inside_radius(pos, 8) do
 		ent = obj:get_luaentity()
 
 		if ent and ent.name and ent.name == mob then

@@ -116,7 +116,7 @@ function mcl_raids.promote_to_raidcaptain(c) -- object
 end
 
 function mcl_raids.is_raidcaptain_near(pos)
-	for _, v in pairs(minetest.get_objects_inside_radius(pos,32)) do
+	for v in minetest.objects_inside_radius(pos, 32) do
 		local l = v:get_luaentity()
 		if l and l._raidcaptain then return true end
 	end
@@ -198,8 +198,7 @@ function mcl_raids.spawn_raid(event)
 end
 
 function mcl_raids.find_villager(pos)
-	local obj = minetest.get_objects_inside_radius(pos, 8)
-	for _, objects in pairs(obj) do
+	for objects in minetest.objects_inside_radius(pos, 8) do
 		local object = objects:get_luaentity()
 		if object and object.name == "mobs_mc:villager" then
 			return true
@@ -235,7 +234,7 @@ local function check_mobs(self)
 		end
 	end
 	if #m == 0 then --if no valid mobs in table search if there are any (reloaded ones) in the area
-		for _, o in pairs(minetest.get_objects_inside_radius(self.pos,64)) do
+		for o in minetest.objects_inside_radius(self.pos, 64) do
 			local l = o:get_luaentity()
 			if l and l.raidmob then
 				local l = o:get_luaentity()
@@ -314,7 +313,7 @@ minetest.register_chatcommand("dump_banner_layers",{
 	func = function(pname)
 		local p = minetest.get_player_by_name(pname)
 		mcl_raids.drop_obanner(vector.offset(p:get_pos(),1,1,1))
-		for _, v in pairs(minetest.get_objects_inside_radius(p:get_pos(),5)) do
+		for v in minetest.objects_inside_radius(p:get_pos(), 5) do
 			local l = v:get_luaentity()
 			if l and l.name == "mcl_banners:standing_banner" then
 				minetest.log(dump(l._base_color))

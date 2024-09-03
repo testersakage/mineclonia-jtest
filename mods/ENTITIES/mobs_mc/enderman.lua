@@ -360,16 +360,12 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 
 		enderpos = self.object:get_pos()
 		enderpos.y = enderpos.y + 1.5
-		local objs = minetest.get_objects_inside_radius(enderpos, 2)
-		for n = 1, #objs do
-			local obj = objs[n]
-			if obj then
-				if not minetest.is_player(obj) then
-					local lua = obj:get_luaentity()
-					if lua then
-						if lua.name == "mcl_bows:arrow_entity" or lua.name == "mcl_throwing:snowball_entity" then
-							self:teleport(nil)
-						end
+		for obj in minetest.objects_inside_radius(enderpos, 2) do
+			if not minetest.is_player(obj) then
+				local lua = obj:get_luaentity()
+				if lua then
+					if lua.name == "mcl_bows:arrow_entity" or lua.name == "mcl_throwing:snowball_entity" then
+						self:teleport(nil)
 					end
 				end
 			end
@@ -434,15 +430,11 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 		-- ATTACK ENDERMITE
 		local enderpos = self.object:get_pos()
 		if math.random(1,140) == 1 then
-			local mobsnear = minetest.get_objects_inside_radius(enderpos, 64)
-			for n=1, #mobsnear do
-				local mob = mobsnear[n]
-				if mob then
-					local entity = mob:get_luaentity()
-					if entity and entity.name == "mobs_mc:endermite" then
-						self.attack = mob
-						self.state = 'attack'
-					end
+			for mob in minetest.objects_inside_radius(enderpos, self.view_range) do
+				local entity = mob:get_luaentity()
+				if entity and entity.name == "mobs_mc:endermite" then
+					self.attack = mob
+					self.state = 'attack'
 				end
 			end
 		end

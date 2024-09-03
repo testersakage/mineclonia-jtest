@@ -348,14 +348,14 @@ function mobs_mc.villager_mob:take_bed()
 end
 
 local function has_golem(pos)
-	for _,o in pairs(minetest.get_objects_inside_radius(pos,16)) do
+	for o in minetest.objects_inside_radius(pos, 16) do
 		local l = o:get_luaentity()
 		if l and l.name == "mobs_mc:iron_golem" then return true end
 	end
 end
 
 function mobs_mc.villager_mob:monsters_near()
-	for _,o in pairs(minetest.get_objects_inside_radius(self.object:get_pos(),10)) do
+	for o in minetest.objects_inside_radius(self.object:get_pos(), 10) do
 		local l = o:get_luaentity()
 		if l and l.type =="monster" then return true end
 	end
@@ -363,7 +363,7 @@ end
 
 function mobs_mc.villager_mob:has_summon_participants()
 	local r = 0
-	for _,o in pairs(minetest.get_objects_inside_radius(self.object:get_pos(),10)) do
+	for o in minetest.objects_inside_radius(self.object:get_pos(), 10) do
 		local l = o:get_luaentity()
 		--TODO check for gossiping
 		if l and l.name == "mobs_mc:villager" then r = r + 1 end

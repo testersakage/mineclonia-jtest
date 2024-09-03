@@ -52,7 +52,7 @@ mcl_player.register_globalstep(function(player)
 
 		local checkpos = vector.offset(pos, 0, item_drop_settings.player_collect_height, 0)
 		--magnet and collection
-		for _,object in pairs(minetest.get_objects_inside_radius(checkpos, item_drop_settings.xp_radius_magnet)) do
+		for object in minetest.objects_inside_radius(checkpos, item_drop_settings.xp_radius_magnet) do
 			if not object:is_player() then
 				local le = object:get_luaentity()
 				if le and le.name == "__builtin:item" and not le._removed and
@@ -879,7 +879,7 @@ minetest.register_entity(":__builtin:item", {
 
 		if not minetest.registered_nodes[nn] or is_floating or is_on_floor then
 			-- Merge with close entities of the same item
-			for _, object in pairs(minetest.get_objects_inside_radius(p, 0.8)) do
+			for object in minetest.objects_inside_radius(p, 0.8) do
 				local l = object:get_luaentity()
 
 				if l and l.name == "__builtin:item" and l.physical_state == false then

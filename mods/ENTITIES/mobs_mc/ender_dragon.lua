@@ -10,7 +10,7 @@ local HEAL_INTERVAL = 1
 local HEAL_AMOUNT = 2
 
 local function check_beam(self)
-	for _, obj in ipairs(minetest.get_objects_inside_radius(self.object:get_pos(), 80)) do
+	for obj in minetest.objects_inside_radius(self.object:get_pos(), 80) do
 		local luaentity = obj:get_luaentity()
 		if luaentity and luaentity.name == "mcl_end:crystal" then
 			if luaentity.beam then
@@ -139,7 +139,7 @@ mcl_mobs.register_mob("mobs_mc:enderdragon", {
 		end
 
 		-- Free The End Advancement
-		for _,players in pairs(minetest.get_objects_inside_radius(pos,64)) do
+		for players in minetest.objects_inside_radius(pos, 64) do
 			if players:is_player() then
 				awards.unlock(players:get_player_name(), "mcl:freeTheEnd")
 			end

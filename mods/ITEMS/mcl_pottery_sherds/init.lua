@@ -60,7 +60,7 @@ minetest.override_item("mcl_core:brick", { groups = brick_groups })
 
 local function update_entities(pos,rm)
 	pos = vector.round(pos)
-	for _,v in pairs(minetest.get_objects_inside_radius(pos, 0.5, true)) do
+	for v in minetest.objects_inside_radius(pos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and ent.name == "mcl_pottery_sherds:pot_face" then
 			v:remove()

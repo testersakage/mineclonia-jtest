@@ -126,29 +126,29 @@ minetest.register_globalstep(function(dtime)
 			end
 
 			-- Affect players and mobs
-			for _, obj in pairs (minetest.get_objects_inside_radius(pos, d)) do
-			local entity = obj:get_luaentity()
-			if obj:is_player() or entity and entity.is_mob then
-				if vals.is_water then
-				if entity and entity.water_damage then
-					obj:punch (obj, 1.0, { full_punch_interval = 1.0,
-							   damage_groups = {water_vulnerable=1}, },
-						   nil)
-					deduct_time = true
+			for obj in minetest.objects_inside_radius(pos, d) do
+				local entity = obj:get_luaentity()
+				if obj:is_player() or entity and entity.is_mob then
+					if vals.is_water then
+						if entity and entity.water_damage then
+							obj:punch (obj, 1.0, { full_punch_interval = 1.0,
+									   damage_groups = {water_vulnerable=1}, },
+								   nil)
+							deduct_time = true
+						end
+					else
+						for name, effect in pairs (vals.effects) do
+							mcl_potions.give_effect_by_level (name, obj, effect.level,
+											  effect.dur)
+							deduct_time = true
+						end
+						if vals.custom_effect
+							and vals.custom_effect (obj, vals.level,
+										vals.plus) then
+							deduct_time = true
+						end
+					end
 				end
-				else
-				for name, effect in pairs (vals.effects) do
-					mcl_potions.give_effect_by_level (name, obj, effect.level,
-									  effect.dur)
-					deduct_time = true
-				end
-				if vals.custom_effect
-					and vals.custom_effect (obj, vals.level,
-								vals.plus) then
-					deduct_time = true
-				end
-				end
-			end
 			end
 
 			if deduct_time then

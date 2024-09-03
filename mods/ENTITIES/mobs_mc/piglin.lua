@@ -135,7 +135,7 @@ local piglin = {
 			self.trading = true
 			self.gold_items = self.gold_items + 1
 			mcl_util.set_bone_position(self.object, "Wield_Item", vector.new(-1.5,4.9,1.8), vector.new(135,0,90))
-			for _,v in pairs(minetest.get_objects_inside_radius(self.object:get_pos(), 7)) do
+			for v in minetest.objects_inside_radius(self.object:get_pos(), 7) do
 				if v:is_player() then self:look_at(v:get_pos()) end
 			end
 			self:set_state("stand")

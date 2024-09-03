@@ -113,7 +113,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		end
 
 		-- No sleeping if monsters nearby.
-		for _, obj in pairs(minetest.get_objects_inside_radius(bed_pos, 8)) do
+		for obj in minetest.objects_inside_radius(bed_pos, 8) do
 			if obj and not obj:is_player() then
 				local ent = obj:get_luaentity()
 				if ent then

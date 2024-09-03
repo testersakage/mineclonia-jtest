@@ -104,7 +104,7 @@ minetest.register_abm({
 	chance = 1,
 	action = function(pos)
 		if preparing[minetest.pos_to_string(pos)] then return end
-		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 1)) do
+		for obj in minetest.objects_inside_radius(pos, 1) do
 			if obj:get_hp() > 0 then
 				local luaentity = obj:get_luaentity()
 				if luaentity and luaentity.name == "mcl_throwing:ender_pearl" then

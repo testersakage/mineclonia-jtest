@@ -597,7 +597,7 @@ local function initiate_teleport(obj)
 end
 
 local function teleport_objs_in_portal(pos)
-	for _, obj in pairs(minetest.get_objects_inside_radius(pos, 1)) do
+	for obj in minetest.objects_inside_radius(pos, 1) do
 		local lua_entity = obj:get_luaentity()
 		if obj:is_player() or lua_entity then
 			initiate_teleport(obj)
@@ -629,7 +629,7 @@ local function emit_portal_particles(pos, node)
 		end
 	end
 	distance = vector.subtract(pos, distance)
-	for _, obj in pairs(minetest.get_objects_inside_radius(pos, 15)) do
+	for obj in minetest.objects_inside_radius(pos, 15) do
 		if obj:is_player() then
 			minetest.add_particle({
 				amount = 1,

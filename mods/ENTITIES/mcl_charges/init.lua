@@ -87,7 +87,7 @@ end
 local RADIUS = 4
 
 function mcl_charges.wind_burst(pos, radius)
-	for _, obj in ipairs(minetest.get_objects_inside_radius(pos, radius)) do
+	for obj in minetest.objects_inside_radius(pos, radius) do
 		local obj_pos = obj:get_pos()
 		local dist = math.max(1, vector.distance(pos, obj_pos))
 
@@ -206,7 +206,7 @@ function mcl_charges.register_charge(name, descr, def)
 				bdef._on_wind_charge_hit(dpos, self)
 			end
 			if self.hit_player or self.hit_mob or self.hit_object then
-				for _,player in pairs(minetest.get_objects_inside_radius(pos, 0.6)) do
+				for player in minetest.objects_inside_radius(pos, 0.6) do
 					if self.hit_player and player:is_player() then
 						self.hit_player(self, player)
 						def.hit_player_alt(self, pos)

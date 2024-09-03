@@ -139,7 +139,7 @@ local dispenserdef = {
 
 					--[___[ Dispense item ]___]
 					--dispense item on luaentity
-					for _, obj in pairs(minetest.get_objects_inside_radius(droppos, 1)) do
+					for obj in minetest.objects_inside_radius(droppos, 1) do
 						local ent = obj:get_luaentity()
 						if ent and ent._on_dispense then
 							local pos = obj:get_pos()

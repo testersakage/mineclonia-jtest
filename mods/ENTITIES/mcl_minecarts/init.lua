@@ -59,7 +59,7 @@ local function hopper_take_item(self)
 
 	local above_pos = vector.offset(pos, 0, 0.9, 0)
 
-	for _, v in pairs(minetest.get_objects_inside_radius(above_pos, 1.25)) do
+	for v in minetest.objects_inside_radius(above_pos, 1.25) do
 		local ent = v:get_luaentity()
 		local taken_items = false
 
@@ -286,16 +286,12 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		-- Grab mob
 		if math.random(1,20) > 15 and not self._passenger then
 			if self.name == "mcl_minecarts:minecart" then
-				local mobsnear = minetest.get_objects_inside_radius(self.object:get_pos(), 1.3)
-				for n=1, #mobsnear do
-					local mob = mobsnear[n]
-					if mob then
-						local entity = mob:get_luaentity()
-						if entity and entity.is_mob then
-							self._passenger = entity
-							mob:set_attach(self.object, "", passenger_attach_position, vector.zero())
-							break
-						end
+				for mob in minetest.objects_inside_radius(self.object:get_pos(), 1.3) do
+					local entity = mob:get_luaentity()
+					if entity and entity.is_mob then
+						self._passenger = entity
+						mob:set_attach(self.object, "", passenger_attach_position, vector.zero())
+						break
 					end
 				end
 			end

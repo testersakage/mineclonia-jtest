@@ -45,7 +45,7 @@ end
 local function blast_damage(pos, radius)
 	radius = radius * 2
 
-	for _, obj in pairs(minetest.get_objects_inside_radius(pos, radius)) do
+	for obj in minetest.objects_inside_radius(pos, radius) do
 
 		local obj_pos = obj:get_pos()
 		local dist = vector.distance(pos, obj_pos)
@@ -220,8 +220,7 @@ function mob_class:attack_players_and_npcs()
 		return
 	end
 	local pos = self.object:get_pos()
-	local objs = minetest.get_objects_inside_radius(pos, self.view_range)
-	for _,obj in pairs(objs) do
+	for obj in minetest.objects_inside_radius(pos, self.view_range) do
 		if self:line_of_sight(pos, obj:get_pos(), 2) then
 			local l = obj:get_luaentity()
 			if obj:is_player() then
@@ -246,8 +245,7 @@ function mob_class:attack_specific()
 	then return end
 
 	local pos = self.object:get_pos()
-	local objs = minetest.get_objects_inside_radius(pos, self.view_range)
-	for _,obj in pairs(objs) do
+	for obj in minetest.objects_inside_radius(pos, self.view_range) do
 		if obj:is_player() and table.indexof(self.specific_attack,"player") and self.aggro then
 			self:do_attack(obj)
 			break
@@ -266,8 +264,7 @@ function mob_class:attack_monsters()
 	if not self.attack_type or self.type ~= "npc" or self.state == "attack" then return end
 
 	local pos = self.object:get_pos()
-	local objs = minetest.get_objects_inside_radius(pos, self.view_range)
-	for _,obj in pairs(objs) do
+	for obj in minetest.objects_inside_radius(pos, self.view_range) do
 		local l = obj:get_luaentity()
 		if l and l.type == "monster" and self:target_visible(pos, obj) then
 			self:do_attack(obj)
@@ -585,7 +582,7 @@ end
 
 function mob_class:call_group_attack(hitter)
 	local name = hitter:get_player_name()
-	for _, obj in pairs(minetest.get_objects_inside_radius(hitter:get_pos(), self.view_range)) do
+	for obj in minetest.objects_inside_radius(hitter:get_pos(), self.view_range) do
 		local ent = obj:get_luaentity()
 		if ent then
 			-- only alert members of same mob or friends

@@ -202,9 +202,8 @@ function mesecon.register_button(basename, description, texture, recipeitem, sou
 				if push_by_arrow then
 					-- If there's an arrow stuck in the button, keep it pressed and check
 					-- it again later.
-					local objs = minetest.get_objects_inside_radius(pos, 1)
-					for o=1, #objs do
-						local entity = objs[o]:get_luaentity()
+					for obj in minetest.objects_inside_radius(pos, 1) do
+						local entity = obj:get_luaentity()
 						if entity and entity.name == "mcl_bows:arrow_entity" then
 							local timer = minetest.get_node_timer(pos)
 							timer:start(button_timer)

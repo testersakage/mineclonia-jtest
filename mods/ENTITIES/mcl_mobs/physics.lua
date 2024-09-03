@@ -157,8 +157,8 @@ function mob_class:collision()
 	local z = 0
 	local cbox = self.object:get_properties().collisionbox
 	local width = -cbox[1] + cbox[4]
-	for _,object in pairs(minetest.get_objects_inside_radius(pos, width)) do
 
+	for object in minetest.objects_inside_radius(pos, width) do
 		local ent = object:get_luaentity()
 		if (self.pushable and object:is_player()) or
 		   (self.mob_pushable and ent and ent.is_mob and object ~= self.object) then
@@ -793,9 +793,8 @@ end
 function mob_class:check_entity_cramming()
 	local p = self.object:get_pos()
 	if not p then return end
-	local oo = minetest.get_objects_inside_radius(p, 0.5)
 	local mobs = {}
-	for _,o in pairs(oo) do
+	for o in minetest.objects_inside_radius(p, 0.5) do
 		local l = o:get_luaentity()
 		if l and l.is_mob and l.health > 0 then table.insert(mobs,l) end
 	end
