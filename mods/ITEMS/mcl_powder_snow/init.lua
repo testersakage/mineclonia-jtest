@@ -5,13 +5,10 @@ minetest.register_node("mcl_powder_snow:powder_snow", {
 	_doc_items_longdesc = S("This is a block of snow thats extra fluffy, this means players can sink in it"),
 	_doc_items_hidden = false,
 	tiles = {"powder_snow.png"},
-	groups = {shovely=2, deco_block=1, snow_cover=1, pathfind = 1},
+	groups = {shovely=2, snow_cover=1, not_in_creative_inventory = 1},
 	sounds = mcl_sounds.node_sound_snow_defaults(),
-	-- drawtype = "glasslike",
-	-- sunlight_propagates = true,
 	post_effect_color = "#CFD7DBFF",
 	walkable = false,
-	-- damage_per_second = 2,
 	move_resistance = 3,
 	is_ground_content = false, -- set to false to potentially create huge drops into caves >:)
 	on_construct = mcl_core.on_snow_construct,
@@ -116,11 +113,22 @@ local function show_freezing_hud(player, level)
 	})
 end
 
+local function player_has_leather_armor(player)
+	local armor_list = player:get_inventory():get_list("armor")
+	for i = 1, 4 do
+		if minetest.get_item_group(armor_list[i]:get_name(), "armor_leather") == 1 then
+			return true
+		end
+	end
+	return false
+end
+
 mcl_player.register_globalstep_slow(function(player, dtime)
 	local name = player:get_player_name()
 	local player_pos = player:get_pos()
 	local freezing_data = freezing_players[name]
-	if minetest.get_node(player_pos).name == "mcl_powder_snow:powder_snow" then
+
+	if minetest.get_node(player_pos).name == "mcl_powder_snow:powder_snow" and not player_has_leather_armor(player) then
 		if not freezing_data then
 			freezing_players[name] = {time_in_snow = 0, hud_ids = {}}
 		end
