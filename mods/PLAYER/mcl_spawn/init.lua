@@ -212,4 +212,4 @@ function mcl_spawn.spawn(player)
 end
 
 -- Respawn player at specified respawn position
-minetest.register_on_respawnplayer(mcl_spawn.spawn)
+minetest.register_on_respawnplayer(function(player) return mcl_spawn.spawn(player) end)
