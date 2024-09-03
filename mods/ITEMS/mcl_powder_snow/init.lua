@@ -133,9 +133,9 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 			freezing_players[name] = {time_in_snow = 0, hud_ids = {}}
 		end
 
-		freezing_players[name].time_in_snow = freezing_players[name].time_in_snow + 0.5
+		freezing_players[name].time_in_snow = math.min(freezing_players[name].time_in_snow + 0.5, 7)
 
-		if freezing_players[name].time_in_snow == 5 then
+		if freezing_players[name].time_in_snow > 5 then
 			show_freezing_hud(player, 3)
 			mcl_damage.damage_player(player, 0.5, {type = "freeze"})
 		elseif freezing_players[name].time_in_snow == 3 then
