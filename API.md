@@ -110,6 +110,7 @@ These can be applied to all node registrations.
 * `_on_dye_place` callback when node is rickclicked with a dye: function(pos, color_name)
 * `_on_hopper_in` callback when an item is about to be pushed to the node from a hopper: function(hopper_pos, node_pos)
 * `_on_hopper_out` callback when an item is about to be sucked into a hopper under the node: function(node_pos, hopper_pos)
+* `_after_hopper_in` callback when an item is pushed into the node from a hopper: function(node_pos)
 * `_on_lightning_strike` callback when a node is hit by lightning: function(node_pos, lightning_pos1, lightning_pos2)
 * `_mcl_baseitem` this used to determine the item corresponding to the placed node. Can either be an itemstring or a function(pos) returning an itemstack.
 * Get node names close to player (to reduce constant querying):
