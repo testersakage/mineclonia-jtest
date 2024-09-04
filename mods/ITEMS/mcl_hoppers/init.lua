@@ -471,6 +471,11 @@ local function hopper_push(pos, to_pos)
 			success = mcl_util.move_item_container(pos, to_pos)
 		end
 	end
+
+	if success and to_def._after_hopper_in then
+		to_def._after_hopper_in(to_pos)
+	end
+
 	return success
 end
 
