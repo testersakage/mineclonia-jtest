@@ -451,6 +451,9 @@ local function hopper_suck(pos)
 		if not success then
 			success = mcl_util.move_item_container(uppos, pos)
 		end
+		if success and updef._after_hopper_out then
+			updef._after_hopper_out(uppos)
+		end
 	end
 	return success
 end
@@ -470,12 +473,10 @@ local function hopper_push(pos, to_pos)
 		if not success and cgroup >= 2 and cgroup <= 6 then
 			success = mcl_util.move_item_container(pos, to_pos)
 		end
+		if success and to_def._after_hopper_in then
+			to_def._after_hopper_in(to_pos)
+		end
 	end
-
-	if success and to_def._after_hopper_in then
-		to_def._after_hopper_in(to_pos)
-	end
-
 	return success
 end
 
