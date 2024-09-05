@@ -9,6 +9,7 @@ local usages_cache  = {}
 
 local progressive_mode = minetest.settings:get_bool("mcl_craftguide_progressive_mode", true)
 local strict_mode = progressive_mode or minetest.settings:get_bool("mcl_craftguide_strict_mode", true)
+local tooltip_append_itemname = minetest.settings:get_bool("tooltip_append_itemname", false)
 
 local C = minetest.colorize
 local F = minetest.formspec_escape
@@ -300,12 +301,12 @@ local function groups_to_item(groups)
 	return ""
 end
 
-local function get_tooltip(item, groups, cooktime, burntime)
+local function get_tooltip(item, groups, cooktime, burntime, fs_name)
 	local tooltip
 
 	if groups then
 		local gcol = mcl_colors.LIGHT_PURPLE
-		if #groups == 1 then
+		if #groups == 1 and not tooltip_append_itemname then
 			local g = group_names[groups[1]]
 			local groupstr
 			-- Treat the groups “compass” and “clock” as fake groups
@@ -335,7 +336,7 @@ local function get_tooltip(item, groups, cooktime, burntime)
 		end
 	else
 		local def = minetest.registered_items[item]
-		tooltip = def and def.description or item
+		tooltip = def and def.description or "<unknown>"
 	end
 
 	if not groups and cooktime then
@@ -348,7 +349,11 @@ local function get_tooltip(item, groups, cooktime, burntime)
 			S("Burning time: @1", C(mcl_colors.YELLOW, burntime))
 	end
 
-	return string.format(FMT.tooltip, item, F(tooltip))
+	if tooltip_append_itemname and not groups then
+		tooltip = tooltip .. "\n" .. item
+	end
+
+	return string.format(FMT.tooltip, fs_name or item, F(tooltip))
 end
 
 local function get_recipe_fs(data, iY, player)
@@ -422,7 +427,7 @@ local function get_recipe_fs(data, iY, player)
 
 		local burntime = mcl_util.get_burntime(item)
 
-		if groups or cooktime or burntime ~= 0 then
+		if groups or cooktime or burntime ~= 0 or tooltip_append_itemname then
 			fs[#fs + 1] = get_tooltip(item, groups, cooktime, burntime)
 		end
 	end
@@ -487,9 +492,11 @@ local function get_recipe_fs(data, iY, player)
 			F(output_name),
 			"")
 
-		if burntime ~= 0 then
+		if burntime ~= 0 or tooltip_append_itemname then
 			fs[#fs + 1] = get_tooltip(output_name, nil, nil, burntime)
+		end
 
+		if burntime ~= 0 then
 			fs[#fs + 1] = string.format(FMT.image,
 				output_X + 1,
 				iY + 2.33,
@@ -611,6 +618,9 @@ local function make_formspec(name)
 			1.1,
 			item,
 			item)
+		if tooltip_append_itemname then
+			fs[#fs + 1] = get_tooltip(item, nil, nil, nil, item .. "_inv")
+		end
 	end
 
 	if data.recipes and #data.recipes > 0 then
