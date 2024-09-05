@@ -133,12 +133,11 @@ minetest.register_globalstep(function(dtime)
 	-- regular updates based on iterval
 	dimtimer = dimtimer + dtime;
 	if dimtimer >= DIM_UPDATE then
-		local players = minetest.get_connected_players()
-		for p = 1, #players do
-			local dim = mcl_worlds.pos_to_dimension(players[p]:get_pos())
-			local name = players[p]:get_player_name()
+		for player in mcl_util.connected_players() do
+			local dim = mcl_worlds.pos_to_dimension(player:get_pos())
+			local name = player:get_player_name()
 			if dim ~= last_dimension[name] then
-				mcl_worlds.dimension_change(players[p], dim)
+				mcl_worlds.dimension_change(player, dim)
 			end
 		end
 		dimtimer = 0

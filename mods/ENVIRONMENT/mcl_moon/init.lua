@@ -51,9 +51,8 @@ minetest.register_globalstep(function(dtime)
 	minetest.log("info", "[mcl_moon] New moon phase: "..phase)
 	last_reported_phase = phase
 	local moon_arg = {texture = get_moon_texture()}
-	local players = minetest.get_connected_players()
-	for p=1, #players do
-		players[p]:set_moon(moon_arg)
+	for pl in mcl_util.connected_players() do
+		pl:set_moon(moon_arg)
 	end
 end)
 

@@ -596,7 +596,7 @@ mcl_potions.register_effect({
 		local pos = object:get_pos()
 		if not pos then return end
 		local x, y, z = pos.x, pos.y, pos.z
-		for _, player in pairs(minetest.get_connected_players()) do
+		for player in mcl_util.connected_players() do
 			local pp = player:get_pos()
 			if pp and player ~= object then
 				local hud_id = EF.glowing[object].waypoints[player]
@@ -1676,8 +1676,7 @@ minetest.register_on_joinplayer( function(player)
 end)
 
 minetest.register_on_shutdown(function()
-	-- save player effects on server shutdown
-	for _,player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		mcl_potions._save_player_effects(player)
 	end
 end)

@@ -115,7 +115,7 @@ minetest.register_globalstep(function(dtime)
 	etime = dtime + etime
 	if etime < 0.5 then return end
 	etime = 0
-	for _,pl in pairs(minetest.get_connected_players()) do
+	for pl in mcl_util.connected_players() do
 		berry_damage_check(pl)
 	end
 	for _,ent in pairs(minetest.luaentities) do

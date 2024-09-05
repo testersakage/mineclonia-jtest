@@ -22,7 +22,7 @@ minetest.register_globalstep(function()
 			{r=0, g=0, b=0},
 		})
 		mcl_weather.skycolor.active = true
-		for _, player in pairs(minetest.get_connected_players()) do
+		for player in mcl_util.connected_players() do
 			player:set_clouds({color="#3D3D3FE8"})
 		end
 		mcl_weather.thunder.init_done = true

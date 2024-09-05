@@ -67,7 +67,7 @@ function mcl_weather.rain.set_sky_box()
 			{r=85, g=86, b=98},
 			{r=0, g=0, b=0}})
 		mcl_weather.skycolor.active = true
-		for _, player in pairs(minetest.get_connected_players()) do
+		for player in mcl_util.connected_players() do
 			player:set_clouds({color="#5D5D5FE8"})
 		end
 	end
@@ -150,7 +150,7 @@ function mcl_weather.rain.clear()
 	mcl_weather.rain.init_done = false
 	mcl_weather.rain.set_particles_mode("rain")
 	mcl_weather.skycolor.remove_layer("weather-pack-rain-sky")
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		mcl_weather.rain.remove_sound(player)
 		mcl_weather.rain.remove_player(player)
 		mcl_weather.remove_spawners_player(player)
@@ -172,7 +172,7 @@ function mcl_weather.rain.make_weather()
 		mcl_weather.rain.init_done = true
 	end
 
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		local pos=player:get_pos()
 		if mcl_weather.is_underwater(player) or not mcl_weather.has_rain(pos) then
 			mcl_weather.rain.remove_sound(player)

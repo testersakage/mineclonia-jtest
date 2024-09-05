@@ -202,7 +202,7 @@ minetest.register_globalstep(function(dtime)
 	etime = dtime + etime
 	if etime < 0.5 then return end
 	etime = 0
-	for _,pl in pairs(minetest.get_connected_players()) do
+	for pl in mcl_util.connected_players() do
 		local n = minetest.find_node_near(pl:get_pos(),0.4,{"group:cauldron_filled"},true)
 		if n and not minetest.get_node(n).name:find("lava") then
 			cauldron_extinguish(pl,n)

@@ -128,7 +128,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 			}
 
 			local pos = self.object:get_pos()
-			for _, player in pairs(minetest.get_connected_players()) do
+			for player in mcl_util.connected_players() do
 				local d = vector.distance(pos, player:get_pos())
 				if d <= 80 then
 					mcl_bossbars.add_bar(player, bardef, true, d)

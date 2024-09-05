@@ -120,12 +120,11 @@ minetest.register_entity("mcl_conduits:conduit", {
 			self.object:remove()
 			return
 		end
-		local dst = lvl * 2
-		for _, pl in pairs(minetest.get_connected_players()) do
-			if vector.distance(self._pos, pl:get_pos()) < dst then
-				mcl_conduits.player_effect(pl)
-			end
+
+		for pl in mcl_util.connected_players(self._pos, lvl * 2) do
+			mcl_conduits.player_effect(pl)
 		end
+
 		for _, ent in pairs(minetest.luaentities) do
 			if ent.is_mob and ent.type == "monster" and ent.object and ent.object:get_pos() and vector.distance(self._pos, ent.object:get_pos()) < 9 then
 				mcl_conduits.conduit_damage(ent)

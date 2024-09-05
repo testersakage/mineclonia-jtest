@@ -110,7 +110,7 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	    if self._fatigue_counter > 60 then
 		self._fatigue_counter = self._fatigue_counter - 60
 
-		for _, player in pairs (minetest.get_connected_players ()) do
+		for player in mcl_util.connected_players() do
 		    local pos = player:get_pos ()
 		    if vector.distance (pos, self_pos) <= 50 then
 			-- Inflict Mining Fatigue III for 5 minutes.

@@ -111,10 +111,9 @@ local function check_active_tracks()
 	for k,v in pairs(active_tracks) do
 		local pos = minetest.get_position_from_hash(k)
 		local player_near = false
-		for _,pl in pairs(minetest.get_connected_players()) do
-			if vector.distance(pl:get_pos(), pos) <= HEAR_DISTANCE then
-				player_near = true
-			end
+		for _ in mcl_util.connected_players(pos, HEAR_DISTANCE) do
+			player_near = true
+			break
 		end
 		if not player_near then
 			minetest.sound_stop(v)

@@ -138,116 +138,114 @@ minetest.register_on_player_hpchange(function(player, hp_change)
 end)
 
 local food_tick_timers = {} -- one food_tick_timer per player, keys are the player-objects
-minetest.register_globalstep(function(dtime)
-	for _,player in pairs(minetest.get_connected_players()) do
 
-		local food_tick_timer = food_tick_timers[player] and food_tick_timers[player] + dtime or 0
-		local player_name = player:get_player_name()
-		local food_level = mcl_hunger.get_hunger(player)
-		local food_saturation_level = mcl_hunger.get_saturation(player)
-		local player_health = mcl_damage.get_hp (player)
+mcl_player.register_globalstep(function(player, dtime)
+	local food_tick_timer = food_tick_timers[player] and food_tick_timers[player] + dtime or 0
+	local player_name = player:get_player_name()
+	local food_level = mcl_hunger.get_hunger(player)
+	local food_saturation_level = mcl_hunger.get_saturation(player)
+	local player_health = mcl_damage.get_hp (player)
 
-		if food_tick_timer > 4.0 then
-			food_tick_timer = 0
+	if food_tick_timer > 4.0 then
+		food_tick_timer = 0
 
-			-- let hunger work always
-			if player_health > 0 then
-				--mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_HUNGER) -- later for hunger status effect
-				mcl_hunger.update_exhaustion_hud(player)
-			end
+		-- let hunger work always
+		if player_health > 0 then
+			--mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_HUNGER) -- later for hunger status effect
+			mcl_hunger.update_exhaustion_hud(player)
+		end
 
-			if food_level >= 18 then -- slow regeneration
-				if player_health > 0 and player_health < player:get_properties().hp_max then
-					mcl_damage.heal_player (player, 1)
-					mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)
-					mcl_hunger.update_exhaustion_hud(player)
-				end
-
-			elseif food_level == 0 then -- starvation
-				-- the amount of health at which a player will stop to get
-				-- harmed by starvation (10 for Easy, 1 for Normal, 0 for Hard)
-				local maximum_starvation = 1
-				-- TODO: implement Minecraft-like difficulty modes and the update maximumStarvation here
-				if player_health > maximum_starvation then
-					mcl_util.deal_damage(player, 1, {type = "starve"})
-				end
-			end
-
-		elseif food_tick_timer > 0.5 and food_level == 20 and food_saturation_level > 0 then -- fast regeneration
+		if food_level >= 18 then -- slow regeneration
 			if player_health > 0 and player_health < player:get_properties().hp_max then
-				food_tick_timer = 0
 				mcl_damage.heal_player (player, 1)
 				mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)
 				mcl_hunger.update_exhaustion_hud(player)
 			end
+
+		elseif food_level == 0 then -- starvation
+			-- the amount of health at which a player will stop to get
+			-- harmed by starvation (10 for Easy, 1 for Normal, 0 for Hard)
+			local maximum_starvation = 1
+			-- TODO: implement Minecraft-like difficulty modes and the update maximumStarvation here
+			if player_health > maximum_starvation then
+				mcl_util.deal_damage(player, 1, {type = "starve"})
+			end
 		end
 
-		food_tick_timers[player] = food_tick_timer -- update food_tick_timer table
+	elseif food_tick_timer > 0.5 and food_level == 20 and food_saturation_level > 0 then -- fast regeneration
+		if player_health > 0 and player_health < player:get_properties().hp_max then
+			food_tick_timer = 0
+			mcl_damage.heal_player (player, 1)
+			mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)
+			mcl_hunger.update_exhaustion_hud(player)
+		end
 	end
+
+	food_tick_timers[player] = food_tick_timer -- update food_tick_timer table
 end)
 
 -- JUMP EXHAUSTION
 mcl_player.register_globalstep(function(player, dtime)
-	local name = player:get_player_name()
-	local node_stand, node_stand_below, node_head, node_feet, node_head_top
+local name = player:get_player_name()
+local node_stand, node_stand_below, node_head, node_feet, node_head_top
 
-	-- Update jump status immediately since we need this info in real time.
-	-- WARNING: This section is HACKY as hell since it is all just based on heuristics.
+-- Update jump status immediately since we need this info in real time.
+-- WARNING: This section is HACKY as hell since it is all just based on heuristics.
 
-	if mcl_player.players[player].jump_cooldown > 0 then
-		mcl_player.players[player].jump_cooldown = mcl_player.players[player].jump_cooldown - dtime
+if mcl_player.players[player].jump_cooldown > 0 then
+	mcl_player.players[player].jump_cooldown = mcl_player.players[player].jump_cooldown - dtime
+end
+
+if player:get_player_control().jump and mcl_player.players[player].jump_cooldown <= 0 then
+
+	--pos = player:get_pos()
+
+	node_stand = mcl_player.players[player].nodes.stand
+	node_stand_below = mcl_player.players[player].nodes.stand_below
+	node_head = mcl_player.players[player].nodes.head
+	node_feet = mcl_player.players[player].nodes.feet
+	node_head_top = mcl_player.players[player].nodes.head_top
+	if not node_stand or not node_stand_below or not node_head or not node_feet then
+		return
+	end
+	if (not minetest.registered_nodes[node_stand]
+	or not minetest.registered_nodes[node_stand_below]
+	or not minetest.registered_nodes[node_head]
+	or not minetest.registered_nodes[node_feet]
+	or not minetest.registered_nodes[node_head_top]) then
+		return
 	end
 
-	if player:get_player_control().jump and mcl_player.players[player].jump_cooldown <= 0 then
+	-- Cause buggy exhaustion for jumping
 
-		--pos = player:get_pos()
+	--[[ Checklist we check to know the player *actually* jumped:
+		* Not on or in liquid
+		* Not on or at climbable
+		* On walkable
+		* Not on disable_jump
+	FIXME: This code is pretty hacky and it is possible to miss some jumps or detect false
+	jumps because of delays, rounding errors, etc.
+	What this code *really* needs is some kind of jumping “callback” which this engine lacks
+	as of 0.4.15.
+	]]
 
-		node_stand = mcl_player.players[player].nodes.stand
-		node_stand_below = mcl_player.players[player].nodes.stand_below
-		node_head = mcl_player.players[player].nodes.head
-		node_feet = mcl_player.players[player].nodes.feet
-		node_head_top = mcl_player.players[player].nodes.head_top
-		if not node_stand or not node_stand_below or not node_head or not node_feet then
-			return
-		end
-		if (not minetest.registered_nodes[node_stand]
-		or not minetest.registered_nodes[node_stand_below]
-		or not minetest.registered_nodes[node_head]
-		or not minetest.registered_nodes[node_feet]
-		or not minetest.registered_nodes[node_head_top]) then
-			return
-		end
+	if minetest.get_item_group(node_feet, "liquid") == 0 and
+			minetest.get_item_group(node_stand, "liquid") == 0 and
+			not minetest.registered_nodes[node_feet].climbable and
+			not minetest.registered_nodes[node_stand].climbable and
+			(minetest.registered_nodes[node_stand].walkable or minetest.registered_nodes[node_stand_below].walkable)
+			and minetest.get_item_group(node_stand, "disable_jump") == 0
+			and minetest.get_item_group(node_stand_below, "disable_jump") == 0 then
+	-- Cause exhaustion for jumping
+	if mcl_sprint.is_sprinting(name) then
+		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_SPRINT_JUMP)
+	else
+		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_JUMP)
+	end
 
-		-- Cause buggy exhaustion for jumping
-
-		--[[ Checklist we check to know the player *actually* jumped:
-			* Not on or in liquid
-			* Not on or at climbable
-			* On walkable
-			* Not on disable_jump
-		FIXME: This code is pretty hacky and it is possible to miss some jumps or detect false
-		jumps because of delays, rounding errors, etc.
-		What this code *really* needs is some kind of jumping “callback” which this engine lacks
-		as of 0.4.15.
-		]]
-
-		if minetest.get_item_group(node_feet, "liquid") == 0 and
-				minetest.get_item_group(node_stand, "liquid") == 0 and
-				not minetest.registered_nodes[node_feet].climbable and
-				not minetest.registered_nodes[node_stand].climbable and
-				(minetest.registered_nodes[node_stand].walkable or minetest.registered_nodes[node_stand_below].walkable)
-				and minetest.get_item_group(node_stand, "disable_jump") == 0
-				and minetest.get_item_group(node_stand_below, "disable_jump") == 0 then
-		-- Cause exhaustion for jumping
-		if mcl_sprint.is_sprinting(name) then
-			mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_SPRINT_JUMP)
-		else
-			mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_JUMP)
-		end
-
-		-- Reset cooldown timer
-			mcl_player.players[player].jump_cooldown = 0.45
-		end
+	-- Reset cooldown timer
+		mcl_player.players[player].jump_cooldown = 0.45
+	end
 	end
 end)
 

@@ -236,9 +236,8 @@ minetest.register_globalstep(function(dtime)
 	end
 
 	timer = 0
-	local players = minetest.get_connected_players()
-	for n = 1, #players do
-		mcl_fire.update_player_sound(players[n])
+	for player in mcl_util.connected_players() do
+		mcl_fire.update_player_sound(player)
 	end
 end)
 

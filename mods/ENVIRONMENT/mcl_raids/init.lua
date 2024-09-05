@@ -218,9 +218,7 @@ function mcl_raids.find_village(pos)
 end
 
 local function is_player_near(self)
-	for _,pl in pairs(minetest.get_connected_players()) do
-		if self.pos and vector.distance(pl:get_pos(),self.pos) < 64 then return true end
-	end
+	for _ in mcl_util.connected_players(self.pos, 63) do return true end
 end
 
 local function check_mobs(self)
@@ -256,7 +254,7 @@ mcl_events.register_event("raid",{
 	enable_bossbar = true,
 	cond_start  = function()
 		local r = {}
-		for _,p in pairs(minetest.get_connected_players()) do
+		for p in mcl_util.connected_players() do
 			if mcl_potions.has_effect(p,"bad_omen") then
 				local raid_pos = mcl_raids.find_village(p:get_pos())
 				if raid_pos then

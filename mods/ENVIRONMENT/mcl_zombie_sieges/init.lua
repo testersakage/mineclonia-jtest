@@ -35,7 +35,7 @@ mcl_events.register_event("zombie_siege",{
 		local rnd = pr:next(1,10)
 
 		if t < 0.04 and rnd == 1 then
-			for _,p in pairs(minetest.get_connected_players()) do
+			for p in mcl_util.connected_players() do
 				local village = mcl_raids.find_village(p:get_pos())
 				if village then
 					table.insert(r,{ player = p:get_player_name(), pos = village})

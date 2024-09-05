@@ -963,9 +963,7 @@ if progressive_mode then
 	-- Workaround. Need an engine call to detect when the contents
 	-- of the player inventory changed, instead.
 	local function poll_new_items()
-		local players = minetest.get_connected_players()
-		for i = 1, #players do
-			local player = players[i]
+		for player in mcl_util.connected_players() do
 			local name   = player:get_player_name()
 			local data   = player_data[name]
 			local inv_items = get_inv_items(player)
@@ -1017,9 +1015,7 @@ if progressive_mode then
 	end)
 
 	minetest.register_on_shutdown(function()
-		local players = minetest.get_connected_players()
-		for i = 1, #players do
-			local player = players[i]
+		for player in mcl_util.connected_players() do
 			save_meta(player)
 		end
 	end)

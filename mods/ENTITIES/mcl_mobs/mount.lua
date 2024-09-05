@@ -60,7 +60,7 @@ local function force_detach(player)
 end
 
 minetest.register_on_shutdown(function()
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		force_detach(player)
 	end
 end)

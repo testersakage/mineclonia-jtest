@@ -532,11 +532,9 @@ end
 
 function mob_class:check_despawn(pos, dtime)
 	if remove_far and self:despawn_allowed() then
-		local min_dist = 10000
-
-		for _, player in pairs(minetest.get_connected_players()) do
-			local dist = vector.distance(player:get_pos(), pos)
-			min_dist = math.min(min_dist, dist)
+		local min_dist = math.huge
+		for player in mcl_util.connected_players() do
+			min_dist = math.min(min_dist, vector.distance(player:get_pos(), pos))
 		end
 
 		if min_dist > instant_despawn_range then

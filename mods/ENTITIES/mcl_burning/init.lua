@@ -19,7 +19,7 @@ mcl_burning = {
 dofile(modpath .. "/api.lua")
 
 minetest.register_globalstep(function(dtime)
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		local storage = mcl_burning.storage[player]
 		if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
 			local nodes = mcl_burning.get_touching_nodes(player, {"group:puts_out_fire", "group:set_on_fire"}, storage)
@@ -80,7 +80,7 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 minetest.register_on_shutdown(function()
-	for _,player in ipairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		on_leaveplayer(player)
 	end
 end)

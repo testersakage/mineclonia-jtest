@@ -61,10 +61,8 @@ local pick_up = {
 function mobs_mc.villager_mob:on_pick_up(itementity)
 	local clicker
 	local it = ItemStack(itementity.itemstring)
-	for _,p in pairs(minetest.get_connected_players()) do
-		if vector.distance(p:get_pos(),self.object:get_pos()) < 10 then
-			clicker = p
-		end
+	for p in mcl_util.connected_players(self.object:get_pos(), 9) do
+		clicker = p
 	end
 	if clicker and not self.horny then
 		self:feed_tame(clicker, 4, true, false, true)

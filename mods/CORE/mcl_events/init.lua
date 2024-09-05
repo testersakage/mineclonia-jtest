@@ -27,11 +27,9 @@ end
 
 local function addbars(self)
 	if not self.enable_bossbar then return end
-	for _,player in pairs(minetest.get_connected_players()) do
-		if vector.distance(self.pos,player:get_pos()) < 64 then
-			local bar = mcl_bossbars.add_bar(player, {color = "red", text = self.readable_name .. ": Wave "..self.stage.." / "..self.max_stage, percentage = self.percent }, true,1)
-			table.insert(self.bars,bar)
-		end
+	for player in mcl_util.connected_players(self.pos, 63) do
+		local bar = mcl_bossbars.add_bar(player, {color = "red", text = self.readable_name .. ": Wave "..self.stage.." / "..self.max_stage, percentage = self.percent }, true,1)
+		table.insert(self.bars,bar)
 	end
 end
 
@@ -106,11 +104,14 @@ function check_events(dtime)
 	end
 	for idx,ae in pairs(active_events) do
 		local player_near = false
-		for _,pl in pairs(minetest.get_connected_players()) do
-			if ae.pos and vector.distance(pl:get_pos(),ae.pos) < 64 then player_near = true end
-		end
-		if ae.pos and not player_near then
-			active_events[idx] = nil
+		if ae.pos then
+			for _ in mcl_util.connected_players(ae.pos, 63) do
+				player_near = true
+				break
+			end
+			if not player_near then
+				active_events[idx] = nil
+			end
 		end
 	end
 end

@@ -426,7 +426,7 @@ local function update_shield_hud(player, blocking, shieldstack)
 end
 
 minetest.register_globalstep(function()
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 
 		handle_blocking(player)
 

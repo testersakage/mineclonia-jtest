@@ -27,9 +27,9 @@ local function within_limits(pos, radius)
 end
 
 function mob_class:player_in_active_range()
-	for _,p in pairs(minetest.get_connected_players()) do
-		if vector.distance(self.object:get_pos(),p:get_pos()) <= self.player_active_range then return true end
+	for _ in mcl_util.connected_players(self.object:get_pos(), self.player_active_range) do
 		-- slightly larger than the mc 32 since mobs spawn on that circle and easily stand still immediately right after spawning.
+		return true
 	end
 end
 

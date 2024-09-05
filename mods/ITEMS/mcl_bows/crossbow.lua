@@ -401,7 +401,7 @@ controls.register_on_hold(function(player, key)
 end)
 
 minetest.register_globalstep(function()
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		local name = player:get_player_name()
 		local wielditem = player:get_wielded_item()
 		local wieldindex = player:get_wield_index()

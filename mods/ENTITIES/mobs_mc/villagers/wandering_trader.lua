@@ -230,7 +230,7 @@ local function attempt_trader_spawn(manual)
 	if not exists and math.random(100) < current_chance then
 		current_chance = 25
 		local ow_players = {}
-		for _, pl in pairs(minetest.get_connected_players()) do
+		for pl in mcl_util.connected_players() do
 			if mcl_worlds.pos_to_dimension(pl:get_pos()) == "overworld" then
 				table.insert(ow_players, pl)
 			end

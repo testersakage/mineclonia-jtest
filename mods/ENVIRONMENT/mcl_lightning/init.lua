@@ -139,9 +139,7 @@ function mcl_lightning.strike_func(pos, pos2, objects)
 		end
 	end
 
-	local playerlist = minetest.get_connected_players()
-	for i = 1, #playerlist do
-		local player = playerlist[i]
+	for player in mcl_util.connected_players() do
 		local sky = {}
 		local sky_table = player:get_sky(true)
 

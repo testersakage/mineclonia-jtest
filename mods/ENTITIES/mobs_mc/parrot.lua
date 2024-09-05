@@ -91,7 +91,7 @@ end
 
 local function check_perch(self,dtime)
 	if self.object:get_attach() then
-		for _,p in pairs(minetest.get_connected_players()) do
+		for p in mcl_util.connected_players() do
 			for _,o in pairs(p:get_children()) do
 				local l = o:get_luaentity()
 				if l and l.name == "mobs_mc:parrot" then
@@ -107,7 +107,7 @@ local function check_perch(self,dtime)
 			end
 		end
 	elseif not self.detach_timer then
-		for _,p in pairs(minetest.get_connected_players()) do
+		for p in mcl_util.connected_players() do
 			if vector.distance(self.object:get_pos(),p:get_pos()) < 0.5 then
 				perch(self,p)
 				return

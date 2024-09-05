@@ -70,12 +70,9 @@ local function barrel_open(pos, node, clicker)
 end
 
 local function close_forms(pos)
-	local players = minetest.get_connected_players()
 	local formname = "mcl_barrels:barrel_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z
-	for p = 1, #players do
-		if vector.distance(players[p]:get_pos(), pos) <= 30 then
-			minetest.close_formspec(players[p]:get_player_name(), formname)
-		end
+	for pl in mcl_util.connected_players(pos, 30) do
+		minetest.close_formspec(pl:get_player_name(), formname)
 	end
 end
 

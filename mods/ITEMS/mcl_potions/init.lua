@@ -619,7 +619,7 @@ minetest.register_globalstep(function(dtime)
 	etime = dtime + etime
 	if etime < 0.5 then return end
 	etime = 0
-	for _,pl in pairs(minetest.get_connected_players()) do
+	for pl in mcl_util.connected_players() do
 		local npos = vector.offset(pl:get_pos(), 0, 0.2, 0)
 		local n = minetest.get_node(npos)
 		if n.name == "mcl_flowers:wither_rose" then mcl_potions.withering_func(pl, 1, 2) end

@@ -188,7 +188,7 @@ function mob_class:check_particlespawners(dtime)
 	if self._particle_timer and self._particle_timer >= 1 then
 		self._particle_timer = 0
 		local players = {}
-		for _,player in pairs(minetest.get_connected_players()) do
+		for player in mcl_util.connected_players() do
 			local pn = player:get_player_name()
 			table.insert(players,pn)
 			if not active_particlespawners[pn] then

@@ -631,7 +631,7 @@ function mob_class:follow_player()
 		and self.state ~= "runaway"
 	then
 
-		for _, player in pairs(minetest.get_connected_players()) do
+		for player in mcl_util.connected_players() do
 			if (self:object_in_range(player))
 			and not mcl_mobs.invis[ player:get_player_name() ] then
 				self.following = player

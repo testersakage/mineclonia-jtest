@@ -71,8 +71,8 @@ function mcl_weather.remove_spawners_player(pl)
 end
 
 function mcl_weather.remove_all_spawners()
-	for _, v in pairs(minetest.get_connected_players()) do
-		mcl_weather.remove_spawners_player(v)
+	for pl in mcl_util.connected_players() do
+		mcl_weather.remove_spawners_player(pl)
 	end
 end
 

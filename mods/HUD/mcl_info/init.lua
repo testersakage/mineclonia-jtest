@@ -72,7 +72,7 @@ local function get_text(player, bits)
 end
 
 local function info()
-	for _, player in pairs(minetest.get_connected_players()) do
+	for player in mcl_util.connected_players() do
 		local name = player:get_player_name()
 		local s = player_setting(player)
 		local text = get_text(player, s)

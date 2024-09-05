@@ -251,7 +251,7 @@ minetest.register_globalstep(function(dtime)
 	etime = dtime + etime
 	if etime < 0.5 then return end
 	etime = 0
-	for _,pl in pairs(minetest.get_connected_players()) do
+	for pl in mcl_util.connected_players() do
 		local armor_feet = pl:get_inventory():get_stack("armor", 5)
 		if pl and pl:get_player_control().sneak
 		    or mcl_enchanting.has_enchantment(armor_feet, "frost_walker")
@@ -276,7 +276,7 @@ function mcl_campfires.generate_smoke(pos)
 	end
 
 	local ph = minetest.hash_node_position(pos)
-	for _,pl in pairs(minetest.get_connected_players()) do
+	for pl in mcl_util.connected_players() do
 		if not player_particlespawners[pl] then player_particlespawners[pl] = {} end
 		if not player_particlespawners[pl][ph] and vector.distance(pos, pl:get_pos()) < PARTICLE_DISTANCE then
 			player_particlespawners[pl][ph] = minetest.add_particlespawner({
