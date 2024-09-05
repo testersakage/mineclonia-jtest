@@ -339,6 +339,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 		end
 
 		minetest.swap_node(pos, {name="mcl_chests:chest", param2=facedir})
+		mcl_structures.construct_nodes(pos, pos, {"mcl_chests:chest"})
 		local meta = minetest.get_meta(pos)
 		minetest.log("info", "[mcl_dungeons] Filling chest " .. tostring(c) .. " at " .. minetest.pos_to_string(pos))
 		mcl_loot.fill_inventory(meta:get_inventory(), "main", mcl_loot.get_multi_loot(loottable, pr), pr)
