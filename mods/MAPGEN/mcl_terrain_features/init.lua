@@ -374,7 +374,7 @@ mcl_structures.register_structure("powder_snow_trap", {
 		local solid_nodes = {}
 		for i = 0, width do
 			for j = 0, length do
-				for k = 0, width do
+				for k = 0, depth do
 					if minetest.get_item_group(minetest.get_node(vector.offset(pos, i, k, j)).name, "solid") > 0 then
 						table.insert(solid_nodes, vector.offset(pos, i, k, j))
 					end
