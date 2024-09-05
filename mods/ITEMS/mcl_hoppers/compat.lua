@@ -18,7 +18,7 @@ minetest.register_on_mods_loaded(function()
 				_on_hopper_out = function(node_pos, hopper_pos)
 					local hinv = minetest.get_meta(hopper_pos):get_inventory()
 					local inv, list, stack = def._mcl_hoppers_on_try_pull(node_pos, hopper_pos, hinv, "main")
-					if stack and mcl_util.move_item(inv, list, stack, hinv, "main") and ( def._mcl_hoppers_after_pull == nil or def._mcl_hoppers_after_pull(node_pos)) then
+					if stack and mcl_util.move_item(inv, list, stack, hinv, "main") then
 						return true
 					end
 					return true
@@ -35,6 +35,11 @@ minetest.register_on_mods_loaded(function()
 					end
 					return true
 				end,
+			})
+		end
+		if not def._after_hopper_out and def._mcl_hoppers_on_after_pull then
+			minetest.override_item(nname, {
+				_after_hopper_out = def._mcl_hoppers_on_after_pull,
 			})
 		end
 		if not def._after_hopper_in and def._mcl_hoppers_on_after_push then
