@@ -51,7 +51,7 @@ mcl_buckets.register_liquid({
 	tt_help = S("Places a powder snow block"),
 })
 
-local freezing_stages = 
+local freezing_stages =
 {
 	"freezing_1.png",
 	"freezing_2.png",
