@@ -46,7 +46,6 @@ function mcl_doors:register_door(name, def)
 	def.groups.not_in_creative_inventory = 1
 	def.groups.dig_by_piston = 1
 	def.groups.door = 1
-	def.groups.mesecon_ignore_opaque_dig = 1
 
 	if not def.sound_open then
 		def.sound_open = "doors_door_open"
@@ -96,7 +95,7 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	local craftitem_groups = { mesecon_conductor_craftable = 1, deco_block = 1 }
+	local craftitem_groups = {deco_block = 1}
 	if def.groups and def.groups.flammable then
 		craftitem_groups.flammable = def.groups.flammable
 	end
@@ -241,20 +240,32 @@ function mcl_doors:register_door(name, def)
 		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
 	end
 
-	local function on_mesecons_signal_open(pos, _)
+	local function open(pos)
 		on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
 	end
-	local function on_mesecons_signal_close(pos, _)
-		if not mesecon.is_powered({x=pos.x,y=pos.y+1,z=pos.z}) then
-			on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
+	local function close(pos)
+		on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
+	end
+
+	local function redstone_connects_to(node, dir)
+		return true
+	end
+
+	local function redstone_update_bottom(pos)
+		local pos2 = pos:offset(0, 1, 0)
+		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
+			minetest.after(0, function() open(pos) end)
+		else
+			minetest.after(0, function() close(pos) end)
 		end
 	end
-	local function on_mesecons_signal_open_top(pos, node)
-		on_mesecons_signal_open({x=pos.x, y=pos.y-1, z=pos.z}, node)
-	end
-	local function on_mesecons_signal_close_top(pos, node)
-		if not mesecon.is_powered({x=pos.x,y=pos.y-1,z=pos.z}) then
-			on_mesecons_signal_close({x=pos.x, y=pos.y-1, z=pos.z}, node)
+
+	local function redstone_update_top(pos)
+		local pos2 = pos:offset(0, -1, 0)
+		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
+			minetest.after(0, function() open(pos2) end)
+		else
+			minetest.after(0, function() close(pos2) end)
 		end
 	end
 
@@ -317,14 +328,16 @@ function mcl_doors:register_door(name, def)
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
 			if node.name ~= "mcl_doors:iron_door_b_1" then
-				on_mesecons_signal_open(pos, node)
+				open(pos)
 			end
 			return true
 		end,
 
-		mesecons = { effector = {
-			action_on = on_mesecons_signal_open,
-		}},
+		_redstone = {
+			connects_to = redstone_connects_to,
+			update = redstone_update_bottom,
+			init = function() end,
+		},
 
 		on_rotate = function(bottom, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
@@ -396,15 +409,16 @@ function mcl_doors:register_door(name, def)
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
 			if node.name ~= "mcl_doors:iron_door_t_1" then
-				on_mesecons_signal_open_top(pos, node)
+				open(pos)
 			end
 			return true
 		end,
 
-		mesecons = { effector = {
-			action_on = on_mesecons_signal_open_top,
-			rules = mesecon.rules.flat,
-		}},
+		_redstone = {
+			connects_to = redstone_connects_to,
+			update = redstone_update_top,
+			init = function() end,
+		},
 
 		on_rotate = function(top, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
@@ -477,14 +491,16 @@ function mcl_doors:register_door(name, def)
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
 			if node.name ~= "mcl_doors:iron_door_b_2" then
-				on_mesecons_signal_close(pos, node)
+				close(pos)
 			end
 			return true
 		end,
 
-		mesecons = { effector = {
-			action_off = on_mesecons_signal_close,
-		}},
+		_redstone = {
+			connects_to = redstone_connects_to,
+			update = redstone_update_bottom,
+			init = function() end,
+		},
 
 		on_rotate = function(bottom, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
@@ -556,15 +572,16 @@ function mcl_doors:register_door(name, def)
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
 			if node.name ~= "mcl_doors:iron_door_t_2" then
-				on_mesecons_signal_close_top(pos, node)
+				close(pos)
 			end
 			return true
 		end,
 
-		mesecons = { effector = {
-			action_off = on_mesecons_signal_close_top,
-			rules = mesecon.rules.flat,
-		}},
+		_redstone = {
+			connects_to = redstone_connects_to,
+			update = redstone_update_top,
+			init = function() end,
+		},
 
 		on_rotate = function(top, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then

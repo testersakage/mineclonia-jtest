@@ -53,7 +53,6 @@ function mcl_doors:register_trapdoor(name, def)
 	if groups == nil then
 		groups = {}
 	end
-	groups.mesecon_ignore_opaque_dig = 1
 
 	if not def.sound_open then
 		def.sound_open = "doors_door_open"
@@ -145,11 +144,14 @@ function mcl_doors:register_trapdoor(name, def)
 			fixed = {
 			{-8/16, -8/16, -8/16, 8/16, -5/16, 8/16},},
 		},
-		mesecons = {effector = {
-			action_on = (function(pos)
-				punch(pos)
-			end),
-		}},
+		_redstone = {
+			update = function(pos, node)
+				if mcl_redstone.get_power(pos) ~= 0 then
+					punch(pos)
+				end
+			end,
+			init = function() end,
+		},
 		on_place = function(itemstack, placer, pointed_thing)
 
 			if not placer or not placer:is_player() then
@@ -228,11 +230,14 @@ function mcl_doors:register_trapdoor(name, def)
 			fixed = {-0.5, -0.5, 5/16, 0.5, 0.5, 0.5}
 		},
 		on_rightclick = on_rightclick,
-		mesecons = {effector = {
-			action_off = (function(pos)
-				punch(pos)
-			end),
-		}},
+		_redstone = {
+			update = function(pos, node)
+				if mcl_redstone.get_power(pos) == 0 then
+					punch(pos)
+				end
+			end,
+			init = function() end,
+		},
 		on_rotate = on_rotate,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)

@@ -129,7 +129,7 @@ minetest.register_craft({
 	output = mcl_clock.stereotype,
 	recipe = {
 		{"", "mcl_core:gold_ingot", ""},
-		{"mcl_core:gold_ingot", "mesecons:redstone", "mcl_core:gold_ingot"},
+		{"mcl_core:gold_ingot", "mcl_redstone:redstone", "mcl_core:gold_ingot"},
 		{"", "mcl_core:gold_ingot", ""}
 	}
 })

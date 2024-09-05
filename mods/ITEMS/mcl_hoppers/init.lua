@@ -163,12 +163,16 @@ def_hopper_enabled.on_place = function(itemstack, placer, pointed_thing)
 	itemstack:set_name("mcl_hoppers:hopper")
 	return itemstack
 end
-def_hopper_enabled.mesecons = {
-	effector = {
-		action_on = function(pos, node)
+def_hopper_enabled._redstone = {
+	connects_to = function(node, dir)
+		return true
+	end,
+	update = function(pos)
+		if mcl_redstone.get_power(pos) ~= 0 then
+			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mcl_hoppers:hopper_disabled", param2=node.param2})
-		end,
-	},
+		end
+	end,
 }
 
 minetest.register_node("mcl_hoppers:hopper", def_hopper_enabled)
@@ -180,12 +184,16 @@ def_hopper_disabled.inventory_image = nil
 def_hopper_disabled._doc_items_create_entry = false
 def_hopper_disabled.groups.not_in_creative_inventory = 1
 def_hopper_disabled.drop = "mcl_hoppers:hopper"
-def_hopper_disabled.mesecons = {
-	effector = {
-		action_off = function(pos, node)
+def_hopper_disabled._redstone = {
+	connects_to = function(node, dir)
+		return true
+	end,
+	update = function(pos)
+		if mcl_redstone.get_power(pos) == 0 then
+			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mcl_hoppers:hopper", param2=node.param2})
-		end,
-	},
+		end
+	end,
 }
 
 minetest.register_node("mcl_hoppers:hopper_disabled", def_hopper_disabled)
@@ -289,23 +297,31 @@ local def_hopper_side = {
 
 local def_hopper_side_enabled = table.copy(def_hopper_side)
 def_hopper_side_enabled.description = S("Side Hopper")
-def_hopper_side_enabled.mesecons = {
-	effector = {
-		action_on = function(pos, node)
+def_hopper_side_enabled._redstone = {
+	connects_to = function(node, dir)
+		return true
+	end,
+	update = function(pos)
+		if mcl_redstone.get_power(pos) ~= 0 then
+			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mcl_hoppers:hopper_side_disabled", param2=node.param2})
-		end,
-	},
+		end
+	end,
 }
 minetest.register_node("mcl_hoppers:hopper_side", def_hopper_side_enabled)
 
 local def_hopper_side_disabled = table.copy(def_hopper_side)
 def_hopper_side_disabled.description = S("Disabled Side Hopper")
-def_hopper_side_disabled.mesecons = {
-	effector = {
-		action_off = function(pos, node)
+def_hopper_side_disabled._redstone = {
+	connects_to = function(node, dir)
+		return true
+	end,
+	update = function(pos)
+		if mcl_redstone.get_power(pos) == 0 then
+			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mcl_hoppers:hopper_side", param2=node.param2})
-		end,
-	},
+		end
+	end,
 }
 minetest.register_node("mcl_hoppers:hopper_side_disabled", def_hopper_side_disabled)
 

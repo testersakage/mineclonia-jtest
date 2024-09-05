@@ -1,0 +1,230 @@
+local S = minetest.get_translator(minetest.get_current_modname())
+
+-- Numbers with binary representation YYYYXXXX where XXXX determines if there
+-- is a visible connection in each of the four cardinal directions and YYYY if
+-- the respective connection also goes up over the neighbouring node.
+local wires = {}
+
+for y0 = 0, 15 do
+	for y1 = 0, 15 do
+		if bit.band(y1, bit.bnot(y0)) == 0 then
+			table.insert(wires, bit.bor(bit.lshift(y1, 4), y0))
+		end
+	end
+end
+
+local nodebox_wire = {
+	{-1/16, -.5, -8/16, 1/16, -.5+1/64, -1/16}, -- z negative
+	{-8/16, -.5, -1/16, -1/16, -.5+1/64, 1/16}, -- x negative
+	{-1/16, -.5, 1/16, 1/16, -.5+1/64, 8/16}, -- z positive
+	{1/16, -.5, -1/16, 8/16, -.5+1/64, 1/16}, -- x positive
+	{-1/16, -.5+1/16, -.5, 1/16, .4999+1/64, -.5+1/16}, -- z negative up
+	{-.5, -.5+1/16, -1/16, -.5+1/16, .4999+1/64, 1/16}, -- x negative up
+	{-1/16, -.5+1/16, .5-1/16, 1/16, .4999+1/64, .5}, -- z positive up
+	{.5-1/16, -.5+1/16, -1/16, .5, .4999+1/64, 1/16}, -- x positive up
+}
+local box_center = {-1/16, -.5, -1/16, 1/16, -.5+1/64, 1/16}
+local box_bump =  {-2/16, -8/16,  -2/16, 2/16, -.5+1/64, 2/16}
+
+local selectionbox = {
+	type = "fixed",
+	fixed = {-.5, -.5, -.5, .5, -.5+1/16, .5}
+}
+
+local cross_tile = "redstone_redstone_dust_dot.png^redstone_redstone_dust_line0.png^(redstone_redstone_dust_line1.png^[transformR90)"
+local line_tile = "redstone_redstone_dust_line0.png"
+local dot_tile = "redstone_redstone_dust_dot.png"
+
+local function check_bit(n, b)
+	return bit.band(n, bit.lshift(1, b)) ~= 0
+end
+
+-- Transform illegal wireflags like 0b11110011 to legal ones like 0b00110011 to
+-- avoid unknown node crashes when updating nodes.
+local function make_legal(wireflags)
+	local y0 = bit.band(wireflags, 0xf)
+	local y1 = bit.band(y0, bit.rshift(wireflags, 4))
+	return bit.bor(bit.lshift(y1, 4), y0)
+end
+
+local function wireflags_to_name(wireflags)
+	return wireflags == 0 and
+		"mcl_redstone:redstone" or
+		"mcl_redstone:wire_"..(bit.tohex(wireflags, 2))
+end
+
+local function update_wire(pos)
+	local update_tab = {
+		{wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44},
+		{wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x88},
+		{wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x11},
+		{wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x22},
+		{wire = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x4},
+		{wire = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x8},
+		{wire = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x1},
+		{wire = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x2},
+		{wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0), mask = 0x11, mask2 = 0x4},
+		{wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x22, mask2 = 0x8},
+		{wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0), mask = 0x44, mask2 = 0x1},
+		{wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x88, mask2 = 0x2},
+	}
+	local fourdir_tab = {
+		{dir = vector.new(0, 0, -1), mask = 0x1},
+		{dir = vector.new(-1, 0, 0), mask = 0x2},
+		{dir = vector.new(0, 0, 1), mask = 0x4},
+		{dir = vector.new(1, 0, 0), mask = 0x8},
+	}
+
+	local node = minetest.get_node(pos)
+	local present = minetest.get_item_group(node.name, "redstone_wire") ~= 0
+	local wireflags = 0
+
+	for _, entry in pairs(update_tab) do
+		if not entry.obstruct or minetest.get_item_group(minetest.get_node(pos:add(entry.obstruct)).name, "opaque") == 0 then
+			local pos2 = pos:add(entry.wire)
+			local node2 = minetest.get_node(pos2)
+			if minetest.get_item_group(node2.name, "redstone_wire") ~= 0 then
+				wireflags = bit.bor(wireflags, entry.mask)
+
+				local wireflags2 = minetest.registered_nodes[node2.name]._wireflags
+				if present then
+					wireflags2 = bit.bor(wireflags2, entry.mask2)
+				else
+					wireflags2 = bit.band(wireflags2, bit.bnot(entry.mask2))
+				end
+
+				minetest.swap_node(pos2, {
+					name = wireflags_to_name(make_legal(wireflags2)),
+					param2 = node2.param2,
+				})
+			end
+		end
+	end
+	for _, entry in pairs(fourdir_tab) do
+		local pos2 = pos:add(entry.dir)
+		local node2 = minetest.get_node(pos2)
+		local ndef2 = minetest.registered_nodes[node2.name]
+		local redstone = ndef2._redstone
+		local connects_to = redstone and redstone.connects_to
+
+		if connects_to and connects_to(node2, -entry.dir) then
+			wireflags = bit.bor(wireflags, entry.mask)
+		end
+	end
+
+	if present then
+		minetest.swap_node(pos, {
+			name = wireflags_to_name(make_legal(wireflags)),
+			param2 = node.param2,
+		})
+	end
+end
+
+local fourdirs = {
+	vector.new(1, 0, 0),
+	vector.new(-1, 0, 0),
+	vector.new(0, 0, 1),
+	vector.new(0, 0, -1),
+}
+
+for _, wire in pairs(wires) do
+	local wireid = bit.tohex(wire, 2)
+
+	local tt
+	local longdesc
+	local usagehelp
+	local nodebox
+	local tiles
+	if wire == 0 then
+		tt = S("Transmits redstone power, powers mechanisms")
+		longdesc = S("Redstone is a versatile conductive mineral which transmits redstone power. It can be placed on the ground as a trail.").."\n"..
+			S("A redstone trail can be in two states: Powered or not powered. A powered redstone trail will power (and thus activate) adjacent redstone components.").."\n"..
+			S("Redstone power can be received from various redstone components, such as a block of redstone or a button. Redstone power is used to activate numerous mechanisms, such as redstone lamps or pistons.")
+		usagehelp = S("Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills.").."\n\n"..
+			S("Read the help entries on the other redstone components to learn how redstone components interact.")
+		tiles = {dot_tile, dot_tile, "blank.png", "blank.png", "blank.png", "blank.png"}
+		nodebox = {type = "fixed", fixed={-8/16, -.5, -8/16, 8/16, -.5+1/64, 8/16}}
+	else
+		tiles = {cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile}
+		nodebox = {type = "fixed", fixed={box_center}}
+
+		-- Calculate nodebox
+		for i = 0, 7 do
+			if bit.band(wire, bit.lshift(1, i)) ~= 0 then
+				table.insert(nodebox.fixed, nodebox_wire[i + 1])
+			end
+		end
+
+		-- Add bump to nodebox if curved
+		if (check_bit(wire, 0) and check_bit(wire, 1)) or (check_bit(wire, 1) and check_bit(wire, 2))
+				or (check_bit(wire, 2) and check_bit(wire, 3)) or (check_bit(wire, 3) and check_bit(wire, 0)) then
+			table.insert(nodebox.fixed, box_bump)
+		end
+
+		doc.add_entry_alias("nodes", "mcl_redstone:redstone", "nodes", "mcl_redstone:wire_"..wireid)
+	end
+
+	minetest.register_node(wireflags_to_name(wire), {
+		drawtype = "nodebox",
+		paramtype = "light",
+		paramtype2 = "color",
+		palette = "redstone_palette_power.png",
+		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
+		sunlight_propagates = true,
+		selection_box = selectionbox,
+		node_box = nodebox,
+		tiles = tiles,
+		walkable = false,
+		drop = "mcl_redstone:redstone",
+		sounds = mcl_sounds.node_sound_defaults(),
+		is_ground_content = false,
+		groups = {redstone_wire = 1, dig_immediate = 3, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow=1, dig_by_piston = 1, craftitem = 1, not_in_creative_inventory = wire ~= 0 and 1 or 0},
+		description = wire == 0 and "Redstone" or S("Redstone Trail (@1)", wireid),
+		_tt_help = tt,
+		_doc_items_create_entry = longdesc and true or false,
+		_doc_items_longdesc = longdesc,
+		_doc_items_usagehelp = usagehelp,
+		wield_image = wire == 0 and "redstone_redstone_dust.png" or nil,
+		inventory_image = wire == 0 and "redstone_redstone_dust.png" or nil,
+		on_construct = function(pos)
+			update_wire(pos)
+		end,
+		after_destruct = function(pos, oldnode)
+			update_wire(pos)
+		end,
+		_wireflags = wire,
+	})
+end
+
+local function connect_with_wires(pos)
+	for _, dir in pairs(fourdirs) do
+		local pos2 = pos:add(dir)
+		local node = minetest.get_node(pos2)
+		if minetest.get_item_group(node.name, "redstone_wire") ~= 0 then
+			update_wire(pos2)
+		end
+	end
+end
+
+minetest.register_on_mods_loaded(function()
+	for name, ndef in pairs(minetest.registered_nodes) do
+		if ndef._redstone and ndef._redstone.connects_to then
+			local old_construct = ndef.on_construct
+			local old_destruct = ndef.after_destruct
+			minetest.override_item(name, {
+				on_construct = function(pos)
+					if old_construct then
+						old_construct(pos)
+					end
+					connect_with_wires(pos)
+				end,
+				after_destruct = function(pos, oldnode)
+					if old_destruct then
+						old_destruct(pos, oldnode)
+					end
+					connect_with_wires(pos)
+				end,
+			})
+		end
+	end
+end)

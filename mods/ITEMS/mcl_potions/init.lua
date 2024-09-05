@@ -376,7 +376,7 @@ local water_table = {
 	["mcl_core:sugar"] = "mcl_potions:mundane",
 	["mcl_mobitems:magma_cream"] = "mcl_potions:mundane",
 	["mcl_mobitems:blaze_powder"] = "mcl_potions:mundane",
-	["mesecons:wire_00000000_off"] = "mcl_potions:mundane",
+	["mcl_redstone:redstone"] = "mcl_potions:mundane",
 	["mcl_mobitems:ghast_tear"] = "mcl_potions:mundane",
 	["mcl_mobitems:spider_eye"] = "mcl_potions:mundane",
 	["mcl_mobitems:rabbit_foot"] = "mcl_potions:mundane",
@@ -549,7 +549,7 @@ local function extend_dur(potionstack)
 	end
 	return false
 end
-mcl_potions.register_meta_modifier("mesecons:wire_00000000_off", extend_dur)
+mcl_potions.register_meta_modifier("mcl_redstone:redstone", extend_dur)
 
 local function enhance_pow(potionstack)
 	local name = potionstack:get_name ()

@@ -50,8 +50,7 @@ minetest.register_on_mods_loaded(function()
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0) and def.description and
 			def.description ~= "" then
 			local function is_redstone(def)
-				return def.mesecons or def.groups.mesecon or def.groups.mesecon_conductor_craftable or
-					def.groups.mesecon_effecor_off
+				return def._redstone or def.groups.redstone_wire
 			end
 
 			local function is_tool(def)
@@ -394,7 +393,7 @@ end]]
 local tab_icon = {
 	blocks = "mcl_core:brick_block",
 	deco = "mcl_flowers:peony",
-	redstone = "mesecons:redstone",
+	redstone = "mcl_redstone:redstone",
 	rail = "mcl_minecarts:golden_rail",
 	misc = "mcl_buckets:bucket_lava",
 	nix = "mcl_compass:compass",
