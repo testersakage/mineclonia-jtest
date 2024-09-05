@@ -20,6 +20,8 @@ local rotations = {
 	"270"
 }
 
+local EMPTY_SCHEMATIC = { size = {x = 0, y = 0, z = 0}, data = { } }
+
 function mcl_structures.is_disabled(structname)
 	return table.indexof(disabled_structures,structname) ~= -1
 end
@@ -248,50 +250,33 @@ end
 
 function mcl_structures.register_structure(name,def,nospawn) --nospawn means it will be placed by another (non-nospawn) structure that contains it's structblock i.e. it will not be placed by mapgen directly
 	if mcl_structures.is_disabled(name) then return end
-	local structblock = "mcl_structures:structblock_"..name
 	local flags = "place_center_x, place_center_z, force_placement"
-	local sbgroups = { structblock = 1, not_in_creative_inventory=1 }
 	if def.flags then flags = def.flags end
 	def.name = name
 	if not def.noise_params and def.chunk_probability then
 		def.fill_ratio = def.fill_ratio or 1.1/80/80 -- aim for 1 per chunk, control via chunk probability
 	end
-	if nospawn then
-		sbgroups.structblock = nil
-		sbgroups.structblock_lbm = 1
-	else
-		if def.place_on then
-			minetest.register_on_mods_loaded(function() --make sure all previous decorations and biomes have been registered
-				def.deco = minetest.register_decoration({
-					name = "mcl_structures:deco_"..name,
-					decoration = structblock,
-					deco_type = "simple",
-					place_on = def.place_on,
-					spawn_by = def.spawn_by,
-					num_spawn_by = def.num_spawn_by,
-					sidelen = 80,
-					fill_ratio = def.fill_ratio,
-					noise_params = def.noise_params,
-					flags = flags,
-					biomes = def.biomes,
-					y_max = def.y_max,
-					y_min = def.y_min
-				})
-				local dbg_add = {}
-				if mcl_structures.DBG then
-					dbg_add = {
-						drawtype = "normal",
-						pointable = true,
-					}
-				end
-				minetest.register_node(":"..structblock, table.merge({drawtype="airlike", walkable = false, pointable = false, groups = sbgroups, sunlight_propagates = true, paramtype = "light"}, dbg_add))
-				def.structblock = structblock
-				def.deco_id = minetest.get_decoration_id("mcl_structures:deco_"..name)
-				minetest.set_gen_notify({decoration=true}, { def.deco_id })
-				--catching of gennotify happens in mcl_mapgen_core
-
-			end)
-		end
+	if not nospawn and def.place_on then
+		minetest.register_on_mods_loaded(function() --make sure all previous decorations and biomes have been registered
+			def.deco = minetest.register_decoration({
+				name = "mcl_structures:deco_"..name,
+				deco_type = "schematic",
+				schematic = EMPTY_SCHEMATIC,
+				place_on = def.place_on,
+				spawn_by = def.spawn_by,
+				num_spawn_by = def.num_spawn_by,
+				sidelen = 80,
+				fill_ratio = def.fill_ratio,
+				noise_params = def.noise_params,
+				flags = flags,
+				biomes = def.biomes,
+				y_max = def.y_max,
+				y_min = def.y_min
+			})
+			def.deco_id = minetest.get_decoration_id("mcl_structures:deco_"..name)
+			minetest.set_gen_notify({decoration=true}, { def.deco_id })
+			--catching of gennotify happens in mcl_mapgen_core
+		end)
 	end
 	mcl_structures.registered_structures[name] = def
 end
@@ -321,21 +306,5 @@ function mcl_structures.register_structure_spawn(def)
 			if mobdef.can_spawn and not mobdef.can_spawn(p) then return end
 			minetest.add_entity(vector.offset(p,0,-0.5,0),def.name)
 		end,
-	})
-end
-
---lbm for secondary structures (structblock included in base structure)
-if not mcl_structures.DBG then
-	minetest.register_lbm({
-		name = "mcl_structures:struct_lbm",
-		run_at_every_load = true,
-		nodenames = {"group:structblock_lbm"},
-		action = function(pos, node)
-			minetest.remove_node(pos)
-			local name = node.name:gsub("mcl_structures:structblock_","")
-			local def = mcl_structures.registered_structures[name]
-			if not def then return end
-			mcl_structures.place_structure(pos)
-		end
 	})
 end
