@@ -425,5 +425,4 @@ local function overwrite()
 	end
 end
 
--- Make sure all tools and groups are registered
-minetest.register_on_mods_loaded(overwrite)
+overwrite()
