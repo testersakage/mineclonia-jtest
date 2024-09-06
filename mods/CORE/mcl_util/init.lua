@@ -1518,16 +1518,27 @@ local function valid_object_iterator(objects)
 	return next_valid_object
 end
 
+local function valid_object_iterator_in_radius(objects, center, radius)
+	local i = 0
+	local function next_valid_object()
+		i = i + 1
+		local obj = objects[i]
+		if obj == nil then
+			return
+		end
+		local p = obj:get_pos()
+		if p and vector.distance(p, center) <= radius then
+			return obj
+		end
+		return next_valid_object()
+	end
+	return next_valid_object
+end
+
 function mcl_util.connected_players(center, radius)
 	local pls = minetest.get_connected_players()
 	if not center then return valid_object_iterator(pls) end
-	local rpls = {}
-	for _, pl in pairs(pls) do
-		if pl:get_pos() and vector.distance(center, pl:get_pos()) <= radius then
-			table.insert(rpls, pl)
-		end
-	end
-	return valid_object_iterator(rpls)
+	return valid_object_iterator_in_radius(pls, center, radius or 1)
 end
 
 if not minetest.objects_inside_radius then --polyfill for pre minetest 5.9
