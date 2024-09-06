@@ -207,6 +207,14 @@ function mob_class:check_particlespawners(dtime)
 	self._particle_timer = self._particle_timer + dtime
 end
 
+function mob_class:reset_animation(anim_name)
+	anim_name = anim_name or "stand"
+	local x = self.animation[anim_name.."_start"] or 0
+	local y = self.animation[anim_name.."_end"] or 0
+	local speed = self.animation[anim_name.."_speed"] or self.animation.speed_normal or 15
+	local loop = self.animation[anim_name .. "_loop"] ~= false
+	self.object:set_animation({ x = x, y = y}, speed, 0, loop )
+end
 
 -- set defined animation
 function mob_class:set_animation(anim, fixed_frame)

@@ -127,6 +127,12 @@ function mob_class:grow_up()
 	if not self.child then return end
 	local pos = self.object:get_pos()
 	self.child = nil
+
+	if self.on_grown and self:on_grown() then return end
+
+	self.animation = mcl_mobs.registered_mobs[self.name].animation
+	self:reset_animation()
+
 	self:set_properties({
 		textures = self.base_texture,
 		mesh = self.base_mesh,
@@ -134,12 +140,10 @@ function mob_class:grow_up()
 		collisionbox = self.base_colbox,
 		selectionbox = self.base_selbox,
 	})
-	self.animation = mcl_mobs.registered_mobs[self.name].animation
-	self:set_animation("stand")
-	if self.on_grown then
-		self.on_grown(self)
-	end
+
+	--prevents mobs from clipping into the floor or walls when the collisionbox changed because of growing up
 	self.object:set_pos(pos)
+	self.object:set_velocity(vector.zero())
 end
 
 function mob_class:check_breeding()
