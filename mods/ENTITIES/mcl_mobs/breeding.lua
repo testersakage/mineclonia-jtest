@@ -125,7 +125,7 @@ end
 
 function mob_class:grow_up()
 	if not self.child then return end
-
+	local pos = self.object:get_pos()
 	self.child = nil
 	self:set_properties({
 		textures = self.base_texture,
@@ -138,56 +138,21 @@ function mob_class:grow_up()
 	self:set_animation("stand")
 	if self.on_grown then
 		self.on_grown(self)
-	else
-		-- jump when fully grown so as not to fall into ground
-		self.object:set_velocity({
-			x = 0,
-			y = self.jump_height,
-			z = 0
-		})
 	end
+	self.object:set_pos(pos)
 end
 
 function mob_class:check_breeding()
-	if false or self.child == true then
-		-- When a child, hornytimer is used to count age until adulthood
-		self.hornytimer = self.hornytimer + 1
-		if self.hornytimer >= CHILD_GROW_TIME then
-			self.child = false
-			self.hornytimer = 0
-			self:set_properties({
-				textures = self.base_texture,
-				mesh = self.base_mesh,
-				visual_size = self.base_size or self.initial_properties.visual_size or { x = 1, y = 1, z = 1 },
-				collisionbox = self.base_colbox,
-				selectionbox = self.base_selbox,
-			})
-			if self.on_grown then
-				self.on_grown(self)
-			else
-				-- jump when fully grown so as not to fall into ground
-				self.object:set_velocity({
-					x = 0,
-					y = self.jump_height,
-					z = 0
-				})
-			end
-			self.animation = nil
-			local anim = self._current_animation
-			self._current_animation = nil
-			self:set_animation(anim)
-		end
-		return
-	else
-		if self.horny == true then
-			self.hornytimer = self.hornytimer + 1
 
-			if self.hornytimer >= HORNY_TIME + HORNY_AGAIN_TIME then
-				self.hornytimer = 0
-				self.horny = false
-			end
+	if self.horny == true then
+		self.hornytimer = self.hornytimer + 1
+
+		if self.hornytimer >= HORNY_TIME + HORNY_AGAIN_TIME then
+			self.hornytimer = 0
+			self.horny = false
 		end
 	end
+
 	if self.horny == true
 	and self.hornytimer <= HORNY_TIME then
 		local pos = self.object:get_pos()
