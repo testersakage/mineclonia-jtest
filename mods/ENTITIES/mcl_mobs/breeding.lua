@@ -146,8 +146,73 @@ function mob_class:grow_up()
 	self.object:set_velocity(vector.zero())
 end
 
-function mob_class:check_breeding()
+function mob_class:breed()
+	local num = 0
+	local pos = self.object:get_pos()
+	for _, obj in pairs(minetest.get_objects_inside_radius(pos, 3)) do
+		local ent = obj:get_luaentity()
+		-- check for same animal with different colour
+		local canmate = false
+		if ent then
+			if ent.name == self.name then
+				canmate = true
+			else
+				local entname = string.split(ent.name,":")
+				local selfname = string.split(self.name,":")
+				if entname[1] == selfname[1] then
+					entname = string.split(entname[2],"_")
+					selfname = string.split(selfname[2],"_")
+					if entname[1] == selfname[1] then
+						canmate = true
+					end
+				end
+			end
+		end
 
+		if ent
+		and canmate == true
+		and ent.horny == true
+		and ent.hornytimer <= HORNY_TIME then
+			num = num + 1
+		end
+
+		-- found your mate? then have a baby
+		if num > 1 then
+			self.hornytimer = HORNY_TIME + 1
+			ent.hornytimer = HORNY_TIME + 1
+			minetest.after(5, function(parent1, parent2, pos)
+				if not parent1.object:get_luaentity() then
+					return
+				end
+				if not parent2.object:get_luaentity() then
+					return
+				end
+
+				mcl_experience.throw_xp(pos, math.random(1, 7))
+
+				if parent1.on_breed then
+					if parent1.on_breed(parent1, parent2) == false then
+						return
+					end
+				end
+				local child = mcl_mobs.spawn_child(parent1.object:get_pos(), parent1.name)
+				local ent_c = child:get_luaentity()
+				if ent_c then
+					-- Use texture of one of the parents
+					local p = math.random(1, 2)
+					if p == 1 then
+						ent_c.base_texture = parent1.base_texture
+					else
+						ent_c.base_texture = parent2.base_texture
+					end
+				end
+			end, self, ent, pos)
+			break
+		end
+	end
+end
+
+function mob_class:check_breeding()
 	if self.horny == true then
 		self.hornytimer = self.hornytimer + 1
 
@@ -164,69 +229,7 @@ function mob_class:check_breeding()
         if (self.hornytimer % 20) == 0.0 then
             mcl_mobs.effect({x = pos.x, y = pos.y + 1, z = pos.z}, 8, "heart.png", 3, 4, 1, 0.1)
         end
-
-		local num = 0
-		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 3)) do
-			local ent = obj:get_luaentity()
-			-- check for same animal with different colour
-			local canmate = false
-			if ent then
-				if ent.name == self.name then
-					canmate = true
-				else
-					local entname = string.split(ent.name,":")
-					local selfname = string.split(self.name,":")
-					if entname[1] == selfname[1] then
-						entname = string.split(entname[2],"_")
-						selfname = string.split(selfname[2],"_")
-						if entname[1] == selfname[1] then
-							canmate = true
-						end
-					end
-				end
-			end
-
-			if ent
-			and canmate == true
-			and ent.horny == true
-			and ent.hornytimer <= HORNY_TIME then
-				num = num + 1
-			end
-
-			-- found your mate? then have a baby
-			if num > 1 then
-				self.hornytimer = HORNY_TIME + 1
-				ent.hornytimer = HORNY_TIME + 1
-				minetest.after(5, function(parent1, parent2, pos)
-					if not parent1.object:get_luaentity() then
-						return
-					end
-					if not parent2.object:get_luaentity() then
-						return
-					end
-
-					mcl_experience.throw_xp(pos, math.random(1, 7))
-
-					if parent1.on_breed then
-						if parent1.on_breed(parent1, parent2) == false then
-							return
-						end
-					end
-					local child = mcl_mobs.spawn_child(parent1.object:get_pos(), parent1.name)
-					local ent_c = child:get_luaentity()
-					if ent_c then
-						-- Use texture of one of the parents
-						local p = math.random(1, 2)
-						if p == 1 then
-							ent_c.base_texture = parent1.base_texture
-						else
-							ent_c.base_texture = parent2.base_texture
-						end
-					end
-				end, self, ent, pos)
-				break
-			end
-		end
+		self:breed()
 	end
 end
 
