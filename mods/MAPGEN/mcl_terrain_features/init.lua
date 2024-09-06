@@ -370,21 +370,30 @@ mcl_structures.register_structure("powder_snow_trap", {
 	y_min = 1,
 	y_max = mcl_vars.mg_overworld_max,
 	place_func = function(pos)
-		local width  = math.random(6)
-		local length = math.random(6)
+		local width  = math.random(6) - 3
+		local length = math.random(6) - 3
 		local depth  = math.random(4)
 
 		local solid_nodes = {}
+		local node_name
 		for i = 0, width do
 			for j = 0, length do
 				for k = 0, depth do
-					if minetest.get_item_group(minetest.get_node(vector.offset(pos, i, k, j)).name, "solid") > 0 then
+					node_name = minetest.get_node(vector.offset(pos, i, k, j)).name
+					if minetest.get_item_group(node_name, "dirt") > 0
+						or minetest.get_item_group(node_name, "snow_cover") > 0
+						or minetest.get_item_group(node_name, "stone") > 0 then
 						table.insert(solid_nodes, vector.offset(pos, i, k, j))
 					end
 				end
 			end
 		end
 
+		if #solid_nodes == 0 then
+			return false
+		end
+
 		minetest.bulk_set_node(solid_nodes, {name = "mcl_powder_snow:powder_snow"})
+		return true
 	end
 })
