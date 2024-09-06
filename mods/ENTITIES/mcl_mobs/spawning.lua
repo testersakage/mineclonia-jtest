@@ -373,18 +373,9 @@ local function get_next_mob_spawn_pos(pos)
 	-- Select a distance such that distances closer to the player are selected much more often than
 	-- those further away from the player. This does produce a concentration at INNER (24 blocks)
 	local distance = math.random()^2 * (MOB_SPAWN_ZONE_OUTER - MOB_SPAWN_ZONE_INNER) + MOB_SPAWN_ZONE_INNER
-	--print("Using spawn distance of "..tostring(distance).."  fx="..tostring(fx)..",x="..tostring(x))
-
-	-- Choose a random direction. Rejection sampling is simple and fast (1-2 tries usually)
-	local xoff, yoff, zoff, dd
-	repeat
-	       xoff, yoff, zoff = math.random() * 2 - 1, math.random() * 2 - 1, math.random() * 2 - 1
-	       dd = xoff*xoff + yoff*yoff + zoff*zoff
-	until (dd <= 1 and dd >= 1e-6) -- outside of uniform ball, retry
-	dd = distance / math.sqrt(dd) -- distance scaling factor
-	xoff, yoff, zoff = xoff * dd, yoff * dd, zoff * dd
-	
-	local goal_pos = vector.offset(pos, xoff, yoff, zoff)
+	local dir = vector.random_direction()
+	-- minetest.log("action", "Using spawn distance of "..tostring(distance).." in direction "..minetest.pos_to_string(dir))
+	local goal_pos = vector.offset(pos, dir.x * distance, dir.y * distance, dir.z * distance)
 
 	if not ( math.abs(goal_pos.x) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.y) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.z) <= SPAWN_MAPGEN_LIMIT ) then
 		return nil
