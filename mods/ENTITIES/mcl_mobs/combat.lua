@@ -563,6 +563,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if not die then
 			if self.name == "mobs_mc:wolf" then
 				local textures = self.object:get_properties().textures[1]
+				self._texture_holder = textures
 				self.object:set_properties({textures = { textures.."^mobs_mc_wolf_angry_eyes.png"}})
 			end
 			-- attack whoever punched mob
@@ -625,6 +626,9 @@ end
 
 
 function mob_class:clear_aggro()
+	if self.name == "mobs_mc:wolf" then
+		self.object:set_properties({ textures = { self._texture_holder }})
+	end
 	self:set_state("stand")
 	self:set_velocity( 0)
 	self:set_animation( "stand")

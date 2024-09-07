@@ -130,6 +130,7 @@ local wolf = {
 		"mobs_mc:witherskeleton",
 	},
 	avoid_from = { "mobs_mc:llama" },
+	_texture_holder = ""
 }
 
 mcl_mobs.register_mob("mobs_mc:wolf", wolf)
