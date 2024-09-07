@@ -89,9 +89,11 @@ local wolf = {
 			-- 1/3 chance of getting tamed
 			if pr:next(1, 3) == 1 then
 				local yaw = self.object:get_yaw()
+				self._texture_holder = self.object:get_properties().textures
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
 					dog:set_yaw(yaw)
+					dog:set_properties({ textures = self._texture_holder })
 					ent = dog:get_luaentity()
 					ent.owner = clicker:get_player_name()
 					ent.tamed = true
@@ -158,9 +160,10 @@ local colors = {
 	["unicolor_light_blue"] = "#B0B0FF",
 }
 
-local get_dog_textures = function(color)
+local get_dog_textures = function(self, color)
+	local textures = self.object:get_properties().textures[1]
 	if colors[color] then
-		return {"mobs_mc_wolf_tame.png^(mobs_mc_wolf_collar.png^[colorize:"..colors[color]..":192)"}
+		return {textures.."^(mobs_mc_wolf_collar.png^[colorize:"..colors[color]..":192)"}
 	else
 		return nil
 	end
@@ -173,8 +176,6 @@ dog.can_despawn = false
 dog.passive = true
 dog.hp_min = 20
 dog.hp_max = 20
--- Tamed wolf texture + red collar
-dog.textures = get_dog_textures("unicolor_red")
 dog.owner = ""
 dog.order = "sit"
 dog.state = "stand"
@@ -196,7 +197,7 @@ dog.on_rightclick = function(self, clicker)
 			-- Check if color is supported
 			if minetest.get_item_group(item:get_name(), group) == 1 then
 				-- Dye collar
-				local tex = get_dog_textures(group)
+				local tex = get_dog_textures(self, group)
 				if tex then
 					self.base_texture = tex
 					self.object:set_properties({
