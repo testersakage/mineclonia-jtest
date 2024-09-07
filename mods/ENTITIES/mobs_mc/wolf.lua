@@ -43,7 +43,9 @@ local wolf = {
 	visual = "mesh",
 	mesh = "mobs_mc_wolf.b3d",
 	textures = {
-		{"mobs_mc_wolf.png"},
+		{"mobs_mc_wolf.png"}, {"mobs_mc_wolf_ashen.png"}, {"mobs_mc_wolf_black.png"},
+		{"mobs_mc_wolf_chestnut.png"}, {"mobs_mc_wolf_rusty.png"}, {"mobs_mc_wolf_snowy.png"},
+		{"mobs_mc_wolf_spotted.png"}, {"mobs_mc_wolf_striped.png"}, {"mobs_mc_wolf_woods.png"}
 	},
 	makes_footstep_sound = true,
 	head_swivel = "head.control",
