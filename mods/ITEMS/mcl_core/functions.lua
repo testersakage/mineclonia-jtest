@@ -294,7 +294,7 @@ minetest.register_abm({
 			if minetest.get_item_group(n2.name, "grass_block") ~= 0 then
 				n2 = mcl_core.get_grass_block_type(pos)
 			end
-			minetest.set_node(pos, {name=n2.name})
+			minetest.swap_node(pos, {name=n2.name})
 
 			-- If this was mycelium, uproot plant above
 			if n2.name == "mcl_core:mycelium" then
@@ -319,7 +319,7 @@ minetest.register_abm({
 		local name = minetest.get_node(above).name
 		-- Kill grass/mycelium when below opaque block or liquid
 		if name ~= "ignore" and (minetest.get_item_group(name, "opaque") == 1 or minetest.get_item_group(name, "liquid") ~= 0) then
-			minetest.set_node(pos, {name = "mcl_core:dirt"})
+			minetest.swap_node(pos, {name = "mcl_core:dirt"})
 		end
 	end
 })
@@ -347,7 +347,7 @@ minetest.register_abm({
 		local name = minetest.get_node(above).name
 		local nodedef = minetest.registered_nodes[name]
 		if name ~= "ignore" and nodedef and (nodedef.groups and nodedef.groups.solid) then
-			minetest.set_node(pos, {name = "mcl_core:dirt"})
+			minetest.swap_node(pos, {name = "mcl_core:dirt"})
 		end
 	end,
 })
@@ -379,7 +379,7 @@ minetest.register_lbm({
 			end
 		end
 		node.param2 = SAVANNA_INDEX
-		minetest.set_node(pos, node)
+		minetest.swap_node(pos, node)
 	end,
 })
 
