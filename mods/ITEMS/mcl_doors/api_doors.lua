@@ -159,7 +159,6 @@ function mcl_doors:register_door(name, def)
 			local door_dir = 1
 			if left_node.name:sub(1, #name) == name then
 				mirrored = true
-				door_dir = 2
 				p2 = left_node.param2
 			end
 
