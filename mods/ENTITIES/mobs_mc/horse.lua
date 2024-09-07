@@ -141,6 +141,9 @@ local horse = {
 		["mcl_farming:carrot_item_gold"] = 5,
 		["mcl_core:apple_gold"] = 10
 	},
+	_can_mate_with = {
+		["mobs_mc:donkey"] = "mobs_mc:mule",
+	},
 	passive = true,
 	hp_min = 15,
 	hp_max = 30,
@@ -373,7 +376,9 @@ local horse = {
 			})
 		end
 	end,
-	on_breed = function(parent1, parent2)
+	on_breed = function(parent1, parent2, child_name)
+		if child_name ~= parent1.name then return end
+
 		local pos = parent1.object:get_pos()
 		local child = mcl_mobs.spawn_child(pos, parent1.name)
 		if child then
@@ -499,6 +504,9 @@ local donkey = table.merge(horse, {
 	},
 	jump = true,
 	jump_height = 3.75,
+	_can_mate_with = {
+		["mobs_mc:horse"] = "mobs_mc:mule",
+	},
 })
 
 mcl_mobs.register_mob("mobs_mc:donkey", donkey)

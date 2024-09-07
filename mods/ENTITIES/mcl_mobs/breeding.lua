@@ -1,8 +1,25 @@
 local mob_class = mcl_mobs.mob_class
 
-local HORNY_TIME = 30*20
+local HORNY_TIME = 30 --*20
 local HORNY_AGAIN_TIME = 30*20 -- was 300 or 15*20
 local CHILD_GROW_TIME = 24000
+
+local hearts_pspawner = {
+	amount = 8,
+	time = 0,
+	minpos = vector.new(0, 0.5, 0),
+	maxpos = vector.new(0, 1.5, 0),
+	minvel = vector.new(-1, -1, -1),
+	maxvel = vector.new(1, 1, 1),
+	minacc = {x = 0, y = -0.1, z = 0},
+	maxacc = {x = 0, y = -0.1, z = 0},
+	minexptime = 0.1,
+	maxexptime = 1,
+	minsize = 3,
+	maxsize = 4,
+	texture = "heart.png",
+	glow = 3,
+}
 
 function mob_class:use_shears(new_textures, shears_stack)
 	if minetest.get_item_group(shears_stack:get_name(), "shears") > 0 then
@@ -47,13 +64,16 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake)
 
 	if not consume_food and self.child == true then
 		consume_food = true
-		self.hornytimer = self.hornytimer + ((CHILD_GROW_TIME - self.hornytimer) * 0.1)
+		self._grow_up_timer = (self._grow_up_timer or self._grow_up_time) - ((CHILD_GROW_TIME - self._grow_up_timer) * 0.1)
 	end
 
-	if breed and not consume_food and self.hornytimer == 0 and not self.horny then
+	if breed and not consume_food and not self._horny then
 		consume_food = true
-		self.horny = true
+		self._horny = true
 		self.persistent = true
+		self._hearts_ps = minetest.add_particlespawner(table.merge(hearts_pspawner,{
+			attached = self.object
+		}))
 	end
 
 	self:update_tag()
@@ -146,41 +166,46 @@ function mob_class:grow_up()
 	self.object:set_velocity(vector.zero())
 end
 
-function mob_class:breed()
-	local num = 0
-	local pos = self.object:get_pos()
-	for _, obj in pairs(minetest.get_objects_inside_radius(pos, 3)) do
-		local ent = obj:get_luaentity()
-		-- check for same animal with different colour
-		local canmate = false
-		if ent then
-			if ent.name == self.name then
-				canmate = true
-			else
-				local entname = string.split(ent.name,":")
-				local selfname = string.split(self.name,":")
+-- if breeding is possible return entity name of the resulting child
+function mob_class:can_mate_with(ent)
+	if ent then
+		if self.object == ent.object then return end
+		if ent.name == self.name then
+			return self.name
+		elseif self._can_mate_with and self._can_mate_with[ent.name] then
+			return self._can_mate_with[ent.name]
+		else
+			-- TODO is this branch even needed, some mobs_redo remnant!?
+			local entname = string.split(ent.name,":")
+			local selfname = string.split(self.name,":")
+			if entname[1] == selfname[1] then
+				entname = string.split(entname[2],"_")
+				selfname = string.split(selfname[2],"_")
 				if entname[1] == selfname[1] then
-					entname = string.split(entname[2],"_")
-					selfname = string.split(selfname[2],"_")
-					if entname[1] == selfname[1] then
-						canmate = true
-					end
+					return self.name
 				end
 			end
 		end
+	end
+end
+
+function mob_class:breed()
+	local pos = self.object:get_pos()
+	for _, obj in pairs(minetest.get_objects_inside_radius(pos, 3)) do
+		local ent = obj:get_luaentity()
+		local canmate = self:can_mate_with(ent)
 
 		if ent
-		and canmate == true
-		and ent.horny == true
-		and ent.hornytimer <= HORNY_TIME then
-			num = num + 1
-		end
+		and canmate
+		and ent._horny
+		and self._horny then
+			-- found your mate? then have a baby
+			self._hornytimer = -1
+			ent._hornytimer = -1
+			self._horny_cooldown = HORNY_AGAIN_TIME
+			ent._horny_cooldown = HORNY_AGAIN_TIME
 
-		-- found your mate? then have a baby
-		if num > 1 then
-			self.hornytimer = HORNY_TIME + 1
-			ent.hornytimer = HORNY_TIME + 1
-			minetest.after(5, function(parent1, parent2, pos)
+			minetest.after(5, function(parent1, parent2, canmate, pos)
 				if not parent1.object:get_luaentity() then
 					return
 				end
@@ -191,45 +216,39 @@ function mob_class:breed()
 				mcl_experience.throw_xp(pos, math.random(1, 7))
 
 				if parent1.on_breed then
-					if parent1.on_breed(parent1, parent2) == false then
+					if parent1.on_breed(parent1, parent2, canmate) == false then
 						return
 					end
 				end
-				local child = mcl_mobs.spawn_child(parent1.object:get_pos(), parent1.name)
-				local ent_c = child:get_luaentity()
-				if ent_c then
-					-- Use texture of one of the parents
-					local p = math.random(1, 2)
-					if p == 1 then
-						ent_c.base_texture = parent1.base_texture
-					else
-						ent_c.base_texture = parent2.base_texture
+
+				local child = mcl_mobs.spawn_child(parent1.object:get_pos(), canmate or parent1.name)
+				if child then
+					local ent_c = child:get_luaentity()
+					if ent_c then
+						ent_c.base_texture = math.random(2) == 1 and parent1.base_texture or parent2.base_texture
 					end
 				end
-			end, self, ent, pos)
-			break
+			end, self, ent, canmate, pos)
+			return
 		end
 	end
 end
 
-function mob_class:check_breeding()
-	if self.horny == true then
-		self.hornytimer = self.hornytimer + 1
-
-		if self.hornytimer >= HORNY_TIME + HORNY_AGAIN_TIME then
-			self.hornytimer = 0
-			self.horny = false
+function mob_class:check_breeding(dtime)
+	if self._horny then
+		self._hornytimer = (self._hornytimer or HORNY_TIME) - dtime
+		if self._hornytimer < 0 then
+			self._horny = nil
+			self._horny_cooldown = HORNY_AGAIN_TIME
+			minetest.delete_particlespawner(self._hearts_ps)
+			return
 		end
-	end
-
-	if self.horny == true
-	and self.hornytimer <= HORNY_TIME then
-		local pos = self.object:get_pos()
-
-        if (self.hornytimer % 20) == 0.0 then
-            mcl_mobs.effect({x = pos.x, y = pos.y + 1, z = pos.z}, 8, "heart.png", 3, 4, 1, 0.1)
-        end
 		self:breed()
+	elseif self._horny_cooldown then
+		self._horny_cooldown = self._horny_cooldown - dtime
+		if self._horny_cooldown < 0 then
+			self._horny_cooldown = nil
+		end
 	end
 end
 

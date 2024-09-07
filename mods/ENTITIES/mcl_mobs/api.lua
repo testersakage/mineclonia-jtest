@@ -463,7 +463,7 @@ function mob_class:on_step(dtime, moveresult)
 		self:attack_monsters()
 		self:attack_specific()
 
-		self:check_breeding()
+		self:check_breeding(dtime)
 		self:check_grow_up(dtime)
 		self:check_aggro(dtime)
 
