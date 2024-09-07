@@ -47,6 +47,23 @@ local function make_legal(wireflags)
 	return bit.bor(bit.lshift(y1, 4), y0)
 end
 
+-- Make wires which only extend in one direction also extend in the opposite
+-- direction.
+local function make_long(wireflags)
+	local conv_tab = {
+		[0x1] = 0x5,
+		[0x4] = 0x5,
+		[0x2] = 0xa,
+		[0x8] = 0xa,
+	}
+	for k, v in pairs(conv_tab) do
+		if bit.band(wireflags, 0xf) == k then
+			return bit.bor(wireflags, v)
+		end
+	end
+	return wireflags
+end
+
 local function wireflags_to_name(wireflags)
 	return wireflags == 0 and
 		"mcl_redstone:redstone" or
@@ -148,16 +165,18 @@ for _, wire in pairs(wires) do
 		tiles = {cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile}
 		nodebox = {type = "fixed", fixed={box_center}}
 
+		local lwire = make_long(wire)
+
 		-- Calculate nodebox
 		for i = 0, 7 do
-			if bit.band(wire, bit.lshift(1, i)) ~= 0 then
+			if bit.band(lwire, bit.lshift(1, i)) ~= 0 then
 				table.insert(nodebox.fixed, nodebox_wire[i + 1])
 			end
 		end
 
 		-- Add bump to nodebox if curved
-		if (check_bit(wire, 0) and check_bit(wire, 1)) or (check_bit(wire, 1) and check_bit(wire, 2))
-				or (check_bit(wire, 2) and check_bit(wire, 3)) or (check_bit(wire, 3) and check_bit(wire, 0)) then
+		if (check_bit(lwire, 0) and check_bit(lwire, 1)) or (check_bit(lwire, 1) and check_bit(lwire, 2))
+				or (check_bit(lwire, 2) and check_bit(lwire, 3)) or (check_bit(lwire, 3) and check_bit(lwire, 0)) then
 			table.insert(nodebox.fixed, box_bump)
 		end
 
