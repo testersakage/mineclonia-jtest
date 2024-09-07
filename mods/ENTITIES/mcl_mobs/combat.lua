@@ -561,6 +561,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	and hitter_playername ~= self.owner
 	and not mcl_mobs.invis[ hitter_playername or ""] then
 		if not die then
+			if self.name == "mobs_mc:wolf" then
+				local textures = self.object:get_properties().textures[1]
+				self.object:set_properties({textures = { textures.."^mobs_mc_wolf_angry_eyes.png"}})
+			end
 			-- attack whoever punched mob
 			self:set_state("")
 			self:do_attack(hitter)
