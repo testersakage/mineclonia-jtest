@@ -101,14 +101,14 @@ local commdef = {
 				return {
 					delay = delay,
 					priority = 1,
-					name = "mcl_repeaters:repeater_on_"..tostring(delay),
+					name = "mcl_repeaters:repeater_on_"..delay,
 					param2 = node.param2,
 				}
 			end
 			if not on and not locked then
 				return {
 					delay = delay,
-					name = "mcl_repeaters:repeater_off_"..tostring(delay),
+					name = "mcl_repeaters:repeater_off_"..delay,
 					param2 = node.param2,
 				}
 			end
@@ -140,7 +140,7 @@ for delay = 1, 4 do
 		end,
 	})
 
-	minetest.register_node("mcl_repeaters:repeater_off_"..tostring(delay), table.merge(normaldef, {
+	minetest.register_node("mcl_repeaters:repeater_off_"..delay, table.merge(normaldef, {
 		description = delay == 1 and S("Redstone Repeater") or S("Redstone Repeater (Delay @1)", delay),
 		inventory_image = delay == 1 and "mesecons_delayer_item.png" or nil,
 		wield_image = delay == 1 and "mesecons_delayer_item.png" or nil,
@@ -149,11 +149,11 @@ for delay = 1, 4 do
 			S("Delays signal").."\n"..
 			S("Output locks when getting active redstone repeater signal from the side")
 		) or nil,
-		usagehelp = delay == 1 and (
+		_doc_items_usagehelp = delay == 1 and (
 			S("To power a redstone repeater, send a signal in “arrow” direction (the input). The signal goes out on the opposite side (the output) with a delay. To change the delay, use the redstone repeater. The delay is between 0.1 and 0.4 seconds long and can be changed in steps of 0.1 seconds. It is indicated by the position of the moving redstone torch.").."\n"..
 			S("To lock a repeater, send a signal from an adjacent repeater into one of its sides. While locked, the moving redstone torch disappears, the output doesn't change and the input signal is ignored.")
 		) or nil,
-		longdesc = delay == 1 and S("Redstone repeaters are versatile redstone components with multiple purposes: 1. They only allow signals to travel in one direction. 2. They delay the signal. 3. Optionally, they can lock their output in one state.") or nil,
+		_doc_items_longdesc = delay == 1 and S("Redstone repeaters are versatile redstone components with multiple purposes: 1. They only allow signals to travel in one direction. 2. They delay the signal. 3. Optionally, they can lock their output in one state.") or nil,
 		_doc_items_create_entry = delay == 1,
 		tiles = {
 			"mesecons_delayer_off.png",
@@ -166,7 +166,7 @@ for delay = 1, 4 do
 		groups = table.merge(normaldef.groups, {not_in_creative_inventory = delay ~= 1 and 1 or 0}),
 	}))
 
-	minetest.register_node("mcl_repeaters:repeater_on_"..tostring(delay), table.merge(normaldef, {
+	minetest.register_node("mcl_repeaters:repeater_on_"..delay, table.merge(normaldef, {
 		description = S("Redstone Repeater (Delay @1, Powered)", delay),
 		_doc_items_create_entry = false,
 		tiles = {
@@ -188,6 +188,11 @@ for delay = 1, 4 do
 			end,
 		}),
 	}))
+
+	if delay ~= 1 then
+		doc.add_entry_alias("nodes", "mcl_repeaters:repeater_off_1", "nodes", "mcl_repeaters:repeater_off_"..delay)
+	end
+	doc.add_entry_alias("nodes", "mcl_repeaters:repeater_off_1", "nodes", "mcl_repeaters:repeater_on_"..delay)
 end
 
 local lockeddef = table.merge(commdef, {
@@ -236,3 +241,6 @@ minetest.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef
 		end,
 	})
 }))
+
+doc.add_entry_alias("nodes", "mcl_repeaters:repeater_off_1", "nodes", "mcl_repeaters:repeater_off_locked")
+doc.add_entry_alias("nodes", "mcl_repeaters:repeater_off_1", "nodes", "mcl_repeaters:repeater_on_locked")
