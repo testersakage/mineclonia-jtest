@@ -263,53 +263,6 @@ local function generate_beacon_formspec (meta)
 	"listring[current_player;main]"
 end
 
-minetest.register_node("mcl_beacons:beacon", {
-	description = S("Beacon"),
-	drawtype = "mesh",
-	collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
-	mesh = "mcl_beacon.b3d",
-	tiles = {"beacon_UV.png"},
-	is_ground_content = false,
-	use_texture_alpha = "clip",
-	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local inv = meta:get_inventory()
-		inv:set_size("input", 1)
-		meta:set_string("formspec", generate_beacon_formspec(meta))
-	end,
-	on_destruct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local input = meta:get_inventory():get_stack("input",1)
-		if not input:is_empty() then
-			local p = {x=pos.x+math.random(0, 10)/10-0.5, y=pos.y, z=pos.z+math.random(0, 10)/10-0.5} --from mcl_anvils
-			minetest.add_item(p, input)
-		end
-		remove_beacon_beam(pos)
-	end,
-	on_rightclick = function (pos, _, clicker)
-		local name = clicker:get_player_name ()
-		local m = minetest.get_meta(pos)
-
-		if m:get_string("formspec") == "" then --generate node formspec for mcla pre-0.106.1
-			m:set_string("formspec", generate_beacon_formspec(m))
-		end
-
-		if minetest.is_protected (pos, name) then
-			minetest.record_protection_violation (pos, name)
-			return 0
-		end
-		open_beacons[name] = pos
-	end,
-	allow_metadata_inventory_put = allow_metadata_inventory_put,
-	allow_metadata_inventory_move = allow_metadata_inventory_move,
-	allow_metadata_inventory_take = allow_metadata_inventory_take,
-	light_source = minetest.LIGHT_MAX,
-	groups = {handy=1, deco_block=1, rarity=2},
-	drop = "mcl_beacons:beacon",
-	sounds = mcl_sounds.node_sound_glass_defaults(),
-	_mcl_hardness = 3,
-})
-
 function mcl_beacons.register_beaconblock (itemstring)--API function for other mods
 	table.insert(mcl_beacons.blocks, itemstring)
 end
@@ -399,10 +352,7 @@ minetest.register_on_leaveplayer (function (player, timed_out)
 	open_beacons[player] = nil
 end)
 
-local function apply_beacon_formspec (sender, formname, fields)
-	if formname ~= "mcl_beacons:beacon_formspec" then
-	return
-	end
+local function apply_beacon_formspec (_, _, fields, sender)
 	local sender_name = sender:get_player_name ()
 	local pos = open_beacons[sender_name]
 	if fields.quit then
@@ -526,4 +476,52 @@ local function apply_beacon_formspec (sender, formname, fields)
 	end
 end
 
-minetest.register_on_player_receive_fields (apply_beacon_formspec)
+minetest.register_node("mcl_beacons:beacon", {
+	description = S("Beacon"),
+	drawtype = "mesh",
+	collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
+	mesh = "mcl_beacon.b3d",
+	tiles = {"beacon_UV.png"},
+	is_ground_content = false,
+	use_texture_alpha = "clip",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		inv:set_size("input", 1)
+		meta:set_string("formspec", generate_beacon_formspec(meta))
+	end,
+	on_destruct = function(pos)
+		local meta = minetest.get_meta(pos)
+		local input = meta:get_inventory():get_stack("input",1)
+		if not input:is_empty() then
+			local p = {x=pos.x+math.random(0, 10)/10-0.5, y=pos.y, z=pos.z+math.random(0, 10)/10-0.5} --from mcl_anvils
+			minetest.add_item(p, input)
+		end
+		remove_beacon_beam(pos)
+	end,
+	on_rightclick = function (pos, _, clicker)
+		local name = clicker:get_player_name ()
+		local m = minetest.get_meta(pos)
+
+		if minetest.is_protected (pos, name) then
+			minetest.record_protection_violation (pos, name)
+			return 0
+		end
+
+		if m:get_string("formspec") == "" then --generate node formspec for mcla pre-0.106.1
+			local fs = generate_beacon_formspec(m)
+			m:set_string("formspec", fs)
+			minetest.show_formspec (clicker:get_player_name (), "mcl_beacons:beacon_formspec", fs)
+		end
+		open_beacons[name] = pos
+	end,
+	on_receive_fields = apply_beacon_formspec,
+	allow_metadata_inventory_put = allow_metadata_inventory_put,
+	allow_metadata_inventory_move = allow_metadata_inventory_move,
+	allow_metadata_inventory_take = allow_metadata_inventory_take,
+	light_source = 14,
+	groups = {handy=1, deco_block=1},
+	drop = "mcl_beacons:beacon",
+	sounds = mcl_sounds.node_sound_glass_defaults(),
+	_mcl_hardness = 3,
+})
