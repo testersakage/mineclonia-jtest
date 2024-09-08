@@ -24,7 +24,7 @@ local nodebox_wire = {
 	{.5-1/16, -.5+1/16, -1/16, .5, .4999+1/64, 1/16}, -- x positive up
 }
 local box_center = {-1/16, -.5, -1/16, 1/16, -.5+1/64, 1/16}
-local box_bump =  {-2/16, -8/16,  -2/16, 2/16, -.5+1/64, 2/16}
+local box_bump =  { -2/16, -8/16,  -2/16, 2/16, -.5+1/64, 2/16 }
 
 local selectionbox = {
 	type = "fixed",
@@ -72,24 +72,24 @@ end
 
 local function update_wire(pos)
 	local update_tab = {
-		{wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44},
-		{wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x88},
-		{wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x11},
-		{wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x22},
-		{wire = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x4},
-		{wire = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x8},
-		{wire = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x1},
-		{wire = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x2},
-		{wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0), mask = 0x11, mask2 = 0x4},
-		{wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x22, mask2 = 0x8},
-		{wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0), mask = 0x44, mask2 = 0x1},
-		{wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x88, mask2 = 0x2},
+		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44 },
+		{ wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x88 },
+		{ wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x11 },
+		{ wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x22 },
+		{ wire = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x4 },
+		{ wire = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x8 },
+		{ wire = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x1 },
+		{ wire = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x2 },
+		{ wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0), mask = 0x11, mask2 = 0x4 },
+		{ wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x22, mask2 = 0x8 },
+		{ wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0), mask = 0x44, mask2 = 0x1 },
+		{ wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x88, mask2 = 0x2 },
 	}
 	local fourdir_tab = {
-		{dir = vector.new(0, 0, -1), mask = 0x1},
-		{dir = vector.new(-1, 0, 0), mask = 0x2},
-		{dir = vector.new(0, 0, 1), mask = 0x4},
-		{dir = vector.new(1, 0, 0), mask = 0x8},
+		{ dir = vector.new(0, 0, -1), mask = 0x1 },
+		{ dir = vector.new(-1, 0, 0), mask = 0x2 },
+		{ dir = vector.new(0, 0, 1), mask = 0x4 },
+		{ dir = vector.new(1, 0, 0), mask = 0x8 },
 	}
 
 	local node = minetest.get_node(pos)
@@ -162,7 +162,7 @@ for _, wire in pairs(wires) do
 		tiles = {dot_tile, dot_tile, "blank.png", "blank.png", "blank.png", "blank.png"}
 		nodebox = {type = "fixed", fixed={-8/16, -.5, -8/16, 8/16, -.5+1/64, 8/16}}
 	else
-		tiles = {cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile}
+		tiles = { cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile }
 		nodebox = {type = "fixed", fixed={box_center}}
 
 		local lwire = make_long(wire)

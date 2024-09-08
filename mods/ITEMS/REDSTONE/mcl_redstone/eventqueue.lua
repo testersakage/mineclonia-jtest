@@ -71,7 +71,6 @@ local node_event_tab = {}
 
 function mcl_redstone._schedule_event(delay, priority, pos, func)
 	local tick = current_tick + delay
-	local h = minetest.hash_node_position(pos)
 	local event = {
 		pos = pos,
 		tick = tick,
@@ -79,17 +78,24 @@ function mcl_redstone._schedule_event(delay, priority, pos, func)
 		func = func,
 	}
 
-	-- Priority -1 is hardcoded to allow multiple pending events. This is
-	-- because it is used for by con/destruct callbacks which require that
-	-- construct events happen after destruct events.
-	if node_event_tab[h] and (priority ~= -1 and node_event_tab[h].priority <= priority) then
-		return
+	if priority then
+		local h = minetest.hash_node_position(pos)
+
+		-- Priority -1 is hardcoded to allow multiple pending events. This is
+		-- because it is used for by con/destruct callbacks which require that
+		-- construct events happen after destruct events.
+		if node_event_tab[h] and (priority ~= -1 and node_event_tab[h].priority <= priority) then
+			return
+		end
+		node_event_tab[h] = event
 	end
-	node_event_tab[h] = event
 	eventqueue:enqueue(tick, event)
 end
 
 local function clear_event(event)
+	if not event.pos then
+		return
+	end
 	local hash = minetest.hash_node_position(event.pos)
 	if node_event_tab[hash] == event then
 		node_event_tab[hash] = nil
@@ -105,6 +111,9 @@ local function clear_all_pending_events()
 end
 
 local function is_prioritized(event)
+	if not event.pos then
+		return true
+	end
 	local hash = minetest.hash_node_position(event.pos)
 	return event.priority == -1 or event == node_event_tab[hash]
 end
@@ -186,7 +195,7 @@ minetest.register_globalstep(function(dtime)
 		local event = eventqueue:dequeue()
 		if is_prioritized(event) then
 			clear_event(event)
-			if too_far_away(event) then
+			if event.pos and too_far_away(event) then
 				nfaraway = nfaraway + 1
 			else
 				nevents = nevents + 1
