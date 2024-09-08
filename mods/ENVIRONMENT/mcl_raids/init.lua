@@ -297,7 +297,7 @@ mcl_events.register_event("raid",{
 
 	    if player then
 		mcl_potions.clear_effect (player, "bad_omen")
-		mcl_potions.give_effect ("hero_of_village", player, 0, false)
+		mcl_potions.give_effect ("hero_of_village", player, 0, 2400)
 	    end
 	end,
 })
