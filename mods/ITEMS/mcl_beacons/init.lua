@@ -1,4 +1,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
+local F = minetest.formspec_escape
 
 mcl_beacons = {
 	blocks ={"mcl_core:diamondblock","mcl_core:ironblock","mcl_core:goldblock","mcl_core:emeraldblock","mcl_nether:netheriteblock"},
@@ -223,34 +225,42 @@ local function upgrade_effect_level_button (oldmeta)
 	end
 end
 
-local function generate_beacon_formspec (pos, meta)
-	return ("size[11,14]"
-		.. "label[0.5,1;"..minetest.formspec_escape(S("Primary Power:")).."]"
-		.. "label[5.5,1;"..minetest.formspec_escape(S("Secondary Power:")).."]"
-		.. "label[0.5,8.25;"..minetest.formspec_escape( S("Inventory:")).."]"
-		.. "image[1,1.5;1,1;custom_beacon_symbol_4.png]"
-		.. "image[1,3;1,1;custom_beacon_symbol_3.png]"
-		.. "image[1,4.5;1,1;custom_beacon_symbol_2.png]"
-		.. "image[6,3.5;1,1;custom_beacon_symbol_1.png]"
-		.. "image_button[2.5,1.5;1,1;mcl_potions_effect_swift.png;swiftness;]"
-		.. "image_button[3.5,1.5;1,1;mcl_potions_effect_haste.png;haste;]"
-		.. "image_button[2.5,3;1,1;mcl_potions_effect_resistance.png;resistance;]"
-		.. "image_button[3.5,3;1,1;mcl_potions_effect_leaping.png;leaping;]"
-		.. "image_button[3.0,4.5;1,1;mcl_potions_effect_strong.png;strength;]"
-		.. "image_button[7.5,3.5;1,1;mcl_potions_effect_regenerating.png;regeneration;]"
-		.. upgrade_effect_level_button (meta)
-		.. "item_image[1,7;1,1;mcl_core:diamond]"
-		.. "item_image[2.2,7;1,1;mcl_core:emerald]"
-		.. "item_image[3.4,7;1,1;mcl_core:iron_ingot]"
-		.. "item_image[4.6,7;1,1;mcl_core:gold_ingot]"
-		.. "item_image[5.8,7;1,1;mcl_nether:netherite_ingot]"
-		.. mcl_formspec.get_itemslot_bg(7.2,7,1,1)
-		.. string.format ("list[nodemeta:%s,%s,%s;input;7.2,7;1,1;]",
-				  pos.x, pos.y, pos.z)
-		.. mcl_formspec.get_itemslot_bg(1,9,9,3)
-		.. "list[current_player;main;1,9;9,3;9]"
-		.. mcl_formspec.get_itemslot_bg(1,12.5,9,1)
-		.. "list[current_player;main;1,12.5;9,1;]")
+local function generate_beacon_formspec (meta)
+	return "formspec_version[4]"..
+	"size[11.75,14.425]"..
+	"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Beacon"))) .. "]"..
+	"label[0.5,1;"..minetest.formspec_escape(S("Primary Power:")).."]"..
+	"label[5.5,1;"..minetest.formspec_escape(S("Secondary Power:")).."]"..
+	"image[1,1.5;1,1;custom_beacon_symbol_4.png]"..
+	"image[1,3;1,1;custom_beacon_symbol_3.png]"..
+	"image[1,4.5;1,1;custom_beacon_symbol_2.png]"..
+	"image[6,3.5;1,1;custom_beacon_symbol_1.png]"..
+	"image_button[2.5,1.5;1,1;mcl_potions_effect_swift.png;swiftness;]"..
+	"image_button[3.5,1.5;1,1;mcl_potions_effect_haste.png;haste;]"..
+	"image_button[2.5,3;1,1;mcl_potions_effect_resistance.png;resistance;]"..
+	"image_button[3.5,3;1,1;mcl_potions_effect_leaping.png;leaping;]"..
+	"image_button[3.0,4.5;1,1;mcl_potions_effect_strong.png;strength;]"..
+	"image_button[7.5,3.5;1,1;mcl_potions_effect_regenerating.png;regeneration;]"..
+	upgrade_effect_level_button (meta)..
+	"item_image[1,7;1,1;mcl_core:diamond]"..
+	"item_image[2.2,7;1,1;mcl_core:emerald]"..
+	"item_image[3.4,7;1,1;mcl_core:iron_ingot]"..
+	"item_image[4.6,7;1,1;mcl_core:gold_ingot]"..
+	"item_image[5.8,7;1,1;mcl_nether:netherite_ingot]"..
+	mcl_formspec.get_itemslot_bg_v4(7.2,7,1,1)..
+	"list[context;input;7.2,7;1,1;]"..
+
+	"label[0.375,8.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]"..
+	mcl_formspec.get_itemslot_bg_v4(0.375, 9.1, 9, 3)..
+	"list[current_player;main;0.375,9.1;9,3;9]"..
+
+	mcl_formspec.get_itemslot_bg_v4(0.375, 13.05, 9, 1)..
+	"list[current_player;main;0.375,13.05;9,1;]"..
+
+	"listring[context;input]"..
+	"listring[current_player;main]"..
+	"listring[context;input]"..
+	"listring[current_player;main]"
 end
 
 minetest.register_node("mcl_beacons:beacon", {
@@ -265,6 +275,7 @@ minetest.register_node("mcl_beacons:beacon", {
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
+		meta:set_string("formspec", generate_beacon_formspec(meta))
 	end,
 	on_destruct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -275,16 +286,18 @@ minetest.register_node("mcl_beacons:beacon", {
 		end
 		remove_beacon_beam(pos)
 	end,
-	on_rightclick = function (pos, node, clicker)
+	on_rightclick = function (pos, _, clicker)
 		local name = clicker:get_player_name ()
-		if minetest.is_protected (pos, name) then
-		minetest.record_protection_violation (pos, name)
-		return 0
+		local m = minetest.get_meta(pos)
+
+		if m:get_string("formspec") == "" then --generate node formspec for mcla pre-0.106.1
+			m:set_string("formspec", generate_beacon_formspec(m))
 		end
-		minetest.show_formspec (clicker:get_player_name (),
-					"mcl_beacons:beacon_formspec",
-					generate_beacon_formspec (pos,
-								  minetest.get_meta (pos)))
+
+		if minetest.is_protected (pos, name) then
+			minetest.record_protection_violation (pos, name)
+			return 0
+		end
 		open_beacons[name] = pos
 	end,
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
@@ -508,9 +521,7 @@ local function apply_beacon_formspec (sender, formname, fields)
 		end
 		apply_effects_to_all_players(pos) --call it once outside the globalstep so the player gets the effect right after selecting it
 		-- Redisplay the formspec.
-		minetest.show_formspec (sender_name,
-					"mcl_beacons:beacon_formspec",
-					generate_beacon_formspec (pos, meta))
+		meta:set_string("formspec", generate_beacon_formspec(meta))
 	end
 	end
 end
