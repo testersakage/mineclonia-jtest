@@ -183,10 +183,14 @@ local function apply_effects_to_all_players(pos)
 	local beacon_distance = (power_level + 1) * 10
 
 	for player in mcl_util.connected_players(pos, beacon_distance) do
-		if not clear_obstructed_beam (pos) then
-			effect_player (effect_string, pos, power_level, effect_level, player)
-			if secondary and secondary ~= "" and power_level == 4 then
-				effect_player (secondary, pos, power_level, 1, player)
+		if vector.distance(pos, player:get_pos()) <= beacon_distance then
+			if not clear_obstructed_beam (pos) then
+				if effect_string and effect_string ~= "" then
+					effect_player (effect_string, pos, power_level, effect_level, player)
+				end
+				if secondary and secondary ~= "" and power_level == 4 then
+					effect_player (secondary, pos, power_level, 1, player)
+				end
 			end
 		end
 	end
