@@ -247,7 +247,6 @@ local function remove_shield_hud(player)
 	set_interact(player, true)
 	playerphysics.remove_physics_factor(player, "speed", "shield_speed")
 
-	if not shield_hud[player] then return end --this function takes a long time. only run it when necessary
 	player:hud_remove(shield_hud[player])
 	shield_hud[player] = nil
 	set_shield(player, false, 1)
@@ -435,7 +434,7 @@ minetest.register_globalstep(function()
 
 		if blocking then
 			update_shield_hud(player, blocking, shieldstack)
-		else
+		elseif shield_hud[player] then --this function takes a long time. only run it when necessary
 			remove_shield_hud(player)
 		end
 
@@ -446,7 +445,8 @@ minetest.register_globalstep(function()
 end)
 
 minetest.register_on_dieplayer(function(player)
-	remove_shield_hud(player)
+	set_interact(player, true)
+	playerphysics.remove_physics_factor(player, "speed", "shield_speed")
 	if not minetest.settings:get_bool("mcl_keepInventory") then
 		remove_shield_entity(player, 1)
 		remove_shield_entity(player, 2)
@@ -576,5 +576,6 @@ minetest.register_on_joinplayer(function(player)
 		shields = {},
 		blocking = 0,
 	}
-	remove_shield_hud(player)
+	set_interact(player, true)
+	playerphysics.remove_physics_factor(player, "speed", "shield_speed")
 end)
