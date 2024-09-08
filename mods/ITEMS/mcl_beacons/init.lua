@@ -513,9 +513,7 @@ minetest.register_node("mcl_beacons:beacon", {
 		end
 
 		if m:get_string("formspec") == "" then --generate node formspec for mcla pre-0.106.1
-			local fs = generate_beacon_formspec(m)
-			m:set_string("formspec", fs)
-			minetest.show_formspec (clicker:get_player_name (), "mcl_beacons:beacon_formspec", fs)
+			m:set_string("formspec", generate_beacon_formspec(m))
 		end
 		open_beacons[name] = pos
 	end,
