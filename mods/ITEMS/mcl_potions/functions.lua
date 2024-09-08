@@ -1901,6 +1901,7 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 end
 
 function mcl_potions.give_effect_by_level(name, object, level, duration, no_particles)
+	if name == "" or object == nil then return false end
 	if level == 0 then return false end
 	if not registered_effects[name].uses_factor then
 		return mcl_potions.give_effect(name, object, 0, duration, no_particles)
