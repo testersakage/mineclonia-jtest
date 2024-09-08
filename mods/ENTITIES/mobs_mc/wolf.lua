@@ -145,12 +145,9 @@ local wolf = {
 	texture_holder = "",
 	on_spawn = function(self)
 		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
-		for biome, defs in pairs(biomes) do
-			if biome_name == biome then
-				self.texture_holder = "mobs_mc_wolf_"..defs.textures..".png"
-				self.object:set_properties({textures = {"mobs_mc_wolf_"..defs.textures..".png"}})
-			end
-		end
+		local texture = "mobs_mc_wolf_"..biomes[biome_name].textures..".png"
+		self.texture_holder = texture
+		self.object:set_properties({textures = {texture}})
 	end
 }
 
