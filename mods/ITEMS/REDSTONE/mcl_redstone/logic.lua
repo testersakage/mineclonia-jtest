@@ -27,6 +27,15 @@ local get_power_tab = {}
 local update_tab = {}
 local init_tab = {}
 
+local function check_bit(n, b)
+	return bit.band(n, bit.lshift(1, b)) ~= 0
+end
+
+local function wireflags_to_dirs()
+	for i = 0, 7 do
+	end
+end
+
 local wiredirs = {
 	{wire = vector.new(1, 0, 0)},
 	{wire = vector.new(-1, 0, 0)},
@@ -201,6 +210,10 @@ local function schedule_update(pos, update)
 		})
 		update_neighbours(pos, oldnode)
 	end)
+end
+
+function mcl_redstone.after(delay, func)
+	mcl_redstone._schedule_event(delay, nil, nil, func)
 end
 
 local function call_init(pos)
