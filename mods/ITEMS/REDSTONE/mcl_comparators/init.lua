@@ -161,6 +161,8 @@ for _, mode in pairs{"comp", "sub"} do
 				desc = S("Redstone Comparator (Subtract, Powered)")
 			end
 			nodedef.description = desc
+
+			doc.add_entry_alias("nodes", "mcl_comparators:comparator_"..mode.."_"..state, "nodes", nodename)
 		end
 
 		minetest.register_node(nodename, nodedef)
