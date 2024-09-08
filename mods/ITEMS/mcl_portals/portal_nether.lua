@@ -118,9 +118,7 @@ local function spawn_zombified_piglin(pos)
 			end
 			local up = minetest.find_nodes_in_area(spawn, vector.offset(spawn, 0,1.5,0), {"air"})
 			if #up >= 2 then
-				-- TODO remove manually set gravity if it already set in mobs physics
-				local obj = minetest.add_entity(spawn, "mobs_mc:zombified_piglin", minetest.serialize({ _just_portaled = 60 }))
-				obj:set_acceleration({x=0, y=-9.81*1.5, z=0})
+				minetest.add_entity(spawn, "mobs_mc:zombified_piglin", minetest.serialize({ _just_portaled = 60 }))
 			end
 		end
 	end
