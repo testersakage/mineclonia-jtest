@@ -21,11 +21,31 @@ mcl_torches.register_torch({
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 })
 
+local burnout_tab = {}
+
+local function handle_burnout(pos)
+	local h = minetest.hash_node_position(pos)
+	burnout_tab[h] = (burnout_tab[h] or 0) + 1
+	mcl_redstone.after(30, function()
+		burnout_tab[h] = burnout_tab[h] > 1 and burnout_tab[h] - 1 or nil
+	end)
+
+	if burnout_tab[h] == 8 then
+		minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+	end
+
+	return burnout_tab[h] > 8
+end
+
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_off", "mcl_redstone_torch:redstone_torch_off_wall" }) do
 	minetest.override_item(name, {
 		_redstone = {
 			update = function(pos, node)
 				if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) == 0 then
+					if handle_burnout(pos) then
+						return
+					end
+
 					local ndef = minetest.registered_nodes[node.name]
 					return {
 						name = ndef._redstone_torch_on,
@@ -48,6 +68,8 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_tor
 			end,
 			update = function(pos, node)
 				if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) > 0 then
+					handle_burnout(pos)
+
 					local ndef = minetest.registered_nodes[node.name]
 					return {
 						name = ndef._redstone_torch_off,
