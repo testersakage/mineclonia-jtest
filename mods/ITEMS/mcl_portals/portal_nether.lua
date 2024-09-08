@@ -104,6 +104,29 @@ local function unregister_portal(pos)
 	end
 end
 
+-- There is 3/2000 (0.15%) chance of spawning zombified_piglin on each portal node at random tick
+local function spawn_zombified_piglin(pos)
+	if math.random(2000) <= 3 then
+		-- Find Y of lowest portal frame
+		local floor = minetest.find_nodes_in_area(pos, vector.offset(pos, 0,-MAX_PORTAL_NODES,0), {"mcl_core:obsidian"})
+		if #floor > 0 then
+			local spawn = floor[#floor]
+			if minetest.get_node(pos).param2 == 3 then
+				spawn = vector.offset(spawn, 1,0.5,0) -- East
+			else
+				spawn = vector.offset(spawn, 0,0.5,-1) -- South
+			end
+			local up = minetest.find_nodes_in_area(spawn, vector.offset(spawn, 0,1.5,0), {"air"})
+			if #up >= 2 then
+				-- TODO remove manually set gravity if it already set in mobs physics
+				local obj = minetest.add_entity(spawn, "mobs_mc:zombified_piglin", minetest.serialize({ _just_portaled = 60 }))
+				obj:set_acceleration({x=0, y=-9.81*1.5, z=0})
+			end
+		end
+	end
+	return true
+end
+
 -- Rotate vector 90 degrees if 'param2 % 2 == 1'.
 local function orient(pos, param2)
 	if (param2 % 2) == 1 then
@@ -161,6 +184,7 @@ end
 -- positions for the portal nodes.
 local function init_portal_meta(nodes, portal)
 	for _, pos in pairs(nodes) do
+		spawn_zombified_piglin(pos)
 		minetest.get_meta(pos):set_string("portal", minetest.serialize(portal))
 	end
 end
@@ -803,6 +827,7 @@ minetest.register_abm({
 	action = function(pos, node)
 		emit_portal_particles(pos, node)
 		teleport_objs_in_portal(pos)
+		spawn_zombified_piglin(pos)
 	end,
 })
 
