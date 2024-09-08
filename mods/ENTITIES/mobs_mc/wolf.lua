@@ -26,6 +26,16 @@ food["mcl_mobitems:cooked_porkchop"] = 8
 food["mcl_mobitems:cooked_beef"] = 8
 food["mcl_mobitems:rabbit_stew"] = 10
 
+local biomes = {
+	["Forest"] = {textures = "woods", --[[pack_size = 4]]},
+	["Taiga"] = {textures = "pale", --[[pack_size = 4]]},
+}
+
+local function add_collar(self, color)
+	if not color then color = "#FF0000" end
+	return self.texture_holder.."^(mobs_mc_wolf_collar.png^[colorize:"..color..":192)"
+end
+
 -- Wolf
 local wolf = {
 	description = S("Wolf"),
@@ -89,11 +99,11 @@ local wolf = {
 			-- 1/3 chance of getting tamed
 			if pr:next(1, 3) == 1 then
 				local yaw = self.object:get_yaw()
-				self.texture_holder = self.object:get_properties().textures
+				self.texture_holder = self.object:get_properties().textures[1]
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
 					dog:set_yaw(yaw)
-					dog:set_properties({ textures = self.texture_holder })
+					dog:set_properties({textures = {add_collar(self)}})
 					ent = dog:get_luaentity()
 					ent.owner = clicker:get_player_name()
 					ent.tamed = true
@@ -133,13 +143,15 @@ local wolf = {
 	},
 	avoid_from = { "mobs_mc:llama" },
 	texture_holder = "",
-	--on_spawn = function(self)
-	--	local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
-	--	for biome, defs in pairs(biomes) do
-	--		if biome_name == biome then
-	--		end
-	--	end
-	--end
+	on_spawn = function(self)
+		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
+		for biome, defs in pairs(biomes) do
+			if biome_name == biome then
+				self.texture_holder = "mobs_mc_wolf_"..defs.textures..".png"
+				self.object:set_properties({textures = {"mobs_mc_wolf_"..defs.textures..".png"}})
+			end
+		end
+	end
 }
 
 mcl_mobs.register_mob("mobs_mc:wolf", wolf)
@@ -163,14 +175,12 @@ local colors = {
 	["unicolor_violet"] = "#5000CC",
 	["unicolor_white"] = "#FFFFFF",
 	["unicolor_yellow"] = "#FFFF00",
-
 	["unicolor_light_blue"] = "#B0B0FF",
 }
 
 local get_dog_textures = function(self, color)
-	local textures = self.object:get_properties().textures[1]
 	if colors[color] then
-		return {textures.."^(mobs_mc_wolf_collar.png^[colorize:"..colors[color]..":192)"}
+		return {add_collar(self, colors[color])}
 	else
 		return nil
 	end
@@ -207,9 +217,7 @@ dog.on_rightclick = function(self, clicker)
 				local tex = get_dog_textures(self, group)
 				if tex then
 					self.base_texture = tex
-					self.object:set_properties({
-						textures = self.base_texture
-					})
+					self.object:set_properties({textures = self.base_texture})
 					if not minetest.is_creative_enabled(clicker:get_player_name()) then
 						item:take_item()
 						clicker:set_wielded_item(item)

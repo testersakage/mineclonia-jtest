@@ -13,7 +13,7 @@
 * Pig: Mesh and animation by Pavel_S
 * Polar Bear: Mesh and animation by toby109tt  / https://github.com/22i
 * Sheep: Mesh and animation by Pavel_S
-* Wold: KrupnoPavel
+* Wolf: KrupnoPavel
 * Squid: Animation, sound and egg texture by daufinsyd
 
 ### NPCs
