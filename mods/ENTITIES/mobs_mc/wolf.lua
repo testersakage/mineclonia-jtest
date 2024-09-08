@@ -89,11 +89,11 @@ local wolf = {
 			-- 1/3 chance of getting tamed
 			if pr:next(1, 3) == 1 then
 				local yaw = self.object:get_yaw()
-				self._texture_holder = self.object:get_properties().textures
+				self.texture_holder = self.object:get_properties().textures
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
 					dog:set_yaw(yaw)
-					dog:set_properties({ textures = self._texture_holder })
+					dog:set_properties({ textures = self.texture_holder })
 					ent = dog:get_luaentity()
 					ent.owner = clicker:get_player_name()
 					ent.tamed = true
@@ -132,7 +132,14 @@ local wolf = {
 		"mobs_mc:witherskeleton",
 	},
 	avoid_from = { "mobs_mc:llama" },
-	_texture_holder = ""
+	texture_holder = "",
+	--on_spawn = function(self)
+	--	local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
+	--	for biome, defs in pairs(biomes) do
+	--		if biome_name == biome then
+	--		end
+	--	end
+	--end
 }
 
 mcl_mobs.register_mob("mobs_mc:wolf", wolf)
