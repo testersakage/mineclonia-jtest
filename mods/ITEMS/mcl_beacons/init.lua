@@ -165,6 +165,7 @@ end
 local function effect_player(effect, pos, power_level, effect_level,player)
 	local distance =  vector.distance(player:get_pos(), pos)
 	if distance > (power_level+1)*10 then return end
+	if effect == "" then return end
 	mcl_potions.give_effect_by_level (effect, player, effect_level, 16)
 end
 
