@@ -177,6 +177,12 @@ local function generate_beacon_formspec (meta)
 	"image_button[3.5,3;1,1;mcl_potions_effect_leaping.png;leaping;]"..
 	"image_button[3.0,4.5;1,1;mcl_potions_effect_strong.png;strength;]"..
 	"image_button[7.5,3.5;1,1;mcl_potions_effect_regenerating.png;regeneration;]"..
+	"tooltip[swiftness;"..S("Swiftness").."]"..
+	"tooltip[haste;"..S("Haste").."]"..
+	"tooltip[resistance;"..S("Resistance").."]"..
+	"tooltip[leaping;"..S("Leaping").."]"..
+	"tooltip[strength;"..S("Strength").."]"..
+	"tooltip[regeneration;"..S("Regeneration").."]"..
 	upgrade_effect_level_button (meta)..
 	"item_image[1,7;1,1;mcl_core:diamond]"..
 	"item_image[2.2,7;1,1;mcl_core:emerald]"..
