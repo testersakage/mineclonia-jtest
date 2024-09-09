@@ -7,77 +7,12 @@ mcl_beacons = {
 	fuel = {"mcl_core:diamond","mcl_core:emerald","mcl_core:iron_ingot","mcl_core:gold_ingot","mcl_nether:netherite_ingot"}
 }
 
-local pallete_order = {
-	glass_cyan		 		= 1,
-	pane_cyan_flat			= 1,
-	pane_cyan				= 1,
-
-	glass_white		 		= 2,
-	pane_white_flat			= 2,
-	pane_white				= 2,
-
-	glass_brown				= 3,
-	pane_brown_flat			= 3,
-	pane_brown				= 3,
-
-	glass_blue				= 4,
-	pane_blue_flat			= 4,
-	pane_blue				= 4,
-
-	glass_light_blue		= 5,
-	pane_light_blue_flat	= 5,
-	pane_light_blue			= 5,
-
-	glass_pink				= 6,
-	pane_pink_flat			= 6,
-	pane_pink				= 6,
-
-	glass_purple			= 7,
-	pane_purple_flat		= 7,
-	pane_purple		 		= 7,
-
-	glass_red				= 8,
-	pane_red_flat			= 8,
-	pane_red				= 8,
-
-	glass_silver			= 9,
-	pane_silver_flat		= 9,
-	pane_silver				= 9,
-
-	glass_gray		 		= 10,
-	pane_gray_flat	 		= 10,
-	pane_gray		   		= 10,
-
-	glass_lime		  		= 11,
-	pane_lime_flat	  		= 11,
-	pane_lime		   		= 11,
-
-	glass_green		 		= 12,
-	pane_green_flat	 		= 12,
-	pane_green		  		= 12,
-
-	glass_orange			= 13,
-	pane_orange_flat		= 13,
-	pane_orange		 		= 13,
-
-	glass_yellow			= 14,
-	pane_yellow_flat		= 14,
-	pane_yellow		 		= 14,
-
-	glass_black		 		= 15,
-	pane_black_flat	 		= 15,
-	pane_black		  		= 15,
-
-	glass_magenta	   		= 16,
-	pane_magenta_flat   	= 16,
-	pane_magenta			= 16
-}
-
 local function get_beacon_beam(glass_nodename)
 	if glass_nodename == "air" then return 0 end
-	local glass_string = glass_nodename:split(':')[2]
-	if not pallete_order[glass_string] then return 0 end
-	return pallete_order[glass_string]
+	local def = minetest.registered_nodes[glass_nodename]
+	if def and def._color then
+		return mcl_dyes.colors[def._color].palette_index
+	end
 end
 
 local function set_node_if_clear(pos,node)
@@ -103,8 +38,7 @@ minetest.register_node("mcl_beacons:beacon_beam", {
 	groups = {not_in_creative_inventory=1},
 	_mcl_blast_resistance = 1200,
 	paramtype2 = "color",
-	palette = "beacon_beam_palette.png",
-	palette_index = 0,
+	palette = "mcl_dyes_palette.png",
 	buildable_to = true,
 })
 
