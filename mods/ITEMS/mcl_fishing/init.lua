@@ -288,6 +288,10 @@ local flying_bobber_ENTITY={
 
 -- Movement function of flying bobber
 local function flying_bobber_on_step(self, dtime)
+	if not self._thrower then
+		self.object:remove()
+		return
+	end
 	self.timer=self.timer+dtime
 	local pos = self.object:get_pos()
 	local node = minetest.get_node(pos)
