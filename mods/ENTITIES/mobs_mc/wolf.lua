@@ -27,8 +27,14 @@ food["mcl_mobitems:cooked_beef"] = 8
 food["mcl_mobitems:rabbit_stew"] = 10
 
 local biomes = {
-	["Forest"] = {textures = "woods", --[[pack_size = 4]]},
-	["Taiga"] = {textures = "pale", --[[pack_size = 4]]},
+	["Forest"] = {textures = "woods"},
+	["Taiga"] = {textures = "pale"},
+	["MegaSpruceTaiga"] = {textures = "chestnut"},
+	["MegaTaiga"] = {textures = "black"},
+	["SavannaM"] = {textures = "spotted"},
+	["MesaPlateauF"] = {textures = "striped"},
+	["ColdTaiga"] = {textures = "ashen"},
+	["Jungle"] = {textures = "rusty"}
 }
 
 local function add_collar(self, color)
