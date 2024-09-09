@@ -485,28 +485,8 @@ minetest.register_node("mcl_beacons:beacon", {
 		inv:set_size("input", 1)
 		meta:set_string("formspec", generate_beacon_formspec(meta))
 	end,
-	on_destruct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local input = meta:get_inventory():get_stack("input",1)
-		if not input:is_empty() then
-			local p = {x=pos.x+math.random(0, 10)/10-0.5, y=pos.y, z=pos.z+math.random(0, 10)/10-0.5} --from mcl_anvils
-			minetest.add_item(p, input)
-		end
-		remove_beacon_beam(pos)
-	end,
-	on_rightclick = function (pos, _, clicker)
-		local name = clicker:get_player_name ()
-		local m = minetest.get_meta(pos)
-
-		if minetest.is_protected (pos, name) then
-			minetest.record_protection_violation (pos, name)
-			return 0
-		end
-
-		if m:get_string("formspec") == "" then --generate node formspec for mcla pre-0.106.1
-			m:set_string("formspec", generate_beacon_formspec(m))
-		end
-	end,
+	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
+	on_destruct = remove_beacon_beam,
 	on_receive_fields = apply_beacon_formspec,
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
 	allow_metadata_inventory_move = allow_metadata_inventory_move,
@@ -516,4 +496,17 @@ minetest.register_node("mcl_beacons:beacon", {
 	drop = "mcl_beacons:beacon",
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	_mcl_hardness = 3,
+})
+
+minetest.register_lbm({
+	label = "Upgrade pre 106.1 beacons formspecs",
+	name = "mcl_beacons:upgrade_beacon_formspec",
+	nodenames = {"mcl_beacons:beacon"},
+	run_at_every_load = false,
+	action = function(pos)
+		local m = minetest.get_meta(pos)
+		if m:get_string("formspec") == "" then
+			m:set_string("formspec", generate_beacon_formspec(m))
+		end
+	end,
 })
