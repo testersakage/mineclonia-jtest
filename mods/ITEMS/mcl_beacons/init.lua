@@ -322,30 +322,6 @@ minetest.register_craft({
 	}
 })
 
-local function upgrade_old_data (pos, node, dtime_s)
-	-- Clear the primary effect if it is Regeneration, or substitute
-	-- `strength' for the old value `strenght'.
-	local meta = minetest.get_meta (pos)
-	if meta:get_string ("effect") == "regeneration" then
-		meta:set_string ("effect", "")
-		meta:set_string ("secondary_effect", "regeneration")
-		meta:set_string ("effect_level", 1)
-	elseif meta:get_string ("effect") == "strenght" then
-		meta:set_string ("effect", "strength")
-	end
-	-- Clear previously installed formspec properties, now that they
-	-- are now computed and displayed from within on_rightclick.
-	meta:set_string ("formspec", "")
-end
-
-minetest.register_lbm ({
-	label = "Upgrade legacy beacon data",
-	name = "mcl_beacons:upgrade_data",
-	nodenames = {"mcl_beacons:beacon"},
-	run_at_every_load = false,
-	action = upgrade_old_data,
-})
-
 local function apply_beacon_formspec (pos, _, fields, sender)
 	local sender_name = sender:get_player_name ()
 	-- Return if the node is no longer a beacon.
@@ -499,14 +475,20 @@ minetest.register_node("mcl_beacons:beacon", {
 })
 
 minetest.register_lbm({
-	label = "Upgrade pre 106.1 beacons formspecs",
-	name = "mcl_beacons:upgrade_beacon_formspec",
+	label = "Upgrade pre 106.1 beacons data",
+	name = "mcl_beacons:upgrade_beacon_data",
 	nodenames = {"mcl_beacons:beacon"},
 	run_at_every_load = false,
 	action = function(pos)
 		local m = minetest.get_meta(pos)
-		if m:get_string("formspec") == "" then
-			m:set_string("formspec", generate_beacon_formspec(m))
+		m:set_string("formspec", generate_beacon_formspec(m))
+
+		if m:get_string ("effect") == "regeneration" then
+			m:set_string ("effect", "")
+			m:set_string ("secondary_effect", "regeneration")
+			m:set_string ("effect_level", 1)
+		elseif m:get_string ("effect") == "strenght" then
+			m:set_string ("effect", "strength")
 		end
 	end,
 })
