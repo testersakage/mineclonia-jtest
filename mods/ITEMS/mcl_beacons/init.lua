@@ -23,25 +23,6 @@ local function set_node_if_clear(pos,node)
 	end
 end
 
-minetest.register_node("mcl_beacons:beacon_beam", {
-	tiles = {"blank.png^[noalpha^[colorize:#b8bab9"},
-	drawtype = "nodebox",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.1250, -0.5000, -0.1250, 0.1250, 0.5000, 0.1250}
-		}
-	},
-	pointable= false,
-	light_source = minetest.LIGHT_MAX,
-	walkable = false,
-	groups = {not_in_creative_inventory=1},
-	_mcl_blast_resistance = 1200,
-	paramtype2 = "color",
-	palette = "mcl_dyes_palette.png",
-	buildable_to = true,
-})
-
 local function remove_beacon_beam(pos)
 	for y=pos.y, pos.y+301 do
 		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
@@ -211,57 +192,6 @@ function mcl_beacons.register_beaconfuel(itemstring)
 	table.insert(mcl_beacons.fuel, itemstring)
 end
 
-minetest.register_abm{
-	label="update beacon beam",
-	nodenames = {"mcl_beacons:beacon_beam"},
-	interval = 1,
-	chance = 1,
-	action = function(pos)
-		local node_below = minetest.get_node({x=pos.x,y=pos.y-1,z=pos.z})
-		local node_above = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
-		local node_current = minetest.get_node(pos)
-
-		local beacon = minetest.find_nodes_in_area({x=pos.x,y=pos.y-100,z=pos.z},{x=pos.x,y=pos.y+100,z=pos.z},{"mcl_beacons:beacon"})
-		if #beacon > 0 then
-			local air_above = minetest.find_nodes_in_area({x=beacon[1].x, y=beacon[1].y, z=beacon[1].z}, {x=beacon[1].x, y=beacon[1].y+100, z=beacon[1].z}, {"air"})
-			if #air_above > 0 then
-				minetest.set_node({x=air_above[1].x, y=air_above[1].y, z=air_above[1].z}, {name="mcl_beacons:beacon_beam",param2=0})
-			end
-		end
-
-		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
-			if minetest.get_node({x=pos.x,y=pos.y-2,z=pos.z}).name == "mcl_beacons:beacon" then
-				set_node_if_clear({x=pos.x,y=pos.y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
-			end
-		elseif node_above.name == "air" or (node_above.name == "mcl_beacons:beacon_beam" and node_above.param2 ~= node_current.param2) then
-			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node_current.param2})
-		elseif minetest.get_item_group(node_below.name, "glass") ~= 0 or minetest.get_item_group(node_below.name,"material_glass") ~= 0 then
-			set_node_if_clear({x=pos.x,y=pos.y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
-		elseif minetest.get_item_group(node_above.name, "glass") ~= 0 or minetest.get_item_group(node_above.name,"material_glass") ~= 0 then
-			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
-		end
-	end,
-}
-
-minetest.register_abm{
-	label="apply beacon effects to players",
-	nodenames = {"mcl_beacons:beacon"},
-	interval = 3,
-	chance = 1,
-	action = function(pos)
-		apply_effects_to_all_players(pos)
-	end,
-}
-
-minetest.register_craft({
-	output = "mcl_beacons:beacon",
-	recipe = {
-		{"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
-		{"mcl_core:glass", "mcl_mobitems:nether_star", "mcl_core:glass"},
-		{"mcl_core:obsidian", "mcl_core:obsidian", "mcl_core:obsidian"}
-	}
-})
-
 local function apply_beacon_formspec (pos, _, fields, sender)
 	local sender_name = sender:get_player_name ()
 	-- Return if the node is no longer a beacon.
@@ -413,6 +343,76 @@ minetest.register_node("mcl_beacons:beacon", {
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	_mcl_hardness = 3,
 })
+
+minetest.register_node("mcl_beacons:beacon_beam", {
+	tiles = {"blank.png^[noalpha^[colorize:#b8bab9"},
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.1250, -0.5000, -0.1250, 0.1250, 0.5000, 0.1250}
+		}
+	},
+	pointable= false,
+	light_source = minetest.LIGHT_MAX,
+	walkable = false,
+	groups = {not_in_creative_inventory=1},
+	_mcl_blast_resistance = 1200,
+	paramtype2 = "color",
+	palette = "mcl_dyes_palette.png",
+	buildable_to = true,
+})
+
+minetest.register_craft({
+	output = "mcl_beacons:beacon",
+	recipe = {
+		{"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
+		{"mcl_core:glass", "mcl_mobitems:nether_star", "mcl_core:glass"},
+		{"mcl_core:obsidian", "mcl_core:obsidian", "mcl_core:obsidian"}
+	}
+})
+
+minetest.register_abm{
+	label="update beacon beam",
+	nodenames = {"mcl_beacons:beacon_beam"},
+	interval = 1,
+	chance = 1,
+	action = function(pos)
+		local node_below = minetest.get_node({x=pos.x,y=pos.y-1,z=pos.z})
+		local node_above = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
+		local node_current = minetest.get_node(pos)
+
+		local beacon = minetest.find_nodes_in_area({x=pos.x,y=pos.y-100,z=pos.z},{x=pos.x,y=pos.y+100,z=pos.z},{"mcl_beacons:beacon"})
+		if #beacon > 0 then
+			local air_above = minetest.find_nodes_in_area({x=beacon[1].x, y=beacon[1].y, z=beacon[1].z}, {x=beacon[1].x, y=beacon[1].y+100, z=beacon[1].z}, {"air"})
+			if #air_above > 0 then
+				minetest.set_node({x=air_above[1].x, y=air_above[1].y, z=air_above[1].z}, {name="mcl_beacons:beacon_beam",param2=0})
+			end
+		end
+
+		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
+			if minetest.get_node({x=pos.x,y=pos.y-2,z=pos.z}).name == "mcl_beacons:beacon" then
+				set_node_if_clear({x=pos.x,y=pos.y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
+			end
+		elseif node_above.name == "air" or (node_above.name == "mcl_beacons:beacon_beam" and node_above.param2 ~= node_current.param2) then
+			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node_current.param2})
+		elseif minetest.get_item_group(node_below.name, "glass") ~= 0 or minetest.get_item_group(node_below.name,"material_glass") ~= 0 then
+			set_node_if_clear({x=pos.x,y=pos.y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
+		elseif minetest.get_item_group(node_above.name, "glass") ~= 0 or minetest.get_item_group(node_above.name,"material_glass") ~= 0 then
+			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
+		end
+	end,
+}
+
+minetest.register_abm{
+	label="apply beacon effects to players",
+	nodenames = {"mcl_beacons:beacon"},
+	interval = 3,
+	chance = 1,
+	action = function(pos)
+		apply_effects_to_all_players(pos)
+	end,
+}
 
 minetest.register_lbm({
 	label = "Upgrade pre 106.1 beacons data",
