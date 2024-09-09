@@ -104,12 +104,11 @@ function mcl_raids.promote_to_raidcaptain(c) -- object
 			l._banner:remove()
 			l._banner = nil
 			mcl_raids.drop_obanner(pos)
+			if not l.raidmob then
+				minetest.add_item(l.object:get_pos(), ItemStack("mcl_potions:ominous"))
+			end
 			if cmi_cause and cmi_cause.type == "player" then
 				awards.unlock(cmi_cause.source:get_player_name(), "mcl:voluntary_exile")
-				local lv = mcl_potions.get_effect_level(cmi_cause.source, "bad_omen")
-				if not lv then lv = 0 end
-				lv = math.max(5,lv + 1)
-				mcl_potions.give_effect_by_level("bad_omen", cmi_cause.source, lv, 6000)
 			end
 		end
 		if old_ondie then return old_ondie(self,pos,cmi_cause) end

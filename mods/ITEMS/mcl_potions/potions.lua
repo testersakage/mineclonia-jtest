@@ -595,11 +595,7 @@ mcl_potions.register_potion({
 	desc_whole = S("Ominous Bottle"),
 	_tt = nil,
 	_longdesc = S("Attracts danger."),
-	image = table.concat({
-		"(mcl_potions_potion_overlay.png^[colorize:red:100)",
-		"^mcl_potions_splash_overlay.png^[colorize:black:100",
-		"^mcl_potions_potion_bottle.png",
-	}),
+	image = "mcl_potions_ominous_potion.png",
 	_effect_list = {
 		bad_omen = {dur = 6000, dur_variable = false,},
 	},
