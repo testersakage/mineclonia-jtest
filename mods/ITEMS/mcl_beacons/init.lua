@@ -105,21 +105,13 @@ local function apply_effects_to_all_players(pos)
 	end
 end
 
-local function allow_metadata_inventory_take(pos, _, _, stack, player)
+local function allow_metadata_inventory_take_put(pos, _, _, stack, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then
 		minetest.record_protection_violation(pos, name)
 		return 0
 	end
 	return stack:get_count()
-end
-
-local function allow_metadata_inventory_put(pos, listname, index, stack, player)
-	return allow_metadata_inventory_take(pos, listname, index, stack, player)
-end
-
-local function allow_metadata_inventory_move()
-	return 0
 end
 
 local function upgrade_effect_level_button (oldmeta)
@@ -337,9 +329,9 @@ minetest.register_node("mcl_beacons:beacon", {
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
 	on_destruct = remove_beacon_beam,
 	on_receive_fields = apply_beacon_formspec,
-	allow_metadata_inventory_put = allow_metadata_inventory_put,
-	allow_metadata_inventory_move = allow_metadata_inventory_move,
-	allow_metadata_inventory_take = allow_metadata_inventory_take,
+	allow_metadata_inventory_put = allow_metadata_inventory_take_put,
+	allow_metadata_inventory_move = function () return 0 end,
+	allow_metadata_inventory_take = allow_metadata_inventory_take_put,
 	light_source = 14,
 	groups = {handy=1, deco_block=1},
 	drop = "mcl_beacons:beacon",
