@@ -218,14 +218,14 @@ local open_beacons = {}
 local function upgrade_effect_level_button (oldmeta)
 	local effect = oldmeta:get_string ("effect")
 	if effect and effect ~= "" then
-	local pdef = mcl_potions.registered_effects[effect] or { }
-	local tooltip = (pdef.description or "???") .. " II"
-	return ("image_button[8.5,3.5;1,1;"
-		.. (pdef.icon or "unknown.png")
-		.. ";upgrade_ii;]"
-		.. "tooltip[8.5,3.5;1,1;" .. tooltip .. "]")
+		local pdef = mcl_potions.registered_effects[effect] or { }
+		local tooltip = (pdef.description or "???") .. " II"
+		return ("image_button[8.5,3.5;1,1;"
+			.. (pdef.icon or "unknown.png")
+			.. ";upgrade_ii;]"
+			.. "tooltip[8.5,3.5;1,1;" .. tooltip .. "]")
 	else
-	return ""
+		return ""
 	end
 end
 
@@ -331,11 +331,11 @@ local function upgrade_old_data (pos, node, dtime_s)
 	-- `strength' for the old value `strenght'.
 	local meta = minetest.get_meta (pos)
 	if meta:get_string ("effect") == "regeneration" then
-	meta:set_string ("effect", "")
-	meta:set_string ("secondary_effect", "regeneration")
-	meta:set_string ("effect_level", 1)
+		meta:set_string ("effect", "")
+		meta:set_string ("secondary_effect", "regeneration")
+		meta:set_string ("effect_level", 1)
 	elseif meta:get_string ("effect") == "strenght" then
-	meta:set_string ("effect", "strength")
+		meta:set_string ("effect", "strength")
 	end
 	-- Clear previously installed formspec properties, now that they
 	-- are now computed and displayed from within on_rightclick.
@@ -353,130 +353,130 @@ minetest.register_lbm ({
 -- Remove players who depart from `open_beacons'
 
 minetest.register_on_leaveplayer (function (player, timed_out)
-	open_beacons[player] = nil
+	open_beacons[player:get_player_name()] = nil
 end)
 
 local function apply_beacon_formspec (_, _, fields, sender)
 	local sender_name = sender:get_player_name ()
 	local pos = open_beacons[sender_name]
 	if fields.quit then
-	open_beacons[sender_name] = nil
-	return
+		open_beacons[sender_name] = nil
+		return
 	end
 	-- Return if the node is no longer a beacon.
 	if not pos or minetest.get_node (pos).name ~= "mcl_beacons:beacon" then
-	return
+		return
 	end
 	if (fields.swiftness or fields.regeneration or fields.leaping
 	or fields.strength or fields.upgrade_ii or fields.resistance
 	or fields.haste) then
-	local power_level = beacon_blockcheck (pos)
+		local power_level = beacon_blockcheck (pos)
 
-	if minetest.is_protected (pos, sender_name) then
-		minetest.record_protection_violation(pos, sender_name)
-		return
-	elseif power_level == 0 then
-		return
-	end
-
-	local meta = minetest.get_meta (pos)
-	local inv = meta:get_inventory ()
-	local input = inv:get_stack ("input", 1)
-
-	if input:is_empty() then
-		return
-	end
-
-	local valid_item = false
-
-	for _, item in ipairs (mcl_beacons.fuel) do
-		if input:get_name () == item then
-		valid_item = true
-		end
-	end
-
-	if not valid_item then
-		return
-	end
-
-	local successful = false
-
-	if fields.swiftness then
-		meta:set_string ("effect", "swiftness")
-		if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-		meta:set_int ("effect_level", 1)
-		end
-		successful = true
-	elseif fields.haste then
-		meta:set_string ("effect", "haste")
-		if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-		meta:set_int ("effect_level", 1)
-		end
-		successful = true
-	elseif fields.leaping and power_level >= 2 then
-		meta:set_string ("effect", "leaping")
-		if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-		meta:set_int ("effect_level", 1)
-		end
-		successful = true
-	elseif fields.resistance and power_level >= 2 then
-		meta:set_string ("effect", "resistance")
-		if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-		meta:set_int ("effect_level", 1)
-		end
-		successful = true
-	elseif fields.strength and power_level >= 3 then
-		meta:set_string ("effect","strength")
-		if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-		meta:set_int ("effect_level", 1)
-		end
-		successful = true
-	elseif fields.regeneration and power_level == 4 then
-		-- If a secondary effect is enabled, the effect level must
-		-- be reset to 1.
-		meta:set_int ("effect_level", 1)
-		meta:set_string ("secondary_effect", "regeneration")
-		successful = true
-	elseif fields.upgrade_ii and power_level == 4 then
-		-- Upgrade the primary effect to II but cancel the
-		-- secondary one.  Also verify that there is an effect to
-		-- upgrade.
-		if minetest.get_meta (pos):get_string ("effect")
-		and minetest.get_meta (pos):get_int ("effect_level") < 2 then
-		minetest.get_meta (pos):set_int ("effect_level", 2)
-		minetest.get_meta (pos):set_string ("secondary_effect", "")
-		successful = true
-		end
-	end
-	if successful then
-		if power_level == 4 then
-		awards.unlock(sender_name, "mcl:maxed_beacon")
-		end
-		awards.unlock(sender_name, "mcl:beacon")
-		input:take_item ()
-		inv:set_stack("input",1,input)
-
-		local beam_palette_index = 0
-		remove_beacon_beam(pos)
-		for y = pos.y +1, pos.y + 201 do
-		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
-		if node.name == "ignore" then
-			minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
-			node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+		if minetest.is_protected (pos, sender_name) then
+			minetest.record_protection_violation(pos, sender_name)
+			return
+		elseif power_level == 0 then
+			return
 		end
 
-		if minetest.get_item_group(node.name, "glass") ~= 0 or minetest.get_item_group(node.name,"material_glass") ~= 0 then
-			beam_palette_index = get_beacon_beam(node.name)
+		local meta = minetest.get_meta (pos)
+		local inv = meta:get_inventory ()
+		local input = inv:get_stack ("input", 1)
+
+		if input:is_empty() then
+			return
 		end
 
-		if node.name == "air" then
-			minetest.set_node({x=pos.x,y=y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=beam_palette_index})
+		local valid_item = false
+
+		for _, item in ipairs (mcl_beacons.fuel) do
+			if input:get_name () == item then
+			valid_item = true
+			end
 		end
+
+		if not valid_item then
+			return
 		end
-		apply_effects_to_all_players(pos) --call it once outside the globalstep so the player gets the effect right after selecting it
-		-- Redisplay the formspec.
-		meta:set_string("formspec", generate_beacon_formspec(meta))
-	end
+
+		local successful = false
+
+		if fields.swiftness then
+			meta:set_string ("effect", "swiftness")
+			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+				meta:set_int ("effect_level", 1)
+			end
+			successful = true
+		elseif fields.haste then
+			meta:set_string ("effect", "haste")
+			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+				meta:set_int ("effect_level", 1)
+			end
+			successful = true
+		elseif fields.leaping and power_level >= 2 then
+			meta:set_string ("effect", "leaping")
+			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+				meta:set_int ("effect_level", 1)
+			end
+			successful = true
+		elseif fields.resistance and power_level >= 2 then
+			meta:set_string ("effect", "resistance")
+			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+				meta:set_int ("effect_level", 1)
+			end
+			successful = true
+		elseif fields.strength and power_level >= 3 then
+			meta:set_string ("effect","strength")
+			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
+				meta:set_int ("effect_level", 1)
+			end
+			successful = true
+		elseif fields.regeneration and power_level == 4 then
+			-- If a secondary effect is enabled, the effect level must
+			-- be reset to 1.
+			meta:set_int ("effect_level", 1)
+			meta:set_string ("secondary_effect", "regeneration")
+			successful = true
+		elseif fields.upgrade_ii and power_level == 4 then
+			-- Upgrade the primary effect to II but cancel the
+			-- secondary one.  Also verify that there is an effect to
+			-- upgrade.
+			if minetest.get_meta (pos):get_string ("effect")
+			and minetest.get_meta (pos):get_int ("effect_level") < 2 then
+			minetest.get_meta (pos):set_int ("effect_level", 2)
+			minetest.get_meta (pos):set_string ("secondary_effect", "")
+				successful = true
+			end
+		end
+		if successful then
+			if power_level == 4 then
+				awards.unlock(sender_name, "mcl:maxed_beacon")
+			end
+			awards.unlock(sender_name, "mcl:beacon")
+			input:take_item ()
+			inv:set_stack("input",1,input)
+
+			local beam_palette_index = 0
+			remove_beacon_beam(pos)
+			for y = pos.y +1, pos.y + 201 do
+				local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+				if node.name == "ignore" then
+					minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
+					node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+				end
+
+				if minetest.get_item_group(node.name, "glass") ~= 0 or minetest.get_item_group(node.name,"material_glass") ~= 0 then
+					beam_palette_index = get_beacon_beam(node.name)
+				end
+
+				if node.name == "air" then
+					minetest.set_node({x=pos.x,y=y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=beam_palette_index})
+				end
+			end
+			apply_effects_to_all_players(pos) --call it once outside the globalstep so the player gets the effect right after selecting it
+			-- Redisplay the formspec.
+			meta:set_string("formspec", generate_beacon_formspec(meta))
+		end
 	end
 end
 
