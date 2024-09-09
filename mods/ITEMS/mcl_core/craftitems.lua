@@ -56,7 +56,7 @@ minetest.register_craftitem("mcl_core:diamond", {
 	description = S("Diamond"),
 	_doc_items_longdesc = S("Diamonds are precious minerals and useful to create the highest tier of armor and tools."),
 	inventory_image = "default_diamond.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_crafting_output = {square3 = {output = "mcl_core:diamondblock"}}
 })
 
@@ -74,7 +74,7 @@ minetest.register_craftitem("mcl_core:iron_ingot", {
 	description = S("Iron Ingot"),
 	_doc_items_longdesc = S("Molten iron. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_steel_ingot.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:iron_nugget 9"},
 		square3 = {output = "mcl_core:ironblock"}
@@ -85,7 +85,7 @@ minetest.register_craftitem("mcl_core:gold_ingot", {
 	description = S("Gold Ingot"),
 	_doc_items_longdesc = S("Molten gold. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_gold_ingot.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:gold_nugget 9"},
 		square3 = {output = "mcl_core:goldblock"}
@@ -96,7 +96,7 @@ minetest.register_craftitem("mcl_core:emerald", {
 	description = S("Emerald"),
 	_doc_items_longdesc = S("Emeralds are used in villager trades as currency."),
 	inventory_image = "mcl_core_emerald.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_crafting_output = {square3 = {output = "mcl_core:emeraldblock"}}
 })
 

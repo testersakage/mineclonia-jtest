@@ -2,11 +2,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local C = minetest.colorize
 local F = minetest.formspec_escape
 
-mcl_beacons = {
-	blocks ={"mcl_core:diamondblock","mcl_core:ironblock","mcl_core:goldblock","mcl_core:emeraldblock","mcl_nether:netheriteblock"},
-	fuel = {"mcl_core:diamond","mcl_core:emerald","mcl_core:iron_ingot","mcl_core:gold_ingot","mcl_nether:netherite_ingot"}
-}
-
+mcl_beacons = {}
 local function get_beacon_beam(glass_nodename)
 	if glass_nodename == "air" then return 0 end
 	local def = minetest.registered_nodes[glass_nodename]
@@ -45,10 +41,8 @@ local function beacon_blockcheck(pos)
 		for block_x = (pos.x-y_offset),(pos.x+y_offset) do
 			for block_z = (pos.z-y_offset),(pos.z+y_offset) do
 				local valid_block = false --boolean which stores if block is valid or not
-				for _, beacon_block in pairs(mcl_beacons.blocks) do
-					if beacon_block == minetest.get_node({x=block_x,y=block_y,z=block_z}).name and not valid_block then --is the block in the pyramid a valid beacon block
-						valid_block =true
-					end
+				if minetest.get_item_group(minetest.get_node(vector.new(block_x, block_y, block_z)).name, "beacon_block") > 0 then
+					valid_block =true
 				end
 				if not valid_block then
 					return y_offset -1 --the last layer is complete, this one is missing or incomplete
@@ -184,12 +178,23 @@ local function generate_beacon_formspec (meta)
 	"listring[current_player;main]"
 end
 
-function mcl_beacons.register_beaconblock (itemstring)--API function for other mods
-	table.insert(mcl_beacons.blocks, itemstring)
+local function add_group(item, group)
+	local def = minetest.regisered_items[item]
+	if def then
+		minetest.override_item(item, {
+			groups = table.merge(def.groups or {}, { [group] = 1 })
+		})
+	end
+end
+
+function mcl_beacons.register_beaconblock (itemstring)
+	minetest.log("warning", "[mcl_beacons] mcl_beacons.register_beaconblock is deprecated. Use the \"beacon_block\" item group instead!")
+	add_group(itemstring, "beacon_block")
 end
 
 function mcl_beacons.register_beaconfuel(itemstring)
-	table.insert(mcl_beacons.fuel, itemstring)
+	minetest.log("warning", "[mcl_beacons] mcl_beacons.register_beaconfuel is deprecated. Use the \"beacon_fuel\" item group instead!")
+	add_group(itemstring, "beacon_fuel")
 end
 
 local function apply_beacon_formspec (pos, _, fields, sender)
@@ -226,10 +231,8 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 
 		local valid_item = false
 
-		for _, item in ipairs (mcl_beacons.fuel) do
-			if input:get_name () == item then
+		if minetest.get_item_group(input:get_name(), "beacon_fuel") > 0 then
 			valid_item = true
-			end
 		end
 
 		if not valid_item then

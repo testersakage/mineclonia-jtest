@@ -68,7 +68,7 @@ minetest.register_node("mcl_nether:netheriteblock", {
 	_doc_items_longdesc = S("Netherite block is very hard and can be made of 9 netherite ingots."),
 	tiles = {"mcl_nether_netheriteblock.png"},
 	is_ground_content = false,
-	groups = { pickaxey=4, building_block=1, material_stone=1, xp = 0, fire_immune=1 },
+	groups = { pickaxey=4, building_block=1, material_stone=1, xp = 0, fire_immune=1, beacon_block = 1 },
 	drop = "mcl_nether:netheriteblock",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 1200,
@@ -360,7 +360,7 @@ minetest.register_craftitem("mcl_nether:netherite_ingot", {
 	description = S("Netherite Ingot"),
 	_doc_items_longdesc = S("Netherite ingots can be used with a smithing table to upgrade items to netherite."),
 	inventory_image = "mcl_nether_netherite_ingot.png",
-	groups = { craftitem = 1, fire_immune=1 },
+	groups = { craftitem = 1, fire_immune=1, beacon_fuel = 1 },
 	_mcl_crafting_output = {square3 = {output = "mcl_nether:netheriteblock"}}
 })
 
