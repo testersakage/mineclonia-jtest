@@ -28,12 +28,16 @@ food["mcl_mobitems:rabbit_stew"] = 10
 
 local biomes = {
 	["Forest"] = {textures = "woods"},
+	["Forest_beach"] = {textures = "woods"},
 	["Taiga"] = {textures = "pale"},
+	["Taiga_beach"] = {textures = "pale"},
 	["MegaSpruceTaiga"] = {textures = "chestnut"},
 	["MegaTaiga"] = {textures = "black"},
 	["SavannaM"] = {textures = "spotted"},
 	["MesaPlateauF"] = {textures = "striped"},
 	["ColdTaiga"] = {textures = "ashen"},
+	["ColdTaiga_beach"] = {textures = "ashen"},
+	["ColdTaiga_beach_water"] = {textures = "ashen"},
 	["Jungle"] = {textures = "rusty"}
 }
 
@@ -250,15 +254,18 @@ mcl_mobs.spawn_setup({
 	min_height = mobs_mc.water_level + 3,
 	biomes = {
 		"flat",
+		"Forest",
+		"Forest_beach",
 		"Taiga",
+		"Taiga_beach",
 		"MegaSpruceTaiga",
 		"MegaTaiga",
-		"Forest",
+		"SavannaM",
+		"MesaPlateauF",
 		"ColdTaiga",
-		"Forest_beach",
-		"ColdTaiga_beach_water",
-		"Taiga_beach",
 		"ColdTaiga_beach",
+		"ColdTaiga_beach_water",
+		"Jungle"
 	},
 	chance = 80,
 })
