@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-09-03 12:31+0000\n"
+"PO-Revision-Date: 2024-09-10 05:18+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_achievements/zh_Hans/>\n"
@@ -108,10 +108,10 @@ msgid "Who is Cutting Onions?"
 msgstr "谁在切洋葱？"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "从地上捡起一块哭泣的黑曜石。"
 
 msgid "Hidden in the Depths"
-msgstr ""
+msgstr "深处所获"
 
 msgid "Pick up an Ancient Debris from the floor."
 msgstr "从地上捡起一个古代碎片。"
@@ -122,6 +122,8 @@ msgstr "下一代"
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
+"握住龙蛋。\n"
+"提示：从地上拾起龙蛋，并将其放入库存中。"
 
 msgid "Sky's the Limit"
 msgstr "九霄天外"
@@ -157,7 +159,7 @@ msgid "Sniper Duel"
 msgstr "弓弩对决"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
-msgstr ""
+msgstr "在 20 米外，用弓箭射杀一只骷髅、凋灵骷髅或流浪者。"
 
 msgid "Monster Hunter"
 msgstr "怪物猎人"
@@ -186,10 +188,10 @@ msgid "Bring summer clothes.\n"
 msgstr ""
 
 msgid "Postmortal"
-msgstr ""
+msgstr "超越生死"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr ""
+msgstr "利用不死图腾逃离死亡。"
 
 msgid "Sweet Dreams"
 msgstr "晚安好梦"
@@ -213,13 +215,13 @@ msgid "Tactical Fishing"
 msgstr "天才钓鱼佬"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "不用鱼竿，逮一条鱼！"
 
 msgid "The Cutest Predator"
-msgstr ""
+msgstr "最萌凶物"
 
 msgid "Catch an Axolotl with a bucket!"
-msgstr ""
+msgstr "用铁桶捕获一只美西螈！"
 
 msgid "Withering Heights"
 msgstr "呼啸山庄"
@@ -228,7 +230,7 @@ msgid "Summon the wither from the dead."
 msgstr ""
 
 msgid "Free the End"
-msgstr ""
+msgstr "解放末地"
 
 msgid "Kill the ender dragon. Good Luck!"
 msgstr ""
