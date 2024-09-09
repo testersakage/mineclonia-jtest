@@ -628,19 +628,18 @@ function mcl_trees.register_wood(name, p)
 		)
 	end
 	if p.button == nil or type(p.button) == "table" then
-		mcl_redstone.register_button(
-			name,
-			S("@1 Button", rname),
-			p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
-			"mcl_trees:wood_"..name,
-			mcl_sounds.node_sound_wood_defaults(),
-			{material_wood=1,handy=1,axey=1},
-			1.5,
-			true,
-			S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
-			"mesecons_button_push_wood",
-			p.button and p.button._mcl_burntime or 5
-		)
+		mcl_buttons.register_button(name, {
+			description = S("@1 Button", rname),
+			texture = p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
+			recipeitem = "mcl_trees:wood_"..name,
+			sounds = mcl_sounds.node_sound_wood_defaults(),
+			groups = {material_wood=1,handy=1,axey=1},
+			push_duration = 15,
+			push_by_arrow = true,
+			longdesc = S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
+			push_sound = "mesecons_button_push_wood",
+			p.button and p.button._mcl_burntime or 5,
+		})
 	end
 
 	if (p.sapling == nil or type(p.sapling) == "table") and (p.potted_sapling == nil or type(p.potted_sapling) == "table") then
