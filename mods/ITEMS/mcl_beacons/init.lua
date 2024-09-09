@@ -260,8 +260,6 @@ local function generate_beacon_formspec (meta)
 	"list[current_player;main;0.375,13.05;9,1;]"..
 
 	"listring[context;input]"..
-	"listring[current_player;main]"..
-	"listring[context;input]"..
 	"listring[current_player;main]"
 end
 
