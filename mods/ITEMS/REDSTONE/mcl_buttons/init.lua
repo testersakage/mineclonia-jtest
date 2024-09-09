@@ -1,10 +1,12 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
+mcl_buttons = {}
+
 -- Push the button
-function mcl_redstone.push_button(pos, node)
+function mcl_buttons.push_button(pos, node)
 	local def = minetest.registered_nodes[node.name]
 	minetest.set_node(pos, {name="mcl_buttons:button_"..def._mcl_button_basename.."_on", param2=node.param2})
-	minetest.sound_play(def._redstone_button_sound, {pos=pos}, true)
+	minetest.sound_play(def._redstone_push_sound, {pos=pos}, true)
 end
 
 local function on_button_place(itemstack, placer, pointed_thing)
@@ -62,9 +64,20 @@ local function on_button_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-function mcl_redstone.register_button(basename, description, texture, recipeitem, sounds, plusgroups, button_timer, push_by_arrow, longdesc, button_sound)
+function mcl_buttons.register_button(basename, def)
+	local description = def.description
+	local texture = def.texture
+	local recipeitem = def.recipeitem
+	local groups = def.groups
+	local sounds = def.sounds
+	local push_by_arrow = def.push_by_arrow
+	local longdesc = def.longdesc
+	local push_duration = def.push_duration
+	local push_sound = def.push_sound
+	local burntime = def.burntime
+
 	local tt = S("Provides redstone power when pushed")
-	tt = tt .. "\n" .. S("Push duration: @1s", string.format("%.1f", button_timer))
+	tt = tt .. "\n" .. S("Push duration: @1s", string.format("%.1f", push_duration))
 	if push_by_arrow then
 		tt = tt .. "\n" .. S("Pushable by arrow")
 	end
@@ -79,7 +92,7 @@ function mcl_redstone.register_button(basename, description, texture, recipeitem
 		is_ground_content = false,
 		walkable = false,
 		sunlight_propagates = true,
-		groups = { attached_node=1, dig_by_water=1, dig_by_piston=1, button=1, attaches_to_base=1, attaches_to_side=1, attaches_to_top=1, button_push_by_arrow = push_by_arrow and 1 or 0 },
+		groups = table.merge(groups, {attached_node=1, dig_by_water=1, dig_by_piston=1, button=1, attaches_to_base=1, attaches_to_side=1, attaches_to_top=1, button_push_by_arrow = push_by_arrow and 1 or 0}),
 		description = description,
 		_tt_help = tt,
 		_doc_items_longdesc = longdesc,
@@ -90,7 +103,8 @@ function mcl_redstone.register_button(basename, description, texture, recipeitem
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 		_mcl_button_basename = basename,
-		_redstone_button_sound = button_sound or "mesecons_button_push",
+		_mcl_burntime = burntime,
+		_redstone_push_sound = push_sound or "mesecons_button_push",
 		_redstone = {
 			connects_to = function(node)
 				return true
@@ -107,14 +121,14 @@ function mcl_redstone.register_button(basename, description, texture, recipeitem
 		},
 		groups = table.merge(commdef.groups, {button=1}),
 		on_rightclick = function(pos, node)
-			mcl_redstone.push_button(pos, node)
+			mcl_buttons.push_button(pos, node)
 		end,
 		sounds = sounds,
 		_on_arrow_hit = function(pos, arrowent)
 			local node = minetest.get_node(pos)
 			local bdir = minetest.wallmounted_to_dir(node.param2)
 			if vector.equals(vector.add(pos, bdir), arrowent._stuckin) then
-				mcl_redstone.push_button(pos, node)
+				mcl_buttons.push_button(pos, node)
 				return true
 			end
 		end,
@@ -135,8 +149,11 @@ function mcl_redstone.register_button(basename, description, texture, recipeitem
 				return 15
 			end,
 			init = function(_, node)
+				mcl_redstone.after(push_duration, function()
+					minetest.sound_play(push_sound, {pos=pos, pitch=0.9}, true)
+				end)
 				return {
-					delay = math.floor(button_timer * 10),
+					delay = push_duration,
 					name = "mcl_buttons:button_"..basename.."_off",
 					param2 = node.param2,
 				}
@@ -150,29 +167,29 @@ function mcl_redstone.register_button(basename, description, texture, recipeitem
 	})
 end
 
-mcl_redstone.register_button(
-	"stone",
-	S("Stone Button"),
-	"default_stone.png",
-	"mcl_core:stone",
-	mcl_sounds.node_sound_stone_defaults(),
-	{material_stone=1,handy=1,pickaxey=1},
-	1,
-	false,
-	S("A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."),
-	"mesecons_button_push")
+mcl_buttons.register_button("stone", {
+	description = S("Stone Button"),
+	texture = "default_stone.png",
+	recipeitem = "mcl_core:stone",
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	groups = {material_stone=1,handy=1,pickaxey=1},
+	push_duration = 10,
+	push_by_arrow = false,
+	longdesc = S("A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."),
+	push_sound = "mesecons_button_push",
+})
 
-mcl_redstone.register_button(
-	"polished_blackstone",
-	S("Polished Blackstone Button"),
-	"mcl_blackstone_polished.png",
-	"mcl_blackstone:blackstone_polished",
-	mcl_sounds.node_sound_stone_defaults(),
-	{material_stone=1,handy=1,pickaxey=1},
-	1,
-	false,
-	S("A polished blackstone button is a redstone component made out of polished blackstone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."),
-	"mesecons_button_push")
+mcl_buttons.register_button("polished_blackstone", {
+	description = S("Polished Blackstone Button"),
+	texture = "mcl_blackstone_polished.png",
+	recipeitem = "mcl_blackstone:blackstone_polished",
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	groups = {material_stone=1,handy=1,pickaxey=1},
+	push_duration = 10,
+	push_by_arrow = false,
+	longdesc = S("A polished blackstone button is a redstone component made out of polished blackstone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."),
+	push_sound = "mesecons_button_push",
+})
 
 -- Add entry aliases for the Help
 if minetest.get_modpath("doc") then
