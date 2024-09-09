@@ -213,8 +213,6 @@ local function allow_metadata_inventory_move()
 	return 0
 end
 
-local open_beacons = {}
-
 local function upgrade_effect_level_button (oldmeta)
 	local effect = oldmeta:get_string ("effect")
 	if effect and effect ~= "" then
@@ -350,23 +348,18 @@ minetest.register_lbm ({
 	action = upgrade_old_data,
 })
 
--- Remove players who depart from `open_beacons'
-
-minetest.register_on_leaveplayer (function (player, timed_out)
-	open_beacons[player:get_player_name()] = nil
-end)
-
-local function apply_beacon_formspec (_, _, fields, sender)
+local function apply_beacon_formspec (pos, _, fields, sender)
 	local sender_name = sender:get_player_name ()
-	local pos = open_beacons[sender_name]
-	if fields.quit then
-		open_beacons[sender_name] = nil
-		return
-	end
 	-- Return if the node is no longer a beacon.
 	if not pos or minetest.get_node (pos).name ~= "mcl_beacons:beacon" then
 		return
 	end
+
+	if minetest.is_protected (pos, sender_name) then
+		minetest.record_protection_violation (pos, sender_name)
+		return
+	end
+
 	if (fields.swiftness or fields.regeneration or fields.leaping
 	or fields.strength or fields.upgrade_ii or fields.resistance
 	or fields.haste) then
@@ -515,7 +508,6 @@ minetest.register_node("mcl_beacons:beacon", {
 		if m:get_string("formspec") == "" then --generate node formspec for mcla pre-0.106.1
 			m:set_string("formspec", generate_beacon_formspec(m))
 		end
-		open_beacons[name] = pos
 	end,
 	on_receive_fields = apply_beacon_formspec,
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
