@@ -25,6 +25,14 @@ local creeper_defs = {
 	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat" },
 	attack_type = "explode",
 	maxdrops = 2,
+	sounds = {
+		attack = "tnt_ignite",
+		death = "mobs_mc_creeper_death",
+		damage = "mobs_mc_creeper_hurt",
+		fuse = "tnt_ignite",
+		explode = "tnt_explode",
+		distance = 16,
+	},
 	drops = {
 		{name = "mcl_mobitems:gunpowder",
 		chance = 1,
