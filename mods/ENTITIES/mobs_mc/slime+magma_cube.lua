@@ -110,6 +110,9 @@ local slime_big = {
 		attack = "green_slime_attack",
 		distance = 16,
 	},
+	sound_params = {
+		gain = 1,
+	},
 	damage = 4,
 	reach = 3,
 	armor = 100,
@@ -159,6 +162,7 @@ slime_small.run_velocity = 1.45
 slime_small.jump_height = 4.3
 slime_small.spawn_small_alternative = "mobs_mc:slime_tiny"
 slime_small.on_die = spawn_children_on_die("mobs_mc:slime_tiny", 0.6, 1.0)
+slime_small.sound_params.gain = slime_big.sound_params.gain / 3
 mcl_mobs.register_mob("mobs_mc:slime_small", slime_small)
 
 local slime_tiny = table.copy(slime_big)
@@ -184,6 +188,7 @@ slime_tiny.run_velocity = 1.45
 slime_tiny.jump_height = 3
 slime_tiny.spawn_small_alternative = nil
 slime_tiny.on_die = nil
+slime_tiny.sound_params.gain = slime_small.sound_params.gain / 3
 
 mcl_mobs.register_mob("mobs_mc:slime_tiny", slime_tiny)
 
@@ -285,6 +290,10 @@ local magma_cube_big = {
 		attack = "mobs_mc_magma_cube_attack",
 		distance = 16,
 	},
+	sound_params = {
+		gain = 1,
+		max_hear_distance = 16,
+	},
 	walk_velocity = 1.45,
 	run_velocity = 1.45, -- (was 2.5) they are slow and huge
 	damage = 6,
@@ -347,6 +356,7 @@ magma_cube_small.reach = 2.75
 magma_cube_small.armor = 66
 magma_cube_small.spawn_small_alternative = "mobs_mc:magma_cube_tiny"
 magma_cube_small.on_die = spawn_children_on_die("mobs_mc:magma_cube_tiny", 0.6, 1.0)
+magma_cube_small.sound_params.gain = 0.7 -- has different sound file from big
 mcl_mobs.register_mob("mobs_mc:magma_cube_small", magma_cube_small)
 
 local magma_cube_tiny = table.copy(magma_cube_big)
@@ -369,6 +379,7 @@ magma_cube_tiny.armor = 50
 magma_cube_tiny.drops = {}
 magma_cube_tiny.spawn_small_alternative = nil
 magma_cube_tiny.on_die = nil
+magma_cube_tiny.sound_params.gain = magma_cube_small.sound_params.gain / 3
 
 mcl_mobs.register_mob("mobs_mc:magma_cube_tiny", magma_cube_tiny)
 
