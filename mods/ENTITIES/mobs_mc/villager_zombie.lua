@@ -93,7 +93,7 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 	},
 	sound_params = {
 		max_hear_distance = 16,
-		gain = 0.3
+		gain = 0.5
 	},
 	animation = {
 		stand_start = 20, stand_end = 40,

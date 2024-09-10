@@ -80,7 +80,7 @@ local zombie = {
 	},
 	sound_params = {
 		max_hear_distance = 16,
-		gain = 0.3
+		gain = 0.5,
 	},
 	walk_velocity = .8,
 	run_velocity = 1.2,

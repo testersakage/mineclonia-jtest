@@ -34,7 +34,7 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	sounds = {
 		random = "mobs_mc_guardian_random",
 		war_cry = "mobs_mc_guardian_random",
-		damage = {name="mobs_mc_guardian_hurt", gain=0.3},
+		damage = {name="mobs_mc_guardian_hurt", gain=1.0},
 		death = "mobs_mc_guardian_death",
 		flop = "mobs_mc_squid_flop",
 		base_pitch = 0.6,
