@@ -275,11 +275,9 @@ local flying_bobber_ENTITY={
 		visual_size = {x=0.5, y=0.5},
 		collisionbox = {0,0,0,0,0,0},
 		pointable = false,
+		static_save = false,
 	},
 	timer=0,
-
-	get_staticdata = mcl_throwing.get_staticdata,
-	on_activate = mcl_throwing.on_activate,
 
 	_lastpos={},
 	_thrower = nil,
