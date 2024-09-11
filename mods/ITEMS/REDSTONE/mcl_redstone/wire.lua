@@ -50,6 +50,10 @@ end
 -- Make wires which only extend in one direction also extend in the opposite
 -- direction.
 local function make_long(wireflags)
+	if wireflags == 0 then
+		return 0x0f
+	end
+
 	local conv_tab = {
 		[0x1] = 0x5,
 		[0x4] = 0x5,
@@ -212,6 +216,7 @@ for _, wire in pairs(wires) do
 			update_wire(pos)
 		end,
 		_wireflags = wire,
+		_logical_wireflags = make_long(wire),
 	})
 end
 
