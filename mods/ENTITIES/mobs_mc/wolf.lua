@@ -33,12 +33,17 @@ local biomes = {
 	["Taiga_beach"] = {textures = "pale"},
 	["MegaSpruceTaiga"] = {textures = "chestnut"},
 	["MegaTaiga"] = {textures = "black"},
+	["Savanna"] = {textures = "spotted"}, -- Will not spawn naturally. Do not remove, it is intended.
 	["SavannaM"] = {textures = "spotted"},
+	["Mesa"] = {textures = "striped"}, -- Will not spawn naturally. Do not remove, it is intended.
 	["MesaPlateauF"] = {textures = "striped"},
+	["MesaPlateauFM"] = {textures = "striped"}, -- Will not spawn naturally. Do not remove, it is intended.
 	["ColdTaiga"] = {textures = "ashen"},
 	["ColdTaiga_beach"] = {textures = "ashen"},
 	["ColdTaiga_beach_water"] = {textures = "ashen"},
-	["Jungle"] = {textures = "rusty"}
+	["Jungle"] = {textures = "rusty"},
+	["JungleEdge"] = {textures = "rusty"}, -- Will not spawn naturally. Do not remove, it is intended.
+	["BambooJungle"] = {textures = "rusty"} -- Will not spawn naturally. Do not remove, it is intended.
 }
 
 local function add_collar(self, color)
@@ -155,7 +160,7 @@ local wolf = {
 	texture_holder = "",
 	on_spawn = function(self)
 		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
-		local texture = "mobs_mc_wolf_"..biomes[biome_name].textures..".png"
+		local texture = ("mobs_mc_wolf_"..biomes[biome_name].textures..".png") or "mobs_mc_wolf_pale.png"
 		self.texture_holder = texture
 		self.object:set_properties({textures = {texture}})
 	end
