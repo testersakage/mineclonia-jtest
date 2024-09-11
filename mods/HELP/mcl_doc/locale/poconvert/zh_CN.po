@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-09-08 18:12+0000\n"
+"PO-Revision-Date: 2024-09-12 06:18+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_doc/zh_Hans/>\n"
@@ -99,10 +99,10 @@ msgid "It can be worn on the feet."
 msgstr ""
 
 msgid "Armor points: @1"
-msgstr ""
+msgstr "防护点：@1"
 
 msgid "Armor durability: @1"
-msgstr ""
+msgstr "防护耐久：@1"
 
 msgid "This item cannot be renamed at an anvil."
 msgstr ""
@@ -198,37 +198,37 @@ msgid ", "
 msgstr ""
 
 msgid "Painfully slow"
-msgstr ""
+msgstr "超慢"
 
 msgid "Very slow"
-msgstr ""
+msgstr "很慢"
 
 msgid "Slow"
-msgstr ""
+msgstr "慢速"
 
 msgid "Fast"
-msgstr ""
+msgstr "快速"
 
 msgid "Very fast"
-msgstr ""
+msgstr "很块"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "极快"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "即时"
 
 msgid "@1 uses"
-msgstr ""
+msgstr "用了@1次"
 
 msgid "Unlimited uses"
-msgstr ""
+msgstr "可无限使用"
 
 msgid "Mining speed: @1"
-msgstr ""
+msgstr "挖掘速率：@1"
 
 msgid "Mining durability: @1"
-msgstr ""
+msgstr "挖掘耐久：@1"
 
 msgid "This tool is capable of mining."
 msgstr ""
