@@ -26,24 +26,24 @@ food["mcl_mobitems:cooked_porkchop"] = 8
 food["mcl_mobitems:cooked_beef"] = 8
 food["mcl_mobitems:rabbit_stew"] = 10
 
+-- Some of the biomes listed here are not in the list of allowed biomes for wolf spawning.
+-- Don't change this. This behavior is intentional.
 local biomes = {
 	["Forest"] = {textures = "woods"},
 	["Forest_beach"] = {textures = "woods"},
-	["Taiga"] = {textures = "pale"},
-	["Taiga_beach"] = {textures = "pale"},
 	["MegaSpruceTaiga"] = {textures = "chestnut"},
 	["MegaTaiga"] = {textures = "black"},
-	["Savanna"] = {textures = "spotted"}, -- Will not spawn naturally. Do not remove, it is intended.
+	["Savanna"] = {textures = "spotted"},
 	["SavannaM"] = {textures = "spotted"},
-	["Mesa"] = {textures = "striped"}, -- Will not spawn naturally. Do not remove, it is intended.
+	["Mesa"] = {textures = "striped"},
 	["MesaPlateauF"] = {textures = "striped"},
-	["MesaPlateauFM"] = {textures = "striped"}, -- Will not spawn naturally. Do not remove, it is intended.
+	["MesaPlateauFM"] = {textures = "striped"},
 	["ColdTaiga"] = {textures = "ashen"},
 	["ColdTaiga_beach"] = {textures = "ashen"},
 	["ColdTaiga_beach_water"] = {textures = "ashen"},
 	["Jungle"] = {textures = "rusty"},
-	["JungleEdge"] = {textures = "rusty"}, -- Will not spawn naturally. Do not remove, it is intended.
-	["BambooJungle"] = {textures = "rusty"} -- Will not spawn naturally. Do not remove, it is intended.
+	["JungleEdge"] = {textures = "rusty"},
+	["BambooJungle"] = {textures = "rusty"}
 }
 
 local function add_collar(self, color)
@@ -160,7 +160,8 @@ local wolf = {
 	texture_holder = "",
 	on_spawn = function(self)
 		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
-		local texture = ("mobs_mc_wolf_"..biomes[biome_name].textures..".png") or "mobs_mc_wolf_pale.png"
+		local texture = "mobs_mc_wolf.png"
+		if biomes[biome_name] then texture = "mobs_mc_wolf_"..biomes[biome_name].textures..".png" end
 		self.texture_holder = texture
 		self.object:set_properties({textures = {texture}})
 	end
