@@ -29,21 +29,21 @@ food["mcl_mobitems:rabbit_stew"] = 10
 -- Some of the biomes listed here are not in the list of allowed biomes for wolf spawning.
 -- Don't change this. This behavior is intentional.
 local biomes = {
-	["Forest"] = {textures = "woods"},
-	["Forest_beach"] = {textures = "woods"},
-	["MegaSpruceTaiga"] = {textures = "chestnut"},
-	["MegaTaiga"] = {textures = "black"},
-	["Savanna"] = {textures = "spotted"},
-	["SavannaM"] = {textures = "spotted"},
-	["Mesa"] = {textures = "striped"},
-	["MesaPlateauF"] = {textures = "striped"},
-	["MesaPlateauFM"] = {textures = "striped"},
-	["ColdTaiga"] = {textures = "ashen"},
-	["ColdTaiga_beach"] = {textures = "ashen"},
-	["ColdTaiga_beach_water"] = {textures = "ashen"},
-	["Jungle"] = {textures = "rusty"},
-	["JungleEdge"] = {textures = "rusty"},
-	["BambooJungle"] = {textures = "rusty"}
+	["Forest"] = {textures = "woods", group_size = 4},
+	["Forest_beach"] = {textures = "woods", group_size = 4},
+	["MegaSpruceTaiga"] = {textures = "chestnut", group_size_min = 2, group_size = 4},
+	["MegaTaiga"] = {textures = "black", group_size_min = 2, group_size = 4},
+	["Savanna"] = {textures = "spotted", group_size_min = 4, group_size = 8},
+	["SavannaM"] = {textures = "spotted", group_size_min = 4, group_size = 8},
+	["Mesa"] = {textures = "striped", group_size_min = 4, group_size = 8},
+	["MesaPlateauF"] = {textures = "striped", group_size_min = 4, group_size = 8},
+	["MesaPlateauFM"] = {textures = "striped", group_size_min = 4, group_size = 8},
+	["ColdTaiga"] = {textures = "ashen", group_size = 4},
+	["ColdTaiga_beach"] = {textures = "ashen", group_size = 4},
+	["ColdTaiga_beach_water"] = {textures = "ashen", group_size = 4},
+	["Jungle"] = {textures = "rusty", group_size_min = 2, group_size = 4},
+	["JungleEdge"] = {textures = "rusty", group_size_min = 2, group_size = 4},
+	["BambooJungle"] = {textures = "rusty", group_size_min = 2, group_size = 4}
 }
 
 local function add_collar(self, color)
@@ -159,11 +159,13 @@ local wolf = {
 	avoid_from = { "mobs_mc:llama" },
 	texture_holder = "",
 	on_spawn = function(self)
-		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
 		local texture = "mobs_mc_wolf.png"
+		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
 		if biomes[biome_name] then texture = "mobs_mc_wolf_"..biomes[biome_name].textures..".png" end
 		self.texture_holder = texture
 		self.object:set_properties({textures = {texture}})
+		self.spawn_in_group = biomes[biome_name].group_size
+		if biomes[biome_name] and biomes[biome_name].group_size_min then self.spawn_in_group_min = biomes[biome_name].group_size_min end
 	end
 }
 
