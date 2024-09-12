@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-09-12 06:18+0000\n"
+"PO-Revision-Date: 2024-09-12 09:33+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_enchanting/zh_Hans/>\n"
@@ -117,79 +117,79 @@ msgid "Repair the item while gaining XP orbs."
 msgstr ""
 
 msgid "Multishot"
-msgstr ""
+msgstr "猬集"
 
 msgid "Shoot 3 arrows at the cost of one."
 msgstr ""
 
 msgid "Piercing"
-msgstr ""
+msgstr "穿透"
 
 msgid "Arrows passes through multiple objects."
 msgstr ""
 
 msgid "Power"
-msgstr ""
+msgstr "强力"
 
 msgid "Increases arrow damage."
 msgstr ""
 
 msgid "Punch"
-msgstr ""
+msgstr "冲击"
 
 msgid "Increases arrow knockback."
 msgstr ""
 
 msgid "Quick Charge"
-msgstr ""
+msgstr "装填"
 
 msgid "Decreases crossbow charging time."
 msgstr ""
 
 msgid "Respiration"
-msgstr ""
+msgstr "水下呼吸"
 
 msgid "Extends underwater breathing time."
 msgstr ""
 
 msgid "Riptide"
-msgstr ""
+msgstr "激流"
 
 msgid "Trident launches player with itself when thrown. Works only in water or rain."
 msgstr ""
 
 msgid "Sharpness"
-msgstr ""
+msgstr "砥砺"
 
 msgid "Increases damage."
 msgstr ""
 
 msgid "Silk Touch"
-msgstr ""
+msgstr "精准采集"
 
 msgid "Mined blocks drop themselves."
 msgstr ""
 
 msgid "Smite"
-msgstr ""
+msgstr "亡灵杀手"
 
 msgid "Increases damage to undead mobs."
 msgstr ""
 
 msgid "Soul Speed"
-msgstr ""
+msgstr "灵魂疾行"
 
 msgid "Increases walking speed on soul sand."
 msgstr ""
 
 msgid "Sweeping Edge"
-msgstr ""
+msgstr "秋风扫落叶"
 
 msgid "Increases sweeping attack damage."
 msgstr ""
 
 msgid "Unbreaking"
-msgstr ""
+msgstr "耐久"
 
 msgid "Increases item durability."
 msgstr ""
@@ -198,13 +198,13 @@ msgid "Inventory"
 msgstr "背包"
 
 msgid "@1 Lapis Lazuli"
-msgstr ""
+msgstr "@1块青金石"
 
 msgid "@1 Enchantment Levels"
-msgstr ""
+msgstr "@1级魔法"
 
 msgid "Level requirement: @1"
-msgstr ""
+msgstr "升级所需：@1"
 
 msgid "Enchant an item"
 msgstr ""
