@@ -104,14 +104,6 @@ local function table_merge(t, t2)
 	return t
 end
 
-local function table_replace(t, val, new)
-	for k, v in pairs(t) do
-		if v == val then
-			t[k] = new
-		end
-	end
-end
-
 local function table_diff(t, t2)
 	local hash = {}
 
@@ -247,28 +239,6 @@ end
 
 local function extract_groups(str)
 	return string.split(string.sub(str, 7), ",")
-end
-
-local function item_in_recipe(item, recipe)
-	for _, recipe_item in pairs(recipe.items) do
-		if recipe_item == item then
-			return true
-		end
-	end
-end
-
-local function groups_item_in_recipe(item, recipe)
-	local item_groups = minetest.registered_items[item].groups
-	for _, recipe_item in pairs(recipe.items) do
-		if string.sub(recipe_item, 1, 6) == "group:" then
-			local groups = extract_groups(recipe_item)
-			if item_has_groups(item_groups, groups) then
-				local usage = table.copy(recipe)
-				table_replace(usage.items, recipe_item, item)
-				return usage
-			end
-		end
-	end
 end
 
 local function get_filtered_items(player)
@@ -844,7 +814,7 @@ local function init_usages_cache()
 					for _, ingredient in pairs(recipe.items) do
 						if not used_items[ingredient] then
 							used_items[ingredient] = true
-						
+
 							if string.sub(ingredient, 1, 6) == "group:" then
 								groups = extract_groups(ingredient)
 								for _, group in pairs(groups) do
