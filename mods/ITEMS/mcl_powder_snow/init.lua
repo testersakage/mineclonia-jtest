@@ -59,13 +59,12 @@ local freezing_stages =
 }
 
 -- key value pair
--- key: name of player
+-- key: ObjectRef of the player
 -- value: number of seconds the player spent in powder snow
 local freezing_players = {}
 
 local function show_freezing_hud(player, level)
-	local player_name = player:get_player_name()
-	local freezing_data = freezing_players[player_name]
+	local freezing_data = freezing_players[player]
 	if freezing_data and #freezing_data.hud_ids > 0 then
 		for _, hud_id in pairs(freezing_data.hud_ids) do
 			player:hud_remove(hud_id)
@@ -124,43 +123,47 @@ local function player_has_leather_armor(player)
 end
 
 mcl_player.register_globalstep_slow(function(player, dtime)
-	local name = player:get_player_name()
 	local player_pos = player:get_pos()
-	local freezing_data = freezing_players[name]
+	local freezing_data = freezing_players[player]
 
 	if minetest.get_node(player_pos).name == "mcl_powder_snow:powder_snow" and not player_has_leather_armor(player) then
 		if not freezing_data then
-			freezing_players[name] = {time_in_snow = 0, hud_ids = {}}
+			freezing_players[player] = {time_in_snow = 0, hud_ids = {}}
+			freezing_data = freezing_players[player]
 		end
 
-		freezing_players[name].time_in_snow = math.min(freezing_players[name].time_in_snow + 0.5, 7)
+		freezing_data.time_in_snow = math.min(freezing_data.time_in_snow + 0.5, 7)
 
-		if freezing_players[name].time_in_snow > 5 then
+		if freezing_data.time_in_snow > 5 then
 			show_freezing_hud(player, 3)
 			mcl_damage.damage_player(player, 0.5, {type = "freeze"})
 			hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png")
-		elseif freezing_players[name].time_in_snow == 3 then
+		elseif freezing_data.time_in_snow == 3 then
 			show_freezing_hud(player, 2)
-		elseif freezing_players[name].time_in_snow == 1 then
+		elseif freezing_data.time_in_snow == 1 then
 			show_freezing_hud(player, 1)
 		end
-	elseif freezing_players[name] then
-		freezing_players[name].time_in_snow = freezing_players[name].time_in_snow - 0.5
+	elseif freezing_players[player] then
+		freezing_data.time_in_snow = freezing_data.time_in_snow - 0.5
 
-		if freezing_players[name].time_in_snow <= 0 then
-			if #freezing_players[name].hud_ids > 0 then
-				for _, hud_id in pairs(freezing_players[name].hud_ids) do
+		if freezing_data.time_in_snow <= 0 then
+			if #freezing_data.hud_ids > 0 then
+				for _, hud_id in pairs(freezing_data.hud_ids) do
 					player:hud_remove(hud_id)
 				end
 			end
-			freezing_players[name] = nil
+			freezing_players[player] = nil
 		else
-			if freezing_players[name].time_in_snow == 1 then
+			if freezing_data.time_in_snow == 1 then
 				show_freezing_hud(player, 1)
-			elseif freezing_players[name].time_in_snow == 3 then
+			elseif freezing_data.time_in_snow == 3 then
 				hb.change_hudbar(player, "health", nil, nil, "hudbars_icon_health.png")
 				show_freezing_hud(player, 2)
 			end
 		end
 	end
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	freezing_players[player] = nil
 end)
