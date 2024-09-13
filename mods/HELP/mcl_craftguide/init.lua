@@ -79,6 +79,11 @@ local group_names = {
 	stick = S("Any stick"),
 }
 
+-- caches every item belonging to a certain group
+-- key: group name
+-- value: a listt of items
+local group_cache = {}
+
 
 
 local item_lists = {
@@ -266,32 +271,6 @@ local function groups_item_in_recipe(item, recipe)
 	end
 end
 
-local function get_item_usages(item)
-	local usages, c = {}, 0
-
-	for _, recipes in pairs(recipes_cache) do
-	for i = 1, #recipes do
-		local recipe = recipes[i]
-		if item_in_recipe(item, recipe) then
-			c = c + 1
-			usages[c] = recipe
-		else
-			recipe = groups_item_in_recipe(item, recipe)
-			if recipe then
-				c = c + 1
-				usages[c] = recipe
-			end
-		end
-	end
-	end
-
-	if fuel_cache[item] then
-		usages[#usages + 1] = {type = "fuel", width = 1, items = {item}}
-	end
-
-	return usages
-end
-
 local function get_filtered_items(player)
 	local items, c = {}, 0
 
@@ -344,7 +323,14 @@ local function get_recipes(item, data, player)
 	end
 
 	if data.show_usages then
-		recipes = apply_recipe_filters(usages_cache[item], player)
+		recipes = usages_cache[item]
+
+		local item_groups = minetest.registered_items[item].groups
+		for cache_group_name, group_cache in pairs(group_cache) do
+			if item_groups[cache_group_name] then
+				recipes = table_merge(recipes, group_cache)
+			end
+		end
 		if #recipes == 0 then
 			return
 		end
@@ -842,10 +828,39 @@ local function reset_data(data)
 	data.items       = data.items_raw
 end
 
-local function cache_usages()
-	for i = 1, #init_items do
-		local item = init_items[i]
-		usages_cache[item] = get_item_usages(item)
+local function init_usages_cache()
+	local groups
+	local recipes
+	local used_items
+	for item_name, item in pairs(minetest.registered_items) do
+		recipes = recipes_cache[item_name]
+		-- minetest.debug(dump(item_name))
+
+		if recipes then
+			-- minetest.debug("gyat here")
+			for _, recipe in pairs(recipes) do
+				if recipe then
+					used_items = {}
+					for _, ingredient in pairs(recipe.items) do
+						if not used_items[ingredient] then
+							used_items[ingredient] = true
+						
+							if string.sub(ingredient, 1, 6) == "group:" then
+								groups = extract_groups(ingredient)
+								for _, group in pairs(groups) do
+									group_cache[group] = group_cache[group] or {}
+									table.insert(group_cache[group], recipe)
+								end
+							else
+								usages_cache[ingredient] = usages_cache[ingredient] or {}
+								table.insert(usages_cache[ingredient], recipe)
+							end
+						end
+					end
+				end
+			end
+		-- usages_cache[item] = get_item_usages(item)
+		end
 	end
 end
 
@@ -862,7 +877,8 @@ local function get_init_items()
 	end
 
 	table.sort(init_items)
-	cache_usages()
+	init_usages_cache()
+	-- minetest.debug(dump(group_cache))
 end
 
 local function on_receive_fields(player, fields)
