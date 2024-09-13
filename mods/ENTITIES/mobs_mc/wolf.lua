@@ -160,12 +160,17 @@ local wolf = {
 	texture_holder = "",
 	on_spawn = function(self)
 		local texture = "mobs_mc_wolf.png"
+		local group_size = 1
 		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
-		if biomes[biome_name] then texture = "mobs_mc_wolf_"..biomes[biome_name].textures..".png" end
+		if biomes[biome_name] then
+			local defs = biomes[biome_name]
+			if defs.group_size_min then self.spawn_in_group_min = defs.group_size_min end
+			texture = "mobs_mc_wolf_"..defs.textures..".png"
+			group_size = defs.group_size
+		end
 		self.texture_holder = texture
+		self.spawn_in_group = group_size
 		self.object:set_properties({textures = {texture}})
-		self.spawn_in_group = biomes[biome_name].group_size
-		if biomes[biome_name] and biomes[biome_name].group_size_min then self.spawn_in_group_min = biomes[biome_name].group_size_min end
 	end
 }
 
