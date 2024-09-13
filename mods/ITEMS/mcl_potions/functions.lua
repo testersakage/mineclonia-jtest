@@ -481,9 +481,16 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("moves body upwards at @1 nodes/s", factor)
 	end,
-	on_step = function(_, object, factor)
-		local vel = object:get_velocity().y
-		if vel<factor then object:add_velocity(vector.new(0,factor,0)) end
+	on_start = function (object, factor)
+		local v = object:get_velocity()
+		if v then
+			add_physics_factor(object, "gravity", "fall_speed", "mcl_potions:levitation", 0)
+			object:set_acceleration(vector.zero())
+			object:add_velocity(vector.new(0, (0.9 * factor) - v.y, 0))
+		end
+	end,
+	on_end = function (object)
+		remove_physics_factor(object, "gravity", "fall_speed", "mcl_potions:levitation")
 	end,
 	particle_color = "#420E7E",
 	uses_factor = true,
