@@ -356,7 +356,6 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 	local s = get_sign(self.v)
 	self.v = self.v - 0.02 * s
 	if s ~= get_sign(self.v) then
-
 		self.object:set_velocity({x = 0, y = 0, z = 0})
 		self.v = 0
 		return

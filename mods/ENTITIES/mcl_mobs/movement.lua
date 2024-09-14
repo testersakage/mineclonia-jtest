@@ -419,43 +419,8 @@ function mob_class:do_jump()
 			and minetest.get_item_group(nod.name, "fence_gate") == 0
 			and minetest.get_item_group(nod.name, "wall") == 0
 		then
-			local dir_x, dir_z = self:forward_directions()
-			-- Extensive testing to get this to work  ...
-			local v = vector.new(dir_x, self.jump_height + 0.5 * 10, dir_z)
-
-			if not in_water and self:can_jump_cliff() then
-				v = vector.multiply(v, vector.new(2.8, 1, 2.8))
-			end
-
 			-- ensure we don't turn if we are trying to jump up something
 			self.order = "jump"
-			self:set_animation("jump")
-			walk_log("jump at: " .. minetest.pos_to_string(self.object:get_pos()))
-
-			self.object:set_velocity(v)
-			self.object:set_acceleration(vector.new(v.x, 1, v.z))
-
-			-- when in air move forward
-			minetest.after(0.3, function(self, v)
-				if (not self.object) or (not self.object:get_luaentity()) or (self.state == "die") then
-					return
-				end
-				walk_log("move forward at: " .. minetest.pos_to_string(self.object:get_pos()))
-				self.object:set_acceleration(vector.new(v.x * 5, DEFAULT_FALL_SPEED, v.z * 5))
-
-				if self.order == "jump" then
-					self.order = ""
-					if self.state == "stand" then
-						self:set_velocity(self.walk_velocity)
-						self:set_state("walk")
-						self:set_animation("walk")
-					end
-				end
-			end, self, v)
-
-			if self:check_timer("jump_sound_cooloff", self.jump_sound_cooloff) then
-				self:mob_sound("jump")
-			end
 		else
 			self.facing_fence = true
 		end
@@ -682,8 +647,7 @@ function mob_class:follow_player()
 				if p.x > s.x then yaw = yaw +math.pi end
 				self:set_yaw( yaw, 2.35)
 				-- anyone but standing npc's can move along
-				if dist > 3
-				and self.order ~= "stand" then
+				if dist > 2 and self.order ~= "stand" then
 					self:set_velocity(self.follow_velocity)
 					if self.walk_chance ~= 0 then
 						self:set_animation( "run")
@@ -893,7 +857,6 @@ function mob_class:do_states_stand()
 	if self.order == "sleep" then
 		self:set_animation("stand")
 		self:set_velocity(0)
-		self:slow_mob()
 		return
 	end
 
@@ -934,11 +897,9 @@ function mob_class:do_states_stand()
 	if self.order == "sit" then
 		self:set_animation("sit")
 		self:set_velocity(0)
-		self:slow_mob()
 	else
 		self:set_animation("stand")
 		self:set_velocity(0)
-		self:slow_mob()
 	end
 
 	--walk_log("stand in " .. self.standing_in .. ", on " .. self.standing_on)
@@ -1020,13 +981,11 @@ function mob_class:do_states_fly()
 
 		if self:should_flap() then
 			fly_log("flapping?")
-			self:slow_mob()
 			self:set_animation("walk")
 		else
 			self:set_velocity(0)
 			self:set_state("stand")
 			self:set_animation("stand")
-			self:slow_mob()
 			fly_log("standing or floating?")
 		end
 	else
@@ -1137,7 +1096,6 @@ function mob_class:swim_or_jump()
 			--self.object:set_acceleration({ x = 0, y = -1.5, z = 0 })
 			self.object:set_acceleration({ x = 0, y = DEFAULT_FALL_SPEED, z = 0 })
 			--local dir_x, dir_z = self:forward_directions()
-			self:slow_mob()
 			--self.object:set_velocity(vector.new(dir_x, -1, dir_z))
 			self:set_animation("walk")
 			self:set_state("swim")
@@ -1222,7 +1180,6 @@ function mob_class:do_states_swim()
 	if self.facing_fence == true or facing_solid or math.random(1, 100) <= 30 then
 		self:set_state("stand")
 		self:turn_away(3)
-		self:slow_mob()
 		if self.object:get_velocity().y < 0.1 then
 			self:set_animation("stand")
 		else
@@ -1285,18 +1242,4 @@ function mob_class:check_smooth_rotation(dtime)
 		self.object:set_yaw(yaw)
 	end
 	-- end rotation
-end
-
---this is a generic climb function
-function mob_class:climb()
-	local current_velocity = self.object:get_velocity()
-	local goal_velocity = {x=0, y=3, z=0}
-	local new_velocity_addition = vector.subtract(goal_velocity,current_velocity)
-	new_velocity_addition.x = 0
-	new_velocity_addition.z = 0
-
-	--smooths out mobs a bit
-	if vector.length(new_velocity_addition) >= 0.0001 then
-		self.object:add_velocity(new_velocity_addition)
-	end
 end

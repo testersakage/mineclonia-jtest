@@ -107,6 +107,11 @@ mcl_player.register_globalstep_slow(function(player)
 	end
 end)
 
+function mcl_enchanting.depth_strider_level (mob)
+	-- TODO: depth strider for mobs.
+	return 0
+end
+
 -- implemented via on_enchant
 mcl_enchanting.enchantments.efficiency = {
 	name = S("Efficiency"),

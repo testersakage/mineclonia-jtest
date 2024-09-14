@@ -149,7 +149,7 @@ local horse = {
 	floats = 1,
 	makes_footstep_sound = true,
 	jump = true,
-	jump_height = 5.75,
+	jump_height = 15,
 	drops = { base_drop },
 	should_drive = function (self)
 		return self._saddle and mob_class.should_drive (self)
@@ -498,7 +498,7 @@ local donkey = table.merge(horse, {
 		horse.collisionbox[6] * d,
 	},
 	jump = true,
-	jump_height = 3.75,
+	jump_height = 15,
 })
 
 mcl_mobs.register_mob("mobs_mc:donkey", donkey)
