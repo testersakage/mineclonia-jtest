@@ -39,7 +39,7 @@ mcl_mobs.mob_class = {
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source", 'mcl_core:water_flowing', 'mclx_core:river_water_flowing' },
 	owner = "",
 	order = "",
-	jump_height = 4, -- was 6
+	jump_height = 8.4,
 	rotate = 0, --  0=front, 90=side, 180=back, 270=side2
 	xp_min = 0,
 	xp_max = 0,
@@ -58,7 +58,7 @@ mcl_mobs.mob_class = {
 	_mcl_freeze_damage = 2,
 	suffocation = true,
 	fall_damage = 1,
-	fall_speed = -9.81 * 1.5,
+	fall_speed = -1.6, -- Accelerate by 1.6 m/s per Minecraft tick.
 	drops = {},
 	armor = 100,
 	sounds = {},
@@ -72,6 +72,8 @@ mcl_mobs.mob_class = {
 	shoot_offset = 0,
 	floats = 1,
 	floats_on_lava = 0,
+	water_friction = 0.8,
+	water_velocity = 0.4,
 	replace_offset = 0,
 	replace_delay = 0,
 	timer = 0,
@@ -321,6 +323,8 @@ function mcl_mobs.register_mob(name, def)
 				collide_with_objects = false,
 			})
 			self._physics_factors = {}
+			self.acc_dir = vector.zero ()
+			self.acc_speed = 0
 
 			self._timers = {}
 			return self:mob_activate(staticdata, dtime)

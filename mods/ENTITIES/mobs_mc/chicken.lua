@@ -51,7 +51,7 @@ mcl_mobs.register_mob("mobs_mc:chicken", {
 		looting = "common",},
 	},
 	fall_damage = 0,
-	fall_speed = -2.25,
+	gravity_drag = 0.6,
 	sounds = {
 		random = "mobs_mc_chicken_buck",
 		damage = "mobs_mc_chicken_hurt",
