@@ -6,7 +6,6 @@ local player_data = {}
 local init_items    = {}
 local searches      = {}
 local usages_cache  = {}
-local fuel_cache    = {}
 
 local progressive_mode = minetest.settings:get_bool("mcl_craftguide_progressive_mode", true)
 
@@ -272,7 +271,7 @@ local function get_recipes(item, data, player)
 			end
 		end
 
-		if fuel_cache[item] then
+		if mcl_util.is_fuel(item) then
 			table.insert(recipes, {type = "fuel", width = 1, items = {item}})
 		end
 
@@ -427,9 +426,9 @@ local function get_recipe_fs(data, iY, player)
 			string.match(item, "%S*"),
 			F(label))
 
-		local burntime = fuel_cache[item]
+		local burntime = mcl_util.get_burntime(item)
 
-		if groups or cooktime or burntime then
+		if groups or cooktime or burntime ~= 0 then
 			fs[#fs + 1] = get_tooltip(item, groups, cooktime, burntime)
 		end
 	end
@@ -453,7 +452,7 @@ local function get_recipe_fs(data, iY, player)
 			"mcl_craftguide_fuel.png")
 	else
 		local output_name = string.match(recipe.output, "%S+")
-		local burntime = fuel_cache[output_name]
+		local burntime = mcl_util.get_burntime(output_name)
 
 		fs[#fs + 1] = string.format(FMT.item_image_button,
 			output_X,
@@ -464,7 +463,7 @@ local function get_recipe_fs(data, iY, player)
 			F(output_name),
 			"")
 
-		if burntime then
+		if burntime ~= 0 then
 			fs[#fs + 1] = get_tooltip(output_name, nil, nil, burntime)
 
 			fs[#fs + 1] = string.format(FMT.image,
@@ -756,10 +755,6 @@ local function get_init_items()
 					end
 				end
 			end
-		end
-
-		if mcl_util.is_fuel(item_name) then
-			fuel_cache[item_name] = true
 		end
 	end
 
