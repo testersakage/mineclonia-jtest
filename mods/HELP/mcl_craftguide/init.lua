@@ -301,6 +301,10 @@ local function get_recipes(item, data, player)
 				recipes = table_merge(recipes, group_cache)
 			end
 		end
+
+		if fuel_cache[item] then
+			table.insert(recipes, {type = "fuel", width = 1, items = {item}})
+		end
 		if #recipes == 0 then
 			return
 		end
