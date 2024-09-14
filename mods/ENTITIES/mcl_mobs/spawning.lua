@@ -365,8 +365,6 @@ local MOB_SPAWN_ZONE_OUTER = 128
 
 local SPAWN_MAPGEN_LIMIT  = 30911
 
-
-local two_pi = 2 * math.pi
 local function math_round(x) return (x > 0) and math.floor(x + 0.5) or math.ceil(x - 0.5) end
 
 local function get_next_mob_spawn_pos(pos)
