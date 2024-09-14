@@ -813,7 +813,6 @@ local function reset_data(data)
 end
 
 local function init_usages_cache()
-	local groups
 	local recipes
 	local used_items
 	for item_name, item in pairs(minetest.registered_items) do
