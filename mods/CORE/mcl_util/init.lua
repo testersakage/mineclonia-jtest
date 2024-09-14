@@ -1502,23 +1502,35 @@ if not vector.random_direction then
 	end
 end
 
-if not minetest.objects_inside_radius then --polyfill for pre minetest 5.9
-	local function valid_object_iterator(objects)
-		local i = 0
-		local function next_valid_object()
-			i = i + 1
-			local obj = objects[i]
-			if obj == nil then
-				return
-			end
-			if obj:get_pos() then
-				return obj
-			end
-			return next_valid_object()
+local function valid_object_iterator(objects)
+	local i = 0
+	local function next_valid_object()
+		i = i + 1
+		local obj = objects[i]
+		if obj == nil then
+			return
 		end
-		return next_valid_object
+		if obj:get_pos() then
+			return obj
+		end
+		return next_valid_object()
 	end
+	return next_valid_object
+end
 
+function mcl_util.connected_players(center, radius)
+	local pls = minetest.get_connected_players()
+	if not center then return valid_object_iterator(pls) end
+	local rpls = {}
+	for _, pl in pairs(pls) do
+		if pl:get_pos() and vector.distance(center, pl:get_pos()) <= radius then
+			table.insert(rpls, pl)
+		end
+	end
+	return valid_object_iterator(rpls)
+end
+
+if not minetest.objects_inside_radius then --polyfill for pre minetest 5.9
 	function core.objects_inside_radius(center, radius)
 		return valid_object_iterator(core.get_objects_inside_radius(center, radius))
 	end
