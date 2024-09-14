@@ -1472,7 +1472,6 @@ local roman_conversion = {
 	{4, "IV"},
 	{1, "I"}
 }
-
 function mcl_util.to_roman(number)
 	local r = ""
 	local a = number
@@ -1500,5 +1499,31 @@ if not vector.random_direction then
 		-- normalize
 		local l = math.sqrt(l2)
 		return vector.new(x/l, y/l, z/l)
+	end
+end
+
+if not minetest.objects_inside_radius then --polyfill for pre minetest 5.9
+	local function valid_object_iterator(objects)
+		local i = 0
+		local function next_valid_object()
+			i = i + 1
+			local obj = objects[i]
+			if obj == nil then
+				return
+			end
+			if obj:get_pos() then
+				return obj
+			end
+			return next_valid_object()
+		end
+		return next_valid_object
+	end
+
+	function core.objects_inside_radius(center, radius)
+		return valid_object_iterator(core.get_objects_inside_radius(center, radius))
+	end
+
+	function core.objects_in_area(min_pos, max_pos)
+		return valid_object_iterator(core.get_objects_in_area(min_pos, max_pos))
 	end
 end
