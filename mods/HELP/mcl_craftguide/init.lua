@@ -223,7 +223,7 @@ local function get_filtered_items(player)
 
 	for i = 1, #init_items do
 		local item = init_items[i]
-		local recipes = minetest.get_all_craft_(item)
+		local recipes = minetest.get_all_craft_recipes(item)
 		local usages = usages_cache[item]
 
 		if recipes and #apply_recipe_filters(recipes, player) > 0 or
