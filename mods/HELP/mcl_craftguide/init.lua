@@ -253,7 +253,7 @@ local function get_recipes(item, data, player)
 	end
 
 	if data.show_usages then
-		recipes = usages_cache[item]
+		recipes = usages_cache[item] or {}
 
 		local item_groups = minetest.registered_items[item].groups
 		local required_groups
