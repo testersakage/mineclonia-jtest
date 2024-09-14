@@ -130,27 +130,6 @@ local function table_diff(t, t2)
 	return diff
 end
 
-local custom_crafts, craft_types = {}, {}
-
-function mcl_craftguide.register_craft_type(name, def)
-	local func = "mcl_craftguide.register_craft_type(): "
-	assert(name, func .. "'name' field missing")
-	assert(def.description, func .. "'description' field missing")
-	assert(def.icon, func .. "'icon' field missing")
-
-	craft_types[name] = def
-end
-
-function mcl_craftguide.register_craft(def)
-	local func = "mcl_craftguide.register_craft(): "
-	assert(def.type, func .. "'type' field missing")
-	assert(def.width, func .. "'width' field missing")
-	assert(def.output, func .. "'output' field missing")
-	assert(def.items, func .. "'items' field missing")
-
-	custom_crafts[#custom_crafts + 1] = def
-end
-
 local recipe_filters = {}
 
 function mcl_craftguide.add_recipe_filter(name, f)
@@ -261,15 +240,6 @@ end
 
 local function cache_recipes(output)
 	local recipes = minetest.get_all_craft_recipes(output) or {}
-	local c = 0
-
-	for i = 1, #custom_crafts do
-		local custom_craft = custom_crafts[i]
-		if string.match(custom_craft.output, "%S*") == output then
-			c = c + 1
-			recipes[c] = custom_craft
-		end
-	end
 
 	if #recipes > 0 then
 		recipes_cache[output] = recipes
@@ -411,12 +381,11 @@ local function get_recipe_fs(data, iY, player)
 	local recipe = data.recipes[data.rnum]
 	local width = recipe.width
 	local xoffset = data.iX / 2.15
-	local cooktime, shapeless
+	local cooktime
 
 	if recipe.type == "cooking" then
 		cooktime, width = width, 1
 	elseif width == 0 then
-		shapeless = true
 		if #recipe.items <= 4 then
 			width = 2
 		else
@@ -484,36 +453,6 @@ local function get_recipe_fs(data, iY, player)
 		if groups or cooktime or burntime then
 			fs[#fs + 1] = get_tooltip(item, groups, cooktime, burntime)
 		end
-	end
-
-	local custom_recipe = craft_types[recipe.type]
-
-	if custom_recipe or shapeless or recipe.type == "cooking" then
-		local icon = custom_recipe and custom_recipe.icon or
-				 shapeless and "shapeless" or "furnace"
-
-		if recipe.type == "cooking" then
-			icon = "craftguide_furnace.png"
-		elseif not custom_recipe then
-			icon = string.format("craftguide_%s.png", icon)
-		end
-
-		fs[#fs + 1] = string.format(FMT.image,
-			rightest + 1.2,
-			iY + 1.7,
-			0.5,
-			0.5,
-			icon)
-
-		local tooltip = custom_recipe and custom_recipe.description or
-				shapeless and S("Shapeless") or S("Cooking")
-
-		fs[#fs + 1] = string.format("tooltip[%f,%f;%f,%f;%s]",
-			rightest + 1.2,
-			iY + 1.7,
-			0.5,
-			0.5,
-			F(tooltip))
 	end
 
 	local arrow_X  = rightest + (s_btn_size or 1.1)
@@ -816,7 +755,7 @@ local function init_usages_cache()
 	local recipes
 	local used_items
 	for item_name, item in pairs(minetest.registered_items) do
-		recipes = recipes_cache[item_name]
+		recipes = minetest.get_all_craft_recipes(item_name)
 
 		if recipes then
 			for _, recipe in pairs(recipes) do
@@ -1143,26 +1082,3 @@ doc.sub.items.register_factoid(nil, "groups", function(_, def)
 	end
 	return ""
 end)
-
---[[ Custom recipes (>3x3) test code
-
-minetest.register_craftitem(":secretstuff:custom_recipe_test", {
-	description = "Custom Recipe Test",
-})
-
-local cr = {}
-for x = 1, 6 do
-	cr[x] = {}
-	for i = 1, 10 - x do
-		cr[x][i] = {}
-		for j = 1, 10 - x do
-			cr[x][i][j] = "group:wood"
-		end
-	end
-
-	minetest.register_craft({
-		output = "secretstuff:custom_recipe_test",
-		recipe = cr[x]
-	})
-end
-]]
