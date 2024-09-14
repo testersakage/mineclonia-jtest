@@ -96,7 +96,7 @@ local function count_mobs_total_cap(mob_type)
 end
 
 --this is where all of the spawning information is kept
-local spawn_dictionary = {}
+spawn_dictionary = {}
 
 local spawn_defaults = {
 	dimension = "overworld",
