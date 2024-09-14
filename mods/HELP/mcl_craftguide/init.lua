@@ -5,7 +5,6 @@ local player_data = {}
 -- Caches
 local init_items    = {}
 local searches      = {}
-local recipes_cache = {}
 local usages_cache  = {}
 local fuel_cache    = {}
 
@@ -767,7 +766,7 @@ local function get_init_items()
 	table.sort(init_items)
 
 	for _, cache in pairs(usages_cache) do
-		table.sort(cache, 
+		table.sort(cache,
 		function(a, b)
 			return a.output > b.output
 		end)
