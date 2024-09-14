@@ -197,12 +197,12 @@ globals = {
 	"mcl_armor_trims",
 	"mcl_villages",
 	"AreaStore",
+	"vector",
 }
 
 read_globals = {
 	"DIR_DELIM",
 	"dump", "dump2",
-	"vector",
 	"VoxelManip", "VoxelArea",
 	"PseudoRandom", "PcgRandom", "PerlinNoise", "PerlinNoiseMap",
 	"ItemStack",

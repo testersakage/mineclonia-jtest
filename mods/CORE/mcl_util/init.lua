@@ -1423,3 +1423,11 @@ if not minetest.objects_inside_radius then --polyfill for pre minetest 5.9
 		return valid_object_iterator(core.get_objects_in_area(min_pos, max_pos))
 	end
 end
+
+if not vector.in_area then
+	function vector.in_area(pos, min, max)
+		return (pos.x >= min.x) and (pos.x <= max.x) and
+			(pos.y >= min.y) and (pos.y <= max.y) and
+			(pos.z >= min.z) and (pos.z <= max.z)
+	end
+end
