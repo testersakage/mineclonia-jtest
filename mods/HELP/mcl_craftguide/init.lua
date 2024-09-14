@@ -225,7 +225,7 @@ local function get_filtered_items(player)
 
 	for i = 1, #init_items do
 		local item = init_items[i]
-		local recipes = recipes_cache[item]
+		local recipes = minetest.get_all_craft_(item)
 		local usages = usages_cache[item]
 
 		if recipes and #apply_recipe_filters(recipes, player) > 0 or
@@ -238,17 +238,8 @@ local function get_filtered_items(player)
 	return items
 end
 
-local function cache_recipes(output)
-	local recipes = minetest.get_all_craft_recipes(output) or {}
-
-	if #recipes > 0 then
-		recipes_cache[output] = recipes
-		return true
-	end
-end
-
 local function get_recipes(item, data, player)
-	local recipes = recipes_cache[item]
+	local recipes = minetest.get_all_craft_recipes(item)
 	local usages = usages_cache[item]
 
 	if recipes then
@@ -285,24 +276,13 @@ local function get_recipes(item, data, player)
 		if fuel_cache[item] then
 			table.insert(recipes, {type = "fuel", width = 1, items = {item}})
 		end
-		if #recipes == 0 then
+
+		if recipes == nil or #recipes == 0 then
 			return
 		end
 	end
 
 	return recipes
-end
-
-local function get_burntime(item)
-	return minetest.get_craft_result({method = "fuel", width = 1, items = {item}}).time
-end
-
-local function cache_fuel(item)
-	local burntime = get_burntime(item)
-	if burntime > 0 then
-		fuel_cache[item] = burntime
-		return true
-	end
 end
 
 local function groups_to_item(groups)
@@ -751,13 +731,14 @@ local function reset_data(data)
 	data.items       = data.items_raw
 end
 
-local function init_usages_cache()
+local function get_init_items()
 	local recipes
 	local used_items
 	for item_name, item in pairs(minetest.registered_items) do
 		recipes = minetest.get_all_craft_recipes(item_name)
 
-		if recipes then
+		if recipes and item_name ~= "" then
+			table.insert(init_items, item_name)
 			for _, recipe in pairs(recipes) do
 				if recipe then
 					used_items = {}
@@ -777,23 +758,20 @@ local function init_usages_cache()
 				end
 			end
 		end
-	end
-end
 
-local function get_init_items()
-	local c = 0
-	for name, def in pairs(minetest.registered_items) do
-		local is_fuel = cache_fuel(name)
-		if def.groups.not_in_craft_guide ~= 1 and
-				def.description and def.description ~= "" and
-				(cache_recipes(name) or is_fuel) then
-			c = c + 1
-			init_items[c] = name
+		if mcl_util.is_fuel(item_name) then
+			fuel_cache[item_name] = true
 		end
 	end
 
 	table.sort(init_items)
-	init_usages_cache()
+
+	for _, cache in pairs(usages_cache) do
+		table.sort(cache, 
+		function(a, b)
+			return a.output > b.output
+		end)
+	end
 end
 
 local function on_receive_fields(player, fields)
