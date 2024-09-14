@@ -182,7 +182,6 @@ end
 -- positions for the portal nodes.
 local function init_portal_meta(nodes, portal)
 	for _, pos in pairs(nodes) do
-		spawn_zombified_piglin(pos)
 		minetest.get_meta(pos):set_string("portal", minetest.serialize(portal))
 	end
 end
