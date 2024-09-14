@@ -166,8 +166,8 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 		-- TODO: more unused animations between 45 and 130
 	},
 	fall_damage = 0,
-	fall_speed = -2.25,
 	attack_type = "dogfight",
+	gravity_drag = 0.6,
 	floats = 1,
 	physical = true,
 	walk_velocity = 0.5,

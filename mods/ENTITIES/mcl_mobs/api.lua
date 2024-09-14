@@ -393,10 +393,6 @@ function mob_class:on_step(dtime, moveresult)
 
 	self:update_tag()
 
-	if not should_drive or self.steer_class ~= "follow_item" then
-	   self:slow_mob ()
-	end
-
 	if not (moveresult and moveresult.touching_ground) and self:falling(pos) then return end
 
 	-- Get nodes early for use in other functions
@@ -415,6 +411,7 @@ function mob_class:on_step(dtime, moveresult)
 	local pos_head = vector.offset(p, 0, cbox[5] - 0.5, 0)
 	self.head_in =  mcl_mobs.node_ok(pos_head, "air").name
 
+	self:motion_step (dtime, moveresult)
 	self:falling (pos)
 
 	if self.force_step then
@@ -504,12 +501,6 @@ function mob_class:on_step(dtime, moveresult)
 
 	if self:env_damage (dtime, pos) then return end
 	if self:do_states(dtime) then return end
-
-	--mobs that can climb over stuff
-	if self.always_climb
-	   and self:node_infront_ok(pos, 0).name ~= "air" then
-		self:climb()
-	end
 
 	if self.jump_sound_cooloff > 0 then
 		self.jump_sound_cooloff = self.jump_sound_cooloff - dtime

@@ -394,9 +394,6 @@ function mob_class:set_animation_speed(custom_speed)
 				self.object:set_animation_frame_speed(25)
 			end
 		end
-		if self.acc and mcl_mobs.check_vector(self.acc) then
-			self.object:add_velocity(self.acc)
-		end
 	end
 end
 

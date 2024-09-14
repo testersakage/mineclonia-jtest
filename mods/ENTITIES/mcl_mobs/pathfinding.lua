@@ -225,6 +225,7 @@ function mob_class:check_gowp()
 		self.order = "stand"
 		self.object:set_velocity({x = 0, y = 0, z = 0})
 		self.object:set_acceleration({x = 0, y = 0, z = 0})
+		self.acc_dir = vector.zero ()
 		if self.callback_arrived then return self.callback_arrived(self) end
 		return true
 	end
@@ -257,6 +258,7 @@ function mob_class:check_gowp()
 			self._pf_last_failed = os.time()
 			self.object:set_velocity({x = 0, y = 0, z = 0})
 			self.object:set_acceleration({x = 0, y = 0, z = 0})
+			self.acc_dir = vector.zero ()
 			return
 		end
 		self:go_to_pos(self.current_target["pos"])
