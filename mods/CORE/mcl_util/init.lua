@@ -432,10 +432,22 @@ function mcl_util.drop_items_from_meta_container(lists)
 	end
 end
 
+local fuel_cache = {}
+
+-- Returns the burntime of an item
+-- Returns false otherwise
+function mcl_util.get_burntime(item)
+	if fuel_cache[item] == nil then
+		fuel_cache[item] = minetest.get_craft_result({method = "fuel", width = 1, items = {item}}).time
+	end
+
+	return fuel_cache[item]
+end
+
 -- Returns true if item (itemstring or ItemStack) can be used as a furnace fuel.
 -- Returns false otherwise
 function mcl_util.is_fuel(item)
-	return minetest.get_craft_result({method = "fuel", width = 1, items = {item}}).time ~= 0
+	return mcl_util.get_burntime(item) ~= 0
 end
 
 -- Returns a on_place function for plants
