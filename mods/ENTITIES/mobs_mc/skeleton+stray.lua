@@ -141,7 +141,7 @@ mcl_mobs.register_mob("mobs_mc:skeleton", skeleton)
 mcl_mobs.register_mob("mobs_mc:stray", table.merge(skeleton, {
 	description = S("Stray"),
 	mesh = "mobs_mc_skeleton.b3d",
-	_freeze_damage = 0,
+	_mcl_freeze_damage = 0,
 	textures = {
 		{
 			"mobs_mc_stray_overlay.png",
