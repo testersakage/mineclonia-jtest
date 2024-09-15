@@ -182,7 +182,7 @@ minetest.register_on_joinplayer(function(player)
 
 	if time_in_snow > 5 then
 		show_freezing_hud(player, 3)
-		hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png")
+		minetest.after(0, function() hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png") end)
 	elseif time_in_snow > 3 then
 		show_freezing_hud(player, 2)
 	elseif time_in_snow > 1 then
