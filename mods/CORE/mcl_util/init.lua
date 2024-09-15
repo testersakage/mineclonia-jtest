@@ -436,6 +436,10 @@ local fuel_cache = {}
 
 -- Returns the burntime of an item
 -- Returns false otherwise
+--
+-- do note that if you call this function early in the load order (before fuel recipes are registered)
+-- you will get wrong results, and you will poison the cache for rest of the game.
+-- see discussion at https://codeberg.org/mineclonia/mineclonia/pulls/2073#issuecomment-2314190
 function mcl_util.get_burntime(item)
 	if fuel_cache[item] == nil then
 		fuel_cache[item] = minetest.get_craft_result({method = "fuel", width = 1, items = {item}}).time
@@ -446,6 +450,10 @@ end
 
 -- Returns true if item (itemstring or ItemStack) can be used as a furnace fuel.
 -- Returns false otherwise
+--
+-- do note that if you call this function early in the load order (before fuel recipes are registered)
+-- you will get wrong results, and you will poison the cache for rest of the game. 
+-- see discussion at https://codeberg.org/mineclonia/mineclonia/pulls/2073#issuecomment-2314190
 function mcl_util.is_fuel(item)
 	return mcl_util.get_burntime(item) ~= 0
 end
