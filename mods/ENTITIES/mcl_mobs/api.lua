@@ -266,7 +266,7 @@ function mob_class:mob_activate(staticdata, dtime)
 		self.nametag = def.nametag
 	end
 
-	self.base_size = self.object:get_properties().visual_size
+	self.base_size = self.base_size or {x = 1, y = 1, z = 1}
 
 	if self.base_texture then
 		self:set_properties({textures = self.base_texture})
