@@ -104,9 +104,11 @@ local function unregister_portal(pos)
 	end
 end
 
--- There is 3/2000 (0.15%) chance of spawning zombified_piglin on each portal node at random tick
+-- There is 3/2000 (0.15%) chance of spawning zombified_piglin on each portal
+-- node at random tick. In Minecraft random tick happens on average every 68.27
+-- seconds.
 local function spawn_zombified_piglin(pos)
-	if math.random(2000) <= 3 then
+	if math.random() < 0.0015 / 68.27 then
 		-- Find Y of lowest portal frame
 		local floor = minetest.find_nodes_in_area(pos, vector.offset(pos, 0,-MAX_PORTAL_NODES,0), {"mcl_core:obsidian"})
 		if #floor > 0 then
