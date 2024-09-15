@@ -136,7 +136,6 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 	local player_pos = player:get_pos()
 	local player_meta = player:get_meta()
 	local time_in_snow = tonumber(player_meta:get("time_in_snow"))
-	local freezing_data = freezing_players[player]
 
 	if minetest.get_node(player_pos).name == "mcl_powder_snow:powder_snow" and not player_has_leather_armor(player) then
 		if not time_in_snow then
@@ -149,9 +148,9 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 			show_freezing_hud(player, 3)
 			mcl_damage.damage_player(player, 0.5, {type = "freeze"})
 			hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png")
-		elseif time_in_snow > 3 then
+		elseif time_in_snow == 3 then
 			show_freezing_hud(player, 2)
-		elseif time_in_snow > 1 then
+		elseif time_in_snow == 1 then
 			show_freezing_hud(player, 1)
 		end
 
@@ -176,6 +175,26 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 	end
 end)
 
+minetest.register_on_joinplayer(function(player)
+	local time_in_snow = tonumber(player:get_meta():get("time_in_snow"))
+
+	if not time_in_snow then return end
+
+	if time_in_snow > 5 then
+		show_freezing_hud(player, 3)
+		hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png")
+	elseif time_in_snow > 3 then
+		show_freezing_hud(player, 2)
+	elseif time_in_snow > 1 then
+		show_freezing_hud(player, 1)
+	end
+end)
+
 minetest.register_on_leaveplayer(function(player)
 	freezing_players[player] = nil
+end)
+
+minetest.register_on_respawnplayer(function(player)
+	remove_freezing_hud(player)
+	hb.change_hudbar(player, "health", nil, nil, "hudbars_icon_health.png")
 end)
