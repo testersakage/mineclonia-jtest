@@ -74,7 +74,7 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 	},
 	-- MC Wiki: takes 1 damage every half second while in water
 	water_damage = 2,
-	_freeze_damage = 5,
+	_mcl_freeze_damage = 5,
 	lava_damage = 0,
 	fire_damage = 0,
 	fall_damage = 0,

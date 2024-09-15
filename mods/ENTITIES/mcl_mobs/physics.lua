@@ -684,9 +684,9 @@ function mob_class:do_env_damage()
 				return true
 			end
 		end
-	elseif self._freeze_damage > 0
+	elseif self._mcl_freeze_damage > 0
 	and self:is_in_node("mcl_powder_snow:powder_snow") then
-		self:damage_mob("freeze", self._freeze_damage)
+		self:damage_mob("freeze", self._mcl_freeze_damage)
 
 		if self:check_for_death("freeze", {type = "freeze",
 				pos = pos, node = self.standing_in}) then

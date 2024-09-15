@@ -92,7 +92,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 		min = 1,
 		max = 1},
 	},
-	_freeze_damage = 0,
+	_mcl_freeze_damage = 0,
 	lava_damage = 0,
 	fire_damage = 0,
 	attack_type = "custom",
