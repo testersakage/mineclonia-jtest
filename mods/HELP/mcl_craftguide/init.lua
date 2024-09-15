@@ -252,7 +252,7 @@ local function get_recipes(item, data, player)
 	end
 
 	if data.show_usages then
-		recipes = table.copy(usages_cache[item]) or {}
+		recipes = usages_cache[item] and table.copy(usages_cache[item]) or {}
 
 		local item_groups = minetest.registered_items[item].groups
 		local required_groups
