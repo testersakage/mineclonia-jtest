@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-09-15 22:40+0000\n"
+"Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Axolotl"
 msgstr "Axolotl"
@@ -38,7 +39,7 @@ msgid "Creeper"
 msgstr "Lopódzó"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Feltöltött Lopódzó"
 
 msgid "Dolphin"
 msgstr "Delfin"
@@ -89,7 +90,7 @@ msgid "Mule"
 msgstr "Öszvér"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "Guggolj, hogy leszereld"
 
 msgid "Iron Golem"
 msgstr "Vas Gólem"
@@ -155,22 +156,22 @@ msgid "Wither Skeleton"
 msgstr "Sorvasztó Csontváz"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Zselé - nagy"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Zselé - kicsi"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Zselé - parány"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Magma Kocka - nagy"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Magma Kocka - kicsi"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Magma Kocka - apró"
 
 msgid "Magma Cube"
 msgstr "Magma Kocka"
@@ -299,7 +300,7 @@ msgid "Master"
 msgstr "Mester"
 
 msgid "Witch"
-msgstr ""
+msgstr "Boszi"
 
 msgid "Wither"
 msgstr "Sorvasztó"
@@ -308,7 +309,7 @@ msgid "Wolf"
 msgstr "Farkas"
 
 msgid "Dog"
-msgstr ""
+msgstr "Kutya"
 
 msgid "Zombie"
 msgstr "Zombi"
@@ -324,4 +325,3 @@ msgstr "Sivatagi Zombika"
 
 msgid "Zombified Piglin"
 msgstr "Malacfej Zombi"
-
