@@ -42,14 +42,14 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 	if damage == nil then
 		damage = 3
 	end
-	local knockback
+	local knockback = 0
 	if bow_stack then
 		local enchantments = mcl_enchanting.get_enchantments(bow_stack)
 		if enchantments.power then
 			damage = damage + (enchantments.power + 1) / 4
 		end
 		if enchantments.punch then
-			knockback = enchantments.punch * 3
+			knockback = knockback + enchantments.punch * 3
 		end
 		if enchantments.flame then
 			mcl_burning.set_on_fire(obj, math.huge)

@@ -108,8 +108,7 @@ local horse = {
 	visual_size = {x=3.0, y=3.0},
 	collisionbox = {-0.69825, -0.01, -0.69825, 0.69825, 1.59, 0.69825},
 	runaway = true,
-	run_velocity = 2,
-	follow_velocity = 1.5,
+	movement_speed = 6.75,
 	animation = {
 		stand_start = 0, stand_end = 0, stand_speed = 25,
 		walk_start = 0, walk_end = 40, walk_speed = 25,
@@ -166,15 +165,15 @@ local horse = {
 			if ctrl and ctrl.sneak then
 				detach_driver(self)
 			end
-			if self.run_velocity ~= self._horse_speed then
-				self.run_velocity = self._horse_speed
-			end
+			-- if self.run_velocity ~= self._horse_speed then
+			-- 	self.run_velocity = self._horse_speed
+			-- end
 			if self.jump_height ~= self._horse_jump then
 				self.jump_height = self._horse_jump
 			end
 		else
 			detach_driver(self)
-			self.run_velocity = self.initial_properties.run_velocity
+			-- self.run_velocity = self.initial_properties.run_velocity
 			self.jump_height = self.initial_properties.jump_height
 		end
 
@@ -443,6 +442,7 @@ local skeleton_horse = table.merge(horse, {
 		base_pitch = 0.95,
 		distance = 16,
 	},
+	movement_speed = 4.0,
 	harmed_by_heal = true,
 })
 
@@ -476,6 +476,7 @@ local donkey = table.merge(horse, {
 	textures = {{"blank.png", "mobs_mc_donkey.png", "blank.png"}},
 	spawn_in_group = 3,
 	spawn_in_group_min = 1,
+	movement_speed = 3.5,
 	animation = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 40,

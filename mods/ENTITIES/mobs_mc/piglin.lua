@@ -72,8 +72,7 @@ local piglin = {
 	},
 	jump = true,
 	makes_footstep_sound = true,
-	walk_velocity = 1,
-	run_velocity = 1.4, -- (was 2.8) hes fast and has bow, but slower compare to hoglin
+	movement_speed = 4.6,
 	drops = {
 		{name = "mcl_bows:crossbow",
 		chance = 10,
@@ -106,7 +105,6 @@ local piglin = {
 			    return
 			end
 		elseif self.trading then
-			self:set_state("stand")
 			mcl_util.set_bone_position(self.object, "Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(20,-20,18))
 			mcl_util.set_bone_position(self.object, "Head", vector.new(0,6.3,0), vector.new(-40,0,0))
 			self.base_texture[2] = "default_gold_ingot.png"
@@ -122,7 +120,8 @@ local piglin = {
 
 		if self.attack and self.attack:is_player() and mobs_mc.player_wears_gold(self.attack) then
 			if not self._attacked_by_player then
-				self:set_state("stand")
+				-- TODO
+				-- self:set_state("stand")
 			end
 		end
 	end,
@@ -138,14 +137,16 @@ local piglin = {
 			for v in minetest.objects_inside_radius(self.object:get_pos(), 7) do
 				if v:is_player() then self:look_at(v:get_pos()) end
 			end
-			self:set_state("stand")
+			-- TODO
+			-- self:set_state("stand")
 			minetest.after(5, function(self)
 				local pos
 				if self then
 					self.gold_items = self.gold_items - 1
 					if self.gold_items == 0 then
 						self.trading = false
-						self:set_state("stand")
+						-- TODO
+						-- self:set_state("stand")
 					end
 					pos = self and self.object and self.object:get_pos()
 				end
@@ -200,7 +201,7 @@ mcl_mobs.register_mob("mobs_mc:sword_piglin",table.merge(piglin,{
 		min = 1,
 		max = 1,},
 	},
-	attack_type = "dogfight",
+	attack_type = "melee",
 	animation = {
 		stand_start = 0, stand_end = 79, stand_speed = 30,
 		walk_start = 168, walk_end = 187, walk_speed = 12,
@@ -223,7 +224,7 @@ mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
 	prevents_sleep_when_hostile = true,
 	mesh = "extra_mobs_sword_piglin.b3d",
 	textures = {"extra_mobs_zombified_piglin.png", "default_tool_goldsword.png", "blank.png"},
-	attack_type = "dogfight",
+	attack_type = "melee",
 	animation = {
 		stand_start = 0, stand_end = 79, stand_speed = 30,
 		walk_start = 168, walk_end = 187, walk_speed = 30,
@@ -245,8 +246,6 @@ mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
 	jump = true,
 	makes_footstep_sound = true,
-	walk_velocity = .8,
-	run_velocity = 2.6,
 	pathfinding = 1,
 	lava_damage = 0,
 	fire_damage = 0,
@@ -280,7 +279,7 @@ mcl_mobs.register_mob("mobs_mc:piglin_brute",table.merge(piglin,{
 	attack_animals = true,
 	mesh = "extra_mobs_sword_piglin.b3d",
 	textures = { "extra_mobs_piglin_brute.png", "default_tool_goldaxe.png", "blank.png" },
-	attack_type = "dogfight",
+	attack_type = "melee",
 	animation = {
 		stand_start = 0, stand_end = 79, stand_speed = 30,
 		walk_start = 168, walk_end = 187, walk_speed = 12,

@@ -607,6 +607,9 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 				luaentity.last_player_hit_name = mcl_reason.source:get_player_name()
 			end
 			if luaentity.health - damage > 0 then
+				if damage > 0 then
+					luaentity:register_damage (mcl_reason or {type = "generic"})
+				end
 				luaentity.health = luaentity.health - damage
 				mcl_damage.run_damage_callbacks(target, damage, mcl_reason or {type = "generic"})
 			else

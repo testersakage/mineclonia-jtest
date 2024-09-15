@@ -371,10 +371,10 @@ mcl_potions.register_effect({
 		-- TODO: apply this only to swimming for mobs.
 		if node and minetest.registered_nodes[node.name]
 			and minetest.get_item_group(node.name, "liquid") ~= 0 then
-			add_physics_factor (object, "speed", "walk_velocity",
+			add_physics_factor (object, "speed", "movement_speed",
 					"mcl_potions:dolphin", 1.6)
 		else
-			remove_physics_factor (object, "speed", "walk_velocity",
+			remove_physics_factor (object, "speed", "movement_speed",
 					   "mcl_potions:dolphin")
 		end
 	end,
@@ -443,13 +443,12 @@ mcl_potions.register_effect({
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
-		add_physics_factor (object, "speed", "walk_velocity",
-				"mcl_potions:swiftness", 1 + factor,
-				"run_velocity")
+		add_physics_factor (object, "speed", "movement_speed",
+				"mcl_potions:swiftness", 1 + factor)
 	end,
 	on_end = function(object)
-		remove_physics_factor (object, "speed", "walk_velocity",
-				   "mcl_potions:swiftness", "run_velocity")
+		remove_physics_factor (object, "speed", "movement_speed",
+				   "mcl_potions:swiftness")
 	end,
 	particle_color = "#7CAFC6",
 	uses_factor = true,
@@ -465,13 +464,12 @@ mcl_potions.register_effect({
 		return S("-@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
-		add_physics_factor (object, "speed", "walk_velocity",
-				"mcl_potions:slowness", 1 - factor,
-				"run_velocity")
+		add_physics_factor (object, "speed", "movement_speed",
+				"mcl_potions:slowness", 1 - factor)
 	end,
 	on_end = function(object)
-		remove_physics_factor (object, "speed", "walk_velocity",
-				   "mcl_potions:slowness", "run_velocity")
+		remove_physics_factor (object, "speed", "movement_speed",
+				   "mcl_potions:slowness")
 	end,
 	particle_color = "#5A6C81",
 	uses_factor = true,

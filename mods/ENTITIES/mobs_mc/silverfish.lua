@@ -39,8 +39,7 @@ mcl_mobs.register_mob("mobs_mc:silverfish", {
 		distance = 16,
 	},
 	makes_footstep_sound = false,
-	walk_velocity = 0.6,
-	run_velocity = 1,
+	movement_speed = 5.0,
 	jump = true,
 	fear_height = 4,
 	replace_what = {
@@ -58,7 +57,7 @@ mcl_mobs.register_mob("mobs_mc:silverfish", {
 		run_start = 0, run_end = 20, run_speed = 50,
 	},
 	view_range = 16,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	damage = 1,
 	check_light = check_light,
 	deal_damage = function (self, damage, mcl_reason)
