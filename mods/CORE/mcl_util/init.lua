@@ -452,7 +452,7 @@ end
 -- Returns false otherwise
 --
 -- do note that if you call this function early in the load order (before fuel recipes are registered)
--- you will get wrong results, and you will poison the cache for rest of the game. 
+-- you will get wrong results, and you will poison the cache for rest of the game.
 -- see discussion at https://codeberg.org/mineclonia/mineclonia/pulls/2073#issuecomment-2314190
 function mcl_util.is_fuel(item)
 	return mcl_util.get_burntime(item) ~= 0
