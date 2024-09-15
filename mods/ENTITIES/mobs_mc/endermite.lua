@@ -29,8 +29,7 @@ mcl_mobs.register_mob("mobs_mc:endermite", {
 		death = "mobs_mc_endermite_death",
 		distance = 16,
 	},
-	walk_velocity = 1,
-	run_velocity = 2,
+	movement_speed = 5.0,
 	animation = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 20, walk_speed = 55

@@ -70,8 +70,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 	visual_size = {x=4, y=4},
 	view_range = 50,
 	fear_height = 4,
-	walk_velocity = 2,
-	run_velocity = 4,
+	movement_speed = 12,
 	strafes = w_strafes,
 	sounds = {
 		shoot_attack = "mobs_mc_ender_dragon_shoot",
@@ -204,7 +203,8 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 			else
 				self.fly = true
 				local vel = self.object:get_velocity()
-				self.object:set_velocity(vector.new(vel.x, self.walk_velocity, vel.z))
+				-- self.object:set_velocity(vector.new(vel.x, self.walk_velocity, vel.z))
+				-- TODO
 			end
 		end
 		self.object:set_properties({textures={self.base_texture}})
@@ -247,7 +247,7 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 		if self.fly then
 			local vel = self.object:get_velocity()
 			local diff = s.y - p.y
-			local FLY_FACTOR = self.walk_velocity
+			local FLY_FACTOR = 0 -- self.walk_velocity
 			if diff < 10 then
 				self.object:set_velocity({x=vel.x, y= FLY_FACTOR, z=vel.z})
 			elseif diff > 15 then
@@ -273,7 +273,8 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 			end
 
 			local dir = vector.rotate_around_axis(vector.direction(s, p), vector.new(0,1,0), self.strafe_direction)
-			local dir2 = vector.multiply(dir, 0.3 * self.walk_velocity)
+			local dir2 = vector.multiply(dir, 0.3 -- * self.walk_velocity TODO
+			)
 
 			if dir2 and stay_away_from_player then
 				self.acc = vector.add(dir2, stay_away_from_player)

@@ -69,7 +69,7 @@ local axolotl = {
 	jump = true,
 	damage = 2,
 	reach = 2,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	attack_animals = true,
 	specific_attack = {
 		"mobs_mc:cod",
@@ -81,6 +81,7 @@ local axolotl = {
 		"mobs_mc:glow_squid"
 	},
 	runaway = true,
+	movement_speed = 20,
 }
 
 mcl_mobs.register_mob("mobs_mc:axolotl", axolotl)

@@ -38,12 +38,11 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	} },
 	makes_footstep_sound = true,
 	damage = 6,
-	walk_velocity = 1.2,
-	run_velocity = 1.5,
+	movement_speed = 10,
 	group_attack = true,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	custom_attack_interval = 15,
-	custom_attack = function(self, _)
+	custom_attack = function(self)
 		if not spawned_vexes[self] then spawned_vexes[self] = {} end
 		if #spawned_vexes[self] >= 7 then return end
 		for k,v in pairs(spawned_vexes[self]) do

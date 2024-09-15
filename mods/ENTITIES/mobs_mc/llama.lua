@@ -85,9 +85,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 	},
 	makes_footstep_sound = true,
 	runaway = true,
-	walk_velocity = 1,
-	run_velocity = 1.5,
-	follow_velocity = 1.5,
+	movement_speed = 1,
 	floats = 1,
 	drops = {
 		{name = "mcl_mobitems:leather",

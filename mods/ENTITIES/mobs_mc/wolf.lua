@@ -91,11 +91,10 @@ local wolf = {
 	floats = 1,
 	view_range = 16,
 	walk_chance = default_walk_chance,
-	walk_velocity = 2,
-	run_velocity = 2.5,
+	movement_speed = 6.0,
 	damage = 4,
 	reach = 2,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	fear_height = 4,
 	on_rightclick = function(self, clicker)
 		-- Try to tame wolf (intentionally does NOT use mcl_mobs.feed_tame)
@@ -228,7 +227,6 @@ dog.owner = ""
 dog.order = "sit"
 dog.state = "stand"
 dog.owner_loyal = true
-dog.follow_velocity = 3.2
 -- Automatically teleport dog to owner
 dog.do_custom = mobs_mc.make_owner_teleport_function(12)
 dog.attack_animals = nil

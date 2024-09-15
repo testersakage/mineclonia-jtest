@@ -46,12 +46,6 @@ mcl_mobs.mob_class = {
 	xp_timestamp = 0,
 	breathes_in_water = false,
 	view_range = 16,
-	walk_velocity = 1,
-	run_velocity = 2,
-	swim_velocity = 1,
-	fly_velocity = 4,
-	light_damage = 0,
-	sunlight_damage = 0,
 	water_damage = 0,
 	lava_damage = 8,
 	fire_damage = 1,
@@ -72,7 +66,8 @@ mcl_mobs.mob_class = {
 	shoot_offset = 0,
 	floats = 1,
 	floats_on_lava = 0,
-	water_friction = 0.8,
+	water_friction = 0.6,
+	-- This is multiplied by water_friction as in Minecraft.
 	water_velocity = 0.4,
 	replace_offset = 0,
 	replace_delay = 0,
@@ -95,13 +90,14 @@ mcl_mobs.mob_class = {
 	explosion_timer = 3,
 	allow_fuse_reset = true,
 	stop_to_explode = true,
-	dogfight_interval = 1,
+	melee_interval = 1,
 	custom_attack_interval = 1,
 	dogshoot_count = 0,
 	dogshoot_count_max = 5,
 	dogshoot_count2_max = 5,
 	attack_animals = false,
 	attack_npcs = false,
+	attack_esp = false,
 	facing_fence = false,
 	is_mob = true,
 	pushable = true,
@@ -112,11 +108,19 @@ mcl_mobs.mob_class = {
 	child = false,
 	texture_mods = {},
 	suffocation_timer = 0,
-	follow_velocity = 2.4,
+	movement_speed = 14, -- https://minecraft.wiki/w/Attribute#movementSpeed
+	run_bonus = 1.25,
+	follow_bonus = 1.2,
+	follow_distance = 6.0,
+	-- Distance at which targets will be relinquished.
+	tracking_distance = 32.0,
+	stop_distance = 2,
 	instant_death = false,
 	fire_resistant = false,
 	fire_damage_resistant = false,
 	ignited_by_sunlight = false,
+	avoids_sunlight = false,
+	sunlight = 1,
 	noyaw = false,
 	tnt_knockback = true,
 	min_light = 7,
@@ -169,6 +173,7 @@ dofile(path .. "/movement.lua")
 -- items: item management for mobs
 dofile(path .. "/items.lua")
 -- pathfinding: pathfinding to target positions
+dofile(path .. "/PriorityQueue.lua")
 dofile(path .. "/pathfinding.lua")
 -- combat: attack logic
 dofile(path .. "/combat.lua")
@@ -194,6 +199,9 @@ end
 
 local on_rightclick_prefix = function(self, clicker)
 	if not (clicker and clicker:is_player()) then return end
+	if mcl_mobs.maybe_test_pathfinding (self, clicker) then
+		return
+	end
 	local playername = clicker:get_player_name()
 	if playername and playername ~= "" then
 		doc.mark_entry_as_revealed(playername, "mobs", self.name)
@@ -323,8 +331,6 @@ function mcl_mobs.register_mob(name, def)
 				collide_with_objects = false,
 			})
 			self._physics_factors = {}
-			self.acc_dir = vector.zero ()
-			self.acc_speed = 0
 
 			self._timers = {}
 			return self:mob_activate(staticdata, dtime)

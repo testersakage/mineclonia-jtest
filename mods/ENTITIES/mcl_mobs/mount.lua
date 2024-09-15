@@ -199,7 +199,7 @@ function mob_class:drive_follow (moving_anim, stand_anim, dtime, moveresult)
 	self._drive_jump_time = nil
 	self._jump_vector = nil
 
-	local velocity = self.run_velocity
+	local velocity = self.movement_speed
 	if elapsed then
 		local f = 1.0 + 1.5 * math.sin (elapsed / total * math.pi)
 		velocity = velocity * f
@@ -234,14 +234,12 @@ function mob_class:drive_follow (moving_anim, stand_anim, dtime, moveresult)
 		end
 		self.object:set_velocity (v)
 		self.object:set_acceleration (acc)
-		self.acc = nil
 		self:set_animation (moving_anim)
 	else
 		local v = get_velocity (velocity, dir, self.jump_height)
 		self.object:set_velocity (v)
 		self._jump_vector = v
 		self._drive_jump_time = 0
-		self.acc = nil
 	end
 	self:set_animation_speed ()
 end
@@ -267,7 +265,7 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 				rot_view = rot_view + 70
 			end
 
-			self.v = self.v + self.accel / 10 * self.run_velocity / 2.6
+			self.v = self.v + self.accel / 10 * self.movement_speed * self.run_bonus / 2.6
 
 		elseif ctrl.down then
 
@@ -296,7 +294,6 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 		else
 			self.v = 0
 			self:set_velocity(0)
-			self:set_state("stand")
 			self:set_animation("stand")
 		end
 

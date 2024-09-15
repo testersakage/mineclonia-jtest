@@ -70,6 +70,7 @@ local tropical_fish = {
 	armor = 100,
 	spawn_in_group = 9,
 	tilt_swim = true,
+	movement_speed = 14,
 	collisionbox = { -0.15, 0.0, -0.15, 0.15, 0.75, 0.15 },
 	visual = "mesh",
 	mesh = "extra_mobs_tropical_fish_a.b3d",

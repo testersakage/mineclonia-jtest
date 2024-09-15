@@ -54,6 +54,7 @@ local cod = {
 	makes_footstep_sound = false,
 	swims = true,
 	breathes_in_water = true,
+	movement_speed = 14.0,
 	jump = false,
 	view_range = 16,
 	runaway = true,

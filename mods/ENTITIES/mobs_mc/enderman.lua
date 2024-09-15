@@ -282,8 +282,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 		random = {name="mobs_mc_enderman_random", gain=0.5},
 		distance = 16,
 	},
-	walk_velocity = 0.5, -- ( was 0.2 ) he isnt that slow in mc?
-	run_velocity = 2.75, -- runs fast!
+	movement_speed = 6.0,
 	damage = 7,
 	reach = 2,
 	particlespawners = psdefs,
@@ -615,7 +614,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 	water_damage = 8,
 	view_range = 64,
 	fear_height = 4,
-	attack_type = "dogfight",
+	attack_type = "melee",
 })
 
 -- End spawn

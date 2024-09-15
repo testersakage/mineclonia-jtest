@@ -66,6 +66,7 @@ local squid_defs = {
 	visual_size = { x = 3, y = 3 },
 	makes_footstep_sound = false,
 	swims = true,
+	movement_speed = 14,
 	breathes_in_water = true,
 	jump = false,
 	view_range = 16,

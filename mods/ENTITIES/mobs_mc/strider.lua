@@ -20,7 +20,7 @@ local strider = {
 	xp_min = 9,
 	xp_max = 9,
 	armor = {fleshy = 90},
-	attack_type = "dogfight",
+	attack_type = "melee",
 	damage = 2,
 	reach = 2,
 	collisionbox = {-.6, -0.01, -.6, .6, 1.94, .6},
@@ -36,8 +36,7 @@ local strider = {
 	},
 	jump = true,
 	makes_footstep_sound = true,
-	walk_velocity = 2,
-	run_velocity = 4,
+	movement_speed = 3.5,
 	runaway = true,
 	drops = {
 		{name = "mcl_mobsitems:string",
@@ -60,7 +59,6 @@ local strider = {
 	},
 	lava_damage = 0,
 	fire_damage = 0,
-	light_damage = 0,
 	water_damage = 5,
 	_mcl_freeze_damage = 5,
 	fear_height = 4,
@@ -78,22 +76,19 @@ local strider = {
 
 		if minetest.find_node_near(self.object:get_pos(), 2, {"mcl_core:lava_source","mcl_core:lava_flowing","mcl_nether:nether_lava_source","mcl_nether:nether_lava_flowing"}) then
 			if self.driver then
-				self.walk_velocity = 4
-				self.run_velocity = 8
+				self:add_physics_factor ("movement_speed", "mobs_mc:strider_on_lava", 2.0)
 			else
-				self.walk_velocity = 2
-				self.run_velocity = 4
+				self:remove_physics_factor ("movement_speed", "mobs_mc:strider_on_lava")
 			end
 			self.base_texture[1] = "extra_mobs_strider.png"
 			self.shaking = false
 		else
 			self.base_texture[1] = "extra_mobs_strider_cold.png"
-			self.walk_velocity = .5
-			self.run_velocity = 1
 			self.shaking = true
+			self:add_physics_factor ("movement_speed", "mobs_mc:strider_out_of_lava", 0.25)
 		end
 
-		self.object:set_properties({textures=self.base_texture, shaking=self.shaking, run_velocity=self.run_velocity, walk_velocity=self.walk_velocity})
+		self.object:set_properties({textures=self.base_texture, shaking=self.shaking})
 
 		-- set needed values if not already present
 		if not self.v2 then
@@ -201,8 +196,6 @@ mcl_mobs.register_mob("mobs_mc:baby_strider",table.merge(strider,{
 		"extra_mobs_strider.png",
 		"blank.png",
 	} },
-	walk_velocity = 1.2,
-	run_velocity = 2.4,
 	child = 1,
 }))
 

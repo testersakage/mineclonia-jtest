@@ -15,7 +15,7 @@ mcl_mobs.register_mob("mobs_mc:vex", {
 	spawn_class = "hostile",
 	pathfinding = 1,
 	passive = false,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	physical = false,
 	hp_min = 14,
 	hp_max = 14,
@@ -34,8 +34,7 @@ mcl_mobs.register_mob("mobs_mc:vex", {
 	damage = 9,
 	reach = 2,
 	view_range = 16,
-	walk_velocity = 2,
-	run_velocity = 3,
+	movement_speed = 14,
 	sounds = {
 		-- TODO: random
 		death = "mobs_mc_vex_death",

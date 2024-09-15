@@ -614,3 +614,8 @@ function mcl_doors:register_door(name, def)
 	end
 
 end
+
+function mcl_doors.is_open (pos)
+	local meta = minetest.get_meta (pos)
+	return meta:get_int ("is_open") == 1
+end
