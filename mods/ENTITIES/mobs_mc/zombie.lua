@@ -55,7 +55,7 @@ local zombie = {
 	xp_max = 5,
 	head_swivel = "head.control",
 	bone_eye_height = 6.3,
-	head_eye_height = 2.2,
+	head_eye_height = 1.74,
 	curiosity = 7,
 	head_pitch_multiplier=-1,
 	breath_max = -1,
@@ -82,8 +82,7 @@ local zombie = {
 		max_hear_distance = 16,
 		gain = 0.5,
 	},
-	walk_velocity = .8,
-	run_velocity = 1.2,
+	movement_speed = 4.6,
 	damage = 3,
 	reach = 2,
 	fear_height = 4,
@@ -99,10 +98,9 @@ local zombie = {
 		punch_start = 50, punch_end = 59, punch_speed = 20,
 	},
 	ignited_by_sunlight = true,
-	sunlight_damage = 2,
 	floats = 0,
 	view_range = 16,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	harmed_by_heal = true,
 	attack_npcs = true,
 }
@@ -118,10 +116,9 @@ local baby_zombie = table.merge(zombie, {
 	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.98, 0.25},
 	xp_min = 12,
 	xp_max = 12,
-	walk_velocity = 1,
-	run_velocity = 1.45,
 	child = 1,
 	reach = 1,
+	movement_speed = zombie.movement_speed + zombie.movement_speed * 0.5,
 	animation = {
 		stand_start = 100, stand_end = 109, stand_speed = 2,
 		walk_start = 60, walk_end = 99, speed_normal = 40,
@@ -143,7 +140,6 @@ husk.textures = {
 		}
 	}
 husk.ignited_by_sunlight = false
-husk.sunlight_damage = 0
 husk.drops = drops_common
 husk.dealt_effect = {
     name = "hunger",
@@ -163,7 +159,6 @@ baby_husk.textures = {{
 	"mobs_mc_husk.png", -- texture
 }}
 baby_husk.ignited_by_sunlight = false
-baby_husk.sunlight_damage = 0
 baby_husk.drops = drops_common
 baby_husk.dealt_effect = {
     name = "hunger",

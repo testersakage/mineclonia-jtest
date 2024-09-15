@@ -110,6 +110,23 @@ local function damage_particles(pos, is_critical)
 	end
 end
 
+function ARROW_ENTITY:arrow_knockback (object)
+	local entity = object:get_luaentity ()
+	local v = self.object:get_velocity ()
+	v.y = 0
+	local dir = vector.normalize (v)
+
+	-- Utilize different methods of applying knockback for
+	-- consistency's sake.
+	if entity and entity.is_mob then
+		entity:projectile_knockback (1 + (self._knockback or 0), dir)
+	elseif object:is_player () then
+		local knockback = minetest.calculate_knockback (object, self.object,
+								1.4, nil, dir, 0, 1)
+		object:add_velocity (vector.multiply (dir, 3 + knockback))
+	end
+end
+
 function ARROW_ENTITY.on_step(self, dtime)
 	mcl_burning.tick(self.object, dtime, self)
 	-- mcl_burning.tick may remove object immediately
@@ -198,7 +215,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 
 		local arrow_dir = self.object:get_velocity()
 		--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-		local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.1)), true, false)
+		local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.04)), true, false)
 		for hitpoint in raycast do
 			if hitpoint.type == "object" then
 				-- find the closest object that is in the way of the arrow
@@ -257,6 +274,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 						end
 						if not self._in_player and not self._blocked then
 							mcl_util.deal_damage(obj, self._damage, {type = "arrow", source = self._shooter, direct = self.object})
+							self:arrow_knockback (obj)
 							if self._extra_hit_func then
 								self._extra_hit_func(obj)
 							end

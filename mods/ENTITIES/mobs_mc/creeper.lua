@@ -19,8 +19,7 @@ local creeper_defs = {
 	mesh = "mobs_mc_creeper.b3d",
 	visual_size = { x = 3, y = 3 },
 	makes_footstep_sound = true,
-	walk_velocity = .8,
-	run_velocity = 1.3, -- not dead yet slow, imagine fast crepeer...
+	movement_speed = 6.0,
 	runaway = true,
 	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat" },
 	attack_type = "explode",

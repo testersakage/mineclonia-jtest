@@ -66,8 +66,7 @@ mcl_mobs.register_mob("mobs_mc:enderdragon", {
 	},
 	visual_size = {x=3, y=3},
 	view_range = 64,
-	walk_velocity = 6,
-	run_velocity = 6,
+	movement_speed = 14,
 	can_despawn = false,
 	sounds = {
 		-- TODO: more sounds

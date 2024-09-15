@@ -27,6 +27,7 @@ local skeleton = {
 	group_attack = true,
 	head_swivel = "Head_Control",
 	bone_eye_height = 2.38,
+	head_eye_height = 1.74,
 	curiosity = 6,
 	visual = "mesh",
 	mesh = "mobs_mc_skeleton.b3d",
@@ -40,8 +41,7 @@ local skeleton = {
 			"mcl_bows_bow_0.png", -- wielded_item
 		}
 	},
-	walk_velocity = 1.1,
-	run_velocity = 1.45, -- skeletons are really anoying in mc, so i made only walkin 0.2 slower
+	movement_speed = 5.0,
 	sounds = {
 		random = "mobs_mc_skeleton_random",
 		death = "mobs_mc_skeleton_death",
@@ -98,10 +98,11 @@ local skeleton = {
 		return true
 	end,
 	ignited_by_sunlight = true,
+	avoids_sunlight = true,
 	floats = 0,
 	view_range = 16,
 	fear_height = 4,
-	attack_type = "dogshoot",
+	attack_type = "bowshoot",
 	arrow = "mcl_bows:arrow_entity",
 	shoot_arrow = function(self, pos, dir)
 		if mod_bows then
@@ -114,8 +115,6 @@ local skeleton = {
 	end,
 	shoot_interval = 2,
 	shoot_offset = 1.5,
-	dogshoot_switch = 1,
-	dogshoot_count_max =1.8,
 	harmed_by_heal = true,
 	on_die = function(self, pos, cmi_cause)
 		if cmi_cause and cmi_cause.puncher then

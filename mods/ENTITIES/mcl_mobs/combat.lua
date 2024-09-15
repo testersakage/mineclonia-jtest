@@ -4,13 +4,6 @@ local damage_enabled = minetest.settings:get_bool("enable_damage", true)
 local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
 
-local stuck_timeout = 3 -- how long before mob gets stuck in place and starts searching
-local stuck_path_timeout = 10 -- how long will mob follow path before giving up
-
-local enable_pathfinding = true
-
-local TIME_TO_FORGET_TARGET = 15
-
 local function atan(x)
 	if not x or minetest.is_nan(x) then
 		return 0
@@ -27,18 +20,27 @@ function mob_class:day_docile()
 	return false
 end
 
+local SIGHT_PERSISTENCE = 3.0
+
 function mob_class:do_attack(obj)
-	if self.state == "attack" or self.state == "die" then
+	if self.dead then
 		return
 	end
+	-- No longer idle.  Interrupt other
+	-- activities.
+	self.avoiding_sunlight = false
+	self.mate = nil
+	self.following = nil
+	self.herd_following = nil
+	self.pacing = false
 
+	-- Attack!!!
 	self.attack = obj
-	self:set_state("attack")
+	self.attacking = false
+	self:set_animation ("run")
 
-	-- TODO: Implement war_cry sound without being annoying
-	--if random(0, 100) < 90 then
-		--self:mob_sound("war_cry", true)
-	--end
+	-- Abandon after obj disappears for longer than three seconds.
+	self.target_invisible_time = SIGHT_PERSISTENCE
 end
 
 -- blast damage to entities nearby
@@ -63,214 +65,9 @@ end
 
 function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius, self.object) end
 
-local los_switcher = false
-local height_switcher = false
-
--- path finding and smart mob routine by rnd, line_of_sight and other edits by Elkien3
-function mob_class:smart_mobs(s, _, _, dtime)
-
-	local stepheight = self.object:get_properties().stepheight
-	local s1 = self.path.lastpos
-
-	local target_pos = self.attack:get_pos()
-
-	-- is it becoming stuck?
-	if math.abs(s1.x - s.x) + math.abs(s1.z - s.z) < .5 then
-		self.path.stuck_timer = self.path.stuck_timer + dtime
-	else
-		self.path.stuck_timer = 0
-	end
-
-	self.path.lastpos = {x = s.x, y = s.y, z = s.z}
-
-	local use_pathfind = false
-	local has_lineofsight = minetest.line_of_sight(
-		{x = s.x, y = (s.y) + .5, z = s.z},
-		{x = target_pos.x, y = (target_pos.y) + 1.5, z = target_pos.z}, .2)
-
-	-- im stuck, search for path
-	if not has_lineofsight then
-
-		if los_switcher == true then
-			use_pathfind = true
-			los_switcher = false
-		end -- cannot see target!
-	else
-		if los_switcher == false then
-
-			los_switcher = true
-			use_pathfind = false
-
-			minetest.after(1, function(self)
-				if not self.object:get_luaentity() then
-					return
-				end
-				if has_lineofsight then self.path.following = false end
-			end, self)
-		end -- can see target!
-	end
-
-	if self:check_timer("stuck_timer", stuck_timeout) and not self.path.following  then
-		use_pathfind = true
-		self.path.stuck_timer = 0
-
-		minetest.after(1, function(self)
-			if not self.object:get_luaentity() then
-				return
-			end
-			if has_lineofsight then self.path.following = false end
-		end, self)
-	end
-
-	if self:check_timer("stuck_path_timer", stuck_path_timeout) and self.path.following then
-
-		use_pathfind = true
-		minetest.after(1, function(self)
-			if not self.object:get_luaentity() then
-				return
-			end
-			if has_lineofsight then self.path.following = false end
-		end, self)
-	end
-
-	if math.abs(vector.subtract(s,target_pos).y) > stepheight then
-
-		if height_switcher then
-			use_pathfind = true
-			height_switcher = false
-		end
-	else
-		if not height_switcher then
-			use_pathfind = false
-			height_switcher = true
-		end
-	end
-
-	if use_pathfind then
-		-- lets try find a path, first take care of positions
-		-- since pathfinder is very sensitive
-		-- round position to center of node to avoid stuck in walls
-		-- also adjust height for player models!
-
-		s.x = math.floor(s.x + 0.5)
-		s.z = math.floor(s.z + 0.5)
-
-		local ssight, sground = minetest.line_of_sight(s, {
-			x = s.x, y = s.y - 4, z = s.z}, 1)
-
-		-- determine node above ground
-		if not ssight then
-			s.y = sground.y + 1
-		end
-
-		local p1 = self.attack:get_pos()
-
-		p1.x = math.floor(p1.x + 0.5)
-		p1.y = math.floor(p1.y + 0.5)
-		p1.z = math.floor(p1.z + 0.5)
-
-		local dropheight = 12
-		if self.fear_height ~= 0 then dropheight = self.fear_height end
-		local jumpheight = 0
-		if self.jump and self.jump_height >= 4 then
-			jumpheight = math.min(math.ceil(self.jump_height / 4), 4)
-		elseif stepheight > 0.5 then
-			jumpheight = 1
-		end
-		self.path.way = minetest.find_path(s, p1, 16, jumpheight, dropheight, "A*_noprefetch")
-
-		self:set_state("")
-		self:do_attack(self.attack)
-
-		-- no path found, try something else
-		if not self.path.way then
-
-			self.path.following = false
-			-- will try again in 2 seconds
-		elseif s.y < p1.y and (not self.fly) then
-			self:do_jump() --add jump to pathfinding
-			self.path.following = true
-			-- Yay, I found path!
-			-- TODO: Implement war_cry sound without being annoying
-			--self:mob_sound("war_cry", true)
-		else
-			self:set_velocity(self.walk_velocity)
-
-			-- follow path now that it has it
-			self.path.following = true
-		end
-	end
-end
-
 function mob_class:attack_players_allowed ()
-	if not damage_enabled or
-		peaceful_mode or
-		self.state == "attack" or
-		self.passive or
-		self:day_docile() or
-		self.type ~= "monster" or
-		not self.attack_type then
-			return false
-	end
+	-- TODO
 	return true
-end
-
-function mob_class:attack_players_and_npcs()
-	if not self:attack_players_allowed () then
-		return
-	end
-	local pos = self.object:get_pos()
-	for obj in minetest.objects_inside_radius(pos, self.view_range) do
-		if self:line_of_sight(pos, obj:get_pos(), 2) then
-			local l = obj:get_luaentity()
-			if obj:is_player() then
-				self:do_attack(obj)
-				break
-			elseif self.attack_npcs and (l and l.type == "npc") then
-				self:do_attack(obj)
-				break
-			end
-		end
-	end
-
-	return false
-end
-
-function mob_class:attack_specific()
-	if not self.specific_attack or
-	not self.attack_type or
-	self.state == "attack" or
-	(not self.damage or self.damage == 0) or
-	(self.passive and not self.aggro)
-	then return end
-
-	local pos = self.object:get_pos()
-	for obj in minetest.objects_inside_radius(pos, self.view_range) do
-		if obj:is_player() and table.indexof(self.specific_attack,"player") and self.aggro then
-			self:do_attack(obj)
-			break
-		end
-		local l = obj:get_luaentity()
-		if l and l.is_mob then
-			if table.indexof(self.specific_attack,l.name) ~= -1 and self:line_of_sight(pos, obj:get_pos(), 2) then
-				self:do_attack(obj)
-				break
-			end
-		end
-	end
-end
-
-function mob_class:attack_monsters()
-	if not self.attack_type or self.type ~= "npc" or self.state == "attack" then return end
-
-	local pos = self.object:get_pos()
-	for obj in minetest.objects_inside_radius(pos, self.view_range) do
-		local l = obj:get_luaentity()
-		if l and l.type == "monster" and self:target_visible(pos, obj) then
-			self:do_attack(obj)
-			break
-		end
-	end
 end
 
 -- dogshoot attack switch and counter function
@@ -337,6 +134,53 @@ function mob_class:boom(pos, strength, fire, no_remove)
 	end
 end
 
+-- Apply projectile knockback.
+function mob_class:projectile_knockback (factor, dir)
+	local v = self.object:get_velocity ()
+	local kb, up = 1, 2
+
+	self._kb_turn = true
+	self._turn_to=self.object:get_yaw()-1.57
+	if self.animation.run_end then
+		self:set_animation ("run")
+	elseif self.animation.walk_end then
+		self:set_animation ("walk")
+	end
+	minetest.after(0.2, function()
+			       if self and self.object then
+				       self.frame_speed_multiplier=1
+				       self._kb_turn = false
+			       end
+	end)
+	self.object:set_velocity({
+			x = v.x / 2.0 + dir.x * factor * 2.5,
+			y = v.y / 2.0 + up*2,
+			z = v.z / 2.0 + dir.z * factor * 2.5,
+	})
+
+	self.pause_timer = 0.25
+end
+
+-- Register damage delivered otherwise than as punches and retaliate.
+function mob_class:register_damage (cmi_reason)
+	local source = cmi_reason.source
+
+	if not source then
+		return
+	end
+
+	if source:is_player () and source:get_player_name () == self.owner then
+		return
+	end
+
+	-- Attack puncher if necessary.
+	if ( self.passive == false or self.retaliates )
+		and self.state ~= "flop"
+		and (self.child == false or self.type == "monster") then
+		self:do_attack (source)
+	end
+end
+
 -- deal damage and effects when mob punched
 function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	local is_player = hitter and hitter:is_player()
@@ -366,17 +210,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			return
 		end
 
-		if minetest.is_creative_enabled(hitter_playername) then
-			-- Instantly kill mob after a slight delay.
-			-- Without this delay the node behind would be dug by the punch as well.
-			minetest.after(0.15, function(self)
-				if self and self.object and self.object:get_pos() then
-					self.health = 0
-				end
-			end, self)
-		end
-
-		-- set/update 'drop xp' timestamp if hitted by player
+		-- set/update 'drop xp' timestamp if hit by player
 		self.xp_timestamp = minetest.get_us_time()
 	end
 
@@ -490,7 +324,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			local v = self.object:get_velocity()
 			if not v then return end
 			local r = 1.4 - math.min(punch_interval, 1.4)
-			local kb = r * (math.abs(v.x)+math.abs(v.z))
+			local kb = r
 			local up = 2
 
 			if die==true then
@@ -536,12 +370,11 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 					self._kb_turn = false
 				end
 			end)
-			self.object:add_velocity({
-				x = dir.x * kb,
-				y = up*2,
-				z = dir.z * kb
-			})
 
+			v.x = v.x / 2.0 + dir.x * kb*2.5
+			v.z = v.z / 2.0 + dir.z * kb*2.5
+			v.y = v.y / 2.0 + up * 2
+			self.object:set_velocity (v)
 			self.pause_timer = 0.25
 		end
 	end -- END if damage
@@ -559,9 +392,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	and not mcl_mobs.invis[ hitter_playername or ""] then
 		if not die then
 			-- attack whoever punched mob
-			self:set_state("")
 			self:do_attack(hitter)
-			self.aggro = true
 		end
 	end
 
@@ -571,12 +402,8 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	end
 end
 
-function mob_class:do_runaway(hitter)
-	self:set_yaw( minetest.dir_to_yaw(vector.direction(hitter:get_pos(), self.object:get_pos())))
-	self:set_velocity( self.run_velocity)
-	self:set_state("runaway")
-	self:set_animation("run")
-	self.runaway_timer = 0
+function mob_class:do_runaway ()
+	self.runaway_timer = 5
 	self.following = nil
 end
 
@@ -593,7 +420,6 @@ function mob_class:call_group_attack(hitter)
 					ent:do_attack(hitter)
 				elseif type(ent.group_attack) == "table" then
 					if table.indexof(ent.group_attack, self.name) ~= -1 then
-						ent.aggro = true
 						ent:do_attack(hitter)
 					end
 				end
@@ -607,433 +433,307 @@ function mob_class:call_group_attack(hitter)
 	end
 end
 
-function mob_class:check_aggro()
-	if not self.aggro or not self.attack then return end
-	if not self:check_timer("check_aggro", 5) then return end
-	if not self.attack:get_pos() or vector.distance(self.attack:get_pos(),self.object:get_pos()) > 128 then
-		self:clear_aggro()
-	end
-end
 
+function mob_class:should_attack (object)
+	local entity = object:get_luaentity ()
+	local specific = self.specific_attack or {}
+	if object == self.object then
+		return false
+	elseif entity and entity.is_mob then
+		if self.attack_animals and entity.passive then
+			return true
+		end
 
+		if self.attack_npcs and entity.type == "npc" then
+			return true
+		end
 
-function mob_class:clear_aggro()
-	self:set_state("stand")
-	self:set_velocity( 0)
-	self:set_animation( "stand")
-
-	self.attack = nil
-	self.aggro = nil
-
-	self.v_start = false
-	self.timer = 0
-	self.blinktimer = 0
-	self.path.way = nil
-end
-
-function mob_class:do_states_attack (dtime)
-	local yaw
-	local attacked
-	local s = self.object:get_pos()
-
-	-- stop attacking if player invisible or out of range
-	if not self.attack
-			or not self.attack:get_pos()
-			or not self:object_in_range(self.attack)
-			or self.attack:get_hp() <= 0
-			or (self.attack:is_player() and mcl_mobs.invis[ self.attack:get_player_name() ]) then
-
-		self:clear_aggro()
-		return
+		if table.indexof (specific, entity.name) ~= -1 then
+			return true
+		end
+	elseif object:is_player () and self:attack_players_allowed () then
+		return self.type == "monster" or table.indexof (specific, "player")
 	end
 
-	-- Needs to be after self.attack check above
-	local p = self.attack:get_pos() or s
+	return false
+end
 
-	local target_line_of_sight = self:target_visible(s)
+function mob_class:should_continue_to_attack (object)
+	if object:is_player () and not self:attack_players_allowed () then
+		return false
+	end
+	return object:get_hp () > 0
+end
 
-	if not target_line_of_sight then
-		if self.target_time_lost then
-			if os.time() - self.target_time_lost > TIME_TO_FORGET_TARGET then
-				self.target_time_lost = nil
-				self:clear_aggro()
-				return
-			end
+function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
+	if not self.attacking then
+		-- Initialize parameters consulted during the attack.
+		self._target_visible_time = 0
+		self._strafe_time = -1 -- Don't strafe.
+		self._z_strafe = 1
+		self._x_strafe = 1
+		self._shoot_time = nil
+		self._shoot_timer = 0
+		self.attacking = true
+	end
+	local vistime = self._target_visible_time
+	local dist = vector.distance (self_pos, target_pos)
+	local shoot_pos = {
+		x = self_pos.x,
+		y = self_pos.y + self.shoot_offset,
+		z = self_pos.z,
+	}
+	local target_bb = self.attack:get_properties ()
+	local collisionbox = target_bb.collisionbox
+	local target = {
+		x = target_pos.x,
+		y = target_pos.y + (collisionbox[5] - collisionbox[2]) * 0.33,
+		z = target_pos.z,
+	}
+	local line_of_sight = self:line_of_sight (shoot_pos, target)
+
+	if line_of_sight then
+		if vistime < 0 then
+			vistime = 0
+		end
+		vistime = vistime + dtime
+	else
+		if vistime > 0 then
+			vistime = 0
+		end
+		vistime = vistime - dtime
+	end
+
+	-- Stop if the target is in range and has been for a second.
+	if dist < 15 and vistime >= 1 then
+		self:cancel_navigation ()
+		self._strafe_time = self._strafe_time + dtime
+	else
+		if self:check_timer ("bowshoot_pathfind", 0.5) then
+			self:gopath (target_pos, nil, true)
+		end
+		self._strafe_time = -1
+	end
+
+	-- Potentially switch directions after having strafed
+	-- for 1 second.
+	if self._strafe_time >= 1 then
+		if math.random (10) <= 3 then
+			self._z_strafe = -self._z_strafe
+		end
+		if math.random (10) <= 3 then
+			self._x_strafe = -self._x_strafe
+		end
+		self._strafe_time = 0
+	end
+	-- Target in range?
+	if self._strafe_time > -1 then
+		-- Don't allow target to approach too close or move
+		-- too far.
+		if dist > 15 * 0.75 then
+			self._z_strafe = 1
+		elseif dist < 15 * 0.25 then
+			self._z_strafe = -1
+		end
+
+		self.movement_goal = "strafe"
+		self.movement_velocity = self.movement_speed * 0.25
+		self.strafe_direction = { x = self._x_strafe * 0.5,
+					  z = self._z_strafe * 0.5, }
+		self:look_at (target_pos)
+		self:set_animation ("run")
+	end
+
+	if not self._shoot_time then
+		if self._shoot_timer <= 0 and vistime >= -3 then
+			self:set_animation ("shoot")
+			self._shoot_time = 0
+			self._shoot_timer = 0
 		else
-			self.target_time_lost = os.time()
+			self._shoot_timer = self._shoot_timer - dtime
 		end
 	else
-		self.target_time_lost = nil
+		-- If no longer visible, clear shooting counter.
+		if not line_of_sight and vistime < -3 then
+			self:set_animation ("run")
+			self.shoot_time = nil
+		elseif self._shoot_time > 1 then
+			-- Fire arrow.
+			self._shoot_time = nil
+			self._shoot_timer = self.shoot_interval or 1
+			self:set_animation ("run")
+
+			local vec = {
+				x = target.x - shoot_pos.x,
+				y = target.y - shoot_pos.y,
+				z = target.z - shoot_pos.z,
+			}
+
+			local target_bb = self.attack:get_properties ()
+			local collisionbox = target_bb.collisionbox
+
+			-- Offset by distance.
+			vec.y = vec.y + 0.12 * vector.length (vec)
+
+			if self.shoot_arrow then
+				local offset = self.shoot_offset
+				local origin = vector.offset (self_pos, 0, offset, 0)
+				vec = vector.normalize (vec)
+				self:shoot_arrow (origin, vec)
+			end
+		else
+			self._shoot_time = self._shoot_time + dtime
+		end
 	end
 
-	-- calculate distance from mob and enemy
-	local dist = vector.distance(p, s)
+	self._target_visible_time = vistime
+end
 
-	if self.attack_type == "explode" then
+function mob_class:custom_attack ()
+	-- Punch player (or what player is attached to)
+	local attached = self.attack:get_attach()
+	local attack = self.attack
+	if attached then
+		attack = attached
+	end
+	local damage = {
+		full_punch_interval = 1.0,
+		damage_groups = {fleshy = self.damage},
+	}
+	self:set_animation ("punch")
+	attack:punch (self.object, 1.0, damage, nil)
+end
 
-		if target_line_of_sight then
-			local vec = { x = p.x - s.x, z = p.z - s.z }
-			local yaw = (atan(vec.z / vec.x) +math.pi/ 2) - self.rotate
-			if p.x > s.x then yaw = yaw +math.pi end
-			self:set_yaw( yaw, 0, dtime)
+function mob_class:attack_melee (self_pos, dtime, target_pos)
+	if not self.attacking then
+		-- Initialize attack parameters.
+		self._target_pos = nil
+		self._gopath_delay = 0
+		self._attack_delay = 0
+		self.attacking = true
+	end
+
+	local delay = math.max (self._gopath_delay - dtime, 0)
+	local distance = vector.distance (self_pos, target_pos)
+
+	-- If the target is detectable...
+	if (self.esp or self:target_visible (self_pos, self.attack))
+		-- ...and the navigation timeout has elapsed...
+		and delay == 0
+		-- ..and this mob has yet to arrive at its target, or
+		-- the path should be recomputed...
+		and (not self._target_pos
+			or vector.distance (self_pos, target_pos) >= 1) then
+		self._target_pos = target_pos
+
+		delay = (4 + math.random (8) - 1) / 20.0
+
+		-- How distant is the target?
+		if distance > 32 then
+			delay = delay + 0.5
+		elseif distance > 16 then
+			delay = delay + 0.25
 		end
 
-		local node_break_radius = self.explosion_radius or 1
-		local entity_damage_radius = self.explosion_damage_radius
-				or (node_break_radius * 2)
+		-- Try to pathfind.
+		if not self:gopath (target_pos, nil, true) then
+			delay = delay + 0.75
+			self:set_animation ("stand")
+		end
+	end
+	self._gopath_delay = delay
 
-		-- start timer when in reach and line of sight
-		if not self.v_start and dist <= self.reach and target_line_of_sight then
-			self.v_start = true
-			self.timer = 0
-			self.blinktimer = 0
-			self:mob_sound("fuse", nil, false)
+	-- Can the target be attacked?
+	local delay = math.max (self._attack_delay - dtime, 0)
+	if distance < self.reach and delay == 0 then
+		self:look_at (target_pos)
+		self:custom_attack ()
+		delay = self.melee_interval
+	end
+	self._attack_delay = delay
+end
 
-			-- stop timer if out of reach or direct line of sight
-		elseif self.allow_fuse_reset and self.v_start
-				and (dist >= self.explosiontimer_reset_radius or not target_line_of_sight) then
-			self.v_start = false
-			self.timer = 0
-			self.blinktimer = 0
-			self.blinkstatus = false
-			self:remove_texture_mod("^[brighten")
+function mob_class:check_attack (self_pos, dtime)
+	if not self.attack then
+		if not self:check_timer ("seek_target", 0.5) then
+			return false
 		end
 
-		-- walk right up to player unless the timer is active
-		if self.v_start and (self.stop_to_explode or dist < self.reach) or not target_line_of_sight then
-			self:set_velocity(0)
+		if self.attack_custom then
+			self:attack_custom ()
 		else
-			self:set_velocity(self.run_velocity)
-		end
-
-		if self.animation and self.animation.run_start then
-			self:set_animation( "run")
-		else
-			self:set_animation( "walk")
-		end
-
-		if self.v_start then
-			self.timer = self.timer + dtime
-			self.blinktimer = (self.blinktimer or 0) + dtime
-
-			if self.blinktimer > 0.2 then
-				self.blinktimer = 0
-				if self.blinkstatus then
-					self:remove_texture_mod("^[brighten")
-				else
-					self:add_texture_mod("^[brighten")
+			local target, max_distance
+			local objects
+				= minetest.get_objects_inside_radius (self_pos, self.view_range)
+			for _, object in ipairs (objects) do
+				if self:should_attack (object) then
+					local pos = object:get_pos ()
+					local factor = 1.0
+					if object:is_player () then
+						local factors = mcl_armor.player_view_range_factors[object]
+						if factors then
+							factor = factors[self.name] or 1.0
+						end
+					end
+					local distance = vector.distance (self_pos, pos)
+					if distance <= self.view_range * factor
+						and (not max_distance or distance < max_distance)
+						and (self.attack_esp or self:target_visible (self_pos, object)) then
+						target = object
+						max_distance = distance
+					end
 				end
-				self.blinkstatus = not self.blinkstatus
 			end
 
-			if self.timer > self.explosion_timer then
-				local pos = self.object:get_pos()
-
-				if mobs_griefing and not minetest.is_protected(pos, "") then
-					mcl_explosions.explode(mcl_util.get_object_center(self.object), self.explosion_strength, {}, self.object)
-				else
-					minetest.sound_play(self.sounds.explode, {
-						pos = pos,
-						gain = 1.0,
-						max_hear_distance = self.sounds.distance or 32
-					}, true)
-					self:entity_physics(pos,entity_damage_radius)
-					mcl_mobs.effect(pos, 32, "mcl_particles_smoke.png", nil, nil, node_break_radius, 1, 0)
-				end
-
-				if self.on_attack then
-					self:on_attack(dtime)
-				end
-				self:safe_remove()
-
+			if target then
+				self:do_attack (target)
 				return true
 			end
 		end
+	else
+		local line_of_sight, target_pos
+		if not self.attack:is_valid () then
+			self.attack = nil
+			self:set_animation ("stand")
+			return true
+		end
+		-- If it's no longer possible to attack the
+		-- target, abandon it immediately.
+		if not self:should_continue_to_attack (self.attack) then
+			self.attack = nil
+			self:set_animation ("stand")
+			return true
+		end
+		target_pos = self.attack:get_pos ()
+		local distance = vector.distance (self_pos, target_pos)
+		if distance > self.tracking_distance then
+			self.attack = nil
+			self:set_animation ("stand")
+			return true
+		end
+		if not self.esp
+			and not self:target_visible (self_pos, self.attack) then
+			local t = self.target_invisible_time
+			self.target_invisible_time = t - dtime
 
-	elseif self.attack_type == "dogfight"
-			or (self.attack_type == "dogshoot" and self:dogswitch(dtime) == 2) and (dist >= self.avoid_distance or not self.shooter_avoid_enemy)
-			or (self.attack_type == "dogshoot" and dist <= self.reach and self:dogswitch() == 0) then
-
-		if self.fly
-				and dist > self.reach then
-
-			local p1 = s
-			local me_y = math.floor(p1.y)
-			local p2 = p
-			local p_y = math.floor(p2.y + 1)
-			local v = self.object:get_velocity()
-
-			if self:flight_check( s) then
-
-				if me_y < p_y then
-
-					self.object:set_velocity({
-						x = v.x,
-						y = 1 * self.walk_velocity,
-						z = v.z
-					})
-
-				elseif me_y > p_y then
-
-					self.object:set_velocity({
-						x = v.x,
-						y = -1 * self.walk_velocity,
-						z = v.z
-					})
-				end
-			else
-				if me_y < p_y then
-
-					self.object:set_velocity({
-						x = v.x,
-						y = 0.01,
-						z = v.z
-					})
-
-				elseif me_y > p_y then
-
-					self.object:set_velocity({
-						x = v.x,
-						y = -0.01,
-						z = v.z
-					})
-				end
+			if t < 0 then
+				self.attack = nil
+				self:set_animation ("stand")
+				return true
 			end
-
+			self.target_invisible_time = SIGHT_PERSISTENCE
 		end
 
-		-- rnd: new movement direction
-		if self.path.following
-				and self.path.way
-				and self.attack_type ~= "dogshoot" then
-
-			-- no paths longer than 50
-			if #self.path.way > 50
-					or dist < self.reach then
-				self.path.following = false
-				return
-			end
-
-			local p1 = self.path.way[1]
-
-			if not p1 then
-				self.path.following = false
-				return
-			end
-
-			if math.abs(p1.x-s.x) + math.abs(p1.z - s.z) < 0.6 then
-				-- reached waypoint, remove it from queue
-				table.remove(self.path.way, 1)
-			end
-
-			-- set new temporary target
-			p = {x = p1.x, y = p1.y, z = p1.z}
-		end
-
-		local vec = {
-			x = p.x - s.x,
-			z = p.z - s.z
-		}
-
-		yaw = (atan(vec.z / vec.x) + math.pi / 2) - self.rotate
-
-		if p.x > s.x then yaw = yaw + math.pi end
-
-		self:set_yaw( yaw, 0, dtime)
-
-		-- move towards enemy if beyond mob reach
-		if dist > self.reach then
-
-			-- path finding by rnd
-			if self.pathfinding -- only if mob has pathfinding enabled
-					and enable_pathfinding then
-
-				self:smart_mobs(s, p, dist, dtime)
-			end
-
-			if self:is_at_cliff_or_danger() then
-
-				self:set_velocity( 0)
-				self:set_animation( "stand")
-				local yaw = self.object:get_yaw() or 0
-				self:set_yaw( yaw + 0.78, 8)
-			else
-
-				if self.path.stuck then
-					self:set_velocity( self.walk_velocity)
-				else
-					self:set_velocity( self.run_velocity)
-				end
-
-				if self.animation and self.animation.run_start then
-					self:set_animation( "run")
-				else
-					self:set_animation( "walk")
-				end
-			end
-
-		else -- rnd: if inside reach range
-
-			self.path.stuck = false
-			self.path.stuck_timer = 0
-			self.path.following = false -- not stuck anymore
-
-			self:set_velocity( 0)
-
-			if not self.custom_attack then
-
-				if self.timer > self.dogfight_interval then
-
-					self.timer = 0
-
-					if self.double_melee_attack
-							and math.random(1, 2) == 1 then
-						self:set_animation( "punch2")
-					else
-						self:set_animation( "punch")
-					end
-
-					if self:target_visible(self.object:get_pos()) then
-						-- play attack sound
-						self:mob_sound("attack")
-
-						-- punch player (or what player is attached to)
-						local attached = self.attack:get_attach()
-						if attached then
-							self.attack = attached
-						end
-						self.attack:punch(self.object, 1.0, {
-							full_punch_interval = 1.0,
-							damage_groups = {fleshy = self.damage}
-						}, nil)
-						if self.dealt_effect then
-							mcl_potions.give_effect_by_level(self.dealt_effect.name, self.attack,
-								self.dealt_effect.level, self.dealt_effect.dur)
-						end
-						attacked = true
-					end
-				end
-			else	-- call custom attack every second
-				if self.custom_attack
-						and self.timer > self.custom_attack_interval then
-
-					self.timer = 0
-
-					self:custom_attack(p)
-					attacked = true
-				end
-			end
-		end
-
-	elseif self.attack_type == "shoot"
-			or (self.attack_type == "dogshoot" and self:dogswitch(dtime) == 1)
-			or (self.attack_type == "dogshoot" and (dist > self.reach or dist < self.avoid_distance and self.shooter_avoid_enemy) and self:dogswitch() == 0) then
-
-		p.y = p.y - .5
-		s.y = s.y + .5
-
-		local dist = vector.distance(p, s)
-		local vec = {
-			x = p.x - s.x,
-			y = p.y - s.y,
-			z = p.z - s.z
-		}
-
-		yaw = (atan(vec.z / vec.x) +math.pi/ 2) - self.rotate
-
-		if p.x > s.x then yaw = yaw +math.pi end
-
-		self:set_yaw( yaw, 0, dtime)
-
-		local stay_away_from_player = vector.new(0,0,0)
-
-		--strafe back and fourth
-
-		--stay away from players so as to shoot them
-		if dist < self.avoid_distance and self.shooter_avoid_enemy then
-			if self._shoot_while_strafing ~= false then
-				self:set_animation ("shoot")
-			else
-				self:set_animation ("run")
-			end
-			stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
-		end
-
-		if self.strafes then
-			if not self.strafe_direction then
-				self.strafe_direction = 1.57
-			end
-			if math.random(40) == 1 then
-				self.strafe_direction = self.strafe_direction*-1
-			end
-			self.acc = vector.add(vector.multiply(vector.rotate_around_axis(vector.direction(s, p), vector.new(0,1,0), self.strafe_direction), 0.3*self.walk_velocity), stay_away_from_player)
+		if self.attack_type == "bowshoot" then
+			self:attack_bowshoot (self_pos, dtime, target_pos)
+		elseif self.attack_type == "ranged" then
+		elseif self.attack_type == "melee" then
+			self:attack_melee (self_pos, dtime, target_pos)
 		else
-		    self:set_velocity (0)
+			minetest.log ("warning", "unknown attack type " .. self.attack_type)
 		end
 
-		local p = self.object:get_pos()
-		local props = self.object:get_properties()
-		p.y = p.y + (props.collisionbox[2] + props.collisionbox[5]) / 2
-
-		if self.shoot_interval
-			and self.timer > self.shoot_interval
-			and not minetest.raycast(vector.add(p, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
-			and math.random(1, 100) <= 60 then
-			self.timer = 0
-			self:set_animation ("shoot")
-
-			-- play shoot attack sound
-			self:mob_sound("shoot_attack")
-
-			-- Shoot arrow
-			if minetest.registered_entities[self.arrow] or self.shoot_arrow then
-
-				local v = 1
-				local arrow
-				if not self.shoot_arrow then
-					self.firing = true
-					minetest.after(1, function(self)
-						self.firing = false
-					end, self)
-					arrow = minetest.add_entity(p, self.arrow)
-					local ent = arrow:get_luaentity()
-					if ent.velocity then
-						v = ent.velocity
-					end
-					ent.switch = 1
-					ent.owner_id = tostring(self.object) -- add unique owner id to arrow
-
-					-- important for mcl_shields
-					ent._shooter = self.object
-					ent._saved_shooter_pos = self.object:get_pos()
-					if ent.homing then
-						ent._target = self.attack
-					end
-				end
-
-				local amount = (vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) ^ 0.5
-				-- offset makes shoot aim accurate
-				vec.y = vec.y + self.shoot_offset
-				vec.x = vec.x * (v / amount)
-				vec.y = vec.y * (v / amount)
-				vec.z = vec.z * (v / amount)
-
-				if self.shoot_arrow then
-					vec = vector.normalize(vec)
-					arrow = self:shoot_arrow(p, vec)
-				end
-
-				if arrow then
-					arrow:set_velocity(vec)
-				end
-				attacked = true
-			end
-		end
-	elseif self.attack_type == "custom" and self.attack_state then
-		self:attack_state(dtime)
-		attacked = true
+		return true
 	end
-	if attacked and self.on_attack then
-		self:on_attack(dtime)
-	end
+	return false
 end

@@ -21,13 +21,13 @@ local WORK = "work"
 local SLEEP = "sleep"
 local HOME = "home"
 local GATHERING = "gathering"
-local PATHFINDING = "gowp"
 local RUNAWAY = "runaway"
 
 function mobs_mc.villager_mob:stand_still()
 	self.walk_chance = 0
 	self.jump = false
-	self:set_state("stand")
+	self:halt_in_tracks (true)
+	-- self:set_state("stand")
 end
 
 function mobs_mc.villager_mob:get_badge_textures()
@@ -523,7 +523,7 @@ function mobs_mc.villager_mob:get_a_job()
 	local n = minetest.find_node_near(p, work_dist, requested_jobsites)
 	if n and self:employ(n) then return true end
 
-	if self.state ~= PATHFINDING then
+	if not self:is_navigating () then
 		local job_site = self:look_for_job(requested_jobsites)
 		if not job_site then
 			self:go_to_town_bell()
@@ -621,7 +621,7 @@ function mobs_mc.villager_mob:do_work()
 		local distance_to_jobsite = vector.distance(self.object:get_pos(), jobsite)
 
 		if distance_to_jobsite < work_dist then
-			if self.state ~= PATHFINDING and self.order ~= WORK then
+			if self.order ~= WORK and not self:is_navigating () then
 				self.order = WORK
 				self:unlock_trades()
 			end
@@ -754,7 +754,7 @@ function mobs_mc.villager_mob:do_activity(dtime)
 		end
 	end
 
-	if self.following or self.state == PATHFINDING then
+	if self.following or self:is_navigating () then
 		return
 	end
 
@@ -775,7 +775,7 @@ function mobs_mc.villager_mob:do_activity(dtime)
 		-- Only check in day or during thunderstorm but wandered_too_far code won't work
 		local wandered_too_far = false
 		if self:check_bed() then
-			wandered_too_far = (self.state ~= PATHFINDING) and (vector.distance(self.object:get_pos(), self._bed) > VIL_DIST - 10)
+			wandered_too_far = (not self:is_navigating ()) and (vector.distance(self.object:get_pos(), self._bed) > VIL_DIST - 10)
 		end
 		local activity = self:get_activity()
 		-- TODO separate sleep and home activities when villagers can sleep

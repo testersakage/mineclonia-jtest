@@ -56,9 +56,8 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 	makes_footstep_sound = true,
 	damage = 3,
 	reach = 2,
-	walk_velocity = 0.8,
-	run_velocity = 1.2, -- same as zombie
-	attack_type = "dogfight",
+	movement_speed = 4.6,
+	attack_type = "melee",
 	group_attack = true,
 	drops = {
 		{name = "mcl_mobitems:rotten_flesh",
@@ -141,7 +140,6 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 			new_ent:set_textures()
 		end
 	end,
-	sunlight_damage = 2,
 	ignited_by_sunlight = true,
 	floats = 0,
 	view_range = 16,

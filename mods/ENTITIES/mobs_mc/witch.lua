@@ -41,8 +41,7 @@ local witch_base_drops = {
 minetest.register_entity ("mobs_mc:witch_potion", witch_potion_entity)
 
 local function witch_equip_potion (self, potion)
-	self:add_physics_factor ("walk_velocity", "mobs_mc:witch_potion_penalty", 0.75)
-	self:add_physics_factor ("run_velocity", "mobs_mc:witch_potion_penalty", 0.75)
+	self:add_physics_factor ("movement_speed", "mobs_mc:witch_potion_penalty", 0.75)
 
 	self._held_potion = potion
 	local object = minetest.add_entity (self.object:get_pos (), "mobs_mc:witch_potion")
@@ -61,8 +60,8 @@ local function witch_equip_potion (self, potion)
 end
 
 local function witch_consume_potion (self, potion)
-	self:remove_physics_factor ("walk_velocity", "mobs_mc:witch_potion_penalty")
-	self:remove_physics_factor ("run_velocity", "mobs_mc:witch_potion_penalty")
+	self:remove_physics_factor ("movement_speed", "mobs_mc:witch_potion_penalty")
+
 	mcl_potions.consume_potion (self.object, potion, 0, 0)
 	if self._held_potion_object then self._held_potion_object:remove ()
 		self._held_potion_object = nil
@@ -157,8 +156,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	makes_footstep_sound = true,
 	damage = 2,
 	reach = 2,
-	walk_velocity = 1,
-	run_velocity = 1.4,
+	movement_speed = 5.0,
 	pathfinding = 1,
 	group_attack = true,
 	attack_type = "dogshoot",
@@ -202,7 +200,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	end,
 	attack_players_and_npcs = function (self)
 	end,
-	attack_specific = function (self)
+	attack_custom = function (self)
 		local attack_players = self:attack_players_allowed ()
 		if self.state == "attack" then
 		-- A target has already been selected.

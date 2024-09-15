@@ -7,6 +7,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 	type = "animal",
 	spawn_class = "passive",
 	runaway = true,
+	passive = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,
@@ -25,9 +26,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 	curiosity = 3,
 	head_yaw="z",
 	makes_footstep_sound = true,
-	walk_velocity = 1,
-	run_velocity = 1.5,
-	follow_velocity = 1.5,
+	movement_speed = 5.0,
 	drops = {
 		{name = "mcl_mobitems:porkchop",
 		chance = 1,
