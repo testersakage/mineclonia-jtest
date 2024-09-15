@@ -35,10 +35,10 @@ mcl_mobs.register_mob("mobs_mc:polar_bear", {
 	_mcl_freeze_damage = 0,
 	damage = 6,
 	reach = 2,
-	walk_velocity = 1.2,
-	run_velocity = 2.4,
+	movement_speed = 5.0,
+	follow_bonus = 1.25,
 	group_attack = true,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	drops = {
 		-- 3/4 chance to drop raw fish (poor approximation)
 		{name = "mcl_fishing:fish_raw",

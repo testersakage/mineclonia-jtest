@@ -220,7 +220,7 @@ function mob_class:set_animation(anim, fixed_frame)
 		self.jockey = nil
 	end
 
-	if self.state == "die" and anim ~= "die" and anim ~= "stand" then
+	if self.dead and anim ~= "die" and anim ~= "stand" then
 		return
 	end
 
@@ -269,9 +269,11 @@ function mob_class:who_are_you_looking_at()
 	local stop_look_at_player = stop_look_at_player_chance == 1
 
 	if self.attack then
-		self._locked_object = not self.target_time_lost and self.attack or nil
+		self._locked_object = self.attack
 	elseif self.following then
 		self._locked_object = self.following
+	elseif self.mate then
+		self._locked_object = self.mate
 	elseif self._locked_object then
 		if stop_look_at_player then
 			--minetest.log("Stop look: ".. self.name)
@@ -384,17 +386,9 @@ end
 -- set animation speed relative to velocity
 function mob_class:set_animation_speed(custom_speed)
 	local speed = custom_speed or self.animation.walk_speed or 25
-	local v = self.object:get_velocity()
-	if v then
-		if self.frame_speed_multiplier then
-			local v2 = math.abs(v.x)+math.abs(v.z)
-			if v2 > 0.5 then
-				self.object:set_animation_frame_speed((v2/math.max(1,self.run_velocity))*speed*self.frame_speed_multiplier)
-			else
-				self.object:set_animation_frame_speed(25)
-			end
-		end
-	end
+	local v = self:get_velocity ()
+	local scaled_speed = speed * self.frame_speed_multiplier
+	self.object:set_animation_frame_speed (scaled_speed * math.min (1, v))
 end
 
 minetest.register_on_leaveplayer(function(player)

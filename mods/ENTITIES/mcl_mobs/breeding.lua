@@ -115,7 +115,7 @@ function mcl_mobs.spawn_child(pos, mob_type)
 	return child
 end
 
-function mob_class:check_breeding()
+function mob_class:tick_breeding ()
 	if self.child == true then
 		-- When a child, hornytimer is used to count age until adulthood
 		self.hornytimer = self.hornytimer + 1
@@ -132,12 +132,7 @@ function mob_class:check_breeding()
 			if self.on_grown then
 				self.on_grown(self)
 			else
-				-- jump when fully grown so as not to fall into ground
-				self.object:set_velocity({
-					x = 0,
-					y = self.jump_height,
-					z = 0
-				})
+				self.order = "jump"
 			end
 			self.animation = nil
 			local anim = self._current_animation
@@ -146,96 +141,223 @@ function mob_class:check_breeding()
 		end
 		return
 	else
-		if self.horny == true then
+		if self.horny == true or self.hornytimer ~= 0 then
 			self.hornytimer = self.hornytimer + 1
 
 			if self.hornytimer >= HORNY_TIME + HORNY_AGAIN_TIME then
 				self.hornytimer = 0
+			end
+			if self.hornytimer >= HORNY_TIME then
 				self.horny = false
-			end
-		end
-	end
-	if self.horny == true
-	and self.hornytimer <= HORNY_TIME then
-		local pos = self.object:get_pos()
-
-        if (self.hornytimer % 20) == 0.0 then
-            mcl_mobs.effect({x = pos.x, y = pos.y + 1, z = pos.z}, 8, "heart.png", 3, 4, 1, 0.1)
-        end
-
-		local num = 0
-		for obj in minetest.objects_inside_radius(pos, 3) do
-			local ent = obj:get_luaentity()
-			-- check for same animal with different colour
-			local canmate = false
-			if ent then
-				if ent.name == self.name then
-					canmate = true
-				else
-					local entname = string.split(ent.name,":")
-					local selfname = string.split(self.name,":")
-					if entname[1] == selfname[1] then
-						entname = string.split(entname[2],"_")
-						selfname = string.split(selfname[2],"_")
-						if entname[1] == selfname[1] then
-							canmate = true
-						end
-					end
-				end
-			end
-
-			if ent
-			and canmate == true
-			and ent.horny == true
-			and ent.hornytimer <= HORNY_TIME then
-				num = num + 1
-			end
-
-			-- found your mate? then have a baby
-			if num > 1 then
-				self.hornytimer = HORNY_TIME + 1
-				ent.hornytimer = HORNY_TIME + 1
-				minetest.after(5, function(parent1, parent2, pos)
-					if not parent1.object:get_luaentity() then
-						return
-					end
-					if not parent2.object:get_luaentity() then
-						return
-					end
-
-					mcl_experience.throw_xp(pos, math.random(1, 7))
-
-					if parent1.on_breed then
-						if parent1.on_breed(parent1, parent2) == false then
-							return
-						end
-					end
-					local child = mcl_mobs.spawn_child(pos, parent1.name)
-					if child then
-						local ent_c = child:get_luaentity()
-						-- Use texture of one of the parents
-						local p = math.random(1, 2)
-						if p == 1 then
-							ent_c.base_texture = parent1.base_texture
-						else
-							ent_c.base_texture = parent2.base_texture
-						end
-						ent_c:set_properties({
-							textures = ent_c.base_texture
-						})
-						ent_c.tamed = true
-						ent_c.owner = parent1.owner
-					end
-				end, self, ent, pos)
-				break
+			elseif self.horny and (self.hornytimer % 20) == 0 then
+				local pos = self.object:get_pos ()
+				mcl_mobs.effect({x = pos.x, y = pos.y + 1, z = pos.z}, 8, "heart.png", 3, 4, 1, 0.1)
 			end
 		end
 	end
 end
 
+function mob_class:beget_child (pos)
+	local mate
+	if not self.object:get_luaentity () then
+		return
+	end
+	mate = self.mate and self.mate:get_luaentity ()
+	if not mate then
+		return
+	end
+	-- Clear both fields to guarantee that a pair of mobs can only
+	-- breed once.
+	self.mate = nil
+	mate.mate = nil
+	mcl_experience.throw_xp (pos, math.random (1, 7))
+	self:set_animation ("stand")
+	mate:set_animation ("stand")
+	if self.on_breed then
+		if self:on_breed (mate) == false then
+			return
+		end
+		local child = mcl_mobs.spawn_child(pos, self.name)
+		if child then
+			local ent_c = child:get_luaentity()
+			-- Use texture of one of the parents
+			local p = math.random(1, 2)
+			if p == 1 then
+				ent_c.base_texture = self.base_texture
+			else
+				ent_c.base_texture = self.base_texture
+			end
+			ent_c:set_properties({
+					textures = ent_c.base_texture
+			})
+			ent_c.tamed = true
+			ent_c.owner = self.owner
+		end
+	end
+end
+
+function mob_class:can_mate (with)
+	if with == self.object then
+		return false
+	end
+	local ent = with:get_luaentity ()
+	if ent and ent.horny and ent.is_mob then
+		if ent.name == self.name then
+			-- Don't attempt to mate with mobs already
+			-- taken.
+			return not ent.mate or ent.mate == self
+		end
+
+		-- Match different variants of one mob.
+		-- FIXME: hideous code.
+		local entname = string.split (ent.name, ":")
+		local selfname = string.split (self.name, ":")
+		if entname[1] == selfname[1] then
+			entname = string.split (entname[2], "_")
+			selfname = string.split (selfname[2], "_")
+			if entname[1] == selfname[1] then
+				return not ent.mate or ent.mate == self
+			end
+		end
+	end
+	return false
+end
+
+function mob_class:same_species (ent)
+	-- Match different variants of one mob.
+	-- FIXME: hideous code.
+	local entname = string.split (ent.name, ":")
+	local selfname = string.split (self.name, ":")
+	if entname[1] == selfname[1] then
+		entname = string.split (entname[2], "_")
+		selfname = string.split (selfname[2], "_")
+		if entname[1] == selfname[1] then
+			return not ent.mate or ent.mate == self
+		end
+	end
+	return false
+end
+
+function mob_class:check_breeding (pos)
+	if self.mate then
+		if not self.mate:is_valid () then
+			self:set_animation ("stand")
+			self.mate = nil
+			return false
+		end
+		local entity = self.mate:get_luaentity ()
+		if self.hornytimer == 0 or entity.hornytimer == 0
+		-- Unrequited love?
+			or entity.mate ~= self.object then
+			self.mate = nil
+			return false
+		end
+		local matepos = self.mate:get_pos ()
+		if vector.distance (pos, matepos) < 3.0 and self.hornytimer
+			and not self.begetting then
+			self.begetting = true
+			minetest.after (5, mob_class.beget_child, self, pos)
+		end
+		self:gopath (matepos, nil, true)
+		return true
+	elseif self.horny and self.hornytimer < HORNY_TIME then
+			local ax, ay, az, bx, by, bz
+			ax = self.collisionbox[1]
+			ay = self.collisionbox[2]
+			az = self.collisionbox[3]
+			bx = self.collisionbox[4]
+			by = self.collisionbox[5]
+			bz = self.collisionbox[6]
+			local aa = { x = pos.x + ax - 8, y = pos.y + ay - 4, z = pos.z + az - 8 }
+			local bb = { x = pos.x + bx + 8, y = pos.y + by + 4, z = pos.z + bz + 8 }
+			local objects = minetest.get_objects_in_area (aa, bb)
+			for _, object in ipairs (objects) do
+				if self:can_mate (object) then
+					local entity = object:get_luaentity ()
+					self.mate = object
+					entity.mate = self.object
+					self.begetting = false
+					self.horny = false
+					-- Prevent duplicate calls to
+					-- minetest.after.
+					entity.begetting = true
+					-- Taken, sorry!
+					entity.horny = false
+
+					-- Interrupt other activities.
+					self.herd_following = nil
+					self.pacing = nil
+					return true
+				end
+			end
+	end
+end
+
+function mob_class:follow_herd (pos)
+	if self.herd_following then
+		if not self.child then
+			-- Mob matured.
+			self.herd_following = nil
+			return false
+		end
+
+		local entity = self.herd_following:get_luaentity ()
+		if not entity then
+			self.herd_following = nil
+			return false
+		end
+
+		local target_pos = self.herd_following:get_pos ()
+		if vector.distance (target_pos, pos) < 9 then
+			self.herd_following = nil
+			return false
+		end
+		-- Recalculate path every .5 seconds, as in Minecraft.
+		if self:check_timer ("check_herd", 0.5) then
+			self:gopath (target_pos, nil, true,
+				     self.movement_speed * self.follow_bonus)
+		end
+	elseif self.child and self:check_timer ("check_herd", 0.5) then
+		-- Locate nearby adults to decide whether the entire
+		-- herd is further than 9 blocks away.
+		local ax, ay, az, bx, by, bz
+		ax = self.collisionbox[1]
+		ay = self.collisionbox[2]
+		az = self.collisionbox[3]
+		bx = self.collisionbox[4]
+		by = self.collisionbox[5]
+		bz = self.collisionbox[6]
+		local aa = { x = pos.x + ax - 8, y = pos.y + ay - 4, z = pos.z + az - 8 }
+		local bb = { x = pos.x + bx + 8, y = pos.y + by + 4, z = pos.z + bz + 8 }
+		local objects = minetest.get_objects_in_area (aa, bb)
+		local distmax, selected = 5000
+
+		for _, object in ipairs (objects) do
+			local obj_pos = object:get_pos ()
+			local dist = vector.distance (pos, obj_pos)
+			if dist < distmax then
+				local entity = object:get_luaentity ()
+				if entity and entity.is_mob and not entity.child
+					and self:same_species (entity) then
+					distmax = dist
+					selected = object
+				end
+			end
+			-- There's no need to move towards the rest of
+			-- the herd.
+			if distmax < 9 then
+				return false
+			end
+		end
+
+		-- Interrupt other activities.
+		self.pacing = false
+		self.herd_following = selected
+	end
+end
+
 function mob_class:stay()
 	self.order = "sit"
-	self:set_state("stand")
 	self.walk_chance = 0
 	self.jump = false
 	if self.animation.sit_start then
@@ -247,7 +369,6 @@ end
 
 function mob_class:roam()
 	self.order = "roam"
-	self:set_state("stand")
 	self.walk_chance = 50
 	self.jump = true
 	self:set_animation("stand")

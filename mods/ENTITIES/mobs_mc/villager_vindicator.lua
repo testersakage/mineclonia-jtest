@@ -38,9 +38,8 @@ mcl_mobs.register_mob("mobs_mc:vindicator", {
 	makes_footstep_sound = true,
 	damage = 13,
 	reach = 2,
-	walk_velocity = 1.2,
-	run_velocity = 1.6,
-	attack_type = "dogfight",
+	movement_speed = 7.0,
+	attack_type = "melee",
 	attack_npcs = true,
 	drops = {
 		{name = "mcl_core:emerald",

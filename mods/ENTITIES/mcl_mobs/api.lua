@@ -1,8 +1,6 @@
 local mob_class = mcl_mobs.mob_class
 -- API for Mobs Redo: MineClone 2 Edition (MRM)
 
-local PATHFINDING = "gowp"
-
 -- Localize
 local S = minetest.get_translator("mcl_mobs")
 
@@ -87,6 +85,9 @@ function mob_class:get_staticdata()
 		if  t ~= "function"
 		and t ~= "nil"
 		and t ~= "userdata"
+		-- This structure is liable to grow to an immense size.
+		and tag ~= "pathfinding_context"
+		and tag ~= "waypoints"
 		and tag ~= "_cmi_components" then
 			tmp[tag] = self[tag]
 		end
@@ -147,19 +148,21 @@ end
 
 function mob_class:scale_size(scale, force)
 	if self.scaled and not force then return end
+	local collisionbox = {
+		self.base_colbox[1] * scale,
+		self.base_colbox[2] * scale,
+		self.base_colbox[3] * scale,
+		self.base_colbox[4] * scale,
+		self.base_colbox[5] * scale,
+		self.base_colbox[6] * scale,
+	}
+	self.collisionbox = collisionbox
 	self:set_properties({
 		visual_size = {
 			x = self.base_size.x * scale,
 			y = self.base_size.y * scale,
 		},
-		collisionbox = {
-			self.base_colbox[1] * scale,
-			self.base_colbox[2] * scale,
-			self.base_colbox[3] * scale,
-			self.base_colbox[4] * scale,
-			self.base_colbox[5] * scale,
-			self.base_colbox[6] * scale,
-		},
+		collisionbox = collisionbox,
 		selectionbox = {
 			self.base_selbox[1] * scale,
 			self.base_selbox[2] * scale,
@@ -198,15 +201,17 @@ function mob_class:mob_activate(staticdata, dtime)
 		end
 	end
 
-	if not self.state then
-		self:set_state("stand")
-	elseif self.state == "die" then
+	self.acc_dir = vector.zero ()
+	self.acc_speed = 0
+
+	if self.dead then
 		self:safe_remove()
 		return
-	elseif self.state == "attack" then
-		if not self.attack or not self.attack.get_pos or not self.attack:get_pos() then
-			self:set_state("stand")
-		end
+		-- TODO
+	-- elseif self.state == "attack" then
+	-- 	if not self.attack or not self.attack.get_pos or not self.attack:get_pos() then
+	-- 		self:set_state("stand")
+	-- 	end
 	end
 
 	if peaceful_mode and not self.persist_in_peaceful then
@@ -233,6 +238,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	end
 
 	local def = mcl_mobs.registered_mobs[self.name]
+	self.collisionbox = self.initial_properties.collisionbox
 	if self.child == true then
 		self:scale_size(0.5)
 		if def.child_texture then
@@ -307,6 +313,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	if def.after_activate then
 		def.after_activate(self, staticdata, def, dtime)
 	end
+	self:init_ai ()
 end
 
 function mob_class:forward_directions()
@@ -331,37 +338,6 @@ function mob_class:node_infront_ok(pos, y_adjust, fallback)
 	return minetest.registered_nodes[fallback]
 end
 
-function mob_class:set_state(state)
-	if self.state == "die" then
-		return
-	end
-	--minetest.log("set_state: " .. state .. ", " .. debug.traceback())
-	self.state = state
-end
-
--- returns true if mob has died
--- which only happens if a mob explodes itself as part of an attack
-function mob_class:do_states(dtime)
-	--minetest.log("state: " .. self.state .. ", order: " .. self.order .. ", mob: " .. self.name)
-	if self.state == PATHFINDING then
-		self:check_gowp(dtime)
-	elseif self.state == "walk" then
-		self:do_states_walk()
-	elseif self.state == "runaway" then
-		self:do_states_runaway()
-	elseif self.state == "attack" then
-		if self:do_states_attack(dtime) then
-			return true
-		end
-	elseif self.state == "fly" then
-		self:do_states_fly()
-	elseif self.state == "swim" or self.state == "flop" then
-		self:do_states_swim()
-	else
-		self:do_states_stand()
-	end
-end
-
 local function update_attack_timers (self, dtime)
 	if self.pause_timer > 0 then
 		self.pause_timer = self.pause_timer - dtime
@@ -369,11 +345,12 @@ local function update_attack_timers (self, dtime)
 	end
 	-- attack timer
 	self.timer = self.timer + dtime
-	if self.state ~= "attack" and self.state ~= PATHFINDING then
-		if self.timer < 1 then
-			return true
+	if self.state ~= "attack" then
+		if self.timer >= 1 then
+			self.timer = 0
+		else
+			return
 		end
-		self.timer = 0
 	end
 
 	if self.timer > 100 then
@@ -411,8 +388,19 @@ function mob_class:on_step(dtime, moveresult)
 	local pos_head = vector.offset(p, 0, cbox[5] - 0.5, 0)
 	self.head_in =  mcl_mobs.node_ok(pos_head, "air").name
 
-	self:motion_step (dtime, moveresult)
+
 	self:falling (pos)
+	self:check_dying ()
+	self:motion_step (dtime, moveresult)
+
+	if self.stupefied then
+		self:halt_in_tracks ()
+		return
+	end
+
+	self:movement_step (dtime, moveresult)
+	self:navigation_step (dtime, moveresult)
+	self:ai_step (dtime)
 
 	if self.force_step then
 		self:force_step(dtime)
@@ -422,12 +410,6 @@ function mob_class:on_step(dtime, moveresult)
 	if self:check_suspend() then
 		self.object:set_velocity(vector.zero()) --stop movement otherwise mobs keep moving continuously
 		return
-	end
-
-	self:check_water_flow()
-
-	if not self.driver then
-	   self:env_danger_movement_checks (dtime)
 	end
 
 	if not self.fire_resistant then
@@ -448,20 +430,10 @@ function mob_class:on_step(dtime, moveresult)
 	   self:check_particlespawners(dtime)
 	   self:check_item_pickup()
 	else
-	   self:follow_player() -- Mob following code.
 	   self:set_animation_speed()
 	   self:check_smooth_rotation(dtime)
 	   self:check_head_swivel(dtime)
-
 	   self:set_armor_texture()
-	   self:check_runaway_from()
-
-	   self:attack_players_and_npcs()
-	   self:attack_monsters()
-	   self:attack_specific()
-
-	   self:check_breeding()
-	   self:check_aggro(dtime)
 
 	   -- Expel drivers riding submerged mobs.
 	   self:expel_underwater_drivers ()
@@ -500,13 +472,11 @@ function mob_class:on_step(dtime, moveresult)
 	end
 
 	if self:env_damage (dtime, pos) then return end
-	if self:do_states(dtime) then return end
+	self:run_ai (dtime)
 
 	if self.jump_sound_cooloff > 0 then
 		self.jump_sound_cooloff = self.jump_sound_cooloff - dtime
 	end
-
-	self:do_jump()
 
 	if not self.object:get_luaentity() then
 		return false

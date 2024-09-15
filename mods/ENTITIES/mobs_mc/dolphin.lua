@@ -49,7 +49,6 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	fly_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	_player_check_time = 0,
 	follow_holding = function (_) return true end,
-	follow_velocity = 4.8,
 	do_custom = function (self, dtime)
 	local pos = self.object:get_pos ()
 	local closest_player, cur_dist
@@ -86,13 +85,11 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	jump = false,
 	view_range = 16,
 	fear_height = 4,
-	walk_velocity = 1,
-	run_velocity = 1,
-	swim_velocity = 2,
+	movement_speed = 24.0,
 	group_attack = { "mobs_mc:dolphin" },
 	reach = 2,
 	damage = 2.5,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	on_rightclick = function(self, clicker)
 		local wi = clicker:get_wielded_item()
 		if table.indexof(food_items, wi:get_name()) ~= -1 then

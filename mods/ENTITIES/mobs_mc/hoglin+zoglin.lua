@@ -20,8 +20,8 @@ local hoglin = {
 	xp_min = 9,
 	xp_max = 9,
 	armor = {fleshy = 90},
-	attack_type = "dogfight",
-	dogfight_interval = 3,
+	attack_type = "melee",
+	melee_interval = 3,
 	custom_attack_interval = 3,
 	damage = 4,
 	reach = 3,
@@ -40,8 +40,7 @@ local hoglin = {
 	},
 	jump = true,
 	makes_footstep_sound = true,
-	walk_velocity = 1,
-	run_velocity = 1.3, -- ( was 2.8 )  < 2.4 is slow and 2.6 < is fast
+	movement_speed = 6.0,
 	retaliates = true,
 	group_attack = true,
 	avoid_from = {
@@ -127,8 +126,7 @@ mcl_mobs.register_mob("mobs_mc:baby_hoglin",table.merge(hoglin,{
 		"extra_mobs_hoglin.png",
 		"blank.png",
 	} },
-	walk_velocity = 1.2,
-	run_velocity = 1.6,
+	movement_speed = 6.0,
 	child = 1,
 }))
 

@@ -37,7 +37,7 @@ local spider = {
 	spawn_class = "hostile",
 	passive = false,
 	docile_by_day = true,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	pathfinding = 1,
 	damage = 2,
 	reach = 2,
@@ -84,8 +84,7 @@ local spider = {
 		-- TODO: sounds: walk
 		distance = 16,
 	},
-	walk_velocity = 1.1,
-	run_velocity = 1.45, -- (was 2.4) a bit slower, they arent much different from running skeletons
+	movement_speed = 6.0,
 	jump = true,
 	jump_height = 4,
 	always_climb = true,
@@ -135,8 +134,6 @@ cave_spider.on_spawn = function(self)
 		minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes"):set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
 	end
 end
-cave_spider.walk_velocity = 1
-cave_spider.run_velocity = 1.3
 cave_spider.animation.walk_speed = 40
 cave_spider.sounds = table.copy(spider.sounds)
 cave_spider.sounds.base_pitch = 1.25

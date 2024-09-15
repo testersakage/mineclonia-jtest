@@ -42,15 +42,14 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	owner = "",
 	order = "follow",
 	floats = 0,
-	walk_velocity = 0.3,
-	run_velocity = 1,
+	movement_speed = 5.0,
 	-- Approximation
 	damage = 14,
-	knock_back = false,
+	knock_back = true,
 	reach = 3,
 	group_attack = { "mobs_mc:iron_golem", "mobs_mc:villager" },
 	attacks_monsters = true,
-	attack_type = "dogfight",
+	attack_type = "melee",
 	_got_poppy = false,
 	pick_up = {"mcl_flowers:poppy"},
 	on_pick_up = function(self,n)

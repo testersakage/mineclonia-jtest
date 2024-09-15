@@ -216,8 +216,7 @@ table.update(mobs_mc.villager_mob, {
 		"mobs_mc_villager.png", --hat
 	},
 	makes_footstep_sound = true,
-	walk_velocity = 1,
-	run_velocity = 1.5,
+	movement_speed = 10,
 	drops = {},
 	can_despawn = false,
 	-- TODO: sounds

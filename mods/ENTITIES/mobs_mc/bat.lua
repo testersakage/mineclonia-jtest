@@ -40,8 +40,7 @@ mcl_mobs.register_mob("mobs_mc:bat", {
 		death = "mobs_mc_bat_death",
 		distance = 16,
 	},
-	walk_velocity = 4.5,
-	run_velocity = 6.0,
+	movement_speed = 14.0,
 	-- TODO: Hang upside down
 	animation = {
 		stand_speed = 80,

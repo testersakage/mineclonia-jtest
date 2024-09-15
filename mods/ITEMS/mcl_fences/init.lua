@@ -261,6 +261,8 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 	opendefinitions.inventory_image = nil
 	opendefinitions.wield_image = nil
 	opendefinitions._mcl_burntime = nil
+	opendefinitions.groups = table.copy (definitions.groups)
+	opendefinitions.groups.fence_gate_open = 1
 
 	opendefinitions.groups.not_in_creative_inventory = 1
 	opendefinitions.mesecon_ignore_opaque_dig = 1

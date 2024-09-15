@@ -42,8 +42,7 @@ mcl_mobs.register_mob("mobs_mc:illusioner", {
 		distance = 16,
 	},
 	visual_size = {x=2.75, y=2.75},
-	walk_velocity = 0.6,
-	run_velocity = 2,
+	movement_speed = 10,
 	jump = true,
 	animation = {
 		stand_speed = 25,
