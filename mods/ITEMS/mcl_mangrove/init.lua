@@ -6,6 +6,7 @@ mcl_trees.register_wood("mangrove",{
 	readable_name=S("Mangrove"),
 	sign_color="#8E3731",
 	sapling=false,
+	saplingdrop="mcl_mangrove:propagule",
 	tree_schems = {
 		{file = modpath.."/schematics/mcl_mangrove_tree_1.mts", offset = vector.new(1,0,1)},
 		{file = modpath.."/schematics/mcl_mangrove_tree_2.mts",},
