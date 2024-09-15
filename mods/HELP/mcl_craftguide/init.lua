@@ -278,6 +278,8 @@ local function get_recipes(item, data, player)
 		if recipes == nil or #recipes == 0 then
 			return
 		end
+
+		recipes = apply_recipe_filters(recipes, player)
 	end
 
 	return recipes
