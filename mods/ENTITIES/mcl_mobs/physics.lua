@@ -498,12 +498,12 @@ function mob_class:check_for_death(cause, cmi_cause)
 	end
 
 	-- Drop items and xp
-	if cause == "lava" or cause == "fire" then
+	if cmi_cause and (cmi_cause.type == "lava" or cmi_cause.type == "fire") then
 		self:item_drop(true, 0, cmi_cause)
 	else
 		local wielditem = ItemStack()
-		if cause == "hit" then
-			local puncher = cmi_cause.puncher
+		if cmi_cause and cmi_cause.type == "player" then
+			local puncher = cmi_cause.direct
 			if puncher then
 				wielditem = puncher:get_wielded_item()
 			end
