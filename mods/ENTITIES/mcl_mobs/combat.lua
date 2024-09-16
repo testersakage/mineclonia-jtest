@@ -42,7 +42,7 @@ function mob_class:do_attack(obj)
 end
 
 -- blast damage to entities nearby
-local function blast_damage(pos, radius)
+local function blast_damage(pos, radius, source)
 	radius = radius * 2
 
 	for obj in minetest.objects_inside_radius(pos, radius) do
@@ -54,7 +54,7 @@ local function blast_damage(pos, radius)
 		local damage = math.floor((4 / dist) * radius)
 
 		-- punches work on entities AND players
-		obj:punch(obj, 1.0, {
+		obj:punch(source, 1.0, {
 			full_punch_interval = 1.0,
 			damage_groups = {fleshy = damage},
 		}, vector.direction(pos, obj_pos))
@@ -309,7 +309,7 @@ function mob_class:safe_boom(pos, strength, no_remove)
 		max_hear_distance = self.sounds and self.sounds.distance or 32
 	}, true)
 	local radius = strength
-	blast_damage(pos, radius)
+	blast_damage(pos, radius, self.object)
 	mcl_mobs.effect(pos, 32, "mcl_particles_smoke.png", radius * 3, radius * 5, radius, 1, 0)
 	if not no_remove then
 		if self.is_mob then
