@@ -8,6 +8,13 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "mcl_copper:raw_copper 9",
+	recipe = {
+		{ "mcl_copper:block_raw" },
+	},
+})
+
+minetest.register_craft({
 	output = "mcl_copper:block",
 	recipe = {
 		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
@@ -16,6 +23,14 @@ minetest.register_craft({
 	},
 })
 
+minetest.register_craft({
+	output = "mcl_copper:copper_ingot 9",
+	recipe = {
+		{ "mcl_copper:block" },
+	},
+})
+
+-- TO HERE
 minetest.register_craft({
 	output = "mcl_copper:block_cut 4",
 	recipe = {
@@ -149,6 +164,14 @@ minetest.register_craft({
 		{ "", "mcl_copper:block_oxidized_preserved", "" },
 		{ "mcl_copper:block_oxidized_preserved", "", "mcl_copper:block_oxidized_preserved" },
 		{ "", "mcl_copper:block_oxidized_preserved", "" }
+	}
+})
+
+-- NOONE working here for slabs
+minetest.register_craft({
+	output = "mcl_stairs:slab_copper_cut_preserved 6",
+	recipe = {
+		{ "mcl_copper:block_cut_preserved", "mcl_copper:block_cut_preserved", "mcl_copper:block_cut_preserved" }
 	}
 })
 
@@ -315,17 +338,3 @@ for _, w in ipairs(waxable_blocks) do
 		},
 	})
 end
-
-minetest.register_craft({
-	output = "mcl_copper:copper_ingot 9",
-	recipe = {
-		{ "mcl_copper:block" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_copper:raw_copper 9",
-	recipe = {
-		{ "mcl_copper:block_raw" },
-	},
-})
