@@ -77,7 +77,7 @@ local ARROW_ENTITY={
 	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
 }
 
--- Destroy arrow entity self at pos and drops it as an item
+-- Drop arrow as item at pos
 local function spawn_item(self, pos)
 	if not minetest.is_creative_enabled("") then
 		local itemstring = "mcl_bows:arrow"
@@ -88,8 +88,6 @@ local function spawn_item(self, pos)
 		item:set_velocity(vector.new(0, 0, 0))
 		item:set_yaw(self.object:get_yaw())
 	end
-	mcl_burning.extinguish(self.object)
-	self.object:remove()
 end
 
 local function damage_particles(pos, is_critical)
@@ -140,7 +138,11 @@ function ARROW_ENTITY.on_step(self, dtime)
 			end
 			-- TODO: In MC, arrow just falls down without turning into an item
 			if stuckin_def and stuckin_def.walkable == false then
-				spawn_item(self, pos)
+				if self._collectable then
+					spawn_item(self, pos)
+				end
+				mcl_burning.extinguish(self.object)
+				self.object:remove()
 				return
 			end
 			self._stuckrechecktimer = 0

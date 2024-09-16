@@ -94,7 +94,6 @@ local function player_shoot_arrow(_, player, power, damage, is_critical)
 	local arrow_stack, arrow_stack_id = get_arrow(player)
 	local arrow_itemstring
 	local has_infinity_enchantment = mcl_enchanting.has_enchantment(player:get_wielded_item(), "infinity")
-	local infinity_used = false
 
 	if minetest.is_creative_enabled(player:get_player_name()) then
 		if arrow_stack then
@@ -107,9 +106,7 @@ local function player_shoot_arrow(_, player, power, damage, is_critical)
 			return false
 		end
 		arrow_itemstring = arrow_stack:get_name()
-		if has_infinity_enchantment and minetest.get_item_group(arrow_itemstring, "ammo_bow_regular") > 0 then
-			infinity_used = true
-		else
+		if not (has_infinity_enchantment and minetest.get_item_group(arrow_itemstring, "ammo_bow_regular") > 0) then
 			arrow_stack:take_item()
 		end
 		local inv = player:get_inventory()
@@ -122,7 +119,7 @@ local function player_shoot_arrow(_, player, power, damage, is_critical)
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
-	mcl_bows.shoot_arrow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, power, damage, is_critical, player:get_wielded_item(), not infinity_used)
+	mcl_bows.shoot_arrow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, power, damage, is_critical, player:get_wielded_item(), not has_infinity_enchantment)
 	return true
 end
 
