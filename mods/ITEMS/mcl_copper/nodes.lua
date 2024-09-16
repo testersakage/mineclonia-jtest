@@ -174,30 +174,41 @@ for n, desc in pairs(n_desc) do
 	mcl_wip.register_wip_item("mcl_copper:door"..n)
 end
 
-mcl_stairs.register_stair_and_slab("copper_cut", {
-	baseitem = "mcl_copper:block_cut",
-	description_stair = "Cut Copper Stairs",
-	description_slab = "Cut Copper Slab",
-	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block", "mcl_copper:block_cut"}}
-})
 
-mcl_stairs.register_stair_and_slab("copper_exposed_cut", {
-	baseitem = "mcl_copper:block_exposed_cut",
-	description_stair = "Exposed Cut Copper Stairs",
-	description_slab = "Exposed Cut Copper Slab",
-	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_exposed", "mcl_copper:block_exposed_cut"}, _on_lightning_strike = on_lightning_strike}
-})
-
-mcl_stairs.register_stair_and_slab("copper_weathered_cut", {
-	baseitem = "mcl_copper:block_weathered_cut",
-	description_stair = "Weathered Cut Copper Stairs",
-	description_slab = "Weathered Cut Copper Slab",
-	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_weathered", "mcl_copper:block_weathered_cut"}, _on_lightning_strike = on_lightning_strike}
-})
-
-mcl_stairs.register_stair_and_slab("copper_oxidized_cut", {
-	baseitem = "mcl_copper:block_oxidized_cut",
-	description_stair = "Oxidized Cut Copper Stairs",
-	description_slab = "Oxidized Cut Copper Slab",
-	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_oxidized", "mcl_copper:block_oxidized_cut"}, _on_lightning_strike = on_lightning_strike}
-})
+for xposr, desc in pairs(n_desc) do
+	if xposr == "" then
+		mcl_stairs.register_stair_and_slab("copper"..xposr.."_cut", {
+			baseitem = "mcl_copper:block"..xposr.."_cut",
+			description_stair = S("@1 Cut Copper Stairs", desc),
+			description_slab = S("@1 Cut Copper Slab", desc),
+			overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block", "mcl_copper:block"..xposr.."_cut"}}
+		})
+	else
+		mcl_stairs.register_stair_and_slab("copper"..xposr.."_cut", {
+			baseitem = "mcl_copper:block"..xposr.."_cut",
+			description_stair = S("@1 Cut Copper Stairs", desc),
+			description_slab = S("@1 Cut Copper Slab", desc),
+			overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block", "mcl_copper:block"..xposr.."_cut"}, _on_lightning_strike = on_lightning_strike}
+		})
+	end
+end
+-- mcl_stairs.register_stair_and_slab("copper_exposed_cut", {
+-- 	baseitem = "mcl_copper:block_exposed_cut",
+-- 	description_stair = "Exposed Cut Copper Stairs",
+-- 	description_slab = "Exposed Cut Copper Slab",
+-- 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_exposed", "mcl_copper:block_exposed_cut"}, _on_lightning_strike = on_lightning_strike}
+-- })
+--
+-- mcl_stairs.register_stair_and_slab("copper_weathered_cut", {
+-- 	baseitem = "mcl_copper:block_weathered_cut",
+-- 	description_stair = "Weathered Cut Copper Stairs",
+-- 	description_slab = "Weathered Cut Copper Slab",
+-- 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_weathered", "mcl_copper:block_weathered_cut"}, _on_lightning_strike = on_lightning_strike}
+-- })
+--
+-- mcl_stairs.register_stair_and_slab("copper_oxidized_cut", {
+-- 	baseitem = "mcl_copper:block_oxidized_cut",
+-- 	description_stair = "Oxidized Cut Copper Stairs",
+-- 	description_slab = "Oxidized Cut Copper Slab",
+-- 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_oxidized", "mcl_copper:block_oxidized_cut"}, _on_lightning_strike = on_lightning_strike}
+-- })
