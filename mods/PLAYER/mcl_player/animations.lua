@@ -200,7 +200,7 @@ end
 
 function mcl_player.get_player_formspec_model(player, x, y, w, h, fsname)
 	local model = mcl_player.players[player].model
-	local anim = mcl_player.registered_player_models[model].animations[mcl_player.players[player].animation]
+	local anim = mcl_player.registered_player_models[model].animations["stand"]
 	local textures = table.copy(mcl_player.players[player].textures)
 	if not mcl_player.players[player].visible then
 		textures[1] = "blank.png"
