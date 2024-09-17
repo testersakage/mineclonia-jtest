@@ -378,6 +378,10 @@ mcl_potions.register_effect({
 					   "mcl_potions:dolphin")
 		end
 	end,
+	on_end = function(object)
+			remove_physics_factor (object, "speed", "walk_velocity",
+					   "mcl_potions:dolphin")
+	end,
 	particle_color = "#6AABFD",
 	uses_factor = false,
 	timer_uses_factor = false,
