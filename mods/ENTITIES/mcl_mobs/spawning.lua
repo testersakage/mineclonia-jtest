@@ -536,32 +536,47 @@ function mob_class:check_despawn(pos, dtime)
 		end
 
 		if min_dist > instant_despawn_range then
-			self:kill_me("no players within " .. instant_despawn_range)
+			self:kill_me("no players within distance " .. instant_despawn_range)
 			return true
 		elseif min_dist > random_despawn_range then
 			if self.lifetimer then
 				self.lifetimer = self.lifetimer - dtime
-			else
-				if minetest.get_node_light(pos) < timer_light_level then
-					self.lifetimer = timer_dark
+
+				if self.lifetimer <= 0 then
+					-- timer expired -> check random despawn chance
+
+					if math.random(1, 100) < (min_dist * min_dist) / 512 then
+						self:kill_me("random chance at distance " .. math.round(min_dist))
+						return true
+					end
+
+					-- survived despawn check -> fall through to refresh timer
 				else
-					self.lifetimer = timer_light
+					-- timer not yet expired
+					return false
 				end
+
 			end
 
-			if self.lifetimer <= 0 and math.random(1, 100) < 4 then
-				self:kill_me("player distance timeout and random chance")
-				return true
+			-- (re)set timer depending on light level
+			if minetest.get_node_light(pos) < timer_light_level then
+				self.lifetimer = timer_dark
+			else
+				self.lifetimer = timer_light
 			end
+
+			return false
 		else
+			-- too close -> disable timer
 			self.lifetimer = nil
+			return false
 		end
 	end
 end
 
 function mob_class:kill_me(msg)
 	if logging then
-		minetest.log("action", "[mcl_mobs] Mob " .. self.name .. " despawns because " .. msg)
+		minetest.log("action", "[mcl_mobs] Mob " .. self.name .. " despawns at " .. minetest.pos_to_string(self.object:get_pos(), 1) .. ": " .. msg)
 	end
 
 	self:safe_remove()
