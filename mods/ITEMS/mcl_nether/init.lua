@@ -440,8 +440,8 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "mcl_nether:chiseled_nether_brick",
 	recipe = {
-		{"mcl_stairs:netherbrick_slab"},
-		{"mcl_stairs:netherbrick_slab"},
+		{"mcl_stairs:slab_nether_brick"},
+		{"mcl_stairs:slab_nether_brick"},
 	}
 })
 
