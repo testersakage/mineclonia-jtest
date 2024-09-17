@@ -31,7 +31,6 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	visual_size = {x=12, y=12},
 	sounds = {
 		shoot_attack = "mobs_fireball",
-		death = "mobs_mc_zombie_death",
 		attack = "mobs_fireball",
 		random = "mobs_eerie",
 		distance = 80,
