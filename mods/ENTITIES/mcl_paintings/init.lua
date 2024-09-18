@@ -257,6 +257,16 @@ mcl_paintings.register_painting({ name = "squid", width = 1, height = 1, oldid =
 mcl_paintings.register_painting({ name = "timberframe", width = 2, height = 2, oldid = 1 })
 mcl_paintings.register_painting({ name = "waterfall", width = 4, height = 4, oldid = 1 })
 
+
+mcl_paintings.register_painting({ name = "whitelily", width = 1, height = 1 })
+mcl_paintings.register_painting({ name = "volendam_costume", width = 4, height = 4 })
+mcl_paintings.register_painting({ name = "street", width = 4, height = 3 })
+mcl_paintings.register_painting({ name = "monet", width = 2, height = 2 })
+mcl_paintings.register_painting({ name = "mcla", width = 4, height = 2 })
+mcl_paintings.register_painting({ name = "dusk", width = 4, height = 4 })
+mcl_paintings.register_painting({ name = "arbor", width = 4, height = 3 })
+mcl_paintings.register_painting({ name = "irises", width = 4, height = 3 })
+
 minetest.register_craft({
 	output = "mcl_paintings:painting",
 	recipe = {
