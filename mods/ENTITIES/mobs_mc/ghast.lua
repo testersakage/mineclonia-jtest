@@ -89,7 +89,7 @@ mcl_mobs.spawn_setup({
 	type_of_spawning = "ground",
 	dimension = "nether",
 	min_light = 0,
-	max_light = 7,
+	max_light = 15,
 	aoc = 2,
 	biomes = {
 		"Nether",
