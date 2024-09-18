@@ -298,7 +298,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 	_taken_node = "",
 	can_spawn = function(pos)
 		return #minetest.find_nodes_in_area(vector.offset(pos,0,1,0),vector.offset(pos,0,3,0),{"air"}) > 2 and
-		(minetest.get_item_group(minetest.get_node(pos).name, "water") == 0 or nil)
+		(minetest.get_item_group(minetest.get_node(pos).name, "water") == 0)
 	end,
 	do_custom = function(self, dtime)
 		-- RAIN DAMAGE / EVASIVE WARP BEHAVIOUR HERE.
