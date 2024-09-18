@@ -237,6 +237,7 @@ local function get_filtered_items(player)
 end
 
 local function get_recipes(item, data, player)
+	item = minetest.registered_aliases[item] or item
 	local recipes = minetest.get_all_craft_recipes(item)
 	local usages = usages_cache[item]
 
@@ -743,13 +744,14 @@ local function get_init_items()
 				if recipe then
 					used_items = {}
 					for _, ingredient in pairs(recipe.items) do
+						ingredient = minetest.registered_aliases[ingredient] or ingredient
 						if not used_items[ingredient] then
 							used_items[ingredient] = true
 
 							if string.sub(ingredient, 1, 6) == "group:" then
 								group_cache[ingredient] = group_cache[ingredient] or {}
 								table.insert(group_cache[ingredient], recipe)
-							else
+							elseif minetest.registered_items[ingredient] then
 								usages_cache[ingredient] = usages_cache[ingredient] or {}
 								table.insert(usages_cache[ingredient], recipe)
 							end
