@@ -59,7 +59,7 @@ minetest.register_node("mcl_daylight_detector:daylight_detector", table.merge(co
 	_doc_items_usagehelp = S("Use the daylight detector to toggle its state."),
 	_redstone = table.merge(commdef._redstone, {
 		get_power = function(node, dir)
-			return node.param2
+			return node.param2, false
 		end,
 	}),
 }))

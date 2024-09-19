@@ -45,7 +45,7 @@ minetest.register_node("mcl_target:target_on", table.merge(commdef, {
 	end,
 	_redstone = {
 		get_power = function(node, dir)
-			return 15
+			return 15, false
 		end,
 	},
 }))

@@ -75,6 +75,7 @@ local function wireflags_to_dirs(wireflags)
 	return dirs
 end
 
+-- 0-3 correspond to the direction bits in wireflags.
 local sixdirs = {
 	[0] = vector.new(0, 0, 1),
 	[1] = vector.new(1, 0, 0),
@@ -85,20 +86,26 @@ local sixdirs = {
 }
 
 local function get_node_power(pos, include_wire)
-	local max = 0
+	local weak = 0
+	local strong = 0
 	for i, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 
 		if get_power_tab[node2.name] then
-			max = math.max(max, get_power_tab[node2.name](node2, -dir) or 0)
+			local power, is_strong = get_power_tab[node2.name](node2, -dir)
+
+			weak = math.max(weak, power)
+			if is_strong then
+				strong = math.max(strong, power)
+			end
 		elseif include_wire and wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			-- Wire is above or pointing towards this node.
-			return node2.param2
+			weak = math.max(weak, node2.param2)
 		end
 	end
 
-	return max
+	return weak, strong
 end
 
 local function get_node_power_2(pos)
@@ -108,8 +115,9 @@ local function get_node_power_2(pos)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 
 		if opaque_tab[node2.name] then
-			local power = get_node_power(pos2) - 1
-			max = math.max(max, power)
+			-- Only strong power will go through opaque nodes.
+			local _, power2 = get_node_power(pos2)
+			max = math.max(max, power2 - 1)
 		end
 	end
 
@@ -205,12 +213,13 @@ function mcl_redstone.get_power(pos, dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 
 		if get_power_tab[node2.name] then
-			power = math.max(power, get_power_tab[node2.name](node2, -dir))
+			local power2 = get_power_tab[node2.name](node2, -dir)
+			power = math.max(power, power2)
 		elseif wiredir_tab[node2.name] then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
-			local power2 = math.max(get_node_power(pos2, true) - 1, 0)
-			power = math.max(power, power2)
+			-- Only strong power goes through opaque nodes.
+			power = math.max(power, get_node_power(pos2, true) - 1)
 		end
 	end
 
@@ -275,18 +284,17 @@ function mcl_redstone.swap_node(pos, node)
 	mcl_redstone._update_neighbours(pos, node)
 end
 
-local function get_wire_power(pos, dirs)
+local function get_wire_power(pos)
 	local max = get_node_power(pos)
-	for _, dir in pairs(dirs) do
+	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 
 		if opaque_tab[node2.name] then
-			max = math.max(max, get_node_power(pos2) - 1)
+			local _, power2 = get_node_power(pos2)
+			max = math.max(max, power2 - 1)
 		end
 	end
-	max = math.max(max, get_node_power(pos:offset(0, -1, 0)) - 1)
-	max = math.max(max, get_node_power(pos:offset(0, 1, 0)) - 1)
 
 	return max
 end
@@ -300,9 +308,9 @@ function update_neighbours(pos, oldnode)
 	local get_power = ndef and ndef._redstone and ndef._redstone.get_power
 	local old_get_power = oldndef and oldndef._redstone and oldndef._redstone.get_power
 
-	local function update_wire(pos, oldpower, dirs, fourdirs)
+	local function update_wire(pos, oldpower, dirs)
 		if oldpower then clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs}) end
-		fill_queue:enqueue({pos = pos, power = get_wire_power(pos, fourdirs), dirs = dirs})
+		fill_queue:enqueue({pos = pos, power = get_wire_power(pos), dirs = dirs})
 	end
 
 	local hash = minetest.hash_node_position(pos)
@@ -319,7 +327,7 @@ function update_neighbours(pos, oldnode)
 
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
 			if wiredir_tab[node2.name] then
-				update_wire(pos2, oldpower2, wiredir_tab[node2.name], wire_fourdir_tab[node2.name])
+				update_wire(pos2, oldpower2, wiredir_tab[node2.name])
 			elseif opaque_tab[node2.name] then
 				for i, dir in pairs(sixdirs) do
 					local pos3 = pos2:add(dir)
@@ -327,8 +335,8 @@ function update_neighbours(pos, oldnode)
 					local hash3 = minetest.hash_node_position(pos3)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
-					if wireflag_tab[node3.name] and (i == 5 or check_bit(wireflag_tab[node3.name], i)) then
-						update_wire(pos3, math.max(oldpower2 - 1, 0), wiredir_tab[node3.name], wire_fourdir_tab[node3.name])
+					if wiredir_tab[node3.name] then
+						update_wire(pos3, math.max(oldpower2 - 1, 0), wiredir_tab[node3.name])
 					end
 				end
 			end
@@ -352,7 +360,8 @@ local function opaque_update_neighbours(pos, added)
 		local pos2 = pos:add(dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 		if get_power_tab[node2.name] then
-			power = math.max(power, get_power_tab[node2.name](node2, dir))
+			local power2 = get_power_tab[node2.name](node2, -dir)
+			power = math.max(power, power2)
 		end
 	end
 	if power == 0 then

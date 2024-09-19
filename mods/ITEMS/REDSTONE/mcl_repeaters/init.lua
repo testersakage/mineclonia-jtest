@@ -184,7 +184,7 @@ for delay = 1, 4 do
 				if not fourdir or dir.y ~= 0 then
 					return 0
 				end
-				return node.param2 == fourdir and 15 or 0
+				return node.param2 == fourdir and 15 or 0, true
 			end,
 		}),
 	}))

@@ -64,7 +64,7 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_tor
 				return true
 			end,
 			get_power = function(node, dir)
-				return minetest.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0
+				return minetest.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0, dir.y > 0
 			end,
 			update = function(pos, node)
 				if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) > 0 then
@@ -106,7 +106,7 @@ minetest.register_node("mcl_redstone_torch:redstoneblock", {
 	is_ground_content = false,
 	_redstone = {
 		get_power = function()
-			return 15
+			return 15, false
 		end,
 	},
 	_mcl_blast_resistance = 6,
