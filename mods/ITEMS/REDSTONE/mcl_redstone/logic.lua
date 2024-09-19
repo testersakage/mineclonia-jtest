@@ -215,7 +215,7 @@ function mcl_redstone.get_power(pos, dir)
 		if get_power_tab[node2.name] then
 			local power2 = get_power_tab[node2.name](node2, -dir)
 			power = math.max(power, power2)
-		elseif wiredir_tab[node2.name] then
+		elseif wiredir_tab[node2.name] and dir.y >= 0 then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
 			-- Only strong power goes through opaque nodes.
