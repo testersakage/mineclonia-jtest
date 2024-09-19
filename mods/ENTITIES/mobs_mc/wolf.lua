@@ -41,7 +41,9 @@ local biomes = {
 	["ColdTaiga_beach_water"] = {textures = "ashen", group_size = 4},
 	["Jungle"] = {textures = "rusty", group_size_min = 2, group_size = 4},
 	["JungleEdge"] = {textures = "rusty", group_size_min = 2, group_size = 4},
-	["BambooJungle"] = {textures = "rusty", group_size_min = 2, group_size = 4}
+	["BambooJungle"] = {textures = "rusty", group_size_min = 2, group_size = 4},
+	["IcePlains"] = {textures = "snowy", group_size = 1},
+	["IcePlainsSpikes"] = {textures = "snowy", group_size = 1}
 }
 
 local function add_collar(self, color)
@@ -292,6 +294,7 @@ mcl_mobs.spawn_setup({
 		"ColdTaiga_beach_water",
 		"Taiga_beach",
 		"ColdTaiga_beach",
+		"IcePlains"
 	},
 	chance = 80,
 })
