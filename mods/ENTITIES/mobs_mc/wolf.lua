@@ -26,6 +26,24 @@ food["mcl_mobitems:cooked_porkchop"] = 8
 food["mcl_mobitems:cooked_beef"] = 8
 food["mcl_mobitems:rabbit_stew"] = 10
 
+local biomes = {
+	["Forest"] = {textures = "woods", group_size = 4},
+	["Forest_beach"] = {textures = "woods", group_size = 4},
+	["MegaSpruceTaiga"] = {textures = "chestnut", group_size_min = 2, group_size = 4},
+	["MegaTaiga"] = {textures = "black", group_size_min = 2, group_size = 4},
+	["Savanna"] = {textures = "spotted", group_size_min = 4, group_size = 8},
+	["SavannaM"] = {textures = "spotted", group_size_min = 4, group_size = 8},
+	["Mesa"] = {textures = "striped", group_size_min = 4, group_size = 8},
+	["MesaPlateauF"] = {textures = "striped", group_size_min = 4, group_size = 8},
+	["MesaPlateauFM"] = {textures = "striped", group_size_min = 4, group_size = 8},
+	["ColdTaiga"] = {textures = "ashen", group_size = 4},
+	["ColdTaiga_beach"] = {textures = "ashen", group_size = 4},
+	["ColdTaiga_beach_water"] = {textures = "ashen", group_size = 4},
+	["Jungle"] = {textures = "rusty", group_size_min = 2, group_size = 4},
+	["JungleEdge"] = {textures = "rusty", group_size_min = 2, group_size = 4},
+	["BambooJungle"] = {textures = "rusty", group_size_min = 2, group_size = 4}
+}
+
 -- Wolf
 local wolf = {
 	description = S("Wolf"),
@@ -43,7 +61,9 @@ local wolf = {
 	visual = "mesh",
 	mesh = "mobs_mc_wolf.b3d",
 	textures = {
-		{"mobs_mc_wolf.png"},
+		{"mobs_mc_wolf.png"}, {"mobs_mc_wolf_ashen.png"}, {"mobs_mc_wolf_black.png"},
+		{"mobs_mc_wolf_chestnut.png"}, {"mobs_mc_wolf_rusty.png"}, {"mobs_mc_wolf_snowy.png"},
+		{"mobs_mc_wolf_spotted.png"}, {"mobs_mc_wolf_striped.png"}, {"mobs_mc_wolf_woods.png"},
 	},
 	makes_footstep_sound = true,
 	head_swivel = "head.control",
@@ -89,6 +109,7 @@ local wolf = {
 				local yaw = self.object:get_yaw()
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
+					dog:set_properties({texture_holder = self.texture_holder, textures = {self.texture_holder}})
 					dog:set_yaw(yaw)
 					ent = dog:get_luaentity()
 					ent.owner = clicker:get_player_name()
@@ -128,6 +149,30 @@ local wolf = {
 		"mobs_mc:witherskeleton",
 	},
 	avoid_from = { "mobs_mc:llama" },
+	after_activate = function(self)
+		self.texture_holder = self.object:get_properties().textures[1]
+	end,
+	do_custom = function(self)
+		if self.state == "attack" then
+			self.object:set_properties({textures = {self.texture_holder.."^mobs_mc_wolf_angry_eyes.png"}})
+		else
+			self.object:set_properties({textures = {self.texture_holder}})
+		end
+	end,
+	on_spawn = function(self)
+		local texture = "mobs_mc_wolf.png"
+		local group_size = 1
+		local biome_name = minetest.get_biome_name(minetest.get_biome_data(self.object:get_pos()).biome)
+		if biomes[biome_name] then
+			local defs = biomes[biome_name]
+			if defs.group_size_min then self.spawn_in_group_min = defs.group_size_min end
+			texture = "mobs_mc_wolf_"..defs.textures..".png"
+			group_size = defs.group_size
+		end
+		self.texture_holder = texture
+		self.spawn_in_group = group_size
+		self.object:set_properties({textures = {texture}})
+	end
 }
 
 mcl_mobs.register_mob("mobs_mc:wolf", wolf)
@@ -155,9 +200,9 @@ local colors = {
 	["unicolor_light_blue"] = "#B0B0FF",
 }
 
-local get_dog_textures = function(color)
+local get_dog_textures = function(self, color)
 	if colors[color] then
-		return {"mobs_mc_wolf_tame.png^(mobs_mc_wolf_collar.png^[colorize:"..colors[color]..":192)"}
+		return {self.texture_holder.."^(mobs_mc_wolf_collar.png^[colorize:"..colors[color]..":192)"}
 	else
 		return nil
 	end
@@ -181,6 +226,11 @@ dog.follow_velocity = 3.2
 dog.do_custom = mobs_mc.make_owner_teleport_function(12)
 dog.attack_animals = nil
 dog.specific_attack = nil
+dog.after_activate = function(self)
+	if self.texture_holder ~= "" then
+		self.object:set_properties({textures = {self.texture_holder}})
+	end
+end
 
 dog.on_rightclick = function(self, clicker)
 	local item = clicker:get_wielded_item()
@@ -193,7 +243,7 @@ dog.on_rightclick = function(self, clicker)
 			-- Check if color is supported
 			if minetest.get_item_group(item:get_name(), group) == 1 then
 				-- Dye collar
-				local tex = get_dog_textures(group)
+				local tex = get_dog_textures(self, group)
 				if tex then
 					self.base_texture = tex
 					self.object:set_properties({
