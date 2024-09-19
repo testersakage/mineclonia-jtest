@@ -61,7 +61,7 @@ local function blast_damage(pos, radius, source)
 	end
 end
 
-function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius) end
+function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius, self.object) end
 
 local los_switcher = false
 local height_switcher = false
