@@ -215,6 +215,7 @@ mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
 	type = "animal",
 	passive = false,
 	spawn_class = "passive",
+	can_despawn = true,
 	do_custom = function() end,
 	on_spawn = function() end,
 	on_rightclick = function() end,
