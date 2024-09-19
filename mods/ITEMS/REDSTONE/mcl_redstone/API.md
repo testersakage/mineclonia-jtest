@@ -7,7 +7,8 @@ This mods adds an API for defining custom redstone components.
 Here is an example from the redstone torch. The relevant parts for
 `mcl_redstone` is in the `_redstone` field. It defines `get_power` to make the
 torch emit power to all surrounding nodes except the node it is wallmounted on.
-It also defines `update` to make the torch turn off if the node it is
+The node above the torch is strongly powered indicated by the `dir.y > 0`
+return. It also defines `update` to make the torch turn off if the node it is
 wallmounted on is powered.
 
 ```lua
@@ -19,7 +20,7 @@ minetest.override_item("mcl_redstone:redstone_torch_on", {
             return true
         end,
         get_power = function(node, dir)
-            return minetest.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0
+            return minetest.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0, dir.y > 0
         end,
         update = function(pos, node)
             if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2))) ~= 0 then
@@ -72,8 +73,10 @@ component.
 
 ### `get_power = function(node, dir)`
 
-Should return the power level going from the node to the direction `dir`. Not
-defining it is equivalent to having it always return 0.
+Should return the power level going from the node to the direction `dir`.
+Returns two values, the power level and a boolean indicating if it will
+strongly power a node in that direction. Not defining it is equivalent to
+having it always return `0, false`.
 
 ### `connects_to = function(node, dir)`
 

@@ -114,7 +114,7 @@ for _, mode in pairs{"comp", "sub"} do
 					if not fourdir or dir.y ~= 0 then
 						return 0
 					end
-					return node.param2 % 4 == fourdir and math.floor(node.param2 / 4) or 0
+					return node.param2 % 4 == fourdir and math.floor(node.param2 / 4) or 0, true
 				end,
 				update = function(pos, node)
 					-- TODO: should not accept side power from opaque blocks

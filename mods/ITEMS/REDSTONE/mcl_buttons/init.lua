@@ -145,8 +145,8 @@ function mcl_buttons.register_button(basename, def)
 		drop = "mcl_buttons:button_"..basename.."_off",
 		_doc_items_create_entry = false,
 		_redstone = table.merge(commdef._redstone, {
-			get_power = function(pos)
-				return 15
+			get_power = function(node, dir)
+				return 15, node.param2 == minetest.dir_to_wallmounted(dir)
 			end,
 			init = function(_, node)
 				mcl_redstone.after(push_duration, function()
