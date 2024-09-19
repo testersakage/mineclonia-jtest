@@ -11,6 +11,7 @@ local overworld_sky_threshold = 7
 local overworld_passive_threshold = 7
 
 local PASSIVE_INTERVAL = 20
+local HOSTILE_INTERVAL = 10
 local dbg_spawn_attempts = 0
 local dbg_spawn_succ = 0
 local dbg_spawn_counts = {}
@@ -508,12 +509,13 @@ if mobs_spawn then
 
 	--MAIN LOOP
 
-	local timer = 0
+	local timer = HOSTILE_INTERVAL
 	minetest.register_globalstep(function(dtime)
 		passive_timer = passive_timer - dtime
-		timer = timer + dtime
-		if timer < 10 then return end
-		timer = 0
+		timer = timer - dtime
+		if timer > 0 then return end
+		timer = HOSTILE_INTERVAL
+
 		local players = minetest.get_connected_players()
 		local total_mobs = count_mobs_total_cap()
 		if total_mobs > mob_cap.total or total_mobs > #players * mob_cap.player then
