@@ -213,17 +213,9 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	local is_bedrock  = gotten_node == "mcl_core:bedrock"
 	local is_grass = minetest.get_item_group(gotten_node,"grass_block") ~= 0
 
-	local mob_count_wide = 0
-	local mob_count = 0
-	if not ignore_caps then
-		mob_count = count_mobs(pos,32,mob_type)
-		mob_count_wide = count_mobs(pos,aoc_range,mob_type)
-	end
 
 	if not pos then return false,"no pos" end
 	if not spawn_def then return false,"no spawn_def" end
-	if ( mob_count_wide >= (mob_cap[mob_type] or 15) ) then return false,"mob cap wide full" end
-	if ( mob_count >= 5 ) then return false, "local mob cap full" end
 	if not ( spawn_def.min_height and pos.y >= spawn_def.min_height ) then return false, "too low" end
 	if not ( spawn_def.max_height and pos.y <= spawn_def.max_height ) then return false, "too high" end
 	if spawn_def.dimension ~= dimension then return false, "wrong dimension" end
@@ -237,7 +229,7 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	if not ( not spawn_protected or not minetest.is_protected(pos, "") ) then return false, "spawn protected" end
 	if is_bedrock then return false, "no spawn on bedrock" end
 
-	--biome and light check is supposedly relatively expensive, do them last
+	-- More expensive checks last
 	local biome = minetest.get_biome_data(pos)
 	if not biome then return false, "no biome found" end
 	biome = minetest.get_biome_name(biome.biome) --makes it easier to work with
@@ -276,6 +268,16 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 		if gotten_light < spawn_def.min_light then return false,"too dark" end
 		if gotten_light > spawn_def.max_light then return false,"too bright" end
 	end
+
+	local mob_count_wide = 0
+	local mob_count = 0
+	if not ignore_caps then
+		mob_count = count_mobs(pos,32,mob_type)
+		mob_count_wide = count_mobs(pos,aoc_range,mob_type)
+	end
+
+	if ( mob_count_wide >= (mob_cap[mob_type] or 15) ) then return false,"mob cap wide full" end
+	if ( mob_count >= 5 ) then return false, "local mob cap full" end
 
 	return true, ""
 end
