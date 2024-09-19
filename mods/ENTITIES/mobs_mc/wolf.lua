@@ -44,6 +44,11 @@ local biomes = {
 	["BambooJungle"] = {textures = "rusty", group_size_min = 2, group_size = 4}
 }
 
+local function add_collar(self, color)
+	if not color then color = "#FF0000" end
+	return self.texture_holder.."^(mobs_mc_wolf_collar.png^[colorize:"..color..":192)"
+end
+
 -- Wolf
 local wolf = {
 	description = S("Wolf"),
@@ -109,7 +114,7 @@ local wolf = {
 				local yaw = self.object:get_yaw()
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
-					dog:set_properties({texture_holder = self.texture_holder, textures = {self.texture_holder}})
+					dog:set_properties({texture_holder = self.texture_holder, textures = {add_collar(self)}})
 					dog:set_yaw(yaw)
 					ent = dog:get_luaentity()
 					ent.owner = clicker:get_player_name()
@@ -196,13 +201,13 @@ local colors = {
 	["unicolor_violet"] = "#5000CC",
 	["unicolor_white"] = "#FFFFFF",
 	["unicolor_yellow"] = "#FFFF00",
-
 	["unicolor_light_blue"] = "#B0B0FF",
 }
 
 local get_dog_textures = function(self, color)
 	if colors[color] then
-		return {self.texture_holder.."^(mobs_mc_wolf_collar.png^[colorize:"..colors[color]..":192)"}
+		self.collar_color = colors[color]
+		return {add_collar(self, colors[color])}
 	else
 		return nil
 	end
@@ -228,7 +233,7 @@ dog.attack_animals = nil
 dog.specific_attack = nil
 dog.after_activate = function(self)
 	if self.texture_holder ~= "" then
-		self.object:set_properties({textures = {self.texture_holder}})
+		self.object:set_properties({textures = {add_collar(self, self.collar_color)}})
 	end
 end
 
