@@ -190,7 +190,7 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		_doc_items_create_entry = false,
 		_redstone = table.merge(commdef._redstone, {
 			get_power = function(pos, dir)
-				return dir.y ~= 1 and 15 or 0
+				return dir.y ~= 1 and 15 or 0, dir.y < 0
 			end,
 		}),
 	}))

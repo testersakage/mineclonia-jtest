@@ -1015,7 +1015,10 @@ register_chest("trapped_chest_on",
 	nil, nil, nil, nil, traptiles, true,
 	{
 		connects_to = function(node, dir) return true end,
-		get_power = function(pos) return 15 end,
+		-- TODO: Trapped chests should return a power level equal to
+		-- the number of players accessing the chest. Just return 15
+		-- until that has been implemented.
+		get_power = function(node, dir) return 15, dir.y < 0 end,
 	},
 	nil, nil, nil,
 	"trapped_chest",
