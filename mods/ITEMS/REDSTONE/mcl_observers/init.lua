@@ -134,7 +134,7 @@ minetest.register_node("mcl_observers:observer_on", table.merge(commdef_on, {
 		end,
 		get_power = function(node, dir)
 			local dir2 = -minetest.facedir_to_dir(node.param2)
-			return dir2 == dir and 15 or 0
+			return dir2 == dir and 15 or 0, false
 		end,
 	})
 }))

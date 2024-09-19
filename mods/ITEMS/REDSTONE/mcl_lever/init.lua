@@ -153,7 +153,7 @@ minetest.register_node("mcl_lever:lever_on", table.merge(commdef, {
 	end,
 	_redstone = table.merge(commdef._redstone, {
 		get_power = function(node, dir)
-			return dir.y ~= 1 and 15 or 0
+			return 15, minetest.facedir_to_dir(node.param2) == dir
 		end,
 	}),
 }))
