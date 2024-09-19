@@ -197,11 +197,9 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	local dimension = mcl_worlds.pos_to_dimension(pos)
 	local mob_def = minetest.registered_entities[spawn_def.name]
 	local mob_type = mob_def.type
-	local gotten_node = minetest.get_node(pos).name
-	local gotten_biome = minetest.get_biome_data(pos)
-	if not gotten_node or not gotten_biome then return end
-	gotten_biome = minetest.get_biome_name(gotten_biome.biome) --makes it easier to work with
-
+	local gotten_node = minetest.get_node_or_nil(pos)
+	if not gotten_node then return end
+	gotten_node = gotten_node.name
 	local is_ground = minetest.get_item_group(gotten_node,"solid") ~= 0
 	if not is_ground then
 		pos.y = pos.y - 1
@@ -229,8 +227,6 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	if not ( spawn_def.min_height and pos.y >= spawn_def.min_height ) then return false, "too low" end
 	if not ( spawn_def.max_height and pos.y <= spawn_def.max_height ) then return false, "too high" end
 	if spawn_def.dimension ~= dimension then return false, "wrong dimension" end
-	if not ( not spawn_def.biomes_except or (spawn_def.biomes_except and not biome_check(spawn_def.biomes_except, gotten_biome))) then return false, "biomes_except failed" end
-	if not ( not spawn_def.biomes or (spawn_def.biomes and biome_check(spawn_def.biomes, gotten_biome))) then return false, "biome check failed" end
 	if not (is_ground or spawn_def.type_of_spawning ~= "ground") then return false, "not on ground" end
 	if not (spawn_def.type_of_spawning ~= "ground" or not is_leaf) then return false, "leaf" end
 	if not has_room(mob_def,pos) then return false, "no room" end
@@ -240,6 +236,13 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	if not (spawn_def.type_of_spawning ~= "lava" or is_lava) then return false, "lava mobs only on lava" end
 	if not ( not spawn_protected or not minetest.is_protected(pos, "") ) then return false, "spawn protected" end
 	if is_bedrock then return false, "no spawn on bedrock" end
+
+	--biome and light check is supposedly relatively expensive, do them last
+	local biome = minetest.get_biome_data(pos)
+	if not biome then return false, "no biome found" end
+	biome = minetest.get_biome_name(biome.biome) --makes it easier to work with
+	if not ( not spawn_def.biomes_except or (spawn_def.biomes_except and not biome_check(spawn_def.biomes_except, biome))) then return false, "biomes_except failed" end
+	if not ( not spawn_def.biomes or (spawn_def.biomes and biome_check(spawn_def.biomes, biome))) then return false, "biome check failed" end
 
 	local gotten_light = minetest.get_node_light(pos)
 	local my_node = minetest.get_node(pos)
