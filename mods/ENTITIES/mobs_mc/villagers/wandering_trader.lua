@@ -192,6 +192,7 @@ function mobs_mc.spawn_trader_llama(pos, wt)
 		l.base_texture = tx
 		l.following = wt
 		l._follow_trader = wt._id
+		l.can_despawn = true
 		o:set_properties({
 			textures = tx,
 		})
