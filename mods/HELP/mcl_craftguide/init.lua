@@ -794,7 +794,7 @@ local function on_receive_fields(player, fields)
 		end
 
 		local num_next = data.rnum - 1
-		data.rnum = data.recipes[num_next] and num_next or 1
+		data.rnum = data.recipes[num_next] and num_next or #data.recipes
 		show_fs(player, name)
 
 	elseif fields.next_alternate then
