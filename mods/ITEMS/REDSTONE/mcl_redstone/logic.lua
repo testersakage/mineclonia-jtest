@@ -206,16 +206,24 @@ end
 function mcl_redstone.get_power(pos, dir)
 	assert(mcl_redstone._mapcache, "mcl_redstone.get_power is only valid to call during redstone updates")
 
-	local dirs = dir and {dir} or sixdirs
+	-- Create table with keys corresponding to bits in wireflags to
+	-- simplify wire direction checks.
+	local dirs = {}
+	for k, v in pairs(sixdirs) do
+		if not dir or v == dir then
+			dirs[k] = v
+		end
+	end
+
 	local power = 0
-	for _, dir in pairs(dirs) do
+	for i, dir in pairs(dirs) do
 		local pos2 = pos:add(dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 
 		if get_power_tab[node2.name] then
 			local power2 = get_power_tab[node2.name](node2, -dir)
 			power = math.max(power, power2)
-		elseif wiredir_tab[node2.name] and dir.y >= 0 then
+		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
 			-- Only strong power goes through opaque nodes.
