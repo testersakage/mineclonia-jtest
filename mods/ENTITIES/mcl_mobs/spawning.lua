@@ -201,11 +201,11 @@ local function spawn_check(pos,spawn_def,ignore_caps)
 	local gotten_node = minetest.get_node_or_nil(pos)
 	if not gotten_node then return end
 	gotten_node = gotten_node.name
-	local is_ground = minetest.get_item_group(gotten_node,"solid") ~= 0
+	local is_ground = minetest.get_item_group(gotten_node,"opaque") ~= 0
 	if not is_ground then
 		pos.y = pos.y - 1
 		gotten_node = minetest.get_node(pos).name
-		is_ground = minetest.get_item_group(gotten_node,"solid") ~= 0
+		is_ground = minetest.get_item_group(gotten_node,"opaque") ~= 0
 	end
 	pos.y = pos.y + 1
 	local is_water = minetest.get_item_group(gotten_node, "water") ~= 0
@@ -416,7 +416,7 @@ local function get_next_mob_spawn_pos(pos)
 	local spawning_position_list = minetest.find_nodes_in_area_under_air(
 			{x = goal_pos.x, y = y_min, z = goal_pos.z},
 			{x = goal_pos.x, y = y_max, z = goal_pos.z},
-			{"group:solid", "group:water", "group:lava"}
+			{"group:opaque", "group:water", "group:lava"}
 	) or {}
 
 	-- Select only the locations at a valid distance
