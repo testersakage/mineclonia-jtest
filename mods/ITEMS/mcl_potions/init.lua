@@ -162,7 +162,7 @@ local cauldron_levels = {
 local fill_cauldron = function(cauldron, water_type)
 	local base = "mcl_cauldrons:cauldron"
 	for index = 1, #cauldron_levels[water_type] do
-		if cauldron == (base .. cauldron_levels[water_type][index]) then
+		if cauldron == (base .. cauldron_levels[water_type][index]) and index ~= #cauldron_levels[water_type] then
 			return base .. cauldron_levels[water_type][index + 1]
 		end
 	end
@@ -220,6 +220,7 @@ local function water_bottle_on_place(itemstack, placer, pointed_thing)
 
 		if cauldron then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, cauldron)
+			return ItemStack("mcl_potions:glass_bottle")
 		elseif node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud")
 		end
