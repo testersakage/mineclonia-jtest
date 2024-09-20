@@ -387,7 +387,7 @@ function mesecon.mvps_move_objects(pos, dir, nodestack)
 		local player = obj:is_player()
 
 		if not entity or not player and not mesecon.is_mvps_unmov(entity.name) then
-			obj:set_pos(destpos)
+			obj:set_pos(destpos:offset(0, -0.5, 0))
 			-- Launch Player, TNT & mobs like in Minecraft
 			-- Only doing so if slimeblock is attached.
 			for _, r in ipairs(alldirs) do
