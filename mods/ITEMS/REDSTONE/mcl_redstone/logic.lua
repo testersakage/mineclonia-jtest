@@ -140,7 +140,6 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		local pos = entry.pos
 		local power = entry.power
 
-		mcl_redstone._mapcache:set_param2(pos, 0)
 		updates_[minetest.hash_node_position(pos)] = pos
 
 		for _, dir in pairs(entry.dirs) do
@@ -152,6 +151,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 				if power2 > 0 then
 					local dirs2 = wiredir_tab[node2.name]
 					if power2 < power then
+						mcl_redstone._mapcache:set_param2(pos2, 0)
 						clear_queue:enqueue({pos = pos2, power = power2, dirs = dirs2})
 					else
 						fill_queue:enqueue({pos = pos2, power = power2, dirs = dirs2})
@@ -309,8 +309,11 @@ function update_neighbours(pos, oldnode)
 	local old_get_power = oldndef and oldndef._redstone and oldndef._redstone.get_power
 
 	local function update_wire(pos, oldpower, dirs)
-		if oldpower then clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs}) end
-		fill_queue:enqueue({pos = pos, power = get_wire_power(pos), dirs = dirs})
+		if oldpower then
+			mcl_redstone._mapcache:set_param2(pos, 0)
+			clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs})
+		end
+		fill_queue:enqueue({pos = pos, power = get_node_power_2(pos), dirs = dirs})
 	end
 
 	local hash = minetest.hash_node_position(pos)
@@ -351,7 +354,10 @@ local function opaque_update_neighbours(pos, added)
 	local clear_queue = queue()
 
 	local function update_wire(pos, oldpower, dirs)
-		if oldpower then clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs}) end
+		if oldpower then
+			mcl_redstone._mapcache:set_param2(pos, 0)
+			clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs})
+		end
 		fill_queue:enqueue({pos = pos, power = get_node_power_2(pos), dirs = dirs})
 	end
 
@@ -389,10 +395,11 @@ local function update_wire(pos, oldnode)
 	local dirs = wiredir_tab[node.name]
 	local olddirs = oldnode and wiredir_tab[oldnode.name] or dirs
 
+	mcl_redstone._mapcache:set_param2(pos, 0)
 	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0, dirs = olddirs})
 	if dirs then
 		local fourdirs = wire_fourdir_tab[node.name]
-		fill_queue:enqueue({pos = pos, power = get_wire_power(pos, fourdirs), dirs = dirs})
+		fill_queue:enqueue({pos = pos, power = get_node_power_2(pos, fourdirs), dirs = dirs})
 	end
 
 	propagate_wire(clear_queue, fill_queue)
