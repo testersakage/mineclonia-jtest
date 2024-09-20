@@ -60,9 +60,6 @@ minetest.register_craftitem("mcl_potions:glass_bottle", {
 			local node = minetest.get_node(pointed_thing.under)
 			local def = minetest.registered_nodes[node.name]
 
-			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-			if rc then return rc end
-
 			-- Try to fill glass bottle with water
 			local get_water = false
 			--local from_liquid_source = false
@@ -130,6 +127,8 @@ minetest.register_craftitem("mcl_potions:glass_bottle", {
 				end
 			end
 		end
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc then return rc end
 		return itemstack
 	end,
 })
@@ -157,22 +156,14 @@ end
 -- Cauldron fill up rules:
 -- Adding any water increases the water level by 1, preserving the current water type
 local cauldron_levels = {
-	-- start = { add water, add river water }
-	{ "",    "_1",  "_1r" },
-	{ "_1",  "_2",  "_2" },
-	{ "_2",  "_3",  "_3" },
-	{ "_1r", "_2r",  "_2r" },
-	{ "_2r", "_3r", "_3r" },
+	["mcl_core:water_source"] = {"", "_1", "_2", "_3"},
+	["mclx_core:river_water_source"] = {"", "_1r", "_2r", "_3r"},
 }
 local fill_cauldron = function(cauldron, water_type)
 	local base = "mcl_cauldrons:cauldron"
-	for i=1, #cauldron_levels do
-		if cauldron == base .. cauldron_levels[i][1] then
-			if water_type == "mclx_core:river_water_source" then
-				return base .. cauldron_levels[i][3]
-			else
-				return base .. cauldron_levels[i][2]
-			end
+	for index = 1, #cauldron_levels[water_type] do
+		if cauldron == (base .. cauldron_levels[water_type][index]) then
+			return base .. cauldron_levels[water_type][index + 1]
 		end
 	end
 end
@@ -217,10 +208,8 @@ end
 
 local function water_bottle_on_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type == "node" then
-		local node = minetest.get_node(pointed_thing.under)
 
-		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-		if rc then return rc end
+		local node = minetest.get_node(pointed_thing.under)
 
 		local cauldron = nil
 		if itemstack:get_name() == "mcl_potions:water" then -- regular water
@@ -229,13 +218,16 @@ local function water_bottle_on_place(itemstack, placer, pointed_thing)
 			cauldron = fill_cauldron(node.name, "mclx_core:river_water_source")
 		end
 
-
 		if cauldron then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, cauldron)
 		elseif node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud")
 		end
+
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc then return rc end
 	end
+
 
 	-- Drink the water by default
 	return minetest.do_item_eat(0, "mcl_potions:glass_bottle", itemstack, placer, pointed_thing)
