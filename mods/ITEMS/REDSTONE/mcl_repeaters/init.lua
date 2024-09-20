@@ -69,7 +69,6 @@ local commdef = {
 			return node.param2 == fourdir or (node.param2 + 2) % 4 == fourdir
 		end,
 		update = function(pos, node)
-			local was_on = minetest.get_item_group(node.name, "redstone_repeater_on") ~= 0
 			local was_locked = minetest.get_item_group(node.name, "redstone_repeater") == 5
 			local on = mcl_redstone.get_power(pos, -minetest.fourdir_to_dir(node.param2)) ~= 0
 			local locked = check_locked(pos, node)
