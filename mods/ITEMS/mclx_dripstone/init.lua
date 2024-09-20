@@ -6,7 +6,7 @@ local dripstone_directions =
 	[1] = "down",
 }
 
-local dripstone_stages = 
+local dripstone_stages =
 {
 	"tip_merge",
 	"tip",
@@ -55,7 +55,6 @@ mcl_mobs.register_arrow("mclx_dripstone:vengeful_dripstone",
 })
 
 local function update_dripstone(pos, direction)
-	local iterator = direction
 	-- if a dripstone column should be created
 	if string.find(minetest.get_node(vector.offset(pos, 0, -direction, 0)).name, "^mclx_dripstone:dripstone_") then
 		minetest.swap_node(pos, {name = "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
@@ -100,7 +99,7 @@ local on_dripstone_destruct = function(pos)
 	local direction = string.find(minetest.get_node(pos).name, "^mclx_dripstone:dripstone_down") and 1 or -1
 	local offset_pos = vector.copy(pos)
 	local stage
-	while true do 
+	while true do
 		offset_pos = vector.offset(offset_pos, 0, -direction, 0)
 		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
 		if stage == 1 and extract_direction(minetest.get_node(offset_pos).name) == -direction then
@@ -125,7 +124,7 @@ local on_dripstone_destruct = function(pos)
 	if minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage") ~= 0 then
 		minetest.swap_node(offset_pos, {name = get_dripstone_node(2, direction)})
 
-		while true do 
+		while true do
 			offset_pos = vector.offset(offset_pos, 0, direction, 0)
 			stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
 			if stage == 3 then
