@@ -85,9 +85,11 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 			s = "mcl_core:lava_source"
 		end
 		if minetest.registered_nodes[n] then
-			itemstack:take_item()
-			local inv = placer:get_inventory()
-			inv:add_item("main","mcl_buckets:bucket_empty")
+			if not minetest.is_creative_enabled(placer:get_player_name()) then
+				itemstack:take_item()
+				local inv = placer:get_inventory()
+				inv:add_item("main","mcl_buckets:bucket_empty")
+			end
 			minetest.swap_node(pointed_thing.under,{name=n})
 			if s then
 				sound_place(s, pointed_thing.under)
@@ -144,9 +146,11 @@ local function register_filled_cauldron(water_level, description, liquid)
 				s = "mcl_core:lava_source"
 			end
 			if minetest.registered_items[n] then
-				itemstack:take_item()
-				local inv = placer:get_inventory()
-				inv:add_item("main",n)
+				if not minetest.is_creative_enabled(placer:get_player_name()) then
+					itemstack:take_item()
+					local inv = placer:get_inventory()
+					inv:add_item("main",n)
+				end
 				minetest.swap_node(pointed_thing.under,{name="mcl_cauldrons:cauldron"})
 				if s then
 					sound_take(s, pointed_thing.under)

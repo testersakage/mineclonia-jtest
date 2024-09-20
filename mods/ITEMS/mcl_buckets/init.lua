@@ -171,18 +171,18 @@ local function on_place_bucket_empty(itemstack, user, _)
 		return itemstack
 	end
 
-	-- Call on_rightclick if the pointed node defines it
-	local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
-	if new_stack then
-		return new_stack
-	end
-
 	local new_bucket = false
 	local under = pointed_thing.under
 	local node_name = minetest.get_node(under).name
 	local def = minetest.registered_nodes[node_name]
 	if def and def._on_bucket_place_empty then
 		return def._on_bucket_place_empty(itemstack,user,pointed_thing)
+	end
+
+	-- Call on_rightclick if the pointed node defines it
+	local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
+	if new_stack then
+		return new_stack
 	end
 	if pointable_sources[node_name] then
 		if minetest.is_protected(under, user:get_player_name()) then
