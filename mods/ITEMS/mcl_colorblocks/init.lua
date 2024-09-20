@@ -112,7 +112,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		paramtype2 = "facedir",
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
-		_mcl_blast_resistance = 4.2,
+		_mcl_blast_resistance = 1.4,
 		_mcl_hardness = 1.4,
 		on_rotate = on_rotate,
 	})
