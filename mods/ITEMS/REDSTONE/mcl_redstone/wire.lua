@@ -74,6 +74,11 @@ local function wireflags_to_name(wireflags)
 		"mcl_redstone:wire_"..(bit.tohex(wireflags, 2))
 end
 
+local function is_solid_opaque(name)
+	return minetest.get_item_group(name, "solid") ~= 0 and
+		minetest.get_item_group(name, "opaque") ~= 0
+end
+
 local function update_wire(pos)
 	local update_tab = {
 		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44 },
@@ -101,17 +106,22 @@ local function update_wire(pos)
 	local wireflags = 0
 
 	for _, entry in pairs(update_tab) do
-		if not entry.obstruct or minetest.get_item_group(minetest.get_node(pos:add(entry.obstruct)).name, "opaque") == 0 then
+		if not entry.obstruct or not is_solid_opaque(minetest.get_node(pos:add(entry.obstruct)).name) then
 			local pos2 = pos:add(entry.wire)
 			local node2 = minetest.get_node(pos2)
+
 			if minetest.get_item_group(node2.name, "redstone_wire") ~= 0 then
-				wireflags = bit.bor(wireflags, entry.mask)
+				local over_opaque = is_solid_opaque(minetest.get_node(pos2:offset(0, -1, 0)).name)
+				local mask = bit.band(entry.mask, over_opaque and 0xff or 0x0f)
+				local mask2 = bit.band(entry.mask2, over_opaque and 0xff or 0x0f)
+
+				wireflags = bit.bor(wireflags, mask)
 
 				local wireflags2 = minetest.registered_nodes[node2.name]._wireflags
 				if present then
-					wireflags2 = bit.bor(wireflags2, entry.mask2)
+					wireflags2 = bit.bor(wireflags2, mask2)
 				else
-					wireflags2 = bit.band(wireflags2, bit.bnot(entry.mask2))
+					wireflags2 = bit.band(wireflags2, bit.bnot(mask2))
 				end
 
 				minetest.swap_node(pos2, {
