@@ -23,6 +23,21 @@ local function extract_direction(name)
 	return string.sub(name, 26, 31) == "bottom" and -1 or 1
 end
 
+-- it is assumed pos is at the tip of the dripstone
+local function get_dripstone_length(pos, direction)
+	local offset_pos = vector.copy(pos)
+	local stage
+	local length = 1
+	while true do
+		offset_pos = vector.offset(offset_pos, 0, direction, 0)
+		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
+		if stage == 0 then
+			return length
+		end
+		length = length + 1
+	end
+end
+
 minetest.register_node("mclx_dripstone:dripstone_block", {
 	description = S("Dripstone block"),
 	_doc_items_longdesc = S("Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"),
@@ -187,42 +202,23 @@ minetest.register_abm({
 	chance = 1,
 	action = function(pos)
 		-- checking if can grow
-		local offset_pos = vector.copy(pos)
-		local stage
-		local node
-		local stalagtite_lenth = 1
-		while true do
-			offset_pos = vector.offset(offset_pos, 0, 1, 0)
-			stalagtite_lenth = stalagtite_lenth + 1
-			node = minetest.get_node(offset_pos)
-			stage = minetest.get_item_group(node.name, "dripstone_stage")
-			if stage == 0 then
-				if node.name ~= "mclx_dripstone:dripstone_block"
-				or minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water") == 0 then
-					return
-				end
-				break
-			end
+		local stalagtite_lenth = get_dripstone_length(pos, 1)
+		if minetest.get_node(vector.offset(pos, 0, stalagtite_lenth, 0)).name ~= "mclx_dripstone:dripstone_block"
+		or minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_lenth + 1, 0)).name, "water") == 0 then
+			return
 		end
 
 		-- randomly chose to either grow the stalagmite or stalagtites
 		if math.random(2) == 1 then
 			-- stalagmite growth
 			local groups
-			local length = 0
+			local node
+			local length
 			for i = 1, 10 do
 				node = minetest.get_node(vector.offset(pos, 0, -i, 0))
 				groups = minetest.registered_nodes[node.name].groups
 				if (groups["solid"] or 0) > 0 or (groups["dripstone_stage"] or 0) > 0 then
-					if (groups["dripstone_stage"] or 0) > 0 then
-						while true do
-							stage = minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, -i - length, 0)).name, "dripstone_stage")
-							if stage == 0 then
-								break
-							end
-							length = length + 1
-						end
-					end
+					length = get_dripstone_length(pos, 1)
 
 					if length < 7 then
 						minetest.set_node(vector.offset(pos, 0, -i + 1, 0), {name = get_dripstone_node(2, -1)})
@@ -237,8 +233,10 @@ minetest.register_abm({
 			-- stalagtite growth
 			if stalagtite_lenth > 7 then return end
 
-			minetest.set_node(vector.offset(pos, 0, -1, 0), {name = get_dripstone_node(2, 1)})
-			update_dripstone(vector.offset(pos, 0, -1, 0), 1)
+			if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "air" then
+				minetest.set_node(vector.offset(pos, 0, -1, 0), {name = get_dripstone_node(2, 1)})
+				update_dripstone(vector.offset(pos, 0, -1, 0), 1)
+			end
 		end
 	end,
 })
@@ -264,24 +262,10 @@ minetest.register_abm({
 	interval = 1,
 	chance = 5.5,
 	action = function(pos)
-		-- checking if can grow
-		local offset_pos = vector.copy(pos)
-		local stage
-		local stalagtite_lenth = 1
-		while true do
-			offset_pos = vector.offset(offset_pos, 0, 1, 0)
-			stalagtite_lenth = stalagtite_lenth + 1
-			stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
-			if stage == 0 then
-				minetest.debug(minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water"))
-				if minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water") == 0 then
-					return
-				end
-				break
-			end
-		end
+		local stalagtite_length = get_dripstone_length(pos, 1)
 
-		if stalagtite_lenth > 10 then
+		if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name, "water") == 0
+		or stalagtite_length > 10 then
 			return
 		end
 
@@ -308,22 +292,10 @@ minetest.register_abm({
 	interval = 1,
 	chance = 17,
 	action = function(pos)
-		local offset_pos = vector.copy(pos)
-		local stage
-		local stalagtite_lenth = 1
-		while true do
-			offset_pos = vector.offset(offset_pos, 0, 1, 0)
-			stalagtite_lenth = stalagtite_lenth + 1
-			stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
-			if stage == 0 then
-				if minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "lava") == 0 then
-					return
-				end
-				break
-			end
-		end
+		local stalagtite_length = get_dripstone_length(pos, 1)
 
-		if stalagtite_lenth > 10 then
+		if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name, "lava") == 0
+		or stalagtite_length > 10 then
 			return
 		end
 
