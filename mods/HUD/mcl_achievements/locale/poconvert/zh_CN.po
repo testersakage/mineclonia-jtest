@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-30 14:13+0000\n"
+"PO-Revision-Date: 2024-09-16 21:34+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
-"mineclonia/mcl_achievements/zh_Hans/>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mcl_achievements/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Benchmarking"
 msgstr "始方工作台"
@@ -108,20 +108,22 @@ msgid "Who is Cutting Onions?"
 msgstr "谁在切洋葱？"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "从地上捡起一块哭泣的黑曜石。"
 
 msgid "Hidden in the Depths"
-msgstr ""
+msgstr "深处所获"
 
 msgid "Pick up an Ancient Debris from the floor."
 msgstr "从地上捡起一个古代碎片。"
 
 msgid "The Next Generation"
-msgstr ""
+msgstr "下一代"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
+"持有龙蛋。\n"
+"提示：从地上拾起龙蛋，并将其放入库存中。"
 
 msgid "Sky's the Limit"
 msgstr "九霄天外"
@@ -157,7 +159,7 @@ msgid "Sniper Duel"
 msgstr "弓弩对决"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
-msgstr ""
+msgstr "在 20 米外，用弓箭射杀一只骷髅、凋灵骷髅或流浪者。"
 
 msgid "Monster Hunter"
 msgstr "怪物猎人"
@@ -169,7 +171,7 @@ msgid "We Need to Go Deeper"
 msgstr "向深处进发"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
-msgstr ""
+msgstr "使用黑曜石和燧石建造一座下界传送门。"
 
 msgid "The End?"
 msgstr "结束了？"
@@ -186,10 +188,10 @@ msgid "Bring summer clothes.\n"
 msgstr ""
 
 msgid "Postmortal"
-msgstr ""
+msgstr "超越生死"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr ""
+msgstr "利用不死图腾逃离死亡。"
 
 msgid "Sweet Dreams"
 msgstr "晚安好梦"
@@ -213,13 +215,13 @@ msgid "Tactical Fishing"
 msgstr "天才钓鱼佬"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "不用鱼竿，逮一条鱼！"
 
 msgid "The Cutest Predator"
-msgstr ""
+msgstr "最萌凶物"
 
 msgid "Catch an Axolotl with a bucket!"
-msgstr ""
+msgstr "用铁桶捕获一只美西螈！"
 
 msgid "Withering Heights"
 msgstr "呼啸山庄"
@@ -228,10 +230,10 @@ msgid "Summon the wither from the dead."
 msgstr ""
 
 msgid "Free the End"
-msgstr ""
+msgstr "解放末地"
 
 msgid "Kill the ender dragon. Good Luck!"
-msgstr ""
+msgstr "击杀末地龙，保护好自己！"
 
 msgid "Fishy Business"
 msgstr "捕鱼大业"
@@ -255,32 +257,32 @@ msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate yo
 msgstr ""
 
 msgid "Local Brewery"
-msgstr ""
+msgstr "本地酿造厂"
 
 msgid "Brew a Potion.\n"
 "Hint: Take a potion or glass bottle out of the brewing stand."
 msgstr ""
 
 msgid "Enchanter"
-msgstr ""
+msgstr "魔法师"
 
 msgid "Enchant an item using an Enchantment Table."
 msgstr ""
 
 msgid "Bring Home the Beacon"
-msgstr ""
+msgstr "指引我还乡"
 
 msgid "Use a beacon."
 msgstr ""
 
 msgid "Beaconator"
-msgstr ""
+msgstr "信标工程师"
 
 msgid "Use a fully powered beacon."
 msgstr ""
 
 msgid "The End... Again..."
-msgstr ""
+msgstr "又是...末地..."
 
 msgid "Respawn the Ender Dragon."
 msgstr ""
@@ -310,25 +312,25 @@ msgid "Scrape wax off of a copper block."
 msgstr ""
 
 msgid "Crafting a New Look"
-msgstr ""
+msgstr "旧貌换新颜"
 
 msgid "Craft a trimmed armor at a Smithing Table"
 msgstr ""
 
 msgid "Smithing with Style"
-msgstr ""
+msgstr "花样锻造"
 
 msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Silence, Vex, Tide, Wayfinder"
 msgstr ""
 
 msgid "Dispense With This"
-msgstr ""
+msgstr "发射"
 
 msgid "Place a dispenser."
-msgstr ""
+msgstr "使用发射器。"
 
 msgid "Pork Chop"
-msgstr ""
+msgstr "美味猪排"
 
 msgid "Eat a cooked porkchop."
 msgstr ""
@@ -346,22 +348,22 @@ msgid "Get really desperate and eat rotten flesh."
 msgstr ""
 
 msgid "Pot Planter"
-msgstr ""
+msgstr "盆栽癖好"
 
 msgid "Place a flower pot."
 msgstr ""
 
 msgid "The Haggler"
-msgstr ""
+msgstr "砍价还价"
 
 msgid "Mine emerald ore."
-msgstr ""
+msgstr "挖掘绿宝石。"
 
 msgid "Stone Age"
 msgstr "石器时代"
 
 msgid "Mine a stone with new pickaxe."
-msgstr ""
+msgstr "使用新镐挖掘石头。"
 
 msgid "Hot Stuff"
 msgstr "热门产品"

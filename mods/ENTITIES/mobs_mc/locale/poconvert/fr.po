@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-09-04 22:15+0000\n"
+"Last-Translator: Cwpute <Cwpute@users.noreply.translate.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.7\n"
 
 msgid "Axolotl"
 msgstr "Axolotl"
@@ -38,7 +39,7 @@ msgid "Creeper"
 msgstr "Creeper"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Creeper chargé"
 
 msgid "Dolphin"
 msgstr "Dauphin"
@@ -89,7 +90,7 @@ msgid "Mule"
 msgstr "Mule"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "S'accroupir pour descendre"
 
 msgid "Iron Golem"
 msgstr "Golem de fer"
@@ -155,22 +156,22 @@ msgid "Wither Skeleton"
 msgstr "Wither squelette"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Slime - grand"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Slime - petit"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Slime - tout petit"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Cube de magma - grand"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Cube de magma - petit"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Cube de magma - tout petit"
 
 msgid "Magma Cube"
 msgstr "Cube de magma"
@@ -308,7 +309,7 @@ msgid "Wolf"
 msgstr "Loup"
 
 msgid "Dog"
-msgstr ""
+msgstr "Chien"
 
 msgid "Zombie"
 msgstr "Zombie"
@@ -324,4 +325,3 @@ msgstr "Bébé zombie momifié"
 
 msgid "Zombified Piglin"
 msgstr "Piglin Zombifié"
-

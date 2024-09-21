@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_death_messages x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-06 13:18+0000\n"
+"PO-Revision-Date: 2024-09-13 09:37+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_death_messages/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7\n"
 
 msgid "@1 went up in flames"
 msgstr ""
@@ -27,7 +27,7 @@ msgid "@1 was struck by lightning whilst fighting @2"
 msgstr ""
 
 msgid "@1 burned to death"
-msgstr ""
+msgstr "@1被烧死"
 
 msgid "@1 was burnt to a crisp whilst fighting @2"
 msgstr ""
@@ -51,7 +51,7 @@ msgid "@1 suffocated in a wall whilst fighting @2"
 msgstr ""
 
 msgid "@1 drowned"
-msgstr ""
+msgstr "@1已溺毙"
 
 msgid "@1 drowned whilst trying to escape @2"
 msgstr ""
@@ -69,7 +69,7 @@ msgid "@1 walked into a cactus whilst trying to escape @2"
 msgstr ""
 
 msgid "@1 hit the ground too hard"
-msgstr ""
+msgstr "@1撞上了坚硬地面"
 
 msgid "@1 hit the ground too hard whilst trying to escape @2"
 msgstr ""
@@ -87,13 +87,13 @@ msgid "@1 didn't want to live in the same world as @2"
 msgstr ""
 
 msgid "@1 died"
-msgstr ""
+msgstr "@1已殁"
 
 msgid "@1 died because of @2"
-msgstr ""
+msgstr "@1死于@2"
 
 msgid "@1 was killed by magic"
-msgstr ""
+msgstr "@1为魔法所杀"
 
 msgid "@1 was killed by magic whilst trying to escape @2"
 msgstr ""
@@ -132,16 +132,16 @@ msgid "@1 was squashed by a falling block whilst fighting @2"
 msgstr ""
 
 msgid "@1 was slain by @2"
-msgstr ""
+msgstr "@2杀死了@1"
 
 msgid "@1 was slain by @2 using @3"
-msgstr ""
+msgstr "@2使用@3杀死了@1"
 
 msgid "@1 was shot by @2"
-msgstr ""
+msgstr "@2射杀了@1"
 
 msgid "@1 was shot by @2 using @3"
-msgstr ""
+msgstr "@2使用@3射杀了@1"
 
 msgid "@1 was fireballed by @2"
 msgstr ""

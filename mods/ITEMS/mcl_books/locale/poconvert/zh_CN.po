@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_books x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-08 10:18+0000\n"
+"PO-Revision-Date: 2024-09-13 09:37+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_books/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7\n"
 
 msgid "Book"
 msgstr "书籍"
@@ -30,16 +30,16 @@ msgid "Copy of Copy of “@1”"
 msgstr ""
 
 msgid "Tattered Book"
-msgstr ""
+msgstr "残书"
 
 msgid "by @1"
 msgstr ""
 
 msgid "Sign"
-msgstr ""
+msgstr "告示牌"
 
 msgid "Done"
-msgstr ""
+msgstr "完成"
 
 msgid "Book and Quill"
 msgstr ""
@@ -66,13 +66,13 @@ msgid "Note: The book will no longer be editable after signing"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 msgid "Nameless Book"
-msgstr ""
+msgstr "佚书"
 
 msgid "Written Book"
-msgstr ""
+msgstr "成书"
 
 msgid "Written books contain some text written by someone. They can be read and copied, but not edited."
 msgstr ""
@@ -84,7 +84,7 @@ msgid "To copy the text of the written book, place it into the crafting grid tog
 msgstr ""
 
 msgid "Bookshelf"
-msgstr ""
+msgstr "书架"
 
 msgid "Inventory"
 msgstr "背包"
