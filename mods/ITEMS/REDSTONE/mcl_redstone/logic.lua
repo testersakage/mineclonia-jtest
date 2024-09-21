@@ -314,32 +314,18 @@ local function opaque_update_neighbours(pos, added)
 	local fill_queue = queue()
 	local clear_queue = queue()
 
-	local function update_wire(pos, oldpower)
-		if oldpower then
-			mcl_redstone._mapcache:set_param2(pos, 0)
-			clear_queue:enqueue({pos = pos, power = oldpower})
-		end
+	local function update_wire(pos)
+		local oldpower = mcl_redstone._mapcache:get_node(pos).param2
+		mcl_redstone._mapcache:set_param2(pos, 0)
+		clear_queue:enqueue({pos = pos, power = oldpower})
 		fill_queue:enqueue({pos = pos, power = get_node_power_2(pos)})
-	end
-
-	local power = 0
-	for _, dir in pairs(sixdirs) do
-		local pos2 = pos:add(dir)
-		local node2 = mcl_redstone._mapcache:get_node(pos2)
-		if get_power_tab[node2.name] then
-			local power2 = get_power_tab[node2.name](node2, -dir)
-			power = math.max(power, power2)
-		end
-	end
-	if power == 0 then
-		return
 	end
 
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
 		if wireflag_tab[node2.name] then
-			update_wire(pos2, not added and power or nil)
+			update_wire(pos2)
 		elseif update_tab[node2.name] then
 			local hash2 = minetest.hash_node_position(pos2)
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
