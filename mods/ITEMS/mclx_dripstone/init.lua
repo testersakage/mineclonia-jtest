@@ -268,7 +268,7 @@ minetest.register_abm({
 		if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name, "water") == 0
 		or stalagtite_length > 10 then
 			-- reusing the ABM for converting mud to clay, since the chances are the same
-			if minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name == "mcl_mud:mud" 
+			if minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name == "mcl_mud:mud"
 			and mcl_worlds.pos_to_dimension(vector.offset(pos, 0, stalagtite_length + 1, 0)) ~= "nether" then
 				minetest.set_node(vector.offset(pos, 0, stalagtite_length + 1, 0), {name = "mcl_core:clay"})
 			end
