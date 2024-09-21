@@ -70,7 +70,8 @@ mcl_mobs.register_arrow("mclx_dripstone:vengeful_dripstone",
 
 local function update_dripstone(pos, direction)
 	-- if a dripstone column should be created
-	if string.find(minetest.get_node(vector.offset(pos, 0, -direction, 0)).name, "^mclx_dripstone:dripstone_") then
+	-- ".[^l]" is in the pattern to prevent dripstone blocks from being matched
+	if string.find(minetest.get_node(vector.offset(pos, 0, -direction, 0)).name, "^mclx_dripstone:dripstone_.[^l]") then
 		minetest.swap_node(pos, {name = "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
 		minetest.swap_node(vector.offset(pos, 0, -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip_merge"})
 	end
