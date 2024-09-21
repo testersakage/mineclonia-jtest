@@ -172,7 +172,7 @@ for i = 1, #dripstone_stages do
 		drawtype = "plantlike",
 		tiles = {"pointed_dripstone_" .. stage .. ".png^[transform6"},
 		drop = "mclx_dripstone:pointed_dripstone",
-		groups = {pickaxey=1, not_in_creative_inventory=1, dripstone_stage = i},
+		groups = {pickaxey=1, not_in_creative_inventory=1, fall_damage_add_percent = 100, dripstone_stage = i},
 		sunlight_propagates = true,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		on_destruct = on_dripstone_destruct,
@@ -180,3 +180,12 @@ for i = 1, #dripstone_stages do
 		_mcl_hardness = 1.5,
 	})
 end
+
+minetest.register_abm({
+	label = "Dripstone",
+	nodenames = {"mclx_dripstone:dripstone_down_tip", "mclx_dripstone:dripstone_up_tip"},
+	interval = 10,
+	chance = 85,
+	action = function(pos,node)
+	end,
+})
