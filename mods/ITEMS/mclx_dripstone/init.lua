@@ -197,9 +197,9 @@ minetest.register_abm({
 			node = minetest.get_node(offset_pos)
 			stage = minetest.get_item_group(node.name, "dripstone_stage")
 			if stage == 0 then
-				if node.name ~= "mclx_dripstone:dripstone_block" 
-				or minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water") == 0 then 
-					return 
+				if node.name ~= "mclx_dripstone:dripstone_block"
+				or minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water") == 0 then
+					return
 				end
 				break
 			end
@@ -228,7 +228,9 @@ minetest.register_abm({
 						minetest.set_node(vector.offset(pos, 0, -i + 1, 0), {name = get_dripstone_node(2, -1)})
 						update_dripstone(vector.offset(pos, 0, -i + 1, 0), -1)
 					end
-					break
+					return
+				elseif node.name ~= "air" then
+					return
 				end
 			end
 		else
@@ -237,6 +239,102 @@ minetest.register_abm({
 
 			minetest.set_node(vector.offset(pos, 0, -1, 0), {name = get_dripstone_node(2, 1)})
 			update_dripstone(vector.offset(pos, 0, -1, 0), 1)
+		end
+	end,
+})
+
+-- Cauldron fill up rules:
+-- Adding any water increases the water level by 1, preserving the current water type
+local cauldron_levels = {
+	["mcl_core:water_source"] = {"", "_1", "_2", "_3"},
+	["mclx_core:river_water_source"] = {"", "_1r", "_2r", "_3r"},
+}
+local fill_cauldron = function(cauldron, water_type)
+	local base = "mcl_cauldrons:cauldron"
+	for index = 1, #cauldron_levels[water_type] do
+		if cauldron == (base .. cauldron_levels[water_type][index]) and index ~= #cauldron_levels[water_type] then
+			return base .. cauldron_levels[water_type][index + 1]
+		end
+	end
+end
+
+minetest.register_abm({
+	label = "Dripstone filling water cauldrons",
+	nodenames = {"mclx_dripstone:dripstone_top_tip"},
+	interval = 1,
+	chance = 5.5,
+	action = function(pos)
+		-- checking if can grow
+		local offset_pos = vector.copy(pos)
+		local stage
+		local stalagtite_lenth = 1
+		while true do
+			offset_pos = vector.offset(offset_pos, 0, 1, 0)
+			stalagtite_lenth = stalagtite_lenth + 1
+			stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
+			if stage == 0 then
+				minetest.debug(minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water"))
+				if minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water") == 0 then
+					return
+				end
+				break
+			end
+		end
+
+		if stalagtite_lenth > 10 then
+			return
+		end
+
+		local node
+		local new_cauldron
+		for i = 1, 10 do
+			node = minetest.get_node(vector.offset(pos, 0, -i, 0))
+			if minetest.get_item_group(node.name, "cauldron") ~= 0 and not string.find(node.name, "lava$") then
+				new_cauldron = fill_cauldron(node.name, "mcl_core:water_source")
+				if new_cauldron then
+					minetest.set_node(vector.offset(pos, 0, -i, 0), {name = new_cauldron})
+				end
+				return
+			elseif node.name ~= "air" then
+				return
+			end
+		end
+	end,
+})
+
+minetest.register_abm({
+	label = "Dripstone filling lava cauldrons",
+	nodenames = {"mclx_dripstone:dripstone_top_tip"},
+	interval = 1,
+	chance = 17,
+	action = function(pos)
+		local offset_pos = vector.copy(pos)
+		local stage
+		local stalagtite_lenth = 1
+		while true do
+			offset_pos = vector.offset(offset_pos, 0, 1, 0)
+			stalagtite_lenth = stalagtite_lenth + 1
+			stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
+			if stage == 0 then
+				if minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "lava") == 0 then
+					return
+				end
+				break
+			end
+		end
+
+		if stalagtite_lenth > 10 then
+			return
+		end
+
+		local node
+		for i = 1, 10 do
+			node = minetest.get_node(vector.offset(pos, 0, -i, 0))
+			if node.name == "mcl_cauldrons:cauldron" then
+				minetest.set_node(vector.offset(pos, 0, -i, 0), {name = "mcl_cauldrons:cauldron_3_lava"})
+			elseif node.name ~= "air" then
+				return
+			end
 		end
 	end,
 })
