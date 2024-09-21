@@ -203,19 +203,39 @@ end
 --- condition: Function which takes an itemstack and returns true if it matches the desired item condition.
 ---            If set to nil, the slot of the first item stack will be taken unconditionally.
 -- dst_inventory and dst_list can also be nil if condition is nil.
-function mcl_util.get_eligible_transfer_item_slot(src_inventory, src_list, dst_inventory, dst_list, condition)
+function mcl_util.get_eligible_transfer_item_slot(src_inventory, src_list, dst_inventory, dst_list, condition, count)
 	local size = src_inventory:get_size(src_list)
 	local stack
-	for i = 1, size do
-		stack = src_inventory:get_stack(src_list, i)
-		if not stack:is_empty() and (condition == nil or condition(stack, src_inventory, src_list, dst_inventory, dst_list)) then
-			return i
+	if dst_list then
+	-- We have a dst_list, we can check if src_list slots contain a transferrable item
+		local new_stack
+		count = count or 1 -- Do we want an optional count for possible checks?
+		for i = 1, size do
+			stack = src_inventory:get_stack(src_list, i)
+
+			if stack:get_count() >= count then
+				new_stack = ItemStack(stack)
+				new_stack:set_count(count)
+			end
+
+			if not stack:is_empty() and dst_inventory:room_for_item(dst_list, new_stack) and (condition == nil or condition(stack, src_inventory, src_list, dst_inventory, dst_list)) then
+				return i
+			end
+		end
+	else
+	-- We have no dst_list, try to get a candidate anyway.
+		for i = 1, size do
+			stack = src_inventory:get_stack(src_list, i)
+
+			if not stack:is_empty() and (condition == nil or condition(stack, src_inventory, src_list, dst_inventory, dst_list)) then
+				return i
+			end
 		end
 	end
 	return nil
 end
 
--- Returns true if itemstack is a shulker box
+-- Returns true if itemstack is not a shulker box
 local function is_not_shulker_box(itemstack)
 	local g = minetest.get_item_group(itemstack:get_name(), "shulker_box")
 	return g == 0 or g == nil
@@ -224,7 +244,7 @@ end
 -- Moves a single item from one inventory to another.
 --- source_inventory: Inventory to take the item from
 --- source_list: List name of the source inventory from which to take the item
---- source_stack_id: The inventory position ID of the source inventory to take the item from (-1 for first occupied slot)
+--- source_stack_id: The inventory position ID of the source inventory to take the item from (-1 for first occupied slot, -2 for going thru every source_list slots and search for a candidate)
 --- destination_inventory: Put item into this inventory
 --- destination_list: List name of the destination inventory to which to put the item into
 
@@ -232,10 +252,17 @@ end
 -- Possible failures: No item in source slot, destination inventory full
 function mcl_util.move_item(source_inventory, source_list, source_stack_id, destination_inventory, destination_list)
 	if source_stack_id == -1 then
-		source_stack_id =  mcl_util.get_eligible_transfer_item_slot(source_inventory, source_list)
-		if source_stack_id == nil then
-			return false
-		end
+	-- Force first occupied slot, check if we can move the first item available only
+			source_stack_id = mcl_util.get_eligible_transfer_item_slot(source_inventory, source_list)
+
+	elseif source_stack_id == -2 and destination_list then
+	-- If we have a destination_list to check against, try to get a source_stack_id iterating source_list
+			source_stack_id = mcl_util.get_eligible_transfer_item_slot(source_inventory, source_list, destination_inventory, destination_list)
+	end
+
+-- Abort, we didn't get a valid source_stack_id candidate.
+	if source_stack_id == nil then
+		return false
 	end
 
 	if not source_inventory:is_empty(source_list) then
@@ -260,7 +287,7 @@ end
 --- source_pos: Position ({x,y,z}) of the node to take the item from
 --- destination_pos: Position ({x,y,z}) of the node to put the item into
 --- source_list (optional): List name of the source inventory from which to take the item. Default is normally "main"; "dst" for furnace
---- source_stack_id (optional): The inventory position ID of the source inventory to take the item from (-1 for slot of the first valid item; -1 is default)
+--- source_stack_id (optional): The inventory position ID of the source inventory to take the item from (-1 for first occupied slot; -2 for going thru every source_list slot and search a valid item; -2 is default)
 --- destination_list (optional): List name of the destination inventory. Default is normally "main"; "src" for furnace
 -- Returns true on success and false on failure.
 function mcl_util.move_item_container(source_pos, destination_pos, source_list, source_stack_id, destination_list)
@@ -273,7 +300,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 	local sctype = minetest.get_item_group(snode.name, "container")
 
 	-- Container type 7 does not allow any movement
-	if sctype == 7 then
+	if sctype == 7 or dctype == 7 then
 		return false
 	end
 
@@ -307,7 +334,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 	-- Default source lists
 	if not source_list then
 		-- Main inventory for most container types
-		if sctype == 2 or sctype == 3 or sctype == 5 or sctype == 6 or sctype == 7 then
+		if sctype == 2 or sctype == 3 or sctype == 5 or sctype == 6 then
 			source_list = "main"
 			-- Furnace: output
 		elseif sctype == 4 then
@@ -319,43 +346,17 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 	end
 
 	-- Automatically select stack slot ID if set to automatic
+	-- -2 to iterate, -1 to force first occupied slot only.
 	if not source_stack_id then
-		source_stack_id = -1
+		source_stack_id = -2
 	end
-	if source_stack_id == -1 then
-		local cond = nil
-		-- Prevent shulker box inception
-		if dctype == 3 then
-			cond = is_not_shulker_box
-		end
-		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
-		if not source_stack_id then
-			-- Try again if source is a double container
-			if snode and sctype == 5 then
-				spos = mcl_util.get_double_container_neighbor_pos(spos, snode.param2, "left")
-				smeta = minetest.get_meta(spos)
-				sinv = smeta:get_inventory()
-
-				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
-				if not source_stack_id then
-					return false
-				end
-			else
-				return false
-			end
-		end
-	end
-
+	
 	-- Abort transfer if shulker box wants to go into shulker box
 	if dctype == 3 then
-		local stack = sinv:get_stack(source_list, source_stack_id)
-		if stack and minetest.get_item_group(stack:get_name(), "shulker_box") == 1 then
+		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, "main", is_not_shulker_box)
+		if not source_stack_id then
 			return false
 		end
-	end
-	-- Container type 7 does not allow any placement
-	if dctype == 7 then
-		return false
 	end
 
 	-- If it's a container, put it into the container
@@ -363,7 +364,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		-- Automatically select a destination list if omitted
 		if not destination_list then
 			-- Main inventory for most container types
-			if dctype == 2 or dctype == 3 or dctype == 5 or dctype == 6 or dctype == 7 then
+			if dctype == 2 or dctype == 3 or dctype == 5 or dctype == 6 then
 				destination_list = "main"
 				-- Furnace source slot
 			elseif dctype == 4 then
@@ -373,13 +374,22 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		if destination_list then
 			-- Move item
 			local ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
+			-- Try transfer from neighbor node if transfer failed and double container
+			if snode and not ok and sctype == 5 then
+				spos = mcl_util.get_double_container_neighbor_pos(spos, snode.param2, "left")
+				smeta = minetest.get_meta(spos)
+				sinv = smeta:get_inventory()
 
-			-- Try transfer to neighbor node if transfer failed and double container
+				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list)
+				ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
+			end
+			-- Re-try transfer to neighbor node if transfer failed and double container
 			if dnode and not ok and dctype == 5 then
 				dpos = mcl_util.get_double_container_neighbor_pos(dpos, dnode.param2, "left")
 				dmeta = minetest.get_meta(dpos)
 				dinv = dmeta:get_inventory()
 
+				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list)
 				ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
 			end
 
