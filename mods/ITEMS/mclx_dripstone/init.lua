@@ -2,8 +2,8 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 local dripstone_directions =
 {
-	[-1] = "up",
-	[1] = "down",
+	[-1] = "bottom",
+	[1] = "top",
 }
 
 local dripstone_stages =
@@ -20,7 +20,7 @@ local function get_dripstone_node(stage, direction)
 end
 
 local function extract_direction(name)
-	return string.sub(name, 26, 27) == "up" and -1 or 1
+	return string.sub(name, 26, 31) == "bottom" and -1 or 1
 end
 
 minetest.register_node("mclx_dripstone:dripstone_block", {
@@ -35,7 +35,6 @@ minetest.register_node("mclx_dripstone:dripstone_block", {
 })
 
 local function dripstone_hit_func(self, object)
-	minetest.debug(dump(self))
 	mcl_util.deal_damage(object, math.ceil(self.timer / 0.2 - 2), {type = "falling_node"})
 end
 
@@ -96,14 +95,14 @@ local function on_dripstone_place(itemstack, player, pointed_thing)
 end
 
 local on_dripstone_destruct = function(pos)
-	local direction = string.find(minetest.get_node(pos).name, "^mclx_dripstone:dripstone_down") and 1 or -1
+	local direction = extract_direction(minetest.get_node(pos).name)
 	local offset_pos = vector.copy(pos)
 	local stage
 	while true do
 		offset_pos = vector.offset(offset_pos, 0, -direction, 0)
 		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
 		if stage == 1 and extract_direction(minetest.get_node(offset_pos).name) == -direction then
-			minetest.swap_node(offset_pos, {name = "mclx_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip"})
+			minetest.swap_node(offset_pos, {name = get_dripstone_node(2, -direction)})
 			break
 		elseif stage == 0 then
 			break
@@ -150,7 +149,7 @@ minetest.register_craftitem("mclx_dripstone:pointed_dripstone", {
 
 for i = 1, #dripstone_stages do
 	local stage = dripstone_stages[i]
-	minetest.register_node("mclx_dripstone:dripstone_down_" .. stage, {
+	minetest.register_node("mclx_dripstone:dripstone_top_" .. stage, {
 		description = S("Pointed dripstone (@1/@2)", i, #dripstone_stages),
 		_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
 		_doc_items_hidden = true,
@@ -165,7 +164,7 @@ for i = 1, #dripstone_stages do
 		_mcl_hardness = 1.5,
 	})
 
-	minetest.register_node("mclx_dripstone:dripstone_up_" .. stage, {
+	minetest.register_node("mclx_dripstone:dripstone_bottom_" .. stage, {
 		description = S("Pointed dripstone (@1/@2)", i, #dripstone_stages),
 		_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
 		_doc_items_hidden = true,
@@ -180,12 +179,3 @@ for i = 1, #dripstone_stages do
 		_mcl_hardness = 1.5,
 	})
 end
-
-minetest.register_abm({
-	label = "Dripstone",
-	nodenames = {"mclx_dripstone:dripstone_down_tip", "mclx_dripstone:dripstone_up_tip"},
-	interval = 10,
-	chance = 85,
-	action = function(pos,node)
-	end,
-})
