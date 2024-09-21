@@ -31,13 +31,6 @@ local function check_bit(n, b)
 	return bit.band(n, bit.lshift(1, b)) ~= 0
 end
 
-local wireflag_dirs = {
-	[0] = vector.new(0, 0, -1),
-	[1] = vector.new(-1, 0, 0),
-	[2] = vector.new(0, 0, 1),
-	[3] = vector.new(1, 0, 0),
-}
-
 -- 0-3 correspond to the direction bits in wireflags.
 local sixdirs = {
 	[0] = vector.new(0, 0, 1),
@@ -265,21 +258,6 @@ end
 function mcl_redstone.swap_node(pos, node)
 	minetest.swap_node(pos, node)
 	mcl_redstone._update_neighbours(pos, node)
-end
-
-local function get_wire_power(pos)
-	local max = get_node_power(pos)
-	for _, dir in pairs(sixdirs) do
-		local pos2 = pos:add(dir)
-		local node2 = mcl_redstone._mapcache:get_node(pos2)
-
-		if opaque_tab[node2.name] then
-			local _, power2 = get_node_power(pos2)
-			max = math.max(max, power2 - 1)
-		end
-	end
-
-	return max
 end
 
 function update_neighbours(pos, oldnode)

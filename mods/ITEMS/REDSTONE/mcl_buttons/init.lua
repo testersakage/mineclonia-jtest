@@ -148,7 +148,7 @@ function mcl_buttons.register_button(basename, def)
 			get_power = function(node, dir)
 				return 15, node.param2 == minetest.dir_to_wallmounted(dir)
 			end,
-			init = function(_, node)
+			init = function(pos, node)
 				mcl_redstone.after(push_duration, function()
 					minetest.sound_play(push_sound, {pos=pos, pitch=0.9}, true)
 				end)
