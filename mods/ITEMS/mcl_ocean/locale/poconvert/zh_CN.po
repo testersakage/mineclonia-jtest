@@ -3,52 +3,52 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_ocean x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-14 17:37+0000\n"
+"PO-Revision-Date: 2024-09-21 15:36+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
-"mineclonia/mcl_ocean/zh_Hans/>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mcl_ocean/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Tube Coral Block"
 msgstr "管珊瑚块"
 
 msgid "Dead Tube Coral Block"
-msgstr ""
+msgstr "失活的管珊瑚块"
 
 msgid "Tube Coral"
-msgstr ""
+msgstr "管珊瑚"
 
 msgid "Dead Tube Coral"
-msgstr ""
+msgstr "失活的管珊瑚"
 
 msgid "Tube Coral Fan"
-msgstr ""
+msgstr "管珊瑚扇"
 
 msgid "Dead Tube Coral Fan"
-msgstr ""
+msgstr "失活的管珊瑚扇"
 
 msgid "Brain Coral Block"
-msgstr ""
+msgstr "脑纹珊瑚块"
 
 msgid "Dead Brain Coral Block"
-msgstr ""
+msgstr "失活的脑纹珊瑚块"
 
 msgid "Brain Coral"
-msgstr ""
+msgstr "脑纹珊瑚"
 
 msgid "Dead Brain Coral"
-msgstr ""
+msgstr "失活的脑纹珊瑚"
 
 msgid "Brain Coral Fan"
-msgstr ""
+msgstr "脑纹珊瑚扇"
 
 msgid "Dead Brain Coral Fan"
-msgstr ""
+msgstr "失活的脑纹珊瑚扇"
 
 msgid "Bubble Coral Block"
 msgstr ""
