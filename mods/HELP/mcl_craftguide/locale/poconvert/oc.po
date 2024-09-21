@@ -94,12 +94,6 @@ msgstr ""
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr ""
 
-msgid "Shapeless"
-msgstr ""
-
-msgid "Cooking"
-msgstr ""
-
 msgid "Increase window size"
 msgstr ""
 
@@ -122,6 +116,9 @@ msgid "No item to show"
 msgstr ""
 
 msgid "Collect items to reveal more recipes"
+msgstr ""
+
+msgid "Invalid crafting ingredient: \"@1\" (dosent exist)"
 msgstr ""
 
 msgid "This item can be repaired at an anvil with: @1."

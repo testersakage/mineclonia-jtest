@@ -13,11 +13,11 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.0\n"
 
-msgid "Beacon:"
-msgstr "Leuchtfeuer:"
-
 msgid "Primary Power:"
 msgstr "Primäre Kraft:"
+
+msgid "Secondary Power:"
+msgstr ""
 
 msgid "Inventory:"
 msgstr "Inventar:"

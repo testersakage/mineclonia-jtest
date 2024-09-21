@@ -1,5 +1,5 @@
 # textdomain: mcl_beacons
-Beacon:=Faro:
 Primary Power:=Poder Primario:
+Secondary Power:=
 Inventory:=Inventario:
 Beacon=Faro

@@ -1,5 +1,5 @@
 # textdomain: mcl_beacons
-Beacon:=Balise :
 Primary Power:=Pouvoir Primaire :
+Secondary Power:=
 Inventory:=Inventaire :
 Beacon=Balise

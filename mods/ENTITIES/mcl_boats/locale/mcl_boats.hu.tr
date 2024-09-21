@@ -1,5 +1,5 @@
 # textdomain: mcl_boats
-Sneak to dismount=Guggolj a kiszálláshoz
+Sneak to dismount=Guggolj, hogy leszereld
 Boats are used to travel on the surface of water.=Csónakkal a víz felszínén közlekedhetsz.
 Rightclick on a water source to place the boat. Rightclick the boat to enter it. Use [Left] and [Right] to steer, [Forwards] to speed up and [Backwards] to slow down or move backwards. Use [Sneak] to leave the boat, punch the boat to make it drop as an item.=Jobb gombbal kattints a vízre, hogy elhelyezd a csónakot. Jobb gombbal kattints a csónakra a beszálláshoz. A [Bal] és [Jobb] irányváltoztatáshoz, [Előre] és [Hátra] az evezéshez. Használd a [Guggolás]-t a kiszálláshoz, üsd meg a csónakot, hogy felvehető elemmé váljon.
 Boat=Csónak

@@ -70,12 +70,12 @@ msgstr "Escaleras de ladrillos de piedra negra pulida"
 msgid "Blackstone Brick Slab"
 msgstr "Losa de ladrillos de piedra negra pulida"
 
-msgid "Blackstone Wall"
-msgstr "Pared de piedra negra"
-
 msgid "Soul Torch"
 msgstr "Antorcha del almas"
 
 msgid "Torches are light sources which can be placed at the side or on the top of most blocks."
 msgstr "Las antorchas son fuentes de luz que se pueden colocar a un lado o encima de la mayoría de los bloques."
+
+msgid "Blackstone Wall"
+msgstr "Pared de piedra negra"
 

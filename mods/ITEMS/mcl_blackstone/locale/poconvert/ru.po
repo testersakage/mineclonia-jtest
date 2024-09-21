@@ -70,12 +70,12 @@ msgstr ""
 msgid "Blackstone Brick Slab"
 msgstr ""
 
-msgid "Blackstone Wall"
-msgstr "Стена из чернокамня"
-
 msgid "Soul Torch"
 msgstr "Факел душ"
 
 msgid "Torches are light sources which can be placed at the side or on the top of most blocks."
 msgstr "Факелы это источники света, которые могут быть размещены сбоку или сверху большинства блоков."
+
+msgid "Blackstone Wall"
+msgstr "Стена из чернокамня"
 

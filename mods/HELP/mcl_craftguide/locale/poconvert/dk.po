@@ -94,12 +94,6 @@ msgstr ""
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "Formen er for stor til at blive vist (@1x@2)"
 
-msgid "Shapeless"
-msgstr "Uformelig"
-
-msgid "Cooking"
-msgstr "Madlavning"
-
 msgid "Increase window size"
 msgstr "Øg vinduesstørrelsen"
 
@@ -123,6 +117,9 @@ msgstr "Ingen genstande at vise"
 
 msgid "Collect items to reveal more recipes"
 msgstr "Saml genstande for at afsløre flere opskrifter"
+
+msgid "Invalid crafting ingredient: \"@1\" (dosent exist)"
+msgstr ""
 
 msgid "This item can be repaired at an anvil with: @1."
 msgstr ""

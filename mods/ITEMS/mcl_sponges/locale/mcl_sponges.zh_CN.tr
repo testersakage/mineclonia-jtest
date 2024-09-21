@@ -1,5 +1,5 @@
 # textdomain: mcl_sponges
-Sponge=
+Sponge=海绵
 Removes water on contact=
 Sponges are blocks which remove water around them when they are placed or come in contact with water, turning it into a wet sponge.=
 Waterlogged Sponge=

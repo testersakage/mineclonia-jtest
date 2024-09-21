@@ -94,12 +94,6 @@ msgstr ""
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "レシピを表示するには大きすぎる (@1×@2)"
 
-msgid "Shapeless"
-msgstr "不定形"
-
-msgid "Cooking"
-msgstr "調理"
-
 msgid "Increase window size"
 msgstr "ウィンドウサイズ拡大"
 
@@ -123,6 +117,9 @@ msgstr "表示するアイテムなし"
 
 msgid "Collect items to reveal more recipes"
 msgstr "アイテムを集めて、より多くのレシピを明かす"
+
+msgid "Invalid crafting ingredient: \"@1\" (dosent exist)"
+msgstr ""
 
 msgid "This item can be repaired at an anvil with: @1."
 msgstr ""

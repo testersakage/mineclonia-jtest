@@ -7,7 +7,7 @@ In this world, going to bed won't skip the night, but it will skip thunderstorms
 Sleeping allows you to skip the night. The night is skipped when all players in this world went to sleep. The night is skipped after sleeping for a few seconds. Thunderstorms can be skipped in the same manner.=Dormir te permite saltarte la noche. Se omite la noche cuando todos los jugadores en este mundo se fueron a dormir. La noche se salta después de dormir durante unos segundos. Las tormentas eléctricas se pueden omitir de la misma manera.
 Allows you to sleep=Puedes dormir
 Bed=Cama
-@1 Bed=@1 Cama
+@1 Bed=Cama color @1
 You can only sleep at night or during a thunderstorm.=Solo puedes dormir por la noche o durante tormentas eléctricas.
 You can't sleep, the bed's too far away!=¡No puedes dormir, la cama está muy lejos!
 This bed is already occupied!=¡La cama ya está ocupada!

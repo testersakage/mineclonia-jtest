@@ -13,26 +13,242 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.0\n"
 
-msgid "<effect> <duration> [<factor>]"
-msgstr "<efekt> <czas trwania> [<czynnik>]"
+msgid "<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"
+msgstr ""
 
-msgid "Add a status effect to yourself. Arguments: <effect>: name of status effect, e.g. poison. <duration>: duration in seconds. <factor>: effect strength multiplier (1 = 100%)"
-msgstr "Dodaj status na siebie. Argumenty: <efekt>: nazwa efektu statusu, np. trucizna. <czas trwania>: czas trwania w sekundach. <czynnik>: czynnik siły efektu (1 = 100%)"
+msgid "Add a status effect to yourself. Arguments: <effect>: name of status effect. Passing \"list\" as effect name lists available effects. Passing \"heal\" as effect name heals (or harms) by amount designed by the next parameter. Passing \"clear\" as effect name removes all effects. Passing \"remove\" as effect name removes the effect named by the next parameter. <duration>: duration in seconds. Passing \"INF\" as duration makes the effect infinite. (<heal-amount>: amount of healing when the effect is \"heal\", passing a negative value subtracts health. <effect>: name of a status effect to be removed when using \"remove\" as the previous parameter.) <level>: effect power determinant, bigger level results in more powerful effect for effects that depend on the level (no changes for other effects), defaults to 1, pass F to use low-level factor instead. <factor>: effect strength modifier, can mean different things depending on the effect, no changes for effects that do not depend on level/factor. NOPART at the end means no particles will be shown for this effect."
+msgstr ""
 
 msgid "Missing effect parameter!"
 msgstr "Brak parametru efektu!"
 
-msgid "Missing or invalid duration parameter!"
-msgstr "Brak lub nieprawidłowy parametr czasu trwania!"
+msgid "Missing or invalid heal amount parameter!"
+msgstr ""
 
-msgid "Invalid factor parameter!"
-msgstr "Nieprawidłowy parametr czynnika!"
+msgid "Player @1 healed by @2 HP."
+msgstr ""
+
+msgid "Player @1 harmed by @2 HP."
+msgstr ""
+
+msgid "Effects cleared for player @1"
+msgstr ""
+
+msgid "Removed effect @1 from player @2"
+msgstr ""
 
 msgid "@1 is not an available status effect."
 msgstr "@1 nie jest dostępnym efektem statusu."
 
+msgid "Missing or invalid duration parameter!"
+msgstr "Brak lub nieprawidłowy parametr czasu trwania!"
+
+msgid "Invalid level parameter!"
+msgstr ""
+
+msgid "Missing or invalid factor parameter when level is F!"
+msgstr ""
+
+msgid "@1 effect given to player @2 for @3 seconds with factor of @4."
+msgstr ""
+
+msgid "@1 effect given to player @2 for @3 seconds."
+msgstr ""
+
+msgid "Giving effect @1 to player @2 failed."
+msgstr ""
+
+msgid "@1 effect on level @2 given to player @3 for @4 seconds."
+msgstr ""
+
+msgid "Invisiblity"
+msgstr ""
+
+msgid "body is invisible"
+msgstr ""
+
+msgid "Poison"
+msgstr "trucizny"
+
+msgid "-1 HP / @1 s"
+msgstr ""
+
+msgid "Regeneration"
+msgstr "regeneracji"
+
+msgid "+1 HP / @1 s"
+msgstr ""
+
+msgid "Strength"
+msgstr "siły"
+
+msgid "+@1% melee damage"
+msgstr ""
+
+msgid "Weakness"
+msgstr "słabości"
+
+msgid "-@1% melee damage"
+msgstr ""
+
+msgid "Water Breathing"
+msgstr "oddychania pod wodą"
+
+msgid "limitless breathing under water"
+msgstr ""
+
+msgid "Dolphin's Grace"
+msgstr ""
+
+msgid "swimming gracefully"
+msgstr ""
+
+msgid "Leaping"
+msgstr "skakania"
+
+msgid "+@1% jumping power"
+msgstr ""
+
+msgid "-@1% jumping power"
+msgstr ""
+
+msgid "Slow Falling"
+msgstr ""
+
+msgid "decreases gravity effects"
+msgstr ""
+
+msgid "Swiftness"
+msgstr "prędkości"
+
+msgid "+@1% running speed"
+msgstr ""
+
+msgid "Slowness"
+msgstr "spowolnienia"
+
+msgid "-@1% running speed"
+msgstr ""
+
+msgid "Levitation"
+msgstr ""
+
+msgid "moves body upwards at @1 nodes/s"
+msgstr ""
+
+msgid "Night Vision"
+msgstr "widzenia w ciemności"
+
+msgid "improved vision during the night"
+msgstr ""
+
+msgid "Darkness"
+msgstr ""
+
+msgid "surrounded by darkness"
+msgstr ""
+
+msgid "not seeing anything beyond @1 nodes"
+msgstr ""
+
+msgid "Glowing"
+msgstr ""
+
+msgid "more visible at all times"
+msgstr ""
+
+msgid "Health Boost"
+msgstr ""
+
+msgid "HP increased by @1"
+msgstr ""
+
+msgid "Absorption"
+msgstr ""
+
+msgid "absorbs up to @1 incoming damage"
+msgstr ""
+
+msgid "Fire Resistance"
+msgstr "odporności na ogień"
+
+msgid "resistance to fire damage"
+msgstr ""
+
+msgid "Resistance"
+msgstr ""
+
+msgid "resist @1% of incoming damage"
+msgstr ""
+
+msgid "Luck"
+msgstr ""
+
+msgid "Bad Luck"
+msgstr ""
+
+msgid "Bad Omen"
+msgstr ""
+
+msgid "danger is imminent"
+msgstr ""
+
+msgid "Hero of the Village"
+msgstr ""
+
+msgid "Withering"
+msgstr ""
+
+msgid "-1 HP / @1 s, can kill"
+msgstr ""
+
+msgid "impaired sight"
+msgstr ""
+
+msgid "Hunger"
+msgstr ""
+
+msgid "exhausts by @1 per second"
+msgstr ""
+
+msgid "Nausea"
+msgstr ""
+
+msgid "not feeling very well..."
+msgstr ""
+
+msgid "frequency: @1 / 1 s"
+msgstr ""
+
+msgid "Saturation"
+msgstr ""
+
+msgid "saturates by @1 per second"
+msgstr ""
+
+msgid "Haste"
+msgstr ""
+
+msgid "+@1% mining and attack speed"
+msgstr ""
+
+msgid "Fatigue"
+msgstr ""
+
+msgid "-@1% mining and attack speed"
+msgstr ""
+
+msgid "Conduit Power"
+msgstr ""
+
+msgid "+@1% mining and attack speed in water"
+msgstr ""
+
 msgid "Fermented Spider Eye"
 msgstr "Fermentowane oko pająka"
+
+msgid "Try different combinations to create potions."
+msgstr "Spróbuj innej kombinacji aby stworzyć miksturę."
 
 msgid "Glass Bottle"
 msgstr "Szklana butelka"
@@ -85,14 +301,11 @@ msgstr "Błyszczący arbuz"
 msgid "This shiny melon is full of tiny gold nuggets and would be nice in an item frame. It isn't edible and not useful for anything else."
 msgstr "Ten błyszczący arbuz jest pełen tycich odłamków złota i wygląda ładnie w ramkach na przedmioty. Nie jest jadalny ani użyteczny do innych rzeczy."
 
-msgid "Try different combinations to create potions."
-msgstr "Spróbuj innej kombinacji aby stworzyć miksturę."
-
 msgid "No effect"
 msgstr "Brak efektu"
 
-msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect, possibly repeatedly."
-msgstr "Mikstura którą można rzucać i roztrzaska się przy uderzeniu tworząc magiczne opary pozostające przez chwilę na ziemi. Jakikolwiek gracz lub mob wewnątrz oparów będzie wystawiony na efekt mikstury."
+msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
+msgstr ""
 
 msgid "Use the “Punch” key to throw it."
 msgstr "Użyj przycisku \"Uderz\" by rzucić."
@@ -100,92 +313,38 @@ msgstr "Użyj przycisku \"Uderz\" by rzucić."
 msgid "Use the “Place” key to drink it."
 msgstr "Użyj przycisku \"Postaw\" by wypić."
 
-msgid "Drinking a potion gives you a particular effect."
-msgstr "Wypicie mikstury sprawi, że będziesz wystawiona na jej efekty."
+msgid "Drinking a potion gives you a particular effect or set of effects."
+msgstr ""
 
-msgid "1 HP/@1s | @2"
-msgstr "1 HP/@1s | @2"
-
-msgid "@1 HP"
-msgstr "@1 HP"
+msgid "@1 Potion @2"
+msgstr ""
 
 msgid "@1 Potion"
 msgstr "Mikstura @1"
 
-msgid "Splash @1 Potion"
-msgstr "Miotana mikstura @1"
+msgid "Potion @1"
+msgstr ""
 
-msgid "Lingering @1 Potion"
-msgstr "Trwała miotana mikstura @1"
+msgid "Strange Potion"
+msgstr ""
 
-msgid "Arrow of @1"
-msgstr "Strzała @1"
+msgid "Splash @1"
+msgstr ""
 
-msgid " II"
-msgstr " II"
+msgid "Lingering @1"
+msgstr ""
 
-msgid " IV"
-msgstr " IV"
+msgid "@1 Arrow @2"
+msgstr ""
 
-msgid "@1 Potion@2"
-msgstr "Mikstura @1@2"
+msgid "@1 Arrow"
+msgstr ""
 
-msgid "Splash @1@2 Potion"
-msgstr "Miotana mikstura @1@2"
+msgid "Arrow @1"
+msgstr ""
 
-msgid "Lingering @1@2 Potion"
-msgstr "Trwała miotana mikstura @1@2"
-
-msgid "Arrow of @1@2"
-msgstr "Strzała @1@2"
-
-msgid "@1 + Potion"
-msgstr "Mikstura @1 +"
-
-msgid "Splash @1 + Potion"
-msgstr "Miotana mikstura @1 +"
-
-msgid "Lingering @1 + Potion"
-msgstr "Trwała miotana mikstura @1 +"
-
-msgid "Arrow of @1 +"
-msgstr "Strzała @1 +"
-
-msgid "Awkward Potion"
-msgstr "Klarowna mikstura"
-
-msgid "Awkward Splash Potion"
-msgstr "Klarowna miotana mikstura"
-
-msgid "Awkward Lingering Potion"
-msgstr "Klarowna trwała miotana mikstura"
-
-msgid "Has an awkward taste and is used for brewing potions."
-msgstr "Ma dziwny smak i jest użyteczna przy warzenia mikstur."
-
-msgid "Mundane Potion"
-msgstr "Mdła mikstura"
-
-msgid "Mundane Splash Potion"
-msgstr "Mdła miotana mikstura"
-
-msgid "Mundane Lingering Potion"
-msgstr "Mdła trwała miotana mikstura"
-
-msgid "Has a terrible taste and is not useful for brewing potions."
-msgstr "Ma ohydny smak i nie jest użyteczna przy warzenia mikstur."
-
-msgid "Thick Potion"
-msgstr "Gęsta mikstura"
-
-msgid "Thick Splash Potion"
-msgstr "Gęsta miotana mikstura"
-
-msgid "Thick Lingering Potion"
-msgstr "Gęsta trwała miotana mikstura"
-
-msgid "Has a bitter taste and is not useful for brewing potions."
-msgstr "Ma cierpki smak i nie jest użyteczna przy warzenia mikstur."
+msgid "Strange Tipped Arrow"
+msgstr ""
 
 msgid "Dragon's Breath"
 msgstr "Oddech smoka"
@@ -193,107 +352,155 @@ msgstr "Oddech smoka"
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr "Ten przedmiot jest używany przy warzeniu i może zostać dodany do miotanych mikstur aby uczynić je trwałymi."
 
-msgid "Healing"
-msgstr "leczenia"
+msgid "Awkward"
+msgstr ""
 
-msgid "+4 HP"
-msgstr "+4 HP"
+msgid "Has an awkward taste and is used for brewing potions."
+msgstr "Ma dziwny smak i jest użyteczna przy warzenia mikstur."
 
-msgid "+8 HP"
-msgstr "+8 HP"
+msgid "Mundane"
+msgstr ""
+
+msgid "Has a terrible taste and is not really useful for brewing potions."
+msgstr ""
+
+msgid "Thick"
+msgstr ""
+
+msgid "Has a bitter taste and is not really useful for brewing potions."
+msgstr ""
+
+msgid "of Healing"
+msgstr ""
+
+msgid "+@1 HP"
+msgstr ""
 
 msgid "Instantly heals."
 msgstr "Natychmiastowo leczy."
 
-msgid "Harming"
-msgstr "obrażeń"
+msgid "of Harming"
+msgstr ""
 
-msgid "-6 HP"
-msgstr "-6 HP"
-
-msgid "-12 HP"
-msgstr "-12 HP"
+msgid "-@1 HP"
+msgstr ""
 
 msgid "Instantly deals damage."
 msgstr "Natychmiastowo zadaje obrażenia."
 
-msgid "Night Vision"
-msgstr "widzenia w ciemności"
+msgid "of Night Vision"
+msgstr ""
 
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "Zwiększa postrzeganą jasność przy ciemnym niebie."
 
-msgid "Swiftness"
-msgstr "prędkości"
+msgid "of Swiftness"
+msgstr ""
 
 msgid "Increases walking speed."
 msgstr "Zwiększa prędkość poruszania."
 
-msgid "Slowness"
-msgstr "spowolnienia"
+msgid "of Slowness"
+msgstr ""
 
 msgid "Decreases walking speed."
 msgstr "Zmniejsza prędkość poruszania."
 
-msgid "Leaping"
-msgstr "skakania"
+msgid "of Leaping"
+msgstr ""
 
 msgid "Increases jump strength."
 msgstr "Zwiększa siłę skoku."
 
-msgid "Withering"
+msgid "of Decay"
 msgstr ""
 
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr ""
 
-msgid "Poison"
-msgstr "trucizny"
+msgid "of Poison"
+msgstr ""
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "Aplikuje efekt trucizny zadający obrażenia w regularnych odstępach czasu."
 
-msgid "Regeneration"
-msgstr "regeneracji"
+msgid "of Regeneration"
+msgstr ""
 
 msgid "Regenerates health over time."
 msgstr "Regeneruje życie przez pewien czas."
 
-msgid "Invisibility"
-msgstr "niewidzialności"
+msgid "of Invisibility"
+msgstr ""
 
 msgid "Grants invisibility."
 msgstr "Sprawia, że cel jest niewidzialny."
 
-msgid "Water Breathing"
-msgstr "oddychania pod wodą"
+msgid "of Water Breathing"
+msgstr ""
 
 msgid "Grants limitless breath underwater."
 msgstr "Sprawia, że cel może oddychać pod wodą."
 
-msgid "Fire Resistance"
-msgstr "odporności na ogień"
+msgid "of Fire Resistance"
+msgstr ""
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "Sprawia, że cel jest odporny na obrażenia od źródeł ciepła takich jak ogień."
 
-msgid "Weakness"
-msgstr "słabości"
+msgid "of Strength"
+msgstr ""
 
-msgid "Weakness +"
-msgstr "słabości +"
+msgid "Increases attack power."
+msgstr ""
 
-msgid "Strength"
-msgstr "siły"
+msgid "of Weakness"
+msgstr ""
 
-msgid "Strength II"
-msgstr "siły II"
+msgid "Decreases attack power."
+msgstr ""
 
-msgid "Strength +"
-msgstr "siły +"
+msgid "of Slow Falling"
+msgstr ""
 
-msgid "A throwable potion that will shatter on impact, where it gives all nearby players and mobs a status effect."
-msgstr "Mikstura, którą można rzucić i rozbije się przy uderzeniu wystawiając wszystkich pobliskich graczy i moby na efekt jej działania."
+msgid "Instead of falling, you descend gracefully."
+msgstr ""
+
+msgid "of the Turtle Master"
+msgstr ""
+
+msgid "Decreases damage taken at the cost of speed."
+msgstr ""
+
+msgid "of Luck"
+msgstr ""
+
+msgid "Increases luck."
+msgstr ""
+
+msgid "of Bad Luck"
+msgstr ""
+
+msgid "Decreases luck."
+msgstr ""
+
+msgid "Ominous Bottle"
+msgstr ""
+
+msgid "Attracts danger."
+msgstr ""
+
+msgid "Unknown Potion"
+msgstr ""
+
+msgid "Right-click to identify"
+msgstr ""
+
+msgid "Unknown Tipped Arrow"
+msgstr ""
+
+msgid "A throwable potion that will shatter on impact, where it gives all nearby players and mobs a status effect or a set of status effects."
+msgstr ""
 
 msgid "This particular arrow is tipped and will give an effect when it hits a player or mob."
 msgstr "Czubek tej strzały jest zanurzony w miksturze co wystawi jej cel na efekt jej działania."
