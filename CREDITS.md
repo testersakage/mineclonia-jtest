@@ -20,6 +20,10 @@
 * Jürgen Rühle
 * teknomunk
 * kno10
+* Po Lu
+* goblin_mode
+* Lars Müller 
+* the-real-herowl
 
 ## Previous Contributors
 * Lizzy Fleckenstein

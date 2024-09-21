@@ -22,6 +22,10 @@ return {
 		"Jürgen Rühle",
 		"teknomunk",
 		"kno10",
+		"Po Lu",
+		"goblin_mode",
+		"Lars Müller ",
+		"the-real-herowl",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
