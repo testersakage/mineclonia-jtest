@@ -179,3 +179,64 @@ for i = 1, #dripstone_stages do
 		_mcl_hardness = 1.5,
 	})
 end
+
+minetest.register_abm({
+	label = "Dripstone growth",
+	nodenames = {"mclx_dripstone:dripstone_top_tip"},
+	interval = 1,
+	chance = 1,
+	action = function(pos)
+		-- checking if can grow
+		local offset_pos = vector.copy(pos)
+		local stage
+		local node
+		local stalagtite_lenth = 1
+		while true do
+			offset_pos = vector.offset(offset_pos, 0, 1, 0)
+			stalagtite_lenth = stalagtite_lenth + 1
+			node = minetest.get_node(offset_pos)
+			stage = minetest.get_item_group(node.name, "dripstone_stage")
+			if stage == 0 then
+				if node.name ~= "mclx_dripstone:dripstone_block" 
+				or minetest.get_item_group(minetest.get_node(vector.offset(offset_pos, 0, 1, 0)).name, "water") == 0 then 
+					return 
+				end
+				break
+			end
+		end
+
+		-- randomly chose to either grow the stalagmite or stalagtites
+		if math.random(2) == 1 then
+			-- stalagmite growth
+			local groups
+			local length = 0
+			for i = 1, 10 do
+				node = minetest.get_node(vector.offset(pos, 0, -i, 0))
+				groups = minetest.registered_nodes[node.name].groups
+				if (groups["solid"] or 0) > 0 or (groups["dripstone_stage"] or 0) > 0 then
+					if (groups["dripstone_stage"] or 0) > 0 then
+						while true do
+							stage = minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, -i - length, 0)).name, "dripstone_stage")
+							if stage == 0 then
+								break
+							end
+							length = length + 1
+						end
+					end
+
+					if length < 7 then
+						minetest.set_node(vector.offset(pos, 0, -i + 1, 0), {name = get_dripstone_node(2, -1)})
+						update_dripstone(vector.offset(pos, 0, -i + 1, 0), -1)
+					end
+					break
+				end
+			end
+		else
+			-- stalagtite growth
+			if stalagtite_lenth > 7 then return end
+
+			minetest.set_node(vector.offset(pos, 0, -1, 0), {name = get_dripstone_node(2, 1)})
+			update_dripstone(vector.offset(pos, 0, -1, 0), 1)
+		end
+	end,
+})
