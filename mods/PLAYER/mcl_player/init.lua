@@ -156,8 +156,6 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 					return 0
 				elseif node.name == "mcl_powder_snow:powder_snow" then
 					return 0
-				elseif node.name == "mclx_dripstone:dripstone_up_tip" then
-					return damage * 2
 				end
 			end
 			pos = vector.add(pos, step)
