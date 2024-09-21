@@ -129,8 +129,8 @@ mcl_player.register_globalstep_slow(function(player)
 	end
 end)
 
--- Don't change HP if the player falls in the water or through End Portal:
-mcl_damage.register_modifier(function(obj, _, reason)
+-- Change the fall damage dealt depending on the block the player landed on
+mcl_damage.register_modifier(function(obj, damage, reason)
 	if reason.type == "fall" then
 		local pos = obj:get_pos()
 		local node = minetest.get_node(pos)
@@ -143,27 +143,21 @@ mcl_damage.register_modifier(function(obj, _, reason)
 				node = minetest.get_node(pos)
 			end
 			if node then
-				local def = minetest.registered_nodes[node.name]
-				if not def or def.walkable then
-					return
-				end
 				if minetest.get_item_group(node.name, "water") ~= 0 then
 					return 0
-				end
-				if node.name == "mcl_portals:portal_end" then
+				elseif node.name == "mcl_portals:portal_end" then
 					if mcl_portals and mcl_portals.end_teleport then
 						mcl_portals.end_teleport(obj)
 					end
 					return 0
-				end
-				if node.name == "mcl_core:cobweb" then
+				elseif node.name == "mcl_core:cobweb" then
 					return 0
-				end
-				if node.name == "mcl_core:vine" then
+				elseif node.name == "mcl_core:vine" then
 					return 0
-				end
-				if node.name == "mcl_powder_snow:powder_snow" then
+				elseif node.name == "mcl_powder_snow:powder_snow" then
 					return 0
+				elseif node.name == "mclx_dripstone:dripstone_up_tip" then
+					return damage * 2
 				end
 			end
 			pos = vector.add(pos, step)
