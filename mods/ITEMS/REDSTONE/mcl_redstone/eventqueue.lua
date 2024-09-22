@@ -3,7 +3,6 @@ local UPDATE_RANGE = (tonumber(minetest.settings:get("mcl_redstone_update_range"
 local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
 local TIME_BUDGET = UPDATE_TICK * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2)
 
-mcl_redstone._mapcache = nil
 mcl_redstone._pending_updates = {}
 
 local function priority_queue()
@@ -168,8 +167,6 @@ minetest.register_globalstep(function(dtime)
 		clear_all_pending_events()
 	end
 
-	mcl_redstone._mapcache = mcl_redstone._new_mapcache()
-
 	local starttime = get_time()
 	local endtime = starttime + TIME_BUDGET
 	local nevents = 0
@@ -180,14 +177,12 @@ minetest.register_globalstep(function(dtime)
 		local time = get_time() - starttime
 		local npending = eventqueue:size()
 
-		mcl_redstone._mapcache = nil
 		debug_log(current_tick, nevents, nupdates, nfaraway, npending, time, aborted)
 	end
 
 	local last_tick = current_tick
 	while eventqueue:size() > 0 and eventqueue:peek().tick <= current_tick do
 		if get_time() > endtime then
-			mcl_redstone._mapcache:write_to_map()
 			before_return(true)
 			return
 		end
@@ -205,7 +200,6 @@ minetest.register_globalstep(function(dtime)
 		last_tick = event.tick
 	end
 
-	mcl_redstone._mapcache:write_to_map()
 	for h, pos in pairs(mcl_redstone._pending_updates) do
 		if get_time() > endtime then
 			before_return(true)
@@ -213,7 +207,7 @@ minetest.register_globalstep(function(dtime)
 		end
 
 		nupdates = nupdates + 1
-		mcl_redstone._call_update(pos)
+		mcl_redstone._schedule_update(pos)
 		mcl_redstone._pending_updates[h] = nil
 	end
 

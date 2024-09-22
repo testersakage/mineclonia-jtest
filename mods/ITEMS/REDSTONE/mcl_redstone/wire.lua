@@ -77,7 +77,7 @@ local function wireflags_to_name(wireflags)
 		"mcl_redstone:wire_"..(bit.tohex(wireflags, 2))
 end
 
-local function update_wire(pos, get_node, swap_node)
+local function update_wire(pos)
 	local update_tab = {
 		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44 },
 		{ wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x88 },
@@ -99,17 +99,17 @@ local function update_wire(pos, get_node, swap_node)
 		{ dir = vector.new(1, 0, 0), mask = 0x8 },
 	}
 
-	local node = get_node(pos)
+	local node = minetest.get_node(pos)
 	local present = wireflag_tab[node.name] ~= nil
 	local wireflags = 0
 
 	for _, entry in pairs(update_tab) do
-		if not entry.obstruct or not opaque_tab[get_node(pos:add(entry.obstruct)).name] then
+		if not entry.obstruct or not opaque_tab[minetest.get_node(pos:add(entry.obstruct)).name] then
 			local pos2 = pos:add(entry.wire)
-			local node2 = get_node(pos2)
+			local node2 = minetest.get_node(pos2)
 
 			if wireflag_tab[node2.name] then
-				local over_opaque = opaque_tab[get_node(pos2:offset(0, -1, 0)).name]
+				local over_opaque = opaque_tab[minetest.get_node(pos2:offset(0, -1, 0)).name]
 				local mask = bit.band(entry.mask, over_opaque and 0xff or 0x0f)
 				local mask2 = bit.band(entry.mask2, over_opaque and 0xff or 0x0f)
 
@@ -122,7 +122,7 @@ local function update_wire(pos, get_node, swap_node)
 					wireflags2 = bit.band(wireflags2, bit.bnot(mask2))
 				end
 
-				swap_node(pos2, {
+				minetest.swap_node(pos2, {
 					name = wireflags_to_name(make_legal(wireflags2)),
 					param2 = node2.param2,
 				})
@@ -131,7 +131,7 @@ local function update_wire(pos, get_node, swap_node)
 	end
 	for _, entry in pairs(fourdir_tab) do
 		local pos2 = pos:add(entry.dir)
-		local node2 = get_node(pos2)
+		local node2 = minetest.get_node(pos2)
 		local ndef2 = minetest.registered_nodes[node2.name]
 		local redstone = ndef2._redstone
 		local connects_to = redstone and redstone.connects_to
@@ -142,7 +142,7 @@ local function update_wire(pos, get_node, swap_node)
 	end
 
 	if present then
-		swap_node(pos, {
+		minetest.swap_node(pos, {
 			name = wireflags_to_name(make_legal(wireflags)),
 			param2 = node.param2,
 		})
@@ -150,23 +150,19 @@ local function update_wire(pos, get_node, swap_node)
 end
 
 local function update_opaque(pos)
-	mcl_redstone._schedule_event(0, -1, pos, function()
-		local dirs = {
-			vector.new(0, -1, 0),
-			vector.new(1, 0, 0),
-			vector.new(-1, 0, 0),
-			vector.new(0, 0, 1),
-			vector.new(0, 0, -1),
-		}
-		for _, dir in pairs(dirs) do
-			local pos2 = pos:add(dir)
-			if wireflag_tab[minetest.get_node(pos2).name] then
-				local get_node = function(pos) return mcl_redstone._mapcache:get_node(pos) end
-				local swap_node = function(pos, node) return mcl_redstone._mapcache:set_node(pos, node) end
-				update_wire(pos2, get_node, swap_node)
-			end
+	local dirs = {
+		vector.new(0, -1, 0),
+		vector.new(1, 0, 0),
+		vector.new(-1, 0, 0),
+		vector.new(0, 0, 1),
+		vector.new(0, 0, -1),
+	}
+	for _, dir in pairs(dirs) do
+		local pos2 = pos:add(dir)
+		if wireflag_tab[minetest.get_node(pos2).name] then
+			update_wire(pos2)
 		end
-	end)
+	end
 end
 
 local fourdirs = {

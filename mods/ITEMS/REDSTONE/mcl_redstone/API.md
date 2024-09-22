@@ -119,9 +119,6 @@ has changed. Because of this, nodes that perform actions on redstone pulses
 must keep track of their previous power state. This can be done either by
 storing a flag in `param2` or by registering a separate powered-on node.
 
-It is illegal to call functions which write to the map from this function.
-Such function calls need to be wrapped in `minetest.after`.
-
 ### `init = function(pos, node)`
 
 The `init` callback gets called after a node is placed normally or by
@@ -134,15 +131,9 @@ If `init` has not been specified it will default to the `update`. For nodes
 were this is undesirable (like doors), `init` should be set to an empty
 function.
 
-It is illegal to call functions which write to the map from this function.
-Such function calls need to be wrapped in `minetest.after`.
-
 ## `mcl_redstone.after(delay, func)`
 
 Calls the function `func` after `delay` ticks.
-
-It is illegal to call functions which write to the map from `func`. Such
-function calls need to be wrapped in `minetest.after`.
 
 ## `mcl_redstone.get_power(pos, dir)`
 
