@@ -182,7 +182,7 @@ local offdef = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
-				minetest.after(0, function() piston_on(pos, node) end)
+				piston_on(pos, node)
 			end
 		end,
 	},
@@ -198,7 +198,7 @@ local ondef = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
-				minetest.after(0, function() piston_off(pos, node) end)
+				piston_off(pos, node)
 			end
 		end,
 	},
@@ -376,7 +376,7 @@ local offupdef = table.merge(offdef, {
 	_redstone = {
 		update = function(pos, node)
 			if powered_facing_dir(pos, vector.new(0, 1, 0)) then
-				minetest.after(0, function() piston_on(pos, node) end)
+				piston_on(pos, node)
 			end
 		end,
 	},
@@ -389,7 +389,7 @@ local onupdef = table.merge(ondef, {
 	_redstone = {
 		update = function(pos, node)
 			if not powered_facing_dir(pos, vector.new(0, 1, 0)) then
-				minetest.after(0, function() piston_off(pos, node) end)
+				piston_off(pos, node)
 			end
 		end,
 	},
@@ -534,7 +534,7 @@ local offdowndef = table.merge(offdef, {
 	_redstone = {
 		update = function(pos, node)
 			if powered_facing_dir(pos, vector.new(0, -1, 0)) then
-				minetest.after(0, function() piston_on(pos, node) end)
+				piston_on(pos, node)
 			end
 		end,
 	},
@@ -546,7 +546,7 @@ local ondowndef = table.merge(ondef, {
 	_redstone = {
 		update = function(pos, node)
 			if not powered_facing_dir(pos, vector.new(0, -1, 0)) then
-				minetest.after(0, function() piston_off(pos, node) end)
+				piston_off(pos, node)
 			end
 		end,
 	},
