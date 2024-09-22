@@ -409,6 +409,7 @@ local function generate_dripstone(pos, direction)
 		local offset_r
 		local dripstone_positions = {}
 
+
 		for x = -r, r do
 			for z = -r, r do
 				offset_r = math.sqrt((x + x_offset)^2 + (z + z_offset)^2)
@@ -417,6 +418,14 @@ local function generate_dripstone(pos, direction)
 					table.insert(dripstone_positions, vector.offset(pos, x, offset_y * (direction or 1), z))
 				end
 			end
+		end
+
+		-- generating a foundation
+		minetest.debug(dump(vector.offset(pos, -r, 0, -r)), dump(vector.offset(pos, r, -3 * direction, r)))
+		if direction == -1 then
+			mcl_util.bulk_set_node_vm(vector.offset(pos, -r, 0, -r), vector.offset(pos, r, 3, r), "mclx_dripstone:dripstone_block")
+		else
+			mcl_util.bulk_set_node_vm(vector.offset(pos, -r, -3 * direction, -r), vector.offset(pos, r, 0, r), "mclx_dripstone:dripstone_block")
 		end
 
 		minetest.bulk_set_node(dripstone_positions, {name = "mclx_dripstone:dripstone_block"})
@@ -439,6 +448,7 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
 	place_func = function(pos)
+		minetest.debug("tite", dump(pos))
 		local empty_air_length = 0
 		while true do
 			if minetest.get_node(vector.offset(pos, 0, -empty_air_length, 0)).name ~= "air" then
@@ -448,7 +458,7 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 		end
 
 		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 6 then
+		if empty_air_length < 3 then
 			return false
 		else
 			generate_dripstone(pos, -1)
@@ -473,6 +483,7 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
 	place_func = function(pos)
+		minetest.debug("mite", dump(pos))
 		local empty_air_length = 0
 		while true do
 			if minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
@@ -482,7 +493,7 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 		end
 
 		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 6 then
+		if empty_air_length < 3 then
 			return false
 		else
 			generate_dripstone(pos, 1)
@@ -507,15 +518,23 @@ mcl_structures.register_structure("large_dripstone_column", {
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
 	place_func = function(pos)
+		minetest.debug("COLUMN", dump(pos))
 		local empty_air_length = 0
 		while true do
-			if minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
+			if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name, "solid") ~= 0 then
 				break
+			elseif empty_air_length > 20 then
+				return false
 			end
 			empty_air_length = empty_air_length + 1
 		end
 
-		generate_dripstone(pos, 1)
-		generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), -1)
+		if empty_air_length < 6 then
+			generate_dripstone(pos, 1)
+			generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), -1)
+			return true
+		else
+			return false
+		end
 	end
 })
