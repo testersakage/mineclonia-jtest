@@ -21,8 +21,8 @@ local function queue()
 	}
 end
 
-local wireflag_tab = {}
-local opaque_tab = {}
+local lwireflag_tab = {}
+local opaque_tab = mcl_redstone._solid_opaque_tab
 local get_power_tab = {}
 local update_tab = {}
 local init_tab = {}
@@ -70,7 +70,7 @@ local function get_node_power(pos, include_wire)
 			if is_strong then
 				strong = math.max(strong, power)
 			end
-		elseif include_wire and wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
+		elseif include_wire and lwireflag_tab[node2.name] and (i == 5 or check_bit(lwireflag_tab[node2.name], i)) then
 			-- Wire is above or pointing towards this node.
 			weak = math.max(weak, node2.param2)
 		end
@@ -103,7 +103,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	local updates_ = {}
 
 	local function get_power(node)
-		return wireflag_tab[node.name] and node.param2 or 0
+		return lwireflag_tab[node.name] and node.param2 or 0
 	end
 
 	while clear_queue:size() > 0 do
@@ -144,7 +144,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 			if not dir.obstruct or not opaque_tab[mcl_redstone._mapcache:get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
 				local node2 = mcl_redstone._mapcache:get_node(pos2)
-				if wireflag_tab[node2.name] and get_power(node2) < power2 then
+				if lwireflag_tab[node2.name] and get_power(node2) < power2 then
 					fill_queue:enqueue({pos = pos2, power = power2})
 				end
 			end
@@ -191,7 +191,7 @@ function mcl_redstone.get_power(pos, dir)
 		if get_power_tab[node2.name] then
 			local power2 = get_power_tab[node2.name](node2, -dir)
 			power = math.max(power, power2)
-		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
+		elseif lwireflag_tab[node2.name] and (i == 5 or check_bit(lwireflag_tab[node2.name], i)) then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
 			-- Only strong power goes through opaque nodes.
@@ -290,7 +290,7 @@ function update_neighbours(pos, oldnode)
 			local hash2 = minetest.hash_node_position(pos2)
 
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
-			if wireflag_tab[node2.name] then
+			if lwireflag_tab[node2.name] then
 				update_wire(pos2, oldpower2)
 			elseif opaque_tab[node2.name] then
 				for i, dir in pairs(sixdirs) do
@@ -299,7 +299,7 @@ function update_neighbours(pos, oldnode)
 					local hash3 = minetest.hash_node_position(pos3)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
-					if wireflag_tab[node3.name] then
+					if lwireflag_tab[node3.name] then
 						update_wire(pos3, math.max(oldpower2 - 1, 0))
 					end
 				end
@@ -324,7 +324,7 @@ local function opaque_update_neighbours(pos, added)
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
 		local node2 = mcl_redstone._mapcache:get_node(pos2)
-		if wireflag_tab[node2.name] then
+		if lwireflag_tab[node2.name] then
 			update_wire(pos2)
 		elseif update_tab[node2.name] then
 			local hash2 = minetest.hash_node_position(pos2)
@@ -342,7 +342,7 @@ local function update_wire(pos, oldnode)
 
 	mcl_redstone._mapcache:set_param2(pos, 0)
 	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0})
-	if wireflag_tab[node.name] then
+	if lwireflag_tab[node.name] then
 		local power = get_node_power_2(pos)
 		fill_queue:enqueue({pos = pos, power = power})
 	end
@@ -356,7 +356,6 @@ minetest.register_on_mods_loaded(function()
 		local old_construct = ndef.on_construct
 		local old_destruct = ndef.on_destruct
 		if minetest.get_item_group(name, "opaque") ~= 0 and minetest.get_item_group(name, "solid") ~= 0 then
-			opaque_tab[name] = true
 			minetest.override_item(name, {
 				on_construct = function(pos)
 					if old_construct then
@@ -378,7 +377,7 @@ minetest.register_on_mods_loaded(function()
 		end
 
 		if minetest.get_item_group(name, "redstone_wire") ~= 0 then
-			wireflag_tab[name] = ndef._logical_wireflags
+			lwireflag_tab[name] = ndef._logical_wireflags
 
 			local old_construct = ndef.on_construct
 			local old_destruct = ndef.after_destruct

@@ -35,6 +35,9 @@ local cross_tile = "redstone_redstone_dust_dot.png^redstone_redstone_dust_line0.
 local line_tile = "redstone_redstone_dust_line0.png"
 local dot_tile = "redstone_redstone_dust_dot.png"
 
+local opaque_tab = mcl_redstone._solid_opaque_tab
+local wireflag_tab = {}
+
 local function check_bit(n, b)
 	return bit.band(n, bit.lshift(1, b)) ~= 0
 end
@@ -74,11 +77,6 @@ local function wireflags_to_name(wireflags)
 		"mcl_redstone:wire_"..(bit.tohex(wireflags, 2))
 end
 
-local function is_solid_opaque(name)
-	return minetest.get_item_group(name, "solid") ~= 0 and
-		minetest.get_item_group(name, "opaque") ~= 0
-end
-
 local function update_wire(pos)
 	local update_tab = {
 		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44 },
@@ -102,22 +100,22 @@ local function update_wire(pos)
 	}
 
 	local node = minetest.get_node(pos)
-	local present = minetest.get_item_group(node.name, "redstone_wire") ~= 0
+	local present = wireflag_tab[node.name] ~= nil
 	local wireflags = 0
 
 	for _, entry in pairs(update_tab) do
-		if not entry.obstruct or not is_solid_opaque(minetest.get_node(pos:add(entry.obstruct)).name) then
+		if not entry.obstruct or not opaque_tab[minetest.get_node(pos:add(entry.obstruct)).name] then
 			local pos2 = pos:add(entry.wire)
 			local node2 = minetest.get_node(pos2)
 
-			if minetest.get_item_group(node2.name, "redstone_wire") ~= 0 then
-				local over_opaque = is_solid_opaque(minetest.get_node(pos2:offset(0, -1, 0)).name)
+			if wireflag_tab[node2.name] then
+				local over_opaque = opaque_tab[minetest.get_node(pos2:offset(0, -1, 0)).name]
 				local mask = bit.band(entry.mask, over_opaque and 0xff or 0x0f)
 				local mask2 = bit.band(entry.mask2, over_opaque and 0xff or 0x0f)
 
 				wireflags = bit.bor(wireflags, mask)
 
-				local wireflags2 = minetest.registered_nodes[node2.name]._wireflags
+				local wireflags2 = wireflag_tab[node2.name]
 				if present then
 					wireflags2 = bit.bor(wireflags2, mask2)
 				else
@@ -197,7 +195,8 @@ for _, wire in pairs(wires) do
 		doc.add_entry_alias("nodes", "mcl_redstone:redstone", "nodes", "mcl_redstone:wire_"..wireid)
 	end
 
-	minetest.register_node(wireflags_to_name(wire), {
+	local name = wireflags_to_name(wire)
+	minetest.register_node(name, {
 		drawtype = "nodebox",
 		paramtype = "light",
 		paramtype2 = "color",
@@ -228,6 +227,7 @@ for _, wire in pairs(wires) do
 		_wireflags = wire,
 		_logical_wireflags = make_long(wire),
 	})
+	wireflag_tab[name] = wire
 end
 
 local function connect_with_wires(pos)
