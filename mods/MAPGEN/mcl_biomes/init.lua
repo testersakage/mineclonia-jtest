@@ -1766,6 +1766,18 @@ local function register_biomes()
 	})
 
 	minetest.register_biome({
+		name = "DripstoneCave",
+		depth_top = 1,
+		node_cave_liquid = "mcl_core:water_source",
+		depth_riverbed = 2,
+		y_min = mcl_worlds.mg_overworld_min,
+		y_max = 0,
+		vertical_blend = 1,
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 0,
+	})
+
+	minetest.register_biome({
 		name = "LushCaves_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -3134,6 +3146,37 @@ local function register_decorations()
 		register_coral_decos(k)
 	end
 
+	minetest.register_decoration({
+		deco_type = "simple",
+		place_on = {"group:stone"},
+		sidelen = 1,
+		height = 1,
+		max_height = 1,
+		place_offset_y = -1,
+		noise_params = 
+		{
+			offset = 0,
+			scale = 1,
+			spread = {x = 20, y = 20, z = 20},
+			seed = 101,
+			octaves = 3,
+			persistance = 1,
+			lacunarity = 2,
+		},
+		decoration = "mclx_dripstone:dripstone_block",
+		biomes = {"DripstoneCave"},
+		flags = "all_floors, all_ceilings, force_placement",
+	})
+
+	minetest.register_decoration({
+		deco_type = "simple",
+		place_on = {"mclx_dripstone:dripstone_block"},
+		sidelen = 1,
+		fill_ratio = 0.2,
+		decoration = "mclx_dripstone:dripstone_bottom_tip",
+		biomes = {"DripstoneCave"},
+		flags = "all_floors",
+	})
 
 	local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
 	local lushcaves_underground = { "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}

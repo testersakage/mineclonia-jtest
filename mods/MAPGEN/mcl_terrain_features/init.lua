@@ -462,13 +462,15 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 	spawn_by = "air",
 	check_offset = 1,
 	num_spawn_by = 5,
+	biomes = {"DripstoneCave"},
 	noise_params = {
 		offset = 0.00040,
-		scale = 0.001,
-		spread = {x = 500, y = 500, z = 500},
-		seed = 00010001,
+		scale = 0.5,
+		spread = {x = 10, y = 10, z = 10},
+		seed = 01841,
 		octaves = 4,
-		persist = 0.67,
+		persist = 0.1,
+		flags = "absvalue"
 	},
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
@@ -483,7 +485,7 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 		end
 
 		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 5 then
+		if empty_air_length < 12 then
 			return false
 		else
 			generate_dripstone(pos, -1)
@@ -497,13 +499,15 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 	spawn_by = "air",
 	check_offset = -1,
 	num_spawn_by = 5,
+	biomes = {"DripstoneCave"},
 	noise_params = {
 		offset = 0.00040,
-		scale = 0.001,
-		spread = {x = 500, y = 500, z = 500},
-		seed = 00100010,
+		scale = 0.5,
+		spread = {x = 10, y = 10, z = 10},
+		seed = 033412341,
 		octaves = 4,
-		persist = 0.67,
+		persist = 0.1,
+		flags = "absvalue"
 	},
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
@@ -518,7 +522,7 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 		end
 
 		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 10 then
+		if empty_air_length < 12 then
 			return false
 		else
 			generate_dripstone(pos, 1)
@@ -532,13 +536,15 @@ mcl_structures.register_structure("large_dripstone_column", {
 	spawn_by = "air",
 	check_offset = 1,
 	num_spawn_by = 5,
+	biomes = {"DripstoneCave"},
 	noise_params = {
 		offset = 0.00040,
-		scale = 0.001,
-		spread = {x = 500, y = 500, z = 500},
-		seed = 01000100,
+		scale = 0.5,
+		spread = {x = 10, y = 10, z = 10},
+		seed = 00010231,
 		octaves = 4,
-		persist = 0.67,
+		persist = 0.1,
+		flags = "absvalue"
 	},
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
@@ -554,7 +560,7 @@ mcl_structures.register_structure("large_dripstone_column", {
 			empty_air_length = empty_air_length + 1
 		end
 
-		if empty_air_length < 10 then
+		if empty_air_length < 12 then
 			generate_dripstone(pos, 1)
 			generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), -1)
 			return true

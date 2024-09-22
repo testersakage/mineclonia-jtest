@@ -38,6 +38,36 @@ local function get_dripstone_length(pos, direction)
 	end
 end
 
+function place_dripstone(pos, length, direction)
+	-- minetest.debug("CALLED", dump(pos), length, direction)
+	if length == 0 then return end
+	-- create the base
+	if length >= 3 then
+		minetest.swap_node(vector.offset(pos, 0, 0, 0), {name = get_dripstone_node(5, direction)})
+	end
+
+	-- create the middle
+	if length >= 4 then
+		for i = 0, length - 4 do
+			minetest.swap_node(vector.offset(pos, 0, (i + 1) * -direction, 0), {name = get_dripstone_node(4, direction)})
+		end
+	end
+
+	-- create the frustum
+	if length >= 2 then
+		minetest.swap_node(vector.offset(pos, 0, (length - 2)  * -direction, 0), {name = get_dripstone_node(3, direction)})
+	end
+
+	-- if a dripstone column should be created
+	-- ".[^l]" is in the pattern to prevent dripstone blocks from being matched
+	if string.find(minetest.get_node(vector.offset(pos, 0, length * -direction, 0)).name, "^mclx_dripstone:dripstone_.[^l]") then
+		minetest.swap_node(vector.offset(pos, 0, (length - 1) * -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
+		minetest.swap_node(vector.offset(pos, 0, length * -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip_merge"})
+	else
+		minetest.swap_node(vector.offset(pos, 0, (length - 1) * -direction, 0), {name = get_dripstone_node(2, direction)})
+	end
+end
+
 minetest.register_node("mclx_dripstone:dripstone_block", {
 	description = S("Dripstone block"),
 	_doc_items_longdesc = S("Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"),
@@ -175,6 +205,8 @@ for i = 1, #dripstone_stages do
 		drop = "mclx_dripstone:pointed_dripstone",
 		groups = {pickaxey=1, not_in_creative_inventory=1, dripstone_stage = i},
 		sunlight_propagates = true,
+		paramtype = "light",
+		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		on_destruct = on_dripstone_destruct,
 		_mcl_blast_resistance = 3,
@@ -190,6 +222,8 @@ for i = 1, #dripstone_stages do
 		drop = "mclx_dripstone:pointed_dripstone",
 		groups = {pickaxey=1, not_in_creative_inventory=1, fall_damage_add_percent = 100, dripstone_stage = i},
 		sunlight_propagates = true,
+		paramtype = "light",
+		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		on_destruct = on_dripstone_destruct,
 		_mcl_blast_resistance = 3,
@@ -316,4 +350,54 @@ minetest.register_abm({
 			end
 		end
 	end,
+})
+
+mcl_structures.register_structure("dripstone_stalagmite", {
+	place_on = {"mclx_dripstone:dripstone_block"},
+	spawn_by = "air",
+	check_offset = 1,
+	num_spawn_by = 5,
+	biomes = {"DripstoneCave"},
+	fill_ratio = 0.8,
+	y_min = mcl_vars.mg_overworld_min,
+	y_max = 0,
+	place_func = function(pos)
+		max_length = 0
+		offset_pos = vector.copy(pos)
+		while true do
+			offset_pos = vector.offset(offset_pos, 0, 1, 0)
+			if minetest.get_node(offset_pos).name ~= "air" then
+				break
+			end
+			max_length = max_length + 1
+		end
+		place_dripstone(pos, math.min(math.random(2, 5), max_length), -1)
+		return true
+	end
+})
+
+mcl_structures.register_structure("dripstone_stalagtite", {
+	place_on = {"mclx_dripstone:dripstone_block"},
+	spawn_by = "air",
+	check_offset = 1,
+	num_spawn_by = 5,
+	biomes = {"DripstoneCave"},
+	fill_ratio = 0.8,
+	y_min = mcl_vars.mg_overworld_min,
+	y_max = 0,
+	flags = "all_ceilings",
+	place_func = function(pos)
+		pos = vector.offset(pos, 0, -2, 0)
+		max_length = 0
+		offset_pos = vector.copy(pos)
+		while true do
+			offset_pos = vector.offset(offset_pos, 0, -1, 0)
+			if minetest.get_node(offset_pos).name ~= "air" then
+				break
+			end
+			max_length = max_length + 1
+		end
+		place_dripstone(pos, math.min(math.random(2, 5), max_length), 1)
+		return true
+	end
 })
