@@ -404,7 +404,7 @@ local function generate_dripstone(pos, direction)
 		local x_offset = math.random(-0.2, 0.2)
 		local z_offset = math.random(-0.2, 0.2)
 		local r = math.random(2, 4)
-		local max_length = r * 3 + math.random(0, 4)
+		local max_length = r * 5 + math.random(0, 4)
 		local c_to = minetest.get_content_id("mclx_dripstone:dripstone_block")
 		local vm = minetest.get_voxel_manip()
 		local start_pos, end_pos
@@ -445,7 +445,7 @@ local function generate_dripstone(pos, direction)
 		for x = start_pos.x, end_pos.x do
 			for z = start_pos.z, end_pos.z do
 				offset_r = math.sqrt((pos.x - (x + x_offset))^2 + (pos.z - (z + z_offset))^2)
-				length = max_length - r * offset_r - offset_r * offset_r * 0.3 -- this is the formula that decides the shape!!
+				length = max_length - r * offset_r - offset_r * offset_r -- this is the formula that decides the shape!!
 				for offset_y = 0, length do
 					local vi = a:index(x, pos.y + (offset_y * direction), z)
 					data[vi] = c_to
