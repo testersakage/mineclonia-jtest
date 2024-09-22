@@ -362,8 +362,8 @@ mcl_structures.register_structure("dripstone_stalagmite", {
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
 	place_func = function(pos)
-		max_length = 0
-		offset_pos = vector.copy(pos)
+		local max_length = 0
+		local offset_pos = vector.copy(pos)
 		while true do
 			offset_pos = vector.offset(offset_pos, 0, 1, 0)
 			if minetest.get_node(offset_pos).name ~= "air" then
@@ -388,8 +388,8 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 	flags = "all_ceilings",
 	place_func = function(pos)
 		pos = vector.offset(pos, 0, -2, 0)
-		max_length = 0
-		offset_pos = vector.copy(pos)
+		local max_length = 0
+		local offset_pos = vector.copy(pos)
 		while true do
 			offset_pos = vector.offset(offset_pos, 0, -1, 0)
 			if minetest.get_node(offset_pos).name ~= "air" then
