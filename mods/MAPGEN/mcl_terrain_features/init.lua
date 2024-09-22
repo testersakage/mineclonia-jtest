@@ -397,3 +397,125 @@ mcl_structures.register_structure("powder_snow_trap", {
 		return true
 	end
 })
+
+-- direction is a multiplier to each block's y offset from the starting position, should be either -1 or 1
+local function generate_dripstone(pos, direction)
+		-- generating relative to some random sub position of the node, so the dripstone column is more asymetrical (aka natural)
+		local x_offset = math.random(-0.2, 0.2)
+		local z_offset = math.random(-0.2, 0.2)
+		local r = math.random(2, 4)
+		local max_length = r * 3 + math.random(0, 4)
+		local length
+		local offset_r
+		local dripstone_positions = {}
+
+		for x = -r, r do
+			for z = -r, r do
+				offset_r = math.sqrt((x + x_offset)^2 + (z + z_offset)^2)
+				length = max_length - r * offset_r - offset_r * offset_r * 0.3
+				for offset_y = 0, length do
+					table.insert(dripstone_positions, vector.offset(pos, x, offset_y * (direction or 1), z))
+				end
+			end
+		end
+
+		minetest.bulk_set_node(dripstone_positions, {name = "mclx_dripstone:dripstone_block"})
+		return true
+end
+
+mcl_structures.register_structure("large_dripstone_stalagtite", {
+	place_on = {"group:stone"},
+	spawn_by = "air",
+	check_offset = 1,
+	num_spawn_by = 5,
+	noise_params = {
+		offset = 0.00040,
+		scale = 0.001,
+		spread = {x = 500, y = 500, z = 500},
+		seed = 00010001,
+		octaves = 4,
+		persist = 0.67,
+	},
+	y_min = mcl_vars.mg_overworld_min,
+	y_max = 0,
+	place_func = function(pos)
+		local empty_air_length = 0
+		while true do
+			if minetest.get_node(vector.offset(pos, 0, -empty_air_length, 0)).name ~= "air" then
+				break
+			end
+			empty_air_length = empty_air_length + 1
+		end
+
+		-- dont generate stalagmites if there isnt enough space
+		if empty_air_length < 6 then
+			return false
+		else
+			generate_dripstone(pos, -1)
+			return true
+		end
+	end
+})
+
+mcl_structures.register_structure("large_dripstone_stalagmite", {
+	place_on = {"group:stone"},
+	spawn_by = "air",
+	check_offset = -1,
+	num_spawn_by = 5,
+	noise_params = {
+		offset = 0.00040,
+		scale = 0.001,
+		spread = {x = 500, y = 500, z = 500},
+		seed = 00100010,
+		octaves = 4,
+		persist = 0.67,
+	},
+	y_min = mcl_vars.mg_overworld_min,
+	y_max = 0,
+	place_func = function(pos)
+		local empty_air_length = 0
+		while true do
+			if minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
+				break
+			end
+			empty_air_length = empty_air_length + 1
+		end
+
+		-- dont generate stalagmites if there isnt enough space
+		if empty_air_length < 6 then
+			return false
+		else
+			generate_dripstone(pos, 1)
+			return true
+		end
+	end
+})
+
+mcl_structures.register_structure("large_dripstone_column", {
+	place_on = {"group:stone"},
+	spawn_by = "air",
+	check_offset = 1,
+	num_spawn_by = 5,
+	noise_params = {
+		offset = 0.00040,
+		scale = 0.001,
+		spread = {x = 500, y = 500, z = 500},
+		seed = 01000100,
+		octaves = 4,
+		persist = 0.67,
+	},
+	y_min = mcl_vars.mg_overworld_min,
+	y_max = 0,
+	place_func = function(pos)
+		local empty_air_length = 0
+		while true do
+			if minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
+				break
+			end
+			empty_air_length = empty_air_length + 1
+		end
+
+		generate_dripstone(pos, 1)
+		generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), -1)
+	end
+})
