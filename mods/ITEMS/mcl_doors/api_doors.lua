@@ -254,18 +254,18 @@ function mcl_doors:register_door(name, def)
 	local function redstone_update_bottom(pos)
 		local pos2 = pos:offset(0, 1, 0)
 		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
-			minetest.after(0, function() open(pos) end)
+			open(pos)
 		else
-			minetest.after(0, function() close(pos) end)
+			close(pos)
 		end
 	end
 
 	local function redstone_update_top(pos)
 		local pos2 = pos:offset(0, -1, 0)
 		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
-			minetest.after(0, function() open(pos2) end)
+			open(pos2)
 		else
-			minetest.after(0, function() close(pos2) end)
+			close(pos2)
 		end
 	end
 

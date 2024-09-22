@@ -61,7 +61,7 @@ local function get_node_power(pos, include_wire)
 	local strong = 0
 	for i, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
-		local node2 = mcl_redstone._mapcache:get_node(pos2)
+		local node2 = minetest.get_node(pos2)
 
 		if get_power_tab[node2.name] then
 			local power, is_strong = get_power_tab[node2.name](node2, -dir)
@@ -83,7 +83,7 @@ local function get_node_power_2(pos)
 	local max = get_node_power(pos)
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
-		local node2 = mcl_redstone._mapcache:get_node(pos2)
+		local node2 = minetest.get_node(pos2)
 
 		if opaque_tab[node2.name] then
 			-- Only strong power will go through opaque nodes.
@@ -114,14 +114,14 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		updates_[minetest.hash_node_position(pos)] = pos
 
 		for _, dir in pairs(wiredirs) do
-			if not dir.obstruct or not opaque_tab[mcl_redstone._mapcache:get_node(pos:add(dir.obstruct)).name] then
+			if not dir.obstruct or not opaque_tab[minetest.get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
-				local node2 = mcl_redstone._mapcache:get_node(pos2)
+				local node2 = minetest.get_node(pos2)
 				local power2 = get_power(node2)
 
 				if power2 > 0 then
 					if power2 < power then
-						mcl_redstone._mapcache:set_param2(pos2, 0)
+						minetest.swap_node(pos2, {name = node2.name, param2 = 0})
 						clear_queue:enqueue({pos = pos2, power = power2})
 					else
 						fill_queue:enqueue({pos = pos2, power = power2})
@@ -137,13 +137,16 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		local power = entry.power
 		local power2 = power - 1
 
-		mcl_redstone._mapcache:set_param2(pos, power)
+		minetest.swap_node(pos, {
+			name = minetest.get_node(pos).name,
+			param2 = power,
+		})
 		updates_[minetest.hash_node_position(pos)] = pos
 
 		for _, dir in pairs(wiredirs) do
-			if not dir.obstruct or not opaque_tab[mcl_redstone._mapcache:get_node(pos:add(dir.obstruct)).name] then
+			if not dir.obstruct or not opaque_tab[minetest.get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
-				local node2 = mcl_redstone._mapcache:get_node(pos2)
+				local node2 = minetest.get_node(pos2)
 				if lwireflag_tab[node2.name] and get_power(node2) < power2 then
 					fill_queue:enqueue({pos = pos2, power = power2})
 				end
@@ -154,14 +157,14 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	for _, pos in pairs(updates_) do
 		for _, dir in pairs(sixdirs) do
 			local pos2 = pos:add(dir)
-			local node2 = mcl_redstone._mapcache:get_node(pos2)
+			local node2 = minetest.get_node(pos2)
 			local hash2 = minetest.hash_node_position(pos2)
 
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
 			if opaque_tab[node2.name] then
 				for _, dir in pairs(sixdirs) do
 					local pos3 = pos2:add(dir)
-					local node3 = mcl_redstone._mapcache:get_node(pos3)
+					local node3 = minetest.get_node(pos3)
 					local hash3 = minetest.hash_node_position(pos3)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
@@ -172,8 +175,6 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 end
 
 function mcl_redstone.get_power(pos, dir)
-	assert(mcl_redstone._mapcache, "mcl_redstone.get_power is only valid to call during redstone updates")
-
 	-- Create table with keys corresponding to bits in wireflags to
 	-- simplify wire direction checks.
 	local dirs = {}
@@ -186,7 +187,7 @@ function mcl_redstone.get_power(pos, dir)
 	local power = 0
 	for i, dir in pairs(dirs) do
 		local pos2 = pos:add(dir)
-		local node2 = mcl_redstone._mapcache:get_node(pos2)
+		local node2 = minetest.get_node(pos2)
 
 		if get_power_tab[node2.name] then
 			local power2 = get_power_tab[node2.name](node2, -dir)
@@ -205,16 +206,16 @@ end
 local function schedule_update(pos, update)
 	local delay = update.delay or 1
 	local priority = update.priority or 1000
-	local oldnode = mcl_redstone._mapcache:get_node(pos)
+	local oldnode = minetest.get_node(pos)
 	local param2 = update.param2 or 0
 
 	mcl_redstone._schedule_event(delay, priority, pos, function()
-		local node = mcl_redstone._mapcache:get_node(pos)
+		local node = minetest.get_node(pos)
 		if update.name == node.name and param2 == node.param2 then
 			return
 		end
 
-		mcl_redstone._mapcache:set_node(pos, {
+		minetest.swap_node(pos, {
 			name = update.name,
 			param2 = update.param2,
 		})
@@ -227,7 +228,7 @@ function mcl_redstone.after(delay, func)
 end
 
 local function call_init(pos)
-	local node = mcl_redstone._mapcache:get_node(pos)
+	local node = minetest.get_node(pos)
 	if init_tab[node.name] then
 		local ret = init_tab[node.name](pos, node)
 		if ret then
@@ -236,8 +237,8 @@ local function call_init(pos)
 	end
 end
 
-function mcl_redstone._call_update(pos)
-	local node = mcl_redstone._mapcache:get_node(pos)
+function mcl_redstone._schedule_update(pos)
+	local node = minetest.get_node(pos)
 	if update_tab[node.name] then
 		local ret = update_tab[node.name](pos, node)
 		if ret then
@@ -263,7 +264,7 @@ end
 function update_neighbours(pos, oldnode)
 	local fill_queue = queue()
 	local clear_queue = queue()
-	local node = mcl_redstone._mapcache:get_node(pos)
+	local node = minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
 	local oldndef = oldnode and minetest.registered_nodes[oldnode.name]
 	local get_power = ndef and ndef._redstone and ndef._redstone.get_power
@@ -271,7 +272,10 @@ function update_neighbours(pos, oldnode)
 
 	local function update_wire(pos, oldpower, dirs)
 		if oldpower then
-			mcl_redstone._mapcache:set_param2(pos, 0)
+			minetest.swap_node(pos, {
+				name = minetest.get_node(pos).name,
+				param2 = 0,
+			})
 			clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs})
 		end
 		fill_queue:enqueue({pos = pos, power = get_node_power_2(pos), dirs = dirs})
@@ -286,7 +290,7 @@ function update_neighbours(pos, oldnode)
 		local oldpower2 = old_get_power and old_get_power(oldnode, dir) or 0
 
 		if power2 ~= oldpower2 then
-			local node2 = mcl_redstone._mapcache:get_node(pos2)
+			local node2 = minetest.get_node(pos2)
 			local hash2 = minetest.hash_node_position(pos2)
 
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
@@ -295,7 +299,7 @@ function update_neighbours(pos, oldnode)
 			elseif opaque_tab[node2.name] then
 				for i, dir in pairs(sixdirs) do
 					local pos3 = pos2:add(dir)
-					local node3 = mcl_redstone._mapcache:get_node(pos3)
+					local node3 = minetest.get_node(pos3)
 					local hash3 = minetest.hash_node_position(pos3)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
@@ -315,15 +319,18 @@ local function opaque_update_neighbours(pos, added)
 	local clear_queue = queue()
 
 	local function update_wire(pos)
-		local oldpower = mcl_redstone._mapcache:get_node(pos).param2
-		mcl_redstone._mapcache:set_param2(pos, 0)
+		local oldpower = minetest.get_node(pos).param2
+		minetest.swap_node(pos, {
+			name = minetest.get_node(pos).name,
+			param2 = 0,
+		})
 		clear_queue:enqueue({pos = pos, power = oldpower})
 		fill_queue:enqueue({pos = pos, power = get_node_power_2(pos)})
 	end
 
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
-		local node2 = mcl_redstone._mapcache:get_node(pos2)
+		local node2 = minetest.get_node(pos2)
 		if lwireflag_tab[node2.name] then
 			update_wire(pos2)
 		elseif update_tab[node2.name] then
@@ -338,9 +345,12 @@ end
 local function update_wire(pos, oldnode)
 	local fill_queue = queue()
 	local clear_queue = queue()
-	local node = mcl_redstone._mapcache:get_node(pos)
+	local node = minetest.get_node(pos)
 
-	mcl_redstone._mapcache:set_param2(pos, 0)
+	minetest.swap_node(pos, {
+		name = node.name,
+		param2 = 0,
+	})
 	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0})
 	if lwireflag_tab[node.name] then
 		local power = get_node_power_2(pos)
