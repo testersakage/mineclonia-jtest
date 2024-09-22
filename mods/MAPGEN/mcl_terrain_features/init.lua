@@ -405,31 +405,56 @@ local function generate_dripstone(pos, direction)
 		local z_offset = math.random(-0.2, 0.2)
 		local r = math.random(2, 4)
 		local max_length = r * 3 + math.random(0, 4)
-		local length
-		local offset_r
-		local dripstone_positions = {}
+		local c_to = minetest.get_content_id("mclx_dripstone:dripstone_block")
+		local vm = minetest.get_voxel_manip()
+		local start_pos, end_pos
+		local foundation_start_y, foundation_end_y
+		if direction == 1 then
+			start_pos = vector.offset(pos, -r, -2, -r)
+			end_pos = vector.offset(pos, r, max_length, r)
+			foundation_start_y = pos.y + (-2 * direction)
+			foundation_end_y = pos.y + (-1 * direction)
+		else
+			start_pos = vector.offset(pos, -r, -max_length, -r)
+			end_pos = vector.offset(pos, r, 2, r)
+			foundation_start_y = pos.y + (-1 * direction)
+			foundation_end_y = pos.y + (-2 * direction)
+		end
+		local emin, emax = vm:read_from_map(start_pos, end_pos)
+		local a = VoxelArea:new(
+		{
+			MinEdge = emin,
+			MaxEdge = emax,
+		})
+		local data = vm:get_data()
 
-
-		for x = -r, r do
-			for z = -r, r do
-				offset_r = math.sqrt((x + x_offset)^2 + (z + z_offset)^2)
-				length = max_length - r * offset_r - offset_r * offset_r * 0.3
-				for offset_y = 0, length do
-					table.insert(dripstone_positions, vector.offset(pos, x, offset_y * (direction or 1), z))
+		-- generating foundation
+		for x = start_pos.x, end_pos.x do
+			for z = start_pos.z, end_pos.z do
+				minetest.debug(foundation_start_y, foundation_end_y)
+				for y = foundation_start_y, foundation_end_y do
+					minetest.debug(x, y, z)
+					local vi = a:index(x, y, z)
+					data[vi] = c_to
 				end
 			end
 		end
 
-		-- generating a foundation
-		minetest.debug(dump(vector.offset(pos, -r, 0, -r)), dump(vector.offset(pos, r, -3 * direction, r)))
-		if direction == -1 then
-			mcl_util.bulk_set_node_vm(vector.offset(pos, -r, 0, -r), vector.offset(pos, r, 3, r), "mclx_dripstone:dripstone_block")
-		else
-			mcl_util.bulk_set_node_vm(vector.offset(pos, -r, -3 * direction, -r), vector.offset(pos, r, 0, r), "mclx_dripstone:dripstone_block")
+		local length
+		local offset_r
+		for x = start_pos.x, end_pos.x do
+			for z = start_pos.z, end_pos.z do
+				offset_r = math.sqrt((pos.x - (x + x_offset))^2 + (pos.z - (z + z_offset))^2)
+				length = max_length - r * offset_r - offset_r * offset_r * 0.3 -- this is the formula that decides the shape!!
+				for offset_y = 0, length do
+					local vi = a:index(x, pos.y + (offset_y * direction), z)
+					data[vi] = c_to
+				end
+			end
 		end
 
-		minetest.bulk_set_node(dripstone_positions, {name = "mclx_dripstone:dripstone_block"})
-		return true
+		vm:set_data(data)
+		vm:write_to_map(true)
 end
 
 mcl_structures.register_structure("large_dripstone_stalagtite", {
