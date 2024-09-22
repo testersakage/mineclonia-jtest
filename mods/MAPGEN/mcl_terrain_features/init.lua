@@ -483,7 +483,7 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 		end
 
 		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 3 then
+		if empty_air_length < 5 then
 			return false
 		else
 			generate_dripstone(pos, -1)
@@ -518,7 +518,7 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 		end
 
 		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 3 then
+		if empty_air_length < 10 then
 			return false
 		else
 			generate_dripstone(pos, 1)
@@ -554,7 +554,7 @@ mcl_structures.register_structure("large_dripstone_column", {
 			empty_air_length = empty_air_length + 1
 		end
 
-		if empty_air_length < 6 then
+		if empty_air_length < 10 then
 			generate_dripstone(pos, 1)
 			generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), -1)
 			return true
