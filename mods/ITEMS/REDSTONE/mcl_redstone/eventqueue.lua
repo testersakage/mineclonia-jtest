@@ -1,7 +1,7 @@
 local UPDATE_TICK = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
 local UPDATE_RANGE = (tonumber(minetest.settings:get("mcl_redstone_update_range")) or 8) * 16
 local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
-local TIME_BUDGET = UPDATE_TICK * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2)
+local TIME_BUDGET = math.max(0.01, UPDATE_TICK * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
 
 mcl_redstone._pending_updates = {}
 
