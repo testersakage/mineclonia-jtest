@@ -356,7 +356,7 @@ minetest.register_craft({
 	output = "mcl_minecarts:activator_rail 6",
 	recipe = {
 		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_redstone:torch_on", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_redstone_torch:redstone_torch_on", "mcl_core:iron_ingot"},
 		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
 	}
 })
@@ -365,7 +365,7 @@ minetest.register_craft({
 	output = "mcl_minecarts:detector_rail 6",
 	recipe = {
 		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_redstone:pressure_plate_stone_off", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_pressureplates:pressure_plate_stone_off", "mcl_core:iron_ingot"},
 		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
 	}
 })
