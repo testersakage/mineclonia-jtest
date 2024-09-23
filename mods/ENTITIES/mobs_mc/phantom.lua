@@ -1,3 +1,4 @@
+local MAX_SLEEP_INTERVAL = 3600
 local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_mobs.register_mob("mobs_mc:phantom", {
@@ -45,3 +46,24 @@ mcl_mobs.register_mob("mobs_mc:phantom", {
 })
 
 mcl_mobs.register_egg("mobs_mc:phantom", "Phantom", "#162328", "#a078db", 0)
+
+local next_spawn_attempt = {}
+mcl_player.register_globalstep_slow(function (player)
+	local tod = minetest.get_timeofday()
+	if tod > 0.25 and tod < 0.75 then return end
+	local gt = minetest.get_gametime()
+	if next_spawn_attempt[player] and next_spawn_attempt[player] - gt > 0 then return end
+
+	local pos = player:get_pos()
+
+	local light = minetest.get_natural_light(pos, 0.5)
+	if light and light < minetest.LIGHT_MAX then return end
+
+	if mcl_worlds.pos_to_dimension(pos) ~= "overworld" then return end
+
+	local m = player:get_meta()
+	if gt - m:get_int("mcl_beds:last_sleep") < MAX_SLEEP_INTERVAL then return end
+
+	mcl_mobs.spawn(vector.offset(pos, 0, math.random(13,25), 0), "mobs_mc:phantom")
+	next_spawn_attempt[player] = gt + math.random(60,120)
+end)
