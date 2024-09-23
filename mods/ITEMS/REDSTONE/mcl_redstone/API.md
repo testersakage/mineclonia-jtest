@@ -12,7 +12,7 @@ return. It also defines `update` to make the torch turn off if the node it is
 wallmounted on is powered.
 
 ```lua
-minetest.override_item("mcl_redstone:redstone_torch_on", {
+minetest.override_item("mcl_redstone_torch:redstone_torch_on", {
     paramtype2 = "wallmounted",
     [...]
     _redstone = {
@@ -25,7 +25,7 @@ minetest.override_item("mcl_redstone:redstone_torch_on", {
         update = function(pos, node)
             if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2))) ~= 0 then
                 return {
-                    name = "mcl_redstone:redstone_torch_off",
+                    name = "mcl_redstone_torch:redstone_torch_off",
                     param2 = node.param2,
                 }
             end
@@ -39,7 +39,7 @@ on in `update` and does not have `get_power` (which is equivalent to have it
 always return `0`).
 
 ```lua
-minetest.override_item("mcl_redstone:redstone_torch_off", {
+minetest.override_item("mcl_redstone_torch:redstone_torch_off", {
     paramtype2 = "wallmounted",
     [...]
     _redstone = {
@@ -49,7 +49,7 @@ minetest.override_item("mcl_redstone:redstone_torch_off", {
         update = function(pos, node)
             if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) == 0 then
                 return {
-                    name = "mcl_redstone:redstone_torch_on",
+                    name = "mcl_redstone_torch:redstone_torch_on",
                     param2 = node.param2,
                 }
             end
