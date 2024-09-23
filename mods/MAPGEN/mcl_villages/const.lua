@@ -106,8 +106,8 @@ mcl_villages.material_substitions = {
 	desert = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_sandstonesmooth%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_birchwood_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_birchwood_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:birch_trapdoor%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:birch_door%1"' },
@@ -135,8 +135,8 @@ mcl_villages.material_substitions = {
 	spruce = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_sprucewood%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_sprucewood_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_sprucewood_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:spruce_trapdoor%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:spruce_door%1"' },
@@ -148,8 +148,8 @@ mcl_villages.material_substitions = {
 	birch = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_birchwood%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_birchwood_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_birchwood_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:birch_trapdoor%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:birch_door%1"' },
@@ -161,8 +161,8 @@ mcl_villages.material_substitions = {
 	acacia = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_acaciawood%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_acaciawood_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_acaciawood_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:acacia_trapdoor%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:acacia_door%1"' },
@@ -174,8 +174,8 @@ mcl_villages.material_substitions = {
 	dark_oak = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_darkwood%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_darkwood_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_darkwood_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:dark_oak_trapdoor%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:dark_oak_door%1"' },
@@ -187,8 +187,8 @@ mcl_villages.material_substitions = {
 	jungle = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_junglewood%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_junglewood_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_junglewood_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:jungle_trapdoor%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:jungle_door%1"' },
@@ -200,8 +200,8 @@ mcl_villages.material_substitions = {
 	bamboo = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_bamboo_block%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_bamboo_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_bamboo_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:trapdoor_bamboo%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:door_bamboo%1"' },
@@ -218,8 +218,8 @@ mcl_villages.material_substitions = {
 	cherry = {
 		{ '"mcl_stairs:slab_oak([^"]*)"', '"mcl_stairs:slab_cherry_blossom%1"' },
 		{
-			'"mcl_redstone:pressure_plate_oak_([^"]+)"',
-			'"mcl_redstone:pressure_plate_cherry_blossom_%1"',
+			'"mesecons_pressureplates:pressure_plate_oak_([^"]+)"',
+			'"mesecons_pressureplates:pressure_plate_cherry_blossom_%1"',
 		},
 		{ '"mcl_doors:trapdoor_oak([^"]*)"', '"mcl_doors:trapdoor_cherry_blossom%1"' },
 		{ '"mcl_doors:door_oak([^"]*)"', '"mcl_doors:door_cherry_blossom%1"' },

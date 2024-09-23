@@ -17,7 +17,7 @@ local function temple_placement_callback(pos,def, pr)
 	end
 
 	-- Initialize pressure plates and randomly remove up to 5 plates
-	local pplates = minetest.find_nodes_in_area(p1, p2, "mcl_redstone:pressure_plate_stone_off")
+	local pplates = minetest.find_nodes_in_area(p1, p2, "mcl_pressureplates:pressure_plate_stone_off")
 	local pplates_remove = 5
 	for p=1, #pplates do
 		if pplates_remove > 0 and pr:next(1, 100) >= 50 then
@@ -26,7 +26,7 @@ local function temple_placement_callback(pos,def, pr)
 			pplates_remove = pplates_remove - 1
 		else
 			-- Initialize plate
-			minetest.registered_nodes["mcl_redstone:pressure_plate_stone_off"].on_construct(pplates[p])
+			minetest.registered_nodes["mcl_pressureplates:pressure_plate_stone_off"].on_construct(pplates[p])
 		end
 	end
 	if minetest.registered_nodes["mcl_sus_nodes:sand"] then
