@@ -346,22 +346,32 @@ function mesecon.mvps_push_or_pull(pos, _, movedir, maximum, player_name, piston
 end
 
 function mesecon.mvps_move_objects(pos, dir, nodestack)
-	local objects_to_move = {}
-
-	-- Move object at tip of stack, pushpos is position at tip of stack
-	local pushpos = vector.add(pos, vector.multiply(dir, #nodestack))
-
-	for obj in minetest.objects_inside_radius(pushpos, 1.15) do
-		table.insert(objects_to_move, obj)
+	-- Do not move entities into solid node.
+	local destpos = vector.add(pos, vector.multiply(dir, #nodestack + 1))
+	local destnode = minetest.get_node(destpos)
+	if not minetest.registered_nodes[destnode.name] or minetest.registered_nodes[destnode.name].walkable then
+		return
 	end
 
-	-- Move objects lying/standing on the stack (before it was pushed - oldstack)
-	if GRAVITY > 0 then
-		-- If gravity positive and dir horizontal, push players standing on the stack
-		for _, n in ipairs(nodestack) do
-			local p_above = vector.add(n.pos, {x=0, y=1, z=0})
-			for obj in minetest.objects_inside_radius(p_above, 1.15) do
-				table.insert(objects_to_move, obj)
+	local objects_to_move = {}
+	for i = -1, #nodestack do
+		-- Move object at tip of stack, pushpos is position at tip of stack
+		local pushpos = vector.add(pos, vector.multiply(dir, i))
+
+		local objects = minetest.get_objects_inside_radius(pushpos, 1.0)
+		for _, obj in ipairs(objects) do
+			table.insert(objects_to_move, obj)
+		end
+
+		-- Move objects lying/standing on the stack (before it was pushed - oldstack)
+		if GRAVITY > 0 then
+			-- If gravity positive and dir horizontal, push players standing on the stack
+			for _, n in ipairs(nodestack) do
+				local p_above = vector.add(n.pos, {x=0, y=1, z=0})
+				local objects = minetest.get_objects_inside_radius(p_above, 1.15)
+				for _, obj in ipairs(objects) do
+					table.insert(objects_to_move, obj)
+				end
 			end
 		end
 	end
@@ -370,35 +380,27 @@ function mesecon.mvps_move_objects(pos, dir, nodestack)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
 
-
 		if not entity or not player and not mesecon.is_mvps_unmov(entity.name) then
-			local np = vector.add(obj:get_pos(), dir)
+			obj:set_pos(destpos)
+			-- Launch Player, TNT & mobs like in Minecraft
+			-- Only doing so if slimeblock is attached.
+			for _, r in ipairs(alldirs) do
+				local adjpos = vector.add(destpos, r)
+				local adjnode = minetest.get_node(adjpos)
+				if minetest.registered_nodes[adjnode.name] and minetest.registered_nodes[adjnode.name].mvps_sticky and adjnode.name == "mcl_core:slimeblock" then
+					-- Reset acceleration of all objects before launching.
+					-- Fixes eggs, & snowballs thrown by dispensers
+					obj:set_acceleration({x=dir.x, y=-GRAVITY, z=dir.z})
 
-			--move only if destination is not solid
-			local nn = minetest.get_node(np)
-			if not ((not minetest.registered_nodes[nn.name])
-			or minetest.registered_nodes[nn.name].walkable) then
-				obj:set_pos(np)
-				-- Launch Player, TNT & mobs like in Minecraft
-				-- Only doing so if slimeblock is attached.
-				for _, r in ipairs(alldirs) do
-					local adjpos = vector.add(np, r)
-					local adjnode = minetest.get_node(adjpos)
-					if minetest.registered_nodes[adjnode.name] and minetest.registered_nodes[adjnode.name].mvps_sticky and adjnode.name == "mcl_core:slimeblock" then
-						-- Reset acceleration of all objects before launching.
-						-- Fixes eggs, & snowballs thrown by dispensers
-						obj:set_acceleration({x=dir.x, y=-GRAVITY, z=dir.z})
-
-						--Need to set velocities differently for players, items & mobs/tnt, and falling anvils.
-						if player then
-							obj:add_velocity({x = dir.x * 10, y = dir.y * 13, z = dir.z * 10})
-						elseif entity.name == "__builtin:item" then
-							obj:add_velocity({x = dir.x * 9, y = dir.y * 11, z = dir.z * 9})
-						elseif entity.name == "__builtin:falling_node" then
-							obj:add_velocity({x = dir.x * 43, y = dir.y * 72, z = dir.z * 43})
-						else
-							obj:add_velocity({x = dir.x * 6, y = dir.y * 9, z = dir.z * 6})
-						end
+					--Need to set velocities differently for players, items & mobs/tnt, and falling anvils.
+					if player then
+						obj:add_velocity({x = dir.x * 10, y = dir.y * 13, z = dir.z * 10})
+					elseif entity.name == "__builtin:item" then
+						obj:add_velocity({x = dir.x * 9, y = dir.y * 11, z = dir.z * 9})
+					elseif entity.name == "__builtin:falling_node" then
+						obj:add_velocity({x = dir.x * 43, y = dir.y * 72, z = dir.z * 43})
+					else
+						obj:add_velocity({x = dir.x * 6, y = dir.y * 9, z = dir.z * 6})
 					end
 				end
 			end
