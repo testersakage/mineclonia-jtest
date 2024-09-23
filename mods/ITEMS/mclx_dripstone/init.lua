@@ -39,7 +39,6 @@ local function get_dripstone_length(pos, direction)
 end
 
 function place_dripstone(pos, length, direction)
-	-- minetest.debug("CALLED", dump(pos), length, direction)
 	if length == 0 then return end
 	-- create the base
 	if length >= 3 then
@@ -373,7 +372,7 @@ mcl_structures.register_structure("dripstone_stalagmite", {
 		end
 		place_dripstone(pos, math.min(math.random(2, 5), max_length), -1)
 		return true
-	end
+	end,
 })
 
 mcl_structures.register_structure("dripstone_stalagtite", {
@@ -399,5 +398,5 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 		end
 		place_dripstone(pos, math.min(math.random(2, 5), max_length), 1)
 		return true
-	end
+	end,
 })

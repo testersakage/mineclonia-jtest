@@ -399,12 +399,13 @@ mcl_structures.register_structure("powder_snow_trap", {
 })
 
 -- direction is a multiplier to each block's y offset from the starting position, should be either -1 or 1
-local function generate_dripstone(pos, direction)
+local function generate_dripstone(pos, max_length, direction)
 		-- generating relative to some random sub position of the node, so the dripstone column is more asymetrical (aka natural)
 		local x_offset = math.random(-0.2, 0.2)
 		local z_offset = math.random(-0.2, 0.2)
-		local r = math.random(2, 4)
-		local max_length = r * 5 + math.random(0, 4)
+		local r = math.ceil((max_length / 8))
+		-- local r = math.random(2, 4)
+		-- local max_length = r * 5 + math.random(0, 4)
 		local c_to = minetest.get_content_id("mclx_dripstone:dripstone_block")
 		local vm = minetest.get_voxel_manip()
 		local start_pos, end_pos
@@ -431,9 +432,7 @@ local function generate_dripstone(pos, direction)
 		-- generating foundation
 		for x = start_pos.x, end_pos.x do
 			for z = start_pos.z, end_pos.z do
-				minetest.debug(foundation_start_y, foundation_end_y)
 				for y = foundation_start_y, foundation_end_y do
-					minetest.debug(x, y, z)
 					local vi = a:index(x, y, z)
 					data[vi] = c_to
 				end
@@ -445,7 +444,8 @@ local function generate_dripstone(pos, direction)
 		for x = start_pos.x, end_pos.x do
 			for z = start_pos.z, end_pos.z do
 				offset_r = math.sqrt((pos.x - (x + x_offset))^2 + (pos.z - (z + z_offset))^2)
-				length = max_length - r * offset_r - offset_r * offset_r -- this is the formula that decides the shape!!
+				-- length = max_length - r * offset_r - offset_r * offset_r -- this is the formula that decides the shape!!
+				length = (max_length * (r^2 - offset_r^2)) / r^2
 				for offset_y = 0, length do
 					local vi = a:index(x, pos.y + (offset_y * direction), z)
 					data[vi] = c_to
@@ -463,19 +463,12 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 	check_offset = 1,
 	num_spawn_by = 5,
 	biomes = {"DripstoneCave"},
-	noise_params = {
-		offset = 0.00040,
-		scale = 0.5,
-		spread = {x = 10, y = 10, z = 10},
-		seed = 01841,
-		octaves = 4,
-		persist = 0.1,
-		flags = "absvalue"
-	},
-	y_min = mcl_vars.mg_overworld_min,
+	fill_ratio = 0.005,
+	y_min = mcl_vars.mg_overworld_min + 1, -- plus one so it cant generate on bedrock
 	y_max = 0,
+	flags = "all_ceilings",
+	place_offset_y = 1,
 	place_func = function(pos)
-		minetest.debug("tite", dump(pos))
 		local empty_air_length = 0
 		while true do
 			if minetest.get_node(vector.offset(pos, 0, -empty_air_length, 0)).name ~= "air" then
@@ -484,13 +477,8 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 			empty_air_length = empty_air_length + 1
 		end
 
-		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 12 then
-			return false
-		else
-			generate_dripstone(pos, -1)
-			return true
-		end
+		generate_dripstone(pos, math.min(20, empty_air_length * math.random(0.2, 0.6)), -1)
+		return true
 	end
 })
 
@@ -500,19 +488,11 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 	check_offset = -1,
 	num_spawn_by = 5,
 	biomes = {"DripstoneCave"},
-	noise_params = {
-		offset = 0.00040,
-		scale = 0.5,
-		spread = {x = 10, y = 10, z = 10},
-		seed = 033412341,
-		octaves = 4,
-		persist = 0.1,
-		flags = "absvalue"
-	},
-	y_min = mcl_vars.mg_overworld_min,
+	fill_ratio = 0.005,
+	y_min = mcl_vars.mg_overworld_min + 1,
 	y_max = 0,
+	flags = "all_floors",
 	place_func = function(pos)
-		minetest.debug("mite", dump(pos))
 		local empty_air_length = 0
 		while true do
 			if minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
@@ -521,13 +501,8 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 			empty_air_length = empty_air_length + 1
 		end
 
-		-- dont generate stalagmites if there isnt enough space
-		if empty_air_length < 12 then
-			return false
-		else
-			generate_dripstone(pos, 1)
-			return true
-		end
+		generate_dripstone(pos, math.min(20, empty_air_length * math.random(0.4, 0.8)), 1)
+		return true
 	end
 })
 
@@ -537,19 +512,11 @@ mcl_structures.register_structure("large_dripstone_column", {
 	check_offset = 1,
 	num_spawn_by = 5,
 	biomes = {"DripstoneCave"},
-	noise_params = {
-		offset = 0.00040,
-		scale = 0.5,
-		spread = {x = 10, y = 10, z = 10},
-		seed = 00010231,
-		octaves = 4,
-		persist = 0.1,
-		flags = "absvalue"
-	},
+	fill_ratio = 0.005,
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
+	flags = "all_floors",
 	place_func = function(pos)
-		minetest.debug("COLUMN", dump(pos))
 		local empty_air_length = 0
 		while true do
 			if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name, "solid") ~= 0 then
@@ -560,12 +527,9 @@ mcl_structures.register_structure("large_dripstone_column", {
 			empty_air_length = empty_air_length + 1
 		end
 
-		if empty_air_length < 12 then
-			generate_dripstone(pos, 1)
-			generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), -1)
-			return true
-		else
-			return false
-		end
+		local height_multi = math.random(0.4, 6)
+		generate_dripstone(pos, math.min(20, empty_air_length * height_multi), 1)
+		generate_dripstone(vector.offset(pos, 0, empty_air_length, 0), math.min(20, empty_air_length * height_multi), -1)
+		return true
 	end
 })
