@@ -531,7 +531,7 @@ minetest.register_abm({
 	action = function(pos, node)
 		if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, 1, 0)).name, "solid") > 0 then
 			node.name = "mcl_nether:netherrack"
-			minetest.set_node(pos, node)
+			minetest.swap_node(pos, node)
 		end
 	end
 })

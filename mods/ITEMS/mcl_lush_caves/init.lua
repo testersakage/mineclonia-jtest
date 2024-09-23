@@ -65,7 +65,7 @@ function mcl_lush_caves.makelake(pos, _, pr)
 	if not nn[1] then return end
 	--local dripleaves = {}
 	for i=1,pr:next(1,#nn) do
-		minetest.set_node(nn[i],{name="mcl_core:water_source"})
+		minetest.swap_node(nn[i],{name="mcl_core:water_source"})
 		--[[
 		if pr:next(1,20) == 1 then
 			table.insert(dripleaves,nn[i])
@@ -78,9 +78,9 @@ function mcl_lush_caves.makelake(pos, _, pr)
 			local pp = vector.add(v,vv)
 			local an = minetest.get_node(pp)
 			if an.name ~= "mcl_core:water_source" then
-				minetest.set_node(pp,{name="mcl_core:clay"})
+				minetest.swap_node(pp,{name="mcl_core:clay"})
 				if pr:next(1,20) == 1 then
-					minetest.set_node(vector.offset(pp,0,1,0),{name="mcl_lush_caves:moss_carpet"})
+					minetest.swap_node(vector.offset(pp,0,1,0),{name="mcl_lush_caves:moss_carpet"})
 				end
 			end
 		end
