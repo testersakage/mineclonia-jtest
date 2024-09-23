@@ -138,6 +138,9 @@ mobs_griefing (Mob griefing) bool true
 # Larger values will have a larger performance impact
 mcl_mob_active_range (Active mob range) int 48 0 256
 
+# Should phantoms spawn at night when player has not slept for 3 days?
+mcl_phantoms_spawn (Phantoms Spawn) bool true
+
 [Mob caps]
 # Global maximum amount of mobs
 # This controls how many mobs can exist in the map
