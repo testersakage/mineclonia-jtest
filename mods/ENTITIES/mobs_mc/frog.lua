@@ -73,12 +73,10 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	floats = 0,
 	spawn_in_group = 6,
 	spawn_in_group_min = 2,
-	--follow = {},
-	--on_rightclick = function(self, clicker)
-	--	if mobs:feed_tame(self, clicker, 8, true, true) then return end
-	--	if mobs:protect(self, clicker) then return end
-	--	if mobs:capture_mob(self, clicker, 15, 25, 0, false, nil) then return end
-	--end,
+	follow = {"mcl_mobitems:slimeball"},
+	on_rightclick = function(self, clicker)
+		if self:feed_tame(clicker, 8, true, true) then return end
+	end,
 	on_spawn = function(self)
 		local pos = self.object:get_pos()
 		local b = core.get_biome_name(core.get_biome_data(pos).biome)
@@ -86,6 +84,20 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		if bdef then
 			set_textures(self,bdef._mcl_biome_type)
 		end
+	end,
+	on_breed = function(self)
+		local pos = self.object:get_pos()
+		local ww = core.find_nodes_in_area_under_air(vector.offset(pos, -self.view_range, -5, -self.view_range), vector.offset(pos, self.view_range, 20, self.view_range), {"group:water"})
+		if ww and #ww > 0 then
+			table.sort(ww, function(a, b) return vector.distance(pos, a) < vector.distance(pos, b) end)
+			local p = ww[1]
+			self:gopath(p, function()
+				local sp = vector.offset(pos, 0, 1, 0)
+				core.set_node(sp, {name = "mcl_mobitems:frogspawn"})
+				core.get_node_timer(sp):start(math.random(120, 360))
+			end)
+		end
+		return false
 	end,
 })
 
