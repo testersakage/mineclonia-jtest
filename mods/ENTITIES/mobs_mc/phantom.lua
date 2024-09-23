@@ -29,9 +29,8 @@ mcl_mobs.register_mob("mobs_mc:phantom", {
 	   -- random = "",
 	},
 	drops = {
-	   -- {name = "mcl_mobitems:phantom_membrane", min = 1, max = 2},
+		{name = "mcl_mobitems:phantom_membrane", chance = 2, min = 0, max = 1, looting = "common"},
 	},
-
 	view_range = 16,
 	stepheight = 1.1,
 	fall_damage = false,
