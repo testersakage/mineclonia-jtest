@@ -30,16 +30,16 @@ local function setup_dispenser(pos)
 	inv:set_size("main", 9)
 end
 
-local function orientate(pos, placer)
+local function orientate(pos, placer, basename)
 	if not placer then return end
 
 	local pitch_deg = placer:get_look_vertical() * (180 / math.pi)
 
 	local node = minetest.get_node(pos)
 	if pitch_deg > 55 then
-		minetest.swap_node(pos, { name = "mcl_dispensers:dispenser_up", param2 = node.param2 })
+		minetest.swap_node(pos, { name = "mcl_dispensers:"..basename.."_up", param2 = node.param2 })
 	elseif pitch_deg < -55 then
-		minetest.swap_node(pos, { name = "mcl_dispensers:dispenser_down", param2 = node.param2 })
+		minetest.swap_node(pos, { name = "mcl_dispensers:"..basename.."_down", param2 = node.param2 })
 	end
 end
 
@@ -296,7 +296,7 @@ do
 		paramtype2 = "facedir",
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			setup_dispenser(pos)
-			orientate(pos, placer)
+			orientate(pos, placer, "dispenser")
 		end,
 	}))
 
@@ -357,7 +357,7 @@ do
 		paramtype2 = "facedir",
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			setup_dispenser(pos)
-			orientate(pos, placer)
+			orientate(pos, placer, "dropper")
 		end,
 	}))
 
