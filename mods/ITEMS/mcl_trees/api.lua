@@ -613,7 +613,7 @@ function mcl_trees.register_wood(name, p)
 
 	if p.pressure_plate == nil or type(p.pressure_plate) == "table" then
 		mcl_redstone.register_pressure_plate(
-			"mcl_redstone:pressure_plate_"..name,
+			"mcl_pressureplates:pressure_plate_"..name,
 			S("@1 Pressure Plate", rname),
 			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
 			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},

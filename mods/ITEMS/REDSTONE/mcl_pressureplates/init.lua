@@ -204,7 +204,7 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 end
 
 mcl_redstone.register_pressure_plate(
-	"mcl_redstone:pressure_plate_stone",
+	"mcl_pressureplates:pressure_plate_stone",
 	S("Stone Pressure Plate2"),
 	{"default_stone.png"},
 	{"default_stone.png"},
@@ -217,7 +217,7 @@ mcl_redstone.register_pressure_plate(
 	S("A stone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."))
 
 mcl_redstone.register_pressure_plate(
-	"mcl_redstone:pressure_plate_polished_blackstone",
+	"mcl_pressureplates:pressure_plate_polished_blackstone",
 	S("Polished Blackstone Pressure Plate2"),
 	{"mcl_blackstone_polished.png"},
 	{"mcl_blackstone_polished.png"},
