@@ -141,6 +141,8 @@ local function propagate_golden_rail_power(pos, new_power, old_power, powered_on
 		clear_queue:enqueue({ pos = pos, power = old_power })
 	end
 	if new_power then
+		local ind = a:indexp(pos)
+		update_power(ind, new_power)
 		fill_queue:enqueue({ pos = pos, power = new_power })
 	end
 
@@ -160,9 +162,11 @@ local function propagate_golden_rail_power(pos, new_power, old_power, powered_on
 				if power2 and power2 > 0 then
 					if power2 < power then
 						if golden_rail_tab[data[ind2]] then
+							update_power(ind, 0)
 							clear_queue:enqueue({ pos = pos2, power = power2 })
 						end
 					else
+						update_power(ind2, power2)
 						fill_queue:enqueue({ pos = pos2, power = power2 })
 					end
 				end
@@ -186,6 +190,7 @@ local function propagate_golden_rail_power(pos, new_power, old_power, powered_on
 				local pos2 = pos:add(dir.rail)
 				local ind2 = a:indexp(pos2)
 				if golden_rail_tab[data[ind2]] and get_power(ind2) < power2 then
+					update_power(ind2, power2)
 					fill_queue:enqueue({ pos = pos2, power = power2 })
 				end
 			end
