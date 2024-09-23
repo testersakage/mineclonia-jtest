@@ -208,8 +208,12 @@ local function schedule_update(pos, update)
 	local param2 = update.param2 or 0
 
 	mcl_redstone._schedule_event(delay, priority, pos, function()
+		-- Only update if node is not the same or has not changed.
 		local node = minetest.get_node(pos)
 		if update.name == node.name and param2 == node.param2 then
+			return
+		end
+		if node.name ~= oldnode.name or node.param2 ~= oldnode.param2 then
 			return
 		end
 
