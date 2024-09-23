@@ -86,10 +86,17 @@ local commdef_on = table.merge(commdef, {
 	_redstone = table.merge(commdef._redstone, {
 		init = function(pos, node)
 			local ndef = minetest.registered_nodes[node.name]
-			minetest.after(0, function() minetest.set_node(pos, {
-				name = ndef._observer_off,
-				param2 = node.param2,
-			}) end)
+			mcl_redstone.after(2, function()
+				local node2 = minetest.get_node(pos)
+				if node2.name ~= node.name and node2.param2 ~= node.param2 then
+					return
+				end
+
+				minetest.set_node(pos, {
+					name = ndef._observer_off,
+					param2 = node.param2,
+				})
+			end)
 		end,
 	}),
 })
