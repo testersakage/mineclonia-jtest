@@ -104,12 +104,20 @@ local function update_wire(pos)
 	local wireflags = 0
 
 	for _, entry in pairs(update_tab) do
-		if not entry.obstruct or not opaque_tab[minetest.get_node(pos:add(entry.obstruct)).name] then
-			local pos2 = pos:add(entry.wire)
+		local wire = entry.wire
+		local obstruct = (wire.y < 0 and wire:multiply(vector.new(1, 0, 1))) or
+			(wire.y > 0 and wire:multiply(vector.new(0, 1, 0))) or
+			nil
+		local over = (wire.y < 0 and wire:multiply(vector.new(0, 1, 0))) or
+			(wire.y > 0 and wire:multiply(vector.new(1, 0, 1))) or
+			nil
+
+		if not obstruct or not opaque_tab[minetest.get_node(pos:add(obstruct)).name] then
+			local pos2 = pos:add(wire)
 			local node2 = minetest.get_node(pos2)
 
 			if wireflag_tab[node2.name] then
-				local over_opaque = opaque_tab[minetest.get_node(pos2:offset(0, -1, 0)).name]
+				local over_opaque = over and opaque_tab[minetest.get_node(pos:add(over)).name] or false
 				local mask = bit.band(entry.mask, over_opaque and 0xff or 0x0f)
 				local mask2 = bit.band(entry.mask2, over_opaque and 0xff or 0x0f)
 
