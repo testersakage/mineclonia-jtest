@@ -269,34 +269,27 @@ local function protection_check_put_take(pos, _, _, stack, player)
 	end
 end
 
-local trapped_chest_mesecons_rules = mesecon.rules.pplate
-
 -- To be called when a chest is closed (only relevant for trapped chest atm)
 local function chest_update_after_close(pos)
 	local node = minetest.get_node(pos)
 	if animate_chests then
 		if node.name == "mcl_chests:trapped_chest_on_small" then
-			minetest.swap_node(pos, {name="mcl_chests:trapped_chest_small", param2 = node.param2})
+			mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_small", param2 = node.param2})
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_small")
-			mesecon.receptor_off(pos, trapped_chest_mesecons_rules)
 		elseif node.name == "mcl_chests:trapped_chest_on_left" then
-			minetest.swap_node(pos, { name = "mcl_chests:trapped_chest_left", param2 = node.param2 })
+			mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_left", param2 = node.param2 })
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_left", tiles_chest_trapped_double, node.param2, true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_left")
-			mesecon.receptor_off(pos, trapped_chest_mesecons_rules)
 
 			local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
 			minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_right", param2 = node.param2 })
-			mesecon.receptor_off(pos_other, trapped_chest_mesecons_rules)
 		elseif node.name == "mcl_chests:trapped_chest_on_right" then
-			minetest.swap_node(pos, { name = "mcl_chests:trapped_chest_right", param2 = node.param2 })
-			mesecon.receptor_off(pos, trapped_chest_mesecons_rules)
+			mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_right", param2 = node.param2 })
 
 			local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
-			minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_left", param2 = node.param2 })
+			mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_left", param2 = node.param2 })
 			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_left", tiles_chest_trapped_double, node.param2, true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_left")
-			mesecon.receptor_off(pos_other, trapped_chest_mesecons_rules)
 		end
 	end
 end
@@ -319,7 +312,7 @@ local function player_chest_close(player)
 end
 
 -- This is a helper function to register both chests and trapped chests. Trapped chests will make use of the additional parameters
-local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, mesecons,
+local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, redstone,
 							  on_rightclick_addendum, on_rightclick_addendum_left, on_rightclick_addendum_right, drop,
 							  canonical_basename)
 	-- START OF register_chest FUNCTION BODY
@@ -589,7 +582,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_destruct = function(pos)
 			close_forms(canonical_basename, pos)
 		end,
-		mesecons = mesecons,
+		_redstone = redstone,
 		on_rotate = simple_rotate,
 	})
 
@@ -764,7 +757,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			player_chest_open(clicker, pos, left_name, left_textures, node.param2, true, "default_chest",
 				"mcl_chests_chest")
 		end,
-		mesecons = mesecons,
+		_redstone = redstone,
 		on_rotate = no_rotate,
 	})
 
@@ -931,7 +924,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			player_chest_open(clicker, pos_other, left_name, left_textures, node.param2, true, "default_chest",
 				"mcl_chests_chest")
 		end,
-		mesecons = mesecons,
+		_redstone = redstone,
 		on_rotate = no_rotate,
 	})
 
@@ -980,94 +973,50 @@ register_chest("trapped_chest",
 	traptiles,
 	nil,
 	{
-		receptor = {
-			state = mesecon.state.off,
-			rules = trapped_chest_mesecons_rules,
-		},
+		connects_to = function(node, dir) return true end,
 	},
 	function(pos, node, _)
-		minetest.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
+		mcl_redstone.swap_node(1, pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 		end
-		mesecon.receptor_on(pos, trapped_chest_mesecons_rules)
 	end,
 	function(pos, node, _)
 		local meta = minetest.get_meta(pos)
 		meta:set_int("players", 1)
 
-		minetest.swap_node(pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
+		mcl_redstone.swap_node(1, pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2, true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
 		end
-		mesecon.receptor_on(pos, trapped_chest_mesecons_rules)
 
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
-		minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
-		mesecon.receptor_on(pos_other, trapped_chest_mesecons_rules)
+		mcl_redstone.swap_node(1, pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
 	end,
 	function(pos, node, _)
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 
-		minetest.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
-		mesecon.receptor_on(pos, trapped_chest_mesecons_rules)
-
-		minetest.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
+		mcl_redstone.swap_node(1, pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
+		mcl_redstone.swap_node(1, pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
 		if animate_chests then
 			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2,
 				true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
 		end
-		mesecon.receptor_on(pos_other, trapped_chest_mesecons_rules)
 	end
 )
 
 register_chest("trapped_chest_on",
 	nil, nil, nil, nil, traptiles, true,
 	{
-		receptor = {
-			state = mesecon.state.on,
-			rules = trapped_chest_mesecons_rules,
-		},
+		connects_to = function(node, dir) return true end,
+		get_power = function(pos) return 15 end,
 	},
 	nil, nil, nil,
 	"trapped_chest",
 	"trapped_chest"
 )
-
---[[local function close_if_trapped_chest(pos, player)
-	local node = minetest.get_node(pos)
-	if animate_chests then
-		if node.name == "mcl_chests:trapped_chest_on_small" then
-			minetest.swap_node(pos, {name="mcl_chests:trapped_chest_small", param2 = node.param2})
-			find_or_create_entity(pos, "mcl_chests:trapped_chest_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_small")
-			mesecon.receptor_off(pos, trapped_chest_mesecons_rules)
-
-			player_chest_close(player)
-		elseif node.name == "mcl_chests:trapped_chest_on_left" then
-			minetest.swap_node(pos, {name="mcl_chests:trapped_chest_left", param2 = node.param2})
-			find_or_create_entity(pos, "mcl_chests:trapped_chest_left", tiles_chest_trapped_double, node.param2, true, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_left")
-			mesecon.receptor_off(pos, trapped_chest_mesecons_rules)
-
-			local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
-			minetest.swap_node(pos_other, {name="mcl_chests:trapped_chest_right", param2 = node.param2})
-			mesecon.receptor_off(pos_other, trapped_chest_mesecons_rules)
-
-			player_chest_close(player)
-		elseif node.name == "mcl_chests:trapped_chest_on_right" then
-			minetest.swap_node(pos, {name="mcl_chests:trapped_chest_right", param2 = node.param2})
-			mesecon.receptor_off(pos, trapped_chest_mesecons_rules)
-
-			local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
-			minetest.swap_node(pos_other, {name="mcl_chests:trapped_chest_left", param2 = node.param2})
-			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_left", tiles_chest_trapped_double, node.param2, true, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_left")
-			mesecon.receptor_off(pos_other, trapped_chest_mesecons_rules)
-
-			player_chest_close(player)
-		end
-	end
-end]]
 
 -- Disable chest when it has been closed
 minetest.register_on_player_receive_fields(function(player, formname, fields)

@@ -120,14 +120,20 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		drop = "mcl_copper:bulb"..n.."_off",
-		mesecons = {effector = {
-			action_on = function(pos, node)
-				node.name = "mcl_copper:bulb"..n.."_off"
-				minetest.swap_node(pos,node)
+		_redstone = {
+			update = function(pos, node)
+				local oldpowered = node.param2 ~= 0
+				local powered  = mcl_redstone.get_power(pos) ~= 0
+				local newname = node.name
+				if powered and not oldpowered then
+					newname = "mcl_copper:bulb"..n.."_off"
+				end
+				return {
+					name = newname,
+					param2 = powered and 1 or 0,
+				}
 			end,
-			rules = mesecon.rules.alldirs,
-		}},
+		},
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
 		description = S("@1 Copper Bulb", desc),
@@ -138,13 +144,21 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		mesecons = {effector = {
-			action_on = function(pos, node)
-				node.name = "mcl_copper:bulb"..n.."_on"
-				minetest.swap_node(pos,node)
+		_redstone = {
+			update = function(pos)
+				local node = minetest.get_node(pos)
+				local oldpowered = node.param2 ~= 0
+				local powered  = mcl_redstone.get_power(pos) ~= 0
+				local newname = node.name
+				if powered and not oldpowered then
+					newname = "mcl_copper:bulb"..n.."_on"
+				end
+				return {
+					name = newname,
+					param2 = powered and 1 or 0,
+				}
 			end,
-			rules = mesecon.rules.alldirs,
-		}},
+		},
 	})
 
 	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n, {

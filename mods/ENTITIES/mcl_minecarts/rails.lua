@@ -44,26 +44,6 @@ local function register_rail(itemstring, tiles, def_extras, creative)
 	minetest.register_node(itemstring, ndef)
 end
 
--- Redstone rules
-local rail_rules_long =
-{{x=-1,  y= 0, z= 0, spread=true},
- {x= 1,  y= 0, z= 0, spread=true},
- {x= 0,  y=-1, z= 0, spread=true},
- {x= 0,  y= 1, z= 0, spread=true},
- {x= 0,  y= 0, z=-1, spread=true},
- {x= 0,  y= 0, z= 1, spread=true},
-
- {x= 1, y= 1, z= 0},
- {x= 1, y=-1, z= 0},
- {x=-1, y= 1, z= 0},
- {x=-1, y=-1, z= 0},
- {x= 0, y= 1, z= 1},
- {x= 0, y=-1, z= 1},
- {x= 0, y= 1, z=-1},
- {x= 0, y=-1, z=-1}}
-
-local rail_rules_short = mesecon.rules.pplate
-
 local railuse = S("Place them on the ground to build your railway, the rails will automatically connect to each other and will turn into curves, T-junctions, crossings and slopes as needed.")
 
 -- Normal rail
@@ -77,6 +57,172 @@ register_rail("mcl_minecarts:rail",
 	}
 )
 
+local golden_rail_tab = {}
+local opaque_tab = {}
+
+minetest.register_on_mods_loaded(function()
+	for name, ndef in pairs(minetest.registered_nodes) do
+		local cid = minetest.get_content_id(name)
+		opaque_tab[cid] = minetest.get_item_group(name, "opaque") ~= 0 and true or nil
+		if name == "mcl_minecarts:golden_rail" or name == "mcl_minecarts:golden_rail_on" then
+			golden_rail_tab[cid] = {
+				c_on = minetest.get_content_id("mcl_minecarts:golden_rail_on"),
+				c_off = minetest.get_content_id("mcl_minecarts:golden_rail"),
+			}
+		end
+	end
+end)
+
+local function queue()
+	return {
+		front = 1,
+		back = 1,
+		queue = {},
+		enqueue = function(self, value)
+			self.queue[self.back] = value
+			self.back = self.back + 1
+		end,
+		dequeue = function(self) local value = self.queue[self.front]
+			if not value then
+				return
+			end
+			self.queue[self.front] = nil
+			self.front = self.front + 1
+			return value
+		end,
+		size = function(self)
+			return self.back - self.front
+		end,
+	}
+end
+
+local directions = {
+	{ rail = vector.new(1, 0, 0) },
+	{ rail = vector.new(-1, 0, 0) },
+	{ rail = vector.new(0, 0, 1) },
+	{ rail = vector.new(0, 0, -1) },
+	{ rail = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0) },
+	{ rail = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0) },
+	{ rail = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0) },
+	{ rail = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0) },
+	{ rail = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0) },
+	{ rail = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0) },
+	{ rail = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1) },
+	{ rail = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1) },
+}
+
+-- Propagate power from pos through powered rails. 'old_power' is the old power
+-- of the node if it was updated. 'updates' is a table which get populated with
+-- positions that have been traversed.
+local function propagate_golden_rail_power(pos, new_power, old_power, powered_on)
+	local vm = minetest.get_voxel_manip()
+	local emin, emax = vm:read_from_map(pos:offset(-9, -9, -9), pos:offset(9, 9, 9))
+	local a = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
+	local data = vm:get_data()
+	local old_param2_data = vm:get_param2_data()
+	local param2_data = vm:get_param2_data()
+
+	local function get_power(ind)
+		local cid = data[ind]
+		if golden_rail_tab[cid] then
+			return param2_data[ind]
+		end
+	end
+
+	local function update_power(ind, power)
+		local cid = data[ind]
+		data[ind] = power > 0 and golden_rail_tab[cid].c_on or golden_rail_tab[cid].c_off
+		param2_data[ind] = power
+	end
+
+	local clear_queue = queue()
+	local fill_queue = queue()
+	if old_power then
+		clear_queue:enqueue({ pos = pos, power = old_power })
+	end
+	if new_power then
+		fill_queue:enqueue({ pos = pos, power = new_power })
+	end
+
+	while clear_queue:size() > 0 do
+		local entry = clear_queue:dequeue()
+		local pos = entry.pos
+		local ind = a:indexp(pos)
+		local power = entry.power
+		update_power(ind, 0)
+
+		for _, dir in pairs(directions) do
+			if not dir.obstruct or not opaque_tab[data[a:indexp(pos:add(dir.obstruct))]] then
+				local pos2 = pos:add(dir.rail)
+				local ind2 = a:indexp(pos2)
+				local power2 = get_power(ind2)
+
+				if power2 and power2 > 0 then
+					if power2 < power then
+						if golden_rail_tab[data[ind2]] then
+							clear_queue:enqueue({ pos = pos2, power = power2 })
+						end
+					else
+						fill_queue:enqueue({ pos = pos2, power = power2 })
+					end
+				end
+			end
+		end
+	end
+
+	while fill_queue:size() > 0 do
+		local entry = fill_queue:dequeue()
+		local pos = entry.pos
+		local ind = a:indexp(pos)
+		local power = entry.power
+		local power2 = power - 1
+		update_power(ind, power)
+		if old_param2_data[ind] == 0 and param2_data ~= 0 then
+			powered_on[ind] = pos
+		end
+
+		for _, dir in pairs(directions) do
+			if not dir.obstruct or not opaque_tab[data[a:indexp(pos:add(dir.obstruct))]] then
+				local pos2 = pos:add(dir.rail)
+				local ind2 = a:indexp(pos2)
+				if golden_rail_tab[data[ind2]] and get_power(ind2) < power2 then
+					fill_queue:enqueue({ pos = pos2, power = power2 })
+				end
+			end
+		end
+	end
+
+	vm:set_data(data)
+	vm:set_param2_data(param2_data)
+	vm:write_to_map(false)
+end
+
+local function push_minecart(pos)
+	local dir = mcl_minecarts:get_start_direction(pos)
+	if not dir then return end
+	local objs = minetest.get_objects_inside_radius(pos, 1)
+	for _, o in pairs(objs) do
+		local l = o:get_luaentity()
+		local v = o:get_velocity()
+		if l and string.sub(l.name, 1, 14) == "mcl_minecarts:"
+		and v and vector.equals(v, vector.zero())
+		then
+			mcl_minecarts:set_velocity(l, dir)
+		end
+	end
+end
+
+local function golden_rail_redstone_update(pos)
+	local oldpower = minetest.get_node(pos).param2
+	local newpower = mcl_redstone.get_power(pos) ~= 0 and 8 or 0
+	local powered_on = {}
+	propagate_golden_rail_power(pos, newpower, oldpower, powered_on)
+
+	for _, pos in pairs(powered_on) do
+		push_minecart(pos)
+	end
+end
+
 -- Powered rail (off = brake mode)
 register_rail("mcl_minecarts:golden_rail",
 	{"mcl_minecarts_rail_golden.png", "mcl_minecarts_rail_golden_curved.png", "mcl_minecarts_rail_golden_t_junction.png", "mcl_minecarts_rail_golden_crossing.png"},
@@ -86,13 +232,11 @@ register_rail("mcl_minecarts:golden_rail",
 		_doc_items_longdesc = S("Rails can be used to build transport tracks for minecarts. Powered rails are able to accelerate and brake minecarts."),
 		_doc_items_usagehelp = railuse .. "\n" .. S("Without redstone power, the rail will brake minecarts. To make this rail accelerate minecarts, power it with redstone power."),
 		_rail_acceleration = -3,
-		mesecons = {
-			conductor = {
-				state = mesecon.state.off,
-				offstate = "mcl_minecarts:golden_rail",
-				onstate = "mcl_minecarts:golden_rail_on",
-				rules = rail_rules_long,
-			},
+		_redstone = {
+			connects_to = function(node, dir)
+				return true
+			end,
+			update = golden_rail_redstone_update,
 		},
 	}
 )
@@ -103,28 +247,11 @@ register_rail("mcl_minecarts:golden_rail_on",
 	{
 		_doc_items_create_entry = false,
 		_rail_acceleration = 4,
-		mesecons = {
-			conductor = {
-				state = mesecon.state.on,
-				offstate = "mcl_minecarts:golden_rail",
-				onstate = "mcl_minecarts:golden_rail_on",
-				rules = rail_rules_long,
-			},
-			effector = {
-				action_on = function(pos, _)
-					local dir = mcl_minecarts:get_start_direction(pos)
-					if not dir then return end
-					for o in minetest.objects_inside_radius(pos, 1) do
-						local l = o:get_luaentity()
-						local v = o:get_velocity()
-						if l and string.sub(l.name, 1, 14) == "mcl_minecarts:"
-						and v and vector.equals(v, vector.zero())
-						then
-							mcl_minecarts:set_velocity(l, dir)
-						end
-					end
-end,
-			},
+		_redstone = {
+			connects_to = function(node, dir)
+				return true
+			end,
+			update = golden_rail_redstone_update,
 		},
 		drop = "mcl_minecarts:golden_rail",
 	},
@@ -139,14 +266,12 @@ register_rail("mcl_minecarts:activator_rail",
 		_tt_help = S("Track for minecarts").."\n"..S("Activates minecarts when powered"),
 		_doc_items_longdesc = S("Rails can be used to build transport tracks for minecarts. Activator rails are used to activate special minecarts."),
 		_doc_items_usagehelp = railuse .. "\n" .. S("To make this rail activate minecarts, power it with redstone power and send a minecart over this piece of rail."),
-		mesecons = {
-			conductor = {
-				state = mesecon.state.off,
-				offstate = "mcl_minecarts:activator_rail",
-				onstate = "mcl_minecarts:activator_rail_on",
-				rules = rail_rules_long,
-
-			},
+		_redstone = {
+			update = function(pos)
+				if mcl_redstone.get_power(pos) ~= 0 then
+					minetest.swap_node(pos, {name = "mcl_minecarts:activator_rail_on"})
+				end
+			end,
 		},
 	}
 )
@@ -156,16 +281,11 @@ register_rail("mcl_minecarts:activator_rail_on",
 	{"mcl_minecarts_rail_activator_powered.png", "mcl_minecarts_rail_activator_curved_powered.png", "mcl_minecarts_rail_activator_t_junction_powered.png", "mcl_minecarts_rail_activator_crossing_powered.png"},
 	{
 		_doc_items_create_entry = false,
-		mesecons = {
-			conductor = {
-				state = mesecon.state.on,
-				offstate = "mcl_minecarts:activator_rail",
-				onstate = "mcl_minecarts:activator_rail_on",
-				rules = rail_rules_long,
-			},
-			effector = {
-				-- Activate minecarts
-				action_on = function(pos, _)
+		_redstone = {
+			update = function(pos)
+				if mcl_redstone.get_power(pos) == 0 then
+					minetest.swap_node(pos, {name = "mcl_minecarts:activator_rail"})
+				else
 					local pos2 = { x = pos.x, y =pos.y + 1, z = pos.z }
 					for o in minetest.objects_inside_radius(pos2, 1) do
 						local l = o:get_luaentity()
@@ -173,9 +293,8 @@ register_rail("mcl_minecarts:activator_rail_on",
 							l:on_activate_by_rail()
 						end
 					end
-				end,
-			},
-
+				end
+			end,
 		},
 		drop = "mcl_minecarts:activator_rail",
 	},
@@ -190,12 +309,6 @@ register_rail("mcl_minecarts:detector_rail",
 		_tt_help = S("Track for minecarts").."\n"..S("Emits redstone power when a minecart is detected"),
 		_doc_items_longdesc = S("Rails can be used to build transport tracks for minecarts. A detector rail is able to detect a minecart above it and powers redstone mechanisms."),
 		_doc_items_usagehelp = railuse .. "\n" .. S("To detect a minecart and provide redstone power, connect it to redstone trails or redstone mechanisms and send any minecart over the rail."),
-		mesecons = {
-			receptor = {
-				state = mesecon.state.off,
-				rules = rail_rules_short,
-			},
-		},
 	}
 )
 
@@ -204,11 +317,10 @@ register_rail("mcl_minecarts:detector_rail_on",
 	{"mcl_minecarts_rail_detector_powered.png", "mcl_minecarts_rail_detector_curved_powered.png", "mcl_minecarts_rail_detector_t_junction_powered.png", "mcl_minecarts_rail_detector_crossing_powered.png"},
 	{
 		_doc_items_create_entry = false,
-		mesecons = {
-			receptor = {
-				state = mesecon.state.on,
-				rules = rail_rules_short,
-			},
+		_redstone = {
+			get_power = function(node, dir)
+				return 15
+			end,
 		},
 		drop = "mcl_minecarts:detector_rail",
 	},
@@ -231,7 +343,7 @@ minetest.register_craft({
 	recipe = {
 		{"mcl_core:gold_ingot", "", "mcl_core:gold_ingot"},
 		{"mcl_core:gold_ingot", "mcl_core:stick", "mcl_core:gold_ingot"},
-		{"mcl_core:gold_ingot", "mesecons:redstone", "mcl_core:gold_ingot"},
+		{"mcl_core:gold_ingot", "mcl_redstone:redstone", "mcl_core:gold_ingot"},
 	}
 })
 
@@ -239,7 +351,7 @@ minetest.register_craft({
 	output = "mcl_minecarts:activator_rail 6",
 	recipe = {
 		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mesecons_torch:mesecon_torch_on", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_redstone:torch_on", "mcl_core:iron_ingot"},
 		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
 	}
 })
@@ -248,8 +360,8 @@ minetest.register_craft({
 	output = "mcl_minecarts:detector_rail 6",
 	recipe = {
 		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mesecons_pressureplates:pressure_plate_stone_off", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mesecons:redstone", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_redstone:pressure_plate_stone_off", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
 	}
 })
 

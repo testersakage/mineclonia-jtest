@@ -276,7 +276,7 @@ local tpl_door = {
 local tpl_trapdoor = {
 	_doc_items_longdesc = S("Wooden trapdoors are horizontal barriers which can be opened and closed by hand or a redstone signal. They occupy the upper or lower part of a block, depending on how they have been placed. When open, they can be climbed like a ladder."),
 	_doc_items_usagehelp = S("To open or close the trapdoor, rightclick it or send a redstone signal to it."),
-	groups = {handy=1,axey=1, mesecon_effector_on=1, material_wood=1, flammable=-1},
+	groups = {handy=1,axey=1, material_wood=1, flammable=-1},
 	_mcl_hardness = 3,
 	_mcl_blast_resistance = 3,
 	_mcl_burntime = 15,
@@ -612,9 +612,8 @@ function mcl_trees.register_wood(name, p)
 	end
 
 	if p.pressure_plate == nil or type(p.pressure_plate) == "table" then
-		p.pressure_plate = p.pressure_plate or {}
-		mesecon.register_pressure_plate(
-			"mesecons_pressureplates:pressure_plate_"..name,
+		mcl_redstone.register_pressure_plate(
+			"mcl_redstone:pressure_plate_"..name,
 			S("@1 Pressure Plate", rname),
 			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
 			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
@@ -629,8 +628,7 @@ function mcl_trees.register_wood(name, p)
 		)
 	end
 	if p.button == nil or type(p.button) == "table" then
-		p.button = p.button or {}
-		mesecon.register_button(
+		mcl_redstone.register_button(
 			name,
 			S("@1 Button", rname),
 			p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
