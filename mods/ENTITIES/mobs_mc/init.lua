@@ -41,6 +41,7 @@ local files = {
 	"pillager.lua",
 	"polar_bear.lua",
 	"rabbit.lua",
+	"ravager.lua",
 	"salmon.lua",
 	"sheep.lua",
 	"shulker.lua",
