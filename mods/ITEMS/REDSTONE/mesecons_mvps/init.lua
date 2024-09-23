@@ -354,11 +354,17 @@ function mesecon.mvps_move_objects(pos, dir, nodestack)
 	end
 
 	local objects_to_move = {}
-	for i = -1, #nodestack do
-		-- Move object at tip of stack, pushpos is position at tip of stack
-		local pushpos = vector.add(pos, vector.multiply(dir, i))
+	local indices_to_push = {#nodestack}
+	if #nodestack < 2 then
+		table.insert(indices_to_push, -1)
+		table.insert(indices_to_push, 0)
+	end
 
-		local objects = minetest.get_objects_inside_radius(pushpos, 1.0)
+	for _, index in pairs(indices_to_push) do
+		-- Move object at tip of stack, pushpos is position at tip of stack
+		local pushpos = vector.add(pos, vector.multiply(dir, index))
+
+		local objects = minetest.get_objects_inside_radius(pushpos, index == #nodestack and 1.15 or 0.95)
 		for _, obj in ipairs(objects) do
 			table.insert(objects_to_move, obj)
 		end
