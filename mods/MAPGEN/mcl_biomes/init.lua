@@ -3153,7 +3153,7 @@ local function register_decorations()
 		height = 1,
 		max_height = 1,
 		place_offset_y = -1,
-		noise_params = 
+		noise_params =
 		{
 			offset = 0,
 			scale = 1,
