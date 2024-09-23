@@ -53,7 +53,7 @@ local groups = {
 
 for _, mode in pairs{"comp", "sub"} do
 	for _, state in pairs{"on", "off"} do
-		local nodename = "mcl_comparators:comparator_"..mode.."_"..state
+		local nodename = "mcl_comparators:comparator_"..state.."_"..mode
 
 		local longdesc, usagehelp, use_help
 		if state == "off" and mode == "comp" then
@@ -89,7 +89,7 @@ for _, mode in pairs{"comp", "sub"} do
 			paramtype2 = "4dir",
 			sunlight_propagates = false,
 			is_ground_content = false,
-			drop = "mcl_comparators:comparator_comp_off",
+			drop = "mcl_comparators:comparator_off_comp",
 			on_rightclick = function (pos, node, clicker)
 				local protname = clicker:get_player_name()
 				if minetest.is_protected(pos, protname) then
@@ -98,7 +98,7 @@ for _, mode in pairs{"comp", "sub"} do
 				end
 				local newmode = mode == "comp" and "sub" or "comp"
 				minetest.set_node(pos, {
-					name = "mcl_comparators:comparator_"..newmode.."_"..state,
+					name = "mcl_comparators:comparator_"..state.."_"..newmode,
 					param2 = node.param2,
 				})
 			end,
@@ -135,7 +135,7 @@ for _, mode in pairs{"comp", "sub"} do
 
 					local newstate = output > 0 and "on" or "off"
 					return {
-						name = "mcl_comparators:comparator_"..mode.."_"..newstate,
+						name = "mcl_comparators:comparator_"..newstate.."_"..mode,
 						param2 = 4 * output + node.param2 % 4,
 					}
 				end,
@@ -162,7 +162,7 @@ for _, mode in pairs{"comp", "sub"} do
 			end
 			nodedef.description = desc
 
-			doc.add_entry_alias("nodes", "mcl_comparators:comparator_"..mode.."_"..state, "nodes", nodename)
+			doc.add_entry_alias("nodes", "mcl_comparators:comparator_"..state.."_"..mode, "nodes", nodename)
 		end
 
 		minetest.register_node(nodename, nodedef)
