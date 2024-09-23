@@ -16,7 +16,6 @@ end
 
 mcl_mobs.register_mob("mobs_mc:frog", {
 	description = S("Frog"),
-	stepheight = 3,
 	type = "animal",
 	passive = false,
 	reach = 1,
@@ -34,20 +33,21 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	drawtype = "front",
 	textures = {
 		{"mobs_mc_frog.png"},
-
 	},
 	sounds = {
 		random = "frog",
 	},
 	makes_footstep_sound = true,
-	walk_velocity = 2,
+	walk_velocity = 1,
+	run_velocity = 4,
+	view_range = 16,
+	stepheight = 1.1,
+	jump = true,
+	jump_height = 10,
 	visual_size = { x = 10, y = 10 },
-	run_velocity = 3,
 	specific_attack = { "mobs_mc:magma_cube_tiny", "mobs_mc:slime_tiny",  },
 	runaway = true,
 	runaway_from = {"mobs_mc:spider", "mobs_mc:axolotl"},
-	jump = true,
-	jump_height = 6,
 	drops = {
 		--{name = "mcl_mobitems:froglight", chance = 1, min = 1, max = 1},
 	},
@@ -69,12 +69,11 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		punch_end = 140,
 		punch_speed =15,
 	},
-	fly_in = {"mcl_core:water_source", "mcl_core:water_flowing", "mclx_core:river_water_source", "mclx_core:river_water_flowing"},
+	swims = true,
 	floats = 0,
 	spawn_in_group = 6,
 	spawn_in_group_min = 2,
 	--follow = {},
-	view_range = 6,
 	--on_rightclick = function(self, clicker)
 	--	if mobs:feed_tame(self, clicker, 8, true, true) then return end
 	--	if mobs:protect(self, clicker) then return end
@@ -124,5 +123,34 @@ mcl_mobs.spawn_setup({
 	chance = 15000,
 })
 
--- spawn eggs
 mcl_mobs.register_egg("mobs_mc:frog", S("Frog"), "#00AA00", "#db635f", 0)
+
+mcl_mobs.register_mob("mobs_mc:tadpole", {
+	type = "animal",
+	spawn_class = "passive",
+	damage = 8,
+	hp_min = 6,
+	hp_max = 6,
+	spawn_in_group = 9,
+	tilt_swim = true,
+	armor = 100,
+	collisionbox = { -0.2, -0.05, -0.2, 0.2, 0.5, 0.2 },
+	visual = "mesh",
+	mesh = "mobs_mc_tadpole.b3d",
+	visual_size = { x = 10, y = 10 },
+	textures = { "mobs_mc_tadpole.png" },
+	makes_footstep_sound = false,
+	swims = true,
+	breathes_in_water = true,
+	jump = false,
+	view_range = 16,
+	runaway = true,
+	fear_height = 4,
+	animation = {
+		stand_start = 1, stand_end = 20, stand_speed = 10,
+		walk_start = 40, walk_end =80, speed_normal = 10,
+		run_start = 40, run_end = 80, speed_run = 15,
+	},
+})
+
+mcl_mobs.register_egg("mobs_mc:tadpole", "tadpole", "#3B2103", "#140C05", 0)
