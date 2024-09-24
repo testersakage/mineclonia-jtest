@@ -67,6 +67,28 @@ mcl_mobs.register_mob("mobs_mc:turtle", {
 			end
 		end
 	end,
+	on_breed = function(self, _)
+		self._has_egg = true
+		self:go_home()
+		return false
+	end,
+	go_home = function(self)
+		if not self._home then return end
+		if vector.distance(self.object:get_pos() < 25) then
+			return true
+		end
+		self:go_to_pos(self._home)
+	end,
+	lay_egg = function(self)
+		local pos = self.object:get_pos()
+		local nn = core.find_nodes_in_area_under_air(vector.offset(pos, -32, -5, -32), vector.offset(pos, 32, 5, 32), { "mcl_core:sand", "mcl_core:red_sand" } )
+		if nn and #nn > 0 then
+			local p = nn[math.random(#nn)]
+			self:gopath(p, function()
+				core.set_node(vector.offset(p, 0, 1, 0), { name = "mcl_mobitems:turtle_egg" })
+			end)
+		end
+	end,
 
 	on_grown = function(self)
 		mcl_util.drop_item_stack(self.object:get_pos(), ItemStack("mcl_mobitems:scute"))
