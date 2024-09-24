@@ -1,6 +1,30 @@
 local S = minetest.get_translator("mobs_mc")
 local trname = S("Evoker")
 
+local function get_points_on_circle(pos,r,n)
+	local rt = {}
+	for i=1, n do
+		table.insert(rt,vector.offset(pos,r * math.cos(((i-1)/n) * (2*math.pi)),0,  r* math.sin(((i-1)/n) * (2*math.pi)) ))
+	end
+	return rt
+end
+
+local function fangs_line(p, d)
+	local r = {}
+	for i = 1, 7 do
+		table.insert(r, vector.round(vector.add(p, d * i)))
+	end
+	return r
+end
+
+local function fangs_circles(p)
+	local r = get_points_on_circle(p, 1, 5)
+	for _, k in pairs(get_points_on_circle(p, 2, 8)) do
+		table.insert(r, k)
+	end
+	return r
+end
+
 mcl_mobs.register_mob("mobs_mc:evoker", {
 	description = trname,
 	type = "monster",
@@ -57,14 +81,15 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 			end
 		end
 	end,
-	fangs_attack = function(self)
+	fangs_attack = function(self, type)
 		if self.attack and self.attack:get_pos() then
 			local p = self.object:get_pos()
 			local ap = self.attack:get_pos()
-			local d = vector.direction(p, ap)
-			for i = 1, 7 do
-				local fp = vector.round(vector.add(p, d * i))
-				fp.y = p.y
+			local pp =fangs_circles(p)
+			if type ~= "circle" and vector.distance(p, ap) > 3 then
+				pp = fangs_line(p, vector.direction(p, ap))
+			end
+			for _, fp in pairs(pp) do
 				if minetest.get_item_group(minetest.get_node(fp).name, "solid") <= 0 then
 					minetest.add_entity(fp, "mobs_mc:evoker_fangs")
 				end
@@ -73,7 +98,7 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	end,
 	passive = false,
 	drops = {
-		{name = "mcl_core:emerald", chance = 1, 	min = 0, max = 1, looting = "common",},
+		{name = "mcl_core:emerald", chance = 1, min = 0, max = 1, looting = "common",},
 		{name = "mcl_totems:totem", chance = 1, min = 1, max = 1 },
 	},
 	-- TODO: sounds
@@ -96,16 +121,18 @@ mcl_mobs.register_egg("mobs_mc:evoker", trname, "#959b9b", "#1e1c1a", 0)
 
 minetest.register_entity("mobs_mc:evoker_fangs", {
 	initial_properties = {
-		physical = true,
-		collide_with_objects = true,
+		physical = false,
 		visual = "mesh",
 		mesh = "mobs_mc_evoker_fangs.b3d",
 		textures = { "mobs_mc_evoker_fangs.png" },
 		static_save = false,
 	},
-	_timer = 5,
+	_timer = 3,
 	on_activate = function(self)
-		self.object:set_animation({x = 0, y = 40}, 15, 0, false)
+		self.object:set_animation({x = 1, y = 40}, 15, 0, false)
+		for o in minetest.objects_inside_radius(self.object:get_pos(), 0.4) do
+			mcl_util.deal_damage(o, 6, { type = "magic" })
+		end
 	end,
 	on_step = function(self, dtime)
 		self._timer = self._timer - dtime
