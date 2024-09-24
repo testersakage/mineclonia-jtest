@@ -1,9 +1,8 @@
 local S = minetest.get_translator("mobs_mc")
-
-local pr = PseudoRandom(os.time()*666)
+local trname = S("Evoker")
 
 mcl_mobs.register_mob("mobs_mc:evoker", {
-	description = S("Evoker"),
+	description = trname,
 	type = "monster",
 	spawn_class = "hostile",
 	can_despawn = false,
@@ -41,18 +40,18 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 		for k,v in pairs(self.active_vexes) do
 			if not v or v.health <= 0 then table.remove(self.active_vexes,k) end
 		end
-		local r = pr:next(1,4)
+		local r = math.random(4)
 		local basepos = self.object:get_pos()
 		basepos.y = basepos.y + 1
 		for _ = 1, r do
-			local spawnpos = vector.add(basepos, minetest.yaw_to_dir(pr:next(0,360)))
+			local spawnpos = vector.add(basepos, minetest.yaw_to_dir(math.random(0,360)))
 			local vex = minetest.add_entity(spawnpos, "mobs_mc:vex")
 			if vex and vex:get_pos() then
 				local ent = vex:get_luaentity()
 
 				-- Mark vexes as summoned and start their life clock (they take damage it reaches 0)
 				ent._summoned = true
-				ent._lifetimer = pr:next(33, 108)
+				ent._lifetimer = math.random(33, 108)
 
 				table.insert(self.active_vexes,ent)
 			end
@@ -93,7 +92,7 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	end,
 })
 
-mcl_mobs.register_egg("mobs_mc:evoker", S("Evoker"), "#959b9b", "#1e1c1a", 0)
+mcl_mobs.register_egg("mobs_mc:evoker", trname, "#959b9b", "#1e1c1a", 0)
 
 minetest.register_entity("mobs_mc:evoker_fangs", {
 	initial_properties = {
