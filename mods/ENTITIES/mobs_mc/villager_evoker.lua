@@ -1,13 +1,4 @@
---MCmobs v0.4
---maikerumine
---made for MC like Survival game
---License for code WTFPL and otherwise stated in readmes
-
 local S = minetest.get_translator("mobs_mc")
-
---###################
---################### EVOKER
---###################
 
 local pr = PseudoRandom(os.time()*666)
 
@@ -31,7 +22,7 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	mesh = "mobs_mc_villager.b3d",
 	textures = { {
 		"mobs_mc_evoker.png",
-		"blank.png", --no hat
+		"blank.png",
 		-- TODO: Attack glow
 	} },
 	makes_footstep_sound = true,
@@ -83,22 +74,15 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	end,
 	passive = false,
 	drops = {
-		{name = "mcl_core:emerald",
-		chance = 1,
-		min = 0,
-		max = 1,
-		looting = "common",},
-		{name = "mcl_totems:totem",
-		chance = 1,
-		min = 1,
-		max = 1,},
+		{name = "mcl_core:emerald", chance = 1, 	min = 0, max = 1, looting = "common",},
+		{name = "mcl_totems:totem", chance = 1, min = 1, max = 1 },
 	},
 	-- TODO: sounds
 	animation = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 40, walk_speed = 50,
 		run_start = 0, run_end = 40, run_speed = 25,
-		shoot_start = 142, shoot_end = 152, -- Magic arm swinging
+		shoot_start = 120, shoot_end = 130,
 	},
 	view_range = 16,
 	fear_height = 4,
@@ -109,7 +93,6 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	end,
 })
 
--- spawn eggs
 mcl_mobs.register_egg("mobs_mc:evoker", S("Evoker"), "#959b9b", "#1e1c1a", 0)
 
 minetest.register_entity("mobs_mc:evoker_fangs", {
@@ -123,7 +106,7 @@ minetest.register_entity("mobs_mc:evoker_fangs", {
 	},
 	_timer = 5,
 	on_activate = function(self)
-		self.object:set_animation({x = 0, y = 10}, 30, 0, false)
+		self.object:set_animation({x = 0, y = 40}, 15, 0, false)
 	end,
 	on_step = function(self, dtime)
 		self._timer = self._timer - dtime
