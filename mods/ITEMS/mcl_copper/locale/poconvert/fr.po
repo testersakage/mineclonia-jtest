@@ -3,18 +3,19 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-09-24 21:18+0000\n"
+"Last-Translator: 3raven <3raven@users.noreply.translate.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_copper/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Waxed @1"
-msgstr "Ciré @1"
+msgstr "@1 ciré"
 
 msgid "Copper Ingot"
 msgstr "Lingot de cuivre"
@@ -26,7 +27,7 @@ msgid "Raw Copper"
 msgstr "Cuivre brut"
 
 msgid "Raw Copper. Mine a Copper Ore to get it."
-msgstr "Cuivre brut. Creuser dans du minerai de cuivre pour l'obtenir."
+msgstr "Cuivre brut. Miner du minerai de cuivre pour l'obtenir."
 
 msgid "Copper Ore"
 msgstr "Minerai de cuivre"
@@ -56,29 +57,28 @@ msgid "@1 Copper"
 msgstr "@1 Cuivre"
 
 msgid "@1 copper is mostly a decorative block."
-msgstr "@1 cuivre est un bloc majoritairement décoratif."
+msgstr "Le @1 cuivre est surtout un bloc décoratif."
 
 msgid "@1 Cut Copper"
-msgstr "@1 Cuivre Taillé"
+msgstr "Cuivre Taillé @1"
 
 msgid "@1 Chiseled Copper"
-msgstr "@1 Cuivre Ciselé"
+msgstr "Cuivre Ciselé @1"
 
 msgid "@1 Chiseled copper is mostly a decorative block."
-msgstr "@1 Cuivre Ciselé est majoritairement un bloc décoratif."
+msgstr "Le @1 Cuivre Ciselé est surtout un bloc décoratif."
 
 msgid "@1 Copper Grate"
-msgstr "@1 Grille en cuivre"
+msgstr "Grille en cuivre @1"
 
 msgid "@1 Copper Bulb On"
-msgstr "@1 Ampoule en Cuivre allumée"
+msgstr "Ampoule en Cuivre @1 allumée"
 
 msgid "@1 Copper Bulb"
-msgstr "@1 Ampoule en Cuivre"
+msgstr "Ampoule en Cuivre @1"
 
 msgid "@1 Copper Trapdoor"
-msgstr "@1 Trappe en Cuivre"
+msgstr "Trappe en Cuivre @1"
 
 msgid "@1 Copper Door"
-msgstr "@1 Porte en Cuivre"
-
+msgstr "Porte en Cuivre @1"
