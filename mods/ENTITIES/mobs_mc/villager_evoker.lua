@@ -75,7 +75,7 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 			for i = 1, 7 do
 				local fp = vector.round(vector.add(p, d * i))
 				fp.y = p.y
-				if minetest.get_node(fp).name == "air" then
+				if minetest.get_item_group(minetest.get_node(fp).name, "solid") <= 0 then
 					minetest.add_entity(fp, "mobs_mc:evoker_fangs")
 				end
 			end
