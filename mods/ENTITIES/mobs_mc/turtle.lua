@@ -53,6 +53,10 @@ mcl_mobs.register_mob("mobs_mc:turtle", {
 		-- = 145,fly_end = 165,fly_speed = 10,
 		--die_start = 0, die_end = 0, die_speed = 0,--die_loop = 0,
 	},
+
+	on_grown = function(self)
+		mcl_util.drop_item_stack(self.object:get_pos(), ItemStack("mcl_mobitems:scute"))
+	end,
 })
 
 local tspawn = {
