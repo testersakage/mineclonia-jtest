@@ -11,8 +11,6 @@ local S = minetest.get_translator("mobs_mc")
 
 local pr = PseudoRandom(os.time()*666)
 
-local spawned_vexes = {} --this is stored locally so the mobs engine doesn't try to store it in staticdata
-
 mcl_mobs.register_mob("mobs_mc:evoker", {
 	description = S("Evoker"),
 	type = "monster",
@@ -41,13 +39,16 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	walk_velocity = 1.2,
 	run_velocity = 1.5,
 	group_attack = true,
-	attack_type = "dogfight",
+	attack_type = "dogshoot",
 	custom_attack_interval = 15,
+	active_vexes = {},
 	custom_attack = function(self, _)
-		if not spawned_vexes[self] then spawned_vexes[self] = {} end
-		if #spawned_vexes[self] >= 7 then return end
-		for k,v in pairs(spawned_vexes[self]) do
-			if not v or v.health <= 0 then table.remove(spawned_vexes[self],k) end
+		self:fangs_attack()
+	end,
+	vex_attack = function(self)
+		if #self.active_vexes >= 7 then return end
+		for k,v in pairs(self.active_vexes) do
+			if not v or v.health <= 0 then table.remove(self.active_vexes,k) end
 		end
 		local r = pr:next(1,4)
 		local basepos = self.object:get_pos()
@@ -62,7 +63,21 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 				ent._summoned = true
 				ent._lifetimer = pr:next(33, 108)
 
-				table.insert(spawned_vexes[self],ent)
+				table.insert(self.active_vexes,ent)
+			end
+		end
+	end,
+	fangs_attack = function(self)
+		if self.attack and self.attack:get_pos() then
+			local p = self.object:get_pos()
+			local ap = self.attack:get_pos()
+			local d = vector.direction(p, ap)
+			for i = 1, 7 do
+				local fp = vector.round(vector.add(p, d * i))
+				fp.y = p.y
+				if minetest.get_node(fp).name == "air" then
+					minetest.add_entity(fp, "mobs_mc:evoker_fangs")
+				end
 			end
 		end
 	end,
@@ -96,3 +111,24 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:evoker", S("Evoker"), "#959b9b", "#1e1c1a", 0)
+
+minetest.register_entity("mobs_mc:evoker_fangs", {
+	initial_properties = {
+		physical = true,
+		collide_with_objects = true,
+		visual = "mesh",
+		mesh = "mobs_mc_evoker_fangs.b3d",
+		textures = { "mobs_mc_evoker_fangs.png" },
+		static_save = false,
+	},
+	_timer = 5,
+	on_activate = function(self)
+		self.object:set_animation({x = 0, y = 10}, 30, 0, false)
+	end,
+	on_step = function(self, dtime)
+		self._timer = self._timer - dtime
+		if self._timer < 0 then
+			self.object:remove()
+		end
+	end
+})
