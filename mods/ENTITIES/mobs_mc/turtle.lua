@@ -1,3 +1,5 @@
+local mob_class = mcl_mobs.mob_class
+
 mcl_mobs.register_mob("mobs_mc:turtle", {
 	type = "animal",
 	spawn_class = "passive",
@@ -35,6 +37,7 @@ mcl_mobs.register_mob("mobs_mc:turtle", {
 	swims = true,
 	spawn_in_group = 5,
 	--breathes_in_water = true,
+	follow = { "mcl_ocean:seagrass" },
 	sounds = {
 	   -- random = "",
 	},
@@ -54,8 +57,30 @@ mcl_mobs.register_mob("mobs_mc:turtle", {
 		--die_start = 0, die_end = 0, die_speed = 0,--die_loop = 0,
 	},
 
+	on_rightclick = function(self, clicker)
+		local it = clicker:get_wielded_item()
+		if it:get_name() == "mcl_ocean:seagrass" then
+			self:feed_tame(clicker, 4, true, false, true)
+			if not core.is_creative_enabled(clicker:get_player_name()) then
+				it:take_item()
+				clicker:set_wielded_item(it)
+			end
+		end
+	end,
+
 	on_grown = function(self)
 		mcl_util.drop_item_stack(self.object:get_pos(), ItemStack("mcl_mobitems:scute"))
+	end,
+
+	post_load_staticdata = function(self)
+		mob_class.post_load_staticdata(self)
+		if not self._turtle_initialized then
+			self._home = self.object:get_pos():copy()
+			if not self.child and math.random(10) == 1 then
+				self.child = true
+			end
+			self._turtle_initialized = true
+		end
 	end,
 })
 
