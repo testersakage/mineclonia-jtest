@@ -114,6 +114,27 @@ local function spawn_dripstone_entity(pos)
 	ent.switch = 1
 end
 
+local function break_dripstone(pos, direction)
+	local offset_pos = vector.copy(pos)
+	while true do
+		offset_pos = vector.offset(offset_pos, 0, -direction, 0)
+		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
+		if stage == 1 and extract_direction(minetest.get_node(offset_pos).name) == -direction then
+			minetest.swap_node(offset_pos, {name = get_dripstone_node(2, -direction)})
+			break
+		elseif stage == 0 then
+			break
+		else
+			if direction == -1 then
+				minetest.add_item(offset_pos, ItemStack("mclx_dripstone:pointed_dripstone"))
+			else
+				spawn_dripstone_entity(offset_pos)
+			end
+			minetest.swap_node(offset_pos, {name = "air"})
+		end
+	end
+end
+
 local function update_dripstone(pos, direction)
 	-- if a dripstone column should be created
 	-- ".[^l]" is in the pattern to prevent dripstone blocks from being matched
@@ -159,25 +180,7 @@ end
 
 local on_dripstone_destruct = function(pos)
 	local direction = extract_direction(minetest.get_node(pos).name)
-	local offset_pos = vector.copy(pos)
-	local stage
-	while true do
-		offset_pos = vector.offset(offset_pos, 0, -direction, 0)
-		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
-		if stage == 1 and extract_direction(minetest.get_node(offset_pos).name) == -direction then
-			minetest.swap_node(offset_pos, {name = get_dripstone_node(2, -direction)})
-			break
-		elseif stage == 0 then
-			break
-		else
-			if direction == -1 then
-				minetest.add_item(offset_pos, ItemStack("mclx_dripstone:pointed_dripstone"))
-			else
-				spawn_dripstone_entity(offset_pos)
-			end
-			minetest.swap_node(offset_pos, {name = "air"})
-		end
-	end
+	break_dripstone(pos, direction)
 
 	offset_pos = vector.copy(vector.offset(pos, 0, direction, 0))
 	if minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage") ~= 0 then
@@ -243,6 +246,18 @@ for i = 1, #dripstone_stages do
 		_mcl_hardness = 1.5,
 	})
 end
+
+minetest.register_on_dignode(function(pos)
+	local offset_pos = vector.copy(vector.offset(pos, 0, -1, 0))
+	local nn = minetest.get_node(offset_pos).name
+	if minetest.get_item_group(nn, "dripstone_stage") ~= 0 and extract_direction(nn) == 1 then
+		if minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage") ~= 0 then
+			break_dripstone(offset_pos, 1)
+			spawn_dripstone_entity(offset_pos)
+			minetest.swap_node(offset_pos, {name = "air"})
+		end
+	end
+end)
 
 minetest.register_abm({
 	label = "Dripstone growth",
@@ -416,4 +431,3 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 		return true
 	end,
 })
-
