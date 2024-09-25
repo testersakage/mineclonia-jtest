@@ -148,6 +148,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 		itemstack:get_meta():set_string("active", "true")
 		return itemstack
 	end,
+	touch_interaction = "short_dig_long_place",
 	groups = {weapon=1,weapon_ranged=1,bow=1,enchantability=1},
 	_mcl_uses = 385,
 	_mcl_burntime = 15
@@ -213,6 +214,7 @@ for level=0, 2 do
 		on_place = function(itemstack)
 			return itemstack
 		end,
+		touch_interaction = "short_dig_long_place",
 		_mcl_uses = 385,
 	})
 end

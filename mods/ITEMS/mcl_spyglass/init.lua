@@ -13,6 +13,7 @@ minetest.register_tool("mcl_spyglass:spyglass",{
 	groups = {tool = 1},
 	stack_max = 1,
 	_mcl_toollike_wield = true,
+	touch_interaction = "short_dig_long_place",
 })
 
 minetest.register_craft({
