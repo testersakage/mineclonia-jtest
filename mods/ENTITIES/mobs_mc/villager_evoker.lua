@@ -127,9 +127,9 @@ minetest.register_entity("mobs_mc:evoker_fangs", {
 		textures = { "mobs_mc_evoker_fangs.png" },
 		static_save = false,
 	},
-	_timer = 3,
+	_timer = 2,
 	on_activate = function(self)
-		self.object:set_animation({x = 1, y = 40}, 15, 0, false)
+		self.object:set_animation({x = 1, y = 35}, 15, 0, false)
 		for o in minetest.objects_inside_radius(self.object:get_pos(), 0.4) do
 			mcl_util.deal_damage(o, 6, { type = "magic" })
 		end
