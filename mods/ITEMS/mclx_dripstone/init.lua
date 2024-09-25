@@ -87,7 +87,9 @@ minetest.register_craft({
 })
 
 local function dripstone_hit_func(self, object)
-	mcl_util.deal_damage(object, math.ceil(self.timer / 0.2 - 2), {type = "falling_node"})
+	-- the number 1.125 comes from: (nodes fallen / timer increase) * damage per node fallen
+	-- which comes out to be: (1.5 / 8) * 6 = 1.125
+	mcl_util.deal_damage(object, math.min(40, self.timer * 1.125), {type = "falling_node"})
 end
 
 mcl_mobs.register_arrow("mclx_dripstone:vengeful_dripstone",
@@ -99,11 +101,18 @@ mcl_mobs.register_arrow("mclx_dripstone:vengeful_dripstone",
 	hit_player = dripstone_hit_func,
 	hit_mob = dripstone_hit_func,
 	hit_object = dripstone_hit_func,
-	hit_node = function(_, pos)
+	hit_node = function(self, pos)
 		minetest.add_item(pos, ItemStack("mclx_dripstone:pointed_dripstone"))
 	end,
 	drop = "mclx_dripstone:pointed_dripstone",
 })
+
+local function spawn_dripstone_entity(pos)
+	local vengeful_dripstone = minetest.add_entity(pos, "mclx_dripstone:vengeful_dripstone")
+	vengeful_dripstone:add_velocity(vector.new(0, -12, 0))
+	local ent = vengeful_dripstone:get_luaentity()
+	ent.switch = 1
+end
 
 local function update_dripstone(pos, direction)
 	-- if a dripstone column should be created
@@ -164,10 +173,7 @@ local on_dripstone_destruct = function(pos)
 			if direction == -1 then
 				minetest.add_item(offset_pos, ItemStack("mclx_dripstone:pointed_dripstone"))
 			else
-				local vengeful_dripstone = minetest.add_entity(offset_pos, "mclx_dripstone:vengeful_dripstone")
-				vengeful_dripstone:add_velocity(vector.new(0, -12, 0))
-				local ent = vengeful_dripstone:get_luaentity()
-				ent.switch = 1
+				spawn_dripstone_entity(offset_pos)
 			end
 			minetest.swap_node(offset_pos, {name = "air"})
 		end
@@ -368,6 +374,7 @@ mcl_structures.register_structure("dripstone_stalagmite", {
 	fill_ratio = 0.8,
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
+	place_offset_y = 1,
 	place_func = function(pos)
 		local max_length = 0
 		local offset_pos = vector.copy(pos)
@@ -390,7 +397,7 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 	num_spawn_by = 5,
 	biomes = {"DripstoneCave"},
 	fill_ratio = 0.8,
-	y_min = mcl_vars.mg_overworld_min,
+	y_min = mcl_vars.mg_overworld_min + 1,
 	y_max = 0,
 	flags = "all_ceilings",
 	place_func = function(pos)
@@ -409,3 +416,4 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 		return true
 	end,
 })
+
