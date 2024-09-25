@@ -78,6 +78,14 @@ minetest.register_node("mclx_dripstone:dripstone_block", {
 	_mcl_hardness = 1.5,
 })
 
+minetest.register_craft({
+	output = "mclx_dripstone:dripstone_block",
+	recipe = {
+		{ "mclx_dripstone:pointed_dripstone", "mclx_dripstone:pointed_dripstone"},
+		{ "mclx_dripstone:pointed_dripstone", "mclx_dripstone:pointed_dripstone"},
+	}
+})
+
 local function dripstone_hit_func(self, object)
 	mcl_util.deal_damage(object, math.ceil(self.timer / 0.2 - 2), {type = "falling_node"})
 end
@@ -396,6 +404,7 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 			end
 			max_length = max_length + 1
 		end
+
 		place_dripstone(pos, math.min(math.random(2, 5), max_length), 1)
 		return true
 	end,
