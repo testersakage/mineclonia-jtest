@@ -43,11 +43,11 @@ enable_bed_respawn (Respawn at bed) bool true
 # How many players have to sleep to skip the night, in percent.
 # Setting to 0 will mean 1 player is always enough to skip the night.
 # Setting above 100 will prevent skipping the night.
-# 100 by default.
+# Default: 100
 mcl_playersSleepingPercentage (Player sleeping percentage) int 100
 
 # Normally, players drop all their items when they die.
-# Enabling this setting, players always keep their inventory on death.
+# If enabled, players always keep their inventory on death.
 mcl_keepInventory (Keep inventory on death) bool false
 
 # If enabled, chat messages are shown to everyone when a player dies.
@@ -117,7 +117,7 @@ wither_strafes (Wither strafes) bool true
 mcl_mob_active_range (Active mob range) int 48 0 256
 
 [Mob caps]
-# Maximum amount mobs
+# Global maximum amount of mobs
 mcl_mob_cap_total (Global mob cap) int 500 0 2048
 
 # Maximum amount of mobs per player
@@ -139,10 +139,12 @@ mcl_mob_cap_water (Mob cap for water mobs) int 5 0 1024
 mcl_mob_cap_water_ambient (Mob cap for ambient water mobs) int 20 0 1024
 
 [Features]
-# Enable Bookshelf inventories
+# Enabling this setting adds and inventory to bookshelves
 mcl_bookshelf_inventories (Bookshelf inventories) bool true
 
 # All tameable mobs listen to the "sit" right-click like dogs
+# For some mobs the Sneak button must be pressed:
+# Eg. with horses or other animals with a right-click function
 mcl_extended_pet_control (Extended pet control) bool false
 
 # Enable nodes not in Minecraft.
@@ -163,7 +165,7 @@ enable_real_maps (Real maps) bool true
 # Place bonus chest near players' initial spawn point
 mcl_bonus_chest (Bonus chest) bool false
 
-# Allow editing signs
+# Allow editing signs after they are placed
 mcl_signs_editable (Editable signs) bool false
 
 [Graphics]
