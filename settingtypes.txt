@@ -35,24 +35,26 @@ mcl_enable_mt_dungeons (Native Minetest dungeons) bool false
 mcl_superflat_classic (Classic superflat map generation) bool false
 
 [Players]
-# If enabled, players respawn at the bed they last lay on instead of normal
-# spawn.
+# If enabled, players respawn at the bed they last
+# lay on instead of normal spawn.
 # This setting is only read at startup.
 enable_bed_respawn (Respawn at bed) bool true
 
 # How many players have to sleep to skip the night, in percent.
-# Setting to 0 will mean 1 player is always enough to skip the night. Setting above 100 will prevent skipping the night.
+# Setting to 0 will mean 1 player is always enough to skip the night.
+# Setting above 100 will prevent skipping the night.
 # 100 by default.
 mcl_playersSleepingPercentage (Player sleeping percentage) int 100
 
-# Normally, players drop all their items when they die. Enable this
-# setting, so players always keep their inventory on death.
+# Normally, players drop all their items when they die.
+# Enabling this setting, players always keep their inventory on death.
 mcl_keepInventory (Keep inventory on death) bool false
 
 # If enabled, chat messages are shown to everyone when a player dies.
 mcl_showDeathMessages (Show death messages) bool true
 
-# If enabled, the recipe book will progressively be filled with new recipes that can be crafted from all items you ever have had in your inventory.
+# If enabled, the recipe book will progressively be filled with new
+# recipes that can be crafted from all items you ever have had in your inventory.
 # Recommended for new players and for a spoiler-free gameplay experience.
 # If disabled, all recipes will be shown.
 mcl_craftguide_progressive_mode	(Learn crafting recipes progressively) bool true
@@ -61,11 +63,11 @@ mcl_craftguide_progressive_mode	(Learn crafting recipes progressively) bool true
 mcl_enable_skin_customization (Player skin customization) bool true
 
 # How far the player hand can reach
-# Default:4.5
+# Default: 4.5
 mcl_hand_range (Hand range) float 4.5 1 128
 
 # How far the player hand can reach in creative mode
-# Default:10
+# Default: 10
 mcl_hand_range_creative (Creative mode hand range) float 10 1 128
 
 # If enabled the hunger mechanic will be active
@@ -73,32 +75,35 @@ mcl_hand_range_creative (Creative mode hand range) float 10 1 128
 mcl_enable_hunger (Hunger) bool true
 
 [Mobs]
-# If enabled, mobs will spawn naturally. This does not affect
-# affect mob spawners.
+# If enabled, mobs will spawn naturally.
+# This does not affect mob spawners.
 # This setting is only read at startup.
 mobs_spawn (Spawn mobs naturally) bool true
 
-# If enabled, only peaceful mobs will appear naturally. This does not
-# affect mob spawners.
+# If enabled, only peaceful mobs will appear naturally.
+# This does not affect mob spawners.
 # This setting is only read at startup.
 only_peaceful_mobs (Spawn only peaceful mobs) bool false
 
-# Allow mobs to spawn in protected areas. This does not affect
-# mob spawners.
+# Allow mobs to spawn in protected areas.
+# This does not affect mob spawners.
 mobs_spawn_protected (Spawn mobs in protected areas) bool false
 
-# Use light levels from Minecraft 1.18+ for monster spawning. Disable to use older mob specific light levels.
+# Use light levels from Minecraft 1.18+ for monster spawning.
+# Disable to use older mob specific light levels.
 mcl_mobs_modern_lighting (Modern light rules for spawning) bool true
 
-# Mobs difficulty. This is a number that will affect the initial and maximum
-# health and the amount of damage that mobs deal. Health and damage will
-# be multiplied with this number.
+# Mobs difficulty.
+# This is a number that will affect the initial and maximum health and
+# the amount of damage that mobs deal.
+# Health and damage will be multiplied with this number.
 mob_difficulty (Mob difficulty factor) float 1.0 0.0
 
 # If enabled, mobs might drop items when they die.
 mobs_drop_items (Mob drops) bool true
 
-# If enabled, mobs can take, place, change and destroy blocks around them.
+# If enabled, mobs can take, place, change and
+# destroy blocks around them.
 mobs_griefing (Mob griefing) bool true
 
 # Should wither follow the player who spawned him around
@@ -140,14 +145,16 @@ mcl_bookshelf_inventories (Bookshelf inventories) bool true
 # All tameable mobs listen to the "sit" right-click like dogs
 mcl_extended_pet_control (Extended pet control) bool false
 
-# Enable nodes not in Minecraft. Includes extra stairs and slabs, Red Nether Brick Fence and nether brick fence gates.
+# Enable nodes not in Minecraft.
+# Includes extra stairs and slabs, Red Nether Brick Fence and
+# nether brick fence gates.
 mcl_extra_nodes (Additional nodes) bool true
 
 # Enable piston movement of inventory nodes.
 mcl_inv_nodes_movable (Movable inventory nodes) bool true
 
-# Make iron golems teleport home when they are far away and villagers teleport
-# home when the night is skipped.
+# Make iron golems teleport home when they are far away and
+# villagers teleport home when the night is skipped.
 mcl_mob_allow_nav_hacks (Mob navigation hacks) bool false
 
 # Allow players to create Minecraft-like maps.
@@ -172,7 +179,8 @@ mcl_damage_particles (Damage particles) bool true
 # The maximum number of boss bars to simultaneously display on the screen
 mcl_max_bossbars (Maximum boss bars) int 5
 
-# How many vertical animation frames the fire texture (fire_basic_flame_animated.png) has.
+# How many vertical animation frames the fire
+# texture (fire_basic_flame_animated.png) has.
 # This may vary depending on the texture pack you use.
 # Form: Image height / Image width
 fire_animation_frames (Fire animation frames) int 8
