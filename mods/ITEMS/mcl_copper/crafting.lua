@@ -30,6 +30,13 @@ minetest.register_craft({
 	},
 })
 
+minetest.register_craft({
+	output = "mcl_copper:copper_ingot 9",
+	recipe = {
+		{ "mcl_copper:block_preserved" },
+	},
+})
+
 -- TO HERE
 minetest.register_craft({
 	output = "mcl_copper:block_cut 4",
