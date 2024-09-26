@@ -224,15 +224,19 @@ function plant_fields(_, biome_name, schem_lua, pr)
 	local map_name = mcl_villages.biome_map[biome_name] or "plains"
 
 	for _, crop in ipairs(mcl_villages.get_crop_types()) do
-		if string.find(modified_schem_lua, "mcl_villages:crop_" .. crop) then
+		local base_itemstring = "mcl_villages:crop_" .. crop
+		if string.find(modified_schem_lua, base_itemstring) then
 			for count = 1, 8 do
-				local name = '{ name = "mcl_villages:crop_' .. crop .. "_" .. count
-				local replacement = mcl_villages.get_weighted_crop(map_name, crop, pr)
-				if replacement == nil or replacement == "" then
-					replacement = mcl_villages.default_crop()
+				local name = '{ name = "'..base_itemstring.."_" .. count
+				local cropdef = minetest.registered_nodes[name]
+				if cropdef then
+					local replacement = mcl_villages.get_weighted_crop(map_name, crop, pr)
+					if replacement == nil or replacement == "" then
+						replacement = mcl_villages.default_crop()
+					end
+					replacement = '{ name ="'..replacement..'", param2 = '..(cropdef.place_param2 or 0)
+					modified_schem_lua = modified_schem_lua:gsub(name, replacement)
 				end
-				replacement = '{ name ="'..replacement..'", param2 = 3'
-				modified_schem_lua = modified_schem_lua:gsub(name, replacement)
 			end
 		end
 	end
