@@ -3163,17 +3163,17 @@ local function register_decorations()
 			persistance = 1,
 			lacunarity = 2,
 		},
-		decoration = "mclx_dripstone:dripstone_block",
+		decoration = "mcl_dripstone:dripstone_block",
 		biomes = {"DripstoneCave"},
 		flags = "all_floors, all_ceilings, force_placement",
 	})
 
 	minetest.register_decoration({
 		deco_type = "simple",
-		place_on = {"mclx_dripstone:dripstone_block"},
+		place_on = {"mcl_dripstone:dripstone_block"},
 		sidelen = 1,
 		fill_ratio = 0.2,
-		decoration = "mclx_dripstone:dripstone_bottom_tip",
+		decoration = "mcl_dripstone:dripstone_bottom_tip",
 		biomes = {"DripstoneCave"},
 		flags = "all_floors",
 	})

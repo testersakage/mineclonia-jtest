@@ -15,10 +15,52 @@ local dripstone_stages =
 	"base",
 }
 
-local function get_dripstone_node(stage, direction)
-	return "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_" .. dripstone_stages[stage]
+local function dripstone_hit_func(self, object)
+	-- the number 1.125 comes from: (nodes fallen / timer increase) * damage per node fallen
+	-- which comes out to be: (1.5 / 8) * 6 = 1.125
+	mcl_util.deal_damage(object, math.min(40, self.timer * 1.125), {type = "falling_node"})
 end
 
+mcl_mobs.register_arrow("mcl_dripstone:vengeful_dripstone",
+{
+	visual = "upright_sprite",
+	textures = {"pointed_dripstone_tip.png"},
+	visual_size = {x = 1, y = 1},
+	velocity = 20,
+	hit_player = dripstone_hit_func,
+	hit_mob = dripstone_hit_func,
+	hit_object = dripstone_hit_func,
+	hit_node = function(self, pos)
+		minetest.add_item(pos, ItemStack("mcl_dripstone:pointed_dripstone"))
+	end,
+	drop = "mcl_dripstone:pointed_dripstone",
+})
+
+local function spawn_dripstone_entity(pos)
+	local vengeful_dripstone = minetest.add_entity(pos, "mcl_dripstone:vengeful_dripstone")
+	vengeful_dripstone:add_velocity(vector.new(0, -12, 0))
+	local ent = vengeful_dripstone:get_luaentity()
+	ent.switch = 1
+end
+
+minetest.register_node("mcl_dripstone:dripstone_block", {
+	description = S("Dripstone block"),
+	_doc_items_longdesc = S("Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"),
+	_doc_items_hidden = false,
+	tiles = {"dripstone_block.png"},
+	groups = {pickaxey=1, stone=1, building_block=1, material_stone=1, stonecuttable = 1, converts_to_moss = 1},
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 1.5,
+})
+
+
+-- returns the name of pointed dripstone node with that stage and direction
+local function get_dripstone_node(stage, direction)
+	return "mcl_dripstone:dripstone_" .. dripstone_directions[direction] .. "_" .. dripstone_stages[stage]
+end
+
+-- extracts the direction from dripstone's name
 local function extract_direction(name)
 	return string.sub(name, 26, 31) == "bottom" and -1 or 1
 end
@@ -59,66 +101,19 @@ function place_dripstone(pos, length, direction)
 
 	-- if a dripstone column should be created
 	-- ".[^l]" is in the pattern to prevent dripstone blocks from being matched
-	if string.find(minetest.get_node(vector.offset(pos, 0, length * -direction, 0)).name, "^mclx_dripstone:dripstone_.[^l]") then
-		minetest.swap_node(vector.offset(pos, 0, (length - 1) * -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
-		minetest.swap_node(vector.offset(pos, 0, length * -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip_merge"})
+	if string.find(minetest.get_node(vector.offset(pos, 0, length * -direction, 0)).name, "^mcl_dripstone:dripstone_.[^l]") then
+		minetest.swap_node(vector.offset(pos, 0, (length - 1) * -direction, 0), {name = "mcl_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
+		minetest.swap_node(vector.offset(pos, 0, length * -direction, 0), {name = "mcl_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip_merge"})
 	else
 		minetest.swap_node(vector.offset(pos, 0, (length - 1) * -direction, 0), {name = get_dripstone_node(2, direction)})
 	end
 end
 
-minetest.register_node("mclx_dripstone:dripstone_block", {
-	description = S("Dripstone block"),
-	_doc_items_longdesc = S("Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"),
-	_doc_items_hidden = false,
-	tiles = {"dripstone_block.png"},
-	groups = {pickaxey=1, stone=1, building_block=1, material_stone=1, stonecuttable = 1, converts_to_moss = 1},
-	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 1.5,
-})
-
-minetest.register_craft({
-	output = "mclx_dripstone:dripstone_block",
-	recipe = {
-		{ "mclx_dripstone:pointed_dripstone", "mclx_dripstone:pointed_dripstone"},
-		{ "mclx_dripstone:pointed_dripstone", "mclx_dripstone:pointed_dripstone"},
-	}
-})
-
-local function dripstone_hit_func(self, object)
-	-- the number 1.125 comes from: (nodes fallen / timer increase) * damage per node fallen
-	-- which comes out to be: (1.5 / 8) * 6 = 1.125
-	mcl_util.deal_damage(object, math.min(40, self.timer * 1.125), {type = "falling_node"})
-end
-
-mcl_mobs.register_arrow("mclx_dripstone:vengeful_dripstone",
-{
-	visual = "upright_sprite",
-	textures = {"pointed_dripstone_tip.png"},
-	visual_size = {x = 1, y = 1},
-	velocity = 20,
-	hit_player = dripstone_hit_func,
-	hit_mob = dripstone_hit_func,
-	hit_object = dripstone_hit_func,
-	hit_node = function(self, pos)
-		minetest.add_item(pos, ItemStack("mclx_dripstone:pointed_dripstone"))
-	end,
-	drop = "mclx_dripstone:pointed_dripstone",
-})
-
-local function spawn_dripstone_entity(pos)
-	local vengeful_dripstone = minetest.add_entity(pos, "mclx_dripstone:vengeful_dripstone")
-	vengeful_dripstone:add_velocity(vector.new(0, -12, 0))
-	local ent = vengeful_dripstone:get_luaentity()
-	ent.switch = 1
-end
-
 local function break_dripstone(pos, direction)
 	local offset_pos = vector.copy(pos)
 	while true do
-		offset_pos = vector.offset(offset_pos, 0, -direction, 0)
-		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
+		local offset_pos = vector.offset(offset_pos, 0, -direction, 0)
+		local stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
 		if stage == 1 and extract_direction(minetest.get_node(offset_pos).name) == -direction then
 			minetest.swap_node(offset_pos, {name = get_dripstone_node(2, -direction)})
 			break
@@ -126,7 +121,7 @@ local function break_dripstone(pos, direction)
 			break
 		else
 			if direction == -1 then
-				minetest.add_item(offset_pos, ItemStack("mclx_dripstone:pointed_dripstone"))
+				minetest.add_item(offset_pos, ItemStack("mcl_dripstone:pointed_dripstone"))
 			else
 				spawn_dripstone_entity(offset_pos)
 			end
@@ -138,9 +133,9 @@ end
 local function update_dripstone(pos, direction)
 	-- if a dripstone column should be created
 	-- ".[^l]" is in the pattern to prevent dripstone blocks from being matched
-	if string.find(minetest.get_node(vector.offset(pos, 0, -direction, 0)).name, "^mclx_dripstone:dripstone_.[^l]") then
-		minetest.swap_node(pos, {name = "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
-		minetest.swap_node(vector.offset(pos, 0, -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip_merge"})
+	if string.find(minetest.get_node(vector.offset(pos, 0, -direction, 0)).name, "^mcl_dripstone:dripstone_.[^l]") then
+		minetest.swap_node(pos, {name = "mcl_dripstone:dripstone_" .. dripstone_directions[direction] .. "_tip_merge"})
+		minetest.swap_node(vector.offset(pos, 0, -direction, 0), {name = "mcl_dripstone:dripstone_" .. dripstone_directions[-direction] .. "_tip_merge"})
 	end
 
 	local stage
@@ -153,7 +148,7 @@ local function update_dripstone(pos, direction)
 			break
 		elseif stage == 0 then
 			if previous_stage == 3 then
-				minetest.swap_node(vector.offset(pos, 0, -direction, 0), {name = "mclx_dripstone:dripstone_" .. dripstone_directions[direction] .. "_base"})
+				minetest.swap_node(vector.offset(pos, 0, -direction, 0), {name = "mcl_dripstone:dripstone_" .. dripstone_directions[direction] .. "_base"})
 			end
 			break
 		end
@@ -167,13 +162,14 @@ local function on_dripstone_place(itemstack, player, pointed_thing)
 	if pointed_thing.above.x ~= pointed_thing.under.x or pointed_thing.above.z ~= pointed_thing.under.z then return itemstack end
 
 	local direction = pointed_thing.under.y - pointed_thing.above.y
-	local direction_string = dripstone_directions[direction]
-	if not direction_string then return end
+	if direction == 0 then
+		return
+	end
 
 	if not minetest.is_creative_enabled(player:get_player_name()) then
 		itemstack:take_item()
 	end
-	minetest.set_node(pointed_thing.above, {name = "mclx_dripstone:dripstone_" .. direction_string .. "_tip"})
+	minetest.set_node(pointed_thing.above, {name = get_dripstone_node(2, direction)})
 	update_dripstone(pointed_thing.above, direction)
 	return itemstack
 end
@@ -182,13 +178,13 @@ local on_dripstone_destruct = function(pos)
 	local direction = extract_direction(minetest.get_node(pos).name)
 	break_dripstone(pos, direction)
 
-	offset_pos = vector.copy(vector.offset(pos, 0, direction, 0))
+	local offset_pos = vector.copy(vector.offset(pos, 0, direction, 0))
 	if minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage") ~= 0 then
 		minetest.swap_node(offset_pos, {name = get_dripstone_node(2, direction)})
 
 		while true do
 			offset_pos = vector.offset(offset_pos, 0, direction, 0)
-			stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
+			local stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
 			if stage == 3 then
 				minetest.swap_node(offset_pos, {name = get_dripstone_node(2, direction)})
 			elseif stage == 4 or stage == 5 then
@@ -201,7 +197,15 @@ local on_dripstone_destruct = function(pos)
 	end
 end
 
-minetest.register_craftitem("mclx_dripstone:pointed_dripstone", {
+minetest.register_craft({
+	output = "mcl_dripstone:dripstone_block",
+	recipe = {
+		{ "mcl_dripstone:pointed_dripstone", "mcl_dripstone:pointed_dripstone"},
+		{ "mcl_dripstone:pointed_dripstone", "mcl_dripstone:pointed_dripstone"},
+	}
+})
+
+minetest.register_craftitem("mcl_dripstone:pointed_dripstone", {
 	description = S("Pointed dripstone"),
 	_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
 	_doc_items_hidden = false,
@@ -212,13 +216,13 @@ minetest.register_craftitem("mclx_dripstone:pointed_dripstone", {
 
 for i = 1, #dripstone_stages do
 	local stage = dripstone_stages[i]
-	minetest.register_node("mclx_dripstone:dripstone_top_" .. stage, {
+	minetest.register_node("mcl_dripstone:dripstone_top_" .. stage, {
 		description = S("Pointed dripstone (@1/@2)", i, #dripstone_stages),
 		_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
 		_doc_items_hidden = true,
 		drawtype = "plantlike",
 		tiles = {"pointed_dripstone_" .. stage .. ".png"},
-		drop = "mclx_dripstone:pointed_dripstone",
+		drop = "mcl_dripstone:pointed_dripstone",
 		groups = {pickaxey=1, not_in_creative_inventory=1, dripstone_stage = i},
 		sunlight_propagates = true,
 		paramtype = "light",
@@ -229,13 +233,13 @@ for i = 1, #dripstone_stages do
 		_mcl_hardness = 1.5,
 	})
 
-	minetest.register_node("mclx_dripstone:dripstone_bottom_" .. stage, {
+	minetest.register_node("mcl_dripstone:dripstone_bottom_" .. stage, {
 		description = S("Pointed dripstone (@1/@2)", i, #dripstone_stages),
 		_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
 		_doc_items_hidden = true,
 		drawtype = "plantlike",
 		tiles = {"pointed_dripstone_" .. stage .. ".png^[transform6"},
-		drop = "mclx_dripstone:pointed_dripstone",
+		drop = "mcl_dripstone:pointed_dripstone",
 		groups = {pickaxey=1, not_in_creative_inventory=1, fall_damage_add_percent = 100, dripstone_stage = i},
 		sunlight_propagates = true,
 		paramtype = "light",
@@ -261,13 +265,13 @@ end)
 
 minetest.register_abm({
 	label = "Dripstone growth",
-	nodenames = {"mclx_dripstone:dripstone_top_tip"},
-	interval = 1,
+	nodenames = {"mcl_dripstone:dripstone_top_tip"},
+	interval = 69,
 	chance = 1,
 	action = function(pos)
 		-- checking if can grow
 		local stalagtite_lenth = get_dripstone_length(pos, 1)
-		if minetest.get_node(vector.offset(pos, 0, stalagtite_lenth, 0)).name ~= "mclx_dripstone:dripstone_block"
+		if minetest.get_node(vector.offset(pos, 0, stalagtite_lenth, 0)).name ~= "mcl_dripstone:dripstone_block"
 		or minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_lenth + 1, 0)).name, "water") == 0 then
 			return
 		end
@@ -322,8 +326,8 @@ end
 
 minetest.register_abm({
 	label = "Dripstone filling water cauldrons, conversion from mud to clay",
-	nodenames = {"mclx_dripstone:dripstone_top_tip"},
-	interval = 1,
+	nodenames = {"mcl_dripstone:dripstone_top_tip"},
+	interval = 69,
 	chance = 5.5,
 	action = function(pos)
 		local stalagtite_length = get_dripstone_length(pos, 1)
@@ -357,8 +361,8 @@ minetest.register_abm({
 
 minetest.register_abm({
 	label = "Dripstone filling lava cauldrons",
-	nodenames = {"mclx_dripstone:dripstone_top_tip"},
-	interval = 1,
+	nodenames = {"mcl_dripstone:dripstone_top_tip"},
+	interval = 69,
 	chance = 17,
 	action = function(pos)
 		local stalagtite_length = get_dripstone_length(pos, 1)
@@ -381,7 +385,7 @@ minetest.register_abm({
 })
 
 mcl_structures.register_structure("dripstone_stalagmite", {
-	place_on = {"mclx_dripstone:dripstone_block"},
+	place_on = {"mcl_dripstone:dripstone_block"},
 	spawn_by = "air",
 	check_offset = 1,
 	num_spawn_by = 5,
@@ -390,6 +394,7 @@ mcl_structures.register_structure("dripstone_stalagmite", {
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
 	place_offset_y = 1,
+	terrain_feature = true,
 	place_func = function(pos)
 		local max_length = 0
 		local offset_pos = vector.copy(pos)
@@ -406,7 +411,7 @@ mcl_structures.register_structure("dripstone_stalagmite", {
 })
 
 mcl_structures.register_structure("dripstone_stalagtite", {
-	place_on = {"mclx_dripstone:dripstone_block"},
+	place_on = {"mcl_dripstone:dripstone_block"},
 	spawn_by = "air",
 	check_offset = 1,
 	num_spawn_by = 5,
@@ -415,6 +420,7 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 	y_min = mcl_vars.mg_overworld_min + 1,
 	y_max = 0,
 	flags = "all_ceilings",
+	terrain_feature = true,
 	place_func = function(pos)
 		pos = vector.offset(pos, 0, -2, 0)
 		local max_length = 0
