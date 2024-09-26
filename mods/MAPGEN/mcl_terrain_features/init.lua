@@ -369,6 +369,7 @@ mcl_structures.register_structure("powder_snow_trap", {
 	biomes = {"IcePlainsSpikes, ColdTaiga, ColdTaiga_beach, IcePlains"},
 	y_min = 1,
 	y_max = mcl_vars.mg_overworld_max,
+	terrain_feature = true,
 	place_func = function(pos)
 		local width  = math.random(6) - 3
 		local length = math.random(6) - 3
@@ -406,7 +407,7 @@ local function generate_dripstone(pos, max_length, direction)
 		local r = math.ceil((max_length / 8))
 		-- local r = math.random(2, 4)
 		-- local max_length = r * 5 + math.random(0, 4)
-		local c_to = minetest.get_content_id("mclx_dripstone:dripstone_block")
+		local c_to = minetest.get_content_id("mcl_dripstone:dripstone_block")
 		local vm = minetest.get_voxel_manip()
 		local start_pos, end_pos
 		local foundation_start_y, foundation_end_y
@@ -468,6 +469,7 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 	y_max = 0,
 	flags = "all_ceilings",
 	place_offset_y = 1,
+	terrain_feature = true,
 	place_func = function(pos)
 		local empty_air_length = 0
 		while true do
@@ -492,6 +494,7 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 	y_min = mcl_vars.mg_overworld_min + 1,
 	y_max = 0,
 	flags = "all_floors",
+	terrain_feature = true,
 	place_func = function(pos)
 		local empty_air_length = 0
 		while true do
@@ -516,6 +519,7 @@ mcl_structures.register_structure("large_dripstone_column", {
 	y_min = mcl_vars.mg_overworld_min,
 	y_max = 0,
 	flags = "all_floors",
+	terrain_feature = true,
 	place_func = function(pos)
 		local empty_air_length = 0
 		while true do
