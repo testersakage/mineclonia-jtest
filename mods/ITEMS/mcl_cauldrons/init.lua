@@ -121,7 +121,7 @@ core.register_node("mcl_cauldrons:cauldron", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	is_ground_content = false,
-	groups = {pickaxey=1, deco_block=1, cauldron=1},
+	groups = {pickaxey=1, deco_block=1, cauldron=1, _mcl_partial=2},
 	node_box = create_cauldron_nodebox(0),
 	selection_box = { type = "regular" },
 	tiles = {
@@ -159,7 +159,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		paramtype = "light",
 		light_source = light_level,
 		is_ground_content = false,
-		groups = {pickaxey=1, not_in_creative_inventory=1, cauldron=(1+water_level), cauldron_filled=water_level, comparator_signal=water_level, cauldron_water = cauldron_water},
+		groups = {pickaxey=1, not_in_creative_inventory=1, cauldron=(1+water_level), cauldron_filled=water_level, comparator_signal=water_level, cauldron_water = cauldron_water, _mcl_partial = 2},
 		node_box = create_cauldron_nodebox(water_level),
 		collision_box = create_cauldron_nodebox(0),
 		selection_box = { type = "regular" },

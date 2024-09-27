@@ -125,7 +125,6 @@ local horse = {
 	},
 	fear_height = 4,
 	fly = false,
-	walk_chance = 60,
 	view_range = 16,
 	steer_class = "controls",
 	follow = {
@@ -150,6 +149,7 @@ local horse = {
 	jump = true,
 	jump_height = 15,
 	drops = { base_drop },
+	head_eye_height = 1.52,
 	should_drive = function (self)
 		return self._saddle and mob_class.should_drive (self)
 	end,
@@ -477,6 +477,7 @@ local donkey = table.merge(horse, {
 	spawn_in_group = 3,
 	spawn_in_group_min = 1,
 	movement_speed = 3.5,
+	head_eye_height = 1.425,
 	animation = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 40,
@@ -513,6 +514,7 @@ mcl_mobs.register_mob("mobs_mc:mule", table.merge(donkey, {
 	sounds = table.merge(donkey.sounds, {
 		base_pitch = 1.15,
 	}),
+	head_eye_height = 1.52,
 	collisionbox = {
 		horse.collisionbox[1] * m,
 		horse.collisionbox[2] * m,

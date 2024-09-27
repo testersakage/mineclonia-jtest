@@ -117,7 +117,6 @@ function mobs_mc.villager_mob:stand_near_players()
 		if table.count(minetest.get_objects_inside_radius(self.object:get_pos(), PLAYER_SCAN_RADIUS), function(_, pl) return pl:is_player() end) > 0 then
 			self:stand_still()
 		else
-			self.walk_chance = DEFAULT_WALK_CHANCE
 			self.jump = true
 		end
 	end
@@ -205,7 +204,7 @@ table.update(mobs_mc.villager_mob, {
 	hp_max = 20,
 	head_swivel = "head.control",
 	bone_eye_height = 6.3,
-	head_eye_height = 2.2,
+	head_eye_height = 1.62,
 	curiosity = 10,
 	runaway = true,
 	collisionbox = {-0.25, -0.01, -0.25, 0.25, 1.94, 0.25},
@@ -216,7 +215,7 @@ table.update(mobs_mc.villager_mob, {
 		"mobs_mc_villager.png", --hat
 	},
 	makes_footstep_sound = true,
-	movement_speed = 10,
+	movement_speed = 5.0,
 	drops = {},
 	can_despawn = false,
 	-- TODO: sounds
@@ -242,7 +241,6 @@ table.update(mobs_mc.villager_mob, {
 	view_range = 16,
 	fear_height = 4,
 	jump = true,
-	walk_chance = DEFAULT_WALK_CHANCE,
 	_bed = nil,
 	_id = nil,
 	_profession = "unemployed",

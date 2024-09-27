@@ -102,6 +102,7 @@ minetest.register_node("mcl_fire:fire", {
 			mcl_portals.light_nether_portal(pos)
 		end
 	end,
+	_pathfinding_class = "DAMAGE_FIRE",
 	_mcl_blast_resistance = 0,
 })
 
@@ -142,6 +143,7 @@ minetest.register_node("mcl_fire:eternal_fire", {
 	end,
 	sounds = {},
 	drop = "",
+	_pathfinding_class = "DAMAGE_FIRE",
 	_mcl_blast_resistance = 0,
 })
 

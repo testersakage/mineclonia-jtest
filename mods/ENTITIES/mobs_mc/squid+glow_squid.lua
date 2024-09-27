@@ -42,6 +42,7 @@ local squid_defs = {
     xp_min = 1,
     xp_max = 3,
     armor = 100,
+    head_eye_height = 0.4,
 	spawn_in_group_min = 2,
     spawn_in_group = 4,
 	-- FIXME: If the squid is near the floor, it turns black

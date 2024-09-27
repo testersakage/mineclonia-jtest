@@ -22,6 +22,7 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	movement_speed = 6.0,
 	damage = 8,
 	reach = 3,
+	head_eye_height = 0.99875,
 	collisionbox = {-0.99875, 0.5, -0.99875, 0.99875, 2.4975, 0.99875},
 	doll_size_override = { x = 0.72, y = 0.72 },
 	visual = "mesh",

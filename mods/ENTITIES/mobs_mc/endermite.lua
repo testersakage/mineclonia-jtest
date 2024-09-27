@@ -39,6 +39,7 @@ mcl_mobs.register_mob("mobs_mc:endermite", {
 	view_range = 16,
 	damage = 2,
 	reach = 1,
+	head_eye_height = 0.13,
 })
 
 mcl_mobs.register_egg("mobs_mc:endermite", S("Endermite"), "#161616", "#6d6d6d", 0)

@@ -113,7 +113,7 @@ local skeleton = {
 			mcl_bows.shoot_arrow("mcl_bows:arrow", pos, dir, self.object:get_yaw(), self.object, nil, dmg)
 		end
 	end,
-	shoot_interval = 2,
+	shoot_interval = 1,
 	shoot_offset = 1.5,
 	harmed_by_heal = true,
 	on_die = function(self, pos, cmi_cause)

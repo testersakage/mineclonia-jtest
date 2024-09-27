@@ -58,7 +58,6 @@ mcl_mobs.mob_class = {
 	sounds = {},
 	animation = {},
 	jump = true,
-	walk_chance = 50,
 	attacks_monsters = false,
 	group_attack = false,
 	passive = false,
@@ -97,7 +96,7 @@ mcl_mobs.mob_class = {
 	dogshoot_count2_max = 5,
 	attack_animals = false,
 	attack_npcs = false,
-	attack_esp = false,
+	esp = false,
 	facing_fence = false,
 	is_mob = true,
 	pushable = true,
@@ -173,7 +172,6 @@ dofile(path .. "/movement.lua")
 -- items: item management for mobs
 dofile(path .. "/items.lua")
 -- pathfinding: pathfinding to target positions
-dofile(path .. "/PriorityQueue.lua")
 dofile(path .. "/pathfinding.lua")
 -- combat: attack logic
 dofile(path .. "/combat.lua")
@@ -304,11 +302,17 @@ function mcl_mobs.register_mob(name, def)
 	init_props.hp_max = scale_difficulty(init_props.hp_max, 10, 1)
 	init_props.collisionbox = init_props.collisionbox or mcl_mobs.mob_class.initial_properties.collisionbox
 	init_props.selectionbox = init_props.selectionbox or init_props.collisionbox or mcl_mobs.mob_class.initial_properties.selectionbox
+	local eye_height = init_props.head_eye_height
+	if not eye_height then
+		eye_height = init_props.collisionbox[5] - init_props.collisionbox[2]
+		eye_height = eye_height * 0.75 + init_props.collisionbox[2]
+	end
 
 	local final_def = setmetatable(table.merge(def,{
 		initial_properties = table.merge(mcl_mobs.mob_class.initial_properties,init_props),
 		can_despawn = can_despawn,
 		rotate = math.rad(def.rotate or 0), --  0=front, 90=side, 180=back, 270=side2
+		head_eye_height = eye_height,
 		hp_min = scale_difficulty(def.hp_min, 5, 1),
 		on_rightclick = create_mob_on_rightclick(def.on_rightclick),
 		dogshoot_count2_max = def.dogshoot_count2_max or (def.dogshoot_count_max or 5),

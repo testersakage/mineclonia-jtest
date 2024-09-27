@@ -43,6 +43,7 @@ mcl_mobs.register_mob("mobs_mc:villager_zombie", {
 	mesh = "mobs_mc_villager_zombie.b3d",
 	head_swivel = "Head_Control",
 	bone_eye_height = 2.35,
+	head_eye_height = 1.74,
 	curiosity = 2,
 	textures = {
 		{"mobs_mc_zombie_butcher.png"},
