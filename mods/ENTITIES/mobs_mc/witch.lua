@@ -153,6 +153,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 		{"mobs_mc_witch.png"},
 	},
 	visual_size = {x=2.75, y=2.75},
+	head_eye_height = 1.62,
 	makes_footstep_sound = true,
 	damage = 2,
 	reach = 2,
@@ -201,8 +202,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	attack_players_and_npcs = function (self)
 	end,
 	attack_custom = function (self)
-		local attack_players = self:attack_players_allowed ()
-		if self.state == "attack" then
+		if self.attacking then
 		-- A target has already been selected.
 			return
 		end
@@ -215,9 +215,9 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 		local objs = minetest.get_objects_inside_radius (pos, self.view_range)
 		table.shuffle (objs)
 		for _, obj in pairs (objs) do
-			if self:line_of_sight (pos, obj:get_pos(), 2) then
+			if self:line_of_sight (pos, obj:get_pos()) then
 				local l = obj:get_luaentity ()
-				if attack_players and obj:is_player () and (not self._player_cooldown or not self.raidmob) then
+				if obj:is_player () and self:attack_players_allowed (obj) and (not self._player_cooldown or not self.raidmob) then
 					self:do_attack (obj)
 					break
 				elseif self.raidmob and l and l.raidmob and (l.name == "mobs_mc:pillager" or l.name == "mobs_mc:vindicator" or l.name == "mobs_mc:evoker") then

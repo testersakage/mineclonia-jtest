@@ -162,9 +162,9 @@ function mob_class:collision()
 			or (self.mob_pushable and ent and ent.is_mob and object ~= self.object) then
 			local pos2 = object:get_pos()
 			local vec  = {x = pos.x - pos2.x, z = pos.z - pos2.z}
-			local force = width - vector.distance(
+			local force = vector.distance(
 				{x = pos.x, y = 0, z = pos.z},
-				{x = pos2.x, y = 0, z = pos2.z})
+				{x = pos2.x, y = 0, z = pos2.z}) / width
 
 			x = x + (vec.x * force)
 			z = z + (vec.z * force)
@@ -597,8 +597,9 @@ function mob_class:do_env_damage()
 				drowning = true
 			end
 		elseif head_nodedef.drowning > 0 then
-			-- TODO: immersion depth
-			drowning = true
+			if self._immersion_depth > self.head_eye_height then
+				drowning = true
+			end
 		end
 		if drowning then
 			self.breath = math.max(0, self.breath - 1)
@@ -804,9 +805,8 @@ function mob_class:check_water_flow ()
 end
 
 function mob_class:check_dying(reason, cmi_cause)
-    if ((self.state and self.state == "die")
-	or self:check_for_death(reason, cmi_cause))
-	and not self.animation.die_end then
+	if (self.dead or self:check_for_death(reason, cmi_cause))
+		and not self.animation.die_end then
 		if self.object then
 			local rot = self.object:get_rotation()
 			rot.z = ((math.pi/2-rot.z)*.2)+rot.z
@@ -923,8 +923,6 @@ local function horiz_collision (v, moveresult)
 	return moveresult.collides and not (moveresult.standing_on_object or moveresult.touching_ground)
 end
 
---- TODO: melee combat
---- TODO: skelly combat
 --- TODO: flying and swimming mobs
 --- TODO: correct uses of fall_speed and other modified fields
 --- TODO: mob mounting
@@ -948,9 +946,7 @@ function mob_class:immersion_depth (liquidgroup, pos, max)
 			if def.liquidtype == "flowing" then
 				height = 0.1 + node.param2 * 0.1
 			end
-			ymax = math.round (i) + height - 0.5
-		else
-			break
+			ymax = math.floor (i + 0.5) + height - 0.5
 		end
 		i = i + 1
 	end
@@ -982,19 +978,15 @@ function mob_class:motion_step (dtime, moveresult)
 	local climbing = false
 
 	if self.floats == 1 and math.random (10) < 8 then
-		if standin.groups.water then
-			local depth = self._immersion_depth or 0
-			if depth > LIQUID_JUMP_THRESHOLD then
+		local depth = self._immersion_depth or 0
+		if depth > LIQUID_JUMP_THRESHOLD then
 				jumping = true
-			end
 		end
 	end
 
 	if self.jump_timer and self.jump_timer > 0 then
 		self.jump_timer = math.max (0, self.jump_timer - dtime)
 	end
-
-	self:check_collision ()
 
 	p = pow_by_step (AIR_DRAG, dtime)
 	acc_dir.x = acc_dir.x * p
@@ -1021,10 +1013,28 @@ function mob_class:motion_step (dtime, moveresult)
 		self.reset_fall_damage = 1
 	end
 
+	local deferred_jump
+
+	if jumping then
+		if standin.groups.water or standin.groups.lava then
+			if self.floats then
+				deferred_jump = LIQUID_JUMP_FORCE
+			else
+				v.y = v.y + LIQUID_JUMP_FORCE_ONESHOT
+			end
+		else
+			if touching_ground and (not self.jump_timer or self.jump_timer <= 0) then
+				v = self:jump_actual (v)
+				self.jump_timer = 0.2
+			end
+		end
+	end
+
 	local water_vec = self:check_water_flow ()
+	local velocity_factor = standon._mcl_velocity_factor or 1
 
 	if standin.groups.water then
-		local friction = self.water_friction
+		local friction = self.water_friction * velocity_factor
 		local speed = self.water_velocity
 
 		-- Apply depth strider.
@@ -1059,6 +1069,12 @@ function mob_class:motion_step (dtime, moveresult)
 			v.y = -0.06
 		end
 
+		-- Apply any ascent force, now that v_scale is
+		-- available.
+		if deferred_jump then
+			v.y = v.y + deferred_jump * v_scale
+		end
+
 		if horiz_collision (v, moveresult) then
 			-- Climb water as if it were a ladder.
 			v.y = 3.0
@@ -1069,10 +1085,18 @@ function mob_class:motion_step (dtime, moveresult)
 		local r, z = pow_by_step (LAVA_FRICTION, dtime), LAVA_FRICTION
 		h_scale = (1 - r) / (1 - z)
 		speed = speed * h_scale
+
 		local fv = self:accelerate_relative (acc_dir, speed)
 		v = vector.multiply (v, r)
 		v_scale = h_scale
 		v.y = v.y + fall_speed * v_scale
+
+		-- Apply any ascent force, now that v_scale is
+		-- available.
+		if deferred_jump then
+			v.y = v.y + deferred_jump * v_scale
+		end
+
 		v = vector.add (v, fv)
 	else
 		-- If not standing on air, apply slippery to a base value of
@@ -1095,7 +1119,11 @@ function mob_class:motion_step (dtime, moveresult)
 		else
 			speed = 0.4 -- 0.4 blocks/s
 		end
-		friction = friction * AIR_FRICTION
+		-- Apply friction (velocity_factor) from Soul Sand and
+		-- the like.  NOTE: this friction is supposed to be
+		-- applied after movement, just as with standard
+		-- friction.
+		friction = friction * AIR_FRICTION * velocity_factor
 
 		-- Adjust speed by friction.  Minecraft applies
 		-- friction to acceleration (speed), not just the
@@ -1132,22 +1160,8 @@ function mob_class:motion_step (dtime, moveresult)
 		v.y = v.y * f
 	end
 
-	if jumping then
-		if standin.groups.water or standin.groups.lava then
-			if self.floats then
-				v.y = v.y + LIQUID_JUMP_FORCE * v_scale
-			else
-				v.y = v.y + LIQUID_JUMP_FORCE_ONESHOT
-			end
-		else
-			if touching_ground and (not self.jump_timer or self.jump_timer <= 0) then
-				v = self:jump_actual (v)
-				self.jump_timer = 0.2
-			end
-		end
-	end
-
 	-- Clear the jump flag even when jumping is not yet possible.
 	self.order = ""
 	self.object:set_velocity (v)
+	self:check_collision ()
 end

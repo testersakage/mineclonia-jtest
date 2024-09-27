@@ -360,7 +360,7 @@ end
 
 function mob_class:on_step(dtime, moveresult)
 	local pos = self.object:get_pos()
-	if not mcl_mobs.check_vector(pos) or self.removed then
+	if not mcl_mobs.check_vector(pos) or self.removed or not moveresult then
 		self:safe_remove()
 		return
 	end
@@ -373,21 +373,20 @@ function mob_class:on_step(dtime, moveresult)
 	if not (moveresult and moveresult.touching_ground) and self:falling(pos) then return end
 
 	-- Get nodes early for use in other functions
-	local cbox = self.object:get_properties().collisionbox
-	local y_level = cbox[2]
-
-	if self.child then
-		y_level = cbox[2] * 0.5
+	local cbox = self.collisionbox
+	local feet = vector.copy (pos)
+	local bbase = pos.y + self.collisionbox[2] + 0.5
+	feet.y = math.floor (bbase + 1.0e-2)
+	if bbase - feet.y <= 1.0e-2 then
+		self.standing_in = mcl_mobs.node_ok (feet, "air").name
+		feet.y = feet.y - 1
+		self.standing_on = mcl_mobs.node_ok (feet, "air").name
+	else
+		self.standing_in = mcl_mobs.node_ok (feet, "air").name
+		self.standing_on = self.standing_in
 	end
-
-	local p = vector.copy(pos)
-	p.y = p.y + y_level + 0.25 -- foot level
-	local pos2 = vector.offset(pos, 0, -1, 0)
-	self.standing_in =  mcl_mobs.node_ok(p, "air").name
-	self.standing_on =  mcl_mobs.node_ok(pos2, "air").name
-	local pos_head = vector.offset(p, 0, cbox[5] - 0.5, 0)
-	self.head_in =  mcl_mobs.node_ok(pos_head, "air").name
-
+	local pos_head = vector.offset(pos, 0, cbox[5] - 0.5, 0)
+	self.head_in = mcl_mobs.node_ok(pos_head, "air").name
 
 	self:falling (pos)
 	self:check_dying ()

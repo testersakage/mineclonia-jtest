@@ -6,7 +6,7 @@ mcl_doors:register_door("mcl_doors:iron_door", {
 	_doc_items_longdesc = S("Iron doors are 2-block high barriers which can only be opened or closed by a redstone signal, but not by hand."),
 	_doc_items_usagehelp = S("To open or close an iron door, supply its lower half with a redstone signal."),
 	inventory_image = "doors_item_steel.png",
-	groups = {pickaxey=1},
+	groups = {pickaxey=1, door_iron=1},
 	_mcl_hardness = 5,
 	_mcl_blast_resistance = 5,
 	tiles_bottom = {"mcl_doors_door_iron_lower.png^[transformFX", "mcl_doors_door_iron_side_lower.png"},

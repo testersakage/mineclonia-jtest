@@ -384,7 +384,12 @@ function mob_class:check_head_swivel(dtime, clear)
 end
 
 -- set animation speed relative to velocity
-function mob_class:set_animation_speed(custom_speed)
+function mob_class:set_animation_speed(custom_speed)		
+	if self._current_animation ~= "walk"
+		and self._current_animation ~= "run" then
+		self.object:set_animation_frame_speed (self.animation.walk_speed)
+		return
+	end
 	local speed = custom_speed or self.animation.walk_speed or 25
 	local v = self:get_velocity ()
 	local scaled_speed = speed * self.frame_speed_multiplier

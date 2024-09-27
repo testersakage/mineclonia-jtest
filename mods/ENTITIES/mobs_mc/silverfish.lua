@@ -24,6 +24,7 @@ mcl_mobs.register_mob("mobs_mc:silverfish", {
 	xp_min = 5,
 	xp_max = 5,
 	armor = {fleshy = 100, arthropod = 100},
+	head_eye_height = 0.13,
 	collisionbox = {-0.4, -0.01, -0.4, 0.4, 0.44, 0.4},
 	visual = "mesh",
 	mesh = "mobs_mc_silverfish.b3d",

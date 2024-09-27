@@ -172,6 +172,7 @@ local function register_stair(subname, stairdef)
 
 	stairdef.groups.stair = 1
 	stairdef.groups.building_block = 1
+	stairdef.groups._mcl_partial = 2
 
 	local image_table = {}
 	for i, image in pairs(stairdef.tiles) do
@@ -390,6 +391,7 @@ local function register_slab(subname, stairdef)
 	-- e.g. upper sandstone slabs look completely wrong.
 	local topdef = table.copy(nodedef)
 	topdef.groups.slab = 1
+	topdef.groups._mcl_partial = 2
 	topdef.groups.slab_top = 1
 	topdef.groups.not_in_creative_inventory = 1
 	topdef.groups.not_in_craft_guide = 1

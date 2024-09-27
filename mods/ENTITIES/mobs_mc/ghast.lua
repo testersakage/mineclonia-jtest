@@ -57,6 +57,7 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	passive = false,
 	jump = true,
 	jump_height = 4,
+	head_eye_height = 2.6,
 	floats=1,
 	fly = true,
 	makes_footstep_sound = false,
