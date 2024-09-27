@@ -38,7 +38,7 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 	} },
 	makes_footstep_sound = true,
 	damage = 6,
-	movement_speed = 10,
+	movement_speed = 5.0,
 	group_attack = true,
 	attack_type = "melee",
 	custom_attack_interval = 15,

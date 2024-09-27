@@ -253,7 +253,9 @@ function mob_class:check_breeding (pos)
 			return false
 		end
 		local matepos = self.mate:get_pos ()
-		if vector.distance (pos, matepos) < 3.0 and self.hornytimer
+		if vector.distance (pos, matepos) < 3.0
+			and self:target_visible (pos, self.mate)
+			and self.hornytimer
 			and not self.begetting then
 			self.begetting = true
 			minetest.after (5, mob_class.beget_child, self, pos)
@@ -287,6 +289,7 @@ function mob_class:check_breeding (pos)
 					-- Interrupt other activities.
 					self.herd_following = nil
 					self.pacing = nil
+					self.following = nil
 					return true
 				end
 			end
@@ -358,7 +361,6 @@ end
 
 function mob_class:stay()
 	self.order = "sit"
-	self.walk_chance = 0
 	self.jump = false
 	if self.animation.sit_start then
 		self:set_animation("sit")
@@ -369,7 +371,6 @@ end
 
 function mob_class:roam()
 	self.order = "roam"
-	self.walk_chance = 50
 	self.jump = true
 	self:set_animation("stand")
 end

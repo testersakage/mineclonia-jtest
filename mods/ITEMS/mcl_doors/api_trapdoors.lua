@@ -190,6 +190,7 @@ function mcl_doors:register_trapdoor(name, def)
 			end
 			return true
 		end,
+		_pathfinding_class = "TRAPDOOR",
 	})
 
 	-- Open trapdoor
@@ -246,6 +247,7 @@ function mcl_doors:register_trapdoor(name, def)
 			end
 			return true
 		end,
+		_pathfinding_class = "TRAPDOOR",
 	})
 
 	if minetest.get_modpath("doc") then

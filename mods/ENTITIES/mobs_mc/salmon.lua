@@ -22,6 +22,7 @@ local salmon = {
 	armor = 100,
 	spawn_in_group = 5,
 	tilt_swim = true,
+	head_eye_height = 0.26,
 	collisionbox = {-0.4, 0.0, -0.4, 0.4, 0.79, 0.4},
 	visual = "mesh",
 	mesh = "extra_mobs_salmon.b3d",

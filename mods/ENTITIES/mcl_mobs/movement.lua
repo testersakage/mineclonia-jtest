@@ -1,15 +1,6 @@
 local mob_class = mcl_mobs.mob_class
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 
-local atann = math.atan
-local function atan(x)
-	if not x or x ~= x then
-		return 0
-	else
-		return atann(x)
-	end
-end
-
 -- Returns true is node can deal damage to self
 function mob_class:is_node_dangerous(nodename)
 	local nn = nodename
@@ -66,82 +57,211 @@ function mob_class:target_visible(origin, target)
 
 	local origin_eye_pos = vector.offset(origin, 0, self.head_eye_height, 0)
 
-	local targ_head_height, targ_feet_height
+	local targ_head_height
 	local cbox = self.object:get_properties().collisionbox
 	if target:is_player () then
-		targ_head_height = vector.offset(target_pos, 0, cbox[5], 0)
-		targ_feet_height = target_pos -- Cbox would put feet under ground which interferes with ray
+		local eye = target:get_properties ().eye_height
+		targ_head_height = vector.offset(target_pos, 0, eye, 0)
 	else
 		targ_head_height = vector.offset(target_pos, 0, cbox[5], 0)
-		targ_feet_height = vector.offset(target_pos, 0, cbox[2], 0)
 	end
 
-	if self:line_of_sight(origin_eye_pos, targ_head_height) then
+	if self:line_of_sight (origin_eye_pos, targ_head_height) then
 		return true
 	end
-
-	if self:line_of_sight(origin_eye_pos, targ_feet_height) then
-		return true
-	end
-
-	-- TODO mid way between feet and head
 
 	return false
 end
 
--- check line of sight (BrunoMine)
-function mob_class:line_of_sight(pos1, pos2, stepsize)
-	stepsize = stepsize or 1
-	local s, _ = minetest.line_of_sight(pos1, pos2, stepsize)
+-- Check line of sight:
+-- http://www.cse.yorku.ca/~amana/research/grid.pdf
+-- The ubiquitous slab method of intersecting rays with
+-- AABBs.
 
-	-- normal walking and flying mobs can see you through air
-	if s then return true end
+local function signum (number)
+	return number == 0.0 and 0 or number < 0 and -1 or 1
+end
 
-	-- New pos1 to be analyzed
-	local npos1 = vector.copy(pos1)
-	local r, pos = minetest.line_of_sight(npos1, pos2, stepsize)
+local function genbox (box, node)
+	box[1] = box[1] + node.x
+	box[2] = box[2] + node.y
+	box[3] = box[3] + node.z
+	box[4] = box[4] + node.x
+	box[5] = box[5] + node.y
+	box[6] = box[6] + node.z
+end
 
-	if r == true then return true end
-	local nn = minetest.get_node(pos).name
-	local td = vector.distance(pos1, pos2)
-	local ad = 0
+local function maxnum (a, b)
+	return math.max (a, b)
+end
 
-	-- It continues to advance in the line of sight in search of a real
-	-- obstruction which counts as 'normal' nodebox.
-	while minetest.registered_nodes[nn]
-	and minetest.registered_nodes[nn].walkable == false do
+local function minnum (a, b)
+	return math.min (a, b)
+end
 
-		-- Check if you can still move forward
-		if td < ad + stepsize then
-			return true -- Reached the target
-		end
-
-		-- Moves the analyzed pos
-		local d = vector.distance(pos1, pos2)
-
-		npos1.x = ((pos2.x - pos1.x) / d * stepsize) + pos1.x
-		npos1.y = ((pos2.y - pos1.y) / d * stepsize) + pos1.y
-		npos1.z = ((pos2.z - pos1.z) / d * stepsize) + pos1.z
-
-		-- NaN checks
-		if d == 0
-		or npos1.x ~= npos1.x
-		or npos1.y ~= npos1.y
-		or npos1.z ~= npos1.z then
+local function aabb_clear (node, origin, pos2, direction, d)
+	local node_type = minetest.get_node (node)
+	if node_type.name == "air" then
+		return true
+	else
+		local def = minetest.registered_nodes[node_type.name]
+		if def and not def.walkable then
+			return true
+		elseif not def then
 			return false
 		end
+	end
+	local boxes = minetest.get_node_boxes ("collision_box", node)
 
-		ad = ad + stepsize
+	for _, box in ipairs (boxes) do
+		genbox (box, node)
+		local x1, y1, z1, x2, y2, z2
+			= box[1], box[2], box[3], box[4], box[5], box[6]
 
-		-- scan again
-		r, pos = minetest.line_of_sight(npos1, pos2, stepsize)
+		local min, max = -1/0, 1/0
+		-- X face.
+		local n1 = (x1 - origin.x) * direction.x
+		local f1 = (x2 - origin.x) * direction.x
+		if n1 > f1 then
+			n1, f1 = f1, n1
+		end
+		min = maxnum (min, n1)
+		max = minnum (max, f1)
 
-		if r == true then return true end
-		-- New Nodename found
-		nn = minetest.get_node(pos).name
+		-- Y face.
+		local n2 = (y1 - origin.y) * direction.y
+		local f2 = (y2 - origin.y) * direction.y
+		if n2 > f2 then
+			n2, f2 = f2, n2
+		end
+		min = maxnum (min, n2)
+		max = minnum (max, f2)
+
+		-- Z face.
+		local n3 = (z1 - origin.z) * direction.z
+		local f3 = (z2 - origin.z) * direction.z
+		if n3 > f3 then
+			n3, f3 = f3, n3
+		end
+		min = maxnum (min, n3)
+		max = minnum (max, f3)
+		-- Intersection with furthest near face is within the
+		-- vector.
+		if ((min < 0 and max or min) <= d)
+			-- Intersection with closest far face
+			-- falls after the origin.
+			and (max >= 0)
+			-- luacheck: push ignore 581
+			and not (max <= min) then
+			-- luacheck: pop
+			return false
+		end
+	end
+	return true
+end
+
+local line_of_sight_scratch = vector.zero ()
+
+local function mod (x)
+	return x - math.floor (x)
+end
+
+local scale_poses_scratch = vector.zero ()
+local scale_poses_scratch_1 = vector.zero ()
+
+local function scale_poses (pos1, pos2)
+	local v1, v2 = scale_poses_scratch, scale_poses_scratch_1
+	v1.x = pos1.x + 1.0e-7
+	v1.y = pos1.y + 1.0e-7
+	v1.z = pos1.z + 1.0e-7
+	v2.x = pos2.x + -1.0e-7
+	v2.y = pos2.y + -1.0e-7
+	v2.z = pos2.z + -1.0e-7
+	return v1, v2
+end
+
+function mob_class:line_of_sight (pos1, pos2)
+	-- Move pos1 and pos2 by minuscule values to avoid generating
+	-- Inf or NaN.
+	pos1, pos2 = scale_poses (pos1, pos2)
+	local traveledx = mod (pos1.x + 0.5)
+	local traveledy = mod (pos1.y + 0.5)
+	local traveledz = mod (pos1.z + 0.5)
+	local x = math.floor (pos1.x + 0.5)
+	local y = math.floor (pos1.y + 0.5)
+	local z = math.floor (pos1.z + 0.5)
+	local dx, dy, dz = pos2.x - pos1.x, pos2.y - pos1.y, pos2.z - pos1.z
+	local sx, sy, sz = signum (dx), signum (dy), signum (dz)
+	local stepx, stepy, stepz = sx / dx, sy / dy, sz / dz
+	local direction = vector.direction (pos1, pos2)
+	local distance = vector.distance (pos1, pos2)
+
+	-- Precompute reciprocal.
+	direction.x = 1.0 / direction.x
+	direction.y = 1.0 / direction.y
+	direction.z = 1.0 / direction.z
+
+	if sx == 0 then
+		traveledx = 1.0
+	elseif sx > 0 then
+		traveledx = stepx * (1.0 - traveledx)
+	else
+		traveledx = stepx * (traveledx)
+	end
+	if sy == 0 then
+		traveledy = 1.0
+	elseif sy > 0 then
+		traveledy = stepy * (1.0 - traveledy)
+	else
+		traveledy = stepy * (traveledy)
+	end
+	if sz == 0 then
+		traveledz = 1.0
+	elseif sz > 0 then
+		traveledz = stepz * (1.0 - traveledz)
+	else
+		traveledz = stepz * (traveledz)
 	end
 
-	return false
+	local v = line_of_sight_scratch
+	v.x = x
+	v.y = y
+	v.z = z
+	if not aabb_clear (v, pos1, pos2, direction, distance) then
+		return false
+	end
+
+	while (traveledx <= 1.0)
+		or (traveledy <= 1.0)
+		or (traveledz <= 1.0) do
+		if traveledx < traveledy then
+			if traveledx < traveledz then
+				x = x + sx
+				traveledx = traveledx + stepx
+			else
+				z = z + sz
+				traveledz = traveledz + stepz
+			end
+		else
+			if traveledy < traveledz then
+				y = y + sy
+				traveledy = traveledy + stepy
+			else
+				z = z + sz
+				traveledz = traveledz + stepz
+			end
+		end
+
+		v.x = x
+		v.y = y
+		v.z = z
+
+		if not aabb_clear (v, pos1, pos2, direction, distance) then
+			return false
+		end
+	end
+
+	return true
 end
 
 function mob_class:can_jump_cliff()
@@ -181,64 +301,6 @@ function mob_class:can_jump_cliff()
 	end
 end
 
--- is mob facing a cliff or danger
-function mob_class:is_at_cliff_or_danger()
-	if self.fear_height == 0 or self._jumping_cliff or not self.object:get_luaentity() then -- 0 for no falling protection!
-		return false
-	end
-
-	local cbox = self.object:get_properties().collisionbox
-	local dir_x, dir_z = self:forward_directions()
-	local pos = self.object:get_pos()
-
-	local free_fall, blocker = minetest.line_of_sight(
-		vector.offset(pos, dir_x, cbox[2], dir_z),
-		vector.offset(pos, dir_x, -self.fear_height, dir_z))
-
-	if free_fall then
-		return true
-	else
-		local bnode = minetest.get_node(blocker)
-		local danger = self:is_node_dangerous(bnode.name)
-		if danger then
-			return true
-		else
-			local def = minetest.registered_nodes[bnode.name]
-			if def and def.walkable then
-				return false
-			end
-		end
-	end
-
-	return false
-end
-
-function mob_class:is_at_water_danger()
-	if self._jumping_cliff or self.swims or self.fly or self.object:get_properties().breath_max == -1 then
-		return false
-	end
-
-	local cbox = self.object:get_properties().collisionbox
-	local pos = self.object:get_pos()
-	local infront = self:node_infront_ok(pos, -1)
-	local height = cbox[5] - cbox[2]
-
-	if self:is_node_waterhazard(infront.name) then
-		-- if short then mob can drown in a single node
-		if height <= 1.0 then
-			return true
-		else
-			-- else it's only dangerous if two nodes deep
-			local below_infront = self:node_infront_ok(pos, -2)
-			if self:is_node_waterhazard(below_infront.name) then
-				return true
-			end
-		end
-	end
-
-	return false
-end
-
 function mob_class:check_jump (self_pos, moveresult)
 	local max_y = nil
 	local dir = vector.zero ()
@@ -276,70 +338,6 @@ end
 
 local function in_list(list, what)
 	return type(list) == "table" and table.indexof(list, what) ~= -1
-end
-
-function mob_class:is_object_in_view(object_list, object_range, node_range, turn_around)
-	local s = self.object:get_pos()
-	local min_dist = object_range + 1
-	local object_pos
-	for object in minetest.objects_inside_radius(s, object_range) do
-		local name = ""
-		if object:is_player() then
-			if not (mcl_mobs.invis[ object:get_player_name() ]
-			or self.owner == object:get_player_name()
-			or (not self:object_in_range(object))) then
-				name = "player"
-				if not (name ~= self.name
-				and in_list(object_list, name)) then
-					local item = object:get_wielded_item()
-					name = item:get_name() or ""
-				end
-			end
-		else
-			local ent = object:get_luaentity()
-
-			if ent then
-				object = ent.object
-				name = ent.name or ""
-			end
-		end
-
-		-- find specific mob to avoid or runaway from
-		if name ~= "" and name ~= self.name
-		and in_list(object_list, name) then
-
-			local p = object:get_pos()
-			local dist = vector.distance(p, s)
-
-			-- choose closest player/mob to avoid or runaway from
-			if dist < min_dist
-			-- aim higher to make looking up hills more realistic
-			and self:line_of_sight(vector.offset(s, 0,1,0), vector.offset(p, 0,1,0)) == true then
-				min_dist = dist
-				object_pos = p
-			end
-		end
-	end
-
-	if not object_pos then
-		-- find specific node to avoid or runaway from
-		local p = minetest.find_node_near(s, node_range, object_list, true)
-		local dist = p and vector.distance(p, s)
-		if dist and dist < min_dist
-		and self:line_of_sight(s, p) == true then
-			object_pos = p
-		end
-	end
-
-	if object_pos and turn_around then
-
-		local vec = vector.subtract(object_pos, s)
-		local yaw = (atan(vec.z / vec.x) + 3 *math.pi/ 2) - self.rotate
-		if object_pos.x > s.x then yaw = yaw + math.pi end
-
-		self:set_yaw(yaw, 4)
-	end
-	return object_pos ~= nil
 end
 
 -- should mob follow what I'm holding ?
@@ -400,11 +398,9 @@ function mob_class:replace(pos)
 end
 
 function mob_class:look_at(b)
-	local s=self.object:get_pos()
-	local v = { x = b.x - s.x, z = b.z - s.z }
-	local yaw = (atann(v.z / v.x) +math.pi/ 2) - self.rotate
-	if b.x > s.x then yaw = yaw +math.pi end
-	self.object:set_yaw(yaw)
+	local s = self.object:get_pos()
+	local yaw = (math.atan2 (b.z - s.z, b.x - s.x) - math.pi / 2) - self.rotate
+	self.object:set_yaw (yaw)
 end
 
 function mob_class:go_to_pos (b, velocity, animation)
@@ -424,9 +420,6 @@ end
 
 function mob_class:check_smooth_rotation(dtime)
 	-- smooth rotation by ThomasMonroe314
-	if self._turn_to and self.order ~= "sleep" then
-		self:set_yaw( self._turn_to, .1)
-	end
 	if self.delay and self.delay > 0 then
 		local yaw = self.object:get_yaw() or 0
 		if self.delay == 1 then
@@ -475,9 +468,16 @@ function mob_class:do_go_pos (dtime, moveresult)
 	self:look_at (target)
 	self:set_velocity (vel)
 
-	-- Jump if the mob is obstructed.
 	if self:check_jump (pos, moveresult) then
-		self.order = "jump"
+		if self.should_jump and self.should_jump > 2 then
+			self.order = "jump"
+			self.should_jump = 0
+		else
+			-- Jump again if the collision remains after
+			-- the next step.
+			local i = self.should_jump or 0
+			self.should_jump = i + 1
+		end
 		return
 	end
 end
@@ -494,15 +494,23 @@ function mob_class:do_strafe (dtime, moveresult)
 
 	-- Don't jump off ledges or head into unwalkable nodes if
 	-- strafing in reverse or to the sides.
-	local node, def, est_delta
+	local node, est_delta
 	local v = { x = sx * vel, y = 0, z = sz * vel, }
 	est_delta = self:accelerate_relative (v, vel)
-	est_delta.y = -0.25
-	node = minetest.get_node (vector.add (self.object:get_pos (), est_delta))
-	def = minetest.registered_nodes[node.name]
-	if def and not def.walkable then
-		sx = 0
-		sz = 1
+	node = vector.add (self.object:get_pos (),
+			   -- Scale the delta to
+			   -- reflect the quantity
+			   -- of movement applied
+			   -- in one Minecraft
+			   -- tick.
+			   est_delta * 0.05)
+	node.x = math.floor (node.x + 0.5)
+	node.y = math.floor (node.y + 0.5)
+	node.z = math.floor (node.z + 0.5)
+
+	if self:gwp_classify_for_movement (node) ~= "WALKABLE" then
+		self.strafe_direction.x, sx = 0, 0
+		self.strafe_direction.z, sz = 1, 1
 	end
 
 	-- Begin strafing.
@@ -524,6 +532,11 @@ function mob_class:halt_in_tracks (immediate)
 	self.acc_speed = 0
 	self.movement_goal = nil
 	self:cancel_navigation ()
+
+	if self._current_animation == "walk"
+		or self._current_animation == "run" then
+		self:set_animation ("stand")
+	end
 
 	if immediate then
 		self.object:set_acceleration(vector.new(0,0,0))
@@ -577,7 +590,7 @@ end
 
 function mob_class:navigation_step (dtime, moveresult)
 	if self.waypoints or self.pathfinding_context then
-		self:next_waypoint ()
+		self:next_waypoint (dtime)
 	elseif self.stupid_target then
 		self:go_to_pos (self.stupid_target, self.stupid_velocity)
 	end
@@ -690,7 +703,7 @@ function mob_class:check_following (self_pos, dtime)
 		if self.following then
 			-- check_head_swivel is responsible for
 			-- looking at the target.
-			self:go_to_stupidly (pos, self.movement_speed * self.follow_bonus)
+			self:go_to_stupidly (pos)
 		end
 		return true
 	elseif self.follow and not self.follow_cooldown then

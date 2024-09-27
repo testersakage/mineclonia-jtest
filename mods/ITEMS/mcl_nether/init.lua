@@ -156,7 +156,7 @@ minetest.register_node("mcl_nether:soul_sand", {
 	_tt_help = S("Reduces walking speed"),
 	_doc_items_longdesc = S("Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."),
 	tiles = {"mcl_nether_soul_sand.png"},
-	groups = {handy = 1, shovely = 1, building_block = 1, soil_nether_wart = 1, material_sand = 1, soul_block = 1 },
+	groups = {handy = 1, shovely = 1, building_block = 1, soil_nether_wart = 1, material_sand = 1, soul_block = 1, _mcl_partial = 2 },
 	collision_box = {
 		type = "fixed",
 		fixed = { -0.5, -0.5, -0.5, 0.5, 0.5 - 2/16, 0.5 },
@@ -164,13 +164,14 @@ minetest.register_node("mcl_nether:soul_sand", {
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	-- Mobs only.
+	_mcl_velocity_factor = 0.4,
 })
 
 mcl_player.register_globalstep_slow(function(player)
 	-- Standing on soul sand or soul soil?
 	if minetest.get_item_group(mcl_player.players[player].nodes.stand, "soul_block") > 0 then
 		-- TODO: Tweak walk speed
-		-- TODO: Also slow down mobs
 		local boots = player:get_inventory():get_stack("armor", 5)
 		local soul_speed = mcl_enchanting.get_enchantment(boots, "soul_speed")
 		-- If player wears Soul Speed boots, increase speed

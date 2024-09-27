@@ -309,4 +309,5 @@ minetest.register_node("mcl_flowers:waterlily", {
 		return itemstack
 	end,
 	on_rotate = screwdriver.rotate_simple,
+	_pathfinding_class = "TRAPDOOR",
 })

@@ -67,7 +67,6 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	mob_pushable = false,
 	-- TODO: sounds
 	visual_size = {x=3, y=3},
-	walk_chance = 10,
 	knock_back = false,
 	jump = false,
 	can_despawn = false,

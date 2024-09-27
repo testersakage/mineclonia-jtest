@@ -261,6 +261,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 	makes_footstep_sound = true,
 	can_despawn = true,
 	spawn_in_group = 2,
+	head_eye_height = 2.55,
 	on_spawn = function(self)
 		local spider_eyes=false
 		for n = 1, #self.object:get_children() do
