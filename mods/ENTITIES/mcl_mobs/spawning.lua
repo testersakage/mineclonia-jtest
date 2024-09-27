@@ -566,7 +566,7 @@ function mob_class:check_despawn(pos, dtime)
 			end
 
 			-- (re)set timer depending on light level
-			if minetest.get_node_light(pos) < timer_light_level then
+			if (minetest.get_node_light(pos) or minetest.LIGHT_MAX )< timer_light_level then
 				self.lifetimer = timer_dark
 			else
 				self.lifetimer = timer_light
