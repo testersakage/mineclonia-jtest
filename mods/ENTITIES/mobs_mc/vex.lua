@@ -21,6 +21,7 @@ mcl_mobs.register_mob("mobs_mc:vex", {
 	hp_max = 14,
 	xp_min = 6,
 	xp_max = 6,
+	head_eye_height = 0.51875,
 	collisionbox = {-0.2, 0.2, -0.2, 0.2, 1.0, 0.2},  --bat
 	visual = "mesh",
 	mesh = "mobs_mc_vex.b3d",

@@ -75,7 +75,7 @@ local wolf = {
 	makes_footstep_sound = true,
 	head_swivel = "head.control",
 	bone_eye_height = 3.5,
-	head_eye_height = 1.1,
+	head_eye_height = 0.68,
 	horizontal_head_height=0,
 	curiosity = 3,
 	head_yaw="z",
@@ -90,7 +90,6 @@ local wolf = {
 	pathfinding = 1,
 	floats = 1,
 	view_range = 16,
-	walk_chance = default_walk_chance,
 	movement_speed = 6.0,
 	damage = 4,
 	reach = 2,
@@ -121,7 +120,6 @@ local wolf = {
 					ent.owner = clicker:get_player_name()
 					ent.tamed = true
 					ent:set_animation("sit")
-					ent.walk_chance = 0
 					ent.jump = false
 					ent.health = self.health
 					-- cornfirm taming

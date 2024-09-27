@@ -52,7 +52,7 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 	collisionbox = {-0.45, -0.01, -0.45, 0.45, 1.29, 0.45},
 	head_swivel = "head.control",
 	bone_eye_height = 3.3,
-	head_eye_height = 1.1,
+	head_eye_height = 1.235,
 	horizontal_head_height=-.7,
 	curiosity = 6,
 	head_yaw="z",

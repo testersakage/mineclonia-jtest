@@ -4,14 +4,6 @@ local damage_enabled = minetest.settings:get_bool("enable_damage", true)
 local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
 
-local function atan(x)
-	if not x or minetest.is_nan(x) then
-		return 0
-	else
-		return math.atan(x)
-	end
-end
-
 -- check if daytime and also if mob is docile during daylight hours
 function mob_class:day_docile()
 	if self.docile_by_day and self.time_of_day > 0.2 and self.time_of_day < 0.8 then
@@ -23,7 +15,7 @@ end
 local SIGHT_PERSISTENCE = 3.0
 
 function mob_class:do_attack(obj)
-	if self.dead then
+	if self.dead or obj == self.obj or obj == self.attack then
 		return
 	end
 	-- No longer idle.  Interrupt other
@@ -65,8 +57,8 @@ end
 
 function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius, self.object) end
 
-function mob_class:attack_players_allowed ()
-	-- TODO
+function mob_class:attack_player_allowed ()
+	-- TODO: creative mode
 	return true
 end
 
@@ -137,26 +129,23 @@ end
 -- Apply projectile knockback.
 function mob_class:projectile_knockback (factor, dir)
 	local v = self.object:get_velocity ()
-	local kb, up = 1, 2
 
-	self._kb_turn = true
-	self._turn_to=self.object:get_yaw()-1.57
 	if self.animation.run_end then
 		self:set_animation ("run")
 	elseif self.animation.walk_end then
 		self:set_animation ("walk")
 	end
+	self.frame_speed_multiplier=2.3
+	self.object:set_velocity({
+			x = v.x / 2.0 + dir.x * factor * 2.5,
+			y = v.y / 2.0 + 2,
+			z = v.z / 2.0 + dir.z * factor * 2.5,
+	})
 	minetest.after(0.2, function()
 			       if self and self.object then
 				       self.frame_speed_multiplier=1
-				       self._kb_turn = false
 			       end
 	end)
-	self.object:set_velocity({
-			x = v.x / 2.0 + dir.x * factor * 2.5,
-			y = v.y / 2.0 + up*2,
-			z = v.z / 2.0 + dir.z * factor * 2.5,
-	})
 
 	self.pause_timer = 0.25
 end
@@ -356,8 +345,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			elseif luaentity and luaentity._knockback then
 				kb = kb + luaentity._knockback
 			end
-			self._kb_turn = true
-			self._turn_to=self.object:get_yaw()-1.57
 			self.frame_speed_multiplier=2.3
 			if self.animation.run_end then
 				self:set_animation( "run")
@@ -367,7 +354,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			minetest.after(0.2, function()
 				if self and self.object then
 					self.frame_speed_multiplier=1
-					self._kb_turn = false
 				end
 			end)
 
@@ -451,21 +437,21 @@ function mob_class:should_attack (object)
 		if table.indexof (specific, entity.name) ~= -1 then
 			return true
 		end
-	elseif object:is_player () and self:attack_players_allowed () then
-		return self.type == "monster" or table.indexof (specific, "player")
+	elseif object:is_player () and self:attack_player_allowed (object) then
+		return self.type == "monster" or table.indexof (specific, "player") ~= -1
 	end
 
 	return false
 end
 
 function mob_class:should_continue_to_attack (object)
-	if object:is_player () and not self:attack_players_allowed () then
+	if object:is_player () and not self:attack_player_allowed (object) then
 		return false
 	end
 	return object:get_hp () > 0
 end
 
-function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
+function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		-- Initialize parameters consulted during the attack.
 		self._target_visible_time = 0
@@ -490,7 +476,6 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
 		y = target_pos.y + (collisionbox[5] - collisionbox[2]) * 0.33,
 		z = target_pos.z,
 	}
-	local line_of_sight = self:line_of_sight (shoot_pos, target)
 
 	if line_of_sight then
 		if vistime < 0 then
@@ -532,7 +517,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
 		-- too far.
 		if dist > 15 * 0.75 then
 			self._z_strafe = 1
-		elseif dist < 15 * 0.25 then
+		elseif dist < 15 * 0.55 then
 			self._z_strafe = -1
 		end
 
@@ -541,14 +526,20 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
 		self.strafe_direction = { x = self._x_strafe * 0.5,
 					  z = self._z_strafe * 0.5, }
 		self:look_at (target_pos)
-		self:set_animation ("run")
+		if not self._shoot_time then
+			self:set_animation ("run")
+		else
+			self:set_animation ("shoot")
+		end
 	end
 
 	if not self._shoot_time then
 		if self._shoot_timer <= 0 and vistime >= -3 then
-			self:set_animation ("shoot")
-			self._shoot_time = 0
-			self._shoot_timer = 0
+			if line_of_sight then
+				self:set_animation ("shoot")
+				self._shoot_time = 0
+				self._shoot_timer = 0
+			end
 		else
 			self._shoot_timer = self._shoot_timer - dtime
 		end
@@ -557,7 +548,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
 		if not line_of_sight and vistime < -3 then
 			self:set_animation ("run")
 			self.shoot_time = nil
-		elseif self._shoot_time > 1 then
+		elseif line_of_sight and self._shoot_time > 1 then
 			-- Fire arrow.
 			self._shoot_time = nil
 			self._shoot_timer = self.shoot_interval or 1
@@ -568,9 +559,6 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos)
 				y = target.y - shoot_pos.y,
 				z = target.z - shoot_pos.z,
 			}
-
-			local target_bb = self.attack:get_properties ()
-			local collisionbox = target_bb.collisionbox
 
 			-- Offset by distance.
 			vec.y = vec.y + 0.12 * vector.length (vec)
@@ -604,7 +592,7 @@ function mob_class:custom_attack ()
 	attack:punch (self.object, 1.0, damage, nil)
 end
 
-function mob_class:attack_melee (self_pos, dtime, target_pos)
+function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		-- Initialize attack parameters.
 		self._target_pos = nil
@@ -617,13 +605,14 @@ function mob_class:attack_melee (self_pos, dtime, target_pos)
 	local distance = vector.distance (self_pos, target_pos)
 
 	-- If the target is detectable...
-	if (self.esp or self:target_visible (self_pos, self.attack))
+	if (self.esp or line_of_sight)
 		-- ...and the navigation timeout has elapsed...
 		and delay == 0
 		-- ..and this mob has yet to arrive at its target, or
 		-- the path should be recomputed...
 		and (not self._target_pos
-			or vector.distance (self_pos, target_pos) >= 1) then
+			or vector.distance (target_pos, self._target_pos) >= 1
+			or math.random (100) <= 5) then
 		self._target_pos = target_pos
 
 		delay = (4 + math.random (8) - 1) / 20.0
@@ -638,14 +627,13 @@ function mob_class:attack_melee (self_pos, dtime, target_pos)
 		-- Try to pathfind.
 		if not self:gopath (target_pos, nil, true) then
 			delay = delay + 0.75
-			self:set_animation ("stand")
 		end
 	end
 	self._gopath_delay = delay
 
 	-- Can the target be attacked?
 	local delay = math.max (self._attack_delay - dtime, 0)
-	if distance < self.reach and delay == 0 then
+	if distance <= self.reach and delay == 0 then
 		self:look_at (target_pos)
 		self:custom_attack ()
 		delay = self.melee_interval
@@ -678,7 +666,7 @@ function mob_class:check_attack (self_pos, dtime)
 					local distance = vector.distance (self_pos, pos)
 					if distance <= self.view_range * factor
 						and (not max_distance or distance < max_distance)
-						and (self.attack_esp or self:target_visible (self_pos, object)) then
+						and (self.esp or self:target_visible (self_pos, object)) then
 						target = object
 						max_distance = distance
 					end
@@ -691,7 +679,7 @@ function mob_class:check_attack (self_pos, dtime)
 			end
 		end
 	else
-		local line_of_sight, target_pos
+		local target_pos
 		if not self.attack:is_valid () then
 			self.attack = nil
 			self:set_animation ("stand")
@@ -711,8 +699,8 @@ function mob_class:check_attack (self_pos, dtime)
 			self:set_animation ("stand")
 			return true
 		end
-		if not self.esp
-			and not self:target_visible (self_pos, self.attack) then
+		local line_of_sight = self:target_visible (self_pos, self.attack)
+		if not self.esp and not line_of_sight then
 			local t = self.target_invisible_time
 			self.target_invisible_time = t - dtime
 
@@ -721,14 +709,18 @@ function mob_class:check_attack (self_pos, dtime)
 				self:set_animation ("stand")
 				return true
 			end
+		else
 			self.target_invisible_time = SIGHT_PERSISTENCE
 		end
 
 		if self.attack_type == "bowshoot" then
-			self:attack_bowshoot (self_pos, dtime, target_pos)
+			self:attack_bowshoot (self_pos, dtime, target_pos,
+					      line_of_sight)
 		elseif self.attack_type == "ranged" then
+			-- TODO
 		elseif self.attack_type == "melee" then
-			self:attack_melee (self_pos, dtime, target_pos)
+			self:attack_melee (self_pos, dtime, target_pos,
+					   line_of_sight)
 		else
 			minetest.log ("warning", "unknown attack type " .. self.attack_type)
 		end

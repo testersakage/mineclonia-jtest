@@ -45,6 +45,7 @@ local spider = {
 	hp_max = 16,
 	xp_min = 5,
 	xp_max = 5,
+	head_eye_height = 0.65,
 	armor = {fleshy = 100, arthropod = 100},
 	on_spawn = function(self)
 		self.object:set_properties({visual_size={x=1,y=1}})
@@ -119,6 +120,7 @@ cave_spider.textures = { {"mobs_mc_cave_spider.png^(mobs_mc_spider_eyes.png^[mak
 cave_spider.damage = 2
 cave_spider.hp_min = 1
 cave_spider.hp_max = 12
+cave_spider.head_eye_height = 0.5625
 cave_spider.collisionbox = {-0.35, -0.01, -0.35, 0.35, 0.46, 0.35}
 cave_spider.visual_size = {x=0.55,y=0.5}
 cave_spider.on_spawn = function(self)

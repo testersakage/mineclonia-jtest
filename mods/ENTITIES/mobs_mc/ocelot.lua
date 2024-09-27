@@ -34,7 +34,7 @@ local ocelot = {
 	xp_max = 3,
 	head_swivel = "head.control",
 	bone_eye_height = 6.2,
-	head_eye_height = 0.4,
+	head_eye_height = 0.35,
 	horizontal_head_height=-0,
 	head_yaw="z",
 	curiosity = 4,
@@ -43,7 +43,6 @@ local ocelot = {
 	mesh = "mobs_mc_cat.b3d",
 	textures = {"mobs_mc_cat_ocelot.png"},
 	makes_footstep_sound = true,
-	walk_chance = default_walk_chance,
 	movement_speed = 6.0,
 	floats = 1,
 	runaway = true,
@@ -138,13 +137,11 @@ table.update(cat,{
 
 		if not self.order or self.order == "" or self.order == "sit" then
 			self.order = "roam"
-			self.walk_chance = default_walk_chance
 			self.jump = true
 		else
 			-- “Sit!”
 			-- TODO: Add sitting model
 			self.order = "sit"
-			self.walk_chance = 0
 			self.jump = false
 		end
 	end,

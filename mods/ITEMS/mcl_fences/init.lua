@@ -207,7 +207,8 @@ function mcl_fences.register_fence_def(name, definitions)
 
     if not definitions.groups then definitions.groups = {} end
 
-	definitions.groups.fence = 1
+    definitions.groups.fence = 1
+    definitions._pathfinding_class = "FENCE"
     definitions.groups.deco_block = 1
 
     if not definitions.connects_to then
@@ -248,6 +249,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 	if not definitions.groups then definitions.groups = {} end
 
 	definitions.groups.fence_gate = 1
+	definitions._pathfinding_class = "FENCE"
 	definitions.groups.deco_block = 1
 
 	if definitions.tiles and definitions.tiles[1] then
@@ -262,7 +264,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 	opendefinitions.wield_image = nil
 	opendefinitions._mcl_burntime = nil
 	opendefinitions.groups = table.copy (definitions.groups)
-	opendefinitions.groups.fence_gate_open = 1
+	opendefinitions._pathfinding_class = "OPEN"
 
 	opendefinitions.groups.not_in_creative_inventory = 1
 	opendefinitions.mesecon_ignore_opaque_dig = 1

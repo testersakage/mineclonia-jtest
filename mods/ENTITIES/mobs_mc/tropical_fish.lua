@@ -68,6 +68,7 @@ local tropical_fish = {
 	xp_min = 1,
 	xp_max = 3,
 	armor = 100,
+	head_eye_height = 0.26,
 	spawn_in_group = 9,
 	tilt_swim = true,
 	movement_speed = 14,

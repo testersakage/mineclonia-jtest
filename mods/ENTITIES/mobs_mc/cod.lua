@@ -25,6 +25,7 @@ local cod = {
 	spawn_in_group = 8,
 	tilt_swim = true,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.79, 0.3},
+	head_eye_height = 0.195,
 	visual = "mesh",
 	mesh = "extra_mobs_cod.b3d",
 	textures = {
