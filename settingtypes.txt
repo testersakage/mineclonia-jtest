@@ -35,8 +35,7 @@ mcl_enable_mt_dungeons (Native Minetest dungeons) bool false
 mcl_superflat_classic (Classic superflat map generation) bool false
 
 [Players]
-# If enabled, players respawn at the bed they last
-# lay on instead of normal spawn.
+# If enabled, players respawn at the bed they clicked instead of normal spawn.
 # This setting is only read at startup.
 enable_bed_respawn (Respawn at bed) bool true
 
@@ -53,8 +52,8 @@ mcl_keepInventory (Keep inventory on death) bool false
 # If enabled, chat messages are shown to everyone when a player dies.
 mcl_showDeathMessages (Show death messages) bool true
 
-# If enabled, the recipe book will progressively be filled with new
-# recipes that can be crafted from all items you ever have had in your inventory.
+# If enabled, the recipe book will progressively be filled with new recipes
+# that can be crafted from all items you ever have had in your inventory.
 # Recommended for new players and for a spoiler-free gameplay experience.
 # If disabled, all recipes will be shown.
 mcl_craftguide_progressive_mode	(Learn crafting recipes progressively) bool true
@@ -94,8 +93,8 @@ mobs_spawn_protected (Spawn mobs in protected areas) bool false
 mcl_mobs_modern_lighting (Modern light rules for spawning) bool true
 
 # Mobs difficulty.
-# This is a number that will affect the initial and maximum health and
-# the amount of damage that mobs deal.
+# This is a number that will affect the initial and maximum
+# health of mobs and the amount of damage that mobs deal.
 # Health and damage will be multiplied with this number.
 mob_difficulty (Mob difficulty factor) float 1.0 0.0
 
@@ -118,9 +117,10 @@ mcl_mob_active_range (Active mob range) int 48 0 256
 
 [Mob caps]
 # Global maximum amount of mobs
+# This controls how many mobs can exist in the map
 mcl_mob_cap_total (Global mob cap) int 500 0 2048
 
-# Maximum amount of mobs per player
+# Maximum amount of mobs (animals+monsters) per player
 mcl_mob_cap_player (Mob cap per player) int 75 0 2048
 
 # Maximum amount of monsters that will spawn near a player
@@ -132,7 +132,8 @@ mcl_mob_cap_animal (Mob cap for animals) int 10 0 1024
 # Maximum amount of ambient mobs that will spawn near a player
 mcl_mob_cap_ambient (Mob cap for ambient mobs) int 15 0 1024
 
-# Maximum amount of water mobs (squids, dolphins) that will spawn near a player
+# Maximum amount of water mobs (squids, dolphins)
+# that will spawn near a player
 mcl_mob_cap_water (Mob cap for water mobs) int 5 0 1024
 
 # Maximum amount of ambient water mobs (fish) that will spawn near a player
@@ -175,7 +176,7 @@ animated_chests (Animated chests) bool true
 # Enable dust particles in the nether
 mcl_nether_dust (Nether dust particles) bool true
 
-# If enabled, mobs will emit damage particles when they get hurt.
+# If enabled, mobs will emit damage particles when they get hurt
 mcl_damage_particles (Damage particles) bool true
 
 # The maximum number of boss bars to simultaneously display on the screen
@@ -194,7 +195,8 @@ mcl_villages_min_jobs (Minimum number of jobs in village) int 1
 # Maximum number of job sites which are placed during village generation
 mcl_villages_max_jobs (Maximum number of jobs in village) int 12
 
-# 1 in X chance a village will spawn in a valid chunk. Set to 0 for no villages
+# 1 in X chance a village will spawn in a valid chunk.
+# Set to 0 to disable village generation.
 mcl_villages_village_chance (Village chance) int 100
 
 # This controls how job sites and houses are placed during village generation
@@ -223,3 +225,7 @@ mcl_logging_structures (Log structure generation) bool true
 
 # Debug logging for mcl_events.
 mcl_logging_event_api (Debug logging for mcl_events) bool false
+
+
+
+# vim: set cc=78:
