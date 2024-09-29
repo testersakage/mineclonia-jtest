@@ -48,13 +48,9 @@ minetest.register_on_shutdown(save_weather)
 local particlespawners={}
 function mcl_weather.add_spawner_player(pl,id,ps)
 	local name=pl:get_player_name()
-	if not particlespawners[name] then
-		particlespawners[name] = {}
-	end
+	particlespawners[name] = particlespawners[name] or {}
 	if not particlespawners[name][id] then
-		mcl_weather.remove_spawners_player(pl)
-		particlespawners[name] = {}
-		ps.playername =name
+		ps.playername = name
 		ps.attached = pl
 		particlespawners[name][id]=minetest.add_particlespawner(ps)
 		return particlespawners[name][id]

@@ -1,6 +1,6 @@
 mcl_weather.snow = {}
 
-local PARTICLES_COUNT_SNOW = 100
+local PARTICLES_COUNT_SNOW = 20
 mcl_weather.snow.init_done = false
 
 local psdef= {
@@ -14,8 +14,8 @@ local psdef= {
 	maxacc = vector.new(0,-4,0),
 	minexptime = 3,
 	maxexptime = 5,
-	minsize = 2,
-	maxsize = 5,
+	minsize = 1,
+	maxsize = 3,
 	collisiondetection = true,
 	collision_removal = true,
 	object_collision = true,
@@ -60,7 +60,7 @@ function mcl_weather.snow.clear()
 end
 
 function mcl_weather.snow.add_player(player)
-	for i=1,2 do
+	for i=1,11 do
 		psdef.texture="weather_pack_snow_snowflake"..i..".png"
 		mcl_weather.add_spawner_player(player,"snow"..i,psdef)
 	end
