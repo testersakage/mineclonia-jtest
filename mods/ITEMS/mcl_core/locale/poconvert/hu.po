@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-09-24 21:18+0000\n"
+"PO-Revision-Date: 2024-09-30 20:31+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/hu/>\n"
@@ -154,9 +154,11 @@ msgstr "Vöröskőérc"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
 msgstr ""
+"A Vöröskőérc gyakori elem a világ aljának közelében. Világít amikor ütést "
+"kap vagy sétálnak rajta."
 
 msgid "Lit Redstone Ore"
-msgstr "Világító vöröskőérc"
+msgstr "Világító Vöröskőérc"
 
 msgid "Lapis Lazuli Ore"
 msgstr "Lazuritérc"
@@ -562,15 +564,17 @@ msgstr "Zseléblokk"
 
 msgid "Slime blocks are very bouncy and prevent fall damage."
 msgstr ""
+"A zseléblokk rendkívül ruganyos, ezáltal elkerülhető vele a zuhanásból eredő "
+"sérülés."
 
 msgid "Cobweb"
 msgstr "Pókháló"
 
 msgid "Slows down movement"
-msgstr ""
+msgstr "Lelassítja a mozgást"
 
 msgid "Cobwebs can be walked through, but significantly slow you down."
-msgstr ""
+msgstr "A pókhálón át lehet sétálni de jelentősen lelassítja a mozgást."
 
 msgid "Dead Bush"
 msgstr "Száraz bokor"
