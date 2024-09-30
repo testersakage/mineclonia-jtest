@@ -40,13 +40,13 @@ pillager = {
 	view_range = 16,
 	fear_height = 4,
 	arrow = "mcl_bows:arrow_entity",
-	attack_type = "dogshoot", -- Alternate punching/shooting
+	attack_type = "crossbow",
 	attack_npcs = true,
 	reach = 0, -- Punching max distance
 	damage = 0, -- Punching damage
-	dogshoot_switch = 1, -- Start of shooting
-	dogshoot_count_max = 5, -- Max time spent shooting (standing)
-	dogshoot_count2_max = 1, -- Max time spent punching (running)
+	specific_attack = {
+		"mobs_mc:iron_golem"
+	},
 	sounds = {
 		random = "mobs_mc_pillager_grunt2",
 		war_cry = "mobs_mc_pillager_grunt1",

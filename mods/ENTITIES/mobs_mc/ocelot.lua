@@ -9,8 +9,6 @@ local S = minetest.get_translator("mobs_mc")
 --################### OCELOT AND CAT
 --###################
 
-local default_walk_chance = 70
-
 local food = {
 	"mcl_fishing:fish_raw",
 	"mcl_fishing:salmon_raw",

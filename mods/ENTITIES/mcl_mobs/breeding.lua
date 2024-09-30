@@ -413,6 +413,7 @@ function mob_class:break_in(player)
 			player:set_wielded_item(item)
 		elseif not self.driver then
 			self.object:set_properties({stepheight = 1.1})
+			self._initial_step_height = 1.1
 			self:attach(player)
 			self.buck_off_time = 40 -- TODO how long does it take in minecraft?
 			if self.temper > 100 then

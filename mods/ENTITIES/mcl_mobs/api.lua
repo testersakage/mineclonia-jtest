@@ -88,7 +88,8 @@ function mob_class:get_staticdata()
 		-- This structure is liable to grow to an immense size.
 		and tag ~= "pathfinding_context"
 		and tag ~= "waypoints"
-		and tag ~= "_cmi_components" then
+		and tag ~= "_cmi_components"
+		and tag ~= "_targets_visible" then
 			tmp[tag] = self[tag]
 		end
 	end
@@ -175,15 +176,6 @@ function mob_class:scale_size(scale, force)
 	self.scaled = true
 end
 
-function mob_class:reset_path()
-	self.path = {}
-	self.path.way = {} -- path to follow, table of positions
-	self.path.lastpos = {x = 0, y = 0, z = 0}
-	self.path.stuck = false
-	self.path.following = false
-	self.path.stuck_timer = 0
-end
-
 function mob_class:mob_activate(staticdata, dtime)
 	if not self.object:get_pos() or staticdata == "remove" then
 		mcl_burning.extinguish(self.object)
@@ -203,15 +195,13 @@ function mob_class:mob_activate(staticdata, dtime)
 
 	self.acc_dir = vector.zero ()
 	self.acc_speed = 0
+	self._initial_step_height = self.initial_properties.stepheight
+	self._previously_floating = nil
 
 	if self.dead then
 		self:safe_remove()
 		return
 		-- TODO
-	-- elseif self.state == "attack" then
-	-- 	if not self.attack or not self.attack.get_pos or not self.attack:get_pos() then
-	-- 		self:set_state("stand")
-	-- 	end
 	end
 
 	if peaceful_mode and not self.persist_in_peaceful then
@@ -221,7 +211,6 @@ function mob_class:mob_activate(staticdata, dtime)
 	end
 
 	self:update_textures()
-	self:reset_path()
 
 	if not self.base_selbox then
 		self.base_selbox = self.initial_properties.selectionbox or self.base_colbox
@@ -325,19 +314,6 @@ function mob_class:forward_directions()
 	return dir_x, dir_z
 end
 
-function mob_class:node_infront_ok(pos, y_adjust, fallback)
-	fallback = fallback or mcl_mobs.fallback_node
-
-	local dir_x, dir_z = self:forward_directions()
-	local node = minetest.get_node_or_nil(vector.offset(pos, dir_x, y_adjust, dir_z))
-
-	if node and minetest.registered_nodes[node.name] then
-		return node
-	end
-
-	return minetest.registered_nodes[fallback]
-end
-
 local function update_attack_timers (self, dtime)
 	if self.pause_timer > 0 then
 		self.pause_timer = self.pause_timer - dtime
@@ -364,6 +340,7 @@ function mob_class:on_step(dtime, moveresult)
 		self:safe_remove()
 		return
 	end
+	self._targets_visible = {}
 	local should_drive = self:should_drive ()
 
 	if self:check_despawn(pos, dtime) then return true end
@@ -393,12 +370,13 @@ function mob_class:on_step(dtime, moveresult)
 	self:motion_step (dtime, moveresult)
 
 	if self.stupefied then
+		self.object:set_animation_frame_speed (0)
 		self:halt_in_tracks ()
 		return
 	end
 
-	self:movement_step (dtime, moveresult)
 	self:navigation_step (dtime, moveresult)
+	self:movement_step (dtime, moveresult)
 	self:ai_step (dtime)
 
 	if self.force_step then

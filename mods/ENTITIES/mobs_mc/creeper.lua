@@ -2,6 +2,9 @@
 
 local S = minetest.get_translator("mobs_mc")
 
+local mob_class = mcl_mobs.mob_class
+local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
+
 --###################
 --################### CREEPER
 --###################
@@ -22,7 +25,7 @@ local creeper_defs = {
 	movement_speed = 6.0,
 	runaway = true,
 	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat" },
-	attack_type = "explode",
+	attack_type = "melee",
 	maxdrops = 2,
 	sounds = {
 		attack = "tnt_ignite",
@@ -62,59 +65,175 @@ local creeper_defs = {
 	reach = 3,
 	allow_fuse_reset = true,
 	stop_to_explode = true,
-	-- Force-ignite creeper with flint and steel and explode after 1.5 seconds.
-	-- TODO: Make creeper flash after doing this as well.
-	on_rightclick = function(self, clicker)
-		if self._forced_explosion_countdown_timer ~= nil then
-			return
-		end
-		local item = clicker:get_wielded_item()
-		if minetest.get_item_group(item:get_name(), "flint_and_steel") > 0 then
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-				-- Wear tool
-				local wdef = item:get_definition()
-				item:add_wear(1000)
-				-- Tool break sound
-				if item:get_count() == 0 and wdef.sound and wdef.sound.breaks then
-					minetest.sound_play(wdef.sound.breaks, {pos = clicker:get_pos(), gain = 0.5}, true)
-				end
-				clicker:set_wielded_item(item)
+}
+
+local CREEPER_SWELL_TIME = 30/20
+
+function creeper_defs:on_rightclick (clicker)
+	local item = clicker:get_wielded_item()
+	if minetest.get_item_group(item:get_name(), "flint_and_steel") > 0 then
+		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			-- Wear tool
+			local wdef = item:get_definition()
+			item:add_wear(1000)
+			-- Tool break sound
+			if item:get_count() == 0 and wdef.sound and wdef.sound.breaks then
+				minetest.sound_play(wdef.sound.breaks, {pos = clicker:get_pos(), gain = 0.5}, true)
 			end
-			self._forced_explosion_countdown_timer = self.explosion_timer
-			minetest.sound_play(self.sounds.attack, {pos = self.object:get_pos(), gain = 1, max_hear_distance = 16}, true)
+			clicker:set_wielded_item(item)
 		end
-	end,
-	do_custom = function(self, dtime)
-		if self._forced_explosion_countdown_timer ~= nil then
-			self._forced_explosion_countdown_timer = self._forced_explosion_countdown_timer - dtime
-			if self._forced_explosion_countdown_timer <= 0 then
-				self:boom(mcl_util.get_object_center(self.object), self.explosion_strength)
-			end
+		self.attack = self.object
+		self:custom_attack ()
+	end
+end
+
+function creeper_defs:update_swell ()
+	local self_pos = self.object:get_pos ()
+	local target_pos = self.attack and self.attack:get_pos ()
+	local visual_size = self.initial_properties.visual_size
+	self:cancel_navigation ()
+	self:halt_in_tracks ()
+
+	if not self.attack
+		or not self.attack:is_valid ()
+		or self._swell_time <= 0
+		or vector.distance (self_pos, target_pos) > 7.0
+		or not self:target_visible (self_pos, self.attack) then
+		-- Cancel swelling if the target is no longer valid.
+		self._swell_dir = -1
+	end
+
+	if self._swell_time >= CREEPER_SWELL_TIME then
+		self:boom (mcl_util.get_object_center (self.object),
+			   self.explosion_strength, false)
+		return
+	end
+
+	local swell = self._swell_time / CREEPER_SWELL_TIME
+	local interpolated = 1 + math.sin (swell * 100) * swell * 0.01
+	swell = swell * swell * swell
+	local xz = (1.0 + swell * 0.4) * interpolated
+	local y = (1.0 + swell * 0.1) / interpolated
+	self:set_properties ({
+			visual_size = {
+				x = visual_size.x * xz,
+				y = visual_size.y * y,
+			},
+	})
+
+	local t = math.floor (self._swell_time * 20)
+	if t % 12 == 6 or self._swell_dir == -1 then
+		self:remove_texture_mod ("^[brighten")
+	elseif t % 12 == 0 then
+		self:add_texture_mod ("^[brighten")
+	end
+end
+
+-- blast damage to entities nearby
+local function blast_damage(pos, radius, source)
+	radius = radius * 2
+
+	for obj in minetest.objects_inside_radius(pos, radius) do
+
+		local obj_pos = obj:get_pos()
+		local dist = vector.distance(pos, obj_pos)
+		if dist < 1 then dist = 1 end
+
+		local damage = math.floor((4 / dist) * radius)
+
+		-- punches work on entities AND players
+		obj:punch(source, 1.0, {
+			full_punch_interval = 1.0,
+			damage_groups = {fleshy = damage},
+		}, vector.direction(pos, obj_pos))
+	end
+end
+
+-- no damage to nodes explosion
+function creeper_defs:safe_boom(pos, strength, no_remove)
+	minetest.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
+		pos = pos,
+		gain = 1.0,
+		max_hear_distance = self.sounds and self.sounds.distance or 32
+	}, true)
+	local radius = strength
+	blast_damage(pos, radius, self.object)
+	mcl_mobs.effect(pos, 32, "mcl_particles_smoke.png", radius * 3, radius * 5, radius, 1, 0)
+	if not no_remove then
+		if self.is_mob then
+			self:safe_remove()
+		else
+			self.object:remove()
 		end
-	end,
-	on_die = function(_, pos, cmi_cause)
-		-- Drop a random music disc when killed by skeleton or stray
-		if cmi_cause and cmi_cause.type == "arrow" then
-			if cmi_cause.mob_name == "mobs_mc:skeleton" or cmi_cause.mob_name == "mobs_mc:stray" then
-				local loot = mcl_jukebox.get_random_creeper_loot()
-				if loot then
-					minetest.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
-				end
-			end
-		end
-	end,
-	on_attack = function (self)
-	    -- Dissipate active status effects.
-	    local pos = self.object:get_pos ()
-	    for name, val in pairs (mcl_potions.all_effects (self.object)) do
+	end
+end
+
+
+-- make explosion with protection and tnt mod check
+function creeper_defs:boom(pos, strength, fire, no_remove)
+	if mobs_griefing and not minetest.is_protected(pos, "") then
+		mcl_explosions.explode(pos, strength, { fire = fire }, self.object)
+	else
+		self:safe_boom(self, pos, strength, no_remove)
+	end
+	-- Dissipate active status effects.
+	for name, val in pairs (mcl_potions.all_effects (self.object)) do
 		local level = mcl_potions.get_effect_level (self.object,
 							    name)
 		mcl_potions.add_lingering_effect (pos, name, val.dur / 2,
 						  level, 2.5)
-	    end
-	end,
-}
+	end
+	if not no_remove then
+		if self.is_mob then
+			self:safe_remove()
+		else
+			self.object:remove()
+		end
+	end
+end
 
+function creeper_defs:do_custom (dtime)
+	local swell_time = self._swell_time
+	local swell_dir  = self._swell_dir
+	if swell_dir == 1 then
+		self._swell_time = swell_time + dtime
+		self:update_swell ()
+		return false
+	elseif swell_dir == -1 then
+		local t = swell_time - dtime
+		self._swell_time = t
+		if t <= 0 then
+			self._swell_time = 0
+		end
+		self:update_swell ()
+		-- Clear this after update_swell is called, to
+		-- override any value it might set.
+		if t <= 0 then
+			self._swell_dir = nil
+		end
+		return false
+	end
+end
+
+function creeper_defs:on_die (pos, cmi_cause)
+	-- Drop a random music disc when killed by skeleton or stray
+	if cmi_cause and cmi_cause.type == "arrow" then
+		if cmi_cause.mob_name == "mobs_mc:skeleton" or cmi_cause.mob_name == "mobs_mc:stray" then
+			local loot = mcl_jukebox.get_random_creeper_loot()
+			if loot then
+				minetest.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
+			end
+		end
+	end
+end
+
+function creeper_defs:custom_attack ()
+	-- Begin swelling.
+	self:mob_sound ("attack")
+	self._swell_time = 0
+	self._swell_dir = 1
+	self:cancel_navigation ()
+end
 
 mcl_mobs.register_mob("mobs_mc:creeper", table.merge(creeper_defs, {
 	description = S("Creeper"),

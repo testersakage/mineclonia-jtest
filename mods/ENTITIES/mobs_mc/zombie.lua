@@ -97,6 +97,9 @@ local zombie = {
 		run_start = 0, run_end = 39, speed_run = 50,
 		punch_start = 50, punch_end = 59, punch_speed = 20,
 	},
+	specific_attack = {
+		"mobs_mc:iron_golem"
+	},
 	ignited_by_sunlight = true,
 	floats = 0,
 	view_range = 16,

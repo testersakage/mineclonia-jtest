@@ -164,6 +164,61 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 end, -200)
 
+function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, damage)
+	local knockback = 1
+	local luaentity
+	if hitter then
+		luaentity = hitter:get_luaentity()
+	end
+	if hitter and hitter:is_player() then
+		local wielditem = hitter:get_wielded_item()
+		knockback = knockback + mcl_enchanting.get_enchantment(wielditem, "knockback")
+	elseif luaentity and luaentity._knockback then
+		knockback = knockback + luaentity._knockback
+	end
+
+	-- Throwables should always deal knockback.
+	-- https://minecraft.wiki/w/Knockback_(mechanic)
+	if tool_capabilities
+		and (tool_capabilities.damage_groups.snowball_vulnerable
+			or tool_capabilities.damage_groups.egg_vulnerable) then
+		damage = 1
+	end
+
+	if damage > 0 then
+		local velocity
+			= player:get_velocity ()
+		local standing
+			= velocity.y < 0.2 and velocity.y > -0.2 -- Very dubious test.
+		local knockback
+			= mcl_util.calculate_knockback (velocity, knockback * 0.5,
+							standing, dir.x, dir.z)
+		local delta
+			= vector.subtract (knockback, velocity)
+		player:add_velocity (delta)
+	end
+end
+
+minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	-- This section borrowed from Minetest.
+	if player:get_hp() == 0 then
+		return -- RIP
+	end
+
+	if hitter then
+		-- Server::handleCommand_Interact() adds eye offset to
+		-- one but not the other so the direction is slightly
+		-- off, calculate it ourselves
+		dir = vector.subtract(player:get_pos(), hitter:get_pos())
+	end
+	local d = vector.length(dir)
+	if d ~= 0.0 then
+		dir = vector.divide(dir, d)
+	end
+
+	mcl_player.player_knockback (player, hitter, dir, tool_capabilities, damage)
+end)
+
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 dofile(modpath.."/animations.lua")
 dofile(modpath.."/compat.lua")

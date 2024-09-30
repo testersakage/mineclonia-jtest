@@ -86,10 +86,6 @@ local skeleton = {
 		shoot_end = 90,
 		jockey_start = 172,
 		jockey_end = 172,
-		die_start = 160,
-		die_end = 170,
-		die_speed = 15,
-		die_loop = false,
 	},
 	on_spawn = function(self)
 		if math.random(100) == 1 then
@@ -103,6 +99,9 @@ local skeleton = {
 	view_range = 16,
 	fear_height = 4,
 	attack_type = "bowshoot",
+	specific_attack = {
+		"mobs_mc:iron_golem"
+	},
 	arrow = "mcl_bows:arrow_entity",
 	shoot_arrow = function(self, pos, dir)
 		if mod_bows then

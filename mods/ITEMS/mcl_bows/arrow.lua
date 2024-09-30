@@ -110,7 +110,7 @@ local function damage_particles(pos, is_critical)
 	end
 end
 
-function ARROW_ENTITY:arrow_knockback (object)
+function ARROW_ENTITY:arrow_knockback (object, damage)
 	local entity = object:get_luaentity ()
 	local v = self.object:get_velocity ()
 	v.y = 0
@@ -121,9 +121,7 @@ function ARROW_ENTITY:arrow_knockback (object)
 	if entity and entity.is_mob then
 		entity:projectile_knockback (1 + (self._knockback or 0), dir)
 	elseif object:is_player () then
-		local knockback = minetest.calculate_knockback (object, self.object,
-								1.4, nil, dir, 0, 1)
-		object:add_velocity (vector.multiply (dir, 3 + knockback))
+		mcl_player.player_knockback (object, entity, dir, nil, damage)
 	end
 end
 
@@ -273,8 +271,8 @@ function ARROW_ENTITY.on_step(self, dtime)
 							mcl_burning.set_on_fire(obj, 5)
 						end
 						if not self._in_player and not self._blocked then
-							mcl_util.deal_damage(obj, self._damage, {type = "arrow", source = self._shooter, direct = self.object})
-							self:arrow_knockback (obj)
+							local damage = mcl_util.deal_damage(obj, self._damage, {type = "arrow", source = self._shooter, direct = self.object})
+							self:arrow_knockback (obj, damage)
 							if self._extra_hit_func then
 								self._extra_hit_func(obj)
 							end

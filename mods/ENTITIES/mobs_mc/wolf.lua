@@ -2,8 +2,6 @@
 
 local S = minetest.get_translator("mobs_mc")
 
-local default_walk_chance = 50
-
 local pr = PseudoRandom(os.time()*10)
 
 local food = {} -- [item_name] = heal
