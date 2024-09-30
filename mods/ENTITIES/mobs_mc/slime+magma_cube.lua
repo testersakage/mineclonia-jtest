@@ -86,6 +86,107 @@ local function slime_check_light(pos, _, artificial_light, sky_light)
 	return math.max(artificial_light, sky_light) <= maxlight
 end
 
+-- Slime movement.
+
+local function slime_do_go_pos (self, dtime, moveresult)
+	-- The target position is ignored.
+	local speed = self.movement_velocity
+
+	if not self._next_jump then
+		self._next_jump = 0
+	end
+
+	local delay = math.max (0, self._next_jump - dtime)
+	if delay == 0 or self._in_water
+		or not (moveresult.touching_ground
+			or moveresult.standing_on_object) then
+		if delay == 0 then
+			self.order = "jump"
+			delay = (math.random (60) + 40) / 20 * self.jump_delay_multiplier
+			if self.attack then
+				delay = delay / 3
+			end
+		end
+		self.acc_dir.z = speed / 20
+		self.acc_speed = speed
+	else
+		self.acc_dir.z = 0
+		self.acc_speed = 0
+	end
+	self._next_jump = delay
+end
+
+local function slime_turn (self, dtime, self_pos)
+	if not self.attack then
+		local standing_on = minetest.registered_nodes[self.standing_on]
+		local remaining = self._next_turn
+		if not remaining or remaining == 0 then
+			remaining = (math.random (60) + 40) / 20
+		end
+
+		if standing_on and (standing_on.walkable
+				    or standing_on.liquidtype ~= "none") then
+			remaining = math.max (0, remaining - dtime)
+			if remaining == 0 then
+				local angle = math.random () * 2 * math.pi
+				self.object:set_yaw (angle - self.rotate)
+			end
+		end
+		self._next_turn = remaining
+	else
+		local target_pos = self.attack:get_pos ()
+		local dz, dx = target_pos.z - self_pos.z, target_pos.x - self_pos.x
+		local yaw = math.atan2 (dz, dx) - math.pi / 2
+
+		self.object:set_yaw (yaw)
+	end
+end
+
+local function slime_jump_continuously (self)
+	local factor = 1
+	self._in_water = false
+	if minetest.get_item_group (self.standing_in, "water") ~= 0
+		or minetest.get_item_group (self.standing_in, "lava") ~= 0 then
+		factor = 1.2
+		self._in_water = true
+	end
+	self.movement_goal = "go_pos"
+	self.movement_velocity = self.movement_speed * factor
+	-- movement_target is disregarded by slimes.
+end
+
+local function slime_check_attack (self, self_pos, dtime)
+	if not self.attack then
+		return
+	end
+	self._attack_cooldown = math.max (self._attack_cooldown - dtime, 0)
+	local target_pos = self.attack:get_pos ()
+	local girth = self.collisionbox[6] - self.collisionbox[3]
+	if vector.distance (target_pos, self_pos) <= girth + 0.25
+	   and self._attack_cooldown == 0 then
+		self:custom_attack ()
+		self._attack_cooldown = 0.5
+	end
+end
+
+local function slime_run_ai (self, dtime)
+	local self_pos = self.object:get_pos ()
+
+	self:check_attack (self_pos, dtime)
+	slime_turn (self, dtime, self_pos)
+	slime_jump_continuously (self)
+	slime_check_attack (self, self_pos, dtime)
+end
+
+local function slime_do_attack (self, target)
+	self.attack = target
+	self.target_invisible_time = 3.0
+	if self._next_jump then
+		self._next_jump = self._next_jump / 3
+	end
+	self._attack_cooldown = 0.5 -- Minecraft damage immunity.
+end
+
 -- Slime
 local slime_big = {
 	description = S("Slime - big"),
@@ -117,30 +218,35 @@ local slime_big = {
 	reach = 3,
 	armor = 100,
 	drops = {},
-	-- TODO: Fix animations
 	animation = {
-		jump_speed = 14,
-		stand_speed = 14,
-		walk_speed = 7,
 		jump_start = 1,
 		jump_end = 20,
+		jump_speed = 24,
+		jump_loop = false,
+		stand_speed = 0,
+		walk_speed = 0,
 		stand_start = 1,
-		stand_end = 20,
+		stand_end = 1,
 		walk_start = 1,
-		walk_end = 20,
+		walk_end = 1,
 	},
+	do_go_pos = slime_do_go_pos,
+	run_ai = slime_run_ai,
+	do_attack = slime_do_attack,
+	jump_delay_multiplier = 1,
 	fall_damage = 0,
 	view_range = 16,
-	attack_type = "melee",
 	passive = false,
 	jump = true,
-	movement_speed = 12, -- (0.3 + 0.1 * size) * 20
-	jump_height = 8, -- (was 5.8) JUMP!
+	movement_speed = 10, -- (0.2 + 0.1 * size) * 20
 	fear_height = 0,
 	spawn_small_alternative = "mobs_mc:slime_small",
 	on_die = spawn_children_on_die("mobs_mc:slime_small", 1.0, 1.5),
 	use_texture_alpha = true,
 	check_light = slime_check_light,
+	specific_attack = {
+		"mobs_mc:iron_golem",
+	},
 }
 mcl_mobs.register_mob("mobs_mc:slime_big", slime_big)
 
@@ -155,8 +261,7 @@ slime_small.collisionbox = {-0.51, -0.01, -0.51, 0.51, 1.00, 0.51}
 slime_small.visual_size = {x=6.25, y=6.25}
 slime_small.damage = 3
 slime_small.reach = 2.75
-slime_small.movement_speed = 8.0
-slime_small.jump_height = 4.3
+slime_small.movement_speed = 6.0
 slime_small.spawn_small_alternative = "mobs_mc:slime_tiny"
 slime_small.on_die = spawn_children_on_die("mobs_mc:slime_tiny", 0.6, 1.0)
 slime_small.sound_params.gain = slime_big.sound_params.gain / 3
@@ -180,8 +285,7 @@ slime_tiny.drops = {
 	min = 0,
 	max = 2,},
 }
-slime_small.movement_speed = 6.0
-slime_tiny.jump_height = 3
+slime_small.movement_speed = 4.0
 slime_tiny.spawn_small_alternative = nil
 slime_tiny.on_die = nil
 slime_tiny.sound_params.gain = slime_small.sound_params.gain / 3
@@ -290,7 +394,7 @@ local magma_cube_big = {
 		gain = 1,
 		max_hear_distance = 16,
 	},
-	movement_speed = 12,
+	movement_speed = 10.0,
 	damage = 6,
 	reach = 3,
 	armor = 53,
@@ -300,28 +404,31 @@ local magma_cube_big = {
 		min = 1,
 		max = 1,},
 	},
-	-- TODO: Fix animations
 	animation = {
-		jump_speed = 20,
-		stand_speed = 20,
-		walk_speed = 20,
-		jump_start = 1,
-		jump_end = 20,
-		stand_start = 1,
-		stand_end = 1,
-		walk_start = 1,
-		walk_end = 20,
+		jump_speed = 40,
+		jump_loop = false,
+		stand_speed = 0,
+		walk_speed = 0,
+		jump_start = 0,
+		jump_end = 50,
+		stand_start = 0,
+		stand_end = 0,
+		walk_start = 0,
+		walk_end = 0,
 	},
+	do_go_pos = slime_do_go_pos,
+	run_ai = slime_run_ai,
+	do_attack = slime_do_attack,
+	jump_delay_multiplier = 4,
 	water_damage = 0,
 	_mcl_freeze_damage = 5,
 	lava_damage = 0,
         fire_damage = 0,
 	fall_damage = 0,
 	view_range = 16,
-	attack_type = "melee",
+	jump_height = 14.4,
 	passive = false,
 	jump = true,
-	jump_height = 8,
 	fear_height = 0,
 	spawn_small_alternative = "mobs_mc:magma_cube_small",
 	on_die = spawn_children_on_die("mobs_mc:magma_cube_small", 0.8, 1.5),
@@ -341,8 +448,8 @@ magma_cube_small.collisionbox = {-0.51, -0.01, -0.51, 0.51, 1.00, 0.51}
 magma_cube_small.visual_size = {x=6.25, y=6.25}
 magma_cube_small.damage = 3
 magma_cube_small.reach = 2.75
-magma_cube_small.movement_speed = 8
-magma_cube_small.jump_height = 6
+magma_cube_small.movement_speed = 6.0
+magma_cube_small.jump_height = 12.4
 magma_cube_small.damage = 4
 magma_cube_small.reach = 2.75
 magma_cube_small.armor = 66
@@ -362,8 +469,8 @@ magma_cube_tiny.xp_min = 1
 magma_cube_tiny.xp_max = 1
 magma_cube_tiny.collisionbox = {-0.2505, -0.01, -0.2505, 0.2505, 0.50, 0.2505}
 magma_cube_tiny.visual_size = {x=3.125, y=3.125}
-magma_cube_tiny.movement_speed = 6
-magma_cube_tiny.jump_height = 4
+magma_cube_tiny.movement_speed = 4.0
+magma_cube_tiny.jump_height = 8.4
 magma_cube_tiny.damage = 3
 magma_cube_tiny.reach = 2.5
 magma_cube_tiny.armor = 50

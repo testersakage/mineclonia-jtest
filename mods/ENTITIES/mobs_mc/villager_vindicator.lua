@@ -41,6 +41,9 @@ mcl_mobs.register_mob("mobs_mc:vindicator", {
 	movement_speed = 7.0,
 	attack_type = "melee",
 	attack_npcs = true,
+	specific_attack = {
+		"mobs_mc:iron_golem"
+	},
 	drops = {
 		{name = "mcl_core:emerald",
 		chance = 1,

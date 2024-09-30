@@ -1726,7 +1726,7 @@ function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
 	-- Mobs and objects are currently non-colliding, so supplement the
 	-- move results with a raycast as in mcl_bows.
 	if not val or in_thrower_body then
-	local raycast = minetest.raycast (pos, vector.add (pos, velocity * 0.1),
+	local raycast = minetest.raycast (pos, vector.add (pos, velocity * 0.04),
 					  true, false)
 	local still_inside = false
 	local thrower = entity._thrower

@@ -37,6 +37,7 @@ mcl_mobs.mob_class = {
 	fly_chance = 55,
 	swims = false,
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source", 'mcl_core:water_flowing', 'mclx_core:river_water_flowing' },
+	ranged_attack_radius = 20,
 	owner = "",
 	order = "",
 	jump_height = 8.4,
@@ -82,15 +83,18 @@ mcl_mobs.mob_class = {
 	reach = 3,
 	htimer = 0,
 	texture_list = {},
-	docile_by_day = false,
 	time_of_day = 0.5,
 	fear_height = 0,
 	runaway_timer = 0,
+	runaway_from = nil,
+	avoid_range = 6.0,
 	explosion_timer = 3,
 	allow_fuse_reset = true,
 	stop_to_explode = true,
 	melee_interval = 1,
 	custom_attack_interval = 1,
+	ranged_interval_min = 1.0,
+	ranged_interval_max = 1.0,
 	dogshoot_count = 0,
 	dogshoot_count_max = 5,
 	dogshoot_count2_max = 5,
@@ -470,7 +474,7 @@ function mcl_mobs.register_arrow(name, def)
 
 			if self.hit_player or self.hit_mob or self.hit_object then
 				local raycast
-				= minetest.raycast (pos, pos + self.object:get_velocity () * 0.1)
+				= minetest.raycast (pos, pos + self.object:get_velocity () * 0.04)
 				local ok = false
 				local closest_object
 				local closest_distance

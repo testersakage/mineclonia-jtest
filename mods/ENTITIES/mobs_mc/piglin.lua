@@ -166,7 +166,7 @@ local piglin = {
 			self._attacked_by_player = true
 		end
 	end,
-	attack_type = "dogshoot",
+	attack_type = "crossbow",
 	arrow = "mcl_bows:arrow_entity",
 	shoot_arrow = function(self, pos, dir)
 		if self.attack then
