@@ -3,7 +3,7 @@ mcl_vaults = {
 }
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
---local S = minetest.get_translator(modname)
+local S = minetest.get_translator(modname)
 
 dofile(modpath.."/api.lua")
 
@@ -79,6 +79,74 @@ mcl_vaults.register_vault("vault",{
 				{ itemstring = "mcl_jukebox:record_8", weight = 2 },
 				--{ itemstring = "TODO:mcl_banners:pattern_guster", weight = 2 },
 				--{ itemstring = "TODO:tridentr", weight = 1 },
+			}
+		}
+}
+})
+
+mcl_vaults.register_vault("ominous_vault",{
+	key = "mcl_vaults:ominous_trial_key",
+	node_off = {
+		description = S("Ominous Vault"),
+		tiles = { "mcl_vaults_vault_ominous_top_off.png", "mcl_vaults_vault_ominous_bottom.png",
+			"mcl_vaults_vault_ominous_side_off.png", "mcl_vaults_vault_ominous_side_off.png",
+			"mcl_vaults_vault_ominous_side_off.png", "mcl_vaults_vault_ominous_front_off.png",
+		},
+	},
+	node_on = {
+		tiles = { "mcl_vaults_vault_ominous_top_on.png", "mcl_vaults_vault_bottom.png",
+			"mcl_vaults_vault_ominous_side_on.png", "mcl_vaults_vault_ominous_side_on.png",
+			"mcl_vaults_vault_ominous_side_on.png", "mcl_vaults_vault_ominous_front_on.png",
+		},
+	},
+	node_ejecting = {
+		tiles = { "mcl_vaults_vault_ominous_top_ejecting.png", "mcl_vaults_vault_bottom.png",
+			"mcl_vaults_vault_ominous_side_ejecting.png", "mcl_vaults_vault_ominous_side_ejecting.png",
+			"mcl_vaults_vault_ominous_side_ejecting.png", "mcl_vaults_vault_ominous_front_ejecting.png",
+		},
+	},
+	loot ={
+		{
+			stacks_min = 1,
+			stacks_max = 1,
+			items = {
+				{ itemstring = "mcl_core:emerald", weight = 145, amount_min = 4, amount_max = 10 },
+				{ itemstring = "mcl_charges:wind_charge", weight = 116, amount_min = 8, amount_max = 12 },
+				--{ itemstring = "TODO mcl_potions:arrow_of_slowness", weight = 87, amount_min = 2, amount_max = 8 },
+				{ itemstring = "mcl_core:diamond", weight = 58, amount_min = 2, amount_max = 3 },
+				--{ itemstring = "TODO:ominous_bottle", weight = 29, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_core:emeraldblock", weight = 300, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_bows:crossbow", weight = 240, func = function(stack, pr) mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
+				{ itemstring = "mcl_core:ironblock", weight = 240, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_core:apple_gold", weight = 180, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_tools:axe_diamond", weight = 180, func = function(stack, pr) mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
+				{ itemstring = "mcl_armor:chestplate_diamond", weight = 180, func = function(stack, pr) mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
+				{ itemstring = "mcl_books:book", weight = 120, func = function(stack, pr)	mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
+				{ itemstring = "mcl_books:book", weight = 120, func = function(stack, pr)	mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
+				{ itemstring = "mcl_books:book", weight = 120, func = function(stack, pr)	mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
+				{ itemstring = "mcl_core:diamondblock", weight = 60, amount_min = 1, amount_max = 1 },
+			}
+		},
+		{
+			stacks_min = 1,
+			stacks_max = 3,
+			items = {
+				{ itemstring = "mcl_core:emerald", weight = 145, amount_min = 4, amount_max = 10 },
+				{ itemstring = "mcl_charges:wind_charge", weight = 116, amount_min = 8, amount_max = 12 },
+				--{ itemstring = "TODO mcl_potions:arrow_of_slowness", weight = 87, amount_min = 2, amount_max = 8 },
+				{ itemstring = "mcl_core:diamond", weight = 58, amount_min = 2, amount_max = 3 },
+				--{ itemstring = "TODO:ominous_bottle", weight = 29, amount_min = 1, amount_max = 1 },
+			},
+		},
+		{
+			stacks_min = 1,
+			stacks_max = 1,
+			items = {
+				{ itemstring = "mcl_armor:flow", weight = 9, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_core:apple_gold_enchanted", weight = 9, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_banners:pattern_flow", weight = 6, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_jukebox:record_7", weight = 6 },
+				{ itemstring = "mcl_tools:heavy_core", weight = 9, amount_min = 1, amount_max = 1 },
 			}
 		}
 }
