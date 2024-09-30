@@ -1,4 +1,6 @@
 local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
+local modname = minetest.get_current_modname()
+local modpath = minetest.get_modpath(modname)
 
 mcl_util = {}
 
@@ -1442,3 +1444,5 @@ end
 
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
+mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
+dofile(modpath.."/compat.lua")
