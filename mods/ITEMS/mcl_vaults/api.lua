@@ -42,7 +42,7 @@ local tpl = {
 	_tt_help = S("Ejects loot when opened with the key"),
 	_doc_items_longdesc = S("A vault ejects loot when opened with the right key. It can only be opnend once by each player."),
 	_doc_items_usagehelp = S("A vault ejects loot when opened with the right key. It can only be opnend once by each player."),
-	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1},
+	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1, not_in_creative_inventory = 1},
 	is_ground_content = false,
 	drop = "",
 	_mcl_hardness = 50,
@@ -123,6 +123,7 @@ function mcl_vaults.register_vault(name, def)
 
 	minetest.register_node("mcl_vaults:"..name, table.merge(tpl, {
 		_mcl_vault_name = name,
+		groups = table.merge(tpl.groups, { not_in_creative_inventory = 0 }),
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			if itemstack:get_name() == def.key and can_open(pos, clicker) then
 				mcl_vaults.activate(pos)
