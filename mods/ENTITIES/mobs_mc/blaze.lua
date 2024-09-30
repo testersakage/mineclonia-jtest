@@ -80,7 +80,7 @@ mcl_mobs.register_mob("mobs_mc:blaze", {
 	fall_speed = -2.25,
 	gravity_drag = 0.6,
 	view_range = 16,
-	attack_type = "dogshoot",
+	attack_type = "ranged",
 	arrow = "mobs_mc:blaze_fireball",
 	shoot_interval = 3.5,
 	shoot_offset = 1.0,

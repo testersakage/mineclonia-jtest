@@ -228,7 +228,7 @@ function mob_class:set_animation(anim, fixed_frame)
 
 	if (anim == self._current_animation
 	or not self.animation[anim .. "_start"]
-	or not self.animation[anim .. "_end"]) and self.state ~= "die" then
+	or not self.animation[anim .. "_end"]) and not self.dead then
 		return
 	end
 
@@ -242,12 +242,15 @@ function mob_class:set_animation(anim, fixed_frame)
 		a_end = self.animation[anim .. "_end"]
 	end
 	if a_start and a_end then
-		self.object:set_animation({
-			x = a_start,
-			y = a_end},
+		local loop = self.animation[anim .. "_loop"] ~= false
+		self.object:set_animation({x = a_start,
+					   y = a_end},
 			self.animation[anim .. "_speed"] or self.animation.speed_normal or 15,
-			0, self.animation[anim .. "_loop"] ~= false)
+			0, loop)
+		if not loop then
+			self._current_animation = nil
 		end
+	end
 end
 
 -- above function exported for mount.lua
@@ -349,9 +352,9 @@ function mob_class:check_head_swivel(dtime, clear)
 			local mob_yaw = self_rot.y + math.atan2(dir.x, dir.z) + self.head_yaw_offset
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
 
-			if (mob_yaw < -PI_THIRD or mob_yaw > PI_THIRD) and not (self.attack and self.state == "attack" and not self.runaway) then
+			if (mob_yaw < -PI_THIRD or mob_yaw > PI_THIRD) and not (self.attack and not self.runaway) then
 				newr = vector.multiply(oldr, 0.9)
-			elseif self.attack and self.state == "attack" and not self.runaway then
+			elseif self.attack and not self.runaway then
 				if self.head_yaw == "y" then
 					newr = vector.new(mob_pitch, mob_yaw, 0)
 				elseif self.head_yaw == "z" then
@@ -384,13 +387,21 @@ function mob_class:check_head_swivel(dtime, clear)
 end
 
 -- set animation speed relative to velocity
-function mob_class:set_animation_speed(custom_speed)		
-	if self._current_animation ~= "walk"
-		and self._current_animation ~= "run" then
-		self.object:set_animation_frame_speed (self.animation.walk_speed)
+function mob_class:set_animation_speed(custom_speed)
+	local anim = self._current_animation
+	if not anim then
 		return
 	end
-	local speed = custom_speed or self.animation.walk_speed or 25
+	local name = anim .. "_speed"
+	if anim ~= "walk" and self.anim ~= "run" then
+		self.object:set_animation_frame_speed (self.animation[name]
+						       or self.animation.speed_normal
+						       or 25)
+		return
+	end
+	local speed = custom_speed or self.animation[name]
+		or self.animation.speed_normal
+		or 25
 	local v = self:get_velocity ()
 	local scaled_speed = speed * self.frame_speed_multiplier
 	self.object:set_animation_frame_speed (scaled_speed * math.min (1, v))

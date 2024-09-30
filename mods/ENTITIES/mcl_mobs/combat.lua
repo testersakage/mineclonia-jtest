@@ -20,6 +20,7 @@ function mob_class:do_attack(obj)
 	end
 	-- No longer idle.  Interrupt other
 	-- activities.
+	self.avoiding = false
 	self.avoiding_sunlight = false
 	self.mate = nil
 	self.following = nil
@@ -90,45 +91,17 @@ function mob_class:dogswitch(dtime)
 	return self.dogshoot_switch
 end
 
--- no damage to nodes explosion
-function mob_class:safe_boom(pos, strength, no_remove)
-	minetest.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
-		pos = pos,
-		gain = 1.0,
-		max_hear_distance = self.sounds and self.sounds.distance or 32
-	}, true)
-	local radius = strength
-	blast_damage(pos, radius, self.object)
-	mcl_mobs.effect(pos, 32, "mcl_particles_smoke.png", radius * 3, radius * 5, radius, 1, 0)
-	if not no_remove then
-		if self.is_mob then
-			self:safe_remove()
-		else
-			self.object:remove()
-		end
-	end
-end
-
-
--- make explosion with protection and tnt mod check
-function mob_class:boom(pos, strength, fire, no_remove)
-	if mobs_griefing and not minetest.is_protected(pos, "") then
-		mcl_explosions.explode(pos, strength, { fire = fire }, self.object)
-	else
-		mcl_mobs.mob_class.safe_boom(self, pos, strength, no_remove) --need to call it this way bc self can be the "arrow" object here
-	end
-	if not no_remove then
-		if self.is_mob then
-			self:safe_remove()
-		else
-			self.object:remove()
-		end
-	end
+function mob_class:standing_on_walkable ()
+	local def = minetest.registered_nodes [self.standing_on]
+	return def and def.walkable
 end
 
 -- Apply projectile knockback.
 function mob_class:projectile_knockback (factor, dir)
-	local v = self.object:get_velocity ()
+	local velocity = self.object:get_velocity ()
+	local standing = self:standing_on_walkable ()
+	local knockback
+		= mcl_util.calculate_knockback (velocity, factor * 0.5, standing, dir.x, dir.z)
 
 	if self.animation.run_end then
 		self:set_animation ("run")
@@ -136,11 +109,7 @@ function mob_class:projectile_knockback (factor, dir)
 		self:set_animation ("walk")
 	end
 	self.frame_speed_multiplier=2.3
-	self.object:set_velocity({
-			x = v.x / 2.0 + dir.x * factor * 2.5,
-			y = v.y / 2.0 + 2,
-			z = v.z / 2.0 + dir.z * factor * 2.5,
-	})
+	self.object:set_velocity (knockback)
 	minetest.after(0.2, function()
 			       if self and self.object then
 				       self.frame_speed_multiplier=1
@@ -304,66 +273,67 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 				die = true
 			end
 		end
-		-- knock back effect (only on full punch)
-		if self.knock_back
-		and tflp >= punch_interval then
-			-- direction error check
-			dir = dir or {x = 0, y = 0, z = 0}
-
-			local v = self.object:get_velocity()
-			if not v then return end
-			local r = 1.4 - math.min(punch_interval, 1.4)
-			local kb = r
-			local up = 2
-
-			if die==true then
-				kb=kb*2
-			end
-
-			-- if already in air then dont go up anymore when hit
-			if math.abs(v.y) > 0.1
-			or self.fly then
-				up = 0
-			end
-
-
-			-- check if tool already has specific knockback value
-			if tool_capabilities.damage_groups["knockback"] then
-				kb = tool_capabilities.damage_groups["knockback"]
-			else
-				kb = kb * 1.5
-			end
-
-
-			local luaentity
-			if hitter then
-				luaentity = hitter:get_luaentity()
-			end
-			if is_player then
-				local wielditem = hitter:get_wielded_item()
-				kb = kb + 3 * mcl_enchanting.get_enchantment(wielditem, "knockback")
-			elseif luaentity and luaentity._knockback then
-				kb = kb + luaentity._knockback
-			end
-			self.frame_speed_multiplier=2.3
-			if self.animation.run_end then
-				self:set_animation( "run")
-			elseif self.animation.walk_end then
-				self:set_animation( "walk")
-			end
-			minetest.after(0.2, function()
-				if self and self.object then
-					self.frame_speed_multiplier=1
-				end
-			end)
-
-			v.x = v.x / 2.0 + dir.x * kb*2.5
-			v.z = v.z / 2.0 + dir.z * kb*2.5
-			v.y = v.y / 2.0 + up * 2
-			self.object:set_velocity (v)
-			self.pause_timer = 0.25
-		end
 	end -- END if damage
+
+	-- knock back effect (only on full punch)
+	if (damage >= 0 or tool_capabilities.damage_groups.snowball_vulnerable
+		or tool_capabilities.damage_groups.egg_vulnerable)
+		and (self.knock_back and tflp >= punch_interval) then
+		-- direction error check
+		dir = dir or {x = 0, y = 0, z = 0}
+
+		local v = self.object:get_velocity()
+		if not v then return end
+		local r = 1.4 - math.min(punch_interval, 1.4)
+		local kb = r
+		local up = 2
+
+		if die==true then
+			kb=kb*2
+		end
+
+		-- if already in air then dont go up anymore when hit
+		if math.abs(v.y) > 0.1
+			or self.fly then
+			up = 0
+		end
+
+
+		-- check if tool already has specific knockback value
+		if tool_capabilities.damage_groups["knockback"] then
+			kb = tool_capabilities.damage_groups["knockback"]
+		else
+			kb = kb * 1.5
+		end
+
+
+		local luaentity
+		if hitter then
+			luaentity = hitter:get_luaentity()
+		end
+		if is_player then
+			local wielditem = hitter:get_wielded_item()
+			kb = kb + mcl_enchanting.get_enchantment(wielditem, "knockback")
+		elseif luaentity and luaentity._knockback then
+			kb = kb + luaentity._knockback
+		end
+		self.frame_speed_multiplier=2.3
+		if self.animation.run_end then
+			self:set_animation( "run")
+		elseif self.animation.walk_end then
+			self:set_animation( "walk")
+		end
+		minetest.after(0.2, function()
+				       if self and self.object then
+					       self.frame_speed_multiplier=1
+				       end
+		end)
+
+		local standing = self:standing_on_walkable ()
+		v = mcl_util.calculate_knockback (v, kb * 0.5, standing, dir.x, dir.z)
+		self.object:set_velocity (v)
+		self.pause_timer = 0.25
+	end
 
 	-- if skittish then run away
 	if hitter and hitter:get_pos() and not die and self.runaway == true and self.state ~= "flop" then
@@ -434,6 +404,10 @@ function mob_class:should_attack (object)
 			return true
 		end
 
+		if self.attacks_monsters and entity.type == "monster" then
+			return true
+		end
+
 		if table.indexof (specific, entity.name) ~= -1 then
 			return true
 		end
@@ -446,6 +420,10 @@ end
 
 function mob_class:should_continue_to_attack (object)
 	if object:is_player () and not self:attack_player_allowed (object) then
+		return false
+	end
+	local entity = object:get_luaentity ()
+	if entity and entity.is_mob and entity.dead then
 		return false
 	end
 	return object:get_hp () > 0
@@ -589,6 +567,7 @@ function mob_class:custom_attack ()
 		damage_groups = {fleshy = self.damage},
 	}
 	self:set_animation ("punch")
+	self:mob_sound ("attack")
 	attack:punch (self.object, 1.0, damage, nil)
 end
 
@@ -639,6 +618,117 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		delay = self.melee_interval
 	end
 	self._attack_delay = delay
+end
+
+function mob_class:discharge_ranged (self_pos, target_pos)
+	local p = vector.offset (target_pos, 0, -0.5, 0)
+	local s = vector.offset (self_pos, 0, 0.5, 0)
+	local vec = {
+		x = p.x - s.x,
+		y = p.y - s.y,
+		z = p.z - s.z
+	}
+
+	self:mob_sound ("shoot_attack")
+	-- Shoot arrow
+	if minetest.registered_entities[self.arrow] or self.shoot_arrow then
+		s.y = s.y + (self.collisionbox[2] + self.collisionbox[5]) / 2
+		local v = 1
+		local arrow
+		if not self.shoot_arrow then
+			self.firing = true
+			minetest.after(1, function(self)
+					       self.firing = false
+			end, self)
+			arrow = minetest.add_entity(s, self.arrow)
+			local ent = arrow:get_luaentity()
+			if ent.velocity then
+				v = ent.velocity
+			end
+			ent.switch = 1
+			ent.owner_id = tostring(self.object) -- add unique owner id to arrow
+
+			-- important for mcl_shields
+			ent._shooter = self.object
+			ent._saved_shooter_pos = self.object:get_pos()
+			if ent.homing then
+				ent._target = self.attack
+			end
+		end
+
+		local amount = (vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) ^ 0.5
+		-- offset makes shoot aim accurate
+		vec.y = vec.y + self.shoot_offset
+		vec.x = vec.x * (v / amount)
+		vec.y = vec.y * (v / amount)
+		vec.z = vec.z * (v / amount)
+
+		if self.shoot_arrow then
+			vec = vector.normalize (vec)
+			arrow = self:shoot_arrow (s, vec)
+		end
+
+		if arrow then
+			arrow:set_velocity(vec)
+		end
+	end
+end
+
+function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
+	local vistime, min_distance
+	if not self.attacking then
+		self._target_visible_time = 0
+		self._shoot_timer = self.ranged_interval_min
+		self.attacking = true
+	end
+	vistime = self._target_visible_time
+
+	if line_of_sight then
+		vistime = vistime + dtime
+	else
+		vistime = 0
+	end
+	self._target_visible_time = vistime
+	min_distance = self.ranged_attack_radius
+
+	local distance = vector.distance (self_pos, target_pos)
+	if distance < min_distance and vistime > 0.25 then
+		self:cancel_navigation ()
+		self:halt_in_tracks ()
+	else
+		if self:check_timer ("ranged_pathfind", 0.5) then
+			self:gopath (target_pos)
+		end
+	end
+	local shoot_time = self._shoot_timer
+	shoot_time = math.max (0, shoot_time - dtime)
+	if line_of_sight and self:navigation_finished () then
+		self:look_at (target_pos)
+	end
+	if shoot_time == 0 then
+		if line_of_sight then
+			-- Attack target.
+			self:discharge_ranged (self_pos, target_pos)
+
+			-- Derive the delay from the distance to the
+			-- target.
+			local rem = distance / min_distance
+			local rem = math.max (0.1, math.min (1.0, rem))
+			self._shoot_timer = rem * (self.ranged_interval_max
+							- self.ranged_interval_min)
+				+ self.ranged_interval_min
+			return
+		end
+
+		-- Likewise, but don't confine it to a fixed
+		-- range.
+		local rem = distance / min_distance
+		self._shoot_timer = rem * (self.ranged_interval_max
+					   - self.ranged_interval_min)
+			+ self.ranged_interval_min
+	else
+		self._shoot_timer = shoot_time
+	end
 end
 
 function mob_class:check_attack (self_pos, dtime)
@@ -713,14 +803,19 @@ function mob_class:check_attack (self_pos, dtime)
 			self.target_invisible_time = SIGHT_PERSISTENCE
 		end
 
-		if self.attack_type == "bowshoot" then
+		local attack_type = self.attack_type
+		if not attack_type then
+			return true
+		end
+		if attack_type == "bowshoot" then
 			self:attack_bowshoot (self_pos, dtime, target_pos,
 					      line_of_sight)
-		elseif self.attack_type == "ranged" then
+		elseif attack_type == "crossbow" then
 			-- TODO
-		elseif self.attack_type == "melee" then
-			self:attack_melee (self_pos, dtime, target_pos,
-					   line_of_sight)
+		elseif attack_type == "ranged" then
+			self:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
+		elseif attack_type == "melee" then
+			self:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		else
 			minetest.log ("warning", "unknown attack type " .. self.attack_type)
 		end

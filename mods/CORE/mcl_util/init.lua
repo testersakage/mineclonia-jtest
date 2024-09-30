@@ -600,7 +600,7 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 			if luaentity:deal_damage(damage, mcl_reason or {type = "generic"}) ~= true then
 				mcl_damage.run_damage_callbacks(target, damage, mcl_reason or {type = "generic"})
 			end
-			return
+			return damage
 		elseif luaentity.is_mob then
 			if mcl_reason.source and mcl_reason.source.is_player and mcl_reason.source:is_player() then
 				luaentity.last_player_hit_time = minetest.get_gametime()
@@ -617,7 +617,7 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 				mcl_damage.run_death_callbacks(target, mcl_reason or {type = "generic"})
 			end
 			luaentity:check_for_death (mcl_reason.type, mcl_reason)
-			return
+			return damage
 		else
 			local armorgroups = target:get_armor_groups()
 			if armorgroups and not armorgroups.immortal then
@@ -639,6 +639,7 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 	      target:set_hp (hp - damage, {_mcl_reason = mcl_reason})
 	   end
 	end
+	return damage
 end
 
 function mcl_util.get_hp(obj)
@@ -1445,6 +1446,17 @@ function mcl_util.queue()
 	}
 end
 
+function mcl_util.calculate_knockback (velocity, factor, standing, x, z)
+	local v = vector.normalize (vector.new (x, 0, z)) * factor
+
+	-- Counterbalance it with a reduced version of the current
+	-- velocity.
+	v.x = (velocity.x / 2 + (v.x * 20)) * 0.546
+	v.z = (velocity.z / 2 + (v.z * 20)) * 0.546
+	-- Apply vertical force if standing
+	v.y = standing and (math.min (0.4 * 20, v.y / 2.0 + (factor * 10))) or v.y
+	return v
+end
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")

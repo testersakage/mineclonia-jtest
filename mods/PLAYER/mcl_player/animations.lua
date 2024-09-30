@@ -37,29 +37,57 @@ function mcl_player.register_on_visual_change(func)
 	table.insert(mcl_player.registered_on_visual_change, func)
 end
 
-local function player_collision(player)
+function mcl_player.player_collision(player, object)
+	local pos = player:get_pos()
+	local pos2 = object:get_pos()
+	local r1 = (math.random (300) - 150) / 2400
+	local r2 = (math.random (300) - 150) / 2400
+	local x_diff = pos2.x - pos.x + r1
+	local z_diff = pos2.z - pos.z + r2
+	local max_diff = math.max (math.abs (x_diff), math.abs (z_diff))
+	local d_scale
 
+	if max_diff > 0.01 then
+		max_diff = math.sqrt (max_diff)
+		d_scale = math.min (1.0, 1.0 / max_diff)
+		z_diff = z_diff / max_diff * d_scale * 0.91
+		x_diff = x_diff / max_diff * d_scale * 0.91
+
+		player:add_velocity (vector.new (-x_diff, 0, -z_diff))
+	end
+end
+
+local function player_collision (player)
 	local pos = player:get_pos()
 	local x = 0
 	local z = 0
 	local width = .75
 
+	-- This function is only concerned with players; mobs
+	-- colliding with players call mcl_player.player_collision
+	-- instead.
 	for object in minetest.objects_inside_radius(pos, width) do
-
-		local ent = object:get_luaentity()
-		if (object:is_player() or (ent and ent.is_mob and object ~= player)) then
-
+		if object ~= player and object:is_player () then
 			local pos2 = object:get_pos()
-			local vec  = {x = pos.x - pos2.x, z = pos.z - pos2.z}
-			local force = (width + 0.5) - vector.distance(
-				{x = pos.x, y = 0, z = pos.z},
-				{x = pos2.x, y = 0, z = pos2.z})
+			local r1 = (math.random (300) - 150) / 2400
+			local r2 = (math.random (300) - 150) / 2400
+			local x_diff = pos2.x - pos.x + r1
+			local z_diff = pos2.z - pos.z + r2
+			local max_diff, d_scale
+				= math.max (math.abs (x_diff), math.abs (z_diff))
 
-			x = x + (vec.x * force)
-			z = z + (vec.z * force)
+			if max_diff > 0.01 then
+				max_diff = math.sqrt (max_diff)
+				d_scale = math.min (1.0, 1.0 / max_diff)
+				z_diff = z_diff / max_diff * d_scale
+				x_diff = x_diff / max_diff * d_scale
+
+				x = x - x_diff
+				z = z - z_diff
+			end
 		end
 	end
-	return {x,z}
+	return x * 0.91, z * 0.91
 end
 
 local function dir_to_pitch(dir)
@@ -249,7 +277,7 @@ mcl_player.register_globalstep(function(player)
 	local player_velocity = player:get_velocity()
 	local elytra = mcl_player.players[player].elytra and mcl_player.players[player].elytra.active
 
-	local c_x, c_y = unpack(player_collision(player))
+	local c_x, c_y = player_collision (player)
 
 	if player_velocity.x + player_velocity.y < .5 and c_x + c_y > 0 then
 		player:add_velocity({x = c_x, y = 0, z = c_y})

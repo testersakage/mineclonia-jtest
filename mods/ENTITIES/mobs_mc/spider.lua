@@ -4,6 +4,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
 --###################
 --################### SPIDER
@@ -36,7 +37,6 @@ local spider = {
 	type = "monster",
 	spawn_class = "hostile",
 	passive = false,
-	docile_by_day = true,
 	attack_type = "melee",
 	pathfinding = 1,
 	damage = 2,
@@ -111,6 +111,27 @@ local spider = {
 		run_end = 20,
 	},
 }
+
+local function mc_light_value (self)
+	local brightness, value
+	local pos = self.object:get_pos ()
+	brightness = minetest.get_node_light (pos) / 15.0
+	value = brightness / (4 - 3 * brightness)
+	return value
+end
+
+function spider:should_continue_to_attack (target)
+	if math.random (100) == 1 and mc_light_value (self) >= 0.5 then
+		return false
+	end
+	return mob_class.should_continue_to_attack (self, target)
+end
+
+function spider:should_attack (target)
+	return mc_light_value (self) < 0.5
+		and mob_class.should_attack (self, target)
+end
+
 mcl_mobs.register_mob("mobs_mc:spider", spider)
 
 -- Cave spider

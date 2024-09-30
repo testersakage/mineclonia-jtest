@@ -156,21 +156,36 @@ function mob_class:collision()
 	local z = 0
 	local cbox = self.collisionbox
 	local width = -cbox[1] + cbox[4]
+	local pushable = self.pushable
+	local mob_pushable = self.mob_pushable
 	for _,object in pairs(minetest.get_objects_inside_radius(pos, width)) do
 		local ent = object:get_luaentity()
-		if (self.pushable and object:is_player())
-			or (self.mob_pushable and ent and ent.is_mob and object ~= self.object) then
+		local is_player = object:is_player ()
+		if (pushable and is_player)
+			or (mob_pushable and ent and ent.is_mob and object ~= self.object) then
 			local pos2 = object:get_pos()
-			local vec  = {x = pos.x - pos2.x, z = pos.z - pos2.z}
-			local force = vector.distance(
-				{x = pos.x, y = 0, z = pos.z},
-				{x = pos2.x, y = 0, z = pos2.z}) / width
+			local r1 = (math.random (300) - 150) / 2400
+			local r2 = (math.random (300) - 150) / 2400
+			local x_diff = pos2.x - pos.x + r1
+			local z_diff = pos2.z - pos.z + r2
+			local max_diff = math.max (math.abs (x_diff), math.abs (z_diff))
+			local d_scale
 
-			x = x + (vec.x * force)
-			z = z + (vec.z * force)
+			if max_diff > 0.01 then
+				max_diff = math.sqrt (max_diff)
+				d_scale = math.min (1.0, 1.0 / max_diff)
+				z_diff = z_diff / max_diff * d_scale
+				x_diff = x_diff / max_diff * d_scale
+
+				x = x - x_diff
+				z = z - z_diff
+			end
+
+			if is_player then
+				mcl_player.player_collision (object, self.object)
+			end
 		end
 	end
-
 	return x, z
 end
 
@@ -363,11 +378,6 @@ function mob_class:check_for_death(cause, cmi_cause)
 		collide_with_objects = false,
 	})
 
-	self:set_velocity(0)
-	if self.object then
-		self.object:set_acceleration(vector.new(0, self.fall_speed, 0))
-	end
-
 	local length
 	-- default death function and die animation (if defined)
 	if self.instant_death then
@@ -438,19 +448,6 @@ function mob_class:check_for_death(cause, cmi_cause)
 	end
 
 	return true
-end
-
--- Deal light damage to mob, returns true if mob died
-function mob_class:deal_light_damage(pos, damage)
-	if not ((mcl_weather.rain.raining or mcl_weather.state == "snow") and mcl_weather.is_outdoor(pos)) then
-		self:damage_mob("light", damage)
-
-		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png")
-
-		if self:check_for_death("light", {type = "light"}) then
-			return true
-		end
-	end
 end
 
 function mob_class:is_in_node(itemstring) --can be group:...
@@ -874,16 +871,25 @@ local AIR_FRICTION		= 0.91
 local WATER_DRAG		= 0.8
 local LAVA_FRICTION		= 0.5
 local LAVA_SPEED		= 0.4
+local FLYING_LIQUID_SPEED	= 0.4
+local FLYING_GROUND_SPEED	= 2.0
+local FLYING_AIR_SPEED		= 0.4
 local BASE_SLIPPERY		= 0.98
 local BASE_FRICTION		= 0.6
 local LIQUID_FORCE		= 0.28
 local BASE_FRICTION3		= math.pow (0.6, 3)
+local FLYING_BASE_FRICTION3	= math.pow (BASE_FRICTION * AIR_FRICTION, 3)
 local LIQUID_JUMP_THRESHOLD	= 0.4
 local LIQUID_JUMP_FORCE		= 0.8
 local LIQUID_JUMP_FORCE_ONESHOT	= 6.0
 
 local function scale_speed (speed, friction)
 	local f = BASE_FRICTION3 / (friction * friction * friction)
+	return speed * f
+end
+
+local function scale_speed_flying (speed, friction)
+	local f = FLYING_BASE_FRICTION3 / (friction * friction * friction)
 	return speed * f
 end
 
@@ -904,7 +910,7 @@ end
 
 function mob_class:jump_actual (v)
 	self.order = ""
-	-- TODO: animation and block jump factors
+	self:set_animation ("jump")
 	v = {x = v.x, y = self.jump_height, z = v.z,}
 	if self:can_jump_cliff () then
 		v = vector.multiply (v, vector.new (2.8, 1, 2.8))
@@ -1013,23 +1019,6 @@ function mob_class:motion_step (dtime, moveresult)
 		self.reset_fall_damage = 1
 	end
 
-	local deferred_jump
-
-	if jumping then
-		if standin.groups.water or standin.groups.lava then
-			if self.floats then
-				deferred_jump = LIQUID_JUMP_FORCE
-			else
-				v.y = v.y + LIQUID_JUMP_FORCE_ONESHOT
-			end
-		else
-			if touching_ground and (not self.jump_timer or self.jump_timer <= 0) then
-				v = self:jump_actual (v)
-				self.jump_timer = 0.2
-			end
-		end
-	end
-
 	local water_vec = self:check_water_flow ()
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
@@ -1069,12 +1058,6 @@ function mob_class:motion_step (dtime, moveresult)
 			v.y = -0.06
 		end
 
-		-- Apply any ascent force, now that v_scale is
-		-- available.
-		if deferred_jump then
-			v.y = v.y + deferred_jump * v_scale
-		end
-
 		if horiz_collision (v, moveresult) then
 			-- Climb water as if it were a ladder.
 			v.y = 3.0
@@ -1090,13 +1073,6 @@ function mob_class:motion_step (dtime, moveresult)
 		v = vector.multiply (v, r)
 		v_scale = h_scale
 		v.y = v.y + fall_speed * v_scale
-
-		-- Apply any ascent force, now that v_scale is
-		-- available.
-		if deferred_jump then
-			v.y = v.y + deferred_jump * v_scale
-		end
-
 		v = vector.add (v, fv)
 	else
 		-- If not standing on air, apply slippery to a base value of
@@ -1160,8 +1136,88 @@ function mob_class:motion_step (dtime, moveresult)
 		v.y = v.y * f
 	end
 
+	if jumping then
+		if standin.groups.water or standin.groups.lava then
+			if self.floats then
+				v.y = v.y + LIQUID_JUMP_FORCE * v_scale
+			else
+				v.y = v.y + LIQUID_JUMP_FORCE_ONESHOT
+			end
+		else
+			if touching_ground and (not self.jump_timer or self.jump_timer <= 0) then
+				v = self:jump_actual (v)
+				self.jump_timer = 0.2
+			end
+		end
+	end
+
+	-- Step height should always be configured to zero while not
+	-- standing.  This might be slightly counter-intuitive, but it
+	-- enables jumping to function correctly when the mob is
+	-- accelerating forward.
+	if touching_ground and self._previously_floating then
+		self._previously_floating = false
+		self.object:set_properties ({stepheight = self._initial_step_height})
+	elseif not touching_ground and not self._previously_floating then
+		self._previously_floating = true
+		self.object:set_properties ({stepheight = 0.0})
+	end
+
 	-- Clear the jump flag even when jumping is not yet possible.
 	self.order = ""
+	self.object:set_velocity (v)
+	self:check_collision ()
+end
+
+-- Simplified `motion_step' for true (i.e., not birds or blazes)
+-- flying mobs.
+
+function mob_class:flying_step (dtime, moveresult)
+	if not moveresult then
+		return
+	end
+	local standin = minetest.registered_nodes[self.standing_in]
+	local standon = minetest.registered_nodes[self.standing_on]
+	local touching_ground = moveresult.touching_ground
+		or moveresult.standing_on_object
+	local v = self.object:get_velocity ()
+	local p = pow_by_step (AIR_DRAG, dtime)
+	local acc_dir = self.acc_dir
+	local fv, speed, scale
+
+	acc_dir.x = acc_dir.x * p
+	acc_dir.z = acc_dir.z * p
+
+	if standin.groups.water then
+		speed = FLYING_LIQUID_SPEED
+		p = pow_by_step (WATER_DRAG, dtime)
+		scale = (1 - p) / (1 - WATER_DRAG)
+	elseif standin.groups.lava then
+		speed = FLYING_LIQUID_SPEED
+		p = pow_by_step (LAVA_FRICTION, dtime)
+		scale = (1 - p) / (1 - LAVA_FRICTION)
+	else
+		local slippery = standon.groups.slippery
+		local friction
+
+		if slippery and slippery > 0 then
+			friction = BASE_SLIPPERY * AIR_FRICTION
+			speed = scale_speed_flying (FLYING_GROUND_SPEED, friction)
+		elseif touching_ground then
+			friction = BASE_FRICTION * AIR_FRICTION
+			speed = scale_speed_flying (FLYING_GROUND_SPEED, friction)
+		else
+			friction = AIR_FRICTION
+			speed = FLYING_AIR_SPEED
+		end
+		p = pow_by_step (friction, dtime)
+		scale = (1 - p) / (1 - friction)
+	end
+
+	fv = self:accelerate_relative (acc_dir, speed * scale)
+	v.x = v.x * p + fv.x
+	v.y = v.y * p + fv.y
+	v.z = v.z * p + fv.z
 	self.object:set_velocity (v)
 	self:check_collision ()
 end

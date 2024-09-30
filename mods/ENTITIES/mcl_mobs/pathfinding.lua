@@ -266,7 +266,7 @@ local function d (node1, node2)
 	return vector.distance (node1, node2)
 end
 
-function mob_class:h_to_nearest_target (node, context)
+function h_to_nearest_target (node, context)
 	local best_distance
 	for _, target in ipairs (context.targets) do
 		local d = manhattan3d (node.x, node.y, node.z,
@@ -338,10 +338,9 @@ function mob_class:gwp_initialize (targets, range)
 	-- Construct initial open set and initialize context for first
 	-- cycle.
 	start.g = 0
-	start.h = self:h_to_nearest_target (start, context)
+	start.h = h_to_nearest_target (start, context)
 	start.total_d = 0
 	context.open_set:enqueue (start, start.h)
-	context.stepheight = self.object:get_properties ().stepheight
 	context.fall_distance = self:gwp_safe_fall_distance ()
 	return context
 end
@@ -353,27 +352,23 @@ function mob_class:gwp_safe_fall_distance ()
 	return 3
 end
 
+local get_us_time = minetest.get_us_time
+
 function mob_class:gwp_cycle (context, timeout)
-	local time = os.clock ()
+	local time = get_us_time ()
 	local set = context.open_set
 	local clock
 	local n_total = context.total_nodes
 	local maxnodes = context.maxnodes
-	context.stepheight = self.object:get_properties ().stepheight
+	-- Convert this timeout to us.
+	timeout = math.round (timeout * 1e6)
 	context.fall_distance = self:gwp_safe_fall_distance ()
 	repeat
-		if set:empty () then
-			local time = os.clock () - time
+		if set:empty () or n_total + 1 > maxnodes then
+			local time = get_us_time () - time
 			context.time_elapsed = context.time_elapsed + time
 			context.total_nodes = n_total
-			return true, time
-		end
-
-		if n_total + 1 > maxnodes then
-			local time = os.clock () - time
-			context.time_elapsed = context.time_elapsed + time
-			context.total_nodes = n_total
-			return true, time
+			return true, time / 1e6
 		end
 
 		local node = set:dequeue ()
@@ -389,10 +384,10 @@ function mob_class:gwp_cycle (context, timeout)
 			end
 		end
 		if #context.arrivals >= 1 then
-			local time = os.clock () - time
+			local time = get_us_time () - time
 			context.time_elapsed = context.time_elapsed + time
 			context.total_nodes = n_total
-			return true, time
+			return true, time / 1e6
 		end
 
 		-- Enter each neighbor into the queue.
@@ -405,7 +400,7 @@ function mob_class:gwp_cycle (context, timeout)
 			if dist <= context.range
 				and neighbor.total_d < context.maxdist then
 				local new_g = node.g + dist + neighbor.penalty
-				local new_h = self:h_to_nearest_target (neighbor, context) * 1.5 -- Minecraft value.
+				local new_h = h_to_nearest_target (neighbor, context) * 1.5 -- Minecraft value.
 				if set:contains (neighbor) then
 					-- Re-enqueue this neighbor if this
 					-- path to it is shorter.
@@ -426,11 +421,11 @@ function mob_class:gwp_cycle (context, timeout)
 				end
 			end
 		end
-		clock = os.clock ()
+		clock = get_us_time ()
 	until clock - time >= timeout
 	context.time_elapsed = context.time_elapsed + (clock - time)
 	context.total_nodes = n_total
-	return false, clock - time
+	return false, (clock - time) / 1e6
 end
 
 function mob_class:gwp_reconstruct_path (context, arrival)
@@ -618,7 +613,7 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump)
 
 	-- Can this mob climb from PARENT to this node on the same
 	-- level without jumping?
-	if ground - floor > context.stepheight then
+	if ground - floor > self._initial_step_height then
 		return nil
 	else
 		local class = self:gwp_classify_node (context, node)
@@ -1048,8 +1043,8 @@ function mob_class:gwp_classify_surroundings (pos)
 	end
 
 	v.x = x + 0
-	v.y = y +  -1
-	v.z = z +  1
+	v.y = y + -1
+	v.z = z + 1
 	local new = gwp_basic_classify (v)
 	local influence = influences[new]
 	if influence then
@@ -1057,8 +1052,8 @@ function mob_class:gwp_classify_surroundings (pos)
 	end
 
 	v.x = x + 0
-	v.y = y +  -1
-	v.z = z +  -1
+	v.y = y + -1
+	v.z = z + -1
 	local new = gwp_basic_classify (v)
 	local influence = influences[new]
 	if influence then
@@ -1120,7 +1115,7 @@ function mob_class:gwp_classify_surroundings (pos)
 	end
 
 	v.x = x + -1
-	v.y = y +  -1
+	v.y = y + -1
 	v.z = z +  1
 	local new = gwp_basic_classify (v)
 	local influence = influences[new]
@@ -1205,7 +1200,14 @@ function mob_class:gwp_edges (context, node)
 end
 
 if minetest.global_exists ("jit") then
-	jit.off (mob_class.gwp_cycle, true)
+	-- jit.off (mob_class.gwp_cycle, true)
+	-- jit.off (mob_class.gwp_edges, true)
+	-- jit.off (gwp_edges_1, true)
+	-- jit.off (mob_class.gwp_classify_node, true)
+	-- jit.off (gwp_basic_classify, true)
+	-- jit.off (mob_class.gwp_essay_drop, true)
+	-- jit.off (mob_class.gwp_essay_jump, true)
+	jit.opt.start ("maxtrace=8000", "maxrecord=16000", "minstitch=3", "maxmcode=40960")
 end
 
 ----------------------------------------------------------------------------------
@@ -1629,18 +1631,19 @@ function mob_class:next_waypoint (dtime)
 	-- Pathfind for at most half the remaining quota.
 	if self.pathfinding_context then
 		-- Continue pathfinding till either the process times
-		-- out, or os.clock - time expires.
+		-- out, or the pathfinding time quota is exhausted.
 		mobs_this_step = mobs_this_step + 1
 		local quota = pathfinding_quota
 		if quota < 0 then
 			return
 		end
 		local ctx = self.pathfinding_context
-		local timeout = math.min (PATHFIND_TIMEOUT - ctx.time_elapsed,
+		local time_sec = ctx.time_elapsed * 1e6
+		local timeout = math.min (PATHFIND_TIMEOUT - time_sec,
 					  quota)
 		local result, elapsed
 			= self:gwp_cycle (ctx, math.max (0, timeout))
-		if ctx.time_elapsed > PATHFIND_TIMEOUT then
+		if ctx.time_elapsed * 1e6 > PATHFIND_TIMEOUT then
 			result = true
 		end
 		pathfinding_quota = pathfinding_quota - elapsed
