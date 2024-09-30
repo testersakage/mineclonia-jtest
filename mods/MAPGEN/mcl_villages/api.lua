@@ -10,40 +10,45 @@ mcl_villages.forced_blocks = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local function job_count(schem_lua)
-	-- Local copy so we don't trash the schema for other uses, because apparently
-	-- there isn't a non-destructive way to count occurrences of a string :(
-	local str = schem_lua
-	local count = 0
+local jobsites_set = {}
+for _, jobsite in pairs(mobs_mc.jobsites) do
+	jobsites_set[jobsite] = true
+end
 
-	for _, n in pairs(mobs_mc.jobsites) do
-		if string.find(n, "^group:") then
-			if n == "group:cauldron" then
-				count = count + select(2, string.gsub(str, '"mcl_cauldrons:cauldron', ""))
-			else
-				local name = string.sub(n, 6, -1)
-				local num = select(2, string.gsub(str, name, ""))
-				if num then
-					minetest.log(
-						"info",
-						string.format("[mcl_villages] Guessing how to handle %s counting it as %d job sites", name, num)
-					)
-					count = count + num
-				else
-					minetest.log(
-						"warning",
-						string.format("[mcl_villages] Don't know how to handle group %s counting it as 1 job site", n)
-					)
+local function job_count(schem_lua)
+	local count = 0
+	local look_after = [[name="]]
+	local check_offset = 1
+	local head_offset = 1
+	local node_name
+	local _
+
+	local sub = string.sub
+	local byte = string.byte
+	local find = string.find
+
+	while head_offset <= #schem_lua do
+		-- iterating over the whole shematic until we find an instance of "name="" appearing.
+		-- In that case, extract the node name and check if its inside the jobsite set
+		if byte(schem_lua, head_offset) == byte(look_after, check_offset) then
+			check_offset = check_offset + 1
+		else
+			if check_offset == #look_after + 1 then
+				_, head_offset, node_name = find(schem_lua, [[^([^"]*)]], head_offset)
+
+				if (sub(node_name, 1, 13) == "mcl_cauldrons" and minetest.get_item_group(node_name, "cauldron") ~= 0)
+				or jobsites_set[node_name] then
 					count = count + 1
 				end
 			end
-		else
-			count = count + select(2, string.gsub(str, '{name="' .. n .. '"', ""))
+			check_offset = 1
 		end
+		head_offset = head_offset + 1
 	end
 
 	return count
 end
+
 
 local function load_schema(name, mts)
 	local schem_lua = minetest.serialize_schematic(mts, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
