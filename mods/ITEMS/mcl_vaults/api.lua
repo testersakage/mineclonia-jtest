@@ -4,7 +4,8 @@ local SHOWITEM_INTERVAL = 2
 
 local function can_open(pos, player)
 	local m = minetest.get_meta(pos)
-	if m:get(player:get_player_name()) == "looted" then
+	local rb = mcl_util.ringbuffer.new(180, minetest.deserialize(m:get("mcl_vaults:visited_players")))
+	if rb:indexof(player:get_player_name()) then
 		return false
 	end
 	return true
@@ -12,8 +13,10 @@ end
 
 local function set_visited(pos, player)
 	local m = minetest.get_meta(pos)
-	m:set_string(player:get_player_name(), "looted")
-	m:mark_as_private(player:get_player_name())
+	local rb = mcl_util.ringbuffer.new(180, minetest.deserialize(m:get("mcl_vaults:visited_players")))
+	rb:insert_if_not_exists(player:get_player_name())
+	m:set_string("mcl_vaults:visited_players", rb:serialize())
+	m:mark_as_private("mcl_vaults:visited_players")
 end
 
 local function eject_items(pos, name, list)
