@@ -114,8 +114,8 @@ function mcl_potions.register_splash(name, descr, color, def)
 				minetest.add_particlespawner({
 					amount = 50,
 					time = 0.1,
-					minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
-					maxpos = {x=pos.x+d, y=pos.y+0.5+d, z=pos.z+d},
+					minpos = {x=pos.x-d, y=pos.y, z=pos.z-d},
+					maxpos = {x=pos.x+d, y=pos.y+d, z=pos.z+d},
 					minvel = {x=-2, y=0, z=-2},
 					maxvel = {x=2, y=2, z=2},
 					minacc = acc,

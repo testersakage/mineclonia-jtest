@@ -160,11 +160,10 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	movement_speed = 5.0,
 	pathfinding = 1,
 	group_attack = true,
-	attack_type = "dogshoot",
-	shoot_interval = 2.5,
+	attack_type = "ranged",
+	ranged_interval_min = 3.0,
+	ranged_interval_max = 3.0,
 	shoot_offset = 1,
-	dogshoot_switch = 1,
-	dogshoot_count_max = 1.8,
 	shooter_avoid_enemy = true,
 	strafes = true,
 	_shoot_while_strafing = false,
@@ -190,6 +189,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	view_range = 16,
 	fear_height = 4,
 	avoid_distance = 6,
+	ranged_attack_radius = 10.0,
 	_witch_potion_check = 0,
 	do_attack = function (self, obj)
 		 local l = obj:get_luaentity ()
@@ -199,10 +199,8 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 		 end
 		 mcl_mobs.mob_class.do_attack (self, obj)
 	end,
-	attack_players_and_npcs = function (self)
-	end,
 	attack_custom = function (self)
-		if self.attacking then
+		if self.attack then
 		-- A target has already been selected.
 			return
 		end
@@ -213,11 +211,10 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 
 		local pos = self.object:get_pos ()
 		local objs = minetest.get_objects_inside_radius (pos, self.view_range)
-		table.shuffle (objs)
 		for _, obj in pairs (objs) do
-			if self:line_of_sight (pos, obj:get_pos()) then
+			if self:target_visible (pos, obj) then
 				local l = obj:get_luaentity ()
-				if obj:is_player () and self:attack_players_allowed (obj) and (not self._player_cooldown or not self.raidmob) then
+				if obj:is_player () and self:attack_player_allowed (obj) and (not self._player_cooldown or not self.raidmob) then
 					self:do_attack (obj)
 					break
 				elseif self.raidmob and l and l.raidmob and (l.name == "mobs_mc:pillager" or l.name == "mobs_mc:vindicator" or l.name == "mobs_mc:evoker") then
@@ -312,7 +309,6 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 		 end
 
 		-- Adjust for deceleration and entity movement.
-		local eye_height = self.attack:get_properties ().eye_height or 0
 		local movement = self.attack:get_velocity ()
 		movement.y = 0 -- But don't compensate for vertical movement.
 		local pos_adj = target_pos + movement
@@ -322,9 +318,8 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 			target_pos = pos_adj
 		end
 
-		target_pos.y = target_pos.y + eye_height
 		local d = vector.subtract (target_pos, p)
-		d.y = d.y + vector.length (d) * 0.2
+		d.y = d.y + 0.25 + vector.length (d) * 0.25
 		mcl_potions.throw_splash (effect_potion, vector.normalize (d), p, self.object, 0, 0)
 	end,
 })

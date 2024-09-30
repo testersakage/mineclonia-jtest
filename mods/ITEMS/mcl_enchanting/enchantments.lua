@@ -311,20 +311,9 @@ mcl_enchanting.enchantments.knockback = {
 	anvil_book_factor = 1,
 }
 
-local old_calculate_knockback = minetest.calculate_knockback
 function minetest.calculate_knockback(player, hitter, time_from_last_punch, tool_capabilities, dir, distance, damage)
-	local knockback = old_calculate_knockback(player, hitter, time_from_last_punch, tool_capabilities, dir, distance, damage)
-	local luaentity
-	if hitter then
-		luaentity = hitter:get_luaentity()
-	end
-	if hitter and hitter:is_player() then
-		local wielditem = hitter:get_wielded_item()
-		knockback = knockback + 3 * mcl_enchanting.get_enchantment(wielditem, "knockback")
-	elseif luaentity and luaentity._knockback then
-		knockback = knockback + luaentity._knockback
-	end
-	return knockback
+	-- Core knockback computation is overridden by mcl_player.
+	return 0
 end
 
 -- implemented in mcl_mobs and mobs_mc

@@ -45,6 +45,11 @@ function mob_class:is_node_waterhazard(nodename)
 end
 
 function mob_class:target_visible(origin, target)
+	-- This cache is flushed on each call to on_step. 
+	if self._targets_visible[target] then
+		return true
+	end
+
 	if not origin then return end
 
 	if not target and self.attack then
@@ -67,9 +72,11 @@ function mob_class:target_visible(origin, target)
 	end
 
 	if self:line_of_sight (origin_eye_pos, targ_head_height) then
+		self._targets_visible[target] = true
 		return true
 	end
 
+	self._targets_visible[target] = false
 	return false
 end
 
@@ -325,7 +332,7 @@ function mob_class:check_jump (self_pos, moveresult)
 
 
 	if max_y and (max_y > self_pos.y)
-		and (max_y - self_pos.y > self.object:get_properties ().stepheight) then
+		and (max_y - self_pos.y > self._initial_step_height) then
 		-- Verify that the direction of the collision measured as a
 		-- force substantially matches the direction of movement.
 		dir = vector.normalize (dir)
@@ -519,12 +526,6 @@ function mob_class:do_strafe (dtime, moveresult)
 	self.acc_dir.z = sz
 end
 
-function mob_class:do_fly_pos (dtime, moveresult)
-end
-
-function mob_class:do_swim_pos (dtime, moveresult)
-end
-
 function mob_class:halt_in_tracks (immediate)
 	self.acc_dir.z = 0
 	self.acc_dir.y = 0
@@ -539,13 +540,13 @@ function mob_class:halt_in_tracks (immediate)
 	end
 
 	if immediate then
-		self.object:set_acceleration(vector.new(0,0,0))
-		self.object:set_velocity(vector.new(0,0,0))
+		self.object:set_acceleration (vector.new(0,0,0))
+		self.object:set_velocity (vector.new(0,0,0))
 	end
 end
 
 function mob_class:movement_step (dtime, moveresult)
-	if self.state == "die" then
+	if self.dead then
 		return
 	end
 	if self.movement_goal == nil then
@@ -559,10 +560,6 @@ function mob_class:movement_step (dtime, moveresult)
 		self:do_go_pos (dtime, moveresult)
 	elseif self.movement_goal == "strafe" then
 		self:do_strafe (dtime, moveresult)
-	elseif self.movement_goal == "fly_pos" then
-		self:do_fly_pos (dtime, moveresult)
-	elseif self.movement_goal == "swim_pos" then
-		self:do_swim_pos (dtime, moveresult)
 	end
 end
 
@@ -629,10 +626,7 @@ function mob_class:target_in_shade (pos, width, height)
 	end
 
 	local newnode = {}
-	local i = 1
-	while i <= 10 do
-		i = i + 1
-
+	for i = 1, 10 do
 		local node = nodes[math.random (#nodes)]
 		newnode.x = node.x
 		newnode.y = node.y + 1
@@ -645,11 +639,40 @@ function mob_class:target_in_shade (pos, width, height)
 	return nil
 end
 
+function mob_class:random_node_direction (limx, limy, direction, range)
+	local input = math.atan2 (direction.z, direction.x) - math.pi/2
+	local yaw = input + (2 * math.random () - 1.0) * range
+	local xdist = math.sqrt (math.random () * 2) * limx
+	local x, z = xdist * -math.sin (yaw), xdist * math.cos (yaw)
+	local y = math.random (2 * limy + 1) - limy
+
+	if math.abs (x) <= limx and math.abs (y) <= limx then
+		return vector.new (math.floor (x + 0.5),
+					math.floor (y + 0.5),
+					math.floor (z + 0.5))
+	end
+	return nil
+end
+
+function mob_class:target_away_from (pos, pursuer)
+	local forward_dir = vector.subtract (pos, pursuer)
+	for i = 1, 10 do
+		local dir = self:random_node_direction (16, 7, forward_dir, math.pi / 2)
+		if dir then
+			local pos = vector.add (pos, dir)
+			if self:gwp_classify_for_movement (pos) == "WALKABLE" then
+				return pos
+			end
+		end
+	end
+end
+
 local IDLE_TIME_MAX = 250
 
 function mob_class:init_ai ()
 	self.ai_idle_time = 0
 	self.avoiding_sunlight = nil
+	self.avoiding = false
 	self.attack = nil
 	self.mate = nil
 	self.following = nil
@@ -674,6 +697,55 @@ function mob_class:ai_step (dtime)
 		self.follow_cooldown = nil
 	end
 	self:tick_breeding ()
+end
+
+function mob_class:check_avoid (self_pos)
+	local runaway_from = self.runaway_from
+	if not runaway_from then
+		return false
+	end
+
+	if self.avoiding then
+		if self:navigation_finished () then
+			self.avoiding = false
+		end
+		return true
+	else
+		-- Search for nearby mobs to avoid.
+		local target, max_distance, target_pos
+		local objects
+			= minetest.get_objects_inside_radius (self_pos, self.view_range)
+		for _, object in ipairs (objects) do
+			local entity = object:get_luaentity ()
+			if entity
+				and table.indexof (runaway_from, entity.name) ~= -1
+				and self:target_visible (self_pos, object) then
+				local pos = object:get_pos ()
+				local distance = vector.distance (self_pos, pos)
+				if not max_distance or distance < max_distance then
+					target = object
+					target_pos = pos
+					max_distance = distance
+				end
+			end
+		end
+		if target then
+			local pos = self:target_away_from (self_pos, target_pos)
+			if pos and vector.distance (pos, target_pos) > max_distance then
+				self:gopath (pos)
+				self.avoiding = true
+				-- Interupt other activities.
+				self.frightened = false
+				self.attack = nil
+				self.mate = nil
+				self.following = nil
+				self.herd_following = nil
+				self.pacing = false
+				return true
+			end
+		end
+	end
+	return false
 end
 
 function mob_class:check_following (self_pos, dtime)
@@ -728,7 +800,7 @@ function mob_class:run_ai (dtime)
 	local pos = self.object:get_pos ()
 
 	if self.dead then
-		self:halt_in_tracks (true)
+		self:halt_in_tracks ()
 		return
 	end
 
@@ -750,6 +822,7 @@ function mob_class:run_ai (dtime)
 				     self.movement_speed * self.run_bonus)
 			self.avoiding_sunlight = true
 			-- Interupt other activities.
+			self.avoiding = false
 			self.attack = nil
 			self.mate = nil
 			self.following = nil
@@ -757,6 +830,10 @@ function mob_class:run_ai (dtime)
 			self.pacing = false
 			idle = false
 		end
+	end
+
+	if idle and self:check_avoid (pos) then
+		idle = false
 	end
 
 	if self.attack_type and not self.avoiding_sunlight then
@@ -787,6 +864,7 @@ function mob_class:run_ai (dtime)
 					     self.movement_speed * self.run_bonus)
 
 				-- Interupt other activities.
+				self.avoiding = false
 				self.mate = nil
 				self.following = nil
 				self.herd_following = nil

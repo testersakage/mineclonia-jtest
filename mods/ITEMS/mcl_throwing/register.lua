@@ -56,22 +56,18 @@ local pearl_ENTITY={
 
 local function check_object_hit(self, pos, dmg)
 	for object in minetest.objects_inside_radius(pos, 1.5) do
-
 		local entity = object:get_luaentity()
-
-		if entity
-		and entity.name ~= self.object:get_luaentity().name then
-
-			if object:is_player() and self._thrower ~= object:get_player_name() then
-				self.object:remove()
-				return true
-			elseif (entity.is_mob == true or entity._hittable_by_projectile) and (self._thrower ~= object) then
+		if not entity or entity.name ~= self.object:get_luaentity().name then
+			local is_player = object:is_player ()
+			local is_valid_entity
+				= entity and (entity.is_mob == true or entity._hittable_by_projectile)
+			if is_player or is_valid_entity and (self._thrower ~= object) then
 				local pl = self._thrower and self._thrower.is_player and self._thrower or type(self._thrower) == "string" and minetest.get_player_by_name(self._thrower)
 				if pl then
 					object:punch(pl, 1.0, {
-						full_punch_interval = 1.0,
-						damage_groups = dmg,
-					}, nil)
+							     full_punch_interval = 1.0,
+							     damage_groups = dmg,
+							      }, nil)
 					return true
 				end
 			end
@@ -172,7 +168,7 @@ local function egg_on_step(self, dtime)
 	end
 
 	-- Destroy when hitting a mob or player (no chick spawning)
-	if check_object_hit(self, pos, 0) then
+	if check_object_hit(self, pos, {egg_vulnerable = 0}) then
 		minetest.sound_play("mcl_throwing_egg_impact", { pos = self.object:get_pos(), max_hear_distance=10, gain=0.5 }, true)
 		self.object:remove()
 		return

@@ -59,7 +59,7 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 	movement_speed = 4.0,
 	jump = true,
 	makes_footstep_sound = true,
-	attack_type = "shoot",
+	attack_type = "ranged",
 	arrow = "mcl_throwing:snowball_entity",
 	shoot_arrow = function(self, pos, dir)
 		if mod_throwing then
