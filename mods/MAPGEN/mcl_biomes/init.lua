@@ -1773,6 +1773,8 @@ local function register_biomes()
 		y_min = mcl_worlds.mg_overworld_min,
 		y_max = 0,
 		vertical_blend = 1,
+		humidity_point = 50,
+		heat_point = 50,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 	})

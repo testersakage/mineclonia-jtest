@@ -69,15 +69,13 @@ end
 local function get_dripstone_length(pos, direction)
 	local offset_pos = vector.copy(pos)
 	local stage
-	local length = 1
-	while true do
+	local length = 0
+	repeat
+		length = length + 1
 		offset_pos = vector.offset(offset_pos, 0, direction, 0)
 		stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
-		if stage == 0 then
-			return length
-		end
-		length = length + 1
-	end
+	until(stage == 0)
+	return length
 end
 
 function place_dripstone(pos, length, direction)
@@ -112,7 +110,7 @@ end
 local function break_dripstone(pos, direction)
 	local offset_pos = vector.copy(pos)
 	while true do
-		local offset_pos = vector.offset(offset_pos, 0, -direction, 0)
+		offset_pos = vector.offset(offset_pos, 0, -direction, 0)
 		local stage = minetest.get_item_group(minetest.get_node(offset_pos).name, "dripstone_stage")
 		if stage == 1 and extract_direction(minetest.get_node(offset_pos).name) == -direction then
 			minetest.swap_node(offset_pos, {name = get_dripstone_node(2, -direction)})
@@ -267,12 +265,12 @@ minetest.register_abm({
 	label = "Dripstone growth",
 	nodenames = {"mcl_dripstone:dripstone_top_tip"},
 	interval = 69,
-	chance = 1,
+	chance = 88,
 	action = function(pos)
 		-- checking if can grow
-		local stalagtite_lenth = get_dripstone_length(pos, 1)
-		if minetest.get_node(vector.offset(pos, 0, stalagtite_lenth, 0)).name ~= "mcl_dripstone:dripstone_block"
-		or minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_lenth + 1, 0)).name, "water") == 0 then
+		local stalagtite_length = get_dripstone_length(pos, 1)
+		if minetest.get_node(vector.offset(pos, 0, stalagtite_length, 0)).name ~= "mcl_dripstone:dripstone_block"
+		or minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name, "water") == 0 then
 			return
 		end
 
@@ -299,7 +297,7 @@ minetest.register_abm({
 			end
 		else
 			-- stalagtite growth
-			if stalagtite_lenth > 7 then return end
+			if stalagtite_length > 7 then return end
 
 			if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "air" then
 				minetest.set_node(vector.offset(pos, 0, -1, 0), {name = get_dripstone_node(2, 1)})
