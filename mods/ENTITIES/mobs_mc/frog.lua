@@ -70,6 +70,8 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		punch_speed =15,
 	},
 	swims = true,
+	-- frog doesn't take drowning damage
+	breath_max = -1,
 	floats = 0,
 	spawn_in_group = 6,
 	spawn_in_group_min = 2,
