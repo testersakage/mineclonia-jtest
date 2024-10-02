@@ -88,7 +88,7 @@ mcl_vaults.register_vault("ominous_vault",{
 	key = "mcl_vaults:ominous_trial_key",
 	node_off = {
 		description = S("Ominous Vault"),
-		tiles = { "mcl_vaults_vault_ominous_top_off.png", "mcl_vaults_vault_ominous_bottom.png",
+		tiles = { "mcl_vaults_vault_ominous_top_off.png", "mcl_vaults_vault_bottom.png",
 			"mcl_vaults_vault_ominous_side_off.png", "mcl_vaults_vault_ominous_side_off.png",
 			"mcl_vaults_vault_ominous_side_off.png", "mcl_vaults_vault_ominous_front_off.png",
 		},
