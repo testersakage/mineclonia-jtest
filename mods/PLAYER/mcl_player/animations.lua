@@ -73,8 +73,9 @@ local function player_collision (player)
 			local r2 = (math.random (300) - 150) / 2400
 			local x_diff = pos2.x - pos.x + r1
 			local z_diff = pos2.z - pos.z + r2
-			local max_diff, d_scale
+			local max_diff
 				= math.max (math.abs (x_diff), math.abs (z_diff))
+			local d_scale
 
 			if max_diff > 0.01 then
 				max_diff = math.sqrt (max_diff)

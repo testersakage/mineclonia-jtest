@@ -1,51 +1,8 @@
 local mob_class = mcl_mobs.mob_class
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 
--- Returns true is node can deal damage to self
-function mob_class:is_node_dangerous(nodename)
-	local nn = nodename
-	if self.lava_damage > 0 then
-		if minetest.get_item_group(nn, "lava") ~= 0 then
-			return true
-		end
-	end
-	if self.fire_damage > 0 then
-		if minetest.get_item_group(nn, "fire") ~= 0 then
-			return true
-		end
-	end
-	if minetest.registered_nodes[nn] and minetest.registered_nodes[nn].damage_per_second and minetest.registered_nodes[nn].damage_per_second > 0 then
-		return true
-	end
-	return false
-end
-
--- Returns true if node is a water hazard to this mob
-function mob_class:is_node_waterhazard(nodename)
-	if self.swims or self.breathes_in_water or self.object:get_properties().breath_max == -1 then
-		return false
-	end
-
-	if self.water_damage > 0 then
-		if minetest.get_item_group(nodename, "water") ~= 0 then
-			return true
-		end
-	end
-
-	if
-		minetest.registered_nodes[nodename]
-		and minetest.registered_nodes[nodename].drowning
-		and minetest.registered_nodes[nodename].drowning > 0
-		and minetest.get_item_group(nodename, "water") ~= 0
-	then
-		return true
-	end
-
-	return false
-end
-
 function mob_class:target_visible(origin, target)
-	-- This cache is flushed on each call to on_step. 
+	-- This cache is flushed on each call to on_step.
 	if self._targets_visible[target] then
 		return true
 	end
@@ -106,13 +63,15 @@ local function minnum (a, b)
 	return math.min (a, b)
 end
 
-local function aabb_clear (node, origin, pos2, direction, d)
+local function aabb_clear (node, origin, pos2, direction, d, typetest)
 	local node_type = minetest.get_node (node)
 	if node_type.name == "air" then
 		return true
 	else
 		local def = minetest.registered_nodes[node_type.name]
 		if def and not def.walkable then
+			return true
+		elseif typetest and typetest (node_type.name, def) then
 			return true
 		elseif not def then
 			return false
@@ -187,7 +146,7 @@ local function scale_poses (pos1, pos2)
 	return v1, v2
 end
 
-function mob_class:line_of_sight (pos1, pos2)
+function mob_class:line_of_sight (pos1, pos2, typetest)
 	-- Move pos1 and pos2 by minuscule values to avoid generating
 	-- Inf or NaN.
 	pos1, pos2 = scale_poses (pos1, pos2)
@@ -234,7 +193,7 @@ function mob_class:line_of_sight (pos1, pos2)
 	v.x = x
 	v.y = y
 	v.z = z
-	if not aabb_clear (v, pos1, pos2, direction, distance) then
+	if not aabb_clear (v, pos1, pos2, direction, distance, typetest) then
 		return false
 	end
 
@@ -489,6 +448,90 @@ function mob_class:do_go_pos (dtime, moveresult)
 	end
 end
 
+local function norm_radians (x)
+	local x = x % (math.pi * 2)
+	if x >= math.pi then
+		x = x - math.pi * 2
+	end
+	if x < -math.pi then
+		x = x + math.pi * 2
+	end
+	return x
+end
+
+local function clip_rotation (from, to, limit)
+	local difference = norm_radians (to - from)
+	if difference > limit then
+		difference = limit
+	end
+	if difference < -limit then
+		difference = -limit
+	end
+	return from + difference
+end
+
+function mob_class:dolphin_do_go_pos (dtime, moveresult)
+	local target = self.movement_target
+	local pos = self.object:get_pos ()
+	local dist = vector.distance (pos, target)
+
+	if dist < 0.5 then
+		return
+	end
+
+	local dx, dy, dz = target.x - pos.x,
+		target.y - pos.y,
+		target.z - pos.z
+	local dir = math.atan2 (dz, dx) - math.pi / 2 - self.rotate
+	local standin = minetest.registered_nodes[self.standing_in]
+	local yaw = self.object:get_yaw ()
+	local f = dtime / 0.05
+	local target_yaw = clip_rotation (yaw, dir, self.max_yaw_movement * f)
+
+	-- Orient the mob vertically.
+	local speed = self.movement_velocity
+	if standin.groups.water then
+		local old_rot = self.object:get_rotation ()
+		local xz_mag = math.sqrt (dx * dx + dz * dz)
+		local des_pitch
+		if xz_mag > 1.0e-5 or xz_mag < -1.0e-5 then
+			local swim_max_pitch = self.swim_max_pitch
+			local old_pitch = old_rot.x
+			des_pitch = -math.atan2 (dy, xz_mag)
+
+			if des_pitch > swim_max_pitch then
+				des_pitch = self.swim_max_pitch
+			elseif des_pitch < -swim_max_pitch then
+				des_pitch = -self.swim_max_pitch
+			end
+
+			local target
+			-- ~50 degrees.
+			target = clip_rotation (old_pitch, des_pitch, 0.8727 * f)
+			self.object:set_rotation ({
+					x = target,
+					y = target_yaw,
+					z = 0,
+			})
+			des_pitch = target
+		else
+			-- Not moving horizontally.
+			des_pitch = self.object:get_rotation ().x
+		end
+		self.acc_dir.z = math.cos (des_pitch) * speed / 20
+		self.acc_dir.y = -math.sin (des_pitch) * speed / 20
+		self.acc_speed = speed * self.swim_speed_factor
+		self._acc_no_gravity = true
+	else
+		-- Fish cannot change their pitch outside a body of
+		-- water.
+		self.acc_dir.y = 0
+		self.acc_dir.z = 0
+		self._acc_no_gravity = false
+		self.object:set_rotation (vector.new (0, target_yaw, 0))
+	end
+end
+
 function mob_class:do_strafe (dtime, moveresult)
 	local vel = self.movement_velocity
 	local sx, sz = self.strafe_direction.x, self.strafe_direction.z
@@ -531,6 +574,7 @@ function mob_class:halt_in_tracks (immediate)
 	self.acc_dir.y = 0
 	self.acc_dir.x = 0
 	self.acc_speed = 0
+	self._acc_movement_speed = 0
 	self.movement_goal = nil
 	self:cancel_navigation ()
 
@@ -670,7 +714,7 @@ end
 local IDLE_TIME_MAX = 250
 
 function mob_class:init_ai ()
-	self.ai_idle_time = 0
+	self.ai_idle_time = 2 + math.random (2)
 	self.avoiding_sunlight = nil
 	self.avoiding = false
 	self.attack = nil
@@ -680,6 +724,11 @@ function mob_class:init_ai ()
 	self.pacing = false
 	self:cancel_navigation ()
 	self:halt_in_tracks ()
+
+	if self.swims then
+		self:gwp_configure_aquatic_mob ()
+		self:configure_aquatic_mob ()
+	end
 end
 
 function mob_class:is_frightened (dtime)
@@ -889,11 +938,18 @@ function mob_class:run_ai (dtime)
 		end
 	else
 		-- Should pace?
-		if idle and self.ai_idle_time > 5 and math.random (120) == 1 then
+		if idle and self.ai_idle_time > self.pace_interval then
 			-- Minecraft mobs pace to random positions
 			-- within a 20 block distance lengthwise and
 			-- 14 blocks vertically.
-			local target = self:pacing_target (pos, 10, 7, {"group:solid"})
+			local groups = {"group:solid"}
+			if self.swims_in and self.swims then
+				-- If this is an aquatic mob, search
+				-- for nodes in which it is capable of
+				-- swimming.
+				groups = self.swims_in
+			end
+			local target = self:pacing_target (pos, 10, self.pace_height, groups)
 			if target and self:gopath (target) then
 				self.pacing = true
 			end
@@ -907,4 +963,67 @@ function mob_class:run_ai (dtime)
 		self:set_animation ("stand")
 		self.ai_idle_time = self.ai_idle_time + dtime
 	end
+end
+
+------------------------------------------------------------------------
+-- Aquatic mob behavior.
+------------------------------------------------------------------------
+
+local function aquatic_pacing_target (self, pos, width, height, groups)
+	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
+	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
+	local nodes = minetest.find_nodes_in_area (aa, bb, groups)
+
+	return #nodes >= 1 and nodes[math.random (#nodes)]
+end
+
+local function aquatic_movement_step (self, dtime, moveresult)
+	if self.movement_goal ~= "go_pos"
+		and self.idle_gravity_in_liquids then
+		self._acc_no_gravity = false
+	end
+	if not self.idle_gravity_in_liquids and self._immersion_depth then
+		self._acc_no_gravity
+			= self._immersion_depth >= self.head_eye_height
+	end
+	mob_class.movement_step (self, dtime, moveresult)
+end
+
+function mob_class:fish_do_go_pos (dtime, moveresult)
+	local target = self.movement_target or vector.zero ()
+	local vel = self.movement_velocity
+	local self_pos = self.object:get_pos ()
+	local dx, dy, dz = target.x - self_pos.x,
+		target.y - self_pos.y,
+		target.z - self_pos.z
+	local current_speed = self._acc_movement_speed or 0
+	current_speed = (vel - current_speed) * 0.125 + current_speed
+	local move_speed = 0.4
+
+	self._acc_movement_speed = current_speed
+	self.acc_speed = current_speed
+	self.acc_dir.z = current_speed / 20
+	if dy ~= 0 then
+		-- acc_speed_aquatic * current_speed/20 is the speed
+		-- at which the mob will move horizontally, but
+		-- current_speed * dy/dxyz provides an absolute rate
+		-- of ascent or descent.
+		local dxyz = math.sqrt (dx * dx + dy * dy + dz * dz)
+		local t1 = self.acc_dir.z * move_speed
+		local t2 = current_speed * (dy / dxyz) * 0.1
+		self.acc_dir.z = t1
+		self.acc_dir.y = t2
+		self.acc_dir = vector.normalize (self.acc_dir)
+		self.acc_speed = math.abs (t1) + math.abs (t2)
+	end
+	local dir = math.atan2 (dz, dx) - math.pi / 2
+	local rotation = clip_rotation (self.object:get_yaw (), dir, math.pi / 2)
+	self.object:set_yaw (rotation)
+end
+
+function mob_class:configure_aquatic_mob ()
+	self.pacing_target = aquatic_pacing_target
+	self.motion_step = self.aquatic_step
+	self.movement_step = aquatic_movement_step
+	self._acc_no_gravity = false
 end
