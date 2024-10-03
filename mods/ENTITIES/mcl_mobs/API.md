@@ -329,6 +329,11 @@ Fields not mentioned in this document can also be added as custom fields for the
 		fly_end = 10,
 		fly_speed = 10,
 
+		swim_start = 10,
+		-- when a mob is swimming.
+		swim_end = 10,
+                -- swim_speed
+
 		punch_start = 10,
 		-- when a mob melee attacks.
 		punch_end = 10,
