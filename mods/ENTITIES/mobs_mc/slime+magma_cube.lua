@@ -178,6 +178,55 @@ local function slime_run_ai (self, dtime)
 	slime_check_attack (self, self_pos, dtime)
 end
 
+local function slime_check_particle (self, dtime, moveresult)
+	if not self._slime_was_touching_ground
+		and moveresult.touching_ground
+		and self._get_slime_particle then
+		local cbox = self.collisionbox
+		-- minetest.add_particlespawner ({
+		-- 		amount = 40,
+		-- 		time = 0.25,
+		-- 		attached = self.object,
+		-- 		texture = self._slime_particle,
+		-- 		collisiondetection = true,
+		-- 		pos = {
+		-- 			min = vector.new (cbox[1] - 0.4, 0, cbox[3] - 0.4),
+		-- 			max = vector.new (cbox[4] + 0.4, 0.2, cbox[6] + 0.4),
+		-- 		},
+		-- })
+		local radius = (cbox[6] - cbox[3])
+		local self_pos = self.object:get_pos ()
+		for i = 1, math.round (radius * 32) do
+			local scale = math.random () * 0.5 + 0.5
+			local angle = math.random () * math.pi * 2
+			local x, z
+			x = math.sin (angle) * scale * radius
+			z = math.cos (angle) * scale * radius
+			minetest.add_particle ({
+					pos = vector.offset (self_pos, x, 0, z),
+					collisiondetection = true,
+					texture = self._get_slime_particle (),
+					time = 0.20,
+					velocity = {
+						x = math.random (-1, 1),
+						y = math.random (1, 2),
+						z = math.random (-1, 1),
+					},
+					acceleration = {
+						x = 0,
+						y = math.random(-9, -5),
+						z = 0,
+					},
+					collision_removal = true,
+					size = math.random (0.5, 1.5),
+					glow = self._slime_particle_glow,
+			})
+		end
+		
+	end
+	self._slime_was_touching_ground = moveresult.touching_ground
+end
+
 local function slime_do_attack (self, target)
 	self.attack = target
 	self.target_invisible_time = 3.0
@@ -233,6 +282,7 @@ local slime_big = {
 	do_go_pos = slime_do_go_pos,
 	run_ai = slime_run_ai,
 	do_attack = slime_do_attack,
+	do_custom = slime_check_particle,
 	jump_delay_multiplier = 1,
 	fall_damage = 0,
 	view_range = 16,
@@ -247,6 +297,12 @@ local slime_big = {
 	specific_attack = {
 		"mobs_mc:iron_golem",
 	},
+	_get_slime_particle = function ()
+		return "[combine:" .. math.random (3)
+			.. "x" .. math.random (3) .. ":-"
+			.. math.random (4) .. ",-"
+			.. math.random (4) .. "=mcl_core_slime.png"
+	end
 }
 mcl_mobs.register_mob("mobs_mc:slime_big", slime_big)
 
@@ -419,6 +475,7 @@ local magma_cube_big = {
 	do_go_pos = slime_do_go_pos,
 	run_ai = slime_run_ai,
 	do_attack = slime_do_attack,
+	do_custom = slime_check_particle,
 	jump_delay_multiplier = 4,
 	water_damage = 0,
 	_mcl_freeze_damage = 5,
@@ -433,6 +490,13 @@ local magma_cube_big = {
 	spawn_small_alternative = "mobs_mc:magma_cube_small",
 	on_die = spawn_children_on_die("mobs_mc:magma_cube_small", 0.8, 1.5),
 	fire_resistant = true,
+	specific_attack = {
+		"mobs_mc:iron_golem",
+	},
+	_get_slime_particle = function ()
+		return "mcl_particles_fire_flame.png"
+	end,
+	_slime_particle_glow = 14,
 }
 mcl_mobs.register_mob("mobs_mc:magma_cube_big", magma_cube_big)
 

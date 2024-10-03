@@ -197,9 +197,8 @@ function mob_class:set_velocity(v)
 		self.acc_dir.z = 0
 		return
 	end
-	local yaw = (self.object:get_yaw() or 0) + self.rotate
 	local vv = self.object:get_velocity()
-	if vv and yaw then
+	if vv then
 		self.acc_speed = v
 		-- Minecraft scales forward acceleration by desired
 		-- velocity in blocks/tick.
@@ -865,10 +864,13 @@ end
 local function pow_by_step (value, dtime)
 	return math.pow (value, dtime / 0.05)
 end
+mcl_mobs.pow_by_step = pow_by_step
 
 local AIR_DRAG			= 0.98
 local AIR_FRICTION		= 0.91
 local WATER_DRAG		= 0.8
+local AQUATIC_WATER_DRAG	= 0.9
+local AQUATIC_GRAVITY		= -0.1
 local LAVA_FRICTION		= 0.5
 local LAVA_SPEED		= 0.4
 local FLYING_LIQUID_SPEED	= 0.4
@@ -894,7 +896,7 @@ local function scale_speed_flying (speed, friction)
 end
 
 function mob_class:accelerate_relative (acc, speed)
-	local yaw = self.object:get_yaw ()
+	local yaw = self.object:get_yaw () + self.rotate
 	acc = vector.length (acc) <= 1
 		and vector.copy (acc)
 		or vector.normalize (acc)
@@ -904,13 +906,14 @@ function mob_class:accelerate_relative (acc, speed)
 	-- local rv = vector.rotate_around_axis (acc, {x = 0, y = 1, z = 0,}, yaw)
 	local s = -math.sin (yaw)
 	local c = math.cos (yaw)
-	local rv = vector.new (acc.x * c + acc.z * s, 0, acc.z * c - acc.x * s)
+	local rv = vector.new (acc.x * c + acc.z * s, acc.y * speed, acc.z * c - acc.x * s)
 	return rv
 end
 
 function mob_class:jump_actual (v)
 	self.order = ""
 	self:set_animation ("jump")
+	self:mob_sound ("jump")
 	v = {x = v.x, y = self.jump_height, z = v.z,}
 	if self:can_jump_cliff () then
 		v = vector.multiply (v, vector.new (2.8, 1, 2.8))
@@ -1019,7 +1022,7 @@ function mob_class:motion_step (dtime, moveresult)
 		self.reset_fall_damage = 1
 	end
 
-	local water_vec = self:check_water_flow ()
+	local water_vec = not self.swims and self:check_water_flow ()
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
 	if standin.groups.water then
@@ -1220,4 +1223,44 @@ function mob_class:flying_step (dtime, moveresult)
 	v.z = v.z * p + fv.z
 	self.object:set_velocity (v)
 	self:check_collision ()
+end
+
+-- Simplified `motion_step' for true (i.e., not birds or blazes)
+-- swimming mobs.
+
+local default_motion_step = mob_class.motion_step
+
+function mob_class:aquatic_step (dtime, moveresult)
+	if not moveresult then
+		return
+	end
+
+	local standin = minetest.registered_nodes[self.standing_in]
+	if standin.groups.water then
+		local acc_speed = self.acc_speed
+		local acc_dir = self.acc_dir
+		local p = pow_by_step (AIR_DRAG, dtime)
+		local fv, scale
+		local v = self.object:get_velocity ()
+
+		acc_dir.x = acc_dir.x * p
+		acc_dir.z = acc_dir.z * p
+		p = pow_by_step (AQUATIC_WATER_DRAG, dtime)
+		scale = (1 - p) / (1 - AQUATIC_WATER_DRAG)
+
+		fv = self:accelerate_relative (acc_dir, acc_speed * scale)
+		v.x = v.x * p + fv.x
+		v.y = v.y * p + fv.y
+		v.z = v.z * p + fv.z
+
+		-- Apply gravity unless attacking mob.
+		if not self.attacking and not self._acc_no_gravity then
+			v.y = v.y + AQUATIC_GRAVITY * scale
+		end
+
+		self.object:set_velocity (v)
+		self:check_collision ()
+	else
+		default_motion_step (self, dtime, moveresult)
+	end
 end

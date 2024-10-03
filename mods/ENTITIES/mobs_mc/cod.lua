@@ -54,6 +54,8 @@ local cod = {
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,
 	swims = true,
+	pace_height = 1.0,
+	do_go_pos = mcl_mobs.mob_class.fish_do_go_pos,
 	breathes_in_water = true,
 	movement_speed = 14.0,
 	jump = false,

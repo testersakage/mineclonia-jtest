@@ -65,6 +65,8 @@ local axolotl = {
 	end,
 	makes_footstep_sound = false,
 	swims = true,
+	do_go_pos = mcl_mobs.mob_class.dolphin_do_go_pos,
+	idle_gravity_in_liquids = true,
 	breathes_in_water = true,
 	jump = true,
 	damage = 2,
