@@ -136,6 +136,13 @@ mcl_mobs.mob_class = {
 	wears_armor = false,
 	steer_class = "controls",
 	steer_item = nil,
+	swim_max_pitch = 85 * math.pi / 180,
+	max_yaw_movement = 10 * math.pi / 180,
+	swim_speed_factor = 0.02,
+	idle_gravity_in_liquids = false,
+	grounded_speed_factor = 0.10,
+	pace_interval = 5,
+	pace_height = 7,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

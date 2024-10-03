@@ -417,7 +417,7 @@ function mob_class:on_step(dtime, moveresult)
 	end
 
 	if self.do_custom then
-		if self.do_custom(self, dtime) == false then
+		if self.do_custom(self, dtime, moveresult) == false then
 			return
 		end
 	end
