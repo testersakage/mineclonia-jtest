@@ -2,7 +2,6 @@
 
 local S = minetest.get_translator("mobs_mc")
 
-local mob_class = mcl_mobs.mob_class
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
 
 --###################
