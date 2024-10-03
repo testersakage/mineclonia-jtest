@@ -317,7 +317,11 @@ local function register_slab(subname, stairdef)
 		paramtype = "light",
 		-- Facedir intentionally left out (see below)
 		is_ground_content = false,
-		groups = table.merge(stairdef.groups, { slab = 1, building_block = 1 }),
+		groups = table.merge(stairdef.groups, {
+					     slab = 1,
+					     building_block = 1,
+					     _mcl_partial=2,
+		}),
 		sounds = stairdef.sounds,
 		node_box = {
 			type = "fixed",
@@ -383,7 +387,7 @@ local function register_slab(subname, stairdef)
 	}, stairdef.overrides or {})
 
 	minetest.register_node(":"..lower_slab, table.merge(nodedef,{
-		groups = table.merge(stairdef.groups,{slab = 1}),
+		groups = table.merge(stairdef.groups,{slab = 1, _mcl_partial=2}),
 	}))
 
 	-- Register the upper slab.
@@ -427,6 +431,7 @@ local function register_slab(subname, stairdef)
 	dgroups.not_in_creative_inventory = 1
 	dgroups.not_in_craft_guide = 1
 	dgroups.slab = nil
+	dgroups._mcl_partial = 2
 	dgroups.double_slab = 1
 	minetest.register_node(":"..double_slab, {
 		description = stairdef.double_description,

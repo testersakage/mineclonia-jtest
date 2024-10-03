@@ -132,6 +132,7 @@ function mob_class:new_gwp_context ()
 		tolerance = 1,
 		time_elapsed = 0,
 		total_nodes = 0,
+		y_offset = 0,
 	}
 end
 
@@ -225,10 +226,11 @@ end
 function mob_class:gwp_start (context)
 	local pos = self:gwp_start_1 (context)
 	if pos then
+		local start_class = self:gwp_classify_node (context, pos)
 		-- If this mob is wider than 1 block, check for valid
 		-- start positions at every block on which it is
 		-- standing.
-		if self:gwp_classify_node (context, pos) == "BLOCKED" then
+		if start_class == "BLOCKED" or start_class == "IGNORE" then
 			local c1, c2, c3, c4
 			local cbox = self.collisionbox
 			c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
@@ -437,6 +439,7 @@ function mob_class:gwp_reconstruct_path (context, arrival)
 		-- the path.
 		arrival.x = arrival.x + context.mob_width * 0.5 - 0.5
 		arrival.z = arrival.z + context.mob_width * 0.5 - 0.5
+		arrival.y = arrival.y + context.y_offset
 		arrival = arrival.referrer
 	end
 	return list
@@ -519,7 +522,9 @@ end
 local gwp_ej_scratch = vector.zero ()
 local gwp_parent_penalty = nil
 
-function mob_class:gwp_essay_jump (context, target, parent)
+local GWP_JUMP_HEIGHT = 1.125
+
+function mob_class:gwp_essay_jump (context, target, parent, floor)
 	local class = self:gwp_classify_node (context, target)
 	local penalty = self.gwp_penalties[class]
 
@@ -541,6 +546,12 @@ function mob_class:gwp_essay_jump (context, target, parent)
 	end
 	-- Return true if this node is walkable or water.
 	if class ~= "OPEN" or (self.floats == 0 and class == "WATER") then
+		-- But first, verify that the node is not too far
+		-- above the current node.
+		local this_floor = ground_height (context, target)
+		if this_floor - floor > GWP_JUMP_HEIGHT then
+			return nil
+		end
 		local node = self:get_gwp_node (context, target.x, target.y,
 						target.z)
 		node.class = class
@@ -639,9 +650,11 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump)
 			-- this node?
 			if class == "OPEN" then
 				object = self:gwp_essay_drop (context, node)
+				-- This explicitly excludes trapdoors
+				-- and suchlike from consideration.
 			elseif class == "BLOCKED" then
 				node.y = node.y + 1
-				object = self:gwp_essay_jump (context, node, parent)
+				object = self:gwp_essay_jump (context, node, parent, floor)
 			elseif (class == "WATER" and self.floats == 0) then
 				object = self:gwp_essay_drift (context, node, object)
 			elseif class == "IGNORE" then
@@ -1570,6 +1583,155 @@ minetest.register_globalstep (function (dtime)
 end)
 
 ------------------------------------------------------------------------
+-- Pathfinding for swimming mobs.
+------------------------------------------------------------------------
+
+local function waterbound_gwp_basic_classify (pos)
+	local nodename, value = gwp_get_node (pos), nil
+	if not nodename then
+		return "IGNORE"
+	end
+	local def = minetest.registered_nodes[nodename]
+	if not def.groups.water then
+		value = "BLOCKED"
+	end
+	return value
+end
+
+local function waterbound_gwp_classify_node (self, context, pos)
+	local hash = hashpos (context, pos.x, pos.y, pos.z)
+	local cache = context.class_cache[hash]
+
+	if cache then
+		-- if record_pathfinding_stats then
+		-- 	gwp_cc_hits = gwp_cc_hits + 1
+		-- end
+		return cache
+	end
+	-- if record_pathfinding_stats then
+	-- 	gwp_cc_misses = gwp_cc_misses + 1
+	-- end
+
+	local b_width, b_height
+	b_width = context.mob_width - 1
+	b_height = context.mob_height - 1
+
+	local sx, sy, sz = pos.x, pos.y, pos.z
+	for x = sx, sx + b_width do
+		for y = sy, sy + b_height do
+			for z = sz, sz + b_width do
+				vector.x = x
+				vector.y = y
+				vector.z = z
+
+				local class = waterbound_gwp_basic_classify (vector)
+				if class then
+					return class
+				end
+			end
+		end
+	end
+	return "WATER"
+end
+
+-- The final two elements of each vector define the indices of nodes
+-- on either side of a diagonal movement that must be checked in
+-- validating it.
+
+-- Cardinal directions.
+
+local gwp_waterbound_directions = {
+	-- North.
+	{ 0, 0, 1, },
+	-- West.
+	{-1, 0, 0, },
+	-- South.
+	{ 0, 0, -1, },
+	-- East.
+	{ 1, 0, 0, },
+	-- Bottom.
+	{ 0, -1, 0, },
+	-- Top.
+	{ 0, 1, 0, },
+}
+
+-- Level diagonal movement.
+
+for i, d in ipairs (gwp_waterbound_directions) do
+	if i > 4 then
+		break
+	end
+	local ccw = i == 4 and 1 or i + 1
+	local counterclockwise = gwp_waterbound_directions[ccw]
+	local diagonal = {
+		d[1] + counterclockwise[1],
+		d[2] + counterclockwise[2],
+		d[3] + counterclockwise[3],
+		i,
+		ccw,
+	}
+	table.insert (gwp_waterbound_directions, diagonal)
+end
+
+local waterbound_gwp_edges_scratch = vector.zero ()
+local waterbound_gwp_edges_scratch_1 = {}
+local waterbound_gwp_edges_buffer = {}
+
+local function waterbound_gwp_edges (self, context, node)
+	local penalties = self.gwp_penalties
+	local buffer = waterbound_gwp_edges_buffer
+	local saved = waterbound_gwp_edges_scratch_1
+	local directions = gwp_waterbound_directions
+	local n = 0
+
+	for i, direction in ipairs (directions) do
+		local vector = waterbound_gwp_edges_scratch
+		local x, y, z = node.x + direction[1],
+			node.y + direction[2],
+			node.z + direction[3]
+		vector.x = x
+		vector.y = y
+		vector.z = z
+
+		if not direction[4]
+			or (saved[direction[4]] and saved[direction[5]]) then
+			local class = waterbound_gwp_classify_node (self, context, node)
+			local penalty = penalties[class]
+			if penalty >= 0.0 then
+				local object = self:get_gwp_node (context, x, y, z)
+
+				-- Record this class and update the node's
+				-- pathfinding penalty.
+				object.class = class
+				if penalty > object.penalty then
+					object.penalty = penalty
+				end
+
+				-- Save the result.
+				saved[i] = object
+				n = n + 1
+				buffer[n] = object
+			end
+		end
+	end
+
+	buffer[n + 1] = nil
+	return buffer
+end
+
+local function waterbound_gwp_start (self, context)
+	local pos = self.object:get_pos ()
+	-- Center pos vertically.
+	pos.y = pos.y + self.collisionbox[2]
+		+ (self.collisionbox[5] - self.collisionbox[2] / 2)
+
+	pos.x = floor (pos.x + 0.5)
+	pos.y = floor (pos.y + 0.5)
+	pos.z = floor (pos.z + 0.5)
+	return pos
+end
+
+------------------------------------------------------------------------
 -- External interface.
 ------------------------------------------------------------------------
 
@@ -1662,49 +1824,138 @@ function mob_class:next_waypoint (dtime)
 			self.pathfinding_context = nil
 		end
 	elseif self.waypoints then
-		local waypoints = self.waypoints
-		if #waypoints < 1 then
-			self:cancel_navigation ()
-			self.movement_goal = nil
-			self:halt_in_tracks ()
-			if self.callback_arrived then
-				self:callback_arrived ()
-			end
-			return
-		end
-		local next_wp = waypoints[#waypoints]
-		local self_pos = self.object:get_pos ()
-		local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
-		local dist_to_ycenter = math.abs (next_wp.y + 0.5 - self_pos.y)
-		local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
-		local cbox = self.collisionbox
-		local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
-		local mindist = girth > 0.75 and girth / 2 or 0.75 - girth / 2
+		self:gwp_next_waypoint (dtime)
+		self:gwp_timeout (dtime)
+	end
+end
 
-		if dist_to_xcenter < mindist
-			and dist_to_zcenter < mindist
-			and dist_to_ycenter < 1.5 then
-			waypoints[#waypoints] = nil
-		else
-			-- Is this mob already en route to the next waypoint?
-			if #waypoints > 1 then
-				local ahead = waypoints[#waypoints - 1]
-				self_pos.y = ahead.y
+function mob_class:gwp_next_waypoint (dtime)
+	local waypoints = self.waypoints
+	if #waypoints < 1 then
+		self:cancel_navigation ()
+		self.movement_goal = nil
+		self:halt_in_tracks ()
+		if self.callback_arrived then
+			self:callback_arrived ()
+		end
+		return
+	end
+	local next_wp = waypoints[#waypoints]
+	local self_pos = self.object:get_pos ()
+	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
+	local dist_to_ycenter = math.abs (next_wp.y + 0.5 - self_pos.y)
+	local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
+	local cbox = self.collisionbox
+	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
+	local mindist = girth > 0.75 and girth / 2 or 0.75 - girth / 2
+
+	if dist_to_xcenter < mindist
+		and dist_to_zcenter < mindist
+		and dist_to_ycenter < 1.5 then
+		waypoints[#waypoints] = nil
+	else
+		-- Is this mob already en route to the next waypoint?
+		if #waypoints > 1 then
+			local ahead = waypoints[#waypoints - 1]
+			self_pos.y = ahead.y
+			local dir = vector.direction (self_pos, ahead)
+			local dir1 = vector.direction (self_pos, next_wp)
+			if vector.dot (dir, dir1) < 0 then
+				next_wp = ahead
+				waypoints[#waypoints] = nil
+			end
+		end
+
+		-- Head to the center of the waypoint.
+		self.movement_goal = "go_pos"
+		self.movement_target = next_wp
+		self.movement_velocity = self.gowp_velocity or self.movement_speed
+	end
+end
+
+local function obstruction_is_water (name, def)
+	-- Water source blocks are always traversible.
+	return name == "mcl_core:water_source"
+		or name == "mclx_core:river_water_source"
+end
+
+local function aquatic_gwp_next_waypoint (self, dtime)
+	local waypoints = self.waypoints
+	if #waypoints < 1 then
+		self:cancel_navigation ()
+		self.movement_goal = nil
+		self:halt_in_tracks ()
+		if self.callback_arrived then
+			self:callback_arrived ()
+		end
+		return
+	end
+	local next_wp = waypoints[#waypoints]
+	local self_pos = self.object:get_pos ()
+	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
+	local dist_to_ycenter = math.abs (next_wp.y + 0.5 - self_pos.y)
+	local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
+	local cbox = self.collisionbox
+	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
+	local mindist = girth > 0.75 and girth / 2 or 0.75 - girth / 2
+
+	if dist_to_xcenter < mindist
+		and dist_to_zcenter < mindist
+		and dist_to_ycenter < 1.0 then
+		waypoints[#waypoints] = nil
+	else
+		-- Is this mob already en route to the next waypoint?
+		-- Alternatively, is there a line of sight between
+		-- this and the next waypoint?
+		while #waypoints > 1 do
+			local ahead = waypoints[#waypoints - 1]
+			local cbox = self.collisionbox
+			local center = {
+				x = self_pos.x,
+				y = self_pos.y + cbox[2] + (cbox[5] - cbox[2]) / 2,
+				z = self_pos.z,
+			}
+
+			if self:line_of_sight (center, ahead, obstruction_is_water) then
+				next_wp = ahead
+				waypoints[#waypoints] = nil
+			else
 				local dir = vector.direction (self_pos, ahead)
 				local dir1 = vector.direction (self_pos, next_wp)
 				if vector.dot (dir, dir1) < 0 then
 					next_wp = ahead
 					waypoints[#waypoints] = nil
+				else
+					break
 				end
 			end
-
-			-- Head to the center of the waypoint.
-			self.movement_goal = "go_pos"
-			self.movement_target = next_wp
-			self.movement_velocity = self.gowp_velocity or self.movement_speed
 		end
 
-		self:gwp_timeout (dtime)
+		-- Head to the center of the waypoint.
+		self.movement_goal = "go_pos"
+		self.movement_target = next_wp
+		self.movement_velocity = self.gowp_velocity or self.movement_speed
 	end
 end
 
+local function waterbound_gwp_initialize (self, targets, range)
+	local context = mob_class.gwp_initialize (self, targets, range)
+	local cbox = self.collisionbox
+
+	-- Offset Y positions of reconstructed path nodes so as to
+	-- center the mob in the said nodes.
+	local cbox_height = cbox[5] - cbox[2]
+	context.y_offset = -(cbox_height / 2) - cbox[2]
+	return context
+end
+
+function mob_class:gwp_configure_aquatic_mob ()
+	self.gwp_edges = waterbound_gwp_edges
+	self.gwp_start = waterbound_gwp_start
+	self.gwp_initialize = waterbound_gwp_initialize
+	self.gwp_classify_node = waterbound_gwp_classify_node
+	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
+	local new_penalties = table.copy (mob_class.gwp_penalties)
+	new_penalties.WATER = 0.0
+	self.gwp_penalties = new_penalties
+end
