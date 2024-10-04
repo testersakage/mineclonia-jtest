@@ -14,7 +14,7 @@ Version: 0.107.0
 * Improved leaf decay
 * Improved villages
 * Wandering traders and trader llamas
-* Suspicious nodes, pottery shreds and decorated pots
+* Suspicious nodes, pottery sherds and decorated pots
 * Conduits
 * Deep dark biome and ancient hermitage (structure corresponding to ancient city)
 * Functional loom to apply banner patterns
