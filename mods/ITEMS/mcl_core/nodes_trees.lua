@@ -135,7 +135,7 @@ mcl_trees.register_wood("spruce",{
 			if is_2by2 then
 				local nn = minetest.find_nodes_in_area_under_air(vector.offset(pos,-6,-6,-6), vector.offset(pos, 6, 6, 6), {"group:dirt"})
 				table.sort(nn, function(a, b) return vector.distance(pos, a) < vector.distance(pos, b) end)
-				for i = 1, math.random(2, #nn) do
+				for i = 1, math.random(math.min(#nn, 2), #nn) do
 					minetest.set_node(nn[i], {name="mcl_core:podzol"})
 				end
 			end
