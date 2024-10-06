@@ -41,7 +41,6 @@ mcl_mobs.register_mob("mobs_mc:silverfish", {
 	},
 	makes_footstep_sound = false,
 	movement_speed = 5.0,
-	jump = true,
 	fear_height = 4,
 	replace_what = {
 		{"mcl_core:stone", "mcl_monster_eggs:monster_egg_stone", -1},

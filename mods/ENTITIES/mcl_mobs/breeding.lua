@@ -25,13 +25,25 @@ function mob_class:_on_dispense(dropitem)
 	end
 end
 
-function mob_class:feed_tame(clicker, heal, breed, tame, notake)
+function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 	local consume_food = false
+	local tamechance = tamechance or 1.0
 
 	if clicker and tame and not self.child then
 		if not self.owner or self.owner == "" then
-			self.tamed = true
-			self.owner = clicker:get_player_name()
+			local pos = self.object:get_pos ()
+			local x, z = pos.x, pos.z
+			if math.random () <= tamechance then
+				self.tamed = true
+				self.owner = clicker:get_player_name()
+				mcl_mobs.effect ({x = x, y = pos.y + 0.7, z = z},
+					5, "heart.png", 2, 4, 2.0, 0.1)
+			else
+				mcl_mobs.effect ({x = x, y = pos.y + 0.7, z = z},
+					math.random (7),
+					"mcl_particles_mob_death.png^[colorize:#000000:255",
+					2, 4, 2.0, 0.1)
+			end
 			consume_food = true
 		end
 	end
@@ -67,6 +79,7 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake)
 	else
 		self:mob_sound("random", true)
 	end
+
 
 	return consume_food
 end
@@ -132,7 +145,9 @@ function mob_class:tick_breeding ()
 			if self.on_grown then
 				self.on_grown(self)
 			else
-				self.order = "jump"
+				-- Jump when fully grown so as not to
+				-- fall into the ground.
+				self._jump = true
 			end
 			self.animation = nil
 			local anim = self._current_animation
@@ -278,6 +293,7 @@ function mob_class:check_breeding (pos)
 					local entity = object:get_luaentity ()
 					self.mate = object
 					entity.mate = self.object
+					entity:replace_activity ("mate")
 					self.begetting = false
 					self.horny = false
 					-- Prevent duplicate calls to
@@ -285,12 +301,7 @@ function mob_class:check_breeding (pos)
 					entity.begetting = true
 					-- Taken, sorry!
 					entity.horny = false
-
-					-- Interrupt other activities.
-					self.herd_following = nil
-					self.pacing = nil
-					self.following = nil
-					return true
+					return "mate"
 				end
 			end
 	end
@@ -311,7 +322,8 @@ function mob_class:follow_herd (pos)
 		end
 
 		local target_pos = self.herd_following:get_pos ()
-		if vector.distance (target_pos, pos) < 9 then
+		if vector.distance (target_pos, pos) < 9
+			or self:navigation_finished () then
 			self.herd_following = nil
 			return false
 		end
@@ -320,6 +332,7 @@ function mob_class:follow_herd (pos)
 			self:gopath (target_pos, nil, true,
 				     self.movement_speed * self.follow_bonus)
 		end
+		return true
 	elseif self.child and self:check_timer ("check_herd", 0.5) then
 		-- Locate nearby adults to decide whether the entire
 		-- herd is further than 9 blocks away.
@@ -330,76 +343,33 @@ function mob_class:follow_herd (pos)
 		bx = self.collisionbox[4]
 		by = self.collisionbox[5]
 		bz = self.collisionbox[6]
-		local aa = { x = pos.x + ax - 8, y = pos.y + ay - 4, z = pos.z + az - 8 }
-		local bb = { x = pos.x + bx + 8, y = pos.y + by + 4, z = pos.z + bz + 8 }
+		local aa = { x = pos.x + ax - 9, y = pos.y + ay - 5, z = pos.z + az - 9 }
+		local bb = { x = pos.x + bx + 9, y = pos.y + by + 5, z = pos.z + bz + 9 }
 		local objects = minetest.get_objects_in_area (aa, bb)
-		local distmax, selected = 5000
+		local distmin, selected = 5000
 
 		for _, object in ipairs (objects) do
 			local obj_pos = object:get_pos ()
 			local dist = vector.distance (pos, obj_pos)
-			if dist < distmax then
+			if dist < distmin then
 				local entity = object:get_luaentity ()
 				if entity and entity.is_mob and not entity.child
 					and self:same_species (entity) then
-					distmax = dist
+					distmin = dist
 					selected = object
 				end
 			end
-			-- There's no need to move towards the rest of
-			-- the herd.
-			if distmax < 9 then
-				return false
-			end
 		end
-
-		-- Interrupt other activities.
-		self.pacing = false
+		-- There's no need to move towards the rest of
+		-- the herd.
+		if not selected or distmin < 3.0 then
+			return false
+		end
+		self:gopath (selected:get_pos (), nil, true,
+			     self.movement_speed * self.follow_bonus)
 		self.herd_following = selected
+		return "herd_following"
 	end
-end
-
-function mob_class:stay()
-	self.order = "sit"
-	self.jump = false
-	if self.animation.sit_start then
-		self:set_animation("sit")
-	else
-		self:set_animation("stand")
-	end
-end
-
-function mob_class:roam()
-	self.order = "roam"
-	self.jump = true
-	self:set_animation("stand")
-end
-
-function mob_class:toggle_sit(clicker,p)
-	if not self.tamed or self.child  or self.owner ~= clicker:get_player_name() then
-		return
-	end
-	local pos = self.object:get_pos()
-	local particle
-	if not self.order or self.order == "" or self.order == "sit" then
-		particle = "mobs_mc_wolf_icon_roam.png"
-		self:roam()
-	else
-		particle = "mobs_mc_wolf_icon_sit.png"
-		self:stay()
-	end
-	local pp = vector.new(0,1.4,0)
-	if p then pp = vector.offset(pp,0,p,0) end
-	-- Display icon to show current order (sit or roam)
-	minetest.add_particle({
-		pos = vector.add(pos, pp),
-		velocity = {x=0,y=0.2,z=0},
-		expirationtime = 1,
-		size = 4,
-		texture = particle,
-		playername = self.owner,
-		glow = minetest.LIGHT_MAX,
-	})
 end
 
 function mob_class:break_in(player)
@@ -435,4 +405,158 @@ function mob_class:break_in(player)
 		self.temper = self.temper + temper_increase
 		return true
 	end
+end
+
+
+----------------------------------------------------------------------------------
+-- Tamable mob interaction with owners.  FIXME: why is this in breeding.lua?
+----------------------------------------------------------------------------------
+
+function mob_class:stay ()
+	self.order = "sit"
+end
+
+function mob_class:toggle_sit(clicker,p)
+	if not self.tamed or self.child  or self.owner ~= clicker:get_player_name() then
+		return
+	end
+	local pos = self.object:get_pos()
+	local particle
+	if not self.order or self.order == "" or self.order == "sit" then
+		particle = "mobs_mc_wolf_icon_roam.png"
+		self.order = ""
+	else
+		particle = "mobs_mc_wolf_icon_sit.png"
+		self:stay ()
+	end
+	local pp = vector.new(0,1.4,0)
+	if p then pp = vector.offset(pp,0,p,0) end
+	-- Display icon to show current order (sit or roam)
+	minetest.add_particle({
+		pos = vector.add(pos, pp),
+		velocity = {x=0,y=0.2,z=0},
+		expirationtime = 1,
+		size = 4,
+		texture = particle,
+		playername = self.owner,
+		glow = minetest.LIGHT_MAX,
+	})
+end
+
+function mob_class:is_not_owner (object)
+	return not object:is_player ()
+		or object:get_player_name () ~= self.owner
+end
+
+function mob_class:sit_if_ordered (self_pos, dtime)
+	if self.order == "sit" and self.owner then
+		if minetest.get_item_group (self.standing_in, "water") ~= 0 then
+			return false
+		end
+		-- If recently damaged and owner is nearby, don't
+		-- activate either.
+		if self._recent_attacker
+			and self:is_not_owner (self._recent_attacker) then
+			local player = minetest.get_player_by_name (self.owner)
+			if player
+				and vector.distance (self_pos, player:get_pos ()) < 12 then
+				return false
+			end
+		end
+		if self.animation.sit_start then
+			self:set_animation ("sit")
+		end
+		self:halt_in_tracks ()
+		self:cancel_navigation ()
+		-- This field doesn't really exist; it serves to
+		-- indicate that the active task has changed.
+		return "sit_if_ordered"
+	end
+	return false
+end
+
+local function teleport_to_owner (self, owner, owner_pos)
+	-- Search for a walkable platform from among 10 random
+	-- positions around the owner's position.  Reject leaves
+	-- unless this mob be airborne.
+	for _ = 1, 10 do
+		local x = math.random (-3, 3)
+		local y = math.random (-1, 1)
+		local z = math.random (-3, 3)
+		owner_pos.x = math.floor (owner_pos.x + 0.5)
+		owner_pos.y = math.floor (owner_pos.y + 0.5)
+		owner_pos.z = math.floor (owner_pos.z + 0.5)
+		local pos = vector.offset (owner_pos, x, y, z)
+
+		if self:gwp_classify_for_movement (pos) == "WALKABLE" then
+			pos.y = pos.y - 1
+			local node = minetest.get_node (pos)
+			local def = minetest.registered_nodes [node.name]
+			if def and (not def.groups.leaves or self.airborne) then
+				pos.y = pos.y + 1
+				self.object:set_pos (pos)
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function mob_class:check_travel_to_owner (self_pos, dtime)
+	if self.traveling_to_owner then
+		if not self.owner then
+			self.traveling_to_owner = nil
+			return false
+		end
+		local owner = minetest.get_player_by_name (self.owner)
+		if not owner then
+			self.traveling_to_owner = nil
+			return false
+		end
+
+		local owner_pos = owner:get_pos ()
+		local distance = vector.distance (self_pos, owner_pos)
+		if distance <= self.stop_chasing_distance
+			or self:navigation_finished () then
+			self:cancel_navigation ()
+			self:halt_in_tracks ()
+			self.traveling_to_owner = nil
+			return false
+		end
+
+		if self:check_timer ("pathfind_to_owner", 0.5) then
+			-- Teleport if the owner is at a distance.
+			if distance > 12 then
+				if teleport_to_owner (self, owner, owner_pos) then
+					self.traveling_to_owner = nil
+					return false
+				end
+			else
+				self:gopath (owner_pos)
+			end
+		end
+		return true
+	else
+		local owner = self.owner and minetest.get_player_by_name (self.owner)
+		if not owner or self.object:get_attach () or self.order == "sit" then
+			return false
+		end
+			local owner_pos = owner:get_pos ()
+			local distance = vector.distance (self_pos, owner_pos)
+
+			-- Teleport if the owner is at a distance.
+			if distance > 12 then
+				if teleport_to_owner (self, owner, owner_pos) then
+					self.traveling_to_owner = nil
+					return false
+				end
+				self.traveling_to_owner = true
+				return "traveling_to_owner"
+			elseif distance > self.chase_owner_distance then
+				self:gopath (owner_pos)
+				self.traveling_to_owner = true
+				return "traveling_to_owner"
+			end
+	end
+	return false
 end

@@ -87,7 +87,6 @@ local zombie = {
 	reach = 2,
 	fear_height = 4,
 	pathfinding = 1,
-	jump = true,
 	jump_height = 8.4,
 	group_attack = { "mobs_mc:zombie", "mobs_mc:baby_zombie", "mobs_mc:husk", "mobs_mc:baby_husk" },
 	drops = drops_zombie,

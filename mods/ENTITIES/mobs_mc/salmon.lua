@@ -4,6 +4,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator(minetest.get_current_modname())
+local mob_class = mcl_mobs.mob_class
 
 --###################
 --################### salmon
@@ -23,7 +24,7 @@ local salmon = {
 	spawn_in_group = 5,
 	tilt_swim = true,
 	head_eye_height = 0.26,
-	collisionbox = {-0.4, 0.0, -0.4, 0.4, 0.79, 0.4},
+	collisionbox = {-0.35, 0.0, -0.35, 0.35, 0.4, 0.35},
 	visual = "mesh",
 	mesh = "extra_mobs_salmon.b3d",
 	textures = {
@@ -46,13 +47,25 @@ local salmon = {
 		min = 1,
 		max = 1,},
 	},
+	runaway_from = {"players"},
+	runaway_bonus_near = 1.6,
+	runaway_bonus_far = 1.4,
+	runaway_view_range = 8,
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,
 	swims = true,
 	pace_height = 1.0,
-	do_go_pos = mcl_mobs.mob_class.fish_do_go_pos,
+	do_go_pos = mob_class.fish_do_go_pos,
+	initialize_group = mob_class.school_init_group,
+	_school_size = 5,
+	ai_functions = {
+		mob_class.check_schooling,
+		mob_class.check_avoid,
+		mob_class.check_frightened,
+		mob_class.check_pace,
+	},
 	breathes_in_water = true,
-	jump = false,
+	flops = true,
 	view_range = 16,
 	runaway = true,
 	fear_height = 4,

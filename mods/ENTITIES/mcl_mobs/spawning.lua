@@ -300,6 +300,7 @@ end
 local function spawn_group(p,mob,spawn_on,group_max,group_min)
 	if not group_min then group_min = 1 end
 	local nn= minetest.find_nodes_in_area_under_air(vector.offset(p,-5,-3,-5),vector.offset(p,5,3,5),spawn_on)
+	local group_members = {}
 	local o
 	table.shuffle(nn)
 	if not nn or #nn < 1 then
@@ -313,8 +314,15 @@ local function spawn_group(p,mob,spawn_on,group_max,group_min)
 				sp = get_water_spawn(sp)
 			end
 			o =  mcl_mobs.spawn(sp,mob.name)
-			if o then dbg_spawn_succ = dbg_spawn_succ + 1 end
+			if o then
+				dbg_spawn_succ = dbg_spawn_succ + 1
+				table.insert (group_members, o)
+			end
 		end
+	end
+	local init_func = minetest.registered_entities[mob.name].initialize_group
+	if init_func and #group_members > 0 then
+		init_func (group_members)
 	end
 	return o
 end

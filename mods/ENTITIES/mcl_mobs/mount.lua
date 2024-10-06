@@ -140,7 +140,6 @@ function mob_class:expel_underwater_drivers ()
 
 		if headin.groups.water then
 			force_detach (self.driver)
-			self:roam ()
 			return
 		end
 	end
@@ -210,7 +209,6 @@ function mob_class:drive_follow (moving_anim, stand_anim, dtime, moveresult)
 
 	if headin.groups.water then
 	   force_detach (self.driver)
-	   self:roam ()
 	   return
 	end
 
@@ -392,7 +390,6 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 		local cbox = self.object:get_properties().collisionbox
 		if minetest.registered_nodes[mcl_mobs.node_ok(vector.offset(p,0,cbox[5] -0.25,0)).name].groups.water then
 			force_detach(self.driver)
-			self:roam()
 		end
 		if ni == "lava" and self.lava_damage ~= 0 then
 			self.lava_counter = (self.lava_counter or 0) + dtime

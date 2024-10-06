@@ -58,7 +58,6 @@ mcl_mobs.mob_class = {
 	armor = 100,
 	sounds = {},
 	animation = {},
-	jump = true,
 	attacks_monsters = false,
 	group_attack = false,
 	passive = false,
@@ -114,6 +113,9 @@ mcl_mobs.mob_class = {
 	movement_speed = 14, -- https://minecraft.wiki/w/Attribute#movementSpeed
 	run_bonus = 1.25,
 	follow_bonus = 1.2,
+	runaway_bonus_near = 1.25,
+	runaway_bonus_far = 1.0,
+	runaway_view_range = 16,
 	follow_distance = 6.0,
 	-- Distance at which targets will be relinquished.
 	tracking_distance = 32.0,
@@ -143,6 +145,13 @@ mcl_mobs.mob_class = {
 	grounded_speed_factor = 0.10,
 	pace_interval = 5,
 	pace_height = 7,
+	pace_width = 10,
+	flops = false,
+	initialize_group = nil,
+	_hovers = false,
+	airborne_speed = 8.0,
+	chase_owner_distance = 10.0,
+	stop_chasing_distance = 2.0,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
@@ -189,11 +198,34 @@ dofile(path .. "/combat.lua")
 -- the enity functions themselves
 dofile(path .. "/api.lua")
 
-
 --utility functions
 dofile(path .. "/breeding.lua")
 dofile(path .. "/spawning.lua")
 dofile(path .. "/mount.lua")
+
+-- AI functions.  This list must be created after the defaults are
+-- initialized above.
+
+-- Default AI functions.  Each function should accept a minimum of
+-- three arguments, POS, DTIME.  If such a function returns non-nil,
+-- subsequent functions are skipped and its value, if otherwise than
+-- `true', is saved into a list of outstanding activities; this value
+-- is expected to be a field to be cleared when an activity of a
+-- higher priority is activated.  Functions earlier in the list take
+-- priority over those which appear later.
+local mob_class = mcl_mobs.mob_class
+mob_class.ai_functions = {
+	mob_class.sit_if_ordered,
+	mob_class.check_travel_to_owner,
+	mob_class.check_avoid_sunlight,
+	mob_class.check_avoid,
+	mob_class.check_frightened,
+	mob_class.check_attack,
+	mob_class.check_breeding,
+	mob_class.check_following,
+	mob_class.follow_herd,
+	mob_class.check_pace,
+}
 
 function mcl_mobs.mob_class:set_nametag(name)
 	if name ~= "" then

@@ -50,7 +50,7 @@ local function get_dim_relative_y(pos)
 		end
 end
 
-mcl_mobs.register_mob("mobs_mc:wither", {
+local wither_def = {
 	description = S("Wither"),
 	type = "monster",
 	spawn_class = "hostile",
@@ -78,7 +78,6 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 		-- TODO: sounds
 		distance = 60,
 	},
-	jump = true,
 	jump_height = 10,
 	fly = true,
 	makes_footstep_sound = false,
@@ -100,9 +99,9 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 	shoot_offset = -0.5,
 	animation = {
 		walk_speed = 12, run_speed = 12, stand_speed = 12,
-		stand_start = 0,		stand_end = 20,
-		walk_start = 0,		walk_end = 20,
-		run_start = 0,		run_end = 20,
+		stand_start = 0, stand_end = 20,
+		walk_start = 0,	walk_end = 20,
+		run_start = 0,	run_end = 20,
 	},
 	harmed_by_heal = true,
 	is_boss = true,
@@ -113,272 +112,6 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 		if not ent or not ent.is_mob or ent.harmed_by_heal or ent.name == "mobs_mc:ghast" then return true
 		else return false end
 	end,
-
-	do_custom = function(self, dtime)
-		if self._spawning then
-			if not self._spw_max then self._spw_max = self._spawning end
-			self._spawning = self._spawning - dtime
-			local bardef = {
-				color = "dark_purple",
-				text = "Wither spawning",
-				percentage = math.floor((self._spw_max - self._spawning) / self._spw_max * 100),
-			}
-
-			local pos = self.object:get_pos()
-			for player in mcl_util.connected_players() do
-				local d = vector.distance(pos, player:get_pos())
-				if d <= 80 then
-					mcl_bossbars.add_bar(player, bardef, true, d)
-				end
-			end
-			self.object:set_yaw(self._spawning*10)
-
-			local factor = math.floor((math.sin(self._spawning*10)+1.5) * 85)
-			local str = minetest.colorspec_to_colorstring({r=factor, g=factor, b=factor})
-			self.object:set_texture_mod("^[brighten^[multiply:"..str)
-
-			if self._spawning <= 0 then
-				if mobs_griefing and not minetest.is_protected(pos, "") then
-					mcl_explosions.explode(pos, WITHER_INIT_BOOM, { drop_chance = 1.0 }, self.object)
-				else
-					mcl_mobs.mob_class.safe_boom(self, pos, WITHER_INIT_BOOM)
-				end
-				self.object:set_texture_mod("")
-				self._spawning = nil
-				self._spw_max = nil
-			else
-				return false
-			end
-		end
-
-		self._custom_timer = self._custom_timer + dtime
-		if self._custom_timer > 1 then
-			self.health = math.min(self.health + 1, self.object:get_properties().hp_max)
-			self._custom_timer = self._custom_timer - 1
-		end
-		if self._spawner then
-			local spawner = minetest.get_player_by_name(self._spawner)
-			if spawner then
-				self._death_timer = 0
-				local pos = self.object:get_pos()
-				local spw = spawner:get_pos()
-				local dist = vector.distance(pos, spw)
-				if dist > 60 and follow_spawner then -- teleport to the player who spawned the wither
-					local R = 10
-					pos.x = spw.x + math.random(-R, R)
-					pos.y = spw.y + math.random(-R, R)
-					pos.z = spw.z + math.random(-R, R)
-					self.object:set_pos(pos)
-				end
-			else
-				self._death_timer = self._death_timer + self.health - self._health_old
-				if self.health == self._health_old then self._death_timer = self._death_timer + dtime end
-				if self._death_timer > 100 then
-					self.object:remove()
-					return false
-				end
-				self._health_old = self.health
-			end
-		end
-
-		local rand_factor
-		if self.health < (self.object:get_properties().hp_max / 2) then
-			self.base_texture = "mobs_mc_wither_half_health.png"
-			self.fly = false
-			self._arrow_resistant = true
-			rand_factor = 3
-		else
-			self.base_texture = "mobs_mc_wither.png"
-			self.fly = true
-			self._arrow_resistant = false
-			rand_factor = 10
-		end
-		if not self.attack then
-			local y = get_dim_relative_y(self.object:get_pos())
-			if y > 0 then
-				self.fly = false
-			else
-				self.fly = true
-				local vel = self.object:get_velocity()
-				-- self.object:set_velocity(vector.new(vel.x, self.walk_velocity, vel.z))
-				-- TODO
-			end
-		end
-		self.object:set_properties({textures={self.base_texture}})
-		mcl_bossbars.update_boss(self.object, "Wither", "dark_purple")
-		if math.random(1, rand_factor) < 2 then
-			self.arrow = "mobs_mc:wither_skull_strong"
-		else
-			self.arrow = "mobs_mc:wither_skull"
-		end
-	end,
-
-	attack_state = function(self, dtime)
-		local s = self.object:get_pos()
-		local p = self.attack:get_pos() or s
-
-		p.y = p.y - .5
-		s.y = s.y + .5
-
-		local dist = vector.distance(p, s)
-		local vec = {
-			x = p.x - s.x,
-			y = p.y - s.y,
-			z = p.z - s.z
-		}
-
-		local yaw = (atan(vec.z / vec.x) +math.pi/ 2) - self.rotate
-		if p.x > s.x then yaw = yaw +math.pi end
-		yaw = self:set_yaw( yaw, 0, dtime)
-
-		local stay_away_from_player = vector.zero()
-
-		--strafe back and fourth
-
-		--stay away from player so as to shoot them
-		if dist < self.avoid_distance and self.shooter_avoid_enemy then
-			self:set_animation( "shoot")
-			stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
-		end
-
-		if self.fly then
-			local vel = self.object:get_velocity()
-			local diff = s.y - p.y
-			local FLY_FACTOR = 0 -- self.walk_velocity
-			if diff < 10 then
-				self.object:set_velocity({x=vel.x, y= FLY_FACTOR, z=vel.z})
-			elseif diff > 15 then
-				self.object:set_velocity({x=vel.x, y=-FLY_FACTOR, z=vel.z})
-			end
-			for i=1, 15 do
-				if minetest.get_node(vector.offset(s, 0, -i, 0)).name ~= "air" then
-					self.object:set_velocity({x=vel.x, y= FLY_FACTOR,   z=vel.z})
-					break
-				elseif minetest.get_node(vector.offset(s, 0, i, 0)).name ~= "air" then
-					self.object:set_velocity({x=vel.x, y=-FLY_FACTOR/i, z=vel.z})
-					break
-				end
-			end
-		end
-
-		if self.strafes then
-			if not self.strafe_direction then
-				self.strafe_direction = 1.57
-			end
-			if math.random(40) == 1 then
-				self.strafe_direction = self.strafe_direction*-1
-			end
-
-			local dir = vector.rotate_around_axis(vector.direction(s, p), vector.new(0,1,0), self.strafe_direction)
-			local dir2 = vector.multiply(dir, 0.3 -- * self.walk_velocity TODO
-			)
-
-			if dir2 and stay_away_from_player then
-				self.acc = vector.add(dir2, stay_away_from_player)
-			end
-		else
-			self:set_velocity(0)
-		end
-
-		if dist > 30 then self.acc = vector.add(self.acc, vector.direction(s, p)*0.01) end
-
-		local side_cor = vector.new(0.7*math.cos(yaw), 0, 0.7*math.sin(yaw))
-		local m = self.object:get_pos() -- position of the middle head
-		local sr = self.object:get_pos() + side_cor -- position of side right head
-		local sl = self.object:get_pos() - side_cor -- position of side left head
-		-- height corrections
-		local cb = self.object:get_properties().collisionbox
-		m.y = m.y + cb[5]
-		sr.y = sr.y + cb[5] - 0.3
-		sl.y = sl.y + cb[5] - 0.3
-		local rand_pos = math.random(1,3)
-		if rand_pos == 1 then m = sr
-		elseif rand_pos == 2 then m = sl end
-
-		-- melee attack
-		if not self._melee_timer then
-			self._melee_timer = 0
-		end
-		if self._melee_timer < WITHER_MELEE_COOLDOWN then
-			self._melee_timer = self._melee_timer + dtime
-		else
-			self._melee_timer = 0
-			local pos = table.copy(s)
-			pos.y = pos.y + 2
-			local hit_some = false
-			for obj in minetest.objects_inside_radius(pos, self.reach) do
-				obj:punch(obj, 1.0, {
-					full_punch_interval = 1.0,
-					damage_groups = {fleshy = 4},
-				}, pos)
-				local ent = obj:get_luaentity()
-				if obj:is_player() or (ent and ent ~= self and (not ent._shooter or ent._shooter ~= self)) then
-					mcl_util.deal_damage(obj, 8, {type = "magic"})
-					hit_some = true
-				end
-				mcl_potions.give_effect("withering", obj, 2, 10)
-			end
-			if hit_some then
-				mcl_mobs.effect(pos, 32, "mcl_particles_soul_fire_flame.png", 5, 10, self.reach, 1, 0)
-			end
-		end
-
-		if dist < self.reach then
-			self.shoot_interval = 3
-		else
-			self.shoot_interval = 1
-		end
-
-		if self.shoot_interval
-				and self.timer > self.shoot_interval
-				and not minetest.raycast(vector.add(m, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
-				and math.random(1, 100) <= 60 then
-
-			self.timer = 0
-			self:set_animation( "shoot")
-
-			-- play shoot attack sound
-			self:mob_sound("shoot_attack")
-
-			-- Shoot arrow
-			if minetest.registered_entities[self.arrow] then
-
-				local arrow, ent
-				local v = 1
-				if not self.shoot_arrow then
-					self.firing = true
-					minetest.after(1, function()
-						self.firing = false
-					end)
-					arrow = minetest.add_entity(m, self.arrow)
-					ent = arrow:get_luaentity()
-					if ent.velocity then
-						v = ent.velocity
-					end
-					ent.switch = 1
-					ent.owner_id = tostring(self.object) -- add unique owner id to arrow
-
-					-- important for mcl_shields
-					ent._shooter = self.object
-					ent._saved_shooter_pos = self.object:get_pos()
-				end
-
-				local amount = (vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) ^ 0.5
-				-- offset makes shoot aim accurate
-				vec.y = vec.y + self.shoot_offset
-				vec.x = vec.x * (v / amount)
-				vec.y = vec.y * (v / amount)
-				vec.z = vec.z * (v / amount)
-				if self.shoot_arrow then
-					vec = vector.normalize(vec)
-					self:shoot_arrow(m, vec)
-				else
-					arrow:set_velocity(vec)
-				end
-			end
-		end
-	end,
-
 	do_punch = function(self, hitter, tflp, tool_capabilities, dir) ---@diagnostic disable-line: unused-local
 		if self._spawning or hitter == self.object then return false end
 		local ent = hitter:get_luaentity()
@@ -391,17 +124,92 @@ mcl_mobs.register_mob("mobs_mc:wither", {
 		wither_unstuck(self)
 		self.health = self.health - damage
 	end,
-
 	on_spawn = function(self)
-		minetest.sound_play("mobs_mc_wither_spawn", {object=self.object, gain=1.0, max_hear_distance=64})
+		minetest.sound_play("mobs_mc_wither_spawn", {gain=1.0})
 		self._custom_timer = 0.0
 		self._death_timer = 0.0
 		self._health_old = self.object:get_properties().hp_max
 		self._spawning = 10
 		return true
 	end,
+}
 
-})
+function wither_def:do_custom (self, dtime, moveresult)
+	if self._spawning then
+		if not self._spw_max then self._spw_max = self._spawning end
+		self._spawning = self._spawning - dtime
+		local bardef = {
+			color = "dark_purple",
+			text = "Wither spawning",
+			percentage = math.floor((self._spw_max - self._spawning) / self._spw_max * 100),
+		}
+
+		local pos = self.object:get_pos()
+		for player in mcl_util.connected_players() do
+			local d = vector.distance(pos, player:get_pos())
+			if d <= 80 then
+				mcl_bossbars.add_bar(player, bardef, true, d)
+			end
+		end
+		self.object:set_yaw(self._spawning*10)
+
+		local factor = math.floor((math.sin(self._spawning*10)+1.5) * 85)
+		local str = minetest.colorspec_to_colorstring({r=factor, g=factor, b=factor})
+		self.object:set_texture_mod("^[brighten^[multiply:"..str)
+
+		if self._spawning <= 0 then
+			if mobs_griefing and not minetest.is_protected(pos, "") then
+				mcl_explosions.explode(pos, WITHER_INIT_BOOM, { drop_chance = 1.0 }, self.object)
+			else
+				mcl_mobs.mob_class.safe_boom(self, pos, WITHER_INIT_BOOM)
+			end
+			self.object:set_texture_mod("")
+			self._spawning = nil
+			self._spw_max = nil
+		else
+			return false
+		end
+	end
+
+	self._custom_timer = self._custom_timer + dtime
+	if self._custom_timer > 1 then
+		self.health = math.min(self.health + 1, self.object:get_properties().hp_max)
+		self._custom_timer = self._custom_timer - 1
+	end
+
+	local rand_factor
+	if self.health < (self.object:get_properties().hp_max / 2) then
+		self.base_texture = "mobs_mc_wither_half_health.png"
+		self.fly = false
+		self._arrow_resistant = true
+		rand_factor = 3
+	else
+		self.base_texture = "mobs_mc_wither.png"
+		self.fly = true
+		self._arrow_resistant = false
+		rand_factor = 10
+	end
+	if not self.attack then
+		local y = get_dim_relative_y(self.object:get_pos())
+		if y > 0 then
+			self.fly = false
+		else
+			self.fly = true
+			local vel = self.object:get_velocity()
+			-- self.object:set_velocity(vector.new(vel.x, self.walk_velocity, vel.z))
+			-- TODO
+		end
+	end
+	self.object:set_properties({textures={self.base_texture}})
+	mcl_bossbars.update_boss(self.object, "Wither", "dark_purple")
+	if math.random(1, rand_factor) < 2 then
+		self.arrow = "mobs_mc:wither_skull_strong"
+	else
+		self.arrow = "mobs_mc:wither_skull"
+	end
+end
+
+mcl_mobs.register_mob("mobs_mc:wither", wither_def)
 
 local wither_rose_soil = { "group:grass_block", "mcl_core:dirt", "mcl_core:coarse_dirt", "mcl_nether:netherrack", "group:soul_block", "mcl_mud:mud", "mcl_lush_caves:moss" }
 local function spawn_wither_rose(obj)

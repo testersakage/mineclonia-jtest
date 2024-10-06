@@ -89,7 +89,9 @@ function mob_class:get_staticdata()
 		and tag ~= "pathfinding_context"
 		and tag ~= "waypoints"
 		and tag ~= "_cmi_components"
-		and tag ~= "_targets_visible" then
+		and tag ~= "_targets_visible"
+		and tag ~= "_leader"
+		and tag ~= "_school" then
 			tmp[tag] = self[tag]
 		end
 	end
@@ -173,6 +175,9 @@ function mob_class:scale_size(scale, force)
 			self.base_selbox[6] * scale,
 		},
 	})
+	-- This presumes that the collision box does not extend much
+	-- beneath the mob origin.
+	self.head_eye_height = self.head_eye_height * scale
 	self.scaled = true
 end
 
@@ -336,7 +341,7 @@ end
 
 function mob_class:on_step(dtime, moveresult)
 	local pos = self.object:get_pos()
-	if not mcl_mobs.check_vector(pos) or self.removed or not moveresult then
+	if not mcl_mobs.check_vector(pos) or self.removed then
 		self:safe_remove()
 		return
 	end
@@ -347,7 +352,19 @@ function mob_class:on_step(dtime, moveresult)
 
 	self:update_tag()
 
-	if not (moveresult and moveresult.touching_ground) and self:falling(pos) then return end
+	-- Objects which are attached don't receive moveresults.
+	-- Create a placeholder object to prevent crashes further
+	-- down the line.
+	if not moveresult then
+		moveresult = {
+			touching_ground = false,
+			collides = false,
+			standing_on_object = true,
+			collisions = { },
+		}
+	end
+
+	if not moveresult.touching_ground and self:falling (pos) then return end
 
 	-- Get nodes early for use in other functions
 	local cbox = self.collisionbox
@@ -362,7 +379,8 @@ function mob_class:on_step(dtime, moveresult)
 		self.standing_in = mcl_mobs.node_ok (feet, "air").name
 		self.standing_on = self.standing_in
 	end
-	local pos_head = vector.offset(pos, 0, cbox[5] - 0.5, 0)
+	local head_y = cbox[2] + (cbox[5] - cbox[2]) * 0.75
+	local pos_head = vector.offset (pos, 0, head_y, 0)
 	self.head_in = mcl_mobs.node_ok(pos_head, "air").name
 
 	self:falling (pos)

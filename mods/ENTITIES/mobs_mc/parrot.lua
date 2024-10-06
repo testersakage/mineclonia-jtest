@@ -4,6 +4,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
 --###################
 --################### PARROT
@@ -89,40 +90,7 @@ local function perch(self,player)
 	end
 end
 
-local function check_perch(self,dtime)
-	if self.object:get_attach() then
-		for p in mcl_util.connected_players() do
-			for _,o in pairs(p:get_children()) do
-				local l = o:get_luaentity()
-				if l and l.name == "mobs_mc:parrot" then
-					local n1 = minetest.get_node(vector.offset(p:get_pos(),0,-0.6,0)).name
-					local n2 = minetest.get_node(vector.offset(p:get_pos(),0,0,0)).name
-					if ( n1 == "air" or minetest.get_item_group(n2,"water") > 0 or minetest.get_item_group(n2,"lava") > 0) and
-					not minetest.is_creative_enabled(p:get_player_name()) then
-						o:set_detach()
-						self.detach_timer = 0
-						return
-					end
-				end
-			end
-		end
-	elseif not self.detach_timer then
-		for p in mcl_util.connected_players() do
-			if vector.distance(self.object:get_pos(),p:get_pos()) < 0.5 then
-				perch(self,p)
-				return
-			end
-		end
-	elseif self.detach_timer then
-		if self.detach_timer > 1 then
-			self.detach_timer = nil
-		else
-			self.detach_timer = self.detach_timer + dtime
-		end
-	end
-end
-
-mcl_mobs.register_mob("mobs_mc:parrot", {
+local parrot_def = {
 	description = S("Parrot"),
 	type = "animal",
 	spawn_class = "passive",
@@ -160,11 +128,7 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 		stand_start = 0, stand_end = 0, stand_speed = 50,
 		fly_start = 130, fly_end = 150, fly_speed = 50,
 		walk_start = 20, walk_end = 40, walk_speed = 50,
-		-- TODO: actual walk animation
-		--walk_start = 0,
-		--walk_end = 20,
-
-		-- TODO: more unused animations between 45 and 130
+		sit_start = 160, sit_end = 160,
 	},
 	fall_damage = 0,
 	attack_type = "melee",
@@ -172,11 +136,13 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 	floats = 1,
 	physical = true,
 	movement_speed = 4.0,
-	fly = true,
-	fly_chance = 50,
+	airborne = true,
 	makes_footstep_sound = false,
-	fear_height = 0,
 	view_range = 16,
+	chase_owner_distance = 5.0,
+	stop_chasing_distance = 1.0,
+	pace_height = 7,
+	pace_width = 8,
 	on_rightclick = function(self, clicker)
 		if self._doomed then return end
 		local item = clicker:get_wielded_item()
@@ -184,8 +150,8 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 		if item:get_name() == "mcl_farming:cookie" then
 			minetest.sound_play("mobs_mc_animal_eat_generic", {object = self.object, max_hear_distance=16}, true)
 			self.health = 0
-			-- Doomed to die
 			self._doomed = true
+			mcl_potions.give_effect_by_level ("poison", self.object, 900, 10)
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				item:take_item()
 				clicker:set_wielded_item(item)
@@ -199,19 +165,94 @@ mcl_mobs.register_mob("mobs_mc:parrot", {
 			"mcl_farming:pumpkin_seeds",
 			"mcl_farming:beetroot_seeds",
 		}
-		if table.indexof(food, item:get_name()) ~= -1 and self:feed_tame(clicker, 4, false, true) then return end
-		perch(self,clicker)
+		if table.indexof (food, item:get_name()) ~= -1 then
+			self:feed_tame (clicker, 4, false, true, false, 0.1)
+			return
+		end
+		if self.order == "sit" then
+			self.order = ""
+		else
+			self:stay ()
+		end
+	end,
+	on_step = function (self, dtime, moveresult)
+		mob_class.on_step (self, dtime, moveresult)
 	end,
 	do_custom = function(self,dtime)
-		check_perch(self,dtime)
-		check_mobimitate(self,dtime)
+		check_mobimitate (self,dtime)
+		-- Lest sit_if_ordered should interrupt perching.
+		if self.object:get_attach () and not self.perching then
+			self.object:detach ()
+		end
 	end,
 	do_punch = function(self,puncher) --do_punch is the mcl_mobs_redo variant - it gets called by on_punch later....
 		if self.object:get_attach() == puncher then
 			return false --return false explicitly here. mcl_mobs checks for that
 		end
 	end,
-})
+}
+
+function parrot_def:check_perch (self_pos, dtime)
+	local attach = self.object:get_attach ()
+	if self.perch_cooldown then
+		self.perch_cooldown
+			= math.max (0, self.perch_cooldown - dtime)
+	else
+		self.perch_cooldown = 0
+	end
+	if attach then
+		if not self.perching then
+			-- Perching was interrupted, and therefore
+			-- this object must be detached.
+			self.object:detach ()
+			return false
+		end
+		local n1 = minetest.get_node (vector.offset (self_pos, 0, -0.6, 0)).name
+		local n2 = minetest.get_node (vector.offset (self_pos, 0, 0, 0)).name
+		if n1 == "air" or minetest.get_item_group (n2,"water") > 0
+			or minetest.get_item_group (n2,"lava") > 0 then
+			self.object:set_detach()
+			self.perching = false
+			self.perch_cooldown = 1.0
+			return false
+		end
+		return true
+	elseif self.owner and self.perch_cooldown == 0 then
+		local owner = minetest.get_player_by_name (self.owner)
+		if not owner then
+			return false
+		end
+		if vector.distance (self_pos, owner:get_pos ()) < 0.5 then
+			perch (self, owner)
+			self.perching = true
+			return "perching"
+		end
+	end
+	return false
+end
+
+function parrot_def:airborne_pacing_target (pos, width, height, groups)
+	if math.random (100) <= 99 then
+		local aa = vector.offset (pos, -3, -6, -3)
+		local bb = vector.offset (pos, 3, 6, 3)
+		local nodes
+			= minetest.find_nodes_in_area_under_air (aa, bb, {"group:leaves"})
+		if #nodes > 0 then
+			return vector.offset (nodes[math.random (#nodes)], 0, 1, 0)
+		end
+	end
+	return mob_class.airborne_pacing_target (self, pos, width, height, groups)
+end
+
+parrot_def.ai_functions = {
+	mob_class.sit_if_ordered,
+	mob_class.check_travel_to_owner,
+	parrot_def.check_perch,
+	mob_class.check_frightened,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob("mobs_mc:parrot", parrot_def)
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:parrot",

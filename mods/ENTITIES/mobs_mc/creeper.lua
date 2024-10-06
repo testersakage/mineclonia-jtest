@@ -232,6 +232,7 @@ function creeper_defs:custom_attack ()
 	self._swell_time = 0
 	self._swell_dir = 1
 	self:cancel_navigation ()
+	self:halt_in_tracks ()
 end
 
 mcl_mobs.register_mob("mobs_mc:creeper", table.merge(creeper_defs, {
