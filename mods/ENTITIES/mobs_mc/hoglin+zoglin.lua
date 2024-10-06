@@ -38,7 +38,6 @@ local hoglin = {
 		death = "extra_mobs_hoglin_hurt",
 		distance = 16,
 	},
-	jump = true,
 	makes_footstep_sound = true,
 	movement_speed = 6.0,
 	retaliates = true,

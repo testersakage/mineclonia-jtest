@@ -101,7 +101,7 @@ local function slime_do_go_pos (self, dtime, moveresult)
 		or not (moveresult.touching_ground
 			or moveresult.standing_on_object) then
 		if delay == 0 then
-			self.order = "jump"
+			self._jump = true
 			delay = (math.random (60) + 40) / 20 * self.jump_delay_multiplier
 			if self.attack then
 				delay = delay / 3
@@ -172,6 +172,10 @@ end
 local function slime_run_ai (self, dtime)
 	local self_pos = self.object:get_pos ()
 
+	if self.dead then
+		return
+	end
+
 	self:check_attack (self_pos, dtime)
 	slime_turn (self, dtime, self_pos)
 	slime_jump_continuously (self)
@@ -183,17 +187,6 @@ local function slime_check_particle (self, dtime, moveresult)
 		and moveresult.touching_ground
 		and self._get_slime_particle then
 		local cbox = self.collisionbox
-		-- minetest.add_particlespawner ({
-		-- 		amount = 40,
-		-- 		time = 0.25,
-		-- 		attached = self.object,
-		-- 		texture = self._slime_particle,
-		-- 		collisiondetection = true,
-		-- 		pos = {
-		-- 			min = vector.new (cbox[1] - 0.4, 0, cbox[3] - 0.4),
-		-- 			max = vector.new (cbox[4] + 0.4, 0.2, cbox[6] + 0.4),
-		-- 		},
-		-- })
 		local radius = (cbox[6] - cbox[3])
 		local self_pos = self.object:get_pos ()
 		for i = 1, math.round (radius * 32) do
@@ -287,7 +280,6 @@ local slime_big = {
 	fall_damage = 0,
 	view_range = 16,
 	passive = false,
-	jump = true,
 	movement_speed = 10, -- (0.2 + 0.1 * size) * 20
 	fear_height = 0,
 	spawn_small_alternative = "mobs_mc:slime_small",
@@ -297,6 +289,7 @@ local slime_big = {
 	specific_attack = {
 		"mobs_mc:iron_golem",
 	},
+	attack_type = "null",
 	_get_slime_particle = function ()
 		return "[combine:" .. math.random (3)
 			.. "x" .. math.random (3) .. ":-"
@@ -485,7 +478,6 @@ local magma_cube_big = {
 	view_range = 16,
 	jump_height = 14.4,
 	passive = false,
-	jump = true,
 	fear_height = 0,
 	spawn_small_alternative = "mobs_mc:magma_cube_small",
 	on_die = spawn_children_on_die("mobs_mc:magma_cube_small", 0.8, 1.5),
@@ -496,6 +488,7 @@ local magma_cube_big = {
 	_get_slime_particle = function ()
 		return "mcl_particles_fire_flame.png"
 	end,
+	attack_type = "null",
 	_slime_particle_glow = 14,
 }
 mcl_mobs.register_mob("mobs_mc:magma_cube_big", magma_cube_big)

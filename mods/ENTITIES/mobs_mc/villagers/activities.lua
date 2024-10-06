@@ -24,7 +24,6 @@ local GATHERING = "gathering"
 local RUNAWAY = "runaway"
 
 function mobs_mc.villager_mob:stand_still()
-	self.jump = false
 	self:halt_in_tracks (true)
 	-- self:set_state("stand")
 end

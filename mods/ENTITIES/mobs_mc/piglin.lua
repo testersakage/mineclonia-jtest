@@ -71,7 +71,6 @@ local piglin = {
 		death = "mobs_mc_zombiepig_death",
 		distance = 16,
 	},
-	jump = true,
 	makes_footstep_sound = true,
 	movement_speed = 4.6,
 	drops = {
@@ -245,7 +244,6 @@ mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
 	head_eye_height = 1.79,
 	curiosity = 15,
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
-	jump = true,
 	makes_footstep_sound = true,
 	pathfinding = 1,
 	lava_damage = 0,

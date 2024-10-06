@@ -9,6 +9,7 @@ else disabled_structures = {} end
 local peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
 local mob_cap_player = tonumber(minetest.settings:get("mcl_mob_cap_player")) or 75
 local mob_cap_animal = tonumber(minetest.settings:get("mcl_mob_cap_animal")) or 10
+local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
 
 local logging = minetest.settings:get_bool("mcl_logging_structures",true)
 mcl_structures.DBG = false
@@ -294,6 +295,9 @@ function mcl_structures.register_structure_spawn(def)
 			local limit = def.limit or 7
 			if active_object_count_wider > limit + mob_cap_animal then return end
 			if active_object_count_wider > mob_cap_player then return end
+			if not mobs_spawn then
+				return
+			end
 			local p = vector.offset(pos,0,1,0)
 			if not def.underwater and minetest.get_node(p).name ~= "air" then return end
 			if minetest.get_meta(pos):get_string("spawnblock") == "" then return end

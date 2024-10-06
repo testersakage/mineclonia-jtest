@@ -100,7 +100,6 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	},
 	swims = true,
 	makes_footstep_sound = false,
-	jump = false,
 	do_custom = function (self, dtime)
 	    local self_pos
 	    -- See:

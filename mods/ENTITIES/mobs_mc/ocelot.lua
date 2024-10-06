@@ -30,6 +30,7 @@ local ocelot = {
 	hp_max = 10,
 	xp_min = 1,
 	xp_max = 3,
+	visual_size = { x = 1.75, y = 1.75, },
 	head_swivel = "head.control",
 	bone_eye_height = 6.2,
 	head_eye_height = 0.35,
@@ -111,9 +112,9 @@ table.update(cat,{
 	owner_loyal = true,
 	tamed = false,
 	runaway = false,
-	visual_size = { x = 0.8, y = 0.8 },
-	-- Automatically teleport cat to owner
-	do_custom = mobs_mc.make_owner_teleport_function(12),
+	visual_size = { x = 1.75 * 0.8, y = 1.75 * 0.8 },
+	chase_owner_distance = 10.0,
+	stop_chasing_distance = 2.0,
 	sounds = {
 		random = "mobs_mc_cat_idle",
 		damage = "mobs_mc_cat_hiss",

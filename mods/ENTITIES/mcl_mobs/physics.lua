@@ -151,7 +151,11 @@ end
 -- collision function borrowed amended from jordan4ibanez open_ai mod
 function mob_class:collision()
 	local pos = self.object:get_pos()
-	if not pos then return {0,0} end
+	local attach = self.object:get_attach ()
+
+	if not pos or attach then
+		return 0, 0
+	end
 	local x = 0
 	local z = 0
 	local cbox = self.collisionbox
@@ -191,19 +195,10 @@ end
 
 -- move mob in facing direction
 function mob_class:set_velocity(v)
-	-- halt mob if it has been ordered to stay
-	if self.order == "stand" or self.order == "sit" then
-		self.acc_speed = 0
-		self.acc_dir.z = 0
-		return
-	end
-	local vv = self.object:get_velocity()
-	if vv then
-		self.acc_speed = v
-		-- Minecraft scales forward acceleration by desired
-		-- velocity in blocks/tick.
-		self.acc_dir.z = v / 20
-	end
+	self.acc_speed = v
+	-- Minecraft scales forward acceleration by desired
+	-- velocity in blocks/tick.
+	self.acc_dir.z = v / 20
 end
 
 -- calculate mob velocity
@@ -656,7 +651,8 @@ function mob_class:env_damage (_, pos)
 	-- Calculate depth of immersion.  This value is also utilized
 	-- by run_ai.
 	self._immersion_depth = 0
-	if (self.floats and minetest.get_item_group (self.standing_in, "water") > 0)
+	if ((self.floats or self.swims)
+		and minetest.get_item_group (self.standing_in, "water") > 0)
 		or minetest.get_item_group (self.head_in, "water") > 0 then
 		local ymin = self.collisionbox[2]
 		local height = self.collisionbox[5] - ymin
@@ -932,7 +928,6 @@ local function horiz_collision (v, moveresult)
 	return moveresult.collides and not (moveresult.standing_on_object or moveresult.touching_ground)
 end
 
---- TODO: flying and swimming mobs
 --- TODO: correct uses of fall_speed and other modified fields
 --- TODO: mob mounting
 
@@ -979,9 +974,9 @@ function mob_class:motion_step (dtime, moveresult)
 	local standon = minetest.registered_nodes[self.standing_on]
 	local acc_dir = self.acc_dir
 	local acc_speed = self.acc_speed
-	local fall_speed = self.fall_speed
+	local fall_speed = self._acc_no_gravity and 0 or self.fall_speed
 	local touching_ground = moveresult.touching_ground or moveresult.standing_on_object
-	local jumping = self.order == "jump"
+	local jumping = self._jump
 	local p
 	local h_scale, v_scale
 	local climbing = false
@@ -1016,13 +1011,13 @@ function mob_class:motion_step (dtime, moveresult)
 		if jumping or horiz_collision (v, moveresult) then
 			v.y = 4.0
 			jumping = false
-			self.order = ""
+			self._jump = false
 		end
 		climbing = true
 		self.reset_fall_damage = 1
 	end
 
-	local water_vec = not self.swims and self:check_water_flow ()
+	local water_vec = not self.swims and self:check_water_flow () or nil
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
 	if standin.groups.water then
@@ -1134,7 +1129,8 @@ function mob_class:motion_step (dtime, moveresult)
 		v.z = v.z + water_vec.z * LIQUID_FORCE * h_scale
 	end
 
-	if self.gravity_drag and v.y < 0 and not touching_ground then
+	if self.gravity_drag and v.y < 0
+		and fall_speed ~= 0 and not touching_ground then
 		local f = pow_by_step (self.gravity_drag, dtime)
 		v.y = v.y * f
 	end
@@ -1167,13 +1163,13 @@ function mob_class:motion_step (dtime, moveresult)
 	end
 
 	-- Clear the jump flag even when jumping is not yet possible.
-	self.order = ""
+	self._jump = false
 	self.object:set_velocity (v)
 	self:check_collision ()
 end
 
 -- Simplified `motion_step' for true (i.e., not birds or blazes)
--- flying mobs.
+-- flying mobs unaffected by gravity (i.e., not ghasts).
 
 function mob_class:flying_step (dtime, moveresult)
 	if not moveresult then
@@ -1221,6 +1217,8 @@ function mob_class:flying_step (dtime, moveresult)
 	v.x = v.x * p + fv.x
 	v.y = v.y * p + fv.y
 	v.z = v.z * p + fv.z
+	self._previously_floating = true
+	self.object:set_properties ({stepheight = 0.0})
 	self.object:set_velocity (v)
 	self:check_collision ()
 end
@@ -1239,6 +1237,7 @@ function mob_class:aquatic_step (dtime, moveresult)
 	if standin.groups.water then
 		local acc_speed = self.acc_speed
 		local acc_dir = self.acc_dir
+		local acc_fixed = self._acc_y_fixed or 0
 		local p = pow_by_step (AIR_DRAG, dtime)
 		local fv, scale
 		local v = self.object:get_velocity ()
@@ -1250,7 +1249,7 @@ function mob_class:aquatic_step (dtime, moveresult)
 
 		fv = self:accelerate_relative (acc_dir, acc_speed * scale)
 		v.x = v.x * p + fv.x
-		v.y = v.y * p + fv.y
+		v.y = v.y * p + fv.y + acc_fixed * scale
 		v.z = v.z * p + fv.z
 
 		-- Apply gravity unless attacking mob.
@@ -1260,6 +1259,8 @@ function mob_class:aquatic_step (dtime, moveresult)
 
 		self.object:set_velocity (v)
 		self:check_collision ()
+		self._previously_floating = true
+		self.object:set_properties ({stepheight = 0.0})
 	else
 		default_motion_step (self, dtime, moveresult)
 	end

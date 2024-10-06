@@ -18,14 +18,6 @@ function mob_class:do_attack(obj)
 	if self.dead or obj == self.obj or obj == self.attack then
 		return
 	end
-	-- No longer idle.  Interrupt other
-	-- activities.
-	self.avoiding = false
-	self.avoiding_sunlight = false
-	self.mate = nil
-	self.following = nil
-	self.herd_following = nil
-	self.pacing = false
 
 	-- Attack!!!
 	self.attack = obj
@@ -133,9 +125,13 @@ function mob_class:register_damage (cmi_reason)
 
 	-- Attack puncher if necessary.
 	if ( self.passive == false or self.retaliates )
-		and self.state ~= "flop"
 		and (self.child == false or self.type == "monster") then
 		self:do_attack (source)
+	end
+
+	if source then
+		self._recent_attacker = source
+		self._recent_attacker_age = 0
 	end
 end
 
@@ -291,13 +287,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			kb=kb*2
 		end
 
-		-- if already in air then dont go up anymore when hit
-		if math.abs(v.y) > 0.1
-			or self.fly then
-			up = 0
-		end
-
-
 		-- check if tool already has specific knockback value
 		if tool_capabilities.damage_groups["knockback"] then
 			kb = tool_capabilities.damage_groups["knockback"]
@@ -335,13 +324,13 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	end
 
 	-- if skittish then run away
-	if hitter and hitter:get_pos() and not die and self.runaway == true and self.state ~= "flop" then
-		self:do_runaway(hitter)
+	if hitter and hitter:get_pos ()
+		and not die and self.runaway == true then
+		self:do_runaway (hitter)
 	end
 
 	-- attack puncher
 	if ( self.passive == false or self.retaliates )
-	and self.state ~= "flop"
 	and (self.child == false or self.type == "monster")
 	and hitter_playername ~= self.owner
 	and not mcl_mobs.invis[ hitter_playername or ""] then
@@ -359,7 +348,6 @@ end
 
 function mob_class:do_runaway ()
 	self.runaway_timer = 5
-	self.following = nil
 end
 
 function mob_class:call_group_attack(hitter)
@@ -469,6 +457,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	-- Stop if the target is in range and has been for a second.
 	if dist < 15 and vistime >= 1 then
 		self:cancel_navigation ()
+		self:halt_in_tracks ()
 		self._strafe_time = self._strafe_time + dtime
 	else
 		if self:check_timer ("bowshoot_pathfind", 0.5) then
@@ -731,6 +720,9 @@ function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 end
 
 function mob_class:check_attack (self_pos, dtime)
+	if not self.attack_type then
+		return false
+	end
 	if not self.attack then
 		if not self:check_timer ("seek_target", 0.5) then
 			return false
@@ -764,7 +756,7 @@ function mob_class:check_attack (self_pos, dtime)
 
 			if target then
 				self:do_attack (target)
-				return true
+				return "attack"
 			end
 		end
 	else
@@ -803,7 +795,7 @@ function mob_class:check_attack (self_pos, dtime)
 		end
 
 		local attack_type = self.attack_type
-		if not attack_type then
+		if attack_type == "null" then
 			return true
 		end
 		if attack_type == "bowshoot" then
