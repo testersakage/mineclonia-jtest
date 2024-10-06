@@ -127,6 +127,7 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	textures = {
 		{"mobs_mc_ghast.png"},
 	},
+	attack_type = "null",
 	visual_size = {x=12, y=12},
 	sounds = {
 		shoot_attack = "mobs_fireball",
@@ -153,7 +154,6 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	shoot_offset = -5,
 	tracking_distance = 64,
 	passive = false,
-	jump = true,
 	jump_height = 4,
 	head_eye_height = 2.6,
 	floats=1,

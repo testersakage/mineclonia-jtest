@@ -86,7 +86,6 @@ local spider = {
 		distance = 16,
 	},
 	movement_speed = 6.0,
-	jump = true,
 	jump_height = 4,
 	always_climb = true,
 	fear_height = 0,

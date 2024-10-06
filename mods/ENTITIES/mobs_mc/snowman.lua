@@ -57,7 +57,6 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 	drops = {{ name = "mcl_throwing:snowball", chance = 1, min = 0, max = 15 }},
 	visual_size = {x=3, y=3},
 	movement_speed = 4.0,
-	jump = true,
 	makes_footstep_sound = true,
 	attack_type = "ranged",
 	arrow = "mcl_throwing:snowball_entity",

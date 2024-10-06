@@ -34,7 +34,6 @@ local strider = {
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
-	jump = true,
 	makes_footstep_sound = true,
 	movement_speed = 3.5,
 	runaway = true,

@@ -223,8 +223,6 @@ dog.owner = ""
 dog.order = "sit"
 dog.state = "stand"
 dog.owner_loyal = true
--- Automatically teleport dog to owner
-dog.do_custom = mobs_mc.make_owner_teleport_function(12)
 dog.attack_animals = nil
 dog.specific_attack = nil
 dog.after_activate = function(self)

@@ -461,7 +461,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			material_wood = 1,
 			flammable = -1,
 			chest_entity = 1,
-			not_in_creative_inventory = 1
+			not_in_creative_inventory = 1,
+			_mcl_partial = 2,
 		},
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),

@@ -47,6 +47,7 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,
 	swims = true,
+	flops = true,
 	do_go_pos = mcl_mobs.mob_class.dolphin_do_go_pos,
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	_player_check_time = 0,
@@ -78,6 +79,7 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 
 	if closest_player then
 		self.following = closest_player
+		self:replace_activity ("following")
 		mcl_potions.give_effect ("dolphin_grace", closest_player, 1, 5)
 	else
 		self.following = nil
@@ -85,7 +87,6 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	end,
 	breathes_in_water = true,
 	idle_gravity_in_liquids = true,
-	jump = false,
 	view_range = 16,
 	fear_height = 4,
 	movement_speed = 24.0,

@@ -17,18 +17,21 @@ function mob_class:target_visible(origin, target)
 	local target_pos = target:get_pos()
 	if not target_pos then return end
 
-	local origin_eye_pos = vector.offset(origin, 0, self.head_eye_height, 0)
+	local origin_eye_pos = vector.offset (origin, 0, self.head_eye_height, 0)
+	local eye
 
-	local targ_head_height
-	local cbox = self.object:get_properties().collisionbox
 	if target:is_player () then
-		local eye = target:get_properties ().eye_height
-		targ_head_height = vector.offset(target_pos, 0, eye, 0)
+		eye = target:get_properties ().eye_height
 	else
-		targ_head_height = vector.offset(target_pos, 0, cbox[5], 0)
+		local entity = target:get_luaentity ()
+		eye = 0
+		if entity and entity.is_mob then
+			eye = entity.head_eye_height
+		end
 	end
+	target_pos.y = target_pos.y + eye
 
-	if self:line_of_sight (origin_eye_pos, targ_head_height) then
+	if self:line_of_sight (origin_eye_pos, target_pos) then
 		self._targets_visible[target] = true
 		return true
 	end
@@ -436,7 +439,7 @@ function mob_class:do_go_pos (dtime, moveresult)
 
 	if self:check_jump (pos, moveresult) then
 		if self.should_jump and self.should_jump > 2 then
-			self.order = "jump"
+			self._jump = true
 			self.should_jump = 0
 		else
 			-- Jump again if the collision remains after
@@ -575,8 +578,9 @@ function mob_class:halt_in_tracks (immediate)
 	self.acc_dir.x = 0
 	self.acc_speed = 0
 	self._acc_movement_speed = 0
+	self._acc_y_fixed = nil
 	self.movement_goal = nil
-	self:cancel_navigation ()
+	self._acc_no_gravity = false
 
 	if self._current_animation == "walk"
 		or self._current_animation == "run" then
@@ -641,6 +645,7 @@ function mob_class:cancel_navigation ()
 	self.pathfinding_context = nil
 	self.waypoints = nil
 	self.stupid_target = nil
+	self.movement_goal = nil
 end
 
 function mob_class:go_to_stupidly (pos, velocity)
@@ -691,9 +696,9 @@ function mob_class:random_node_direction (limx, limy, direction, range)
 	local y = math.random (2 * limy + 1) - limy
 
 	if math.abs (x) <= limx and math.abs (y) <= limx then
-		return vector.new (math.floor (x + 0.5),
-					math.floor (y + 0.5),
-					math.floor (z + 0.5))
+		return vector.new (math.floor (x),
+					math.floor (y),
+					math.floor (z))
 	end
 	return nil
 end
@@ -715,13 +720,10 @@ local IDLE_TIME_MAX = 250
 
 function mob_class:init_ai ()
 	self.ai_idle_time = 2 + math.random (2)
-	self.avoiding_sunlight = nil
-	self.avoiding = false
-	self.attack = nil
-	self.mate = nil
-	self.following = nil
-	self.herd_following = nil
-	self.pacing = false
+	if self._active_activity then
+		self[self._active_activity]  = nil
+		self._active_activity = nil
+	end
 	self:cancel_navigation ()
 	self:halt_in_tracks ()
 
@@ -729,6 +731,14 @@ function mob_class:init_ai ()
 		self:gwp_configure_aquatic_mob ()
 		self:configure_aquatic_mob ()
 	end
+	if self.airborne then
+		self:gwp_configure_airborne_mob ()
+		self:configure_airborne_mob ()
+	end
+	-- Last mob to have attacked this mob within the past five
+	-- seconds.
+	self._recent_attacker = nil
+	self._recent_attacker_age = 0
 end
 
 function mob_class:is_frightened (dtime)
@@ -745,6 +755,14 @@ function mob_class:ai_step (dtime)
 	else
 		self.follow_cooldown = nil
 	end
+	if self._recent_attacker then
+		self._recent_attacker_age = self._recent_attacker_age + dtime
+		if not self._recent_attacker:is_valid ()
+			or self._recent_attacker_age > 5 then
+			self._recent_attacker = nil
+			self._recent_attacker_age = 0
+		end
+	end
 	self:tick_breeding ()
 end
 
@@ -756,19 +774,45 @@ function mob_class:check_avoid (self_pos)
 
 	if self.avoiding then
 		if self:navigation_finished () then
-			self.avoiding = false
+			self.avoiding = nil
+		elseif not self.avoiding:is_valid () then
+			self.avoiding = nil
+			self:cancel_navigation ()
+			self:halt_in_tracks ()
+		else
+			local avoid_pos = self.avoiding:get_pos ()
+			local distance = vector.distance (self_pos, avoid_pos)
+			if distance < 7.0 then
+				self.gowp_velocity
+					= self.movement_speed * self.runaway_bonus_near
+			else
+				self.gowp_velocity
+					= self.movement_speed * self.runaway_bonus_far
+			end
 		end
 		return true
 	else
 		-- Search for nearby mobs to avoid.
 		local target, max_distance, target_pos
+		local range = self.runaway_view_range
 		local objects
-			= minetest.get_objects_inside_radius (self_pos, self.view_range)
+			= minetest.get_objects_inside_radius (self_pos, range)
+		local runaway_from_players
+			= table.indexof (runaway_from, "players") ~= -1
 		for _, object in ipairs (objects) do
 			local entity = object:get_luaentity ()
+			local eligible = false
 			if entity
 				and table.indexof (runaway_from, entity.name) ~= -1
 				and self:target_visible (self_pos, object) then
+				eligible = true
+			elseif object:is_player ()
+				and runaway_from_players
+				and not minetest.is_creative_enabled (object:get_player_name ())
+				and self:target_visible (self_pos, object) then
+				eligible = true
+			end
+			if eligible then
 				local pos = object:get_pos ()
 				local distance = vector.distance (self_pos, pos)
 				if not max_distance or distance < max_distance then
@@ -781,16 +825,11 @@ function mob_class:check_avoid (self_pos)
 		if target then
 			local pos = self:target_away_from (self_pos, target_pos)
 			if pos and vector.distance (pos, target_pos) > max_distance then
-				self:gopath (pos)
-				self.avoiding = true
-				-- Interupt other activities.
-				self.frightened = false
-				self.attack = nil
-				self.mate = nil
-				self.following = nil
-				self.herd_following = nil
-				self.pacing = false
-				return true
+				local initial_velocity
+					= self.movement_speed * self.runaway_bonus_near
+				self:gopath (pos, nil, false, initial_velocity)
+				self.avoiding = target
+				return "avoiding"
 			end
 		end
 	end
@@ -833,34 +872,22 @@ function mob_class:check_following (self_pos, dtime)
 			if distance < self.follow_distance
 				and distance > self.stop_distance and self:follow_holding (player) then
 				self.following = player
-
-				-- Interrupt other activities.
-				self.herd_following = nil
-				self.pacing = nil
-				return true
+				return "following"
 			end
 		end
 	end
 	return false
 end
 
-function mob_class:run_ai (dtime)
-	local idle = true
-	local pos = self.object:get_pos ()
-
-	if self.dead then
-		self:halt_in_tracks ()
-		return
-	end
-
+function mob_class:check_avoid_sunlight (pos)
 	if self.avoiding_sunlight then
-		idle = false
 		-- Still seeking sunlight?
 		if self:navigation_finished () then
 			self.avoiding_sunlight = false
 			self:set_animation ("stand")
 		end
-	elseif idle and self.avoids_sunlight
+		return true
+	elseif self.avoids_sunlight
 		and (self.time_of_day > 0.2 and self.time_of_day < 0.8)
 		and self.sunlight > 12
 		and mcl_burning.is_burning (self.object) then
@@ -870,32 +897,20 @@ function mob_class:run_ai (dtime)
 			self:gopath (tpos, nil, true,
 				     self.movement_speed * self.run_bonus)
 			self.avoiding_sunlight = true
-			-- Interupt other activities.
-			self.avoiding = false
-			self.attack = nil
-			self.mate = nil
-			self.following = nil
-			self.herd_following = nil
-			self.pacing = false
-			idle = false
+			return "avoiding_sunlight"
 		end
 	end
+	return false
+end
 
-	if idle and self:check_avoid (pos) then
-		idle = false
-	end
-
-	if self.attack_type and not self.avoiding_sunlight then
-		idle = not self:check_attack (pos, dtime)
-	end
-
+function mob_class:check_frightened (pos)
 	if self.frightened then
-		idle = false
 		-- Still frightened?
 		if self:navigation_finished () then
 			self.frightened = false
 			self:set_animation ("stand")
 		end
+		return true
 	else
 		if self:is_frightened () then
 			-- If this mob is burning, search for water.
@@ -908,37 +923,28 @@ function mob_class:run_ai (dtime)
 				tpos = self:pacing_target (pos, 5, 4, {"group:solid"})
 			end
 			if tpos then
-				self.frightened = true
 				self:gopath (tpos, nil, true,
 					     self.movement_speed * self.run_bonus)
-
-				-- Interupt other activities.
-				self.avoiding = false
-				self.mate = nil
-				self.following = nil
-				self.herd_following = nil
-				self.pacing = false
-				idle = false
+				self.frightened = true
+				return "frightened"
 			end
 		end
 	end
 
-	if idle	and (self:check_breeding (pos)
-			or self:check_following (pos)
-			or self:follow_herd (pos)) then
-		idle = false
-	end
+	return false
+end
 
+function mob_class:check_pace (pos)
 	if self.pacing then
-		idle = false
 		-- Still pacing?
 		if self:navigation_finished () then
 			self.pacing = false
 			self:set_animation ("stand")
 		end
+		return true
 	else
 		-- Should pace?
-		if idle and self.ai_idle_time > self.pace_interval then
+		if self.ai_idle_time > self.pace_interval then
 			-- Minecraft mobs pace to random positions
 			-- within a 20 block distance lengthwise and
 			-- 14 blocks vertically.
@@ -949,19 +955,57 @@ function mob_class:run_ai (dtime)
 				-- swimming.
 				groups = self.swims_in
 			end
-			local target = self:pacing_target (pos, 10, self.pace_height, groups)
+			local width, height = self.pace_width, self.pace_height
+			local target = self:pacing_target (pos, width, height, groups)
 			if target and self:gopath (target) then
 				self.pacing = true
+				return "pacing"
 			end
-			idle = false
+		end
+		return false
+	end
+end
+
+function mob_class:replace_activity (activity_name)
+	if self._active_activity then
+		self[self._active_activity] = nil
+	end
+	self._active_activity = activity_name
+end
+
+function mob_class:run_ai (dtime)
+	local pos = self.object:get_pos ()
+
+	if self.dead then
+		self:halt_in_tracks ()
+		return
+	end
+
+	local active = nil
+	for _, fn in ipairs (self.ai_functions) do
+		active = fn (self, pos, dtime)
+
+		if active then
+			if active ~= true then
+				local current = self._active_activity
+				-- Cancel the current activity.
+				if current and current ~= active then
+					self[current] = nil
+				end
+				self._active_activity = active
+			end
+			break
 		end
 	end
 
-	if not idle then
+	if active then
 		self.ai_idle_time = 0
 	elseif self.ai_idle_time < IDLE_TIME_MAX then
 		self:set_animation ("stand")
+		self._active_activity = nil
 		self.ai_idle_time = self.ai_idle_time + dtime
+		self:cancel_navigation ()
+		self:halt_in_tracks ()
 	end
 end
 
@@ -986,6 +1030,20 @@ local function aquatic_movement_step (self, dtime, moveresult)
 		self._acc_no_gravity
 			= self._immersion_depth >= self.head_eye_height
 	end
+	if self.flops and self._immersion_depth and self._immersion_depth <= 0 then
+		local touching_ground
+		touching_ground = moveresult.touching_ground
+			or moveresult.standing_on_object
+		if touching_ground then
+			local flop_velocity = {
+				x = math.random () - 0.5 * 2,
+				y = 8.0,
+				z = math.random () - 0.5 * 2,
+			}
+			self.object:add_velocity (flop_velocity)
+		end
+	end
+	self._acc_y_fixed = nil
 	mob_class.movement_step (self, dtime, moveresult)
 end
 
@@ -1001,24 +1059,109 @@ function mob_class:fish_do_go_pos (dtime, moveresult)
 	local move_speed = 0.4
 
 	self._acc_movement_speed = current_speed
-	self.acc_speed = current_speed
+	self.acc_speed = move_speed
 	self.acc_dir.z = current_speed / 20
 	if dy ~= 0 then
-		-- acc_speed_aquatic * current_speed/20 is the speed
-		-- at which the mob will move horizontally, but
-		-- current_speed * dy/dxyz provides an absolute rate
-		-- of ascent or descent.
 		local dxyz = math.sqrt (dx * dx + dy * dy + dz * dz)
-		local t1 = self.acc_dir.z * move_speed
 		local t2 = current_speed * (dy / dxyz) * 0.1
-		self.acc_dir.z = t1
-		self.acc_dir.y = t2
-		self.acc_dir = vector.normalize (self.acc_dir)
-		self.acc_speed = math.abs (t1) + math.abs (t2)
+		self._acc_y_fixed = t2
 	end
 	local dir = math.atan2 (dz, dx) - math.pi / 2
 	local rotation = clip_rotation (self.object:get_yaw (), dir, math.pi / 2)
 	self.object:set_yaw (rotation)
+end
+
+function mob_class.school_init_group (list)
+	-- Designate one of the school's fish as its leader.
+	local leader = list[math.random (#list)]
+	local entity = leader:get_luaentity ()
+
+	entity._school = {}
+	entity._desired_school_size = #list - 1
+	for _, item in ipairs (list) do
+		if item ~= leader then
+			local mob = item:get_luaentity ()
+			table.insert (entity._school, list)
+			mob._leader = leader
+			mob:replace_activity ("_leader")
+		end
+	end
+end
+
+local function find_school_leader (list, species, cluster)
+	for _, mob in ipairs (list) do
+		local entity = mob:get_luaentity ()
+		if entity and entity.name == species
+			and entity._school
+			and #entity._school > 1
+			and #entity._school < cluster then
+			return entity
+		end
+	end
+end
+
+function mob_class:check_schooling (self_pos, list)
+	if self._leader then
+		if not self._leader:is_valid () then
+			self._leader = nil
+			return false
+		end
+		local leader_pos = self._leader:get_pos ()
+		if vector.distance (leader_pos, self_pos) > 11.0 then
+			local luaentity = self._leader:get_luaentity ()
+			local index = table.indexof (luaentity._school, self.object)
+			assert (index >= 1)
+			table.remove (luaentity._school, index)
+			self._leader = nil
+			return false
+		end
+
+		if self:check_timer ("school_pathfind", 0.5) then
+			self:gopath (leader_pos, nil, false, nil, nil, 3)
+		end
+		return true
+	elseif self._school and #self._school > 0 then
+		-- This fish already leads a school.  Remove invalid
+		-- entries from its list of members.
+		local cleaned = {}
+		for _, follower in ipairs (self._school) do
+			if follower:is_valid () then
+				table.insert (cleaned, follower)
+			end
+		end
+		self._school = cleaned
+		return false
+	elseif self:check_timer ("form_school", (200 + math.random (20)) / 40) then
+		local nearby = minetest.get_objects_inside_radius (self_pos, 8)
+		local cluster = self._school_size or self.spawn_in_group or 4
+		local leader = find_school_leader (nearby, self.name, cluster) or self
+		leader._school = leader._school or {}
+
+		-- Assign nearby unassigned mobs other than the
+		-- selected leader to its school.
+		for _, mob in ipairs (nearby) do
+			local entity = mob:get_luaentity ()
+			if entity
+				and entity.object ~= leader.object
+				and entity.name == self.name
+				and (not entity._school or #entity._school == 0)
+				and (not entity._leader) then
+				entity._leader = leader.object
+				entity:replace_activity ("_leader")
+				table.insert (leader._school, mob)
+			end
+		end
+
+		-- Was this mob assigned to a leader, or has it gained
+		-- a school?
+		if self._school and #self._school > 0 then
+			return false
+		end
+		if self._leader then
+			return "_leader"
+		end
+		return false
+	end
 end
 
 function mob_class:configure_aquatic_mob ()
@@ -1026,4 +1169,108 @@ function mob_class:configure_aquatic_mob ()
 	self.motion_step = self.aquatic_step
 	self.movement_step = aquatic_movement_step
 	self._acc_no_gravity = false
+end
+
+------------------------------------------------------------------------
+-- Flying mob behavior.  This only applies to mobs that are truly
+-- adapted to flight in all respects, which excludes bats, whose
+-- flight is implemented in their AI loop, or ghasts, which do not
+-- pathfind.
+------------------------------------------------------------------------
+
+function mob_class:airborne_do_go_pos (dtime, moveresult)
+	local target = self.movement_target or vector.zero ()
+	local vel = self.movement_velocity
+	local self_pos = self.object:get_pos ()
+	local dx, dy, dz = target.x - self_pos.x,
+		target.y - self_pos.y,
+		target.z - self_pos.z
+	local touching_ground = moveresult.touching_ground
+		or moveresult.standing_on_object
+
+	-- Replace movement_speed with airborne_speed if airborne.
+	if not touching_ground then
+		vel = self.airborne_speed
+		self:set_animation ("fly")
+	else
+		self:set_animation ("run")
+	end
+
+	local yaw = math.atan2 (dz, dx) - math.pi / 2
+	local old_yaw = self.object:get_yaw ()
+	local clipped = clip_rotation (old_yaw, yaw, math.pi / 2)
+
+	self.object:set_yaw (clipped)
+	self:set_velocity (vel)
+
+	local xz_magnitude = math.sqrt (dx * dx + dz * dz)
+	if math.abs (dy) > 1.0e-5 or math.abs (xz_magnitude) > 1.0e-5 then
+		-- Vertical acceleration is not adjusted by the pitch
+		-- in order to simulate real world flight.
+		self.acc_dir.y = dy > 0.0 and vel / 20 or -vel / 20
+	end
+	self._acc_no_gravity = true
+end
+
+local function airborne_movement_step (self, dtime, moveresult)
+	if self.dead then
+		return
+	end
+	if self.movement_goal == nil then
+		-- Arrest movement.
+		self.acc_dir.z = 0
+		self.acc_dir.y = 0
+		self.acc_dir.x = 0
+		self.acc_speed = 0
+		if not self._hovers then
+			self._acc_no_gravity = false
+		end
+		return
+	elseif self.movement_goal == "go_pos" then
+		self:do_go_pos (dtime, moveresult)
+	end
+end
+
+local function airborne_pacing_target (self, pos, width, height, groups)
+	return self:airborne_pacing_target (pos, width, height, groups)
+end
+
+function mob_class:airborne_pacing_target (pos, width, height, groups)
+	-- First, generate a position within 90 degrees of this mob's
+	-- current direction of sight.
+	local dir = self.object:get_yaw ()
+	dir = { x = -math.sin (dir), z = math.cos (dir), }
+	local node_pos = vector.copy (pos)
+	node_pos.x = math.floor (node_pos.x + 0.5)
+	node_pos.y = math.floor (node_pos.y + 0.5)
+	node_pos.z = math.floor (node_pos.z + 0.5)
+	for i = 1, 10 do
+		local node = self:random_node_direction (width, height, dir, math.pi / 20)
+		if node then
+			local target = node_pos + node
+			local class = self:gwp_classify_for_movement (target)
+
+			-- Is this node walkable?
+			if class == "WALKABLE" then
+				-- Move an arbitrary number of blocks
+				-- into the air above this node.
+				local n = math.random (3)
+				repeat
+					target.y = target.y + 1
+					if not self:gwp_classify_for_movement (target) == "OPEN" then
+						target.y = target.y - 1
+						break
+					end
+					n = n - 1
+				until n < 1
+				return target
+			end
+		end
+	end
+end
+
+function mob_class:configure_airborne_mob ()
+	self.movement_step = airborne_movement_step
+	self.do_go_pos = mob_class.airborne_do_go_pos
+	self.pacing_target = airborne_pacing_target
 end
