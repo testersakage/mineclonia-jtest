@@ -9,3 +9,4 @@ dofile(modpath.."/list.lua")
 dofile(modpath.."/sound.lua")
 
 dofile(modpath.."/alias.lua")
+dofile(modpath.."/replaceblocks.lua")
