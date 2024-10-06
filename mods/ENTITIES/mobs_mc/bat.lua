@@ -61,8 +61,6 @@ mcl_mobs.register_mob("mobs_mc:bat", {
 	fall_damage = 0,
 	view_range = 16,
 	fear_height = 0,
-
-	jump = false,
 	fly = true,
 	makes_footstep_sound = false,
 	check_light = check_light,

@@ -115,9 +115,7 @@ function mobs_mc.villager_mob:stand_near_players()
 	-- Check infrequently to keep CPU load low
 	if self.order ~= "sleep" and self:check_timer("player_scan", PLAYER_SCAN_INTERVAL) then
 		if table.count(minetest.get_objects_inside_radius(self.object:get_pos(), PLAYER_SCAN_RADIUS), function(_, pl) return pl:is_player() end) > 0 then
-			self:stand_still()
-		else
-			self.jump = true
+			self:stand_still ()
 		end
 	end
 end

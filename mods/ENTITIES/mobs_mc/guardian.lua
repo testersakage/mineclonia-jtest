@@ -95,7 +95,6 @@ mcl_mobs.register_mob("mobs_mc:guardian", {
 	},
 	swims = true,
 	makes_footstep_sound = false,
-	jump = false,
 })
 
 -- spawn eggs

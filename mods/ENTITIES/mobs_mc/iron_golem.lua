@@ -92,7 +92,6 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 		run_start = 40, run_end = 80, run_speed = 25,
 		punch_start = 80, punch_end = 90, punch_speed = 5,
 	},
-	jump = false,
 	do_custom = function(self, dtime)
 		self:crack_overlay()
 		self.home_timer = (self.home_timer or 0) + dtime
