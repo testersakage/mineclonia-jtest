@@ -27,7 +27,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	hp_min = 5,
 	hp_max = 25,
 	armor = 100,
-	collisionbox = {-0.268, -0.01, -0.268,  0.268, 0.25, 0.268},
+	collisionbox = {-0.268, -0.01, -0.268,  0.268, 0.35, 0.268},
 	visual = "mesh",
 	mesh = "mobs_mc_frog.b3d",
 	drawtype = "front",
