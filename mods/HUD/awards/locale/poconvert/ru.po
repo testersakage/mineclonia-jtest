@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-07 22:31+0000\n"
+"PO-Revision-Date: 2024-10-08 10:21+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "awards/ru/>\n"
@@ -85,7 +85,7 @@ msgid "Error: No award available."
 msgstr "Ошибка: Награда недоступна."
 
 msgid "You have not unlocked any awards."
-msgstr ""
+msgstr "Вы не получили ни одного достижения."
 
 msgid "@1’s awards:"
 msgstr "Награды @1:"
@@ -100,7 +100,7 @@ msgid "Chat @1 times"
 msgstr ""
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2 присоединились"
 
 msgid "Join once"
 msgstr ""
@@ -142,16 +142,16 @@ msgid "@1/@2 placed"
 msgstr "@1/@2 размещено"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Размещено: @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Размещено: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Размещен @1 блок."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Размещено @1 блоков."
 
 msgid "@1/@2 crafted"
 msgstr "@1/@2 создано"
