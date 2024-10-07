@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-07 22:31+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"awards/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Secret Award Unlocked: @1"
 msgstr "Разблокировано секретное достижение: @1"
@@ -47,40 +49,40 @@ msgid "You have enabled awards."
 msgstr "Достижения включены."
 
 msgid "<award ID>"
-msgstr ""
+msgstr "<ИД достижения>"
 
 msgid "Show details of an award"
-msgstr ""
+msgstr "Показать подробную информацию о достижении"
 
 msgid "Award not found."
-msgstr ""
+msgstr "Достижение не найдено."
 
 msgid "<name>"
 msgstr "<имя>"
 
 msgid "Get the awards statistics for the given player or yourself"
-msgstr ""
+msgstr "Получите статистику достижений для выбранного игрока или себя"
 
 msgid "Error: No achivements available."
-msgstr ""
+msgstr "Ошибка: Нет доступных достижений."
 
 msgid "OK"
 msgstr "ОК"
 
 msgid "(Secret Award)"
-msgstr ""
+msgstr "(Секретное достижение)"
 
 msgid "Unlock this award to find out what it is."
-msgstr ""
+msgstr "Разблокируйте это достижение чтобы узнать, что это такое."
 
 msgid "@1 (unlocked)"
-msgstr ""
+msgstr "@1 (разблокировано)"
 
 msgid "You've disabled awards. Type /awards enable to reenable."
 msgstr "Вы отключили награды. Введите /awards enable, чтобы включить их."
 
 msgid "Error: No award available."
-msgstr ""
+msgstr "Ошибка: Награда недоступна."
 
 msgid "You have not unlocked any awards."
 msgstr ""
@@ -180,4 +182,3 @@ msgstr ""
 
 msgid "Eat @1 items."
 msgstr ""
-
