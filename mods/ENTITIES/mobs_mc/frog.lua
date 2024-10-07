@@ -79,7 +79,9 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	spawn_in_group_min = 2,
 	follow = {"mcl_mobitems:slimeball"},
 	on_rightclick = function(self, clicker)
-		if self:feed_tame(clicker, 8, true, true) then return end
+		if self:follow_holding(clicker) then
+			if self:feed_tame(clicker, 8, true, false) then return end
+		end
 	end,
 	on_spawn = function(self)
 		local pos = self.object:get_pos()
