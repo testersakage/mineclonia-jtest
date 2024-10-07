@@ -98,7 +98,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 			table.sort(ww, function(a, b) return vector.distance(pos, a) < vector.distance(pos, b) end)
 			local p = ww[1]
 			self:gopath(p, function()
-				local sp = vector.offset(pos, 0, 1, 0)
+				local sp = vector.offset(p, 0, 1, 0)
 				core.set_node(sp, {name = "mcl_mobitems:frogspawn"})
 				core.get_node_timer(sp):start(math.random(120, 360))
 				-- pathfinding sets order = "stand"
