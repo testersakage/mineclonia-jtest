@@ -514,12 +514,11 @@ magma_cube_tiny.reach = 2.5
 magma_cube_tiny.armor = 50
 magma_cube_tiny.drops = {}
 magma_cube_tiny.spawn_small_alternative = nil
-magma_cube_tiny.on_die = function(self, pos, cmi_cause)
-	if cmi_cause and cmi_cause.puncher then
-		local l = cmi_cause.puncher:get_luaentity()
-		if l and l.name == "mobs_mc:frog" then
-			core.add_item(pos,frogdrop[l.frogtype or "medium"])
-		end
+magma_cube_tiny.on_die = function(self, pos, cause_or_reason)
+	local source = cause_or_reason and (cause_or_reason.puncher or cause_or_reason.source)
+	local l = source and source:get_luaentity()
+	if l and l.name == "mobs_mc:frog" then
+		core.add_item(pos,frogdrop[l.frogtype or "medium"])
 	end
 end
 magma_cube_tiny.sound_params.gain = magma_cube_small.sound_params.gain / 3
