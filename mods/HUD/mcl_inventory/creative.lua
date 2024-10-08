@@ -31,21 +31,10 @@ for _, f in pairs(builtin_filter_ids) do
 	inventory_lists[f] = {}
 end
 
-local function replace_enchanted_books(tbl)
-	for k, item in ipairs(tbl) do
-		if item:find("mcl_enchanting:book_enchanted") == 1 then
-			local _, enchantment, level = item:match("(%a+) ([_%w]+) (%d+)")
-			level = level and tonumber(level)
-			if enchantment and level then
-				tbl[k] = mcl_enchanting.enchant(ItemStack("mcl_enchanting:book_enchanted"), enchantment, level)
-			end
-		end
-	end
-end
-
 -- Populate all the item tables. We only do this once.
 -- Note this code must be executed after loading all the other mods in order to work.
 minetest.register_on_mods_loaded(function()
+
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0) and def.description and
 			def.description ~= "" then
@@ -119,43 +108,23 @@ minetest.register_on_mods_loaded(function()
 				table.insert(inventory_lists["misc"], name)
 			end
 
-			if def.groups._mcl_potion == 1 then
-				if def.has_potent then
-					local stack = ItemStack(name)
-					local potency = def._default_potent_level - 1
-					stack:get_meta():set_int("mcl_potions:potion_potent", potency)
-					tt.reload_itemstack_description(stack)
-					table.insert(inventory_lists["brew"], stack:to_string())
-				end
-				if def.has_plus then
-					local stack = ItemStack(name)
-					local extend = def._default_extend_level
-					stack:get_meta():set_int("mcl_potions:potion_plus", extend)
-					tt.reload_itemstack_description(stack)
-					table.insert(inventory_lists["brew"], stack:to_string())
-				end
-			end
-
 			table.insert(inventory_lists["all"], name)
 		elseif minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
 			table.insert(inventory_lists["nici"], name)
 		end
-	end
 
-	for ench, def in pairs(mcl_enchanting.enchantments) do
-		local str = "mcl_enchanting:book_enchanted " .. ench .. " " .. def.max_level
-		if def.inv_tool_tab then
-			table.insert(inventory_lists["tools"], str)
+		if def._get_all_virtual_items then
+			for category, list in pairs(def._get_all_virtual_items()) do
+				for _, virtual_item in pairs(list) do
+					table.insert(inventory_lists[category], virtual_item)
+					table.insert(inventory_lists["all"], virtual_item)
+				end
+			end
 		end
-		if def.inv_combat_tab then
-			table.insert(inventory_lists["combat"], str)
-		end
-		table.insert(inventory_lists["all"], str)
 	end
 
 	for _, to_sort in pairs(inventory_lists) do
 		table.sort(to_sort)
-		replace_enchanted_books(to_sort)
 	end
 end)
 
@@ -177,57 +146,31 @@ local function set_inv_search(filter, player)
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0)
 		and def.description and
-		def.description ~= "" then
-		local name = string.lower(def.name)
-		if filter_item (name, def.description, lang, filter) then
-			if def.groups._mcl_potion == 1 then
-			local stack = ItemStack (name)
-			tt.reload_itemstack_description (stack)
-			table.insert(creative_list, stack:to_string ())
-			else
-			table.insert(creative_list, name)
+			def.description ~= "" then
+			local name = string.lower(def.name)
+			if filter_item (name, def.description, lang, filter) then
+				if def.groups._mcl_potion == 1 then
+					local stack = ItemStack (name)
+					tt.reload_itemstack_description (stack)
+					table.insert(creative_list, stack:to_string ())
+				else
+					table.insert(creative_list, name)
+				end
 			end
 		end
-		if def.groups._mcl_potion == 1 then
-			if def.has_potent then
-			local stack = ItemStack (name)
-			local potency = def._default_potent_level - 1
-			stack:get_meta ():set_int ("mcl_potions:potion_potent",
-						   potency)
-			tt.reload_itemstack_description (stack)
-			local desc
-				= minetest.strip_colors (stack:get_description ())
 
-			if filter_item (name, desc, lang, filter) then
-				table.insert (creative_list, stack:to_string ())
-			end
-			end
-			if def.has_plus then
-			local stack = ItemStack (name)
-			local extend = def._default_extend_level
-			stack:get_meta ():set_int ("mcl_potions:potion_plus",
-						   extend)
-			tt.reload_itemstack_description (stack)
-			local desc
-				= minetest.strip_colors (stack:get_description ())
-
-			if filter_item (name, desc, lang, filter) then
-				table.insert (creative_list, stack:to_string ())
-			end
-			end
-		end
-		end
-	end
-	for ench, def in pairs(mcl_enchanting.enchantments) do
-		for i = 1, def.max_level do
-			local stack = mcl_enchanting.enchant(ItemStack("mcl_enchanting:book_enchanted"), ench, i)
-			if filter_item("mcl_enchanting:book_enchanted", minetest.strip_colors(stack:get_description()), lang, filter) then
-				table.insert(creative_list, "mcl_enchanting:book_enchanted " .. ench .. " " .. i)
+		if def._get_all_virtual_items then
+			for category, list in pairs(def._get_all_virtual_items()) do
+				for _, virtual_item in pairs(list) do
+					if filter_item (virtual_item, minetest.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
+						table.insert(creative_list, virtual_item)
+					end
+				end
 			end
 		end
 	end
+
 	table.sort(creative_list)
-	replace_enchanted_books(creative_list)
 
 	inv:set_size("main", #creative_list)
 	inv:set_list("main", creative_list)
