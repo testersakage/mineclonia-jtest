@@ -1,6 +1,9 @@
+local S = core.get_translator("mobs_mc")
+
 local mob_class = mcl_mobs.mob_class
 
 mcl_mobs.register_mob("mobs_mc:turtle", {
+	description = S("Turtle"),
 	type = "animal",
 	spawn_class = "passive",
 	attack_type = "dogfight",
