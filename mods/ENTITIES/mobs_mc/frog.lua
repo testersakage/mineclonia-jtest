@@ -124,7 +124,7 @@ mcl_mobs.spawn_setup({
 		"Swampland_shore",
 		"SwampLand_ocean",
 	},
-	chance = 15000,
+	chance = 150,
 })
 
 mcl_mobs.spawn_setup({
