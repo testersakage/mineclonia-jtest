@@ -515,7 +515,7 @@ magma_cube_tiny.armor = 50
 magma_cube_tiny.drops = {}
 magma_cube_tiny.spawn_small_alternative = nil
 magma_cube_tiny.on_die = function(self, pos, cause_or_reason)
-	local source = cause_or_reason and (cause_or_reason.puncher or cause_or_reason.source)
+	local source = cause_or_reason and (cause_or_reason.puncher or cause_or_reason.direct)
 	local l = source and source:get_luaentity()
 	if l and l.name == "mobs_mc:frog" then
 		core.add_item(pos,frogdrop[l.frogtype or "medium"])
