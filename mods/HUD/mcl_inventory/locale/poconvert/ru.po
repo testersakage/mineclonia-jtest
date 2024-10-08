@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_inventory x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-08 10:21+0000\n"
+"PO-Revision-Date: 2024-10-09 19:31+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_inventory/ru/>\n"
@@ -22,7 +22,7 @@ msgid "Decoration Blocks"
 msgstr "Декоративные блоки"
 
 msgid "Redstone"
-msgstr "Механизмы"
+msgstr "Редстоун"
 
 msgid "Transportation"
 msgstr "Транспорт"
@@ -55,16 +55,16 @@ msgid "Survival Inventory"
 msgstr "Инвентарь выживания"
 
 msgid "Not in Creative Inventory"
-msgstr ""
+msgstr "Нет в творческом инвентаре"
 
 msgid "Advancements"
-msgstr "Достижения"
+msgstr "Продвижение"
 
 msgid "Switch stack size"
 msgstr "Изменить размер стака"
 
 msgid "@1 / @2"
-msgstr ""
+msgstr "@1 / @2"
 
 msgid "Recipe book"
 msgstr "Книга рецептов"
@@ -76,10 +76,10 @@ msgid "Select player skin"
 msgstr "Выбор скина"
 
 msgid "Crafting"
-msgstr "Создание"
+msgstr "Крафт"
 
 msgid "Fill Craft Grid"
-msgstr ""
+msgstr "Заполните сетку крафта"
 
 msgid "Achievements"
-msgstr ""
+msgstr "Достижения"
