@@ -26,11 +26,13 @@ mobs_mc.villager_mob.tier_xp = {
 }
 
 local function move_stack(inv1, list1, inv2, list2, stack, pos)
-	if stack and inv1:contains_item(list1, stack) and inv2:room_for_item(list2, stack) then
+	if stack then
+	  if inv1:contains_item(list1, stack) and inv2:room_for_item(list2, stack) then
 		return inv2:add_item(list2, inv1:remove_item(list1, stack))
-	elseif pos and not inv2:room_for_item(list2, stack) then
+	  elseif pos and not inv2:room_for_item(list2, stack) then
 		mcl_util.drop_item_stack(pos, stack)
 		inv1:remove_item(list1, stack)
+	  end
 	end
 end
 
@@ -193,8 +195,8 @@ function mobs_mc.villager_mob:set_trade(player, inv, concrete_tradenum)
 
 	local plinv = player:get_inventory()
 	local pos = player:get_pos()
-	 move_index(inv, "input", plinv, "main", 1, pos)
-	 move_index(inv, "input", plinv, "main", 2, pos)
+	move_index(inv, "input", plinv, "main", 1, pos)
+	move_index(inv, "input", plinv, "main", 2, pos)
 	if wanted1 then
 		move_stack(plinv, "main", inv, "input", wanted1)
 	end
