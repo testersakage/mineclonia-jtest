@@ -144,6 +144,20 @@ minetest.register_craftitem("mcl_enchanting:book_enchanted", {
 	groups = {enchanted = 1, not_in_creative_inventory = 1, enchantability = 1},
 	_mcl_enchanting_enchanted_tool = "mcl_enchanting:book_enchanted",
 	stack_max = 1,
+	_get_all_virtual_items = function()
+		local output = {combat = {}, tools = {}}
+		for ench, def in pairs(mcl_enchanting.enchantments) do
+			local str = mcl_enchanting.enchant(ItemStack("mcl_enchanting:book_enchanted"), ench, def.max_level):to_string()
+			if def.inv_tool_tab then
+				table.insert(output.tools, str)
+			end
+			if def.inv_combat_tab then
+				table.insert(output.combat, str)
+			end
+		end
+
+		return output
+	end
 })
 
 minetest.register_alias("mcl_books:book_enchanted", "mcl_enchanting:book_enchanted")
