@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-08 10:21+0000\n"
+"PO-Revision-Date: 2024-10-09 19:31+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/ru/>\n"
@@ -52,7 +52,7 @@ msgid "Craft a cake using wheat, sugar, milk and an egg."
 msgstr "Скрафтите торт из пшеницы, сахара, молока и яйца."
 
 msgid "Getting an Upgrade"
-msgstr "Обновка!"
+msgstr "Получение обновления"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
 msgstr "Скрафтите каменную кирку из палок и булыжников."
@@ -124,13 +124,13 @@ msgstr "Подберите яйцо дракона.\n"
 "Подсказка: Подберите яйцо с земли в инвентарь."
 
 msgid "Sky's the Limit"
-msgstr "Где твои крылья?"
+msgstr "Небо - это предел"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
 msgstr "Найдите элитры и приготовьтесь летать выше и дальше!"
 
 msgid "Acquire Hardware"
-msgstr "Куй железо..."
+msgstr "Куй железо"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
@@ -282,7 +282,7 @@ msgid "Use a fully powered beacon."
 msgstr "Доведите маяк до полной мощности."
 
 msgid "The End... Again..."
-msgstr "Дежавю"
+msgstr "Конец... Снова..."
 
 msgid "Respawn the Ender Dragon."
 msgstr "Возродите Дракона Края."
@@ -383,10 +383,12 @@ msgid "Hero of the Village"
 msgstr "Герой деревни"
 
 msgid "Successfully defend a village from a raid"
-msgstr "Успешно отразите нападение на деревню."
+msgstr "Успешно защитите деревню от набега"
 
 msgid "Voluntary Exile"
 msgstr "Добровольное изгнание"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
-msgstr "Убейте главаря разбойников. Может, стоит пока держаться подальше от деревень... "
+msgstr ""
+"Убейте главаря разбойников. Может, стоит пока держаться подальше от "
+"деревень..."
