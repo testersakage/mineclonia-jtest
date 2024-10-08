@@ -146,6 +146,7 @@ mcl_mobs.spawn_setup({
 mcl_mobs.register_egg("mobs_mc:frog", S("Frog"), "#00AA00", "#db635f", 0)
 
 mcl_mobs.register_mob("mobs_mc:tadpole", {
+	description = S("Tadpole"),
 	type = "animal",
 	spawn_class = "passive",
 	damage = 8,
