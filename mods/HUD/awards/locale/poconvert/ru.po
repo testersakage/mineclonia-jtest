@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-08 10:21+0000\n"
+"PO-Revision-Date: 2024-10-09 19:31+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "awards/ru/>\n"
@@ -97,46 +97,46 @@ msgid "Send a chat message"
 msgstr "Отправить сообщение в чат"
 
 msgid "Chat @1 times"
-msgstr ""
+msgstr "Пообщайтесь @1 раз"
 
 msgid "@1/@2 joins"
 msgstr "@1/@2 присоединились"
 
 msgid "Join once"
-msgstr ""
+msgstr "Присоединяйтесь один раз"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Присоединяйтесь @1 раз"
 
 msgid "@1/@2 deaths"
 msgstr "@1/@2 смертей"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Умереть один раз от @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Умереть @1 раз от @2"
 
 msgid "Die @1 times."
 msgstr "Умер(ла) @1 раз(а)."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Копайте @1 раз"
 
 msgid "@1/@2 dug"
 msgstr "@1/@2 выкопано"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Копайте: @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Копайте: @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Добудьте @1 блок."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Добудьте @1 блоков."
 
 msgid "@1/@2 placed"
 msgstr "@1/@2 размещено"
@@ -163,22 +163,22 @@ msgid "Craft: @1×@2"
 msgstr "Создано: @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Создайте @1 предмет"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Создайте @1 предметов."
 
 msgid "@1/@2 eaten"
 msgstr "@1/@2 съедено"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "Съешьте @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "Съешьте @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "Съешьте @1 предмет"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "Съешьте @1 предметов."
