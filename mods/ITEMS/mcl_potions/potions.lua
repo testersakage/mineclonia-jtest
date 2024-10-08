@@ -41,7 +41,7 @@ local function generate_get_all_virtual_items_func(itemname, pdef)
 		end
 		if pdef.has_plus then
 			local stack = ItemStack(itemname)
-			local extend = pdef._default_extend_level - 1
+			local extend = pdef._default_extend_level
 			stack:get_meta():set_int("mcl_potions:potion_plus", extend)
 			tt.reload_itemstack_description(stack)
 			table.insert(output.brew, stack:to_string())
