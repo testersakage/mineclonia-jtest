@@ -541,6 +541,28 @@ function mobs_mc.villager_mob:show_trade_formspec(playername, tradenum)
 	minetest.show_formspec(playername, tradeinv_name, formspec)
 end
 
+-- BEGIN OF SPECIAL HANDLING OF COMPASS
+-- TODO: Remove these check functions when compass and clock are implemented
+-- as single items.
+local function check_special(special_item, group, wanted1, _, input1, input2)
+	if minetest.registered_aliases[special_item] then
+		special_item = minetest.registered_aliases[special_item]
+	end
+	if wanted1:get_name() == special_item then
+		local function check_input(input, wanted, group)
+			return minetest.get_item_group(input:get_name(), group) ~= 0 and input:get_count() >= wanted:get_count()
+		end
+		return (check_input(input1, wanted1, group) or check_input(input2, wanted1, group))
+	end
+	return false
+end
+-- Apply above function to all items which we consider special.
+-- This function succeeds if ANY item check succeeds.
+local function check_specials(wanted1, wanted2, input1, input2)
+	return check_special(COMPASS, "compass", wanted1, wanted2, input1, input2)
+end
+-- END OF SPECIAL HANDLING OF COMPASS
+
 local function update_offer(inv, player, sound)
 	local name = player:get_player_name()
 	local trader = player_trading_with[name]
@@ -558,42 +580,14 @@ local function update_offer(inv, player, sound)
 	end
 	local wanted1, wanted2 = inv:get_stack("wanted", 1), inv:get_stack("wanted", 2)
 	local input1, input2 = inv:get_stack("input", 1), inv:get_stack("input", 2)
-
-	-- BEGIN OF SPECIAL HANDLING OF COMPASS
-	-- TODO: Remove these check functions when compass and clock are implemented
-	-- as single items.
-	local function check_special(special_item, group, wanted1, _, input1, input2)
-		if minetest.registered_aliases[special_item] then
-			special_item = minetest.registered_aliases[special_item]
-		end
-		if wanted1:get_name() == special_item then
-			local function check_input(input, wanted, group)
-				return minetest.get_item_group(input:get_name(), group) ~= 0 and input:get_count() >= wanted:get_count()
-			end
-			if check_input(input1, wanted1, group) then
-				return true
-			elseif check_input(input2, wanted1, group) then
-				return true
-			else
-				return false
-			end
-		end
-		return false
-	end
-	-- Apply above function to all items which we consider special.
-	-- This function succeeds if ANY item check succeeds.
-	local function check_specials(wanted1, wanted2, input1, input2)
-		return check_special(COMPASS, "compass", wanted1, wanted2, input1, input2)
-	end
-	-- END OF SPECIAL HANDLING OF COMPASS
-
 	if (
 			((inv:contains_item("input", wanted1) and
 			(wanted2:is_empty() or inv:contains_item("input", wanted2))) or
 			-- BEGIN OF SPECIAL HANDLING OF COMPASS
 			check_specials(wanted1, wanted2, input1, input2)) and
 			-- END OF SPECIAL HANDLING OF COMPASS
-			(trade.locked == false)) then
+			(trade.locked == false)
+		) then
 		inv:set_stack("output", 1, inv:get_stack("offered", 1))
 		if sound then
 			minetest.sound_play("mobs_mc_villager_accept", {to_player = name,object=trader.object}, true)
@@ -819,7 +813,9 @@ local trade_inventory = {
 				inv:remove_item("input", inv:get_stack("wanted", 2))
 			end
 			-- BEGIN OF SPECIAL HANDLING FOR COMPASS
-			if wanted1:get_name() == COMPASS then
+			local input1 = inv:get_stack("input", 1)
+			local input2 = inv:get_stack("input", 2)
+			if check_specials(wanted1, wanted2, input1, input2) then
 				for n=1, 2 do
 					local input = inv:get_stack("input", n)
 					if minetest.get_item_group(input:get_name(), "compass") ~= 0 then
