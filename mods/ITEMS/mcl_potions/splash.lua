@@ -67,7 +67,8 @@ function mcl_potions.register_splash(name, descr, color, def)
 				ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
 				ent._effect_list = def._effect_list
 			end
-		end
+		end,
+		_get_all_virtual_items = def._get_all_virtual_items
 	})
 
 	local w = 0.7

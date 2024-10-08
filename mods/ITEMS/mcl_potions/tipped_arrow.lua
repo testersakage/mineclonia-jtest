@@ -31,6 +31,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		_default_extend_level = def._default_extend_level,
 		inventory_image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:"..color..":100)",
 		groups = groups,
+		_get_all_virtual_items = def._get_all_virtual_items
 	}))
 
 	local ARROW_ENTITY = table.copy(minetest.registered_entities["mcl_bows:arrow_entity"])
