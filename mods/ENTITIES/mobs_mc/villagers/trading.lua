@@ -27,12 +27,24 @@ mobs_mc.villager_mob.tier_xp = {
 
 local function move_stack(inv1, list1, inv2, list2, stack, pos)
 	if stack then
-	  if inv1:contains_item(list1, stack) and inv2:room_for_item(list2, stack) then
-		return inv2:add_item(list2, inv1:remove_item(list1, stack))
-	  elseif pos and not inv2:room_for_item(list2, stack) then
-		mcl_util.drop_item_stack(pos, stack)
-		inv1:remove_item(list1, stack)
-	  end
+		-- BEGIN COMPASS WORKAROUND
+		if minetest.get_item_group(stack:get_name(), "compass") ~= 0 and inv2:room_for_item(list2, stack) then
+			local ni=stack:get_count()
+			for i=1, inv1:get_size(list1) do
+				if minetest.get_item_group(inv1:get_stack(list1, i):get_name(), "compass") ~= 0 then
+					new_stack = ItemStack(inv1:get_stack(list1, i))
+					new_stack:set_count(stack:get_count())
+					return inv2:add_item(list2, inv1:remove_item(list1, new_stack))
+				end
+			end
+		end
+		--- END COMPASS WORKAROUND
+		if inv1:contains_item(list1, stack) and inv2:room_for_item(list2, stack) then
+			return inv2:add_item(list2, inv1:remove_item(list1, stack))
+		elseif pos and not inv2:room_for_item(list2, stack) then
+			mcl_util.drop_item_stack(pos, stack)
+			inv1:remove_item(list1, stack)
+		end
 	end
 end
 
