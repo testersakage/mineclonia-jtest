@@ -134,7 +134,6 @@ local slime_big = {
 	walk_velocity = 1.45, -- with no jump delay 1.9<-(was) is way too fast compare to origianl deltax speed of slime
 	run_velocity = 1.45,
 	walk_chance = 0,
-	jump_height = 8, -- (was 5.8) JUMP!
 	fear_height = 0,
 	spawn_small_alternative = "mobs_mc:slime_small",
 	on_die = spawn_children_on_die("mobs_mc:slime_small", 1.0, 1.5),
@@ -156,7 +155,6 @@ slime_small.damage = 3
 slime_small.reach = 2.75
 slime_small.walk_velocity = 1.45
 slime_small.run_velocity = 1.45
-slime_small.jump_height = 4.3
 slime_small.spawn_small_alternative = "mobs_mc:slime_tiny"
 slime_small.on_die = spawn_children_on_die("mobs_mc:slime_tiny", 0.6, 1.0)
 mcl_mobs.register_mob("mobs_mc:slime_small", slime_small)
@@ -181,7 +179,6 @@ slime_tiny.drops = {
 }
 slime_tiny.walk_velocity = 1.45
 slime_tiny.run_velocity = 1.45
-slime_tiny.jump_height = 3
 slime_tiny.spawn_small_alternative = nil
 slime_tiny.on_die = nil
 
