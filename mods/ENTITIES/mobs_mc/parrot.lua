@@ -252,6 +252,10 @@ parrot_def.ai_functions = {
 	mob_class.check_pace,
 }
 
+parrot_def.gwp_penalties = table.copy (mob_class.gwp_penalties)
+parrot_def.gwp_penalties.DANGER_FIRE = -1.0
+parrot_def.gwp_penalties.DAMAGE_FIRE = -1.0
+
 mcl_mobs.register_mob("mobs_mc:parrot", parrot_def)
 
 mcl_mobs.spawn_setup({

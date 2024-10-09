@@ -358,6 +358,9 @@ local function can_spawn(spawn_def,spawning_position)
 	return true
 end
 
+mcl_mobs.can_spawn = can_spawn
+mcl_mobs.spawn_dictionary = spawn_dictionary
+
 local passive_timer = PASSIVE_INTERVAL
 
 --timer function to check if passive mobs should spawn (only every 20 secs unlike other mob spawn classes)

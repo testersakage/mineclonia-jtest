@@ -320,10 +320,6 @@ function mob_class:forward_directions()
 end
 
 local function update_attack_timers (self, dtime)
-	if self.pause_timer > 0 then
-		self.pause_timer = self.pause_timer - dtime
-		return true
-	end
 	-- attack timer
 	self.timer = self.timer + dtime
 	if self.state ~= "attack" then
@@ -363,8 +359,6 @@ function mob_class:on_step(dtime, moveresult)
 			collisions = { },
 		}
 	end
-
-	if not moveresult.touching_ground and self:falling (pos) then return end
 
 	-- Get nodes early for use in other functions
 	local cbox = self.collisionbox
@@ -451,9 +445,8 @@ function mob_class:on_step(dtime, moveresult)
 		end
 	end
 
-	if update_attack_timers(self, dtime) then
-	   return
-	end
+	-- TODO: is this still necessary?
+	update_attack_timers (self, dtime)
 
 	self:check_particlespawners(dtime)
 	self:check_item_pickup()
@@ -467,7 +460,7 @@ function mob_class:on_step(dtime, moveresult)
 	end
 
 	if self:env_damage (dtime, pos) then return end
-	self:run_ai (dtime)
+	self:run_ai (dtime, moveresult)
 
 	if self.jump_sound_cooloff > 0 then
 		self.jump_sound_cooloff = self.jump_sound_cooloff - dtime
