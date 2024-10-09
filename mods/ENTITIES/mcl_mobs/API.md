@@ -332,7 +332,7 @@ Fields not mentioned in this document can also be added as custom fields for the
 		swim_start = 10,
 		-- when a mob is swimming.
 		swim_end = 10,
-                -- swim_speed
+		swim_speed = 10,
 
 		punch_start = 10,
 		-- when a mob melee attacks.
@@ -353,7 +353,7 @@ Fields not mentioned in this document can also be added as custom fields for the
 		-- death animation
 		die_end = 10,
 		die_speed = 10,
-		die_loop = 10,
+		die_loop = false,
 		-- when set to false stops the animation looping.
 	}
 
