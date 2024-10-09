@@ -49,7 +49,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	runaway = true,
 	runaway_from = {"mobs_mc:spider", "mobs_mc:axolotl"},
 	drops = {
-		--{name = "mcl_mobitems:froglight", chance = 1, min = 1, max = 1},
+		-- see magma cube for froglight drop
 	},
 	water_damage = 0,
 	lava_damage = 4,
