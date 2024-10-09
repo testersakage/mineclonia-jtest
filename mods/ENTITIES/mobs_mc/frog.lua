@@ -117,14 +117,11 @@ mcl_mobs.spawn_setup({
 	min_height = mobs_mc.water_level -5,
 	biomes = {
 		"flat",
-		"MangroveSwamp",
-		"MangroveSwamp_shore",
-		"MangroveSwamp_ocean",
 		"Swampland",
 		"Swampland_shore",
 		"SwampLand_ocean",
 	},
-	chance = 150,
+	chance = 20,
 })
 
 mcl_mobs.spawn_setup({
@@ -135,12 +132,37 @@ mcl_mobs.spawn_setup({
 	min_height = mobs_mc.water_level,
 	biomes = {
 		"flat",
-		"MangroveSwamp",
-		"MangroveSwamp_shore",
 		"Swampland",
 		"Swampland_shore"
 	},
-	chance = 15000,
+	chance = 20,
+})
+
+mcl_mobs.spawn_setup({
+	name = "mobs_mc:frog",
+	type_of_spawning = "water",
+	dimension = "overworld",
+	aoc = 9,
+	min_height = mobs_mc.water_level -5,
+	biomes = {
+		"MangroveSwamp",
+		"MangroveSwamp_shore",
+		"MangroveSwamp_ocean",
+	},
+	chance = 50,
+})
+
+mcl_mobs.spawn_setup({
+	name = "mobs_mc:frog",
+	type_of_spawning = "ground",
+	dimension = "overworld",
+	aoc = 9,
+	min_height = mobs_mc.water_level,
+	biomes = {
+		"MangroveSwamp",
+		"MangroveSwamp_shore",
+	},
+	chance = 50,
 })
 
 mcl_mobs.register_egg("mobs_mc:frog", S("Frog"), "#00AA00", "#db635f", 0)
