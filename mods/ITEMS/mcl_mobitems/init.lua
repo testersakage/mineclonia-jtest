@@ -473,6 +473,7 @@ core.register_node("mcl_mobitems:frogspawn", {
 	sunlight_propagates = true,
 	groups ={ destroy_by_lava_flow = 1, dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1, },
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
+	drop = "",
 	node_placement_prediction = "",
 	node_box = {
 		type = "fixed",
