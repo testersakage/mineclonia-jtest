@@ -498,13 +498,12 @@ core.register_node("mcl_mobitems:frogspawn", {
 			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
-			local t = core.get_node_timer(pos)
-			if not t:is_started() then
-				t:start(math.random(60))
-			end
 			return itemstack
 		end
 		return false
+	end,
+	on_construct = function(pos)
+		core.get_node_timer(pos):start(math.random(180, 600))
 	end,
 })
 
