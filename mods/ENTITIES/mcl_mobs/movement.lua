@@ -1085,7 +1085,7 @@ function mob_class.school_init_group (list)
 
 	entity._school = {}
 	entity._desired_school_size = #list - 1
-	for _, item in ipairs (list) do
+	for _, item in pairs (list) do
 		if item ~= leader then
 			local mob = item:get_luaentity ()
 			table.insert (entity._school, list)
@@ -1096,7 +1096,7 @@ function mob_class.school_init_group (list)
 end
 
 local function find_school_leader (list, species, cluster)
-	for _, mob in ipairs (list) do
+	for _, mob in pairs (list) do
 		local entity = mob:get_luaentity ()
 		if entity and entity.name == species
 			and entity._school
@@ -1131,7 +1131,7 @@ function mob_class:check_schooling (self_pos, list)
 		-- This fish already leads a school.  Remove invalid
 		-- entries from its list of members.
 		local cleaned = {}
-		for _, follower in ipairs (self._school) do
+		for _, follower in pairs (self._school) do
 			if follower:is_valid () then
 				table.insert (cleaned, follower)
 			end
@@ -1146,7 +1146,7 @@ function mob_class:check_schooling (self_pos, list)
 
 		-- Assign nearby unassigned mobs other than the
 		-- selected leader to its school.
-		for _, mob in ipairs (nearby) do
+		for _, mob in pairs (nearby) do
 			local entity = mob:get_luaentity ()
 			if entity
 				and entity.object ~= leader.object
