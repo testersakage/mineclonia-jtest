@@ -229,7 +229,9 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 		local ent = obj:get_luaentity()
 
 		-- Ignore items to lower lag
-		if (obj:is_player() or (ent and ent.name ~= "__builtin.item")) and obj:get_hp() > 0 then
+		if (obj:is_player() or (ent and ent.name ~= "__builtin.item")) and obj:get_hp() > 0
+		-- It doesn't make sense to damage the direct source.
+			and obj ~= direct then
 			local opos = obj:get_pos()
 			local collisionbox = obj:get_properties().collisionbox
 

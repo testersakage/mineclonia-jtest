@@ -1017,6 +1017,15 @@ function mob_class:motion_step (dtime, moveresult)
 		self.reset_fall_damage = 1
 	end
 
+	-- In Minecraft, gravity is applied after being attenuated by
+	-- gravity_drag, but acceleration is unaffected.
+	-- Consequently, fv.y must be applied after fall_speed, with
+	-- gravity_drag in between.
+	local gravity_drag = 1
+	if self.gravity_drag and not touching_ground then
+		gravity_drag = pow_by_step (self.gravity_drag, dtime)
+	end
+
 	local water_vec = not self.swims and self:check_water_flow () or nil
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
@@ -1055,6 +1064,9 @@ function mob_class:motion_step (dtime, moveresult)
 		if v.y > -0.06 and v.y < 0 then
 			v.y = -0.06
 		end
+		if v.y < 0 then
+			v.y = v.y * gravity_drag
+		end
 
 		if horiz_collision (v, moveresult) then
 			-- Climb water as if it were a ladder.
@@ -1071,6 +1083,9 @@ function mob_class:motion_step (dtime, moveresult)
 		v = vector.multiply (v, r)
 		v_scale = h_scale
 		v.y = v.y + fall_speed * v_scale
+		if v.y < 0 then
+			v.y = v.y * gravity_drag
+		end
 		v = vector.add (v, fv)
 	else
 		-- If not standing on air, apply slippery to a base value of
@@ -1088,7 +1103,8 @@ function mob_class:motion_step (dtime, moveresult)
 		-- Apply friction, relative movement, and speed.
 		local speed
 
-		if touching_ground or climbing then
+		if touching_ground or climbing
+			or self._airborne_agile then
 			speed = scale_speed (acc_speed, friction)
 		else
 			speed = 0.4 -- 0.4 blocks/s
@@ -1118,6 +1134,9 @@ function mob_class:motion_step (dtime, moveresult)
 		v_scale = (1 - p) / (1 - AIR_DRAG)
 		local new_y = v.y + fall_speed * v_scale
 		v = vector.new (v.x * r, new_y * p, v.z * r)
+		if v.y < 0 then
+			v.y = v.y * gravity_drag
+		end
 
 		-- Apply the new velocity in whole.
 		v = vector.add (v, fv)
@@ -1127,12 +1146,6 @@ function mob_class:motion_step (dtime, moveresult)
 		v.x = v.x + water_vec.x * LIQUID_FORCE * h_scale
 		v.y = v.y + water_vec.y * LIQUID_FORCE * h_scale
 		v.z = v.z + water_vec.z * LIQUID_FORCE * h_scale
-	end
-
-	if self.gravity_drag and v.y < 0
-		and fall_speed ~= 0 and not touching_ground then
-		local f = pow_by_step (self.gravity_drag, dtime)
-		v.y = v.y * f
 	end
 
 	if jumping then

@@ -132,7 +132,6 @@ mcl_mobs.mob_class = {
 	max_light = minetest.LIGHT_MAX + 1,
 	does_not_prevent_sleep = false,
 	prevents_sleep_when_hostile = false,
-	attack_exception = function() return false end,
 	player_active_range = tonumber(minetest.settings:get("mcl_mob_active_range")) or 48,
 	persist_in_peaceful = true,
 	wears_armor = false,
@@ -150,6 +149,7 @@ mcl_mobs.mob_class = {
 	initialize_group = nil,
 	_hovers = false,
 	airborne_speed = 8.0,
+	_airborne_agile = false,
 	chase_owner_distance = 10.0,
 	stop_chasing_distance = 2.0,
 
@@ -626,13 +626,6 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 				local entityname = itemstack:get_name()
 				minetest.log("action", "Player " ..name.." spawned "..entityname.." at "..minetest.pos_to_string(pos))
 				local ent = mob:get_luaentity()
-
-				-- don't set owner if monster or sneak pressed
-				if ent.type ~= "monster"
-				and not placer:get_player_control().sneak then
-					ent.owner = placer:get_player_name()
-					ent.tamed = true
-				end
 
 				-- set nametag
 				ent:set_nametag(itemstack:get_meta():get_string("name"))

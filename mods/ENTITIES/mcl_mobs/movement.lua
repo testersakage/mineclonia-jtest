@@ -301,7 +301,7 @@ function mob_class:check_jump (self_pos, moveresult)
 		local yaw = self.object:get_yaw () + self.rotate
 		local d = math.atan2 (dir.z, dir.x) - math.pi / 2
 		local diff = math.atan2 (math.sin (d - yaw), math.cos (yaw - d))
-		return math.abs (diff) < 0.2617 -- ~15 deg.
+		return math.abs (diff) < math.rad (40) -- ~40 deg.
 	end
 end
 
@@ -437,8 +437,14 @@ function mob_class:do_go_pos (dtime, moveresult)
 	self:look_at (target)
 	self:set_velocity (vel)
 
+	local node_surface = pos.y
+	local target_node_surface = math.floor (target.y + 0.5) - 0.5
+
 	if self:check_jump (pos, moveresult) then
-		if self.should_jump and self.should_jump > 2 then
+		if self.should_jump and self.should_jump > 2
+		-- Be more eager to jump if it is really certain that
+		-- this mob expects to do so.
+			or target_node_surface - node_surface >= 0.98 then
 			self._jump = true
 			self.should_jump = 0
 		else
@@ -973,13 +979,14 @@ function mob_class:replace_activity (activity_name)
 	self._active_activity = activity_name
 end
 
-function mob_class:run_ai (dtime)
+function mob_class:run_ai (dtime, moveresult)
 	local pos = self.object:get_pos ()
 
 	if self.dead then
 		self:halt_in_tracks ()
 		return
 	end
+	self._moveresult = moveresult
 
 	local active = nil
 	for _, fn in ipairs (self.ai_functions) do
@@ -1036,9 +1043,9 @@ local function aquatic_movement_step (self, dtime, moveresult)
 			or moveresult.standing_on_object
 		if touching_ground then
 			local flop_velocity = {
-				x = math.random () - 0.5 * 2,
+				x = (math.random () - 0.5) * 2,
 				y = 8.0,
-				z = math.random () - 0.5 * 2,
+				z = (math.random () - 0.5) * 2,
 			}
 			self.object:add_velocity (flop_velocity)
 		end
@@ -1190,7 +1197,7 @@ function mob_class:airborne_do_go_pos (dtime, moveresult)
 
 	-- Replace movement_speed with airborne_speed if airborne.
 	if not touching_ground then
-		vel = self.airborne_speed
+		vel = vel / self.movement_speed * self.airborne_speed
 		self:set_animation ("fly")
 	else
 		self:set_animation ("run")
