@@ -484,7 +484,7 @@ core.register_node("mcl_mobitems:frogspawn", {
 		fixed = {-7 / 16, -0.5, -7 / 16, 7 / 16, -15 / 32, 7 / 16}
 	},
 	on_timer = function(pos)
-		for i = 2, math.random(2,5) do
+		for i = 1, math.random(2, 5) do
 			core.add_entity(vector.offset(pos, math.random()-0.5, -0.5, math.random()-0.5), "mobs_mc:tadpole")
 		end
 		core.remove_node(pos)
