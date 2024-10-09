@@ -2104,7 +2104,7 @@ local function airborne_gwp_start_1 (self, self_pos, context)
 		return ipairs (positions)
 	else
 		local n = 10
-		cbox = vector.copy (cbox)
+		cbox = table.copy (cbox)
 		cbox[1] = floor (cbox[1] + self_pos.x + 0.5)
 		cbox[2] = floor (cbox[2] + self_pos.y + 0.5)
 		cbox[3] = floor (cbox[3] + self_pos.z + 0.5)
@@ -2147,11 +2147,13 @@ local function airborne_gwp_initialize (self, targets, range)
 	end
 	local cbox = self.collisionbox
 
-	-- Offset Y positions of reconstructed path nodes so as to
-	-- center the mob's feet, or the mob itself, if it is less
-	-- than one node in height, in the said nodes.
-	local feet_height = math.min (1, cbox[5] - cbox[2])
-	context.y_offset = -(feet_height / 2) - cbox[2]
+	-- Offset Y positions of reconstructed nodes so as to center
+	-- the mob itself, if it is less than one node in height, in
+	-- the said nodes.
+	local height = cbox[5] - cbox[2]
+	if height <= 1.0 then
+		context.y_offset = -(height / 2) - cbox[2]
+	end
 	return context
 end
 
@@ -2289,7 +2291,7 @@ end
 -- External interface.
 ------------------------------------------------------------------------
 
-local MAX_STALE_PATH_AGE = 0.25
+local MAX_STALE_PATH_AGE = 2.25
 
 function mob_class:gopath (target, callback_arrived, prioritised, velocity, animation, tolerance)
 	if self.waypoints then
@@ -2430,10 +2432,18 @@ function mob_class:gwp_next_waypoint (dtime)
 		-- Is this mob already en route to the next waypoint?
 		if #waypoints > 1 then
 			local ahead = waypoints[#waypoints - 1]
+			local saved_y = next_wp.y
 			self_pos.y = ahead.y
+			next_wp.y = ahead.y
 			local dir = vector.direction (self_pos, ahead)
 			local dir1 = vector.direction (self_pos, next_wp)
-			if vector.dot (dir, dir1) < 0 then
+			next_wp.y = saved_y
+			-- Apply a slightly tighter threshold to
+			-- prevent triggering this condition when two
+			-- adjacent diagonal moves exist at different
+			-- elevations.
+			local dot = vector.dot (dir, dir1)
+			if dot < -0.5 then
 				next_wp = ahead
 				waypoints[#waypoints] = nil
 			end

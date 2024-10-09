@@ -107,8 +107,6 @@ function mob_class:projectile_knockback (factor, dir)
 				       self.frame_speed_multiplier=1
 			       end
 	end)
-
-	self.pause_timer = 0.25
 end
 
 -- Register damage delivered otherwise than as punches and retaliate.
@@ -320,7 +318,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		local standing = self:standing_on_walkable ()
 		v = mcl_util.calculate_knockback (v, kb * 0.5, standing, dir.x, dir.z)
 		self.object:set_velocity (v)
-		self.pause_timer = 0.25
 	end
 
 	-- if skittish then run away
@@ -796,9 +793,10 @@ function mob_class:check_attack (self_pos, dtime)
 
 		local attack_type = self.attack_type
 		if attack_type == "null" then
-			return true
-		end
-		if attack_type == "bowshoot" then
+			if self.attack_null then
+				self:attack_null (self_pos, dtime, target_pos, line_of_sight)
+			end
+		elseif attack_type == "bowshoot" then
 			self:attack_bowshoot (self_pos, dtime, target_pos,
 					      line_of_sight)
 		elseif attack_type == "crossbow" then
