@@ -35,8 +35,9 @@ local function move_stack(inv1, list1, inv2, list2, stack, pos)
 					new_stack:set_count(stack:get_count())
 					if inv2:room_for_item(list2, new_stack) then
 						return inv2:add_item(list2, inv1:remove_item(list1, new_stack))
-					else
-						return
+					elseif pos and not inv2:room_for_item(list2, stack) then
+						mcl_util.drop_item_stack(pos, stack)
+						inv1:remove_item(list1, stack)
 					end
 				end
 			end
