@@ -487,20 +487,28 @@ core.register_node("mcl_mobitems:frogspawn", {
 		core.remove_node(pos)
 	end,
 	on_place = function(itemstack, placer, pointed_thing)
-		local pos = pointed_thing.above
+		if pointed_thing.type ~= "node" then return itemstack end
+
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
+		local pos = pointed_thing.above
 		if core.is_protected(pos, placer:get_player_name()) then return itemstack end
 
-		if core.get_item_group(core.get_node(pointed_thing.under).name, "water") then
+		-- can only be placed on top of water source into air
+		local under = pointed_thing.under
+		if pos.y - 1 ~= under.y then return itemstack end
+		local under_name = core.get_node(under).name
+		if core.get_node(pos).name == "air"
+				and core.get_item_group(under_name, "water") ~= 0
+				and core.registered_nodes[under_name].liquidtype == "source" then
 			core.set_node(pos, {name = "mcl_mobitems:frogspawn"})
 			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 			return itemstack
 		end
-		return false
+		return itemstack
 	end,
 	on_construct = function(pos)
 		core.get_node_timer(pos):start(math.random(180, 600))
