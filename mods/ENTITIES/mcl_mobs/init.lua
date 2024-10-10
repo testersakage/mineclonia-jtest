@@ -108,9 +108,11 @@ mcl_mobs.mob_class = {
 	ignores_nametag = false,
 	rain_damage = 0,
 	child = false,
-	texture_mods = {},
+	-- A list unique to each entity is created in on_activate.
+	texture_mods = nil,
 	suffocation_timer = 0,
 	movement_speed = 14, -- https://minecraft.wiki/w/Attribute#movementSpeed
+	pace_bonus = 1.0,
 	run_bonus = 1.25,
 	follow_bonus = 1.2,
 	runaway_bonus_near = 1.25,
@@ -378,8 +380,10 @@ function mcl_mobs.register_mob(name, def)
 				collide_with_objects = false,
 			})
 			self._physics_factors = {}
-
 			self._timers = {}
+			if not self.texture_mods then
+				self.texture_mods = {}
+			end
 			return self:mob_activate(staticdata, dtime)
 		end,
 		_spawner = def._spawner,

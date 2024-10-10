@@ -35,13 +35,12 @@ local wither_def = {
 	description = S("Wither"),
 	type = "monster",
 	spawn_class = "hostile",
-	hp_max = 300,
-	hp_min = 300,
+	hp_max = 500,
+	hp_min = 500,
 	xp_min = 50,
 	xp_max = 50,
 	armor = {undead = 80, fleshy = 100},
-	-- This deviates from MC Wiki's size, which makes no sense
-	collisionbox = {-0.9, 0.4, -0.9, 0.9, 2.45, 0.9},
+	collisionbox = {-0.45, -0.01, -0.45, 0.45, 3.49, 0.45},
 	doll_size_override = { x = 1.2, y = 1.2 },
 	visual = "mesh",
 	mesh = "mobs_mc_wither.b3d",
@@ -56,8 +55,7 @@ local wither_def = {
 	_airborne_agile = true,
 	strafes = w_strafes,
 	sounds = {
-		shoot_attack = "mobs_mc_ender_dragon_shoot",
-		attack = "mobs_mc_ender_dragon_attack",
+		shoot_attack = "mobs_fireball",
 		-- TODO: sounds
 		distance = 60,
 	},
@@ -75,23 +73,22 @@ local wither_def = {
 	lava_damage = 0,
 	fire_damage = 0,
 	attack_type = "null",
-	explosion_strength = 8,
 	arrow = "mobs_mc:wither_skull",
 	reach = 5,
 	shoot_interval = 1,
 	shoot_offset = -0.5,
 	animation = {
 		walk_speed = 12, run_speed = 12, stand_speed = 12,
-		stand_start = 0, stand_end = 20,
-		walk_start = 0,	walk_end = 20,
-		run_start = 0,	run_end = 20,
+		stand_start = 20, stand_end = 40,
+		walk_start = 20, walk_end = 40,
+		run_start = 20,	run_end = 40,
 		charge_start = 40, charge_end = 46, charge_speed = 12,
 		charge_loop = false,
 	},
 	harmed_by_heal = true,
 	is_boss = true,
 	airborne = true,
-	tracking_distance = 40,
+	tracking_distance = 64,
 	view_range = 20,
 	pace_interval = 0.0,
 	player_active_range = 128,
@@ -121,15 +118,18 @@ end
 
 function wither_def:do_punch (hitter, tflp, tool_capabilities, dir) ---@diagnostic disable-line: unused-local
 	if self._spawning or hitter == self.object then return false end
-	local ent = hitter:get_luaentity()
-	-- TODO: arrow resistance.
-	if ent and self._arrow_resistant and ent._is_arrow then return false end
 	wither_register_damage (self)
 	return true
 end
 
 function wither_def:deal_damage (damage, mcl_reason)
 	if self._spawning then return end
+	if mcl_reason.direct then
+		local ent = mcl_reason.direct:get_luaentity ()
+		if ent and self._arrow_resistant and ent._is_arrow then
+			return false
+		end
+	end
 	self.health = self.health - damage
 	wither_register_damage (self)
 end
@@ -281,6 +281,13 @@ function wither_def:do_custom (dtime, moveresult)
 			self.object:set_texture_mod("")
 			self._spawning = nil
 			self._spw_max = nil
+
+			if self._spawner then
+				local spawner = minetest.get_player_by_name(self._spawner)
+				if spawner then
+					self:do_attack (spawner)
+				end
+			end
 		else
 			return false
 		end
@@ -349,8 +356,14 @@ function spawn_one_skeleton (aa, bb, self_pos)
 				and def2 and not def2.walkable
 				and def3 and not def3.walkable then
 				copy.y = nodepos.y + 1
-				dbg.pp (copy.y)
-				mcl_mobs.spawn (copy, "mobs_mc:witherskeleton")
+				local entity
+					= mcl_mobs.spawn (copy, "mobs_mc:witherskeleton")
+				-- Prevent summoned skeletons from
+				-- attacking their invoker.
+				if entity then
+					local luaentity = entity:get_luaentity ()
+					luaentity._wither_parent = self
+				end
 				return
 			end
 		end
@@ -478,6 +491,8 @@ function wither_def:float_around (self_pos, dtime)
 	end
 end
 
+local WITHER_CHARGE_DAMAGE = 15
+
 function wither_def:run_ai (dtime, moveresult)
 	local self_pos = self.object:get_pos ()
 	local ws = self._wither_state
@@ -485,6 +500,10 @@ function wither_def:run_ai (dtime, moveresult)
 	self:check_attack (self_pos, dtime)
 	if not ws.air_attack then
 		self:float_around (self_pos, dtime)
+	end
+
+	if self.dead then
+		return
 	end
 
 	local target = self.attack
@@ -564,8 +583,16 @@ function wither_def:run_ai (dtime, moveresult)
 	end
 
 	if ws.charge_time > 0 then
-		-- TODO: damage contacting mobs and players.
 		wither_unstuck (self, 2, 0)
+
+		-- Damage players and mobs within a 3x3 radius.
+		for object in minetest.objects_inside_radius (self_pos, 3) do
+			local entity = object:get_luaentity ()
+			if object ~= self.object
+				and (object:is_player () or (entity and entity.is_mob)) then
+				mcl_util.deal_damage (object, WITHER_CHARGE_DAMAGE, {type = "explosion"})
+			end
+		end
 	end
 
 	if ws.charge_buildup > 0 then
@@ -615,7 +642,7 @@ skull_def = {
 		"mobs_mc_wither_projectile.png^[verticalframe:6:4", -- back
 		"mobs_mc_wither_projectile.png^[verticalframe:6:5", -- front
 	},
-	velocity = 12,
+	velocity = 17,
 	rotate = 90,
 	_lifetime = 500,
 	_explosioninfo = {},
@@ -624,11 +651,12 @@ skull_def = {
 	-- direct hit
 	hit_player = function(self, player)
 		local pos = vector.new(self.object:get_pos())
-		mcl_potions.give_effect("withering", player, 2, 10)
-		player:punch(self.object, 1.0, {
-				     full_punch_interval = 0.5,
-				     damage_groups = {fleshy = 12},
-		}, nil)
+		mcl_potions.give_effect_by_level ("withering", player, 2, 40) -- TODO: difficulty.
+		mcl_util.deal_damage (player, 8.0, {
+					      source = self._shooter,
+					      direct = self.object,
+					      type = "wither_skull",
+		})
 		if mobs_griefing and not minetest.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
@@ -638,16 +666,22 @@ skull_def = {
 			local shooter = self._shooter:get_luaentity()
 			if shooter then shooter.health = shooter.health + 5 end
 			spawn_wither_rose(player)
+		else
+			local v = self.object:get_velocity ()
+			v.y = 0
+			local dir = vector.normalize (v)
+			mcl_player.player_knockback (player, self.object, dir, nil, 8.0)
 		end
 	end,
 
 	hit_mob = function(self, mob)
-		local pos = vector.new(self.object:get_pos())
-		mcl_potions.give_effect("withering", mob, 2, 10)
-		mob:punch(self.object, 1.0, {
-				  full_punch_interval = 0.5,
-				  damage_groups = {fleshy = 12},
-		}, nil)
+		local pos = vector.new (self.object:get_pos())
+		mcl_potions.give_effect_by_level ("withering", mob, 2, 40) -- TODO: difficulty.
+		mcl_util.deal_damage (mob, 8.0, {
+					      source = self._shooter,
+					      direct = self.object,
+					      type = "wither_skull",
+		})
 		if mobs_griefing and not minetest.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
@@ -658,6 +692,12 @@ skull_def = {
 			local shooter = self._shooter:get_luaentity()
 			if shooter then shooter.health = shooter.health + 5 end
 			spawn_wither_rose(mob)
+		end
+		if l then
+			local v = self.object:get_velocity ()
+			v.y = 0
+			local dir = vector.normalize (v)
+			l:projectile_knockback (1, dir)
 		end
 	end,
 
@@ -674,7 +714,7 @@ skull_def = {
 mcl_mobs.register_arrow("mobs_mc:wither_skull", skull_def)
 
 strong_skull_def = table.copy (skull_def)
-strong_skull_def.velocity = 6
+strong_skull_def.velocity = 12
 strong_skull_def.redirectable = true
 strong_skull_def.explosioninfo = {
 	drop_chance = 1.0,
