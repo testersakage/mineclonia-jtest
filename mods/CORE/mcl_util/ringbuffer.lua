@@ -3,8 +3,17 @@ local ringbuffer = {}
 ringbuffer_class.__index = ringbuffer_class
 
 function ringbuffer.new(size, initial_values)
+	local values = initial_values or {}
+	-- use initial_values as is, unless number of entries exceeds size,
+	-- then copy newest entries into new list
+	if #values > size then
+		values = {}
+		for i = #initial_values - size, #initial_values do
+			values[#values] = initial_values[i]
+		end
+	end
 	return setmetatable({
-		data = initial_values or {},
+		data = values,
 		size = size,
 	}, ringbuffer_class)
 end
