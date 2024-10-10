@@ -111,9 +111,8 @@ mcl_mobs.register_mob("mobs_mc:shulker", {
 	end,
 	do_custom = function(self,dtime)
 		local pos = self.object:get_pos()
-		if math.floor(self.object:get_yaw()) ~=0 then
-			self.object:set_yaw(0)
-			mcl_mobs.yaw(self, 0, 0, dtime)
+		if math.floor (self:get_yaw ()) ~=0 then
+			self:set_yaw(0)
 		end
 		if self.state == "attack" then
 			self:set_animation("run")

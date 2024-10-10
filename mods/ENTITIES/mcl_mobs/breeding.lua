@@ -393,7 +393,7 @@ function mob_class:break_in(player)
 				end
 				-- Spawn effect at mount yaw pos so it can be easily noticable in first person view
 				local pos = self.object:get_pos()
-				local yaw = self.object:get_yaw()
+				local yaw = self:get_yaw()
 				local x = pos.x + -math.sin(yaw)
 				local z = pos.z +  math.cos(yaw)
 				mcl_mobs.effect({x = x, y = pos.y + 1.5, z = z}, 20, "heart.png", 3, 4, 1.5, 0.1)
