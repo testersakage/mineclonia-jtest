@@ -64,7 +64,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		speed_normal = 10,
 		run_start = 115,
 		run_end = 125,
-		speed_run = 15,
+		run_speed = 15,
 		punch_start = 130,
 		punch_end = 140,
 		punch_speed =15,
@@ -191,7 +191,7 @@ mcl_mobs.register_mob("mobs_mc:tadpole", {
 	animation = {
 		stand_start = 1, stand_end = 20, stand_speed = 10,
 		walk_start = 40, walk_end =80, speed_normal = 10,
-		run_start = 40, run_end = 80, speed_run = 15,
+		run_start = 40, run_end = 80, run_speed = 15,
 	},
 	follow = {"mcl_mobitems:slimeball"},
 	on_rightclick = function(self, clicker)

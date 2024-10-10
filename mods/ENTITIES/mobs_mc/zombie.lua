@@ -755,7 +755,7 @@ local baby_zombie = table.merge (zombie, {
 	animation = {
 		stand_start = 100, stand_end = 109, stand_speed = 2,
 		walk_start = 60, walk_end = 99, speed_normal = 40,
-		run_start = 60, run_end = 99, speed_run = 80,
+		run_start = 60, run_end = 99, run_speed = 80,
 		punch_start = 109, punch_end = 119
 	},
 	head_eye_height = 0.93,
