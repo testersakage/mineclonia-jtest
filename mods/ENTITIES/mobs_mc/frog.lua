@@ -56,20 +56,12 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	light_damage = 0,
 	fear_height = 6,
 	animation = {
-		stand_start = 1,
-		stand_end = 80,
-		stand_speed = 10,
-		walk_start = 90,
-		walk_end =105,
-		speed_normal = 10,
-		run_start = 115,
-		run_end = 125,
-		run_speed = 15,
-		punch_start = 130,
-		punch_end = 140,
-		punch_speed =15,
-		swim_start = 145,
-		swim_end = 165,
+		speed_normal = 10, -- default animation speed
+		stand_start = 1, stand_end = 80,
+		walk_start = 90, walk_end = 105,
+		run_start = 115, run_end = 125, run_speed = 15,
+		swim_start = 145, swim_end = 165,
+		punch_start = 130, punch_end = 140, punch_speed = 15,
 	},
 	swims = true,
 	-- frog doesn't take drowning damage
@@ -189,8 +181,9 @@ mcl_mobs.register_mob("mobs_mc:tadpole", {
 	runaway = true,
 	fear_height = 4,
 	animation = {
-		stand_start = 1, stand_end = 20, stand_speed = 10,
-		walk_start = 40, walk_end =80, speed_normal = 10,
+		speed_normal = 10, -- default animation speed
+		stand_start = 1, stand_end = 20,
+		walk_start = 40, walk_end = 80,
 		run_start = 40, run_end = 80, run_speed = 15,
 	},
 	follow = {"mcl_mobitems:slimeball"},
