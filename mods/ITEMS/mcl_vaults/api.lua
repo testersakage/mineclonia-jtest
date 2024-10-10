@@ -5,18 +5,13 @@ local VISITED_KEY = modname .. ":visited_players"
 local RINGBUFFER_SIZE = 128
 
 local function can_open(pos, player)
-	local m = minetest.get_meta(pos)
-	local rb = mcl_util.ringbuffer.deserialize(RINGBUFFER_SIZE, m:get(VISITED_KEY))
+	local rb = mcl_util.ringbuffer.get_from_node_meta(pos, VISITED_KEY, RINGBUFFER_SIZE)
 	return not rb:indexof(player:get_player_name())
 end
 
 local function try_open(pos, player)
-	local m = minetest.get_meta(pos)
-	local rb = mcl_util.ringbuffer.deserialize(RINGBUFFER_SIZE, m:get(VISITED_KEY))
-	local inserted = rb:insert_if_not_exists(player:get_player_name())
-	m:set_string(VISITED_KEY, rb:serialize())
-	m:mark_as_private(VISITED_KEY)
-	return inserted
+	local rb = mcl_util.ringbuffer.get_from_node_meta(pos, VISITED_KEY, RINGBUFFER_SIZE)
+	return rb:insert_if_not_exists(player:get_player_name(), true)
 end
 
 local function eject_items(pos, name, list)
