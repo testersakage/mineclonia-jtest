@@ -673,8 +673,11 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump)
 				object = self:gwp_essay_jump (context, node, parent, floor)
 			elseif (class == "WATER" and self.floats == 0) then
 				object = self:gwp_essay_drift (context, node, object)
-			elseif class == "IGNORE" then
-				object = nil
+			-- Any test for `IGNORE' here would simply be
+			-- redundant, as it is always assigned a
+			-- penalty of -1.
+			-- elseif class == "IGNORE" then
+			-- 	object = nil
 			end
 		end
 		return object
@@ -2402,7 +2405,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:creeper" then
+				-- if self.name == "mobs_mc:dolphin" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else

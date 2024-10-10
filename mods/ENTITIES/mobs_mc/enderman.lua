@@ -497,7 +497,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 			self._take_place_timer = 0
 			self._next_take_place_time = math.random(take_frequency_min, take_frequency_max)
 			local pos = self.object:get_pos()
-			local yaw = self.object:get_yaw()
+			local yaw = self:get_yaw()
 			-- Place node at looking direction
 			local place_pos = vector.subtract(pos, minetest.facedir_to_dir(minetest.dir_to_facedir(minetest.yaw_to_dir(yaw))))
 			-- Also check to see if protected.
