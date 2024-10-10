@@ -46,7 +46,8 @@ minetest.register_node("mcl_core:cactus", {
 	end),
 	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
-	_mcl_cooking_output = "mcl_dyes:green"
+	_mcl_cooking_output = "mcl_dyes:green",
+	_pathfinding_class = "DAMAGE_OTHER",
 })
 
 mcl_flowerpots.register_potted_cube("mcl_core:cactus", {

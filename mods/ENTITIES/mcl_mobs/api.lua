@@ -307,6 +307,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	if def.after_activate then
 		def.after_activate(self, staticdata, def, dtime)
 	end
+	self:remove_texture_mod ("^[colorize:#d42222:175")
 	self:init_ai ()
 end
 
@@ -379,17 +380,18 @@ function mob_class:on_step(dtime, moveresult)
 
 	self:falling (pos)
 	self:check_dying ()
-	self:motion_step (dtime, moveresult)
 
 	if self.stupefied then
 		self.object:set_animation_frame_speed (0)
 		self:halt_in_tracks ()
+		self:motion_step (dtime, moveresult)
 		return
 	end
 
 	self:navigation_step (dtime, moveresult)
 	self:movement_step (dtime, moveresult)
 	self:ai_step (dtime)
+	self:motion_step (dtime, moveresult)
 
 	if self.force_step then
 		self:force_step(dtime)
