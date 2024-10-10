@@ -14,7 +14,7 @@ end
 
 local SIGHT_PERSISTENCE = 3.0
 
-function mob_class:do_attack(obj)
+function mob_class:do_attack(obj, persistence)
 	if self.dead or obj == self.obj or obj == self.attack then
 		return
 	end
@@ -25,7 +25,8 @@ function mob_class:do_attack(obj)
 	self:set_animation ("run")
 
 	-- Abandon after obj disappears for longer than three seconds.
-	self.target_invisible_time = SIGHT_PERSISTENCE
+	self.target_invisible_time = persistence or SIGHT_PERSISTENCE
+	self._sight_persistence = persistence or SIGHT_PERSISTENCE
 end
 
 -- blast damage to entities nearby
@@ -124,7 +125,7 @@ function mob_class:register_damage (cmi_reason)
 	-- Attack puncher if necessary.
 	if ( self.passive == false or self.retaliates )
 		and (self.child == false or self.type == "monster") then
-		self:do_attack (source)
+		self:do_attack (source, 15)
 	end
 
 	if source then
@@ -333,7 +334,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	and not mcl_mobs.invis[ hitter_playername or ""] then
 		if not die then
 			-- attack whoever punched mob
-			self:do_attack(hitter)
+			self:do_attack (hitter, 15)
 		end
 	end
 
@@ -542,7 +543,7 @@ end
 
 function mob_class:custom_attack ()
 	-- Punch player (or what player is attached to)
-	local attached = self.attack:get_attach()
+	local attached = self.attack:get_attach ()
 	local attack = self.attack
 	if attached then
 		attack = attached
@@ -554,6 +555,12 @@ function mob_class:custom_attack ()
 	self:set_animation ("punch")
 	self:mob_sound ("attack")
 	attack:punch (self.object, 1.0, damage, nil)
+
+	if self.dealt_effect then
+		mcl_potions.give_effect_by_level (self.dealt_effect.name, attack,
+						  self.dealt_effect.level,
+						  self.dealt_effect.dur)
+	end
 end
 
 function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
@@ -788,7 +795,7 @@ function mob_class:check_attack (self_pos, dtime)
 				return true
 			end
 		else
-			self.target_invisible_time = SIGHT_PERSISTENCE
+			self.target_invisible_time = self._sight_persistence
 		end
 
 		local attack_type = self.attack_type

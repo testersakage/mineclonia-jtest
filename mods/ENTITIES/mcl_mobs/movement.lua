@@ -366,9 +366,36 @@ function mob_class:replace(pos)
 	end
 end
 
-function mob_class:look_at(b)
+local function norm_radians (x)
+	local x = x % (math.pi * 2)
+	if x >= math.pi then
+		x = x - math.pi * 2
+	end
+	if x < -math.pi then
+		x = x + math.pi * 2
+	end
+	return x
+end
+
+local function clip_rotation (from, to, limit)
+	local difference = norm_radians (to - from)
+	if difference > limit then
+		difference = limit
+	end
+	if difference < -limit then
+		difference = -limit
+	end
+	return from + difference
+end
+
+function mob_class:look_at (b, clip_to)
 	local s = self.object:get_pos()
 	local yaw = (math.atan2 (b.z - s.z, b.x - s.x) - math.pi / 2) - self.rotate
+	if clip_to then
+		local old_yaw = self.object:get_yaw ()
+		local x = clip_rotation (old_yaw, yaw, clip_to)
+		yaw = x
+	end
 	self.object:set_yaw (yaw)
 end
 
@@ -430,11 +457,12 @@ function mob_class:do_go_pos (dtime, moveresult)
 	local pos = self.object:get_pos ()
 	local dist = vector.distance (pos, target)
 
-	if dist < 0.5 then
+	if dist < 0.0005 then
+		self.acc_dir.z = 0
 		return
 	end
 
-	self:look_at (target)
+	self:look_at (target, math.pi / 2 * (dtime / 0.05))
 	self:set_velocity (vel)
 
 	local node_surface = pos.y
@@ -446,6 +474,7 @@ function mob_class:do_go_pos (dtime, moveresult)
 		-- this mob expects to do so.
 			or target_node_surface - node_surface >= 0.98 then
 			self._jump = true
+			self.movement_goal = "jump"
 			self.should_jump = 0
 		else
 			-- Jump again if the collision remains after
@@ -457,36 +486,23 @@ function mob_class:do_go_pos (dtime, moveresult)
 	end
 end
 
-local function norm_radians (x)
-	local x = x % (math.pi * 2)
-	if x >= math.pi then
-		x = x - math.pi * 2
-	end
-	if x < -math.pi then
-		x = x + math.pi * 2
-	end
-	return x
-end
+function mob_class:do_jump_goal (dtime, moveresult)
+	local vel = self.movement_velocity
 
-local function clip_rotation (from, to, limit)
-	local difference = norm_radians (to - from)
-	if difference > limit then
-		difference = limit
+	-- Continue accelerating until contact is made with the
+	-- ground, but do not rotate while jumping.
+	self:set_velocity (vel)
+
+	if not self._jump
+		and (moveresult.touching_ground or moveresult.standing_on_object) then
+		self.movement_goal = nil
 	end
-	if difference < -limit then
-		difference = -limit
-	end
-	return from + difference
 end
 
 function mob_class:dolphin_do_go_pos (dtime, moveresult)
 	local target = self.movement_target
 	local pos = self.object:get_pos ()
 	local dist = vector.distance (pos, target)
-
-	if dist < 0.5 then
-		return
-	end
 
 	local dx, dy, dz = target.x - pos.x,
 		target.y - pos.y,
@@ -612,6 +628,8 @@ function mob_class:movement_step (dtime, moveresult)
 		return
 	elseif self.movement_goal == "go_pos" then
 		self:do_go_pos (dtime, moveresult)
+	elseif self.movement_goal == "jump" then
+		self:do_jump_goal (dtime, moveresult)
 	elseif self.movement_goal == "strafe" then
 		self:do_strafe (dtime, moveresult)
 	end
@@ -963,7 +981,8 @@ function mob_class:check_pace (pos)
 			end
 			local width, height = self.pace_width, self.pace_height
 			local target = self:pacing_target (pos, width, height, groups)
-			if target and self:gopath (target) then
+			local speed = self.movement_speed * self.pace_bonus
+			if target and self:gopath (target, nil, false, speed) then
 				self.pacing = true
 				return "pacing"
 			end
@@ -1074,7 +1093,8 @@ function mob_class:fish_do_go_pos (dtime, moveresult)
 		self._acc_y_fixed = t2
 	end
 	local dir = math.atan2 (dz, dx) - math.pi / 2
-	local rotation = clip_rotation (self.object:get_yaw (), dir, math.pi / 2)
+	local rotation = clip_rotation (self.object:get_yaw (), dir,
+					(math.pi / 2) * dtime / 0.05)
 	self.object:set_yaw (rotation)
 end
 
@@ -1205,7 +1225,7 @@ function mob_class:airborne_do_go_pos (dtime, moveresult)
 
 	local yaw = math.atan2 (dz, dx) - math.pi / 2
 	local old_yaw = self.object:get_yaw ()
-	local clipped = clip_rotation (old_yaw, yaw, math.pi / 2)
+	local clipped = clip_rotation (old_yaw, yaw, (math.pi / 2) * dtime / 0.05)
 
 	self.object:set_yaw (clipped)
 	self:set_velocity (vel)
@@ -1264,7 +1284,7 @@ function mob_class:airborne_pacing_target (pos, width, height, groups)
 				local n = math.random (3)
 				repeat
 					target.y = target.y + 1
-					if not self:gwp_classify_for_movement (target) == "OPEN" then
+					if self:gwp_classify_for_movement (target) ~= "OPEN" then
 						target.y = target.y - 1
 						break
 					end

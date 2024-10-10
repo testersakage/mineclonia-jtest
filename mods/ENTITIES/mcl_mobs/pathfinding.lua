@@ -183,8 +183,21 @@ local function round_trunc (n)
 end
 
 function mob_class:gwp_start_1 (context)
-	-- If standing in water...
 	local pos = self.object:get_pos ()
+	-- If traveling to a waypoint that is within one node away,
+	-- start from that waypoint.
+	if self.waypoints and #self.waypoints > 0 then
+		local next_wp = self.waypoints[#self.waypoints]
+		if vector.distance (pos, next_wp) < 1.0 then
+			local class = self:gwp_classify_node (context, next_wp)
+			local penalty = self.gwp_penalties[class]
+			if class ~= "OPEN" and class ~= "WATER" and class ~= "LAVA"
+				and class ~= "DOOR_OPEN" and penalty >= 0.0 then
+				return vector.copy (next_wp)
+			end
+		end
+	end
+	-- If standing in water...
 	pos.x = floor (pos.x + 0.5)
 	pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
 	pos.z = floor (pos.z + 0.5)
@@ -1251,7 +1264,7 @@ mcl_mobs.players_selecting_mob = {}
 local blurb = "Right-click to select a mob, move to the target position, and type /mobpathfind start"
 local DTIME_LIMIT = 0.15
 
-local function create_path_particles (path, playername)
+local function create_path_particles (path, playername, delay, additive)
 	for s=1, #path do
 		local t
 		if s == #path then
@@ -1264,7 +1277,7 @@ local function create_path_particles (path, playername)
 		end
 		minetest.add_particle({
 				pos = path[s],
-				expirationtime = 5 + 0.2 * s,
+				expirationtime = delay + additive * s,
 				playername = playername,
 				glow = minetest.LIGHT_MAX,
 				texture = t,
@@ -1286,7 +1299,7 @@ local function cancel_test (mob, complete)
 		minetest.chat_send_player (complete, msg)
 
 		local path = mob:gwp_reconstruct (mob.pathfinding_context)
-		create_path_particles (path, complete)
+		create_path_particles (path, complete, 5, 0.2)
 	end
 	mob.pathfinding_context = nil
 	mob.on_step = mob._old_onstep
@@ -2389,8 +2402,8 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:parrot" then
-				-- 	create_path_particles (waypoints, "repetitivestrain")
+				-- if self.name == "mobs_mc:creeper" then
+				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else
 				self:cancel_navigation ()
@@ -2405,9 +2418,14 @@ function mob_class:next_waypoint (dtime)
 	end
 end
 
+local function bottom_of_node (node)
+	return vector.new (node.x, floor (node.y + 0.5) - 0.5, node.z)
+end
+
 function mob_class:gwp_next_waypoint (dtime)
 	local waypoints = self.waypoints
-	if #waypoints < 1 then
+	local n_waypoints = #waypoints
+	if n_waypoints < 1 then
 		self:cancel_navigation ()
 		self:halt_in_tracks ()
 		if self.callback_arrived then
@@ -2418,41 +2436,56 @@ function mob_class:gwp_next_waypoint (dtime)
 	local next_wp = waypoints[#waypoints]
 	local self_pos = self.object:get_pos ()
 	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
-	local dist_to_ycenter = math.abs (next_wp.y + 0.5 - self_pos.y)
+	local dist_to_ycenter = math.abs (next_wp.y - 0.5 - self_pos.y)
 	local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
 	local cbox = self.collisionbox
 	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
 	local mindist = girth > 0.75 and girth / 2 or 0.75 - girth / 2
+	local ahead = n_waypoints > 1 and waypoints[#waypoints - 1]
+	local next_wp_surface = bottom_of_node (next_wp)
+	local ahead_surface = ahead and bottom_of_node (ahead)
 
 	if dist_to_xcenter < mindist
 		and dist_to_zcenter < mindist
-		and dist_to_ycenter < 1.5 then
+		and dist_to_ycenter < 1.0 then
+		next_wp = ahead
+		next_wp_surface = ahead_surface
 		waypoints[#waypoints] = nil
 	else
 		-- Is this mob already en route to the next waypoint?
 		if #waypoints > 1 then
-			local ahead = waypoints[#waypoints - 1]
-			local saved_y = next_wp.y
-			self_pos.y = ahead.y
-			next_wp.y = ahead.y
-			local dir = vector.direction (self_pos, ahead)
-			local dir1 = vector.direction (self_pos, next_wp)
-			next_wp.y = saved_y
-			-- Apply a slightly tighter threshold to
-			-- prevent triggering this condition when two
-			-- adjacent diagonal moves exist at different
-			-- elevations.
-			local dot = vector.dot (dir, dir1)
-			if dot < -0.5 then
-				next_wp = ahead
-				waypoints[#waypoints] = nil
+			local dist_to_next_wp = vector.distance (next_wp_surface, self_pos)
+
+			if dist_to_next_wp < 2.0 then
+				local dist_to_ahead = vector.distance (ahead_surface, self_pos)
+				if dist_to_ahead < dist_to_next_wp
+					or dist_to_next_wp < 0.5 then
+					local dir = vector.direction (self_pos, ahead_surface)
+					local dir1 = vector.direction (self_pos, next_wp_surface)
+					local dot = vector.dot (dir, dir1)
+					if dot < 0 then
+						next_wp = ahead
+						next_wp_surface = ahead_surface
+						waypoints[#waypoints] = nil
+					end
+				end
 			end
 		end
+	end
 
-		-- Head to the center of the waypoint.
-		self.movement_goal = "go_pos"
-		self.movement_target = next_wp
+	if next_wp then
+		if self.movement_goal ~= "jump" then
+			-- Head to the center of the waypoint.
+			self.movement_goal = "go_pos"
+		end
+		self.movement_target = next_wp_surface
 		self.movement_velocity = self.gowp_velocity or self.movement_speed
+	else
+		self:cancel_navigation ()
+		self:halt_in_tracks ()
+		if self.callback_arrived then
+			self:callback_arrived ()
+		end
 	end
 end
 
