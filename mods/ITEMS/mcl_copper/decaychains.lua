@@ -68,6 +68,7 @@ local function register_unpreserve(nodename,od,def)
 	nd.description = nd.description and S("Waxed @1", nd.description) or S("Waxed "..nodename)
 	nd[def.unpreserve_callback]  = function(itemstack, clicker, pointed_thing)
 		if pointed_thing then
+			awards.unlock(clicker:get_player_name(), "mcl:wax_off")
 			return unpreserve(itemstack, clicker, pointed_thing)
 		end
 		return itemstack
@@ -128,6 +129,7 @@ local function register_preserve(nodename,def,chaindef)
 						itemstack:take_item()
 					end
 				end
+				awards.unlock(placer:get_player_name(), "mcl:wax_on")
 			end
 			return itemstack
 		end
