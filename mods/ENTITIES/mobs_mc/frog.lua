@@ -61,7 +61,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		walk_start = 90, walk_end = 105,
 		run_start = 115, run_end = 125, run_speed = 15,
 		swim_start = 145, swim_end = 165,
-		punch_start = 130, punch_end = 140, punch_speed = 15,
+		punch_start = 130, punch_end = 140, punch_speed = 15, punch_loop = false,
 	},
 	swims = true,
 	-- frog doesn't take drowning damage
