@@ -21,7 +21,7 @@ local creeper_defs = {
 	mesh = "mobs_mc_creeper.b3d",
 	visual_size = { x = 3, y = 3 },
 	makes_footstep_sound = true,
-	movement_speed = 6.0,
+	movement_speed = 5.0,
 	runaway = true,
 	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat" },
 	attack_type = "melee",
@@ -64,6 +64,7 @@ local creeper_defs = {
 	reach = 3,
 	allow_fuse_reset = true,
 	stop_to_explode = true,
+	pace_bonus = 0.8,
 }
 
 local CREEPER_SWELL_TIME = 30/20

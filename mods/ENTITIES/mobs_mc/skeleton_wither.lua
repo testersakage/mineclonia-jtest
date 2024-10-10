@@ -101,6 +101,15 @@ mcl_mobs.register_mob("mobs_mc:witherskeleton", {
 		level = 1,
 		dur = 10,
 	},
+	_wither_parent = nil,
+	should_attack = function (self, object)
+		return object ~= self._wither_parent
+			and mcl_mobs.mob_class.should_attack (self, object)
+	end,
+	should_continue_to_attack = function (self, object)
+		return object ~= self._wither_parent
+			and mcl_mobs.mob_class.should_continue_to_attack (self, object)
+	end,
 })
 
 -- spawn eggs

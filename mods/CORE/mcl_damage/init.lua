@@ -20,8 +20,8 @@ mcl_damage = {
 		generic = {bypasses_armor = true},
 		magic = {is_magic = true, bypasses_armor = true},
 		dragon_breath = {is_magic = true, bypasses_armor = true},	-- this is only used for dragon fireball; dragon fireball does not actually deal impact damage tho, so this is unreachable
-		wither = {bypasses_armor = true}, -- unused
-		wither_skull = {is_magic = true, is_explosion = true}, -- this is non-MC but a workaround to get the proper death message
+		wither = {bypasses_armor = true},
+		wither_skull = {is_magic = true, is_explosion = true},
 		anvil = {},
 		falling_node = {},	-- this is falling_block in MC
 		mob = {},
