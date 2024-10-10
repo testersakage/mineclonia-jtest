@@ -78,6 +78,8 @@ Frog model by ElCeejo, MIT License:
         * `mobs_mc_mushroom_brown.png` (CC0)
     *  ElCeejo
         * `mobs_mc_frog*.png`, modified (MIT)
+    *  Nowa_Wostra (Pixel perfection Legacy, see https://github.com/NovaWostra/Pixel-Perfection-Chorus-Eddit/issues/5 for license clarification)
+        * `tadpole_bucket.png`
 
 * “Spawn egg” textures (`mobs_mc_spawn_icon_*`) by 22i
 * Llama decor (carpet) textures (`mobs_mc_llama_decor_*`) by erlehmann and rudzik8

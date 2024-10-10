@@ -188,13 +188,20 @@ mcl_mobs.register_mob("mobs_mc:tadpole", {
 	},
 	follow = {"mcl_mobitems:slimeball"},
 	on_rightclick = function(self, clicker)
+		local item = clicker:get_wielded_item()
+		local bn = item:get_name()
+		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
+			clicker:set_wielded_item("mcl_buckets:bucket_tadpole")
+			self:safe_remove()
+			return
+		end
 		if self:follow_holding(clicker) then
 			if not core.is_creative_enabled(clicker:get_player_name()) then
-				local item = clicker:get_wielded_item()
 				item:take_item()
 				clicker:set_wielded_item(item)
 			end
 			self._grow_timer = self._grow_timer * 0.9
+			return
 		end
 	end,
 	on_spawn = function(self)

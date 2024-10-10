@@ -6,6 +6,7 @@ local fish_names = {
 	["salmon"] = {"Salmon", "a Salmon"},
 	["tropical_fish"] = {"Tropical Fish", "a Tropical Fish"},
 	["axolotl"] = {"Axolotl", "an Axolotl"},
+	["tadpole"] = {"Tadpole", "a Tadpole"},
 	--["pufferfish"] = {"Pufferfish", "a Pufferfish"}, --FIXME add pufferfish
 }
 
