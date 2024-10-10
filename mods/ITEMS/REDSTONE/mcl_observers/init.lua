@@ -2,6 +2,17 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_observers = {}
 
+function mcl_observers.observer_activate(pos)
+	mcl_redstone.after(1, function()
+		local node = minetest.get_node(pos)
+		if not node then
+			return
+		end
+		local ndef = minetest.registered_nodes[node.name]
+		minetest.set_node(pos, {name = ndef._observer_on, param2 = node.param2})
+	end)
+end
+
 -- Scan the node in front of the observer and update the observer state if
 -- needed.
 --
