@@ -3,21 +3,23 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_itemframes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-10 16:25+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_itemframes/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Item Frame"
 msgstr "Рамка"
 
 msgid "Can hold an item"
-msgstr ""
+msgstr "Может удерживать предмет"
 
 msgid "Item frames are decorative blocks in which items can be placed."
 msgstr "Рамки это декоративные блоки, в которые можно помещать предметы."
@@ -26,14 +28,13 @@ msgid "Just place any item on the item frame. Use the item frame again to retrie
 msgstr "Просто поместите в рамку любой предмет. Используйте рамку вновь, чтобы забрать из неё предмет обратно."
 
 msgid "Glow Item Frame"
-msgstr ""
+msgstr "Светящаяся рамка"
 
 msgid "Can hold an item and glows"
-msgstr ""
+msgstr "Может удерживать предмет и светится"
 
 msgid "Glow and Behold!"
-msgstr ""
+msgstr "Сияй и созерцай!"
 
 msgid "Craft a glow item frame."
-msgstr ""
-
+msgstr "Сделайте светящуюся рамку для предметов."
