@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-10 16:25+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mclx_stairs/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Lapis Lazuli Stairs"
 msgstr "Лазуритовые ступени"
@@ -20,16 +22,16 @@ msgid "Lapis Lazuli Slab"
 msgstr "Лазуритовая плита"
 
 msgid "Gold Stairs"
-msgstr ""
+msgstr "Лестница из золота"
 
 msgid "Gold Slab"
-msgstr ""
+msgstr "Плита из золота"
 
 msgid "Iron Stairs"
-msgstr ""
+msgstr "Железная лестница"
 
 msgid "Iron Slab"
-msgstr ""
+msgstr "Железная плита"
 
 msgid "Cracked Stone Brick Stairs"
 msgstr "Ступени из потрескавшихся каменных кирпичей"
@@ -38,43 +40,43 @@ msgid "Cracked Stone Brick Slab"
 msgstr "Плита из потрескавшихся каменных кирпичей"
 
 msgid "Cracked Deepslate Brick Stairs"
-msgstr ""
+msgstr "Лестница из кирпича глубинного сланца с трещинами"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr ""
+msgstr "Плита из кирпича глубинного сланца с трещинами"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr ""
+msgstr "Лестница с растрескавшейся плиткой глубинного сланца"
 
 msgid "Cracked Deepslate Tile Slab"
-msgstr ""
+msgstr "Растрескавшаяся плитка глубинного сланца"
 
 msgid "End Stone Stairs"
-msgstr ""
+msgstr "Лестница из камня края"
 
 msgid "End Stone Slab"
-msgstr ""
+msgstr "Плита из камня края"
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "Лестница из гладкого камня"
 
 msgid "Terracotta Stairs"
-msgstr ""
+msgstr "Терракотовая лестница"
 
 msgid "Terracotta Slab"
-msgstr ""
+msgstr "Терракотовая плита"
 
 msgid "@1 Concrete Stairs"
-msgstr ""
+msgstr "@1 Бетонная лестница"
 
 msgid "@1 Concrete Slab"
-msgstr ""
+msgstr "@1 Бетонная плита"
 
 msgid "@1 Terracotta Stairs"
-msgstr ""
+msgstr "@1 Терракотовая лестница"
 
 msgid "@1 Terracotta Slab"
-msgstr ""
+msgstr "@1 Терракотовая плита"
 
 msgid "Concrete Slab"
 msgstr "Бетонная плита"
@@ -86,5 +88,4 @@ msgid "Concrete Stairs"
 msgstr "Бетонные ступени"
 
 msgid "Double Terracotta Slab"
-msgstr ""
-
+msgstr "Двойная терракотовая плита"
