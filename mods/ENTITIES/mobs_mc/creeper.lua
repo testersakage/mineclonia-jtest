@@ -174,7 +174,7 @@ function creeper_defs:boom(pos, strength, fire, no_remove)
 	if mobs_griefing and not minetest.is_protected(pos, "") then
 		mcl_explosions.explode(pos, strength, { fire = fire }, self.object)
 	else
-		self:safe_boom(self, pos, strength, no_remove)
+		self:safe_boom(pos, strength, no_remove)
 	end
 	-- Dissipate active status effects.
 	for name, val in pairs (mcl_potions.all_effects (self.object)) do
