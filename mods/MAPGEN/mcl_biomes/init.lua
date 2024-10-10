@@ -1770,7 +1770,7 @@ local function register_biomes()
 		depth_top = 1,
 		node_cave_liquid = "mcl_core:water_source",
 		depth_riverbed = 2,
-		y_min = mcl_worlds.mg_overworld_min,
+		y_min = mcl_vars.mg_overworld_min,
 		y_max = 0,
 		vertical_blend = 1,
 		humidity_point = 50,
@@ -3168,6 +3168,7 @@ local function register_decorations()
 		decoration = "mcl_dripstone:dripstone_block",
 		biomes = {"DripstoneCave"},
 		flags = "all_floors, all_ceilings, force_placement",
+		y_min = mcl_vars.mg_overworld_min,
 	})
 
 	minetest.register_decoration({
@@ -3178,6 +3179,7 @@ local function register_decorations()
 		decoration = "mcl_dripstone:dripstone_bottom_tip",
 		biomes = {"DripstoneCave"},
 		flags = "all_floors",
+		y_min = mcl_vars.mg_overworld_min,
 	})
 
 	local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
