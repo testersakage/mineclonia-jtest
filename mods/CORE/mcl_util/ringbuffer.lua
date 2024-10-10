@@ -31,9 +31,11 @@ function ringbuffer_class:indexof(val)
 end
 
 function ringbuffer_class:insert_if_not_exists(record)
-	if not self:indexof(record) then
+	local insert = not self:indexof(record)
+	if insert then
 		self:insert(record)
 	end
+	return insert
 end
 
 function ringbuffer_class:serialize()
