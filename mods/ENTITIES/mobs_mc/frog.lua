@@ -76,7 +76,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		end
 	end,
 	on_spawn = function(self)
-		local pos = self.object:get_pos()
+		local pos = vector.offset(self.object:get_pos(), math.random(-10, 10), 0, math.random(-10, 10))
 		local b = core.get_biome_name(core.get_biome_data(pos).biome)
 		local bdef = core.registered_biomes[b]
 		if bdef then
