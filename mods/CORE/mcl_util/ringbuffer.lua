@@ -42,4 +42,9 @@ function ringbuffer_class:serialize()
 	return minetest.serialize(self.data)
 end
 
+function ringbuffer.deserialize(size, serialized_data)
+	local rb_data = minetest.deserialize(serialized_data)
+	return rb_data and ringbuffer.new(size, rb_data)
+end
+
 return setmetatable(ringbuffer, ringbuffer_class)
