@@ -15,6 +15,8 @@ function ringbuffer.new(size, initial_values)
 	return setmetatable({
 		data = values,
 		size = size,
+		auto_update_node_meta_key = false,
+		node_meta_private = false,
 	}, ringbuffer_class)
 end
 
@@ -67,7 +69,7 @@ function ringbuffer.get_from_node_meta(pos, key, size, private)
 		local meta = minetest.get_meta(pos)
 		rb = ringbuffer.deserialize(size, meta:get_string(key)) or ringbuffer.new(size)
 		rb.auto_update_node_meta_key = node_meta_key
-		rb.node_meta_private = private
+		rb.node_meta_private = private or false
 		node_meta_rb_cache[node_meta_key] = rb
 	end
 	return rb
