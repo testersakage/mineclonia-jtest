@@ -1,5 +1,6 @@
 -- Tree nodes: Wood, Wooden Planks, Sapling, Leaves, Stripped Wood
 local S = minetest.get_translator(minetest.get_current_modname())
+local D = mcl_util.get_dynamic_translator()
 local bark_stairs = minetest.settings:get_bool("mcl_extra_nodes",true)
 
 local wood_groups = {
@@ -380,20 +381,22 @@ function mcl_trees.register_wood(name, p)
 		mcl_trees.woods[name] = p
 	end
 	if p.tree == nil or type(p.tree) == "table" then
-		minetest.register_node(":mcl_trees:".."tree_"..name,table.merge(tpl_log,{
-			description = S("@1 Log", rname),
-			_doc_items_longdesc = S("The trunk of a @1 tree.", rname),
+		local def = table.merge(tpl_log,{
 			tiles = { minetest.get_current_modname().."_log_"..name.."_top.png",  "mcl_core_log_"..name.."_top.png", "mcl_core_log_"..name..".png"},
 			_mcl_stripped_variant = "mcl_trees:stripped_"..name,
-		},p.tree or {}))
+		},p.tree or {})
+		def.description = def.description or D(rname .. " Log")
+		def._doc_items_longdesc = def._doc_items_longdesc or D("The trunk of a " .. rname .. " tree.")
+		minetest.register_node(":mcl_trees:".."tree_"..name,def)
 	end
 
 	if p.wood == nil or type(p.wood) == "table" then
-		minetest.register_node(":mcl_trees:wood_"..name, table.merge(tpl_wood,{
-			description =  S("@1 Planks", rname),
+		local def =  table.merge(tpl_wood,{
 			_doc_items_longdesc = doc.sub.items.temp.build,
 			tiles = { minetest.get_current_modname().."_planks_"..name..".png"},
-		},p.wood or {}))
+		},p.wood or {})
+		def.description = def.description or D(rname .. " Planks")
+		minetest.register_node(":mcl_trees:wood_"..name, def)
 		minetest.register_craft({
 			output = "mcl_trees:wood_"..name.." 4",
 			recipe = {
@@ -403,13 +406,14 @@ function mcl_trees.register_wood(name, p)
 	end
 
 	if p.bark == nil or type(p.bark) == "table" then
-		minetest.register_node(":mcl_trees:bark_"..name,table.merge(tpl_log, {
-			description = S("@1 Bark", rname),
+		local def = table.merge(tpl_log, {
 			_doc_items_longdesc = S("This is a decorative block surrounded by the bark of a tree trunk."),
 			tiles = p.tree and p.tree.tiles and {p.tree.tiles[3]} or { minetest.get_current_modname().."_log_"..name..".png"},
 			is_ground_content = false,
 			_mcl_stripped_variant = "mcl_trees:bark_stripped_"..name,
-		}, p.bark or {}))
+		}, p.bark or {})
+		def.description = def.description or D(rname .. " Bark")
+		minetest.register_node(":mcl_trees:bark_"..name,def)
 		minetest.register_craft({
 			output = "mcl_trees:bark_"..name.." 3",
 			recipe = {
@@ -420,68 +424,70 @@ function mcl_trees.register_wood(name, p)
 	end
 
 	if p.stripped == nil or type(p.stripped) == "table" then
-		minetest.register_node(":mcl_trees:stripped_"..name, table.merge(tpl_log, {
-			description = S("Stripped @1 Log", rname),
-			_doc_items_longdesc = S("The stripped trunk of an @1 tree.", rname),
+		local def = table.merge(tpl_log, {
 			_doc_items_hidden = false,
 			tiles = { minetest.get_current_modname().."_stripped_"..name.."_top.png",  "mcl_core_stripped_"..name.."_top.png", "mcl_core_stripped_"..name.."_side.png"},
-		}, p.stripped or {}))
+		}, p.stripped or {})
+		def.description = def.description or D("Stripped " .. rname .. " Log")
+		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped trunk of an ".. rname .. " tree.")
+		minetest.register_node(":mcl_trees:stripped_"..name, def)
 	end
 
 	if p.stripped_bark == nil or type(p.stripped_bark) == "table" then
-		minetest.register_node(":mcl_trees:bark_stripped_"..name, table.merge(tpl_log, {
-			description = S("Stripped @1 Wood", rname),
-			_doc_items_longdesc = S("The stripped wood of an @1 tree.", rname),
+		local def = table.merge(tpl_log, {
 			tiles = { minetest.get_current_modname().."_stripped_"..name.."_side.png"},
 			is_ground_content = false,
-		}, p.stripped_bark or {}))
+		}, p.stripped_bark or {})
+		def.description = def.description or D("Stripped " .. rname .. " Wood")
+		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped wood of an " .. rname .. " tree.")
+		minetest.register_node(":mcl_trees:bark_stripped_"..name, def)
 	end
 
 	if p.sapling == nil or type(p.sapling) == "table" then
-		minetest.register_node(":mcl_trees:sapling_"..name, table.merge(tpl_sapling, {
-			description = S("@1 Sapling", rname),
+		local def = table.merge(tpl_sapling, {
 			tiles = { minetest.get_current_modname().."_sapling_"..name..".png"},
 			inventory_image = minetest.get_current_modname().."_sapling_"..name..".png",
 			wield_image = minetest.get_current_modname().."_sapling_"..name..".png",
-		}, p.sapling or {}))
+		}, p.sapling or {})
+		def.description = def.description or D(rname .. " Sapling")
+		minetest.register_node(":mcl_trees:sapling_"..name, def)
 	end
 
 
 	if p.leaves == nil or type(p.leaves) == "table" then
-		register_leaves("leaves_"..name,
-			table.merge({
-				description = S("@1 Leaves", rname),
-				_doc_items_longdesc = S("@1 leaves are grown from @2 trees.", rname, rname),
+		local def = table.merge({
 				tiles = { minetest.get_current_modname().."_leaves_"..name..".png"},
-			}, p.leaves or {} ),
+		}, p.leaves or {})
+		def.description = def.description or D(rname .. " Leaves")
+		def._doc_items_longdesc = def._doc_items_longdesc or D(rname .. " leaves are grown from " .. rname .. " trees.")
+		register_leaves("leaves_"..name, def,
 			p.saplingdrop or ( "mcl_trees:sapling_"..name ),
 			p.drop_apples or false,
 			p.sapling_chances or {20, 16, 12, 10}
 		)
 	end
 	if p.fence == nil or type(p.fence) == "table" then
-		p.fence = p.fence or {}
-		mcl_fences.register_fence_def(name.."_fence", table.merge({
-			description = p.fence.description or S("@1 Fence", rname),
-			tiles = p.fence.tiles or { "mcl_fences_fence_"..name..".png" },
-			groups = p.fence.groups or table.merge(wood_groups, { fence_wood = 1 }),
-			connects_to = p.fence.connects_to or { "group:fence_wood", "group:solid" },
-			sounds = p.fence.sounds or wood_sounds,
-			_mcl_blast_resistance = p.fence._mcl_blast_resistance or 3,
-			_mcl_hardness = p.fence._mcl_hardness or 2,
-			_mcl_burntime = p.fence._mcl_burntime or 15,
+		local def = table.merge({
+			tiles = { "mcl_fences_fence_"..name..".png" },
+			groups = table.merge(wood_groups, { fence_wood = 1 }),
+			connects_to = { "group:fence_wood", "group:solid" },
+			sounds = wood_sounds,
+			_mcl_blast_resistance = 3,
+			_mcl_hardness = 2,
+			_mcl_burntime = 15,
 			_mcl_fences_baseitem = "mcl_trees:wood_"..name
-		}, p.fence))
+		}, p.fence or {})
+		def.description = def.description or D(rname .. " Fence")
+		mcl_fences.register_fence_def(name.."_fence", def)
 	end
 	if p.fence_gate == nil or type(p.fence_gate) == "table" then
 		p.fence_gate = p.fence_gate or {}
-		mcl_fences.register_fence_gate_def(name.."_fence", table.merge({
-			description = p.fence_gate.description or S("@1 Fence Gate", rname),
-			tiles = p.fence_gate.tiles or { "mcl_fences_fence_"..name..".png" },
-			groups = p.fence_gate.groups or table.merge(wood_groups,{fence_wood = 1}),
-			_mcl_blast_resistance = p.fence_gate._mcl_blast_resistance or 3,
-			_mcl_hardness = p.fence_gate._mcl_hardness or 2,
-			sounds = p.fence_gate.sounds or wood_sounds,
+		local def = table.merge({
+			tiles = { "mcl_fences_fence_"..name..".png" },
+			groups = table.merge(wood_groups,{fence_wood = 1}),
+			_mcl_blast_resistance = 3,
+			_mcl_hardness = 2,
+			sounds = wood_sounds,
 			_mcl_fences_sounds = {
 				open = {
 					spec = p.fence_gate.sound_open,
@@ -492,16 +498,20 @@ function mcl_trees.register_wood(name, p)
 					gain = p.fence_gate.sound_gain_close
 				}
 			},
-			_mcl_burntime = p.fence_gate._mcl_burntime or 15,
-			_mcl_fences_baseitem = "mcl_trees:wood_"..name}, p.fence_gate))
+			_mcl_burntime = 15,
+			_mcl_fences_baseitem = "mcl_trees:wood_"..name
+		}, p.fence_gate)
+		def.description = def.description or D(rname .. " Fence Gate")
+		mcl_fences.register_fence_gate_def(name.."_fence", def)
 	end
 	if p.door == nil or type(p.door) == "table" then
-		mcl_doors:register_door("mcl_doors:door_"..name,table.merge(tpl_door, {
-			description = S("@1 Door", rname),
+		local def = table.merge(tpl_door, {
 			inventory_image = "mcl_doors_door_"..name..".png",
 			tiles_bottom = {"mcl_doors_door_"..name.."_lower.png", "mcl_doors_door_"..name.."_side_lower.png"},
 			tiles_top = {"mcl_doors_door_"..name.."_upper.png", "mcl_doors_door_"..name.."_side_upper.png"}
-		}, p.door or {}))
+		}, p.door or {})
+		def.description = def.description or D(rname .. " Door")
+		mcl_doors:register_door("mcl_doors:door_"..name,def)
 		minetest.register_craft({
 			output = "mcl_doors:door_"..name.." 3",
 			recipe = {
@@ -512,12 +522,13 @@ function mcl_trees.register_wood(name, p)
 		})
 	end
 	if p.trapdoor == nil or type(p.trapdoor) == "table" then
-		mcl_doors:register_trapdoor("mcl_doors:trapdoor_"..name,table.merge(tpl_trapdoor, {
-			description = S("@1 Trapdoor", rname),
+		local def = table.merge(tpl_trapdoor, {
 			tile_front = "mcl_doors_trapdoor_"..name..".png",
 			tile_side = "mcl_doors_trapdoor_"..name.."_side.png",
 			wield_image = "mcl_doors_trapdoor_"..name..".png",
-		}, p.trapdoor or {}))
+		}, p.trapdoor or {})
+		def.description = def.description or D(rname .. " Trapdoor")
+		mcl_doors:register_trapdoor("mcl_doors:trapdoor_"..name,def)
 		minetest.register_craft({
 			output = "mcl_doors:trapdoor_"..name.." 2",
 			recipe = {
@@ -529,55 +540,64 @@ function mcl_trees.register_wood(name, p)
 
 	if p.stairs == nil or type(p.stairs) == "table" then
 		p.stairs = p.stairs or {}
-		mcl_stairs.register_stair(name, table.merge({
+		local def = table.merge({
 			baseitem="mcl_trees:wood_"..name,
-			description = S("@1 Stairs", rname),
 			groups = { wood_stairs = 1 },
 			overrides = {
 				_mcl_burntime = 15
 			},
-		}, p.stairs))
+		}, p.stairs or {})
+		def.description = def.description or D(rname .. " Stairs")
+		mcl_stairs.register_stair(name, def)
 		if p.bark == nil or type(p.bark) == "table"  then
-			mcl_stairs.register_stair(name.."_bark", table.merge({
+			local copy = table.copy(p.stairs)
+			copy.description = nil
+			def = table.merge({
 				baseitem="mcl_trees:bark_"..name,
-				description = S("@1 Bark Stairs", rname),
 				groups = { bark_stairs = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
 				overrides = {
 					_mcl_burntime = 15
 				},
-			}, p.stairs))
+			}, copy, p.stairs.bark or {})
+			def.description = def.description or D(rname .. " Bark Stairs")
+			mcl_stairs.register_stair(name.."_bark", def)
 		end
 	end
 
 	if p.slab == nil or type(p.slab) == "table" then
 		p.slab = p.slab or {}
-		mcl_stairs.register_slab(name, table.merge({
+		local def = table.merge({
 			baseitem="mcl_trees:wood_"..name,
-			description = S("@1 Slab", rname),
 			groups = { wood_slab = 1 },
 			register_stair_and_slab = false,
 			overrides = {
 				_mcl_burntime = 7.5,
 			},
-		}, p.slab))
+		}, p.slab)
+		def.description = def.description or D(rname .. " Slab")
+		mcl_stairs.register_slab(name, def)
 		if p.bark == nil or type(p.bark) == "table" then
-			mcl_stairs.register_slab(name.."_bark", table.merge({
+			local copy = table.copy(p.slab)
+			copy.description = nil
+			def = table.merge({
 				baseitem="mcl_trees:bark_"..name,
-				description = S("@1 Bark Slab", rname),
 				groups = { bark_slab = 1 },
 				recipeitem=bark_stairs and "mcl_trees:bark_"..name or "",
 				overrides = {
 					_mcl_burntime = 7.5,
 				},
-			}, p.slab))
+			}, copy, p.slab.bark or {})
+			def.description = def.description or D(rname .. " Bark Slab")
+			mcl_stairs.register_slab(name.."_bark", def)
 		end
 	end
 	if p.sign_color and ( p.sign == nil or type(p.sign) == "table" ) then
-		mcl_signs.register_sign(name,p.sign_color,table.merge({
-			description = S("@1 Sign", rname),
+		local def = table.merge({
 			_mcl_burntime = 10
-		}, p.sign or {}))
+		}, p.sign or {})
+		def.description = def.description or D(rname .. " Sign")
+		mcl_signs.register_sign(name,p.sign_color,def)
 		minetest.register_craft({
 			output = "mcl_signs:wall_sign_"..name.." 3",
 			recipe = {
@@ -589,9 +609,10 @@ function mcl_trees.register_wood(name, p)
 	end
 
 	if p.pressure_plate == nil or type(p.pressure_plate) == "table" then
+		p.pressure_plate = p.pressure_plate or {}
 		mcl_redstone.register_pressure_plate(
 			"mcl_pressureplates:pressure_plate_"..name,
-			S("@1 Pressure Plate", rname),
+			p.pressure_plate.description or D(rname .. " Pressure Plate"),
 			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
 			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
 			p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
@@ -601,12 +622,13 @@ function mcl_trees.register_wood(name, p)
 			{axey=1, material_wood=1},
 			nil,
 			S("A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."),
-			p.pressure_plate and p.pressure_plate._mcl_burntime or 15
+			p.pressure_plate._mcl_burntime or 15
 		)
 	end
 	if p.button == nil or type(p.button) == "table" then
+		p.button = p.button or {}
 		mcl_buttons.register_button(name, {
-			description = S("@1 Button", rname),
+			description = p.button.description or D(rname .. " Button"),
 			texture = p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
 			recipeitem = "mcl_trees:wood_"..name,
 			sounds = mcl_sounds.node_sound_wood_defaults(),
@@ -615,30 +637,30 @@ function mcl_trees.register_wood(name, p)
 			push_by_arrow = true,
 			longdesc = S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
 			push_sound = "mesecons_button_push_wood",
-			burntime = p.button and p.button._mcl_burntime or 5,
+			burntime = p.button._mcl_burntime or 5,
 		})
 	end
 
 	if (p.sapling == nil or type(p.sapling) == "table") and (p.potted_sapling == nil or type(p.potted_sapling) == "table") then
-		mcl_flowerpots.register_potted_flower("mcl_trees:sapling_"..name, table.merge({
+		local def = table.merge({
 			name = "sapling_"..name,
-			desc = S("@1 Sapling", rname),
 			image = minetest.get_current_modname().."_sapling_"..name..".png",
-		},p.potted_sapling or {}))
+		},p.potted_sapling or {})
+		def.desc = def.desc or D(rname .. " Sapling")
+		mcl_flowerpots.register_potted_flower("mcl_trees:sapling_"..name, def)
 	end
 
 	if p.boat == nil or type(p.boat) == "table" then
 		p.boat = p.boat or {}
-		mcl_boats.register_boat(name,table.merge({
-			description = S("@1 Boat", rname),
-		}, p.boat.item or {}), p.boat.object or {}, p.boat.entity or {})
+		local def = table.copy(p.boat.item or {})
+		def.description = def.description or D(rname .. " Boat")
+		mcl_boats.register_boat(name,def, p.boat.object or {}, p.boat.entity or {})
 	end
 	if p.chest_boat == nil or type(p.chest_boat) == "table" then
 		p.chest_boat = p.chest_boat or {}
-		mcl_boats.register_boat(name.."_chest",table.merge({
-			description = S("@1 Chest Boat", rname),
-		}, p.chest_boat.item or {}), p.chest_boat.object or {}, p.chest_boat.entity or {})
-
+		local def = table.copy(p.chest_boat.item or {})
+		def.description = def.description or D(rname .. " Chest Boat")
+		mcl_boats.register_boat(name.."_chest", def, p.chest_boat.object or {}, p.chest_boat.entity or {})
 	end
 end
 

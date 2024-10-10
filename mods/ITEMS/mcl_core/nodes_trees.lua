@@ -1,10 +1,11 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
-local S = minetest.get_translator(minetest.get_current_modname())
+-- All required translation strings are currently generated in mcl_trees
+-- local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_trees.register_wood("oak",{
-	readable_name = S("Oak"),
+	readable_name = "Oak",
 	sign_color="#917056",
 	tree_schems= {
 		{ file = modpath.."/schematics/mcl_core_oak_balloon.mts"},
@@ -45,7 +46,7 @@ mcl_trees.register_wood("oak",{
 })
 
 mcl_trees.register_wood("dark_oak",{
-	readable_name = S("Dark Oak"),
+	readable_name = "Dark Oak",
 	sign_color="#625048",
 	tree_schems_2x2 = {
 		{ file = modpath.."/schematics/mcl_core_dark_oak.mts"},
@@ -74,7 +75,7 @@ mcl_trees.register_wood("dark_oak",{
 })
 
 mcl_trees.register_wood("jungle",{
-	readable_name = S("Jungle"),
+	readable_name = "Jungle",
 	sign_color="#845A43",
 	tree_schems = {
 		{ file = modpath.."/schematics/mcl_core_jungle_tree.mts"},
@@ -106,7 +107,7 @@ mcl_trees.register_wood("jungle",{
 })
 
 mcl_trees.register_wood("spruce",{
-	readable_name = S("Spruce"),
+	readable_name = "Spruce",
 	sign_color="#604335",
 	tree_schems = {
 		{ file = modpath.."/schematics/mcl_core_spruce_1.mts"},
@@ -144,7 +145,7 @@ mcl_trees.register_wood("spruce",{
 })
 
 mcl_trees.register_wood("acacia",{
-	readable_name = S("Acacia"),
+	readable_name = "Acacia",
 	sign_color="#965638",
 	tree_schems ={
 		{ file = modpath.."/schematics/mcl_core_acacia_1.mts"},
@@ -173,7 +174,7 @@ mcl_trees.register_wood("acacia",{
 })
 
 mcl_trees.register_wood("birch",{
-	readable_name = S("Birch"),
+	readable_name = "Birch",
 	sign_color="#AA907A",
 	tree_schems = {
 		{ file = modpath.."/schematics/mcl_core_birch.mts"},

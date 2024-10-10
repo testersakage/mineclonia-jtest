@@ -12,7 +12,7 @@ mcl_util.generate_on_place_plant_function(function(pos)
 end)
 
 mcl_trees.register_wood("bamboo",{
-	readable_name = S("Bamboo"),
+	readable_name = "Bamboo",
 	sign_color="#FCE6BC",
 	sapling = false,
 	potted_sapling = false,

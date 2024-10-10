@@ -98,3 +98,23 @@ All features can be disabled by setting them to false, nil will assume default v
 	},
 })
 ```
+
+Localization notes:
+
+By default the API will create translatable strings for the node and item
+descriptions and some documentation entries automatically by combining the
+(untranslated) `readable_name` of the wood definition with the base
+descriptions. This automatic generation of translation strings can be bypassed
+by passing explicit (already translated) strings in the `description` or
+`_doc_items_longdesc` fields of the respective subdefinitions. For bark stairs
+and slabs use a `bark` subtable of the `stair` and `slab` subdefinitions (note
+that `_doc_items_longdesc` and all other fields *except `description`* are
+inherited from the `stair` or `slab` subdefinition), for boat and chest boat use
+an `item` subtable of the `boat` or `chestboat` subdefinitions.
+
+For mcla mods the automatically generated strings will be added to the
+translation template of the calling mod during the translation update work
+flow. Third party mods can either adapt mcla's translation work flow to
+automatically generate the translation strings or explicitly provide the
+translated strings through the subdefinition fields mentioned above and just use
+minetest's standard mod translation update tooling.

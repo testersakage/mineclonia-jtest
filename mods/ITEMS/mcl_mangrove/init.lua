@@ -3,7 +3,7 @@ local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
 mcl_trees.register_wood("mangrove",{
-	readable_name=S("Mangrove"),
+	readable_name="Mangrove",
 	sign_color="#8E3731",
 	sapling=false,
 	saplingdrop="mcl_mangrove:propagule",

@@ -4,7 +4,7 @@ local S = minetest.get_translator(modname)
 local PARTICLE_DISTANCE = 25
 
 mcl_trees.register_wood("cherry_blossom",{
-	readable_name = S("Cherry"),
+	readable_name = "Cherry",
 	sign_color="#F29889",
 	tree_schems= {
 		{file=modpath.."/schematics/mcl_cherry_blossom_tree_1.mts"},
