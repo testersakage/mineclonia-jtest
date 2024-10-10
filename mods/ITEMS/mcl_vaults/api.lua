@@ -1,22 +1,22 @@
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
+local VISITED_KEY = modname .. ":visited_players"
+local RINGBUFFER_SIZE = 128
 
 local function can_open(pos, player)
 	local m = minetest.get_meta(pos)
-	local rb = mcl_util.ringbuffer.new(180, minetest.deserialize(m:get("mcl_vaults:visited_players")))
-	if rb:indexof(player:get_player_name()) then
-		return false
-	end
-	return true
+	local rb = mcl_util.ringbuffer.deserialize(RINGBUFFER_SIZE, m:get(VISITED_KEY))
+	return not rb:indexof(player:get_player_name())
 end
 
-local function set_visited(pos, player)
+local function try_open(pos, player)
 	local m = minetest.get_meta(pos)
-	local rb = mcl_util.ringbuffer.new(180, minetest.deserialize(m:get("mcl_vaults:visited_players")))
-	rb:insert_if_not_exists(player:get_player_name())
-	m:set_string("mcl_vaults:visited_players", rb:serialize())
-	m:mark_as_private("mcl_vaults:visited_players")
+	local rb = mcl_util.ringbuffer.deserialize(RINGBUFFER_SIZE, m:get(VISITED_KEY))
+	local inserted = rb:insert_if_not_exists(player:get_player_name())
+	m:set_string(VISITED_KEY, rb:serialize())
+	m:mark_as_private(VISITED_KEY)
+	return inserted
 end
 
 local function eject_items(pos, name, list)
@@ -142,8 +142,7 @@ function mcl_vaults.register_vault(name, def)
 			create_display_item(pos, def)
 		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-			if itemstack:get_name() == def.key and can_open(pos, clicker) then
-				set_visited(pos, clicker)
+			if itemstack:get_name() == def.key and try_open(pos, clicker) then
 				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)
