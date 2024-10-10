@@ -1,15 +1,16 @@
 local S = core.get_translator("mobs_mc")
 local textures = {
 	cold = "mobs_mc_frog.png",
+	snowy = "mobs_mc_frog.png",
 	medium = "mobs_mc_frog_temperate.png",
 	hot = "mobs_mc_frog_warm.png",
 }
 
 local function set_textures(self, biome_type)
-	biome_type = biome_type or "medium"
+	local texture = textures[biome_type or "medium"] or textures["medium"]
 	self.object:set_properties({
 		textures = {
-			textures[biome_type]
+			texture
 		},
 	})
 end
