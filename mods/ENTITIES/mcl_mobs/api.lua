@@ -272,7 +272,7 @@ function mob_class:mob_activate(staticdata, dtime)
 		self:set_properties({textures = self.base_texture})
 	end
 
-	self:set_yaw( (math.random(0, 360) - 180) / 180 * math.pi, 6)
+	self:set_yaw ((math.random(0, 360) - 180) / 180 * math.pi)
 	self:update_tag()
 	self._current_animation = nil
 	self:set_animation( "stand")
@@ -309,15 +309,6 @@ function mob_class:mob_activate(staticdata, dtime)
 	end
 	self:remove_texture_mod ("^[colorize:#d42222:175")
 	self:init_ai ()
-end
-
-function mob_class:forward_directions()
-	local yaw = self.object:get_yaw()
-	local cbox = self.object:get_properties().collisionbox
-	local dir_x = -math.sin(yaw) * (cbox[4] + 0.5)
-	local dir_z = math.cos(yaw) * (cbox[4] + 0.5)
-
-	return dir_x, dir_z
 end
 
 local function update_attack_timers (self, dtime)
@@ -411,9 +402,8 @@ function mob_class:on_step(dtime, moveresult)
 
 	if self.state == "die" then return end
 
+	self:rotate_step (dtime)
 	if should_drive then
-	   self:check_smooth_rotation (dtime)
-
 	   -- Called only to reset the swivel.
 	   self:check_head_swivel (dtime, true)
 	   self:drive ("walk", "stand", false, dtime, moveresult)
@@ -422,7 +412,6 @@ function mob_class:on_step(dtime, moveresult)
 	   self:check_item_pickup()
 	else
 	   self:set_animation_speed()
-	   self:check_smooth_rotation(dtime)
 	   self:check_head_swivel(dtime)
 	   self:set_armor_texture()
 

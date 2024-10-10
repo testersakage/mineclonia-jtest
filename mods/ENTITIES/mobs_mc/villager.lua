@@ -107,7 +107,7 @@ function mobs_mc.villager_mob:on_rightclick(clicker)
 	local selfpos = self.object:get_pos()
 	local clickerpos = clicker:get_pos()
 	local dir = vector.direction(selfpos, clickerpos)
-	self.object:set_yaw(minetest.dir_to_yaw(dir))
+	self:set_yaw(minetest.dir_to_yaw(dir))
 	self:stand_still()
 end
 

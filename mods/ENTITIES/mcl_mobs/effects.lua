@@ -7,7 +7,6 @@ local PI_THIRD = math.pi / 3 -- 60 degrees
 local player_transfer_distance = tonumber(minetest.settings:get("player_transfer_distance")) or 128
 if player_transfer_distance == 0 then player_transfer_distance = math.huge end
 
-
 -- custom particle effects
 function mcl_mobs.effect(pos, amount, texture, min_size, max_size, radius, gravity, glow, go_down)
 
@@ -338,8 +337,9 @@ function mob_class:check_head_swivel(dtime, clear)
 		end
 		if _locked_object_eye_height then
 			local self_rot = self.object:get_rotation()
-			-- If a mob is attached, should we really be messing with what they are looking at?
-			-- Should this be excluded?
+			-- If a mob is attached, should we really be
+			-- messing with what it is looking at?  Should
+			-- this be excluded?
 			if self.object:get_attach() and self.object:get_attach():get_rotation() then
 				self_rot = self.object:get_attach():get_rotation()
 			end
@@ -417,3 +417,122 @@ minetest.register_on_leaveplayer(function(player)
 	end
 	active_particlespawners[pn] = nil
 end)
+
+----------------------------------------------------------------------------------
+-- Smooth rotation.  In the long run, most mob models should receive a root bone,
+-- enabling client-side interpolation.
+----------------------------------------------------------------------------------
+
+function mob_class:rotation_info ()
+	if not self._rotation_info then
+		self._rotation_info = {
+			yaw = {
+				current = self.object:get_yaw () + self.rotate,
+				remaining_turn = 0,
+				amt_per_second = 0,
+			},
+			pitch = {
+				current = self.object:get_rotation ().x,
+				remaining_turn = 0,
+				amt_per_second = 0,
+			},
+		}
+	end
+	return self._rotation_info
+end
+
+local ROTATE_TIME = 1/0.15 -- 3 minecraft ticks.
+
+local function norm_radians (x)
+	local x = x % (math.pi * 2)
+	if x >= math.pi then
+		x = x - math.pi * 2
+	end
+	if x < -math.pi then
+		x = x + math.pi * 2
+	end
+	return x
+end
+
+function mob_class:rotate_axis (axis, target)
+	local rotation_info = self:rotation_info ()[axis]
+	local current_rot
+
+	if axis == "yaw" then
+		current_rot = self.object:get_yaw () + self.rotate
+	else
+		current_rot = self.object:get_rotation ().x
+	end
+
+	rotation_info.current = current_rot
+	rotation_info.remaining_turn
+		= norm_radians (target - current_rot)
+	rotation_info.amt_per_second
+		= rotation_info.remaining_turn * ROTATE_TIME
+end
+
+function mob_class:rotate_gradually (info, axis, dtime)
+	local info = info[axis]
+	local rem = info.remaining_turn
+
+	if math.abs (info.remaining_turn) > 1.0e-5 then
+		local increment = info.amt_per_second * dtime
+
+		if (increment < 0 and increment < info.remaining_turn)
+			or (increment > 0 and increment > info.remaining_turn) then
+			increment = info.remaining_turn
+		end
+
+		local target = info.current + increment
+		info.remaining_turn = rem - increment
+		info.current = norm_radians (target)
+		return info.current
+	else
+		if axis == "yaw" and self._target_yaw then
+			info.current = self._target_yaw
+		elseif self._target_pitch then
+			info.current = self._target_pitch
+		end
+		return info.current
+	end
+end
+
+function mob_class:get_roll ()
+	return self.object:get_rotation ().z
+end
+
+function mob_class:rotate_step (dtime)
+	local yaw, pitch
+	local info = self:rotation_info ()
+	yaw = self:rotate_gradually (info, "yaw", dtime)
+	pitch = self:rotate_gradually (info, "pitch", dtime)
+	if self.shaking then
+		yaw = yaw + (math.random() * 2 - 1) * 5 * dtime
+	end
+	self.object:set_rotation ({
+			x = pitch,
+			y = yaw - self.rotate,
+			z = self.dead and self:get_roll () or 0,
+	})
+end
+
+function mob_class:set_yaw (yaw)
+	if self.noyaw then return end
+
+	self:rotate_axis ("yaw", yaw)
+	self._target_yaw = yaw
+	return yaw
+end
+
+function mob_class:get_yaw (yaw)
+	return self._target_yaw or (self.object:get_yaw () + self.rotate)
+end
+
+function mob_class:set_pitch (pitch)
+	self:rotate_axis ("pitch", pitch)
+	self._target_pitch = pitch
+end
+
+function mob_class:get_pitch ()
+	return self._target_pitch or self.object:get_rotation ().x
+end

@@ -21,6 +21,7 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	rotate = 180,
 	spawn_in_group_min = 3,
 	spawn_in_group = 5,
+	pace_chance = 10,
 	pace_interval = 0.5,
 	tilt_swim = true,
 	floats = false,

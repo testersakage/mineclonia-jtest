@@ -106,7 +106,7 @@ function mob_class:attach(player)
 		end
 	end, player:get_player_name())
 
-	player:set_look_horizontal(self.object:get_yaw() - rot_view)
+	player:set_look_horizontal(self:get_yaw () - rot_view)
 end
 
 
@@ -170,7 +170,7 @@ function mob_class:drive_follow (moving_anim, stand_anim, dtime, moveresult)
 	local pos = self.object:get_pos ()
 	local jump = self:check_jump (pos, moveresult)
 
-	self.object:set_yaw (dir - self.rotate)
+	self.object:set_yaw (dir)
 	local elapsed, total
 
 	if self._drive_boost_elapsed then
@@ -295,7 +295,7 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 			self:set_animation("stand")
 		end
 
-		self.object:set_yaw(self.driver:get_look_horizontal() - self.rotate)
+		self:set_yaw (self.driver:get_look_horizontal())
 
 		if can_fly then
 
@@ -432,7 +432,7 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 		end
 	end
 
-	new_velo = get_velocity(v, self.object:get_yaw() - rot_view, velo.y)
+	new_velo = get_velocity(v, self:get_yaw () - rot_view, velo.y)
 	new_acce.y = new_acce.y + acce_y
 
 	self.object:set_velocity(new_velo)
