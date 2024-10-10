@@ -21,7 +21,7 @@ local function ghast_do_go_pos (self, dtime, moveresult)
 
 	if not self.attack then
 		local dir = math.atan2 (dir.z, dir.x) - math.pi/2
-		self.object:set_yaw (dir)
+		self:set_yaw (dir)
 
 		if moveresult.collides then
 			if not self._ghast_collide_time then
@@ -79,7 +79,7 @@ local function ghast_maybe_discharge (self, self_pos, dtime)
 		if distance < 64 then
 			local dir = vector.subtract (target_pos, self_pos)
 			local yaw = math.atan2 (dir.z, dir.x) - math.pi/2
-			self.object:set_yaw (yaw)
+			self:set_yaw (yaw)
 		end
 
 		if distance < 64 and self:target_visible (self_pos, self.attack) then
@@ -105,6 +105,7 @@ end
 local function ghast_do_attack (self, target)
 	self.attack = target
 	self.target_invisible_time = 3.0
+	self._sight_persistence = 3.0
 	self._charge_time = 0
 end
 

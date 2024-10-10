@@ -126,7 +126,7 @@ local witch_potion_items = {
 }
 
 local function check_behind (self, obj_pos, target_pos)
-	 local look_dir = self.object:get_yaw ()
+	 local look_dir = self:get_yaw ()
 	 local v = { z = math.cos (look_dir), y = 0, x = -math.sin (look_dir), }
 	 v = vector.normalize (v)
 	 local x = vector.direction (obj_pos, target_pos)

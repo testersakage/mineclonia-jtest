@@ -210,105 +210,6 @@ function mob_class:get_velocity()
 	return 0
 end
 
-local function shortest_term_of_yaw_rotation(_, rot_origin, rot_target, nums)
-	if not rot_origin or not rot_target then
-		return
-	end
-
-	rot_origin = math.deg(rot_origin)
-	rot_target = math.deg(rot_target)
-
-	if rot_origin < rot_target then
-		if math.abs(rot_origin-rot_target)<180 then
-			if nums then
-				return rot_target-rot_origin
-			end
-		else
-			if nums then
-				return -(rot_origin-(rot_target-360))
-			else
-				return -1
-			end
-		end
-	else
-		if math.abs(rot_origin-rot_target)<180 then
-			if nums then
-				return rot_target-rot_origin
-			else
-				return -1
-			end
-		else
-			if nums then
-				return (rot_target-(rot_origin-360))
-			end
-		end
-	end
-	return 1
-end
-
--- set and return valid yaw
-function mob_class:set_yaw(yaw, delay, dtime)
-	if self.noyaw then return end
-
-	if math.deg(self.object:get_yaw()) > 360 then
-		self.object:set_yaw(math.rad(0))
-	elseif math.deg(self.object:get_yaw()) < 0 then
-		self.object:set_yaw(math.rad(360))
-	end
-
-	if math.deg(yaw) > 360 then
-		yaw=math.rad(math.deg(yaw)%360)
-	elseif math.deg(yaw) < 0 then
-		yaw=math.rad(((360*5)-math.deg(yaw))%360)
-	end
-
-	--calculate the shortest way to turn to find our target
-	local target_shortest_path = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), yaw, false)
-	local target_shortest_path_nums = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), yaw, true)
-
-	--turn in the shortest path possible toward our target. if we are attacking, don't dance.
-	if not target_shortest_path then return end
-	if (math.abs(target_shortest_path) > 50 and not self._kb_turn) and (self.attack and self.attack:get_pos() or self.following and self.following:get_pos()) then
-		if self.following then
-			target_shortest_path = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.following:get_pos())), true)
-			target_shortest_path_nums = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.following:get_pos())), false)
-		else
-			target_shortest_path = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())), true)
-			target_shortest_path_nums = shortest_term_of_yaw_rotation(self, self.object:get_yaw(), minetest.dir_to_yaw(vector.direction(self.object:get_pos(), self.attack:get_pos())), false)
-		end
-	end
-
-	if not target_shortest_path_nums then return end
-
-	local ddtime = dtime or 0.05
-	if math.abs(target_shortest_path_nums) > 10 then
-		self.object:set_yaw(self.object:get_yaw()+(target_shortest_path*(3.6*ddtime)))
-		if self.acc and mcl_mobs.check_vector(self.acc) then
-			self.acc=vector.rotate_around_axis(self.acc,vector.new(0,1,0), target_shortest_path*(3.6*ddtime))
-		end
-	end
-
-	delay = delay or 0
-	yaw = self.object:get_yaw()
-
-	if delay == 0 then
-		if self.shaking and dtime then
-			yaw = yaw + (math.random() * 2 - 1) * 5 * dtime
-		end
-		return yaw
-	end
-
-	self.target_yaw = yaw
-	self.delay = delay
-
-	return self.target_yaw
-end
-
--- global function to set mob yaw
-function mcl_mobs.yaw(self, yaw, delay, dtime)
-	return mob_class.set_yaw(self, yaw, delay, dtime)
-end
-
 -- check if mob is dead or only hurt
 function mob_class:check_for_death(cause, cmi_cause)
 	if self.dead then
@@ -430,7 +331,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 
 		local dpos = self.object:get_pos()
 		local cbox = self.object:get_properties().collisionbox
-		local yaw = self.object:get_rotation().y
+		local yaw = self:get_yaw ()
 		self:safe_remove()
 		mcl_mobs.death_effect(dpos, yaw, cbox, not self.instant_death)
 	end
@@ -892,7 +793,7 @@ local function scale_speed_flying (speed, friction)
 end
 
 function mob_class:accelerate_relative (acc, speed)
-	local yaw = self.object:get_yaw () + self.rotate
+	local yaw = self:get_yaw ()
 	acc = vector.length (acc) <= 1
 		and vector.copy (acc)
 		or vector.normalize (acc)
@@ -911,9 +812,6 @@ function mob_class:jump_actual (v)
 	self:set_animation ("jump")
 	self:mob_sound ("jump")
 	v = {x = v.x, y = self.jump_height, z = v.z,}
-	if self:can_jump_cliff () then
-		v = vector.multiply (v, vector.new (2.8, 1, 2.8))
-	end
 	return v
 end
 

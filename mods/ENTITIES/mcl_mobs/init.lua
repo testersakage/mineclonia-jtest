@@ -144,7 +144,8 @@ mcl_mobs.mob_class = {
 	swim_speed_factor = 0.02,
 	idle_gravity_in_liquids = false,
 	grounded_speed_factor = 0.10,
-	pace_interval = 5,
+	pace_chance = 120,
+	pace_interval = 6,
 	pace_height = 7,
 	pace_width = 10,
 	flops = false,
@@ -154,6 +155,11 @@ mcl_mobs.mob_class = {
 	_airborne_agile = false,
 	chase_owner_distance = 10.0,
 	stop_chasing_distance = 2.0,
+	_is_idle_activity = {
+		pacing = true,
+		herd_following = true,
+		traveling_to_owner = true,
+	},
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

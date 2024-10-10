@@ -1,7 +1,6 @@
 local S = minetest.get_translator("mobs_mc")
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 local w_strafes = minetest.settings:get_bool("wither_strafes") ~= false
-local mob_class = mcl_mobs.mob_class
 
 local WITHER_INIT_BOOM = 7
 local WITHER_DESCENT_BOOM = 7
@@ -48,8 +47,6 @@ local wither_def = {
 		{"mobs_mc_wither.png"},
 	},
 	visual_size = {x=4, y=4},
-	view_range = 50,
-	fear_height = 4,
 	movement_speed = 5.0,
 	airborne_speed = 5.0,
 	_airborne_agile = true,
@@ -91,6 +88,7 @@ local wither_def = {
 	tracking_distance = 64,
 	view_range = 20,
 	pace_interval = 0.0,
+	pace_chance = 1,
 	player_active_range = 128,
 }
 
@@ -262,7 +260,8 @@ function wither_def:do_custom (dtime, moveresult)
 				mcl_bossbars.add_bar(player, bardef, true, d)
 			end
 		end
-		self.object:set_yaw(self._spawning*10)
+		self:set_yaw (self._spawning*10)
+		self:rotate_step (dtime)
 
 		local factor = math.floor((math.sin(self._spawning*10)+1.5) * 85)
 		local str = minetest.colorspec_to_colorstring({r=factor, g=factor, b=factor})
@@ -334,7 +333,7 @@ function wither_def:should_attack (object)
 		and luaentity.name ~= "mobs_mc:ghast"
 end
 
-function spawn_one_skeleton (aa, bb, self_pos)
+function spawn_one_skeleton (object, aa, bb, self_pos)
 	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, {"group:solid"})
 	if #nodes > 0 then
 		for i = 1, 10 do
@@ -362,7 +361,7 @@ function spawn_one_skeleton (aa, bb, self_pos)
 				-- attacking their invoker.
 				if entity then
 					local luaentity = entity:get_luaentity ()
-					luaentity._wither_parent = self
+					luaentity._wither_parent = object
 				end
 				return
 			end
@@ -376,10 +375,10 @@ function wither_def:spawn_skeletons (self_pos)
 	-- Search for valid spawn positions within a 15x4x15 area
 	-- around this mob's position on which to spawn wither
 	-- skeletons.
-	spawn_one_skeleton (aa, bb, self_pos)
-	spawn_one_skeleton (aa, bb, self_pos)
-	spawn_one_skeleton (aa, bb, self_pos)
-	spawn_one_skeleton (aa, bb, self_pos)
+	spawn_one_skeleton (self.object, aa, bb, self_pos)
+	spawn_one_skeleton (self.object, aa, bb, self_pos)
+	spawn_one_skeleton (self.object, aa, bb, self_pos)
+	spawn_one_skeleton (self.object, aa, bb, self_pos)
 end
 
 function wither_def:ranged_attack (ws, self_pos, target_pos)
@@ -496,6 +495,7 @@ local WITHER_CHARGE_DAMAGE = 15
 function wither_def:run_ai (dtime, moveresult)
 	local self_pos = self.object:get_pos ()
 	local ws = self._wither_state
+	local did_charge = false
 
 	self:check_attack (self_pos, dtime)
 	if not ws.air_attack then
@@ -518,7 +518,9 @@ function wither_def:run_ai (dtime, moveresult)
 		ws.shoot_delay = math.max (0, ws.shoot_delay - dtime)
 	end
 	if ws.charge_time > 0 then
+		did_charge = true
 		ws.charge_time = math.max (0, ws.charge_time - dtime)
+		self:cancel_navigation ()
 
 		if ws.dir_to_target then
 			local v = self.object:get_velocity ()
@@ -572,7 +574,7 @@ function wither_def:run_ai (dtime, moveresult)
 					ws.dir_to_target = vector.direction (self_pos, target_pos)
 					local yaw = math.atan2 (ws.dir_to_target.z,
 								ws.dir_to_target.x) - math.pi / 2
-					self.object:set_yaw (yaw)
+					self:set_yaw (yaw)
 					self:set_animation ("charge")
 				end
 			else
@@ -582,7 +584,7 @@ function wither_def:run_ai (dtime, moveresult)
 		end
 	end
 
-	if ws.charge_time > 0 then
+	if did_charge then
 		wither_unstuck (self, 2, 0)
 
 		-- Damage players and mobs within a 3x3 radius.

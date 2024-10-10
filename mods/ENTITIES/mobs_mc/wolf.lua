@@ -109,12 +109,12 @@ local wolf = {
 			end
 			-- 1/3 chance of getting tamed
 			if pr:next(1, 3) == 1 then
-				local yaw = self.object:get_yaw()
+				local yaw = self:get_yaw()
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
 					dog:set_properties({texture_holder = self.texture_holder, textures = {add_collar(self)}})
-					dog:set_yaw(yaw)
 					ent = dog:get_luaentity()
+					ent:set_yaw (yaw)
 					ent.owner = clicker:get_player_name()
 					ent.tamed = true
 					ent:set_animation("sit")

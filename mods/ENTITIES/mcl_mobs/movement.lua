@@ -233,43 +233,6 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 	return true
 end
 
-function mob_class:can_jump_cliff()
-	local pos = self.object:get_pos()
-
-	--is there nothing under the block in front? if so jump the gap.
-	local dir_x, dir_z = self:forward_directions()
-	local pos_low = vector.offset(pos, dir_x, -0.5, dir_z)
-	local pos_far = vector.offset(pos, dir_x * 2, -0.5, dir_z * 2)
-	local pos_far2 = vector.offset(pos, dir_x * 3, -0.5, dir_z * 3)
-
-	local nodLow = mcl_mobs.node_ok(pos_low, "air")
-	local nodFar = mcl_mobs.node_ok(pos_far, "air")
-	local nodFar2 = mcl_mobs.node_ok(pos_far2, "air")
-
-	if minetest.registered_nodes[nodLow.name]
-	and minetest.registered_nodes[nodLow.name].walkable ~= true
-
-
-	and (minetest.registered_nodes[nodFar.name]
-	and minetest.registered_nodes[nodFar.name].walkable == true
-
-	or minetest.registered_nodes[nodFar2.name]
-	and minetest.registered_nodes[nodFar2.name].walkable == true)
-
-	then
-		--disable fear heigh while we make our jump
-		self._jumping_cliff = true
-		minetest.after(1, function()
-			if self and self.object then
-				self._jumping_cliff = false
-			end
-		end)
-		return true
-	else
-		return false
-	end
-end
-
 function mob_class:check_jump (self_pos, moveresult)
 	local max_y = nil
 	local dir = vector.zero ()
@@ -298,7 +261,7 @@ function mob_class:check_jump (self_pos, moveresult)
 		-- Verify that the direction of the collision measured as a
 		-- force substantially matches the direction of movement.
 		dir = vector.normalize (dir)
-		local yaw = self.object:get_yaw () + self.rotate
+		local yaw = self:get_yaw ()
 		local d = math.atan2 (dir.z, dir.x) - math.pi / 2
 		local diff = math.atan2 (math.sin (d - yaw), math.cos (yaw - d))
 		return math.abs (diff) < math.rad (40) -- ~40 deg.
@@ -390,13 +353,13 @@ end
 
 function mob_class:look_at (b, clip_to)
 	local s = self.object:get_pos()
-	local yaw = (math.atan2 (b.z - s.z, b.x - s.x) - math.pi / 2) - self.rotate
+	local yaw = (math.atan2 (b.z - s.z, b.x - s.x) - math.pi / 2)
 	if clip_to then
-		local old_yaw = self.object:get_yaw ()
+		local old_yaw = self:get_yaw ()
 		local x = clip_rotation (old_yaw, yaw, clip_to)
 		yaw = x
 	end
-	self.object:set_yaw (yaw)
+	self:set_yaw (yaw)
 end
 
 function mob_class:go_to_pos (b, velocity, animation)
@@ -412,41 +375,6 @@ function mob_class:teleport(target)
 			return
 		end
 	end
-end
-
-function mob_class:check_smooth_rotation(dtime)
-	-- smooth rotation by ThomasMonroe314
-	if self.delay and self.delay > 0 then
-		local yaw = self.object:get_yaw() or 0
-		if self.delay == 1 then
-			yaw = self.target_yaw
-		else
-			local dif = math.abs(yaw - self.target_yaw)
-			if yaw > self.target_yaw then
-				if dif > math.pi then
-					dif = 2 * math.pi - dif -- need to add
-					yaw = yaw + dif / self.delay
-				else
-					yaw = yaw - dif / self.delay -- need to subtract
-				end
-			elseif yaw < self.target_yaw then
-				if dif >math.pi then
-					dif = 2 * math.pi - dif
-					yaw = yaw - dif / self.delay -- need to subtract
-				else
-					yaw = yaw + dif / self.delay -- need to add
-				end
-			end
-			if yaw > (math.pi * 2) then yaw = yaw - (math.pi * 2) end
-			if yaw < 0 then yaw = yaw + (math.pi * 2) end
-		end
-		self.delay = self.delay - 1
-		if self.shaking then
-			yaw = yaw + (math.random() * 2 - 1) * 5 * dtime
-		end
-		self.object:set_yaw(yaw)
-	end
-	-- end rotation
 end
 
 --- Movement mechanics for flying/swimming/landed mobs.
@@ -502,26 +430,24 @@ end
 function mob_class:dolphin_do_go_pos (dtime, moveresult)
 	local target = self.movement_target
 	local pos = self.object:get_pos ()
-	local dist = vector.distance (pos, target)
-
 	local dx, dy, dz = target.x - pos.x,
 		target.y - pos.y,
 		target.z - pos.z
-	local dir = math.atan2 (dz, dx) - math.pi / 2 - self.rotate
+	local dir = math.atan2 (dz, dx) - math.pi / 2
 	local standin = minetest.registered_nodes[self.standing_in]
-	local yaw = self.object:get_yaw ()
+	local yaw = self:get_yaw ()
 	local f = dtime / 0.05
 	local target_yaw = clip_rotation (yaw, dir, self.max_yaw_movement * f)
+	self:set_yaw (target_yaw)
 
 	-- Orient the mob vertically.
 	local speed = self.movement_velocity
 	if standin.groups.water then
-		local old_rot = self.object:get_rotation ()
 		local xz_mag = math.sqrt (dx * dx + dz * dz)
 		local des_pitch
 		if xz_mag > 1.0e-5 or xz_mag < -1.0e-5 then
 			local swim_max_pitch = self.swim_max_pitch
-			local old_pitch = old_rot.x
+			local old_pitch = self:get_pitch ()
 			des_pitch = -math.atan2 (dy, xz_mag)
 
 			if des_pitch > swim_max_pitch then
@@ -533,15 +459,11 @@ function mob_class:dolphin_do_go_pos (dtime, moveresult)
 			local target
 			-- ~50 degrees.
 			target = clip_rotation (old_pitch, des_pitch, 0.8727 * f)
-			self.object:set_rotation ({
-					x = target,
-					y = target_yaw,
-					z = 0,
-			})
+			self:set_pitch (target)
 			des_pitch = target
 		else
 			-- Not moving horizontally.
-			des_pitch = self.object:get_rotation ().x
+			des_pitch = self:get_pitch ()
 		end
 		self.acc_dir.z = math.cos (des_pitch) * speed / 20
 		self.acc_dir.y = -math.sin (des_pitch) * speed / 20
@@ -553,7 +475,8 @@ function mob_class:dolphin_do_go_pos (dtime, moveresult)
 		self.acc_dir.y = 0
 		self.acc_dir.z = 0
 		self._acc_no_gravity = false
-		self.object:set_rotation (vector.new (0, target_yaw, 0))
+		self:set_yaw (target_yaw)
+		self:set_pitch (0)
 	end
 end
 
@@ -968,7 +891,8 @@ function mob_class:check_pace (pos)
 		return true
 	else
 		-- Should pace?
-		if self.ai_idle_time > self.pace_interval then
+		if self.ai_idle_time > self.pace_interval
+			and (self.pace_chance == 1 or math.random (self.pace_chance) == 1) then
 			-- Minecraft mobs pace to random positions
 			-- within a 20 block distance lengthwise and
 			-- 14 blocks vertically.
@@ -1024,7 +948,7 @@ function mob_class:run_ai (dtime, moveresult)
 		end
 	end
 
-	if active then
+	if active and not self._is_idle_activity[self._current_activity] then
 		self.ai_idle_time = 0
 	elseif self.ai_idle_time < IDLE_TIME_MAX then
 		self:set_animation ("stand")
@@ -1093,9 +1017,9 @@ function mob_class:fish_do_go_pos (dtime, moveresult)
 		self._acc_y_fixed = t2
 	end
 	local dir = math.atan2 (dz, dx) - math.pi / 2
-	local rotation = clip_rotation (self.object:get_yaw (), dir,
+	local rotation = clip_rotation (self:get_yaw (), dir,
 					(math.pi / 2) * dtime / 0.05)
-	self.object:set_yaw (rotation)
+	self:set_yaw (rotation)
 end
 
 function mob_class.school_init_group (list)
@@ -1224,10 +1148,10 @@ function mob_class:airborne_do_go_pos (dtime, moveresult)
 	end
 
 	local yaw = math.atan2 (dz, dx) - math.pi / 2
-	local old_yaw = self.object:get_yaw ()
+	local old_yaw = self:get_yaw ()
 	local clipped = clip_rotation (old_yaw, yaw, (math.pi / 2) * dtime / 0.05)
 
-	self.object:set_yaw (clipped)
+	self:set_yaw (clipped)
 	self:set_velocity (vel)
 
 	local xz_magnitude = math.sqrt (dx * dx + dz * dz)
@@ -1265,7 +1189,7 @@ end
 function mob_class:airborne_pacing_target (pos, width, height, groups)
 	-- First, generate a position within 90 degrees of this mob's
 	-- current direction of sight.
-	local dir = self.object:get_yaw ()
+	local dir = self:get_yaw ()
 	dir = { x = -math.sin (dir), z = math.cos (dir), }
 	local node_pos = vector.copy (pos)
 	node_pos.x = math.floor (node_pos.x + 0.5)

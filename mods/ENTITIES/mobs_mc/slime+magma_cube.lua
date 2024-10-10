@@ -129,7 +129,7 @@ local function slime_turn (self, dtime, self_pos)
 			remaining = math.max (0, remaining - dtime)
 			if remaining == 0 then
 				local angle = math.random () * 2 * math.pi
-				self.object:set_yaw (angle - self.rotate)
+				self:set_yaw (angle)
 			end
 		end
 		self._next_turn = remaining
@@ -138,7 +138,7 @@ local function slime_turn (self, dtime, self_pos)
 		local dz, dx = target_pos.z - self_pos.z, target_pos.x - self_pos.x
 		local yaw = math.atan2 (dz, dx) - math.pi / 2
 
-		self.object:set_yaw (yaw)
+		self:set_yaw (yaw)
 	end
 end
 
@@ -215,7 +215,7 @@ local function slime_check_particle (self, dtime, moveresult)
 					glow = self._slime_particle_glow,
 			})
 		end
-		
+
 	end
 	self._slime_was_touching_ground = moveresult.touching_ground
 end
@@ -223,6 +223,7 @@ end
 local function slime_do_attack (self, target)
 	self.attack = target
 	self.target_invisible_time = 3.0
+	self._sight_persistence = 3.0
 	if self._next_jump then
 		self._next_jump = self._next_jump / 3
 	end
