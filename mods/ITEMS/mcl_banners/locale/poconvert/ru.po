@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-08 10:22+0000\n"
+"PO-Revision-Date: 2024-10-10 16:25+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/ru/>\n"
@@ -37,7 +37,7 @@ msgid "Black Banner"
 msgstr "Чёрный флаг"
 
 msgid "Black"
-msgstr "Чёрный"
+msgstr "Черный"
 
 msgid "Red Banner"
 msgstr "Красный флаг"
@@ -49,19 +49,19 @@ msgid "Yellow Banner"
 msgstr "Жёлтый флаг"
 
 msgid "Yellow"
-msgstr "Жёлтый"
+msgstr "Желтый"
 
 msgid "Green Banner"
 msgstr "Зелёный флаг"
 
 msgid "Green"
-msgstr "Зелёный"
+msgstr "Зеленый"
 
 msgid "Cyan Banner"
 msgstr "Бирюзовый флаг"
 
 msgid "Cyan"
-msgstr "Голубой"
+msgstr "Циановый"
 
 msgid "Blue Banner"
 msgstr "Синий флаг"
@@ -103,7 +103,7 @@ msgid "Lime Banner"
 msgstr "Лаймовый флаг"
 
 msgid "Lime"
-msgstr "Зелёный лаймовый"
+msgstr "Лаймовый"
 
 msgid "Light Blue Banner"
 msgstr "Голубой флаг"
@@ -194,10 +194,10 @@ msgid "@1 Thing Charge"
 msgstr "@1 нечто"
 
 msgid "@1 Globe Charge"
-msgstr ""
+msgstr "@1 Заряженный глобус"
 
 msgid "@1 Piglin Charge"
-msgstr ""
+msgstr "@1 Заряженный Пиглин"
 
 msgid "@1 Lozenge"
 msgstr "@1 Ромб в центре"
@@ -260,10 +260,10 @@ msgid "@1 Chief Indented"
 msgstr "@1 гребешки сверху"
 
 msgid "@1 Flow"
-msgstr ""
+msgstr "@1 Поток"
 
 msgid "@1 Guster"
-msgstr ""
+msgstr "@1 Гаст"
 
 msgid "And one additional layer"
 msgstr "И один дополнительный слой"
