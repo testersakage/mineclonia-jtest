@@ -351,6 +351,8 @@ local function clip_rotation (from, to, limit)
 	return from + difference
 end
 
+mcl_mobs.clip_rotation = clip_rotation
+
 function mob_class:look_at (b, clip_to)
 	local s = self.object:get_pos()
 	local yaw = (math.atan2 (b.z - s.z, b.x - s.x) - math.pi / 2)
@@ -948,11 +950,14 @@ function mob_class:run_ai (dtime, moveresult)
 		end
 	end
 
+	if not active then
+		self:set_animation ("stand")
+		self._active_activity = nil
+	end
+
 	if active and not self._is_idle_activity[self._current_activity] then
 		self.ai_idle_time = 0
 	elseif self.ai_idle_time < IDLE_TIME_MAX then
-		self:set_animation ("stand")
-		self._active_activity = nil
 		self.ai_idle_time = self.ai_idle_time + dtime
 		self:cancel_navigation ()
 		self:halt_in_tracks ()

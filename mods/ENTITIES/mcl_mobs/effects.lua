@@ -393,15 +393,14 @@ function mob_class:set_animation_speed(custom_speed)
 		return
 	end
 	local name = anim .. "_speed"
-	if anim ~= "walk" and self.anim ~= "run" then
-		self.object:set_animation_frame_speed (self.animation[name]
-						       or self.animation.speed_normal
-						       or 25)
-		return
-	end
-	local speed = custom_speed or self.animation[name]
+	local normal_speed = self.animation[name]
 		or self.animation.speed_normal
 		or 25
+	if anim ~= "walk" and self.anim ~= "run" then
+		self.object:set_animation_frame_speed (normal_speed)
+		return
+	end
+	local speed = custom_speed or normal_speed
 	local v = self:get_velocity ()
 	local scaled_speed = speed * self.frame_speed_multiplier
 	self.object:set_animation_frame_speed (scaled_speed * math.min (1, v))

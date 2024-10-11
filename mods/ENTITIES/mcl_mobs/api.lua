@@ -411,9 +411,9 @@ function mob_class:on_step(dtime, moveresult)
 	   self:check_particlespawners(dtime)
 	   self:check_item_pickup()
 	else
-	   self:set_animation_speed()
-	   self:check_head_swivel(dtime)
-	   self:set_armor_texture()
+	   self:set_animation_speed ()
+	   self:check_head_swivel (dtime)
+	   self:set_armor_texture ()
 
 	   -- Expel drivers riding submerged mobs.
 	   self:expel_underwater_drivers ()
