@@ -90,7 +90,7 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 		stand_start = 0, stand_end = 0, stand_speed = 15,
 		walk_start = 40, walk_end = 80, walk_speed = 25,
 		run_start = 40, run_end = 80, run_speed = 25,
-		punch_start = 80, punch_end = 90, punch_speed = 5,
+		punch_start = 80, punch_end = 90, punch_speed = 15,
 	},
 	do_custom = function(self, dtime)
 		self:crack_overlay()

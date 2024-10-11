@@ -38,6 +38,8 @@ local wither_def = {
 	hp_min = 500,
 	xp_min = 50,
 	xp_max = 50,
+	head_swivel = "head",
+	bone_eye_height = 0.625,
 	armor = {undead = 80, fleshy = 100},
 	collisionbox = {-0.45, -0.01, -0.45, 0.45, 3.49, 0.45},
 	doll_size_override = { x = 1.2, y = 1.2 },
@@ -75,11 +77,10 @@ local wither_def = {
 	shoot_interval = 1,
 	shoot_offset = -0.5,
 	animation = {
-		walk_speed = 12, run_speed = 12, stand_speed = 12,
+		stand_speed = 12,
 		stand_start = 20, stand_end = 40,
-		walk_start = 20, walk_end = 40,
-		run_start = 20,	run_end = 40,
-		charge_start = 40, charge_end = 46, charge_speed = 12,
+		charge_speed = 12,
+		charge_start = 40, charge_end = 46,
 		charge_loop = false,
 	},
 	harmed_by_heal = true,
@@ -87,9 +88,10 @@ local wither_def = {
 	airborne = true,
 	tracking_distance = 64,
 	view_range = 20,
-	pace_interval = 0.0,
-	pace_chance = 1,
 	player_active_range = 128,
+	gravity_drag = 0.6,
+	fall_damage = 0,
+	fire_damage = 0,
 }
 
 local function wither_register_damage (self)
@@ -146,63 +148,97 @@ function wither_def:on_spawn ()
 	self._death_timer = 0.0
 	self._health_old = properties.hp_max
 	self._spawning = 10
-
-	self._wither_state = {
-		-- Whether to explode and spawn wither skeletons upon
-		-- contact with the ground.
-		pending_explode = false,
-		-- Number of ticks remaining till blocks should be
-		-- destroyed in response to damage.
-		block_destruction_remaining = 0,
-		-- Direction to target during charge.
-		dir_to_target = nil,
-		-- Number of seconds remaining in this charge.
-		charge_time = 0,
-		-- Number of seconds remaining till charge begins.
-		charge_buildup = 0,
-		-- Interval in seconds between firing of skulls.
-		firerate = 1,
-		-- Cooldown period remaining after a round of skulls
-		-- was fired.
-		attack_cooldown = 0,
-		-- Default cooldown period after a round of skulls is
-		-- fired.  Multiplied by two after this wither reaches
-		-- half health.
-		default_attack_cooldown = 2,
-		-- Whether wither ought to fly to a position near the
-		-- player.
-		wants_to_move = false,
-		-- Number of seconds till skulls may be fired again.
-		shoot_delay = 1,
-		-- Counter which upon elapsing will prompt an attempt
-		-- to fire a skull.
-		time_to_discharge = 1,
-		follow_range = 30.0,
-		half_health = properties.hp_max / 2,
-		-- Change in health that should prompt
-		-- a reduction in shelling rate.
-		firerate_reduction_threshold
-			= properties.hp_max / 6,
-		-- Recentest value to trigger such a
-		-- reduction.
-		previous_health_threshold
-			= properties.hp_max,
-		-- Number of skulls fired in total.  Every fourth
-		-- skull should be blue.
-		skulls_fired = 0,
-		-- Time spent idling.
-		time_inactive = 0,
-		-- Flag indicating that the attack cooldown was
-		-- previously set in response to the discharge of a
-		-- blue skull.
-		blue_skull_fired = false,
-		-- Whether wither remains airborne.
-		air_attack = true,
-		-- One if wither has entered the second phase of its
-		-- combat routine.
-		phase = 0,
-	}
 	return true
+end
+
+function wither_def:mob_activate (staticdata, dtime)
+	mcl_mobs.mob_class.mob_activate (self, staticdata, dtime)
+	local properties = self.object:get_properties ()
+	if not self._wither_state then
+		-- Upgrade old withers.
+		self._wither_state = {
+			-- Whether to explode and spawn wither skeletons upon
+			-- contact with the ground.
+			pending_explode = false,
+			-- Number of ticks remaining till blocks should be
+			-- destroyed in response to damage.
+			block_destruction_remaining = 0,
+			-- Direction to target during charge.
+			dir_to_target = nil,
+			-- Number of seconds remaining in this charge.
+			charge_time = 0,
+			-- Number of seconds remaining till charge begins.
+			charge_buildup = 0,
+			-- Interval in seconds between firing of skulls.
+			firerate = 1,
+			-- Cooldown period remaining after a round of skulls
+			-- was fired.
+			attack_cooldown = 0,
+			-- Default cooldown period after a round of skulls is
+			-- fired.  Multiplied by two after this wither reaches
+			-- half health.
+			default_attack_cooldown = 2,
+			-- Whether wither ought to fly to a position near the
+			-- player.
+			wants_to_move = false,
+			-- Number of seconds till skulls may be fired again.
+			shoot_delay = 1,
+			-- Counter which upon elapsing will prompt an attempt
+			-- to fire a skull.
+			time_to_discharge = 1,
+			-- Health threshold at which to switch phases.
+			half_health = properties.hp_max / 2,
+			-- Change in health that should prompt
+			-- a reduction in shelling rate.
+			firerate_reduction_threshold
+				= properties.hp_max / 6,
+			-- Recentest value to trigger such a
+			-- reduction.
+			previous_health_threshold
+				= properties.hp_max,
+			-- Number of skulls fired in total.  Every fourth
+			-- skull should be blue.
+			skulls_fired = 0,
+			-- Time spent idling.
+			time_inactive = 0,
+			-- Flag indicating that the attack cooldown was
+			-- previously set in response to the discharge of a
+			-- blue skull.
+			blue_skull_fired = false,
+			-- Whether wither remains airborne.
+			air_attack = true,
+			-- One if wither has entered the second phase of its
+			-- combat routine.
+			phase = 0,
+			-- Metadata for auxiliary heads.
+			aux_heads = {
+				-- Left.
+				{
+					-- Time remaining till next
+					-- attempt to fire a skull at
+					-- random.
+					next_update = 0,
+					-- Number of attempts elapsed
+					-- since skulls were last
+					-- fired from this head.
+					idle_update = 0,
+					bone = "minihead.left",
+				},
+				-- Right.
+				{
+					-- Time remaining till next
+					-- attempt to fire a skull at
+					-- random.
+					next_update = 0,
+					-- Number of attempts elapsed
+					-- since skulls were last
+					-- fired from this head.
+					idle_update = 0,
+					bone = "minihead.right",
+				},
+			},
+		}
+	end
 end
 
 -- blast damage to entities nearby
@@ -323,7 +359,6 @@ end
 
 function wither_def:should_attack (object)
 	if object:is_player () and self:attack_player_allowed (object) then
-		-- dbg.pp ("Attacking player")
 		return true
 	end
 	local luaentity = object:get_luaentity ()
@@ -453,7 +488,6 @@ end
 local function wither_ascend (self, self_pos, target_pos)
 	local ws = self._wither_state
 	local v = self.object:get_velocity ()
-	v.y = v.y * 0.6
 	if ws.charge_buildup > 0 or ws.charge_time > 0 then
 		if math.abs (v.y) < 0.0009 then
 			v.y = 0
@@ -462,7 +496,7 @@ local function wither_ascend (self, self_pos, target_pos)
 		v.y = v.y - 20.0
 	elseif self.movement_goal == "go_pos" then
 		v.y = (self.movement_target.y - self_pos.y)
-	elseif ws.air_attack then
+	elseif ws.air_attack and self.attack then
 		if v.y < 0 then
 			v.y = 0
 		end
@@ -483,22 +517,57 @@ function wither_def:attack_null (self_pos, dtime, target_pos, line_of_sight)
 end
 
 function wither_def:float_around (self_pos, dtime)
-	if self:check_pace (self_pos, dtime) then
-		self.ai_idle_time = 0
-	else
-		self.ai_idle_time = self.ai_idle_time + dtime
-	end
+	self.ai_idle_time = self.ai_idle_time + dtime
+	self:check_pace (self_pos, dtime)
 end
 
 local WITHER_CHARGE_DAMAGE = 15
+
+function wither_def:ranged_attack_from_head (idx, ws, self_pos, target_pos, blue)
+	local yaw_off = self:get_yaw () + math.pi / 2
+	local distance = idx == 2 and 0.65 or -0.65
+	local x, z = -math.sin (yaw_off) * distance, math.cos (yaw_off) * distance
+	local pos = vector.offset (self_pos, x, -0.1, z)
+
+	if blue then
+		self.arrow = "mobs_mc:wither_skull_strong"
+	else
+		self.arrow = "mobs_mc:wither_skull"
+	end
+	self:discharge_ranged (pos, target_pos)
+end
+
+local function target_eye_height (attack)
+	local luaentity = attack:get_luaentity ()
+
+	if luaentity and luaentity.head_eye_height then
+		return luaentity.head_eye_height
+	elseif attack:is_player () then
+		return attack:get_properties ().eye_height
+	end
+	return 0
+end
+
+local FOURTY_DEG = math.rad (40)
+local TEN_DEG = math.rad (10)
 
 function wither_def:run_ai (dtime, moveresult)
 	local self_pos = self.object:get_pos ()
 	local ws = self._wither_state
 	local did_charge = false
 
-	self:check_attack (self_pos, dtime)
-	if not ws.air_attack then
+	if self:check_attack (self_pos, dtime) then
+		self.ai_idle_time = 0
+	end
+	if (not ws.air_attack or not self.attack)
+		and ws.charge_time == 0 then
+		if self.attack then
+			self.pace_interval = 0.0
+			self.pace_chance = 1
+		else
+			self.pace_interval = 5
+			self.pace_chance = 120
+		end
 		self:float_around (self_pos, dtime)
 	end
 
@@ -518,19 +587,24 @@ function wither_def:run_ai (dtime, moveresult)
 		ws.shoot_delay = math.max (0, ws.shoot_delay - dtime)
 	end
 	if ws.charge_time > 0 then
-		did_charge = true
 		ws.charge_time = math.max (0, ws.charge_time - dtime)
 		self:cancel_navigation ()
 
 		if ws.dir_to_target then
 			local v = self.object:get_velocity ()
-			v.x = ws.dir_to_target.x * 40
-			v.z = ws.dir_to_target.z * 40
-			self.object:set_velocity (v)
 			if ws.charge_time == 0 then
+				-- Arrest movement immediately after
+				-- charge completes.
+				v.x = 0
+				v.z = 0
 				ws.dir_to_target = nil
-				self:set_animation ("walk")
+				self:set_animation ("stand")
+			else
+				v.x = ws.dir_to_target.x * 40
+				v.z = ws.dir_to_target.z * 40
+				did_charge = true
 			end
+			self.object:set_velocity (v)
 		end
 	end
 	if ws.pending_explode
@@ -554,13 +628,102 @@ function wither_def:run_ai (dtime, moveresult)
 		end
 	end
 
-	-- TODO: alternative targets.
+	-- Process idle heads.
+	for idx = 1, 2 do
+		local head = ws.aux_heads[idx]
+		local yaw, pitch
+		yaw = head.yaw or 0
+		pitch = head.pitch or 0
+		head.next_update = head.next_update - dtime
+		local name = "_wither_target_" .. idx
+		local attack = self[name]
+		local attack_pos = attack and attack:get_pos ()
+
+		-- Turn this head towards any creature it is attacking.
+		if attack_pos then
+			-- Look at this target.
+			local head_x, head_y, head_z, base_yaw
+			local head_off = idx == 1 and -0.65 or 0.65
+
+			base_yaw = self:get_yaw () + math.pi / 2
+			head_x = self_pos.x + head_off * -math.sin (base_yaw)
+			head_y = self_pos.y + 0.6
+			head_z = self_pos.z + head_off * math.cos (base_yaw)
+
+			local target_x = attack_pos.x
+			local target_y = attack_pos.y + target_eye_height (attack)
+			local target_z = attack_pos.z
+			local dx, dy, dz = target_x - head_x,
+				target_y - head_y,
+				target_z - head_z
+			local x_magnitude = math.sqrt (dx * dx + dz * dz)
+			yaw = math.atan2 (dx, dz) + self:get_yaw ()
+			pitch = -math.atan2 (dy, x_magnitude)
+		else
+			yaw = 0
+			pitch = 0
+		end
+
+		if head.next_update <= 0 then
+			head.next_update = 0.5 + math.random () * 0.5
+			if head.idle_update >= 15 then
+				head.idle_update = 0
+				local random = {
+					x = self_pos.x + math.random () * 20 - 10,
+					y = self_pos.y + math.random () * 10 - 5,
+					z = self_pos.z + math.random () * 20 - 10,
+				}
+				self:ranged_attack_from_head (idx, ws, self_pos, random, true)
+			end
+			head.idle_update = head.idle_update + 1
+
+			if attack then
+				if attack_pos
+					and self:should_continue_to_attack (attack)
+					and vector.distance (self_pos, attack_pos) <= 30
+					and self:target_visible (self_pos, attack) then
+					head.next_update = 2 + math.random ()
+					head.idle_update = 0
+					self:ranged_attack_from_head (idx, ws, self_pos, attack_pos)
+				else
+					self[name] = nil
+				end
+			else
+				local other_head = idx == 1 and 2 or 1
+				local other_name = "_wither_target_" .. other_head
+				for object in minetest.objects_inside_radius (self_pos, 20) do
+					if self:should_attack (object)
+						and object ~= self.attack
+						and object ~= self[other_name] then
+						self[name] = object
+						break
+					end
+				end
+			end
+		end
+
+		-- Interpolate head yaw and pitch.
+		if yaw ~= head.yaw or pitch ~= head.pitch then
+			head.yaw
+				= mcl_mobs.clip_rotation (head.yaw or 0, yaw, FOURTY_DEG)
+			head.pitch
+				= mcl_mobs.clip_rotation (head.pitch or 0, pitch, TEN_DEG)
+		end
+		local vec = vector.new (head.pitch, head.yaw, 0)
+		local info = {
+			rotation = {
+				vec = vec,
+				absolute = true,
+			},
+		}
+		self.object:set_bone_override (head.bone, info)
+	end
 
 	if ws.block_destruction_remaining > 0 then
 		ws.block_destruction_remaining
 			= math.max (0, ws.block_destruction_remaining - dtime)
 		if ws.block_destruction_remaining == 0 then
-			wither_unstuck (self, 0)
+			wither_unstuck (self, 1, 1)
 		end
 	end
 
