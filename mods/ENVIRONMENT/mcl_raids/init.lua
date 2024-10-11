@@ -28,6 +28,8 @@ local waves = {
 		["mobs_mc:vindicator"] = 5,
 		["mobs_mc:witch"] = 1,
 		["mobs_mc:evoker"] = 1,
+		["mobs_mc:ravager"] = 2,
+		["jockey"] = { name = "mobs_mc:pillager", count = 1 },
 	},
 }
 
@@ -81,14 +83,6 @@ oban_def.on_step = function(self)
 end
 
 core.register_entity(":mcl_raids:ominous_banner",oban_def)
-
-local function extra_spawn(pos)
-	local vin = mcl_mobs.spawn(pos, "mobs_mc:vindicator")
-	if vin then
-		local lvin = vin:get_luaentity()
-		lvin:jock_to("mobs_mc:ravager", vector.new(0,14,0), vector.new(0,0,0))
-	end
-end
 
 function mcl_raids.drop_obanner(pos)
 	local it = ItemStack("mcl_banners:banner_item_white")
@@ -242,15 +236,21 @@ function mcl_raids.spawn_raid(event)
 		local captain = nil
 		local p = vector.offset(spawn_pos,0,1,0)
 		for m,c in pairs(w) do
-			for _ = 1, c do
+			local jockey = m == "jockey"
+			local name = jockey and c.name or m
+			local count = jockey and c.count or c
+			for _ = 1, count do
 				local datatable = {
 					_raid_spawn = 1,
 				}
 				local staticdata = core.serialize (datatable)
-				local mob = mcl_mobs.spawn (p, m, staticdata)
+				local mob = mcl_mobs.spawn (p, name, staticdata)
 				if mob then
 					local l = mob:get_luaentity()
 					if l then
+						if jockey then
+							mob:jock_to("mobs_mc:ravager", vector.new(0,14,0), vector.new(0,0,0))
+						end
 						l.raidmob = true
 						event.health_max = event.health_max + l.health
 						table.insert(event.mobs,mob)
@@ -266,9 +266,6 @@ function mcl_raids.spawn_raid(event)
 					end
 				end
 			end
-		end
-		if event.stage > #waves then
-			extra_spawn(p)
 		end
 		event._raidcaptain = captain
 		core.log("action", "[mcl_raids] Raid Spawned. "
