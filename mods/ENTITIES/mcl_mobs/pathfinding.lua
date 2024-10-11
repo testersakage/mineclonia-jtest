@@ -353,6 +353,7 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 
 	-- Construct initial open set and initialize context for first
 	-- cycle.
+	start.class = self:gwp_classify_node (context, start)
 	start.g = 0
 	start.h = h_to_nearest_target (start, context)
 	start.total_d = 0
@@ -577,9 +578,16 @@ function mob_class:gwp_essay_jump (context, target, parent, floor)
 	return nil
 end
 
-function mob_class:gwp_essay_drop (context, target)
+local gwp_ed_scratch = vector.zero ()
+
+function mob_class:gwp_essay_drop (context, node)
 	local fall_distance = context.fall_distance
-	local lim = target.y - fall_distance
+	local lim = node.y - fall_distance
+	local target = gwp_ed_scratch
+
+	target.x = node.x
+	target.y = node.y
+	target.z = node.z
 	repeat
 		target.y = target.y - 1
 		local class = self:gwp_classify_node (context, target)
@@ -595,6 +603,48 @@ function mob_class:gwp_essay_drop (context, target)
 			return node
 		end
 	until target.y < lim
+	return nil
+end
+
+local gwp_edd_scratch = vector.zero ()
+
+-- Try to descend from the second (or higher) block of a wooden door.
+-- This is necessary for the reason that doors will otherwise always
+-- be considered equivalent to walkable surfaces.
+
+function mob_class:gwp_essay_descend_door (context, object)
+	local fall_distance = context.fall_distance
+	local lim = object.y - fall_distance
+	local target = gwp_edd_scratch
+	local last_class, class
+
+	target.x = object.x
+	target.y = object.y
+	target.z = object.z
+	repeat
+		target.y = target.y - 1
+		last_class = class
+		class = self:gwp_classify_node (context, target)
+		if class ~= "DOOR_WOOD_CLOSED" and class ~= "DOOR_OPEN" then
+			if not last_class then
+				-- No need to descend; reuse the input
+				-- object.
+				return object
+			else
+				local penalty = self.gwp_penalties[last_class]
+				if penalty < 0 then
+					return nil
+				end
+				local node = self:get_gwp_node (context, target.x,
+								target.y + 1, target.z)
+				node.penalty = math.max (penalty, node.penalty)
+				node.class = class
+				return node
+			end
+		end
+	until target.y < lim
+
+	-- It's doors all the way down.
 	return nil
 end
 
@@ -673,6 +723,9 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump)
 				object = self:gwp_essay_jump (context, node, parent, floor)
 			elseif (class == "WATER" and self.floats == 0) then
 				object = self:gwp_essay_drift (context, node, object)
+			elseif (penalty >= 0.0 and (class == "DOOR_WOOD_CLOSED"
+						    or class == "DOOR_OPEN")) then
+				object = self:gwp_essay_descend_door (context, object)
 			-- Any test for `IGNORE' here would simply be
 			-- redundant, as it is always assigned a
 			-- penalty of -1.
@@ -835,7 +888,6 @@ local function gwp_classify_node_1 (self, pos)
 		-- Otherwise, this is walkable.  Adjust its
 		-- class according to its surroundings.
 		return floortype or self:gwp_classify_surroundings (pos, "WALKABLE")
-
 	end
 	return class_1
 end
@@ -1289,7 +1341,7 @@ local function create_path_particles (path, playername, delay, additive)
 	end
 end
 
-local function cancel_test (mob, complete)
+local function cancel_test (mob, complete, sneaking)
 	if complete then
 		local player = minetest.get_player_by_name (complete)
 		if not player then
@@ -1303,6 +1355,14 @@ local function cancel_test (mob, complete)
 
 		local path = mob:gwp_reconstruct (mob.pathfinding_context)
 		create_path_particles (path, complete, 5, 0.2)
+
+		if sneaking then
+			mob.waypoints = path
+			mob.waypoint_age = 0
+			mob.gowp_velocity = mob.movement_speed
+			mob.gowp_animation = "walk"
+			mob._gwp_timeout = 20
+		end
 	end
 	mob.pathfinding_context = nil
 	mob.on_step = mob._old_onstep
@@ -1314,6 +1374,7 @@ function mcl_mobs.maybe_test_pathfinding (mob, clicker)
 		mcl_mobs.players_selecting_mob[name] = mob.object
 		minetest.chat_send_player (name, "Mob selected")
 		mob.stupefied = true
+		mob.waypoints = nil
 	end
 end
 
@@ -1432,6 +1493,7 @@ local function print_node_classification (itemstack, user, pointed_thing)
 			mcl_mobs.players_selecting_mob[playername] = mob
 			minetest.chat_send_player (playername, "Mob selected")
 			entity.stupefied = true
+			entity.waypoints = nil
 		end
 	end
 end
@@ -1495,6 +1557,7 @@ local function pathfind_selected_mob (itemstack, user, pointed_thing)
 	entity.pathfinding_duration = 0
 	local old_step = entity.on_step
 	entity._old_onstep = old_step
+	local sneaking = user:get_player_control ().sneak
 	entity.on_step = function (self, moveresult)
 		if entity.pathfinding_context then
 			local context = self.pathfinding_context
@@ -1504,7 +1567,7 @@ local function pathfind_selected_mob (itemstack, user, pointed_thing)
 				= self.pathfinding_duration + dtime
 			if complete then
 				mobs[playername] = nil
-				cancel_test (self, playername)
+				cancel_test (self, playername, sneaking)
 			end
 			return
 		end
@@ -2329,12 +2392,6 @@ function mob_class:gopath (target, callback_arrived, prioritised, velocity, anim
 	return self.pathfinding_context
 end
 
-function mob_class:interact_with_door(action, target)
-end
-
-function mob_class:do_pathfind_action(action)
-end
-
 local GWP_TIMEOUT_TICKS = 100
 local GWP_TIMEOUT	= 100 / 20
 
@@ -2374,6 +2431,7 @@ function mob_class:gwp_timeout (dtime)
 end
 
 function mob_class:next_waypoint (dtime)
+	self:gwp_close_memorized_doors ()
 	-- Pathfind for at most half the remaining quota.
 	if self.pathfinding_context then
 		-- Continue pathfinding till either the process times
@@ -2425,6 +2483,104 @@ local function bottom_of_node (node)
 	return vector.new (node.x, floor (node.y + 0.5) - 0.5, node.z)
 end
 
+local function is_door_in_waypoints (mob, door)
+	local mob_waypoints = mob.waypoints
+	if not mob_waypoints then
+		return false
+	end
+	local max = #mob_waypoints
+	for i = 0, max - 1 do
+		local node = mob_waypoints[max - i]
+		if vector.equals (node, door) then
+			return true
+		end
+	end
+end
+
+local function is_mob_to_close_door (mob, door)
+	if not mob.doors_to_close then
+		return false
+	end
+	for _, closedoor in pairs (mob.doors_to_close) do
+		if vector.equals (door, closedoor) then
+			return true
+		end
+	end
+	return false
+end
+
+local function xz_distance (v1, v2)
+	local dx, dz = v1.x - v2.x, v1.z - v2.z
+	return math.sqrt (dx*dx + dz*dz)
+end
+
+local function door_has_other_users (self, door)
+	-- Locate users of this door besides `self' who are within two
+	-- blocks of the said door and are pathfinding through it, or
+	-- are within 0.5 blocks and preparing to close it.
+	for object in minetest.objects_inside_radius (door, 2) do
+		local entity
+		entity = object:get_luaentity ()
+		if entity and entity.is_mob and entity ~= self
+			and entity.can_open_doors then
+			local pos = object:get_pos ()
+			if vector.distance (pos, door) <= 2
+				and is_door_in_waypoints (entity, pos) then
+				return true
+			end
+			if math.abs (pos.y - door.y) <= 2.0
+				and xz_distance (pos, door) <= 0.7
+				and is_mob_to_close_door (entity, door) then
+				return true
+			end
+		end
+	end
+end
+
+function mob_class:gwp_close_memorized_doors ()
+	if not self.doors_to_close then
+		return
+	end
+	local self_pos = self.object:get_pos ()
+	local remaining = {}
+	for _, door in pairs (self.doors_to_close) do
+		if math.abs (self_pos.y - door.y) <= 2.0
+			and xz_distance (self_pos, door) <= 0.7 then
+			table.insert (remaining, door)
+		elseif not is_door_in_waypoints (self, door)
+			and vector.distance (self_pos, door) <= 3
+			and not door_has_other_users (self, door) then
+			local node = minetest.get_node (door)
+			if minetest.get_item_group (node.name, "door") ~= 0 then
+				if mcl_doors.is_open (door) then
+					local def = minetest.registered_nodes[node.name]
+					def.on_rightclick (door, node, self)
+				end
+			end
+		end
+	end
+	self.doors_to_close = remaining
+end
+
+function mob_class:gwp_open_and_memorize_door (door)
+	local node = minetest.get_node (door)
+	if minetest.get_item_group (node.name, "door") ~= 0
+		and minetest.get_item_group (node.name, "iron_door") == 0 then
+		local door_node = vector.copy (door)
+		if not mcl_doors.is_open (door) then
+			local def = minetest.registered_nodes[node.name]
+			-- Copy this position, lest it be modified by
+			-- the right click handler.
+			def.on_rightclick (door_node, node, self)
+		end
+		if not self.doors_to_close then
+			self.doors_to_close = { door_node, }
+		else
+			table.insert (self.doors_to_close, door_node)
+		end
+	end
+end
+
 function mob_class:gwp_next_waypoint (dtime)
 	local waypoints = self.waypoints
 	local n_waypoints = #waypoints
@@ -2437,6 +2593,7 @@ function mob_class:gwp_next_waypoint (dtime)
 		return
 	end
 	local next_wp = waypoints[#waypoints]
+	local prev_wp = next_wp
 	local self_pos = self.object:get_pos ()
 	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
 	local dist_to_ycenter = math.abs (next_wp.y - 0.5 - self_pos.y)
@@ -2483,12 +2640,29 @@ function mob_class:gwp_next_waypoint (dtime)
 		end
 		self.movement_target = next_wp_surface
 		self.movement_velocity = self.gowp_velocity or self.movement_speed
+
+		-- Open doors that are encountered, but remember to
+		-- close them behind us.
+		if self.can_open_doors
+			and (next_wp.class == "DOOR_WOOD_CLOSED"
+				or next_wp.class == "DOOR_OPEN") then
+			self:gwp_open_and_memorize_door (next_wp)
+		end
 	else
 		self:cancel_navigation ()
 		self:halt_in_tracks ()
 		if self.callback_arrived then
 			self:callback_arrived ()
 		end
+	end
+
+	-- If a waypoint that has been put behind is a closed door,
+	-- open it also.
+	if prev_wp ~= next_wp
+		and self.can_open_doors
+		and (prev_wp.class == "DOOR_WOOD_CLOSED"
+			or prev_wp.class == "DOOR_OPEN") then
+		self:gwp_open_and_memorize_door (prev_wp)
 	end
 end
 

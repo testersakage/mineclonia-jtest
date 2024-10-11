@@ -1454,7 +1454,7 @@ function mcl_util.calculate_knockback (velocity, factor, standing, x, z)
 	v.x = (velocity.x / 2 + (v.x * 20)) * 0.546
 	v.z = (velocity.z / 2 + (v.z * 20)) * 0.546
 	-- Apply vertical force if standing
-	v.y = standing and (math.min (0.4 * 20, factor * 10)) or 0
+	v.y = standing and (math.min (0.4 * 20, velocity.y / 2.0 + factor * 10)) or velocity.y
 	return v
 end
 
