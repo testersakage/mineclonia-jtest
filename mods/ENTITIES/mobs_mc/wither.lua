@@ -91,7 +91,6 @@ local wither_def = {
 	player_active_range = 128,
 	gravity_drag = 0.6,
 	fall_damage = 0,
-	fire_damage = 0,
 }
 
 local function wither_register_damage (self)
@@ -632,8 +631,6 @@ function wither_def:run_ai (dtime, moveresult)
 	for idx = 1, 2 do
 		local head = ws.aux_heads[idx]
 		local yaw, pitch
-		yaw = head.yaw or 0
-		pitch = head.pitch or 0
 		head.next_update = head.next_update - dtime
 		local name = "_wither_target_" .. idx
 		local attack = self[name]
