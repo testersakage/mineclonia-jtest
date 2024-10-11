@@ -375,6 +375,11 @@ function mob_class:on_step(dtime, moveresult)
 	if self.stupefied then
 		self.object:set_animation_frame_speed (0)
 		self:halt_in_tracks ()
+		if self.waypoints then
+			self:navigation_step (dtime, moveresult)
+			self:movement_step (dtime, moveresult)
+		end
+		self:rotate_step (dtime)
 		self:motion_step (dtime, moveresult)
 		return
 	end

@@ -160,6 +160,7 @@ mcl_mobs.mob_class = {
 		herd_following = true,
 		traveling_to_owner = true,
 	},
+	can_open_doors = false,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
@@ -359,6 +360,7 @@ function mcl_mobs.register_mob(name, def)
 		eye_height = eye_height * 0.75 + init_props.collisionbox[2]
 	end
 
+	local gwp_penalties = mcl_mobs.mob_class.gwp_penalties
 	local final_def = setmetatable(table.merge(def,{
 		initial_properties = table.merge(mcl_mobs.mob_class.initial_properties,init_props),
 		can_despawn = can_despawn,
@@ -367,6 +369,10 @@ function mcl_mobs.register_mob(name, def)
 		hp_min = scale_difficulty(def.hp_min, 5, 1),
 		on_rightclick = create_mob_on_rightclick(def.on_rightclick),
 		dogshoot_count2_max = def.dogshoot_count2_max or (def.dogshoot_count_max or 5),
+		gwp_penalties = def.can_open_doors
+			and table.merge (gwp_penalties, {
+						 DOOR_WOOD_CLOSED = 0.0,
+					}) or gwp_penalties,
 
 		min_light = def.min_light or (def.spawn_class == "hostile" and 0) or 7,
 		max_light = def.max_light or (def.spawn_class == "hostile" and 7) or minetest.LIGHT_MAX + 1,
