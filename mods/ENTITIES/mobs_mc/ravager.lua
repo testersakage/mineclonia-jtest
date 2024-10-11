@@ -8,8 +8,8 @@ mcl_mobs.register_mob("mobs_mc:ravager", {
 	hp_max = 100,
 	xp_min = 5,
 	xp_max = 5,
-	attack_type = "dogshoot",
-	reach = 3, -- Height: 2.9 blocks
+	attack_type = "dogfight",
+	reach = 3,
 	armor = 10,
 	collisionbox = { -0.8, 0, -0.8, 0.8, 2.2, 0.8 },
 	visual = "mesh",
@@ -34,7 +34,7 @@ mcl_mobs.register_mob("mobs_mc:ravager", {
 	animation = {
 		stand_start = 1, stand_end = 40, stand_speed = 10,
 		walk_start = 50, walk_end = 90, speed_normal = 10,
-		run_start = 50, run_end = 90, speed_run = 20,
+		run_start = 50, run_end = 90, run_speed = 20,
 		punch_start = 100, punch_end = 140, punch_speed = 20,
 	},
 })
