@@ -354,21 +354,23 @@ end
 mcl_mobs.clip_rotation = clip_rotation
 
 function mob_class:look_at (b, clip_to)
-	local s = self.object:get_pos()
+	local mob = self:mob_controlling_movement ()
+	local s = mob.object:get_pos()
 	local yaw = (math.atan2 (b.z - s.z, b.x - s.x) - math.pi / 2)
 	if clip_to then
-		local old_yaw = self:get_yaw ()
+		local old_yaw = mob:get_yaw ()
 		local x = clip_rotation (old_yaw, yaw, clip_to)
 		yaw = x
 	end
-	self:set_yaw (yaw)
+	mob:set_yaw (yaw)
 end
 
 function mob_class:go_to_pos (b, velocity, animation)
-	self.movement_goal = "go_pos"
-	self.movement_target = b
-	self.movement_velocity = velocity or self.movement_speed
-	self:set_animation (animation or "walk")
+	local mob = self:mob_controlling_movement ()
+	mob.movement_goal = "go_pos"
+	mob.movement_target = b
+	mob.movement_velocity = velocity or mob.movement_speed
+	mob:set_animation (animation or "walk")
 end
 
 function mob_class:teleport(target)
@@ -379,7 +381,138 @@ function mob_class:teleport(target)
 	end
 end
 
+------------------------------------------------------------------------
+-- Jockeys.
+------------------------------------------------------------------------
+
+function mob_class:jock_to (mob, relative_pos, rot)
+	local jock = minetest.add_entity (self.object:get_pos (), mob)
+	if not jock then return end
+	local entity = jock:get_luaentity ()
+	-- Controlling mobs in jockeys are not saved directly, but in
+	-- the staticdata of their vehicles.
+	self.jockey_vehicle = jock
+	self.object:set_properties ({static_save = false,})
+	entity._jockey_rider = self.object
+	entity._jockey_relative_pos = relative_pos
+	entity._jockey_rot = rot
+	self.object:set_attach (jock, "", relative_pos, rot)
+	entity:set_animation ("jockey")
+	return jock
+end
+
+function mob_class:check_jockey_status ()
+	-- Remove any jockey that is no longer valid and was not
+	-- expressly removed.
+	if self._jockey_rider and not self._jockey_rider:is_valid () then
+		self._jockey_rider = nil
+		self._jockey_staticdata = nil
+		minetest.log ("warning", "Rider of jockeyed mob "
+			      .. self.name .. " disappeared abruptly")
+	end
+
+	-- If this mob's mount has vanished, remove itself also.
+	if self.jockey_vehicle and not self.object:get_attach () then
+		minetest.log ("warning", "Jockeyed mob controlled by "
+			      .. self.name .. " disappeared abruptly")
+		self.object:remove ()
+		return true
+	end
+end
+
+function mob_class:on_deactivate (removal)
+	if self.jockey_vehicle then
+		-- Dismount the jockey if this mob is to be
+		-- permanantly removed, and otherwise, save its
+		-- staticdata into its vehicle.
+		if not removal then
+			local entity = self.jockey_vehicle:get_luaentity ()
+			if entity then
+				-- XXX: is it possible that a jockey's
+				-- passenger should be unloaded
+				-- independently of its vehicle?
+				entity._jockey_rider = nil
+				entity._jockey_staticdata
+					= self:get_staticdata_table ()
+				entity._jockey_staticdata.name = self.name
+			end
+		else
+			local entity = self.jockey_vehicle:get_luaentity ()
+			if entity then
+				entity._jockey_rider = nil
+				entity._jockey_staticdata = nil
+			end
+		end
+	end
+
+	if self._jockey_rider and self._jockey_rider:is_valid () then
+		-- Save the rider's staticdata.
+		local entity = self._jockey_rider:get_luaentity ()
+		local staticdata = entity:get_staticdata_table ()
+		entity.jokey_vehicle = nil
+		self._jockey_rider:remove ()
+		self._jockey_staticdata = staticdata
+		self._jockey_staticdata.name = entity.name
+		self._jockey_rider = nil
+	end
+end
+
+function mob_class:jockey_death ()
+	if self.jockey_vehicle then
+		local entity = self.jockey_vehicle:get_luaentity ()
+		if entity then
+			entity._jockey_staticdata = nil
+			entity._jockey_rider = nil
+		end
+	elseif self._jockey_rider then
+		local entity = self._jockey_rider:get_luaentity ()
+		if entity then
+			self._jockey_rider:set_detach ()
+			self._jockey_rider:set_properties ({static_save = true,})
+			self._jockey_rider = nil
+			self._jockey_staticdata = nil
+			entity.jockey_vehicle = nil
+		end
+	end
+end
+
+function mob_class:restore_jockey ()
+	if self._jockey_staticdata and not self._jockey_rider then
+		local name = self._jockey_staticdata.name
+		if not name then
+			self._jockey_staticdata = nil
+			return
+		end
+		-- Don't serialize name.
+		self._jockey_staticdata.name = nil
+		local serialized = minetest.serialize (self._jockey_staticdata)
+		local jock = minetest.add_entity (self.object:get_pos (),
+						  name, serialized)
+		if jock then
+			local entity = jock:get_luaentity ()
+			local relative_pos = self._jockey_relative_pos
+			local rot = self._jockey_rot
+			entity.jockey_vehicle = self.object
+			jock:set_properties ({static_save = false,})
+			jock:set_attach (self.object, "", relative_pos, rot)
+			self._jockey_rider = jock
+			entity:set_animation ("jockey")
+		end
+		self._jockey_staticdata = nil
+	end
+end
+
+function mob_class:mob_controlling_movement ()
+	if self.jockey_vehicle then
+		local attached = self.object:get_attach ()
+		return (attached and attached:get_luaentity ()) or self
+	end
+	return self
+end
+
+--------------------------------------------------------------------------------
 --- Movement mechanics for flying/swimming/landed mobs.
+--------------------------------------------------------------------------------
 
 function mob_class:do_go_pos (dtime, moveresult)
 	local target = self.movement_target or vector.zero ()
@@ -519,24 +652,26 @@ function mob_class:do_strafe (dtime, moveresult)
 	self.acc_dir.z = sz
 end
 
-function mob_class:halt_in_tracks (immediate)
-	self.acc_dir.z = 0
-	self.acc_dir.y = 0
-	self.acc_dir.x = 0
-	self.acc_speed = 0
-	self._acc_movement_speed = 0
-	self._acc_y_fixed = nil
-	self.movement_goal = nil
-	self._acc_no_gravity = false
+function mob_class:halt_in_tracks (immediate, keep_animation)
+	local mob = self:mob_controlling_movement ()
+	mob.acc_dir.z = 0
+	mob.acc_dir.y = 0
+	mob.acc_dir.x = 0
+	mob.acc_speed = 0
+	mob._acc_movement_speed = 0
+	mob._acc_y_fixed = nil
+	mob.movement_goal = nil
+	mob._acc_no_gravity = false
 
-	if self._current_animation == "walk"
-		or self._current_animation == "run" then
-		self:set_animation ("stand")
+	if not keep_animation
+		and (mob._current_animation == "walk"
+			or mob._current_animation == "run") then
+		mob:set_animation ("stand")
 	end
 
 	if immediate then
-		self.object:set_acceleration (vector.new(0,0,0))
-		self.object:set_velocity (vector.new(0,0,0))
+		mob.object:set_acceleration (vector.new(0,0,0))
+		mob.object:set_velocity (vector.new(0,0,0))
 	end
 end
 
@@ -591,15 +726,17 @@ function mob_class:navigation_step (dtime, moveresult)
 end
 
 function mob_class:cancel_navigation ()
-	self.pathfinding_context = nil
-	self.waypoints = nil
-	self.stupid_target = nil
-	self.movement_goal = nil
+	local mob = self:mob_controlling_movement ()
+	mob.pathfinding_context = nil
+	mob.waypoints = nil
+	mob.stupid_target = nil
+	mob.movement_goal = nil
 end
 
 function mob_class:go_to_stupidly (pos, velocity)
-	self.stupid_target = pos
-	self.stupid_velocity = velocity or self.movement_speed
+	local mob = self:mob_controlling_movement ()
+	mob.stupid_target = pos
+	mob.stupid_velocity = velocity or mob.movement_speed
 end
 
 --- Mob AI.
@@ -729,14 +866,15 @@ function mob_class:check_avoid (self_pos)
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
 		else
+			local mob = self:mob_controlling_movement ()
 			local avoid_pos = self.avoiding:get_pos ()
 			local distance = vector.distance (self_pos, avoid_pos)
 			if distance < 7.0 then
-				self.gowp_velocity
-					= self.movement_speed * self.runaway_bonus_near
+				mob.gowp_velocity
+					= mob.movement_speed * self.runaway_bonus_near
 			else
-				self.gowp_velocity
-					= self.movement_speed * self.runaway_bonus_far
+				mob.gowp_velocity
+					= mob.movement_speed * self.runaway_bonus_far
 			end
 		end
 		return true
@@ -774,9 +912,8 @@ function mob_class:check_avoid (self_pos)
 		if target then
 			local pos = self:target_away_from (self_pos, target_pos)
 			if pos and vector.distance (pos, target_pos) > max_distance then
-				local initial_velocity
-					= self.movement_speed * self.runaway_bonus_near
-				self:gopath (pos, nil, false, initial_velocity)
+				local bonus = self.runaway_bonus_near
+				self:gopath (pos, nil, false, bonus)
 				self.avoiding = target
 				return "avoiding"
 			end
@@ -843,8 +980,7 @@ function mob_class:check_avoid_sunlight (pos)
 		local tpos = self:target_in_shade (pos, 10, 3)
 
 		if tpos then
-			self:gopath (tpos, nil, true,
-				     self.movement_speed * self.run_bonus)
+			self:gopath (tpos, nil, true, self.run_bonus)
 			self.avoiding_sunlight = true
 			return "avoiding_sunlight"
 		end
@@ -872,8 +1008,7 @@ function mob_class:check_frightened (pos)
 				tpos = self:pacing_target (pos, 5, 4, {"group:solid"})
 			end
 			if tpos then
-				self:gopath (tpos, nil, true,
-					     self.movement_speed * self.run_bonus)
+				self:gopath (tpos, nil, true, self.run_bonus)
 				self.frightened = true
 				return "frightened"
 			end
@@ -907,8 +1042,7 @@ function mob_class:check_pace (pos)
 			end
 			local width, height = self.pace_width, self.pace_height
 			local target = self:pacing_target (pos, width, height, groups)
-			local speed = self.movement_speed * self.pace_bonus
-			if target and self:gopath (target, nil, false, speed) then
+			if target and self:gopath (target, nil, false, self.pace_bonus) then
 				self.pacing = true
 				return "pacing"
 			end
@@ -934,24 +1068,29 @@ function mob_class:run_ai (dtime, moveresult)
 	self._moveresult = moveresult
 
 	local active = nil
-	for _, fn in ipairs (self.ai_functions) do
-		active = fn (self, pos, dtime)
 
-		if active then
-			if active ~= true then
-				local current = self._active_activity
-				-- Cancel the current activity.
-				if current and current ~= active then
-					self[current] = nil
+	-- Don't run AI if controlled as a jockey.
+	if not self._jockey_rider then
+		for _, fn in ipairs (self.ai_functions) do
+			active = fn (self, pos, dtime)
+
+			if active then
+				if active ~= true then
+					local current = self._active_activity
+					-- Cancel the current activity.
+					if current and current ~= active then
+						self[current] = nil
+					end
+					self._active_activity = active
 				end
-				self._active_activity = active
+				break
 			end
-			break
 		end
 	end
 
 	if not active then
-		self:set_animation ("stand")
+		local mob = self:mob_controlling_movement
+		mob:set_animation ("stand")
 		self._active_activity = nil
 	end
 
@@ -959,8 +1098,11 @@ function mob_class:run_ai (dtime, moveresult)
 		self.ai_idle_time = 0
 	elseif self.ai_idle_time < IDLE_TIME_MAX then
 		self.ai_idle_time = self.ai_idle_time + dtime
-		self:cancel_navigation ()
-		self:halt_in_tracks ()
+
+		if not self._jockey_rider then
+			self:cancel_navigation ()
+			self:halt_in_tracks ()
+		end
 	end
 end
 

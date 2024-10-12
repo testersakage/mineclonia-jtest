@@ -182,7 +182,7 @@ local parrot_def = {
 		check_mobimitate (self,dtime)
 		-- Lest sit_if_ordered should interrupt perching.
 		if self.object:get_attach () and not self.perching then
-			self.object:detach ()
+			self.object:set_detach ()
 		end
 	end,
 	do_punch = function(self,puncher) --do_punch is the mcl_mobs_redo variant - it gets called by on_punch later....
@@ -204,7 +204,7 @@ function parrot_def:check_perch (self_pos, dtime)
 		if not self.perching then
 			-- Perching was interrupted, and therefore
 			-- this object must be detached.
-			self.object:detach ()
+			self.object:set_detach ()
 			return false
 		end
 		local n1 = minetest.get_node (vector.offset (self_pos, 0, -0.6, 0)).name

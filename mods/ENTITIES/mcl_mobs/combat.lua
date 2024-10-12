@@ -4,14 +4,6 @@ local damage_enabled = minetest.settings:get_bool("enable_damage", true)
 local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
 
--- check if daytime and also if mob is docile during daylight hours
-function mob_class:day_docile()
-	if self.docile_by_day and self.time_of_day > 0.2 and self.time_of_day < 0.8 then
-		return true
-	end
-	return false
-end
-
 local SIGHT_PERSISTENCE = 3.0
 
 function mob_class:do_attack(obj, persistence)
@@ -20,9 +12,10 @@ function mob_class:do_attack(obj, persistence)
 	end
 
 	-- Attack!!!
+	local mover = self:mob_controlling_movement ()
 	self.attack = obj
 	self.attacking = false
-	self:set_animation ("run")
+	mover:set_animation ("run")
 
 	-- Abandon after obj disappears for longer than three seconds.
 	self.target_invisible_time = persistence or SIGHT_PERSISTENCE
@@ -455,7 +448,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	-- Stop if the target is in range and has been for a second.
 	if dist < 15 and vistime >= 1 then
 		self:cancel_navigation ()
-		self:halt_in_tracks ()
+		self:halt_in_tracks (false, true)
 		self._strafe_time = self._strafe_time + dtime
 	else
 		if self:check_timer ("bowshoot_pathfind", 0.5) then
@@ -475,6 +468,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 		end
 		self._strafe_time = 0
 	end
+	local mover = self:mob_controlling_movement ()
 	-- Target in range?
 	if self._strafe_time > -1 then
 		-- Don't allow target to approach too close or move
@@ -485,22 +479,26 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 			self._z_strafe = -1
 		end
 
-		self.movement_goal = "strafe"
-		self.movement_velocity = self.movement_speed * 0.25
-		self.strafe_direction = { x = self._x_strafe * 0.5,
-					  z = self._z_strafe * 0.5, }
+		mover.movement_goal = "strafe"
+		mover.movement_velocity = mover.movement_speed * 0.25
+		mover.strafe_direction = {
+			x = self._x_strafe * 0.5,
+			z = self._z_strafe * 0.5,
+		}
 		self:look_at (target_pos)
-		if not self._shoot_time then
-			self:set_animation ("run")
+		if not self._shoot_time or self ~= mover then
+			mover:set_animation ("run")
 		else
-			self:set_animation ("shoot")
+			mover:set_animation ("shoot")
 		end
 	end
 
 	if not self._shoot_time then
 		if self._shoot_timer <= 0 and vistime >= -3 then
 			if line_of_sight then
-				self:set_animation ("shoot")
+				if self == mover then
+					mover:set_animation ("shoot")
+				end
 				self._shoot_time = 0
 				self._shoot_timer = 0
 			end
@@ -510,13 +508,13 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	else
 		-- If no longer visible, clear shooting counter.
 		if not line_of_sight and vistime < -3 then
-			self:set_animation ("run")
+			mover:set_animation ("run")
 			self.shoot_time = nil
 		elseif line_of_sight and self._shoot_time > 1 then
 			-- Fire arrow.
 			self._shoot_time = nil
 			self._shoot_timer = self.shoot_interval or 1
-			self:set_animation ("run")
+			mover:set_animation ("run")
 
 			local vec = {
 				x = target.x - shoot_pos.x,
@@ -765,23 +763,24 @@ function mob_class:check_attack (self_pos, dtime)
 		end
 	else
 		local target_pos
+		local mover = self:mob_controlling_movement ()
 		if not self.attack:is_valid () then
 			self.attack = nil
-			self:set_animation ("stand")
+			mover:set_animation ("stand")
 			return true
 		end
 		-- If it's no longer possible to attack the
 		-- target, abandon it immediately.
 		if not self:should_continue_to_attack (self.attack) then
 			self.attack = nil
-			self:set_animation ("stand")
+			mover:set_animation ("stand")
 			return true
 		end
 		target_pos = self.attack:get_pos ()
 		local distance = vector.distance (self_pos, target_pos)
 		if distance > self.tracking_distance then
 			self.attack = nil
-			self:set_animation ("stand")
+			mover:set_animation ("stand")
 			return true
 		end
 		local line_of_sight = self:target_visible (self_pos, self.attack)
@@ -791,7 +790,7 @@ function mob_class:check_attack (self_pos, dtime)
 
 			if t < 0 then
 				self.attack = nil
-				self:set_animation ("stand")
+				mover:set_animation ("stand")
 				return true
 			end
 		else
