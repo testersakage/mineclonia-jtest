@@ -50,26 +50,7 @@ function mob_class:check_timer(timer, interval)
 	return false
 end
 
-function mob_class:jock_to(mob, reletive_pos, rot)
-	self.jockey = mob
-	local jock = minetest.add_entity(self.object:get_pos(), mob)
-	if not jock then return end
-	jock:get_luaentity().docile_by_day = false
-	jock:get_luaentity().riden_by_jock = true
-	self.object:set_attach(jock, "", reletive_pos, rot)
-	return jock
-end
-
---[[
-NOTE: This function is not called when something is about to despawn.
-
-It is called every 18 seconds.
-
-DO NOT change the state of the mob in this function!
-
-Edit the copied state so it's serialized in the state you need to.
-]]
-function mob_class:get_staticdata()
+function mob_class:get_staticdata_table ()
 	local pos = self.object:get_pos()
 	if not mcl_mobs.check_vector(pos) then
 		self.object:remove()
@@ -106,8 +87,29 @@ function mob_class:get_staticdata()
 	else
 		tmp._mcl_potions = {}
 	end
+	return tmp
+end
 
-	return minetest.serialize(tmp)
+--[[
+NOTE: This function is not called when something is about to despawn.
+
+It is called every 18 seconds.
+
+DO NOT change the state of the mob in this function!
+
+Edit the copied state so it's serialized in the state you need to.
+]]
+function mob_class:get_staticdata()
+	local data = self:get_staticdata_table ()
+
+	-- Preserve the rider, which is not persisted itself.
+	if self._jockey_rider and self._jockey_rider:is_valid () then
+		local entity = self._jockey_rider:get_luaentity ()
+		local rider_data = entity:get_staticdata_table ()
+		rider_data.name = entity.name
+		data._jockey_staticdata	= rider_data
+	end
+	return minetest.serialize (data)
 end
 
 function mob_class:valid_texture(def_textures)
@@ -277,10 +279,11 @@ function mob_class:mob_activate(staticdata, dtime)
 	self._current_animation = nil
 	self:set_animation( "stand")
 
-	if self.riden_by_jock then --- Keep this function before self.on_spawn() is run.
+	if self.riden_by_jock then --- Old-style jockeys.
 		self.object:remove()
 		return
 	end
+	self:restore_jockey ()
 
 	if self.on_spawn and not self.on_spawn_run then
 		if self:on_spawn() == false then
@@ -369,6 +372,9 @@ function mob_class:on_step(dtime, moveresult)
 	local pos_head = vector.offset (pos, 0, head_y, 0)
 	self.head_in = mcl_mobs.node_ok(pos_head, "air").name
 
+	if self:check_jockey_status () then
+		return
+	end
 	self:falling (pos)
 	self:check_dying ()
 

@@ -392,7 +392,8 @@ function mob_class:gwp_cycle (context, timeout)
 		node.covered = true
 		n_total = n_total + 1
 
-		-- Evaluate this node...does it arrive at any target?
+		-- Evaluate this node...does it constitute an arrival
+		-- at any target?
 		for _, target in ipairs (context.targets) do
 			if manhattan3d (node.x, node.y, node.z,
 					target.x, target.y, target.z)
@@ -2372,24 +2373,26 @@ end
 
 local MAX_STALE_PATH_AGE = 2.25
 
-function mob_class:gopath (target, callback_arrived, prioritised, velocity, animation, tolerance)
-	if self.waypoints then
-		local wp_target = self.waypoints[1]
+function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, animation, tolerance)
+	local mob = self:mob_controlling_movement ()
+
+	if mob.waypoints then
+		local wp_target = mob.waypoints[1]
 
 		-- Attempt to reuse existing paths if possible.
 		if wp_target and wp_target.x == floor (target.x + 0.5)
 			and wp_target.y == floor (target.y + 0.5)
 			and wp_target.z == floor (target.z + 0.5)
-			and self.waypoint_age < MAX_STALE_PATH_AGE then
-			return
+			and mob.waypoint_age < MAX_STALE_PATH_AGE then
+			return true
 		end
 	end
 
-	self.gowp_velocity = velocity
-	self.gowp_animation = animation or "walk"
-	self.pathfinding_context = self:gwp_initialize ({target})
-	self.callback_arrived = callback_arrived
-	return self.pathfinding_context
+	mob.gowp_velocity = speed_bonus and speed_bonus * mob.movement_speed
+	mob.gowp_animation = animation or "walk"
+	mob.pathfinding_context = self:gwp_initialize ({target})
+	mob.callback_arrived = callback_arrived
+	return mob.pathfinding_context
 end
 
 local GWP_TIMEOUT_TICKS = 100

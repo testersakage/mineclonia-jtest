@@ -596,7 +596,16 @@ function mob_class:kill_me(msg)
 	if logging then
 		minetest.log("action", "[mcl_mobs] Mob " .. self.name .. " despawns at " .. minetest.pos_to_string(self.object:get_pos(), 1) .. ": " .. msg)
 	end
-
+	if self._jockey_rider then
+		if self._jockey_rider:is_valid () then
+			-- Detach this rider.
+			local entity = self._jockey_rider:get_luaentity ()
+			self._jockey_rider:set_properties ({static_save = true,})
+			self._jockey_rider:set_detach ()
+			entity.jockey_vehicle = nil
+		end
+		self._jockey_rider = nil
+	end
 	self:safe_remove()
 end
 
