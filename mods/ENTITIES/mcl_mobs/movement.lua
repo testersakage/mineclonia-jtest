@@ -926,6 +926,7 @@ function mob_class:check_following (self_pos, dtime)
 	if self.following then
 		-- Can this mob continue to follow its target?
 		local pos = self.following:get_pos ()
+		local must_stop = false
 		if not pos then
 			self.following = nil
 			self.follow_cooldown = 4
@@ -936,17 +937,20 @@ function mob_class:check_following (self_pos, dtime)
 			if not self:follow_holding (self.following) then
 				distance = nil
 			end
-			if not distance or distance > self.follow_distance
+			if not distance
+				or distance > self.follow_distance
 				or distance <= self.stop_distance then
-				self:halt_in_tracks ()
-				self:set_animation ("stand")
 				if not distance or distance > self.follow_distance then
 					self.following = nil
 					self.follow_cooldown = 4
 				end
+				self:halt_in_tracks ()
+				self:cancel_navigation ()
+				self:set_animation ("stand")
+				must_stop = true
 			end
 		end
-		if self.following then
+		if self.following and not must_stop then
 			-- check_head_swivel is responsible for
 			-- looking at the target.
 			self:go_to_stupidly (pos)
