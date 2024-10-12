@@ -278,8 +278,10 @@ Fields not mentioned in this document can also be added as custom fields for the
 		--maximum number of items dropped.
 	},
 
-	textures = {},
-	-- holds a table list of textures to be used for mob, or you could use multiple lists inside another table for random selection e.g. { {"texture1.png"}, {"texture2.png"} }
+	texture_list = { { texture_var1_1.png, texture_var1_2.png, ...}, { texture_var2_1.png, texture_var2_2.png, ... } ... },
+	-- holds a list of texture variants for the mob, each element contains a list of textures to be applied to the mob
+        -- for backwards compatibility the key ``textures`` can be used instead of ``texture_list``
+        -- for backwards compatibility a non nested list of textures can be used if there is only one variant
 
 	child_texture = {},
 	-- holds the texture table for when baby mobs are used.

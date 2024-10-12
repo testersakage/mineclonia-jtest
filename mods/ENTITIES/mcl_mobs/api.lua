@@ -233,11 +233,6 @@ function mob_class:update_textures()
 	--If textures in definition change, reload textures
 	if not self:valid_texture(def.texture_list) then
 
-		-- compatiblity with old simple mobs textures
-		if type(def.texture_list[1]) == "string" then
-			def.texture_list = {def.texture_list}
-		end
-
 		if not self.texture_selected then
 			local c = 1
 			if #def.texture_list > c then c = #def.texture_list end

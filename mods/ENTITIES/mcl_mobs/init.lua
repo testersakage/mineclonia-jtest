@@ -376,10 +376,18 @@ function mcl_mobs.register_mob(name, def)
 		can_despawn = true
 	end
 
+	-- compatiblity with old mob texture_list specification
 	if def.textures then
 		def.texture_list = table.copy(def.textures)
 		def.textures = nil
+		core.log("warning", "[mcl_mobs] " .. name .. " is using decprecated texture list key 'textures'. Please use 'texture_list' instead.")
 	end
+
+	if type(def.texture_list[1]) == "string" then
+		def.texture_list = { def.texture_list }
+		core.log("warning", "[mcl_mobs] " .. name .. " is using decprecated non nested texture list format. Please use a list of lists instead.")
+	end
+
 
 	local init_props = {}
 	for _,k in pairs(object_properties) do
