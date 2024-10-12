@@ -1,3 +1,4 @@
+local mobs_griefing = minetest.settings:get_bool("mobs_griefing", false)
 mcl_mobs.register_mob("mobs_mc:allay", {
 	type = "animal",
 	spawn_class = "passive",
@@ -40,6 +41,61 @@ mcl_mobs.register_mob("mobs_mc:allay", {
 		--shoot_start = 0, shoot_end = 0, die_speed = 0,
 		--die_start = 0, die_end = 0, die_speed = 0,--die_loop = 0,
 	},
+	_set_item = function (self, stack, clicker)
+		if clicker:is_player() then
+			self._player = clicker:get_player_name()
+			self._given_item = stack:to_string()
+			self.pick_up = {stack:get_name() }
+		end
+	end,
+	_drop_items = function(self, only_picked_up)
+		if not self._given_item then return end
+		minetest.add_item(self.object:get_pos(), self._picked_up_item)
+		self._picked_up_item = nil
+		if not only_picked_up then
+			minetest.add_item(self.object:get_pos(), self.item)
+			self._given_item = nil
+			self.pick_up = nil
+		end
+	end,
+	on_pick_up = function(self, l)
+		if not mobs_griefing then return end
+		self._picked_up_item = l.itemstring
+		l.object:remove()
+	end,
+	on_rightclick = function(self, clicker)
+		if not mobs_griefing then return end
+		local wi = clicker:get_wielded_item()
+		self:_drop_items()
+		if not wi:is_empty() then
+			self:_set_item(wi, clicker)
+		end
+	end,
+	do_custom = function(self)
+		if not self:check_timer("allay_item_scan", 3) then return end
+		if not self._picked_up_item and self._given_item then
+			local pos = self.object:get_pos()
+			for o in minetest.objects_inside_radius(pos, self.view_range) do
+				local l =o:get_luaentity()
+				local opos = o:get_pos()
+				if l and l.name == "__builtin:item" and l.itemstring == ItemStack(self._given_item):get_name() and minetest.line_of_sight(pos, opos)then
+					self:go_to_pos(opos)
+				end
+			end
+		elseif self._picked_up_item then
+			local pl = minetest.get_player_by_name(self._player)
+			if pl then
+				local pos = self.object:get_pos()
+				local plpos = pl:get_pos()
+				local dst = vector.distance(pos, plpos)
+				if dst <= 3 then
+					self:_drop_items(true)
+				elseif dst > self.view_range and minetest.line_of_sight(pos, plpos) then
+					self:go_to_pos(plpos)
+				end
+			end
+		end
+	end
 })
 
 mcl_mobs.register_egg("mobs_mc:allay", "Allay", "#38e0e5", "#f7f8f8", 0)
