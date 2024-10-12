@@ -28,7 +28,6 @@ local waves = {
 		["mobs_mc:vindicator"] = 5,
 		["mobs_mc:witch"] = 1,
 		["mobs_mc:evoker"] = 1,
-		["mobs_mc:ravager"] = 2,
 		["jockey"] = { name = "mobs_mc:pillager", count = 1 },
 	},
 }
@@ -38,6 +37,7 @@ local extra_wave = {
 	["mobs_mc:vindicator"] = 5,
 	["mobs_mc:witch"] = 1,
 	["mobs_mc:evoker"] = 1,
+	["mobs_mc:ravager"] = 2,
 }
 
 local oban_layers = {
