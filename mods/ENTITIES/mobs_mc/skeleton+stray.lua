@@ -100,7 +100,7 @@ local skeleton = {
 	fear_height = 4,
 	attack_type = "bowshoot",
 	specific_attack = {
-		"mobs_mc:iron_golem"
+		"mobs_mc:iron_golem",
 	},
 	arrow = "mcl_bows:arrow_entity",
 	shoot_arrow = function(self, pos, dir)

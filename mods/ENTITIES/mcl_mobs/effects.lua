@@ -213,10 +213,8 @@ function mob_class:set_animation(anim, fixed_frame)
 		return
 	end
 
-	if self.jockey and self.object:get_attach() then
+	if self.jockey_vehicle and self.object:get_attach () then
 		anim = "jockey"
-	elseif not self.object:get_attach() then
-		self.jockey = nil
 	end
 
 	if self.dead and anim ~= "die" and anim ~= "stand" then

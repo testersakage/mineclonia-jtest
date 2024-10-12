@@ -166,7 +166,9 @@ function mob_class:collision()
 		local ent = object:get_luaentity()
 		local is_player = object:is_player ()
 		if (pushable and is_player)
-			or (mob_pushable and ent and ent.is_mob and object ~= self.object) then
+			or (mob_pushable and ent and ent.is_mob
+			    and object ~= self.object
+			    and object ~= self._jockey_rider) then
 			local pos2 = object:get_pos()
 			local r1 = (math.random (300) - 150) / 2400
 			local r2 = (math.random (300) - 150) / 2400
@@ -213,6 +215,7 @@ end
 -- check if mob is dead or only hurt
 function mob_class:check_for_death(cause, cmi_cause)
 	if self.dead then
+		self:jockey_death ()
 		return true
 	end
 
@@ -243,6 +246,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 	end
 
 	self:mob_sound("death")
+	self:jockey_death ()
 
 	-- execute custom death function
 	if self.on_die then
@@ -253,11 +257,6 @@ function mob_class:check_for_death(cause, cmi_cause)
 			self:safe_remove()
 			return true
 		end
-	end
-
-	if self.jockey or self.riden_by_jock then
-		self.riden_by_jock = nil
-		self.jockey = nil
 	end
 	self.dead = true
 	self.attack = nil
@@ -825,9 +824,6 @@ local function horiz_collision (v, moveresult)
 
 	return moveresult.collides and not (moveresult.standing_on_object or moveresult.touching_ground)
 end
-
---- TODO: correct uses of fall_speed and other modified fields
---- TODO: mob mounting
 
 local function clamp (num, min, max)
 	return math.min (max, math.max (num, min))
