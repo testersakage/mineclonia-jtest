@@ -1089,7 +1089,7 @@ function mob_class:run_ai (dtime, moveresult)
 	end
 
 	if not active then
-		local mob = self:mob_controlling_movement
+		local mob = self:mob_controlling_movement ()
 		mob:set_animation ("stand")
 		self._active_activity = nil
 	end
