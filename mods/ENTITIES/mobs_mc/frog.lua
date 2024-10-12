@@ -32,7 +32,7 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	visual = "mesh",
 	mesh = "mobs_mc_frog.b3d",
 	drawtype = "front",
-	textures = {
+	texture_list = {
 		{"mobs_mc_frog.png"},
 	},
 	sounds = {
@@ -173,7 +173,9 @@ mcl_mobs.register_mob("mobs_mc:tadpole", {
 	visual = "mesh",
 	mesh = "mobs_mc_tadpole.b3d",
 	visual_size = { x = 10, y = 10 },
-	textures = { "mobs_mc_tadpole.png" },
+	texture_list = {
+		{"mobs_mc_tadpole.png"},
+	},
 	makes_footstep_sound = false,
 	swims = true,
 	breathes_in_water = true,
