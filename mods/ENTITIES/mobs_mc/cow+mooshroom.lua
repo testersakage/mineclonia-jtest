@@ -18,7 +18,7 @@ local cow_def = {
 	spawn_in_group_min = 3,
 	visual = "mesh",
 	mesh = "mobs_mc_cow.b3d",
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_cow.png",
 			"blank.png",
@@ -117,9 +117,15 @@ local mooshroom = table.merge(cow_def, {
 	description = S("Mooshroom"),
 	spawn_in_group_min = 4,
 	spawn_in_group = 8,
-	textures = {
-		{"mobs_mc_mooshroom.png", "mobs_mc_mushroom_red.png"},
-		{"mobs_mc_mooshroom_brown.png", "mobs_mc_mushroom_brown.png" },
+	texture_list = {
+		{
+			"mobs_mc_mooshroom.png",
+			"mobs_mc_mushroom_red.png",
+		},
+		{
+			"mobs_mc_mooshroom_brown.png",
+			"mobs_mc_mushroom_brown.png",
+		},
 	},
 })
 

@@ -33,7 +33,7 @@ local silverfish = {
 	collisionbox = {-0.2, -0.0, -0.2, 0.2, 0.3, 0.2},
 	visual = "mesh",
 	mesh = "mobs_mc_silverfish.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_silverfish.png"},
 	},
 	visual_size = {x=3, y=3},

@@ -27,8 +27,8 @@ local salmon = {
 	collisionbox = {-0.35, 0.0, -0.35, 0.35, 0.4, 0.35},
 	visual = "mesh",
 	mesh = "extra_mobs_salmon.b3d",
-	textures = {
-		{"extra_mobs_salmon.png"}
+	texture_list = {
+		{"extra_mobs_salmon.png"},
 	},
 	sounds = {
 	},

@@ -60,7 +60,7 @@ local spider = {
 	collisionbox = {-0.7, -0.01, -0.7, 0.7, 0.89, 0.7},
 	visual = "mesh",
 	mesh = "mobs_mc_spider.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_spider.png"},
 	},
 	visual_size = {x=1, y=1},
@@ -292,7 +292,7 @@ mcl_mobs.register_mob ("mobs_mc:spider", spider)
 
 local cave_spider = table.merge (spider, {
 	description = S("Cave Spider"),
-	textures = {
+	texture_list = {
 		{"mobs_mc_cave_spider.png^(mobs_mc_spider_eyes.png^[makealpha:0,0,0)"}
 	},
 	hp_min = 12,

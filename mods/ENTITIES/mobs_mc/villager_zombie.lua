@@ -39,10 +39,12 @@ local zombie_villager = table.merge (zombie, {
 	head_eye_height = 1.74,
 	curiosity = 2,
 	head_pitch_multiplier = 1,
-	textures = {
-		"mobs_mc_zombie_villager.png",
-		"blank.png", -- Armor layer 1
-		"blank.png", -- Armor layer 2
+	texture_list = {
+		{
+			"mobs_mc_zombie_villager.png",
+			"blank.png", -- Armor layer 1
+			"blank.png", -- Armor layer 2
+		},
 	},
 	visual_size = {
 		x = 2.75,

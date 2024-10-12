@@ -28,7 +28,7 @@ local chicken = {
 	visual_size = {x=1,y=1},
 	visual = "mesh",
 	mesh = "mobs_mc_chicken.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_chicken.png"},
 	},
 	makes_footstep_sound = true,

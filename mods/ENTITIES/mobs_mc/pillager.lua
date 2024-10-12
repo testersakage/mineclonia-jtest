@@ -45,7 +45,7 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 		damage = "mobs_mc_pillager_ow1",
 		distance = 16,
 	},
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_pillager.png", -- Skin
 		}

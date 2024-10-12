@@ -28,7 +28,7 @@ local vex = {
 	collisionbox = {-0.2, 0.0, -0.2, 0.2, 0.8, 0.2},
 	visual = "mesh",
 	mesh = "mobs_mc_vex.b3d",
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_vex.png",
 		},

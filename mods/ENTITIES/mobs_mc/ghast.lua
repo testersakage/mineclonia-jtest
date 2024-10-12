@@ -24,7 +24,7 @@ local ghast = {
 	visual = "mesh",
 	mesh = "mobs_mc_ghast.b3d",
 	spawn_in_group = 1,
-	textures = {
+	texture_list = {
 		{"mobs_mc_ghast.png"},
 	},
 	attack_type = "null",

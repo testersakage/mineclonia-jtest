@@ -40,14 +40,16 @@ local snow_golem = {
 		death = { name = "mobs_mc_snowman_death", gain = 0.25 },
 		distance = 16,
 	},
-	textures = {
-		"mobs_mc_snowman.png", --snowman texture
-		"farming_pumpkin_side.png", --top
-		"farming_pumpkin_top.png", --down
-		"farming_pumpkin_face.png", --front
-		"farming_pumpkin_side.png", --left
-		"farming_pumpkin_side.png", --right
-		"farming_pumpkin_top.png", --left
+	texture_list = {
+		{
+			"mobs_mc_snowman.png", --snowman texture
+			"farming_pumpkin_side.png", --top
+			"farming_pumpkin_top.png", --down
+			"farming_pumpkin_face.png", --front
+			"farming_pumpkin_side.png", --left
+			"farming_pumpkin_side.png", --right
+			"farming_pumpkin_top.png", --left
+		},
 	},
 	drops = {{
 		name = "mcl_throwing:snowball",

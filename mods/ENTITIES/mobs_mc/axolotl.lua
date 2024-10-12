@@ -31,7 +31,7 @@ local axolotl = {
 	collisionbox = {-0.375, 0.0, -0.375, 0.375, 0.42, 0.375},
 	visual = "mesh",
 	mesh = "mobs_mc_axolotl.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_axolotl_brown.png"},
 		{"mobs_mc_axolotl_yellow.png"},
 		{"mobs_mc_axolotl_green.png"},

@@ -10,8 +10,10 @@ local is_valid = mcl_util.is_valid_objectref
 
 local wandering_trader = table.merge (villager_base, {
        description = S ("Wandering Trader"),
-       textures = {
-	       "mobs_mc_villager_wandering_trader.png",
+       texture_list = {
+	       {
+		       "mobs_mc_villager_wandering_trader.png",
+	       },
        },
        runaway_from = {
 	       "mobs_mc:zombie",
@@ -567,7 +569,7 @@ local llama = mobs_mc.llama
 
 local trader_llama = table.merge (llama, {
 	description = S ("Trader Llama"),
-	textures = {
+	texture_list = {
 		{
 			"blank.png",
 			"mobs_mc_llama_decor_wandering_trader.png",

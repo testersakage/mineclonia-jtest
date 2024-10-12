@@ -41,7 +41,7 @@ local blaze = {
 	head_swivel = "head.control",
 	bone_eye_height = 4,
 	head_pitch_multiplier=-1,
-	textures = {
+	texture_list = {
 		{"mobs_mc_blaze.png"},
 	},
 	armor = {

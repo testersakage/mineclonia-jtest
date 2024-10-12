@@ -189,7 +189,7 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	spawn_in_group = 4,
 	spawn_in_group_min = 2,
 	_child_mesh = "mobs_mc_baby_piglin.b3d",
-	textures = {
+	texture_list = {
 		{
 			"extra_mobs_piglin.png",
 			"blank.png",
@@ -1522,10 +1522,12 @@ local piglin_brute = table.merge (piglin_base, {
 	xp_max = 20,
 	hp_min = 50,
 	hp_max = 50,
-	textures = {
-		"extra_mobs_piglin_brute.png",
-		"blank.png",
-		"blank.png",
+	texture_list = {
+		{
+			"extra_mobs_piglin_brute.png",
+			"blank.png",
+			"blank.png",
+		}
 	},
 	attack_type = "melee",
 	can_despawn = false,
@@ -1677,7 +1679,7 @@ local zombified_piglin = table.merge (zombie, {
 	specific_attack = {},
 	mesh = "mobs_mc_piglin.b3d",
 	_child_mesh = "mobs_mc_baby_piglin.b3d",
-	textures = {
+	texture_list = {
 		{
 			"extra_mobs_zombified_piglin.png",
 			"blank.png",

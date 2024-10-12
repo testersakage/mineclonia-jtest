@@ -29,7 +29,7 @@ local guardian = {
 	doll_size_override = { x = 0.6, y = 0.6 },
 	visual = "mesh",
 	mesh = "mobs_mc_guardian.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_guardian.png"},
 	},
 	visual_size = {x=3, y=3},

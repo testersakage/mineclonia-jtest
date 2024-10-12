@@ -218,7 +218,12 @@ local slime_big = {
 	xp_max = 4,
 	collisionbox = {-1.02, -0.01, -1.02, 1.02, 2.03, 1.02},
 	visual_size = {x=12.5, y=12.5},
-	textures = {{"mobs_mc_slime.png", "mobs_mc_slime.png"}},
+	texture_list = {
+		{
+			"mobs_mc_slime.png",
+			"mobs_mc_slime.png",
+		},
+	},
 	visual = "mesh",
 	mesh = "mobs_mc_slime.b3d",
 	makes_footstep_sound = true,
@@ -403,7 +408,12 @@ local magma_cube_big = {
 	xp_max = 4,
 	collisionbox = {-1.02, -0.01, -1.02, 1.02, 2.03, 1.02},
 	visual_size = {x=12.5, y=12.5},
-	textures = {{ "mobs_mc_magmacube.png", "mobs_mc_magmacube.png" }},
+	texture_list = {
+		{
+			"mobs_mc_magmacube.png",
+			"mobs_mc_magmacube.png",
+		},
+	},
 	visual = "mesh",
 	mesh = "mobs_mc_magmacube.b3d",
 	makes_footstep_sound = true,

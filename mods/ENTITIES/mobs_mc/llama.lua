@@ -36,7 +36,8 @@ local llama = table.merge (horse, {
 	visual_size = { x = 1, y = 1, },
 	visual = "mesh",
 	mesh = "mobs_mc_llama.b3d",
-	textures = { -- 1: chest -- 2: decor (carpet) -- 3: llama base texture
+	texture_list = {
+		-- 1: chest -- 2: decor (carpet) -- 3: llama base texture
 		{"blank.png", "blank.png", "mobs_mc_llama_brown.png"},
 		{"blank.png", "blank.png", "mobs_mc_llama_creamy.png"},
 		{"blank.png", "blank.png", "mobs_mc_llama_gray.png"},

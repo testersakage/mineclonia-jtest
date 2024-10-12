@@ -9,7 +9,7 @@ local mob_class = mcl_mobs.mob_class
 
 local squid = {
 	description = S("Squid"),
-	textures = {
+	texture_list = {
 		{ "mobs_mc_squid.png" }
 	},
 	type = "animal",
@@ -410,8 +410,8 @@ end
 
 local glow_squid = table.merge (squid, {
 	description = S("Glow Squid"),
-	textures = {
-		{ "extra_mobs_glow_squid.png" }
+	texture_list = {
+		{ "extra_mobs_glow_squid.png" },
 	},
 	drops = {
 		{

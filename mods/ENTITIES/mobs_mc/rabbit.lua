@@ -24,7 +24,7 @@ local rabbit = {
 	head_yaw = "z",
 	visual = "mesh",
 	mesh = "mobs_mc_rabbit.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_rabbit_brown.png"},
 		{"mobs_mc_rabbit_gold.png"},
 		{"mobs_mc_rabbit_white.png"},
@@ -417,8 +417,8 @@ local killer_bunny = table.merge (rabbit, {
 	retaliates = true,
 	-- 8 armor points
 	armor = 50,
-	textures = {
-		"mobs_mc_rabbit_caerbannog.png",
+	texture_list = {
+		{"mobs_mc_rabbit_caerbannog.png"},
 	},
 	group_attack = true,
 	runaway = false,

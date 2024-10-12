@@ -45,7 +45,9 @@ local ocelot = {
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 0.69, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_cat.b3d",
-	textures = {"mobs_mc_cat_ocelot.png"},
+	texture_list = {
+		{"mobs_mc_cat_ocelot.png"},
+	},
 	makes_footstep_sound = true,
 	movement_speed = 6.0,
 	floats = 1,
@@ -413,7 +415,7 @@ local cat_full_moon_textures = {
 
 local cat = table.merge (ocelot, {
 	description = S("Cat"),
-	textures = cat_default_textures,
+	texture_list = {},
 	can_despawn = false,
 	tamed = false,
 	runaway = false,
@@ -780,7 +782,6 @@ function cat:update_textures ()
 		texturelist = cat_full_moon_textures
 	end
 
-	self.texture_list = texturelist
 	if not self._default_texture then
 		local r = pr:next (1, #texturelist)
 		self._default_texture = texturelist[r]

@@ -38,8 +38,8 @@ local villager_base = {
 	collisionbox = {-0.25, 0.0, -0.25, 0.25, 1.90, 0.25},
 	visual = "mesh",
 	mesh = "mobs_mc_villager.b3d",
-	textures = {
-		"mobs_mc_villager.png",
+	texture_list = {
+		{"mobs_mc_villager.png"},
 	},
 	makes_footstep_sound = true,
 	movement_speed = 10.0,

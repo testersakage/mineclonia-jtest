@@ -29,7 +29,7 @@ local dragon = {
 	physical = false,
 	visual = "mesh",
 	mesh = "mobs_mc_dragon.b3d",
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_dragon.png",
 		},

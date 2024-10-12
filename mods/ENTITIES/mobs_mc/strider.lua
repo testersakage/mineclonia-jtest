@@ -29,7 +29,7 @@ local strider = {
 	collisionbox = {-.6, -0.01, -.6, .6, 1.94, .6},
 	visual = "mesh",
 	mesh = "extra_mobs_strider.b3d",
-	textures = {
+	texture_list = {
 		{
 			"extra_mobs_strider.png",
 		},
@@ -465,7 +465,7 @@ local old_baby_strider = table.merge (strider, {
 	collisionbox = {-.3, -0.01, -.3, .3, 0.94, .3},
 	xp_min = 13,
 	xp_max = 13,
-	textures = {
+	texture_list = {
 		{
 			"extra_mobs_strider.png",
 			"blank.png",

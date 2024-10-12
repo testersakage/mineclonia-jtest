@@ -3,7 +3,7 @@
 local S = core.get_translator(core.get_current_modname())
 local pigman = {
 	description = S("Zombified Piglin"),
-	textures = {{ "" }},
+	texture_list = {},
 	after_activate = function(self)
 		mcl_util.replace_mob(self.object, "mobs_mc:zombified_piglin")
 	end,

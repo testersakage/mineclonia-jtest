@@ -72,7 +72,7 @@ local witch = table.merge (raid_mob, {
 	},
 	visual = "mesh",
 	mesh = "mobs_mc_witch.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_witch.png"},
 	},
 	visual_size = {

@@ -92,7 +92,7 @@ local zombie = table.merge (posing_humanoid, {
 		x = 1,
 		y = 1.1,
 	},
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_empty.png", -- armor
 			"mobs_mc_zombie.png", -- texture
@@ -770,9 +770,11 @@ mcl_mobs.register_mob ("mobs_mc:baby_zombie", baby_zombie)
 
 local husk = table.merge (zombie, {
 	description = S ("Husk"),
-	textures = {
-		"mobs_mc_empty.png", -- armor
-		"mobs_mc_husk.png", -- texture
+	texture_list = {
+		{
+			"mobs_mc_empty.png", -- armor
+			"mobs_mc_husk.png", -- texture
+		}
 	},
 	ignited_by_sunlight = false,
 	drops = drops_common,
@@ -816,10 +818,12 @@ mcl_mobs.register_mob ("mobs_mc:husk", husk)
 
 local baby_husk = table.merge (baby_zombie, {
 	description = S("Baby Husk"),
-	textures = {{
-		"mobs_mc_empty.png", -- wielded_item
-		"mobs_mc_husk.png", -- texture
-	}},
+	texture_list = {
+		{
+			"mobs_mc_empty.png", -- wielded_item
+			"mobs_mc_husk.png", -- texture
+		}
+	},
 	ignited_by_sunlight = false,
 	drops = drops_common,
 	dealt_effect = {

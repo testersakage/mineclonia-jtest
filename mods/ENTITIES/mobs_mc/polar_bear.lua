@@ -22,7 +22,7 @@ local polar_bear = {
 	collisionbox = {-0.7, -0.01, -0.7, 0.7, 1.39, 0.7},
 	visual = "mesh",
 	mesh = "mobs_mc_polarbear.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_polarbear.png"},
 	},
 	head_swivel = "head.control",

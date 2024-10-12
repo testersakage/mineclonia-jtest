@@ -29,7 +29,7 @@ local vindicator = table.merge (illager, table.merge (posing_humanoid, {
 	bone_eye_height = 6.61948,
 	head_eye_height = 2.2,
 	curiosity = 10,
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_vindicator.png",
 		},

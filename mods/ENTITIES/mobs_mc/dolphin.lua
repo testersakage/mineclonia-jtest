@@ -32,7 +32,7 @@ local dolphin = {
 	head_eye_height = 0.3,
 	visual = "mesh",
 	mesh = "extra_mobs_dolphin.b3d",
-	textures = {
+	texture_list = {
 		{
 			"extra_mobs_dolphin.png",
 		},

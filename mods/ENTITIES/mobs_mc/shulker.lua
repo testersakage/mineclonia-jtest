@@ -28,8 +28,8 @@ local shulker = {
 	},
 	visual = "mesh",
 	mesh = "mobs_mc_shulker.b3d",
-	textures = {
-		"mobs_mc_endergolem.png",
+	texture_list = {
+		{"mobs_mc_endergolem.png"},
 	},
 	pushable = false,
 	visual_size = {

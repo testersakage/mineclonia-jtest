@@ -246,7 +246,7 @@ local enderman = {
 	doll_size_override = { x = 0.8, y = 0.8 },
 	visual = "mesh",
 	mesh = "mobs_mc_enderman.b3d",
-	textures = create_enderman_textures(),
+	texture_list = { create_enderman_textures() },
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = true,
 	can_despawn = true,

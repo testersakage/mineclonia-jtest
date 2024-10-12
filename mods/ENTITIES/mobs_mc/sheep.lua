@@ -72,7 +72,7 @@ local sheep = {
 	head_yaw = "z",
 	visual = "mesh",
 	mesh = "mobs_mc_sheepfur.b3d",
-	textures = {
+	texture_list = {
 		sheep_texture ("unicolor_white"),
 	},
 	color = "unicolor_white",

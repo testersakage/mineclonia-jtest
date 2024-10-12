@@ -21,7 +21,7 @@ local wither_skeleton = table.merge (skeleton, {
 	head_eye_height = 2.1,
 	bone_eye_height = 2.38,
 	curiosity = 60,
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_empty.png",
 			"mobs_mc_wither_skeleton.png",

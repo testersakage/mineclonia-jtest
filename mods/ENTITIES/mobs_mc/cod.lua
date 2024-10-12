@@ -28,7 +28,7 @@ local cod = {
 	head_eye_height = 0.195,
 	visual = "mesh",
 	mesh = "extra_mobs_cod.b3d",
-	textures = {
+	texture_list = {
 		{"extra_mobs_cod.png"}
 	},
 	sounds = {

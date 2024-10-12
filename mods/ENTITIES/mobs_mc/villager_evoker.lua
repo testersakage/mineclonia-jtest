@@ -31,7 +31,7 @@ local evoker = table.merge (illager, {
 	collisionbox = {-0.4, 0, -0.4, 0.4, 1.95, 0.4},
 	visual = "mesh",
 	mesh = "mobs_mc_evoker.b3d",
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_evoker.png",
 		},

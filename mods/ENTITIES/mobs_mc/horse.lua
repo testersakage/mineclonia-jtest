@@ -90,7 +90,7 @@ local horse = {
 		"mcl_core:apple_gold",
 		"mcl_core:apple_gold_enchanted",
 	},
-	textures = horse_textures,
+	texture_list = horse_textures,
 	sounds = {
 		random = "mobs_mc_horse_random",
 		-- TODO: Separate damage sound
@@ -1043,7 +1043,13 @@ local skeleton_horse = table.merge(horse, {
 	description = S("Skeleton Horse"),
 	breath_max = -1,
 	armor = {undead = 100, fleshy = 100},
-	textures = {{"blank.png", "mobs_mc_horse_skeleton.png", "blank.png"}},
+	texture_list = {
+		{
+			"blank.png",
+			"mobs_mc_horse_skeleton.png",
+			"blank.png",
+		},
+	},
 	drops = {
 		{
 			name = "mcl_mobitems:bone",
@@ -1175,7 +1181,9 @@ mcl_mobs.register_mob("mobs_mc:skeleton_horse", skeleton_horse)
 
 mcl_mobs.register_mob("mobs_mc:zombie_horse", table.merge(skeleton_horse, {
 	description = S("Zombie Horse"),
-	textures = {{"blank.png", "mobs_mc_horse_zombie.png", "blank.png"}},
+	texture_list = {
+		{"blank.png", "mobs_mc_horse_zombie.png", "blank.png"},
+	},
 	drops = {
 		{
 			name = "mcl_mobitems:rotten_flesh",
@@ -1206,7 +1214,9 @@ mcl_mobs.register_mob("mobs_mc:zombie_horse", table.merge(skeleton_horse, {
 local d = 0.86
 local donkey = table.merge (horse, {
 	description = S("Donkey"),
-	textures = {{"blank.png", "mobs_mc_donkey.png", "blank.png"}},
+	texture_list = {
+		{"blank.png", "mobs_mc_donkey.png", "blank.png"},
+	},
 	spawn_in_group = 3,
 	spawn_in_group_min = 1,
 	movement_speed = 3.5,
@@ -1278,7 +1288,9 @@ mcl_entity_invs.register_inv ("mobs_mc:donkey", "Donkey", 15, true)
 local m = 0.94
 local mule = table.merge(donkey, {
 	description = S("Mule"),
-	textures = {{"blank.png", "mobs_mc_mule.png", "blank.png"}},
+	texture_list = {
+		{"blank.png", "mobs_mc_mule.png", "blank.png"},
+	},
 	visual_size = { x=horse.visual_size.x*m, y=horse.visual_size.y*m },
 	sounds = table.merge(donkey.sounds, {
 		base_pitch = 1.15,

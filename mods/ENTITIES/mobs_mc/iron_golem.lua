@@ -28,7 +28,7 @@ local golem = {
 	bone_eye_height = 3.38,
 	head_eye_height = 2.6,
 	curiosity = 10,
-	textures = {
+	texture_list = {
 		{
 			-- Golem texture.
 			"mobs_mc_iron_golem.png",

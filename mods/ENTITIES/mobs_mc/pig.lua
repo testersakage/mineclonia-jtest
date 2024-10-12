@@ -16,10 +16,12 @@ local pig = {
 	collisionbox = {-0.45, -0.01, -0.45, 0.45, 0.865, 0.45},
 	visual = "mesh",
 	mesh = "mobs_mc_pig.b3d",
-	textures = {{
-		"mobs_mc_pig.png", -- base
-		"blank.png", -- saddle
-	}},
+	texture_list = {
+		{
+			"mobs_mc_pig.png",  -- base
+			"blank.png",        -- saddle
+		},
+	},
 	head_swivel = "head.control",
 	bone_eye_height = 7.5,
 	head_eye_height = 0.8,

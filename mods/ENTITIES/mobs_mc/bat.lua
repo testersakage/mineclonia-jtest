@@ -33,7 +33,7 @@ local bat = {
 	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.89, 0.25},
 	visual = "mesh",
 	mesh = "mobs_mc_bat.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_bat.png"},
 	},
 	visual_size = {x=2, y=2},

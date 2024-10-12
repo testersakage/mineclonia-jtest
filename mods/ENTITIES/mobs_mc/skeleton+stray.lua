@@ -36,10 +36,12 @@ local skeleton = table.merge (posing_humanoid, {
 		feet = 0.085,
 	},
 	makes_footstep_sound = true,
-	textures = {
+	texture_list = {
+		{
 			"mobs_mc_empty.png", -- armor
 			"mobs_mc_empty.png", -- stray overlay
 			"mobs_mc_skeleton.png", -- texture
+		},
 	},
 	movement_speed = 5.0,
 	sounds = {
@@ -334,7 +336,7 @@ mobs_mc.skeleton = skeleton
 local stray = table.merge (skeleton, {
 	description = S("Stray"),
 	mesh = "mobs_mc_skeleton.b3d",
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_empty.png", -- armor
 			"mobs_mc_stray_overlay.png",

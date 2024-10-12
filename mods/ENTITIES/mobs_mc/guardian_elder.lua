@@ -25,7 +25,7 @@ local guardian_elder = table.merge (mobs_mc.guardian, {
 	doll_size_override = { x = 0.72, y = 0.72 },
 	visual = "mesh",
 	mesh = "mobs_mc_guardian.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_guardian_elder.png"},
 	},
 	visual_size = {x=7, y=7},

@@ -19,7 +19,7 @@ local endermite = {
 	collisionbox = {-0.2, -0.01, -0.2, 0.2, 0.29, 0.2},
 	visual = "mesh",
 	mesh = "mobs_mc_endermite.b3d",
-	textures = {
+	texture_list = {
 		{"mobs_mc_endermite.png"},
 	},
 	visual_size = {x=3, y=3},

@@ -28,9 +28,11 @@ local hoglin = {
 	collisionbox = {-.6, -0.01, -.6, .6, 1.4, .6},
 	visual = "mesh",
 	mesh = "extra_mobs_hoglin.b3d",
-	textures = { {
-		"extra_mobs_hoglin.png",
-	} },
+	texture_list = {
+		{
+			"extra_mobs_hoglin.png",
+		},
+	},
 	visual_size = {x=3, y=3},
 	sounds = {
 		random = "extra_mobs_hoglin",
@@ -450,7 +452,7 @@ mcl_mobs.register_mob("mobs_mc:baby_hoglin", table.merge (hoglin, {
 		y = 1,
 	},
 	mesh = "mobs_mc_baby_hoglin.b3d",
-	textures = {
+	texture_list = {
 		{
 			"extra_mobs_hoglin.png",
 			"blank.png",
@@ -490,7 +492,11 @@ mcl_mobs.spawn_setup({
 local zoglin = table.merge (hoglin, {
 	description = S("Zoglin"),
 	fire_resistant = 1,
-	textures = {"extra_mobs_zoglin.png"},
+	texture_list = {
+		{
+			"extra_mobs_zoglin.png",
+		},
+	},
 	lava_damage = 0,
 	fire_damage = 0,
 	armor = {
@@ -553,7 +559,11 @@ local baby_zoglin = table.merge (hoglin, {
 	melee_interval = 0.75,
 	description = S("Zoglin"),
 	fire_resistant = 1,
-	textures = {"extra_mobs_zoglin.png"},
+	texture_list = {
+		{
+			"extra_mobs_zoglin.png",
+		},
+	},
 	lava_damage = 0,
 	fire_damage = 0,
 	armor = {

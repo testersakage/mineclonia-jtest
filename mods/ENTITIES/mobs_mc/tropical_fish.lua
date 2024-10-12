@@ -20,7 +20,7 @@ local tropical_fish = {
 	collisionbox = { -0.15, 0.0, -0.15, 0.15, 0.75, 0.15 },
 	visual = "mesh",
 	mesh = "extra_mobs_tropical_fish_a.b3d",
-	textures = { "extra_mobs_tropical_fish_a.png" }, -- to be populated on_spawn
+	texture_list = {}, -- to be populated on_spawn
 	sounds = {},
 	animation = {
 		stand_start = 0, stand_end = 20,

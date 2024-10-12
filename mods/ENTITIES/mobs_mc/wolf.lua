@@ -25,7 +25,7 @@ local wolf = {
 	mesh = "mobs_mc_wolf.b3d",
 	_child_mesh = "mobs_mc_baby_wolf.b3d",
 	-- Textures are actually set by update_textures.
-	textures = {},
+	texture_list = {},
 	makes_footstep_sound = true,
 	head_swivel = "head.control",
 	bone_eye_height = 3.5,

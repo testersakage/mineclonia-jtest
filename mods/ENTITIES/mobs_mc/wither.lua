@@ -22,7 +22,7 @@ local wither_def = {
 	doll_size_override = { x = 1.2, y = 1.2 },
 	visual = "mesh",
 	mesh = "mobs_mc_wither.b3d",
-	textures = {
+	texture_list = {
 		{
 			"mobs_mc_wither_invulnerable.png",
 			"mobs_mc_wither_armor.png",
