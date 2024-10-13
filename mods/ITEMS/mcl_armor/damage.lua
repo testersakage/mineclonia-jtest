@@ -4,7 +4,9 @@ local function use_durability(obj, inv, index, stack, uses)
 	if stack:is_empty() and def and def._on_break then
 		stack = def._on_break(obj) or stack
 	end
-	inv:set_stack("armor", index, stack)
+	if inv then
+		inv:set_stack("armor", index, stack)
+	end
 end
 
 mcl_damage.register_modifier(function(obj, damage, reason)
@@ -25,15 +27,28 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	local thorns_damage_irregular = 0
 	local thorns_pieces = {}
 
-	local inv = mcl_util.get_inventory(obj)
+	local inv = mcl_util.get_inventory (obj)
+	local luaentity = obj:get_luaentity ()
+	local is_mob = luaentity and luaentity.is_mob and luaentity.armor_list
+
+	-- If this is a mob, refer to its armor list.
+	if is_mob then
+		inv = nil
+	end
 
 	if reason.source and mcl_tools.mace_cooldown[reason.source] and mcl_tools.mace_cooldown[reason.source] and minetest.get_gametime() - mcl_tools.mace_cooldown[reason.source] < 2 then
 		breach_level = mcl_enchanting.get_enchantment(reason.source:get_wielded_item(), "breach")
 	end
 
-	if inv then
-		for _, element in pairs(mcl_armor.elements) do
-			local itemstack = inv:get_stack("armor", element.index)
+	if inv or is_mob then
+		for name, element in pairs(mcl_armor.elements) do
+			local itemstack
+
+			if is_mob then
+				itemstack = ItemStack (luaentity.armor_list[name] or "")
+			else
+				itemstack = inv:get_stack("armor", element.index)
+			end
 			if not itemstack:is_empty() then
 				local itemname = itemstack:get_name()
 				local enchantments = mcl_enchanting.get_enchantments(itemstack)
@@ -43,6 +58,9 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 					toughness = toughness + minetest.get_item_group(itemname, "mcl_armor_toughness")
 
 					use_durability(obj, inv, element.index, itemstack, uses)
+					if is_mob then
+						luaentity.armor_list[name] = itemstack:to_string ()
+					end
 				end
 
 				if not flags.bypasses_magic then
@@ -79,7 +97,11 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 						end
 					end
 
-					table.insert(thorns_pieces, {index = element.index, itemstack = itemstack})
+					table.insert(thorns_pieces, {
+							     index = element.index,
+							     name = name,
+							     itemstack = itemstack
+					})
 				end
 			end
 		end
@@ -102,6 +124,10 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		local thorns_item = thorns_pieces[math.random(#thorns_pieces)]
 
 		use_durability(obj, inv, thorns_item.index, thorns_item.itemstack, 2)
+
+		if is_mob then
+			luaentity.armor_list[thorns_item.name] = thorns_item.itemstack:to_string ()
+		end
 	end
 
 	mcl_armor.update(obj)

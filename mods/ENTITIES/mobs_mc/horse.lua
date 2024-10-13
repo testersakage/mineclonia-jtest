@@ -149,7 +149,6 @@ local horse = {
 	floats = 1,
 	makes_footstep_sound = true,
 	jump = true,
-	jump_height = 15,
 	drops = { base_drop },
 	head_eye_height = 1.52,
 	should_drive = function (self)
@@ -446,7 +445,70 @@ local skeleton_horse = table.merge(horse, {
 	},
 	movement_speed = 4.0,
 	harmed_by_heal = true,
+	_trap_age = 0,
+	_is_trap = false,
 })
+
+function skeleton_horse:_on_lightning_strike ()
+	-- Immune to lightning.
+	return true
+end
+
+function skeleton_horse:do_custom (dtime, moveresult)
+	self._trap_age = self._trap_age + dtime
+	if self._trap_age > 900 then
+		self:safe_remove ()
+		return false
+	end
+end
+
+local function check_skeleton_trap (self, self_pos, dtime)
+	if not self._is_trap then
+		return false
+	end
+	if not self:check_timer ("skeleton_trap", 0.15) then
+		return false
+	end
+	for player in mcl_util.connected_players (self_pos, 10) do
+		self._is_trap = false
+		mcl_lightning.strike (self_pos, true)
+
+		-- Spawn three horses.
+		local horses = { self.object, }
+		for _ = 1, 3 do
+			local horse = minetest.add_entity (self_pos, self.name)
+			if horse then
+				table.insert (horses, horse)
+			end
+		end
+
+		-- Spawn skeletons for each horse.
+		for _, horse in pairs (horses) do
+			local skelly = minetest.add_entity (self_pos, "mobs_mc:skeleton")
+			if skelly then
+				local entity = skelly:get_luaentity ()
+				entity:jock_to_existing (horse, "", {
+								 x = 0,
+								 y = 1.6,
+								 z = 0,
+				}, vector.zero ())
+				-- Equip it with an enchanted iron
+				-- helmet between levels 5.0 and 23.
+				-- TODO: difficulty.
+				local stack = ItemStack ("mcl_armor:helmet_iron")
+				local level = 5.0 + math.random (18)
+				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+				entity.armor_list.head = stack:to_string ()
+				entity:set_armor_texture ()
+			end
+		end
+		return false
+	end
+end
+
+skeleton_horse.ai_functions
+	= table.copy (mcl_mobs.mob_class.ai_functions)
+table.insert (skeleton_horse.ai_functions, 1, check_skeleton_trap)
 
 mcl_mobs.register_mob("mobs_mc:skeleton_horse", skeleton_horse)
 
@@ -502,7 +564,9 @@ local donkey = table.merge(horse, {
 		horse.collisionbox[6] * d,
 	},
 	jump = true,
-	jump_height = 15,
+	-- MC Wiki is completely wrong: the Minecraft value is 0.5,
+	-- not 0.175, and which multiplied by 20 yields 8.0.
+	jump_height = 8.0,
 })
 
 mcl_mobs.register_mob("mobs_mc:donkey", donkey)
