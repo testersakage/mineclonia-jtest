@@ -15,7 +15,9 @@ mcl_mobs.register_mob("mobs_mc:ravager", {
 	visual = "mesh",
 	mesh = "mobs_mc_ravager.b3d",
 	visual_size = { x = 1, y = 1},
-	textures = { "mobs_mc_ravager.png" },
+	texture_list = {
+		{"mobs_mc_ravager.png" },
+	},
 	walk_velocity = 1,
 	run_velocity = 3,
 	sounds = {
