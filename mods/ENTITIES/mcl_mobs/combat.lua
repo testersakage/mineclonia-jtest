@@ -1,9 +1,5 @@
 local mob_class = mcl_mobs.mob_class
 
-local damage_enabled = minetest.settings:get_bool("enable_damage", true)
-local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
-
 local SIGHT_PERSISTENCE = 3.0
 
 function mob_class:do_attack(obj, persistence)

@@ -94,7 +94,7 @@ local function choose_pos(pos)
 	return pos, pos2
 end
 
-function mcl_lightning.strike_func(pos, pos2, objects)
+function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 	local particle_pos = vector.offset(pos2, 0, (mcl_lightning.size / 2) + 0.5, 0)
 	local particle_size = mcl_lightning.size * 10
 	local time = 0.2
@@ -156,27 +156,22 @@ function mcl_lightning.strike_func(pos, pos2, objects)
 	-- trigger revert of skybox
 	ttl = 0.1
 
-	-- Events caused by the lightning strike: Fire, damage, mob transformations, rare skeleton spawn
-
+	-- Events caused by the lightning strike: Fire, damage, and skeleton trap spawning
 	pos2.y = pos2.y + 1/2
 	if minetest.get_item_group(minetest.get_node({ x = pos2.x, y = pos2.y - 1, z = pos2.z }).name, "liquid") < 1 then
 		if minetest.get_node(pos2).name == "air" then
-			-- Low chance for a lightning to spawn skeleton horse + skeletons
+			-- Low chance for a lightning to spawn skeleton trap horse.
 			if rng:next(1,100) <= 3 then
-				minetest.add_entity(pos2, "mobs_mc:skeleton_horse")
-
-				local angle, posadd
-				angle = math.random(0, math.pi*2)
-				for _= 1, 3 do
-					posadd = { x=math.cos(angle),y=0,z=math.sin(angle) }
-					posadd = vector.normalize(posadd)
-					local mob = minetest.add_entity(vector.add(pos2, posadd), "mobs_mc:skeleton")
-					if mob then
-						mob:set_yaw(angle-math.pi/2)
-					end
-					angle = angle + (math.pi*2) / 3
+				if for_trap then
+					return
 				end
 
+				local entity
+					= minetest.add_entity(pos2, "mobs_mc:skeleton_horse")
+				if entity then
+					local luaentity = entity:get_luaentity ()
+					luaentity._is_trap = true
+				end
 			-- Cause a fire
 			else
 				minetest.set_node(pos2, { name = "mcl_fire:fire" })
@@ -187,7 +182,7 @@ end
 
 -- * pos: optional, if not given a random pos will be chosen
 -- * returns: bool - success if a strike happened
-function mcl_lightning.strike(pos)
+function mcl_lightning.strike(pos, for_trap)
 	local pos2
 	pos, pos2 = choose_pos(pos)
 
@@ -199,7 +194,7 @@ function mcl_lightning.strike(pos)
 		for _, func in pairs(mcl_lightning.on_strike_functions) do
 			-- allow on_strike callbacks to destroy entities by re-obtaining objects for each callback
 			local objects = minetest.get_objects_inside_radius(pos2, 3.5)
-			local p,stop = func(pos, pos2, objects)
+			local p,stop = func(pos, pos2, objects, for_trap)
 			if p then
 				pos = p
 				pos2 = choose_pos(p)
@@ -208,7 +203,7 @@ function mcl_lightning.strike(pos)
 		end
 	end
 	if do_strike and pos and pos2 then
-		mcl_lightning.strike_func(pos,pos2,minetest.get_objects_inside_radius(pos2, 3.5))
+		mcl_lightning.strike_func(pos, pos2, minetest.get_objects_inside_radius (pos2, 3.5), for_trap)
 	end
 end
 

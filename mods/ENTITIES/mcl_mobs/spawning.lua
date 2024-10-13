@@ -600,8 +600,7 @@ function mob_class:kill_me(msg)
 		if self._jockey_rider:is_valid () then
 			-- Detach this rider.
 			local entity = self._jockey_rider:get_luaentity ()
-			self._jockey_rider:set_properties ({static_save = true,})
-			self._jockey_rider:set_detach ()
+			self._jockey_rider:unjock ()
 			entity.jockey_vehicle = nil
 		end
 		self._jockey_rider = nil

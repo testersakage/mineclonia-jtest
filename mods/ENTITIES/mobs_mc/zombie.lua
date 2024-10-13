@@ -59,7 +59,13 @@ local zombie = {
 	curiosity = 7,
 	head_pitch_multiplier=-1,
 	breath_max = -1,
-	wears_armor = true,
+	wears_armor = "no_pickup",
+	armor_drop_probability = {
+		head = 0.085,
+		torso = 0.085,
+		legs = 0.085,
+		feet = 0.085,
+	},
 	armor = {undead = 90, fleshy = 90},
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
 	visual = "mesh",
@@ -106,6 +112,14 @@ local zombie = {
 	harmed_by_heal = true,
 	attack_npcs = true,
 }
+
+function zombie:on_spawn ()
+	-- Enable picking up armor for a random subset of
+	-- skeletons.
+	if math.random () < 0.55 then -- TODO: modify this by difficulty.
+		self.wears_armor = true
+	end
+end
 
 mcl_mobs.register_mob("mobs_mc:zombie", zombie)
 

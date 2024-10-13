@@ -143,7 +143,11 @@ function mob_class:update_textures()
 			self.texture_selected = math.random(c)
 		end
 
-		self.base_texture = def.texture_list[self.texture_selected]
+
+		-- Otherwise set_armor_texture will modify the texture
+		-- list in the metatable, which eventually appears in
+		-- mob spawners.
+		self.base_texture = table.copy (def.texture_list[self.texture_selected])
 		self.base_mesh = def.initial_properties.mesh
 		self.base_size = def.initial_properties.visual_size
 		self.base_colbox = def.initial_properties.collisionbox
@@ -314,22 +318,6 @@ function mob_class:mob_activate(staticdata, dtime)
 	self:init_ai ()
 end
 
-local function update_attack_timers (self, dtime)
-	-- attack timer
-	self.timer = self.timer + dtime
-	if self.state ~= "attack" then
-		if self.timer >= 1 then
-			self.timer = 0
-		else
-			return
-		end
-	end
-
-	if self.timer > 100 then
-		self.timer = 1
-	end
-end
-
 function mob_class:on_step(dtime, moveresult)
 	local pos = self.object:get_pos()
 	if not mcl_mobs.check_vector(pos) or self.removed then
@@ -411,7 +399,7 @@ function mob_class:on_step(dtime, moveresult)
 		if not self.object:get_pos() then return end
 	end
 
-	if self.state == "die" then return end
+	if self.dead then return end
 
 	self:rotate_step (dtime)
 	if should_drive then
@@ -424,7 +412,6 @@ function mob_class:on_step(dtime, moveresult)
 	else
 	   self:set_animation_speed ()
 	   self:check_head_swivel (dtime)
-	   self:set_armor_texture ()
 
 	   -- Expel drivers riding submerged mobs.
 	   self:expel_underwater_drivers ()
@@ -446,9 +433,6 @@ function mob_class:on_step(dtime, moveresult)
 			self._just_portaled = nil
 		end
 	end
-
-	-- TODO: is this still necessary?
-	update_attack_timers (self, dtime)
 
 	self:check_particlespawners(dtime)
 	self:check_item_pickup()
