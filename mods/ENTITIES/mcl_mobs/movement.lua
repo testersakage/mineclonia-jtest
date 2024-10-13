@@ -388,16 +388,32 @@ end
 function mob_class:jock_to (mob, relative_pos, rot)
 	local jock = minetest.add_entity (self.object:get_pos (), mob)
 	if not jock then return end
+	return self:jock_to_existing (jock, "", relative_pos, rot)
+end
+
+function mob_class:jock_to_existing (jock, bone, relative_pos, rot)
 	local entity = jock:get_luaentity ()
 	-- Controlling mobs in jockeys are not saved directly, but in
 	-- the staticdata of their vehicles.
 	self.jockey_vehicle = jock
-	self.object:set_properties ({static_save = false,})
+	-- Fix the visual size of this mob.
+	local jock_properties = jock:get_properties ()
+	local properties = self.object:get_properties ()
+	self.object:set_properties ({
+			static_save = false,
+			visual_size = {
+				x = properties.visual_size.x
+					/ jock_properties.visual_size.x,
+				y = properties.visual_size.y
+					/ jock_properties.visual_size.y,
+			},
+	})
 	entity._jockey_rider = self.object
 	entity._jockey_relative_pos = relative_pos
+	entity._jockey_bone = bone
 	entity._jockey_rot = rot
-	self.object:set_attach (jock, "", relative_pos, rot)
-	entity:set_animation ("jockey")
+	self.object:set_attach (jock, bone, relative_pos, rot)
+	self:set_animation ("jockey")
 	return jock
 end
 
@@ -467,11 +483,9 @@ function mob_class:jockey_death ()
 	elseif self._jockey_rider then
 		local entity = self._jockey_rider:get_luaentity ()
 		if entity then
-			self._jockey_rider:set_detach ()
-			self._jockey_rider:set_properties ({static_save = true,})
+			entity:unjock ()
 			self._jockey_rider = nil
 			self._jockey_staticdata = nil
-			entity.jockey_vehicle = nil
 		end
 	end
 end
@@ -492,11 +506,8 @@ function mob_class:restore_jockey ()
 			local entity = jock:get_luaentity ()
 			local relative_pos = self._jockey_relative_pos
 			local rot = self._jockey_rot
-			entity.jockey_vehicle = self.object
-			jock:set_properties ({static_save = false,})
-			jock:set_attach (self.object, "", relative_pos, rot)
-			self._jockey_rider = jock
-			entity:set_animation ("jockey")
+			local bone = self._jockey_bone
+			entity:jock_to_existing (self.object, bone, relative_pos, rot)
 		end
 		self._jockey_staticdata = nil
 	end
@@ -508,6 +519,17 @@ function mob_class:mob_controlling_movement ()
 		return (attached and attached:get_luaentity ()) or self
 	end
 	return self
+end
+
+function mob_class:unjock ()
+	self.object:set_detach ()
+	self.object:set_properties ({
+			static_save = true,
+			-- XXX: what about mobs which alter their
+			-- visual sizes?
+			visual_size = self.initial_properties.visual_size,
+	})
+	self.jockey_vehicle = nil
 end
 
 --------------------------------------------------------------------------------
@@ -1093,8 +1115,10 @@ function mob_class:run_ai (dtime, moveresult)
 	end
 
 	if not active then
-		local mob = self:mob_controlling_movement ()
-		mob:set_animation ("stand")
+		if not self._jockey_rider then
+			local mob = self:mob_controlling_movement ()
+			mob:set_animation ("stand")
+		end
 		self._active_activity = nil
 	end
 
