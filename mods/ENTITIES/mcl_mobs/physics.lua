@@ -63,16 +63,6 @@ function mob_class:object_in_range(object)
 	return p1 and p2 and (vector.distance(p1, p2) <= dist)
 end
 
-function mob_class:drop_armor()
-	if not self.armor_list then return end
-	for k, v in pairs(self.armor_list) do
-		if v ~= "" then
-			mcl_util.drop_item_stack(self.object:get_pos(), ItemStack(v))
-			self.armor_list[k] = ""
-		end
-	end
-end
-
 function mob_class:item_drop(cooked, looting_level, cmi_cause)
 	if not mobs_drop_items then return end
 	looting_level = looting_level or 0
@@ -144,7 +134,7 @@ function mob_class:item_drop(cooked, looting_level, cmi_cause)
 			end
 		end
 	end
-	self:drop_armor()
+	self:drop_armor (looting_level * 0.01)
 	self.drops = {}
 end
 
@@ -261,7 +251,6 @@ function mob_class:check_for_death(cause, cmi_cause)
 	self.dead = true
 	self.attack = nil
 	self.v_start = false
-	self.timer = 0
 	self.blinktimer = 0
 	self:remove_texture_mod("^[colorize:#FF000040")
 	self:remove_texture_mod("^[brighten")

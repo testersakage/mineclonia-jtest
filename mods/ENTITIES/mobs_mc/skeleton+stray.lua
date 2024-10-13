@@ -31,15 +31,21 @@ local skeleton = {
 	curiosity = 6,
 	visual = "mesh",
 	mesh = "mobs_mc_skeleton.b3d",
+	wears_armor = "no_pickup",
+	armor_drop_probability = {
+		head = 0.085,
+		torso = 0.085,
+		legs = 0.085,
+		feet = 0.085,
+	},
 	shooter_avoid_enemy = true,
 	strafes = true,
 	makes_footstep_sound = true,
 	textures = {
-		{
 			"mobs_mc_empty.png", -- armor
+			"mobs_mc_empty.png", -- stray overlay
 			"mobs_mc_skeleton.png", -- texture
 			"mcl_bows_bow_0.png", -- wielded_item
-		}
 	},
 	movement_speed = 5.0,
 	sounds = {
@@ -90,6 +96,11 @@ local skeleton = {
 	on_spawn = function(self)
 		if math.random(100) == 1 then
 			self:jock_to("mobs_mc:spider", vector.new(0,0,0), vector.new(0,0,0))
+		end
+		-- Enable picking up armor for a random subset of
+		-- skeletons.
+		if math.random () < 0.55 then -- TODO: modify this by difficulty.
+			self.wears_armor = true
 		end
 		return true
 	end,
@@ -142,6 +153,7 @@ mcl_mobs.register_mob("mobs_mc:stray", table.merge(skeleton, {
 	_mcl_freeze_damage = 0,
 	textures = {
 		{
+			"mobs_mc_empty.png", -- armor
 			"mobs_mc_stray_overlay.png",
 			"mobs_mc_stray.png",
 			"mcl_bows_bow_0.png",
