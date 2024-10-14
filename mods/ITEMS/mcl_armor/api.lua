@@ -352,3 +352,58 @@ end)
 function mcl_armor.is_trimmed(itemstack)
 	return itemstack:get_meta():get_string("mcl_armor:trim_overlay") ~= ""
 end
+
+function mcl_armor.get_armor_coverage (object)
+	local entity = object:get_luaentity ()
+	local factor
+	if entity and entity.is_mob then
+		if not entity.armor_list then
+			return 0
+		end
+		local npieces = 0
+		for _, item in pairs (entity.armor_list) do
+			if item ~= "" then
+				npieces = npieces + 1
+			end
+		end
+		factor = npieces / 4
+	else
+		local npieces = 0
+		local inv = mcl_util.get_inventory (object, true)
+
+		if not inv then
+			return 0
+		end
+
+		for _, desc in pairs (mcl_armor.elements) do
+			if inv and not inv:get_stack ("armor", desc.index):is_empty () then
+				npieces = npieces + 1
+			end
+		end
+		factor = npieces / 4
+	end
+	return factor
+end
+
+function mcl_armor.get_headpiece_factor (object, mob_name)
+	if object:is_player () then
+		local factors = mcl_armor.player_view_range_factors[object]
+		return (factors and factors[mob_name]) or 1.0
+	end
+
+	local luaentity = object:get_luaentity ()
+	
+	if luaentity
+		and luaentity.is_mob
+		and luaentity.armor_list
+		and luaentity.armor_list.head
+		and luaentity.armor_list.head ~= "" then
+		local stack = ItemStack (luaentity.armor_list.head)
+		local def = stack:get_definition ()
+		if def and mob_name == def._mcl_armor_mob_range_factor
+			and def._mcl_armor_mob_range_factor then
+			return def._mcl_armor_mob_range_factor
+		end
+	end
+	return 1.0
+end
