@@ -138,6 +138,8 @@ minetest.register_on_player_hpchange(function(player, hp_change)
 end)
 
 local food_tick_timers = {} -- one food_tick_timer per player, keys are the player-objects
+local peaceful_heal_timer = {}
+local peaceful_nourish_timer = {}
 
 mcl_player.register_globalstep(function(player, dtime)
 	local food_tick_timer = food_tick_timers[player] and food_tick_timers[player] + dtime or 0
@@ -145,8 +147,31 @@ mcl_player.register_globalstep(function(player, dtime)
 	local food_level = mcl_hunger.get_hunger(player)
 	local food_saturation_level = mcl_hunger.get_saturation(player)
 	local player_health = mcl_damage.get_hp (player)
+	local props = player:get_properties ()
 
-	if food_tick_timer > 4.0 then
+	if mcl_vars.difficulty == 0 then
+		-- Heal player by 1 heart every two seconds and grant
+		-- more food points every half a second.
+		if (peaceful_heal_timer[player] or 1.0) >= 1.0 then
+			if player_health > 0 and player_health < props.hp_max then
+				mcl_damage.heal_player (player, 1)
+			end
+			peaceful_heal_timer[player] = 0
+		else
+			peaceful_heal_timer[player]
+				= peaceful_heal_timer[player] + dtime
+		end
+		if (peaceful_nourish_timer[player] or 0.5) >= 0.5 then
+			local hunger = mcl_hunger.get_hunger (player)
+			if hunger < 20 then
+				mcl_hunger.set_hunger (player, hunger + 1)
+			end
+			peaceful_nourish_timer[player] = 0
+		else
+			peaceful_nourish_timer[player]
+				= peaceful_nourish_timer[player] + dtime
+		end
+	elseif food_tick_timer > 4.0 then
 		food_tick_timer = 0
 
 		-- let hunger work always
@@ -156,24 +181,29 @@ mcl_player.register_globalstep(function(player, dtime)
 		end
 
 		if food_level >= 18 then -- slow regeneration
-			if player_health > 0 and player_health < player:get_properties().hp_max then
+			if player_health > 0 and player_health < props.hp_max then
 				mcl_damage.heal_player (player, 1)
 				mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)
 				mcl_hunger.update_exhaustion_hud(player)
 			end
-
 		elseif food_level == 0 then -- starvation
 			-- the amount of health at which a player will stop to get
 			-- harmed by starvation (10 for Easy, 1 for Normal, 0 for Hard)
-			local maximum_starvation = 1
-			-- TODO: implement Minecraft-like difficulty modes and the update maximumStarvation here
+			local maximum_starvation
+			if mcl_vars.difficulty <= 1 then
+				maximum_starvation = 10
+			elseif mcl_vars.difficulty < 3 then
+				maximum_starvation = 1
+			else
+				maximum_starvation = 0
+			end
 			if player_health > maximum_starvation then
-				mcl_util.deal_damage(player, 1, {type = "starve"})
+				mcl_util.deal_damage (player, 1, {type = "starve"})
 			end
 		end
 
 	elseif food_tick_timer > 0.5 and food_level == 20 and food_saturation_level > 0 then -- fast regeneration
-		if player_health > 0 and player_health < player:get_properties().hp_max then
+		if player_health > 0 and player_health < props.hp_max then
 			food_tick_timer = 0
 			mcl_damage.heal_player (player, 1)
 			mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)

@@ -7,8 +7,6 @@ local S = minetest.get_translator("mcl_mobs")
 -- Invisibility mod check
 mcl_mobs.invis = {}
 
-local peaceful_mode = minetest.settings:get_bool("only_peaceful_mobs", false)
-
 function mob_class:set_properties(prop)
 	mcl_util.set_properties(self.object, prop)
 end
@@ -215,7 +213,7 @@ function mob_class:mob_activate(staticdata, dtime)
 		-- TODO
 	end
 
-	if peaceful_mode and not self.persist_in_peaceful then
+	if mcl_vars.difficulty <= 0 and not self.persist_in_peaceful then
 		mcl_burning.extinguish(self.object)
 		self.object:remove()
 		return
@@ -289,6 +287,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	end
 	self:restore_jockey ()
 
+	self:init_ai ()
 	if self.on_spawn and not self.on_spawn_run then
 		if self:on_spawn() == false then
 			self:safe_remove()
@@ -315,7 +314,6 @@ function mob_class:mob_activate(staticdata, dtime)
 		def.after_activate(self, staticdata, def, dtime)
 	end
 	self:remove_texture_mod ("^[colorize:#d42222:175")
-	self:init_ai ()
 end
 
 function mob_class:on_step(dtime, moveresult)

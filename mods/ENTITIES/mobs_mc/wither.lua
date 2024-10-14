@@ -1,6 +1,5 @@
 local S = minetest.get_translator("mobs_mc")
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
-local w_strafes = minetest.settings:get_bool("wither_strafes") ~= false
 
 local WITHER_INIT_BOOM = 7
 local WITHER_DESCENT_BOOM = 7
@@ -52,7 +51,6 @@ local wither_def = {
 	movement_speed = 5.0,
 	airborne_speed = 5.0,
 	_airborne_agile = true,
-	strafes = w_strafes,
 	sounds = {
 		shoot_attack = "mobs_fireball",
 		-- TODO: sounds
@@ -134,14 +132,20 @@ function wither_def:deal_damage (damage, mcl_reason)
 end
 
 function wither_def:on_spawn ()
-	-- TODO: adjust maximum health by one of the following
-	-- factors, contingent on difficulty:
+	-- Adjust maximum health by one of the following factors,
+	-- contingent on difficulty:
 	--
 	--   - Hard: 1.0
 	--   - Normal: 0.75
 	--   - Easy: 0.5
 
 	local properties = self.object:get_properties ()
+	local health_factor = 1.0 - (mcl_vars.difficulty - 3) * 0.25
+	properties.hp_max = math.max (0.5, health_factor) * properties.hp_max
+	self.object:set_properties ({
+			hp_max = properties.hp_max,
+	})
+
 	minetest.sound_play("mobs_mc_wither_spawn", {gain=1.0})
 	self._custom_timer = 0.0
 	self._death_timer = 0.0
@@ -664,7 +668,7 @@ function wither_def:run_ai (dtime, moveresult)
 
 		if head.next_update <= 0 then
 			head.next_update = 0.5 + math.random () * 0.5
-			if head.idle_update >= 15 then
+			if mcl_vars.difficulty >= 2 and head.idle_update >= 15 then
 				head.idle_update = 0
 				local random = {
 					x = self_pos.x + math.random () * 20 - 10,
@@ -814,7 +818,11 @@ skull_def = {
 	-- direct hit
 	hit_player = function(self, player)
 		local pos = vector.new(self.object:get_pos())
-		mcl_potions.give_effect_by_level ("withering", player, 2, 40) -- TODO: difficulty.
+		if mcl_vars.difficulty >= 2 then
+			local duration = mcl_vars.difficulty == 2 and 10 or 40
+			mcl_potions.give_effect_by_level ("withering", player, 2,
+							  duration)
+		end
 		mcl_util.deal_damage (player, 8.0, {
 					      source = self._shooter,
 					      direct = self.object,
@@ -839,7 +847,11 @@ skull_def = {
 
 	hit_mob = function(self, mob)
 		local pos = vector.new (self.object:get_pos())
-		mcl_potions.give_effect_by_level ("withering", mob, 2, 40) -- TODO: difficulty.
+		if mcl_vars.difficulty >= 2 then
+			local duration = mcl_vars.difficulty == 2 and 10 or 40
+			mcl_potions.give_effect_by_level ("withering", mob, 2,
+							  duration)
+		end
 		mcl_util.deal_damage (mob, 8.0, {
 					      source = self._shooter,
 					      direct = self.object,

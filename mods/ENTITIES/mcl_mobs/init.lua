@@ -6,7 +6,6 @@ local S = minetest.get_translator(modname)
 
 local old_spawn_icons = minetest.settings:get_bool("mcl_old_spawn_icons",false)
 local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
-local difficulty = tonumber(minetest.settings:get("mob_difficulty")) or 1.0
 
 local object_properties = { "hp_max", "breath_max", "zoom_fov", "eye_height", "physical", "collide_with_objects", "collisionbox", "selectionbox", "pointable", "visual", "visual_size", "mesh", "textures", "colors", "use_texture_alpha", "spritediv", "initial_sprite_basepos", "is_visible", "makes_footstep_sound", "automatic_rotate", "stepheight", "automatic_face_movement_dir", "automatic_face_movement_max_rotation_per_sec", "backface_culling", "glow", "nametag", "nametag_color", "nametag_bgcolor", "infotext", "static_save", "damage_texture_modifier", "shaded", "show_on_minimap", }
 
@@ -322,14 +321,6 @@ function mcl_mobs.register_mob(name, def)
 		can_despawn = true
 	end
 
-	local function scale_difficulty(value, default, min, special)
-		if (not value) or (value == default) or (value == special) then
-			return default
-		else
-			return math.max(min, value * difficulty)
-		end
-	end
-
 	if def.textures then
 		def.texture_list = table.copy(def.textures)
 		def.textures = nil
@@ -351,7 +342,7 @@ function mcl_mobs.register_mob(name, def)
 		def.persist_in_peaceful = false
 	end
 
-	init_props.hp_max = scale_difficulty(init_props.hp_max, 10, 1)
+	init_props.hp_max = init_props.hp_max
 	init_props.collisionbox = init_props.collisionbox or mcl_mobs.mob_class.initial_properties.collisionbox
 	init_props.selectionbox = init_props.selectionbox or init_props.collisionbox or mcl_mobs.mob_class.initial_properties.selectionbox
 	local eye_height = init_props.head_eye_height
@@ -366,7 +357,7 @@ function mcl_mobs.register_mob(name, def)
 		can_despawn = can_despawn,
 		rotate = math.rad(def.rotate or 0), --  0=front, 90=side, 180=back, 270=side2
 		head_eye_height = eye_height,
-		hp_min = scale_difficulty(def.hp_min, 5, 1),
+		hp_min = def.hp_min,
 		on_rightclick = create_mob_on_rightclick(def.on_rightclick),
 		dogshoot_count2_max = def.dogshoot_count2_max or (def.dogshoot_count_max or 5),
 		gwp_penalties = def.can_open_doors

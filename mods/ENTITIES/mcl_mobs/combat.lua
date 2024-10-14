@@ -40,9 +40,9 @@ end
 
 function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius, self.object) end
 
-function mob_class:attack_player_allowed ()
-	-- TODO: creative mode
-	return true
+function mob_class:attack_player_allowed (player)
+	return mcl_vars.difficulty ~= 0
+		and mcl_gamemode.get_gamemode (player) ~= "creative"
 end
 
 -- dogshoot attack switch and counter function
@@ -551,9 +551,22 @@ function mob_class:custom_attack ()
 	attack:punch (self.object, 1.0, damage, nil)
 
 	if self.dealt_effect then
-		mcl_potions.give_effect_by_level (self.dealt_effect.name, attack,
-						  self.dealt_effect.level,
-						  self.dealt_effect.dur)
+		local duration = self.dealt_effect.dur
+		if mcl_vars.difficulty <= 1 and self.dealt_effect.dur_easy then
+			duration = self.dealt_effect.dur_easy
+		elseif mcl_vars.difficulty > 2 and self.dealt_effect.dur_hard then
+			duration = self.dealt_effect.dur_hard
+		end
+
+		if self.dealt_effect.respect_local_difficulty then
+			local self_pos = self.object:get_pos ()
+			local factor = mcl_worlds.get_regional_difficulty (self_pos)
+			duration = duration * factor
+		end
+		if duration > 0 then
+			mcl_potions.give_effect_by_level (self.dealt_effect.name, attack,
+							  self.dealt_effect.level, duration)
+		end
 	end
 end
 

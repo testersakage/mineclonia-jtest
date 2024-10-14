@@ -219,6 +219,39 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 	mcl_player.player_knockback (player, hitter, dir, tool_capabilities, damage)
 end)
 
+-- Each player's influence on this metric is cumulative with others'.
+-- register_globalstep_slow is unsuitable because several global
+-- functions must only be reset once.
+
+local old_gametime = nil
+local gametime_timeout = 1
+
+minetest.register_globalstep (function (dtime)
+		local increment_by
+		gametime_timeout = gametime_timeout + dtime
+		if gametime_timeout < 1 then
+			return
+		end
+		gametime_timeout = 0
+		-- Respect time_speed.
+		local gametime = math.floor (minetest.get_timeofday () * 24000)
+		if not old_gametime then
+			old_gametime = gametime
+			return
+		end
+		if gametime < old_gametime then
+			-- Wraparound.
+			increment_by = 24000 - old_gametime + gametime
+		else
+			increment_by = gametime - old_gametime
+		end
+		old_gametime = gametime
+		for player in mcl_util.connected_players () do
+			local pos = player:get_pos ()
+			mcl_worlds.tick_chunk_inhabited_time (pos, increment_by)
+		end
+end)
+
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 dofile(modpath.."/animations.lua")
 dofile(modpath.."/compat.lua")

@@ -362,11 +362,22 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 	return context
 end
 
+local BASE_FALL_DISTANCE = 3
+
 function mob_class:gwp_safe_fall_distance ()
+	local bonus = 0
 	if self.attack then
-		return 6
+		-- Derive this distance from difficulty and remaining
+		-- health.  get_properties produces too much garbage.
+		local props = self.initial_properties
+		local sacrifice = self.health - props.hp_max * 0.33
+
+		-- Be willing to sacrifice more health in pursuit of a
+		-- target as difficulty increases.
+		sacrifice = sacrifice - (3 - mcl_vars.difficulty) * 4
+		bonus = math.max (0, sacrifice)
 	end
-	return 3
+	return BASE_FALL_DISTANCE + bonus
 end
 
 local get_us_time = minetest.get_us_time
@@ -767,28 +778,34 @@ local gwp_floortypes = {
 	IGNORE = "IGNORE",
 }
 
-local function is_partial (nodedef, pos)
+local function is_partial (nodedef)
 	if nodedef.groups._mcl_partial == 2 then
 		return false
 	elseif nodedef.groups._mcl_partial == 1 then
 		return true
 	end
 
-	local boxes = minetest.get_node_boxes ("collision_box", pos)
+	local boxes = nodedef.node_box
 
 	-- Return whether the node is the default cube.
-	if not (#boxes == 1
-		and boxes[1][1] <= -0.5
-		and boxes[1][2] <= -0.5
-		and boxes[1][3] <= -0.5
-		and boxes[1][4] >= 0.5
-		and boxes[1][5] >= 0.5
-		and boxes[1][6] >= 0.5) then
-		nodedef.groups._mcl_partial = 1
-		return true
+	if not boxes or boxes.type == "regular" then
+		local fixed = boxes and boxes.fixed
+		if not fixed then
+			return false
+		end
+		if fixed and type (fixed[1]) == "number" then
+			fixed = {fixed[1]}
+		end
+		boxes = fixed
+		return not (#boxes == 1
+				and boxes[1][1] <= -0.5
+				and boxes[1][2] <= -0.5
+				and boxes[1][3] <= -0.5
+				and boxes[1][4] >= 0.5
+				and boxes[1][5] >= 0.5
+				and boxes[1][6] >= 0.5)
 	end
-	nodedef.groups._mcl_partial = 2
-	return false
+	return true
 end
 
 local nodes_this_step = {}
@@ -810,8 +827,41 @@ end
 -- local record_pathfinding_stats = false
 -- local bc_stats = { }
 
+local gwp_basic_node_classes = {
+	["ignore"] = "IGNORE",
+}
+
+local gwp_door_classes = {}
+
+-- Pre-compute node classes for efficiency.  Beware that
+-- DOOR_IRON_CLOSED and DOOR_WOOD_CLOSED must still be processed
+-- specially to establish whether doors are open.
+
+minetest.register_on_mods_loaded (function ()
+		for name, def in pairs (minetest.registered_nodes) do
+			local value = "OPEN"
+
+			if def._pathfinding_class then
+				value = def._pathfinding_class
+			elseif def.damage_per_second ~= 0 then
+				value = "DAMAGE_OTHER"
+			elseif def.groups.door then
+				value = nil
+				if def.groups.door_iron then
+					gwp_door_classes[name] = "DOOR_IRON_CLOSED"
+				else
+					gwp_door_classes[name] = "DOOR_WOOD_CLOSED"
+				end
+			elseif def.walkable and not is_partial (def) then
+				value = "BLOCKED"
+			end
+			gwp_basic_node_classes[name] = value
+		end
+end)
+
 local function gwp_basic_classify (pos)
-	local nodename, value = gwp_get_node (pos), "OPEN"
+	local nodename = gwp_get_node (pos)
+	local value
 
 	-- Minecraft assigns blocks to one of these classes:
 	-- (See: https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.12.2/net/minecraft/pathfinding/PathNodeType.html)
@@ -840,28 +890,15 @@ local function gwp_basic_classify (pos)
 	-- If a hazardous node adjoins a node, the latter will be
 	-- classified as damage-inflicting.
 
-	if nodename ~= "air" then
-		local def = minetest.registered_nodes[nodename]
-		if not def then
-			value = "IGNORE"
-		elseif def._pathfinding_class then
-			value = def._pathfinding_class
-		-- TODO: dripstone.
-		elseif def.damage_per_second ~= 0 then
-			value = "DAMAGE_OTHER"
-		elseif def.groups.door then
-			if mcl_doors.is_open (pos) then
-				value = "DOOR_OPEN"
-			elseif def.groups.door_iron then
-				value = "DOOR_IRON_CLOSED"
-			else
-				value = "DOOR_WOOD_CLOSED"
-			end
-			-- def.groups.partial should be set to 2 on
-			-- partial-height nodes which mobs should
-			-- travel from the inside, such as slabs.
-		elseif def.walkable and not is_partial (def, pos) then
-			value = "BLOCKED"
+	value = gwp_basic_node_classes[nodename]
+
+	-- A value of nil indicates a door whose state must be
+	-- checked.
+	if not value then
+		if mcl_doors.is_open (pos) then
+			value = "DOOR_OPEN"
+		else
+			value = gwp_door_classes[nodename]
 		end
 	end
 	-- if record_pathfinding_stats then
