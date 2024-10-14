@@ -1773,13 +1773,10 @@ function mcl_potions.make_invisible(obj_ref, hide)
 			mcl_player.player_set_visibility(obj_ref, true)
 			obj_ref:set_nametag_attributes({ color = { r = 255, g = 255, b = 255, a = 255 } })
 		end
-	else -- TODO make below section (and preferably other effects on mobs) rely on metadata
-		if hide then
-			local luaentity = obj_ref:get_luaentity()
-			EF.invisibility[obj_ref].old_size = luaentity.visual_size
-			obj_ref:set_properties({ visual_size = { x = 0, y = 0 } })
-		else
-			obj_ref:set_properties({ visual_size = EF.invisibility[obj_ref].old_size })
+	else
+		local luaentity = obj_ref:get_luaentity()
+		if luaentity and luaentity.set_invisible then
+			luaentity:set_invisible (luaentity, hide)
 		end
 	end
 end

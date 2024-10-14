@@ -148,7 +148,7 @@ mcl_mobs.register_mob("mobs_mc:mooshroom", table.merge(cow_def, {
 		else
 			self.base_texture = { "mobs_mc_mooshroom_brown.png", "mobs_mc_mushroom_brown.png" }
 		end
-		self.object:set_properties({ textures = self.base_texture })
+		self:set_textures (self.base_texture)
 		return true
 	end,
 	_on_dispense = function(self, dropitem, pos, droppos, dropnode, dropdir)

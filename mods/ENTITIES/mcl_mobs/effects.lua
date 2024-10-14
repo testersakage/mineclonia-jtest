@@ -533,3 +533,32 @@ end
 function mob_class:get_pitch ()
 	return self._target_pitch or self.object:get_rotation ().x
 end
+
+
+----------------------------------------------------------------------------------
+-- Invisibility.  This invisibility exempts attached objects and armor by altering
+-- textures rather than visual size.
+----------------------------------------------------------------------------------
+
+function mob_class:set_invisible (hide)
+	if hide then
+		self._mob_invisible = true
+		self:set_textures (self._active_texture_list)
+	elseif not hide then
+		self._mob_invisible = false
+		self:set_textures (self._active_texture_list)
+	end
+end
+
+function mob_class:set_textures (textures)
+	self._active_texture_list = textures
+	if self._mob_invisible then
+		textures = table.copy (textures)
+		for i = self.wears_armor and 2 or 1, #textures do
+			textures[i] = "blank.png"
+		end
+	end
+	self.object:set_properties ({
+			textures = textures,
+	})
+end
