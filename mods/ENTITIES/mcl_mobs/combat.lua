@@ -734,6 +734,22 @@ function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 	end
 end
 
+-- Ref: https://minecraft.wiki/w/Invisibility
+function mob_class:detection_multiplier_for_object (object)
+	local factor = 1.0
+
+	if mcl_potions.get_effect (object, "invisibility") then
+		factor = mcl_armor.get_armor_coverage (object)
+		if factor < 0.1 then
+			factor = 0.1
+		end
+		factor = factor * 0.7
+	end
+
+	factor = factor * mcl_armor.get_headpiece_factor (object, self.name)
+	return factor
+end
+
 function mob_class:check_attack (self_pos, dtime)
 	if not self.attack_type then
 		return false
@@ -752,13 +768,7 @@ function mob_class:check_attack (self_pos, dtime)
 			for _, object in ipairs (objects) do
 				if self:should_attack (object) then
 					local pos = object:get_pos ()
-					local factor = 1.0
-					if object:is_player () then
-						local factors = mcl_armor.player_view_range_factors[object]
-						if factors then
-							factor = factors[self.name] or 1.0
-						end
-					end
+					local factor = self:detection_multiplier_for_object (object)
 					local distance = vector.distance (self_pos, pos)
 					if distance <= self.view_range * factor
 						and (not max_distance or distance < max_distance)
