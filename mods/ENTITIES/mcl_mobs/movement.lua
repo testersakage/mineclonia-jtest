@@ -255,7 +255,6 @@ function mob_class:check_jump (self_pos, moveresult)
 		end
 	end
 
-
 	if max_y and (max_y > self_pos.y)
 		and (max_y - self_pos.y > self._initial_step_height) then
 		-- Verify that the direction of the collision measured as a
@@ -753,6 +752,7 @@ function mob_class:cancel_navigation ()
 	mob.waypoints = nil
 	mob.stupid_target = nil
 	mob.movement_goal = nil
+	mob._last_wp = nil
 end
 
 function mob_class:go_to_stupidly (pos, velocity)
