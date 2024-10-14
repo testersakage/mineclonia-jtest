@@ -40,6 +40,7 @@ local hoglin = {
 	},
 	makes_footstep_sound = true,
 	movement_speed = 6.0,
+	knockback_resistance = 0.6,
 	retaliates = true,
 	group_attack = true,
 	avoid_from = {

@@ -43,6 +43,7 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 	order = "follow",
 	floats = 0,
 	movement_speed = 5.0,
+	knockback_resistance = 1.0,
 	-- Approximation
 	damage = 14,
 	knock_back = true,

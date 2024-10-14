@@ -1446,7 +1446,11 @@ function mcl_util.queue()
 	}
 end
 
-function mcl_util.calculate_knockback (velocity, factor, standing, x, z)
+function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x, z)
+	local factor = factor * (1.0 - math.min (1.0, resistance))
+	if factor <= 1.0e-5 then
+		return vector.zero ()
+	end
 	local v = vector.normalize (vector.new (x, 0, z)) * factor
 
 	-- Counterbalance it with a reduced version of the current

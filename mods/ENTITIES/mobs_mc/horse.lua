@@ -41,15 +41,11 @@ end
 
 local function attach_driver(self, clicker)
 	mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
-	self.object:set_properties({stepheight = 1.1})
-	self._initial_step_height = 1.1
 	self.object:set_properties({selectionbox = {0,0,0,0,0,0}})
 	self:attach(clicker)
 end
 
 local function detach_driver(self)
-	self.object:set_properties({stepheight = 0.6})
-	self._initial_step_height = 0.6
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
 	if self.driver then
 		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
@@ -150,6 +146,9 @@ local horse = {
 	makes_footstep_sound = true,
 	jump = true,
 	drops = { base_drop },
+	jump_height = 14,
+	-- Values of 1.0 precisely trigger engine bugs.
+	stepheight = 1.02,
 	head_eye_height = 1.52,
 	should_drive = function (self)
 		return self._saddle and mob_class.should_drive (self)
@@ -157,25 +156,16 @@ local horse = {
 	on_spawn = function(self)
 		local tex = horse_extra_texture(self)
 		self.object:set_properties({textures = tex})
-		self._horse_speed = math.random(486, 1457)/100
-		self._horse_jump = math.random(575, 875)/100
 	end,
 	do_custom = function(self, dtime)
 		if self.driver then
-			local ctrl = self.driver:get_player_control()
+			local ctrl = self.driver:get_player_control ()
 			if ctrl and ctrl.sneak then
-				detach_driver(self)
-			end
-			-- if self.run_velocity ~= self._horse_speed then
-			-- 	self.run_velocity = self._horse_speed
-			-- end
-			if self.jump_height ~= self._horse_jump then
-				self.jump_height = self._horse_jump
+				detach_driver (self)
 			end
 		else
-			detach_driver(self)
-			-- self.run_velocity = self.initial_properties.run_velocity
-			self.jump_height = self.initial_properties.jump_height
+			self._jump_charge = nil
+			detach_driver (self)
 		end
 
 		if not self.v2 then
@@ -286,6 +276,7 @@ local horse = {
 			elseif minetest.get_item_group(iname, "horse_armor") > 0 and can_equip_horse_armor(self.name) and not self.driver and self:set_armor(clicker) then
 				return
 			elseif not self.driver then
+				self._jump_charge = nil
 				attach_driver(self, clicker)
 			end
 		end
@@ -419,6 +410,52 @@ local horse = {
 		end
 	end,
 }
+
+function horse:apply_driver_input (velocity, self_pos, moveresult, dtime)
+	mob_class.apply_driver_input (self, velocity, self_pos, moveresult, dtime)
+
+	self._jump = false
+	local controls = self.driver:get_player_control ()
+	if controls.jump then
+		if self._jump_charge == nil then
+			self._jump_charge = 0.0
+		end
+		local charge = self._jump_charge
+		self._jump_charge = charge + dtime
+	end
+end
+
+function horse:post_apply_driver_input (velocity, self_pos, moveresult, dtime)
+	local controls = self.driver:get_player_control ()
+	if not controls.jump
+		and self._jump_charge and self._jump_charge > 0.0 then
+		if not moveresult.touching_ground
+			or moveresult.standing_on_object then
+			return
+		end
+
+		local charge = self._jump_charge
+		local mc_ticks = math.floor (self._jump_charge * 20)
+		local scale = mc_ticks
+
+		if mc_ticks >= 10 then
+			scale = 0.8 + 2.0 / (mc_ticks - 9) * 0.1
+		else
+			scale = mc_ticks * 0.1
+		end
+		if scale >= 0.9 then
+			scale = 1.0
+		else
+			scale = 0.4 + 0.4 * scale / 0.9
+		end
+
+		-- TODO: horses should rear up after jumping.
+		local v = self.object:get_velocity ()
+		v.y = scale * self.jump_height
+		self.object:set_velocity (v)
+		self._jump_charge = 0
+	end
+end
 
 mcl_mobs.register_mob("mobs_mc:horse", horse)
 
