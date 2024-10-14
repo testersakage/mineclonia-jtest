@@ -27,6 +27,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 	head_yaw="z",
 	makes_footstep_sound = true,
 	movement_speed = 5.0,
+	drive_bonus = 0.225,
 	drops = {
 		{name = "mcl_mobitems:porkchop",
 		chance = 1,
@@ -181,6 +182,15 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 			self.object:set_properties({
 				textures = self.base_texture
 			})
+		end
+	end,
+	do_custom = function (self)
+		if self.driver then
+			local controls = self.driver:get_player_control ()
+			if not controls.sneak then
+				return
+			end
+			mcl_mobs.detach (self.driver, {x = 1, y = 0, z = 1})
 		end
 	end,
 })

@@ -114,6 +114,7 @@ mcl_mobs.mob_class = {
 	pace_bonus = 1.0,
 	run_bonus = 1.25,
 	follow_bonus = 1.2,
+	drive_bonus = 1.0,
 	runaway_bonus_near = 1.25,
 	runaway_bonus_far = 1.0,
 	runaway_view_range = 16,
@@ -160,6 +161,7 @@ mcl_mobs.mob_class = {
 		traveling_to_owner = true,
 	},
 	can_open_doors = false,
+	knockback_resistance = 0.0,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
