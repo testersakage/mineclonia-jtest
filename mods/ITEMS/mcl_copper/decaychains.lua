@@ -1,7 +1,7 @@
 mcl_copper.registered_decaychains = {}
 local decay_nodes = {}
 local nodename_chains = {}
-local S = minetest.get_translator("mcl_copper")
+local D = mcl_util.get_dynamic_translator()
 
 local ESCAPE_CHAR = string.char(0x1b)
 local function untranslate(s, ...)
@@ -123,7 +123,7 @@ local function register_unpreserve(nodename,od,def)
 	local nd = table.copy(od)
 	if nd.description then
 		local description, args = untranslate(nd.description)
-		nd.description = S("Waxed " .. description, unpack(args))
+		nd.description = D("Waxed " .. description, unpack(args))
 	end
 	nd[def.unpreserve_callback]  = function(itemstack, clicker, pointed_thing)
 		if pointed_thing then
