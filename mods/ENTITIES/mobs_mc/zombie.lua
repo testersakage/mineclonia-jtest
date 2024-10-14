@@ -114,9 +114,11 @@ local zombie = {
 }
 
 function zombie:on_spawn ()
+	local self_pos = self.object:get_pos ()
+	local mob_factor = mcl_worlds.get_special_difficulty (self_pos)
 	-- Enable picking up armor for a random subset of
 	-- skeletons.
-	if math.random () < 0.55 then -- TODO: modify this by difficulty.
+	if math.random () < 0.55 * mob_factor then
 		self.wears_armor = true
 	end
 end
@@ -159,8 +161,9 @@ husk.ignited_by_sunlight = false
 husk.drops = drops_common
 husk.dealt_effect = {
     name = "hunger",
-    dur = 7, -- TODO: regional difficulty.
+    dur = 7,
     level = 1,
+    respect_local_difficulty = true,
 }
 -- TODO: Husks avoid water
 
@@ -178,8 +181,9 @@ baby_husk.ignited_by_sunlight = false
 baby_husk.drops = drops_common
 baby_husk.dealt_effect = {
     name = "hunger",
-    dur = 7, -- TODO: regional difficulty.
+    dur = 7,
     level = 1,
+    respect_local_difficulty = true,
 }
 
 mcl_mobs.register_mob("mobs_mc:baby_husk", baby_husk)

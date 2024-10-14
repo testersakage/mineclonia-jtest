@@ -482,6 +482,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 			end
 		end
 
+		local mob_factor = mcl_worlds.get_special_difficulty (self_pos)
 		-- Spawn skeletons for each horse.
 		for _, horse in pairs (horses) do
 			local skelly = minetest.add_entity (self_pos, "mobs_mc:skeleton")
@@ -496,7 +497,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 				-- helmet between levels 5.0 and 23.
 				-- TODO: difficulty.
 				local stack = ItemStack ("mcl_armor:helmet_iron")
-				local level = 5.0 + math.random (18)
+				local level = 5.0 + math.random (18) * mob_factor
 				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
 				entity.armor_list.head = stack:to_string ()
 				entity:set_armor_texture ()

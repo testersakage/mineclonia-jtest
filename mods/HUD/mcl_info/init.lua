@@ -148,6 +148,28 @@ minetest.register_chatcommand("whereami", {
 	end
 })
 
+mcl_info.register_debug_field ("Local Difficulty", {
+       level = 4,
+       func = function (_, pos)
+	       return string.format ("%.2f // %.2f (Day %d)",
+					mcl_worlds.get_regional_difficulty (pos),
+					mcl_worlds.get_special_difficulty (pos),
+					minetest.get_day_count ())
+       end,
+})
+
+mcl_info.register_debug_field ("Inhabited time", {
+       level = 4,
+       func = function (_, pos)
+	       local time = mcl_worlds.chunk_inhabited_time (pos)
+	       local days = math.floor (time / 24000)
+	       local fractional = time / 24000 - days
+	       local seconds = math.floor (fractional * 1440) % 60
+	       local hours = math.floor (fractional * 24)
+	       return string.format ("%d day(s) + %02d:%02d", days, hours, seconds)
+       end,
+})
+
 mcl_info.register_debug_field("Node feet",{
 	level = 4,
 	func = function(_, pos)

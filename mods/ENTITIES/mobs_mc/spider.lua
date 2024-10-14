@@ -47,19 +47,6 @@ local spider = {
 	xp_max = 5,
 	head_eye_height = 0.65,
 	armor = {fleshy = 100, arthropod = 100},
-	on_spawn = function(self)
-		self.object:set_properties({visual_size={x=1,y=1}})
-		local spider_eyes=false
-		for n = 1, #self.object:get_children() do
-			local obj = self.object:get_children()[n]
-			if obj:get_luaentity() and self.object:get_luaentity().name == "mobs_mc:spider_eyes" then
-				spider_eyes = true
-			end
-		end
-		if not spider_eyes then
-			minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes"):set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
-		end
-	end,
 	on_die=function(self)
 		if self.object:get_children() and self.object:get_children()[1] then
 			self.object:get_children()[1]:set_detach()
@@ -111,6 +98,51 @@ local spider = {
 	},
 }
 
+local spider_effects = {
+	"swiftness",
+	"strength",
+	"regeneration",
+	"invisibility",
+}
+
+function spider:on_spawn ()
+	self.object:set_properties({visual_size={x=1,y=1}})
+	local spider_eyes=false
+	for n = 1, #self.object:get_children() do
+		local obj = self.object:get_children()[n]
+		if obj:get_luaentity() and self.object:get_luaentity().name == "mobs_mc:spider_eyes" then
+			spider_eyes = true
+		end
+	end
+	if not spider_eyes then
+		minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes")
+			:set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
+	end
+
+	-- Spawn as jockeys ridden by skeletons 1% of the time.
+	local self_pos = self.object:get_pos ()
+	if math.random (100) == 1 then
+		local skelly = minetest.add_entity (self_pos,
+						"mobs_mc:skeleton")
+		if skelly then
+			local entity = skelly:get_luaentity ()
+			local v = vector.zero ()
+			entity:jock_to_existing (self.object, "", v, v)
+		end
+	end
+
+	-- Occasionally spawn with various beneficial status effects
+	-- on hard difficulty.  TODO: invisible spiders should
+	-- nevertheless have visible eyes.
+	if mcl_vars.difficulty == 3 then
+		local random = math.random ()
+		if random < 0.1 * mcl_worlds.get_special_difficulty (self_pos) then
+			local effect = spider_effects[math.random (#spider_effects)]
+			mcl_potions.give_effect (effect, self.object, 1, math.huge)
+		end
+	end
+end
+
 local function mc_light_value (self)
 	local brightness, value
 	local pos = self.object:get_pos ()
@@ -161,8 +193,10 @@ cave_spider.sounds = table.copy(spider.sounds)
 cave_spider.sounds.base_pitch = 1.25
 cave_spider.dealt_effect = {
 	name = "poison",
-	level = 2,
+	level = 1,
+	dur_easy = 0,
 	dur = 7,
+	dur_hard = 15,
 }
 mcl_mobs.register_mob("mobs_mc:cave_spider", cave_spider)
 
