@@ -1,12 +1,12 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local D = mcl_util.get_dynamic_translator()
 
 -- Fish Buckets
 local fish_names = {
-	["cod"] = "Cod",
-	["salmon"] = "Salmon",
-	["tropical_fish"] = "Tropical Fish",
-	["axolotl"] = "Axolotl",
-	--["pufferfish"] = "Pufferfish", --FIXME add pufferfish
+	["cod"] = {"Cod", "a Cod"},
+	["salmon"] = {"Salmon", "a Salmon"},
+	["tropical_fish"] = {"Tropical Fish", "a Tropical Fish"},
+	["axolotl"] = {"Axolotl", "an Axolotl"},
+	--["pufferfish"] = {"Pufferfish", "a Pufferfish"}, --FIXME add pufferfish
 }
 
 local fishbucket_prefix = "mcl_buckets:bucket_"
@@ -59,11 +59,12 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 end
 
 for techname, fishname in pairs(fish_names) do
+	local fish, a_fish, a_fish_dot = fishname[1], fishname[2], fishname[2] .. "."
 	minetest.register_craftitem(fishbucket_prefix .. techname, {
-		description = S("Bucket of @1", S(fishname)),
-		_doc_items_longdesc = S("This bucket is filled with water and @1.", S(fishname)),
-		_doc_items_usagehelp = S("Place it to empty the bucket and place a @1. Obtain by right clicking on a @2 with a bucket of water.", S(fishname), S(fishname)),
-		_tt_help = S("Places a water source and a @1.", S(fishname)),
+		description = D("Bucket of " .. fish),
+		_doc_items_longdesc = D("This bucket is filled with water and " .. a_fish_dot),
+		_doc_items_usagehelp = D("Place it to empty the bucket and place " .. a_fish_dot .. " Obtain by right clicking on " .. a_fish .. " with a bucket of water."),
+		_tt_help = D("Places a water source and " .. a_fish_dot),
 		inventory_image = techname .. "_bucket.png",
 		stack_max = 1,
 		groups = {bucket = 1, fish_bucket = 1},
