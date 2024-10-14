@@ -345,7 +345,7 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 	})
 end
 
--- Difficulty.  Peaceful is 0, normal is 1, 
+-- Difficulty.  Peaceful is 0, normal is 1,
 local difficulty = minetest.settings:get ("mcl_difficulty")
 if difficulty == "peaceful" then
 	mcl_vars.difficulty = 0
