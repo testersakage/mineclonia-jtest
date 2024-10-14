@@ -192,7 +192,7 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 			= velocity.y < 0.2 and velocity.y > -0.2 -- Very dubious test.
 		local knockback
 			= mcl_util.calculate_knockback (velocity, knockback * 0.5,
-							standing, dir.x, dir.z)
+							0, standing, dir.x, dir.z)
 		local delta
 			= vector.subtract (knockback, velocity)
 		player:add_velocity (delta)
@@ -219,9 +219,9 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 	mcl_player.player_knockback (player, hitter, dir, tool_capabilities, damage)
 end)
 
--- Each player's influence on this metric is cumulative with others'.
--- register_globalstep_slow is unsuitable because several global
--- functions must only be reset once.
+-- Each player's influence on this metric is cumulative with those of
+-- others.  register_globalstep_slow is unsuitable because these
+-- global variables must only be reset once.
 
 local old_gametime = nil
 local gametime_timeout = 1
