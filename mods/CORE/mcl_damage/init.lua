@@ -29,7 +29,7 @@ mcl_damage = {
 		arrow = {is_projectile = true},
 		fireball = {is_projectile = true, is_fire = true},
 		thorns = {is_magic = true},
-		explosion = {is_explosion = true},
+		explosion = {is_explosion = true, scales = true},
 		cramming = {bypasses_armor = true}, -- unused
 		fireworks = {is_explosion = true}, -- unused
 		environment = {},
@@ -329,6 +329,32 @@ minetest.register_on_dieplayer(function(player, mt_reason)
 	  meta:set_float ("mcl_health", 0)
 	  mcl_damage.run_death_callbacks(player, mcl_damage.from_mt(mt_reason))
 end)
+
+-- Register a modifier that adjusts damage by difficulty.
+
+local function is_mob (source)
+	if not source then
+		return false
+	end
+	local entity = source:get_luaentity ()
+	return entity.is_mob
+end
+
+mcl_damage.register_modifier (function (obj, damage, reason)
+	if not obj:is_player () then
+		return damage
+	end
+	if reason.flags.scales == true or is_mob (reason.source) then
+		if mcl_vars.difficulty == 0 then
+			return 0
+		elseif mcl_vars.difficulty == 1 then
+			return math.min (damage / 2.0 + 1.0, damage)
+		elseif mcl_vars.difficulty == 3 then
+			return damage * 1.5
+		end
+	end
+	return damage
+end, -1000)
 
 minetest.register_on_mods_loaded(function()
 	table.sort(mcl_damage.modifiers, function(a, b) return a.priority < b.priority end)

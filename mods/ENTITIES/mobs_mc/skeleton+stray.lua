@@ -94,12 +94,11 @@ local skeleton = {
 		jockey_end = 172,
 	},
 	on_spawn = function(self)
-		if math.random(100) == 1 then
-			self:jock_to("mobs_mc:spider", vector.new(0,0,0), vector.new(0,0,0))
-		end
+		local self_pos = self.object:get_pos ()
+		local mob_factor = mcl_worlds.get_special_difficulty (self_pos)
 		-- Enable picking up armor for a random subset of
 		-- skeletons.
-		if math.random () < 0.55 then -- TODO: modify this by difficulty.
+		if math.random () < 0.55 * mob_factor then
 			self.wears_armor = true
 		end
 		return true

@@ -174,9 +174,16 @@ function mobs_mc.villager_mob:on_die(_, cmi_cause)
 
 	if cmi_cause and cmi_cause.puncher then
 		local l = cmi_cause.puncher:get_luaentity()
-		if l and math.random(2) == 1 and( l.name == "mobs_mc:zombie" or l.name == "mobs_mc:baby_zombie" or l.name == "mobs_mc:villager_zombie" or l.name == "mobs_mc:husk") then
-			mcl_util.replace_mob(self.object,"mobs_mc:villager_zombie")
-			return true
+		if mcl_vars.difficulty > 1 then
+			if l and (mcl_vars.difficulty > 2
+					or math.random (2) == 1)
+				and (l.name == "mobs_mc:zombie"
+					or l.name == "mobs_mc:baby_zombie"
+					or l.name == "mobs_mc:villager_zombie"
+					or l.name == "mobs_mc:husk") then
+				mcl_util.replace_mob(self.object,"mobs_mc:villager_zombie")
+				return true
+			end
 		end
 	end
 end
