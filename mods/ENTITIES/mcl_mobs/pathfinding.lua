@@ -151,6 +151,7 @@ local function longhash (x, y, z)
 end
 
 function mob_class:get_gwp_node (context, x, y, z, g, h)
+	-- assert (x % 1 == 0 and y % 1 == 0 and z % 1 == 0)
 	local hash = hashpos (context, x, y, z)
 	if context.nodes[hash] then
 		return context.nodes[hash]
@@ -193,7 +194,17 @@ function mob_class:gwp_start_1 (context)
 			local penalty = self.gwp_penalties[class]
 			if class ~= "OPEN" and class ~= "WATER" and class ~= "LAVA"
 				and class ~= "DOOR_OPEN" and penalty >= 0.0 then
-				return vector.copy (next_wp)
+				local v = vector.copy (next_wp)
+
+				-- If this mob is doublewide, the
+				-- original position has been adjusted
+				-- and must be restored to its initial
+				-- nodepos value.
+				v.x = v.x - (context.mob_width * 0.5 - 0.5)
+				v.z = v.z - (context.mob_width * 0.5 - 0.5)
+				v.x = floor (v.x)
+				v.z = floor (v.z)
+				return v
 			end
 		end
 	end
@@ -357,6 +368,7 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 
 	-- Construct initial open set and initialize context for first
 	-- cycle.
+	start = self:get_gwp_node (context, start.x, start.y, start.z)
 	start.class = self:gwp_classify_node (context, start)
 	start.g = 0
 	start.h = h_to_nearest_target (start, context)
@@ -1426,7 +1438,7 @@ end
 
 local cdef = {
 	privs = { server = true, },
-	params = "[ cancel | start | choose ]",
+	params = "[ cancel | start | choose | classify ]",
 	func = function (playername, param)
 		local player = minetest.get_player_by_name (playername)
 		local mobs = mcl_mobs.mobs_being_tested
@@ -1485,6 +1497,32 @@ local cdef = {
 				end
 				return old_step (self, moveresult)
 			end
+		elseif param == "classify" then
+			local mob = mcl_mobs.players_selecting_mob[playername]
+			if mob == true or not mob or not mob:is_valid () then
+				local blurb = "You must select a valid mob"
+				minetest.chat_send_player (playername, blurb)
+				return
+			end
+			local entity = mob:get_luaentity ()
+			-- Target position is immaterial here.
+			local pos = vector.apply (player:get_pos (), round_trunc)
+			local context = entity:gwp_initialize ({pos})
+			if not context then
+				minetest.chat_send_player (playername, "Cannot pathfind!")
+				return
+			end
+			local class1 = entity:gwp_classify_node (context, pos)
+			local class2 = entity:gwp_classify_node (context, pos)
+			minetest.chat_send_player (playername,
+						   string.format ("Position (%d, %d, %d): %s",
+								  pos.x, pos.y, pos.z, class1)
+						   .. "\nIntrinsic: " .. class2 .. "\n")
+
+			local width = context.mob_width
+			local height = context.mob_height
+			minetest.chat_send_player (playername, "WIDTH (& LENGTH), HEIGHT: "
+						   .. width .. " " .. height)
 		end
 	end
 }
@@ -1518,6 +1556,10 @@ local function print_node_classification (itemstack, user, pointed_thing)
 		end
 		-- Target position is immaterial here.
 		local context = entity:gwp_initialize ({user:get_pos ()})
+		if not context then
+			minetest.chat_send_player (playername, "Cannot pathfind!")
+			return
+		end
 		local class1 = entity:gwp_classify_node (context, pointed_thing.under)
 		local class2 = entity:gwp_classify_node (context, pointed_thing.above)
 		local class3 = gwp_basic_classify (pointed_thing.under)
@@ -2416,7 +2458,7 @@ end
 -- External interface.
 ------------------------------------------------------------------------
 
-local MAX_STALE_PATH_AGE = 2.25
+local MAX_STALE_PATH_AGE = 1.25
 
 function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, animation, tolerance)
 	local mob = self:mob_controlling_movement ()
@@ -2437,6 +2479,11 @@ function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, a
 	mob.gowp_animation = animation or "walk"
 	mob.pathfinding_context = self:gwp_initialize ({target})
 	mob.callback_arrived = callback_arrived
+
+	-- Cancel navigation if pathing is impossible.
+	if not mob.pathfinding_context then
+		self:cancel_navigation ()
+	end
 	return mob.pathfinding_context
 end
 
@@ -2511,9 +2558,9 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				if self.name == "mobs_mc:iron_golem" then
-					create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
-				end
+				-- if self.name == "mobs_mc:iron_golem" then
+				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
+				-- end
 			else
 				self:cancel_navigation ()
 			end
