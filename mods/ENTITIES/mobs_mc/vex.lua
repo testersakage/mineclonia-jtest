@@ -59,7 +59,7 @@ mcl_mobs.register_mob("mobs_mc:vex", {
 		if self.state == "attack" then
 			if self.base_texture[2] ~= "mobs_mc_vex_charging.png" then
 				self.base_texture[2] = "mobs_mc_vex_charging.png"
-				self.object:set_properties({textures=self.base_texture})
+				self:set_textures (self.base_texture)
 			end
 		else
 			if self.base_texture[2] == "mobs_mc_vex_charging.png" then
@@ -68,7 +68,7 @@ mcl_mobs.register_mob("mobs_mc:vex", {
 			if self.base_texture[1] ~= "default_tool_steelsword.png" then
 				self.base_texture[1] = "default_tool_steelsword.png"
 			end
-			self.object:set_properties({textures=self.base_texture})
+			self:set_textures (self.base_texture)
 		end
 
 		-- Take constant damage if the vex' life clock ran out

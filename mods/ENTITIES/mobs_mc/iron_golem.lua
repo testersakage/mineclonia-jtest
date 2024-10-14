@@ -137,7 +137,7 @@ mcl_mobs.register_mob("mobs_mc:iron_golem", {
 		elseif self.health >= 50 then t = base.."^(mobs_mc_iron_golem_crack_low.png"..o
 		elseif self.health >= 25 then t = base.."^(mobs_mc_iron_golem_crack_medium.png"..o
 		else t = base.."^(mobs_mc_iron_golem_crack_high.png"..o end
-		self:set_properties({textures={t}})
+		self:set_textures ({ t, })
 	end,
 })
 

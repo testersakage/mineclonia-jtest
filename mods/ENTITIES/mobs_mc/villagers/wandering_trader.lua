@@ -120,7 +120,7 @@ end
 
 function wandering_trader:on_spawn()
 	if self._id then
-		self:set_textures()
+		self:villager_set_textures()
 		for _, lid in pairs(self._llamas) do
 			local e = mcl_util.get_luaentity_by_id(lid)
 			if e then
@@ -132,7 +132,7 @@ function wandering_trader:on_spawn()
 	self._id = minetest.sha1(minetest.get_gametime()..minetest.pos_to_string(self.object:get_pos())..tostring(math.random()))
 	self._llamas = {}
 	self._spawn_time = os.time()
-	self:set_textures()
+	self:villager_set_textures()
 end
 
 function wandering_trader:on_rightclick(clicker)
@@ -193,9 +193,7 @@ function mobs_mc.spawn_trader_llama(pos, wt)
 		l.following = wt
 		l._follow_trader = wt._id
 		l.can_despawn = true
-		o:set_properties({
-			textures = tx,
-		})
+		l:set_textures (tx)
 	end
 end
 

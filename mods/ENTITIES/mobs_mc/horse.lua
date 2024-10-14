@@ -155,7 +155,7 @@ local horse = {
 	end,
 	on_spawn = function(self)
 		local tex = horse_extra_texture(self)
-		self.object:set_properties({textures = tex})
+		self:set_textures (tex)
 	end,
 	do_custom = function(self, dtime)
 		if self.driver then
@@ -233,7 +233,7 @@ local horse = {
 				end
 				local tex = horse_extra_texture(self)
 				self.base_texture = tex
-				self.object:set_properties({textures = self.base_texture})
+				self:set_textures (tex)
 				self:update_drops()
 				return
 			elseif self._chest and clicker:get_player_control().sneak then
@@ -294,7 +294,7 @@ local horse = {
 			end
 			local tex = horse_extra_texture(self)
 			self.base_texture = tex
-			self.object:set_properties({textures = self.base_texture})
+			self:set_textures (tex)
 			minetest.sound_play({name = "mcl_armor_equip_leather"}, {gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
 			self:update_drops()
 			return true
@@ -329,7 +329,7 @@ local horse = {
 			end
 			local tex = horse_extra_texture(self, cstring)
 			self.base_texture = tex
-			self.object:set_properties({textures = self.base_texture})
+			self:set_textures (tex)
 			local def = w:get_definition()
 			if def.sounds and def.sounds._mcl_armor_equip then
 				minetest.sound_play({name = def.sounds._mcl_armor_equip}, {gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
@@ -405,7 +405,7 @@ local horse = {
 			end
 			ent_c.base_texture = { "blank.png", child_texture, "blank.png" }
 			ent_c._naked_texture = child_texture
-			child:set_properties({textures = ent_c.base_texture})
+			ent_c:set_textures (ent_c.base_texture)
 			return false
 		end
 	end,

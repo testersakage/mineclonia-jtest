@@ -6,7 +6,7 @@ local CHILD_GROW_TIME = 24000
 
 function mob_class:use_shears(new_textures, shears_stack)
 	if minetest.get_item_group(shears_stack:get_name(), "shears") > 0 then
-		self.object:set_properties({ textures = new_textures })
+		self:set_textures (new_textures)
 		self.gotten = true
 		minetest.sound_play("mcl_tools_shears_cut", { pos = self.object:get_pos() }, true)
 		local shears_def = shears_stack:get_definition()
@@ -99,7 +99,6 @@ function mcl_mobs.spawn_child(pos, mob_type)
 	end
 
 	ent:set_properties({
-		textures = textures,
 		visual_size = {
 			x = ent.base_size.x * .5,
 			y = ent.base_size.y * .5,
@@ -121,6 +120,9 @@ function mcl_mobs.spawn_child(pos, mob_type)
 			ent.base_selbox[6] * .5,
 		},
 	})
+	if ent.child_texture then
+		ent:set_textures (textures)
+	end
 
 	ent.animation = ent._child_animations
 	ent._current_animation = nil
@@ -136,12 +138,12 @@ function mob_class:tick_breeding ()
 			self.child = false
 			self.hornytimer = 0
 			self:set_properties({
-				textures = self.base_texture,
 				mesh = self.base_mesh,
 				visual_size = self.base_size,
 				collisionbox = self.base_colbox,
 				selectionbox = self.base_selbox,
 			})
+			self:set_textures (self.base_texture)
 			if self.on_grown then
 				self.on_grown(self)
 			else
@@ -202,9 +204,7 @@ function mob_class:beget_child (pos)
 			else
 				ent_c.base_texture = self.base_texture
 			end
-			ent_c:set_properties({
-					textures = ent_c.base_texture
-			})
+			ent_c:set_textures (ent_c.base_texture)
 			ent_c.tamed = true
 			ent_c.owner = self.owner
 		end

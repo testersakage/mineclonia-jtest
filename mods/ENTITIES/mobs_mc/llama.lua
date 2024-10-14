@@ -215,9 +215,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			end
 			self._has_chest = true
 			self.base_texture[1] = self.base_texture[3]
-			self.object:set_properties({
-				textures = self.base_texture,
-			})
+			self:set_textures (self.base_texture)
 			self:update_drops()
 			return true
 		end
@@ -235,9 +233,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 					end
 				end
 				self.base_texture[2] = "mobs_mc_llama_decor_"..(messytextures[idef._color] or idef._color)..".png"
-				self.object:set_properties({
-					textures = self.base_texture,
-				})
+				self:set_textures (self.base_texture)
 				self.carpet = iname
 				self:update_drops()
 				return true
@@ -257,7 +253,7 @@ mcl_mobs.register_mob("mobs_mc:llama", {
 			local ent_c = child:get_luaentity()
 			ent_c.base_texture = table.copy(ent_c.base_texture)
 			ent_c.base_texture[2] = "blank.png"
-			child:set_properties({textures = ent_c.base_texture})
+			ent_c:set_textures (ent_c.base_texture)
 			ent_c.tamed = true
 			ent_c.carpet = nil
 			ent_c.owner = parent.owner

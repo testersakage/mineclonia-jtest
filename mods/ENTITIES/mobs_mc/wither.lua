@@ -356,7 +356,7 @@ function wither_def:do_custom (dtime, moveresult)
 		self._arrow_resistant = false
 	end
 
-	self.object:set_properties({textures={self.base_texture}})
+	self:set_textures (self.base_texture)
 	mcl_bossbars.update_boss(self.object, "Wither", "dark_purple")
 end
 
