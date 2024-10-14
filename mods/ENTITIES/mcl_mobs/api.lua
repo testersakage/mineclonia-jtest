@@ -376,10 +376,15 @@ function mob_class:on_step(dtime, moveresult)
 		return
 	end
 
-	self:navigation_step (dtime, moveresult)
-	self:movement_step (dtime, moveresult)
+	if not should_drive then
+		self:navigation_step (dtime, moveresult)
+		self:movement_step (dtime, moveresult)
+		self:motion_step (dtime, moveresult)
+	else
+		self:drive ("walk", "stand", false, dtime, moveresult)
+	end
+
 	self:ai_step (dtime)
-	self:motion_step (dtime, moveresult)
 
 	if self.force_step then
 		self:force_step(dtime)
@@ -400,20 +405,11 @@ function mob_class:on_step(dtime, moveresult)
 	if self.dead then return end
 
 	self:rotate_step (dtime)
-	if should_drive then
-	   -- Called only to reset the swivel.
-	   self:check_head_swivel (dtime, true)
-	   self:drive ("walk", "stand", false, dtime, moveresult)
-	   self:env_damage (dtime, pos)
-	   self:check_particlespawners(dtime)
-	   self:check_item_pickup()
-	else
-	   self:set_animation_speed ()
-	   self:check_head_swivel (dtime)
+	self:set_animation_speed ()
+	self:check_head_swivel (dtime)
 
-	   -- Expel drivers riding submerged mobs.
-	   self:expel_underwater_drivers ()
-	end
+	-- Expel drivers riding submerged mobs.
+	self:expel_underwater_drivers ()
 
 	if self.do_custom then
 		if self.do_custom(self, dtime, moveresult) == false then
@@ -421,15 +417,16 @@ function mob_class:on_step(dtime, moveresult)
 		end
 	end
 
-	if should_drive then
-	   return
-	end
-
 	if self._just_portaled then
 		self._just_portaled = self._just_portaled - dtime
 		if self._just_portaled < 0 then
 			self._just_portaled = nil
 		end
+	end
+
+	if should_drive then
+		self:env_damage (dtime, pos)
+		return
 	end
 
 	self:check_particlespawners(dtime)

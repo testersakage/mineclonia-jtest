@@ -82,8 +82,11 @@ end
 function mob_class:projectile_knockback (factor, dir)
 	local velocity = self.object:get_velocity ()
 	local standing = self:standing_on_walkable ()
+	local resistance = self.knockback_resistance
 	local knockback
-		= mcl_util.calculate_knockback (velocity, factor * 0.5, standing, dir.x, dir.z)
+		= mcl_util.calculate_knockback (velocity, factor * 0.5,
+						resistance,
+						standing, dir.x, dir.z)
 
 	if self.animation.run_end then
 		self:set_animation ("run")
@@ -306,7 +309,8 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		end)
 
 		local standing = self:standing_on_walkable ()
-		v = mcl_util.calculate_knockback (v, kb * 0.5, standing, dir.x, dir.z)
+		v = mcl_util.calculate_knockback (v, kb * 0.5, self.knockback_resistance,
+						standing, dir.x, dir.z)
 		self.object:set_velocity (v)
 	end
 

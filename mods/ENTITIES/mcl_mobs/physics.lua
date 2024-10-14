@@ -155,7 +155,7 @@ function mob_class:collision()
 	for _,object in pairs(minetest.get_objects_inside_radius(pos, width)) do
 		local ent = object:get_luaentity()
 		local is_player = object:is_player ()
-		if (pushable and is_player)
+		if (pushable and is_player and object:get_attach () ~= self.object)
 			or (mob_pushable and ent and ent.is_mob
 			    and object ~= self.object
 			    and object ~= self._jockey_rider) then
@@ -864,7 +864,8 @@ function mob_class:motion_step (dtime, moveresult)
 	local h_scale, v_scale
 	local climbing = false
 
-	if self.floats == 1 and math.random (10) < 8 then
+	-- Note that mobs being controlled by a player should sink.
+	if self.floats == 1 and not self.driver and math.random (10) < 8 then
 		local depth = self._immersion_depth or 0
 		if depth > LIQUID_JUMP_THRESHOLD then
 				jumping = true
