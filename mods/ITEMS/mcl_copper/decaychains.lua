@@ -3,6 +3,62 @@ local decay_nodes = {}
 local nodename_chains = {}
 local S = minetest.get_translator("mcl_copper")
 
+local ESCAPE_CHAR = string.char(0x1b)
+local function untranslate(s, ...)
+	if type(s) ~= "string" then return "", {} end
+	local str, esc, nest, args = s, 1, 0, {}
+	local start, arg
+	while esc < #str do
+		esc = str:find(ESCAPE_CHAR, esc)
+		if not esc then
+			-- suffix, abort
+			start = nil
+			break
+		end
+		local char = str:sub(esc + 1, esc + 1)
+		if esc == 1 then
+			if char == "(" then
+				local _, i = str:find(ESCAPE_CHAR .. "%(T@[^%)]-%)")
+				start = i + 1
+			elseif char == "T" then
+				start = esc + 2
+			else
+				-- unknown code, abort (everything still has initial values)
+				break
+			end
+			nest = 1
+		elseif not start then
+			-- prefix, abort (everything still has initial values)
+			break
+		elseif char == "(" or char == "T" then
+			nest = nest + 1
+		elseif char == "F" then
+			if nest == 1 then
+				arg = esc
+			end
+			nest = nest + 1
+		elseif char == "E" then
+			nest = nest - 1
+			if nest == 1 and arg then
+				args[#args + 1] = str:sub(arg + 2, esc - 1)
+				str = str:sub(1, arg - 1) .. "@" .. (#args) .. str:sub(esc + 2)
+				esc = arg
+				arg = nil
+			end
+		else
+			-- unknown code, abort
+			start = nil
+			break
+		end
+		esc = esc + 2
+	end
+	if start and nest == 0 then
+		return str:sub(start, -3), args
+	else
+		return s, {}
+	end
+end
+
 function mcl_copper.get_decayed(nodename, amount)
 	amount = amount or 1
 	local dc = mcl_copper.registered_decaychains[nodename_chains[nodename]]
@@ -65,7 +121,10 @@ end
 
 local function register_unpreserve(nodename,od,def)
 	local nd = table.copy(od)
-	nd.description = nd.description and S("Waxed @1", nd.description) or S("Waxed "..nodename)
+	if nd.description then
+		local description, args = untranslate(nd.description)
+		nd.description = S("Waxed " .. description, unpack(args))
+	end
 	nd[def.unpreserve_callback]  = function(itemstack, clicker, pointed_thing)
 		if pointed_thing then
 			awards.unlock(clicker:get_player_name(), "mcl:wax_off")
