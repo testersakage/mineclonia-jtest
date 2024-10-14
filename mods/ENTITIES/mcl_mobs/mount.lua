@@ -1,45 +1,5 @@
 local mob_class = mcl_mobs.mob_class
 
-local function node_is(pos)
-	local node = mcl_mobs.node_ok(pos)
-	if node.name == "air" then
-		return "air"
-	end
-	if minetest.get_item_group(node.name, "lava") ~= 0 then
-		return "lava"
-	end
-	if minetest.get_item_group(node.name, "liquid") ~= 0 then
-		return "liquid"
-	end
-	if minetest.registered_nodes[node.name].walkable == true then
-		return "walkable"
-	end
-	return "other"
-end
-
-
-local function get_sign(i)
-	i = i or 0
-	if i == 0 then
-		return 0
-	else
-		return i / math.abs(i)
-	end
-end
-
-
-local function get_velocity(v, yaw, y)
-	local x = -math.sin(yaw) * v
-	local z =  math.cos(yaw) * v
-	return {x = x, y = y, z = z}
-end
-
-
-local function get_v(v)
-	return math.sqrt(v.x * v.x + v.z * v.z)
-end
-
-
 local function force_detach(player)
 	if not player or not player:get_pos() or not player:is_player() then return end
 
