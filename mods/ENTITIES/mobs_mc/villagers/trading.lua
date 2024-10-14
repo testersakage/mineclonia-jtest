@@ -849,7 +849,7 @@ local trade_inventory = {
 					-- Level up
 					if trader._trade_xp >= mobs_mc.villager_mob.tier_xp[trader._max_trade_tier] then
 						trader._max_trade_tier = trader._max_trade_tier + 1
-						trader:set_textures()
+						trader:villager_set_textures()
 						trader:update_max_tradenum()
 						player_xp = player_xp + 5
 						-- Also heal trader for unlocking stuff

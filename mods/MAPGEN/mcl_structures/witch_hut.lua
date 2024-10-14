@@ -16,7 +16,7 @@ local function spawn_witch(p1,p2)
 		local catobject = minetest.add_entity(vector.offset(nn[math.random(#nn)],0,1,0),"mobs_mc:cat")
 		if catobject and catobject:get_pos() then
 			local cat=catobject:get_luaentity()
-			cat.object:set_properties({textures = {"mobs_mc_cat_black.png"}})
+			cat:set_textures ({"mobs_mc_cat_black.png"})
 			cat._home = c
 			cat.can_despawn = false
 		end

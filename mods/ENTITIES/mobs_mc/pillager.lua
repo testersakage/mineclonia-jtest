@@ -3,10 +3,8 @@ local S = minetest.get_translator("mobs_mc")
 local function reload(self)
 	if not self.object:get_pos() then return end
 	minetest.sound_play("mcl_bows_crossbow_drawback_1", {object = self.object, max_hear_distance=16}, true)
-	local props = self.object:get_properties()
-	if not props then return end
-	props.textures[2] = "mcl_bows_crossbow_3.png^[resize:16x16"
-	self.object:set_properties(props)
+	self.base_texture[2] = "mcl_bows_crossbow_3.png^[resize:16x16"
+	self:set_textures (self.base_texture)
 end
 
 local function reset_animation(self, animation)
@@ -90,9 +88,8 @@ pillager = {
 	},
 	shoot_arrow = function(self, pos, dir)
 		minetest.sound_play("mcl_bows_crossbow_shoot", {object = self.object, max_hear_distance=16}, true)
-		local props = self.object:get_properties()
-		props.textures[2] = "mcl_bows_crossbow_0.png^[resize:16x16"
-		self.object:set_properties(props)
+		self.base_texture[2] = "mcl_bows_crossbow_0.png^[resize:16x16"
+		self:set_textures (self.base_texture)
 		local old_anim = self._current_animation
 		if old_anim == "run" or old_anim == "walk" then
 			self:set_animation("reload_run")

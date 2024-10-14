@@ -108,13 +108,13 @@ local piglin = {
 			mcl_util.set_bone_position(self.object, "Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(20,-20,18))
 			mcl_util.set_bone_position(self.object, "Head", vector.new(0,6.3,0), vector.new(-40,0,0))
 			self.base_texture[2] = "default_gold_ingot.png"
-			mcl_util.set_properties(self.object, {textures = self.base_texture})
+			self:set_textures (self.base_texture)
 		else
 			mcl_util.set_bone_position(self.object, "Wield_Item", vector.new(.5,4.5,-1.6), vector.new(90,0,20))
 			mcl_util.set_bone_position(self.object, "Head", vector.new(0,6.3,0), vector.new(0,0,0))
 			mcl_util.set_bone_position(self.object, "Arm_Right_Pitch_Control", vector.new(-3,5.785,0), vector.new(0,0,0))
 			self.base_texture[2] = self.weapon
-			mcl_util.set_properties(self.object, {textures = self.base_texture})
+			self:set_textures (self.base_texture)
 			self._zombie_timer = nil
 		end
 

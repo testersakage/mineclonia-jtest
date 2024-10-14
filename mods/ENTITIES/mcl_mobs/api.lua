@@ -206,6 +206,8 @@ function mob_class:mob_activate(staticdata, dtime)
 	self.acc_speed = 0
 	self._initial_step_height = self.initial_properties.stepheight
 	self._previously_floating = nil
+	self._active_texture_list = nil
+	self._mob_invisible = false
 
 	if self.dead then
 		self:safe_remove()
@@ -227,7 +229,7 @@ function mob_class:mob_activate(staticdata, dtime)
 
 	if self.gotten == true
 	and self.gotten_texture then
-		self:set_properties({textures = self.gotten_texture })
+		self:set_textures (self.gottten_texture)
 	end
 
 	if self.gotten == true
@@ -273,7 +275,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	self.base_size = self.base_size or {x = 1, y = 1, z = 1}
 
 	if self.base_texture then
-		self:set_properties({textures = self.base_texture})
+		self:set_textures (self.base_texture)
 	end
 
 	self:set_yaw ((math.random(0, 360) - 180) / 180 * math.pi)

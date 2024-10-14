@@ -108,9 +108,7 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 		if self.gotten ~= true and minetest.get_item_group(item:get_name(), "shears") > 0 then
 			-- Remove pumpkin
 			self.gotten = true
-			self.object:set_properties({
-				textures = gotten_texture,
-			})
+			self:set_textures (self.gotten_texture)
 
 			local pos = self.object:get_pos()
 			minetest.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
@@ -128,7 +126,7 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 	end,
 	_on_dispense = function(self, dropitem, pos, droppos, dropnode, dropdir)
 		if minetest.get_item_group(dropitem:get_name(), "shears") > 0 then
-			if self.object:get_properties().textures[2] ~= "blank.png" then
+			if not self.gotten then
 				dropitem = self:use_shears({
 					"mobs_mc_snowman.png",
 					"blank.png", "blank.png",

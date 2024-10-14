@@ -43,7 +43,7 @@ function mob_class:set_armor_texture()
 		if self.base_texture[self.wears_armor and 1] then
 			self.base_texture[self.wears_armor and 1]=texture
 		end
-		self:set_properties({textures=self.base_texture})
+		self:set_textures (self.base_texture)
 
 		local armor_
 		if type(self.armor) == "table" then

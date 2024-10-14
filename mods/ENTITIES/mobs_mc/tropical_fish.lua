@@ -51,10 +51,10 @@ local function set_textures(self)
 		self._pattern = "extra_mobs_tropical_fish_pattern_"..self._type.."_"..math.random(6)..".png"
 	end
 	self.object:set_properties({
-		textures = {
-			"(extra_mobs_tropical_fish_"..self._type..".png^[colorize:"..self._base_color..":127)^("..self._pattern.."^[colorize:"..self._pattern_color..")",
-		},
 		mesh="extra_mobs_tropical_fish_"..self._type..".b3d"
+	})
+	self:set_textures ({
+			"(extra_mobs_tropical_fish_"..self._type..".png^[colorize:"..self._base_color..":127)^("..self._pattern.."^[colorize:"..self._pattern_color..")",
 	})
 end
 

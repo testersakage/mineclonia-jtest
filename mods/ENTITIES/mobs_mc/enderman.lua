@@ -483,7 +483,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 							block_type = "unknown"
 						end
 						self.base_texture = create_enderman_textures(block_type, self._taken_node)
-						self.object:set_properties({ textures = self.base_texture })
+						self:set_textures (self.base_texture)
 						self.animation = select_enderman_animation("block")
 						self:set_animation(self.animation.current)
 						if def.sounds and def.sounds.dug then

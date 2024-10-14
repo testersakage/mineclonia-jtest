@@ -151,7 +151,7 @@ table.update(cat,{
 		if not self._texture then
 			self._texture = cat.textures[math.random(#cat.textures)]
 		end
-		self.object:set_properties({textures = self._texture})
+		self:set_textures (self._texture)
 	end
 })
 
