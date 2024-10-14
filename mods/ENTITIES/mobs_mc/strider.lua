@@ -87,7 +87,10 @@ local strider = {
 			self:add_physics_factor ("movement_speed", "mobs_mc:strider_out_of_lava", 0.25)
 		end
 
-		self.object:set_properties({textures=self.base_texture, shaking=self.shaking})
+		self:set_textures (self.base_texture)
+		self.object:set_properties({
+				shaking=self.shaking
+		})
 
 		-- set needed values if not already present
 		if not self.v2 then
@@ -132,9 +135,7 @@ local strider = {
 				"extra_mobs_strider.png",
 				"mobs_mc_pig_saddle.png", -- saddle
 			}
-			self.object:set_properties({
-				textures = self.base_texture
-			})
+			self:set_textures (self.base_texture)
 			self.saddle = "yes"
 			self.tamed = true
 			self.drops = {

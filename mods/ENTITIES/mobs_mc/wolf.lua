@@ -112,7 +112,8 @@ local wolf = {
 				local yaw = self:get_yaw()
 				dog = mcl_util.replace_mob(self.object, "mobs_mc:dog")
 				if dog and dog:get_pos() then
-					dog:set_properties({texture_holder = self.texture_holder, textures = {add_collar(self)}})
+					dog.texture_holder = self.texture_holder
+					dog:set_textures (add_collar (self))
 					ent = dog:get_luaentity()
 					ent:set_yaw (yaw)
 					ent.owner = clicker:get_player_name()
@@ -152,13 +153,15 @@ local wolf = {
 	},
 	avoid_from = { "mobs_mc:llama" },
 	after_activate = function(self)
-		self.texture_holder = self.object:get_properties().textures[1]
+		self.texture_holder = self._active_texture_list[1]
 	end,
 	do_custom = function(self)
-		if self.state == "attack" then
-			self.object:set_properties({textures = {self.texture_holder.."^mobs_mc_wolf_angry_eyes.png"}})
+		if self.attack then
+			self:set_textures ({
+					self.texture_holder.."^mobs_mc_wolf_angry_eyes.png"
+			})
 		else
-			self.object:set_properties({textures = {self.texture_holder}})
+			self:set_textures ({ self.texture_holder, })
 		end
 	end,
 	on_spawn = function(self)
@@ -173,7 +176,7 @@ local wolf = {
 		end
 		self.texture_holder = texture
 		self.spawn_in_group = group_size
-		self.object:set_properties({textures = {texture}})
+		self:set_textures ({ texture, })
 	end
 }
 
@@ -227,7 +230,7 @@ dog.attack_animals = nil
 dog.specific_attack = nil
 dog.after_activate = function(self)
 	if self.texture_holder ~= "" then
-		self.object:set_properties({textures = {add_collar(self, self.collar_color)}})
+		self:set_textures (add_collar (self, self.collar_color))
 	end
 end
 
@@ -245,9 +248,7 @@ dog.on_rightclick = function(self, clicker)
 				local tex = get_dog_textures(self, group)
 				if tex then
 					self.base_texture = tex
-					self.object:set_properties({
-						textures = self.base_texture
-					})
+					self:set_textures (tex)
 					if not minetest.is_creative_enabled(clicker:get_player_name()) then
 						item:take_item()
 						clicker:set_wielded_item(item)

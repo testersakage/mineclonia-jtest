@@ -472,7 +472,7 @@ function mobs_mc.villager_mob:employ(jobsite_pos)
 
 		if not self:has_traded() then
 			self._profession=p
-			self:set_textures()
+			self:villager_set_textures()
 		end
 		return true
 	end
@@ -555,7 +555,7 @@ function mobs_mc.villager_mob:remove_job()
 	if not self:has_traded() then
 		self._profession = "unemployed"
 		self._trades = nil
-		self:set_textures()
+		self:villager_set_textures()
 	end
 end
 

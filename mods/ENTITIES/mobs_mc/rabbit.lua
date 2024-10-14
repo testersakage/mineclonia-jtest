@@ -90,11 +90,11 @@ local rabbit = {
 		if nametag == "Toast" and not self._has_toast_texture then
 			self._original_rabbit_texture = self.base_texture
 			self.base_texture = { "mobs_mc_rabbit_toast.png" }
-			self.object:set_properties({ textures = self.base_texture })
+			self:set_textures (self.base_texture)
 			self._has_toast_texture = true
 		elseif nametag ~= "Toast" and self._has_toast_texture then
 			self.base_texture = self._original_rabbit_texture
-			self.object:set_properties({ textures = self.base_texture })
+			self:set_textures (self.base_texture)
 			self._has_toast_texture = false
 		end
 	end,

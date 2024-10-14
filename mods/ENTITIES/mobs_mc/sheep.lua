@@ -137,7 +137,7 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 				self.color = "unicolor_light_red"
 			end
 			self.base_texture = sheep_texture(self.color)
-			self.object:set_properties({ textures = self.base_texture })
+			self:set_textures (self.base_texture)
 			self.drops = get_sheep_drops(self.color)
 			self.initial_color_set = true
 		end
@@ -157,9 +157,7 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 			local cgroup = "unicolor_"..mcl_dyes.colors[idef._color].unicolor
 			self.color = cgroup
 			self.base_texture = sheep_texture(cgroup)
-			self.object:set_properties({
-				textures = self.base_texture,
-			})
+			self:set_textures (self.base_texture)
 			self.drops = get_sheep_drops(cgroup)
 			return
 		end
@@ -172,7 +170,7 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 			self.color = self.color or "unicolor_white"
 			minetest.add_item(pos, ItemStack(unicolor_to_wool(self.color).." "..math.random(1,3)))
 			self.base_texture = gotten_texture
-			self.object:set_properties({ textures = self.base_texture })
+			self:set_textures (self.base_texture)
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				item:add_wear(mobs_mc.shears_wear)
 				clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
@@ -206,7 +204,7 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 			ent_c.initial_color_set = true
 			ent_c.tamed = true
 			ent_c.owner = parent1.owner
-			child:set_properties({textures = ent_c.base_texture})
+			self:set_textures (ent_c.base_texture)
 			return false
 		end
 	end,

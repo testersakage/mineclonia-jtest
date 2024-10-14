@@ -94,9 +94,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 				"mobs_mc_pig.png", -- base
 				"mobs_mc_pig_saddle.png", -- saddle
 			}
-			self.object:set_properties({
-				textures = self.base_texture
-			})
+			self.object:set_textures (self.base_texture)
 			self.saddle = "yes"
 			self.tamed = true
 			self.drops = {
@@ -179,9 +177,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 				"mobs_mc_pig.png", -- base
 				"mobs_mc_pig_saddle.png", -- saddle
 			}
-			self.object:set_properties({
-				textures = self.base_texture
-			})
+			self:set_textures (self.base_textures)
 		end
 	end,
 	do_custom = function (self)
