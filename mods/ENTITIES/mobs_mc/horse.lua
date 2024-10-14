@@ -434,9 +434,8 @@ function horse:post_apply_driver_input (velocity, self_pos, moveresult, dtime)
 			return
 		end
 
-		local charge = self._jump_charge
 		local mc_ticks = math.floor (self._jump_charge * 20)
-		local scale = mc_ticks
+		local scale
 
 		if mc_ticks >= 10 then
 			scale = 0.8 + 2.0 / (mc_ticks - 9) * 0.1
