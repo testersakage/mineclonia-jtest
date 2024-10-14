@@ -240,11 +240,11 @@ function mob_class:gwp_start (context)
 	local pos = self:gwp_start_1 (context)
 	if pos then
 		local start_class = self:gwp_classify_node (context, pos)
-		-- If this mob is wider than 1 block, check for valid
-		-- start positions at every block on which it is
-		-- standing.
-		if start_class == "BLOCKED" or start_class == "IGNORE" then
-			local c1, c2, c3, c4
+		local penalties = self.gwp_penalties
+		-- Check for valid start positions at every block on
+		-- which this mob is standing.
+		if start_class == "OPEN" or penalties[start_class] < 0.0 then
+			local c1, c2, c3, c4, class
 			local cbox = self.collisionbox
 			c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
 			c1 = vector.apply (c1, round_trunc)
@@ -254,16 +254,20 @@ function mob_class:gwp_start (context)
 			c3 = vector.apply (c3, round_trunc)
 			c4 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[6])
 			c4 = vector.apply (c4, round_trunc)
-			if self:gwp_classify_node (context, c1) ~= "BLOCKED" then
+			class = self:gwp_classify_node (context, c1)
+			if class ~= "OPEN" and penalties[class] >= 0.0 then
 				return c1
 			end
-			if self:gwp_classify_node (context, c2) ~= "BLOCKED" then
+			class = self:gwp_classify_node (context, c2)
+			if class ~= "OPEN" and penalties[class] >= 0.0 then
 				return c2
 			end
-			if self:gwp_classify_node (context, c3) ~= "BLOCKED" then
+			class = self:gwp_classify_node (context, c3)
+			if class ~= "OPEN" and penalties[class] >= 0.0 then
 				return c3
 			end
-			if self:gwp_classify_node (context, c4) ~= "BLOCKED" then
+			class = self:gwp_classify_node (context, c4)
+			if class ~= "OPEN" and penalties[class] >= 0.0 then
 				return c4
 			end
 		else
@@ -2507,9 +2511,9 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:dolphin" then
-				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
-				-- end
+				if self.name == "mobs_mc:iron_golem" then
+					create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
+				end
 			else
 				self:cancel_navigation ()
 			end
