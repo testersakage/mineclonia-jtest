@@ -161,7 +161,9 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 	if minetest.get_item_group(minetest.get_node({ x = pos2.x, y = pos2.y - 1, z = pos2.z }).name, "liquid") < 1 then
 		if minetest.get_node(pos2).name == "air" then
 			-- Low chance for a lightning to spawn skeleton trap horse.
-			if rng:next(1,100) <= 3 then
+			local difficulty = mcl_worlds.get_regional_difficulty (pos2)
+			local random = rng:next (0, 26000) / 26000
+			if random <= difficulty * 0.01 then
 				if for_trap then
 					return
 				end

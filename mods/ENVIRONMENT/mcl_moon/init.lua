@@ -35,6 +35,11 @@ local function get_moon_texture()
 	return "mcl_moon_moon_phases.png^[sheet:"..SHEET_W.."x"..SHEET_H..":"..x..","..y
 end
 
+function mcl_moon.get_moon_brightness ()
+	local phase = mcl_moon.get_moon_phase ()
+	return math.abs (phase - 4) / 4
+end
+
 local timer = 0
 local last_reported_phase = nil
 minetest.register_globalstep(function(dtime)
