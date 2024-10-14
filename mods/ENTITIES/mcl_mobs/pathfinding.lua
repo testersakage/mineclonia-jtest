@@ -197,13 +197,13 @@ function mob_class:gwp_start_1 (context)
 			end
 		end
 	end
-	-- If standing in water...
 	pos.x = floor (pos.x + 0.5)
 	pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
 	pos.z = floor (pos.z + 0.5)
 	local node = minetest.get_node (pos)
 	local ground = minetest.get_node (vector.offset (pos, 0, -1, 0))
 
+	-- If standing in water...
 	if node.name == "mcl_core:water_source" then
 		if self.floats == 0
 			and ground == "mcl_core:water_source" then
@@ -461,15 +461,19 @@ end
 
 function mob_class:gwp_reconstruct_path (context, arrival)
 	local list = {arrival}
+	-- Adjust waypoint position so as to center the mob on
+	-- the path.
+	arrival.x = arrival.x + context.mob_width * 0.5 - 0.5
+	arrival.z = arrival.z + context.mob_width * 0.5 - 0.5
+	arrival.y = arrival.y + context.y_offset
 	while arrival.referrer ~= nil do
 		table.insert (list, arrival.referrer)
-
+		arrival = arrival.referrer
 		-- Adjust waypoint position so as to center the mob on
 		-- the path.
 		arrival.x = arrival.x + context.mob_width * 0.5 - 0.5
 		arrival.z = arrival.z + context.mob_width * 0.5 - 0.5
 		arrival.y = arrival.y + context.y_offset
-		arrival = arrival.referrer
 	end
 	return list
 end
