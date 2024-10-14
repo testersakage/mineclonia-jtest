@@ -208,9 +208,25 @@ function mob_class:gwp_start_1 (context)
 			end
 		end
 	end
-	pos.x = floor (pos.x + 0.5)
-	pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
-	pos.z = floor (pos.z + 0.5)
+	-- It is possible for mobs to turn around during a repath if
+	-- the start position returned is inconsistent with that of
+	-- the last waypoint reached, for this will frequently produce
+	-- a path containing the new start position, followed by that
+	-- of the previous waypoint, while gwp_next_waypoint is only
+	-- capable of eliminating one overrun waypoint at a time.
+	local last_wp = self._last_wp
+	if last_wp
+		and math.abs (pos.x - last_wp.x) < 0.5
+		and math.abs (pos.z - last_wp.z) < 0.5
+		and math.abs (pos.y - last_wp.y) < 1 then
+		pos.x = last_wp.x - (context.mob_width * 0.5 - 0.5)
+		pos.y = last_wp.y - context.y_offset
+		pos.z = last_wp.z - (context.mob_width * 0.5 - 0.5)
+	else
+		pos.x = floor (pos.x + 0.5)
+		pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
+		pos.z = floor (pos.z + 0.5)
+	end
 	local node = minetest.get_node (pos)
 	local ground = minetest.get_node (vector.offset (pos, 0, -1, 0))
 
@@ -249,41 +265,41 @@ end
 
 function mob_class:gwp_start (context)
 	local pos = self:gwp_start_1 (context)
+	local penalties = self.gwp_penalties
 	if pos then
 		local start_class = self:gwp_classify_node (context, pos)
-		local penalties = self.gwp_penalties
 		-- Check for valid start positions at every block on
 		-- which this mob is standing.
-		if start_class == "OPEN" or penalties[start_class] < 0.0 then
-			local c1, c2, c3, c4, class
-			local cbox = self.collisionbox
-			c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
-			c1 = vector.apply (c1, round_trunc)
-			c2 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[6])
-			c2 = vector.apply (c2, round_trunc)
-			c3 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[3])
-			c3 = vector.apply (c3, round_trunc)
-			c4 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[6])
-			c4 = vector.apply (c4, round_trunc)
-			class = self:gwp_classify_node (context, c1)
-			if class ~= "OPEN" and penalties[class] >= 0.0 then
-				return c1
-			end
-			class = self:gwp_classify_node (context, c2)
-			if class ~= "OPEN" and penalties[class] >= 0.0 then
-				return c2
-			end
-			class = self:gwp_classify_node (context, c3)
-			if class ~= "OPEN" and penalties[class] >= 0.0 then
-				return c3
-			end
-			class = self:gwp_classify_node (context, c4)
-			if class ~= "OPEN" and penalties[class] >= 0.0 then
-				return c4
-			end
-		else
+		if start_class ~= "OPEN" and penalties[start_class] >= 0.0 then
 			return pos
 		end
+	end
+	local c1, c2, c3, c4, class
+	local cbox = self.collisionbox
+	local pos = self.object:get_pos ()
+	c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
+	c1 = vector.apply (c1, round_trunc)
+	c2 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[6])
+	c2 = vector.apply (c2, round_trunc)
+	c3 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[3])
+	c3 = vector.apply (c3, round_trunc)
+	c4 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[6])
+	c4 = vector.apply (c4, round_trunc)
+	class = self:gwp_classify_node (context, c1)
+	if class ~= "OPEN" and penalties[class] >= 0.0 then
+		return c1
+	end
+	class = self:gwp_classify_node (context, c2)
+	if class ~= "OPEN" and penalties[class] >= 0.0 then
+		return c2
+	end
+	class = self:gwp_classify_node (context, c3)
+	if class ~= "OPEN" and penalties[class] >= 0.0 then
+		return c3
+	end
+	class = self:gwp_classify_node (context, c4)
+	if class ~= "OPEN" and penalties[class] >= 0.0 then
+		return c4
 	end
 	return nil
 end
@@ -2703,6 +2719,11 @@ function mob_class:gwp_next_waypoint (dtime)
 	if dist_to_xcenter < mindist
 		and dist_to_zcenter < mindist
 		and dist_to_ycenter < 1.0 then
+		self._last_wp = {
+			x = next_wp.x,
+			y = next_wp.y,
+			z = next_wp.z,
+		}
 		next_wp = ahead
 		next_wp_surface = ahead_surface
 		waypoints[#waypoints] = nil
@@ -2719,6 +2740,11 @@ function mob_class:gwp_next_waypoint (dtime)
 					local dir1 = vector.direction (self_pos, next_wp_surface)
 					local dot = vector.dot (dir, dir1)
 					if dot < 0 then
+						self._last_wp = {
+							x = next_wp.x,
+							y = next_wp.y,
+							z = next_wp.z,
+						}
 						next_wp = ahead
 						next_wp_surface = ahead_surface
 						waypoints[#waypoints] = nil
