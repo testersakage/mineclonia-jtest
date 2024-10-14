@@ -392,7 +392,7 @@ function mcl_armor.get_headpiece_factor (object, mob_name)
 	end
 
 	local luaentity = object:get_luaentity ()
-	
+
 	if luaentity
 		and luaentity.is_mob
 		and luaentity.armor_list
