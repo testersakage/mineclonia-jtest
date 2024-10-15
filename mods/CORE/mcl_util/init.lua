@@ -1462,6 +1462,16 @@ function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x
 	return v
 end
 
+function mcl_util.get_wielditem (object)
+	local entity = object:get_luaentity ()
+	if object:is_player () then
+		return object:get_wielded_item ()
+	elseif entity and entity.is_mob then
+		return entity:get_wielditem ()
+	end
+	return ItemStack ()
+end
+
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
 dofile(modpath.."/compat.lua")

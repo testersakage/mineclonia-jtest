@@ -101,6 +101,7 @@ local skeleton = {
 		if math.random () < 0.55 * mob_factor then
 			self.wears_armor = true
 		end
+		self:generate_default_equipment (mob_factor, true, false)
 		return true
 	end,
 	ignited_by_sunlight = true,

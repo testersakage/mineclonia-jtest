@@ -37,7 +37,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 
 	if reason.source and mcl_tools.mace_cooldown[reason.source] and mcl_tools.mace_cooldown[reason.source] and minetest.get_gametime() - mcl_tools.mace_cooldown[reason.source] < 2 then
-		breach_level = mcl_enchanting.get_enchantment(reason.source:get_wielded_item(), "breach")
+		breach_level = mcl_enchanting.get_enchantment(mcl_util.get_wielditem (reason.source), "breach")
 	end
 
 	if inv or is_mob then

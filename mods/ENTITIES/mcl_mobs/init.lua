@@ -162,6 +162,10 @@ mcl_mobs.mob_class = {
 	},
 	can_open_doors = false,
 	knockback_resistance = 0.0,
+	can_wield_items = false,
+	wielditem_type = nil,
+	wielditem_drop_probability = 0.0,
+	ignite_targets_while_burning = false,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

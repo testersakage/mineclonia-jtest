@@ -107,6 +107,13 @@ function mcl_burning.set_on_fire(obj, burn_time)
 		local inv = mcl_util.get_inventory(obj)
 		local armor_list = inv and inv:get_list("armor")
 
+		if luaentity.is_mob and luaentity.armor_list then
+			armor_list = { }
+			for _, itemstring in pairs (luaentity.armor_list) do
+				table.insert (armor_list, ItemStack (itemstring))
+			end
+		end
+
 		if armor_list then
 			for _, stack in pairs(armor_list) do
 				local fire_prot_lvl = mcl_enchanting.get_enchantment(stack, "fire_protection")

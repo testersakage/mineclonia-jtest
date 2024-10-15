@@ -170,11 +170,13 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	if hitter then
 		luaentity = hitter:get_luaentity()
 	end
-	if hitter and hitter:is_player() then
-		local wielditem = hitter:get_wielded_item()
-		knockback = knockback + mcl_enchanting.get_enchantment(wielditem, "knockback")
-	elseif luaentity and luaentity._knockback then
+	if luaentity and luaentity._knockback then
 		knockback = knockback + luaentity._knockback
+	elseif hitter then
+		local wielditem = mcl_util.get_wielditem (hitter)
+		knockback = knockback
+			+ mcl_enchanting.get_enchantment (wielditem,
+							"knockback")
 	end
 
 	-- Throwables should always deal knockback.
