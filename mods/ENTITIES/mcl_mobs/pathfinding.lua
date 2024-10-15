@@ -1707,6 +1707,8 @@ minetest.register_tool ("mcl_mobs:pathfinder_edge_stick", {
 	on_use = print_node_neighbors,
 })
 
+mcl_mobs.last_dbg_entity = nil
+
 minetest.register_tool ("mcl_mobs:pathfinder_dump_stick", {
 	description = "Dump object luaentities",
 	inventory_image = "default_stick.png",
@@ -1717,6 +1719,7 @@ minetest.register_tool ("mcl_mobs:pathfinder_dump_stick", {
 			return
 		end
 		dbg.pp (pointed_thing.ref:get_luaentity ())
+		mcl_mobs.last_dbg_entity = pointed_thing.ref:get_luaentity ()
 	end,
 })
 

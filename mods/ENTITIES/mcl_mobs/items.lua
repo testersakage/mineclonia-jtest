@@ -88,6 +88,89 @@ function mob_class:set_armor_drop_probability (armor_slot, probability)
 	self._armor_drop_probabilities[armor_slot] = probability
 end
 
+function mob_class:armor_better_than (stack, current)
+	local def = current:get_definition ()
+	if not def then
+		return true
+	end
+
+	if current:is_empty () then
+		return true
+	end
+
+	local itemname = stack:get_name ()
+	local curname = current:get_name ()
+
+	if mcl_enchanting.has_enchantment (current, "curse_of_binding") then
+		return false
+	end
+
+	if minetest.get_item_group (curname, "mcl_armor_points")
+		< minetest.get_item_group (itemname, "mcl_armor_points") then
+		return true
+	elseif minetest.get_item_group (curname, "mcl_armor_toughness")
+		< minetest.get_item_group (itemname, "mcl_armor_toughness") then
+		return true
+	else
+		-- TODO: the MC Wiki states that Minecraft also
+		-- replaces items without "NBT values" with those
+		-- which have them.
+		local dur_old = mcl_util.calculate_durability (current)
+		local dur_new = mcl_util.calculate_durability (stack)
+		if dur_old < dur_new then
+			return true
+		end
+		-- Prefer enchanted to non-enchanted items.
+		if minetest.get_item_group (curname, "enchanted") == 0
+			and minetest.get_item_group (itemname, "enchanted") ~= 0 then
+			return true
+		end
+	end
+end
+
+function mob_class:wielditem_better_than (stack, current)
+	-- Always prefer swords to non-sword items.
+	local cap_new, cap_old
+
+	if current:is_empty () then
+		return true
+	end
+
+	local itemname = stack:get_name ()
+	local curname = current:get_name ()
+
+	if minetest.get_item_group (itemname, "sword") > 0 then
+		if minetest.get_item_group (curname, "sword") == 0 then
+			return true
+		end
+	end
+
+	if minetest.get_item_group (itemname, "tool") ~= 0
+		or minetest.get_item_group (itemname, "weapon") ~= 0 then
+		cap_new = stack:get_tool_capabilities ()
+		cap_old = current:get_tool_capabilities ()
+		if minetest.get_item_group (curname, "tool") == 0
+			and minetest.get_item_group (curname, "weapon") == 0 then
+			return true
+		end
+		if (cap_new.damage_groups.fleshy or 0)
+			> (cap_old.damage_groups.fleshy or 0) then
+			return true
+		end
+		local dur_old = mcl_util.calculate_durability (stack)
+		local dur_new = mcl_util.calculate_durability (current)
+		if dur_old < dur_new then
+			return true
+		end
+		-- Prefer enchanted to non-enchanted items.
+		if minetest.get_item_group (curname, "enchanted") == 0
+			and minetest.get_item_group (itemname, "enchanted") ~= 0 then
+			return true
+		end
+	end
+	return false
+end
+
 function mob_class:try_equip_item (stack, def, itemname)
 	if self.wears_armor
 		and self.wears_armor ~= "no_pickup"
@@ -99,9 +182,12 @@ function mob_class:try_equip_item (stack, def, itemname)
 		local current = self.armor_list[slot]
 		local self_pos = self.object:get_pos ()
 		if current and current ~= "" then
+			if not self:armor_better_than (stack, ItemStack (current)) then
+				return false
+			end
 			local random = math.random () - 0.1
 			if math.max (0, random)
-				< self:effective_drop_probability (itemname) then
+				< self:effective_drop_probability (slot) then
 				minetest.add_item (self_pos, ItemStack (current))
 			end
 		end
@@ -111,7 +197,16 @@ function mob_class:try_equip_item (stack, def, itemname)
 		self:set_armor_texture ()
 		self.persistent = true
 		return true
+	elseif self.can_wield_items
+		and self.can_wield_items ~= "no_pickup" then
+		local item = self:get_wielditem ()
+		if self:wielditem_better_than (stack, item) then
+			self:drop_wielditem ()
+			self:set_wielditem (stack)
+			return true
+		end
 	end
+	return false
 end
 
 function mob_class:drop_armor (bonus)
@@ -120,7 +215,7 @@ function mob_class:drop_armor (bonus)
 	end
 	local self_pos = self.object:get_pos ()
 	for name, item in pairs (self.armor_list) do
-		local probability = self:effective_drop_probability (bonus)
+		local probability = self:effective_drop_probability (name)
 		if probability > 0 and item and item ~= ""
 			and math.random () <= probability + bonus then
 			mcl_util.drop_item_stack (self_pos, ItemStack (item))

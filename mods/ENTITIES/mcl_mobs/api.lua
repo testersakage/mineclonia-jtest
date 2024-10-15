@@ -290,14 +290,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	self:restore_jockey ()
 
 	self:init_ai ()
-	if self.on_spawn and not self.on_spawn_run then
-		if self:on_spawn() == false then
-			self:safe_remove()
-			return
-		else
-			self.on_spawn_run = true
-		end
-	end
+	self:display_wielditem ()
 
 	if not self.wears_armor and self.armor_list then
 		self.armor_list = nil
@@ -305,6 +298,15 @@ function mob_class:mob_activate(staticdata, dtime)
 		self.armor_list = { head = "", torso = "", feet = "", legs = "" }
 		self:set_armor_texture()
 		self._run_armor_init = true
+	end
+
+	if self.on_spawn and not self.on_spawn_run then
+		if self:on_spawn() == false then
+			self:safe_remove()
+			return
+		else
+			self.on_spawn_run = true
+		end
 	end
 
 	if not self._mcl_potions then

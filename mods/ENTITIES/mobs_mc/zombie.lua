@@ -66,6 +66,7 @@ local zombie = {
 		legs = 0.085,
 		feet = 0.085,
 	},
+	wielditem_drop_probability = 0.085,
 	armor = {undead = 90, fleshy = 90},
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
 	visual = "mesh",
@@ -111,6 +112,31 @@ local zombie = {
 	attack_type = "melee",
 	harmed_by_heal = true,
 	attack_npcs = true,
+	can_wield_items = "no_pickup",
+	wielditem_info = {
+		bone = "arm.right",
+		position = {
+			x = 0.7,
+			y = 6.0,
+			z = 0.0,
+		},
+		toollike_position = {
+			x = 0.0,
+			y = 5.0,
+			z = 4.0,
+		},
+		rotation = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		toollike_rotation = {
+			x = 90,
+			y = -45,
+			z = -90,
+		},
+	},
+	ignite_targets_while_burning = true,
 }
 
 function zombie:on_spawn ()
@@ -120,7 +146,9 @@ function zombie:on_spawn ()
 	-- skeletons.
 	if math.random () < 0.55 * mob_factor then
 		self.wears_armor = true
+		self.can_wield_items = true
 	end
+	self:generate_default_equipment (mob_factor, true, true)
 end
 
 mcl_mobs.register_mob("mobs_mc:zombie", zombie)
