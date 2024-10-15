@@ -161,7 +161,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 
 	-- punch interval
-	local weapon = hitter:get_wielded_item()
+	local weapon = hitter and mcl_util.get_wielditem (hitter)
 	local punch_interval = 1.4
 
 	-- exhaust attacker
@@ -218,8 +218,8 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	and minetest.is_creative_enabled(hitter_playername) ~= true
 	and tool_capabilities
 	and tool_capabilities.punch_attack_uses
-	and tool_capabilities.punch_attack_uses > 0 then
-		local weapon = hitter:get_wielded_item()
+	and tool_capabilities.punch_attack_uses > 0
+	and weapon then
 		local wear = math.floor(65535/tool_capabilities.punch_attack_uses)
 		weapon:add_wear(wear)
 		hitter:set_wielded_item(weapon)
@@ -290,11 +290,11 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if hitter then
 			luaentity = hitter:get_luaentity()
 		end
-		if is_player then
-			local wielditem = hitter:get_wielded_item()
-			kb = kb + mcl_enchanting.get_enchantment(wielditem, "knockback")
-		elseif luaentity and luaentity._knockback then
+		if luaentity and luaentity._knockback then
 			kb = kb + luaentity._knockback
+		else
+			local wielditem = mcl_util.get_wielditem (hitter)
+			kb = kb + mcl_enchanting.get_enchantment(wielditem, "knockback")
 		end
 		self.frame_speed_multiplier=2.3
 		if self.animation.run_end then
@@ -546,13 +546,32 @@ function mob_class:custom_attack ()
 	if attached then
 		attack = attached
 	end
+	local wielditem = self:get_wielditem ()
 	local damage = {
 		full_punch_interval = 1.0,
 		damage_groups = {fleshy = self.damage},
 	}
+	if not wielditem:is_empty () then
+		damage = wielditem:get_tool_capabilities ()
+		local damage = 65535 / damage.punch_attack_uses
+		wielditem:add_wear (math.floor (damage))
+		self:set_wielditem (wielditem)
+	end
 	self:set_animation ("punch")
 	self:mob_sound ("attack")
 	attack:punch (self.object, 1.0, damage, nil)
+
+	if self.ignite_targets_while_burning
+		and mcl_burning.is_burning (self.object) then
+		if self:get_wielditem ():is_empty () then
+			local self_pos = self.object:get_pos ()
+			local difficulty
+				= mcl_worlds.get_regional_difficulty (self_pos)
+			if math.random () < difficulty * 0.3 then
+				mcl_burning.set_on_fire (attack, difficulty * 2)
+			end
+		end
+	end
 
 	if self.dealt_effect then
 		local duration = self.dealt_effect.dur
@@ -841,4 +860,198 @@ function mob_class:check_attack (self_pos, dtime)
 		return true
 	end
 	return false
+end
+
+------------------------------------------------------------------------
+-- Item wielding.
+------------------------------------------------------------------------
+
+local wielditem_props = {
+	visual = "wielditem",
+	visual_size = {
+		x = 0.21, y = 0.21,
+	},
+	physical = false,
+	pointable = false,
+	wield_item = "mcl_core:barrier",
+}
+
+local wielditem_entity = {
+	initial_properties = wielditem_props,
+	on_step = function (self)
+		local parent = self.object:get_attach ()
+		if not parent then
+			self.object:remove ()
+			return
+		end
+	end,
+}
+
+minetest.register_entity ("mcl_mobs:wielditem", wielditem_entity)
+
+function mob_class:display_wielditem (item)
+	local info = self.wielditem_info
+	if not info then
+		return
+	end
+	if info.bone then
+		if not self._wielditem
+			or ItemStack (self._wielditem):is_empty () then
+			if self._wielditem_object ~= nil then
+				self._wielditem_object:remove ()
+				self._wielditem_object = nil
+			end
+			return
+		end
+
+		if not self._wielditem_object
+			or not self._wielditem_object:is_valid () then
+			local self_pos = self.object:get_pos ()
+			self._wielditem_object
+				= minetest.add_entity (self_pos, "mcl_mobs:wielditem")
+		end
+
+		-- Apply rotation and position according to item type.
+		local rot = info.rotation
+		local pos = info.position
+		local stack = ItemStack (self._wielditem)
+		local def = stack:get_definition ()
+		if def and def._mcl_toollike_wield then
+			rot = info.toollike_rotation
+			pos = info.toollike_position
+		end
+		self._wielditem_object:set_attach (self.object, info.bone,
+						   pos, rot)
+		local name = stack:get_name ()
+		self._wielditem_object:set_properties ({
+				wield_item = name,
+		})
+	-- elseif info.texture then
+	end
+end
+
+function mob_class:set_wielditem (stack)
+	if not self.can_wield_items then
+		return nil
+	end
+
+	local stack_string
+	if not stack or stack:is_empty () then
+		stack_string = nil
+	else
+		stack_string = stack:to_string ()
+	end
+
+	self._wielditem = stack_string
+	self._effective_wielditem_drop_probability
+		= self.wielditem_drop_probability
+	self:display_wielditem ()
+end
+
+
+function mob_class:drop_wielditem (bonus)
+	if not self._effective_wielditem_drop_probability
+		or not self._wielditem then
+		return
+	end
+	local self_pos = self.object:get_pos ()
+	local probability = self._effective_wielditem_drop_probability
+	local item = self._wielditem
+	if probability > 0 and item and item ~= ""
+		and math.random () <= probability + bonus then
+		mcl_util.drop_item_stack (self_pos, ItemStack (self._wielditem))
+	end
+	self._wielditem = nil
+end
+
+function mob_class:get_wielditem ()
+	return ItemStack (self._wielditem)
+end
+
+local armor_types = { "head", "torso", "legs", "feet", }
+local armor_table = {
+	head = {
+		"mcl_armor:helmet_leather",
+		"mcl_armor:helmet_gold",
+		"mcl_armor:helmet_chainmail",
+		"mcl_armor:helmet_iron",
+		"mcl_armor:helmet_diamond",
+	},
+	torso = {
+		"mcl_armor:chestplate_leather",
+		"mcl_armor:chestplate_gold",
+		"mcl_armor:chestplate_chainmail",
+		"mcl_armor:chestplate_iron",
+		"mcl_armor:chestplate_diamond",
+	},
+	legs = {
+		"mcl_armor:leggings_leather",
+		"mcl_armor:leggings_gold",
+		"mcl_armor:leggings_chainmail",
+		"mcl_armor:leggings_iron",
+		"mcl_armor:leggings_diamond",
+	},
+	feet = {
+		"mcl_armor:boots_leather",
+		"mcl_armor:boots_gold",
+		"mcl_armor:boots_chainmail",
+		"mcl_armor:boots_iron",
+		"mcl_armor:boots_diamond",
+	},
+}
+
+function mob_class:generate_default_equipment (mob_factor, do_armor, do_wielditems)
+	if math.random () < mob_factor * 0.15 then
+		if do_armor then
+			-- Decide what armor material this mob will
+			-- wear.
+			local base_level = math.random (1)
+			if math.random () < 0.095 then
+				base_level = base_level + 1
+			end
+			if math.random () < 0.095 then
+				base_level = base_level + 1
+			end
+			if math.random () < 0.095 then
+				base_level = base_level + 1
+			end
+			local armor_generated = false
+			local stop_chance = 4
+			if mcl_vars.difficulty == 3 then
+				stop_chance = 10
+			end
+			for _, slot in ipairs (armor_types) do
+				if not armor_generated and math.random (stop_chance) == 1 then
+					break
+				end
+				local stack = ItemStack (armor_table[slot][base_level])
+				if math.random () < 0.5 * mob_factor then
+					local level = 5.0 + mob_factor * math.random (18)
+					level = math.floor (level)
+					mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+				end
+				self.armor_list[slot] = stack:to_string ()
+				local probability = self.armor_drop_probability[slot]
+				self:set_armor_drop_probability (slot, probability)
+			end
+			self:set_armor_texture ()
+		end
+	end
+	if do_wielditems then
+		local chance = (mcl_vars.difficulty == 3) and 20 or 100
+		if math.random (chance) == 1 then
+			local stack
+			if math.random (3) == 1 then
+				stack = ItemStack ("mcl_tools:sword_iron")
+			else
+				stack = ItemStack ("mcl_tools:shovel_iron")
+			end
+			if math.random () < 0.25 * mob_factor then
+				local level = 5.0 + mob_factor * math.random (18)
+				level = math.floor (level)
+				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+			end
+			self:set_wielditem (stack)
+		end
+	end
 end
