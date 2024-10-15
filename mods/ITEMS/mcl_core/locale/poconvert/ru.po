@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-15 22:45+0000\n"
+"PO-Revision-Date: 2024-10-15 23:02+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/ru/>\n"
@@ -667,34 +667,34 @@ msgid "Cut Sandstone Slab"
 msgstr "Плита из резного песчаника"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из красного песчаника"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "Плита из красного песчаника"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из гладкого красного песчаника"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "Плита из гладкого красного песчаника"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из резаного красного песчаника"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "Плита из резаного красного песчаника"
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "Лестница из каменного кирпича"
 
 msgid "Stone Brick Slab"
-msgstr ""
+msgstr "Плита из каменного кирпича"
 
 msgid "Polished Andesite Stairs"
-msgstr ""
+msgstr "Лестница из полированного андезита"
 
 msgid "Polished Andesite Slab"
-msgstr ""
+msgstr "Плита из полированного андезита"
 
 msgid "Polished Granite Stairs"
 msgstr ""
