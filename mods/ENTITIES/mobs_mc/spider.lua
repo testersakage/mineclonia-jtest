@@ -156,8 +156,8 @@ function spider:should_continue_to_attack (target)
 end
 
 function spider:should_attack (target)
-	return mc_light_value (self) < 0.5
-		and mob_class.should_attack (self, target)
+	return mob_class.should_attack (self, target)
+		and mc_light_value (self) < 0.5
 end
 
 mcl_mobs.register_mob("mobs_mc:spider", spider)
