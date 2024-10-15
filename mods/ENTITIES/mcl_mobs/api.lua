@@ -208,6 +208,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	self._previously_floating = nil
 	self._active_texture_list = nil
 	self._mob_invisible = false
+	self._was_stuck = false
 
 	if self.dead then
 		self:safe_remove()
@@ -345,6 +346,13 @@ function mob_class:on_step(dtime, moveresult)
 		}
 	end
 
+	-- Clear remaining momentum if stuck in a cobweb or analogous
+	-- node.
+	if self._was_stuck then
+		self.object:set_velocity (vector.zero ())
+		self._was_stuck = false
+	end
+
 	-- Get nodes early for use in other functions
 	local cbox = self.collisionbox
 	local feet = vector.copy (pos)
@@ -387,6 +395,7 @@ function mob_class:on_step(dtime, moveresult)
 	else
 		self:drive ("walk", "stand", false, dtime, moveresult)
 	end
+	self:post_motion_step (pos, dtime)
 
 	self:ai_step (dtime)
 

@@ -98,6 +98,9 @@ local spider = {
 	},
 }
 
+spider.slowdown_nodes = table.copy (mob_class.slowdown_nodes)
+spider.slowdown_nodes["mcl_core:cobweb"] = nil
+
 local spider_effects = {
 	"swiftness",
 	"strength",
