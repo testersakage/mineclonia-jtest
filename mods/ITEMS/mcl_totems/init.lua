@@ -36,10 +36,11 @@ local particle_colors = {"98BF22", "C49E09", "337D0B", "B0B021", "1E9200"} -- TO
 
 -- Save the player from death when holding totem of undying in hand
 mcl_damage.register_modifier(function(obj, damage, reason)
-	if obj:is_player() and not reason.flags.bypasses_totem then
-		local hp = mcl_damage.get_hp (obj)
-		if hp - damage <= 0 then
-			local wield = obj:get_wielded_item()
+	if not reason.flags.bypasses_totem then
+		local hp = mcl_util.get_hp (obj)
+		local entity = obj:get_luaentity ()
+		if hp - damage <= 0 and (obj:is_player () or (entity and entity.is_mob)) then
+			local wield = mcl_util.get_wielditem (obj)
 			local in_offhand = false
 			if wield:get_name() ~= "mcl_totems:totem" then
 				local inv = obj:get_inventory()
@@ -51,20 +52,24 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 			if wield:get_name() == "mcl_totems:totem" then
 				local ppos = obj:get_pos()
 
-				if obj:get_breath() < 11 then
-					obj:set_breath(10)
-				end
-
-				if not minetest.is_creative_enabled(obj:get_player_name()) then
-					wield:take_item()
-					if in_offhand then
-						obj:get_inventory():set_stack("offhand", 1, wield)
-						mcl_inventory.update_inventory_formspec(obj)
-					else
-						obj:set_wielded_item(wield)
+				if obj:is_player () then
+					if obj:get_breath() < 11 then
+						obj:set_breath(10)
 					end
+					if not minetest.is_creative_enabled(obj:get_player_name()) then
+						wield:take_item()
+						if in_offhand then
+							obj:get_inventory():set_stack("offhand", 1, wield)
+							mcl_inventory.update_inventory_formspec(obj)
+						else
+							obj:set_wielded_item(wield)
+						end
+					end
+					awards.unlock(obj:get_player_name(), "mcl:postMortal")
+				else
+					entity.breath = math.max (entity.breath, 10)
+					entity:set_wielditem (ItemStack ())
 				end
-				awards.unlock(obj:get_player_name(), "mcl:postMortal")
 
 				-- Effects
 				minetest.sound_play({name = "mcl_totems_totem", gain = 1}, {pos=ppos, max_hear_distance = 16}, true)
@@ -105,7 +110,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 				mcl_potions.give_effect_by_level ("absorption", obj, 2, 5);
 
 				-- Big totem overlay
-				if not hud_totem[obj] then
+				if obj:is_player () and not hud_totem[obj] then
 					hud_totem[obj] = obj:hud_add({
 						[hud_elem_type_field] = "image",
 						text = "mcl_totems_totem.png",

@@ -135,6 +135,7 @@ function mob_class:item_drop(cooked, looting_level, cmi_cause)
 		end
 	end
 	self:drop_armor (looting_level * 0.01)
+	self:drop_wielditem (looting_level * 0.01)
 	self.drops = {}
 end
 
@@ -287,13 +288,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 	if cmi_cause and (cmi_cause.type == "lava" or cmi_cause.type == "fire") then
 		self:item_drop(true, 0, cmi_cause)
 	else
-		local wielditem = ItemStack()
-		if cmi_cause and cmi_cause.type == "player" then
-			local puncher = cmi_cause.direct
-			if puncher then
-				wielditem = puncher:get_wielded_item()
-			end
-		end
+		local wielditem = cmi_cause.direct and mcl_util.get_wielditem (cmi_cause.direct)
 		local cooked = mcl_burning.is_burning(self.object) or mcl_enchanting.has_enchantment(wielditem, "fire_aspect")
 		local looting = mcl_enchanting.get_enchantment(wielditem, "looting")
 		self:item_drop(cooked, looting, cmi_cause)
@@ -368,8 +363,19 @@ function mob_class:do_env_damage()
 	self.sunlight = sunlight
 	local _, dim = mcl_worlds.y_to_layer(pos.y)
 	if self.ignited_by_sunlight and (sunlight or 0) >= minetest.LIGHT_MAX and dim == "overworld" then
-		if self.armor_list and not self.armor_list.head or not self.armor_list or self.armor_list and self.armor_list.head and self.armor_list.head == "" then
-			mcl_burning.set_on_fire(self.object, 10)
+		if self.armor_list then
+			local stack = ItemStack (self.armor_list.head)
+			if stack:is_empty () then
+				mcl_burning.set_on_fire (self.object, 10)
+			else
+				-- Damage armor while on fire.
+				mcl_util.use_item_durability (stack, 5 * math.random ())
+				-- Apply wear to head armor.
+				self.armor_list.head = stack:to_string ()
+				if stack:is_empty () then
+					self:set_armor_texture ()
+				end
+			end
 		end
 	end
 

@@ -105,20 +105,14 @@ local spider_effects = {
 	"invisibility",
 }
 
+function spider:mob_activate (staticdata, dtime)
+	mcl_mobs.mob_class.mob_activate (self, staticdata, dtime)
+	minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes")
+		:set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
+end
+
 function spider:on_spawn ()
 	self.object:set_properties({visual_size={x=1,y=1}})
-	local spider_eyes=false
-	for n = 1, #self.object:get_children() do
-		local obj = self.object:get_children()[n]
-		if obj:get_luaentity() and self.object:get_luaentity().name == "mobs_mc:spider_eyes" then
-			spider_eyes = true
-		end
-	end
-	if not spider_eyes then
-		minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes")
-			:set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
-	end
-
 	-- Spawn as jockeys ridden by skeletons 1% of the time.
 	local self_pos = self.object:get_pos ()
 	if math.random (100) == 1 then
