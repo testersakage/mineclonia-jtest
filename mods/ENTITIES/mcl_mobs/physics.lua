@@ -1168,3 +1168,65 @@ function mob_class:aquatic_step (dtime, moveresult)
 		default_motion_step (self, dtime, moveresult)
 	end
 end
+
+local floor = math.floor
+
+mcl_mobs.mob_class.slowdown_nodes = {
+	["mcl_farming:sweet_berry_bush_1"] = {
+		x = 0.8,
+		y = 0.75,
+		z = 0.8,
+	},
+	["mcl_farming:sweet_berry_bush_2"] = {
+		x = 0.8,
+		y = 0.75,
+		z = 0.8,
+	},
+	["mcl_farming:sweet_berry_bush_3"] = {
+		x = 0.8,
+		y = 0.75,
+		z = 0.8,
+	},
+	["mcl_core:cobweb"] = {
+		x = 0.25,
+		y = 0.05,
+		z = 0.25,
+	},
+}
+
+function mob_class:post_motion_step (self_pos, dtime)
+	-- Apply slowdowns from blocks that should impede movement.
+	local xmin, zmin, xmax, zmax, ymin, ymax
+	local slowdowns = self.slowdown_nodes
+	local v = vector.zero ()
+
+	xmin = floor (self_pos.x + self.collisionbox[1] + 0.5)
+	zmin = floor (self_pos.z + self.collisionbox[3] + 0.5)
+	xmax = floor (self_pos.x + self.collisionbox[4] + 0.5)
+	zmax = floor (self_pos.z + self.collisionbox[6] + 0.5)
+	ymin = floor (self_pos.y + self.collisionbox[2] + 0.5)
+	ymax = floor (self_pos.y + self.collisionbox[5] + 0.5)
+	for x = xmin, xmax do
+		v.x = x
+		for z = zmin, zmax do
+			v.z = z
+			for y = ymin, ymax do
+				v.y = y
+				local node = minetest.get_node_or_nil (v)
+				if node and slowdowns[node.name] then
+					local slowdown = slowdowns[node.name]
+					local v = self.object:get_velocity ()
+					v.x = v.x * pow_by_step (slowdown.x, dtime)
+					v.y = v.y * pow_by_step (slowdown.y, dtime)
+					v.z = v.z * pow_by_step (slowdown.z, dtime)
+					self.object:set_velocity (v)
+
+					-- Indicate that the velocity must be reset
+					-- upon the next globalstep
+					self._was_stuck = true
+					return
+				end
+			end
+		end
+	end
+end
