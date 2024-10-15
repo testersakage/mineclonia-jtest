@@ -417,6 +417,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 		self._shoot_time = nil
 		self._shoot_timer = 0
 		self.attacking = true
+		self._punch_animation_timeout = 0
 	end
 	local vistime = self._target_visible_time
 	local dist = vector.distance (self_pos, target_pos)
@@ -557,7 +558,18 @@ function mob_class:custom_attack ()
 		wielditem:add_wear (math.floor (damage))
 		self:set_wielditem (wielditem)
 	end
-	self:set_animation ("punch")
+	if self.animation.punch_start then
+		local frames
+			= self.animation.punch_end - self.animation.punch_start
+		local speed = self.animation.punch_speed
+			or self.animation.speed_normal or 25
+		local min_duration = (frames / speed - 0.09)
+		self:set_animation ("punch")
+		-- FIXME: this is hideous but necessary to prevent punch
+		-- animations from being overwritten as this mob continues
+		-- pursuing its target, having inflicted knockback.
+		self._punch_animation_timeout = min_duration
+	end
 	self:mob_sound ("attack")
 	attack:punch (self.object, 1.0, damage, nil)
 
@@ -600,6 +612,20 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		self._gopath_delay = 0
 		self._attack_delay = 0
 		self.attacking = true
+		self._punch_animation_timeout = 0
+	end
+
+	if self._punch_animation_timeout then
+		self._punch_animation_timeout
+			= math.max (self._punch_animation_timeout - dtime, 0)
+		if self._punch_animation_timeout == 0 then
+			if self:navigation_finished () then
+				self:set_animation ("stand")
+			else
+				self:set_animation ("walk")
+			end
+			self._punch_animation_timeout = nil
+		end
 	end
 
 	local delay = math.max (self._gopath_delay - dtime, 0)

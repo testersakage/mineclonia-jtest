@@ -221,6 +221,10 @@ function mob_class:set_animation(anim, fixed_frame)
 		return
 	end
 
+	if self.attack and self._punch_animation_timeout then
+		anim = "punch"
+	end
+
 	self._current_animation = self._current_animation or ""
 
 	if (anim == self._current_animation
