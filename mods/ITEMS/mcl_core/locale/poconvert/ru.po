@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-15 23:02+0000\n"
+"PO-Revision-Date: 2024-10-16 00:30+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/ru/>\n"
@@ -709,25 +709,25 @@ msgid "Polished Diorite Slab"
 msgstr ""
 
 msgid "Mossy Stone Brick Stairs"
-msgstr ""
+msgstr "Лестница из кирпича мшистого камня"
 
 msgid "Mossy Stone Brick Slab"
-msgstr ""
+msgstr "Плита из кирпича мшистого камня"
 
 msgid "Oak"
-msgstr ""
+msgstr "Дуб"
 
 msgid "Dark Oak"
-msgstr ""
+msgstr "Темный дуб"
 
 msgid "Jungle"
-msgstr ""
+msgstr "Джунгли"
 
 msgid "Spruce"
-msgstr ""
+msgstr "Ель"
 
 msgid "Acacia"
-msgstr ""
+msgstr "Акация"
 
 msgid "Birch"
-msgstr ""
+msgstr "Береза"
