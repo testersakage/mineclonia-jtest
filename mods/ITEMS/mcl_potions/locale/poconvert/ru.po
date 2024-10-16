@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 01:20+0000\n"
+"PO-Revision-Date: 2024-10-16 01:24+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -203,7 +203,7 @@ msgid "resist @1% of incoming damage"
 msgstr "сопротивление @1% к получаемому урону"
 
 msgid "Luck"
-msgstr "Удача"
+msgstr "Везение"
 
 msgid "Bad Luck"
 msgstr "Неудача"
@@ -506,28 +506,30 @@ msgid "Increases luck."
 msgstr "Увеличивает удачу."
 
 msgid "of Bad Luck"
-msgstr ""
+msgstr "неудачи"
 
 msgid "Decreases luck."
-msgstr ""
+msgstr "Уменьшает удачу."
 
 msgid "Ominous Bottle"
-msgstr ""
+msgstr "Зловещая бутылка"
 
 msgid "Attracts danger."
-msgstr ""
+msgstr "Привлекает опасность."
 
 msgid "Unknown Potion"
-msgstr ""
+msgstr "Неизвестное зелье"
 
 msgid "Right-click to identify"
-msgstr ""
+msgstr "Щелкните правой кнопкой мыши, чтобы узнать"
 
 msgid "Unknown Tipped Arrow"
-msgstr ""
+msgstr "Неизвестная стрела с наконечником"
 
 msgid "A throwable potion that will shatter on impact, where it gives all nearby players and mobs a status effect or a set of status effects."
 msgstr ""
+"Бросаемое зелье, которое при ударе разлетается на куски и накладывает на "
+"всех ближайших игроков и мобов статусный эффект или набор статусных эффектов."
 
 msgid "This particular arrow is tipped and will give an effect when it hits a player or mob."
 msgstr "Эта обмакнутая в зелье стрела даёт эффект при попадании в игрока или моба."
