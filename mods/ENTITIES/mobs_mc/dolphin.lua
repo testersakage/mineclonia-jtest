@@ -49,7 +49,7 @@ mcl_mobs.register_mob("mobs_mc:dolphin", {
 	makes_footstep_sound = false,
 	swims = true,
 	flops = true,
-	do_go_pos = mcl_mobs.mob_class.dolphin_do_go_pos,
+	do_go_pos = mcl_mobs.mob_class.pitchswim_do_go_pos,
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	_player_check_time = 0,
 	follow_holding = function (_) return true end,

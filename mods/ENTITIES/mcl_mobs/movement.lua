@@ -583,59 +583,6 @@ function mob_class:do_jump_goal (dtime, moveresult)
 	end
 end
 
-function mob_class:dolphin_do_go_pos (dtime, moveresult)
-	local target = self.movement_target
-	local pos = self.object:get_pos ()
-	local dx, dy, dz = target.x - pos.x,
-		target.y - pos.y,
-		target.z - pos.z
-	local dir = math.atan2 (dz, dx) - math.pi / 2
-	local standin = minetest.registered_nodes[self.standing_in]
-	local yaw = self:get_yaw ()
-	local f = dtime / 0.05
-	local target_yaw = clip_rotation (yaw, dir, self.max_yaw_movement * f)
-	self:set_yaw (target_yaw)
-
-	-- Orient the mob vertically.
-	local speed = self.movement_velocity
-	if standin.groups.water then
-		local xz_mag = math.sqrt (dx * dx + dz * dz)
-		local des_pitch
-		if xz_mag > 1.0e-5 or xz_mag < -1.0e-5 then
-			local swim_max_pitch = self.swim_max_pitch
-			local old_pitch = self:get_pitch ()
-			des_pitch = -math.atan2 (dy, xz_mag)
-
-			if des_pitch > swim_max_pitch then
-				des_pitch = self.swim_max_pitch
-			elseif des_pitch < -swim_max_pitch then
-				des_pitch = -self.swim_max_pitch
-			end
-
-			local target
-			-- ~50 degrees.
-			target = clip_rotation (old_pitch, des_pitch, 0.8727 * f)
-			self:set_pitch (target)
-			des_pitch = target
-		else
-			-- Not moving horizontally.
-			des_pitch = self:get_pitch ()
-		end
-		self.acc_dir.z = math.cos (des_pitch) * speed / 20
-		self.acc_dir.y = -math.sin (des_pitch) * speed / 20
-		self.acc_speed = speed * self.swim_speed_factor
-		self._acc_no_gravity = true
-	else
-		-- Fish cannot change their pitch outside a body of
-		-- water.
-		self.acc_dir.y = 0
-		self.acc_dir.z = 0
-		self._acc_no_gravity = false
-		self:set_yaw (target_yaw)
-		self:set_pitch (0)
-	end
-end
-
 function mob_class:do_strafe (dtime, moveresult)
 	local vel = self.movement_velocity
 	local sx, sz = self.strafe_direction.x, self.strafe_direction.z
@@ -838,6 +785,10 @@ function mob_class:init_ai ()
 	if self.swims then
 		self:gwp_configure_aquatic_mob ()
 		self:configure_aquatic_mob ()
+	end
+	if self.amphibious then
+		self:gwp_configure_amphibious_mob ()
+		self:configure_amphibious_mob ()
 	end
 	if self.airborne then
 		self:gwp_configure_airborne_mob ()
@@ -1060,7 +1011,7 @@ function mob_class:check_pace (pos)
 			-- within a 20 block distance lengthwise and
 			-- 14 blocks vertically.
 			local groups = {"group:solid"}
-			if self.swims_in and self.swims then
+			if self.swims_in and (self.swims or self.amphibious) then
 				-- If this is an aquatic mob, search
 				-- for nodes in which it is capable of
 				-- swimming.
@@ -1150,6 +1101,7 @@ local function aquatic_movement_step (self, dtime, moveresult)
 	if self.movement_goal ~= "go_pos"
 		and self.idle_gravity_in_liquids then
 		self._acc_no_gravity = false
+		self:set_pitch (0)
 	end
 	if not self.idle_gravity_in_liquids and self._immersion_depth then
 		self._acc_no_gravity
@@ -1291,6 +1243,71 @@ function mob_class:check_schooling (self_pos, list)
 end
 
 function mob_class:configure_aquatic_mob ()
+	self.pacing_target = aquatic_pacing_target
+	self.motion_step = self.aquatic_step
+	self.movement_step = aquatic_movement_step
+	self._acc_no_gravity = false
+end
+
+------------------------------------------------------------------------
+-- Amphibious mobs.  These are very akin to landed mobs in their
+-- pathfinding mechanics, but not in their movement.
+------------------------------------------------------------------------
+
+function mob_class:pitchswim_do_go_pos (dtime, moveresult)
+	local target = self.movement_target
+	local pos = self.object:get_pos ()
+	local dx, dy, dz = target.x - pos.x,
+		target.y - pos.y,
+		target.z - pos.z
+	local dir = math.atan2 (dz, dx) - math.pi / 2
+	local standin = minetest.registered_nodes[self.standing_in]
+	local yaw = self:get_yaw ()
+	local f = dtime / 0.05
+	local target_yaw = clip_rotation (yaw, dir, self.max_yaw_movement * f)
+	self:set_yaw (target_yaw)
+
+	-- Orient the mob vertically.
+	local speed = self.movement_velocity
+	if standin.groups.water then
+		local xz_mag = math.sqrt (dx * dx + dz * dz)
+		local des_pitch
+		if xz_mag > 1.0e-5 or xz_mag < -1.0e-5 then
+			local swim_max_pitch = self.swim_max_pitch
+			local old_pitch = self:get_pitch ()
+			des_pitch = -math.atan2 (dy, xz_mag)
+
+			if des_pitch > swim_max_pitch then
+				des_pitch = self.swim_max_pitch
+			elseif des_pitch < -swim_max_pitch then
+				des_pitch = -self.swim_max_pitch
+			end
+
+			local target
+			-- ~50 degrees.
+			target = clip_rotation (old_pitch, des_pitch, 0.8727 * f)
+			self:set_pitch (target)
+			des_pitch = target
+		else
+			-- Not moving horizontally.
+			des_pitch = self:get_pitch ()
+		end
+		self.acc_dir.z = math.cos (des_pitch) * speed / 20
+		self.acc_dir.y = -math.sin (des_pitch) * speed / 20
+		self.acc_speed = speed * self.swim_speed_factor
+		self._acc_no_gravity = true
+	else
+		-- Fish cannot change their pitch outside a body of
+		-- water.
+		self.acc_dir.y = 0
+		self:set_velocity (speed * self.grounded_speed_factor)
+		self._acc_no_gravity = false
+		self:set_yaw (target_yaw)
+		self:set_pitch (0)
+	end
+end
+
+function mob_class:configure_amphibious_mob ()
 	self.pacing_target = aquatic_pacing_target
 	self.motion_step = self.aquatic_step
 	self.movement_step = aquatic_movement_step
