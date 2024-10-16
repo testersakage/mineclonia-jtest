@@ -21,7 +21,7 @@ local axolotl = {
 	spawn_in_group_min = 1,
 	spawn_in_group = 4,
 	tilt_swim = true,
-	collisionbox = {-0.5, 0.0, -0.5, 0.5, 0.8, 0.5},
+	collisionbox = {-0.375, 0.0, -0.375, 0.375, 0.42, 0.375},
 	visual = "mesh",
 	mesh = "mobs_mc_axolotl.b3d",
 	textures = {
@@ -61,11 +61,14 @@ local axolotl = {
 			awards.unlock(clicker:get_player_name(), "mcl:cutestPredator")
 			return
 		end
-		if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
+		if self:follow_holding (clicker)
+			and self:feed_tame (clicker, 4, true, false) then
+			return
+		end
 	end,
 	makes_footstep_sound = false,
-	swims = true,
-	do_go_pos = mcl_mobs.mob_class.dolphin_do_go_pos,
+	amphibious = true,
+	do_go_pos = mcl_mobs.mob_class.pitchswim_do_go_pos,
 	idle_gravity_in_liquids = true,
 	breathes_in_water = true,
 	jump = true,
@@ -84,6 +87,7 @@ local axolotl = {
 	},
 	runaway = true,
 	movement_speed = 20,
+	step_height = 1.02,
 }
 
 mcl_mobs.register_mob("mobs_mc:axolotl", axolotl)
