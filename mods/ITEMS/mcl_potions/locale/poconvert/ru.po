@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 01:10+0000\n"
+"PO-Revision-Date: 2024-10-16 01:11+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -378,7 +378,7 @@ msgid "This item is used in brewing and can be combined with splash potions to c
 msgstr "Этот предмет используется в зельеварении и может объединяться со взрывающимися зельями, чтобы создать эффект оседания"
 
 msgid "Awkward"
-msgstr ""
+msgstr "Неловкость"
 
 msgid "Has an awkward taste and is used for brewing potions."
 msgstr "Имеет неприятный вкус и используется для приготовления других зелий."
