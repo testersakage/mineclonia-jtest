@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 01:24+0000\n"
+"PO-Revision-Date: 2024-10-16 01:30+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -101,7 +101,7 @@ msgid "+1 HP / @1 s"
 msgstr "+1 HP / @1 с"
 
 msgid "Strength"
-msgstr "силы"
+msgstr "Прочность"
 
 msgid "+@1% melee damage"
 msgstr "+@1% урона в ближнем бою"
@@ -260,7 +260,7 @@ msgid "-@1% mining and attack speed"
 msgstr "-@1% добычи и скорости атаки"
 
 msgid "Conduit Power"
-msgstr "Питание по кабелю"
+msgstr "Питание по шлангу"
 
 msgid "+@1% mining and attack speed in water"
 msgstr "+@1% добычи и скорости атаки в воде"
@@ -375,7 +375,9 @@ msgid "Dragon's Breath"
 msgstr "Дыхание дракона"
 
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
-msgstr "Этот предмет используется в зельеварении и может объединяться со взрывающимися зельями, чтобы создать эффект оседания"
+msgstr ""
+"Этот предмет используется в зельеварении и может объединяться со "
+"взрывающимися зельями, чтобы создать эффект оседания."
 
 msgid "Awkward"
 msgstr "Неловкость"
@@ -423,19 +425,19 @@ msgid "of Swiftness"
 msgstr "Стремительность"
 
 msgid "Increases walking speed."
-msgstr "Увеличивает скорость ходьбы"
+msgstr "Увеличивает скорость ходьбы."
 
 msgid "of Slowness"
 msgstr "медлительность"
 
 msgid "Decreases walking speed."
-msgstr "Уменьшает скорость ходьбы"
+msgstr "Уменьшает скорость ходьбы."
 
 msgid "of Leaping"
 msgstr "Прыгучесть"
 
 msgid "Increases jump strength."
-msgstr "Увеличивает силу прыжка"
+msgstr "Увеличивает силу прыжка."
 
 msgid "of Decay"
 msgstr "упадок"
