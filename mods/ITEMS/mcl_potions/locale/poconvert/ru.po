@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 00:36+0000\n"
+"PO-Revision-Date: 2024-10-16 00:42+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -47,16 +47,16 @@ msgid "Missing or invalid heal amount parameter!"
 msgstr "Отсутствующий или недопустимый параметр суммы исцеления!"
 
 msgid "Player @1 healed by @2 HP."
-msgstr ""
+msgstr "Игрок @1 исцелился на @2 HP."
 
 msgid "Player @1 harmed by @2 HP."
-msgstr ""
+msgstr "Игроку @1 нанесен урон @2 HP."
 
 msgid "Effects cleared for player @1"
-msgstr ""
+msgstr "Эффекты очищены для игрока @1"
 
 msgid "Removed effect @1 from player @2"
-msgstr ""
+msgstr "Снятие эффекта @1 с игрока @2"
 
 msgid "@1 is not an available status effect."
 msgstr "@1 не является допустимым эффектом."
@@ -65,34 +65,34 @@ msgid "Missing or invalid duration parameter!"
 msgstr "Отсутствует либо неправильно задан параметр длительности!"
 
 msgid "Invalid level parameter!"
-msgstr ""
+msgstr "Неверный параметр уровня!"
 
 msgid "Missing or invalid factor parameter when level is F!"
-msgstr ""
+msgstr "Отсутствующий или недопустимый параметр фактора, когда уровень - F!"
 
 msgid "@1 effect given to player @2 for @3 seconds with factor of @4."
-msgstr ""
+msgstr "Эффект @1 дается игроку @2 на @3 секунды с коэффициентом @4."
 
 msgid "@1 effect given to player @2 for @3 seconds."
-msgstr ""
+msgstr "Эффект @1 дается игроку @2 на @3 секунды."
 
 msgid "Giving effect @1 to player @2 failed."
-msgstr ""
+msgstr "Передача эффекта @1 игроку @2 не удалась."
 
 msgid "@1 effect on level @2 given to player @3 for @4 seconds."
-msgstr ""
+msgstr "Эффект @1 на уровне @2 дается игроку @3 на @4 секунды."
 
 msgid "Invisiblity"
-msgstr ""
+msgstr "Невидимость"
 
 msgid "body is invisible"
-msgstr ""
+msgstr "тело невидимо"
 
 msgid "Poison"
 msgstr "отравления"
 
 msgid "-1 HP / @1 s"
-msgstr ""
+msgstr "-1 HP / @1 с"
 
 msgid "Regeneration"
 msgstr "регенерации"
