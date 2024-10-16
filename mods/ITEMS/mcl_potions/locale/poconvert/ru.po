@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 01:17+0000\n"
+"PO-Revision-Date: 2024-10-16 01:19+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -470,31 +470,31 @@ msgid "Grants limitless breath underwater."
 msgstr "Даёт возможность дышать под водой."
 
 msgid "of Fire Resistance"
-msgstr ""
+msgstr "Огнестойкость"
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "Делает невосприимчивым к урону от источников тепла, например, от огня."
 
 msgid "of Strength"
-msgstr ""
+msgstr "силы"
 
 msgid "Increases attack power."
-msgstr ""
+msgstr "Увеличивает силу атаки."
 
 msgid "of Weakness"
-msgstr ""
+msgstr "Слабости"
 
 msgid "Decreases attack power."
-msgstr ""
+msgstr "Уменьшает силу атаки."
 
 msgid "of Slow Falling"
-msgstr ""
+msgstr "медленного падения"
 
 msgid "Instead of falling, you descend gracefully."
-msgstr ""
+msgstr "Вместо того чтобы падать, вы грациозно спускаетесь вниз."
 
 msgid "of the Turtle Master"
-msgstr ""
+msgstr "Повелителя черепах"
 
 msgid "Decreases damage taken at the cost of speed."
 msgstr ""
