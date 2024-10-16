@@ -697,7 +697,7 @@ msgid "Polished Andesite Slab"
 msgstr "Плита из полированного андезита"
 
 msgid "Polished Granite Stairs"
-msgstr ""
+msgstr "Лестница из полированного гранита"
 
 msgid "Polished Granite Slab"
 msgstr ""
