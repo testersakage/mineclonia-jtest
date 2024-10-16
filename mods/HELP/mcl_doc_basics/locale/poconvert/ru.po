@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-15 22:45+0000\n"
+"PO-Revision-Date: 2024-10-16 13:21+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/ru/>\n"
@@ -949,7 +949,7 @@ msgid "• At 0 hunger points, you lose 1 HP every 4 seconds (down to 1 HP)"
 msgstr "• При 0 очках голода вы теряете 1 очко здоровья 4 секунды (до тех пор пока здоровье не понизится до 1 HP)"
 
 msgid "• Poisonous food decreases your health"
-msgstr "• Ядовитая пища умешьшает ваше здоровье."
+msgstr "• Ядовитая пища уменьшает ваше здоровье"
 
 msgid "Details:"
 msgstr "Подробности:"
@@ -1060,7 +1060,7 @@ msgid "Two animals of the same species will start to breed if they are in Love M
 msgstr "Два животных одного вида начнут размножаться, если они находятся в режиме любви и близко друг к другу. Скоро появится детёныш животного."
 
 msgid "Baby animals:"
-msgstr "Детёныш животного"
+msgstr "Детёныш животного:"
 
 msgid "Baby animals are just like their adult couterparts, but they can't be tamed or bred and don't drop anything when they die. They grow to adults after a short time. When fed, they grow to adults faster."
 msgstr "Детёнышы животных точно такие же, как и взрослые, но их нельзя приручить или разводить, и они ничего не дают вам, когда умирают. Они вырастают до взрослых через короткое время. Если кормить их, то они вырастут быстрее."
@@ -1107,7 +1107,7 @@ msgid "• 2: Third-person view from behind"
 msgstr "• 2: вид от третьего лица сзади"
 
 msgid "• 3: Third-person view from the front"
-msgstr "• 3: вид от третьего лица спереди."
+msgstr "• 3: вид от третьего лица спереди"
 
 msgid "These camera modes can be toggled between by default pressing [F7]."
 msgstr ""
