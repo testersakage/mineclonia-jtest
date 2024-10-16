@@ -150,7 +150,7 @@ local function longhash (x, y, z)
 		+ (32767 + z)
 end
 
-function mob_class:get_gwp_node (context, x, y, z, g, h)
+function mob_class:get_gwp_node (context, x, y, z)
 	-- assert (x % 1 == 0 and y % 1 == 0 and z % 1 == 0)
 	local hash = hashpos (context, x, y, z)
 	if context.nodes[hash] then
@@ -158,7 +158,7 @@ function mob_class:get_gwp_node (context, x, y, z, g, h)
 	end
 	local obj = {
 		x = x, y = y, z = z,
-		g = g, h = h, penalty = 0,
+		g = nil, h = nil, penalty = 0,
 		f = 0, total_d = 0,
 	}
 	context.nodes[hash] = obj
@@ -726,7 +726,7 @@ end
 
 local gwp_edges_1_scratch = vector.zero ()
 
-local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump)
+local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump, amphibious)
 	local node = gwp_edges_1_scratch
 	node.x = parent.x + xoff
 	node.y = parent.y
@@ -759,7 +759,7 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump)
 		end
 
 		-- Is the node unusable?
-		if class ~= "WALKABLE" then
+		if class ~= "WALKABLE" and (not amphibious or class ~= "WATER") then
 			-- Should there be an attempt to jump onto
 			-- this node?
 			if class == "OPEN" then
@@ -1977,6 +1977,85 @@ local function waterbound_gwp_initialize (self, targets, range)
 end
 
 ------------------------------------------------------------------------
+-- Pathfinding for amphibious mobs.
+------------------------------------------------------------------------
+
+local amphibious_gwp_edges_scratch = vector.zero ()
+
+local function amphibious_gwp_edges_1 (self, context, node, yoff)
+	local v = amphibious_gwp_edges_scratch
+	v.x = node.x
+	v.y = node.y + yoff
+	v.z = node.z
+	local class = self:gwp_classify_node (context, v)
+
+	if class == "WATER" then
+		local penalty = self.gwp_penalties[class]
+		local object = self:get_gwp_node (context, v.x, v.y, v.z)
+		object.class = class
+		if penalty >= 0.0 then
+			object.penalty = math.max (penalty, object.penalty)
+		else
+			-- Impassible node.
+			object.penalty = -1
+		end
+		return object
+	end
+	return nil
+end
+
+local function amphibious_gwp_edges (self, context, node)
+	local array, c1, c2, c3, c4, c5, c6 = gwp_edges_scratch
+	local floor = ground_height (context, node)
+	local n = 0
+	gwp_parent_penalty = nil
+
+	-- Consider neighbors in the four cardinal directions.
+	c1 = gwp_edges_1 (self, context, node, floor, 1, 0, true)
+	if c1 and c1.penalty >= 0.0 then n = n + 1; array[n] = c1 end
+	c2 = gwp_edges_1 (self, context, node, floor, 0, 1, true)
+	if c2 and c2.penalty >= 0.0 then n = n + 1; array[n] = c2 end
+	c3 = gwp_edges_1 (self, context, node, floor, -1, 0, true)
+	if c3 and c3.penalty >= 0.0 then n = n + 1; array[n] = c3 end
+	c4 = gwp_edges_1 (self, context, node, floor, 0, -1, true)
+	if c4 and c4.penalty >= 0.0 then n = n + 1; array[n] = c4 end
+	-- Consider diagonal neighbors at an angle.
+	if self:gwp_check_diagonal (node, c1, c2) then
+		local d = gwp_edges_1 (self, context, node, floor, 1, 1, true)
+		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+	end
+	if self:gwp_check_diagonal (node, c1, c4) then
+		local d = gwp_edges_1 (self, context, node, floor, 1, -1, true)
+		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+	end
+	if self:gwp_check_diagonal (node, c3, c2) then
+		local d = gwp_edges_1 (self, context, node, floor, -1, 1, true)
+		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+	end
+	if self:gwp_check_diagonal (node, c3, c4) then
+		local d = gwp_edges_1 (self, context, node, floor, -1, -1, true)
+		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+	end
+	-- Consider neighbors vertically above and below, but only if
+	-- they be water.
+	c5 = amphibious_gwp_edges_1 (self, context, node, 1)
+	if c5 then n = n + 1; array[n] = c5 end
+	c6 = amphibious_gwp_edges_1 (self, context, node, -1)
+	if c6 then n = n + 1; array[n] = c6 end
+	array[n + 1] = nil
+	return array
+end
+
+local function amphibious_gwp_start (self, context, node)
+	if not self.standing_in
+		or minetest.get_item_group (self.standing_in, "water") == 0 then
+		return mob_class.gwp_start (self, context, node)
+	else
+		return waterbound_gwp_start (self, context, node)
+	end
+end
+
+------------------------------------------------------------------------
 -- Pathfinding for airborne mobs.
 ------------------------------------------------------------------------
 
@@ -2796,7 +2875,11 @@ local function obstruction_is_water (name, def)
 		or name == "mclx_core:river_water_source"
 end
 
--- N.B.: also reused for airborne mobs.
+local function standing_in_water (self)
+	return minetest.get_item_group (self.standing_in, "water") ~= 0
+end
+
+-- N.B.: also reused for airborne and amphibious mobs.
 local function aquatic_gwp_next_waypoint (self, dtime)
 	local waypoints = self.waypoints
 	if #waypoints < 1 then
@@ -2824,7 +2907,7 @@ local function aquatic_gwp_next_waypoint (self, dtime)
 		-- Is this mob already en route to the next waypoint?
 		-- Alternatively, is there a line of sight between
 		-- this and the next waypoint?
-		while #waypoints > 1 do
+		if #waypoints > 1 then
 			local ahead = waypoints[#waypoints - 1]
 			local cbox = self.collisionbox
 			local bottom = {
@@ -2840,8 +2923,12 @@ local function aquatic_gwp_next_waypoint (self, dtime)
 				y = ahead.y + (cbox[5] - cbox[2]) / 2,
 				z = ahead.z,
 			}
+			local do_line_of_sight_check
+				= self.swims or self.airborne
+				or (self.amphibious and standing_in_water (self))
 
-			if self:line_of_sight (bottom, ahead_adj, obstruction_is_water) then
+			if do_line_of_sight_check
+				and self:line_of_sight (bottom, ahead_adj, obstruction_is_water) then
 				next_wp = ahead
 				waypoints[#waypoints] = nil
 			else
@@ -2850,8 +2937,6 @@ local function aquatic_gwp_next_waypoint (self, dtime)
 				if vector.dot (dir, dir1) < 0 then
 					next_wp = ahead
 					waypoints[#waypoints] = nil
-				else
-					break
 				end
 			end
 		end
@@ -2884,4 +2969,14 @@ function mob_class:gwp_configure_airborne_mob ()
 	self.gwp_classify_for_movement
 		= airborne_gwp_classify_for_movement
 	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
+end
+
+function mob_class:gwp_configure_amphibious_mob ()
+	self.gwp_edges = amphibious_gwp_edges
+	self.gwp_start = amphibious_gwp_start
+	self.gwp_initialize = waterbound_gwp_initialize
+	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
+	local new_penalties = table.copy (mob_class.gwp_penalties)
+	new_penalties.WATER = 0.0
+	self.gwp_penalties = new_penalties
 end
