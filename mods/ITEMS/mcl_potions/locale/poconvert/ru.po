@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 00:42+0000\n"
+"PO-Revision-Date: 2024-10-16 01:10+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -98,172 +98,172 @@ msgid "Regeneration"
 msgstr "регенерации"
 
 msgid "+1 HP / @1 s"
-msgstr ""
+msgstr "+1 HP / @1 с"
 
 msgid "Strength"
 msgstr "силы"
 
 msgid "+@1% melee damage"
-msgstr ""
+msgstr "+@1% урона в ближнем бою"
 
 msgid "Weakness"
 msgstr "слабости+"
 
 msgid "-@1% melee damage"
-msgstr ""
+msgstr "-@1% урона в ближнем бою"
 
 msgid "Water Breathing"
 msgstr "подводного дыхания"
 
 msgid "limitless breathing under water"
-msgstr ""
+msgstr "Безграничное дыхание под водой"
 
 msgid "Dolphin's Grace"
-msgstr ""
+msgstr "Благодать дельфина"
 
 msgid "swimming gracefully"
-msgstr ""
+msgstr "грациозное плавание"
 
 msgid "Leaping"
 msgstr "прыгучести"
 
 msgid "+@1% jumping power"
-msgstr ""
+msgstr "+@1% силы прыжка"
 
 msgid "-@1% jumping power"
-msgstr ""
+msgstr "-@1% силы прыжка"
 
 msgid "Slow Falling"
-msgstr ""
+msgstr "Медленное падение"
 
 msgid "decreases gravity effects"
-msgstr ""
+msgstr "уменьшает эффект гравитации"
 
 msgid "Swiftness"
 msgstr "стремительности"
 
 msgid "+@1% running speed"
-msgstr ""
+msgstr "+@1% скорости бега"
 
 msgid "Slowness"
 msgstr "замедления"
 
 msgid "-@1% running speed"
-msgstr ""
+msgstr "-@1% скорости бега"
 
 msgid "Levitation"
-msgstr ""
+msgstr "Левитация"
 
 msgid "moves body upwards at @1 nodes/s"
-msgstr ""
+msgstr "перемещает тело вверх со скоростью @1 узлов/с"
 
 msgid "Night Vision"
 msgstr "ночного зрения"
 
 msgid "improved vision during the night"
-msgstr ""
+msgstr "улучшение зрения в ночное время"
 
 msgid "Darkness"
-msgstr ""
+msgstr "Тьма"
 
 msgid "surrounded by darkness"
-msgstr ""
+msgstr "окружает темнотой"
 
 msgid "not seeing anything beyond @1 nodes"
-msgstr ""
+msgstr "не видно дальше @1 узлов"
 
 msgid "Glowing"
-msgstr ""
+msgstr "Светящийся"
 
 msgid "more visible at all times"
-msgstr ""
+msgstr "более заметны в любое время"
 
 msgid "Health Boost"
-msgstr ""
+msgstr "Укрепление здоровья"
 
 msgid "HP increased by @1"
-msgstr ""
+msgstr "HP увеличено на @1"
 
 msgid "Absorption"
-msgstr ""
+msgstr "Поглощение"
 
 msgid "absorbs up to @1 incoming damage"
-msgstr ""
+msgstr "Поглощает до @1 единиц получаемого урона"
 
 msgid "Fire Resistance"
 msgstr "огнестойкости"
 
 msgid "resistance to fire damage"
-msgstr ""
+msgstr "устойчивость к огню"
 
 msgid "Resistance"
-msgstr ""
+msgstr "Сопротивление"
 
 msgid "resist @1% of incoming damage"
-msgstr ""
+msgstr "сопротивление @1% к получаемому урону"
 
 msgid "Luck"
-msgstr ""
+msgstr "Удача"
 
 msgid "Bad Luck"
-msgstr ""
+msgstr "Неудача"
 
 msgid "Bad Omen"
-msgstr ""
+msgstr "Дурное предзнаменование"
 
 msgid "danger is imminent"
-msgstr ""
+msgstr "опасность неминуема"
 
 msgid "Hero of the Village"
-msgstr ""
+msgstr "Герой деревни"
 
 msgid "Withering"
-msgstr ""
+msgstr "Увядание"
 
 msgid "-1 HP / @1 s, can kill"
-msgstr ""
+msgstr "-1 HP / @1 с, может убить"
 
 msgid "impaired sight"
-msgstr ""
+msgstr "ослабленное зрение"
 
 msgid "Hunger"
 msgstr "Голод"
 
 msgid "exhausts by @1 per second"
-msgstr ""
+msgstr "истощается на @1 в секунду"
 
 msgid "Nausea"
-msgstr ""
+msgstr "Тошнота"
 
 msgid "not feeling very well..."
-msgstr ""
+msgstr "не очень хорошо себя чувствую..."
 
 msgid "frequency: @1 / 1 s"
-msgstr ""
+msgstr "частота: @1 / 1 s"
 
 msgid "Saturation"
-msgstr ""
+msgstr "Насыщение"
 
 msgid "saturates by @1 per second"
-msgstr ""
+msgstr "насыщается на @1 в секунду"
 
 msgid "Haste"
-msgstr ""
+msgstr "Спешка"
 
 msgid "+@1% mining and attack speed"
-msgstr ""
+msgstr "+@1% добычи и скорости атаки"
 
 msgid "Fatigue"
-msgstr ""
+msgstr "Усталость"
 
 msgid "-@1% mining and attack speed"
-msgstr ""
+msgstr "-@1% добычи и скорости атаки"
 
 msgid "Conduit Power"
-msgstr ""
+msgstr "Питание по кабелю"
 
 msgid "+@1% mining and attack speed in water"
-msgstr ""
+msgstr "+@1% добычи и скорости атаки в воде"
 
 msgid "Fermented Spider Eye"
 msgstr "Приготовленный паучий глаз"
@@ -327,6 +327,10 @@ msgstr "без эффекта"
 
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr ""
+"Бросаемое зелье, которое при ударе разлетается на куски и создает магическое "
+"облако, которое держится некоторое время. Любой игрок или моб, оказавшийся "
+"внутри облака, получит эффект или набор эффектов зелья, возможно, "
+"неоднократно."
 
 msgid "Use the “Punch” key to throw it."
 msgstr "Нажмите [Ударить], чтобы бросить."
@@ -335,37 +339,37 @@ msgid "Use the “Place” key to drink it."
 msgstr "Нажмите [Использовать], чтобы выпить."
 
 msgid "Drinking a potion gives you a particular effect or set of effects."
-msgstr ""
+msgstr "Выпив зелье, вы получаете определенный эффект или набор эффектов."
 
 msgid "@1 Potion @2"
-msgstr ""
+msgstr "@1 Зелье @2"
 
 msgid "@1 Potion"
 msgstr "Зелье @1"
 
 msgid "Potion @1"
-msgstr ""
+msgstr "Зелье @1"
 
 msgid "Strange Potion"
-msgstr ""
+msgstr "Странное зелье"
 
 msgid "Splash @1"
-msgstr ""
+msgstr "Всплеск @1"
 
 msgid "Lingering @1"
-msgstr ""
+msgstr "Затянувшийся @1"
 
 msgid "@1 Arrow @2"
-msgstr ""
+msgstr "@1 Стрела @2"
 
 msgid "@1 Arrow"
-msgstr ""
+msgstr "@1 Стрела"
 
 msgid "Arrow @1"
-msgstr ""
+msgstr "Стрела @1"
 
 msgid "Strange Tipped Arrow"
-msgstr ""
+msgstr "Стрела со странным наконечником"
 
 msgid "Dragon's Breath"
 msgstr "Дыхание дракона"
