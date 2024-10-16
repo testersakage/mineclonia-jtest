@@ -11,14 +11,24 @@ mcl_util.generate_on_place_plant_function(function(pos)
 	return minetest.get_item_group(node_below.name, "soil_bamboo") > 0
 end)
 
+local block_doc = S("A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.")
+
 mcl_trees.register_wood("bamboo",{
 	readable_name = "Bamboo",
 	sign_color="#FCE6BC",
 	sapling = false,
 	potted_sapling = false,
 	leaves = false,
-	tree = { tiles = {"mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo_bottom.png","mcl_bamboo_bamboo_block.png" }},
-	stripped = { tiles = {"mcl_bamboo_bamboo_bottom_stripped.png", "mcl_bamboo_bamboo_bottom_stripped.png","mcl_bamboo_bamboo_block_stripped.png" }},
+	tree = {
+		description = S("Block of Bamboo"),
+		_doc_items_longdesc = block_doc,
+		tiles = {"mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo_bottom.png","mcl_bamboo_bamboo_block.png" }
+	},
+	stripped = {
+		description = S("Block of Stripped Bamboo"),
+		_doc_items_longdesc = block_doc,
+		tiles = {"mcl_bamboo_bamboo_bottom_stripped.png", "mcl_bamboo_bamboo_bottom_stripped.png","mcl_bamboo_bamboo_block_stripped.png" }
+	},
 	bark = { tiles = {"mcl_bamboo_bamboo_block.png"}},
 	wood = { tiles = {"mcl_bamboo_bamboo_plank.png"}},
 	stripped_bark = { tiles = {"mcl_bamboo_bamboo_block_stripped.png"} },
