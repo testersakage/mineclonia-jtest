@@ -185,29 +185,6 @@ end
 
 function mob_class:gwp_start_1 (context)
 	local pos = self.object:get_pos ()
-	-- If traveling to a waypoint that is within one node away,
-	-- start from that waypoint.
-	if self.waypoints and #self.waypoints > 0 then
-		local next_wp = self.waypoints[#self.waypoints]
-		if vector.distance (pos, next_wp) < 1.0 then
-			local class = self:gwp_classify_node (context, next_wp)
-			local penalty = self.gwp_penalties[class]
-			if class ~= "OPEN" and class ~= "WATER" and class ~= "LAVA"
-				and class ~= "DOOR_OPEN" and penalty >= 0.0 then
-				local v = vector.copy (next_wp)
-
-				-- If this mob is doublewide, the
-				-- original position has been adjusted
-				-- and must be restored to its initial
-				-- nodepos value.
-				v.x = v.x - (context.mob_width * 0.5 - 0.5)
-				v.z = v.z - (context.mob_width * 0.5 - 0.5)
-				v.x = floor (v.x)
-				v.z = floor (v.z)
-				return v
-			end
-		end
-	end
 	-- It is possible for mobs to turn around during a repath if
 	-- the start position returned is inconsistent with that of
 	-- the last waypoint reached, for this will frequently produce
@@ -218,7 +195,7 @@ function mob_class:gwp_start_1 (context)
 	if last_wp
 		and math.abs (pos.x - last_wp.x) < 0.5
 		and math.abs (pos.z - last_wp.z) < 0.5
-		and math.abs (pos.y - last_wp.y) < 1 then
+		and math.abs (pos.y - last_wp.y) < 1.0 then
 		pos.x = last_wp.x - (context.mob_width * 0.5 - 0.5)
 		pos.y = last_wp.y - context.y_offset
 		pos.z = last_wp.z - (context.mob_width * 0.5 - 0.5)
@@ -277,13 +254,16 @@ function mob_class:gwp_start (context)
 	local c1, c2, c3, c4, class
 	local cbox = self.collisionbox
 	local pos = self.object:get_pos ()
-	c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
+
+	-- Offset pos.y by 0.5, for this mob should attempt to walk
+	-- above slabs and soul sand, not on them.
+	c1 = vector.new (pos.x + cbox[1], pos.y + 0.5, pos.z + cbox[3])
 	c1 = vector.apply (c1, round_trunc)
-	c2 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[6])
+	c2 = vector.new (pos.x + cbox[1], pos.y + 0.5, pos.z + cbox[6])
 	c2 = vector.apply (c2, round_trunc)
-	c3 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[3])
+	c3 = vector.new (pos.x + cbox[4], pos.y + 0.5, pos.z + cbox[3])
 	c3 = vector.apply (c3, round_trunc)
-	c4 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[6])
+	c4 = vector.new (pos.x + cbox[4], pos.y + 0.5, pos.z + cbox[6])
 	c4 = vector.apply (c4, round_trunc)
 	class = self:gwp_classify_node (context, c1)
 	if class ~= "OPEN" and penalties[class] >= 0.0 then
@@ -357,6 +337,9 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 	if self.attacking then
 		context.tolerance = self.reach * 0.65
 	end
+
+	-- Return positions touching the surfaces of the nodes below.
+	context.y_offset = -0.5
 
 	-- Calculate entity dimensions.
 	local collisionbox = self.collisionbox
@@ -1622,7 +1605,9 @@ local function print_node_neighbors (itemstack, user, pointed_thing)
 		-- Target position is immaterial here.
 		local context = entity:gwp_initialize ({user:get_pos ()})
 		local edges_under = entity:gwp_edges (context, pointed_thing.under)
+		edges_under = table.copy (edges_under)
 		local edges_above = entity:gwp_edges (context, pointed_thing.above)
+		edges_above = table.copy (edges_above)
 		dbg.pp (edges_under)
 		dbg.pp (edges_above)
 	end
@@ -1924,9 +1909,10 @@ local function waterbound_gwp_edges (self, context, node)
 		vector.y = y
 		vector.z = z
 
+		saved[i] = nil
 		if not direction[4]
 			or (saved[direction[4]] and saved[direction[5]]) then
-			local class = waterbound_gwp_classify_node (self, context, node)
+			local class = waterbound_gwp_classify_node (self, context, vector)
 			local penalty = penalties[class]
 			if penalty >= 0.0 then
 				local object = self:get_gwp_node (context, x, y, z)
@@ -2656,7 +2642,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:iron_golem" then
+				-- if self.name == "mobs_mc:axolotl" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else
@@ -2665,7 +2651,11 @@ function mob_class:next_waypoint (dtime)
 			self:set_animation (self.gowp_animation)
 			self.pathfinding_context = nil
 		end
-	elseif self.waypoints then
+	end
+
+	-- Continue navigating even if another pathfinding operation
+	-- is in progress.  This appears to reduce jank.
+	if self.waypoints then
 		self.waypoint_age = self.waypoint_age + dtime
 		self:gwp_next_waypoint (dtime)
 		self:gwp_timeout (dtime)
@@ -2774,6 +2764,8 @@ function mob_class:gwp_open_and_memorize_door (door)
 	end
 end
 
+local SQRT_HALF = math.sqrt (0.5)
+
 function mob_class:gwp_next_waypoint (dtime)
 	local waypoints = self.waypoints
 	local n_waypoints = #waypoints
@@ -2789,7 +2781,7 @@ function mob_class:gwp_next_waypoint (dtime)
 	local prev_wp = next_wp
 	local self_pos = self.object:get_pos ()
 	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
-	local dist_to_ycenter = math.abs (next_wp.y - 0.5 - self_pos.y)
+	local dist_to_ycenter = math.abs (next_wp.y - self_pos.y)
 	local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
 	local cbox = self.collisionbox
 	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
@@ -2809,28 +2801,32 @@ function mob_class:gwp_next_waypoint (dtime)
 		next_wp = ahead
 		next_wp_surface = ahead_surface
 		waypoints[#waypoints] = nil
-	else
-		-- Is this mob already en route to the next waypoint?
 		if #waypoints > 1 then
-			local dist_to_next_wp = vector.distance (next_wp_surface, self_pos)
+			ahead = waypoints[#waypoints - 1]
+			ahead_surface = bottom_of_node (ahead)
+		end
+	end
 
-			if dist_to_next_wp < 2.0 then
-				local dist_to_ahead = vector.distance (ahead_surface, self_pos)
-				if dist_to_ahead < dist_to_next_wp
-					or dist_to_next_wp < 0.5 then
-					local dir = vector.direction (self_pos, ahead_surface)
-					local dir1 = vector.direction (self_pos, next_wp_surface)
-					local dot = vector.dot (dir, dir1)
-					if dot < 0 then
-						self._last_wp = {
-							x = next_wp.x,
-							y = next_wp.y,
-							z = next_wp.z,
-						}
-						next_wp = ahead
-						next_wp_surface = ahead_surface
-						waypoints[#waypoints] = nil
-					end
+	-- Is this mob already en route to the next waypoint?
+	if #waypoints > 1 then
+		local dist_to_next_wp = vector.distance (next_wp_surface, self_pos)
+
+		if dist_to_next_wp < 2.0 then
+			local dist_to_ahead = vector.distance (ahead_surface, self_pos)
+			if dist_to_ahead < dist_to_next_wp
+				or dist_to_next_wp < SQRT_HALF then
+				local dir = vector.direction (self_pos, ahead_surface)
+				local dir1 = vector.direction (self_pos, next_wp_surface)
+				local dot = vector.dot (dir, dir1)
+				if dot < 0 then
+					self._last_wp = {
+						x = next_wp.x,
+						y = next_wp.y,
+						z = next_wp.z,
+					}
+					next_wp = ahead
+					next_wp_surface = ahead_surface
+					waypoints[#waypoints] = nil
 				end
 			end
 		end
@@ -2893,7 +2889,7 @@ local function aquatic_gwp_next_waypoint (self, dtime)
 	local next_wp = waypoints[#waypoints]
 	local self_pos = self.object:get_pos ()
 	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
-	local dist_to_ycenter = math.abs (next_wp.y + 0.5 - self_pos.y)
+	local dist_to_ycenter = math.abs (next_wp.y - self_pos.y)
 	local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
 	local cbox = self.collisionbox
 	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
@@ -2974,7 +2970,6 @@ end
 function mob_class:gwp_configure_amphibious_mob ()
 	self.gwp_edges = amphibious_gwp_edges
 	self.gwp_start = amphibious_gwp_start
-	self.gwp_initialize = waterbound_gwp_initialize
 	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
 	local new_penalties = table.copy (mob_class.gwp_penalties)
 	new_penalties.WATER = 0.0
