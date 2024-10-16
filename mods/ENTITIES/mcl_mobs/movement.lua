@@ -702,10 +702,10 @@ function mob_class:cancel_navigation ()
 	mob._last_wp = nil
 end
 
-function mob_class:go_to_stupidly (pos, velocity)
+function mob_class:go_to_stupidly (pos, factor)
 	local mob = self:mob_controlling_movement ()
 	mob.stupid_target = pos
-	mob.stupid_velocity = velocity or mob.movement_speed
+	mob.stupid_velocity = mob.movement_speed * (factor or 1)
 end
 
 --- Mob AI.
@@ -822,6 +822,11 @@ function mob_class:ai_step (dtime)
 			self._recent_attacker_age = 0
 		end
 	end
+	if self._last_attacker then
+		if not self._last_attacker:is_valid () then
+			self._last_attacker = nil
+		end
+	end
 	self:tick_breeding ()
 end
 
@@ -926,7 +931,7 @@ function mob_class:check_following (self_pos, dtime)
 		if self.following and not must_stop then
 			-- check_head_swivel is responsible for
 			-- looking at the target.
-			self:go_to_stupidly (pos)
+			self:go_to_stupidly (pos, self.follow_bonus)
 		end
 		return true
 	elseif self.follow and not self.follow_cooldown then
@@ -1300,6 +1305,9 @@ function mob_class:pitchswim_do_go_pos (dtime, moveresult)
 		-- Fish cannot change their pitch outside a body of
 		-- water.
 		self.acc_dir.y = 0
+		if self.fixed_grounded_speed then
+			speed = self.fixed_grounded_speed
+		end
 		self:set_velocity (speed * self.grounded_speed_factor)
 		self._acc_no_gravity = false
 		self:set_yaw (target_yaw)
@@ -1307,8 +1315,20 @@ function mob_class:pitchswim_do_go_pos (dtime, moveresult)
 	end
 end
 
+local function amphibious_pacing_target (self, pos, width, height, groups)
+	local target_aquatic
+		= aquatic_pacing_target (self, pos, width, height, groups)
+	if target_aquatic then
+		return target_aquatic
+	end
+	-- Otherwise attempt to move onto land, if possible.
+	local target
+		= mob_class.pacing_target (self, pos, width, height, {"group:solid"})
+	return target
+end
+
 function mob_class:configure_amphibious_mob ()
-	self.pacing_target = aquatic_pacing_target
+	self.pacing_target = amphibious_pacing_target
 	self.motion_step = self.aquatic_step
 	self.movement_step = aquatic_movement_step
 	self._acc_no_gravity = false
