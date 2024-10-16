@@ -344,7 +344,7 @@ mcl_damage.register_modifier (function (obj, damage, reason)
 	if not obj:is_player () then
 		return damage
 	end
-	if reason.flags.scales == true or is_mob (reason.source) then
+	if (reason.flags.scales == true) or is_mob (reason.source) then
 		if mcl_vars.difficulty == 0 then
 			return 0
 		elseif mcl_vars.difficulty == 1 then

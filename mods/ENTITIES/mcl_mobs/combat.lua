@@ -102,9 +102,11 @@ function mob_class:projectile_knockback (factor, dir)
 	end)
 end
 
--- Register damage delivered otherwise than as punches and retaliate.
-function mob_class:register_damage (cmi_reason)
-	local source = cmi_reason.source
+-- Register damage delivered by punches or other means, retaliate, and
+-- summon reinforcements.
+function mob_class:receive_damage (mcl_reason, damage)
+	local source = mcl_reason.source
+	self.health = self.health - damage
 
 	if not source then
 		return
@@ -114,15 +116,33 @@ function mob_class:register_damage (cmi_reason)
 		return
 	end
 
+	if damage < 0 then
+		-- Healing.
+		return
+	end
+
 	-- Attack puncher if necessary.
-	if ( self.passive == false or self.retaliates )
+	if (self.passive == false or self.retaliates)
 		and (self.child == false or self.type == "monster") then
-		self:do_attack (source, 15)
+		if not self.passive_towards_players
+			or not source:is_player () then
+			self:do_attack (source, 15)
+		end
 	end
 
 	if source then
 		self._recent_attacker = source
 		self._recent_attacker_age = 0
+	end
+	self._last_attacker = source
+
+	-- Alert others to the attack.
+	if source and source:get_pos () and self.health > 0 then
+		self:call_group_attack (source)
+
+		if self.runaway then
+			self:do_runaway (source)
+		end
 	end
 end
 
@@ -229,7 +249,9 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 
 	if damage >= 0 then
-		-- only play hit sound and show blood effects if damage is 1 or over; lower to 0.1 to ensure armor works appropriately.
+		-- only play hit sound and show blood effects if
+		-- damage is 1 or over; lower to 0.1 to ensure armor
+		-- works appropriately.
 		if damage >= 0.1 then
 			-- weapon sounds
 			if weapon:get_definition().sounds ~= nil then
@@ -247,7 +269,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 				}, true)
 			end
 
-			self:damage_effect(damage)
+			self:damage_effect (damage)
 
 			-- do damage
 			local mcl_reason = {}
@@ -256,7 +278,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			mcl_util.deal_damage(self.object, damage, mcl_reason)
 
 			-- skip future functions if dead, except alerting others
-			if self:check_for_death( "hit", {type = "punch", puncher = hitter}) then
+			if self:check_for_death ("hit", {type = "punch", puncher = hitter}) then
 				die = true
 			end
 		end
@@ -312,28 +334,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		v = mcl_util.calculate_knockback (v, kb * 0.5, self.knockback_resistance,
 						standing, dir.x, dir.z)
 		self.object:set_velocity (v)
-	end
-
-	-- if skittish then run away
-	if hitter and hitter:get_pos ()
-		and not die and self.runaway == true then
-		self:do_runaway (hitter)
-	end
-
-	-- attack puncher
-	if ( self.passive == false or self.retaliates )
-	and (self.child == false or self.type == "monster")
-	and hitter_playername ~= self.owner
-	and not mcl_mobs.invis[ hitter_playername or ""] then
-		if not die then
-			-- attack whoever punched mob
-			self:do_attack (hitter, 15)
-		end
-	end
-
-	-- alert others to the attack
-	if hitter and hitter:get_pos() then
-		self:call_group_attack(hitter)
 	end
 end
 
@@ -453,7 +453,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 		self._strafe_time = self._strafe_time + dtime
 	else
 		if self:check_timer ("bowshoot_pathfind", 0.5) then
-			self:gopath (target_pos, nil, true)
+			self:gopath (target_pos, nil, true, self.pursuit_bonus)
 		end
 		self._strafe_time = -1
 	end
@@ -652,7 +652,7 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		end
 
 		-- Try to pathfind.
-		if not self:gopath (target_pos, nil, true) then
+		if not self:gopath (target_pos, nil, true, self.pursuit_bonus) then
 			delay = delay + 0.75
 		end
 	end
@@ -745,7 +745,7 @@ function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 		self:halt_in_tracks ()
 	else
 		if self:check_timer ("ranged_pathfind", 0.5) then
-			self:gopath (target_pos)
+			self:gopath (target_pos, nil, false, self.pursuit_bonus)
 		end
 	end
 	local shoot_time = self._shoot_timer
