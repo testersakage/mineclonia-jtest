@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-16 01:11+0000\n"
+"PO-Revision-Date: 2024-10-16 01:17+0000\n"
 "Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/ru/>\n"
@@ -384,85 +384,87 @@ msgid "Has an awkward taste and is used for brewing potions."
 msgstr "Имеет неприятный вкус и используется для приготовления других зелий."
 
 msgid "Mundane"
-msgstr ""
+msgstr "Мирская жизнь"
 
 msgid "Has a terrible taste and is not really useful for brewing potions."
-msgstr ""
+msgstr "Имеет ужасный вкус и не очень подходит для варки зелий."
 
 msgid "Thick"
-msgstr ""
+msgstr "Толстый"
 
 msgid "Has a bitter taste and is not really useful for brewing potions."
-msgstr ""
+msgstr "Имеет горький вкус и не очень подходит для варки зелий."
 
 msgid "of Healing"
-msgstr ""
+msgstr "Исцеление"
 
 msgid "+@1 HP"
-msgstr ""
+msgstr "+@1 HP"
 
 msgid "Instantly heals."
 msgstr "Мгновенно исцеляет."
 
 msgid "of Harming"
-msgstr ""
+msgstr "причинение вреда"
 
 msgid "-@1 HP"
-msgstr ""
+msgstr "-@1 HP"
 
 msgid "Instantly deals damage."
 msgstr "Наносит мгновенный урон."
 
 msgid "of Night Vision"
-msgstr ""
+msgstr "Ночное зрение"
 
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "Усиливает восприятие яркости освещения в тёмных местах."
 
 msgid "of Swiftness"
-msgstr ""
+msgstr "Стремительность"
 
 msgid "Increases walking speed."
 msgstr "Увеличивает скорость ходьбы"
 
 msgid "of Slowness"
-msgstr ""
+msgstr "медлительность"
 
 msgid "Decreases walking speed."
 msgstr "Уменьшает скорость ходьбы"
 
 msgid "of Leaping"
-msgstr ""
+msgstr "Прыгучесть"
 
 msgid "Increases jump strength."
 msgstr "Увеличивает силу прыжка"
 
 msgid "of Decay"
-msgstr ""
+msgstr "упадок"
 
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr ""
+"Применяет эффект увядания, который наносит урон с регулярным интервалом и "
+"может убить."
 
 msgid "of Poison"
-msgstr ""
+msgstr "Яд"
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "Наносит эффект яда, который вызывает урон через равные промежутки времени."
 
 msgid "of Regeneration"
-msgstr ""
+msgstr "Регенерация"
 
 msgid "Regenerates health over time."
 msgstr "Восстанавливает здоровье со временем."
 
 msgid "of Invisibility"
-msgstr ""
+msgstr "невидимости"
 
 msgid "Grants invisibility."
 msgstr "Делает невидимым."
 
 msgid "of Water Breathing"
-msgstr ""
+msgstr "Водное дыхание"
 
 msgid "Grants limitless breath underwater."
 msgstr "Даёт возможность дышать под водой."
