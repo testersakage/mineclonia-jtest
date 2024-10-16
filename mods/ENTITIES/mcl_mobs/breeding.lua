@@ -194,20 +194,20 @@ function mob_class:beget_child (pos)
 		if self:on_breed (mate) == false then
 			return
 		end
-		local child = mcl_mobs.spawn_child(pos, self.name)
-		if child then
-			local ent_c = child:get_luaentity()
-			-- Use texture of one of the parents
-			local p = math.random(1, 2)
-			if p == 1 then
-				ent_c.base_texture = self.base_texture
-			else
-				ent_c.base_texture = self.base_texture
-			end
-			ent_c:set_textures (ent_c.base_texture)
-			ent_c.tamed = true
-			ent_c.owner = self.owner
+	end
+	local child = mcl_mobs.spawn_child(pos, self.name)
+	if child then
+		local ent_c = child:get_luaentity()
+		-- Use texture of one of the parents
+		local p = math.random(1, 2)
+		if p == 1 then
+			ent_c.base_texture = self.base_texture
+		else
+			ent_c.base_texture = self.base_texture
 		end
+		ent_c:set_textures (ent_c.base_texture)
+		ent_c.tamed = true
+		ent_c.owner = self.owner
 	end
 end
 
@@ -275,7 +275,7 @@ function mob_class:check_breeding (pos)
 			self.begetting = true
 			minetest.after (5, mob_class.beget_child, self, pos)
 		end
-		self:gopath (matepos, nil, true)
+		self:gopath (matepos, nil, true, self.breed_bonus)
 		return true
 	elseif self.horny and self.hornytimer < HORNY_TIME then
 			local ax, ay, az, bx, by, bz
