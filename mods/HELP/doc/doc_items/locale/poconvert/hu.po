@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-07 22:31+0000\n"
+"PO-Revision-Date: 2024-10-17 15:17+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "doc_items/hu/>\n"
@@ -15,58 +15,60 @@ msgstr ""
 "X-Generator: Weblate 5.7.2\n"
 
 msgid "This is a decorational block."
-msgstr ""
+msgstr "Ez egy dekorációs blokk."
 
 msgid "This block is a building block for creating various buildings."
-msgstr ""
+msgstr "Ez egy építő blokk, mellyel különböző épületeket készíthetsz."
 
 msgid "This item is primarily used for crafting other items."
-msgstr ""
+msgstr "Ez az eszköz elsősorban más eszközök előállításához használható."
 
 msgid "Hold it in your hand, then leftclick to eat it."
-msgstr ""
+msgstr "Fogd a kezedbe és bal gombbal kattintva edd meg."
 
 msgid "Hold it in your hand, then leftclick to eat it. But why would you want to do this?"
 msgstr ""
+"A kezedben fogva, bal gombbal kattintva eheted meg. De miért is akarnád "
+"megenni?"
 
 msgid "This block's rotation is affected by the way you place it: Place it on the floor or ceiling for a vertical orientation; place it at the side for a horizontal orientation. Sneaking while placing it leads to a perpendicular orientation instead."
 msgstr ""
 
 msgid "Hand"
-msgstr ""
+msgstr "Kéz"
 
 msgid "Air"
-msgstr ""
+msgstr "Levegő"
 
 msgid "Yes"
-msgstr ""
+msgstr "Igen"
 
 msgid "No"
-msgstr ""
+msgstr "Nem"
 
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "Unknown item (@1)"
-msgstr ""
+msgstr "Ismeretlen tárgy (@1)"
 
 msgid "unknown"
-msgstr ""
+msgstr "ismeretlen"
 
 msgid "1 second"
-msgstr ""
+msgstr "1 másodperc"
 
 msgid "@1 seconds"
-msgstr ""
+msgstr "@1 másodperc"
 
 msgid "• @1: @2"
-msgstr ""
+msgstr "• @1: @2"
 
 msgid "• @1, rating @2: @3 s - @4 s"
-msgstr ""
+msgstr "• @1, értékelés @2: @3 s - @4 s"
 
 msgid "• @1, rating @2: @3 s"
-msgstr ""
+msgstr "• @1, értékelés @2: @3 s"
 
 msgid "• @1, level @2: @3 uses"
 msgstr ""
@@ -75,34 +77,34 @@ msgid "• @1, level @2: Unlimited"
 msgstr ""
 
 msgid "This tool is capable of mining."
-msgstr ""
+msgstr "Ezzel az eszközzel bányászhatsz."
 
 msgid "Maximum toughness levels:"
-msgstr ""
+msgstr "Legnagyobb keménységi fok:"
 
 msgid "Mining times:"
-msgstr ""
+msgstr "Fejtési idők:"
 
 msgid "Mining durability:"
-msgstr ""
+msgstr "Tartósság:"
 
 msgid "This is a melee weapon which deals damage by punching."
-msgstr ""
+msgstr "Ez egy közelharcban használható fegyver, mellyel szúrni lehet."
 
 msgid "Maximum damage per hit:"
-msgstr ""
+msgstr "Legnagyobb sebzés ütésenként:"
 
 msgid "• @1: @2 HP"
 msgstr ""
 
 msgid "Full punch interval: @1 s"
-msgstr ""
+msgstr "Lendítési idő: @1 s"
 
 msgid "This block can be mined by any mining tool in half a second."
-msgstr ""
+msgstr "Ezt a blokkot bármely szerszámmal fél másodperc alatt lehet kitermelni."
 
 msgid "This block can be mined by any mining tool immediately."
-msgstr ""
+msgstr "Ezt a blokkot bármely szerszámmal azonnal ki lehet termelni."
 
 msgid "This block can not be mined by ordinary mining tools."
 msgstr ""
