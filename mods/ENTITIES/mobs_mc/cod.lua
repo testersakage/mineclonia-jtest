@@ -4,6 +4,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator(minetest.get_current_modname())
+local mob_class = mcl_mobs.mob_class
 
 --###################
 --################### cod
@@ -23,7 +24,6 @@ local cod = {
 	rotate = 180,
 	spawn_in_group_min = 3,
 	spawn_in_group = 8,
-	tilt_swim = true,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.79, 0.3},
 	head_eye_height = 0.195,
 	visual = "mesh",
@@ -70,10 +70,8 @@ local cod = {
 	flops = true,
 	breathes_in_water = true,
 	movement_speed = 14.0,
-	jump = false,
 	view_range = 16,
 	runaway = true,
-	fear_height = 4,
 	on_rightclick = function(self, clicker)
 		local bn = clicker:get_wielded_item():get_name()
 		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
