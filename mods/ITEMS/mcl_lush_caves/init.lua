@@ -21,6 +21,7 @@ local function vector_distance_xz(a, b)
 end
 
 dofile(modpath.."/nodes.lua")
+dofile(modpath.."/crafting.lua")
 
 minetest.register_abm({
 	label = "Spore Blossom Particles",
