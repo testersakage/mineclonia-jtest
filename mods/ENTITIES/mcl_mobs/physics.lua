@@ -612,23 +612,6 @@ function mob_class:check_entity_cramming()
 	end
 end
 
-function mob_class:fly_or_walk_anim()
-	if self.animation and self.animation.fly_start and self.animation.fly_end then
-		return "fly"
-	end
-
-	return "walk"
-end
-
--- Axolotl should have different anims for swimming and walking ...
-function mob_class:swim_or_walk_anim()
-	if self.animation and self.animation.swim_start and self.animation.swim_end then
-		return "swim"
-	end
-
-	return "walk"
-end
-
 -- falling and fall damage
 -- returns true if mob died
 function mob_class:falling(pos)
