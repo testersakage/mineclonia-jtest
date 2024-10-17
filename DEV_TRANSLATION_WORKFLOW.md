@@ -19,13 +19,27 @@ Rather than translating strings directly in the TR files, translators are encour
 
 ## Preconditions
 
-You need at least Luanti (Minetest) 5.8.0, Python 3 and the Luanti Translation Tools for this to work. You can find the Luanti Translation tools at <https://codeberg.org/Wuzzy/Minetest_Translation_Tools>.
+You need Python 3, the Luanti Translation Tools, Luanti 5.8.0 or greater, and an environment which can interact with git repositories and execute shell scripts for this to work (e.g. any linux box or Git Bash). For the Luanti Translation tools you need parts of the repositories at <https://github.com/minetest/modtools> and <https://codeberg.org/Wuzzy/Minetest_Translation_Tools>.
+
+## Creating translatable strings
+
+Mineclonia uses the standard notation to mark translatable strings in the mod lua code, i.e. `S("This string can be translated")`. See the documentation included with the minetest modtools repository for details.
+
+Additionally some mineclonia mods will compute translatable strings by piecing information fragments together, e.g. mcl_trees will create the translatable string `Cherry Log` for the name of the cherry tree trunk node when called from the `mcl_cherry_blossom` mod. The mod passes the `readable_name` property with the value `"Cherry"` (untranslated) into the `register_tree` function that concatenates this readable name with the default names used for the created items and nodes. This computed translatable string conceptually belongs to the `mcl_cherry_blossom` mod and will be automatically added to the translation template file `locale\template.txt` of `mcl_cherry_blossom` by the workflow in this document. Mods can usually override these translatable strings created by other mods on their behalf, e.g. `mcl_bamboo` overrides the name of the tree log node by passing the translated string `S("Block of Bamboo")` to the `register_tree` function. Consult the respective API documents for details.
+
+## Notes for mod developers
+
+To allow your carefully designed content to be easily translatable into idiomatic versions for all languages some thought is needed to find the correct English base strings to translate, because in many languages words need to change their form depending on the grammatic gender and number of other words. Sometimes compeltely different grammatic constructions are needed, just because some small detail changes. The following rules might help you get started:
+
+ - never construct new strings of already translated parts, it is almost always wrong to use a parameterized translation string for short node and item descriptions, while it's fine to use parameters to add e.g. stats to a longer description string
+
+ - many languages use different phrases for 1, 2, 3, and many items, so it might be necessary to take special care if you want to talk about an unknown number of items using prose (instead of a more table like syntax)
 
 ## Part 1: Pushing the translations from the game to Weblate:
 
 1. Clean up: Make sure the game repository is in a clean state (no non-committed changes)
-2. Update TR files: Run `util/mod_translation_updater.py` (included since Luanti 5.8.0) in the `mods` directory and commit the changes (if any)
-3. Convert TR to PO: Run `mtt_convert.py --tr2po -r` in the `mods` directory and commit the changes
+2. Generate computed translation strings and update TR files: Run `tools/generate_translation_strings/generate.sh` passing the path to the `mod_translation_updater.py` (from the minetest modtools repository) as the parameter and commit the resulting changes (if any). For example, if both mineclonia and the modtools are checked out to the same directory, execute `mineclonia/tools/generate_translation_strings/generate modtools/mod_translation_updater.py` in that directory.
+3. Convert TR to PO: Run `mtt_convert.py --tr2po -r` (from Wuzzy's Minetest_Translation_Tools repository) in the `mods` directory and commit the changes
 4. Push: Push the changes to the online repository of the game
 5. Update Weblate repository (optional): Weblate should soon automatically update its repository. But if you want to want the new strings to be available immediately, go to the project page, then “Manage > Repository Maintenance” and click “Update”
 
