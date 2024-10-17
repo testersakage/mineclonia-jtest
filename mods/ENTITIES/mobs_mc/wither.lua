@@ -542,17 +542,6 @@ function wither_def:ranged_attack_from_head (idx, ws, self_pos, target_pos, blue
 	self:discharge_ranged (pos, target_pos)
 end
 
-local function target_eye_height (attack)
-	local luaentity = attack:get_luaentity ()
-
-	if luaentity and luaentity.head_eye_height then
-		return luaentity.head_eye_height
-	elseif attack:is_player () then
-		return attack:get_properties ().eye_height
-	end
-	return 0
-end
-
 local FOURTY_DEG = math.rad (40)
 local TEN_DEG = math.rad (10)
 
@@ -654,7 +643,7 @@ function wither_def:run_ai (dtime, moveresult)
 			head_z = self_pos.z + head_off * math.cos (base_yaw)
 
 			local target_x = attack_pos.x
-			local target_y = attack_pos.y + target_eye_height (attack)
+			local target_y = attack_pos.y + mcl_util.target_eye_height (attack)
 			local target_z = attack_pos.z
 			local dx, dy, dz = target_x - head_x,
 				target_y - head_y,

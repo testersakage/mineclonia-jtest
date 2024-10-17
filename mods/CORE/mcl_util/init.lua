@@ -1468,6 +1468,27 @@ function mcl_util.get_wielditem (object)
 	return ItemStack ()
 end
 
+local rng = PcgRandom (os.time ())
+
+function mcl_util.dist_triangular (base, magnitude)
+	local r = 1 / 2147483647
+	local dist = (rng:next (0, 2147483647) * r
+			- rng:next (0, 2147483647) * r)
+	return base + magnitude * dist
+end
+
+function mcl_util.target_eye_height (attack)
+	local luaentity = attack:get_luaentity ()
+
+	if luaentity and luaentity.head_eye_height then
+		return luaentity.head_eye_height
+	elseif attack:is_player () then
+		return attack:get_properties ().eye_height
+	end
+	return 0
+end
+
+
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
 dofile(modpath.."/compat.lua")
