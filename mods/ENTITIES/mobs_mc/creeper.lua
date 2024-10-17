@@ -3,6 +3,7 @@
 local S = minetest.get_translator("mobs_mc")
 
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
+local mob_class = mcl_mobs.mob_class
 
 --###################
 --################### CREEPER
@@ -234,6 +235,18 @@ function creeper_defs:custom_attack ()
 	self._swell_dir = 1
 	self:cancel_navigation ()
 	self:halt_in_tracks ()
+end
+
+function creeper_defs:damage_mob (reason, damage)
+	mob_class.damage_mob (self, reason, damage)
+	if reason == "fall" then
+		self._swell_time
+			= (self._swell_time
+				+ math.floor (damage * 1.5) / 20)
+		if self._swell_time > CREEPER_SWELL_TIME - 0.25 then
+			self._swell_time = CREEPER_SWELL_TIME - 0.25
+		end
+	end
 end
 
 mcl_mobs.register_mob("mobs_mc:creeper", table.merge(creeper_defs, {
