@@ -638,7 +638,7 @@ function mcl_trees.register_wood(name, p)
 			push_by_arrow = true,
 			longdesc = S("A wooden button is a redstone component made out of wood which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1.5 seconds. Wooden buttons may also be pushed by arrows."),
 			push_sound = "mesecons_button_push_wood",
-			p.button and p.button._mcl_burntime or 5,
+			burntime = p.button and p.button._mcl_burntime or 5,
 		})
 	end
 
