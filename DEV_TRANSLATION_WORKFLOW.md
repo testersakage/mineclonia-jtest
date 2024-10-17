@@ -29,7 +29,7 @@ Additionally some mineclonia mods will compute translatable strings by piecing i
 
 ## Notes for mod developers
 
-To allow your carefully designed content to be easily translatable into idiomatic versions for all languages some thought is needed to find the correct English base strings to translate, because in many languages words need to change their form depending on the grammatic gender and number of other words. Sometimes compeltely different grammatic constructions are needed, just because some small detail changes. The following rules might help you get started:
+To allow your carefully designed content to be easily translatable into idiomatic versions for all languages some thought is needed to find the correct English base strings to translate. This is because in many languages words need to change their form depending on the grammatic gender and number of other words. Sometimes completely different grammatic constructions are needed, just because some small detail changes. The following rules might help you get started:
 
  - never construct new strings of already translated parts, it is almost always wrong to use a parameterized translation string for short node and item descriptions, while it's fine to use parameters to add e.g. stats to a longer description string
 
