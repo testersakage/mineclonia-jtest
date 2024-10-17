@@ -89,7 +89,7 @@ local axolotl = {
 	},
 	runaway = true,
 	movement_speed = 20,
-	step_height = 1.02,
+	stepheight = 1.02,
 	pace_bonus = 0.5,
 	follow_bonus = 0.6,
 	run_bonus = 0.6,
