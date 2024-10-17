@@ -84,6 +84,14 @@ local chicken = {
 	run_bonus = 1.4,
 }
 
+chicken.ai_functions = {
+	mob_class.check_frightened,
+	mob_class.check_breeding,
+	mob_class.check_following,
+	mob_class.follow_herd,
+	mob_class.check_pace,
+}
+
 function chicken:on_rightclick (clicker)
 	if self:follow_holding(clicker)
 		and self:feed_tame(clicker, 4, true, false) then
