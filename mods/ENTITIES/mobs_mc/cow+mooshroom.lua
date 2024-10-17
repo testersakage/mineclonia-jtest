@@ -1,11 +1,13 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
 local cow_def = {
 	description = S("Cow"),
 	type = "animal",
 	spawn_class = "passive",
+	runaway = true,
 	passive = true,
 	hp_min = 10,
 	hp_max = 10,
@@ -81,6 +83,15 @@ local cow_def = {
 	follow = { "mcl_farming:wheat_item" },
 	view_range = 10,
 	fear_height = 4,
+	run_bonus = 2.0,
+}
+
+cow_def.ai_functions = {
+	mob_class.check_frightened,
+	mob_class.check_breeding,
+	mob_class.check_following,
+	mob_class.follow_herd,
+	mob_class.check_pace,
 }
 
 mcl_mobs.register_mob("mobs_mc:cow", cow_def)
