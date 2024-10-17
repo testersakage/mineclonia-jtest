@@ -220,7 +220,7 @@ function mob_class:can_mate (with)
 		if ent.name == self.name then
 			-- Don't attempt to mate with mobs already
 			-- taken.
-			return not ent.mate or ent.mate == self
+			return not ent.mate or ent.mate == self.object
 		end
 
 		-- Match different variants of one mob.
@@ -247,7 +247,7 @@ function mob_class:same_species (ent)
 		entname = string.split (entname[2], "_")
 		selfname = string.split (selfname[2], "_")
 		if entname[1] == selfname[1] then
-			return not ent.mate or ent.mate == self
+			return not ent.mate or ent.mate == self.object
 		end
 	end
 	return false
@@ -261,9 +261,7 @@ function mob_class:check_breeding (pos)
 			return false
 		end
 		local entity = self.mate:get_luaentity ()
-		if self.hornytimer == 0 or entity.hornytimer == 0
-		-- Unrequited love?
-			or entity.mate ~= self.object then
+		if entity.mate ~= self.object then
 			self.mate = nil
 			return false
 		end
@@ -291,9 +289,9 @@ function mob_class:check_breeding (pos)
 			for _, object in ipairs (objects) do
 				if self:can_mate (object) then
 					local entity = object:get_luaentity ()
+					entity:replace_activity ("mate")
 					self.mate = object
 					entity.mate = self.object
-					entity:replace_activity ("mate")
 					self.begetting = false
 					self.horny = false
 					-- Prevent duplicate calls to
