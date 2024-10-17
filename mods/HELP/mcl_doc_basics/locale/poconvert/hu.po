@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-09-30 20:31+0000\n"
+"PO-Revision-Date: 2024-10-18 17:13+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/hu/>\n"
@@ -729,7 +729,7 @@ msgid "There is a rule which sometimes makes attacks impossible: Players, animat
 msgstr ""
 
 msgid "Blocks"
-msgstr ""
+msgstr "Blokkok"
 
 msgid "The world is made entirely out of blocks (voxels, to be precise). Blocks can be added or removed with the correct tools."
 msgstr ""
