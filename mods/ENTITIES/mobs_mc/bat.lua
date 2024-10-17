@@ -18,7 +18,7 @@ local function check_light(_, _, artificial_light, _)
 	return true, ""
 end
 
-mcl_mobs.register_mob("mobs_mc:bat", {
+local bat = {
 	description = S("Bat"),
 	type = "animal",
 	spawn_class = "ambient",
@@ -34,7 +34,7 @@ mcl_mobs.register_mob("mobs_mc:bat", {
 	textures = {
 		{"mobs_mc_bat.png"},
 	},
-	visual_size = {x=1, y=1},
+	visual_size = {x=2, y=2},
 	sounds = {
 		random = "mobs_mc_bat_idle",
 		damage = "mobs_mc_bat_hurt",
@@ -54,9 +54,12 @@ mcl_mobs.register_mob("mobs_mc:bat", {
 		run_start = 0,
 		run_end = 40,
 		die_speed = 60,
-		die_start = 40,
-		die_end = 80,
+		die_start = 80,
+		die_end = 120,
 		die_loop = false,
+		hang_start = 130,
+		hang_end = 135,
+		hang_speed = 4,
 	},
 	fall_damage = 0,
 	view_range = 16,
@@ -64,7 +67,113 @@ mcl_mobs.register_mob("mobs_mc:bat", {
 	fly = true,
 	makes_footstep_sound = false,
 	check_light = check_light,
-})
+	gravity_drag = 0.6,
+}
+
+local function is_walkable (node)
+	local node = minetest.get_node (node)
+	local def = minetest.registered_nodes[node.name]
+	return def and def.walkable
+end
+
+local function signum (number)
+	return (number == -0.0 or number < 0) and -1
+		or (number == 0.0 and 0.0 or 1)
+end
+
+function bat:motion_step (dtime, moveresult)
+	local self_pos = self.object:get_pos ()
+	local old_y = self_pos.y
+	local abovepos = {
+		x = math.floor (self_pos.x + 0.5),
+		y = math.floor (self_pos.y + 0.5) + 1,
+		z = math.floor (self_pos.z + 0.5),
+	}
+
+	if self._resting then
+		-- Verify that the block above is still walkable and
+		-- whole.
+		-- TODO: this should only accept redstone conductors,
+		-- but this must wait till the redstone branch is
+		-- merged.
+		if not is_walkable (abovepos) then
+			self._resting = false
+			self:set_animation ("walk")
+		else
+			-- Be startled off by players wihin 4 nodes.
+			for player in mcl_util.connected_players (self_pos, 4) do
+				self._resting = false
+				self:set_animation ("walk")
+				break
+			end
+		end
+
+		if self._resting then
+			self:set_animation ("hang")
+			self.object:set_pos ({
+					x = self_pos.x,
+					y = abovepos.y - 0.5 - 0.9,
+					z = self_pos.z,
+			})
+			self.object:set_velocity (vector.zero ())
+			-- Rotate randomly.
+			if math.random (math.round (200 * 0.05 / dtime)) == 1 then
+				self:set_yaw (math.random () * math.pi * 2)
+			end
+			return
+		end
+	end
+
+	self_pos.y = self_pos.y + (self.collisionbox[5] - self.collisionbox[2]) / 2
+	-- Bats feature no true AI and simply float aimlessly,
+	-- applying input directly to their velocity.
+	local target_pos = self._target_pos
+
+	if not target_pos
+		or is_walkable (target_pos)
+		or math.random (math.round (30 * 0.05 / dtime)) == 1
+		or vector.distance (self_pos, target_pos) <= 2.0 then
+		-- Switch target positions.
+		local x = (math.random (7) - 1) - (math.random (7) - 1)
+		local z = (math.random (7) - 1) - (math.random (7) - 1)
+		local y = (math.random (6) - 1) - 2.0
+		self_pos.y = old_y
+		target_pos = vector.offset (self_pos, x, y, z)
+		target_pos.x = math.floor (target_pos.x + 0.5)
+		target_pos.y = math.floor (target_pos.y)
+		target_pos.z = math.floor (target_pos.z + 0.5)
+	end
+
+	self_pos.y = old_y
+	self._target_pos = target_pos
+	local v = self.object:get_velocity ()
+	local dx = target_pos.x - self_pos.x
+	local dy = target_pos.y - self_pos.y
+	local dz = target_pos.z - self_pos.z
+	local x_mod = (signum (dx) * 10 - v.x) * mcl_mobs.pow_by_step (0.1, dtime)
+	local y_mod = (signum (dy) * 14 - v.y) * mcl_mobs.pow_by_step (0.1, dtime)
+	local z_mod = (signum (dz) * 10 - v.z) * mcl_mobs.pow_by_step (0.1, dtime)
+	v.x = v.x + x_mod
+	v.y = v.y + y_mod
+	v.z = v.z + z_mod
+	self.object:set_velocity (v)
+	local yaw = math.atan2 (v.z, v.x) - math.pi / 2
+	self:set_yaw (yaw)
+
+	if math.random (math.round (100 * 0.05 / dtime)) == 1
+		and is_walkable (abovepos) then
+		self._resting = true
+	end
+
+	mcl_mobs.mob_class.motion_step (dtime, moveresult)
+	return
+end
+
+function bat:run_ai (dtime, moveresult)
+	return
+end
+
+mcl_mobs.register_mob ("mobs_mc:bat", bat)
 
 
 -- Spawning
