@@ -98,7 +98,7 @@ minetest.register_entity("mcl_burning:fire", {
 		},
 		spritediv = {x = 1, y = animation_frames},
 		pointable = false,
-		glow = -1,
+		glow = 14,
 		backface_culling = false,
 	},
 	_mcl_animation_timer = 0,

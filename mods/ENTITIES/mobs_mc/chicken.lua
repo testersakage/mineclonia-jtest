@@ -35,7 +35,6 @@ mcl_mobs.register_mob("mobs_mc:chicken", {
 
 	makes_footstep_sound = true,
 	movement_speed = 5.0,
-	jump_height = 1.5,
 	drops = {
 		{name = "mcl_mobitems:chicken",
 		chance = 1,
