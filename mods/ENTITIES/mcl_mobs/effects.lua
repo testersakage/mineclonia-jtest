@@ -424,11 +424,24 @@ end)
 -- enabling client-side interpolation.
 ----------------------------------------------------------------------------------
 
+local function norm_radians (x)
+	local x = x % (math.pi * 2)
+	if x >= math.pi then
+		x = x - math.pi * 2
+	end
+	if x < -math.pi then
+		x = x + math.pi * 2
+	end
+	return x
+end
+
 function mob_class:rotation_info ()
 	if not self._rotation_info then
+		local oldyaw
+			= self.object:get_yaw () + self.rotate
 		self._rotation_info = {
 			yaw = {
-				current = self.object:get_yaw () + self.rotate,
+				current	= norm_radians (oldyaw),
 				remaining_turn = 0,
 				amt_per_second = 0,
 			},
@@ -444,23 +457,16 @@ end
 
 local ROTATE_TIME = 1/0.15 -- 3 minecraft ticks.
 
-local function norm_radians (x)
-	local x = x % (math.pi * 2)
-	if x >= math.pi then
-		x = x - math.pi * 2
-	end
-	if x < -math.pi then
-		x = x + math.pi * 2
-	end
-	return x
-end
-
 function mob_class:rotate_axis (axis, target)
 	local rotation_info = self:rotation_info ()[axis]
 	local current_rot
 
 	if axis == "yaw" then
-		current_rot = self.object:get_yaw () + self.rotate
+		current_rot = self.object:get_yaw ()
+		if self.rotate ~= 0 then
+			current_rot
+				= norm_radians (current_rot + self.rotate)
+		end
 	else
 		current_rot = self.object:get_rotation ().x
 	end
