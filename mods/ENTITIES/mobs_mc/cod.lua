@@ -51,6 +51,13 @@ local cod = {
 		min = 1,
 		max = 1,},
 	},
+	initialize_group = mob_class.school_init_group,
+	ai_functions = {
+		mob_class.check_schooling,
+		mob_class.check_avoid,
+		mob_class.check_frightened,
+		mob_class.check_pace,
+	},
 	runaway_from = {"players"},
 	runaway_bonus_near = 1.6,
 	runaway_bonus_far = 1.4,
