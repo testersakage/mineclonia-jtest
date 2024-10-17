@@ -81,6 +81,7 @@ local chicken = {
 	},
 	view_range = 16,
 	fear_height = 4,
+	run_bonus = 1.4,
 }
 
 function chicken:on_rightclick (clicker)
