@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-07 22:31+0000\n"
+"PO-Revision-Date: 2024-10-17 15:17+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc/hu/>\n"
@@ -195,7 +195,7 @@ msgid "This blocks drops the following when mined by shears: @1"
 msgstr ""
 
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "Painfully slow"
 msgstr "Irtó lassú"
@@ -231,16 +231,16 @@ msgid "Mining durability: @1"
 msgstr "Bányász tartósság: @1"
 
 msgid "This tool is capable of mining."
-msgstr ""
+msgstr "Ezzel az eszközzel bányászhatsz."
 
 msgid "Block breaking strength: @1"
 msgstr "Blokktörő erő: @1"
 
 msgid "This is a melee weapon which deals damage by punching."
-msgstr ""
+msgstr "Ez egy közelharcban használható fegyver, mellyel szúrni lehet."
 
 msgid "Maximum damage: @1 HP"
 msgstr ""
 
 msgid "Full punch interval: @1 s"
-msgstr ""
+msgstr "Lendítési idő: @1 s"
