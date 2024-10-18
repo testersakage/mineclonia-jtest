@@ -169,6 +169,10 @@ mcl_bonus_chest (Bonus chest) bool false
 # Allow re-editing signs after they are placed
 mcl_signs_editable (Editable signs) bool false
 
+# Change size of vault memory. By default a vault remembers the last 128 players
+# that looted that vault and prevents them from looting the same vault again.
+mcl_vaults_looter_list_length (Vault memory size) int 128 1 1024
+
 [Graphics]
 # Whether to animate chests when open / close
 animated_chests (Animated chests) bool true
