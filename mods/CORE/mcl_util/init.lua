@@ -1488,6 +1488,29 @@ function mcl_util.target_eye_height (attack)
 	return 0
 end
 
+function mcl_util.norm_radians (x)
+	local x = x % (math.pi * 2)
+	if x >= math.pi then
+		x = x - math.pi * 2
+	end
+	if x < -math.pi then
+		x = x + math.pi * 2
+	end
+	return x
+end
+
+function mcl_util.get_2d_block_direction (yaw)
+	local d = math.floor (yaw / (math.pi / 2) + 0.5) % 4
+	if d == 0 then
+		return 0, 1
+	elseif d == 1 then
+		return -1, 0
+	elseif d == 2 then
+		return 0, -1
+	else -- if d == 3 then
+		return 1, 0
+	end
+end
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
