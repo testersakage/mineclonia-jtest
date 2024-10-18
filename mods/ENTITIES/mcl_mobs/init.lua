@@ -82,7 +82,6 @@ mcl_mobs.mob_class = {
 	htimer = 0,
 	texture_list = {},
 	time_of_day = 0.5,
-	fear_height = 0,
 	runaway_timer = 0,
 	runaway_from = nil,
 	avoid_range = 6.0,
