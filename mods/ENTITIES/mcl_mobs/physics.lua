@@ -342,6 +342,10 @@ function mob_class:reset_breath ()
     end
 end
 
+function mob_class:respire ()
+	self.breath = math.min (self.object:get_properties().breath_max, self.breath + 1)
+end
+
 -- environmental damage (water, lava, fire, light etc.)
 function mob_class:do_env_damage()
 	-- feed/tame text timer (so mob 'full' messages dont spam chat)
@@ -510,7 +514,7 @@ function mob_class:do_env_damage()
 				return true
 			end
 		else
-			self.breath = math.min(self.object:get_properties().breath_max, self.breath + 1)
+			self:respire ()
 		end
 	end
 	--- suffocation inside solid node
@@ -643,7 +647,7 @@ function mob_class:falling(pos)
 				if add ~= 0 then
 					damage = damage + damage * (add/100)
 				end
-				self:damage_mob("fall",damage)
+				self:damage_mob ("fall", damage)
 				self.reset_fall_damage = 0
 			end
 			self.old_y = self.object:get_pos().y
