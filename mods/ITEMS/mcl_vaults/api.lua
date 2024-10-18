@@ -25,10 +25,6 @@ local function eject_items(pos, name, list)
 	minetest.after(0.5, eject_items, pos, name, list)
 end
 
-minetest.register_craftitem("mcl_vaults:trial_key", {
-	inventory_image = "mcl_vaults_trial_key.png",
-})
-
 local tpl = {
 	drawtype = "allfaces_optional",
 	paramtype2 = "facedir",
@@ -113,32 +109,39 @@ end
 function mcl_vaults.register_vault(name, def)
 	assert(type(name) == "string", "[mcl_vaults] trying to register vault without a valid (string) name")
 	assert(def.loot, "[mcl_vaults] vault "..tostring(name).." does not define a loot table.")
+	assert(def.keyitem or type(def.key) == "table", "[mcl_vaults] vault "..tostring(name).." does not define a key item.")
 	def.name = name
 	mcl_vaults.registered_vaults[name] = def
 
-	minetest.register_node("mcl_vaults:"..name, table.merge(tpl, {
+	local keyitem = def.keyitem or ("mcl_vaults:"..def.key.name)
+	if not def.keyitem then
+		minetest.register_craftitem(keyitem, def.key)
+	end
+
+	minetest.register_node(":mcl_vaults:"..name, table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { not_in_creative_inventory = 0 }),
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-			if itemstack:get_name() == def.key and can_open(pos, clicker) then
+			if itemstack:get_name() == keyitem and can_open(pos, clicker) then
 				mcl_vaults.activate(pos)
 			end
 		end
 	}, def.node_off))
-	minetest.register_node("mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
+	minetest.register_node(":mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 3 }),
 	}, def.node_ejecting))
 
-	minetest.register_node("mcl_vaults:"..name.."_on", table.merge(tpl, {
+	minetest.register_node(":mcl_vaults:"..name.."_on", table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 2 }),
 		on_construct = function(pos)
 			create_display_item(pos, def)
 		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-			if itemstack:get_name() == def.key and try_open(pos, clicker) then
-				eject_items(pos, name, mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time())))
+			if itemstack:get_name() == keyitem and try_open(pos, clicker) then
+				local loot = mcl_vaults.registered_vaults[name].loot
+				eject_items(pos, name, mcl_loot.get_multi_loot(loot, PcgRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)
 				if not minetest.is_creative_enabled(clicker:get_player_name()) then

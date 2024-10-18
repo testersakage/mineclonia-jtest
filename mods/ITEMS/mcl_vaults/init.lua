@@ -8,7 +8,11 @@ local S = minetest.get_translator(modname)
 dofile(modpath.."/api.lua")
 
 mcl_vaults.register_vault("vault",{
-	key = "mcl_vaults:trial_key",
+	key = {
+		name = "trial_key",
+		description = S("Trial Key"),
+		inventory_image = "mcl_vaults_trial_key.png",
+	},
 	node_off = {
 		tiles = { "mcl_vaults_vault_top_off.png", "mcl_vaults_vault_bottom.png",
 			"mcl_vaults_vault_side_off.png", "mcl_vaults_vault_side_off.png",
@@ -85,7 +89,11 @@ mcl_vaults.register_vault("vault",{
 })
 
 mcl_vaults.register_vault("ominous_vault",{
-	key = "mcl_vaults:ominous_trial_key",
+	key = {
+		name = "ominous_trial_key",
+		description = S("Ominous Trial Key"),
+		inventory_image = "mcl_vaults_ominous_trial_key.png",
+	},
 	node_off = {
 		description = S("Ominous Vault"),
 		tiles = { "mcl_vaults_vault_ominous_top_off.png", "mcl_vaults_vault_bottom.png",
