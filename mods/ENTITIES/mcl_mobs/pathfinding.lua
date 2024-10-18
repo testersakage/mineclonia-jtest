@@ -144,6 +144,7 @@ local function hashpos (context, x, y, z)
 
 	return x1 * 256*256 + y1 * 256 + z1
 end
+mcl_mobs.gwp_hashpos = hashpos
 
 local function longhash (x, y, z)
 	return (32767 + x) * 65536 * 65536 + (32767 + y) * 65536
@@ -842,6 +843,7 @@ local function gwp_get_node (pos)
 	map[hash] = cache
 	return cache
 end
+mcl_mobs.gwp_get_node = gwp_get_node
 
 -- local record_pathfinding_stats = false
 -- local bc_stats = { }
@@ -1912,7 +1914,7 @@ local function waterbound_gwp_edges (self, context, node)
 		saved[i] = nil
 		if not direction[4]
 			or (saved[direction[4]] and saved[direction[5]]) then
-			local class = waterbound_gwp_classify_node (self, context, vector)
+			local class = self:gwp_classify_node (context, vector)
 			local penalty = penalties[class]
 			if penalty >= 0.0 then
 				local object = self:get_gwp_node (context, x, y, z)

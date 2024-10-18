@@ -424,16 +424,11 @@ end)
 -- enabling client-side interpolation.
 ----------------------------------------------------------------------------------
 
-local function norm_radians (x)
-	local x = x % (math.pi * 2)
-	if x >= math.pi then
-		x = x - math.pi * 2
-	end
-	if x < -math.pi then
-		x = x + math.pi * 2
-	end
-	return x
-end
+local norm_radians = nil
+
+minetest.register_on_mods_loaded (function ()
+		norm_radians = mcl_util.norm_radians
+end)
 
 function mob_class:rotation_info ()
 	if not self._rotation_info then

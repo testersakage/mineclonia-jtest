@@ -328,16 +328,11 @@ function mob_class:replace(pos)
 	end
 end
 
-local function norm_radians (x)
-	local x = x % (math.pi * 2)
-	if x >= math.pi then
-		x = x - math.pi * 2
-	end
-	if x < -math.pi then
-		x = x + math.pi * 2
-	end
-	return x
-end
+local norm_radians = nil
+
+minetest.register_on_mods_loaded (function ()
+		norm_radians = mcl_util.norm_radians
+end)
 
 local function clip_rotation (from, to, limit)
 	local difference = norm_radians (to - from)
@@ -778,6 +773,7 @@ function mob_class:init_ai ()
 	if self._active_activity then
 		self[self._active_activity]  = nil
 		self._active_activity = nil
+		self._can_interrupt_activity = false
 	end
 	self:cancel_navigation ()
 	self:halt_in_tracks ()
@@ -1040,6 +1036,29 @@ function mob_class:replace_activity (activity_name)
 	self._active_activity = activity_name
 end
 
+local function run_ai_1 (self, self_pos, dtime, moveresult)
+	local active, uninterruptible
+	for _, fn in ipairs (self.ai_functions) do
+		active, uninterruptible = fn (self, self_pos, dtime, moveresult)
+
+		if active then
+			if active ~= true then
+				local current = self._active_activity
+				-- Cancel the current activity.
+				if current and current ~= active then
+					self[current] = nil
+				end
+				self._active_activity = active
+				self._can_interrupt_activity
+					= not uninterruptible
+				self._active_activity_function = fn
+			end
+			break
+		end
+	end
+	return active
+end
+
 function mob_class:run_ai (dtime, moveresult)
 	local pos = self.object:get_pos ()
 
@@ -1053,20 +1072,14 @@ function mob_class:run_ai (dtime, moveresult)
 
 	-- Don't run AI if controlled as a jockey.
 	if not self._jockey_rider then
-		for _, fn in ipairs (self.ai_functions) do
-			active = fn (self, pos, dtime)
-
-			if active then
-				if active ~= true then
-					local current = self._active_activity
-					-- Cancel the current activity.
-					if current and current ~= active then
-						self[current] = nil
-					end
-					self._active_activity = active
-				end
-				break
-			end
+		-- Check all inactive AI functions if the current
+		-- activity can be interrupted.
+		if self._can_interrupt_activity
+			or not self._active_activity then
+			active = run_ai_1 (self, pos, dtime, moveresult)
+		else
+			-- Or tick the active activity if not.
+			active = self._active_activity_function (self, pos, dtime, moveresult)
 		end
 	end
 
@@ -1102,11 +1115,17 @@ local function aquatic_pacing_target (self, pos, width, height, groups)
 	return #nodes >= 1 and nodes[math.random (#nodes)]
 end
 
+function mob_class:can_reset_pitch ()
+	return true
+end
+
 local function aquatic_movement_step (self, dtime, moveresult)
 	if self.movement_goal ~= "go_pos"
 		and self.idle_gravity_in_liquids then
 		self._acc_no_gravity = false
-		self:set_pitch (0)
+		if self:can_reset_pitch () then
+			self:set_pitch (0)
+		end
 	end
 	if not self.idle_gravity_in_liquids and self._immersion_depth then
 		self._acc_no_gravity
@@ -1311,7 +1330,9 @@ function mob_class:pitchswim_do_go_pos (dtime, moveresult)
 		self:set_velocity (speed * self.grounded_speed_factor)
 		self._acc_no_gravity = false
 		self:set_yaw (target_yaw)
-		self:set_pitch (0)
+		if self:can_reset_pitch () then
+			self:set_pitch (0)
+		end
 	end
 end
 
