@@ -2,7 +2,7 @@ local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
 local VISITED_KEY = modname .. ":visited_players"
-local RINGBUFFER_SIZE = 128
+local RINGBUFFER_SIZE = tonumber(minetest.settings:get("mcl_vaults_looter_list_length")) or 128
 
 local function can_open(pos, player)
 	local rb = mcl_util.ringbuffer.get_from_node_meta(pos, VISITED_KEY, RINGBUFFER_SIZE)
