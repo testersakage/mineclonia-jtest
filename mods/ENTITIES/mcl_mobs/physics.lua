@@ -410,6 +410,7 @@ function mob_class:do_env_damage()
 
 	pos.y = pos.y + 1 -- for particle effect position
 
+	local frozen = false
 	-- water damage
 	if self.water_damage > 0
 	and nodef.groups.water then
@@ -462,11 +463,15 @@ function mob_class:do_env_damage()
 		end
 	elseif self._mcl_freeze_damage > 0
 	and self:is_in_node("mcl_powder_snow:powder_snow") then
-		self:damage_mob("freeze", self._mcl_freeze_damage)
+		frozen = true
+		self._frozen_for = self._frozen_for + 1
+		if self._frozen_for >= 8 and self._frozen_for % 2 == 0 then
+			self:damage_mob("freeze", self._mcl_freeze_damage)
 
-		if self:check_for_death("freeze", {type = "freeze",
-				pos = pos, node = self.standing_in}) then
-			return true
+			if self:check_for_death("freeze", {type = "freeze",
+							   pos = pos, node = self.standing_in}) then
+				return true
+			end
 		end
 	-- damage_per_second node check
 	elseif nodef.damage_per_second ~= 0 and not nodef.groups.lava and not nodef.groups.fire then
@@ -516,6 +521,11 @@ function mob_class:do_env_damage()
 		else
 			self:respire ()
 		end
+	end
+	if not frozen and self._frozen_for > 0 then
+		-- Mobs thaw twice as quickly as they freeze.
+		self._frozen_for
+			= math.max (0, math.min (self._frozen_for, 7) - 2)
 	end
 	--- suffocation inside solid node
 	if (self.suffocation == true)
@@ -874,12 +884,19 @@ function mob_class:motion_step (dtime, moveresult)
 	acc_dir.z = acc_dir.z * p
 
 	local v = self.object:get_velocity ()
+	local climbable = standin.climbable or standon.climbable
+
+	if self.climb_powder_snow then
+		if self.standing_in == "mcl_powder_snow:powder_snow"
+			or self.standing_on == "mcl_powder_snow:powder_snow" then
+			climbable = true
+		end
+	end
 
 	-- If standing on a climable block and jumping or impeded
 	-- horizontally, begin climbing, and prevent fall speed from
 	-- exceeding 3.0 blocks/s.
-	if (self.always_climb and horiz_collision (v, moveresult))
-		or standin.climbable or standon.climbable then
+	if (self.always_climb and horiz_collision (v, moveresult)) or climbable then
 		if v.y < -3.0 then
 			v.y = -3.0
 		end
@@ -1178,6 +1195,11 @@ mcl_mobs.mob_class.slowdown_nodes = {
 		x = 0.25,
 		y = 0.05,
 		z = 0.25,
+	},
+	["mcl_powder_snow:powder_snow"] = {
+		x = 0.9,
+		y = 1.5,
+		z = 0.9,
 	},
 }
 
