@@ -15,7 +15,6 @@ return {
 	{S("Active Contributors"), 0xF84355, {
 		"codiac",
 		"DragonWrangler1",
-		"nixnoxus",
 		"JoseDouglas26",
 		"Brama Udi",
 		"amino",
@@ -26,6 +25,7 @@ return {
 		"goblin_mode",
 		"Lars Müller ",
 		"the-real-herowl",
+		"nooneatall",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",

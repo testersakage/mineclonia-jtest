@@ -13,7 +13,6 @@
 ## Active Contributors
 * codiac
 * DragonWrangler1
-* nixnoxus
 * JoseDouglas26
 * Brama Udi
 * amino
@@ -24,6 +23,7 @@
 * goblin_mode
 * Lars Müller 
 * the-real-herowl
+* nooneatall
 
 ## Previous Contributors
 * Lizzy Fleckenstein
