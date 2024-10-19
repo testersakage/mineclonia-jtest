@@ -9,30 +9,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_nether:quartz_smooth 4",
-	recipe = {
-		{ "mcl_nether:quartz_block", "mcl_nether:quartz_block" },
-		{ "mcl_nether:quartz_block", "mcl_nether:quartz_block" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_core:sandstonesmooth2 4",
-	recipe = {
-		{ "mcl_core:sandstonesmooth", "mcl_core:sandstonesmooth" },
-		{ "mcl_core:sandstonesmooth", "mcl_core:sandstonesmooth" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_core:redsandstonesmooth2 4",
-	recipe = {
-		{ "mcl_core:redsandstonesmooth", "mcl_core:redsandstonesmooth" },
-		{ "mcl_core:redsandstonesmooth", "mcl_core:redsandstonesmooth" },
-	},
-})
-
-minetest.register_craft({
 	output = "mcl_potions:dragon_breath 3",
 	recipe = {
 		{"","mcl_end:chorus_flower",""},
