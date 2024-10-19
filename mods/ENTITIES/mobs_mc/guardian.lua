@@ -163,7 +163,8 @@ end
 function guardian:movement_step (dtime, moveresult)
 	mob_class.aquatic_movement_step (self, dtime, moveresult)
 	if self.attack then
-		self._acc_no_gravity = true
+		self._acc_no_gravity
+			= self._immersion_depth >= self.head_eye_height
 	end
 end
 
