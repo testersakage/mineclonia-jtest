@@ -125,6 +125,27 @@
 * snowyu
 * 3raven
 * Riu Sakura
+* 3raven
+* Ame-chan-angel
+* Application-Maker
+* Benny
+* collectanos
+* Cwpute
+* Dirk
+* Enlive
+* fnetX
+* Gaemy
+* hugoalh
+* j-r
+* Kyoushi
+* liulitchi
+* mugcake
+* phileas
+* Pietro Cappuccino
+* RadonPrunus
+* Sencyy
+* Sotis
+* Zozosticot
 
 ## Special thanks
 * celeron55 for creating Minetest
