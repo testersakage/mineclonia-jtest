@@ -350,10 +350,10 @@ function wither_def:do_custom (dtime, moveresult)
 	end
 
 	if self._wither_state.phase == 1 then
-		self.base_texture = "mobs_mc_wither_half_health.png"
+		self.base_texture = {"mobs_mc_wither_half_health.png"}
 		self._arrow_resistant = true
 	else
-		self.base_texture = "mobs_mc_wither.png"
+		self.base_texture = {"mobs_mc_wither.png"}
 		self._arrow_resistant = false
 	end
 
