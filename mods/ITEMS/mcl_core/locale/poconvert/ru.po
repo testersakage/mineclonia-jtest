@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-16 00:36+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Stick"
 msgstr "Палка"
@@ -503,7 +505,7 @@ msgid "Stained Glass"
 msgstr "Окрашенное стекло"
 
 msgid "@1 Stained Glass"
-msgstr ""
+msgstr "Витраж @1"
 
 msgid "Flowing Water"
 msgstr "Текущая вода"
@@ -620,113 +622,112 @@ msgid "Granite Stairs"
 msgstr "Гранитные ступени"
 
 msgid "Granite Slab"
-msgstr ""
+msgstr "Гранитная плита"
 
 msgid "Diorite Stairs"
-msgstr ""
+msgstr "Диоритовая лестница"
 
 msgid "Diorite Slab"
-msgstr ""
+msgstr "Диоритовая плита"
 
 msgid "Cobblestone Stairs"
-msgstr ""
+msgstr "Лестница из булыжника"
 
 msgid "Cobblestone Slab"
-msgstr ""
+msgstr "Плита из булыжника"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr ""
+msgstr "Лестница из мшистого булыжника"
 
 msgid "Mossy Cobblestone Slab"
-msgstr ""
+msgstr "Плита из мшистого булыжника"
 
 msgid "Brick Stairs"
-msgstr ""
+msgstr "Кирпичная лестница"
 
 msgid "Brick Slab"
-msgstr ""
+msgstr "Кирпичная плита"
 
 msgid "Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из песчаника"
 
 msgid "Sandstone Slab"
-msgstr ""
+msgstr "Плита из песчаника"
 
 msgid "Smooth Sandstone Stairs"
-msgstr ""
+msgstr "Гладкая лестница из песчаника"
 
 msgid "Smooth Sandstone Slab"
-msgstr ""
+msgstr "Гладкая плита из песчаника"
 
 msgid "Cut Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из резного песчаника"
 
 msgid "Cut Sandstone Slab"
-msgstr ""
+msgstr "Плита из резного песчаника"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из красного песчаника"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "Плита из красного песчаника"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из гладкого красного песчаника"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "Плита из гладкого красного песчаника"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "Лестница из резаного красного песчаника"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "Плита из резаного красного песчаника"
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "Лестница из каменного кирпича"
 
 msgid "Stone Brick Slab"
-msgstr ""
+msgstr "Плита из каменного кирпича"
 
 msgid "Polished Andesite Stairs"
-msgstr ""
+msgstr "Лестница из полированного андезита"
 
 msgid "Polished Andesite Slab"
-msgstr ""
+msgstr "Плита из полированного андезита"
 
 msgid "Polished Granite Stairs"
-msgstr ""
+msgstr "Лестница из полированного гранита"
 
 msgid "Polished Granite Slab"
-msgstr ""
+msgstr "Плита из полированного гранита"
 
 msgid "Polished Diorite Stairs"
-msgstr ""
+msgstr "Лестница из полированного диорита"
 
 msgid "Polished Diorite Slab"
-msgstr ""
+msgstr "Плита из полированного диорита"
 
 msgid "Mossy Stone Brick Stairs"
-msgstr ""
+msgstr "Лестница из кирпича мшистого камня"
 
 msgid "Mossy Stone Brick Slab"
-msgstr ""
+msgstr "Плита из кирпича мшистого камня"
 
 msgid "Oak"
-msgstr ""
+msgstr "Дуб"
 
 msgid "Dark Oak"
-msgstr ""
+msgstr "Темный дуб"
 
 msgid "Jungle"
-msgstr ""
+msgstr "Джунгли"
 
 msgid "Spruce"
-msgstr ""
+msgstr "Ель"
 
 msgid "Acacia"
-msgstr ""
+msgstr "Акация"
 
 msgid "Birch"
-msgstr ""
-
+msgstr "Береза"

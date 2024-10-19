@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-15 17:57+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_deepslate/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Deepslate"
 msgstr "Глубинный сланец"
@@ -23,10 +25,12 @@ msgid "Infested Deepslate"
 msgstr "Заражённый глубинный сланец"
 
 msgid "Reinforced Deepslate"
-msgstr ""
+msgstr "Усиленный глубинный сланец"
 
 msgid "Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode."
 msgstr ""
+"Усиленная глубинный сланец - это очень прочный блок, который не разрушается "
+"даже от взрывов. Его невозможно получить в режиме выживания."
 
 msgid "Deepslate Coal Ore"
 msgstr "Глубинная угольная руда"
@@ -92,43 +96,45 @@ msgid "Deepslate bricks are the brick version of deepslate."
 msgstr "Сланцевые кирпичи это кирпичный вариант глубинного сланца."
 
 msgid "Deepslate Brick Stairs"
-msgstr ""
+msgstr "Лестница из кирпича глубинного сланца"
 
 msgid "Deepslate Brick Slab"
-msgstr ""
+msgstr "Плита из кирпича глубинного сланца"
 
 msgid "Deepslate Brick Wall"
-msgstr ""
+msgstr "Кирпичная стена из глубинного сланца"
 
 msgid "Cracked Deepslate Bricks"
 msgstr "Потрескавшиеся сланцевые кирпичи"
 
 msgid "Deepslate Tiles"
-msgstr "Сланцевая плитка"
+msgstr "Сланцевый плитняк"
 
 msgid "Deepslate tiles are a decorative variant of deepslate."
-msgstr "Сланцевая плитка это декоративный вариант глубинного сланца."
+msgstr "Сланцевый плитняк это декоративный вариант глубинного сланца."
 
 msgid "Deepslate Tile Stairs"
-msgstr ""
+msgstr "Лестница из сланцевого плитняка"
 
 msgid "Deepslate Tile Slab"
-msgstr ""
+msgstr "Плита из сланцевого плитняка"
 
 msgid "Deepslate Tiles Wall"
-msgstr "Стена из сланцевой плитки"
+msgstr "Стена из сланцевого плитняка"
 
 msgid "Cracked Deepslate Tiles"
-msgstr "Потрескавшаяся сланцевая плитка"
+msgstr "Потрескавшийся сланцевый плитняк"
 
 msgid "Chiseled Deepslate"
 msgstr "Резной сланец"
 
 msgid "@1 is a variant of @2 that can generate in deepslate and tuff blobs."
 msgstr ""
+"@1 - это разновидность @2, которая может генерироваться в глубинных сланцах "
+"и туфовых блоках."
 
 msgid "@1 are a cracked variant."
-msgstr ""
+msgstr "Это треснувший вариант - @1."
 
 msgid "Tuff"
 msgstr "Туф"
@@ -137,53 +143,54 @@ msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in undergr
 msgstr "Туф орнаментальный камень сформированный из вулканического пепла, появляется в виде подземных скоплений ниже Y=16."
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "Резной туф"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
-msgstr ""
+msgstr "Резной туф - точеная разновидность туфа."
 
 msgid "Chiseled Tuff Bricks"
-msgstr ""
+msgstr "Кирпичи из резного туфа"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr ""
+"Резные кирпичи из туфа - это разновидность туфовых кирпичей, отличающаяся "
+"большим кирпичом в центре блока, с геометрическим рисунком сверху и снизу."
 
 msgid "Tuff Stairs"
-msgstr ""
+msgstr "Ступеньки из туфа"
 
 msgid "Tuff Slab"
-msgstr ""
+msgstr "Плита из туфа"
 
 msgid "Tuff Wall"
-msgstr ""
+msgstr "Стена из туфа"
 
 msgid "Polished Tuff"
-msgstr ""
+msgstr "Полированный туф"
 
 msgid "Polished tuff is a polished variant of the tuff block."
-msgstr ""
+msgstr "Полированный туф - это полированная разновидность туфового блока."
 
 msgid "Polished Tuff Stairs"
-msgstr ""
+msgstr "Ступени из полированного туфа"
 
 msgid "Polished Tuff Slab"
-msgstr ""
+msgstr "Плита из полированного туфа"
 
 msgid "Polished Tuff Wall"
-msgstr ""
+msgstr "Стена из полированного туфа"
 
 msgid "Tuff Bricks"
-msgstr ""
+msgstr "Туфовые кирпичи"
 
 msgid "Tuff bricks are a brick variant of tuff."
-msgstr ""
+msgstr "Туфовый кирпич - это разновидность кирпича из туфа."
 
 msgid "Tuff Bricks Stairs"
-msgstr ""
+msgstr "Ступени из туфового кирпича"
 
 msgid "Tuff Bricks Slab"
-msgstr ""
+msgstr "Плита из туфового кирпича"
 
 msgid "Tuff Bricks Wall"
-msgstr ""
-
+msgstr "Стена из туфовых кирпичей"

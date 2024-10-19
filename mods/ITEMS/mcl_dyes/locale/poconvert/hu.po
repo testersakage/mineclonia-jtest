@@ -3,63 +3,64 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_dyes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-09 19:31+0000\n"
+"Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_dyes/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "White"
-msgstr ""
+msgstr "Fehér"
 
 msgid "Light Grey"
-msgstr ""
+msgstr "Világosszürke"
 
 msgid "Grey"
-msgstr ""
+msgstr "Szürke"
 
 msgid "Black"
-msgstr ""
+msgstr "Fekete"
 
 msgid "Purple"
 msgstr ""
 
 msgid "Blue"
-msgstr ""
+msgstr "Kék"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "Világoskék"
 
 msgid "Cyan"
-msgstr ""
+msgstr "Türkiz"
 
 msgid "Green"
-msgstr ""
+msgstr "Zöld"
 
 msgid "Lime"
-msgstr ""
+msgstr "Élénkzöld"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Sárga"
 
 msgid "Brown"
-msgstr ""
+msgstr "Barna"
 
 msgid "Orange"
-msgstr ""
+msgstr "Narancs"
 
 msgid "Red"
-msgstr ""
+msgstr "Vörös"
 
 msgid "Magenta"
-msgstr ""
+msgstr "Bíbor"
 
 msgid "Pink"
-msgstr ""
+msgstr "Rózsaszín"
 
 msgid "@1 Dye"
 msgstr ""
@@ -69,4 +70,3 @@ msgstr ""
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
 msgstr ""
-

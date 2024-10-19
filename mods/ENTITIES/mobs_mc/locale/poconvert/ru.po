@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-10 16:25+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Axolotl"
 msgstr "Аксолотль"
@@ -38,7 +40,7 @@ msgid "Creeper"
 msgstr "Крипер"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Заряженный крипер"
 
 msgid "Dolphin"
 msgstr "Дельфин"
@@ -56,7 +58,7 @@ msgid "Ghast"
 msgstr "Гаст"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "Огненный шар Гаста"
 
 msgid "Guardian"
 msgstr "Страж"
@@ -71,7 +73,7 @@ msgid "Zoglin"
 msgstr "Зоглин"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Малыш Хоглин"
 
 msgid "Horse"
 msgstr "Лошадь"
@@ -89,7 +91,7 @@ msgid "Mule"
 msgstr "Мул"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "Нажмите [Красться] для высадки"
 
 msgid "Iron Golem"
 msgstr "Железный голем"
@@ -113,7 +115,7 @@ msgid "Piglin"
 msgstr "Пиглин"
 
 msgid "Zombiefied Piglin"
-msgstr ""
+msgstr "Зомбированный Пиглин"
 
 msgid "Piglin Brute"
 msgstr "Жестокий пиглин"
@@ -155,22 +157,22 @@ msgid "Wither Skeleton"
 msgstr "Скелет-иссушитель"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Слизень - большой"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Слизень - малый"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Слизень - крошечный"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Куб Магмы - большой"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Куб Магмы - малый"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Куб Магмы - крошечный"
 
 msgid "Magma Cube"
 msgstr "Лавовый куб"
@@ -197,13 +199,13 @@ msgid "Strider"
 msgstr "Страйдер"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Малыш-страйдер"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Тропическая рыба"
 
 msgid "Tropical fish"
-msgstr "Тропическая рыба"
+msgstr "Тропические рыбы"
 
 msgid "Vex"
 msgstr "Досаждатель"
@@ -224,19 +226,19 @@ msgid "Zombie Villager"
 msgstr "Зомби-житель"
 
 msgid "@1 sleeps here"
-msgstr ""
+msgstr "@1 спит здесь"
 
 msgid "A villager sleeps here"
-msgstr ""
+msgstr "Здесь спит деревенский житель"
 
 msgid "@1 works here"
-msgstr ""
+msgstr "@1 работает здесь"
 
 msgid "A villager works here"
-msgstr ""
+msgstr "Здесь работает деревенский житель"
 
 msgid "Unemployed"
-msgstr ""
+msgstr "Безработный"
 
 msgid "Farmer"
 msgstr "Фермер"
@@ -275,28 +277,28 @@ msgid "Cleric"
 msgstr "Церковник"
 
 msgid "Mason"
-msgstr ""
+msgstr "Мейсон"
 
 msgid "Nitwit"
 msgstr "Нищий"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Бродячий торговец"
 
 msgid "Novice"
-msgstr ""
+msgstr "Новичок"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Ученик"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Подмастерье"
 
 msgid "Expert"
-msgstr ""
+msgstr "Эксперт"
 
 msgid "Master"
-msgstr ""
+msgstr "Мастер"
 
 msgid "Witch"
 msgstr "Ведьма"
@@ -308,7 +310,7 @@ msgid "Wolf"
 msgstr "Волк"
 
 msgid "Dog"
-msgstr ""
+msgstr "Собака"
 
 msgid "Zombie"
 msgstr "Зомби"
@@ -323,5 +325,4 @@ msgid "Baby Husk"
 msgstr "Кадавр-ребёнок"
 
 msgid "Zombified Piglin"
-msgstr ""
-
+msgstr "Зомбированный Пиглин"

@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_credits x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-10 16:25+0000\n"
+"Last-Translator: Sotis <Sotis@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_credits/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "A faithful Open Source clone of Minecraft"
 msgstr "Верный открытый клон Minecraft"
@@ -23,22 +25,22 @@ msgid "Jump to speed up (additionally sprint)"
 msgstr "[Прыжок] или [Спринт] для промотки вперед"
 
 msgid "Show the Mineclonia end credits"
-msgstr ""
+msgstr "Показать финальные титры Mineclonia"
 
 msgid "Creators of Mineclonia"
-msgstr ""
+msgstr "Создатели Mineclonia"
 
 msgid "Creator of MineClone 2"
-msgstr ""
+msgstr "Создатели MineClone 2"
 
 msgid "Creator of MineClone"
 msgstr "Создатель MineClone"
 
 msgid "Active Contributors"
-msgstr ""
+msgstr "Активные участники"
 
 msgid "Previous Contributors"
-msgstr ""
+msgstr "Предыдущие участники"
 
 msgid "Original Mod Authors"
 msgstr "Авторы оригинальных модов"
@@ -47,11 +49,10 @@ msgid "3D Models"
 msgstr "3D модели"
 
 msgid "Textures and menu images"
-msgstr ""
+msgstr "Текстуры и изображения меню"
 
 msgid "Translations"
 msgstr "Перевод"
 
 msgid "Special thanks"
 msgstr "Особая благодарность"
-

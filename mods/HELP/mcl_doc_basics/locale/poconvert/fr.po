@@ -3,24 +3,27 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-09-24 21:18+0000\n"
+"Last-Translator: 3raven <3raven@users.noreply.translate.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc_basics/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 msgid "Advanced usage"
 msgstr "Utilisation avancée"
 
 msgid "Advanced information which may be nice to know, but is not crucial to gameplay"
-msgstr "Informations avancées qui peuvent être agréables à connaître, mais qui ne sont pas cruciales pour le gameplay"
+msgstr ""
+"Informations avancées qui peuvent être utiles à connaître, mais qui ne sont "
+"pas cruciales pour le gameplay"
 
 msgid "Creative Mode"
-msgstr "Mode Creatif"
+msgstr "Mode Créatif"
 
 msgid "Enabling Creative Mode in MineClone 2 applies the following changes:"
 msgstr "L'activation du mode créatif dans MineClone 2 applique les modifications suivantes :"
@@ -38,7 +41,7 @@ msgid "• Greatly increased hand pointing range"
 msgstr "• Plage de pointage de la main considérablement augmentée"
 
 msgid "• Mined blocks don't drop items"
-msgstr "• Les blocs extraits ne déposent pas d'objets"
+msgstr "• Les blocs extraits ne donnent pas d'objets"
 
 msgid "• Items don't get used up"
 msgstr "• Les articles ne s'épuisent pas"
@@ -1404,4 +1407,3 @@ msgstr "Minetest peut être joué seul ou en ligne avec plusieurs joueurs. Le je
 
 msgid "MineClonia is a game that is built on top of the Minetest engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
 msgstr "MineClonia est un jeu construit sur le moteur Minetest qui vise à créer un jeu aussi proche que possible de Minecraft. Il existe cependant de nombreux autres jeux pour Minetest, qui peuvent être installés à partir du menu principal du navigateur de contenu."
-
