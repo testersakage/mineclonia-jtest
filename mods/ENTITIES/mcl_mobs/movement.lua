@@ -693,6 +693,23 @@ end
 
 --- Mob AI.
 
+function mob_class:ascend_in_powder_snow (self_pos, dtime)
+	local in_powder_snow
+		= self.standing_on == "mcl_powder_snow:powder_snow"
+		or self.standing_in == "mcl_powder_snow:powder_snow"
+	if in_powder_snow then
+		local block_above = vector.offset (self_pos, 0, 1, 0)
+		local node = minetest.get_node (block_above)
+		local def = minetest.registered_nodes[node.name]
+		if node.name == "mcl_powder_snow:powder_snow"
+			or (def and not def.walkable) then
+			self._jump = true
+			return "_ascending_in_powder_snow"
+		end
+	end
+	return false
+end
+
 function mob_class:pacing_target (pos, width, height, groups)
 	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)

@@ -168,6 +168,7 @@ mcl_mobs.mob_class = {
 	wielditem_type = nil,
 	wielditem_drop_probability = 0.0,
 	ignite_targets_while_burning = false,
+	climb_powder_snow = false,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
@@ -180,6 +181,7 @@ mcl_mobs.mob_class = {
 	standing_on = "ignore",
 	jump_sound_cooloff = 0.5, -- used to prevent jump sound from being played too often in short time
 	opinion_sound_cooloff = 1, -- used to prevent sound spam of particular sound types
+	_frozen_for = 0,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
