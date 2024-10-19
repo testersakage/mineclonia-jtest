@@ -1,6 +1,7 @@
 # Mineclonia
 
 [![ContentDB](https://content.minetest.net/packages/ryvnf/mineclonia/shields/downloads/)](https://content.minetest.net/packages/ryvnf/mineclonia/)
+[![Translation status](https://translate.codeberg.org/widget/mineclonia/svg-badge.svg)](https://translate.codeberg.org/engage/mineclonia/)
 
 An unofficial Minecraft-like game for Minetest. Fork of MineClone 2 with focus
 on stability, multiplayer performance and features. For information about
