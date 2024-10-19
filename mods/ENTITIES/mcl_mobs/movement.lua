@@ -1005,14 +1005,18 @@ function mob_class:check_pace (pos)
 	if self.pacing then
 		-- Still pacing?
 		if self:navigation_finished () then
+			self._pace_asap = nil
 			self.pacing = false
 			self:set_animation ("stand")
 		end
 		return true
 	else
+		local pace_asap = self._pace_asap
 		-- Should pace?
-		if self.ai_idle_time > self.pace_interval
-			and (self.pace_chance == 1 or math.random (self.pace_chance) == 1) then
+		if pace_asap
+			or (self.ai_idle_time > self.pace_interval
+				and (self.pace_chance == 1
+					or math.random (self.pace_chance) == 1)) then
 			-- Minecraft mobs pace to random positions
 			-- within a 20 block distance lengthwise and
 			-- 14 blocks vertically.
@@ -1124,7 +1128,7 @@ function mob_class:can_reset_pitch ()
 	return true
 end
 
-local function aquatic_movement_step (self, dtime, moveresult)
+function mob_class:aquatic_movement_step (dtime, moveresult)
 	if self.movement_goal ~= "go_pos"
 		and self.idle_gravity_in_liquids then
 		self._acc_no_gravity = false
@@ -1147,6 +1151,7 @@ local function aquatic_movement_step (self, dtime, moveresult)
 				z = (math.random () - 0.5) * 2,
 			}
 			self.object:add_velocity (flop_velocity)
+			self:mob_sound ("flop")
 		end
 	end
 	self._acc_y_fixed = nil
@@ -1274,7 +1279,7 @@ end
 function mob_class:configure_aquatic_mob ()
 	self.pacing_target = aquatic_pacing_target
 	self.motion_step = self.aquatic_step
-	self.movement_step = aquatic_movement_step
+	self.movement_step = self.aquatic_movement_step
 	self._acc_no_gravity = false
 end
 
@@ -1356,7 +1361,7 @@ end
 function mob_class:configure_amphibious_mob ()
 	self.pacing_target = amphibious_pacing_target
 	self.motion_step = self.aquatic_step
-	self.movement_step = aquatic_movement_step
+	self.movement_step = self.aquatic_movement_step
 	self._acc_no_gravity = false
 end
 

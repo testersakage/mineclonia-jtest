@@ -841,6 +841,9 @@ function mob_class:check_attack (self_pos, dtime)
 		if not self.attack:is_valid () then
 			self.attack = nil
 			mover:set_animation ("stand")
+			if self.attack_end then
+				self:attack_end ()
+			end
 			return true
 		end
 		-- If it's no longer possible to attack the
@@ -848,6 +851,9 @@ function mob_class:check_attack (self_pos, dtime)
 		if not self:should_continue_to_attack (self.attack) then
 			self.attack = nil
 			mover:set_animation ("stand")
+			if self.attack_end then
+				self:attack_end ()
+			end
 			return true
 		end
 		target_pos = self.attack:get_pos ()
@@ -855,6 +861,9 @@ function mob_class:check_attack (self_pos, dtime)
 		if distance > self.tracking_distance then
 			self.attack = nil
 			mover:set_animation ("stand")
+			if self.attack_end then
+				self:attack_end ()
+			end
 			return true
 		end
 		local line_of_sight = self:target_visible (self_pos, self.attack)
@@ -865,6 +874,9 @@ function mob_class:check_attack (self_pos, dtime)
 			if t < 0 then
 				self.attack = nil
 				mover:set_animation ("stand")
+				if self.attack_end then
+					self:attack_end ()
+				end
 				return true
 			end
 		else
