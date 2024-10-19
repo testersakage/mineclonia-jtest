@@ -147,8 +147,8 @@ end
 mcl_mobs.gwp_hashpos = hashpos
 
 local function longhash (x, y, z)
-	return (32767 + x) * 65536 * 65536 + (32767 + y) * 65536
-		+ (32767 + z)
+	return (32768 + x) * 65536 * 65536 + (32768 + y) * 65536
+		+ (32768 + z)
 end
 
 function mob_class:get_gwp_node (context, x, y, z)
