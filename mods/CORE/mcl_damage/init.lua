@@ -18,7 +18,7 @@ mcl_damage = {
 		fly_into_wall = {bypasses_armor = true}, -- unused
 		out_of_world = {bypasses_armor = true, bypasses_magic = true, bypasses_invulnerability = true, bypasses_totem = true},
 		generic = {bypasses_armor = true},
-		magic = {is_magic = true, bypasses_armor = true},
+		magic = {is_magic = true, bypasses_armor = true, bypasses_guardian = true,},
 		dragon_breath = {is_magic = true, bypasses_armor = true},	-- this is only used for dragon fireball; dragon fireball does not actually deal impact damage tho, so this is unreachable
 		wither = {bypasses_armor = true},
 		wither_skull = {is_magic = true, is_explosion = true},
@@ -28,7 +28,7 @@ mcl_damage = {
 		player = {},
 		arrow = {is_projectile = true},
 		fireball = {is_projectile = true, is_fire = true},
-		thorns = {is_magic = true},
+		thorns = {is_magic = true, bypasses_guardian = true,},
 		explosion = {is_explosion = true, scales = true},
 		cramming = {bypasses_armor = true}, -- unused
 		fireworks = {is_explosion = true}, -- unused
