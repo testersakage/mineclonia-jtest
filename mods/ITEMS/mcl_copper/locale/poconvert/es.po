@@ -82,3 +82,9 @@ msgstr "Trampilla de cobre @1"
 msgid "@1 Copper Door"
 msgstr "Puerta de cobre @1"
 
+msgid "@1 Cut Copper Stairs"
+msgstr ""
+
+msgid "@1 Cut Copper Slab"
+msgstr ""
+

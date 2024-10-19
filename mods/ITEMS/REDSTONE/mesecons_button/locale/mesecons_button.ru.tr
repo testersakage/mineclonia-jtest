@@ -1,6 +1,6 @@
 # textdomain: mesecons_button
 Use the button to push it.=Используйте кнопку, чтобы нажать её.
-Provides redstone power when pushed=Выдаёт сигнал редстоуна при нажатии
+Provides redstone power when pushed=Выдает сигнал редстоуна при нажатии
 Push duration: @1s=Длительность нажатия: @1с
 Pushable by arrow=Нажимается стрелами
 Stone Button=Каменная кнопка

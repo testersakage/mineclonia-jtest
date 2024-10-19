@@ -1,6 +1,6 @@
 # textdomain: mesecons_pressureplates
 A pressure plate is a redstone component which supplies its surrounding blocks with redstone power while someone or something rests on top of it.=
-Provides redstone power when pushed=
+Provides redstone power when pushed=Vöröskő jelet ad amikor megnyomják
 Pushable by players, mobs and objects=
 Pushable by players and mobs=
 Pushable by mobs=

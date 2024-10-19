@@ -82,3 +82,9 @@ msgstr ""
 msgid "@1 Copper Door"
 msgstr ""
 
+msgid "@1 Cut Copper Stairs"
+msgstr ""
+
+msgid "@1 Cut Copper Slab"
+msgstr ""
+

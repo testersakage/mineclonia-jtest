@@ -1,5 +1,5 @@
 # textdomain: mcl_beacons
 Primary Power:=Основной эффект:
-Secondary Power:=
+Secondary Power:=Вторичная энергия:
 Inventory:=Инвентарь:
-Beacon=
+Beacon=Маяк
