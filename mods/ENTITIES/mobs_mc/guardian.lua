@@ -187,14 +187,17 @@ function guardian:check_head_swivel (dtime, clear)
 		return
 	end
 
-	if clear or (self._locked_object
-			and not self._locked_object:is_valid ()) then
+	if clear then
 	   self._locked_object = nil
 	else
 	   self:who_are_you_looking_at ()
 	end
 
 	if self._locked_object then
+		if not self._locked_object:is_valid () then
+			self._locked_object = nil
+			return
+		end
 		local self_pos = self.object:get_pos ()
 		local yaw = self.object:get_yaw ()
 		local forward_vector = minetest.yaw_to_dir (yaw)
@@ -345,6 +348,9 @@ guardian.ai_functions = {
 function guardian:receive_damage (mcl_reason, damage)
 	mob_class.receive_damage (self, mcl_reason, damage)
 	local source = mcl_reason.source
+	if not source then
+		return
+	end
 	local entity = source:get_luaentity ()
 	if (source:is_player () or (entity and entity.is_mob))
 		and not mcl_reason.flags.bypasses_guardian then
