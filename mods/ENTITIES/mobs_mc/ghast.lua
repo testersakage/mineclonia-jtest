@@ -109,12 +109,10 @@ local function ghast_do_attack (self, target)
 	self._charge_time = 0
 end
 
-mcl_mobs.register_mob("mobs_mc:ghast", {
+local ghast = {
 	description = S("Ghast"),
 	type = "monster",
 	spawn_class = "hostile",
-	pathfinding = 1,
-	group_attack = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 5,
@@ -154,10 +152,9 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 	arrow = "mobs_mc:fireball",
 	shoot_offset = -5,
 	tracking_distance = 64,
-	passive = false,
 	jump_height = 4,
 	head_eye_height = 2.6,
-	floats=1,
+	floats = 1,
 	fly = true,
 	-- True flight.
 	motion_step = mcl_mobs.mob_class.flying_step,
@@ -185,8 +182,9 @@ mcl_mobs.register_mob("mobs_mc:ghast", {
 			self:set_textures (self.base_texture)
 		end
 	end,
-})
+}
 
+mcl_mobs.register_mob ("mobs_mc:ghast", ghast)
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:ghast",
