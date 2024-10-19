@@ -359,7 +359,8 @@ function mcl_mobs.register_mob(name, def)
 		eye_height = eye_height * 0.75 + init_props.collisionbox[2]
 	end
 
-	local gwp_penalties = mcl_mobs.mob_class.gwp_penalties
+	local gwp_penalties = def.gwp_penalties
+		or mcl_mobs.mob_class.gwp_penalties
 	local final_def = setmetatable(table.merge(def,{
 		initial_properties = table.merge(mcl_mobs.mob_class.initial_properties,init_props),
 		can_despawn = can_despawn,
