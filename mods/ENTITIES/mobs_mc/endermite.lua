@@ -3,8 +3,9 @@
 --###################
 
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
-mcl_mobs.register_mob("mobs_mc:endermite", {
+local endermite = {
 	description = S("Endermite"),
 	type = "monster",
 	spawn_class = "hostile",
@@ -34,12 +35,18 @@ mcl_mobs.register_mob("mobs_mc:endermite", {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 20, walk_speed = 55
 	},
-	jump = true,
-	fear_height = 4,
 	view_range = 16,
 	damage = 2,
 	reach = 1,
 	head_eye_height = 0.13,
-})
+	climb_powder_snow = true,
+}
 
+endermite.ai_functions = {
+	mob_class.ascend_in_powder_snow,
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob("mobs_mc:endermite", endermite)
 mcl_mobs.register_egg("mobs_mc:endermite", S("Endermite"), "#161616", "#6d6d6d", 0)
