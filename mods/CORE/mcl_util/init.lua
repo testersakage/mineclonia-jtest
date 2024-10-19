@@ -1488,6 +1488,18 @@ function mcl_util.target_eye_height (attack)
 	return 0
 end
 
+function mcl_util.target_eye_pos (attack)
+	local luaentity = attack:get_luaentity ()
+	local pos = attack:get_pos ()
+
+	if luaentity and luaentity.head_eye_height then
+		pos.y = pos.y + luaentity.head_eye_height
+	elseif attack:is_player () then
+		pos.y = pos.y + attack:get_properties ().eye_height
+	end
+	return pos
+end
+
 function mcl_util.norm_radians (x)
 	local x = x % (math.pi * 2)
 	if x >= math.pi then

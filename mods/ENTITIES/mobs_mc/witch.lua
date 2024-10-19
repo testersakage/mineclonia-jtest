@@ -200,11 +200,6 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 		 mcl_mobs.mob_class.do_attack (self, obj)
 	end,
 	attack_custom = function (self)
-		if self.attack then
-		-- A target has already been selected.
-			return
-		end
-
 		-- Ordinary witches only attack players, but witches
 		-- spawned in raids also seek out nearby illagers
 		-- participating in raids to heal them.
@@ -223,7 +218,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 						-- again for a period of 5 seconds.
 						self._illager_cooldown = 0
 						self:do_attack (obj)
-						break
+						return true
 					end
 				end
 			end

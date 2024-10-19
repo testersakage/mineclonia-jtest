@@ -795,6 +795,26 @@ function mob_class:detection_multiplier_for_object (object)
 	return factor
 end
 
+function mob_class:attack_default (self_pos, dtime, esp)
+	local target, max_distance
+	local objects
+		= minetest.get_objects_inside_radius (self_pos, self.view_range)
+	for _, object in ipairs (objects) do
+		if self:should_attack (object) then
+			local pos = object:get_pos ()
+			local factor = self:detection_multiplier_for_object (object)
+			local distance = vector.distance (self_pos, pos)
+			if distance <= self.view_range * factor
+				and (not max_distance or distance < max_distance)
+				and (esp or self:target_visible (self_pos, object)) then
+				target = object
+				max_distance = distance
+			end
+		end
+	end
+	return target
+end
+
 function mob_class:check_attack (self_pos, dtime)
 	if not self.attack_type then
 		return false
@@ -805,25 +825,11 @@ function mob_class:check_attack (self_pos, dtime)
 		end
 
 		if self.attack_custom then
-			self:attack_custom ()
-		else
-			local target, max_distance
-			local objects
-				= minetest.get_objects_inside_radius (self_pos, self.view_range)
-			for _, object in ipairs (objects) do
-				if self:should_attack (object) then
-					local pos = object:get_pos ()
-					local factor = self:detection_multiplier_for_object (object)
-					local distance = vector.distance (self_pos, pos)
-					if distance <= self.view_range * factor
-						and (not max_distance or distance < max_distance)
-						and (self.esp or self:target_visible (self_pos, object)) then
-						target = object
-						max_distance = distance
-					end
-				end
+			if self:attack_custom (self_pos, dtime) then
+				return "attack"
 			end
-
+		else
+			local target = self:attack_default (self_pos, dtime, self.esp)
 			if target then
 				self:do_attack (target)
 				return "attack"
