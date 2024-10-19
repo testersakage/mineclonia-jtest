@@ -326,7 +326,7 @@ function mob_class:check_head_swivel(dtime, clear)
 		oldp, oldr = ov.position.vec, ov.rotation.vec
 	else -- minetest < 5.9
 		oldp, oldr = self.object:get_bone_position(self.head_swivel)
-		oldr = vector.apply(oldr, math.rad) -- old API uses radians
+		oldr = vector.apply(oldr, math.rad) -- old API uses degrees
 	end
 
 	local locked_object = self._locked_object
@@ -350,7 +350,7 @@ function mob_class:check_head_swivel(dtime, clear)
 			ps.y = ps.y + self.head_eye_height * .7
 			local pt = locked_object:get_pos()
 			pt.y = pt.y + _locked_object_eye_height
-			local dir = vector.direction(ps, pt)
+			local dir = vector.direction (ps, pt)
 			local mob_yaw = self_rot.y + math.atan2(dir.x, dir.z) + self.head_yaw_offset
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
 
@@ -386,6 +386,39 @@ function mob_class:check_head_swivel(dtime, clear)
 		-- old API uses degrees not radians
 		self.object:set_bone_position(self.head_swivel, newp, vector.apply(newr, math.deg))
 	end
+end
+
+function mob_class:get_look_dir ()
+	if not head_swivel then
+		return vector.zero ()
+	end
+	local rotation
+	if self.object.get_bone_override then
+		local override = self.object:get_bone_override (self.head_swivel)
+		rotation = override.rotation.vec
+	else
+		local _, bone_rot = self.object:get_bone_position (self.head_swivel)
+		rotation = vector.apply (bone_rot, math.rad) -- old API uses degrees
+	end
+	if self.head_yaw == "y" then
+		rotation = {
+			x = rotation.x,
+			y = rotation.y,
+			z = 0,
+		}
+	else -- if self.head_yaw == "z" then
+		rotation = {
+			x = rotation.x,
+			y = rotation.z,
+			z = 0,
+		}
+	end
+	local magnitude = math.cos (rotation.x)
+	return {
+		x = magnitude * math.cos (rotation.y),
+		y = math.sin (rotation.x),
+		z = magnitude * math.sin (-rotation.y),
+	}
 end
 
 -- set animation speed relative to velocity

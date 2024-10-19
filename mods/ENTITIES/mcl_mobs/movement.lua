@@ -6,30 +6,18 @@ function mob_class:target_visible(origin, target)
 	if self._targets_visible[target] then
 		return true
 	end
-
-	if not origin then return end
-
+	if not origin then
+		return
+	end
 	if not target and self.attack then
 		target = self.attack
 	end
-	if not target then return end
-
-	local target_pos = target:get_pos()
-	if not target_pos then return end
-
-	local origin_eye_pos = vector.offset (origin, 0, self.head_eye_height, 0)
-	local eye
-
-	if target:is_player () then
-		eye = target:get_properties ().eye_height
-	else
-		local entity = target:get_luaentity ()
-		eye = 0
-		if entity and entity.is_mob then
-			eye = entity.head_eye_height
-		end
+	if not target then
+		return
 	end
-	target_pos.y = target_pos.y + eye
+
+	local target_pos = mcl_util.target_eye_pos (target)
+	local origin_eye_pos = vector.offset (origin, 0, self.head_eye_height, 0)
 
 	if self:line_of_sight (origin_eye_pos, target_pos) then
 		self._targets_visible[target] = true
@@ -197,7 +185,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 	v.y = y
 	v.z = z
 	if not aabb_clear (v, pos1, pos2, direction, distance, typetest) then
-		return false
+		return false, v
 	end
 
 	while (traveledx <= 1.0)
@@ -226,7 +214,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 		v.z = z
 
 		if not aabb_clear (v, pos1, pos2, direction, distance) then
-			return false
+			return false, v
 		end
 	end
 

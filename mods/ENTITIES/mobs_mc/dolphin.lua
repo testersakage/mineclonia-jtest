@@ -281,7 +281,7 @@ local function dolphin_swim_with_player (self, self_pos, dtime)
 		local cur_dist, closest_player
 		for player, meta in pairs (mcl_player.players) do
 			local pos
-			if meta.is_swimming then
+			if self.attack ~= player and meta.is_swimming then
 				pos = player:get_pos ()
 
 				if pos then
@@ -543,14 +543,14 @@ end
 
 dolphin.ai_functions = {
 	mob_class.check_avoid,
+	dolphin_return_to_water,
+	dolphin_seek_treasure,
+	dolphin_swim_with_player,
 	dolphin_swim_with_boat,
 	-- dolphin_harass_items,
 	mob_class.check_attack,
 	dolphin_jump,
 	mob_class.check_pace,
-	dolphin_swim_with_player,
-	dolphin_seek_treasure,
-	dolphin_return_to_water,
 	dolphin_breathe_air,
 }
 
