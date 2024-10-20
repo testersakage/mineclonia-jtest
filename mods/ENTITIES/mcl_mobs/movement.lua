@@ -720,12 +720,15 @@ function mob_class:pacing_target (pos, width, height, groups)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
 	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, groups)
 
-	if self._restrict_center and #nodes >= 1 then
+	if (self._restrict_center and #nodes >= 1)
+		or self.acceptable_pacing_target then
 		-- Make ten attempts to select a node within the
-		-- restriction.
+		-- restriction or one that is eligible.
 		for i = 1, 10 do
 			local node = nodes[math.random (#nodes)]
-			if self:node_in_restriction (node) then
+			if self:node_in_restriction (node)
+				and (not self.acceptable_pacing_target
+					or self:acceptable_pacing_target (node)) then
 				return node
 			end
 		end
@@ -1057,11 +1060,12 @@ function mob_class:check_pace (pos)
 	end
 end
 
-function mob_class:replace_activity (activity_name)
+function mob_class:replace_activity (activity_name, uninterruptible)
 	if self._active_activity then
 		self[self._active_activity] = nil
 	end
 	self._active_activity = activity_name
+	self._can_interrupt_activity = not uninterruptible
 end
 
 local function run_ai_1 (self, self_pos, dtime, moveresult)
