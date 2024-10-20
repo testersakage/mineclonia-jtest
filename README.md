@@ -3,7 +3,7 @@
 [![ContentDB](https://content.minetest.net/packages/ryvnf/mineclonia/shields/downloads/)](https://content.minetest.net/packages/ryvnf/mineclonia/)
 [![Translation status](https://translate.codeberg.org/widget/mineclonia/svg-badge.svg)](https://translate.codeberg.org/engage/mineclonia/)
 
-An unofficial Minecraft-like game for Minetest. Fork of MineClone 2 with focus
+An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of MineClone 2 with focus
 on stability, multiplayer performance and features. For information about
 migrating from MineClone 2 to Mineclonia, see [MIGRATING.md](../../../src/branch/main/MIGRATING.md).
 
@@ -92,14 +92,14 @@ Use the `/giveme` chat command to obtain them. See the in-game help for
 an explanation.
 
 ## Installation
-This game requires [Minetest](http://minetest.net) to run (version 5.6 or
-later). So you need to install Minetest first. Only stable versions of Minetest
+This game requires [Luanti](http://minetest.net) to run (version 5.6 or
+later). So you need to install Luanti first. Only stable versions of Luanti
 are officially supported. There is no support for running Mineclonia in
-development versions of Minetest.
+development versions of Luanti.
 
 To install Mineclonia (if you haven't already), move this directory into the
-“games” directory of your Minetest data directory. Consult the help of
-Minetest to learn more.
+“games” directory of your Luanti data directory. Consult the help of
+Luanti to learn more.
 
 ## Useful links
 The Mineclonia repository is hosted at [Codeberg](https://codeberg.org).
@@ -114,7 +114,7 @@ To contribute or report issues, head there.
 The main goal of **Mineclonia** is to be a stable and performant clone of
 Minecraft released as free software.
 
-* Minecraft is aimed to be cloned as well as Minetest currently permits without
+* Minecraft is aimed to be cloned as well as Luanti currently permits without
   resorting to hacks which are too heavyweight or complicated to maintain
 * Cloning the gameplay has highest priority
 * Cloning the interface has low priority. It will only be roughly imitated
@@ -184,7 +184,7 @@ Bonus features (not found in Minecraft):
 * Built-in crafting guide which shows you crafting and smelting recipes
 * In-game help system containing extensive help about gameplay basics, blocks,
   items and more
-* Fully moddable (thanks to Minetest's powerful Lua API)
+* Fully moddable (thanks to Luanti's powerful Lua API)
 * Bookshelves can be used to store books
 * Nether portals can be created with custom shapes
 * New blocks and items:
@@ -213,7 +213,7 @@ Technical differences from Minecraft:
 * Different music for jukebox
 * Different textures (Pixel Perfection)
 * Different sounds (various sources)
-* Different engine (Minetest)
+* Different engine (Luanti)
 * Different easter eggs
 
 … and finally, Mineclonia is free software (“free” as in “freedom”)!
@@ -221,6 +221,6 @@ Technical differences from Minecraft:
 ## Other readme files
 * [LICENSE.txt](../../../src/branch/main/LICENSE.txt): The GPLv3 license text
 * [CONTRIBUTING.md](../../../src/branch/main/CONTRIBUTING.md): Information for those who want to contribute
-* [API.md](../../../src/branch/main/API.md): For Minetest modders who want to mod this game
+* [API.md](../../../src/branch/main/API.md): For Luanti modders who want to mod this game
 * [LEGAL.md](../../../src/branch/main/LEGAL.md): Legal information
 * [CREDITS.md](../../../src/branch/main/CREDITS.md): List of everyone who contributed
