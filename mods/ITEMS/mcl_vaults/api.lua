@@ -63,17 +63,19 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	on_step = function(self, dtime)
 		self._timer = (self._timer or SHOWITEM_INTERVAL) - dtime
 		if self._timer < 0 then
-			if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "vault") <= 1 then
+			local node = minetest.get_node(self._pos)
+			if node.name ~= self._vault_on_name then
+				-- vault node changed, probably ejecting -> remove entity
 				self.object:remove()
-				return
-			end
-			self._timer = SHOWITEM_INTERVAL
-			self:_next_item()
-			if not self:_check_players_near() then
-				local node = minetest.get_node(self._pos)
-				node.name = "mcl_vaults:"..self._vault_name
+			elseif not self:_check_players_near() then
+				-- no player near -> deactivate
+				node.name = self._vault_name
 				minetest.swap_node(self._pos, node)
 				self.object:remove()
+			else
+				-- active vault and player still there -> show next item
+				self._timer = SHOWITEM_INTERVAL
+				self:_next_item()
 			end
 		end
 	end,
@@ -81,7 +83,8 @@ minetest.register_entity("mcl_vaults:item_entity", {
 		local s = minetest.deserialize(staticdata)
 		if s and s.loot then
 			self._pos = s.pos
-			self._vault_name = s.name
+			self._vault_name = "mcl_vaults:" .. s.name
+			self._vault_on_name = self._vault_name .. "_on"
 			self._loot = s.loot
 			self:_next_item()
 			self.object:set_armor_groups({ immortal = 1 })
