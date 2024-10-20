@@ -58,7 +58,7 @@ end
 function ringbuffer_class:serialize()
 	local data, wrap = {}, self.size - self.position
 	for i = 1, wrap do
-		data[i] = self.data[self.position + i]
+		data[i] = self.data[self.position + i] or ""
 	end
 	for i = 1, self.position do
 		data[i + wrap] = self.data[i]
