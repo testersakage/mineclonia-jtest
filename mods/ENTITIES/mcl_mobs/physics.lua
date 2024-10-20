@@ -1044,7 +1044,7 @@ function mob_class:motion_step (dtime, moveresult)
 
 	if jumping then
 		if standin.groups.water or standin.groups.lava then
-			if self.floats then
+			if self.floats == 1 then
 				v.y = v.y + LIQUID_JUMP_FORCE * v_scale
 			else
 				v.y = v.y + LIQUID_JUMP_FORCE_ONESHOT

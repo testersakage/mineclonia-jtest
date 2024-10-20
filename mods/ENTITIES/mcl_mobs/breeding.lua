@@ -63,9 +63,12 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 	end
 
 	if breed and not consume_food and self.hornytimer == 0 and not self.horny then
-		consume_food = true
-		self.horny = true
-		self.persistent = true
+		if not self.breeding_possible
+			or self:breeding_possible () then
+			consume_food = true
+			self.horny = true
+			self.persistent = true
+		end
 	end
 
 	self:update_tag()
