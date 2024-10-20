@@ -123,7 +123,12 @@ for n, desc in pairs(n_desc) do
 		drop = "mcl_copper:bulb"..n.."_off",
 		mesecons = {effector = {
 			action_on = function(pos, node)
-				node.name = "mcl_copper:bulb"..n.."_off"
+				-- needed to maintain it's waxed state
+				local preserved_state = ""
+				if string.find(node.name, "_preserved") then
+					preserved_state = "_preserved"
+				end
+				node.name = "mcl_copper:bulb"..n.."_off"..preserved_state
 				minetest.swap_node(pos,node)
 			end,
 			rules = mesecon.rules.alldirs,
@@ -140,7 +145,12 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3,
 		mesecons = {effector = {
 			action_on = function(pos, node)
-				node.name = "mcl_copper:bulb"..n.."_on"
+				-- needed to maintain it's waxed state
+				local preserved_state = ""
+				if string.find(node.name, "_preserved") then
+					preserved_state = "_preserved"
+				end
+				node.name = "mcl_copper:bulb"..n.."_on"..preserved_state
 				minetest.swap_node(pos,node)
 			end,
 			rules = mesecon.rules.alldirs,
