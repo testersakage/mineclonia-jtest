@@ -193,10 +193,11 @@ function boat.on_activate(self, staticdata)
 end
 
 function boat.get_staticdata(self)
+	local props = self.object:get_properties()
 	return minetest.serialize({
 		v = self._v,
 		itemstring = self._itemstring,
-		textures = self.object:get_properties().textures
+		textures = props and props.textures or nil
 	})
 end
 
