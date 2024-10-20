@@ -123,7 +123,7 @@ for n, desc in pairs(n_desc) do
 		drop = "mcl_copper:bulb"..n.."_off",
 		mesecons = {effector = {
 			action_on = function(pos, node)
-				-- needed to maintain it's waxed state
+				-- needed to maintain its waxed state
 				local preserved_state = ""
 				if string.find(node.name, "_preserved") then
 					preserved_state = "_preserved"
@@ -145,7 +145,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3,
 		mesecons = {effector = {
 			action_on = function(pos, node)
-				-- needed to maintain it's waxed state
+				-- needed to maintain its waxed state
 				local preserved_state = ""
 				if string.find(node.name, "_preserved") then
 					preserved_state = "_preserved"

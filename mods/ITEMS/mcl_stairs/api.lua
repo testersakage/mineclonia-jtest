@@ -373,7 +373,7 @@ local function register_slab(subname, stairdef)
 		on_rotate = function(pos, node, _, mode)
 			-- Flip slab
 			if mode == screwdriver.ROTATE_AXIS then
-				-- needed for copper to maintain it's waxed state
+				-- needed for copper to maintain its waxed state
 				local preserved_state = ""
 				if string.find(node.name, "_preserved") then
 					preserved_state = "_preserved"
@@ -408,7 +408,7 @@ local function register_slab(subname, stairdef)
 	function topdef.on_rotate(pos, node, _, mode)
 		-- Flip slab
 		if mode == screwdriver.ROTATE_AXIS then
-			-- needed for copper to maintain it's waxed state
+			-- needed for copper to maintain its waxed state
 			local preserved_state = ""
 			if string.find(node.name, "_preserved") then
 				preserved_state = "_preserved"
