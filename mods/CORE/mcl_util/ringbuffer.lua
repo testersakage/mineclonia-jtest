@@ -9,6 +9,7 @@ function ringbuffer.new(size, initial_values)
 	local values = initial_values or {}
 	-- use initial_values as is, unless number of entries exceeds size,
 	-- then copy newest entries into new list
+	-- assume index 0 is oldest entry
 	if #values > size then
 		values = {}
 		for i = #initial_values - size, #initial_values do
@@ -18,14 +19,17 @@ function ringbuffer.new(size, initial_values)
 	return setmetatable({
 		data = values,
 		size = size,
+		position = 0,
 	}, ringbuffer_class)
 end
 
 function ringbuffer_class:insert(record)
-	if #self.data >= self.size then
-		table.remove(self.data, 1)
+	-- position is zero based, so increment first and wrap when reaching size
+	self.position = self.position + 1
+	self.data[self.position] = record
+	if self.position >= self.size then
+		self.position = 0
 	end
-	table.insert(self.data, record)
 	if self.auto_update_node_meta_key then
 		local pos = minetest.get_position_from_hash(self.auto_update_node_meta_key:sub(1, 16))
 		local key = self.auto_update_node_meta_key:sub(17)
@@ -52,7 +56,14 @@ function ringbuffer_class:insert_if_not_exists(record)
 end
 
 function ringbuffer_class:serialize()
-	return minetest.serialize(self.data)
+	local data, wrap = {}, self.size - self.position
+	for i = 1, wrap do
+		data[i] = self.data[self.position + i]
+	end
+	for i = 1, self.position do
+		data[i + wrap] = self.data[i]
+	end
+	return minetest.serialize(data)
 end
 
 function ringbuffer.deserialize(size, serialized_data)
