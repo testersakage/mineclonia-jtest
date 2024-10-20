@@ -30,9 +30,10 @@ function table.merge(t, ...)
 end
 
 function table.reverse(t)
-	local len = #t
-	for i = len - 1, 1, -1 do
-		t[len] = table.remove(t, i)
+	local a, b = 1, #t
+	while a < b do
+		t[a], t[b] = t[b], t[a]
+		a, b = a + 1, b - 1
 	end
 end
 
