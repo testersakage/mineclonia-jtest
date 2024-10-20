@@ -19,11 +19,12 @@ function ringbuffer.new(size, initial_values)
 	return setmetatable({
 		data = values,
 		size = size,
-		position = 0,
+		position = #values % size, -- insert after last value if buffer not yet full
 	}, ringbuffer_class)
 end
 
 function ringbuffer_class:insert(record)
+	assert(record)
 	-- position is zero based, so increment first and wrap when reaching size
 	self.position = self.position + 1
 	self.data[self.position] = record
@@ -56,12 +57,16 @@ function ringbuffer_class:insert_if_not_exists(record)
 end
 
 function ringbuffer_class:serialize()
-	local data, wrap = {}, self.size - self.position
+	local data, wrap, offset = {}, self.size - self.position, 0
 	for i = 1, wrap do
-		data[i] = self.data[self.position + i] or ""
+		if self.data[self.position + i] then
+			data[i - offset] = self.data[self.position + i]
+		else
+			offset = offset + 1
+		end
 	end
 	for i = 1, self.position do
-		data[i + wrap] = self.data[i]
+		data[i + wrap - offset] = self.data[i]
 	end
 	return minetest.serialize(data)
 end
