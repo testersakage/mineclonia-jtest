@@ -19,12 +19,12 @@ Rather than translating strings directly in the TR files, translators are encour
 
 ## Preconditions
 
-You need at least Minetest 5.8.0, Python 3 and the Minetest Translation Tools for this to work. You can find the Minetest Translation tools at <https://codeberg.org/Wuzzy/Minetest_Translation_Tools>.
+You need at least Luanti (Minetest) 5.8.0, Python 3 and the Luanti Translation Tools for this to work. You can find the Luanti Translation tools at <https://codeberg.org/Wuzzy/Minetest_Translation_Tools>.
 
 ## Part 1: Pushing the translations from the game to Weblate:
 
 1. Clean up: Make sure the game repository is in a clean state (no non-committed changes)
-2. Update TR files: Run `util/mod_translation_updater.py` (included since Minetest 5.8.0) in the `mods` directory and commit the changes (if any)
+2. Update TR files: Run `util/mod_translation_updater.py` (included since Luanti 5.8.0) in the `mods` directory and commit the changes (if any)
 3. Convert TR to PO: Run `mtt_convert.py --tr2po -r` in the `mods` directory and commit the changes
 4. Push: Push the changes to the online repository of the game
 5. Update Weblate repository (optional): Weblate should soon automatically update its repository. But if you want to want the new strings to be available immediately, go to the project page, then “Manage > Repository Maintenance” and click “Update”
