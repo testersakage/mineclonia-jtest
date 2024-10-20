@@ -1940,10 +1940,6 @@ end
 
 local function waterbound_gwp_start (self, context)
 	local pos = self.object:get_pos ()
-	-- Center pos vertically.
-	pos.y = pos.y + self.collisionbox[2]
-		+ (self.collisionbox[5] - self.collisionbox[2] / 2)
-
 	pos.x = floor (pos.x + 0.5)
 	pos.y = floor (pos.y + 0.5)
 	pos.z = floor (pos.z + 0.5)
@@ -1956,11 +1952,14 @@ local function waterbound_gwp_initialize (self, targets, range)
 		return nil
 	end
 	local cbox = self.collisionbox
+	local cbox_height = cbox[5] - cbox[2]
 
 	-- Offset Y positions of reconstructed path nodes so as to
-	-- center the mob in the said nodes.
-	local cbox_height = cbox[5] - cbox[2]
-	context.y_offset = -(cbox_height / 2) - cbox[2]
+	-- center the mob in the said nodes if it is sufficiently
+	-- small.
+	if cbox_height < 0.4 then
+		context.y_offset = -(cbox_height / 2) - cbox[2]
+	end
 	return context
 end
 

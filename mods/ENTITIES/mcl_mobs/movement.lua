@@ -646,7 +646,10 @@ function mob_class:movement_step (dtime, moveresult)
 	end
 end
 
---- Navigation state management.
+------------------------------------------------------------------------
+-- Mob navigation.
+------------------------------------------------------------------------
+
 
 function mob_class:is_navigating ()
 	return self.waypoints or self.stupid_target
@@ -691,7 +694,9 @@ function mob_class:go_to_stupidly (pos, factor)
 	mob.stupid_velocity = mob.movement_speed * (factor or 1)
 end
 
---- Mob AI.
+------------------------------------------------------------------------
+-- Mob AI.
+------------------------------------------------------------------------
 
 function mob_class:ascend_in_powder_snow (self_pos, dtime)
 	local in_powder_snow
@@ -714,6 +719,18 @@ function mob_class:pacing_target (pos, width, height, groups)
 	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
 	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, groups)
+
+	if self._restrict_center and #nodes >= 1 then
+		-- Make ten attempts to select a node within the
+		-- restriction.
+		for i = 1, 10 do
+			local node = nodes[math.random (#nodes)]
+			if self:node_in_restriction (node) then
+				return node
+			end
+		end
+		return nil
+	end
 
 	return #nodes >= 1 and nodes[math.random (#nodes)]
 end
@@ -764,8 +781,10 @@ function mob_class:target_away_from (pos, pursuer)
 		local dir = self:random_node_direction (16, 7, forward_dir, math.pi / 2)
 		if dir then
 			local pos = vector.add (pos, dir)
-			if self:gwp_classify_for_movement (pos) == "WALKABLE" then
-				return pos
+			if self:node_in_restriction (pos) then
+				if self:gwp_classify_for_movement (pos) == "WALKABLE" then
+					return pos
+				end
 			end
 		end
 	end
@@ -1121,6 +1140,18 @@ local function aquatic_pacing_target (self, pos, width, height, groups)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
 	local nodes = minetest.find_nodes_in_area (aa, bb, groups)
 
+	if self._restrict_center and #nodes >= 1 then
+		-- Make ten attempts to select a node within the
+		-- restriction.
+		for i = 1, 10 do
+			local node = nodes[math.random (#nodes)]
+			if self:node_in_restriction (node) then
+				return node
+			end
+		end
+		return nil
+	end
+
 	return #nodes >= 1 and nodes[math.random (#nodes)]
 end
 
@@ -1467,4 +1498,50 @@ function mob_class:configure_airborne_mob ()
 	self.movement_step = airborne_movement_step
 	self.do_go_pos = mob_class.airborne_do_go_pos
 	self.pacing_target = airborne_pacing_target
+end
+
+------------------------------------------------------------------------
+-- Mob restrictions.
+------------------------------------------------------------------------
+
+function mob_class:restrict_to (node, radius)
+	self._restriction_center = node
+	self._restriction_size = radius
+end
+
+function mob_class:node_in_restriction (node)
+	if self._restriction_center then
+		return vector.distance (self._restriction_center, node)
+			< self._restriction_size
+	end
+	return true
+end
+
+function mob_class:return_to_restriction (self_pos, dtime)
+	if self._returning_to_restriction then
+		if self:navigation_finished () then
+			self._returning_to_restriction = false
+			return false
+		end
+		return true
+	end
+	if not self._restriction_center
+		or self:node_in_restriction (self_pos) then
+		return false
+	end
+	for i = 1, 10 do
+		local restrict = self._restriction_center
+		local restriction_dir = vector.direction (self_pos, restrict)
+		local dir = self:random_node_direction (16, 7, restriction_dir,
+							math.pi / 2)
+		if dir then
+			local node = vector.add (self_pos, dir)
+			if self:node_in_restriction (node) then
+				self:gopath (node, nil, false, self.restriction_bonus)
+				self._returning_to_restriction = true
+				return "_returning_to_restriction"
+			end
+		end
+	end
+	return false
 end
