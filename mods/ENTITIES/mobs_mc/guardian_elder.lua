@@ -5,8 +5,9 @@
 --###################
 
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
-mcl_mobs.register_mob("mobs_mc:guardian_elder", {
+local guardian_elder = table.merge (mobs_mc.guardian, {
 	description = S("Elder Guardian"),
 	type = "monster",
 	spawn_class = "hostile",
@@ -16,14 +17,11 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	xp_max = 10,
 	breath_max = -1,
 	passive = false,
-	attack_type = "melee",
-	pathfinding = 1,
-	view_range = 16,
-	movement_speed = 6.0,
 	damage = 8,
-	reach = 3,
+	movement_speed = 6.0,
+	_default_laser_delay = 3.0,
 	head_eye_height = 0.99875,
-	collisionbox = {-0.99875, 0.5, -0.99875, 0.99875, 2.4975, 0.99875},
+	collisionbox = {-0.99875, 0, -0.99875, 0.99875, 1.9975, 0.99875},
 	doll_size_override = { x = 0.72, y = 0.72 },
 	visual = "mesh",
 	mesh = "mobs_mc_guardian.b3d",
@@ -31,21 +29,6 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 		{"mobs_mc_guardian_elder.png"},
 	},
 	visual_size = {x=7, y=7},
-	sounds = {
-		random = "mobs_mc_guardian_random",
-		war_cry = "mobs_mc_guardian_random",
-		damage = {name="mobs_mc_guardian_hurt", gain=1.0},
-		death = "mobs_mc_guardian_death",
-		flop = "mobs_mc_squid_flop",
-		base_pitch = 0.6,
-		distance = 16,
-	},
-	animation = {
-		stand_speed = 25, walk_speed = 25, run_speed = 50,
-		stand_start = 0,		stand_end = 20,
-		walk_start = 0,		walk_end = 20,
-		run_start = 0,		run_end = 20,
-	},
 	drops = {
 		{name = "mcl_ocean:prismarine_shard",
 		chance = 1,
@@ -98,28 +81,44 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 		looting = "rare",
 		looting_factor = 0.01 / 4,},
 	},
-	swims = true,
-	makes_footstep_sound = false,
-	do_custom = function (self, dtime)
-	    local self_pos
-	    -- See:
-	    -- https://minecraft.wiki/w/Elder_Guardian#Inflicting_Mining_Fatigue
-	    self._fatigue_counter = (self._fatigue_counter or 60) + dtime;
-	    self_pos = self.object:get_pos ()
-	    if self._fatigue_counter > 60 then
+})
+
+------------------------------------------------------------------------
+-- Elder Guardian AI.
+------------------------------------------------------------------------
+
+function guardian_elder:on_spawn ()
+	-- Restrict to a 16 node radius around spawn point.
+	self:restrict_to (self.object:get_pos (), 16)
+end
+
+function guardian_elder:ai_step (dtime)
+	local self_pos
+	-- See:
+	-- https://minecraft.wiki/w/Elder_Guardian#Inflicting_Mining_Fatigue
+	self._fatigue_counter = (self._fatigue_counter or 60) + dtime
+	self_pos = self.object:get_pos ()
+	if self._fatigue_counter > 60 then
 		self._fatigue_counter = self._fatigue_counter - 60
 
 		for player in mcl_util.connected_players() do
-		    local pos = player:get_pos ()
-		    if vector.distance (pos, self_pos) <= 50 then
-			-- Inflict Mining Fatigue III for 5 minutes.
-			mcl_potions.give_effect_by_level ("fatigue", player, 3, 300)
-			-- TODO: display an apparition and play eerie noises.
-		    end
+			local pos = player:get_pos ()
+			if vector.distance (pos, self_pos) <= 50 then
+				-- Inflict Mining Fatigue III for 5 minutes.
+				mcl_potions.give_effect_by_level ("fatigue", player, 3, 300)
+				-- TODO: display an apparition and play eerie noises.
+			end
 		end
-	    end
-	end,
-})
+	end
+end
+
+guardian_elder.ai_functions = {
+	mob_class.return_to_restriction,
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob ("mobs_mc:guardian_elder", guardian_elder)
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:guardian_elder", S("Elder Guardian"), "#ceccba", "#747693", 0)

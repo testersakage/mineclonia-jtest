@@ -118,6 +118,7 @@ mcl_mobs.mob_class = {
 	breed_bonus = 1.0,
 	runaway_bonus_near = 1.25,
 	runaway_bonus_far = 1.0,
+	restriction_bonus = 1.0,
 	runaway_view_range = 16,
 	follow_distance = 6.0,
 	-- Distance at which targets will be relinquished.
@@ -182,6 +183,8 @@ mcl_mobs.mob_class = {
 	jump_sound_cooloff = 0.5, -- used to prevent jump sound from being played too often in short time
 	opinion_sound_cooloff = 1, -- used to prevent sound spam of particular sound types
 	_frozen_for = 0,
+	_restriction_center = nil,
+	_restriction_size = 0,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
@@ -233,6 +236,7 @@ dofile(path .. "/mount.lua")
 -- priority over those which appear later.
 local mob_class = mcl_mobs.mob_class
 mob_class.ai_functions = {
+	mob_class.return_to_restriction,
 	mob_class.sit_if_ordered,
 	mob_class.check_travel_to_owner,
 	mob_class.check_avoid_sunlight,

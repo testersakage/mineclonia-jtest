@@ -15,8 +15,10 @@ mobs_mc.shears_wear = 276
 mobs_mc.water_level = tonumber(minetest.settings:get("water_level")) or 0
 
 -- Auto load all lua files
-local path = minetest.get_modpath("mobs_mc")
-for _, file in pairs(minetest.get_dir_list(path, false)) do
+local path = minetest.get_modpath ("mobs_mc")
+local files = minetest.get_dir_list (path, false)
+table.sort (files)
+for _, file in pairs (files) do
 	if file:sub(-4) == ".lua" and file ~= "init.lua" then
 		dofile(path .. "/" ..file)
 	end

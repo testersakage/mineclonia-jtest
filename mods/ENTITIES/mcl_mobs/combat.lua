@@ -373,6 +373,9 @@ function mob_class:should_attack (object)
 	local specific = self.specific_attack or {}
 	if object == self.object then
 		return false
+	elseif self._restriction_center
+		and not self:node_in_restriction (object:get_pos ()) then
+		return false
 	elseif entity and entity.is_mob then
 		if self.attack_animals and entity.passive then
 			return true
@@ -398,6 +401,9 @@ end
 
 function mob_class:should_continue_to_attack (object)
 	if object:is_player () and not self:attack_player_allowed (object) then
+		return false
+	elseif self._restriction_center
+		and not self:node_in_restriction (object:get_pos ()) then
 		return false
 	end
 	local entity = object:get_luaentity ()

@@ -24,7 +24,7 @@ local guardian = {
 	damage = 6,
 	reach = 3,
 	head_eye_height = 0.425,
-	collisionbox = {-0.425, 0.25, -0.425, 0.425, 1.1, 0.425},
+	collisionbox = {-0.425, 0, -0.425, 0.425, 0.85, 0.425},
 	doll_size_override = { x = 0.6, y = 0.6 },
 	visual = "mesh",
 	mesh = "mobs_mc_guardian.b3d",
@@ -105,6 +105,7 @@ local guardian = {
 		"player",
 	},
 	flops = true,
+	_default_laser_delay = 4.0,
 }
 
 ------------------------------------------------------------------------
@@ -147,6 +148,7 @@ function guardian:do_go_pos (dtime, moveresult)
 	local fv = vector.new (x, y, z)
 	self.object:add_velocity (fv)
 	self.acc_speed = 2.0
+	self._acc_no_gravity = true
 end
 
 function guardian:mob_activate (staticdata, dtime)
@@ -304,7 +306,7 @@ end
 
 function guardian:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
-		self._laser_delay = 4.0
+		self._laser_delay = self._default_laser_delay
 		self.attacking = true
 	end
 	if not line_of_sight then
@@ -353,15 +355,17 @@ function guardian:receive_damage (mcl_reason, damage)
 	end
 	local entity = source:get_luaentity ()
 	if (source:is_player () or (entity and entity.is_mob))
+		and self.movement_goal ~= "go_pos"
 		and not mcl_reason.flags.bypasses_guardian then
 		mcl_util.deal_damage (source, 2.0, {
-			type = "magic",
+			type = "thorns",
 			source = self.object,
 		})
 	end
 	self._pace_asap = true
 end
 
+mobs_mc.guardian = guardian
 mcl_mobs.register_mob ("mobs_mc:guardian", guardian)
 
 -- spawn eggs

@@ -389,7 +389,7 @@ function mob_class:check_head_swivel(dtime, clear)
 end
 
 function mob_class:get_look_dir ()
-	if not head_swivel then
+	if not self.head_swivel then
 		return vector.zero ()
 	end
 	local rotation
