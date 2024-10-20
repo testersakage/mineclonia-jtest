@@ -167,7 +167,7 @@ function boat.on_rightclick(self, clicker)
 	attach_object(self, clicker)
 end
 
-function boat.on_activate(self, staticdata)
+function boat:on_activate(staticdata)
 	self.object:set_armor_groups({fleshy = 125})
 	local data = minetest.deserialize(staticdata)
 	if type(data) == "table" then
@@ -192,7 +192,7 @@ function boat.on_activate(self, staticdata)
 	end
 end
 
-function boat.get_staticdata(self)
+function boat:get_staticdata()
 	local props = self.object:get_properties()
 	return minetest.serialize({
 		v = self._v,
@@ -201,7 +201,7 @@ function boat.get_staticdata(self)
 	})
 end
 
-function boat.on_death(self, killer)
+function boat:on_death(killer)
 	mcl_burning.extinguish(self.object)
 
 	if killer and killer:is_player() and minetest.is_creative_enabled(killer:get_player_name()) then
@@ -223,13 +223,13 @@ function boat.on_death(self, killer)
 end
 
 ---@diagnostic disable-next-line: unused-local
-function boat.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+function boat:on_punch(puncher, time_from_last_punch, tool_capabilities, dir, damage)
 	if damage > 0 then
 		self._regen_timer = 0
 	end
 end
 
-function boat.on_step(self, dtime, moveresult)
+function boat:on_step(dtime, moveresult)
 	mcl_burning.tick(self.object, dtime, self)
 	-- mcl_burning.tick may remove object immediately
 	if not self.object:get_pos() then return end
