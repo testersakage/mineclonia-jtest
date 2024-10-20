@@ -542,7 +542,7 @@ function mob_class:rotate_step (dtime)
 	yaw = self:rotate_gradually (info, "yaw", dtime)
 	pitch = self:rotate_gradually (info, "pitch", dtime)
 	if self.shaking then
-		yaw = yaw + (math.random() * 2 - 1) * 5 * dtime
+		yaw = yaw + (math.random() * 1 - 0.5) * dtime
 	end
 	self.object:set_rotation ({
 			x = pitch,

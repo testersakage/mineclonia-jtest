@@ -170,6 +170,8 @@ mcl_mobs.mob_class = {
 	wielditem_drop_probability = 0.0,
 	ignite_targets_while_burning = false,
 	climb_powder_snow = false,
+	breeding_possible = nil,
+	acceptable_pacing_target = nil,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
