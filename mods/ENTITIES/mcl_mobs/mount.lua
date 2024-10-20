@@ -41,13 +41,15 @@ end
 
 
 local function force_detach(player)
+	if not player or not player:get_pos() or not player:is_player() then return end
+
 	local attached_to = player:get_attach()
 	if not attached_to then
 		return
 	end
 
 	local entity = attached_to:get_luaentity()
-	if entity.driver and entity.driver == player then
+	if entity and entity.driver and entity.driver == player then
 		entity.driver = nil
 	end
 
@@ -56,7 +58,6 @@ local function force_detach(player)
 	player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
 	mcl_player.player_set_animation(player, "stand" , 30)
 	player:set_properties({visual_size = {x = 1, y = 1} })
-
 end
 
 minetest.register_on_shutdown(function()
