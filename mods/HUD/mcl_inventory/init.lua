@@ -50,7 +50,8 @@ local function set_inventory(player)
 		return
 	end
 
-	player:set_inventory_formspec(mcl_inventory.build_survival_formspec(player))
+	local formspec = mcl_inventory.build_survival_formspec (player)
+	mcl_player.set_inventory_formspec (player, formspec, 0)
 end
 
 function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_height)
@@ -229,7 +230,8 @@ function mcl_inventory.update_inventory(player)
 	if player_gamemode == "creative" then
 		mcl_inventory.set_creative_formspec(player)
 	elseif player_gamemode == "survival" then
-		player:set_inventory_formspec(mcl_inventory.build_survival_formspec(player))
+		local formspec = mcl_inventory.build_survival_formspec (player)
+		mcl_player.set_inventory_formspec (player, formspec, 0)
 	end
 	mcl_meshhand.update_player(player)
 end

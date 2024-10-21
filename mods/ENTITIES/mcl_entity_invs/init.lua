@@ -122,9 +122,6 @@ minetest.register_on_player_receive_fields(function(_, formname, _)
 				mcl_entity_invs.save_inv(k)
 				open_invs[k] = nil
 				k._inv_open = nil
-				if k.is_mob then
-					k:roam()
-				end
 			end
 		end
 	end

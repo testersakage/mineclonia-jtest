@@ -70,7 +70,7 @@ function mob_class:attach(player)
 end
 
 
-function mcl_mobs.detach(player, offset)
+function mob_class:detach(player, offset)
 	force_detach(player)
 	mcl_player.player_set_animation(player, "stand" , 30)
 	if offset then

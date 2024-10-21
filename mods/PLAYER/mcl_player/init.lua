@@ -21,6 +21,7 @@ local tpl_playerinfo = {
 	vel_yaw = nil,
 	is_swimming = false,
 	nodes = {},
+	inventory_formspecs = {},
 }
 
 local nodeinfo_pos = { --offset positions of the "nodeinfo" nodes.
@@ -50,6 +51,8 @@ local slow_gs_timer = 0.5
 
 minetest.register_on_joinplayer(function(player)
 	mcl_player.players[player] = table.copy(tpl_playerinfo)
+	mcl_player.players[player].inventory_formspecs = {}
+	mcl_player.players[player].nodes = {}
 	player:get_inventory():set_size("hand", 1)
 	player:set_fov(default_fov)
 	for bone, pos in pairs(bone_start_positions) do
@@ -253,6 +256,22 @@ minetest.register_globalstep (function (dtime)
 			mcl_worlds.tick_chunk_inhabited_time (pos, increment_by)
 		end
 end)
+
+function mcl_player.set_inventory_formspec (player, formspec, priority)
+	local formspecs = mcl_player.players[player].inventory_formspecs
+	formspecs[priority] = formspec
+	local best, priority
+
+	for k, formspec in pairs (formspecs) do
+		if not best or k > priority then
+			best = formspec
+			priority = k
+		end
+	end
+	if best then
+		player:set_inventory_formspec (best)
+	end
+end
 
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 dofile(modpath.."/animations.lua")

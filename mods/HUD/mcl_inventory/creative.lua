@@ -624,7 +624,7 @@ function mcl_inventory.set_creative_formspec(player)
 	end
 	formspec = formspec .. "container_end[]"
 	if pagenum then formspec = formspec .. "p" .. tostring(pagenum) end
-	player:set_inventory_formspec(formspec)
+	mcl_player.set_inventory_formspec (player, formspec, 0)
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)

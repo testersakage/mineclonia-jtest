@@ -657,7 +657,7 @@ function mob_class:falling(pos)
 				if add ~= 0 then
 					damage = damage + damage * (add/100)
 				end
-				self:damage_mob ("fall", damage)
+				self:damage_mob ("fall", damage * self.fall_damage_multiplier)
 				self.reset_fall_damage = 0
 			end
 			self.old_y = self.object:get_pos().y
@@ -737,6 +737,13 @@ function mob_class:remove_physics_factor (field, id)
     end
     self._physics_factors[field][id] = nil
     apply_physics_factors (self, field, id)
+end
+
+function mob_class:stock_value (field)
+    if not self._physics_factors[field] then
+	    return self[field]
+    end
+    return self._physics_factors[field].base
 end
 
 -- Mob motion routines.

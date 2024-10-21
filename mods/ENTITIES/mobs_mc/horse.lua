@@ -13,20 +13,26 @@ local base_drop = {
 
 local function horse_extra_texture(horse, cstring)
 	local base = horse._naked_texture or horse.base_texture[2]
-	local saddle = horse._saddle
+	local saddle = ItemStack (horse._saddle)
 	local chest  = horse._chest
-	local armor = horse._horse_armor
+	local armor = ItemStack (horse._horse_armor_stack)
+	local armor_name = armor:get_name ()
 	local textures = {}
-	if armor and minetest.get_item_group(armor, "horse_armor") > 0 then
+	if not armor:is_empty ()
+		and minetest.get_item_group (armor_name, "horse_armor") > 0 then
 		if cstring then
-			textures[2] = base .. "^(" .. minetest.registered_items[armor]._horse_overlay_image:gsub(".png$", "_desat.png").."^[multiply:"..cstring..")"
+			textures[2] = base
+				.. "^("
+				.. minetest.registered_items[armor_name]._horse_overlay_image:gsub(".png$", "_desat.png")
+				.. "^[multiply:" .. cstring .. ")"
 		else
-			textures[2] = base .. "^" .. minetest.registered_items[armor]._horse_overlay_image
+			textures[2] = base .. "^"
+				.. minetest.registered_items[armor_name]._horse_overlay_image
 		end
 	else
 		textures[2] = base
 	end
-	if saddle then
+	if not saddle:is_empty () then
 		textures[3] = base
 	else
 		textures[3] = "blank.png"
@@ -49,16 +55,14 @@ local function detach_driver(self)
 	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
 	if self.driver then
 		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
-		mcl_mobs.detach(self.driver, {x=0, y=0, z=0})
+		self:detach(self.driver, {x=0, y=0, z=0})
 	end
 end
 
-local can_equip_horse_armor = function(entity_id)
-	return entity_id == "mobs_mc:horse" or entity_id == "mobs_mc:skeleton_horse" or entity_id == "mobs_mc:zombie_horse"
-end
-
-local can_breed = function(entity_id)
-	return entity_id == "mobs_mc:horse" or "mobs_mc:mule" or entity_id == "mobs_mc:donkey"
+local function can_equip_horse_armor (entity_id)
+	return entity_id == "mobs_mc:horse"
+		or entity_id == "mobs_mc:skeleton_horse"
+		or entity_id == "mobs_mc:zombie_horse"
 end
 
 local horse_base = {
@@ -108,9 +112,14 @@ local horse = {
 	runaway = true,
 	movement_speed = 6.75,
 	animation = {
-		stand_start = 0, stand_end = 0, stand_speed = 25,
-		walk_start = 0, walk_end = 40, walk_speed = 25,
+		stand_start = 0, stand_end = 0, stand_speed = 45,
+		walk_start = 0, walk_end = 40, walk_speed = 45,
 		run_start = 0, run_end = 40, run_speed = 50,
+	},
+	follow = {
+		"mcl_farming:carrot_item_gold",
+		"mcl_core:apple_gold",
+		"mcl_core:apple_gold_enchanted",
 	},
 	textures = horse_textures,
 	sounds = {
@@ -121,24 +130,50 @@ local horse = {
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
-	fear_height = 4,
-	fly = false,
 	view_range = 16,
 	steer_class = "controls",
-	follow = {
-		"mcl_farming:carrot_item_gold",
-		"mcl_core:apple_gold",
-		"mcl_core:apple_gold_enchanted",
-	},
-	_temper_increase = {
-		["mcl_core:sugar"] = 3,
-		["mcl_farming:wheat_item"] = 3,
-		["mcl_core:apple"] = 3,
-		["mcl_farming:carrot_item_gold"] = 5,
-		["mcl_core:apple_gold"] = 10
+	_food_items = {
+		["mcl_farming:wheat_item"] = {
+			2.0, -- Health.
+			20, -- Age delta in MC ticks.
+			3, -- Temper.
+		},
+		["mcl_core:sugar"] = {
+			1.0, -- Health.
+			30, -- Age delta in MC ticks.
+			3, -- Temper.
+		},
+		["mcl_farming:hay_block"] = {
+			2.0, -- Health.
+			20, -- Age delta in MC ticks.
+			3, -- Temper.
+		},
+		["mcl_core:apple"] = {
+			3.0,
+			60,
+			3,
+		},
+		["mcl_farming:carrot_item_gold"] = {
+			4.0,
+			60,
+			5,
+			true -- Breed.
+		},
+		["mcl_core:apple_gold"] = {
+			10.0,
+			240,
+			10,
+			true -- Breed.
+		},
+		["mcl_core:apple_gold_enchanted"] = {
+			10.0,
+			240,
+			10,
+			true -- Breed.
+		},
 	},
 	passive = true,
-	hp_min = 15,
+	hp_min = 30,
 	hp_max = 30,
 	xp_min = 1,
 	xp_max = 3,
@@ -147,269 +182,428 @@ local horse = {
 	jump = true,
 	drops = { base_drop },
 	jump_height = 14,
+	fall_damage_multiplier = 0.5,
 	-- Values of 1.0 precisely trigger engine bugs.
 	stepheight = 1.02,
 	head_eye_height = 1.52,
-	should_drive = function (self)
-		return self._saddle and mob_class.should_drive (self)
-	end,
-	on_spawn = function(self)
-		local tex = horse_extra_texture(self)
-		self:set_textures (tex)
-	end,
-	do_custom = function(self, dtime)
-		if self.driver then
-			local ctrl = self.driver:get_player_control ()
-			if ctrl and ctrl.sneak then
-				detach_driver (self)
-			end
-		else
-			self._jump_charge = nil
-			detach_driver (self)
-		end
+	_temper = 0,
+	_max_temper = 120,
+	pace_bonus = 0.7,
+	follow_bonus = 1.0,
+	_saddle = "",
+	_horse_armor_stack = "",
+	_eats = true,
+}
 
-		if not self.v2 then
-			local vsize = self.object:get_properties().visual_size
-			self.v2 = 0
-			self.max_speed_forward = 7
-			self.max_speed_reverse = 2
-			self.accel = 6
-			self.terrain_type = 3
-			self.driver_attach_at = {x = 0, y = 4.17, z = -1.75}
-			self.driver_eye_offset = {x = 0, y = 3, z = 0}
-			self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
-		end
+function horse:on_spawn ()
+	if not self._props_initialized then
+		self:initial_movement_properties ()
+	end
+	local tex = horse_extra_texture(self)
+	self:set_textures (tex)
+end
 
-		self._regentimer = ( self._regentimer or 0) + dtime
-		if self._regentimer >= 4 then
-			if self.health < self.object:get_properties().hp_max then
-				self.health = self.health + 1
-			end
-			self._regentimer = 0
-		end
+------------------------------------------------------------------------
+-- Horse AI.
+------------------------------------------------------------------------
 
-		if self.driver and not self.tamed and self.buck_off_time <= 0 then
-			if math.random() < 0.2 then
-				detach_driver(self)
-				-- TODO bucking animation
-			else
-				self.buck_off_time = 20
-			end
-		end
+local pr = PcgRandom (os.time () + 343)
 
-		if self.buck_off_time then
-			if self.driver then
-				self.buck_off_time = self.buck_off_time - 1
-			else
-				self.buck_off_time = nil
-			end
-		end
+function horse:breeding_possible ()
+	local entity_id = self.name
+	return (entity_id == "mobs_mc:horse"
+		or entity_id == "mobs_mc:donkey")
+		and self.tamed
+end
 
-		return true
-	end,
-	on_die = function(self)
-		if self.driver then
-			detach_driver(self)
-		end
-	end,
-	on_rightclick = function(self, clicker)
-		if not clicker or not clicker:is_player() then
-			return
-		end
+function horse:enrage ()
+	-- TODO: angry noises.
+end
 
-		local item = clicker:get_wielded_item()
-		local iname = item:get_name()
-		local heal = 0
+local function horse_maybe_tame (self, self_pos, dtime)
+	local driver = self.driver
 
-		if self._inv_id then
-			if not self._chest and item:get_name() == "mcl_chests:chest" then
-				item:take_item()
-				clicker:set_wielded_item(item)
-				self._chest = true
-				-- Update texture
-				if not self._naked_texture then
-					-- Base horse texture without chest or saddle
-					self._naked_texture = self.base_texture[2]
-				end
-				local tex = horse_extra_texture(self)
-				self.base_texture = tex
-				self:set_textures (tex)
-				self:update_drops()
-				return
-			elseif self._chest and clicker:get_player_control().sneak then
-				mcl_entity_invs.show_inv_form(self,clicker)
-				return
-			end
-		end
-
-		if self:break_in(clicker) then return end
-
-		if can_breed(self.name) then
-			if (iname == "mcl_core:apple_gold") or (iname == "mcl_core:apple_gold_enchanted") then
-				heal = 10
-			elseif (iname == "mcl_farming:carrot_item_gold") then
-				heal = 4
-			end
-			if heal > 0 and self:feed_tame(clicker, heal, true, false) then
-				return
-			end
-		end
-
-		if (iname == "mcl_core:sugar") then
-			heal = 1
-		elseif (iname == "mcl_farming:wheat_item") then
-			heal = 2
-		elseif (iname == "mcl_core:apple") then
-			heal = 3
-		elseif (iname == "mcl_farming:hay_block") then
-			heal = 20
-		end
-		if heal > 0 and self:feed_tame(clicker, heal, false, false) then
-			return
-		end
-
-		if self.tamed and not self.child and self.owner == clicker:get_player_name() then
-			if not self.driver and clicker:get_player_control().sneak then
-				return
-			elseif not self.driver and iname == "mcl_mobitems:saddle" and self:set_saddle(clicker) then
-				return
-			elseif minetest.get_item_group(iname, "horse_armor") > 0 and can_equip_horse_armor(self.name) and not self.driver and self:set_armor(clicker) then
-				return
-			elseif not self.driver then
-				self._jump_charge = nil
-				attach_driver(self, clicker)
-			end
-		end
-	end,
-	set_saddle = function(self, clicker)
-		if not self._saddle then
-			local w = clicker:get_wielded_item()
-			self._saddle = true
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-				w:take_item()
-				clicker:set_wielded_item(w)
-			end
-			if not self._naked_texture then
-				self._naked_texture = self.base_texture[2]
-			end
-			local tex = horse_extra_texture(self)
-			self.base_texture = tex
-			self:set_textures (tex)
-			minetest.sound_play({name = "mcl_armor_equip_leather"}, {gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
-			self:update_drops()
-			return true
-		end
-	end,
-	set_armor = function(self, clicker)
-		local w = clicker:get_wielded_item()
-		local iname = w:get_name()
-		if iname ~= self._horse_armor then
-			local cstring
-			if minetest.get_item_group(iname, "armor_leather") > 0 then
-				local m = w:get_meta()
-				local cs = m:get_string("mcl_armor:color")
-				cstring = cs ~= "" and cs or nil
-			end
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-				w:take_item()
-				clicker:set_wielded_item(w)
-				if self._horse_armor then
-					minetest.add_item(self.object:get_pos(), self._horse_armor)
-				end
-			end
-			local armor = minetest.get_item_group(iname, "horse_armor")
-			self._wearing_armor = true
-			self._horse_armor = iname
-			self.armor = armor
-			local agroups = self.object:get_armor_groups()
-			agroups.fleshy = self.armor
-			self.object:set_armor_groups(agroups)
-			if not self._naked_texture then
-				self._naked_texture = self.base_texture[2]
-			end
-			local tex = horse_extra_texture(self, cstring)
-			self.base_texture = tex
-			self:set_textures (tex)
-			local def = w:get_definition()
-			if def.sounds and def.sounds._mcl_armor_equip then
-				minetest.sound_play({name = def.sounds._mcl_armor_equip}, {gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
-			end
-			return true
-		end
-	end,
-	update_drops = function(self)
-		self.drops = { base_drop }
-		if self._saddle then
-			table.insert(self.drops,{
-				name = "mcl_mobitems:saddle",
-				chance = 1,
-				min = 1,
-				max = 1,
-			})
-		end
-		if self._horse_armor then
-			table.insert(self.drops,{
-				name = self._horse_armor,
-				chance = 1,
-				min = 1,
-				max = 1,
-			})
-		end
-		if self._chest then
-			table.insert(self.drops,{
-				name = "mcl_chests:chest",
-				chance = 1,
-				min = 1,
-				max = 1,
-			})
-		end
-	end,
-	on_breed = function(parent1, parent2)
-		local pos = parent1.object:get_pos()
-		local child = mcl_mobs.spawn_child(pos, parent1.name)
-		if child then
-			local ent_c = child:get_luaentity()
-			local p = math.random(1, 2)
-			local child_texture
-			if p == 1 then
-				if parent1._naked_texture then
-					child_texture = parent1._naked_texture
-				else
-					child_texture = parent1.base_texture[2]
-				end
-			else
-				if parent2._naked_texture then
-					child_texture = parent2._naked_texture
-				else
-					child_texture = parent2.base_texture[2]
-				end
-			end
-			local splt = string.split(child_texture, "^")
-			if #splt >= 2 then
-				local base = splt[1]
-				local markings = splt[2]
-				local mutate_base = math.random(1, 9)
-				local mutate_markings = math.random(1, 9)
-				if mutate_base == 1 then
-					local b = math.random(1, #horse_base)
-					base = horse_base[b]
-				end
-				if mutate_markings == 1 then
-					local m = math.random(1, #horse_markings)
-					markings = horse_markings[m]
-				end
-				child_texture = base
-				if markings ~= "" then
-					child_texture = child_texture .. "^" .. markings
-				end
-			end
-			ent_c.base_texture = { "blank.png", child_texture, "blank.png" }
-			ent_c._naked_texture = child_texture
-			ent_c:set_textures (ent_c.base_texture)
+	if self._evaluating_handler then
+		if not driver or not driver:is_valid ()	or self.tamed then
+			self:cancel_navigation ()
+			self:halt_in_tracks ()
+			self._evaluating_handler = false
 			return false
 		end
-	end,
+
+		if self:navigation_finished () then
+			self._evaluating_handler = false
+			return false
+		end
+
+		-- Evaluate this handler every (on average) 50 ticks.
+		local delay = math.round (50 * (dtime / 0.05))
+		if pr:next (1, delay) == 1 then
+			if pr:next (1, self._max_temper)
+				<= self._temper + 1 then
+				self:just_tame (self_pos, driver)
+				self._evaluating_handler = false
+				self:post_attach (driver)
+				return false
+			end
+
+			self._temper = math.min (self._temper + 5,
+						self._max_temper)
+			detach_driver (self)
+			self:enrage ()
+			self._evaluating_handler = false
+			return false
+		end
+		return true
+	elseif driver and not self.tamed then
+		local target = self:pacing_target (self_pos, 5, 4, {"group:solid"})
+		if target then
+			self:gopath (target, nil, false, 1.2)
+			self._evaluating_handler = true
+			return "_evaluating_handler"
+		end
+		return false
+	end
+end
+
+-- local function horse_cancel_rearing (self, self_pos, dtime)
+-- 	-- TODO: rearing animations.
+-- end
+
+function horse:begin_eating (dtime)
+	-- TODO: eating animation.
+	self._eating = dtime
+end
+
+function horse:stop_eating ()
+	self._eating = nil
+end
+
+function horse:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
+	-- Regenerate health when idle.
+	if pr:next (1, math.round (900 * dtime / 0.05)) == 1 then
+		self.health = self.health + 1
+		local maxhp = self.object:get_properties ().hp_max
+		if self.health > maxhp then
+			self.health = maxhp
+		end
+	end
+
+	if self._eats then
+		if not self._eating
+			and not self._rider
+			and pr:next (1, math.round (300 * dtime / 0.05))
+			and self.standing_on == "mcl_core:dirt_with_grass" then
+			self:begin_eating (2.5)
+		end
+		if self._eating then
+			self._eating = self._eating - dtime
+			if self._eating <= 0 then
+				self:stop_eating ()
+			end
+		end
+	end
+end
+
+horse.ai_functions = {
+	mob_class.check_frightened,
+	horse_maybe_tame,
+	mob_class.check_breeding,
+	mob_class.check_following,
+	mob_class.follow_herd,
+	mob_class.check_pace,
+	-- horse_cancel_rearing,
 }
+
+------------------------------------------------------------------------
+-- Horse armor.
+------------------------------------------------------------------------
+
+function horse:set_armor_1 (iname, w)
+	local cstring
+	if minetest.get_item_group(iname, "armor_leather") > 0 then
+		local m = w:get_meta()
+		local cs = m:get_string("mcl_armor:color")
+		cstring = cs ~= "" and cs or nil
+	end
+	local armor = minetest.get_item_group(iname, "horse_armor")
+	self._horse_armor_stack = w:to_string ()
+	self.armor = armor
+	local agroups = self.object:get_armor_groups()
+	agroups.fleshy = self.armor
+	self.object:set_armor_groups(agroups)
+	if not self._naked_texture then
+		self._naked_texture = self.base_texture[2]
+	end
+	local tex = horse_extra_texture(self, cstring)
+	self.base_texture = tex
+	self:set_textures (tex)
+	local def = w:get_definition()
+	if def.sounds and def.sounds._mcl_armor_equip then
+		minetest.sound_play({name = def.sounds._mcl_armor_equip},
+			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
+	end
+end
+
+function horse:set_armor (clicker)
+	local w = clicker:get_wielded_item ()
+	local iname = w:get_name ()
+	if self._horse_armor_stack == "" then
+		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			w:take_item()
+			clicker:set_wielded_item(w)
+		end
+		self:set_armor_1 (iname, w)
+		self:update_armor_inv ()
+		return true
+	end
+end
+
+function horse:remove_armor (stack)
+	self._horse_armor_stack = ""
+	local def = stack:get_definition ()
+	if def.sounds and def.sounds._mcl_armor_unequip then
+		minetest.sound_play ({name = def.sounds._mcl_armor_unequip},
+			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
+	end
+	local tex = horse_extra_texture (self)
+	self.base_texture = tex
+	self:set_textures (tex)
+
+	-- Restore initial armor values.
+	self.armor = 100
+	local agroups = self.object:get_armor_groups()
+	agroups.fleshy = 100
+	self.object:set_armor_groups(agroups)
+end
+
+------------------------------------------------------------------------
+-- Horse inventories.
+------------------------------------------------------------------------
+
+local SADDLE_SLOT = 1
+local ARMOR_SLOT = 2
+
+local function armor_allow_move (inv, from_list, from_index, to_list, to_index, count, player)
+	return 0
+end
+
+local function armor_allow_put (inv, listname, index, stack, player)
+	if index == ARMOR_SLOT then
+		local armor = minetest.get_item_group (stack:get_name (),
+						       "horse_armor")
+		return armor > 1 and 1 or 0
+	elseif index == SADDLE_SLOT then
+		local saddle = stack:get_name () == "mcl_mobitems:saddle"
+		return saddle and 1 or 0
+	end
+	return 1
+end
+
+local function armor_on_put (horse, inv, listname, index, stack, player)
+	if index == SADDLE_SLOT then
+		horse:set_saddle (stack, nil)
+	elseif index == ARMOR_SLOT then
+		horse:set_armor_1 (stack:get_name (), stack)
+	end
+end
+
+local function armor_on_take (horse, inv, listname, index, stack, player)
+	if index == SADDLE_SLOT then
+		horse:remove_saddle ()
+	elseif index == ARMOR_SLOT then
+		horse:remove_armor (stack)
+	end
+end
+
+local horse_inventory_counter = 0
+
+function horse:get_staticdata_table ()
+	local supertable = mob_class.get_staticdata_table (self)
+	if supertable then
+		supertable._armor_inv = nil
+		supertable._armor_inv_name = nil
+	end
+	return supertable
+end
+
+function horse:mob_activate (staticdata, dtime)
+	mob_class.mob_activate (self, staticdata, dtime)
+	-- Update old horses.
+	if self._horse_armor and self._wearing_armor then
+		self._horse_armor_stack
+			= ItemStack (self._horse_armor):to_string ()
+	end
+	if self._saddle and type (self._saddle) ~= "string" then
+		self._saddle
+			= ItemStack ("mcl_mobitems:saddle"):to_string ()
+	end
+	if not self._saddle then
+		self._saddle = ""
+	end
+	if not self._horse_armor_stack then
+		self._horse_armor_stack = ""
+	end
+	self._horse_armor = nil
+	self:update_drops ()
+end
+
+function horse:on_deactivate (removal)
+	if self.driver then
+		mcl_player.set_inventory_formspec (self.driver, nil, 100)
+	end
+
+	mob_class.on_deactivate (self, removal)
+
+	if self._armor_inv_name then
+		minetest.remove_detached_inventory (self._armor_inv_name)
+		self._armor_inv_name = nil
+		self._armor_inv = nil
+	end
+end
+
+function horse:update_armor_inv ()
+	if not self._armor_inv then
+		return
+	end
+	local stack = ItemStack (self._saddle)
+	self._armor_inv:set_stack ("main", SADDLE_SLOT, stack)
+	stack = ItemStack (self._horse_armor_stack)
+	self._armor_inv:set_stack ("main", ARMOR_SLOT, stack)
+end
+
+function horse:generate_inventory_formspec ()
+	if not self._armor_inv_name then
+		return "formspec_version[6]"
+	end
+	local objectname = mcl_util.get_object_name (self.object)
+	objectname = minetest.formspec_escape (objectname)
+	local armorname = self._armor_inv_name
+	armorname = minetest.formspec_escape ("detached:" .. armorname)
+	local chest_itemslots
+	if self._chest then
+		chest_itemslots = string.format ("list[detached:%s;main;5.375,0.875;5,3;]",
+					 self._inv_id)
+	else
+		chest_itemslots = "image[5.375,0.825;6.10,3.625;mcl_formspec_itemslot.png;2]"
+	end
+	local nslots
+	if can_equip_horse_armor (self.name) then
+		nslots = 2
+	else
+		nslots = 1
+	end
+	return table.concat ({
+		"formspec_version[6]",
+		"size[11.75,10.45]",
+		"position[0.5,0.5]",
+		string.format ("label[0.375,0.5;%s]", objectname),
+		mcl_formspec.get_itemslot_bg_v4 (0.375, 0.875, 1, nslots),
+		string.format ("list[%s;main;0.375,0.875;1,%d;]", armorname, nslots),
+		"image[1.55,0.825;3.625,3.625;mcl_inventory_background9.png;2]",
+		string.format ("model[1.55,0.875;3.625,3.5;horse;mobs_mc_horse.b3d;%s;%s]",
+			       table.concat (self.base_texture, ","), "0,45,0"),
+		self._chest and mcl_formspec.get_itemslot_bg_v4 (5.375, 0.875, 5, 3) or "",
+		chest_itemslots,
+		-- Main inventory.
+		mcl_formspec.get_itemslot_bg_v4 (0.375, 5, 9, 3),
+		"list[current_player;main;0.375,5;9,3;9]",
+		-- Hotbar.
+		mcl_formspec.get_itemslot_bg_v4 (0.375, 8.95, 9, 1),
+		"list[current_player;main;0.375,8.95;9,1;]",
+		string.format ("listring[%s;main]", armorname),
+		self._chest and string.format ("listring[detached:%s;main]",
+					self._inv_id) or "",
+		"listring[current_player;main]",
+	})
+end
+
+function horse:post_attach (player)
+	if not self._armor_inv then
+		-- Create a temporary inventory that holds armor and
+		-- saddles and populate it with any such items already
+		-- present.
+		local name = self.name .. ":" .. horse_inventory_counter
+		horse_inventory_counter = horse_inventory_counter + 1
+		local inventory = minetest.create_detached_inventory (name, {
+			allow_move = armor_allow_move,
+			allow_put = armor_allow_put,
+			on_put = function (inv, listname, index, stack, player)
+				return armor_on_put (self, inv, listname, index, stack, player)
+			end,
+			on_take = function (inv, listname, index, stack, player)
+				return armor_on_take (self, inv, listname, index, stack, player)
+			end,
+		})
+		self._armor_inv_name = name
+		self._armor_inv = inventory
+		if can_equip_horse_armor (self.name) then
+			inventory:set_size ("main", 2)
+		else
+			inventory:set_size ("main", 1)
+		end
+		self:update_armor_inv ()
+	end
+	local formspec = self:generate_inventory_formspec ()
+	mcl_player.set_inventory_formspec (player, formspec, 100)
+	mcl_entity_invs.load_inv (self, 15)
+end
+
+function horse:attach (player)
+	mob_class.attach (self, player)
+	if not self.tamed then
+		return
+	end
+	self:post_attach (player)
+end
+
+function horse:detach (player)
+	mob_class.detach (self, player)
+	if not self.tamed then
+		return
+	end
+	mcl_player.set_inventory_formspec (player, nil, 100)
+	mcl_entity_invs.save_inv (self)
+	if self._armor_inv_name then
+		minetest.remove_detached_inventory (self._armor_inv_name)
+		self._armor_inv_name = nil
+		self._armor_inv = nil
+	end
+end
+
+function horse:set_textures (texturelist)
+	mob_class.set_textures (self, texturelist)
+	if not self.tamed then
+		return
+	end
+	if self.driver then
+		local formspec = self:generate_inventory_formspec ()
+		mcl_player.set_inventory_formspec (self.driver, formspec, 100)
+	end
+end
+
+function horse:drop_armor (bonus)
+	local self_pos = self.object:get_pos ()
+	if self._saddle ~= "" then
+		local stack = ItemStack (self._saddle)
+		mcl_util.drop_item_stack (self_pos, stack)
+	end
+	if self._horse_armor_stack ~= "" then
+		local stack = ItemStack (self._horse_armor_stack)
+		mcl_util.drop_item_stack (self_pos, stack)
+	end
+	self._horse_armor_stack = ""
+	self._saddle = ""
+end
+
+------------------------------------------------------------------------
+-- Horse mounting.
+------------------------------------------------------------------------
+
+function horse:should_drive ()
+	return self._saddle ~= "" and mob_class.should_drive (self)
+end
 
 function horse:apply_driver_input (velocity, self_pos, moveresult, dtime)
 	mob_class.apply_driver_input (self, velocity, self_pos, moveresult, dtime)
@@ -456,7 +650,330 @@ function horse:post_apply_driver_input (velocity, self_pos, moveresult, dtime)
 	end
 end
 
-mcl_mobs.register_mob("mobs_mc:horse", horse)
+function horse:do_custom (dtime)
+	if self.driver then
+		local ctrl = self.driver:get_player_control ()
+		if ctrl and ctrl.sneak then
+			detach_driver (self)
+		end
+	else
+		self._jump_charge = nil
+		detach_driver (self)
+
+		if self._armor_inv_name then
+			minetest.remove_detached_inventory (self._armor_inv_name)
+			self._armor_inv_name = nil
+			self._armor_inv = nil
+		end
+	end
+
+	if not self.v2 then
+		local vsize = self.object:get_properties().visual_size
+		self.v2 = 0
+		self.max_speed_forward = 7
+		self.max_speed_reverse = 2
+		self.accel = 6
+		self.terrain_type = 3
+		self.driver_attach_at = {x = 0, y = 4.17, z = -1.75}
+		self.driver_eye_offset = {x = 0, y = 3, z = 0}
+		self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
+	end
+
+	return true
+end
+
+function horse:on_die ()
+	if self.driver then
+		detach_driver(self)
+	end
+end
+
+function horse:on_rightclick (clicker)
+	if not clicker or not clicker:is_player() then
+		return
+	end
+
+	local item = clicker:get_wielded_item()
+	local iname = item:get_name()
+	local creative = minetest.is_creative_enabled (clicker:get_player_name())
+
+	if self.child and not self._food_items[iname] then
+		return
+	end
+
+	if self._inv_id then
+		if not self._chest and iname == "mcl_chests:chest" then
+			item:take_item()
+			clicker:set_wielded_item(item)
+			self._chest = true
+			-- Update texture
+			if not self._naked_texture then
+				-- Base horse texture without chest or saddle
+				self._naked_texture = self.base_texture[2]
+			end
+			local tex = horse_extra_texture(self)
+			self.base_texture = tex
+			self:set_textures (tex)
+			self:update_drops ()
+			return
+		elseif self._chest and clicker:get_player_control().sneak then
+			mcl_entity_invs.show_inv_form(self,clicker)
+			return
+		end
+	end
+
+	-- Feed on and potentially consume food items.
+	local food_desc = self._food_items[iname]
+	if food_desc then
+		local heal, age, temper, breed = unpack (food_desc)
+		local consume
+
+		-- Heal and/or age mob if necessary.
+		local maxhp = self.object:get_properties ().hp_max
+		if heal and self.health < maxhp then
+			self.health = math.min (maxhp, self.health + heal)
+			consume = true
+		end
+		if self.child and age > 0 then
+			self.hornytimer = self.hornytimer + age
+			consume = true
+		end
+		if temper and not self.child then
+			if self._temper < self._max_temper then
+				self._temper = self._temper + temper
+				if self._temper > self._max_temper then
+					self._temper = self._max_temper
+				end
+				consume = true
+			end
+		end
+		if breed and not self.child
+			and self:feed_tame (clicker, 0, true, false) then
+			consume = true
+		end
+		if consume and not creative then
+			item:take_item ()
+			clicker:set_wielded_item (item)
+		end
+		return
+	end
+
+	if self.tamed and not self.child and self.owner == clicker:get_player_name() then
+		if not self.driver and clicker:get_player_control().sneak then
+			return
+		elseif not self.driver
+			and iname == "mcl_mobitems:saddle"
+			and self:set_saddle (item, clicker) then
+			return
+		elseif minetest.get_item_group(iname, "horse_armor") > 0
+			and can_equip_horse_armor(self.name)
+			and not self.driver and self:set_armor(clicker) then
+			return
+		end
+	end
+
+	-- It shouldn't be possible to mount an untamed horse without
+	-- an empty hand.
+	if not item:is_empty () and not self.tamed then
+		self:enrage ()
+		return
+	end
+
+	if not self.driver then
+		self._jump_charge = nil
+		attach_driver (self, clicker)
+	end
+end
+
+function horse:set_saddle (stack, clicker)
+	if self._saddle == "" then
+		self._saddle = stack:to_string ()
+		if clicker then
+			local name = clicker:get_player_name ()
+			if not minetest.is_creative_enabled (name) then
+				stack:take_item ()
+				clicker:set_wielded_item (stack)
+			end
+			self:update_armor_inv ()
+		end
+		if not self._naked_texture then
+			self._naked_texture = self.base_texture[2]
+		end
+		local tex = horse_extra_texture(self)
+		self.base_texture = tex
+		self:set_textures (tex)
+		minetest.sound_play({name = "mcl_armor_equip_leather"},
+			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
+		return true
+	end
+end
+
+function horse:remove_saddle ()
+	self._saddle = ""
+	if not self._naked_texture then
+		self._naked_texture = self.base_texture[2]
+	end
+	local tex = horse_extra_texture (self)
+	self.base_texture = tex
+	self:set_textures (tex)
+	minetest.sound_play ({name = "mcl_armor_unequip_leather"},
+		{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
+end
+
+function horse:update_drops ()
+	self.drops = { base_drop, }
+	if self._chest then
+		table.insert(self.drops,{
+			name = "mcl_chests:chest",
+			chance = 1,
+			min = 1,
+			max = 1,
+		})
+	end
+end
+
+------------------------------------------------------------------------
+-- Horse breeding and attributes.
+------------------------------------------------------------------------
+
+function horse:generate_hp_max (rand, rand1)
+	return 15.0 + (rand or pr:next (0, 8)) + (rand1 or pr:next (0, 9))
+end
+
+local r = 1 / 2147483647
+
+function horse:generate_jump_height (rand)
+	local t1, t2, t3
+	t1 = (rand or pr:next (0, 2147483647) * r) * 0.2
+	t2 = (rand or pr:next (0, 2147483647) * r) * 0.2
+	t3 = (rand or pr:next (0, 2147483647) * r) * 0.2
+
+	return (0.4 + t1 + t2 + t3) * 20
+end
+
+function horse:generate_movement_speed (rand)
+	local t1, t2, t3
+	t1 = (rand or pr:next (0, 2147483647) * r) * 0.3
+	t2 = (rand or pr:next (0, 2147483647) * r) * 0.3
+	t3 = (rand or pr:next (0, 2147483647) * r) * 0.3
+
+	return (0.45 + t1 + t2 + t3) * 20 * 0.25
+end
+
+function horse:initial_movement_properties ()
+	local hp_max = self:generate_hp_max ()
+	local jump_height = self:generate_jump_height ()
+	local speed = self:generate_movement_speed ()
+
+	self.object:set_properties ({
+			hp_max = hp_max,
+	})
+	self.jump_height = jump_height
+	self.movement_speed = speed
+	self.health = hp_max
+	self.hp_max = hp_max
+end
+
+function horse:derive_child_properties (p1, p2)
+	local hp_max = self:generate_hp_max (8, 9)
+	local jump_max = self:generate_jump_height (1.0)
+	local speed_max = self:generate_movement_speed (1.0)
+	local hp_min = self:generate_hp_max (0, 0)
+	local jump_min = self:generate_jump_height (0.0)
+	local speed_min = self:generate_movement_speed (0.0)
+	local props_p1 = p1.object:get_properties ()
+	local props_p2 = p2.object:get_properties ()
+	local value = self:child_properties (props_p1.hp_max,
+					     props_p2.hp_max,
+					     hp_min, hp_max)
+	self.object:set_properties ({
+		hp_max = value,
+	})
+	self.hp_max = hp_max
+	self.health = value
+	value = self:child_properties (p1:stock_value ("jump_height"),
+				       p2:stock_value ("jump_height"),
+				       jump_min, jump_max)
+	self.jump_height = value
+	value = self:child_properties (p1:stock_value ("movement_speed"),
+				       p2:stock_value ("movement_speed"),
+				       speed_min, speed_max)
+	self.movement_speed = value
+end
+
+-- https://old.reddit.com/r/Minecraft/comments/14zdge0/statistics_and_psuedocode_for_the_new_horse/
+function horse:child_properties (p1, p2, min, max)
+	p1 = math.min (math.max (p1, min), max)
+	p2 = math.min (math.max (p2, min), max)
+	local t1 = 0.15 * (max - min)
+	local t2 = math.abs (p1 - p2) + t1 * 2
+	local t3 = (p1 + p2) / 2
+	local t4 = pr:next (0, 2147483647) * r
+	local t5 = pr:next (0, 2147483647) * r
+	local t6 = pr:next (0, 2147483647) * r
+	local t7 = (t4 + t5 + t6) / 3
+	local t8 = t3 + t2 * t7
+	if t8 > max then
+		return max - (t8 - max)
+	elseif t8 < min then
+		return min + (min - t8)
+	end
+	return t8
+end
+
+function horse:on_breed (parent1, parent2)
+	local pos = parent1.object:get_pos()
+	local child = mcl_mobs.spawn_child(pos, parent1.name)
+	if child then
+		local ent_c = child:get_luaentity()
+		local p = math.random(1, 2)
+		local child_texture
+		if p == 1 then
+			if parent1._naked_texture then
+				child_texture = parent1._naked_texture
+			else
+				child_texture = parent1.base_texture[2]
+			end
+		else
+			if parent2._naked_texture then
+				child_texture = parent2._naked_texture
+			else
+				child_texture = parent2.base_texture[2]
+			end
+		end
+		local splt = string.split(child_texture, "^")
+		if #splt >= 2 then
+			local base = splt[1]
+			local markings = splt[2]
+			local mutate_base = pr:next (1, 9)
+			local mutate_markings = pr:next (1, 9)
+			if mutate_base == 1 then
+				local b = math.random(1, #horse_base)
+				base = horse_base[b]
+			end
+			if mutate_markings == 1 then
+				local m = math.random(1, #horse_markings)
+				markings = horse_markings[m]
+			end
+			child_texture = base
+			if markings ~= "" then
+				child_texture = child_texture .. "^" .. markings
+			end
+		end
+		ent_c.base_texture = { "blank.png", child_texture, "blank.png" }
+		ent_c._naked_texture = child_texture
+		ent_c:set_textures (ent_c.base_texture)
+		ent_c:derive_child_properties (parent1, parent2)
+
+		return false
+	end
+end
+
+mcl_mobs.register_mob ("mobs_mc:horse", horse)
+
+------------------------------------------------------------------------
+-- Skeleton & Zombie Horse
+------------------------------------------------------------------------
 
 local skeleton_horse = table.merge(horse, {
 	description = S("Skeleton Horse"),
@@ -483,6 +1000,7 @@ local skeleton_horse = table.merge(horse, {
 	harmed_by_heal = true,
 	_trap_age = 0,
 	_is_trap = false,
+	_eats = false,
 })
 
 function skeleton_horse:_on_lightning_strike ()
@@ -491,6 +1009,7 @@ function skeleton_horse:_on_lightning_strike ()
 end
 
 function skeleton_horse:do_custom (dtime, moveresult)
+	horse.do_custom (self, dtime, moveresult)
 	self._trap_age = self._trap_age + dtime
 	if self._trap_age > 900 then
 		self:safe_remove ()
@@ -508,6 +1027,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 	for player in mcl_util.connected_players (self_pos, 10) do
 		self._is_trap = false
 		mcl_lightning.strike (self_pos, true)
+		self.tamed = true
 
 		-- Spawn three horses.
 		local horses = { self.object, }
@@ -515,6 +1035,8 @@ local function check_skeleton_trap (self, self_pos, dtime)
 			local horse = minetest.add_entity (self_pos, self.name)
 			if horse then
 				table.insert (horses, horse)
+				local entity = horse:get_luaentity ()
+				entity.tamed = true
 			end
 		end
 
@@ -531,7 +1053,6 @@ local function check_skeleton_trap (self, self_pos, dtime)
 				}, vector.zero ())
 				-- Equip it with an enchanted iron
 				-- helmet between levels 5.0 and 23.
-				-- TODO: difficulty.
 				local stack = ItemStack ("mcl_armor:helmet_iron")
 				local level = 5.0 + math.random (18) * mob_factor
 				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
@@ -543,9 +1064,26 @@ local function check_skeleton_trap (self, self_pos, dtime)
 	end
 end
 
-skeleton_horse.ai_functions
-	= table.copy (mcl_mobs.mob_class.ai_functions)
-table.insert (skeleton_horse.ai_functions, 1, check_skeleton_trap)
+function skeleton_horse:initial_movement_properties ()
+	local jump_height = self:generate_jump_height ()
+	self.jump_height = jump_height
+end
+
+skeleton_horse.follow = {}
+skeleton_horse._food_items = {}
+
+function skeleton_horse:on_rightclick (clicker)
+	if self.tamed then
+		return horse.on_rightclick (self, clicker)
+	end
+end
+
+skeleton_horse.ai_functions = {
+	check_skeleton_trap,
+	mob_class.check_frightened,
+	mob_class.check_pace,
+	-- horse_cancel_rearing,
+}
 
 mcl_mobs.register_mob("mobs_mc:skeleton_horse", skeleton_horse)
 
@@ -569,10 +1107,18 @@ mcl_mobs.register_mob("mobs_mc:zombie_horse", table.merge(skeleton_horse, {
 		base_pitch = 0.5,
 		distance = 16,
 	},
+	ai_functions = {
+		mob_class.check_frightened,
+		mob_class.check_pace,
+	},
 }))
 
+------------------------------------------------------------------------
+-- Donkeys.
+------------------------------------------------------------------------
+
 local d = 0.86
-local donkey = table.merge(horse, {
+local donkey = table.merge (horse, {
 	description = S("Donkey"),
 	textures = {{"blank.png", "mobs_mc_donkey.png", "blank.png"}},
 	spawn_in_group = 3,
@@ -600,17 +1146,51 @@ local donkey = table.merge(horse, {
 		horse.collisionbox[5] * d,
 		horse.collisionbox[6] * d,
 	},
-	jump = true,
-	-- MC Wiki is completely wrong: the Minecraft value is 0.5,
-	-- not 0.175, and which multiplied by 20 yields 8.0.
-	jump_height = 8.0,
+	-- MC Wiki is completely wrong: the Minecraft value is 0.5
+	-- (not 0.4), not 0.175, and which multiplied by 20 yields
+	-- 10.0.
+	jump_height = 10.0,
 })
 
-mcl_mobs.register_mob("mobs_mc:donkey", donkey)
-mcl_entity_invs.register_inv("mobs_mc:donkey","Donkey",15,true)
+function donkey:initial_movement_properties ()
+	local hp_max = self:generate_hp_max ()
+
+	self.object:set_properties ({
+			hp_max = hp_max,
+	})
+	self.hp_max = hp_max
+	self.health = hp_max
+end
+
+function donkey:same_species (ent)
+	return ent.name == self.name
+		or ent.name == "mobs_mc:horse"
+end
+
+function donkey:on_breed (parent1, parent2)
+	-- parent1 (self) is guaranteed to be a donkey, because only
+	-- `same_species' is only overridden for them.
+
+	local name = parent2.name == "mobs_mc:horse"
+		and "mobs_mc:mule" or parent1.name
+	local pos = parent1.object:get_pos ()
+	local child = mcl_mobs.spawn_child (pos, name)
+	if child then
+		local ent_c = child:get_luaentity ()
+		ent_c:derive_child_properties (parent1, parent2)
+		return false
+	end
+end
+
+mcl_mobs.register_mob ("mobs_mc:donkey", donkey)
+mcl_entity_invs.register_inv ("mobs_mc:donkey", "Donkey", 15, true)
+
+------------------------------------------------------------------------
+-- Mules.
+------------------------------------------------------------------------
 
 local m = 0.94
-mcl_mobs.register_mob("mobs_mc:mule", table.merge(donkey, {
+local mule = table.merge(donkey, {
 	description = S("Mule"),
 	textures = {{"blank.png", "mobs_mc_mule.png", "blank.png"}},
 	visual_size = { x=horse.visual_size.x*m, y=horse.visual_size.y*m },
@@ -626,8 +1206,19 @@ mcl_mobs.register_mob("mobs_mc:mule", table.merge(donkey, {
 		horse.collisionbox[5] * m,
 		horse.collisionbox[6] * m,
 	},
-}))
-mcl_entity_invs.register_inv("mobs_mc:mule","Mule",15,true)
+})
+mule.ai_functions = {
+	mob_class.check_frightened,
+	horse_maybe_tame,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob ("mobs_mc:mule", mule)
+mcl_entity_invs.register_inv ("mobs_mc:mule", "Mule", 15, true)
+
+------------------------------------------------------------------------
+-- Spawning.
+------------------------------------------------------------------------
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:horse",
