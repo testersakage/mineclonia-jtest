@@ -112,8 +112,8 @@ local horse = {
 	runaway = true,
 	movement_speed = 6.75,
 	animation = {
-		stand_start = 0, stand_end = 0, stand_speed = 45,
-		walk_start = 0, walk_end = 40, walk_speed = 45,
+		stand_start = 0, stand_end = 0, stand_speed = 25,
+		walk_start = 0, walk_end = 40, walk_speed = 25,
 		run_start = 0, run_end = 40, run_speed = 50,
 	},
 	follow = {
@@ -306,6 +306,21 @@ function horse:ai_step (dtime)
 	end
 end
 
+function horse:set_animation_speed (custom_speed)
+	local anim = self._current_animation
+	if not anim then
+		return
+	end
+	local name = anim .. "_speed"
+	local normal_speed = self.animation[name]
+		or self.animation.speed_normal
+		or 25
+	local speed = custom_speed or normal_speed
+	local v = self:get_velocity ()
+	local scaled_speed = speed * self.frame_speed_multiplier
+	self.object:set_animation_frame_speed (scaled_speed * math.max (1, v / 2))
+end
+
 horse.ai_functions = {
 	mob_class.check_frightened,
 	horse_maybe_tame,
@@ -430,6 +445,13 @@ end
 
 function horse:mob_activate (staticdata, dtime)
 	mob_class.mob_activate (self, staticdata, dtime)
+	-- Reconfigure maximum HP.
+	if self.hp_max then
+		self.object:set_properties ({
+				hp_max = self.hp_max,
+		})
+		self.health = math.max (self.health, self.hp_max)
+	end
 	-- Update old horses.
 	if self._horse_armor and self._wearing_armor then
 		self._horse_armor_stack
