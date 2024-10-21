@@ -172,6 +172,7 @@ mcl_mobs.mob_class = {
 	climb_powder_snow = false,
 	breeding_possible = nil,
 	acceptable_pacing_target = nil,
+	fall_damage_multiplier = 1.0,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

@@ -25,6 +25,14 @@ function mob_class:_on_dispense(dropitem)
 	end
 end
 
+function mob_class:just_tame (self_pos, owner)
+	local x, z = self_pos.x, self_pos.z
+	self.tamed = true
+	self.owner = owner:get_player_name ()
+	mcl_mobs.effect ({x = x, y = self_pos.y + 0.7, z = z},
+		5, "heart.png", 2, 4, 2.0, 0.1)
+end
+
 function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 	local consume_food = false
 	local tamechance = tamechance or 1.0
@@ -194,7 +202,7 @@ function mob_class:beget_child (pos)
 	self:set_animation ("stand")
 	mate:set_animation ("stand")
 	if self.on_breed then
-		if self:on_breed (mate) == false then
+		if self:on_breed (self, mate) == false then
 			return
 		end
 	end
@@ -220,22 +228,10 @@ function mob_class:can_mate (with)
 	end
 	local ent = with:get_luaentity ()
 	if ent and ent.horny and ent.is_mob then
-		if ent.name == self.name then
+		if self:same_species (ent) then
 			-- Don't attempt to mate with mobs already
 			-- taken.
 			return not ent.mate or ent.mate == self.object
-		end
-
-		-- Match different variants of one mob.
-		-- FIXME: hideous code.
-		local entname = string.split (ent.name, ":")
-		local selfname = string.split (self.name, ":")
-		if entname[1] == selfname[1] then
-			entname = string.split (entname[2], "_")
-			selfname = string.split (selfname[2], "_")
-			if entname[1] == selfname[1] then
-				return not ent.mate or ent.mate == self
-			end
 		end
 	end
 	return false
@@ -250,7 +246,7 @@ function mob_class:same_species (ent)
 		entname = string.split (entname[2], "_")
 		selfname = string.split (selfname[2], "_")
 		if entname[1] == selfname[1] then
-			return not ent.mate or ent.mate == self.object
+			return true
 		end
 	end
 	return false
@@ -399,7 +395,7 @@ function mob_class:break_in(player)
 			end
 			temper_increase = 5
 		elseif self.driver and self.driver == player then
-			mcl_mobs.detach(player, vector.new(0, 0, 1))
+			self:detach(player, vector.new(0, 0, 1))
 		end
 		self.temper = self.temper + temper_increase
 		return true

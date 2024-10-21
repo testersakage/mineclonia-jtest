@@ -1,4 +1,11 @@
 # mcl_player
+## Inventory formspecs.
+
+### mcl_player.set_inventory_formspec (player, formspec, priority)
+Set PLAYER's formspec at the priority level PRIORITY to FORMSPEC or
+nil.  Formspecs of higher priorities will be displayed over those of
+lower ones.
+
 ## Globalsteps
 
 `mcl_player.register_globalstep(function(player, dtime))`

@@ -111,7 +111,7 @@ local strider = {
 		-- drop saddle when horse is killed while riding
 		-- also detach from horse properly
 		if self.driver then
-			mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+			self:detach(self.driver, {x = 1, y = 0, z = 1})
 		end
 	end,
 
@@ -159,7 +159,7 @@ local strider = {
 		-- Mount or detach player
 		if self.driver and clicker == self.driver then
 			-- Detach if already attached
-			mcl_mobs.detach(clicker, {x=1, y=0, z=0})
+			self:detach(clicker, {x=1, y=0, z=0})
 			return
 
 		elseif not self.driver and self.saddle == "yes" then
