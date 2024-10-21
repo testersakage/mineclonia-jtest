@@ -132,13 +132,13 @@ local function debug_log(tick, nevents, nupdates, nfaraway, npending, time, abor
 	local saborted = aborted and ", was aborted" or ""
 	local sfaraway = nfaraway ~= 0 and string.format(", %d far away events", nfaraway) or ""
 	minetest.log(string.format(
-		"[mcl_redstone] tick %d, %d events and %d updates processed%s, %d pending events, took %f seconds%s",
+		"[mcl_redstone] tick %d, %d events and %d updates processed%s, %d pending events, took %f ms%s",
 		tick,
 		nevents,
 		nupdates,
 		sfaraway,
 		npending,
-		time,
+		time / 1000,
 		saborted
 	))
 end
