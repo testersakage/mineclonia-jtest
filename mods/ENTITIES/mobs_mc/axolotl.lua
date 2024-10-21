@@ -110,6 +110,10 @@ local axolotl = {
 -- gazing, rather than a random position.
 ------------------------------------------------------------------------
 
+function axolotl:valid_enemy ()
+	return self._regeneration_time == nil
+end
+
 local function axolotl_regenerate (self, self_pos, dtime)
 	if self._regeneration_time then
 		self:cancel_navigation ()

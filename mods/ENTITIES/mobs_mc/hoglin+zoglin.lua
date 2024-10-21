@@ -501,6 +501,7 @@ function zoglin:should_attack (object)
 		return luaentity.name ~= "mobs_mc:creeper"
 			and luaentity.name ~= "mobs_mc:zoglin"
 			and luaentity.name ~= "mobs_mc:baby_zoglin"
+			and luaentity:valid_enemy ()
 	elseif object:is_player () then
 		return self:attack_player_allowed (object)
 	end
