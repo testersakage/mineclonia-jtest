@@ -24,7 +24,7 @@ function ringbuffer.new(size, initial_values)
 end
 
 function ringbuffer_class:insert(record)
-	assert(record)
+	assert(record ~= nil, "Trying to insert nil into ringbuffer")
 	-- position is zero based, so increment first and wrap when reaching size
 	self.position = self.position + 1
 	self.data[self.position] = record
