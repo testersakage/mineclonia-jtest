@@ -1,7 +1,9 @@
-local UPDATE_TICK = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
+mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
 local UPDATE_RANGE = (tonumber(minetest.settings:get("mcl_redstone_update_range")) or 8) * 16
 local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
-local TIME_BUDGET = math.max(0.01, UPDATE_TICK * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
+local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
+
+mcl_redstone.is_tick_frozen = false
 
 mcl_redstone._pending_updates = {}
 
@@ -141,14 +143,7 @@ local function debug_log(tick, nevents, nupdates, nfaraway, npending, time, abor
 	))
 end
 
-local timer = 0
-minetest.register_globalstep(function(dtime)
-	timer = timer + dtime
-	if timer < UPDATE_TICK then
-		return
-	end
-	timer = timer - UPDATE_TICK
-
+function mcl_redstone.tick_step()
 	local player_poses = {}
 	for _, player in pairs(minetest.get_connected_players()) do
 		table.insert(player_poses, player:get_pos())
@@ -173,7 +168,7 @@ minetest.register_globalstep(function(dtime)
 	local nupdates = 0
 	local nfaraway = 0
 
-	local function before_return(aborted)
+	local function log_redstone_events(aborted)
 		local time = get_time() - starttime
 		local npending = eventqueue:size()
 
@@ -183,7 +178,7 @@ minetest.register_globalstep(function(dtime)
 	local last_tick = current_tick
 	while eventqueue:size() > 0 and eventqueue:peek().tick <= current_tick do
 		if get_time() > endtime then
-			before_return(true)
+			log_redstone_events(true)
 			return
 		end
 
@@ -202,7 +197,7 @@ minetest.register_globalstep(function(dtime)
 
 	for h, pos in pairs(mcl_redstone._pending_updates) do
 		if get_time() > endtime then
-			before_return(true)
+			log_redstone_events(true)
 			return
 		end
 
@@ -211,6 +206,78 @@ minetest.register_globalstep(function(dtime)
 		mcl_redstone._pending_updates[h] = nil
 	end
 
-	before_return(false)
+	log_redstone_events(false)
 	current_tick = last_tick + 1
+end
+
+minetest.register_chatcommand("tick",
+{
+	description = "Allows to stop redstone ticking, speed it up, or freezing it. Note that \"ticks\" in this command actually refer to redstone ticks",
+	params = "step [ticks] | sprint <ticks> | freeze | unfreeze | rate <seconds per tick> | query",
+	privs = {server = true},
+	func = function(name, param)
+		local _, end_pos, operation = string.find(param, "^%s*(%a+)")
+		local _, _, arg = string.find(param, "^%s*([%a%d.]+)", end_pos + 1)
+
+		if operation == "query" then
+			return true, mcl_redstone.tick_speed
+		elseif operation == "freeze" then
+			mcl_redstone.is_tick_frozen = true
+			return true
+		elseif operation == "unfreeze" then
+			mcl_redstone.is_tick_frozen = false
+			return true
+		elseif operation == "rate" then
+			if tonumber(arg) then
+				mcl_redstone.tick_speed = tonumber(arg)
+				return true
+			else
+				return false, "second argument must be a number"
+			end
+		elseif operation == "sprint" then
+			if mcl_redstone.is_tick_frozen then
+				if tonumber(arg) then
+					local timer = minetest.get_us_time()
+					for i = 1, tonumber(arg) do
+						mcl_redstone.tick_step()
+					end
+					return true, string.format("sprint finished: took %sms", (minetest.get_us_time() - timer) / 1000)
+				else
+					return false, "second argument must be a number"
+				end
+			else
+				return false, "tick step can only be used when ticking is frozen"
+			end
+		elseif operation == "step" then
+			if mcl_redstone.is_tick_frozen then
+				if tonumber(arg) then
+					mcl_redstone.is_tick_frozen = false
+					mcl_redstone.after(tonumber(arg), function() mcl_redstone.is_tick_frozen = true end)
+					return true
+				elseif arg == nil then
+					mcl_redstone.tick_step()
+					return true
+				else
+					return false, "second argument must be a number"
+				end
+			else
+				return false, "tick step can only be used when ticking is frozen"
+			end
+		end
+
+		return false
+	end
+})
+
+local timer = 0
+minetest.register_globalstep(function(dtime)
+	if not mcl_redstone.is_tick_frozen then
+		timer = timer + dtime
+		if timer < mcl_redstone.tick_speed then
+			return
+		end
+		timer = timer - mcl_redstone.tick_speed
+
+		mcl_redstone.tick_step()
+	end
 end)
