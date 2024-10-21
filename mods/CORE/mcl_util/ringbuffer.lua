@@ -58,6 +58,7 @@ end
 
 function ringbuffer_class:serialize()
 	local data, wrap, offset = {}, self.size - self.position, 0
+	-- the oldest entry is at position + 1
 	for i = 1, wrap do
 		if self.data[self.position + i] then
 			data[i - offset] = self.data[self.position + i]
