@@ -30,7 +30,7 @@ How weight works: The probability of a single item stack being selected is weigh
 total_weight being the sum of all weight values in the items table. If you leave out the weight for
 all items, the likelihood of each item being selected is equal.
 
-Returns: Table of itemstrings
+Returns: Table of ItemStacks
 ]]
 function mcl_loot.get_loot(loot_definitions, pr)
 	local items = {}
@@ -95,7 +95,7 @@ Useful for filling chests.
 * multi_loot_definitions: Table of loot_definitions (see mcl_loot.get_loot)
 * pr: PseudoRandom object used for the randomness
 
-Returns: Table of itemstrings ]]
+Returns: Table of ItemStacks ]]
 function mcl_loot.get_multi_loot(multi_loot_definitions, pr)
 	local items = {}
 	for m=1, #multi_loot_definitions do
