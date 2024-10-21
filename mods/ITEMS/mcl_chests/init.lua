@@ -976,7 +976,7 @@ register_chest("trapped_chest",
 		connects_to = function(node, dir) return true end,
 	},
 	function(pos, node, _)
-		mcl_redstone.swap_node(1, pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
+		mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 		end
@@ -985,20 +985,20 @@ register_chest("trapped_chest",
 		local meta = minetest.get_meta(pos)
 		meta:set_int("players", 1)
 
-		mcl_redstone.swap_node(1, pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
+		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2, true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
 		end
 
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
-		mcl_redstone.swap_node(1, pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
+		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
 	end,
 	function(pos, node, _)
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 
-		mcl_redstone.swap_node(1, pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
-		mcl_redstone.swap_node(1, pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
+		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
+		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
 		if animate_chests then
 			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2,
 				true,
