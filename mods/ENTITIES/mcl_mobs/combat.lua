@@ -377,6 +377,9 @@ function mob_class:should_attack (object)
 		and not self:node_in_restriction (object:get_pos ()) then
 		return false
 	elseif entity and entity.is_mob then
+		if not entity:valid_enemy () then
+			return false
+		end
 		if self.attack_animals and entity.passive then
 			return true
 		end
@@ -407,7 +410,8 @@ function mob_class:should_continue_to_attack (object)
 		return false
 	end
 	local entity = object:get_luaentity ()
-	if entity and entity.is_mob and entity.dead then
+	if entity and entity.is_mob
+		and (entity.dead or not entity:valid_enemy ()) then
 		return false
 	end
 	return object:get_hp () > 0
@@ -799,6 +803,10 @@ function mob_class:detection_multiplier_for_object (object)
 
 	factor = factor * mcl_armor.get_headpiece_factor (object, self.name)
 	return factor
+end
+
+function mob_class:valid_enemy ()
+	return true
 end
 
 function mob_class:attack_default (self_pos, dtime, esp)

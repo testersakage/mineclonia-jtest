@@ -368,6 +368,7 @@ function wither_def:should_attack (object)
 	local luaentity = object:get_luaentity ()
 	return luaentity
 		and luaentity.is_mob
+		and luaentity:valid_enemy ()
 		and not luaentity.harmed_by_heal
 		and luaentity.name ~= "mobs_mc:ghast"
 end

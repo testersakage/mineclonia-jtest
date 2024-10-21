@@ -623,6 +623,7 @@ end
 function enderman:should_attack (object)
 	local entity = object:get_luaentity ()
 	return entity and entity.name == "mobs_mc:endermite"
+		and entity:valid_enemy ()
 end
 
 function enderman:attack_custom (self_pos, dtime)
