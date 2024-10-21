@@ -1,6 +1,8 @@
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
+local EJECTITEM_INTERVAL = 0.5
+local LOOT_KEY = modname .. ":loot"
 local VISITED_KEY = modname .. ":visited_players"
 local RINGBUFFER_SIZE = tonumber(minetest.settings:get("mcl_vaults_looter_list_length")) or 128
 
@@ -14,16 +16,47 @@ local function try_open(pos, player)
 	return rb:insert_if_not_exists(player:get_player_name(), true)
 end
 
-local function eject_items(pos, name, list)
-	if not list or #list == 0 then
-		local node = minetest.get_node(pos)
-		node.name = "mcl_vaults:"..name
-		minetest.swap_node(pos, node)
-		return
-	end
-	minetest.add_item(vector.offset(pos, 0, 0.5, 0), table.remove(list))
-	minetest.after(0.5, eject_items, pos, name, list)
+local function get_vault_def(pos)
+	local node = pos and minetest.get_node(pos)
+	local def = node and minetest.registered_nodes[node.name]
+	return def and def._mcl_vault_name and mcl_vaults.registered_vaults[def._mcl_vault_name]
 end
+
+local function generate_loot(pos)
+	local def = get_vault_def(pos)
+	if def then
+		local loot = {}
+		for _, stack in pairs(mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time()))) do
+			table.insert(loot, stack:to_string())
+		end
+		local meta = minetest.get_meta(pos)
+		meta:set_string(LOOT_KEY, minetest.serialize(loot))
+		meta:mark_as_private(LOOT_KEY)
+	end
+end
+
+local function get_next_loot(pos)
+	local meta = minetest.get_meta(pos)
+	local loot_string = meta:get_string(LOOT_KEY)
+	local loot = minetest.deserialize(loot_string)
+	if type(loot) ~= "table" then
+		-- loot data missing or invalid -> clean metadata
+		if loot_string ~= "" then
+			minetest.log("warning", "[mcl_vaults]: cleaning invalid loot data at pos " .. minetest.pos_to_string(pos, 0) .. ": " .. dump(loot_string))
+		end
+		meta:set_string(LOOT_KEY, "")
+		loot = {}
+	end
+	local next_item = table.remove(loot, 1)
+	if #loot > 0 then
+		meta:set_string(LOOT_KEY, minetest.serialize(loot))
+		meta:mark_as_private(LOOT_KEY)
+	else
+		meta:set_string(LOOT_KEY, "")
+	end
+	return next_item, loot[1]
+end
+
 
 local tpl = {
 	drawtype = "allfaces_optional",
@@ -31,8 +64,8 @@ local tpl = {
 	paramtype = "light",
 	description = S("Vault"),
 	_tt_help = S("Ejects loot when opened with the key"),
-	_doc_items_longdesc = S("A vault ejects loot when opened with the right key. It can only be opnend once by each player."),
-	_doc_items_usagehelp = S("A vault ejects loot when opened with the right key. It can only be opnend once by each player."),
+	_doc_items_longdesc = S("A vault ejects loot when opened with the right key. It can only be opened once by each player."),
+	_doc_items_usagehelp = S("A vault ejects loot when opened with the right key. It can only be opened once by each player."),
 	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1, not_in_creative_inventory = 1},
 	is_ground_content = false,
 	drop = "",
@@ -49,44 +82,65 @@ minetest.register_entity("mcl_vaults:item_entity", {
 		pointable = true,
 		static_save = false,
 	},
-	_next_item = function(self)
-		local i = mcl_loot.get_multi_loot(self._loot, PseudoRandom(os.time()))[1]:get_name()
-		self.object:set_properties({
-			wield_item = i,
-		})
-	end,
 	_check_players_near = function(self)
 		for _, v in pairs(minetest.get_objects_inside_radius(self._pos, 5)) do
 			if v:is_player() and can_open(self._pos, v) then return true end
 		end
 	end,
+	_deactivate = function(self, node)
+		node.name = self._vault_name
+		minetest.swap_node(self._pos, node)
+		self.object:remove()
+	end,
+	_display_item = function(self, item_name)
+		self.object:set_properties({
+			wield_item = item_name,
+		})
+	end,
 	on_step = function(self, dtime)
-		self._timer = (self._timer or SHOWITEM_INTERVAL) - dtime
+		self._timer = (self._timer or 0) - dtime
 		if self._timer < 0 then
 			local node = minetest.get_node(self._pos)
-			if node.name ~= self._vault_on_name then
-				-- vault node changed, probably ejecting -> remove entity
-				self.object:remove()
-			elseif not self:_check_players_near() then
-				-- no player near -> deactivate
-				node.name = self._vault_name
-				minetest.swap_node(self._pos, node)
-				self.object:remove()
+			if node.name == self._vault_on_name then
+				if self:_check_players_near() then
+					-- active vault and player still there -> show next item
+					self._timer = SHOWITEM_INTERVAL
+					local item = mcl_loot.get_multi_loot(self._loot, self._pr)[1]:get_name()
+					self:_display_item(item)
+					-- TODO: manage particles
+				else
+					-- no player near -> deactivate
+					self:_deactivate(node)
+				end
+			elseif node.name == self._vault_ejecting_name then
+				self._timer = EJECTITEM_INTERVAL
+				local loot, preview = get_next_loot(self._pos)
+				if loot then
+					minetest.add_item(vector.offset(self._pos, 0, 0.5, 0), loot)
+					-- TODO: create particles
+				end
+				if preview then
+					self:_display_item(ItemStack(preview):get_name())
+				else
+					-- no more loot -> deactivate
+					self:_deactivate(node)
+				end
 			else
-				-- active vault and player still there -> show next item
-				self._timer = SHOWITEM_INTERVAL
-				self:_next_item()
+				-- vault node changed -> remove entity
+				self.object:remove()
 			end
 		end
 	end,
-	on_activate = function(self, staticdata, dtime_s)
-		local s = minetest.deserialize(staticdata)
-		if s and s.loot then
-			self._pos = s.pos
-			self._vault_name = "mcl_vaults:" .. s.name
+	on_activate = function(self)
+		self._pos = self.object:get_pos()
+		local def = get_vault_def(self._pos)
+		if def then
+			self._vault_name = "mcl_vaults:" .. def.name
 			self._vault_on_name = self._vault_name .. "_on"
-			self._loot = s.loot
-			self:_next_item()
+			self._vault_ejecting_name = self._vault_name .. "_ejecting"
+			self._loot = def.loot
+			self._pr = PcgRandom(os.time())
+			self._timer = 0
 			self.object:set_armor_groups({ immortal = 1 })
 		else
 			self.object:remove()
@@ -95,20 +149,47 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	end,
 })
 
-local function create_display_item(pos, def)
-	return minetest.add_entity(pos, "mcl_vaults:item_entity", minetest.serialize({loot = def.loot, name = def.name, pos = pos}))
+local function activate_item_entity(pos)
+	local entity
+
+	local count = 0
+	for o in minetest.objects_inside_radius(pos, 0.1) do
+		local lua_entity = o:get_luaentity()
+		if lua_entity.name == "mcl_vaults:item_entity" then
+			count = count + 1
+			if count == 1 then
+				entity = o
+				lua_entity._timer = 0 -- activate
+			else
+				-- remove any superfluous entity
+				minetest.log("warning", "[mcl_vaults] more than one item entity found at " .. minetest.pos_to_string(pos, 0))
+				o:remove()
+			end
+		end
+	end
+
+	return entity or minetest.add_entity(pos, "mcl_vaults:item_entity")
 end
 
+-- Activate node at position `pos`.
+-- Creates an entity inside the vault that displays potential loot.
 function mcl_vaults.activate(pos)
-	local node = minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
-	if def and def._mcl_vault_name and minetest.get_item_group(node.name, "vault") == 1 then
-		node.name = "mcl_vaults:"..def._mcl_vault_name.."_on"
+	local def = get_vault_def(pos)
+	if def then
+		local node = minetest.get_node(pos)
+		node.name = "mcl_vaults:"..def.name.."_on"
 		minetest.swap_node(pos, node)
-		create_display_item(pos, mcl_vaults.registered_vaults[def._mcl_vault_name])
+		activate_item_entity(pos)
 	end
 end
 
+-- Register new type of vault.
+--
+-- The `def` needs to define the loot, a key item that unlocks the loot and the
+-- properties of the inactive, active, and ejecting variant.
+--
+-- The code currently assumes that `#mcl_loot.get_multi_loot(loot, pr) > 0`,
+-- i.e. that at least some loot components have `stacks_min > 0`.
 function mcl_vaults.register_vault(name, def)
 	assert(type(name) == "string", "[mcl_vaults] trying to register vault without a valid (string) name")
 	assert(def.loot, "[mcl_vaults] vault "..tostring(name).." does not define a loot table.")
@@ -130,6 +211,7 @@ function mcl_vaults.register_vault(name, def)
 			end
 		end
 	}, def.node_off))
+
 	minetest.register_node(":mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 3 }),
@@ -138,20 +220,34 @@ function mcl_vaults.register_vault(name, def)
 	minetest.register_node(":mcl_vaults:"..name.."_on", table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 2 }),
-		on_construct = function(pos)
-			create_display_item(pos, def)
-		end,
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+			-- generate loot and store it in private node metadata
+			-- do this before actually opening the vault to prevent
+			-- it from getting lost in a badly timed server crash
+			generate_loot(pos, node)
 			if itemstack:get_name() == keyitem and try_open(pos, clicker) then
-				local loot = mcl_vaults.registered_vaults[name].loot
-				eject_items(pos, name, mcl_loot.get_multi_loot(loot, PcgRandom(os.time())))
 				node.name = "mcl_vaults:"..name.."_ejecting"
 				minetest.swap_node(pos, node)
 				if not minetest.is_creative_enabled(clicker:get_player_name()) then
 					itemstack:take_item()
 				end
+				-- the item entity handles ejecting the loot and
+				-- finally deactivating the vault; it is
+				-- recreated on server restart
+				activate_item_entity(pos)
 				return itemstack
 			end
 		end
 	}, def.node_on))
+
+	minetest.register_lbm({
+		name = "mcl_vaults:" .. name,
+		label = "Activate vault item entity",
+		nodenames = {
+			"mcl_vaults:" .. name .. "_on",
+			"mcl_vaults:" .. name .. "_ejecting",
+		},
+		run_at_every_load = true,
+		action = activate_item_entity,
+	})
 end
