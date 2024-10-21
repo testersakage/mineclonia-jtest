@@ -70,7 +70,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		-- drop saddle when horse is killed while riding
 		-- also detach from horse properly
 		if self.driver then
-			mcl_mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+			self:detach(self.driver, {x = 1, y = 0, z = 1})
 		end
 	end,
 
@@ -141,7 +141,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 		-- Mount or detach player
 		if self.driver and clicker == self.driver then -- and self.driver:get_wielded_item():get_name() ~= "mcl_mobitems:carrot_on_a_stick" then -- Note: This is for when the ability to make the pig go faster is implemented
 			-- Detach if already attached
-			mcl_mobs.detach(clicker, {x=1, y=0, z=0})
+			self:detach(clicker, {x=1, y=0, z=0})
 			return
 
 		elseif not self.driver and self.saddle == "yes" then
@@ -186,7 +186,7 @@ mcl_mobs.register_mob("mobs_mc:pig", {
 			if not controls.sneak then
 				return
 			end
-			mcl_mobs.detach (self.driver, {x = 1, y = 0, z = 1})
+			self:detach (self.driver, {x = 1, y = 0, z = 1})
 		end
 	end,
 })
