@@ -423,6 +423,9 @@ function spawn_one_skeleton (object, aa, bb, self_pos)
 end
 
 function wither_def:spawn_skeletons (self_pos)
+	if mcl_vars.difficulty <= 1 then
+		return
+	end
 	local aa = vector.offset (self_pos, -7, -2, -7)
 	local bb = vector.offset (self_pos, 7, 2, 7)
 	-- Search for valid spawn positions within a 15x4x15 area
