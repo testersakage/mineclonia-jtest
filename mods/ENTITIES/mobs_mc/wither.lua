@@ -148,7 +148,6 @@ function wither_def:on_spawn ()
 	})
 	self.health = properties.hp_max
 	self.hp_max = properties.hp_max
-	dbg.pp (self.hp_max)
 
 	minetest.sound_play("mobs_mc_wither_spawn", {gain=1.0})
 	self._custom_timer = 0.0
