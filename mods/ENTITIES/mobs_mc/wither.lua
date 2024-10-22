@@ -141,11 +141,14 @@ function wither_def:on_spawn ()
 	--   - Easy: 0.5
 
 	local properties = self.object:get_properties ()
-	local health_factor = 1.0 - (mcl_vars.difficulty - 3) * 0.25
+	local health_factor = 1.0 - (3 - mcl_vars.difficulty) * 0.25
 	properties.hp_max = math.max (0.5, health_factor) * properties.hp_max
 	self.object:set_properties ({
 			hp_max = properties.hp_max,
 	})
+	self.health = properties.hp_max
+	self.hp_max = properties.hp_max
+	dbg.pp (self.hp_max)
 
 	minetest.sound_play("mobs_mc_wither_spawn", {gain=1.0})
 	self._custom_timer = 0.0
@@ -157,6 +160,16 @@ end
 
 function wither_def:mob_activate (staticdata, dtime)
 	mcl_mobs.mob_class.mob_activate (self, staticdata, dtime)
+
+	-- Restore the max health calculated at spawn time, which is
+	-- lost when the object is unloaded.
+	if self.hp_max then
+		self.object:set_properties ({
+				hp_max = self.hp_max,
+		})
+		self.health = math.min (self.health, self.hp_max)
+	end
+
 	local properties = self.object:get_properties ()
 	if not self._wither_state then
 		-- Upgrade old withers.
