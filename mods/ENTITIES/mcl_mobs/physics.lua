@@ -766,6 +766,7 @@ local AIR_FRICTION		= 0.91
 local WATER_DRAG		= 0.8
 local AQUATIC_WATER_DRAG	= 0.9
 local AQUATIC_GRAVITY		= -0.1
+local SPRINTING_WATER_DRAG	= 0.9
 local LAVA_FRICTION		= 0.5
 local LAVA_SPEED		= 0.4
 local FLYING_LIQUID_SPEED	= 0.4
@@ -806,10 +807,16 @@ function mob_class:accelerate_relative (acc, speed)
 end
 
 function mob_class:jump_actual (v)
-	self.order = ""
 	self:set_animation ("jump")
 	self:mob_sound ("jump")
-	v = {x = v.x, y = self.jump_height, z = v.z,}
+	v = vector.new (v.x, self.jump_height, v.z)
+
+	-- Apply acceleration if sprinting.
+	if self._sprinting then
+		local yaw = self:get_yaw ()
+		v.x = v.x + math.sin (yaw) * -4.0
+		v.z = v.z + math.cos (yaw) * 4.0
+	end
 	return v
 end
 
@@ -931,7 +938,11 @@ function mob_class:motion_step (dtime, moveresult)
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
 	if standin.groups.water then
-		local friction = self.water_friction * velocity_factor
+		local water_friction = self.water_friction
+		if self._sprinting then
+			water_friction = SPRINTING_WATER_DRAG
+		end
+		local friction = water_friction * velocity_factor
 		local speed = self.water_velocity
 
 		-- Apply depth strider.
@@ -961,12 +972,16 @@ function mob_class:motion_step (dtime, moveresult)
 
 		-- Apply the new velocity in whole.
 		v_scale = (1 - p) / (1 - WATER_DRAG)
-		v.y = v.y + fall_speed / 16 * v_scale
-		if v.y > -0.06 and v.y < 0 then
-			v.y = -0.06
-		end
-		if v.y < 0 then
-			v.y = v.y * gravity_drag
+
+		-- Apply gravity unless this mob is sprinting.
+		if not self._sprinting then
+			v.y = v.y + fall_speed / 16 * v_scale
+			if v.y > -0.06 and v.y < 0 then
+				v.y = -0.06
+			end
+			if v.y < 0 then
+				v.y = v.y * gravity_drag
+			end
 		end
 
 		if horiz_collision (v, moveresult) then
@@ -1210,6 +1225,21 @@ mcl_mobs.mob_class.slowdown_nodes = {
 	},
 }
 
+local function standing_in_liquid_or_walkable (self)
+	if self.standing_in == "air" then
+		return false
+	end
+	local def = minetest.registered_nodes[self.standing_in]
+	return not def and def.liquidtype ~= "flowing" and not def.walkable
+end
+
+function mob_class:display_sprinting_particles ()
+	-- Don't display such particles if standing in a liquid or
+	-- similar block.
+	return self._sprinting and not self._crouching
+		and not standing_in_liquid_or_walkable (self)
+end
+
 function mob_class:post_motion_step (self_pos, dtime)
 	-- Apply slowdowns from blocks that should impede movement.
 	local xmin, zmin, xmax, zmax, ymin, ymax
@@ -1243,6 +1273,59 @@ function mob_class:post_motion_step (self_pos, dtime)
 					return
 				end
 			end
+		end
+	end
+
+	-- Generate sprinting particles if and standing on a surface
+	-- appropriate.
+	if self:display_sprinting_particles () then
+		local def = minetest.registered_nodes[self.standing_on]
+		if def and def.walkable then
+			local p2 = self.standing_on_param2
+			local p2_type = def.paramtype2
+			local tile = mcl_sprint.get_top_node_tile (p2, p2_type)
+			local v = self.object:get_velocity ()
+			local xwidth = (self.collisionbox[4] - self.collisionbox[1]) / 2
+			local zwidth = (self.collisionbox[6] - self.collisionbox[3]) / 2
+			v.x = v.x * -0.2
+			v.z = v.z * -0.2
+			v.y = 2.15
+			minetest.add_particlespawner ({
+					amount = math.random (1, 2),
+					time = 1,
+					minpos = {
+						x = -xwidth,
+						y = 0.1,
+						z = -zwidth,
+					},
+					maxpos = {
+						x = xwidth,
+						y = 0.1,
+						z = zwidth,
+					},
+					minvel = v,
+					maxvel = v,
+					minexptime = 0.1,
+					maxexptime = 1.5,
+					minacc = {
+						x = 0,
+						y = -13,
+						z = 0,
+					},
+					maxacc = {
+						x = 0,
+						y = -13,
+						z = 0,
+					},
+					collisiondetection = true,
+					attached = self.object,
+					vertical = false,
+					node = {
+						name = self.standing_on,
+						param2 = p2,
+					},
+					node_tile = tile,
+			})
 		end
 	end
 end
