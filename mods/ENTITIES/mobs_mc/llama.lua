@@ -229,6 +229,10 @@ function llama:check_caravan ()
 			entity._caravan_head = nil
 		end
 	end
+	if self._caravan_tail
+		and not self._caravan_tail:is_valid () then
+		self._caravan_tail = nil
+	end
 end
 
 function llama:is_leashed ()
