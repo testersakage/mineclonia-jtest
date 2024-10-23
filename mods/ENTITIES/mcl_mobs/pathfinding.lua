@@ -150,6 +150,7 @@ local function longhash (x, y, z)
 	return (32768 + x) * 65536 * 65536 + (32768 + y) * 65536
 		+ (32768 + z)
 end
+mcl_mobs.gwp_longhash = longhash
 
 function mob_class:get_gwp_node (context, x, y, z)
 	-- assert (x % 1 == 0 and y % 1 == 0 and z % 1 == 0)
