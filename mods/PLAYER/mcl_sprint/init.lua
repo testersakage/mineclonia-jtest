@@ -125,6 +125,7 @@ local function get_top_node_tile(param2, paramtype2)
 		return 1
 	end
 end
+mcl_sprint.get_top_node_tile = get_top_node_tile
 
 minetest.register_on_modchannel_message(function(channel_name, sender, message)
 	if channel_name == "mcl_sprint:" .. sender then

@@ -359,6 +359,11 @@ function golem:crack_overlay ()
 	self:set_textures ({ t, self._poppy_texture, })
 end
 
+function golem:display_sprinting_particles ()
+	local v = self.object:get_velocity ()
+	return pr:next (1, 5) == 1 and v.x * v.x + v.z * v.z > 0.0025
+end
+
 ------------------------------------------------------------------------
 -- Iron Golem summoning.
 ------------------------------------------------------------------------
