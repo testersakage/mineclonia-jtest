@@ -359,7 +359,6 @@ function mcl_mobs.register_mob(name, def)
 		def.persist_in_peaceful = false
 	end
 
-	init_props.hp_max = init_props.hp_max
 	init_props.collisionbox = init_props.collisionbox or mcl_mobs.mob_class.initial_properties.collisionbox
 	init_props.selectionbox = init_props.selectionbox or init_props.collisionbox or mcl_mobs.mob_class.initial_properties.selectionbox
 	local eye_height = init_props.head_eye_height
