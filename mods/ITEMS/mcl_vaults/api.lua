@@ -204,11 +204,7 @@ function mcl_vaults.register_vault(name, def)
 	minetest.register_node(":mcl_vaults:"..name, table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { not_in_creative_inventory = 0 }),
-		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-			if itemstack:get_name() == keyitem and can_open(pos, clicker) then
-				mcl_vaults.activate(pos)
-			end
-		end
+		on_rightclick = mcl_vaults.activate,
 	}, def.node_off))
 
 	minetest.register_node(":mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
@@ -250,3 +246,11 @@ function mcl_vaults.register_vault(name, def)
 		action = activate_item_entity,
 	})
 end
+
+mcl_player.register_globalstep_slow(function(player)
+	local pos = player and player:get_pos()
+	if not pos then return end
+	for _, p in pairs(minetest.find_nodes_in_area(vector.add(pos, -3), vector.add(pos, 3), "group:vault")) do
+		mcl_vaults.activate(p)
+	end
+end)
