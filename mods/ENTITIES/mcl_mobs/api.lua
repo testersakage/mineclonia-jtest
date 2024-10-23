@@ -209,6 +209,8 @@ function mob_class:mob_activate(staticdata, dtime)
 	self._active_texture_list = nil
 	self._mob_invisible = false
 	self._was_stuck = false
+	self._sprinting = false
+	self._crouching = false
 
 	if self.dead then
 		self:safe_remove()
