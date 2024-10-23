@@ -174,6 +174,8 @@ mcl_mobs.mob_class = {
 	breeding_possible = nil,
 	acceptable_pacing_target = nil,
 	fall_damage_multiplier = 1.0,
+	_sprinting = false,
+	_crouching = false,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
