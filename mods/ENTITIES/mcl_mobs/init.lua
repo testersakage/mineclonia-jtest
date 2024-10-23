@@ -113,6 +113,7 @@ mcl_mobs.mob_class = {
 	pace_bonus = 1.0,
 	run_bonus = 1.25,
 	follow_bonus = 1.2,
+	follow_herd_bonus = nil, -- Default value is that of follow_bonus.
 	drive_bonus = 1.0,
 	pursuit_bonus = 1.0,
 	breed_bonus = 1.0,

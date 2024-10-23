@@ -102,6 +102,10 @@ function mob_class:projectile_knockback (factor, dir)
 	end)
 end
 
+function mob_class:retaliate_against (source)
+	self:do_attack (source, 15)
+end
+
 -- Register damage delivered by punches or other means, retaliate, and
 -- summon reinforcements.
 function mob_class:receive_damage (mcl_reason, damage)
@@ -126,7 +130,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 		and (self.child == false or self.type == "monster") then
 		if not self.passive_towards_players
 			or not source:is_player () then
-			self:do_attack (source, 15)
+			self:retaliate_against (source)
 		end
 	end
 

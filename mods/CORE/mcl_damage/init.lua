@@ -337,7 +337,7 @@ local function is_mob (source)
 		return false
 	end
 	local entity = source:get_luaentity ()
-	return entity.is_mob
+	return entity and entity.is_mob
 end
 
 mcl_damage.register_modifier (function (obj, damage, reason)
