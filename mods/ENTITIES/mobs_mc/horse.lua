@@ -450,7 +450,7 @@ function horse:mob_activate (staticdata, dtime)
 		self.object:set_properties ({
 				hp_max = self.hp_max,
 		})
-		self.health = math.max (self.health, self.hp_max)
+		self.health = math.min (self.health, self.hp_max)
 	end
 	-- Update old horses.
 	if self._horse_armor and self._wearing_armor then
@@ -1032,6 +1032,9 @@ end
 
 function skeleton_horse:do_custom (dtime, moveresult)
 	horse.do_custom (self, dtime, moveresult)
+	if not self._is_trap then
+		return
+	end
 	self._trap_age = self._trap_age + dtime
 	if self._trap_age > 900 then
 		self:safe_remove ()
@@ -1059,6 +1062,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 				table.insert (horses, horse)
 				local entity = horse:get_luaentity ()
 				entity.tamed = true
+				entity.persistent = true
 			end
 		end
 
@@ -1078,6 +1082,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 				local stack = ItemStack ("mcl_armor:helmet_iron")
 				local level = 5.0 + math.random (18) * mob_factor
 				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+				entity.persistent = true
 				entity.armor_list.head = stack:to_string ()
 				entity:set_armor_texture ()
 			end
