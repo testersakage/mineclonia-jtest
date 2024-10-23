@@ -279,8 +279,8 @@ function mob_class:who_are_you_looking_at()
 	elseif self.mate then
 		self._locked_object = self.mate
 	elseif self._locked_object then
-		if stop_look_at_player then
-			--minetest.log("Stop look: ".. self.name)
+		if stop_look_at_player
+			or self._locked_object == self.driver then
 			self._locked_object = nil
 		end
 	elseif not self._locked_object then
@@ -295,11 +295,15 @@ function mob_class:who_are_you_looking_at()
 			local look_at_player = look_at_player_chance == 1
 
 			for obj in minetest.objects_inside_radius(pos, 8) do
-				if obj:is_player() and vector.distance(pos,obj:get_pos()) < 4 then
+				if obj:is_player() and vector.distance(pos,obj:get_pos()) < 4
+					and obj ~= self.driver then
 					self._locked_object = obj
 					break
-				elseif obj:is_player() or (obj:get_luaentity() and obj:get_luaentity().name == self.name and self ~= obj:get_luaentity()) then
-					if look_at_player then
+				elseif obj:is_player()
+					or (obj:get_luaentity()
+						and obj:get_luaentity().name == self.name
+						and self ~= obj:get_luaentity()) then
+					if look_at_player and obj ~= self.driver then
 						self._locked_object = obj
 						break
 					end
@@ -308,6 +312,12 @@ function mob_class:who_are_you_looking_at()
 		end
 
 	end
+end
+
+local HALF_DEG = math.rad (0.5)
+
+local function is_zero_vector (v)
+	return v.x == 0 and v.y == 0 and v.z == 0
 end
 
 function mob_class:check_head_swivel(dtime, clear)
@@ -370,13 +380,18 @@ function mob_class:check_head_swivel(dtime, clear)
 				end
 			end
 		end
-	elseif not locked_object and math.abs(oldr.y) > 0.05 and math.abs(oldr.x) < 0.05 then
+	elseif not locked_object and vector.length (oldr) > 0 then
 		newr = vector.multiply(oldr, 0.9)
 	end
 
-	local newp = vector.new(0, self.bone_eye_height, self.horizontal_head_height)
-	-- 0.02 is about 1.14 degrees tolerance, to update less often
-	if math.abs(oldr.x-newr.x) < 0.02 and math.abs(oldr.y-newr.y) < 0.02 and math.abs(oldr.z-newr.z) < 0.02 and vector.equals(oldp, newp) then return end
+	local newp = vector.new (0, self.bone_eye_height, self.horizontal_head_height)
+	if math.abs (oldr.x - newr.x) < HALF_DEG
+		and math.abs (oldr.y - newr.y) < HALF_DEG
+		and math.abs (oldr.z - newr.z) < HALF_DEG
+		and (is_zero_vector (oldr) or not is_zero_vector (newr))
+		and vector.equals (oldp, newp) then
+		return
+	end
 
 	if self.object.get_bone_override then -- minetest >= 5.9
 		self.object:set_bone_override(self.head_swivel, {
