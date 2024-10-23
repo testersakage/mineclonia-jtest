@@ -148,6 +148,13 @@ minetest.register_chatcommand("whereami", {
 	end
 })
 
+mcl_info.register_debug_field ("Village proximity", {
+       level = 4,
+       func = function (_, pos)
+	       return string.format (mcl_villages.get_poi_heat (pos))
+       end,
+})
+
 mcl_info.register_debug_field ("Local Difficulty", {
        level = 4,
        func = function (_, pos)
