@@ -2563,7 +2563,7 @@ function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, a
 
 	mob.gowp_velocity = speed_bonus and speed_bonus * mob.movement_speed
 	mob.gowp_animation = animation or "walk"
-	mob.pathfinding_context = self:gwp_initialize ({target})
+	mob.pathfinding_context = self:gwp_initialize ({target}, nil, tolerance)
 	mob.callback_arrived = callback_arrived
 
 	-- Cancel navigation if pathing is impossible.

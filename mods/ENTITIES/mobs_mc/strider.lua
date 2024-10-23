@@ -96,10 +96,6 @@ local strider = {
 		if not self.v2 then
 			local vsize = self.object:get_properties().visual_size
 			self.v2 = 0
-			self.max_speed_forward = 8
-			self.max_speed_reverse = 4
-			self.accel = 2
-			self.terrain_type = 3
 			self.driver_attach_at = {x = 0, y = 5.5, z = -1.75}
 			self.driver_eye_offset = {x = 0, y = 10, z = 0}
 			self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}

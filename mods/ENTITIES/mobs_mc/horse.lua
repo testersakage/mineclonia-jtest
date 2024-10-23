@@ -11,40 +11,6 @@ local base_drop = {
 	looting = "common",
 }
 
-local function horse_extra_texture(horse, cstring)
-	local base = horse._naked_texture or horse.base_texture[2]
-	local saddle = ItemStack (horse._saddle)
-	local chest  = horse._chest
-	local armor = ItemStack (horse._horse_armor_stack)
-	local armor_name = armor:get_name ()
-	local textures = {}
-	if not armor:is_empty ()
-		and minetest.get_item_group (armor_name, "horse_armor") > 0 then
-		if cstring then
-			textures[2] = base
-				.. "^("
-				.. minetest.registered_items[armor_name]._horse_overlay_image:gsub(".png$", "_desat.png")
-				.. "^[multiply:" .. cstring .. ")"
-		else
-			textures[2] = base .. "^"
-				.. minetest.registered_items[armor_name]._horse_overlay_image
-		end
-	else
-		textures[2] = base
-	end
-	if not saddle:is_empty () then
-		textures[3] = base
-	else
-		textures[3] = "blank.png"
-	end
-	if chest then
-		textures[1] = base
-	else
-		textures[1] = "blank.png"
-	end
-	return textures
-end
-
 local function attach_driver(self, clicker)
 	mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
 	self.object:set_properties({selectionbox = {0,0,0,0,0,0}})
@@ -189,7 +155,8 @@ local horse = {
 	_temper = 0,
 	_max_temper = 120,
 	pace_bonus = 0.7,
-	follow_bonus = 1.0,
+	follow_bonus = 1.25,
+	follow_herd_bonus = 1.0,
 	_saddle = "",
 	_horse_armor_stack = "",
 	_eats = true,
@@ -199,7 +166,7 @@ function horse:on_spawn ()
 	if not self._props_initialized then
 		self:initial_movement_properties ()
 	end
-	local tex = horse_extra_texture(self)
+	local tex = self:extra_textures ()
 	self:set_textures (tex)
 end
 
@@ -321,6 +288,8 @@ function horse:set_animation_speed (custom_speed)
 	self.object:set_animation_frame_speed (scaled_speed * math.max (1, v / 2))
 end
 
+horse.check_tame = horse_maybe_tame
+
 horse.ai_functions = {
 	mob_class.check_frightened,
 	horse_maybe_tame,
@@ -334,6 +303,41 @@ horse.ai_functions = {
 ------------------------------------------------------------------------
 -- Horse armor.
 ------------------------------------------------------------------------
+
+function horse:extra_textures (cstring)
+	local horse = self
+	local base = horse._naked_texture or horse.base_texture[2]
+	local saddle = ItemStack (horse._saddle)
+	local chest = horse._chest
+	local armor = ItemStack (horse._horse_armor_stack)
+	local armor_name = armor:get_name ()
+	local textures = {}
+	if not armor:is_empty ()
+		and minetest.get_item_group (armor_name, "horse_armor") > 0 then
+		if cstring then
+			textures[2] = base
+				.. "^("
+				.. minetest.registered_items[armor_name]._horse_overlay_image:gsub(".png$", "_desat.png")
+				.. "^[multiply:" .. cstring .. ")"
+		else
+			textures[2] = base .. "^"
+				.. minetest.registered_items[armor_name]._horse_overlay_image
+		end
+	else
+		textures[2] = base
+	end
+	if not saddle:is_empty () then
+		textures[3] = base
+	else
+		textures[3] = "blank.png"
+	end
+	if chest then
+		textures[1] = base
+	else
+		textures[1] = "blank.png"
+	end
+	return textures
+end
 
 function horse:set_armor_1 (iname, w)
 	local cstring
@@ -351,7 +355,7 @@ function horse:set_armor_1 (iname, w)
 	if not self._naked_texture then
 		self._naked_texture = self.base_texture[2]
 	end
-	local tex = horse_extra_texture(self, cstring)
+	local tex = self:extra_textures (cstring)
 	self.base_texture = tex
 	self:set_textures (tex)
 	local def = w:get_definition()
@@ -382,7 +386,7 @@ function horse:remove_armor (stack)
 		minetest.sound_play ({name = def.sounds._mcl_armor_unequip},
 			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
 	end
-	local tex = horse_extra_texture (self)
+	local tex = self:extra_textures ()
 	self.base_texture = tex
 	self:set_textures (tex)
 
@@ -400,17 +404,21 @@ end
 local SADDLE_SLOT = 1
 local ARMOR_SLOT = 2
 
+function horse:is_saddle_item (stack)
+	return stack:get_name () == "mcl_mobitems:saddle"
+end
+
 local function armor_allow_move (inv, from_list, from_index, to_list, to_index, count, player)
 	return 0
 end
 
-local function armor_allow_put (inv, listname, index, stack, player)
+local function armor_allow_put (horse, inv, listname, index, stack, player)
 	if index == ARMOR_SLOT then
 		local armor = minetest.get_item_group (stack:get_name (),
 						       "horse_armor")
 		return armor > 1 and 1 or 0
 	elseif index == SADDLE_SLOT then
-		local saddle = stack:get_name () == "mcl_mobitems:saddle"
+		local saddle = horse:is_saddle_item (stack)
 		return saddle and 1 or 0
 	end
 	return 1
@@ -469,6 +477,7 @@ function horse:mob_activate (staticdata, dtime)
 	end
 	self._horse_armor = nil
 	self:update_drops ()
+	self:init_attachment_position ()
 end
 
 function horse:on_deactivate (removal)
@@ -550,7 +559,9 @@ function horse:post_attach (player)
 		horse_inventory_counter = horse_inventory_counter + 1
 		local inventory = minetest.create_detached_inventory (name, {
 			allow_move = armor_allow_move,
-			allow_put = armor_allow_put,
+			allow_put = function (inv, listname, index, stack, player)
+				return armor_allow_put (self, inv, listname, index, stack, player)
+			end,
 			on_put = function (inv, listname, index, stack, player)
 				return armor_on_put (self, inv, listname, index, stack, player)
 			end,
@@ -672,6 +683,13 @@ function horse:post_apply_driver_input (velocity, self_pos, moveresult, dtime)
 	end
 end
 
+function horse:init_attachment_position ()
+	local vsize = self.object:get_properties().visual_size
+	self.driver_attach_at = {x = 0, y = 4.17, z = -1.75}
+	self.driver_eye_offset = {x = 0, y = 3, z = 0}
+	self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
+end
+
 function horse:do_custom (dtime)
 	if self.driver then
 		local ctrl = self.driver:get_player_control ()
@@ -687,18 +705,6 @@ function horse:do_custom (dtime)
 			self._armor_inv_name = nil
 			self._armor_inv = nil
 		end
-	end
-
-	if not self.v2 then
-		local vsize = self.object:get_properties().visual_size
-		self.v2 = 0
-		self.max_speed_forward = 7
-		self.max_speed_reverse = 2
-		self.accel = 6
-		self.terrain_type = 3
-		self.driver_attach_at = {x = 0, y = 4.17, z = -1.75}
-		self.driver_eye_offset = {x = 0, y = 3, z = 0}
-		self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
 	end
 
 	return true
@@ -733,7 +739,7 @@ function horse:on_rightclick (clicker)
 				-- Base horse texture without chest or saddle
 				self._naked_texture = self.base_texture[2]
 			end
-			local tex = horse_extra_texture(self)
+			local tex = self:extra_textures ()
 			self.base_texture = tex
 			self:set_textures (tex)
 			self:update_drops ()
@@ -784,7 +790,7 @@ function horse:on_rightclick (clicker)
 		if not self.driver and clicker:get_player_control().sneak then
 			return
 		elseif not self.driver
-			and iname == "mcl_mobitems:saddle"
+			and self:is_saddle_item (item)
 			and self:set_saddle (item, clicker) then
 			return
 		elseif minetest.get_item_group(iname, "horse_armor") > 0
@@ -809,7 +815,7 @@ end
 
 function horse:set_saddle (stack, clicker)
 	if self._saddle == "" then
-		self._saddle = stack:to_string ()
+		self._saddle = stack:peek_item ():to_string ()
 		if clicker then
 			local name = clicker:get_player_name ()
 			if not minetest.is_creative_enabled (name) then
@@ -821,7 +827,7 @@ function horse:set_saddle (stack, clicker)
 		if not self._naked_texture then
 			self._naked_texture = self.base_texture[2]
 		end
-		local tex = horse_extra_texture(self)
+		local tex = self:extra_textures ()
 		self.base_texture = tex
 		self:set_textures (tex)
 		minetest.sound_play({name = "mcl_armor_equip_leather"},
@@ -835,7 +841,7 @@ function horse:remove_saddle ()
 	if not self._naked_texture then
 		self._naked_texture = self.base_texture[2]
 	end
-	local tex = horse_extra_texture (self)
+	local tex = self:extra_textures ()
 	self.base_texture = tex
 	self:set_textures (tex)
 	minetest.sound_play ({name = "mcl_armor_unequip_leather"},
@@ -992,6 +998,7 @@ function horse:on_breed (parent1, parent2)
 end
 
 mcl_mobs.register_mob ("mobs_mc:horse", horse)
+mobs_mc.horse = horse
 
 ------------------------------------------------------------------------
 -- Skeleton & Zombie Horse
@@ -1023,6 +1030,7 @@ local skeleton_horse = table.merge(horse, {
 	_trap_age = 0,
 	_is_trap = false,
 	_eats = false,
+	floats = 0,
 })
 
 function skeleton_horse:_on_lightning_strike ()

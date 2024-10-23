@@ -326,7 +326,9 @@ function mob_class:follow_herd (pos)
 		end
 		-- Recalculate path every .5 seconds, as in Minecraft.
 		if self:check_timer ("check_herd", 0.5) then
-			self:gopath (target_pos, nil, true, self.follow_bonus)
+			local bonus = self.follow_herd_bonus
+				or self.follow_bonus
+			self:gopath (target_pos, nil, true, bonus)
 		end
 		return true
 	elseif self.child and self:check_timer ("check_herd", 0.5) then
@@ -361,7 +363,9 @@ function mob_class:follow_herd (pos)
 		if not selected or distmin < 3.0 then
 			return false
 		end
-		self:gopath (selected:get_pos (), nil, true, self.follow_bonus)
+		local bonus = self.follow_herd_bonus
+			or self.follow_bonus
+		self:gopath (selected:get_pos (), nil, true, bonus)
 		self.herd_following = selected
 		return "herd_following"
 	end
