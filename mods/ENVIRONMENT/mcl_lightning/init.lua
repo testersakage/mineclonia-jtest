@@ -173,6 +173,10 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 				if entity then
 					local luaentity = entity:get_luaentity ()
 					luaentity._is_trap = true
+					-- Mark this object as
+					-- persistent; it will despawn
+					-- of itself in 900 seconds.
+					luaentity.persistent = true
 				end
 			-- Cause a fire
 			else

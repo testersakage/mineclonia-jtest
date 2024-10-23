@@ -499,6 +499,7 @@ function zoglin:should_attack (object)
 	local luaentity = object:get_luaentity ()
 	if luaentity and luaentity.is_mob then
 		return luaentity.name ~= "mobs_mc:creeper"
+			and luaentity.name ~= "mobs_mc:creeper_charged"
 			and luaentity.name ~= "mobs_mc:zoglin"
 			and luaentity.name ~= "mobs_mc:baby_zoglin"
 			and luaentity:valid_enemy ()
