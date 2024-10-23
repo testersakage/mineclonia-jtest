@@ -365,7 +365,7 @@ function mob_class:on_step(dtime, moveresult)
 		self.standing_on = node.name
 		self.standing_on_param2 = node.param2
 	else
-		local node = mcl_mobs.node_ok (feet, "air").name
+		local node = mcl_mobs.node_ok (feet, "air")
 		self.standing_in = node.name
 		self.standing_on = self.standing_in
 		self.standing_on_param2 = node.param2

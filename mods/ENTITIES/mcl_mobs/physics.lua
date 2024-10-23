@@ -955,8 +955,6 @@ function mob_class:motion_step (dtime, moveresult)
 			speed = speed + delta * level / 3
 		end
 
-		-- TODO: apply Dolphin's Grace.
-
 		-- Adjust speed by friction.  Minecraft applies
 		-- friction to acceleration (speed), not just the
 		-- previous velocity.
@@ -979,9 +977,9 @@ function mob_class:motion_step (dtime, moveresult)
 			if v.y > -0.06 and v.y < 0 then
 				v.y = -0.06
 			end
-			if v.y < 0 then
-				v.y = v.y * gravity_drag
-			end
+		end
+		if v.y < 0 then
+			v.y = v.y * gravity_drag
 		end
 
 		if horiz_collision (v, moveresult) then
