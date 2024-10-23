@@ -227,6 +227,9 @@ minetest.register_chatcommand("tick",
 		elseif operation == "unfreeze" then
 			mcl_redstone.is_tick_frozen = false
 			return true
+		elseif operation == "reset" then
+			mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
+			return true
 		elseif operation == "rate" then
 			if tonumber(arg) then
 				mcl_redstone.tick_speed = tonumber(arg)
