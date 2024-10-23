@@ -361,10 +361,14 @@ function mob_class:on_step(dtime, moveresult)
 	if bbase - feet.y <= 1.0e-2 then
 		self.standing_in = mcl_mobs.node_ok (feet, "air").name
 		feet.y = feet.y - 1
-		self.standing_on = mcl_mobs.node_ok (feet, "air").name
+		local node = mcl_mobs.node_ok (feet, "air")
+		self.standing_on = node.name
+		self.standing_on_param2 = node.param2
 	else
-		self.standing_in = mcl_mobs.node_ok (feet, "air").name
+		local node = mcl_mobs.node_ok (feet, "air").name
+		self.standing_in = node.name
 		self.standing_on = self.standing_in
+		self.standing_on_param2 = node.param2
 	end
 	local head_y = cbox[2] + (cbox[5] - cbox[2]) * 0.75
 	local pos_head = vector.offset (pos, 0, head_y, 0)
