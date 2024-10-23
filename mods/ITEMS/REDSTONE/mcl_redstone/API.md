@@ -151,3 +151,15 @@ Like `minetest.swap_node` but will trigger redstone updates to surrounding
 nodes. It was added because some code in Mineclonia which would otherwise have
 to be rewritten required it. It should be avoided in favor of
 `minetest.set_node` and might get removed in the future.
+
+## `mcl_redstone.tick_step()`
+
+When called, does the next redstone tick
+
+## `mcl_redstone.tick_speed`
+
+Variable that holds the ticking interval in seconds. Can be modified to change the interval speed
+
+## `mcl_redstone.is_tick_frozen`
+
+Variable that holds whether the redstone will naturally tick. Can be modified to freeze or unfreeze ticking
