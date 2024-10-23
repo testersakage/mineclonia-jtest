@@ -1228,7 +1228,7 @@ function mob_class.school_init_group (list)
 	for _, item in pairs (list) do
 		if item ~= leader then
 			local mob = item:get_luaentity ()
-			table.insert (entity._school, list)
+			table.insert (entity._school, item)
 			mob._leader = leader
 			mob:replace_activity ("_leader")
 		end
