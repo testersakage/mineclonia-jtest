@@ -19,7 +19,7 @@ end
 local function get_vault_def(pos)
 	local node = pos and minetest.get_node(pos)
 	local def = node and minetest.registered_nodes[node.name]
-	return def and def._mcl_vault_name and mcl_vaults.registered_vaults[def._mcl_vault_name]
+	return def and def._mcl_vault_name and mcl_vaults.registered_vaults[def._mcl_vault_name], node
 end
 
 local function generate_loot(pos)
@@ -174,10 +174,9 @@ end
 -- Activate node at position `pos`.
 -- Creates an entity inside the vault that displays potential loot.
 function mcl_vaults.activate(pos)
-	local def = get_vault_def(pos)
-	if def then
-		local node = minetest.get_node(pos)
-		node.name = "mcl_vaults:"..def.name.."_on"
+	local def, node = get_vault_def(pos)
+	if def and node.name == "mcl_vaults:"..def.name then
+		node.name = node.name.."_on"
 		minetest.swap_node(pos, node)
 		activate_item_entity(pos)
 	end
