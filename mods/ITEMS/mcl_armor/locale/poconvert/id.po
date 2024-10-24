@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-24 08:07+0000\n"
+"PO-Revision-Date: 2024-10-25 14:07+0000\n"
 "Last-Translator: bramaudi <bramaudi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Indonesian <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_armor/id/>\n"
@@ -50,130 +50,134 @@ msgid "Player isn't online"
 msgstr "Pemain tidak sedang online"
 
 msgid "Golden Helmet"
-msgstr ""
+msgstr "Helm Emas"
 
 msgid "Golden Chestplate"
-msgstr ""
+msgstr "Zirah Emas"
 
 msgid "Golden Leggings"
-msgstr ""
+msgstr "Celana Emas"
 
 msgid "Golden Boots"
-msgstr ""
+msgstr "Sepatu Emas"
 
 msgid "Chainmail Helmet"
-msgstr ""
+msgstr "Helm Rantai"
 
 msgid "Chainmail Chestplate"
-msgstr ""
+msgstr "Pelindung Dada Rantai"
 
 msgid "Chainmail Leggings"
-msgstr ""
+msgstr "Celana Rantai"
 
 msgid "Chainmail Boots"
-msgstr ""
+msgstr "Sepatu Rantai"
 
 msgid "Iron Helmet"
-msgstr ""
+msgstr "Helm Besi"
 
 msgid "Iron Chestplate"
-msgstr ""
+msgstr "Pelindung Dada Besi"
 
 msgid "Iron Leggings"
-msgstr ""
+msgstr "Celana Besi"
 
 msgid "Iron Boots"
-msgstr ""
+msgstr "Sepatu Besi"
 
 msgid "Diamond Helmet"
-msgstr ""
+msgstr "Helm Berlian"
 
 msgid "Diamond Chestplate"
-msgstr ""
+msgstr "Pelindung Dada Berlian"
 
 msgid "Diamond Leggings"
-msgstr ""
+msgstr "Celana Berlian"
 
 msgid "Diamond Boots"
-msgstr ""
+msgstr "Sepatu Berlian"
 
 msgid "Netherite Helmet"
-msgstr ""
+msgstr "Helm Netherite"
 
 msgid "Netherite Chestplate"
-msgstr ""
+msgstr "Pelindung Dada Netherite"
 
 msgid "Netherite Leggings"
-msgstr ""
+msgstr "Celana Netherite"
 
 msgid "Netherite Boots"
-msgstr ""
+msgstr "Sepatu Netherite"
 
 msgid "Projectile Protection"
-msgstr ""
+msgstr "Proteksi Proyektil"
 
 msgid "Reduces projectile damage."
-msgstr ""
+msgstr "Mengurangi kerusakan akibat proyektil."
 
 msgid "Blast Protection"
-msgstr ""
+msgstr "Proteksi Ledakan"
 
 msgid "Reduces explosion damage and knockback."
-msgstr ""
+msgstr "Mengurangi kerusakan akibat ledakan dan pukulan mundur."
 
 msgid "Fire Protection"
-msgstr ""
+msgstr "Proteksi Api"
 
 msgid "Reduces fire damage."
-msgstr ""
+msgstr "Mengurangi kerusakan akibat kebakaran."
 
 msgid "Protection"
-msgstr ""
+msgstr "Proteksi"
 
 msgid "Reduces most types of damage by 4% for each level."
-msgstr ""
+msgstr "Mengurangi segala jenis kerusakan sebanyak 4% tiap levelnya."
 
 msgid "Feather Falling"
-msgstr ""
+msgstr "Bulu Jatuh"
 
 msgid "Reduces fall damage."
-msgstr ""
+msgstr "Mengurangi kerusakan akibat jatuh."
 
 msgid "Aqua Affinity"
-msgstr ""
+msgstr "Afinitas Air"
 
 msgid "Increases underwater mining speed."
-msgstr ""
+msgstr "Meningkatkan kecepatan penambangan bawah air."
 
 msgid "Curse of Binding"
-msgstr ""
+msgstr "Kutukan Pengikatan"
 
 msgid "Item cannot be removed from armor slots except due to death, breaking or in Creative Mode."
 msgstr ""
+"Item tidak dapat dihapus dari slot armor kecuali karena kematian, rusak atau "
+"dalam Mode Kreatif."
 
 msgid "Thorns"
-msgstr ""
+msgstr "Duri"
 
 msgid "Reflects some of the damage taken when hit, at the cost of reducing durability with each proc."
 msgstr ""
+"Memantulkan sebagian kerusakan yang diterima saat terkena, dengan "
+"mengorbankan daya tahan pada setiap proses."
 
 msgid "Elytra"
 msgstr ""
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "Templat Penempaan"
 
 msgid "@1 Armor Trim"
-msgstr ""
+msgstr "@1 hiasan baju besi"
 
 msgid "Applies to:"
-msgstr ""
+msgstr "Berlaku untuk:"
 
 msgid "Armor"
-msgstr ""
+msgstr "Zirah"
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Bahan-bahan:"
 
 msgid "Ingot & Crystals"
-msgstr ""
+msgstr "Batangan dan Kristal"
