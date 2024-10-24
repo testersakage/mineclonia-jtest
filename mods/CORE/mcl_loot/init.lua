@@ -20,6 +20,11 @@ Parameters:
 		amount_max = 10,	-- Maximum size of item stack. Must not be larger than item definition's stack_max or 6553. Optional (default: 1)
 		wear_min = 1,		-- Minimum wear value. Must be at least 1. Optional (default: no wear)
 		wear_max = 1,		-- Maxiumum wear value. Must be at least 1. Optional (default: no wear)
+		-- OR
+		nothing = true,		-- simulate a failure roll with the given weight
+
+		-- optional
+		func = function(stack, pr) end	-- modify stack, e.g. enchant item
 		},
 		{ -- more tables like above, one table per item stack }
 	}
@@ -79,7 +84,7 @@ function mcl_loot.get_loot(loot_definitions, pr)
 				end
 
 				table.insert(items, stack)
-			else
+			elseif not item.nothing then
 				minetest.log("error", "[mcl_loot] INTERNAL ERROR! Failed to select random loot item!")
 			end
 		end
