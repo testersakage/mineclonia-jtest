@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-24 08:07+0000\n"
+"PO-Revision-Date: 2024-10-25 14:07+0000\n"
 "Last-Translator: bramaudi <bramaudi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Indonesian <https://translate.codeberg.org/projects/"
 "mineclonia/mobs_mc/id/>\n"
@@ -21,7 +21,7 @@ msgid "Bat"
 msgstr "Kelelawar"
 
 msgid "Blaze"
-msgstr "Blaze"
+msgstr ""
 
 msgid "Chicken"
 msgstr "Ayam"
@@ -39,7 +39,7 @@ msgid "Creeper"
 msgstr ""
 
 msgid "Charged Creeper"
-msgstr "Creeper Terisi"
+msgstr "Creeper Menyala"
 
 msgid "Dolphin"
 msgstr "Lumba-lumba"
@@ -57,13 +57,13 @@ msgid "Ghast"
 msgstr ""
 
 msgid "Ghast Fireball"
-msgstr "Bola api Ghast"
-
-msgid "Guardian"
 msgstr ""
 
+msgid "Guardian"
+msgstr "Penjaga"
+
 msgid "Elder Guardian"
-msgstr "Tetua Guardian"
+msgstr "Tetua Penjaga"
 
 msgid "Hoglin"
 msgstr ""
@@ -87,7 +87,7 @@ msgid "Donkey"
 msgstr "Keledai"
 
 msgid "Mule"
-msgstr ""
+msgstr "Bagal"
 
 msgid "Sneak to dismount"
 msgstr "Menyelinap untuk turun"
@@ -123,7 +123,7 @@ msgid "Zombie Piglin"
 msgstr "Piglin Zombi"
 
 msgid "Pillager"
-msgstr ""
+msgstr "Penjarah"
 
 msgid "Polar Bear"
 msgstr "Beruang Kutub"
@@ -144,7 +144,7 @@ msgid "Shulker"
 msgstr ""
 
 msgid "Silverfish"
-msgstr ""
+msgstr "Gegat"
 
 msgid "Skeleton"
 msgstr "Tengkorak"
@@ -153,7 +153,7 @@ msgid "Stray"
 msgstr ""
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "Tengkorak Layu"
 
 msgid "Slime - big"
 msgstr "Slime - besar"
@@ -165,163 +165,163 @@ msgid "Slime - tiny"
 msgstr "Slime - mini"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Kubus Magma - besar"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Kubus Magma - kecil"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Kubus Magma - mini"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "Kubus Magma"
 
 msgid "Slime"
 msgstr ""
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "Golem Salju"
 
 msgid "Spider"
-msgstr ""
+msgstr "Laba-laba"
 
 msgid "Cave Spider"
-msgstr ""
+msgstr "Laba-laba Goa"
 
 msgid "Squid"
-msgstr ""
+msgstr "Cumi-cumi"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "Cumi-cumi Bersinar"
 
 msgid "Strider"
 msgstr ""
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Bayi Strider"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Ikan Tropis"
 
 msgid "Tropical fish"
-msgstr ""
+msgstr "Ikan tropis"
 
 msgid "Vex"
 msgstr ""
 
 msgid "Villager"
-msgstr ""
+msgstr "Penduduk"
 
 msgid "Evoker"
 msgstr ""
 
 msgid "Illusioner"
-msgstr ""
+msgstr "Ilusionis"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "Pembela"
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "Zombi Penduduk"
 
 msgid "@1 sleeps here"
-msgstr ""
+msgstr "@1 tidur disini"
 
 msgid "A villager sleeps here"
-msgstr ""
+msgstr "Penduduk tidur disini"
 
 msgid "@1 works here"
-msgstr ""
+msgstr "@1 bekerja disini"
 
 msgid "A villager works here"
-msgstr ""
+msgstr "Penduduk bekerja disini"
 
 msgid "Unemployed"
-msgstr ""
+msgstr "Pengangguran"
 
 msgid "Farmer"
-msgstr ""
+msgstr "Petani"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "Nelayan"
 
 msgid "Fletcher"
 msgstr ""
 
 msgid "Shepherd"
-msgstr ""
+msgstr "Gembala"
 
 msgid "Librarian"
 msgstr "Pustakawan"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "Kartogram"
 
 msgid "Armorer"
-msgstr ""
+msgstr "Pandai Besi Zirah"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "Pengrajin Kulit"
 
 msgid "Butcher"
-msgstr ""
+msgstr "Tukang Daging"
 
 msgid "Weapon Smith"
-msgstr ""
+msgstr "Empu"
 
 msgid "Tool Smith"
-msgstr ""
+msgstr "Pandai Besi Alat"
 
 msgid "Cleric"
-msgstr ""
+msgstr "Pendeta"
 
 msgid "Mason"
-msgstr ""
+msgstr "Tukang Batu"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "Dungu"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Pengembara"
 
 msgid "Novice"
-msgstr ""
+msgstr "Pemula"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Magang"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Ahli"
 
 msgid "Expert"
-msgstr ""
+msgstr "Pakar"
 
 msgid "Master"
-msgstr ""
+msgstr "Sepuh"
 
 msgid "Witch"
-msgstr ""
+msgstr "Penyihir"
 
 msgid "Wither"
-msgstr ""
+msgstr "Layu"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Serigala"
 
 msgid "Dog"
-msgstr ""
+msgstr "Anjing"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombi"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Bayi Zombi"
 
 msgid "Husk"
-msgstr ""
+msgstr "Sekam"
 
 msgid "Baby Husk"
-msgstr ""
+msgstr "Bayi Sekam"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "Zombifikasi Piglin"
