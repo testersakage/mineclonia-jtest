@@ -346,7 +346,11 @@ function mcl_enchanting.random(pr, ...)
 	local r = pr and pr:next(...) or math.random(...)
 
 	if pr and not ({ ... })[1] then
-		r = r / 32767
+		if pr.rand_normal_dist then
+			r = (r + 2147483648) / 4294967295
+		else
+			r = r / 32767
+		end
 	end
 
 	return r
