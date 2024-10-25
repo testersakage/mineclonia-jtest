@@ -363,6 +363,7 @@ function mob_class:check_head_swivel(dtime, clear)
 			local dir = vector.direction (ps, pt)
 			local mob_yaw = self_rot.y + math.atan2(dir.x, dir.z) + self.head_yaw_offset
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
+				+ self._head_pitch_offset
 
 			if (mob_yaw < -PI_THIRD or mob_yaw > PI_THIRD) and not (self.attack and not self.runaway) then
 				newr = vector.multiply(oldr, 0.9)
