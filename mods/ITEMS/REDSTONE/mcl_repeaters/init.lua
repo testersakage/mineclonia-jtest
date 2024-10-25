@@ -66,7 +66,7 @@ local commdef = {
 	_redstone = {
 		connects_to = function(node, dir)
 			local fourdir = minetest.dir_to_fourdir(dir)
-			return node.param2 == fourdir or (node.param2 + 2) % 4 == fourdir
+			return node.param2 % 4 == fourdir or (node.param2 + 2) % 4 == fourdir
 		end,
 		update = function(pos, node)
 			local was_locked = minetest.get_item_group(node.name, "redstone_repeater") == 5
