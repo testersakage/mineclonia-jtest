@@ -73,29 +73,6 @@ minetest.register_on_mods_loaded(function()
 	end
 end)
 
-local function queue()
-	return {
-		front = 1,
-		back = 1,
-		queue = {},
-		enqueue = function(self, value)
-			self.queue[self.back] = value
-			self.back = self.back + 1
-		end,
-		dequeue = function(self) local value = self.queue[self.front]
-			if not value then
-				return
-			end
-			self.queue[self.front] = nil
-			self.front = self.front + 1
-			return value
-		end,
-		size = function(self)
-			return self.back - self.front
-		end,
-	}
-end
-
 local directions = {
 	{ rail = vector.new(1, 0, 0) },
 	{ rail = vector.new(-1, 0, 0) },
@@ -135,8 +112,8 @@ local function propagate_golden_rail_power(pos, new_power, old_power, powered_on
 		param2_data[ind] = power
 	end
 
-	local clear_queue = queue()
-	local fill_queue = queue()
+	local clear_queue = mcl_util.queue()
+	local fill_queue = mcl_util.queue()
 	if old_power then
 		clear_queue:enqueue({ pos = pos, power = old_power })
 	end
