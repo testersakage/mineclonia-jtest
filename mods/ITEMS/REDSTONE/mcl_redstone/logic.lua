@@ -239,7 +239,7 @@ local function call_init(pos)
 	end
 end
 
-function mcl_redstone._schedule_update(pos)
+function mcl_redstone.schedule_update(pos)
 	local node = minetest.get_node(pos)
 	if update_tab[node.name] then
 		local ret = update_tab[node.name](pos, node)

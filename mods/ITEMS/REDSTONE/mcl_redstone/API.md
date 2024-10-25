@@ -145,6 +145,10 @@ power level of all six directions.
 It is only valid to call this function from a redstone callback (`init` or
 `update`). Using it in other places will result in an error.
 
+## `mcl_redstone.schedule_update(pos)`
+
+Schedule an update to redstone component at `pos`.
+
 ## `mcl_redstone.swap_node(pos, node)`
 
 Like `minetest.swap_node` but will trigger redstone updates to surrounding

@@ -13,14 +13,12 @@ function mcl_redstone.update_comparators(pos)
 		local node2 = minetest.get_node(pos2)
 
 		if dir == minetest.fourdir_to_dir(node2.param2) and node2.name:find("mcl_comparators:comparator_") then
-			print("push update")
-			mcl_redstone._pending_updates[minetest.hash_node_position(pos2)] = pos2
+			mcl_redstone.schedule_update(pos2)
 		elseif mcl_redstone._solid_opaque_tab[node2.name] then
 			local pos3 = pos2:add(dir)
 			local node3 = minetest.get_node(pos3)
 			if dir == minetest.fourdir_to_dir(node3.param2) and node3.name:find("mcl_comparators:comparator_") then
-				print("push update")
-				mcl_redstone._pending_updates[minetest.hash_node_position(pos3)] = pos3
+				mcl_redstone.schedule_update(pos3)
 			end
 		end
 	end
