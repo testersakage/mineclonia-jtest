@@ -214,7 +214,7 @@ function mob_class:beget_child (pos)
 		if p == 1 then
 			ent_c.base_texture = self.base_texture
 		else
-			ent_c.base_texture = self.base_texture
+			ent_c.base_texture = mate.base_texture
 		end
 		ent_c:set_textures (ent_c.base_texture)
 		ent_c.tamed = true

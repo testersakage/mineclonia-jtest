@@ -156,7 +156,9 @@ function mob_class:collision()
 	for _,object in pairs(minetest.get_objects_inside_radius(pos, width)) do
 		local ent = object:get_luaentity()
 		local is_player = object:is_player ()
-		if (pushable and is_player and object:get_attach () ~= self.object)
+		-- Sleeping players shouldn't ever be pushed around.
+		if (pushable and is_player and object:get_attach () ~= self.object
+			and not mcl_beds.player[object:get_player_name ()])
 			or (mob_pushable and ent and ent.is_mob
 			    and object ~= self.object
 			    and object ~= self._jockey_rider) then
