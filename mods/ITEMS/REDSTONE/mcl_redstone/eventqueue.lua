@@ -202,7 +202,7 @@ function mcl_redstone.tick_step()
 		end
 
 		nupdates = nupdates + 1
-		mcl_redstone._schedule_update(pos)
+		mcl_redstone.schedule_update(pos)
 		mcl_redstone._pending_updates[h] = nil
 	end
 
