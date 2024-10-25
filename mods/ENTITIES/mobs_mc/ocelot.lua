@@ -864,6 +864,7 @@ function cat:on_rightclick (clicker)
 	local self_pos = self.object:get_pos ()
 	local name = item:get_name ()
 	local playername = clicker:get_player_name ()
+	local creative = minetest.is_creative_enabled (playername)
 
 	if self.tamed and self.owner == playername then
 		if minetest.get_item_group (name, "dye") == 1 then
@@ -876,6 +877,12 @@ function cat:on_rightclick (clicker)
 			end
 			self:update_textures ()
 			self:set_textures (self.base_texture)
+
+			if not creative then
+				item:take_item ()
+				clicker:set_wielded_item (item)
+			end
+			return
 		elseif table.indexof (cat_food, item:get_name ()) ~= -1 then
 			-- Begin breeding.
 			local heal = minetest.get_item_group (name, "food")
@@ -890,15 +897,21 @@ function cat:on_rightclick (clicker)
 		else
 			self:stay ()
 		end
-	else
+	elseif table.indexof (cat_food, item:get_name ()) ~= -1 then
 		local r = pr:next (1, 3)
 		if r == 1 then
 			self:just_tame (self_pos, clicker)
 			self:update_textures ()
 			self:set_textures (self.base_texture)
 			self.order = "sit"
-			item:take_item ()
-			clicker:set_wielded_item (item)
+			if not creative then
+				item:take_item ()
+				clicker:set_wielded_item (item)
+			end
+		else
+			mcl_mobs.effect (vector.offset (self_pos, 0, 0.7, 0),
+					5, "mcl_particles_mob_death.png^[colorize:#000000:255",
+					2, 4, 2.0, 0.1)
 		end
 		-- Feeding cats fish renders them persistent
 		-- independently of taming.
