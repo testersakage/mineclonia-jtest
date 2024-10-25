@@ -101,14 +101,14 @@ local commdef = {
 					delay = delay,
 					priority = 1,
 					name = "mcl_repeaters:repeater_on_"..delay,
-					param2 = node.param2,
+					param2 = node.param2 % 4,
 				}
 			end
 			if not on and not locked then
 				return {
 					delay = delay,
 					name = "mcl_repeaters:repeater_off_"..delay,
-					param2 = node.param2,
+					param2 = node.param2 % 4,
 				}
 			end
 		end,
