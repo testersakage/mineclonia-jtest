@@ -1,26 +1,3 @@
-local function queue()
-	return {
-		front = 1,
-		back = 1,
-		queue = {},
-		enqueue = function(self, value)
-			self.queue[self.back] = value
-			self.back = self.back + 1
-		end,
-		dequeue = function(self) local value = self.queue[self.front]
-			if not value then
-				return
-			end
-			self.queue[self.front] = nil
-			self.front = self.front + 1
-			return value
-		end,
-		size = function(self)
-			return self.back - self.front
-		end,
-	}
-end
-
 -- Logical wireflags by contentid
 local lwireflag_tab = {}
 
@@ -271,8 +248,8 @@ end
 -- Update neighbouring wires and components at pos. Oldnode is the previous
 -- node at the position.
 function update_neighbours(pos, oldnode)
-	local fill_queue = queue()
-	local clear_queue = queue()
+	local fill_queue = mcl_util.queue()
+	local clear_queue = mcl_util.queue()
 	local node = minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
 	local oldndef = oldnode and minetest.registered_nodes[oldnode.name]
@@ -326,8 +303,8 @@ function update_neighbours(pos, oldnode)
 end
 
 local function opaque_update_neighbours(pos, added)
-	local fill_queue = queue()
-	local clear_queue = queue()
+	local fill_queue = mcl_util.queue()
+	local clear_queue = mcl_util.queue()
 
 	local function update_wire(pos)
 		local oldpower = minetest.get_node(pos).param2
@@ -356,8 +333,8 @@ local function opaque_update_neighbours(pos, added)
 end
 
 local function update_wire(pos, oldnode)
-	local fill_queue = queue()
-	local clear_queue = queue()
+	local fill_queue = mcl_util.queue()
+	local clear_queue = mcl_util.queue()
 	local node = minetest.get_node(pos)
 	local power = get_node_power_2(pos)
 
