@@ -161,7 +161,7 @@ local function update_wire(pos)
 	end
 end
 
-local function update_opaque(pos)
+function mcl_redstone._update_opaque_connections(pos)
 	local dirs = {
 		vector.new(0, -1, 0),
 		vector.new(1, 0, 0),
@@ -258,7 +258,7 @@ for _, wire in pairs(wires) do
 	wireflag_tab[name] = wire
 end
 
-local function connect_with_wires(pos)
+function mcl_redstone._connect_with_wires(pos)
 	for _, dir in pairs(fourdirs) do
 		local pos2 = pos:add(dir)
 		local node = minetest.get_node(pos2)
@@ -267,42 +267,3 @@ local function connect_with_wires(pos)
 		end
 	end
 end
-
-minetest.register_on_mods_loaded(function()
-	for name, ndef in pairs(minetest.registered_nodes) do
-		local old_construct = ndef.on_construct
-		local old_destruct = ndef.after_destruct
-		if ndef._redstone and ndef._redstone.connects_to then
-			minetest.override_item(name, {
-				on_construct = function(pos)
-					if old_construct then
-						old_construct(pos)
-					end
-					connect_with_wires(pos)
-				end,
-				after_destruct = function(pos, oldnode)
-					if old_destruct then
-						old_destruct(pos, oldnode)
-					end
-					connect_with_wires(pos)
-				end,
-			})
-		end
-		if minetest.get_item_group(name, "opaque") ~= 0 and minetest.get_item_group(name, "solid") ~= 0 then
-			minetest.override_item(name, {
-				on_construct = function(pos)
-					if old_construct then
-						old_construct(pos)
-					end
-					update_opaque(pos)
-				end,
-				after_destruct = function(pos, oldnode)
-					if old_destruct then
-						old_destruct(pos, oldnode)
-					end
-					update_opaque(pos)
-				end,
-			})
-		end
-	end
-end)
