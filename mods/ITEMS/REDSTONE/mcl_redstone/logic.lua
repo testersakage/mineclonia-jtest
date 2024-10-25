@@ -61,6 +61,7 @@ local wiredirs = {
 	{wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1)},
 }
 
+-- Get power from direct neighbours at pos. Returns weak and strong power.
 local function get_node_power(pos, include_wire)
 	local weak = 0
 	local strong = 0
@@ -84,6 +85,7 @@ local function get_node_power(pos, include_wire)
 	return weak, strong
 end
 
+-- Get strong power from neighbours (including opaque nodes) at pos.
 local function get_node_power_2(pos)
 	local max = get_node_power(pos)
 	for _, dir in pairs(sixdirs) do
