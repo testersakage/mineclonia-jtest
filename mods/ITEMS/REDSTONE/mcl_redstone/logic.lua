@@ -253,9 +253,7 @@ end
 -- piston was extended just before a server restart. It is not a clean solution
 -- but it works.
 function mcl_redstone._update_neighbours(pos, oldnode)
-	mcl_redstone._schedule_event(0, -1, pos, function()
-		update_neighbours(pos, oldnode)
-	end)
+	update_neighbours(pos, oldnode)
 end
 
 function mcl_redstone.swap_node(pos, node)
@@ -402,17 +400,13 @@ minetest.register_on_mods_loaded(function()
 					if old_construct then
 						old_construct(pos)
 					end
-					mcl_redstone._schedule_event(0, -1, pos, function()
-						update_wire(pos)
-					end)
+					update_wire(pos)
 				end,
 				after_destruct = function(pos, oldnode)
 					if old_destruct then
 						old_destruct(pos, oldnode)
 					end
-					mcl_redstone._schedule_event(0, -1, pos, function()
-						update_wire(pos, oldnode)
-					end)
+					update_wire(pos, oldnode)
 				end,
 			})
 		end
@@ -448,9 +442,7 @@ minetest.register_on_mods_loaded(function()
 						old_destruct(pos, oldnode)
 					end
 					if ndef._redstone.get_power then
-						mcl_redstone._schedule_event(0, -1, pos, function()
-							update_neighbours(pos, oldnode)
-						end)
+						update_neighbours(pos, oldnode)
 					end
 				end,
 			})
@@ -464,9 +456,7 @@ minetest.register_lbm({
 	nodenames = {"group:redstone_init"},
 	run_at_every_load = true,
 	action = function(pos, node, dtime)
-		mcl_redstone._schedule_event(0, -1, pos, function()
-			call_init(pos)
-		end)
+		call_init(pos)
 	end,
 })
 
@@ -476,8 +466,6 @@ minetest.register_lbm({
 	nodenames = {"group:redstone_get_power"},
 	run_at_every_load = true,
 	action = function(pos, node, dtime)
-		mcl_redstone._schedule_event(0, -1, pos, function()
-			update_neighbours(pos)
-		end)
+		update_neighbours(pos)
 	end,
 })
