@@ -17,6 +17,11 @@ local commdef = {
 	}),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_redstone = {
+		connects_to = function()
+			return true
+		end,
+	},
 }
 
 minetest.register_node("mcl_target:target_off", table.merge(commdef, {
@@ -43,11 +48,11 @@ minetest.register_node("mcl_target:target_on", table.merge(commdef, {
 			minetest.set_node(pos, {name="mcl_target:target_off"})
 		end
 	end,
-	_redstone = {
+	_redstone = table.merge(commdef._redstone, {
 		get_power = function(node, dir)
 			return 15, false
 		end,
-	},
+	}),
 }))
 
 
