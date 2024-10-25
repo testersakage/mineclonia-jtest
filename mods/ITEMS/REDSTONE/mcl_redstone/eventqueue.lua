@@ -106,7 +106,6 @@ end
 local function clear_all_pending_events()
 	node_event_tab = {}
 	while eventqueue:size() > 0 do
-		node_event_tab = {}
 		eventqueue:dequeue()
 	end
 end
