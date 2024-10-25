@@ -33,7 +33,6 @@ minetest.register_node("mcl_redstone_lamp:lamp_on", table.merge(commdef, {
 	tiles = {"jeija_lightstone_gray_on.png"},
 	groups = table.merge(commdef.groups, {not_in_creative_inventory=1}),
 	drop = "node mcl_redstone_lamp:lamp_off",
-	paramtype = "light",
 	light_source = light,
 }))
 
