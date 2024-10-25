@@ -95,7 +95,7 @@ local function get_node_power_2(pos)
 		if opaque_tab[node2.name] then
 			-- Only strong power will go through opaque nodes.
 			local _, power2 = get_node_power(pos2)
-			max = math.max(max, power2 - 1)
+			max = math.max(max, power2)
 		end
 	end
 
@@ -201,7 +201,7 @@ function mcl_redstone.get_power(pos, dir)
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
 			-- Only strong power goes through opaque nodes.
-			power = math.max(power, get_node_power(pos2, true) - 1)
+			power = math.max(power, get_node_power(pos2, true))
 		end
 	end
 
