@@ -25,6 +25,7 @@ mcl_mobs.mob_class = {
 	max_name_length = 30,
 	head_yaw_offset = 0,
 	head_pitch_multiplier = 1,
+	_head_pitch_offset = 0,
 	bone_eye_height = 1.4,
 	head_eye_height = 0,
 	curiosity = 1,

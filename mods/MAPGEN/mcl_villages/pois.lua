@@ -133,6 +133,17 @@ function mcl_villages.get_pois_in (aa, bb)
 	return list1
 end
 
+function mcl_villages.get_pois_in_by_nodepos (aa, bb)
+	local list = pois:get_areas_in_area (aa, bb, false, true, true)
+	local list1 = {}
+	for key, value in pairs (list) do
+		table.insert (list1, value)
+		value.id = key
+	end
+	table.sort (list1, sort_pois_by_minpos)
+	return list1
+end
+
 function mcl_villages.insert_poi (nodepos, kind)
 	local areas = pois:get_areas_for_pos (nodepos, false, true)
 	if areas then
@@ -406,6 +417,7 @@ mcl_villages.register_poi ("mcl_villages:demo_poi", {
 		return false
 	end,
 	village_center = true,
+	is_home = true,
 })
 
 minetest.register_node ("mcl_villages:demo_poi", {
