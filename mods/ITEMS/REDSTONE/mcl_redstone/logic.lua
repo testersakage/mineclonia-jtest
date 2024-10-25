@@ -384,6 +384,7 @@ minetest.register_on_mods_loaded(function()
 					if old_construct then
 						old_construct(pos)
 					end
+					mcl_redstone._update_opaque_connections(pos)
 					mcl_redstone._schedule_event(0, -1, pos, function()
 						opaque_update_neighbours(pos)
 					end)
@@ -392,6 +393,7 @@ minetest.register_on_mods_loaded(function()
 					if old_destruct then
 						old_destruct(pos, oldnode)
 					end
+					mcl_redstone._update_opaque_connections(pos)
 					mcl_redstone._schedule_event(0, -1, pos, function()
 						opaque_update_neighbours(pos)
 					end)
@@ -437,6 +439,9 @@ minetest.register_on_mods_loaded(function()
 					if old_construct then
 						old_construct(pos)
 					end
+					if ndef._redstone.connects_to then
+						mcl_redstone._connect_with_wires(pos)
+					end
 					mcl_redstone._schedule_event(0, -1, pos, function()
 						if init then
 							call_init(pos)
@@ -449,6 +454,9 @@ minetest.register_on_mods_loaded(function()
 				after_destruct = function(pos, oldnode)
 					if old_destruct then
 						old_destruct(pos, oldnode)
+					end
+					if ndef._redstone.connects_to then
+						mcl_redstone._connect_with_wires(pos)
 					end
 					if ndef._redstone.get_power then
 						update_neighbours(pos, oldnode)
