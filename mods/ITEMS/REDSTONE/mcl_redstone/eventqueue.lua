@@ -1,4 +1,5 @@
 mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
+local MULTIPLAYER = not minetest.is_singleplayer()
 local UPDATE_RANGE = (tonumber(minetest.settings:get("mcl_redstone_update_range")) or 8) * 16
 local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
 local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
@@ -184,7 +185,7 @@ function mcl_redstone.tick_step()
 		local event = eventqueue:dequeue()
 		if is_prioritized(event) then
 			clear_event(event)
-			if event.pos and too_far_away(event) then
+			if MULTIPLAYER and event.pos and too_far_away(event) then
 				nfaraway = nfaraway + 1
 			else
 				nevents = nevents + 1
