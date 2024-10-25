@@ -21,8 +21,13 @@ local function queue()
 	}
 end
 
+-- Logical wireflags by contentid
 local lwireflag_tab = {}
+
+-- True if node is opaque by contentid
 local opaque_tab = mcl_redstone._solid_opaque_tab
+
+-- get_power, update and init callbacks by contentid
 local get_power_tab = {}
 local update_tab = {}
 local init_tab = {}
