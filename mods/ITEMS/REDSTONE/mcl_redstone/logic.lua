@@ -268,6 +268,8 @@ function mcl_redstone.swap_node(pos, node)
 	mcl_redstone._update_neighbours(pos, node)
 end
 
+-- Update neighbouring wires and components at pos. Oldnode is the previous
+-- node at the position.
 function update_neighbours(pos, oldnode)
 	local fill_queue = queue()
 	local clear_queue = queue()
