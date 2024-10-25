@@ -231,7 +231,7 @@ end
 function creeper_defs:custom_attack ()
 	-- Begin swelling.
 	self:mob_sound ("attack")
-	self._swell_time = 0
+	self._swell_time = self._swell_time or 0
 	self._swell_dir = 1
 	self:cancel_navigation ()
 	self:halt_in_tracks ()
@@ -241,7 +241,7 @@ function creeper_defs:damage_mob (reason, damage)
 	mob_class.damage_mob (self, reason, damage)
 	if reason == "fall" then
 		self._swell_time
-			= (self._swell_time
+			= ((self._swell_time or 0)
 				+ math.floor (damage * 1.5) / 20)
 		if self._swell_time > CREEPER_SWELL_TIME - 0.25 then
 			self._swell_time = CREEPER_SWELL_TIME - 0.25

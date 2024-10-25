@@ -1,3 +1,5 @@
+mcl_chests = {}
+
 local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 local C = minetest.colorize
@@ -1580,6 +1582,16 @@ local function select_and_spawn_entity(pos, node)
 	end
 
 	find_or_create_entity(pos, node_name, node_def._chest_entity_textures, node.param2, double_chest, node_def._chest_entity_sound, node_def._chest_entity_mesh, node_def._chest_entity_animation_type)
+end
+
+function mcl_chests.is_opened (chest)
+	for k, v in open_chests do
+		if vector.equal (v.pos, chest)
+			and minetest.get_player_by_name (k) then
+			return true
+		end
+	end
+	return false
 end
 
 minetest.register_lbm({

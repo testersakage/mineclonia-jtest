@@ -2553,9 +2553,10 @@ function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, a
 		local wp_target = mob.waypoints[1]
 
 		-- Attempt to reuse existing paths if possible.
-		if wp_target and wp_target.x == floor (target.x + 0.5)
-			and wp_target.y == floor (target.y + 0.5)
-			and wp_target.z == floor (target.z + 0.5)
+		if wp_target
+			and floor (wp_target.x + 0.5) == floor (target.x + 0.5)
+			and floor (wp_target.y + 0.5) == floor (target.y + 0.5)
+			and floor (wp_target.z + 0.5) == floor (target.z + 0.5)
 			and mob.waypoint_age < MAX_STALE_PATH_AGE then
 			return true
 		end
@@ -2644,7 +2645,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:axolotl" then
+				-- if self.name == "mobs_mc:cat" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else

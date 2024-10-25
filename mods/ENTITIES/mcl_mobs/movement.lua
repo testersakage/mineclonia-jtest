@@ -621,8 +621,9 @@ function mob_class:halt_in_tracks (immediate, keep_animation)
 	end
 
 	if immediate then
-		mob.object:set_acceleration (vector.new(0,0,0))
-		mob.object:set_velocity (vector.new(0,0,0))
+		local v = vector.zero ()
+		mob.object:set_acceleration (v)
+		mob.object:set_velocity (v)
 	end
 end
 
@@ -1123,12 +1124,12 @@ function mob_class:run_ai (dtime, moveresult)
 		self._active_activity = nil
 	end
 
-	if active and not self._is_idle_activity[self._current_activity] then
+	if active and not self._is_idle_activity[self._active_activity] then
 		self.ai_idle_time = 0
 	elseif self.ai_idle_time < IDLE_TIME_MAX then
 		self.ai_idle_time = self.ai_idle_time + dtime
 
-		if not self._jockey_rider then
+		if not self._jockey_rider and not active then
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
 		end
