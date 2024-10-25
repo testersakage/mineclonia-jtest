@@ -654,7 +654,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 	if not self.tamed or self.order == "sit" then
 		return false
 	elseif self._target_block then
-		local node = minetest.get_node (self._target_bed_real)
+		local node = minetest.get_node (self._target_block_real)
 		if minetest.get_item_group (node.name, "furnace") == 0
 			and node.name ~= "mcl_chests:chest" then
 			self._target_block = nil
@@ -663,7 +663,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 			self._pose = "walk"
 			return false
 		end
-		if vector.distance (self_pos, self._target_block) <= 0.5 then
+		if vector.distance (self_pos, self._target_block) <= 0.7 then
 			self._pose = "sit"
 			local t = self._target_block_elapsed + dtime
 			self._target_block_elapsed = t
@@ -722,7 +722,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 					local node_above = vector.offset (node, 0, 1, 0)
 					local above = minetest.get_node (node_above)
 					local def = minetest.registered_nodes[above.name]
-					if def and def.walkable and not open then
+					if def and not def.walkable and not open then
 						self._target_block_real = node
 						self._target_block = node_above
 						self._target_block_elapsed = 0
