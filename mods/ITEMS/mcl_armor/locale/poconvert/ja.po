@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-24 08:07+0000\n"
+"PO-Revision-Date: 2024-10-25 17:46+0000\n"
 "Last-Translator: XP_42319 <XP_42319@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_armor/ja/>\n"
@@ -21,7 +21,7 @@ msgid "To equip it, put it on the corresponding armor slot in your inventory men
 msgstr "装備するには、インベントリメニュー中の対応する防具スロットに置いてください。"
 
 msgid "Leather Cap"
-msgstr ""
+msgstr "革の帽子"
 
 msgid "Leather Tunic"
 msgstr "革の上着"
@@ -30,7 +30,7 @@ msgid "Leather Pants"
 msgstr "革のズボン"
 
 msgid "Leather Boots"
-msgstr ""
+msgstr "革のブーツ"
 
 msgid "Colorize a piece of leather armor, or wash it"
 msgstr ""
