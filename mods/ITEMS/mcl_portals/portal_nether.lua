@@ -135,29 +135,6 @@ local function orient(pos, param2)
 	return pos
 end
 
-local function queue()
-	return {
-		front = 1,
-		back = 1,
-		queue = {},
-		enqueue = function(self, value)
-			self.queue[self.back] = value
-			self.back = self.back + 1
-		end,
-		dequeue = function(self) local value = self.queue[self.front]
-			if not value then
-				return
-			end
-			self.queue[self.front] = nil
-			self.front = self.front + 1
-			return value
-		end,
-		size = function(self)
-			return self.back - self.front
-		end,
-	}
-end
-
 -- Check if node is replacable with a portal node.
 local function replacable_with_portal(name)
 	return name == "air" or
@@ -199,7 +176,7 @@ local function light_nether_portal(pos, param2)
 	end
 
 	local nodes = {}
-	local queue = queue()
+	local queue = mcl_util.queue()
 	local checked = {}
 
 	queue:enqueue(pos)
