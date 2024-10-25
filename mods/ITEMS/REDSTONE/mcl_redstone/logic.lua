@@ -223,7 +223,7 @@ local function call_init(pos)
 	end
 end
 
-function mcl_redstone.schedule_update(pos)
+function mcl_redstone._schedule_update(pos)
 	local node = minetest.get_node(pos)
 	if update_tab[node.name] then
 		local ret = update_tab[node.name](pos, node)
@@ -231,6 +231,11 @@ function mcl_redstone.schedule_update(pos)
 			schedule_update(pos, ret)
 		end
 	end
+end
+
+-- TODO: A bit ugly, could be refactored.
+function mcl_redstone.update_node(pos)
+	mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = pos
 end
 
 -- Piston pusher nodes calls this during init to avoid circuits stopping if a

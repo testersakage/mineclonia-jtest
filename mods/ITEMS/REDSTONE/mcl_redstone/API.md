@@ -145,7 +145,7 @@ power level of all six directions.
 It is only valid to call this function from a redstone callback (`init` or
 `update`). Using it in other places will result in an error.
 
-## `mcl_redstone.schedule_update(pos)`
+## `mcl_redstone.update_node(pos)`
 
 Schedule an update to redstone component at `pos`.
 
