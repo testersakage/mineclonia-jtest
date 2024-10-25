@@ -1,8 +1,9 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
--- Numbers with binary representation YYYYXXXX where XXXX determines if there
--- is a visible connection in each of the four cardinal directions and YYYY if
--- the respective connection also goes up over the neighbouring node.
+-- Wireflags are numbers with binary representation YYYYXXXX where XXXX
+-- determines if there is a visible connection in each of the four cardinal
+-- directions and YYYY if the respective connection also goes up over the
+-- neighbouring node.
 local wires = {}
 
 for y0 = 0, 15 do
@@ -35,7 +36,10 @@ local cross_tile = "redstone_redstone_dust_dot.png^redstone_redstone_dust_line0.
 local line_tile = "redstone_redstone_dust_line0.png"
 local dot_tile = "redstone_redstone_dust_dot.png"
 
+-- True if node is opaque by contentid
 local opaque_tab = mcl_redstone._solid_opaque_tab
+
+-- Wireflags by contentid
 local wireflag_tab = {}
 
 local function check_bit(n, b)
@@ -248,8 +252,8 @@ for _, wire in pairs(wires) do
 		after_destruct = function(pos, oldnode)
 			update_wire(pos, minetest.get_node, minetest.swap_node)
 		end,
-		_wireflags = wire,
-		_logical_wireflags = make_long(wire),
+		_wireflags = wire, -- Wireflags for connections
+		_logical_wireflags = make_long(wire), -- Wireflags for power output
 	})
 	wireflag_tab[name] = wire
 end
