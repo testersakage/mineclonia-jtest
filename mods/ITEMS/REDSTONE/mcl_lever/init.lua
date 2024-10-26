@@ -42,6 +42,7 @@ local commdef = {
 		destroy_by_lava_flow = 1,
 		dig_by_piston = 1,
 		attached_node_facedir = 1,
+		unsticky = 1
 	},
 	is_ground_content = false,
 	drop = "mcl_lever:lever_off",

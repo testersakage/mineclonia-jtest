@@ -43,7 +43,7 @@ for i=0,4 do
 			use_texture_alpha = "blend",
 			_mcl_baseitem = "mcl_beds:respawn_anchor",
 		})
-		mesecon.register_mvps_stopper("mcl_beds:respawn_anchor")
+		-- mesecon.register_mvps_stopper("mcl_beds:respawn_anchor")
 	else
 		minetest.register_node("mcl_beds:respawn_anchor_charged_"..i,{
 			description=S("Respawn Anchor"),
@@ -69,7 +69,7 @@ for i=0,4 do
 			light_source = math.min((4 * i) - 1, minetest.LIGHT_MAX),
 			use_texture_alpha = "opaque",
 		})
-		mesecon.register_mvps_stopper("mcl_beds:respawn_anchor_charged_"..i)
+		-- mesecon.register_mvps_stopper("mcl_beds:respawn_anchor_charged_"..i)
 	end
  end
 

@@ -128,9 +128,12 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 	local groups_off = table.copy(plusgroups)
 	groups_off.attached_node = 1
 	groups_off.dig_by_piston = 1
+	groups_off.unsticky = 1
 	groups_off.pressure_plate = 1
 	local groups_on = table.copy(groups_off)
 	groups_on.not_in_creative_inventory = 1
+	groups_on.dig_by_piston = 1
+	groups_on.unsticky = 1
 	groups_on.pressure_plate = 2
 	if not longdesc then
 		longdesc = S("A pressure plate is a redstone component which supplies its surrounding blocks with redstone power while someone or something rests on top of it.")

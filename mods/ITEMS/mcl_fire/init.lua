@@ -79,7 +79,7 @@ minetest.register_node("mcl_fire:fire", {
 	buildable_to = true,
 	sunlight_propagates = true,
 	damage_per_second = 1,
-	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston=1, destroys_items=1, set_on_fire=8},
+	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston=1, destroys_items=1, set_on_fire=8, unsticky = 1},
 	floodable = true,
 	on_flood = function(pos, _, newnode)
 		if minetest.get_item_group(newnode.name, "water") ~= 0 then
@@ -127,7 +127,7 @@ minetest.register_node("mcl_fire:eternal_fire", {
 	buildable_to = true,
 	sunlight_propagates = true,
 	damage_per_second = 1,
-	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston = 1, destroys_items = 1, set_on_fire=8},
+	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston = 1, destroys_items = 1, set_on_fire=8, unsticky = 1},
 	floodable = true,
 	on_flood = function(pos, _, newnode)
 		if minetest.get_item_group(newnode.name, "water") ~= 0 then

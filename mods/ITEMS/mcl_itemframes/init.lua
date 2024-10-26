@@ -219,7 +219,7 @@ function mcl_itemframes.register_itemframe(name, def)
 	mcl_itemframes.registered_itemframes[name] = def
 	minetest.register_node(":"..nodename, table.merge(mcl_itemframes.tpl_node, def.node, {
 		_mcl_itemframe = name,
-		groups = table.merge({ dig_immediate = 3, deco_block = 1, dig_by_piston = 1, handy = 1, axey = 1, itemframe = 1 }, def.node.groups),
+		groups = table.merge({ dig_immediate = 3, deco_block = 1, dig_by_piston = 1, handy = 1, axey = 1, itemframe = 1, unsticky = 1}, def.node.groups),
 	}))
 end
 

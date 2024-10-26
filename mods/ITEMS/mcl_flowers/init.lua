@@ -145,7 +145,7 @@ function mcl_flowers.register_simple_flower(name, def)
 			dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
 			plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
 			flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-			compostability = 65
+			compostability = 65, unsticky = 1
 		},
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		node_placement_prediction = "",
@@ -183,7 +183,7 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 		dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1,
 		flammable = 2, fire_encouragement = 60, fire_flammability = 100,
 		plant = 1, double_plant = 1, non_mycelium_plant = 1, flower = 1,
-		compostability = 65
+		compostability = 65, unsticky = 1
 	},
 	on_place = function(itemstack, placer, pointed_thing)
 		-- We can only place on nodes

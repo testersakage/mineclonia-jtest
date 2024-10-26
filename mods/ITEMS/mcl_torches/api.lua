@@ -53,6 +53,7 @@ function mcl_torches.register_torch(def)
 	groups.dig_by_water = 1
 	groups.destroy_by_lava_flow = 1
 	groups.dig_by_piston = 1
+	groups.unsticky = 1
 	groups.flame_type = def.flame_type or 1
 	groups.attaches_to_top = 1
 	groups.attaches_to_side = 1

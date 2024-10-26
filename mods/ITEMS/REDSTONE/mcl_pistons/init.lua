@@ -1,3 +1,3 @@
 mcl_pistons = {}
 
-dofile("api.lua")
+dofile(minetest.get_modpath("mcl_pistons") .. "/api.lua")

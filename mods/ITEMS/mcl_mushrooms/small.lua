@@ -84,7 +84,7 @@ minetest.register_node("mcl_mushrooms:mushroom_brown", {
 	walkable = false,
 	groups = {
 		attached_node = 1, deco_block = 1, destroy_by_lava_flow = 1,
-		dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1,
+		dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1, unsticky = 1,
 		mushroom = 1, enderman_takable = 1, compostability = 65
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
@@ -113,7 +113,7 @@ minetest.register_node("mcl_mushrooms:mushroom_red", {
 	walkable = false,
 	groups = {
 		attached_node = 1, deco_block = 1, destroy_by_lava_flow = 1,
-		dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1,
+		dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1, unsticky = 1,
 		mushroom = 1, enderman_takable = 1, compostability = 65
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
