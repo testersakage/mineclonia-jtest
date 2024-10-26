@@ -146,7 +146,7 @@ for s=1,4 do
 		wield_image = img,
 		groups = {
 			dig_immediate = 3, deco_block = 1, sea_pickle = 1,
-			not_in_creative_inventory=nici, compostability = 65
+			not_in_creative_inventory=nici, compostability = 65, dig_by_piston = 1, unsticky = 1
 		},
 		light_source = light_strength[s],
 		selection_box = {

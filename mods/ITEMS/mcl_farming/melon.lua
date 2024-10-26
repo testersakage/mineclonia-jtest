@@ -24,7 +24,7 @@ local melon_base_def = {
 	tiles = {"farming_melon_top.png", "farming_melon_top.png", "farming_melon_side.png", "farming_melon_side.png", "farming_melon_side.png", "farming_melon_side.png"},
 	groups = {
 		handy = 1, axey = 1, plant = 1, building_block = 1, dig_by_piston = 1,
-		enderman_takable = 1, compostability = 65
+		enderman_takable = 1, compostability = 65, unsticky = 1
 	},
 	drop = {
 		max_items = 1,

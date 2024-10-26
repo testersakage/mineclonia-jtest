@@ -108,7 +108,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = ename_gt,
 		tiles = texes,
-		groups = {handy=1,pickaxey=1, glazed_terracotta=1,building_block=1, material_stone=1},
+		groups = {handy=1,pickaxey=1, glazed_terracotta=1,building_block=1, material_stone=1, unsticky = 1},
 		paramtype2 = "facedir",
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
