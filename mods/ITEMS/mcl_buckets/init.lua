@@ -198,6 +198,7 @@ local function on_place_bucket_empty(itemstack, user, _)
 				end
 			end
 			minetest.set_node(under, {name="air"})
+			minetest.check_for_falling(under)
 			sound_take(node_name, under)
 
 			if doc.entry_exists("nodes", node_name) then
