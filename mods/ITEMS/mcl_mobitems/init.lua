@@ -471,9 +471,13 @@ core.register_node("mcl_mobitems:frogspawn", {
 	wield_image = "mcl_mobitems_frogspawn.png",
 	liquids_pointable = true,
 	sunlight_propagates = true,
-	groups ={ destroy_by_lava_flow = 1, dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1, },
+	groups ={
+		destroy_by_lava_flow = 1, dig_immediate = 3, dig_by_water = 1, dig_by_piston = 1,
+		supported_node = 1,
+	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	walkable = false,
+	floodable = true,
 	drop = "",
 	node_placement_prediction = "",
 	node_box = {
