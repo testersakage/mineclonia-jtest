@@ -391,6 +391,7 @@ minetest.register_entity("mcl_signs:text", {
 		local t = props and props.textures
 		if type(t) ~= "table" or #t == 0 then self.object:remove() end
 	end,
+	_mcl_pistons_unmovable = true
 })
 
 local function colored_texture(texture,color)

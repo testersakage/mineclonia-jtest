@@ -223,6 +223,7 @@ minetest.register_entity("mcl_enchanting:book", {
 		self._player_near = player_near
 		mcl_enchanting.check_animation_schedule(self, dtime)
 	end,
+	_mcl_pistons_unmovable = true
 })
 
 local rotate

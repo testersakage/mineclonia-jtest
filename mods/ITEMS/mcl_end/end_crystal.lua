@@ -93,7 +93,8 @@ minetest.register_entity("mcl_end:crystal", {
 	on_punch = crystal_explode,
 	on_activate = set_crystal_animation,
 	_exploded = false,
-	_hittable_by_projectile = true
+	_hittable_by_projectile = true,
+	_mcl_pistons_unmovable = true
 })
 
 minetest.register_entity("mcl_end:crystal_beam", {
