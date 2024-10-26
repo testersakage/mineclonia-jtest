@@ -13,6 +13,7 @@ local _BOW_CHARGE_TIME_FULL = 900000 -- bow level 2 (full charge)
 
 local BOW_CHARGE_TIME_HALF = 350000 -- bow level 1
 local BOW_CHARGE_TIME_FULL = 900000 -- bow level 2 (full charge)
+mcl_bows.CROSSBOW_CHARGE_TIME_FULL = BOW_CHARGE_TIME_FULL / 1e+6
 
 -- Factor to multiply with player speed while player uses bow
 -- This emulates the sneak speed.
