@@ -147,7 +147,8 @@ minetest.register_entity("mcl_chests:chest", {
 		if not self:check() then
 			self.object:remove()
 		end
-	end
+	end,
+	_mcl_pistons_unmovable = true
 })
 
 local function get_entity_pos(pos, dir, double)

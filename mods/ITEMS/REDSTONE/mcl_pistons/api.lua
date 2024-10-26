@@ -172,7 +172,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	local function move_object(obj, n)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
-		if (entity or player) and not (entity and entity._mcl_pistons_unmovable) then
+		minetest.debug(entity and dump(minetest.registered_entities[entity.name]))
+		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
 			obj:move_to(obj:get_pos():add(movedir))
 			-- Launch Player, TNT & mobs like in Minecraft
 			-- Only doing so if slimeblock is attached.
@@ -239,19 +240,6 @@ end
 -- mesecon.register_mvps_stopper("mcl_chests:trapped_chest_small")
 -- mesecon.register_mvps_stopper("mcl_chests:trapped_chest_left")
 -- mesecon.register_mvps_stopper("mcl_chests:trapped_chest_right")
---
--- -- Unmovable by design: objects
--- mesecon.register_mvps_unmov("mcl_enchanting:book")
--- mesecon.register_mvps_unmov("mcl_chests:chest")
--- mesecon.register_mvps_unmov("mcl_banners:hanging_banner")
--- mesecon.register_mvps_unmov("mcl_banners:standing_banner")
--- mesecon.register_mvps_unmov("mcl_signs:text")
--- mesecon.register_mvps_unmov("mcl_mobspawners:doll")
--- mesecon.register_mvps_unmov("mcl_armor_stand:armor_entity")
--- mesecon.register_mvps_unmov("mcl_itemframes:item")
--- mesecon.register_mvps_unmov("mcl_itemframes:map")
--- mesecon.register_mvps_unmov("mcl_paintings:painting")
--- mesecon.register_mvps_unmov("mcl_end:crystal")
 
 mcl_pistons.register_on_move(function(moved_nodes)
 	for i = 1, #moved_nodes do

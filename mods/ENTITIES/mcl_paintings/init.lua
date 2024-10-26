@@ -112,6 +112,7 @@ minetest.register_entity("mcl_paintings:painting", {
 		collide_with_objects = false,
 		textures = { wood, wood, wood, wood, wood, wood },
 		hp_max = 1,
+		_mcl_pistons_unmovable = true
 	},
 
 	_motive = 0,

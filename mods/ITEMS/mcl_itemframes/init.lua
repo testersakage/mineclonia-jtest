@@ -18,6 +18,7 @@ local map_props = {
 	visual_size = { x = 1, y = 1 },
 	collide_with_objects = false,
 	textures = { "blank.png" },
+	_mcl_pistons_unmovable = true
 }
 
 mcl_itemframes.tpl_node = {
@@ -44,6 +45,7 @@ mcl_itemframes.tpl_entity = {
 	initial_properties = base_props,
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = false,
+	_mcl_pistons_unmovable = true,
 }
 --Utility functions
 local function find_entity(pos)
