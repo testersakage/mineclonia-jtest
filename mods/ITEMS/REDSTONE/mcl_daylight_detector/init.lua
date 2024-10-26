@@ -7,7 +7,7 @@ local toggle_inverted = {
 }
 
 local function update_detector(pos)
-	minetest.set_node(pos, {
+	mcl_redstone.swap_node(pos, {
 		name = minetest.get_node(pos).name,
 		param2 = minetest.get_natural_light(pos),
 	})
@@ -37,7 +37,7 @@ local commdef = {
 			minetest.record_protection_violation(pos, protname)
 			return
 		end
-		mcl_redstone.swap_node(1, pos, {name = toggle_inverted[node.name], param2 = node.param2})
+		mcl_redstone.swap_node(pos, {name = toggle_inverted[node.name], param2 = node.param2})
 	end,
 	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
