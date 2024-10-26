@@ -3,9 +3,10 @@ local S = minetest.get_translator(minetest.get_current_modname())
 mcl_observers = {}
 
 function mcl_observers.observer_activate(pos)
+	local oldnode = minetest.get_node(pos)
 	mcl_redstone.after(1, function()
 		local node = minetest.get_node(pos)
-		if not node then
+		if oldnode.name ~= node.name or oldnode.param2 ~= node.param2 then
 			return
 		end
 		local ndef = minetest.registered_nodes[node.name]
@@ -98,17 +99,10 @@ local commdef_on = table.merge(commdef, {
 	_redstone = table.merge(commdef._redstone, {
 		init = function(pos, node)
 			local ndef = minetest.registered_nodes[node.name]
-			mcl_redstone.after(2, function()
-				local node2 = minetest.get_node(pos)
-				if node2.name ~= node.name and node2.param2 ~= node.param2 then
-					return
-				end
-
-				minetest.set_node(pos, {
-					name = ndef._observer_off,
-					param2 = node.param2,
-				})
-			end)
+			return {
+				name = ndef._observer_off,
+				param2 = node.param2,
+			}
 		end,
 	}),
 })
