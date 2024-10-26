@@ -297,7 +297,7 @@ function update_neighbours(pos, oldnode)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
 					if lwireflag_tab[node3.name] then
-						update_wire(pos3, math.max(oldpower2 - 1, 0))
+						update_wire(pos3, math.max(oldpower2, 0))
 					end
 				end
 			end
