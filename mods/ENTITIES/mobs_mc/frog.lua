@@ -218,4 +218,4 @@ mcl_mobs.register_mob("mobs_mc:tadpole", {
 	end
 })
 
-mcl_mobs.register_egg("mobs_mc:tadpole", "tadpole", "#3B2103", "#140C05", 0)
+mcl_mobs.register_egg("mobs_mc:tadpole", S("Tadpole"), "#3B2103", "#140C05", 0)
