@@ -421,6 +421,10 @@ function mob_class:should_continue_to_attack (object)
 	return object:get_hp () > 0
 end
 
+------------------------------------------------------------------------
+-- Combat mechanics.
+------------------------------------------------------------------------
+
 function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		-- Initialize parameters consulted during the attack.
@@ -793,6 +797,75 @@ function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 	end
 end
 
+function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
+	if not self.attacking then
+		self._vistime = 0
+		self._time_to_next_repath = 0
+		self._shoot_delay = 0
+		-- 0: uncharged, 1: charging, 2: charged, 3: ready to attack.
+		self._crossbow_state = 0
+		self.attacking = true
+	end
+
+	local vistime = self._vistime
+
+	if line_of_sight then
+		vistime = math.max (vistime, 0) + dtime
+	else
+		vistime = math.min (vistime, 0) - dtime
+	end
+
+	local dist = vector.distance (self_pos, target_pos)
+	local should_pathfind = vistime < 0.25 or dist > self.ranged_attack_radius
+
+	if should_pathfind then
+		self._time_to_next_repath
+			= self._time_to_next_repath - dtime
+		if self._time_to_next_repath <= 0 then
+			local speed = self.run_bonus
+			if self._crossbow_state > 0 then
+				speed = speed * 0.5
+			end
+			self:gopath (target_pos, nil, true, speed)
+			self._time_to_next_repath = math.random (2)
+		end
+	else
+		self._time_to_next_repath = 0
+		self:cancel_navigation ()
+		self:halt_in_tracks ()
+		self:look_at (target_pos)
+	end
+
+	if self._crossbow_state == 0 then
+		if not should_pathfind then
+			self._crossbow_state = 1
+			self._crossbow_charge_time = 0
+			self:set_animation ("shoot")
+		end
+	elseif self._crossbow_state == 1 then
+		self._crossbow_charge_time
+			= self._crossbow_charge_time + dtime
+		if self._crossbow_charge_time >= mcl_bows.CROSSBOW_CHARGE_TIME_FULL then
+			self._crossbow_state = 2
+			self._shoot_delay = 1 + math.random (0, 20) * 0.05
+		end
+	elseif self._crossbow_state == 2 then
+		self._shoot_delay = self._shoot_delay - dtime
+		if self._shoot_delay <= 0 then
+			self._crossbow_state = 3
+		end
+	elseif self._crossbow_state == 3 and line_of_sight then
+		self._crossbow_state = 0
+		self:discharge_ranged (self_pos, target_pos)
+	end
+
+	self._vistime = vistime
+end
+
+------------------------------------------------------------------------
+-- Target acquisition.
+------------------------------------------------------------------------
+
 -- Ref: https://minecraft.wiki/w/Invisibility
 function mob_class:detection_multiplier_for_object (object)
 	local factor = 1.0
@@ -910,7 +983,8 @@ function mob_class:check_attack (self_pos, dtime)
 			self:attack_bowshoot (self_pos, dtime, target_pos,
 					      line_of_sight)
 		elseif attack_type == "crossbow" then
-			-- TODO
+			self:attack_crossbow (self_pos, dtime, target_pos,
+					      line_of_sight)
 		elseif attack_type == "ranged" then
 			self:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 		elseif attack_type == "melee" then
