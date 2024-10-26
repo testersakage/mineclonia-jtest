@@ -686,6 +686,7 @@ local entity_standing = {
 		end
 		self.object:set_properties({textures = {mcl_banners.make_banner_texture(self._base_color, self._layers)}})
 	end,
+	_mcl_pistons_unmovable = true
 }
 minetest.register_entity("mcl_banners:standing_banner", entity_standing)
 

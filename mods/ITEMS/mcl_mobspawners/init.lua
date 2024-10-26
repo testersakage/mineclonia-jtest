@@ -347,6 +347,7 @@ local doll_def = {
 	},
 	timer = 0,
 	_mob = default_mob, -- name of the mob this doll represents
+	_mcl_pistons_unmovable = true
 }
 
 doll_def.get_staticdata = function(self)

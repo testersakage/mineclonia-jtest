@@ -107,6 +107,7 @@ minetest.register_entity("mcl_armor_stand:armor_entity", {
 		textures = {"blank.png"},
 		timer = 0,
 		static_save = false,
+		_mcl_pistons_unmovable = true,
 	},
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
