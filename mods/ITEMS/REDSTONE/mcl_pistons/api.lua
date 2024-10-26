@@ -80,7 +80,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
 							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0 then
-							if piston_pos:equals(offset_pos) and not movedir:equals(dir) then
+							minetest.debug(dump(piston_pos), dump(movedir))
+							if vector.equals(piston_pos, offset_pos) and not vector.equals(movedir, dir) then
 								return
 							end
 
@@ -97,7 +98,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 							and minetest.registered_nodes[offset_node.name]._mcl_pistons_sticky(nn, dir:multiply(-1))
 
 							if is_connected then
-								if piston_pos:equals(offset_pos) then
+								if vector.equals(piston_pos, offset_pos) then
 									return
 								end
 
@@ -171,14 +172,14 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 	end
 
-	local function move_object(obj, n)
+	local function move_object(obj, n, is_pulled)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
 		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
-			obj:move_to(obj:get_pos():add(movedir))
+			obj:move_to(obj:get_pos():add(movedir), true)
 			-- Launch Player, TNT & mobs like in Minecraft
 			-- Only doing so if slimeblock is attached.
-			if n.node.name == "mcl_core:slimeblock" then
+			if n.node.name == "mcl_core:slimeblock" and not is_pulled then
 				obj:set_acceleration({x=movedir.x, y=-GRAVITY, z=movedir.z})
 
 				--Need to set velocities differently for players, items & mobs/tnt, and falling anvils.
@@ -195,19 +196,31 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 	end
 
-	for id, n in ipairs(nodes) do
-		local objects = minetest.get_objects_inside_radius(n.pos, 0.9)
-		for _, obj in ipairs(objects) do
-			move_object(obj, n)
-		end
-
-		-- if moving up, dont push objects already on the block. Because the loop just above does it already
-		if movedir.y ~= 1 then
+	-- remember already moved objects. So they dont get moved more than once
+	local moved_objects = {}
+	local objects
+	if movedir.y ~= 1 then
+		for id, n in ipairs(nodes) do
+			-- if moving up, dont push objects already on the block. Because the loop just above does it already
 			objects = minetest.get_objects_inside_radius(n.old_pos:offset(0, 1, 0), 0.9)
 			for _, obj in ipairs(objects) do
-				move_object(obj, n)
+				if not moved_objects[obj] then
+					move_object(obj, n, true)
+					moved_objects[obj] = true
+				end
 			end
 		end
+	end
+
+	for id, n in ipairs(nodes) do
+		objects = minetest.get_objects_inside_radius(n.pos, 0.9)
+		for _, obj in ipairs(objects) do
+			if not moved_objects[obj] then
+				move_object(obj, n, false)
+				moved_objects[obj] = true
+			end
+		end
+
 	end
 
 	run_on_mcl_piston_move(nodes)
