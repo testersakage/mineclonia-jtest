@@ -764,7 +764,7 @@ minetest.register_node("mcl_portals:portal", {
 			{-0.5, -0.5, -0.1,  0.5, 0.5, 0.1},
 		},
 	},
-	groups = { creative_breakable = 1, portal = 1, not_in_creative_inventory = 1 },
+	groups = { creative_breakable = 1, portal = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	on_destruct = destroy_portal,
 	on_rotate = on_rotate,

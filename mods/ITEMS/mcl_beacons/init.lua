@@ -106,7 +106,7 @@ minetest.register_node("mcl_beacons:beacon_beam", {
 	buildable_to = true,
 })
 
-mesecon.register_mvps_stopper("mcl_beacons:beacon_beam")
+-- mesecon.register_mvps_stopper("mcl_beacons:beacon_beam")
 
 local function remove_beacon_beam(pos)
 	for y=pos.y, pos.y+301 do
@@ -299,7 +299,7 @@ minetest.register_node("mcl_beacons:beacon", {
 	_mcl_hardness = 3,
 })
 
-mesecon.register_mvps_stopper("mcl_beacons:beacon")
+-- mesecon.register_mvps_stopper("mcl_beacons:beacon")
 
 function mcl_beacons.register_beaconblock (itemstring)--API function for other mods
 	table.insert(mcl_beacons.blocks, itemstring)

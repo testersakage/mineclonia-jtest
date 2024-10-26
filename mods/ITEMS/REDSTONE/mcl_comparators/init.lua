@@ -104,6 +104,7 @@ local groups = {
 	dig_by_water  = 1,
 	destroy_by_lava_flow = 1,
 	dig_by_piston = 1,
+	unsticky = 1,
 	attached_node = 1,
 }
 

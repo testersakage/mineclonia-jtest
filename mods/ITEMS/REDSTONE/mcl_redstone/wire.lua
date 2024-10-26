@@ -238,7 +238,7 @@ for _, wire in pairs(wires) do
 		drop = "mcl_redstone:redstone",
 		sounds = mcl_sounds.node_sound_defaults(),
 		is_ground_content = false,
-		groups = {redstone_wire = 1, dig_immediate = 3, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow=1, dig_by_piston = 1, craftitem = 1, not_in_creative_inventory = wire ~= 0 and 1 or 0},
+		groups = {redstone_wire = 1, dig_immediate = 3, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow=1, dig_by_piston = 1, unsticky = 1, craftitem = 1, not_in_creative_inventory = wire ~= 0 and 1 or 0},
 		description = wire == 0 and "Redstone" or S("Redstone Trail (@1)", wireid),
 		_tt_help = tt,
 		_doc_items_create_entry = longdesc and true or false,

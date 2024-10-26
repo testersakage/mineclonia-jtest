@@ -123,7 +123,7 @@ function mcl_campfires.register_campfire(name, def)
 		mesh = "mcl_campfires_campfire.obj",
 		tiles = {{name="mcl_campfires_log.png"},},
 		use_texture_alpha = "clip",
-		groups = { handy=1, axey=1, material_wood=1, not_in_creative_inventory=1, campfire=1},
+		groups = { handy=1, axey=1, material_wood=1, not_in_creative_inventory=1, campfire=1, unmovable_by_piston = 1},
 		paramtype = "light",
 		paramtype2 = "4dir",
 		_on_ignite = function(_, node)
@@ -180,7 +180,7 @@ function mcl_campfires.register_campfire(name, def)
 			 }}
 		},
 		use_texture_alpha = "clip",
-		groups = { handy=1, axey=1, material_wood=1, lit_campfire=1, deco_block=1},
+		groups = { handy=1, axey=1, material_wood=1, lit_campfire=1, deco_block=1, unmovable_by_piston = 1},
 		paramtype = "light",
 		paramtype2 = "4dir",
 		on_destruct = function(pos)

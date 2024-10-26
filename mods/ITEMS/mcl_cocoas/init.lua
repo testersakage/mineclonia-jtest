@@ -51,7 +51,7 @@ local tpl_cocoa = {
 		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
 		attached_node_facedir=1,
 		not_in_creative_inventory=1,
-		cocoa=1
+		cocoa=1, unsticky = 1
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	on_rotate = false,

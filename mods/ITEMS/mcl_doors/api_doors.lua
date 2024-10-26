@@ -45,6 +45,7 @@ end
 function mcl_doors:register_door(name, def)
 	def.groups.not_in_creative_inventory = 1
 	def.groups.dig_by_piston = 1
+	def.groups.unsticky = 1
 	def.groups.door = 1
 
 	if not def.sound_open then
