@@ -221,6 +221,7 @@ local pusherdef = {
 	selection_box = piston_pusher_box,
 	node_box = piston_pusher_box,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
+	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 0.5,
 	on_rotate = false,
 	_redstone = {
@@ -278,7 +279,6 @@ minetest.register_node("mcl_pistons:piston_pusher_normal", table.merge(pusherdef
 		"mesecons_piston_pusher_back.png",
 		"mesecons_piston_pusher_front.png"
 	},
-	groups = {piston_pusher=1, unmovable_by_piston = 1,},
 	corresponding_piston = "mcl_pistons:piston_normal_on",
 }))
 
@@ -341,7 +341,6 @@ minetest.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef
 		"mesecons_piston_pusher_back.png",
 		"mesecons_piston_pusher_front_sticky.png"
 	},
-	groups = {piston_pusher=2, unmovable_by_piston = 1},
 	corresponding_piston = "mcl_pistons:piston_sticky_on",
 }))
 
@@ -446,7 +445,6 @@ minetest.register_node("mcl_pistons:piston_up_pusher_normal", table.merge(pusher
 		"mesecons_piston_pusher_bottom.png",
 		"mesecons_piston_pusher_top.png^[transformR180",
 	},
-	groups = {piston_pusher=1, unmovable_by_piston = 1},
 	is_ground_content = false,
 	corresponding_piston = "mcl_pistons:piston_up_normal_on",
 }))
@@ -501,7 +499,6 @@ minetest.register_node("mcl_pistons:piston_up_pusher_sticky", table.merge(pusher
 		"mesecons_piston_pusher_bottom.png",
 		"mesecons_piston_pusher_top.png^[transformR180",
 	},
-	groups = {piston_pusher=2, unmovable_by_piston = 1},
 	corresponding_piston = "mcl_pistons:piston_up_sticky_on",
 }))
 
@@ -601,7 +598,6 @@ minetest.register_node("mcl_pistons:piston_down_pusher_normal", table.merge(push
 		"mesecons_piston_pusher_bottom.png^[transformR180",
 		"mesecons_piston_pusher_top.png",
 	},
-	groups = {piston_pusher=1, unmovable_by_piston = 1},
 	is_ground_content = false,
 	corresponding_piston = "mcl_pistons:piston_down_normal_on",
 }))
@@ -655,7 +651,6 @@ minetest.register_node("mcl_pistons:piston_down_pusher_sticky", table.merge(push
 		"mesecons_piston_pusher_bottom.png^[transformR180",
 		"mesecons_piston_pusher_top.png",
 	},
-	groups = {piston_pusher=2, unmovable_by_piston = 1},
 	corresponding_piston = "mcl_pistons:piston_down_sticky_on",
 }))
 
