@@ -34,7 +34,7 @@ local bamboo_def = {
 	paramtype = "light",
 	paramtype2 = "4dir",
 	use_texture_alpha = "clip",
-	groups = {handy = 1, axey = 1, choppy = 1, dig_by_piston = 1, plant = 1, non_mycelium_plant = 1, flammable = 3, bamboo = 1, bamboo_tree = 1, vinelike_node = 1},
+	groups = {handy = 1, axey = 1, choppy = 1, dig_by_piston = 1, plant = 1, non_mycelium_plant = 1, flammable = 3, bamboo = 1, bamboo_tree = 1, vinelike_node = 1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	drop = "mcl_bamboo:bamboo",
 	inventory_image = "mcl_bamboo_bamboo_shoot.png",
@@ -99,7 +99,7 @@ mcl_flowerpots.register_potted_flower("mcl_bamboo:bamboo", {
 
 local bamboo_top = table.copy(bamboo_def)
 table.update(bamboo_top,{
-	groups = {not_in_creative_inventory = 1, handy = 1, axey = 1, choppy = 1, flammable = 3, vinelike_node = 1},
+	groups = {not_in_creative_inventory = 1, handy = 1, axey = 1, choppy = 1, flammable = 3, vinelike_node = 1, unsticky = 1},
 	nodebox = nil,
 	selection_box = nil,
 	collision_box = nil,
@@ -179,7 +179,7 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 	climbable = true,
 	physical = true,
 	node_placement_prediction = "",
-	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, stack_falling = 1, scaffolding = 1 },
+	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, stack_falling = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,

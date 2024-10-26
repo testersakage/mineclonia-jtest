@@ -31,7 +31,7 @@ minetest.register_node("mcl_core:ladder", {
 		type = "wallmounted",
 		wall_side = { -0.5, -0.5, -0.5, -7/16, 0.5, 0.5 },
 	},
-	groups = {handy=1,axey=1, attached_node=1, deco_block=1, dig_by_piston=1},
+	groups = {handy=1,axey=1, attached_node=1, deco_block=1, dig_by_piston=1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	node_placement_prediction = "",
 	-- Restrict placement of ladders
@@ -99,7 +99,7 @@ minetest.register_node("mcl_core:vine", {
 	groups = {
 		handy = 1, axey = 1, shearsy = 1, swordy = 1, deco_block = 1, vinelike_node = 4,
 		dig_by_piston = 1, destroy_by_lava_flow = 1, compostability = 50,
-		flammable = 2, fire_encouragement = 15, fire_flammability = 100
+		flammable = 2, fire_encouragement = 15, fire_flammability = 100, unsticky = 1
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	drop = "",

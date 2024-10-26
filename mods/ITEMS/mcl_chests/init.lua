@@ -1062,7 +1062,7 @@ minetest.register_node("mcl_chests:ender_chest", {
 	use_texture_alpha = "opaque",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = { deco_block = 1 },
+	groups = { deco_block = 1, unmovable_by_piston = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_construct = function(pos)
 		local node = minetest.get_node(pos)
@@ -1123,7 +1123,7 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 		"mcl_chests_ender_chest_back.png", "mcl_chests_ender_chest_front.png"},]]--
 	-- Note: The “container” group is missing here because the ender chest does not
 	-- have an inventory on its own
-	groups = { pickaxey = 1, deco_block = 1, material_stone = 1, chest_entity = 1, not_in_creative_inventory = 1 },
+	groups = { pickaxey = 1, deco_block = 1, material_stone = 1, chest_entity = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	is_ground_content = false,
 	paramtype = "light",
 	light_source = 7,
@@ -1324,6 +1324,7 @@ for color, desc in pairs(boxtypes) do
 			container = 3,
 			deco_block = 1,
 			dig_by_piston = 1,
+			unsticky = 1,
 			shulker_box = 1,
 			old_shulker_box_node = 1
 		},

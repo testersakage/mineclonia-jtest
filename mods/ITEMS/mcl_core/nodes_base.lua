@@ -685,7 +685,7 @@ minetest.register_node("mcl_core:bedrock", {
 	_doc_items_longdesc = S("Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode.").."\n"..
 		S("In the End dimension, starting a fire on this block will create an eternal fire."),
 	tiles = {"mcl_core_bedrock.png"},
-	groups = {creative_breakable=1, building_block=1, material_stone=1},
+	groups = {creative_breakable=1, building_block=1, material_stone=1, unmovable_by_piston = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	is_ground_content = false,
 	on_blast = function() end,
@@ -815,7 +815,7 @@ minetest.register_node("mcl_core:obsidian", {
 	tiles = {"default_obsidian.png"},
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	groups = {pickaxey=5, building_block=1, material_stone=1},
+	groups = {pickaxey=5, building_block=1, material_stone=1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 50,
 	after_dig_node = function(_, _, _, digger)
@@ -832,7 +832,7 @@ minetest.register_node("mcl_core:crying_obsidian", {
 	is_ground_content = false,
 	light_source = 10,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	groups = {pickaxey=5, building_block=1, material_stone=1},
+	groups = {pickaxey=5, building_block=1, material_stone=1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 50,
 })
@@ -1041,7 +1041,7 @@ for i=1,8 do
 			mcl_core.clear_snow_dirt(npos, node)
 		end,
 		node_box = node_box,
-		groups = {shovely=2, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i},
+		groups = {shovely=2, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1},
 		sounds = mcl_sounds.node_sound_snow_defaults(),
 		on_construct = mcl_core.on_snow_construct,
 		on_place = on_place,

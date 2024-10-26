@@ -25,6 +25,7 @@ minetest.register_node("mcl_amethyst:budding_amethyst_block",{
 		pickaxey = 1,
 		building_block = 1,
 		dig_by_piston = 1,
+		unsticky = 1,
 	},
 	sounds = sounds,
 	_mcl_hardness = 1.5,
@@ -112,6 +113,7 @@ for size, def in pairs(bud_def) do
 		groups = {
 			destroy_by_lava_flow = 1,
 			dig_by_piston = 1,
+			unsticky = 1,
 			pickaxey = 1,
 			deco_block = 1,
 			amethyst_buds = 1,
@@ -151,6 +153,7 @@ minetest.register_node("mcl_amethyst:amethyst_cluster",{
 	groups = {
 		destroy_by_lava_flow = 1,
 		dig_by_piston = 1,
+		unsticky = 1,
 		pickaxey = 1,
 		deco_block = 1,
 		attached_node = 1,
