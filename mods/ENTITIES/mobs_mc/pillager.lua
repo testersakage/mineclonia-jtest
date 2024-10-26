@@ -24,7 +24,7 @@ pillager = {
 	breath_max = -1,
 	eye_height = 1.5,
 	shoot_interval = 3,
-	shoot_offset = 1.5,
+	shoot_offset = 1.0,
 	armor = {fleshy = 100},
 	can_despawn = false,
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.98, 0.3},

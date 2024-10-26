@@ -131,8 +131,12 @@ function ARROW_ENTITY.on_step(self, dtime)
 	if not self.object:get_pos() then return end
 
 
-	local pos = self.object:get_pos()
-	local dpos = vector.round(vector.new(pos)) -- digital pos
+	local self_pos = self.object:get_pos ()
+	local pos = self._lastpos.x and self._lastpos or self._startpos
+	if not pos or vector.distance (pos, self_pos) > 1 then
+		pos = self_pos
+	end
+	local dpos = vector.round(vector.copy(self_pos)) -- digital pos
 	local node = minetest.get_node(dpos)
 
 	self._lifetime = self._lifetime + dtime
@@ -163,13 +167,13 @@ function ARROW_ENTITY.on_step(self, dtime)
 			self._stuckrechecktimer = 0
 		end
 		-- Pickup arrow if player is nearby (not in Creative Mode)
-		for obj in minetest.objects_inside_radius(pos, 1) do
+		for obj in minetest.objects_inside_radius(self_pos, 1) do
 			if obj:is_player() then
 				if self._collectable and not minetest.is_creative_enabled(obj:get_player_name()) then
 					if obj:get_inventory():room_for_item("main", "mcl_bows:arrow") then
 						obj:get_inventory():add_item("main", "mcl_bows:arrow")
 						minetest.sound_play("item_drop_pickup", {
-							pos = pos,
+							pos = self_pos,
 							max_hear_distance = 16,
 							gain = 1.0,
 						}, true)
@@ -213,7 +217,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 
 		local arrow_dir = self.object:get_velocity()
 		--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-		local raycast = minetest.raycast(pos, vector.add(pos, vector.multiply(arrow_dir, 0.04)), true, false)
+		local raycast = minetest.raycast(pos, vector.add(self_pos, vector.multiply(arrow_dir, 0.04)), true, false)
 		for hitpoint in raycast do
 			if hitpoint.type == "object" then
 				-- find the closest object that is in the way of the arrow
@@ -226,7 +230,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 					end
 				end
 				if ok then
-					local dist = vector.distance(hitpoint.ref:get_pos(), pos)
+					local dist = vector.distance(hitpoint.ref:get_pos(), self_pos)
 					if not closest_object or not closest_distance then
 						closest_object = hitpoint.ref
 						closest_distance = dist
@@ -242,7 +246,8 @@ function ARROW_ENTITY.on_step(self, dtime)
 			local obj = closest_object
 			local is_player = obj:is_player()
 			local lua = obj:get_luaentity()
-			if obj == self._shooter and self._lifetime > 0.5 or obj ~= self._shooter and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
+			if (obj == self._shooter and self._lifetime > 0.5 or obj ~= self._shooter)
+				and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
 				if obj:get_hp() > 0 then
 					-- Check if there is no solid node between arrow and object
 					local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
@@ -265,7 +270,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 					-- Punch target object but avoid hurting enderman.
 					if not lua or lua.name ~= "mobs_mc:enderman" then
 						if not self._in_player then
-							damage_particles(vector.add(pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
+							damage_particles(vector.add(self_pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
 						end
 						if mcl_burning.is_burning(self.object) then
 							mcl_burning.set_on_fire(obj, 5)
@@ -360,7 +365,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 			-- Check for the node to which the arrow is pointing
 			local dir
 			if math.abs(vel.y) < 0.00001 then
-				if self._lastpos.y < pos.y then
+				if self._lastpos.y < self_pos.y then
 					dir = vector.new(0, 1, 0)
 				else
 					dir = vector.new(0, -1, 0)
@@ -443,7 +448,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 	end
 
 	-- Update internal variable
-	self._lastpos = pos
+	self._lastpos = self_pos
 end
 
 -- Force recheck of stuck arrows when punched.
