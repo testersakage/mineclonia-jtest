@@ -217,6 +217,10 @@ minetest.register_chatcommand("tick",
 	privs = {server = true},
 	func = function(name, param)
 		local _, end_pos, operation = string.find(param, "^%s*(%a+)")
+		if not end_pos then
+			return false
+		end
+
 		local _, _, arg = string.find(param, "^%s*([%a%d.]+)", end_pos + 1)
 
 		if operation == "query" then
