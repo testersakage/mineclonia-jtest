@@ -26,6 +26,7 @@ globals = {
 	"tga_encoder",
 	"hb",
 	"walkover",
+	"mcl_pistons",
 	"mcl_redstone",
 	"mcl_achievements",
 	"mcl_amethyst",
