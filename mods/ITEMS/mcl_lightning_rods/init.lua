@@ -63,7 +63,7 @@ rod_def_a.tiles = { "mcl_lightning_rods_rod.png^[brighten" }
 
 rod_def_a.groups.not_in_creative_inventory = 1
 
-rod_def_a._redstone = {
+rod_def_a._mcl_redstone = {
 	get_power = function(node, dir)
 		return 15
 	end,

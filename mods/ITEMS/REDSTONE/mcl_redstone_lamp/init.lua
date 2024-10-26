@@ -9,7 +9,7 @@ local commdef = {
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,

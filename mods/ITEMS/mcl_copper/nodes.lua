@@ -120,7 +120,7 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		_redstone = {
+		_mcl_redstone = {
 			update = function(pos, node)
 				local oldpowered = node.param2 ~= 0
 				local powered  = mcl_redstone.get_power(pos) ~= 0
@@ -144,7 +144,7 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		_redstone = {
+		_mcl_redstone = {
 			update = function(pos)
 				local node = minetest.get_node(pos)
 				local oldpowered = node.param2 ~= 0

@@ -239,7 +239,7 @@ local commdef  = {
 	on_rotate = screwdriver.rotate_simple,
 	_mcl_blast_resistance = 3.5,
 	_mcl_hardness = 3.5,
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,

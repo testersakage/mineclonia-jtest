@@ -178,7 +178,7 @@ local normaldef = table.merge(commdef, {
 })
 
 local offdef = {
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
@@ -194,7 +194,7 @@ local ondef = {
 	selection_box = piston_on_box,
 	after_destruct = piston_remove_pusher,
 	on_rotate = false,
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
@@ -217,7 +217,7 @@ local pusherdef = {
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_blast_resistance = 0.5,
 	on_rotate = false,
-	_redstone = {
+	_mcl_redstone = {
 		-- It is possible for a piston to extend just before server
 		-- shutdown. To avoid circuits stopping because of that we
 		-- update all neighbouring nodes during loading as if a
@@ -373,7 +373,7 @@ local offupdef = table.merge(offdef, {
 	sounds = mcl_sounds.node_sound_stone_defaults({
 		footstep = mcl_sounds.node_sound_wood_defaults().footstep
 	}),
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			if powered_facing_dir(pos, vector.new(0, 1, 0)) then
 				piston_on(pos, node)
@@ -386,7 +386,7 @@ local onupdef = table.merge(ondef, {
 	node_box = piston_up_on_box,
 	selection_box = piston_up_on_box,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			if not powered_facing_dir(pos, vector.new(0, 1, 0)) then
 				piston_off(pos, node)
@@ -531,7 +531,7 @@ local pistonspec_normal_down = {
 }
 
 local offdowndef = table.merge(offdef, {
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			if powered_facing_dir(pos, vector.new(0, -1, 0)) then
 				piston_on(pos, node)
@@ -543,7 +543,7 @@ local offdowndef = table.merge(offdef, {
 local ondowndef = table.merge(ondef, {
 	node_box = piston_down_on_box,
 	selection_box = piston_down_on_box,
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			if not powered_facing_dir(pos, vector.new(0, -1, 0)) then
 				piston_off(pos, node)

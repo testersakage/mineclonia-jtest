@@ -63,7 +63,7 @@ local commdef = {
 	drop = "mcl_repeaters:repeater_off_1",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = screwdriver.disallow,
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			local fourdir = minetest.dir_to_fourdir(dir)
 			return node.param2 % 4 == fourdir or (node.param2 + 2) % 4 == fourdir
@@ -130,7 +130,7 @@ for delay = 1, 4 do
 			end
 			local ndef = minetest.registered_nodes[node.name]
 			local next_setting = delay % 4 + 1
-			local powered = ndef._redstone and ndef._redstone.get_power and "on" or "off"
+			local powered = ndef._mcl_redstone and ndef._mcl_redstone.get_power and "on" or "off"
 
 			minetest.set_node(pos, {
 				name = "mcl_repeaters:repeater_"..powered.."_"..tostring(next_setting),
@@ -177,7 +177,7 @@ for delay = 1, 4 do
 			"mesecons_delayer_ends_on.png",
 		},
 		groups = table.merge(normaldef.groups, {redstone_repeater_on = 1, not_in_creative_inventory = 1}),
-		_redstone = table.merge(normaldef._redstone, {
+		_mcl_redstone = table.merge(normaldef._mcl_redstone, {
 			get_power = function(node, dir)
 				local fourdir = minetest.dir_to_fourdir(dir)
 				if not fourdir or dir.y ~= 0 then
@@ -230,7 +230,7 @@ minetest.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef
 		"mesecons_delayer_end_locked_on.png",
 	},
 	groups = table.merge(lockeddef.groups, {redstone_repeater_on = 1}),
-	_redstone = table.merge(lockeddef._redstone, {
+	_mcl_redstone = table.merge(lockeddef._mcl_redstone, {
 		get_power = function(node, dir)
 			local fourdir = minetest.dir_to_fourdir(dir)
 			if not fourdir or dir.y ~= 0 then

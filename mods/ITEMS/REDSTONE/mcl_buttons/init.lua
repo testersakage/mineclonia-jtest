@@ -6,7 +6,7 @@ mcl_buttons = {}
 function mcl_buttons.push_button(pos, node)
 	local def = minetest.registered_nodes[node.name]
 	minetest.set_node(pos, {name="mcl_buttons:button_"..def._mcl_button_basename.."_on", param2=node.param2})
-	minetest.sound_play(def._redstone_push_sound, {pos=pos}, true)
+	minetest.sound_play(def._mcl_redstone_push_sound, {pos=pos}, true)
 end
 
 local function on_button_place(itemstack, placer, pointed_thing)
@@ -104,8 +104,8 @@ function mcl_buttons.register_button(basename, def)
 		_mcl_hardness = 0.5,
 		_mcl_button_basename = basename,
 		_mcl_burntime = burntime,
-		_redstone_push_sound = push_sound or "mesecons_button_push",
-		_redstone = {
+		_mcl_redstone_push_sound = push_sound or "mesecons_button_push",
+		_mcl_redstone = {
 			connects_to = function(node)
 				return true
 			end,
@@ -144,7 +144,7 @@ function mcl_buttons.register_button(basename, def)
 		groups = table.merge(commdef.groups, {button=2, button_on=1, not_in_creative_inventory=1}),
 		drop = "mcl_buttons:button_"..basename.."_off",
 		_doc_items_create_entry = false,
-		_redstone = table.merge(commdef._redstone, {
+		_mcl_redstone = table.merge(commdef._mcl_redstone, {
 			get_power = function(node, dir)
 				return 15, node.param2 == minetest.dir_to_wallmounted(dir)
 			end,
