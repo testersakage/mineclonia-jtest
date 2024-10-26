@@ -152,9 +152,7 @@ Schedule an update to redstone component at `pos`.
 ## `mcl_redstone.swap_node(pos, node)`
 
 Like `minetest.swap_node` but will trigger redstone updates to surrounding
-nodes. It was added because some code in Mineclonia which would otherwise have
-to be rewritten required it. It should be avoided in favor of
-`minetest.set_node` and might get removed in the future.
+nodes.
 
 ## `mcl_redstone.tick_step()`
 
