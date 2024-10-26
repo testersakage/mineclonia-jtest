@@ -63,7 +63,9 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		else
 			if not minetest.registered_nodes[nn.name].buildable_to then
 				table.insert(nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
-				if #nodes > maximum then return end
+				if #nodes > maximum then
+					return
+				end
 
 				-- add connected nodes to frontiers, connected is a vector list
 				-- the vectors must be absolute positions
@@ -78,7 +80,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
 							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0 then
-							if piston_pos:equals(offset_pos) then
+							if piston_pos:equals(offset_pos) and not movedir:equals(dir) then
 								return
 							end
 
@@ -172,7 +174,6 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	local function move_object(obj, n)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
-		minetest.debug(entity and dump(minetest.registered_entities[entity.name]))
 		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
 			obj:move_to(obj:get_pos():add(movedir))
 			-- Launch Player, TNT & mobs like in Minecraft
