@@ -345,9 +345,9 @@ end
 
 
 
-function kelp.surface_on_mvps_move(pos, node, oldpos, nodemeta) ---@diagnostic disable-line: unused-local
+function kelp.surface_on_mvps_move(movednode) ---@diagnostic disable-line: unused-local
 	-- Pistons moving falling nodes will have already activated on_falling callback.
-	kelp.detach_dig(pos, pos, minetest.get_item_group(node.name, "falling_node") ~= 1, node)
+	kelp.detach_dig(movednode.pos, movednode.pos, minetest.get_item_group(movednode.node.name, "falling_node") ~= 1, movednode.node)
 end
 
 
@@ -486,7 +486,7 @@ kelp.surface_deftemplate = {
 	on_destruct = kelp.surface_on_destruct,
 	on_dig = kelp.surface_on_dig,
 	after_dig_node = kelp.surface_after_dig_node,
-	mesecon = { on_mvps_move = kelp.surface_on_mvps_move, },
+	_mcl_pistons_on_move = kelp.surface_on_mvps_move,
 	drop = "", -- drops are handled in on_dig
 	--_mcl_falling_node_alternative = is_falling and nodename or nil,
 	_mcl_hardness = 0,
