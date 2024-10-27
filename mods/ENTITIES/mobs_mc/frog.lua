@@ -1,19 +1,10 @@
 local S = core.get_translator("mobs_mc")
 local textures = {
-	cold = "mobs_mc_frog.png",
-	snowy = "mobs_mc_frog.png",
-	medium = "mobs_mc_frog_temperate.png",
-	hot = "mobs_mc_frog_warm.png",
+	cold = 1,
+	snowy = 1,
+	medium = 2,
+	hot = 3,
 }
-
-local function set_textures(self, biome_type)
-	local texture = textures[biome_type or "medium"] or textures["medium"]
-	self.object:set_properties({
-		textures = {
-			texture
-		},
-	})
-end
 
 mcl_mobs.register_mob("mobs_mc:frog", {
 	description = S("Frog"),
@@ -34,6 +25,8 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 	drawtype = "front",
 	texture_list = {
 		{"mobs_mc_frog.png"},
+		{"mobs_mc_frog_temperate.png"},
+		{"mobs_mc_frog_warm.png"},
 	},
 	sounds = {
 		random = "frog",
@@ -81,7 +74,11 @@ mcl_mobs.register_mob("mobs_mc:frog", {
 		local b = core.get_biome_name(core.get_biome_data(pos).biome)
 		local bdef = core.registered_biomes[b]
 		if bdef then
-			set_textures(self,bdef._mcl_biome_type)
+			-- set necessary properties to prevent texture reset on entity reload
+			self.texture_selected = textures[bdef._mcl_biome_type or "medium"] or textures["medium"]
+			self.base_texture = self.texture_list[self.texture_selected]
+			--unfortunately texture has already been set at this point in mob_activate
+			self:set_properties({textures = self.base_texture})
 		end
 	end,
 	on_breed = function(self)
