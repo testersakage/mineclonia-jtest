@@ -12,7 +12,7 @@ The project goals are listed under the project description in the
 [README](./src/branch/main/README.md). Contributions that do not align with the project goals
 will not be accepted. The main goal of Mineclonia is to be a stable and
 performant clone of Minecraft. We suggest using the
-[Minecraft wiki](https://minecraft.fandom.com/wiki/Minecraft_Wiki) as a
+[Minecraft wiki](https://minecraft.wiki/w/Minecraft_Wiki) as a
 reference when implementing new features.
 
 While the primary goal of Mineclonia is to clone Minecraft gameplay, sometimes

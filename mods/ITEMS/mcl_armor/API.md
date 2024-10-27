@@ -70,7 +70,7 @@ mcl_armor.register_set({
 	},
 
 	--this attribute reduce strong damage even more
-	--See https://minecraft.fandom.com/wiki/Armor#Armor_toughness for more explanations
+	--See https://minecraft.wiki/w/Armor#Armor_toughness for more explanations
 	--default: 0
 	toughness = 2,
 

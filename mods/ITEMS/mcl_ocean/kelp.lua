@@ -648,13 +648,13 @@ minetest.register_abm({
 })
 
 
--- 50% growth over a minute https://minecraft.fandom.com/wiki/Tutorials/Kelp_farming
+-- 50% growth over a minute https://minecraft.wiki/w/Tutorials/Kelp_farming
 -- 14% chance every random tick
 -- On average, blocks are updated every 68.27 seconds (1365.33 game ticks)
 -- 1 in 7 every 68
 -- 1 in 28 every 17
 -- 1 in 21 every 22
--- https://minecraft.fandom.com/wiki/Tick#Random_tick
+-- https://minecraft.wiki/w/Tick#Random_tick
 minetest.register_abm({
 	label = "Kelp growth",
 	nodenames = { "group:kelp" },

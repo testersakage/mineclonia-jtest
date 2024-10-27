@@ -353,7 +353,7 @@ minetest.register_craftitem("mcl_mobitems:heart_of_the_sea", {
 
 local horse_armor_use = S("Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor.")
 
--- https://minecraft.fandom.com/wiki/Armor#Damage_protection
+-- https://minecraft.wiki/w/Armor#Damage_reduction
 
 minetest.register_craftitem("mcl_mobitems:leather_horse_armor", {
 	description = S("Leather Horse Armor"),
