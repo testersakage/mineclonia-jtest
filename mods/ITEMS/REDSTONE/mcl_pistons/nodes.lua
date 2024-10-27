@@ -172,7 +172,9 @@ local offdef = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
-				piston_on(pos, node)
+				mcl_redstone.after(1, function()
+					piston_on(pos, node)
+				end)
 			end
 		end,
 	},
@@ -189,7 +191,9 @@ local ondef = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
-				piston_off(pos, node)
+				mcl_redstone.after(1, function()
+					piston_off(pos, node)
+				end)
 			end
 		end,
 	},
