@@ -252,7 +252,7 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 -- [...]a fire that is not adjacent to any flammable block does not spread, even to another flammable block within the normal range.
--- https://minecraft.fandom.com/wiki/Fire#Spread
+-- https://minecraft.wiki/w/Fire#Spread
 
 local function check_aircube(p1,p2)
 	local nds=minetest.find_nodes_in_area(p1,p2,{"air"})

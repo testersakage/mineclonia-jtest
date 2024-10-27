@@ -13,7 +13,7 @@ end
 -- If the light level is equal to or less than a random integer (from 0 to 7)
 -- If the fraction of the moon that is bright is greater than a random number (from 0 to 1)
 -- If these conditions are met and the altitude is acceptable, there is a 50% chance of spawning a slime.
--- https://minecraft.fandom.com/wiki/Slime#Swamps
+-- https://minecraft.wiki/w/Slime#Swamps
 
 local function swamp_spawn(pos)
 	if minetest.get_node_light(pos) > math.random(0,7) then return false end

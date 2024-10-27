@@ -293,7 +293,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 			target_hp = entity.is_mob and entity.health or 0
 		end
 
-		 -- Ref: https://minecraft.fandom.com/wiki/Witch#Behavior
+		 -- Ref: https://minecraft.wiki/w/Witch#Behavior
 		local pos = self.object:get_pos ()
 		local dist = vector.distance (target_pos, pos)
 		if entity and (entity.name == "mobs_mc:pillager" or entity.name == "mobs_mc:vindicator" or entity.name == "mobs_mc:evoker") then

@@ -104,7 +104,7 @@ mcl_mobs.register_mob("mobs_mc:guardian_elder", {
 	do_custom = function (self, dtime)
 	    local self_pos
 	    -- See:
-	    -- https://minecraft.fandom.com/wiki/Elder_Guardian#Inflicting_Mining_Fatigue
+	    -- https://minecraft.wiki/w/Elder_Guardian#Inflicting_Mining_Fatigue
 	    self._fatigue_counter = (self._fatigue_counter or 60) + dtime;
 	    self_pos = self.object:get_pos ()
 	    if self._fatigue_counter > 60 then

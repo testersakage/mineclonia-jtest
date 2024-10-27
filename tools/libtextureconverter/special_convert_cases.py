@@ -709,7 +709,7 @@ def convert_grass_textures(
             "/mcl_flowers_double_plant_grass_inv.png",
             tempfile2.name)
 
-        # Convert grass palette: https://minecraft.fandom.com/wiki/Tint
+        # Convert grass palette: https://minecraft.wiki/w/Color
         grass_colors = [
             # [Coords or #Color, AdditionalTint], # Index - Minecraft biome name (MineClone2 biome names)
             # 0 - Plains (flat, Plains, Plains_beach, Plains_ocean, End)
