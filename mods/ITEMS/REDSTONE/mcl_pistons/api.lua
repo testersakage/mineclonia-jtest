@@ -80,30 +80,11 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
 							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0 then
-							minetest.debug(dump(piston_pos), dump(movedir))
 							if vector.equals(piston_pos, offset_pos) and not vector.equals(movedir, dir) then
 								return
 							end
 
 							table.insert(connected, offset_pos)
-						end
-					end
-				else
-					if minetest.get_item_group(nn.name, "unsticky") == 0 then
-						-- when pushing a non sticky block, check for sticky blocks around it, and if they exist, push them aswell
-						for _, dir in pairs(sixdirs) do
-							offset_pos = np:add(dir)
-							offset_node = minetest.get_node(offset_pos)
-							is_connected = minetest.registered_nodes[offset_node.name] and minetest.registered_nodes[offset_node.name]._mcl_pistons_sticky
-							and minetest.registered_nodes[offset_node.name]._mcl_pistons_sticky(nn, dir:multiply(-1))
-
-							if is_connected then
-								if vector.equals(piston_pos, offset_pos) then
-									return
-								end
-
-								table.insert(connected, offset_pos)
-							end
 						end
 					end
 				end
