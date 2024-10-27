@@ -2,24 +2,12 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 local PISTON_MAXIMUM_PUSH = 12
 
-local function piston_facedir_direction(node)
-	return -minetest.facedir_to_dir(node.param2)
-end
-
-local function piston_get_direction(dir, node)
-	if type(dir) == "function" then
-		return dir(node)
-	else
-		return dir
-	end
-end
-
 -- Remove pusher of piston.
 -- To be used when piston was destroyed or dug.
 local function piston_remove_pusher(pos, oldnode)
 	local pistonspec = minetest.registered_nodes[oldnode.name]._piston_spec
 
-	local dir = piston_get_direction(pistonspec.dir, oldnode)
+	local dir = -minetest.facedir_to_dir(oldnode.param2)
 	local pusherpos = vector.add(pos, dir)
 	local pushername = minetest.get_node(pusherpos).name
 
@@ -40,7 +28,7 @@ local function piston_remove_base(pos, oldnode)
 	local basenodename = minetest.registered_nodes[oldnode.name].corresponding_piston
 	local pistonspec = minetest.registered_nodes[basenodename]._piston_spec
 
-	local dir = piston_get_direction(pistonspec.dir, oldnode)
+	local dir = -minetest.facedir_to_dir(oldnode.param2)
 	local basepos = vector.subtract(pos, dir)
 	local basename = minetest.get_node(basepos).name
 
@@ -58,7 +46,7 @@ end
 local function piston_on(pos, node)
 	local pistonspec = minetest.registered_nodes[node.name]._piston_spec
 
-	local dir = piston_get_direction(pistonspec.dir, node)
+	local dir = -minetest.facedir_to_dir(node.param2)
 	local np = vector.add(pos, dir)
 	local meta = minetest.get_meta(pos)
 	local success = mcl_pistons.push(np, dir, PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
@@ -85,7 +73,7 @@ local function piston_off(pos, node)
 		return
 	end
 
-	local dir = piston_get_direction(pistonspec.dir, node)
+	local dir = -minetest.facedir_to_dir(node.param2)
 	local pullpos = vector.add(pos, vector.multiply(dir, 2))
 	local meta = minetest.get_meta(pos)
 	mcl_pistons.push(pullpos, vector.multiply(dir, -1), PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
@@ -101,12 +89,12 @@ local function piston_orientate(pos, placer)
 	local node = minetest.get_node(pos)
 	local pistonspec = minetest.registered_nodes[node.name]._piston_spec
 	if pitch > 55 then
-		minetest.add_node(pos, {name=pistonspec.piston_up})
+		minetest.add_node(pos, {name=pistonspec.offname, param2 = minetest.dir_to_facedir(vector.new(0, -1, 0), true)})
 	elseif pitch < -55 then
-		minetest.add_node(pos, {name=pistonspec.piston_down})
+		minetest.add_node(pos, {name=pistonspec.offname, param2 = minetest.dir_to_facedir(vector.new(0, 1, 0), true)})
 	end
 
-	-- set owner meta after setting node, or it will not keep
+	-- set owner meta after setting node
 	local meta = minetest.get_meta(pos)
 	local owner = placer and placer.get_player_name and placer:get_player_name()
 	if owner and owner ~= "" then
@@ -142,10 +130,7 @@ local piston_on_box = {
 local pistonspec_normal = {
 	offname = "mcl_pistons:piston_normal_off",
 	onname = "mcl_pistons:piston_normal_on",
-	dir = piston_facedir_direction,
 	pusher = "mcl_pistons:piston_pusher_normal",
-	piston_down = "mcl_pistons:piston_down_normal_off",
-	piston_up   = "mcl_pistons:piston_up_normal_off",
 }
 
 local usagehelp_piston = S("This block can have one of 6 possible orientations.")
@@ -287,11 +272,8 @@ minetest.register_node("mcl_pistons:piston_pusher_normal", table.merge(pusherdef
 local pistonspec_sticky = {
 	offname = "mcl_pistons:piston_sticky_off",
 	onname = "mcl_pistons:piston_sticky_on",
-	dir = piston_facedir_direction,
 	pusher = "mcl_pistons:piston_pusher_sticky",
 	sticky = true,
-	piston_down = "mcl_pistons:piston_down_sticky_off",
-	piston_up   = "mcl_pistons:piston_up_sticky_off",
 }
 
 local stickydef = table.merge(commdef, {
@@ -344,349 +326,8 @@ minetest.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef
 	corresponding_piston = "mcl_pistons:piston_sticky_on",
 }))
 
---
---
--- UP
---
---
-
-local piston_up_pusher_box = {
-	type = "fixed",
-	fixed = {
-		{-2/16, -.5 - pt, -2/16, 2/16, .5 - pt, 2/16},
-		{-.5  ,  .5 - pt, -.5  , .5  , .5     ,   .5},
-	},
-}
-
-local piston_up_on_box = {
-	type = "fixed",
-	fixed = {
-		{-.5, -.5, -.5 , .5, .5-pt, .5}
-	},
-}
-
--- Normal
-
-local pistonspec_normal_up = {
-	offname = "mcl_pistons:piston_up_normal_off",
-	onname = "mcl_pistons:piston_up_normal_on",
-	dir = {x = 0, y = 1, z = 0},
-	pusher = "mcl_pistons:piston_up_pusher_normal",
-}
-
-local offupdef = table.merge(offdef, {
-	sounds = mcl_sounds.node_sound_stone_defaults({
-		footstep = mcl_sounds.node_sound_wood_defaults().footstep
-	}),
-	_redstone = {
-		update = function(pos, node)
-			if powered_facing_dir(pos, vector.new(0, 1, 0)) then
-				piston_on(pos, node)
-			end
-		end,
-	},
-})
-
-local onupdef = table.merge(ondef, {
-	node_box = piston_up_on_box,
-	selection_box = piston_up_on_box,
-	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_redstone = {
-		update = function(pos, node)
-			if not powered_facing_dir(pos, vector.new(0, 1, 0)) then
-				piston_off(pos, node)
-			end
-		end,
-	},
-})
-
-local normalupdef = table.merge(normaldef, {
-	_piston_spec = pistonspec_normal_up,
-	drop = "mcl_pistons:piston_normal_off",
-	groups = table.merge(normaldef.groups, {not_in_creative_inventory=1}),
-})
-
-local pusherupdef = table.merge(pusherdef, {
-	selection_box = piston_up_pusher_box,
-	node_box = piston_up_pusher_box,
-})
-
--- offstate
-minetest.register_node("mcl_pistons:piston_up_normal_off", table.merge(normalupdef, offupdef, {
-	tiles = {
-		"mesecons_piston_pusher_front.png",
-		"mesecons_piston_back.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-	},
-}))
-
--- onstate
-minetest.register_node("mcl_pistons:piston_up_normal_on", table.merge(normalupdef, onupdef, {
-	tiles = {
-		"mesecons_piston_on_front.png",
-		"mesecons_piston_back.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-	},
-}))
-
--- pusher
-minetest.register_node("mcl_pistons:piston_up_pusher_normal", table.merge(pusherupdef, {
-	tiles = {
-		"mesecons_piston_pusher_front.png",
-		"mesecons_piston_pusher_back.png",
-		"mesecons_piston_pusher_left.png^[transformR270",
-		"mesecons_piston_pusher_right.png^[transformR90",
-		"mesecons_piston_pusher_bottom.png",
-		"mesecons_piston_pusher_top.png^[transformR180",
-	},
-	is_ground_content = false,
-	corresponding_piston = "mcl_pistons:piston_up_normal_on",
-}))
-
--- Sticky
-
-local pistonspec_sticky_up = {
-	offname = "mcl_pistons:piston_up_sticky_off",
-	onname = "mcl_pistons:piston_up_sticky_on",
-	dir = {x = 0, y = 1, z = 0},
-	pusher = "mcl_pistons:piston_up_pusher_sticky",
-	sticky = true,
-}
-
-local stickyupdef = table.merge(stickydef, {
-	_piston_spec = pistonspec_sticky_up,
-	drop = "mcl_pistons:piston_sticky_off",
-	groups = table.merge(stickydef.groups, {not_in_creative_inventory=1}),
-})
-
--- offstate
-minetest.register_node("mcl_pistons:piston_up_sticky_off", table.merge(stickyupdef, offupdef, {
-	tiles = {
-		"mesecons_piston_pusher_front_sticky.png",
-		"mesecons_piston_back.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-	},
-}))
-
--- onstate
-minetest.register_node("mcl_pistons:piston_up_sticky_on", table.merge(stickyupdef, onupdef, {
-	tiles = {
-		"mesecons_piston_on_front.png",
-		"mesecons_piston_back.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-		"mesecons_piston_bottom.png",
-	},
-}))
-
--- pusher
-minetest.register_node("mcl_pistons:piston_up_pusher_sticky", table.merge(pusherupdef, {
-	tiles = {
-		"mesecons_piston_pusher_front_sticky.png",
-		"mesecons_piston_pusher_back.png",
-		"mesecons_piston_pusher_left.png^[transformR270",
-		"mesecons_piston_pusher_right.png^[transformR90",
-		"mesecons_piston_pusher_bottom.png",
-		"mesecons_piston_pusher_top.png^[transformR180",
-	},
-	corresponding_piston = "mcl_pistons:piston_up_sticky_on",
-}))
-
---
---
--- DOWN
---
---
-
-local piston_down_pusher_box = {
-	type = "fixed",
-	fixed = {
-		{-2/16, -.5 + pt, -2/16, 2/16,  .5 + pt, 2/16},
-		{-.5  , -.5     , -.5  , .5  , -.5 + pt,   .5},
-	},
-}
-
-local piston_down_on_box = {
-	type = "fixed",
-	fixed = {
-		{-.5, -.5+pt, -.5 , .5, .5, .5}
-	},
-}
-
-
--- Normal
-
-local pistonspec_normal_down = {
-	offname = "mcl_pistons:piston_down_normal_off",
-	onname = "mcl_pistons:piston_down_normal_on",
-	dir = {x = 0, y = -1, z = 0},
-	pusher = "mcl_pistons:piston_down_pusher_normal",
-}
-
-local offdowndef = table.merge(offdef, {
-	_redstone = {
-		update = function(pos, node)
-			if powered_facing_dir(pos, vector.new(0, -1, 0)) then
-				piston_on(pos, node)
-			end
-		end,
-	},
-})
-
-local ondowndef = table.merge(ondef, {
-	node_box = piston_down_on_box,
-	selection_box = piston_down_on_box,
-	_redstone = {
-		update = function(pos, node)
-			if not powered_facing_dir(pos, vector.new(0, -1, 0)) then
-				piston_off(pos, node)
-			end
-		end,
-	},
-})
-
-local normaldowndef = table.merge(normalupdef, {
-	_piston_spec = pistonspec_normal_down,
-})
-
-local pusherdowndef = table.merge(pusherupdef, {
-	selection_box = piston_down_pusher_box,
-	node_box = piston_down_pusher_box,
-})
-
--- offstate
-minetest.register_node("mcl_pistons:piston_down_normal_off", table.merge(normaldowndef, offdowndef, {
-	tiles = {
-		"mesecons_piston_back.png",
-		"mesecons_piston_pusher_front.png",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-	},
-}))
-
--- onstate
-minetest.register_node("mcl_pistons:piston_down_normal_on", table.merge(normaldowndef, ondowndef, {
-	tiles = {
-		"mesecons_piston_back.png",
-		"mesecons_piston_on_front.png",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-	},
-}))
-
--- pusher
-minetest.register_node("mcl_pistons:piston_down_pusher_normal", table.merge(pusherdowndef, {
-	tiles = {
-		"mesecons_piston_pusher_back.png",
-		"mesecons_piston_pusher_front.png",
-		"mesecons_piston_pusher_left.png^[transformR90",
-		"mesecons_piston_pusher_right.png^[transformR270",
-		"mesecons_piston_pusher_bottom.png^[transformR180",
-		"mesecons_piston_pusher_top.png",
-	},
-	is_ground_content = false,
-	corresponding_piston = "mcl_pistons:piston_down_normal_on",
-}))
-
--- Sticky
-
-local pistonspec_sticky_down = {
-	onname = "mcl_pistons:piston_down_sticky_on",
-	offname = "mcl_pistons:piston_down_sticky_off",
-	dir = {x = 0, y = -1, z = 0},
-	pusher = "mcl_pistons:piston_down_pusher_sticky",
-	sticky = true,
-}
-
-local stickydowndef = table.merge(stickyupdef, {
-	_piston_spec = pistonspec_sticky_down,
-	sounds = mcl_sounds.node_sound_stone_defaults(),
-})
-
--- offstate
-minetest.register_node("mcl_pistons:piston_down_sticky_off", table.merge(stickydowndef, offdowndef, {
-	tiles = {
-		"mesecons_piston_back.png",
-		"mesecons_piston_pusher_front_sticky.png",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-	},
-}))
-
--- onstate
-minetest.register_node("mcl_pistons:piston_down_sticky_on", table.merge(stickydowndef, ondowndef, {
-	tiles = {
-		"mesecons_piston_back.png",
-		"mesecons_piston_on_front.png",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-		"mesecons_piston_bottom.png^[transformR180",
-	},
-}))
-
--- pusher
-minetest.register_node("mcl_pistons:piston_down_pusher_sticky", table.merge(pusherdowndef, {
-	tiles = {
-		"mesecons_piston_pusher_back.png",
-		"mesecons_piston_pusher_front_sticky.png",
-		"mesecons_piston_pusher_left.png^[transformR90",
-		"mesecons_piston_pusher_right.png^[transformR270",
-		"mesecons_piston_pusher_bottom.png^[transformR180",
-		"mesecons_piston_pusher_top.png",
-	},
-	corresponding_piston = "mcl_pistons:piston_down_sticky_on",
-}))
-
-
---craft recipes
-minetest.register_craft({
-	output = "mcl_pistons:piston_normal_off",
-	recipe = {
-		{"group:wood", "group:wood", "group:wood"},
-		{"mcl_core:cobble", "mcl_core:iron_ingot", "mcl_core:cobble"},
-		{"mcl_core:cobble", "mcl_redstone:redstone", "mcl_core:cobble"},
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_pistons:piston_sticky_off",
-	recipe = {
-		{"mcl_mobitems:slimeball"},
-		{"mcl_pistons:piston_normal_off"},
-	},
-})
-
 -- Add entry aliases for the Help
 doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_normal_on")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_up_normal_off")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_up_normal_on")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_down_normal_off")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_down_normal_on")
 doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_pusher_normal")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_up_pusher_normal")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_down_pusher_normal")
 doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_sticky_on")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_up_sticky_off")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_up_sticky_on")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_down_sticky_off")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_down_sticky_on")
 doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_pusher_sticky")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_up_pusher_sticky")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_down_pusher_sticky")
