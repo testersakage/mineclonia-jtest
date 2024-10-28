@@ -77,7 +77,7 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	initial_properties = {
 		physical = false,
 		visual = "wielditem",
-		visual_size = {x=0.28, y=0.28},
+		visual_size = {x=0.25, y=0.25},
 		collisionbox = {0,0,0,0,0,0},
 		pointable = true,
 		static_save = false,
