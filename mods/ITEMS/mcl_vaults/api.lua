@@ -18,6 +18,12 @@ local function try_open(pos, player)
 	return rb:insert_if_not_exists(player:get_player_name(), true)
 end
 
+local function get_eligible_player_near(pos, distance)
+	for _, v in pairs(minetest.get_objects_inside_radius(pos, distance)) do
+		if v:is_player() and can_open(pos, v) then return v end
+	end
+end
+
 local function get_vault_def(pos)
 	local node = pos and minetest.get_node(pos)
 	local def = node and minetest.registered_nodes[node.name]
@@ -84,15 +90,11 @@ minetest.register_entity("mcl_vaults:item_entity", {
 		pointable = true,
 		static_save = false,
 	},
-	_check_players_near = function(self)
-		for _, v in pairs(minetest.get_objects_inside_radius(self._pos, 5)) do
-			if v:is_player() and can_open(self._pos, v) then return true end
-		end
-	end,
 	_deactivate = function(self, node)
 		node.name = self._vault_name
 		minetest.swap_node(self._pos, node)
 		self.object:remove()
+		minetest.get_node_timer(self._pos):start(1)
 	end,
 	_display_item = function(self, item_name)
 		self.object:set_properties({
@@ -104,14 +106,15 @@ minetest.register_entity("mcl_vaults:item_entity", {
 		if self._timer < 0 then
 			local node = minetest.get_node(self._pos)
 			if node.name == self._vault_on_name then
-				if self:_check_players_near() then
-					-- active vault and player still there -> show next item
+				if get_eligible_player_near(self._pos, 5) then
+					-- active vault and eligible player still there -> show next item
+					-- intentionally use larger distance to prevent activate/deactivate race
 					self._timer = SHOWITEM_INTERVAL
 					local item = mcl_loot.get_multi_loot(self._loot, self._pr)[1]:get_name()
 					self:_display_item(item)
 					-- TODO: manage particles
 				else
-					-- no player near -> deactivate
+					-- no player near or player can't open -> deactivate
 					self:_deactivate(node)
 				end
 			elseif node.name == self._vault_ejecting_name then
@@ -181,7 +184,9 @@ function mcl_vaults.activate(pos, player)
 		node.name = node.name.."_on"
 		minetest.swap_node(pos, node)
 		activate_item_entity(pos)
+		return true
 	end
+	return false
 end
 
 -- Register new type of vault.
@@ -209,6 +214,13 @@ function mcl_vaults.register_vault(name, def)
 		on_rightclick = function(pos, _, clicker)
 			-- just in case that auto activation somehow didn't work
 			mcl_vaults.activate(pos, clicker)
+		end,
+		on_construct = function(pos)
+			minetest.get_node_timer(pos):start(1)
+		end,
+		on_timer = function(pos)
+			local player = get_eligible_player_near(pos, 3)
+			return not player or not mcl_vaults.activate(pos, player)
 		end,
 	}, def.node_off))
 
@@ -250,12 +262,17 @@ function mcl_vaults.register_vault(name, def)
 		run_at_every_load = true,
 		action = activate_item_entity,
 	})
-end
 
-mcl_player.register_globalstep_slow(function(player)
-	local pos = player and player:get_pos()
-	if not pos then return end
-	for _, p in pairs(minetest.find_nodes_in_area(vector.add(pos, -3), vector.add(pos, 3), "group:vault")) do
-		mcl_vaults.activate(p, player)
-	end
-end)
+	minetest.register_lbm({
+		name = "mcl_vaults:" .. name,
+		label = "Activate vault item entity",
+		nodenames = {
+			"mcl_vaults:" .. name,
+		},
+		run_at_every_load = true,
+		action = function(pos)
+			-- don't bother with checking whether it's already running
+			minetest.get_node_timer(pos):start(1)
+		end,
+	})
+end
