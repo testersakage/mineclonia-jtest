@@ -1,4 +1,3 @@
-
 function mcl_trees.strip_tree(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then return end
 
@@ -101,36 +100,22 @@ local function check_schem_growth(pos, file, giant)
 	return false
 end
 
-local diagonals = {
-	vector.new(1,0,1),
-	vector.new(-1,0,1),
-	vector.new(1,0,-1),
-	vector.new(-1,0,-1),
-}
-
 local function check_2by2_saps(pos, node)
 	local n = node.name
 	-- quick check if at all there are sufficient saplings nearby
-	if #minetest.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) == 0 then return end
+	if #minetest.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) < 4 then return end
 	-- we need to check 4 possible 2x2 squares on the x/z plane each uniquely defined by one of the
 	-- diagonals of the position we're checking:
-	for _,v in pairs(diagonals) do
-		local d = vector.add(pos,v) --one of the 4 diagonal positions from this node
-		local xp = vector.new(d.x,d.y,d.z-v.z) --go "back" towards our position on the z axis
-		local zp = vector.new(d.x-v.x,d.y,d.z) --go "back" towards our position on the x axis
+	for dx in -1,1,2 do for dz in -1,1,2 do
+		local d = vector.offset(pos, dx, 0, dz) --one of the 4 diagonal positions from this node
+		local xp = vector.new(d.x,pos.y,pos.z) --x neighbor
+		local zp = vector.new(pos.x,pos.y,d.z) --z neighbor
 
-		local dn = minetest.get_node(d).name
-		local xn = minetest.get_node(xp).name
-		local zn = minetest.get_node(zp).name
-		if n == dn and n == xn and n == zn then
+		if minetest.get_node(d).name == n and minetest.get_node(xp).name == n and minetest.get_node(zp).name == n then
 			--if all the 3 acquired positions have the same nodename as the original node it must be a square
-			local ne = pos
-			for _,p in pairs({pos,d,xp,zp}) do
-				if p.x > ne.x or p.z > ne.z then ne = p end
-			end --find northeasternmost node
-			return {d,xp,zp}, ne
+			return {d,xp,zp}, vector.offset(pos, math.max(dx, 0), 0, math.max(dz, 0))
 		end
-	end
+	end; end
 end
 
 function mcl_trees.grow_tree(pos, node)
