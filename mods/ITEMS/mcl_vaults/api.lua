@@ -7,11 +7,13 @@ local VISITED_KEY = modname .. ":visited_players"
 local RINGBUFFER_SIZE = tonumber(minetest.settings:get("mcl_vaults_looter_list_length")) or 128
 
 local function can_open(pos, player)
+	if not player or not player:is_player() then return false end
 	local rb = mcl_util.ringbuffer.get_from_node_meta(pos, VISITED_KEY, RINGBUFFER_SIZE)
 	return not rb:indexof(player:get_player_name())
 end
 
 local function try_open(pos, player)
+	if not player or not player:is_player() then return false end
 	local rb = mcl_util.ringbuffer.get_from_node_meta(pos, VISITED_KEY, RINGBUFFER_SIZE)
 	return rb:insert_if_not_exists(player:get_player_name(), true)
 end
@@ -173,9 +175,9 @@ end
 
 -- Activate node at position `pos`.
 -- Creates an entity inside the vault that displays potential loot.
-function mcl_vaults.activate(pos)
+function mcl_vaults.activate(pos, player)
 	local def, node = get_vault_def(pos)
-	if def and node.name == "mcl_vaults:"..def.name then
+	if def and node.name == "mcl_vaults:"..def.name and can_open(pos, player) then
 		node.name = node.name.."_on"
 		minetest.swap_node(pos, node)
 		activate_item_entity(pos)
@@ -204,7 +206,10 @@ function mcl_vaults.register_vault(name, def)
 	minetest.register_node(":mcl_vaults:"..name, table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { not_in_creative_inventory = 0 }),
-		on_rightclick = mcl_vaults.activate,
+		on_rightclick = function(pos, _, clicker)
+			-- just in case that auto activation somehow didn't work
+			mcl_vaults.activate(pos, clicker)
+		end,
 	}, def.node_off))
 
 	minetest.register_node(":mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
@@ -251,6 +256,6 @@ mcl_player.register_globalstep_slow(function(player)
 	local pos = player and player:get_pos()
 	if not pos then return end
 	for _, p in pairs(minetest.find_nodes_in_area(vector.add(pos, -3), vector.add(pos, 3), "group:vault")) do
-		mcl_vaults.activate(p)
+		mcl_vaults.activate(p, player)
 	end
 end)
