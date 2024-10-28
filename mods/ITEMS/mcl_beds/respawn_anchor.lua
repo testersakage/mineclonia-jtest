@@ -5,6 +5,8 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 --local mod_doc = minetest.get_modpath("doc") -> maybe add documentation ?
 
+local light_level = { [0] = 0, 3, 7, 10, 14 }
+
 for i=0,4 do
 
 	local function rightclick(pos, node, player, itemstack)
@@ -66,7 +68,7 @@ for i=0,4 do
 					{items = {"mcl_beds:respawn_anchor"}},
 				}
 			},
-			light_source = math.min((4 * i) - 1, minetest.LIGHT_MAX),
+			light_source = light_level[i],
 			use_texture_alpha = "opaque",
 		})
 		mesecon.register_mvps_stopper("mcl_beds:respawn_anchor_charged_"..i)

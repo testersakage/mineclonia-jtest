@@ -301,6 +301,8 @@ minetest.register_node("mcl_enchanting:table", {
 	drop = "",
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 5,
+	paramtype = "light",
+	light_source = 7,
 })
 
 minetest.register_craft({

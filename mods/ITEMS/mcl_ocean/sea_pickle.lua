@@ -66,6 +66,8 @@ local canonical = "mcl_ocean:sea_pickle_1_"..ontop
 
 for s=1,4 do
 	local desc, doc_desc, doc_use, doc_create, tt_help, nici, img, img_off, on_place, cookoutput
+	-- from MC wiki adjusted to mcla values
+	local light_strength = { 6, 8, 11, 14 }
 	if s == 1 then
 		desc = S("Sea Pickle")
 		doc_desc = S("Sea pickles grow on dead brain coral blocks and provide light when underwater. They come in 4 sizes that vary in brightness.")
@@ -147,8 +149,7 @@ for s=1,4 do
 			dig_immediate = 3, deco_block = 1, sea_pickle = 1,
 			not_in_creative_inventory=nici, compostability = 65
 		},
-		-- Light level: 6 at size 1, +3 for each additional stage
-		light_source = math.min(6 + (s-1)*3, minetest.LIGHT_MAX),
+		light_source = light_strength[s],
 		selection_box = {
 			type = "fixed",
 			fixed = {

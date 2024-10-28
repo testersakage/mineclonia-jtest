@@ -266,7 +266,7 @@ minetest.register_node("mcl_sculk:sensor", {
 	is_ground_content = false,
 	after_dig_node = sculk_after_dig_node,
 	_mcl_blast_resistance = 3,
-	light_source  = 6,
+	light_source  = 1,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 })
@@ -284,7 +284,7 @@ minetest.register_node("mcl_sculk:shrieker", {
 	is_ground_content = false,
 	after_dig_node = sculk_after_dig_node,
 	_mcl_blast_resistance = 3,
-	light_source  = 6,
+	light_source  = 0,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 })

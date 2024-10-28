@@ -13,7 +13,7 @@ mcl_lanterns.register_lantern("soul_lantern", {
 	longdesc = S("Lanterns are light sources which can be placed on the top or the bottom of most blocks."),
 	texture = "mcl_lanterns_soul_lantern.png",
 	texture_inv = "mcl_lanterns_soul_lantern_inv.png",
-	light_level = 10,
+	light_level = 9,
 })
 
 minetest.register_craft({

@@ -52,9 +52,9 @@ local n_desc = {
 
 local bulb_light = {
 	[""] = 14,
-	["_exposed"] = 12,
-	["_weathered"] = 10,
-	["_oxidized"] = 7,
+	["_exposed"] = 11,
+	["_weathered"] = 8,
+	["_oxidized"] = 4,
 }
 
 for n, desc in pairs(n_desc) do

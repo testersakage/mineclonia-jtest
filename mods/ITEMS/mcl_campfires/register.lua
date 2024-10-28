@@ -18,7 +18,7 @@ mcl_campfires.register_campfire("mcl_campfires:soul_campfire", {
 	fire_texture = "mcl_campfires_soul_campfire_fire.png",
 	lit_logs_texture = "mcl_campfires_soul_campfire_log_lit.png",
 	drops = "mcl_blackstone:soul_soil",
-	lightlevel = 10,
+	lightlevel = 9,
 	damage = 2,
 })
 

@@ -103,11 +103,13 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 local function register_filled_cauldron(water_level, description, liquid)
 	local id = "mcl_cauldrons:cauldron_"..water_level
 	local water_tex
+	local light_level = 0
 	if liquid == "river_water" then
 		id = id .. "r"
 		water_tex = "default_river_water_source_animated.png^[verticalframe:16:0"
 	elseif liquid == "lava" then
 		id = id .. "_lava"
+		light_level = 14
 		water_tex = "default_lava_source_animated.png^[verticalframe:16:0"
 	else
 		water_tex = "default_water_source_animated.png^[verticalframe:16:0"
@@ -118,6 +120,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 		drawtype = "nodebox",
 		paramtype = "light",
+		light_source = light_level,
 		is_ground_content = false,
 		groups = {pickaxey=1, not_in_creative_inventory=1, cauldron=(1+water_level), cauldron_filled=water_level, comparator_signal=water_level},
 		node_box = create_cauldron_nodebox(water_level),

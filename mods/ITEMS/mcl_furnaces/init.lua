@@ -4,7 +4,7 @@ local S = minetest.get_translator(modname)
 local C = minetest.colorize
 local F = minetest.formspec_escape
 
-local LIGHT_ACTIVE_FURNACE = 13
+local LIGHT_ACTIVE_FURNACE = 12
 
 --
 -- Formspecs
