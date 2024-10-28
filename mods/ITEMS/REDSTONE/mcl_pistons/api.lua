@@ -1,6 +1,6 @@
 local GRAVITY = tonumber(minetest.settings:get("movement_gravity"))
 
--- local inv_nodes_movable = minetest.settings:get_bool("mcl_inv_nodes_movable", true)
+local inv_nodes_movable = minetest.settings:get_bool("mcl_inv_nodes_movable", true)
 
 mcl_pistons.registered_on_move = {}
 
@@ -49,7 +49,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			nn = minetest.get_node(np)
 		end
 
-		if minetest.get_item_group(nn.name, "unmovable_by_piston") == 1 then
+		if minetest.get_item_group(nn.name, "unmovable_by_piston") == 1
+			or (not inv_nodes_movable and minetest.get_item_group(nn.name, "container") ~= 0) then
 			return
 		end
 
@@ -79,7 +80,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 						is_connected = minetest.registered_nodes[nn.name]._mcl_pistons_sticky(offset_node, dir)
 
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
-							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0 then
+							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0
+							and (inv_nodes_movable or minetest.get_item_group(offset_node.name, "container") == 0) then
 							if vector.equals(piston_pos, offset_pos) and not vector.equals(movedir, dir) then
 								return
 							end
@@ -208,33 +210,6 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 	return true
 end
-
--- -- These are unmovable in java edition due to technical restrictions
--- -- disable the setting mcl_nodes_movable
--- if not inv_nodes_movable then
--- 	mesecon.register_mvps_stopper("mcl_hoppers:hopper")
--- 	mesecon.register_mvps_stopper("mcl_hoppers:hopper_side")
--- 	mesecon.register_mvps_stopper("mcl_droppers:dropper")
--- 	mesecon.register_mvps_stopper("mcl_droppers:dropper_up")
--- 	mesecon.register_mvps_stopper("mcl_droppers:dropper_down")
--- 	mesecon.register_mvps_stopper("mcl_dispensers:dispenser")
--- 	mesecon.register_mvps_stopper("mcl_dispensers:dispenser_up")
--- 	mesecon.register_mvps_stopper("mcl_dispensers:dispenser_down")
--- 	mesecon.register_mvps_stopper("mcl_barrels:barrel_open")
--- 	mesecon.register_mvps_stopper("mcl_barrels:barrel_closed")
--- 	mesecon.register_mvps_stopper("mcl_anvils:anvil")
--- 	mesecon.register_mvps_stopper("mcl_anvils:anvil_damage_1")
--- 	mesecon.register_mvps_stopper("mcl_anvils:anvil_damage_2")
--- end
---
--- mesecon.register_mvps_stopper("mcl_chests:chest")
--- mesecon.register_mvps_stopper("mcl_chests:chest_small")
--- mesecon.register_mvps_stopper("mcl_chests:chest_left")
--- mesecon.register_mvps_stopper("mcl_chests:chest_right")
--- mesecon.register_mvps_stopper("mcl_chests:trapped_chest")
--- mesecon.register_mvps_stopper("mcl_chests:trapped_chest_small")
--- mesecon.register_mvps_stopper("mcl_chests:trapped_chest_left")
--- mesecon.register_mvps_stopper("mcl_chests:trapped_chest_right")
 
 mcl_pistons.register_on_move(function(moved_nodes)
 	for i = 1, #moved_nodes do
