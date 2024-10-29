@@ -117,7 +117,7 @@ minetest.register_node("mcl_core:stone_with_redstone", {
 		max_count = 5,
 	},
 	_mcl_ore_lit = "mcl_core:stone_with_redstone_lit",
-	_mcl_cooking_output = "mesecons:redstone"
+	_mcl_cooking_output = "mcl_redstone:redstone"
 })
 
 local function redstone_ore_reactivate(pos, node, puncher, pointed_thing)
