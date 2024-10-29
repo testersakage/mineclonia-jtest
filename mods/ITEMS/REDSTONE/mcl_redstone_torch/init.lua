@@ -114,6 +114,13 @@ minetest.register_node("mcl_redstone_torch:redstoneblock", {
 })
 
 minetest.register_craft({
+	output = "mcl_redstone_torch:redstone_torch_on",
+	recipe = {
+		{"mcl_redstone:redstone"},
+		{"mcl_core:stick"},}
+})
+
+minetest.register_craft({
 	output = "mcl_redstone_torch:redstoneblock",
 	recipe = {
 		{"mcl_redstone:redstone","mcl_redstone:redstone","mcl_redstone:redstone"},
