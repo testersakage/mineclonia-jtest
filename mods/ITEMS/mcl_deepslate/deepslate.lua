@@ -56,7 +56,7 @@ mcl_deepslate.register_deepslate_ore("lapis", S("Deepslate Lapis Lazuli Ore"), {
 mcl_deepslate.register_deepslate_ore("redstone", S("Deepslate Redstone Ore"), {
 	_mcl_ore_lit = "mcl_deepslate:deepslate_with_redstone_lit",
 	_mcl_ore_unlit = "mcl_deepslate:deepslate_with_redstone",
-	_mcl_cooking_output = "mesecons:redstone"
+	_mcl_cooking_output = "mcl_redstone:redstone"
 })
 mcl_deepslate.register_deepslate_ore("redstone_lit", S("Lit Deepslate Redstone Ore"), {
 	tiles = { "mcl_deepslate_redstone_ore.png" },
