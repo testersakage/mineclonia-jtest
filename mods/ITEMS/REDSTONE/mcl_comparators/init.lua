@@ -240,3 +240,12 @@ for _, mode in pairs{"comp", "sub"} do
 		minetest.register_node(nodename, nodedef)
 	end
 end
+
+minetest.register_craft({
+	output = "mcl_comparators:comparator_off_comp",
+	recipe = {
+		{ "",      "mcl_redstone_torch:redstone_torch_on", ""      },
+		{ "mcl_redstone_torch:redstone_torch_on", "mcl_nether:quartz",  "mcl_redstone_torch:redstone_torch_on" },
+		{ "mcl_core:stone",   "mcl_core:stone",   "mcl_core:stone"   },
+	}
+})

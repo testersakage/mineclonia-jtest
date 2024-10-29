@@ -241,5 +241,14 @@ minetest.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef
 	})
 }))
 
+minetest.register_craft({
+	output = "mcl_repeaters:repeater_off_1",
+	recipe = {
+		{ "",      "", ""      },
+		{ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone:redstone",  "mcl_redstone_torch:redstone_torch_on" },
+		{ "mcl_core:stone",   "mcl_core:stone",   "mcl_core:stone"   },
+	}
+})
+
 doc.add_entry_alias("nodes", "mcl_repeaters:repeater_off_1", "nodes", "mcl_repeaters:repeater_off_locked")
 doc.add_entry_alias("nodes", "mcl_repeaters:repeater_off_1", "nodes", "mcl_repeaters:repeater_on_locked")
