@@ -57,6 +57,13 @@ local function measure_inventory(pos, _, _, lists)
 	return empty and 0 or math.floor(1 + (fullness / slots) * 14)
 end
 
+--- wrap measure_inventory to measure non main invs
+local function measure_complex_inventory(lists)
+	return function(pos)
+		return measure_inventory(pos, nil, nil, lists)
+	end
+end
+
 local function measure_double_chest(side)
 	return function(pos, node)
 		local other_pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, side)
@@ -71,6 +78,7 @@ end
 
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
+local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
 
 -- measurable nodes mapped to their measuring function
 local measure_tab = {
@@ -95,6 +103,9 @@ local measure_tab = {
 	["mcl_hoppers:hopper_disabled"] = measure_inventory,
 	["mcl_hoppers:hopper_side"] = measure_inventory,
 	["mcl_hoppers:hopper_side_disabled"] = measure_inventory,
+	["mcl_furnaces:furnace"] = measure_furnace,
+	["mcl_blast_furnace:blast_furnace"] = measure_furnace,
+	["mcl_smoker:smoker"] = measure_furnace,
 }
 
 -- check if node at pos is 'interesting'
