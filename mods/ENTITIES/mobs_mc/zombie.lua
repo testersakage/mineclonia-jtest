@@ -120,20 +120,50 @@ local zombie = {
 			y = 6.0,
 			z = 0.0,
 		},
-		toollike_position = {
-			x = 0.0,
-			y = 5.0,
-			z = 4.0,
-		},
 		rotation = {
 			x = 0,
 			y = 0,
 			z = 0,
 		},
+		toollike_position = {
+			x = 0.0,
+			y = 5.0,
+			z = 4.0,
+		},
 		toollike_rotation = {
 			x = 90,
 			y = -45,
 			z = -90,
+		},
+		blocklike_position = {
+			x = 0,
+			y = 6.0,
+			z = 0,
+		},
+		blocklike_rotation = {
+			x = 0,
+			y = 180,
+			z = 45,
+		},
+		crossbow_position = {
+			x = 0,
+			y = 6.0,
+			z = 0,
+		},
+		crossbow_rotation = {
+			x = 0,
+			y = 180,
+			z = 45,
+		},
+		bow_position = {
+			x = 0,
+			y = 6.0,
+			z = 0,
+		},
+		bow_rotation = {
+			x = 90,
+			y = 130,
+			z = 115,
 		},
 	},
 	ignite_targets_while_burning = true,

@@ -221,7 +221,9 @@ function mob_class:set_animation(anim, fixed_frame)
 		return
 	end
 
-	if self.attack and self._punch_animation_timeout then
+	if self.attack
+		and self._punch_animation_timeout
+		and self._punch_animation_timeout > 0 then
 		anim = "punch"
 	end
 
@@ -454,7 +456,7 @@ function mob_class:set_animation_speed(custom_speed)
 	local speed = custom_speed or normal_speed
 	local v = self:get_velocity ()
 	local scaled_speed = speed * self.frame_speed_multiplier
-	self.object:set_animation_frame_speed (scaled_speed * math.min (1, v))
+	self.object:set_animation_frame_speed (scaled_speed * v)
 end
 
 minetest.register_on_leaveplayer(function(player)
@@ -604,12 +606,24 @@ function mob_class:set_invisible (hide)
 	end
 end
 
+local function is_armor_texture_slot (self, i)
+	for k, _ in pairs (self._armor_texture_slots) do
+		if k == i then
+			return true
+		end
+	end
+
+	return false
+end
+
 function mob_class:set_textures (textures)
 	self._active_texture_list = textures
 	if self._mob_invisible then
 		textures = table.copy (textures)
-		for i = self.wears_armor and 2 or 1, #textures do
-			textures[i] = "blank.png"
+		for i = 1, #textures do
+			if not is_armor_texture_slot (self, i) then
+				textures[i] = "blank.png"
+			end
 		end
 	end
 	self.object:set_properties ({

@@ -249,6 +249,7 @@ local function player_chest_open(player, pos, node_name, textures, param2, doubl
 	else
 		minetest.sound_play(sound .. "_open", { pos = pos, gain = 0.5, max_hear_distance = 16 }, true)
 	end
+	mobs_mc.enrage_piglins (player, true)
 end
 
 -- Simple protection checking functions
@@ -465,6 +466,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			chest_entity = 1,
 			not_in_creative_inventory = 1,
 			_mcl_partial = 2,
+			piglin_protected = 1,
 		},
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
@@ -615,7 +617,9 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			material_wood = 1,
 			flammable = -1,
 			chest_entity = 1,
-			double_chest = 1
+			double_chest = 1,
+			_mcl_partial = 2,
+			piglin_protected = 1,
 		},
 		drop = drop,
 		is_ground_content = false,
@@ -790,7 +794,9 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			not_in_creative_inventory = 1,
 			material_wood = 1,
 			flammable = -1,
-			double_chest = 2
+			double_chest = 2,
+			_mcl_partial = 2,
+			piglin_protected = 1,
 		},
 		drop = drop,
 		is_ground_content = false,
@@ -1133,7 +1139,16 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 		"mcl_chests_ender_chest_back.png", "mcl_chests_ender_chest_front.png"},]]--
 	-- Note: The “container” group is missing here because the ender chest does not
 	-- have an inventory on its own
-	groups = { pickaxey = 1, deco_block = 1, material_stone = 1, chest_entity = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
+	groups = {
+		pickaxey = 1,
+		deco_block = 1,
+		material_stone = 1,
+		chest_entity = 1,
+		not_in_creative_inventory = 1,
+		_mcl_partial = 1,
+		piglin_protected = 1,
+		unmovable_by_piston = 1,
+	},
 	is_ground_content = false,
 	paramtype = "light",
 	light_source = 7,
@@ -1362,7 +1377,7 @@ for color, desc in pairs(boxtypes) do
 			dig_by_piston = 1,
 			unsticky = 1,
 			shulker_box = 1,
-			old_shulker_box_node = 1
+			old_shulker_box_node = 1,
 		},
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
@@ -1445,7 +1460,8 @@ for color, desc in pairs(boxtypes) do
 			dig_by_piston = 1,
 			shulker_box = 1,
 			chest_entity = 1,
-			not_in_creative_inventory = 1
+			not_in_creative_inventory = 1,
+			piglin_protected = 1,
 		},
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),

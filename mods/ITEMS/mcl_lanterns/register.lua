@@ -14,6 +14,9 @@ mcl_lanterns.register_lantern("soul_lantern", {
 	texture = "mcl_lanterns_soul_lantern.png",
 	texture_inv = "mcl_lanterns_soul_lantern_inv.png",
 	light_level = 10,
+	groups = {
+		soul_firelike = 1,
+	},
 })
 
 minetest.register_craft({
