@@ -54,7 +54,7 @@ local function minnum (a, b)
 	return math.min (a, b)
 end
 
-local function aabb_clear (node, origin, pos2, direction, d, typetest)
+local function aabb_clear (node, origin, pos2, direction, d_sqr, typetest)
 	local node_type = minetest.get_node (node)
 	if node_type.name == "air" then
 		return true
@@ -102,9 +102,10 @@ local function aabb_clear (node, origin, pos2, direction, d, typetest)
 		end
 		min = maxnum (min, n3)
 		max = minnum (max, f3)
+		local x = min < 0 and max or min
 		-- Intersection with furthest near face is within the
 		-- vector.
-		if ((min < 0 and max or min) <= d)
+		if (x * x <= d_sqr)
 			-- Intersection with closest far face
 			-- falls after the origin.
 			and (max >= 0)
@@ -151,7 +152,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 	local sx, sy, sz = signum (dx), signum (dy), signum (dz)
 	local stepx, stepy, stepz = sx / dx, sy / dy, sz / dz
 	local direction = vector.direction (pos1, pos2)
-	local distance = vector.distance (pos1, pos2)
+	local distsqr = dx * dx + dy * dy + dz * dz
 
 	-- Precompute reciprocal.
 	direction.x = 1.0 / direction.x
@@ -184,7 +185,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 	v.x = x
 	v.y = y
 	v.z = z
-	if not aabb_clear (v, pos1, pos2, direction, distance, typetest) then
+	if not aabb_clear (v, pos1, pos2, direction, distsqr, typetest) then
 		return false, v
 	end
 
@@ -213,7 +214,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 		v.y = y
 		v.z = z
 
-		if not aabb_clear (v, pos1, pos2, direction, distance) then
+		if not aabb_clear (v, pos1, pos2, direction, distsqr) then
 			return false, v
 		end
 	end
@@ -381,6 +382,12 @@ function mob_class:jock_to_existing (jock, bone, relative_pos, rot)
 	-- Fix the visual size of this mob.
 	local jock_properties = jock:get_properties ()
 	local properties = self.object:get_properties ()
+	self._original_visual_size = properties.visual_size
+	-- CAUTION: it is far too involved to get this to function
+	-- correctly in the presence of nested attachments that differ
+	-- in visual size, and consequently, if multiple objects are
+	-- to be jocked above each other, they _must_ share a
+	-- visual_size of 1.
 	self.object:set_properties ({
 			static_save = false,
 			visual_size = {
@@ -394,9 +401,20 @@ function mob_class:jock_to_existing (jock, bone, relative_pos, rot)
 	entity._jockey_relative_pos = relative_pos
 	entity._jockey_bone = bone
 	entity._jockey_rot = rot
+	entity._jockey_rider_non_dominant = not self._dominant_in_jockeys
 	self.object:set_attach (jock, bone, relative_pos, rot)
 	self:set_animation ("jockey")
 	return jock
+end
+
+function mob_class:dismount_jockey ()
+	self:unjock ()
+	local vehicle = self.jockey_vehicle:get_luaentity ()
+	if vehicle._jockey_rider == self.object then
+		vehicle._jockey_rider = nil
+		vehicle._jockey_staticdata = nil
+		return
+	end
 end
 
 function mob_class:check_jockey_status ()
@@ -498,7 +516,8 @@ end
 function mob_class:mob_controlling_movement ()
 	if self.jockey_vehicle then
 		local attached = self.object:get_attach ()
-		return (attached and attached:get_luaentity ()) or self
+		local entity = attached and attached:get_luaentity ()
+		return entity:mob_controlling_movement () or self
 	end
 	return self
 end
@@ -509,9 +528,8 @@ function mob_class:unjock ()
 			static_save = true,
 			-- XXX: what about mobs which alter their
 			-- visual sizes?
-			visual_size = self.initial_properties.visual_size,
+			visual_size = self._original_visual_size,
 	})
-	self.jockey_vehicle = nil
 end
 
 --------------------------------------------------------------------------------
@@ -786,7 +804,8 @@ function mob_class:target_away_from (pos, pursuer)
 		if dir then
 			local pos = vector.add (pos, dir)
 			if self:node_in_restriction (pos) then
-				if self:gwp_classify_for_movement (pos) == "WALKABLE" then
+				local class = self:gwp_classify_for_movement (pos)
+				if class == "WALKABLE" then
 					return pos
 				end
 			end
@@ -1099,12 +1118,11 @@ function mob_class:run_ai (dtime, moveresult)
 		self:halt_in_tracks ()
 		return
 	end
-	self._moveresult = moveresult
 
 	local active = nil
 
 	-- Don't run AI if controlled as a jockey.
-	if not self._jockey_rider then
+	if not self._jockey_rider or self._jockey_rider_non_dominant then
 		-- Check all inactive AI functions if the current
 		-- activity can be interrupted.
 		if self._can_interrupt_activity

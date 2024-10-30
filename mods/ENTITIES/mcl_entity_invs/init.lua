@@ -152,6 +152,9 @@ function mcl_entity_invs.register_inv(entity_name,show_name,size,no_on_righclick
 		local old_rc = minetest.registered_entities[entity_name].on_rightclick
 		minetest.registered_entities[entity_name].on_rightclick = function(self,clicker)
 			if no_sneak or clicker:get_player_control().sneak  then
+				if self._on_show_entity_inv then
+					self:_on_show_entity_inv (clicker)
+				end
 				mcl_entity_invs.show_inv_form(self,clicker,"")
 				if not no_sneak then return end
 			end

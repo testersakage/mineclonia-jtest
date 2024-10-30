@@ -67,6 +67,7 @@ local function barrel_open(pos, node, clicker)
 	minetest.swap_node(pos, { name = "mcl_barrels:barrel_open", param2 = node.param2 })
 	open_barrels[playername] = pos
 	minetest.sound_play({ name = "mcl_barrels_default_barrel_open" }, { pos = pos, gain = 0.5, max_hear_distance = 16 }, true)
+	mobs_mc.enrage_piglins (clicker, true)
 end
 
 local function close_forms(pos)
@@ -116,7 +117,15 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 		return itemstack
 	end,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	groups = { handy = 1, axey = 1, container = 2, material_wood = 1, flammable = -1, deco_block = 1 },
+	groups = {
+		handy = 1,
+		axey = 1,
+		container = 2,
+		material_wood = 1,
+		flammable = -1,
+		deco_block = 1,
+		piglin_protected = 1,
+	},
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
@@ -170,7 +179,8 @@ minetest.register_node("mcl_barrels:barrel_open", {
 		material_wood = 1,
 		flammable = -1,
 		deco_block = 1,
-		not_in_creative_inventory = 1
+		not_in_creative_inventory = 1,
+		piglin_protected = 1,
 	},
 	allow_metadata_inventory_move = protection_check_move,
 	allow_metadata_inventory_take = protection_check_put_take,

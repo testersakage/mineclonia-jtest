@@ -185,6 +185,11 @@ local function round_trunc (n)
 	return floor (n + 0.5)
 end
 
+local function is_water_source (name)
+	return name == "mcl_core:water_source"
+		or name == "mclx_core:river_water_source"
+end
+
 function mob_class:gwp_start_1 (context)
 	local pos = self.object:get_pos ()
 	-- It is possible for mobs to turn around during a repath if
@@ -210,55 +215,57 @@ function mob_class:gwp_start_1 (context)
 	local ground = minetest.get_node (vector.offset (pos, 0, -1, 0))
 
 	-- If standing in water...
-	if node.name == "mcl_core:water_source" then
-		if self.floats == 0
-			and ground == "mcl_core:water_source" then
+	if is_water_source (node.name) then
+		if self.floats == 1
+			and is_water_source (ground.name) then
 			local nextnode = minetest.get_node (pos)
-			-- Find the first liquid source block beneath
-			-- a non-source block.
-			while nextnode.name == "mcl_core:water_source" do
+			-- Find the first water source beneath a
+			-- non-source block.
+			while is_water_source (nextnode.name) do
 				pos.y = pos.y + 1
 				nextnode = minetest.get_node (pos)
 			end
 			pos.y = pos.y - 1
-			return pos
+			return pos, false
 		end
-	elseif ground ~= "ignore" and ground ~= "air" then
-		return pos
+	elseif self._moveresult and self._moveresult.touching_ground then
+		-- If touching ground, return the position of the node
+		-- at the center of this mob, which will prompt
+		-- gwp_start to return a position derived from one of
+		-- the corners of the bounding box if the mob is stuck
+		-- with its center over the edge of a long drop.
+		return pos, false
+	else
+		local class = self:gwp_classify_node (context, pos)
+		if class ~= "OPEN" and self.gwp_penalties[class] >= 0.0 then
+			return pos, false
+		end
 	end
 	local target_y = pos.y - 128
 
-	while pos.y >= target_y do
-		local node = minetest.get_node (pos)
-		local def = minetest.registered_nodes[node.name]
-		if def and def.walkable then
-			pos.y = pos.y + 1
-			return pos
+	while pos.y > target_y do
+		local class = self:gwp_classify_node (context, pos)
+		if class ~= "OPEN" and self.gwp_penalties[class] >= 0.0 then
+			return pos, true
 		end
 		pos.y = pos.y - 1
 	end
 
-	return nil
+	return nil, false
 end
 
+local function is_passable (class, penalties)
+	return class ~= "OPEN" and penalties[class] >= 0.0
+end
 
-function mob_class:gwp_start (context)
-	local pos = self:gwp_start_1 (context)
-	local penalties = self.gwp_penalties
-	if pos then
-		local start_class = self:gwp_classify_node (context, pos)
-		-- Check for valid start positions at every block on
-		-- which this mob is standing.
-		if start_class ~= "OPEN" and penalties[start_class] >= 0.0 then
-			return pos
-		end
-	end
+local function is_walkable (class)
+	return class == "WALKABLE"
+end
+
+function mob_class:gwp_start_2 (context, cbox, self_pos, criteria)
 	local c1, c2, c3, c4, class
-	local cbox = self.collisionbox
-	local pos = self.object:get_pos ()
-
-	-- Offset pos.y by 0.5, for this mob should attempt to walk
-	-- above slabs and soul sand, not on them.
+	local penalties = self.gwp_penalties
+	local pos = self_pos
 	c1 = vector.new (pos.x + cbox[1], pos.y + 0.5, pos.z + cbox[3])
 	c1 = vector.apply (c1, round_trunc)
 	c2 = vector.new (pos.x + cbox[1], pos.y + 0.5, pos.z + cbox[6])
@@ -268,22 +275,49 @@ function mob_class:gwp_start (context)
 	c4 = vector.new (pos.x + cbox[4], pos.y + 0.5, pos.z + cbox[6])
 	c4 = vector.apply (c4, round_trunc)
 	class = self:gwp_classify_node (context, c1)
-	if class ~= "OPEN" and penalties[class] >= 0.0 then
+	if criteria (class, penalties) then
 		return c1
 	end
 	class = self:gwp_classify_node (context, c2)
-	if class ~= "OPEN" and penalties[class] >= 0.0 then
+	if criteria (class, penalties) then
 		return c2
 	end
 	class = self:gwp_classify_node (context, c3)
-	if class ~= "OPEN" and penalties[class] >= 0.0 then
+	if criteria (class, penalties) then
 		return c3
 	end
 	class = self:gwp_classify_node (context, c4)
-	if class ~= "OPEN" and penalties[class] >= 0.0 then
+	if criteria (class, penalties) then
 		return c4
 	end
 	return nil
+end
+
+function mob_class:gwp_start (context)
+	local pos, optional = self:gwp_start_1 (context)
+	local penalties = self.gwp_penalties
+	local cbox = self.collisionbox
+	if pos then
+		local start_class = self:gwp_classify_node (context, pos)
+		-- Check for valid start positions at every block on
+		-- which this mob is standing.
+		if start_class ~= "OPEN" and penalties[start_class] >= 0.0 then
+			-- `optional' indicates that the selected POS
+			-- is sub-optimal and should be overridden by
+			-- any other walkable node contacting this
+			-- mob's bounding box.
+			if optional then
+				local self_pos = self.object:get_pos ()
+				local optimal
+					= self:gwp_start_2 (context, cbox, self_pos,
+							is_walkable)
+				return optimal or pos
+			end
+			return pos
+		end
+	end
+	local self_pos = self.object:get_pos ()
+	return self:gwp_start_2 (context, cbox, self_pos, is_passable)
 end
 
 local function manhattan3d (ax, ay, az, bx, by, bz)
@@ -2645,7 +2679,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:cat" then
+				-- if self.name == "mobs_mc:creeper" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else
@@ -2870,8 +2904,7 @@ end
 
 local function obstruction_is_water (name, def)
 	-- Water source blocks are always traversible.
-	return name == "mcl_core:water_source"
-		or name == "mclx_core:river_water_source"
+	return is_water_source (name)
 end
 
 local function standing_in_water (self)

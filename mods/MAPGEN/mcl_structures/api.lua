@@ -308,7 +308,10 @@ function mcl_structures.register_structure_spawn(def)
 			end
 			local mobdef = minetest.registered_entities[def.name]
 			if mobdef.can_spawn and not mobdef.can_spawn(p) then return end
-			minetest.add_entity(vector.offset(p,0,-0.5,0),def.name)
+			local staticdata = minetest.serialize ({
+				_structure_spawn = 1,
+			})
+			minetest.add_entity (vector.offset(p,0,-0.5,0), def.name, staticdata)
 		end,
 	})
 end
