@@ -24,6 +24,7 @@ local piglin_base = {
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
 	visual = "mesh",
 	head_eye_height = 1.79,
+	floats = 0,
 	can_open_doors = true,
 	wears_armor = true,
 	armor_drop_probability = {
