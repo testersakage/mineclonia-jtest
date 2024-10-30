@@ -115,6 +115,25 @@ local measure_tab = {
 	["mcl_brewing:stand_101"] = measure_brewing_stand,
 	["mcl_brewing:stand_110"] = measure_brewing_stand,
 	["mcl_brewing:stand_111"] = measure_brewing_stand,
+	-- TODO:
+	--["decorated_pot"] = measure_inventory,
+	--["minecart_with_chest"] = measure_inventory,
+	--["minecart_with_hopper"] = measure_inventory,
+	--["beehive"] = measure_beehive,
+	--["bees_nest"] = measure_beehive,
+	--["cake"] = measure_cake,
+	--["cauldron"] = measure_cauldron,
+	--["chiseled_bookshelf"] = measure_bookshelf,
+	--["composter"] = measure_composter,
+	--["copper_bulb"] = measure_bulb,
+	--["command_block"] = measure_command_block,
+	--["crafter"] = measure_crafter,
+	--["end_portal_frame"] = measure_end_portal_frame,
+	--["item_frame"] = measure_item_frame,
+	--["jukebox"] = measure_jukebox,
+	--["lectern"] = measure_lectern,
+	--["respawn_anchor"] = measure_respawn_anchor,
+	--["sculc_sensor"] = measure_sculc_sensor,
 }
 
 -- check if node at pos is 'interesting'
