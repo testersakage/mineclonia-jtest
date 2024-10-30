@@ -444,17 +444,13 @@ awards.register_achievement("mcl:total_beelocation", {
 })
 
 -- Triggered in mcl_copper decaychains.lua
+-- TODO Add new triggers for using the crafting table
+-- to allow multiple targets for a single trigger.
+-- Allow adding secondary crafting triggers here.
 awards.register_achievement("mcl:wax_on", {
 	title = S("Wax On"),
 	description = S("Apply honeycomb to a copper block to protect it from the elements."),
 	icon = "mcl_honey_honeycomb.png",
--- TODO Multiple target items not supported. Currently wax_on only works when
---      applying honeycomb by hand.
---	trigger = {
---		type = "craft",
---		item = "mcl_copper:block_preserved",
---		target = 1
---	},
 	type = "Advancement",
 	group = "Husbandry",
 })
