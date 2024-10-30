@@ -1309,6 +1309,17 @@ for color, desc in pairs(boxtypes) do
 
 	local small_name = "mcl_chests:" .. color .. "_shulker_box_small"
 
+	local function set_inventory_and_meta_from_stack(pos, stack)
+		local stack_meta = stack:get_meta()
+		local node_meta = minetest.get_meta(pos)
+		local inv = node_meta:get_inventory()
+		local main = minetest.deserialize(stack_meta:get_string("")) or {}
+		inv:set_size("main", 9 * 3)
+		inv:set_list("main", main)
+		mcl_redstone.update_comparators(pos)
+		set_shulkerbox_meta(node_meta, stack_meta)
+	end
+
 	minetest.register_node("mcl_chests:" .. color .. "_shulker_box", {
 		description = desc,
 		_doc_items_create_entry = create_entry,
@@ -1338,18 +1349,15 @@ for color, desc in pairs(boxtypes) do
 		on_construct = function(pos)
 			local node = minetest.get_node(pos)
 			node.name = small_name
+			-- set_node required to trigger on_construct of _small variant
 			minetest.set_node(pos, node)
 		end,
 		after_place_node = function(pos, placer, itemstack, _)
-			local nmeta = minetest.get_meta(pos)
-			local imetadata = itemstack:get_meta():get_string("")
-			local iinv_main = minetest.deserialize(imetadata)
-			local ninv = nmeta:get_inventory()
-			ninv:set_list("main", iinv_main)
-			ninv:set_size("main", 9 * 3)
-			set_shulkerbox_meta(nmeta, itemstack:get_meta())
+			-- restore node inventory and meta data
+			set_inventory_and_meta_from_stack(pos, itemstack)
 
 			if minetest.is_creative_enabled(placer and placer:get_player_name() or "") then
+				local ninv = minetest.get_meta(pos):get_inventory()
 				if not ninv:is_empty("main") then
 					return nil
 				else
@@ -1364,12 +1372,8 @@ for color, desc in pairs(boxtypes) do
 			local def = minetest.registered_nodes[dropnode.name]
 			if def and def.buildable_to then
 				minetest.set_node(droppos, { name = small_name, param2 = minetest.dir_to_facedir(dropdir) })
-				local ninv = minetest.get_inventory({ type = "node", pos = droppos })
-				local imetadata = stack:get_meta():get_string("")
-				local iinv_main = minetest.deserialize(imetadata)
-				ninv:set_list("main", iinv_main)
-				ninv:set_size("main", 9 * 3)
-				set_shulkerbox_meta(minetest.get_meta(droppos), stack:get_meta())
+				-- restore node inventory and meta data
+				set_inventory_and_meta_from_stack(droppos, stack)
 				stack:take_item()
 			end
 			return stack
@@ -1428,26 +1432,15 @@ for color, desc in pairs(boxtypes) do
 		--	This doesn't work, it just destroys the inventory:
 		--	on_place = minetest.rotate_node,
 		on_construct = function(pos)
-			local meta = minetest.get_meta(pos)
-			meta:set_string("formspec", formspec_shulker_box(nil))
-			local inv = meta:get_inventory()
-			inv:set_size("main", 9*3)
 			create_entity(pos, small_name, {mob_texture}, minetest.get_node(pos).param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
 		end,
 		after_place_node = function(pos, placer, itemstack, _)
-			if not placer or not placer:is_player() then
-				return itemstack
-			end
-
-			local nmeta = minetest.get_meta(pos)
-			local imetadata = itemstack:get_meta():get_string("")
-			local iinv_main = minetest.deserialize(imetadata)
-			local ninv = nmeta:get_inventory()
-			ninv:set_list("main", iinv_main)
-			ninv:set_size("main", 9 * 3)
-			set_shulkerbox_meta(nmeta, itemstack:get_meta())
+			-- normally not called (_small variant is never created as an item)
+			-- keep it here to make sure inventory - if any - is not lost
+			set_inventory_and_meta_from_stack(pos, itemstack)
 
 			if minetest.is_creative_enabled(placer:get_player_name()) then
+				local ninv = minetest.get_meta(pos):get_inventory()
 				if not ninv:is_empty("main") then
 					return nil
 				else
@@ -1493,6 +1486,20 @@ for color, desc in pairs(boxtypes) do
 			else
 				return 0
 			end
+		end,
+		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
+			minetest.log("action", player:get_player_name() ..
+				" moves stuff in shulker box at " .. minetest.pos_to_string(pos))
+		end,
+		on_metadata_inventory_put = function(pos, listname, _, stack, player)
+			minetest.log("action", player:get_player_name() ..
+				" moves stuff to shulker box at " .. minetest.pos_to_string(pos))
+			mcl_redstone.update_comparators(pos)
+		end,
+		on_metadata_inventory_take = function(pos, _, _, _, player)
+			minetest.log("action", player:get_player_name() ..
+				" takes stuff from shulker box at " .. minetest.pos_to_string(pos))
+			mcl_redstone.update_comparators(pos)
 		end,
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 2,
