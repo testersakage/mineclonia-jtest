@@ -20,6 +20,9 @@ mcl_campfires.register_campfire("mcl_campfires:soul_campfire", {
 	drops = "mcl_blackstone:soul_soil",
 	lightlevel = 10,
 	damage = 2,
+	groups = {
+		soul_firelike = 1,
+	},
 })
 
 -- Register Campfire Crafting

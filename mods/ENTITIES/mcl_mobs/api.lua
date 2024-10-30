@@ -58,9 +58,7 @@ function mob_class:get_staticdata_table ()
 	local tmp = {}
 
 	for tag, stat in pairs(self) do
-
 		local t = type(stat)
-
 		if  t ~= "function"
 		and t ~= "nil"
 		and t ~= "userdata"
@@ -85,6 +83,20 @@ function mob_class:get_staticdata_table ()
 	else
 		tmp._mcl_potions = {}
 	end
+
+	-- If fortunately the jockey rider is still present, prefer
+	-- staticdata derived "from the horse's mouth" to any saved by
+	-- prior on_deactivate callbacks.
+	--
+	-- If rider(s) have been deactivated first, their staticdata
+	-- will none the less have been preserved by on_deactivate and
+	-- suchlike.
+	if self._jockey_rider and self._jockey_rider:is_valid () then
+		local entity = self._jockey_rider:get_luaentity ()
+		local rider_data = entity:get_staticdata_table ()
+		rider_data.name = entity.name
+		tmp._jockey_staticdata = rider_data
+	end
 	return tmp
 end
 
@@ -99,14 +111,6 @@ Edit the copied state so it's serialized in the state you need to.
 ]]
 function mob_class:get_staticdata()
 	local data = self:get_staticdata_table ()
-
-	-- Preserve the rider, which is not persisted itself.
-	if self._jockey_rider and self._jockey_rider:is_valid () then
-		local entity = self._jockey_rider:get_luaentity ()
-		local rider_data = entity:get_staticdata_table ()
-		rider_data.name = entity.name
-		data._jockey_staticdata	= rider_data
-	end
 	return minetest.serialize (data)
 end
 
@@ -141,7 +145,6 @@ function mob_class:update_textures()
 			self.texture_selected = math.random(c)
 		end
 
-
 		-- Otherwise set_armor_texture will modify the texture
 		-- list in the metatable, which eventually appears in
 		-- mob spawners.
@@ -153,8 +156,7 @@ function mob_class:update_textures()
 	end
 end
 
-function mob_class:scale_size(scale, force)
-	if self.scaled and not force then return end
+function mob_class:scale_size_of_child (scale)
 	local collisionbox = {
 		self.base_colbox[1] * scale,
 		self.base_colbox[2] * scale,
@@ -164,8 +166,9 @@ function mob_class:scale_size(scale, force)
 		self.base_colbox[6] * scale,
 	}
 	self.collisionbox = collisionbox
-	self:set_properties({
-		visual_size = {
+	local initial_size = self.initial_properties.visual_size
+	self:set_properties ({
+		visual_size = self._child_mesh and initial_size or {
 			x = self.base_size.x * scale,
 			y = self.base_size.y * scale,
 		},
@@ -178,11 +181,15 @@ function mob_class:scale_size(scale, force)
 			self.base_selbox[5] * scale,
 			self.base_selbox[6] * scale,
 		},
+		mesh = self._child_mesh or self.base_mesh,
 	})
 	-- This presumes that the collision box does not extend much
 	-- beneath the mob origin.
 	self.head_eye_height = self.head_eye_height * scale
-	self.scaled = true
+end
+
+function mob_class:post_load_staticdata ()
+	-- Nothing here but crickets.
 end
 
 function mob_class:mob_activate(staticdata, dtime)
@@ -202,6 +209,7 @@ function mob_class:mob_activate(staticdata, dtime)
 		end
 	end
 
+	self:post_load_staticdata ()
 	self.acc_dir = vector.zero ()
 	self.acc_speed = 0
 	self._initial_step_height = self.initial_properties.stepheight
@@ -243,7 +251,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	local def = mcl_mobs.registered_mobs[self.name]
 	self.collisionbox = self.initial_properties.collisionbox
 	if self.child == true then
-		self:scale_size(0.5)
+		self:scale_size_of_child (0.5)
 		if def.child_texture then
 			self.base_texture = def.child_texture[1]
 		end
@@ -293,13 +301,25 @@ function mob_class:mob_activate(staticdata, dtime)
 	self:restore_jockey ()
 
 	self:init_ai ()
-	self:display_wielditem ()
+	self:display_wielditem (false)
+	self:display_wielditem (true)
+
+	if type (self._armor_texture_slots) == "number" then
+		self._armor_texture_slots = {
+			[self._armor_texture_slots] = {
+				"head",
+				"torso",
+				"legs",
+				"feet",
+			},
+		}
+	end
 
 	if not self.wears_armor and self.armor_list then
 		self.armor_list = nil
 	elseif not self._run_armor_init and self.wears_armor then
 		self.armor_list = { head = "", torso = "", feet = "", legs = "" }
-		self:set_armor_texture()
+		self:set_armor_texture ()
 		self._run_armor_init = true
 	end
 
@@ -347,6 +367,7 @@ function mob_class:on_step(dtime, moveresult)
 			collisions = { },
 		}
 	end
+	self._moveresult = moveresult
 
 	-- Clear remaining momentum if stuck in a cobweb or analogous
 	-- node.
@@ -383,7 +404,7 @@ function mob_class:on_step(dtime, moveresult)
 	self:check_dying ()
 
 	if self.stupefied then
-		self.object:set_animation_frame_speed (0)
+		-- self.object:set_animation_frame_speed (0)
 		if self.waypoints then
 			self:navigation_step (dtime, moveresult)
 			self:movement_step (dtime, moveresult)

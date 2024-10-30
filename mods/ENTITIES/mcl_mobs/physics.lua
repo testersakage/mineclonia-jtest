@@ -134,8 +134,13 @@ function mob_class:item_drop(cooked, looting_level, cmi_cause)
 			end
 		end
 	end
-	self:drop_armor (looting_level * 0.01)
-	self:drop_wielditem (looting_level * 0.01)
+	local bonus_chance = looting_level * 0.01
+	self:drop_armor (bonus_chance)
+	self:drop_wielditem (bonus_chance)
+	self:drop_offhand_item (bonus_chance)
+	if self.drop_custom then
+		self:drop_custom (looting_level)
+	end
 	self.drops = {}
 end
 
@@ -289,7 +294,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 	-- Drop items and xp
 	if cmi_cause and (cmi_cause.type == "lava" or cmi_cause.type == "fire") then
 		self:item_drop(true, 0, cmi_cause)
-	else
+	elseif cmi_cause then
 		local wielditem = cmi_cause.direct and mcl_util.get_wielditem (cmi_cause.direct)
 		local cooked = mcl_burning.is_burning(self.object) or mcl_enchanting.has_enchantment(wielditem, "fire_aspect")
 		local looting = mcl_enchanting.get_enchantment(wielditem, "looting")

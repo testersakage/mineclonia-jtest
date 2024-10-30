@@ -88,6 +88,8 @@ local hoglin = {
 	_nearby_hoglins = 0,
 	_nearby_piglins = 0,
 	_convert_to = "mobs_mc:zoglin",
+	_nearby_piglin_list = {},
+	_nearby_hoglin_list = {},
 }
 
 ------------------------------------------------------------------------
@@ -119,7 +121,7 @@ local function is_hoglin (entity)
 end
 
 function hoglin:step_sensors (self_pos)
-	if self:check_timer ("hoglin_sensing", 0.25) then
+	if not self:check_timer ("hoglin_sensing", 0.20) then
 		return nil
 	end
 
@@ -203,6 +205,7 @@ end
 
 local function hoglin_retreat (self, self_pos, dtime)
 	if self._retreating then
+		self._retreat_asap = false
 		self._retreat_time = self._retreat_time - dtime
 		local retreat_pos = self._retreating:get_pos ()
 		if self._nearby_hoglins > self._nearby_piglins
@@ -230,6 +233,7 @@ local function hoglin_retreat (self, self_pos, dtime)
 		if not piglin then
 			return false
 		end
+		self._retreat_from = false
 		local pos = piglin:get_pos ()
 		if not pos then
 			return false
@@ -433,11 +437,17 @@ mcl_mobs.register_mob("mobs_mc:baby_hoglin", table.merge (hoglin, {
 	collisionbox = {-.3, -0.01, -.3, .3, 0.94, .3},
 	xp_min = 20,
 	xp_max = 20,
-	visual_size = {x=hoglin.visual_size.x/2, y=hoglin.visual_size.y/2},
-	textures = { {
-		"extra_mobs_hoglin.png",
-		"blank.png",
-	} },
+	visual_size = {
+		x = 1,
+		y = 1,
+	},
+	mesh = "mobs_mc_baby_hoglin.b3d",
+	textures = {
+		{
+			"extra_mobs_hoglin.png",
+			"blank.png",
+		},
+	},
 	movement_speed = 6.0,
 	child = 1,
 	reach = 1.0,
@@ -523,7 +533,11 @@ local baby_zoglin = table.merge (hoglin, {
 	collisionbox = {-.3, -0.01, -.3, .3, 0.94, .3},
 	xp_min = 20,
 	xp_max = 20,
-	visual_size = {x=hoglin.visual_size.x/2, y=hoglin.visual_size.y/2},
+	visual_size = {
+		x = 1,
+		y = 1,
+	},
+	mesh = "mobs_mc_baby_hoglin.b3d",
 	movement_speed = 6.0,
 	child = 1,
 	reach = 1.0,
