@@ -74,6 +74,8 @@ local measure_double_chest_right = measure_double_chest("right")
 
 -- measurable nodes mapped to their measuring function
 local measure_tab = {
+	["mcl_barrels:barrel_closed"] = measure_inventory,
+	["mcl_barrels:barrel_open"] = measure_inventory,
 	["mcl_chests:chest_small"] = measure_inventory,
 	["mcl_chests:chest_left"] = measure_double_chest_left,
 	["mcl_chests:chest_right"] = measure_double_chest_right,
