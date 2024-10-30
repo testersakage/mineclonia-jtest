@@ -217,13 +217,13 @@ for _, mode in pairs{"comp", "sub"} do
 					local is_measurable, o, node2, def2 = is_measurable_or_opaque(pos2)
 					if is_measurable then
 						-- o is measuring function
-						rear_power = o(pos2, node2, def2)
+						rear_power = math.max(0, math.min (15, o(pos2, node2, def2)))
 					elseif o then
 						-- opaque
 						local pos3 = vector.add(pos2, back)
 						local is_measurable, o, node3, def3 = is_measurable_or_opaque(pos3)
 						if is_measurable then
-							rear_power = o(pos3, node3, def3)
+							rear_power = math.max(0, math.min (15, o(pos3, node3, def3)))
 						else
 							-- no measurable node in back direction
 							-- try to get power normally
