@@ -24,36 +24,67 @@ function mcl_redstone.update_comparators(pos)
 	end
 end
 
-local function check_inventory(pos)
-	local invnode = minetest.get_node_or_nil(pos)
-	local invnodedef = invnode and minetest.registered_nodes[invnode.name]
-
-	if not invnodedef then return false, false end
-
-	if not invnodedef.groups.container or (invnodedef.groups.container == 0) then
-		return false, invnodedef.groups.opaque and (invnodedef.groups.opaque ~= 0)
+local function get_inventory_data(pos, lists)
+	if not lists or #lists == 0 then
+		lists = { "main" }
 	end
 
-	return true, minetest.get_inventory({type="node", pos=pos})
-end
+	local inv = minetest.get_inventory({type="node", pos=pos})
 
-local function inventory_power(inv)
 	if not inv then return 0 end
 
-	local fullness, slots = 0, 0
+	local empty, fullness, slots = true, 0, 0
 
-	for listname, list in pairs(inv:get_lists()) do
+	for _, listname in pairs(lists) do
+		slots = slots + inv:get_size(listname)
 		if not inv:is_empty(listname) then
-			for _, stack in pairs(list) do
+			empty = false
+			for _, stack in pairs(inv:get_list(listname)) do
 				if stack then
 					fullness = fullness + stack:get_count() / stack:get_stack_max()
 				end
-				slots = slots + 1
 			end
 		end
 	end
 
-	return (slots == 0) and 0 or math.floor(1 + (fullness / slots) * 14)
+	return empty, fullness, slots
+end
+
+local function measure_inventory(pos, _, _, lists)
+	local empty, fullness, slots = get_inventory_data(pos, lists)
+
+	-- formula copied from wiki
+	return empty and 0 or math.floor(1 + (fullness / slots) * 14)
+end
+
+-- measurable nodes mapped to their measuring function
+local measure_tab = {
+	["mcl_chests:chest_small"] = measure_inventory,
+	["mcl_chests:trapped_chest_small"] = measure_inventory,
+	["mcl_chests:trapped_chest_on_small"] = measure_inventory,
+	["mcl_hoppers:hopper"] = measure_inventory,
+	["mcl_hoppers:hopper_disabled"] = measure_inventory,
+	["mcl_hoppers:hopper_side"] = measure_inventory,
+	["mcl_hoppers:hopper_side_disabled"] = measure_inventory,
+}
+
+-- check if node at pos is 'interesting'
+-- first result is true, iff node has an entry in measure_tab, 2nd result is
+-- 1. node is measurable -> measuring function from measure_tab
+-- 2. node is opaque -> true, iff node has opaque group set to non zero
+-- 3rd and 4th results are node and nodedef
+local function is_measurable_or_opaque(pos)
+	local node = minetest.get_node_or_nil(pos)
+	local def = node and minetest.registered_nodes[node.name]
+
+	if not def then return false, false, nil, nil end
+
+	local measuring_function = measure_tab[node.name]
+	if measuring_function then
+		return true, measuring_function, node, def
+	end
+
+	return false, def.groups and def.groups.opaque and (def.groups.opaque ~= 0), node, def
 end
 
 -- compute tile depending on state and mode
@@ -182,17 +213,21 @@ for _, mode in pairs{"comp", "sub"} do
 						mcl_redstone.get_power(pos, left),
 						mcl_redstone.get_power(pos, right)
 					)
-					local back_pos = vector.add(pos, back)
+					local pos2 = vector.add(pos, back)
 					local rear_power
-					local has_inv, o = check_inventory(back_pos)
-					if has_inv then
-						rear_power = inventory_power(o)
+					local is_measurable, o, node2, def2 = is_measurable_or_opaque(pos2)
+					if is_measurable then
+						-- o is measuring function
+						rear_power = o(pos2, node2, def2)
 					elseif o then
-						back_pos = vector.add(back_pos, back)
-						has_inv, o = check_inventory(back_pos)
-						if has_inv then
-							rear_power = inventory_power(o)
+						-- opaque
+						local pos3 = vector.add(pos2, back)
+						local is_measurable, o, node3, def3 = is_measurable_or_opaque(pos3)
+						if is_measurable then
+							rear_power = o(pos3, node3, def3)
 						else
+							-- no measurable node in back direction
+							-- try to get power normally
 							rear_power = mcl_redstone.get_power(pos, back)
 						end
 					else
