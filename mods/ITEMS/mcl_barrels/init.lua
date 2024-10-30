@@ -135,10 +135,12 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" moves stuff to barrel at " .. minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" takes stuff from barrel at " .. minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	after_dig_node = drop_content,
 	on_blast = on_blast,
@@ -180,10 +182,12 @@ minetest.register_node("mcl_barrels:barrel_open", {
 	on_metadata_inventory_put = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" moves stuff to barrel at " .. minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
 		minetest.log("action", player:get_player_name() ..
 			" takes stuff from barrel at " .. minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	after_dig_node = drop_content,
 	on_blast = on_blast,
