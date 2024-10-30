@@ -77,7 +77,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 					for _, dir in pairs(sixdirs) do
 						offset_pos = np:add(dir:multiply(-1))
 						offset_node = minetest.get_node(offset_pos)
-						is_connected = minetest.registered_nodes[nn.name]._mcl_pistons_sticky(offset_node, dir)
+						is_connected = minetest.registered_nodes[nn.name]._mcl_pistons_sticky(nn, offset_node, dir)
 
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
 							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0

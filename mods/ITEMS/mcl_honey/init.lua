@@ -60,8 +60,8 @@ minetest.register_node("mcl_honey:honey_block", {
 	},
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
-	_mcl_pistons_sticky = function(node, dir)
-		return node.name ~= "mcl_core:slimeblock"
+	_mcl_pistons_sticky = function(node, node_to, dir)
+		return node_to.name ~= "mcl_core:slimeblock"
 	end,
 })
 
