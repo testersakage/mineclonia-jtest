@@ -114,6 +114,7 @@ local function take_fuel (pos, meta, inv)
 	else
 		inv:set_stack("fuel", 1, "")
 	end
+	mcl_redstone.update_comparators(pos)
 	return BURN_TIME -- New value of fuel_timer_new
 	else -- no fuel available
 	return 0
@@ -181,6 +182,7 @@ local function brewing_stand_timer(pos, elapsed)
 			end
 			end
 			stand_timer = 0
+			mcl_redstone.update_comparators(pos)
 		end
 		end
 	end
@@ -284,6 +286,7 @@ local function start_stand_if_not_empty(pos)
 	end
 	minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
 	minetest.get_node_timer(pos):start(1.0)
+	mcl_redstone.update_comparators(pos)
 end
 
 local function on_put(pos, listname, _, stack, _)
@@ -310,6 +313,7 @@ local function on_put(pos, listname, _, stack, _)
 		return
 	end
 	minetest.get_node_timer (pos):start (1.0)
+	mcl_redstone.update_comparators(pos)
 end
 
 local function allow_move(pos, from_list, from_index, to_list, _, count, _)
