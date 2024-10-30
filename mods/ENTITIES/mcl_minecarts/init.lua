@@ -208,6 +208,9 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 				for d=1, #drop do
 					minetest.add_item(self.object:get_pos(), drop[d])
 				end
+				if self._on_destroy_minecart then
+					self:_on_destroy_minecart (puncher)
+				end
 			elseif puncher and puncher:is_player() then
 				local inv = puncher:get_inventory()
 				for d=1, #drop do
@@ -595,6 +598,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 	end
 
 	minetest.register_entity(entity_id, cart)
+	return minetest.registered_entities[entity_id]
 end
 
 -- Place a minecart at pointed_thing
@@ -710,12 +714,13 @@ Register a minecart
 * creative: If false, don't show in Creative Inventory
 ]]
 local function register_minecart(itemstring, entity_id, description, tt_help, longdesc, usagehelp, mesh, textures, icon, drop, on_rightclick, on_activate_by_rail, creative)
-	register_entity(entity_id, mesh, textures, drop, on_rightclick, on_activate_by_rail)
+	local entity = register_entity(entity_id, mesh, textures, drop, on_rightclick, on_activate_by_rail)
 	tt_help = (tt_help and tt_help .. "\n" or "") .. S("Sneak-click to remove")
 	register_craftitem(itemstring, entity_id, description, tt_help, longdesc, usagehelp, icon, creative)
 	if minetest.get_modpath("doc_identifier") then
 		doc.sub.identifier.register_object(entity_id, "craftitems", itemstring)
 	end
+	return entity
 end
 
 -- Minecart
@@ -758,7 +763,7 @@ register_minecart(
 )
 
 -- Minecart with Chest
-register_minecart(
+local minecart_with_chest = register_minecart(
 	"mcl_minecarts:chest_minecart",
 	"mcl_minecarts:chest_minecart",
 	S("Minecart with Chest"),
@@ -769,6 +774,14 @@ register_minecart(
 	{"mcl_minecarts:minecart", "mcl_chests:chest"},
 	nil, nil, true)
 mcl_entity_invs.register_inv("mcl_minecarts:chest_minecart","Minecart",27,false,true)
+
+function minecart_with_chest:_on_show_entity_inv (player)
+	mobs_mc.enrage_piglins (player, true)
+end
+
+function minecart_with_chest:_on_destroy_minecart (player)
+	mobs_mc.enrage_piglins (player, true)
+end
 
 -- Minecart with Furnace
 register_minecart(

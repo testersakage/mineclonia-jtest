@@ -6,60 +6,44 @@ local function player_near(pos)
 	end
 end
 
-local function get_armor_texture(obj, armor_name)
-	local stack = ItemStack(armor_name)
-	local def = stack:get_definition()
-	if armor_name == "" then
-		return ""
+local function get_armor_texture (obj, stack)
+	local def = stack:get_definition ()
+	if not def then
+		return nil
 	end
-	if armor_name=="blank.png" then
-		return "blank.png"
+	local t = def._mcl_armor_texture or "blank.png"
+	if type (def._mcl_armor_texture) == "function" then
+		t = def._mcl_armor_texture (obj, stack)
 	end
-	local t = def._mcl_armor_texture or ""
-	if type(def._mcl_armor_texture) == "function" then
-		t = def._mcl_armor_texture(obj, stack)
-	end
-	return t.."^"
+	return t
 end
 
 function mob_class:set_armor_texture()
+	if not self.wears_armor then
+		return
+	end
+
 	if self.armor_list then
-		local chestplate=minetest.registered_items[ItemStack(self.armor_list.torso):get_name()]  or {name=""}
-		local boots=minetest.registered_items[ItemStack(self.armor_list.feet):get_name()] or {name=""}
-		local leggings=minetest.registered_items[ItemStack(self.armor_list.legs):get_name()] or {name=""}
-		local helmet=minetest.registered_items[ItemStack(self.armor_list.head):get_name()] or {name=""}
-
-		if helmet.name=="" and chestplate.name=="" and leggings.name=="" and boots.name=="" then
-			helmet={name="blank.png"}
-		end
-
-		local texture = get_armor_texture(self.object, chestplate.name)
-		..get_armor_texture(self.object, helmet.name)
-		..get_armor_texture(self.object, boots.name)
-		..get_armor_texture(self.object, leggings.name)
-		if string.sub(texture, -1,-1) == "^" then
-			texture=string.sub(texture,1,-2)
-		end
-		if self.base_texture[self.wears_armor and 1] then
-			self.base_texture[self.wears_armor and 1]=texture
+		local obj = self.object
+		for slot, keys in pairs (self._armor_texture_slots) do
+			local list = {}
+			for _, armor in ipairs (keys) do
+				local stack = ItemStack (self.armor_list[armor])
+				if not stack:is_empty () then
+					local str = get_armor_texture (obj, stack)
+					if str then
+						local fn = self._armor_transforms[armor]
+						if fn then
+							str = fn (str)
+						end
+						table.insert (list, str)
+					end
+				end
+			end
+			local texture = #list > 0 and table.concat (list, "^") or "blank.png"
+			self.base_texture[slot] = texture
 		end
 		self:set_textures (self.base_texture)
-
-		local armor_
-		if type(self.armor) == "table" then
-			armor_ = table.copy(self.armor)
-			armor_.immortal = 1
-		else
-			armor_ = {immortal=1, fleshy = self.armor}
-		end
-
-		for _,item in pairs(self.armor_list) do
-			if not item then return end
-			if type(minetest.get_item_group(item, "mcl_armor_points")) == "number" then
-				armor_.fleshy=armor_.fleshy-(minetest.get_item_group(item, "mcl_armor_points")*3.5)
-			end
-		end
-		self.object:set_armor_groups(armor_)
 	end
 end
 
@@ -171,6 +155,25 @@ function mob_class:wielditem_better_than (stack, current)
 	return false
 end
 
+function mob_class:evaluate_new_item (item)
+	local def = item:get_definition ()
+	if not def then
+		return false
+	end
+	local itemname = item:get_name ()
+	if self.wears_armor
+		and def._mcl_armor_element
+		and minetest.get_item_group (itemname, "armor") > 0 then
+		local slot = def._mcl_armor_element
+		local current = self.armor_list[slot]
+		return self:armor_better_than (item, ItemStack (current))
+	elseif self.can_wield_items then
+		local current = self:get_wielditem ()
+		return self:wielditem_better_than (item, current)
+	end
+	return false
+end
+
 function mob_class:try_equip_item (stack, def, itemname)
 	if self.wears_armor
 		and self.wears_armor ~= "no_pickup"
@@ -201,7 +204,7 @@ function mob_class:try_equip_item (stack, def, itemname)
 		and self.can_wield_items ~= "no_pickup" then
 		local item = self:get_wielditem ()
 		if self:wielditem_better_than (stack, item) then
-			self:drop_wielditem ()
+			self:drop_wielditem (0)
 			self:set_wielditem (stack)
 			return true
 		end
@@ -223,14 +226,22 @@ function mob_class:drop_armor (bonus)
 	end
 end
 
+function mob_class:default_pickup (object, stack, def, itemname)
+	if self:try_equip_item (stack, def, itemname) then
+		object:remove ()
+		return true
+	end
+	return false
+end
+
 function mob_class:check_item_pickup ()
 	if self.pick_up and #self.pick_up > 0
 		or (self.wears_armor and self.wears_armor ~= "no_pickup") then
 		local p = self.object:get_pos()
 		if not p then return end
 		local player_near = player_near (p)
-		for o in minetest.objects_inside_radius(p, 2) do
-			local l=o:get_luaentity()
+		for o in minetest.objects_inside_radius (p, 2) do
+			local l = o:get_luaentity ()
 			if l and l.name == "__builtin:item"
 				and l.age >= 1.0
 				and not player_near
@@ -239,9 +250,8 @@ function mob_class:check_item_pickup ()
 				local def = stack:get_definition()
 				local itemname = stack:get_name()
 
-				if self:try_equip_item (stack, def, itemname) then
-					o:remove ()
-				elseif self.pick_up then
+				if not self:default_pickup (o, stack, def, itemname)
+					and self.pick_up then
 					for _, v in pairs(self.pick_up) do
 						if self.on_pick_up and itemname == v then
 							local r = self.on_pick_up(self,l)

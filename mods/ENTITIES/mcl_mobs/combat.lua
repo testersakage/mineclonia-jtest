@@ -435,7 +435,6 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 		self._shoot_time = nil
 		self._shoot_timer = 0
 		self.attacking = true
-		self._punch_animation_timeout = 0
 	end
 	local vistime = self._target_visible_time
 	local dist = vector.distance (self_pos, target_pos)
@@ -818,7 +817,20 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 	local dist = vector.distance (self_pos, target_pos)
 	local should_pathfind = vistime < 0.25 or dist > self.ranged_attack_radius
 
-	if should_pathfind then
+	if self._crossbow_backoff_threshold
+		and dist < self._crossbow_backoff_threshold
+		and line_of_sight then
+		self:cancel_navigation ()
+		local mover = self:mob_controlling_movement ()
+		mover.movement_goal = "strafe"
+		mover.movement_velocity = mover.movement_speed * 0.25
+		mover.strafe_direction = {
+			x = 0,
+			z = -1.0,
+		}
+		self:look_at (target_pos)
+		self:set_animation ("walk")
+	elseif should_pathfind then
 		self._time_to_next_repath
 			= self._time_to_next_repath - dtime
 		if self._time_to_next_repath <= 0 then
@@ -840,7 +852,6 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 		if not should_pathfind then
 			self._crossbow_state = 1
 			self._crossbow_charge_time = 0
-			self:set_animation ("shoot")
 		end
 	elseif self._crossbow_state == 1 then
 		self._crossbow_charge_time
@@ -860,6 +871,19 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 	end
 
 	self._vistime = vistime
+end
+
+function mob_class:reset_attack_type (newtype)
+	if newtype == self.attack_type then
+		return
+	end
+
+	self.attack_type = newtype
+	if self.attack then
+		self.attacking = false
+		self:cancel_navigation ()
+		self:halt_in_tracks ()
+	end
 end
 
 ------------------------------------------------------------------------
@@ -886,11 +910,17 @@ function mob_class:valid_enemy ()
 	return true
 end
 
+function mob_class:default_rangecheck (self_pos, object)
+	local pos = object:get_pos ()
+	local factor = self:detection_multiplier_for_object (object)
+	local distance = vector.distance (self_pos, pos)
+	return distance <= self.view_range * factor
+end
+
 function mob_class:attack_default (self_pos, dtime, esp)
 	local target, max_distance
-	local objects
-		= minetest.get_objects_inside_radius (self_pos, self.view_range)
-	for _, object in ipairs (objects) do
+	for object in minetest.objects_inside_radius (self_pos,
+						self.view_range) do
 		if self:should_attack (object) then
 			local pos = object:get_pos ()
 			local factor = self:detection_multiplier_for_object (object)
@@ -1025,50 +1055,102 @@ local wielditem_entity = {
 
 minetest.register_entity ("mcl_mobs:wielditem", wielditem_entity)
 
-function mob_class:display_wielditem (item)
-	local info = self.wielditem_info
+function mob_class:wielditem_transform (info, stack)
+	local rot = info.rotation
+	local pos = info.position
+	local name = stack:get_name ()
+	local def = stack:get_definition ()
+
+	if def and def._mcl_toollike_wield then
+		rot = info.toollike_rotation
+		pos = info.toollike_position
+	elseif info.bow_position
+		and minetest.get_item_group (name, "bow") > 0 then
+		rot = info.bow_rotation
+		pos = info.bow_position
+	elseif info.crossbow_position
+		and minetest.get_item_group (name, "crossbow") > 0 then
+		rot = info.crossbow_rotation
+		pos = info.crossbow_position
+	elseif info.blocklike_position
+		and def and def.inventory_image == "" then
+		rot = info.blocklike_rotation
+		pos = info.blocklike_position
+	end
+	return rot, pos
+end
+
+function mob_class:display_wielditem (offhand)
+	local info = offhand and self._offhand_wielditem_info
+		or self.wielditem_info
 	if not info then
 		return
 	end
+	local objectname = "_wielditem_object"
+	if offhand then
+		objectname = "_offhand_object"
+	end
+	local itemname = "_wielditem"
+	if offhand then
+		itemname = "_offhand_item"
+	end
 	if info.bone then
-		if not self._wielditem
-			or ItemStack (self._wielditem):is_empty () then
-			if self._wielditem_object ~= nil then
-				self._wielditem_object:remove ()
-				self._wielditem_object = nil
+		if not self[itemname]
+			or ItemStack (self[itemname]):is_empty () then
+			if self[objectname] ~= nil then
+				self[objectname]:remove ()
+				self[objectname] = nil
 			end
 			return
 		end
 
-		if not self._wielditem_object
-			or not self._wielditem_object:is_valid () then
+		if not self[objectname]
+			or not self[objectname]:is_valid () then
 			local self_pos = self.object:get_pos ()
-			self._wielditem_object
+			self[objectname]
 				= minetest.add_entity (self_pos, "mcl_mobs:wielditem")
 		end
 
 		-- Apply rotation and position according to item type.
-		local rot = info.rotation
-		local pos = info.position
-		local stack = ItemStack (self._wielditem)
-		local def = stack:get_definition ()
-		if def and def._mcl_toollike_wield then
-			rot = info.toollike_rotation
-			pos = info.toollike_position
+		local stack = ItemStack (self[itemname])
+		local rot, pos = self:wielditem_transform (info, stack)
+		if not info.rotate_bone then
+			self[objectname]:set_attach (self.object, info.bone, pos, rot)
+		else
+			self[objectname]:set_attach (self.object, info.bone)
+			mcl_util.set_bone_position (self.object, info.bone, pos, rot)
 		end
-		self._wielditem_object:set_attach (self.object, info.bone,
-						   pos, rot)
 		local name = stack:get_name ()
-		self._wielditem_object:set_properties ({
+		self[objectname]:set_properties ({
 				wield_item = name,
 		})
-	-- elseif info.texture then
+	elseif info.textureslot and info.texturebone then
+		local stack = ItemStack (self[itemname])
+		if stack:is_empty () then
+			self.base_texture[info.textureslot] = "blank.png"
+			self:set_textures (self.base_texture)
+			return
+		end
+		local rot, pos = self:wielditem_transform (info, stack)
+		mcl_util.set_bone_position (self.object, info.texturebone, rot, pos)
+		local def = stack:get_definition ()
+
+		-- NOTE: this method does not support displaying
+		-- wielded nodes.
+		self.base_texture[info.textureslot] = table.concat ({
+			def.wield_image ~= ""
+				and def.wield_image or def.inventory_image,
+			def.wield_overlay ~= ""
+				and "^" .. def.wield_image
+				or "^" .. def.inventory_overlay,
+		})
+		self:set_textures (self.base_texture)
 	end
 end
 
 function mob_class:set_wielditem (stack)
 	if not self.can_wield_items then
-		return nil
+		return
 	end
 
 	local stack_string
@@ -1081,23 +1163,21 @@ function mob_class:set_wielditem (stack)
 	self._wielditem = stack_string
 	self._effective_wielditem_drop_probability
 		= self.wielditem_drop_probability
-	self:display_wielditem ()
+	self:display_wielditem (false)
 end
 
-
 function mob_class:drop_wielditem (bonus)
-	if not self._effective_wielditem_drop_probability
-		or not self._wielditem then
-		return
-	end
 	local self_pos = self.object:get_pos ()
-	local probability = self._effective_wielditem_drop_probability
-	local item = self._wielditem
-	if probability > 0 and item and item ~= ""
-		and math.random () <= probability + bonus then
-		mcl_util.drop_item_stack (self_pos, ItemStack (self._wielditem))
+	if self._effective_wielditem_drop_probability
+		and self._wielditem then
+		local probability = self._effective_wielditem_drop_probability
+		local item = self._wielditem
+		if probability > 0 and item and item ~= ""
+			and math.random () <= probability + bonus then
+			mcl_util.drop_item_stack (self_pos, ItemStack (self._wielditem))
+		end
+		self._wielditem = nil
 	end
-	self._wielditem = nil
 end
 
 function mob_class:get_wielditem ()
@@ -1135,6 +1215,20 @@ local armor_table = {
 		"mcl_armor:boots_diamond",
 	},
 }
+
+function mob_class:enchant_default_armor (mob_factor, pr)
+	for slot, item in pairs (self.armor_list) do
+		local stack = ItemStack (item)
+		if not stack:is_empty () then
+			if math.random () < 0.5 * mob_factor then
+				local level = 5.0 + mob_factor * pr:next (1, 18)
+				level = math.floor (level)
+				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+			end
+			self.armor_list[slot] = stack:to_string ()
+		end
+	end
+end
 
 function mob_class:generate_default_equipment (mob_factor, do_armor, do_wielditems)
 	if math.random () < mob_factor * 0.15 then
@@ -1190,4 +1284,42 @@ function mob_class:generate_default_equipment (mob_factor, do_armor, do_wieldite
 			self:set_wielditem (stack)
 		end
 	end
+end
+
+------------------------------------------------------------------------
+-- Offhand item wielding.
+------------------------------------------------------------------------
+
+function mob_class:drop_offhand_item (bonus)
+	local self_pos = self.object:get_pos ()
+	if self._effective_offhand_drop_probability
+		and self._offhand_item then
+		local probability = self._effective_offhand_drop_probability
+		local item = self._offhand_item
+		if probability > 0 and item and item ~= ""
+			and math.random () <= probability + bonus then
+			mcl_util.drop_item_stack (self_pos, ItemStack (self._offhand_item))
+		end
+		self._offhand_item = nil
+	end
+end
+
+function mob_class:set_offhand_item (stack)
+	if not self._offhand_wielditem_info then
+		return
+	end
+
+	if not stack then
+		self._offhand_item = ""
+	else
+		self._offhand_item = stack:to_string ()
+	end
+
+	self._effective_offhand_drop_probability
+		= self.wielditem_drop_probability
+	self:display_wielditem (true)
+end
+
+function mob_class:get_offhand_item ()
+	return ItemStack (self._offhand_item)
 end
