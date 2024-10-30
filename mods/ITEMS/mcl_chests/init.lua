@@ -686,10 +686,10 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_metadata_inventory_put = function(pos, listname, _, stack, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. minetest.pos_to_string(pos))
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, "left")
 			-- BEGIN OF LISTRING WORKAROUND
 			if listname == "input" then
 				local inv = minetest.get_inventory({ type = "node", pos = pos })
-				local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, "left")
 				local other_inv = minetest.get_inventory({ type = "node", pos = other_pos })
 
 				inv:set_stack("input", 1, nil)
@@ -698,11 +698,14 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 			-- END OF LISTRING WORKAROUND
 			mcl_redstone.update_comparators(pos)
+			mcl_redstone.update_comparators(other_pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, "left")
 			mcl_redstone.update_comparators(pos)
+			mcl_redstone.update_comparators(other_pos)
 		end,
 		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
@@ -855,9 +858,9 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_metadata_inventory_put = function(pos, listname, _, stack, player)
 			minetest.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. minetest.pos_to_string(pos))
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, "right")
 			-- BEGIN OF LISTRING WORKAROUND
 			if listname == "input" then
-				local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, "right")
 				local other_inv = minetest.get_inventory({ type = "node", pos = other_pos })
 				local inv = minetest.get_inventory({ type = "node", pos = pos })
 
@@ -867,11 +870,14 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 			-- END OF LISTRING WORKAROUND
 			mcl_redstone.update_comparators(pos)
+			mcl_redstone.update_comparators(other_pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
 			minetest.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. minetest.pos_to_string(pos))
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, minetest.get_node(pos).param2, "right")
 			mcl_redstone.update_comparators(pos)
+			mcl_redstone.update_comparators(other_pos)
 		end,
 		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,

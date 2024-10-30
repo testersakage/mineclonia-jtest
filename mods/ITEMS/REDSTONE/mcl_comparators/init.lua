@@ -57,11 +57,32 @@ local function measure_inventory(pos, _, _, lists)
 	return empty and 0 or math.floor(1 + (fullness / slots) * 14)
 end
 
+local function measure_double_chest(side)
+	return function(pos, node)
+		local other_pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, side)
+		local empty1, fullness1, slots1 = get_inventory_data(pos)
+		local empty2, fullness2, slots2 = get_inventory_data(other_pos)
+		local empty, fullness, slots = empty1 and empty2, fullness1 + fullness2, slots1 + slots2
+
+		-- apply formula to cumulated data
+		return empty and 0 or math.floor(1 + (fullness / slots) * 14), fullness, slots
+	end
+end
+
+local measure_double_chest_left = measure_double_chest("left")
+local measure_double_chest_right = measure_double_chest("right")
+
 -- measurable nodes mapped to their measuring function
 local measure_tab = {
 	["mcl_chests:chest_small"] = measure_inventory,
+	["mcl_chests:chest_left"] = measure_double_chest_left,
+	["mcl_chests:chest_right"] = measure_double_chest_right,
 	["mcl_chests:trapped_chest_small"] = measure_inventory,
+	["mcl_chests:trapped_chest_left"] = measure_double_chest_left,
+	["mcl_chests:trapped_chest_right"] = measure_double_chest_right,
 	["mcl_chests:trapped_chest_on_small"] = measure_inventory,
+	["mcl_chests:trapped_chest_on_left"] = measure_double_chest_left,
+	["mcl_chests:trapped_chest_on_right"] = measure_double_chest_right,
 	["mcl_dispensers:dispenser"] = measure_inventory,
 	["mcl_dispensers:dispenser_down"] = measure_inventory,
 	["mcl_dispensers:dispenser_up"] = measure_inventory,
@@ -294,6 +315,19 @@ minetest.register_craft({
 minetest.register_on_dignode(function (pos, node)
 	if node and measure_tab[node.name] then
 		mcl_redstone.update_comparators(pos)
+	end
+	-- double chest support
+	local other_pos
+	local container_type = minetest.get_item_group(node.name, "container")
+	if container_type == 5 then
+		other_pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
+	elseif container_type == 6 then
+		other_pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
+	end
+	if other_pos then
+		--minetest.after(0.5, function ()
+			mcl_redstone.update_comparators(other_pos)
+		--end)
 	end
 end)
 
