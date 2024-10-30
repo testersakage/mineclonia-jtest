@@ -218,6 +218,7 @@ function mcl_furnaces.on_metadata_inventory_take(pos, listname, _, stack, player
 		end
 		mcl_furnaces.give_xp(pos, player)
 	end
+	mcl_redstone.update_comparators(pos)
 end
 
 function mcl_furnaces.on_metadata_inventory_move(pos, from_list, _, _, _, _, player)
@@ -232,6 +233,7 @@ function mcl_furnaces.on_metadata_inventory_put(pos, listname, _, stack, _)
 		inv:add_item(sort_stack(stack, pos), stack)
 		inv:set_stack("sorter", 1, ItemStack(""))
 	end
+	mcl_redstone.update_comparators(pos)
 end
 
 function mcl_furnaces.swap_node(pos, name)
@@ -320,6 +322,7 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 		end
 
 		local update = true
+		local inv_changed = false
 		while elapsed_game_time > 0.00001 and update do
 			--
 			-- Cooking
@@ -365,6 +368,7 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 					el = math.min(el, fuel_totaltime)
 					active = true
 					fuellist = inv:get_list("fuel")
+					inv_changed = true
 				end
 			elseif active then
 				el = math.min(el, fuel_totaltime - fuel_time)
@@ -396,10 +400,15 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 					src_time = 0
 
 					meta:set_int("xp", meta:get_int("xp") + 1) -- ToDo give each recipe an idividial XP count
+					inv_changed = true
 				end
 			end
 
 			elapsed_game_time = elapsed_game_time - el
+		end
+
+		if inv_changed then
+			mcl_redstone.update_comparators(pos)
 		end
 
 		if fuel and fuel_totaltime > fuel.time then
