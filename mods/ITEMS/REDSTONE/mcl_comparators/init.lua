@@ -284,3 +284,9 @@ minetest.register_craft({
 		{ "mcl_core:stone",   "mcl_core:stone",   "mcl_core:stone"   },
 	}
 })
+
+minetest.register_on_dignode(function (pos, node)
+	if node and measure_tab[node.name] then
+		mcl_redstone.update_comparators(pos)
+	end
+end)
