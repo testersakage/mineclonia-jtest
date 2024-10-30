@@ -79,6 +79,7 @@ end
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
 local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
+local measure_brewing_stand = measure_complex_inventory({"fuel", "input", "stand"})
 
 -- measurable nodes mapped to their measuring function
 local measure_tab = {
@@ -106,6 +107,14 @@ local measure_tab = {
 	["mcl_furnaces:furnace"] = measure_furnace,
 	["mcl_blast_furnace:blast_furnace"] = measure_furnace,
 	["mcl_smoker:smoker"] = measure_furnace,
+	["mcl_brewing:stand_000"] = measure_brewing_stand,
+	["mcl_brewing:stand_001"] = measure_brewing_stand,
+	["mcl_brewing:stand_010"] = measure_brewing_stand,
+	["mcl_brewing:stand_011"] = measure_brewing_stand,
+	["mcl_brewing:stand_100"] = measure_brewing_stand,
+	["mcl_brewing:stand_101"] = measure_brewing_stand,
+	["mcl_brewing:stand_110"] = measure_brewing_stand,
+	["mcl_brewing:stand_111"] = measure_brewing_stand,
 }
 
 -- check if node at pos is 'interesting'
