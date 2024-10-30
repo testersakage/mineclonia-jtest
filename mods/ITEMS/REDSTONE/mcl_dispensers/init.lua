@@ -69,6 +69,7 @@ local function activate_dropper(pos, droppos, dropdir, inv, stack_)
 	if not dropped and not dropnodedef.groups.container then
 		drop(pos, droppos, dropitem, inv, stack_)
 	end
+	mcl_redstone.update_comparators(pos)
 end
 
 local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
@@ -95,6 +96,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 			local od_ret = ent:_on_dispense(stack, pos, droppos, dropnode, dropdir)
 			if od_ret then
 				inv:set_stack("main", stack_id, od_ret)
+				mcl_redstone.update_comparators(pos)
 				return
 			end
 		end
@@ -173,6 +175,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 			drop(pos, droppos, dropitem, inv, stack_)
 		end
 	end
+	mcl_redstone.update_comparators(pos)
 end
 
 local function activate(pos, activate_func)
@@ -235,6 +238,20 @@ local commdef  = {
 		else
 			return stack:get_count()
 		end
+	end,
+	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
+		minetest.log("action", player:get_player_name() ..
+			" moves stuff in dispenser at " .. minetest.pos_to_string(pos))
+	end,
+	on_metadata_inventory_put = function(pos, listname, _, stack, player)
+		minetest.log("action", player:get_player_name() ..
+			" moves stuff to dispenser at " .. minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
+	end,
+	on_metadata_inventory_take = function(pos, _, _, _, player)
+		minetest.log("action", player:get_player_name() ..
+			" takes stuff from dispenser at " .. minetest.pos_to_string(pos))
+		mcl_redstone.update_comparators(pos)
 	end,
 	on_rotate = screwdriver.rotate_simple,
 	_mcl_blast_resistance = 3.5,
