@@ -295,3 +295,11 @@ minetest.register_on_dignode(function (pos, node)
 		mcl_redstone.update_comparators(pos)
 	end
 end)
+
+minetest.register_on_mods_loaded(function()
+	for name, _ in pairs(minetest.registered_nodes) do
+		if minetest.get_item_group(name, "shulker_box") ~= 0 then
+			measure_tab[name] = measure_inventory
+		end
+	end
+end)
