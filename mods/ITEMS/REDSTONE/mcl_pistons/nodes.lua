@@ -170,7 +170,7 @@ local normaldef = table.merge(commdef, {
 })
 
 local offdef = {
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
@@ -189,7 +189,7 @@ local ondef = {
 	after_destruct = piston_remove_pusher,
 	on_rotate = false,
 	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
@@ -215,7 +215,7 @@ local pusherdef = {
 	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 0.5,
 	on_rotate = false,
-	_redstone = {
+	_mcl_redstone = {
 		-- It is possible for a piston to extend just before server
 		-- shutdown. To avoid circuits stopping because of that we
 		-- update all neighbouring nodes during loading as if a
