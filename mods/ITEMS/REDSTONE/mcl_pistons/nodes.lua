@@ -393,3 +393,6 @@ minetest.register_lbm(
 		minetest.set_node(pos, {name = nodename, param2 = new_param2})
 	end
 })
+
+minetest.register_alias("mesecons_pistons:piston_normal_off", "mcl_pistons:piston_normal_off")
+minetest.register_alias("mesecons_pistons:piston_sticky_off", "mcl_pistons:piston_sticky_off")
