@@ -330,6 +330,24 @@ minetest.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef
 	corresponding_piston = "mcl_pistons:piston_sticky_on",
 }))
 
+--craft recipes
+minetest.register_craft({
+	output = "mcl_pistons:piston_normal_off",
+	recipe = {
+		{"group:wood", "group:wood", "group:wood"},
+		{"mcl_core:cobble", "mcl_core:iron_ingot", "mcl_core:cobble"},
+		{"mcl_core:cobble", "mcl_redstone:redstone", "mcl_core:cobble"},
+	},
+})
+
+minetest.register_craft({
+	output = "mcl_pistons:piston_sticky_off",
+	recipe = {
+		{"mcl_mobitems:slimeball"},
+		{"mcl_pistons:piston_normal_off"},
+	},
+})
+
 -- Add entry aliases for the Help
 doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_normal_on")
 doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_pusher_normal")
