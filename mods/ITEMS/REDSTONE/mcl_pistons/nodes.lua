@@ -68,15 +68,17 @@ end
 local function piston_off(pos, node)
 	local pistonspec = minetest.registered_nodes[node.name]._piston_spec
 	minetest.swap_node(pos, {param2 = node.param2, name = pistonspec.offname})
-	piston_remove_pusher (pos, node)
+	piston_remove_pusher(pos, node)
 	if not pistonspec.sticky then
 		return
 	end
 
 	local dir = -minetest.facedir_to_dir(node.param2)
 	local pullpos = vector.add(pos, vector.multiply(dir, 2))
-	local meta = minetest.get_meta(pos)
-	mcl_pistons.push(pullpos, vector.multiply(dir, -1), PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
+	if minetest.get_item_group(minetest.get_node(pullpos).name, "unsticky") == 0 then
+		local meta = minetest.get_meta(pos)
+		mcl_pistons.push(pullpos, vector.multiply(dir, -1), PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
+	end
 end
 
 local function piston_orientate(pos, placer)
