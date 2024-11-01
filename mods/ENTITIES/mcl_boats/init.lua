@@ -129,7 +129,7 @@ local boat = {
 		pointable = true,
 		-- Warning: Do not change the position of the collisionbox top surface,
 		-- lowering it causes the boat to fall through the world if underwater
-		collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.55, 0.5},
+		collisionbox = {-0.5, -0.00, -0.5, 0.5, 0.55, 0.5},
 		selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.55, 0.7},
 		visual = "mesh",
 		mesh = "mcl_boats_boat.b3d",
