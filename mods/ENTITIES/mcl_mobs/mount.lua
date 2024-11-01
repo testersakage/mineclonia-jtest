@@ -322,6 +322,10 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 			if ctrl.jump then
 				if velo.y == 0 then
 					if self._last_jump == 0 then
+						local min_jump_height = 4.86 -- below 4.75 will cause jumping glitch
+						if self.jump_height < min_jump_height then
+							self.jump_height = min_jump_height
+						end
 						velo.y = velo.y + self.jump_height * 7
 						acce_y = acce_y + (acce_y * 3) + 1
 						self._last_jump = velo.y
