@@ -117,33 +117,6 @@ local function sort_pois_by_minpos (a, b)
 	return a.y < b.y
 end
 
-function mcl_villages.get_pois_in (aa, bb)
-	local aa = vector.multiply (aa, 16)
-	local bb = vector.multiply (bb, 16)
-	bb.x = bb.x + 15
-	bb.y = bb.y + 15
-	bb.z = bb.z + 15
-	local list = pois:get_areas_in_area (aa, bb, false, true, true)
-	local list1 = {}
-	for key, value in pairs (list) do
-		table.insert (list1, value)
-		value.id = key
-	end
-	table.sort (list1, sort_pois_by_minpos)
-	return list1
-end
-
-function mcl_villages.get_pois_in_by_nodepos (aa, bb)
-	local list = pois:get_areas_in_area (aa, bb, false, true, true)
-	local list1 = {}
-	for key, value in pairs (list) do
-		table.insert (list1, value)
-		value.id = key
-	end
-	table.sort (list1, sort_pois_by_minpos)
-	return list1
-end
-
 function mcl_villages.insert_poi (nodepos, kind)
 	local areas = pois:get_areas_for_pos (nodepos, false, true)
 	if areas then
@@ -444,6 +417,33 @@ end
 -- POI querying.
 ------------------------------------------------------------------------
 
+function mcl_villages.get_pois_in (aa, bb)
+	local aa = vector.multiply (aa, 16)
+	local bb = vector.multiply (bb, 16)
+	bb.x = bb.x + 15
+	bb.y = bb.y + 15
+	bb.z = bb.z + 15
+	local list = pois:get_areas_in_area (aa, bb, false, true, true)
+	local list1 = {}
+	for key, value in pairs (list) do
+		table.insert (list1, value)
+		value.id = key
+	end
+	table.sort (list1, sort_pois_by_minpos)
+	return list1
+end
+
+function mcl_villages.get_pois_in_by_nodepos (aa, bb)
+	local list = pois:get_areas_in_area (aa, bb, false, true, true)
+	local list1 = {}
+	for key, value in pairs (list) do
+		table.insert (list1, value)
+		value.id = key
+	end
+	table.sort (list1, sort_pois_by_minpos)
+	return list1
+end
+
 function mcl_villages.get_poi_heat (nodepos)
 	local section_pos = section_position (nodepos)
 	local x, y, z = section_pos.x, section_pos.y, section_pos.z
@@ -475,4 +475,42 @@ function mcl_villages.center_of_section (sectionpos)
 		y = sectionpos.y * 16 + 8,
 		z = sectionpos.z * 16 + 8,
 	}
+end
+
+function mcl_villages.get_pois_in (aa, bb)
+	local aa = vector.multiply (aa, 16)
+	local bb = vector.multiply (bb, 16)
+	bb.x = bb.x + 15
+	bb.y = bb.y + 15
+	bb.z = bb.z + 15
+	local list = pois:get_areas_in_area (aa, bb, false, true, true)
+	local list1 = {}
+	for key, value in pairs (list) do
+		table.insert (list1, value)
+		value.id = key
+	end
+	table.sort (list1, sort_pois_by_minpos)
+	return list1
+end
+
+function mcl_villages.get_pois_in_by_nodepos (aa, bb)
+	local list = pois:get_areas_in_area (aa, bb, false, true, true)
+	local list1 = {}
+	for key, value in pairs (list) do
+		table.insert (list1, value)
+		value.id = key
+	end
+	table.sort (list1, sort_pois_by_minpos)
+	return list1
+end
+
+function mcl_villages.random_poi_in (aa, bb, predicate)
+	local list = mcl_villages.get_pois_in_by_nodepos (aa, bb)
+	table.shuffle (list)
+	for _, poi in pairs (list) do
+		if not predicate or predicate (poi) then
+			return poi
+		end
+	end
+	return nil
 end

@@ -43,6 +43,7 @@ function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius, se
 function mob_class:attack_player_allowed (player)
 	return mcl_vars.difficulty ~= 0
 		and mcl_gamemode.get_gamemode (player) ~= "creative"
+		and player:get_hp () > 0
 end
 
 -- dogshoot attack switch and counter function
@@ -381,6 +382,9 @@ function mob_class:should_attack (object)
 		and not self:node_in_restriction (object:get_pos ()) then
 		return false
 	elseif entity and entity.is_mob then
+		if entity.health <= 0 then
+			return false
+		end
 		if not entity:valid_enemy () then
 			return false
 		end
@@ -936,12 +940,20 @@ function mob_class:attack_default (self_pos, dtime, esp)
 	return target
 end
 
+function mob_class:target_detected (self_pos, target)
+	-- A value of true indicates that movement should be halted
+	-- while target_detected decides whether to initiate the
+	-- attack, while false, or nil, indicates to proceeed with it.
+	return false
+end
+
 function mob_class:check_attack (self_pos, dtime)
 	if not self.attack_type then
 		return false
 	end
 	if not self.attack then
-		if not self:check_timer ("seek_target", 0.5) then
+		if not self:check_timer ("seek_target", 0.5)
+			and not self._attack_target_detected then
 			return false
 		end
 
@@ -952,6 +964,18 @@ function mob_class:check_attack (self_pos, dtime)
 		else
 			local target = self:attack_default (self_pos, dtime, self.esp)
 			if target then
+				if self:target_detected (self_pos, target) then
+					-- Let self.attack remain nil
+					-- to revaluate whether to
+					-- begin attacking on the next
+					-- step.
+					if not self._attack_target_detected then
+						self._attack_target_detected = true
+						return "_attack_target_detected"
+					end
+					return true
+				end
+				self._attack_target_detected = false
 				self:do_attack (target)
 				return "attack"
 			end
@@ -1039,6 +1063,7 @@ local wielditem_props = {
 	},
 	physical = false,
 	pointable = false,
+	static_save = false,
 	wield_item = "mcl_core:barrier",
 }
 
@@ -1077,7 +1102,7 @@ function mob_class:wielditem_transform (info, stack)
 		rot = info.blocklike_rotation
 		pos = info.blocklike_position
 	end
-	return rot, pos
+	return rot, pos, table.copy (wielditem_props.visual_size)
 end
 
 function mob_class:display_wielditem (offhand)
@@ -1113,7 +1138,7 @@ function mob_class:display_wielditem (offhand)
 
 		-- Apply rotation and position according to item type.
 		local stack = ItemStack (self[itemname])
-		local rot, pos = self:wielditem_transform (info, stack)
+		local rot, pos, size = self:wielditem_transform (info, stack)
 		if not info.rotate_bone then
 			self[objectname]:set_attach (self.object, info.bone, pos, rot)
 		else
@@ -1123,6 +1148,7 @@ function mob_class:display_wielditem (offhand)
 		local name = stack:get_name ()
 		self[objectname]:set_properties ({
 				wield_item = name,
+				visual_size = size,
 		})
 	elseif info.textureslot and info.texturebone then
 		local stack = ItemStack (self[itemname])
@@ -1189,28 +1215,28 @@ local armor_table = {
 	head = {
 		"mcl_armor:helmet_leather",
 		"mcl_armor:helmet_gold",
-		"mcl_armor:helmet_chainmail",
+		"mcl_armor:helmet_chain",
 		"mcl_armor:helmet_iron",
 		"mcl_armor:helmet_diamond",
 	},
 	torso = {
 		"mcl_armor:chestplate_leather",
 		"mcl_armor:chestplate_gold",
-		"mcl_armor:chestplate_chainmail",
+		"mcl_armor:chestplate_chain",
 		"mcl_armor:chestplate_iron",
 		"mcl_armor:chestplate_diamond",
 	},
 	legs = {
 		"mcl_armor:leggings_leather",
 		"mcl_armor:leggings_gold",
-		"mcl_armor:leggings_chainmail",
+		"mcl_armor:leggings_chain",
 		"mcl_armor:leggings_iron",
 		"mcl_armor:leggings_diamond",
 	},
 	feet = {
 		"mcl_armor:boots_leather",
 		"mcl_armor:boots_gold",
-		"mcl_armor:boots_chainmail",
+		"mcl_armor:boots_chain",
 		"mcl_armor:boots_iron",
 		"mcl_armor:boots_diamond",
 	},
@@ -1230,12 +1256,25 @@ function mob_class:enchant_default_armor (mob_factor, pr)
 	end
 end
 
+function mob_class:enchant_default_weapon (mob_factor, pr)
+	local stack = self:get_wielditem ()
+	if stack:is_empty () then
+		return
+	end
+	if math.random () < 0.25 * mob_factor then
+		local level = 5.0 + mob_factor * pr:next (1, 18)
+		level = math.floor (level)
+		mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+	end
+	self:set_wielditem (stack)
+end
+
 function mob_class:generate_default_equipment (mob_factor, do_armor, do_wielditems)
 	if math.random () < mob_factor * 0.15 then
 		if do_armor then
 			-- Decide what armor material this mob will
 			-- wear.
-			local base_level = math.random (1)
+			local base_level = math.random (2)
 			if math.random () < 0.095 then
 				base_level = base_level + 1
 			end

@@ -73,7 +73,6 @@ local axolotl = {
 	do_go_pos = mcl_mobs.mob_class.pitchswim_do_go_pos,
 	idle_gravity_in_liquids = true,
 	breathes_in_water = true,
-	jump = true,
 	damage = 2,
 	reach = 2,
 	attack_type = "melee",

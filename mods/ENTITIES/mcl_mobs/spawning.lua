@@ -326,11 +326,11 @@ local function spawn_group(p,mob,spawn_on,group_max,group_min)
 	return o
 end
 
-function mob_class:despawn_allowed()
+function mob_class:despawn_allowed ()
 	local nametag = self.nametag and self.nametag ~= ""
-	local not_busy = self.state ~= "attack" and self.following == nil
 	if self.can_despawn == true then
-		if not nametag and not_busy and not self.tamed and not self.persistent then
+		if not nametag and not self.tamed
+			and not self.persistent then
 			return true
 		end
 	end
@@ -545,6 +545,10 @@ if mobs_spawn then
 	end)
 end
 
+function mob_class:despawn_ok (d_to_closest_player)
+	return true
+end
+
 function mob_class:check_despawn(pos, dtime)
 	if remove_far and self:despawn_allowed() then
 		local min_dist = math.huge
@@ -552,7 +556,9 @@ function mob_class:check_despawn(pos, dtime)
 			min_dist = math.min(min_dist, vector.distance(player:get_pos(), pos))
 		end
 
-		if min_dist > instant_despawn_range then
+		if not self:despawn_ok (min_dist) then
+			return false
+		elseif min_dist > instant_despawn_range then
 			self:kill_me("no players within distance " .. instant_despawn_range)
 			return true
 		elseif min_dist > random_despawn_range then
