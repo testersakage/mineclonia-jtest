@@ -141,9 +141,9 @@ local function golem_seek_village (self, self_pos, dtime)
 		if section then
 			local center = mcl_villages.center_of_section (section)
 			local dir = vector.direction (self_pos, center)
-			local pace_dir = self:random_node_direction (10, 7, dir, NINETY_DEG)
-			if pace_dir then
-				local target = vector.add (self_pos, pace_dir)
+			local target = self:target_in_direction (self_pos, 10, 7,
+								 dir, NINETY_DEG)
+			if target then
 				self:gopath (target, nil, false, 0.6)
 				self._seeking_village = true
 				return "_seeking_village"
@@ -300,9 +300,9 @@ function golem:pacing_target (pos, width, height, groups)
 		if #pois > 0 then
 			local poi = pois[pr:next (1, #pois)].min
 			local dir = vector.direction (pos, poi)
-			local pace_dir = self:random_node_direction (10, 7, dir, NINETY_DEG)
-			if pace_dir then
-				local target = vector.add (pos, pace_dir)
+			local target = self:target_in_direction (pos, 10, 7, dir,
+								 NINETY_DEG)
+			if target then
 				return target
 			end
 		end

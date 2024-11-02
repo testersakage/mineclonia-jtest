@@ -44,7 +44,8 @@ S("Arrows might get stuck on solid blocks and can be retrieved again. They are a
 		-- Shoot arrow
 		local shootpos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 		local yaw = math.atan2(dropdir.z, dropdir.x) + YAW_OFFSET
-		mcl_bows.shoot_arrow(itemstack:get_name(), shootpos, dropdir, yaw, nil, 19, 3)
+		mcl_bows.shoot_arrow (itemstack:get_name(), shootpos, dropdir,
+				      yaw, nil, 0.366666)
 	end,
 })
 
@@ -125,6 +126,17 @@ function ARROW_ENTITY:arrow_knockback (object, damage)
 	end
 end
 
+function ARROW_ENTITY:calculate_damage (v)
+	local crit_bonus = 0
+	local multiplier = vector.length (v) / 20
+	local damage = (self._damage or 2) * multiplier
+
+	if self._is_critical then
+		crit_bonus = math.random (damage / 2 + 2)
+	end
+	return math.floor (damage + crit_bonus)
+end
+
 function ARROW_ENTITY.on_step(self, dtime)
 	mcl_burning.tick(self.object, dtime, self)
 	-- mcl_burning.tick may remove object immediately
@@ -188,7 +200,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 	-- Check for object "collision". Done every tick (hopefully this is not too stressing)
 	else
 
-		if self._damage >= 9 and self._in_player == false then
+		if self._is_critical and self._in_player == false then
 			minetest.add_particlespawner({
 				amount = 20,
 				time = .2,
@@ -215,9 +227,9 @@ function ARROW_ENTITY.on_step(self, dtime)
 			self._deflection_cooloff = self._deflection_cooloff - dtime
 		end
 
-		local arrow_dir = self.object:get_velocity()
+		local v = self.object:get_velocity()
 		--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-		local raycast = minetest.raycast(pos, vector.add(self_pos, vector.multiply(arrow_dir, 0.04)), true, false)
+		local raycast = minetest.raycast(pos, vector.add(self_pos, vector.multiply(v, 0.04)), true, false)
 		for hitpoint in raycast do
 			if hitpoint.type == "object" then
 				-- find the closest object that is in the way of the arrow
@@ -270,13 +282,19 @@ function ARROW_ENTITY.on_step(self, dtime)
 					-- Punch target object but avoid hurting enderman.
 					if not lua or lua.name ~= "mobs_mc:enderman" then
 						if not self._in_player then
-							damage_particles(vector.add(self_pos, vector.multiply(self.object:get_velocity(), 0.1)), self._is_critical)
+							damage_particles(vector.add(self_pos, vector.multiply(v, 0.1)), self._is_critical)
 						end
 						if mcl_burning.is_burning(self.object) then
 							mcl_burning.set_on_fire(obj, 5)
 						end
 						if not self._in_player and not self._blocked then
-							local damage = mcl_util.deal_damage(obj, self._damage, {type = "arrow", source = self._shooter, direct = self.object})
+							local reason = {
+								type = "arrow",
+								source = self._shooter,
+								direct = self.object,
+							}
+							local dmg = self:calculate_damage (v)
+							local damage = mcl_util.deal_damage (obj, dmg, reason)
 							self:arrow_knockback (obj, damage)
 							if self._extra_hit_func then
 								self._extra_hit_func(obj)

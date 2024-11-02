@@ -1336,6 +1336,32 @@ function mob_class:gwp_check_diagonal (node, flanking1, flanking2)
 	return f1_valid and f2_valid
 end
 
+local gwp_check_diagonal_1_scratch = {}
+
+function mob_class:gwp_check_diagonal_1 (context, d, flanking1, flanking2, y)
+	if d.y <= y then
+		return d.penalty >= 0.0
+	elseif d.penalty >= 0.0 then
+		-- Reject a diagonal jump if the jump would be
+		-- obstructed if performed from either of the flanking
+		-- nodes.
+		local node = gwp_check_diagonal_1_scratch
+		local penalties = self.gwp_penalties
+
+		node.x = flanking1.x
+		node.y = y + 1
+		node.z = flanking1.z
+		local class_1 = self:gwp_classify_node (context, node)
+		if penalties[class_1] >= 0.0 then
+			node.x = flanking2.x
+			node.z = flanking2.z
+			local class_2 = self:gwp_classify_node (context, node)
+			return penalties[class_2] >= 0.0
+		end
+	end
+	return false
+end
+
 local gwp_edges_scratch = {}
 
 function mob_class:gwp_edges (context, node)
@@ -1353,22 +1379,32 @@ function mob_class:gwp_edges (context, node)
 	if c3 and c3.penalty >= 0.0 then n = n + 1; array[n] = c3 end
 	c4 = gwp_edges_1 (self, context, node, floor, 0, -1)
 	if c4 and c4.penalty >= 0.0 then n = n + 1; array[n] = c4 end
+
 	-- Consider diagonal neighbors at an angle.
+	local y = node.y
 	if self:gwp_check_diagonal (node, c1, c2) then
 		local d = gwp_edges_1 (self, context, node, floor, 1, 1)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c1, c2, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	if self:gwp_check_diagonal (node, c1, c4) then
 		local d = gwp_edges_1 (self, context, node, floor, 1, -1)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c1, c4, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	if self:gwp_check_diagonal (node, c3, c2) then
 		local d = gwp_edges_1 (self, context, node, floor, -1, 1)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c3, c2, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	if self:gwp_check_diagonal (node, c3, c4) then
 		local d = gwp_edges_1 (self, context, node, floor, -1, -1)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c3, c4, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	array[n + 1] = nil
 	return array
@@ -2042,21 +2078,30 @@ local function amphibious_gwp_edges (self, context, node)
 	c4 = gwp_edges_1 (self, context, node, floor, 0, -1, true)
 	if c4 and c4.penalty >= 0.0 then n = n + 1; array[n] = c4 end
 	-- Consider diagonal neighbors at an angle.
+	local y = node.y
 	if self:gwp_check_diagonal (node, c1, c2) then
 		local d = gwp_edges_1 (self, context, node, floor, 1, 1, true)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c1, c2, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	if self:gwp_check_diagonal (node, c1, c4) then
 		local d = gwp_edges_1 (self, context, node, floor, 1, -1, true)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c1, c4, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	if self:gwp_check_diagonal (node, c3, c2) then
 		local d = gwp_edges_1 (self, context, node, floor, -1, 1, true)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c3, c2, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	if self:gwp_check_diagonal (node, c3, c4) then
 		local d = gwp_edges_1 (self, context, node, floor, -1, -1, true)
-		if d and d.penalty >= 0.0 then n = n + 1; array[n] = d end
+		if d and self:gwp_check_diagonal_1 (context, d, c3, c4, y) then
+			n = n + 1; array[n] = d
+		end
 	end
 	-- Consider neighbors vertically above and below, but only if
 	-- they be water.

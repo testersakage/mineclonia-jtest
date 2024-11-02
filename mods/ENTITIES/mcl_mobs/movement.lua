@@ -799,8 +799,14 @@ end
 
 function mob_class:target_away_from (pos, pursuer)
 	local forward_dir = vector.subtract (pos, pursuer)
+	return self:target_in_direction (pos, 14, 7, forward_dir,
+					 math.pi / 2)
+end
+
+function mob_class:target_in_direction (pos, xmax, ymax, dir, deviation)
 	for i = 1, 10 do
-		local dir = self:random_node_direction (16, 7, forward_dir, math.pi / 2)
+		local dir = self:random_node_direction (xmax, ymax, dir,
+							deviation)
 		if dir then
 			local pos = vector.add (pos, dir)
 			if self:node_in_restriction (pos) then
@@ -1555,10 +1561,10 @@ function mob_class:return_to_restriction (self_pos, dtime)
 	for i = 1, 10 do
 		local restrict = self._restriction_center
 		local restriction_dir = vector.direction (self_pos, restrict)
-		local dir = self:random_node_direction (16, 7, restriction_dir,
-							math.pi / 2)
-		if dir then
-			local node = vector.add (self_pos, dir)
+		local node = self:target_in_direction (self_pos, 16, 7,
+						       restriction_dir,
+						       math.pi / 2)
+		if node then
 			if self:node_in_restriction (node) then
 				self:gopath (node, nil, false, self.restriction_bonus)
 				self._returning_to_restriction = true
