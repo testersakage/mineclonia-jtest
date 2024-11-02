@@ -592,8 +592,8 @@ end
 
 
 ----------------------------------------------------------------------------------
--- Invisibility.  This invisibility exempts attached objects and armor by altering
--- textures rather than visual size.
+-- Invisibility.  This invisibility exempts attached objects and armor
+-- by altering textures rather than visual size.
 ----------------------------------------------------------------------------------
 
 function mob_class:set_invisible (hide)
@@ -630,3 +630,68 @@ function mob_class:set_textures (textures)
 			textures = textures,
 	})
 end
+
+----------------------------------------------------------------------------------
+-- Humanoids.  This provides support for managing humanoid poses in
+-- Lua.
+----------------------------------------------------------------------------------
+
+local posing_humanoid = {
+	_arm_poses = {
+		default = {},
+	},
+	_arm_pose_continuous = {
+		default = false,
+	}
+}
+
+function posing_humanoid:do_custom (dtime)
+	-- Not supported on 5.8.0 or earlier, where bone overrides
+	-- cannot be cleared or be marked as absolute.
+	if not self.object or not self.object.set_bone_override then
+		return
+	end
+	local last_arm_pose = self._arm_pose
+	self._arm_pose = self:select_arm_pose ()
+	if last_arm_pose ~= self._arm_pose
+		or self._arm_pose_continuous[self._arm_pose] then
+		local pose = self._arm_poses[self._arm_pose]
+		if pose then
+			for k, v in pairs (pose) do
+				if v[2] or v[1] then
+					local pos = v[1] and (type (v[1]) ~= "function"
+							      and vector.apply (v[1], math.rad)
+							      or v[1] (self))
+					local rot = v[2] and (type (v[2]) ~= "function"
+							      and vector.apply (v[2], math.rad)
+							      or v[2] (self))
+					local pos = pos
+					local rot = rot
+					self.object:set_bone_override (k, {
+					       position = pos and {
+						       vec = pos,
+						       absolute = true,
+					       },
+					       rotation = rot and {
+						       vec = rot,
+						       absolute = true,
+					       },
+					})
+				else
+					self.object:set_bone_override (k)
+				end
+			end
+		end
+	end
+end
+
+function posing_humanoid:select_arm_pose ()
+	return "default"
+end
+
+function posing_humanoid:mob_activate (staticdata, dtime)
+	self._humanoid_superclass.mob_activate (self, staticdata, dtime)
+	self._arm_pose = nil
+end
+
+mcl_mobs.posing_humanoid = posing_humanoid

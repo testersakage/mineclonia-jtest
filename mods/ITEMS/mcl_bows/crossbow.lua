@@ -19,9 +19,7 @@ mcl_bows.CROSSBOW_CHARGE_TIME_FULL = BOW_CHARGE_TIME_FULL / 1e+6
 -- This emulates the sneak speed.
 local PLAYER_USE_CROSSBOW_SPEED = tonumber(minetest.settings:get("movement_speed_crouch")) / tonumber(minetest.settings:get("movement_speed_walk"))
 
--- TODO: Use Minecraft speed (ca. 53 m/s)
--- Currently nerfed because at full speed the arrow would easily get out of the range of the loaded map.
-local BOW_MAX_SPEED = 68
+local BOW_MAX_SPEED = 3.15 * 20
 
 local function play_load_sound(id, pos)
 	minetest.sound_play("mcl_bows_crossbow_drawback_"..id, {pos=pos, max_hear_distance=12}, true)
@@ -39,14 +37,11 @@ local bow_load = {}
 -- Another player table, this one stores the wield index of the bow being charged
 local bow_index = {}
 
-function mcl_bows.shoot_arrow_crossbow(arrow_item, pos, dir, yaw, shooter, power, damage, is_critical, crossbow_stack, collectable)
+function shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
 	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, arrow_item.."_entity")
 	if not obj or not obj:get_pos() then return end
-	if power == nil then
-		power = BOW_MAX_SPEED --19
-	end
 	if damage == nil then
-		damage = 3
+		damage = 2
 	end
 	if crossbow_stack then
 		local enchantments = mcl_enchanting.get_enchantments(crossbow_stack)
@@ -56,7 +51,7 @@ function mcl_bows.shoot_arrow_crossbow(arrow_item, pos, dir, yaw, shooter, power
 			obj:get_luaentity()._piercing = 0
 		end
 	end
-	obj:set_velocity({x=dir.x*power, y=dir.y*power, z=dir.z*power})
+	obj:set_velocity({x=dir.x*speed, y=dir.y*speed, z=dir.z*speed})
 	obj:set_acceleration({x=0, y=-GRAVITY, z=0})
 	obj:set_yaw(yaw-math.pi/2)
 	local le = obj:get_luaentity()
@@ -73,7 +68,35 @@ function mcl_bows.shoot_arrow_crossbow(arrow_item, pos, dir, yaw, shooter, power
 		end
 		obj:get_luaentity().node = shooter:get_inventory():get_stack("main", 1):get_name()
 	end
-	return obj
+	return obj	
+end
+
+local function get_pitch (dir)
+	return math.atan2 (-dir.y, math.sqrt (dir.x * dir.x + dir.z * dir.z))
+end
+
+function mcl_bows.shoot_arrow_crossbow (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
+	local has_multishot_enchantment
+		= crossbow_stack and mcl_enchanting.has_enchantment (crossbow_stack, "multishot")
+	if has_multishot_enchantment then
+		-- calculate rotation by 10 degrees 'left' and 'right' of facing direction
+		local pitch = get_pitch (dir)
+		local pitch_c = math.cos(pitch)
+		local pitch_s = math.sin(pitch)
+		local yaw_c = math.cos(yaw + math.pi / 2)
+		local yaw_s = math.sin(yaw + math.pi / 2)
+
+		local rot_left =  {x =   yaw_c * pitch_s * math.pi / 18, y =   pitch_c * math.pi / 18, z =   yaw_s * pitch_s * math.pi / 18}
+		local rot_right = {x = - yaw_c * pitch_s * math.pi / 18, y = - pitch_c * math.pi / 18, z = - yaw_s * pitch_s * math.pi / 18}
+		local dir_left = vector.rotate(dir, rot_left)
+		local dir_right = vector.rotate(dir, rot_right)
+
+		shoot_arrow_crossbow_1 (arrow_item, pos, {x=dir_left.x, y=dir_left.y, z=dir_left.z}, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
+		shoot_arrow_crossbow_1 (arrow_item, pos, {x=dir_right.x, y=dir_right.y, z=dir_right.z}, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
+		shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
+	else
+		shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
+	end
 end
 
 local function get_arrow(player)
@@ -90,8 +113,7 @@ local function get_arrow(player)
 	return arrow_stack, arrow_stack_id
 end
 
-local function player_shoot_arrow(wielditem, player, power, damage, is_critical)
-	local has_multishot_enchantment = mcl_enchanting.has_enchantment(player:get_wielded_item(), "multishot")
+local function player_shoot_arrow(wielditem, player, is_critical)
 	local arrow_itemstring = wielditem:get_meta():get("arrow")
 
 	if not arrow_itemstring or minetest.get_item_group(arrow_itemstring, "ammo_crossbow") == 0 then
@@ -102,25 +124,7 @@ local function player_shoot_arrow(wielditem, player, power, damage, is_critical)
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
-	if has_multishot_enchantment then
-		-- calculate rotation by 10 degrees 'left' and 'right' of facing direction
-		local pitch = player:get_look_vertical()
-		local pitch_c = math.cos(pitch)
-		local pitch_s = math.sin(pitch)
-		local yaw_c = math.cos(yaw + math.pi / 2)
-		local yaw_s = math.sin(yaw + math.pi / 2)
-
-		local rot_left =  {x =   yaw_c * pitch_s * math.pi / 18, y =   pitch_c * math.pi / 18, z =   yaw_s * pitch_s * math.pi / 18}
-		local rot_right = {x = - yaw_c * pitch_s * math.pi / 18, y = - pitch_c * math.pi / 18, z = - yaw_s * pitch_s * math.pi / 18}
-		local dir_left = vector.rotate(dir, rot_left)
-		local dir_right = vector.rotate(dir, rot_right)
-
-		mcl_bows.shoot_arrow_crossbow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, {x=dir_left.x, y=dir_left.y, z=dir_left.z}, yaw, player, power, damage, is_critical, player:get_wielded_item(), false)
-		mcl_bows.shoot_arrow_crossbow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, {x=dir_right.x, y=dir_right.y, z=dir_right.z}, yaw, player, power, damage, is_critical, player:get_wielded_item(), false)
-		mcl_bows.shoot_arrow_crossbow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, power, damage, is_critical, player:get_wielded_item(), true)
-	else
-		mcl_bows.shoot_arrow_crossbow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, power, damage, is_critical, player:get_wielded_item(), true)
-	end
+	mcl_bows.shoot_arrow_crossbow (arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, BOW_MAX_SPEED, nil, is_critical, player:get_wielded_item(), true)
 	return true
 end
 
@@ -290,29 +294,8 @@ controls.register_on_press(function(player, key)
 		local wielditem = player:get_wielded_item()
 		if wielditem:get_name()=="mcl_bows:crossbow_loaded" or wielditem:get_name()=="mcl_bows:crossbow_loaded_enchanted" then
 		local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
-		local speed, damage
 		local p_load = bow_load[player:get_player_name()]
-		-- Type sanity check
-		if type(p_load) ~= "number" then
-			-- In case something goes wrong ...
-			-- Just assume minimum charge.
-			minetest.log("warning", "[mcl_bows] Player "..player:get_player_name().." fires arrow with non-numeric bow_load!")
-		end
-
-		-- Calculate damage and speed
-		-- Fully charged
-		local is_critical = false
-		speed = BOW_MAX_SPEED
-		local r = math.random(1,5)
-		if r > 4 then
-			-- 20% chance for critical hit (by default)
-			damage = 10 + math.floor((r-5)/5) -- mega crit (over crit) with high luck
-			is_critical = true
-		else
-			damage = 9
-		end
-
-		local has_shot = player_shoot_arrow(wielditem, player, speed, damage, is_critical)
+		local has_shot = player_shoot_arrow (wielditem, player, true)
 
 		if enchanted then
 			wielditem:set_name("mcl_bows:crossbow_enchanted")

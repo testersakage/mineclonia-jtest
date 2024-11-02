@@ -1524,6 +1524,19 @@ function mcl_util.get_2d_block_direction (yaw)
 	end
 end
 
+function mcl_util.is_daytime ()
+	local time = minetest.get_timeofday ()
+	return time <= 0.8 and time >= 0.2
+end
+
+local function round_trunc (x)
+	return math.floor (x + 0.5)
+end
+
+function mcl_util.get_nodepos (pos)
+	return vector.apply (pos, round_trunc)
+end
+
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
 dofile(modpath.."/compat.lua")

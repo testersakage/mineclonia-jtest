@@ -1,5 +1,6 @@
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
+local posing_humanoid = mcl_mobs.posing_humanoid
 
 ------------------------------------------------------------------------
 -- Abstract piglin.  Models and armor.
@@ -89,12 +90,13 @@ local piglin_base = {
 	animation = {
 		stand_start = 0, stand_end = 79, stand_speed = 30,
 		walk_start = 168, walk_end = 187, walk_speed = 12,
-		run_start = 440, run_end = 459, run_speed = 30,
+		run_start = 168, run_end = 187, run_speed = 12,
 		punch_start = 189, punch_end = 198, punch_speed = 45,
 		jockey_start = 483, jockey_end = 483, jockey_speed = 0,
 		dance_start = 500, dance_end = 520, dance_speed = 25,
 	},
 	makes_footstep_sound = true,
+	frame_speed_multiplier = 0.6,
 }
 
 ------------------------------------------------------------------------
@@ -172,7 +174,7 @@ function mobs_mc.player_wears_gold(player)
 	end
 end
 
-local piglin = table.merge (piglin_base, {
+local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	description = S("Piglin"),
 	hp_min = 16,
 	hp_max = 16,
@@ -223,11 +225,22 @@ local piglin = table.merge (piglin_base, {
 	_time_to_ride_start = 0,
 	_dominant_in_jockeys = false,
 	_convert_to = "mobs_mc:zombified_piglin",
-})
+	_humanoid_superclass = mob_class,
+}))
 
 ------------------------------------------------------------------------
 -- Piglin visuals.
 ------------------------------------------------------------------------
+
+function piglin_base:wielditem_transform (info, stack)
+	local rot, pos, size
+		= mob_class.wielditem_transform (self, info, stack)
+	if self.child then
+		size.x = size.x * 0.5
+		size.y = size.y * 0.5
+	end
+	return rot, pos, size
+end
 
 function piglin:who_are_you_looking_at ()
 	if self._interacting_with then
@@ -235,11 +248,6 @@ function piglin:who_are_you_looking_at ()
 	else
 		mob_class.who_are_you_looking_at (self)
 	end
-end
-
-function piglin:mob_activate (staticdata, dtime)
-	mcl_mobs.mob_class.mob_activate (self, staticdata, dtime)
-	self._arm_pose = "default"
 end
 
 function piglin:select_arm_pose ()
@@ -345,45 +353,8 @@ local piglin_pose_continuous = {
 	crossbow_2 = true,
 }
 
-function piglin:do_custom (dtime)
-	-- Not supported on 5.8.0 or earlier, where bone overrides
-	-- cannot be cleared.
-	if not self.object or not self.object.set_bone_override then
-		return
-	end
-	local last_arm_pose = self._arm_pose
-	self._arm_pose = self:select_arm_pose ()
-	if last_arm_pose ~= self._arm_pose
-		or piglin_pose_continuous[self._arm_pose] then
-		local pose = piglin_poses[self._arm_pose]
-		if pose then
-			for k, v in pairs (pose) do
-				if v[2] or v[1] then
-					local pos = v[1] and (type (v[1]) ~= "function"
-							      and vector.apply (v[1], math.rad)
-							      or v[1] (self))
-					local rot = v[2] and (type (v[2]) ~= "function"
-							      and vector.apply (v[2], math.rad)
-							      or v[2] (self))
-					local pos = pos
-					local rot = rot
-					self.object:set_bone_override (k, {
-					       position = pos and {
-						       vec = pos,
-						       absolute = true,
-					       },
-					       rotation = rot and {
-						       vec = rot,
-						       absolute = true,
-					       },
-					})
-				else
-					self.object:set_bone_override (k)
-				end
-			end
-		end
-	end
-end
+piglin._arm_poses = piglin_poses
+piglin._arm_pose_continuous = piglin_pose_continuous
 
 function piglin:ai_step (dtime)
 	piglin_base.ai_step (self, dtime)
@@ -492,6 +463,7 @@ function piglin:on_spawn ()
 		else
 			self:set_wielditem (ItemStack ("mcl_tools:sword_gold"))
 		end
+		self:enchant_default_weapon (mob_factor, pr)
 	end
 
 	self._hunting_cooldown = pr:next (30, 120)
@@ -600,10 +572,12 @@ function piglin:should_pick_up (stack)
 end
 
 function piglin:shoot_arrow (pos, dir)
-	-- 2-4 damage per arrow
-	local dmg = math.max (4, math.random (2, 8))
-	mcl_bows.shoot_arrow ("mcl_bows:arrow", pos, dir, self:get_yaw (),
-				self.object, nil, dmg)
+	local wielditem = self:get_wielditem ()
+	if minetest.get_item_group (wielditem:get_name (), "crossbow") == 0 then
+		wielditem = nil
+	end
+	mcl_bows.shoot_arrow_crossbow ("mcl_bows:arrow", pos, dir, self:get_yaw (),
+				       self.object, 32.0, nil, true, wielditem, false)
 end
 local function piglin_attracted_to_player (player)
 	local item = player:get_wielded_item ()

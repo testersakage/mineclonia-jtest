@@ -17,9 +17,7 @@ local BOW_CHARGE_TIME_FULL = 500000 -- bow level 2 (full charge)
 -- This emulates the sneak speed.
 local PLAYER_USE_BOW_SPEED = tonumber(minetest.settings:get("movement_speed_crouch")) / tonumber(minetest.settings:get("movement_speed_walk"))
 
--- TODO: Use Minecraft speed (ca. 53 m/s)
--- Currently nerfed because at full speed the arrow would easily get out of the range of the loaded map.
-local BOW_MAX_SPEED = 40
+local BOW_MAX_SPEED = 3.0 * 20
 
 --[[ Store the charging state of each player.
 keys: player name
@@ -37,16 +35,26 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, arrow_item.."_entity")
 	if not obj or not obj:get_pos() then return end
 	if power == nil then
-		power = BOW_MAX_SPEED --19
+		power = 1.0
 	end
+	local speed = power * BOW_MAX_SPEED
 	if damage == nil then
-		damage = 3
+		if shooter and not shooter:is_player () then
+			-- Randomize arrow damage by difficulty.
+			damage = 2.0 * power
+			local bonus
+				= mcl_util.dist_triangular (mcl_vars.difficulty * 0.11,
+								0.57425)
+			damage = damage + bonus
+		else
+			damage = 2.0
+		end
 	end
 	local knockback = 0
 	if bow_stack then
 		local enchantments = mcl_enchanting.get_enchantments(bow_stack)
 		if enchantments.power then
-			damage = damage + (enchantments.power + 1) / 4
+			damage = damage + (enchantments.power / 2) + 0.5
 		end
 		if enchantments.punch then
 			knockback = knockback + enchantments.punch * 3
@@ -55,7 +63,7 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 			mcl_burning.set_on_fire(obj, math.huge)
 		end
 	end
-	obj:set_velocity({x=dir.x*power, y=dir.y*power, z=dir.z*power})
+	obj:set_velocity({x=dir.x*speed, y=dir.y*speed, z=dir.z*speed})
 	obj:set_acceleration({x=0, y=-GRAVITY, z=0})
 	obj:set_yaw(yaw-math.pi/2)
 	local le = obj:get_luaentity()
@@ -90,7 +98,7 @@ local function get_arrow(player)
 	return arrow_stack, arrow_stack_id
 end
 
-local function player_shoot_arrow(_, player, power, damage, is_critical)
+local function player_shoot_arrow (player, power, is_critical)
 	local arrow_stack, arrow_stack_id = get_arrow(player)
 	local arrow_itemstring
 	local has_infinity_enchantment = mcl_enchanting.has_enchantment(player:get_wielded_item(), "infinity")
@@ -119,7 +127,14 @@ local function player_shoot_arrow(_, player, power, damage, is_critical)
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
-	mcl_bows.shoot_arrow(arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, power, damage, is_critical, player:get_wielded_item(), not has_infinity_enchantment)
+	local pos = {
+		x = playerpos.x,
+		y = playerpos.y + 1.5,
+		z = playerpos.z,
+	}
+	mcl_bows.shoot_arrow (arrow_itemstring, pos, dir, yaw, player,
+			      power, nil, is_critical, player:get_wielded_item (),
+			      not has_infinity_enchantment)
 	return true
 end
 
@@ -228,7 +243,7 @@ controls.register_on_release(function(player, key)
 		wielditem:get_name()=="mcl_bows:bow_0_enchanted" or wielditem:get_name()=="mcl_bows:bow_1_enchanted" or wielditem:get_name()=="mcl_bows:bow_2_enchanted") then
 
 		local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
-		local speed, damage
+		local speed
 		local p_load = bow_load[player:get_player_name()]
 		local charge
 		-- Type sanity check
@@ -245,27 +260,13 @@ controls.register_on_release(function(player, key)
 		local charge_ratio = charge / BOW_CHARGE_TIME_FULL
 		charge_ratio = math.max(math.min(charge_ratio, 1), 0)
 
-		-- Calculate damage and speed
-		-- Fully charged
+		-- Calculate damage and power.
 		local is_critical = false
 		if charge >= BOW_CHARGE_TIME_FULL then
-			speed = BOW_MAX_SPEED
-			local r = math.random(1,5)
-			if r > 4 then
-				-- 20% chance for critical hit (by default)
-				damage = 10 + math.floor((r-5)/5) -- mega crit (over crit) with high luck
-				is_critical = true
-			else
-				damage = 9
-			end
-		-- Partially charged
-		else
-			-- Linear speed and damage increase
-			speed = math.max(4, BOW_MAX_SPEED * charge_ratio)
-			damage = math.max(1, math.floor(9 * charge_ratio))
+			is_critical = true
 		end
 
-		local has_shot = player_shoot_arrow(wielditem, player, speed, damage, is_critical)
+		local has_shot = player_shoot_arrow (player, charge_ratio, is_critical)
 
 		if enchanted then
 			wielditem:set_name("mcl_bows:bow_enchanted")
