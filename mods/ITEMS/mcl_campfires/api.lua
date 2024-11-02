@@ -249,6 +249,7 @@ function mcl_campfires.register_campfire(name, def)
 			campfire_drops(pos, digger, def.drops, name.."_lit")
 		end,
 		_mcl_campfires_smothered_form = name,
+		_pathfinding_class = "DAMAGE_FIRE",
 	})
 end
 
