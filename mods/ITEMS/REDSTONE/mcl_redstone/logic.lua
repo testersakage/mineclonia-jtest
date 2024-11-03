@@ -189,28 +189,7 @@ local function schedule_update(pos, update)
 	local delay = update.delay or 1
 	local priority = update.priority or 1000
 	local oldnode = minetest.get_node(pos)
-	local param2 = update.param2 or 0
-
-	mcl_redstone._schedule_event(delay, priority, pos, function()
-		-- Only update if node is not the same or has not changed.
-		local node = minetest.get_node(pos)
-		if update.name == node.name and param2 == node.param2 then
-			return
-		end
-		if node.name ~= oldnode.name or node.param2 ~= oldnode.param2 then
-			return
-		end
-
-		minetest.swap_node(pos, {
-			name = update.name,
-			param2 = update.param2,
-		})
-		update_neighbours(pos, oldnode)
-	end)
-end
-
-function mcl_redstone.after(delay, func)
-	mcl_redstone._schedule_event(delay, nil, nil, func)
+	mcl_redstone._schedule_update(delay, priority, pos, update, oldnode)
 end
 
 local function call_init(pos)
@@ -223,7 +202,7 @@ local function call_init(pos)
 	end
 end
 
-function mcl_redstone._schedule_update(pos)
+function mcl_redstone._call_update(pos)
 	local node = minetest.get_node(pos)
 	if update_tab[node.name] then
 		local ret = update_tab[node.name](pos, node)
@@ -367,7 +346,7 @@ minetest.register_on_mods_loaded(function()
 						old_construct(pos)
 					end
 					mcl_redstone._update_opaque_connections(pos)
-					mcl_redstone._schedule_event(0, -1, pos, function()
+					mcl_redstone.after(0, function()
 						opaque_update_neighbours(pos)
 					end)
 				end,
@@ -376,7 +355,7 @@ minetest.register_on_mods_loaded(function()
 						old_destruct(pos, oldnode)
 					end
 					mcl_redstone._update_opaque_connections(pos)
-					mcl_redstone._schedule_event(0, -1, pos, function()
+					mcl_redstone.after(0, function()
 						opaque_update_neighbours(pos)
 					end)
 				end,
@@ -424,7 +403,8 @@ minetest.register_on_mods_loaded(function()
 					if ndef._mcl_redstone.connects_to then
 						mcl_redstone._connect_with_wires(pos)
 					end
-					mcl_redstone._schedule_event(0, -1, pos, function()
+					mcl_redstone._abort_pending_update(pos)
+					mcl_redstone.after(0, function()
 						if init then
 							call_init(pos)
 						end
@@ -441,7 +421,10 @@ minetest.register_on_mods_loaded(function()
 						mcl_redstone._connect_with_wires(pos)
 					end
 					if ndef._mcl_redstone.get_power then
-						update_neighbours(pos, oldnode)
+						mcl_redstone._abort_pending_update(pos)
+						mcl_redstone.after(0, function()
+							update_neighbours(pos, oldnode)
+						end)
 					end
 				end,
 			})
