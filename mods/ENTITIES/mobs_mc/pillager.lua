@@ -74,7 +74,7 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 		bone = "wield",
 		rotate_bone = true,
 	},
-	pacing_bonus = 0.6,
+	pace_bonus = 0.6,
 	_humanoid_superclass = illager,
 }))
 

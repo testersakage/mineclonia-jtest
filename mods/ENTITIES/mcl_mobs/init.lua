@@ -121,6 +121,8 @@ mcl_mobs.mob_class = {
 	runaway_bonus_far = 1.0,
 	restriction_bonus = 1.0,
 	runaway_view_range = 16,
+	_runaway_player_view_range = nil,
+	_runaway_monster_view_range = nil,
 	follow_distance = 6.0,
 	-- Distance at which targets will be relinquished.
 	tracking_distance = 32.0,
