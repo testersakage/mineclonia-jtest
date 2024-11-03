@@ -814,7 +814,10 @@ function mob_class:accelerate_relative (acc, speed)
 end
 
 function mob_class:jump_actual (v)
-	self:set_animation ("jump")
+	if self.animation.jump_start then
+		self._current_animation = nil
+		self:set_animation ("jump")
+	end
 	self:mob_sound ("jump")
 	v = vector.new (v.x, self.jump_height, v.z)
 
