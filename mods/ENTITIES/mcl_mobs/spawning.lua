@@ -295,9 +295,13 @@ function mcl_mobs.spawn(pos,id, staticdata)
 	return minetest.add_entity(pos, def.name, staticdata)
 end
 
+function mob_class.spawn_group_member_data (idx)
+	return nil
+end
 
 local function spawn_group(p,mob,spawn_on,group_max,group_min)
 	if not group_min then group_min = 1 end
+	local mob_def = minetest.registered_entities[mob.name]
 	local nn= minetest.find_nodes_in_area_under_air(vector.offset(p,-5,-3,-5),vector.offset(p,5,3,5),spawn_on)
 	local group_members = {}
 	local o
@@ -306,20 +310,22 @@ local function spawn_group(p,mob,spawn_on,group_max,group_min)
 		nn = {}
 		table.insert(nn,p)
 	end
-	for _ = 1, math.random(group_min,group_max) do
+	for i = 1, math.random(group_min,group_max) do
 		local sp = vector.offset(nn[math.random(#nn)],0,1,0)
 		if spawn_check(nn[math.random(#nn)],mob,true) then
 			if mob.type_of_spawning == "water" then
 				sp = get_water_spawn(sp)
 			end
-			o =  mcl_mobs.spawn(sp,mob.name)
+			local data
+				= mob_def.spawn_group_member_data (i)
+			o = mcl_mobs.spawn (sp, mob.name, data)
 			if o then
 				dbg_spawn_succ = dbg_spawn_succ + 1
 				table.insert (group_members, o)
 			end
 		end
 	end
-	local init_func = minetest.registered_entities[mob.name].initialize_group
+	local init_func = mob_def.initialize_group
 	if init_func and #group_members > 0 then
 		init_func (group_members)
 	end

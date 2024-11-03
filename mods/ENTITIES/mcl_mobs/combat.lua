@@ -626,6 +626,10 @@ function mob_class:custom_attack ()
 	end
 end
 
+function mob_class:pre_melee_attack (distance, delay, line_of_sight)
+	return distance <= self.reach and delay == 0 and line_of_sight
+end
+
 function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		-- Initialize attack parameters.
@@ -634,6 +638,10 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		self._attack_delay = 0
 		self.attacking = true
 		self._punch_animation_timeout = 0
+	end
+	local tolerance = 2 - math.ceil (self.collisionbox[4] - self.collisionbox[1])
+	if tolerance < 0 then
+		tolerance = 0
 	end
 
 	if self._punch_animation_timeout then
@@ -673,7 +681,8 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		end
 
 		-- Try to pathfind.
-		if not self:gopath (target_pos, nil, true, self.pursuit_bonus) then
+		if not self:gopath (target_pos, nil, true,
+					self.pursuit_bonus, nil, tolerance) then
 			delay = delay + 0.75
 		end
 	end
@@ -681,7 +690,7 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 
 	-- Can the target be attacked?
 	local delay = math.max (self._attack_delay - dtime, 0)
-	if distance <= self.reach and delay == 0 and line_of_sight then
+	if self:pre_melee_attack (distance, delay, line_of_sight) then
 		self:look_at (target_pos)
 		self:custom_attack ()
 		delay = self.melee_interval
