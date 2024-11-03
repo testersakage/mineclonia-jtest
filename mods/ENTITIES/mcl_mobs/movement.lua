@@ -909,27 +909,39 @@ function mob_class:check_avoid (self_pos)
 		-- Search for nearby mobs to avoid.
 		local target, max_distance, target_pos
 		local range = self.runaway_view_range
-		local objects
-			= minetest.get_objects_inside_radius (self_pos, range)
 		local runaway_from_players
 			= table.indexof (runaway_from, "players") ~= -1
-		for _, object in ipairs (objects) do
+		local runaway_from_monsters
+			= table.indexof (runaway_from, "monsters") ~= -1
+		for object in minetest.objects_inside_radius (self_pos, range) do
 			local entity = object:get_luaentity ()
 			local eligible = false
+			local view_range = range
 			if entity
 				and table.indexof (runaway_from, entity.name) ~= -1
 				and self:target_visible (self_pos, object) then
 				eligible = true
+			elseif runaway_from_monsters
+				and entity
+				and entity.type == "monster" then
+				eligible = true
+				if self._runaway_monster_view_range then
+					view_range = self._runaway_monster_view_range
+				end
 			elseif object:is_player ()
 				and runaway_from_players
 				and not minetest.is_creative_enabled (object:get_player_name ())
 				and self:target_visible (self_pos, object) then
 				eligible = true
+				if self._runaway_player_view_range then
+					view_range = self._runaway_player_view_range
+				end
 			end
 			if eligible then
 				local pos = object:get_pos ()
 				local distance = vector.distance (self_pos, pos)
-				if not max_distance or distance < max_distance then
+				if distance <= view_range
+					and (not max_distance or distance < max_distance) then
 					target = object
 					target_pos = pos
 					max_distance = distance

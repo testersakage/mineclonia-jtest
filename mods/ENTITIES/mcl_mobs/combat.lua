@@ -847,7 +847,7 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 		self._time_to_next_repath
 			= self._time_to_next_repath - dtime
 		if self._time_to_next_repath <= 0 then
-			local speed = self.run_bonus
+			local speed = self.pursuit_bonus
 			if self._crossbow_state > 0 then
 				speed = speed * 0.5
 			end

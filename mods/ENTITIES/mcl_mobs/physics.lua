@@ -813,13 +813,17 @@ function mob_class:accelerate_relative (acc, speed)
 	return rv
 end
 
-function mob_class:jump_actual (v)
+function mob_class:get_jump_force (moveresult)
+	return self.jump_height
+end
+
+function mob_class:jump_actual (v, jump_force)
 	if self.animation.jump_start then
 		self._current_animation = nil
 		self:set_animation ("jump")
 	end
 	self:mob_sound ("jump")
-	v = vector.new (v.x, self.jump_height, v.z)
+	v = vector.new (v.x, jump_force, v.z)
 
 	-- Apply acceleration if sprinting.
 	if self._sprinting then
@@ -830,7 +834,7 @@ function mob_class:jump_actual (v)
 	return v
 end
 
-local function horiz_collision (v, moveresult)
+local function horiz_collision (moveresult)
 	for _, item in ipairs (moveresult.collisions) do
 		if item.type == "node"
 			and (item.axis == "x" or item.axis == "z") then
@@ -840,6 +844,8 @@ local function horiz_collision (v, moveresult)
 
 	return moveresult.collides and not (moveresult.standing_on_object or moveresult.touching_ground)
 end
+
+mcl_mobs.horiz_collision = horiz_collision
 
 local function clamp (num, min, max)
 	return math.min (max, math.max (num, min))
@@ -895,7 +901,7 @@ function mob_class:motion_step (dtime, moveresult)
 	if self.floats == 1 and not self.driver and math.random (10) < 8 then
 		local depth = self._immersion_depth or 0
 		if depth > LIQUID_JUMP_THRESHOLD then
-				jumping = true
+			jumping = true
 		end
 	end
 
@@ -920,13 +926,13 @@ function mob_class:motion_step (dtime, moveresult)
 	-- If standing on a climable block and jumping or impeded
 	-- horizontally, begin climbing, and prevent fall speed from
 	-- exceeding 3.0 blocks/s.
-	if (self.always_climb and horiz_collision (v, moveresult)) or climbable then
+	if (self.always_climb and horiz_collision (moveresult)) or climbable then
 		if v.y < -3.0 then
 			v.y = -3.0
 		end
 		v.x = clamp (v.x, -3.0, 3.0)
 		v.z = clamp (v.z, -3.0, 3.0)
-		if jumping or horiz_collision (v, moveresult) then
+		if jumping or horiz_collision (moveresult) then
 			v.y = 4.0
 			jumping = false
 			self._jump = false
@@ -992,7 +998,7 @@ function mob_class:motion_step (dtime, moveresult)
 			v.y = v.y * gravity_drag
 		end
 
-		if horiz_collision (v, moveresult) then
+		if horiz_collision (moveresult) then
 			-- Climb water as if it were a ladder.
 			v.y = 3.0
 		end
@@ -1016,9 +1022,16 @@ function mob_class:motion_step (dtime, moveresult)
 		-- 0.6.
 		local slippery = standon.groups.slippery
 		local friction
-		if slippery and slippery > 0 then
+		-- The order in which Minecraft applies velocity is
+		-- such that it is scaled by ground friction after
+		-- application even if vertical acceleration would
+		-- render the mob airborne.  Emulate this behavior, in
+		-- order to avoid a marked disparity in the speed of
+		-- mobs that jump while in motion or walk off ledges.
+		if self._was_touching_ground
+			and slippery and slippery > 0 then
 			friction = BASE_SLIPPERY
-		elseif touching_ground then
+		elseif self._was_touching_ground then
 			friction = BASE_FRICTION
 		else
 			friction = 1
@@ -1081,7 +1094,8 @@ function mob_class:motion_step (dtime, moveresult)
 			end
 		else
 			if touching_ground and (not self.jump_timer or self.jump_timer <= 0) then
-				v = self:jump_actual (v)
+				local force = self:get_jump_force (moveresult)
+				v = self:jump_actual (v, force)
 				self.jump_timer = 0.2
 			end
 		end
@@ -1101,6 +1115,7 @@ function mob_class:motion_step (dtime, moveresult)
 
 	-- Clear the jump flag even when jumping is not yet possible.
 	self._jump = false
+	self._was_touching_ground = touching_ground
 	self.object:set_velocity (v)
 	self:check_collision ()
 end

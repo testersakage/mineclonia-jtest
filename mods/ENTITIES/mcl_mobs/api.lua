@@ -219,6 +219,7 @@ function mob_class:mob_activate(staticdata, dtime)
 	self._was_stuck = false
 	self._sprinting = false
 	self._crouching = false
+	self._was_touching_ground = true
 
 	if self.dead then
 		self:safe_remove()
