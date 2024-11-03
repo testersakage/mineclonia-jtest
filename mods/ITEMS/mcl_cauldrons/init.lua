@@ -109,7 +109,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		water_tex = "default_river_water_source_animated.png^[verticalframe:16:0"
 	elseif liquid == "lava" then
 		id = id .. "_lava"
-		light_level = 14
+		light_level = minetest.LIGHT_MAX
 		water_tex = "default_lava_source_animated.png^[verticalframe:16:0"
 	else
 		water_tex = "default_water_source_animated.png^[verticalframe:16:0"

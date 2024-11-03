@@ -133,7 +133,7 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 	_doc_items_create_entry = false,
 	tiles = {"mcl_core_redstone_ore.png"},
 	paramtype = "light",
-	light_source = 8,
+	light_source = 9,
 	groups = {pickaxey=4, not_in_creative_inventory=1, material_stone=1, xp=7, blast_furnace_smeltable=1},
 	drop = {
 		items = {
@@ -831,7 +831,7 @@ minetest.register_node("mcl_core:crying_obsidian", {
 	_doc_items_longdesc = S("Crying obsidian is a luminous obsidian that can generate as part of ruined portals."),
 	tiles = {"default_obsidian.png^mcl_core_crying_obsidian.png"},
 	is_ground_content = false,
-	light_source = 9,
+	light_source = 10,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey=5, building_block=1, material_stone=1},
 	_mcl_blast_resistance = 1200,

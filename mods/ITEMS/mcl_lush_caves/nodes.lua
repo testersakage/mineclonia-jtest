@@ -196,7 +196,7 @@ minetest.register_node("mcl_lush_caves:cave_vines_lit", {
 	walkable = false,
 	climbable = true,
 	drawtype = "plantlike",
-	light_source = 13,
+	light_source = 14,
 	tiles = {"mcl_lush_caves_cave_vines_lit.png"},
 	inventory_image = "mcl_lush_caves_cave_vines_lit.png",
 	wield_image = "mcl_lush_caves_cave_vines_lit.png",

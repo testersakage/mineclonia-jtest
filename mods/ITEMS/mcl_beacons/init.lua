@@ -96,7 +96,7 @@ minetest.register_node("mcl_beacons:beacon_beam", {
 		}
 	},
 	pointable= false,
-	light_source = 14,
+	light_source = minetest.LIGHT_MAX,
 	walkable = false,
 	groups = {not_in_creative_inventory=1},
 	_mcl_blast_resistance = 1200,
@@ -292,7 +292,7 @@ minetest.register_node("mcl_beacons:beacon", {
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
 	allow_metadata_inventory_move = allow_metadata_inventory_move,
 	allow_metadata_inventory_take = allow_metadata_inventory_take,
-	light_source = 14,
+	light_source = minetest.LIGHT_MAX,
 	groups = {handy=1, deco_block=1},
 	drop = "mcl_beacons:beacon",
 	sounds = mcl_sounds.node_sound_glass_defaults(),

@@ -779,7 +779,7 @@ minetest.register_node("mcl_portals:portal", {
 	walkable = false,
 	is_ground_content = false,
 	drop = "",
-	light_source = 10,
+	light_source = 11,
 	post_effect_color = {a = 180, r = 51, g = 7, b = 89},
 	node_box = {
 		type = "fixed",

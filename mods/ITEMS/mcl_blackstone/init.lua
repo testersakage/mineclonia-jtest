@@ -164,7 +164,7 @@ minetest.register_node("mcl_blackstone:soul_fire", {
 	},
 	inventory_image = "soul_fire_basic_flame.png",
 	paramtype = "light",
-	light_source = 9,
+	light_source = 10,
 	walkable = false,
 	buildable_to = true,
 	sunlight_propagates = true,
@@ -230,7 +230,7 @@ mcl_torches.register_torch({
 		name = "soul_torch_on_floor_animated.png",
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 3.3}
 	}},
-	light = 9, --soul torches are a bit dimmer than normal torches
+	light = 10, --soul torches are a bit dimmer than normal torches
 	groups = {dig_immediate = 3, deco_block = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	particles = true,

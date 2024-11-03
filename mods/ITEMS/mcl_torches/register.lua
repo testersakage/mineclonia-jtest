@@ -10,8 +10,8 @@ mcl_torches.register_torch({
 		name = "default_torch_on_floor_animated.png",
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 3.3}
 	}},
-	-- this is 14 in minecraft
-	light = 13,
+	-- this is 14 in minecraft but raised +1 for useablility
+	light =  minetest.LIGHT_MAX,
 	groups = {dig_immediate = 3, deco_block = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	particles = true,

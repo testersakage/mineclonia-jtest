@@ -5,7 +5,7 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 --local mod_doc = minetest.get_modpath("doc") -> maybe add documentation ?
 
-local light_level = { [0] = 0, 3, 7, 10, 14 }
+local light_level = { [0] = 0, 3, 7, 11, minetest.LIGHT_MAX }
 
 for i=0,4 do
 

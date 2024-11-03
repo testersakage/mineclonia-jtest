@@ -51,8 +51,8 @@ local n_desc = {
 }
 
 local bulb_light = {
-	[""] = 14,
-	["_exposed"] = 11,
+	[""] = minetest.LIGHT_MAX,
+	["_exposed"] = 12,
 	["_weathered"] = 8,
 	["_oxidized"] = 4,
 }

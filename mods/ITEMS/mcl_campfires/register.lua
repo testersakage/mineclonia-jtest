@@ -7,7 +7,7 @@ mcl_campfires.register_campfire("mcl_campfires:campfire", {
 	fire_texture = "mcl_campfires_campfire_fire.png",
 	lit_logs_texture = "mcl_campfires_campfire_log_lit.png",
 	drops = "mcl_core:charcoal_lump 2",
-	lightlevel = 14,
+	lightlevel = minetest.LIGHT_MAX,
 	damage = 1,
 })
 
@@ -18,7 +18,7 @@ mcl_campfires.register_campfire("mcl_campfires:soul_campfire", {
 	fire_texture = "mcl_campfires_soul_campfire_fire.png",
 	lit_logs_texture = "mcl_campfires_soul_campfire_log_lit.png",
 	drops = "mcl_blackstone:soul_soil",
-	lightlevel = 9,
+	lightlevel = 10,
 	damage = 2,
 })
 

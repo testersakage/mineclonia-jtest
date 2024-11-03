@@ -63,11 +63,10 @@ end
 local sounds_coral_plant = mcl_sounds.node_sound_leaves_defaults({footstep = mcl_sounds.node_sound_dirt_defaults().footstep})
 local ontop = "dead_brain_coral_block"
 local canonical = "mcl_ocean:sea_pickle_1_"..ontop
+local light_strength = { 6, 9, 12, minetest.LIGHT_MAX }
 
 for s=1,4 do
 	local desc, doc_desc, doc_use, doc_create, tt_help, nici, img, img_off, on_place, cookoutput
-	-- from MC wiki adjusted to mcla values
-	local light_strength = { 6, 8, 11, 14 }
 	if s == 1 then
 		desc = S("Sea Pickle")
 		doc_desc = S("Sea pickles grow on dead brain coral blocks and provide light when underwater. They come in 4 sizes that vary in brightness.")

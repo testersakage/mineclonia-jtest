@@ -77,8 +77,7 @@ minetest.register_node("mcl_portals:portal_end", {
 	buildable_to = false,
 	is_ground_content = false,
 	drop = "",
-	-- This is 15 in MC.
-	light_source = 14,
+	light_source = minetest.LIGHT_MAX,
 	post_effect_color = {a = 192, r = 0, g = 0, b = 0},
 	after_destruct = destroy_portal,
 	-- This prevents “falling through”

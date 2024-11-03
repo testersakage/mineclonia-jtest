@@ -385,6 +385,7 @@ local tpl_brewing_stand = {
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
 	drop = "mcl_brewing:stand",
 	paramtype = "light",
+	light_source = 1,
 	sunlight_propagates = true,
 	is_ground_content = false,
 	paramtype2 = "facedir",
