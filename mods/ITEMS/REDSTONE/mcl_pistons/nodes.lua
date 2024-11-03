@@ -130,9 +130,9 @@ local piston_on_box = {
 -- Normal (non-sticky) ones:
 
 local pistonspec_normal = {
-	offname = "mcl_pistons:piston_normal_off",
-	onname = "mcl_pistons:piston_normal_on",
-	pusher = "mcl_pistons:piston_pusher_normal",
+	offname = "mcl_pistons:piston_off",
+	onname = "mcl_pistons:piston_on",
+	pusher = "mcl_pistons:piston_pusher",
 }
 
 local usagehelp_piston = S("This block can have one of 6 possible orientations.")
@@ -155,12 +155,6 @@ local commdef = {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	on_rotate = function(pos, node, user, mode)
-		if mode == screwdriver.ROTATE_AXIS then
-			minetest.set_node(pos, {name="mcl_pistons:piston_up_normal_off"})
-			return true
-		end
-	end,
 }
 
 local normaldef = table.merge(commdef, {
@@ -230,7 +224,7 @@ local pusherdef = {
 }
 
 -- offstate
-minetest.register_node("mcl_pistons:piston_normal_off", table.merge(normaldef, offdef, {
+minetest.register_node("mcl_pistons:piston_off", table.merge(normaldef, offdef, {
 	_doc_items_create_entry = true,
 	_tt_help = S("Pushes block when powered by redstone power"),
 	_doc_items_longdesc = S("A piston is a redstone component with a pusher which pushes the block or blocks in front of it when it is supplied with redstone power. Not all blocks can be pushed, however."),
@@ -247,7 +241,7 @@ minetest.register_node("mcl_pistons:piston_normal_off", table.merge(normaldef, o
 }))
 
 -- onstate
-minetest.register_node("mcl_pistons:piston_normal_on", table.merge(normaldef, ondef, {
+minetest.register_node("mcl_pistons:piston_on", table.merge(normaldef, ondef, {
 	tiles = {
 		"mesecons_piston_bottom.png^[transformR180",
 		"mesecons_piston_bottom.png",
@@ -257,11 +251,11 @@ minetest.register_node("mcl_pistons:piston_normal_on", table.merge(normaldef, on
 		"mesecons_piston_on_front.png"
 	},
 	groups = table.merge(normaldef.groups, {not_in_creative_inventory=1, unmovable_by_piston = 1}),
-	drop = "mcl_pistons:piston_normal_off",
+	drop = "mcl_pistons:piston_off",
 }))
 
 -- pusher
-minetest.register_node("mcl_pistons:piston_pusher_normal", table.merge(pusherdef, {
+minetest.register_node("mcl_pistons:piston_pusher", table.merge(pusherdef, {
 	tiles = {
 		"mesecons_piston_pusher_top.png",
 		"mesecons_piston_pusher_bottom.png",
@@ -270,7 +264,7 @@ minetest.register_node("mcl_pistons:piston_pusher_normal", table.merge(pusherdef
 		"mesecons_piston_pusher_back.png",
 		"mesecons_piston_pusher_front.png"
 	},
-	corresponding_piston = "mcl_pistons:piston_normal_on",
+	corresponding_piston = "mcl_pistons:piston_on",
 }))
 
 -- Sticky ones
@@ -334,7 +328,7 @@ minetest.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef
 
 --craft recipes
 minetest.register_craft({
-	output = "mcl_pistons:piston_normal_off",
+	output = "mcl_pistons:piston_off",
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
 		{"mcl_core:cobble", "mcl_core:iron_ingot", "mcl_core:cobble"},
@@ -346,13 +340,13 @@ minetest.register_craft({
 	output = "mcl_pistons:piston_sticky_off",
 	recipe = {
 		{"mcl_mobitems:slimeball"},
-		{"mcl_pistons:piston_normal_off"},
+		{"mcl_pistons:piston_off"},
 	},
 })
 
 -- Add entry aliases for the Help
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_normal_on")
-doc.add_entry_alias("nodes", "mcl_pistons:piston_normal_off", "nodes", "mcl_pistons:piston_pusher_normal")
+doc.add_entry_alias("nodes", "mcl_pistons:piston_off", "nodes", "mcl_pistons:piston_on")
+doc.add_entry_alias("nodes", "mcl_pistons:piston_off", "nodes", "mcl_pistons:piston_pusher")
 doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_sticky_on")
 doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_pusher_sticky")
 
@@ -383,16 +377,16 @@ minetest.register_lbm(
 		local nodename = ""
 
 		if string.find(node.name, "_on") then
-			nodename = is_sticky and "mcl_pistons:piston_sticky_on" or "mcl_pistons:piston_normal_on"
+			nodename = is_sticky and "mcl_pistons:piston_sticky_on" or "mcl_pistons:piston_on"
 		elseif string.find(node.name, "_off") then
-			nodename = is_sticky and "mcl_pistons:piston_sticky_off" or "mcl_pistons:piston_normal_off"
+			nodename = is_sticky and "mcl_pistons:piston_sticky_off" or "mcl_pistons:piston_off"
 		elseif string.find(node.name, "_pusher") then
-			nodename = is_sticky and "mcl_pistons:piston_pusher_sticky" or "mcl_pistons:piston_pusher_normal"
+			nodename = is_sticky and "mcl_pistons:piston_pusher_sticky" or "mcl_pistons:piston_pusher"
 		end
 
 		minetest.set_node(pos, {name = nodename, param2 = new_param2})
 	end
 })
 
-minetest.register_alias("mesecons_pistons:piston_normal_off", "mcl_pistons:piston_normal_off")
+minetest.register_alias("mesecons_pistons:piston_normal_off", "mcl_pistons:piston_off")
 minetest.register_alias("mesecons_pistons:piston_sticky_off", "mcl_pistons:piston_sticky_off")
