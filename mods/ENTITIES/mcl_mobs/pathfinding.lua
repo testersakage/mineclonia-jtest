@@ -2724,7 +2724,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:creeper" then
+				-- if self.name == "mobs_mc:polar_bear" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else

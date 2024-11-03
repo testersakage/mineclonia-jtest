@@ -226,6 +226,8 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	_dominant_in_jockeys = false,
 	_convert_to = "mobs_mc:zombified_piglin",
 	_humanoid_superclass = mob_class,
+	_nearby_adults = {},
+	_furthest_visible_adults = {},
 }))
 
 ------------------------------------------------------------------------
@@ -723,7 +725,6 @@ function piglin:step_sensors (self_pos)
 					    < vector.distance (self_pos, b)
 		end)
 		self._closest_repellent = blocks[1]
-		self._stay_passive_for = 10
 	else
 		self._closest_repellent = nil
 	end
