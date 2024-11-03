@@ -25,9 +25,11 @@ local function run_on_mcl_piston_move(moved_nodes)
 	end
 end
 
--- pos: pos of mvps;
+-- pos: pos of block to be pushed;
 -- movedir: direction of actual movement
 -- maximum: maximum nodes to be pushed
+-- player_name: player who is moving the block
+-- piston_pos: position of the piston
 function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	-- table containing nodes to be moved, has the following format:
 	-- pos: position after being moved
