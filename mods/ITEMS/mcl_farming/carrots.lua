@@ -46,7 +46,7 @@ for i=1, 7 do
 				{-7/16, -0.5 ,-7/16, 7/16, sel_height ,7/16}
 			},
 		},
-		groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1},
+		groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1,carrot=i},
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		_mcl_blast_resistance = 0,
 		_on_bone_meal = on_bone_meal,
@@ -81,7 +81,7 @@ minetest.register_node("mcl_farming:carrot", {
 			{-7/16, -0.5 ,-7/16, 7/16, -0.5+(8/16) ,7/16}
 		},
 	},
-	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1},
+	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1,carrot=8},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_blast_resistance = 0,
 	_on_bone_meal = on_bone_meal,
