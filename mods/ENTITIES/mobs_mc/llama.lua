@@ -80,7 +80,7 @@ local llama = {
 		},
 	},
 	_max_temper = 30,
-	pacing_bonus = 0.7,
+	pace_bonus = 0.7,
 	follow_bonus = 1.25,
 	follow_herd_bonus = 1.0,
 	follow = {
