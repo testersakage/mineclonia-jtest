@@ -90,8 +90,8 @@ end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_torch:redstone_torch_off" }) do
 	minetest.override_item(name, {
-		_redstone_torch_on = "mcl_redstone_torch:redstone_torch_on",
-		_redstone_torch_off = "mcl_redstone_torch:redstone_torch_off",
+		_mcl_redstone_torch_on = "mcl_redstone_torch:redstone_torch_on",
+		_mcl_redstone_torch_off = "mcl_redstone_torch:redstone_torch_off",
 	})
 end
 
