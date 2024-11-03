@@ -250,9 +250,6 @@ function mob_class:set_animation(anim, fixed_frame)
 					   y = a_end},
 			self.animation[anim .. "_speed"] or self.animation.speed_normal or 15,
 			0, loop)
-		if not loop then
-			self._current_animation = nil
-		end
 	end
 end
 

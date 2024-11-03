@@ -849,7 +849,7 @@ function mob_class:init_ai ()
 	self._recent_attacker_age = 0
 end
 
-function mob_class:is_frightened (dtime)
+function mob_class:is_frightened ()
 	return self.passive and (mcl_burning.is_burning (self.object) or self.runaway_timer > 0)
 end
 
