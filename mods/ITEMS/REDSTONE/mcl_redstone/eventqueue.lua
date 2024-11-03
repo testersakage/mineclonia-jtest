@@ -68,55 +68,72 @@ end
 local eventqueue = priority_queue()
 local current_tick = 0
 
--- Table containing the highest priority event for each node position.
-local node_event_tab = {}
+-- Table containing the highest priority update event for each node position.
+local update_event_tab = {}
 
-function mcl_redstone._schedule_event(delay, priority, pos, func)
+function mcl_redstone._schedule_update(delay, priority, pos, node, oldnode)
+	-- Ignore events that do not change anything.
+	if node.name == oldnode.name and node.param2 == oldnode.param2 then
+		return
+	end
 	local tick = current_tick + delay
 	local event = {
+		type = "update",
 		pos = pos,
 		tick = tick,
 		priority = priority,
-		func = func,
+		node = node,
+		oldnode = oldnode,
 	}
 
-	if priority then
-		local h = minetest.hash_node_position(pos)
-
-		-- Priority -1 is hardcoded to allow multiple pending events. This is
-		-- because it is used for by con/destruct callbacks which require that
-		-- construct events happen after destruct events.
-		if node_event_tab[h] and (priority ~= -1 and node_event_tab[h].priority <= priority) then
-			return
-		end
-		node_event_tab[h] = event
+	local h = minetest.hash_node_position(pos)
+	if not update_event_tab[h] or priority < update_event_tab[h].priority then
+		update_event_tab[h] = event
+		eventqueue:enqueue(tick, event)
 	end
+end
+
+function mcl_redstone.after(delay, func)
+	local tick = current_tick + delay
+	local event = {
+		type = "after",
+		tick = tick,
+		func = func,
+	}
 	eventqueue:enqueue(tick, event)
 end
 
-local function clear_event(event)
-	if not event.pos then
+function mcl_redstone._abort_pending_update(pos)
+	local h = minetest.hash_node_position(pos)
+	update_event_tab[h] = nil
+end
+
+local function handle_update_event(event)
+	local h = minetest.hash_node_position(event.pos)
+	if update_event_tab[h] ~= event then
 		return
 	end
-	local hash = minetest.hash_node_position(event.pos)
-	if node_event_tab[hash] == event then
-		node_event_tab[hash] = nil
+	local oldnode = minetest.get_node(event.pos)
+	if oldnode.name ~= event.oldnode.name or oldnode.param2 ~= event.oldnode.param2 then
+		return
+	end
+	minetest.set_node(event.pos, event.node)
+	update_event_tab[h] = nil
+end
+
+local function handle_event(event)
+	if event.type == "after" then
+		event.func()
+	elseif event.type == "update" then
+		handle_update_event(event)
 	end
 end
 
 local function clear_all_pending_events()
-	node_event_tab = {}
+	update_event_tab = {}
 	while eventqueue:size() > 0 do
 		eventqueue:dequeue()
 	end
-end
-
-local function is_prioritized(event)
-	if not event.pos then
-		return true
-	end
-	local hash = minetest.hash_node_position(event.pos)
-	return event.priority == -1 or event == node_event_tab[hash]
 end
 
 local function get_time()
@@ -183,14 +200,11 @@ function mcl_redstone.tick_step()
 		end
 
 		local event = eventqueue:dequeue()
-		if is_prioritized(event) then
-			clear_event(event)
-			if MULTIPLAYER and event.pos and too_far_away(event) then
-				nfaraway = nfaraway + 1
-			else
-				nevents = nevents + 1
-				event.func()
-			end
+		if MULTIPLAYER and event.pos and too_far_away(event) then
+			nfaraway = nfaraway + 1
+		else
+			nevents = nevents + 1
+			handle_event(event)
 		end
 		last_tick = event.tick
 	end
@@ -202,7 +216,7 @@ function mcl_redstone.tick_step()
 		end
 
 		nupdates = nupdates + 1
-		mcl_redstone._schedule_update(pos)
+		mcl_redstone._call_update(pos)
 		mcl_redstone._pending_updates[h] = nil
 	end
 
