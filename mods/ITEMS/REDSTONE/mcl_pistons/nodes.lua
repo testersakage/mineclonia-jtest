@@ -49,6 +49,17 @@ local function piston_on(pos, node)
 	local dir = -minetest.facedir_to_dir(node.param2)
 	local np = vector.add(pos, dir)
 	local meta = minetest.get_meta(pos)
+
+	local objects = minetest.get_objects_inside_radius(pos, 0.9)
+	for _, obj in ipairs(objects) do
+		obj:move_to(obj:get_pos():add(dir))
+	end
+
+	local objects = minetest.get_objects_inside_radius(np, 0.9)
+	for _, obj in ipairs(objects) do
+		obj:move_to(obj:get_pos():add(dir))
+	end
+
 	local success = mcl_pistons.push(np, dir, PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
 	if success then
 		minetest.swap_node(pos, {param2 = node.param2, name = pistonspec.onname})
