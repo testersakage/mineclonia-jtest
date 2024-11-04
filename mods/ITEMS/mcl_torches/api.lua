@@ -40,7 +40,7 @@ function mcl_torches.register_torch(def)
 	local itemstring = minetest.get_current_modname() .. ":" .. def.name
 	local itemstring_wall = itemstring .. "_wall"
 
-	def.light = def.light or minetest.LIGHT_MAX
+	def.light = def.light or 14
 	def.mesh_floor = def.mesh_floor or "mcl_torches_torch_floor.obj"
 	def.mesh_wall = def.mesh_wall or "mcl_torches_torch_wall.obj"
 	def.flame_type = def.flame_type or 1
