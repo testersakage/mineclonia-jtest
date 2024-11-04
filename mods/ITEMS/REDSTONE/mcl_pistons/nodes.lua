@@ -212,13 +212,13 @@ local pusherdef = {
 	paramtype2 = "facedir",
 	is_ground_content = false,
 	after_destruct = piston_remove_base,
-	diggable = false,
 	drop = "",
 	selection_box = piston_pusher_box,
 	node_box = piston_pusher_box,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 0.5,
+	_mcl_hardness = 0.5,
 	on_rotate = false,
 	_mcl_redstone = {
 		-- It is possible for a piston to extend just before server
