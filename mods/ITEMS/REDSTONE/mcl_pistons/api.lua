@@ -161,7 +161,13 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
 		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
-			obj:move_to(obj:get_pos():add(movedir), true)
+			local new_pos = obj:get_pos():add(movedir)
+
+			if minetest.registered_nodes[minetest.get_node(new_pos).name].walkable == nil or minetest.registered_nodes[minetest.get_node(new_pos).name].walkable then
+				return
+			end
+
+			obj:move_to(new_pos, true)
 			-- Launch Player, TNT & mobs like in Minecraft
 			-- Only doing so if slimeblock is attached.
 			if n.node.name == "mcl_core:slimeblock" and not is_pulled then
