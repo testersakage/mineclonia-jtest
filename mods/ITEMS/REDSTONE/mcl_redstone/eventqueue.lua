@@ -117,7 +117,8 @@ local function handle_update_event(event)
 	if oldnode.name ~= event.oldnode.name or oldnode.param2 ~= event.oldnode.param2 then
 		return
 	end
-	minetest.set_node(event.pos, event.node)
+	minetest.swap_node(event.pos, event.node)
+	mcl_redstone._update_neighbours(event.pos, event.oldnode)
 	update_event_tab[h] = nil
 end
 

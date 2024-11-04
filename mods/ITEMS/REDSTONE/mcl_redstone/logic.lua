@@ -225,8 +225,9 @@ function mcl_redstone._update_neighbours(pos, oldnode)
 end
 
 function mcl_redstone.swap_node(pos, node)
+	local oldnode = minetest.get_node(pos)
 	minetest.swap_node(pos, node)
-	mcl_redstone._update_neighbours(pos, node)
+	mcl_redstone._update_neighbours(pos, oldnode)
 end
 
 -- Update neighbouring wires and components at pos. Oldnode is the previous
