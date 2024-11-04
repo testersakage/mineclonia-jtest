@@ -50,14 +50,18 @@ local function piston_on(pos, node)
 	local np = vector.add(pos, dir)
 	local meta = minetest.get_meta(pos)
 
-	local objects = minetest.get_objects_inside_radius(pos, 0.9)
-	for _, obj in ipairs(objects) do
-		obj:move_to(obj:get_pos():add(dir))
-	end
-
 	local objects = minetest.get_objects_inside_radius(np, 0.9)
 	for _, obj in ipairs(objects) do
-		obj:move_to(obj:get_pos():add(dir))
+		if vector.equals(obj:get_pos():round(), np) then
+			obj:move_to(obj:get_pos():add(dir))
+		end
+	end
+
+	local objects = minetest.get_objects_inside_radius(pos, 0.9)
+	for _, obj in ipairs(objects) do
+		if vector.equals(obj:get_pos():round(), pos) then
+			obj:move_to(obj:get_pos():add(dir * 2))
+		end
 	end
 
 	local success = mcl_pistons.push(np, dir, PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
