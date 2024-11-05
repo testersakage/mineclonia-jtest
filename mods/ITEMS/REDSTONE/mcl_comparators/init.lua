@@ -107,14 +107,10 @@ local measure_tab = {
 	["mcl_furnaces:furnace"] = measure_furnace,
 	["mcl_blast_furnace:blast_furnace"] = measure_furnace,
 	["mcl_smoker:smoker"] = measure_furnace,
-	["mcl_brewing:stand_000"] = measure_brewing_stand,
-	["mcl_brewing:stand_001"] = measure_brewing_stand,
-	["mcl_brewing:stand_010"] = measure_brewing_stand,
-	["mcl_brewing:stand_011"] = measure_brewing_stand,
-	["mcl_brewing:stand_100"] = measure_brewing_stand,
-	["mcl_brewing:stand_101"] = measure_brewing_stand,
-	["mcl_brewing:stand_110"] = measure_brewing_stand,
-	["mcl_brewing:stand_111"] = measure_brewing_stand,
+	--[[ initalized using after_mods_loaded
+	["mcl_brewing:stand_xxx"] = measure_brewing_stand,
+	["mcl_chests:xxx_shulker_box"] = measure_inventory,
+	]]
 	-- TODO:
 	--["decorated_pot"] = measure_inventory,
 	--["minecart_with_chest"] = measure_inventory,
@@ -376,6 +372,8 @@ minetest.register_on_mods_loaded(function()
 	for name, _ in pairs(minetest.registered_nodes) do
 		if minetest.get_item_group(name, "shulker_box") ~= 0 then
 			measure_tab[name] = measure_inventory
+		elseif minetest.get_item_group(name, "brewing_stand") ~= 0 then
+			measure_tab[name] = measure_brewing_stand
 		end
 	end
 end)
