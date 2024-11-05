@@ -387,7 +387,7 @@ do
 	}))
 
 	minetest.register_craft({
-		output = "mcl_droppers:dropper",
+		output = "mcl_dispensers:dropper",
 		recipe = {
 			{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble", },
 			{ "mcl_core:cobble", "", "mcl_core:cobble", },
