@@ -76,6 +76,12 @@ local function measure_double_chest(side)
 	end
 end
 
+local function measure_constant(power_level)
+	return function()
+		return power_level
+	end
+end
+
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
 local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
@@ -110,6 +116,11 @@ local measure_tab = {
 	--[[ initalized using after_mods_loaded
 	["mcl_brewing:stand_xxx"] = measure_brewing_stand,
 	["mcl_chests:xxx_shulker_box"] = measure_inventory,
+	["mcl_cauldron:cauldron_xxx"] = measure_constant(comparator_signal),
+	["mcl_cake:cake_x"] = measure_constant(comparator_signal),
+	["mcl_copper:bulb_xxx"] = measure_constant(comparator_signal),
+	["mcl_composters:composter_xxx"] = measure_constant(comparator_signal),
+	["mcl_portals:end_portal_frame_xxx"] = measure_constant(comparator_signal),
 	]]
 	-- TODO:
 	--["decorated_pot"] = measure_inventory,
@@ -117,14 +128,9 @@ local measure_tab = {
 	--["minecart_with_hopper"] = measure_inventory,
 	--["beehive"] = measure_beehive,
 	--["bees_nest"] = measure_beehive,
-	--["cake"] = measure_cake,
-	--["cauldron"] = measure_cauldron,
 	--["chiseled_bookshelf"] = measure_bookshelf,
-	--["composter"] = measure_composter,
-	--["copper_bulb"] = measure_bulb,
 	--["command_block"] = measure_command_block,
 	--["crafter"] = measure_crafter,
-	--["end_portal_frame"] = measure_end_portal_frame,
 	--["item_frame"] = measure_item_frame,
 	--["jukebox"] = measure_jukebox,
 	--["lectern"] = measure_lectern,
@@ -368,12 +374,38 @@ minetest.register_on_dignode(function (pos, node)
 	end
 end)
 
+minetest.register_on_placenode(function (pos, newnode, _, oldnode)
+	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
+		mcl_redstone.update_comparators(pos)
+	end
+end)
+
+local swap_node = minetest.swap_node
+minetest.swap_node = function(pos, newnode)
+	local oldnode = minetest.get_node(pos)
+	swap_node(pos, newnode)
+	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
+		mcl_redstone.update_comparators(pos)
+	end
+end
+
+local set_node = minetest.set_node
+minetest.set_node = function(pos, newnode)
+	local oldnode = minetest.get_node(pos)
+	set_node(pos, newnode)
+	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
+		mcl_redstone.update_comparators(pos)
+	end
+end
+
 minetest.register_on_mods_loaded(function()
 	for name, _ in pairs(minetest.registered_nodes) do
 		if minetest.get_item_group(name, "shulker_box") ~= 0 then
 			measure_tab[name] = measure_inventory
 		elseif minetest.get_item_group(name, "brewing_stand") ~= 0 then
 			measure_tab[name] = measure_brewing_stand
+		elseif minetest.get_item_group(name, "comparator_signal") ~= 0 then
+			measure_tab[name] = measure_constant(minetest.get_item_group(name, "comparator_signal"))
 		end
 	end
 end)
