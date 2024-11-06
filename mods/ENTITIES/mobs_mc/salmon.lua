@@ -77,7 +77,8 @@ local salmon = {
 			clicker:set_wielded_item("mcl_buckets:bucket_salmon")
 			awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
 		end
-	end
+	end,
+	pace_chance = 40,
 }
 
 mcl_mobs.register_mob("mobs_mc:salmon", salmon)
