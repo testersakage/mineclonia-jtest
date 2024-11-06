@@ -567,8 +567,6 @@ function mob_class:rotate_step (dtime)
 end
 
 function mob_class:set_yaw (yaw)
-	if self.noyaw then return end
-
 	self:rotate_axis ("yaw", yaw)
 	self._target_yaw = yaw
 	return yaw

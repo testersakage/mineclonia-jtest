@@ -126,6 +126,7 @@ local function add_particles(pos, radius)
 		texture = "mcl_particles_smoke.png",
 	})
 end
+mcl_explosions.add_particles = add_particles
 
 -- Traces the rays of an explosion, and updates the environment.
 --

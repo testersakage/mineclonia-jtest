@@ -151,7 +151,7 @@ function mob_class:update_textures()
 		self.base_texture = table.copy (def.texture_list[self.texture_selected])
 		self.base_mesh = def.initial_properties.mesh
 		self.base_size = def.initial_properties.visual_size
-		self.base_colbox = def.initial_properties.collisionbox
+		self.base_colbox = table.copy (def.initial_properties.collisionbox)
 		self.base_selbox = def.initial_properties.selectionbox
 	end
 end
