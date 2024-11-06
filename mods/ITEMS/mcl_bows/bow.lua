@@ -243,7 +243,6 @@ controls.register_on_release(function(player, key)
 		wielditem:get_name()=="mcl_bows:bow_0_enchanted" or wielditem:get_name()=="mcl_bows:bow_1_enchanted" or wielditem:get_name()=="mcl_bows:bow_2_enchanted") then
 
 		local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
-		local speed
 		local p_load = bow_load[player:get_player_name()]
 		local charge
 		-- Type sanity check
