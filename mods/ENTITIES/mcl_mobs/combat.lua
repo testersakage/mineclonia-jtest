@@ -114,21 +114,22 @@ function mob_class:receive_damage (mcl_reason, damage)
 	self.health = self.health - damage
 
 	if not source then
-		return
+		return true
 	end
 
 	if source:is_player () and source:get_player_name () == self.owner then
-		return
+		return true
 	end
 
 	if damage < 0 then
 		-- Healing.
-		return
+		return true
 	end
 
 	-- Attack puncher if necessary.
 	if (self.passive == false or self.retaliates)
-		and (self.child == false or self.type == "monster") then
+		and (self.child == false or self.type == "monster")
+		and source ~= self.object then
 		if not self.passive_towards_players
 			or not source:is_player () then
 			self:retaliate_against (source)
@@ -149,6 +150,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 			self:do_runaway (source)
 		end
 	end
+	return true
 end
 
 -- deal damage and effects when mob punched
@@ -274,13 +276,14 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 				}, true)
 			end
 
-			self:damage_effect (damage)
-
 			-- do damage
 			local mcl_reason = {}
 			mcl_damage.from_punch(mcl_reason, hitter)
 			mcl_damage.finish_reason(mcl_reason)
-			mcl_util.deal_damage(self.object, damage, mcl_reason)
+			local damage = mcl_util.deal_damage(self.object, damage, mcl_reason)
+			if damage > 0 then
+				self:damage_effect (damage)
+			end
 
 			-- skip future functions if dead, except alerting others
 			if self:check_for_death ("hit", {type = "punch", puncher = hitter}) then
@@ -930,10 +933,13 @@ function mob_class:default_rangecheck (self_pos, object)
 	return distance <= self.view_range * factor
 end
 
+function mob_class:targets_for_attack_default (self_pos, esp)
+	return minetest.objects_inside_radius (self_pos, self.view_range)
+end
+
 function mob_class:attack_default (self_pos, dtime, esp)
 	local target, max_distance
-	for object in minetest.objects_inside_radius (self_pos,
-						self.view_range) do
+	for object in self:targets_for_attack_default (self_pos, esp) do
 		if self:should_attack (object) then
 			local pos = object:get_pos ()
 			local factor = self:detection_multiplier_for_object (object)

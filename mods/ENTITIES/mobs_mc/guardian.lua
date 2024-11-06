@@ -348,7 +348,10 @@ guardian.ai_functions = {
 ------------------------------------------------------------------------
 
 function guardian:receive_damage (mcl_reason, damage)
-	mob_class.receive_damage (self, mcl_reason, damage)
+	local result = mob_class.receive_damage (self, mcl_reason, damage)
+	if not result then
+		return false
+	end
 	local source = mcl_reason.source
 	if not source then
 		return
@@ -363,6 +366,7 @@ function guardian:receive_damage (mcl_reason, damage)
 		})
 	end
 	self._pace_asap = true
+	return result
 end
 
 mobs_mc.guardian = guardian

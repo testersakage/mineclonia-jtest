@@ -416,10 +416,11 @@ local function is_living_damage_source (source)
 end
 
 function enderman:receive_damage (mcl_reason, damage)
-	mob_class.receive_damage (self, mcl_reason, damage)
-	if not is_living_damage_source (mcl_reason.source) then
+	local result = mob_class.receive_damage (self, mcl_reason, damage)
+	if result and not is_living_damage_source (mcl_reason.source) then
 		self:teleport ()
 	end
+	return result
 end
 
 local function enderman_grief (self, self_pos, dtime)

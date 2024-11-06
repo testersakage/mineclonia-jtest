@@ -483,12 +483,24 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("moves body upwards at @1 nodes/s", factor)
 	end,
+	on_step = function (_, object, factor)
+		local entity = object:get_luaentity ()
+		if not entity or not entity._levitation_immune then
+			local v = object:get_velocity ()
+			if v and v.y < factor then
+				object:add_velocity (vector.new (0, factor - v.y, 0))
+			end
+		end
+	end,
 	on_start = function (object, factor)
-		local v = object:get_velocity()
-		if v then
-			add_physics_factor(object, "gravity", "fall_speed", "mcl_potions:levitation", 0)
-			object:set_acceleration(vector.zero())
-			object:add_velocity(vector.new(0, (0.9 * factor) - v.y, 0))
+		local entity = object:get_luaentity ()
+		if not entity or not entity._levitation_immune then
+			local v = object:get_velocity()
+			if v then
+				add_physics_factor(object, "gravity", "fall_speed", "mcl_potions:levitation", 0)
+				object:set_acceleration(vector.zero())
+				object:add_velocity(vector.new(0, (0.9 * factor) - v.y, 0))
+			end
 		end
 	end,
 	on_end = function (object)

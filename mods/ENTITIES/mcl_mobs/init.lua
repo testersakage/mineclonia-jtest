@@ -21,6 +21,7 @@ mcl_mobs.mob_class = {
 		makes_footstep_sound = false,
 		automatic_face_movement_max_rotation_per_sec = 300,
 		hp_max = 20,
+		collide_with_objects = false,
 	},
 	max_name_length = 30,
 	head_yaw_offset = 0,
@@ -133,7 +134,6 @@ mcl_mobs.mob_class = {
 	ignited_by_sunlight = false,
 	avoids_sunlight = false,
 	sunlight = 1,
-	noyaw = false,
 	tnt_knockback = true,
 	min_light = 7,
 	max_light = minetest.LIGHT_MAX + 1,
@@ -400,13 +400,7 @@ function mcl_mobs.register_mob(name, def)
 			return false, true, {}
 		end,
 		on_activate = function(self, staticdata, dtime)
-			--this is a temporary hack so mobs stop
-			--glitching and acting really weird with the
-			--default built in engine collision detection
 			self.is_mob = true
-			self:set_properties({
-				collide_with_objects = false,
-			})
 			self._physics_factors = {}
 			self._timers = {}
 			if not self.texture_mods then
@@ -432,7 +426,7 @@ end
 function mcl_mobs.get_arrow_damage_func(damage, typ, shooter)
 	local typ = mcl_damage.types[typ] and typ or "arrow"
 	return function(projectile, object)
-		return mcl_util.deal_damage(object, damage, {type = typ, source = shooter or projectile._shooter, direct = object})
+		return mcl_util.deal_damage(object, damage, {type = typ, source = shooter or projectile._shooter, direct = projectile.object})
 	end
 end
 

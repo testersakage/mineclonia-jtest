@@ -304,7 +304,6 @@ minetest.register_entity(":__builtin:item", {
 	initial_properties = {
 		hp_max = 1,
 		physical = true,
-		collide_with_objects = false,
 		collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
 		pointable = false,
 		visual = "wielditem",
