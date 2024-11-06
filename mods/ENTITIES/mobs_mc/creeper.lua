@@ -17,16 +17,14 @@ local creeper_defs = {
 	xp_min = 5,
 	xp_max = 5,
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.69, 0.3},
-	pathfinding = 1,
 	visual = "mesh",
 	mesh = "mobs_mc_creeper.b3d",
 	visual_size = { x = 3, y = 3 },
 	makes_footstep_sound = true,
 	movement_speed = 5.0,
 	runaway = true,
-	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat" },
+	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat", },
 	attack_type = "melee",
-	maxdrops = 2,
 	sounds = {
 		attack = "tnt_ignite",
 		death = "mobs_mc_creeper_death",
@@ -36,19 +34,22 @@ local creeper_defs = {
 		distance = 16,
 	},
 	drops = {
-		{name = "mcl_mobitems:gunpowder",
-		chance = 1,
-		min = 0,
-		max = 2,
-		looting = "common",},
+		{
+			name = "mcl_mobitems:gunpowder",
+			chance = 1,
+			min = 0,
+			max = 2,
+			looting = "common",
+		},
 
 		-- Head
-		-- TODO: Only drop if killed by charged creeper
-		{name = "mcl_heads:creeper",
-		chance = 200, -- 0.5%
-		min = 1,
-		max = 1,
-		mob_head = 1, },
+		{
+			name = "mcl_heads:creeper",
+			chance = 200, -- 0.5%
+			min = 1,
+			max = 1,
+			mob_head = 1,
+		},
 	},
 	animation = {
 		stand_start = 0, stand_end = 0,
@@ -61,12 +62,13 @@ local creeper_defs = {
 	floats = 1,
 	fear_height = 4,
 	view_range = 16,
-	explosiontimer_reset_radius = 6,
 	reach = 3,
-	allow_fuse_reset = true,
-	stop_to_explode = true,
 	pace_bonus = 0.8,
 }
+
+---------------------------------------------------------------
+-- Creeper mechanics.
+---------------------------------------------------------------
 
 local CREEPER_SWELL_TIME = 30/20
 
@@ -216,25 +218,17 @@ function creeper_defs:do_custom (dtime)
 	end
 end
 
-function creeper_defs:on_die (pos, cmi_cause)
+function creeper_defs:on_die (pos, mcl_reason)
 	-- Drop a random music disc when killed by skeleton or stray
-	if cmi_cause and cmi_cause.type == "arrow" then
-		if cmi_cause.mob_name == "mobs_mc:skeleton" or cmi_cause.mob_name == "mobs_mc:stray" then
+	if mcl_reason and mcl_reason.type == "arrow" then
+		if mcl_reason.mob_name == "mobs_mc:skeleton"
+			or mcl_reason.mob_name == "mobs_mc:stray" then
 			local loot = mcl_jukebox.get_random_creeper_loot()
 			if loot then
 				minetest.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
 			end
 		end
 	end
-end
-
-function creeper_defs:custom_attack ()
-	-- Begin swelling.
-	self:mob_sound ("attack")
-	self._swell_time = self._swell_time or 0
-	self._swell_dir = 1
-	self:cancel_navigation ()
-	self:halt_in_tracks ()
 end
 
 function creeper_defs:damage_mob (reason, damage)
@@ -249,51 +243,64 @@ function creeper_defs:damage_mob (reason, damage)
 	end
 end
 
-mcl_mobs.register_mob("mobs_mc:creeper", table.merge(creeper_defs, {
+---------------------------------------------------------------
+-- Creeper AI.
+---------------------------------------------------------------
+
+function creeper_defs:custom_attack ()
+	-- Begin swelling.
+	self:mob_sound ("attack")
+	self._swell_time = self._swell_time or 0
+	self._swell_dir = 1
+	self:cancel_navigation ()
+	self:halt_in_tracks ()
+end
+
+---------------------------------------------------------------
+-- Creeper registration and spawning.
+---------------------------------------------------------------
+
+local regular_creeper = table.merge (creeper_defs, {
 	description = S("Creeper"),
 	spawn_in_group = 1,
 	head_swivel = "Head_Control",
 	bone_eye_height = 2.35,
-	head_eye_height = 1.8;
+	head_eye_height = 1.8,
 	curiosity = 2,
 	textures = {
-		{"mobs_mc_creeper.png",
-		"mobs_mc_empty.png"},
+		{
+			"mobs_mc_creeper.png",
+			"mobs_mc_empty.png",
+		},
 	},
-
-	--hssssssssssss
-
 	explosion_strength = 3,
 	explosion_radius = 3.5,
 	explosion_damage_radius = 3.5,
-	explosion_timer = 2.5, -- (was 1.5) This was way too fast compare to mc,
+})
 
-	_on_lightning_strike = function(self)
-		 mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
-		 return true
-	end,
-}))
+function regular_creeper:_on_lightning_strike ()
+	mcl_util.replace_mob(self.object, "mobs_mc:creeper_charged")
+	return true
+end
 
-mcl_mobs.register_mob("mobs_mc:creeper_charged", table.merge(creeper_defs, {
+mcl_mobs.register_mob ("mobs_mc:creeper", regular_creeper)
+
+local charged_creeper = table.merge (creeper_defs, {
 	description = S("Charged Creeper"),
-
-	--BOOM
-
 	textures = {
-		{"mobs_mc_creeper.png",
-		"mobs_mc_creeper_charge.png"},
+		{
+			"mobs_mc_creeper.png",
+			"mobs_mc_creeper_charge.png^[opacity:95",
+		},
 	},
-
 	explosion_strength = 6,
 	explosion_radius = 8,
 	explosion_damage_radius = 8,
 	explosion_timer = 1.5,
+	use_texture_alpha = true,
+})
 
-
-	--Having trouble when fire is placed with lightning
-	fire_resistant = true,
-	glow = 3,
-}))
+mcl_mobs.register_mob ("mobs_mc:creeper_charged", charged_creeper)
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:creeper",

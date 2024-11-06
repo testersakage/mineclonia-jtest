@@ -63,14 +63,14 @@ function mob_class:object_in_range(object)
 	return p1 and p2 and (vector.distance(p1, p2) <= dist)
 end
 
-function mob_class:item_drop(cooked, looting_level, cmi_cause)
+function mob_class:item_drop(cooked, looting_level, mcl_reason)
 	if not mobs_drop_items then return end
 	looting_level = looting_level or 0
 	if (self.child and self.type ~= "monster") then
 		return
 	end
-	if not cmi_cause then
-	    cmi_cause = self._death_reason
+	if not mcl_reason then
+	    mcl_reason = self._death_reason
 	end
 
 	local obj, item
@@ -83,9 +83,9 @@ function mob_class:item_drop(cooked, looting_level, cmi_cause)
 		local looting_type = dropdef.looting
 
 		-- Always drop mob heads when killed by a charged creeper explosion.
-		if (dropdef.mob_head and cmi_cause
-		    and cmi_cause.type == "explosion"
-		    and cmi_cause.mob_name == "mobs_mc:creeper_charged") then
+		if (dropdef.mob_head and mcl_reason
+		    and mcl_reason.type == "explosion"
+		    and mcl_reason.mob_name == "mobs_mc:creeper_charged") then
 		    chance = 1
 		end
 
@@ -211,7 +211,7 @@ function mob_class:get_velocity()
 end
 
 -- check if mob is dead or only hurt
-function mob_class:check_for_death(cause, cmi_cause)
+function mob_class:check_for_death (cause, mcl_reason)
 	if self.dead then
 		self:jockey_death ()
 		return true
@@ -249,7 +249,7 @@ function mob_class:check_for_death(cause, cmi_cause)
 	-- execute custom death function
 	if self.on_die then
 		local pos = self.object:get_pos()
-		local on_die_exit = self.on_die(self, pos, cmi_cause)
+		local on_die_exit = self.on_die (self, pos, mcl_reason)
 		if on_die_exit == true then
 			self.dead = true
 			self:safe_remove()
@@ -292,21 +292,27 @@ function mob_class:check_for_death(cause, cmi_cause)
 	end
 
 	-- Drop items and xp
-	if cmi_cause and (cmi_cause.type == "lava" or cmi_cause.type == "fire") then
-		self:item_drop(true, 0, cmi_cause)
-	elseif cmi_cause then
-		local wielditem = cmi_cause.direct and mcl_util.get_wielditem (cmi_cause.direct)
-		local cooked = mcl_burning.is_burning(self.object) or mcl_enchanting.has_enchantment(wielditem, "fire_aspect")
+	if mcl_reason and (mcl_reason.type == "lava" or mcl_reason.type == "fire") then
+		self:item_drop (true, 0, mcl_reason)
+	elseif mcl_reason then
+		local wielditem = mcl_reason.direct and mcl_util.get_wielditem (mcl_reason.direct)
+		local cooked = mcl_burning.is_burning(self.object)
+			or mcl_enchanting.has_enchantment(wielditem, "fire_aspect")
 		local looting = mcl_enchanting.get_enchantment(wielditem, "looting")
-		self:item_drop(cooked, looting, cmi_cause)
+		self:item_drop (cooked, looting, mcl_reason)
 		if killed_by_player then
-			if self.type == "monster" or self.name == "mobs_mc:zombified_piglin" and self.last_player_hit_name then
+			if self.type == "monster"
+				or self.name == "mobs_mc:zombified_piglin"
+				and self.last_player_hit_name then
 				awards.unlock(self.last_player_hit_name, "mcl:monsterHunter")
 			end
-			if ((not self.child) or self.type ~= "animal") and (minetest.get_us_time() - self.xp_timestamp <= math.huge) then
+
+			if ((not self.child) or self.type ~= "animal")
+				and (minetest.get_us_time() - self.xp_timestamp <= math.huge) then
 				local pos = self.object:get_pos()
 				local xp_amount = math.random(self.xp_min, self.xp_max)
-				if not minetest.is_creative_enabled(self.last_player_hit_name) and not mcl_sculk.handle_death(pos, xp_amount) then
+				if not minetest.is_creative_enabled(self.last_player_hit_name)
+					and not mcl_sculk.handle_death(pos, xp_amount) then
 					mcl_experience.throw_xp(pos, xp_amount)
 				end
 			end
@@ -406,10 +412,7 @@ function mob_class:do_env_damage()
 	-- rain
 	if self.rain_damage > 0 then
 		if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) then
-			self:damage_mob("environment", self.rain_damage)
-
-			if self:check_for_death("rain", {type = "environment",
-					pos = pos, node = self.standing_in}) then
+			if self:damage_mob ("environment", self.rain_damage) then
 				return true
 			end
 		end
@@ -420,21 +423,17 @@ function mob_class:do_env_damage()
 	local frozen = false
 	-- water damage
 	if self.water_damage > 0
-	and nodef.groups.water then
-		self:damage_mob("environment", self.water_damage)
+		and nodef.groups.water then
+		local fatal = self:damage_mob ("environment", self.water_damage)
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png", nil, nil, 1, nil)
-		if self:check_for_death("water", {type = "environment",
-				pos = pos, node = self.standing_in}) then
+		if fatal then
 			return true
 		end
 	-- magma damage
 	elseif self.fire_damage > 0
 	and (nodef2.groups.fire) then
-
 		if self.fire_damage ~= 0 then
-			self:damage_mob("hot_floor", self.fire_damage)
-			if self:check_for_death("fire", {type = "environment",
-					pos = pos, node = self.standing_in}) then
+			if self:damage_mob ("hot_floor", self.fire_damage) then
 				return true
 			end
 		end
@@ -443,12 +442,11 @@ function mob_class:do_env_damage()
 	and self:is_in_node("group:lava") then
 
 		if self.lava_damage ~= 0 then
-			self:damage_mob("lava", self.lava_damage)
+			local fatal = self:damage_mob ("lava", self.lava_damage)
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
 			mcl_burning.set_on_fire(self.object, 10)
 
-			if self:check_for_death("lava", {type = "environment",
-					pos = pos, node = self.standing_in}) then
+			if fatal then
 				return true
 			end
 		end
@@ -457,14 +455,12 @@ function mob_class:do_env_damage()
 	and self:is_in_node("group:fire") then
 
 		if self.fire_damage ~= 0 then
-
-			self:damage_mob("in_fire", self.fire_damage)
+			local fatal = self:damage_mob ("in_fire", self.fire_damage)
 
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
 			mcl_burning.set_on_fire(self.object, 5)
 
-			if self:check_for_death("fire", {type = "environment",
-					pos = pos, node = self.standing_in}) then
+			if fatal then
 				return true
 			end
 		end
@@ -473,21 +469,17 @@ function mob_class:do_env_damage()
 		frozen = true
 		self._frozen_for = self._frozen_for + 1
 		if self._frozen_for >= 8 and self._frozen_for % 2 == 0 then
-			self:damage_mob("freeze", self._mcl_freeze_damage)
+			local fatal = self:damage_mob("freeze", self._mcl_freeze_damage)
 
-			if self:check_for_death("freeze", {type = "freeze",
-							   pos = pos, node = self.standing_in}) then
+			if fatal then
 				return true
 			end
 		end
 	-- damage_per_second node check
 	elseif nodef.damage_per_second ~= 0 and not nodef.groups.lava and not nodef.groups.fire then
-
-		self:damage_mob("environment", nodef.damage_per_second)
+		local fatal = self:damage_mob ("environment", nodef.damage_per_second)
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png")
-
-		if self:check_for_death("dps", {type = "environment",
-				pos = pos, node = self.standing_in}) then
+		if fatal then
 			return true
 		end
 	end
@@ -519,11 +511,9 @@ function mob_class:do_env_damage()
 					dmg = 4
 				end
 				self:damage_effect(dmg)
-				self:damage_mob("environment", dmg)
-			end
-			if self:check_for_death("drowning", {type = "environment",
-					pos = pos, node = self.head_in}) then
-				return true
+				if self:damage_mob ("drown", dmg) then
+					return true
+				end
 			end
 		else
 			self:respire ()
@@ -550,17 +540,15 @@ function mob_class:do_env_damage()
 		if self:check_timer("suffocation", 1) then
 			-- 2 damage per second
 			-- TODO: Deal this damage once every 1/2 second
-			self:damage_mob("environment", 2)
 
-			if self:check_for_death("suffocation", {type = "environment",
-					pos = pos, node = self.head_in}) then
+			if self:damage_mob ("in_wall", 2) then
 				return true
 			end
 		end
 	else
 		self._timers["suffocation"] = 1
 	end
-	return self:check_for_death("", {type = "unknown"})
+	return false
 end
 
 function mob_class:env_damage (_, pos)
@@ -594,10 +582,8 @@ function mob_class:damage_mob(reason, damage)
 		local mcl_reason = { type = reason }
 		mcl_damage.finish_reason(mcl_reason)
 		mcl_util.deal_damage(self.object, damage, mcl_reason)
-
 		mcl_mobs.effect(self.object:get_pos(), 5, "mcl_particles_smoke.png", 1, 2, 2, nil)
-
-		if self:check_for_death(reason, {type = reason}) then
+		if self:check_for_death (reason, mcl_reason) then
 			return true
 		end
 	end
@@ -695,8 +681,8 @@ function mob_class:check_water_flow ()
 	return nil
 end
 
-function mob_class:check_dying(reason, cmi_cause)
-	if (self.dead or self:check_for_death(reason, cmi_cause))
+function mob_class:check_dying ()
+	if (self.dead or self:check_for_death (nil, nil))
 		and not self.animation.die_end then
 		if self.object then
 			local rot = self.object:get_rotation()
