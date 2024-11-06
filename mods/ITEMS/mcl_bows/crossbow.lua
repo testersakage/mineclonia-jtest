@@ -68,7 +68,7 @@ function shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, dama
 		end
 		obj:get_luaentity().node = shooter:get_inventory():get_stack("main", 1):get_name()
 	end
-	return obj	
+	return obj
 end
 
 local function get_pitch (dir)
@@ -294,7 +294,6 @@ controls.register_on_press(function(player, key)
 		local wielditem = player:get_wielded_item()
 		if wielditem:get_name()=="mcl_bows:crossbow_loaded" or wielditem:get_name()=="mcl_bows:crossbow_loaded_enchanted" then
 		local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
-		local p_load = bow_load[player:get_player_name()]
 		local has_shot = player_shoot_arrow (wielditem, player, true)
 
 		if enchanted then
