@@ -549,7 +549,7 @@ local messy_textures = {
 local function set_shulker_color(self, color)
 	local tx = "mobs_mc_shulker_"..color..".png"
 	if messy_textures[color] then tx = messy_textures[color] end
-	self:set_textures (tx)
+	self:set_textures ({tx})
 	self._color = color
 end
 
