@@ -286,7 +286,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			end
 
 			-- skip future functions if dead, except alerting others
-			if self:check_for_death ("hit", {type = "punch", puncher = hitter}) then
+			if self:check_for_death ("hit", mcl_reason) then
 				die = true
 			end
 		end

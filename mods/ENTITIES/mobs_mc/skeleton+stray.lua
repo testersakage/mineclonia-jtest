@@ -126,13 +126,16 @@ local skeleton = {
 	shoot_interval = 1,
 	shoot_offset = 1.5,
 	harmed_by_heal = true,
-	on_die = function(self, pos, cmi_cause)
-		if cmi_cause and cmi_cause.puncher then
-			local l = cmi_cause.puncher:get_luaentity()
-			if l and  l._is_arrow and l._shooter and l._shooter:is_player() and vector.distance(pos,l._startpos) > 20 then
-				awards.unlock(l._shooter:get_player_name(), "mcl:snipeSkeleton")
+	on_die = function(self, pos, mcl_reason)
+		if mcl_reason
+			and mcl_reason.type == "arrow"
+			and mcl_reason.source then
+			local source = mcl_reason.source
+			if source:is_player ()
+				and vector.distance (pos, source:get_pos ()) > 20 then
+				awards.unlock(source:get_player_name (), "mcl:snipeSkeleton")
 			end
-		elseif cmi_cause and cmi_cause.type == "freeze" then
+		elseif mcl_reason and mcl_reason.type == "freeze" then
 			mcl_util.replace_mob(self.object, "mobs_mc:stray")
 			return true
 		end

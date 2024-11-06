@@ -58,30 +58,43 @@ local salmon = {
 	do_go_pos = mob_class.fish_do_go_pos,
 	initialize_group = mob_class.school_init_group,
 	_school_size = 5,
-	ai_functions = {
-		mob_class.check_schooling,
-		mob_class.check_avoid,
-		mob_class.check_frightened,
-		mob_class.check_pace,
-	},
 	breathes_in_water = true,
 	flops = true,
 	view_range = 16,
 	runaway = true,
-	fear_height = 4,
 	movement_speed = 14,
-	on_rightclick = function(self, clicker)
-		local bn = clicker:get_wielded_item():get_name()
-		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
-			self:safe_remove()
-			clicker:set_wielded_item("mcl_buckets:bucket_salmon")
-			awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
-		end
-	end,
 	pace_chance = 40,
 }
 
-mcl_mobs.register_mob("mobs_mc:salmon", salmon)
+------------------------------------------------------------------------
+-- Salmon interaction.
+------------------------------------------------------------------------
+
+function salmon:on_rightclick (clicker)
+	local bn = clicker:get_wielded_item():get_name()
+	if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
+		self:safe_remove()
+		clicker:set_wielded_item("mcl_buckets:bucket_salmon")
+		awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
+	end
+end
+
+------------------------------------------------------------------------
+-- Salmon AI.
+------------------------------------------------------------------------
+
+salmon.ai_functions = {
+	mob_class.check_frightened,
+	mob_class.check_avoid,
+	mob_class.check_schooling,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob ("mobs_mc:salmon", salmon)
+
+------------------------------------------------------------------------
+-- Salmon spawning.
+------------------------------------------------------------------------
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:salmon",
