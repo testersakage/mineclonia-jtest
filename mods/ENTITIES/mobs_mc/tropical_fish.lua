@@ -128,6 +128,7 @@ local tropical_fish = {
 		end
 	end,
 	on_spawn = set_textures,
+	pace_chance = 40,
 }
 
 mcl_mobs.register_mob("mobs_mc:tropical_fish", tropical_fish)
