@@ -2,62 +2,6 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 local mob_class = mcl_mobs.mob_class
 
-local base_colors = {
-	"#FF3855",
-	"#FFF700",
-	"#A7F432",
-	"#FF5470",
-	"#5DADEC",
-	"#A83731",
-	"#87FF2A",
-	"#E936A7",
-	"#FF007C",
-	"#9C51B6",
-	"#66FF66",
-	"#AAF0D1",
-	"#50BFE6",
-	"#FFFF66",
-	"#FF9966",
-	"#FF00CC",
-}
-local pattern_colors = {
-	"#FF3855",
-	"#FFF700",
-	"#A7F432",
-	"#FF5470",
-	"#5DADEC",
-	"#A83731",
-	"#87FF2A",
-	"#E936A7",
-	"#FF007C",
-	"#9C51B6",
-	"#66FF66",
-	"#AAF0D1",
-	"#50BFE6",
-	"#FFFF66",
-	"#FF9966",
-	"#FF00CC",
-}
-
-local function set_textures(self)
-	if not self._type then
-		self._type = "a"
-		if math.random(2) == 1 then
-			self.object:set_properties({})
-			self._type="b"
-		end
-		self._base_color = base_colors[math.random(#base_colors)]
-		self._pattern_color = pattern_colors[math.random(#pattern_colors)]
-		self._pattern = "extra_mobs_tropical_fish_pattern_"..self._type.."_"..math.random(6)..".png"
-	end
-	self.object:set_properties({
-		mesh="extra_mobs_tropical_fish_"..self._type..".b3d"
-	})
-	self:set_textures ({
-			"(extra_mobs_tropical_fish_"..self._type..".png^[colorize:"..self._base_color..":127)^("..self._pattern.."^[colorize:"..self._pattern_color..")",
-	})
-end
-
 local tropical_fish = {
 	description = S("Tropical Fish"),
 	type = "animal",
@@ -113,25 +57,133 @@ local tropical_fish = {
 	flops = true,
 	view_range = 16,
 	runaway = true,
-	fear_height = 4,
-	on_rightclick = function(self, clicker)
-		local bn = clicker:get_wielded_item():get_name()
-		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
-			if clicker:set_wielded_item("mcl_buckets:bucket_tropical_fish") then
-				local it = clicker:get_wielded_item()
-				local m = it:get_meta()
-				m:set_string("properties",minetest.serialize(self.object:get_properties()))
-				clicker:set_wielded_item(it)
-				self:safe_remove()
-			end
-			awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
-		end
-	end,
-	on_spawn = set_textures,
 	pace_chance = 40,
 }
 
-mcl_mobs.register_mob("mobs_mc:tropical_fish", tropical_fish)
+------------------------------------------------------------------------
+-- Tropical Fish visuals.
+------------------------------------------------------------------------
+
+local base_colors = {
+	"#FF3855",
+	"#FFF700",
+	"#A7F432",
+	"#FF5470",
+	"#5DADEC",
+	"#A83731",
+	"#87FF2A",
+	"#E936A7",
+	"#FF007C",
+	"#9C51B6",
+	"#66FF66",
+	"#AAF0D1",
+	"#50BFE6",
+	"#FFFF66",
+	"#FF9966",
+	"#FF00CC",
+}
+local pattern_colors = {
+	"#FF3855",
+	"#FFF700",
+	"#A7F432",
+	"#FF5470",
+	"#5DADEC",
+	"#A83731",
+	"#87FF2A",
+	"#E936A7",
+	"#FF007C",
+	"#9C51B6",
+	"#66FF66",
+	"#AAF0D1",
+	"#50BFE6",
+	"#FFFF66",
+	"#FF9966",
+	"#FF00CC",
+}
+
+function tropical_fish:update_textures ()
+	if not self._type then
+		self._type = "a"
+		if math.random(2) == 1 then
+			self.object:set_properties({})
+			self._type="b"
+		end
+		self._base_color = base_colors[math.random(#base_colors)]
+		self._pattern_color = pattern_colors[math.random(#pattern_colors)]
+		self._pattern = table.concat ({
+			"extra_mobs_tropical_fish_pattern_",
+			self._type,
+			"_",
+			math.random(6),
+			".png",
+		})
+	end
+
+	if not self._default_texture then
+		self._default_mesh = table.concat ({
+			"extra_mobs_tropical_fish_",
+			self._type,
+			".b3d",
+		})
+		self._default_texture = table.concat ({
+			"(extra_mobs_tropical_fish_",
+			self._type,
+			".png^[colorize:",
+			self._base_color,
+			":127)^(",
+			self._pattern,
+			"^[colorize:",
+			self._pattern_color..")",
+		})
+	end
+
+	self.base_texture = {
+		self._default_texture,
+	}
+	self.object:set_properties ({
+		mesh = self._default_mesh,
+	})
+	self:set_textures (self.base_texture)
+	self.base_mesh = self._default_mesh
+	self.base_size = self.initial_properties.visual_size
+	self.base_colbox = self.initial_properties.collisionbox
+	self.base_selbox = self.initial_properties.selectionbox
+end
+
+------------------------------------------------------------------------
+-- Tropical Fish interaction.
+------------------------------------------------------------------------
+
+function tropical_fish:on_rightclick (clicker)
+	local bn = clicker:get_wielded_item():get_name()
+	if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
+		if clicker:set_wielded_item("mcl_buckets:bucket_tropical_fish") then
+			local it = clicker:get_wielded_item()
+			local m = it:get_meta()
+			m:set_string("properties",minetest.serialize(self.object:get_properties()))
+			clicker:set_wielded_item(it)
+			self:safe_remove()
+		end
+		awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
+	end
+end
+
+------------------------------------------------------------------------
+-- Tropical Fish AI.
+------------------------------------------------------------------------
+
+tropical_fish.ai_functions = {
+	mob_class.check_frightened,
+	mob_class.check_avoid,
+	mob_class.check_schooling,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob ("mobs_mc:tropical_fish", tropical_fish)
+
+------------------------------------------------------------------------
+-- Tropical Fish spawning.
+------------------------------------------------------------------------
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:tropical_fish",

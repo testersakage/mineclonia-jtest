@@ -42,22 +42,20 @@ local cod = {
 		run_end = 20,
 	},
 	drops = {
-		{name = "mcl_fishing:fish_raw",
-		chance = 1,
-		min = 1,
-		max = 1,},
-		{name = "mcl_bone_meal:bone_meal",
-		chance = 20,
-		min = 1,
-		max = 1,},
+		{
+			name = "mcl_fishing:fish_raw",
+			chance = 1,
+			min = 1,
+			max = 1,
+		},
+		{
+			name = "mcl_bone_meal:bone_meal",
+			chance = 20,
+			min = 1,
+			max = 1,
+		},
 	},
 	initialize_group = mob_class.school_init_group,
-	ai_functions = {
-		mob_class.check_schooling,
-		mob_class.check_avoid,
-		mob_class.check_frightened,
-		mob_class.check_pace,
-	},
 	runaway_from = {"players"},
 	runaway_bonus_near = 1.6,
 	runaway_bonus_far = 1.4,
@@ -72,20 +70,40 @@ local cod = {
 	movement_speed = 14.0,
 	view_range = 16,
 	runaway = true,
-	on_rightclick = function(self, clicker)
-		local bn = clicker:get_wielded_item():get_name()
-		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
-			self:safe_remove()
-			clicker:set_wielded_item("mcl_buckets:bucket_cod")
-			awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
-		end
-	end,
 	pace_chance = 40,
 }
 
-mcl_mobs.register_mob("mobs_mc:cod", cod)
+------------------------------------------------------------------------
+-- Cod interaction.
+------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
+function cod:on_rightclick (clicker)
+	local bn = clicker:get_wielded_item():get_name()
+	if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then
+		self:safe_remove()
+		clicker:set_wielded_item("mcl_buckets:bucket_cod")
+		awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
+	end
+end
+
+------------------------------------------------------------------------
+-- Cod AI.
+------------------------------------------------------------------------
+
+cod.ai_functions = {
+	mob_class.check_frightened,
+	mob_class.check_avoid,
+	mob_class.check_schooling,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob ("mobs_mc:cod", cod)
+
+------------------------------------------------------------------------
+-- Cod spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.spawn_setup ({
 	name = "mobs_mc:cod",
 	type_of_spawning = "water",
 	dimension = "overworld",
