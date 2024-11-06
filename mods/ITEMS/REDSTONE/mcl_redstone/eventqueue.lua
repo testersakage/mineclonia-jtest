@@ -72,10 +72,18 @@ local current_tick = 0
 local update_event_tab = {}
 
 function mcl_redstone._schedule_update(delay, priority, pos, node, oldnode)
-	-- Ignore events that do not change anything.
-	if node.name == oldnode.name and node.param2 == oldnode.param2 then
+	local h = minetest.hash_node_position(pos)
+	if update_event_tab[h] and priority >= update_event_tab[h].priority then
 		return
 	end
+
+	-- For events that do not change anything, only cancel other pending
+	-- events with lower priority.
+	if node.name == oldnode.name and node.param2 == oldnode.param2 then
+		update_event_tab[h] = nil
+		return
+	end
+
 	local tick = current_tick + delay
 	local event = {
 		type = "update",
@@ -85,12 +93,8 @@ function mcl_redstone._schedule_update(delay, priority, pos, node, oldnode)
 		node = node,
 		oldnode = oldnode,
 	}
-
-	local h = minetest.hash_node_position(pos)
-	if not update_event_tab[h] or priority < update_event_tab[h].priority then
-		update_event_tab[h] = event
-		eventqueue:enqueue(tick, event)
-	end
+	update_event_tab[h] = event
+	eventqueue:enqueue(tick, event)
 end
 
 function mcl_redstone.after(delay, func)
