@@ -606,7 +606,10 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 				luaentity.last_player_hit_time = minetest.get_gametime()
 				luaentity.last_player_hit_name = mcl_reason.source:get_player_name()
 			end
-			luaentity:receive_damage (mcl_reason, damage)
+			if not luaentity:receive_damage (mcl_reason, damage) then
+				damage = 0
+				return damage
+			end
 			if luaentity.health > 0 then
 				mcl_damage.run_damage_callbacks(target, damage, mcl_reason or {type = "generic"})
 			else
