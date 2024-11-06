@@ -79,7 +79,8 @@ local cod = {
 			clicker:set_wielded_item("mcl_buckets:bucket_cod")
 			awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
 		end
-	end
+	end,
+	pace_chance = 40,
 }
 
 mcl_mobs.register_mob("mobs_mc:cod", cod)
