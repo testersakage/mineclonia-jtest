@@ -198,7 +198,7 @@ function axolotl:receive_damage (mcl_reason, damage)
 		mcl_potions.give_effect_by_level ("regeneration", self.object, 1, 10)
 	end
 
-	mob_class.receive_damage (self, mcl_reason, damage)
+	return mob_class.receive_damage (self, mcl_reason, damage)
 end
 
 function axolotl:should_continue_to_attack (object)
