@@ -157,13 +157,15 @@ function patrolling_mob:drop_custom (looting_level)
 	end
 end
 
-function patrolling_mob:on_die (self, pos, cmi_cause)
+function patrolling_mob:on_die (self, pos, mcl_reason)
 	if self._raidcaptain
-		and cmi_cause
-		and cmi_cause.type == "player" then
-		local playername = cmi_cause.source:get_player_name ()
+		and mcl_reason
+		and mcl_reason.type == "player" then
+		local playername = mcl_reason.source:get_player_name ()
 		awards.unlock (playername, "mcl:voluntary_exile")
 	end
+
+	-- TODO
 end
 
 function patrolling_mob:patrol_unstuck (self_pos)

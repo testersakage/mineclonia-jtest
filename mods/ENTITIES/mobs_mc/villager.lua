@@ -146,7 +146,7 @@ function mobs_mc.villager_mob:on_spawn()
 	self:villager_set_textures()
 end
 
-function mobs_mc.villager_mob:on_die(_, cmi_cause)
+function mobs_mc.villager_mob:on_die(_, mcl_reason)
 	-- Close open trade formspecs and give input back to players
 	local trading_players = self._trading_players
 	if trading_players then
@@ -172,8 +172,8 @@ function mobs_mc.villager_mob:on_die(_, cmi_cause)
 		jobsite_meta:set_string("infotext", "")
 	end
 
-	if cmi_cause and cmi_cause.puncher then
-		local l = cmi_cause.puncher:get_luaentity()
+	if mcl_reason and mcl_reason.source then
+		local l = mcl_reason.source:get_luaentity()
 		if mcl_vars.difficulty > 1 then
 			if l and (mcl_vars.difficulty > 2
 					or math.random (2) == 1)
