@@ -173,9 +173,7 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	if hitter then
 		luaentity = hitter:get_luaentity()
 	end
-	if luaentity and luaentity._knockback then
-		knockback = knockback + luaentity._knockback
-	elseif hitter then
+	if hitter then
 		local wielditem = mcl_util.get_wielditem (hitter)
 		knockback = knockback
 			+ mcl_enchanting.get_enchantment (wielditem,

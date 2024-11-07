@@ -301,6 +301,7 @@ function guardian:should_continue_to_attack (object)
 end
 
 function guardian:attack_end ()
+	mob_class.attack_end (self)
 	self._pace_asap = true
 end
 

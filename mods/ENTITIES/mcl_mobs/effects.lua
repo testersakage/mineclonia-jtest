@@ -689,4 +689,24 @@ function posing_humanoid:mob_activate (staticdata, dtime)
 	self._arm_pose = nil
 end
 
+function mcl_mobs.define_composite_pose (poses, prefix, overrides)
+	local new_poses = {}
+
+	for k, v in pairs (poses) do
+		new_poses[prefix .. "_" .. k]
+			= table.merge (v, overrides)
+
+		-- Have the original poses reset modified bones to
+		-- their default values.
+		for bone, _ in pairs (overrides) do
+			if not v[bone] then
+				v[bone] = {}
+			end
+		end
+	end
+	for k, v in pairs (new_poses) do
+		poses[k] = v
+	end
+end
+
 mcl_mobs.posing_humanoid = posing_humanoid

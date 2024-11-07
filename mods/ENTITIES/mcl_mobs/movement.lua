@@ -669,23 +669,24 @@ end
 -- Mob navigation.
 ------------------------------------------------------------------------
 
-
 function mob_class:is_navigating ()
-	return self.waypoints or self.stupid_target
+	local mover = self:mob_controlling_movement ()
+	return mover.waypoints or mover.stupid_target
 end
 
 function mob_class:navigation_finished ()
-	if self.waypoints or self.pathfinding_context then
+	local mover = self:mob_controlling_movement ()
+	if mover.waypoints or mover.pathfinding_context then
 		return false
 	end
-	if self.stupid_target then
-		local v = self.object:get_pos ()
-		local target = vector.new (self.stupid_target.x,
-					   v.y, self.stupid_target.z)
+	if mover.stupid_target then
+		local v = mover.object:get_pos ()
+		local target = vector.new (mover.stupid_target.x,
+					   v.y, mover.stupid_target.z)
 		if vector.distance (v, target) > 0.5 then
 			return false
 		end
-		self:cancel_navigation ()
+		mover:cancel_navigation ()
 	end
 	return true
 end
@@ -877,6 +878,9 @@ function mob_class:ai_step (dtime)
 		end
 	end
 	self:tick_breeding ()
+	if self.can_wield_items then
+		self:wielditem_step (dtime)
+	end
 end
 
 function mob_class:check_avoid (self_pos)

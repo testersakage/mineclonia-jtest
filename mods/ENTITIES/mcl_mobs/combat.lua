@@ -38,40 +38,14 @@ local function blast_damage(pos, radius, source)
 	end
 end
 
-function mob_class:entity_physics(pos,radius) return blast_damage(pos,radius, self.object) end
+function mob_class:entity_physics(pos,radius)
+	return blast_damage (pos,radius, self.object)
+end
 
 function mob_class:attack_player_allowed (player)
 	return mcl_vars.difficulty ~= 0
 		and mcl_gamemode.get_gamemode (player) ~= "creative"
 		and player:get_hp () > 0
-end
-
--- dogshoot attack switch and counter function
-function mob_class:dogswitch(dtime)
-
-	-- switch mode not activated
-	if not self.dogshoot_switch
-	or not dtime then
-		return 0
-	end
-
-	self.dogshoot_count = self.dogshoot_count + dtime
-
-	if (self.dogshoot_switch == 1
-	and self.dogshoot_count > self.dogshoot_count_max)
-	or (self.dogshoot_switch == 2
-	and self.dogshoot_count > self.dogshoot_count2_max) then
-
-		self.dogshoot_count = 0
-
-		if self.dogshoot_switch == 1 then
-			self.dogshoot_switch = 2
-		else
-			self.dogshoot_switch = 1
-		end
-	end
-
-	return self.dogshoot_switch
 end
 
 function mob_class:standing_on_walkable ()
@@ -256,39 +230,36 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 
 	if damage >= 0 then
-		-- only play hit sound and show blood effects if
-		-- damage is 1 or over; lower to 0.1 to ensure armor
-		-- works appropriately.
-		if damage >= 0.1 then
+		if damage > 0 then
 			-- weapon sounds
 			if weapon:get_definition().sounds ~= nil then
 
 				local s = math.random(0, #weapon:get_definition().sounds)
 
 				minetest.sound_play(weapon:get_definition().sounds[s], {
-					object = self.object, --hitter,
-					max_hear_distance = 8
-				}, true)
+							    object = self.object, --hitter,
+							    max_hear_distance = 8
+										       }, true)
 			else
 				minetest.sound_play("default_punch", {
-					object = self.object,
-					max_hear_distance = 5
-				}, true)
+							    object = self.object,
+							    max_hear_distance = 5
+								     }, true)
 			end
+		end
 
-			-- do damage
-			local mcl_reason = {}
-			mcl_damage.from_punch(mcl_reason, hitter)
-			mcl_damage.finish_reason(mcl_reason)
-			local damage = mcl_util.deal_damage(self.object, damage, mcl_reason)
-			if damage > 0 then
-				self:damage_effect (damage)
-			end
+		-- Deal damage and run callbacks, e.g. to retaliate.
+		local mcl_reason = {}
+		mcl_damage.from_punch(mcl_reason, hitter)
+		mcl_damage.finish_reason(mcl_reason)
+		local damage = mcl_util.deal_damage(self.object, damage, mcl_reason)
+		if damage > 0 then
+			self:damage_effect (damage)
+		end
 
-			-- skip future functions if dead, except alerting others
-			if self:check_for_death ("hit", mcl_reason) then
-				die = true
-			end
+		-- skip future functions if dead, except alerting others
+		if self:check_for_death ("hit", mcl_reason) then
+			die = true
 		end
 	end -- END if damage
 
@@ -320,17 +291,13 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if hitter then
 			luaentity = hitter:get_luaentity()
 		end
-		if luaentity and luaentity._knockback then
-			kb = kb + luaentity._knockback
-		else
-			local wielditem = mcl_util.get_wielditem (hitter)
-			kb = kb + mcl_enchanting.get_enchantment(wielditem, "knockback")
-		end
+		local wielditem = mcl_util.get_wielditem (hitter)
+		kb = kb + mcl_enchanting.get_enchantment (wielditem, "knockback")
 		self.frame_speed_multiplier=2.3
 		if self.animation.run_end then
-			self:set_animation( "run")
+			self:set_animation ("run")
 		elseif self.animation.walk_end then
-			self:set_animation( "walk")
+			self:set_animation ("walk")
 		end
 		minetest.after(0.2, function()
 				       if self and self.object then
@@ -439,7 +406,6 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 		self._strafe_time = -1 -- Don't strafe.
 		self._z_strafe = 1
 		self._x_strafe = 1
-		self._shoot_time = nil
 		self._shoot_timer = 0
 		self.attacking = true
 	end
@@ -472,8 +438,10 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 
 	-- Stop if the target is in range and has been for a second.
 	if dist < 15 and vistime >= 1 then
-		self:cancel_navigation ()
-		self:halt_in_tracks (false, true)
+		if not self:navigation_finished () then
+			self:cancel_navigation ()
+			self:halt_in_tracks (false, false)
+		end
 		self._strafe_time = self._strafe_time + dtime
 	else
 		if self:check_timer ("bowshoot_pathfind", 0.5) then
@@ -511,53 +479,37 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 			z = self._z_strafe * 0.5,
 		}
 		self:look_at (target_pos)
-		if not self._shoot_time or self ~= mover then
-			mover:set_animation ("run")
-		else
-			mover:set_animation ("shoot")
-		end
+		mover:set_animation ("walk")
 	end
 
-	if not self._shoot_time then
-		if self._shoot_timer <= 0 and vistime >= -3 then
-			if line_of_sight then
-				if self == mover then
-					mover:set_animation ("shoot")
+	if self._using_wielditem then
+		if not line_of_sight and vistime < -3 then
+			self:release_wielditem ()
+		elseif line_of_sight then
+			if self._using_wielditem > 1.0 then
+				self:release_wielditem ()
+				local vec = {
+					x = target.x - shoot_pos.x,
+					y = target.y - shoot_pos.y,
+					z = target.z - shoot_pos.z,
+				}
+
+				-- Offset by distance.
+				vec.y = vec.y + 0.12 * vector.length (vec)
+
+				if self.shoot_arrow then
+					local offset = self.shoot_offset
+					local origin = vector.offset (self_pos, 0, offset, 0)
+					vec = vector.normalize (vec)
+					self:shoot_arrow (origin, vec)
 				end
-				self._shoot_time = 0
-				self._shoot_timer = 0
+				self._shoot_timer = self.shoot_interval
 			end
-		else
-			self._shoot_timer = self._shoot_timer - dtime
 		end
 	else
-		-- If no longer visible, clear shooting counter.
-		if not line_of_sight and vistime < -3 then
-			mover:set_animation ("run")
-			self.shoot_time = nil
-		elseif line_of_sight and self._shoot_time > 1 then
-			-- Fire arrow.
-			self._shoot_time = nil
-			self._shoot_timer = self.shoot_interval or 1
-			mover:set_animation ("run")
-
-			local vec = {
-				x = target.x - shoot_pos.x,
-				y = target.y - shoot_pos.y,
-				z = target.z - shoot_pos.z,
-			}
-
-			-- Offset by distance.
-			vec.y = vec.y + 0.12 * vector.length (vec)
-
-			if self.shoot_arrow then
-				local offset = self.shoot_offset
-				local origin = vector.offset (self_pos, 0, offset, 0)
-				vec = vector.normalize (vec)
-				self:shoot_arrow (origin, vec)
-			end
-		else
-			self._shoot_time = self._shoot_time + dtime
+		self._shoot_timer = math.max (0, self._shoot_timer - dtime)
+		if self._shoot_timer <= 0 then
+			self:use_wielditem ()
 		end
 	end
 
@@ -737,12 +689,8 @@ function mob_class:discharge_ranged (self_pos, target_pos)
 			end
 		end
 
-		local amount = (vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) ^ 0.5
-		-- offset makes shoot aim accurate
-		vec.y = vec.y + self.shoot_offset
-		vec.x = vec.x * (v / amount)
-		vec.y = vec.y * (v / amount)
-		vec.z = vec.z * (v / amount)
+		-- Offset by distance.
+		vec.y = vec.y + 0.12 * vector.length (vec)
 
 		if self.shoot_arrow then
 			vec = vector.normalize (vec)
@@ -867,14 +815,18 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 	if self._crossbow_state == 0 then
 		if not should_pathfind then
 			self._crossbow_state = 1
-			self._crossbow_charge_time = 0
+			self:use_wielditem ()
 		end
 	elseif self._crossbow_state == 1 then
-		self._crossbow_charge_time
-			= self._crossbow_charge_time + dtime
-		if self._crossbow_charge_time >= mcl_bows.CROSSBOW_CHARGE_TIME_FULL then
-			self._crossbow_state = 2
-			self._shoot_delay = 1 + math.random (0, 20) * 0.05
+		if not self._using_wielditem then
+			self._crossbow_state = 0
+		else
+			if self._using_wielditem
+				>= mcl_bows.CROSSBOW_CHARGE_TIME_FULL then
+				self:release_wielditem ()
+				self._crossbow_state = 2
+				self._shoot_delay = 1 + math.random (0, 20) * 0.05
+			end
 		end
 	elseif self._crossbow_state == 2 then
 		self._shoot_delay = self._shoot_delay - dtime
@@ -897,6 +849,7 @@ function mob_class:reset_attack_type (newtype)
 	self.attack_type = newtype
 	if self.attack then
 		self.attacking = false
+		self:attack_end ()
 		self:cancel_navigation ()
 		self:halt_in_tracks ()
 	end
@@ -962,6 +915,10 @@ function mob_class:target_detected (self_pos, target)
 	return false
 end
 
+function mob_class:attack_end ()
+	self:release_wielditem ()
+end
+
 function mob_class:check_attack (self_pos, dtime)
 	if not self.attack_type then
 		return false
@@ -1001,9 +958,7 @@ function mob_class:check_attack (self_pos, dtime)
 		if not self.attack:is_valid () then
 			self.attack = nil
 			mover:set_animation ("stand")
-			if self.attack_end then
-				self:attack_end ()
-			end
+			self:attack_end ()
 			return true
 		end
 		-- If it's no longer possible to attack the
@@ -1011,9 +966,7 @@ function mob_class:check_attack (self_pos, dtime)
 		if not self:should_continue_to_attack (self.attack) then
 			self.attack = nil
 			mover:set_animation ("stand")
-			if self.attack_end then
-				self:attack_end ()
-			end
+			self:attack_end ()
 			return true
 		end
 		target_pos = self.attack:get_pos ()
@@ -1021,9 +974,7 @@ function mob_class:check_attack (self_pos, dtime)
 		if distance > self.tracking_distance then
 			self.attack = nil
 			mover:set_animation ("stand")
-			if self.attack_end then
-				self:attack_end ()
-			end
+			self:attack_end ()
 			return true
 		end
 		local line_of_sight = self:target_visible (self_pos, self.attack)
@@ -1034,9 +985,7 @@ function mob_class:check_attack (self_pos, dtime)
 			if t < 0 then
 				self.attack = nil
 				mover:set_animation ("stand")
-				if self.attack_end then
-					self:attack_end ()
-				end
+				self:attack_end ()
 				return true
 			end
 		else
@@ -1134,59 +1083,37 @@ function mob_class:display_wielditem (offhand)
 	if offhand then
 		itemname = "_offhand_item"
 	end
-	if info.bone then
-		if not self[itemname]
-			or ItemStack (self[itemname]):is_empty () then
-			if self[objectname] ~= nil then
-				self[objectname]:remove ()
-				self[objectname] = nil
-			end
-			return
+	assert (info.bone)
+	if not self[itemname]
+		or ItemStack (self[itemname]):is_empty () then
+		if self[objectname] ~= nil then
+			self[objectname]:remove ()
+			self[objectname] = nil
 		end
-
-		if not self[objectname]
-			or not self[objectname]:is_valid () then
-			local self_pos = self.object:get_pos ()
-			self[objectname]
-				= minetest.add_entity (self_pos, "mcl_mobs:wielditem")
-		end
-
-		-- Apply rotation and position according to item type.
-		local stack = ItemStack (self[itemname])
-		local rot, pos, size = self:wielditem_transform (info, stack)
-		if not info.rotate_bone then
-			self[objectname]:set_attach (self.object, info.bone, pos, rot)
-		else
-			self[objectname]:set_attach (self.object, info.bone)
-			mcl_util.set_bone_position (self.object, info.bone, pos, rot)
-		end
-		local name = stack:get_name ()
-		self[objectname]:set_properties ({
-				wield_item = name,
-				visual_size = size,
-		})
-	elseif info.textureslot and info.texturebone then
-		local stack = ItemStack (self[itemname])
-		if stack:is_empty () then
-			self.base_texture[info.textureslot] = "blank.png"
-			self:set_textures (self.base_texture)
-			return
-		end
-		local rot, pos = self:wielditem_transform (info, stack)
-		mcl_util.set_bone_position (self.object, info.texturebone, rot, pos)
-		local def = stack:get_definition ()
-
-		-- NOTE: this method does not support displaying
-		-- wielded nodes.
-		self.base_texture[info.textureslot] = table.concat ({
-			def.wield_image ~= ""
-				and def.wield_image or def.inventory_image,
-			def.wield_overlay ~= ""
-				and "^" .. def.wield_image
-				or "^" .. def.inventory_overlay,
-		})
-		self:set_textures (self.base_texture)
+		return
 	end
+
+	if not self[objectname]
+		or not self[objectname]:is_valid () then
+		local self_pos = self.object:get_pos ()
+		self[objectname]
+			= minetest.add_entity (self_pos, "mcl_mobs:wielditem")
+	end
+
+	-- Apply rotation and position according to item type.
+	local stack = ItemStack (self[itemname])
+	local rot, pos, size = self:wielditem_transform (info, stack)
+	if not info.rotate_bone then
+		self[objectname]:set_attach (self.object, info.bone, pos, rot)
+	else
+		self[objectname]:set_attach (self.object, info.bone)
+		mcl_util.set_bone_position (self.object, info.bone, pos, rot)
+	end
+	local name = self:get_visual_wielditem (stack)
+	self[objectname]:set_properties ({
+		wield_item = name,
+		visual_size = size,
+	})
 end
 
 function mob_class:set_wielditem (stack)
@@ -1201,6 +1128,7 @@ function mob_class:set_wielditem (stack)
 		stack_string = stack:to_string ()
 	end
 
+	self._using_wielditem = nil
 	self._wielditem = stack_string
 	self._effective_wielditem_drop_probability
 		= self.wielditem_drop_probability
@@ -1223,6 +1151,101 @@ end
 
 function mob_class:get_wielditem ()
 	return ItemStack (self._wielditem)
+end
+
+function mob_class:use_wielditem ()
+	if self._wielditem ~= "" then
+		self._using_wielditem = 0.0
+	end
+end
+
+function mob_class:release_wielditem ()
+	if self._using_wielditem then
+		self._using_wielditem = nil
+
+		local object = self._wielditem_object
+		if object and object:is_valid () then
+			local stack = ItemStack (self._wielditem)
+			local name = self:get_visual_wielditem (stack)
+
+			object:set_properties ({
+				wield_item = name,
+			})
+		end
+	end
+end
+
+local wielditem_variants_by_duration = {}
+
+minetest.register_on_mods_loaded (function ()
+	wielditem_variants_by_duration = {
+		["mcl_bows:bow"] = {
+			half_time = mcl_bows.BOW_CHARGE_TIME_HALF,
+			full_time = mcl_bows.BOW_CHARGE_TIME_FULL,
+			start = "mcl_bows:bow_0",
+			half = "mcl_bows:bow_1",
+			full = "mcl_bows:bow_2",
+		},
+		["mcl_bows:bow_enchanted"] = {
+			half_time = mcl_bows.BOW_CHARGE_TIME_HALF,
+			full_time = mcl_bows.BOW_CHARGE_TIME_FULL,
+			start = "mcl_bows:bow_0_enchanted",
+			half = "mcl_bows:bow_1_enchanted",
+			full = "mcl_bows:bow_2_enchanted",
+		},
+		-- TODO: Quick Charge?
+		["mcl_bows:crossbow"] = {
+			half_time = mcl_bows.CROSSBOW_CHARGE_TIME_HALF,
+			full_time = mcl_bows.CROSSBOW_CHARGE_TIME_FULL,
+			start = "mcl_bows:crossbow_0",
+			half = "mcl_bows:crossbow_1",
+			full = "mcl_bows:crossbow_2",
+		},
+		["mcl_bows:crossbow_enchanted"] = {
+			half_time = mcl_bows.CROSSBOW_CHARGE_TIME_HALF,
+			full_time = mcl_bows.CROSSBOW_CHARGE_TIME_FULL,
+			start = "mcl_bows:crossbow_0_enchanted",
+			half = "mcl_bows:crossbow_1_enchanted",
+			full = "mcl_bows:crossbow_2_enchanted",
+		},
+	}
+end)
+
+function mob_class:get_visual_wielditem (stack)
+	local name = stack:get_name ()
+	if not self._using_wielditem then
+		return name
+	else
+		local variants = wielditem_variants_by_duration[name]
+		if not variants then
+			return name
+		else
+			if self._using_wielditem >= variants.full_time then
+				return variants.full
+			elseif self._using_wielditem >= variants.half_time then
+				return variants.half
+			else
+				return variants.start
+			end
+		end
+	end
+end
+
+function mob_class:wielditem_step (dtime)
+	if self._using_wielditem then
+		self._using_wielditem
+			= self._using_wielditem + dtime
+
+		local object = self._wielditem_object
+		if object and object:is_valid () then
+			local stack = ItemStack (self._wielditem)
+			local name = self:get_visual_wielditem (stack)
+
+			object:set_properties ({
+				wield_item = name,
+			})
+		end
+	end
 end
 
 local armor_types = { "head", "torso", "legs", "feet", }
