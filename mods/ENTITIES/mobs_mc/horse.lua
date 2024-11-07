@@ -1050,6 +1050,15 @@ function skeleton_horse:do_custom (dtime, moveresult)
 	end
 end
 
+local function get_helmet (skeleton)
+	if skeleton.armor_list.head ~= "" then
+		local stack = ItemStack (skeleton.armor_list.head)
+		stack:get_meta ():set_string ("mcl_enchanting:enchantments", "")
+		return stack
+	end
+	return ItemStack ("mcl_armor:helmet_iron")
+end
+
 local function check_skeleton_trap (self, self_pos, dtime)
 	if not self._is_trap then
 		return false
@@ -1086,13 +1095,20 @@ local function check_skeleton_trap (self, self_pos, dtime)
 								 z = 0,
 				}, vector.zero ())
 				-- Equip it with an enchanted iron
-				-- helmet between levels 5.0 and 23.
-				local stack = ItemStack ("mcl_armor:helmet_iron")
+				-- helmet and bow (or whatever it
+				-- generated with) between levels 5.0
+				-- and 23.
+				local helmet = get_helmet (entity)
 				local level = 5.0 + math.random (18) * mob_factor
-				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+				mcl_enchanting.enchant_randomly (helmet, level, false, false, true)
 				entity.persistent = true
-				entity.armor_list.head = stack:to_string ()
+				entity.armor_list.head = helmet:to_string ()
 				entity:set_armor_texture ()
+
+				local bow = ItemStack ("mcl_bows:bow")
+				local level = 5.0 + math.random (18) * mob_factor
+				mcl_enchanting.enchant_randomly (bow, level, false, false, true)
+				entity:set_wielditem (bow)
 			end
 		end
 		return false

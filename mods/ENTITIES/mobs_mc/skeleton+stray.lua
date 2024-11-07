@@ -262,7 +262,7 @@ function skeleton:reconfigure_attack_type (wielditem)
 end
 
 function skeleton:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	posing_humanoid.mob_activate (self, staticdata, dtime)
 	self:reconfigure_attack_type (self:get_wielditem ())
 
 	-- Skeletons should drop all equipment collected after
