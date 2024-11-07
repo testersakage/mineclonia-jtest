@@ -66,6 +66,7 @@ local silverfish = {
 local pr = PcgRandom (os.time () - 1140)
 
 function silverfish:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
 	local t = self._reinforcement_time - dtime
 	if t > -dtime then
 		local self_pos = self.object:get_pos ()

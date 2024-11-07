@@ -65,6 +65,7 @@ mcl_mobs.register_mob("mobs_mc:snowman", {
 			mcl_throwing.throw("mcl_throwing:snowball", pos, dir, nil, self.object)
 		end
 	end,
+	ranged_attack_radius = 10.0,
 	shoot_interval = 1,
 	shoot_offset = 1,
 	animation = {

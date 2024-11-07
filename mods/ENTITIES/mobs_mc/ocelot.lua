@@ -242,6 +242,7 @@ local function ocelot_follow_shyly (self, self_pos, dtime)
 end
 
 function ocelot:attack_end ()
+	mob_class.attack_end (self)
 	self._sprinting = false
 	self._crouching = false
 end

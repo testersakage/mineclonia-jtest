@@ -191,6 +191,7 @@ function polar_bear:rear_down ()
 end
 
 function polar_bear:attack_end ()
+	mob_class.attack_end (self)
 	self:rear_down ()
 end
 

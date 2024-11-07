@@ -682,27 +682,9 @@ function mcl_util.get_object_name(object)
 	end
 end
 
-function mcl_util.replace_mob(obj, mob)
-	if not obj or not obj:get_pos() then return end
-	local l = obj:get_luaentity()
-	if not l.is_mob then return end
-	local rot = obj:get_yaw()
-	local pos = obj:get_pos()
-	local n = obj:get_properties().nametag
-	obj = minetest.add_entity(pos, mob)
-	if not obj or not obj:get_pos() then return end
-	if l.on_mob_replace then
-		l:on_mob_replace(obj:get_luaentity())
-	end
-	l:safe_remove()
-	l = obj:get_luaentity()
-	if l.is_mob then
-		l:set_nametag(n)
-	else
-		obj:set_properties({nametag = n})
-	end
-	obj:set_yaw(rot)
-	return obj
+function mcl_util.replace_mob (obj, mob_type, propagate_equipment)
+	local sacrifice = obj:get_luaentity ()
+	sacrifice:replace_with (mob_type, propagate_equipment)
 end
 
 -- This function is essentially a wrapper around minetest.raycast to get the currently pointed at "pointed_thing"
