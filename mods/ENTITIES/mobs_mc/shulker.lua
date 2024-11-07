@@ -667,6 +667,7 @@ function shulker:attack_null (self_pos, dtime, target_pos, line_of_sight)
 end
 
 function shulker:attack_end ()
+	mob_class.attack_end (self)
 	self:close ()
 end
 
@@ -680,6 +681,7 @@ local shulker_faces = {
 }
 
 function shulker:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
 	local self_pos = self.object:get_pos ()
 	local node_pos = mcl_util.get_nodepos (self_pos)
 

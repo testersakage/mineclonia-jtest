@@ -694,6 +694,7 @@ function enderman:init_ai ()
 end
 
 function enderman:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
 	if self._pending_target then
 		if not self._pending_target:is_valid () then
 			self._pending_target = nil

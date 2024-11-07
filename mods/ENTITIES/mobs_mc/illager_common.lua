@@ -292,6 +292,7 @@ function raid_mob:mob_activate (staticdata, dtime)
 end
 
 function raid_mob:attack_end ()
+	mob_class.attack_end (self)
 	self._aggressive = nil
 	self._locked_target = nil
 end

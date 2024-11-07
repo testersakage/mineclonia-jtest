@@ -203,7 +203,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		inventory_image = lingering_image(color),
 		groups = groups,
 		on_use = function(item, placer, pointed_thing)
-			local velocity = 10
+			local velocity = 12
 			local dir = placer:get_look_dir();
 			local pos = placer:get_pos();
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)

@@ -93,6 +93,7 @@ function guardian_elder:on_spawn ()
 end
 
 function guardian_elder:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
 	local self_pos
 	-- See:
 	-- https://minecraft.wiki/w/Elder_Guardian#Inflicting_Mining_Fatigue

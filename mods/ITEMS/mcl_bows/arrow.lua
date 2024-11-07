@@ -120,9 +120,27 @@ function ARROW_ENTITY:arrow_knockback (object, damage)
 	-- Utilize different methods of applying knockback for
 	-- consistency's sake.
 	if entity and entity.is_mob then
-		entity:projectile_knockback (1 + (self._knockback or 0), dir)
+		entity:projectile_knockback (1, dir)
 	elseif object:is_player () then
-		mcl_player.player_knockback (object, entity, dir, nil, damage)
+		mcl_player.player_knockback (object, self.object, dir, nil, damage)
+	end
+
+	if self._knockback and self._knockback > 0 then
+		local resistance
+			= entity and entity.knockback_resistance or 0
+		-- Apply an additional horizontal force of
+		-- self._knockback * 0.6 * 20 * 0.546 to the object.
+		local total_kb = self._knockback * (1.0 - resistance) * 12 * 0.546
+		local v = vector.multiply (dir, total_kb)
+
+		-- And a vertical force of 2.0 * 0.91.
+		v.y = v.y + 2.0 * 0.91 * (1.0 - resistance)
+
+		if object:is_player () then
+			v.x = v.x * 0.25
+			v.z = v.z * 0.25
+		end
+		object:add_velocity (v)
 	end
 end
 
@@ -145,7 +163,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 
 	local self_pos = self.object:get_pos ()
 	local pos = self._lastpos.x and self._lastpos or self._startpos
-	if not pos or vector.distance (pos, self_pos) > 1 then
+	if not pos or vector.distance (pos, self_pos) > 2.5 then
 		pos = self_pos
 	end
 	local dpos = vector.round(vector.copy(self_pos)) -- digital pos
