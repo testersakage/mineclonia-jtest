@@ -304,25 +304,28 @@ function update_neighbours(pos, oldnode, newnode)
 
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
-		local power2 = get_power and get_power(node, dir) or 0
-		local oldpower2 = old_get_power and old_get_power(oldnode, dir) or 0
+		local node2 = minetest.get_node(pos2)
 
-		if power2 ~= oldpower2 then
-			local node2 = minetest.get_node(pos2)
-			local hash2 = minetest.hash_node_position(pos2)
+		if opaque_tab[node2.name] or lwireflag_tab[node.name] or update_tab[node.name] or get_power_tab[node.name] then
+			local power2 = get_power and get_power(node, dir) or 0
+			local oldpower2 = old_get_power and old_get_power(oldnode, dir) or 0
 
-			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
-			if wireflag_tab[node2.name] then
-				update_wire(pos2, oldpower2)
-			elseif opaque_tab[node2.name] then
-				for i, dir in pairs(sixdirs) do
-					local pos3 = pos2:add(dir)
-					local node3 = minetest.get_node(pos3)
-					local hash3 = minetest.hash_node_position(pos3)
+			if power2 ~= oldpower2 then
+				local hash2 = minetest.hash_node_position(pos2)
 
-					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
-					if wireflag_tab[node3.name] then
-						update_wire(pos3, math.max(oldpower2, 0))
+				mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
+				if lwireflag_tab[node2.name] then
+					update_wire(pos2, oldpower2)
+				elseif opaque_tab[node2.name] then
+					for i, dir in pairs(sixdirs) do
+						local pos3 = pos2:add(dir)
+						local node3 = minetest.get_node(pos3)
+						local hash3 = minetest.hash_node_position(pos3)
+
+						mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
+						if lwireflag_tab[node3.name] then
+							update_wire(pos3, math.max(oldpower2, 0))
+						end
 					end
 				end
 			end
