@@ -410,6 +410,7 @@ end
 function mob_class:dismount_jockey ()
 	self:unjock ()
 	local vehicle = self.jockey_vehicle:get_luaentity ()
+	self.jockey_vehicle = nil
 	if vehicle._jockey_rider == self.object then
 		vehicle._jockey_rider = nil
 		vehicle._jockey_staticdata = nil
@@ -480,9 +481,11 @@ function mob_class:jockey_death ()
 			entity._jockey_staticdata = nil
 			entity._jockey_rider = nil
 		end
-	elseif self._jockey_rider then
+	end
+	if self._jockey_rider then
 		local entity = self._jockey_rider:get_luaentity ()
 		if entity then
+			entity.jockey_vehicle = nil
 			entity:unjock ()
 			self._jockey_rider = nil
 			self._jockey_staticdata = nil
