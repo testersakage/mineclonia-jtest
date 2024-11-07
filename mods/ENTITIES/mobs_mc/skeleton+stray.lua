@@ -21,7 +21,7 @@ local skeleton = table.merge (posing_humanoid, {
 	xp_max = 6,
 	breath_max = -1,
 	armor = {undead = 100, fleshy = 100},
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.98, 0.3},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.99, 0.3},
 	head_swivel = "Head_Control",
 	bone_eye_height = 2.38,
 	head_eye_height = 1.74,
@@ -229,10 +229,14 @@ function skeleton:on_spawn ()
 		self.wears_armor = true
 		self.can_wield_items = true
 	end
+	self:skelly_generate_default_equipment (mob_factor)
+	return true
+end
+
+function skeleton:skelly_generate_default_equipment (mob_factor)
 	self:generate_default_equipment (mob_factor, true, false)
 	self:set_wielditem (ItemStack ("mcl_bows:bow"))
 	self:enchant_default_weapon (mob_factor, pr)
-	return true
 end
 
 function skeleton:on_die (pos, mcl_reason)
@@ -310,6 +314,7 @@ skeleton.ai_functions = {
 }
 
 mcl_mobs.register_mob ("mobs_mc:skeleton", skeleton)
+mobs_mc.skeleton = skeleton
 
 ------------------------------------------------------------------------
 -- Stray.
