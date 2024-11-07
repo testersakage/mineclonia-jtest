@@ -1381,28 +1381,36 @@ function mcl_util.to_roman(number)
 	return r
 end
 
-function mcl_util.queue()
-	return {
-		front = 1,
-		back = 1,
-		queue = {},
-		enqueue = function(self, value)
-			self.queue[self.back] = value
-			self.back = self.back + 1
-		end,
-		dequeue = function(self) local value = self.queue[self.front]
-			if not value then
-				return
-			end
-			self.queue[self.front] = nil
-			self.front = self.front + 1
-			return value
-		end,
-		size = function(self)
-			return self.back - self.front
-		end,
-	}
-end
+-- the queue class is using clever tricks to avoid allocating more memory than needed
+-- it stores its back and front index are stored in the same table as the elements
+-- index 1: the queue's back
+-- index 2: the queue's front
+local queue_class =
+{
+	enqueue = function(self, value)
+		self[self[1]] = value
+		self[1] = self[1] + 1
+	end,
 
+	dequeue = function(self)
+		local value = self[self[2]]
+		if value == nil then
+			return
+		end
+		self[self[2]] = nil
+		self[2] = self[2] + 1
+		return value
+	end,
+
+	size = function(self)
+		return self[1] - self[2]
+	end
+}
+
+queue_class.__index = queue_class
+
+function mcl_util.queue()
+	return setmetatable({3, 3}, queue_class)
+end
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
