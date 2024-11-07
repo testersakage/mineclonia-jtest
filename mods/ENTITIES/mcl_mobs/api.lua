@@ -21,6 +21,71 @@ function mob_class:safe_remove()
 	end,self.object)
 end
 
+function mob_class:replace_with (successor_type, propagate_equipment)
+	local default_staticdata = {
+		child = self.child,
+		nametag = self.nametag,
+		persistent = self.persistent,
+	}
+	local self_pos = self.object:get_pos ()
+	local staticdata = minetest.serialize (default_staticdata)
+	local new = minetest.add_entity (self_pos, successor_type, staticdata)
+	if not new then
+		return nil
+	end
+	local luaentity = new:get_luaentity ()
+	local yaw = self.object:get_yaw ()
+	assert (luaentity.is_mob)
+
+	-- Only transfer this mob's ability to equip dropped armor or
+	-- items if the new mob is capable of wearing armor.
+	if propagate_equipment then
+		if luaentity.wears_armor then
+			luaentity.wears_armor = self.wears_armor
+		end
+		if luaentity.can_wield_items then
+			luaentity.can_wield_items = self.can_wield_items
+		end
+
+		if luaentity.can_wield_items then
+			local item = self:get_wielditem ()
+			local offhand = self:get_offhand_item ()
+
+			self:set_wielditem (ItemStack ())
+			self:set_offhand_item (ItemStack ())
+			luaentity:set_wielditem (item)
+			luaentity:set_offhand_item (offhand)
+			luaentity._effective_wielditem_drop_probability
+				= self._effective_wielditem_drop_probability
+			luaentity._effective_offhand_drop_probability
+				= self._effective_offhand_drop_probability
+		end
+		if luaentity.wears_armor and self.armor_list then
+			luaentity.armor_list = table.copy (self.armor_list)
+			self.armor_list = {
+				head = "",
+				torso = "",
+				feet = "",
+				legs = "",
+			}
+			luaentity:set_armor_texture ()
+			luaentity.armor_drop_probability
+				= table.copy (self.armor_drop_probability)
+		end
+	end
+
+	if self.jockey_vehicle then
+		local vehicle = self.jockey_vehicle
+		local bone = vehicle._jockey_bone
+		local pos = vehicle._jockey_pos
+		local rot = vehicle._jockey_rot
+		self:dismount_jockey ()
+		luaentity:jock_to_existing (vehicle, bone, pos, rot)
+	end
+	luaentity:set_yaw (yaw)
+	self:safe_remove ()
+end
+
 function mob_class:get_nametag()
 	return self.nametag or ""
 end

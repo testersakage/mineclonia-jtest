@@ -185,7 +185,7 @@ function mcl_potions.throw_splash (potionname, dir, pos, thrower,
 	if not obj then
 	return
 	end
-	local velocity = 10
+	local velocity = 12
 	obj:set_velocity ({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
 	obj:set_acceleration ({x=dir.x*-3, y=-9.8, z=dir.z*-3})
 	local ent = obj:get_luaentity ()

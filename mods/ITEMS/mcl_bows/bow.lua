@@ -12,6 +12,8 @@ local BOW_DURABILITY = 385
 -- Charging time in microseconds
 local BOW_CHARGE_TIME_HALF = 200000 -- bow level 1
 local BOW_CHARGE_TIME_FULL = 500000 -- bow level 2 (full charge)
+mcl_bows.BOW_CHARGE_TIME_HALF = 200000 / 1.0e6
+mcl_bows.BOW_CHARGE_TIME_FULL = 500000 / 1.0e6
 
 -- Factor to multiply with player speed while player uses bow
 -- This emulates the sneak speed.
@@ -38,10 +40,12 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 		power = 1.0
 	end
 	local speed = power * BOW_MAX_SPEED
+	local mob_shooter = shooter and not shooter:is_player ()
+
 	if damage == nil then
-		if shooter and not shooter:is_player () then
+		if mob_shooter then
 			-- Randomize arrow damage by difficulty.
-			damage = 2.0 * power
+			damage = 2.0
 			local bonus
 				= mcl_util.dist_triangular (mcl_vars.difficulty * 0.11,
 								0.57425)
@@ -57,11 +61,19 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 			damage = damage + (enchantments.power / 2) + 0.5
 		end
 		if enchantments.punch then
-			knockback = knockback + enchantments.punch * 3
+			knockback = knockback + enchantments.punch
 		end
 		if enchantments.flame then
 			mcl_burning.set_on_fire(obj, math.huge)
 		end
+	end
+	-- Randomize accuracy by difficulty.
+	if mob_shooter then
+		local f = 14 - mcl_vars.difficulty * 4
+		dir = vector.copy (dir)
+		dir.x = dir.x + mcl_util.dist_triangular (0, 0.0172275 * f)
+		dir.y = dir.y + mcl_util.dist_triangular (0, 0.0172275 * f)
+		dir.z = dir.z + mcl_util.dist_triangular (0, 0.0172275 * f)
 	end
 	obj:set_velocity({x=dir.x*speed, y=dir.y*speed, z=dir.z*speed})
 	obj:set_acceleration({x=0, y=-GRAVITY, z=0})

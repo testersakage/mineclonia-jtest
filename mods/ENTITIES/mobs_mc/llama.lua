@@ -333,6 +333,7 @@ local function llama_follow_caravan (self, self_pos, dtime)
 end
 
 function llama:attack_end ()
+	mob_class.attack_end (self)
 	self:remove_physics_factor ("tracking_distance",
 				    "mobs_mc:llama_wolf_attack")
 end
