@@ -169,10 +169,7 @@ end, -200)
 
 function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, damage)
 	local knockback = 1
-	local luaentity
-	if hitter then
-		luaentity = hitter:get_luaentity()
-	end
+
 	if hitter then
 		local wielditem = mcl_util.get_wielditem (hitter)
 		knockback = knockback
