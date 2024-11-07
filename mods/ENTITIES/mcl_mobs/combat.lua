@@ -287,10 +287,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		end
 
 
-		local luaentity
-		if hitter then
-			luaentity = hitter:get_luaentity()
-		end
 		local wielditem = mcl_util.get_wielditem (hitter)
 		kb = kb + mcl_enchanting.get_enchantment (wielditem, "knockback")
 		self.frame_speed_multiplier=2.3
@@ -666,7 +662,6 @@ function mob_class:discharge_ranged (self_pos, target_pos)
 	-- Shoot arrow
 	if minetest.registered_entities[self.arrow] or self.shoot_arrow then
 		s.y = s.y + (self.collisionbox[2] + self.collisionbox[5]) / 2
-		local v = 1
 		local arrow
 		if not self.shoot_arrow then
 			self.firing = true
@@ -675,9 +670,6 @@ function mob_class:discharge_ranged (self_pos, target_pos)
 			end, self)
 			arrow = minetest.add_entity(s, self.arrow)
 			local ent = arrow:get_luaentity()
-			if ent.velocity then
-				v = ent.velocity
-			end
 			ent.switch = 1
 			ent.owner_id = tostring(self.object) -- add unique owner id to arrow
 
