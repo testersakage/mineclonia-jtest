@@ -23,19 +23,65 @@ local sixdirs = {
 }
 
 local wiredirs = {
-	{wire = vector.new(1, 0, 0)},
-	{wire = vector.new(-1, 0, 0)},
-	{wire = vector.new(0, 0, 1)},
-	{wire = vector.new(0, 0, -1)},
-	{wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0)},
-	{wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0)},
-	{wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0)},
-	{wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0)},
-	{wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0)},
-	{wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0)},
-	{wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1)},
-	{wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1)},
+	[0x1] = {wire = vector.new(0, 0, -1)},
+	[0x2] = {wire = vector.new(-1, 0, 0)},
+	[0x4] = {wire = vector.new(0, 0, 1)},
+	[0x8] = {wire = vector.new(1, 0, 0)},
 }
+
+local wiredirs_up = {
+	[0x1] = {wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0)},
+	[0x2] = {wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0)},
+	[0x4] = {wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0)},
+	[0x8] = {wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0)},
+}
+
+local wiredirs_down = {
+	[0x1] = {wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1)},
+	[0x2] = {wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0)},
+	[0x4] = {wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1)},
+	[0x8] = {wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0)},
+}
+
+local function iterate_wire_neighbours(wireflags)
+	local i = 1
+	local state = 0
+	-- core.debug("IMPORTANT!", wireflags)
+	-- `state` is a special variable that meansL
+	-- 0: now returning entry from the block to the side
+	-- 1: now returning entry from the block to the side and up
+	-- 2: now returning entry from the block to the side and down
+	return function(wireflags)
+		-- core.debug("ITER!", wireflags, i, state)
+		if state == 0 then
+			while i <= 8 do
+				local val = bit.band(wireflags, bit.bor(i, bit.lshift(i, 4)))
+				local tmp = wiredirs[i]
+				-- core.debug("pop", val)
+				if val == i then
+					-- if goes to the side of that block
+					state = 2
+					return tmp
+				elseif val ~= 0 then
+					-- if goes up a block
+					state = 1
+					return tmp
+				end
+				i = i * 2
+			end
+			-- core.debug("terminate")
+			return
+		elseif state == 1 then
+			state = 2
+			return wiredirs_up[i]
+		else
+			local tmp = wiredirs_down[i]
+			i = i * 2
+			state = 0
+			return tmp
+		end
+	end, wireflags
+end
 
 -- Get power from direct neighbours at pos. Returns weak and strong power.
 local function get_node_power(pos, include_wire)
@@ -111,10 +157,12 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		local entry = clear_queue:dequeue()
 		local pos = entry.pos
 		local power = entry.power
+		local node = core.get_node(pos)
 
 		updates_[minetest.hash_node_position(pos)] = pos
 
-		for _, dir in pairs(wiredirs) do
+		for dir in iterate_wire_neighbours(wireflag_tab[node.name] or 0xFF) do
+			-- core.debug(dump(dir))
 			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
 				local node2 = get_node(pos2)
@@ -145,7 +193,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 
 		updates_[minetest.hash_node_position(pos)] = pos
 
-		for _, dir in pairs(wiredirs) do
+		for dir in iterate_wire_neighbours(wireflag_tab[core.get_node(pos).name]) do
 			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
 				local node2 = get_node(pos2)
@@ -306,7 +354,7 @@ function update_neighbours(pos, oldnode, newnode)
 		local pos2 = pos:add(dir)
 		local node2 = minetest.get_node(pos2)
 
-		if opaque_tab[node2.name] or lwireflag_tab[node.name] or update_tab[node.name] or get_power_tab[node.name] then
+		if opaque_tab[node2.name] or wireflag_tab[node.name] or update_tab[node.name] or get_power_tab[node.name] then
 			local power2 = get_power and get_power(node, dir) or 0
 			local oldpower2 = old_get_power and old_get_power(oldnode, dir) or 0
 
@@ -314,7 +362,7 @@ function update_neighbours(pos, oldnode, newnode)
 				local hash2 = minetest.hash_node_position(pos2)
 
 				mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
-				if lwireflag_tab[node2.name] then
+				if wireflag_tab[node2.name] then
 					update_wire(pos2, oldpower2)
 				elseif opaque_tab[node2.name] then
 					for i, dir in pairs(sixdirs) do
@@ -323,7 +371,7 @@ function update_neighbours(pos, oldnode, newnode)
 						local hash3 = minetest.hash_node_position(pos3)
 
 						mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
-						if lwireflag_tab[node3.name] then
+						if wireflag_tab[node3.name] then
 							update_wire(pos3, math.max(oldpower2, 0))
 						end
 					end
