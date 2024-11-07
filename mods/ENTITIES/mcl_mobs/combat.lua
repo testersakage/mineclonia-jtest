@@ -12,6 +12,7 @@ function mob_class:do_attack(obj, persistence)
 	self.attack = obj
 	self.attacking = false
 	mover:set_animation ("run")
+	self:replace_activity ("attack")
 
 	-- Abandon after obj disappears for longer than three seconds.
 	self.target_invisible_time = persistence or SIGHT_PERSISTENCE
@@ -525,10 +526,23 @@ function mob_class:custom_attack ()
 		damage_groups = {fleshy = self.damage},
 	}
 	if not wielditem:is_empty () then
-		damage = wielditem:get_tool_capabilities ()
-		local damage = 65535 / damage.punch_attack_uses
-		wielditem:add_wear (math.floor (damage))
-		self:set_wielditem (wielditem)
+		damage = table.copy (wielditem:get_tool_capabilities ())
+		damage.damage_groups = damage.damage_groups
+			and table.copy (damage.damage_groups) or {}
+		-- Wielditems used by mobs don't sustain wear in
+		-- Minecraft, and their attack damage is combined with
+		-- the mob's base attack damage.
+		local tool_damage = damage.damage_groups.fleshy
+		if not tool_damage then
+			damage.damage_groups.fleshy = self.damage
+		else
+			-- 1 must be subtracted from the total,
+			-- because damage values in minetest tool
+			-- definitions include that inflicted by the
+			-- player's hand.
+			tool_damage = math.max (tool_damage - 1, 0)
+			damage.damage_groups.fleshy = tool_damage + self.damage
+		end
 	end
 	if self.animation.punch_start then
 		local frames
