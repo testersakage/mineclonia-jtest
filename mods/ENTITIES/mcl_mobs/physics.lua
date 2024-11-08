@@ -359,16 +359,44 @@ function mob_class:respire ()
 	self.breath = math.min (self.object:get_properties().breath_max, self.breath + 1)
 end
 
+local function get_internal_light_level ()
+	local tod = minetest.get_timeofday ()
+	local ratio = minetest.time_to_day_night_ratio (tod)
+	local light = math.floor (ratio * 15)
+
+	-- See: https://minecraft.wiki/w/Light#Internal_light_level
+	local weather = mcl_weather.get_weather ()
+	if weather == "thunder" then
+		light = math.max (0, 10 - (15 - light))
+	elseif weather == "rain" or weather == "snow" then
+		light = math.max (0, 12 - (15 - light))
+	end
+	return light
+end
+
 function mob_class:endangered_by_sunlight ()
 	local self_pos = self.object:get_pos ()
 	local dimension = mcl_worlds.pos_to_dimension (self_pos)
-	local factor = mcl_weather.get_current_light_factor ()
 	if dimension == "overworld"
-		and mcl_util.is_daytime ()
-		and (not factor or factor > 0.6) then
+		and not mcl_weather.is_exposed_to_rain (self_pos)
+		and get_internal_light_level () >= 12 then
 		return true
 	end
 	return false
+end
+
+local function get_weather_with_light (self_pos, time_of_day)
+	local light = minetest.get_natural_light (self_pos, time_of_day) or 0
+	local has_rain = mcl_weather.is_exposed_to_rain (self_pos)
+
+	-- See: https://minecraft.wiki/w/Light#Internal_light_level
+	local weather = mcl_weather.get_weather ()
+	if weather == "thunder" then
+		light = math.max (0, 10 - (15 - light))
+	elseif weather == "rain" or weather == "snow" then
+		light = math.max (0, 12 - (15 - light))
+	end
+	return light, has_rain
 end
 
 -- environmental damage (water, lava, fire, light etc.)
@@ -387,24 +415,33 @@ function mob_class:do_env_damage()
 		self:safe_remove()
 		return true
 	end
-
-	local sunlight = minetest.get_natural_light(pos, self.time_of_day)
-	self.sunlight = sunlight
 	local _, dim = mcl_worlds.y_to_layer(pos.y)
-	if self.ignited_by_sunlight
-		and (sunlight or 0) > minetest.LIGHT_MAX
-		and dim == "overworld" then
-		if self.armor_list then
-			local stack = ItemStack (self.armor_list.head)
-			if stack:is_empty () then
-				mcl_burning.set_on_fire (self.object, 10)
-			else
-				-- Damage armor while on fire.
-				mcl_util.use_item_durability (stack, 5 * math.random ())
-				-- Apply wear to head armor.
-				self.armor_list.head = stack:to_string ()
+
+	-- Only ignite when this mob is directly beneath sunlight, as
+	-- measured by the light level at noon.
+	if self.ignited_by_sunlight then
+		local head
+			= vector.offset (pos, 0, self.head_eye_height, 0)
+		local sunlight, has_rain
+			= get_weather_with_light (head, self.time_of_day)
+		local direct_sunlight
+			= minetest.get_natural_light (head, 0.5) or 0
+		self._direct_sunlight = direct_sunlight
+
+		if direct_sunlight >= 15 and sunlight >= 12
+			and not has_rain and dim == "overworld" then
+			if self.armor_list then
+				local stack = ItemStack (self.armor_list.head)
 				if stack:is_empty () then
-					self:set_armor_texture ()
+					mcl_burning.set_on_fire (self.object, 10)
+				else
+					-- Damage armor while on fire.
+					mcl_util.use_item_durability (stack, 5 * math.random ())
+					-- Apply wear to head armor.
+					self.armor_list.head = stack:to_string ()
+					if stack:is_empty () then
+						self:set_armor_texture ()
+					end
 				end
 			end
 		end
@@ -425,7 +462,7 @@ function mob_class:do_env_damage()
 
 	-- rain
 	if self.rain_damage > 0 then
-		if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) then
+		if mcl_weather.is_exposed_to_rain (pos) then
 			if self:damage_mob ("environment", self.rain_damage) then
 				return true
 			end
