@@ -359,6 +359,18 @@ function mob_class:respire ()
 	self.breath = math.min (self.object:get_properties().breath_max, self.breath + 1)
 end
 
+function mob_class:endangered_by_sunlight ()
+	local self_pos = self.object:get_pos ()
+	local dimension = mcl_worlds.pos_to_dimension (self_pos)
+	local factor = mcl_weather.get_current_light_factor ()
+	if dimension == "overworld"
+		and mcl_util.is_daytime ()
+		and (not factor or factor > 0.6) then
+		return true
+	end
+	return false
+end
+
 -- environmental damage (water, lava, fire, light etc.)
 function mob_class:do_env_damage()
 	-- feed/tame text timer (so mob 'full' messages dont spam chat)
@@ -379,7 +391,9 @@ function mob_class:do_env_damage()
 	local sunlight = minetest.get_natural_light(pos, self.time_of_day)
 	self.sunlight = sunlight
 	local _, dim = mcl_worlds.y_to_layer(pos.y)
-	if self.ignited_by_sunlight and (sunlight or 0) >= minetest.LIGHT_MAX and dim == "overworld" then
+	if self.ignited_by_sunlight
+		and (sunlight or 0) > minetest.LIGHT_MAX
+		and dim == "overworld" then
 		if self.armor_list then
 			local stack = ItemStack (self.armor_list.head)
 			if stack:is_empty () then

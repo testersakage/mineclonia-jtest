@@ -1,6 +1,6 @@
 local S = minetest.get_translator("mobs_mc")
 local WOOL_REPLACE_RATE = 80
-local sheared_texture = { "blank.png", "mobs_mc_sheep.png" }
+local sheared_textures = { "blank.png", "mobs_mc_sheep.png" }
 
 local function unicolor_to_wool(unicolor_group)
 	local d = mcl_dyes.unicolor_to_dye(unicolor_group)
