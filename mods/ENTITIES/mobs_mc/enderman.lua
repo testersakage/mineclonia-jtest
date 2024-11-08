@@ -196,16 +196,14 @@ local select_enderman_animation = function(animation_type)
 	if animation_type == "block" then
 		return {
 			stand_start = 200, stand_end = 200,
-			walk_start = 161, walk_end = 200, walk_speed = 65,
-			run_start = 161, run_end = 200, run_speed = 50,
+			walk_start = 161, walk_end = 200, walk_speed = 25,
 			attack_start = 81, attack_end = 120, attack_speed = 50,
 		}
 	-- Enderman doesn't hold a block
 	elseif animation_type == "normal" or animation_type == nil then
 		return {
 			stand_start = 40, stand_end = 80, stand_speed = 25,
-			walk_start = 0, walk_end = 40, walk_speed = 65,
-			run_start = 0, run_end = 40, run_speed = 50,
+			walk_start = 0, walk_end = 40, walk_speed = 25,
 			attack_start = 81, attack_end = 120, attack_speed = 50,
 		}
 	end
