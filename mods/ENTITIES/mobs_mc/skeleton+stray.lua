@@ -255,6 +255,28 @@ end
 -- Skeleton AI.
 ------------------------------------------------------------------------
 
+function skeleton:validate_waypoints (waypoints)
+	local self_pos = self.object:get_pos ()
+	if self.armor_list.head == ""
+		and self:endangered_by_sunlight ()
+		and not mcl_weather.is_outdoor (self_pos)
+		and #waypoints > 0 then
+		local safe_waypoints = {}
+		local n_waypoints = #waypoints
+		for i = 0, n_waypoints - 1 do
+			local r = n_waypoints - i
+			if mcl_weather.is_outdoor (waypoints[r]) then
+				break
+			end
+			table.insert (safe_waypoints, waypoints[r])
+		end
+		self.waypoints = safe_waypoints
+		return
+	end
+
+	return mob_class.validate_waypoints (self, waypoints)
+end
+
 function skeleton:reconfigure_attack_type (wielditem)
 	local name = wielditem:get_name ()
 

@@ -2691,6 +2691,9 @@ function mob_class:gwp_timeout (dtime)
 	self._gwp_timeout = math.max (0, timeout)
 end
 
+function mob_class:validate_waypoints (waypoints)
+end
+
 function mob_class:next_waypoint (dtime)
 	self:gwp_close_memorized_doors ()
 	-- Pathfind for at most half the remaining quota.
@@ -2739,6 +2742,7 @@ function mob_class:next_waypoint (dtime)
 	-- is in progress.  This appears to reduce jank.
 	if self.waypoints then
 		self.waypoint_age = self.waypoint_age + dtime
+		self:validate_waypoints (self.waypoints)
 		self:gwp_next_waypoint (dtime)
 		self:gwp_timeout (dtime)
 	end
