@@ -130,7 +130,6 @@ mcl_mobs.mob_class = {
 	fire_damage_resistant = false,
 	ignited_by_sunlight = false,
 	avoids_sunlight = false,
-	sunlight = 1,
 	tnt_knockback = true,
 	min_light = 7,
 	max_light = minetest.LIGHT_MAX + 1,
@@ -193,6 +192,7 @@ mcl_mobs.mob_class = {
 	_frozen_for = 0,
 	_restriction_center = nil,
 	_restriction_size = 0,
+	_direct_sunlight = 0,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"

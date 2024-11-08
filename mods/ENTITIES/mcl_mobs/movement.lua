@@ -778,8 +778,9 @@ function mob_class:target_in_shade (pos, width, height)
 		newnode.x = node.x
 		newnode.y = node.y + 1
 		newnode.z = node.z
-		local sunlight = minetest.get_natural_light (newnode, self.time_of_day)
-		if sunlight < 12 then
+		local sunlight
+			= minetest.get_natural_light (newnode, 0.5)
+		if sunlight < 15 then
 			return newnode
 		end
 	end
@@ -1020,12 +1021,16 @@ function mob_class:check_avoid_sunlight (pos)
 		-- Still seeking sunlight?
 		if self:navigation_finished () then
 			self.avoiding_sunlight = false
+			local eye_height = self.head_eye_height
+			local head_pos = vector.offset (pos, 0, eye_height, 0)
+			self._direct_sunlight
+				= minetest.get_natural_light (head_pos, 0.5)
 			self:set_animation ("stand")
 		end
 		return true
 	elseif self.avoids_sunlight
-		and (self.time_of_day > 0.2 and self.time_of_day < 0.8)
-		and self.sunlight > 12
+		and mcl_util.is_daytime ()
+		and self._direct_sunlight >= 15
 		and mcl_burning.is_burning (self.object) then
 		local tpos = self:target_in_shade (pos, 10, 3)
 

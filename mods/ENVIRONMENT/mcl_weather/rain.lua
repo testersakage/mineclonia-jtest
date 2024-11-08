@@ -39,6 +39,22 @@ local psdef= {
 
 local textures = {"weather_pack_rain_raindrop_1.png", "weather_pack_rain_raindrop_2.png"}
 
+function mcl_weather.is_exposed_to_rain (pos)
+	if not mcl_weather.rain.raining
+		or not mcl_worlds.has_weather (pos) then
+		return false
+	end
+	local data = minetest.get_biome_data (pos)
+	if not data then
+		return false
+	end
+	local name = minetest.get_biome_name (data.biome)
+	local def = minetest.registered_biomes[name]
+	return def._mcl_biome_type ~= "hot"
+		and mcl_weather.is_outdoor (pos)
+		and not mcl_weather.has_snow (pos)
+end
+
 function mcl_weather.has_rain(pos)
 	if not mcl_worlds.has_weather(pos) then return false end
 	local bd = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]

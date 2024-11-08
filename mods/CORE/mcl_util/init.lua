@@ -1511,7 +1511,7 @@ end
 
 function mcl_util.is_daytime ()
 	local time = minetest.get_timeofday ()
-	return time <= 0.8 and time >= 0.2
+	return time <= 0.76 and time >= 0.24
 end
 
 local function round_trunc (x)
