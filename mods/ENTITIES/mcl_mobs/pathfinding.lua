@@ -129,7 +129,7 @@ function mob_class:new_gwp_context ()
 		arrivals = {},
 		nodes = {},
 		class_cache = {},
-		tolerance = 1,
+		tolerance = 0,
 		time_elapsed = 0,
 		total_nodes = 0,
 		y_offset = 0,
@@ -368,12 +368,6 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 	context.maxdist = range
 	context.maxnodes = floor (range * 16)
 
-	-- If a mob is being attacked, tolerance is the reach
-	-- distance.
-	if self.attacking then
-		context.tolerance = self.reach * 0.65
-	end
-
 	-- Return positions touching the surfaces of the nodes below.
 	context.y_offset = -0.5
 
@@ -459,7 +453,7 @@ function mob_class:gwp_cycle (context, timeout)
 		for _, target in ipairs (context.targets) do
 			if manhattan3d (node.x, node.y, node.z,
 					target.x, target.y, target.z)
-				< context.tolerance then
+				<= context.tolerance then
 				table.insert (context.arrivals, target)
 			end
 		end
@@ -2625,9 +2619,9 @@ end
 
 local MAX_STALE_PATH_AGE = 1.25
 
-function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, animation, tolerance)
-	local mob = self:mob_controlling_movement ()
-
+function mob_class:gopath_internal (target, callback_arrived, prioritized,
+					speed_bonus, animation, tolerance)
+	local mob = self
 	if mob.waypoints then
 		local wp_target = mob.waypoints[1]
 
@@ -2648,9 +2642,16 @@ function mob_class:gopath (target, callback_arrived, prioritised, speed_bonus, a
 
 	-- Cancel navigation if pathing is impossible.
 	if not mob.pathfinding_context then
-		self:cancel_navigation ()
+		mob:cancel_navigation ()
 	end
 	return mob.pathfinding_context
+end
+
+function mob_class:gopath (target, callback_arrived, prioritised,
+				speed_bonus, animation, tolerance)
+	local mob = self:mob_controlling_movement ()
+	return mob:gopath_internal (target, callback_arrived, prioritised,
+					speed_bonus, animation, tolerance)
 end
 
 local GWP_TIMEOUT_TICKS = 100
