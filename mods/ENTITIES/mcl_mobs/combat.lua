@@ -604,10 +604,6 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		self.attacking = true
 		self._punch_animation_timeout = 0
 	end
-	local tolerance = 2 - math.ceil (self.collisionbox[4] - self.collisionbox[1])
-	if tolerance < 0 then
-		tolerance = 0
-	end
 
 	if self._punch_animation_timeout then
 		self._punch_animation_timeout
@@ -647,7 +643,7 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 
 		-- Try to pathfind.
 		if not self:gopath (target_pos, nil, true,
-					self.pursuit_bonus, nil, tolerance) then
+					self.pursuit_bonus, nil) then
 			delay = delay + 0.75
 		end
 	end

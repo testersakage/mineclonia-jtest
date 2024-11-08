@@ -602,9 +602,11 @@ function mob_class:set_invisible (hide)
 end
 
 local function is_armor_texture_slot (self, i)
-	for k, _ in pairs (self._armor_texture_slots) do
-		if k == i then
-			return true
+	if self.wears_armor then
+		for k, _ in pairs (self._armor_texture_slots) do
+			if k == i then
+				return true
+			end
 		end
 	end
 

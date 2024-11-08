@@ -10,7 +10,6 @@ local mob_class = mcl_mobs.mob_class
 --################### SPIDER
 --###################
 
-
 -- Spider by AspireMint (fishyWET (CC-BY-SA 3.0 license for texture)
 minetest.register_entity("mobs_mc:spider_eyes", {
 	initial_properties = {
@@ -20,8 +19,9 @@ minetest.register_entity("mobs_mc:spider_eyes", {
 		visual_size = {x=1.01/3, y=1.01/3},
 		glow = 50,
 		textures = {
-			"mobs_mc_spider_eyes.png",
+			"mobs_mc_spider_eyes.png^[opacity:180",
 		},
+		use_texture_alpha = true,
 	},
 	on_step = function(self)
 		if self and self.object then
@@ -38,7 +38,6 @@ local spider = {
 	spawn_class = "hostile",
 	passive = false,
 	attack_type = "melee",
-	pathfinding = 1,
 	damage = 2,
 	reach = 2,
 	hp_min = 16,
@@ -46,16 +45,14 @@ local spider = {
 	xp_min = 5,
 	xp_max = 5,
 	head_eye_height = 0.65,
-	armor = {fleshy = 100, arthropod = 100},
-	on_die=function(self)
-		if self.object:get_children() and self.object:get_children()[1] then
-			self.object:get_children()[1]:set_detach()
-		end
-	end,
+	armor = {
+		fleshy = 100,
+		arthropod = 100,
+	},
 	head_swivel = "Head_Control",
 	bone_eye_height = 1,
 	curiosity = 10,
-	head_yaw="z",
+	head_yaw = "z",
 	collisionbox = {-0.7, -0.01, -0.7, 0.7, 0.89, 0.7},
 	visual = "mesh",
 	mesh = "mobs_mc_spider.b3d",
@@ -73,33 +70,110 @@ local spider = {
 		distance = 16,
 	},
 	movement_speed = 6.0,
-	jump_height = 4,
-	always_climb = true,
-	fear_height = 0,
 	view_range = 16,
 	floats = 1,
 	drops = {
-		{name = "mcl_mobitems:string", chance = 1, min = 0, max = 2, looting = "common"},
-		{name = "mcl_mobitems:spider_eye", chance = 3, min = 1, max = 1, looting = "common", looting_chance_function = function(lvl)
-			return 1 - 2 / (lvl + 3)
-		end},
+		{
+			name = "mcl_mobitems:string",
+			chance = 1, min = 0, max = 2,
+			looting = "common",
+		},
+		{
+			name = "mcl_mobitems:spider_eye",
+			chance = 3, min = 1, max = 1,
+			looting = "common",
+			looting_chance_function = function(lvl)
+				return 1 - 2 / (lvl + 3)
+			end,
+		},
 	},
-	specific_attack = { "player", "mobs_mc:iron_golem" },
+	specific_attack = {
+		"player",
+		"mobs_mc:iron_golem",
+	},
 	animation = {
 		stand_speed = 10,
 		walk_speed = 25,
-		run_speed = 50,
 		stand_start = 20,
 		stand_end = 40,
 		walk_start = 0,
 		walk_end = 20,
-		run_start = 0,
-		run_end = 20,
 	},
+	always_climb = true,
+	pace_bonus = 0.8,
 }
+
+------------------------------------------------------------------------
+-- Spider movement and physics.
+------------------------------------------------------------------------
 
 spider.slowdown_nodes = table.copy (mob_class.slowdown_nodes)
 spider.slowdown_nodes["mcl_core:cobweb"] = nil
+
+function spider:gopath_internal (target, callback_arrived, prioritized,
+					speed_bonus, animation, tolerance)
+	-- Record the destination so that this spider may attempt to
+	-- scale walls obstructing movement to it.
+	local rc = mob_class.gopath_internal (self, target, callback_arrived,
+				prioritized, speed_bonus, animation, tolerance)
+	if rc then
+		self._gopath_destination
+			= mcl_util.get_nodepos (target)
+		return rc
+	else
+		return nil
+	end
+end
+
+-- Prevent animations from being reset if an obstruction is being
+-- climbed.
+function spider:set_animation (anim, fixed_frame)
+	if self._climbing_obstruction then
+		anim = "walk"
+	end
+	mob_class.set_animation (self, anim, fixed_frame)
+end
+
+function spider:navigation_step (dtime, moveresult)
+	mob_class.navigation_step (self, dtime, moveresult)
+
+	if self:navigation_finished () then
+		-- If navigation has completed but this spider is
+		-- still separated from its target by an obstruction,
+		-- continuing moving forward so as to climb over the
+		-- obstruction.
+
+		if self._gopath_destination then
+			self._climbing_obstruction = true
+
+			-- This renders spiders liable to cross
+			-- hazards or stupidly run into obstructions
+			-- if they fail to navigate to a target
+			-- location.  Identical behavior may be
+			-- observed in Minecraft.
+			local dest = vector.offset (self._gopath_destination, 0, -0.5, 0)
+			local self_pos = self.object:get_pos ()
+			local dx = self_pos.x - dest.x
+			local dz = self_pos.z - dest.z
+			local bb_width = (self.collisionbox[4] - self.collisionbox[1]) / 2
+			local dist_xz = math.sqrt (dx * dx + dz * dz)
+			if (self_pos.y <= dest.y or dist_xz > bb_width) then
+				self.movement_goal = "go_pos"
+				self.movement_target = dest
+				self.movement_velocity
+					= self.gowp_velocity or self.movement_speed
+			else
+				self._climbing_obstruction = false
+				self._gopath_destination = nil
+				self:halt_in_tracks ()
+			end
+		end
+	end
+end
+
+------------------------------------------------------------------------
+-- Spider mechanics.
+------------------------------------------------------------------------
 
 local spider_effects = {
 	"swiftness",
@@ -115,7 +189,6 @@ function spider:mob_activate (staticdata, dtime)
 end
 
 function spider:on_spawn ()
-	self.object:set_properties({visual_size={x=1,y=1}})
 	-- Spawn as jockeys ridden by skeletons 1% of the time.
 	local self_pos = self.object:get_pos ()
 	if math.random (100) == 1 then
@@ -129,8 +202,7 @@ function spider:on_spawn ()
 	end
 
 	-- Occasionally spawn with various beneficial status effects
-	-- on hard difficulty.  TODO: invisible spiders should
-	-- nevertheless have visible eyes.
+	-- on hard difficulty.
 	if mcl_vars.difficulty == 3 then
 		local random = math.random ()
 		if random < 0.1 * mcl_worlds.get_special_difficulty (self_pos) then
@@ -148,6 +220,50 @@ local function mc_light_value (self)
 	return value
 end
 
+------------------------------------------------------------------------
+-- Spider AI.
+------------------------------------------------------------------------
+
+function spider:attack_melee (self_pos, dtime, target_pos, line_of_sight)
+	if not self.attacking then
+		self._leaping = false
+	end
+
+	local moveresult = self._moveresult
+	if self._leaping then
+		if moveresult.touching_ground
+			or moveresult.standing_on_object then
+			self._leaping = false
+		end
+		self._attack_delay = 0
+		return
+	end
+
+	-- Possibly leap at the target.
+	local dist = vector.distance (self_pos, target_pos)
+	local chance = math.round (5 * dtime / 0.05)
+	local r = math.random (chance)
+
+	if self.attacking
+		and dist > 2 and dist < 4 and r == 1
+		and moveresult.touching_ground
+			or moveresult.standing_on_object then
+		self._leaping = true
+		self:cancel_navigation ()
+		self:halt_in_tracks ()
+		local leap = vector.direction (self_pos, target_pos)
+		local v = self.object:get_velocity ()
+		leap.x = leap.x * 8.0 + v.x * 0.2
+		leap.y = 6.0
+		leap.z = leap.z * 8.0 + v.z * 0.2
+		self:set_yaw (math.atan2 (leap.z, leap.x) - math.pi / 2)
+		self.object:set_velocity (leap)
+		return
+	end
+
+	mob_class.attack_melee (self, self_pos, dtime, target_pos, line_of_sight)
+end
+
 function spider:should_continue_to_attack (target)
 	if math.random (100) == 1 and mc_light_value (self) >= 0.5 then
 		return false
@@ -160,44 +276,52 @@ function spider:should_attack (target)
 		and mc_light_value (self) < 0.5
 end
 
-mcl_mobs.register_mob("mobs_mc:spider", spider)
+mcl_mobs.register_mob ("mobs_mc:spider", spider)
 
--- Cave spider
-local cave_spider = table.copy(spider)
-cave_spider.description = S("Cave Spider")
-cave_spider.textures = { {"mobs_mc_cave_spider.png^(mobs_mc_spider_eyes.png^[makealpha:0,0,0)"} }
-cave_spider.damage = 2
-cave_spider.hp_min = 1
-cave_spider.hp_max = 12
-cave_spider.head_eye_height = 0.5625
-cave_spider.collisionbox = {-0.35, -0.01, -0.35, 0.35, 0.46, 0.35}
-cave_spider.visual_size = {x=0.55,y=0.5}
-cave_spider.on_spawn = function(self)
-	self.object:set_properties({visual_size={x=0.55,y=0.5}})
-	local spider_eyes=false
-	for n = 1, #self.object:get_children() do
-		local obj = self.object:get_children()[n]
-		if obj:get_luaentity() and self.object:get_luaentity().name == "mobs_mc:spider_eyes" then
-			spider_eyes = true
-		end
-	end
-	if not spider_eyes then
-		minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes"):set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
-	end
+------------------------------------------------------------------------
+-- Cave spider.
+------------------------------------------------------------------------
+
+local cave_spider = table.merge (spider, {
+	description = S("Cave Spider"),
+	textures = {
+		{"mobs_mc_cave_spider.png^(mobs_mc_spider_eyes.png^[makealpha:0,0,0)"}
+	},
+	hp_min = 12,
+	hp_max = 12,
+	head_eye_height = 0.5625,
+	collisionbox = {-0.35, -0.01, -0.35, 0.35, 0.46, 0.35},
+	visual_size = {
+		x=0.55,
+		y=0.5,
+	},
+	sounds = table.merge (spider.sounds, {
+		base_pitch = 1.25,
+	}),
+	animation = table.merge (spider.animation, {
+		walk_speed = 40,
+	}),
+	dealt_effect = {
+		name = "poison",
+		level = 1,
+		dur_easy = 0,
+		dur = 7,
+		dur_hard = 15,
+	},
+})
+
+function cave_spider:on_spawn ()
+	-- Cave spiders cannot receive special status effects or spawn
+	-- as jockeys.
 end
-cave_spider.animation.walk_speed = 40
-cave_spider.sounds = table.copy(spider.sounds)
-cave_spider.sounds.base_pitch = 1.25
-cave_spider.dealt_effect = {
-	name = "poison",
-	level = 1,
-	dur_easy = 0,
-	dur = 7,
-	dur_hard = 15,
-}
-mcl_mobs.register_mob("mobs_mc:cave_spider", cave_spider)
 
-mcl_mobs.spawn_setup({
+mcl_mobs.register_mob ("mobs_mc:cave_spider", cave_spider)
+
+------------------------------------------------------------------------
+-- Spider spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.spawn_setup ({
 	name = "mobs_mc:spider",
 	type_of_spawning = "ground",
 	dimension = "overworld",
