@@ -304,13 +304,7 @@ function mob_class:mob_activate(staticdata, dtime)
 		self.base_selbox = self.initial_properties.selectionbox or self.base_colbox
 	end
 
-	if self.gotten == true
-	and self.gotten_texture then
-		self:set_textures (self.gottten_texture)
-	end
-
-	if self.gotten == true
-	and self.gotten_mesh then
+	if self.gotten == true and self.gotten_mesh then
 		self:set_properties({mesh = self.gotten_mesh})
 	end
 

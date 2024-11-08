@@ -1,6 +1,6 @@
 local S = minetest.get_translator("mobs_mc")
 local WOOL_REPLACE_RATE = 80
-local gotten_texture = { "blank.png", "mobs_mc_sheep.png" }
+local sheared_texture = { "blank.png", "mobs_mc_sheep.png" }
 
 local function unicolor_to_wool(unicolor_group)
 	local d = mcl_dyes.unicolor_to_dye(unicolor_group)
@@ -60,7 +60,6 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 	visual = "mesh",
 	mesh = "mobs_mc_sheepfur.b3d",
 	textures = { sheep_texture("unicolor_white") },
-	gotten_texture = gotten_texture,
 	color = "unicolor_white",
 	makes_footstep_sound = true,
 	movement_speed = 4.6,
@@ -169,7 +168,7 @@ mcl_mobs.register_mob("mobs_mc:sheep", {
 			pos.y = pos.y + 0.5
 			self.color = self.color or "unicolor_white"
 			minetest.add_item(pos, ItemStack(unicolor_to_wool(self.color).." "..math.random(1,3)))
-			self.base_texture = gotten_texture
+			self.base_texture = sheared_textures
 			self:set_textures (self.base_texture)
 			if not minetest.is_creative_enabled(clicker:get_player_name()) then
 				item:add_wear(mobs_mc.shears_wear)

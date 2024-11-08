@@ -4,8 +4,9 @@ local HORNY_TIME = 30*20
 local HORNY_AGAIN_TIME = 30*20 -- was 300 or 15*20
 local CHILD_GROW_TIME = 24000
 
-function mob_class:use_shears(new_textures, shears_stack)
+function mob_class:use_shears (new_textures, shears_stack)
 	if minetest.get_item_group(shears_stack:get_name(), "shears") > 0 then
+		self.base_texture = new_textures
 		self:set_textures (new_textures)
 		self.gotten = true
 		minetest.sound_play("mcl_tools_shears_cut", { pos = self.object:get_pos() }, true)
