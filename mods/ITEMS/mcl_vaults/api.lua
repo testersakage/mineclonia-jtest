@@ -121,7 +121,7 @@ minetest.register_entity("mcl_vaults:item_entity", {
 				self._timer = EJECTITEM_INTERVAL
 				local loot, preview = get_next_loot(self._pos)
 				if loot then
-					minetest.add_item(vector.offset(self._pos, 0, 0.5, 0), loot)
+					minetest.add_item(vector.offset(self._pos, 0, 0.8, 0), loot)
 					-- TODO: create particles
 				end
 				if preview then
