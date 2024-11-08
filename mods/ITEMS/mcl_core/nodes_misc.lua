@@ -208,10 +208,8 @@ minetest.register_node("mcl_core:realm_barrier", {
 
 
 --- Light blocks
---- TODO: make node only pointable when wielding it
 
 local light_block_pattern = "^mcl_core:light_(%d+)$"
-
 
 for i = 0, 14 do --minetest.LIGHT_MAX
 	minetest.register_node("mcl_core:light_" .. i, {
@@ -220,6 +218,8 @@ for i = 0, 14 do --minetest.LIGHT_MAX
 		_doc_items_usagehelp = S("When you hold a light in hand, you reveal all placed lights in a short distance around you."),
 		drawtype = "airlike",
 		paramtype = "light",
+		pointable = false,
+		pointabilities = { nodes = { ["group:light_block"] = true } },
 		walkable = false,
 		light_source = i,
 		drop = "",
