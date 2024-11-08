@@ -83,8 +83,7 @@ local dolphin = {
 function dolphin:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
 	if minetest.get_item_group (self.standing_in, "water") == 0
-		and (not mcl_weather.rain.raining
-		     or not mcl_weather.has_rain (self.object:get_pos ())) then
+		and not mcl_weather.is_exposed_to_rain (self.object:get_pos ()) then
 		self._moisture = self._moisture - dtime
 		if self._moisture <= 0 and self:check_timer ("desiccation", 1.0) then
 			self:damage_mob ("environment", 1.0)
