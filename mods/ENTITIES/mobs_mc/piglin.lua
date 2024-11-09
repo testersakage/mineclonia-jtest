@@ -1526,7 +1526,7 @@ function piglin:check_light (_, _, artificial_light, _)
 	return true, ""
 end
 
-function piglin:can_spawn (pos)
+function piglin.can_spawn (pos)
 	local block = minetest.get_node (vector.offset (pos, 0, -1, 0))
 	return block.name ~= "mcl_nether:nether_wart_block"
 end

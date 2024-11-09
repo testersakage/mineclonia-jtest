@@ -818,7 +818,7 @@ mob_class.gwp_penalties = {
 	WATER = 8.0,
 }
 
-local gwp_floortypes = {
+mob_class.gwp_floortypes = {
 	OPEN = "OPEN",
 	WATER = "OPEN",
 	LAVA = "OPEN",
@@ -956,6 +956,7 @@ local function gwp_basic_classify (pos)
 	-- end
 	return value
 end
+mcl_mobs.gwp_basic_classify = gwp_basic_classify
 
 local gwp_classify_node_1_scratch = vector.zero ()
 
@@ -971,7 +972,7 @@ local function gwp_classify_node_1 (self, pos)
 		pos_2.y = pos.y - 1
 		pos_2.z = pos.z
 		local class_2 = gwp_basic_classify (pos_2)
-		local floortype = gwp_floortypes[class_2]
+		local floortype = self.gwp_floortypes[class_2]
 
 		-- Otherwise, this is walkable.  Adjust its
 		-- class according to its surroundings.
@@ -2728,7 +2729,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:polar_bear" then
+				-- if self.name == "mobs_mc:strider" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else

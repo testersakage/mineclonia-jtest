@@ -824,6 +824,7 @@ local FLYING_BASE_FRICTION3	= math.pow (BASE_FRICTION * AIR_FRICTION, 3)
 local LIQUID_JUMP_THRESHOLD	= 0.4
 local LIQUID_JUMP_FORCE		= 0.8
 local LIQUID_JUMP_FORCE_ONESHOT	= 6.0
+local LAVA_JUMP_THRESHOLD	= 0.1
 
 local function scale_speed (speed, friction)
 	local f = BASE_FRICTION3 / (friction * friction * friction)
@@ -1004,12 +1005,28 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	local p
 	local h_scale, v_scale
 	local climbing = false
+	local always_enable_step_height = false
 
 	-- Note that mobs being controlled by a player should sink.
 	if self.floats == 1 and not self.driver and math.random (10) < 8 then
 		local depth = self._immersion_depth or 0
 		if depth > LIQUID_JUMP_THRESHOLD then
 			jumping = true
+		end
+	end
+
+	-- Note: this does not exist in Minecraft and is only meant to
+	-- approximate floating in liquids for striders.
+	if self.floats_on_lava and math.random (10) < 8 then
+		local ymin = self.collisionbox[2]
+		local height = self.collisionbox[5] - ymin
+		local depth = self:immersion_depth ("lava", self_pos, height) or 0
+		if depth > LAVA_JUMP_THRESHOLD then
+			jumping = true
+		elseif depth > 0 then
+			-- Enable this mob to step out of this liquid
+			-- pseudo-surface.
+			always_enable_step_height = true
 		end
 	end
 
@@ -1127,19 +1144,35 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			end
 		end
 	elseif standin.groups.lava then
-		local speed = LAVA_SPEED
-		local r, z = pow_by_step (LAVA_FRICTION, dtime), LAVA_FRICTION
-		h_scale = (1 - r) / (1 - z)
-		speed = speed * h_scale
+		if not self.floats_on_lava then
+			local speed = LAVA_SPEED
+			local r, z = pow_by_step (LAVA_FRICTION, dtime), LAVA_FRICTION
+			h_scale = (1 - r) / (1 - z)
+			speed = speed * h_scale
 
-		local fv = self:accelerate_relative (acc_dir, speed)
-		v = vector.multiply (v, r)
-		v_scale = h_scale
-		v.y = v.y + fall_speed * v_scale
-		if v.y < 0 then
-			v.y = v.y * gravity_drag
+			local fv = self:accelerate_relative (acc_dir, speed)
+			v = vector.multiply (v, r)
+			v_scale = h_scale
+			v.y = v.y + (fall_speed / 4.0) * v_scale
+			if v.y < 0 then
+				v.y = v.y * gravity_drag
+			end
+			v = vector.add (v, fv)
+		else
+			local speed = acc_speed
+			local r, z = pow_by_step (BASE_FRICTION, dtime), BASE_FRICTION
+			h_scale = (1 - r) / (1 - z)
+			speed = speed * h_scale
+
+			local fv = self:accelerate_relative (acc_dir, speed)
+			v.x = v.x * r
+			v.z = v.z * r
+
+			p = pow_by_step (WATER_DRAG, dtime)
+			v_scale = (1 - p) / (1 - WATER_DRAG)
+			v.y = v.y * p
+			v = vector.add (v, fv)
 		end
-		v = vector.add (v, fv)
 	else
 		-- If not standing on air, apply slippery to a base value of
 		-- 0.6.
@@ -1210,13 +1243,14 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 
 	if jumping then
 		if standin.groups.water or standin.groups.lava then
-			if self.floats == 1 then
+			if self.floats == 1 or self.floats_on_lava then
 				v.y = v.y + LIQUID_JUMP_FORCE * v_scale
 			else
 				v.y = v.y + LIQUID_JUMP_FORCE_ONESHOT
 			end
 		else
-			if touching_ground and (not self.jump_timer or self.jump_timer <= 0) then
+			if touching_ground
+				and (not self.jump_timer or self.jump_timer <= 0) then
 				local force = self:get_jump_force (moveresult)
 				v = self:jump_actual (v, force)
 				self.jump_timer = 0.2
@@ -1228,10 +1262,11 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- standing.  This might be slightly counter-intuitive, but it
 	-- enables jumping to function correctly when the mob is
 	-- accelerating forward.
-	if touching_ground and self._previously_floating then
+	local enable_step_height = touching_ground or always_enable_step_height
+	if enable_step_height and self._previously_floating then
 		self._previously_floating = false
 		self.object:set_properties ({stepheight = self._initial_step_height})
-	elseif not touching_ground and not self._previously_floating then
+	elseif not enable_step_height and not self._previously_floating then
 		self._previously_floating = true
 		self.object:set_properties ({stepheight = 0.0})
 	end
