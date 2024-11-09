@@ -46,7 +46,7 @@ function mcl_burning.get_touching_nodes(obj, nodenames, storage)
 		-- Prevent riders of striders from catching fire as a
 		-- result of the minetest server's unawareness of
 		-- attachment positions.
-		pos.y = pos.y + 0.4
+		pos.y = pos.y + 1.5
 	end
 	local minp, maxp = mcl_burning.get_collisionbox(obj, true, storage)
 	local nodes = minetest.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
