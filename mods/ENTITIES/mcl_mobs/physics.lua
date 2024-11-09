@@ -919,7 +919,78 @@ function mob_class:check_collision ()
 	end
 end
 
-function mob_class:motion_step (dtime, moveresult)
+local function box_intersection (box, other_box)
+	for index = 1, 3 do
+		if box[index] > other_box[index + 3]
+			or other_box[index] > box[index + 3] then
+			return false
+		end
+	end
+	return true
+end
+
+local function will_breach_water_1 (node, cbox)
+	local node_data = minetest.get_node (node)
+	local def = minetest.registered_nodes[node_data.name]
+
+	if not def.walkable and def.liquidtype == "none" then
+		return false
+	end
+
+	local boxes
+		= minetest.get_node_boxes ("collision_box", node, node_data)
+	for _, box in pairs (boxes) do
+		box[1] = box[1] + node.x
+		box[2] = box[2] + node.y
+		box[3] = box[3] + node.z
+		box[4] = box[4] + node.x
+		box[5] = box[5] + node.y
+		box[6] = box[6] + node.z
+
+		if box_intersection (box, cbox) then
+			return true
+		end
+	end
+	return false
+end
+
+local will_breach_water_scratch = vector.zero ()
+
+function mob_class:will_breach_water (self_pos, dx, dy, dz)
+	local cbox = table.copy (self.collisionbox)
+	cbox[1] = cbox[1] + self_pos.x + dx
+	cbox[2] = cbox[2] + self_pos.y + dy
+	cbox[3] = cbox[3] + self_pos.z + dz
+	cbox[4] = cbox[4] + self_pos.x + dx
+	cbox[5] = cbox[5] + self_pos.y + dy
+	cbox[6] = cbox[6] + self_pos.z + dz
+
+	-- Crude collision detection that does not take movement into
+	-- account.
+	local xmin = math.floor (cbox[1] + 0.5)
+	local ymin = math.floor (cbox[2] + 0.5) - 1
+	local zmin = math.floor (cbox[3] + 0.5)
+	local xmax = math.floor (cbox[4] + 0.5)
+	local ymax = math.floor (cbox[5] + 0.5) + 1
+	local zmax = math.floor (cbox[6] + 0.5)
+	local v = will_breach_water_scratch
+
+	for z = zmin, zmax do
+		for x = xmin, xmax do
+			for y = ymin, ymax do
+				v.x = x
+				v.y = y
+				v.z = z
+				if will_breach_water_1 (v, cbox) then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+function mob_class:motion_step (dtime, moveresult, self_pos)
 	if not moveresult then
 		return
 	end
@@ -991,6 +1062,7 @@ function mob_class:motion_step (dtime, moveresult)
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
 	if standin.groups.water then
+		local saved_vy = v.y
 		local water_friction = self.water_friction
 		if self._sprinting then
 			water_friction = SPRINTING_WATER_DRAG
@@ -1035,11 +1107,25 @@ function mob_class:motion_step (dtime, moveresult)
 			v.y = v.y * gravity_drag
 		end
 
-		if horiz_collision (moveresult) then
-			-- Climb water as if it were a ladder.
-			v.y = 3.0
-		end
 		v = vector.add (v, fv)
+
+		-- If colliding horizontally within water, detect
+		-- whether the result of this movement is vertically
+		-- within 0.6 nodes of a position clear of water and
+		-- collisions, and apply a force to this mob so as to
+		-- breach the water if so.
+		if horiz_collision (moveresult) then
+			local traveled = saved_vy * dtime
+			local diff_tick = v.y * 0.05
+			local dx = v.x * 0.05
+			local dy = diff_tick + 0.6 - traveled
+			local dz = v.z * 0.5
+			local will_breach_water
+				= self:will_breach_water (self_pos, dx, dy, dz)
+			if will_breach_water then
+				v.y = 6.0
+			end
+		end
 	elseif standin.groups.lava then
 		local speed = LAVA_SPEED
 		local r, z = pow_by_step (LAVA_FRICTION, dtime), LAVA_FRICTION
@@ -1160,7 +1246,7 @@ end
 -- Simplified `motion_step' for true (i.e., not birds or blazes)
 -- flying mobs unaffected by gravity (i.e., not ghasts).
 
-function mob_class:flying_step (dtime, moveresult)
+function mob_class:flying_step (dtime, moveresult, self_pos)
 	if not moveresult then
 		return
 	end
@@ -1217,7 +1303,7 @@ end
 
 local default_motion_step = mob_class.motion_step
 
-function mob_class:aquatic_step (dtime, moveresult)
+function mob_class:aquatic_step (dtime, moveresult, self_pos)
 	if not moveresult then
 		return
 	end
@@ -1251,7 +1337,7 @@ function mob_class:aquatic_step (dtime, moveresult)
 		self._previously_floating = true
 		self.object:set_properties ({stepheight = 0.0})
 	else
-		default_motion_step (self, dtime, moveresult)
+		default_motion_step (self, dtime, moveresult, self_pos)
 	end
 end
 
