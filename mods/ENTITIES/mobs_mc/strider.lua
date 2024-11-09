@@ -455,7 +455,7 @@ local old_baby_strider = table.merge (strider, {
 			"blank.png",
 		},
 	},
-	child = 1,
+	child = true,
 })
 
 function old_baby_strider:mob_activate (staticdata, dtime)
