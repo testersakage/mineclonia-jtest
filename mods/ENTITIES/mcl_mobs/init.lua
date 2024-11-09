@@ -63,7 +63,7 @@ mcl_mobs.mob_class = {
 	knock_back = true,
 	shoot_offset = 0,
 	floats = 1,
-	floats_on_lava = 0,
+	floats_on_lava = false,
 	water_friction = 0.6,
 	-- This is multiplied by water_friction as in Minecraft.
 	water_velocity = 0.4,
