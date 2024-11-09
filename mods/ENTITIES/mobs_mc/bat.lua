@@ -81,7 +81,7 @@ local function signum (number)
 		or (number == 0.0 and 0.0 or 1)
 end
 
-function bat:motion_step (dtime, moveresult)
+function bat:motion_step (dtime, moveresult, self_pos)
 	local self_pos = self.object:get_pos ()
 	local old_y = self_pos.y
 	local abovepos = {
@@ -165,7 +165,7 @@ function bat:motion_step (dtime, moveresult)
 		self._resting = true
 	end
 
-	mcl_mobs.mob_class.motion_step (dtime, moveresult)
+	mcl_mobs.mob_class.motion_step (dtime, moveresult, self_pos)
 	return
 end
 

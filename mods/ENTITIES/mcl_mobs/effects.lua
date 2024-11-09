@@ -493,6 +493,11 @@ function mob_class:rotation_info ()
 				remaining_turn = 0,
 				amt_per_second = 0,
 			},
+			roll = self._need_roll and {
+				current = self.object:get_rotation ().z,
+				remaining_turn = 0,
+				amt_per_second = 0,
+			},
 		}
 	end
 	return self._rotation_info
@@ -510,8 +515,10 @@ function mob_class:rotate_axis (axis, target)
 			current_rot
 				= norm_radians (current_rot + self.rotate)
 		end
-	else
+	elseif axis == "pitch" then
 		current_rot = self.object:get_rotation ().x
+	else
+		current_rot = self.object:get_rotation ().z
 	end
 
 	rotation_info.current = current_rot
@@ -540,29 +547,36 @@ function mob_class:rotate_gradually (info, axis, dtime)
 	else
 		if axis == "yaw" and self._target_yaw then
 			info.current = self._target_yaw
-		elseif self._target_pitch then
+		elseif axis == "pitch" and self._target_pitch then
 			info.current = self._target_pitch
+		elseif axis == "roll" and self._target_roll then
+			info.current = self._target_roll
 		end
 		return info.current
 	end
 end
 
-function mob_class:get_roll ()
-	return self.object:get_rotation ().z
+function mob_class:apply_roll (roll)
+	return roll
 end
 
 function mob_class:rotate_step (dtime)
-	local yaw, pitch
+	local yaw, pitch, roll
 	local info = self:rotation_info ()
 	yaw = self:rotate_gradually (info, "yaw", dtime)
 	pitch = self:rotate_gradually (info, "pitch", dtime)
+	if self._need_roll then
+		roll = self:rotate_gradually (info, "roll", dtime)
+	else
+		roll = self:get_roll ()
+	end
 	if self.shaking then
 		yaw = yaw + (math.random() * 1 - 0.5) * dtime
 	end
 	self.object:set_rotation ({
 			x = pitch,
 			y = yaw - self.rotate,
-			z = self.dead and self:get_roll () or 0,
+			z = self:apply_roll (roll),
 	})
 end
 
@@ -585,6 +599,21 @@ function mob_class:get_pitch ()
 	return self._target_pitch or self.object:get_rotation ().x
 end
 
+function mob_class:get_roll ()
+	if self._need_roll and self._target_roll then
+		return self._target_roll
+	end
+	return self.object:get_rotation ().z
+end
+
+function mob_class:set_roll (roll)
+	if self._need_roll then
+		self:rotate_axis ("roll", roll)
+		self._target_roll = roll
+		return roll
+	end
+	return 0
+end
 
 ----------------------------------------------------------------------------------
 -- Invisibility.  This invisibility exempts attached objects and armor
