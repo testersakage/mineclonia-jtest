@@ -418,10 +418,8 @@ strider.gwp_penalties = table.merge (mob_class.gwp_penalties, {
 ------------------------------------------------------------------------
 
 local spawn_nodes = {
-	{
-		"mcl_nether:nether_lava_source",
-		"mcl_nether:nether_lava_flowing",
-	},
+	"mcl_nether:nether_lava_source",
+	"mcl_nether:nether_lava_flowing",
 }
 
 function strider.can_spawn (pos)
