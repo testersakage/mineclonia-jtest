@@ -108,8 +108,13 @@ mcl_player.register_globalstep_slow(function(player)
 end)
 
 function mcl_enchanting.depth_strider_level (mob)
-	-- TODO: depth strider for mobs.
-	return 0
+	if not mob.armor_list or mob.armor_list.feet == "" then
+		return 0
+	end
+
+	local stack = ItemStack (mob.armor_list.feet)
+	return stack:is_empty () and 0
+		or mcl_enchanting.get_enchantment (stack, "depth_strider")
 end
 
 -- implemented via on_enchant

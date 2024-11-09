@@ -149,9 +149,19 @@ function mob_class:tick_breeding ()
 		if self.hornytimer >= CHILD_GROW_TIME then
 			self.child = false
 			self.hornytimer = 0
+			local visual_size = self.base_size
+			if self.jockey_vehicle
+				and self.jockey_vehicle:is_valid () then
+				local props = self.jockey_vehicle:get_properties ()
+				local vehicle_size = props.visual_size
+				visual_size = {
+					x = visual_size.x / vehicle_size.x,
+					y = visual_size.y / vehicle_size.y,
+				}
+			end
 			self:set_properties({
 				mesh = self.base_mesh,
-				visual_size = self.base_size,
+				visual_size = visual_size,
 				collisionbox = self.base_colbox,
 				selectionbox = self.base_selbox,
 			})
