@@ -472,14 +472,14 @@ function mob_class:on_step(dtime, moveresult)
 			self:halt_in_tracks ()
 		end
 		self:rotate_step (dtime)
-		self:motion_step (dtime, moveresult)
+		self:motion_step (dtime, moveresult, pos)
 		return
 	end
 
 	if not should_drive then
 		self:navigation_step (dtime, moveresult)
 		self:movement_step (dtime, moveresult)
-		self:motion_step (dtime, moveresult)
+		self:motion_step (dtime, moveresult, pos)
 	else
 		self:drive ("walk", "stand", false, dtime, moveresult)
 	end

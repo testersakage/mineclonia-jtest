@@ -177,6 +177,7 @@ mcl_mobs.mob_class = {
 	_sprinting = false,
 	_crouching = false,
 	_dominant_in_jockeys = true,
+	_need_roll = false,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

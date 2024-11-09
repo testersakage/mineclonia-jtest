@@ -157,8 +157,8 @@ function guardian:mob_activate (staticdata, dtime)
 	self._previous_eye_diff = nil
 end
 
-function guardian:motion_step (dtime, moveresult)
-	mob_class.aquatic_step (self, dtime, moveresult)
+function guardian:motion_step (dtime, moveresult, self_pos)
+	mob_class.aquatic_step (self, dtime, moveresult, self_pos)
 	self._acc_seed = self._acc_seed + dtime
 end
 

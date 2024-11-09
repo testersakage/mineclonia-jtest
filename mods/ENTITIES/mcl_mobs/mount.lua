@@ -173,7 +173,7 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 		return
 	end
 
-	self:motion_step (dtime, moveresult)
+	self:motion_step (dtime, moveresult, pos)
 	-- This function is called after motion_step to apply forces
 	-- (e.g. velocity changes for jumping) that must not be
 	-- attenuated by motion_step.
