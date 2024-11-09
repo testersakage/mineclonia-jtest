@@ -105,21 +105,129 @@ local function get_node_power(pos, include_wire)
 	return weak, strong
 end
 
+-- pre calculated table for the get_node_power_2 function
+-- each element corresponds to a direction
+-- dir - the direction
+-- always_check - the offset position of node to always check for power
+-- conditional_checks - offset positions of nodes to check only if they weren't checked already:
+-- * the keys are indexes in get_node_power_2_tab table
+-- * the values are the offset positions to check
+-- * if the direction specified by the key was already checked then the position wont be checked again
+local get_node_power_2_tab =
+{
+	{dir = vector.new(0, 0, 1), always_check = vector.new(0, 0, 2), conditional_checks =
+	{
+		[5] = vector.new(0, 1, 1),
+		[6] = vector.new(0, -1, 1),
+		[3] = vector.new(1, 0, 1),
+		[4] = vector.new(-1, 0, 1),
+	}},
+	{dir = vector.new(0, 0, -1), always_check = vector.new(0, 0, -2), conditional_checks =
+	{
+		[5] = vector.new(0, 1, -1),
+		[6] = vector.new(0, -1, -1),
+		[3] = vector.new(1, 0, -1),
+		[4] = vector.new(-1, 0, -1),
+	}},
+	{dir = vector.new(1, 0, 0), always_check = vector.new(2, 0, 0), conditional_checks =
+	{
+		[1] = vector.new(1, 0, 1),
+		[2] = vector.new(1, 0, -1),
+		[5] = vector.new(1, 1, 0),
+		[6] = vector.new(1, -1, 0),
+	}},
+	{dir = vector.new(-1, 0, 0), always_check = vector.new(-2, 0, 0), conditional_checks =
+	{
+		[1] = vector.new(-1, 0, 1),
+		[2] = vector.new(-1, 0, -1),
+		[5] = vector.new(-1, 1, 0),
+		[6] = vector.new(-1, -1, 0),
+	}},
+	{dir = vector.new(0, 1, 0), always_check = vector.new(0, 2, 0), conditional_checks =
+	{
+		[1] = vector.new(0, 1, 1),
+		[2] = vector.new(0, 1, -1),
+		[3] = vector.new(1, 1, 0),
+		[4] = vector.new(-1, 1, 0),
+	}},
+	{dir = vector.new(0, -1, 0), always_check = vector.new(0, -2, 0), conditional_checks =
+	{
+		[1] = vector.new(0, -1, 1),
+		[2] = vector.new(0, -1, -1),
+		[3] = vector.new(1, -1, 0),
+		[4] = vector.new(-1, -1, 0),
+	}},
+}
+
 -- Get strong power from neighbours (including opaque nodes) at pos.
 local function get_node_power_2(pos)
-	local max = get_node_power(pos)
-	for _, dir in pairs(sixdirs) do
-		local pos2 = pos:add(dir)
+	-- core.debug("INVOKED!", dump(pos))
+	local power = 0
+	-- all these false values correspond to each index in get_node_power_2_tab table
+	local checked_directions = {false, false, false, false, false, false}
+
+
+	local function get_node_power(node, dir, include_weak)
+		local power2, is_strong = get_power_tab[node.name](node, -dir)
+
+		-- core.debug("GOT POWER", power2)
+
+		if (is_strong or include_weak) and power2 > power then
+			power = power2
+		end
+
+		return power2
+	end
+
+	for i, entry in pairs(get_node_power_2_tab) do
+		local pos2 = pos:add(entry.dir)
 		local node2 = minetest.get_node(pos2)
 
-		if opaque_tab[node2.name] then
-			-- Only strong power will go through opaque nodes.
-			local _, power2 = get_node_power(pos2)
-			max = math.max(max, power2)
+		-- core.debug("DIR", tostring(entry.dir))
+		if get_power_tab[node2.name] then
+				-- core.debug("DIRECT", dump(node2), dump(entry.dir))
+				get_node_power(node2, entry.dir, true)
+				if power == 15 then
+					return power
+				end
+		elseif opaque_tab[node2.name] then
+			-- core.debug("OPAQUE")
+			checked_directions[i] = true
+			local always_check_node = minetest.get_node(pos + entry.always_check)
+
+			-- core.debug("ALWAYS CHECK", dump(always_check_node), entry.always_check, tostring(entry.dir))
+			if get_power_tab[always_check_node.name] then
+				get_node_power(always_check_node, entry.dir)
+
+				if power == 15 then
+					return power
+				end
+			end
+
+			for key, offset_pos in pairs(entry.conditional_checks) do
+				if not checked_directions[key] then
+					-- if not already checked
+					local node3 = minetest.get_node(offset_pos + pos)
+					-- core.debug(tostring(offset_pos), get_node_power_2_tab[key].dir, dump(node3))
+
+					if get_power_tab[node3.name] then
+						local power3 = get_node_power(node3, get_node_power_2_tab[key].dir)
+
+						if power3 == 15 then
+							return power
+						else
+							-- hack
+							checked_directions[i] = false
+						end
+					end
+				end
+			end
+
 		end
 	end
 
-	return max
+	-- core.debug("END", power)
+	return power
 end
 
 -- Propagate redstone power through wires. 'clear_queue' is a queue of events
