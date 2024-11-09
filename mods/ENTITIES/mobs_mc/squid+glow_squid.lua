@@ -178,6 +178,7 @@ function squid:set_body_roll (roll)
 		self.object:set_bone_override ("root", {
 			rotation = {
 				vec = vector.new (math.pi / 2, 0, math.pi + roll),
+				interpolate = 0.1,
 				absolute = true,
 			},
 		})
@@ -196,7 +197,7 @@ function squid:motion_step (dtime, moveresult, self_pos)
 	local movement = self._tentacle_movement
 	local speed = self._tentacle_speed
 
-	movement = movement + speed
+	movement = movement + speed * (dtime / 0.05)
 
 	if movement >= TWO_PI then
 		movement = 0
@@ -208,12 +209,13 @@ function squid:motion_step (dtime, moveresult, self_pos)
 		self.object:set_animation ({
 			x = 0,
 			y = 40,
-		}, 40 / anim_speed, 0.1, false)
+		}, 40 / anim_speed, 0, false)
 	end
 
 	local f = dtime / 0.05
 	if minetest.get_item_group (self.standing_in, "water") > 0 then
 		local progress = movement / math.pi
+		local r_scale = dtime
 		self._was_touching_water = true
 		if progress < 1.0 then
 			if progress > 0.75 then
@@ -221,12 +223,14 @@ function squid:motion_step (dtime, moveresult, self_pos)
 				self._rotate_speed = 1.0
 			else
 				local f = pow_by_step (0.8, dtime)
+				r_scale = (1 - f) / (1 - 0.8)
 				self._rotate_speed
 					= self._rotate_speed * f
 			end
 		else
 			local f_speed = pow_by_step (0.9, dtime)
-			local f_rotate = pow_by_step (0.9, dtime)
+			local f_rotate = pow_by_step (0.99, dtime)
+			r_scale = (1 - f_rotate) / (1 - 0.99)
 			self._squid_speed
 				= self._squid_speed * f_speed
 			self._rotate_speed
@@ -258,7 +262,7 @@ function squid:motion_step (dtime, moveresult, self_pos)
 		-- The value computed is a value in degrees, not
 		-- radians, in which pi only serves as the number of
 		-- degrees by which to rotate per rotation cycle.
-		local target = roll + math.rad (math.pi * self._rotate_speed * 1.5)
+		local target = roll + math.rad (math.pi * self._rotate_speed * 1.5 * r_scale)
 		local norm = mcl_util.norm_radians (target)
 		self:set_body_roll (norm)
 
@@ -309,7 +313,7 @@ end
 ------------------------------------------------------------------------
 
 local function squid_move_randomly (self, self_pos, dtime)
-	if pr:next (1, math.round (50 * 0.05 / dtime)) == 1
+	if pr:next (1, math.round (50 * (0.05 / dtime))) == 1
 		or not self._was_touching_water
 		or vector.length (self._propel_dir) == 0 then
 		local r1 = pr:next (0, 2147483647) * r * TWO_PI
