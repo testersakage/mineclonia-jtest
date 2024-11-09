@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 08:07+0000\n"
+"PO-Revision-Date: 2024-11-10 00:07+0000\n"
 "Last-Translator: phileas <phileas@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_farming/hu/>\n"
@@ -225,7 +225,7 @@ msgid "A mature pumpkin stem attempts to grow a pumpkin at one of its four adjac
 msgstr ""
 
 msgid "Faceless Pumpkin"
-msgstr "Faragatlan Tök"
+msgstr "Tök"
 
 msgid "A faceless pumpkin is a decorative block. It can be carved with shears to obtain pumpkin seeds."
 msgstr "A faragatlan tök egy díszítő elem. Nyíró ollóval faragható, így hozzá lehet jutni a magokhoz."
@@ -234,7 +234,7 @@ msgid "To carve a face into the pumpkin, use the shears on the side you want to 
 msgstr ""
 
 msgid "Pumpkin"
-msgstr "Tök"
+msgstr "Tökfej"
 
 msgid "A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds."
 msgstr ""
