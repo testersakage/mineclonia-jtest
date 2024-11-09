@@ -949,6 +949,10 @@ function horse:child_properties (p1, p2, min, max)
 	return t8
 end
 
+function horse:on_grown ()
+	self:init_attachment_position ()
+end
+
 function horse:on_breed (parent1, parent2)
 	local pos = parent1.object:get_pos()
 	local child = mcl_mobs.spawn_child(pos, parent1.name)

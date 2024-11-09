@@ -174,13 +174,10 @@ function pig:on_rightclick (clicker)
 
 	elseif not self.driver and self.saddle == "yes" then
 		-- Initialize attachment properties.
-		if not self.v3 then
-			local vsize = self.object:get_properties ().visual_size
-			self.driver_attach_at = {x = 0.0, y = 6.5, z = -3.75}
-			self.driver_eye_offset = {x = 0, y = 3, z = 0}
-			self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
-			self.v3 = 0
-		end
+		local vsize = self.object:get_properties ().visual_size
+		self.driver_attach_at = {x = 0.0, y = 6.5, z = -3.75}
+		self.driver_eye_offset = {x = 0, y = 3, z = 0}
+		self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
 
 		-- Ride pig if it has a saddle
 		self:attach (clicker)
