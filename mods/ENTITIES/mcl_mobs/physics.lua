@@ -622,8 +622,6 @@ function mob_class:env_damage (_, pos)
 	if self:do_env_damage() then
 		return true
 	end
-	-- node replace check (cow eats grass etc.)
-	self:replace(pos)
 end
 
 function mob_class:damage_mob(reason, damage)
