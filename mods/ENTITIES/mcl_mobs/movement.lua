@@ -1,5 +1,4 @@
 local mob_class = mcl_mobs.mob_class
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 
 function mob_class:target_visible(origin, target)
 	-- This cache is flushed on each call to on_step.
