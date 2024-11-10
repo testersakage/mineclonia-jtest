@@ -826,6 +826,9 @@ local LIQUID_JUMP_FORCE		= 0.8
 local LIQUID_JUMP_FORCE_ONESHOT	= 6.0
 local LAVA_JUMP_THRESHOLD	= 0.1
 
+mcl_mobs.AIR_FRICTION = AIR_FRICTION
+mcl_mobs.LIQUID_JUMP_FORCE = 0.1
+
 local function scale_speed (speed, friction)
 	local f = BASE_FRICTION3 / (friction * friction * friction)
 	return speed * f
@@ -1309,7 +1312,7 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 		local slippery = standon.groups.slippery
 		local friction
 
-		if slippery and slippery > 0 then
+		if touching_ground and slippery and slippery > 0 then
 			friction = BASE_SLIPPERY * AIR_FRICTION
 			speed = scale_speed_flying (FLYING_GROUND_SPEED, friction)
 		elseif touching_ground then

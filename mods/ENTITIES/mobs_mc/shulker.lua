@@ -791,6 +791,8 @@ function shulker:receive_damage (mcl_reason, damage)
 	return false
 end
 
+local scale_chance = mcl_mobs.scale_chance
+
 local function shulker_peek (self, self_pos, dtime)
 	if self._peek_time then
 		self._peek_time = self._peek_time - dtime
@@ -800,7 +802,7 @@ local function shulker_peek (self, self_pos, dtime)
 			return false
 		end
 		return true
-	elseif pr:next (1, math.round (40 * 0.05 / dtime)) == 1 then
+	elseif pr:next (1, scale_chance (40, dtime)) == 1 then
 		self._peek_time = 1.0 + pr:next (2, 3) / 20
 		self:peek ()
 		return true
