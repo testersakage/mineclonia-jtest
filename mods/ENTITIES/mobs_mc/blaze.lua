@@ -96,6 +96,7 @@ local blaze = {
 	fire_damage_resistant = true,
 	check_light = check_light,
 	tracking_distance = 48.0,
+	_projectile_gravity = false,
 }
 
 blaze.gwp_penalties = table.copy (mob_class.gwp_penalties)

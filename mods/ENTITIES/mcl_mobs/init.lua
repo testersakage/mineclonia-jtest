@@ -62,6 +62,7 @@ mcl_mobs.mob_class = {
 	passive = false,
 	knock_back = true,
 	shoot_offset = 0,
+	_projectile_gravity = true,
 	floats = 1,
 	floats_on_lava = false,
 	water_friction = 0.6,
@@ -90,9 +91,6 @@ mcl_mobs.mob_class = {
 	ranged_interval_min = 1.0,
 	ranged_interval_max = 1.0,
 	_crossbow_backoff_threshold = nil,
-	dogshoot_count = 0,
-	dogshoot_count_max = 5,
-	dogshoot_count2_max = 5,
 	attack_animals = false,
 	attack_npcs = false,
 	esp = false,
@@ -382,7 +380,6 @@ function mcl_mobs.register_mob(name, def)
 		head_eye_height = eye_height,
 		hp_min = def.hp_min,
 		on_rightclick = create_mob_on_rightclick(def.on_rightclick),
-		dogshoot_count2_max = def.dogshoot_count2_max or (def.dogshoot_count_max or 5),
 		gwp_penalties = def.can_open_doors
 			and table.merge (gwp_penalties, {
 						 DOOR_WOOD_CLOSED = 0.0,

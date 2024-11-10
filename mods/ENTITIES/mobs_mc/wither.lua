@@ -53,7 +53,6 @@ local wither_def = {
 	_airborne_agile = true,
 	sounds = {
 		shoot_attack = "mobs_fireball",
-		-- TODO: sounds
 		distance = 60,
 	},
 	jump_height = 10,
@@ -72,8 +71,8 @@ local wither_def = {
 	attack_type = "null",
 	arrow = "mobs_mc:wither_skull",
 	reach = 5,
-	shoot_interval = 1,
-	shoot_offset = -0.5,
+	shoot_offset = 0.3,
+	_projectile_gravity = false,
 	animation = {
 		stand_speed = 12,
 		stand_start = 20, stand_end = 40,
