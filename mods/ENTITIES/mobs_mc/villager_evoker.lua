@@ -60,6 +60,8 @@ mcl_mobs.register_mob("mobs_mc:evoker", {
 				-- Mark vexes as summoned and start their life clock (they take damage it reaches 0)
 				ent._summoned = true
 				ent._lifetimer = pr:next(33, 108)
+				ent._summoned_by = self.object
+				-- TODO: add restriction.
 
 				table.insert(spawned_vexes[self],ent)
 			end
