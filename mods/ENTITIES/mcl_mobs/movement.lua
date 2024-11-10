@@ -1118,6 +1118,10 @@ function mob_class:replace_activity (activity_name, uninterruptible)
 	self._can_interrupt_activity = not uninterruptible
 end
 
+function mcl_mobs.scale_chance (frequency, dtime)
+	return math.max (2, math.round (frequency * (0.05 / dtime)))
+end
+
 local function run_ai_1 (self, self_pos, dtime, moveresult)
 	local active, uninterruptible
 	for _, fn in ipairs (self.ai_functions) do

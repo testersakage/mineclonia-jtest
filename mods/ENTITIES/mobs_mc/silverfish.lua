@@ -119,11 +119,13 @@ local replacements = {
 	["mcl_core:stonebrickcarved"] = "mcl_monster_eggs:monster_egg_stonebrickcarved",
 }
 
+local scale_chance = mcl_mobs.scale_chance
+
 local function silverfish_return_to_block (self, self_pos, dtime)
 	if not mob_griefing then
 		return false
 	end
-	local chance = 10 * 0.05 / dtime
+	local chance = scale_chance (50, dtime)
 	if pr:next (1, chance) == 1 then
 		local dir = directions[pr:next (1, #directions)]
 		local node_pos = mcl_util.get_nodepos (self_pos)

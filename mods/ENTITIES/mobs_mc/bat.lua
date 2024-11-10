@@ -1,6 +1,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator("mobs_mc")
+local mob_class = mcl_mobs.mob_class
 
 local function check_light(_, _, artificial_light, _)
 	local date = os.date("*t")
@@ -27,6 +28,7 @@ local bat = {
 	passive = true,
 	hp_min = 6,
 	hp_max = 6,
+	rotate = 180,
 	head_eye_height = 0.45,
 	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.89, 0.25},
 	visual = "mesh",
@@ -42,7 +44,6 @@ local bat = {
 		distance = 16,
 	},
 	movement_speed = 14.0,
-	-- TODO: Hang upside down
 	animation = {
 		stand_speed = 80,
 		stand_start = 0,
@@ -70,6 +71,10 @@ local bat = {
 	gravity_drag = 0.6,
 }
 
+------------------------------------------------------------------------
+-- Bat movement and "AI".
+------------------------------------------------------------------------
+
 local function is_walkable (node)
 	local node = minetest.get_node (node)
 	local def = minetest.registered_nodes[node.name]
@@ -81,8 +86,10 @@ local function signum (number)
 		or (number == 0.0 and 0.0 or 1)
 end
 
+local scale_chance = mcl_mobs.scale_chance
+
 function bat:motion_step (dtime, moveresult, self_pos)
-	local self_pos = self.object:get_pos ()
+	mob_class.motion_step (self, dtime, moveresult, self_pos)
 	local old_y = self_pos.y
 	local abovepos = {
 		x = math.floor (self_pos.x + 0.5),
@@ -117,7 +124,7 @@ function bat:motion_step (dtime, moveresult, self_pos)
 			})
 			self.object:set_velocity (vector.zero ())
 			-- Rotate randomly.
-			if math.random (math.round (200 * 0.05 / dtime)) == 1 then
+			if math.random (scale_chance (200, dtime)) == 1 then
 				self:set_yaw (math.random () * math.pi * 2)
 			end
 			return
@@ -150,22 +157,30 @@ function bat:motion_step (dtime, moveresult, self_pos)
 	local dx = target_pos.x - self_pos.x
 	local dy = target_pos.y - self_pos.y
 	local dz = target_pos.z - self_pos.z
-	local x_mod = (signum (dx) * 10 - v.x) * mcl_mobs.pow_by_step (0.1, dtime)
-	local y_mod = (signum (dy) * 14 - v.y) * mcl_mobs.pow_by_step (0.1, dtime)
-	local z_mod = (signum (dz) * 10 - v.z) * mcl_mobs.pow_by_step (0.1, dtime)
+	local x_mod = (signum (dx) * 10 - v.x)
+		* mcl_mobs.pow_by_step (0.1, dtime)
+	local y_mod = (signum (dy) * 18 - v.y)
+		* mcl_mobs.pow_by_step (0.1, dtime)
+	local z_mod = (signum (dz) * 10 - v.z)
+		* mcl_mobs.pow_by_step (0.1, dtime)
 	v.x = v.x + x_mod
+
+	-- motion_step will apply gravity, but it should not take
+	-- effect if this mob is colliding w/ the ground.
+	if moveresult.touching_ground
+		or moveresult.standing_on_object then
+		v.y = 0
+	end
 	v.y = v.y + y_mod
 	v.z = v.z + z_mod
 	self.object:set_velocity (v)
 	local yaw = math.atan2 (v.z, v.x) - math.pi / 2
 	self:set_yaw (yaw)
 
-	if math.random (math.round (100 * 0.05 / dtime)) == 1
+	if math.random (scale_chance (100, dtime)) == 1
 		and is_walkable (abovepos) then
 		self._resting = true
 	end
-
-	mcl_mobs.mob_class.motion_step (dtime, moveresult, self_pos)
 	return
 end
 
@@ -175,8 +190,9 @@ end
 
 mcl_mobs.register_mob ("mobs_mc:bat", bat)
 
-
--- Spawning
+------------------------------------------------------------------------
+-- Bat spawning.
+------------------------------------------------------------------------
 
 --[[ If the game has been launched between the 20th of October and the 3rd of November system time,
 -- the maximum spawn light level is increased. ]]
