@@ -416,14 +416,14 @@ function mob_class:on_step(dtime, moveresult)
 
 	self:update_tag()
 
-	-- Objects which are attached don't receive moveresults.
-	-- Create a placeholder object to prevent crashes further
-	-- down the line.
+	-- Objects which are attached and those which are not physical
+	-- don't receive moveresults.  Create a placeholder object to
+	-- prevent crashes further down the line.
 	if not moveresult then
 		moveresult = {
 			touching_ground = false,
 			collides = false,
-			standing_on_object = true,
+			standing_on_object = false,
 			collisions = { },
 		}
 	end

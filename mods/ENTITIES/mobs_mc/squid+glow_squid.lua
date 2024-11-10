@@ -312,8 +312,10 @@ end
 -- Squid "AI".
 ------------------------------------------------------------------------
 
+local scale_chance = mcl_mobs.scale_chance
+
 local function squid_move_randomly (self, self_pos, dtime)
-	if pr:next (1, math.round (50 * (0.05 / dtime))) == 1
+	if pr:next (1, scale_chance (50, dtime)) == 1
 		or not self._was_touching_water
 		or vector.length (self._propel_dir) == 0 then
 		local r1 = pr:next (0, 2147483647) * r * TWO_PI

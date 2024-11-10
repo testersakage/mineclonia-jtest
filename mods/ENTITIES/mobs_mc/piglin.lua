@@ -1344,6 +1344,8 @@ local function baby_piglin_mount_baby_hoglin (self, self_pos, dtime)
 	end
 end
 
+local scale_chance = mcl_mobs.scale_chance
+
 local function piglin_interact_with (self, self_pos, dtime)
 	if self._interacting_with then
 		local object = self._interacting_with
@@ -1365,7 +1367,7 @@ local function piglin_interact_with (self, self_pos, dtime)
 		end
 		return true
 	elseif self.ai_idle_time >= 5
-		and pr:next (1, math.round (60 * 0.05 / dtime)) == 1 then
+		and pr:next (1, scale_chance (60, dtime)) == 1 then
 		for _, object in ipairs (self._nearby_adults) do
 			if object ~= self.object and object:is_valid () then
 				local pos = object:get_pos ()
