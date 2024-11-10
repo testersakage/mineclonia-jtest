@@ -219,7 +219,7 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	pace_bonus = 0.6,
 	ranged_attack_radius = 7,
 	_crossbow_backoff_threshold = 3.0,
-	shoot_offset = 1.0,
+	shoot_offset = 0.5,
 	-- ESP is handled in `attack_custom' and `should_continue_to_attack'.
 	esp = true,
 	_time_to_ride_start = 0,

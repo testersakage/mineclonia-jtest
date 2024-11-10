@@ -163,7 +163,7 @@ mcl_mobs.register_mob("mobs_mc:witch", {
 	attack_type = "ranged",
 	ranged_interval_min = 3.0,
 	ranged_interval_max = 3.0,
-	shoot_offset = 1,
+	shoot_offset = 0.5,
 	shooter_avoid_enemy = true,
 	strafes = true,
 	_shoot_while_strafing = false,
