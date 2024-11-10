@@ -660,47 +660,42 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 end
 
 function mob_class:discharge_ranged (self_pos, target_pos)
-	local p = vector.offset (target_pos, 0, -0.5, 0)
-	local s = vector.offset (self_pos, 0, 0.5, 0)
-	local vec = {
-		x = p.x - s.x,
-		y = p.y - s.y,
-		z = p.z - s.z
-	}
+	local p = target_pos
+	local shoot_offset
+		= (self.collisionbox[2] + self.collisionbox[5]) / 2
+			+ self.shoot_offset
+	local s = vector.offset (self_pos, 0, shoot_offset, 0)
+	local vec = vector.subtract (p, s)
 
 	self:mob_sound ("shoot_attack")
 	-- Shoot arrow
 	if minetest.registered_entities[self.arrow] or self.shoot_arrow then
-		s.y = s.y + (self.collisionbox[2] + self.collisionbox[5]) / 2
-		local arrow
-		if not self.shoot_arrow then
+		if self._projectile_gravity then
+			-- Offset by distance.
+			vec.y = vec.y + 0.12 * vector.length (vec)
+		end
+
+		vec = vector.normalize (vec)
+
+		if self.shoot_arrow then
+			self:shoot_arrow (s, vec)
+		else
+			local arrow = minetest.add_entity (s, self.arrow)
 			self.firing = true
 			minetest.after(1, function(self)
 					       self.firing = false
 			end, self)
-			arrow = minetest.add_entity(s, self.arrow)
 			local ent = arrow:get_luaentity()
 			ent.switch = 1
 			ent.owner_id = tostring(self.object) -- add unique owner id to arrow
 
 			-- important for mcl_shields
+			arrow:set_velocity (vector.multiply (vec, ent.velocity))
 			ent._shooter = self.object
 			ent._saved_shooter_pos = self.object:get_pos()
 			if ent.homing then
 				ent._target = self.attack
 			end
-		end
-
-		-- Offset by distance.
-		vec.y = vec.y + 0.12 * vector.length (vec)
-
-		if self.shoot_arrow then
-			vec = vector.normalize (vec)
-			arrow = self:shoot_arrow (s, vec)
-		end
-
-		if arrow then
-			arrow:set_velocity(vec)
 		end
 	end
 end
@@ -762,6 +757,33 @@ function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 	end
 end
 
+function mob_class:load_crossbow ()
+	local loaded = ItemStack (self._wielditem)
+	local name = "mcl_bows:crossbow_loaded"
+	if loaded:get_name () == "mcl_bows:crossbow_enchanted" then
+		name = "mcl_bows:crossbow_loaded_enchanted"
+	end
+	loaded:set_name (name)
+	self:set_wielditem (loaded)
+end
+
+function mob_class:unload_crossbow ()
+	local loaded = ItemStack (self._wielditem)
+	local name = "mcl_bows:crossbow"
+	if loaded:get_name () == "mcl_bows:crossbow_loaded_enchanted" then
+		name = "mcl_bows:crossbow_enchanted"
+	end
+	loaded:set_name (name)
+	self:set_wielditem (loaded)
+end
+
+function mob_class:is_crossbow_loaded ()
+	local loaded = ItemStack (self._wielditem)
+	local name = loaded:get_name ()
+	return name == "mcl_bows:crossbow_loaded"
+		or name == "mcl_bows:crossbow_loaded_enchanted"
+end
+
 function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		self._vistime = 0
@@ -770,6 +792,11 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 		-- 0: uncharged, 1: charging, 2: charged, 3: ready to attack.
 		self._crossbow_state = 0
 		self.attacking = true
+
+		if self:is_crossbow_loaded () then
+			self._crossbow_state = 2
+			self._shoot_delay = 1 + math.random (0, 20) * 0.05
+		end
 	end
 
 	local vistime = self._vistime
@@ -825,7 +852,7 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 		else
 			if self._using_wielditem
 				>= mcl_bows.CROSSBOW_CHARGE_TIME_FULL then
-				self:release_wielditem ()
+				self:load_crossbow ()
 				self._crossbow_state = 2
 				self._shoot_delay = 1 + math.random (0, 20) * 0.05
 			end
@@ -837,6 +864,7 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 		end
 	elseif self._crossbow_state == 3 and line_of_sight then
 		self._crossbow_state = 0
+		self:unload_crossbow ()
 		self:discharge_ranged (self_pos, target_pos)
 	end
 

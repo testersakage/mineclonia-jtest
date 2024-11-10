@@ -60,7 +60,7 @@ local snow_golem = {
 	attack_type = "ranged",
 	arrow = "mcl_throwing:snowball_entity",
 	ranged_attack_radius = 10.0,
-	shoot_offset = 1,
+	shoot_offset = 0.5,
 	pursuit_bonus = 1.25,
 	animation = {
 		stand_start = 20, stand_end = 40, stand_speed = 25,
