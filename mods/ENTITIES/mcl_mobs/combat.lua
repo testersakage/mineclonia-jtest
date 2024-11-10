@@ -79,7 +79,11 @@ function mob_class:projectile_knockback (factor, dir)
 end
 
 function mob_class:retaliate_against (source)
-	self:do_attack (source, 15)
+	if self.attack ~= source then
+		self:do_attack (source, 15)
+	else
+		self.sight_persistence = 15
+	end
 end
 
 -- Register damage delivered by punches or other means, retaliate, and
