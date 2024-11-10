@@ -37,7 +37,7 @@ local vex = {
 		y = 1.25,
 	},
 	damage = 4,
-	reach = 1.5,
+	reach = 0.5,
 	view_range = 16,
 	movement_speed = 14,
 	sounds = {
@@ -111,8 +111,13 @@ end
 -- Vex mechanics.
 ------------------------------------------------------------------------
 
+local pr = PcgRandom (os.time () - 30)
+
 function vex:on_spawn ()
+	local self_pos = self.object:get_pos ()
+	local mob_factor = mcl_worlds.get_special_difficulty (self_pos)
 	self:set_wielditem (ItemStack ("mcl_tools:sword_iron"))
+	self:enchant_default_weapon (mob_factor, pr)
 end
 
 ------------------------------------------------------------------------
@@ -214,7 +219,7 @@ function vex:ai_step (dtime)
 	-- (only for vexes summoned by evokers)
 	if self._summoned then
 		if not self._lifetimer then
-			self._lifetimer = (20 + 30 + math.random (90)) / 20
+			self._lifetimer = (20 * (30 + math.random (90))) / 20
 		end
 		self._lifetimer = self._lifetimer - dtime
 		if self._lifetimer <= 0 then
@@ -227,23 +232,33 @@ function vex:ai_step (dtime)
 	end
 end
 
+function vex:distance_check (object)
+	local self_pos = self.object:get_pos ()
+	return vector.distance (object:get_pos (), self_pos) > 2
+end
+
 function vex:attack_default (self_pos, dtime, esp)
 	if self._summoned_by then
 		local summoner = self._summoned_by:get_luaentity ()
-		return summoner.attack
+
+		if summoner.attack
+			and self:distance_check (summoner.attack) then
+			return summoner.attack
+		end
+		return nil
 	end
 	return mob_class.attack_default (self, self_pos, dtime, false)
 end
 
 function vex:should_attack (object)
 	return mob_class.should_attack (self, object)
-		and vector.distance (object:get_pos (), self.object:get_pos ()) > 2
+		and self:distance_check (object)
 end
 
 function vex:should_continue_to_attack (object)
 	if self._summoned_by then
 		local summoner = self._summoned_by:get_luaentity ()
-		return (summoner.attack == nil
+		return ((not summoner or summoner.attack == nil)
 				and mob_class.should_continue_to_attack (self, object))
 			or object == summoner.attack
 	end
@@ -314,4 +329,4 @@ mcl_mobs.register_mob ("mobs_mc:vex", vex)
 ------------------------------------------------------------------------
 
 -- spawn eggs
-mcl_mobs.register_egg("mobs_mc:vex", S("Vex"), "#7a90a4", "#e8edf1", 0)
+mcl_mobs.register_egg ("mobs_mc:vex", S("Vex"), "#7a90a4", "#e8edf1", 0)

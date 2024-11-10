@@ -68,8 +68,6 @@ mcl_mobs.mob_class = {
 	water_friction = 0.6,
 	-- This is multiplied by water_friction as in Minecraft.
 	water_velocity = 0.4,
-	replace_offset = 0,
-	replace_delay = 0,
 	timer = 0,
 	env_damage_timer = 0,
 	tamed = false,

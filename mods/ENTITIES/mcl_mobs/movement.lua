@@ -269,54 +269,6 @@ function mob_class:follow_holding(clicker)
 	return false
 end
 
-
--- find and replace what mob is looking for (grass, wheat etc.)
-function mob_class:replace(pos)
-	if not self.replace_rate
-	or not self.replace_what
-	or self.child == true
-	or self.object:get_velocity().y ~= 0
-	or math.random(1, self.replace_rate) > 1 then
-		return
-	end
-
-	local what, with, y_offset
-
-	if type(self.replace_what[1]) == "table" then
-		local num = math.random(#self.replace_what)
-
-		what = self.replace_what[num][1] or ""
-		with = self.replace_what[num][2] or ""
-		y_offset = self.replace_what[num][3] or 0
-	else
-		what = self.replace_what
-		with = self.replace_with or ""
-		y_offset = self.replace_offset or 0
-	end
-
-	pos.y = pos.y + y_offset
-
-	local node = minetest.get_node(pos)
-	if node.name == what then
-		local oldnode = {name = what, param2 = node.param2}
-		local newnode = {name = with, param2 = node.param2}
-		local on_replace_return = false
-		if self.on_replace then
-			on_replace_return = self.on_replace(self, pos, oldnode, newnode)
-		end
-
-		if on_replace_return ~= false then
-			if mobs_griefing then
-				minetest.after(self.replace_delay, function()
-					if self and self.object and self.object:get_velocity() and self.health > 0 then
-						minetest.set_node(pos, newnode)
-					end
-				end)
-			end
-		end
-	end
-end
-
 local norm_radians = nil
 
 minetest.register_on_mods_loaded (function ()
@@ -1111,7 +1063,8 @@ function mob_class:check_pace (pos)
 end
 
 function mob_class:replace_activity (activity_name, uninterruptible)
-	if self._active_activity then
+	if self._active_activity
+		and self._active_activity ~= activity_name then
 		self[self._active_activity] = nil
 	end
 	self._active_activity = activity_name
