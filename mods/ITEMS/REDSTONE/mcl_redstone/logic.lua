@@ -104,6 +104,10 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		return lwireflag_tab[node.name] and node.param2 or 0
 	end
 
+	for _, entry in pairs(clear_queue.queue) do
+		swap_node(entry.pos, {name = get_node(entry.pos).name, param2 = 0})
+	end
+
 	while clear_queue:size() > 0 do
 		local entry = clear_queue:dequeue()
 		local pos = entry.pos
@@ -128,6 +132,10 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 				end
 			end
 		end
+	end
+
+	for _, entry in pairs(fill_queue.queue) do
+		swap_node(entry.pos, {name = get_node(entry.pos).name, param2 = entry.power})
 	end
 
 	while fill_queue:size() > 0 do
@@ -265,10 +273,6 @@ function update_neighbours(pos, oldnode)
 		end
 		local power = get_node_power_2(pos)
 
-		minetest.swap_node(pos, {
-			name = minetest.get_node(pos).name,
-			param2 = power,
-		})
 		fill_queue:enqueue({pos = pos, power = power, dirs = dirs})
 	end
 
@@ -313,10 +317,6 @@ local function opaque_update_neighbours(pos, added)
 		local oldpower = minetest.get_node(pos).param2
 		local power = get_node_power_2(pos)
 
-		minetest.swap_node(pos, {
-			name = minetest.get_node(pos).name,
-			param2 = power,
-		})
 		clear_queue:enqueue({pos = pos, power = oldpower})
 		fill_queue:enqueue({pos = pos, power = power})
 	end
@@ -343,10 +343,6 @@ local function update_wire(pos, oldnode)
 
 	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0})
 	if lwireflag_tab[node.name] then
-		minetest.swap_node(pos, {
-			name = node.name,
-			param2 = power,
-		})
 		fill_queue:enqueue({pos = pos, power = power})
 	end
 
