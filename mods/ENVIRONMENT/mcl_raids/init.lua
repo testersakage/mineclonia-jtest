@@ -26,7 +26,7 @@ local waves = {
 		["mobs_mc:pillager"] = 5,
 		-- ["mobs_mc:vindicator"] = 5,
 		-- ["mobs_mc:witch"] = 1,
-		-- ["mobs_mc:evoker"] = 1,
+		["mobs_mc:evoker"] = 1,
 	},
 }
 

@@ -363,8 +363,15 @@ function mob_class:check_head_swivel(dtime, clear)
 			local mob_yaw = self_rot.y + math.atan2(dir.x, dir.z) + self.head_yaw_offset
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
 				+ self._head_pitch_offset
+			local out_of_view
+				= (mob_yaw < -PI_THIRD or mob_yaw > PI_THIRD)
+					and not (self.attack and not self.runaway)
+			if self.adjust_head_swivel then
+				mob_yaw, mob_pitch, out_of_view
+					= self:adjust_head_swivel (mob_yaw, mob_pitch, out_of_view)
+			end
 
-			if (mob_yaw < -PI_THIRD or mob_yaw > PI_THIRD) and not (self.attack and not self.runaway) then
+			if out_of_view then
 				newr = vector.multiply(oldr, 0.9)
 			elseif self.attack and not self.runaway then
 				if self.head_yaw == "y" then
@@ -382,9 +389,13 @@ function mob_class:check_head_swivel(dtime, clear)
 		end
 	elseif not locked_object and vector.length (oldr) > 0 then
 		newr = vector.multiply(oldr, 0.9)
+		if self.adjust_head_swivel then
+			self:adjust_head_swivel (nil, nil, nil)
+		end
 	end
 
 	local newp = vector.new (0, self.bone_eye_height, self.horizontal_head_height)
+
 	if math.abs (oldr.x - newr.x) < HALF_DEG
 		and math.abs (oldr.y - newr.y) < HALF_DEG
 		and math.abs (oldr.z - newr.z) < HALF_DEG
@@ -624,13 +635,13 @@ function mob_class:set_invisible (hide)
 	if hide then
 		self._mob_invisible = true
 		self:set_textures (self._active_texture_list)
-	elseif not hide then
+	else
 		self._mob_invisible = false
 		self:set_textures (self._active_texture_list)
 	end
 end
 
-local function is_armor_texture_slot (self, i)
+function mob_class:is_armor_texture_slot (i)
 	if self.wears_armor then
 		for k, _ in pairs (self._armor_texture_slots) do
 			if k == i then
@@ -647,13 +658,13 @@ function mob_class:set_textures (textures)
 	if self._mob_invisible then
 		textures = table.copy (textures)
 		for i = 1, #textures do
-			if not is_armor_texture_slot (self, i) then
+			if not self:is_armor_texture_slot (i) then
 				textures[i] = "blank.png"
 			end
 		end
 	end
 	self.object:set_properties ({
-			textures = textures,
+		textures = textures,
 	})
 end
 
@@ -671,7 +682,47 @@ local posing_humanoid = {
 	}
 }
 
+function posing_humanoid:apply_arm_pose (pose)
+	local pose = self._arm_poses[pose]
+	if pose then
+		for k, v in pairs (pose) do
+			if v[1] or v[2] or v[3] then
+				local pos = v[1] and (type (v[1]) ~= "function"
+						      and v[1] or v[1] (self))
+				local rot = v[2] and (type (v[2]) ~= "function"
+						      and vector.apply (v[2], math.rad)
+						      or v[2] (self))
+				local scale = v[3]
+				local pos = pos
+				local rot = rot
+				self.object:set_bone_override (k, {
+					position = pos and {
+						vec = pos,
+						absolute = true,
+					},
+					rotation = rot and {
+						vec = rot,
+						absolute = true,
+					},
+					scale = scale and {
+						vec = scale,
+						absolute = true,
+					},
+				})
+			else
+				self.object:set_bone_override (k)
+			end
+		end
+		end
+end
+
 function posing_humanoid:do_custom (dtime)
+	local class = self._humanoid_superclass
+
+	if class.do_custom then
+		class.do_custom (self, dtime)
+	end
+
 	-- Not supported on 5.8.0 or earlier, where bone overrides
 	-- cannot be cleared or be marked as absolute.
 	if not self.object or not self.object.set_bone_override then
@@ -681,33 +732,7 @@ function posing_humanoid:do_custom (dtime)
 	self._arm_pose = self:select_arm_pose ()
 	if last_arm_pose ~= self._arm_pose
 		or self._arm_pose_continuous[self._arm_pose] then
-		local pose = self._arm_poses[self._arm_pose]
-		if pose then
-			for k, v in pairs (pose) do
-				if v[2] or v[1] then
-					local pos = v[1] and (type (v[1]) ~= "function"
-							      and vector.apply (v[1], math.rad)
-							      or v[1] (self))
-					local rot = v[2] and (type (v[2]) ~= "function"
-							      and vector.apply (v[2], math.rad)
-							      or v[2] (self))
-					local pos = pos
-					local rot = rot
-					self.object:set_bone_override (k, {
-					       position = pos and {
-						       vec = pos,
-						       absolute = true,
-					       },
-					       rotation = rot and {
-						       vec = rot,
-						       absolute = true,
-					       },
-					})
-				else
-					self.object:set_bone_override (k)
-				end
-			end
-		end
+		self:apply_arm_pose (self._arm_pose)
 	end
 end
 
@@ -716,7 +741,13 @@ function posing_humanoid:select_arm_pose ()
 end
 
 function posing_humanoid:mob_activate (staticdata, dtime)
-	self._humanoid_superclass.mob_activate (self, staticdata, dtime)
+	local class = self._humanoid_superclass
+
+	if class.mob_activate then
+		class.mob_activate (self, staticdata, dtime)
+	else
+		mob_class.mob_activate (self, staticdata, dtime)
+	end
 	self._arm_pose = nil
 end
 
