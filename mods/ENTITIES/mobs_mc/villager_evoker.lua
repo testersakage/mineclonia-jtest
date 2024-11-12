@@ -24,10 +24,10 @@ local evoker = table.merge (illager, {
 	xp_min = 10,
 	xp_max = 10,
 	head_swivel = "head.control",
-	bone_eye_height = 2.2,
+	bone_eye_height = 6.61948,
 	head_eye_height = 2.2,
 	curiosity = 10,
-	collisionbox = {-0.4, -0.01, -0.4, 0.4, 1.95, 0.4},
+	collisionbox = {-0.4, 0, -0.4, 0.4, 1.95, 0.4},
 	visual = "mesh",
 	mesh = "mobs_mc_evoker.b3d",
 	textures = {
@@ -81,6 +81,8 @@ local evoker = table.merge (illager, {
 	pace_bonus = 0.6,
 	runaway_bonus_near = 1.0,
 	runaway_bonus_far = 0.6,
+	_banner_bone = "head",
+	_banner_bone_position = vector.new (0, 0, -2.556729),
 })
 
 ------------------------------------------------------------------------
@@ -254,6 +256,8 @@ local function define_spell (def)
 		end
 	end
 end
+
+evoker.define_spell = define_spell
 
 function evoker:tick_combat_spells (dtime)
 	local self_pos = self.object:get_pos ()
@@ -508,6 +512,8 @@ evoker.ai_functions = {
 	evoker_wololo_spell,
 	mob_class.check_pace,
 }
+
+mobs_mc.evoker = evoker
 
 mcl_mobs.register_mob ("mobs_mc:evoker", evoker)
 
