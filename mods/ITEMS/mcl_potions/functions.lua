@@ -1788,7 +1788,7 @@ function mcl_potions.make_invisible(obj_ref, hide)
 	else
 		local luaentity = obj_ref:get_luaentity()
 		if luaentity and luaentity.set_invisible then
-			luaentity:set_invisible (luaentity, hide)
+			luaentity:set_invisible (hide)
 		end
 	end
 end
