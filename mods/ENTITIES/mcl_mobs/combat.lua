@@ -441,10 +441,14 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	if dist < 15 and vistime >= 1 then
 		if not self:navigation_finished () then
 			self:cancel_navigation ()
-			self:halt_in_tracks (false, false)
+			self:halt_in_tracks ()
 		end
 		self._strafe_time = self._strafe_time + dtime
+		self._timers.bowshoot_pathfind = 0
 	else
+		if self.movement_goal == "strafe" then
+			self:halt_in_tracks ()
+		end
 		if self:check_timer ("bowshoot_pathfind", 0.5) then
 			self:gopath (target_pos, nil, true, self.pursuit_bonus)
 		end

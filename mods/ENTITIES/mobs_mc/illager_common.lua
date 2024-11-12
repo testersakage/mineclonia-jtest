@@ -23,6 +23,7 @@ local patrolling_mob = {
 	_patrol_cooldown = 0,
 	_patrol_n_retries = 0,
 	_is_patrolling_mob = true,
+	_banner_bone = "",
 }
 
 function patrolling_mob:promote_to_raidcaptain ()
@@ -39,8 +40,8 @@ function patrolling_mob:promote_to_raidcaptain ()
 	banner:set_properties ({
 			textures = textures,
 	})
-	banner:set_attach (self.object, "", self._banner_position,
-			   nil, true)
+	banner:set_attach (self.object, self._banner_bone,
+			   self._banner_position, nil, true)
 	self._raidcaptain = true
 end
 
