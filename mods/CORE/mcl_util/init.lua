@@ -1383,8 +1383,8 @@ end
 
 -- the queue class is using clever tricks to avoid allocating more memory than needed
 -- it stores its back and front index are stored in the same table as the elements
--- index 1: the queue's back
--- index 2: the queue's front
+-- index 1: the queue's front
+-- index 2: the queue's back
 local queue_class =
 {
 	enqueue = function(self, value)
@@ -1404,6 +1404,17 @@ local queue_class =
 
 	size = function(self)
 		return self[1] - self[2]
+	end,
+
+	iterate = function(self)
+		local idx = self[2] - 1
+		return function()
+			idx = idx + 1
+			if self[1] <= idx then
+				return nil
+			end
+			return self[idx]
+		end
 	end
 }
 
