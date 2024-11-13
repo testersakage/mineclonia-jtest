@@ -111,6 +111,22 @@ for n, desc in pairs(n_desc) do
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n }
 	})
 
+	local function bulb_connects_to(node, dir)
+		return true
+	end
+	local function bulb_update(pos, node)
+		local oldpowered = node.param2 ~= 0
+		local powered  = mcl_redstone.get_power(pos) ~= 0
+		local newname = node.name
+		if powered and not oldpowered then
+			newname = minetest.registered_nodes[node.name]._mcl_copper_bulb_switch_to
+		end
+		return {
+			name = newname,
+			param2 = powered and 1 or 0,
+		}
+	end
+
 	minetest.register_node("mcl_copper:bulb"..n.."_on", {
 		description = D(desc .. "Copper Bulb On"),
 		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
@@ -122,27 +138,8 @@ for n, desc in pairs(n_desc) do
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
 		drop = "mcl_copper:bulb"..n.."_off",
-		_mcl_redstone = {
-			connects_to = function(node, dir)
-				return true
-			end,
-			update = function(pos, node)
-				local oldpowered = node.param2 ~= 0
-				local powered  = mcl_redstone.get_power(pos) ~= 0
-				local newname = node.name
-				if powered and not oldpowered then
-					local preserved_state = ""
-					if string.find(node.name, "_preserved") then
-						preserved_state = "_preserved"
-					end
-					newname = "mcl_copper:bulb"..n.."_off"..preserved_state
-				end
-				return {
-					name = newname,
-					param2 = powered and 1 or 0,
-				}
-			end,
-		},
+		_mcl_copper_bulb_switch_to = "mcl_copper:bulb"..n.."_off",
+		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update},
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
 		description = D(desc .. "Copper Bulb"),
@@ -153,27 +150,8 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		_mcl_redstone = {
-			connects_to = function(node, dir)
-				return true
-			end,
-			update = function(pos, node)
-				local oldpowered = node.param2 ~= 0
-				local powered  = mcl_redstone.get_power(pos) ~= 0
-				local newname = node.name
-				if powered and not oldpowered then
-					local preserved_state = ""
-					if string.find(node.name, "_preserved") then
-						preserved_state = "_preserved"
-					end
-					newname = "mcl_copper:bulb"..n.."_on"..preserved_state
-				end
-				return {
-					name = newname,
-					param2 = powered and 1 or 0,
-				}
-			end,
-		},
+		_mcl_copper_bulb_switch_to = "mcl_copper:bulb"..n.."_on",
+		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update},
 	})
 
 	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n, {

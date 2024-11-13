@@ -149,6 +149,10 @@ local function register_unpreserve(nodename,od,def)
 		nd.stairs = { od.stairs[1].."_preserved", od.stairs[1].."_outer_preserved", od.stairs[1].."_inner_preserved" }
 		nd.drop = mcl_stairs.get_base_itemstring(nodename).."_preserved"
 	end
+	if nd._mcl_copper_bulb_switch_to then
+		nd.drop = nd.drop and (nd.drop.."_preserved")
+		nd._mcl_copper_bulb_switch_to = od._mcl_copper_bulb_switch_to.."_preserved"
+	end
 	if minetest.get_item_group(nodename, "double_slab") > 0 then
 		nd.drop = mcl_stairs.get_base_itemstring(nodename).."_preserved 2"
 	elseif minetest.get_item_group(nodename, "slab_top") > 0 then
