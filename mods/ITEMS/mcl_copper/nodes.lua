@@ -120,6 +120,7 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
+		drop = "mcl_copper:bulb"..n.."_off",
 		_mcl_redstone = {
 			update = function(pos, node)
 				local oldpowered = node.param2 ~= 0
