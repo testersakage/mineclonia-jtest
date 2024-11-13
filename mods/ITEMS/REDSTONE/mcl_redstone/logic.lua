@@ -136,7 +136,7 @@ local function get_node_power_2(pos)
 	-- core.debug("INVOKED!", dump(pos))
 	local power = 0
 	-- all these false values correspond to each index in get_node_power_2_tab table
-	local checked_directions = {false, false, false, false, false, false}
+	local checked_directions = {}
 
 	local function get_node_power(node, dir, include_weak)
 		local power2, is_strong = get_power_tab[node.name](node, -dir)
@@ -151,6 +151,7 @@ local function get_node_power_2(pos)
 	end
 
 	for i, entry in pairs(get_node_power_2_tab) do
+		checked_directions[i] = false
 		local pos2 = pos:add(entry.dir)
 		local node2 = minetest.get_node(pos2)
 
@@ -226,9 +227,8 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		for _, dir in pairs(sixdirs) do
 			local pos2 = pos:add(dir)
 			local hash = core.hash_node_position(pos2)
-			local node = get_node(pos2)
 
-			mcl_redstone._pending_updates[hash] = update_tab[node.name] and pos2 or nil
+			mcl_redstone._pending_updates[hash] = update_tab[get_node(pos2, hash).name] and pos2 or nil
 		end
 	end
 
@@ -252,7 +252,6 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 			local pos2 = pos:add(dir.wire)
 			local hash2 = core.hash_node_position(pos2)
 			local node2 = get_node(pos2, hash2)
-			-- core.debug("consider check:", tostring(pos2))
 
 			-- when wire pointing towards a redstone component. update it
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
@@ -332,8 +331,6 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 end
 
 function mcl_redstone.get_power(pos, dir)
-	-- Create table with keys corresponding to bits in wireflags to
-	-- simplify wire direction checks.
 	if not dir then
 		return get_node_power_2(pos)
 	end
@@ -346,7 +343,7 @@ function mcl_redstone.get_power(pos, dir)
 		return power2
 	elseif lwireflag_tab[node2.name] then
 		for wire_dir in iterate_wire_neighbours(lwireflag_tab[node2.name]) do
-			if dir == wire_dir.wire then
+			if dir == -wire_dir.wire then
 				return node2.param2
 			end
 		end
@@ -445,15 +442,15 @@ function update_neighbours(pos, oldnode)
 	local get_power = ndef and ndef._mcl_redstone and ndef._mcl_redstone.get_power
 	local old_get_power = oldndef and oldndef._mcl_redstone and oldndef._mcl_redstone.get_power
 
-	local function update_wire(pos, oldpower, dirs)
+	local function update_wire(pos, oldpower)
 		fill_queue = fill_queue or mcl_util.queue()
 		clear_queue = clear_queue or mcl_util.queue()
 		if oldpower then
-			clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs})
+			clear_queue:enqueue({pos = pos, power = oldpower})
 		end
 		local power = get_node_power_2(pos)
 
-		fill_queue:enqueue({pos = pos, power = power, dirs = dirs})
+		fill_queue:enqueue({pos = pos, power = power})
 	end
 
 	local hash = minetest.hash_node_position(pos)
