@@ -398,13 +398,13 @@ minetest.set_node = function(pos, newnode)
 end
 
 minetest.register_on_mods_loaded(function()
-	for name, _ in pairs(minetest.registered_nodes) do
+	for name, def in pairs(minetest.registered_nodes) do
 		if minetest.get_item_group(name, "shulker_box") ~= 0 then
 			measure_tab[name] = measure_inventory
 		elseif minetest.get_item_group(name, "brewing_stand") ~= 0 then
 			measure_tab[name] = measure_brewing_stand
-		elseif minetest.get_item_group(name, "comparator_signal") ~= 0 then
-			measure_tab[name] = measure_constant(minetest.get_item_group(name, "comparator_signal"))
+		elseif def.groups and def.groups.comparator_signal then
+			measure_tab[name] = measure_constant(def.groups.comparator_signal)
 		end
 	end
 end)
