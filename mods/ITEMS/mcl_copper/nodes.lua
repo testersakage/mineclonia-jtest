@@ -122,6 +122,9 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3,
 		drop = "mcl_copper:bulb"..n.."_off",
 		_mcl_redstone = {
+			connects_to = function(node, dir)
+				return true
+			end,
 			update = function(pos, node)
 				local oldpowered = node.param2 ~= 0
 				local powered  = mcl_redstone.get_power(pos) ~= 0
@@ -146,8 +149,10 @@ for n, desc in pairs(n_desc) do
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
 		_mcl_redstone = {
-			update = function(pos)
-				local node = minetest.get_node(pos)
+			connects_to = function(node, dir)
+				return true
+			end,
+			update = function(pos, node)
 				local oldpowered = node.param2 ~= 0
 				local powered  = mcl_redstone.get_power(pos) ~= 0
 				local newname = node.name
