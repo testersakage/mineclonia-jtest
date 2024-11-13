@@ -239,25 +239,31 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	local count = 0
 	local nodecache = {}
 
-	local function get_node(pos)
-		local h = minetest.hash_node_position(pos)
-		if not nodecache[h] then
-			nodecache[h] = minetest.get_node(pos)
+	local function get_node(pos, hash)
+		hash = hash or core.hash_node_position(pos)
+		if not nodecache[hash] then
+			nodecache[hash] = minetest.get_node(pos)
 		end
-		return nodecache[h]
-	end
-
-	local function swap_node(pos, node)
-		local h = minetest.hash_node_position(pos)
-		nodecache[h] = node
+		return nodecache[hash]
 	end
 
 	local function get_power(node)
 		return lwireflag_tab[node.name] and node.param2 or 0
 	end
 
+	local function update_opaque_node(pos)
+		for _, dir in pairs(sixdirs) do
+			local pos2 = pos:add(dir)
+			local hash = core.hash_node_position(pos2)
+			local node = get_node(pos2)
+
+			mcl_redstone._pending_updates[hash] = update_tab[node.name] and pos2 or nil
+		end
+	end
+
 	for v in clear_queue:iterate() do
-		swap_node(v.pos, {name = minetest.get_node(v.pos).name, param2 = 0})
+		local hash = core.hash_node_position(v.pos)
+		nodecache[hash] = {name = get_node(v.pos, hash).name, param2 = 0}
 	end
 
 	for v in clear_queue:iterate() do
@@ -268,36 +274,37 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		local entry = clear_queue:dequeue()
 		local pos = entry.pos
 		local power = entry.power
-		local node = core.get_node(pos)
+		local node = get_node(pos, core.hash_node_position(pos))
 
 		for dir in iterate_wire_neighbours(lwireflag_tab[node.name] or 0xFF) do
 			count = count + 1
 			local pos2 = pos:add(dir.wire)
 			local hash2 = core.hash_node_position(pos2)
-			local node2 = get_node(pos2)
+			local node2 = get_node(pos2, hash2)
 			-- core.debug("consider check:", tostring(pos2))
 
 			-- when wire pointing towards a redstone component. update it
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
+			-- core.debug(tostring(pos2))
 
 			-- when wire pointing towards an opaque node. update it
 			if opaque_tab[node2.name] then
-				local hash2 = minetest.hash_node_position(pos2)
-
-				mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
+				update_opaque_node(pos2)
 			end
 
 			-- when wire pointing another wire. propagate it further
-			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
+			local obstruct_pos = dir.obstruct and pos:add(dir.obstruct)
+			-- core.debug(dump(dir), dump(obstruct_pos))
+			if not dir.obstruct or not opaque_tab[get_node(obstruct_pos, core.hash_node_position(obstruct_pos)).name] then
 				local power2 = get_power(node2)
 
 				if power2 > 0 then
 					if power2 < power then
-						swap_node(pos2, {name = node2.name, param2 = 0})
+						nodecache[hash2] = {name = node2.name, param2 = 0}
 						clear_queue:enqueue({pos = pos2, power = power2})
 					else
 						-- core.debug("adding to fill queue")
-						swap_node(pos2, {name = node2.name, param2 = power2})
+						nodecache[hash2] = {name = node2.name, param2 = power2}
 						fill_queue:enqueue({pos = pos2, power = power2})
 					end
 				end
@@ -310,7 +317,8 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	-- core.debug("fill queue:", dump(fill_queue))
 	for v in fill_queue:iterate() do
 		-- core.debug("ITER", dump(v), dump(minetest.get_node(v.pos)))
-		swap_node(v.pos, {name = minetest.get_node(v.pos).name, param2 = v.power})
+		local hash = core.hash_node_position(v.pos)
+		nodecache[hash] = {name = get_node(v.pos, hash).name, param2 = v.power}
 	end
 
 	while fill_queue:size() > 0 do
@@ -319,25 +327,24 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		local power = entry.power
 		local power2 = power - 1
 
-		for dir in iterate_wire_neighbours(lwireflag_tab[core.get_node(pos).name]) do
+		for dir in iterate_wire_neighbours(lwireflag_tab[get_node(pos, core.hash_node_position(pos)).name]) do
 			-- count = count + 1
 			local pos2 = pos:add(dir.wire)
 			local hash2 = core.hash_node_position(pos2)
-			local node2 = get_node(pos2)
+			local node2 = get_node(pos2, hash2)
 
 			-- when wire pointing towards a redstone component. update it
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
 
 			-- when wire pointing towards an opaque node. update it
 			if opaque_tab[node2.name] then
-				local hash2 = minetest.hash_node_position(pos2)
-
-				mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
+				update_opaque_node(pos2)
 			end
 
-			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
+			local obstruct_pos = dir.obstruct and pos:add(dir.obstruct)
+			if not dir.obstruct or not opaque_tab[get_node(obstruct_pos, core.hash_node_position(obstruct_pos)).name] then
 				if lwireflag_tab[node2.name] and get_power(node2) < power2 then
-					swap_node(pos2, {name = node2.name, param2 = power2})
+					nodecache[hash2] = {name = node2.name, param2 = power2}
 					fill_queue:enqueue({pos = pos2, power = power2})
 				end
 			-- else
@@ -351,27 +358,6 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		-- nodes_changed = nodes_changed + 1
 		minetest.swap_node(minetest.get_position_from_hash(hash), node)
 	end
-
-	-- core.debug("nodes processed", count, nodes_changed)
-
-	-- for _, pos in pairs(updates_) do
-	-- 	for _, dir in pairs(sixdirs) do
-	-- 		local pos2 = pos:add(dir)
-	-- 		local node2 = get_node(pos2)
-	-- 		local hash2 = minetest.hash_node_position(pos2)
-	--
-	-- 		mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
-	-- 		if opaque_tab[node2.name] then
-	-- 			for _, dir in pairs(sixdirs) do
-	-- 				local pos3 = pos2:add(dir)
-	-- 				local node3 = get_node(pos3)
-	-- 				local hash3 = minetest.hash_node_position(pos3)
-	--
-	-- 				mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
 end
 
 function mcl_redstone.get_power(pos, dir)
@@ -509,17 +495,17 @@ function update_neighbours(pos, oldnode)
 end
 
 local function opaque_update_neighbours(pos, added)
-	local fill_queue = mcl_util.queue()
-	local clear_queue = mcl_util.queue()
+	-- core.debug("CALLED")
+	local fill_queue
+	local clear_queue
 
 	local function update_wire(pos)
+		fill_queue = fill_queue or mcl_util.queue()
+		clear_queue = clear_queue or mcl_util.queue()
+
 		local oldpower = minetest.get_node(pos).param2
 		local power = get_node_power_2(pos)
 
-		-- minetest.swap_node(pos, {
-		-- 	name = minetest.get_node(pos).name,
-		-- 	param2 = power,
-		-- })
 		clear_queue:enqueue({pos = pos, power = oldpower})
 		fill_queue:enqueue({pos = pos, power = power})
 	end
@@ -535,7 +521,9 @@ local function opaque_update_neighbours(pos, added)
 		end
 	end
 
-	propagate_wire(clear_queue, fill_queue)
+	if fill_queue then
+		propagate_wire(clear_queue, fill_queue)
+	end
 end
 
 local function update_wire(pos, oldnode)
@@ -546,10 +534,6 @@ local function update_wire(pos, oldnode)
 
 	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0})
 	if lwireflag_tab[node.name] then
-		-- minetest.swap_node(pos, {
-		-- 	name = node.name,
-		-- 	param2 = power,
-		-- })
 		fill_queue:enqueue({pos = pos, power = power})
 	end
 
