@@ -101,7 +101,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			local im = itemstack:get_meta()
 			local nm = minetest.get_meta(pos)
 			node.name = "mcl_lectern:lectern_with_book"
-			minetest.swap_node(pos,node)
+			mcl_redstone.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
 			if itemstack:get_name() == "mcl_books:written_book" then
 				nm:set_string("infotext", im:get_string("author") .. " - " .. im:get_string("title"))
@@ -117,7 +117,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			return itemstack
 		end
 	end,
-	mcl_redstone = {
+	_mcl_redstone = {
 		connects_to = function()
 			return true
 		end,
