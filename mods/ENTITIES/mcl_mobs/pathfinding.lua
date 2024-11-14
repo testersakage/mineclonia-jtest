@@ -433,6 +433,7 @@ function mob_class:gwp_cycle (context, timeout)
 	local clock
 	local n_total = context.total_nodes
 	local maxnodes = context.maxnodes
+
 	-- Convert this timeout to us.
 	timeout = math.round (timeout * 1e6)
 	context.fall_distance = self:gwp_safe_fall_distance ()
@@ -533,6 +534,7 @@ function mob_class:gwp_reconstruct (context)
 
 			if contact then
 				candidate = self:gwp_reconstruct_path (context, contact)
+				candidate.target = target
 				if not path or #candidate > #path then
 					path = candidate
 					partial = false
@@ -2853,6 +2855,48 @@ function mob_class:gwp_open_and_memorize_door (door)
 end
 
 local SQRT_HALF = math.sqrt (0.5)
+local COS_15_DEG = math.cos (math.rad (15))
+
+function mob_class:gwp_skip_waypoint (self_pos, next_wp_surface, ahead_surface)
+	local dist_to_next_wp = vector.distance (next_wp_surface, self_pos)
+
+	if dist_to_next_wp < 2.0 then
+		local dist_to_ahead = vector.distance (ahead_surface, self_pos)
+
+		-- Does the current position fall between the target
+		-- waypoint and the waypoint ahead of it?
+		local dir = vector.direction (self_pos, ahead_surface)
+		local dir1 = vector.direction (self_pos, next_wp_surface)
+		local dot = vector.dot (dir, dir1)
+
+		-- Is it safe to pass directly onto the next waypoint?
+		if dist_to_ahead < dist_to_next_wp
+			or dist_to_next_wp < SQRT_HALF then
+			return dot < 0
+		elseif dot < 0 then
+			-- Otherwise, is the horizontal direction from
+			-- the current position to the waypoint ahead
+			-- approximately identical to that from the
+			-- target waypoint behind to the current?
+			local dx_to_ahead = ahead_surface.x - self_pos.x
+			local dz_to_ahead = ahead_surface.z - self_pos.z
+			local dir_to_ahead
+				= vector.new (dx_to_ahead, 0, dz_to_ahead)
+			local dx_to_self = self_pos.x - next_wp_surface.x
+			local dz_to_self = self_pos.z - next_wp_surface.z
+			local dir_to_self
+				= vector.new (dx_to_self, 0, dz_to_self)
+			dir_to_ahead = vector.normalize (dir_to_ahead)
+			dir_to_self = vector.normalize (dir_to_self)
+
+			local dot = vector.dot (dir_to_ahead, dir_to_self)
+			if dot > COS_15_DEG then
+				return true
+			end
+		end
+	end
+	return false
+end
 
 function mob_class:gwp_next_waypoint (dtime)
 	local waypoints = self.waypoints
@@ -2896,28 +2940,17 @@ function mob_class:gwp_next_waypoint (dtime)
 	end
 
 	-- Is this mob already en route to the next waypoint?
-	if #waypoints > 1 then
-		local dist_to_next_wp = vector.distance (next_wp_surface, self_pos)
-
-		if dist_to_next_wp < 2.0 then
-			local dist_to_ahead = vector.distance (ahead_surface, self_pos)
-			if dist_to_ahead < dist_to_next_wp
-				or dist_to_next_wp < SQRT_HALF then
-				local dir = vector.direction (self_pos, ahead_surface)
-				local dir1 = vector.direction (self_pos, next_wp_surface)
-				local dot = vector.dot (dir, dir1)
-				if dot < 0 then
-					self._last_wp = {
-						x = next_wp.x,
-						y = next_wp.y,
-						z = next_wp.z,
-					}
-					next_wp = ahead
-					next_wp_surface = ahead_surface
-					waypoints[#waypoints] = nil
-				end
-			end
-		end
+	if #waypoints > 1
+		and self:gwp_skip_waypoint (self_pos, next_wp_surface,
+					    ahead_surface) then
+		self._last_wp = {
+			x = next_wp.x,
+			y = next_wp.y,
+			z = next_wp.z,
+		}
+		next_wp = ahead
+		next_wp_surface = ahead_surface
+		waypoints[#waypoints] = nil
 	end
 
 	if next_wp then
