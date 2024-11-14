@@ -95,20 +95,23 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			local im = itemstack:get_meta()
 			local nm = minetest.get_meta(pos)
 			node.name = "mcl_lectern:lectern_with_book"
-			minetest.swap_node(pos,node)
-			mesecon.receptor_on(pos, mesecon.rules.alldirs)
+			mcl_redstone.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
 			nm:set_string("bookmeta",minetest.serialize(im:to_table()))
+			-- TODO: implement multi page books
+			nm:set_string("pages","15")
+			nm:set_string("page","1")
 			if not minetest.is_creative_enabled(player_name) then
 				itemstack:take_item()
 			end
 			return itemstack
 		end
 	end,
-	mesecons = {receptor = {
-		state = mesecon.state.off,
-		rules = mesecon.rules.alldirs,
-	}},
+	_mcl_redstone = {
+		connects_to = function()
+			return true
+		end,
+	},
 }))
 
 local function create_book(bookmeta)
@@ -131,12 +134,25 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			local inv = sender:get_inventory()
 			local node = minetest.get_node(pos)
 			local nm = minetest.get_meta(pos)
-			local vid = nm:get_string("villager")
 			inv:add_item("main",create_book(nm:get_string("bookmeta")))
 			node.name = "mcl_lectern:lectern"
-			minetest.set_node(pos,node) --set node and reset of villager id on purpose because formspec field won't reset manually
-			nm:set_string("villager",vid)
-			mesecon.receptor_off(pos, mesecon.rules.alldirs)
+			mcl_redstone.swap_node(pos,node)
+			nm:set_string("formspec","")
+			nm:set_string("pages","")
+			nm:set_string("page","")
+		elseif fields and fields.ok then
+			-- simulate a page turn
+			-- TODO: actually implement multi page books
+			local node = minetest.get_node(pos)
+			local nm = minetest.get_meta(pos)
+			local pages = tonumber(nm:get_string("pages")) or 1
+			local page = tonumber(nm:get_string("page")) or 1
+			page = (page % pages) + 1
+			nm:set_string("page",tostring(page))
+			if node.param2 < 128 then
+				node.param2 = node.param2 + 128
+				mcl_redstone.swap_node(pos,node)
+			end
 		end
 	end,
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
@@ -144,10 +160,24 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 		minetest.add_item(pos,is)
 		mesecon.receptor_off(pos, mesecon.rules.alldirs)
 	end,
-	mesecons = {receptor = {
-		state = mesecon.state.on,
-		rules = mesecon.rules.alldirs,
-	}},
+	_mcl_redstone = {
+		connects_to = function()
+			return true
+		end,
+		get_power = function(node, dir)
+			local powered = node.param2 >= 128
+			return powered and 15 or 0, false
+		end,
+		update = function(_, node)
+			local powered = node.param2 >= 128
+			if powered then
+				return {
+					name = node.name,
+					param2 = node.param2 - 128,
+				}
+			end
+		end,
+	},
 }))
 
 mcl_wip.register_wip_item("mcl_lectern:lectern")
