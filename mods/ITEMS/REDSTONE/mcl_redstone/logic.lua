@@ -6,6 +6,8 @@ local get_power_tab = {}
 local update_tab = {}
 local init_tab = {}
 
+local action_tab = mcl_redstone._action_tab
+
 local function check_bit(n, b)
 	return bit.band(n, bit.lshift(1, b)) ~= 0
 end
@@ -243,22 +245,38 @@ end
 -- Piston pusher nodes calls this during init to avoid circuits stopping if a
 -- piston was extended just before a server restart. It is not a clean solution
 -- but it works.
-function mcl_redstone._update_neighbours(pos, oldnode)
-	update_neighbours(pos, oldnode)
+function mcl_redstone._update_neighbours(pos, oldnode, newnode)
+	update_neighbours(pos, oldnode, newnode)
+	if  (oldnode and action_tab[oldnode.name])
+			or (newnode and action_tab[newnode.name]) then
+		local callbacks = {}
+
+		for _, func in pairs(oldnode and action_tab[oldnode.name] or {}) do
+			callbacks[func] = true
+		end
+		for _, func in pairs(newnode and action_tab[newnode.name] or {}) do
+			callbacks[func] = true
+		end
+
+		for func, _ in pairs(callbacks) do
+			func(pos, oldnode, newnode)
+		end
+	end
 end
 
 function mcl_redstone.swap_node(pos, node)
 	local oldnode = minetest.get_node(pos)
+	if not node then print(debug.traceback("trying to place nil")) end
 	minetest.swap_node(pos, node)
-	mcl_redstone._update_neighbours(pos, oldnode)
+	mcl_redstone._update_neighbours(pos, oldnode, node)
 end
 
 -- Update neighbouring wires and components at pos. Oldnode is the previous
 -- node at the position.
-function update_neighbours(pos, oldnode)
+function update_neighbours(pos, oldnode, newnode)
 	local fill_queue = mcl_util.queue()
 	local clear_queue = mcl_util.queue()
-	local node = minetest.get_node(pos)
+	local node = newnode or minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
 	local oldndef = oldnode and minetest.registered_nodes[oldnode.name]
 	local get_power = ndef and ndef._mcl_redstone and ndef._mcl_redstone.get_power
@@ -275,6 +293,8 @@ function update_neighbours(pos, oldnode)
 
 	local hash = minetest.hash_node_position(pos)
 	mcl_redstone._pending_updates[hash] = update_tab[node.name] and pos or nil
+
+	if not (get_power or old_get_power) then return end
 
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)

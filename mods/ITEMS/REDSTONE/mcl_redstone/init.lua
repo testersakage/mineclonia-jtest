@@ -1,5 +1,14 @@
 mcl_redstone = {}
 
+mcl_redstone._action_tab = {}
+
+function mcl_redstone.register_action(func, node_names)
+	for _, name in pairs(node_names) do
+		mcl_redstone._action_tab[name] = mcl_redstone._action_tab[name] or {}
+		table.insert(mcl_redstone._action_tab[name], func)
+	end
+end
+
 mcl_redstone._solid_opaque_tab = {} -- True if node is opaque by name
 
 --- Wireflags are numbers with binary representation YYYYXXXX where XXXX
