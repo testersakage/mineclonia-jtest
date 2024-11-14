@@ -82,6 +82,18 @@ local function measure_constant(power_level)
 	end
 end
 
+local function measure_lectern(pos)
+	local meta = minetest.get_meta(pos)
+	local pages = tonumber(meta:get_string("pages")) or 1
+	local page = tonumber(meta:get_string("page")) or 1
+	local power = 15
+	if pages > 1 then
+		-- formula copied from wiki
+		power = math.floor((14 * (page - 1)) / (pages - 1) + 1)
+	end
+	return power
+end
+
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
 local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
@@ -113,6 +125,7 @@ local measure_tab = {
 	["mcl_furnaces:furnace"] = measure_furnace,
 	["mcl_blast_furnace:blast_furnace"] = measure_furnace,
 	["mcl_smoker:smoker"] = measure_furnace,
+	["mcl_lectern:lectern_with_book"] = measure_lectern,
 	--[[ initalized using after_mods_loaded
 	["mcl_brewing:stand_xxx"] = measure_brewing_stand,
 	["mcl_chests:xxx_shulker_box"] = measure_inventory,
@@ -133,7 +146,6 @@ local measure_tab = {
 	--["crafter"] = measure_crafter,
 	--["item_frame"] = measure_item_frame,
 	--["jukebox"] = measure_jukebox,
-	--["lectern"] = measure_lectern,
 	--["respawn_anchor"] = measure_respawn_anchor,
 	--["sculc_sensor"] = measure_sculc_sensor,
 }
