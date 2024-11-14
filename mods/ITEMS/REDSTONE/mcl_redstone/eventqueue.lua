@@ -123,7 +123,7 @@ local function handle_update_event(event)
 		return
 	end
 	minetest.swap_node(event.pos, event.node)
-	mcl_redstone._update_neighbours(event.pos, event.oldnode)
+	mcl_redstone._update_neighbours(event.pos, event.oldnode, event.node)
 	update_event_tab[h] = nil
 end
 
