@@ -379,24 +379,6 @@ minetest.register_on_placenode(function (pos, newnode, _, oldnode)
 	end
 end)
 
-local swap_node = minetest.swap_node
-minetest.swap_node = function(pos, newnode)
-	local oldnode = minetest.get_node(pos)
-	swap_node(pos, newnode)
-	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
-		mcl_redstone.update_comparators(pos)
-	end
-end
-
-local set_node = minetest.set_node
-minetest.set_node = function(pos, newnode)
-	local oldnode = minetest.get_node(pos)
-	set_node(pos, newnode)
-	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
-		mcl_redstone.update_comparators(pos)
-	end
-end
-
 minetest.register_on_mods_loaded(function()
 	for name, def in pairs(minetest.registered_nodes) do
 		if minetest.get_item_group(name, "shulker_box") ~= 0 then
@@ -407,4 +389,10 @@ minetest.register_on_mods_loaded(function()
 			measure_tab[name] = measure_constant(def.groups.comparator_signal)
 		end
 	end
+
+	local measureable_nodes = {}
+	for name, _ in pairs(measure_tab) do
+		table.insert(measureable_nodes, name)
+	end
+	mcl_redstone.register_action(mcl_redstone.update_comparators, measureable_nodes)
 end)
