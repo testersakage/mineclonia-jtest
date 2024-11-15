@@ -353,7 +353,7 @@ end
 minetest.register_on_mods_loaded(function()
 	for name, ndef in pairs(minetest.registered_nodes) do
 		local old_construct = ndef.on_construct
-		local old_destruct = ndef.on_destruct
+		local old_destruct = ndef.after_destruct
 		if minetest.get_item_group(name, "opaque") ~= 0 and minetest.get_item_group(name, "solid") ~= 0 then
 			minetest.override_item(name, {
 				on_construct = function(pos)
