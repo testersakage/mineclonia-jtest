@@ -98,7 +98,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			node.name = "mcl_lectern:lectern_with_book"
 			minetest.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
-			nm:set_string("bookmeta",minetest.serialize(im:to_table()))
+			nm:set_string("book_item", itemstack:to_string())
 			nm:set_string("pages","15")
 			nm:set_string("page","1")
 			if not minetest.is_creative_enabled(player_name) then
@@ -114,16 +114,10 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 	},
 }))
 
-local function create_book(bookmeta)
-	local is = ItemStack("mcl_books:written_book")
-	is:get_meta():from_table(minetest.deserialize(bookmeta))
-	return is:to_string()
-end
-
 minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl,{
 	groups = table.merge(lectern_tpl.groups, {not_in_creative_inventory = 1}),
-	tiles = {"mcl_lectern_lectern_with_book.png", },
-	on_receive_fields = function(pos, formname, fields, sender)
+	mesh = "mcl_lectern_lectern_with_book.obj",
+	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
 		if minetest.is_protected(pos, sender_name) then
 			minetest.record_protection_violation(pos, sender_name)
@@ -133,7 +127,7 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			local inv = sender:get_inventory()
 			local node = minetest.get_node(pos)
 			local nm = minetest.get_meta(pos)
-			inv:add_item("main",create_book(nm:get_string("bookmeta")))
+			inv:add_item("main", ItemStack(nm:get_string("book_item")))
 			node.name = "mcl_lectern:lectern"
 			mcl_redstone.swap_node(pos,node)
 			nm:set_string("formspec","")
@@ -154,9 +148,8 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			end
 		end
 	end,
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
-		local is = create_book(oldmetadata.fields.bookmeta)
-		minetest.add_item(pos,is)
+	after_dig_node = function(pos, _, oldmetadata, _)
+		minetest.add_item(pos, ItemStack(oldmetadata.fields.book_item))
 		mesecon.receptor_off(pos, mesecon.rules.alldirs)
 	end,
 	_mcl_redstone = {
