@@ -117,6 +117,8 @@ local function handle_update_event(event)
 	if update_event_tab[h] ~= event then
 		return
 	end
+	-- core.debug("UPDATE", tostring(event.pos))
+	-- mcl_redstone.invalidate_propagation_cache(h)
 	local oldnode = minetest.get_node(event.pos)
 	if oldnode.name ~= event.oldnode.name or oldnode.param2 ~= event.oldnode.param2 then
 		return
@@ -166,6 +168,7 @@ local function debug_log(tick, nevents, nupdates, nfaraway, npending, time, abor
 end
 
 function mcl_redstone.tick_step()
+	-- core.debug("PROCESSING TICK")
 	local player_poses = {}
 	for _, player in pairs(minetest.get_connected_players()) do
 		table.insert(player_poses, player:get_pos())
@@ -197,6 +200,9 @@ function mcl_redstone.tick_step()
 		debug_log(current_tick, nevents, nupdates, nfaraway, npending, time, aborted)
 	end
 
+	-- mcl_redstone.process_wires()
+
+	-- core.debug("event queue")
 	local last_tick = current_tick
 	while eventqueue:size() > 0 and eventqueue:peek().tick <= current_tick do
 		if get_time() > endtime then
@@ -213,8 +219,11 @@ function mcl_redstone.tick_step()
 		end
 		last_tick = event.tick
 	end
+	-- core.debug("end event queue")
 
+	-- core.debug("pending updates")
 	for h, pos in pairs(mcl_redstone._pending_updates) do
+		-- core.debug(tostring(pos))
 		if get_time() > endtime then
 			log_redstone_events(true)
 			return
@@ -224,6 +233,9 @@ function mcl_redstone.tick_step()
 		mcl_redstone._call_update(pos)
 		mcl_redstone._pending_updates[h] = nil
 	end
+	-- core.debug("end pending updates")
+
+	mcl_redstone.process_wires()
 
 	log_redstone_events(false)
 	current_tick = last_tick + 1

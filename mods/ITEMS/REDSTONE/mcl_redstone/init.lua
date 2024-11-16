@@ -19,6 +19,7 @@ minetest.register_on_mods_loaded(function()
 end)
 
 local modpath = minetest.get_modpath(minetest.get_current_modname())
+dofile(modpath.."/propagate.lua")
 dofile(modpath.."/logic.lua")
 dofile(modpath.."/eventqueue.lua")
 dofile(modpath.."/wire.lua")
