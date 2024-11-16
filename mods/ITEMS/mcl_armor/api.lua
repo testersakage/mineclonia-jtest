@@ -60,6 +60,7 @@ function mcl_armor.equip(itemstack, obj, swap)
 			if swap then
 				new_stack = itemstack
 				itemstack = old_stack
+				mcl_armor.on_unequip(old_stack, obj)
 			else
 				new_stack = itemstack:take_item()
 			end
