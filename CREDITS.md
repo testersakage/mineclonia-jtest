@@ -21,7 +21,7 @@
 * kno10
 * Po Lu
 * goblin_mode
-* Lars Müller 
+* Lars Müller
 * the-real-herowl
 * nooneatall
 
@@ -89,6 +89,7 @@
 * 22i
 * tobyplowy
 * epCode
+* pixelzone
 
 ## Textures and menu images
 * XSSheep
@@ -111,6 +112,7 @@
 * Aeonix_Aeon
 * Wbjitscool
 * SmokeyDope
+* pixelzone
 
 ## Translations
 * Wuzzy
