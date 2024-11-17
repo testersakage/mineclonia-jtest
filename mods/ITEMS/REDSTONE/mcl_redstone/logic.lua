@@ -1,7 +1,4 @@
--- Logical wireflags by contentid
-local lwireflag_tab = {}
-
--- True if node is opaque by contentid
+local wireflag_tab = mcl_redstone._wireflag_tab
 local opaque_tab = mcl_redstone._solid_opaque_tab
 
 -- get_power, update and init callbacks by name
@@ -53,7 +50,7 @@ local function get_node_power(pos, include_wire)
 			if is_strong then
 				strong = math.max(strong, power)
 			end
-		elseif include_wire and lwireflag_tab[node2.name] and (i == 5 or check_bit(lwireflag_tab[node2.name], i)) then
+		elseif include_wire and wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			-- Wire is above or pointing towards this node.
 			weak = math.max(weak, node2.param2)
 		end
@@ -101,7 +98,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	end
 
 	local function get_power(node)
-		return lwireflag_tab[node.name] and node.param2 or 0
+		return wireflag_tab[node.name] and node.param2 or 0
 	end
 
 	for _, entry in pairs(clear_queue.queue) do
@@ -150,7 +147,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
 				local node2 = get_node(pos2)
-				if lwireflag_tab[node2.name] and get_power(node2) < power2 then
+				if wireflag_tab[node2.name] and get_power(node2) < power2 then
 					swap_node(pos2, {name = node2.name, param2 = power2})
 					fill_queue:enqueue({pos = pos2, power = power2})
 				end
@@ -200,7 +197,7 @@ function mcl_redstone.get_power(pos, dir)
 		if get_power_tab[node2.name] then
 			local power2 = get_power_tab[node2.name](node2, -dir)
 			power = math.max(power, power2)
-		elseif lwireflag_tab[node2.name] and (i == 5 or check_bit(lwireflag_tab[node2.name], i)) then
+		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
 			-- Only strong power goes through opaque nodes.
@@ -289,7 +286,7 @@ function update_neighbours(pos, oldnode)
 			local hash2 = minetest.hash_node_position(pos2)
 
 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
-			if lwireflag_tab[node2.name] then
+			if wireflag_tab[node2.name] then
 				update_wire(pos2, oldpower2)
 			elseif opaque_tab[node2.name] then
 				for i, dir in pairs(sixdirs) do
@@ -298,7 +295,7 @@ function update_neighbours(pos, oldnode)
 					local hash3 = minetest.hash_node_position(pos3)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
-					if lwireflag_tab[node3.name] then
+					if wireflag_tab[node3.name] then
 						update_wire(pos3, math.max(oldpower2, 0))
 					end
 				end
@@ -324,7 +321,7 @@ local function opaque_update_neighbours(pos, added)
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
 		local node2 = minetest.get_node(pos2)
-		if lwireflag_tab[node2.name] then
+		if wireflag_tab[node2.name] then
 			update_wire(pos2)
 		elseif update_tab[node2.name] then
 			local hash2 = minetest.hash_node_position(pos2)
@@ -342,7 +339,7 @@ local function update_wire(pos, oldnode)
 	local power = get_node_power_2(pos)
 
 	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0})
-	if lwireflag_tab[node.name] then
+	if wireflag_tab[node.name] then
 		fill_queue:enqueue({pos = pos, power = power})
 	end
 
@@ -378,8 +375,6 @@ minetest.register_on_mods_loaded(function()
 		end
 
 		if minetest.get_item_group(name, "redstone_wire") ~= 0 then
-			lwireflag_tab[name] = ndef._logical_wireflags
-
 			local old_construct = ndef.on_construct
 			local old_destruct = ndef.after_destruct
 			minetest.override_item(name, {
