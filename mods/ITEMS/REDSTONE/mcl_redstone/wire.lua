@@ -3,7 +3,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 -- Wireflags are numbers with binary representation YYYYXXXX where XXXX
 -- determines if there is a visible connection in each of the four cardinal
 -- directions and YYYY if the respective connection also goes up over the
--- neighbouring node.
+-- neighbouring node. Order of the bits (right to left) are -z, +x, +z, -x.
 local wires = {}
 
 for y0 = 0, 15 do
@@ -46,14 +46,6 @@ local function check_bit(n, b)
 	return bit.band(n, bit.lshift(1, b)) ~= 0
 end
 
--- Transform illegal wireflags like 0b11110011 to legal ones like 0b00110011 to
--- avoid unknown node crashes when updating nodes.
-local function make_legal(wireflags)
-	local y0 = bit.band(wireflags, 0xf)
-	local y1 = bit.band(y0, bit.rshift(wireflags, 4))
-	return bit.bor(bit.lshift(y1, 4), y0)
-end
-
 -- Make wires which only extend in one direction also extend in the opposite
 -- direction.
 local function make_long(wireflags)
@@ -73,6 +65,14 @@ local function make_long(wireflags)
 		end
 	end
 	return wireflags
+end
+
+-- Transform illegal wireflags like 0b11110011 to legal ones like 0b00110011 to
+-- avoid unknown node crashes when updating nodes.
+local function make_legal(wireflags)
+	local y0 = bit.band(wireflags, 0xf)
+	local y1 = bit.band(y0, bit.rshift(wireflags, 4))
+	return bit.bor(bit.lshift(y1, 4), y0)
 end
 
 local function wireflags_to_name(wireflags)
