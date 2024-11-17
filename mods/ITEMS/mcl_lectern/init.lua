@@ -126,7 +126,10 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			local inv = sender:get_inventory()
 			local node = minetest.get_node(pos)
 			local nm = minetest.get_meta(pos)
-			inv:add_item("main", ItemStack(nm:get_string("book_item")))
+			local is = nm:get_string("book_item")
+			if is and is ~= "" then
+				inv:add_item("main", is)
+			end
 			node.name = "mcl_lectern:lectern"
 			mcl_redstone.swap_node(pos,node)
 			nm:set_string("formspec","")
@@ -148,7 +151,9 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 		end
 	end,
 	after_dig_node = function(pos, _, oldmetadata, _)
-		minetest.add_item(pos, ItemStack(oldmetadata.fields.book_item))
+		if oldmetadata and oldmetadata.fields and oldmetadata.fields.book_item then
+			minetest.add_item(pos, ItemStack(oldmetadata.fields.book_item))
+		end
 		mesecon.receptor_off(pos, mesecon.rules.alldirs)
 	end,
 	_mcl_redstone = {
