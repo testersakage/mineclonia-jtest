@@ -213,6 +213,24 @@ do
 			doc.add_entry_alias("nodes", "mcl_redstone:redstone", "nodes", "mcl_redstone:wire_"..wireid)
 		end
 
+		-- Toggle between cross and dot using rightclick
+		local on_rightclick
+		if wire == 0 then
+			on_rightclick = function(pos)
+				minetest.swap_node(pos, {
+					name = "mcl_redstone:wire_0f",
+					param2 = minetest.get_node(pos).param2,
+				})
+			end
+		elseif bit.band(wire, 0xf) == 0xf then
+			on_rightclick = function(pos)
+				minetest.swap_node(pos, {
+					name = "mcl_redstone:redstone",
+					param2 = minetest.get_node(pos).param2,
+				})
+			end
+		end
+
 		local name = wireflags_to_name(wire)
 		minetest.register_node(name, {
 			drawtype = "nodebox",
@@ -242,6 +260,7 @@ do
 			after_destruct = function(pos, oldnode)
 				update_wire_connections(pos)
 			end,
+			on_rightclick = on_rightclick,
 		})
 		wireflag_tab[name] = wire
 	end
