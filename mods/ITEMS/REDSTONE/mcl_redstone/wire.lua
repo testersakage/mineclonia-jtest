@@ -25,10 +25,6 @@ local dot_tile = "redstone_redstone_dust_dot.png"
 local opaque_tab = mcl_redstone._solid_opaque_tab
 local wireflag_tab = mcl_redstone._wireflag_tab
 
-local function check_bit(n, b)
-	return bit.band(n, bit.lshift(1, b)) ~= 0
-end
-
 -- Make wires which only extend in one direction also extend in the opposite
 -- direction.
 local function make_long(wireflags)
@@ -209,9 +205,8 @@ do
 				end
 			end
 
-			-- Add bump to nodebox if curved
-			if (check_bit(wire, 0) and check_bit(wire, 1)) or (check_bit(wire, 1) and check_bit(wire, 2))
-					or (check_bit(wire, 2) and check_bit(wire, 3)) or (check_bit(wire, 3) and check_bit(wire, 0)) then
+			-- Add bump to nodebox if the wireflags has any bits set for X and any bits set for Z
+			if bit.band(wire, 0xA) ~= 0 and bit.band(wire, 0x5) ~= 0 then
 				table.insert(nodebox.fixed, box_bump)
 			end
 
