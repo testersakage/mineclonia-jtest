@@ -83,18 +83,18 @@ end
 
 local function update_wire(pos)
 	local update_tab = {
-		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x44 },
-		{ wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x88 },
-		{ wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x11 },
-		{ wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x22 },
-		{ wire = vector.new(0, 0, -1), mask = 0x1, mask2 = 0x4 },
-		{ wire = vector.new(-1, 0, 0), mask = 0x2, mask2 = 0x8 },
-		{ wire = vector.new(0, 0, 1), mask = 0x4, mask2 = 0x1 },
-		{ wire = vector.new(1, 0, 0), mask = 0x8, mask2 = 0x2 },
-		{ wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0), mask = 0x11, mask2 = 0x4 },
-		{ wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x22, mask2 = 0x8 },
-		{ wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0), mask = 0x44, mask2 = 0x1 },
-		{ wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x88, mask2 = 0x2 },
+		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1 },
+		{ wire = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0), mask = 0x2 },
+		{ wire = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1), mask = 0x4 },
+		{ wire = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0), mask = 0x8 },
+		{ wire = vector.new(0, 0, -1), mask = 0x1 },
+		{ wire = vector.new(-1, 0, 0), mask = 0x2 },
+		{ wire = vector.new(0, 0, 1), mask = 0x4 },
+		{ wire = vector.new(1, 0, 0), mask = 0x8 },
+		{ wire = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0), mask = 0x11 },
+		{ wire = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x22 },
+		{ wire = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0), mask = 0x44 },
+		{ wire = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0), mask = 0x88 },
 	}
 	local fourdir_tab = {
 		{ dir = vector.new(0, 0, -1), mask = 0x1 },
@@ -123,21 +123,7 @@ local function update_wire(pos)
 			if wireflag_tab[node2.name] then
 				local over_opaque = over and opaque_tab[minetest.get_node(pos:add(over)).name] or false
 				local mask = bit.band(entry.mask, over_opaque and 0xff or 0x0f)
-				local mask2 = bit.band(entry.mask2, over_opaque and 0xff or 0x0f)
-
 				wireflags = bit.bor(wireflags, mask)
-
-				local wireflags2 = wireflag_tab[node2.name]
-				if present then
-					wireflags2 = bit.bor(wireflags2, mask2)
-				else
-					wireflags2 = bit.band(wireflags2, bit.bnot(mask2))
-				end
-
-				minetest.swap_node(pos2, {
-					name = wireflags_to_name(make_legal(wireflags2)),
-					param2 = node2.param2,
-				})
 			end
 		end
 	end
@@ -168,6 +154,30 @@ function mcl_redstone._update_opaque_connections(pos)
 		vector.new(-1, 0, 0),
 		vector.new(0, 0, 1),
 		vector.new(0, 0, -1),
+	}
+	for _, dir in pairs(dirs) do
+		local pos2 = pos:add(dir)
+		if wireflag_tab[minetest.get_node(pos2).name] then
+			update_wire(pos2)
+		end
+	end
+end
+
+local function update_wire_connections(pos)
+	local dirs = {
+		vector.new(0, 0, 0),
+		vector.new(1, 0, 0),
+		vector.new(-1, 0, 0),
+		vector.new(0, 0, 1),
+		vector.new(0, 0, -1),
+		vector.new(1, -1, 0),
+		vector.new(-1, -1, 0),
+		vector.new(0, -1, 1),
+		vector.new(0, -1, -1),
+		vector.new(1, 1, 0),
+		vector.new(-1, 1, 0),
+		vector.new(0, 1, 1),
+		vector.new(0, 1, -1),
 	}
 	for _, dir in pairs(dirs) do
 		local pos2 = pos:add(dir)
@@ -247,10 +257,10 @@ for _, wire in pairs(wires) do
 		wield_image = wire == 0 and "redstone_redstone_dust.png" or nil,
 		inventory_image = wire == 0 and "redstone_redstone_dust.png" or nil,
 		on_construct = function(pos)
-			update_wire(pos, minetest.get_node, minetest.swap_node)
+			update_wire_connections(pos)
 		end,
 		after_destruct = function(pos, oldnode)
-			update_wire(pos, minetest.get_node, minetest.swap_node)
+			update_wire_connections(pos)
 		end,
 		_wireflags = wire, -- Wireflags for connections
 		_logical_wireflags = make_long(wire), -- Wireflags for power output
@@ -263,7 +273,7 @@ function mcl_redstone._connect_with_wires(pos)
 		local pos2 = pos:add(dir)
 		local node = minetest.get_node(pos2)
 		if minetest.get_item_group(node.name, "redstone_wire") ~= 0 then
-			update_wire(pos2, minetest.get_node, minetest.swap_node)
+			update_wire(pos2)
 		end
 	end
 end
