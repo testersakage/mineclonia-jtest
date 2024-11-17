@@ -96,6 +96,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			node.name = "mcl_lectern:lectern_with_book"
 			minetest.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
+			nm:set_string("infotext", im:get_string("author") .. " - " .. im:get_string("title"))
 			nm:set_string("book_item", itemstack:to_string())
 			nm:set_string("pages","15")
 			nm:set_string("page","1")
