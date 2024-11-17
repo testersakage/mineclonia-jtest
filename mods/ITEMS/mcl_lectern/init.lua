@@ -19,8 +19,6 @@ local function get_formspec(text, title, author)
 	"button[4.25,7.95;3,1;take;" .. F(S("Take Book")) .. "]"
 end
 
-local S = minetest.get_translator(minetest.get_current_modname())
-
 local lectern_tpl = {
 	description = S("Lectern"),
 	_tt_help = S("Lecterns not only look good, but are job site blocks for Librarians."),
