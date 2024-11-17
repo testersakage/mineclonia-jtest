@@ -84,7 +84,7 @@ local lectern_tpl = {
 }
 
 minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+	on_rightclick = function(pos, node, clicker, itemstack)
 		if itemstack:get_name() == "mcl_books:written_book" then
 			local player_name = clicker:get_player_name()
 			if minetest.is_protected(pos, player_name) then
@@ -97,12 +97,14 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			minetest.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
 			nm:set_string("infotext", im:get_string("author") .. " - " .. im:get_string("title"))
-			nm:set_string("book_item", itemstack:to_string())
 			nm:set_string("pages","15")
 			nm:set_string("page","1")
 			if not minetest.is_creative_enabled(player_name) then
 				itemstack:take_item()
 			end
+			local book_item = ItemStack(itemstack)
+			book_item:set_count(1)
+			nm:set_string("book_item", book_item:to_string())
 			return itemstack
 		end
 	end,
