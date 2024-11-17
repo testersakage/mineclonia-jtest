@@ -22,10 +22,10 @@ local cross_tile = "redstone_redstone_dust_dot.png^redstone_redstone_dust_line0.
 local line_tile = "redstone_redstone_dust_line0.png"
 local dot_tile = "redstone_redstone_dust_dot.png"
 
--- True if node is opaque by contentid
+-- True if node is opaque by name
 local opaque_tab = mcl_redstone._solid_opaque_tab
 
--- Wireflags by contentid
+-- Wireflags by name
 local wireflag_tab = {}
 
 local function check_bit(n, b)
@@ -49,9 +49,9 @@ local function make_long(wireflags)
 	return wireflags
 end
 
--- Transform illegal wireflags like 0b11110011 to legal ones like 0b00110011 to
--- avoid unknown node crashes when updating nodes. Also performs the
--- 'make_long' transformation .
+--- Wireflags are illegal if they have the `is going upwards` flag set for a
+-- direction they arent pointing to. This function removes those extra flags (if
+-- there are any).
 local function make_legal(wireflags)
 	wireflags = make_long(wireflags)
 
@@ -66,6 +66,7 @@ local function wireflags_to_name(wireflags)
 		"mcl_redstone:wire_"..(bit.tohex(wireflags, 2))
 end
 
+-- Update connections for wire at position.
 local function update_wire(pos)
 	local update_tab = {
 		{ wire = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1), mask = 0x1 },
