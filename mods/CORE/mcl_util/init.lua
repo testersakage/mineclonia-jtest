@@ -423,7 +423,7 @@ function mcl_util.drop_items_from_meta_container(lists)
 		else
 			local meta = minetest.get_meta(pos)
 			local inv = meta:get_inventory()
-			for listname in pairs(lists) do
+			for _, listname in pairs(lists) do
 				for i = 1, inv:get_size(listname) do
 					drop_item_stack(pos, inv:get_stack(listname, i))
 				end
