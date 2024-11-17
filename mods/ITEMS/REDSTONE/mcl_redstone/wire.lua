@@ -1,19 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
--- Wireflags are numbers with binary representation YYYYXXXX where XXXX
--- determines if there is a visible connection in each of the four cardinal
--- directions and YYYY if the respective connection also goes up over the
--- neighbouring node. Order of the bits (right to left) are -z, +x, +z, -x.
-local wires = {}
-
-for y0 = 0, 15 do
-	for y1 = 0, 15 do
-		if bit.band(y1, bit.bnot(y0)) == 0 then
-			table.insert(wires, bit.bor(bit.lshift(y1, 4), y0))
-		end
-	end
-end
-
 local nodebox_wire = {
 	{-1/16, -.5, -8/16, 1/16, -.5+1/64, -1/16}, -- z negative
 	{-8/16, -.5, -1/16, -1/16, -.5+1/64, 1/16}, -- x negative
@@ -49,10 +35,6 @@ end
 -- Make wires which only extend in one direction also extend in the opposite
 -- direction.
 local function make_long(wireflags)
-	if wireflags == 0 then
-		return 0x0f
-	end
-
 	local conv_tab = {
 		[0x1] = 0x5,
 		[0x4] = 0x5,
@@ -68,8 +50,11 @@ local function make_long(wireflags)
 end
 
 -- Transform illegal wireflags like 0b11110011 to legal ones like 0b00110011 to
--- avoid unknown node crashes when updating nodes.
+-- avoid unknown node crashes when updating nodes. Also performs the
+-- 'make_long' transformation .
 local function make_legal(wireflags)
+	wireflags = make_long(wireflags)
+
 	local y0 = bit.band(wireflags, 0xf)
 	local y1 = bit.band(y0, bit.rshift(wireflags, 4))
 	return bit.bor(bit.lshift(y1, 4), y0)
@@ -194,78 +179,90 @@ local fourdirs = {
 	vector.new(0, 0, -1),
 }
 
-for _, wire in pairs(wires) do
-	local wireid = bit.tohex(wire, 2)
-
-	local tt
-	local longdesc
-	local usagehelp
-	local nodebox
-	local tiles
-	if wire == 0 then
-		tt = S("Transmits redstone power, powers mechanisms")
-		longdesc = S("Redstone is a versatile conductive mineral which transmits redstone power. It can be placed on the ground as a trail.").."\n"..
-			S("A redstone trail can be in two states: Powered or not powered. A powered redstone trail will power (and thus activate) adjacent redstone components.").."\n"..
-			S("Redstone power can be received from various redstone components, such as a block of redstone or a button. Redstone power is used to activate numerous mechanisms, such as redstone lamps or pistons.")
-		usagehelp = S("Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills.").."\n\n"..
-			S("Read the help entries on the other redstone components to learn how redstone components interact.")
-		tiles = {dot_tile, dot_tile, "blank.png", "blank.png", "blank.png", "blank.png"}
-		nodebox = {type = "fixed", fixed={-8/16, -.5, -8/16, 8/16, -.5+1/64, 8/16}}
-	else
-		tiles = { cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile }
-		nodebox = {type = "fixed", fixed={box_center}}
-
-		local lwire = make_long(wire)
-
-		-- Calculate nodebox
-		for i = 0, 7 do
-			if bit.band(lwire, bit.lshift(1, i)) ~= 0 then
-				table.insert(nodebox.fixed, nodebox_wire[i + 1])
+do
+	local wires = {}
+	for y0 = 0, 15 do
+		for y1 = 0, 15 do
+			local wire = bit.bor(bit.lshift(y1, 4), y0)
+			if wire == make_legal(wire) then
+				table.insert(wires, wire)
 			end
 		end
-
-		-- Add bump to nodebox if curved
-		if (check_bit(lwire, 0) and check_bit(lwire, 1)) or (check_bit(lwire, 1) and check_bit(lwire, 2))
-				or (check_bit(lwire, 2) and check_bit(lwire, 3)) or (check_bit(lwire, 3) and check_bit(lwire, 0)) then
-			table.insert(nodebox.fixed, box_bump)
-		end
-
-		doc.add_entry_alias("nodes", "mcl_redstone:redstone", "nodes", "mcl_redstone:wire_"..wireid)
 	end
 
-	local name = wireflags_to_name(wire)
-	minetest.register_node(name, {
-		drawtype = "nodebox",
-		paramtype = "light",
-		paramtype2 = "color",
-		palette = "redstone_palette_power.png",
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		sunlight_propagates = true,
-		selection_box = selectionbox,
-		node_box = nodebox,
-		tiles = tiles,
-		walkable = false,
-		drop = "mcl_redstone:redstone",
-		sounds = mcl_sounds.node_sound_defaults(),
-		is_ground_content = false,
-		groups = {redstone_wire = 1, dig_immediate = 3, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow=1, dig_by_piston = 1, unsticky = 1, craftitem = 1, not_in_creative_inventory = wire ~= 0 and 1 or 0},
-		description = wire == 0 and "Redstone" or S("Redstone Trail (@1)", wireid),
-		_tt_help = tt,
-		_doc_items_create_entry = longdesc and true or false,
-		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = usagehelp,
-		wield_image = wire == 0 and "redstone_redstone_dust.png" or nil,
-		inventory_image = wire == 0 and "redstone_redstone_dust.png" or nil,
-		on_construct = function(pos)
-			update_wire_connections(pos)
-		end,
-		after_destruct = function(pos, oldnode)
-			update_wire_connections(pos)
-		end,
-		_wireflags = wire, -- Wireflags for connections
-		_logical_wireflags = make_long(wire), -- Wireflags for power output
-	})
-	wireflag_tab[name] = wire
+	for _, wire in pairs(wires) do
+		local wireid = bit.tohex(wire, 2)
+
+		local tt
+		local longdesc
+		local usagehelp
+		local nodebox
+		local tiles
+		if wire == 0 then
+			tt = S("Transmits redstone power, powers mechanisms")
+			longdesc = S("Redstone is a versatile conductive mineral which transmits redstone power. It can be placed on the ground as a trail.").."\n"..
+				S("A redstone trail can be in two states: Powered or not powered. A powered redstone trail will power (and thus activate) adjacent redstone components.").."\n"..
+				S("Redstone power can be received from various redstone components, such as a block of redstone or a button. Redstone power is used to activate numerous mechanisms, such as redstone lamps or pistons.")
+			usagehelp = S("Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills.").."\n\n"..
+				S("Read the help entries on the other redstone components to learn how redstone components interact.")
+			tiles = {dot_tile, dot_tile, "blank.png", "blank.png", "blank.png", "blank.png"}
+			nodebox = {type = "fixed", fixed={-8/16, -.5, -8/16, 8/16, -.5+1/64, 8/16}}
+		else
+			tiles = { cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile }
+			nodebox = {type = "fixed", fixed={box_center}}
+
+			local lwire = make_long(wire)
+
+			-- Calculate nodebox
+			for i = 0, 7 do
+				if bit.band(lwire, bit.lshift(1, i)) ~= 0 then
+					table.insert(nodebox.fixed, nodebox_wire[i + 1])
+				end
+			end
+
+			-- Add bump to nodebox if curved
+			if (check_bit(lwire, 0) and check_bit(lwire, 1)) or (check_bit(lwire, 1) and check_bit(lwire, 2))
+					or (check_bit(lwire, 2) and check_bit(lwire, 3)) or (check_bit(lwire, 3) and check_bit(lwire, 0)) then
+				table.insert(nodebox.fixed, box_bump)
+			end
+
+			doc.add_entry_alias("nodes", "mcl_redstone:redstone", "nodes", "mcl_redstone:wire_"..wireid)
+		end
+
+		local name = wireflags_to_name(wire)
+		minetest.register_node(name, {
+			drawtype = "nodebox",
+			paramtype = "light",
+			paramtype2 = "color",
+			palette = "redstone_palette_power.png",
+			use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
+			sunlight_propagates = true,
+			selection_box = selectionbox,
+			node_box = nodebox,
+			tiles = tiles,
+			walkable = false,
+			drop = "mcl_redstone:redstone",
+			sounds = mcl_sounds.node_sound_defaults(),
+			is_ground_content = false,
+			groups = {redstone_wire = 1, dig_immediate = 3, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow=1, dig_by_piston = 1, unsticky = 1, craftitem = 1, not_in_creative_inventory = wire ~= 0 and 1 or 0},
+			description = wire == 0 and "Redstone" or S("Redstone Trail (@1)", wireid),
+			_tt_help = tt,
+			_doc_items_create_entry = longdesc and true or false,
+			_doc_items_longdesc = longdesc,
+			_doc_items_usagehelp = usagehelp,
+			wield_image = wire == 0 and "redstone_redstone_dust.png" or nil,
+			inventory_image = wire == 0 and "redstone_redstone_dust.png" or nil,
+			on_construct = function(pos)
+				update_wire_connections(pos)
+			end,
+			after_destruct = function(pos, oldnode)
+				update_wire_connections(pos)
+			end,
+			_wireflags = wire, -- Wireflags for connections
+			_logical_wireflags = make_long(wire), -- Wireflags for power output
+		})
+		wireflag_tab[name] = wire
+	end
 end
 
 function mcl_redstone._connect_with_wires(pos)
