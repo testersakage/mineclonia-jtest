@@ -22,11 +22,8 @@ local cross_tile = "redstone_redstone_dust_dot.png^redstone_redstone_dust_line0.
 local line_tile = "redstone_redstone_dust_line0.png"
 local dot_tile = "redstone_redstone_dust_dot.png"
 
--- True if node is opaque by name
 local opaque_tab = mcl_redstone._solid_opaque_tab
-
--- Wireflags by name
-local wireflag_tab = {}
+local wireflag_tab = mcl_redstone._wireflag_tab
 
 local function check_bit(n, b)
 	return bit.band(n, bit.lshift(1, b)) ~= 0
@@ -173,19 +170,12 @@ local function update_wire_connections(pos)
 	end
 end
 
-local fourdirs = {
-	vector.new(1, 0, 0),
-	vector.new(-1, 0, 0),
-	vector.new(0, 0, 1),
-	vector.new(0, 0, -1),
-}
-
 do
 	local wires = {}
 	for y0 = 0, 15 do
 		for y1 = 0, 15 do
 			local wire = bit.bor(bit.lshift(y1, 4), y0)
-			if wire == make_legal(wire) then
+			if wire == make_legal(make_long(wire)) then
 				table.insert(wires, wire)
 			end
 		end
@@ -212,18 +202,16 @@ do
 			tiles = { cross_tile, cross_tile, line_tile, line_tile, line_tile, line_tile }
 			nodebox = {type = "fixed", fixed={box_center}}
 
-			local lwire = make_long(wire)
-
 			-- Calculate nodebox
 			for i = 0, 7 do
-				if bit.band(lwire, bit.lshift(1, i)) ~= 0 then
+				if bit.band(wire, bit.lshift(1, i)) ~= 0 then
 					table.insert(nodebox.fixed, nodebox_wire[i + 1])
 				end
 			end
 
 			-- Add bump to nodebox if curved
-			if (check_bit(lwire, 0) and check_bit(lwire, 1)) or (check_bit(lwire, 1) and check_bit(lwire, 2))
-					or (check_bit(lwire, 2) and check_bit(lwire, 3)) or (check_bit(lwire, 3) and check_bit(lwire, 0)) then
+			if (check_bit(wire, 0) and check_bit(wire, 1)) or (check_bit(wire, 1) and check_bit(wire, 2))
+					or (check_bit(wire, 2) and check_bit(wire, 3)) or (check_bit(wire, 3) and check_bit(wire, 0)) then
 				table.insert(nodebox.fixed, box_bump)
 			end
 
@@ -259,12 +247,17 @@ do
 			after_destruct = function(pos, oldnode)
 				update_wire_connections(pos)
 			end,
-			_wireflags = wire, -- Wireflags for connections
-			_logical_wireflags = make_long(wire), -- Wireflags for power output
 		})
 		wireflag_tab[name] = wire
 	end
 end
+
+local fourdirs = {
+	vector.new(1, 0, 0),
+	vector.new(-1, 0, 0),
+	vector.new(0, 0, 1),
+	vector.new(0, 0, -1),
+}
 
 function mcl_redstone._connect_with_wires(pos)
 	for _, dir in pairs(fourdirs) do
