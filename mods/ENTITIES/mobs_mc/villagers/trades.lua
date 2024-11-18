@@ -519,7 +519,7 @@ return {
 		trades = {
 			{
 			{ { "mcl_mobitems:rotten_flesh", 32, 32 }, E(), 16, 12 },
-			{ E(), { "mesecons:redstone", 2, 2  }, 12, 1 },
+			{ E(), { "mcl_redstone:redstone", 2, 2  }, 12, 1 },
 			},
 
 			{

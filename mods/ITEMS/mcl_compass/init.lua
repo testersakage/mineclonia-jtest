@@ -263,7 +263,7 @@ minetest.register_craft({
 	output = "mcl_compass:" .. stereotype_frame,
 	recipe = {
 		{"", "mcl_core:iron_ingot", ""},
-		{"mcl_core:iron_ingot", "mesecons:redstone", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
 		{"", "mcl_core:iron_ingot", ""}
 	}
 })

@@ -3,6 +3,25 @@ local GRAVITY = tonumber(minetest.settings:get("movement_gravity"))
 local inv_nodes_movable = minetest.settings:get_bool("mcl_inv_nodes_movable", true)
 --register stoppers for movestones/pistons
 
+mesecon = {}
+
+local alldirs = {
+	vector.new(1,  0, 0),
+	vector.new(-1,  0, 0),
+	vector.new(0,  1, 0),
+	vector.new(0, -1, 0),
+	vector.new(0,  0, 1),
+	vector.new(0,  0, -1)
+}
+
+local function join_table(t1, t2)
+	local rval = table.copy(t2)
+	for i, v in ipairs(t1) do
+		table.insert(rval, table.copy(v))
+	end
+	return rval
+end
+
 mesecon.mvps_stoppers = {}
 mesecon.mvps_unsticky = {}
 mesecon.mvps_droppers = {}
@@ -78,13 +97,6 @@ end
 local function on_mvps_move(moved_nodes)
 	for _, callback in ipairs(mesecon.on_mvps_move) do
 		callback(moved_nodes)
-	end
-end
-
-function mesecon.mvps_process_stack(stack)
-	-- update mesecons for placed nodes ( has to be done after all nodes have been added )
-	for _, n in ipairs(stack) do
-		mesecon.on_placenode(n.pos, minetest.get_node(n.pos))
 	end
 end
 
@@ -266,7 +278,7 @@ function mesecon.mvps_push_or_pull(pos, _, movedir, maximum, player_name, piston
 	end
 
 	local all_nodes = nodes
-	if dig_nodes and #dig_nodes > 0 then all_nodes = mesecon.join_table(dig_nodes, nodes) end
+	if dig_nodes and #dig_nodes > 0 then all_nodes = join_table(dig_nodes, nodes) end
 	if are_protected(all_nodes, player_name) then
 		return
 	end
@@ -296,14 +308,6 @@ function mesecon.mvps_push_or_pull(pos, _, movedir, maximum, player_name, piston
 		end
 	end
 
-	-- update mesecons for removed nodes ( has to be done after all nodes have been removed )
-	for id, n in ipairs(all_nodes) do
-		if first_dropper and id >= first_dropper then
-			break
-		end
-		mesecon.on_dignode(n.pos, n.node)
-	end
-
 	-- add nodes
 	for id, n in ipairs(all_nodes) do
 		if first_dropper and id >= first_dropper then
@@ -322,7 +326,7 @@ function mesecon.mvps_push_or_pull(pos, _, movedir, maximum, player_name, piston
 	end
 
 	local moved_nodes = {}
-	local oldstack = mesecon.tablecopy(nodes)
+	local oldstack = table.copy(nodes)
 	for i in ipairs(nodes) do
 		if first_dropper and i >= first_dropper then
 			break
@@ -377,7 +381,7 @@ function mesecon.mvps_move_objects(pos, dir, nodestack)
 				obj:set_pos(np)
 				-- Launch Player, TNT & mobs like in Minecraft
 				-- Only doing so if slimeblock is attached.
-				for _, r in ipairs(mesecon.rules.alldirs) do
+				for _, r in ipairs(alldirs) do
 					local adjpos = vector.add(np, r)
 					local adjnode = minetest.get_node(adjpos)
 					if minetest.registered_nodes[adjnode.name] and minetest.registered_nodes[adjnode.name].mvps_sticky and adjnode.name == "mcl_core:slimeblock" then
@@ -698,20 +702,20 @@ mesecon.register_mvps_unsticky("mcl_nether:nether_wart")
 mesecon.register_mvps_unsticky("mcl_amethyst:amethyst_cluster")
 mesecon.register_mvps_unsticky("mcl_amethyst:budding_amethyst_block")
 -- Pressure Plates
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_wood_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_wood_off")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_stone_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_stone_off")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_acaciawood_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_acaciawoood_off")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_birchwood_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_birchwood_off")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_darkwood_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_darkwood_off")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_sprucekwood_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_sprucewood_off")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_junglewood_on")
-mesecon.register_mvps_unsticky("mesecons_pressureplates:pressure_plate_junglewood_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_wood_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_wood_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_stone_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_stone_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_acaciawood_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_acaciawoood_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_birchwood_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_birchwood_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_darkwood_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_darkwood_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_sprucekwood_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_sprucewood_off")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_junglewood_on")
+mesecon.register_mvps_unsticky("mcl_redstone:pressure_plate_junglewood_off")
 -- Redstone Comparators
 mesecon.register_mvps_unsticky("mcl_comparators:comparator_on_sub")
 mesecon.register_mvps_unsticky("mcl_comparators:comparator_off_sub")
@@ -890,10 +894,10 @@ mesecon.register_mvps_unsticky("mesecons_delayer:delayer_on_2")
 mesecon.register_mvps_unsticky("mesecons_delayer:delayer_on_3")
 mesecon.register_mvps_unsticky("mesecons_delayer:delayer_on_4")
 -- Redstone Torch
-mesecon.register_mvps_unsticky("mesecons_torch:mesecon_torch_on")
-mesecon.register_mvps_unsticky("mesecons_torch:mesecon_torch_off")
-mesecon.register_mvps_unsticky("mesecons_torch:mesecon_torch_on_wall")
-mesecon.register_mvps_unsticky("mesecons_torch:mesecon_torch_off_wall")
+mesecon.register_mvps_unsticky("mcl_redstone:torch_on")
+mesecon.register_mvps_unsticky("mcl_redstone:torch_off")
+mesecon.register_mvps_unsticky("mcl_redstone:torch_on_wall")
+mesecon.register_mvps_unsticky("mcl_redstone:torch_off_wall")
 -- Sea Pickle
 mesecon.register_mvps_unsticky("mcl_ocean:sea_pickle_1_dead_brain_coral_block")
 mesecon.register_mvps_unsticky("mcl_ocean:sea_pickle_2_dead_brain_coral_block")
@@ -943,8 +947,6 @@ mesecon.register_on_mvps_move(mesecon.move_hot_nodes)
 mesecon.register_on_mvps_move(function(moved_nodes)
 	for i = 1, #moved_nodes do
 		local moved_node = moved_nodes[i]
-		-- Check for falling after moving node
-		mesecon.on_placenode(moved_node.pos, moved_node.node)
 		minetest.after(0, function()
 			minetest.check_for_falling(moved_node.oldpos)
 			minetest.check_for_falling(moved_node.pos)

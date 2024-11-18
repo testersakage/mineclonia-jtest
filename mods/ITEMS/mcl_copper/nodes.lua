@@ -51,10 +51,10 @@ local n_desc = {
 }
 
 local bulb_light = {
-	[""] = minetest.LIGHT_MAX,
+	[""] = 14,
 	["_exposed"] = 12,
-	["_weathered"] = 8,
-	["_oxidized"] = 4,
+	["_weathered"] = 10,
+	["_oxidized"] = 7,
 }
 
 for n, desc in pairs(n_desc) do
@@ -120,19 +120,27 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		drop = "mcl_copper:bulb"..n.."_off",
-		mesecons = {effector = {
-			action_on = function(pos, node)
-				-- needed to maintain its waxed state
-				local preserved_state = ""
-				if string.find(node.name, "_preserved") then
-					preserved_state = "_preserved"
-				end
-				node.name = "mcl_copper:bulb"..n.."_off"..preserved_state
-				minetest.swap_node(pos,node)
+		_redstone = {
+			connects_to = function(node)
+				return true
 			end,
-			rules = mesecon.rules.alldirs
-		}}
+			update = function(pos, node)
+				local oldpowered = node.param2 ~= 0
+				local powered  = mcl_redstone.get_power(pos) ~= 0
+				local newname = node.name
+				if powered and not oldpowered then
+					local preserved_state = ""
+					if string.find(node.name, "_preserved") then
+						preserved_state = "_preserved"
+					end 
+					newname = "mcl_copper:bulb"..n.."_off"..preserved_state
+				end
+				return {
+					name = newname,
+					param2 = powered and 1 or 0,
+				}
+			end,
+		},
 	})
 	minetest.register_node("mcl_copper:bulb"..n.."_off", {
 		description = S("@1 Copper Bulb", desc),
@@ -143,18 +151,28 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		mesecons = {effector = {
-			action_on = function(pos, node)
-				-- needed to maintain its waxed state
-				local preserved_state = ""
-				if string.find(node.name, "_preserved") then
-					preserved_state = "_preserved"
-				end
-				node.name = "mcl_copper:bulb"..n.."_on"..preserved_state
-				minetest.swap_node(pos,node)
+		_redstone = {
+			connects_to = function(node)
+				return true
 			end,
-			rules = mesecon.rules.alldirs
-		}}
+			update = function(pos)
+				local node = minetest.get_node(pos)
+				local oldpowered = node.param2 ~= 0
+				local powered  = mcl_redstone.get_power(pos) ~= 0
+				local newname = node.name
+				if powered and not oldpowered then
+					local preserved_state = ""
+					if string.find(node.name, "_preserved") then
+						preserved_state = "_preserved"
+					end 
+					newname = "mcl_copper:bulb"..n.."_on"..preserved_state
+				end
+				return {
+					name = newname,
+					param2 = powered and 1 or 0,
+				}
+			end,
+		},
 	})
 
 	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n, {
@@ -184,41 +202,30 @@ for n, desc in pairs(n_desc) do
 	mcl_wip.register_wip_item("mcl_copper:door"..n)
 end
 
+mcl_stairs.register_stair_and_slab("copper_cut", {
+	baseitem = "mcl_copper:block_cut",
+	description_stair = "Cut Copper Stairs",
+	description_slab = "Cut Copper Slab",
+	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block", "mcl_copper:block_cut"}}
+})
 
-for xposr, desc in pairs(n_desc) do
-	if xposr == "" then
-		mcl_stairs.register_stair_and_slab("copper"..xposr.."_cut", {
-			baseitem = "mcl_copper:block"..xposr.."_cut",
-			description_stair = S("@1 Cut Copper Stairs", desc),
-			description_slab = S("@1 Cut Copper Slab", desc),
-			overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block", "mcl_copper:block"..xposr.."_cut"}}
-		})
-	else
-		mcl_stairs.register_stair_and_slab("copper"..xposr.."_cut", {
-			baseitem = "mcl_copper:block"..xposr.."_cut",
-			description_stair = S("@1 Cut Copper Stairs", desc),
-			description_slab = S("@1 Cut Copper Slab", desc),
-			overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block", "mcl_copper:block"..xposr.."_cut"}, _on_lightning_strike = on_lightning_strike}
-		})
-	end
-end
--- mcl_stairs.register_stair_and_slab("copper_exposed_cut", {
--- 	baseitem = "mcl_copper:block_exposed_cut",
--- 	description_stair = "Exposed Cut Copper Stairs",
--- 	description_slab = "Exposed Cut Copper Slab",
--- 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_exposed", "mcl_copper:block_exposed_cut"}, _on_lightning_strike = on_lightning_strike}
--- })
---
--- mcl_stairs.register_stair_and_slab("copper_weathered_cut", {
--- 	baseitem = "mcl_copper:block_weathered_cut",
--- 	description_stair = "Weathered Cut Copper Stairs",
--- 	description_slab = "Weathered Cut Copper Slab",
--- 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_weathered", "mcl_copper:block_weathered_cut"}, _on_lightning_strike = on_lightning_strike}
--- })
---
--- mcl_stairs.register_stair_and_slab("copper_oxidized_cut", {
--- 	baseitem = "mcl_copper:block_oxidized_cut",
--- 	description_stair = "Oxidized Cut Copper Stairs",
--- 	description_slab = "Oxidized Cut Copper Slab",
--- 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_oxidized", "mcl_copper:block_oxidized_cut"}, _on_lightning_strike = on_lightning_strike}
--- })
+mcl_stairs.register_stair_and_slab("copper_exposed_cut", {
+	baseitem = "mcl_copper:block_exposed_cut",
+	description_stair = "Exposed Cut Copper Stairs",
+	description_slab = "Exposed Cut Copper Slab",
+	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_exposed", "mcl_copper:block_exposed_cut"}, _on_lightning_strike = on_lightning_strike}
+})
+
+mcl_stairs.register_stair_and_slab("copper_weathered_cut", {
+	baseitem = "mcl_copper:block_weathered_cut",
+	description_stair = "Weathered Cut Copper Stairs",
+	description_slab = "Weathered Cut Copper Slab",
+	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_weathered", "mcl_copper:block_weathered_cut"}, _on_lightning_strike = on_lightning_strike}
+})
+
+mcl_stairs.register_stair_and_slab("copper_oxidized_cut", {
+	baseitem = "mcl_copper:block_oxidized_cut",
+	description_stair = "Oxidized Cut Copper Stairs",
+	description_slab = "Oxidized Cut Copper Slab",
+	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_oxidized", "mcl_copper:block_oxidized_cut"}, _on_lightning_strike = on_lightning_strike}
+})

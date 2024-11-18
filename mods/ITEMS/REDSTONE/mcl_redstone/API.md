@@ -1,0 +1,153 @@
+# API for `mcl_redstone`
+
+This mods adds an API for defining custom redstone components.
+
+## Example
+
+Here is an example from the redstone torch. The relevant parts for
+`mcl_redstone` is in the `_redstone` field. It defines `get_power` to make the
+torch emit power to all surrounding nodes except the node it is wallmounted on.
+It also defines `update` to make the torch turn off if the node it is
+wallmounted on is powered.
+
+```lua
+minetest.override_item("mcl_redstone:redstone_torch_on", {
+    paramtype2 = "wallmounted",
+    [...]
+    _redstone = {
+        connects_to = function(node, dir)
+            return true
+        end,
+        get_power = function(node, dir)
+            return minetest.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0
+        end,
+        update = function(pos, node)
+            if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2))) ~= 0 then
+                return {
+                    name = "mcl_redstone:redstone_torch_off",
+                    param2 = node.param2,
+                }
+            end
+        end,
+    },
+})
+```
+
+The definition for the turned off redstone torch is similar except it turns it
+on in `update` and does not have `get_power` (which is equivalent to have it
+always return `0`).
+
+```lua
+minetest.override_item("mcl_redstone:redstone_torch_off", {
+    paramtype2 = "wallmounted",
+    [...]
+    _redstone = {
+        connects_to = function(node, dir)
+            return true
+        end,
+        update = function(pos, node)
+            if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) == 0 then
+                return {
+                    name = "mcl_redstone:redstone_torch_on",
+                    param2 = node.param2,
+                }
+            end
+        end,
+    },
+})
+```
+
+## Redstone definition
+
+The `_redstone` field of node definitions is what defines a node as a redstone
+component.
+
+```lua
+{
+    get_power = function(node, dir),
+    update = function(pos, node, get_power),
+    init = function(pos, node),
+}
+```
+
+### `get_power = function(node, dir)`
+
+Should return the power level going from the node to the direction `dir`. Not
+defining it is equivalent to having it always return 0.
+
+### `connects_to = function(node, dir)`
+
+Should return `true` if a neighbouring redstone trail from the direction `dir`
+should form a connection to the node.
+
+### `update = function(pos, node, get_power)`
+
+The `update` callback gets called when the power level of a surrounding node
+changes. It has three arguments:
+
+1. `pos` -- The position of the node
+2. `node` -- The node (equivalent to `minetest.get_node(pos)`)
+3. `get_power` -- A function which takes a direction and returns the power
+   level coming from the node in that direction
+
+The return value is used for updating the node itself. It should return `nil`
+or an object with the following values:
+
+```lua
+{
+    name = "",       -- Name of node to replace with
+    param2 = 0,      -- param2 value of node to replace with
+    delay = 1,       -- Delay in ticks until node is replaced
+    priority = 1000, -- Priority of update
+}
+```
+
+The `priority` value is used to determine which update gets prioritized if
+multiple overlap. For example, using `priority = 1` when turning on and
+`priority = 2` when turning off will make a component with a delayed update
+keep its powered-on state when its input is quickly toggled off and on again.
+If two overlapping updates have same priority, the first one is prioritized.
+Only values > 0 are allowed.
+
+If `nil` is returned the node stays unchanged.
+
+The `update` callback will sometimes be called even though nothing of relevance
+has changed. Because of this, nodes that perform actions on redstone pulses
+must keep track of their previous power state. This can be done either by
+storing a flag in `param2` or by registering a separate powered-on node.
+
+It is illegal to call functions which write to map (like `minetest.set_node`)
+directly from `update`. Such calls have to be wrapped in a `minetest.after`
+call.
+
+### `init = function(pos, node)`
+
+The `init` callback gets called after a node is placed normally or by
+mcl_redstone. It will also be called after the mapblock of the node is loaded.
+It has the same type of return value as the `update` callback. It is used for
+redstone components (like pressed buttons) that are supposed to deactivate in a
+given number of ticks.
+
+If `init` has not been specified it will default to the `update`. For nodes
+were this is undesirable (like doors), `init` should be set to an empty
+function.
+
+It is illegal to call functions which write to map (like `minetest.set_node`)
+directly from `init`. Such calls have to be wrapped in a `minetest.after` call.
+
+## `mcl_redstone.get_power(pos, dir)`
+
+Returns the power level coming from `dir` into the node at pos. The direction
+is relative to `pos`. So (0, 1, 0) means power coming from the node above for
+example. The `dir` argument can be omitted in which case it returns the maximum
+power level of all six directions.
+
+It is only valid to call this function from a redstone callback (`init` or
+`update`). Using it in other places will result in an error.
+
+## `mcl_redstone.swap_node(pos, node)`
+
+Like `minetest.swap_node` but will trigger redstone updates to surrounding
+nodes. It was added because some code in Mineclonia which would otherwise have
+to be rewritten required it. It should be avoided in favor of
+`minetest.set_node` and might get removed in the future.

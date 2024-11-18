@@ -46,8 +46,18 @@ minetest.register_node("mcl_bells:bell", {
 	_mcl_hardness = 5,
 	on_rightclick = mcl_bells.ring_once,
 	use_texture_alpha = "clip",
-	mesecons = {effector = {
-		action_on = mcl_bells.ring_once,
-		rules = mesecon.rules.flat,
-	}},
+	_redstone = {
+		update = function(pos, node)
+			local oldpowered = node.param2 ~= 0
+			local powered = mcl_redstone.get_power(pos) ~= 0
+			if powered and not oldpowered then
+				mcl_bells.ring_once(pos)
+			end
+
+			minetest.swap_node(pos, {
+				name = node.name,
+				param2 = powered and 1 or 0,
+			})
+		end,
+	},
 })

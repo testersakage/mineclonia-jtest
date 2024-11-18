@@ -2,22 +2,9 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_observers = {}
 
-local rules_flat = {
-	{ x = 0, y = 0, z = -1, spread = true },
-}
-local function get_rules_flat(node)
-	local rules = rules_flat
-	for _ = 1, node.param2 do
-		rules = mesecon.rotate_rules_left(rules)
-	end
-	return rules
-end
-
-local rules_down = {{ x = 0, y = 1, z = 0, spread = true }}
-local rules_up = {{ x = 0, y = -1, z = 0, spread = true }}
-
--- Scan the node in front of the observer
--- and update the observer state if needed.
+-- Scan the node in front of the observer and update the observer state if
+-- needed.
+--
 -- TODO: Also scan metadata changes.
 -- TODO: Ignore some node changes.
 local function observer_scan(pos, initialize)
@@ -38,16 +25,8 @@ local function observer_scan(pos, initialize)
 	if oldnode ~= "" and not initialize then
 		if not (frontnode.name == oldnode and tostring(frontnode.param2) == oldparam2) then
 			-- Node state changed! Activate observer
-			if node.name == "mcl_observers:observer_off" then
-				minetest.swap_node(pos, {name = "mcl_observers:observer_on", param2 = node.param2})
-				mesecon.receptor_on(pos, get_rules_flat(node))
-			elseif node.name == "mcl_observers:observer_down_off" then
-				minetest.swap_node(pos, {name = "mcl_observers:observer_down_on"})
-				mesecon.receptor_on(pos, rules_down)
-			elseif node.name == "mcl_observers:observer_up_off" then
-				minetest.swap_node(pos, {name = "mcl_observers:observer_up_on"})
-				mesecon.receptor_on(pos, rules_up)
-			end
+			local ndef = minetest.registered_nodes[node.name]
+			minetest.set_node(pos, {name = ndef._observer_on, param2 = node.param2})
 			meta_needs_updating = true
 		end
 	else
@@ -60,37 +39,6 @@ local function observer_scan(pos, initialize)
 	return frontnode
 end
 
-function mcl_observers.observer_activate(pos)
-	minetest.after(mcl_vars.redstone_tick, function(pos)
-		local node = minetest.get_node(pos)
-		if not node then
-			return
-		end
-		local nn = node.name
-		local start_timer = false
-		if nn == "mcl_observers:observer_off" then
-			minetest.swap_node(pos, {name = "mcl_observers:observer_on", param2 = node.param2})
-			mesecon.receptor_on(pos, get_rules_flat(node))
-			start_timer = true
-		elseif nn == "mcl_observers:observer_down_off" then
-			minetest.swap_node(pos, {name = "mcl_observers:observer_down_on"})
-			mesecon.receptor_on(pos, rules_down)
-			start_timer = true
-		elseif nn == "mcl_observers:observer_up_off" then
-			minetest.swap_node(pos, {name = "mcl_observers:observer_up_on"})
-			mesecon.receptor_on(pos, rules_up)
-			start_timer = true
-		end
-
-		if start_timer then
-			local timer = minetest.get_node_timer(pos)
-			if not timer:is_started() then
-				observer_scan(pos, true)
-				timer:start(mcl_vars.redstone_tick)
-			end
-		end
-	end, {x=pos.x, y=pos.y, z=pos.z})
-end
 
 -- Vertical orientation (CURRENTLY DISABLED)
 local function observer_orientate(pos, placer)
@@ -110,194 +58,146 @@ local function observer_orientate(pos, placer)
 	end
 end
 
-mesecon.register_node("mcl_observers:observer", {
-		is_ground_content = false,
-		sounds = mcl_sounds.node_sound_stone_defaults(),
-		paramtype2 = "facedir",
-		on_rotate = false,
-		_mcl_blast_resistance = 3.5,
-		_mcl_hardness = 3.5,
-	}, {
-		description = S("Observer"),
-		_tt_help = S("Emits redstone pulse when block in front changes"),
-		_doc_items_longdesc = S("An observer is a redstone component which observes the block in front of it and sends a very short redstone pulse whenever this block changes."),
-		_doc_items_usagehelp = S("Place the observer directly in front of the block you want to observe with the “face” looking at the block. The arrow points to the side of the output, which is at the opposite side of the “face”. You can place your redstone dust or any other component here."),
-
-		groups = {pickaxey=1, material_stone=1, not_opaque=1, },
-		tiles = {
-			"mcl_observers_observer_top.png^[transformR180", "default_furnace_bottom.png",
-			"mcl_observers_observer_side.png", "mcl_observers_observer_side.png",
-			"mcl_observers_observer_front.png", "mcl_observers_observer_back.png",
-		},
-		mesecons = {
-			receptor = {
-				state = mesecon.state.off,
-				rules = get_rules_flat,
-			},
-		},
-		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
-			if not timer:is_started() then
-				observer_scan(pos, true)
-				timer:start(mcl_vars.redstone_tick)
-			end
-		end,
-		on_timer = function(pos)
-			observer_scan(pos)
-			return true
-		end,
-		after_place_node = observer_orientate,
-	}, {
-		_doc_items_create_entry = false,
-		groups = {pickaxey=1, material_stone=1, not_opaque=1, not_in_creative_inventory=1 },
-		tiles = {
-			"mcl_observers_observer_top.png^[transformR180", "default_furnace_bottom.png",
-			"mcl_observers_observer_side.png", "mcl_observers_observer_side.png",
-			"mcl_observers_observer_front.png", "mcl_observers_observer_back_lit.png",
-		},
-		mesecons = {
-			receptor = {
-				state = mesecon.state.on,
-				rules = get_rules_flat,
-			}
-		},
-
-		-- VERY quickly disable observer after construction
-		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
+local commdef = {
+	is_ground_content = false,
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	on_rotate = false,
+	groups = {pickaxey=1, material_stone=1, not_opaque=1, },
+	_mcl_blast_resistance = 3.5,
+	_mcl_hardness = 3.5,
+	on_construct = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		if not timer:is_started() then
 			timer:start(mcl_vars.redstone_tick)
+		end
+	end,
+	_redstone = {},
+}
+local commdef_off = table.merge(commdef, {
+	groups = table.merge(commdef.groups, {observer=1}),
+	on_timer = function(pos, elapsed)
+		observer_scan(pos)
+		return true
+	end,
+})
+local commdef_on = table.merge(commdef, {
+	_doc_items_create_entry = false,
+	groups = table.merge(commdef.groups, {observer=2}),
+	_redstone = table.merge(commdef._redstone, {
+		init = function(pos, node)
+			local ndef = minetest.registered_nodes[node.name]
+			minetest.after(0, function() minetest.set_node(pos, {
+				name = ndef._observer_off,
+				param2 = node.param2,
+			}) end)
 		end,
-		on_timer = function(pos)
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, {name = "mcl_observers:observer_off", param2 = node.param2})
-			mesecon.receptor_off(pos, get_rules_flat(node))
-			return true
-		end,
-	}
-)
+	}),
+})
 
-mesecon.register_node("mcl_observers:observer_down", {
-		is_ground_content = false,
-		sounds = mcl_sounds.node_sound_stone_defaults(),
-		groups = {pickaxey=1, material_stone=1, not_opaque=1, not_in_creative_inventory=1 },
-		on_rotate = false,
-		_mcl_blast_resistance = 3.5,
-		_mcl_hardness = 3.5,
-		drop = "mcl_observers:observer_off",
-	}, {
-		tiles = {
-			"mcl_observers_observer_back.png", "mcl_observers_observer_front.png",
-			"mcl_observers_observer_side.png^[transformR90", "mcl_observers_observer_side.png^[transformR90",
-			"mcl_observers_observer_top.png", "mcl_observers_observer_top.png",
-		},
-		mesecons = {
-			receptor = {
-				state = mesecon.state.off,
-				rules = rules_down,
-			},
-		},
-		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
-			if not timer:is_started() then
-				observer_scan(pos, true)
-				timer:start(mcl_vars.redstone_tick)
-			end
-		end,
-		on_timer = function(pos)
-			observer_scan(pos)
-			return true
-		end,
-	}, {
-		_doc_items_create_entry = false,
-		tiles = {
-			"mcl_observers_observer_back_lit.png", "mcl_observers_observer_front.png",
-			"mcl_observers_observer_side.png^[transformR90", "mcl_observers_observer_side.png^[transformR90",
-			"mcl_observers_observer_top.png", "mcl_observers_observer_top.png",
-		},
-		mesecons = {
-			receptor = {
-				state = mesecon.state.on,
-				rules = rules_down,
-			},
-		},
+minetest.register_node("mcl_observers:observer_off", table.merge(commdef_off, {
+	paramtype2 = "facedir",
+	description = S("Observer"),
+	groups = table.merge(commdef_off.groups),
+	_tt_help = S("Emits redstone pulse when block in front changes"),
+	_doc_items_longdesc = S("An observer is a redstone component which observes the block in front of it and sends a very short redstone pulse whenever this block changes."),
+	_doc_items_usagehelp = S("Place the observer directly in front of the block you want to observe with the “face” looking at the block. The arrow points to the side of the output, which is at the opposite side of the “face”. You can place your redstone dust or any other component here."),
 
-		-- VERY quickly disable observer after construction
-		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
-			timer:start(mcl_vars.redstone_tick)
+	tiles = {
+		"mcl_observers_observer_top.png^[transformR180", "default_furnace_bottom.png",
+		"mcl_observers_observer_side.png", "mcl_observers_observer_side.png",
+		"mcl_observers_observer_front.png", "mcl_observers_observer_back.png",
+	},
+	after_place_node = observer_orientate,
+	_observer_on = "mcl_observers:observer_on",
+	_observer_off = "mcl_observers:observer_off",
+	_redstone = table.merge(commdef_off._redstone, {
+		connects_to = function(node, dir)
+			local dir2 = -minetest.facedir_to_dir(node.param2)
+			return dir2 == dir
 		end,
-		on_timer = function(pos)
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, {name = "mcl_observers:observer_down_off", param2 = node.param2})
-			mesecon.receptor_off(pos, rules_down)
-			return true
+	}),
+}))
+minetest.register_node("mcl_observers:observer_on", table.merge(commdef_on, {
+	paramtype2 = "facedir",
+	groups = table.merge(commdef_on.groups, {not_in_creative_inventory=1}),
+	tiles = {
+		"mcl_observers_observer_top.png^[transformR180", "default_furnace_bottom.png",
+		"mcl_observers_observer_side.png", "mcl_observers_observer_side.png",
+		"mcl_observers_observer_front.png", "mcl_observers_observer_back_lit.png",
+	},
+	_observer_on = "mcl_observers:observer_on",
+	_observer_off = "mcl_observers:observer_off",
+	_redstone = table.merge(commdef_on._redstone, {
+		connects_to = function(node, dir)
+			local dir2 = -minetest.facedir_to_dir(node.param2)
+			return dir2 == dir
 		end,
-	}
-)
+		get_power = function(node, dir)
+			local dir2 = -minetest.facedir_to_dir(node.param2)
+			return dir2 == dir and 15 or 0
+		end,
+	})
+}))
 
-mesecon.register_node("mcl_observers:observer_up", {
-		is_ground_content = false,
-		sounds = mcl_sounds.node_sound_stone_defaults(),
-		groups = {pickaxey=1, material_stone=1, not_opaque=1, not_in_creative_inventory=1 },
-		on_rotate = false,
-		_mcl_blast_resistance = 3.5,
-		_mcl_hardness = 3.5,
-		drop = "mcl_observers:observer_off",
-	}, {
-		tiles = {
-			"mcl_observers_observer_front.png", "mcl_observers_observer_back.png",
-			"mcl_observers_observer_side.png^[transformR270", "mcl_observers_observer_side.png^[transformR270",
-			"mcl_observers_observer_top.png^[transformR180", "mcl_observers_observer_top.png^[transformR180",
-		},
-		mesecons = {
-			receptor = {
-				state = mesecon.state.off,
-				rules = rules_up,
-			},
-		},
-		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
-			if not timer:is_started() then
-				observer_scan(pos, true)
-				timer:start(mcl_vars.redstone_tick)
-			end
+minetest.register_node("mcl_observers:observer_down_off", table.merge(commdef_off, {
+	_doc_items_create_entry = false,
+	groups = table.merge(commdef_off.groups, {not_in_creative_inventory=1}),
+	tiles = {
+		"mcl_observers_observer_back.png", "mcl_observers_observer_front.png",
+		"mcl_observers_observer_side.png^[transformR90", "mcl_observers_observer_side.png^[transformR90",
+		"mcl_observers_observer_top.png", "mcl_observers_observer_top.png",
+	},
+	_observer_on = "mcl_observers:observer_down_on",
+	_observer_off = "mcl_observers:observer_down_off",
+}))
+minetest.register_node("mcl_observers:observer_down_on", table.merge(commdef_on, {
+	groups = table.merge(commdef_on.groups, {not_in_creative_inventory=1}),
+	tiles = {
+		"mcl_observers_observer_back_lit.png", "mcl_observers_observer_front.png",
+		"mcl_observers_observer_side.png^[transformR90", "mcl_observers_observer_side.png^[transformR90",
+		"mcl_observers_observer_top.png", "mcl_observers_observer_top.png",
+	},
+	_observer_on = "mcl_observers:observer_down_on",
+	_observer_off = "mcl_observers:observer_down_off",
+	_redstone = table.merge(commdef_on._redstone, {
+		get_power = function(node, dir)
+			return dir.y > 0 and 15 or 0
 		end,
-		on_timer = function(pos)
-			observer_scan(pos)
-			return true
-		end,
-	}, {
-		_doc_items_create_entry = false,
-		tiles = {
-			"mcl_observers_observer_front.png", "mcl_observers_observer_back_lit.png",
-			"mcl_observers_observer_side.png^[transformR270", "mcl_observers_observer_side.png^[transformR270",
-			"mcl_observers_observer_top.png^[transformR180", "mcl_observers_observer_top.png^[transformR180",
-		},
-		mesecons = {
-			receptor = {
-				state = mesecon.state.on,
-				rules = rules_up,
-			},
-		},
+	})
+}))
 
-		-- VERY quickly disable observer after construction
-		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
-			timer:start(mcl_vars.redstone_tick)
+minetest.register_node("mcl_observers:observer_up_off", table.merge(commdef_off, {
+	_doc_items_create_entry = false,
+	groups = table.merge(commdef_off.groups, {not_in_creative_inventory=1}),
+	tiles = {
+		"mcl_observers_observer_front.png", "mcl_observers_observer_back.png",
+		"mcl_observers_observer_side.png^[transformR270", "mcl_observers_observer_side.png^[transformR270",
+		"mcl_observers_observer_top.png^[transformR180", "mcl_observers_observer_top.png^[transformR180",
+	},
+	_observer_on = "mcl_observers:observer_up_on",
+	_observer_off = "mcl_observers:observer_up_off",
+}))
+minetest.register_node("mcl_observers:observer_up_on", table.merge(commdef_on, {
+	groups = table.merge(commdef_on.groups, {not_in_creative_inventory=1}),
+	tiles = {
+		"mcl_observers_observer_front.png", "mcl_observers_observer_back_lit.png",
+		"mcl_observers_observer_side.png^[transformR270", "mcl_observers_observer_side.png^[transformR270",
+		"mcl_observers_observer_top.png^[transformR180", "mcl_observers_observer_top.png^[transformR180",
+	},
+	_observer_on = "mcl_observers:observer_up_on",
+	_observer_off = "mcl_observers:observer_up_off",
+	_redstone = table.merge(commdef_on._redstone, {
+		get_power = function(node, dir)
+			return dir.y < 0 and 15 or 0
 		end,
-		on_timer = function(pos)
-			minetest.swap_node(pos, {name = "mcl_observers:observer_up_off"})
-			mesecon.receptor_off(pos, rules_up)
-			return true
-		end,
-	}
-)
+	})
+}))
 
 minetest.register_craft({
 	output = "mcl_observers:observer_off",
 	recipe = {
 		{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble" },
-		{ "mcl_nether:quartz", "mesecons:redstone", "mesecons:redstone" },
+		{ "mcl_nether:quartz", "mcl_redstone:redstone", "mcl_redstone:redstone" },
 		{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble" },
 	},
 })
@@ -305,32 +205,63 @@ minetest.register_craft({
 	output = "mcl_observers:observer_off",
 	recipe = {
 		{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble" },
-		{ "mesecons:redstone", "mesecons:redstone", "mcl_nether:quartz" },
+		{ "mcl_redstone:redstone", "mcl_redstone:redstone", "mcl_nether:quartz" },
 		{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble" },
 	},
 })
 
---[[
-	With the following code the observer will detect loading of areas where it is placed.
-	We need to restore signal generated by it before the area was unloaded.
-
-	Observer movement and atomic clock (one observer watches another) fails without this often.
-
-	But it WILL cause wrong single signal for all other cases, and I hope it's nothing.
-	After all, why it can't detect the loading of areas, if we haven't a better solution...
-]]
 minetest.register_lbm({
-	name = "mcl_observers:activate_lbm",
+	name = "mcl_observers:turn_off",
 	nodenames = {
-		"mcl_observers:observer_off",
-		"mcl_observers:observer_down_off",
-		"mcl_observers:observer_up_off",
 		"mcl_observers:observer_on",
 		"mcl_observers:observer_down_on",
 		"mcl_observers:observer_up_on",
+		"mcl_observers:observer_off",
+		"mcl_observers:observer_down_off",
+		"mcl_observers:observer_up_off",
 	},
 	run_at_every_load = true,
 	action = function(pos)
-		minetest.after(1, mcl_observers.observer_activate, {x=pos.x, y=pos.y, z=pos.z})
+		local node = minetest.get_node(pos)
+		local ndef = minetest.registered_nodes[node.name]
+		minetest.set_node(pos, { name = ndef._observer_off, param2 = node.param2 })
 	end,
 })
+
+--function mcl_observers.observer_activate(pos)
+--	mcl_redstone.after(1, function()
+--		local node = minetest.get_node(pos)
+--		if not node then
+--			return
+--		end
+--		local nn = node.name
+--		if minetest.get_item_group(nn, "observer") == 2 then
+--			local ndef = minetest.registered_nodes[nn]
+--			mcl_redstone.swap_node(1, pos, {name = ndef._observer_on, param2 = node.param2})
+--		end
+--	end)
+--end
+----[[
+--	With the following code the observer will detect loading of areas where it is placed.
+--	We need to restore signal generated by it before the area was unloaded.
+--
+--	Observer movement and atomic clock (one observer watches another) fails without this often.
+--
+--	But it WILL cause wrong single signal for all other cases, and I hope it's nothing.
+--	After all, why it can't detect the loading of areas, if we haven't a better solution...
+--]]
+--minetest.register_lbm({
+--	name = "mcl_observers:activate_lbm",
+--	nodenames = {
+--		"mcl_observers:observer_off",
+--		"mcl_observers:observer_down_off",
+--		"mcl_observers:observer_up_off",
+--		"mcl_observers:observer_on",
+--		"mcl_observers:observer_down_on",
+--		"mcl_observers:observer_up_on",
+--	},
+--	run_at_every_load = true,
+--	action = function(pos)
+--		minetest.after(1, mcl_observers.observer_activate, pos)
+--	end,
+--})
