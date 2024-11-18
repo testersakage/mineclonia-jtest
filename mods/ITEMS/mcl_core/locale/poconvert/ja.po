@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Minetest textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-10-24 08:07+0000\n"
+"Last-Translator: Oldcoinmania <Oldcoinmania@users.noreply.translate.codeberg."
+"org>\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.1\n"
 
 msgid "Stick"
 msgstr "棒"
@@ -80,10 +82,11 @@ msgid "Emeralds are used in villager trades as currency."
 msgstr "エメラルドは、村人との取引で通貨として使われます。"
 
 msgid "Lapis Lazuli"
-msgstr ""
+msgstr "ラピスラズリ"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
-msgstr ""
+msgstr "ラピスラズリは、エンチャントテーブルでアイテムをエンチャントするのに必要です"
+"。"
 
 msgid "Brick"
 msgstr "レンガ"
@@ -188,7 +191,7 @@ msgid "Mossy Stone Bricks"
 msgstr "苔むした石レンガ"
 
 msgid "Smooth Stone"
-msgstr ""
+msgstr "滑らかな石"
 
 msgid "Granite"
 msgstr "花崗岩"
@@ -602,88 +605,88 @@ msgid "Void"
 msgstr "奈落"
 
 msgid "Stone Stairs"
-msgstr ""
+msgstr "石の階段"
 
 msgid "Stone Slab"
-msgstr ""
+msgstr "石のハーフブロック"
 
 msgid "Smooth Stone Slab"
-msgstr ""
+msgstr "滑らかな石のハーフブロック"
 
 msgid "Andesite Stairs"
-msgstr ""
+msgstr "安山岩の階段"
 
 msgid "Andesite Slab"
-msgstr ""
+msgstr "安山岩のハーフブロック"
 
 msgid "Granite Stairs"
-msgstr ""
+msgstr "花崗岩の階段"
 
 msgid "Granite Slab"
-msgstr ""
+msgstr "花崗岩のハーフブロック"
 
 msgid "Diorite Stairs"
-msgstr ""
+msgstr "閃緑岩の階段"
 
 msgid "Diorite Slab"
-msgstr ""
+msgstr "閃緑岩のハーフブロック"
 
 msgid "Cobblestone Stairs"
-msgstr ""
+msgstr "丸石の階段"
 
 msgid "Cobblestone Slab"
-msgstr ""
+msgstr "丸石のハーフブロック"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr ""
+msgstr "苔むした丸石の階段"
 
 msgid "Mossy Cobblestone Slab"
-msgstr ""
+msgstr "苔むした丸石のハーフブロック"
 
 msgid "Brick Stairs"
-msgstr ""
+msgstr "レンガの階段"
 
 msgid "Brick Slab"
-msgstr ""
+msgstr "レンガのハーフブロック"
 
 msgid "Sandstone Stairs"
-msgstr ""
+msgstr "砂岩の階段"
 
 msgid "Sandstone Slab"
-msgstr ""
+msgstr "砂岩のハーフブロック"
 
 msgid "Smooth Sandstone Stairs"
-msgstr ""
+msgstr "滑らかな砂岩の階段"
 
 msgid "Smooth Sandstone Slab"
-msgstr ""
+msgstr "滑らかな砂岩のハーフブロック"
 
 msgid "Cut Sandstone Stairs"
-msgstr ""
+msgstr "研がれた砂岩の階段"
 
 msgid "Cut Sandstone Slab"
-msgstr ""
+msgstr "研がれた砂岩のハーフブロック"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "赤い砂岩の階段"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "赤い砂岩のハーフブロック"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "滑らかな赤い砂岩の階段"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "滑らかな赤い砂岩のハーフブロック"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "研がれた赤い砂岩の階段"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "研がれた赤い砂岩のハーフブロック"
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "石レンガの階段"
 
 msgid "Stone Brick Slab"
 msgstr ""
@@ -728,5 +731,4 @@ msgid "Acacia"
 msgstr ""
 
 msgid "Birch"
-msgstr ""
-
+msgstr "シラカバ"
