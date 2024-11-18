@@ -159,7 +159,6 @@ for _, mode in pairs{"comp", "sub"} do
 					param2 = node.param2,
 				})
 			end,
-			_redstone_comparator_mode = mode,
 			sounds = mcl_sounds.node_sound_stone_defaults(),
 			on_rotate = screwdriver.disallow,
 			_mcl_redstone = {
