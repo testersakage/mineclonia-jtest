@@ -208,7 +208,7 @@ end
 
 mcl_redstone.register_pressure_plate(
 	"mcl_pressureplates:pressure_plate_stone",
-	S("Stone Pressure Plate2"),
+	S("Stone Pressure Plate"),
 	{"default_stone.png"},
 	{"default_stone.png"},
 	"default_stone.png",
@@ -221,7 +221,7 @@ mcl_redstone.register_pressure_plate(
 
 mcl_redstone.register_pressure_plate(
 	"mcl_pressureplates:pressure_plate_polished_blackstone",
-	S("Polished Blackstone Pressure Plate2"),
+	S("Polished Blackstone Pressure Plate"),
 	{"mcl_blackstone_polished.png"},
 	{"mcl_blackstone_polished.png"},
 	"mcl_blackstone_polished.png",
