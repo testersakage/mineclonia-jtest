@@ -12,7 +12,7 @@ A mature beetroot plant is a farming plant which is ready to be harvested for a 
 Beetroot=Cékla
 Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too.=
 Hold it in your hand and right-click to eat it. Rightclick an animal to feed it.=
-Beetroot Soup=Céklaleves
+Beetroot Soup=
 Beetroot soup is a food item.=
 Grows on farmland=
 Premature Carrot Plant=
@@ -23,10 +23,10 @@ Mature carrot plants are ready to be harvested for carrots. They won't grow any 
 Carrot=Répa
 Carrots can be eaten and planted. Pigs and rabbits like carrots.=
 Hold it in your hand and rightclick to eat it. Place it on top of farmland to plant the carrot. It grows in sunlight and grows faster on hydrated farmland. Rightclick an animal to feed it.=
-Golden Carrot=Aranyrépa
+Golden Carrot=
 A golden carrot is a precious food item which can be eaten. It is really, really filling!=
-Turns block into farmland=Termőfölddé alakítja a talajt
-Hoes are essential tools for growing crops. They are used to create farmland in order to plant seeds on it. Hoes can also be used as very weak weapons in a pinch.=A kapa alapvető szerszáma a növénytermesztésnek. Termőfölddé alakítja a talajt, melybe magokat vethetünk. A kapa egy rendkívül gyenge támadófegyverként is használható.
+Turns block into farmland=
+Hoes are essential tools for growing crops. They are used to create farmland in order to plant seeds on it. Hoes can also be used as very weak weapons in a pinch.=
 Use the hoe on a cultivatable block (by rightclicking it) to turn it into farmland. Dirt, grass blocks and grass paths are cultivatable blocks. Using a hoe on coarse dirt turns it into dirt.=
 Wood Hoe=Fa Kapa
 Uses: @1=Használat: @1
@@ -68,10 +68,10 @@ Pumpkin stems grow on farmland in 8 stages. On hydrated farmland, the growth is 
 Premature Pumpkin Stem (Stage @1)=
 Mature Pumpkin Stem=
 A mature pumpkin stem attempts to grow a pumpkin at one of its four adjacent blocks. A pumpkin can only grow on top of farmland, dirt or a grass block. When a pumpkin is next to a pumpkin stem, the pumpkin stem immediately bends and connects to the pumpkin. A connected pumpkin stem can't grow another pumpkin. As soon all pumpkins around the stem have been removed, it loses the connection and is ready to grow another pumpkin.=
-Faceless Pumpkin=Tök
+Faceless Pumpkin=Faragatlan Tök
 A faceless pumpkin is a decorative block. It can be carved with shears to obtain pumpkin seeds.=A faragatlan tök egy díszítő elem. Nyíró ollóval faragható, így hozzá lehet jutni a magokhoz.
 To carve a face into the pumpkin, use the shears on the side you want to carve.=
-Pumpkin=Tökfej
+Pumpkin=Tök
 A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds.=
 Jack o'Lantern=Töklámpás
 A jack o'lantern is a traditional Halloween decoration made from a pumpkin. It glows brightly.=
