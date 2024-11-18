@@ -1,18 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Minetest textdomain mcl_mobitems x.x.x\n"
+"Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-09-10 05:18+0000\n"
-"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified) <https://translate.codeberg.org/projects/"
-"mineclonia/mcl_mobitems/zh_Hans/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Rotten Flesh"
 msgstr "腐肉"
@@ -263,6 +262,12 @@ msgstr ""
 msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor."
 msgstr ""
 
+msgid "Leather Horse Armor"
+msgstr ""
+
+msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
+msgstr ""
+
 msgid "Iron Horse Armor"
 msgstr "铁马铠"
 
@@ -304,3 +309,4 @@ msgstr ""
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr ""
+

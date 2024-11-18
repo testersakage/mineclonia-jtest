@@ -38,11 +38,3 @@ Netherite Pickaxe=Picareta de Netherite
 Netherite Shovel=Pá de Netherite
 Netherite Sword=Espada de Netherite
 Netherite Axe=Machado de Netherite
-
-
-##### not used anymore #####
-
-An axe is your tool of choice to cut down trees, wood-based blocks and other blocks. Axes deal a lot of damage as well, but they are rather slow.=Um machado é sua ferramenta preferida para cortar árvores, blocos de madeira e outros blocos. Machados também dão muito dano, mas são bastante lentos.
-You use your bare hand whenever you are not wielding any item. With your hand you can mine most blocks, but this is the slowest method and only the weakest blocks will yield their useful drop. The hand also deals minor damage by punching. Using the hand is often a last resort, as proper mining tools and weapons are much better.=Você usa sua mão nua sempre que não estiver segurando qualquer item. Com sua mão você pode minerar a maioria dos blocos, porém esse é o método mais lento e apenas os blocos mais fracos vão render seus drops úteis. A mão também dá o mínimo de dano quando soca. Usar a mão é muitas vezes o último recurso, uma vez que ferramentas de mineração apropriadas e armas são muito melhores.
-When you are wielding an item which is not a mining tool or a weapon, it will behave as if it were the hand when you start mining or punching.=Quando você estiver segurando um item o qual não é uma ferramenta de mineração ou uma arma, este se comportará como se fosse a mão quando você começa a minerar ou socar.
-In Creative Mode, the hand is able to break all blocks instantly.=No Modo Criativo, a mão é capaz de quebrar todos os blocos instantaneamente.
