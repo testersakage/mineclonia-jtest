@@ -165,7 +165,7 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		_mcl_burntime = burntime,
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = function(node)
 				return true
 			end,
@@ -187,7 +187,7 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		tiles = textures_on,
 		description = "",
 		_doc_items_create_entry = false,
-		_redstone = table.merge(commdef._redstone, {
+		_mcl_redstone = table.merge(commdef._mcl_redstone, {
 			get_power = function(pos, dir)
 				return dir.y ~= 1 and 15 or 0, dir.y < 0
 			end,

@@ -97,7 +97,7 @@ minetest.register_node("mcl_tnt:tnt", {
 			tnt.ignite(arrowent._stuckin)
 		end
 	end,
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,

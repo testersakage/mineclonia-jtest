@@ -51,7 +51,7 @@ local commdef = {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,
@@ -151,7 +151,7 @@ minetest.register_node("mcl_lever:lever_on", table.merge(commdef, {
 		minetest.set_node(pos, {name="mcl_lever:lever_off", param2=node.param2})
 		minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16, pitch=0.9}, true)
 	end,
-	_redstone = table.merge(commdef._redstone, {
+	_mcl_redstone = table.merge(commdef._mcl_redstone, {
 		get_power = function(node, dir)
 			return 15, minetest.facedir_to_dir(node.param2) == dir
 		end,

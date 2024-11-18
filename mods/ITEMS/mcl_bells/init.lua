@@ -46,7 +46,7 @@ minetest.register_node("mcl_bells:bell", {
 	_mcl_hardness = 5,
 	on_rightclick = mcl_bells.ring_once,
 	use_texture_alpha = "clip",
-	_redstone = {
+	_mcl_redstone = {
 		update = function(pos, node)
 			local oldpowered = node.param2 ~= 0
 			local powered = mcl_redstone.get_power(pos) ~= 0

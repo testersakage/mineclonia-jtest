@@ -84,7 +84,7 @@ local commdef = {
 			timer:start(mcl_vars.redstone_tick)
 		end
 	end,
-	_redstone = {},
+	_mcl_redstone = {},
 }
 local commdef_off = table.merge(commdef, {
 	groups = table.merge(commdef.groups, {observer=1}),
@@ -96,7 +96,7 @@ local commdef_off = table.merge(commdef, {
 local commdef_on = table.merge(commdef, {
 	_doc_items_create_entry = false,
 	groups = table.merge(commdef.groups, {observer=2}),
-	_redstone = table.merge(commdef._redstone, {
+	_mcl_redstone = table.merge(commdef._mcl_redstone, {
 		init = function(pos, node)
 			local ndef = minetest.registered_nodes[node.name]
 			return {
@@ -123,7 +123,7 @@ minetest.register_node("mcl_observers:observer_off", table.merge(commdef_off, {
 	after_place_node = observer_orientate,
 	_observer_on = "mcl_observers:observer_on",
 	_observer_off = "mcl_observers:observer_off",
-	_redstone = table.merge(commdef_off._redstone, {
+	_mcl_redstone = table.merge(commdef_off._mcl_redstone, {
 		connects_to = function(node, dir)
 			local dir2 = -minetest.facedir_to_dir(node.param2)
 			return dir2 == dir
@@ -140,7 +140,7 @@ minetest.register_node("mcl_observers:observer_on", table.merge(commdef_on, {
 	},
 	_observer_on = "mcl_observers:observer_on",
 	_observer_off = "mcl_observers:observer_off",
-	_redstone = table.merge(commdef_on._redstone, {
+	_mcl_redstone = table.merge(commdef_on._mcl_redstone, {
 		connects_to = function(node, dir)
 			local dir2 = -minetest.facedir_to_dir(node.param2)
 			return dir2 == dir
@@ -172,7 +172,7 @@ minetest.register_node("mcl_observers:observer_down_on", table.merge(commdef_on,
 	},
 	_observer_on = "mcl_observers:observer_down_on",
 	_observer_off = "mcl_observers:observer_down_off",
-	_redstone = table.merge(commdef_on._redstone, {
+	_mcl_redstone = table.merge(commdef_on._mcl_redstone, {
 		get_power = function(node, dir)
 			return dir.y > 0 and 15 or 0
 		end,
@@ -199,7 +199,7 @@ minetest.register_node("mcl_observers:observer_up_on", table.merge(commdef_on, {
 	},
 	_observer_on = "mcl_observers:observer_up_on",
 	_observer_off = "mcl_observers:observer_up_off",
-	_redstone = table.merge(commdef_on._redstone, {
+	_mcl_redstone = table.merge(commdef_on._mcl_redstone, {
 		get_power = function(node, dir)
 			return dir.y < 0 and 15 or 0
 		end,

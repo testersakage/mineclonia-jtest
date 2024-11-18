@@ -39,7 +39,7 @@ end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_off", "mcl_redstone_torch:redstone_torch_off_wall" }) do
 	minetest.override_item(name, {
-		_redstone = {
+		_mcl_redstone = {
 			update = function(pos, node)
 				if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) == 0 then
 					if handle_burnout(pos) then
@@ -48,7 +48,7 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_off", "mcl_redstone_to
 
 					local ndef = minetest.registered_nodes[node.name]
 					return {
-						name = ndef._redstone_torch_on,
+						name = ndef._mcl_redstone_torch_on,
 						param2 = node.param2,
 					}
 				end
@@ -59,7 +59,7 @@ end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_torch:redstone_torch_on_wall" }) do
 	minetest.override_item(name, {
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = function(node, dir)
 				return true
 			end,
@@ -72,7 +72,7 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_tor
 
 					local ndef = minetest.registered_nodes[node.name]
 					return {
-						name = ndef._redstone_torch_off,
+						name = ndef._mcl_redstone_torch_off,
 						param2 = node.param2,
 					}
 				end
@@ -83,8 +83,8 @@ end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on_wall", "mcl_redstone_torch:redstone_torch_off_wall" }) do
 	minetest.override_item(name, {
-		_redstone_torch_on = "mcl_redstone_torch:redstone_torch_on_wall",
-		_redstone_torch_off = "mcl_redstone_torch:redstone_torch_off_wall",
+		_mcl_redstone_torch_on = "mcl_redstone_torch:redstone_torch_on_wall",
+		_mcl_redstone_torch_off = "mcl_redstone_torch:redstone_torch_off_wall",
 	})
 end
 
@@ -104,7 +104,7 @@ minetest.register_node("mcl_redstone_torch:redstoneblock", {
 	groups = {pickaxey=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	is_ground_content = false,
-	_redstone = {
+	_mcl_redstone = {
 		get_power = function()
 			return 15, false
 		end,

@@ -333,7 +333,7 @@ function mcl_doors:register_door(name, def)
 			return true
 		end,
 
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = redstone_connects_to,
 			update = redstone_update_bottom,
 			init = function() end,
@@ -414,7 +414,7 @@ function mcl_doors:register_door(name, def)
 			return true
 		end,
 
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = redstone_connects_to,
 			update = redstone_update_top,
 			init = function() end,
@@ -496,7 +496,7 @@ function mcl_doors:register_door(name, def)
 			return true
 		end,
 
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = redstone_connects_to,
 			update = redstone_update_bottom,
 			init = function() end,
@@ -577,7 +577,7 @@ function mcl_doors:register_door(name, def)
 			return true
 		end,
 
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = redstone_connects_to,
 			update = redstone_update_top,
 			init = function() end,

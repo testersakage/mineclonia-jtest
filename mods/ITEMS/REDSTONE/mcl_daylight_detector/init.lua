@@ -41,7 +41,7 @@ local commdef = {
 	end,
 	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,
@@ -57,7 +57,7 @@ minetest.register_node("mcl_daylight_detector:daylight_detector", table.merge(co
 	_doc_items_longdesc = S("Daylight detectors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted.").."\n"..
 		S("In inverted state, they provide redstone power when they are not in sunlight and no power otherwise."),
 	_doc_items_usagehelp = S("Use the daylight detector to toggle its state."),
-	_redstone = table.merge(commdef._redstone, {
+	_mcl_redstone = table.merge(commdef._mcl_redstone, {
 		get_power = function(node, dir)
 			return node.param2, false
 		end,
@@ -73,7 +73,7 @@ minetest.register_node("mcl_daylight_detector:daylight_detector_inverted", table
 	groups = table.merge(commdef.groups, {not_in_creative_inventory=1}),
 	description=S("Inverted Daylight Sensor"),
 	_doc_items_create_entry = false,
-	_redstone = table.merge(commdef._redstone, {
+	_mcl_redstone = table.merge(commdef._mcl_redstone, {
 		get_power = function(node, dir)
 			return 15 - node.param2
 		end,
