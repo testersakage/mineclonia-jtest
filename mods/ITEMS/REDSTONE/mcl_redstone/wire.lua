@@ -230,6 +230,7 @@ do
 					name = "mcl_redstone:redstone",
 					param2 = minetest.get_node(pos).param2,
 				})
+				update_wire_connections(pos)
 			end
 		end
 
