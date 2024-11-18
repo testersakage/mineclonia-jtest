@@ -424,7 +424,7 @@ mcl_potions.register_effect({
 
 		if vel then
 		if vel.y < -3 then
-			object:add_velocity(vector.new(0,-3-vel.y,0))
+			object:add_velocity(vector.new(0,-0.05*vel.y,0))
 		end
 		end
 	end,
