@@ -110,11 +110,13 @@ local function update_wire(pos)
 		local pos2 = pos:add(entry.dir)
 		local node2 = minetest.get_node(pos2)
 		local ndef2 = minetest.registered_nodes[node2.name]
-		local redstone = ndef2._mcl_redstone
-		local connects_to = redstone and redstone.connects_to
+		if ndef2 then
+			local redstone = ndef2._mcl_redstone
+			local connects_to = redstone and redstone.connects_to
 
-		if connects_to and connects_to(node2, -entry.dir) then
-			wireflags = bit.bor(wireflags, entry.mask)
+			if connects_to and connects_to(node2, -entry.dir) then
+				wireflags = bit.bor(wireflags, entry.mask)
+			end
 		end
 	end
 
