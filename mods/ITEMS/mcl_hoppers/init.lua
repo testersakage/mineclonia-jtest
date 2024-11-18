@@ -165,7 +165,7 @@ def_hopper_enabled.on_place = function(itemstack, placer, pointed_thing)
 	itemstack:set_name("mcl_hoppers:hopper")
 	return itemstack
 end
-def_hopper_enabled._redstone = {
+def_hopper_enabled._mcl_redstone = {
 	connects_to = function(node, dir)
 		return true
 	end,
@@ -186,7 +186,7 @@ def_hopper_disabled.inventory_image = nil
 def_hopper_disabled._doc_items_create_entry = false
 def_hopper_disabled.groups.not_in_creative_inventory = 1
 def_hopper_disabled.drop = "mcl_hoppers:hopper"
-def_hopper_disabled._redstone = {
+def_hopper_disabled._mcl_redstone = {
 	connects_to = function(node, dir)
 		return true
 	end,
@@ -301,7 +301,7 @@ local def_hopper_side = {
 
 local def_hopper_side_enabled = table.copy(def_hopper_side)
 def_hopper_side_enabled.description = S("Side Hopper")
-def_hopper_side_enabled._redstone = {
+def_hopper_side_enabled._mcl_redstone = {
 	connects_to = function(node, dir)
 		return true
 	end,
@@ -316,7 +316,7 @@ minetest.register_node("mcl_hoppers:hopper_side", def_hopper_side_enabled)
 
 local def_hopper_side_disabled = table.copy(def_hopper_side)
 def_hopper_side_disabled.description = S("Disabled Side Hopper")
-def_hopper_side_disabled._redstone = {
+def_hopper_side_disabled._mcl_redstone = {
 	connects_to = function(node, dir)
 		return true
 	end,

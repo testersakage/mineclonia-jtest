@@ -145,7 +145,7 @@ local function update_wire(pos)
 		local pos2 = pos:add(entry.dir)
 		local node2 = minetest.get_node(pos2)
 		local ndef2 = minetest.registered_nodes[node2.name]
-		local redstone = ndef2._redstone
+		local redstone = ndef2._mcl_redstone
 		local connects_to = redstone and redstone.connects_to
 
 		if connects_to and connects_to(node2, -entry.dir) then

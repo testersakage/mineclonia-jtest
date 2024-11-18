@@ -168,7 +168,7 @@ minetest.register_node("mcl_noteblock:noteblock", {
 		noteblock_play(pos, node.param2 % 32)
 	end,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,

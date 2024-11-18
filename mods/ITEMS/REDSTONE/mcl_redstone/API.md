@@ -5,9 +5,9 @@ This mods adds an API for defining custom redstone components.
 ## Example
 
 Here is an example from the redstone torch. The relevant parts for
-`mcl_redstone` is in the `_redstone` field. It defines `get_power` to make the
-torch emit power to all surrounding nodes except the node it is wallmounted on.
-The node above the torch is strongly powered indicated by the `dir.y > 0`
+`mcl_redstone` is in the `_mcl_redstone` field. It defines `get_power` to make
+the torch emit power to all surrounding nodes except the node it is wallmounted
+on.  The node above the torch is strongly powered indicated by the `dir.y > 0`
 return. It also defines `update` to make the torch turn off if the node it is
 wallmounted on is powered.
 
@@ -15,7 +15,7 @@ wallmounted on is powered.
 minetest.override_item("mcl_redstone_torch:redstone_torch_on", {
     paramtype2 = "wallmounted",
     [...]
-    _redstone = {
+    _mcl_redstone = {
         connects_to = function(node, dir)
             return true
         end,
@@ -42,7 +42,7 @@ always return `0`).
 minetest.override_item("mcl_redstone_torch:redstone_torch_off", {
     paramtype2 = "wallmounted",
     [...]
-    _redstone = {
+    _mcl_redstone = {
         connects_to = function(node, dir)
             return true
         end,
@@ -60,8 +60,8 @@ minetest.override_item("mcl_redstone_torch:redstone_torch_off", {
 
 ## Redstone definition
 
-The `_redstone` field of node definitions is what defines a node as a redstone
-component.
+The `_mcl_redstone` field of node definitions is what defines a node as a
+redstone component.
 
 ```lua
 {

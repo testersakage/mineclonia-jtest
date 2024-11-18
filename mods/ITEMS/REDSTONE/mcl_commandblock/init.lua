@@ -211,7 +211,7 @@ local commdef = {
 		show_formspec(pos, player)
 	end,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_redstone = {
+	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,

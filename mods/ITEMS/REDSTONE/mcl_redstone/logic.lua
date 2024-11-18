@@ -258,8 +258,8 @@ function update_neighbours(pos, oldnode)
 	local node = minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
 	local oldndef = oldnode and minetest.registered_nodes[oldnode.name]
-	local get_power = ndef and ndef._redstone and ndef._redstone.get_power
-	local old_get_power = oldndef and oldndef._redstone and oldndef._redstone.get_power
+	local get_power = ndef and ndef._mcl_redstone and ndef._mcl_redstone.get_power
+	local old_get_power = oldndef and oldndef._mcl_redstone and oldndef._mcl_redstone.get_power
 
 	local function update_wire(pos, oldpower, dirs)
 		if oldpower then
@@ -404,31 +404,31 @@ minetest.register_on_mods_loaded(function()
 			})
 		end
 
-		if ndef._redstone then
-			local init = ndef._redstone.init or ndef._redstone.update
-			get_power_tab[name] = ndef._redstone.get_power
+		if ndef._mcl_redstone then
+			local init = ndef._mcl_redstone.init or ndef._mcl_redstone.update
+			get_power_tab[name] = ndef._mcl_redstone.get_power
 			init_tab[name] = init
-			update_tab[name] = ndef._redstone.update
+			update_tab[name] = ndef._mcl_redstone.update
 
 			local old_construct = ndef.on_construct
 			local old_destruct = ndef.after_destruct
 			minetest.override_item(name, {
 				groups = table.merge(ndef.groups, {
 					redstone_init = init and 1,
-					redstone_get_power = ndef._redstone.get_power and 1,
+					redstone_get_power = ndef._mcl_redstone.get_power and 1,
 				}),
 				on_construct = function(pos)
 					if old_construct then
 						old_construct(pos)
 					end
-					if ndef._redstone.connects_to then
+					if ndef._mcl_redstone.connects_to then
 						mcl_redstone._connect_with_wires(pos)
 					end
 					mcl_redstone._schedule_event(0, -1, pos, function()
 						if init then
 							call_init(pos)
 						end
-						if ndef._redstone.get_power then
+						if ndef._mcl_redstone.get_power then
 							update_neighbours(pos)
 						end
 					end)
@@ -437,10 +437,10 @@ minetest.register_on_mods_loaded(function()
 					if old_destruct then
 						old_destruct(pos, oldnode)
 					end
-					if ndef._redstone.connects_to then
+					if ndef._mcl_redstone.connects_to then
 						mcl_redstone._connect_with_wires(pos)
 					end
-					if ndef._redstone.get_power then
+					if ndef._mcl_redstone.get_power then
 						update_neighbours(pos, oldnode)
 					end
 				end,
