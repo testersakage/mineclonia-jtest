@@ -66,7 +66,7 @@ local loottable =
 			{ itemstring = "mcl_farming:wheat_item", weight = 20, amount_min = 1, amount_max = 4 },
 			{ itemstring = "mcl_farming:bread", weight = 20 },
 			{ itemstring = "mcl_core:coal_lump", weight = 15, amount_min = 1, amount_max = 4 },
-			{ itemstring = "mesecons:redstone", weight = 15, amount_min = 1, amount_max = 4 },
+			{ itemstring = "mcl_redstone:redstone", weight = 15, amount_min = 1, amount_max = 4 },
 			{ itemstring = "mcl_farming:beetroot_seeds", weight = 10, amount_min = 2, amount_max = 4 },
 			{ itemstring = "mcl_farming:melon_seeds", weight = 10, amount_min = 2, amount_max = 4 },
 			{ itemstring = "mcl_farming:pumpkin_seeds", weight = 10, amount_min = 2, amount_max = 4 },

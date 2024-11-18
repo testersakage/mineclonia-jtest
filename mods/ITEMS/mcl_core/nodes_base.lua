@@ -96,11 +96,11 @@ minetest.register_node("mcl_core:stone_with_redstone", {
 		items = {
 			max_items = 1,
 			{
-				items = {"mesecons:redstone 4"},
+				items = {"mcl_redstone:redstone 4"},
 				rarity = 2,
 			},
 			{
-				items = {"mesecons:redstone 5"},
+				items = {"mcl_redstone:redstone 5"},
 			},
 		}
 	},
@@ -112,7 +112,7 @@ minetest.register_node("mcl_core:stone_with_redstone", {
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
 		discrete_uniform_distribution = true,
-		items = {"mesecons:redstone"},
+		items = {"mcl_redstone:redstone"},
 		min_count = 4,
 		max_count = 5,
 	},
@@ -139,11 +139,11 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 		items = {
 			max_items = 1,
 			{
-				items = {"mesecons:redstone 4"},
+				items = {"mcl_redstone:redstone 4"},
 				rarity = 2,
 			},
 			{
-				items = {"mesecons:redstone 5"},
+				items = {"mcl_redstone:redstone 5"},
 			},
 		}
 	},
@@ -161,7 +161,7 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 	_mcl_silk_touch_drop = {"mcl_core:stone_with_redstone"},
 	_mcl_fortune_drop = {
 		discrete_uniform_distribution = true,
-		items = {"mesecons:redstone"},
+		items = {"mcl_redstone:redstone"},
 		min_count = 4,
 		max_count = 5,
 	},

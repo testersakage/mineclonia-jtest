@@ -23,12 +23,6 @@ local rod_def = {
 	selection_box = cbox,
 	collision_box = cbox,
 	node_placement_prediction = "",
-	mesecons = {
-		receptor = {
-			state = mesecon.state.off,
-			rules = mesecon.rules.alldirs,
-		},
-	},
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.type ~= "node" or not placer or not placer:is_player() then
 			return itemstack
@@ -69,11 +63,10 @@ rod_def_a.tiles = { "mcl_lightning_rods_rod.png^[brighten" }
 
 rod_def_a.groups.not_in_creative_inventory = 1
 
-rod_def_a.mesecons = {
-	receptor = {
-		state = mesecon.state.on,
-		rules = mesecon.rules.alldirs,
-	},
+rod_def_a._redstone = {
+	get_power = function(node, dir)
+		return 15
+	end,
 }
 
 rod_def_a.on_timer = function(pos)
@@ -82,7 +75,6 @@ rod_def_a.on_timer = function(pos)
 	if node.name == "mcl_lightning_rods:rod_powered" then --has not been dug
 		node.name = "mcl_lightning_rods:rod"
 		minetest.set_node(pos, node)
-		mesecon.receptor_off(pos, mesecon.rules.alldirs)
 	end
 
 	return false
@@ -99,7 +91,6 @@ mcl_lightning.register_on_strike(function(pos)
 		if node.name == "mcl_lightning_rods:rod" then
 			node.name = "mcl_lightning_rods:rod_powered"
 			minetest.set_node(lr, node)
-			mesecon.receptor_on(lr, mesecon.rules.alldirs)
 			minetest.get_node_timer(lr):start(0.4)
 		end
 	end

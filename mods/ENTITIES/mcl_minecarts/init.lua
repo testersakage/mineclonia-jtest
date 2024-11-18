@@ -200,8 +200,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			local node = minetest.get_node(rou_pos)
 			if node.name == "mcl_minecarts:detector_rail_on" then
 				local newnode = {name="mcl_minecarts:detector_rail", param2 = node.param2}
-				minetest.swap_node(rou_pos, newnode)
-				mesecon.receptor_off(rou_pos)
+				mcl_redstone.swap_node(rou_pos, newnode)
 			end
 
 			-- Drop items and remove cart entity
@@ -427,16 +426,14 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			-- Update detector rails
 			if node.name == "mcl_minecarts:detector_rail" then
 				local newnode = {name="mcl_minecarts:detector_rail_on", param2 = node.param2}
-				minetest.swap_node(rou_pos, newnode)
-				mesecon.receptor_on(rou_pos)
+				mcl_redstone.swap_node(rou_pos, newnode)
 			end
 			if node.name == "mcl_minecarts:golden_rail_on" then
 				restart_pos = rou_pos
 			end
 			if node_old.name == "mcl_minecarts:detector_rail_on" then
 				local newnode = {name="mcl_minecarts:detector_rail", param2 = node_old.param2}
-				minetest.swap_node(rou_old, newnode)
-				mesecon.receptor_off(rou_old)
+				mcl_redstone.swap_node(rou_old, newnode)
 			end
 			-- Activate minecart if on activator rail
 			if node_old.name == "mcl_minecarts:activator_rail_on" and self.on_activate_by_rail then
@@ -620,8 +617,7 @@ function mcl_minecarts.place_minecart(itemstack, pointed_thing, placer)
 	-- Activate detector rail
 	if node.name == "mcl_minecarts:detector_rail" then
 		local newnode = {name="mcl_minecarts:detector_rail_on", param2 = node.param2}
-		minetest.swap_node(railpos, newnode)
-		mesecon.receptor_on(railpos)
+		mcl_redstone.swap_node(railpos, newnode)
 	end
 
 	local entity_id = entity_mapping[itemstack:get_name()]

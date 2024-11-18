@@ -32,7 +32,7 @@ local witch_base_drops = {
 	 {name = "mcl_potions:glass_bottle", chance = 8, min = 0, max = 2, looting = "common",},
 	 {name = "mcl_nether:glowstone_dust", chance = 8, min = 0, max = 2, looting = "common",},
 	 {name = "mcl_mobitems:gunpowder", chance = 8, min = 0, max = 2, looting = "common",},
-	 {name = "mesecons:redstone", chance = 1, min = 4, max = 8, looting = "common",},
+	 {name = "mcl_redstone:redstone", chance = 1, min = 4, max = 8, looting = "common",},
 	 {name = "mcl_mobitems:spider_eye", chance = 8, min = 0, max = 2, looting = "common",},
 	 {name = "mcl_core:sugar", chance = 8, min = 0, max = 2, looting = "common",},
 	 {name = "mcl_core:stick", chance = 4, min = 0, max = 2, looting = "common",},
