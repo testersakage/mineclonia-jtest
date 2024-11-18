@@ -214,7 +214,7 @@ register_rail("mcl_minecarts:golden_rail",
 		_doc_items_longdesc = S("Rails can be used to build transport tracks for minecarts. Powered rails are able to accelerate and brake minecarts."),
 		_doc_items_usagehelp = railuse .. "\n" .. S("Without redstone power, the rail will brake minecarts. To make this rail accelerate minecarts, power it with redstone power."),
 		_rail_acceleration = -3,
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = function(node, dir)
 				return true
 			end,
@@ -229,7 +229,7 @@ register_rail("mcl_minecarts:golden_rail_on",
 	{
 		_doc_items_create_entry = false,
 		_rail_acceleration = 4,
-		_redstone = {
+		_mcl_redstone = {
 			connects_to = function(node, dir)
 				return true
 			end,
@@ -248,7 +248,7 @@ register_rail("mcl_minecarts:activator_rail",
 		_tt_help = S("Track for minecarts").."\n"..S("Activates minecarts when powered"),
 		_doc_items_longdesc = S("Rails can be used to build transport tracks for minecarts. Activator rails are used to activate special minecarts."),
 		_doc_items_usagehelp = railuse .. "\n" .. S("To make this rail activate minecarts, power it with redstone power and send a minecart over this piece of rail."),
-		_redstone = {
+		_mcl_redstone = {
 			update = function(pos)
 				if mcl_redstone.get_power(pos) ~= 0 then
 					minetest.swap_node(pos, {name = "mcl_minecarts:activator_rail_on"})
@@ -263,7 +263,7 @@ register_rail("mcl_minecarts:activator_rail_on",
 	{"mcl_minecarts_rail_activator_powered.png", "mcl_minecarts_rail_activator_curved_powered.png", "mcl_minecarts_rail_activator_t_junction_powered.png", "mcl_minecarts_rail_activator_crossing_powered.png"},
 	{
 		_doc_items_create_entry = false,
-		_redstone = {
+		_mcl_redstone = {
 			update = function(pos)
 				if mcl_redstone.get_power(pos) == 0 then
 					minetest.swap_node(pos, {name = "mcl_minecarts:activator_rail"})
@@ -299,7 +299,7 @@ register_rail("mcl_minecarts:detector_rail_on",
 	{"mcl_minecarts_rail_detector_powered.png", "mcl_minecarts_rail_detector_curved_powered.png", "mcl_minecarts_rail_detector_t_junction_powered.png", "mcl_minecarts_rail_detector_crossing_powered.png"},
 	{
 		_doc_items_create_entry = false,
-		_redstone = {
+		_mcl_redstone = {
 			get_power = function(node, dir)
 				return 15
 			end,
