@@ -4,7 +4,6 @@ local normal_vars_in_singlenode = false
 -- Some global variables (don't overwrite them!)
 mcl_vars = {}
 
-mcl_vars.redstone_tick = 0.1
 mcl_vars.mg_overworld_min_old = -62
 
 --- GUI / inventory menu settings
