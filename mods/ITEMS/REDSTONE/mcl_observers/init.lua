@@ -81,7 +81,7 @@ local commdef = {
 	on_construct = function(pos)
 		local timer = minetest.get_node_timer(pos)
 		if not timer:is_started() then
-			timer:start(mcl_vars.redstone_tick)
+			timer:start(mcl_redstone.tick_speed)
 		end
 	end,
 	_mcl_redstone = {},
