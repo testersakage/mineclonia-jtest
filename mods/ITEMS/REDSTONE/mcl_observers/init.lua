@@ -10,7 +10,7 @@ function mcl_observers.observer_activate(pos)
 			return
 		end
 		local ndef = minetest.registered_nodes[node.name]
-		minetest.set_node(pos, {name = ndef._observer_on, param2 = node.param2})
+		minetest.set_node(pos, {name = ndef._mcl_observer_on, param2 = node.param2})
 	end)
 end
 
@@ -38,7 +38,7 @@ local function observer_scan(pos, initialize)
 		if not (frontnode.name == oldnode and tostring(frontnode.param2) == oldparam2) then
 			-- Node state changed! Activate observer
 			local ndef = minetest.registered_nodes[node.name]
-			minetest.set_node(pos, {name = ndef._observer_on, param2 = node.param2})
+			minetest.set_node(pos, {name = ndef._mcl_observer_on, param2 = node.param2})
 			meta_needs_updating = true
 		end
 	else
@@ -100,7 +100,7 @@ local commdef_on = table.merge(commdef, {
 		local node = minetest.get_node(pos)
 		local ndef = minetest.registered_nodes[node.name]
 		minetest.set_node(pos, {
-			name = ndef._observer_off,
+			name = ndef._mcl_observer_off,
 			param2 = node.param2,
 		})
 	end,
@@ -120,8 +120,8 @@ minetest.register_node("mcl_observers:observer_off", table.merge(commdef_off, {
 		"mcl_observers_observer_front.png", "mcl_observers_observer_back.png",
 	},
 	after_place_node = observer_orientate,
-	_observer_on = "mcl_observers:observer_on",
-	_observer_off = "mcl_observers:observer_off",
+	_mcl_observer_on = "mcl_observers:observer_on",
+	_mcl_observer_off = "mcl_observers:observer_off",
 	_mcl_redstone = table.merge(commdef_off._mcl_redstone, {
 		connects_to = function(node, dir)
 			local dir2 = -minetest.facedir_to_dir(node.param2)
@@ -137,8 +137,8 @@ minetest.register_node("mcl_observers:observer_on", table.merge(commdef_on, {
 		"mcl_observers_observer_side.png", "mcl_observers_observer_side.png",
 		"mcl_observers_observer_front.png", "mcl_observers_observer_back_lit.png",
 	},
-	_observer_on = "mcl_observers:observer_on",
-	_observer_off = "mcl_observers:observer_off",
+	_mcl_observer_on = "mcl_observers:observer_on",
+	_mcl_observer_off = "mcl_observers:observer_off",
 	_mcl_redstone = table.merge(commdef_on._mcl_redstone, {
 		connects_to = function(node, dir)
 			local dir2 = -minetest.facedir_to_dir(node.param2)
@@ -159,8 +159,8 @@ minetest.register_node("mcl_observers:observer_down_off", table.merge(commdef_of
 		"mcl_observers_observer_side.png^[transformR90", "mcl_observers_observer_side.png^[transformR90",
 		"mcl_observers_observer_top.png", "mcl_observers_observer_top.png",
 	},
-	_observer_on = "mcl_observers:observer_down_on",
-	_observer_off = "mcl_observers:observer_down_off",
+	_mcl_observer_on = "mcl_observers:observer_down_on",
+	_mcl_observer_off = "mcl_observers:observer_down_off",
 }))
 minetest.register_node("mcl_observers:observer_down_on", table.merge(commdef_on, {
 	groups = table.merge(commdef_on.groups, {not_in_creative_inventory=1}),
@@ -169,8 +169,8 @@ minetest.register_node("mcl_observers:observer_down_on", table.merge(commdef_on,
 		"mcl_observers_observer_side.png^[transformR90", "mcl_observers_observer_side.png^[transformR90",
 		"mcl_observers_observer_top.png", "mcl_observers_observer_top.png",
 	},
-	_observer_on = "mcl_observers:observer_down_on",
-	_observer_off = "mcl_observers:observer_down_off",
+	_mcl_observer_on = "mcl_observers:observer_down_on",
+	_mcl_observer_off = "mcl_observers:observer_down_off",
 	_mcl_redstone = table.merge(commdef_on._mcl_redstone, {
 		get_power = function(node, dir)
 			return dir.y > 0 and 15 or 0
@@ -186,8 +186,8 @@ minetest.register_node("mcl_observers:observer_up_off", table.merge(commdef_off,
 		"mcl_observers_observer_side.png^[transformR270", "mcl_observers_observer_side.png^[transformR270",
 		"mcl_observers_observer_top.png^[transformR180", "mcl_observers_observer_top.png^[transformR180",
 	},
-	_observer_on = "mcl_observers:observer_up_on",
-	_observer_off = "mcl_observers:observer_up_off",
+	_mcl_observer_on = "mcl_observers:observer_up_on",
+	_mcl_observer_off = "mcl_observers:observer_up_off",
 }))
 minetest.register_node("mcl_observers:observer_up_on", table.merge(commdef_on, {
 	groups = table.merge(commdef_on.groups, {not_in_creative_inventory=1}),
@@ -196,8 +196,8 @@ minetest.register_node("mcl_observers:observer_up_on", table.merge(commdef_on, {
 		"mcl_observers_observer_side.png^[transformR270", "mcl_observers_observer_side.png^[transformR270",
 		"mcl_observers_observer_top.png^[transformR180", "mcl_observers_observer_top.png^[transformR180",
 	},
-	_observer_on = "mcl_observers:observer_up_on",
-	_observer_off = "mcl_observers:observer_up_off",
+	_mcl_observer_on = "mcl_observers:observer_up_on",
+	_mcl_observer_off = "mcl_observers:observer_up_off",
 	_mcl_redstone = table.merge(commdef_on._mcl_redstone, {
 		get_power = function(node, dir)
 			return dir.y < 0 and 15 or 0
@@ -236,7 +236,7 @@ minetest.register_lbm({
 	action = function(pos)
 		local node = minetest.get_node(pos)
 		local ndef = minetest.registered_nodes[node.name]
-		minetest.set_node(pos, { name = ndef._observer_off, param2 = node.param2 })
+		minetest.set_node(pos, { name = ndef._mcl_observer_off, param2 = node.param2 })
 	end,
 })
 
