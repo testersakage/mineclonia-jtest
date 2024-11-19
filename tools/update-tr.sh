@@ -1,11 +1,11 @@
 #!/bin/bash
 
-find -name 'mod.conf' | while read modconf; do
-	# Run the scripts twice to make 'git diff' stable.
-	for i in 0 1; do
-		moddir=$(dirname "$modconf")
-		ltt_convert.py --po2tr "$moddir"
-		mod_translation_updater.py "$moddir"
-		ltt_convert.py --tr2po "$moddir"
-	done
+# assumes to be started in mineclonia top level directory and that Luanti's mod
+# tools and Wuzzy's translation tools are in PATH
+
+# run all steps two times for a complete roundtrip of changed translations
+for i in 0 1; do
+    ltt_convert.py mods --po2tr -r
+    tools/generate_translation_strings/generate.sh mod_translation_updater.py
+    ltt_convert.py mods --tr2po -r
 done
