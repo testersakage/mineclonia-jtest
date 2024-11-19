@@ -62,6 +62,10 @@ This part is usually done when you’re preparing a release. You want to extract
 
 Now all the translations from Weblate should be in the game. You may want to do a quick in-game test to make sure.
 
+## tools/update-tr.sh
+
+This script combines the steps 3 and 1 of the workflow described above into a single step, simplifying the process for the maintainers.
+
 ## Checking translations
 
 At least once directly before a release, you should check the TR files for syntax errors.
