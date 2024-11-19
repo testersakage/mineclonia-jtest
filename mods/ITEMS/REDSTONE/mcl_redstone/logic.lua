@@ -356,6 +356,7 @@ function mcl_redstone.get_power(pos, dir)
 		end
 
 		local always_check_node = minetest.get_node(pos + entry.always_check)
+		core.debug("always check", dump(always_check_node))
 
 		if get_power_tab[always_check_node.name] then
 			max_power = get_power_tab[always_check_node.name](always_check_node, -entry.dir)
@@ -405,6 +406,7 @@ function mcl_redstone._call_update(pos)
 	local node = minetest.get_node(pos)
 	if update_tab[node.name] then
 		local ret = update_tab[node.name](pos, node)
+		core.debug("AAA")
 		if ret then
 			schedule_update(pos, ret)
 		end
@@ -498,11 +500,7 @@ local function opaque_update_neighbours(pos, added)
 end
 
 local function update_wire(pos, oldnode)
-	local node = minetest.get_node(pos)
-
-	if wireflag_tab[node.name] then
-		mcl_redstone.update_wire_power(pos, node)
-	end
+	mcl_redstone.update_wire_power(pos, oldnode)
 end
 
 -- Override nodes to perform redstone updates on changes.
@@ -542,16 +540,13 @@ minetest.register_on_mods_loaded(function()
 					if old_construct then
 						old_construct(pos)
 					end
-					update_wire(pos)
-				end,
-				on_destruct = function(pos, oldnode)
-					update_wire(pos, oldnode)
+					update_wire(pos, core.get_node(pos))
 				end,
 				after_destruct = function(pos, oldnode)
 					if old_destruct then
 						old_destruct(pos, oldnode)
 					end
-					-- update_wire(pos, oldnode)
+					update_wire(pos, oldnode)
 				end,
 			})
 		end

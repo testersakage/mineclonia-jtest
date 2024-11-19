@@ -147,7 +147,7 @@ local function get_time()
 	return minetest.get_us_time() / 1e6
 end
 
-local function debug_log(tick, nevents, nupdates, nfaraway, npending, time, aborted)
+local function debug_log(tick, nevents, nupdates, nfaraway, npending, total_propagations_processed, generated_caches, time, aborted)
 	if not minetest.settings:get_bool("mcl_redstone_debug_eventqueue", false)
 			or (nevents == 0 and nupdates == 0) then
 		return
@@ -156,13 +156,15 @@ local function debug_log(tick, nevents, nupdates, nfaraway, npending, time, abor
 	local saborted = aborted and ", was aborted" or ""
 	local sfaraway = nfaraway ~= 0 and string.format(", %d far away events", nfaraway) or ""
 	minetest.log(string.format(
-		"[mcl_redstone] tick %d, %d events and %d updates processed%s, %d pending events, took %f ms%s",
+		"[mcl_redstone] tick %d, %d events and %d updates processed%s, %d pending events, %d wire propagations, %d generated caches. took %d ms%s",
 		tick,
 		nevents,
 		nupdates,
 		sfaraway,
 		npending,
-		time / 1000,
+		total_propagations_processed,
+		generated_caches,
+		math.floor(time * 1000),
 		saborted
 	))
 end
@@ -192,12 +194,14 @@ function mcl_redstone.tick_step()
 	local nevents = 0
 	local nupdates = 0
 	local nfaraway = 0
+	local generated_caches = 0
+	local total_propagations_processed = 0
 
 	local function log_redstone_events(aborted)
 		local time = get_time() - starttime
 		local npending = eventqueue:size()
 
-		debug_log(current_tick, nevents, nupdates, nfaraway, npending, time, aborted)
+		debug_log(current_tick, nevents, nupdates, nfaraway, npending, total_propagations_processed, generated_caches, time, aborted)
 	end
 
 	-- mcl_redstone.process_wires()
@@ -235,7 +239,7 @@ function mcl_redstone.tick_step()
 	end
 	-- core.debug("end pending updates")
 
-	mcl_redstone.process_wires()
+	total_propagations_processed, generated_caches = mcl_redstone.process_wires()
 
 	log_redstone_events(false)
 	current_tick = last_tick + 1
