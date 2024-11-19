@@ -1,9 +1,30 @@
 # textdomain: mcl_dyes
+This item is a dye which is used for dyeing and crafting.=
+Rightclick on a sheep to dye its wool. Other things are dyed by crafting.=
+Black Dye=
+Blue Dye=
+Brown Dye=
+Cyan Dye=
+Green Dye=
+Grey Dye=
+Light Blue Dye=
+Light Grey Dye=
+Lime Dye=
+Magenta Dye=
+Orange Dye=
+Pink Dye=
+Purple Dye=
+Red Dye=
+White Dye=
+Yellow Dye=
+
+
+##### not used anymore #####
+
 White=Branco
 Light Grey=Cinza-claro
 Grey=Cinza
 Black=Preto
-Purple=
 Blue=Azul
 Light Blue=Azul-claro
 Cyan=Ciano
@@ -15,6 +36,3 @@ Orange=Laranja
 Red=Vermelho
 Magenta=Magenta
 Pink=Rosa
-@1 Dye=
-This item is a dye which is used for dyeing and crafting.=
-Rightclick on a sheep to dye its wool. Other things are dyed by crafting.=

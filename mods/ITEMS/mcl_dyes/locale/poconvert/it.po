@@ -13,60 +13,57 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "White"
-msgstr "Bianco"
-
-msgid "Light Grey"
-msgstr "Grigio Chiaro"
-
-msgid "Grey"
-msgstr "Grigio"
-
-msgid "Black"
-msgstr "Nero"
-
-msgid "Purple"
-msgstr "Viola"
-
-msgid "Blue"
-msgstr "Blu"
-
-msgid "Light Blue"
-msgstr "Azzurro"
-
-msgid "Cyan"
-msgstr "Ciano"
-
-msgid "Green"
-msgstr "Verde"
-
-msgid "Lime"
-msgstr "Lime"
-
-msgid "Yellow"
-msgstr "Giallo"
-
-msgid "Brown"
-msgstr "Marrone"
-
-msgid "Orange"
-msgstr "Arancione"
-
-msgid "Red"
-msgstr "Rosso"
-
-msgid "Magenta"
-msgstr "Magenta"
-
-msgid "Pink"
-msgstr "Rosa"
-
-msgid "@1 Dye"
-msgstr "Colorante @1"
-
 msgid "This item is a dye which is used for dyeing and crafting."
 msgstr "Questo oggetto è un colorante utilizzato per tingere ed assemblare."
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
 msgstr "Clicca col tasto destro su una pecora per tingerne la lana. Degli altri materiali sono tinti attraverso l'assemblaggio."
+
+msgid "Black Dye"
+msgstr ""
+
+msgid "Blue Dye"
+msgstr ""
+
+msgid "Brown Dye"
+msgstr ""
+
+msgid "Cyan Dye"
+msgstr ""
+
+msgid "Green Dye"
+msgstr ""
+
+msgid "Grey Dye"
+msgstr ""
+
+msgid "Light Blue Dye"
+msgstr ""
+
+msgid "Light Grey Dye"
+msgstr ""
+
+msgid "Lime Dye"
+msgstr ""
+
+msgid "Magenta Dye"
+msgstr ""
+
+msgid "Orange Dye"
+msgstr ""
+
+msgid "Pink Dye"
+msgstr ""
+
+msgid "Purple Dye"
+msgstr ""
+
+msgid "Red Dye"
+msgstr ""
+
+msgid "White Dye"
+msgstr ""
+
+msgid "Yellow Dye"
+msgstr ""
 

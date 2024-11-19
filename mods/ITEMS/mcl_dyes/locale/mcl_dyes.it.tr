@@ -1,4 +1,26 @@
 # textdomain: mcl_dyes
+This item is a dye which is used for dyeing and crafting.=Questo oggetto è un colorante utilizzato per tingere ed assemblare.
+Rightclick on a sheep to dye its wool. Other things are dyed by crafting.=Clicca col tasto destro su una pecora per tingerne la lana. Degli altri materiali sono tinti attraverso l'assemblaggio.
+Black Dye=
+Blue Dye=
+Brown Dye=
+Cyan Dye=
+Green Dye=
+Grey Dye=
+Light Blue Dye=
+Light Grey Dye=
+Lime Dye=
+Magenta Dye=
+Orange Dye=
+Pink Dye=
+Purple Dye=
+Red Dye=
+White Dye=
+Yellow Dye=
+
+
+##### not used anymore #####
+
 White=Bianco
 Light Grey=Grigio Chiaro
 Grey=Grigio
@@ -16,5 +38,3 @@ Red=Rosso
 Magenta=Magenta
 Pink=Rosa
 @1 Dye=Colorante @1
-This item is a dye which is used for dyeing and crafting.=Questo oggetto è un colorante utilizzato per tingere ed assemblare.
-Rightclick on a sheep to dye its wool. Other things are dyed by crafting.=Clicca col tasto destro su una pecora per tingerne la lana. Degli altri materiali sono tinti attraverso l'assemblaggio.

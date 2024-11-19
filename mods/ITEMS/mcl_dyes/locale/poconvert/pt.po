@@ -13,60 +13,57 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "White"
-msgstr "Branco"
-
-msgid "Light Grey"
-msgstr "Cinza-claro"
-
-msgid "Grey"
-msgstr "Cinza"
-
-msgid "Black"
-msgstr "Preto"
-
-msgid "Purple"
-msgstr ""
-
-msgid "Blue"
-msgstr "Azul"
-
-msgid "Light Blue"
-msgstr "Azul-claro"
-
-msgid "Cyan"
-msgstr "Ciano"
-
-msgid "Green"
-msgstr "Verde"
-
-msgid "Lime"
-msgstr "Lima"
-
-msgid "Yellow"
-msgstr "Amarelo"
-
-msgid "Brown"
-msgstr "Marrom"
-
-msgid "Orange"
-msgstr "Laranja"
-
-msgid "Red"
-msgstr "Vermelho"
-
-msgid "Magenta"
-msgstr "Magenta"
-
-msgid "Pink"
-msgstr "Rosa"
-
-msgid "@1 Dye"
-msgstr ""
-
 msgid "This item is a dye which is used for dyeing and crafting."
 msgstr ""
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
+msgstr ""
+
+msgid "Black Dye"
+msgstr ""
+
+msgid "Blue Dye"
+msgstr ""
+
+msgid "Brown Dye"
+msgstr ""
+
+msgid "Cyan Dye"
+msgstr ""
+
+msgid "Green Dye"
+msgstr ""
+
+msgid "Grey Dye"
+msgstr ""
+
+msgid "Light Blue Dye"
+msgstr ""
+
+msgid "Light Grey Dye"
+msgstr ""
+
+msgid "Lime Dye"
+msgstr ""
+
+msgid "Magenta Dye"
+msgstr ""
+
+msgid "Orange Dye"
+msgstr ""
+
+msgid "Pink Dye"
+msgstr ""
+
+msgid "Purple Dye"
+msgstr ""
+
+msgid "Red Dye"
+msgstr ""
+
+msgid "White Dye"
+msgstr ""
+
+msgid "Yellow Dye"
 msgstr ""
 

@@ -13,60 +13,57 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "White"
-msgstr "白色"
-
-msgid "Light Grey"
-msgstr "浅灰"
-
-msgid "Grey"
-msgstr "灰色"
-
-msgid "Black"
-msgstr "黑色"
-
-msgid "Purple"
-msgstr "紫色"
-
-msgid "Blue"
-msgstr "蓝色"
-
-msgid "Light Blue"
-msgstr "淡蓝"
-
-msgid "Cyan"
-msgstr "蓝绿"
-
-msgid "Green"
-msgstr "绿色"
-
-msgid "Lime"
-msgstr "鲜绿"
-
-msgid "Yellow"
-msgstr "黄色"
-
-msgid "Brown"
-msgstr "棕色"
-
-msgid "Orange"
-msgstr "橙色"
-
-msgid "Red"
-msgstr "红色"
-
-msgid "Magenta"
-msgstr "洋红"
-
-msgid "Pink"
-msgstr "粉色"
-
-msgid "@1 Dye"
-msgstr "@1染料"
-
 msgid "This item is a dye which is used for dyeing and crafting."
 msgstr "一种染料，可用于染色或合成其他物质。"
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
 msgstr "右键单击绵羊，可染色羊毛；其他东西则通过手工染色。"
+
+msgid "Black Dye"
+msgstr ""
+
+msgid "Blue Dye"
+msgstr ""
+
+msgid "Brown Dye"
+msgstr ""
+
+msgid "Cyan Dye"
+msgstr ""
+
+msgid "Green Dye"
+msgstr ""
+
+msgid "Grey Dye"
+msgstr ""
+
+msgid "Light Blue Dye"
+msgstr ""
+
+msgid "Light Grey Dye"
+msgstr ""
+
+msgid "Lime Dye"
+msgstr ""
+
+msgid "Magenta Dye"
+msgstr ""
+
+msgid "Orange Dye"
+msgstr ""
+
+msgid "Pink Dye"
+msgstr ""
+
+msgid "Purple Dye"
+msgstr ""
+
+msgid "Red Dye"
+msgstr ""
+
+msgid "White Dye"
+msgstr ""
+
+msgid "Yellow Dye"
+msgstr ""
 
