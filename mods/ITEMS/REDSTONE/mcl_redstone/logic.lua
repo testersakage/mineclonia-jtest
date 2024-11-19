@@ -67,7 +67,6 @@ local function get_node_power_2(pos)
 		local node2 = minetest.get_node(pos2)
 
 		if opaque_tab[node2.name] then
-			-- Only strong power will go through opaque nodes.
 			local _, power2 = get_node_power(pos2)
 			max = math.max(max, power2)
 		end
