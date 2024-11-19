@@ -66,7 +66,7 @@ redstone component.
 ```lua
 {
     get_power = function(node, dir),
-    update = function(pos, node, get_power),
+    update = function(pos, node),
     init = function(pos, node),
 }
 ```
@@ -83,15 +83,13 @@ having it always return `0, false`.
 Should return `true` if a neighbouring redstone trail from the direction `dir`
 should form a connection to the node.
 
-### `update = function(pos, node, get_power)`
+### `update = function(pos, node)`
 
 The `update` callback gets called when the power level of a surrounding node
 changes. It has three arguments:
 
 1. `pos` -- The position of the node
 2. `node` -- The node (equivalent to `minetest.get_node(pos)`)
-3. `get_power` -- A function which takes a direction and returns the power
-   level coming from the node in that direction
 
 The return value is used for updating the node itself. It should return `nil`
 or an object with the following values:
