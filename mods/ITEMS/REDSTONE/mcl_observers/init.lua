@@ -96,15 +96,14 @@ local commdef_off = table.merge(commdef, {
 local commdef_on = table.merge(commdef, {
 	_doc_items_create_entry = false,
 	groups = table.merge(commdef.groups, {observer=2}),
-	_mcl_redstone = table.merge(commdef._mcl_redstone, {
-		init = function(pos, node)
-			local ndef = minetest.registered_nodes[node.name]
-			return {
-				name = ndef._observer_off,
-				param2 = node.param2,
-			}
-		end,
-	}),
+	on_timer = function(pos, elapsed)
+		local node = minetest.get_node(pos)
+		local ndef = minetest.registered_nodes[node.name]
+		minetest.set_node(pos, {
+			name = ndef._observer_off,
+			param2 = node.param2,
+		})
+	end,
 })
 
 minetest.register_node("mcl_observers:observer_off", table.merge(commdef_off, {
