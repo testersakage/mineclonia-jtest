@@ -132,7 +132,7 @@ for n, desc in pairs(n_desc) do
 					local preserved_state = ""
 					if string.find(node.name, "_preserved") then
 						preserved_state = "_preserved"
-					end 
+					end
 					newname = "mcl_copper:bulb"..n.."_off"..preserved_state
 				end
 				return {
@@ -164,7 +164,7 @@ for n, desc in pairs(n_desc) do
 					local preserved_state = ""
 					if string.find(node.name, "_preserved") then
 						preserved_state = "_preserved"
-					end 
+					end
 					newname = "mcl_copper:bulb"..n.."_on"..preserved_state
 				end
 				return {
