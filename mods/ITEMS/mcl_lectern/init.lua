@@ -8,15 +8,21 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 
 local function get_formspec(text, title, author)
-	return "size[8,9]" ..
+	local fs = "size[8,9]" ..
 	"no_prepend[]" .. mcl_vars.gui_nonbg .. mcl_vars.gui_bg_color ..
 	"style_type[button;border=false;bgimg=mcl_books_button9.png;bgimg_pressed=mcl_books_button9_pressed.png;bgimg_middle=2,2]" ..
-	"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]" ..
-	"hypertext[0,0.3;8,0.7;title;<style color=black font=normal size=24><center>"..F(title or "").."</center></style>]"..
-	"hypertext[0.75,0.8;7.25,0.5;author;<style color=black font=normal size=12>by </style><style color=#1E1E1E font=mono size=14>"..F(author or "").."</style>]"..
-	"textarea[0.75,1.24;7.20,7.5;;" .. F(text or "") .. ";]" ..
+	"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]"
+
+	if title ~= "" then
+		fs = fs .. "hypertext[0,0.3;8,0.7;title;<style color=black font=normal size=24><center>"..F(title or "").."</center></style>]"
+	end
+	if author ~= "" then
+		fs = fs .. "hypertext[0.75,0.8;7.25,0.5;author;<style color=black font=normal size=12>by </style><style color=#1E1E1E font=mono size=14>"..F(author or "").."</style>]"
+	end
+	fs = fs .."textarea[0.75,1.24;7.20,7.5;;" .. F(text or "") .. ";]" ..
 	"button_exit[1.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"..
 	"button[4.25,7.95;3,1;take;" .. F(S("Take Book")) .. "]"
+	return fs
 end
 
 local lectern_tpl = {
@@ -85,7 +91,8 @@ local lectern_tpl = {
 
 minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 	on_rightclick = function(pos, node, clicker, itemstack)
-		if itemstack:get_name() == "mcl_books:written_book" then
+		if itemstack:get_name() == "mcl_books:written_book"
+			or itemstack:get_name() == "mcl_books:writable_book" then
 			local player_name = clicker:get_player_name()
 			if minetest.is_protected(pos, player_name) then
 				minetest.record_protection_violation(pos, player_name)
