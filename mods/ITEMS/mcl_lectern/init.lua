@@ -99,10 +99,10 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			nm:set_string("infotext", im:get_string("author") .. " - " .. im:get_string("title"))
 			nm:set_string("pages","15")
 			nm:set_string("page","1")
-			if not minetest.is_creative_enabled(player_name) then
-				itemstack:take_item()
-			end
 			local book_item = ItemStack(itemstack)
+			if not minetest.is_creative_enabled(player_name) then
+				book_item = itemstack:take_item()
+			end
 			book_item:set_count(1)
 			nm:set_string("book_item", book_item:to_string())
 			return itemstack
@@ -156,7 +156,6 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 		if oldmetadata and oldmetadata.fields and oldmetadata.fields.book_item then
 			minetest.add_item(pos, ItemStack(oldmetadata.fields.book_item))
 		end
-		mesecon.receptor_off(pos, mesecon.rules.alldirs)
 	end,
 	_mcl_redstone = {
 		connects_to = function()
