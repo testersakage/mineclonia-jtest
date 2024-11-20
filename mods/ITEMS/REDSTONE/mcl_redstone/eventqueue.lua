@@ -174,7 +174,7 @@ function mcl_redstone.tick_step()
 	local function too_far_away(event)
 		local distance = 0
 		for _, player_pos in pairs(player_poses) do
-			distance = math.max(distance, vector.distance(event.pos, player_pos))
+			distance = math.min(distance, vector.distance(event.pos, player_pos))
 		end
 		return distance > UPDATE_RANGE
 	end
