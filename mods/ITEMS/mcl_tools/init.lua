@@ -178,7 +178,7 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		_mcl_diggroups = get_tool_diggroups(materialdefs, toolname),
 		_mcl_toollike_wield = true,
 		_repair_material = materialdefs.material,
-		groups = table.merge(commondefs.groups, materialdefs.groups),
+		groups = table.merge(commondefs.groups, materialdefs.groups, { offhand_item = 1 }),
 		tool_capabilities = table.merge(tcs, {
 			max_drop_level = materialdefs.max_drop_level,
 			punch_attack_uses = get_punch_uses(toolname, materialdefs)
