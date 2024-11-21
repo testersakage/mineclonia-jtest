@@ -63,7 +63,7 @@ minetest.register_node("mcl_nether:ancient_debris", {
 })
 
 minetest.register_node("mcl_nether:netheriteblock", {
-	description = S("Netherite Block"),
+	description = S("Block of Netherite"),
 	_doc_items_longdesc = S("Netherite block is very hard and can be made of 9 netherite ingots."),
 	tiles = {"mcl_nether_netheriteblock.png"},
 	is_ground_content = false,
