@@ -75,6 +75,12 @@ local bat = {
 -- Bat movement and "AI".
 ------------------------------------------------------------------------
 
+local function is_opaque_solid (node)
+	local node = minetest.get_node (node)
+	local def = minetest.registered_nodes[node.name]
+	return def and def.groups.opaque and def.groups.solid
+end
+
 local function is_walkable (node)
 	local node = minetest.get_node (node)
 	local def = minetest.registered_nodes[node.name]
@@ -100,10 +106,7 @@ function bat:motion_step (dtime, moveresult, self_pos)
 	if self._resting then
 		-- Verify that the block above is still walkable and
 		-- whole.
-		-- TODO: this should only accept redstone conductors,
-		-- but this must wait till the redstone branch is
-		-- merged.
-		if not is_walkable (abovepos) then
+		if not is_opaque_solid (abovepos) then
 			self._resting = false
 			self:set_animation ("walk")
 		else
@@ -178,7 +181,7 @@ function bat:motion_step (dtime, moveresult, self_pos)
 	self:set_yaw (yaw)
 
 	if math.random (scale_chance (100, dtime)) == 1
-		and is_walkable (abovepos) then
+		and is_opaque_solid (abovepos) then
 		self._resting = true
 	end
 	return
