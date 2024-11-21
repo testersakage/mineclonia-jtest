@@ -182,6 +182,8 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 end
 
 function mcl_redstone.get_power(pos, dir)
+	minetest.load_area(pos:subtract(2), pos:add(2))
+
 	-- Create table with keys corresponding to bits in wireflags to
 	-- simplify wire direction checks.
 	local dirs = {}
@@ -258,6 +260,8 @@ end
 -- Update neighbouring wires and components at pos. Oldnode is the previous
 -- node at the position.
 function update_neighbours(pos, oldnode)
+	minetest.load_area(pos:subtract(20), pos:add(20))
+
 	local fill_queue = mcl_util.queue()
 	local clear_queue = mcl_util.queue()
 	local node = minetest.get_node(pos)
