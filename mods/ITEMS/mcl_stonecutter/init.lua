@@ -143,13 +143,19 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = { pickaxey=1, material_stone=1, deco_block=1},
+	groups = { pickaxey=1, material_stone=1, deco_block=1, _mcl_partial = 2, },
 	node_box = {
 		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, 0.0625, 0.5}, -- NodeBox1
 			{-0.4375, 0.0625, 0, 0.4375, 0.5, 0}, -- NodeBox2
-		}
+		},
+	},
+	collision_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, 0.0625, 0.5}, -- NodeBox1
+		},
 	},
 	_mcl_blast_resistance = 3.5,
 	_mcl_hardness = 3.5,

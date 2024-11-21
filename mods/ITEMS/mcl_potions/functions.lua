@@ -1483,6 +1483,11 @@ function mcl_potions._reset_effects(object, set_hud)
 	if set_hud ~= false then
 		potions_set_hud(object)
 	end
+
+	local ent = object:get_luaentity ()
+	if ent then
+		ent._mcl_potions = {}
+	end
 end
 
 function mcl_potions._save_player_effects(player)

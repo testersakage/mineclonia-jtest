@@ -38,6 +38,7 @@ minetest.register_craftitem("mcl_farming:pumpkin_seeds", {
 	_doc_items_usagehelp = S("Place the pumpkin seeds on farmland (which can be created with a hoe) to plant a pumpkin stem. Pumpkin stems grow in sunlight and grow faster on hydrated farmland. When mature, the stem attempts to grow a pumpkin next to it. Rightclick an animal to feed it pumpkin seeds."),
 	inventory_image = "mcl_farming_pumpkin_seeds.png",
 	groups = {craftitem=1, compostability = 30},
+	_mcl_places_plant = "mcl_farming:pumpkin_1",
 	on_place = function(itemstack, placer, pointed_thing)
 		return mcl_farming:place_seed(itemstack, placer, pointed_thing, "mcl_farming:pumpkin_1")
 	end

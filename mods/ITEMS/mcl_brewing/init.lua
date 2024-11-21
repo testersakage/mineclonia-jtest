@@ -384,7 +384,8 @@ local tpl_brewing_stand = {
 	description = S("Brewing Stand"),
 	_doc_items_create_entry = false,
 	_tt_help = S("Brew Potions"),
-	groups = {pickaxey = 1, container = 1, not_in_creative_inventory = 1, not_in_craft_guide = 1, brewing_stand = 1},
+	groups = {pickaxey = 1, container = 1, not_in_creative_inventory = 1, not_in_craft_guide = 1,
+			brewing_stand = 1, _mcl_partial = 2},
 	tiles = tiles,
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
 	drop = "mcl_brewing:stand",
@@ -431,7 +432,8 @@ minetest.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
 	_doc_items_longdesc = S("The stand allows you to brew potions!"),
 	_doc_items_create_entry = true,
 	_doc_items_usagehelp = doc_string,
-	groups = {pickaxey = 1, brewitem = 1, container = 1, brewing_stand = 1},
+	groups = {pickaxey = 1, brewitem = 1, container = 1, brewing_stand = 1,
+			_mcl_partial = 2,},
 	node_box = {
 		type = "fixed",
 		fixed = {

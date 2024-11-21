@@ -158,7 +158,7 @@ function patrolling_mob:drop_custom (looting_level)
 	end
 end
 
-function patrolling_mob:on_die (self, pos, mcl_reason)
+function patrolling_mob:on_die (pos, mcl_reason)
 	if self._raidcaptain
 		and mcl_reason
 		and mcl_reason.type == "player" then

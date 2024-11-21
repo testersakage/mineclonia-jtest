@@ -125,6 +125,7 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 		flammable = -1,
 		deco_block = 1,
 		piglin_protected = 1,
+		barrel = 1,
 	},
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -181,6 +182,7 @@ minetest.register_node("mcl_barrels:barrel_open", {
 		deco_block = 1,
 		not_in_creative_inventory = 1,
 		piglin_protected = 1,
+		barrel = 1,
 	},
 	allow_metadata_inventory_move = protection_check_move,
 	allow_metadata_inventory_take = protection_check_put_take,

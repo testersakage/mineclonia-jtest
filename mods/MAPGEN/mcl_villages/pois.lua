@@ -90,6 +90,8 @@ local registered_pois = mcl_villages.registered_pois
 --   containing instances of this POI and those adjoining.
 --   `is_valid': function called to confirm the continued existence and
 --   validity of a POI.
+--   `on_destroy': function called to clean up after a deleted POI.
+--   Not called if deleted by mcl_villages.remove_poi.
 
 function mcl_villages.register_poi (name, def)
 	mcl_villages.registered_pois[name] = def
@@ -138,11 +140,11 @@ function mcl_villages.insert_poi (nodepos, kind)
 	return pois:insert_area (nodepos, nodepos, kind)
 end
 
-function mcl_villages.get_poi (nodepos, kind)
+function mcl_villages.get_poi (nodepos)
 	local areas = pois:get_areas_for_pos (nodepos, false, true)
 	if areas then
-		-- Replace these POIs but log a warning message.
 		for id, area in pairs (areas) do
+			area.id = id
 			return area
 		end
 	end
@@ -177,6 +179,38 @@ for x = -1, 1 do
 		for z = -1, 1 do
 			if x ~= 0 or y ~= 0 or z ~= 0 then
 				push (directions, { x, y, z, })
+			end
+		end
+	end
+end
+
+function mcl_villages.remove_poi (id)
+	local area = pois:get_area (id, true, true)
+
+	if area then
+		pois:remove_area (id)
+
+		local def = registered_pois[area.data]
+
+		-- Propagate POI "lighting" reduction if necessary.
+		if not def or def.village_center then
+			local pos = section_position (area.min)
+			local section_desc = get_poi_section (pos.x, pos.y, pos.z)
+
+			if section_desc.heat > 0 then
+				local pois = mcl_villages.get_pois_in (pos, pos)
+				local heat = 0
+
+				for _, poi in ipairs (pois) do
+					def = registered_pois[poi.data]
+					if def.village_center then
+						heat = MAX_HEAT
+					end
+				end
+
+				if heat == 0 then
+					push (poi_deletion_pdl, section_desc)
+				end
 			end
 		end
 	end
@@ -266,7 +300,13 @@ local function enqueue_in_player_area (player, ticket)
 			if section_desc then
 				-- If this section is no longer heated, remove
 				-- its influence.
-				if heat == 0 and section_desc.heat > 0 then
+				-- The current heat level is compared against
+				-- MAX_HEAT in deciding whether it was previously
+				-- heated, because other values may result in
+				-- misfires if a POI exists within a section heated
+				-- by adjacent village centers but without being a
+				-- village center itself.
+				if heat == 0 and section_desc.heat == MAX_HEAT then
 					push (poi_deletion_pdl, section_desc)
 				elseif heat > 0 and section_desc.heat < heat then
 					push (poi_insertion_pdl, section_desc)
@@ -298,6 +338,9 @@ local function enqueue_in_player_area (player, ticket)
 				pois:remove_area (poi.id)
 			else
 				if not def.is_valid (poi.min) then
+					if def.on_destroy then
+						def.on_destroy (poi.min)
+					end
 					pois:remove_area (poi.id)
 				elseif def.village_center then
 					heat = MAX_HEAT
@@ -343,11 +386,12 @@ end
 local dtime_total = 0
 -- local steps_completed = 0
 -- local step_total_time = 0
+-- local step_max = 0
 
 minetest.register_globalstep (function (dtime)
 	dtime_total = dtime_total + dtime
 	-- local clock = os.clock ()
-	-- Enqueue valid POIs and remove invalid ones near connected
+	-- enqueue valid POIs and remove invalid ones near connected
 	-- players.
 	for player in mcl_util.connected_players () do
 		enqueue_in_player_area (player, dtime_total)
@@ -359,12 +403,15 @@ minetest.register_globalstep (function (dtime)
 	-- local finish = os.clock ()
 	-- steps_completed = steps_completed + 1
 	-- step_total_time = step_total_time + (finish - clock)
-	-- if steps_completed >= 10 then
-	-- 	local blurb = string.format ("Previous 10 cycles took %.2f ms per cycle",
-	-- 				     step_total_time / steps_completed * 1000)
-	-- 	minetest.log ("action", blurb)
+	-- step_max = math.max (step_max, (finish - clock))
+	-- if steps_completed >= 20 then
+	-- 	local blurb = string.format ("Previous 20 cycles took %.2f ms per cycle (max %.2f)",
+	-- 				     step_total_time / steps_completed * 1000,
+	-- 				     step_max * 1000)
+	-- 	print ("action", blurb)
 	-- 	step_total_time = 0
 	-- 	steps_completed = 0
+	-- 	step_max = 0
 	-- end
 end)
 
@@ -514,3 +561,171 @@ function mcl_villages.random_poi_in (aa, bb, predicate)
 	end
 	return nil
 end
+
+------------------------------------------------------------------------
+-- POI creation.
+------------------------------------------------------------------------
+
+mcl_villages.register_poi ("mcl_villages:armorer", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_blast_furnace:blast_furnace")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:butcher", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_smoker:smoker")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:cartographer", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_cartography_table:cartography_table")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:cleric", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or minetest.get_item_group (node.name, "brewing_stand") > 0)
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:farmer", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or mcl_composters.test_composter (node.name))
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:fisherman", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_barrels:barrel_closed"
+			or node.name == "mcl_barrels:barrel_open")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:fletcher", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_fletching_table:fletching_table")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:leatherworker", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or minetest.get_item_group (node.name, "cauldron") > 0)
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:librarian", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_lectern:lectern")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:mason", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_stonecutter:stonecutter")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:shepherd", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_loom:loom")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:toolsmith", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_smithing_table:table")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:weaponsmith", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_grindstone:grindstone")
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:bed", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or minetest.get_item_group (node.name, "bed") > 0)
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:bell", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_bells:bell")
+	end,
+	on_destroy = function (nodepos)
+		local meta = minetest.get_meta (nodepos)
+		if meta then
+			meta:set_int ("mcl_villages:bell_users", 0)
+		end
+	end,
+	village_center = true,
+})
+
+mcl_villages.register_poi ("mcl_villages:provisional_poi", {
+	is_valid = function (nodepos)
+		local node = minetest.get_node (nodepos)
+		return (node.name == "ignore"
+			or node.name == "mcl_blast_furnace:blast_furnace"
+			or node.name == "mcl_cartography_table:cartography_table"
+			or node.name == "mcl_fletching_table:fletching_table"
+			or node.name == "mcl_grindstone:grindstone"
+			or node.name == "mcl_lectern:lectern"
+			or node.name == "mcl_loom:loom"
+			or node.name == "mcl_smithing_table:table"
+			or node.name == "mcl_smoker:smoker"
+			or node.name == "mcl_stonecutter:stonecutter"
+			or node.name == "mcl_barrels:barrel_closed"
+			or node.name == "mcl_barrels:barrel_open"
+			or mcl_composters.test_composter (node.name)
+			or minetest.get_item_group (node.name, "brewing_stand") > 0
+			or minetest.get_item_group (node.name, "cauldron") > 0)
+	end,
+	village_center = false,
+})

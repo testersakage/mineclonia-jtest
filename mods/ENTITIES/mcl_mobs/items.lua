@@ -1,10 +1,8 @@
 local mob_class = mcl_mobs.mob_class
 
-local function player_near(pos)
-	for o in minetest.objects_inside_radius(pos, 2) do
-		if o:is_player() then return true end
-	end
-end
+------------------------------------------------------------------------
+-- Equipment mechanics.
+------------------------------------------------------------------------
 
 local function get_armor_texture (obj, stack)
 	local def = stack:get_definition ()
@@ -44,14 +42,6 @@ function mob_class:set_armor_texture()
 			self.base_texture[slot] = texture
 		end
 		self:set_textures (self.base_texture)
-	end
-end
-
-function mob_class:is_drop(itemstack)
-	if self.drops then
-		for _, v in pairs(self.drops) do
-			if v and v.name and v.name == itemstack:get_name() then return true end
-		end
 	end
 end
 
@@ -235,34 +225,135 @@ function mob_class:default_pickup (object, stack, def, itemname)
 end
 
 function mob_class:check_item_pickup ()
-	if self.pick_up and #self.pick_up > 0
-		or (self.wears_armor and self.wears_armor ~= "no_pickup") then
-		local p = self.object:get_pos()
-		if not p then return end
-		local player_near = player_near (p)
-		for o in minetest.objects_inside_radius (p, 2) do
-			local l = o:get_luaentity ()
-			if l and l.name == "__builtin:item"
-				and l.age >= 1.0
-				and not player_near
-				and not self:is_drop(ItemStack(l.itemstring)) then
-				local stack = ItemStack(l.itemstring)
-				local def = stack:get_definition()
-				local itemname = stack:get_name()
+	if self.can_wield_items
+		or self._inventory_size
+		or self._wears_armor then
+		local self_pos = self.object:get_pos ()
+		for object in minetest.objects_inside_radius (self_pos, 1.95) do
+			local entity = object:get_luaentity ()
+			if entity
+				and entity.name == "__builtin:item"
+				and entity.age >= 1.0 then
+				local stack = ItemStack (entity.itemstring)
+				local def = stack:get_definition ()
+				local itemname = stack:get_name ()
+				self:default_pickup (object, stack, def, itemname)
+			end
+		end
+	end
+end
 
-				if not self:default_pickup (o, stack, def, itemname)
-					and self.pick_up then
-					for _, v in pairs(self.pick_up) do
-						if self.on_pick_up and itemname == v then
-							local r = self.on_pick_up(self,l)
-							if r and r.is_empty and not r:is_empty() then
-								l.itemstring = r:to_string()
-							elseif r and r.is_empty and r:is_empty() then
-								o:remove()
-							end
-						end
-					end
-				end
+------------------------------------------------------------------------
+-- Inventories.
+------------------------------------------------------------------------
+
+-- Return whether there is sufficient space in this mob's inventory to
+-- insert STACK whole, i.e., without dividing it between multiple
+-- slots.
+
+function mob_class:has_inventory_space (stack)
+	if not self._inventory_size then
+		return false
+	elseif not self._inventory then
+		return true
+	end
+	for _, slot in pairs (self._inventory) do
+		if ItemStack (slot):item_fits (stack) then
+			return true
+		end
+	end
+	return false
+end
+
+function mob_class:add_to_inventory (stack)
+	if not self._inventory_size then
+		return stack
+	elseif not self._inventory then
+		self._inventory = {}
+		for i = 1, self._inventory_size do
+			self._inventory[i] = ""
+		end
+	end
+
+	local remainder = stack
+	for i = 1, #self._inventory do
+		local stack = ItemStack (self._inventory[i])
+		remainder = stack:add_item (remainder)
+		self._inventory[i] = stack:to_string ()
+		if remainder:is_empty () then
+			break
+		end
+	end
+	return remainder
+end
+
+function mob_class:has_items (name, rem)
+	if not self._inventory then
+		return false
+	end
+
+	for _, slot in ipairs (self._inventory) do
+		local item = ItemStack (slot)
+		if name == item:get_name () then
+			local count = item:get_count ()
+
+			rem = rem - math.min (rem, count)
+			if rem == 0 then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function mob_class:count_items (name)
+	if not self._inventory then
+		return 0
+	end
+
+	local count = 0
+	for _, slot in ipairs (self._inventory) do
+		local item = ItemStack (slot)
+		if name == item:get_name () then
+			count = count + item:get_count ()
+		end
+	end
+	return count
+end
+
+function mob_class:remove_item (name, wanted)
+	if not self._inventory then
+		return 0
+	end
+
+	local stack = ItemStack ()
+	for i, slot in ipairs (self._inventory) do
+		local item = ItemStack (slot)
+		if not item:is_empty ()
+			and item:get_name () == name then
+			local count = item:get_count ()
+			local n = math.min (wanted, count)
+			local taken = item:take_item (n)
+			local remainder = stack:add_item (taken)
+			local rem = remainder:get_count ()
+			item:add_item (remainder)
+			wanted = wanted - (n - rem)
+			self._inventory[i] = item:to_string ()
+		end
+
+		if wanted <= 0 then
+			break
+		end
+	end
+	return stack
+end
+
+function mob_class:drop_inventory (self_pos)
+	if self._inventory then
+		for _, item in pairs (self._inventory) do
+			local stack = ItemStack (item)
+			if not stack:is_empty () then
+				mcl_util.drop_item_stack (self_pos, stack)
 			end
 		end
 	end

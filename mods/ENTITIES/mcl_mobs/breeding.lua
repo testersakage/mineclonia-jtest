@@ -165,6 +165,9 @@ function mob_class:tick_breeding ()
 				collisionbox = self.base_colbox,
 				selectionbox = self.base_selbox,
 			})
+			if self._adult_head_eye_height then
+				self.head_eye_height = self._adult_head_eye_height
+			end
 			self:set_textures (self.base_texture)
 			if self.on_grown then
 				self.on_grown(self)
