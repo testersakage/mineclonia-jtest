@@ -2,7 +2,6 @@ local mob_class = mcl_mobs.mob_class
 local active_particlespawners = {}
 local enable_blood = minetest.settings:get_bool("mcl_damage_particles", true)
 local DEFAULT_FALL_SPEED = -9.81*1.5
-local PI_THIRD = math.pi / 3 -- 60 degrees
 
 local player_transfer_distance = tonumber(minetest.settings:get("player_transfer_distance")) or 128
 if player_transfer_distance == 0 then player_transfer_distance = math.huge end
@@ -339,13 +338,12 @@ function mob_class:check_head_swivel(dtime, clear)
 	end
 
 	local locked_object = self._locked_object
-	if locked_object and (locked_object:is_player() or locked_object:get_luaentity()) and locked_object:get_hp() > 0 then
-		local _locked_object_eye_height = 1.5
-		if locked_object:is_player() then
-			_locked_object_eye_height = locked_object:get_properties().eye_height
-		elseif locked_object:get_luaentity() then
-			_locked_object_eye_height = locked_object:get_luaentity().head_eye_height
-		end
+	if locked_object
+		and locked_object:is_valid ()
+		and locked_object:get_hp () > 0 then
+		local _locked_object_eye_height
+			= mcl_util.target_eye_height (locked_object)
+
 		if _locked_object_eye_height then
 			local self_rot = self.object:get_rotation()
 			-- If a mob is attached, should we really be
@@ -356,7 +354,7 @@ function mob_class:check_head_swivel(dtime, clear)
 			end
 
 			local ps = self.object:get_pos()
-			ps.y = ps.y + self.head_eye_height * .7
+			ps.y = ps.y + self.head_eye_height
 			local pt = locked_object:get_pos()
 			pt.y = pt.y + _locked_object_eye_height
 			local dir = vector.direction (ps, pt)
@@ -364,7 +362,7 @@ function mob_class:check_head_swivel(dtime, clear)
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
 				+ self._head_pitch_offset
 			local out_of_view
-				= (mob_yaw < -PI_THIRD or mob_yaw > PI_THIRD)
+				= (mob_yaw < -self._head_rot_limit or mob_yaw > self._head_rot_limit)
 					and not (self.attack and not self.runaway)
 			if self.adjust_head_swivel then
 				mob_yaw, mob_pitch, out_of_view

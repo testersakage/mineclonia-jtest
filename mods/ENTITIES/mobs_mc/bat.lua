@@ -13,7 +13,7 @@ local function check_light(_, _, artificial_light, _)
 	end
 
 	if artificial_light > maxlight then
-		return false, "To bright"
+		return false, "Too bright"
 	end
 
 	return true, ""

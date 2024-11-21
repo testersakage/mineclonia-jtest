@@ -31,7 +31,6 @@ local shulker = {
 		"mobs_mc_endergolem.png",
 	},
 	pushable = false,
-	mob_pushable = false,
 	visual_size = {
 		x = 3,
 		y = 3,

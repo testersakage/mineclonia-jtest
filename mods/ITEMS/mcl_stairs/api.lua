@@ -387,7 +387,7 @@ local function register_slab(subname, stairdef)
 	}, stairdef.overrides or {})
 
 	minetest.register_node(":"..lower_slab, table.merge(nodedef,{
-		groups = table.merge(stairdef.groups,{slab = 1, _mcl_partial=2}),
+		groups = table.merge(stairdef.groups,{slab = 1, _mcl_partial=3}),
 	}))
 
 	-- Register the upper slab.

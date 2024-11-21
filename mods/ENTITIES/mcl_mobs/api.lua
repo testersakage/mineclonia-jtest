@@ -21,12 +21,16 @@ function mob_class:safe_remove()
 	end,self.object)
 end
 
-function mob_class:replace_with (successor_type, propagate_equipment)
+function mob_class:replace_with (successor_type, propagate_equipment, mob_staticdata)
 	local default_staticdata = {
 		child = self.child,
 		nametag = self.nametag,
 		persistent = self.persistent,
 	}
+	if mob_staticdata then
+		default_staticdata
+			= table.merge (default_staticdata, mob_staticdata)
+	end
 	local self_pos = self.object:get_pos ()
 	local staticdata = minetest.serialize (default_staticdata)
 	local new = minetest.add_entity (self_pos, successor_type, staticdata)
@@ -114,29 +118,31 @@ function mob_class:check_timer(timer, interval)
 end
 
 function mob_class:get_staticdata_table ()
-	local pos = self.object:get_pos()
-	if not mcl_mobs.check_vector(pos) then
-		self.object:remove()
-		return
+	local pos = self.object:get_pos ()
+	if not pos then
+		self.object:remove ()
+		return nil
 	end
 
 	local tmp = {}
 
 	for tag, stat in pairs(self) do
 		local t = type(stat)
-		if  t ~= "function"
-		and t ~= "nil"
-		and t ~= "userdata"
-		-- This structure is liable to grow to an immense size.
-		and tag ~= "pathfinding_context"
-		and tag ~= "waypoints"
-		and tag ~= "_cmi_components"
-		and tag ~= "_targets_visible"
-		and tag ~= "_leader"
-		and tag ~= "_school" then
+		if  t ~= "function" and t ~= "nil" and t ~= "userdata" then
 			tmp[tag] = self[tag]
 		end
 	end
+
+	-- Erase state variables that mustn't be preserved.
+	tmp.pathfinding_context = nil
+	tmp.waypoints = nil
+	tmp._navigation_session = nil
+	tmp._gwp_did_timeout = nil
+	tmp._targets_visible = nil
+	tmp._leader = nil
+	tmp._school = nil
+	tmp.head_eye_height = nil
+	tmp._adult_head_eye_height = nil
 
 	if self._mcl_potions then
 		tmp._mcl_potions = self._mcl_potions
@@ -250,6 +256,7 @@ function mob_class:scale_size_of_child (scale)
 	})
 	-- This presumes that the collision box does not extend much
 	-- beneath the mob origin.
+	self._adult_head_eye_height = self.head_eye_height
 	self.head_eye_height = self.head_eye_height * scale
 end
 
@@ -403,9 +410,11 @@ function mob_class:mob_activate(staticdata, dtime)
 	self:remove_texture_mod ("^[colorize:#d42222:175")
 end
 
+local scale_chance = mcl_mobs.scale_chance
+
 function mob_class:on_step(dtime, moveresult)
-	local pos = self.object:get_pos()
-	if not mcl_mobs.check_vector(pos) or self.removed then
+	local pos = self.object:get_pos ()
+	if not pos or self.removed then
 		self:safe_remove()
 		return
 	end
@@ -413,8 +422,6 @@ function mob_class:on_step(dtime, moveresult)
 	local should_drive = self:should_drive ()
 
 	if self:check_despawn(pos, dtime) then return true end
-
-	self:update_tag()
 
 	-- Objects which are attached and those which are not physical
 	-- don't receive moveresults.  Create a placeholder object to
@@ -536,8 +543,9 @@ function mob_class:on_step(dtime, moveresult)
 	if self.opinion_sound_cooloff > 0 then
 		self.opinion_sound_cooloff = self.opinion_sound_cooloff - dtime
 	end
-	-- mob plays random sound at times. Should be 120. Zombie and mob farms are ridiculous
-	if math.random(1, 70) == 1 then
+	-- Mob plays random sound at times.
+	local chance = scale_chance (70, dtime)
+	if math.random (1, chance) == 1 then
 		self:mob_sound("random", true)
 	end
 

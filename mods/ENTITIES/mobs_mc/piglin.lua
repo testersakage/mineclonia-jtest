@@ -97,6 +97,7 @@ local piglin_base = {
 	},
 	makes_footstep_sound = true,
 	frame_speed_multiplier = 0.6,
+	_inventory_size = 8,
 }
 
 ------------------------------------------------------------------------
@@ -809,54 +810,9 @@ function piglin:chuck_randomly (self_pos, object)
 	end
 end
 
-function piglin:has_inventory_space (stack)
-	if not self._piglin_inventory then
-		return true
-	end
-	for _, slot in pairs (self._piglin_inventory) do
-		if ItemStack (slot):item_fits (stack) then
-			return true
-		end
-	end
-	return false
-end
-
-function piglin:add_to_inventory (item)
-	if not self._piglin_inventory then
-		self._piglin_inventory = {
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-		}
-	end
-
-	local remainder = item
-	for i = 1, #self._piglin_inventory do
-		local stack = ItemStack (self._piglin_inventory[i])
-		remainder = stack:add_item (remainder)
-		self._piglin_inventory[i] = stack:to_string ()
-		if remainder:is_empty () then
-			break
-		end
-	end
-	return remainder
-end
-
 function piglin:drop_custom (looting)
 	local self_pos = self.object:get_pos ()
-	if self._piglin_inventory then
-		for _, item in pairs (self._piglin_inventory) do
-			local stack = ItemStack (item)
-			if not stack:is_empty () then
-				mcl_util.drop_item_stack (self_pos, stack)
-			end
-		end
-	end
+	self:drop_inventory (self_pos)
 end
 
 function piglin:dispose_of_wielditem (self_pos, no_bartering)
@@ -1495,8 +1451,8 @@ local function piglin_avoid_repellent (self, self_pos, dtime)
 	return false
 end
 
-function piglin:ai_init ()
-	mob_class.ai_init (self)
+function piglin:init_ai ()
+	mob_class.init_ai (self)
 	self._retreat_asap = nil
 end
 

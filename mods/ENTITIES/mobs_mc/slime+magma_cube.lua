@@ -38,7 +38,6 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 		local mndef = minetest.registered_nodes[minetest.get_node(pos).name]
 		local mother_stuck = mndef and mndef.walkable
 		local angle = math.random(0, math.pi*2)
-		local children = {}
 		local spawn_count = math.random(2, 4)
 		for _ = 1, spawn_count do
 			dir = vector.new(math.cos(angle), 0, math.sin(angle))
@@ -57,19 +56,6 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 			if mob and mob:get_pos() and not mother_stuck then
 				mob:set_velocity(dir * eject_speed)
 			end
-		end
-		-- If mother was murdered, children attack the killer after 1 second
-		if self.state == "attack" then
-			minetest.after(1.0, function(children, enemy)
-				local le
-				for c = 1, #children do
-					le = children[c]:get_luaentity()
-					if le then
-						le.state = "attack"
-						le.attack = enemy
-					end
-				end
-			end, children, self.attack)
 		end
 	end
 end

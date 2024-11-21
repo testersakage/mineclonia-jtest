@@ -259,7 +259,7 @@ function horse:ai_step (dtime)
 
 	if self._eats then
 		if not self._eating
-			and not self._rider
+			and not self.driver
 			and pr:next (1, math.round (300 * dtime / 0.05))
 			and self.standing_on == "mcl_core:dirt_with_grass" then
 			self:begin_eating (2.5)
@@ -716,6 +716,10 @@ function horse:on_die ()
 	end
 end
 
+function horse:allow_mount (clicker)
+	return true
+end
+
 function horse:on_rightclick (clicker)
 	if not clicker or not clicker:is_player() then
 		return
@@ -807,7 +811,7 @@ function horse:on_rightclick (clicker)
 		return
 	end
 
-	if not self.driver then
+	if not self.driver and self:allow_mount (clicker) then
 		self._jump_charge = nil
 		attach_driver (self, clicker)
 	end

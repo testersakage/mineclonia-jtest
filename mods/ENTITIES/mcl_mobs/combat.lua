@@ -93,10 +93,12 @@ function mob_class:receive_damage (mcl_reason, damage)
 	self.health = self.health - damage
 
 	if not source then
+		self:check_for_death (mcl_reason)
 		return true
 	end
 
 	if source:is_player () and source:get_player_name () == self.owner then
+		self:check_for_death (mcl_reason)
 		return true
 	end
 
@@ -129,6 +131,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 			self:do_runaway (source)
 		end
 	end
+	self:check_for_death (mcl_reason)
 	return true
 end
 
@@ -231,9 +234,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		hitter:set_wielded_item(weapon)
 	end
 
-	local die = false
-
-
 	if damage >= 0 then
 		if damage > 0 then
 			-- weapon sounds
@@ -261,11 +261,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if damage > 0 then
 			self:damage_effect (damage)
 		end
-
-		-- skip future functions if dead, except alerting others
-		if self:check_for_death ("hit", mcl_reason) then
-			die = true
-		end
 	end -- END if damage
 
 	-- knock back effect (only on full punch)
@@ -279,10 +274,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if not v then return end
 		local r = 1.4 - math.min(punch_interval, 1.4)
 		local kb = r
-
-		if die==true then
-			kb=kb*2
-		end
 
 		-- check if tool already has specific knockback value
 		if tool_capabilities.damage_groups["knockback"] then
@@ -323,9 +314,7 @@ function mob_class:call_group_attack(hitter)
 		local ent = obj:get_luaentity()
 		if ent then
 			-- only alert members of same mob or friends
-			if ent.group_attack
-			and ent.state ~= "attack"
-			and ent.owner ~= name then
+			if ent.group_attack then
 				if ent.name == self.name then
 					ent:do_attack(hitter)
 				elseif type(ent.group_attack) == "table" then
@@ -1088,7 +1077,8 @@ function mob_class:wielditem_transform (info, stack)
 	local name = stack:get_name ()
 	local def = stack:get_definition ()
 
-	if def and def._mcl_toollike_wield then
+	if info.toollike_position
+		and def and def._mcl_toollike_wield then
 		rot = info.toollike_rotation
 		pos = info.toollike_position
 	elseif info.bow_position

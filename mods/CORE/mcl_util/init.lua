@@ -615,7 +615,6 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 			else
 				mcl_damage.run_death_callbacks(target, mcl_reason or {type = "generic"})
 			end
-			luaentity:check_for_death (mcl_reason.type, mcl_reason)
 			return damage
 		else
 			local armorgroups = target:get_armor_groups()

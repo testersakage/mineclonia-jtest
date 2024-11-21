@@ -150,6 +150,18 @@ function mcl_raids.find_surface_position (node_pos)
 	end
 end
 
+function mcl_raids.find_active_raid (pos)
+	for _, event in ipairs (mcl_events.active_events) do
+		if event.exclusive_to_area
+			and vector.distance (pos, event.pos)
+				<= event.exclusive_to_area
+			and event.health_max then
+			return event
+		end
+	end
+	return nil
+end
+
 local pr = PcgRandom (os.time () + 970)
 local r = 1 / 2147483647
 

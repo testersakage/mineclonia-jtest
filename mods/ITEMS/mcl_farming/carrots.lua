@@ -103,6 +103,7 @@ minetest.register_craftitem("mcl_farming:carrot_item", {
 	inventory_image = "farming_carrot.png",
 	groups = {food = 2, eatable = 3, compostability = 65},
 	_mcl_saturation = 3.6,
+	_mcl_places_plant = "mcl_farming:carrot_1",
 	on_secondary_use = minetest.item_eat(3),
 	on_place = function(itemstack, placer, pointed_thing)
 		local new = mcl_farming:place_seed(itemstack, placer, pointed_thing, "mcl_farming:carrot_1")
