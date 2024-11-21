@@ -789,7 +789,7 @@ minetest.register_node("mcl_core:diamondblock", {
 })
 
 minetest.register_node("mcl_core:lapisblock", {
-	description = S("Lapis Lazuli Block"),
+	description = S("Block of Lapis Lazuli"),
 	_doc_items_longdesc = S("A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."),
 	tiles = {"mcl_core_lapis_block.png"},
 	is_ground_content = false,
