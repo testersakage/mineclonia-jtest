@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Luanti textdomain hudbars x.x.x\n"
+"Project-Id-Version: Luanti textdomain mcl_sculk x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -13,12 +13,21 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "@1: @2/@3"
-msgstr "@1：@2／@3"
+msgid "Sculk"
+msgstr "伏聆"
 
-msgid "Health"
-msgstr "生命"
+msgid "Sculk Vein"
+msgstr ""
 
-msgid "Breath"
-msgstr "氣息"
+msgid "Sculk vein."
+msgstr ""
+
+msgid "Sculk Catalyst"
+msgstr ""
+
+msgid "Sculk Sensor"
+msgstr ""
+
+msgid "Sculk Shrieker"
+msgstr ""
 

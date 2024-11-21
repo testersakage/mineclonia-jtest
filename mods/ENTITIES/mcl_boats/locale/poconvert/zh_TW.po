@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "潛行以停止騎乘"
 
 msgid "Boats are used to travel on the surface of water."
-msgstr "船是用來在水上行走的交通工具。"
+msgstr "船用於在水面上行駛。"
 
 msgid "Rightclick on a water source to place the boat. Rightclick the boat to enter it. Use [Left] and [Right] to steer, [Forwards] to speed up and [Backwards] to slow down or move backwards. Use [Sneak] to leave the boat, punch the boat to make it drop as an item."
 msgstr ""
@@ -26,14 +26,14 @@ msgid "Boat"
 msgstr "船"
 
 msgid "Water vehicle"
-msgstr "水上交通工具"
+msgstr "水上載具"
 
 msgid "Chest Boats are used to travel on the surface of water. And transport goods"
-msgstr ""
+msgstr "船連箱子用於在水面上行駛。以及運輸貨物"
 
 msgid "Rightclick on a water source to place the boat. Rightclick the boat to enter it. Use [Left] and [Right] to steer, [Forwards] to speed up and [Backwards] to slow down or move backwards. Use [Sneak] to leave the boat, punch the boat to make it drop as an item. Use [Sneak] + [Rightclick] to open the boat's chest"
 msgstr ""
 
 msgid "Chest Boat"
-msgstr ""
+msgstr "船連箱子"
 
