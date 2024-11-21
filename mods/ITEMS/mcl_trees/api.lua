@@ -441,6 +441,13 @@ function mcl_trees.register_wood(name, p)
 		def.description = def.description or D("Stripped " .. rname .. " Wood")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped wood of an " .. rname .. " tree.")
 		minetest.register_node(":mcl_trees:bark_stripped_"..name, def)
+		minetest.register_craft({
+			output = "mcl_trees:bark_stripped_"..name.." 3",
+			recipe = {
+				{ "mcl_trees:stripped_"..name, "mcl_trees:stripped_"..name },
+				{ "mcl_trees:stripped_"..name, "mcl_trees:stripped_"..name },
+			}
+		})
 	end
 
 	if p.sapling == nil or type(p.sapling) == "table" then
