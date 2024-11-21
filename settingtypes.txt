@@ -149,8 +149,8 @@ mcl_bookshelf_inventories (Bookshelf inventories) bool true
 mcl_extended_pet_control (Extended pet control) bool false
 
 # Enable nodes not in Minecraft.
-# Includes extra stairs and slabs, Red Nether Brick Fence and
-# nether brick fence gates.
+# Includes extra stairs and slabs, Red Nether Brick Fence,
+# nether brick fence gates, and Bamboo Bark.
 mcl_extra_nodes (Additional nodes) bool true
 
 # Enable piston movement of inventory nodes.

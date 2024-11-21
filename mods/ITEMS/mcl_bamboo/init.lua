@@ -11,6 +11,8 @@ mcl_util.generate_on_place_plant_function(function(pos)
 	return minetest.get_item_group(node_below.name, "soil_bamboo") > 0
 end)
 
+local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
+
 local block_doc = S("A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.")
 
 local block_groups = {
@@ -37,9 +39,9 @@ mcl_trees.register_wood("bamboo",{
 		groups = block_groups,
 		tiles = {"mcl_bamboo_bamboo_bottom_stripped.png", "mcl_bamboo_bamboo_bottom_stripped.png","mcl_bamboo_bamboo_block_stripped.png" }
 	},
-	bark = { tiles = {"mcl_bamboo_bamboo_block.png"}},
 	wood = { tiles = {"mcl_bamboo_bamboo_plank.png"}},
-	stripped_bark = { tiles = {"mcl_bamboo_bamboo_block_stripped.png"} },
+	bark = extra_nodes and { tiles = {"mcl_bamboo_bamboo_block.png"}},
+	stripped_bark = extra_nodes and { tiles = {"mcl_bamboo_bamboo_block_stripped.png"}},
 	fence = { tiles = { "mcl_bamboo_fence_bamboo.png" },},
 	fence_gate = { tiles = { "mcl_bamboo_fence_gate_bamboo.png" }, },
 	door = {
