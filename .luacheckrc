@@ -203,6 +203,7 @@ globals = {
 	"AreaStore",
 	"vector",
 	"mcla_generated_translations",
+	"dbg",
 }
 
 read_globals = {
