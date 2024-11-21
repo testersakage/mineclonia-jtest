@@ -8,7 +8,7 @@ local messytextures = {
 	silver = "light_gray",
 }
 
-local llama = {
+local llama = table.merge (horse, {
 	description = S("Llama"),
 	type = "animal",
 	spawn_class = "passive",
@@ -87,7 +87,8 @@ local llama = {
 		"mcl_farming:hay_block",
 	},
 	tracking_distance = 40,
-}
+	_default_decor_texture = "blank.png",
+})
 
 ------------------------------------------------------------------------------
 -- Llama spawning.
@@ -164,7 +165,7 @@ function llama:extra_textures (colorstring)
 	local chest = self._chest
 	local textures = {
 		"blank.png",
-		"blank.png",
+		self._default_decor_texture,
 		self._naked_texture,
 	}
 	if chest then
@@ -254,7 +255,7 @@ function llama:count_ahead ()
 	return n
 end
 
-local function llama_follow_caravan (self, self_pos, dtime)
+function llama:follow_caravan (self_pos, dtime)
 	self:check_caravan ()
 	if self._caravan_head then
 		local head_pos = self._caravan_head:get_pos ()
@@ -286,7 +287,7 @@ local function llama_follow_caravan (self, self_pos, dtime)
 			self:halt_in_tracks ()
 		end
 		return true
-	else
+	elseif not self:is_leashed () then
 		-- Attempt to locate a llama within a 9 block radius
 		-- that leashed or is fewer than 7 llamas removed from
 		-- its leasher.
@@ -297,7 +298,8 @@ local function llama_follow_caravan (self, self_pos, dtime)
 
 		for object in minetest.objects_inside_radius (self_pos, 9) do
 			local entity = object:get_luaentity ()
-			if entity and entity.name == "mobs_mc:llama" then
+			if entity and (entity.name == "mobs_mc:llama"
+				       or entity.name == "mobs_mc:trader_llama") then
 				local dist = vector.distance (object:get_pos (), self_pos)
 				if (not closest_straggler or dist < d1)
 					and entity._caravan_head
@@ -381,7 +383,7 @@ end
 
 llama.ai_functions = {
 	horse.check_tame,
-	llama_follow_caravan,
+	llama.follow_caravan,
 	mob_class.check_attack,
 	mob_class.check_frightened,
 	mob_class.check_breeding,
@@ -450,7 +452,12 @@ function llama:should_drive ()
 	return false
 end
 
-mcl_mobs.register_mob ("mobs_mc:llama", table.merge (horse, llama))
+mcl_mobs.register_mob ("mobs_mc:llama", llama)
+mobs_mc.llama = llama
+
+------------------------------------------------------------------------
+-- Llama spawning.
+------------------------------------------------------------------------
 
 mcl_entity_invs.register_inv("mobs_mc:llama","Llama",nil,true)
 

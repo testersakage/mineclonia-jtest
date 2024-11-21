@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+mcl_composters = {}
 
 --
 -- Composter mod, adds composters.
@@ -31,6 +32,38 @@ minetest.register_craft({
 		{"group:wood_slab", "group:wood_slab", "group:wood_slab"},
 	}
 })
+
+function mcl_composters.add_item (pos, node, itemstack)
+	local itemname = itemstack:get_name ()
+	local chance = minetest.get_item_group (itemname, "compostability")
+
+	-- calculate leveling up chance
+	local rand = math.random(0,100)
+	if chance >= rand then
+		-- get current compost level
+		local level = minetest.registered_nodes[node.name]["_mcl_compost_level"]
+		-- spawn green particles above new layer
+		mcl_bone_meal.add_bone_meal_particle(vector.offset(pos, 0, level/8, 0))
+		-- update composter block
+		if level < 7 then
+			level = level + 1
+		else
+			level = "ready"
+		end
+		minetest.swap_node(pos, {name = "mcl_composters:composter_" .. level})
+		minetest.sound_play({name="default_grass_footstep", gain=0.4}, {
+			pos = pos,
+			gain= 0.4,
+			max_hear_distance = 16,
+		}, true)
+		-- a full composter becomes ready for harvest after one second
+		-- the block will get updated by the node timer callback set in node reg def
+		if level == 7 then
+			local timer = minetest.get_node_timer(pos)
+			timer:start(1)
+		end
+	end
+end
 
 --- Fill the composter when rightclicked.
 --
@@ -65,32 +98,7 @@ local function composter_add_item(pos, node, player, itemstack, _)
 				max_hear_distance = 16,
 			}, true)
 		end
-		-- calculate leveling up chance
-		local rand = math.random(0,100)
-		if chance >= rand then
-			-- get current compost level
-			local level = minetest.registered_nodes[node.name]["_mcl_compost_level"]
-			-- spawn green particles above new layer
-			mcl_bone_meal.add_bone_meal_particle(vector.offset(pos, 0, level/8, 0))
-			-- update composter block
-			if level < 7 then
-				level = level + 1
-			else
-				level = "ready"
-			end
-			minetest.swap_node(pos, {name = "mcl_composters:composter_" .. level})
-			minetest.sound_play({name="default_grass_footstep", gain=0.4}, {
-				pos = pos,
-				gain= 0.4,
-				max_hear_distance = 16,
-			}, true)
-			-- a full composter becomes ready for harvest after one second
-			-- the block will get updated by the node timer callback set in node reg def
-			if level == 7 then
-				local timer = minetest.get_node_timer(pos)
-				timer:start(1)
-			end
-		end
+		mcl_composters.add_item (pos, node, itemstack)
 	end
 	return itemstack
 end
@@ -157,8 +165,7 @@ local function composter_get_nodeboxes(level)
 	}
 end
 
-local function composter_level(node)
-	local nn = node.name
+function mcl_composters.test_composter (nn)
 	if nn == "mcl_composters:composter" then
 		return 0
 	elseif nn == "mcl_composters:composter_1" then
@@ -175,9 +182,16 @@ local function composter_level(node)
 		return 6
 	elseif nn == "mcl_composters:composter_7" then
 		return 7
+	elseif nn == "mcl_composters:composter_ready" then
+		return 8
 	else
 		return nil
 	end
+end
+
+local function composter_level(node)
+	local nn = node.name
+	return mcl_composters.test_composter (nn)
 end
 
 for i = 1, 7 do
@@ -205,7 +219,7 @@ local function on_hopper_in(pos, downpos)
 	local level = composter_level(downnode)
 
 	--Consume compostable items and update composter below
-	if level then
+	if level and level ~= 8 then
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 
@@ -255,7 +269,7 @@ minetest.register_node("mcl_composters:composter", {
 	groups = {
 		handy=1, material_wood=1, deco_block=1, dirtifier=1,
 		flammable=2, fire_encouragement=3, fire_flammability=4,
-		container = 1,
+		container = 1, composter = 1, _mcl_partial = 2,
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.6,
@@ -289,7 +303,8 @@ local function register_filled_composter(level)
 			handy=1, material_wood=1, deco_block=1, dirtifier=1,
 			not_in_creative_inventory=1, not_in_craft_guide=1,
 			flammable=2, fire_encouragement=3, fire_flammability=4,
-			comparator_signal=level, container = 1,
+			comparator_signal=level, container = 1, composter = 1,
+			_mcl_partial = 2,
 		},
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		drop = "mcl_composters:composter",
@@ -333,7 +348,8 @@ minetest.register_node("mcl_composters:composter_ready", {
 		handy=1, material_wood=1, deco_block=1, dirtifier=1,
 		not_in_creative_inventory=1, not_in_craft_guide=1,
 		flammable=2, fire_encouragement=3, fire_flammability=4,
-		comparator_signal=8, container = 1,
+		comparator_signal=8, container = 1, composter = 1,
+		_mcl_partial = 2,
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	drop = "mcl_composters:composter",

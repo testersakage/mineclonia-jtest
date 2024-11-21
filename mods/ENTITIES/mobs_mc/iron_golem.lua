@@ -47,10 +47,6 @@ local golem = {
 	knockback_resistance = 1.0,
 	damage = 15,
 	reach = 3,
-	group_attack = {
-		"mobs_mc:iron_golem",
-		"mobs_mc:villager",
-	},
 	attacks_monsters = true,
 	attack_type = "melee",
 	drops = {
@@ -75,7 +71,6 @@ local golem = {
 		punch_start = 80, punch_end = 90, punch_speed = 15,
 		flower_start = 100, flower_end = 100, flower_speed = 0,
 	},
-	_got_poppy = false,
 	pace_bonus = 0.6,
 	_poppy_texture = "blank.png",
 }
@@ -86,10 +81,35 @@ local golem = {
 
 local pr = PcgRandom (os.time () + 412)
 local r = 1 / 2147483647
+local NINETY_DEG = math.pi / 2
 
 local function golem_seek_target (self, self_pos, dtime)
-	--- TODO: implement once villagers in distress are capable of
-	--- summoning golems.
+	if self._seeking_target then
+		local target = self._nearest_undesirable
+		if not target or not target:is_valid () then
+			self._seeking_target = false
+			return false
+		end
+
+		if not self:navigation_finished () then
+			return true
+		end
+		self._seeking_target = false
+		return false
+	elseif self._nearest_undesirable then
+		local target = self._nearest_undesirable
+		if target and target:is_valid () then
+			local dir = vector.direction (self_pos, target:get_pos ())
+			local target
+				= self:target_in_direction (self_pos, 16, 7, dir, NINETY_DEG)
+
+			if target and self:gopath (target, false, nil, 0.9) then
+				self._seeking_target = true
+				return "_seeking_target"
+			end
+		end
+	end
+	return false
 end
 
 local function find_nearest_village_section (section)
@@ -120,8 +140,6 @@ local function find_nearest_village_section (section)
 	return closest
 end
 
-local NINETY_DEG = math.pi / 2
-
 local function golem_seek_village (self, self_pos, dtime)
 	if self._seeking_village then
 		if self:navigation_finished () then
@@ -134,7 +152,7 @@ local function golem_seek_village (self, self_pos, dtime)
 		local heat = mcl_villages.get_poi_heat_of_section (section)
 
 		-- Can't seek village if already in one.
-		if heat == 6 then
+		if heat >= 5 then
 			return false
 		end
 		local section = find_nearest_village_section (section)
@@ -255,10 +273,77 @@ function golem:should_attack (object)
 	return false
 end
 
+function golem:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
+	if self._nearest_undesirable then
+		local obj = self._nearest_undesirable
+		local self_pos = self.object:get_pos ()
+		if not obj:is_valid ()
+			or not self:should_continue_to_attack (obj)
+			or vector.distance (self_pos, obj:get_pos ()) > 64 then
+			self._nearest_undesirable = nil
+		end
+	end
+end
+
+function golem:locate_undesirable (self_pos)
+	if self._creator then
+		return nil
+	end
+	local aa = vector.offset (self_pos, -10, -10, -10)
+	local bb = vector.offset (self_pos, 10, 10, 10)
+	local player_rep = {}
+
+	for object in minetest.objects_in_area (aa, bb) do
+		local entity = object:get_luaentity ()
+		if entity and entity.name == "mobs_mc:villager" then
+			for name, rep in pairs (entity._reputation) do
+				local value = player_rep[name] or 0
+				player_rep[name] = math.min (value, rep)
+			end
+		end
+	end
+
+	local undesirable, dist = nil, nil
+	for player in mcl_util.connected_players (self_pos, 64) do
+		if self:attack_player_allowed (player) then
+			local name = player:get_player_name ()
+			local rep = player_rep[name] or 0
+			if rep < -100 then
+				local player_pos = player:get_pos ()
+				local new_dist = vector.distance (self_pos, player_pos)
+				if not undesirable or new_dist < dist then
+					undesirable = player
+					dist = new_dist
+				end
+			end
+		end
+	end
+	return undesirable
+end
+
+function golem:do_attack (target, persistence)
+	mob_class.do_attack (self, target, persistence)
+	self.esp = target == self._nearest_undesirable
+end
+
 function golem:attack_custom (self_pos, dtime)
-	-- TODO: locate players hostile to villagers within a 64-node
-	-- distance, and disable line of sight when pursuing such
-	-- targets.
+	-- Locate players within a 64-node distance whose reputation
+	-- is below -100 with any villager within 10 nodes, and pursue
+	-- such targets aggressively.
+	local undesirable = self._nearest_undesirable
+	if not undesirable or not undesirable:is_valid () then
+		undesirable = self:locate_undesirable (self_pos)
+		self._nearest_undesirable = undesirable
+	end
+	if undesirable then
+		local pos = undesirable:get_pos ()
+		if vector.distance (self_pos, pos) < self.view_range then
+			self:do_attack (self._nearest_undesirable)
+			return true
+		end
+	end
+
 	local target = mob_class.attack_default (self, self_pos, dtime)
 	if target then
 		self:do_attack (target)
@@ -267,18 +352,32 @@ function golem:attack_custom (self_pos, dtime)
 	return false
 end
 
-function golem:pacing_target (pos, width, height, groups)
-	local random = pr:next (0, 2147483647) * r
-	if random < 0.3 then
-		return mob_class.pacing_target (self, pos, width, height, groups)
+function golem:pacing_target_towards_villager (pos)
+	-- Attempt to reveal this mob to a villager who has not seen a
+	-- golem lately.
+	local villagers = {}
+	local aa = vector.offset (pos, -32, -32, -32)
+	local bb = vector.offset (pos, 32, 32, 32)
+	local gmt = minetest.get_gametime ()
+	for object in minetest.objects_in_area (aa, bb) do
+		local entity = object:get_luaentity ()
+		if entity and entity.name == "mobs_mc:villager"
+			and not entity:seen_golem_lately (gmt) then
+			table.insert (villagers, object)
+		end
 	end
 
-	-- Otherwise, try to assist a villager in need.
-	-- TODO: villagers.
-	-- if random < 0.7 then
-	-- ...
-	-- end
+	if #villagers > 0 then
+		local villager = villagers[pr:next (1, #villagers)]
+		local villager_pos = villager:get_pos ()
+		local dir = vector.direction (pos, villager_pos)
+		local target = self:target_in_direction (pos, 10, 7, dir, NINETY_DEG)
+		return target
+	end
+	return nil
+end
 
+function golem:pacing_target_towards_poi (pos)
 	-- Select a hot village section in a 5x5 cube around this mob
 	-- horizontally, and subsequently a random POI from that
 	-- section.
@@ -307,6 +406,36 @@ function golem:pacing_target (pos, width, height, groups)
 			end
 		end
 	end
+end
+
+function golem:pacing_target (pos, width, height, groups)
+	local random = pr:next (0, 2147483647) * r
+	if random < 0.3 then
+		return mob_class.pacing_target (self, pos, width, height, groups)
+	end
+
+	if random < 0.7 then
+		local target = self:pacing_target_towards_villager (pos)
+		if target then
+			return target
+		end
+
+		local target = self:pacing_target_towards_poi (pos)
+		if target then
+			return target
+		end
+	else
+		local target = self:pacing_target_towards_poi (pos)
+		if target then
+			return target
+		end
+
+		local target = self:pacing_target_towards_villager (pos)
+		if target then
+			return target
+		end
+	end
+
 	return mob_class.pacing_target (self, pos, width, height, groups)
 end
 

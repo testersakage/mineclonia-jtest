@@ -4,6 +4,7 @@ local disabled_events = minetest.settings:get("mcl_disabled_events")
 if disabled_events then	disabled_events = disabled_events:split(",")
 else disabled_events = {} end
 local active_events = {}
+mcl_events.active_events = active_events
 
 local event_tpl = {
 	stage = 0,
