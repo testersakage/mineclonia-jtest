@@ -301,7 +301,7 @@ do
 	}))
 
 	minetest.register_node("mcl_dispensers:dispenser_down", table.merge(dispenserdef, {
-		description = S("Downwards-Facing Dispenser"),
+		description = S("Dispenser"),
 		after_place_node = setup_dispenser,
 		tiles = {
 			"default_furnace_top.png", "mcl_dispensers_dispenser_front_vertical.png",
@@ -313,7 +313,7 @@ do
 		drop = "mcl_dispensers:dispenser",
 	}))
 	minetest.register_node("mcl_dispensers:dispenser_up", table.merge(dispenserdef, {
-		description = S("Upwards-Facing Dispenser"),
+		description = S("Dispenser"),
 		after_place_node = setup_dispenser,
 		tiles = {
 			"mcl_dispensers_dispenser_front_vertical.png", "default_furnace_bottom.png",
@@ -362,7 +362,7 @@ do
 	}))
 
 	minetest.register_node("mcl_dispensers:dropper_down", table.merge(dropperdef, {
-		description = S("Downwards-Facing Dispenser"),
+		description = S("Dropper"),
 		after_place_node = setup_dispenser,
 		tiles = {
 			"default_furnace_top.png", "mcl_droppers_dropper_front_vertical.png",
@@ -374,7 +374,7 @@ do
 		drop = "mcl_dispensers:dropper",
 	}))
 	minetest.register_node("mcl_dispensers:dropper_up", table.merge(dropperdef, {
-		description = S("Upwards-Facing Dropper"),
+		description = S("Dropper"),
 		after_place_node = setup_dispenser,
 		tiles = {
 			"mcl_droppers_dropper_front_vertical.png", "default_furnace_bottom.png",
