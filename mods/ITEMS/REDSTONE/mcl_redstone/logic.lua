@@ -93,6 +93,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 
 	local function swap_node(pos, node)
 		local h = minetest.hash_node_position(pos)
+		node.dirty = true
 		nodecache[h] = node
 	end
 
@@ -155,7 +156,9 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	end
 
 	for hash, node in pairs(nodecache) do
-		minetest.swap_node(minetest.get_position_from_hash(hash), node)
+		if node.dirty then
+			minetest.swap_node(minetest.get_position_from_hash(hash), node)
+		end
 	end
 
 	for _, pos in pairs(updates_) do
