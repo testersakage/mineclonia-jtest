@@ -541,6 +541,11 @@ minetest.register_on_mods_loaded(function()
 						old_construct(pos)
 					end
 					update_wire(pos, core.get_node(pos))
+
+					local power = mcl_redstone.get_power(pos)
+					if power > 0 then
+						mcl_redstone.propagate_wire(pos, power)
+					end
 				end,
 				after_destruct = function(pos, oldnode)
 					if old_destruct then

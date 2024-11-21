@@ -329,6 +329,7 @@ function mcl_redstone.update_wire_power(pos, node)
 
 		if cache.hash == hash then
 			-- this means the root of the cache got broken
+			mcl_redstone.invalidate_propagation_cache(hash)
 
 			for _, clear_pos in pairs(cache.wire_positions) do
 				local clear_hash = core.hash_node_position(clear_pos)
@@ -341,8 +342,6 @@ function mcl_redstone.update_wire_power(pos, node)
 				mcl_redstone.propagate_cache_positions[update_hash] = nil
 				mcl_redstone._pending_updates[hash] = update_pos
 			end
-
-			mcl_redstone.invalidate_propagation_cache(hash)
 
 			return
 		end
