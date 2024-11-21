@@ -13,6 +13,11 @@ end)
 
 local block_doc = S("A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.")
 
+local block_groups = {
+	handy = 1, axey = 1, material_wood = 1, building_block = 1,
+	flammable = 3, fire_encouragement = 5, fire_flammability = 20
+}
+
 mcl_trees.register_wood("bamboo",{
 	readable_name = "Bamboo",
 	sign_color="#FCE6BC",
@@ -23,11 +28,13 @@ mcl_trees.register_wood("bamboo",{
 	tree = {
 		description = S("Block of Bamboo"),
 		_doc_items_longdesc = block_doc,
+		groups = block_groups,
 		tiles = {"mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo_bottom.png","mcl_bamboo_bamboo_block.png" }
 	},
 	stripped = {
 		description = S("Block of Stripped Bamboo"),
 		_doc_items_longdesc = block_doc,
+		groups = block_groups,
 		tiles = {"mcl_bamboo_bamboo_bottom_stripped.png", "mcl_bamboo_bamboo_bottom_stripped.png","mcl_bamboo_bamboo_block_stripped.png" }
 	},
 	bark = { tiles = {"mcl_bamboo_bamboo_block.png"}},
