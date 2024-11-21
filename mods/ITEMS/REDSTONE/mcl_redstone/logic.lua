@@ -226,6 +226,12 @@ function mcl_redstone.get_power(pos, dir)
 			if max_power == 15 then
 				return max_power
 			end
+		elseif wireflag_tab[always_check_node.name] and mcl_redstone.is_pointing_to_dir(wireflag_tab[always_check_node.name], -entry.dir) then
+			if always_check_node.param2 == 15 then
+				return 15
+			else
+				max_power = always_check_node.param2
+			end
 		end
 
 		for key, offset_pos in pairs(entry.conditional_checks) do
@@ -238,6 +244,12 @@ function mcl_redstone.get_power(pos, dir)
 					return 15
 				elseif power2 > max_power then
 					max_power = power2
+				end
+			elseif wireflag_tab[node3.name] and mcl_redstone.is_pointing_to_dir(wireflag_tab[node3.name], -get_node_power_2_tab[key].dir) then
+				if node3.param2 == 15 then
+					return 15
+				elseif node3.param2 > max_power then
+					max_power = node3.param2
 				end
 			end
 		end

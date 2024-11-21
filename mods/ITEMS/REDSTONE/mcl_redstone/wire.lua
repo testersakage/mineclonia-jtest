@@ -42,6 +42,14 @@ local function make_long(wireflags)
 	return wireflags
 end
 
+function mcl_redstone.is_pointing_to_dir(wireflags, dir)
+	return bit.band(wireflags, dir.z == -1 and 0x1 or 0x0) or
+	bit.band(wireflags, dir.x == -1 and 0x2 or 0x0) or
+	bit.band(wireflags, dir.z == 1 and 0x4 or 0x0) or
+	bit.band(wireflags, dir.x == 1 and 0x8 or 0x0) or
+	dir.y == -1
+end
+
 --- Wireflags are illegal if they have the `is going upwards` flag set for a
 -- direction they arent pointing to. This function removes those extra flags (if
 -- there are any).
