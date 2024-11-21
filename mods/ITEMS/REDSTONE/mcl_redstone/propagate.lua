@@ -48,18 +48,15 @@ local wiredirs_down = {
 local function iterate_wire_neighbours(wireflags)
 	local i = 1
 	local state = 0
-	-- core.debug("IMPORTANT!", wireflags)
 	-- `state` is a special variable that meansL
 	-- 0: now returning entry from the block to the side
 	-- 1: now returning entry from the block to the side and up
 	-- 2: now returning entry from the block to the side and down
 	return function(wireflags)
-		-- core.debug("ITER!", wireflags, i, state)
 		if state == 0 then
 			while i <= 8 do
 				local val = bit.band(wireflags, bit.bor(i, bit.lshift(i, 4)))
 				local tmp = wiredirs[i]
-				-- core.debug("pop", val)
 				if val == i then
 					-- if goes to the side of that block
 					state = 2
@@ -71,7 +68,6 @@ local function iterate_wire_neighbours(wireflags)
 				end
 				i = i * 2
 			end
-			-- core.debug("terminate")
 			return
 		elseif state == 1 then
 			state = 2
@@ -168,17 +164,13 @@ local function generate_propagation_cache(pos, nodecache)
 
 		propagate_cache_positions[hash2] = cache
 
-		-- core.debug(dump(node2))
-		-- core.debug("ITER", tostring(pos2))
 		for dir in iterate_wire_neighbours(wireflag_tab[node2.name] or 0xF) do
 			local pos3 = pos2:add(dir.wire)
 			local hash3 = core.hash_node_position(pos3)
-			-- core.debug(tostring(pos3), hash3)
 			local node3 = get_node(pos3, hash3)
 			if wireflag_tab[node3.name] and not already_traversed[hash3] then
 				local obstruct_pos = dir.obstruct and pos2:add(dir.obstruct)
 				if not dir.obstruct or not opaque_tab[get_node(obstruct_pos, core.hash_node_position(obstruct_pos))] then
-					-- core.debug("CAN POINT")
 					same_power_count = same_power_count + 1
 					already_traversed[hash3] = true
 					cache.wire_positions[#cache.wire_positions + 1] = pos3
@@ -198,7 +190,6 @@ local function generate_propagation_cache(pos, nodecache)
 						cache.update_positions[#cache.update_positions + 1] = pos4
 						already_traversed[hash4] = true
 						propagate_cache_positions[hash4] = cache
-						-- core.debug("update cached: opaque", tostring(pos4))
 						-- the opaque block is now considered a part of the cache, so when its removed. the cache will
 						-- be invalidated
 						propagate_cache_positions[hash3] = cache
@@ -207,18 +198,14 @@ local function generate_propagation_cache(pos, nodecache)
 			end
 
 			if update_tab[node3.name] and not already_traversed[hash3] then
-				-- core.debug("update cached: direct", tostring(pos3))
 				cache.update_positions[#cache.update_positions + 1] = pos3
 				already_traversed[hash3] = true
 				propagate_cache_positions[hash3] = cache
 			end
 
 		end
-		-- core.debug(idx, next_power_idx, same_power_count, current_power, #cache.wire_positions)
 		if next_power_idx == idx then
 			if same_power_count ~= 0 then
-				-- core.debug("power level dropped", current_power, dump(cache.update_positions))
-				-- core.debug("add", same_power_count)
 				cache.wire_ranges[#cache.wire_ranges + 1] = #cache.wire_positions
 				next_power_idx = next_power_idx + same_power_count
 				current_power = current_power - 1
@@ -256,7 +243,6 @@ function mcl_redstone.process_wires()
 
 	for _, entry in pairs(propagate_tab) do
 		total_processed = total_processed + 1
-		-- core.debug("ITER")
 		local hash = core.hash_node_position(entry.pos)
 		local cache = propagate_cache[hash]
 		if not cache then
@@ -266,14 +252,8 @@ function mcl_redstone.process_wires()
 
 		local old_power = cache.current_state
 
-		-- core.debug(entry.power, cache.current_state)
-		-- core.debug("HII", dump(cache))
-
 		local current_power = entry.power
 		local power_idx = 1
-		-- set power level
-		-- dbg.pp("cache", cache)
-		-- dbg.pp("power", old_power, entry.power)
 		if entry.power ~= 0 then
 			for idx = 1, cache.wire_ranges[entry.power] or cache.wire_ranges[#cache.wire_ranges] do
 				-- dbg.pp("idx", idx)
@@ -289,7 +269,6 @@ function mcl_redstone.process_wires()
 			if #cache.update_positions ~= 0 then
 				for i = 1, cache.update_ranges[entry.power] or cache.update_ranges[#cache.update_ranges] do
 					mcl_redstone._pending_updates[core.hash_node_position(cache.update_positions[i])] = cache.update_positions[i]
-					-- core.debug("AH", cache.update_positions[i], dump(mcl_redstone._pending_updates))
 				end
 			end
 		end
@@ -304,13 +283,11 @@ function mcl_redstone.process_wires()
 			if #cache.update_positions ~= 0 then
 				for i = power_idx, cache.update_ranges[old_power] or (#cache.update_ranges < old_power and cache.update_ranges[#cache.update_ranges]) do
 					mcl_redstone._pending_updates[core.hash_node_position(cache.update_positions[i])] = cache.update_positions[i]
-					-- core.debug("removed", cache.update_positions[i], dump(mcl_redstone._pending_updates))
 				end
 			end
 		end
 
 		cache.current_state = entry.power
-		-- core.debug("POST", dump(cache.current_state))
 
 	end
 
@@ -393,16 +370,13 @@ function mcl_redstone.update_wire_power(pos, node)
 
 	for dir in iterate_wire_neighbours(wireflag_tab[node.name] or 0xFF) do
 		local pos2 = pos:add(dir.wire)
-		-- core.debug(tostring(pos2))
 		local hash2 = core.hash_node_position(pos2)
 		cache = propagate_cache_positions[hash2]
 		if cache then
 			local cache_state = cache.current_state
 			local cache_root = core.get_position_from_hash(cache.hash)
 
-			-- core.debug("??", tostring(pos2))
 			mcl_redstone.invalidate_propagation_cache(hash2)
-			-- core.debug("!?!", tostring(cache_root), cache_state)
 			mcl_redstone.propagate_wire(cache_root, cache_state)
 		end
 	end

@@ -42,18 +42,15 @@ local wiredirs_down = {
 local function iterate_wire_neighbours(wireflags)
 	local i = 1
 	local state = 0
-	-- core.debug("IMPORTANT!", wireflags)
 	-- `state` is a special variable that meansL
 	-- 0: now returning entry from the block to the side
 	-- 1: now returning entry from the block to the side and up
 	-- 2: now returning entry from the block to the side and down
 	return function(wireflags)
-		-- core.debug("ITER!", wireflags, i, state)
 		if state == 0 then
 			while i <= 8 do
 				local val = bit.band(wireflags, bit.bor(i, bit.lshift(i, 4)))
 				local tmp = wiredirs[i]
-				-- core.debug("pop", val)
 				if val == i then
 					-- if goes to the side of that block
 					state = 2
@@ -65,7 +62,6 @@ local function iterate_wire_neighbours(wireflags)
 				end
 				i = i * 2
 			end
-			-- core.debug("terminate")
 			return
 		elseif state == 1 then
 			state = 2
@@ -135,15 +131,12 @@ local get_node_power_2_tab =
 
 -- Get strong power from neighbours (including opaque nodes) at pos.
 local function get_node_power_2(pos)
-	-- core.debug("INVOKED!", dump(pos))
 	local power = 0
 	-- all these false values correspond to each index in get_node_power_2_tab table
 	local checked_directions = {}
 
 	local function get_node_power(node, dir, include_weak)
 		local power2, is_strong = get_power_tab[node.name](node, -dir)
-
-		-- core.debug("GOT POWER", power2)
 
 		if (is_strong or include_weak) and power2 > power then
 			power = power2
@@ -157,19 +150,15 @@ local function get_node_power_2(pos)
 		local pos2 = pos:add(entry.dir)
 		local node2 = minetest.get_node(pos2)
 
-		-- core.debug("DIR", tostring(entry.dir))
 		if get_power_tab[node2.name] then
-				-- core.debug("DIRECT", dump(node2), dump(entry.dir))
 				get_node_power(node2, entry.dir, true)
 				if power == 15 then
 					return power
 				end
 		elseif opaque_tab[node2.name] then
-			-- core.debug("OPAQUE")
 			checked_directions[i] = true
 			local always_check_node = minetest.get_node(pos + entry.always_check)
 
-			-- core.debug("ALWAYS CHECK", dump(always_check_node), entry.always_check, tostring(entry.dir))
 			if get_power_tab[always_check_node.name] then
 				get_node_power(always_check_node, entry.dir)
 
@@ -182,7 +171,6 @@ local function get_node_power_2(pos)
 				if not checked_directions[key] then
 					-- if not already checked
 					local node3 = minetest.get_node(offset_pos + pos)
-					-- core.debug(tostring(offset_pos), get_node_power_2_tab[key].dir, dump(node3))
 
 					if get_power_tab[node3.name] then
 						local power3 = get_node_power(node3, get_node_power_2_tab[key].dir)
@@ -200,134 +188,9 @@ local function get_node_power_2(pos)
 		end
 	end
 
-	-- core.debug("END", power)
 	return power
 end
 
--- Propagate redstone power through wires. 'clear_queue' is a queue of events
--- were power which is lowered/removed. 'fill_queue' is a queue of events were
--- power is added/raised. 'update' is a table which gets populated with
--- positions that should get redstone update events.
--- local function propagate_wire(clear_queue, fill_queue, updates)
--- 	-- core.debug("propagating: ", dump(fill_queue), dump(clear_queue), debug.traceback())
--- 	local count = 0
--- 	local nodecache = {}
---
--- 	local function get_node(pos, hash)
--- 		hash = hash or core.hash_node_position(pos)
--- 		if not nodecache[hash] then
--- 			nodecache[hash] = minetest.get_node(pos)
--- 		end
--- 		return nodecache[hash]
--- 	end
---
--- 	local function get_power(node)
--- 		return lwireflag_tab[node.name] and node.param2 or 0
--- 	end
---
--- 	local function update_opaque_node(pos)
--- 		for _, dir in pairs(sixdirs) do
--- 			local pos2 = pos:add(dir)
--- 			local hash = core.hash_node_position(pos2)
---
--- 			mcl_redstone._pending_updates[hash] = update_tab[get_node(pos2, hash).name] and pos2 or nil
--- 		end
--- 	end
---
--- 	for v in clear_queue:iterate() do
--- 		local hash = core.hash_node_position(v.pos)
--- 		nodecache[hash] = {name = get_node(v.pos, hash).name, param2 = 0}
--- 	end
---
--- 	while clear_queue:size() > 0 do
--- 		local entry = clear_queue:dequeue()
--- 		local pos = entry.pos
--- 		local power = entry.power
--- 		local node = get_node(pos, core.hash_node_position(pos))
---
--- 		for dir in iterate_wire_neighbours(lwireflag_tab[node.name] or 0xFF) do
--- 			count = count + 1
--- 			local pos2 = pos:add(dir.wire)
--- 			local hash2 = core.hash_node_position(pos2)
--- 			local node2 = get_node(pos2, hash2)
---
--- 			-- when wire pointing towards a redstone component. update it
--- 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
--- 			-- core.debug(tostring(pos2))
---
--- 			-- when wire pointing towards an opaque node. update it
--- 			if opaque_tab[node2.name] then
--- 				update_opaque_node(pos2)
--- 			end
---
--- 			-- when wire pointing another wire. propagate it further
--- 			local obstruct_pos = dir.obstruct and pos:add(dir.obstruct)
--- 			-- core.debug(dump(dir), dump(obstruct_pos))
--- 			if not dir.obstruct or not opaque_tab[get_node(obstruct_pos, core.hash_node_position(obstruct_pos)).name] then
--- 				local power2 = get_power(node2)
---
--- 				if power2 > 0 then
--- 					if power2 < power then
--- 						nodecache[hash2] = {name = node2.name, param2 = 0}
--- 						clear_queue:enqueue({pos = pos2, power = power2})
--- 					else
--- 						-- core.debug("adding to fill queue")
--- 						nodecache[hash2] = {name = node2.name, param2 = power2}
--- 						fill_queue:enqueue({pos = pos2, power = power2})
--- 					end
--- 				end
--- 			-- else
--- 			-- 	core.debug("wasted check:", tostring(pos2))
--- 			end
--- 		end
--- 	end
---
--- 	-- core.debug("fill queue:", dump(fill_queue))
--- 	for v in fill_queue:iterate() do
--- 		-- core.debug("ITER", dump(v), dump(minetest.get_node(v.pos)))
--- 		local hash = core.hash_node_position(v.pos)
--- 		nodecache[hash] = {name = get_node(v.pos, hash).name, param2 = v.power}
--- 	end
---
--- 	while fill_queue:size() > 0 do
--- 		local entry = fill_queue:dequeue()
--- 		local pos = entry.pos
--- 		local power = entry.power
--- 		local power2 = power - 1
---
--- 		for dir in iterate_wire_neighbours(lwireflag_tab[get_node(pos, core.hash_node_position(pos)).name]) do
--- 			-- count = count + 1
--- 			local pos2 = pos:add(dir.wire)
--- 			local hash2 = core.hash_node_position(pos2)
--- 			local node2 = get_node(pos2, hash2)
---
--- 			-- when wire pointing towards a redstone component. update it
--- 			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
---
--- 			-- when wire pointing towards an opaque node. update it
--- 			if opaque_tab[node2.name] then
--- 				update_opaque_node(pos2)
--- 			end
---
--- 			local obstruct_pos = dir.obstruct and pos:add(dir.obstruct)
--- 			if not dir.obstruct or not opaque_tab[get_node(obstruct_pos, core.hash_node_position(obstruct_pos)).name] then
--- 				if lwireflag_tab[node2.name] and get_power(node2) < power2 then
--- 					nodecache[hash2] = {name = node2.name, param2 = power2}
--- 					fill_queue:enqueue({pos = pos2, power = power2})
--- 				end
--- 			-- else
--- 			-- 	core.debug("wasted check:", tostring(pos2))
--- 			end
--- 		end
--- 	end
---
--- 	-- local nodes_changed = 0
--- 	for hash, node in pairs(nodecache) do
--- 		-- nodes_changed = nodes_changed + 1
--- 		minetest.swap_node(minetest.get_position_from_hash(hash), node)
--- 	end
--- end
---
 function mcl_redstone.get_power(pos, dir)
 	if not dir then
 		return get_node_power_2(pos)
@@ -356,7 +219,6 @@ function mcl_redstone.get_power(pos, dir)
 		end
 
 		local always_check_node = minetest.get_node(pos + entry.always_check)
-		core.debug("always check", dump(always_check_node))
 
 		if get_power_tab[always_check_node.name] then
 			max_power = get_power_tab[always_check_node.name](always_check_node, -entry.dir)
@@ -406,7 +268,6 @@ function mcl_redstone._call_update(pos)
 	local node = minetest.get_node(pos)
 	if update_tab[node.name] then
 		local ret = update_tab[node.name](pos, node)
-		core.debug("AAA")
 		if ret then
 			schedule_update(pos, ret)
 		end
