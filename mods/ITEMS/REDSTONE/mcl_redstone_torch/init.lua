@@ -3,6 +3,8 @@ local S = minetest.get_translator(minetest.get_current_modname())
 mcl_torches.register_torch({
 	name = "redstone_torch_off",
 	description = S("Redstone Torch (off)"),
+	doc_items_longdesc = S("A redstone torch is a redstone component which can be used to invert a redstone signal. It supplies its surrounding blocks with redstone power, except for the block it is attached to. A redstone torch is normally lit, but it can also be turned off by powering the block it is attached to. While unlit, a redstone torch does not power anything."),
+	doc_items_usagehelp = S("Redstone torches can be placed at the side and on the top of full solid opaque blocks."),
 	icon = "jeija_torches_off.png",
 	tiles = {"jeija_torches_off.png"},
 	light = 0,
