@@ -117,6 +117,7 @@ local function handle_update_event(event)
 	if update_event_tab[h] ~= event then
 		return
 	end
+
 	local oldnode = minetest.get_node(event.pos)
 	if oldnode.name ~= event.oldnode.name or oldnode.param2 ~= event.oldnode.param2 then
 		return
