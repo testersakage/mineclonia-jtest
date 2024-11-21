@@ -79,19 +79,7 @@ msgstr ""
 msgid "• Other items: Are simply dropped"
 msgstr ""
 
-msgid "Downwards-Facing Dispenser"
-msgstr ""
-
-msgid "Upwards-Facing Dispenser"
-msgstr ""
-
 msgid "Dropper"
-msgstr ""
-
-msgid "Inventory"
-msgstr ""
-
-msgid "9 inventory slots"
 msgstr ""
 
 msgid "Drops item when powered by redstone power"
@@ -101,11 +89,5 @@ msgid "A dropper is a redstone component and a container with 9 inventory slots 
 msgstr ""
 
 msgid "Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item."
-msgstr ""
-
-msgid "Downwards-Facing Dropper"
-msgstr ""
-
-msgid "Upwards-Facing Dropper"
 msgstr ""
 

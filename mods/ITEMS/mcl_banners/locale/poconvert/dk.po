@@ -121,9 +121,6 @@ msgstr "Brug håndværk til at tegne et mønster på banneret. Prægede bannere 
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr "Du kan kopiere menteret på et banner ved at placere to bannere i den samme farve i håndværksgitteret. Det ene skal være præget, det andet rent. Du kan også bruge et banner på en keddel med vand for at vaske det øverste lag af."
 
-msgid "@1 Banner"
-msgstr ""
-
 msgid "Preview Banner"
 msgstr ""
 

@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Waxed @1"
-msgstr "@1 encerado"
-
 msgid "Copper Ingot"
 msgstr "Lingote de cobre"
 
@@ -28,6 +25,300 @@ msgstr "Cobre crudo"
 msgid "Raw Copper. Mine a Copper Ore to get it."
 msgstr "Cobre crudo. Pica un mineral de cobre para conseguirlo."
 
+msgid "Block of Copper"
+msgstr ""
+
+msgid "Block of Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Chiseled Copper"
+msgstr ""
+
+msgid "Chiseled Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Copper Bulb"
+msgstr ""
+
+msgid "Copper Bulb On"
+msgstr ""
+
+msgid "Copper Bulb is mostly a decorative block."
+msgstr ""
+
+msgid "Copper Door"
+msgstr ""
+
+msgid "Copper Grate"
+msgstr ""
+
+msgid "Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Copper Trapdoor"
+msgstr ""
+
+msgid "Cut Copper"
+msgstr ""
+
+msgid "Cut Copper Slab"
+msgstr ""
+
+msgid "Cut Copper Stairs"
+msgstr ""
+
+msgid "Cut Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Exposed Chiseled Copper"
+msgstr ""
+
+msgid "Exposed Chiseled Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Exposed Copper"
+msgstr ""
+
+msgid "Exposed Copper Bulb"
+msgstr ""
+
+msgid "Exposed Copper Bulb On"
+msgstr ""
+
+msgid "Exposed Copper Bulb is mostly a decorative block."
+msgstr ""
+
+msgid "Exposed Copper Door"
+msgstr ""
+
+msgid "Exposed Copper Grate"
+msgstr ""
+
+msgid "Exposed Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Exposed Copper Trapdoor"
+msgstr ""
+
+msgid "Exposed Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Exposed Cut Copper"
+msgstr ""
+
+msgid "Exposed Cut Copper Slab"
+msgstr ""
+
+msgid "Exposed Cut Copper Stairs"
+msgstr ""
+
+msgid "Exposed Cut Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Oxidized Chiseled Copper"
+msgstr ""
+
+msgid "Oxidized Chiseled Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Oxidized Copper"
+msgstr ""
+
+msgid "Oxidized Copper Bulb"
+msgstr ""
+
+msgid "Oxidized Copper Bulb On"
+msgstr ""
+
+msgid "Oxidized Copper Bulb is mostly a decorative block."
+msgstr ""
+
+msgid "Oxidized Copper Door"
+msgstr ""
+
+msgid "Oxidized Copper Grate"
+msgstr ""
+
+msgid "Oxidized Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Oxidized Copper Trapdoor"
+msgstr ""
+
+msgid "Oxidized Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Oxidized Cut Copper"
+msgstr ""
+
+msgid "Oxidized Cut Copper Slab"
+msgstr ""
+
+msgid "Oxidized Cut Copper Stairs"
+msgstr ""
+
+msgid "Oxidized Cut Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Waxed Block of Copper"
+msgstr ""
+
+msgid "Waxed Chiseled Copper"
+msgstr ""
+
+msgid "Waxed Copper Bulb"
+msgstr ""
+
+msgid "Waxed Copper Bulb On"
+msgstr ""
+
+msgid "Waxed Copper Grate"
+msgstr ""
+
+msgid "Waxed Copper Trapdoor"
+msgstr ""
+
+msgid "Waxed Cut Copper"
+msgstr ""
+
+msgid "Waxed Cut Copper Slab"
+msgstr ""
+
+msgid "Waxed Cut Copper Stairs"
+msgstr ""
+
+msgid "Waxed Double @1"
+msgstr ""
+
+msgid "Waxed Exposed Chiseled Copper"
+msgstr ""
+
+msgid "Waxed Exposed Copper"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb On"
+msgstr ""
+
+msgid "Waxed Exposed Copper Grate"
+msgstr ""
+
+msgid "Waxed Exposed Copper Trapdoor"
+msgstr ""
+
+msgid "Waxed Exposed Cut Copper"
+msgstr ""
+
+msgid "Waxed Exposed Cut Copper Slab"
+msgstr ""
+
+msgid "Waxed Exposed Cut Copper Stairs"
+msgstr ""
+
+msgid "Waxed Oxidized Chiseled Copper"
+msgstr ""
+
+msgid "Waxed Oxidized Copper"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb On"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Grate"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Trapdoor"
+msgstr ""
+
+msgid "Waxed Oxidized Cut Copper"
+msgstr ""
+
+msgid "Waxed Oxidized Cut Copper Slab"
+msgstr ""
+
+msgid "Waxed Oxidized Cut Copper Stairs"
+msgstr ""
+
+msgid "Waxed Upper @1"
+msgstr ""
+
+msgid "Waxed Weathered Chiseled Copper"
+msgstr ""
+
+msgid "Waxed Weathered Copper"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb On"
+msgstr ""
+
+msgid "Waxed Weathered Copper Grate"
+msgstr ""
+
+msgid "Waxed Weathered Copper Trapdoor"
+msgstr ""
+
+msgid "Waxed Weathered Cut Copper"
+msgstr ""
+
+msgid "Waxed Weathered Cut Copper Slab"
+msgstr ""
+
+msgid "Waxed Weathered Cut Copper Stairs"
+msgstr ""
+
+msgid "Weathered Chiseled Copper"
+msgstr ""
+
+msgid "Weathered Chiseled Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Weathered Copper"
+msgstr ""
+
+msgid "Weathered Copper Bulb"
+msgstr ""
+
+msgid "Weathered Copper Bulb On"
+msgstr ""
+
+msgid "Weathered Copper Bulb is mostly a decorative block."
+msgstr ""
+
+msgid "Weathered Copper Door"
+msgstr ""
+
+msgid "Weathered Copper Grate"
+msgstr ""
+
+msgid "Weathered Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Weathered Copper Trapdoor"
+msgstr ""
+
+msgid "Weathered Copper is mostly a decorative block."
+msgstr ""
+
+msgid "Weathered Cut Copper"
+msgstr ""
+
+msgid "Weathered Cut Copper Slab"
+msgstr ""
+
+msgid "Weathered Cut Copper Stairs"
+msgstr ""
+
+msgid "Weathered Cut Copper is mostly a decorative block."
+msgstr ""
+
 msgid "Copper Ore"
 msgstr "Mineral de cobre"
 
@@ -39,52 +330,4 @@ msgstr "Bloque de cobre crudo"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Un bloque utilizado para el almacenamiento compacto de cobre crudo."
-
-msgid "Exposed"
-msgstr "expuesto"
-
-msgid "Weathered"
-msgstr "degradado"
-
-msgid "Oxidized"
-msgstr "oxidado"
-
-msgid "Block of"
-msgstr "Bloque de"
-
-msgid "@1 Copper"
-msgstr "Cobre @1"
-
-msgid "@1 copper is mostly a decorative block."
-msgstr "El cobre @1 es principalmente un bloque decorativo."
-
-msgid "@1 Cut Copper"
-msgstr "Cobre cortado @1"
-
-msgid "@1 Chiseled Copper"
-msgstr "Cobre cincelado @1"
-
-msgid "@1 Chiseled copper is mostly a decorative block."
-msgstr "El cobre cincelado @1 es principalmente un bloque decorativo."
-
-msgid "@1 Copper Grate"
-msgstr "Rejilla de cobre @1"
-
-msgid "@1 Copper Bulb On"
-msgstr "Bombilla de cobre encendida @1"
-
-msgid "@1 Copper Bulb"
-msgstr "Bombilla de cobre @1"
-
-msgid "@1 Copper Trapdoor"
-msgstr "Trampilla de cobre @1"
-
-msgid "@1 Copper Door"
-msgstr "Puerta de cobre @1"
-
-msgid "@1 Cut Copper Stairs"
-msgstr ""
-
-msgid "@1 Cut Copper Slab"
-msgstr ""
 

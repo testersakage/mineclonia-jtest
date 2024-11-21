@@ -34,12 +34,6 @@ msgstr "Lesen Sie die Hilfeeinträge über andere Redstone-Komponenten, um zu er
 msgid "Redstone"
 msgstr "Redstone"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "Aktivierter Redstone-Klecks (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "Redstone-Spur (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "Aktivierte Redstone-Spur (@1)"
 

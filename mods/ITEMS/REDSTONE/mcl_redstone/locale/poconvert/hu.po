@@ -34,12 +34,6 @@ msgstr "Olvasd el a vöröskő eszközök leírását, hogy megismerd, hogyan m�
 msgid "Redstone"
 msgstr "Vöröskő"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "Aktivált Vöröskő Pont (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "Vöröskő Nyomvonal (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "Aktivált Vöröskő Nyomvonal (@1)"
 

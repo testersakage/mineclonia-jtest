@@ -2,7 +2,7 @@
 Daylight Sensor=日光探测器
 Provides redstone power when in sunlight=
 Can be inverted=
-Daylight sensors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted.=
+Daylight detectors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted.=
 In inverted state, they provide redstone power when they are not in sunlight and no power otherwise.=
-Use the daylight sensor to toggle its state.=
+Use the daylight detector to toggle its state.=
 Inverted Daylight Sensor=

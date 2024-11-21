@@ -16,20 +16,14 @@ msgstr ""
 msgid "Redstone Torch (off)"
 msgstr "红石火炬（熄灭）"
 
-msgid "Redstone Torch (overheated)"
-msgstr "红石火炬（耀眼）"
-
-msgid "Redstone Torch"
-msgstr "红石火炬"
-
 msgid "A redstone torch is a redstone component which can be used to invert a redstone signal. It supplies its surrounding blocks with redstone power, except for the block it is attached to. A redstone torch is normally lit, but it can also be turned off by powering the block it is attached to. While unlit, a redstone torch does not power anything."
 msgstr ""
 
 msgid "Redstone torches can be placed at the side and on the top of full solid opaque blocks."
 msgstr ""
 
-msgid "Provides redstone power when it's not powered itself"
-msgstr ""
+msgid "Redstone Torch"
+msgstr "红石火炬"
 
 msgid "Block of Redstone"
 msgstr "红石块"

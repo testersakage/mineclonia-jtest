@@ -79,20 +79,8 @@ msgstr "• Kelesztő tojás: kikelti a benne rejlő mobot"
 msgid "• Other items: Are simply dropped"
 msgstr "• Egyéb: egyszerűen kidobja"
 
-msgid "Downwards-Facing Dispenser"
-msgstr "Lefele Néző Adagoló"
-
-msgid "Upwards-Facing Dispenser"
-msgstr "Felfelé Néző Adagoló"
-
 msgid "Dropper"
 msgstr "Kidobó"
-
-msgid "Inventory"
-msgstr "Eszköztár"
-
-msgid "9 inventory slots"
-msgstr "9 rekeszű tároló"
 
 msgid "Drops item when powered by redstone power"
 msgstr "Kiadagolja a tárgyakat ha vöröskő jelet kap"
@@ -102,10 +90,4 @@ msgstr "A kidobó egy vöröskő berendezés kilenc rekeszű tárolóval. Amenny
 
 msgid "Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item."
 msgstr "A kidobót hatféle irányba lehet elhelyezni. A tárgyak a lyukból lesznek kiadva. Az kidobót használva éred el a tárolóját. Vezess bele vöröskő jelet, hogy véletlenszerűen kiadjon egy tárgyat."
-
-msgid "Downwards-Facing Dropper"
-msgstr "Lefele Néző Kidobó"
-
-msgid "Upwards-Facing Dropper"
-msgstr "Felfelé Néző Kidobó"
 

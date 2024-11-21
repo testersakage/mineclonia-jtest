@@ -34,12 +34,6 @@ msgstr "Lisez les entrées d'aide sur les autres composants Redstone pour savoir
 msgid "Redstone"
 msgstr "Redstone"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "Spot Redstone alimenté (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "Sentier Redstone (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "Sentier Redstone alimenté (@1)"
 

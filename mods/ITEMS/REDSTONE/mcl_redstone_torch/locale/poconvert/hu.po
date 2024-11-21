@@ -16,20 +16,14 @@ msgstr ""
 msgid "Redstone Torch (off)"
 msgstr "Vöröskő Fáklya (Ki)"
 
-msgid "Redstone Torch (overheated)"
-msgstr "Vöröskő Fáklya (túlhevített)"
-
-msgid "Redstone Torch"
-msgstr "Vöröskő Fáklya"
-
 msgid "A redstone torch is a redstone component which can be used to invert a redstone signal. It supplies its surrounding blocks with redstone power, except for the block it is attached to. A redstone torch is normally lit, but it can also be turned off by powering the block it is attached to. While unlit, a redstone torch does not power anything."
 msgstr "A Vöröskő Fáklya olyan eszköz, ami megfordítja a vöröskő jelet. A környező blokkokat vöröskő jellel látja el, kivéve azt a blokkot amihez erősítették. A vöröskő fáklya alapból világít, de ki is kapcsolható, amennyiben jelet vezetünk abba a blokkba amihez erősítették. Amíg nem világít, nem is ad ki jelet magából."
 
 msgid "Redstone torches can be placed at the side and on the top of full solid opaque blocks."
 msgstr "A Vöröskő Fáklyát bármely teli átlátszatlan blokk oldalán vagy tetején helyezhetjük el."
 
-msgid "Provides redstone power when it's not powered itself"
-msgstr "Vöröskő jelet ad, amennyiben önmaga nincs áram alatt"
+msgid "Redstone Torch"
+msgstr "Vöröskő Fáklya"
 
 msgid "Block of Redstone"
 msgstr "Vöröskő Blokk"

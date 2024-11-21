@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Use the button to push it."
-msgstr "ボタンを押して使用します。"
-
 msgid "Provides redstone power when pushed"
 msgstr "押すとレッドストーン動力を提供"
 
@@ -24,6 +21,9 @@ msgstr "押下持続時間： @1秒"
 
 msgid "Pushable by arrow"
 msgstr "矢で押下可能"
+
+msgid "Use the button to push it."
+msgstr "ボタンを押して使用します。"
 
 msgid "Stone Button"
 msgstr "石のボタン"

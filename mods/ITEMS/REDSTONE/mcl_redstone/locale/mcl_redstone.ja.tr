@@ -6,6 +6,4 @@ Redstone power can be received from various redstone components, such as a block
 Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills.=
 Read the help entries on the other redstone components to learn how redstone components interact.=レッドストーン部品がどのように相互作用するかについては、他のレッドストーン部品のヘルプエントリーをお読みください。
 Redstone=レッドストーン
-Powered Redstone Spot (@1)=稼動中のレッドストーンスポット (@1)
 Redstone Trail (@1)=レッドストーン導線 (@1)
-Powered Redstone Trail (@1)=稼動中のレッドストーン導線 (@1)

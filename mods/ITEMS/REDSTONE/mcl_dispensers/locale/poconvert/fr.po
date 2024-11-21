@@ -79,20 +79,8 @@ msgstr "• Silex et acier : Sert à allumer un feu dans l'air et à allumer du 
 msgid "• Other items: Are simply dropped"
 msgstr "• Autres articles : Sont simplement lâchés"
 
-msgid "Downwards-Facing Dispenser"
-msgstr "Distributeur orienté vers le bas"
-
-msgid "Upwards-Facing Dispenser"
-msgstr "Distributeur orienté vers le haut"
-
 msgid "Dropper"
 msgstr "Dropper"
-
-msgid "Inventory"
-msgstr "Inventaire"
-
-msgid "9 inventory slots"
-msgstr "9 emplacements d'inventaire"
 
 msgid "Drops item when powered by redstone power"
 msgstr "Obtient un objet lorsqu'il est alimenté par la puissance Redstone"
@@ -102,10 +90,4 @@ msgstr "Un dropper est un composant redstone et un conteneur avec 9 emplacements
 
 msgid "Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item."
 msgstr "Les droppers peuvent être placés dans 6 directions possibles, les objets seront déposés hors du trou. Utilisez le dropper pour accéder à son inventaire. Fournissez-lui de l'énergie redstone pour faire tomber un élement ou transférer un élément aléatoire."
-
-msgid "Downwards-Facing Dropper"
-msgstr "Dropper orienté vers le bas"
-
-msgid "Upwards-Facing Dropper"
-msgstr "Dropper orienté vers le haut"
 

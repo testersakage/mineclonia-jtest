@@ -34,12 +34,6 @@ msgstr "Przeczytaj wpisy na temat innych czerwienitowych mechanizmów, by dowied
 msgid "Redstone"
 msgstr "Redstone"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "Zasilony punkt czerwienitu (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "Ścieżka czerwienitu (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "Zasilona ścieżka czerwienitu (@1)"
 

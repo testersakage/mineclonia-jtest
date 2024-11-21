@@ -34,12 +34,6 @@ msgstr "Lea las entradas de ayuda en los otros componentes de redstone para apre
 msgid "Redstone"
 msgstr "Redstone"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "Punto de Redstone accionado (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "Sendero de Redstone (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "Sendero de Redstone con motorizado (@1)"
 

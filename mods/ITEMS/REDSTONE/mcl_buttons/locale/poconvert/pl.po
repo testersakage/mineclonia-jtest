@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Use the button to push it."
-msgstr "Użyj przycisku by go wcisnąć."
-
 msgid "Provides redstone power when pushed"
 msgstr "Dostarcza energii czerwienitowej gdy naciśnięty"
 
@@ -24,6 +21,9 @@ msgstr "Czas trwania naciśnięcia: @1s"
 
 msgid "Pushable by arrow"
 msgstr "Można nacisnąć strzałą"
+
+msgid "Use the button to push it."
+msgstr "Użyj przycisku by go wcisnąć."
 
 msgid "Stone Button"
 msgstr "Kamienny przycisk"

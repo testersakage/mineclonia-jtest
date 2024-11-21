@@ -79,20 +79,8 @@ msgstr "• Jaja przywołujące: przywołają moba, którego zawierają"
 msgid "• Other items: Are simply dropped"
 msgstr "• Inne przedmioty: zostaną upuszczone"
 
-msgid "Downwards-Facing Dispenser"
-msgstr "Dozownik skierowany w dół"
-
-msgid "Upwards-Facing Dispenser"
-msgstr "Dozownik skierowany w górę"
-
 msgid "Dropper"
 msgstr "Podajnik"
-
-msgid "Inventory"
-msgstr "Ekwipunek"
-
-msgid "9 inventory slots"
-msgstr "9 miejsc ekwipunku"
 
 msgid "Drops item when powered by redstone power"
 msgstr "Wyrzuca przedmiot gdy zasilony czerwienitem"
@@ -102,10 +90,4 @@ msgstr "Podajnik jest urządzeniem czerwienitowym i pojemnikiem z 9 miejscami, k
 
 msgid "Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item."
 msgstr "Podajniki mogą być skierowane w 6 możliwych kierunkach, przedmioty będą wyrzucane z dziury. Użyj podajnika aby zyskać dostęp do jego ekwipunku. Dostarcz do niego energii czerwienitowej aby sprawić by wyrzucił lub przeniósł losowy przedmiot."
-
-msgid "Downwards-Facing Dropper"
-msgstr "Podajnik skierowany w dół"
-
-msgid "Upwards-Facing Dropper"
-msgstr "Podajnik skierowany w górę"
 

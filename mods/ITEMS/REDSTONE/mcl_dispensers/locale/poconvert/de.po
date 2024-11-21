@@ -79,20 +79,8 @@ msgstr "• Spawn-Eier: Beschwören einen Mob"
 msgid "• Other items: Are simply dropped"
 msgstr "• Andere Gegenstände: Werden fallen gelassen"
 
-msgid "Downwards-Facing Dispenser"
-msgstr "Nach unten zeigender Werfer"
-
-msgid "Upwards-Facing Dispenser"
-msgstr "Nach oben zeigender Werfer"
-
 msgid "Dropper"
 msgstr "Spender"
-
-msgid "Inventory"
-msgstr "Inventar"
-
-msgid "9 inventory slots"
-msgstr "9 Inventarplätze"
 
 msgid "Drops item when powered by redstone power"
 msgstr "Legt einen Gegenstand ab, wenn durch Redstone-Energie aktiviert"
@@ -102,10 +90,4 @@ msgstr "Ein Spender ist eine Redstonekomponente und ein Behälter mit 9 Inventar
 
 msgid "Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item."
 msgstr "Spender können in 6 mögliche Richtungen platziert werden, Gegenstände fallen aus dem Loch hinaus. Benutzen Sie den Spender, um auf sein Inventar zuzugreifen. Versorgen Sie ihn mit Redstoneenergie, um den Spender einen Gegenstand abwerfen oder in einen Behälter ablegen zu lassen."
-
-msgid "Downwards-Facing Dropper"
-msgstr "Nach unten zeigender Spender"
-
-msgid "Upwards-Facing Dropper"
-msgstr "Nach oben zeigender Spender"
 

@@ -43,11 +43,11 @@ msgstr "Parancsok:"
 msgid "Help"
 msgstr "Segítség"
 
-msgid "Placement denied. You need the “maphack” privilege to place command blocks."
-msgstr "Elhelyezés megtagadva. Szükséged van a \"maphack\" jogosultságra a parancsblokk elhelyezéséhez."
-
 msgid "Command Block"
 msgstr "Parancsblokk"
+
+msgid "Placement denied. You need the “maphack” privilege to place command blocks."
+msgstr "Elhelyezés megtagadva. Szükséged van a \"maphack\" jogosultságra a parancsblokk elhelyezéséhez."
 
 msgid "Executes server commands when powered by redstone power"
 msgstr "Szerver parancsokat hajt végre amikor vöröskő jelet kap"

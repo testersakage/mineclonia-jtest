@@ -22,14 +22,14 @@ msgstr "Fournit une puissance de redstone en plein soleil"
 msgid "Can be inverted"
 msgstr "Peut être inversé"
 
-msgid "Daylight sensors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
-msgstr "Les capteurs de luminosité sont des composants de redstone qui fournissent une puissance de redstone lorsqu'ils sont en plein soleil et aucune autrement. Ils peuvent également être inversés."
+msgid "Daylight detectors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
+msgstr ""
 
 msgid "In inverted state, they provide redstone power when they are not in sunlight and no power otherwise."
 msgstr "En état inversé, ils fournissent une puissance de redstone lorsqu'ils ne sont pas en plein soleil et aucune puissance autrement."
 
-msgid "Use the daylight sensor to toggle its state."
-msgstr "Utilisez le capteur de luminosité pour basculer son état."
+msgid "Use the daylight detector to toggle its state."
+msgstr ""
 
 msgid "Inverted Daylight Sensor"
 msgstr "Capteur de luminosité inversé"

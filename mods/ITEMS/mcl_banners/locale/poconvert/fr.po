@@ -121,9 +121,6 @@ msgstr "Utilisez l'artisanat pour dessiner un motif sur le dessus de la bannièr
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr "Vous pouvez copier le motif d'une bannière en plaçant deux bannières de la même couleur dans la grille de fabrication : l'une doit être décorée, l'autre doit être propre. Enfin, vous pouvez utiliser une bannière sur un chaudron avec de l'eau pour laver sa couche la plus haute."
 
-msgid "@1 Banner"
-msgstr "Bannière @1"
-
 msgid "Preview Banner"
 msgstr "Aperçu de Bannière"
 

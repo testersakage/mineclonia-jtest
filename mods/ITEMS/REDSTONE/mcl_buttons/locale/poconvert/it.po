@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Use the button to push it."
-msgstr "Utilizzare il pulsante per premerlo."
-
 msgid "Provides redstone power when pushed"
 msgstr "Fornisce la corrente di pietrarossa quando viene premuto"
 
@@ -24,6 +21,9 @@ msgstr "Durata di pressione: @1s"
 
 msgid "Pushable by arrow"
 msgstr ""
+
+msgid "Use the button to push it."
+msgstr "Utilizzare il pulsante per premerlo."
 
 msgid "Stone Button"
 msgstr ""

@@ -43,11 +43,11 @@ msgstr "Komendy:"
 msgid "Help"
 msgstr "Pomoc"
 
-msgid "Placement denied. You need the “maphack” privilege to place command blocks."
-msgstr "Odmówiono postawienia. Potrzebujesz przywileju \"maphack\" aby stawiać bloki komend."
-
 msgid "Command Block"
 msgstr "Blok komend"
+
+msgid "Placement denied. You need the “maphack” privilege to place command blocks."
+msgstr "Odmówiono postawienia. Potrzebujesz przywileju \"maphack\" aby stawiać bloki komend."
 
 msgid "Executes server commands when powered by redstone power"
 msgstr "Wykonuje komendy serwera gdy jest zasilany energią czerwienitową"

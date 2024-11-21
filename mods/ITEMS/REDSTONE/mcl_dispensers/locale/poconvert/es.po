@@ -79,20 +79,8 @@ msgstr "• Huevos: Invocarán al mob que contengan"
 msgid "• Other items: Are simply dropped"
 msgstr "• Otros ítems: Simplemente se dejan caer"
 
-msgid "Downwards-Facing Dispenser"
-msgstr "Dispensador orientado hacia abajo"
-
-msgid "Upwards-Facing Dispenser"
-msgstr "Dispensador orientado hacia arriba"
-
 msgid "Dropper"
 msgstr "Soltador"
-
-msgid "Inventory"
-msgstr "Inventario"
-
-msgid "9 inventory slots"
-msgstr "9 espacios de inventario"
 
 msgid "Drops item when powered by redstone power"
 msgstr "Suelta un ítem cuando se activan con redstone"
@@ -102,10 +90,4 @@ msgstr "Un Soltador es un componente de redstone y un contenedor con 9 ranuras d
 
 msgid "Droppers can be placed in 6 possible directions, items will be dropped out of the hole. Use the dropper to access its inventory. Supply it with redstone energy once to make the dropper drop or transfer a random item."
 msgstr "Los soltadores se pueden colocar en 6 direcciones posibles, los artículos se sacarán del agujero. Usa el cuentagotas para acceder a su inventario. Proporcione energía de redstone una vez para hacer que el soltador caiga o transfiera un elemento aleatorio."
-
-msgid "Downwards-Facing Dropper"
-msgstr "Soltador orientado hacia abajo"
-
-msgid "Upwards-Facing Dropper"
-msgstr "Soltador orientado hacia arriba"
 

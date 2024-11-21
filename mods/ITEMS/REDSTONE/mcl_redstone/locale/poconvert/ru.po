@@ -34,12 +34,6 @@ msgstr "Смотрите справочные записи к остальным
 msgid "Redstone"
 msgstr "Редстоун"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "Подключенное пятно редстоуна (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "Дорожка редстоуна (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "Подключенная дорожка редстоуна (@1)"
 

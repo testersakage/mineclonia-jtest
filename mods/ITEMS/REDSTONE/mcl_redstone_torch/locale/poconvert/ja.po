@@ -16,20 +16,14 @@ msgstr ""
 msgid "Redstone Torch (off)"
 msgstr "レッドストーントーチ（オフ）"
 
-msgid "Redstone Torch (overheated)"
-msgstr "レッドストーントーチ（熱過多状態）"
-
-msgid "Redstone Torch"
-msgstr "レッドストーントーチ"
-
 msgid "A redstone torch is a redstone component which can be used to invert a redstone signal. It supplies its surrounding blocks with redstone power, except for the block it is attached to. A redstone torch is normally lit, but it can also be turned off by powering the block it is attached to. While unlit, a redstone torch does not power anything."
 msgstr "レッドストーントーチはレッドストーン部品で、レッドストーン信号を反転させるのに使えます。それは、それが取り付けられているブロックを除いて、その周囲のブロックにレッドストーン動力を供給します。レッドストーントーチは通常点灯していますが、接続されているブロックに動力を供給することで消灯も可能です。消灯中のレッドストーントーチは、何の動力源にもなりません。"
 
 msgid "Redstone torches can be placed at the side and on the top of full solid opaque blocks."
 msgstr "レッドストーントーチは、全固体の不透明ブロックの側面と上部に配置できます。"
 
-msgid "Provides redstone power when it's not powered itself"
-msgstr "自身が動力を得ていない時にレッドストーン動力を提供"
+msgid "Redstone Torch"
+msgstr "レッドストーントーチ"
 
 msgid "Block of Redstone"
 msgstr ""

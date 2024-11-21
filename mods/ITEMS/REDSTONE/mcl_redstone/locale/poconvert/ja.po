@@ -34,12 +34,6 @@ msgstr "レッドストーン部品がどのように相互作用するかにつ
 msgid "Redstone"
 msgstr "レッドストーン"
 
-msgid "Powered Redstone Spot (@1)"
-msgstr "稼動中のレッドストーンスポット (@1)"
-
 msgid "Redstone Trail (@1)"
 msgstr "レッドストーン導線 (@1)"
-
-msgid "Powered Redstone Trail (@1)"
-msgstr "稼動中のレッドストーン導線 (@1)"
 

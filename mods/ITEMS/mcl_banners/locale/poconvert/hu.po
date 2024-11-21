@@ -121,9 +121,6 @@ msgstr "Kézművességgel rajzolj mintát a zászló tetejére. A díszes zászl
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr "A zászló mintáját úgy másolhatod, hogy két azonos színű zászlót helyezel el a kézművesrácsba – az egyiknek díszesnek, a másiknak üresnek kell lennie. A zászlót egy üst víz fölött használva lemoshatod a legfelső rétegét."
 
-msgid "@1 Banner"
-msgstr "@1 Zászló"
-
 msgid "Preview Banner"
 msgstr "Zászló Előnézet"
 

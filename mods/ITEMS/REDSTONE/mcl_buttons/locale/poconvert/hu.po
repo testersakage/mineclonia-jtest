@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Use the button to push it."
-msgstr "Használd a nyomógombot a megnyomáshoz."
-
 msgid "Provides redstone power when pushed"
 msgstr "Vöröskő jelet ad amikor megnyomják"
 
@@ -24,6 +21,9 @@ msgstr "Nyomva tartás: @1 mp"
 
 msgid "Pushable by arrow"
 msgstr "Nyíllal nyomható"
+
+msgid "Use the button to push it."
+msgstr "Használd a nyomógombot a megnyomáshoz."
 
 msgid "Stone Button"
 msgstr "Kő Nyomógomb"

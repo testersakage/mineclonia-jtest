@@ -37,9 +37,6 @@ msgstr ""
 msgid "Bed"
 msgstr ""
 
-msgid "@1 Bed"
-msgstr ""
-
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr ""
 
@@ -108,6 +105,54 @@ msgstr ""
 
 msgid "New respawn position set!"
 msgstr "E' stata definita la nuova posizione di generazione!"
+
+msgid "Black Bed"
+msgstr ""
+
+msgid "Blue Bed"
+msgstr ""
+
+msgid "Brown Bed"
+msgstr ""
+
+msgid "Cyan Bed"
+msgstr ""
+
+msgid "Green Bed"
+msgstr ""
+
+msgid "Grey Bed"
+msgstr ""
+
+msgid "Light Blue Bed"
+msgstr ""
+
+msgid "Light Grey Bed"
+msgstr ""
+
+msgid "Lime Bed"
+msgstr ""
+
+msgid "Magenta Bed"
+msgstr ""
+
+msgid "Orange Bed"
+msgstr ""
+
+msgid "Pink Bed"
+msgstr ""
+
+msgid "Purple Bed"
+msgstr ""
+
+msgid "Red Bed"
+msgstr ""
+
+msgid "White Bed"
+msgstr ""
+
+msgid "Yellow Bed"
+msgstr ""
 
 msgid "Respawn Anchor"
 msgstr ""

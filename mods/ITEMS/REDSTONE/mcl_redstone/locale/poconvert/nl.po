@@ -34,12 +34,6 @@ msgstr ""
 msgid "Redstone"
 msgstr ""
 
-msgid "Powered Redstone Spot (@1)"
-msgstr ""
-
 msgid "Redstone Trail (@1)"
-msgstr ""
-
-msgid "Powered Redstone Trail (@1)"
 msgstr ""
 

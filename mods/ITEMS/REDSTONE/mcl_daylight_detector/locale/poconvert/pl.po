@@ -22,14 +22,14 @@ msgstr "Dostarcza energię czerwienitową gdy w oświetlony słońcem"
 msgid "Can be inverted"
 msgstr "Może być odwrócony"
 
-msgid "Daylight sensors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
-msgstr "Czujniki światła dziennego są czerwienitowymi elementami, które wysyłają energie czerwienitową gdy są w świetle słonecznym i nie dostarczają energii w przeciwnym przypadku."
+msgid "Daylight detectors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
+msgstr ""
 
 msgid "In inverted state, they provide redstone power when they are not in sunlight and no power otherwise."
 msgstr "W odwrotnym stanie, dostarczają energię czerwienitową gdy nie są w świetle słonecznym i nie dostarczają energii w przeciwnym przypadku."
 
-msgid "Use the daylight sensor to toggle its state."
-msgstr "Użyj czujnik światła dziennego by zmienić jego stan."
+msgid "Use the daylight detector to toggle its state."
+msgstr ""
 
 msgid "Inverted Daylight Sensor"
 msgstr "Odwrotny czujnik światła dziennego"

@@ -37,9 +37,6 @@ msgstr "Vous permet de dormir"
 msgid "Bed"
 msgstr "Lit"
 
-msgid "@1 Bed"
-msgstr "Lit @1"
-
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr "Vous ne pouvez dormir que la nuit ou pendant un orage."
 
@@ -108,6 +105,54 @@ msgstr "Hé ! Ça vous dérangerait de dormir ?"
 
 msgid "New respawn position set!"
 msgstr "Nouvelle position de réapparition définie !"
+
+msgid "Black Bed"
+msgstr ""
+
+msgid "Blue Bed"
+msgstr ""
+
+msgid "Brown Bed"
+msgstr ""
+
+msgid "Cyan Bed"
+msgstr ""
+
+msgid "Green Bed"
+msgstr ""
+
+msgid "Grey Bed"
+msgstr ""
+
+msgid "Light Blue Bed"
+msgstr ""
+
+msgid "Light Grey Bed"
+msgstr ""
+
+msgid "Lime Bed"
+msgstr ""
+
+msgid "Magenta Bed"
+msgstr ""
+
+msgid "Orange Bed"
+msgstr ""
+
+msgid "Pink Bed"
+msgstr ""
+
+msgid "Purple Bed"
+msgstr ""
+
+msgid "Red Bed"
+msgstr ""
+
+msgid "White Bed"
+msgstr ""
+
+msgid "Yellow Bed"
+msgstr ""
 
 msgid "Respawn Anchor"
 msgstr "Ancre de réapparition"

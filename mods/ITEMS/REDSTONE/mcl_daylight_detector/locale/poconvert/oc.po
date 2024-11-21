@@ -22,13 +22,13 @@ msgstr ""
 msgid "Can be inverted"
 msgstr ""
 
-msgid "Daylight sensors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
+msgid "Daylight detectors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
 msgstr ""
 
 msgid "In inverted state, they provide redstone power when they are not in sunlight and no power otherwise."
 msgstr ""
 
-msgid "Use the daylight sensor to toggle its state."
+msgid "Use the daylight detector to toggle its state."
 msgstr ""
 
 msgid "Inverted Daylight Sensor"

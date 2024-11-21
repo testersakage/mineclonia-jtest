@@ -16,20 +16,14 @@ msgstr ""
 msgid "Redstone Torch (off)"
 msgstr "Redstonefackel (aus)"
 
-msgid "Redstone Torch (overheated)"
-msgstr "Redstonefackel (überhitzt)"
-
-msgid "Redstone Torch"
-msgstr "Redstonefackel"
-
 msgid "A redstone torch is a redstone component which can be used to invert a redstone signal. It supplies its surrounding blocks with redstone power, except for the block it is attached to. A redstone torch is normally lit, but it can also be turned off by powering the block it is attached to. While unlit, a redstone torch does not power anything."
 msgstr "Eine Redstonefackel ist eine Redstonekomponente, die benutzt werden kann, um ein Redstonesignal zu invertieren. Sie versorgt die benachbarten Blöcke mit Redstoneenergie, ausgenommen den Block, an dem sie befestigt wurde. Eine Redstonefackel leuchtet normalerweise, aber sie kann auch ausgeschaltet werden, indem der Block, an dem sie befestigt ist, bestromt wird. Wenn sie aus ist, wird sie nichts mit Redstoneenergie versorgen."
 
 msgid "Redstone torches can be placed at the side and on the top of full solid opaque blocks."
 msgstr "Redstonefackeln können an der Seite und auf der Oberseite der meisten undurchsichtigen ganzen Blöcke platziert werden."
 
-msgid "Provides redstone power when it's not powered itself"
-msgstr "Liefert Redstone-Energie, wenn sie nicht selbst aktiviert ist"
+msgid "Redstone Torch"
+msgstr "Redstonefackel"
 
 msgid "Block of Redstone"
 msgstr "Redstoneblock"

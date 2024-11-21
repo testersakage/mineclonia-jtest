@@ -38,11 +38,3 @@ Invalid crafting ingredient: "@1" (dosent exist)=
 This item can be repaired at an anvil with: @1.=
 This item can be repaired at an anvil with any wooden planks.=
 This item can be repaired at an anvil with any item in the “@1” group.=
-
-
-##### not used anymore #####
-
-Shapeless=Sem forma
-Cooking=Cozimento
-Usage @1 of @2=Uso @1 de @2
-Recipe @1 of @2=Receita @1 de @2

@@ -121,9 +121,6 @@ msgstr "Benutze die Fertigung, um ein Muster auf einem Banner zu malen. Bemalte 
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr "Du kannst ein Muster eines Banners kopieren, indem du zwei Banner der selben Grundfarbe in das Fertigungsgitter platzierst: Das eine muss bemalt sein, das andere leer. Außerdem kannst du ein Banner an einem Kessel mit Wasser benutzen, um seine oberste Schicht abzuwaschen."
 
-msgid "@1 Banner"
-msgstr "@1-Banner"
-
 msgid "Preview Banner"
 msgstr "Banner-Vorschau"
 

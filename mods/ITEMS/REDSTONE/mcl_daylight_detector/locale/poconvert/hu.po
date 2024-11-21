@@ -22,14 +22,14 @@ msgstr "Napsütés esetén vöröskő jelet ad"
 msgid "Can be inverted"
 msgstr "Megfordítható a működése"
 
-msgid "Daylight sensors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
-msgstr "A napfény érzékelő egy vöröskő szerkezet ami napsütés esetén vöröskő jelet ad, egyébként nem ad jelet. Megfordítható a működése."
+msgid "Daylight detectors are redstone components which provide redstone power when they are in sunlight and no power otherwise. They can also be inverted."
+msgstr ""
 
 msgid "In inverted state, they provide redstone power when they are not in sunlight and no power otherwise."
 msgstr "Megfordított működés esetén jelet ad, ha nem süt ad és nem ad jelet, ha süt."
 
-msgid "Use the daylight sensor to toggle its state."
-msgstr "Használd a napfény érzékelőt, hogy megfordítsd a működését."
+msgid "Use the daylight detector to toggle its state."
+msgstr ""
 
 msgid "Inverted Daylight Sensor"
 msgstr "Megfordított Napfény Érzékelő"

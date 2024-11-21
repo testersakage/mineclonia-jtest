@@ -13,18 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Bucket of @1"
-msgstr "Teli Vödör @1"
-
-msgid "This bucket is filled with water and @1."
-msgstr "Ebben a vödörben víz és @1 van."
-
-msgid "Place it to empty the bucket and place a @1. Obtain by right clicking on a @2 with a bucket of water."
-msgstr "Tedd le a vödröt, hogy kiürítsd és elhelyezd: @1. Felveheted, ha egy vödör vízzel jobb gombot nyomsz erre: @2."
-
-msgid "Places a water source and a @1."
-msgstr "Vízforrást és @1-t helyez el."
-
 msgid "Empty Bucket"
 msgstr "Üres Vödör"
 
@@ -36,6 +24,54 @@ msgstr "Üss meg egy folyadékforrást a begyűjtéshez. Ezután a teli vödör 
 
 msgid "Collects liquids"
 msgstr "Folyadékot gyűjt be"
+
+msgid "Bucket of Axolotl"
+msgstr ""
+
+msgid "Bucket of Cod"
+msgstr ""
+
+msgid "Bucket of Salmon"
+msgstr ""
+
+msgid "Bucket of Tropical Fish"
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Tropical Fish. Obtain by right clicking on a Tropical Fish with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place an Axolotl. Obtain by right clicking on an Axolotl with a bucket of water."
+msgstr ""
+
+msgid "Places a water source and a Cod."
+msgstr ""
+
+msgid "Places a water source and a Salmon."
+msgstr ""
+
+msgid "Places a water source and a Tropical Fish."
+msgstr ""
+
+msgid "Places a water source and an Axolotl."
+msgstr ""
+
+msgid "This bucket is filled with water and a Cod."
+msgstr ""
+
+msgid "This bucket is filled with water and a Salmon."
+msgstr ""
+
+msgid "This bucket is filled with water and a Tropical Fish."
+msgstr ""
+
+msgid "This bucket is filled with water and an Axolotl."
+msgstr ""
 
 msgid "Lava Bucket"
 msgstr "Láva Vödör"

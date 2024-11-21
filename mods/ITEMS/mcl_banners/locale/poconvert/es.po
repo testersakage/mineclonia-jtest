@@ -121,9 +121,6 @@ msgstr "Utiliza una mesa para dibujar un patrón en la parte superior del estand
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr "Puede copiar el patrón de un estandarte colocando dos estandartes del mismo color en la cuadrícula de fabricación: una debe ser estampada, la otra debe estar limpia. Finalmente, puede usar un estandarte en un caldero con agua para lavar su capa superior."
 
-msgid "@1 Banner"
-msgstr "Estandarte @1"
-
 msgid "Preview Banner"
 msgstr "Vista previa del Estandarte"
 

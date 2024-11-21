@@ -121,9 +121,6 @@ msgstr "Użyj wytwarzania aby narysować wzór na górze sztandaru. Upiększone 
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr "Możesz skopiować wzór sztandaru kładąc dwa sztandary tego samego koloru w siatce wytwarzania. Jeden z nich musi być upiększony, drugi czysty. Możesz również użyć sztandar na kociołku z wodą aby zmyć górną warstwę."
 
-msgid "@1 Banner"
-msgstr ""
-
 msgid "Preview Banner"
 msgstr ""
 

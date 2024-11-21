@@ -25,9 +25,99 @@ msgstr "La laine est un bloc décoratif disponible en différentes couleurs."
 msgid "Carpets are thin floor covers which come in many different colors."
 msgstr "Les tapis sont des revêtements de sol minces qui viennent dans de nombreuses couleurs différentes."
 
-msgid "@1 Wool"
-msgstr "Laine @1"
+msgid "Black Carpet"
+msgstr ""
 
-msgid "@1 Carpet"
-msgstr "Tapis @1"
+msgid "Black Wool"
+msgstr ""
+
+msgid "Blue Carpet"
+msgstr ""
+
+msgid "Blue Wool"
+msgstr ""
+
+msgid "Brown Carpet"
+msgstr ""
+
+msgid "Brown Wool"
+msgstr ""
+
+msgid "Cyan Carpet"
+msgstr ""
+
+msgid "Cyan Wool"
+msgstr ""
+
+msgid "Green Carpet"
+msgstr ""
+
+msgid "Green Wool"
+msgstr ""
+
+msgid "Grey Carpet"
+msgstr ""
+
+msgid "Grey Wool"
+msgstr ""
+
+msgid "Light Blue Carpet"
+msgstr ""
+
+msgid "Light Blue Wool"
+msgstr ""
+
+msgid "Light Grey Carpet"
+msgstr ""
+
+msgid "Light Grey Wool"
+msgstr ""
+
+msgid "Lime Carpet"
+msgstr ""
+
+msgid "Lime Wool"
+msgstr ""
+
+msgid "Magenta Carpet"
+msgstr ""
+
+msgid "Magenta Wool"
+msgstr ""
+
+msgid "Orange Carpet"
+msgstr ""
+
+msgid "Orange Wool"
+msgstr ""
+
+msgid "Pink Carpet"
+msgstr ""
+
+msgid "Pink Wool"
+msgstr ""
+
+msgid "Purple Carpet"
+msgstr ""
+
+msgid "Purple Wool"
+msgstr ""
+
+msgid "Red Carpet"
+msgstr ""
+
+msgid "Red Wool"
+msgstr ""
+
+msgid "White Carpet"
+msgstr ""
+
+msgid "White Wool"
+msgstr ""
+
+msgid "Yellow Carpet"
+msgstr ""
+
+msgid "Yellow Wool"
+msgstr ""
 

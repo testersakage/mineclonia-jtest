@@ -16,20 +16,14 @@ msgstr ""
 msgid "Redstone Torch (off)"
 msgstr "Torcia di Pietrarossa (inattiva)"
 
-msgid "Redstone Torch (overheated)"
-msgstr "Torcia di Pietrarossa (sovraccaricata)"
-
-msgid "Redstone Torch"
-msgstr "Torcia di Pietrarossa"
-
 msgid "A redstone torch is a redstone component which can be used to invert a redstone signal. It supplies its surrounding blocks with redstone power, except for the block it is attached to. A redstone torch is normally lit, but it can also be turned off by powering the block it is attached to. While unlit, a redstone torch does not power anything."
 msgstr ""
 
 msgid "Redstone torches can be placed at the side and on the top of full solid opaque blocks."
 msgstr ""
 
-msgid "Provides redstone power when it's not powered itself"
-msgstr ""
+msgid "Redstone Torch"
+msgstr "Torcia di Pietrarossa"
 
 msgid "Block of Redstone"
 msgstr ""

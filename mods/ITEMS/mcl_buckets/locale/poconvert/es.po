@@ -13,18 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Bucket of @1"
-msgstr "Cubo de @1"
-
-msgid "This bucket is filled with water and @1."
-msgstr "Este cubo está lleno de agua y @1."
-
-msgid "Place it to empty the bucket and place a @1. Obtain by right clicking on a @2 with a bucket of water."
-msgstr "Colócalo para vaciar el cubo y colocar un @1. Obténlo al hacer clic derecho en un @2 con un cubo de agua."
-
-msgid "Places a water source and a @1."
-msgstr "Coloca una fuente de agua y un @1."
-
 msgid "Empty Bucket"
 msgstr "Cubo vacío"
 
@@ -36,6 +24,54 @@ msgstr "Golpea una fuente de líquido para recolectarla. Luego puede usar el cub
 
 msgid "Collects liquids"
 msgstr "Recoge líquidos"
+
+msgid "Bucket of Axolotl"
+msgstr ""
+
+msgid "Bucket of Cod"
+msgstr ""
+
+msgid "Bucket of Salmon"
+msgstr ""
+
+msgid "Bucket of Tropical Fish"
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Tropical Fish. Obtain by right clicking on a Tropical Fish with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place an Axolotl. Obtain by right clicking on an Axolotl with a bucket of water."
+msgstr ""
+
+msgid "Places a water source and a Cod."
+msgstr ""
+
+msgid "Places a water source and a Salmon."
+msgstr ""
+
+msgid "Places a water source and a Tropical Fish."
+msgstr ""
+
+msgid "Places a water source and an Axolotl."
+msgstr ""
+
+msgid "This bucket is filled with water and a Cod."
+msgstr ""
+
+msgid "This bucket is filled with water and a Salmon."
+msgstr ""
+
+msgid "This bucket is filled with water and a Tropical Fish."
+msgstr ""
+
+msgid "This bucket is filled with water and an Axolotl."
+msgstr ""
 
 msgid "Lava Bucket"
 msgstr "Cubo con lava"

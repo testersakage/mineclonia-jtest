@@ -43,11 +43,11 @@ msgstr "コマンド："
 msgid "Help"
 msgstr "ヘルプ"
 
-msgid "Placement denied. You need the “maphack” privilege to place command blocks."
-msgstr "配置が拒否されました。コマンドブロックを配置するには \"maphack\" 権限が必要です。"
-
 msgid "Command Block"
 msgstr "コマンドブロック"
+
+msgid "Placement denied. You need the “maphack” privilege to place command blocks."
+msgstr "配置が拒否されました。コマンドブロックを配置するには \"maphack\" 権限が必要です。"
 
 msgid "Executes server commands when powered by redstone power"
 msgstr "レッドストーン動力が来るとサーバーコマンドを実行"
