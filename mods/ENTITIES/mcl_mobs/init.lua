@@ -27,6 +27,7 @@ mcl_mobs.mob_class = {
 	head_yaw_offset = 0,
 	head_pitch_multiplier = 1,
 	_head_pitch_offset = 0,
+	_head_rot_limit = math.pi / 3, -- 60 degrees.
 	bone_eye_height = 1.4,
 	head_eye_height = 0,
 	curiosity = 1,
@@ -95,7 +96,6 @@ mcl_mobs.mob_class = {
 	facing_fence = false,
 	is_mob = true,
 	pushable = true,
-	mob_pushable = true,
 	avoid_distance = 9,
 	ignores_nametag = false,
 	rain_damage = 0,
@@ -174,6 +174,7 @@ mcl_mobs.mob_class = {
 	_crouching = false,
 	_dominant_in_jockeys = true,
 	_need_roll = false,
+	_inventory_size = nil,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
@@ -193,10 +194,6 @@ mcl_mobs.mob_class = {
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
-
-function mcl_mobs.check_vector(v)
-	return v and v.x and v.y and v.z and not minetest.is_nan(v.x) and not minetest.is_nan(v.y) and not minetest.is_nan(v.z) and tonumber(v.x) and tonumber(v.y) and tonumber(v.z)
-end
 
 -- get node but use fallback for nil or unknown
 function mcl_mobs.node_ok(pos, fallback)
@@ -363,7 +360,7 @@ function mcl_mobs.register_mob(name, def)
 
 	init_props.collisionbox = init_props.collisionbox or mcl_mobs.mob_class.initial_properties.collisionbox
 	init_props.selectionbox = init_props.selectionbox or init_props.collisionbox or mcl_mobs.mob_class.initial_properties.selectionbox
-	local eye_height = init_props.head_eye_height
+	local eye_height = def.head_eye_height
 	if not eye_height then
 		eye_height = init_props.collisionbox[5] - init_props.collisionbox[2]
 		eye_height = eye_height * 0.75 + init_props.collisionbox[2]

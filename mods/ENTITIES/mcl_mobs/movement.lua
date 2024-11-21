@@ -235,7 +235,7 @@ function mob_class:check_jump (self_pos, moveresult)
 			dir.z = dir.z + item.old_velocity.z - item.new_velocity.z
 			local pos = item.node_pos
 			local boxes = minetest.get_node_boxes ("collision_box", pos)
-			if pos.y > self_pos.y then
+			if pos.y + 0.5 > self_pos.y then
 				for _, box in ipairs (boxes) do
 					max_y = math.max (max_y or 0, pos.y + box[2], pos.y + box[5])
 				end
@@ -669,6 +669,217 @@ function mob_class:go_to_stupidly (pos, factor)
 end
 
 ------------------------------------------------------------------------
+-- Navigation wrapper.
+------------------------------------------------------------------------
+
+local DEFAULT_REPATH_INTERVAL = 6.0
+local RETRY_INTERVAL_BASE = 1.0
+local MINIMUM_REPATH_INTERVAL = 0.5
+local MAX_RETRIES = 5
+
+function mob_class:session_navigate (destination, bonus, tolerance, repath_interval, repath_min)
+	local mob = self:mob_controlling_movement ()
+	local dest = mcl_util.get_nodepos (destination)
+	mob._navigation_session = {
+		destination = dest,
+		bonus = bonus,
+		repath_interval
+			= repath_interval or DEFAULT_REPATH_INTERVAL,
+		repath_min = repath_min or MINIMUM_REPATH_INTERVAL,
+		repath_timer = 0,
+		path_requested = 0,
+		tolerance = tolerance or 0,
+		total_time = 0,
+		was_partial = false,
+	}
+	mob:gopath_internal (dest, nil, false, bonus, nil, tolerance)
+end
+
+local function clamp (x, a, b)
+	if a > b then
+		a, b = b, a
+	end
+
+	return math.min (math.max (x, a), b)
+end
+
+local function has_strayed (self_pos, last_wp, next_wp)
+	if not last_wp then
+		return vector.distance (self_pos, next_wp) >= 3.0
+	end
+	local vec = vector.subtract (next_wp, last_wp)
+	local pos = vector.subtract (self_pos, last_wp)
+	local proj = vector.dot (vec, pos)
+	local norm = vector.normalize (vec)
+	local closest = vector.multiply (norm, proj)
+	closest.x = clamp (closest.x, 0, vec.x)
+	closest.y = clamp (closest.y, 0, vec.x)
+	closest.z = clamp (closest.z, 0, vec.x)
+	local dx = closest.x - pos.x
+	local dy = closest.y - pos.y
+	local dz = closest.z - pos.z
+	local diff = math.sqrt (dx * dx + dy * dy + dz * dz)
+	return diff >= 2.0
+end
+
+local function get_new_target (self, current, new)
+	if not vector.equals (new, current) then
+		local aligned = mcl_util.get_nodepos (new)
+		if not vector.equals (aligned, current) then
+			return aligned
+		end
+	end
+	return nil
+end
+
+local function manhattan3d (v1, v2)
+	return math.abs (v1.x - v2.x)
+		+ math.abs (v1.y - v2.y)
+		+ math.abs (v1.z - v2.z)
+end
+
+-- Return the state of the current navigation session.
+-- Value is:
+--
+--   "failed", if navigation failed to bring this mob to its
+--   destination.
+--
+--   "wait", if navigation is proceeding or a timeout is being
+--   processed.
+--
+--   "arrived", if navigation completed successfully or was
+--   terminated.
+
+function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
+	local mob = self:mob_controlling_movement ()
+	if mob ~= self then
+		self_pos = mob.object:get_pos ()
+	end
+	local session = self._navigation_session
+	if not session then
+		return "arrived"
+	end
+	local destination = session.destination
+	local bonus = session.bonus
+	local tolerance = session.tolerance
+
+	if timeout then
+		local total_time = session.total_time + dtime
+		session.total_time = total_time
+
+		if total_time > timeout then
+			mob:cancel_navigation ()
+			mob:halt_in_tracks ()
+			return "failed"
+		end
+	end
+
+	-- If pathfinding is still in progress, wait for its
+	-- completion.
+	if mob.pathfinding_context then
+		return "wait"
+	end
+
+	-- A path was just requested.  If no path now exists, this
+	-- navigation should be considered to have failed.
+	local path_requested = session.path_requested
+	if path_requested and not mob.waypoints then
+		if path_requested >= MAX_RETRIES then
+			return "failed"
+		end
+
+		-- If the distance between the current position and
+		-- the destination is within the defined tolerance,
+		-- this mob has arrived at its destination.
+		local startpos = self:gwp_align_start_pos (self_pos)
+		if manhattan3d (startpos, destination) <= tolerance then
+			return "arrived"
+		end
+
+		-- Retry in a staggered fashion.
+		if session.repath_timer <= 0 then
+			local t = session.repath_timer
+				+ RETRY_INTERVAL_BASE
+				+ math.random () * RETRY_INTERVAL_BASE
+			session.repath_timer = t
+		else
+			local t = session.repath_timer - dtime
+			session.repath_timer = t
+
+			if t <= 0 then
+				local destination = session.destination
+				local bonus = session.bonus
+				session.path_requested = path_requested + 1
+
+				-- Always use a new target if specified.
+				if new_target then
+					destination
+						= self:gwp_align_start_pos (new_target)
+					session.destination = destination
+				end
+				mob:gopath_internal (destination, nil, false, bonus,
+							nil, tolerance)
+			end
+		end
+
+		return "wait"
+	end
+
+	local t = session.repath_timer - dtime
+	session.repath_timer = t
+	session.path_requested = nil
+
+	-- Has this mob strayed very far from the next waypoint along
+	-- the path?  If so, recompute this path.
+	if mob.waypoints then
+		local n_waypoints = #mob.waypoints
+		local next_wp = mob.waypoints[n_waypoints]
+		local new_target = new_target
+			and get_new_target (self, destination, new_target)
+		local last_wp = self._last_wp
+
+		-- mob.waypoints.target is set if the path is
+		-- complete.
+		session.was_partial = not mob.waypoints.target
+		if (t < -session.repath_min
+			and (has_strayed (self_pos, last_wp, next_wp)
+				or new_target))
+			or t < -session.repath_interval then
+			session.repath_timer = 0
+			session.path_requested = 0
+			if new_target then
+				destination = new_target
+				session.destination = new_target
+			end
+			mob:gopath_internal (destination, nil, false, bonus,
+						nil, tolerance)
+		end
+
+		return "wait"
+	end
+
+	-- Navigation has completed.  Attempt to detect whether this
+	-- mob has arrived at its destination, and if not, attempt to
+	-- return to the destination.
+	if session.was_partial or mob._gwp_did_timeout then
+		session.repath_timer = 0
+		session.path_requested = 0
+		-- Always use a new target if specified.
+		if new_target then
+			destination
+				= self:gwp_align_start_pos (new_target)
+			session.destination = destination
+		end
+		mob:gopath_internal (destination, nil, false, bonus, nil, tolerance)
+		return "wait"
+	end
+
+	self._navigation_session = nil
+	self:halt_in_tracks ()
+	return "arrived"
+end
+
+------------------------------------------------------------------------
 -- Mob AI.
 ------------------------------------------------------------------------
 
@@ -694,8 +905,8 @@ function mob_class:pacing_target (pos, width, height, groups)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
 	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, groups)
 
-	if (self._restrict_center and #nodes >= 1)
-		or self.acceptable_pacing_target then
+	if (self._restrict_center or self.acceptable_pacing_target)
+		and #nodes >= 1 then
 		-- Make ten attempts to select a node within the
 		-- restriction or one that is eligible.
 		for i = 1, 10 do
@@ -1125,7 +1336,10 @@ function mob_class:run_ai (dtime, moveresult)
 			local mob = self:mob_controlling_movement ()
 			mob:set_animation ("stand")
 		end
-		self._active_activity = nil
+		if self._active_activity then
+			self[self._active_activity] = nil
+			self._active_activity = nil
+		end
 	end
 
 	if active and not self._is_idle_activity[self._active_activity] then

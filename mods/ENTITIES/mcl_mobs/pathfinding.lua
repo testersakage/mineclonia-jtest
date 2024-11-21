@@ -1,5 +1,6 @@
 local mob_class = mcl_mobs.mob_class
 local floor = math.floor
+local luajit_present = minetest.global_exists ("jit")
 
 local function shift_up (self, node, idx)
 	local priority = node.priority
@@ -136,15 +137,31 @@ function mob_class:new_gwp_context ()
 	}
 end
 
-local function hashpos (context, x, y, z)
-	local x1, y1, z1
-	x1 = x - context.minpos.x
-	y1 = y - context.minpos.y
-	z1 = z - context.minpos.z
+local hashpos
 
-	return x1 * 256*256 + y1 * 256 + z1
+if not luajit_present then
+	function hashpos (context, x, y, z)
+		local x1, y1, z1
+		x1 = x - context.minpos.x
+		y1 = y - context.minpos.y
+		z1 = z - context.minpos.z
+
+		return x1 * 256*256 + y1 * 256 + z1
+	end
+	mcl_mobs.gwp_hashpos = hashpos
+else
+	function hashpos (context, x, y, z)
+		local x1, y1, z1
+		x1 = x - context.minpos.x
+		y1 = y - context.minpos.y
+		z1 = z - context.minpos.z
+
+		return bit.lshift (x1, 16)
+			+ bit.lshift (y1, 8)
+			+ bit.tobit (z1)
+	end
+	mcl_mobs.gwp_hashpos = hashpos
 end
-mcl_mobs.gwp_hashpos = hashpos
 
 local function longhash (x, y, z)
 	return (32768 + x) * 65536 * 65536 + (32768 + y) * 65536
@@ -190,6 +207,13 @@ local function is_water_source (name)
 		or name == "mclx_core:river_water_source"
 end
 
+function mob_class:gwp_align_start_pos (pos)
+	pos.x = floor (pos.x + 0.5)
+	pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
+	pos.z = floor (pos.z + 0.5)
+	return pos
+end
+
 function mob_class:gwp_start_1 (context)
 	local pos = self.object:get_pos ()
 	-- It is possible for mobs to turn around during a repath if
@@ -203,13 +227,11 @@ function mob_class:gwp_start_1 (context)
 		and math.abs (pos.x - last_wp.x) < 0.5
 		and math.abs (pos.z - last_wp.z) < 0.5
 		and math.abs (pos.y - last_wp.y) < 1.0 then
-		pos.x = last_wp.x - (context.mob_width * 0.5 - 0.5)
-		pos.y = last_wp.y - context.y_offset
-		pos.z = last_wp.z - (context.mob_width * 0.5 - 0.5)
+		pos.x = last_wp.x - last_wp.x_offset
+		pos.y = last_wp.y - last_wp.y_offset
+		pos.z = last_wp.z - last_wp.x_offset
 	else
-		pos.x = floor (pos.x + 0.5)
-		pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
-		pos.z = floor (pos.z + 0.5)
+		pos = self:gwp_align_start_pos (pos)
 	end
 	local node = minetest.get_node (pos)
 	local ground = minetest.get_node (vector.offset (pos, 0, -1, 0))
@@ -254,41 +276,110 @@ function mob_class:gwp_start_1 (context)
 	return nil, false
 end
 
-local function is_passable (class, penalties)
-	return class ~= "OPEN" and penalties[class] >= 0.0
+local function is_passable (class, penalties, startpos, context, mob)
+	if (class ~= "OPEN" and penalties[class] >= 0.0) then
+		return startpos
+	end
+	return nil
 end
 
-local function is_walkable (class)
-	return class == "WALKABLE"
+local function is_stuck (class, penalties, startpos, context, mob)
+	if class == "BLOCKED" or class == "FENCE"
+		or class == "SLAB"
+		or class == "DOOR_WOOD_CLOSED"
+		or class == "DOOR_IRON_CLOSED" then
+		return startpos
+	end
+	return nil
+end
+
+local function is_walkable (class, penalties, startpos, context, mob)
+	if class == "WALKABLE" then
+		return startpos
+	end
+	return nil
+end
+
+local function is_open_valid_fall (class, penalties, startpos, context, mob)
+	if class == "OPEN" then
+		local pos = mob:gwp_essay_drop (context, startpos)
+		return pos and vector.copy (pos)
+	end
+	return nil
 end
 
 function mob_class:gwp_start_2 (context, cbox, self_pos, criteria)
-	local c1, c2, c3, c4, class
+	local c1, c2, c3, c4, class, output_pos
 	local penalties = self.gwp_penalties
 	local pos = self_pos
-	c1 = vector.new (pos.x + cbox[1], pos.y + 0.5, pos.z + cbox[3])
-	c1 = vector.apply (c1, round_trunc)
-	c2 = vector.new (pos.x + cbox[1], pos.y + 0.5, pos.z + cbox[6])
-	c2 = vector.apply (c2, round_trunc)
-	c3 = vector.new (pos.x + cbox[4], pos.y + 0.5, pos.z + cbox[3])
-	c3 = vector.apply (c3, round_trunc)
-	c4 = vector.new (pos.x + cbox[4], pos.y + 0.5, pos.z + cbox[6])
-	c4 = vector.apply (c4, round_trunc)
+	c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
+	c1 = self:gwp_align_start_pos (c1)
 	class = self:gwp_classify_node (context, c1)
-	if criteria (class, penalties) then
-		return c1
+	output_pos = criteria (class, penalties, c1, context, self)
+	if output_pos then
+		return output_pos
 	end
+	c2 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[6])
+	c2 = self:gwp_align_start_pos (c2)
 	class = self:gwp_classify_node (context, c2)
-	if criteria (class, penalties) then
-		return c2
+	output_pos = criteria (class, penalties, c2, context, self)
+	if output_pos then
+		return output_pos
 	end
+	c3 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[3])
+	c3 = self:gwp_align_start_pos (c3)
 	class = self:gwp_classify_node (context, c3)
-	if criteria (class, penalties) then
-		return c3
+	output_pos = criteria (class, penalties, c3, context, self)
+	if output_pos then
+		return output_pos
 	end
+	c4 = vector.new (pos.x + cbox[4], pos.y, pos.z + cbox[6])
+	c4 = self:gwp_align_start_pos (c4)
 	class = self:gwp_classify_node (context, c4)
-	if criteria (class, penalties) then
-		return c4
+	output_pos = criteria (class, penalties, c4, context, self)
+	if output_pos then
+		return output_pos
+	end
+	return nil
+end
+
+function mob_class:gwp_corner_check_1 (context, self_pos, penalties)
+	local nearest = {}
+	local center = self:gwp_align_start_pos (self_pos)
+	for x = -1, 1 do
+		for z = -1, 1 do
+			if x ~= 0 or z ~= 0 then
+				local test = vector.offset (center, x, 0, z)
+				table.insert (nearest, test)
+			end
+		end
+	end
+	table.sort (nearest, function (a, b)
+		    return vector.distance (a, self_pos)
+			    < vector.distance (b, self_pos)
+	end)
+	for i = 1, 3 do
+		local node = nearest[i]
+		local class = self:gwp_classify_node (context, node)
+		local pos = is_walkable (class, penalties, node, context, self)
+		if not pos then
+			pos = is_open_valid_fall (class, penalties, node, context, self)
+		end
+		if pos then
+			return pos
+		end
+	end
+end
+
+function mob_class:gwp_corner_check (context, cbox, pos, self_pos, penalties)
+	local corner
+		= self:gwp_start_2 (context, cbox, pos, is_open_valid_fall)
+	if corner then
+		return corner
+	end
+
+	if context.mob_width == 1 then
+		return self:gwp_corner_check_1 (context, self_pos, penalties)
 	end
 	return nil
 end
@@ -297,8 +388,9 @@ function mob_class:gwp_start (context)
 	local pos, optional = self:gwp_start_1 (context)
 	local penalties = self.gwp_penalties
 	local cbox = self.collisionbox
+	local start_class = nil
 	if pos then
-		local start_class = self:gwp_classify_node (context, pos)
+		start_class = self:gwp_classify_node (context, pos)
 		-- Check for valid start positions at every block on
 		-- which this mob is standing.
 		if start_class ~= "OPEN" and penalties[start_class] >= 0.0 then
@@ -317,7 +409,29 @@ function mob_class:gwp_start (context)
 		end
 	end
 	local self_pos = self.object:get_pos ()
-	return self:gwp_start_2 (context, cbox, self_pos, is_passable)
+	local pos1 = self:gwp_start_2 (context, cbox, self_pos, is_passable)
+	if pos1 then
+		return pos1
+	end
+
+	-- If this mob is stuck inside a fence-like node (by which it
+	-- is meant any node narrower than a full node) placed upon a
+	-- ledge, attempt to locate a corner that is aloft.  If no
+	-- such corner is available, evaluate the six corners
+	-- surrounding the fence and attempt to exit from the corner
+	-- nearest to the fence.
+
+	if not optional and start_class and start_class ~= "OPEN" then
+		local corner = self:gwp_corner_check (context, cbox, pos,
+						self_pos, penalties)
+		if corner then
+			return corner
+		end
+	end
+
+	-- As a final attempt, try to exit any solid node in which
+	-- this mob is stuck.
+	return self:gwp_start_2 (context, cbox, self_pos, is_stuck)
 end
 
 local function manhattan3d (ax, ay, az, bx, by, bz)
@@ -387,6 +501,10 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 		end
 	end
 
+	-- Save information that may be accessed in deriving a start
+	-- position.
+	context.fall_distance = self:gwp_safe_fall_distance ()
+
 	-- Derive a valid start position if suspended in water or the
 	-- like.
 	local start = self:gwp_start (context)
@@ -403,7 +521,6 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 	start.h = h_to_nearest_target (start, context)
 	start.total_d = 0
 	context.open_set:enqueue (start, start.h)
-	context.fall_distance = self:gwp_safe_fall_distance ()
 	return context
 end
 
@@ -509,17 +626,23 @@ function mob_class:gwp_reconstruct_path (context, arrival)
 	local list = {arrival}
 	-- Adjust waypoint position so as to center the mob on
 	-- the path.
-	arrival.x = arrival.x + context.mob_width * 0.5 - 0.5
-	arrival.z = arrival.z + context.mob_width * 0.5 - 0.5
-	arrival.y = arrival.y + context.y_offset
+	local x_offset = context.mob_width * 0.5 - 0.5
+	local y_offset = context.y_offset
+	arrival.x = arrival.x + x_offset
+	arrival.z = arrival.z + x_offset
+	arrival.y = arrival.y + y_offset
+	arrival.x_offset = x_offset
+	arrival.y_offset = y_offset
 	while arrival.referrer ~= nil do
 		table.insert (list, arrival.referrer)
 		arrival = arrival.referrer
 		-- Adjust waypoint position so as to center the mob on
 		-- the path.
-		arrival.x = arrival.x + context.mob_width * 0.5 - 0.5
-		arrival.z = arrival.z + context.mob_width * 0.5 - 0.5
-		arrival.y = arrival.y + context.y_offset
+		arrival.x = arrival.x + x_offset
+		arrival.z = arrival.z + x_offset
+		arrival.y = arrival.y + y_offset
+		arrival.x_offset = x_offset
+		arrival.y_offset = y_offset
 	end
 	return list
 end
@@ -534,7 +657,7 @@ function mob_class:gwp_reconstruct (context)
 
 			if contact then
 				candidate = self:gwp_reconstruct_path (context, contact)
-				candidate.target = target
+				candidate.target = arrival
 				if not path or #candidate > #path then
 					path = candidate
 					partial = false
@@ -568,6 +691,24 @@ end
 --- move.
 ------------------------------------------------------------------------------
 
+local nodes_this_step = {}
+
+local function gwp_get_node (pos)
+	local hash = longhash (pos.x, pos.y, pos.z)
+	local map = nodes_this_step
+	local cache = map[hash]
+
+	if cache then
+		return cache
+	end
+
+	cache = minetest.get_node (pos).name
+	map[hash] = cache
+	return cache
+end
+
+mcl_mobs.gwp_get_node = gwp_get_node
+
 local ground_height_scratch = vector.zero ()
 local ground_height_this_step = {}
 
@@ -593,10 +734,9 @@ local function ground_height (context, node)
 		end
 	end
 
-	-- This is _purposefully_ .5 blocks below the true top face of
-	-- the node.
-	ground_height_this_step[hash] = below.y + y
-	return below.y + y
+	local value = below.y + y
+	ground_height_this_step[hash] = value
+	return value
 end
 
 local gwp_ej_scratch = vector.zero ()
@@ -781,7 +921,7 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump, amph
 				object = self:gwp_essay_drop (context, node)
 				-- This explicitly excludes trapdoors
 				-- and suchlike from consideration.
-			elseif class == "BLOCKED" then
+			elseif class == "BLOCKED" or class == "SLAB" then
 				node.y = node.y + 1
 				object = self:gwp_essay_jump (context, node, parent, floor)
 			elseif (class == "WATER" and self.floats == 0) then
@@ -804,6 +944,7 @@ mob_class.gwp_penalties = {
 	-- A penalty < 0 indicates unconditional rejection, while one
 	-- greater than zero compounds the heuristic distance.
 	BLOCKED = -1.0,
+	SLAB = -1.0,
 	DAMAGE_FIRE = 16.0,
 	DAMAGE_OTHER = -1.0,
 	DANGER_FIRE = 8.0,
@@ -829,11 +970,13 @@ mob_class.gwp_floortypes = {
 	IGNORE = "IGNORE",
 }
 
-local function is_partial (nodedef)
-	if nodedef.groups._mcl_partial == 2 then
-		return false
+local function get_partial_type (nodedef)
+	if nodedef.groups._mcl_partial == 3 then
+		return "SLAB"
+	elseif nodedef.groups._mcl_partial == 2 then
+		return "BLOCKED"
 	elseif nodedef.groups._mcl_partial == 1 then
-		return true
+		return "OPEN"
 	end
 
 	local boxes = nodedef.node_box
@@ -842,46 +985,32 @@ local function is_partial (nodedef)
 	if not boxes or boxes.type == "regular" then
 		local fixed = boxes and boxes.fixed
 		if not fixed then
-			return false
+			return "BLOCKED"
 		end
 		if fixed and type (fixed[1]) == "number" then
 			fixed = {fixed[1]}
 		end
 		boxes = fixed
-		return not (#boxes == 1
-				and boxes[1][1] <= -0.5
-				and boxes[1][2] <= -0.5
-				and boxes[1][3] <= -0.5
-				and boxes[1][4] >= 0.5
-				and boxes[1][5] >= 0.5
-				and boxes[1][6] >= 0.5)
+		if (#boxes == 1
+			and boxes[1][1] <= -0.5
+			and boxes[1][2] <= -0.5
+			and boxes[1][3] <= -0.5
+			and boxes[1][4] >= 0.5
+			and boxes[1][5] >= 0.5
+			and boxes[1][6] >= 0.5) then
+			return "BLOCKED"
+		end
 	end
-	return true
+	return "OPEN"
 end
 
-local nodes_this_step = {}
-
-local function gwp_get_node (pos)
-	local hash = longhash (pos.x, pos.y, pos.z)
-	local map = nodes_this_step
-	local cache = map[hash]
-
-	if cache then
-		return cache
-	end
-
-	cache = minetest.get_node (pos).name
-	map[hash] = cache
-	return cache
-end
-mcl_mobs.gwp_get_node = gwp_get_node
-
--- local record_pathfinding_stats = false
+-- local record_pathfinding_stats = true
 -- local bc_stats = { }
 
 local gwp_basic_node_classes = {
 	["ignore"] = "IGNORE",
 }
+mcl_mobs.gwp_basic_node_classes = gwp_basic_node_classes
 
 local gwp_door_classes = {}
 
@@ -890,25 +1019,25 @@ local gwp_door_classes = {}
 -- specially to establish whether doors are open.
 
 minetest.register_on_mods_loaded (function ()
-		for name, def in pairs (minetest.registered_nodes) do
-			local value = "OPEN"
+	for name, def in pairs (minetest.registered_nodes) do
+		local value = "OPEN"
 
-			if def._pathfinding_class then
-				value = def._pathfinding_class
-			elseif def.damage_per_second ~= 0 then
-				value = "DAMAGE_OTHER"
-			elseif def.groups.door then
-				value = nil
-				if def.groups.door_iron then
-					gwp_door_classes[name] = "DOOR_IRON_CLOSED"
-				else
-					gwp_door_classes[name] = "DOOR_WOOD_CLOSED"
-				end
-			elseif def.walkable and not is_partial (def) then
-				value = "BLOCKED"
+		if def._pathfinding_class then
+			value = def._pathfinding_class
+		elseif def.damage_per_second ~= 0 then
+			value = "DAMAGE_OTHER"
+		elseif def.groups.door then
+			value = nil
+			if def.groups.door_iron then
+				gwp_door_classes[name] = "DOOR_IRON_CLOSED"
+			else
+				gwp_door_classes[name] = "DOOR_WOOD_CLOSED"
 			end
-			gwp_basic_node_classes[name] = value
+		elseif def.walkable then
+			value = get_partial_type (def)
 		end
+		gwp_basic_node_classes[name] = value
+	end
 end)
 
 local function gwp_basic_classify (pos)
@@ -976,12 +1105,28 @@ local function gwp_classify_node_1 (self, pos)
 		local class_2 = gwp_basic_classify (pos_2)
 		local floortype = self.gwp_floortypes[class_2]
 
+		if floortype == "OPEN" then
+			-- An OPEN node resting on an OPEN surface
+			-- above a FENCE should be reset to WALKABLE,
+			-- as the collision box of the FENCE will
+			-- extend into the node above, becoming
+			-- something of a slab.
+			pos_2.y = pos_2.y - 1
+			local class_3 = gwp_basic_classify (pos_2)
+			if class_3 == "FENCE" then
+				floortype = "WALKABLE"
+			end
+		end
+
 		-- Otherwise, this is walkable.  Adjust its
 		-- class according to its surroundings.
-		return floortype or self:gwp_classify_surroundings (pos, "WALKABLE")
+		return floortype
+			or self:gwp_classify_surroundings (pos, "WALKABLE")
 	end
 	return class_1
 end
+
+mcl_mobs.gwp_classify_node_1 = gwp_classify_node_1
 
 -- Evaluate the approximate traversability of nodes that would contact
 -- this mob at POS, examining them, and if open, the node(s) beneath
@@ -1025,7 +1170,8 @@ function mob_class:gwp_classify_node (context, pos)
 				-- Report impassible nodes
 				-- immediately.
 				if penalties[class] < 0.0 then
-					return class
+					worst = class
+					break
 				-- Otherwise select the worst class possible.
 				elseif worst == "OPEN" or penalty < penalties[class] then
 					penalty = penalties[class]
@@ -1097,9 +1243,157 @@ function mob_class:gwp_classify_surroundings (pos, default)
 		return influence
 	end
 
-	v.x = x + 1
+	v.x = x + -1
+	v.y = y + -1
+	v.z = z + 0
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + -1
+	v.y = y + -1
+	v.z = z + 1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + -1
+	v.y = y + 0
+	v.z = z + -1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + -1
+	v.y = y + 0
+	v.z = z + 0
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + -1
+	v.y = y + 1
+	v.z = z + -1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + -1
 	v.y = y + 1
 	v.z = z + 1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 0
+	v.y = y + -1
+	v.z = z + -1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 0
+	v.y = y + -1
+	v.z = z + 0
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+		-- Nodes above fences should be regarded as slabs, as
+		-- their collision boxes extend into nodes above.
+	elseif new == "FENCE" then
+		return "BLOCKED"
+	end
+
+	v.x = x + 0
+	v.y = y + 0
+	v.z = z + -1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 0
+	v.y = y + 0
+	v.z = z + 1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 0
+	v.y = y + 1
+	v.z = z + 0
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 0
+	v.y = y + 1
+	v.z = z + 1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 1
+	v.y = y + -1
+	v.z = z + -1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 1
+	v.y = y + -1
+	v.z = z + 1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 1
+	v.y = y + 0
+	v.z = z + 0
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 1
+	v.y = y + 0
+	v.z = z + 1
+	local new = gwp_basic_classify (v)
+	local influence = influences[new]
+	if influence then
+		return influence
+	end
+
+	v.x = x + 1
+	v.y = y + 1
+	v.z = z + -1
 	local new = gwp_basic_classify (v)
 	local influence = influences[new]
 	if influence then
@@ -1117,187 +1411,7 @@ function mob_class:gwp_classify_surroundings (pos, default)
 
 	v.x = x + 1
 	v.y = y + 1
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 1
-	v.y = y + 0
 	v.z = z + 1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 1
-	v.y = y + 0
-	v.z = z + 0
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 1
-	v.y = y + 0
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 1
-	v.y = y + -1
-	v.z = z + 1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 1
-	v.y = y + -1
-	v.z = z + 0
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 1
-	v.y = y + -1
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 0
-	v.y = y + 1
-	v.z = z + 1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 0
-	v.y = y + 1
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 0
-	v.y = y + 0
-	v.z = z + 1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 0
-	v.y = y + 0
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 0
-	v.y = y + -1
-	v.z = z + 1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + 0
-	v.y = y + -1
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y +  1
-	v.z = z +  1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y +  1
-	v.z = z +  0
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y +  1
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y +  0
-	v.z = z +  1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y +  0
-	v.z = z +  0
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y +  0
-	v.z = z + -1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y + -1
-	v.z = z +  1
-	local new = gwp_basic_classify (v)
-	local influence = influences[new]
-	if influence then
-		return influence
-	end
-
-	v.x = x + -1
-	v.y = y + -1
-	v.z = z + 0
 	local new = gwp_basic_classify (v)
 	local influence = influences[new]
 	if influence then
@@ -1407,7 +1521,7 @@ function mob_class:gwp_edges (context, node)
 	return array
 end
 
-if minetest.global_exists ("jit") then
+if luajit_present then
 	-- jit.off (mob_class.gwp_cycle, true)
 	-- jit.off (mob_class.gwp_edges, true)
 	-- jit.off (gwp_edges_1, true)
@@ -1415,12 +1529,12 @@ if minetest.global_exists ("jit") then
 	-- jit.off (gwp_basic_classify, true)
 	-- jit.off (mob_class.gwp_essay_drop, true)
 	-- jit.off (mob_class.gwp_essay_jump, true)
-	jit.opt.start ("maxtrace=16000", "maxrecord=24000", "minstitch=3", "maxmcode=81920")
+	jit.opt.start ("maxtrace=24000", "maxrecord=32000",
+		       "minstitch=3", "maxmcode=163840")
 end
 
 ----------------------------------------------------------------------------------
--- Pathfinder testing commands, e.g.
--- /mobpathfind
+-- Pathfinder testing command `/mobpathfind'
 --
 -- Some code adopted from the devtest mod `testpathfinder', which is
 -- Copyright (C) 2020 Wuzzy <Wuzzy@disroot.org>
@@ -1678,8 +1792,11 @@ local function print_node_neighbors (itemstack, user, pointed_thing)
 		edges_under = table.copy (edges_under)
 		local edges_above = entity:gwp_edges (context, pointed_thing.above)
 		edges_above = table.copy (edges_above)
-		dbg.pp (edges_under)
-		dbg.pp (edges_above)
+
+		if minetest.global_exists ("dbg") then
+			dbg.pp (edges_under)
+			dbg.pp (edges_above)
+		end
 	end
 end
 
@@ -1773,7 +1890,9 @@ minetest.register_tool ("mcl_mobs:pathfinder_dump_stick", {
 		if not (user and user:is_player ()) or pointed_thing.type ~= "object" then
 			return
 		end
-		dbg.pp (pointed_thing.ref:get_luaentity ())
+		if minetest.global_exists ("dbg") then
+			dbg.pp (pointed_thing.ref:get_luaentity ())
+		end
 		mcl_mobs.last_dbg_entity = pointed_thing.ref:get_luaentity ()
 	end,
 })
@@ -1803,7 +1922,7 @@ minetest.register_globalstep (function (dtime)
 		-- 			end
 		-- 		end
 		-- 		minetest.log ("action", "During the previous 20 steps, an average"
-		-- 			      .. " of " .. string.format ("%.2f", total / 10 * 1000)
+		-- 			      .. " of " .. string.format ("%.2f", total / 20 * 1000)
 		-- 			      .. " ms, and a maximum of "
 		-- 			      .. string.format ("%.2f", max * 1000)
 		-- 			      .. " ms, were spent pathfinding on behalf of ~"
@@ -1827,6 +1946,8 @@ minetest.register_globalstep (function (dtime)
 		-- 							       item[1] / total * 100))
 		-- 		end
 		-- 		minetest.log ("action", string.format ("%.2f%% of classification attempts registered cache hits", (gwp_cc_hits / (gwp_cc_hits + gwp_cc_misses)) * 100))
+		-- 		gwp_cc_hits = 0
+		-- 		gwp_cc_misses = 0
 		-- 		bc_stats = {}
 		-- 		pathfinding_history = { }
 		-- 		mobs_this_step = 0
@@ -2493,12 +2614,13 @@ local gwp_airborne_floortypes = {
 	DANGER_FIRE = "WALKABLE",
 	DANGER_OTHER = "WALKABLE",
 	DOOR_IRON_CLOSED = "WALKABLE",
+	DOOR_OPEN = "WALKABLE",
 	DOOR_WOOD_CLOSED = "WALKABLE",
 	FENCE = "WALKABLE",
 	IGNORE = "IGNORE",
-	DOOR_OPEN = "WALKABLE",
 	LAVA = "OPEN",
 	OPEN = "OPEN",
+	SLAB = "WALKABLE",
 	TRAPDOOR = "WALKABLE",
 	WALKABLE = "WALKABLE",
 	WATER = "OPEN",
@@ -2521,6 +2643,20 @@ local function airborne_gwp_classify_node_1 (self, pos)
 		-- Open nodes should also be modified by their
 		-- surroundings with airborne mobs.
 		if floortype == "OPEN" or floortype == "WALKABLE" then
+			if floortype == "OPEN" then
+				-- An OPEN node resting on an OPEN
+				-- surface above a FENCE should be
+				-- reset to WALKABLE, as the collision
+				-- box of the FENCE will extend into
+				-- the node above, becoming something
+				-- of a slab.
+				pos_2.y = pos_2.y - 1
+				local class_3 = gwp_basic_classify (pos_2)
+				if class_3 == "FENCE" then
+					floortype = "WALKABLE"
+				end
+			end
+
 			floortype = self:gwp_classify_surroundings (pos, floortype)
 		end
 		return floortype
@@ -2566,7 +2702,8 @@ local function airborne_gwp_classify_node (self, context, pos)
 				-- Report impassible nodes
 				-- immediately.
 				if penalties[class] < 0.0 then
-					return class
+					worst = class
+					break
 				-- Otherwise select the worst class possible.
 				elseif worst == "OPEN" or penalty < penalties[class] then
 					penalty = penalties[class]
@@ -2604,7 +2741,8 @@ local function airborne_gwp_classify_for_movement (self, pos)
 				-- Report impassible nodes
 				-- immediately.
 				if penalties[class] < 0.0 then
-					return class
+					worst = class
+					break
 				-- Otherwise select the worst class possible.
 				elseif worst == "OPEN" or penalty < penalties[class] then
 					penalty = penalties[class]
@@ -2627,12 +2765,18 @@ function mob_class:gopath_internal (target, callback_arrived, prioritized,
 	local mob = self
 	if mob.waypoints then
 		local wp_target = mob.waypoints[1]
+		local target_x = floor (target.x + 0.5)
+		local target_y = floor (target.y + 0.5)
+		local target_z = floor (target.z + 0.5)
+		local wp_target_x = wp_target.x - wp_target.x_offset
+		local wp_target_y = wp_target.y - wp_target.y_offset
+		local wp_target_z = wp_target.z - wp_target.x_offset
 
 		-- Attempt to reuse existing paths if possible.
 		if wp_target
-			and floor (wp_target.x + 0.5) == floor (target.x + 0.5)
-			and floor (wp_target.y + 0.5) == floor (target.y + 0.5)
-			and floor (wp_target.z + 0.5) == floor (target.z + 0.5)
+			and manhattan3d (target_x, target_y, target_z,
+						wp_target_x, wp_target_y, wp_target_z)
+				<= (tolerance or 0)
 			and mob.waypoint_age < MAX_STALE_PATH_AGE then
 			return true
 		end
@@ -2642,6 +2786,7 @@ function mob_class:gopath_internal (target, callback_arrived, prioritized,
 	mob.gowp_animation = animation or "walk"
 	mob.pathfinding_context = mob:gwp_initialize ({target}, nil, tolerance)
 	mob.callback_arrived = callback_arrived
+	mob._gwp_did_timeout = false
 
 	-- Cancel navigation if pathing is impossible.
 	if not mob.pathfinding_context then
@@ -2657,7 +2802,6 @@ function mob_class:gopath (target, callback_arrived, prioritised,
 					speed_bonus, animation, tolerance)
 end
 
-local GWP_TIMEOUT_TICKS = 100
 local GWP_TIMEOUT	= 100 / 20
 
 function mob_class:gwp_position_on_path ()
@@ -2673,26 +2817,28 @@ function mob_class:gwp_timeout (dtime)
 		local speed = self.acc_speed or self.movement_speed
 		local expected_speed
 
-		if speed >= 1.0 then
+		if speed >= 20.0 then
 			-- The speed won't be scaled by itself.
 			expected_speed = speed
 		else
-			expected_speed = speed * speed
+			expected_speed = speed * speed * 0.05
 		end
 		local pos = self:gwp_position_on_path ()
 		if previous_pos then
-			local mindist = expected_speed * GWP_TIMEOUT_TICKS * 0.25
+			local mindist = expected_speed * GWP_TIMEOUT * 0.25
 			if mindist > vector.distance (pos, previous_pos) then
 				self.waypoints = nil
 				self:halt_in_tracks ()
+				self._gwp_did_timeout = true
 				return
 			end
 		end
 
 		self._gwp_previous_pos = pos
 		self._gwp_timeout = GWP_TIMEOUT
+	else
+		self._gwp_timeout = math.max (0, timeout)
 	end
-	self._gwp_timeout = math.max (0, timeout)
 end
 
 function mob_class:validate_waypoints (waypoints)
@@ -2731,7 +2877,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:skeleton" then
+				-- if self.name == "mobs_mc:villager" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else
@@ -2750,10 +2896,6 @@ function mob_class:next_waypoint (dtime)
 		self:gwp_next_waypoint (dtime)
 		self:gwp_timeout (dtime)
 	end
-end
-
-local function bottom_of_node (node)
-	return vector.new (node.x, floor (node.y + 0.5) - 0.5, node.z)
 end
 
 local function is_door_in_waypoints (mob, door)
@@ -2857,16 +2999,16 @@ end
 local SQRT_HALF = math.sqrt (0.5)
 local COS_15_DEG = math.cos (math.rad (15))
 
-function mob_class:gwp_skip_waypoint (self_pos, next_wp_surface, ahead_surface)
-	local dist_to_next_wp = vector.distance (next_wp_surface, self_pos)
+function mob_class:gwp_skip_waypoint (self_pos, next_wp, ahead)
+	local dist_to_next_wp = vector.distance (next_wp, self_pos)
 
 	if dist_to_next_wp < 2.0 then
-		local dist_to_ahead = vector.distance (ahead_surface, self_pos)
+		local dist_to_ahead = vector.distance (ahead, self_pos)
 
 		-- Does the current position fall between the target
 		-- waypoint and the waypoint ahead of it?
-		local dir = vector.direction (self_pos, ahead_surface)
-		local dir1 = vector.direction (self_pos, next_wp_surface)
+		local dir = vector.direction (self_pos, ahead)
+		local dir1 = vector.direction (self_pos, next_wp)
 		local dot = vector.dot (dir, dir1)
 
 		-- Is it safe to pass directly onto the next waypoint?
@@ -2878,18 +3020,21 @@ function mob_class:gwp_skip_waypoint (self_pos, next_wp_surface, ahead_surface)
 			-- the current position to the waypoint ahead
 			-- approximately identical to that from the
 			-- target waypoint behind to the current?
-			local dx_to_ahead = ahead_surface.x - self_pos.x
-			local dz_to_ahead = ahead_surface.z - self_pos.z
+			local dx_to_ahead = ahead.x - self_pos.x
+			local dz_to_ahead = ahead.z - self_pos.z
 			local dir_to_ahead
 				= vector.new (dx_to_ahead, 0, dz_to_ahead)
-			local dx_to_self = self_pos.x - next_wp_surface.x
-			local dz_to_self = self_pos.z - next_wp_surface.z
+			local dx_to_self = self_pos.x - next_wp.x
+			local dz_to_self = self_pos.z - next_wp.z
 			local dir_to_self
 				= vector.new (dx_to_self, 0, dz_to_self)
 			dir_to_ahead = vector.normalize (dir_to_ahead)
 			dir_to_self = vector.normalize (dir_to_self)
 
 			local dot = vector.dot (dir_to_ahead, dir_to_self)
+			-- if self.earmarked then
+			-- 	dbg.pp (math.deg (math.acos (dot)))
+			-- end
 			if dot > COS_15_DEG then
 				return true
 			end
@@ -2919,8 +3064,15 @@ function mob_class:gwp_next_waypoint (dtime)
 	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
 	local mindist = girth > 0.75 and girth / 2 or 0.75 - girth / 2
 	local ahead = n_waypoints > 1 and waypoints[#waypoints - 1]
-	local next_wp_surface = bottom_of_node (next_wp)
-	local ahead_surface = ahead and bottom_of_node (ahead)
+
+	-- Be less tolerant on the approach to a door.
+	if self.can_open_doors
+		and (next_wp.class == "DOOR_WOOD_CLOSED"
+		     or next_wp.class == "DOOR_OPEN"
+		     or ahead and (ahead.class == "DOOR_OPEN"
+					or ahead.class == "DOOR_WOOD_CLOSED")) then
+		mindist = math.min (mindist, 0.25)
+	end
 
 	if dist_to_xcenter < mindist
 		and dist_to_zcenter < mindist
@@ -2929,27 +3081,27 @@ function mob_class:gwp_next_waypoint (dtime)
 			x = next_wp.x,
 			y = next_wp.y,
 			z = next_wp.z,
+			x_offset = next_wp.x_offset,
+			y_offset = next_wp.y_offset,
 		}
 		next_wp = ahead
-		next_wp_surface = ahead_surface
 		waypoints[#waypoints] = nil
 		if #waypoints > 1 then
 			ahead = waypoints[#waypoints - 1]
-			ahead_surface = bottom_of_node (ahead)
 		end
 	end
 
 	-- Is this mob already en route to the next waypoint?
 	if #waypoints > 1
-		and self:gwp_skip_waypoint (self_pos, next_wp_surface,
-					    ahead_surface) then
+		and self:gwp_skip_waypoint (self_pos, next_wp, ahead) then
 		self._last_wp = {
 			x = next_wp.x,
 			y = next_wp.y,
 			z = next_wp.z,
+			x_offset = next_wp.x_offset,
+			y_offset = next_wp.y_offset,
 		}
 		next_wp = ahead
-		next_wp_surface = ahead_surface
 		waypoints[#waypoints] = nil
 	end
 
@@ -2958,7 +3110,7 @@ function mob_class:gwp_next_waypoint (dtime)
 			-- Head to the center of the waypoint.
 			self.movement_goal = "go_pos"
 		end
-		self.movement_target = next_wp_surface
+		self.movement_target = next_wp
 		self.movement_velocity = self.gowp_velocity or self.movement_speed
 
 		-- Open doors that are encountered, but remember to
@@ -2995,73 +3147,32 @@ local function standing_in_water (self)
 	return minetest.get_item_group (self.standing_in, "water") ~= 0
 end
 
--- N.B.: also reused for airborne and amphibious mobs.
-local function aquatic_gwp_next_waypoint (self, dtime)
-	local waypoints = self.waypoints
-	if #waypoints < 1 then
-		self:cancel_navigation ()
-		self:halt_in_tracks ()
-		if self.callback_arrived then
-			self:callback_arrived ()
-		end
-		return
-	end
-	local next_wp = waypoints[#waypoints]
-	local self_pos = self.object:get_pos ()
-	local dist_to_xcenter = math.abs (next_wp.x - self_pos.x)
-	local dist_to_ycenter = math.abs (next_wp.y - self_pos.y)
-	local dist_to_zcenter = math.abs (next_wp.z - self_pos.z)
+local function aquatic_gwp_skip_waypoint (self, self_pos, next_wp, ahead)
 	local cbox = self.collisionbox
-	local girth = math.max (cbox[4] - cbox[1], cbox[6] - cbox[3])
-	local mindist = girth > 0.75 and girth / 2 or 0.75 - girth / 2
+	local bottom = {
+		x = self_pos.x,
+		y = self_pos.y + cbox[2],
+		z = self_pos.z,
+	}
+	local ahead_adj = {
+		x = ahead.x,
+		-- Test a position slightly above the
+		-- target position to deal with
+		-- grazing lines of sight.
+		y = ahead.y + (cbox[5] - cbox[2]) / 2,
+		z = ahead.z,
+	}
+	local do_line_of_sight_check
+		= self.swims or self.airborne
+		or (self.amphibious and standing_in_water (self))
 
-	if dist_to_xcenter < mindist
-		and dist_to_zcenter < mindist
-		and dist_to_ycenter < 1.0 then
-		waypoints[#waypoints] = nil
-	else
-		-- Is this mob already en route to the next waypoint?
-		-- Alternatively, is there a line of sight between
-		-- this and the next waypoint?
-		if #waypoints > 1 then
-			local ahead = waypoints[#waypoints - 1]
-			local cbox = self.collisionbox
-			local bottom = {
-				x = self_pos.x,
-				y = self_pos.y + cbox[2],
-				z = self_pos.z,
-			}
-			local ahead_adj = {
-				x = ahead.x,
-				-- Test a position slightly above the
-				-- target position to deal with
-				-- grazing lines of sight.
-				y = ahead.y + (cbox[5] - cbox[2]) / 2,
-				z = ahead.z,
-			}
-			local do_line_of_sight_check
-				= self.swims or self.airborne
-				or (self.amphibious and standing_in_water (self))
-
-			if do_line_of_sight_check
-				and self:line_of_sight (bottom, ahead_adj, obstruction_is_water) then
-				next_wp = ahead
-				waypoints[#waypoints] = nil
-			else
-				local dir = vector.direction (self_pos, ahead)
-				local dir1 = vector.direction (self_pos, next_wp)
-				if vector.dot (dir, dir1) < 0 then
-					next_wp = ahead
-					waypoints[#waypoints] = nil
-				end
-			end
-		end
-
-		-- Head to the center of the waypoint.
-		self.movement_goal = "go_pos"
-		self.movement_target = next_wp
-		self.movement_velocity = self.gowp_velocity or self.movement_speed
+	if do_line_of_sight_check
+		and self:line_of_sight (bottom, ahead_adj,
+					obstruction_is_water) then
+		return true
 	end
+
+	return mob_class.gwp_skip_waypoint (self, self_pos, next_wp, ahead)
 end
 
 function mob_class:gwp_configure_aquatic_mob ()
@@ -3071,7 +3182,7 @@ function mob_class:gwp_configure_aquatic_mob ()
 	self.gwp_classify_node = waterbound_gwp_classify_node
 	self.gwp_classify_for_movement
 		= waterbound_gwp_classify_for_movement
-	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
+	self.gwp_skip_waypoint = aquatic_gwp_skip_waypoint
 	local new_penalties = table.copy (mob_class.gwp_penalties)
 	new_penalties.WATER = 0.0
 	self.gwp_penalties = new_penalties
@@ -3084,13 +3195,13 @@ function mob_class:gwp_configure_airborne_mob ()
 	self.gwp_classify_node = airborne_gwp_classify_node
 	self.gwp_classify_for_movement
 		= airborne_gwp_classify_for_movement
-	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
+	self.gwp_skip_waypoint = aquatic_gwp_skip_waypoint
 end
 
 function mob_class:gwp_configure_amphibious_mob ()
 	self.gwp_edges = amphibious_gwp_edges
 	self.gwp_start = amphibious_gwp_start
-	self.gwp_next_waypoint = aquatic_gwp_next_waypoint
+	self.gwp_skip_waypoint = aquatic_gwp_skip_waypoint
 	local new_penalties = table.copy (mob_class.gwp_penalties)
 	new_penalties.WATER = 0.0
 	self.gwp_penalties = new_penalties

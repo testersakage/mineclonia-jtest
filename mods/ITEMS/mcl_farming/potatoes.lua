@@ -108,6 +108,7 @@ minetest.register_craftitem("mcl_farming:potato_item", {
 	groups = {food = 2, eatable = 1, compostability = 65, smoker_cookable = 1, campfire_cookable = 1},
 	_mcl_saturation = 0.6,
 	_mcl_cooking_output = "mcl_farming:potato_item_baked",
+	_mcl_places_plant = "mcl_farming:potato_1",
 	on_secondary_use = minetest.item_eat(1),
 	on_place = function(itemstack, placer, pointed_thing)
 		local new = mcl_farming:place_seed(itemstack, placer, pointed_thing, "mcl_farming:potato_1")

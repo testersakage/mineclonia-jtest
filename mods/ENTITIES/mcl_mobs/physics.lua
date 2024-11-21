@@ -69,9 +69,6 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 	if (self.child and self.type ~= "monster") then
 		return
 	end
-	if not mcl_reason then
-	    mcl_reason = self._death_reason
-	end
 
 	local obj, item
 	local pos = self.object:get_pos()
@@ -145,26 +142,24 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 end
 
 -- collision function borrowed amended from jordan4ibanez open_ai mod
-function mob_class:collision()
+function mob_class:collision ()
 	local pos = self.object:get_pos()
 	local attach = self.object:get_attach ()
 
-	if not pos or attach then
+	if not self.pushable or not pos or attach then
 		return 0, 0
 	end
 	local x = 0
 	local z = 0
 	local cbox = self.collisionbox
 	local width = -cbox[1] + cbox[4]
-	local pushable = self.pushable
-	local mob_pushable = self.mob_pushable
-	for _,object in pairs(minetest.get_objects_inside_radius(pos, width)) do
+	for object in minetest.objects_inside_radius (pos, width) do
 		local ent = object:get_luaentity()
 		local is_player = object:is_player ()
 		-- Sleeping players shouldn't ever be pushed around.
-		if (pushable and is_player and object:get_attach () ~= self.object
+		if (is_player and object:get_attach () ~= self.object
 			and not mcl_beds.player[object:get_player_name ()])
-			or (mob_pushable and ent and ent.is_mob
+			or (ent and ent.is_mob
 			    and object ~= self.object
 			    and object ~= self._jockey_rider) then
 			local pos2 = object:get_pos()
@@ -211,7 +206,7 @@ function mob_class:get_velocity()
 end
 
 -- check if mob is dead or only hurt
-function mob_class:check_for_death (cause, mcl_reason)
+function mob_class:check_for_death (mcl_reason)
 	if self.dead then
 		self:jockey_death ()
 		return true
@@ -249,7 +244,7 @@ function mob_class:check_for_death (cause, mcl_reason)
 	-- execute custom death function
 	if self.on_die then
 		local pos = self.object:get_pos()
-		local on_die_exit = self.on_die (self, pos, mcl_reason)
+		local on_die_exit = self:on_die (pos, mcl_reason)
 		if on_die_exit == true then
 			self.dead = true
 			self:safe_remove()
@@ -632,10 +627,8 @@ function mob_class:damage_mob(reason, damage)
 		mcl_damage.finish_reason(mcl_reason)
 		mcl_util.deal_damage(self.object, damage, mcl_reason)
 		mcl_mobs.effect(self.object:get_pos(), 5, "mcl_particles_smoke.png", 1, 2, 2, nil)
-		if self:check_for_death (reason, mcl_reason) then
-			return true
-		end
 	end
+	return self.dead
 end
 
 function mob_class:check_entity_cramming()
@@ -731,8 +724,7 @@ function mob_class:check_water_flow ()
 end
 
 function mob_class:check_dying ()
-	if (self.dead or self:check_for_death (nil, nil))
-		and not self.animation.die_end then
+	if self.dead and not self.animation.die_end then
 		if self.object then
 			local rot = self.object:get_rotation()
 			rot.z = ((math.pi/2-rot.z)*.2)+rot.z
@@ -915,7 +907,7 @@ end
 
 function mob_class:check_collision ()
 	-- can mob be pushed, if so calculate direction
-	if self.pushable or self.mob_pushable then
+	if self.pushable then
 		local c_x, c_y = self:collision ()
 		self.object:add_velocity ({x = c_x, y = 0, z = c_y})
 	end

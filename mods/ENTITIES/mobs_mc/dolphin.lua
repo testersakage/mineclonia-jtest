@@ -38,14 +38,15 @@ local dolphin = {
 	},
 	animation = {
 		stand_start = 0, stand_end = 15, stand_speed = 20,
-		walk_start = 0, walk_end = 15, walk_speed = 60,
-		run_start = 0, run_end = 15, run_speed = 60,
-		},
-		drops = {
-			{name = "mcl_fishing:fish_raw",
+		walk_start = 0, walk_end = 15, walk_speed = 20,
+	},
+	drops = {
+		{
+			name = "mcl_fishing:fish_raw",
 			chance = 1,
 			min = 0,
-			max = 1,},
+			max = 1,
+		},
 	},
 	runaway_from = {
 		"mobs_mc:guardian",
@@ -59,7 +60,6 @@ local dolphin = {
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	idle_gravity_in_liquids = true,
 	view_range = 16,
-	fear_height = 4,
 	movement_speed = 24.0,
 	retaliates = true,
 	group_attack = { "mobs_mc:dolphin" },

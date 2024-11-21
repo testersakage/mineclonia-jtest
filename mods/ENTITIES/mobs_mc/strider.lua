@@ -364,7 +364,7 @@ local gwp_ej_scratch = vector.zero ()
 local gwp_basic_classify = mcl_mobs.gwp_basic_classify
 
 function strider:gwp_essay_jump (context, target, parent, floor)
-	-- Striders cannot jump from lava to a normal walkable
+	-- Striders cannot jump from lava onto a normal walkable
 	-- surface.
 
 	local v = gwp_ej_scratch

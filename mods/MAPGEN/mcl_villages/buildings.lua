@@ -584,21 +584,13 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 			-- We only spawn at bed bottoms
 			-- 1 is bottom, 2 is top
 			if bed_group == 1 then
-				local m = minetest.get_meta(bed)
-				m:set_string("bell_pos", minetest.pos_to_string(bell))
-				if m:get_string("villager") == "" then
-					local v = minetest.add_entity(vector.offset(bed, 0, 0.06, 0), "mobs_mc:villager")
-					if v then
-						local l = v:get_luaentity()
-						l._bed = bed
-						l._bell = bell
-						m:set_string("villager", l._id)
-						m:set_string("infotext", S("A villager sleeps here"))
-						for _, callback in pairs(mcl_villages.on_villager_placed) do
-							callback(v, blockseed)
-						end
-					else
-						minetest.log("info", "Could not create a villager!")
+				local v = minetest.add_entity(vector.offset(bed, 0, 0.06, 0), "mobs_mc:villager")
+				if v then
+					local l = v:get_luaentity()
+					l:claim_home (bed)
+					l:claim_bell (bell)
+					for _, callback in pairs(mcl_villages.on_villager_placed) do
+						callback(v, blockseed)
 					end
 				end
 			end
@@ -664,30 +656,22 @@ function mcl_villages.post_process_village(blockseed)
 			if res then
 				mcl_villages.forced_blocks[minetest.pos_to_string(bed_pos)] = minetest.get_us_time()
 			end
-			local m = minetest.get_meta(bed_pos)
-			m:set_string("bell_pos", minetest.pos_to_string(bell))
-			if m:get_string("villager") == "" then
-				local v = minetest.add_entity(vector.offset(bed_pos, 0, 0.06, 0), "mobs_mc:villager")
-				if v then
-					local l = v:get_luaentity()
-					l._bed = bed_pos
-					l._bell = bell
-					m:set_string("villager", l._id)
-					m:set_string("infotext", S("A villager sleeps here"))
+			local v = minetest.add_entity(vector.offset(bed_pos, 0, 0.06, 0), "mobs_mc:villager")
+			if v then
+				local l = v:get_luaentity()
+				l:claim_home (bed_pos)
+				l:claim_bell (bell)
 
-					local job_pos = table.remove(jobs, 1)
-					if job_pos then
-						l:employ(job_pos)
-					end
+				local job_pos = table.remove(jobs, 1)
+				if job_pos then
+					l:claim_poi (job_pos)
+				end
 
-					for _, callback in pairs(mcl_villages.on_villager_placed) do
-						callback(v, blockseed)
-					end
-				else
-					minetest.log("info", "Could not create a villager!")
+				for _, callback in pairs(mcl_villages.on_villager_placed) do
+					callback(v, blockseed)
 				end
 			else
-				minetest.log("info", "bed already owned by " .. m:get_string("villager"))
+				minetest.log("info", "Could not create a villager!")
 			end
 		end
 	end
