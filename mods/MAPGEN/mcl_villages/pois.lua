@@ -691,6 +691,7 @@ mcl_villages.register_poi ("mcl_villages:bed", {
 			or minetest.get_item_group (node.name, "bed") > 0)
 	end,
 	village_center = true,
+	is_home = true,
 })
 
 mcl_villages.register_poi ("mcl_villages:bell", {

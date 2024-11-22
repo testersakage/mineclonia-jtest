@@ -554,17 +554,17 @@ end
 function raid_mob:check_navigate_village (self_pos, dtime)
 	if self._navigating_to_poi then
 		local poi = self._navigating_to_poi
-		local distance = vector.distance (self_pos, poi)
-		local width = self.collisionbox[4] - self.collisionbox[1]
-		local reached = distance < width + 2
+		local state = self:poll_navigation_state (self_pos, dtime)
+		local reached = state == "arrived"
 
-		if reached then
+		if reached and not self._navigating_around_poi then
 			table.insert (self._visited_pois, poi)
 			self._poi_reached = true
 		end
 
-		if self:navigation_finished () then
+		if state ~= "wait" then
 			if self._poi_reached then
+				self._navigating_around_poi = false
 				self._navigating_to_poi = false
 				return false
 			else
@@ -572,15 +572,14 @@ function raid_mob:check_navigate_village (self_pos, dtime)
 				-- this POI.
 				local t1 = select_random_position (self, self_pos, poi)
 				if t1 then
-					self:gopath (t1, false, nil, 1.05, nil, 2)
+					self._navigating_around_poi = true
+					self:session_navigate (t1, 1.05, 1.0, nil, nil, 1, 1)
 				else
+					self._navigating_around_poi = false
 					self._navigating_to_poi = false
 					return false
 				end
 			end
-		elseif not self._poi_reached
-			and self:check_timer ("poi_repath", 1.0) then
-			self:gopath (poi, false, nil, 1.05, nil, 2)
 		end
 
 		return true
@@ -593,8 +592,9 @@ function raid_mob:check_navigate_village (self_pos, dtime)
 		if not poi then
 			return false
 		end
+		self._navigating_around_poi = false
 		self._navigating_to_poi = poi
-		self:gopath (poi, false, nil, 1.05, nil, 2)
+		self:session_navigate (poi, 1.05, 1.0, nil, nil, 1, 1)
 		return "_navigating_to_poi"
 	end
 end
