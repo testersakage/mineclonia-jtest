@@ -34,7 +34,8 @@ mcl_trees.register_wood("bamboo",{
 		description = S("Block of Bamboo"),
 		_doc_items_longdesc = block_doc,
 		groups = block_groups,
-		tiles = {"mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo_bottom.png","mcl_bamboo_bamboo_block.png" }
+		tiles = {"mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo_bottom.png","mcl_bamboo_bamboo_block.png" },
+		_mcl_cooking_output = false,
 	},
 	stripped = {
 		description = S("Block of Stripped Bamboo"),
