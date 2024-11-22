@@ -981,7 +981,6 @@ function mob_class:check_attack (self_pos, dtime)
 		end
 	else
 		local target_pos
-		local mover = self:mob_controlling_movement ()
 		if not self.attack:is_valid () then
 			self.attack = nil
 			self:attack_end ()
