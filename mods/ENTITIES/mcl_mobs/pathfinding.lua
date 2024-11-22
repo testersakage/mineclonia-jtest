@@ -2877,7 +2877,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:villager" then
+				-- if self.name == "mobs_mc:vindicator" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else
@@ -2977,22 +2977,30 @@ function mob_class:gwp_close_memorized_doors ()
 	self.doors_to_close = remaining
 end
 
+function mob_class:gwp_memorize_door (door_node)
+	if not self.doors_to_close then
+		self.doors_to_close = { door_node, }
+	else
+		table.insert (self.doors_to_close, door_node)
+	end
+end
+
+function mob_class:gwp_open_door (door_node, node)
+	local def = minetest.registered_nodes[node.name]
+	-- Copy this position, lest it be modified by
+	-- the right click handler.
+	def.on_rightclick (door_node, node, self)
+end
+
 function mob_class:gwp_open_and_memorize_door (door)
 	local node = minetest.get_node (door)
 	if minetest.get_item_group (node.name, "door") ~= 0
 		and minetest.get_item_group (node.name, "iron_door") == 0 then
 		local door_node = vector.copy (door)
 		if not mcl_doors.is_open (door) then
-			local def = minetest.registered_nodes[node.name]
-			-- Copy this position, lest it be modified by
-			-- the right click handler.
-			def.on_rightclick (door_node, node, self)
+			self:gwp_open_door (door_node, node)
 		end
-		if not self.doors_to_close then
-			self.doors_to_close = { door_node, }
-		else
-			table.insert (self.doors_to_close, door_node)
-		end
+		self:gwp_memorize_door (door_node)
 	end
 end
 

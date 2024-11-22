@@ -984,7 +984,6 @@ function mob_class:check_attack (self_pos, dtime)
 		local mover = self:mob_controlling_movement ()
 		if not self.attack:is_valid () then
 			self.attack = nil
-			mover:set_animation ("stand")
 			self:attack_end ()
 			return true
 		end
@@ -992,7 +991,6 @@ function mob_class:check_attack (self_pos, dtime)
 		-- target, abandon it immediately.
 		if not self:should_continue_to_attack (self.attack) then
 			self.attack = nil
-			mover:set_animation ("stand")
 			self:attack_end ()
 			return true
 		end
@@ -1000,7 +998,6 @@ function mob_class:check_attack (self_pos, dtime)
 		local distance = vector.distance (self_pos, target_pos)
 		if distance > self.tracking_distance then
 			self.attack = nil
-			mover:set_animation ("stand")
 			self:attack_end ()
 			return true
 		end
@@ -1011,7 +1008,6 @@ function mob_class:check_attack (self_pos, dtime)
 
 			if t < 0 then
 				self.attack = nil
-				mover:set_animation ("stand")
 				self:attack_end ()
 				return true
 			end
