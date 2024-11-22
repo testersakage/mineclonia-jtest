@@ -677,7 +677,8 @@ local RETRY_INTERVAL_BASE = 1.0
 local MINIMUM_REPATH_INTERVAL = 0.5
 local MAX_RETRIES = 5
 
-function mob_class:session_navigate (destination, bonus, tolerance, repath_interval, repath_min)
+function mob_class:session_navigate (destination, bonus, tolerance, repath_interval, repath_min,
+					max_retries, max_frustration)
 	local mob = self:mob_controlling_movement ()
 	local dest = mcl_util.get_nodepos (destination)
 	mob._navigation_session = {
@@ -691,6 +692,10 @@ function mob_class:session_navigate (destination, bonus, tolerance, repath_inter
 		tolerance = tolerance or 0,
 		total_time = 0,
 		was_partial = false,
+		last_partial = nil,
+		partial_check = 0,
+		max_retries = max_retries or MAX_RETRIES,
+		max_frustration = max_frustration,
 	}
 	mob:gopath_internal (dest, nil, false, bonus, nil, tolerance)
 end
@@ -781,10 +786,11 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 	end
 
 	-- A path was just requested.  If no path now exists, this
-	-- navigation should be considered to have failed.
+	-- navigation should be considered to have failed; likewise
+	-- if the terminus of this path.
 	local path_requested = session.path_requested
 	if path_requested and not mob.waypoints then
-		if path_requested >= MAX_RETRIES then
+		if path_requested >= session.max_retries then
 			return "failed"
 		end
 
@@ -816,6 +822,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 					destination
 						= self:gwp_align_start_pos (new_target)
 					session.destination = destination
+					session.last_partial = nil
 				end
 				mob:gopath_internal (destination, nil, false, bonus,
 							nil, tolerance)
@@ -837,6 +844,21 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 		local new_target = new_target
 			and get_new_target (self, destination, new_target)
 		local last_wp = self._last_wp
+		local terminus = mob.waypoints[1]
+
+		-- Check for frustration...  If the destination is
+		-- identical to the previous partial position,
+		-- increment the frustration counter.
+		if session.max_frustration and session.last_partial
+			and vector.equals (terminus, session.last_partial) then
+			local count = session.partial_check + 1
+			session.partial_check = count
+			session.last_partial = nil
+
+			if count >= session.max_frustration then
+				return "failure"
+			end
+		end
 
 		-- mob.waypoints.target is set if the path is
 		-- complete.
@@ -850,6 +872,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 			if new_target then
 				destination = new_target
 				session.destination = new_target
+				session.last_partial = nil
 			end
 			mob:gopath_internal (destination, nil, false, bonus,
 						nil, tolerance)
@@ -869,6 +892,12 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 			destination
 				= self:gwp_align_start_pos (new_target)
 			session.destination = destination
+			session.last_partial = nil
+		else
+			-- Remember the position of the waypoint just
+			-- passed.  If another partial path is created
+			-- to the same position, indicate failure.
+			session.last_partial = self._last_wp
 		end
 		mob:gopath_internal (destination, nil, false, bonus, nil, tolerance)
 		return "wait"

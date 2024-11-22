@@ -74,6 +74,7 @@ local evoker = table.merge (illager, {
 	specific_attack = {
 		"player",
 		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
 		"mobs_mc:iron_golem",
 	},
 	attack_type = "null",
