@@ -32,7 +32,9 @@ local dolphin = {
 	visual = "mesh",
 	mesh = "extra_mobs_dolphin.b3d",
 	textures = {
-		{"extra_mobs_dolphin.png"}
+		{
+			"extra_mobs_dolphin.png",
+		},
 	},
 	sounds = {
 	},
@@ -66,19 +68,28 @@ local dolphin = {
 	reach = 2,
 	damage = 2.5,
 	attack_type = "melee",
-	on_rightclick = function(self, clicker)
-		local wi = clicker:get_wielded_item()
-		if table.indexof(food_items, wi:get_name()) ~= -1 then
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
-				wi:take_item()
-				clicker:set_wielded_item(wi)
-			end
-			-- TODO: bone meal particles.
-			self._fed = true
-		end
-	end,
 	_moisture = 120,
 }
+
+------------------------------------------------------------------------
+-- Dolphin interaction.
+------------------------------------------------------------------------
+
+function dolphin:on_rightclick (clicker)
+	local wi = clicker:get_wielded_item()
+	if table.indexof(food_items, wi:get_name()) ~= -1 then
+		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			wi:take_item()
+			clicker:set_wielded_item(wi)
+		end
+		-- TODO: bone meal particles.
+		self._fed = true
+	end
+end
+
+------------------------------------------------------------------------
+-- Dolphin AI.
+------------------------------------------------------------------------
 
 function dolphin:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
@@ -556,7 +567,11 @@ dolphin.ai_functions = {
 
 mcl_mobs.register_mob ("mobs_mc:dolphin", dolphin)
 
-mcl_mobs.spawn_setup({
+------------------------------------------------------------------------
+-- Dolphin spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.spawn_setup ({
 	name = "mobs_mc:dolphin",
 	type_of_spawning = "water",
 	dimension = "overworld",

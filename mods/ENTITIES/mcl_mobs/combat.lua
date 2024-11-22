@@ -1168,7 +1168,7 @@ function mob_class:drop_wielditem (bonus)
 			and math.random () <= probability + bonus then
 			mcl_util.drop_item_stack (self_pos, ItemStack (self._wielditem))
 		end
-		self._wielditem = nil
+		self:set_wielditem (ItemStack ())
 	end
 end
 
