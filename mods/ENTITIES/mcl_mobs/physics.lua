@@ -872,8 +872,7 @@ local function horiz_collision (moveresult)
 			return true
 		end
 	end
-
-	return moveresult.collides and not (moveresult.standing_on_object or moveresult.touching_ground)
+	return false
 end
 
 mcl_mobs.horiz_collision = horiz_collision
