@@ -413,7 +413,7 @@ function mcl_trees.register_wood(name, p)
 			is_ground_content = false,
 			_mcl_stripped_variant = (p.stripped_bark == nil or type(p.stripped_bark) == "table") and "mcl_trees:bark_stripped_"..name,
 		}, p.bark or {})
-		def.description = def.description or D(rname .. " Bark")
+		def.description = def.description or D(rname .. " Wood")
 		minetest.register_node(":mcl_trees:bark_"..name,def)
 		minetest.register_craft({
 			output = "mcl_trees:bark_"..name.." 3",
