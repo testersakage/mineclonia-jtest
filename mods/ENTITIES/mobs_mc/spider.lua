@@ -157,7 +157,8 @@ function spider:navigation_step (dtime, moveresult)
 			local dz = self_pos.z - dest.z
 			local bb_width = (self.collisionbox[4] - self.collisionbox[1]) / 2
 			local dist_xz = math.sqrt (dx * dx + dz * dz)
-			if (self_pos.y <= dest.y or dist_xz > bb_width) then
+			if ((self_pos.y <= dest.y and dist_xz > bb_width / 2)
+				or dist_xz > bb_width) then
 				self.movement_goal = "go_pos"
 				self.movement_target = dest
 				self.movement_velocity
