@@ -74,7 +74,7 @@ local villager_base = {
 
 function villager_base:wielditem_transform (info, stack)
 	local rot, pos, size
-		= mcl_mobs.mob_class.wielditem_transform (self, info, stack)
+		= mob_class.wielditem_transform (self, info, stack)
 	size.x = size.x / 1.5
 	size.y = size.y / 1.5
 	return rot, pos, size
