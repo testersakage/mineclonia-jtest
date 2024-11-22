@@ -74,6 +74,7 @@ local function func_or_it(item)
 end
 
 function mobs_mc.villager_mob:init_trades(trade_tiers)
+	if not mobs_mc.professions[self._profession] then return end
 	if not trade_tiers then
 		local profession = mobs_mc.professions[self._profession]
 		trade_tiers = profession.trades

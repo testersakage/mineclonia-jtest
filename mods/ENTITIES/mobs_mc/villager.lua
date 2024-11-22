@@ -72,6 +72,7 @@ function mobs_mc.villager_mob:on_pick_up(itementity)
 end
 
 function mobs_mc.villager_mob:on_rightclick(clicker)
+	if not mobs_mc.professions[self._profession] then return end
 	if self.child or self._profession == "unemployed" or self._profession == "nitwit" then
 		self.order = nil
 		return

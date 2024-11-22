@@ -31,12 +31,15 @@ function mobs_mc.villager_mob:stand_still()
 end
 
 function mobs_mc.villager_mob:get_badge_textures()
-	local t = mobs_mc.professions[self._profession].texture
-	if self._profession == "unemployed"	then
-		t = mobs_mc.professions[self._profession].textures -- ideally both scenarios should be textures with a list containing 1 or multiple
+	local pdef = mobs_mc.professions[self._profession]
+	local t
+	if self._profession == "unemployed" or not pdef or not pdef.texture then
+		return mobs_mc.professions["unemployed"].textures -- ideally both scenarios should be textures with a list containing 1 or multiple
+	else
+		t = pdef.texture
 	end
 
-	if self._profession == "unemployed" or self._profession == "nitwit" then return t end
+	if self._profession == "nitwit" then return t end
 	local tier = self._max_trade_tier or 1
 	return {
 		t .. "^" .. badges[tier]
