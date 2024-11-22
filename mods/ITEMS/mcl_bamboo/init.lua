@@ -11,7 +11,10 @@ mcl_util.generate_on_place_plant_function(function(pos)
 	return minetest.get_item_group(node_below.name, "soil_bamboo") > 0
 end)
 
-local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
+-- Historically mcla provided non canonical bamboo bark blocks.
+-- These have been replaced by aliases, but for the time being can be reenabled
+-- (instead of the aliases) by setting `extra_nodes` to true.
+local extra_nodes = false
 
 local block_doc = S("A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.")
 
@@ -84,3 +87,14 @@ minetest.register_abm({
 		mcl_bamboo.grow(pos)
 	end,
 })
+
+if not extra_nodes then
+	minetest.register_alias("mcl_trees:bark_bamboo", "mcl_trees:tree_bamboo")
+	minetest.register_alias("mcl_trees:bark_stripped_bamboo", "mcl_trees:stripped_bamboo")
+	minetest.register_alias("mcl_stairs:slab_bamboo_bark", "mcl_stairs:slab_bamboo")
+	minetest.register_alias("mcl_stairs:slab_bamboo_bark_double", "mcl_stairs:slab_bamboo_double")
+	minetest.register_alias("mcl_stairs:slab_bamboo_bark_top", "mcl_stairs:slab_bamboo_top")
+	minetest.register_alias("mcl_stairs:stair_bamboo_bark", "mcl_stairs:stair_bamboo")
+	minetest.register_alias("mcl_stairs:stair_bamboo_bark_inner", "mcl_stairs:stair_bamboo_inner")
+	minetest.register_alias("mcl_stairs:stair_bamboo_bark_outer", "mcl_stairs:stair_bamboo_outer")
+end
