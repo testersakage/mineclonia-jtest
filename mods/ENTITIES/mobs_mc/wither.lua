@@ -1,5 +1,99 @@
 local S = minetest.get_translator("mobs_mc")
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
+local mob_class = mcl_mobs.mob_class
+
+------------------------------------------------------------------------
+-- Wither.
+------------------------------------------------------------------------
+
+local wither_def = {
+	description = S("Wither"),
+	type = "monster",
+	spawn_class = "hostile",
+	hp_max = 500,
+	hp_min = 500,
+	xp_min = 50,
+	xp_max = 50,
+	head_swivel = "head",
+	bone_eye_height = 0.625,
+	armor = {undead = 80, fleshy = 100},
+	collisionbox = {-0.45, -0.01, -0.45, 0.45, 3.49, 0.45},
+	doll_size_override = { x = 1.2, y = 1.2 },
+	visual = "mesh",
+	mesh = "mobs_mc_wither.b3d",
+	textures = {
+		{
+			"mobs_mc_wither_invulnerable.png",
+			"mobs_mc_wither_armor.png",
+		},
+	},
+	visual_size = {x=4, y=4},
+	movement_speed = 5.0,
+	airborne_speed = 5.0,
+	_airborne_agile = true,
+	sounds = {
+		shoot_attack = "mobs_fireball",
+		distance = 60,
+	},
+	jump_height = 10,
+	fly = true,
+	makes_footstep_sound = false,
+	can_despawn = false,
+	drops = {
+		{
+			name = "mcl_mobitems:nether_star",
+			chance = 1,
+			min = 1,
+			max = 1,
+		},
+	},
+	_mcl_freeze_damage = 0,
+	lava_damage = 0,
+	fire_damage = 0,
+	attack_type = "null",
+	arrow = "mobs_mc:wither_skull",
+	reach = 5,
+	shoot_offset = 0.3,
+	_projectile_gravity = false,
+	animation = {
+		stand_speed = 12,
+		stand_start = 20, stand_end = 40,
+		charge_speed = 12,
+		charge_start = 40, charge_end = 46,
+		charge_loop = false,
+	},
+	harmed_by_heal = true,
+	is_boss = true,
+	airborne = true,
+	tracking_distance = 64,
+	view_range = 20,
+	player_active_range = 128,
+	gravity_drag = 0.6,
+	fall_damage = 0,
+	slowdown_nodes = {},
+	particlespawners = {
+		{
+			amount = 40,
+			time = 0,
+			minpos = vector.new (-1.0,1.5,-1.0),
+			maxpos = vector.new (1.0,3.4,1.0),
+			minvel = vector.new (-0.05,0.65,-0.05),
+			maxvel = vector.new (0.05,0.60,0.05),
+			minexptime = 1.9,
+			maxexptime = 2.5,
+			minsize = 0.8,
+			maxsize = 1.5,
+			glow = 5,
+			collisiondetection = true,
+			collision_removal = true,
+			texture = "mcl_particles_mob_death.png^[colorize:#000000:255",
+		},
+	},
+}
+
+------------------------------------------------------------------------
+-- Wither mechanics, combat and AI.
+------------------------------------------------------------------------
 
 local WITHER_INIT_BOOM = 7
 local WITHER_DESCENT_BOOM = 7
@@ -29,68 +123,6 @@ local function wither_unstuck (self, xz_exp)
 	end
 end
 
-local wither_def = {
-	description = S("Wither"),
-	type = "monster",
-	spawn_class = "hostile",
-	hp_max = 500,
-	hp_min = 500,
-	xp_min = 50,
-	xp_max = 50,
-	head_swivel = "head",
-	bone_eye_height = 0.625,
-	armor = {undead = 80, fleshy = 100},
-	collisionbox = {-0.45, -0.01, -0.45, 0.45, 3.49, 0.45},
-	doll_size_override = { x = 1.2, y = 1.2 },
-	visual = "mesh",
-	mesh = "mobs_mc_wither.b3d",
-	textures = {
-		{"mobs_mc_wither.png"},
-	},
-	visual_size = {x=4, y=4},
-	movement_speed = 5.0,
-	airborne_speed = 5.0,
-	_airborne_agile = true,
-	sounds = {
-		shoot_attack = "mobs_fireball",
-		distance = 60,
-	},
-	jump_height = 10,
-	fly = true,
-	makes_footstep_sound = false,
-	can_despawn = false,
-	drops = {
-		{name = "mcl_mobitems:nether_star",
-		chance = 1,
-		min = 1,
-		max = 1},
-	},
-	_mcl_freeze_damage = 0,
-	lava_damage = 0,
-	fire_damage = 0,
-	attack_type = "null",
-	arrow = "mobs_mc:wither_skull",
-	reach = 5,
-	shoot_offset = 0.3,
-	_projectile_gravity = false,
-	animation = {
-		stand_speed = 12,
-		stand_start = 20, stand_end = 40,
-		charge_speed = 12,
-		charge_start = 40, charge_end = 46,
-		charge_loop = false,
-	},
-	harmed_by_heal = true,
-	is_boss = true,
-	airborne = true,
-	tracking_distance = 64,
-	view_range = 20,
-	player_active_range = 128,
-	gravity_drag = 0.6,
-	fall_damage = 0,
-	slowdown_nodes = {},
-}
-
 local function wither_register_damage (self)
 	local ws = self._wither_state
 	local health = self.health
@@ -113,22 +145,20 @@ local function wither_register_damage (self)
 	end
 end
 
-function wither_def:do_punch (hitter, tflp, tool_capabilities, dir) ---@diagnostic disable-line: unused-local
-	if self._spawning or hitter == self.object then return false end
-	wither_register_damage (self)
-	return true
-end
-
-function wither_def:deal_damage (damage, mcl_reason)
-	if self._spawning then return end
+function wither_def:receive_damage (mcl_reason, damage)
+	if self._spawning then
+		return false
+	end
 	if mcl_reason.direct then
 		local ent = mcl_reason.direct:get_luaentity ()
 		if ent and self._arrow_resistant and ent._is_arrow then
 			return false
 		end
 	end
-	self.health = self.health - damage
-	wither_register_damage (self)
+	if mob_class.receive_damage (self, mcl_reason, damage) then
+		wither_register_damage (self)
+		return true
+	end
 end
 
 function wither_def:on_spawn ()
@@ -300,7 +330,7 @@ function wither_def:do_custom (dtime, moveresult)
 		self._spawning = self._spawning - dtime
 		local bardef = {
 			color = "dark_purple",
-			text = "Wither spawning",
+			text = S ("Wither"),
 			percentage = math.floor((self._spw_max - self._spawning) / self._spw_max * 100),
 		}
 
@@ -311,12 +341,13 @@ function wither_def:do_custom (dtime, moveresult)
 				mcl_bossbars.add_bar(player, bardef, true, d)
 			end
 		end
-		self:set_yaw (self._spawning*10)
+		self:set_yaw (self._spawning * math.pi * 5)
 		self:rotate_step (dtime)
 
-		local factor = math.floor((math.sin(self._spawning*10)+1.5) * 85)
-		local str = minetest.colorspec_to_colorstring({r=factor, g=factor, b=factor})
-		self.object:set_texture_mod("^[brighten^[multiply:"..str)
+		local value = (self._spawning / self._spw_max)
+		self.object:set_texture_mod (table.concat ({
+			"^[colorize:#ffffff:", 128 + math.floor (value * 128),
+		}))
 
 		local v = self.object:get_velocity ()
 		v.y = v.y * 0.6
@@ -328,7 +359,7 @@ function wither_def:do_custom (dtime, moveresult)
 			else
 				self:safe_boom (pos, WITHER_INIT_BOOM, true)
 			end
-			self.object:set_texture_mod("")
+			self.object:set_texture_mod ("")
 			self._spawning = nil
 			self._spw_max = nil
 
@@ -361,10 +392,16 @@ function wither_def:do_custom (dtime, moveresult)
 	end
 
 	if self._wither_state.phase == 1 then
-		self.base_texture = {"mobs_mc_wither_half_health.png"}
+		self.base_texture = {
+			"mobs_mc_wither.png",
+			"mobs_mc_wither_armor.png",
+		}
 		self._arrow_resistant = true
 	else
-		self.base_texture = {"mobs_mc_wither.png"}
+		self.base_texture = {
+			"mobs_mc_wither.png",
+			"blank.png",
+		}
 		self._arrow_resistant = false
 	end
 
@@ -788,10 +825,23 @@ function wither_def:run_ai (dtime, moveresult)
 	end
 end
 
-mcl_mobs.register_mob("mobs_mc:wither", wither_def)
+mcl_mobs.register_mob ("mobs_mc:wither", wither_def)
 
-local wither_rose_soil = { "group:grass_block", "mcl_core:dirt", "mcl_core:coarse_dirt", "mcl_nether:netherrack", "group:soul_block", "mcl_mud:mud", "mcl_lush_caves:moss" }
-local function spawn_wither_rose(obj)
+------------------------------------------------------------------------
+-- Wither Skull.
+------------------------------------------------------------------------
+
+local wither_rose_soil = {
+	"group:grass_block",
+	"mcl_core:dirt",
+	"mcl_core:coarse_dirt",
+	"mcl_nether:netherrack",
+	"group:soul_block",
+	"mcl_mud:mud",
+	"mcl_lush_caves:moss",
+}
+
+local function spawn_wither_rose (obj)
 	local n = minetest.find_node_near(obj:get_pos(),2,wither_rose_soil)
 	if n then
 		local p = vector.offset(n,0,1,0)
@@ -803,7 +853,7 @@ local function spawn_wither_rose(obj)
 	end
 end
 
-skull_def = {
+local skull_def = {
 	visual = "cube",
 	visual_size = {x = 0.35, y = 0.35},
 	textures = {
