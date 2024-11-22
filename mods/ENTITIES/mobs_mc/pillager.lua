@@ -30,6 +30,14 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	specific_attack = {
 		"mobs_mc:iron_golem",
 		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
+	},
+	group_attack = {
+		"mobs_mc:evoker",
+		"mobs_mc:vindicator",
+		"mobs_mc:pillager",
+		"mobs_mc:illusioner",
+		"mobs_mc:witch",
 	},
 	sounds = {
 		random = "mobs_mc_pillager_grunt2",
@@ -63,7 +71,7 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 		run_end = 39,
 		run_speed = 25,
 	},
-	can_wield_items = true,
+	can_wield_items = "no_pickup",
 	wielditem_drop_probability = 0.085,
 	wielditem_info = {
 		toollike_position = vector.new (1.3, 1.8, -0.1),
@@ -230,8 +238,8 @@ end
 
 pillager.ai_functions = {
 	illager.check_recover_banner,
-	illager.check_pathfind_to_raid,
 	mob_class.check_attack,
+	illager.check_pathfind_to_raid,
 	illager.check_distant_patrol,
 	illager.check_navigate_village,
 	illager.check_celebrate,

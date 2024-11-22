@@ -711,7 +711,7 @@ function posing_humanoid:apply_arm_pose (pose)
 				self.object:set_bone_override (k)
 			end
 		end
-		end
+	end
 end
 
 function posing_humanoid:do_custom (dtime)
@@ -746,7 +746,8 @@ function posing_humanoid:mob_activate (staticdata, dtime)
 	else
 		mob_class.mob_activate (self, staticdata, dtime)
 	end
-	self._arm_pose = nil
+	self._arm_pose = self:select_arm_pose ()
+	self:apply_arm_pose (self._arm_pose)
 end
 
 function mcl_mobs.define_composite_pose (poses, prefix, overrides)
