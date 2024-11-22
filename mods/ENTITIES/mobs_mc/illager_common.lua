@@ -324,6 +324,14 @@ function raid_mob:ai_step (dtime)
 	self._locked_target = target
 end
 
+function raid_mob:retaliate_against (source)
+	local entity = source:get_luaentity ()
+
+	if not entity or not entity._is_raid_mob then
+		mob_class.retaliate_against (self, source)
+	end
+end
+
 function raid_mob:attack_default (self_pos, dtime, esp)
 	if self._locked_target
 		and self._locked_target:is_valid () then
@@ -615,7 +623,10 @@ local illager = table.merge (raid_mob, {
 
 function illager:should_attack (object)
 	local entity = object:get_luaentity ()
-	if entity and entity._is_illager then
+	-- Illagers should never attack other illagers or villager
+	-- children.
+	if entity and (entity.name == "mobs_mc:villager" and entity.child
+				or entity._is_illager) then
 		return false
 	end
 	return mob_class.should_attack (self, object)
