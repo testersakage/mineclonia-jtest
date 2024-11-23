@@ -51,9 +51,10 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			nn = minetest.get_node(np)
 		end
 
+		local def = minetest.registered_nodes[nn.name]
 		if minetest.get_item_group(nn.name, "unmovable_by_piston") == 1
 			or (not inv_nodes_movable and minetest.get_item_group(nn.name, "container") ~= 0)
-			or not minetest.registered_nodes[nn.name] then
+			or not def then
 			return
 		end
 
@@ -65,7 +66,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			-- if we want the node to drop, e.g. sugar cane, do not count towards push limit
 			table.insert(dig_nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 		else
-			if not minetest.registered_nodes[nn.name].buildable_to then
+			if not def.buildable_to then
 				table.insert(nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 				if #nodes > maximum then
 					return
@@ -75,12 +76,12 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 				-- the vectors must be absolute positions
 				local connected= {}
 				local is_connected, offset_node, offset_pos
-				if minetest.registered_nodes[nn.name]._mcl_pistons_sticky then
+				if def._mcl_pistons_sticky then
 					-- when pushing a sticky block, push all applicable blocks with it
 					for _, dir in pairs(sixdirs) do
 						offset_pos = np:add(dir:multiply(-1))
 						offset_node = minetest.get_node(offset_pos)
-						is_connected = minetest.registered_nodes[nn.name]._mcl_pistons_sticky(nn, offset_node, dir)
+						is_connected = def._mcl_pistons_sticky(nn, offset_node, dir)
 
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
 							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0
