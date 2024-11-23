@@ -64,7 +64,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			-- if we want the node to drop, e.g. sugar cane, do not count towards push limit
 			table.insert(dig_nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 		else
-			if not minetest.registered_nodes[nn.name].buildable_to then
+			if minetest.registered_nodes[nn.name] and not minetest.registered_nodes[nn.name].buildable_to then
 				table.insert(nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 				if #nodes > maximum then
 					return
