@@ -73,6 +73,7 @@ local golem = {
 	},
 	pace_bonus = 0.6,
 	_poppy_texture = "blank.png",
+	_melee_esp = true,
 }
 
 ------------------------------------------------------------------------
@@ -103,7 +104,7 @@ local function golem_seek_target (self, self_pos, dtime)
 			local target
 				= self:target_in_direction (self_pos, 16, 7, dir, NINETY_DEG)
 
-			if target and self:gopath (target, false, nil, 0.9) then
+			if target and self:gopath (target, 0.9) then
 				self._seeking_target = true
 				return "_seeking_target"
 			end
@@ -162,7 +163,7 @@ local function golem_seek_village (self, self_pos, dtime)
 			local target = self:target_in_direction (self_pos, 10, 7,
 								 dir, NINETY_DEG)
 			if target then
-				self:gopath (target, nil, false, 0.6)
+				self:gopath (target, 0.6)
 				self._seeking_village = true
 				return "_seeking_village"
 			end

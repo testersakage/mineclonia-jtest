@@ -38,6 +38,7 @@ local spider = {
 	spawn_class = "hostile",
 	passive = false,
 	attack_type = "melee",
+	_melee_esp = true,
 	damage = 2,
 	reach = 2,
 	hp_min = 16,
@@ -110,12 +111,11 @@ local spider = {
 spider.slowdown_nodes = table.copy (mob_class.slowdown_nodes)
 spider.slowdown_nodes["mcl_core:cobweb"] = nil
 
-function spider:gopath_internal (target, callback_arrived, prioritized,
-					speed_bonus, animation, tolerance)
+function spider:gopath_internal (target, speed_bonus, animation, tolerance, penalties)
 	-- Record the destination so that this spider may attempt to
 	-- scale walls obstructing movement to it.
-	local rc = mob_class.gopath_internal (self, target, callback_arrived,
-				prioritized, speed_bonus, animation, tolerance)
+	local rc = mob_class.gopath_internal (self, target, speed_bonus,
+						animation, tolerance, penalties)
 	if rc then
 		self._gopath_destination
 			= mcl_util.get_nodepos (target)
@@ -236,6 +236,8 @@ function spider:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 			or moveresult.standing_on_object then
 			self._leaping = false
 		end
+		-- Trigger a repath after leaping.
+		self._target_pos = nil
 		self._attack_delay = 0
 		return
 	end
@@ -255,7 +257,7 @@ function spider:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		local leap = vector.direction (self_pos, target_pos)
 		local v = self.object:get_velocity ()
 		leap.x = leap.x * 8.0 + v.x * 0.2
-		leap.y = 6.0
+		leap.y = 8.0
 		leap.z = leap.z * 8.0 + v.z * 0.2
 		self:set_yaw (math.atan2 (leap.z, leap.x) - math.pi / 2)
 		self.object:set_velocity (leap)

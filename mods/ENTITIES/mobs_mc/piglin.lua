@@ -1165,7 +1165,7 @@ function piglin:gloat (victim)
 	if not self._gloat_at then
 		self._gloat_at = victim:get_pos ()
 		self._gloat_time = 15
-		self:gopath (self._gloat_at, nil, false, 1.0, nil, 2)
+		self:gopath (self._gloat_at, 1.0, nil, 2)
 		self:replace_activity ("_gloat_at", false)
 	end
 end
@@ -1262,7 +1262,7 @@ local function baby_piglin_mount_baby_hoglin (self, self_pos, dtime)
 			if distance > 1.0
 				and (self:check_timer ("mount_repath", 1.0)
 				     or self:navigation_finished ()) then
-				self:gopath (target_pos, nil, false, 0.8)
+				self:gopath (target_pos, 0.8)
 			elseif distance <= 1.0 then
 				self:jock_to_existing (jock_target, "",
 						       get_attachment_pos (jock_target))
@@ -1293,7 +1293,7 @@ local function baby_piglin_mount_baby_hoglin (self, self_pos, dtime)
 				self._ride_target_mounted = false
 				self._ride_duration = pr:next (10, 30)
 				local target_pos = self._ride_target:get_pos ()
-				self:gopath (target_pos, nil, false, 0.8)
+				self:gopath (target_pos, 0.8)
 				return "_ride_target"
 			end
 		end
@@ -1319,7 +1319,7 @@ local function piglin_interact_with (self, self_pos, dtime)
 			return false
 		end
 		if self:check_timer ("interact_repath", 0.5) then
-			self:gopath (object_pos, nil, false, 0.6, nil, 2)
+			self:gopath (object_pos, 0.6, nil, 2)
 		end
 		return true
 	elseif self.ai_idle_time >= 5
@@ -1328,7 +1328,7 @@ local function piglin_interact_with (self, self_pos, dtime)
 			if object ~= self.object and object:is_valid () then
 				local pos = object:get_pos ()
 				if vector.distance (pos, self_pos) <= 8 then
-					if self:gopath (pos, nil, false, 0.6, nil, 2) then
+					if self:gopath (pos, 0.6, nil, 2) then
 						self._interacting_with = object
 						return "_interacting_with"
 					end
@@ -1386,7 +1386,7 @@ local function piglin_retreat (self, self_pos, dtime)
 		if self:navigation_finished () then
 			local target = self:target_away_from (self_pos, retreat_pos)
 			if target then
-				self:gopath (target, nil, true, 1.3)
+				self:gopath (target, 1.3)
 			end
 		end
 		return true
@@ -1406,7 +1406,7 @@ local function piglin_retreat (self, self_pos, dtime)
 		end
 		local target = self:target_away_from (self_pos, pos)
 		if target then
-			self:gopath (target, nil, true, 1.0)
+			self:gopath (target, 1.0)
 			self._retreating = hoglin
 			return "_retreating"
 		end

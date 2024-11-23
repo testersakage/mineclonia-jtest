@@ -533,8 +533,7 @@ local function wither_strafe_above_target (self, self_pos, dtime)
 		local dest = vector.offset (target_pos, rx, 0, rz)
 		dest.y = self_pos.y
 
-		if self:gopath (dest, nil, false,
-				12 / self.movement_speed) then
+		if self:gopath (dest, 12 / self.movement_speed) then
 			self._wither_strafing = true
 			return true
 		end

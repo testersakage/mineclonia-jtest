@@ -358,11 +358,15 @@ function mob_class:check_head_swivel(dtime, clear)
 			local pt = locked_object:get_pos()
 			pt.y = pt.y + _locked_object_eye_height
 			local dir = vector.direction (ps, pt)
-			local mob_yaw = self_rot.y + math.atan2(dir.x, dir.z) + self.head_yaw_offset
+			local mob_yaw_raw = self_rot.y
+				+ math.atan2 (dir.x, dir.z)
+				+ self.head_yaw_offset
+			local mob_yaw = mcl_util.norm_radians (mob_yaw_raw)
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
 				+ self._head_pitch_offset
 			local out_of_view
-				= (mob_yaw < -self._head_rot_limit or mob_yaw > self._head_rot_limit)
+				= (mob_yaw < -self._head_rot_limit
+				   or mob_yaw > self._head_rot_limit)
 					and not (self.attack and not self.runaway)
 			if self.adjust_head_swivel then
 				mob_yaw, mob_pitch, out_of_view
