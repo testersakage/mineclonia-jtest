@@ -324,7 +324,6 @@ function mob_class:do_runaway ()
 end
 
 function mob_class:call_group_attack(hitter)
-	local name = hitter:get_player_name()
 	for obj in minetest.objects_inside_radius(hitter:get_pos(), self.view_range) do
 		local ent = obj:get_luaentity()
 		if ent then
