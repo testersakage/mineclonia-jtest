@@ -167,7 +167,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
 			local new_pos = obj:get_pos():add(movedir)
 			local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
-			if def and ( def.walkable == nil or def.walkable ) then
+			if def and def.walkable then
 				return
 			end
 
