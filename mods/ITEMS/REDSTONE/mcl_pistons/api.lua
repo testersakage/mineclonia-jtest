@@ -128,8 +128,10 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		-- if current node has already been destroyed (e.g. chain reaction of sugar cane breaking), skip it
 		if minetest.get_node(n.old_pos).name == n.node.name then
 			local def = minetest.registered_nodes[n.node.name]
-			def.on_dig(n.old_pos, n.node) --no need to check if it exists since all nodes have this via metatable (defaulting to minetest.node_dig which will handle drops)
-			minetest.remove_node(n.old_pos)
+			if def then
+				def.on_dig(n.old_pos, n.node) --no need to check if it exists since all nodes have this via metatable (defaulting to minetest.node_dig which will handle drops)
+				minetest.remove_node(n.old_pos)
+			end
 		end
 	end
 
@@ -163,9 +165,9 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
 		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
-
 			local new_pos = obj:get_pos():add(movedir)
-			if minetest.registered_nodes[minetest.get_node(new_pos).name].walkable == nil or minetest.registered_nodes[minetest.get_node(new_pos).name].walkable then
+			local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
+			if def and ( def.walkable == nil or def.walkable ) then
 				return
 			end
 
