@@ -222,7 +222,7 @@ local function ocelot_follow_shyly (self, self_pos, dtime)
 			and self:check_timer ("ocelot_repath", 0.30) then
 			-- check_head_swivel is responsible for
 			-- looking at the target.
-			self:gopath (pos, nil, false, self.follow_bonus)
+			self:gopath (pos, self.follow_bonus)
 			self._pose = "crouching"
 		end
 		return true
@@ -303,7 +303,7 @@ function ocelot:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	end
 
 	if self:check_timer ("ocelot_repath", 0.25) then
-		self:gopath (target_pos, nil, false, movement_factor)
+		self:gopath (target_pos, movement_factor)
 	end
 	if self._attack_cooldown == 0
 		and dist <= reach
@@ -568,7 +568,7 @@ local function cat_sleep_with_owner (self, self_pos, dtime)
 			if not self:bed_occupied (pos) then
 				self._bed = pos
 				self:gopath (vector.offset (pos, 0, 1, 0),
-						nil, true, 1.1, nil, 0)
+						1.1, nil, 0)
 				self._sleeping_with_owner = true
 				return "_sleeping_with_owner"
 			end
@@ -606,7 +606,7 @@ local function cat_sit_on_bed (self, self_pos, dtime)
 			self._target_bed_elapsed = t
 			self._pose = "walk"
 			if self:check_timer ("cat_repath", 2.0) then
-				self:gopath (self._target_bed, nil, false, 0.8)
+				self:gopath (self._target_bed, 0.8)
 			end
 			if t < -60 then
 				self._target_bed = nil
@@ -641,7 +641,7 @@ local function cat_sit_on_bed (self, self_pos, dtime)
 						self._target_bed_real = node
 						self._target_bed = node_above
 						self._target_bed_elapsed = 0
-						self:gopath (node_above, nil, false, 0.8)
+						self:gopath (node_above, 0.8)
 						return "_target_bed"
 					end
 				end
@@ -682,7 +682,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 			self._target_block_elapsed = t
 			self._pose = "walk"
 			if self:check_timer ("cat_repath", 2.0) then
-				self:gopath (self._target_block, nil, false, 0.8)
+				self:gopath (self._target_block, 0.8)
 			end
 			if t < -60 then
 				self._target_block = nil
@@ -727,7 +727,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 						self._target_block_real = node
 						self._target_block = node_above
 						self._target_block_elapsed = 0
-						self:gopath (node_above, nil, false, 0.8)
+						self:gopath (node_above, 0.8)
 						return "_target_block"
 					end
 				end
@@ -905,14 +905,14 @@ function cat:on_rightclick (clicker)
 			self:update_textures ()
 			self:set_textures (self.base_texture)
 			self.order = "sit"
-			if not creative then
-				item:take_item ()
-				clicker:set_wielded_item (item)
-			end
 		else
 			mcl_mobs.effect (vector.offset (self_pos, 0, 0.7, 0),
 					5, "mcl_particles_mob_death.png^[colorize:#000000:255",
 					2, 4, 2.0, 0.1)
+		end
+		if not creative then
+			item:take_item ()
+			clicker:set_wielded_item (item)
 		end
 		-- Feeding cats fish renders them persistent
 		-- independently of taming.

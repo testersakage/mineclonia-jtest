@@ -350,7 +350,7 @@ local function rabbit_grief_garden (self, self_pos, dtime)
 
 		self._griefing_garden = self._griefing_garden + dtime
 		if self:check_timer ("rabbit_repath", 2.0) then
-			self:gopath (target, nil, false, 0.7)
+			self:gopath (target, 0.7)
 		end
 		return true
 	elseif self._grief_time == 0 then
@@ -378,7 +378,7 @@ local function rabbit_grief_garden (self, self_pos, dtime)
 			if rabbit_griefable (node.name) then
 				self._grief_target = carrot
 				self._griefing_garden = 0.0
-				self:gopath (carrot, nil, false, 0.7)
+				self:gopath (carrot, 0.7)
 				return "_griefing_garden"
 			end
 		end

@@ -187,6 +187,11 @@ function horse:enrage ()
 	-- TODO: angry noises.
 end
 
+local SOLID_PACING_GROUPS = {
+	"group:solid",
+	"group:top_snow",
+}
+
 local function horse_maybe_tame (self, self_pos, dtime)
 	local driver = self.driver
 
@@ -223,9 +228,9 @@ local function horse_maybe_tame (self, self_pos, dtime)
 		end
 		return true
 	elseif driver and not self.tamed then
-		local target = self:pacing_target (self_pos, 5, 4, {"group:solid"})
+		local target = self:pacing_target (self_pos, 5, 4, SOLID_PACING_GROUPS)
 		if target then
-			self:gopath (target, nil, false, 1.2)
+			self:gopath (target, 1.2)
 			self._evaluating_handler = true
 			return "_evaluating_handler"
 		end

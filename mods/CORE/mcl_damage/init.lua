@@ -24,6 +24,7 @@ mcl_damage = {
 		wither_skull = {is_magic = true, is_explosion = true},
 		anvil = {},
 		falling_node = {},	-- this is falling_block in MC
+		spit = {is_projectile = true},
 		mob = {},
 		player = {},
 		arrow = {is_projectile = true},

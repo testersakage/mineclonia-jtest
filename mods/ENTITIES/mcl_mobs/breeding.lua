@@ -97,48 +97,15 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 end
 
 function mcl_mobs.spawn_child(pos, mob_type)
-	local child = minetest.add_entity(pos, mob_type)
+	local staticdata = minetest.serialize ({
+		child = true,
+	})
+	local child = minetest.add_entity (pos, mob_type, staticdata)
 	if not child then
 		return
 	end
 
-	local ent = child:get_luaentity()
-	mcl_mobs.effect(pos, 15, "mcl_particles_smoke.png", 1, 2, 2, 15, 5)
-	ent.child = true
-	local textures
-	if ent.child_texture then
-		textures = ent.child_texture[1]
-	end
-
-	ent:set_properties({
-		visual_size = {
-			x = ent.base_size.x * .5,
-			y = ent.base_size.y * .5,
-		},
-		collisionbox = {
-			ent.base_colbox[1] * .5,
-			ent.base_colbox[2] * .5,
-			ent.base_colbox[3] * .5,
-			ent.base_colbox[4] * .5,
-			ent.base_colbox[5] * .5,
-			ent.base_colbox[6] * .5,
-		},
-		selectionbox = {
-			ent.base_selbox[1] * .5,
-			ent.base_selbox[2] * .5,
-			ent.base_selbox[3] * .5,
-			ent.base_selbox[4] * .5,
-			ent.base_selbox[5] * .5,
-			ent.base_selbox[6] * .5,
-		},
-	})
-	if ent.child_texture then
-		ent:set_textures (textures)
-	end
-
-	ent.animation = ent._child_animations
-	ent._current_animation = nil
-	ent:set_animation("stand")
+	mcl_mobs.effect (pos, 15, "mcl_particles_smoke.png", 1, 2, 2, 15, 5)
 	return child
 end
 
@@ -171,10 +138,6 @@ function mob_class:tick_breeding ()
 			self:set_textures (self.base_texture)
 			if self.on_grown then
 				self.on_grown(self)
-			else
-				-- Jump when fully grown so as not to
-				-- fall into the ground.
-				self._jump = true
 			end
 			self.animation = nil
 			local anim = self._current_animation
@@ -286,7 +249,7 @@ function mob_class:check_breeding (pos)
 			self.begetting = true
 			minetest.after (5, mob_class.beget_child, self, pos)
 		end
-		self:gopath (matepos, nil, true, self.breed_bonus)
+		self:gopath (matepos, self.breed_bonus)
 		return true
 	elseif self.horny and self.hornytimer < HORNY_TIME then
 			local ax, ay, az, bx, by, bz
@@ -333,7 +296,7 @@ function mob_class:follow_herd (pos)
 		end
 
 		local target_pos = self.herd_following:get_pos ()
-		if vector.distance (target_pos, pos) < 9
+		if vector.distance (target_pos, pos) < 3.0
 			or self:navigation_finished () then
 			self.herd_following = nil
 			return false
@@ -342,7 +305,7 @@ function mob_class:follow_herd (pos)
 		if self:check_timer ("check_herd", 0.5) then
 			local bonus = self.follow_herd_bonus
 				or self.follow_bonus
-			self:gopath (target_pos, nil, true, bonus)
+			self:gopath (target_pos, bonus)
 		end
 		return true
 	elseif self.child and self:check_timer ("check_herd", 0.5) then
@@ -379,7 +342,7 @@ function mob_class:follow_herd (pos)
 		end
 		local bonus = self.follow_herd_bonus
 			or self.follow_bonus
-		self:gopath (selected:get_pos (), nil, true, bonus)
+		self:gopath (selected:get_pos (), bonus)
 		self.herd_following = selected
 		return "herd_following"
 	end
@@ -453,6 +416,8 @@ function mob_class:sit_if_ordered (self_pos, dtime)
 end
 
 local function teleport_to_owner (self, owner, owner_pos)
+	self:cancel_navigation ()
+	self:halt_in_tracks ()
 	-- Search for a walkable platform from among 10 random
 	-- positions around the owner's position.  Reject leaves
 	-- unless this mob be airborne.
@@ -509,7 +474,10 @@ function mob_class:check_travel_to_owner (self_pos, dtime)
 					return false
 				end
 			else
-				self:gopath (owner_pos)
+				local penalties = table.merge (self.gwp_penalties, {
+					WATER = 0.0,
+				})
+				self:gopath (owner_pos, nil, nil, nil, penalties)
 			end
 		end
 		return true
@@ -530,7 +498,10 @@ function mob_class:check_travel_to_owner (self_pos, dtime)
 				self.traveling_to_owner = true
 				return "traveling_to_owner"
 			elseif distance > self.chase_owner_distance then
-				self:gopath (owner_pos)
+				local penalties = table.merge (self.gwp_penalties, {
+					WATER = 0.0,
+				})
+				self:gopath (owner_pos, nil, nil, nil, penalties)
 				self.traveling_to_owner = true
 				return "traveling_to_owner"
 			end

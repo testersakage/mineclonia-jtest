@@ -86,6 +86,20 @@ function mob_class:retaliate_against (source)
 	end
 end
 
+local function source_is_player_or_tamed_wolf (mcl_reason)
+	local source = mcl_reason.source
+	if source:is_player () then
+		return source:get_player_name ()
+	else
+		local entity = source:get_luaentity ()
+		if entity and entity.name == "mobs_mc:wolf"
+			and entity.tamed then
+			return entity.owner
+		end
+	end
+	return nil
+end
+
 -- Register damage delivered by punches or other means, retaliate, and
 -- summon reinforcements.
 function mob_class:receive_damage (mcl_reason, damage)
@@ -95,6 +109,12 @@ function mob_class:receive_damage (mcl_reason, damage)
 	if not source then
 		self:check_for_death (mcl_reason)
 		return true
+	end
+
+	local name = source_is_player_or_tamed_wolf (mcl_reason)
+	if name then
+		self.last_player_hit_time = minetest.get_gametime ()
+		self.last_player_hit_name = name
 	end
 
 	if source:is_player () and source:get_player_name () == self.owner then
@@ -157,15 +177,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	end
 
 	if is_player then
-		self.last_player_hit_time = minetest.get_gametime()
-		self.last_player_hit_name = hitter_playername
 		-- is mob protected?
 		if self.protected and minetest.is_protected(self.object:get_pos(), hitter_playername) then
 			return
 		end
-
-		-- set/update 'drop xp' timestamp if hit by player
-		self.xp_timestamp = minetest.get_us_time()
 	end
 
 
@@ -323,11 +338,6 @@ function mob_class:call_group_attack(hitter)
 					end
 				end
 			end
-
-			-- have owned mobs attack player threat
-			if ent.owner == name and ent.owner_loyal then
-				ent:do_attack(self.object)
-			end
 		end
 	end
 end
@@ -439,7 +449,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 			self:halt_in_tracks ()
 		end
 		if self:check_timer ("bowshoot_pathfind", 0.5) then
-			self:gopath (target_pos, nil, true, self.pursuit_bonus)
+			self:gopath (target_pos, self.pursuit_bonus)
 		end
 		self._strafe_time = -1
 	end
@@ -619,7 +629,7 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 	local distance = vector.distance (self_pos, target_pos)
 
 	-- If the target is detectable...
-	if (self.esp or line_of_sight)
+	if (self._melee_esp or line_of_sight)
 		-- ...and the navigation timeout has elapsed...
 		and delay == 0
 		-- ..and this mob has yet to arrive at its target, or
@@ -639,8 +649,7 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		end
 
 		-- Try to pathfind.
-		if not self:gopath (target_pos, nil, true,
-					self.pursuit_bonus, nil) then
+		if not self:gopath (target_pos, self.pursuit_bonus) then
 			delay = delay + 0.75
 		end
 	end
@@ -678,6 +687,9 @@ function mob_class:discharge_ranged (self_pos, target_pos)
 			self:shoot_arrow (s, vec)
 		else
 			local arrow = minetest.add_entity (s, self.arrow)
+			if not arrow then
+				return
+			end
 			self.firing = true
 			minetest.after(1, function(self)
 					       self.firing = false
@@ -720,7 +732,7 @@ function mob_class:attack_ranged (self_pos, dtime, target_pos, line_of_sight)
 		self:halt_in_tracks ()
 	else
 		if self:check_timer ("ranged_pathfind", 0.5) then
-			self:gopath (target_pos, nil, false, self.pursuit_bonus)
+			self:gopath (target_pos, self.pursuit_bonus)
 		end
 	end
 	local shoot_time = self._shoot_timer
@@ -828,7 +840,7 @@ function mob_class:attack_crossbow (self_pos, dtime, target_pos, line_of_sight)
 			if self._crossbow_state > 0 then
 				speed = speed * 0.5
 			end
-			self:gopath (target_pos, nil, true, speed)
+			self:gopath (target_pos, speed)
 			self._time_to_next_repath = math.random (2)
 		end
 	else

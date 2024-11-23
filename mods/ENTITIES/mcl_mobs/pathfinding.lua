@@ -194,7 +194,7 @@ function mob_class:gwp_target_pos (context, pos)
 	n.closest_node = nil
 	-- Class and penalty of this node.
 	n.class = self:gwp_classify_node (context, n)
-	n.penalty = self.gwp_penalties[n.class]
+	n.penalty = context.penalties[n.class]
 	return n
 end
 
@@ -259,7 +259,7 @@ function mob_class:gwp_start_1 (context)
 		return pos, false
 	else
 		local class = self:gwp_classify_node (context, pos)
-		if class ~= "OPEN" and self.gwp_penalties[class] >= 0.0 then
+		if class ~= "OPEN" and context.penalties[class] >= 0.0 then
 			return pos, false
 		end
 	end
@@ -267,7 +267,7 @@ function mob_class:gwp_start_1 (context)
 
 	while pos.y > target_y do
 		local class = self:gwp_classify_node (context, pos)
-		if class ~= "OPEN" and self.gwp_penalties[class] >= 0.0 then
+		if class ~= "OPEN" and context.penalties[class] >= 0.0 then
 			return pos, true
 		end
 		pos.y = pos.y - 1
@@ -310,7 +310,7 @@ end
 
 function mob_class:gwp_start_2 (context, cbox, self_pos, criteria)
 	local c1, c2, c3, c4, class, output_pos
-	local penalties = self.gwp_penalties
+	local penalties = context.penalties
 	local pos = self_pos
 	c1 = vector.new (pos.x + cbox[1], pos.y, pos.z + cbox[3])
 	c1 = self:gwp_align_start_pos (c1)
@@ -386,7 +386,7 @@ end
 
 function mob_class:gwp_start (context)
 	local pos, optional = self:gwp_start_1 (context)
-	local penalties = self.gwp_penalties
+	local penalties = context.penalties
 	local cbox = self.collisionbox
 	local start_class = nil
 	if pos then
@@ -462,7 +462,7 @@ function h_to_nearest_target (node, context)
 	return best_distance
 end
 
-function mob_class:gwp_initialize (targets, range, tolerance)
+function mob_class:gwp_initialize (targets, range, tolerance, penalties)
 	local context = self:new_gwp_context ()
 
 	-- Compute pathfinding bounds.
@@ -476,6 +476,7 @@ function mob_class:gwp_initialize (targets, range, tolerance)
 	context.maxpos = vector.new (pos.x + range, pos.y + range,
 				     pos.z + range)
 	context.tolerance = tolerance or context.tolerance
+	context.penalties = penalties or self.gwp_penalties
 
 	-- Establish a limit on the distance of routes and on the
 	-- number of nodes examined.
@@ -746,7 +747,7 @@ local GWP_JUMP_HEIGHT = 1.125
 
 function mob_class:gwp_essay_jump (context, target, parent, floor)
 	local class = self:gwp_classify_node (context, target)
-	local penalty = self.gwp_penalties[class]
+	local penalty = context.penalties[class]
 
 	-- Classify the block above the parent's position, unless
 	-- already classified.
@@ -755,7 +756,7 @@ function mob_class:gwp_essay_jump (context, target, parent, floor)
 		gwp_ej_scratch.y = parent.y + 1
 		gwp_ej_scratch.z = parent.z
 		local jump = self:gwp_classify_node (context, gwp_ej_scratch)
-		local penalty = self.gwp_penalties[jump]
+		local penalty = context.penalties[jump]
 		gwp_parent_penalty = penalty
 	end
 
@@ -796,7 +797,7 @@ function mob_class:gwp_essay_drop (context, node)
 		local class = self:gwp_classify_node (context, target)
 		if class ~= "OPEN" then
 			-- Walkable?
-			local penalty = self.gwp_penalties[class]
+			local penalty = context.penalties[class]
 			if penalty < 0 then
 				return nil
 			end
@@ -834,7 +835,7 @@ function mob_class:gwp_essay_descend_door (context, object)
 				-- object.
 				return object
 			else
-				local penalty = self.gwp_penalties[last_class]
+				local penalty = context.penalties[last_class]
 				if penalty < 0 then
 					return nil
 				end
@@ -863,7 +864,7 @@ function mob_class:gwp_essay_drift (context, target, object)
 			if not last then
 				return nil
 			end
-			local penalty = self.gwp_penalties[last]
+			local penalty = context.penalties[last]
 			if penalty < 0 then
 				return nil
 			end
@@ -897,7 +898,7 @@ local function gwp_edges_1 (self, context, parent, floor, xoff, zoff, jump, amph
 		return nil
 	else
 		local class = self:gwp_classify_node (context, node)
-		local penalty = self.gwp_penalties[class]
+		local penalty = context.penalties[class]
 		local object
 
 		-- Is the node traversable?  Return fences though they
@@ -1155,7 +1156,7 @@ function mob_class:gwp_classify_node (context, pos)
 	local worst, penalty = "OPEN", 0.0
 	local vector = gwp_classify_node_scratch
 	local b_width, b_height
-	local penalties = self.gwp_penalties
+	local penalties = context.penalties
 
 	b_width = context.mob_width - 1
 	b_height = context.mob_height - 1
@@ -1457,7 +1458,7 @@ function mob_class:gwp_check_diagonal_1 (context, d, flanking1, flanking2, y)
 		-- obstructed if performed from either of the flanking
 		-- nodes.
 		local node = gwp_check_diagonal_1_scratch
-		local penalties = self.gwp_penalties
+		local penalties = context.penalties
 
 		node.x = flanking1.x
 		node.y = y + 1
@@ -2085,7 +2086,7 @@ local waterbound_gwp_edges_scratch_1 = {}
 local waterbound_gwp_edges_buffer = {}
 
 local function waterbound_gwp_edges (self, context, node)
-	local penalties = self.gwp_penalties
+	local penalties = context.penalties
 	local buffer = waterbound_gwp_edges_buffer
 	local saved = waterbound_gwp_edges_scratch_1
 	local directions = gwp_waterbound_directions
@@ -2135,8 +2136,8 @@ local function waterbound_gwp_start (self, context)
 	return pos
 end
 
-local function waterbound_gwp_initialize (self, targets, range)
-	local context = mob_class.gwp_initialize (self, targets, range)
+local function waterbound_gwp_initialize (self, targets, range, penalties)
+	local context = mob_class.gwp_initialize (self, targets, range, penalties)
 	if not context then
 		return nil
 	end
@@ -2166,7 +2167,7 @@ local function amphibious_gwp_edges_1 (self, context, node, yoff)
 	local class = self:gwp_classify_node (context, v)
 
 	if class == "WATER" then
-		local penalty = self.gwp_penalties[class]
+		local penalty = context.penalties[class]
 		local object = self:get_gwp_node (context, v.x, v.y, v.z)
 		object.class = class
 		if penalty >= 0.0 then
@@ -2246,7 +2247,7 @@ end
 
 local function airborne_gwp_edges_1 (self, context, pos)
 	local class = self:gwp_classify_node (context, pos)
-	local penalty = self.gwp_penalties[class]
+	local penalty = context.penalties[class]
 
 	if penalty >= 0.0 then
 		local node = self:get_gwp_node (context, pos.x, pos.y, pos.z)
@@ -2583,15 +2584,15 @@ local function airborne_gwp_start (self, context)
 	-- TODO: ascend to surface of water if floating.
 	for _, pos in airborne_gwp_start_1 (self, self_pos, context) do
 		local class = self:gwp_classify_node (context, pos)
-		if class and self.gwp_penalties[class] >= 0.0 then
+		if class and context.penalties[class] >= 0.0 then
 			return pos
 		end
 	end
 	return nil
 end
 
-local function airborne_gwp_initialize (self, targets, range)
-	local context = mob_class.gwp_initialize (self, targets, range)
+local function airborne_gwp_initialize (self, targets, range, penalties)
+	local context = mob_class.gwp_initialize (self, targets, range, penalties)
 	if not context then
 		return nil
 	end
@@ -2687,7 +2688,7 @@ local function airborne_gwp_classify_node (self, context, pos)
 	local worst, penalty = "OPEN", 0.0
 	local vector = gwp_classify_node_scratch
 	local b_width, b_height
-	local penalties = self.gwp_penalties
+	local penalties = context.penalties
 
 	b_width = context.mob_width - 1
 	b_height = context.mob_height - 1
@@ -2760,8 +2761,7 @@ end
 
 local MAX_STALE_PATH_AGE = 1.25
 
-function mob_class:gopath_internal (target, callback_arrived, prioritized,
-					speed_bonus, animation, tolerance)
+function mob_class:gopath_internal (target, speed_bonus, animation, tolerance, penalties)
 	local mob = self
 	if mob.waypoints then
 		local wp_target = mob.waypoints[1]
@@ -2784,8 +2784,8 @@ function mob_class:gopath_internal (target, callback_arrived, prioritized,
 
 	mob.gowp_velocity = speed_bonus and speed_bonus * mob.movement_speed
 	mob.gowp_animation = animation or "walk"
-	mob.pathfinding_context = mob:gwp_initialize ({target}, nil, tolerance)
-	mob.callback_arrived = callback_arrived
+	mob.pathfinding_context
+		= mob:gwp_initialize ({target}, nil, tolerance, penalties)
 	mob._gwp_did_timeout = false
 
 	-- Cancel navigation if pathing is impossible.
@@ -2795,11 +2795,9 @@ function mob_class:gopath_internal (target, callback_arrived, prioritized,
 	return mob.pathfinding_context
 end
 
-function mob_class:gopath (target, callback_arrived, prioritised,
-				speed_bonus, animation, tolerance)
+function mob_class:gopath (target, speed_bonus, animation, tolerance, penalties)
 	local mob = self:mob_controlling_movement ()
-	return mob:gopath_internal (target, callback_arrived, prioritised,
-					speed_bonus, animation, tolerance)
+	return mob:gopath_internal (target, speed_bonus, animation, tolerance, penalties)
 end
 
 local GWP_TIMEOUT	= 100 / 20
