@@ -52,7 +52,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 
 		if minetest.get_item_group(nn.name, "unmovable_by_piston") == 1
-			or (not inv_nodes_movable and minetest.get_item_group(nn.name, "container") ~= 0) then
+			or (not inv_nodes_movable and minetest.get_item_group(nn.name, "container") ~= 0)
+			or not minetest.registered_nodes[nn.name] then
 			return
 		end
 
@@ -64,7 +65,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			-- if we want the node to drop, e.g. sugar cane, do not count towards push limit
 			table.insert(dig_nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 		else
-			if minetest.registered_nodes[nn.name] and not minetest.registered_nodes[nn.name].buildable_to then
+			if not minetest.registered_nodes[nn.name].buildable_to then
 				table.insert(nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 				if #nodes > maximum then
 					return
