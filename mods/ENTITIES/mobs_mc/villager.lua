@@ -3333,7 +3333,7 @@ function villager:interact_with_customer (self_pos, dtime)
 		return customer ~= nil
 	elseif customer and customer:is_valid () then
 		local pos = customer:get_pos ()
-		self:gopath (pos, nil, false, 0.5, nil, 2.0)
+		self:gopath (pos, 0.5, nil, 2.0)
 		self._entertaining_customer = true
 		return "_entertaining_customer"
 	end
@@ -3955,6 +3955,11 @@ function villager:acceptable_pacing_target (target)
 	return true
 end
 
+local SOLID_PACING_GROUPS = {
+	"group:solid",
+	"group:top_snow",
+}
+
 function villager:pace_around_poi (self_pos, dtime)
 	if self._pacing_around_poi then
 		local target = self._pacing_around_poi
@@ -3966,7 +3971,7 @@ function villager:pace_around_poi (self_pos, dtime)
 	elseif self._job_site
 		and vector.distance (self_pos, self._job_site) < 6
 		and self:check_timer ("pace_around_poi", 9.0) then
-		local target = self:pacing_target (self_pos, 8, 6, {"group:solid"})
+		local target = self:pacing_target (self_pos, 8, 6, SOLID_PACING_GROUPS)
 		if target then
 			if self:do_navigate (self_pos, dtime, target, 0.4, false) then
 				self._pacing_around_poi = target
@@ -4809,9 +4814,9 @@ function villager:play_tag (self_pos, dtime)
 				and self:check_timer ("switch_tag_target", 0.5) then
 				-- Continue to pace randomly.
 				local target
-					= self:pacing_target (self_pos, 14, 8, {"group:solid"})
+					= self:pacing_target (self_pos, 14, 8, SOLID_PACING_GROUPS)
 				if target then
-					self:gopath (target, nil, false, 0.6, 0.5)
+					self:gopath (target, 0.6, 0.5)
 				end
 			end
 
@@ -4964,7 +4969,7 @@ local function generate_pace_around_village (activity_name, bonus, range_xz, ran
 			local y = range_y
 
 			if heat >= 5 then
-				pos = self:pacing_target (self_pos, xz, y, {"group:solid"})
+				pos = self:pacing_target (self_pos, xz, y, SOLID_PACING_GROUPS)
 			else
 				local target = find_nearest_village_section (section, 5)
 				if target and not vector.equals (target, section) then
@@ -4972,11 +4977,11 @@ local function generate_pace_around_village (activity_name, bonus, range_xz, ran
 					local dir = vector.direction (self_pos, center)
 					pos = self:target_in_direction (self_pos, xz, y, dir, math.pi / 2)
 				else
-					pos = self:pacing_target (self_pos, xz, y, {"group:solid"})
+					pos = self:pacing_target (self_pos, xz, y, SOLID_PACING_GROUPS)
 				end
 			end
 
-			if pos and self:gopath (pos, nil, false, bonus) then
+			if pos and self:gopath (pos, bonus) then
 				self[activity_name] = true
 				return activity_name
 			end
@@ -5117,7 +5122,7 @@ function villager:pace_around_bell (self_pos, dtime)
 			and pr:next (1, 200) == 1
 			and self._bell_pace_cooldown == 0
 			and vector.distance (self_pos, self._bell) < 4 then
-			local target = self:pacing_target (self_pos, 4, 4, {"group:solid"})
+			local target = self:pacing_target (self_pos, 4, 4, SOLID_PACING_GROUPS)
 			if target then
 				if self:do_navigate (self_pos, dtime, target, 0.4, false) then
 					self._pacing_around_bell = target

@@ -496,8 +496,10 @@ if mobs_spawn then
 			local spawn_def = mob_library_worker_table[mob_index]
 			--minetest.log(spawn_def.name.." "..step_chance.. " "..mob_chance)
 			if spawn_def and spawn_def.name and minetest.registered_entities[spawn_def.name] then
-				local spawn_in_group = minetest.registered_entities[spawn_def.name].spawn_in_group or 4
-				local spawn_in_group_min = minetest.registered_entities[spawn_def.name].spawn_in_group_min or 1
+				local spawn_in_group = spawn_def.spawn_in_group
+					or minetest.registered_entities[spawn_def.name].spawn_in_group or 4
+				local spawn_in_group_min = spawn_def.spawn_in_group_min
+					or minetest.registered_entities[spawn_def.name].spawn_in_group_min or 1
 				local mob_type = minetest.registered_entities[spawn_def.name].type
 				if spawn_check(spawning_position,spawn_def) then
 

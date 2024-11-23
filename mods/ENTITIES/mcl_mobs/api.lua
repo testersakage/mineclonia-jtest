@@ -322,6 +322,10 @@ function mob_class:mob_activate(staticdata, dtime)
 		if def.child_texture then
 			self.base_texture = def.child_texture[1]
 		end
+		-- This is cleared when the mob matures.
+		if self._child_animations then
+			self.animation = self._child_animations
+		end
 	end
 
 	if self.health == 0 then

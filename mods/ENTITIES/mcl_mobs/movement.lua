@@ -498,6 +498,8 @@ function mob_class:do_go_pos (dtime, moveresult)
 
 	if dist < 0.0005 then
 		self.acc_dir.z = 0
+		self.acc_dir.x = 0
+		self.acc_dir.y = 0
 		return
 	end
 
@@ -697,7 +699,7 @@ function mob_class:session_navigate (destination, bonus, tolerance, repath_inter
 		max_retries = max_retries or MAX_RETRIES,
 		max_frustration = max_frustration,
 	}
-	mob:gopath_internal (dest, nil, false, bonus, nil, tolerance)
+	mob:gopath_internal (dest, bonus, nil, tolerance)
 end
 
 local function clamp (x, a, b)
@@ -824,8 +826,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 					session.destination = destination
 					session.last_partial = nil
 				end
-				mob:gopath_internal (destination, nil, false, bonus,
-							nil, tolerance)
+				mob:gopath_internal (destination, bonus, nil, tolerance)
 			end
 		end
 
@@ -874,8 +875,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 				session.destination = new_target
 				session.last_partial = nil
 			end
-			mob:gopath_internal (destination, nil, false, bonus,
-						nil, tolerance)
+			mob:gopath_internal (destination, bonus, nil, tolerance)
 		end
 
 		return "wait"
@@ -899,7 +899,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 			-- to the same position, indicate failure.
 			session.last_partial = self._last_wp
 		end
-		mob:gopath_internal (destination, nil, false, bonus, nil, tolerance)
+		mob:gopath_internal (destination, bonus, nil, tolerance)
 		return "wait"
 	end
 
@@ -929,6 +929,17 @@ function mob_class:ascend_in_powder_snow (self_pos, dtime)
 	return false
 end
 
+local function convert_top_snow (node)
+	local nodedata = minetest.get_node (node)
+	if minetest.get_item_group (nodedata.name, "top_snow") <= 2 then
+		return node
+	end
+
+	-- Otherwise move to the air node above.
+	node.y = node.y + 1
+	return node
+end
+
 function mob_class:pacing_target (pos, width, height, groups)
 	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
@@ -943,13 +954,13 @@ function mob_class:pacing_target (pos, width, height, groups)
 			if self:node_in_restriction (node)
 				and (not self.acceptable_pacing_target
 					or self:acceptable_pacing_target (node)) then
-				return node
+				return convert_top_snow (node)
 			end
 		end
 		return nil
 	end
 
-	return #nodes >= 1 and nodes[math.random (#nodes)]
+	return #nodes >= 1 and convert_top_snow (nodes[math.random (#nodes)])
 end
 
 function mob_class:target_in_shade (pos, width, height)
@@ -1078,6 +1089,10 @@ function mob_class:ai_step (dtime)
 	end
 end
 
+function mob_class:should_runaway_from_mob (entity)
+	return true
+end
+
 function mob_class:check_avoid (self_pos)
 	local runaway_from = self.runaway_from
 	if not runaway_from then
@@ -1118,6 +1133,7 @@ function mob_class:check_avoid (self_pos)
 			local view_range = range
 			if entity
 				and table.indexof (runaway_from, entity.name) ~= -1
+				and self:should_runaway_from_mob (entity)
 				and self:target_visible (self_pos, object) then
 				eligible = true
 			elseif runaway_from_monsters
@@ -1151,7 +1167,7 @@ function mob_class:check_avoid (self_pos)
 			local pos = self:target_away_from (self_pos, target_pos)
 			if pos and vector.distance (pos, target_pos) > max_distance then
 				local bonus = self.runaway_bonus_near
-				self:gopath (pos, nil, false, bonus)
+				self:gopath (pos, bonus)
 				self.avoiding = target
 				return "avoiding"
 			end
@@ -1226,13 +1242,18 @@ function mob_class:check_avoid_sunlight (pos)
 		local tpos = self:target_in_shade (pos, 10, 3)
 
 		if tpos then
-			self:gopath (tpos, nil, true, self.run_bonus)
+			self:gopath (tpos, self.run_bonus)
 			self.avoiding_sunlight = true
 			return "avoiding_sunlight"
 		end
 	end
 	return false
 end
+
+local SOLID_PACING_GROUPS = {
+	"group:solid",
+	"group:top_snow",
+}
 
 function mob_class:check_frightened (pos)
 	if self.frightened then
@@ -1251,10 +1272,10 @@ function mob_class:check_frightened (pos)
 				tpos = self:pacing_target (pos, 5, 4, {"group:water"})
 			end
 			if not tpos then
-				tpos = self:pacing_target (pos, 5, 4, {"group:solid"})
+				tpos = self:pacing_target (pos, 5, 4, SOLID_PACING_GROUPS)
 			end
 			if tpos then
-				self:gopath (tpos, nil, true, self.run_bonus)
+				self:gopath (tpos, self.run_bonus)
 				self.frightened = true
 				return "frightened"
 			end
@@ -1283,7 +1304,7 @@ function mob_class:check_pace (pos)
 			-- Minecraft mobs pace to random positions
 			-- within a 20 block distance lengthwise and
 			-- 14 blocks vertically.
-			local groups = {"group:solid"}
+			local groups = SOLID_PACING_GROUPS
 			if self.swims_in and (self.swims or self.amphibious) then
 				-- If this is an aquatic mob, search
 				-- for nodes in which it is capable of
@@ -1292,7 +1313,7 @@ function mob_class:check_pace (pos)
 			end
 			local width, height = self.pace_width, self.pace_height
 			local target = self:pacing_target (pos, width, height, groups)
-			if target and self:gopath (target, nil, false, self.pace_bonus) then
+			if target and self:gopath (target, self.pace_bonus) then
 				self.pacing = true
 				return "pacing"
 			end
@@ -1512,7 +1533,7 @@ function mob_class:check_schooling (self_pos, list)
 		end
 
 		if self:check_timer ("school_pathfind", 0.5) then
-			self:gopath (leader_pos, nil, false, nil, nil, 3)
+			self:gopath (leader_pos, nil, nil, 3)
 		end
 		return true
 	elseif self._school and #self._school > 0 then
@@ -1637,7 +1658,7 @@ local function amphibious_pacing_target (self, pos, width, height, groups)
 	end
 	-- Otherwise attempt to move onto land, if possible.
 	local target
-		= mob_class.pacing_target (self, pos, width, height, {"group:solid"})
+		= mob_class.pacing_target (self, pos, width, height, SOLID_PACING_GROUPS)
 	return target
 end
 
@@ -1789,7 +1810,7 @@ function mob_class:return_to_restriction (self_pos, dtime)
 						       math.pi / 2)
 		if node then
 			if self:node_in_restriction (node) then
-				self:gopath (node, nil, false, self.restriction_bonus)
+				self:gopath (node, self.restriction_bonus)
 				self._returning_to_restriction = true
 				return "_returning_to_restriction"
 			end

@@ -194,6 +194,8 @@ function mob_class:set_velocity(v)
 	-- Minecraft scales forward acceleration by desired
 	-- velocity in blocks/tick.
 	self.acc_dir.z = v / 20
+	self.acc_dir.x = 0
+	self.acc_dir.y = 0
 end
 
 -- calculate mob velocity
@@ -212,36 +214,30 @@ function mob_class:check_for_death (mcl_reason)
 		return true
 	end
 
-	-- has health actually changed?
-	if self.health == self.old_health and self.health > 0 then
-		return false
-	end
+	-- Make mob flash red.
+	self:add_texture_mod ("^[colorize:#d42222:175")
 
-	local damaged = self.health < ( self.old_health or 0 )
-	self.old_health = self.health
-
-	-- still got some health?
+	-- Still got some health?
 	if self.health > 0 then
-		-- make sure health isn't higher than max
-		self.health = math.min(self.health, self.object:get_properties().hp_max)
+		self:mob_sound ("damage")
+		-- Limit health to defined maximum value.
+		local hp_max = self.object:get_properties ().hp_max
+		self.health = math.min (self.health, hp_max)
 
-		-- play damage sound if health was reduced and make mob flash red.
-		if damaged then
-			self:add_texture_mod("^[colorize:#d42222:175")
-			minetest.after(0.5, function(self)
-				if self and self.object and self.object:get_pos() then
-					self:remove_texture_mod("^[colorize:#d42222:175")
-				end
-			end, self)
-			self:mob_sound("damage")
-		end
+		-- Remove damage overlay.
+		minetest.after (0.5, function (self)
+			if self and not self.dead and self.object
+				and self.object:get_pos () then
+				self:remove_texture_mod ("^[colorize:#d42222:175")
+			end
+		end, self)
 		return false
 	end
 
-	self:mob_sound("death")
+	self:mob_sound ("death")
 	self:jockey_death ()
 
-	-- execute custom death function
+	-- Execute custom death function
 	if self.on_die then
 		local pos = self.object:get_pos()
 		local on_die_exit = self:on_die (pos, mcl_reason)
@@ -251,15 +247,13 @@ function mob_class:check_for_death (mcl_reason)
 			return true
 		end
 	end
+
 	self.dead = true
 	self.attack = nil
-	self.v_start = false
-	self.blinktimer = 0
-	self:remove_texture_mod("^[colorize:#FF000040")
-	self:remove_texture_mod("^[brighten")
-	self.passive = true
+	self:remove_texture_mod ("^[colorize:#FF000040")
+	self:remove_texture_mod ("^[brighten")
 
-	self.object:set_properties({
+	self.object:set_properties ({
 		pointable = false,
 		collide_with_objects = false,
 	})
@@ -269,20 +263,20 @@ function mob_class:check_for_death (mcl_reason)
 	if self.instant_death then
 		length = 0
 	elseif self.animation
-	and self.animation.die_start
-	and self.animation.die_end then
-
+		and self.animation.die_start
+		and self.animation.die_end then
 		local frames = self.animation.die_end - self.animation.die_start
 		local speed = self.animation.die_speed or 15
 		length = math.max(frames / speed, 0) + DEATH_DELAY
-		self:set_animation( "die")
+		self:set_animation ("die")
 	else
 		length = 1 + DEATH_DELAY
-		self:set_animation( "stand", true)
+		self:set_animation ("stand", true)
 	end
 
 	local killed_by_player = false
-	if self.last_player_hit_time and minetest.get_gametime() - self.last_player_hit_time <= 5 then
+	if self.last_player_hit_time
+		and minetest.get_gametime() - self.last_player_hit_time <= 5 then
 		killed_by_player  = true
 	end
 
@@ -302,8 +296,7 @@ function mob_class:check_for_death (mcl_reason)
 				awards.unlock(self.last_player_hit_name, "mcl:monsterHunter")
 			end
 
-			if ((not self.child) or self.type ~= "animal")
-				and (minetest.get_us_time() - self.xp_timestamp <= math.huge) then
+			if ((not self.child) or self.type ~= "animal") then
 				local pos = self.object:get_pos()
 				local xp_amount = math.random(self.xp_min, self.xp_max)
 				if not minetest.is_creative_enabled(self.last_player_hit_name)
@@ -780,15 +773,15 @@ function mob_class:stock_value (field)
     return self._physics_factors[field].base
 end
 
--- Mob motion routines.
+------------------------------------------------------------------------
+-- Mob motion routines.  Do not tamper with the mechanics or constants
+-- in this section without reference to
+-- https://minecraft.wiki/w/Physics and a number of documents
+-- available online, and a copy of Minecraft for visual comparison.
+------------------------------------------------------------------------
 
 --- Constants.  These remain constant for the duration of the game but
 --- are adjusted so as to reflect the global step time.
-
--- TODO: read floating point settings.
--- local step_length = minetest.settings:get ("dedicated_server_step")
--- step_length = tonumber (step_length) or 0.09
--- local step_length = 0.05
 
 local function pow_by_step (value, dtime)
 	return math.pow (value, dtime / 0.05)

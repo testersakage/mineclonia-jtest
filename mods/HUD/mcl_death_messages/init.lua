@@ -101,6 +101,10 @@ mcl_death_messages = {
 			killer = NS("@1 was shot by @2"),
 			item = NS("@1 was shot by @2 using @3"),
 		},
+		spit = {
+			killer = NS ("@1 was spitballed by @2"),
+			item = NS("@1 was spitballed by @2 using @3"),
+		},
 		fireball = {
 			killer = NS("@1 was fireballed by @2"),
 			item = NS("@1 was fireballed by @2 using @3"),

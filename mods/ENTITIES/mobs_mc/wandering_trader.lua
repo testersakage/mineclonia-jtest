@@ -260,7 +260,9 @@ function wandering_trader:receive_damage (mcl_reason, damage)
 			-- Call llamas to retaliate.
 			for _, llama in pairs (self._llamas) do
 				local entity = llama:get_luaentity ()
-				entity:do_attack (mcl_reason.source)
+				if entity then
+					entity:do_attack (mcl_reason.source)
+				end
 			end
 		end
 		return true
@@ -339,11 +341,11 @@ function wandering_trader_check_wander (self, self_pos, dtime)
 				end
 			end
 			self._wander_last_pos = self_pos
-			self:gopath (self._wander_to, nil, false, 0.35)
+			self:gopath (self._wander_to, 0.35)
 		end
 		return true
 	elseif self._wander_to then
-		self:gopath (self._wander_to, nil, false, 0.35)
+		self:gopath (self._wander_to, 0.35)
 		self._wandering_to_target = true
 		self._wander_last_pos = self_pos
 		self._wander_retries = 0
@@ -616,7 +618,7 @@ local function trader_llama_follow_owner (self, self_pos, dtime)
 		end
 
 		if self:check_timer ("follow_owner", 0.5) then
-			self:gopath (owner_pos, nil, true, 1.4, nil, 3.0)
+			self:gopath (owner_pos, 1.4, nil, 3.0)
 		end
 		return true
 	else
@@ -625,11 +627,12 @@ local function trader_llama_follow_owner (self, self_pos, dtime)
 			return
 		end
 		local owner_pos = owner:get_pos ()
-		if vector.distance (self_pos, owner_pos) <= 20
-			and vector.distance (self_pos, owner_pos) >= 6.0 then
-			self._following_owner = true
-			self:gopath (owner_pos, nil, true, 1.4, nil, 3.0)
-			return "_following_owner"
+		if vector.distance (self_pos, owner_pos) <= 20 then
+			if vector.distance (self_pos, owner_pos) >= 6.0 then
+				self._following_owner = true
+				self:gopath (owner_pos, 1.4, nil, 3.0)
+				return "_following_owner"
+			end
 		elseif owner then
 			self._trader_id = nil
 			self._get_owner = trader_llama._get_owner
