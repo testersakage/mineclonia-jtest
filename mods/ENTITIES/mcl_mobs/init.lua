@@ -44,7 +44,6 @@ mcl_mobs.mob_class = {
 	rotate = 0, --  0=front, 90=side, 180=back, 270=side2
 	xp_min = 0,
 	xp_max = 0,
-	xp_timestamp = 0,
 	breathes_in_water = false,
 	view_range = 16,
 	water_damage = 0,
@@ -86,6 +85,7 @@ mcl_mobs.mob_class = {
 	runaway_from = nil,
 	avoid_range = 6.0,
 	melee_interval = 1,
+	_melee_esp = false,
 	custom_attack_interval = 1,
 	ranged_interval_min = 1.0,
 	ranged_interval_max = 1.0,
@@ -180,9 +180,6 @@ mcl_mobs.mob_class = {
 	_mcl_fishing_reelable = true,
 
 	--internal variables
-	blinktimer = 0,
-	blinkstatus = false,
-	v_start = false,
 	standing_in = "ignore",
 	standing_on = "ignore",
 	jump_sound_cooloff = 0.5, -- used to prevent jump sound from being played too often in short time

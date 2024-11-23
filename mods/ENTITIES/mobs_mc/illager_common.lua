@@ -175,7 +175,7 @@ function patrolling_mob:patrol_unstuck (self_pos)
 	local node_pos = mcl_util.get_nodepos (self_pos)
 	local pos = vector.offset (node_pos, x, 0, z)
 	local target = self:find_surface_position (pos)
-	self:gopath (target, nil, false, self._patrol_bonus_minions)
+	self:gopath (target, self._patrol_bonus_minions)
 end
 
 function patrolling_mob:check_distant_patrol (self_pos, dtime)
@@ -248,7 +248,7 @@ function patrolling_mob:check_distant_patrol (self_pos, dtime)
 			if not self._raidcaptain then
 				bonus = self._patrol_bonus_minions
 			end
-			self:gopath (node_pos, nil, false, bonus)
+			self:gopath (node_pos, bonus)
 			if self._raidcaptain then
 				for _, ally in pairs (allies) do
 					ally._patrol_target = node_pos
@@ -426,7 +426,7 @@ function raid_mob:check_recover_banner (self_pos, dtime)
 		end
 		if not self:navigation_finished () then
 			if self:check_timer ("raid_recover_banner", 2.0) then
-				self:gopath (banner, nil, false, 1.15)
+				self:gopath (banner, 1.15)
 			end
 			return true
 		end
@@ -453,7 +453,7 @@ function raid_mob:check_recover_banner (self_pos, dtime)
 				local entity = object:get_luaentity ()
 				if entity and decode_banner_item (entity) then
 					local banner = object:get_pos ()
-					self:gopath (banner, nil, false, 1.15)
+					self:gopath (banner, 1.15)
 					self._recovering_banner = object
 					return "_recovering_banner"
 				end

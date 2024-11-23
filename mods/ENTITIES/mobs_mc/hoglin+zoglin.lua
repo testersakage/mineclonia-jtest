@@ -220,7 +220,7 @@ local function hoglin_retreat (self, self_pos, dtime)
 		if self:navigation_finished () then
 			local target = self:target_away_from (self_pos, retreat_pos)
 			if target then
-				self:gopath (target, nil, true, 1.3)
+				self:gopath (target, 1.3)
 			end
 		end
 		return true
@@ -240,7 +240,7 @@ local function hoglin_retreat (self, self_pos, dtime)
 		end
 		local target = self:target_away_from (self_pos, pos)
 		if target then
-			self:gopath (target, nil, true, 1.3)
+			self:gopath (target, 1.3)
 			self._retreating = piglin
 			self._retreat_time = math.random (5, 20)
 			return "_retreating"

@@ -602,10 +602,6 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 			end
 			return damage
 		elseif luaentity.is_mob then
-			if mcl_reason.source and mcl_reason.source.is_player and mcl_reason.source:is_player() then
-				luaentity.last_player_hit_time = minetest.get_gametime()
-				luaentity.last_player_hit_name = mcl_reason.source:get_player_name()
-			end
 			if not luaentity:receive_damage (mcl_reason, damage) then
 				damage = 0
 				return damage

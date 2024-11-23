@@ -185,7 +185,7 @@ function evoker:attack_null (self_pos, dtime, target_pos, line_of_sight)
 
 			if target then
 				local bonus = self.runaway_bonus_near
-				self:gopath (target, nil, false, bonus)
+				self:gopath (target, bonus)
 			end
 		else
 			local distance = vector.distance (self_pos, target_pos)

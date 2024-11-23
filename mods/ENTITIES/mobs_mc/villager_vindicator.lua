@@ -236,14 +236,14 @@ function vindicator:gwp_open_door (door, nodedef)
 	end
 end
 
-function vindicator:gwp_initialize (targets, range, tolerance)
+function vindicator:gwp_initialize (targets, range, tolerance, penalties)
 	-- Vindicators are assigned a relatively low tracking
 	-- distance, but their pathfinding abilities should not be
 	-- limited accordingly.
 	if not range or range < 32.0 then
 		range = 32.0
 	end
-	return mob_class.gwp_initialize (self, targets, range, tolerance)
+	return mob_class.gwp_initialize (self, targets, range, tolerance, penalties)
 end
 
 vindicator.ai_functions = {

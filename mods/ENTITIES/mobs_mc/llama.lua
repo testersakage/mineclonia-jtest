@@ -17,13 +17,13 @@ local llama = table.merge (horse, {
 	ranged_interval_min = 4.0,
 	ranged_interval_max = 4.0,
 	ranged_attack_radius = 20.0,
-	arrow = "mobs_mc:llamaspit",
 	retaliates = true,
 	spawn_in_group_min = 4,
 	spawn_in_group = 6,
 	head_swivel = "head.control",
 	bone_eye_height = 11,
 	head_eye_height = 1.7765,
+	shoot_offset = 1.6,
 	horizontal_head_height=0,
 	curiosity = 10,
 	head_yaw = "z",
@@ -86,6 +86,7 @@ local llama = table.merge (horse, {
 	follow = {
 		"mcl_farming:hay_block",
 	},
+	view_range = 40,
 	tracking_distance = 40,
 	_default_decor_texture = "blank.png",
 })
@@ -194,6 +195,33 @@ end
 -- Llama AI.
 ------------------------------------------------------------------------------
 
+function llama:discharge_ranged (self_pos, target_pos)
+	local attack = self.attack
+	local eye_height = mcl_util.target_eye_height (attack)
+	local p = vector.offset (target_pos, 0, eye_height, 0)
+	local s = vector.offset (self_pos, 0, self.shoot_offset, 0)
+	local vec = vector.subtract (p, s)
+
+	self:mob_sound ("shoot_attack")
+	-- Offset by distance.
+	vec.y = vec.y + 0.04 * vector.length (vec)
+	vec = vector.normalize (vec)
+
+	local arrow = minetest.add_entity (s, "mobs_mc:llama_spit")
+
+	if arrow then
+		local entity = arrow:get_luaentity ()
+		entity._shooter = self.object
+		arrow:set_velocity (vector.multiply (vec, 40))
+	end
+
+	-- Call off the attack after firing once.
+	if self._is_retaliating then
+		self.attack = nil
+		self:attack_end ()
+	end
+end
+
 function llama:join_caravan (head)
 	local entity = head:get_luaentity ()
 	self._caravan_head = head
@@ -279,7 +307,7 @@ function llama:follow_caravan (self_pos, dtime)
 			= math.max (0, self._caravan_timeout - dtime)
 		if distance > 3.0 then
 			if self:check_timer ("llama_caravan", 0.3) then
-				self:gopath (head_pos, nil, true, self._caravan_speed_factor,
+				self:gopath (head_pos, self._caravan_speed_factor,
 					     "run", 3.0)
 			end
 		else
@@ -340,14 +368,19 @@ function llama:attack_end ()
 				    "mobs_mc:llama_wolf_attack")
 end
 
-function llama:discharge_ranged (self_pos, target_pos)
-	mob_class.discharge_ranged (self, self_pos, target_pos)
-
-	-- Call off the attack after firing once.
-	if self._is_retaliating then
-		self.attack = nil
-		self:attack_end ()
+function llama:ai_step (dtime)
+	horse.ai_step (self, dtime)
+	if not self.attack then
+		self:remove_physics_factor ("tracking_distance",
+					    "mobs_mc:llama_wolf_attack")
 	end
+end
+
+function llama:targets_for_attack_default (self_pos, esp)
+	-- The detection range of a llama is reduced with respect to
+	-- wolves, which are the only targets they attack without
+	-- provocation.
+	return minetest.objects_inside_radius (self_pos, self.view_range * 0.25)
 end
 
 function llama:should_attack (object)
@@ -454,25 +487,13 @@ end
 
 mcl_mobs.register_mob ("mobs_mc:llama", llama)
 mobs_mc.llama = llama
+mcl_entity_invs.register_inv ("mobs_mc:llama", "Llama", nil, true)
 
 ------------------------------------------------------------------------
 -- Llama spawning.
 ------------------------------------------------------------------------
 
-mcl_entity_invs.register_inv("mobs_mc:llama","Llama",nil,true)
-
-mcl_mobs.register_arrow("mobs_mc:llamaspit", {
-	visual = "sprite",
-	visual_size = {x = 0.10, y = 0.10},
-	textures = {"mobs_mc_llama_spit.png"},
-	velocity = 20,
-	hit_player = mcl_mobs.get_arrow_damage_func (1),
-	hit_mob = mcl_mobs.get_arrow_damage_func (1),
-	tail = 1,
-	tail_texture = "mcl_particles_smoke.png",
-})
-
-mcl_mobs.spawn_setup({
+mcl_mobs.spawn_setup ({
 	name = "mobs_mc:llama",
 	type_of_spawning = "ground",
 	dimension = "overworld",
@@ -491,4 +512,128 @@ mcl_mobs.spawn_setup({
 	chance = 50,
 })
 
-mcl_mobs.register_egg("mobs_mc:llama", S("Llama"), "#c09e7d", "#995f40", 0)
+mcl_mobs.register_egg ("mobs_mc:llama", S("Llama"), "#c09e7d", "#995f40", 0)
+
+------------------------------------------------------------------------
+-- Llama spit entity.
+------------------------------------------------------------------------
+
+local llama_spit = {
+	initial_properties = {
+		visual = "mesh",
+		mesh = "mobs_mc_llama_spit.b3d",
+		textures = {
+			"mobs_mc_llama_spit.png",
+		},
+		visual_size = {
+			x = 0.745,
+			y = 0.745,
+		},
+		collisionbox = {
+			-0.15625,
+			-0.15625,
+			-0.15625,
+			0.15625,
+			0.15625,
+			0.15625,
+		},
+		physical = true,
+		collide_with_objects = false,
+		static_save = false,
+		use_texture_alpha = false,
+	},
+}
+
+function llama_spit:hit_object (object)
+	return mcl_mobs.get_arrow_damage_func (1, "spit", self._shooter) (self, object)
+end
+
+function llama_spit:on_activate (_, _)
+	self._prev_pos = self.object:get_pos ()
+	self.object:set_acceleration ({
+		x = 0,
+		y = -9.81,
+		z = 0,
+	})
+	self._particlespawner = minetest.add_particlespawner ({
+		time = 0,
+		amount = 72,
+		vel = {
+			min = vector.new (-0.1, 0, -0.1),
+			max = vector.new (0.1, 0, 0.1),
+		},
+		acc = {
+			min = vector.new (0, -9.81 / 3, 0),
+			max = vector.new (0, -9.81 / 3, 0),
+		},
+		pos = {
+			min = vector.new (-0.2, -0.2, -0.2),
+			max = vector.new (0.2, 0.2, 0.2),
+		},
+		size = {
+			min = 1.3,
+			max = 2.2,
+		},
+		exptime = {
+			min = 1.0,
+			max = 1.0,
+		},
+		texpool = {
+			"mcl_particles_mob_death.png^[colorize:#2c2c2c2c:255",
+			"mcl_particles_mob_death.png^[colorize:#c5c5c5c5:255",
+			"mcl_particles_mob_death.png^[colorize:#f0f0f0f0:255",
+		},
+		attached = self.object,
+	})
+end
+
+function llama_spit:on_deactivate (_)
+	minetest.delete_particlespawner (self._particlespawner)
+end
+
+function llama_spit:on_step (dtime, moveresult)
+	local self_pos = self.object:get_pos ()
+	local prev_pos = self._prev_pos
+
+	local raycast = minetest.raycast (prev_pos, self_pos, true, false)
+	for hitpoint in raycast do
+		if hitpoint.type == "object" then
+			local object = hitpoint.ref
+			local entity = object:get_luaentity ()
+			if object:is_player () or (entity and entity.is_mob)
+				and object ~= self._shooter then
+				self:hit_object (object)
+				self.object:remove ()
+				return
+			end
+		end
+	end
+
+	for _, item in pairs (moveresult.collisions) do
+		if item.type == "node" then
+			self.object:remove ()
+			return
+		end
+	end
+
+	self._prev_pos = self_pos
+end
+
+function llama_spit:on_punch (_, _, _, _, _)
+	return
+end
+
+minetest.register_entity ("mobs_mc:llama_spit", llama_spit)
+
+------------------------------------------------------------------------
+-- Obsolete Llama Spit.
+------------------------------------------------------------------------
+
+local old_llama_spit = {
+	initial_properties = {},
+	on_activate = function (self, _, _)
+		self.object:remove ()
+	end,
+}
+
+minetest.register_entity ("mobs_mc:llamaspit", old_llama_spit)

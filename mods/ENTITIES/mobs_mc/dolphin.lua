@@ -134,7 +134,7 @@ local function dolphin_swim_with_boat (self, self_pos, dtime)
 				self._swd_phase = 1
 			else
 				-- Move towards the boat's driver.
-				self:gopath (driver_pos, nil, true, 1.97)
+				self:gopath (driver_pos, 1.97)
 			end
 		end
 		if self._swd_phase == 1 then
@@ -145,7 +145,7 @@ local function dolphin_swim_with_boat (self, self_pos, dtime)
 				local dir = minetest.yaw_to_dir (driver_yaw)
 				local target_pos = vector.offset (self_pos, dir.x * 10, 0,
 								  dir.z * 10)
-				self:gopath (target_pos, nil, true, 1.97)
+				self:gopath (target_pos, 1.97)
 			end
 		end
 		return true
@@ -285,7 +285,7 @@ local function dolphin_swim_with_player (self, self_pos, dtime)
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
 		elseif self:check_timer ("dolphin_repath_quick", 0.15) then
-			self:gopath (player:get_pos (), nil, true, 4.0, nil, nil)
+			self:gopath (player:get_pos (), 4.0, nil, nil)
 		end
 		return true
 	elseif self:check_timer ("dolphin_locate_swimmers", 0.3) then
@@ -306,8 +306,7 @@ local function dolphin_swim_with_player (self, self_pos, dtime)
 		end
 		if closest_player then
 			self._swimming_with = closest_player
-			self:gopath (closest_player:get_pos (), nil, true,
-					4.0, nil, nil)
+			self:gopath (closest_player:get_pos (), 4.0, nil, nil)
 			return "_swimming_with"
 		end
 		return false
@@ -389,7 +388,7 @@ local function dolphin_seek_treasure (self, self_pos, dtime)
 			end
 
 			if node then
-				self:gopath (node, nil, true, 1.3)
+				self:gopath (node, 1.3)
 				return true
 			end
 			self._seeking_treasure = nil
@@ -398,7 +397,7 @@ local function dolphin_seek_treasure (self, self_pos, dtime)
 			return false
 		end
 		if self:check_timer ("dolphin_repath", 0.5) then
-			self:gopath (treasure, nil, true, 1.3)
+			self:gopath (treasure, 1.3)
 		end
 		return true
 	elseif self._fed and self.breath > 5 then
@@ -407,7 +406,7 @@ local function dolphin_seek_treasure (self, self_pos, dtime)
 			self._fed = false
 			return false
 		end
-		self:gopath (target, nil, true, 1.3)
+		self:gopath (target, 1.3)
 		self._seeking_treasure = target
 		return "seeking_treasure"
 	end
