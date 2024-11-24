@@ -119,6 +119,7 @@ for n, desc in pairs(n_desc) do
 		light_source = bulb_light[n],
 		groups = {pickaxey = 2, building_block = 1, not_in_creative_inventory = 1, comparator_signal = 1},
 		sounds = mcl_sounds.node_sound_metal_defaults(),
+		drop = "mcl_copper:bulb"..n.."_off",
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
 		_mcl_redstone = {
