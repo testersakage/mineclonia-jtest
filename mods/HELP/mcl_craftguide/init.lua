@@ -813,6 +813,7 @@ local function get_init_items()
 				if recipe then
 					used_items = {}
 					for _, ingredient in pairs(recipe.items) do
+						_, _, ingredient = string.find(ingredient, "^([^%s]+)") -- handles edge case where the igredient is an item string
 						ingredient = minetest.registered_aliases[ingredient] or ingredient
 						if not used_items[ingredient] then
 							used_items[ingredient] = true
