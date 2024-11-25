@@ -128,6 +128,33 @@ local function table_diff(t, t2)
 	return diff
 end
 
+local custom_crafts, craft_types = {}, {}
+
+function mcl_craftguide.register_craft_type(name, def)
+	local func = "mcl_craftguide.register_craft_type(): "
+	assert(name, func .. "'name' field missing")
+	assert(def.description, func .. "'description' field missing")
+	assert(def.icon, func .. "'icon' field missing")
+
+	craft_types[name] = def
+end
+
+function mcl_craftguide.register_craft(def)
+	local func = "mcl_craftguide.register_craft(): "
+	assert(def.type, func .. "'type' field missing")
+	assert(def.width, func .. "'width' field missing")
+	assert(def.output, func .. "'output' field missing")
+	assert(def.items, func .. "'items' field missing")
+
+	local _, _, item_name = string.find(def.output, "^([^%s]+)")
+
+	if custom_crafts[item_name] then
+		table.insert(custom_crafts[item_name], def)
+	else
+		custom_crafts[item_name] = {def}
+	end
+end
+
 local recipe_filters = {}
 
 function mcl_craftguide.add_recipe_filter(name, f)
@@ -362,11 +389,12 @@ local function get_recipe_fs(data, iY, player)
 	local recipe = data.recipes[data.rnum]
 	local width = recipe.width
 	local xoffset = data.iX / 2.15
-	local cooktime
+	local cooktime, shapeless
 
 	if recipe.type == "cooking" then
 		cooktime, width = width, 1
 	elseif width == 0 then
+		shapeless = true
 		if #recipe.items <= 4 then
 			width = 2
 		else
@@ -434,6 +462,36 @@ local function get_recipe_fs(data, iY, player)
 		if groups or cooktime or burntime ~= 0 then
 			fs[#fs + 1] = get_tooltip(item, groups, cooktime, burntime)
 		end
+	end
+
+	local custom_recipe = craft_types[recipe.type]
+
+	if custom_recipe or shapeless or recipe.type == "cooking" then
+		local icon = custom_recipe and custom_recipe.icon or
+				 shapeless and "shapeless" or "furnace"
+
+		if recipe.type == "cooking" then
+			icon = "craftguide_furnace.png"
+		elseif not custom_recipe then
+			icon = string.format("craftguide_%s.png", icon)
+		end
+
+		fs[#fs + 1] = string.format(FMT.image,
+			rightest + 1.2,
+			iY + 1.7,
+			0.5,
+			0.5,
+			icon)
+
+		local tooltip = custom_recipe and custom_recipe.description or
+				shapeless and S("Shapeless") or S("Cooking")
+
+		fs[#fs + 1] = string.format("tooltip[%f,%f;%f,%f;%s]",
+			rightest + 1.2,
+			iY + 1.7,
+			0.5,
+			0.5,
+			F(tooltip))
 	end
 
 	local arrow_X  = rightest + (s_btn_size or 1.1)
@@ -732,13 +790,24 @@ local function reset_data(data)
 	data.items       = data.items_raw
 end
 
+local function get_item_recipes(item_name)
+	local recipes = minetest.get_all_craft_recipes(item_name) or {}
+	if custom_crafts[item_name] then
+		for _, v in pairs(custom_crafts[item_name]) do
+			recipes[#recipes + 1] = v
+		end
+	end
+
+	return recipes
+end
+
 local function get_init_items()
 	local recipes
 	local used_items
 	for item_name, item in pairs(minetest.registered_items) do
-		recipes = minetest.get_all_craft_recipes(item_name)
+		recipes = get_item_recipes(item_name)
 
-		if recipes and item_name ~= "" then
+		if #recipes > 0 and item_name ~= "" then
 			table.insert(init_items, item_name)
 			for _, recipe in pairs(recipes) do
 				if recipe then
