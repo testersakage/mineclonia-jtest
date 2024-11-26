@@ -821,8 +821,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 
 				-- Always use a new target if specified.
 				if new_target then
-					destination
-						= self:gwp_align_start_pos (new_target)
+					destination = mcl_util.get_nodepos (new_target)
 					session.destination = destination
 					session.last_partial = nil
 				end
@@ -889,8 +888,7 @@ function mob_class:poll_navigation_state (self_pos, dtime, timeout, new_target)
 		session.path_requested = 0
 		-- Always use a new target if specified.
 		if new_target then
-			destination
-				= self:gwp_align_start_pos (new_target)
+			destination = mcl_util.get_nodepos (new_target)
 			session.destination = destination
 			session.last_partial = nil
 		else
