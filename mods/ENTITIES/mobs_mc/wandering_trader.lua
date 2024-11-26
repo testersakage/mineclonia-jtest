@@ -388,6 +388,7 @@ local function convert_old_trades (tradestring)
 end
 
 function wandering_trader:post_load_staticdata ()
+	mob_class.post_load_staticdata (self)
 	if self._trades and type (self._trades) ~= "table" then
 		self._trades = convert_old_trades (self._trades, self._tier)
 	end

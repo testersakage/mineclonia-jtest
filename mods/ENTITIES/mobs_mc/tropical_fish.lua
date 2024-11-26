@@ -55,7 +55,6 @@ local tropical_fish = {
 	do_go_pos = mcl_mobs.mob_class.fish_do_go_pos,
 	breathes_in_water = true,
 	flops = true,
-	view_range = 16,
 	runaway = true,
 	pace_chance = 40,
 }

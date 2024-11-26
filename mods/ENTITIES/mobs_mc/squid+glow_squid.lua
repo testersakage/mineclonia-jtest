@@ -39,7 +39,6 @@ local squid = {
 	makes_footstep_sound = false,
 	movement_speed = 14,
 	breathes_in_water = true,
-	view_range = 16,
 	runaway = false,
 	drops = {
 		{

@@ -207,8 +207,6 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 		distance = 16,
 	},
 	movement_speed = 7.0,
-	view_range = 16,
-	tracking_distance = 16,
 	attack_type = "crossbow",
 	specific_attack = {
 		"player",
@@ -424,6 +422,7 @@ function piglin:register_death_of_target ()
 end
 
 function piglin:post_load_staticdata ()
+	mob_class.post_load_staticdata (self)
 	if not self._piglin_initialized
 		and not self._structure_spawn
 		and pr:next (1, 10) <= 2 then

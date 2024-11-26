@@ -85,7 +85,6 @@ local rabbit = {
 		"mcl_farming:carrot_item",
 		"mcl_farming:carrot_item_gold",
 	},
-	view_range = 8,
 	climb_powder_snow = true,
 	follow_bonus = 1.0,
 	pursuit_bonus = 1.4,

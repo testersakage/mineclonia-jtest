@@ -2975,30 +2975,30 @@ function mob_class:gwp_close_memorized_doors ()
 	self.doors_to_close = remaining
 end
 
-function mob_class:gwp_memorize_door (door_node)
+function mob_class:gwp_memorize_door (door_wp)
 	if not self.doors_to_close then
-		self.doors_to_close = { door_node, }
+		self.doors_to_close = { door_wp, }
 	else
-		table.insert (self.doors_to_close, door_node)
+		table.insert (self.doors_to_close, door_wp)
 	end
 end
 
-function mob_class:gwp_open_door (door_node, node)
+function mob_class:gwp_open_door (door_node, node, dtime)
 	local def = minetest.registered_nodes[node.name]
 	-- Copy this position, lest it be modified by
 	-- the right click handler.
 	def.on_rightclick (door_node, node, self)
 end
 
-function mob_class:gwp_open_and_memorize_door (door)
+function mob_class:gwp_open_and_memorize_door (door, dtime)
 	local node = minetest.get_node (door)
 	if minetest.get_item_group (node.name, "door") ~= 0
 		and minetest.get_item_group (node.name, "iron_door") == 0 then
-		local door_node = vector.copy (door)
-		if not mcl_doors.is_open (door) then
-			self:gwp_open_door (door_node, node)
+		local door_node = mcl_util.get_nodepos (door)
+		if not mcl_doors.is_open (door_node) then
+			self:gwp_open_door (door_node, node, dtime)
 		end
-		self:gwp_memorize_door (door_node)
+		self:gwp_memorize_door (door)
 	end
 end
 
@@ -3124,7 +3124,7 @@ function mob_class:gwp_next_waypoint (dtime)
 		if self.can_open_doors
 			and (next_wp.class == "DOOR_WOOD_CLOSED"
 				or next_wp.class == "DOOR_OPEN") then
-			self:gwp_open_and_memorize_door (next_wp)
+			self:gwp_open_and_memorize_door (next_wp, dtime)
 		end
 	else
 		self:cancel_navigation ()
@@ -3140,7 +3140,7 @@ function mob_class:gwp_next_waypoint (dtime)
 		and self.can_open_doors
 		and (prev_wp.class == "DOOR_WOOD_CLOSED"
 			or prev_wp.class == "DOOR_OPEN") then
-		self:gwp_open_and_memorize_door (prev_wp)
+		self:gwp_open_and_memorize_door (prev_wp, dtime)
 	end
 end
 

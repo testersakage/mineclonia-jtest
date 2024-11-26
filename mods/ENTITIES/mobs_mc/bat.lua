@@ -63,7 +63,6 @@ local bat = {
 		hang_speed = 4,
 	},
 	fall_damage = 0,
-	view_range = 16,
 	fear_height = 0,
 	fly = true,
 	makes_footstep_sound = false,

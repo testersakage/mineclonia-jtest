@@ -379,7 +379,7 @@ mcl_potions.register_effect({
 		end
 	end,
 	on_end = function(object)
-			remove_physics_factor (object, "speed", "walk_velocity",
+			remove_physics_factor (object, "speed", "movement_speed",
 					   "mcl_potions:dolphin")
 	end,
 	particle_color = "#6AABFD",
@@ -387,6 +387,8 @@ mcl_potions.register_effect({
 	timer_uses_factor = false,
 	hit_timer_step = 1,
 })
+
+mcl_mobs.make_physics_factor_persistent ("mcl_potions:dolphin")
 
 mcl_potions.register_effect({
 	name = "leaping",
@@ -408,6 +410,8 @@ mcl_potions.register_effect({
 	lvl1_factor = 0.5,
 	lvl2_factor = 1,
 })
+
+mcl_mobs.make_physics_factor_persistent ("mcl_potions:leaping")
 
 mcl_potions.register_effect({
 	name = "slow_falling",
@@ -435,6 +439,8 @@ mcl_potions.register_effect({
 	particle_color = "#ACCCFF",
 })
 
+mcl_mobs.make_physics_factor_persistent ("mcl_potions:slow_falling")
+
 mcl_potions.register_effect({
 	name = "swiftness",
 	description = S("Swiftness"),
@@ -455,6 +461,8 @@ mcl_potions.register_effect({
 	lvl1_factor = 0.2,
 	lvl2_factor = 0.4,
 })
+
+mcl_mobs.make_physics_factor_persistent ("mcl_potions:swiftness")
 
 mcl_potions.register_effect({
 	name = "slowness",
@@ -511,6 +519,8 @@ mcl_potions.register_effect({
 	lvl1_factor = 0.9,
 	lvl2_factor = 1.8,
 })
+
+mcl_mobs.make_physics_factor_persistent ("mcl_potions:levitation")
 
 mcl_potions.register_effect({
 	name = "night_vision",
@@ -1677,6 +1687,10 @@ function mcl_potions.clear_effect(object, effectname)
 	end
 	if item_speed_effects[effectname] then
 		item_speed_effects[effectname][object] = nil
+	end
+	local entity = object:get_luaentity ()
+	if entity and entity._mcl_potions then
+		entity._mcl_potions["_EF_" .. effectname] = nil
 	end
 	if not object:is_player() then return end
 	potions_set_hud(object)

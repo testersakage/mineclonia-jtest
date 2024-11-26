@@ -67,8 +67,6 @@ local strider = {
 	fire_damage = 0,
 	water_damage = 5,
 	_mcl_freeze_damage = 5,
-	fear_height = 4,
-	view_range = 16,
 	fire_resistant = true,
 	floats_on_lava = true,
 	floats = 0,
@@ -78,6 +76,8 @@ local strider = {
 	follow_herd_bonus = 1.0,
 	follow_bonus = 1.4,
 	drive_bonus = 0.55,
+	view_range = 16.0,
+	tracking_distance = 16.0,
 }
 
 ------------------------------------------------------------------------

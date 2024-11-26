@@ -60,7 +60,6 @@ local salmon = {
 	_school_size = 5,
 	breathes_in_water = true,
 	flops = true,
-	view_range = 16,
 	runaway = true,
 	movement_speed = 14,
 	pace_chance = 40,

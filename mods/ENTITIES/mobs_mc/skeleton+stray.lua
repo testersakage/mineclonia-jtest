@@ -35,8 +35,6 @@ local skeleton = table.merge (posing_humanoid, {
 		legs = 0.085,
 		feet = 0.085,
 	},
-	shooter_avoid_enemy = true,
-	strafes = true,
 	makes_footstep_sound = true,
 	textures = {
 			"mobs_mc_empty.png", -- armor
@@ -92,8 +90,6 @@ local skeleton = table.merge (posing_humanoid, {
 	ignited_by_sunlight = true,
 	avoids_sunlight = true,
 	floats = 0,
-	view_range = 16,
-	fear_height = 4,
 	attack_type = "bowshoot",
 	specific_attack = {
 		"mobs_mc:iron_golem",

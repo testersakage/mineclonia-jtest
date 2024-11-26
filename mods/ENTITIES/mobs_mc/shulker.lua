@@ -52,8 +52,6 @@ local shulker = {
 		},
 	},
 	animation = {},
-	view_range = 16,
-	fear_height = 0,
 	movement_speed = 0,
 	_color = "purple",
 	_mcl_fishing_hookable = true,

@@ -1150,7 +1150,7 @@ function mob_class:display_wielditem (offhand)
 	})
 end
 
-function mob_class:set_wielditem (stack)
+function mob_class:set_wielditem (stack, drop_probability)
 	if not self.can_wield_items then
 		return
 	end
@@ -1165,19 +1165,24 @@ function mob_class:set_wielditem (stack)
 	self._using_wielditem = nil
 	self._wielditem = stack_string
 	self._effective_wielditem_drop_probability
-		= self.wielditem_drop_probability
+		= drop_probability or self.wielditem_drop_probability
 	self:display_wielditem (false)
 end
 
-function mob_class:drop_wielditem (bonus)
+function mob_class:drop_wielditem (bonus, min_probability)
 	local self_pos = self.object:get_pos ()
 	if self._effective_wielditem_drop_probability
 		and self._wielditem then
 		local probability = self._effective_wielditem_drop_probability
 		local item = self._wielditem
 		if probability > 0 and item and item ~= ""
+			and (probability + bonus) >= (min_probability or 0)
 			and math.random () <= probability + bonus then
-			mcl_util.drop_item_stack (self_pos, ItemStack (self._wielditem))
+			local stack = ItemStack (self._wielditem)
+
+			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
+				mcl_util.drop_item_stack (self_pos, stack)
+			end
 		end
 		self:set_wielditem (ItemStack ())
 	end
@@ -1401,21 +1406,26 @@ end
 -- Offhand item wielding.
 ------------------------------------------------------------------------
 
-function mob_class:drop_offhand_item (bonus)
+function mob_class:drop_offhand_item (bonus, min_probability)
 	local self_pos = self.object:get_pos ()
 	if self._effective_offhand_drop_probability
 		and self._offhand_item then
 		local probability = self._effective_offhand_drop_probability
 		local item = self._offhand_item
 		if probability > 0 and item and item ~= ""
+			and (probability + bonus) >= (min_probability or 0)
 			and math.random () <= probability + bonus then
-			mcl_util.drop_item_stack (self_pos, ItemStack (self._offhand_item))
+			local stack = ItemStack (self._offhand_item)
+
+			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
+				mcl_util.drop_item_stack (self_pos, stack)
+			end
 		end
-		self._offhand_item = nil
+		self:set_offhand_item (ItemStack (""))
 	end
 end
 
-function mob_class:set_offhand_item (stack)
+function mob_class:set_offhand_item (stack, drop_probability)
 	if not self._offhand_wielditem_info then
 		return
 	end
@@ -1427,7 +1437,7 @@ function mob_class:set_offhand_item (stack)
 	end
 
 	self._effective_offhand_drop_probability
-		= self.wielditem_drop_probability
+		= drop_probability or self.wielditem_drop_probability
 	self:display_wielditem (true)
 end
 

@@ -78,12 +78,13 @@ local evoker = table.merge (illager, {
 		"mobs_mc:iron_golem",
 	},
 	attack_type = "null",
-	view_range = 16,
 	pace_bonus = 0.6,
 	runaway_bonus_near = 1.0,
 	runaway_bonus_far = 0.6,
 	_banner_bone = "head",
 	_banner_bone_position = vector.new (0, 0, -2.556729),
+	tracking_distance = 12.0,
+	view_range = 12.0,
 })
 
 ------------------------------------------------------------------------

@@ -48,7 +48,6 @@ local axolotl = {
 	follow = {
 		"mcl_buckets:bucket_tropical_fish"
 	},
-	view_range = 16,
 	on_rightclick = function(self, clicker)
 		local bn = clicker:get_wielded_item():get_name()
 		if bn == "mcl_buckets:bucket_water" or bn == "mcl_buckets:bucket_river_water" then

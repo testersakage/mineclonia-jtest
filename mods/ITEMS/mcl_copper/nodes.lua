@@ -168,7 +168,7 @@ for n, desc in pairs(n_desc) do
 	})
 	mcl_doors:register_door("mcl_copper:door"..n, {
 		description = D(desc .. "Copper Door"),
-		groups = { door = 1, copper = 1, pickaxey = 2, building_block = 1},
+		groups = { door = 1, copper = 1, pickaxey = 2, building_block = 1, door_iron = 1,},
 		inventory_image = "mcl_copper_door"..n..".png",
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		sound_close = "doors_steel_door_close",

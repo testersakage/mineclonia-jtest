@@ -25,7 +25,6 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	},
 	makes_footstep_sound = true,
 	movement_speed = 7.0,
-	view_range = 32,
 	attack_type = "crossbow",
 	specific_attack = {
 		"mobs_mc:iron_golem",
@@ -87,6 +86,8 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	},
 	pace_bonus = 0.6,
 	_humanoid_superclass = illager,
+	view_range = 32.0,
+	tracking_distance = 32.0,
 }))
 
 ------------------------------------------------------------------------
