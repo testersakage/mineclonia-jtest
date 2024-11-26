@@ -668,7 +668,8 @@ mcl_villages.register_poi ("mcl_villages:librarian", {
 	is_valid = function (nodepos)
 		local node = minetest.get_node (nodepos)
 		return (node.name == "ignore"
-			or node.name == "mcl_lectern:lectern")
+			or node.name == "mcl_lectern:lectern"
+			or node.name == "mcl_lectern:lectern_with_book")
 	end,
 	village_center = true,
 })

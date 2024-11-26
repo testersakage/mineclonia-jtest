@@ -1091,7 +1091,7 @@ local villager_professions = {
 		description = S ("Librarian"),
 		name = "librarian",
 		poi = "mcl_villages:librarian",
-		group = "mcl_lectern:lectern",
+		group = "group:lectern",
 		texture = "mobs_mc_villager_librarian.png",
 		extra_pick_up = {},
 	},
