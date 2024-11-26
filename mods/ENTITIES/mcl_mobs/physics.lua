@@ -754,6 +754,20 @@ function mob_class:validate_attribute (field, value)
 	return value
 end
 
+function mob_class:post_apply_physics_factor (field, oldvalue, value)
+	if field == "movement_speed" then
+		-- Rescale gowp velocity (or stupid_velocity) to match
+		-- the new movement_speed.
+		if self.waypoints or self.pathfinding_context then
+			local factor = self.gowp_velocity / oldvalue
+			self.gowp_velocity = factor * value
+		elseif self.stupid_target then
+			local factor = self.stupid_velocity / oldvalue
+			self.stupid_velocity = factor * value
+		end
+	end
+end
+
 local function apply_physics_factors (self, field)
 	local base = self._physics_factors[field].base or self[field]
 	local total = base
@@ -762,9 +776,7 @@ local function apply_physics_factors (self, field)
 	local to_multiply_total = {}
 	for name, value in pairs (self._physics_factors[field]) do
 		if name ~= "base" then
-			if type (value) == "number" then
-				table.insert (to_multiply_total, value)
-			elseif value.op == "scale_by" then
+			if value.op == "scale_by" then
 				table.insert (to_multiply_total, value.amount)
 			elseif value.op == "add_multiplied_base" then
 				table.insert (to_add_multiply_base, value.amount)
@@ -785,7 +797,9 @@ local function apply_physics_factors (self, field)
 	for _, value in ipairs (to_multiply_total) do
 		total = total * value
 	end
+	local oldvalue = self[field]
 	self[field] = self:validate_attribute (field, total)
+	self:post_apply_physics_factor (field, oldvalue, total)
 end
 
 function mob_class:set_physics_factor_base (field, base)
@@ -800,6 +814,12 @@ end
 function mob_class:add_physics_factor (field, id, factor, op)
 	if not self._physics_factors[field] then
 		self._physics_factors[field] = { base = self[field], }
+	else
+		-- Do not apply physics factors redundantly.
+		local old = self._physics_factors[field][id]
+		if old and old.amount == factor and old.op == op then
+			return
+		end
 	end
 	self._physics_factors[field][id] = {
 		amount = factor,
@@ -809,7 +829,8 @@ function mob_class:add_physics_factor (field, id, factor, op)
 end
 
 function mob_class:remove_physics_factor (field, id)
-	if not self._physics_factors[field] then
+	if not self._physics_factors[field]
+		or not not self._physics_factors[field][id] then
 		return
 	end
 	self._physics_factors[field][id] = nil
@@ -825,6 +846,15 @@ end
 
 function mob_class:restore_physics_factors ()
 	for field, factors in pairs (self._physics_factors) do
+		-- Upgrade obsolete numerical factors.
+		for id, data in pairs (factors) do
+			if id ~= "base" and type (data) == "number" then
+				factors[id] = {
+					amount = data,
+					op = "scale_by",
+				}
+			end
+		end
 		apply_physics_factors (self, field)
 	end
 end
