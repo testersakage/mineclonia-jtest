@@ -3693,6 +3693,7 @@ function villager:sleep (self_pos, dtime)
 			if position then
 				self.object:set_pos (position)
 				self:set_yaw (yaw)
+				self:gwp_close_memorized_doors ()
 				self:begin_sleep ()
 				self._villager_sleeping = true
 				return "_villager_sleeping"
