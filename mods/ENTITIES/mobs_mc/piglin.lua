@@ -123,7 +123,7 @@ function piglin_base:conversion_step (self_pos, dtime)
 			= self._conversion_time + dtime
 		if self._conversion_time > 15 then
 			local object
-				= mcl_util.replace_mob (self.object, self._convert_to)
+				= self:replace_with (self._convert_to, true)
 			if object then
 				mcl_potions.give_effect ("nausea", object, 1, 10, false)
 			end
@@ -437,7 +437,7 @@ function piglin:tick_breeding ()
 end
 
 function piglin:on_spawn ()
-	if not self.child then
+	if not self.child and not self._converted_from_old_piglin then
 		local f = pr:next (1, 10)
 		if f == 1 then
 			self.armor_list.head = "mcl_armor:helmet_gold"
@@ -1350,7 +1350,7 @@ function piglin:should_cancel_retreat (target)
 	elseif (entity.name == "mobs_mc:zoglin"
 		or entity.name == "mobs_mc:baby_zoglin"
 		or entity.name == "mobs_mc:zombified_piglin")
-			and entity ~= self._nearest_zombified then
+			and target ~= self._nearest_zombified then
 		return true
 	end
 	return false
@@ -1494,8 +1494,23 @@ mcl_mobs.register_mob ("mobs_mc:piglin", piglin)
 -- Legacy sword piglin.
 ------------------------------------------------------------------------
 
--- TODO: convert legacy sword piglins into unified ones.
--- mcl_mobs.register_mob ("mobs_mc:sword_piglin", {})
+local old_sword_piglin = {}
+
+function old_sword_piglin:on_activate (staticdata, dtime)
+	local data = staticdata
+		and minetest.deserialize (staticdata)
+		or {}
+	local self_pos = self.object:get_pos ()
+	minetest.add_entity (self_pos, "mobs_mc:piglin", minetest.serialize ({
+		_wielditem = "mcl_tools:sword_gold",
+		nametag = data.nametag,
+		_piglin_initialized = true,
+		_converted_from_old_piglin = true,
+	}))
+	self.object:remove ()
+end
+
+minetest.register_entity ("mobs_mc:sword_piglin", old_sword_piglin)
 
 ------------------------------------------------------------------------
 -- Piglin Brute.
@@ -1643,43 +1658,47 @@ piglin_brute.ai_functions = {
 mcl_mobs.register_mob ("mobs_mc:piglin_brute", piglin_brute)
 
 ------------------------------------------------------------------------
--- Zombie Pigman.
--- TODO: implement by extending Zombie.
+-- Zombified Piglin.
 ------------------------------------------------------------------------
 
-mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
-	description = S("Zombiefied Piglin"),
-	-- type="animal", passive=false: This combination is needed for a neutral mob which becomes hostile, if attacked
-	type = "animal",
-	passive = false,
+local zombie = mobs_mc.zombie
+
+local zombified_piglin = table.merge (zombie, {
+	description = S("Zombified Piglin"),
 	spawn_class = "passive",
-	can_despawn = true,
-	do_custom = function() end,
-	on_spawn = function() end,
-	on_rightclick = function() end,
-	attack_animals = true,
 	prevents_sleep_when_hostile = true,
-	mesh = "extra_mobs_piglin.b3d",
-	textures = {"extra_mobs_zombified_piglin.png", "default_tool_goldsword.png", "blank.png"},
+	_neutral_to_players = true,
+	specific_attack = {},
+	mesh = "mobs_mc_piglin.b3d",
+	_child_mesh = "mobs_mc_baby_piglin.b3d",
+	textures = {
+		{
+			"extra_mobs_zombified_piglin.png",
+			"blank.png",
+			"blank.png",
+		}
+	},
+	visual_size = {
+		x = 1.0,
+		y = 1.0,
+	},
 	attack_type = "melee",
 	animation = {
 		stand_start = 0, stand_end = 79, stand_speed = 30,
-		walk_start = 168, walk_end = 187, walk_speed = 30,
-		run_start = 440, run_end = 459, run_speed = 30,
+		walk_start = 168, walk_end = 187, walk_speed = 12,
+		run_start = 168, run_end = 187, run_speed = 12,
 		punch_start = 189, punch_end = 198, punch_speed = 45,
+		dance_start = 500, dance_end = 520, dance_speed = 25,
 	},
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 6,
 	xp_max = 6,
-	armor = {undead = 90, fleshy = 90},
-	group_attack = { "mobs_mc:zombified_piglin" },
-	damage = 9,
+	damage = 5.0,
 	reach = 2,
-	head_swivel = "head.control",
-	bone_eye_height = 2.4,
+	head_swivel = "Head",
+	bone_eye_height = 6.7495,
 	head_eye_height = 1.79,
-	curiosity = 15,
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
 	makes_footstep_sound = true,
 	lava_damage = 0,
@@ -1694,7 +1713,127 @@ mcl_mobs.register_mob("mobs_mc:zombified_piglin",table.merge(piglin,{
 		damage = "mobs_mc_zombiepig_hurt",
 		distance = 16,
 	},
-}))
+	_armor_texture_slots = piglin._armor_texture_slots,
+	_armor_transforms = piglin._armor_transforms,
+	wielditem_info = piglin.wielditem_info,
+	_offhand_wielditem_info = piglin._offhand_wielditem_info,
+	_reinforcement_type = "mobs_mc:zombified_piglin",
+	_alert_interval = 0,
+	ignited_by_sunlight = false,
+	group_attack = {
+		"mobs_mc:zombified_piglin",
+	},
+})
+
+------------------------------------------------------------------------
+-- Zombified Piglin mechanics.
+------------------------------------------------------------------------
+
+function zombified_piglin:zombie_post_spawn ()
+	self:set_physics_factor_base ("_spawn_reinforcements_chance", 0.0)
+end
+
+function zombified_piglin:tick_breeding ()
+end
+
+function zombified_piglin:generate_default_equipment (mob_factor, do_armor, do_wielditems)
+	mob_class.generate_default_equipment (self, mob_factor, do_armor, false)
+
+	if do_wielditems then
+		self:set_wielditem (ItemStack ("mcl_tools:sword_gold"))
+		self:enchant_default_weapon (mob_factor, pr)
+	end
+end
+
+------------------------------------------------------------------------
+-- Zombified Piglin visuals.
+------------------------------------------------------------------------
+
+local zombified_piglin_poses = {
+	default = {
+		Arm_Left_Pitch_Control = {
+			nil,
+			vector.new (85, 0, 0),
+		},
+		Arm_Right_Pitch_Control = {
+			nil,
+			vector.new (85, 0, 0),
+		},
+		Arm_Left = {
+			nil,
+			vector.zero (),
+		},
+		Arm_Right = {
+			nil,
+			vector.zero (),
+		},
+	},
+	aggressive = {
+		Arm_Left_Pitch_Control = {
+			nil,
+			vector.new (110, 0, 0),
+		},
+		Arm_Right_Pitch_Control = {
+			nil,
+			vector.new (110, 0, 0),
+		},
+		Arm_Left = {
+			nil,
+			vector.zero (),
+		},
+		Arm_Right = {
+			nil,
+			vector.zero (),
+		},
+	},
+}
+
+mcl_mobs.define_composite_pose (zombified_piglin_poses, "jockey", {
+	["Leg_Left"] = {
+		vector.new (-1, 0, 0),
+		vector.new (-90, 35, 0),
+	},
+	["Leg_Right"] = {
+		vector.new (1, 0, 0),
+		vector.new (-90, -35, 0),
+	},
+})
+
+zombified_piglin._arm_poses = zombified_piglin_poses
+
+------------------------------------------------------------------------
+-- Zombified Piglin AI.
+------------------------------------------------------------------------
+
+function zombified_piglin:alert_other_piglins ()
+	local self_pos = self.object:get_pos ()
+	local aa = vector.offset (self_pos, -self.view_range, -10, -self.view_range)
+	local bb = vector.offset (self_pos, self.view_range, 10, self.view_range)
+	for object in minetest.objects_in_area (aa, bb) do
+		local entity = object:get_luaentity ()
+		if entity and entity.name == "mobs_mc:zombified_piglin"
+			and not entity.attack and entity ~= self then
+			entity:do_attack (self.attack, 15)
+		end
+	end
+end
+
+function zombified_piglin:ai_step (dtime)
+	zombie.ai_step (self, dtime)
+	if self.attack and not self.dead then
+		if self._alert_interval <= 0 then
+			self:alert_other_piglins ()
+			self._alert_interval = pr:next (4, 6) / 20.0
+		end
+	end
+end
+
+zombified_piglin.ai_functions = {
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
+
+mcl_mobs.register_mob ("mobs_mc:zombified_piglin", zombified_piglin)
 
 ------------------------------------------------------------------------
 -- Piglin & Zombie Pigman spawning.

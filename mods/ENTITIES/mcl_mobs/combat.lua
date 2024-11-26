@@ -341,7 +341,6 @@ function mob_class:call_group_attack(hitter)
 	end
 end
 
-
 function mob_class:should_attack (object)
 	local entity = object:get_luaentity ()
 	local specific = self.specific_attack or {}
@@ -373,7 +372,8 @@ function mob_class:should_attack (object)
 			return true
 		end
 	elseif object:is_player () and self:attack_player_allowed (object) then
-		return self.type == "monster" or table.indexof (specific, "player") ~= -1
+		return (self.type == "monster" and not self._neutral_to_players)
+			or table.indexof (specific, "player") ~= -1
 	end
 
 	return false
