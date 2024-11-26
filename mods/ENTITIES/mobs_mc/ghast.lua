@@ -70,6 +70,7 @@ local ghast = {
 	fire_resistant = true,
 	does_not_prevent_sleep = true,
 	_projectile_gravity = false,
+	_impulse_time = 0.0,
 }
 
 ------------------------------------------------------------------------
@@ -80,10 +81,15 @@ function ghast:do_go_pos (dtime, moveresult)
 	local target = self.movement_target or vector.zero ()
 	local self_pos = self.object:get_pos ()
 	local dir = vector.direction (self_pos, target)
+	local t = self._impulse_time - dtime
 
-	-- This acceleration circumvents the regular physics
-	-- mechanism, as in Minecraft.
-	self.object:add_velocity (dir * 0.5)
+	if t <= 0 then
+		t = (math.random (0, 5) + 2) / 20
+		-- This acceleration circumvents the regular physics
+		-- mechanism, as in Minecraft.
+		self.object:add_velocity (dir * 2.0)
+	end
+	self._impulse_time = t
 
 	if not self.attack then
 		local dir = math.atan2 (dir.z, dir.x) - math.pi/2
