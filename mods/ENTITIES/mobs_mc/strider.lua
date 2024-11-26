@@ -88,10 +88,24 @@ local pr = PcgRandom (os.time () - 74)
 
 function strider:on_spawn ()
 	if not self.child then
-		-- if pr:next (1, 30) == 1 then
-		-- 	-- TODO: Zombie Pigman jockeys.
-		-- else
-		if pr:next (1, 10) == 1 then
+		if pr:next (1, 30) == 1 then
+			local self_pos = self.object:get_pos ()
+			local no_jockeys = minetest.serialize ({
+				_no_chicken_jockeys = true,
+			})
+			local rider = minetest.add_entity (self_pos, "mobs_mc:zombified_piglin",
+							   no_jockeys)
+			if rider then
+				local entity = rider:get_luaentity ()
+				local pos = {
+					x = 0,
+					y = entity.child and 4.3 or 3.0,
+					z = 0,
+				}
+				entity:jock_to_existing (self.object, "", pos)
+				entity:set_wielditem (ItemStack ("mcl_mobitems:warped_fungus_on_a_stick"))
+			end
+		elseif pr:next (1, 10) == 1 then
 			local self_pos = self.object:get_pos ()
 			local child = minetest.serialize ({
 				child = true,

@@ -335,25 +335,27 @@ function zombie:on_spawn ()
 		-- Enable these zombies to spawn reinforcements.
 		self._can_break_doors = true
 	end
-	if self.child and math.random (100) <= 5 then
-		local chicken = self:find_chicken ()
-		if chicken then
-			self:jock_to_existing (chicken, CHICKEN_ATTACHMENT_POS)
-			local entity = chicken:get_luaentity ()
-			entity._is_chicken_jockey = true
-		end
-	elseif self.child and math.random (100) <= 5 then
-		local chicken = self:jock_to ("mobs_mc:chicken", CHICKEN_ATTACHMENT_POS)
-		if chicken then
-			local entity = chicken:get_luaentity ()
-			entity._is_chicken_jockey = true
+	if not self._no_chicken_jockeys then
+		if self.child and math.random (100) <= 5 then
+			local chicken = self:find_chicken ()
+			if chicken then
+				self:jock_to_existing (chicken, CHICKEN_ATTACHMENT_POS)
+				local entity = chicken:get_luaentity ()
+				entity._is_chicken_jockey = true
+			end
+		elseif self.child and math.random (100) <= 5 then
+			local chicken = self:jock_to ("mobs_mc:chicken", CHICKEN_ATTACHMENT_POS)
+			if chicken then
+				local entity = chicken:get_luaentity ()
+				entity._is_chicken_jockey = true
+			end
 		end
 	end
 	self:zombie_post_spawn ()
 end
 
 function zombie:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	posing_humanoid.mob_activate (self, staticdata, dtime)
 	self._visited_pois = {}
 	if self._zombie_health_bonus then
 		self.object:set_properties ({
