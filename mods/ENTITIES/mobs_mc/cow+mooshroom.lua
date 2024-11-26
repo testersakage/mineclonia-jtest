@@ -65,9 +65,9 @@ local cow_def = {
 		walk_start = 41, walk_end = 81, walk_speed = 80,
 		run_start = 41, run_end = 81, run_speed = 80,
 	},
-	follow = { "mcl_farming:wheat_item" },
-	view_range = 10,
-	fear_height = 4,
+	follow = {
+		"mcl_farming:wheat_item",
+	},
 	run_bonus = 2.0,
 }
 

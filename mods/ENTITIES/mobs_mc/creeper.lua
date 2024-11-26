@@ -60,8 +60,6 @@ local creeper_defs = {
 		look_start = 50, look_end = 108,
 	},
 	floats = 1,
-	fear_height = 4,
-	view_range = 16,
 	reach = 3,
 	pace_bonus = 0.8,
 }
@@ -265,7 +263,6 @@ local regular_creeper = table.merge (creeper_defs, {
 	spawn_in_group = 1,
 	head_swivel = "Head_Control",
 	bone_eye_height = 2.35,
-	head_eye_height = 1.8,
 	curiosity = 2,
 	textures = {
 		{

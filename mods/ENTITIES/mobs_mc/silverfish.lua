@@ -50,7 +50,6 @@ local silverfish = {
 		walk_start = 0, walk_end = 20, walk_speed = 30,
 		run_start = 0, run_end = 20, run_speed = 50,
 	},
-	view_range = 16,
 	attack_type = "melee",
 	damage = 1,
 	check_light = check_light,

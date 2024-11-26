@@ -79,10 +79,13 @@ local chicken = {
 		"mcl_farming:pumpkin_seeds",
 		"mcl_farming:beetroot_seeds",
 	},
-	view_range = 16,
-	fear_height = 4,
 	run_bonus = 1.4,
+	_is_chicken_jockey = false,
 }
+
+------------------------------------------------------------------------
+-- Chicken AI.
+------------------------------------------------------------------------
 
 chicken.ai_functions = {
 	mob_class.check_frightened,
@@ -100,22 +103,28 @@ function chicken:on_rightclick (clicker)
 end
 
 function chicken:do_custom (dtime)
-	self.egg_timer = (self.egg_timer or math.random(300, 600)) - dtime
-	if self.egg_timer > 0 then
-		return
+	-- Chickens mounted by a baby zombie never proceed to lay eggs
+	-- again.
+	if not self._is_chicken_jockey then
+		self.egg_timer = (self.egg_timer or math.random(300, 600)) - dtime
+		if self.egg_timer > 0 then
+			return
+		end
+		self.egg_timer = nil
+
+		local pos = self.object:get_pos ()
+		minetest.add_item (pos, "mcl_throwing:egg")
+		minetest.sound_play ("mobs_mc_chicken_lay_egg", {
+			pos = pos,
+			gain = 1.0,
+			max_hear_distance = 16,
+		}, true)
 	end
-	self.egg_timer = nil
-
-	local pos = self.object:get_pos()
-
-	minetest.add_item(pos, "mcl_throwing:egg")
-
-	minetest.sound_play("mobs_mc_chicken_lay_egg", {
-				    pos = pos,
-				    gain = 1.0,
-				    max_hear_distance = 16,
-	}, true)
 end
+
+------------------------------------------------------------------------
+-- Chicken visuals.
+------------------------------------------------------------------------
 
 function chicken:set_animation (anim, fixed_frame)
 	if self._flapping then
@@ -152,6 +161,10 @@ function chicken:motion_step (dtime, moveresult, self_pos)
 end
 
 mcl_mobs.register_mob ("mobs_mc:chicken", chicken)
+
+------------------------------------------------------------------------
+-- Chicken spawning.
+------------------------------------------------------------------------
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:chicken",
