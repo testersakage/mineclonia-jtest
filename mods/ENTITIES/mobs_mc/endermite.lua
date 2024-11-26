@@ -35,7 +35,6 @@ local endermite = {
 		stand_start = 0, stand_end = 0,
 		walk_start = 0, walk_end = 20, walk_speed = 55
 	},
-	view_range = 16,
 	damage = 2,
 	reach = 1,
 	head_eye_height = 0.13,

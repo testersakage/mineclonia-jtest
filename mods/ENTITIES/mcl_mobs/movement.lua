@@ -227,7 +227,7 @@ function mob_class:check_jump (self_pos, moveresult)
 
 	-- Read the height of every colliding node in moveresult,
 	-- and the node above.
-	for _, item in ipairs (moveresult.collisions) do
+	for _, item in pairs (moveresult.collisions) do
 		if item.type == "node"
 			and (item.new_velocity.x ~= item.old_velocity.x
 			     or item.new_velocity.z ~= item.old_velocity.z) then
@@ -1254,6 +1254,7 @@ local SOLID_PACING_GROUPS = {
 	"group:solid",
 	"group:top_snow",
 }
+mcl_mobs.SOLID_PACING_GROUPS = SOLID_PACING_GROUPS
 
 function mob_class:check_frightened (pos)
 	if self.frightened then
@@ -1385,6 +1386,7 @@ function mob_class:run_ai (dtime, moveresult)
 		if not self._jockey_rider then
 			local mob = self:mob_controlling_movement ()
 			mob:set_animation ("stand")
+			self:set_animation ("stand")
 		end
 		if self._active_activity then
 			self[self._active_activity] = nil
@@ -1817,4 +1819,23 @@ function mob_class:return_to_restriction (self_pos, dtime)
 		end
 	end
 	return false
+end
+
+------------------------------------------------------------------------
+-- Mob attribute randomization.
+------------------------------------------------------------------------
+
+mob_class._persistent_physics_factors = {
+	["mcl_mobs:standard_view_range_bonus"] = true,
+	["mcl_mobs:standard_tracking_distance_bonus"] = true,
+}
+
+function mob_class:randomize_attributes ()
+	-- This was once 0.05 but has been increased to ~1/9 in MC
+	-- 1.20.
+	local d = mcl_util.dist_triangular (0.0, 0.11485)
+	self:add_physics_factor ("view_range", "mcl_mobs:standard_view_range_bonus",
+		d, "add_multiplied_base")
+	self:add_physics_factor ("tracking_distance", "mcl_mobs:standard_tracking_distance_bonus",
+		d, "add_multiplied_base")
 end

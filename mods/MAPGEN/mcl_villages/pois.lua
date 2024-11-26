@@ -551,15 +551,40 @@ function mcl_villages.get_pois_in_by_nodepos (aa, bb)
 	return list1
 end
 
-function mcl_villages.random_poi_in (aa, bb, predicate)
+function mcl_villages.random_poi_in (aa, bb, predicate, userdata)
 	local list = mcl_villages.get_pois_in_by_nodepos (aa, bb)
 	table.shuffle (list)
 	for _, poi in pairs (list) do
-		if not predicate or predicate (poi) then
+		if not predicate or predicate (poi, userdata) then
 			return poi
 		end
 	end
 	return nil
+end
+
+local function calc_distsqr (a, b)
+	local dx = a.x - b.x
+	local dy = a.y - b.y
+	local dz = a.z - b.z
+	return dx * dx + dy * dy + dz * dz
+end
+
+function mcl_villages.nearest_poi_in_radius (center, radius, predicate, userdata)
+	local aa = vector.offset (center, -radius, -radius, -radius)
+	local bb = vector.offset (center, radius, radius, radius)
+	local list = mcl_villages.get_pois_in_by_nodepos (aa, bb)
+	local distsqr = radius * radius
+	local nearest, dist
+	for _, poi in pairs (list) do
+		local this_dist = calc_distsqr (center, poi.min)
+		if this_dist <= distsqr
+			and (not nearest or this_dist < dist)
+			and (not predicate or predicate (poi, userdata)) then
+			nearest = poi
+			dist = this_dist
+		end
+	end
+	return nearest, dist and math.sqrt (dist) or nil
 end
 
 ------------------------------------------------------------------------

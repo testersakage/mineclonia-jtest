@@ -87,7 +87,6 @@ local blaze = {
 	fire_damage = 0,
 	fall_damage = 0,
 	gravity_drag = 0.6,
-	view_range = 16,
 	attack_type = "null",
 	arrow = "mobs_mc:blaze_fireball",
 	passive = false,
@@ -95,20 +94,14 @@ local blaze = {
 	glow = 14,
 	fire_damage_resistant = true,
 	check_light = check_light,
+	view_range = 48.0,
 	tracking_distance = 48.0,
 	_projectile_gravity = false,
 }
 
-blaze.gwp_penalties = table.copy (mob_class.gwp_penalties)
-blaze.gwp_penalties.WATER = -1.0
-blaze.gwp_penalties.LAVA = 8.0
-blaze.gwp_penalties.DANGER_FIRE = 0.0
-blaze.gwp_penalties.DAMAGE_FIRE = 0.0
-
-blaze.ai_functions = {
-	mob_class.check_attack,
-	mob_class.check_pace,
-}
+------------------------------------------------------------------------
+-- Blaze visuals.
+------------------------------------------------------------------------
 
 local function blaze_set_charged (self, charged)
 	if charged then
@@ -179,6 +172,14 @@ function blaze:do_custom (dtime)
 		blaze_set_charged (self, false)
 	end
 end
+
+function blaze:set_animation_speed (custom_speed)
+	self.object:set_animation_frame_speed (25)
+end
+
+------------------------------------------------------------------------
+-- Blaze AI.
+------------------------------------------------------------------------
 
 function blaze:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
@@ -279,14 +280,30 @@ function blaze:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	end
 end
 
-function blaze:set_animation_speed (custom_speed)
-	self.object:set_animation_frame_speed (25)
-end
+blaze.gwp_penalties = table.copy (mob_class.gwp_penalties)
+blaze.gwp_penalties.WATER = -1.0
+blaze.gwp_penalties.LAVA = 8.0
+blaze.gwp_penalties.DANGER_FIRE = 0.0
+blaze.gwp_penalties.DAMAGE_FIRE = 0.0
 
-mcl_mobs.register_mob("mobs_mc:blaze", blaze)
+blaze.ai_functions = {
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
 
--- Blaze fireball
-mcl_mobs.register_arrow("mobs_mc:blaze_fireball", {
+mcl_mobs.register_mob ("mobs_mc:blaze", blaze)
+
+------------------------------------------------------------------------
+-- Blaze spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.register_egg ("mobs_mc:blaze", S("Blaze"), "#f6b201", "#fff87e", 0)
+
+------------------------------------------------------------------------
+-- Small Fireball.
+------------------------------------------------------------------------
+
+mcl_mobs.register_arrow ("mobs_mc:blaze_fireball", {
 	visual = "sprite",
 	visual_size = {x = 1, y = 1},
 	textures = {"mcl_fire_fire_charge.png"},
@@ -332,6 +349,3 @@ mcl_mobs.register_arrow("mobs_mc:blaze_fireball", {
 		end
 	end
 })
-
--- spawn eggs
-mcl_mobs.register_egg("mobs_mc:blaze", S("Blaze"), "#f6b201", "#fff87e", 0)

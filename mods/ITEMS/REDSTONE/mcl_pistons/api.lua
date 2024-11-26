@@ -184,6 +184,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 					obj:add_velocity(vector.new(movedir.x * 9, movedir.y * 11, movedir.z * 9))
 				elseif entity.name == "__builtin:falling_node" then
 					obj:add_velocity(vector.new(movedir.x * 43, movedir.y * 72, movedir.z * 43))
+				elseif entity.is_mob then
+					obj:add_velocity (vector.new (movedir.x * 20, movedir.y * 20, movedir.z * 20))
 				else
 					obj:add_velocity(vector.new(movedir.x * 6, movedir.y * 9, movedir.z * 6))
 				end

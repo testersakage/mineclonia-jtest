@@ -138,7 +138,6 @@ local parrot_def = {
 	movement_speed = 4.0,
 	airborne = true,
 	makes_footstep_sound = false,
-	view_range = 16,
 	chase_owner_distance = 5.0,
 	stop_chasing_distance = 1.0,
 	pace_height = 7,

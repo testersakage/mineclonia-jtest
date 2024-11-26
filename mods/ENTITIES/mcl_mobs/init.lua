@@ -45,7 +45,6 @@ mcl_mobs.mob_class = {
 	xp_min = 0,
 	xp_max = 0,
 	breathes_in_water = false,
-	view_range = 16,
 	water_damage = 0,
 	lava_damage = 8,
 	fire_damage = 1,
@@ -93,10 +92,8 @@ mcl_mobs.mob_class = {
 	attack_animals = false,
 	attack_npcs = false,
 	esp = false,
-	facing_fence = false,
 	is_mob = true,
 	pushable = true,
-	avoid_distance = 9,
 	ignores_nametag = false,
 	rain_damage = 0,
 	child = false,
@@ -118,8 +115,10 @@ mcl_mobs.mob_class = {
 	_runaway_player_view_range = nil,
 	_runaway_monster_view_range = nil,
 	follow_distance = 6.0,
-	-- Distance at which targets will be relinquished.
-	tracking_distance = 32.0,
+	-- Distance at which targets will be acquired and relinquished
+	-- respectively.
+	view_range = 16.0,
+	tracking_distance = 16.0,
 	stop_distance = 2,
 	instant_death = false,
 	fire_resistant = false,
@@ -175,6 +174,7 @@ mcl_mobs.mob_class = {
 	_dominant_in_jockeys = true,
 	_need_roll = false,
 	_inventory_size = nil,
+	_persistent_physics_factors = {},
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
@@ -188,6 +188,8 @@ mcl_mobs.mob_class = {
 	_restriction_center = nil,
 	_restriction_size = 0,
 	_direct_sunlight = 0,
+	_physics_factors = nil,
+	_immersion_depth = 0,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
@@ -366,7 +368,7 @@ function mcl_mobs.register_mob(name, def)
 	local gwp_penalties = def.gwp_penalties
 		or mcl_mobs.mob_class.gwp_penalties
 	local final_def = setmetatable(table.merge(def,{
-		initial_properties = table.merge(mcl_mobs.mob_class.initial_properties,init_props),
+		initial_properties = table.merge(mob_class.initial_properties,init_props),
 		can_despawn = can_despawn,
 		rotate = math.rad(def.rotate or 0), --  0=front, 90=side, 180=back, 270=side2
 		head_eye_height = eye_height,
@@ -387,15 +389,12 @@ function mcl_mobs.register_mob(name, def)
 			return false, true, {}
 		end,
 		on_activate = function(self, staticdata, dtime)
-			self.is_mob = true
-			self._physics_factors = {}
-			self._timers = {}
-			if not self.texture_mods then
-				self.texture_mods = {}
-			end
-			return self:mob_activate(staticdata, dtime)
+			return self:mob_activate (staticdata, dtime)
 		end,
 		_spawner = def._spawner,
+		_persistent_physics_factors
+			= table.merge (mob_class._persistent_physics_factors,
+					def._persistent_physics_factors),
 	}),mcl_mobs.mob_class_meta)
 
 	mcl_mobs.registered_mobs[name] = final_def

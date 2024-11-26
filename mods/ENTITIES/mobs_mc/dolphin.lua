@@ -61,7 +61,6 @@ local dolphin = {
 	do_go_pos = mcl_mobs.mob_class.pitchswim_do_go_pos,
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	idle_gravity_in_liquids = true,
-	view_range = 16,
 	movement_speed = 24.0,
 	retaliates = true,
 	group_attack = { "mobs_mc:dolphin" },

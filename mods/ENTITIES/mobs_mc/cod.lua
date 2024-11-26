@@ -68,7 +68,6 @@ local cod = {
 	flops = true,
 	breathes_in_water = true,
 	movement_speed = 14.0,
-	view_range = 16,
 	runaway = true,
 	pace_chance = 40,
 }

@@ -62,7 +62,6 @@ local pig = {
 		"mcl_farming:beetroot_item",
 		"mcl_mobitems:carrot_on_a_stick"
 	},
-	view_range = 8,
 	steer_class = "follow_item",
 	steer_item = "mcl_mobitems:carrot_on_a_stick",
 	follow_herd_bonus = 1.1,

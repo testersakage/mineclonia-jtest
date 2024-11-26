@@ -40,7 +40,6 @@ local golem = {
 	sounds = {
 		damage = "mobs_mc_iron_golem_hurt"
 	},
-	view_range = 16,
 	stepheight = 1.01,
 	floats = 0,
 	movement_speed = 5.0,

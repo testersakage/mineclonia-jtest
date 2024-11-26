@@ -9,7 +9,10 @@ local function spawn_zombies(self)
 	for i=1,20 do
 		local p = vector.offset(nn[i%#nn],0,1,0)
 		if check_spawn_pos(p) then
-			local m = mcl_mobs.spawn(p,"mobs_mc:zombie")
+			local zombie = math.random (5, 100) <= 5
+				and "mobs_mc:baby_zombie"
+				or "mobs_mc:zombie"
+			local m = mcl_mobs.spawn (p, zombie)
 			if m then
 				local l = m:get_luaentity()
 				m:get_luaentity():gopath(self.pos)

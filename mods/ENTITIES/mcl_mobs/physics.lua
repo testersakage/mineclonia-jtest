@@ -740,37 +740,97 @@ function mob_class:check_suspend()
 	end
 end
 
-local function apply_physics_factors (self, field, id)
-    local base = self._physics_factors[field].base
-    for name, value in pairs (self._physics_factors[field]) do
-	if name ~= "base" then
-	    base = base * value
+------------------------------------------------------------------------
+-- Attribute modifiers.
+-- Ref: https://minecraft.wiki/w/Attribute#Modifiers.
+------------------------------------------------------------------------
+
+mcl_mobs.persistent_physics_factors = {}
+
+function mob_class:validate_attribute (field, value)
+	if value == "knockback_resistance" then
+		return math.max (0.0, math.min (1.0, value))
 	end
-    end
-    self[field] = base
+	return value
 end
 
-function mob_class:add_physics_factor (field, id, factor)
-    if not self._physics_factors[field] then
-	self._physics_factors[field] = { base = self[field], }
-    end
-    self._physics_factors[field][id] = factor
-    apply_physics_factors (self, field, id)
+local function apply_physics_factors (self, field)
+	local base = self._physics_factors[field].base or self[field]
+	local total = base
+	local to_add = {}
+	local to_add_multiply_base = {}
+	local to_multiply_total = {}
+	for name, value in pairs (self._physics_factors[field]) do
+		if name ~= "base" then
+			if type (value) == "number" then
+				table.insert (to_multiply_total, value)
+			elseif value.op == "scale_by" then
+				table.insert (to_multiply_total, value.amount)
+			elseif value.op == "add_multiplied_base" then
+				table.insert (to_add_multiply_base, value.amount)
+			elseif value.op == "add_multiplied_total" then
+				table.insert (to_multiply_total, 1.0 + value.amount)
+			elseif value.op == "add" then
+				table.insert (to_add, value.amount)
+			end
+		end
+	end
+	for _, value in ipairs (to_add) do
+		total = total + value
+	end
+	base = total
+	for _, value in ipairs (to_add_multiply_base) do
+		total = total + base * value
+	end
+	for _, value in ipairs (to_multiply_total) do
+		total = total * value
+	end
+	self[field] = self:validate_attribute (field, total)
+end
+
+function mob_class:set_physics_factor_base (field, base)
+	if not self._physics_factors[field] then
+		self._physics_factors[field] = { base = base, }
+	else
+		self._physics_factors[field].base = base
+	end
+	apply_physics_factors (self, field)
+end
+
+function mob_class:add_physics_factor (field, id, factor, op)
+	if not self._physics_factors[field] then
+		self._physics_factors[field] = { base = self[field], }
+	end
+	self._physics_factors[field][id] = {
+		amount = factor,
+		op = op or "scale_by",
+	}
+	apply_physics_factors (self, field)
 end
 
 function mob_class:remove_physics_factor (field, id)
-    if not self._physics_factors[field] then
-	return
-    end
-    self._physics_factors[field][id] = nil
-    apply_physics_factors (self, field, id)
+	if not self._physics_factors[field] then
+		return
+	end
+	self._physics_factors[field][id] = nil
+	apply_physics_factors (self, field)
 end
 
 function mob_class:stock_value (field)
-    if not self._physics_factors[field] then
-	    return self[field]
-    end
-    return self._physics_factors[field].base
+	if not self._physics_factors[field] then
+		return self[field]
+	end
+	return self._physics_factors[field].base
+end
+
+function mob_class:restore_physics_factors ()
+	for field, factors in pairs (self._physics_factors) do
+		apply_physics_factors (self, field)
+	end
+end
+
+function mcl_mobs.make_physics_factor_persistent (id)
+	mcl_mobs.persistent_physics_factors[id] = true
 end
 
 ------------------------------------------------------------------------

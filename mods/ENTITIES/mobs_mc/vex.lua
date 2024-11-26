@@ -38,7 +38,6 @@ local vex = {
 	},
 	damage = 4,
 	reach = 0.5,
-	view_range = 16,
 	movement_speed = 14,
 	sounds = {
 		death = "mobs_mc_vex_death",
