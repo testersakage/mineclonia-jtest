@@ -55,15 +55,15 @@ function mcl_beds.is_night(tod)
 	return  tod > 18541 or tod < 5458
 end
 
--- monsters prevent sleep unless the "does_not_prevent_sleep" flag is set
--- other mobs *can* prevent sleep when hostile if the "prevents_sleep_when_hostile"
--- flag is set. This is needed because zombiefied piglins technically count as
--- animals.
+-- monsters prevent sleep unless the "does_not_prevent_sleep" flag is
+-- set other mobs *can* prevent sleep when hostile if the
+-- "prevents_sleep_when_hostile" flag is set.
 local function prevents_sleep(mob_def,mob_ent)
-	if ( mob_def.prevents_sleep_when_hostile and mob_ent.state ~= "attack" )
-	or mob_def.type ~= "monster"
-	or mob_def.does_not_prevent_sleep
-	then return false end
+	if (mob_def.prevents_sleep_when_hostile and not mob_ent.attack)
+		or mob_def.type ~= "monster"
+		or mob_def.does_not_prevent_sleep then
+		return false
+	end
 	return true
 end
 
