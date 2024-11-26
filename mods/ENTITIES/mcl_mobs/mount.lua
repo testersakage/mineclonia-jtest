@@ -147,6 +147,11 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 
 	self:set_yaw (dir)
 
+	-- Cancel any ongoing activity.
+	if self._active_activity then
+		self:replace_activity (nil)
+	end
+
 	if self._drive_boost_elapsed then
 		self._drive_boost_elapsed = self._drive_boost_elapsed + dtime
 		if self._drive_boost_elapsed > self._drive_boost_total then
