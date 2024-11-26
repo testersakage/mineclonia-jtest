@@ -91,6 +91,7 @@ mcl_mobs.mob_class = {
 	_crossbow_backoff_threshold = nil,
 	attack_animals = false,
 	attack_npcs = false,
+	_neutral_to_players = false,
 	esp = false,
 	is_mob = true,
 	pushable = true,
