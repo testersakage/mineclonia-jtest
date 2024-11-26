@@ -3038,9 +3038,6 @@ function mob_class:gwp_skip_waypoint (self_pos, next_wp, ahead)
 			dir_to_self = vector.normalize (dir_to_self)
 
 			local dot = vector.dot (dir_to_ahead, dir_to_self)
-			-- if self.earmarked then
-			-- 	dbg.pp (math.deg (math.acos (dot)))
-			-- end
 			if dot > COS_15_DEG then
 				return true
 			end
