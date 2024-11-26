@@ -1668,6 +1668,12 @@ local zombified_piglin = table.merge (zombie, {
 	spawn_class = "passive",
 	prevents_sleep_when_hostile = true,
 	_neutral_to_players = true,
+	hp_min = 20,
+	hp_max = 20,
+	xp_min = 6,
+	xp_max = 6,
+	damage = 5.0,
+	reach = 2,
 	specific_attack = {},
 	mesh = "mobs_mc_piglin.b3d",
 	_child_mesh = "mobs_mc_baby_piglin.b3d",
@@ -1690,12 +1696,29 @@ local zombified_piglin = table.merge (zombie, {
 		punch_start = 189, punch_end = 198, punch_speed = 45,
 		dance_start = 500, dance_end = 520, dance_speed = 25,
 	},
-	hp_min = 20,
-	hp_max = 20,
-	xp_min = 6,
-	xp_max = 6,
-	damage = 5.0,
-	reach = 2,
+	drops = {
+		{
+			name = "mcl_mobitems:rotten_flesh",
+			chance = 1,
+			min = 1,
+			max = 1,
+			looting = "common",
+		},
+		{
+			name = "mcl_core:gold_nugget",
+			chance = 1,
+			min = 0,
+			max = 1,
+			looting = "common",
+		},
+		{
+			name = "mcl_core:gold_ingot",
+			chance = 40, -- 2.5%
+			min = 1,
+			max = 1,
+			looting = "rare",
+		},
+	},
 	head_swivel = "Head",
 	bone_eye_height = 6.7495,
 	head_eye_height = 1.79,
@@ -1825,6 +1848,19 @@ function zombified_piglin:ai_step (dtime)
 			self:alert_other_piglins ()
 			self._alert_interval = pr:next (4, 6) / 20.0
 		end
+	end
+
+	if self.child then
+		return
+	end
+
+	if self.attack then
+		self:add_physics_factor ("movement_speed",
+				"mobs_mc:zombified_piglin_attack_modifier",
+				1.0, "add")
+	else
+		self:remove_physics_factor ("movement_speed",
+				"mobs_mc:zombified_piglin_attack_modifier")
 	end
 end
 
