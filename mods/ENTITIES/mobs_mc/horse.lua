@@ -96,7 +96,6 @@ local horse = {
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
-	view_range = 16,
 	steer_class = "controls",
 	_food_items = {
 		["mcl_farming:wheat_item"] = {
@@ -187,10 +186,7 @@ function horse:enrage ()
 	-- TODO: angry noises.
 end
 
-local SOLID_PACING_GROUPS = {
-	"group:solid",
-	"group:top_snow",
-}
+local SOLID_PACING_GROUPS = mcl_mobs.SOLID_PACING_GROUPS
 
 local function horse_maybe_tame (self, self_pos, dtime)
 	local driver = self.driver

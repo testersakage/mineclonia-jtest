@@ -47,7 +47,6 @@ local wolf = {
 		distance = 16,
 	},
 	floats = 1,
-	view_range = 16,
 	movement_speed = 6.0,
 	damage = 4,
 	reach = 2,

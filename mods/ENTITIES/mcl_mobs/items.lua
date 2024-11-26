@@ -185,8 +185,9 @@ function mob_class:try_equip_item (stack, def, itemname)
 			end
 		end
 		self.armor_list[slot] = stack:to_string ()
-		local probability = self.armor_drop_probability[slot]
-		self:set_armor_drop_probability (slot, probability)
+		-- This indicates that the item was collected from a
+		-- player.
+		self:set_armor_drop_probability (slot, 2.0)
 		self:set_armor_texture ()
 		self.persistent = true
 		return true
@@ -195,14 +196,14 @@ function mob_class:try_equip_item (stack, def, itemname)
 		local item = self:get_wielditem ()
 		if self:wielditem_better_than (stack, item) then
 			self:drop_wielditem (0)
-			self:set_wielditem (stack)
+			self:set_wielditem (stack, 2.0)
 			return true
 		end
 	end
 	return false
 end
 
-function mob_class:drop_armor (bonus)
+function mob_class:drop_armor (bonus, min_probability)
 	if not self._armor_drop_probabilities then
 		return
 	end
@@ -210,8 +211,13 @@ function mob_class:drop_armor (bonus)
 	for name, item in pairs (self.armor_list) do
 		local probability = self:effective_drop_probability (name)
 		if probability > 0 and item and item ~= ""
+			and (probability + bonus) >= (min_probability or 0)
 			and math.random () <= probability + bonus then
-			mcl_util.drop_item_stack (self_pos, ItemStack (item))
+			local stack = ItemStack (item)
+
+			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
+				mcl_util.drop_item_stack (self_pos, stack)
+			end
 		end
 	end
 end

@@ -55,7 +55,6 @@ local villager_base = {
 		damage = "mobs_mc_villager_hurt",
 		distance = 10,
 	},
-	view_range = 16,
 	wielditem_info = {
 		position = WIELD_POSITION,
 		rotation = vector.new (135, 0, 0),
@@ -976,6 +975,7 @@ local villager = table.merge (villager_base, {
       can_wield_items = true,
       can_open_doors = true,
       tracking_distance = 48.0,
+      view_range = 48.0,
       _head_rot_limit = math.rad (110),
       ----------------------------------------
       -- Villager identity.
@@ -1003,7 +1003,7 @@ local villager = table.merge (villager_base, {
       -- The metatable values of these fields
       -- are replaced in mob_activate or ai_init.
       ----------------------------------------
-      _villager_type = "default",
+      _villager_type = "plains",
       _retry_counters = {},
       _gossips = {},
       _reputation = {},
@@ -1132,6 +1132,7 @@ local villager_professions = {
 		name = "nitwit",
 		poi = nil,
 		group = nil,
+		texture = "mobs_mc_villager_nitwit.png",
 		extra_pick_up = {},
 	},
 }
@@ -1168,7 +1169,6 @@ end
 ------------------------------------------------------------------------
 
 local villager_type_overlays = {
-	default = "",
 	taiga = "mobs_mc_villager_taiga.png",
 	swamp = "mobs_mc_villager_swamp.png",
 	snowy = "mobs_mc_villager_snow.png",
@@ -1326,7 +1326,11 @@ function villager:wake_up ()
 	self.object:set_properties ({
 		collisionbox = self.collisionbox,
 	})
-	self:set_animation ("stand")
+	if self:navigation_finished () then
+		self:set_animation ("stand")
+	else
+		self:set_animation ("walk")
+	end
 	self._last_awoken_gmt = minetest.get_gametime ()
 end
 
@@ -2111,6 +2115,10 @@ local function villager_log (str)
 end
 
 local function villager_type_from_biome (biomedata)
+	if not biomedata then
+		return "plains"
+	end
+
 	local name = minetest.get_biome_name (biomedata.biome)
 
 	if name:find ("Mesa")
@@ -2128,7 +2136,7 @@ local function villager_type_from_biome (biomedata)
 	elseif name:find ("Swamp") then
 		return "swamp"
 	else
-		return "default"
+		return "plains"
 	end
 end
 
@@ -2169,6 +2177,11 @@ end
 
 function villager:mob_activate (staticdata, dtime)
 	villager_base.mob_activate (self, staticdata, dtime)
+	-- This villager type was only possible for a short period
+	-- during development.
+	if self._villager_type == "default" then
+		self._villager_type = "plains"
+	end
 	if self._profession then
 		local profession = professions_by_name[self._profession]
 		self.description = profession.description
@@ -2227,7 +2240,7 @@ end
 local zombie_types = {
 	"mobs_mc:husk",
 	"mobs_mc:zombie",
-	"mobs_mc:zombie_villager",
+	"mobs_mc:villager_zombie",
 }
 
 function villager:export_villager_data ()
@@ -2238,6 +2251,7 @@ function villager:export_villager_data ()
 		villager_type = self._villager_type,
 		gossips = self._gossips,
 		reputation = self._reputation,
+		trades = self._trades,
 	}
 end
 
@@ -3955,10 +3969,7 @@ function villager:acceptable_pacing_target (target)
 	return true
 end
 
-local SOLID_PACING_GROUPS = {
-	"group:solid",
-	"group:top_snow",
-}
+local SOLID_PACING_GROUPS = mcl_mobs.SOLID_PACING_GROUPS
 
 function villager:pace_around_poi (self_pos, dtime)
 	if self._pacing_around_poi then
@@ -6434,6 +6445,7 @@ local function convert_old_trades (tradestring, tier)
 end
 
 function villager:post_load_staticdata ()
+	mob_class.post_load_staticdata (self)
 	local is_old_villager
 	-- Awful heuristic for detecting old villagers.
 		= self._jobsite or self._bed or (self.state and self._bell)

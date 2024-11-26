@@ -72,7 +72,6 @@ local wither_skeleton = table.merge (skeleton, {
 	water_damage = 0,
 	lava_damage = 0,
 	fire_damage = 0,
-	view_range = 16,
 	fire_resistant = true,
 	dealt_effect = {
 		name = "withering",

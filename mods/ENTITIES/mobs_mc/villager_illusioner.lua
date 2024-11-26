@@ -41,6 +41,8 @@ local illusioner = table.merge (evoker, table.merge (posing_humanoid, {
 	bone_eye_height = 6.61948,
 	head_eye_height = 2.2,
 	curiosity = 10,
+	tracking_distance = 18.0,
+	view_range = 18.0,
 	sounds = {
 		distance = 16,
 	},

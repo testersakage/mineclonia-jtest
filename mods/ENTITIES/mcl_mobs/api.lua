@@ -88,6 +88,7 @@ function mob_class:replace_with (successor_type, propagate_equipment, mob_static
 	end
 	luaentity:set_yaw (yaw)
 	self:safe_remove ()
+	return new
 end
 
 function mob_class:get_nametag()
@@ -128,7 +129,7 @@ function mob_class:get_staticdata_table ()
 
 	for tag, stat in pairs(self) do
 		local t = type(stat)
-		if  t ~= "function" and t ~= "nil" and t ~= "userdata" then
+		if t ~= "function" and t ~= "nil" and t ~= "userdata" then
 			tmp[tag] = self[tag]
 		end
 	end
@@ -143,6 +144,21 @@ function mob_class:get_staticdata_table ()
 	tmp._school = nil
 	tmp.head_eye_height = nil
 	tmp._adult_head_eye_height = nil
+
+	-- Remove physics factors that are not persistent and revert
+	-- fields that were modified and disapply them.
+	tmp._physics_factors = table.copy (self._physics_factors)
+	for field, factors in pairs (tmp._physics_factors) do
+		tmp[field] = factors.base
+
+		for id, factor in pairs (factors) do
+			if id ~= "base"
+				and not self._persistent_physics_factors[id]
+				and not mcl_mobs.persistent_physics_factors[id] then
+				factors[id] = nil
+			end
+		end
+	end
 
 	if self._mcl_potions then
 		tmp._mcl_potions = self._mcl_potions
@@ -261,10 +277,23 @@ function mob_class:scale_size_of_child (scale)
 end
 
 function mob_class:post_load_staticdata ()
-	-- Nothing here but crickets.
+	-- Initialize this mob's list of physics factors if none
+	-- already exists.
+	if self._physics_factors == nil then
+		self._physics_factors = {}
+		self:randomize_attributes ()
+	else
+		self:restore_physics_factors ()
+	end
+
+	-- Erase timers.
+	self._timers = {}
+	if not self.texture_mods then
+		self.texture_mods = {}
+	end
 end
 
-function mob_class:mob_activate(staticdata, dtime)
+function mob_class:mob_activate (staticdata, dtime)
 	if not self.object:get_pos() or staticdata == "remove" then
 		mcl_burning.extinguish(self.object)
 		self.object:remove()
@@ -438,7 +467,10 @@ function mob_class:on_step(dtime, moveresult)
 			collisions = { },
 		}
 	end
+
+	-- These represent the results of collision detection.
 	self._moveresult = moveresult
+	self._old_velocity = self.object:get_velocity ()
 
 	-- Clear remaining momentum if stuck in a cobweb or analogous
 	-- node.
@@ -494,8 +526,8 @@ function mob_class:on_step(dtime, moveresult)
 	else
 		self:drive ("walk", "stand", false, dtime, moveresult)
 	end
-	self:post_motion_step (pos, dtime)
 
+	self:post_motion_step (pos, dtime)
 	self:ai_step (dtime)
 
 	if self.force_step then

@@ -217,7 +217,7 @@ end
 function vindicator:gwp_memorize_door (door_node)
 end
 
-function vindicator:gwp_open_door (door, nodedef)
+function vindicator:gwp_open_door (door, nodedef, dtime)
 	-- On Normal and Hard, there is a 10% chance per tick that a
 	-- vindicator will choose to break rather than open a door.
 
@@ -226,13 +226,13 @@ function vindicator:gwp_open_door (door, nodedef)
 		and not minetest.is_protected (door, "") then
 		self:set_animation ("punch")
 		self._punch_animation_timeout = 1.0
-		minetest.remove_node (door)
+		minetest.dig_node (door)
 		minetest.sound_play ("default_dig_choppy", {
 			pos = door,
 			gain = 0.5,
 		})
 	else
-		mob_class.gwp_open_door (self, door, nodedef)
+		mob_class.gwp_open_door (self, door, nodedef, dtime)
 	end
 end
 

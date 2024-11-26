@@ -256,7 +256,6 @@ local enderman = {
 	},
 	movement_speed = 6.0,
 	damage = 7,
-	tracking_distance = 64,
 	player_active_range = 128,
 	stepheight = 1.01,
 	reach = 2,
@@ -282,9 +281,21 @@ local enderman = {
 	water_damage = 8,
 	rain_damage = 1.0,
 	view_range = 64,
+	tracking_distance = 64,
 	attack_type = "melee",
 	pursuit_bonus = 1.15,
 }
+
+------------------------------------------------------------------------
+-- Enderman visuals and mechanics.
+------------------------------------------------------------------------
+
+function enderman:set_animation (anim, custom_speed)
+	if self.attack then
+		anim = "attack"
+	end
+	mob_class.set_animation (self, anim, custom_speed)
+end
 
 function enderman:mob_activate (staticdata, dtime)
 	mob_class.mob_activate (self, staticdata, dtime)
@@ -715,18 +726,15 @@ function enderman:ai_step (dtime)
 	end
 end
 
-function enderman:set_animation (anim, custom_speed)
-	if self.attack then
-		anim = "attack"
-	end
-	mob_class.set_animation (self, anim, custom_speed)
-end
-
 -- Prevent endermen from crossing water.
 enderman.gwp_penalties = table.copy (mob_class.gwp_penalties)
 enderman.gwp_penalties.WATER = -1.0
 
-mcl_mobs.register_mob("mobs_mc:enderman", enderman)
+mcl_mobs.register_mob ("mobs_mc:enderman", enderman)
+
+------------------------------------------------------------------------
+-- Enderman spawning.
+------------------------------------------------------------------------
 
 -- End spawn
 mcl_mobs.spawn_setup({

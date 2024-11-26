@@ -71,7 +71,6 @@ local spider = {
 		distance = 16,
 	},
 	movement_speed = 6.0,
-	view_range = 16,
 	floats = 1,
 	drops = {
 		{
