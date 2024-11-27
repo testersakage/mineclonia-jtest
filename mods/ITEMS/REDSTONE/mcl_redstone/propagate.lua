@@ -86,12 +86,10 @@ end
 -- * wire_positions - list that has positions of each wire
 -- * wire_ranges - table where the key is the power level, and the value is an index in the `wire_positions` list.
 --   if the key is 15 and value 17, then it means first 17 wires would be affected by that power level
--- * wire_neighbours - list of elements that correspond to the wire_positions table. the elements are lists of indexes in the
---   wire_positions table of neighbouring wires. wire_neighbours may have holes if the wire at that index dosent have any neighbours.
---   Also wires that were already traversed arent in this table. I.e no backtracking
 -- * update_positions - list of positions to be updated
 -- * update_ranges - analagous to wire_ranges
 -- * current_state - current power level
+-- * overlapping_caches - a table where keys are hashes to a wire position, and values are a list of caches at that position
 -- * hash - hash position of the root
 --
 -- notes:
@@ -101,6 +99,14 @@ local propagate_cache = {}
 
 -- table containing positions that make up nodes inside the propagate_cache table
 -- its a weak table so if the propagate_cache element is ever invalidated, then the positions will too
+--
+-- IMPORTANT
+-- keep in mind that multiple caches can overlap at the same position, but only one cache (the most recently generated) one will
+-- be pointed at in this table. However you can find the other caches in the `overlapping_caches` entry of that single cache in
+-- O(n) time (where n is the amount of overlapping caches of the cache at that position, which may include other unrelated
+-- overlaps)
+--
+-- note to self: the method for finding overlaping caches dosent work for opaque blocks and redstone components
 local propagate_cache_positions = setmetatable({}, {__mode = "v"})
 
 mcl_redstone.propagate_cache = propagate_cache
@@ -143,8 +149,11 @@ local function generate_propagation_cache(pos, nodecache)
 	end
 
 	local cache =
-	{wire_positions = {pos}, wire_ranges = {1}, wire_neighbours = {},
-	update_positions = {}, update_ranges = {}, current_state = get_node(pos).param2, hash = hash}
+	{
+		wire_positions = {pos}, wire_ranges = {1},
+		update_positions = {}, update_ranges = {}, overlapping_caches = {},
+		current_state = get_node(pos).param2, hash = hash,
+	}
 
 	local idx = 1
 	local next_power_idx = 1
@@ -153,6 +162,10 @@ local function generate_propagation_cache(pos, nodecache)
 
 	-- set of already already traversed redstone dust
 	local already_traversed = {}
+
+	-- list of lists of unique combinations of caches
+	-- This is so tables from this list can be copied by reference, saving on memory
+	local possible_combinations = {}
 	already_traversed[hash] = true
 
 
@@ -162,6 +175,49 @@ local function generate_propagation_cache(pos, nodecache)
 		local hash2 = core.hash_node_position(pos2)
 		local node2 = get_node(pos2, hash2)
 
+		if propagate_cache_positions[hash2] then
+			-- this means that a cache already exists at that position
+			local overlaping_caches_set
+			local overlaps_at_pos
+
+			if propagate_cache_positions[hash2].overlapping_caches[hash2] then
+				overlaping_caches_set = {}
+				overlaps_at_pos = {}
+				for _, cache in pairs(propagate_cache_positions[hash2].overlapping_caches[hash2]) do
+					overlaping_caches_set[cache] = true
+					table.insert(overlaps_at_pos, cache)
+				end
+			else
+				overlaping_caches_set = {[cache] = true, [propagate_cache_positions[hash2]] = true }
+				overlaps_at_pos = {cache, propagate_cache_positions[hash2]}
+			end
+
+			local correct_combination
+
+			for _, combination in pairs(possible_combinations) do
+				local combination_overlaps = 0
+				for _, possibly_overlapping_cache in pairs(combination) do
+					if overlaping_caches_set[possibly_overlapping_cache] then
+						combination_overlaps = combination_overlaps + 1
+					end
+				end
+
+				if combination_overlaps == #overlaps_at_pos then
+					correct_combination = combination
+					break
+				end
+			end
+
+			if not correct_combination then
+				core.debug("no such combination exists, generating new combination")
+				correct_combination = overlaps_at_pos
+				table.insert(possible_combinations, overlaps_at_pos)
+			end
+
+			for _, overlapping_cache in pairs(correct_combination) do
+				overlapping_cache.overlapping_caches[hash2] = correct_combination
+			end
+		end
 		propagate_cache_positions[hash2] = cache
 
 		for dir in iterate_wire_neighbours(wireflag_tab[node2.name] or 0xF) do
@@ -174,11 +230,6 @@ local function generate_propagation_cache(pos, nodecache)
 					same_power_count = same_power_count + 1
 					already_traversed[hash3] = true
 					cache.wire_positions[#cache.wire_positions + 1] = pos3
-					if cache.wire_neighbours[idx] then
-						table.insert(cache.wire_neighbours[idx], #cache.wire_positions)
-					else
-						cache.wire_neighbours[idx] = {#cache.wire_positions}
-					end
 				end
 			elseif opaque_tab[node3.name] then
 				for _, dir in pairs(sixdirs) do
@@ -241,23 +292,44 @@ function mcl_redstone.process_wires()
 	local generated_caches = 0
 	local total_processed = 0
 
+	-- Have a two pass for propagating power. First pass is to ensure all propagations have a cache (and if not, generate then)
+	-- This is needed for handling cases where caches overlap
+	for _, entry in pairs(propagate_tab) do
+		local hash = core.hash_node_position(entry.pos)
+		if not propagate_cache[hash] then
+			generated_caches = generated_caches + 1
+			generate_propagation_cache(entry.pos, nodecache)
+		end
+	end
+
+	local overlaping_positions = {}
+
 	for _, entry in pairs(propagate_tab) do
 		total_processed = total_processed + 1
 		local hash = core.hash_node_position(entry.pos)
 		local cache = propagate_cache[hash]
-		if not cache then
-			generated_caches = generated_caches + 1
-			cache = generate_propagation_cache(entry.pos, nodecache)
-		end
 
 		local old_power = cache.current_state
 
 		local current_power = entry.power
 		local power_idx = 1
+		core.debug(tostring(entry.pos))
+		-- core.debug(dump(cache))
 		if entry.power ~= 0 then
 			for idx = 1, cache.wire_ranges[entry.power] or cache.wire_ranges[#cache.wire_ranges] do
 				-- dbg.pp("idx", idx)
-				core.swap_node(cache.wire_positions[idx], {name = get_node(cache.wire_positions[idx]).name, param2 = current_power})
+				local hash2 = core.hash_node_position(cache.wire_positions[idx])
+				-- core.debug(tostring(cache.wire_positions[idx]), dump(cache.overlapping_caches))
+				if cache.overlapping_caches[hash2] then
+					if not overlaping_positions[hash2] then
+						-- core.debug("AH", current_power, get_node(cache.wire_positions[idx]).param2)
+						overlaping_positions[hash2] = math.max(current_power, get_node(cache.wire_positions[idx]).param2)
+					elseif overlaping_positions[hash2] < current_power then
+						overlaping_positions[hash2] = current_power
+					end
+				else
+					core.swap_node(cache.wire_positions[idx], {name = get_node(cache.wire_positions[idx]).name, param2 = current_power})
+				end
 				if idx == cache.wire_ranges[power_idx] then
 					-- dbg.pp("decreasing power", idx)
 					current_power = current_power - 1
@@ -274,6 +346,7 @@ function mcl_redstone.process_wires()
 		end
 
 		-- remove old power
+		core.debug("removing!", old_power, entry.power)
 		if old_power > entry.power then
 			for idx = power_idx, cache.wire_ranges[old_power] or cache.wire_ranges[#cache.wire_ranges] do
 				core.swap_node(cache.wire_positions[idx], {name = get_node(cache.wire_positions[idx]).name, param2 = 0})
@@ -289,6 +362,12 @@ function mcl_redstone.process_wires()
 
 		cache.current_state = entry.power
 
+	end
+
+	for hash, power in pairs(overlaping_positions) do
+		local pos = core.get_position_from_hash(hash)
+		core.debug(tostring(pos), " overlapped", power)
+		core.swap_node(pos, {name = get_node(pos).name, param2 = power})
 	end
 
 	propagate_tab_length = 0
