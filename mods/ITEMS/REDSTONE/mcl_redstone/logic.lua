@@ -325,7 +325,7 @@ function update_neighbours(pos, oldnode)
 		local pos2 = pos:add(dir)
 		local node2 = minetest.get_node(pos2)
 
-		if opaque_tab[node2.name] or wireflag_tab[node.name] or update_tab[node.name] or get_power_tab[node.name] then
+		if opaque_tab[node2.name] or wireflag_tab[node2.name] or update_tab[node2.name] or get_power_tab[node2.name] then
 			local power2 = get_power and get_power(node, dir) or 0
 			local oldpower2 = old_get_power and old_get_power(oldnode, dir) or 0
 
