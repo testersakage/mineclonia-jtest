@@ -164,7 +164,7 @@ end
 
 local commdef = {
 	_doc_items_create_entry = false,
-	groups = {handy=1, not_opaque=1},
+	groups = {handy=1, pickaxey=1, not_opaque=1},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	is_ground_content = false,
@@ -225,7 +225,7 @@ local pusherdef = {
 	selection_box = piston_pusher_box,
 	node_box = piston_pusher_box,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	groups = {handy=1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
+	groups = {handy=1, pickaxey=1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	on_rotate = false,
