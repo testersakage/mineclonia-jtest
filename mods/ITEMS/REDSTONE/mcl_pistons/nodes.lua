@@ -34,6 +34,7 @@ local function piston_remove_base(pos, oldnode)
 
 	if basename == pistonspec.onname then -- make sure there actually is a base node
 		minetest.remove_node(basepos)
+		minetest.add_item(basepos, pistonspec.offname)
 		minetest.check_for_falling(basepos)
 		minetest.sound_play("piston_retract", {
 			pos = pos,
@@ -224,7 +225,7 @@ local pusherdef = {
 	selection_box = piston_pusher_box,
 	node_box = piston_pusher_box,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
+	groups = {handy=1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	on_rotate = false,
