@@ -144,6 +144,7 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			node.name = "mcl_lectern:lectern"
 			mcl_redstone.swap_node(pos,node)
 			nm:set_string("formspec","")
+			nm:set_string("infotext","")
 			nm:set_string("pages","")
 			nm:set_string("page","")
 		elseif fields and fields.ok then
