@@ -146,6 +146,7 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 			nm:set_string("formspec","")
 			nm:set_string("infotext","")
 			nm:set_string("pages","")
+			nm:set_string("book_item","")
 			nm:set_string("page","")
 		elseif fields and fields.ok then
 			-- simulate a page turn
