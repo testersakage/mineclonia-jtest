@@ -284,7 +284,9 @@ function skeleton:reconfigure_attack_type (wielditem)
 end
 
 function skeleton:mob_activate (staticdata, dtime)
-	posing_humanoid.mob_activate (self, staticdata, dtime)
+	if not posing_humanoid.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self:reconfigure_attack_type (self:get_wielditem ())
 
 	-- Skeletons should drop all equipment collected after
@@ -296,6 +298,7 @@ function skeleton:mob_activate (staticdata, dtime)
 		legs = 1.0,
 		feet = 1.0,
 	}
+	return true
 end
 
 function skeleton:set_wielditem (stack)

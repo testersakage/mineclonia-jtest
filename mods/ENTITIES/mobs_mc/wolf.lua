@@ -203,7 +203,9 @@ function wolf:on_breed (parent1, parent2)
 end
 
 function wolf:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	if self.tamed then
 		self.object:set_properties ({
 			hp_max = 40.0,
@@ -214,6 +216,7 @@ function wolf:mob_activate (staticdata, dtime)
 			"mobs_mc:witherskeleton",
 		}
 	end
+	return true
 end
 
 function wolf:after_tame ()

@@ -203,7 +203,9 @@ end
 
 function villager_base:mob_activate (staticdata, dtime)
 	self._trading_with = {}
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	if not rawget (self, "_gossips") then
 		self._gossips = {}
 	end
@@ -229,6 +231,7 @@ function villager_base:mob_activate (staticdata, dtime)
 			"",
 		}
 	end
+	return true
 end
 
 local function get_trading_inventory (player)
@@ -2176,7 +2179,9 @@ function villager:reset_profession (name)
 end
 
 function villager:mob_activate (staticdata, dtime)
-	villager_base.mob_activate (self, staticdata, dtime)
+	if not villager_base.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	-- This villager type was only possible for a short period
 	-- during development.
 	if self._villager_type == "default" then
@@ -2186,6 +2191,7 @@ function villager:mob_activate (staticdata, dtime)
 		local profession = professions_by_name[self._profession]
 		self.description = profession.description
 	end
+	return true
 end
 
 function villager:receive_damage (mcl_reason, damage)

@@ -247,8 +247,11 @@ end
 ------------------------------------------------------------------------
 
 function strider:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._aground = false
+	return true
 end
 
 -- The default breeding routine is unsuitable as it is apt to
@@ -471,8 +474,11 @@ local old_baby_strider = table.merge (strider, {
 })
 
 function old_baby_strider:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self:replace_with ("mobs_mc:strider", true)
+	return true
 end
 
 mcl_mobs.register_mob ("mobs_mc:baby_strider", old_baby_strider)

@@ -97,8 +97,11 @@ local ocelot = {
 ------------------------------------------------------------------------
 
 function ocelot:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._pose = "walk"
+	return true
 end
 
 local FOURTY_FIVE_DEG = math.rad (45)

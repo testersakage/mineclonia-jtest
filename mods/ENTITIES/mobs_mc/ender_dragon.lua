@@ -260,7 +260,9 @@ end
 local NUM_SAMPLES = 64
 
 function dragon:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 
 	-- Initialize sampling.
 	self._sample_ptr = 0
@@ -293,6 +295,7 @@ function dragon:mob_activate (staticdata, dtime)
 		self._dragon_target = nil
 		self._phase = "death"
 	end
+	return true
 end
 
 function dragon:get_staticdata_table ()
