@@ -152,9 +152,12 @@ function llama:on_spawn ()
 end
 
 function llama:mob_activate (staticdata, dtime)
-	horse.mob_activate (self, staticdata, dtime)
+	if not horse.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self:remove_physics_factor ("tracking_distance",
 				    "mobs_mc:llama_wolf_attack")
+	return true
 end
 
 ------------------------------------------------------------------------------

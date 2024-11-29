@@ -298,11 +298,14 @@ function enderman:set_animation (anim, custom_speed)
 end
 
 function enderman:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	minetest.add_entity (self.object:get_pos(), "mobs_mc:ender_eyes")
 		:set_attach(self.object, "head.top", vector.new(0,2.54,-1.99), vector.new(90,0,180))
 	minetest.add_entity (self.object:get_pos(), "mobs_mc:ender_eyes")
 		:set_attach(self.object, "head.top", vector.new(1,2.54,-1.99), vector.new(90,0,180))
+	return true
 end
 
 function enderman:on_die (self_pos)

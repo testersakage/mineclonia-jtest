@@ -378,8 +378,11 @@ function illusioner:adjust_head_swivel (mob_yaw, mob_pitch, out_of_view)
 end
 
 function illusioner:mob_activate (staticdata, dtime)
-	posing_humanoid.mob_activate (self, staticdata, dtime)
+	if not posing_humanoid.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._decoy_wielditems = {}
+	return true
 end
 
 function illusioner:wielditem_step (dtime)

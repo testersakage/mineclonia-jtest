@@ -139,7 +139,9 @@ local shulker_open_direction = {
 }
 
 function shulker:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._cbox_extension = 0
 	self._cbox_animation = 0
 	self._cbox_delta = 0
@@ -147,6 +149,7 @@ function shulker:mob_activate (staticdata, dtime)
 	self._cbox_duration = 0
 	self:attach_to_face (self._face)
 	self._look_target = nil
+	return true
 end
 
 function shulker:extend_cbox_to (extend)

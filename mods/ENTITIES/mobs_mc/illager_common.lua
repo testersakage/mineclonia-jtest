@@ -65,10 +65,13 @@ function patrolling_mob:on_spawn ()
 end
 
 function patrolling_mob:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	if self._raidcaptain then
 		self:promote_to_raidcaptain ()
 	end
+	return true
 end
 
 function patrolling_mob:despawn_ok (d_to_closest_player)
@@ -288,8 +291,11 @@ function raid_mob:apply_raid_buffs (stage)
 end
 
 function raid_mob:mob_activate (staticdata, dtime)
-	patrolling_mob.mob_activate (self, staticdata, dtime)
+	if not patrolling_mob.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._visited_pois = {}
+	return true
 end
 
 function raid_mob:attack_end ()

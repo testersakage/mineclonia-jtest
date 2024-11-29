@@ -151,7 +151,7 @@ end
 
 function chicken:mob_activate (staticdata, dtime)
 	self._flapping = false
-	mob_class.mob_activate (self, staticdata, dtime)
+	return mob_class.mob_activate (self, staticdata, dtime)
 end
 
 function chicken:motion_step (dtime, moveresult, self_pos)

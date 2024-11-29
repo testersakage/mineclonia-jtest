@@ -746,12 +746,17 @@ function posing_humanoid:mob_activate (staticdata, dtime)
 	local class = self._humanoid_superclass
 
 	if class.mob_activate then
-		class.mob_activate (self, staticdata, dtime)
+		if not class.mob_activate (self, staticdata, dtime) then
+			return false
+		end
 	else
-		mob_class.mob_activate (self, staticdata, dtime)
+		if not mob_class.mob_activate (self, staticdata, dtime) then
+			return false
+		end
 	end
 	self._arm_pose = self:select_arm_pose ()
 	self:apply_arm_pose (self._arm_pose)
+	return true
 end
 
 function mcl_mobs.define_composite_pose (poses, prefix, overrides)
