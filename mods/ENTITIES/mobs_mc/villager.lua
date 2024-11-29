@@ -6314,7 +6314,8 @@ function villager:claim_poi_for_upgrade (old_jobsite)
 		-- block type before laying claim to the POI.
 		local node = minetest.get_node (old_jobsite)
 		local profession = get_profession (node.name)
-		if node.name ~= "ignore" and profession.name ~= self._profession then
+		if not profession or (node.name ~= "ignore"
+				      and profession.name ~= self._profession) then
 			local template = {
 				"[mobs_mc] The type of the work site ",
 				vector.to_string (old_jobsite),
