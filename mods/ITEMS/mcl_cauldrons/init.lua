@@ -129,17 +129,18 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 
 -- Template function for cauldrons with water
 local function register_filled_cauldron(water_level, description, liquid)
-	local id = "mcl_cauldrons:cauldron_"..water_level
+	local id = mcl_cauldrons.get_caulrdon_name(water_level, liquid)
 	local water_tex
 	local light_level = 0
+	local cauldron_water = 0
 	if liquid == "river_water" then
-		id = id .. "r"
+		cauldron_water = 2
 		water_tex = "default_river_water_source_animated.png^[verticalframe:16:0"
 	elseif liquid == "lava" then
-		id = id .. "_lava"
 		light_level = minetest.LIGHT_MAX
 		water_tex = "default_lava_source_animated.png^[verticalframe:16:0"
 	else
+		cauldron_water = 1
 		water_tex = "default_water_source_animated.png^[verticalframe:16:0"
 	end
 	minetest.register_node(id, {
@@ -150,7 +151,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		paramtype = "light",
 		light_source = light_level,
 		is_ground_content = false,
-		groups = {pickaxey=1, not_in_creative_inventory=1, cauldron=(1+water_level), cauldron_filled=water_level, comparator_signal=water_level},
+		groups = {pickaxey=1, not_in_creative_inventory=1, cauldron=(1+water_level), cauldron_filled=water_level, comparator_signal=water_level, cauldron_water = cauldron_water},
 		node_box = create_cauldron_nodebox(water_level),
 		collision_box = create_cauldron_nodebox(0),
 		selection_box = { type = "regular" },
