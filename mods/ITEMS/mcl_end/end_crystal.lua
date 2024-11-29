@@ -26,8 +26,11 @@ local function find_crystal(pos)
 end
 
 local function crystal_explode(self, puncher)
-	if self._exploded then return end
+	if self._exploded then
+		return true
+	end
 	self._exploded = true
+	self._puncher = puncher
 	local strength = 1
 	local source
 	if puncher then
@@ -37,8 +40,11 @@ local function crystal_explode(self, puncher)
 		mcl_damage.finish_reason(reason)
 		source = reason.source
 	end
-	minetest.after(0, self.object.remove, self.object)
+	-- Enable dragons to detect explosions by slightly deferring
+	-- object deletion.
+	minetest.after (0.1, self.object.remove, self.object)
 	mcl_explosions.explode(vector.add(self.object:get_pos(), {x = 0, y = 1.5, z = 0}), strength, {}, self.object, source)
+	return true
 end
 
 local function set_crystal_animation(self)
@@ -116,17 +122,8 @@ minetest.register_entity("mcl_end:crystal_beam", {
 	_mcl_fishing_reelable = false,
 	spin = 0,
 	init = function(self, dragon, crystal)
-		self.dragon, self.crystal = dragon, crystal
-		crystal:get_luaentity().beam = self.object
-		dragon:get_luaentity().beam = self.object
-	end,
-	on_deactivate = function(self)
-		if self.crystal and self.crystal:get_luaentity() then
-			self.crystal:get_luaentity().beam = nil
-		end
-		if self.dragon and self.dragon:get_luaentity() then
-			self.dragon:get_luaentity().beam = nil
-		end
+		self.dragon = dragon
+		self.crystal = crystal
 	end,
 	on_step = function(self, dtime)
 		if self.dragon and self.dragon:get_luaentity() and self.crystal and self.crystal:get_luaentity() then
@@ -140,7 +137,13 @@ minetest.register_entity("mcl_end:crystal_beam", {
 			local rot = vector.dir_to_rotation(vector.direction(dragon_pos, crystal_pos))
 			rot.z = self.spin
 			self.object:set_rotation(rot)
-			self.object:set_properties({visual_size = {x = 0.5, y = 0.5, z = vector.distance(dragon_pos, crystal_pos)}})
+			local dist = vector.distance (dragon_pos, crystal_pos)
+			self.object:set_properties({
+				visual_size = {
+					x = 0.5,
+					y = 0.5,
+					z = math.min (256, dist),
+			}})
 		else
 			self.object:remove()
 		end

@@ -30,7 +30,7 @@ mcl_damage = {
 		arrow = {is_projectile = true},
 		fireball = {is_projectile = true, is_fire = true},
 		thorns = {is_magic = true, bypasses_guardian = true,},
-		explosion = {is_explosion = true, scales = true},
+		explosion = {is_explosion = true, scales = true, always_affects_dragons = true},
 		cramming = {bypasses_armor = true}, -- unused
 		fireworks = {is_explosion = true}, -- unused
 		environment = {},

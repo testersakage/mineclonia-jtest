@@ -462,15 +462,20 @@ function h_to_nearest_target (node, context)
 	return best_distance
 end
 
+function mob_class:gwp_limit_range (range)
+	-- This limit is decided by the values `hashpos' is capable of
+	-- handling.
+	local range = range or self.tracking_distance
+	return math.min (range, 127)
+end
+
 function mob_class:gwp_initialize (targets, range, tolerance, penalties)
 	local context = self:new_gwp_context ()
 
 	-- Compute pathfinding bounds.
 	local pos = vector.apply (self.object:get_pos (), round_trunc)
-	-- This limit is decided by the values `hashpos' is capable of
-	-- handling.
-	range = range or self.tracking_distance
-	context.range = math.min (range, 127)
+	local range = self:gwp_limit_range (range)
+	context.range = range
 	context.minpos = vector.new (pos.x - range, pos.y - range,
 				     pos.z - range)
 	context.maxpos = vector.new (pos.x + range, pos.y + range,
@@ -648,13 +653,21 @@ function mob_class:gwp_reconstruct_path (context, arrival)
 	return list
 end
 
-function mob_class:gwp_reconstruct (context)
+function mob_class:gwp_reconstruct (context, real_dest)
 	local path, partial
 	if #context.arrivals > 0 then
 		-- Return the path traversing the fewest nodes.
 		for _, arrival in ipairs (context.arrivals) do
 			local candidate
 			local contact = arrival.best_node
+
+			-- If real_dest is set, replace the best node
+			-- with it.  This facility is only exercised
+			-- by the Ender Dragon.
+			if real_dest and contact then
+				real_dest.referrer = contact
+				contact = real_dest
+			end
 
 			if contact then
 				candidate = self:gwp_reconstruct_path (context, contact)
