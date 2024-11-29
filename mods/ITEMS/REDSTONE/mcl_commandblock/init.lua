@@ -177,7 +177,7 @@ end
 
 local commdef = {
 	description = S("Command Block"),
-	groups = {creative_breakable=1, unmovable_by_piston = 1},
+	groups = {creative_breakable=1, unmovable_by_piston = 1, command_block = 1},
 	drop = "",
 	is_ground_content = false,
 	on_construct = function(pos)

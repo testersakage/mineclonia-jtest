@@ -621,17 +621,17 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 				end
 			end
 		end
-	end
+	else
+		local hp = target:get_hp()
+		local armorgroups = target:get_armor_groups()
 
-	local hp = target:get_hp()
-	local armorgroups = target:get_armor_groups()
-
-	if hp > 0 and armorgroups and not armorgroups.immortal then
-	   if target:is_player () then
-	      mcl_damage.damage_player (target, damage, mcl_reason)
-	   else
-	      target:set_hp (hp - damage, {_mcl_reason = mcl_reason})
-	   end
+		if hp > 0 and armorgroups and not armorgroups.immortal then
+			if target:is_player () then
+				mcl_damage.damage_player (target, damage, mcl_reason)
+			else
+				target:set_hp (hp - damage, {_mcl_reason = mcl_reason})
+			end
+		end
 	end
 	return damage
 end
