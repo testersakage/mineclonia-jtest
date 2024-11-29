@@ -152,9 +152,12 @@ function guardian:do_go_pos (dtime, moveresult)
 end
 
 function guardian:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._acc_seed = math.random (4)
 	self._previous_eye_diff = nil
+	return true
 end
 
 function guardian:motion_step (dtime, moveresult, self_pos)

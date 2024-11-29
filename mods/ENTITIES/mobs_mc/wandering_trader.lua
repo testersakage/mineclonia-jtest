@@ -170,11 +170,14 @@ end
 ------------------------------------------------------------------------
 
 function wandering_trader:mob_activate (staticdata, dtime)
-	villager_base.mob_activate (self, staticdata, dtime)
+	if not villager_base.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._llamas = {}
 	self._provide_owner = function ()
 		return self.object:is_valid () and self.object
 	end
+	return true
 end
 
 function wandering_trader:get_staticdata_table ()

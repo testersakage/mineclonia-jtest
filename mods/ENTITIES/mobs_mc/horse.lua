@@ -453,7 +453,9 @@ function horse:get_staticdata_table ()
 end
 
 function horse:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	-- Reconfigure maximum HP.
 	if self.hp_max then
 		self.object:set_properties ({
@@ -479,6 +481,7 @@ function horse:mob_activate (staticdata, dtime)
 	self._horse_armor = nil
 	self:update_drops ()
 	self:init_attachment_position ()
+	return true
 end
 
 function horse:on_deactivate (removal)

@@ -399,7 +399,9 @@ function zombie_villager:get_overlaid_texture ()
 end
 
 function zombie_villager:mob_activate (staticdata, dtime)
-	zombie.mob_activate (self, staticdata, dtime)
+	if not zombie.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	if not self._previous_incarnation then
 		local self_pos = self.object:get_pos ()
 		local biomedata = minetest.get_biome_data (self_pos)
@@ -418,6 +420,7 @@ function zombie_villager:mob_activate (staticdata, dtime)
 	self.base_texture[1] = self:get_overlaid_texture ()
 	self:set_textures (self.base_texture)
 	self:set_armor_texture ()
+	return true
 end
 
 function zombie_villager:update_textures ()

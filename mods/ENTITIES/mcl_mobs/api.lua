@@ -297,7 +297,7 @@ function mob_class:mob_activate (staticdata, dtime)
 	if not self.object:get_pos() or staticdata == "remove" then
 		mcl_burning.extinguish(self.object)
 		self.object:remove()
-		return
+		return false
 	end
 
 	if staticdata then
@@ -324,14 +324,13 @@ function mob_class:mob_activate (staticdata, dtime)
 
 	if self.dead then
 		self:safe_remove()
-		return
-		-- TODO
+		return false
 	end
 
 	if mcl_vars.difficulty <= 0 and not self.persist_in_peaceful then
 		mcl_burning.extinguish(self.object)
 		self.object:remove()
-		return
+		return false
 	end
 
 	self:update_textures()
@@ -441,6 +440,7 @@ function mob_class:mob_activate (staticdata, dtime)
 		def.after_activate(self, staticdata, def, dtime)
 	end
 	self:remove_texture_mod ("^[colorize:#d42222:175")
+	return true
 end
 
 local scale_chance = mcl_mobs.scale_chance

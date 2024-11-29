@@ -452,8 +452,11 @@ golem.ai_functions = {
 ------------------------------------------------------------------------
 
 function golem:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._poppy_texture = "blank.png"
+	return true
 end
 
 function golem:do_custom (dtime)

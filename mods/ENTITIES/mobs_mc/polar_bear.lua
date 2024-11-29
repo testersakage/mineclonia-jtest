@@ -103,8 +103,11 @@ end
 ------------------------------------------------------------------------
 
 function polar_bear:mob_activate (staticdata, dtime)
-	mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._rearing_time = nil
+	return true
 end
 
 function polar_bear:do_custom (dtime, moveresult)

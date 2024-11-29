@@ -183,9 +183,12 @@ local spider_effects = {
 }
 
 function spider:mob_activate (staticdata, dtime)
-	mcl_mobs.mob_class.mob_activate (self, staticdata, dtime)
-	minetest.add_entity(self.object:get_pos(), "mobs_mc:spider_eyes")
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	minetest.add_entity(self.object:get_pos (), "mobs_mc:spider_eyes")
 		:set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
+	return true
 end
 
 function spider:on_spawn ()
