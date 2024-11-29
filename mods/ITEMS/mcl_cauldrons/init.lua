@@ -19,10 +19,9 @@ end
 
 -- Convenience function because the cauldron nodeboxes are very similar
 local function create_cauldron_nodebox(water_level)
-	local floor_y
-	if water_level == 0 then	-- empty
-		floor_y = -0.1875
-	elseif water_level == 1 then	-- 1/3 filled
+	local floor_y = 0.1875
+
+	if water_level == 1 then	-- 1/3 filled
 		floor_y = 1/16
 	elseif water_level == 2 then	-- 2/3 filled
 		floor_y = 4/16
