@@ -101,11 +101,13 @@ mcl_armor.register_set({
 	},
 	craft_material = "mcl_mobitems:leather",
 	on_place = function(itemstack, _, pointed_thing)
-		if minetest.get_item_group(minetest.get_node(pointed_thing.under).name, "cauldron") <= 1 then return end
-		local outcome = mcl_armor.wash_leather_armor(itemstack)
-		if outcome then
-			minetest.sound_play("mcl_potions_bottle_pour", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
-			return outcome
+		if minetest.get_item_group(minetest.get_node(pointed_thing.under).name, "cauldron_water") <= 0 then return end
+		if mcl_cauldrons.add_level(pointed_thing.under, -1) then
+			local outcome = mcl_armor.wash_leather_armor(itemstack)
+			if outcome then
+				minetest.sound_play("mcl_potions_bottle_pour", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
+				return outcome
+			end
 		end
 	end,
 })
