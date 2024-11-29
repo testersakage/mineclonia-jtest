@@ -153,6 +153,17 @@ function mcl_armor.register_set(def)
 			upgrade_item = itemstring:gsub("_[%l%d]*$",def._mcl_upgrade_item_material)
 		end
 
+		local on_place = mcl_armor.equip_on_use
+		if def.on_place then
+			on_place = function(itemstack, placer, pointed_thing)
+				if def.on_place then
+					local op = def.on_place(itemstack, placer, pointed_thing)
+					if op then return op end
+				end
+				return mcl_armor.equip_on_use(itemstack, placer, pointed_thing)
+			end
+		end
+
 		minetest.register_tool(itemstring, {
 			description = descriptions[name],
 			_doc_items_longdesc = mcl_armor.longdesc,
@@ -164,7 +175,7 @@ function mcl_armor.register_set(def)
 				_mcl_armor_equip = def.sound_equip or modname .. "_equip_" .. def.name,
 				_mcl_armor_unequip = def.sound_unequip or modname .. "_unequip_" .. def.name,
 			},
-			on_place = mcl_armor.equip_on_use,
+			on_place =  on_place,
 			on_secondary_use = mcl_armor.equip_on_use,
 			_on_equip = on_equip_callbacks[name] or def.on_equip,
 			_on_unequip = on_unequip_callbacks[name] or def.on_unequip,
