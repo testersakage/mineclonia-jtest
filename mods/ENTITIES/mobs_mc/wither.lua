@@ -187,7 +187,9 @@ function wither_def:on_spawn ()
 end
 
 function wither_def:mob_activate (staticdata, dtime)
-	mcl_mobs.mob_class.mob_activate (self, staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 
 	-- Restore the max health calculated at spawn time, which is
 	-- lost when the object is unloaded.
@@ -284,6 +286,7 @@ function wither_def:mob_activate (staticdata, dtime)
 			},
 		}
 	end
+	return true
 end
 
 -- blast damage to entities nearby

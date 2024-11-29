@@ -355,7 +355,9 @@ function zombie:on_spawn ()
 end
 
 function zombie:mob_activate (staticdata, dtime)
-	posing_humanoid.mob_activate (self, staticdata, dtime)
+	if not posing_humanoid.mob_activate (self, staticdata, dtime) then
+		return false
+	end
 	self._visited_pois = {}
 	if self._zombie_health_bonus then
 		self.object:set_properties ({
@@ -366,6 +368,7 @@ function zombie:mob_activate (staticdata, dtime)
 		self:add_physics_factor ("movement_speed", "mobs_mc:baby_zombie_speed",
 						0.5, "add_multiplied_base")
 	end
+	return true
 end
 
 ------------------------------------------------------------------------
