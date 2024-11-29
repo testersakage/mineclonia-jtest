@@ -1009,7 +1009,7 @@ local function will_breach_water_1 (node, cbox)
 	local node_data = minetest.get_node (node)
 	local def = minetest.registered_nodes[node_data.name]
 
-	if not def.walkable and def.liquidtype == "none" then
+	if def and not def.walkable and def.liquidtype == "none" then
 		return false
 	end
 
