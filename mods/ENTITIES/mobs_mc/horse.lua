@@ -12,16 +12,30 @@ local base_drop = {
 }
 
 local function attach_driver(self, clicker)
-	mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
-	self.object:set_properties({selectionbox = {0,0,0,0,0,0}})
+	mcl_title.set(clicker, "actionbar", {
+		text=S("Sneak to dismount"),
+		color="white", stay = 60,
+	})
+	self.object:set_properties ({
+		selectionbox = {0,0,0,0,0,0},
+	})
+	self._selectionbox_overloaded = true
 	self:attach(clicker)
 end
 
 local function detach_driver(self)
-	self.object:set_properties({selectionbox = self.object:get_properties().collisionbox})
 	if self.driver then
-		if extended_pet_control and self.order ~= "sit" then self:toggle_sit(self.driver) end
-		self:detach(self.driver, {x=0, y=0, z=0})
+		if extended_pet_control and self.order ~= "sit" then
+			self:toggle_sit (self.driver)
+		end
+		self:detach (self.driver, {x=0, y=0, z=0})
+	end
+
+	if self._selectionbox_overloaded then
+		self._selectionbox_overloaded = false
+		self.object:set_properties ({
+			selectionbox = self.collisionbox,
+		})
 	end
 end
 
@@ -479,6 +493,7 @@ function horse:mob_activate (staticdata, dtime)
 		self._horse_armor_stack = ""
 	end
 	self._horse_armor = nil
+	self._selectionbox_overloaded = false
 	self:update_drops ()
 	self:init_attachment_position ()
 	return true
@@ -701,8 +716,8 @@ function horse:do_custom (dtime)
 			detach_driver (self)
 		end
 	else
-		self._jump_charge = nil
 		detach_driver (self)
+		self._jump_charge = nil
 
 		if self._armor_inv_name then
 			minetest.remove_detached_inventory (self._armor_inv_name)
