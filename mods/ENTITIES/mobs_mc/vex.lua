@@ -171,7 +171,7 @@ function vex:do_go_pos (dtime, moveresult)
 		local fv = vector.multiply (dir, vector.multiply (scale, modifier))
 		self.object:add_velocity (fv)
 
-		if self.attack then
+		if self.attack and self.attack:is_valid () then
 			self:look_at (self.attack:get_pos ())
 		else
 			local v = vector.add (fv, v)
