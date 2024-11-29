@@ -104,7 +104,7 @@ for n, desc in pairs(n_desc) do
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_grate.png"},
 		use_texture_alpha = "blend",
 		is_ground_content = false,
-		groups = {pickaxey = 2, building_block = 1 },
+		groups = {pickaxey = 2, building_block = 1, copper_grate = 1, },
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
