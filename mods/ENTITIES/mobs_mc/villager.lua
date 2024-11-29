@@ -6506,6 +6506,10 @@ function villager:post_load_staticdata ()
 		self._max_trade_tier = nil
 		self._trade_xp = nil
 		self._id = nil
+
+		-- Old villagers had `_child_animation' lists that are
+		-- not appropriate now.
+		self.animation = nil
 	end
 end
 
