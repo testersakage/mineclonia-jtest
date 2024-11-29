@@ -576,7 +576,7 @@ minetest.register_globalstep (function (dtime)
 	end
 end)
 
-function evoker_fangs:deal_damage ()
+function evoker_fangs:deal_fang_damage ()
 	local self_pos = self.object:get_pos ()
 	local aa = vector.offset (self_pos, -3, -3, -3)
 	local bb = vector.offset (self_pos, 3, 3, 3)
@@ -665,7 +665,7 @@ function evoker_fangs:on_step (dtime)
 		self._animation_started = true
 	elseif self._startup_delay <= -0.4 then
 		if not self._damage_dealt then
-			self:deal_damage ()
+			self:deal_fang_damage ()
 			if self._startup_delay > -1.1 then
 				local fps = 15 / (self._startup_delay + 1.1)
 				self.object:set_animation ({

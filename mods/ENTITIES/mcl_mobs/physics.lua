@@ -716,7 +716,7 @@ function mob_class:check_water_flow ()
 	return nil
 end
 
-function mob_class:check_dying ()
+function mob_class:check_dying (dtime)
 	if self.dead and not self.animation.die_end then
 		if self.object then
 			local rot = self.object:get_rotation()

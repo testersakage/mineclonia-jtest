@@ -40,8 +40,9 @@ local function valid_object_iterator_in_radius(objects, center, radius)
 			return
 		end
 		local p = obj:get_pos()
-		if p and vector.distance(p, center) <= radius then
-			return obj
+		local distance = p and vector.distance (p, center)
+		if p and distance <= radius then
+			return obj, distance
 		end
 		return next_valid_object()
 	end

@@ -498,13 +498,13 @@ function mob_class:on_step(dtime, moveresult)
 	end
 	local head_y = cbox[2] + (cbox[5] - cbox[2]) * 0.75
 	local pos_head = vector.offset (pos, 0, head_y, 0)
-	self.head_in = mcl_mobs.node_ok(pos_head, "air").name
+	self.head_in = mcl_mobs.node_ok (pos_head, "air").name
 
 	if self:check_jockey_status () then
 		return
 	end
 	self:falling (pos)
-	self:check_dying ()
+	self:check_dying (dtime)
 
 	if self.stupefied then
 		-- self.object:set_animation_frame_speed (0)
@@ -514,8 +514,8 @@ function mob_class:on_step(dtime, moveresult)
 		else
 			self:halt_in_tracks ()
 		end
-		self:rotate_step (dtime)
 		self:motion_step (dtime, moveresult, pos)
+		self:rotate_step (dtime)
 		return
 	end
 
