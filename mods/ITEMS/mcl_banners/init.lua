@@ -464,23 +464,8 @@ for _, colortab in pairs(mcl_banners.colors) do
 				local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 				if rc then return rc end
 
-				if minetest.get_modpath("mcl_cauldrons") then
-					-- Use banner on cauldron to remove the top-most layer. This reduces the water level by 1.
-					local new_node
-					if node_under.name == "mcl_cauldrons:cauldron_3" then
-						new_node = "mcl_cauldrons:cauldron_2"
-					elseif node_under.name == "mcl_cauldrons:cauldron_2" then
-						new_node = "mcl_cauldrons:cauldron_1"
-					elseif node_under.name == "mcl_cauldrons:cauldron_1" then
-						new_node = "mcl_cauldrons:cauldron"
-					elseif node_under.name == "mcl_cauldrons:cauldron_3r" then
-						new_node = "mcl_cauldrons:cauldron_2r"
-					elseif node_under.name == "mcl_cauldrons:cauldron_2r" then
-						new_node = "mcl_cauldrons:cauldron_1r"
-					elseif node_under.name == "mcl_cauldrons:cauldron_1r" then
-						new_node = "mcl_cauldrons:cauldron"
-					end
-					if new_node then
+				if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
+					if mcl_cauldrons.add_level(pointed_thing.under, -1) then
 						local imeta = itemstack:get_meta()
 						local layers_raw = imeta:get_string("layers")
 						local layers = minetest.deserialize(layers_raw)
@@ -494,13 +479,6 @@ for _, colortab in pairs(mcl_banners.colors) do
 								imeta:set_string("description", newdesc)
 							end
 						end
-
-						-- Washing off reduces the water level by 1.
-						-- (It is possible to waste water if the banner had 0 layers.)
-						minetest.swap_node(pointed_thing.under, {name=new_node})
-
-						-- Play sound (from mcl_potions mod)
-						minetest.sound_play("mcl_potions_bottle_pour", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
 
 						return itemstack
 					end
