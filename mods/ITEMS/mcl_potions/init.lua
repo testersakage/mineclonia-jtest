@@ -64,40 +64,22 @@ minetest.register_craftitem("mcl_potions:glass_bottle", {
 			local get_water = false
 			--local from_liquid_source = false
 			local river_water = false
+			local cauldron_group = minetest.get_item_group(node.name, "cauldron_water")
 			if def and def.groups and def.groups.water and def.liquidtype == "source" then
 				-- Water source
 				get_water = true
 				--from_liquid_source = true
 				river_water = node.name == "mclx_core:river_water_source"
 			-- Or reduce water level of cauldron by 1
-			elseif string.sub(node.name, 1, 14) == "mcl_cauldrons:" then
+			elseif cauldron_group > 0 then
 				local pname = placer:get_player_name()
 				if minetest.is_protected(pointed_thing.under, pname) then
 					minetest.record_protection_violation(pointed_thing.under, pname)
 					return itemstack
 				end
-				if node.name == "mcl_cauldrons:cauldron_3" then
-					get_water = true
-					minetest.swap_node(pointed_thing.under, {name="mcl_cauldrons:cauldron_2"})
-				elseif node.name == "mcl_cauldrons:cauldron_2" then
-					get_water = true
-					minetest.swap_node(pointed_thing.under, {name="mcl_cauldrons:cauldron_1"})
-				elseif node.name == "mcl_cauldrons:cauldron_1" then
-					get_water = true
-					minetest.swap_node(pointed_thing.under, {name="mcl_cauldrons:cauldron"})
-				elseif node.name == "mcl_cauldrons:cauldron_3r" then
-					get_water = true
-					river_water = true
-					minetest.swap_node(pointed_thing.under, {name="mcl_cauldrons:cauldron_2r"})
-				elseif node.name == "mcl_cauldrons:cauldron_2r" then
-					get_water = true
-					river_water = true
-					minetest.swap_node(pointed_thing.under, {name="mcl_cauldrons:cauldron_1r"})
-				elseif node.name == "mcl_cauldrons:cauldron_1r" then
-					get_water = true
-					river_water = true
-					minetest.swap_node(pointed_thing.under, {name="mcl_cauldrons:cauldron"})
-				end
+				get_water = true
+				river_water = cauldron_group == 2
+				mcl_cauldrons.add_level(pointed_thing.under, -1)
 			end
 			if get_water then
 				local water_bottle
