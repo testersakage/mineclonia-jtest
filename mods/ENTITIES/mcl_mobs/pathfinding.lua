@@ -1094,6 +1094,9 @@ local function gwp_basic_classify (pos)
 			value = "DOOR_OPEN"
 		else
 			value = gwp_door_classes[nodename]
+			if not value then
+				value = "IGNORE" -- Unknown nodes.
+			end
 		end
 	end
 	-- if record_pathfinding_stats then
