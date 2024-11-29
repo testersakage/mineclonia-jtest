@@ -5806,10 +5806,15 @@ function villager:get_staticdata_table ()
 		supertable._wielditem_timer = nil
 
 		if supertable._trades then
-			supertable._trades = table.copy (supertable._trades)
-			for i, trade in ipairs (supertable._trades) do
-				-- Remove player-specific pricing data.
-				supertable._trades[i].special_price_diff = 0
+			-- It is possible for supertable._trade not to
+			-- be a table, if this is a mob that has still
+			-- to be converted.
+			if type (supertable._trades) == "table" then
+				supertable._trades = table.copy (supertable._trades)
+				for i, trade in ipairs (supertable._trades) do
+					-- Remove player-specific pricing data.
+					supertable._trades[i].special_price_diff = 0
+				end
 			end
 		end
 	end
