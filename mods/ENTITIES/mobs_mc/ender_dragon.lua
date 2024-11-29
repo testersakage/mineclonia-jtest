@@ -586,7 +586,6 @@ function dragon:motion_step (dtime, moveresult, self_pos)
 		else
 			dy = dy * 20
 		end
-		-- print (string.format ("%f %f %s %f", dy / 20, target.y - self_pos.y, vector.to_string (target), speed))
 
 		local y_drag = pow_by_step (Y_DRAG, dtime)
 		local y_scale = (1 - y_drag) / (1 - Y_DRAG)
@@ -624,7 +623,6 @@ function dragon:motion_step (dtime, moveresult, self_pos)
 		v.y = v.y + fv.y
 		v.z = v.z + fv.z
 
-		-- print (v.y)
 		self.object:set_velocity (v)
 		local dir1 = vector.normalize (v)
 		local x_drag = 0.8 + 0.15 * (vector.dot (dir1, forward) + 1.0) / 2.0
@@ -1803,7 +1801,6 @@ function dragon:do_phase_strafe (self_pos, dtime)
 		local dist = math.sqrt (dx * dx + dz * dz)
 		local height = math.min (10.0, 0.4 + dist / 80.0 - 1.0)
 		self._dragon_target = vector.offset (target_pos, 0, height, 0)
-		-- print (self._dragon_target:to_string ())
 	end
 end
 
