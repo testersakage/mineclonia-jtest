@@ -203,6 +203,20 @@ function mob_class:try_equip_item (stack, def, itemname)
 	return false
 end
 
+function mob_class:scale_durability_for_drop (stack, drop_probability)
+	-- Randomize the durability of generated equipment dropped by
+	-- mobs.
+
+	if drop_probability <= 1.0 then
+		local uses = mcl_util.calculate_durability (stack)
+		if uses > 0 then
+			local max = math.random (0, math.max (uses - 4, 0))
+			local amount = math.random (0, max)
+			stack:add_wear (65535 / uses * amount)
+		end
+	end
+end
+
 function mob_class:drop_armor (bonus, min_probability)
 	if not self._armor_drop_probabilities then
 		return
@@ -216,6 +230,7 @@ function mob_class:drop_armor (bonus, min_probability)
 			local stack = ItemStack (item)
 
 			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
+				self:scale_durability_for_drop (stack, probability)
 				mcl_util.drop_item_stack (self_pos, stack)
 			end
 		end

@@ -1181,6 +1181,7 @@ function mob_class:drop_wielditem (bonus, min_probability)
 			local stack = ItemStack (self._wielditem)
 
 			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
+				self:scale_durability_for_drop (stack, probability)
 				mcl_util.drop_item_stack (self_pos, stack)
 			end
 		end
@@ -1418,6 +1419,7 @@ function mob_class:drop_offhand_item (bonus, min_probability)
 			local stack = ItemStack (self._offhand_item)
 
 			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
+				self:scale_durability_for_drop (stack, probability)
 				mcl_util.drop_item_stack (self_pos, stack)
 			end
 		end
