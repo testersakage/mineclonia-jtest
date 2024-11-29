@@ -1,3 +1,4 @@
+mcl_cauldrons = {}
 local S = minetest.get_translator(minetest.get_current_modname())
 
 -- Cauldron mod, adds cauldrons.
@@ -48,6 +49,42 @@ local function create_cauldron_nodebox(water_level)
 	}
 end
 
+local cauldron_ids = {
+	water = "",
+	river_water = "r",
+	lava = "_lava",
+}
+
+local liquid_nodes = {
+	water = "mcl_core:water_source",
+	river_water = "mclx_core:river_water_source",
+	lava = "mcl_core:lava_source",
+}
+
+function mcl_cauldrons.get_caulrdon_name(level, liquid)
+	level = math.min(3, level)
+	level = math.max(0, level)
+	if level == 0 then return "mcl_cauldrons:cauldron" end
+	return "mcl_cauldrons:cauldron_"..level..cauldron_ids[liquid or "water"]
+end
+
+function mcl_cauldrons.add_level(pos, amount)
+	local node = minetest.get_node(pos)
+	amount = tonumber(amount) or 1
+	local water_level = minetest.get_item_group(node.name, "cauldron_filled")
+	local def = minetest.registered_nodes[node.name]
+	if amount ~= 0 and def and def._mcl_cauldrons_liquid then
+		if amount > 0 then
+			sound_place(liquid_nodes[def._mcl_cauldrons_liquid], pos)
+		else
+			sound_take(liquid_nodes[def._mcl_cauldrons_liquid], pos)
+		end
+		node.name = mcl_cauldrons.get_caulrdon_name(water_level + amount, def._mcl_cauldrons_liquid)
+		minetest.swap_node(pos, node)
+		return true
+	end
+end
+
 -- Empty cauldron
 minetest.register_node("mcl_cauldrons:cauldron", {
 	description = S("Cauldron"),
@@ -72,18 +109,9 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 	_mcl_hardness = 2,
 	_mcl_blast_resistance = 2,
 	_on_bucket_place = function(itemstack,placer,pointed_thing)
-		local n = itemstack:get_name():gsub("mcl_buckets:bucket_","")
-		local s
-		if n == "water" then
-			n = "mcl_cauldrons:cauldron_3"
-			s = "mcl_core:water_source"
-		elseif n == "river_water" then
-			n = "mcl_cauldrons:cauldron_3r"
-			s = "mclx_core:river_water_source"
-		elseif n == "lava" then
-			n = "mcl_cauldrons:cauldron_3_lava"
-			s = "mcl_core:lava_source"
-		end
+		local n = itemstack:get_name():gsub("mcl_buckets:bucket_","") or "water"
+		local s = liquid_nodes[n]
+		n = mcl_cauldrons.get_caulrdon_name(3, n)
 		if minetest.registered_nodes[n] then
 			if not minetest.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
@@ -135,6 +163,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		drop = "mcl_cauldrons:cauldron",
 		_mcl_hardness = 2,
 		_mcl_blast_resistance = 2,
+		_mcl_cauldrons_liquid = liquid or "water",
 		_mcl_baseitem = "mcl_cauldrons:cauldron",
 		_on_bucket_place_empty  = function(itemstack,placer,pointed_thing)
 			local n,s
