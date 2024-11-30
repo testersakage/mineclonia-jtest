@@ -31,7 +31,7 @@ mcl_heads.deftemplate = {
 		head = 1,
 		deco_block = 1,
 		dig_by_piston = 1,
-		unsticky = 1
+		unsticky = 1,
 		_mcl_partial = 2,
 	},
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
