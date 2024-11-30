@@ -552,16 +552,15 @@ function mob_class:do_strafe (dtime, moveresult)
 
 	-- Don't jump off ledges or head into unwalkable nodes if
 	-- strafing in reverse or to the sides.
-	local node, est_delta
+	local node, est_dx, est_dz
 	local v = { x = sx * vel, y = 0, z = sz * vel, }
-	est_delta = self:accelerate_relative (v, vel)
-	node = vector.add (self.object:get_pos (),
-			   -- Scale the delta to
-			   -- reflect the quantity
-			   -- of movement applied
-			   -- in one Minecraft
-			   -- tick.
-			   est_delta * 0.05)
+	local self_pos = self.object:get_pos ()
+	est_dx, est_dz = self:accelerate_relative (v, vel)
+	node = vector.offset (self_pos,
+			      -- Scale the delta to reflect the
+			      -- quantity of movement applied in one
+			      -- Minecraft tick.
+			      est_dx * 0.05, 0, est_dz * 0.05)
 	node.x = math.floor (node.x + 0.5)
 	node.y = math.floor (node.y + 0.5)
 	node.z = math.floor (node.z + 0.5)

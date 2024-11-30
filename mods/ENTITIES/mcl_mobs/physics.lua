@@ -208,7 +208,14 @@ function mob_class:get_velocity()
 end
 
 -- check if mob is dead or only hurt
-function mob_class:check_for_death (mcl_reason)
+function mob_class:check_for_death (mcl_reason, damage)
+	-- Don't display death animations when no damage was dealt,
+	-- e.g. when it was all neutralized by fire resistance or
+	-- water breathing.
+	if damage <= 0 then
+		return false
+	end
+
 	if self.dead then
 		self:jockey_death ()
 		return true
@@ -461,25 +468,21 @@ function mob_class:do_env_damage()
 
 	local frozen = false
 	-- water damage
-	if self.water_damage > 0
-		and nodef.groups.water then
+	if self.water_damage > 0 and nodef.groups.water then
 		local fatal = self:damage_mob ("environment", self.water_damage)
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png", nil, nil, 1, nil)
 		if fatal then
 			return true
 		end
 	-- magma damage
-	elseif self.fire_damage > 0
-	and (nodef2.groups.fire) then
+	elseif self.fire_damage > 0 and (nodef2.groups.fire) then
 		if self.fire_damage ~= 0 then
 			if self:damage_mob ("hot_floor", self.fire_damage) then
 				return true
 			end
 		end
 	-- lava damage
-	elseif self.lava_damage > 0
-	and self:is_in_node("group:lava") then
-
+	elseif self.lava_damage > 0 and self:is_in_node("group:lava") then
 		if self.lava_damage ~= 0 then
 			local fatal = self:damage_mob ("lava", self.lava_damage)
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
@@ -490,9 +493,7 @@ function mob_class:do_env_damage()
 			end
 		end
 	-- fire damage
-	elseif self.fire_damage > 0
-	and self:is_in_node("group:fire") then
-
+	elseif self.fire_damage > 0 and self:is_in_node("group:fire") then
 		if self.fire_damage ~= 0 then
 			local fatal = self:damage_mob ("in_fire", self.fire_damage)
 
@@ -503,8 +504,7 @@ function mob_class:do_env_damage()
 				return true
 			end
 		end
-	elseif self._mcl_freeze_damage > 0
-	and self:is_in_node("mcl_powder_snow:powder_snow") then
+	elseif self._mcl_freeze_damage > 0 and self:is_in_node("mcl_powder_snow:powder_snow") then
 		frozen = true
 		self._frozen_for = self._frozen_for + 1
 		if self._frozen_for >= 8 and self._frozen_for % 2 == 0 then
@@ -830,7 +830,7 @@ end
 
 function mob_class:remove_physics_factor (field, id)
 	if not self._physics_factors[field]
-		or not not self._physics_factors[field][id] then
+		or not self._physics_factors[field][id] then
 		return
 	end
 	self._physics_factors[field][id] = nil
@@ -884,6 +884,7 @@ local WATER_DRAG		= 0.8
 local AQUATIC_WATER_DRAG	= 0.9
 local AQUATIC_GRAVITY		= -0.1
 local SPRINTING_WATER_DRAG	= 0.9
+local JUMPING_LAVA_DRAG		= 0.8
 local LAVA_FRICTION		= 0.5
 local LAVA_SPEED		= 0.4
 local FLYING_LIQUID_SPEED	= 0.4
@@ -914,17 +915,22 @@ end
 
 function mob_class:accelerate_relative (acc, speed)
 	local yaw = self:get_yaw ()
-	acc = vector.length (acc) <= 1
-		and vector.copy (acc)
-		or vector.normalize (acc)
-	acc.x = acc.x * speed
-	acc.z = acc.z * speed
-	-- vector.rotate_around_axis is surprisingly inefficient.
-	-- local rv = vector.rotate_around_axis (acc, {x = 0, y = 1, z = 0,}, yaw)
+	local acc_x, acc_y, acc_z
+	local magnitude = vector.length (acc)
+	if magnitude > 1.0 then
+		acc_x = acc.x / magnitude * speed
+		acc_y = acc.y / magnitude * speed
+		acc_z = acc.z / magnitude * speed
+	else
+		acc_x = acc.x * speed
+		acc_y = acc.y * speed
+		acc_z = acc.z * speed
+	end
 	local s = -math.sin (yaw)
 	local c = math.cos (yaw)
-	local rv = vector.new (acc.x * c + acc.z * s, acc.y * speed, acc.z * c - acc.x * s)
-	return rv
+	local x = acc_x * c + acc_z * s
+	local z = acc_z * c - acc_x * s
+	return x, acc_y, z
 end
 
 function mob_class:get_jump_force (moveresult)
@@ -1085,7 +1091,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- Note that mobs being controlled by a player should sink.
 	if self.floats == 1 and not self.driver and math.random (10) < 8 then
 		local depth = self._immersion_depth or 0
-		if depth > LIQUID_JUMP_THRESHOLD then
+		if depth > LIQUID_JUMP_THRESHOLD or standin.groups.lava then
 			jumping = true
 		end
 	end
@@ -1095,7 +1101,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	if self.floats_on_lava and math.random (10) < 8 then
 		local ymin = self.collisionbox[2]
 		local height = self.collisionbox[5] - ymin
-		local depth = self:immersion_depth ("lava", self_pos, height) or 0
+		local depth = self:immersion_depth ("lava", self_pos, height)
 		if depth > LAVA_JUMP_THRESHOLD then
 			jumping = true
 		elseif depth > 0 then
@@ -1179,11 +1185,13 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		h_scale = (1 - r) / (1 - z)
 		speed = speed * h_scale
 
-		local fv = self:accelerate_relative (acc_dir, speed)
+		local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
 		p = pow_by_step (WATER_DRAG, dtime)
 
-		-- Apply friction.
-		v = vector.new (v.x * r, v.y * p, v.z * r)
+		-- Apply friction and acceleration.
+		v.x = v.x * r + fv_x
+		v.y = v.y * p
+		v.z = v.z * r + fv_z
 
 		-- Apply the new velocity in whole.
 		v_scale = (1 - p) / (1 - WATER_DRAG)
@@ -1199,7 +1207,8 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			v.y = v.y * gravity_drag
 		end
 
-		v = vector.add (v, fv)
+		-- Apply vertical acceleration.
+		v.y = v.y + fv_y
 
 		-- If colliding horizontally within water, detect
 		-- whether the result of this movement is vertically
@@ -1220,33 +1229,68 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		end
 	elseif standin.groups.lava then
 		if not self.floats_on_lava then
+			local saved_vy = v.y
 			local speed = LAVA_SPEED
 			local r, z = pow_by_step (LAVA_FRICTION, dtime), LAVA_FRICTION
 			h_scale = (1 - r) / (1 - z)
 			speed = speed * h_scale
+			v_scale, p = h_scale, r
 
-			local fv = self:accelerate_relative (acc_dir, speed)
-			v = vector.multiply (v, r)
-			v_scale = h_scale
+			-- If this mob is not submerged in lava to a
+			-- depth of LIQUID_JUMP_THRESHOLD, apply a
+			-- reduced drag.
+			local ymin
+				= self.collisionbox[2]
+			local height
+				= self.collisionbox[5] - ymin
+			local depth
+				= self:immersion_depth ("lava", self_pos, height)
+			if depth <= LIQUID_JUMP_THRESHOLD then
+				p = pow_by_step (JUMPING_LAVA_DRAG, dtime)
+				v_scale = (1 - p) / (1 - JUMPING_LAVA_DRAG)
+			end
+
+			local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
+			v.x = v.x * r + fv_x
+			v.y = v.y * p
+			v.z = v.z * r + fv_z
 			v.y = v.y + (fall_speed / 4.0) * v_scale
 			if v.y < 0 then
 				v.y = v.y * gravity_drag
 			end
-			v = vector.add (v, fv)
+			v.y = v.y + fv_y
+
+			-- If colliding horizontally within lava,
+			-- detect whether the result of this movement
+			-- is vertically within 0.6 nodes of a
+			-- position clear of lava and collisions, and
+			-- apply a force to this mob so as to breach
+			-- the water if so.
+			if horiz_collision (moveresult) then
+				local traveled = saved_vy * dtime
+				local diff_tick = v.y * 0.05
+				local dx = v.x * 0.05
+				local dy = diff_tick + 0.6 - traveled
+				local dz = v.z * 0.5
+				local will_breach_lava
+					= self:will_breach_water (self_pos, dx, dy, dz)
+				if will_breach_lava then
+					v.y = 6.0
+				end
+			end
 		else
 			local speed = acc_speed
 			local r, z = pow_by_step (BASE_FRICTION, dtime), BASE_FRICTION
 			h_scale = (1 - r) / (1 - z)
 			speed = speed * h_scale
 
-			local fv = self:accelerate_relative (acc_dir, speed)
-			v.x = v.x * r
-			v.z = v.z * r
+			local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
+			v.x = v.x * r + fv_x
+			v.z = v.z * r + fv_z
 
 			p = pow_by_step (WATER_DRAG, dtime)
 			v_scale = (1 - p) / (1 - WATER_DRAG)
-			v.y = v.y * p
-			v = vector.add (v, fv)
+			v.y = v.y * p + fv_y
 		end
 	else
 		-- If not standing on air, apply slippery to a base value of
@@ -1298,16 +1342,16 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		h_scale = (1 - r) / (1 - z)
 		speed = speed * h_scale
 
-		local fv = self:accelerate_relative (acc_dir, speed)
+		local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
 		v_scale = (1 - p) / (1 - AIR_DRAG)
 		local new_y = v.y + fall_speed * v_scale
-		v = vector.new (v.x * r, new_y * p, v.z * r)
+		v.x = v.x * r + fv_x
+		v.y = new_y * p
+		v.z = v.z * r + fv_z
 		if v.y < 0 then
 			v.y = v.y * gravity_drag
 		end
-
-		-- Apply the new velocity in whole.
-		v = vector.add (v, fv)
+		v.y = v.y + fv_y
 	end
 
 	if water_vec ~= nil and vector.length (water_vec) ~= 0 then
@@ -1367,7 +1411,7 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 	local v = self.object:get_velocity ()
 	local p = pow_by_step (AIR_DRAG, dtime)
 	local acc_dir = self.acc_dir
-	local fv, speed, scale
+	local speed, scale
 
 	acc_dir.x = acc_dir.x * p
 	acc_dir.z = acc_dir.z * p
@@ -1398,10 +1442,10 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 		scale = (1 - p) / (1 - friction)
 	end
 
-	fv = self:accelerate_relative (acc_dir, speed * scale)
-	v.x = v.x * p + fv.x
-	v.y = v.y * p + fv.y
-	v.z = v.z * p + fv.z
+	local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed * scale)
+	v.x = v.x * p + fv_x
+	v.y = v.y * p + fv_y
+	v.z = v.z * p + fv_z
 	self._previously_floating = true
 	self.object:set_properties ({stepheight = 0.0})
 	self.object:set_velocity (v)
@@ -1424,18 +1468,18 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 		local acc_dir = self.acc_dir
 		local acc_fixed = self._acc_y_fixed or 0
 		local p = pow_by_step (AIR_DRAG, dtime)
-		local fv, scale
 		local v = self.object:get_velocity ()
 
 		acc_dir.x = acc_dir.x * p
 		acc_dir.z = acc_dir.z * p
 		p = pow_by_step (AQUATIC_WATER_DRAG, dtime)
-		scale = (1 - p) / (1 - AQUATIC_WATER_DRAG)
+		local scale = (1 - p) / (1 - AQUATIC_WATER_DRAG)
 
-		fv = self:accelerate_relative (acc_dir, acc_speed * scale)
-		v.x = v.x * p + fv.x
-		v.y = v.y * p + fv.y + acc_fixed * scale
-		v.z = v.z * p + fv.z
+		local fv_x, fv_y, fv_z
+			= self:accelerate_relative (acc_dir, acc_speed * scale)
+		v.x = v.x * p + fv_x
+		v.y = v.y * p + fv_y + acc_fixed * scale
+		v.z = v.z * p + fv_z
 
 		-- Apply gravity unless attacking mob.
 		if not self.attacking and not self._acc_no_gravity then
