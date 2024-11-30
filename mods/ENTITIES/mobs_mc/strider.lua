@@ -284,14 +284,14 @@ function strider:ai_step (dtime)
 	end
 
 	if self._aground and not was_aground then
-		self:add_physics_factor ("movement_speed", "mcl_mobs:strider_out_of_water", 0.66)
+		self:add_physics_factor ("movement_speed", "mobs_mc:strider_out_of_water", 0.66)
 		local textures = table.copy (self.base_texture)
 		textures[0] = "extra_mobs_strider_cold.png"
 		self:set_textures (textures)
 		self.shaking = true
 		self.drive_bonus = 0.35
 	elseif not self._aground and was_aground then
-		self:remove_physics_factor ("movement_speed", "mcl_mobs:strider_out_of_water")
+		self:remove_physics_factor ("movement_speed", "mobs_mc:strider_out_of_water")
 		self:set_textures (self.base_texture)
 		self.shaking = false
 		self.drive_bonus = 0.55
