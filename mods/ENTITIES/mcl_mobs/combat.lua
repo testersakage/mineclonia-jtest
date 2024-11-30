@@ -107,7 +107,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 	self.health = self.health - damage
 
 	if not source then
-		self:check_for_death (mcl_reason)
+		self:check_for_death (mcl_reason, damage)
 		return true
 	end
 
@@ -118,7 +118,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 	end
 
 	if source:is_player () and source:get_player_name () == self.owner then
-		self:check_for_death (mcl_reason)
+		self:check_for_death (mcl_reason, damage)
 		return true
 	end
 
@@ -151,7 +151,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 			self:do_runaway (source)
 		end
 	end
-	self:check_for_death (mcl_reason)
+	self:check_for_death (mcl_reason, damage)
 	return true
 end
 

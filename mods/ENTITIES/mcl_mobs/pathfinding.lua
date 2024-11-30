@@ -208,10 +208,10 @@ local function is_water_source (name)
 end
 
 function mob_class:gwp_align_start_pos (pos)
-	pos.x = floor (pos.x + 0.5)
-	pos.y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
-	pos.z = floor (pos.z + 0.5)
-	return pos
+	local x = floor (pos.x + 0.5)
+	local y = floor (pos.y + 1.0) -- Deal with soul sand and slabs.
+	local z = floor (pos.z + 0.5)
+	return vector.new (x, y, z)
 end
 
 function mob_class:gwp_start_1 (context)
@@ -284,7 +284,9 @@ local function is_passable (class, penalties, startpos, context, mob)
 end
 
 local function is_stuck (class, penalties, startpos, context, mob)
-	if class == "BLOCKED" or class == "FENCE"
+	if class == "BLOCKED"
+		or class == "LAVA"
+		or class == "FENCE"
 		or class == "SLAB"
 		or class == "DOOR_WOOD_CLOSED"
 		or class == "DOOR_IRON_CLOSED" then
