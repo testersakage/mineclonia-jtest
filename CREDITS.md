@@ -17,7 +17,6 @@
 * Brama Udi
 * amino
 * Jürgen Rühle
-* teknomunk
 * kno10
 * Po Lu
 * goblin_mode
