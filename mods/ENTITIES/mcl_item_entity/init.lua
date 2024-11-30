@@ -312,6 +312,10 @@ minetest.register_entity(":__builtin:item", {
 		spritediv = {x = 1, y = 1},
 		initial_sprite_basepos = {x = 0, y = 0},
 		automatic_rotate = math.pi * 0.5,
+		-- This prevents items from colliding with shulkers,
+		-- but this is a better compromise than permitting
+		-- them to colide with players.
+		collide_with_objects = false,
 	},
 
 	-- Itemstring of dropped item. The empty string is used when the item is not yet initialized yet.
