@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Done"
+msgstr ""
+
+msgid "Take Book"
+msgstr ""
+
 msgid "Lectern"
 msgstr "Leggìo"
 

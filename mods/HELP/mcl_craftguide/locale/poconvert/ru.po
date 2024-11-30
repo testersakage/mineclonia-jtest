@@ -94,6 +94,12 @@ msgstr "@1 из @2"
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "Рецепт слишком большой для отображения (@1×@2)"
 
+msgid "Shapeless"
+msgstr ""
+
+msgid "Cooking"
+msgstr ""
+
 msgid "Increase window size"
 msgstr "Увеличить окно"
 

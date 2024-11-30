@@ -31,8 +31,8 @@ msgstr "Древние обломки"
 msgid "Ancient debris can be found in the nether and is very very rare."
 msgstr "Древние обломки можно найти в нижнем мире, и это очень большая редкость."
 
-msgid "Netherite Block"
-msgstr "Незеритовый блок"
+msgid "Block of Netherite"
+msgstr ""
 
 msgid "Netherite block is very hard and can be made of 9 netherite ingots."
 msgstr "Незеритовый блок очень крепкий. Может быть создан из 9 незеритовых слитков."

@@ -31,7 +31,7 @@ msgstr ""
 msgid "Ancient debris can be found in the nether and is very very rare."
 msgstr ""
 
-msgid "Netherite Block"
+msgid "Block of Netherite"
 msgstr ""
 
 msgid "Netherite block is very hard and can be made of 9 netherite ingots."

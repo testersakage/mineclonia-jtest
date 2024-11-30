@@ -868,8 +868,8 @@ msgstr "Diamantblock"
 msgid "A block of diamond is mostly a shiny decorative block but also useful as a compact storage of diamonds."
 msgstr "Ein Diamantblock ist hauptsächlich ein schicker Dekorationsblock, aber er ist auch nützlich zur kompakten Aufbewahrung von Diamanten."
 
-msgid "Lapis Lazuli Block"
-msgstr "Lapislazuliblock"
+msgid "Block of Lapis Lazuli"
+msgstr ""
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
 msgstr "Ein Lapislazuliblock ist hauptsächlich ein Deko-Block aber er ist auch nützlich zur kompakten Aufbewahrung von Lapislazuli."

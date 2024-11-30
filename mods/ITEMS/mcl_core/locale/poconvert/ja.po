@@ -868,8 +868,8 @@ msgstr "ダイヤモンドブロック"
 msgid "A block of diamond is mostly a shiny decorative block but also useful as a compact storage of diamonds."
 msgstr "ダイヤモンドブロックは、主に装飾用の輝くブロックですが、ダイヤモンドをコンパクトに保管するのにも便利です。"
 
-msgid "Lapis Lazuli Block"
-msgstr "ラピスラズリブロック"
+msgid "Block of Lapis Lazuli"
+msgstr ""
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
 msgstr "ラピスラズリブロックは、主に装飾用のブロックですが、ラピスラズリをコンパクトに保管するのにも便利です。"

@@ -94,6 +94,12 @@ msgstr ""
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "Receita é muito grande para ser mostrada (@1x@2)"
 
+msgid "Shapeless"
+msgstr ""
+
+msgid "Cooking"
+msgstr ""
+
 msgid "Increase window size"
 msgstr "Aumentar tamanho da janela"
 
