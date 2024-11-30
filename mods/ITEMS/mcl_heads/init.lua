@@ -32,6 +32,7 @@ mcl_heads.deftemplate = {
 		deco_block = 1,
 		dig_by_piston = 1,
 		unsticky = 1
+		_mcl_partial = 2,
 	},
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 
@@ -155,6 +156,7 @@ function mcl_heads.register_head(head_def)
 			deco_block = 1,
 			dig_by_piston = 1,
 			not_in_creative_inventory = 1,
+			_mcl_partial = 2,
 		},
 		_doc_items_create_entry = false,
 		selection_box = {
@@ -191,6 +193,7 @@ function mcl_heads.register_head(head_def)
 			deco_block = 1,
 			dig_by_piston = 1,
 			not_in_creative_inventory = 1,
+			_mcl_partial = 2,
 		},
 		_doc_items_create_entry = false,
 		-- Note: -x coords go right per-pixel, -y coords go down per-pixel
