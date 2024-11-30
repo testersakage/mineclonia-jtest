@@ -3,14 +3,6 @@ local mob_class = mcl_mobs.mob_class
 
 local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
 
-local base_drop = {
-	name = "mcl_mobitems:leather",
-	chance = 1,
-	min = 0,
-	max = 2,
-	looting = "common",
-}
-
 local function attach_driver(self, clicker)
 	mcl_title.set(clicker, "actionbar", {
 		text=S("Sneak to dismount"),
@@ -159,7 +151,15 @@ local horse = {
 	floats = 1,
 	makes_footstep_sound = true,
 	jump = true,
-	drops = { base_drop },
+	drops = {
+		{
+			name = "mcl_mobitems:leather",
+			chance = 1,
+			min = 0,
+			max = 2,
+			looting = "common",
+		},
+	},
 	jump_height = 14,
 	fall_damage_multiplier = 0.5,
 	-- Values of 1.0 precisely trigger engine bugs.
@@ -470,6 +470,8 @@ function horse:mob_activate (staticdata, dtime)
 	if not mob_class.mob_activate (self, staticdata, dtime) then
 		return false
 	end
+	-- Erase obsolete drop lists.
+	self.drops = nil
 	-- Reconfigure maximum HP.
 	if self.hp_max then
 		self.object:set_properties ({
@@ -494,7 +496,6 @@ function horse:mob_activate (staticdata, dtime)
 	end
 	self._horse_armor = nil
 	self._selectionbox_overloaded = false
-	self:update_drops ()
 	self:init_attachment_position ()
 	return true
 end
@@ -645,8 +646,13 @@ function horse:drop_armor (bonus)
 		local stack = ItemStack (self._horse_armor_stack)
 		mcl_util.drop_item_stack (self_pos, stack)
 	end
+	if self._chest then
+		local stack = ItemStack ("mcl_chests:chest")
+		mcl_util.drop_item_stack (self_pos, stack)
+	end
 	self._horse_armor_stack = ""
 	self._saddle = ""
+	self._chest = false
 end
 
 ------------------------------------------------------------------------
@@ -765,7 +771,6 @@ function horse:on_rightclick (clicker)
 			local tex = self:extra_textures ()
 			self.base_texture = tex
 			self:set_textures (tex)
-			self:update_drops ()
 			return
 		elseif self._chest and clicker:get_player_control().sneak then
 			mcl_entity_invs.show_inv_form(self,clicker)
@@ -869,18 +874,6 @@ function horse:remove_saddle ()
 	self:set_textures (tex)
 	minetest.sound_play ({name = "mcl_armor_unequip_leather"},
 		{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
-end
-
-function horse:update_drops ()
-	self.drops = { base_drop, }
-	if self._chest then
-		table.insert(self.drops,{
-			name = "mcl_chests:chest",
-			chance = 1,
-			min = 1,
-			max = 1,
-		})
-	end
 end
 
 ------------------------------------------------------------------------
