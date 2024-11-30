@@ -572,7 +572,8 @@ end
 
 local function is_dark (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	return minetest.get_node_light (nodepos) <= 4.0
+	local light = minetest.get_node_light (nodepos)
+	return light and light <= 4.0
 end
 
 local function is_clear (nodepos, x, y, z)
@@ -598,12 +599,22 @@ local function is_free_of_living_players (pos, radius)
 	return true
 end
 
+local function is_living_entity (object)
+	if not object then
+		return nil
+	end
+
+	local entity = object:get_luaentity ()
+	return object:is_player () or (entity and entity.is_mob)
+end
+
 function zombie:receive_damage (mcl_reason, damage)
 	if not mob_class.receive_damage (self, mcl_reason, damage) then
 		return false
 	end
 
 	if mcl_vars.difficulty >= 3 -- Hard
+		and is_living_entity (self.attack or mcl_reason.source)
 		and math.random () < self._spawn_reinforcements_chance
 		and self:can_spawn_reinforcements (mcl_reason) then
 		-- Perform 50 attempts to spawn reinforcements on

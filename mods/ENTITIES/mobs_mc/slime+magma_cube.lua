@@ -16,7 +16,8 @@ end
 -- https://minecraft.wiki/w/Slime#Swamps
 
 local function swamp_spawn(pos)
-	if minetest.get_node_light(pos) > math.random(0,7) then return false end
+	local light = (minetest.get_node_light (pos) or minetest.LIGHT_MAX)
+	if light > math.random(0,7) then return false end
 	if math.abs(4 - mcl_moon.get_moon_phase()) / 4 < math.random() then return false end --moon phase 4 is new moon in mcl_moon
 	if math.random(2) == 2 then return false end
 	return true

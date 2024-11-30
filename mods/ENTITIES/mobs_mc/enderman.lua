@@ -695,7 +695,7 @@ end
 local function mc_light_value (self, self_pos)
 	local brightness, value
 	local pos = self_pos
-	brightness = minetest.get_node_light (pos) / 15.0
+	brightness = (minetest.get_node_light (pos) or 0) / 15.0
 	value = brightness / (4 - 3 * brightness)
 	return value
 end
