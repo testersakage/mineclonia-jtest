@@ -2245,7 +2245,9 @@ end
 
 local zombie_types = {
 	"mobs_mc:husk",
+	"mobs_mc:baby_husk",
 	"mobs_mc:zombie",
+	"mobs_mc:baby_zombie",
 	"mobs_mc:villager_zombie",
 }
 
@@ -2637,6 +2639,8 @@ end
 
 -- See https://minecraft.wiki/w/Villager#Panicking
 local alarm_distances = {
+	["mobs_mc:baby_husk"] = 8.0,
+	["mobs_mc:baby_zombie"] = 8.0,
 	["mobs_mc:husk"] = 8.0,
 	["mobs_mc:illusioner"] = 12.0,
 	["mobs_mc:pillager"] = 15.0,
