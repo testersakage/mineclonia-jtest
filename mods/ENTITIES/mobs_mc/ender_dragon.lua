@@ -1244,7 +1244,7 @@ end
 function dragon:crystal_destroyed (crystal, puncher)
 	if self._phase == "hold" then
 		if not puncher then
-			puncher = self:get_nearest_player (crystal, 64)
+			puncher = self:get_nearest_player (crystal, 128)
 		end
 		if puncher and puncher:is_valid ()
 			and (not puncher:is_player ()
@@ -1916,14 +1916,19 @@ function dragon:check_crystals (dtime, self_pos)
 				self._current_crystal = nil
 			end
 		else
-			table.insert (living, crystal)
+			local entity = crystal:get_luaentity ()
 			local pos = crystal:get_pos ()
-			local distance = vector.distance (self_pos, pos)
+			if entity._exploded then
+				self:crystal_destroyed (pos, entity._puncher)
+			else
+				table.insert (living, crystal)
+				local distance = vector.distance (self_pos, pos)
 
-			if not nearest or distance < dist then
-				nearest = crystal
-				dist = distance
-				nearest_pos = pos
+				if not nearest or distance < dist then
+					nearest = crystal
+					dist = distance
+					nearest_pos = pos
+				end
 			end
 		end
 	end
@@ -1960,7 +1965,6 @@ function dragon:check_crystals (dtime, self_pos)
 			mcl_util.deal_damage (self.object, 10.0, mcl_reason)
 			self._current_crystal:remove ()
 			self._current_crystal = nil
-			self:crystal_destroyed (pos, entity.puncher)
 		elseif self:check_timer ("crystal_heal", 0.5) then
 			local hp_max = self.initial_properties.hp_max
 			self.health = math.min (self.health + 1.0, hp_max)
