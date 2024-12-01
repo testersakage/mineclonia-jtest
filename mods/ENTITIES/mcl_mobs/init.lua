@@ -1,4 +1,38 @@
 mcl_mobs = {}
+
+------------------------------------------------------------------------
+-- Temporary performance hacks.
+------------------------------------------------------------------------
+
+-- If mcl_mobs is a trusted mod, it may be possible to extract the
+-- definition of `get_node_raw' from minetest.get_node and avoid
+-- garbage collection incurred by table allocation in the loop below.
+
+mcl_mobs.get_node_raw = minetest.get_node_raw
+local env = minetest.request_insecure_environment ()
+
+if env and not mcl_mobs.get_node_raw then
+	local get_node = minetest.get_node
+	local i = 1
+	while true do
+		local name, upvalue = debug.getupvalue (get_node, i)
+		if not name then
+			break
+		end
+
+		if name == "get_node_raw" then
+			mcl_mobs.get_node_raw = upvalue
+			break
+		end
+
+		i = i + 1
+	end
+end
+
+------------------------------------------------------------------------
+-- Mob initialization.
+------------------------------------------------------------------------
+
 mcl_mobs.registered_mobs = {}
 local modname = minetest.get_current_modname()
 local path = minetest.get_modpath(modname)
