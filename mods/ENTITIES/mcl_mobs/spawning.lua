@@ -312,7 +312,7 @@ local function spawn_group(p,mob,spawn_on,group_max,group_min)
 	end
 	for i = 1, math.random(group_min,group_max) do
 		local sp = vector.offset(nn[math.random(#nn)],0,1,0)
-		if spawn_check(nn[math.random(#nn)],mob,true) then
+		if spawn_check(nn[math.random(#nn)],mob) then
 			if mob.type_of_spawning == "water" then
 				sp = get_water_spawn(sp)
 			end
