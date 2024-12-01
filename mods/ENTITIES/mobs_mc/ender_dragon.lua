@@ -868,9 +868,9 @@ end
 function dragon:on_punch (_, _, _, _)
 end
 
-function dragon:check_for_death (mcl_reason)
+function dragon:check_for_death (mcl_reason, damage)
 	if self.health > 0 then
-		return mob_class.check_for_death (self, mcl_reason)
+		return mob_class.check_for_death (self, mcl_reason, damage)
 	else
 		self._phase = "death"
 		return false
