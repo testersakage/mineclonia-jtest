@@ -53,15 +53,30 @@ local function minnum (a, b)
 	return math.min (a, b)
 end
 
-local function aabb_clear (node, origin, pos2, direction, d_sqr, typetest)
-	local node_type = minetest.get_node (node)
-	if node_type.name == "air" then
+-- This is a Minetest internal function that enables this frequently
+-- invoked function to avoid table allocation and consequently
+-- generated garbage.
+local get_node_raw = mcl_mobs.get_node_raw
+
+local function get_node (node)
+	if get_node_raw then
+		local content, _, _ = get_node_raw (node.x, node.y, node.z)
+		return minetest.get_name_from_content_id (content)
+	else
+		local data = minetest.get_node (node)
+		return data.name
+	end
+end
+
+local function aabb_clear (node, origin, pos2, direction, dist, typetest)
+	local node_type = get_node (node)
+	if node_type == "air" then
 		return true
 	else
-		local def = minetest.registered_nodes[node_type.name]
+		local def = minetest.registered_nodes[node_type]
 		if def and not def.walkable then
 			return true
-		elseif typetest and typetest (node_type.name, def) then
+		elseif typetest and typetest (node_type, def) then
 			return true
 		elseif not def then
 			return false
@@ -104,7 +119,7 @@ local function aabb_clear (node, origin, pos2, direction, d_sqr, typetest)
 		local x = min < 0 and max or min
 		-- Intersection with furthest near face is within the
 		-- vector.
-		if (x * x <= d_sqr)
+		if (x <= dist)
 			-- Intersection with closest far face
 			-- falls after the origin.
 			and (max >= 0)
@@ -137,6 +152,20 @@ local function scale_poses (pos1, pos2)
 	return v1, v2
 end
 
+local fast_direction_scratch = vector.zero ()
+
+local function dir_and_magnitude (a, b)
+	local dx = b.x - a.x
+	local dy = b.y - a.y
+	local dz = b.z - a.z
+	local v = fast_direction_scratch
+	local magnitude = math.sqrt (dx * dx + dy * dy + dz * dz)
+	v.x = dx / magnitude
+	v.y = dy / magnitude
+	v.z = dz / magnitude
+	return v, magnitude
+end
+
 function mob_class:line_of_sight (pos1, pos2, typetest)
 	-- Move pos1 and pos2 by minuscule values to avoid generating
 	-- Inf or NaN.
@@ -150,8 +179,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 	local dx, dy, dz = pos2.x - pos1.x, pos2.y - pos1.y, pos2.z - pos1.z
 	local sx, sy, sz = signum (dx), signum (dy), signum (dz)
 	local stepx, stepy, stepz = sx / dx, sy / dy, sz / dz
-	local direction = vector.direction (pos1, pos2)
-	local distsqr = dx * dx + dy * dy + dz * dz
+	local direction, dist = dir_and_magnitude (pos1, pos2)
 
 	-- Precompute reciprocal.
 	direction.x = 1.0 / direction.x
@@ -184,7 +212,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 	v.x = x
 	v.y = y
 	v.z = z
-	if not aabb_clear (v, pos1, pos2, direction, distsqr, typetest) then
+	if not aabb_clear (v, pos1, pos2, direction, dist, typetest) then
 		return false, v
 	end
 
@@ -213,7 +241,7 @@ function mob_class:line_of_sight (pos1, pos2, typetest)
 		v.y = y
 		v.z = z
 
-		if not aabb_clear (v, pos1, pos2, direction, distsqr) then
+		if not aabb_clear (v, pos1, pos2, direction, dist) then
 			return false, v
 		end
 	end
