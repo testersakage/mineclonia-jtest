@@ -181,6 +181,9 @@ local normaldef = table.merge(commdef, {
 
 local offdef = {
 	_mcl_redstone = {
+		connects_to = function(node, dir)
+			return -core.facedir_to_dir(node.param2) ~= dir
+		end,
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
@@ -202,6 +205,9 @@ local ondef = {
 	on_rotate = false,
 	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	_mcl_redstone = {
+		connects_to = function(node, dir)
+			return -core.facedir_to_dir(node.param2) ~= dir
+		end,
 		update = function(pos, node)
 			local dir = -minetest.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
