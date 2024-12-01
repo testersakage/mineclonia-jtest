@@ -131,16 +131,6 @@ mcl_structures.register_structure("end_boat",{
 	}
 })
 
-mcl_structures.register_structure_spawn({
-	name = "mobs_mc:shulker",
-	y_min = mcl_vars.mg_end_min,
-	y_max = mcl_vars.mg_end_max,
-	chance = 10,
-	interval = 60,
-	limit = 6,
-	spawnon = spawnon,
-})
-
 mcl_structures.register_structure("small_end_city",{
 	place_on = {"mcl_end:end_stone"},
 	fill_ratio = 0.01,
