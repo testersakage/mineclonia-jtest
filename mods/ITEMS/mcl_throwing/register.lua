@@ -186,6 +186,25 @@ local function pearl_tp(player, pos)
 	mcl_damage.damage_player (player, 5, { type = "fall", })
 end
 
+local function check_gateway_teleportation (self, pos, lastpos)
+	local raycast = minetest.raycast (lastpos, pos, false, false)
+	for hitpoint in raycast do
+		if hitpoint.type == "node" then
+			local node = minetest.get_node (hitpoint.under)
+			local player = self._thrower
+				and minetest.get_player_by_name (self._thrower)
+			if node.name == "mcl_portals:portal_gateway" then
+				if player then
+					mcl_portals.gateway_teleport (hitpoint.under, player)
+				end
+				self.object:remove ()
+				return true
+			end
+		end
+	end
+	return false
+end
+
 -- Movement function of ender pearl
 local function pearl_on_step(self, dtime)
 	self.timer = self.timer + dtime
@@ -197,6 +216,9 @@ local function pearl_on_step(self, dtime)
 
 	-- Destroy when hitting a solid node
 	if self._lastpos.x~=nil then
+		if check_gateway_teleportation (self, pos, self._lastpos) then
+			return
+		end
 		local walkable = (def and def.walkable)
 
 		-- No teleport for hitting ignore for now. Otherwise the player could get stuck.
