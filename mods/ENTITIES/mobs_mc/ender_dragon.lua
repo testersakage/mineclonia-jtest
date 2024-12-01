@@ -1955,7 +1955,6 @@ function dragon:check_crystals (dtime, self_pos)
 		if not entity then
 			self._current_crystal = nil
 		elseif entity._exploded then
-			local pos = self._current_crystal:get_pos ()
 			local mcl_reason = {
 				type = "explosion",
 				source = self.object,
