@@ -117,3 +117,5 @@ minetest.register_abm({
 		end
 	end,
 })
+
+mcl_portals.gateway_teleport = teleport
