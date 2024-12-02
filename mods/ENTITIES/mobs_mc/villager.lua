@@ -6473,11 +6473,17 @@ function villager:post_load_staticdata ()
 		or self._locked_trades
 		or self._max_trade_tier
 		or self._profession == "unemployed"
+		or self._profession == "tool_smith"
+		or self._profession == "weapon_smith"
 		or self._id
 
 	if is_old_villager then
 		if self._profession == "unemployed" then
 			self._profession = nil
+		elseif self._profession == "tool_smith" then
+			self._profession = "toolsmith"
+		elseif self._profession == "weapon_smith" then
+			self._profession = "weaponsmith"
 		end
 
 		if self._jobsite
