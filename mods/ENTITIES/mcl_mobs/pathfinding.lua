@@ -769,33 +769,32 @@ end
 mcl_mobs.gwp_get_node = gwp_get_node
 
 local ground_height_scratch = vector.zero ()
-local ground_height_this_step = {}
+local gwp_fixed_ground_height = {}
 
 local function ground_height (context, node)
-	local hash = longhash (node.x, node.y, node.z)
-	local cache = ground_height_this_step[hash]
-
-	if cache then
-		return cache
-	end
-
 	local below = ground_height_scratch
 	below.x = node.x
 	below.y = node.y - 1
 	below.z = node.z
-	local boxes = minetest.get_node_boxes ("collision_box", below)
-	local y = 0
 
-	for _, box in ipairs (boxes) do
-		local max = math.max (box[2], box[5])
-		if y < max then
-			y = max
+	local nodevalue = gwp_get_node (below)
+	local fixed = gwp_fixed_ground_height[nodevalue]
+	if fixed then
+		return fixed + below.y
+	else
+		local boxes = minetest.get_node_boxes ("collision_box", below)
+		local y = 0
+
+		for _, box in ipairs (boxes) do
+			local max = math.max (box[2], box[5])
+			if y < max then
+				y = max
+			end
 		end
-	end
 
-	local value = below.y + y
-	ground_height_this_step[hash] = value
-	return value
+		local value = below.y + y
+		return value
+	end
 end
 
 local gwp_ej_scratch = vector.zero ()
@@ -1066,16 +1065,44 @@ end
 -- local record_pathfinding_stats = true
 -- local bc_stats = { }
 
-local gwp_basic_node_classes = {
-	["ignore"] = "IGNORE",
-}
+local gwp_basic_node_classes = {}
+
 mcl_mobs.gwp_basic_node_classes = gwp_basic_node_classes
+mcl_mobs.gwp_fixed_ground_height = gwp_fixed_ground_height
 
 if get_node_raw then
 	gwp_basic_node_classes[65536] = nil
+	gwp_fixed_ground_height[65536] = nil
 end
 
 local gwp_door_classes = {}
+
+local function gwp_compute_fixed_ground_height (def)
+	if def.paramtype2 == "color"
+		or def.paramtype2 == "none" then
+		local node_box = def.collision_box
+			or def.node_box
+			or {type = "regular"}
+		if node_box.type == "regular" then
+			return 0.5
+		elseif node_box.type == "fixed" then
+			local tallest = nil
+			if type (node_box.fixed[1]) == "number" then
+				tallest = node_box.fixed[5]
+			else
+				for _, box in pairs (node_box.fixed) do
+					if tallest then
+						tallest = math.max (tallest, box[5])
+					else
+						tallest = box[5]
+					end
+				end
+			end
+			return tallest
+		end
+	end
+	return nil
+end
 
 -- Pre-compute node classes for efficiency.  Beware that
 -- DOOR_IRON_CLOSED and DOOR_WOOD_CLOSED must still be processed
@@ -1100,6 +1127,8 @@ minetest.register_on_mods_loaded (function ()
 		elseif def.walkable then
 			value = get_partial_type (def)
 		end
+		gwp_fixed_ground_height[key]
+			= gwp_compute_fixed_ground_height (def)
 		gwp_basic_node_classes[key] = value
 	end
 end)
@@ -1814,9 +1843,12 @@ local function print_node_classification (itemstack, user, pointed_thing)
 		local class3 = gwp_basic_classify (pointed_thing.under)
 		local class4 = gwp_basic_classify (pointed_thing.above)
 		minetest.chat_send_player (playername,
-					   "ABOVE: " .. class2 .. "\nUNDER: "
-					   .. class1 .. "\nABOVE (basic): "
-					   .. class4 .. "\nUNDER (basic): "
+					   "ABOVE: " .. class2 .. " "
+					   .. ground_height (context, pointed_thing.above)
+					   .. "\nUNDER: " .. class1
+					   .. "\nABOVE (basic): "
+					   .. class4
+					   .. "\nUNDER (basic): "
 					   .. class3)
 
 		local width = context.mob_width
@@ -1973,7 +2005,6 @@ local mobs_this_step = 0
 -- local pathfinding_history = {  }
 
 minetest.register_globalstep (function (dtime)
-		ground_height_this_step = {}
 		nodes_this_step = {}
 		if pathfinding_quota <= 0.0 then
 			minetest.log ("warning", "Global pathfinding quota exceeded...")
