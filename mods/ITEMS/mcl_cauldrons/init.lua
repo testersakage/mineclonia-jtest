@@ -86,7 +86,7 @@ function mcl_cauldrons.add_level(pos, amount, liquid)
 			sound_take(liquid_nodes[liquid], pos)
 		end
 		node.name = mcl_cauldrons.get_cauldron_name(water_level + amount, liquid)
-		minetest.swap_node(pos, node)
+		mcl_redstone.swap_node(pos, node)
 		return true
 	end
 end
