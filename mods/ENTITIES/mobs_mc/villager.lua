@@ -2014,7 +2014,7 @@ function villager:check_restock (gmt, day)
 		end
 		if self._restocks_remaining == 2
 			or (self._restocks_remaining > 0
-				and self._last_restock_gmt - gmt > 120) then
+				and gmt - self._last_restock_gmt > 120) then
 			self:restock_if_needed ()
 		end
 	end
