@@ -5263,10 +5263,10 @@ function villager:throw_some_of (self_pos, target_pos, items)
 			and table.indexof (items, item:get_name ()) ~= -1 then
 			local stacksize = item:get_stack_max ()
 			local count = item:get_count ()
-			local num_to_take = math.min (24, stacksize / 2)
+			local num_to_retain = math.min (24, stacksize / 2)
 
-			if count > num_to_take then
-				stack = item:take_item (num_to_take)
+			if count > num_to_retain then
+				stack = item:take_item (count - num_to_retain)
 				self._inventory[i] = item:to_string ()
 				break
 			end
