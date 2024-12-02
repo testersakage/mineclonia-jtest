@@ -6140,10 +6140,11 @@ local is_bottom_slab = {}
 
 minetest.register_on_mods_loaded (function ()
 	for name, def in pairs (minetest.registered_nodes) do
+		local value = mcl_mobs.gwp_name_to_nodevalue (name)
 		if def.groups.slab_top then
-			is_top_slab[name] = true
+			is_top_slab[value] = true
 		elseif def.groups.slab or def.groups.bed then
-			is_bottom_slab[name] = true
+			is_bottom_slab[value] = true
 		end
 	end
 end)
