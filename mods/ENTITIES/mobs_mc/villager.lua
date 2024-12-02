@@ -6181,7 +6181,7 @@ function villager:gwp_essay_jump (context, target, parent, floor)
 			floor = floor + 0.5
 		end
 		if is_pos_bottom_slab (target)
-			and (target.y + 0.5) - floor > GWP_JUMP_HEIGHT then
+			and target.y - floor > GWP_JUMP_HEIGHT then
 			return nil
 		end
 	end
