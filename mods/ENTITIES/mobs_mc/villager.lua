@@ -3880,7 +3880,7 @@ function villager:compost (composter)
 end
 
 function villager:craft_bread (self_pos)
-	if not self:has_items ("mcl_farming:bread", 36) then
+	if not self:has_items ("mcl_farming:bread", 37) then
 		local n_wheat = self:count_items ("mcl_farming:wheat_item")
 		local pcs = math.min (3, math.floor (n_wheat / 3))
 
