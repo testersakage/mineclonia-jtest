@@ -126,6 +126,19 @@ function pillager:apply_raid_buffs (stage)
 	-- TODO: pillager raid buffs.
 end
 
+function pillager:drop_custom (looting_level)
+	illager.drop_custom (self, looting_level)
+
+	-- The MC wiki is wrong when it states that these bottles are
+	-- dropped by all raid captains spawned independently of
+	-- raids.  They are only dropped by Pillagers.
+	if not self:_get_active_raid () and self._raidcaptain then
+		local self_pos = self.object:get_pos ()
+		local stack = ItemStack ("mcl_potions:ominous")
+		minetest.add_item (self_pos, stack)
+	end
+end
+
 ------------------------------------------------------------------------
 -- Pillager visuals.
 ------------------------------------------------------------------------
