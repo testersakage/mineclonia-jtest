@@ -60,7 +60,7 @@ local liquid_nodes = {
 	lava = "mcl_core:lava_source",
 }
 
-function mcl_cauldrons.get_caulrdon_name(level, liquid)
+function mcl_cauldrons.get_cauldron_name(level, liquid)
 	level = math.min(3, level)
 	level = math.max(0, level)
 	if level == 0 then return "mcl_cauldrons:cauldron" end
@@ -78,7 +78,7 @@ function mcl_cauldrons.add_level(pos, amount)
 		else
 			sound_take(liquid_nodes[def._mcl_cauldrons_liquid], pos)
 		end
-		node.name = mcl_cauldrons.get_caulrdon_name(water_level + amount, def._mcl_cauldrons_liquid)
+		node.name = mcl_cauldrons.get_cauldron_name(water_level + amount, def._mcl_cauldrons_liquid)
 		minetest.swap_node(pos, node)
 		return true
 	end
@@ -110,7 +110,7 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 	_on_bucket_place = function(itemstack,placer,pointed_thing)
 		local n = itemstack:get_name():gsub("mcl_buckets:bucket_","") or "water"
 		local s = liquid_nodes[n]
-		n = mcl_cauldrons.get_caulrdon_name(3, n)
+		n = mcl_cauldrons.get_cauldron_name(3, n)
 		if minetest.registered_nodes[n] then
 			if not minetest.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
@@ -128,7 +128,7 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 
 -- Template function for cauldrons with water
 local function register_filled_cauldron(water_level, description, liquid)
-	local id = mcl_cauldrons.get_caulrdon_name(water_level, liquid)
+	local id = mcl_cauldrons.get_cauldron_name(water_level, liquid)
 	local water_tex
 	local light_level = 0
 	local cauldron_water = 0
