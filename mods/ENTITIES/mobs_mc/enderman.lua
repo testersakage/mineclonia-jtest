@@ -18,7 +18,7 @@
 -- added rain damage.
 -- fixed the grass_with_dirt issue.
 
-minetest.register_entity("mobs_mc:ender_eyes", {
+minetest.register_entity ("mobs_mc:ender_eyes", {
 	initial_properties = {
 		visual = "mesh",
 		mesh = "mobs_mc_spider.b3d",
@@ -26,6 +26,9 @@ minetest.register_entity("mobs_mc:ender_eyes", {
 		glow = 50,
 		textures = {
 			"mobs_mc_enderman_eyes.png",
+		},
+		selectionbox = {
+			0, 0, 0, 0, 0, 0,
 		},
 	},
 	on_step = function(self)
