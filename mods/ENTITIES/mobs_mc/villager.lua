@@ -2003,17 +2003,18 @@ function villager:level_up ()
 end
 
 function villager:check_restock (gmt, day)
-	if self._last_restock_day ~= -1
-		and day > self._last_restock_day then
+	if (self._last_restock_day ~= -1
+		and day > self._last_restock_day)
+		or (gmt - self._last_restock_gmt >= 600
+			and self._last_restock_gmt ~= -1) then
 		self:next_working_day ()
-	elseif self._last_restock_gmt == -1
-		or gmt - self._last_restock_gmt >= 600 then
+	else
 		if self._last_restock_gmt == -1 then
 			self._last_restock_gmt = gmt
 		end
 		if self._restocks_remaining == 2
 			or (self._restocks_remaining > 0
-			    and self._last_restock_gmt - gmt > 120) then
+				and self._last_restock_gmt - gmt > 120) then
 			self:restock_if_needed ()
 		end
 	end
@@ -2045,7 +2046,7 @@ function villager:restock_if_needed ()
 end
 
 function villager:next_working_day ()
-	-- Update demand and supply yesterday's deficiency.
+	-- Update demand and supply yesterday's deficits.
 	for _, trade in pairs (self._trades) do
 		for i = 1, self._restocks_remaining do
 			trade:update_demand ()
