@@ -222,7 +222,6 @@ local slime_big = {
 	description = S("Slime - big"),
 	type = "monster",
 	spawn_class = "hostile",
-	group_attack = { "mobs_mc:slime_big", "mobs_mc:slime_small", "mobs_mc:slime_tiny" },
 	hp_min = 16,
 	hp_max = 16,
 	xp_min = 4,
