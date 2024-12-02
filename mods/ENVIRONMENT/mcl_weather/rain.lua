@@ -241,20 +241,9 @@ if mcl_weather.allow_abm then
 		nodenames = {"mcl_cauldrons:cauldron", "mcl_cauldrons:cauldron_1", "mcl_cauldrons:cauldron_2"},
 		interval = 56.0,
 		chance = 1,
-		action = function(pos, node)
-			-- Rain is equivalent to a water bottle
+		action = function(pos)
 			if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) and mcl_weather.has_rain(pos) then
-				if node.name == "mcl_cauldrons:cauldron" then
-					minetest.swap_node(pos, {name="mcl_cauldrons:cauldron_1"})
-				elseif node.name == "mcl_cauldrons:cauldron_1" then
-					minetest.swap_node(pos, {name="mcl_cauldrons:cauldron_2"})
-				elseif node.name == "mcl_cauldrons:cauldron_2" then
-					minetest.swap_node(pos, {name="mcl_cauldrons:cauldron_3"})
-				elseif node.name == "mcl_cauldrons:cauldron_1r" then
-					minetest.swap_node(pos, {name="mcl_cauldrons:cauldron_2r"})
-				elseif node.name == "mcl_cauldrons:cauldron_2r" then
-					minetest.swap_node(pos, {name="mcl_cauldrons:cauldron_3r"})
-				end
+				mcl_cauldrons.add_level(pos, 1, "water")
 			end
 		end
 	})
