@@ -494,14 +494,18 @@ end
 
 local hashpos = mcl_mobs.gwp_hashpos
 local gwp_get_node = mcl_mobs.gwp_get_node
+local gwp_nodevalue_to_name = mcl_mobs.gwp_nodevalue_to_name
 
 local function dolphin_gwp_basic_classify (pos)
-	local nodename, value = gwp_get_node (pos), nil
-	if not nodename then
+	local nodevalue, value = gwp_get_node (pos), nil
+	if not nodevalue then
 		return "IGNORE"
 	end
-	local def = minetest.registered_nodes[nodename]
-	if not def.groups.water then
+	local name = gwp_nodevalue_to_name (nodevalue)
+	local def = minetest.registered_nodes[name]
+	if not def then
+		value = "BLOCKED"
+	elseif not def.groups.water then
 		-- Enable dolphins to (attempt to) surface into and
 		-- breathe air.
 		if not def.walkable then
