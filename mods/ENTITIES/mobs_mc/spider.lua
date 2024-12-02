@@ -21,6 +21,9 @@ minetest.register_entity("mobs_mc:spider_eyes", {
 		textures = {
 			"mobs_mc_spider_eyes.png^[opacity:180",
 		},
+		selectionbox = {
+			0, 0, 0, 0, 0, 0,
+		},
 		use_texture_alpha = true,
 	},
 	on_step = function(self)

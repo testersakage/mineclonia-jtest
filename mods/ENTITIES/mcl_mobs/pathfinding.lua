@@ -701,6 +701,23 @@ function mob_class:gwp_reconstruct (context, real_dest)
 	return path, partial
 end
 
+function mob_class:bench_pathing (iterations)
+	local self_pos = self.object:get_pos ()
+	local self_pos = self:gwp_align_start_pos (self_pos)
+	local time = 0
+	for i = 1, iterations do
+		local x = math.random (-40, 40)
+		local y = math.random (-40, 40)
+		local z = math.random (-40, 40)
+		local context = self:gwp_initialize ({
+			vector.offset (self_pos, x, y, z),
+		}, 48.0, 0.0)
+		local _, dtime = self:gwp_cycle (context, math.huge)
+		time = time + dtime
+	end
+	return time, time / iterations
+end
+
 ------------------------------------------------------------------------------
 --- Graph edge generation.  It is expected that different versions of
 --- these functions will be provided by mobs according to how they
@@ -708,9 +725,30 @@ end
 ------------------------------------------------------------------------------
 
 local nodes_this_step = {}
+local get_node_raw = mcl_mobs.get_node_raw
+
+local function gwp_nodevalue_to_name (nodevalue)
+	if get_node_raw then
+		return minetest.get_name_from_content_id (nodevalue)
+	else
+		return nodevalue
+	end
+end
+
+local function gwp_name_to_nodevalue (name)
+	if get_node_raw then
+		return minetest.get_content_id (name)
+	else
+		return name
+	end
+end
+
+mcl_mobs.gwp_nodevalue_to_name = gwp_nodevalue_to_name
+mcl_mobs.gwp_name_to_nodevalue = gwp_name_to_nodevalue
 
 local function gwp_get_node (pos)
-	local hash = longhash (pos.x, pos.y, pos.z)
+	local x, y, z = pos.x, pos.y, pos.z
+	local hash = longhash (x, y, z)
 	local map = nodes_this_step
 	local cache = map[hash]
 
@@ -718,8 +756,13 @@ local function gwp_get_node (pos)
 		return cache
 	end
 
-	cache = minetest.get_node (pos).name
-	map[hash] = cache
+	if get_node_raw then
+		cache = get_node_raw (x, y, z)
+		map[hash] = cache
+	else
+		cache = minetest.get_node (pos).name
+		map[hash] = cache
+	end
 	return cache
 end
 
@@ -1028,6 +1071,10 @@ local gwp_basic_node_classes = {
 }
 mcl_mobs.gwp_basic_node_classes = gwp_basic_node_classes
 
+if get_node_raw then
+	gwp_basic_node_classes[65536] = nil
+end
+
 local gwp_door_classes = {}
 
 -- Pre-compute node classes for efficiency.  Beware that
@@ -1037,6 +1084,7 @@ local gwp_door_classes = {}
 minetest.register_on_mods_loaded (function ()
 	for name, def in pairs (minetest.registered_nodes) do
 		local value = "OPEN"
+		local key = gwp_name_to_nodevalue (name)
 
 		if def._pathfinding_class then
 			value = def._pathfinding_class
@@ -1045,19 +1093,19 @@ minetest.register_on_mods_loaded (function ()
 		elseif def.groups.door then
 			value = nil
 			if def.groups.door_iron then
-				gwp_door_classes[name] = "DOOR_IRON_CLOSED"
+				gwp_door_classes[key] = "DOOR_IRON_CLOSED"
 			else
-				gwp_door_classes[name] = "DOOR_WOOD_CLOSED"
+				gwp_door_classes[key] = "DOOR_WOOD_CLOSED"
 			end
 		elseif def.walkable then
 			value = get_partial_type (def)
 		end
-		gwp_basic_node_classes[name] = value
+		gwp_basic_node_classes[key] = value
 	end
 end)
 
 local function gwp_basic_classify (pos)
-	local nodename = gwp_get_node (pos)
+	local nodevalue = gwp_get_node (pos)
 	local value
 
 	-- Minecraft assigns blocks to one of these classes:
@@ -1087,7 +1135,7 @@ local function gwp_basic_classify (pos)
 	-- If a hazardous node adjoins a node, the latter will be
 	-- classified as damage-inflicting.
 
-	value = gwp_basic_node_classes[nodename]
+	value = gwp_basic_node_classes[nodevalue]
 
 	-- A value of nil indicates a door whose state must be
 	-- checked.
@@ -1095,7 +1143,7 @@ local function gwp_basic_classify (pos)
 		if mcl_doors.is_open (pos) then
 			value = "DOOR_OPEN"
 		else
-			value = gwp_door_classes[nodename]
+			value = gwp_door_classes[nodevalue]
 			if not value then
 				value = "IGNORE" -- Unknown nodes.
 			end
@@ -1541,7 +1589,6 @@ function mob_class:gwp_edges (context, node)
 end
 
 if luajit_present then
-	-- jit.off (mob_class.gwp_cycle, true)
 	-- jit.off (mob_class.gwp_edges, true)
 	-- jit.off (gwp_edges_1, true)
 	-- jit.off (mob_class.gwp_classify_node, true)
@@ -1981,12 +2028,13 @@ end)
 ------------------------------------------------------------------------
 
 local function waterbound_gwp_basic_classify (pos)
-	local nodename, value = gwp_get_node (pos), nil
-	if not nodename then
+	local nodevalue, value = gwp_get_node (pos), nil
+	if not nodevalue then
 		return "IGNORE"
 	end
-	local def = minetest.registered_nodes[nodename]
-	if not def.groups.water then
+	local name = gwp_nodevalue_to_name (nodevalue)
+	local def = minetest.registered_nodes[name]
+	if not def or not def.groups.water then
 		value = "BLOCKED"
 	end
 	return value
