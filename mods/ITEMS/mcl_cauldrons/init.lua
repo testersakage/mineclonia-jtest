@@ -95,14 +95,15 @@ end
 local function bucket_place(itemstack,placer,pointed_thing)
 	local name = core.get_node(pointed_thing.under).name
 	if core.get_item_group(name, "cauldron_filled")  >= 3 then return itemstack end
+	local def = core.registered_nodes[name]
 	local l = itemstack:get_definition()._mcl_buckets_liquid
-	if l then
+	if def and l and ( def._mcl_cauldrons_liquid == l or minetest.get_item_group(name, "cauldron") == 1 ) then
 		mcl_cauldrons.add_level(pointed_thing.under, 3, l)
-	end
-	if not minetest.is_creative_enabled(placer:get_player_name()) then
-		itemstack:take_item()
-		local inv = placer:get_inventory()
-		inv:add_item("main","mcl_buckets:bucket_empty")
+		if not minetest.is_creative_enabled(placer:get_player_name()) then
+			itemstack:take_item()
+			local inv = placer:get_inventory()
+			inv:add_item("main","mcl_buckets:bucket_empty")
+		end
 	end
 	return itemstack
 end
