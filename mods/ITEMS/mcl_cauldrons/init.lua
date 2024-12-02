@@ -1,19 +1,19 @@
 mcl_cauldrons = {}
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Cauldron mod, adds cauldrons.
 
 local function sound_place(itemname, pos)
-	local def = minetest.registered_nodes[itemname]
+	local def = core.registered_nodes[itemname]
 	if def and def.sounds and def.sounds.place then
-		minetest.sound_play(def.sounds.place, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
+		core.sound_play(def.sounds.place, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
 	end
 end
 
 local function sound_take(itemname, pos)
-	local def = minetest.registered_nodes[itemname]
+	local def = core.registered_nodes[itemname]
 	if def and def.sounds and def.sounds.dug then
-		minetest.sound_play(def.sounds.dug, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
+		core.sound_play(def.sounds.dug, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
 	end
 end
 
@@ -74,10 +74,10 @@ function mcl_cauldrons.get_cauldron_name(level, liquid)
 end
 
 function mcl_cauldrons.add_level(pos, amount, liquid)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	amount = tonumber(amount) or 1
-	local water_level = minetest.get_item_group(node.name, "cauldron_filled")
-	local def = minetest.registered_nodes[node.name]
+	local water_level = core.get_item_group(node.name, "cauldron_filled")
+	local def = core.registered_nodes[node.name]
 	local liquid = def and def._mcl_cauldrons_liquid or liquid
 	if amount ~= 0 and liquid then
 		if amount > 0 then
@@ -97,9 +97,9 @@ local function bucket_place(itemstack,placer,pointed_thing)
 	if core.get_item_group(name, "cauldron_filled")  >= 3 then return itemstack end
 	local def = core.registered_nodes[name]
 	local l = itemstack:get_definition()._mcl_buckets_liquid
-	if def and l and ( def._mcl_cauldrons_liquid == l or minetest.get_item_group(name, "cauldron") == 1 ) then
+	if def and l and ( def._mcl_cauldrons_liquid == l or core.get_item_group(name, "cauldron") == 1 ) then
 		mcl_cauldrons.add_level(pointed_thing.under, 3, l)
-		if not minetest.is_creative_enabled(placer:get_player_name()) then
+		if not core.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item()
 			local inv = placer:get_inventory()
 			inv:add_item("main","mcl_buckets:bucket_empty")
@@ -109,14 +109,14 @@ local function bucket_place(itemstack,placer,pointed_thing)
 end
 
 -- Empty cauldron
-minetest.register_node("mcl_cauldrons:cauldron", {
+core.register_node("mcl_cauldrons:cauldron", {
 	description = S("Cauldron"),
 	_tt_help = S("Stores water"),
 	_doc_items_longdesc = S("Cauldrons are used to store water and slowly fill up under rain."),
 	_doc_items_usagehelp = S("Place a water bucket into the cauldron to fill it with water. Place an empty bucket on a full cauldron to retrieve the water. Place a water bottle into the cauldron to fill the cauldron to one third with water. Place a glass bottle in a cauldron with water to retrieve one third of the water."),
 	wield_image = "mcl_cauldrons_cauldron.png",
 	inventory_image = "mcl_cauldrons_cauldron.png",
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
+	use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false,
 	drawtype = "nodebox",
 	paramtype = "light",
 	is_ground_content = false,
@@ -144,16 +144,16 @@ local function register_filled_cauldron(water_level, description, liquid)
 		cauldron_water = 2
 		water_tex = "default_river_water_source_animated.png^[verticalframe:16:0"
 	elseif liquid == "lava" then
-		light_level = minetest.LIGHT_MAX
+		light_level = core.LIGHT_MAX
 		water_tex = "default_lava_source_animated.png^[verticalframe:16:0"
 	else
 		cauldron_water = 1
 		water_tex = "default_water_source_animated.png^[verticalframe:16:0"
 	end
-	minetest.register_node(id, {
+	core.register_node(id, {
 		description = description,
 		_doc_items_create_entry = false,
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
+		use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false,
 		drawtype = "nodebox",
 		paramtype = "light",
 		light_source = light_level,
@@ -178,7 +178,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 			local name = core.get_node(pointed_thing.under).name
 			if core.get_item_group(name, "cauldron_filled") < 3 then return itemstack end
 			mcl_cauldrons.add_level(pointed_thing.under, -3)
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				local def = core.registered_nodes[name]
 				if def and def._mcl_cauldrons_liquid and buckets[def._mcl_cauldrons_liquid] then
 					itemstack:take_item()
@@ -191,7 +191,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 	})
 
 	-- Add entry aliases for the Help
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", "mcl_cauldrons:cauldron", "nodes", id)
 	end
 end
@@ -200,12 +200,12 @@ end
 for i=1,3 do
 	register_filled_cauldron(i, S("Cauldron (@1/3 Water)", i))
 	register_filled_cauldron(i, S("Cauldron (@1/3 Lava)", i),"lava")
-	if minetest.get_modpath("mclx_core") then
+	if core.get_modpath("mclx_core") then
 		register_filled_cauldron(i, S("Cauldron (@1/3 River Water)", i),"river_water")
 	end
 end
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_cauldrons:cauldron",
 	recipe = {
 		{ "mcl_core:iron_ingot", "", "mcl_core:iron_ingot" },
@@ -215,33 +215,33 @@ minetest.register_craft({
 })
 
 local function cauldron_extinguish(obj,pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if mcl_burning.is_burning(obj) then
 		mcl_burning.extinguish(obj)
-		local new_group = minetest.get_item_group(node.name, "cauldron_filled") - 1
-		minetest.swap_node(pos, {name = "mcl_cauldrons:cauldron" .. (new_group == 0 and "" or "_" .. new_group)})
+		local new_group = core.get_item_group(node.name, "cauldron_filled") - 1
+		core.swap_node(pos, {name = "mcl_cauldrons:cauldron" .. (new_group == 0 and "" or "_" .. new_group)})
 	end
 end
 
 local etime = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	etime = dtime + etime
 	if etime < 0.5 then return end
 	etime = 0
 	for pl in mcl_util.connected_players() do
-		local n = minetest.find_node_near(pl:get_pos(),0.4,{"group:cauldron_filled"},true)
-		if n and not minetest.get_node(n).name:find("lava") then
+		local n = core.find_node_near(pl:get_pos(),0.4,{"group:cauldron_filled"},true)
+		if n and not core.get_node(n).name:find("lava") then
 			cauldron_extinguish(pl,n)
-		elseif n and minetest.get_node(n).name:find("lava") then
+		elseif n and core.get_node(n).name:find("lava") then
 				mcl_burning.set_on_fire(pl, 5)
 		end
 	end
-	for _,ent in pairs(minetest.luaentities) do
+	for _,ent in pairs(core.luaentities) do
 		if ent.object:get_pos() and ent.is_mob then
-			local n = minetest.find_node_near(ent.object:get_pos(),0.4,{"group:cauldron_filled"},true)
-			if n and not minetest.get_node(n).name:find("lava") then
+			local n = core.find_node_near(ent.object:get_pos(),0.4,{"group:cauldron_filled"},true)
+			if n and not core.get_node(n).name:find("lava") then
 				cauldron_extinguish(ent.object,n)
-			elseif n and minetest.get_node(n).name:find("lava") then
+			elseif n and core.get_node(n).name:find("lava") then
 				mcl_burning.set_on_fire(ent.object, 5)
 			end
 		end
