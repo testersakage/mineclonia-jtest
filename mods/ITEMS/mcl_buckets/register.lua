@@ -6,6 +6,7 @@ local has_awards = minetest.get_modpath("awards")
 if mod_mcl_core then
 	-- Lava bucket
 	mcl_buckets.register_liquid({
+		id = "lava",
 		source_place = function(pos)
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then
@@ -32,6 +33,7 @@ if mod_mcl_core then
 
 	-- Water bucket
 	mcl_buckets.register_liquid({
+		id = "water",
 		source_place = "mcl_core:water_source",
 		source_take = {"mcl_core:water_source"},
 		bucketname = "mcl_buckets:bucket_water",
@@ -54,6 +56,7 @@ end
 if mod_mclx_core then
 	-- River water bucket
 	mcl_buckets.register_liquid({
+		id = "river_water",
 		source_place = "mclx_core:river_water_source",
 		source_take = {"mclx_core:river_water_source"},
 		bucketname = "mcl_buckets:bucket_river_water",

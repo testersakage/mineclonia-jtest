@@ -60,6 +60,12 @@ local liquid_nodes = {
 	lava = "mcl_core:lava_source",
 }
 
+local buckets = {
+	water = "mcl_buckets:bucket_water",
+	river_water = "mcl_buckets:bucket_river_water",
+	lava = "mcl_buckets:bucket_lava",
+}
+
 function mcl_cauldrons.get_cauldron_name(level, liquid)
 	level = math.min(3, level)
 	level = math.max(0, level)
@@ -67,21 +73,38 @@ function mcl_cauldrons.get_cauldron_name(level, liquid)
 	return "mcl_cauldrons:cauldron_"..level..cauldron_ids[liquid or "water"]
 end
 
-function mcl_cauldrons.add_level(pos, amount)
+function mcl_cauldrons.add_level(pos, amount, liquid)
 	local node = minetest.get_node(pos)
 	amount = tonumber(amount) or 1
 	local water_level = minetest.get_item_group(node.name, "cauldron_filled")
 	local def = minetest.registered_nodes[node.name]
-	if amount ~= 0 and def and def._mcl_cauldrons_liquid then
+	local liquid = def and def._mcl_cauldrons_liquid or liquid
+	if amount ~= 0 and liquid then
 		if amount > 0 then
-			sound_place(liquid_nodes[def._mcl_cauldrons_liquid], pos)
+			sound_place(liquid_nodes[liquid], pos)
 		else
-			sound_take(liquid_nodes[def._mcl_cauldrons_liquid], pos)
+			sound_take(liquid_nodes[liquid], pos)
 		end
-		node.name = mcl_cauldrons.get_cauldron_name(water_level + amount, def._mcl_cauldrons_liquid)
+		node.name = mcl_cauldrons.get_cauldron_name(water_level + amount, liquid)
 		minetest.swap_node(pos, node)
 		return true
 	end
+end
+
+
+local function bucket_place(itemstack,placer,pointed_thing)
+	local name = core.get_node(pointed_thing.under).name
+	if core.get_item_group(name, "cauldron_filled")  >= 3 then return itemstack end
+	local l = itemstack:get_definition()._mcl_buckets_liquid
+	if l then
+		mcl_cauldrons.add_level(pointed_thing.under, 3, l)
+	end
+	if not minetest.is_creative_enabled(placer:get_player_name()) then
+		itemstack:take_item()
+		local inv = placer:get_inventory()
+		inv:add_item("main","mcl_buckets:bucket_empty")
+	end
+	return itemstack
 end
 
 -- Empty cauldron
@@ -107,23 +130,7 @@ minetest.register_node("mcl_cauldrons:cauldron", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_hardness = 2,
 	_mcl_blast_resistance = 2,
-	_on_bucket_place = function(itemstack,placer,pointed_thing)
-		local n = itemstack:get_name():gsub("mcl_buckets:bucket_","") or "water"
-		local s = liquid_nodes[n]
-		n = mcl_cauldrons.get_cauldron_name(3, n)
-		if minetest.registered_nodes[n] then
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
-				itemstack:take_item()
-				local inv = placer:get_inventory()
-				inv:add_item("main","mcl_buckets:bucket_empty")
-			end
-			minetest.swap_node(pointed_thing.under,{name=n})
-			if s then
-				sound_place(s, pointed_thing.under)
-			end
-		end
-		return itemstack
-	end,
+	_on_bucket_place = bucket_place,
 })
 
 -- Template function for cauldrons with water
@@ -165,27 +172,17 @@ local function register_filled_cauldron(water_level, description, liquid)
 		_mcl_blast_resistance = 2,
 		_mcl_cauldrons_liquid = liquid or "water",
 		_mcl_baseitem = "mcl_cauldrons:cauldron",
+		_on_bucket_place = bucket_place,
 		_on_bucket_place_empty  = function(itemstack,placer,pointed_thing)
-			local n,s
-			if id == "mcl_cauldrons:cauldron_3" then
-				n = "mcl_buckets:bucket_water"
-				s = "mcl_core:water_source"
-			elseif id == "mcl_cauldrons:cauldron_3r" then
-				n = "mcl_buckets:bucket_river_water"
-				s = "mclx_core:river_water_source"
-			elseif id == "mcl_cauldrons:cauldron_3_lava" then
-				n = "mcl_buckets:bucket_lava"
-				s = "mcl_core:lava_source"
-			end
-			if minetest.registered_items[n] then
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+			local name = core.get_node(pointed_thing.under).name
+			if core.get_item_group(name, "cauldron_filled") < 3 then return itemstack end
+			mcl_cauldrons.add_level(pointed_thing.under, -3)
+			if not minetest.is_creative_enabled(placer:get_player_name()) then
+				local def = core.registered_nodes[name]
+				if def and def._mcl_cauldrons_liquid and buckets[def._mcl_cauldrons_liquid] then
 					itemstack:take_item()
 					local inv = placer:get_inventory()
-					inv:add_item("main",n)
-				end
-				minetest.swap_node(pointed_thing.under,{name="mcl_cauldrons:cauldron"})
-				if s then
-					sound_take(s, pointed_thing.under)
+					inv:add_item("main", buckets[def._mcl_cauldrons_liquid])
 				end
 			end
 			return itemstack
