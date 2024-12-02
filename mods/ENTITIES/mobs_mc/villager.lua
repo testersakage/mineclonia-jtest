@@ -4180,7 +4180,7 @@ function villager:fertilize_farmland (self_pos, dtime)
 			local node = minetest.get_node (target)
 			local def = minetest.registered_nodes[node.name]
 			if def._on_bone_meal
-				and table.indexof (villager_wanted_items,
+				and table.indexof (villager_seeds,
 						   def._mcl_baseitem) ~= -1 then
 				if def._on_bone_meal (stack, nil, nil, target, node) then
 					mcl_bone_meal.add_bone_meal_particle (target)
