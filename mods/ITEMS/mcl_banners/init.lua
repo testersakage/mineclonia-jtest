@@ -463,6 +463,7 @@ for _, colortab in pairs(mcl_banners.colors) do
 			if placer and not placer:get_player_control().sneak then
 				local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 				if rc then return rc end
+				if mcl_util.check_position_protection(under, placer) then return itemstack end
 
 				if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
 					if mcl_cauldrons.add_level(pointed_thing.under, -1) then
