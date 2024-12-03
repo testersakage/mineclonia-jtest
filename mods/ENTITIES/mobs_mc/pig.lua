@@ -38,7 +38,6 @@ local pig = {
 			looting = "common",
 		},
 	},
-	fear_height = 4,
 	sounds = {
 		random = "mobs_pig",
 		death = "mobs_pig_angry",
