@@ -38,42 +38,23 @@ function mcl_clock.get_clock_frame()
 	local t = clock_frames * minetest.get_timeofday()
 	t = round(t)
 	if t == clock_frames then t = 0 end
-	return tostring(t)
+	return tostring((t + (clock_frames / 2)) % clock_frames)
 end
-
-local doc_mod = minetest.get_modpath("doc")
 
 -- Register items
-function mcl_clock.register_item(name, image, creative, frame)
-	local g = 1
-	if creative then
-		g = 0
-	end
-	local use_doc = name == mcl_clock.stereotype
-	if doc_mod and not use_doc then
-		doc.add_entry_alias("craftitems", mcl_clock.stereotype, "craftitems", name)
-	end
-	local longdesc, usagehelp, tt
-	if use_doc then
-		longdesc = S("Clocks are tools which shows the current time of day in the Overworld.")
-		usagehelp = S("The clock contains a rotating disc with a sun symbol (yellow disc) and moon symbol and a little “pointer” which shows the current time of day by estimating the real position of the sun and the moon in the sky. Noon is represented by the sun symbol and midnight is represented by the moon symbol.")
-		tt = S("Displays the time of day in the Overworld")
-	end
-	minetest.register_craftitem(name, {
-		description = S("Clock"),
-		_tt_help = tt,
-		_doc_items_create_entry = use_doc,
-		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = usagehelp,
-		inventory_image = image,
-		groups = {not_in_creative_inventory=g, tool=1, clock=frame, disable_repair=1},
-		wield_image = "",
-		_on_set_item_entity = function(itemstack, entity)
-			entity.is_clock = true
-			return itemstack
-		end,
-	})
-end
+minetest.register_craftitem("mcl_clock:clock", {
+	description = S("Clock"),
+	_tt_help = S("Displays the time of day in the Overworld"),
+	_doc_items_longdesc = S("Clocks are tools which shows the current time of day in the Overworld."),
+	_doc_items_usagehelp = S("The clock contains a rotating disc with a sun symbol (yellow disc) and moon symbol and a little “pointer” which shows the current time of day by estimating the real position of the sun and the moon in the sky. Noon is represented by the sun symbol and midnight is represented by the moon symbol."),
+	inventory_image = mcl_clock.images[1],
+	groups = { tool=1, clock = 1, disable_repair=1 },
+	wield_image = "",
+	_on_set_item_entity = function(itemstack, entity)
+		entity.is_clock = true
+		return itemstack
+	end,
+})
 
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
 -- just in case some clocks in the world go wrong
@@ -89,7 +70,7 @@ minetest.register_globalstep(function(dtime)
 		random_timer = 0
 	end
 
-	if mcl_clock.old_time == now and force_clock_update_timer < 60 then
+	if mcl_clock.old_time == now and force_clock_update_timer < 1 then
 		return
 	end
 	force_clock_update_timer = 0
@@ -98,20 +79,21 @@ minetest.register_globalstep(function(dtime)
 	mcl_clock.random_frame = random_frame
 
 	for player in mcl_util.connected_players() do
-		for s, stack in pairs(player:get_inventory():get_list("main")) do
-			local frame
-			-- Clocks do not work in certain zones
-			if not mcl_worlds.clock_works(player:get_pos()) then
-				frame = random_frame
-			else
-				frame = now
-			end
+		local inv = player:get_inventory()
+		for s, stack in pairs(inv:get_list("main")) do
+			if stack:get_name() == "mcl_clock:clock"then
+				local frame
+				-- Clocks do not work in certain zones
+				if not mcl_worlds.clock_works(player:get_pos()) then
+					frame = random_frame
+				else
+					frame = now
+				end
 
-			local count = stack:get_count()
-			if stack:get_name() == mcl_clock.stereotype then
-				player:get_inventory():set_stack("main", s, "mcl_clock:clock_"..frame.." "..count)
-			elseif minetest.get_item_group(stack:get_name(), "clock") ~= 0 then
-				player:get_inventory():set_stack("main", s, "mcl_clock:clock_"..frame.." "..count)
+				local m = stack:get_meta()
+				m:set_string("wield_image", mcl_clock.images[frame + 1])
+				m:set_string("inventory_image", mcl_clock.images[frame + 1])
+				inv:set_stack("main", s, stack)
 			end
 		end
 	end
@@ -134,17 +116,7 @@ minetest.register_craft({
 	}
 })
 
--- Clock tool
-mcl_clock.register_item(mcl_clock.stereotype, mcl_clock.images[1], true, 1)
-
--- Faces
 for a=0,clock_frames-1,1 do
-	local b = a
-	if b > 31 then
-		b = b - 32
-	else
-		b = b + 32
-	end
-	mcl_clock.register_item("mcl_clock:clock_"..tostring(a), mcl_clock.images[b+1], false, a+1)
+	core.register_alias("mcl_clock:clock_"..tostring(a), "mcl_clock:clock")
 end
 
