@@ -67,7 +67,6 @@ local wither_def = {
 	airborne = true,
 	tracking_distance = 64,
 	view_range = 40,
-	player_active_range = 128,
 	gravity_drag = 0.6,
 	fall_damage = 0,
 	slowdown_nodes = {},

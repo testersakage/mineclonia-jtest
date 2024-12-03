@@ -47,7 +47,6 @@ local dragon = {
 	},
 	ignores_nametag = true,
 	persistent = true,
-	player_active_range = 128,
 	fire_resistant = true,
 	is_boss = true,
 	_dragon_parts = {},
