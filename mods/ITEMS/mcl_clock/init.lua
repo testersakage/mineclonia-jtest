@@ -1,15 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-
---[[
-  mcl_clock, renew of the renew of the mcl_clock mod
-
-  Original from Echo, here: http://forum.minetest.net/viewtopic.php?id=3795
-]]--
-
 mcl_clock = {}
-
--- This is the itemstring of the default clock item. It is used for the default inventory image, help entries, and the like
-mcl_clock.stereotype = "mcl_clock:clock"
 
 mcl_clock.old_time = -1
 
@@ -20,7 +10,6 @@ local random_timer = 0.0
 local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Increase if there are performance problems
 local random_frame = math.random(0, clock_frames-1)
 
--- Image of all possible faces
 mcl_clock.images = {}
 for frame=0, clock_frames-1 do
 	local sframe = tostring(frame)
@@ -41,7 +30,6 @@ function mcl_clock.get_clock_frame()
 	return tostring((t + (clock_frames / 2)) % clock_frames)
 end
 
--- Register items
 minetest.register_craftitem("mcl_clock:clock", {
 	description = S("Clock"),
 	_tt_help = S("Displays the time of day in the Overworld"),
@@ -64,6 +52,7 @@ minetest.register_globalstep(function(dtime)
 	local now = mcl_clock.get_clock_frame()
 	force_clock_update_timer = force_clock_update_timer + dtime
 	random_timer = random_timer + dtime
+
 	-- This causes the random spinning of the clock
 	if random_timer >= random_timer_trigger then
 		random_frame = (random_frame + math.random(-4, 4)) % clock_frames
@@ -99,16 +88,14 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
--- Immediately set correct clock time after crafting
 minetest.register_on_craft(function(itemstack)
-	if itemstack:get_name() == mcl_clock.stereotype then
-		itemstack:set_name("mcl_clock:clock_"..mcl_clock.get_clock_frame())
+	if itemstack:get_name() == "mcl_clock:clock" then
+		itemstack:get_meta():set_string("inventory_image", mcl_clock.images[mcl_clock.get_clock_frame()])
 	end
 end)
 
--- Clock recipe
 minetest.register_craft({
-	output = mcl_clock.stereotype,
+	output = "mcl_clock:clock",
 	recipe = {
 		{"", "mcl_core:gold_ingot", ""},
 		{"mcl_core:gold_ingot", "mcl_redstone:redstone", "mcl_core:gold_ingot"},
