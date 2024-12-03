@@ -100,7 +100,8 @@ mcl_armor.register_set({
 		feet = get_texture_function("mcl_armor_boots_leather.png"),
 	},
 	craft_material = "mcl_mobitems:leather",
-	on_place = function(itemstack, _, pointed_thing)
+	on_place = function(itemstack, placer, pointed_thing)
+		if mcl_util.check_position_protection(pointed_thing.under, placer) then return itemstack end
 		if minetest.get_item_group(minetest.get_node(pointed_thing.under).name, "cauldron_water") <= 0 then return end
 		if mcl_cauldrons.add_level(pointed_thing.under, -1) then
 			local outcome = mcl_armor.wash_leather_armor(itemstack)
