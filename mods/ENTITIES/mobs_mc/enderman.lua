@@ -259,7 +259,6 @@ local enderman = {
 	},
 	movement_speed = 6.0,
 	damage = 7,
-	player_active_range = 128,
 	stepheight = 1.01,
 	reach = 2,
 	particlespawners = psdefs,

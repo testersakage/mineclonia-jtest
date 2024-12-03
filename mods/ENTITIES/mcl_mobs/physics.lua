@@ -25,44 +25,6 @@ local function within_limits(pos, radius)
 	return true
 end
 
-function mob_class:player_in_active_range()
-	for _ in mcl_util.connected_players(self.object:get_pos(), self.player_active_range) do
-		-- slightly larger than the mc 32 since mobs spawn on that circle and easily stand still immediately right after spawning.
-		return true
-	end
-end
-
-function mob_class:object_in_follow_range(object)
-	local dist = 6
-	local p1, p2 = self.object:get_pos(), object:get_pos()
-	return p1 and p2 and (vector.distance(p1, p2) <= dist)
-end
-
--- Return true if object is in view_range
-function mob_class:object_in_range(object)
-	if not object then
-		return false
-	end
-	local factor
-	-- Apply view range reduction for special player armor
-	if object:is_player() then
-		local factors = mcl_armor.player_view_range_factors[object]
-		factor = factors and factors[self.name]
-	end
-	-- Distance check
-	local dist
-	if factor and factor == 0 then
-		return false
-	elseif factor then
-		dist = self.view_range * factor
-	else
-		dist = self.view_range
-	end
-
-	local p1, p2 = self.object:get_pos(), object:get_pos()
-	return p1 and p2 and (vector.distance(p1, p2) <= dist)
-end
-
 function mob_class:item_drop(cooked, looting_level, mcl_reason)
 	if not mobs_drop_items then return end
 	looting_level = looting_level or 0
@@ -722,19 +684,6 @@ function mob_class:check_dying (dtime)
 			local rot = self.object:get_rotation()
 			rot.z = ((math.pi/2-rot.z)*.2)+rot.z
 			self.object:set_rotation(rot)
-		end
-		return true
-	end
-end
-
-function mob_class:check_suspend()
-	if not self:player_in_active_range() then
-		local pos = self.object:get_pos()
-		local node_under = mcl_mobs.node_ok(vector.offset(pos,0,-1,0)).name
-		local acc = self.object:get_acceleration()
-		self:set_animation( "stand", true)
-		if acc.y > 0 or node_under ~= "air" then
-			self:halt_in_tracks (true)
 		end
 		return true
 	end
