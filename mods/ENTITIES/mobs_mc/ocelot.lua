@@ -51,7 +51,6 @@ local ocelot = {
 	floats = 1,
 	runaway = false,
 	fall_damage = 0,
-	fear_height = 4,
 	sounds = {
 		damage = "mobs_mc_ocelot_hurt",
 		death = "mobs_mc_ocelot_hurt",

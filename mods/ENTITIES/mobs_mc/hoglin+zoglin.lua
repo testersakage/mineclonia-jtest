@@ -77,7 +77,6 @@ local hoglin = {
 		run_start = 1, run_end = 10, run_speed = 30,
 		punch_start = 22, punch_end = 32, punch_speed = 20,
 	},
-	fear_height = 4,
 	floats = 0,
 	runaway_bonus_near = 0.6,
 	runaway_bonus_far = 0.6,
