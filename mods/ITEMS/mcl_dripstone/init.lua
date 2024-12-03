@@ -307,21 +307,6 @@ minetest.register_abm({
 	end,
 })
 
--- Cauldron fill up rules:
--- Adding any water increases the water level by 1, preserving the current water type
-local cauldron_levels = {
-	["mcl_core:water_source"] = {"", "_1", "_2", "_3"},
-	["mclx_core:river_water_source"] = {"", "_1r", "_2r", "_3r"},
-}
-local fill_cauldron = function(cauldron, water_type)
-	local base = "mcl_cauldrons:cauldron"
-	for index = 1, #cauldron_levels[water_type] do
-		if cauldron == (base .. cauldron_levels[water_type][index]) and index ~= #cauldron_levels[water_type] then
-			return base .. cauldron_levels[water_type][index + 1]
-		end
-	end
-end
-
 minetest.register_abm({
 	label = "Dripstone filling water cauldrons, conversion from mud to clay",
 	nodenames = {"mcl_dripstone:dripstone_top_tip"},
@@ -329,26 +314,28 @@ minetest.register_abm({
 	chance = 5.5,
 	action = function(pos)
 		local stalagtite_length = get_dripstone_length(pos, 1)
+		local wpos = vector.offset(pos, 0, stalagtite_length + 1, 0)
+		local wnode = core.get_node(wpos)
 
-		if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name, "water") == 0
+		if minetest.get_item_group(minetest.get_node(wpos).name, "water") == 0
 		or stalagtite_length > 10 then
 			-- reusing the ABM for converting mud to clay, since the chances are the same
-			if minetest.get_node(vector.offset(pos, 0, stalagtite_length + 1, 0)).name == "mcl_mud:mud"
-			and mcl_worlds.pos_to_dimension(vector.offset(pos, 0, stalagtite_length + 1, 0)) ~= "nether" then
-				minetest.set_node(vector.offset(pos, 0, stalagtite_length + 1, 0), {name = "mcl_core:clay"})
+			if wnode.name == "mcl_mud:mud"
+			and mcl_worlds.pos_to_dimension(wpos) ~= "nether" then
+				minetest.set_node(wpos, {name = "mcl_core:clay"})
 			end
 			return
 		end
 
-		local node
-		local new_cauldron
+		local water_type = "water"
+		if minetest.get_item_group(wnode.name, "river_water") > 0 then
+			water_type = "river_water"
+		end
 		for i = 1, 10 do
-			node = minetest.get_node(vector.offset(pos, 0, -i, 0))
-			if minetest.get_item_group(node.name, "cauldron") ~= 0 and not string.find(node.name, "lava$") then
-				new_cauldron = fill_cauldron(node.name, "mcl_core:water_source")
-				if new_cauldron then
-					minetest.set_node(vector.offset(pos, 0, -i, 0), {name = new_cauldron})
-				end
+			local cpos = vector.offset(pos, 0, -i, 0)
+			local node = minetest.get_node(cpos)
+			if minetest.get_item_group(node.name, "cauldron") == 1 or minetest.get_item_group(node.name, "cauldron_water") > 0 then
+				mcl_cauldrons.add_level(cpos, 1, water_type)
 				return
 			elseif node.name ~= "air" then
 				return
