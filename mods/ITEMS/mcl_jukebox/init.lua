@@ -14,6 +14,7 @@ local HEAR_DISTANCE = 65
 
 -- Player name-indexed table containing the currently heard track
 local active_tracks = {}
+mcl_jukebox.active_tracks = active_tracks
 
 -- Player name-indexed table containing the current used HUD ID for the “Now playing” message.
 local active_huds = {}
