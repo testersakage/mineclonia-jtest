@@ -132,11 +132,18 @@ local tpl_fence_gates = {
 		local meta = minetest.get_meta(pos)
 		meta:set_int("state", 0)
 	end,
-	mesecons = {effector = {
-		action_on = (function(pos, node)
-			punch_gate(pos, node)
-		end),
-	}},
+	_mcl_redstone = {
+		connects_to = function (node, dir)
+			return true
+		end,
+		update = function (pos)
+			if mcl_redstone.get_power (pos) ~= 0 then
+				local node = minetest.get_node (pos)
+				punch_gate (pos, node)
+			end
+		end,
+		init = function() end,
+	},
 	on_rotate = on_rotate,
 	on_rightclick = function(pos, node, _)
 		punch_gate(pos, node)
@@ -175,11 +182,18 @@ local tpl_fence_gates_open = {
 	on_rightclick = function(pos, node, _)
 		punch_gate(pos, node)
 	end,
-	mesecons = {effector = {
-		action_off = (function(pos, node)
-			punch_gate(pos, node)
-		end),
-	}},
+	_mcl_redstone = {
+		connects_to = function (node, dir)
+			return true
+		end,
+		update = function (pos)
+			if mcl_redstone.get_power (pos) == 0 then
+				local node = minetest.get_node (pos)
+				punch_gate (pos, node)
+			end
+		end,
+		init = function() end,
+	},
 	on_rotate = on_rotate,
 	_on_wind_charge_hit = function(pos)
 		local node = minetest.get_node(pos)
