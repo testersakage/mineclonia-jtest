@@ -370,11 +370,11 @@ minetest.register_abm({
 			return
 		end
 
-		local node
 		for i = 1, 10 do
-			node = minetest.get_node(vector.offset(pos, 0, -i, 0))
+			local cpos = vector.offset(pos, 0, -i, 0)
+			local node = minetest.get_node(cpos)
 			if node.name == "mcl_cauldrons:cauldron" then
-				minetest.set_node(vector.offset(pos, 0, -i, 0), {name = "mcl_cauldrons:cauldron_3_lava"})
+				mcl_cauldrons.add_level(cpos, 3, "lava")
 			elseif node.name ~= "air" then
 				return
 			end
