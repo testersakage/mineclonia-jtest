@@ -58,10 +58,6 @@ function patrolling_mob:on_spawn ()
 			end
 		end
 	end
-
-	if self._is_patrolling_mob then
-		self.player_active_range = 128
-	end
 end
 
 function patrolling_mob:mob_activate (staticdata, dtime)
