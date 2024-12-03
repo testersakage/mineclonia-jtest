@@ -165,7 +165,6 @@ mcl_mobs.mob_class = {
 	max_light = minetest.LIGHT_MAX + 1,
 	does_not_prevent_sleep = false,
 	prevents_sleep_when_hostile = false,
-	player_active_range = tonumber(minetest.settings:get("mcl_mob_active_range")) or 96,
 	persist_in_peaceful = true,
 	wears_armor = false,
 	_armor_texture_slots = 1,
