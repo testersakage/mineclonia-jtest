@@ -2,45 +2,6 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 mcl_compass = {}
 
-local compass_types = {
-	compass = {
-		name = "compass",
-		img_fmt = "mcl_compass_compass_%02d.png",
-		name_fmt = "mcl_compass:%d",
-		desc = S("Compass"),
-		tt = S("Points to the world origin"),
-		longdesc = S("Compasses are tools which point to the world origin (X=0, Z=0) or the spawn point in the Overworld."),
-		usagehelp = S("A Compass always points to the world spawn point when the player is in the overworld.  In other dimensions, it spins randomly."),
-		group_rating = 1,
-	},
-	lodestone = {
-		name = "compass_lodestone",
-		img_fmt = "mcl_compass_compass_%02d.png^[colorize:purple:50",
-		name_fmt = "mcl_compass:%d_lodestone",
-		desc = S("Lodestone Compass"),
-		tt = S("Points to a lodestone"),
-		longdesc = S("Lodestone compasses resemble regular compasses, but they point to a specific lodestone."),
-		usagehelp = S("A Lodestone compass can be made from an ordinary compass by using it on a lodestone.  After becoming a lodestone compass, it always points to its linked lodestone, provided that they are in the same dimension.  If not in the same dimension, the lodestone compass spins randomly, similarly to a regular compass when outside the overworld.  A lodestone compass can be relinked with another lodestone."),
-		group_rating = 2,
-	},
-	recovery = {
-		name = "compass_recovery",
-		img_fmt = "mcl_compass_recovery_compass_%02d.png",
-		name_fmt = "mcl_compass:%d_recovery",
-		desc = S("Recovery Compass"),
-		tt = S("Points to your last death location"),
-		longdesc = S("Recovery Compasses are compasses that point to your last death location"),
-		usagehelp = S("Recovery Compasses always point to the location of your last death, in case you haven't died yet, it will just randomly spin around"),
-		group_rating = 3,
-	}
-}
-
-local compass_keys = {
-	"compass",
-	"lodestone",
-	"recovery",
-} --this essentially maps the group rating to the compass id
-
 -- Number of dynamic compass images (and items registered.)
 local compass_frames = 32
 
@@ -157,16 +118,15 @@ local function update_compass_img(stack, img)
 	return stack
 end
 
-function compass_types.compass.update(stack, player)
+local function update_compass(stack, player)
 	local pos = player:get_pos()
 	local dir = player:get_look_horizontal()
-	return update_compass_img(stack, string.format(compass_types.compass.img_fmt, get_compass_frame(pos, dir, stack)))
+	local def = stack:get_definition()
+	return update_compass_img(stack, string.format(def._mcl_compass_img_fmt, get_compass_frame(pos, dir, stack)))
 end
 
-compass_types.lodestone.update = compass_types.compass.update
-
-
-function compass_types.recovery.update(stack, player)
+local function update_recovery_compass(stack, player)
+	local def = stack:get_definition()
 	local pos = player:get_pos()
 	local dir = player:get_look_horizontal()
 	local meta = player:get_meta()
@@ -176,9 +136,9 @@ function compass_types.recovery.update(stack, player)
 	local _, p_dim = mcl_worlds.y_to_layer(pos.y)
 	local img
 	if p_dim ~= target_dim then
-		img = string.format(compass_types.recovery.img_fmt, random_frame)
+		img = string.format(def._mcl_compass_img_fmt, random_frame)
 	else
-		img = string.format(compass_types.recovery.img_fmt, get_compass_angle(pos, targetpos, dir))
+		img = string.format(def._mcl_compass_img_fmt, get_compass_angle(pos, targetpos, dir))
 	end
 	return update_compass_img(stack, img)
 end
@@ -195,8 +155,10 @@ minetest.register_globalstep(function(dtime)
 		for j, stack in pairs(inv:get_list("main")) do
 			local compass_group = minetest.get_item_group(stack:get_name(), "compass")
 			if compass_group > 0 then
-				compass_types[compass_keys[compass_group]].update(stack, player)
-				inv:set_stack("main", j, stack)
+				local def = stack:get_definition()
+				if def._mcl_compass_update then
+					inv:set_stack("main", j, def._mcl_compass_update(stack, player))
+				end
 			end
 		end
 	end
@@ -205,25 +167,62 @@ end)
 --
 -- Node and craftitem definitions
 --
-
-for _, item in pairs(compass_types) do
-	core.register_craftitem("mcl_compass:"..item.name, {
-		description = item.desc,
-		_doc_items_longdesc = item.longdesc,
-		_doc_items_usagehelp = item.usagehelp,
-		_tt_help = item.tt,
-		inventory_image = string.format(item.img_fmt, stereotype_frame),
-		wield_image = string.format(item.img_fmt, stereotype_frame),
-		groups = {compass = item.group_rating, tool = 1, disable_repair = 1},
-		_on_set_item_entity = function(itemstack, entity)
-			--entity.is_compass = true
-			return itemstack
-		end
-	})
+mcl_compass.registered_compasses = {}
+function mcl_compass.register_compass(name, def)
+	mcl_compass.registered_compasses[name] = def
+	core.register_craftitem("mcl_compass:"..(def.name or name), table.merge({}, def.overrides or {}, {
+		groups = table.merge({tool = 1, disable_repair = 1}, def.overrides.groups)
+	}))
 	for i = 0, compass_frames - 1 do
-		core.register_alias(string.format(item.name_fmt, i), "mcl_compass"..item.name)
+		core.register_alias(string.format(def.name_fmt, i), "mcl_compass"..(def.name or name))
 	end
 end
+
+mcl_compass.register_compass("compass", {
+	name = "compass",
+	name_fmt = "mcl_compass:%d",
+	overrides = {
+		description = S("Compass"),
+		_tt_help = S("Points to the world origin"),
+		_doc_items_longdesc = S("Compasses are tools which point to the world origin (X=0, Z=0) or the spawn point in the Overworld."),
+		_doc_items_usagehelp = S("A Compass always points to the world spawn point when the player is in the overworld.  In other dimensions, it spins randomly."),
+		inventory_image = "mcl_compass_compass_01.png",
+		wield_image = "mcl_compass_compass_01.png",
+		groups = { compass = 1 },
+		_mcl_compass_update = update_compass,
+		_mcl_compass_img_fmt = "mcl_compass_compass_%02d.png",
+	}
+})
+mcl_compass.register_compass("lodestone_compass", {
+	name = "compass_lodestone",
+	name_fmt = "mcl_compass:%d_lodestone",
+	overrides = {
+		description = S("Lodestone Compass"),
+		_tt_help = S("Points to a lodestone"),
+		_doc_items_longdesc = S("Lodestone compasses resemble regular compasses, but they point to a specific lodestone."),
+		_doc_items_usagehelp = S("A Lodestone compass can be made from an ordinary compass by using it on a lodestone.  After becoming a lodestone compass, it always points to its linked lodestone, provided that they are in the same dimension.  If not in the same dimension, the lodestone compass spins randomly, similarly to a regular compass when outside the overworld.  A lodestone compass can be relinked with another lodestone."),
+		inventory_image = "mcl_compass_compass_01.png^[colorize:purple:50",
+		wield_image = "mcl_compass_compass_01.png^[colorize:purple:50",
+		groups = { compass = 2 },
+		_mcl_compass_update = update_compass,
+		_mcl_compass_img_fmt = "mcl_compass_compass_%02d.png^[colorize:purple:50",
+	}
+})
+mcl_compass.register_compass("recovery_compass", {
+	name = "compass_recovery",
+	name_fmt = "mcl_compass:%d_recovery",
+	overrides = {
+		description = S("Recovery Compass"),
+		_tt_help = S("Points to your last death location"),
+		_doc_items_longdesc = S("Recovery Compasses are compasses that point to your last death location"),
+		_doc_items_usagehelp = S("Recovery Compasses always point to the location of your last death, in case you haven't died yet, it will just randomly spin around"),
+		inventory_image = "mcl_compass_recovery_compass_01.png",
+		wield_image = "mcl_compass_recovery_compass_01.png",
+		groups = { compass = 3 },
+		_mcl_compass_update = update_recovery_compass,
+		_mcl_compass_img_fmt = "mcl_compass_recovery_compass_%02d.png",
+	}
+})
 
 minetest.register_craft({
 	output = "mcl_compass:" .. stereotype_frame,
