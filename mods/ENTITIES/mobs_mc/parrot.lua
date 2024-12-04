@@ -117,11 +117,13 @@ function parrot:on_rightclick (clicker)
 		return
 	end
 
-	-- Otherwise, toggle sitting.
-	if self.order == "sit" then
-		self.order = ""
-	else
-		self:stay ()
+	if self.tamed then
+		-- Otherwise, toggle sitting.
+		if self.order == "sit" then
+			self.order = ""
+		else
+			self:stay ()
+		end
 	end
 end
 
