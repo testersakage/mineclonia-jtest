@@ -112,7 +112,7 @@ function parrot:on_rightclick (clicker)
 		"mcl_farming:pumpkin_seeds",
 		"mcl_farming:beetroot_seeds",
 	}
-	if table.indexof (food, item) ~= -1 then
+	if table.indexof (food, name) ~= -1 then
 		self:feed_tame (clicker, 4, false, true, false, 0.1)
 		return
 	end
