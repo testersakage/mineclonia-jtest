@@ -38,10 +38,15 @@ minetest.register_craftitem("mcl_clock:clock", {
 	inventory_image = mcl_clock.images[1],
 	groups = { tool=1, clock = 1, disable_repair=1 },
 	wield_image = "",
-	_on_set_item_entity = function(itemstack, entity)
-		entity.is_clock = true
-		return itemstack
-	end,
+	_on_entity_step = function(self)
+		self.object:set_properties({
+			visual = "upright_sprite",
+			textures = {
+				mcl_clock.images[mcl_clock.get_clock_frame() + 1],
+				mcl_clock.images[mcl_clock.get_clock_frame() + 1]
+			},
+		})
+	end
 })
 
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
