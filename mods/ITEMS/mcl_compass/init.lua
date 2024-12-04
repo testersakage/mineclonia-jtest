@@ -25,6 +25,9 @@ local compass_types = {
 		usagehelp = S("Recovery Compasses always point to the location of your last death, in case you haven't died yet, it will just randomly spin around"),
 	}
 }
+local compass_img_fmt = "mcl_compass_compass_%02d.png"
+local lodestone_img_fmt = "mcl_compass_compass_%02d.png^[colorize:purple:50"
+local recovery_img_fmt = "mcl_compass_recovery_compass_%02d.png"
 
 -- Number of dynamic compass images (and items registered.)
 local compass_frames = 32
@@ -174,34 +177,38 @@ minetest.register_globalstep(function(dtime)
 		dir = player:get_look_horizontal()
 		inv = player:get_inventory()
 		for j, stack in pairs(inv:get_list("main")) do
+			local m = stack:get_meta()
 			compass_nr = minetest.get_item_group(stack:get_name(), "compass")
 			if compass_nr ~= 0 and not string.find(stack:get_name(), "_recovery") then
 				-- check if current compass image still matches true orientation
 				compass_frame = get_compass_frame(pos, dir, stack)
 				if compass_nr - 1 ~= compass_frame then
-
 					if string.find(stack:get_name(), "_lodestone") then
-						stack:set_name("mcl_compass:" .. compass_frame .. "_lodestone")
+						local img = string.format(lodestone_img_fmt, compass_frame)
+						m:set_string("inventory_image", img)
+						m:set_string("wield_image", img)
 						awards.unlock(player:get_player_name(), "mcl:countryLode")
 					else
-						stack:set_name("mcl_compass:" .. compass_frame)
+						local img = string.format(compass_img_fmt, compass_frame)
+						m:set_string("inventory_image", img)
+						m:set_string("wield_image", img)
 					end
 					inv:set_stack("main", j, stack)
 				end
 			elseif compass_nr ~= 0 then
 				local meta = player:get_meta()
 				local posstring =  meta:get_string("mcl_compass:recovery_pos")
-				if not posstring or posstring == "" then
-					stack:set_name("mcl_compass:"..random_frame .. "_recovery")
+				local targetpos = minetest.string_to_pos(posstring)
+				local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
+				local _, p_dim = mcl_worlds.y_to_layer(pos.y)
+				if p_dim ~= target_dim then
+					local img = string.format(recovery_img_fmt, random_frame)
+					m:set_string("inventory_image", img)
+					m:set_string("wield_image", img)
 				else
-					local targetpos = minetest.string_to_pos(posstring)
-					local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
-					local _, p_dim = mcl_worlds.y_to_layer(pos.y)
-					if p_dim ~= target_dim then
-						stack:set_name("mcl_compass:"..random_frame.."_recovery")
-					else
-						stack:set_name("mcl_compass:"..get_compass_angle(pos,targetpos,dir).."_recovery")
-					end
+					local img = string.format(recovery_img_fmt, get_compass_angle(pos, targetpos, dir))
+					m:set_string("inventory_image", img)
+					m:set_string("wield_image", img)
 				end
 				inv:set_stack("main",j,stack)
 			end
@@ -212,7 +219,6 @@ end)
 --
 -- Node and craftitem definitions
 --
-local doc_mod = minetest.get_modpath("doc")
 
 for _, item in pairs(compass_types) do
 	local name_fmt, img_fmt
@@ -226,36 +232,22 @@ for _, item in pairs(compass_types) do
 		name_fmt = "mcl_compass:%d_recovery"
 		img_fmt = "mcl_compass_recovery_compass_%02d.png"
 	end
+	core.register_craftitem("mcl_compass:"..item.name, {
+		description = item.desc,
+		_doc_items_longdesc = item.longdesc,
+		_doc_items_usagehelp = item.usagehelp,
+		_tt_help = item.tt,
+		inventory_image = string.format(img_fmt, stereotype_frame),
+		wield_image = string.format(img_fmt, stereotype_frame),
+		groups = {compass = 1 + 1, tool = 1, disable_repair = 1},
+		_on_set_item_entity = function(itemstack, entity)
+			entity.is_compass = true
+			return itemstack
+		end
+	})
 	for i = 0, compass_frames - 1 do
 		local itemstring = string.format(name_fmt, i)
-		local def = {
-			description = item.desc,
-			_tt_help = item.tt,
-			inventory_image = string.format(img_fmt, i),
-			wield_image = string.format(img_fmt, i),
-			groups = {compass = i + 1, tool = 1, disable_repair = 1},
-			_on_set_item_entity = function(itemstack, entity)
-				entity.is_compass = true
-				itemstack:set_name(string.format(name_fmt, stereotype_frame))
-				return itemstack
-			end
-		}
-		if i == stereotype_frame then
-			def._doc_items_longdesc = item.longdesc
-			def._doc_items_usagehelp = item.usagehelp
-			if string.match(itemstring, "lodestone") then
-				def.groups.not_in_creative_inventory = 1
-			end
-		else
-			def._doc_items_create_entry = false
-			def.groups.not_in_creative_inventory = 1
-		end
-		minetest.register_craftitem(itemstring, table.copy(def))
-
-		-- Help aliases. Makes sure the lookup tool works correctly
-		if doc_mod and i ~= stereotype_frame then
-			doc.add_entry_alias("craftitems", "mcl_compass:"..(stereotype_frame), "craftitems", itemstring)
-		end
+		core.register_alias(itemstring, "mcl_compass"..item.name)
 	end
 end
 
