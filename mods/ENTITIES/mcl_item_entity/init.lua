@@ -486,7 +486,7 @@ minetest.register_entity(":__builtin:item", {
 				stack = s
 			end
 		end
-
+		self._on_entity_step = stack:get_definition()._on_entity_step
 		self.itemstring = stack:to_string()
 		local s = 0.2 + 0.1 * (count / max_count)
 		local wield_scale = (def and type(def.wield_scale) == "table" and tonumber(def.wield_scale.x)) or 1
@@ -667,10 +667,8 @@ minetest.register_entity(":__builtin:item", {
 			return
 		end
 
-		if self.is_clock then
-			self.object:set_properties({
-				wield_item = "mcl_clock:clock_" .. (mcl_worlds.clock_works(p) and mcl_clock.old_time or mcl_clock.random_frame)
-			})
+		if self._on_entity_step then
+			self:_on_entity_step()
 		end
 
 		-- If no collector was found for a long enough time, declare the magnet as disabled
