@@ -11,6 +11,7 @@ local compass_types = {
 		tt = S("Points to the world origin"),
 		longdesc = S("Compasses are tools which point to the world origin (X=0, Z=0) or the spawn point in the Overworld."),
 		usagehelp = S("A Compass always points to the world spawn point when the player is in the overworld.  In other dimensions, it spins randomly."),
+		group_rating = 1,
 	},
 	lodestone = {
 		name = "compass_lodestone",
@@ -20,6 +21,7 @@ local compass_types = {
 		tt = S("Points to a lodestone"),
 		longdesc = S("Lodestone compasses resemble regular compasses, but they point to a specific lodestone."),
 		usagehelp = S("A Lodestone compass can be made from an ordinary compass by using it on a lodestone.  After becoming a lodestone compass, it always points to its linked lodestone, provided that they are in the same dimension.  If not in the same dimension, the lodestone compass spins randomly, similarly to a regular compass when outside the overworld.  A lodestone compass can be relinked with another lodestone."),
+		group_rating = 2,
 	},
 	recovery = {
 		name = "compass_recovery",
@@ -29,8 +31,16 @@ local compass_types = {
 		tt = S("Points to your last death location"),
 		longdesc = S("Recovery Compasses are compasses that point to your last death location"),
 		usagehelp = S("Recovery Compasses always point to the location of your last death, in case you haven't died yet, it will just randomly spin around"),
+		group_rating = 3,
 	}
 }
+
+local compass_keys = {
+	"compass",
+	"lodestone",
+	"recovery",
+} --this essentially maps the group rating to the compass id
+
 -- Number of dynamic compass images (and items registered.)
 local compass_frames = 32
 
@@ -40,6 +50,7 @@ local stereotype_frame = 18
 -- random compass spinning tick in seconds.
 -- Increase if there are performance problems.
 local spin_timer_tick = 0.5
+local spin_timer = 0
 
 -- Initialize random compass frame for spinning compass.  It is updated in
 -- the compass globalstep function.
@@ -138,15 +149,40 @@ end
 function mcl_compass.get_compass_itemname() return "mcl_compass:compass" end
 mcl_compass.stereotype = "mcl_compass:compass"
 
--- Timer for randomly spinning compass.
--- Gets updated and checked in the globalstep function.
-local spin_timer = 0
 
--- Compass globalstep function.
--- * updates random spin counter and random frame of spinning compasses;
--- * updates all compasses in player's inventories to match the correct
---   needle orientations for their current positions.
---
+local function update_compass_img(stack, img)
+	local m = stack:get_meta()
+	m:set_string("inventory_image", img)
+	m:set_string("wield_image", img)
+	return stack
+end
+
+function compass_types.compass.update(stack, player)
+	local pos = player:get_pos()
+	local dir = player:get_look_horizontal()
+	return update_compass_img(stack, string.format(compass_types.compass.img_fmt, get_compass_frame(pos, dir, stack)))
+end
+
+compass_types.lodestone.update = compass_types.compass.update
+
+
+function compass_types.recovery.update(stack, player)
+	local pos = player:get_pos()
+	local dir = player:get_look_horizontal()
+	local meta = player:get_meta()
+	local posstring =  meta:get_string("mcl_compass:recovery_pos")
+	local targetpos = minetest.string_to_pos(posstring)
+	local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
+	local _, p_dim = mcl_worlds.y_to_layer(pos.y)
+	local img
+	if p_dim ~= target_dim then
+		img = string.format(compass_types.recovery.img_fmt, random_frame)
+	else
+		img = string.format(compass_types.recovery.img_fmt, get_compass_angle(pos, targetpos, dir))
+	end
+	return update_compass_img(stack, img)
+end
+
 minetest.register_globalstep(function(dtime)
 	spin_timer = spin_timer + dtime
 	if spin_timer >= spin_timer_tick then
@@ -154,47 +190,13 @@ minetest.register_globalstep(function(dtime)
 		spin_timer = 0
 	end
 
-	local compass_nr, compass_frame
-	local pos, dir, inv
 	for player in mcl_util.connected_players() do
-		pos = player:get_pos()
-		dir = player:get_look_horizontal()
-		inv = player:get_inventory()
+		local inv = player:get_inventory()
 		for j, stack in pairs(inv:get_list("main")) do
-			local m = stack:get_meta()
-			compass_nr = minetest.get_item_group(stack:get_name(), "compass")
-			if compass_nr ~= 0 and not string.find(stack:get_name(), "_recovery") then
-				-- check if current compass image still matches true orientation
-				compass_frame = get_compass_frame(pos, dir, stack)
-				if compass_nr - 1 ~= compass_frame then
-					if string.find(stack:get_name(), "_lodestone") then
-						local img = string.format(compass_types.lodestone.img_fmt, compass_frame)
-						m:set_string("inventory_image", img)
-						m:set_string("wield_image", img)
-						awards.unlock(player:get_player_name(), "mcl:countryLode")
-					else
-						local img = string.format(compass_types.compass.img_fmt, compass_frame)
-						m:set_string("inventory_image", img)
-						m:set_string("wield_image", img)
-					end
-					inv:set_stack("main", j, stack)
-				end
-			elseif compass_nr ~= 0 then
-				local meta = player:get_meta()
-				local posstring =  meta:get_string("mcl_compass:recovery_pos")
-				local targetpos = minetest.string_to_pos(posstring)
-				local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
-				local _, p_dim = mcl_worlds.y_to_layer(pos.y)
-				if p_dim ~= target_dim then
-					local img = string.format(compass_types.recovery.img_fmt, random_frame)
-					m:set_string("inventory_image", img)
-					m:set_string("wield_image", img)
-				else
-					local img = string.format(compass_types.recovery.img_fmt, get_compass_angle(pos, targetpos, dir))
-					m:set_string("inventory_image", img)
-					m:set_string("wield_image", img)
-				end
-				inv:set_stack("main",j,stack)
+			local compass_group = minetest.get_item_group(stack:get_name(), "compass")
+			if compass_group > 0 then
+				compass_types[compass_keys[compass_group]].update(stack, player)
+				inv:set_stack("main", j, stack)
 			end
 		end
 	end
@@ -212,7 +214,7 @@ for _, item in pairs(compass_types) do
 		_tt_help = item.tt,
 		inventory_image = string.format(item.img_fmt, stereotype_frame),
 		wield_image = string.format(item.img_fmt, stereotype_frame),
-		groups = {compass = 1 + 1, tool = 1, disable_repair = 1},
+		groups = {compass = item.group_rating, tool = 1, disable_repair = 1},
 		_on_set_item_entity = function(itemstack, entity)
 			--entity.is_compass = true
 			return itemstack
