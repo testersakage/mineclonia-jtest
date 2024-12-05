@@ -308,14 +308,20 @@ function mob_class:is_in_node (self_pos, itemstring) --can be group:...
 end
 
 function mob_class:reset_breath ()
-    local max = self.object:get_properties ().breath_max
+    local max = self.initial_properties.breath_max
     if max ~= -1 then
 	self.breath = max
     end
 end
 
 function mob_class:respire ()
-	self.breath = math.min (self.object:get_properties().breath_max, self.breath + 1)
+	-- This ties mobs to the `breath_max' in their initial mob
+	-- definitions, which is acceptable, as no code in the game or
+	-- in mods expects mobs to respect this player-specific
+	-- property at all, and calling `get_properties' is simply too
+	-- expensive.
+	local breath_max = self.initial_properties.breath_max
+	self.breath = math.min (breath_max, self.breath + 1)
 end
 
 local function get_internal_light_level ()
@@ -487,7 +493,7 @@ function mob_class:do_env_damage()
 		end
 	end
 	-- Drowning damage
-	if self.object:get_properties().breath_max ~= -1 then
+	if self.initial_properties.breath_max ~= -1 then
 		local drowning = false
 		if self.breathes_in_water then
 			if minetest.get_item_group(self.standing_in, "water") == 0 then
