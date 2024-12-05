@@ -51,6 +51,7 @@ local function get_compass_angle(pos, target, dir)
 	local angle_relative = (angle_north - angle_dir + 180) % 360
 	return math.floor((angle_relative/11.25) + 0.5) % compass_frames
 end
+mcl_compass.get_compass_angle = get_compass_angle
 
 --- Get compass image frame.
 -- Returns the compass image frame with the needle direction matching the
@@ -170,11 +171,13 @@ end)
 mcl_compass.registered_compasses = {}
 function mcl_compass.register_compass(name, def)
 	mcl_compass.registered_compasses[name] = def
-	core.register_craftitem("mcl_compass:"..(def.name or name), table.merge({}, def.overrides or {}, {
-		groups = table.merge({tool = 1, disable_repair = 1}, def.overrides.groups)
+	core.register_craftitem(":mcl_compass:"..(def.name or name), table.merge({}, def.overrides or {}, {
+		groups = table.merge({tool = 1, disable_repair = 1, compass = 1}, def.overrides.groups)
 	}))
-	for i = 0, compass_frames - 1 do
-		core.register_alias(string.format(def.name_fmt, i), "mcl_compass"..(def.name or name))
+	if def.name_fmt then
+		for i = 0, compass_frames - 1 do
+			core.register_alias(string.format(def.name_fmt, i), "mcl_compass"..(def.name or name))
+		end
 	end
 end
 
