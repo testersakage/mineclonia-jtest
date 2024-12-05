@@ -499,7 +499,7 @@ end
 -- Shulker visuals.
 ------------------------------------------------------------------------
 
-function shulker:check_head_swivel (dtime, clear)
+function shulker:check_head_swivel (self_pos, dtime, clear)
 	if clear then
 		self._locked_object = nil
 	else
@@ -513,7 +513,6 @@ function shulker:check_head_swivel (dtime, clear)
 			and vector.equals (self._look_target, target_pos) then
 			return
 		end
-		local self_pos = self.object:get_pos ()
 		self_pos.y = self_pos.y + self.head_eye_height
 		self:shulker_look_at (self_pos, target_pos)
 		self._look_target = target_pos

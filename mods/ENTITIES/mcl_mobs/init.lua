@@ -206,9 +206,10 @@ mcl_mobs.mob_class = {
 	_sprinting = false,
 	_crouching = false,
 	_dominant_in_jockeys = true,
-	_need_roll = false,
 	_inventory_size = nil,
 	_persistent_physics_factors = {},
+	_old_head_swivel_vector = vector.zero (),
+	_old_head_swivel_pos = vector.zero (),
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

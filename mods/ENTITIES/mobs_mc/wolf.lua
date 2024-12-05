@@ -353,9 +353,9 @@ function wolf:add_shake_particles ()
 	})
 end
 
-function wolf:check_head_swivel (dtime, clear)
+function wolf:check_head_swivel (self_pos, dtime, clear)
 	if not self._interested_in then
-		mob_class.check_head_swivel (self, dtime, clear)
+		mob_class.check_head_swivel (self, self_pos, dtime, clear)
 	end
 end
 
@@ -382,6 +382,7 @@ local function visually_display_interest_1 (self, yaw, dx, dy, dz)
 			interpolate = 0.15,
 		},
 	})
+	self._old_head_swivel_vector = nil
 end
 
 function wolf:visually_display_interest (dtime, self_pos, target_pos)
@@ -423,6 +424,7 @@ function wolf:visually_cancel_interest ()
 	if self.object.set_bone_override then
 		self.object:set_bone_override ("body.head", nil)
 		self.object:set_bone_override ("head.control", nil)
+		self._old_head_swivel_vector = nil
 	end
 	self._beg_rotate_time = nil
 	self._beg_vector = nil
