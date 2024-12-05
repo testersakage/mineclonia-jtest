@@ -579,7 +579,9 @@ function mob_class:on_step (dtime, moveresult)
 		mcl_burning.tick (self.object, dtime, self)
 	end
 
-	if self.dead then return end
+	if self.dead then
+		return
+	end
 
 	self:rotate_step (dtime)
 	self:set_animation_speed ()
@@ -602,7 +604,7 @@ function mob_class:on_step (dtime, moveresult)
 	end
 
 	if should_drive then
-		self:env_damage (dtime, pos)
+		self:env_damage (pos)
 		return
 	end
 
@@ -618,7 +620,9 @@ function mob_class:on_step (dtime, moveresult)
 		self:mob_sound("random", true)
 	end
 
-	if self:env_damage (dtime, pos) then return end
+	if self:env_damage (pos) then
+		return
+	end
 	self:run_ai (dtime, moveresult)
 
 	if self.jump_sound_cooloff > 0 then
