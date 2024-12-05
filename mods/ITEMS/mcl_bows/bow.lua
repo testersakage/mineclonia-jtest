@@ -172,8 +172,32 @@ local function set_bow_level(stack, level)
 	return stack
 end
 
+function mcl_bows.register_bow(name, def)
+	core.register_tool(name, table.merge({
+		wield_scale = mcl_vars.tool_wield_scale,
+		stack_max = 1,
+		range = 4,
+		-- Trick to disable digging as well
+		on_use = function() end,
+		on_place = function(itemstack, player, pointed_thing)
+			local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
+			if rc then return rc end
+
+			itemstack:get_meta():set_string("active", "true")
+			return itemstack
+		end,
+		on_secondary_use = function(itemstack)
+			itemstack:get_meta():set_string("active", "true")
+			return itemstack
+		end,
+		touch_interaction = "short_dig_long_place",
+		groups = table.merge(def.groups, { weapon = 1, weapon_ranged = 1, enchantability=1, }),
+		_mcl_uses = 385,
+		_mcl_burntime = 15
+	}, def))
+end
 -- Bow item, uncharged state
-minetest.register_tool("mcl_bows:bow", {
+mcl_bows.register_bow("mcl_bows:bow", {
 	description = S("Bow"),
 	_tt_help = S("Launches arrows"),
 	_doc_items_longdesc = S("Bows are ranged weapons to shoot arrows at your foes.").."\n"..
@@ -198,7 +222,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 		return itemstack
 	end,
 	touch_interaction = "short_dig_long_place",
-	groups = {weapon = 1, weapon_ranged = 1, bow = 1, enchantability = 1, offhand_item = 1},
+	groups = {weapon = 1, weapon_ranged = 1, bow = 1, enchantability = 1, offhand_item = 1, bow_power = BOW_MAX_SPEED },
 	_mcl_uses = 385,
 	_mcl_burntime = 15
 })
