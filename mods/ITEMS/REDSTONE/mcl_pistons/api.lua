@@ -168,7 +168,11 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			local new_pos = obj:get_pos():add(movedir)
 			local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
 			if def and def.walkable then
-				return
+				return false
+			end
+
+			if entity._mcl_pistons_on_move and entity._mcl_pistons_on_move(entity, new_pos) then
+				return false
 			end
 
 			obj:move_to(new_pos, true)
@@ -190,6 +194,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 					obj:add_velocity(vector.new(movedir.x * 6, movedir.y * 9, movedir.z * 6))
 				end
 			end
+			return true
 		end
 	end
 
@@ -201,8 +206,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			-- if moving up, dont push objects already on the block. Because the loop just above does it already
 			objects = minetest.get_objects_inside_radius(n.old_pos:offset(0, 1, 0), 0.9)
 			for _, obj in ipairs(objects) do
-				if not moved_objects[obj] then
-					move_object(obj, n, true)
+				if not moved_objects[obj] and move_object(obj, n, true) then
 					moved_objects[obj] = true
 				end
 			end
@@ -212,8 +216,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	for id, n in ipairs(nodes) do
 		objects = minetest.get_objects_inside_radius(n.pos, 0.9)
 		for _, obj in ipairs(objects) do
-			if not moved_objects[obj] then
-				move_object(obj, n, false)
+			if not moved_objects[obj] and move_object(obj, n, false) then
 				moved_objects[obj] = true
 			end
 		end
