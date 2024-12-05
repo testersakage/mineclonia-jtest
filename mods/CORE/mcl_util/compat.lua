@@ -23,7 +23,7 @@ local function valid_object_iterator(objects)
 		if obj == nil then
 			return
 		end
-		if obj:get_pos() then
+		if obj:is_valid () then
 			return obj
 		end
 		return next_valid_object()
