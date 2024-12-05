@@ -164,14 +164,10 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	local function move_object(obj, n, is_pulled)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
-		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
+		if (entity or player) and not (entity and entity._mcl_pistons_unmovable) then
 			local new_pos = obj:get_pos():add(movedir)
 			local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
 			if def and def.walkable then
-				return false
-			end
-
-			if entity._mcl_pistons_on_move and entity._mcl_pistons_on_move(entity, new_pos) then
 				return false
 			end
 
