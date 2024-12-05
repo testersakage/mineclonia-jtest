@@ -2158,6 +2158,18 @@ function villager:on_spawn ()
 		self.base_texture[1] = self:get_overlaid_texture ()
 		self:set_textures (self.base_texture)
 	end
+
+	-- As usual the MC Wiki is incorrect in stating that naturally
+	-- spawned zombie villagers retain their professions after
+	-- curing if they cannot locate a job block.  Testing in MC
+	-- 1.20.6 reveals that their professions are reset
+	-- immediately.
+
+	if self._profession and self._profession ~= "nitwit"
+		and self._xp == 0 then
+		self:update_trades ({})
+		self:reset_profession ()
+	end
 end
 
 function villager:set_profession (name)
