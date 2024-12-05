@@ -112,7 +112,8 @@ mcl_structures.register_structure("end_spike",{
 			if calls_remaining ~= 0 then return end
 			local s = make_endspike(pos,d,h)
 			minetest.swap_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})
-			minetest.add_entity(vector.offset(s,0,2,0),"mcl_end:crystal")
+			minetest.swap_node(vector.offset(s,0,2,0),{name="mcl_fire:eternal_fire"})
+			minetest.add_entity(vector.offset(s,0,3,0),"mcl_end:crystal")
 			if pr:next(1,3) == 1 then
 				make_cage(vector.offset(s,0,1,0),d)
 			end
