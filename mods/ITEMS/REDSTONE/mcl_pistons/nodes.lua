@@ -51,23 +51,8 @@ local function piston_on(pos, node)
 	local np = vector.add(pos, dir)
 	local meta = minetest.get_meta(pos)
 
-	for obj in core.objects_inside_radius(np, 0.9) do
-		if vector.equals(obj:get_pos():round(), np) then
-			local l = obj:get_luaentity()
-			if l and ( not l._mcl_pistons_on_move or not l._mcl_pistons_on_move(l, obj:get_pos():add(dir))) then
-				obj:move_to(obj:get_pos():add(dir))
-			end
-		end
-	end
-
-	for obj in core.objects_inside_radius(pos, 0.9) do
-		if vector.equals(obj:get_pos():round(), pos) then
-			local l = obj:get_luaentity()
-			if l and ( not l._mcl_pistons_on_move or not l._mcl_pistons_on_move(l, obj:get_pos():add(dir*2))) then
-				obj:move_to(obj:get_pos():add(dir * 2))
-			end
-		end
-	end
+	mcl_pistons.try_moving_objects({{pos = np}}, dir)
+	mcl_pistons.try_moving_objects({{pos = pos}}, dir*2)
 
 	local success = mcl_pistons.push(np, dir, PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
 	if success then

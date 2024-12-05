@@ -25,6 +25,53 @@ local function run_on_mcl_piston_move(moved_nodes)
 	end
 end
 
+function mcl_pistons.move_object(obj, movedir, push_node, is_pulled)
+	local entity = obj:get_luaentity()
+	local player = obj:is_player()
+	if (entity or player) and not (entity and entity._mcl_pistons_unmovable) then
+		local new_pos = obj:get_pos():add(movedir)
+		local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
+		if def and def.walkable then
+			return false
+		end
+
+		if entity and entity._mcl_pistons_on_move then
+			local r = entity:_mcl_pistons_on_move(new_pos)
+			if r then
+				return r
+			end
+		end
+
+		obj:move_to(new_pos, true)
+		-- Launch Player, TNT & mobs like in Minecraft
+		-- Only doing so if slimeblock is attached.
+		if push_node and push_node.name == "mcl_core:slimeblock" and not is_pulled then
+			obj:set_acceleration({x=movedir.x, y=-GRAVITY, z=movedir.z})
+
+			--Need to set velocities differently for players, items & mobs/tnt, and falling anvils.
+			if player then
+				obj:add_velocity(vector.new(movedir.x * 10, movedir.y * 13, movedir.z * 10))
+			elseif entity.name == "__builtin:item" then
+				obj:add_velocity(vector.new(movedir.x * 9, movedir.y * 11, movedir.z * 9))
+			elseif entity.name == "__builtin:falling_node" then
+				obj:add_velocity(vector.new(movedir.x * 43, movedir.y * 72, movedir.z * 43))
+			elseif entity.is_mob then
+				obj:add_velocity (vector.new (movedir.x * 20, movedir.y * 20, movedir.z * 20))
+			else
+				obj:add_velocity(vector.new(movedir.x * 6, movedir.y * 9, movedir.z * 6))
+			end
+		end
+		return true
+	end
+end
+
+function mcl_pistons.try_moving_objects(nodes, dir, offset)
+	for _, n in pairs(nodes) do
+		for obj in core.objects_inside_radius(n.pos:add(offset or vector.zero()), 0.9) do
+			mcl_pistons.move_object(obj, dir, n.node, false)
+		end
+	end
+end
 -- pos: pos of block to be pushed;
 -- movedir: direction of actual movement
 -- maximum: maximum nodes to be pushed
@@ -161,60 +208,12 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 	end
 
-	local function move_object(obj, n, is_pulled)
-		local entity = obj:get_luaentity()
-		local player = obj:is_player()
-		if (entity or player) and not (entity and entity._mcl_pistons_unmovable) then
-			local new_pos = obj:get_pos():add(movedir)
-			local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
-			if def and def.walkable then
-				return false
-			end
-
-			obj:move_to(new_pos, true)
-			-- Launch Player, TNT & mobs like in Minecraft
-			-- Only doing so if slimeblock is attached.
-			if n.node.name == "mcl_core:slimeblock" and not is_pulled then
-				obj:set_acceleration({x=movedir.x, y=-GRAVITY, z=movedir.z})
-
-				--Need to set velocities differently for players, items & mobs/tnt, and falling anvils.
-				if player then
-					obj:add_velocity(vector.new(movedir.x * 10, movedir.y * 13, movedir.z * 10))
-				elseif entity.name == "__builtin:item" then
-					obj:add_velocity(vector.new(movedir.x * 9, movedir.y * 11, movedir.z * 9))
-				elseif entity.name == "__builtin:falling_node" then
-					obj:add_velocity(vector.new(movedir.x * 43, movedir.y * 72, movedir.z * 43))
-				elseif entity.is_mob then
-					obj:add_velocity (vector.new (movedir.x * 20, movedir.y * 20, movedir.z * 20))
-				else
-					obj:add_velocity(vector.new(movedir.x * 6, movedir.y * 9, movedir.z * 6))
-				end
-			end
-			return true
-		end
-	end
-
 	-- remember already moved objects. So they dont get moved more than once
-	local moved_objects = {}
 	if movedir.y ~= 1 then
-		for id, n in ipairs(nodes) do
-			-- if moving up, dont push objects already on the block. Because the loop just above does it already
-			for obj in core.objects_inside_radius(vector.offset(pos, 0, 1, 0), 0.9) do
-				if not moved_objects[obj] and move_object(obj, n, true) then
-					moved_objects[obj] = true
-				end
-			end
-		end
+		mcl_pistons.try_moving_objects(nodes, movedir, vector.new(0, 1, 0))
 	end
 
-	for id, n in ipairs(nodes) do
-		for obj in core.objects_inside_radius(n.pos, 0.9) do
-			if not moved_objects[obj] and move_object(obj, n, false) then
-				moved_objects[obj] = true
-			end
-		end
-
-	end
+	mcl_pistons.try_moving_objects(nodes, movedir)
 	run_on_mcl_piston_move(nodes)
 
 	return true
