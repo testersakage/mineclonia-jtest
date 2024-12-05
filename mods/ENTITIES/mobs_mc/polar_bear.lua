@@ -144,12 +144,12 @@ local SIXTY_FIVE_DEG = math.rad (64)
 --- XXX: creating additional bone overrides prevents bone override
 --- interpolation from functioning.
 
-function polar_bear:check_head_swivel (dtime)
+function polar_bear:check_head_swivel (self_pos, dtime, clear)
 	if self._rearing_time
 		and self._rearing_time < 0.3 then
 		return
 	end
-	mob_class.check_head_swivel (self, dtime)
+	mob_class.check_head_swivel (self, self_pos, dtime, clear)
 end
 
 function polar_bear:rear_up ()

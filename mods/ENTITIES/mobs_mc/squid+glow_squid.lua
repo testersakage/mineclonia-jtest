@@ -290,19 +290,19 @@ function squid:motion_step (dtime, moveresult, self_pos)
 			or moveresult.standing_on_object then
 			if not self._stepheight_enabled then
 				self.object:set_properties ({
-						stepheight = 0.6,
+					stepheight = 0.6,
 				})
 				self._stepheight_enabled = true
 			end
 		elseif self._stepheight_enabled then
 			self.object:set_properties ({
-					stepheight = 0,
+				stepheight = 0,
 			})
 			self._stepheight_enabled = false
 		end
 	end
 
-	self:check_collision ()
+	self:check_collision (self_pos)
 	self._tentacle_movement = movement
 	self._tentacle_speed = speed
 end

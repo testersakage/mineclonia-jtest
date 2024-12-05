@@ -104,13 +104,13 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 end
 
 -- collision function borrowed amended from jordan4ibanez open_ai mod
-function mob_class:collision ()
-	local pos = self.object:get_pos()
+function mob_class:collision (pos)
 	local attach = self.object:get_attach ()
 
-	if not self.pushable or not pos or attach then
+	if not self.pushable or attach then
 		return 0, 0
 	end
+
 	local x = 0
 	local z = 0
 	local cbox = self.collisionbox
@@ -298,10 +298,12 @@ function mob_class:check_for_death (mcl_reason, damage)
 	return true
 end
 
-function mob_class:is_in_node(itemstring) --can be group:...
-	local cb = self.object:get_properties().collisionbox
-	local pos = self.object:get_pos()
-	local nn = minetest.find_nodes_in_area(vector.offset(pos, cb[1], cb[2], cb[3]), vector.offset(pos, cb[4], cb[5], cb[6]), {itemstring})
+function mob_class:is_in_node (self_pos, itemstring) --can be group:...
+	local cb = self.collisionbox
+	local pos = self_pos
+	local v1 = vector.offset (pos, cb[1], cb[2], cb[3])
+	local v2 = vector.offset (pos, cb[4], cb[5], cb[6])
+	local nn = minetest.find_nodes_in_area (v1, v2, {itemstring})
 	if nn and #nn > 0 then return true end
 end
 
@@ -444,7 +446,7 @@ function mob_class:do_env_damage()
 			end
 		end
 	-- lava damage
-	elseif self.lava_damage > 0 and self:is_in_node("group:lava") then
+	elseif self.lava_damage > 0 and self:is_in_node (pos, "group:lava") then
 		if self.lava_damage ~= 0 then
 			local fatal = self:damage_mob ("lava", self.lava_damage)
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
@@ -455,7 +457,7 @@ function mob_class:do_env_damage()
 			end
 		end
 	-- fire damage
-	elseif self.fire_damage > 0 and self:is_in_node("group:fire") then
+	elseif self.fire_damage > 0 and self:is_in_node (pos, "group:fire") then
 		if self.fire_damage ~= 0 then
 			local fatal = self:damage_mob ("in_fire", self.fire_damage)
 
@@ -466,7 +468,7 @@ function mob_class:do_env_damage()
 				return true
 			end
 		end
-	elseif self._mcl_freeze_damage > 0 and self:is_in_node("mcl_powder_snow:powder_snow") then
+	elseif self._mcl_freeze_damage > 0 and self:is_in_node (pos, "mcl_powder_snow:powder_snow") then
 		frozen = true
 		self._frozen_for = self._frozen_for + 1
 		if self._frozen_for >= 8 and self._frozen_for % 2 == 0 then
@@ -628,18 +630,20 @@ function mob_class:falling(pos)
 		return false -- mob has teleported through portal - it's 99% not falling
 	end
 
-	if minetest.registered_nodes[mcl_mobs.node_ok(pos).name].name == "mcl_powder_snow:powder_snow" then
+	local node = mcl_mobs.node_ok (pos, "air")
+	if node.name == "mcl_powder_snow:powder_snow" then
 		self.reset_fall_damage = 1
-	elseif minetest.registered_nodes[mcl_mobs.node_ok(pos).name].groups.water then
+	elseif minetest.registered_nodes[node.name].groups.water then
 		-- Reset fall damage when falling into water first.
 		self.reset_fall_damage = 1
 	else
 		-- fall damage onto solid ground
 		if self.fall_damage == 1
-		and self.object:get_velocity().y == 0 then
+			and self.object:get_velocity().y == 0 then
 			local n = mcl_mobs.node_ok(vector.offset(pos,0,-1,0)).name
 			-- init old_y to current height if not set.
-			local d = (self.old_y or self.object:get_pos().y) - self.object:get_pos().y
+			local self_pos = self.object:get_pos ()
+			local d = (self.old_y or self_pos.y) - self_pos.y
 
 			if d > 5 and n ~= "air" and n ~= "ignore" and self.reset_fall_damage ~= 1 then
 				local add = minetest.get_item_group(self.standing_on, "fall_damage_add_percent")
@@ -650,16 +654,15 @@ function mob_class:falling(pos)
 				self:damage_mob ("fall", damage * self.fall_damage_multiplier)
 				self.reset_fall_damage = 0
 			end
-			self.old_y = self.object:get_pos().y
+			self.old_y = self_pos.y
 		end
 		self.reset_fall_damage = 0
 	end
 end
 
-function mob_class:check_water_flow ()
-	local p, node, nn, def
-	p = self.object:get_pos ()
-	node = minetest.get_node_or_nil (p)
+function mob_class:check_water_flow (self_pos)
+	local node, nn, def
+	node = minetest.get_node_or_nil (self_pos)
 	if node then
 		nn = node.name
 		def = minetest.registered_nodes[nn]
@@ -672,7 +675,7 @@ function mob_class:check_water_flow ()
 		-- liquids with a flowing distance of 7.  Luckily,
 		-- this is exactly what we need if we only care about
 		-- water, which has this flowing distance.
-		local vec = flowlib.quick_flow(p, node)
+		local vec = flowlib.quick_flow (self_pos, node)
 		return vec
 	end
 	return nil
@@ -942,11 +945,17 @@ function mob_class:immersion_depth (liquidgroup, pos, max)
 	return ymax and ymax - start or 0
 end
 
-function mob_class:check_collision ()
+function mob_class:check_collision (self_pos)
 	-- can mob be pushed, if so calculate direction
 	if self.pushable then
-		local c_x, c_y = self:collision ()
-		self.object:add_velocity ({x = c_x, y = 0, z = c_y})
+		local c_x, c_z = self:collision (self_pos)
+		if c_x > 0 or c_z > 0 then
+			self.object:add_velocity ({
+				x = c_x,
+				y = 0,
+				z = c_z,
+			})
+		end
 	end
 end
 
@@ -1105,7 +1114,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		gravity_drag = pow_by_step (self.gravity_drag, dtime)
 	end
 
-	local water_vec = not self.swims and self:check_water_flow () or nil
+	local water_vec = not self.swims and self:check_water_flow (self_pos) or nil
 	local velocity_factor = standon._mcl_velocity_factor or 1
 
 	if standin.groups.water then
@@ -1343,7 +1352,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	self._jump = false
 	self._was_touching_ground = touching_ground
 	self.object:set_velocity (v)
-	self:check_collision ()
+	self:check_collision (self_pos)
 end
 
 -- Simplified `motion_step' for true (i.e., not birds or blazes)
@@ -1398,7 +1407,7 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 	self._previously_floating = true
 	self.object:set_properties ({stepheight = 0.0})
 	self.object:set_velocity (v)
-	self:check_collision ()
+	self:check_collision (self_pos)
 end
 
 -- Simplified `motion_step' for true (i.e., not birds or blazes)
@@ -1436,7 +1445,7 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 		end
 
 		self.object:set_velocity (v)
-		self:check_collision ()
+		self:check_collision (self_pos)
 		self._previously_floating = true
 		self.object:set_properties ({stepheight = 0.0})
 	else
@@ -1489,11 +1498,26 @@ function mob_class:display_sprinting_particles ()
 		and not standing_in_liquid_or_walkable (self)
 end
 
+local get_node_raw = mcl_mobs.get_node_raw
+
+local function get_node_name (nodepos)
+	if get_node_raw then
+		local x, y, z = nodepos.x, nodepos.y, nodepos.z
+		local id, _, _ = get_node_raw (x, y, z)
+		return minetest.get_name_from_content_id (id)
+	else
+		local node = minetest.get_node (nodepos)
+		return node.name
+	end
+end
+
+local post_motion_step_scratch = vector.zero ()
+
 function mob_class:post_motion_step (self_pos, dtime)
 	-- Apply slowdowns from blocks that should impede movement.
 	local xmin, zmin, xmax, zmax, ymin, ymax
 	local slowdowns = self.slowdown_nodes
-	local v = vector.zero ()
+	local v = post_motion_step_scratch
 
 	xmin = floor (self_pos.x + self.collisionbox[1] + 0.5)
 	zmin = floor (self_pos.z + self.collisionbox[3] + 0.5)
@@ -1501,15 +1525,15 @@ function mob_class:post_motion_step (self_pos, dtime)
 	zmax = floor (self_pos.z + self.collisionbox[6] + 0.5)
 	ymin = floor (self_pos.y + self.collisionbox[2] + 0.5)
 	ymax = floor (self_pos.y + self.collisionbox[5] + 0.5)
-	for x = xmin, xmax do
-		v.x = x
-		for z = zmin, zmax do
-			v.z = z
+	for z = zmin, zmax do
+		v.z = z
+		for x = xmin, xmax do
+			v.x = x
 			for y = ymin, ymax do
 				v.y = y
-				local node = minetest.get_node_or_nil (v)
-				if node and slowdowns[node.name] then
-					local slowdown = slowdowns[node.name]
+				local node = get_node_name (v)
+				if slowdowns[node] then
+					local slowdown = slowdowns[node]
 					local v = self.object:get_velocity ()
 					v.x = v.x * pow_by_step (slowdown.x, dtime)
 					v.y = v.y * pow_by_step (slowdown.y, dtime)
