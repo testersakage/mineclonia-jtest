@@ -388,11 +388,11 @@ function piglin:ai_step (dtime)
 	end
 end
 
-function piglin:check_head_swivel (dtime, clear)
+function piglin:check_head_swivel (self_pos, dtime, clear)
 	-- Not supported on 5.8.0 or earlier, where bone overrides
 	-- cannot be cleared.
 	if not self.object or not self.object.set_bone_override then
-		mob_class.check_head_swivel (self, dtime, clear)
+		mob_class.check_head_swivel (self, self_pos, dtime, clear)
 		return
 	end
 
@@ -400,7 +400,7 @@ function piglin:check_head_swivel (dtime, clear)
 		or self._arm_pose == "gloat" then
 		return
 	end
-	mob_class.check_head_swivel (self, dtime, clear)
+	mob_class.check_head_swivel (self, self_pos, dtime, clear)
 end
 
 ------------------------------------------------------------------------
