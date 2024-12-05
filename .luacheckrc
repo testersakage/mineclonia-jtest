@@ -204,6 +204,7 @@ globals = {
 	"vector",
 	"mcla_generated_translations",
 	"dbg",
+	"mcl_serverplayer",
 }
 
 read_globals = {
