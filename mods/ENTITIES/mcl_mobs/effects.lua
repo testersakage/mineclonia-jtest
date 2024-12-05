@@ -355,10 +355,12 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 			end
 
 			local ps = self_pos
+			local old_y = ps.y
 			ps.y = ps.y + self.head_eye_height
 			local pt = locked_object:get_pos ()
 			pt.y = pt.y + _locked_object_eye_height
 			local dir = vector.direction (ps, pt)
+			ps.y = old_y
 			local mob_yaw_raw = self_rot.y
 				+ math.atan2 (dir.x, dir.z)
 				+ self.head_yaw_offset

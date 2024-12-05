@@ -560,7 +560,7 @@ function mob_class:do_env_damage()
 	return false
 end
 
-function mob_class:env_damage (_, pos)
+function mob_class:env_damage (pos)
 	-- Calculate depth of immersion.  This value is also utilized
 	-- by run_ai.
 	self._immersion_depth = 0
@@ -569,7 +569,6 @@ function mob_class:env_damage (_, pos)
 		or minetest.get_item_group (self.head_in, "water") > 0 then
 		local ymin = self.collisionbox[2]
 		local height = self.collisionbox[5] - ymin
-		local pos = vector.new (pos.x, pos.y, pos.z)
 		self._immersion_depth = self:immersion_depth ("water", pos, height)
 	end
 
