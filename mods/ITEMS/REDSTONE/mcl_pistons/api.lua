@@ -200,12 +200,10 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 	-- remember already moved objects. So they dont get moved more than once
 	local moved_objects = {}
-	local objects
 	if movedir.y ~= 1 then
 		for id, n in ipairs(nodes) do
 			-- if moving up, dont push objects already on the block. Because the loop just above does it already
-			objects = minetest.get_objects_inside_radius(n.old_pos:offset(0, 1, 0), 0.9)
-			for _, obj in ipairs(objects) do
+			for obj in core.objects_inside_radius(vector.offset(pos, 0, 1, 0), 0.9) do
 				if not moved_objects[obj] and move_object(obj, n, true) then
 					moved_objects[obj] = true
 				end
@@ -214,15 +212,13 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	end
 
 	for id, n in ipairs(nodes) do
-		objects = minetest.get_objects_inside_radius(n.pos, 0.9)
-		for _, obj in ipairs(objects) do
+		for obj in core.objects_inside_radius(n.pos, 0.9) do
 			if not moved_objects[obj] and move_object(obj, n, false) then
 				moved_objects[obj] = true
 			end
 		end
 
 	end
-
 	run_on_mcl_piston_move(nodes)
 
 	return true
