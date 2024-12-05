@@ -146,6 +146,9 @@ function mob_class:get_staticdata_table ()
 	tmp._school = nil
 	tmp.head_eye_height = nil
 	tmp._adult_head_eye_height = nil
+	tmp._old_head_swivel_vector = nil
+	tmp._old_head_swivel_pos = nil
+	tmp._head_swivel_pos = nil
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
@@ -323,6 +326,13 @@ function mob_class:mob_activate (staticdata, dtime)
 	self._sprinting = false
 	self._crouching = false
 	self._was_touching_ground = true
+	self._old_head_swivel_vector = nil
+	self._old_head_swivel_pos = nil
+
+	if self.head_swivel then
+		self._head_swivel_pos
+			= vector.new (0, self.bone_eye_height, self.horizontal_head_height)
+	end
 
 	if self.dead then
 		self:safe_remove()
@@ -566,16 +576,14 @@ function mob_class:on_step (dtime, moveresult)
 	self:update_timers(dtime)
 
 	if not self.fire_resistant then
-		mcl_burning.tick(self.object, dtime, self)
-		-- mcl_burning.tick may remove object immediately
-		if not self.object:get_pos() then return end
+		mcl_burning.tick (self.object, dtime, self)
 	end
 
 	if self.dead then return end
 
 	self:rotate_step (dtime)
 	self:set_animation_speed ()
-	self:check_head_swivel (dtime)
+	self:check_head_swivel (pos, dtime)
 
 	-- Expel drivers riding submerged mobs.
 	self:expel_underwater_drivers ()

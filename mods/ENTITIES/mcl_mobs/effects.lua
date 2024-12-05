@@ -318,24 +318,23 @@ local function is_zero_vector (v)
 	return v.x == 0 and v.y == 0 and v.z == 0
 end
 
-function mob_class:check_head_swivel(dtime, clear)
-	if not self.head_swivel or type(self.head_swivel) ~= "string" then return end
+local ZERO_VECTOR = vector.zero ()
+
+function mob_class:check_head_swivel (self_pos, dtime, clear)
+	if not self.head_swivel
+		or type (self.head_swivel) ~= "string" then
+		return
+	end
 
 	if clear then
-	   self._locked_object = nil
+		self._locked_object = nil
 	else
-	   self:who_are_you_looking_at ()
+		self:who_are_you_looking_at ()
 	end
 
-	local oldp, oldr
-	local newr = vector.zero()
-	if self.object.get_bone_override then -- minetest >= 5.9
-		local ov = self.object:get_bone_override(self.head_swivel)
-		oldp, oldr = ov.position.vec, ov.rotation.vec
-	else -- minetest < 5.9
-		oldp, oldr = self.object:get_bone_position(self.head_swivel)
-		oldr = vector.apply(oldr, math.rad) -- old API uses degrees
-	end
+	local oldr = self._old_head_swivel_vector
+	local oldp = self._old_head_swivel_pos
+	local newr = ZERO_VECTOR
 
 	local locked_object = self._locked_object
 	if locked_object
@@ -345,17 +344,19 @@ function mob_class:check_head_swivel(dtime, clear)
 			= mcl_util.target_eye_height (locked_object)
 
 		if _locked_object_eye_height then
-			local self_rot = self.object:get_rotation()
+			local self_rot
 			-- If a mob is attached, should we really be
 			-- messing with what it is looking at?  Should
 			-- this be excluded?
-			if self.object:get_attach() and self.object:get_attach():get_rotation() then
-				self_rot = self.object:get_attach():get_rotation()
+			if not self.object:get_attach () then
+				self_rot = self.object:get_rotation ()
+			else
+				self_rot = self.object:get_attach ():get_rotation ()
 			end
 
-			local ps = self.object:get_pos()
+			local ps = self_pos
 			ps.y = ps.y + self.head_eye_height
-			local pt = locked_object:get_pos()
+			local pt = locked_object:get_pos ()
 			pt.y = pt.y + _locked_object_eye_height
 			local dir = vector.direction (ps, pt)
 			local mob_yaw_raw = self_rot.y
@@ -377,26 +378,29 @@ function mob_class:check_head_swivel(dtime, clear)
 				newr = vector.multiply(oldr, 0.9)
 			elseif self.attack and not self.runaway then
 				if self.head_yaw == "y" then
-					newr = vector.new(mob_pitch, mob_yaw, 0)
-				elseif self.head_yaw == "z" then
-					newr = vector.new(mob_pitch, 0, -mob_yaw)
+					newr = vector.new (mob_pitch, mob_yaw, 0)
+				else -- if self.head_yaw == "z" then
+					newr = vector.new (mob_pitch, 0, -mob_yaw)
 				end
 			else
 				if self.head_yaw == "y" then
-					newr = vector.new((mob_pitch-oldr.x)*.3+oldr.x, (mob_yaw-oldr.y)*.3+oldr.y, 0)
-				elseif self.head_yaw == "z" then
-					newr = vector.new((mob_pitch-oldr.x)*.3+oldr.x, 0, ((mob_yaw-oldr.y)*.3+oldr.y)*-3)
+					newr = vector.new ((mob_pitch-oldr.x)*.3+oldr.x, (mob_yaw-oldr.y)*.3+oldr.y, 0)
+				else -- if self.head_yaw == "z" then
+					newr = vector.new ((mob_pitch-oldr.x)*.3+oldr.x, 0, ((mob_yaw-oldr.y)*.3+oldr.y)*-3)
 				end
 			end
 		end
-	elseif not locked_object and vector.length (oldr) > 0 then
-		newr = vector.multiply(oldr, 0.9)
+	elseif not locked_object
+		and (math.abs (oldr.x + oldr.y + oldr.z) > 0) then
+		newr = vector.multiply (oldr, 0.9)
 		if self.adjust_head_swivel then
 			self:adjust_head_swivel (nil, nil, nil)
 		end
+	else
+		newr = ZERO_VECTOR
 	end
 
-	local newp = vector.new (0, self.bone_eye_height, self.horizontal_head_height)
+	local newp = self._head_swivel_pos
 
 	if math.abs (oldr.x - newr.x) < HALF_DEG
 		and math.abs (oldr.y - newr.y) < HALF_DEG
@@ -407,46 +411,16 @@ function mob_class:check_head_swivel(dtime, clear)
 	end
 
 	if self.object.get_bone_override then -- minetest >= 5.9
-		self.object:set_bone_override(self.head_swivel, {
+		self.object:set_bone_override (self.head_swivel, {
 			position = { vec = newp, absolute = true },
-			rotation = { vec = newr, absolute = true } })
+			rotation = { vec = newr, absolute = true },
+		})
 	else -- minetest < 5.9
-		-- old API uses degrees not radians
-		self.object:set_bone_position(self.head_swivel, newp, vector.apply(newr, math.deg))
+		local deg = vector.apply (newr, math.deg)
+		self.object:set_bone_position (self.head_swivel, newp, deg)
 	end
-end
-
-function mob_class:get_look_dir ()
-	if not self.head_swivel then
-		return vector.zero ()
-	end
-	local rotation
-	if self.object.get_bone_override then
-		local override = self.object:get_bone_override (self.head_swivel)
-		rotation = override.rotation.vec
-	else
-		local _, bone_rot = self.object:get_bone_position (self.head_swivel)
-		rotation = vector.apply (bone_rot, math.rad) -- old API uses degrees
-	end
-	if self.head_yaw == "y" then
-		rotation = {
-			x = rotation.x,
-			y = rotation.y,
-			z = 0,
-		}
-	else -- if self.head_yaw == "z" then
-		rotation = {
-			x = rotation.x,
-			y = rotation.z,
-			z = 0,
-		}
-	end
-	local magnitude = math.cos (rotation.x)
-	return {
-		x = magnitude * math.cos (rotation.y),
-		y = math.sin (rotation.x),
-		z = magnitude * math.sin (-rotation.y),
-	}
+	self._old_head_swivel_pos = newp
+	self._old_head_swivel_vector = newr
 end
 
 -- set animation speed relative to velocity
@@ -506,11 +480,6 @@ function mob_class:rotation_info ()
 				remaining_turn = 0,
 				amt_per_second = 0,
 			},
-			roll = self._need_roll and {
-				current = self.object:get_rotation ().z,
-				remaining_turn = 0,
-				amt_per_second = 0,
-			},
 		}
 	end
 	return self._rotation_info
@@ -562,35 +531,26 @@ function mob_class:rotate_gradually (info, axis, dtime)
 			info.current = self._target_yaw
 		elseif axis == "pitch" and self._target_pitch then
 			info.current = self._target_pitch
-		elseif axis == "roll" and self._target_roll then
-			info.current = self._target_roll
 		end
 		return info.current
 	end
 end
 
-function mob_class:apply_roll (roll)
-	return roll
-end
+local rotate_step_scratch = vector.zero ()
 
 function mob_class:rotate_step (dtime)
-	local yaw, pitch, roll
+	local yaw, pitch
 	local info = self:rotation_info ()
 	yaw = self:rotate_gradually (info, "yaw", dtime)
 	pitch = self:rotate_gradually (info, "pitch", dtime)
-	if self._need_roll then
-		roll = self:rotate_gradually (info, "roll", dtime)
-	else
-		roll = self:get_roll ()
-	end
 	if self.shaking then
-		yaw = yaw + (math.random() * 1 - 0.5) * dtime
+		yaw = yaw + (math.random () * 1 - 0.5) * dtime
 	end
-	self.object:set_rotation ({
-			x = pitch,
-			y = yaw - self.rotate,
-			z = self:apply_roll (roll),
-	})
+	local v = rotate_step_scratch
+	v.x = pitch
+	v.y = yaw - self.rotate
+	v.z = self:get_roll ()
+	self.object:set_rotation (v)
 end
 
 function mob_class:set_yaw (yaw)
@@ -613,19 +573,13 @@ function mob_class:get_pitch ()
 end
 
 function mob_class:get_roll ()
-	if self._need_roll and self._target_roll then
-		return self._target_roll
+	if self.dead and not self.animation.die_end then
+		return self.object:get_rotation ().z
+	else
+		-- Avoid the needless call to get_rotation and
+		-- subsequent consing.
+		return 0
 	end
-	return self.object:get_rotation ().z
-end
-
-function mob_class:set_roll (roll)
-	if self._need_roll then
-		self:rotate_axis ("roll", roll)
-		self._target_roll = roll
-		return roll
-	end
-	return 0
 end
 
 ----------------------------------------------------------------------------------
@@ -711,6 +665,9 @@ function posing_humanoid:apply_arm_pose (pose)
 						absolute = true,
 					},
 				})
+				if k == self.head_swivel then
+					self._old_head_swivel_vector = rot
+				end
 			else
 				self.object:set_bone_override (k)
 			end

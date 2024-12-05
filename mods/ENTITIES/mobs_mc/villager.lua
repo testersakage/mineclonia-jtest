@@ -2059,11 +2059,12 @@ function villager:next_working_day ()
 	self._last_restock_gmt = minetest.get_gametime ()
 end
 
-function villager:check_head_swivel (dtime, clear)
+function villager:check_head_swivel (self_pos, dtime, clear)
 	if self.object.set_bone_override and self._head_nod_timeout then
 		self.object:set_bone_override ("Head_Control", nil)
+		self._old_head_swivel_vector = nil
 	else
-		mob_class.check_head_swivel (self, dtime, clear)
+		mob_class.check_head_swivel (self, self_pos, dtime, clear)
 	end
 end
 

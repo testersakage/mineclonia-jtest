@@ -185,7 +185,7 @@ end
 
 local EYE_LATITUDE = 0.4
 
-function guardian:check_head_swivel (dtime, clear)
+function guardian:check_head_swivel (self_pos, dtime, clear)
 	-- This is not readily supported on Minetest 5.8.0 and
 	-- earlier.
 	if not self.object.set_bone_override then
@@ -203,7 +203,6 @@ function guardian:check_head_swivel (dtime, clear)
 			self._locked_object = nil
 			return
 		end
-		local self_pos = self.object:get_pos ()
 		local yaw = self.object:get_yaw ()
 		local forward_vector = minetest.yaw_to_dir (yaw)
 		local diff = vector.offset (self_pos, 0, self.head_eye_height, 0)
