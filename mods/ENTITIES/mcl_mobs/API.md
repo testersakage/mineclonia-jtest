@@ -4,7 +4,7 @@ The following documentation is dreadfully out of date as of the late
 mob rewrite.  New documentation is being prepared, but till it is
 available, please consider everything described below except that
 which relates to mob spawning incorrect, and consult the source code
-and mob implementations in `mobs_mc' in their place.
+and mob implementations in `mobs_mc' in its place.
 
 # mcl_mobs
 This mod was originally based of off "mobs_redo" (https://notabug.org/TenPlus1/mobs_redo) by TenPlus1.
