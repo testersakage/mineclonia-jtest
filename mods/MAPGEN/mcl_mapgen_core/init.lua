@@ -304,7 +304,7 @@ mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blocks
 				end
 			end
 		elseif struct.static_pos then
-			for _, pos in pairs(struct.static_pos) do
+			for _, pos in ipairs(struct.static_pos) do
 				local pr = PcgRandom(minetest.hash_node_position(pos) + 42)
 				if in_cube(pos, minp, maxp) then
 					mcl_structures.place_structure(pos, struct, pr, blockseed)

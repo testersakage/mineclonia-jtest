@@ -1,6 +1,7 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
+local seed_pr = PcgRandom(minetest.get_mapgen_setting("seed"))
 
 mcl_structures.register_structure("end_spawn_obsidian_platform",{
 	static_pos ={mcl_vars.mg_end_platform_pos},
@@ -52,6 +53,7 @@ mcl_structures.register_structure("end_exit_portal_open",{
 		local p1 = vector.offset(pos,-16,-16,-16)
 		local p2 = vector.offset(pos,16,16,16)
 		minetest.fix_light(p1,p2)
+		seed_pr = PcgRandom(minetest.get_mapgen_setting("seed"))
 	end
 })
 mcl_structures.register_structure("end_gateway_portal",{
@@ -102,10 +104,10 @@ local function get_points_on_circle(pos,r,n)
 end
 
 mcl_structures.register_structure("end_spike",{
-	static_pos =get_points_on_circle(vector.offset(mcl_vars.mg_end_exit_portal_pos,0,-20,0),43,10),
-	place_func = function(pos, _,pr)
-		local d = pr:next(6,12)
-		local h = d * pr:next(4,6)
+	static_pos = get_points_on_circle(vector.offset(mcl_vars.mg_end_exit_portal_pos,0,-20,0),43,10),
+	place_func = function(pos)
+		local d = seed_pr:next(6,12)
+		local h = d * seed_pr:next(4,6)
 		local p1 = vector.offset(pos, -d / 2, 0, -d / 2)
 		local p2 = vector.offset(pos, d / 2, h + d, d / 2)
 		minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
@@ -114,7 +116,7 @@ mcl_structures.register_structure("end_spike",{
 			minetest.swap_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})
 			minetest.swap_node(vector.offset(s,0,2,0),{name="mcl_fire:eternal_fire"})
 			minetest.add_entity(vector.offset(s,0,3,0),"mcl_end:crystal")
-			if pr:next(1,3) == 1 then
+			if seed_pr:next(1,3) == 1 then
 				make_cage(vector.offset(s,0,1,0),d)
 			end
 		end)
