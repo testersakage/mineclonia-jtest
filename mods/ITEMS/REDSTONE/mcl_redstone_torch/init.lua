@@ -107,6 +107,9 @@ minetest.register_node("mcl_redstone_torch:redstoneblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	is_ground_content = false,
 	_mcl_redstone = {
+		connects_to = function()
+			return true
+		end,
 		get_power = function()
 			return 15, false
 		end,
