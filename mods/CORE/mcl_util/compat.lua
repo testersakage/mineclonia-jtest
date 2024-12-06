@@ -19,11 +19,11 @@ end
 
 if minetest.objects_in_area then
 function mcl_util.is_valid_objectref (object)
-	return object:is_valid ()
+	return object and object:is_valid ()
 end
 else
 function mcl_util.is_valid_objectref (object)
-	return object:get_pos () ~= nil
+	return object and object:get_pos () ~= nil
 end
 end
 
