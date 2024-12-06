@@ -1,6 +1,7 @@
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local horse = mobs_mc.horse
+local is_valid = mcl_util.is_valid_objectref
 
 -- table mapping unified color names to non-conforming color names in carpet texture filenames
 local messytextures = {
@@ -247,7 +248,7 @@ end
 
 function llama:check_caravan ()
 	if self._caravan_head
-		and not self._caravan_head:is_valid () then
+		and not is_valid (self._caravan_head) then
 		self._caravan_head = nil
 	end
 	-- Disband caravan if no longer leashed.
@@ -262,7 +263,7 @@ function llama:check_caravan ()
 		end
 	end
 	if self._caravan_tail
-		and not self._caravan_tail:is_valid () then
+		and not is_valid (self._caravan_tail) then
 		self._caravan_tail = nil
 	end
 end

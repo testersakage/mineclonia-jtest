@@ -8,6 +8,7 @@ local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
 local illager = mobs_mc.illager
 local evoker = mobs_mc.evoker
+local is_valid = mcl_util.is_valid_objectref
 
 ------------------------------------------------------------------------
 -- Illusioner.
@@ -182,7 +183,7 @@ function illusioner:apply_arm_pose (pose)
 		end
 
 		for _, decoy in pairs (decoys) do
-			if decoy:is_valid () then
+			if is_valid (decoy) then
 				decoy:set_properties ({
 					visual_size = {
 						x = 0.21,
@@ -202,7 +203,7 @@ function illusioner:apply_arm_pose (pose)
 		end
 
 		for _, decoy in pairs (decoys) do
-			if decoy:is_valid () then
+			if is_valid (decoy) then
 				decoy:set_properties ({
 					visual_size = {
 						x = 0,
@@ -393,14 +394,14 @@ function illusioner:wielditem_step (dtime)
 		local stack = ItemStack (self._wielditem)
 		local name = self:get_visual_wielditem (stack)
 		local object = self._wielditem_object
-		if object and object:is_valid () then
+		if object and is_valid (object) then
 			object:set_properties ({
 				wield_item = name,
 			})
 		end
 		local decoys = self._decoy_wielditems
 		for i, decoy in pairs (decoys) do
-			if decoy:is_valid () then
+			if is_valid (decoy) then
 				decoy:set_properties ({
 					wield_item = name,
 				})
@@ -416,14 +417,14 @@ function illusioner:release_wielditem ()
 		local stack = ItemStack (self._wielditem)
 		local name = self:get_visual_wielditem (stack)
 		local object = self._wielditem_object
-		if object and object:is_valid () then
+		if object and is_valid (object) then
 			object:set_properties ({
 				wield_item = name,
 			})
 		end
 		local decoys = self._decoy_wielditems
 		for i, decoy in pairs (decoys) do
-			if decoy:is_valid () then
+			if is_valid (decoy) then
 				decoy:set_properties ({
 					wield_item = name,
 				})
@@ -449,7 +450,7 @@ function illusioner:display_wielditem (offhand)
 		local name = self:get_visual_wielditem (stack)
 
 		for i, decoy in pairs (decoys) do
-			if decoy:is_valid () then
+			if is_valid (decoy) then
 				local bone = "bow.00" .. i
 				decoy:set_attach (self.object, bone)
 				mcl_util.set_bone_position (self.object, bone, pos, rot)
@@ -473,7 +474,7 @@ function illusioner:create_wielditems ()
 		local name = self:get_visual_wielditem (stack)
 
 		if self._wielditem_object
-			and self._wielditem_object:is_valid () then
+			and is_valid (self._wielditem_object) then
 			new_wielditems[1] = self._wielditem_object
 			new_wielditems[1]:set_attach (self.object, "bow.001")
 			mcl_util.set_bone_position (self.object, "bow.001", pos, rot)
@@ -548,7 +549,7 @@ end
 
 function illusioner:ai_step (dtime)
 	evoker.ai_step (self, dtime)
-	if self._last_blinded and not self._last_blinded:is_valid () then
+	if self._last_blinded and not is_valid (self._last_blinded) then
 		self._last_blinded = nil
 	end
 end
@@ -585,7 +586,7 @@ local illusioner_blindness_spell = evoker.define_spell ({
 		return false
 	end,
 	step = function (self, self_pos, dtime, rem)
-		if self.attack and self.attack:is_valid ()
+		if self.attack and is_valid (self.attack)
 			and not mcl_potions.has_effect (self.attack, "blindness") then
 			mcl_potions.give_effect ("blindness", self.attack, 0, 60)
 		end

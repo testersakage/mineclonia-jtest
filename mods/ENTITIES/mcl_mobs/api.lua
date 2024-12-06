@@ -1,6 +1,8 @@
 local mob_class = mcl_mobs.mob_class
 local enable_dtime_hacks
 	= minetest.settings:get_bool ("mcl_enable_dtime_hacks", false)
+local is_valid = mcl_util.is_valid_objectref
+
 -- API for Mobs Redo: MineClone 2 Edition (MRM)
 
 -- Localize
@@ -183,7 +185,7 @@ function mob_class:get_staticdata_table ()
 	-- If rider(s) have been deactivated first, their staticdata
 	-- will none the less have been preserved by on_deactivate and
 	-- suchlike.
-	if self._jockey_rider and self._jockey_rider:is_valid () then
+	if self._jockey_rider and is_valid (self._jockey_rider) then
 		local entity = self._jockey_rider:get_luaentity ()
 		local rider_data = entity:get_staticdata_table ()
 		rider_data.name = entity.name

@@ -4,6 +4,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 local guardian = {
 	description = S("Guardian"),
@@ -199,7 +200,7 @@ function guardian:check_head_swivel (self_pos, dtime, clear)
 	end
 
 	if self._locked_object then
-		if not self._locked_object:is_valid () then
+		if not is_valid (self._locked_object) then
 			self._locked_object = nil
 			return
 		end

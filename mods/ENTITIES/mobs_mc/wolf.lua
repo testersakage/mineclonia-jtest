@@ -3,6 +3,7 @@
 local S = minetest.get_translator("mobs_mc")
 local pr = PseudoRandom (os.time () *10)
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 ------------------------------------------------------------------------
 -- Wolf.
@@ -711,7 +712,7 @@ function wolf:check_owner_attacked ()
 		local source, serial, _ = unpack (data or {})
 
 		if serial and serial > self._owner_attacked_serial
-			and source:is_valid ()
+			and is_valid (source)
 			and self:should_attack_owner_assailant_or_target (source) then
 			self._owner_attacked_serial = serial
 			self:do_attack (source, 15)
@@ -728,7 +729,7 @@ function wolf:check_owner_attacking ()
 		local target, serial, _ = unpack (data or {})
 
 		if serial and serial > self._owner_target_serial
-			and target:is_valid ()
+			and is_valid (target)
 			and self:should_attack_owner_assailant_or_target (target) then
 			self._owner_target_serial = serial
 			self:do_attack (target, 15)
@@ -812,7 +813,7 @@ end
 local function wolf_check_beg (self, self_pos, dtime)
 	if self._interested_in then
 		local target = self._interested_in
-		if not target:is_valid ()
+		if not is_valid (target)
 			or self.attack or self._avoiding_llama
 			or not self:is_interested_in (target) then
 			self:visually_cancel_interest ()

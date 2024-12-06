@@ -1,5 +1,6 @@
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
 
@@ -206,7 +207,7 @@ local function horse_maybe_tame (self, self_pos, dtime)
 	local driver = self.driver
 
 	if self._evaluating_handler then
-		if not driver or not driver:is_valid ()	or self.tamed then
+		if not driver or not is_valid (driver) or self.tamed then
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
 			self._evaluating_handler = false
