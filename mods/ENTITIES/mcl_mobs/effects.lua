@@ -2,6 +2,7 @@ local mob_class = mcl_mobs.mob_class
 local active_particlespawners = {}
 local enable_blood = minetest.settings:get_bool("mcl_damage_particles", true)
 local DEFAULT_FALL_SPEED = -9.81*1.5
+local is_valid = mcl_util.is_valid_objectref
 
 local player_transfer_distance = tonumber(minetest.settings:get("player_transfer_distance")) or 128
 if player_transfer_distance == 0 then player_transfer_distance = math.huge end
@@ -338,7 +339,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 
 	local locked_object = self._locked_object
 	if locked_object
-		and locked_object:is_valid ()
+		and is_valid (locked_object)
 		and locked_object:get_hp () > 0 then
 		local _locked_object_eye_height
 			= mcl_util.target_eye_height (locked_object)

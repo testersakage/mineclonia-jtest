@@ -2,6 +2,7 @@ local mob_class = mcl_mobs.mob_class
 local modname = minetest.get_current_modname ()
 local S = minetest.get_translator (modname)
 local villager_base = mobs_mc.villager_base
+local is_valid = mcl_util.is_valid_objectref
 
 ------------------------------------------------------------------------
 -- Wandering Trader.
@@ -175,7 +176,7 @@ function wandering_trader:mob_activate (staticdata, dtime)
 	end
 	self._llamas = {}
 	self._provide_owner = function ()
-		return self.object:is_valid () and self.object
+		return is_valid (self.object) and self.object
 	end
 	return true
 end
@@ -229,7 +230,7 @@ function wandering_trader:ai_step (dtime)
 	local valid_llamas = {}
 	-- Delete invalid llamas.
 	for _, llama in pairs (self._llamas) do
-		if llama:is_valid () then
+		if is_valid (llama) then
 			table.insert (valid_llamas, llama)
 		end
 	end
@@ -288,7 +289,7 @@ local function wandering_trader_check_trading (self, self_pos, dtime, moveresult
 		else
 			local dist_min = math.huge
 			for player, _ in pairs (self._trading_with) do
-				if player:is_valid () then
+				if is_valid (player) then
 					local pos = player:get_pos ()
 					local d = vector.distance (pos, self_pos)
 					if d > 16 then

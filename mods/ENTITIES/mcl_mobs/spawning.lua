@@ -1,5 +1,6 @@
 --lua locals
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 local modern_lighting = minetest.settings:get_bool("mcl_mobs_modern_lighting", true)
 
@@ -610,7 +611,7 @@ function mob_class:kill_me(msg)
 		minetest.log("action", "[mcl_mobs] Mob " .. self.name .. " despawns at " .. minetest.pos_to_string(self.object:get_pos(), 1) .. ": " .. msg)
 	end
 	if self._jockey_rider then
-		if self._jockey_rider:is_valid () then
+		if is_valid (self._jockey_rider) then
 			-- Detach this rider.
 			local entity = self._jockey_rider:get_luaentity ()
 			entity:unjock ()

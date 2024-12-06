@@ -1,6 +1,7 @@
 local S = minetest.get_translator("mobs_mc")
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 ------------------------------------------------------------------------
 -- Wither.
@@ -529,7 +530,7 @@ local function wither_strafe_above_target (self, self_pos, dtime)
 		return true
 	elseif ws.wants_to_move
 		and self.attack
-		and self.attack:is_valid () then
+		and is_valid (self.attack) then
 		local target_pos = self.attack:get_pos ()
 		local rx, rz = math.random (0, 20) - 10, math.random (0, 20) - 10
 		local dest = vector.offset (target_pos, rx, 0, rz)

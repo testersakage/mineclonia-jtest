@@ -1,4 +1,5 @@
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 function mob_class:target_visible(origin, target)
 	-- This cache is flushed on each call to on_step.
@@ -400,7 +401,7 @@ end
 function mob_class:check_jockey_status ()
 	-- Remove any jockey that is no longer valid and was not
 	-- expressly removed.
-	if self._jockey_rider and not self._jockey_rider:is_valid () then
+	if self._jockey_rider and not is_valid (self._jockey_rider) then
 		self._jockey_rider = nil
 		self._jockey_staticdata = nil
 		minetest.log ("warning", "Rider of jockeyed mob "
@@ -441,7 +442,7 @@ function mob_class:on_deactivate (removal)
 		end
 	end
 
-	if self._jockey_rider and self._jockey_rider:is_valid () then
+	if self._jockey_rider and is_valid (self._jockey_rider) then
 		-- Save the rider's staticdata.
 		local entity = self._jockey_rider:get_luaentity ()
 		local staticdata = entity:get_staticdata_table ()
@@ -1097,14 +1098,14 @@ function mob_class:ai_step (dtime)
 	end
 	if self._recent_attacker then
 		self._recent_attacker_age = self._recent_attacker_age + dtime
-		if not self._recent_attacker:is_valid ()
+		if not is_valid (self._recent_attacker)
 			or self._recent_attacker_age > 5 then
 			self._recent_attacker = nil
 			self._recent_attacker_age = 0
 		end
 	end
 	if self._last_attacker then
-		if not self._last_attacker:is_valid () then
+		if not is_valid (self._last_attacker) then
 			self._last_attacker = nil
 		end
 	end
@@ -1127,7 +1128,7 @@ function mob_class:check_avoid (self_pos)
 	if self.avoiding then
 		if self:navigation_finished () then
 			self.avoiding = nil
-		elseif not self.avoiding:is_valid () then
+		elseif not is_valid (self.avoiding) then
 			self.avoiding = nil
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
@@ -1545,7 +1546,7 @@ end
 
 function mob_class:check_schooling (self_pos, list)
 	if self._leader then
-		if not self._leader:is_valid () then
+		if not is_valid (self._leader) then
 			self._leader = nil
 			return false
 		end
@@ -1568,7 +1569,7 @@ function mob_class:check_schooling (self_pos, list)
 		-- entries from its list of members.
 		local cleaned = {}
 		for _, follower in pairs (self._school) do
-			if follower:is_valid () then
+			if is_valid (follower) then
 				table.insert (cleaned, follower)
 			end
 		end
