@@ -124,8 +124,17 @@ function mob_class:apply_driver_input (speed, self_pos, moveresult, dtime)
 		end
 	elseif self.steer_class == "controls" then
 		local controls = self.driver:get_player_control ()
-		self.acc_dir.z = controls.movement_y
-		self.acc_dir.x = controls.movement_x * 0.5
+		if controls.movement_x then
+			self.acc_dir.z = controls.movement_y
+			self.acc_dir.x = controls.movement_x * 0.5
+		else
+			local x = (controls.left and -1.0 or 0.0)
+				+ (controls.right and 1.0 or 0.0)
+			local z = (controls.up and 1.0 or 0.0)
+				+ (controls.down and -1.0 or 0.0)
+			self.acc_dir.z = z
+			self.acc_dir.x = x * 0.5
+		end
 		self.acc_speed = speed
 
 		if self.acc_dir.z < 0 then
