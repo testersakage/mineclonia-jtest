@@ -6,6 +6,7 @@ local mob_class = mcl_mobs.mob_class
 local F = minetest.formspec_escape
 local S = minetest.get_translator ("mobs_mc")
 local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
+local is_valid = mcl_util.is_valid_objectref
 local villager_verbose
 	= minetest.settings:get_bool ("villager_verbose", false)
 local villager_debug
@@ -298,7 +299,7 @@ end
 
 function villager_base:stop_trading ()
 	for player, _ in pairs (self._trading_with) do
-		if player:is_valid () then
+		if is_valid (player) then
 			local formname = "mobs_mc:trading_formspec"
 			return_fields (player)
 			minetest.close_formspec (player:get_player_name (), formname)
@@ -407,7 +408,7 @@ function inv_class:allow_take (listname, index, stack, player)
 	elseif listname == "output" then
 		-- Whom is this player trading with?
 		local merchant = trading_players[player]
-		if not merchant or not merchant:is_valid () then
+		if not merchant or not is_valid (merchant) then
 			return 0
 		end
 		-- What is being bartered?
@@ -439,7 +440,7 @@ end
 function inv_class:allow_put (listname, _, stack, player)
 	if listname == "input" then
 		local merchant = trading_players[player]
-		if not merchant or not merchant:is_valid () then
+		if not merchant or not is_valid (merchant) then
 			return 0
 		end
 		-- Is there anything that is being bartered?
@@ -473,7 +474,7 @@ function inv_class:on_put (listname, index, stack, player)
 		end
 	end
 	local merchant = trading_players[player]
-	if not merchant or not merchant:is_valid () then
+	if not merchant or not is_valid (merchant) then
 		return
 	end
 	-- Is there anything that is being bartered?
@@ -488,7 +489,7 @@ end
 function inv_class:on_take (listname, index, stack, player)
 	if listname == "input" or listname == "output" then
 		local merchant = trading_players[player]
-		if not merchant or not merchant:is_valid () then
+		if not merchant or not is_valid (merchant) then
 			return
 		end
 		-- Is there anything that is being bartered?
@@ -774,7 +775,7 @@ end
 
 function villager_base:show_trade_formspec (player, tradenum)
 	local current = trading_players[player]
-	if current and current:is_valid () and current ~= self.object then
+	if current and is_valid (current) and current ~= self.object then
 		return false
 	end
 
@@ -910,7 +911,7 @@ minetest.register_on_player_receive_fields (function (player, formname, fields)
 		if fields.quit then
 			return_fields (player)
 			local trader = trading_players[player]
-			if trader and trader:is_valid () then
+			if trader and is_valid (trader) then
 				local entity = trader:get_luaentity ()
 				entity._trading_with[player] = nil
 				entity:trading_stopped (player)
@@ -918,7 +919,7 @@ minetest.register_on_player_receive_fields (function (player, formname, fields)
 			trading_players[player] = nil
 		else
 			local trader = trading_players[player]
-			if not trader or not trader:is_valid () then
+			if not trader or not is_valid (trader) then
 				return
 			end
 			local entity = trader:get_luaentity ()
@@ -958,7 +959,7 @@ end)
 
 minetest.register_on_leaveplayer (function (player)
 	local trading = trading_players[player]
-	if trading and trading:is_valid () then
+	if trading and is_valid (trading) then
 		local entity = trading:get_luaentity ()
 		entity._trading_with[player] = nil
 		return_fields (player)
@@ -2645,7 +2646,7 @@ function villager:who_are_you_looking_at ()
 	end
 
 	if self.ai_idle_time > 2.0 and self._locked_object
-		and self._locked_object:is_valid () then
+		and is_valid (self._locked_object) then
 		self.ai_idle_time = 1.0
 		self:look_at (self._locked_object:get_pos ())
 	end
@@ -3369,7 +3370,7 @@ function villager:interact_with_customer (self_pos, dtime)
 			self:look_at (customer:get_pos ())
 		end
 		return customer ~= nil
-	elseif customer and customer:is_valid () then
+	elseif customer and is_valid (customer) then
 		local pos = customer:get_pos ()
 		self:gopath (pos, 0.5, nil, 2.0)
 		self._entertaining_customer = true
@@ -3404,7 +3405,7 @@ function villager:visit_wanted_item (self_pos, dtime)
 		for _, item in ipairs (items) do
 			-- Verify that the item is still desired and
 			-- available.
-			if item:is_valid () then
+			if is_valid (item) then
 				local entity = item:get_luaentity ()
 				local stack = ItemStack (entity.itemstring)
 				if self:should_pick_up (stack) then
@@ -4778,7 +4779,7 @@ end
 function villager:salute_hero (self_pos, dtime)
 	if self._saluting_hero then
 		local hero = self._saluting_hero
-		if not hero or not hero:is_valid () then
+		if not hero or not is_valid (hero) then
 			self._saluting_hero = nil
 			return false
 		end
@@ -4859,7 +4860,7 @@ function villager:play_tag (self_pos, dtime)
 			return true
 		else
 			local leader = self._playing_tag
-			if not leader:is_valid () then
+			if not is_valid (leader) then
 				self._playing_tag = nil
 				return false
 			end
@@ -5651,7 +5652,7 @@ end
 function villager:avoid_hostiles (self_pos, dtime)
 	local hostile = self._avoiding_hostile
 	if hostile then
-		if not hostile:is_valid () then
+		if not is_valid (hostile) then
 			self._avoiding_hostile = nil
 			return false
 		end
@@ -5939,7 +5940,7 @@ function villager:ai_step (dtime)
 	local self_pos = self.object:get_pos ()
 
 	if self._interaction_target
-		and not self._interaction_target:is_valid () then
+		and not is_valid (self._interaction_target) then
 		self._interaction_target = nil
 	elseif self._interaction_target then
 		local pos = self._interaction_target:get_pos ()

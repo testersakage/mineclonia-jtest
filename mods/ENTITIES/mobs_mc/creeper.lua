@@ -1,6 +1,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = minetest.get_translator("mobs_mc")
+local is_valid = mcl_util.is_valid_objectref
 
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
@@ -96,7 +97,7 @@ function creeper_defs:update_swell ()
 	self:halt_in_tracks ()
 
 	if not self.attack
-		or not self.attack:is_valid ()
+		or not is_valid (self.attack)
 		or self._swell_time <= 0
 		or vector.distance (self_pos, target_pos) > 7.0
 		or not self:target_visible (self_pos, self.attack) then

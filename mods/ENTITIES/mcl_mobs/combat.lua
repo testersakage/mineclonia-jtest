@@ -1,4 +1,5 @@
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 local SIGHT_PERSISTENCE = 3.0
 
@@ -992,7 +993,7 @@ function mob_class:check_attack (self_pos, dtime)
 		end
 	else
 		local target_pos
-		if not self.attack:is_valid () then
+		if not is_valid (self.attack) then
 			self.attack = nil
 			self:attack_end ()
 			return true
@@ -1128,7 +1129,7 @@ function mob_class:display_wielditem (offhand)
 	end
 
 	if not self[objectname]
-		or not self[objectname]:is_valid () then
+		or not is_valid (self[objectname]) then
 		local self_pos = self.object:get_pos ()
 		self[objectname]
 			= minetest.add_entity (self_pos, "mcl_mobs:wielditem")
@@ -1204,7 +1205,7 @@ function mob_class:release_wielditem ()
 		self._using_wielditem = nil
 
 		local object = self._wielditem_object
-		if object and object:is_valid () then
+		if object and is_valid (object) then
 			local stack = ItemStack (self._wielditem)
 			local name = self:get_visual_wielditem (stack)
 
@@ -1277,7 +1278,7 @@ function mob_class:wielditem_step (dtime)
 			= self._using_wielditem + dtime
 
 		local object = self._wielditem_object
-		if object and object:is_valid () then
+		if object and is_valid (object) then
 			local stack = ItemStack (self._wielditem)
 			local name = self:get_visual_wielditem (stack)
 

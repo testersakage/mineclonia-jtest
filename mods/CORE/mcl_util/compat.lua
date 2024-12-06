@@ -15,6 +15,20 @@ if not vector.random_direction then
 	end
 end
 
+ -- This serves as a check for the existence of `ObjectRef:is_valid'.
+
+if minetest.objects_in_area then
+function mcl_util.is_valid_objectref (object)
+	return object:is_valid ()
+end
+else
+function mcl_util.is_valid_objectref (object)
+	return object:get_pos () ~= nil
+end
+end
+
+local is_valid = mcl_util.is_valid_objectref
+
 local function valid_object_iterator(objects)
 	local i = 0
 	local function next_valid_object()
@@ -23,7 +37,7 @@ local function valid_object_iterator(objects)
 		if obj == nil then
 			return
 		end
-		if obj:is_valid () then
+		if is_valid (obj) then
 			return obj
 		end
 		return next_valid_object()

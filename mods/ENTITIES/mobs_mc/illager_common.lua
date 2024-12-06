@@ -5,6 +5,7 @@
 ------------------------------------------------------------------------
 
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 ------------------------------------------------------------------------
 -- Patrols.
@@ -307,7 +308,7 @@ function raid_mob:ai_step (dtime)
 	local target = self._locked_target
 	local d = self.tracking_distance
 	local self_pos = self.object:get_pos ()
-	if target and not target:is_valid () then
+	if target and not is_valid (target) then
 		target = nil
 	elseif target
 		and vector.distance (self_pos, target:get_pos ()) > d then
@@ -336,7 +337,7 @@ end
 
 function raid_mob:attack_default (self_pos, dtime, esp)
 	if self._locked_target
-		and self._locked_target:is_valid () then
+		and is_valid (self._locked_target) then
 		return self._locked_target
 	end
 
