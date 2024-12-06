@@ -182,8 +182,7 @@ end
 local function push_minecart(pos)
 	local dir = mcl_minecarts:get_start_direction(pos)
 	if not dir then return end
-	local objs = minetest.get_objects_inside_radius(pos, 1)
-	for _, o in pairs(objs) do
+	for o in core.objects_inside_radius(pos, 1) do
 		local l = o:get_luaentity()
 		local v = o:get_velocity()
 		if l and string.sub(l.name, 1, 14) == "mcl_minecarts:"
