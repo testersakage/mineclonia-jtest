@@ -87,6 +87,49 @@ if not vector.in_area then
 	end
 end
 
+-- Pre-Minetest 5.10.
+
+if not minetest.time_to_day_night_ratio then
+	local tod_values = {
+		{4250.0 + 125.0, 175.0},
+		{4500.0 + 125.0, 175.0},
+		{4750.0 + 125.0, 250.0},
+		{5000.0 + 125.0, 350.0},
+		{5250.0 + 125.0, 500.0},
+		{5500.0 + 125.0, 675.0},
+		{5750.0 + 125.0, 875.0},
+		{6000.0 + 125.0, 1000.0},
+		{6250.0 + 125.0, 1000.0},
+	}
+	function minetest.time_to_day_night_ratio (tod)
+		local t = tod * 24000
+		if t < 0.0 then
+			t = t + (-math.floor (t) / 24000) * 24000
+		end
+		if t > 24000.0 then
+			t = t - (-math.floor (t) / 24000) * 24000
+		end
+		if t > 12000.0 then
+			t = 24000.0 - t
+		end
+
+		if t <= 4625.0 then -- 4500 + 125
+			return tod_values[1][2] / 1000.0
+		elseif t >= 6125.0 then -- 6000 + 125
+			return 1.0
+		end
+
+		for i = 1, 9 do
+			if tod_values[i][1] > t then
+				local td0 = tod_values[i][1] - tod_values[i - 1][1]
+				local f = (t - tod_values[i - 1][1]) / td0
+				return (f * tod_values[i][2] + (1.0 - f) * tod_values[i - 1][2]) / 1000
+			end
+		end
+		return 1.0
+	end
+end
+
 -- Pre minetest 5.9
 if not minetest.get_node_boxes then
 --> function(nodename) -> whether node matches
