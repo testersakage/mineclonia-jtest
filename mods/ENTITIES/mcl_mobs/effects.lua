@@ -345,16 +345,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 			= mcl_util.target_eye_height (locked_object)
 
 		if _locked_object_eye_height then
-			local self_rot
-			-- If a mob is attached, should we really be
-			-- messing with what it is looking at?  Should
-			-- this be excluded?
-			if not self.object:get_attach () then
-				self_rot = self.object:get_rotation ()
-			else
-				self_rot = self.object:get_attach ():get_rotation ()
-			end
-
+			local self_rot = self.object:get_rotation ()
 			local ps = self_pos
 			local old_y = ps.y
 			ps.y = ps.y + self.head_eye_height
