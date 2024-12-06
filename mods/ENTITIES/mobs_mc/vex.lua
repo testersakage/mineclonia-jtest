@@ -5,7 +5,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
-local is_valid = mcl_util.is_valid_objectrefx
+local is_valid = mcl_util.is_valid_objectref
 
 --###################
 --################### VEX
