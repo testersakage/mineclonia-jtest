@@ -213,7 +213,9 @@ end
 
 function zombie_villager:previous_staticdata ()
 	if not self._previous_incarnation then
-		return nil
+		return {
+			persistent = true,
+		}
 	end
 	return {
 		_xp = self._previous_incarnation.xp,
@@ -223,6 +225,7 @@ function zombie_villager:previous_staticdata ()
 		_gossips = self._previous_incarnation.gossips,
 		_reputation = self._previous_incarnation.reputation,
 		_trades = self._previous_incarnation.trades,
+		persistent = true,
 	}
 end
 
