@@ -3,6 +3,8 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
+local is_valid = mcl_util.is_valid_objref
+
 -- Rootyjr
 -----------------------------
 -- implemented ability to detect when seen / break eye contact and aggressive response
@@ -710,7 +712,7 @@ end
 function enderman:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
 	if self._pending_target then
-		if not self._pending_target:is_valid () then
+		if not is_valid (self._pending_target) then
 			self._pending_target = nil
 		end
 	end

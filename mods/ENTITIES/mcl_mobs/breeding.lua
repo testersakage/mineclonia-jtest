@@ -1,4 +1,5 @@
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 local HORNY_TIME = 30*20
 local HORNY_AGAIN_TIME = 30*20 -- was 300 or 15*20
@@ -119,7 +120,7 @@ function mob_class:tick_breeding ()
 			self.hornytimer = 0
 			local visual_size = self.base_size
 			if self.jockey_vehicle
-				and self.jockey_vehicle:is_valid () then
+				and is_valid (self.jockey_vehicle) then
 				local props = self.jockey_vehicle:get_properties ()
 				local vehicle_size = props.visual_size
 				visual_size = {
@@ -232,7 +233,7 @@ end
 
 function mob_class:check_breeding (pos)
 	if self.mate then
-		if not self.mate:is_valid () then
+		if not is_valid (self.mate) then
 			self:set_animation ("stand")
 			self.mate = nil
 			return false

@@ -5,6 +5,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectrefx
 
 --###################
 --################### VEX
@@ -171,7 +172,7 @@ function vex:do_go_pos (dtime, moveresult)
 		local fv = vector.multiply (dir, vector.multiply (scale, modifier))
 		self.object:add_velocity (fv)
 
-		if self.attack and self.attack:is_valid () then
+		if self.attack and is_valid (self.attack) then
 			self:look_at (self.attack:get_pos ())
 		else
 			local v = vector.add (fv, v)
@@ -210,7 +211,7 @@ end
 function vex:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
 
-	if self._summoned_by and not self._summoned_by:is_valid () then
+	if self._summoned_by and not is_valid (self._summoned_by) then
 		self._summoned_by = nil
 	end
 

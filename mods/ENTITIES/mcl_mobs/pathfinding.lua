@@ -1,6 +1,7 @@
 local mob_class = mcl_mobs.mob_class
 local floor = math.floor
 local luajit_present = minetest.global_exists ("jit")
+local is_valid = mcl_util.is_valid_objectref
 
 local function shift_up (self, node, idx)
 	local priority = node.priority
@@ -1739,7 +1740,7 @@ local cdef = {
 			mcl_mobs.players_selecting_mob[playername] = true
 		elseif param == "start" then
 			local mob = mcl_mobs.players_selecting_mob[playername]
-			if mob == true or not mob or not mob:is_valid () then
+			if mob == true or not mob or not is_valid (mob) then
 				local blurb = "You must select a valid mob"
 				minetest.chat_send_player (playername, blurb)
 				return
@@ -1777,7 +1778,7 @@ local cdef = {
 			end
 		elseif param == "classify" then
 			local mob = mcl_mobs.players_selecting_mob[playername]
-			if mob == true or not mob or not mob:is_valid () then
+			if mob == true or not mob or not is_valid (mob) then
 				local blurb = "You must select a valid mob"
 				minetest.chat_send_player (playername, blurb)
 				return

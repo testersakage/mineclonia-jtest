@@ -2,6 +2,7 @@
 --maikerumine
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
+local is_valid = mcl_util.is_valid_objectref
 
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
@@ -283,7 +284,7 @@ function hoglin:call_group_attack (hitter)
 			local hoglin = hoglin:get_luaentity ()
 			if hoglin and hoglin ~= self
 				and (not hoglin._retreating or not is_piglin (entity)) then
-				if hoglin.attack and hoglin.attack:is_valid () then
+				if hoglin.attack and is_valid (hoglin.attack) then
 					local hoglin_pos = hoglin.object:get_pos ()
 					local attack_pos = hoglin.attack:get_pos ()
 					local d1 = vector.distance (pos, hoglin_pos)

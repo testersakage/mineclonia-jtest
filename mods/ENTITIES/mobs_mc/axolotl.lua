@@ -1,5 +1,10 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
+
+------------------------------------------------------------------------
+-- Axolotl
+------------------------------------------------------------------------
 
 local axolotl = {
 	description = S("Axolotl"),
@@ -207,7 +212,7 @@ function axolotl:should_continue_to_attack (object)
 	-- regeneration and remove mining fatigue.
 	if entity and entity.dead then
 		local attacker = entity._last_attacker
-		if attacker:is_valid ()
+		if is_valid (attacker)
 			and attacker:is_player ()
 			and vector.distance (attacker:get_pos (),
 						self.object:get_pos ()) < 20 then
@@ -266,9 +271,13 @@ axolotl.ai_functions = {
 	mob_class.check_pace,
 }
 
-mcl_mobs.register_mob("mobs_mc:axolotl", axolotl)
+mcl_mobs.register_mob ("mobs_mc:axolotl", axolotl)
 
-mcl_mobs.spawn_setup({
+------------------------------------------------------------------------
+-- Axolotl spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.spawn_setup ({
 	name = "mobs_mc:axolotl",
 	type_of_spawning = "ground",
 	dimension = "overworld",

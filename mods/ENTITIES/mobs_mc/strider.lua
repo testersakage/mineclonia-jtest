@@ -5,6 +5,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
+local is_valid = mcl_util.is_valid_objectref
 
 --###################
 --################### STRIDER
@@ -130,7 +131,7 @@ end
 
 function mobs_mc.is_riding_strider (obj)
 	local obj = obj:get_attach ()
-	if obj and obj:is_valid () then
+	if obj and is_valid (obj) then
 		local entity = obj:get_luaentity ()
 		return entity and entity.name == "mobs_mc:strider"
 	end
@@ -162,7 +163,7 @@ function strider:detach (driver, pos)
 			and not def.walkable and not def_1.walkable then
 			mob_class.detach (self, driver, vector.zero ())
 			minetest.after (0.1, function ()
-				if driver:is_valid () then
+				if is_valid (driver) then
 					driver:set_pos (vector.offset (node_pos, 0, -0.5, 0))
 				end
 			end)
