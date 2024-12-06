@@ -450,10 +450,10 @@ function mob_class:mob_activate (staticdata, dtime)
 	end
 	mcl_potions._load_entity_effects(self)
 
+	self:remove_texture_mod ("^[colorize:#d42222:175")
 	if def.after_activate then
 		def.after_activate(self, staticdata, def, dtime)
 	end
-	self:remove_texture_mod ("^[colorize:#d42222:175")
 	return true
 end
 
