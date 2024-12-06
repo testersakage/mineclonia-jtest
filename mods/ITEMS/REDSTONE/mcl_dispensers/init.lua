@@ -89,7 +89,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 	local igroups = stackdef.groups
 
 	-- Dispense item on luaentity
-	for _, obj in pairs(minetest.get_objects_inside_radius(droppos, 1)) do
+	for obj in core.objects_inside_radius(droppos, 1) do
 		local ent = obj:get_luaentity()
 		if ent and ent._on_dispense then
 			local pos = obj:get_pos()

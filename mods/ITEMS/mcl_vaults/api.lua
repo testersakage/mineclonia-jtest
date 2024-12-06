@@ -19,7 +19,7 @@ local function try_open(pos, player)
 end
 
 local function get_eligible_player_near(pos, distance)
-	for _, v in pairs(minetest.get_objects_inside_radius(pos, distance)) do
+	for v in core.objects_inside_radius(pos, distance) do
 		if v:is_player() and can_open(pos, v) then return v end
 	end
 end
