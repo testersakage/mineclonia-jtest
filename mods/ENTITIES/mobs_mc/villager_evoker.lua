@@ -7,7 +7,7 @@ local S = minetest.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local illager = mobs_mc.illager
 local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
-local is_valid = mcl_util.is_valid_objref
+local is_valid = mcl_util.is_valid_objectref
 
 --###################
 --################### EVOKER

@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local is_valid = mcl_util.is_valid_objref
+local is_valid = mcl_util.is_valid_objectref
 
 -- Rootyjr
 -----------------------------
