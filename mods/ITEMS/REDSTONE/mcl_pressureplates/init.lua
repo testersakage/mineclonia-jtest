@@ -158,6 +158,9 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		description = description,
 		drop = basename .. "_off",
 		on_timer = pp_on_timer,
+		_on_walk_through = function(pos)
+			pp_on_timer(vector.round(pos))
+		end,
 		on_construct = function(pos)
 			minetest.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
 		end,
