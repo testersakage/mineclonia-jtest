@@ -80,7 +80,7 @@ local function spawn_crystal(pos)
 		end
 	end
 	for _, crystal in pairs(crystals) do
-		crystal_explode(crystal)
+		crystal:_explode()
 	end
 	local portal_pos = vector.add(portal_center, vector.new(0, -1, 0))
 	mcl_structures.place_structure(portal_pos,mcl_structures.registered_structures["end_exit_portal"],PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
@@ -172,6 +172,7 @@ minetest.register_craftitem("mcl_end:crystal", {
 		end
 		return itemstack
 	end,
+	_explode = crystal_explode,
 	_tt_help = S("Ignited by a punch or a hit with an arrow").."\n"..S("Explosion radius: @1", tostring(explosion_strength)),
 	_doc_items_longdesc = S("End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."),
 	_doc_items_usagehelp = S("Place the End Crystal on Obsidian or Bedrock, then punch it or hit it with an arrow to cause an huge and probably deadly explosion. To Spawn the Ender Dragon, place one at each side of the End Exit Portal."),
