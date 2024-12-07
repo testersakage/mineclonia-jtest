@@ -104,7 +104,7 @@ function mob_class:expel_underwater_drivers ()
 		local headin = minetest.registered_nodes[self.head_in]
 
 		if headin.groups.water then
-			force_detach (self.driver)
+			self:detach (self.driver)
 			return
 		end
 	end
@@ -178,16 +178,8 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	end
 
 	self:apply_driver_input (speed, pos, moveresult, dtime)
-
-	-- Detach the driver if submerged.
-	local headin = minetest.registered_nodes[self.head_in]
-
-	if headin.groups.water then
-		force_detach (self.driver)
-		return
-	end
-
 	self:motion_step (dtime, moveresult, pos)
+
 	-- This function is called after motion_step to apply forces
 	-- (e.g. velocity changes for jumping) that must not be
 	-- attenuated by motion_step.
