@@ -570,12 +570,7 @@ function mob_class:on_step (dtime, moveresult)
 
 	self:post_motion_step (pos, dtime)
 	self:ai_step (dtime)
-
-	if self.force_step then
-		self:force_step(dtime)
-	end
-
-	self:update_timers(dtime)
+	self:update_timers (dtime)
 
 	if not self.fire_resistant then
 		mcl_burning.tick (self.object, dtime, self)
