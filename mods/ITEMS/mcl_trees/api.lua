@@ -413,7 +413,7 @@ function mcl_trees.register_wood(name, p)
 			is_ground_content = false,
 			_mcl_stripped_variant = (p.stripped_bark == nil or type(p.stripped_bark) == "table") and "mcl_trees:bark_stripped_"..name,
 		}, p.bark or {})
-		def.description = def.description or D(rname .. " Wood")
+		def.description = def.description or D(rname .. " Bark")
 		minetest.register_node(":mcl_trees:bark_"..name,def)
 		minetest.register_craft({
 			output = "mcl_trees:bark_"..name.." 3",
@@ -451,7 +451,7 @@ function mcl_trees.register_wood(name, p)
 			tiles = { minetest.get_current_modname().."_stripped_"..name.."_side.png"},
 			is_ground_content = false,
 		}, p.stripped_bark or {})
-		def.description = def.description or D("Stripped " .. rname .. " Wood")
+		def.description = def.description or D("Stripped " .. rname .. " Bark")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped wood of an " .. rname .. " tree.")
 		minetest.register_node(":mcl_trees:bark_stripped_"..name, def)
 		minetest.register_craft({
