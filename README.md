@@ -9,7 +9,7 @@ migrating from MineClone 2 to Mineclonia, see [MIGRATING.md](../../../src/branch
 
 Version: 0.109.2
 
-### Differences from MineClone 2
+### Differences from MineClone 2 (now VoxeLibre)
 * Overworld depth increased from 64 to 128 nodes
 * Improved nether portals
 * Improved leaf decay
@@ -22,7 +22,9 @@ Version: 0.109.2
 * Lush caves biome
 * Cherry grove biome
 * No in-game music, twice as small compared to MineClone 2
-* No hamburgers
+* No hamburgers (but villagers follow dropped food as in Minecraft)
+* No renamed mobs (e.g. Creepers remain Creepers, not Stalkers)
+* Overhauled mob pathfinding, physics, and AI
 * More features but almost 10k lines of code less
 
 ### Gameplay
