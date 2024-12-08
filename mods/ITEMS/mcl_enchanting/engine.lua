@@ -118,17 +118,17 @@ function mcl_enchanting.item_supports_enchantment(itemname, enchantment)
 	if itemdef.type ~= "tool" and enchantment_def.requires_tool then
 		return false
 	end
-	for disallow in pairs(enchantment_def.disallow) do
+	for disallow, _ in pairs(enchantment_def.disallow) do
 		if minetest.get_item_group(itemname, disallow) > 0 then
 			return false
 		end
 	end
-	for group in pairs(enchantment_def.primary) do
+	for group, _ in pairs(enchantment_def.primary) do
 		if minetest.get_item_group(itemname, group) > 0 then
 			return true, true
 		end
 	end
-	for group in pairs(enchantment_def.secondary) do
+	for group, _ in pairs(enchantment_def.secondary) do
 		if minetest.get_item_group(itemname, group) > 0 then
 			return true, false
 		end
@@ -163,7 +163,7 @@ function mcl_enchanting.can_enchant(itemstack, enchantment, level)
 		return false, "incompatible", mcl_enchanting.get_enchantment_description(enchantment, enchantment_level)
 	end
 	if not mcl_enchanting.is_book(itemname) then
-		for incompatible in pairs(enchantment_def.incompatible) do
+		for incompatible, _ in pairs(enchantment_def.incompatible) do
 			local incompatible_level = item_enchantments[incompatible]
 			if incompatible_level then
 				return false, "incompatible",
@@ -220,7 +220,7 @@ function mcl_enchanting.combine(itemstack, combine_with)
 				any_new_enchantment = any_new_enchantment or ( enchantment_level ~= enchantments[enchantment] )
 			elseif mcl_enchanting.item_supports_enchantment(itemname, enchantment) then -- this is a new enchantement to try to add
 				local supported = true
-				for incompatible in pairs(enchantment_def.incompatible) do
+				for incompatible, _ in pairs(enchantment_def.incompatible) do
 					if enchantments[incompatible] then
 						incompatible_enchants = incompatible_enchants + 1
 						supported = false

@@ -305,7 +305,7 @@ function mcl_villages.paths_new(blockseed, biome_name)
 
 	-- get a list of reverse sorted keys, which are distances
 	local dist_keys = {}
-	for k in pairs(pathends) do
+	for k, _ in pairs(pathends) do
 		table.insert(dist_keys, k)
 	end
 	table.sort(dist_keys, function(a, b)

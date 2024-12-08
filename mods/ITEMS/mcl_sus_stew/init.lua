@@ -70,7 +70,7 @@ local effects = {
 
 local function get_random_effect()
 	local keys = {}
-	for k in pairs(effects) do
+	for k, _ in pairs(effects) do
 		table.insert(keys, k)
 	end
 	return effects[keys[math.random(#keys)]]

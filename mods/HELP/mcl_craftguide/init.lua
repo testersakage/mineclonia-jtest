@@ -922,7 +922,7 @@ local function on_receive_fields(player, fields)
 		mcl_inventory.to_craft_grid(player, data.recipes[data.rnum])
 	else
 		local item
-		for field in pairs(fields) do
+		for field, _ in pairs(fields) do
 			if string.find(field, ":") then
 				item = field
 				break
