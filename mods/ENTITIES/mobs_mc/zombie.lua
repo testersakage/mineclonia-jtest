@@ -638,10 +638,10 @@ function zombie:receive_damage (mcl_reason, damage)
 					local entity = object:get_luaentity ()
 					self:add_physics_factor ("_spawn_reinforcements_chance",
 								 "mobs_mc:zombie_reinforcement_caller_attenuation",
-								 -0.05, "add")
+								 -0.05, "add", true)
 					entity:add_physics_factor ("_spawn_reinforcements_chance",
 								   "mobs_mc:zombie_reinforcement_callee_attenuation",
-								   -0.05, "add")
+								   -0.05, "add", true)
 					entity:do_attack (self.attack or mcl_reason.source, 15)
 				end
 			end
