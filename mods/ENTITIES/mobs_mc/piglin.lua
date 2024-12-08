@@ -1667,6 +1667,7 @@ local zombified_piglin = table.merge (zombie, {
 	spawn_class = "passive",
 	prevents_sleep_when_hostile = true,
 	_neutral_to_players = true,
+	attack_npcs = false,
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 6,
