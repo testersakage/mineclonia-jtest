@@ -11,7 +11,7 @@ local pp_box_on = {
 	fixed = { -7/16, -8/16, -7/16, 7/16, -7.5/16, 7/16 },
 }
 
-local function pp_on_timer(pos)
+local function update_pp(pos)
 	local node = minetest.get_node(pos)
 	local basename = minetest.registered_nodes[node.name].pressureplate_basename
 	local activated_by = minetest.registered_nodes[node.name].pressureplate_activated_by
@@ -157,9 +157,9 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		walkable = false,
 		description = description,
 		drop = basename .. "_off",
-		on_timer = pp_on_timer,
+		on_timer = update_pp,
 		_on_walk_through = function(pos)
-			pp_on_timer(vector.round(pos))
+			update_pp(vector.round(pos))
 		end,
 		on_construct = function(pos)
 			minetest.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
