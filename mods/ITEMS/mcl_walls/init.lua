@@ -144,7 +144,7 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 			need[4] = nil
 			table.insert(take, full_blocks[2])
 		end
-		for k in pairs(need) do
+		for k, _ in pairs(need) do
 			table.insert(take, half_blocks[k])
 			need_pillar = true
 		end
