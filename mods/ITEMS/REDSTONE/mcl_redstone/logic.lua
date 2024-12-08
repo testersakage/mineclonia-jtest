@@ -183,7 +183,7 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 	end
 end
 
-function mcl_redstone.get_power(pos, dir)
+function mcl_redstone.get_power(pos, dir, option)
 	minetest.load_area(pos:subtract(2), pos:add(2))
 
 	-- Create table with keys corresponding to bits in wireflags to
@@ -206,7 +206,10 @@ function mcl_redstone.get_power(pos, dir)
 		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
-			power = math.max(power, get_node_power(pos2, true), opaque_tab[node2.name])
+			power = math.max(power, opaque_tab[node2.name])
+			if option ~= "direct" then
+				power = math.max(power, get_node_power(pos2, true))
+			end
 		end
 	end
 
