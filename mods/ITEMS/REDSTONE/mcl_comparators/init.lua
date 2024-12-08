@@ -291,29 +291,25 @@ for _, mode in pairs{"comp", "sub"} do
 					local left = minetest.fourdir_to_dir((node.param2 - 1) % 4)
 					local right = minetest.fourdir_to_dir((node.param2 + 1) % 4)
 					local side_power = math.max(
-						mcl_redstone.get_power(pos, left),
-						mcl_redstone.get_power(pos, right)
+						mcl_redstone.get_power(pos, left, "direct"),
+						mcl_redstone.get_power(pos, right, "direct")
 					)
 					local pos2 = vector.add(pos, back)
-					local rear_power
+					local rear_power = 0
 					local is_measurable, o, node2, def2 = is_measurable_or_opaque(pos2)
 					if is_measurable then
 						-- o is measuring function
-						rear_power = math.max(0, math.min (15, o(pos2, node2, def2)))
+						rear_power = math.max(rear_power, math.min(15, o(pos2, node2, def2)))
 					elseif o then
 						-- opaque
 						local pos3 = vector.add(pos2, back)
 						local is_measurable, o, node3, def3 = is_measurable_or_opaque(pos3)
 						if is_measurable then
-							rear_power = math.max(0, math.min (15, o(pos3, node3, def3)))
-						else
-							-- no measurable node in back direction
-							-- try to get power normally
-							rear_power = mcl_redstone.get_power(pos, back)
+							rear_power = math.max(rear_power, math.min(15, o(pos3, node3, def3)))
 						end
-					else
-						rear_power = mcl_redstone.get_power(pos, back)
 					end
+					rear_power = math.max(rear_power, mcl_redstone.get_power(pos, back, "direct"))
+
 					local output
 					if mode == "comp" then
 						output = rear_power >= side_power and rear_power or 0
