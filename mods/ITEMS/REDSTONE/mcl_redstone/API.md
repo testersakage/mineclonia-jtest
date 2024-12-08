@@ -140,9 +140,6 @@ is relative to `pos`. So (0, 1, 0) means power coming from the node above for
 example. The `dir` argument can be omitted in which case it returns the maximum
 power level of all six directions.
 
-It is only valid to call this function from a redstone callback (`init` or
-`update`). Using it in other places will result in an error.
-
 ## `mcl_redstone.update_node(pos)`
 
 Schedule an update to redstone component at `pos`.
