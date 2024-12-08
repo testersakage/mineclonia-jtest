@@ -22,7 +22,7 @@ minetest.register_on_mods_loaded(function()
 	end
 end)
 
-mcl_player.register_globalstep_slow(function(player)
+mcl_player.register_globalstep(function(player)
 	local pos = player:get_pos()
 	local npos = vector.add(pos, mcl_player.node_offsets.stand)
 	local node = minetest.get_node(npos)

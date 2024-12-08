@@ -101,7 +101,7 @@ minetest.register_globalstep(function(dtime)
 end)
 
 --cache nodes near the player according to offsets defined above
-mcl_player.register_globalstep_slow(function(player)
+mcl_player.register_globalstep(function(player)
 	for k, v in pairs(nodeinfo_pos) do
 		mcl_player.players[player].nodes[k] = node_ok(vector.add(player:get_pos(), v))
 	end
