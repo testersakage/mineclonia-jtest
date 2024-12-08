@@ -434,13 +434,13 @@ function mob_class:do_env_damage()
 		end
 	end
 
-	pos.y = pos.y + 1 -- for particle effect position
-
 	local frozen = false
 	-- water damage
 	if self.water_damage > 0 and nodef.groups.water then
 		local fatal = self:damage_mob ("environment", self.water_damage)
+		pos.y = pos.y + 1
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png", nil, nil, 1, nil)
+		pos.y = pos.y - 1
 		if fatal then
 			return true
 		end
@@ -455,8 +455,10 @@ function mob_class:do_env_damage()
 	elseif self.lava_damage > 0 and self:is_in_node (pos, "group:lava") then
 		if self.lava_damage ~= 0 then
 			local fatal = self:damage_mob ("lava", self.lava_damage)
+			pos.y = pos.y + 1
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
 			mcl_burning.set_on_fire(self.object, 10)
+			pos.y = pos.y - 1
 
 			if fatal then
 				return true
@@ -467,7 +469,9 @@ function mob_class:do_env_damage()
 		if self.fire_damage ~= 0 then
 			local fatal = self:damage_mob ("in_fire", self.fire_damage)
 
+			pos.y = pos.y + 1
 			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
+			pos.y = pos.y - 1
 			mcl_burning.set_on_fire(self.object, 5)
 
 			if fatal then
@@ -487,7 +491,9 @@ function mob_class:do_env_damage()
 	-- damage_per_second node check
 	elseif nodef.damage_per_second ~= 0 and not nodef.groups.lava and not nodef.groups.fire then
 		local fatal = self:damage_mob ("environment", nodef.damage_per_second)
+		pos.y = pos.y + 1
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png")
+		pos.y = pos.y - 1
 		if fatal then
 			return true
 		end
@@ -509,7 +515,9 @@ function mob_class:do_env_damage()
 			-- Only show bubbles if getting close to drowning
 			-- Mainly because of dolphins
 			if self.breath <= 20 then
+				pos.y = pos.y + 1
 				mcl_mobs.effect(pos, 2, "bubble.png", nil, nil, 1, nil)
+				pos.y = pos.y - 1
 			end
 
 			if self.breath <= 0 then
