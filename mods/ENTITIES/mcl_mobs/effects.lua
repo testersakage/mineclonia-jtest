@@ -655,25 +655,33 @@ function posing_humanoid:apply_arm_pose (pose)
 				local scale = v[3]
 				local pos = pos
 				local rot = rot
-				self.object:set_bone_override (k, {
-					position = pos and {
-						vec = pos,
-						absolute = true,
-					},
-					rotation = rot and {
-						vec = rot,
-						absolute = true,
-					},
-					scale = scale and {
-						vec = scale,
-						absolute = true,
-					},
-				})
+				if self.object.set_bone_override then
+					self.object:set_bone_override (k, {
+						position = pos and {
+							vec = pos,
+							absolute = true,
+						},
+						rotation = rot and {
+							vec = rot,
+							absolute = true,
+						},
+						scale = scale and {
+							vec = scale,
+							absolute = true,
+						},
+					})
+				else
+					self.object:set_bone_position(k, pos or vector.zero(), vector.apply(rot or vector.zero(), math.deg))
+				end
 				if k == self.head_swivel then
 					self._old_head_swivel_vector = rot
 				end
 			else
-				self.object:set_bone_override (k)
+				if self.object.set_bone_override then
+					self.object:set_bone_override (k)
+				else
+					self.object:set_bone_position(k, vector.zero(), vector.zero())
+				end
 			end
 		end
 	end
