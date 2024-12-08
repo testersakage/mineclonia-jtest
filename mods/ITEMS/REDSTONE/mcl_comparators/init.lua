@@ -375,9 +375,7 @@ minetest.register_on_dignode(function (pos, node)
 		other_pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 	end
 	if other_pos then
-		--minetest.after(0.5, function ()
-			mcl_redstone.update_comparators(other_pos)
-		--end)
+		mcl_redstone.update_comparators(other_pos)
 	end
 end)
 
