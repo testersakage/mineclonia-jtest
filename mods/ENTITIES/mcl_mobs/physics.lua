@@ -776,14 +776,21 @@ function mob_class:set_physics_factor_base (field, base)
 	apply_physics_factors (self, field)
 end
 
-function mob_class:add_physics_factor (field, id, factor, op)
+function mob_class:add_physics_factor (field, id, factor, op, add_to_existing)
 	if not self._physics_factors[field] then
 		self._physics_factors[field] = { base = self[field], }
 	else
 		-- Do not apply physics factors redundantly.
 		local old = self._physics_factors[field][id]
-		if old and old.amount == factor and old.op == op then
-			return
+		if old then
+			if add_to_existing then
+				old.amount = old.amount + factor
+				old.op = op
+				apply_physics_factors (self, field)
+				return
+			elseif old.amount == factor and old.op == op then
+				return
+			end
 		end
 	end
 	self._physics_factors[field][id] = {
