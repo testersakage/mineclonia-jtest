@@ -17,7 +17,7 @@ end
 
  -- This serves as a check for the existence of `ObjectRef:is_valid'.
 
-if minetest.objects_in_area then
+if core.features.physics_overrides_v2  then
 function mcl_util.is_valid_objectref (object)
 	return object:is_valid ()
 end
