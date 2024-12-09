@@ -291,7 +291,7 @@ for _, mode in pairs{"comp", "sub"} do
 						mcl_redstone.get_power(pos, left, "direct"),
 						mcl_redstone.get_power(pos, right, "direct")
 					)
-					local rear_power = 0
+					local rear_power
 					-- first check whether the node in the back pos is measurable
 					local pos2 = vector.add(pos, back)
 					local measure, is_opaque, node2, def2 = is_measurable_or_opaque(pos2)
@@ -302,7 +302,7 @@ for _, mode in pairs{"comp", "sub"} do
 						-- rear input does accept power from opaque nodes, but
 						-- ignores it in preference of a measurable node (behind
 						-- the opaque node) unless rear power level is 15
-						if rear_power < 15 and is_opaque then
+						if is_opaque then
 							local pos3 = vector.add(pos2, back)
 							local measure, _, node3, def3 = is_measurable_or_opaque(pos3)
 							if measure then
