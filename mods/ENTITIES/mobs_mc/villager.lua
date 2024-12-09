@@ -379,11 +379,6 @@ function villager_base:validate_transaction (inv, player, trade_id, input1, inpu
 	end
 
 	trade.uses = trade.uses + 1
-	if trade.uses >= trade.max_uses then
-		inv:set_stack ("output", 1, "")
-		self:show_trade_formspec (player, trade_id)
-	end
-
 	if trade.reward_xp then
 		local xp = 3 + math.random (3)
 		mcl_experience.throw_xp (self.object:get_pos (), xp)
