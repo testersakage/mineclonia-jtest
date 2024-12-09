@@ -207,6 +207,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 				active_huds[cname] = nil
 			end
 		else
+			inv:set_size("main", 1) -- if the inventory isn't initialized it registers as empty - initialize it to be sure so discs are not "swallowed" by the jukebox
 			-- Jukebox is empty: Play track if player holds music record
 			local playing = play_record(pos, itemstack, clicker)
 			if playing then
