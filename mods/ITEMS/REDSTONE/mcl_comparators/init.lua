@@ -150,23 +150,20 @@ local measure_tab = {
 	--["sculc_sensor"] = measure_sculc_sensor,
 }
 
--- check if node at pos is 'interesting'
--- first result is true, iff node has an entry in measure_tab, 2nd result is
--- 1. node is measurable -> measuring function from measure_tab
--- 2. node is opaque -> true, iff node has opaque group set to non zero
--- 3rd and 4th results are node and nodedef
+-- check if node at pos is 'interesting', returning multiple results
+-- 1: measuring function for node from measure_tab or nil
+-- 2: true, iff node has opaque group set to non zero
+-- 3/4: node and nodedef (to avoid looking them up again later)
 local function is_measurable_or_opaque(pos)
 	local node = minetest.get_node_or_nil(pos)
 	local def = node and minetest.registered_nodes[node.name]
 
-	if not def then return false, false, nil, nil end
+	if not def then return nil, false, nil, nil end
 
 	local measuring_function = measure_tab[node.name]
-	if measuring_function then
-		return true, measuring_function, node, def
-	end
+	local is_opaque = def.groups and def.groups.opaque and (def.groups.opaque ~= 0)
 
-	return false, def.groups and def.groups.opaque and (def.groups.opaque ~= 0), node, def
+	return measuring_function, is_opaque, node, def
 end
 
 -- compute tile depending on state and mode
@@ -286,29 +283,33 @@ for _, mode in pairs{"comp", "sub"} do
 					return node.param2 % 4 == fourdir and math.floor(node.param2 / 4) or 0, true
 				end,
 				update = function(pos, node)
-					-- TODO: should not accept side power from opaque blocks
 					local back = -minetest.fourdir_to_dir(node.param2)
 					local left = minetest.fourdir_to_dir((node.param2 - 1) % 4)
 					local right = minetest.fourdir_to_dir((node.param2 + 1) % 4)
+					-- side input does not accept power from opaque nodes
 					local side_power = math.max(
 						mcl_redstone.get_power(pos, left, "direct"),
 						mcl_redstone.get_power(pos, right, "direct")
 					)
-					local pos2 = vector.add(pos, back)
 					local rear_power = 0
-					local is_measurable, o, node2, def2 = is_measurable_or_opaque(pos2)
-					if is_measurable then
-						-- o is measuring function
-						rear_power = math.max(rear_power, math.min(15, o(pos2, node2, def2)))
-					elseif o then
-						-- opaque
-						local pos3 = vector.add(pos2, back)
-						local is_measurable, o, node3, def3 = is_measurable_or_opaque(pos3)
-						if is_measurable then
-							rear_power = math.max(rear_power, math.min(15, o(pos3, node3, def3)))
+					-- first check whether the node in the back pos is measurable
+					local pos2 = vector.add(pos, back)
+					local measure, is_opaque, node2, def2 = is_measurable_or_opaque(pos2)
+					if measure then
+						rear_power = math.max(0, math.min(15, measure(pos2, node2, def2)))
+					else
+						rear_power = mcl_redstone.get_power(pos, back)
+						-- rear input does accept power from opaque nodes, but
+						-- ignores it in preference of a measurable node (behind
+						-- the opaque node) unless rear power level is 15
+						if rear_power < 15 and is_opaque then
+							local pos3 = vector.add(pos2, back)
+							local measure, _, node3, def3 = is_measurable_or_opaque(pos3)
+							if measure then
+								rear_power = math.max(0, math.min(15, measure(pos3, node3, def3)))
+							end
 						end
 					end
-					rear_power = math.max(rear_power, mcl_redstone.get_power(pos, back, "direct"))
 
 					local output
 					if mode == "comp" then
