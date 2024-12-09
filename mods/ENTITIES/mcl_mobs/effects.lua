@@ -345,7 +345,17 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 			= mcl_util.target_eye_height (locked_object)
 
 		if _locked_object_eye_height then
-			local self_rot = self.object:get_rotation ()
+			local self_yaw
+			-- It so transpires that
+			-- ObjectRef:get_rotation does not return the
+			-- rotation of the parent if there is an
+			-- attachment.
+			local attach = self.object:get_attach ()
+			if attach then
+				self_yaw = attach:get_yaw () or 0
+			else
+				self_yaw = self.object:get_yaw ()
+			end
 			local ps = self_pos
 			local old_y = ps.y
 			ps.y = ps.y + self.head_eye_height
@@ -353,7 +363,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 			pt.y = pt.y + _locked_object_eye_height
 			local dir = vector.direction (ps, pt)
 			ps.y = old_y
-			local mob_yaw_raw = self_rot.y
+			local mob_yaw_raw = self_yaw
 				+ math.atan2 (dir.x, dir.z)
 				+ self.head_yaw_offset
 			local mob_yaw = mcl_util.norm_radians (mob_yaw_raw)
