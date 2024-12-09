@@ -40,7 +40,7 @@ function mcl_structures.generate_igloo_basement(pos, orientation, loot, pr)
 		local p1 = vector.offset(pos,-5,-5,-5)
 		local p2 = vector.offset(pos,5,5,5)
 		mcl_structures.fill_chests(p1,p2,loot,pr)
-		mcl_structures.construct_nodes(p1,p2,{"mcl_brewing:stand_000","mcl_books:bookshelf"})
+		mcl_structures.construct_nodes(p1,p2,{"mcl_brewing:stand_000", "mcl_books:bookshelf", "mcl_jukebox:jukebox"})
 		spawn_mobs(p1,p2)
 	end, pr)
 end
