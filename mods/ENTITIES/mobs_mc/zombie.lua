@@ -629,7 +629,7 @@ function zombie:receive_damage (mcl_reason, damage)
 			local dz = math.random (7, 40) * math.random (-1, 1)
 			local pos = vector.offset (node_pos, dx, dy, dz)
 
-			if (is_dark (pos, 0, 0, 0) or true) and is_solid (pos, 0, -1, 0)
+			if is_dark (pos, 0, 0, 0) and is_solid (pos, 0, -1, 0)
 				and is_clear (pos, 0, 0, 0) and is_clear (pos, 0, 1, 0)
 				and is_free_of_living_players (pos, 7.0) then
 				local floor = vector.offset (pos, 0, -0.5, 0)
