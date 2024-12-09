@@ -309,7 +309,7 @@ end
 -- or in the metadata of an enchanted tool.
 --
 -- Parameters:
--- toolname - Name of the tool being enchanted (like "mcl_tools:diamond_pickaxe")
+-- toolname - Name of the tool being enchanted (like "mcl_tools:pick_diamond")
 -- efficiency - The efficiency level the tool is enchanted with (default 0)
 --
 -- NOTE:
