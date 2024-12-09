@@ -288,21 +288,11 @@ function skeleton:mob_activate (staticdata, dtime)
 		return false
 	end
 	self:reconfigure_attack_type (self:get_wielditem ())
-
-	-- Skeletons should drop all equipment collected after
-	-- spawning.
-	self.wielditem_drop_probability = 1.0
-	self.armor_drop_probability = {
-		head = 1.0,
-		torso = 1.0,
-		legs = 1.0,
-		feet = 1.0,
-	}
 	return true
 end
 
-function skeleton:set_wielditem (stack)
-	mob_class.set_wielditem (self, stack)
+function skeleton:set_wielditem (stack, drop_probability)
+	mob_class.set_wielditem (self, stack, drop_probability)
 	self:reconfigure_attack_type (stack)
 end
 

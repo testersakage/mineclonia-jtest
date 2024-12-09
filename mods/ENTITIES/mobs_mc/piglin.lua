@@ -472,8 +472,8 @@ function piglin:on_spawn ()
 	self._hunting_cooldown = pr:next (30, 120)
 end
 
-function piglin:set_wielditem (stack)
-	mob_class.set_wielditem (self, stack)
+function piglin:set_wielditem (stack, drop_probability)
+	mob_class.set_wielditem (self, stack, drop_probability)
 	local name = stack:get_name ()
 
 	if minetest.get_item_group (name, "crossbow") > 0 then
