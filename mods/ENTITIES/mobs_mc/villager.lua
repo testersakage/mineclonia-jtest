@@ -4853,7 +4853,7 @@ function villager:play_tag (self_pos, dtime)
 				local target
 					= self:pacing_target (self_pos, 14, 8, SOLID_PACING_GROUPS)
 				if target then
-					self:gopath (target, 0.6, 0.5)
+					self:gopath (target, 0.6, nil, 0.5)
 				end
 			end
 
