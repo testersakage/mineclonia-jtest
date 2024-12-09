@@ -339,7 +339,7 @@ function zombie:on_spawn ()
 		if self.child and math.random (100) <= 5 then
 			local chicken = self:find_chicken ()
 			if chicken then
-				self:jock_to_existing (chicken, CHICKEN_ATTACHMENT_POS)
+				self:jock_to_existing (chicken, "", CHICKEN_ATTACHMENT_POS)
 				local entity = chicken:get_luaentity ()
 				entity._is_chicken_jockey = true
 			end
