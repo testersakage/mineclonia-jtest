@@ -121,7 +121,7 @@ core.register_node("mcl_cauldrons:cauldron", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	is_ground_content = false,
-	groups = {pickaxey=1, deco_block=1, cauldron=1},
+	groups = {pickaxey=1, deco_block=1, cauldron=1, comparator_signal=0},
 	node_box = create_cauldron_nodebox(0),
 	selection_box = { type = "regular" },
 	tiles = {
