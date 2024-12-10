@@ -36,10 +36,10 @@ local function on_bone_meal(_, _, _, pos, n)
 
 	-- Select schematic
 	local schematic, offset, height
-	height = 8
+	height = 5
 	if n.name == "mcl_mushrooms:mushroom_brown" then
 		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_brown.mts"
-		offset = vector.new(-3,-1,-3)
+		offset = vector.new(-3,0,-3)
 	elseif n.name == "mcl_mushrooms:mushroom_red" then
 		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
 		offset = vector.new(-2,-1,-2)
@@ -53,11 +53,10 @@ local function on_bone_meal(_, _, _, pos, n)
 			return
 		end
 	end
-	local yoff = 3
-	local minp, maxp = vector.offset(pos,-3,yoff,-3), vector.offset(pos,3,yoff+(height-3),3)
+	local minp, maxp = vector.offset(pos,-3,0,-3), vector.offset(pos,3,(height-1),3)
 	local diff = vector.subtract(maxp, minp)
 	diff = vector.add(diff, vector.new(1,1,1))
-	local totalnodes = diff.x * diff.y * diff.z
+	local totalnodes = diff.x * diff.y * diff.z - 1
 	local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
 	if #goodnodes < totalnodes then
 		return
