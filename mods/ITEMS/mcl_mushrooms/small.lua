@@ -13,7 +13,7 @@ local on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _
 	if light and light <= 12 then
 		light_ok = true
 	end
-	return ((snn == "mcl_core:podzol" or snn == "mcl_core:podzol_snow" or snn == "mcl_core:mycelium" or snn == "mcl_core:mycelium_snow") or (light_ok and minetest.get_item_group(snn, "solid") == 1 and minetest.get_item_group(snn, "opaque") == 1))
+	return (minetest.get_item_group(snn, "supports_mushrooms") == 1 or (light_ok and minetest.get_item_group(snn, "solid") == 1 and minetest.get_item_group(snn, "opaque") == 1))
 end)
 
 local longdesc_intro_brown = S("Brown mushrooms are fungi which grow and spread in darkness, but are sensitive to light. They are inedible as such, but they can be used to craft food items.")
