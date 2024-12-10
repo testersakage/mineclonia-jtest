@@ -70,7 +70,7 @@ local function get_node_power_2(pos)
 
 		if opaque_tab[node2.name] then
 			local _, power2 = get_node_power(pos2)
-			max = math.max(max, power2)
+			max = math.max(max, power2, opaque_tab[node2.name])
 		end
 	end
 
@@ -206,8 +206,7 @@ function mcl_redstone.get_power(pos, dir)
 		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			power = math.max(power, node2.param2)
 		elseif opaque_tab[node2.name] then
-			-- Only strong power goes through opaque nodes.
-			power = math.max(power, get_node_power(pos2, true))
+			power = math.max(power, get_node_power(pos2, true), opaque_tab[node2.name])
 		end
 	end
 
@@ -322,7 +321,7 @@ function update_neighbours(pos, oldnode, newnode)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
 					if wireflag_tab[node3.name] then
-						update_wire(pos3, math.max(oldpower2, 0))
+						update_wire(pos3, math.max(oldpower2, 0, opaque_tab[node2.name]))
 					end
 				end
 			end
