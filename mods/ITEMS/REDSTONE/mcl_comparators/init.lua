@@ -299,9 +299,11 @@ for _, mode in pairs{"comp", "sub"} do
 						rear_power = math.max(0, math.min(15, measure(pos2, node2, def2)))
 					else
 						rear_power = mcl_redstone.get_power(pos, back)
-						-- rear input does accept power from opaque nodes, but
+						-- Rear input does accept power from opaque nodes, but
 						-- ignores it in preference of a measurable node (behind
-						-- the opaque node) unless rear power level is 15
+						-- the opaque node). Java edition makes an exception if
+						-- the power level is 15, we do not do so because we
+						-- mainly target bedrock.
 						if is_opaque then
 							local pos3 = vector.add(pos2, back)
 							local measure, _, node3, def3 = is_measurable_or_opaque(pos3)
