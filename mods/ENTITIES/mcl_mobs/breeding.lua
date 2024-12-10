@@ -440,6 +440,7 @@ local function teleport_to_owner (self, owner, owner_pos)
 				pos.y = pos.y + 1
 				self.object:move_to (pos)
 				self.reset_fall_damage = 1
+				self.old_y = nil
 				return true
 			end
 		end
