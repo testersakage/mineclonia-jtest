@@ -747,8 +747,8 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 
 	for i = -7, 7 do
 		for j = -7, 7 do
-			for y = -1, 1 do
-				local pos = vector.offset(pointed_thing.above, i, y, j)
+			for y = 0, 2 do
+				local pos = vector.offset(pointed_thing.under, i, y, j)
 				local n = minetest.get_node(pos)
 				local n2 = minetest.get_node(vector.offset(pos, 0, -1, 0))
 
