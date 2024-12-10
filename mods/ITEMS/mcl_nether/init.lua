@@ -130,17 +130,6 @@ minetest.register_node("mcl_nether:magma", {
 	light_source = 3,
 	groups = {pickaxey=1, building_block=1, material_stone=1, fire=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	-- From walkover mod
-	on_walk_over = function(_, _, player)
-		local armor_feet = player:get_inventory():get_stack("armor", 5)
-		if player and player:get_player_control().sneak or (minetest.global_exists("mcl_enchanting") and mcl_enchanting.has_enchantment(armor_feet, "frost_walker")) or (minetest.global_exists("mcl_potions") and mcl_potions.has_effect(player, "fire_resistance")) then
-			return
-		end
-		-- Hurt players standing on top of this block
-		if player:get_hp() > 0 then
-			mcl_util.deal_damage(player, 1, {type = "hot_floor"})
-		end
-	end,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 
@@ -148,6 +137,18 @@ minetest.register_node("mcl_nether:magma", {
 	after_destruct = eternal_after_destruct,
 	_on_ignite = eternal_on_ignite,
 })
+
+mcl_player.register_globalstep_slow(function(player)
+	if mcl_player.players[player].nodes.stand ~= "mcl_nether:magma" then return end
+	local armor_feet = player:get_inventory():get_stack("armor", 5)
+	if player and player:get_player_control().sneak or (minetest.global_exists("mcl_enchanting") and mcl_enchanting.has_enchantment(armor_feet, "frost_walker")) or (minetest.global_exists("mcl_potions") and mcl_potions.has_effect(player, "fire_resistance")) then
+		return
+	end
+	-- Hurt players standing on top of this block
+	if player:get_hp() > 0 then
+		mcl_util.deal_damage(player, 1, {type = "hot_floor"})
+	end
+end)
 
 minetest.register_node("mcl_nether:soul_sand", {
 	description = S("Soul Sand"),
