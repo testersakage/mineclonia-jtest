@@ -27,11 +27,11 @@ local tt_help = S("Grows on podzol, mycelium and other blocks").."\n"..S("Spread
 local usagehelp = S("This mushroom can be placed on mycelium and podzol at any light level. It can also be placed on blocks which are both solid and opaque, as long as the light level at daytime is not higher than 12.")
 
 local function on_bone_meal(_, _, _, pos, n)
-	if math.random(1, 100) > 40 then return false end --40% chance
+	if math.random(1, 100) > 40 then return end --40% chance
 
 	local bn = minetest.get_node(vector.offset(pos,0,-1,0)).name
 	if bn ~= "mcl_core:mycelium" and bn ~= "mcl_core:dirt" and minetest.get_item_group(bn, "grass_block") ~= 1 and bn ~= "mcl_core:coarse_dirt" and bn ~= "mcl_core:podzol" then
-		return false
+		return
 	end
 
 	-- Select schematic
@@ -44,13 +44,13 @@ local function on_bone_meal(_, _, _, pos, n)
 		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
 		offset = vector.new(-2,-1,-2)
 	else
-		return false
+		return
 	end
 	-- Check space requirements
 	for i=1,3 do
 		local cpos = vector.add(pos, {x=0, y=i, z=0})
 		if minetest.get_node(cpos).name ~= "air" then
-			return false
+			return
 		end
 	end
 	local yoff = 3
@@ -60,7 +60,7 @@ local function on_bone_meal(_, _, _, pos, n)
 	local totalnodes = diff.x * diff.y * diff.z
 	local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
 	if #goodnodes < totalnodes then
-		return false
+		return
 	end
 
 	-- Place the huge mushroom
