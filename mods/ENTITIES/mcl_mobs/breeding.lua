@@ -438,7 +438,8 @@ local function teleport_to_owner (self, owner, owner_pos)
 			local def = minetest.registered_nodes [node.name]
 			if def and (not def.groups.leaves or self.airborne) then
 				pos.y = pos.y + 1
-				self.object:set_pos (pos)
+				self.object:move_to (pos)
+				self.reset_fall_damage = 1
 				return true
 			end
 		end
