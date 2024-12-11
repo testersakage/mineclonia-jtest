@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-11 03:47+0000\n"
+"PO-Revision-Date: 2024-12-11 06:53+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -43,7 +43,7 @@ msgid "Copper Bulb"
 msgstr "Ampoule en cuivre"
 
 msgid "Copper Bulb On"
-msgstr "Ampoule en cuivre allumée"
+msgstr "Ampoule allumée en cuivre"
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "L'ampoule en cuivre est surtout un bloc décoratif."
@@ -85,7 +85,7 @@ msgid "Exposed Copper Bulb"
 msgstr "Ampoule en cuivre exposé"
 
 msgid "Exposed Copper Bulb On"
-msgstr "Ampoule en cuivre exposé allumée"
+msgstr "Ampoule allumée en cuivre exposé"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "L'ampoule en cuivre exposé est surtout un bloc décoratif."
@@ -163,163 +163,163 @@ msgid "Oxidized Cut Copper is mostly a decorative block."
 msgstr "Le cuivre taillé oxydé est surtout un bloc décoratif."
 
 msgid "Waxed Block of Copper"
-msgstr ""
+msgstr "Bloc de cuivre ciré"
 
 msgid "Waxed Chiseled Copper"
-msgstr ""
+msgstr "Cuivre sculpté ciré"
 
 msgid "Waxed Copper Bulb"
-msgstr ""
+msgstr "Ampoule en cuivre ciré"
 
 msgid "Waxed Copper Bulb On"
-msgstr ""
+msgstr "Ampoule allumée en cuivre ciré"
 
 msgid "Waxed Copper Grate"
-msgstr ""
+msgstr "Grille en cuivre ciré"
 
 msgid "Waxed Copper Trapdoor"
-msgstr ""
+msgstr "Trappe en cuivre ciré"
 
 msgid "Waxed Cut Copper"
-msgstr ""
+msgstr "Cuivre taillé ciré"
 
 msgid "Waxed Cut Copper Slab"
-msgstr ""
+msgstr "Dalle en cuivre taillé ciré"
 
 msgid "Waxed Cut Copper Stairs"
-msgstr ""
+msgstr "Escalier en cuivre taillé ciré"
 
 msgid "Waxed Double @1"
 msgstr ""
 
 msgid "Waxed Exposed Chiseled Copper"
-msgstr ""
+msgstr "Cuivre sculpté exposé ciré"
 
 msgid "Waxed Exposed Copper"
-msgstr ""
+msgstr "Cuivre exposé ciré"
 
 msgid "Waxed Exposed Copper Bulb"
-msgstr ""
+msgstr "Ampoule en cuivre exposé ciré"
 
 msgid "Waxed Exposed Copper Bulb On"
-msgstr ""
+msgstr "Ampoule allumée en cuivre exposé ciré"
 
 msgid "Waxed Exposed Copper Grate"
-msgstr ""
+msgstr "Grille en cuivre exposé ciré"
 
 msgid "Waxed Exposed Copper Trapdoor"
-msgstr ""
+msgstr "Trappe en cuivre exposé ciré"
 
 msgid "Waxed Exposed Cut Copper"
-msgstr ""
+msgstr "Cuivre taillé exposé ciré"
 
 msgid "Waxed Exposed Cut Copper Slab"
-msgstr ""
+msgstr "Dalle en cuivre taillé exposé ciré"
 
 msgid "Waxed Exposed Cut Copper Stairs"
-msgstr ""
+msgstr "Escalier en cuivre taillé exposé ciré"
 
 msgid "Waxed Oxidized Chiseled Copper"
-msgstr ""
+msgstr "Cuivre sculpté oxydé ciré"
 
 msgid "Waxed Oxidized Copper"
-msgstr ""
+msgstr "Cuivre oxydé ciré"
 
 msgid "Waxed Oxidized Copper Bulb"
-msgstr ""
+msgstr "Ampoule en cuivre oxydé ciré"
 
 msgid "Waxed Oxidized Copper Bulb On"
-msgstr ""
+msgstr "Ampoule allumée en cuivre oxydé ciré"
 
 msgid "Waxed Oxidized Copper Grate"
-msgstr ""
+msgstr "Grille en cuivre oxydé ciré"
 
 msgid "Waxed Oxidized Copper Trapdoor"
-msgstr ""
+msgstr "Trappe en cuivre oxydé ciré"
 
 msgid "Waxed Oxidized Cut Copper"
-msgstr ""
+msgstr "Cuivre taillé oxydé ciré"
 
 msgid "Waxed Oxidized Cut Copper Slab"
-msgstr ""
+msgstr "Dalle en cuivre taillé oxydé ciré"
 
 msgid "Waxed Oxidized Cut Copper Stairs"
-msgstr ""
+msgstr "Escalier en cuivre taillé oxydé ciré"
 
 msgid "Waxed Upper @1"
 msgstr ""
 
 msgid "Waxed Weathered Chiseled Copper"
-msgstr ""
+msgstr "Cuivre sculpté érodé ciré"
 
 msgid "Waxed Weathered Copper"
-msgstr ""
+msgstr "Cuivre érodé ciré"
 
 msgid "Waxed Weathered Copper Bulb"
-msgstr ""
+msgstr "Ampoule en cuivre érodé ciré"
 
 msgid "Waxed Weathered Copper Bulb On"
-msgstr ""
+msgstr "Ampoule allumée en cuivre érodé ciré"
 
 msgid "Waxed Weathered Copper Grate"
-msgstr ""
+msgstr "Grille en cuivre érodé ciré"
 
 msgid "Waxed Weathered Copper Trapdoor"
-msgstr ""
+msgstr "Trappe en cuivre érodé ciré"
 
 msgid "Waxed Weathered Cut Copper"
-msgstr ""
+msgstr "Cuivre taillé érodé ciré"
 
 msgid "Waxed Weathered Cut Copper Slab"
-msgstr ""
+msgstr "Dalle en cuivre taillé érodé ciré"
 
 msgid "Waxed Weathered Cut Copper Stairs"
-msgstr ""
+msgstr "Escalier en cuivre érodé ciré"
 
 msgid "Weathered Chiseled Copper"
-msgstr ""
+msgstr "Cuivre sculpté érodé"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "Le cuivre sculpté érodé est surtout un bloc décoratif."
 
 msgid "Weathered Copper"
-msgstr ""
+msgstr "Cuivre érodé"
 
 msgid "Weathered Copper Bulb"
-msgstr ""
+msgstr "Ampoule en cuivre érodé"
 
 msgid "Weathered Copper Bulb On"
-msgstr ""
+msgstr "Ampoule allumée en cuivre érodé"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "L'ampoule en cuivre érodé est surtout un bloc décoratif."
 
 msgid "Weathered Copper Door"
-msgstr ""
+msgstr "Porte en cuivre érodé"
 
 msgid "Weathered Copper Grate"
-msgstr ""
+msgstr "Grille en cuivre érodé"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La grille en cuivre érodé est surtout un bloc décoratif."
 
 msgid "Weathered Copper Trapdoor"
-msgstr ""
+msgstr "Trappe en cuivre érodé"
 
 msgid "Weathered Copper is mostly a decorative block."
-msgstr ""
+msgstr "Le cuivre érodé est surtout un bloc décoratif."
 
 msgid "Weathered Cut Copper"
-msgstr ""
+msgstr "Cuivre taillé érodé"
 
 msgid "Weathered Cut Copper Slab"
-msgstr ""
+msgstr "Dalle en cuivre taillé érodé"
 
 msgid "Weathered Cut Copper Stairs"
-msgstr ""
+msgstr "Escalier en cuivre taillé érodé"
 
 msgid "Weathered Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "Le cuivre taillé érodé est surtout un bloc décoratif."
 
 msgid "Copper Ore"
 msgstr "Minerai de cuivre"
