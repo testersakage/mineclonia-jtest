@@ -671,7 +671,16 @@ function posing_humanoid:apply_arm_pose (pose)
 						},
 					})
 				else
-					self.object:set_bone_position(k, pos or vector.zero(), vector.apply(rot or vector.zero(), math.deg))
+					local pos = pos or ZERO_VECTOR
+					-- If scale is 0.0, set its
+					-- position to an enormously
+					-- distant location.
+					if scale and vector.equals (scale, ZERO_VECTOR) then
+						pos = vector.new (-3000, -3000, -3000)
+					end
+
+					local rot = vector.apply (rot or ZERO_VECTOR, math.deg)
+					self.object:set_bone_position (k, pos, rot)
 				end
 				if k == self.head_swivel then
 					self._old_head_swivel_vector = rot
@@ -680,7 +689,7 @@ function posing_humanoid:apply_arm_pose (pose)
 				if self.object.set_bone_override then
 					self.object:set_bone_override (k)
 				else
-					self.object:set_bone_position(k, vector.zero(), vector.zero())
+					self.object:set_bone_position (k, ZERO_VECTOR, ZERO_VECTOR)
 				end
 			end
 		end
@@ -694,11 +703,6 @@ function posing_humanoid:do_custom (dtime)
 		class.do_custom (self, dtime)
 	end
 
-	-- Not supported on 5.8.0 or earlier, where bone overrides
-	-- cannot be cleared or be marked as absolute.
-	if not self.object or not self.object.set_bone_override then
-		return
-	end
 	local last_arm_pose = self._arm_pose
 	self._arm_pose = self:select_arm_pose ()
 	if last_arm_pose ~= self._arm_pose

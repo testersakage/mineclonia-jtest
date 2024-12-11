@@ -67,6 +67,8 @@ local bat = {
 	makes_footstep_sound = false,
 	check_light = check_light,
 	gravity_drag = 0.6,
+	_apply_gravity_drag_on_ground = true,
+	pushable = false,
 }
 
 ------------------------------------------------------------------------
@@ -93,7 +95,8 @@ end
 local scale_chance = mcl_mobs.scale_chance
 
 function bat:motion_step (dtime, moveresult, self_pos)
-	mob_class.motion_step (self, dtime, moveresult, self_pos)
+	local h_scale, v_scale
+		= mob_class.motion_step (self, dtime, moveresult, self_pos)
 	local old_y = self_pos.y
 	local abovepos = {
 		x = math.floor (self_pos.x + 0.5),
@@ -139,12 +142,12 @@ function bat:motion_step (dtime, moveresult, self_pos)
 
 	if not target_pos
 		or is_walkable (target_pos)
-		or math.random (math.round (30 * 0.05 / dtime)) == 1
+		or math.random (scale_chance (30, dtime)) == 1
 		or vector.distance (self_pos, target_pos) <= 2.0 then
 		-- Switch target positions.
-		local x = (math.random (7) - 1) - (math.random (7) - 1)
-		local z = (math.random (7) - 1) - (math.random (7) - 1)
-		local y = (math.random (6) - 1) - 2.0
+		local x = math.random (0, 6) - math.random (0, 6)
+		local z = math.random (0, 6) - math.random (0, 6)
+		local y = math.random (0, 5) - 2.0
 		self_pos.y = old_y
 		target_pos = vector.offset (self_pos, x, y, z)
 		target_pos.x = math.floor (target_pos.x + 0.5)
@@ -155,23 +158,13 @@ function bat:motion_step (dtime, moveresult, self_pos)
 	self_pos.y = old_y
 	self._target_pos = target_pos
 	local v = self.object:get_velocity ()
-	local dx = target_pos.x - self_pos.x
-	local dy = target_pos.y - self_pos.y
-	local dz = target_pos.z - self_pos.z
-	local x_mod = (signum (dx) * 10 - v.x)
-		* mcl_mobs.pow_by_step (0.1, dtime)
-	local y_mod = (signum (dy) * 18 - v.y)
-		* mcl_mobs.pow_by_step (0.1, dtime)
-	local z_mod = (signum (dz) * 10 - v.z)
-		* mcl_mobs.pow_by_step (0.1, dtime)
+	local dx = target_pos.x + 0.5 - self_pos.x
+	local dy = target_pos.y + 0.1 - self_pos.y
+	local dz = target_pos.z + 0.5 - self_pos.z
+	local x_mod = (signum (dx) * 10 - v.x) * 0.1 * h_scale
+	local y_mod = (signum (dy) * 14 - v.y) * 0.1 * v_scale
+	local z_mod = (signum (dz) * 10 - v.z) * 0.1 * h_scale
 	v.x = v.x + x_mod
-
-	-- motion_step will apply gravity, but it should not take
-	-- effect if this mob is colliding w/ the ground.
-	if moveresult.touching_ground
-		or moveresult.standing_on_object then
-		v.y = 0
-	end
 	v.y = v.y + y_mod
 	v.z = v.z + z_mod
 	self.object:set_velocity (v)
