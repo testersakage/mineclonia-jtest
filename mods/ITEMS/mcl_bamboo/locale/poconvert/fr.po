@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-11 00:28+0000\n"
+"PO-Revision-Date: 2024-12-11 03:47+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -17,6 +17,7 @@ msgstr ""
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
 msgstr ""
+"Un bloc fait de tiges de bambou. Peut être transformé en planches de bambou."
 
 msgid "Block of Bamboo"
 msgstr "Bloc de bambou"
@@ -49,31 +50,31 @@ msgid "Bamboo Fence"
 msgstr "Barrière en bambou"
 
 msgid "Bamboo Fence Gate"
-msgstr ""
+msgstr "Portillon en bambou"
 
 msgid "Bamboo Planks"
-msgstr ""
+msgstr "Planches de bambou"
 
 msgid "Bamboo Pressure Plate"
-msgstr ""
+msgstr "Plaque de pression en bambou"
 
 msgid "Bamboo Sign"
-msgstr ""
+msgstr "Pancarte en bambou"
 
 msgid "Bamboo Slab"
-msgstr ""
+msgstr "Dalle en bambou"
 
 msgid "Bamboo Stairs"
-msgstr ""
+msgstr "Escaliers en bambou"
 
 msgid "Bamboo Trapdoor"
-msgstr ""
+msgstr "Trappe en bambou"
 
 msgid "Stripped Bamboo Wood"
-msgstr ""
+msgstr "Bois de bambou écorcé"
 
 msgid "The stripped wood of an Bamboo tree."
-msgstr ""
+msgstr "Le bois écorcé du bambou."
 
 msgid "Bamboo"
 msgstr "Bambou"
