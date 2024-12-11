@@ -3,24 +3,26 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-11 00:28+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_bamboo/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
 msgstr ""
 
 msgid "Block of Bamboo"
-msgstr ""
+msgstr "Bloc de bambou"
 
 msgid "Block of Stripped Bamboo"
-msgstr ""
+msgstr "Bloc de bambou écorcé"
 
 msgid "Bamboo Raft"
 msgstr "Radeau en bambou"
@@ -29,22 +31,22 @@ msgid "Chest Bamboo Raft"
 msgstr "Radeau de stockage en bambou"
 
 msgid "Bamboo Bark"
-msgstr ""
+msgstr "Grume de bambou"
 
 msgid "Bamboo Bark Slab"
-msgstr ""
+msgstr "Dalle en grume de bambou"
 
 msgid "Bamboo Bark Stairs"
-msgstr ""
+msgstr "Escalier en grume de bambou"
 
 msgid "Bamboo Button"
-msgstr ""
+msgstr "Bouton en bambou"
 
 msgid "Bamboo Door"
-msgstr ""
+msgstr "Porte en bambou"
 
 msgid "Bamboo Fence"
-msgstr ""
+msgstr "Barrière en bambou"
 
 msgid "Bamboo Fence Gate"
 msgstr ""
@@ -93,4 +95,3 @@ msgstr "Échafaudage horizontal"
 
 msgid "Scaffolding block..."
 msgstr "Bloc d'échafaudage..."
-
