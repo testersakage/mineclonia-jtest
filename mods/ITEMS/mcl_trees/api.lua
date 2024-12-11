@@ -162,7 +162,7 @@ local tpl_log = {
 	_doc_items_hidden = false,
 	paramtype2 = "facedir",
 	groups = table.merge(wood_groups, {
-		tree = 1, building_block = 1, supports_mushrooms=1
+		tree = 1, building_block = 1, supports_mushrooms=2
 	}),
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	on_place = mcl_util.rotate_axis,
