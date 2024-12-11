@@ -53,10 +53,10 @@ local function on_bone_meal(_, _, _, pos, n)
 			return
 		end
 	end
-	local minp, maxp = vector.offset(pos,-3,0,-3), vector.offset(pos,3,(height-1),3)
+	local minp, maxp = vector.offset(pos,-3,1,-3), vector.offset(pos,3,height,3)
 	local diff = vector.subtract(maxp, minp)
 	diff = vector.add(diff, vector.new(1,1,1))
-	local totalnodes = diff.x * diff.y * diff.z - 1
+	local totalnodes = diff.x * diff.y * diff.z
 	local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
 	if #goodnodes < totalnodes then
 		return
