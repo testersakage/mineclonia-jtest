@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_wool x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-12 03:32+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_wool/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Carpet"
 msgstr "Tapis"
@@ -26,98 +28,97 @@ msgid "Carpets are thin floor covers which come in many different colors."
 msgstr "Les tapis sont des revêtements de sol minces qui viennent dans de nombreuses couleurs différentes."
 
 msgid "Black Carpet"
-msgstr ""
+msgstr "Tapis noir"
 
 msgid "Black Wool"
-msgstr ""
+msgstr "Laine noire"
 
 msgid "Blue Carpet"
-msgstr ""
+msgstr "Tapis bleu"
 
 msgid "Blue Wool"
-msgstr ""
+msgstr "Laine bleue"
 
 msgid "Brown Carpet"
-msgstr ""
+msgstr "Tapis marron"
 
 msgid "Brown Wool"
-msgstr ""
+msgstr "Laine marron"
 
 msgid "Cyan Carpet"
-msgstr ""
+msgstr "Tapis cyan"
 
 msgid "Cyan Wool"
-msgstr ""
+msgstr "Laine cyan"
 
 msgid "Green Carpet"
-msgstr ""
+msgstr "Tapis vert"
 
 msgid "Green Wool"
-msgstr ""
+msgstr "Laine verte"
 
 msgid "Grey Carpet"
-msgstr ""
+msgstr "Tapis gris"
 
 msgid "Grey Wool"
-msgstr ""
+msgstr "Laine grise"
 
 msgid "Light Blue Carpet"
-msgstr ""
+msgstr "Tapis bleu clair"
 
 msgid "Light Blue Wool"
-msgstr ""
+msgstr "Laine bleu clair"
 
 msgid "Light Grey Carpet"
-msgstr ""
+msgstr "Tapis gris clair"
 
 msgid "Light Grey Wool"
-msgstr ""
+msgstr "Laine gris clair"
 
 msgid "Lime Carpet"
-msgstr ""
+msgstr "Tapis vert clair"
 
 msgid "Lime Wool"
-msgstr ""
+msgstr "Laine vert clair"
 
 msgid "Magenta Carpet"
-msgstr ""
+msgstr "Tapis magenta"
 
 msgid "Magenta Wool"
-msgstr ""
+msgstr "Laine magenta"
 
 msgid "Orange Carpet"
-msgstr ""
+msgstr "Tapis orange"
 
 msgid "Orange Wool"
-msgstr ""
+msgstr "Laine orange"
 
 msgid "Pink Carpet"
-msgstr ""
+msgstr "Tapis rose"
 
 msgid "Pink Wool"
-msgstr ""
+msgstr "Laine rose"
 
 msgid "Purple Carpet"
-msgstr ""
+msgstr "Tapis violet"
 
 msgid "Purple Wool"
-msgstr ""
+msgstr "Laine violette"
 
 msgid "Red Carpet"
-msgstr ""
+msgstr "Tapis rouge"
 
 msgid "Red Wool"
-msgstr ""
+msgstr "Laine rouge"
 
 msgid "White Carpet"
-msgstr ""
+msgstr "Tapis blanc"
 
 msgid "White Wool"
-msgstr ""
+msgstr "Laine blanche"
 
 msgid "Yellow Carpet"
-msgstr ""
+msgstr "Tapis jaune"
 
 msgid "Yellow Wool"
-msgstr ""
-
+msgstr "Laine jaune"
