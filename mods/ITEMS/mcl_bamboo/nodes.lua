@@ -222,7 +222,8 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 		mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(pos, _, node)
 			if node.name ~= "mcl_bamboo:scaffolding" then return true end
 			if mcl_util.safe_place(pos, {name = "air"}, digger) then
-				if not minetest.is_creative_enabled(digger:get_player_name()) then
+				local digger_name = digger and digger:get_player_name() or ""
+				if not minetest.is_creative_enabled(digger_name) then
 					minetest.add_item(pos,"mcl_bamboo:scaffolding")
 				end
 				for _,v in pairs(adjacents) do
