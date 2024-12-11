@@ -208,7 +208,9 @@ function shulker:attach_to_face (facedir)
 	if self.object.set_bone_override then
 		self.object:set_bone_override ("root", override)
 	else
-		local pos = override.position.vec
+		local pos = override.position
+			and override.position.vec
+			or vector.zero ()
 		local rot = vector.apply (override.rotation.vec, math.deg)
 		self.object:set_bone_position ("root", pos, rot)
 	end
