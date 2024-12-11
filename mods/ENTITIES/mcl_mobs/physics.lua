@@ -1130,7 +1130,8 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- Consequently, fv.y must be applied after fall_speed, with
 	-- gravity_drag in between.
 	local gravity_drag = 1
-	if self.gravity_drag and not touching_ground then
+	if self.gravity_drag and (not touching_ground
+					or self._apply_gravity_drag_on_ground) then
 		gravity_drag = pow_by_step (self.gravity_drag, dtime)
 	end
 
@@ -1373,6 +1374,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	self._was_touching_ground = touching_ground
 	self.object:set_velocity (v)
 	self:check_collision (self_pos)
+	return h_scale, v_scale
 end
 
 -- Simplified `motion_step' for true (i.e., not birds or blazes)
