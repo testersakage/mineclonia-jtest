@@ -83,11 +83,11 @@ local function spawn_crystal(pos)
 		crystal:_explode()
 	end
 	local portal_pos = vector.add(portal_center, vector.new(0, -1, 0))
-	mcl_structures.place_structure(portal_pos,mcl_structures.registered_structures["end_exit_portal"],PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
+	mcl_structures.place_structure(portal_pos, mcl_structures.registered_structures["end_exit_portal"], PcgRandom(minetest.get_mapgen_setting("seed") + core.hash_node_position(portal_pos) + 42, -1))
 	local spike_def = mcl_structures.registered_structures["end_spike"]
 
 	for _, spike_pos in pairs(spike_def.static_pos) do
-		mcl_structures.place_structure(spike_pos, mcl_structures.registered_structures["end_spike"], PcgRandom(minetest.get_mapgen_setting("seed")), -1)
+		mcl_structures.place_structure(spike_pos, mcl_structures.registered_structures["end_spike"], PcgRandom(minetest.get_mapgen_setting("seed") + core.hash_node_position(spike_pos) + 42, -1))
 	end
 end
 
