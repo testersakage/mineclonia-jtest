@@ -103,6 +103,14 @@ local function get_points_on_circle(pos,r,n)
 	return rt
 end
 
+local function generate_crystal(pos)
+	for o in core.objects_inside_radius(pos, 1) do
+		local l = o:get_luaentity()
+		if l and l.name == "mcl_end:crystal" then return end
+	end
+	minetest.add_entity(pos, "mcl_end:crystal")
+end
+
 mcl_structures.register_structure("end_spike",{
 	static_pos = get_points_on_circle(vector.offset(mcl_vars.mg_end_exit_portal_pos,0,-20,0),43,10),
 	place_func = function(pos)
@@ -115,7 +123,7 @@ mcl_structures.register_structure("end_spike",{
 			local s = make_endspike(pos,d,h)
 			minetest.swap_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})
 			minetest.swap_node(vector.offset(s,0,2,0),{name="mcl_fire:eternal_fire"})
-			minetest.add_entity(vector.offset(s,0,3,0),"mcl_end:crystal")
+			generate_crystal(vector.offset(s, 0, 3, 0))
 			if seed_pr:next(1,3) == 1 then
 				make_cage(vector.offset(s,0,1,0),d)
 			end
