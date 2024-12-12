@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 14:52+0000\n"
+"PO-Revision-Date: 2024-12-12 15:49+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_bamboo/zh_Hans/>\n"
@@ -66,13 +66,13 @@ msgid "Bamboo Stairs"
 msgstr "竹楼梯"
 
 msgid "Bamboo Trapdoor"
-msgstr ""
+msgstr "竹活板门"
 
 msgid "Stripped Bamboo Wood"
-msgstr ""
+msgstr "去皮竹木材"
 
 msgid "The stripped wood of an Bamboo tree."
-msgstr ""
+msgstr "竹子的去皮木材。"
 
 msgid "Bamboo"
 msgstr "竹子"
@@ -90,7 +90,7 @@ msgid "Scaffolding is a temporary structure to easily climb up while building th
 msgstr "一种便于攀爬的临时架构，同时也易于拆除"
 
 msgid "Scaffolding horizontal"
-msgstr ""
+msgstr "脚手架横杆"
 
 msgid "Scaffolding block..."
-msgstr ""
+msgstr "脚手架方块……"
