@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-12 14:42+0000\n"
+"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/awards/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Secret Award Unlocked: @1"
 msgstr "已解锁私密奖励：@1"
@@ -32,7 +33,7 @@ msgid "Advancement Made!"
 msgstr "完成成就！"
 
 msgid "[c|clear|disable|enable]"
-msgstr "[c|clear|disable|enable]"
+msgstr "[c | 清除 | 禁用 | 启用]"
 
 msgid "Show, clear, disable or enable your awards"
 msgstr "显示、清除、禁用或启用奖励"
@@ -107,13 +108,13 @@ msgid "Join @1 times"
 msgstr "加入@1次"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2次死亡"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "因 @1 死亡一次"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "死亡 @1 次的 @2"
 
 msgid "Die @1 times."
 msgstr "死亡@1次。"
@@ -122,7 +123,7 @@ msgid "Mine @1 times"
 msgstr "挖矿@1次"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2个已挖掘"
 
 msgid "Mine: @1"
 msgstr "采矿：@1"
@@ -131,28 +132,28 @@ msgid "Mine: @1×@2"
 msgstr "采矿：@1x@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "挖掘 @1 方块。"
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "挖掘 @1 方块。"
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1/@2个已放置"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "放置:@1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "放置: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "放置 @1 个方块。"
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "放置 @1 个方块。"
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "已制作 @1/@2"
 
 msgid "Craft: @1"
 msgstr "合成：@1"
@@ -164,20 +165,19 @@ msgid "Craft @1 item"
 msgstr "合成@1项"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "制作 @1 个物品。"
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "已吃掉 @1/@2"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "吃掉 @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "吃掉@1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "吃掉 @1 个物品"
 
 msgid "Eat @1 items."
-msgstr ""
-
+msgstr "吃掉 @1 个物品。"
