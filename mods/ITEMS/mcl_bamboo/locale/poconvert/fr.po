@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-11 03:47+0000\n"
+"PO-Revision-Date: 2024-12-12 09:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -32,13 +32,13 @@ msgid "Chest Bamboo Raft"
 msgstr "Radeau de stockage en bambou"
 
 msgid "Bamboo Bark"
-msgstr "Grume de bambou"
+msgstr "Écorce de bambou"
 
 msgid "Bamboo Bark Slab"
-msgstr "Dalle en grume de bambou"
+msgstr "Dalle en écorce de bambou"
 
 msgid "Bamboo Bark Stairs"
-msgstr "Escalier en grume de bambou"
+msgstr "Escalier en écorce de bambou"
 
 msgid "Bamboo Button"
 msgstr "Bouton en bambou"
@@ -65,7 +65,7 @@ msgid "Bamboo Slab"
 msgstr "Dalle en bambou"
 
 msgid "Bamboo Stairs"
-msgstr "Escaliers en bambou"
+msgstr "Escalier en bambou"
 
 msgid "Bamboo Trapdoor"
 msgstr "Trappe en bambou"
@@ -83,7 +83,7 @@ msgid "Bamboo Plant"
 msgstr "Plante de bambou"
 
 msgid "Bamboo Mosaic Plank"
-msgstr "Planche mosaïque de bambou"
+msgstr "Planche de bambou mosaïque"
 
 msgid "Scaffolding"
 msgstr "Échafaudage"
