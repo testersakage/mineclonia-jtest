@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-11 03:47+0000\n"
+"PO-Revision-Date: 2024-12-12 09:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -124,7 +124,7 @@ msgid "You can copy the pattern of a banner by placing two banners of the same c
 msgstr "Vous pouvez copier le motif d'une bannière en plaçant deux bannières de la même couleur dans la grille de fabrication : l'une doit être décorée, l'autre doit être propre. Enfin, vous pouvez utiliser une bannière sur un chaudron avec de l'eau pour laver sa couche la plus haute."
 
 msgid "Preview Banner"
-msgstr "Aperçu de Bannière"
+msgstr "Aperçu de la bannière"
 
 msgid "Paintable decoration"
 msgstr "Pochoir"
