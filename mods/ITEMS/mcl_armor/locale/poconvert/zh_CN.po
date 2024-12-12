@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 14:42+0000\n"
+"PO-Revision-Date: 2024-12-12 14:52+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_armor/zh_Hans/>\n"
@@ -156,22 +156,22 @@ msgid "Reflects some of the damage taken when hit, at the cost of reducing durab
 msgstr "受到攻击时会反弹部分所受伤害，但每次触发该效果都会损耗装备的耐久度。"
 
 msgid "Elytra"
-msgstr ""
+msgstr "鞘翅"
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "锻造模板"
 
 msgid "@1 Armor Trim"
-msgstr ""
+msgstr "@1 盔甲纹饰"
 
 msgid "Applies to:"
-msgstr ""
+msgstr "适用于："
 
 msgid "Armor"
 msgstr "护甲"
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "原料："
 
 msgid "Ingot & Crystals"
-msgstr ""
+msgstr "锭和晶体"
