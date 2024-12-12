@@ -3,21 +3,23 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mclx_stairs/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Lapis Lazuli Stairs"
-msgstr "Escalier de Lapis Lazuli"
+msgstr "Escalier en lapis-lazuli"
 
 msgid "Lapis Lazuli Slab"
-msgstr "Dalle de Lapis Lazuli"
+msgstr "Dalle en lapis-lazuli"
 
 msgid "Gold Stairs"
 msgstr "Escalier en or"
@@ -32,19 +34,19 @@ msgid "Iron Slab"
 msgstr "Dalle en fer"
 
 msgid "Cracked Stone Brick Stairs"
-msgstr "Escalier en Brique de Pierre Fissurée"
+msgstr "Escalier en pierre taillée craquelée"
 
 msgid "Cracked Stone Brick Slab"
-msgstr "Dalle de Brique de Pierre Fissurée"
+msgstr "Dalle en pierre taillée craquelée"
 
 msgid "Cracked Deepslate Brick Stairs"
-msgstr "Escalier en Ardoise des abimes taillée craquelée"
+msgstr "Escalier en ardoise des abîmes taillée craquelée"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr "Dalle en Ardoise des abîmes taillée craquelée"
+msgstr "Dalle en ardoise des abîmes taillée craquelée"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr "Escalier en Ardoise des abîmes carrelée craquelée"
+msgstr "Escalier en ardoise des abîmes carrelée craquelée"
 
 msgid "Cracked Deepslate Tile Slab"
 msgstr "Dalle en ardoise des abîmes carrelée craquelée"
@@ -59,212 +61,211 @@ msgid "Smooth Stone Stairs"
 msgstr "Escalier en roche lisse"
 
 msgid "Terracotta Stairs"
-msgstr "Escalier en terracotta"
+msgstr "Escalier en terre cuite"
 
 msgid "Terracotta Slab"
-msgstr "Dalle en terracotta"
+msgstr "Dalle en terre cuite"
 
 msgid "Concrete Slab"
-msgstr "Dalle en Béton"
+msgstr "Dalle en béton"
 
 msgid "Double Concrete Slab"
-msgstr "Double Dalle en Béton"
+msgstr "Double dalle en béton"
 
 msgid "Concrete Stairs"
-msgstr "Escalier en Béton"
+msgstr "Escalier en béton"
 
 msgid "Double Terracotta Slab"
-msgstr "Double dalle en Terracotta"
+msgstr "Double dalle en terre cuite"
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton noir"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton noir"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite noire"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite noire"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton bleu"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton bleu"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite bleue"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite bleue"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton marron"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton marron"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite marron"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite marron"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton cyan"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton cyan"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite cyan"
 
 msgid "Cyan Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite cyan"
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton vert"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton vert"
 
 msgid "Green Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite verte"
 
 msgid "Green Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite verte"
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton gris"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton gris"
 
 msgid "Grey Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite grise"
 
 msgid "Grey Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite grise"
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton bleu clair"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton bleu clair"
 
 msgid "Light Blue Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite bleu clair"
 
 msgid "Light Blue Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite bleu clair"
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton gris clair"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton gris clair"
 
 msgid "Light Grey Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite gris clair"
 
 msgid "Light Grey Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite gris clair"
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton vert clair"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton vert clair"
 
 msgid "Lime Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite vert clair"
 
 msgid "Lime Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite vert clair"
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton magenta"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton magenta"
 
 msgid "Magenta Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite magenta"
 
 msgid "Magenta Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite magenta"
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton orange"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton orange"
 
 msgid "Orange Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite orange"
 
 msgid "Orange Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite orange"
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton rose"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton rose"
 
 msgid "Pink Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite rose"
 
 msgid "Pink Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite rose"
 
 msgid "Purple Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton violet"
 
 msgid "Purple Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton violet"
 
 msgid "Purple Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite violette"
 
 msgid "Purple Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite violette"
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton rouge"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton rouge"
 
 msgid "Red Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite rouge"
 
 msgid "Red Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite rouge"
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton blanc"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton blanc"
 
 msgid "White Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite blanche"
 
 msgid "White Terracotta Stairs"
-msgstr ""
+msgstr "Escalier en terre cuite blanche"
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "Dalle en béton jaune"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "Escalier en béton jaune"
 
 msgid "Yellow Terracotta Slab"
-msgstr ""
+msgstr "Dalle en terre cuite jaune"
 
 msgid "Yellow Terracotta Stairs"
-msgstr ""
-
+msgstr "Escalier en terre cuite jaune"
