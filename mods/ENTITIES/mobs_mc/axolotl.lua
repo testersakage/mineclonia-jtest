@@ -271,97 +271,33 @@ axolotl.ai_functions = {
 	mob_class.check_pace,
 }
 
-mcl_mobs.register_mob ("mobs_mc:axolotl", axolotl)
-
 ------------------------------------------------------------------------
 -- Axolotl spawning.
 ------------------------------------------------------------------------
 
+function axolotl.can_spawn (pos)
+	for i = 1, 4 do
+		local block = minetest.get_node (vector.offset (pos, 0, -i, 0))
+		if block.name == "mcl_core:clay" then
+			return true
+		end
+	end
+	return false
+end
+
+mcl_mobs.register_mob ("mobs_mc:axolotl", axolotl)
+
 mcl_mobs.spawn_setup ({
 	name = "mobs_mc:axolotl",
-	type_of_spawning = "ground",
+	type_of_spawning = "water",
 	dimension = "overworld",
-	min_height = mobs_mc.water_level-16,
-	max_height = mobs_mc.water_level-1,
 	min_light = 0,
 	max_light = minetest.LIGHT_MAX + 1,
 	aoc = 7,
 	chance = 100,
 	biomes = {
-		"Swampland",
-		"MushroomIsland",
-		"RoofedForest",
-		"FlowerForest_beach",
-		"Forest_beach",
-		"StoneBeach",
-		"Taiga_beach",
-		"Savanna_beach",
-		"Plains_beach",
-		"ExtremeHills_beach",
-		"Swampland_shore",
-		"MushroomIslandShore",
-		"JungleM_shore",
-		"Jungle_shore",
-		"BambooJungle",
-		"BambooJungle_ocean",
-		"RoofedForest_ocean",
-		"JungleEdgeM_ocean",
-		"BirchForestM_ocean",
-		"BirchForest_ocean",
-		"IcePlains_deep_ocean",
-		"Jungle_deep_ocean",
-		"Savanna_ocean",
-		"MesaPlateauF_ocean",
-		"SunflowerPlains_ocean",
-		"Swampland_ocean",
-		"ExtremeHillsM_ocean",
-		"Mesa_ocean",
-		"StoneBeach_ocean",
-		"Plains_ocean",
-		"MesaPlateauFM_ocean",
-		"MushroomIsland_ocean",
-		"MegaTaiga_ocean",
-		"StoneBeach_deep_ocean",
-		"SavannaM_ocean",
-		"ExtremeHills_ocean",
-		"Forest_ocean",
-		"JungleEdge_ocean",
-		"MesaBryce_ocean",
-		"MegaSpruceTaiga_ocean",
-		"ExtremeHills+_ocean",
-		"Jungle_ocean",
-		"FlowerForest_ocean",
-		"Desert_ocean",
-		"Taiga_ocean",
-		"JungleM_ocean",
-		"FlowerForest_underground",
-		"JungleEdge_underground",
-		"StoneBeach_underground",
-		"MesaBryce_underground",
-		"Mesa_underground",
-		"RoofedForest_underground",
-		"Jungle_underground",
-		"Swampland_underground",
-		"MushroomIsland_underground",
-		"BirchForest_underground",
-		"Plains_underground",
-		"MesaPlateauF_underground",
-		"ExtremeHills_underground",
-		"MegaSpruceTaiga_underground",
-		"BirchForestM_underground",
-		"SavannaM_underground",
-		"MesaPlateauFM_underground",
-		"Desert_underground",
-		"Savanna_underground",
-		"Forest_underground",
-		"SunflowerPlains_underground",
-		"MegaTaiga_underground",
-		"Taiga_underground",
-		"ExtremeHills+_underground",
-		"JungleM_underground",
-		"ExtremeHillsM_underground",
-		"JungleEdgeM_underground",
 		"LushCaves",
+		"LushCaves_underground",
 	},
 })
 
