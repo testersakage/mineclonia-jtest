@@ -1543,7 +1543,7 @@ end
 
 local post_motion_step_scratch = vector.zero ()
 
-function mob_class:post_motion_step (self_pos, dtime)
+function mob_class:post_motion_step (self_pos, dtime, moveresult)
 	-- Apply slowdowns from blocks that should impede movement.
 	local xmin, zmin, xmax, zmax, ymin, ymax
 	local slowdowns = self.slowdown_nodes
@@ -1573,7 +1573,7 @@ function mob_class:post_motion_step (self_pos, dtime)
 					-- Indicate that the velocity must be reset
 					-- upon the next globalstep
 					self._was_stuck = true
-					return
+					break
 				end
 			end
 		end
