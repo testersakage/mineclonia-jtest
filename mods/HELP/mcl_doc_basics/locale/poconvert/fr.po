@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 03:32+0000\n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -805,7 +805,7 @@ msgid "Normally, blocks are built in front of the pointed side of the pointed bl
 msgstr "Normalement, les blocs sont construits devant le côté pointu du bloc pointu. Quelques blocs sont différents : lorsque vous essayez de les construire, ils sont remplacés."
 
 msgid "Crafting"
-msgstr "Artisanat"
+msgstr "Fabrication"
 
 msgid "Crafting is the task of combining several items to form a new item."
 msgstr "L'artisanat consiste à combiner plusieurs éléments pour former un nouvel élément."
