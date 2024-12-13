@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 22:37+0000\n"
+"PO-Revision-Date: 2024-12-13 22:54+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
@@ -514,37 +514,37 @@ msgid "Stripped Acacia Log"
 msgstr "Tronco de acacia sin corteza"
 
 msgid "Stripped Acacia Wood"
-msgstr ""
+msgstr "Leño de acacia sin corteza"
 
 msgid "Stripped Birch Log"
-msgstr ""
+msgstr "Tronco de abedul sin corteza"
 
 msgid "Stripped Birch Wood"
-msgstr ""
+msgstr "Leño de abedul sin corteza"
 
 msgid "Stripped Dark Oak Log"
-msgstr ""
+msgstr "Tronco de roble oscuro sin corteza"
 
 msgid "Stripped Dark Oak Wood"
-msgstr ""
+msgstr "Leño de roble oscuro sin corteza"
 
 msgid "Stripped Jungle Log"
-msgstr ""
+msgstr "Tronco de jungla sin corteza"
 
 msgid "Stripped Jungle Wood"
-msgstr ""
+msgstr "Leño de jungla sin corteza"
 
 msgid "Stripped Oak Log"
-msgstr ""
+msgstr "Tronco de roble sin corteza"
 
 msgid "Stripped Oak Wood"
-msgstr ""
+msgstr "Leño de roble sin corteza"
 
 msgid "Stripped Spruce Log"
-msgstr ""
+msgstr "Tronco de abeto sin corteza"
 
 msgid "Stripped Spruce Wood"
-msgstr ""
+msgstr "Leño de abeto sin corteza"
 
 msgid "The stripped trunk of an Acacia tree."
 msgstr ""
@@ -601,10 +601,10 @@ msgid "The trunk of a Spruce tree."
 msgstr ""
 
 msgid "White Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de blanco"
 
 msgid "Yellow Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de amarillo"
 
 msgid "Stone"
 msgstr "Piedra"
@@ -613,7 +613,7 @@ msgid "One of the most common blocks in the world, almost the entire underground
 msgstr "Uno de los bloques más comunes en el mundo, casi todo el subsuelo consiste en piedra. A veces contiene minerales. Se puede crear piedra cuando el agua se encuentra con la lava."
 
 msgid "Coal Ore"
-msgstr "Mena de Carbón"
+msgstr "Mena de carbón"
 
 msgid "Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."
 msgstr "Algo de carbón contenido en la piedra, es muy común y se puede encontrar dentro de la piedra en grupos medianos a grandes en casi todas las alturas."
@@ -631,28 +631,32 @@ msgid "This stone contains pure gold, a rare metal."
 msgstr "Esta piedra contiene oro puro, un metal raro."
 
 msgid "Redstone Ore"
-msgstr "Mineral de redstone"
+msgstr "Mena de redstone"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
-msgstr "El mineral redstone se encuentra comúnmente cerca del fondo del mundo. Brilla cuando es golpeado o pisado."
+msgstr ""
+"El mena redstone se encuentra comúnmente cerca del fondo del mundo. Brilla "
+"cuando es golpeado o pisado."
 
 msgid "Lit Redstone Ore"
-msgstr "Mineral de redstone encendida"
+msgstr "Mena de redstone encendida"
 
 msgid "Lapis Lazuli Ore"
-msgstr "Mineral de lapislázuli"
+msgstr "Mena de lapislázuli"
 
 msgid "Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."
-msgstr "El mineral de lapislázuli produce lapislázuli. Rara vez se puede encontrar en vetas cercanas al fondo del mundo."
+msgstr ""
+"El mena de lapislázuli produce lapislázuli. Rara vez se puede encontrar en "
+"vetas cercanas al fondo del mundo."
 
 msgid "Emerald Ore"
-msgstr "Mineral de esmeralda"
+msgstr "Mena de esmeralda"
 
 msgid "Emerald ore is the ore of emeralds. It is very rare and can be found alone, not in clusters."
 msgstr "El mineral de esmeralda da esmeraldas. Es muy raro y solo se puede encontrar uno, no más."
 
 msgid "Diamond Ore"
-msgstr "Mineral de diamante"
+msgstr "Mena de diamante"
 
 msgid "Diamond ore is rare and can be found in clusters near the bottom of the world."
 msgstr "El mineral de diamante es raro y se puede encontrar en grupos cerca del fondo del mundo."
@@ -661,13 +665,13 @@ msgid "Stone Bricks"
 msgstr "Ladrillos de piedra"
 
 msgid "Chiseled Stone Bricks"
-msgstr "Ladrillo de piedra cincelado"
+msgstr "Ladrillos de piedra cincelados"
 
 msgid "Cracked Stone Bricks"
-msgstr "Ladrillo de piedra agrietado"
+msgstr "Ladrillos de piedra agrietados"
 
 msgid "Mossy Stone Bricks"
-msgstr "Ladrillo de piedra musgoso"
+msgstr "Ladrillos de piedra musgosos"
 
 msgid "Smooth Stone"
 msgstr "Piedra lisa"
