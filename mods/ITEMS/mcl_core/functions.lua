@@ -86,8 +86,7 @@ function mcl_core.grow_reeds(pos, _)
 	end
 end
 
--- ABMs
-
+-- ABMs and liquid flow.
 
 local function drop_attached_node(p)
 	local nn = minetest.get_node(p).name
@@ -107,71 +106,38 @@ local function drop_attached_node(p)
 	end
 end
 
--- Helper function for node actions for liquid flow
-local function liquid_flow_action(pos, group, action)
-	local function check_detach(pos, xp, yp, zp)
-		local p = {x=pos.x+xp, y=pos.y+yp, z=pos.z+zp}
-		local n = minetest.get_node_or_nil(p)
-		if not n then
-			return false
-		end
-		local d = minetest.registered_nodes[n.name]
-		if not d then
-			return false
-		end
-		--[[ Check if we want to perform the liquid action.
-		* 1: Item must be in liquid group
-		* 2a: If target node is below liquid, always succeed
-		* 2b: If target node is horizontal to liquid: succeed if source, otherwise check param2 for horizontal flow direction ]]
-		local range = d.liquid_range or 8
-		if (minetest.get_item_group(n.name, group) ~= 0) and
-				((yp > 0) or
-				(yp == 0 and ((d.liquidtype == "source") or (n.param2 > (8-range) and n.param2 < 9)))) then
-			action(pos)
-		end
-	end
-	local posses = {
-		{ x=-1, y=0, z=0 },
-		{ x=1, y=0, z=0 },
-		{ x=0, y=0, z=-1 },
-		{ x=0, y=0, z=1 },
-		{ x=0, y=1, z=0 },
-	}
-	for p=1,#posses do
-		check_detach(pos, posses[p].x, posses[p].y, posses[p].z)
+local function basic_flood (pos, old_node, new_node)
+	if minetest.get_item_group (new_node.name, "water") > 0 then
+		drop_attached_node (pos)
+		minetest.dig_node (pos)
+	elseif minetest.get_item_group (new_node.name, "lava") > 0 then
+		minetest.remove_node (pos)
+		minetest.sound_play ("builtin_item_lava", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+		minetest.check_for_falling (pos)
+	else
+		return true
 	end
 end
 
--- Drop some nodes next to flowing water, if it would flow into the node
-minetest.register_abm({
-	label = "Wash away dig_by_water nodes by water flow",
-	nodenames = {"group:dig_by_water"},
-	neighbors = {"group:water"},
-	interval = 1,
-	chance = 1,
-	action = function(pos)
-		liquid_flow_action(pos, "water", function(pos)
-			drop_attached_node(pos)
-			minetest.dig_node(pos)
-		end)
-	end,
-})
+-- dig_by_water and destroy_by_lava.  In most (all?) instances the two
+-- are wholly equivalent.
 
--- Destroy some nodes next to flowing lava, if it would flow into the node
-minetest.register_abm({
-	label = "Destroy destroy_by_lava_flow nodes by lava flow",
-	nodenames = {"group:destroy_by_lava_flow"},
-	neighbors = {"group:lava"},
-	interval = 1,
-	chance = 5,
-	action = function(pos)
-		liquid_flow_action(pos, "lava", function(pos)
-			minetest.remove_node(pos)
-			minetest.sound_play("builtin_item_lava", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
-			minetest.check_for_falling(pos)
-		end)
-	end,
-})
+local function init_water_and_lava_flow ()
+	for name, node in pairs (minetest.registered_nodes) do
+		-- dig_by_water and destroy_by_lava_flow are treated
+		-- as synonyms of each other, since Minecraft makes no
+		-- distinction between the two and this vastly
+		-- simplifies processing.
+		if node.groups.dig_by_water or node.groups.destroy_by_lava_flow then
+			minetest.override_item (name, {
+				floodable = true,
+				on_flood = basic_flood,
+			})
+		end
+	end
+end
+
+minetest.register_on_mods_loaded (init_water_and_lava_flow)
 
 -- Cactus mechanisms
 minetest.register_abm({
