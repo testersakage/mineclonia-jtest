@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -19,97 +19,97 @@ msgid "White Banner"
 msgstr "Bannière blanche"
 
 msgid "White"
-msgstr "Blanche"
+msgstr "d'argent"
 
 msgid "Grey Banner"
 msgstr "Bannière grise"
 
 msgid "Grey"
-msgstr "Grise"
+msgstr "d'acier"
 
 msgid "Light Grey Banner"
 msgstr "Bannière gris clair"
 
 msgid "Light Grey"
-msgstr "Gris Clair"
+msgstr "d'argent grisé"
 
 msgid "Black Banner"
 msgstr "Bannière noire"
 
 msgid "Black"
-msgstr "Noire"
+msgstr "de sable"
 
 msgid "Red Banner"
 msgstr "Bannière rouge"
 
 msgid "Red"
-msgstr "Rouge"
+msgstr "de gueules"
 
 msgid "Yellow Banner"
 msgstr "Bannière jaune"
 
 msgid "Yellow"
-msgstr "Jaune"
+msgstr "d'or"
 
 msgid "Green Banner"
 msgstr "Bannière verte"
 
 msgid "Green"
-msgstr "Verte"
+msgstr "de sinople"
 
 msgid "Cyan Banner"
 msgstr "Bannière cyan"
 
 msgid "Cyan"
-msgstr "Cyan"
+msgstr "de cyan"
 
 msgid "Blue Banner"
 msgstr "Bannière bleue"
 
 msgid "Blue"
-msgstr "Bleue"
+msgstr "d'azur"
 
 msgid "Magenta Banner"
 msgstr "Bannière magenta"
 
 msgid "Magenta"
-msgstr "Magenta"
+msgstr "de pourpre"
 
 msgid "Orange Banner"
 msgstr "Bannière orange"
 
 msgid "Orange"
-msgstr "Orange"
+msgstr "d'orangé"
 
 msgid "Purple Banner"
 msgstr "Bannière violette"
 
 msgid "Violet"
-msgstr "Violet"
+msgstr "de mûre"
 
 msgid "Brown Banner"
 msgstr "Bannière marron"
 
 msgid "Brown"
-msgstr "Marron"
+msgstr "de tanné"
 
 msgid "Pink Banner"
 msgstr "Bannière rose"
 
 msgid "Pink"
-msgstr "Rose"
+msgstr "de carnation"
 
 msgid "Lime Banner"
 msgstr "Bannière vert clair"
 
 msgid "Lime"
-msgstr "Vert Clair"
+msgstr "de sinople clair"
 
 msgid "Light Blue Banner"
 msgstr "Bannière bleu clair"
 
 msgid "Light Blue"
-msgstr "Bleu Clair"
+msgstr "de bleu céleste"
 
 msgid "Banner"
 msgstr "Bannière"
@@ -136,55 +136,55 @@ msgid "Special Banner Pattern"
 msgstr "Motif spécial de bannière"
 
 msgid "@1 Bordure"
-msgstr "Bordure (@1)"
+msgstr "Bordure @1"
 
 msgid "@1 Bricks"
-msgstr "Blocs (@1)"
+msgstr "Champ maçonné @1"
 
 msgid "@1 Roundel"
-msgstr "Cocarde (@1)"
+msgstr "Tourteau @1"
 
 msgid "@1 Creeper Charge"
-msgstr "Face de Creeper (@1)"
+msgstr "Face de Creeper @1"
 
 msgid "@1 Saltire"
-msgstr "Saltire (@1)"
+msgstr "Sautoir @1"
 
 msgid "@1 Bordure Indented"
-msgstr "Bordure en retrait (@1)"
+msgstr "Bordure cannelée @1"
 
 msgid "@1 Per Bend Inverted"
-msgstr "Division inclinée inversé (@1)"
+msgstr "Tranché, au premier @1"
 
 msgid "@1 Per Bend Sinister Inverted"
-msgstr "Division oblique inversé (@1)"
+msgstr "Taillé, au premier @1"
 
 msgid "@1 Per Bend"
-msgstr "Division inclinée (@1)"
+msgstr "Tranché, au second @1"
 
 msgid "@1 Per Bend Sinister"
-msgstr "Division oblique (@1)"
+msgstr "Taillé, au second @1"
 
 msgid "@1 Flower Charge"
-msgstr "Figure Fleur (@1)"
+msgstr "Fleur @1"
 
 msgid "@1 Gradient"
-msgstr "Dégradé (@1)"
+msgstr "Dégradé @1"
 
 msgid "@1 Base Gradient"
-msgstr "Dégradé de couleurs (@1)"
+msgstr "Dégradé @1 en pointe"
 
 msgid "@1 Per Fess Inverted"
-msgstr "Division inverse (@1)"
+msgstr "Coupé, au second @1"
 
 msgid "@1 Per Fess"
-msgstr "Division (@1)"
+msgstr "Coupé, au premier @1"
 
 msgid "@1 Per Pale"
-msgstr "Division (@1)"
+msgstr "Parti, au premier @1"
 
 msgid "@1 Per Pale Inverted"
-msgstr "Division inverse (@1)"
+msgstr "Parti, au second @1"
 
 msgid "@1 Thing Charge"
 msgstr "Chose (@1)"
@@ -196,64 +196,64 @@ msgid "@1 Piglin Charge"
 msgstr "@1 Carge de Piglin"
 
 msgid "@1 Lozenge"
-msgstr "Rhombus (@1)"
+msgstr "Losange @1"
 
 msgid "@1 Skull Charge"
 msgstr "Figure de crâne (@1)"
 
 msgid "@1 Paly"
-msgstr "Pieux (@1)"
+msgstr "Quatre pals @1"
 
 msgid "@1 Base Dexter Canton"
-msgstr "Coin inférieur droit (@1)"
+msgstr "Canton @1 en pointe à dextre"
 
 msgid "@1 Base Sinister Canton"
-msgstr "Coin inférieur gauche (@1)"
+msgstr "Canton @1 en pointe à sénestre"
 
 msgid "@1 Chief Dexter Canton"
-msgstr "Coin supérieur droit (@1)"
+msgstr "Canton @1 en chef à dextre"
 
 msgid "@1 Chief Sinister Canton"
-msgstr "Coin supérieur gauche (@1)"
+msgstr "Canton @1 en chef à sénestre"
 
 msgid "@1 Cross"
-msgstr "Croix (@1)"
+msgstr "Croix @1"
 
 msgid "@1 Base"
-msgstr "Pieds (@1)"
+msgstr "Champagne @1"
 
 msgid "@1 Pale"
-msgstr "Mise (@1)"
+msgstr "Pal @1"
 
 msgid "@1 Bend Sinister"
-msgstr "Barre gauche inclinée (@1)"
+msgstr "Barre @1 à sénestre"
 
 msgid "@1 Bend"
-msgstr "Barre inclinée (@1)"
+msgstr "Bande @1"
 
 msgid "@1 Pale Dexter"
-msgstr "Flanc droit (@1)"
+msgstr "Pal @1 à dextre"
 
 msgid "@1 Fess"
-msgstr "Bar (@1)"
+msgstr "Fasce @1"
 
 msgid "@1 Pale Sinister"
-msgstr "Flanc gauche (@1)"
+msgstr "Pal @1 à sénestre"
 
 msgid "@1 Chief"
-msgstr "Principal (@1)"
+msgstr "Chef @1"
 
 msgid "@1 Chevron"
-msgstr "Chevron (@1)"
+msgstr "Mantelé @1"
 
 msgid "@1 Chevron Inverted"
-msgstr "Contre-chevrons (@1)"
+msgstr "Mantelé renversé @1"
 
 msgid "@1 Base Indented"
-msgstr "Pied dentelé (@1)t"
+msgstr "Émanchures @1 en pointe"
 
 msgid "@1 Chief Indented"
-msgstr "Tête dentelée (@1)"
+msgstr "Émanchures @1 en chef"
 
 msgid "@1 Flow"
 msgstr "@1 Flux"
