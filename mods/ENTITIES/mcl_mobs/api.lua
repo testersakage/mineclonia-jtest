@@ -1,6 +1,4 @@
 local mob_class = mcl_mobs.mob_class
-local enable_dtime_hacks
-	= minetest.settings:get_bool ("mcl_enable_dtime_hacks", false)
 local is_valid = mcl_util.is_valid_objectref
 
 -- API for Mobs Redo: MineClone 2 Edition (MRM)
@@ -459,28 +457,7 @@ end
 
 local scale_chance = mcl_mobs.scale_chance
 
-function mob_class:neutralize_dtime_artifacts (dtime, moveresult)
-	-- Set vertical velocity to 0 if dtime exceeds 0.1 and the mob
-	-- has just collided with a bouncy node on the Y axis.
-	if moveresult.collides and dtime >= 0.06 then
-		for _, collision in pairs (moveresult.collisions) do
-			if collision.axis == "y" and collision.type == "node"
-				and collision.old_velocity.y < 0 then
-				local node = minetest.get_node (collision.node_pos).name
-				local def = minetest.registered_nodes[node]
-				if def and def.groups.bouncy and def.groups.bouncy > 0 then
-					local v = self.object:get_velocity ()
-					local self_pos = self.object:get_pos ()
-					self_pos.y = self_pos.y - v.y * dtime
-					v.y = 0
-					self.object:set_velocity (v)
-					self.object:set_pos (self_pos)
-					return
-				end
-			end
-		end
-	end
-end
+local MAX_PHYSICS_DTIME = 0.075
 
 function mob_class:on_step (dtime, moveresult)
 	local pos = self.object:get_pos ()
@@ -503,10 +480,6 @@ function mob_class:on_step (dtime, moveresult)
 			standing_on_object = false,
 			collisions = { },
 		}
-	elseif enable_dtime_hacks then
-		-- Remove physics artifacts produced by excessive
-		-- dtimes that appear on bouncy nodes.
-		self:neutralize_dtime_artifacts (dtime, moveresult)
 	end
 
 	-- These represent the results of collision detection.
@@ -561,14 +534,15 @@ function mob_class:on_step (dtime, moveresult)
 	end
 
 	if not should_drive then
+		local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
 		self:navigation_step (dtime, moveresult)
 		self:movement_step (dtime, moveresult)
-		self:motion_step (dtime, moveresult, pos)
+		self:motion_step (phys_dtime, moveresult, pos)
 	else
 		self:drive ("walk", "stand", false, dtime, moveresult)
 	end
 
-	self:post_motion_step (pos, dtime)
+	self:post_motion_step (pos, dtime, moveresult)
 	self:ai_step (dtime)
 	self:update_timers (dtime)
 

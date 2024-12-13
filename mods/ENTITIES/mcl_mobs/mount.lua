@@ -147,12 +147,15 @@ function mob_class:apply_driver_input (speed, self_pos, moveresult, dtime)
 	end
 end
 
+local MAX_PHYSICS_DTIME = 0.075
+
 function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	local dir = self.driver:get_look_horizontal ()
 	-- Move forward but steer the pig in the direction the
 	-- driver is facing.
 	local pos = self.object:get_pos ()
 	local elapsed, total
+	local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
 
 	self:set_yaw (dir)
 
@@ -178,7 +181,7 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	end
 
 	self:apply_driver_input (speed, pos, moveresult, dtime)
-	self:motion_step (dtime, moveresult, pos)
+	self:motion_step (phys_dtime, moveresult, pos)
 
 	-- This function is called after motion_step to apply forces
 	-- (e.g. velocity changes for jumping) that must not be
