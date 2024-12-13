@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_anvils x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -52,7 +52,7 @@ msgid "The anvil has limited durability and 3 damage levels: undamaged, slightly
 msgstr "L'enclume a une durabilité limitée et 3 niveaux de dommages : en bon état, légèrement endommagé et très endommagé. Chaque fois que vous réparez ou renommez quelque chose, il y a 12% de chances que l'enclume soit endommagée. Les enclumes ont également une chance d'être endommagées lorsqu'elles tombent de plus d'un bloc. Si une enclume très endommagée est à nouveau endommagée, elle est détruite."
 
 msgid "Slightly Damaged Anvil"
-msgstr "Enclume légèrement endommagée"
+msgstr "Enclume ébréchée"
 
 msgid "Very Damaged Anvil"
-msgstr "Enclume très endommagée"
+msgstr "Enclume endommagée"
