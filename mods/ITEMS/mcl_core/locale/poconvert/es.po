@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 21:47+0000\n"
+"PO-Revision-Date: 2024-12-13 22:37+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
@@ -217,301 +217,301 @@ msgid "Birch Log"
 msgstr "Tronco de abedul"
 
 msgid "Birch Planks"
-msgstr ""
+msgstr "Tablones de abedul"
 
 msgid "Birch Pressure Plate"
-msgstr ""
+msgstr "Placa de presión de abedul"
 
 msgid "Birch Sapling"
-msgstr ""
+msgstr "Brote de abedul"
 
 msgid "Birch Sign"
-msgstr ""
+msgstr "Cartel de abedul"
 
 msgid "Birch Slab"
-msgstr ""
+msgstr "Losa de abedul"
 
 msgid "Birch Stairs"
-msgstr ""
+msgstr "Escaleras de abedul"
 
 msgid "Birch Trapdoor"
-msgstr ""
+msgstr "Trampilla de abedul"
 
 msgid "Birch leaves are grown from Birch trees."
 msgstr ""
 
 msgid "Black Stained Glass"
-msgstr ""
+msgstr "Cristal opaco"
 
 msgid "Blue Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de azul"
 
 msgid "Brown Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de marrón"
 
 msgid "Cyan Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de cian"
 
 msgid "Dark Oak Bark"
-msgstr ""
+msgstr "Corteza de roble oscuro"
 
 msgid "Dark Oak Bark Slab"
-msgstr ""
+msgstr "Losa de corteza de roble oscuro"
 
 msgid "Dark Oak Bark Stairs"
-msgstr ""
+msgstr "Escaleras de corteza de roble oscuro"
 
 msgid "Dark Oak Boat"
-msgstr ""
+msgstr "Barca de roble oscuro"
 
 msgid "Dark Oak Button"
-msgstr ""
+msgstr "Botón de roble oscuro"
 
 msgid "Dark Oak Chest Boat"
-msgstr ""
+msgstr "Barca de roble oscuro con cofre"
 
 msgid "Dark Oak Door"
-msgstr ""
+msgstr "Puerta de roble oscuro"
 
 msgid "Dark Oak Fence"
-msgstr ""
+msgstr "Valla de roble oscuro"
 
 msgid "Dark Oak Fence Gate"
-msgstr ""
+msgstr "Puerta de valla de roble oscuro"
 
 msgid "Dark Oak Leaves"
-msgstr ""
+msgstr "Hojas de roble oscuro"
 
 msgid "Dark Oak Log"
-msgstr ""
+msgstr "Tronco de roble oscuro"
 
 msgid "Dark Oak Planks"
-msgstr ""
+msgstr "Tablones de roble oscuro"
 
 msgid "Dark Oak Pressure Plate"
-msgstr ""
+msgstr "Placa de presión de roble oscuro"
 
 msgid "Dark Oak Sapling"
-msgstr ""
+msgstr "Brote de roble oscuro"
 
 msgid "Dark Oak Sign"
-msgstr ""
+msgstr "Cartel de roble oscuro"
 
 msgid "Dark Oak Slab"
-msgstr ""
+msgstr "Losa de roble oscuro"
 
 msgid "Dark Oak Stairs"
-msgstr ""
+msgstr "Escaleras de roble oscuro"
 
 msgid "Dark Oak Trapdoor"
-msgstr ""
+msgstr "Trampilla de roble oscuro"
 
 msgid "Dark Oak leaves are grown from Dark Oak trees."
 msgstr ""
 
 msgid "Green Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de verde"
 
 msgid "Grey Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de gris"
 
 msgid "Jungle Bark"
-msgstr ""
+msgstr "Corteza de jungla"
 
 msgid "Jungle Bark Slab"
-msgstr ""
+msgstr "Losa de corteza de jungla"
 
 msgid "Jungle Bark Stairs"
-msgstr ""
+msgstr "Escaleras de corteza de jungla"
 
 msgid "Jungle Boat"
-msgstr ""
+msgstr "Barca de jungla"
 
 msgid "Jungle Button"
-msgstr ""
+msgstr "Botón de jungla"
 
 msgid "Jungle Chest Boat"
-msgstr ""
+msgstr "Barca de jungla con cofre"
 
 msgid "Jungle Door"
-msgstr ""
+msgstr "Puerta de jungla"
 
 msgid "Jungle Fence"
-msgstr ""
+msgstr "Valla de jungla"
 
 msgid "Jungle Fence Gate"
-msgstr ""
+msgstr "Puerta de valla de jungla"
 
 msgid "Jungle Leaves"
-msgstr ""
+msgstr "Hojas de jungla"
 
 msgid "Jungle Log"
-msgstr ""
+msgstr "Tronco de jungla"
 
 msgid "Jungle Planks"
-msgstr ""
+msgstr "Tablones de jungla"
 
 msgid "Jungle Pressure Plate"
-msgstr ""
+msgstr "Placa de presión de jungla"
 
 msgid "Jungle Sapling"
-msgstr ""
+msgstr "Brote de jungla"
 
 msgid "Jungle Sign"
-msgstr ""
+msgstr "Cartel de jungla"
 
 msgid "Jungle Slab"
-msgstr ""
+msgstr "Losa de jungla"
 
 msgid "Jungle Stairs"
-msgstr ""
+msgstr "Escaleras de jungla"
 
 msgid "Jungle Trapdoor"
-msgstr ""
+msgstr "Trampilla de jungla"
 
 msgid "Jungle leaves are grown from Jungle trees."
 msgstr ""
 
 msgid "Light Blue Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de azul claro"
 
 msgid "Light Grey Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de gris claro"
 
 msgid "Lime Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de verde lima"
 
 msgid "Magenta Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de magenta"
 
 msgid "Oak Bark"
-msgstr ""
+msgstr "Corteza de roble"
 
 msgid "Oak Bark Slab"
-msgstr ""
+msgstr "Losa de corteza de roble"
 
 msgid "Oak Bark Stairs"
-msgstr ""
+msgstr "Escaleras de corteza de roble"
 
 msgid "Oak Boat"
-msgstr ""
+msgstr "Barca de roble"
 
 msgid "Oak Button"
-msgstr ""
+msgstr "Botón de roble"
 
 msgid "Oak Chest Boat"
-msgstr ""
+msgstr "Barca de roble con cofre"
 
 msgid "Oak Door"
-msgstr ""
+msgstr "Puerta de roble"
 
 msgid "Oak Fence"
-msgstr ""
+msgstr "Valla de roble"
 
 msgid "Oak Fence Gate"
-msgstr ""
+msgstr "Puerta de valla de roble"
 
 msgid "Oak Leaves"
-msgstr ""
+msgstr "Hojas de roble"
 
 msgid "Oak Log"
-msgstr ""
+msgstr "Tronco de roble"
 
 msgid "Oak Planks"
-msgstr ""
+msgstr "Tablones de roble"
 
 msgid "Oak Pressure Plate"
-msgstr ""
+msgstr "Placa de presión de roble"
 
 msgid "Oak Sapling"
-msgstr ""
+msgstr "Brote de roble"
 
 msgid "Oak Sign"
-msgstr ""
+msgstr "Cartel de roble"
 
 msgid "Oak Slab"
-msgstr ""
+msgstr "Losa de roble"
 
 msgid "Oak Stairs"
-msgstr ""
+msgstr "Escaleras de roble"
 
 msgid "Oak Trapdoor"
-msgstr ""
+msgstr "Trampilla de roble"
 
 msgid "Oak leaves are grown from Oak trees."
 msgstr ""
 
 msgid "Orange Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de naranja"
 
 msgid "Pink Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de rosa"
 
 msgid "Purple Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de morado"
 
 msgid "Red Stained Glass"
-msgstr ""
+msgstr "Cristal tintado de rojo"
 
 msgid "Spruce Bark"
-msgstr ""
+msgstr "Corteza de abeto"
 
 msgid "Spruce Bark Slab"
-msgstr ""
+msgstr "Losa de corteza de abeto"
 
 msgid "Spruce Bark Stairs"
-msgstr ""
+msgstr "Escaleras de corteza de abeto"
 
 msgid "Spruce Boat"
-msgstr ""
+msgstr "Barca de abeto"
 
 msgid "Spruce Button"
-msgstr ""
+msgstr "Botón de abeto"
 
 msgid "Spruce Chest Boat"
-msgstr ""
+msgstr "Barca de abeto con cofre"
 
 msgid "Spruce Door"
-msgstr ""
+msgstr "Puerta de abeto"
 
 msgid "Spruce Fence"
-msgstr ""
+msgstr "Valla de abeto"
 
 msgid "Spruce Fence Gate"
-msgstr ""
+msgstr "Puerta de valla de abeto"
 
 msgid "Spruce Leaves"
-msgstr ""
+msgstr "Hojas de abeto"
 
 msgid "Spruce Log"
-msgstr ""
+msgstr "Tronco de abeto"
 
 msgid "Spruce Planks"
-msgstr ""
+msgstr "Tablones de abeto"
 
 msgid "Spruce Pressure Plate"
-msgstr ""
+msgstr "Placa de presión de abeto"
 
 msgid "Spruce Sapling"
-msgstr ""
+msgstr "Brote de abeto"
 
 msgid "Spruce Sign"
-msgstr ""
+msgstr "Cartel de abeto"
 
 msgid "Spruce Slab"
-msgstr ""
+msgstr "Losa de abeto"
 
 msgid "Spruce Stairs"
-msgstr ""
+msgstr "Escaleras de abeto"
 
 msgid "Spruce Trapdoor"
-msgstr ""
+msgstr "Trampilla de abeto"
 
 msgid "Spruce leaves are grown from Spruce trees."
 msgstr ""
 
 msgid "Stripped Acacia Log"
-msgstr ""
+msgstr "Tronco de acacia sin corteza"
 
 msgid "Stripped Acacia Wood"
 msgstr ""
