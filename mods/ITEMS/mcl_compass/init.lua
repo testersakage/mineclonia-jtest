@@ -176,7 +176,7 @@ function mcl_compass.register_compass(name, def)
 	}))
 	if def.name_fmt then
 		for i = 0, compass_frames - 1 do
-			core.register_alias(string.format(def.name_fmt, i), "mcl_compass"..(def.name or name))
+			core.register_alias(string.format(def.name_fmt, i), "mcl_compass:"..(def.name or name))
 		end
 	end
 end
