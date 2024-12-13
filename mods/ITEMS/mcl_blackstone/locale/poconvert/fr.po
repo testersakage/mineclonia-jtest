@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_blackstone x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -34,13 +34,13 @@ msgid "Smooth Basalt"
 msgstr "Basalte lisse"
 
 msgid "Polished Blackstone"
-msgstr "Roche noire polie"
+msgstr "Pierre noire"
 
 msgid "Chiseled Polished Blackstone"
-msgstr "Roche noire polie sculptée"
+msgstr "Pierre noire sculptée"
 
 msgid "Polished Blackstone Bricks"
-msgstr "Pierre noire taillée sculptée"
+msgstr "Pierre noire taillée"
 
 msgid "Cracked Polished Blackstone Bricks"
 msgstr "Pierre noire taillée craquelée"
@@ -55,22 +55,22 @@ msgid "Eternal Soul Fire"
 msgstr "Feu éternel des âmes"
 
 msgid "Blackstone Stairs"
-msgstr "Escalier de Noirpierre"
+msgstr "Escalier en roche noire"
 
 msgid "Blackstone Slab"
-msgstr "Dalle de Noirpierre"
+msgstr "Dalle de roche noire"
 
 msgid "Polished Blackstone Stairs"
-msgstr "Escalier en roche noire polie"
+msgstr "Escalier en pierre noire"
 
 msgid "Polished Blackstone Slab"
-msgstr "Dalle de roche noire polie"
+msgstr "Dalle de pierre noire"
 
 msgid "Blackstone Brick Stairs"
 msgstr "Escalier en roche noire taillée"
 
 msgid "Blackstone Brick Slab"
-msgstr "Dalle en roche noire taillée"
+msgstr "Dalle de roche noire taillée"
 
 msgid "Soul Torch"
 msgstr "Torche des âmes"
