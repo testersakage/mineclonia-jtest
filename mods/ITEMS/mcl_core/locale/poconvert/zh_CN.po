@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 07:28+0000\n"
+"PO-Revision-Date: 2024-12-13 08:39+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_core/zh_Hans/>\n"
@@ -267,343 +267,343 @@ msgid "Dark Oak Button"
 msgstr "深色橡木按钮"
 
 msgid "Dark Oak Chest Boat"
-msgstr ""
+msgstr "深色橡木箱船"
 
 msgid "Dark Oak Door"
-msgstr ""
+msgstr "深色橡木门"
 
 msgid "Dark Oak Fence"
-msgstr ""
+msgstr "深色橡木栅栏"
 
 msgid "Dark Oak Fence Gate"
-msgstr ""
+msgstr "深色橡木栅栏门"
 
 msgid "Dark Oak Leaves"
-msgstr ""
+msgstr "深色橡木树叶"
 
 msgid "Dark Oak Log"
-msgstr ""
+msgstr "深色橡木原木"
 
 msgid "Dark Oak Planks"
-msgstr ""
+msgstr "深色橡木木板"
 
 msgid "Dark Oak Pressure Plate"
-msgstr ""
+msgstr "深色橡木压力板"
 
 msgid "Dark Oak Sapling"
-msgstr ""
+msgstr "深色橡木树苗"
 
 msgid "Dark Oak Sign"
-msgstr ""
+msgstr "深色橡木告示牌"
 
 msgid "Dark Oak Slab"
-msgstr ""
+msgstr "深色橡木半砖"
 
 msgid "Dark Oak Stairs"
-msgstr ""
+msgstr "深色橡木楼梯"
 
 msgid "Dark Oak Trapdoor"
-msgstr ""
+msgstr "深色橡木活板门"
 
 msgid "Dark Oak leaves are grown from Dark Oak trees."
-msgstr ""
+msgstr "深色橡木树叶由深色橡树生长而来。"
 
 msgid "Green Stained Glass"
-msgstr ""
+msgstr "绿色染色玻璃"
 
 msgid "Grey Stained Glass"
-msgstr ""
+msgstr "灰色染色玻璃"
 
 msgid "Jungle Bark"
-msgstr ""
+msgstr "丛林树皮"
 
 msgid "Jungle Bark Slab"
-msgstr ""
+msgstr "丛林树皮半砖"
 
 msgid "Jungle Bark Stairs"
-msgstr ""
+msgstr "丛林树皮楼梯"
 
 msgid "Jungle Boat"
-msgstr ""
+msgstr "丛林船"
 
 msgid "Jungle Button"
-msgstr ""
+msgstr "丛林按钮"
 
 msgid "Jungle Chest Boat"
-msgstr ""
+msgstr "丛林箱子船"
 
 msgid "Jungle Door"
-msgstr ""
+msgstr "丛林门"
 
 msgid "Jungle Fence"
-msgstr ""
+msgstr "丛林栅栏"
 
 msgid "Jungle Fence Gate"
-msgstr ""
+msgstr "丛林栅栏门"
 
 msgid "Jungle Leaves"
-msgstr ""
+msgstr "丛林树叶"
 
 msgid "Jungle Log"
-msgstr ""
+msgstr "丛林原木"
 
 msgid "Jungle Planks"
-msgstr ""
+msgstr "丛林木板"
 
 msgid "Jungle Pressure Plate"
-msgstr ""
+msgstr "丛林压力板"
 
 msgid "Jungle Sapling"
-msgstr ""
+msgstr "丛林树苗"
 
 msgid "Jungle Sign"
-msgstr ""
+msgstr "丛林告示牌"
 
 msgid "Jungle Slab"
-msgstr ""
+msgstr "丛林台阶"
 
 msgid "Jungle Stairs"
-msgstr ""
+msgstr "丛林楼梯"
 
 msgid "Jungle Trapdoor"
-msgstr ""
+msgstr "丛林活板门"
 
 msgid "Jungle leaves are grown from Jungle trees."
-msgstr ""
+msgstr "丛林树叶由丛林木生长而来。"
 
 msgid "Light Blue Stained Glass"
-msgstr ""
+msgstr "淡蓝色染色玻璃"
 
 msgid "Light Grey Stained Glass"
-msgstr ""
+msgstr "淡灰色染色玻璃"
 
 msgid "Lime Stained Glass"
-msgstr ""
+msgstr "酸橙色染色玻璃"
 
 msgid "Magenta Stained Glass"
-msgstr ""
+msgstr "品红色染色玻璃"
 
 msgid "Oak Bark"
-msgstr ""
+msgstr "橡木树皮"
 
 msgid "Oak Bark Slab"
-msgstr ""
+msgstr "橡木树皮台阶"
 
 msgid "Oak Bark Stairs"
-msgstr ""
+msgstr "橡木树皮楼梯"
 
 msgid "Oak Boat"
-msgstr ""
+msgstr "橡木船"
 
 msgid "Oak Button"
-msgstr ""
+msgstr "橡木按钮"
 
 msgid "Oak Chest Boat"
-msgstr ""
+msgstr "橡木箱船"
 
 msgid "Oak Door"
-msgstr ""
+msgstr "橡木门"
 
 msgid "Oak Fence"
-msgstr ""
+msgstr "橡木栅栏"
 
 msgid "Oak Fence Gate"
-msgstr ""
+msgstr "橡木栅栏门"
 
 msgid "Oak Leaves"
-msgstr ""
+msgstr "橡木树叶"
 
 msgid "Oak Log"
-msgstr ""
+msgstr "橡木原木"
 
 msgid "Oak Planks"
-msgstr ""
+msgstr "橡木木板"
 
 msgid "Oak Pressure Plate"
-msgstr ""
+msgstr "橡木压力板"
 
 msgid "Oak Sapling"
-msgstr ""
+msgstr "橡木树苗"
 
 msgid "Oak Sign"
-msgstr ""
+msgstr "橡木告示牌"
 
 msgid "Oak Slab"
-msgstr ""
+msgstr "橡木板"
 
 msgid "Oak Stairs"
-msgstr ""
+msgstr "橡木楼梯"
 
 msgid "Oak Trapdoor"
-msgstr ""
+msgstr "橡木活板门"
 
 msgid "Oak leaves are grown from Oak trees."
-msgstr ""
+msgstr "橡树的叶子是从橡树上长出来的。"
 
 msgid "Orange Stained Glass"
-msgstr ""
+msgstr "橙色染色玻璃"
 
 msgid "Pink Stained Glass"
-msgstr ""
+msgstr "粉色染色玻璃"
 
 msgid "Purple Stained Glass"
-msgstr ""
+msgstr "紫色染色玻璃"
 
 msgid "Red Stained Glass"
-msgstr ""
+msgstr "红色染色玻璃"
 
 msgid "Spruce Bark"
-msgstr ""
+msgstr "云杉树皮"
 
 msgid "Spruce Bark Slab"
-msgstr ""
+msgstr "云杉树皮台阶"
 
 msgid "Spruce Bark Stairs"
-msgstr ""
+msgstr "云杉树皮楼梯"
 
 msgid "Spruce Boat"
-msgstr ""
+msgstr "云杉船"
 
 msgid "Spruce Button"
-msgstr ""
+msgstr "云杉按钮"
 
 msgid "Spruce Chest Boat"
-msgstr ""
+msgstr "云杉箱船"
 
 msgid "Spruce Door"
-msgstr ""
+msgstr "云杉门"
 
 msgid "Spruce Fence"
-msgstr ""
+msgstr "云杉栅栏"
 
 msgid "Spruce Fence Gate"
-msgstr ""
+msgstr "云杉栅栏门"
 
 msgid "Spruce Leaves"
-msgstr ""
+msgstr "云杉树叶"
 
 msgid "Spruce Log"
-msgstr ""
+msgstr "云杉原木"
 
 msgid "Spruce Planks"
-msgstr ""
+msgstr "云杉木板"
 
 msgid "Spruce Pressure Plate"
-msgstr ""
+msgstr "云杉压力板"
 
 msgid "Spruce Sapling"
-msgstr ""
+msgstr "云杉树苗"
 
 msgid "Spruce Sign"
-msgstr ""
+msgstr "云杉告示牌"
 
 msgid "Spruce Slab"
-msgstr ""
+msgstr "云杉半砖"
 
 msgid "Spruce Stairs"
-msgstr ""
+msgstr "云杉楼梯"
 
 msgid "Spruce Trapdoor"
-msgstr ""
+msgstr "云杉活板门"
 
 msgid "Spruce leaves are grown from Spruce trees."
-msgstr ""
+msgstr "云杉树叶从云杉树上生长出来。"
 
 msgid "Stripped Acacia Log"
-msgstr ""
+msgstr "去皮的金合欢原木"
 
 msgid "Stripped Acacia Wood"
-msgstr ""
+msgstr "去皮的金合欢木"
 
 msgid "Stripped Birch Log"
-msgstr ""
+msgstr "去皮的白桦原木"
 
 msgid "Stripped Birch Wood"
-msgstr ""
+msgstr "去皮的白桦木"
 
 msgid "Stripped Dark Oak Log"
-msgstr ""
+msgstr "去皮的深色橡木原木"
 
 msgid "Stripped Dark Oak Wood"
-msgstr ""
+msgstr "去皮的深色橡木木材"
 
 msgid "Stripped Jungle Log"
-msgstr ""
+msgstr "去皮的丛林原木"
 
 msgid "Stripped Jungle Wood"
-msgstr ""
+msgstr "去皮的丛林木"
 
 msgid "Stripped Oak Log"
-msgstr ""
+msgstr "去皮的橡木原木"
 
 msgid "Stripped Oak Wood"
-msgstr ""
+msgstr "去皮的橡木木材"
 
 msgid "Stripped Spruce Log"
-msgstr ""
+msgstr "去皮的云杉原木"
 
 msgid "Stripped Spruce Wood"
-msgstr ""
+msgstr "去皮的云杉木"
 
 msgid "The stripped trunk of an Acacia tree."
-msgstr ""
+msgstr "一棵金合欢树的去皮树干。"
 
 msgid "The stripped trunk of an Birch tree."
-msgstr ""
+msgstr "一棵白桦树的去皮树干。"
 
 msgid "The stripped trunk of an Dark Oak tree."
-msgstr ""
+msgstr "一棵深色橡树的去皮树干。"
 
 msgid "The stripped trunk of an Jungle tree."
-msgstr ""
+msgstr "一棵丛林树的去皮树干。"
 
 msgid "The stripped trunk of an Oak tree."
-msgstr ""
+msgstr "一棵橡树的去皮树干。"
 
 msgid "The stripped trunk of an Spruce tree."
-msgstr ""
+msgstr "一棵云杉树的去皮树干。"
 
 msgid "The stripped wood of an Acacia tree."
-msgstr ""
+msgstr "一棵金合欢树的去皮木材。"
 
 msgid "The stripped wood of an Birch tree."
-msgstr ""
+msgstr "一棵白桦树的去皮木材。"
 
 msgid "The stripped wood of an Dark Oak tree."
-msgstr ""
+msgstr "一棵深色橡树的去皮木材。"
 
 msgid "The stripped wood of an Jungle tree."
-msgstr ""
+msgstr "一棵丛林树的去皮木材。"
 
 msgid "The stripped wood of an Oak tree."
-msgstr ""
+msgstr "一棵橡树的去皮木材。"
 
 msgid "The stripped wood of an Spruce tree."
-msgstr ""
+msgstr "一棵云杉树的去皮木材。"
 
 msgid "The trunk of a Acacia tree."
-msgstr ""
+msgstr "一棵金合欢树的树干。"
 
 msgid "The trunk of a Birch tree."
-msgstr ""
+msgstr "一棵白桦树的树干。"
 
 msgid "The trunk of a Dark Oak tree."
-msgstr ""
+msgstr "一棵深色橡树的树干。"
 
 msgid "The trunk of a Jungle tree."
-msgstr ""
+msgstr "一棵丛林树的树干。"
 
 msgid "The trunk of a Oak tree."
-msgstr ""
+msgstr "一棵橡树的树干。"
 
 msgid "The trunk of a Spruce tree."
-msgstr ""
+msgstr "一棵云杉树的树干。"
 
 msgid "White Stained Glass"
-msgstr ""
+msgstr "白色染色玻璃"
 
 msgid "Yellow Stained Glass"
-msgstr ""
+msgstr "黄色染色玻璃"
 
 msgid "Stone"
 msgstr "石头"
@@ -654,7 +654,7 @@ msgid "Diamond Ore"
 msgstr "钻石矿石"
 
 msgid "Diamond ore is rare and can be found in clusters near the bottom of the world."
-msgstr "很稀有，可在世界底层大量开采。"
+msgstr "钻石矿石很稀有，能在靠近世界底部的地方以矿簇形式被发现。"
 
 msgid "Stone Bricks"
 msgstr "石砖"
@@ -714,7 +714,7 @@ msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful bl
 msgstr "有草覆盖的泥土。草块是资源丰富，可供各种植物生长。可以用锄开垦农田，也可以用铲子变成草道。在光照下，草块慢慢地蔓延到附近的泥土上。在不透明的块或液体下，草块可能会变回泥土。"
 
 msgid "Dirt with Snow"
-msgstr "掺雪泥土"
+msgstr "带有雪的泥土"
 
 msgid "Grass Path"
 msgstr "草径"
@@ -729,7 +729,7 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr "一种泥土，蘑菇的理想土壤。与其他泥土型砌块不同，它不能用锄头变成农田。在光线下，菌丝体慢慢扩散到附近的泥土上。在不透明的块或液体下，它最终会退化成泥土。"
 
 msgid "Mycelium with Snow"
-msgstr "掺雪菌丝"
+msgstr "带有雪的菌丝"
 
 msgid "Podzol"
 msgstr "灰化土"
@@ -738,7 +738,7 @@ msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are ab
 msgstr "一种在针叶林中发现的泥土。只有少数植物能在上面生存。"
 
 msgid "Podzol with Snow"
-msgstr "掺雪灰化土"
+msgstr "带有雪的灰化土"
 
 msgid "Dirt"
 msgstr "泥土"
@@ -774,13 +774,13 @@ msgid "Cut Sandstone"
 msgstr "切割砂岩"
 
 msgid "Cut sandstone is a decorative building block."
-msgstr "一种美化用建筑物块。"
+msgstr "切制砂岩是一种装饰性建筑方块。"
 
 msgid "Chiseled Sandstone"
 msgstr "雕纹砂岩"
 
 msgid "Chiseled sandstone is a decorative building block."
-msgstr "一种美化用建筑物块。"
+msgstr "錾制砂岩是一种装饰性建筑方块。"
 
 msgid "Smooth Sandstone"
 msgstr "光滑砂岩"
@@ -810,13 +810,13 @@ msgid "Chiseled Red Sandstone"
 msgstr "雕纹红砂石"
 
 msgid "Chiseled red sandstone is a decorative building block."
-msgstr "一种美化型建筑块。"
+msgstr "錾制红砂岩是一种装饰性建筑方块。"
 
 msgid "Smooth Red Sandstone"
 msgstr "光滑红砂石"
 
 msgid "Smooth red sandstone is a decorative building block."
-msgstr "一种美化型建筑块。"
+msgstr "平滑红砂岩是一种装饰性建筑方块。"
 
 msgid "Clay"
 msgstr "黏土"
@@ -867,46 +867,48 @@ msgid "Block of Diamond"
 msgstr "钻石块"
 
 msgid "A block of diamond is mostly a shiny decorative block but also useful as a compact storage of diamonds."
-msgstr ""
+msgstr "钻石块主要是一种闪闪发亮的装饰性方块，但也可用作紧凑存放钻石的方式，很实用。"
 
 msgid "Block of Lapis Lazuli"
-msgstr ""
+msgstr "青金石块"
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
-msgstr ""
+msgstr "青金石块主要是一种装饰性方块，但也可用作紧凑存放青金石的实用方式。"
 
 msgid "Block of Emerald"
-msgstr "翡翠块"
+msgstr "绿宝石块"
 
 msgid "A block of emerald is mostly a shiny decorative block but also useful as a compact storage of emeralds."
-msgstr ""
+msgstr "绿宝石块主要是一种闪亮的装饰性方块，但也可用作紧凑存放绿宝石的实用之物。"
 
 msgid "Obsidian"
 msgstr "黑曜石"
 
 msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance. Obsidian is formed when water meets lava."
-msgstr ""
+msgstr "黑曜石是一种极其坚硬的矿物，具有极强的抗爆性。当水与熔岩相遇时，就会形成黑曜"
+"石。"
 
 msgid "Crying Obsidian"
 msgstr "哭泣的黑曜石"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
-msgstr ""
+msgstr "哭泣的黑曜石是一种会发光的黑曜石，它可作为残破的传送门的一部分生成。"
 
 msgid "Ice"
 msgstr "冰块"
 
 msgid "Ice is a solid block usually found in cold areas. It melts near block light sources at a light level of 12 or higher. When it melts or is broken while resting on top of another block, it will turn into a water source."
-msgstr ""
+msgstr "冰是一种常见于寒冷地区的固体方块。在亮度等级为12或更高的方块光源附近时会融化"
+"。当它位于另一个方块顶部融化或被破坏时，会变成水源。"
 
 msgid "Packed Ice"
-msgstr "压缩冰"
+msgstr "浮冰"
 
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
-msgstr ""
+msgstr "浮冰是冰的一种压缩形态。它是不透明且坚固的。"
 
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
-msgstr ""
+msgstr "霜冰是一种存在时间较短的固体方块。它会在几秒内融化成水源。"
 
 msgid "Frosted Ice"
 msgstr "霜冰"
@@ -918,19 +920,21 @@ msgid "Stackable"
 msgstr "可堆叠物品"
 
 msgid "Top snow is a layer of snow. It melts near light sources other than the sun with a light level of 12 or higher."
-msgstr ""
+msgstr "顶层雪是一层积雪。在除太阳之外的光源附近，且光照等级达到12或更高时，它会融化"
+"。"
 
 msgid "Top snow can be stacked and has one of 8 different height levels. At levels 2-8, top snow is collidable. Top snow drops 2-9 snowballs, depending on its height."
-msgstr ""
+msgstr "顶层雪可以堆叠，并且有8种不同的高度层级。在2至8级高度时，顶层雪是可碰撞的。根"
+"据其高度不同，破坏顶层雪会掉落2到9个雪球。"
 
 msgid "This block can only be placed on full solid blocks and on another top snow (which increases its height)."
-msgstr ""
+msgstr "这种方块只能放置在完整的实心方块以及另一层顶层雪（这会增加其高度）之上。"
 
 msgid "Snow"
 msgstr "雪"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
-msgstr ""
+msgstr "这是一整块雪。这种厚度的雪通常出现在极度寒冷的地区。"
 
 msgid "Cactus"
 msgstr "仙人掌"
@@ -939,46 +943,53 @@ msgid "Grows on sand"
 msgstr "长在沙土上"
 
 msgid "Contact damage: @1 per half second"
-msgstr ""
+msgstr "接触伤害：每半秒@1点"
 
 msgid "This is a piece of cactus commonly found in dry areas, especially deserts. Over time, cacti will grow up to 3 blocks high on sand or red sand. A cactus hurts living beings touching it with a damage of 1 HP every half second. When a cactus block is broken, all cactus blocks connected above it will break as well."
 msgstr ""
+"这是一种常见于干旱地区，尤其是沙漠中的仙人掌。随着时间推移，仙人掌会在沙子或"
+"红沙上长到3格高。仙人掌会对触碰它的生物造成伤害，每半秒伤害1点生命值。当一格"
+"仙人掌方块被破坏时，与其相连的上方所有仙人掌方块也都会随之被破坏。"
 
 msgid "A cactus can only be placed on top of another cactus or any sand."
-msgstr ""
+msgstr "仙人掌只能放置在另一株仙人掌顶部或者任何沙子之上。"
 
 msgid "Sugar Canes"
 msgstr "甘蔗"
 
 msgid "Grows on sand or dirt next to water"
-msgstr ""
+msgstr "生长在挨着水的沙子或泥土上"
 
 msgid "Sugar canes are a plant which has some uses in crafting. Sugar canes will slowly grow up to 3 blocks when they are next to water and are placed on a grass block, dirt, sand, red sand, podzol or coarse dirt. When a sugar cane is broken, all sugar canes connected above will break as well."
 msgstr ""
+"甘蔗是一种在合成制作方面有一定用途的植物。当甘蔗挨着水，且被放置在草方块、泥"
+"土、沙子、红沙、灰化土或砂土上时，它们会慢慢长到3格高。当一株甘蔗被破坏时，与"
+"其相连的上方所有甘蔗也都会随之被破坏。"
 
 msgid "Sugar canes can only be placed top of other sugar canes and on top of blocks on which they would grow."
-msgstr ""
+msgstr "甘蔗只能放置在其他甘蔗的顶部，以及它们能够生长的方块顶部。"
 
 msgid "Ladder"
 msgstr "梯子"
 
 msgid "A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."
-msgstr ""
+msgstr "这是一架梯子，可供你垂直攀爬。梯子只能放置在实心方块的侧面，不能放置在玻璃、"
+"树叶、冰、台阶、萤石以及海晶灯上。"
 
 msgid "Vines"
 msgstr "藤蔓"
 
 msgid "Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."
-msgstr ""
+msgstr "藤蔓是可供攀爬的方块，可放置在实心完整方块的侧面。藤蔓会缓慢生长和蔓延。"
 
 msgid "Glass"
 msgstr "玻璃"
 
 msgid "A decorative and mostly transparent block."
-msgstr ""
+msgstr "一种具有装饰性且基本透明的方块。"
 
 msgid "Stained glass is a decorative and mostly transparent block which comes in various different colors."
-msgstr ""
+msgstr "染色玻璃是一种带有装饰性且基本透明的方块，有着各种各样不同的颜色。"
 
 msgid "Stained Glass"
 msgstr "有色玻璃"
@@ -993,52 +1004,54 @@ msgid "Water"
 msgstr "水"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
-msgstr ""
+msgstr "水在海洋中大量存在，也会出现在地面上的一些泉眼中。你可以在水中轻松游动，但需"
+"要时不时地换气。"
 
 msgid "Water interacts with lava in various ways:"
-msgstr ""
+msgstr "水以多种方式与熔岩相互作用："
 
 msgid "• When water is directly above or horizontally next to a lava source, the lava turns into obsidian."
-msgstr ""
+msgstr "• 当水直接位于熔岩源的上方或与熔岩源水平相邻时，熔岩会变成黑曜石。"
 
 msgid "• When flowing water touches flowing lava either from above or horizontally, the lava turns into cobblestone."
-msgstr ""
+msgstr "• 当流动的水从上方或水平方向接触到流动的熔岩时，熔岩会变成圆石。"
 
 msgid "• When water is directly below lava, the water turns into stone."
-msgstr ""
+msgstr "• 当水直接位于熔岩下方时，水会变成石头。"
 
 msgid "Flowing Lava"
 msgstr "流动的岩浆"
 
 msgid "A lava source sets fire to a couple of air blocks above when they're next to a flammable block."
-msgstr ""
+msgstr "当熔岩源靠近可燃方块时，它会点燃其上方几个空气方块。"
 
 msgid "Lava Source"
-msgstr ""
+msgstr "熔岩源"
 
 msgid "Lava is hot and rather dangerous. Don't touch it, it will hurt you a lot and it is hard to get out."
-msgstr ""
+msgstr "熔岩温度很高，相当危险。不要触碰它，它会对你造成很大伤害，而且一旦沾上很难脱"
+"身。"
 
 msgid "Lava interacts with water various ways:"
-msgstr ""
+msgstr "熔岩以多种方式与水相互作用："
 
 msgid "• When a lava source is directly below or horizontally next to water, the lava turns into obsidian."
-msgstr ""
+msgstr "• 当熔岩源直接位于水的下方或与水水平相邻时，熔岩会变成黑曜石。"
 
 msgid "• When lava is directly above water, the water turns into stone."
-msgstr ""
+msgstr "• 当熔岩直接位于水的上方时，水会变成石头。"
 
 msgid "Bone Block"
 msgstr "骨块"
 
 msgid "Bone blocks are decorative blocks and a compact storage of bone meal."
-msgstr ""
+msgstr "骨块是一种装饰性方块，也是骨粉的一种紧凑储存形式。"
 
 msgid "Slime Block"
 msgstr "黏液块"
 
 msgid "Slime blocks are very bouncy and prevent fall damage."
-msgstr ""
+msgstr "黏液块弹性很强，能防止摔落伤害。"
 
 msgid "Cobweb"
 msgstr "蛛网"
@@ -1047,34 +1060,37 @@ msgid "Slows down movement"
 msgstr "减缓移动速度"
 
 msgid "Cobwebs can be walked through, but significantly slow you down."
-msgstr ""
+msgstr "蜘蛛网可以穿行，但会极大地减慢你的行进速度。"
 
 msgid "Dead Bush"
 msgstr "枯灌木丛"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
-msgstr ""
+msgstr "枯木丛是一种不起眼的植物，常出现在干旱地区。可以采集它们来获取木棍。"
 
 msgid "Barrier"
 msgstr "屏障"
 
 msgid "Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."
 msgstr ""
+"屏障是一种不可见但可通行的方块。它们被用于创建冒险地图之类的边界。怪物和动物"
+"不会出现在屏障上，而且栅栏无法与屏障相连。其他方块可以像放置在任何其他方块上"
+"那样放置在屏障上。"
 
 msgid "When you hold a barrier in hand, you reveal all placed barriers in a short distance around you."
-msgstr ""
+msgstr "当你手持屏障方块时，你周围短距离内所有已放置的屏障都会显示出来。"
 
 msgid "Realm Barrier"
-msgstr ""
+msgstr "领域屏障"
 
 msgid "Light"
-msgstr ""
+msgstr "光源"
 
 msgid "Lights are invisible blocks. They are used to light up adventure maps and the like."
-msgstr ""
+msgstr "光源是不可见的方块。它们被用于照亮冒险地图之类的区域。"
 
 msgid "When you hold a light in hand, you reveal all placed lights in a short distance around you."
-msgstr ""
+msgstr "当你手持光源时，你周围短距离内所有已放置的光源都会显示出来。"
 
 msgid "Void"
 msgstr "虚空"
