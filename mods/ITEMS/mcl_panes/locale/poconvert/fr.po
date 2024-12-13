@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_panes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_panes/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Glass panes are thin layers of glass which neatly connect to their neighbors as you build them."
 msgstr "Les vitres sont de fines couches de verre qui se connectent parfaitement à leurs voisins lorsque vous les construisez."
@@ -20,62 +22,63 @@ msgid "Stained glass panes are thin layers of stained glass which neatly connect
 msgstr "Les vitres teintées sont de fines couches de verre teinté qui se connectent parfaitement à leurs voisins lorsque vous les construisez. Ils viennent dans de nombreuses couleurs différentes."
 
 msgid "Stained Glass Pane"
-msgstr "Vitre Teintée"
+msgstr "Vitre teintée"
 
 msgid "Iron Bars"
-msgstr "Barres de fer"
+msgstr "Barreaux de fer"
 
 msgid "Iron bars neatly connect to their neighbors as you build them."
-msgstr "Les barres de fer se connectent parfaitement à leurs voisins lorsque vous les construisez."
+msgstr ""
+"Les barreaux de fer se connectent parfaitement à leurs voisins lorsque vous "
+"les construisez."
 
 msgid "Glass Pane"
 msgstr "Vitre"
 
 msgid "Black Stained Glass Pane"
-msgstr "Vitre Teintée Noire"
+msgstr "Vitre noire"
 
 msgid "Blue Stained Glass Pane"
-msgstr "Vitre Teintée Bleue"
+msgstr "Vitre bleue"
 
 msgid "Brown Stained Glass Pane"
-msgstr "Vitre Teintée Marron"
+msgstr "Vitre marron"
 
 msgid "Cyan Stained Glass Pane"
-msgstr "Vitre Teintée Cyan"
+msgstr "Vitre cyan"
 
 msgid "Green Stained Glass Pane"
-msgstr "Vitre Teintée Verte"
+msgstr "Vitre verte"
 
 msgid "Grey Stained Glass Pane"
-msgstr "Vitre Teintée Grise"
+msgstr "Vitre grise"
 
 msgid "Light Blue Stained Glass Pane"
-msgstr "Vitre Teintée Bleu Clair"
+msgstr "Vitre bleu clair"
 
 msgid "Light Grey Stained Glass Pane"
-msgstr "Vitre Teintée Gris Clair"
+msgstr "Vitre gris clair"
 
 msgid "Lime Stained Glass Pane"
-msgstr "Vitre Teintée Vert Clair"
+msgstr "Vitre vert clair"
 
 msgid "Magenta Stained Glass Pane"
-msgstr "Vitre Teintée Magenta"
+msgstr "Vitre magenta"
 
 msgid "Orange Stained Glass Pane"
-msgstr "Vitre Teintée Orange"
+msgstr "Vitre orange"
 
 msgid "Pink Stained Glass Pane"
-msgstr "Vitre Teintée Rose"
+msgstr "Vitre rose"
 
 msgid "Purple Stained Glass Pane"
-msgstr "Vitre Teintée Violette"
+msgstr "Vitre violette"
 
 msgid "Red Stained Glass Pane"
-msgstr "Vitre Teintée Rouge"
+msgstr "Vitre rouge"
 
 msgid "White Stained Glass Pane"
-msgstr "Vitre Teintée Blanche"
+msgstr "Vitre blanche"
 
 msgid "Yellow Stained Glass Pane"
-msgstr "Vitre Teintée Jaune"
-
+msgstr "Vitre jaune"
