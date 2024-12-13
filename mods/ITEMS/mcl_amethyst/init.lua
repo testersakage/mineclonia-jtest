@@ -112,7 +112,6 @@ for size, def in pairs(bud_def) do
 		sunlight_propagates = true,
 		walkable = false,
 		groups = {
-			destroy_by_lava_flow = 1,
 			dig_by_piston = 1,
 			unsticky = 1,
 			pickaxey = 1,
@@ -153,7 +152,6 @@ minetest.register_node("mcl_amethyst:amethyst_cluster",{
 	walkable = false,
 	light_source = 5,
 	groups = {
-		destroy_by_lava_flow = 1,
 		dig_by_piston = 1,
 		unsticky = 1,
 		pickaxey = 1,
