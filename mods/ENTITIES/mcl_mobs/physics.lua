@@ -723,12 +723,20 @@ function mob_class:post_apply_physics_factor (field, oldvalue, value)
 	if field == "movement_speed" then
 		-- Rescale gowp velocity (or stupid_velocity) to match
 		-- the new movement_speed.
+		--
+		-- A velocity of nil is a placeholder for
+		-- movement_speed anyway, and as such no adjustment is
+		-- necessary in these cases.
 		if self.waypoints or self.pathfinding_context then
-			local factor = self.gowp_velocity / oldvalue
-			self.gowp_velocity = factor * value
+			if self.gowp_velocity then
+				local factor = self.gowp_velocity / oldvalue
+				self.gowp_velocity = factor * value
+			end
 		elseif self.stupid_target then
-			local factor = self.stupid_velocity / oldvalue
-			self.stupid_velocity = factor * value
+			if self.stupid_velocity then
+				local factor = self.stupid_velocity / oldvalue
+				self.stupid_velocity = factor * value
+			end
 		end
 	end
 end
