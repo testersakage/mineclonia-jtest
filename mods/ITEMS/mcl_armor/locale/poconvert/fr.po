@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -22,7 +22,7 @@ msgid "To equip it, put it on the corresponding armor slot in your inventory men
 msgstr "Pour l'équiper, placez-le sur l'emplacement d'armure correspondant dans votre menu d'inventaire."
 
 msgid "Leather Cap"
-msgstr "Capuchon en cuir"
+msgstr "Chapeau en cuir"
 
 msgid "Leather Tunic"
 msgstr "Tunique en cuir"
@@ -61,16 +61,16 @@ msgid "Golden Boots"
 msgstr "Bottes en or"
 
 msgid "Chainmail Helmet"
-msgstr "Casque en cotte de mailles"
+msgstr "Casque de mailles"
 
 msgid "Chainmail Chestplate"
-msgstr "Plastron en cotte de mailles"
+msgstr "Cotte de mailles"
 
 msgid "Chainmail Leggings"
-msgstr "Jambières en cotte de mailles"
+msgstr "Jambières de mailles"
 
 msgid "Chainmail Boots"
-msgstr "Bottes en cotte de mailles"
+msgstr "Bottes de mailles"
 
 msgid "Iron Helmet"
 msgstr "Casque en fer"
@@ -97,16 +97,16 @@ msgid "Diamond Boots"
 msgstr "Bottes en diamant"
 
 msgid "Netherite Helmet"
-msgstr "Casque en netherite"
+msgstr "Casque en Netherite"
 
 msgid "Netherite Chestplate"
-msgstr "Plastron en netherite"
+msgstr "Plastron en Netherite"
 
 msgid "Netherite Leggings"
-msgstr "Jambières en netherite"
+msgstr "Jambières en Netherite"
 
 msgid "Netherite Boots"
-msgstr "Bottes en netherite"
+msgstr "Bottes en Netherite"
 
 msgid "Projectile Protection"
 msgstr "Protection contre les projectiles"
@@ -163,7 +163,7 @@ msgid "Smithing Template"
 msgstr "Modèle de forge"
 
 msgid "@1 Armor Trim"
-msgstr "@1 garniture d'armure"
+msgstr "Ornement d'armure @1"
 
 msgid "Applies to:"
 msgstr "S'applique à :"
