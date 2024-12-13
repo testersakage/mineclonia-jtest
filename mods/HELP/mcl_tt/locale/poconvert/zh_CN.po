@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_tt x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 12:30+0000\n"
+"PO-Revision-Date: 2024-12-13 20:35+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_tt/zh_Hans/>\n"
@@ -54,7 +54,7 @@ msgid "Healing: @1"
 msgstr "治疗：@1"
 
 msgid "Full punch interval: @1s"
-msgstr ""
+msgstr "完整攻击间隔： @1秒"
 
 msgid "Food item"
 msgstr "食物栏"
@@ -63,10 +63,10 @@ msgid "+@1 food points"
 msgstr "+@1食物点"
 
 msgid "Contact damage: @1 per second"
-msgstr ""
+msgstr "接触伤害：每秒@1"
 
 msgid "Contact healing: @1 per second"
-msgstr ""
+msgstr "接触治疗：每秒@1"
 
 msgid "Drowning damage: @1"
 msgstr "溺水伤害：@1"
@@ -126,7 +126,7 @@ msgid "Armor durability: @1"
 msgstr "防护耐久：@1"
 
 msgid "Protection: @1%"
-msgstr ""
+msgstr "防护：@1%"
 
 msgid "Hunger points: +@1"
 msgstr "饥饿点：+@1"
@@ -135,13 +135,13 @@ msgid "Saturation points: +@1"
 msgstr "饱腹点： +@1"
 
 msgid "Deals damage when falling"
-msgstr ""
+msgstr "在掉落时造成伤害"
 
 msgid "Grows on grass blocks or dirt"
-msgstr ""
+msgstr "生长在草方块或泥土上"
 
 msgid "Grows on grass blocks, podzol, dirt or coarse dirt"
-msgstr ""
+msgstr "生长在草方块、灰化土、泥土或砂土上"
 
 msgid "Flammable"
 msgstr "可燃"
