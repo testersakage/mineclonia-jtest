@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 08:39+0000\n"
+"PO-Revision-Date: 2024-12-13 12:30+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_doc_basics/zh_Hans/>\n"
@@ -15,286 +15,323 @@ msgstr ""
 "X-Generator: Weblate 5.8.4\n"
 
 msgid "Advanced usage"
-msgstr ""
+msgstr "高级用法"
 
 msgid "Advanced information which may be nice to know, but is not crucial to gameplay"
-msgstr ""
+msgstr "一些了解了会更好，但对游戏进程并非关键的进阶信息"
 
 msgid "Creative Mode"
-msgstr ""
+msgstr "创造模式"
 
 msgid "Enabling Creative Mode in MineClone 2 applies the following changes:"
-msgstr ""
+msgstr "在MineClone 2中启用创造模式会产生以下变化："
 
 msgid "• You keep the things you've placed"
-msgstr ""
+msgstr "• 你放置的东西会保留下来"
 
 msgid "• Creative inventory is available to obtain most items easily"
-msgstr ""
+msgstr "• 可使用创造模式背包，便于轻松获取大多数物品"
 
 msgid "• Hand breaks all default blocks instantly"
-msgstr ""
+msgstr "• 用手能瞬间破坏所有默认方块"
 
 msgid "• Greatly increased hand pointing range"
-msgstr ""
+msgstr "• 手部瞄准范围大幅增加"
 
 msgid "• Mined blocks don't drop items"
-msgstr ""
+msgstr "• 挖掘的方块不会掉落物品"
 
 msgid "• Items don't get used up"
-msgstr ""
+msgstr "• 物品不会被消耗完"
 
 msgid "• Tools don't wear off"
-msgstr ""
+msgstr "• 工具不会磨损"
 
 msgid "• You can eat food whenever you want"
-msgstr ""
+msgstr "• 你可以随时吃东西"
 
 msgid "• You can always use the minimap (including radar mode)"
-msgstr ""
+msgstr "• 你随时都能使用小地图（包括雷达模式）"
 
 msgid "Damage is not affected by Creative Mode, it needs to be disabled separately."
-msgstr ""
+msgstr "创造模式不影响伤害效果，伤害需要单独进行禁用设置。"
 
 msgid "Console"
-msgstr ""
+msgstr "控制台"
 
 msgid "With [F10] you can open and close the console. The main use of the console is to show the chat log and enter chat messages or server commands."
-msgstr ""
+msgstr "通过按下[F10]键，你可以打开和关闭控制台，控制台的主要用途是显示聊天记录以及输"
+"入聊天消息或服务器命令。"
 
 msgid "Using the chat or server command key also opens the console, but it is smaller and will be closed after you sent a message."
-msgstr ""
+msgstr "使用聊天或服务器命令按键也会打开控制台，但这个控制台尺寸较小，且在你发送消息"
+"后就会关闭。"
 
 msgid "Use the chat to communicate with other players. This requires you to have the “shout” privilege."
-msgstr ""
+msgstr "使用聊天功能与其他玩家交流，这需要你拥有“喊话”权限。"
 
 msgid "Just type in the message and hit [Enter]. Public chat messages can not begin with “/”."
-msgstr ""
+msgstr "只需输入消息然后按下[Enter]键即可，公共聊天消息不能以“/”开头。"
 
 msgid "You can send private messages: Say “/msg <player> <message>” in chat to send “<message>” which can only be seen by <player>."
-msgstr ""
+msgstr "你可以发送私人消息：在聊天中输入“/msg <玩家名称> "
+"<消息内容>”，这样发送的“<消息内容>”就只有<玩家名称>所指的玩家能够看到。"
 
 msgid "There are some special controls for the console:"
-msgstr ""
+msgstr "控制台有一些特殊的控制操作："
 
 msgid "• [F10] Open/close console"
-msgstr ""
+msgstr "• [F10]键 - 打开/关闭控制台"
 
 msgid "• [Enter]: Send message or command"
-msgstr ""
+msgstr "•[Enter]键:发送消息或命令"
 
 msgid "• [Tab]: Try to auto-complete a partially-entered player name"
-msgstr ""
+msgstr "• [Tab]键:尝试自动补全部分输入的玩家名称"
 
 msgid "• [Ctrl]+[Left]: Move cursor to the beginning of the previous word"
-msgstr ""
+msgstr "• [Ctrl] + [左方向键]:将光标移到前一个单词的开头"
 
 msgid "• [Ctrl]+[Right]: Move cursor to the beginning of the next word"
-msgstr ""
+msgstr "• [Ctrl] + [右方向键]:将光标移到下一个单词的开头"
 
 msgid "• [Ctrl]+[Backspace]: Delete previous word"
-msgstr ""
+msgstr "• [Ctrl] + [退格键] :删除前一个单词"
 
 msgid "• [Ctrl]+[Delete]: Delete next word"
-msgstr ""
+msgstr "• [Ctrl] + [删除键]:删除下一个单词"
 
 msgid "• [Ctrl]+[U]: Delete all text before the cursor"
-msgstr ""
+msgstr "• [Ctrl] + [U]键:删除光标前的所有文本"
 
 msgid "• [Ctrl]+[K]: Delete all text after the cursor"
-msgstr ""
+msgstr "• [Ctrl] + [K]键:删除光标后的所有文本"
 
 msgid "• [Page up]: Scroll up"
-msgstr ""
+msgstr "• [Page Up]键:向上滚动"
 
 msgid "• [Page down]: Scroll down"
-msgstr ""
+msgstr "• [Page Down]键:向下滚动"
 
 msgid "There is also an input history. Minetest saves your previous console inputs which you can quickly access later:"
-msgstr ""
+msgstr "还有输入历史记录功能，luanti会保存你之前在控制台输入的内容，之后你可以快速访"
+"问这些内容："
 
 msgid "• [Up]: Go to previous entry in history"
-msgstr ""
+msgstr "• [向上箭头键]:转到历史记录中的上一条记录"
 
 msgid "• [Down]: Go to next entry in history"
-msgstr ""
+msgstr "• [向下箭头键]:转到历史记录中的下一条记录"
 
 msgid "Server commands"
-msgstr ""
+msgstr "服务器命令"
 
 msgid "Server commands (also called “chat commands”) are little helpers for advanced users. You don't need to use these commands when playing. But they might come in handy to perform some more technical tasks. Server commands work both in multi-player and single-player mode."
 msgstr ""
+"服务器命令（也称作“聊天命令”）是为高级用户提供的小帮手，玩游戏时你并非一定要"
+"使用这些命令，但在执行一些更具技术性的任务时它们可能会派上用场，服务器命令在"
+"多人模式和单人模式下均可使用。"
 
 msgid "Server commands can be entered by players using the chat to perform a special server action. There are a few commands which can be issued by everyone, but some commands only work if you have certain privileges granted on the server. There is a small set of basic commands which are always available, other commands can be added by mods."
 msgstr ""
+"玩家可以通过聊天输入服务器命令来执行特殊的服务器操作，有一些命令任何人都能使"
+"用，但有些命令只有在服务器授予你特定权限时才有效，有一小部分基本命令始终可用"
+"，其他命令可由模组添加。"
 
 msgid "To issue a command, simply type it like a chat message or press Minetest's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Minetest command key does the same as the chat key, except that the slash is already entered."
 msgstr ""
+"要发出命令，只需像输入聊天消息一样输入它，或者按下luanti的命令键（默认是[/]键"
+"），所有命令都必须以“/”开头，例如“/mods”，luanti的命令键与聊天键作用相同，只"
+"是它已经自带了斜杠（“/”）。"
 
 msgid "Commands may or may not give a response in the chat log, but errors will generally be shown in the chat. Try it for yourselves: Close this window and type in the “/mods” command. This will give you the list of available mods on this server."
 msgstr ""
+"命令可能会也可能不会在聊天记录中给出回复，但通常错误信息会显示在聊天中，你可"
+"以自己试试：关闭这个窗口，然后输入“/mods”命令，这样你就能得到此服务器上可用模"
+"组的列表了。"
 
 msgid "“/help all” is a very important command: You get a list of all available commands on the server, a short explanation and the allowed parameters. This command is also important because the available commands often differ per server."
 msgstr ""
+"“/help all”是一个非常重要的命令：你会得到服务器上所有可用命令的列表、简短的解"
+"释以及允许使用的参数，这个命令很重要还因为可用命令往往因服务器而异。"
 
 msgid "Commands are followed by zero or more parameters."
-msgstr ""
+msgstr "命令后面可跟零个或多个参数。"
 
 msgid "In the command reference, you see some placeholders which you need to replace with an actual value. Here's an explanation:"
-msgstr ""
+msgstr "在命令参考中，你会看到一些占位符，需要用实际的值来替换它们，以下是相关解释："
 
 msgid "• Text in greater-than and lower-than signs (e.g. “<param>”): Placeholder for a parameter"
-msgstr ""
+msgstr "• 用大于号和小于号括起来的文本（例如“<参数>”）：参数的占位符"
 
 msgid "• Anything in square brackets (e.g. “[text]”) is optional and can be omitted"
-msgstr ""
+msgstr "• 方括号内的任何内容（例如“[文本]”）是可选的，可以省略"
 
 msgid "• Pipe or slash (e.g. “text1 | text2 | text3”): Alternation. One of multiple texts must be used (e.g. “text2”)"
-msgstr ""
+msgstr "• 竖线或斜线（例如“文本1 | 文本2 | "
+"文本3”）：表示可选择项，必须使用多个文本中的某一个（例如“文本2”）"
 
 msgid "• Parenthesis: (e.g. “(word1 word2) | word3”): Groups multiple words together, used for alternations"
-msgstr ""
+msgstr "• 括号（例如“(单词1 单词2) | 单词3”）：将多个单词组合在一起，用于表示可选择项"
 
 msgid "• Everything else is to be read as literal text"
-msgstr ""
+msgstr "• 其他所有内容都按字面文本解读"
 
 msgid "Here are some examples to illustrate the command syntax:"
-msgstr ""
+msgstr "以下是一些示例，用于说明命令语法："
 
 msgid "• /mods: No parameters. Just enter “/mods”"
-msgstr ""
+msgstr "• /mods：没有参数，只需输入“/mods”"
 
 msgid "• /me <action>: 1 parameter. You have to enter “/me ” followed by any text, e.g. “/me orders pizza”"
-msgstr ""
+msgstr "• /me <动作>：1个参数，你必须输入“/me ”，然后跟上任意文本，例如“/me orders "
+"pizza”"
 
 msgid "• /give <name> <ItemString>: Two parameters. Example: “/give Player default:apple”"
-msgstr ""
+msgstr "• /give <名称> <物品字符串>：两个参数，例如：“/give 玩家 mcl_core:apple”"
 
 msgid "• /help [all|privs|<cmd>]: Valid inputs are “/help”, “/help all”, “/help privs”, or “/help ” followed by a command name, like “/help time”"
 msgstr ""
+"• /help [全部|权限| <命令>]：有效的输入包括“/help”、“/help all”、“/help "
+"privs”，或者“/help ”后接命令名称，比如“/help time”"
 
 msgid "• /spawnentity <EntityName> [<X>,<Y>,<Z>]: Valid inputs include “/spawnentity boats:boat” and “/spawnentity boats:boat 0,0,0”"
 msgstr ""
+"• /spawnentity <实体名称> [<X>，<Y>，<Z>]：有效的输入包括“/spawnentity "
+"mcl_boats:boat”和“/spawnentity mcl_boats:boat 0,0,0”"
 
 msgid "Some final remarks:"
-msgstr ""
+msgstr "一些最后的说明："
 
 msgid "• For /give and /giveme, you need an itemstring. This is an internally used unique item identifier which you may find in the item help if you have the “give” or “debug” privilege"
 msgstr ""
+"• 对于/give和/giveme命令，你需要物品字符串，这是一个供内部使用的唯一物品标识"
+"符，如果你拥有“给予”或“调试”权限，就可以在物品帮助信息中找到它"
 
 msgid "• For /spawnentity you need an entity name, which is another identifier"
-msgstr ""
+msgstr "• 对于/spawnentity命令，你需要实体名称，这也是一种标识符"
 
 msgid "Privileges"
-msgstr ""
+msgstr "权限"
 
 msgid "Each player has a set of privileges, which differs from server to server. Your privileges determine what you can and can't do. Privileges can be granted and revoked from other players by any player who has the privilege called “privs”."
 msgstr ""
+"每个玩家都有一组权限，不同服务器上的权限有所不同，你的权限决定了你能做什么和"
+"不能做什么，拥有“权限管理（privs）”权限的任何玩家都可以授予或撤销其他玩家的权"
+"限。"
 
 msgid "On a multiplayer server with the default configuration, new players start with the privileges called “interact” and “shout”. The “interact” privilege is required for the most basic gameplay actions such as building, mining, using, etc. The “shout” privilege allows to chat."
 msgstr ""
+"在默认配置的多人服务器上，新玩家初始拥有“交互（interact）”和“喊话（shout）”权"
+"限，“交互”权限是进行诸如建造、挖掘、使用等最基本游戏操作所必需的，“喊话”权限"
+"则允许进行聊天。"
 
 msgid "There is a small set of core privileges which you'll find on every server, other privileges might be added by mods."
-msgstr ""
+msgstr "每个服务器上都有一小部分核心权限，其他权限可能由模组添加。"
 
 msgid "To view your own privileges, issue the server command “/privs”."
-msgstr ""
+msgstr "要查看你自己的权限，可执行服务器命令“/privs”。"
 
 msgid "Here are a few basic privilege-related commands:"
-msgstr ""
+msgstr "以下是一些与权限相关的基本命令："
 
 msgid "• /privs: Lists your privileges"
-msgstr ""
+msgstr "• /privs：列出你的权限"
 
 msgid "• /privs <player>: Lists the privileges of <player>"
-msgstr ""
+msgstr "• /privs <玩家>：列出<玩家>的权限"
 
 msgid "• /help privs: Shows a list and description about all privileges"
-msgstr ""
+msgstr "• /help privs：显示所有权限的列表及描述"
 
 msgid "Players with the “privs” privilege can modify privileges at will:"
-msgstr ""
+msgstr "拥有“权限管理（privs）”权限的玩家可以随意修改权限："
 
 msgid "• /grant <player> <privilege>: Grant <privilege> to <player>"
-msgstr ""
+msgstr "• /grant <玩家> <权限>：将<权限>授予<玩家>"
 
 msgid "• /revoke <player> <privilege>: Revoke <privilege> from <player>"
-msgstr ""
+msgstr "• /revoke <玩家> <权限>：从<玩家>那里撤销<权限>"
 
 msgid "In single-player mode, you can use “/grantme all” to unlock all abilities."
-msgstr ""
+msgstr "在单人模式下，你可以使用“/grantme all”命令来解锁所有能力。"
 
 msgid "Movement modes"
-msgstr ""
+msgstr "移动模式"
 
 msgid "You can enable some special movement modes that change how you move."
-msgstr ""
+msgstr "你可以启用一些特殊的移动模式，它们会改变你的移动方式。"
 
 msgid "Pitch movement mode:"
-msgstr ""
+msgstr "视角俯仰移动模式："
 
 msgid "• Description: If this mode is activated, the movement keys will move you relative to your current view pitch (vertical look angle) when you're in a liquid or in fly mode."
-msgstr ""
+msgstr "• 描述：如果此模式被激活，当你处于液体中或飞行模式下时，移动按键将根据你当前"
+"的视角俯仰（垂直视角角度）来移动你。"
 
 msgid "• Default key: [L]"
-msgstr ""
+msgstr "• 默认按键：[L]"
 
 msgid "• No privilege required"
-msgstr ""
+msgstr "• 无需权限"
 
 msgid "Fast mode:"
-msgstr ""
+msgstr "快速模式："
 
 msgid "• Description: Allows you to move much faster. Hold down the the “Use” key [E] to move faster. In the client configuration, you can further customize fast mode."
-msgstr ""
+msgstr "• 描述：能让你移动得更快，按住“使用”键（[E]键）可加快移动速度，在客户端配置中"
+"，你还可以进一步自定义快速模式。"
 
 msgid "• Default key: [J]"
-msgstr ""
+msgstr "• 默认按键：[J]"
 
 msgid "• Required privilege: fast"
-msgstr ""
+msgstr "• 所需权限：快速"
 
 msgid "Fly mode:"
-msgstr ""
+msgstr "飞行模式："
 
 msgid "• Description: Gravity doesn't affect you and you can move freely in all directions. Use the jump key to rise and the sneak key to sink."
-msgstr ""
+msgstr "• 描述：重力不会对你产生影响，你可以向各个方向自由移动，使用跳跃键上升，使用"
+"潜行键下降。"
 
 msgid "• Default key: [K]"
-msgstr ""
+msgstr "• 默认按键：[K]"
 
 msgid "• Required privilege: fly"
-msgstr ""
+msgstr "• 所需权限：飞行"
 
 msgid "Noclip mode:"
-msgstr ""
+msgstr "穿墙模式："
 
 msgid "• Description: Allows you to move through walls. Only works when fly mode is enabled, too."
-msgstr ""
+msgstr "• 描述：允许你穿过墙壁移动，但该模式只有在飞行模式也启用的情况下才有效。"
 
 msgid "• Default key: [H]"
-msgstr ""
+msgstr "• 默认按键：[H]"
 
 msgid "• Required privilege: noclip"
-msgstr ""
+msgstr "• 所需权限：穿墙"
 
 msgid "Coordinates"
-msgstr ""
+msgstr "坐标"
 
 msgid "The world is a large cube. And because of this, a position in the world can be easily expressed with Cartesian coordinates. That is, for each position in the world, there are 3 values X, Y and Z."
-msgstr ""
+msgstr "世界是一个巨大的立方体，正因如此，世界中的位置可以很容易地用笛卡尔坐标来表示"
+"，也就是说，对于世界中的每个位置，都有X、Y和Z这3个值。"
 
 msgid "Like this: (5, 45, -12)"
-msgstr ""
+msgstr "像这样：(5, 45, -12)"
 
 msgid "This refers to the position where X=5, Y=45 and Z=-12. The 3 letters are called “axes”: Y is for the height. X and Z are for the horizontal position."
-msgstr ""
+msgstr "这指的是X等于5、Y等于45且Z等于 - "
+"12的位置，这3个字母被称作“坐标轴”：Y代表高度，X和Z代表水平位置。"
 
 msgid "The values for X, Y and Z work like this:"
-msgstr ""
+msgstr "X、Y和Z的值变化规律如下："
 
 msgid "• If you go up, Y increases"
-msgstr ""
+msgstr "• 如果你向上走，Y值会增加"
 
 msgid "• If you go down, Y decreases"
 msgstr ""
@@ -840,7 +877,7 @@ msgid "Rarely, crafting recipes have replacements. This means, whenever you perf
 msgstr ""
 
 msgid "Cooking"
-msgstr ""
+msgstr "烹饪"
 
 msgid "Cooking (or smelting) is a form of crafting which does not involve a crafting grid. Cooking is done with a special block (like a furnace), an cookable item, a fuel item and time in order to yield a new item."
 msgstr ""
