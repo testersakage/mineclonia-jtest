@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mangrove x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 03:32+0000\n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -46,19 +46,21 @@ msgid "These cannot be crafted yet only occure when get in contact of water."
 msgstr "Elles ne peuvent être fabriquées mais se forment au contact de l'eau."
 
 msgid "Muddy Mangrove Roots"
-msgstr "Racines de Palétuvier Boueuses"
+msgstr "Racines de palétuvier boueuses"
 
 msgid "crafted with Mud and Mangrove roots"
 msgstr "fabriqué avec de la Boue et des racines de Palétuvier"
 
 msgid "Muddy Mangrove Roots is a block from mangrove swamp.It drowns player a bit inside it."
-msgstr "Les Racines de Palétuvier Boueuses sont un bloc du marécage de la mangrove. Il noie un joueur à l'intérieur."
+msgstr ""
+"Les racines de palétuvier boueuses sont un bloc du marécage de la mangrove. "
+"Il noie un joueur à l'intérieur."
 
 msgid "Mangrove Bark"
 msgstr "Écorce de palétuvier"
 
 msgid "Mangrove Bark Slab"
-msgstr "Dalle en d'écorce de palétuvier"
+msgstr "Dalle d'écorce de palétuvier"
 
 msgid "Mangrove Bark Stairs"
 msgstr "Escalier en écorce de palétuvier"
@@ -88,7 +90,7 @@ msgid "Mangrove Log"
 msgstr "Bûche de palétuvier"
 
 msgid "Mangrove Planks"
-msgstr "Planche de palétuvier"
+msgstr "Planches de palétuvier"
 
 msgid "Mangrove Pressure Plate"
 msgstr "Plaque de pression en palétuvier"
@@ -112,7 +114,7 @@ msgid "Stripped Mangrove Log"
 msgstr "Bûche de palétuvier écorcée"
 
 msgid "Stripped Mangrove Wood"
-msgstr "Bois de palétuvier écorcée"
+msgstr "Bois de palétuvier écorcé"
 
 msgid "The stripped trunk of an Mangrove tree."
 msgstr "Le tronc écorcé d'un palétuvier."
