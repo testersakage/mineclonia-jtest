@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 07:28+0000\n"
+"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mcl_core/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Stick"
 msgstr "木棍"
@@ -125,145 +126,145 @@ msgid "Enchanted Golden Apple"
 msgstr "魔法金苹果"
 
 msgid "Acacia Bark"
-msgstr ""
+msgstr "金合欢木树皮"
 
 msgid "Acacia Bark Slab"
-msgstr ""
+msgstr "金合欢木树皮半砖"
 
 msgid "Acacia Bark Stairs"
-msgstr ""
+msgstr "金合欢木树皮楼梯"
 
 msgid "Acacia Boat"
-msgstr ""
+msgstr "金合欢木船"
 
 msgid "Acacia Button"
-msgstr ""
+msgstr "金合欢木按钮"
 
 msgid "Acacia Chest Boat"
-msgstr ""
+msgstr "金合欢木储物船"
 
 msgid "Acacia Door"
-msgstr ""
+msgstr "金合欢木门"
 
 msgid "Acacia Fence"
-msgstr ""
+msgstr "金合欢木栅栏"
 
 msgid "Acacia Fence Gate"
-msgstr ""
+msgstr "金合欢木栅栏门"
 
 msgid "Acacia Leaves"
-msgstr ""
+msgstr "金合欢树叶"
 
 msgid "Acacia Log"
-msgstr ""
+msgstr "金合欢原木"
 
 msgid "Acacia Planks"
-msgstr ""
+msgstr "金合欢木板"
 
 msgid "Acacia Pressure Plate"
-msgstr ""
+msgstr "金合欢木压力板"
 
 msgid "Acacia Sapling"
-msgstr ""
+msgstr "金合欢树苗"
 
 msgid "Acacia Sign"
-msgstr ""
+msgstr "金合欢木告示牌"
 
 msgid "Acacia Slab"
-msgstr ""
+msgstr "金合欢木半砖"
 
 msgid "Acacia Stairs"
-msgstr ""
+msgstr "金合欢木楼梯"
 
 msgid "Acacia Trapdoor"
-msgstr ""
+msgstr "金合欢木活板门"
 
 msgid "Acacia leaves are grown from Acacia trees."
-msgstr ""
+msgstr "金合欢树叶由金合欢树生长而来。"
 
 msgid "Birch Bark"
-msgstr ""
+msgstr "白桦木树皮"
 
 msgid "Birch Bark Slab"
-msgstr ""
+msgstr "白桦木树皮半砖"
 
 msgid "Birch Bark Stairs"
-msgstr ""
+msgstr "白桦树皮楼梯"
 
 msgid "Birch Boat"
-msgstr ""
+msgstr "白桦木船"
 
 msgid "Birch Button"
-msgstr ""
+msgstr "白桦木按钮"
 
 msgid "Birch Chest Boat"
-msgstr ""
+msgstr "白桦木箱船"
 
 msgid "Birch Door"
-msgstr ""
+msgstr "白桦木门"
 
 msgid "Birch Fence"
-msgstr ""
+msgstr "白桦木栅栏"
 
 msgid "Birch Fence Gate"
-msgstr ""
+msgstr "白桦木栅栏门"
 
 msgid "Birch Leaves"
-msgstr ""
+msgstr "白桦树叶"
 
 msgid "Birch Log"
-msgstr ""
+msgstr "白桦原木"
 
 msgid "Birch Planks"
-msgstr ""
+msgstr "白桦木板"
 
 msgid "Birch Pressure Plate"
-msgstr ""
+msgstr "白桦木压力板"
 
 msgid "Birch Sapling"
-msgstr ""
+msgstr "白桦树苗"
 
 msgid "Birch Sign"
-msgstr ""
+msgstr "白桦木告示牌"
 
 msgid "Birch Slab"
-msgstr ""
+msgstr "白桦木半砖"
 
 msgid "Birch Stairs"
-msgstr ""
+msgstr "白桦木楼梯"
 
 msgid "Birch Trapdoor"
-msgstr ""
+msgstr "白桦木活板门"
 
 msgid "Birch leaves are grown from Birch trees."
-msgstr ""
+msgstr "白桦树叶从白桦树上生长出来。"
 
 msgid "Black Stained Glass"
-msgstr ""
+msgstr "黑色染色玻璃"
 
 msgid "Blue Stained Glass"
-msgstr ""
+msgstr "蓝色染色玻璃"
 
 msgid "Brown Stained Glass"
-msgstr ""
+msgstr "棕色染色玻璃"
 
 msgid "Cyan Stained Glass"
-msgstr ""
+msgstr "青色染色玻璃"
 
 msgid "Dark Oak Bark"
-msgstr ""
+msgstr "深色橡木树皮"
 
 msgid "Dark Oak Bark Slab"
-msgstr ""
+msgstr "深色橡木树皮半砖"
 
 msgid "Dark Oak Bark Stairs"
-msgstr ""
+msgstr "深色橡木树皮楼梯"
 
 msgid "Dark Oak Boat"
-msgstr ""
+msgstr "深色橡木船"
 
 msgid "Dark Oak Button"
-msgstr ""
+msgstr "深色橡木按钮"
 
 msgid "Dark Oak Chest Boat"
 msgstr ""
@@ -1188,4 +1189,3 @@ msgstr "苔藓石砖楼梯"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "苔藓石砖台阶"
-
