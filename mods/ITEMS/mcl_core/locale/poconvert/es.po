@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 22:54+0000\n"
+"PO-Revision-Date: 2024-12-13 23:51+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
@@ -719,7 +719,7 @@ msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful bl
 msgstr "Un bloque de césped es tierra con una cubierta de césped. Los bloques de césped son bloques ingeniosos que permiten el crecimiento de todo tipo de plantas. Pueden convertirse en tierras de cultivo con una azada y convertirse en caminos de césped con una pala. A la luz, el césped se extiende lentamente sobre la tierra cercana. Debajo de un bloque opaco o un líquido, un bloque de césped puede volverse tierra."
 
 msgid "Dirt with Snow"
-msgstr "Tierra con Nieve"
+msgstr "Tierra con nieve"
 
 msgid "Grass Path"
 msgstr "Camino de césped"
@@ -734,7 +734,7 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr "El micelio es un tipo de tierra y el suelo ideal para los hongos. A diferencia de otros bloques de tipo de tierra, no se puede convertir en tierras de cultivo con una azada. A la luz, el micelio se extiende lentamente sobre la tierra cercana. Debajo de un bloque opaco o un líquido, eventualmente se convierte nuevamente en tierra."
 
 msgid "Mycelium with Snow"
-msgstr "Micelio con Nieve"
+msgstr "Micelio con nieve"
 
 msgid "Podzol"
 msgstr "Podzol"
@@ -743,7 +743,7 @@ msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are ab
 msgstr "El podzol es un tipo de tierra que se encuentra en los bosques de taiga. Solo unas pocas plantas pueden sobrevivir en él."
 
 msgid "Podzol with Snow"
-msgstr "Podzol con Nieve"
+msgstr "Podzol con nieve"
 
 msgid "Dirt"
 msgstr "Tierra"
@@ -752,10 +752,12 @@ msgid "Dirt acts as a soil for a few plants. When in light, this block may grow 
 msgstr "La tierra actúa como un suelo para algunas plantas. Cuando está a la luz, este bloque puede crecer una cubierta de césped o micelio si tales bloques están cerca."
 
 msgid "Coarse Dirt"
-msgstr "Tierra infértil"
+msgstr "Tierra estéril"
 
 msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."
-msgstr "La tierra infértil actúa como un suelo para algunas plantas y es similar a la tierra, pero nunca crecerá una cubierta."
+msgstr ""
+"La tierra estéril actúa como un suelo para algunas plantas y es similar a la "
+"tierra, pero nunca crecerá una cubierta."
 
 msgid "Gravel"
 msgstr "Grava"
@@ -812,7 +814,7 @@ msgid "Cut red sandstone is a decorative building block."
 msgstr "La arenisca roja cortada es un elemento decorativo."
 
 msgid "Chiseled Red Sandstone"
-msgstr "Arenisca Roja Cincelada"
+msgstr "Arenisca roja cincelada"
 
 msgid "Chiseled red sandstone is a decorative building block."
 msgstr "La piedra arenisca roja cincelada es un elemento decorativo."
@@ -824,19 +826,21 @@ msgid "Smooth red sandstone is a decorative building block."
 msgstr "La piedra arenisca roja lisa es un elemento decorativo."
 
 msgid "Clay"
-msgstr "Arcilla"
+msgstr "Bloque de arcilla"
 
 msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
 msgstr "La arcilla es un tipo de tierra versátil que se encuentra comúnmente en las playas bajo el agua."
 
 msgid "Brick Block"
-msgstr "Bloque de ladrillo"
+msgstr "Bloque de ladrillos"
 
 msgid "Brick blocks are a good building material for building solid houses and can take quite a punch."
-msgstr "Los bloques de ladrillo son un buen material de construcción para edificar casas sólidas y pueden aguantar bastantes golpes."
+msgstr ""
+"Los bloques de ladrillos son un buen material de construcción para edificar "
+"casas sólidas y pueden aguantar bastantes golpes."
 
 msgid "Bedrock"
-msgstr "Lecho de roca"
+msgstr "Piedra base"
 
 msgid "Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode."
 msgstr "El lecho de roca es un tipo de roca muy duro. No se puede romper, destruir, recoger o mover por medios normales, a menos que esté en modo creativo."
@@ -875,7 +879,7 @@ msgid "A block of diamond is mostly a shiny decorative block but also useful as 
 msgstr "Un bloque de diamante es sobre todo un bloque decorativo reluciente, pero también es útil como almacén compacto de diamantes."
 
 msgid "Block of Lapis Lazuli"
-msgstr ""
+msgstr "Bloque de lapislázuli"
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
 msgstr "Un bloque de lapislázuli es principalmente un bloque decorativo, pero también es útil como un almacenamiento compacto de lapislázuli."
