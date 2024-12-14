@@ -249,8 +249,9 @@ minetest.register_craft({ --TODO: update once echo shards are a thing
 minetest.register_node("mcl_compass:lodestone",{
 	description=S("Lodestone"),
 	on_rightclick = function(pos, _, _, itemstack)
-		if itemstack:get_name() == "mcl_compass:compass_lodestone" then
+		if itemstack:get_name() == "mcl_compass:compass_lodestone" or itemstack:get_name() == "mcl_compass:compass" then
 			itemstack:get_meta():set_string("pointsto", minetest.pos_to_string(pos))
+			itemstack:set_name("mcl_compass:compass_lodestone")
 		end
 		return itemstack
 	end,
