@@ -1079,6 +1079,12 @@ end
 local gwp_door_classes = {}
 
 local function gwp_compute_fixed_ground_height (def)
+	-- Treat non-walkable nodes as identical to air, although this
+	-- is far from their true bounding boxes, to avoid certain
+	-- inconsistencies.
+	if not def.walkable then
+		return 0.5
+	end
 	if def.paramtype2 == "color"
 		or def.paramtype2 == "none" then
 		local node_box = def.collision_box
