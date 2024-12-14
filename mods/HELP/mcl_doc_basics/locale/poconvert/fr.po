@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc_basics/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Advanced usage"
 msgstr "Utilisation avancée"
@@ -737,7 +739,10 @@ msgid "Blocks can have a wide range of different properties which determine mini
 msgstr "Les blocs peuvent avoir un large éventail de propriétés différentes qui déterminent les temps d'exploration, le comportement, l'apparence, la forme et bien plus encore. Leurs propriétés comprennent :"
 
 msgid "• Collidable: Collidable blocks can not be passed through; players can walk on them. Non-collidable blocks can be passed through freely"
-msgstr "• Collision : les blocs collisionnables ne peuvent pas être traversés; les joueurs peuvent marcher dessus. Les blocs non collisionnables peuvent passer librement"
+msgstr ""
+"• Collision : les blocs collisionnables ne peuvent pas être traversés ; les "
+"joueurs peuvent marcher dessus. Les blocs non collisionnables peuvent passer "
+"librement"
 
 msgid "• Pointable: Pointable blocks show a wireframe or a halo box when pointed. But you will just point through non-pointable blocks. Liquids are usually non-pointable but they can be pointed at by some special tools"
 msgstr "• Pointable : les blocs pointables affichent un filaire ou une boîte de halo lorsqu'ils sont pointés. Mais vous pointerez simplement à travers des blocs non pointables. Les liquides sont généralement non pointables mais ils peuvent être pointés par certains outils spéciaux"
@@ -791,13 +796,16 @@ msgid "To build your wielded block, point at a block in the world and right-clic
 msgstr "Pour construire votre bloc brandi, pointez sur un bloc dans le monde et faites un clic droit. Si cela n'est pas possible car le bloc pointé a une action spéciale de clic droit, maintenez la touche furtive avant de cliquer avec le bouton droit."
 
 msgid "Blocks can almost always be built at pointable blocks. One exception are blocks attached to the floor; these can only be built on the floor."
-msgstr "Les blocs peuvent presque toujours être construits sur des blocs pointables. Une exception est les blocs attachés au sol; ceux-ci ne peuvent être construits que sur le sol."
+msgstr ""
+"Les blocs peuvent presque toujours être construits sur des blocs pointables. "
+"Une exception est les blocs attachés au sol ; ceux-ci ne peuvent être "
+"construits que sur le sol."
 
 msgid "Normally, blocks are built in front of the pointed side of the pointed block. A few blocks are different: When you try to build at them, they are replaced."
 msgstr "Normalement, les blocs sont construits devant le côté pointu du bloc pointu. Quelques blocs sont différents : lorsque vous essayez de les construire, ils sont remplacés."
 
 msgid "Crafting"
-msgstr "Artisanat"
+msgstr "Fabrication"
 
 msgid "Crafting is the task of combining several items to form a new item."
 msgstr "L'artisanat consiste à combiner plusieurs éléments pour former un nouvel élément."
@@ -839,7 +847,7 @@ msgid "Rarely, crafting recipes have replacements. This means, whenever you perf
 msgstr "Rarement, les recettes d'artisanat ont des remplacements. Cela signifie que chaque fois que vous effectuez un métier, certains objets de la grille de fabrication ne seront pas consommés, mais seront remplacés à la place par un autre objet."
 
 msgid "Cooking"
-msgstr "Cuisson"
+msgstr "Cuisiner"
 
 msgid "Cooking (or smelting) is a form of crafting which does not involve a crafting grid. Cooking is done with a special block (like a furnace), an cookable item, a fuel item and time in order to yield a new item."
 msgstr "La cuisson (ou la fonte) est une forme d'artisanat qui n'implique pas de grille d'artisanat. La cuisson se fait avec un bloc spécial (comme un four), un article à cuire, un article à combustible et du temps afin de produire un nouvel article."
@@ -1379,10 +1387,15 @@ msgid "• Minetest Game: A game for Minetest by the Minetest developers"
 msgstr "• Minetest Game : Un jeu pour Minetest par les développeurs de Minetest"
 
 msgid "• Game: A complete playing experience to be used in Minetest; such as a game or sandbox or similar"
-msgstr "• Jeu : Une expérience de jeu complète à utiliser dans Minetest; comme un jeu ou un bac à sable ou similaire"
+msgstr ""
+"• Jeu : Une expérience de jeu complète à utiliser dans Minetest ; comme un "
+"jeu ou un bac à sable ou similaire"
 
 msgid "• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them"
-msgstr "• Mod : un sous-système unique qui ajoute ou modifie des fonctionnalités; est le bloc de construction de base des jeux et peut être utilisé pour les améliorer ou les modifier davantage"
+msgstr ""
+"• Mod : un sous-système unique qui ajoute ou modifie des fonctionnalités ; "
+"est le bloc de construction de base des jeux et peut être utilisé pour les "
+"améliorer ou les modifier davantage"
 
 msgid "• Privilege: Allows a player to do something"
 msgstr "• Privilège : Permet à un joueur de faire quelque chose"
@@ -1404,4 +1417,3 @@ msgstr "Minetest peut être joué seul ou en ligne avec plusieurs joueurs. Le je
 
 msgid "MineClonia is a game that is built on top of the Minetest engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
 msgstr "MineClonia est un jeu construit sur le moteur Minetest qui vise à créer un jeu aussi proche que possible de Minecraft. Il existe cependant de nombreux autres jeux pour Minetest, qui peuvent être installés à partir du menu principal du navigateur de contenu."
-

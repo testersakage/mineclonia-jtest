@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_fishing x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-14 05:54+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_fishing/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Fishing Rod"
 msgstr "Canne à pêche"
@@ -26,7 +28,7 @@ msgid "Rightclick to launch the bobber. When it sinks right-click again to reel 
 msgstr "Clic droit pour lancer le bouchon. Lorsqu'il s'enfonce, cliquez de nouveau avec le bouton droit pour rembobiner. Qui sait ce que vous allez attraper ?"
 
 msgid "Raw Fish"
-msgstr "Poisson Cru"
+msgstr "Poisson cru"
 
 msgid "Raw fish is obtained by fishing and is a food item which can be eaten safely. Cooking it improves its nutritional value."
 msgstr "Le poisson cru est obtenu par la pêche et est un aliment qui peut être mangé en toute sécurité. La cuisson améliore sa valeur nutritive."
@@ -50,17 +52,16 @@ msgid "This is a healthy food item which can be eaten."
 msgstr "Il s'agit d'un aliment sain qui peut être consommé."
 
 msgid "Clownfish"
-msgstr "Poisson-Clown"
+msgstr "Poisson-clown"
 
 msgid "Clownfish may be obtained by fishing (and luck) and is a food item which can be eaten safely."
 msgstr "Le poisson-clown peut être obtenu par la pêche (et la chance) et est un aliment qui peut être mangé en toute sécurité."
 
 msgid "Pufferfish"
-msgstr "Poisson-Globe"
+msgstr "Poisson-globe"
 
 msgid "Very poisonous"
 msgstr "Très toxique"
 
 msgid "Pufferfish are a common species of fish and can be obtained by fishing. They can technically be eaten, but they are very bad for humans. Eating a pufferfish only restores 1 hunger point and will poison you very badly (which drains your health non-fatally) and causes serious food poisoning (which increases your hunger)."
 msgstr "Le poisson-globe est une espèce de poisson commune et peut être obtenu par la pêche. Ils peuvent techniquement être mangés, mais ils sont très mauvais pour les humains. Manger un poisson-globe ne restaure que 1 point de faim et vous empoisonnera fortement (ce qui draine votre santé de manière non fatale) et provoque une grave intoxication alimentaire (qui augmente votre faim)."
-

@@ -3,18 +3,20 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 07:28+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_farming/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Beetroot Seeds"
-msgstr "Graines de Betterave"
+msgstr "Graines de betterave"
 
 msgid "Grows into a beetroot plant. Chickens like beetroot seeds."
 msgstr "Pousse en bettrave. Les poulets aiment les graines de betterave."
@@ -23,22 +25,22 @@ msgid "Place the beetroot seeds on farmland (which can be created with a hoe) to
 msgstr "Placez les graines de betterave sur les terres agricoles (qui peuvent être créées avec une houe) pour planter un plant de betterave. Elles poussent au soleil et poussent plus vite sur les terres agricoles hydratées. Faites un clic droit sur un animal pour le nourrir de graines de betteraves."
 
 msgid "Premature Beetroot Plant (Stage 1)"
-msgstr "Plant de Betterave Prématurée (Etape 1)"
+msgstr "Plant de betterave prématurée (Étape 1)"
 
 msgid "Beetroot plants are plants which grow on farmland under sunlight in 4 stages. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
 msgstr "Les plants de betteraves poussent sur les terres agricoles sous le soleil en 4 étapes. Sur les terres agricoles hydratées, elles poussent un peu plus vite. Elles peuvent être récoltées à tout moment mais ne rapporteront de bénéfices qu'à maturité."
 
 msgid "Premature Beetroot Plant"
-msgstr "Plant de Betterave Prématurée"
+msgstr "Plant de betterave prématurée"
 
 msgid "Premature Beetroot Plant (Stage 2)"
-msgstr "Plant de Betterave Prématurée (Etape 2)"
+msgstr "Plant de betterave prématurée (Étape 2)"
 
 msgid "Premature Beetroot Plant (Stage 3)"
-msgstr "Plant de Betterave Prématurée (Etape 3)"
+msgstr "Plant de betterave prématurée (Étape 3)"
 
 msgid "Mature Beetroot Plant"
-msgstr "Betterave Mature"
+msgstr "Betterave mature"
 
 msgid "A mature beetroot plant is a farming plant which is ready to be harvested for a beetroot and some beetroot seeds. It won't grow any further."
 msgstr "Une betterave mature est une plante agricole prête à être récoltée pour une betterave et quelques graines de betterave. Elle ne grandira plus."
@@ -53,7 +55,7 @@ msgid "Hold it in your hand and right-click to eat it. Rightclick an animal to f
 msgstr "Tenez-le dans votre main et faites un clic droit pour le manger. Faites un clic droit sur un animal pour le nourrir."
 
 msgid "Beetroot Soup"
-msgstr "Soupe de Betterave"
+msgstr "Soupe de betterave"
 
 msgid "Beetroot soup is a food item."
 msgstr "La soupe de betterave est un aliment."
@@ -62,13 +64,13 @@ msgid "Grows on farmland"
 msgstr "Pousse sur les terres agricoles"
 
 msgid "Premature Carrot Plant"
-msgstr "Plant de Carrote Prématurée"
+msgstr "Plant de carotte prématurée"
 
 msgid "Carrot plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
 msgstr "Les plants de carotte sont des plantes qui poussent sur les terres agricoles sous la lumière du soleil en 8 étapes, mais seulement 4 étapes peuvent être distinguées visuellement. Sur les terres agricoles hydratées, elles poussent un peu plus vite. Ils peuvent être récoltés à tout moment mais ne rapporteront de bénéfices qu'à maturité."
 
 msgid "Premature Carrot Plant (Stage @1)"
-msgstr "Plant de carotte prématuré (étape @1)"
+msgstr "Plant de carotte prématuré (Étape @1)"
 
 msgid "Mature Carrot Plant"
 msgstr "Plant de carotte mature"
@@ -77,7 +79,7 @@ msgid "Mature carrot plants are ready to be harvested for carrots. They won't gr
 msgstr "Les plants de carottes matures sont prêts à être récoltés pour les carottes. Ils ne grandiront plus."
 
 msgid "Carrot"
-msgstr "Carrotte"
+msgstr "Carotte"
 
 msgid "Carrots can be eaten and planted. Pigs and rabbits like carrots."
 msgstr "Les carottes peuvent être mangées et plantées. Les cochons et les lapins comme les carottes."
@@ -86,7 +88,7 @@ msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmlan
 msgstr "Tenez-la dans votre main et faites un clic droit pour le manger. Placez-le au-dessus des terres agricoles pour planter la carotte. Elle pousse au soleil et pousse plus vite sur les terres agricoles hydratées. Faites un clic droit sur un animal pour le nourrir."
 
 msgid "Golden Carrot"
-msgstr "Carrot Dorée"
+msgstr "Carotte dorée"
 
 msgid "A golden carrot is a precious food item which can be eaten. It is really, really filling!"
 msgstr "Une carotte dorée est un aliment précieux qui peut être mangé. C'est vraiment, vraiment rassasiant !"
@@ -101,28 +103,28 @@ msgid "Use the hoe on a cultivatable block (by rightclicking it) to turn it into
 msgstr "Utilisez une houe sur un bloc cultivable (avec un clic droit sur celui-ci) pour le transformer en terre arable. La terre, les blocs enherbés et les chemins d'herbe sont des blocs cultivables. Utiliser une houe sur un bloc de terre stérile la transforme en bloc de terre simple."
 
 msgid "Wood Hoe"
-msgstr "Houe en Bois"
+msgstr "Houe en bois"
 
 msgid "Uses: @1"
 msgstr "Utilisations : @1"
 
 msgid "Stone Hoe"
-msgstr "Houe en Pierre"
+msgstr "Houe en pierre"
 
 msgid "Iron Hoe"
-msgstr "Houe en Fer"
+msgstr "Houe en fer"
 
 msgid "Golden Hoe"
-msgstr "Houe en Or"
+msgstr "Houe en or"
 
 msgid "Diamond Hoe"
-msgstr "Houe en Diamant"
+msgstr "Houe en diamant"
 
 msgid "Netherite Hoe"
-msgstr "Houe en nétherite"
+msgstr "Houe en Netherite"
 
 msgid "Melon Seeds"
-msgstr "Graine de Pastèque"
+msgstr "Graines de pastèque"
 
 msgid "Grows into a melon stem which in turn grows melons. Chickens like melon seeds."
 msgstr "Se développe en une tige de pastèque qui à son tour forme des pastèques. Les poulets aiment les graines de pastèque."
@@ -137,37 +139,37 @@ msgid "A melon is a block which can be grown from melon stems, which in turn are
 msgstr "Une pastèque est un bloc qui peut être cultivé à partir de tiges de pastèque, qui à leur tour sont cultivées à partir de graines de pastèque. Elle peut être récoltée pour des tranches de pastèque."
 
 msgid "Premature Melon Stem"
-msgstr "Tige de Pastèque Prématurée"
+msgstr "Tige de pastèque prématurée"
 
 msgid "Melon stems grow on farmland in 8 stages. On hydrated farmland, the growth is a bit quicker. Mature melon stems are able to grow melons."
 msgstr "Les tiges de pastèque poussent sur les terres agricoles en 8 étapes. Sur les terres agricoles hydratées, la croissance est un peu plus rapide. Les tiges de pastèque matures sont capables de faire pousser des pastèques."
 
 msgid "Premature Melon Stem (Stage @1)"
-msgstr "Tige de Pastèque Prématurée (Etape @1)"
+msgstr "Tige de pastèque prématurée (Étape @1)"
 
 msgid "Mature Melon Stem"
-msgstr "Tige de Pastèque Mature"
+msgstr "Tige de pastèque mature"
 
 msgid "A mature melon stem attempts to grow a melon at one of its four adjacent blocks. A melon can only grow on top of farmland, dirt, or a grass block. When a melon is next to a melon stem, the melon stem immediately bends and connects to the melon. While connected, a melon stem can't grow another melon. As soon all melons around the stem have been removed, it loses the connection and is ready to grow another melon."
 msgstr "Une tige de pastèque mature tente de faire pousser un pastèque sur l'un de ses quatre blocs adjacents. Une pastèque ne peut pousser que sur des terres agricoles, de la terre ou un bloc d'herbe. Lorsqu'une pastèque est à côté d'une tige de pastèque, la tige de pastèque se plie immédiatement et se connecte au melon. Lorsqu'elle est connectée, une tige de pastèque ne peut pas faire pousser une autre pastèque. Dès que tous les pastèques autour de la tige ont été supprimés, elle perd la connexion et est prêt à faire pousser une autre pastèque."
 
 msgid "Melon Slice"
-msgstr "Tranche de Pastèque"
+msgstr "Tranche de pastèque"
 
 msgid "This is a food item which can be eaten."
 msgstr "Il s'agit d'un aliment qui peut être mangé."
 
 msgid "Premature Potato Plant"
-msgstr "Plant de Pomme de Terre Prématuré"
+msgstr "Plant de pomme de terre prématuré"
 
 msgid "Potato plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
 msgstr "Les plants de pommes de terre sont des plants qui poussent sur les terres agricoles sous la lumière du soleil en 8 étapes, mais seulement 4 étapes peuvent être distinguées visuellement. Sur les terres agricoles hydratées, elles poussent un peu plus vite. Ils peuvent être récoltés à tout moment mais ne rapporteront de bénéfices qu'à maturité."
 
 msgid "Premature Potato Plant (Stage @1)"
-msgstr "Plant de pomme de terre prématuré (Etape @1)"
+msgstr "Plant de pomme de terre prématuré (Étape @1)"
 
 msgid "Mature Potato Plant"
-msgstr "Plant de Pomme de Terre Mature"
+msgstr "Plant de pomme de terre mature"
 
 msgid "Mature potato plants are ready to be harvested for potatoes. They won't grow any further."
 msgstr "Les plants de pommes de terre matures sont prêts à être récoltés pour les pommes de terre. Ils ne grandiront plus."
@@ -182,22 +184,27 @@ msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmlan
 msgstr "Tenez-le dans votre main et faites un clic droit pour le manger. Placez-le au-dessus des terres agricoles pour le planter. Il pousse au soleil et pousse plus vite sur les terres agricoles hydratées. Faites un clic droit sur un animal pour le nourrir."
 
 msgid "Baked Potato"
-msgstr "Pomme de Terre au Four"
+msgstr "Pomme de terre cuite"
 
 msgid "Baked potatoes are food items which are more filling than the unbaked ones."
-msgstr "Les pommes de terre au four sont des aliments qui sont plus copieux que ceux non cuits."
+msgstr ""
+"Les pommes de terre cuite sont des aliments qui sont plus copieux que ceux "
+"non cuits."
 
 msgid "Poisonous Potato"
-msgstr "Pomme de Terre Toxique"
+msgstr "Pomme de terre empoisonnée"
 
 msgid "60% chance of poisoning"
 msgstr "60% de chances d'empoisonnement"
 
 msgid "This potato doesn't look too healthy. You can eat it to restore hunger points, but there's a 60% chance it will poison you briefly."
-msgstr "Cette pomme de terre n'a pas l'air trop saine. Vous pouvez le manger pour restaurer des points de faim, mais il y a 60% de chances qu'il vous empoisonne brièvement."
+msgstr ""
+"Cette pomme de terre n'a pas l'air trop saine. Vous pouvez la manger pour "
+"restaurer des points de faim, mais il y a 60% de chances qu'elle vous "
+"empoisonne brièvement."
 
 msgid "Pumpkin Seeds"
-msgstr "Graines de Citrouille"
+msgstr "Graines de citrouille"
 
 msgid "Grows into a pumpkin stem which in turn grows pumpkins. Chickens like pumpkin seeds."
 msgstr "Pousse dans une tige de citrouille qui à son tour fait pousser des citrouilles. Les poulets aiment des graines de citrouille."
@@ -206,16 +213,16 @@ msgid "Place the pumpkin seeds on farmland (which can be created with a hoe) to 
 msgstr "Placez les graines de citrouille sur les terres agricoles (qui peuvent être créées avec une houe) pour planter une tige de citrouille. Les tiges de citrouille poussent au soleil et poussent plus vite sur les terres agricoles hydratées. À maturité, la tige tente de faire pousser une citrouille à côté d'elle. Faites un clic droit sur un animal pour le nourrir de graines de citrouille."
 
 msgid "Premature Pumpkin Stem"
-msgstr "Tige de Citrouille Prématurée"
+msgstr "Tige de citrouille prématurée"
 
 msgid "Pumpkin stems grow on farmland in 8 stages. On hydrated farmland, the growth is a bit quicker. Mature pumpkin stems are able to grow pumpkins."
 msgstr "Les tiges de citrouille poussent sur les terres agricoles en 8 étapes. Sur les terres agricoles hydratées, la croissance est un peu plus rapide. Les tiges de citrouille matures peuvent faire pousser des citrouilles."
 
 msgid "Premature Pumpkin Stem (Stage @1)"
-msgstr "Tige de Citrouille Prématurée (Etape @1)"
+msgstr "Tige de citrouille prématurée (Étape @1)"
 
 msgid "Mature Pumpkin Stem"
-msgstr "Tige de Citrouille Mature"
+msgstr "Tige de citrouille mature"
 
 msgid "A mature pumpkin stem attempts to grow a pumpkin at one of its four adjacent blocks. A pumpkin can only grow on top of farmland, dirt or a grass block. When a pumpkin is next to a pumpkin stem, the pumpkin stem immediately bends and connects to the pumpkin. A connected pumpkin stem can't grow another pumpkin. As soon all pumpkins around the stem have been removed, it loses the connection and is ready to grow another pumpkin."
 msgstr "Une tige de citrouille mature tente de faire pousser une citrouille dans l'un de ses quatre blocs adjacents. Une citrouille ne peut pousser que sur des terres agricoles, de la terre ou un bloc d'herbe. Lorsqu'une citrouille est à côté d'une tige de citrouille, la tige de citrouille se plie immédiatement et se connecte à la citrouille. Une tige de citrouille connectée ne peut pas faire pousser une autre citrouille. Dès que toutes les citrouilles autour de la tige ont été retirées, elle perd la connexion et est prête à faire pousser une autre citrouille."
@@ -333,4 +340,3 @@ msgstr "\n"
 "\t\tLes plantes de blé matures sont prêtes à être récoltées pour le blé et les semences de blé.\n"
 "\t\tIls ne pousseront plus.\n"
 "\t"
-

@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-14 05:54+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Axolotl"
 msgstr "Axolotl"
@@ -23,7 +25,7 @@ msgid "Blaze"
 msgstr "Blaze"
 
 msgid "Chicken"
-msgstr "Poulet"
+msgstr "Poule"
 
 msgid "Cod"
 msgstr "Morue"
@@ -122,7 +124,7 @@ msgid "Zombie Piglin"
 msgstr "Piglin zombie"
 
 msgid "Pillager"
-msgstr "Pilleur"
+msgstr "Pillard"
 
 msgid "Polar Bear"
 msgstr "Ours blanc"
@@ -221,7 +223,7 @@ msgid "Vindicator"
 msgstr "Vindicateur"
 
 msgid "Zombie Villager"
-msgstr "Zombie Villageois"
+msgstr "Zombie-villageois"
 
 msgid "@1 sleeps here"
 msgstr "@1 dort ici"
@@ -236,7 +238,7 @@ msgid "A villager works here"
 msgstr "Un villageois travaille ici"
 
 msgid "Unemployed"
-msgstr "Sans emploi"
+msgstr "Sans profession"
 
 msgid "Farmer"
 msgstr "Fermier"
@@ -245,7 +247,7 @@ msgid "Fisherman"
 msgstr "Pêcheur"
 
 msgid "Fletcher"
-msgstr "Archer"
+msgstr "Fléchier"
 
 msgid "Shepherd"
 msgstr "Berger"
@@ -266,19 +268,19 @@ msgid "Butcher"
 msgstr "Boucher"
 
 msgid "Weapon Smith"
-msgstr "Fabriquant d'arme"
+msgstr "Forgeron d'arme"
 
 msgid "Tool Smith"
-msgstr "Fabriquant d'outil"
+msgstr "Forgeron d'outil"
 
 msgid "Cleric"
-msgstr "Clerc"
+msgstr "Prêtre"
 
 msgid "Mason"
-msgstr "maçon"
+msgstr "Maçon"
 
 msgid "Nitwit"
-msgstr "Crétin"
+msgstr "Idiot"
 
 msgid "Wandering Trader"
 msgstr "Marchand ambulant"
@@ -324,4 +326,3 @@ msgstr "Bébé zombie momifié"
 
 msgid "Zombified Piglin"
 msgstr "Piglin Zombifié"
-

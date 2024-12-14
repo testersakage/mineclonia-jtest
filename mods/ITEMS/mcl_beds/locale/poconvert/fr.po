@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-11 03:47+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_beds/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Beds allow you to sleep at night and make the time pass faster."
 msgstr "Les lits vous permettent de dormir la nuit et de faire passer le temps plus rapidement."
@@ -107,53 +109,52 @@ msgid "New respawn position set!"
 msgstr "Nouvelle position de réapparition définie !"
 
 msgid "Black Bed"
-msgstr ""
+msgstr "Lit noir"
 
 msgid "Blue Bed"
-msgstr ""
+msgstr "Lit bleu"
 
 msgid "Brown Bed"
-msgstr ""
+msgstr "Lit marron"
 
 msgid "Cyan Bed"
-msgstr ""
+msgstr "Lit cyan"
 
 msgid "Green Bed"
-msgstr ""
+msgstr "Lit vert"
 
 msgid "Grey Bed"
-msgstr ""
+msgstr "Lit gris"
 
 msgid "Light Blue Bed"
-msgstr ""
+msgstr "Lit bleu clair"
 
 msgid "Light Grey Bed"
-msgstr ""
+msgstr "Lit gris clair"
 
 msgid "Lime Bed"
-msgstr ""
+msgstr "Lit vert clair"
 
 msgid "Magenta Bed"
-msgstr ""
+msgstr "Lit magenta"
 
 msgid "Orange Bed"
-msgstr ""
+msgstr "Lit orange"
 
 msgid "Pink Bed"
-msgstr ""
+msgstr "Lit rose"
 
 msgid "Purple Bed"
-msgstr ""
+msgstr "Lit violet"
 
 msgid "Red Bed"
-msgstr ""
+msgstr "Lit rouge"
 
 msgid "White Bed"
-msgstr ""
+msgstr "Lit blanc"
 
 msgid "Yellow Bed"
-msgstr ""
+msgstr "Lit jaune"
 
 msgid "Respawn Anchor"
 msgstr "Ancre de réapparition"
-

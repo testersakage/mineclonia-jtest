@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_colorblocks x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_colorblocks/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Terracotta is a basic building material. It comes in many different colors."
 msgstr "La terre cuite est un matériau de construction de base. Elle est disponible dans de nombreuses couleurs différentes."
@@ -29,16 +31,16 @@ msgid "Turns into concrete on water contact"
 msgstr "Se transforme en béton au contact de l'eau"
 
 msgid "Terracotta"
-msgstr "Terre Cuite"
+msgstr "Terre cuite"
 
 msgid "Terracotta is a basic building material which comes in many different colors. This particular block is uncolored."
 msgstr "La terre cuite est un matériau de construction de base qui se décline en de nombreuses couleurs différentes. Ce bloc particulier n'est pas coloré."
 
 msgid "Colored Terracotta"
-msgstr "Terre Cuite Colorée"
+msgstr "Terre cuite colorée"
 
 msgid "Glazed Terracotta"
-msgstr "Terre Cuite Émaillée"
+msgstr "Terre cuite émaillée"
 
 msgid "Concrete Powder"
 msgstr "Béton en poudre"
@@ -47,194 +49,193 @@ msgid "Concrete"
 msgstr "Béton"
 
 msgid "Black Concrete"
-msgstr ""
+msgstr "Béton noir"
 
 msgid "Black Concrete Powder"
-msgstr ""
+msgstr "Béton noir en poudre"
 
 msgid "Black Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite noire émaillée"
 
 msgid "Black Terracotta"
-msgstr ""
+msgstr "Terre cuite noire"
 
 msgid "Blue Concrete"
-msgstr ""
+msgstr "Béton bleu"
 
 msgid "Blue Concrete Powder"
-msgstr ""
+msgstr "Béton bleu en poudre"
 
 msgid "Blue Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite bleue émaillée"
 
 msgid "Blue Terracotta"
-msgstr ""
+msgstr "Terre cuite bleue"
 
 msgid "Brown Concrete"
-msgstr ""
+msgstr "Béton marron"
 
 msgid "Brown Concrete Powder"
-msgstr ""
+msgstr "Béton marron en poudre"
 
 msgid "Brown Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite marron émaillée"
 
 msgid "Brown Terracotta"
-msgstr ""
+msgstr "Terre cuite marron"
 
 msgid "Cyan Concrete"
-msgstr ""
+msgstr "Béton cyan"
 
 msgid "Cyan Concrete Powder"
-msgstr ""
+msgstr "Béton cyan en poudre"
 
 msgid "Cyan Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite cyan émaillée"
 
 msgid "Cyan Terracotta"
-msgstr ""
+msgstr "Terre cuite cyan"
 
 msgid "Green Concrete"
-msgstr ""
+msgstr "Béton vert"
 
 msgid "Green Concrete Powder"
-msgstr ""
+msgstr "Béton vert en poudre"
 
 msgid "Green Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite verte émaillée"
 
 msgid "Green Terracotta"
-msgstr ""
+msgstr "Terre cuite verte"
 
 msgid "Grey Concrete"
-msgstr ""
+msgstr "Béton gris"
 
 msgid "Grey Concrete Powder"
-msgstr ""
+msgstr "Béton gris en poudre"
 
 msgid "Grey Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite grise émaillée"
 
 msgid "Grey Terracotta"
-msgstr ""
+msgstr "Terre cuite grise"
 
 msgid "Light Blue Concrete"
-msgstr ""
+msgstr "Béton bleu clair"
 
 msgid "Light Blue Concrete Powder"
-msgstr ""
+msgstr "Béton bleu clair en poudre"
 
 msgid "Light Blue Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite bleu clair émaillée"
 
 msgid "Light Blue Terracotta"
-msgstr ""
+msgstr "Terre cuite bleu clair"
 
 msgid "Light Grey Concrete"
-msgstr ""
+msgstr "Béton gris clair"
 
 msgid "Light Grey Concrete Powder"
-msgstr ""
+msgstr "Béton gris clair en poudre"
 
 msgid "Light Grey Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite gris clair émaillée"
 
 msgid "Light Grey Terracotta"
-msgstr ""
+msgstr "Terre cuite gris clair"
 
 msgid "Lime Concrete"
-msgstr ""
+msgstr "Béton vert clair"
 
 msgid "Lime Concrete Powder"
-msgstr ""
+msgstr "Béton vert clair en poudre"
 
 msgid "Lime Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite vert clair émaillée"
 
 msgid "Lime Terracotta"
-msgstr ""
+msgstr "Terre cuite vert clair"
 
 msgid "Magenta Concrete"
-msgstr ""
+msgstr "Béton magenta"
 
 msgid "Magenta Concrete Powder"
-msgstr ""
+msgstr "Béton magenta en poudre"
 
 msgid "Magenta Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite magenta émaillée"
 
 msgid "Magenta Terracotta"
-msgstr ""
+msgstr "Terre cuite magenta"
 
 msgid "Orange Concrete"
-msgstr ""
+msgstr "Béton orange"
 
 msgid "Orange Concrete Powder"
-msgstr ""
+msgstr "Béton orange en poudre"
 
 msgid "Orange Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite orange émaillée"
 
 msgid "Orange Terracotta"
-msgstr ""
+msgstr "Terre cuite orange"
 
 msgid "Pink Concrete"
-msgstr ""
+msgstr "Béton rose"
 
 msgid "Pink Concrete Powder"
-msgstr ""
+msgstr "Béton rose en poudre"
 
 msgid "Pink Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite rose émaillée"
 
 msgid "Pink Terracotta"
-msgstr ""
+msgstr "Terre cuite rose"
 
 msgid "Purple Concrete"
-msgstr ""
+msgstr "Béton violet"
 
 msgid "Purple Concrete Powder"
-msgstr ""
+msgstr "Béton violet en poudre"
 
 msgid "Purple Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite violette émaillée"
 
 msgid "Purple Terracotta"
-msgstr ""
+msgstr "Terre cuite violette"
 
 msgid "Red Concrete"
-msgstr ""
+msgstr "Béton rouge"
 
 msgid "Red Concrete Powder"
-msgstr ""
+msgstr "Béton rouge en poudre"
 
 msgid "Red Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite rouge émaillée"
 
 msgid "Red Terracotta"
-msgstr ""
+msgstr "Terre cuite rouge"
 
 msgid "White Concrete"
-msgstr ""
+msgstr "Béton blanc"
 
 msgid "White Concrete Powder"
-msgstr ""
+msgstr "Béton blanc en poudre"
 
 msgid "White Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite blanche émaillée"
 
 msgid "White Terracotta"
-msgstr ""
+msgstr "Terre cuite blanche"
 
 msgid "Yellow Concrete"
-msgstr ""
+msgstr "Béton jaune"
 
 msgid "Yellow Concrete Powder"
-msgstr ""
+msgstr "Béton jaune en poudre"
 
 msgid "Yellow Glazed Terracotta"
-msgstr ""
+msgstr "Terre cuite jaune émaillée"
 
 msgid "Yellow Terracotta"
-msgstr ""
-
+msgstr "Terre cuite jaune"

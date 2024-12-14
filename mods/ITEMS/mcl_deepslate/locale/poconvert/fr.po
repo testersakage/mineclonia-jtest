@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 04:25+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_deepslate/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Deepslate"
 msgstr "Ardoise des abîmes"
@@ -29,61 +31,63 @@ msgid "Reinforced deepslate is a very hard block undestructable by even wither e
 msgstr "L'ardoise des abîmes renforcée est un bloc très dur, indestructible même par les explosions du wither. Il est impossible de l'obtenir en mode survie."
 
 msgid "Deepslate Coal Ore"
-msgstr "Minerai de charbon de l'ardoise des abîmes"
+msgstr "Minerai de charbon des abîmes"
 
 msgid "Deepslate Iron Ore"
-msgstr "Minerai de fer de l'ardoise des abîmes"
+msgstr "Minerai de fer des abîmes"
 
 msgid "Deepslate Gold Ore"
-msgstr "Minerai d'or de l'ardoise des abîmes"
+msgstr "Minerai d'or des abîmes"
 
 msgid "Deepslate Emerald Ore"
-msgstr "Minerai d'émeraude de l'ardoise des abîmes"
+msgstr "Minerai d'émeraude des abîmes"
 
 msgid "Deepslate Diamond Ore"
-msgstr "Minerai de diamand de l'ardoise des abîmes"
+msgstr "Minerai de diamant des abîmes"
 
 msgid "Deepslate Lapis Lazuli Ore"
-msgstr "Minerai de lapis-lazuli de l'ardoise des abîmes"
+msgstr "Minerai de lapis-lazuli des abîmes"
 
 msgid "Deepslate Redstone Ore"
-msgstr "Minerai de Redstone de l'ardoise des abîmes"
+msgstr "Minerai de redstone des abîmes"
 
 msgid "Lit Deepslate Redstone Ore"
-msgstr "Minerai de Redstone de l'ardoise des abîmes éclairé"
+msgstr "Minerai de redstone des abîmes éclairé"
 
 msgid "Deepslate Copper Ore"
-msgstr "Minerai de cuivre de l'ardoise des abîmes"
+msgstr "Minerai de cuivre des abîmes"
 
 msgid "Cobbled Deepslate"
-msgstr "Pierre des abîmes"
+msgstr "Pierres des abîmes"
 
 msgid "Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone."
 msgstr "La pierre des abîmes est une variante de roche similaire à la pierre ou la pierre noire."
 
 msgid "Cobbled Deepslate Stairs"
-msgstr "Escalier de pierre des abîmes"
+msgstr "Escalier en pierres des abîmes"
 
 msgid "Cobbled Deepslate Slab"
-msgstr "Dalle de pierre des abîmes"
+msgstr "Dalle de pierres des abîmes"
 
 msgid "Cobbled Deepslate Wall"
-msgstr "Muret de pierre des abîmes"
+msgstr "Muret de pierres des abîmes"
 
 msgid "Polished Deepslate"
 msgstr "Ardoise des abîmes polie"
 
 msgid "Polished deepslate is the stone-like polished version of deepslate."
-msgstr "l'ardoise des abîmes polie est la version polie de l'ardoise des abîmes, de manière similaire à la pierre."
+msgstr ""
+"L'ardoise des abîmes polie est la version polie de l'ardoise des abîmes, de "
+"manière similaire à la pierre."
 
 msgid "Polished Deepslate Stairs"
-msgstr "Escalier d'ardoise des abîmes"
+msgstr "Escalier en ardoise des abîmes polie"
 
 msgid "Polished Deepslate Slab"
-msgstr "Dalle d'ardoise des abîmes"
+msgstr "Dalle d'ardoise des abîmes polie"
 
 msgid "Polished Deepslate Wall"
-msgstr "Muret d'ardoise des abîmes"
+msgstr "Muret d'ardoise des abîmes polie"
 
 msgid "Deepslate Bricks"
 msgstr "Ardoise des abîmes taillée"
@@ -95,7 +99,7 @@ msgid "Deepslate Brick Stairs"
 msgstr "Escalier en ardoise des abîmes taillée"
 
 msgid "Deepslate Brick Slab"
-msgstr "Dalle en ardoise des abîmes taillée"
+msgstr "Dalle d'ardoise des abîmes taillée"
 
 msgid "Deepslate Brick Wall"
 msgstr "Muret d'ardoise des abîmes taillée"
@@ -113,10 +117,10 @@ msgid "Deepslate Tile Stairs"
 msgstr "Escalier en ardoise des abîmes carrelée"
 
 msgid "Deepslate Tile Slab"
-msgstr "Dalle en ardoise des abîmes carrelée"
+msgstr "Dalle d'ardoise des abîmes carrelée"
 
 msgid "Deepslate Tiles Wall"
-msgstr "Muret en ardoise des abîmes carrelée"
+msgstr "Muret d'ardoise des abîmes carrelée"
 
 msgid "Cracked Deepslate Tiles"
 msgstr "Ardoise des abîmes carrelée craquelée"
@@ -152,10 +156,10 @@ msgid "Tuff Stairs"
 msgstr "Escalier en tuf"
 
 msgid "Tuff Slab"
-msgstr "Dalle en tuf"
+msgstr "Dalle de tuf"
 
 msgid "Tuff Wall"
-msgstr "Muret en tuf"
+msgstr "Muret de tuf"
 
 msgid "Polished Tuff"
 msgstr "Tuf poli"
@@ -164,10 +168,10 @@ msgid "Polished tuff is a polished variant of the tuff block."
 msgstr "Le tuf poli est une variante polie du bloc de tuf."
 
 msgid "Polished Tuff Stairs"
-msgstr "Escalier de tuf poli"
+msgstr "Escalier en tuf poli"
 
 msgid "Polished Tuff Slab"
-msgstr "Dalle en tuf poli"
+msgstr "Dalle de tuf poli"
 
 msgid "Polished Tuff Wall"
 msgstr "Muret de tuf poli"
@@ -186,4 +190,3 @@ msgstr "Dalle de tuf taillé"
 
 msgid "Tuff Bricks Wall"
 msgstr "Muret de tuf taillé"
-

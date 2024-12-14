@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_colorblocks x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 07:28+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_colorblocks/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Terracotta is a basic building material. It comes in many different colors."
 msgstr "La terracota es un material de construcción básico. Viene en muchos colores diferentes."
@@ -47,194 +49,193 @@ msgid "Concrete"
 msgstr "Hormigón"
 
 msgid "Black Concrete"
-msgstr ""
+msgstr "Hormigón negro"
 
 msgid "Black Concrete Powder"
-msgstr ""
+msgstr "Cemento negro"
 
 msgid "Black Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo negro"
 
 msgid "Black Terracotta"
-msgstr ""
+msgstr "Terracota negra"
 
 msgid "Blue Concrete"
-msgstr ""
+msgstr "Hormigón azul"
 
 msgid "Blue Concrete Powder"
-msgstr ""
+msgstr "Cemento azul"
 
 msgid "Blue Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo azul"
 
 msgid "Blue Terracotta"
-msgstr ""
+msgstr "Terracota azul"
 
 msgid "Brown Concrete"
-msgstr ""
+msgstr "Hormigón marrón"
 
 msgid "Brown Concrete Powder"
-msgstr ""
+msgstr "Cemento marrón"
 
 msgid "Brown Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo marrón"
 
 msgid "Brown Terracotta"
-msgstr ""
+msgstr "Terracota marrón"
 
 msgid "Cyan Concrete"
-msgstr ""
+msgstr "Hormigón cian"
 
 msgid "Cyan Concrete Powder"
-msgstr ""
+msgstr "Cemento cian"
 
 msgid "Cyan Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo cian"
 
 msgid "Cyan Terracotta"
-msgstr ""
+msgstr "Terracota cian"
 
 msgid "Green Concrete"
-msgstr ""
+msgstr "Hormigón verde"
 
 msgid "Green Concrete Powder"
-msgstr ""
+msgstr "Cemento verde"
 
 msgid "Green Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo verde"
 
 msgid "Green Terracotta"
-msgstr ""
+msgstr "Terracota verde"
 
 msgid "Grey Concrete"
-msgstr ""
+msgstr "Hormigón gris"
 
 msgid "Grey Concrete Powder"
-msgstr ""
+msgstr "Cemento gris"
 
 msgid "Grey Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo gris"
 
 msgid "Grey Terracotta"
-msgstr ""
+msgstr "Terracota gris"
 
 msgid "Light Blue Concrete"
-msgstr ""
+msgstr "Hormigón azul claro"
 
 msgid "Light Blue Concrete Powder"
-msgstr ""
+msgstr "Cemento azul claro"
 
 msgid "Light Blue Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo azul claro"
 
 msgid "Light Blue Terracotta"
-msgstr ""
+msgstr "Terracota azul claro"
 
 msgid "Light Grey Concrete"
-msgstr ""
+msgstr "Hormigón gris claro"
 
 msgid "Light Grey Concrete Powder"
-msgstr ""
+msgstr "Cemento gris claro"
 
 msgid "Light Grey Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo gris claro"
 
 msgid "Light Grey Terracotta"
-msgstr ""
+msgstr "Terracota gris claro"
 
 msgid "Lime Concrete"
-msgstr ""
+msgstr "Hormigón verde lima"
 
 msgid "Lime Concrete Powder"
-msgstr ""
+msgstr "Cemento verde lima"
 
 msgid "Lime Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo verde lima"
 
 msgid "Lime Terracotta"
-msgstr ""
+msgstr "Terracota verde lima"
 
 msgid "Magenta Concrete"
-msgstr ""
+msgstr "Hormigón magenta"
 
 msgid "Magenta Concrete Powder"
-msgstr ""
+msgstr "Cemento magenta"
 
 msgid "Magenta Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo magenta"
 
 msgid "Magenta Terracotta"
-msgstr ""
+msgstr "Terracota magenta"
 
 msgid "Orange Concrete"
-msgstr ""
+msgstr "Hormigón naranja"
 
 msgid "Orange Concrete Powder"
-msgstr ""
+msgstr "Cemento naranja"
 
 msgid "Orange Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo naranja"
 
 msgid "Orange Terracotta"
-msgstr ""
+msgstr "Terracota naranja"
 
 msgid "Pink Concrete"
-msgstr ""
+msgstr "Hormigón rosa"
 
 msgid "Pink Concrete Powder"
-msgstr ""
+msgstr "Cemento rosa"
 
 msgid "Pink Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo rosa"
 
 msgid "Pink Terracotta"
-msgstr ""
+msgstr "Terracota rosa"
 
 msgid "Purple Concrete"
-msgstr ""
+msgstr "Hormigón morado"
 
 msgid "Purple Concrete Powder"
-msgstr ""
+msgstr "Cemento morado"
 
 msgid "Purple Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo morado"
 
 msgid "Purple Terracotta"
-msgstr ""
+msgstr "Terracota morada"
 
 msgid "Red Concrete"
-msgstr ""
+msgstr "Hormigón rojo"
 
 msgid "Red Concrete Powder"
-msgstr ""
+msgstr "Cemento rojo"
 
 msgid "Red Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo rojo"
 
 msgid "Red Terracotta"
-msgstr ""
+msgstr "Terracota roja"
 
 msgid "White Concrete"
-msgstr ""
+msgstr "Hormigón blanco"
 
 msgid "White Concrete Powder"
-msgstr ""
+msgstr "Cemento blanco"
 
 msgid "White Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo blanco"
 
 msgid "White Terracotta"
-msgstr ""
+msgstr "Terracota blanca"
 
 msgid "Yellow Concrete"
-msgstr ""
+msgstr "Hormigón amarillo"
 
 msgid "Yellow Concrete Powder"
-msgstr ""
+msgstr "Cemento amarillo"
 
 msgid "Yellow Glazed Terracotta"
-msgstr ""
+msgstr "Azulejo amarillo"
 
 msgid "Yellow Terracotta"
-msgstr ""
-
+msgstr "Terracota amarilla"

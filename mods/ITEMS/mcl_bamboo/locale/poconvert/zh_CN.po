@@ -3,24 +3,25 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-12 15:49+0000\n"
+"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mcl_bamboo/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
-msgstr ""
+msgstr "一种由竹茎制成的方块。可被制作成竹木板。"
 
 msgid "Block of Bamboo"
-msgstr ""
+msgstr "竹块"
 
 msgid "Block of Stripped Bamboo"
-msgstr ""
+msgstr "去皮竹块"
 
 msgid "Bamboo Raft"
 msgstr "竹筏"
@@ -29,49 +30,49 @@ msgid "Chest Bamboo Raft"
 msgstr "运输竹筏"
 
 msgid "Bamboo Bark"
-msgstr ""
+msgstr "竹皮"
 
 msgid "Bamboo Bark Slab"
-msgstr ""
+msgstr "竹皮台阶"
 
 msgid "Bamboo Bark Stairs"
-msgstr ""
+msgstr "竹皮楼梯"
 
 msgid "Bamboo Button"
-msgstr ""
+msgstr "竹质按钮"
 
 msgid "Bamboo Door"
-msgstr ""
+msgstr "竹门"
 
 msgid "Bamboo Fence"
-msgstr ""
+msgstr "竹栅栏"
 
 msgid "Bamboo Fence Gate"
-msgstr ""
+msgstr "竹栅栏门"
 
 msgid "Bamboo Planks"
-msgstr ""
+msgstr "竹木板"
 
 msgid "Bamboo Pressure Plate"
-msgstr ""
+msgstr "竹质压力板"
 
 msgid "Bamboo Sign"
-msgstr ""
+msgstr "竹制告示牌"
 
 msgid "Bamboo Slab"
-msgstr ""
+msgstr "竹台阶"
 
 msgid "Bamboo Stairs"
-msgstr ""
+msgstr "竹楼梯"
 
 msgid "Bamboo Trapdoor"
-msgstr ""
+msgstr "竹活板门"
 
 msgid "Stripped Bamboo Wood"
-msgstr ""
+msgstr "去皮竹木材"
 
 msgid "The stripped wood of an Bamboo tree."
-msgstr ""
+msgstr "竹子的去皮木材。"
 
 msgid "Bamboo"
 msgstr "竹子"
@@ -89,8 +90,7 @@ msgid "Scaffolding is a temporary structure to easily climb up while building th
 msgstr "一种便于攀爬的临时架构，同时也易于拆除"
 
 msgid "Scaffolding horizontal"
-msgstr ""
+msgstr "脚手架横杆"
 
 msgid "Scaffolding block..."
-msgstr ""
-
+msgstr "脚手架方块……"

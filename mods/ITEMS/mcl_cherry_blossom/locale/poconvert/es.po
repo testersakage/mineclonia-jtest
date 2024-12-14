@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_cherry_blossom x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-13 07:28+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_cherry_blossom/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Pink Petals"
 msgstr "Pétalos Rosas"
@@ -20,67 +22,67 @@ msgid "Pink Petals are ground decoration of cherry grove biomes"
 msgstr "\"Los Pétalos Rosados son una decoración del suelo en biomas de cerezo"
 
 msgid "Cherry Bark"
-msgstr ""
+msgstr "Corteza de cerezo"
 
 msgid "Cherry Bark Slab"
-msgstr ""
+msgstr "Losa de corteza de cerezo"
 
 msgid "Cherry Bark Stairs"
-msgstr ""
+msgstr "Escaleras de corteza de cerezo"
 
 msgid "Cherry Boat"
-msgstr ""
+msgstr "Barca de cerezo"
 
 msgid "Cherry Button"
-msgstr ""
+msgstr "Botón de cerezo"
 
 msgid "Cherry Chest Boat"
-msgstr ""
+msgstr "Barca de cerezo con cofre"
 
 msgid "Cherry Door"
-msgstr ""
+msgstr "Puerta de cerezo"
 
 msgid "Cherry Fence"
-msgstr ""
+msgstr "Valla de cerezo"
 
 msgid "Cherry Fence Gate"
-msgstr ""
+msgstr "Puerta de valla de cerezo"
 
 msgid "Cherry Leaves"
-msgstr ""
+msgstr "Hojas de cerezo"
 
 msgid "Cherry Log"
-msgstr ""
+msgstr "Tronco de cerezo"
 
 msgid "Cherry Planks"
-msgstr ""
+msgstr "Tablones de cerezo"
 
 msgid "Cherry Pressure Plate"
-msgstr ""
+msgstr "Placa de presión de cerezo"
 
 msgid "Cherry Sapling"
-msgstr ""
+msgstr "Brote de cerezo"
 
 msgid "Cherry Sign"
-msgstr ""
+msgstr "Cartel de cerezo"
 
 msgid "Cherry Slab"
-msgstr ""
+msgstr "Losa de cerezo"
 
 msgid "Cherry Stairs"
-msgstr ""
+msgstr "Escaleras de cerezo"
 
 msgid "Cherry Trapdoor"
-msgstr ""
+msgstr "Trampilla de cerezo"
 
 msgid "Cherry leaves are grown from Cherry trees."
 msgstr ""
 
 msgid "Stripped Cherry Log"
-msgstr ""
+msgstr "Tronco de cerezo sin corteza"
 
 msgid "Stripped Cherry Wood"
-msgstr ""
+msgstr "Leño de cerezo sin corteza"
 
 msgid "The stripped trunk of an Cherry tree."
 msgstr ""
@@ -90,4 +92,3 @@ msgstr ""
 
 msgid "The trunk of a Cherry tree."
 msgstr ""
-
