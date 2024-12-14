@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 07:28+0000\n"
-"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_bamboo/es/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
 msgstr ""
@@ -29,15 +27,6 @@ msgstr "Balsa de Bambú"
 
 msgid "Chest Bamboo Raft"
 msgstr "Balsa de bambú con cofre"
-
-msgid "Bamboo Bark"
-msgstr "Corteza de bambú"
-
-msgid "Bamboo Bark Slab"
-msgstr "Losa de corteza de bambú"
-
-msgid "Bamboo Bark Stairs"
-msgstr "Escaleras de corteza de bambú"
 
 msgid "Bamboo Button"
 msgstr "Botón de bambú"
@@ -69,12 +58,6 @@ msgstr "Escaleras de bambú"
 msgid "Bamboo Trapdoor"
 msgstr "Trampilla de bambú"
 
-msgid "Stripped Bamboo Wood"
-msgstr "leño de bambú sin corteza"
-
-msgid "The stripped wood of an Bamboo tree."
-msgstr ""
-
 msgid "Bamboo"
 msgstr "Bambú"
 
@@ -95,3 +78,4 @@ msgstr "Andamios horizontales"
 
 msgid "Scaffolding block..."
 msgstr "Bloque de andamio..."
+

@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-11 00:28+0000\n"
-"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
-"doc_items/fr/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a decorational block."
 msgstr "C'est un bloc de décoration."
@@ -286,9 +284,7 @@ msgid "Building another block at this block will place it inside and replace it.
 msgstr "Construire un autre bloc sur ce bloc le placera à l'intérieur et le remplacera."
 
 msgid "Falling blocks can go through this block; they destroy it when doing so."
-msgstr ""
-"Les blocs tombants peuvent traverser ce bloc ; ils le détruisent en faisant "
-"cela."
+msgstr "Les blocs tombants peuvent traverser ce bloc ; ils le détruisent en faisant cela."
 
 msgid "This block will drop as an item when a falling block ends up inside it."
 msgstr "Ce bloc se transformera en objet lorsqu'un autre bloc tombe dessus."
@@ -418,3 +414,4 @@ msgstr "Un bloc transparent, tout simplement un espace vide. Il apparaît géné
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr "Quand vous ne maniez aucun objet, vous utilisez la main qui se comporte comme un outil avec ses propres capacités. Lorsque vous maniez un objet qui n'est pas un outil ou une arme il se comportera comme si c'était la main."
+

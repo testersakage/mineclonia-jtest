@@ -1,5 +1,5 @@
 # textdomain: mcl_info
 Set debug bit mask: 0 @= disable, 1 @= player coords, 2 @= coordinates, 3 @= biome name, 4 @= all=
-<bitmask>=
-Error! Possible values are integer numbers from @1 to @2=
-Set location bit mask: 0 @= disable, 1 @= coordinates=
+<bitmask>=<位掩码>
+Error! Possible values are integer numbers from @1 to @2=错误！可能的值是从@1到@2的整数
+Set location bit mask: 0 @= disable, 1 @= coordinates=设置位置位掩码：0表示禁用，1表示坐标

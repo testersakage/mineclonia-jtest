@@ -76,10 +76,10 @@ msgstr ""
 msgid "Cherry leaves are grown from Cherry trees."
 msgstr ""
 
-msgid "Stripped Cherry Log"
+msgid "Stripped Cherry Bark"
 msgstr ""
 
-msgid "Stripped Cherry Wood"
+msgid "Stripped Cherry Log"
 msgstr ""
 
 msgid "The stripped trunk of an Cherry tree."

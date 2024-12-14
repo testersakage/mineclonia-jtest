@@ -6,7 +6,7 @@ The main input can powered in 2 ways: First, it can be powered directly by redst
 The side inputs are only powered by normal redstone power. The redstone comparator can operate in two modes: Transmission mode and subtraction mode. It starts in transmission mode and the mode can be changed by using the block.=Les entrées latérales sont uniquement alimentées par une alimentation Redstone normale. Le comparateur redstone peut fonctionner en deux modes : le mode de transmission et le mode de soustraction. Il démarre en mode transmission et le mode peut être changé en utilisant le bloc.
 Transmission mode:@nThe front torch is unlit and lowered. The output is powered if, and only if the main input is powered. The two side inputs are ignored.=Mode de transmission :@nLa torche avant est éteinte et abaissée. La sortie est alimentée si et seulement si l'entrée principale est alimentée. Les deux entrées latérales sont ignorées.
 Subtraction mode:@nThe front torch is lit. The output is powered if, and only if the main input is powered and none of the side inputs is powered.=Mode de soustraction : @nLa torche avant est allumée. La sortie est alimentée si et seulement si l'entrée principale est alimentée et qu'aucune des entrées latérales n'est alimentée.
-Redstone Comparator=Comparateur Redstone
-Redstone Comparator (Powered)=Comparateur Redstone (Alimenté)
-Redstone Comparator (Subtract)=Comparateur Redstone (Soustraction)
-Redstone Comparator (Subtract, Powered)=Comparateur Redstone (Soustraction, Alimenté)
+Redstone Comparator=Comparateur de redstone
+Redstone Comparator (Powered)=Comparateur de redstone (Alimenté)
+Redstone Comparator (Subtract)=Comparateur de redstone (Soustraction)
+Redstone Comparator (Subtract, Powered)=Comparateur de redstone (Soustraction, Alimenté)

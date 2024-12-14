@@ -1,5 +1,5 @@
 # textdomain: mcl_walls
-A piece of wall. It cannot be jumped over with a simple jump. When multiple of these are placed to next to each other, they will automatically build a nice wall structure.=
+A piece of wall. It cannot be jumped over with a simple jump. When multiple of these are placed to next to each other, they will automatically build a nice wall structure.=一块墙体。仅靠简单跳跃是无法越过它的。当多块这样的墙体彼此相邻放置时，它们会自动构建出一个美观的墙体结构。
 Cobblestone Wall=鹅卵石墙
 Mossy Cobblestone Wall=苔石墙
 Andesite Wall=安山岩墙

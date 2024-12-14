@@ -3,25 +3,21 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 09:25+0000\n"
-"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_core/fr/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Stick"
 msgstr "Bâton"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
-msgstr ""
-"Les bâtons sont un matériau d'artisanat très polyvalent ; utilisé dans "
-"d'innombrables recettes d'artisanat."
+msgstr "Les bâtons sont un matériau d'artisanat très polyvalent ; utilisé dans d'innombrables recettes d'artisanat."
 
 msgid "Paper"
 msgstr "Papier"
@@ -45,17 +41,13 @@ msgid "Iron Nugget"
 msgstr "Pépite de fer"
 
 msgid "Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."
-msgstr ""
-"Les pépites de fer sont de très petits morceaux de fer fondu ; le but "
-"principal est de créer des lingots de fer."
+msgstr "Les pépites de fer sont de très petits morceaux de fer fondu ; le but principal est de créer des lingots de fer."
 
 msgid "Gold Nugget"
 msgstr "Pépite d'or"
 
 msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."
-msgstr ""
-"Les pépites d'or sont de très petites pièces d'or en fusion ; le but "
-"principal est de créer des lingots d'or."
+msgstr "Les pépites d'or sont de très petites pièces d'or en fusion ; le but principal est de créer des lingots d'or."
 
 msgid "Diamond"
 msgstr "Diamant"
@@ -67,17 +59,13 @@ msgid "Clay Ball"
 msgstr "Motte d'argile"
 
 msgid "Clay balls are a raw material, mainly used to create bricks in the furnace."
-msgstr ""
-"Les mottes d'argile sont une matière première, principalement utilisée pour "
-"créer des briques dans le four."
+msgstr "Les mottes d'argile sont une matière première, principalement utilisée pour créer des briques dans le four."
 
 msgid "Iron Ingot"
 msgstr "Lingot de fer"
 
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
-msgstr ""
-"Le fer. Il est utilisé pour fabriquer des armures, des outils et ainsi de "
-"suite."
+msgstr "Le fer. Il est utilisé pour fabriquer des armures, des outils et ainsi de suite."
 
 msgid "Gold Ingot"
 msgstr "Lingot d'or"
@@ -520,41 +508,41 @@ msgstr "Trappe en sapin"
 msgid "Spruce leaves are grown from Spruce trees."
 msgstr "Les feuilles de sapin poussent sur les sapins."
 
+msgid "Stripped Acacia Bark"
+msgstr ""
+
 msgid "Stripped Acacia Log"
 msgstr "Bûche d'acacia écorcée"
 
-msgid "Stripped Acacia Wood"
-msgstr "Bois d'acacia écorcé"
+msgid "Stripped Birch Bark"
+msgstr ""
 
 msgid "Stripped Birch Log"
 msgstr "Bûche de bouleau écorcé"
 
-msgid "Stripped Birch Wood"
-msgstr "Bois de bouleau écorcé"
+msgid "Stripped Dark Oak Bark"
+msgstr ""
 
 msgid "Stripped Dark Oak Log"
 msgstr "Bûche de chêne noir écorcée"
 
-msgid "Stripped Dark Oak Wood"
-msgstr "Bois de chêne noir écorcé"
+msgid "Stripped Jungle Bark"
+msgstr ""
 
 msgid "Stripped Jungle Log"
 msgstr "Bûche d'acajou écorcée"
 
-msgid "Stripped Jungle Wood"
-msgstr "Bois d'acajou écorcé"
+msgid "Stripped Oak Bark"
+msgstr ""
 
 msgid "Stripped Oak Log"
 msgstr "Bûche de chêne écorcée"
 
-msgid "Stripped Oak Wood"
-msgstr "Bois de chêne écorcé"
+msgid "Stripped Spruce Bark"
+msgstr ""
 
 msgid "Stripped Spruce Log"
 msgstr "Bûche de sapin écorcée"
-
-msgid "Stripped Spruce Wood"
-msgstr "Bois de sapin écorcé"
 
 msgid "The stripped trunk of an Acacia tree."
 msgstr "Le tronc écorcé d'un acacia."
@@ -1200,3 +1188,4 @@ msgstr "Escalier en pierre taillée moussue"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "Dalle en pierre taillée moussue"
+

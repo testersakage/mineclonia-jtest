@@ -94,16 +94,16 @@ msgstr ""
 msgid "Crimson Trapdoor"
 msgstr ""
 
+msgid "Stripped Crimson Bark"
+msgstr ""
+
 msgid "Stripped Crimson Log"
 msgstr ""
 
-msgid "Stripped Crimson Wood"
+msgid "Stripped Warped Bark"
 msgstr ""
 
 msgid "Stripped Warped Log"
-msgstr ""
-
-msgid "Stripped Warped Wood"
 msgstr ""
 
 msgid "The stripped trunk of an Crimson tree."

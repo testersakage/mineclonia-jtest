@@ -1,5 +1,5 @@
 # textdomain: mcl_beacons
-Primary Power:=
-Secondary Power:=
-Inventory:=
+Primary Power:=主要效果:
+Secondary Power:=辅助效果:
+Inventory:=背包:
 Beacon=信标

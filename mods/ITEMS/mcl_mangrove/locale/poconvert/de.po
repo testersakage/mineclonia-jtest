@@ -106,10 +106,10 @@ msgstr ""
 msgid "Mangrove leaves are grown from Mangrove trees."
 msgstr ""
 
-msgid "Stripped Mangrove Log"
+msgid "Stripped Mangrove Bark"
 msgstr ""
 
-msgid "Stripped Mangrove Wood"
+msgid "Stripped Mangrove Log"
 msgstr ""
 
 msgid "The stripped trunk of an Mangrove tree."

@@ -508,40 +508,40 @@ msgstr ""
 msgid "Spruce leaves are grown from Spruce trees."
 msgstr ""
 
+msgid "Stripped Acacia Bark"
+msgstr ""
+
 msgid "Stripped Acacia Log"
 msgstr ""
 
-msgid "Stripped Acacia Wood"
+msgid "Stripped Birch Bark"
 msgstr ""
 
 msgid "Stripped Birch Log"
 msgstr ""
 
-msgid "Stripped Birch Wood"
+msgid "Stripped Dark Oak Bark"
 msgstr ""
 
 msgid "Stripped Dark Oak Log"
 msgstr ""
 
-msgid "Stripped Dark Oak Wood"
+msgid "Stripped Jungle Bark"
 msgstr ""
 
 msgid "Stripped Jungle Log"
 msgstr ""
 
-msgid "Stripped Jungle Wood"
+msgid "Stripped Oak Bark"
 msgstr ""
 
 msgid "Stripped Oak Log"
 msgstr ""
 
-msgid "Stripped Oak Wood"
+msgid "Stripped Spruce Bark"
 msgstr ""
 
 msgid "Stripped Spruce Log"
-msgstr ""
-
-msgid "Stripped Spruce Wood"
 msgstr ""
 
 msgid "The stripped trunk of an Acacia tree."

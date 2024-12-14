@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 23:51+0000\n"
-"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_core/es/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Stick"
 msgstr "Palo"
@@ -510,41 +508,41 @@ msgstr "Trampilla de abeto"
 msgid "Spruce leaves are grown from Spruce trees."
 msgstr ""
 
+msgid "Stripped Acacia Bark"
+msgstr ""
+
 msgid "Stripped Acacia Log"
 msgstr "Tronco de acacia sin corteza"
 
-msgid "Stripped Acacia Wood"
-msgstr "Leño de acacia sin corteza"
+msgid "Stripped Birch Bark"
+msgstr ""
 
 msgid "Stripped Birch Log"
 msgstr "Tronco de abedul sin corteza"
 
-msgid "Stripped Birch Wood"
-msgstr "Leño de abedul sin corteza"
+msgid "Stripped Dark Oak Bark"
+msgstr ""
 
 msgid "Stripped Dark Oak Log"
 msgstr "Tronco de roble oscuro sin corteza"
 
-msgid "Stripped Dark Oak Wood"
-msgstr "Leño de roble oscuro sin corteza"
+msgid "Stripped Jungle Bark"
+msgstr ""
 
 msgid "Stripped Jungle Log"
 msgstr "Tronco de jungla sin corteza"
 
-msgid "Stripped Jungle Wood"
-msgstr "Leño de jungla sin corteza"
+msgid "Stripped Oak Bark"
+msgstr ""
 
 msgid "Stripped Oak Log"
 msgstr "Tronco de roble sin corteza"
 
-msgid "Stripped Oak Wood"
-msgstr "Leño de roble sin corteza"
+msgid "Stripped Spruce Bark"
+msgstr ""
 
 msgid "Stripped Spruce Log"
 msgstr "Tronco de abeto sin corteza"
-
-msgid "Stripped Spruce Wood"
-msgstr "Leño de abeto sin corteza"
 
 msgid "The stripped trunk of an Acacia tree."
 msgstr ""
@@ -634,9 +632,7 @@ msgid "Redstone Ore"
 msgstr "Mena de redstone"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
-msgstr ""
-"El mena redstone se encuentra comúnmente cerca del fondo del mundo. Brilla "
-"cuando es golpeado o pisado."
+msgstr "El mena redstone se encuentra comúnmente cerca del fondo del mundo. Brilla cuando es golpeado o pisado."
 
 msgid "Lit Redstone Ore"
 msgstr "Mena de redstone encendida"
@@ -645,9 +641,7 @@ msgid "Lapis Lazuli Ore"
 msgstr "Mena de lapislázuli"
 
 msgid "Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."
-msgstr ""
-"El mena de lapislázuli produce lapislázuli. Rara vez se puede encontrar en "
-"vetas cercanas al fondo del mundo."
+msgstr "El mena de lapislázuli produce lapislázuli. Rara vez se puede encontrar en vetas cercanas al fondo del mundo."
 
 msgid "Emerald Ore"
 msgstr "Mena de esmeralda"
@@ -755,9 +749,7 @@ msgid "Coarse Dirt"
 msgstr "Tierra estéril"
 
 msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."
-msgstr ""
-"La tierra estéril actúa como un suelo para algunas plantas y es similar a la "
-"tierra, pero nunca crecerá una cubierta."
+msgstr "La tierra estéril actúa como un suelo para algunas plantas y es similar a la tierra, pero nunca crecerá una cubierta."
 
 msgid "Gravel"
 msgstr "Grava"
@@ -835,9 +827,7 @@ msgid "Brick Block"
 msgstr "Bloque de ladrillos"
 
 msgid "Brick blocks are a good building material for building solid houses and can take quite a punch."
-msgstr ""
-"Los bloques de ladrillos son un buen material de construcción para edificar "
-"casas sólidas y pueden aguantar bastantes golpes."
+msgstr "Los bloques de ladrillos son un buen material de construcción para edificar casas sólidas y pueden aguantar bastantes golpes."
 
 msgid "Bedrock"
 msgstr "Piedra base"
@@ -1198,3 +1188,4 @@ msgstr "Escaleras de ladrillo de piedra musgosa"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "Losa de ladrillo de piedra musgosa"
+

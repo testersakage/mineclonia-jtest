@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_ocean x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-14 14:01+0000\n"
-"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
-"org/projects/mineclonia/mcl_ocean/zh_Hans/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.4\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Tube Coral Block"
 msgstr "管珊瑚块"
@@ -108,12 +107,10 @@ msgid "Coral blocks live in the oceans and need a water source next to them to s
 msgstr "珊瑚块生活在海洋中，需要旁边有水源才能存活，没有水就会死去。"
 
 msgid "Corals grow on top of coral blocks and need to be inside a water source to survive. Without water, it will die off, as well as the coral block below."
-msgstr "珊瑚生长在珊瑚块顶部，需要处在水源内才能存活，没有水的话，它以及下方的珊瑚块"
-"都会死去。"
+msgstr "珊瑚生长在珊瑚块顶部，需要处在水源内才能存活，没有水的话，它以及下方的珊瑚块都会死去。"
 
 msgid "Corals fans grow on top of coral blocks and need to be inside a water source to survive. Without water, it will die off, as well as the coral block below."
-msgstr "珊瑚扇生长在珊瑚块顶部，需要处在水源内才能存活，没有水的话，它以及下方的珊瑚"
-"块都会死去。"
+msgstr "珊瑚扇生长在珊瑚块顶部，需要处在水源内才能存活，没有水的话，它以及下方的珊瑚块都会死去。"
 
 msgid "Needs water to live"
 msgstr "需要水才能存活"
@@ -191,8 +188,7 @@ msgid "Sea pickles grow on dead brain coral blocks and provide light when underw
 msgstr "海泡菜生长在死亡脑纹珊瑚块上，在水下时会发光，它们有4种尺寸，亮度各有不同。"
 
 msgid "It can only be placed on top of dead brain coral blocks. Placing a sea pickle on another sea pickle will make it grow and brighter."
-msgstr "海泡菜只能放置在死亡脑纹珊瑚块顶部，将一个海泡菜放置在另一个海泡菜上会使其生"
-"长并且变得更亮。"
+msgstr "海泡菜只能放置在死亡脑纹珊瑚块顶部，将一个海泡菜放置在另一个海泡菜上会使其生长并且变得更亮。"
 
 msgid "Glows in the water"
 msgstr "在水中发光"
@@ -208,3 +204,4 @@ msgstr "海草"
 
 msgid "Seagrass grows inside water on top of dirt, sand or gravel."
 msgstr "海草生长在水下的泥土、沙子或沙砾之上。"
+

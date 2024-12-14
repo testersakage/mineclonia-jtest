@@ -28,15 +28,6 @@ msgstr "Zattera di Bamboo"
 msgid "Chest Bamboo Raft"
 msgstr "Zattera in Bamboo con Baule"
 
-msgid "Bamboo Bark"
-msgstr ""
-
-msgid "Bamboo Bark Slab"
-msgstr ""
-
-msgid "Bamboo Bark Stairs"
-msgstr ""
-
 msgid "Bamboo Button"
 msgstr ""
 
@@ -65,12 +56,6 @@ msgid "Bamboo Stairs"
 msgstr ""
 
 msgid "Bamboo Trapdoor"
-msgstr ""
-
-msgid "Stripped Bamboo Wood"
-msgstr ""
-
-msgid "The stripped wood of an Bamboo tree."
 msgstr ""
 
 msgid "Bamboo"
