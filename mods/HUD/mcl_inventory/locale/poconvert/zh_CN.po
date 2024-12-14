@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_inventory x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 20:35+0000\n"
+"PO-Revision-Date: 2024-12-14 01:11+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_inventory/zh_Hans/>\n"
@@ -24,46 +24,46 @@ msgid "Redstone"
 msgstr "红石"
 
 msgid "Transportation"
-msgstr ""
+msgstr "交通"
 
 msgid "Miscellaneous"
-msgstr ""
+msgstr "杂项"
 
 msgid "Search Items"
-msgstr ""
+msgstr "搜索物品"
 
 msgid "Foodstuffs"
-msgstr ""
+msgstr "食物"
 
 msgid "Tools"
 msgstr "工具"
 
 msgid "Combat"
-msgstr ""
+msgstr "战斗"
 
 msgid "Mobs"
 msgstr "生物"
 
 msgid "Brewing"
-msgstr ""
+msgstr "酿造"
 
 msgid "Materials"
-msgstr ""
+msgstr "材料"
 
 msgid "Survival Inventory"
-msgstr ""
+msgstr "生存物品栏"
 
 msgid "Not in Creative Inventory"
-msgstr ""
+msgstr "不在创造模式物品栏中"
 
 msgid "Advancements"
-msgstr ""
+msgstr "进度"
 
 msgid "Switch stack size"
-msgstr ""
+msgstr "切换堆叠数量"
 
 msgid "@1 / @2"
-msgstr ""
+msgstr "@1 / @2"
 
 msgid "Recipe book"
 msgstr "配方书"
@@ -72,7 +72,7 @@ msgid "Help"
 msgstr "帮助"
 
 msgid "Select player skin"
-msgstr ""
+msgstr "选择玩家皮肤"
 
 msgid "Crafting"
 msgstr "制作"
@@ -81,4 +81,4 @@ msgid "Fill Craft Grid"
 msgstr "填满制作网格"
 
 msgid "Achievements"
-msgstr ""
+msgstr "成就"
