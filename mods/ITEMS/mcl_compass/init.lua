@@ -253,9 +253,6 @@ minetest.register_node("mcl_compass:lodestone",{
 		if string.find(name,"mcl_compass:") then
 			if name ~= "mcl_compass:lodestone" then
 				itemstack:get_meta():set_string("pointsto", minetest.pos_to_string(pos))
-				local dir = player:get_look_horizontal()
-				local frame = get_compass_frame(pos, dir, itemstack)
-				itemstack:set_name("mcl_compass:" .. frame .. "_lodestone")
 			end
 		end
 
