@@ -108,7 +108,12 @@ local function generate_crystal(pos)
 		local l = o:get_luaentity()
 		if l and l.name == "mcl_end:crystal" then return end
 	end
-	minetest.add_entity(pos, "mcl_end:crystal")
+	local cpos = mcl_util.traverse_tower(vector.offset(pos, 0, -4, 0), 1, function(tpos)
+		if core.get_node(vector.offset(tpos, 0, 1, 0)).name == "air" then return true end
+	end)
+	minetest.swap_node(vector.offset(cpos,0,1,0),{name="mcl_core:bedrock"})
+	minetest.swap_node(vector.offset(cpos,0,2,0),{name="mcl_fire:eternal_fire"})
+	minetest.add_entity(vector.offset(cpos, 0, 3, 0), "mcl_end:crystal")
 end
 
 mcl_structures.register_structure("end_spike",{
@@ -121,8 +126,6 @@ mcl_structures.register_structure("end_spike",{
 		minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
 			if calls_remaining ~= 0 then return end
 			local s = make_endspike(pos,d,h)
-			minetest.swap_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})
-			minetest.swap_node(vector.offset(s,0,2,0),{name="mcl_fire:eternal_fire"})
 			generate_crystal(vector.offset(s, 0, 3, 0))
 			if seed_pr:next(1,3) == 1 then
 				make_cage(vector.offset(s,0,1,0),d)
