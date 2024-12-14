@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-14 14:01+0000\n"
+"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mclx_stairs/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Lapis Lazuli Stairs"
 msgstr "青晶石楼梯"
@@ -23,88 +24,88 @@ msgid "Gold Stairs"
 msgstr "金楼梯"
 
 msgid "Gold Slab"
-msgstr ""
+msgstr "金质台阶"
 
 msgid "Iron Stairs"
 msgstr "铁楼梯"
 
 msgid "Iron Slab"
-msgstr ""
+msgstr "铁制台阶"
 
 msgid "Cracked Stone Brick Stairs"
-msgstr ""
+msgstr "裂石砖楼梯"
 
 msgid "Cracked Stone Brick Slab"
-msgstr ""
+msgstr "裂石砖台阶"
 
 msgid "Cracked Deepslate Brick Stairs"
-msgstr ""
+msgstr "破裂的深板岩砖楼梯"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr ""
+msgstr "破裂的深板岩砖台阶"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr ""
+msgstr "裂深板岩瓦楼梯"
 
 msgid "Cracked Deepslate Tile Slab"
-msgstr ""
+msgstr "裂深板岩瓦台阶"
 
 msgid "End Stone Stairs"
-msgstr ""
+msgstr "末地石楼梯"
 
 msgid "End Stone Slab"
-msgstr ""
+msgstr "末地石台阶"
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "平滑石楼梯"
 
 msgid "Terracotta Stairs"
-msgstr ""
+msgstr "陶瓦楼梯"
 
 msgid "Terracotta Slab"
-msgstr ""
+msgstr "陶瓦台阶"
 
 msgid "Concrete Slab"
-msgstr ""
+msgstr "混凝土台阶"
 
 msgid "Double Concrete Slab"
-msgstr ""
+msgstr "双层混凝土台阶"
 
 msgid "Concrete Stairs"
-msgstr ""
+msgstr "混凝土楼梯"
 
 msgid "Double Terracotta Slab"
-msgstr ""
+msgstr "双层陶瓦台阶"
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "黑色混凝土台阶"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "黑色混凝土楼梯"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "黑色陶瓦台阶"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "黑色陶瓦楼梯"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "蓝色混凝土台阶"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "蓝色混凝土楼梯"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "蓝色陶瓦台阶"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "蓝色陶瓦楼梯"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "棕色混凝土台阶"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "棕色混凝土楼梯"
 
 msgid "Brown Terracotta Slab"
 msgstr ""
@@ -267,4 +268,3 @@ msgstr ""
 
 msgid "Yellow Terracotta Stairs"
 msgstr ""
-
