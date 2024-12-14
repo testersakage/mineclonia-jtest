@@ -206,7 +206,7 @@ mcl_compass.register_compass("lodestone_compass", {
 		_doc_items_usagehelp = S("A Lodestone compass can be made from an ordinary compass by using it on a lodestone.  After becoming a lodestone compass, it always points to its linked lodestone, provided that they are in the same dimension.  If not in the same dimension, the lodestone compass spins randomly, similarly to a regular compass when outside the overworld.  A lodestone compass can be relinked with another lodestone."),
 		inventory_image = "mcl_compass_compass_01.png^[colorize:purple:50",
 		wield_image = "mcl_compass_compass_01.png^[colorize:purple:50",
-		groups = { compass = 2 },
+		groups = { compass = 2, not_in_creative_inventory = 1 },
 		_mcl_compass_update = update_compass,
 		_mcl_compass_img_fmt = "mcl_compass_compass_%02d.png^[colorize:purple:50",
 	}
