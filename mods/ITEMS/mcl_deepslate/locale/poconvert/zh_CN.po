@@ -3,187 +3,189 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-14 05:54+0000\n"
+"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mcl_deepslate/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Deepslate"
 msgstr "深板岩"
 
 msgid "Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone."
-msgstr ""
+msgstr "深板岩是一种在主世界地下深处发现的石头类型，其功能与普通石头类似，但比普通石"
+"头更坚硬。"
 
 msgid "Infested Deepslate"
-msgstr ""
+msgstr "被虫蚀的深板岩"
 
 msgid "Reinforced Deepslate"
-msgstr ""
+msgstr "强化深板岩"
 
 msgid "Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode."
-msgstr ""
+msgstr "强化深板岩是一种极其坚硬的方块，即便面对凋零爆炸也无法被破坏。在生存模式下它"
+"是无法获取的。"
 
 msgid "Deepslate Coal Ore"
-msgstr ""
+msgstr "深板岩煤矿石"
 
 msgid "Deepslate Iron Ore"
-msgstr ""
+msgstr "深板岩铁矿石"
 
 msgid "Deepslate Gold Ore"
-msgstr ""
+msgstr "深板岩金矿石"
 
 msgid "Deepslate Emerald Ore"
-msgstr ""
+msgstr "深板岩绿宝石矿石"
 
 msgid "Deepslate Diamond Ore"
-msgstr ""
+msgstr "深板岩钻石矿石"
 
 msgid "Deepslate Lapis Lazuli Ore"
-msgstr ""
+msgstr "深板岩青金石矿石"
 
 msgid "Deepslate Redstone Ore"
-msgstr ""
+msgstr "深板岩红石矿石"
 
 msgid "Lit Deepslate Redstone Ore"
-msgstr ""
+msgstr "发光的深板岩红石矿石"
 
 msgid "Deepslate Copper Ore"
-msgstr ""
+msgstr "深板岩铜矿石"
 
 msgid "Cobbled Deepslate"
-msgstr ""
+msgstr "圆石深板岩"
 
 msgid "Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone."
-msgstr ""
+msgstr "圆石深板岩是一种石头变种，其功能与圆石或黑石类似。"
 
 msgid "Cobbled Deepslate Stairs"
-msgstr ""
+msgstr "圆石深板岩楼梯"
 
 msgid "Cobbled Deepslate Slab"
-msgstr ""
+msgstr "圆石深板岩台阶"
 
 msgid "Cobbled Deepslate Wall"
-msgstr ""
+msgstr "圆石深板岩墙"
 
 msgid "Polished Deepslate"
-msgstr ""
+msgstr "抛光深板岩"
 
 msgid "Polished deepslate is the stone-like polished version of deepslate."
-msgstr ""
+msgstr "抛光深板岩是类似石头的深板岩抛光版本。"
 
 msgid "Polished Deepslate Stairs"
-msgstr ""
+msgstr "抛光深板岩楼梯"
 
 msgid "Polished Deepslate Slab"
-msgstr ""
+msgstr "抛光深板岩台阶"
 
 msgid "Polished Deepslate Wall"
-msgstr ""
+msgstr "抛光深板岩墙"
 
 msgid "Deepslate Bricks"
-msgstr ""
+msgstr "深板岩砖"
 
 msgid "Deepslate bricks are the brick version of deepslate."
-msgstr ""
+msgstr "深板岩砖是深板岩的砖类版本。"
 
 msgid "Deepslate Brick Stairs"
-msgstr ""
+msgstr "深板岩砖楼梯"
 
 msgid "Deepslate Brick Slab"
-msgstr ""
+msgstr "深板岩砖台阶"
 
 msgid "Deepslate Brick Wall"
-msgstr ""
+msgstr "深板岩砖墙"
 
 msgid "Cracked Deepslate Bricks"
-msgstr ""
+msgstr "裂纹深板岩砖"
 
 msgid "Deepslate Tiles"
-msgstr ""
+msgstr "深板岩瓦"
 
 msgid "Deepslate tiles are a decorative variant of deepslate."
-msgstr ""
+msgstr "深板岩瓦是深板岩的一种装饰性变种。"
 
 msgid "Deepslate Tile Stairs"
-msgstr ""
+msgstr "深板岩瓦楼梯"
 
 msgid "Deepslate Tile Slab"
-msgstr ""
+msgstr "深板岩瓦台阶"
 
 msgid "Deepslate Tiles Wall"
-msgstr ""
+msgstr "深板岩瓦墙"
 
 msgid "Cracked Deepslate Tiles"
-msgstr ""
+msgstr "裂纹深板岩瓦"
 
 msgid "Chiseled Deepslate"
-msgstr ""
+msgstr "錾制深板岩"
 
 msgid "@1 is a variant of @2 that can generate in deepslate and tuff blobs."
-msgstr ""
+msgstr "@1是@2的一种变种，可在深板岩和凝灰岩团块中生成。"
 
 msgid "@1 are a cracked variant."
-msgstr ""
+msgstr "@1是一种有裂纹的变种。"
 
 msgid "Tuff"
-msgstr ""
+msgstr "凝灰岩"
 
 msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr ""
+msgstr "凝灰岩是一种由火山灰形成的观赏性岩石，出现在Y坐标值低于16的地下团块中。"
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "錾制凝灰岩"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
-msgstr ""
+msgstr "錾制凝灰岩是凝灰岩的一种錾刻变体。"
 
 msgid "Chiseled Tuff Bricks"
-msgstr ""
+msgstr "錾制凝灰岩砖"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
-msgstr ""
+msgstr "錾制凝灰岩砖是凝灰岩砖的一种变体，其方块中间有一块大砖，上下带有几何图案。"
 
 msgid "Tuff Stairs"
-msgstr ""
+msgstr "凝灰岩楼梯"
 
 msgid "Tuff Slab"
-msgstr ""
+msgstr "凝灰岩半砖"
 
 msgid "Tuff Wall"
-msgstr ""
+msgstr "凝灰岩墙"
 
 msgid "Polished Tuff"
-msgstr ""
+msgstr "抛光凝灰岩"
 
 msgid "Polished tuff is a polished variant of the tuff block."
-msgstr ""
+msgstr "抛光凝灰岩是凝灰岩方块的一种抛光变体。"
 
 msgid "Polished Tuff Stairs"
-msgstr ""
+msgstr "抛光凝灰岩楼梯"
 
 msgid "Polished Tuff Slab"
-msgstr ""
+msgstr "抛光凝灰岩半砖"
 
 msgid "Polished Tuff Wall"
-msgstr ""
+msgstr "抛光凝灰岩墙"
 
 msgid "Tuff Bricks"
-msgstr ""
+msgstr "凝灰岩砖"
 
 msgid "Tuff bricks are a brick variant of tuff."
-msgstr ""
+msgstr "凝灰岩砖是凝灰岩的一种砖类变体。"
 
 msgid "Tuff Bricks Stairs"
-msgstr ""
+msgstr "凝灰岩砖楼梯"
 
 msgid "Tuff Bricks Slab"
-msgstr ""
+msgstr "凝灰岩砖半砖"
 
 msgid "Tuff Bricks Wall"
-msgstr ""
-
+msgstr "凝灰岩砖墙"
