@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-12 09:25+0000\n"
+"PO-Revision-Date: 2024-12-14 05:54+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -223,7 +223,7 @@ msgid "Vindicator"
 msgstr "Vindicateur"
 
 msgid "Zombie Villager"
-msgstr "Zombie Villageois"
+msgstr "Zombie-villageois"
 
 msgid "@1 sleeps here"
 msgstr "@1 dort ici"
@@ -238,7 +238,7 @@ msgid "A villager works here"
 msgstr "Un villageois travaille ici"
 
 msgid "Unemployed"
-msgstr "Sans emploi"
+msgstr "Sans profession"
 
 msgid "Farmer"
 msgstr "Fermier"
@@ -247,7 +247,7 @@ msgid "Fisherman"
 msgstr "Pêcheur"
 
 msgid "Fletcher"
-msgstr "Archer"
+msgstr "Fléchier"
 
 msgid "Shepherd"
 msgstr "Berger"
@@ -268,19 +268,19 @@ msgid "Butcher"
 msgstr "Boucher"
 
 msgid "Weapon Smith"
-msgstr "Fabriquant d'arme"
+msgstr "Forgeron d'arme"
 
 msgid "Tool Smith"
-msgstr "Fabriquant d'outil"
+msgstr "Forgeron d'outil"
 
 msgid "Cleric"
-msgstr "Clerc"
+msgstr "Prêtre"
 
 msgid "Mason"
-msgstr "maçon"
+msgstr "Maçon"
 
 msgid "Nitwit"
-msgstr "Crétin"
+msgstr "Idiot"
 
 msgid "Wandering Trader"
 msgstr "Marchand ambulant"
