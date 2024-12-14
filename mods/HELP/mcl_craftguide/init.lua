@@ -77,18 +77,15 @@ local group_names = {
 	stick = S("Any stick"),
 }
 
--- caches every item belonging to a certain group
--- key: group name
--- value: a listt of items
+-- caches recipes using groups
+--
+-- key: group specification of the form `group:group1,group2,...`
+-- value: a list of recipes
+--
+-- the progressive recipe unlocking assumes that this will not change after a player joins
 local group_cache = {}
 
 
-
-local item_lists = {
-	"main",
-	"craft",
-	"craftpreview",
-}
 
 local function table_merge(t, t2)
 	t, t2 = t or {}, t2 or {}
@@ -100,32 +97,6 @@ local function table_merge(t, t2)
 	end
 
 	return t
-end
-
-local function table_diff(t, t2)
-	local hash = {}
-
-	for i = 1, #t do
-		local v = t[i]
-		hash[v] = true
-	end
-
-	for i = 1, #t2 do
-		local v = t2[i]
-		hash[v] = nil
-	end
-
-	local diff, c = {}, 0
-
-	for i = 1, #t do
-		local v = t[i]
-		if hash[v] then
-			c = c + 1
-			diff[c] = v
-		end
-	end
-
-	return diff
 end
 
 local custom_crafts, craft_types = {}, {}
@@ -744,31 +715,6 @@ local function search(data)
 	data.items = filtered_list
 end
 
-local function get_inv_items(player)
-	local inv = player:get_inventory()
-	local stacks = {}
-
-	for i = 1, #item_lists do
-		local list = inv:get_list(item_lists[i])
-		table_merge(stacks, list)
-	end
-
-	local inv_items, c = {}, 0
-
-	for i = 1, #stacks do
-		local stack = stacks[i]
-		if not stack:is_empty() then
-			local name = stack:get_name()
-			if minetest.registered_items[name] then
-				c = c + 1
-				inv_items[c] = name
-			end
-		end
-	end
-
-	return inv_items
-end
-
 local function init_data(name)
 	player_data[name] = {
 		filter  = "",
@@ -966,32 +912,30 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 if progressive_mode then
-	local function item_in_inv(item, inv_items)
-		local inv_items_size = #inv_items
-
-		if string.sub(item, 1, 6) == "group:" then
-			local groups = extract_groups(item)
-			for i = 1, inv_items_size do
-				local inv_item = minetest.registered_items[inv_items[i]]
-				if inv_item then
-					local item_groups = inv_item.groups
-					if item_has_groups(item_groups, groups) then
-						return true
-					end
-				end
-			end
-		else
-			for i = 1, inv_items_size do
-				if inv_items[i] == item then
-					return true
-				end
+	local function reveal_item(item, progress)
+		item = item and minetest.registered_aliases[item] or item
+		local def = item and minetest.registered_items[item]
+		if not def or item == "" or progress[item] then return end
+		progress[item] = 1
+		for group_spec, _ in pairs(group_cache) do
+			local groups = extract_groups(group_spec)
+			local has_groups = item_has_groups(def.groups, groups)
+			if has_groups then
+				progress[group_spec] = true
 			end
 		end
 	end
 
-	local function recipe_in_inv(recipe, inv_items)
+	local function reveal_inv_list(list, progress)
+		if not list then return end
+		for _, stack in pairs(list) do
+			reveal_item(stack:get_name(), progress)
+		end
+	end
+
+	local function recipe_unlocked(recipe, progress)
 		for _, item in pairs(recipe.items) do
-			if not item_in_inv(item, inv_items) then
+			if not progress[item] then
 				return
 			end
 		end
@@ -1002,15 +946,12 @@ if progressive_mode then
 	local function progressive_filter(recipes, player)
 		local name = player:get_player_name()
 		local data = player_data[name]
-
-		if #data.inv_items == 0 then
-			return {}
-		end
+		local progress = data.progress
 
 		local filtered, c = {}, 0
 		for i = 1, #recipes do
 			local recipe = recipes[i]
-			if recipe_in_inv(recipe, data.inv_items) then
+			if recipe_unlocked(recipe, progress) then
 				c = c + 1
 				filtered[c] = recipe
 			end
@@ -1023,16 +964,12 @@ if progressive_mode then
 	-- of the player inventory changed, instead.
 	local function poll_new_items()
 		for player in mcl_util.connected_players() do
-			local name   = player:get_player_name()
-			local data   = player_data[name]
-			local inv_items = get_inv_items(player)
-			if data and data.inv_items then
-				local diff      = table_diff(inv_items, data.inv_items)
+			local progress = player_data[player:get_player_name()].progress
+			local inv = player:get_inventory()
 
-				if #diff > 0 then
-					data.inv_items = table_merge(diff, data.inv_items)
-				end
-			end
+			reveal_inv_list(inv:get_list("main"), progress)
+			reveal_inv_list(inv:get_list("craft"), progress)
+			reveal_inv_list(inv:get_list("craftpreview"), progress)
 		end
 
 		minetest.after(POLL_FREQ, poll_new_items)
@@ -1044,25 +981,46 @@ if progressive_mode then
 
 	mcl_craftguide.add_recipe_filter("Default progressive filter", progressive_filter)
 
+	-- Initialize progress from list of unlocked items in player meta
 	minetest.register_on_joinplayer(function(player)
 		local name = player:get_player_name()
 		init_data(name)
 		local meta = player:get_meta()
 		local data = player_data[name]
 
-		data.inv_items = minetest.deserialize(meta:get_string("inv_items")) or {}
+		data.progress = {}
+		local progress = data.progress
+		local inv_items = minetest.deserialize(meta:get_string("inv_items"))
+
+		for _, item in pairs(inv_items or {}) do
+			reveal_item(item, progress)
+		end
 	end)
 
+	-- Store list of unlocked items into player metadata.
+	--
+	-- Groups are not stored, they need to be rebuilt each time, because
+	-- relevant group specifications as well as item groups may change on
+	-- game/mod updates.
 	local function save_meta(player)
 		local meta = player:get_meta()
 		local name = player:get_player_name()
 		local data = player_data[name]
 
 		if not data then
+			-- nothing to do
 			return
 		end
 
-		local inv_items = data.inv_items or {}
+		local inv_items = {}
+		local c = 0
+
+		for item, value in pairs(data.progress) do
+			if value == 1 then
+				c = c + 1
+				inv_items[c] = item
+			end
+		end
 
 		meta:set_string("inv_items", minetest.serialize(inv_items))
 	end
