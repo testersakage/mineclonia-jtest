@@ -90,6 +90,7 @@ local function update_wear_bar(player, itemstack)
 end
 
 mcl_player.register_globalstep(function(player)
+	if not mcl_offhand[player] then return end
 	local itemstack = mcl_offhand.get_offhand(player)
 	local offhand_item = itemstack:get_name()
 	local offhand_hud = mcl_offhand[player].hud
