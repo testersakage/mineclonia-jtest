@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-14 14:01+0000\n"
+"PO-Revision-Date: 2024-12-14 14:56+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mclx_stairs/zh_Hans/>\n"
@@ -108,151 +108,151 @@ msgid "Brown Concrete Stairs"
 msgstr "棕色混凝土楼梯"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "棕色陶瓦台阶"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "棕色陶瓦楼梯"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "青色混凝土台阶"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "青色混凝土楼梯"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "青色陶瓦台阶"
 
 msgid "Cyan Terracotta Stairs"
-msgstr ""
+msgstr "青色陶瓦楼梯"
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "绿色混凝土台阶"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "绿色混凝土楼梯"
 
 msgid "Green Terracotta Slab"
-msgstr ""
+msgstr "绿色陶瓦台阶"
 
 msgid "Green Terracotta Stairs"
-msgstr ""
+msgstr "绿色陶瓦楼梯"
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "灰色混凝土台阶"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "灰色混凝土楼梯"
 
 msgid "Grey Terracotta Slab"
-msgstr ""
+msgstr "灰色陶瓦台阶"
 
 msgid "Grey Terracotta Stairs"
-msgstr ""
+msgstr "灰色陶瓦楼梯"
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "浅蓝色混凝土台阶"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "浅蓝色混凝土楼梯"
 
 msgid "Light Blue Terracotta Slab"
-msgstr ""
+msgstr "浅蓝色陶瓦台阶"
 
 msgid "Light Blue Terracotta Stairs"
-msgstr ""
+msgstr "浅蓝色陶瓦楼梯"
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "浅灰色混凝土台阶"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "浅灰色混凝土楼梯"
 
 msgid "Light Grey Terracotta Slab"
-msgstr ""
+msgstr "浅灰色陶瓦台阶"
 
 msgid "Light Grey Terracotta Stairs"
-msgstr ""
+msgstr "浅灰色陶瓦楼梯"
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "青柠色混凝土台阶"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "青柠色混凝土楼梯"
 
 msgid "Lime Terracotta Slab"
-msgstr ""
+msgstr "青柠色陶瓦台阶"
 
 msgid "Lime Terracotta Stairs"
-msgstr ""
+msgstr "青柠色陶瓦楼梯"
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "品红色混凝土台阶"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "洋红色混凝土楼梯"
 
 msgid "Magenta Terracotta Slab"
-msgstr ""
+msgstr "洋红色陶瓦台阶"
 
 msgid "Magenta Terracotta Stairs"
-msgstr ""
+msgstr "洋红色陶瓦楼梯"
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "橙色混凝土台阶"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "橙色混凝土楼梯"
 
 msgid "Orange Terracotta Slab"
-msgstr ""
+msgstr "橙色陶瓦台阶"
 
 msgid "Orange Terracotta Stairs"
-msgstr ""
+msgstr "橙色陶瓦楼梯"
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "粉色混凝土台阶"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "粉色混凝土楼梯"
 
 msgid "Pink Terracotta Slab"
-msgstr ""
+msgstr "粉色陶瓦台阶"
 
 msgid "Pink Terracotta Stairs"
-msgstr ""
+msgstr "粉色陶瓦楼梯"
 
 msgid "Purple Concrete Slab"
-msgstr ""
+msgstr "紫色混凝土台阶"
 
 msgid "Purple Concrete Stairs"
-msgstr ""
+msgstr "紫色混凝土楼梯"
 
 msgid "Purple Terracotta Slab"
-msgstr ""
+msgstr "紫色陶瓦台阶"
 
 msgid "Purple Terracotta Stairs"
-msgstr ""
+msgstr "紫色陶瓦楼梯"
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "红色混凝土台阶"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "红色混凝土楼梯"
 
 msgid "Red Terracotta Slab"
-msgstr ""
+msgstr "红色陶瓦台阶"
 
 msgid "Red Terracotta Stairs"
-msgstr ""
+msgstr "红色陶瓦楼梯"
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "白色混凝土台阶"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "白色混凝土楼梯"
 
 msgid "White Terracotta Slab"
-msgstr ""
+msgstr "白色陶瓦台阶"
 
 msgid "White Terracotta Stairs"
 msgstr ""
