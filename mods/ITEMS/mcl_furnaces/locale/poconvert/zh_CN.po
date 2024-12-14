@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_furnaces x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-13 04:25+0000\n"
+"PO-Revision-Date: 2024-12-14 05:54+0000\n"
 "Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
 "org/projects/mineclonia/mcl_furnaces/zh_Hans/>\n"
@@ -21,28 +21,28 @@ msgid "Recipe book"
 msgstr "配方书"
 
 msgid "Furnace"
-msgstr ""
+msgstr "熔炉"
 
 msgid "Uses fuel to smelt or cook items"
-msgstr ""
+msgstr "使用燃料来烧炼或烹制物品"
 
 msgid "Furnaces cook or smelt several items, using a furnace fuel, into something else."
-msgstr ""
+msgstr "熔炉使用燃料将若干物品烧炼或烹制成其他物品。"
 
 msgid "Use the furnace to open the furnace menu."
-msgstr ""
+msgstr "使用熔炉来打开熔炉菜单。"
 
 msgid "Place a furnace fuel in the lower slot and the source material in the upper slot."
 msgstr "将熔炉燃料放在下方的格子里，把原料放在上方的格子里。"
 
 msgid "The furnace will slowly use its fuel to smelt the item."
-msgstr ""
+msgstr "熔炉会慢慢消耗燃料来烧炼物品。"
 
 msgid "The result will be placed into the output slot at the right side."
 msgstr "熔炼结果会被放置到右侧的输出格子里。"
 
 msgid "Use the recipe book to see what you can smelt, what you can use as fuel and how long it will burn."
-msgstr ""
+msgstr "使用合成配方书查看可以烧炼什么、可用作燃料的物品以及燃料能燃烧多久。"
 
 msgid "Burning Furnace"
-msgstr ""
+msgstr "正在燃烧的熔炉"
