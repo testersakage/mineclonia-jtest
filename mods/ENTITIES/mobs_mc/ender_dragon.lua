@@ -621,7 +621,7 @@ function dragon:motion_step (dtime, moveresult, self_pos)
 		accel = 1.2 * (turn_penalty * accel + (1.0 - accel))
 		accel = accel * x_scale
 		local acc = vector.new (0.0, 0.0, 1.0)
-		local fv_x, fv_y, fv_z = self:accelerate_relative (acc, accel)
+		local fv_x, fv_y, fv_z = self:accelerate_relative (acc, accel, accel)
 		v.x = v.x + fv_x
 		v.y = v.y + fv_y
 		v.z = v.z + fv_z
