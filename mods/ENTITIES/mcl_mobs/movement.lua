@@ -584,7 +584,7 @@ function mob_class:do_strafe (dtime, moveresult)
 	local node, est_dx, est_dz
 	local v = { x = sx * vel, y = 0, z = sz * vel, }
 	local self_pos = self.object:get_pos ()
-	est_dx, est_dz = self:accelerate_relative (v, vel)
+	est_dx, est_dz = self:accelerate_relative (v, vel, vel)
 	node = vector.offset (self_pos,
 			      -- Scale the delta to reflect the
 			      -- quantity of movement applied in one
