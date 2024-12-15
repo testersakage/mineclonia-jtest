@@ -216,6 +216,21 @@ local function extract_groups(str)
 	return string.split(string.sub(str, 7), ",")
 end
 
+local function get_player_data(name, init)
+	if not player_data[name] and init ~= false then
+		player_data[name] = {
+			filter  = "",
+			pagenum = 1,
+			iX      = DEFAULT_SIZE,
+			items   = init_items,
+			items_raw = init_items,
+			lang_code = minetest.get_player_information(name).lang_code or 'en',
+		}
+	end
+
+	return player_data[name]
+end
+
 local function get_filtered_items(player)
 	local items, c = {}, 0
 
@@ -539,7 +554,7 @@ local function get_recipe_fs(data, iY, player)
 end
 
 local function make_formspec(name)
-	local data = player_data[name]
+	local data = get_player_data(name)
 	local iY = data.iX - 5
 	local ipp = data.iX * iY
 
@@ -715,17 +730,6 @@ local function search(data)
 	data.items = filtered_list
 end
 
-local function init_data(name)
-	player_data[name] = {
-		filter  = "",
-		pagenum = 1,
-		iX      = DEFAULT_SIZE,
-		items   = init_items,
-		items_raw = init_items,
-		lang_code = minetest.get_player_information(name).lang_code or 'en',
-	}
-end
-
 local function reset_data(data)
 	data.filter      = ""
 	data.pagenum     = 1
@@ -792,7 +796,7 @@ end
 
 local function on_receive_fields(player, fields)
 	local name = player:get_player_name()
-	local data = player_data[name]
+	local data = get_player_data(name)
 
 	for elem_name, def in pairs(formspec_elements) do
 		if fields[elem_name] and def.action then
@@ -945,7 +949,7 @@ if progressive_mode then
 
 	local function progressive_filter(recipes, player)
 		local name = player:get_player_name()
-		local data = player_data[name]
+		local data = get_player_data(name)
 		local progress = data.progress
 
 		local filtered, c = {}, 0
@@ -964,7 +968,7 @@ if progressive_mode then
 	-- of the player inventory changed, instead.
 	local function poll_new_items()
 		for player in mcl_util.connected_players() do
-			local progress = player_data[player:get_player_name()].progress
+			local progress = get_player_data(player:get_player_name()).progress
 			local inv = player:get_inventory()
 
 			reveal_inv_list(inv:get_list("main"), progress)
@@ -984,12 +988,11 @@ if progressive_mode then
 	-- Initialize progress from list of unlocked items in player meta
 	minetest.register_on_joinplayer(function(player)
 		local name = player:get_player_name()
-		init_data(name)
-		local meta = player:get_meta()
-		local data = player_data[name]
+		local data = get_player_data(name)
 
 		data.progress = {}
 		local progress = data.progress
+		local meta = player:get_meta()
 		local inv_items = minetest.deserialize(meta:get_string("inv_items"))
 
 		for _, item in pairs(inv_items or {}) do
@@ -1005,7 +1008,7 @@ if progressive_mode then
 	local function save_meta(player)
 		local meta = player:get_meta()
 		local name = player:get_player_name()
-		local data = player_data[name]
+		local data = get_player_data(name, false)
 
 		if not data then
 			-- nothing to do
@@ -1037,11 +1040,6 @@ if progressive_mode then
 		end
 	end)
 else
-	minetest.register_on_joinplayer(function(player)
-		local name = player:get_player_name()
-		init_data(name)
-	end)
-
 	minetest.register_on_leaveplayer(function(player)
 		local name = player:get_player_name()
 		player_data[name] = nil
@@ -1051,7 +1049,7 @@ end
 function mcl_craftguide.show(name)
 	local player = minetest.get_player_by_name(name)
 	if next(recipe_filters) then
-		local data = player_data[name]
+		local data = get_player_data(name)
 		data.items_raw = get_filtered_items(player)
 		search(data)
 	end
