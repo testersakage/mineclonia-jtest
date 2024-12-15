@@ -189,7 +189,7 @@ end
 local function item_has_groups(item_groups, groups)
 	for i = 1, #groups do
 		local group = groups[i]
-		if not item_groups[group] then
+		if not item_groups[group] or item_groups[group] == 0 then
 			return
 		end
 	end
@@ -255,17 +255,9 @@ local function get_recipes(item, data, player)
 
 		local item_groups = minetest.registered_items[item].groups
 		local required_groups
-		local item_belongs_in_groups
 		for cache_group_name, group_cache in pairs(group_cache) do
 			required_groups = extract_groups(cache_group_name)
-			item_belongs_in_groups = true
-			for _, required_group in pairs(required_groups) do
-				if not item_groups[required_group] then
-					item_belongs_in_groups = false
-					break
-				end
-			end
-			if item_belongs_in_groups then
+			if item_has_groups(item_groups, required_groups) then
 				recipes = table.insert_all(recipes, group_cache)
 			end
 		end
