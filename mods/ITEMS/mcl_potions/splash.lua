@@ -157,10 +157,14 @@ function mcl_potions.register_splash(name, descr, color, def)
 
 						if def.custom_effect then
 							local power = (potency+1) * mcl_potions.SPLASH_FACTOR
+							local thrower = self._thrower
+							if type (thrower) == "string" then
+								thrower = minetest.get_player_by_name (thrower)
+							end
 							if rad > 0 then
-								def.custom_effect(obj, redux_map[rad] * power, plus)
+								def.custom_effect (obj, redux_map[rad] * power, plus, thrower)
 							else
-								def.custom_effect(obj, power, plus)
+								def.custom_effect (obj, power, plus, thrower)
 							end
 						end
 					end

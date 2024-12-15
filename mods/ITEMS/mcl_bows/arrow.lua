@@ -315,7 +315,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 							local damage = mcl_util.deal_damage (obj, dmg, reason)
 							self:arrow_knockback (obj, damage)
 							if self._extra_hit_func then
-								self._extra_hit_func(obj)
+								self:_extra_hit_func(obj)
 							end
 							if obj:is_player() then
 								if not mcl_shields.is_blocking(obj) then
