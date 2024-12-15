@@ -17,3 +17,11 @@ minetest.register_craft({
 			 {"group:bamboo_tree", "", "group:bamboo_tree"},
 			 {"group:bamboo_tree", "", "group:bamboo_tree"}}
 })
+
+minetest.register_craft({
+	output = "mcl_core:stick",
+	recipe = {
+		{"mcl_bamboo:bamboo"},
+		{"mcl_bamboo:bamboo"},
+	}
+})
