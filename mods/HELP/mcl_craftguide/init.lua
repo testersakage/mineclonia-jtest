@@ -1018,8 +1018,8 @@ if progressive_mode then
 		local progress = get_progress(player)
 
 		local changed = reveal_inv_list(inv:get_list("main"), progress)
-		changed = changed or reveal_inv_list(inv:get_list("craft"), progress)
-		changed = changed or reveal_inv_list(inv:get_list("craftpreview"), progress)
+		changed = changed or reveal_inv_list(inv:get_list("armor"), progress)
+		changed = changed or reveal_inv_list(inv:get_list("offhand"), progress)
 
 		if changed then
 			save_progress(player)
