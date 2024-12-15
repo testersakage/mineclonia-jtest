@@ -965,18 +965,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
---[[local function on_use(user)
-	local name = user:get_player_name()
-
-	if next(recipe_filters) then
-		local data = player_data[name]
-		data.items_raw = get_filtered_items(user)
-		search(data)
-	end
-
-	minetest.show_formspec(name, "mcl_craftguide", make_formspec(name))
-end]]
-
 if progressive_mode then
 	local function item_in_inv(item, inv_items)
 		local inv_items_size = #inv_items
