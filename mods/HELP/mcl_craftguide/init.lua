@@ -18,7 +18,6 @@ local MIN_LIMIT, MAX_LIMIT = 10, 12
 DEFAULT_SIZE = math.min(MAX_LIMIT, math.max(MIN_LIMIT, DEFAULT_SIZE))
 
 local GRID_LIMIT = 5
-local POLL_FREQ  = 0.25
 
 local FMT = {
 	box     = "box[%f,%f;%f,%f;%s]",
@@ -1009,24 +1008,18 @@ if progressive_mode then
 		return filtered
 	end
 
-	-- Workaround. Need an engine call to detect when the contents
-	-- of the player inventory changed, instead.
-	local function poll_new_items()
-		for player in mcl_util.connected_players() do
-			local inv = player:get_inventory()
-			local progress = get_progress(player)
+	-- Workaround. Need engine support to detect when a player inventory
+	-- changes instead.
+	local function poll_new_items(player)
+		local inv = player:get_inventory()
+		local progress = get_progress(player)
 
-			reveal_inv_list(inv:get_list("main"), progress)
-			reveal_inv_list(inv:get_list("craft"), progress)
-			reveal_inv_list(inv:get_list("craftpreview"), progress)
-		end
-
-		minetest.after(POLL_FREQ, poll_new_items)
+		reveal_inv_list(inv:get_list("main"), progress)
+		reveal_inv_list(inv:get_list("craft"), progress)
+		reveal_inv_list(inv:get_list("craftpreview"), progress)
 	end
 
-	minetest.register_on_mods_loaded(function()
-		minetest.after(1, poll_new_items)
-	end)
+	mcl_player.register_globalstep_slow(poll_new_items)
 
 	mcl_craftguide.add_recipe_filter("Default progressive filter", progressive_filter)
 
