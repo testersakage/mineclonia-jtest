@@ -331,7 +331,10 @@ end
 function villager_base:update_trades (trades)
 	self._trades = trades
 	for key, value in pairs (self._trading_with) do
-		self:show_trade_formspec (key, nil)
+		if value < 1 or value > #trades then
+			value = nil
+		end
+		self:show_trade_formspec (key, value)
 	end
 end
 
@@ -451,23 +454,6 @@ function inv_class:allow_put (listname, _, stack, player)
 end
 
 function inv_class:on_put (listname, index, stack, player)
-	if listname == "input" then
-		-- Replace clocks and compasses with their base items.
-		local name = stack:get_name ()
-		if minetest.get_item_group (name, "compass") > 0 then
-			if name:find ("_recovery") then
-				stack:set_name ("mcl_compass:compass_recovery")
-			elseif name:find ("_lodestone") then
-				stack:set_name ("mcl_compass:compass_lodestone")
-			else
-				stack:set_name (mcl_compass.stereotype)
-			end
-			self:set_stack (listname, index, stack)
-		elseif minetest.get_item_group (name, "clock") > 0 then
-			stack:set_name ("mcl_clock:clock")
-			self:set_stack (listname, index, stack)
-		end
-	end
 	local merchant = trading_players[player]
 	if not merchant or not is_valid (merchant) then
 		return
