@@ -918,7 +918,7 @@ if progressive_mode then
 	local function reveal_item(item, progress)
 		item = item and minetest.registered_aliases[item] or item
 		local def = item and minetest.registered_items[item]
-		if not def or item == "" or progress[item] then return end
+		if not def or item == "" or progress[item] then return false end
 		progress[item] = 1
 		for group_spec, _ in pairs(group_cache) do
 			local groups = extract_groups(group_spec)
@@ -927,6 +927,7 @@ if progressive_mode then
 				progress[group_spec] = true
 			end
 		end
+		return true
 	end
 
 	-- Initialize progress from list of unlocked items in player meta if necessary
@@ -977,10 +978,12 @@ if progressive_mode then
 	end
 
 	local function reveal_inv_list(list, progress)
-		if not list then return end
+		if not list then return false end
+		local changed = false
 		for _, stack in pairs(list) do
-			reveal_item(stack:get_name(), progress)
+			changed = changed or reveal_item(stack:get_name(), progress)
 		end
+		return changed
 	end
 
 	local function recipe_unlocked(recipe, progress)
@@ -1014,9 +1017,13 @@ if progressive_mode then
 		local inv = player:get_inventory()
 		local progress = get_progress(player)
 
-		reveal_inv_list(inv:get_list("main"), progress)
-		reveal_inv_list(inv:get_list("craft"), progress)
-		reveal_inv_list(inv:get_list("craftpreview"), progress)
+		local changed = reveal_inv_list(inv:get_list("main"), progress)
+		changed = changed or reveal_inv_list(inv:get_list("craft"), progress)
+		changed = changed or reveal_inv_list(inv:get_list("craftpreview"), progress)
+
+		if changed then
+			save_progress(player)
+		end
 	end
 
 	mcl_player.register_globalstep_slow(poll_new_items)
