@@ -84,20 +84,6 @@ local group_names = {
 -- the progressive recipe unlocking assumes that this will not change after a player joins
 local group_cache = {}
 
-
-
-local function table_merge(t, t2)
-	t, t2 = t or {}, t2 or {}
-	local c = #t
-
-	for i = 1, #t2 do
-		c = c + 1
-		t[c] = t2[i]
-	end
-
-	return t
-end
-
 local custom_crafts, craft_types = {}, {}
 
 function mcl_craftguide.register_craft_type(name, def)
@@ -280,7 +266,7 @@ local function get_recipes(item, data, player)
 				end
 			end
 			if item_belongs_in_groups then
-				recipes = table_merge(recipes, group_cache)
+				recipes = table.insert_all(recipes, group_cache)
 			end
 		end
 
