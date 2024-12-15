@@ -163,6 +163,9 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	if self._active_activity then
 		self:replace_activity (nil)
 	end
+	if not self:navigation_finished () then
+		self:cancel_navigation ()
+	end
 
 	if self._drive_boost_elapsed then
 		self._drive_boost_elapsed = self._drive_boost_elapsed + dtime
