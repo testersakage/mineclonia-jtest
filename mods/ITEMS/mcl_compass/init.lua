@@ -127,12 +127,15 @@ local function update_compass(stack, player)
 end
 
 local function update_recovery_compass(stack, player)
-	local def = stack:get_definition()
-	local pos = player:get_pos()
-	local dir = player:get_look_horizontal()
 	local meta = player:get_meta()
 	local posstring =  meta:get_string("mcl_compass:recovery_pos")
 	local targetpos = minetest.string_to_pos(posstring)
+	if not targetpos then return stack end
+
+	local def = stack:get_definition()
+	local pos = player:get_pos()
+	local dir = player:get_look_horizontal()
+
 	local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
 	local _, p_dim = mcl_worlds.y_to_layer(pos.y)
 	local img
