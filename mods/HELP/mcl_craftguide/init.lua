@@ -930,6 +930,53 @@ if progressive_mode then
 		end
 	end
 
+	-- Initialize progress from list of unlocked items in player meta if necessary
+	local function get_progress(player, init)
+		local name = player:get_player_name()
+		local data = get_player_data(name)
+
+		if not data.progress and init ~= false then
+			-- intialize set of unlocked items and groups
+			data.progress = {}
+			local progress = data.progress
+			local meta = player:get_meta()
+			local inv_items = minetest.deserialize(meta:get_string("inv_items"))
+
+			for _, item in pairs(inv_items or {}) do
+				reveal_item(item, progress)
+			end
+		end
+
+		return data.progress
+	end
+
+	-- Store list of unlocked items into player metadata.
+	--
+	-- Groups are not stored, they need to be rebuilt each time, because
+	-- relevant group specifications as well as item groups may change on
+	-- game/mod updates.
+	local function save_progress(player)
+		local progress = get_progress(player, false)
+
+		if not progress then
+			-- nothing to do
+			return
+		end
+
+		local inv_items = {}
+		local c = 0
+
+		for item, value in pairs(progress) do
+			if value == 1 then
+				c = c + 1
+				inv_items[c] = item
+			end
+		end
+
+		local meta = player:get_meta()
+		meta:set_string("inv_items", minetest.serialize(inv_items))
+	end
+
 	local function reveal_inv_list(list, progress)
 		if not list then return end
 		for _, stack in pairs(list) do
@@ -948,9 +995,7 @@ if progressive_mode then
 	end
 
 	local function progressive_filter(recipes, player)
-		local name = player:get_player_name()
-		local data = get_player_data(name)
-		local progress = data.progress
+		local progress = get_progress(player)
 
 		local filtered, c = {}, 0
 		for i = 1, #recipes do
@@ -968,8 +1013,8 @@ if progressive_mode then
 	-- of the player inventory changed, instead.
 	local function poll_new_items()
 		for player in mcl_util.connected_players() do
-			local progress = get_player_data(player:get_player_name()).progress
 			local inv = player:get_inventory()
+			local progress = get_progress(player)
 
 			reveal_inv_list(inv:get_list("main"), progress)
 			reveal_inv_list(inv:get_list("craft"), progress)
@@ -985,58 +1030,15 @@ if progressive_mode then
 
 	mcl_craftguide.add_recipe_filter("Default progressive filter", progressive_filter)
 
-	-- Initialize progress from list of unlocked items in player meta
-	minetest.register_on_joinplayer(function(player)
-		local name = player:get_player_name()
-		local data = get_player_data(name)
-
-		data.progress = {}
-		local progress = data.progress
-		local meta = player:get_meta()
-		local inv_items = minetest.deserialize(meta:get_string("inv_items"))
-
-		for _, item in pairs(inv_items or {}) do
-			reveal_item(item, progress)
-		end
-	end)
-
-	-- Store list of unlocked items into player metadata.
-	--
-	-- Groups are not stored, they need to be rebuilt each time, because
-	-- relevant group specifications as well as item groups may change on
-	-- game/mod updates.
-	local function save_meta(player)
-		local meta = player:get_meta()
-		local name = player:get_player_name()
-		local data = get_player_data(name, false)
-
-		if not data then
-			-- nothing to do
-			return
-		end
-
-		local inv_items = {}
-		local c = 0
-
-		for item, value in pairs(data.progress) do
-			if value == 1 then
-				c = c + 1
-				inv_items[c] = item
-			end
-		end
-
-		meta:set_string("inv_items", minetest.serialize(inv_items))
-	end
-
 	minetest.register_on_leaveplayer(function(player)
-		save_meta(player)
+		save_progress(player)
 		local name = player:get_player_name()
 		player_data[name] = nil
 	end)
 
 	minetest.register_on_shutdown(function()
 		for player in mcl_util.connected_players() do
-			save_meta(player)
+			save_progress(player)
 		end
 	end)
 else
