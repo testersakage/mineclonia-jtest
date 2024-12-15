@@ -76,7 +76,7 @@ local function generate_on_use(vanish, effects, _, on_use, custom_effect)
 		end
 
 		if on_use then on_use(user, potency+1) end
-		if custom_effect then custom_effect(user, potency+1, plus) end
+		if custom_effect then custom_effect(user, potency+1, plus, user) end
 
 		-- Certain potions, e.g. ominous bottles, are meant to
 		-- vanish after consumption rather than to be replaced
@@ -392,8 +392,8 @@ mcl_potions.register_potion({
 	color = "#F82423",
 	uses_level = true,
 	has_arrow = true,
-	custom_effect = function(object, level)
-		return mcl_potions.healing_func(object, 4 * level)
+	custom_effect = function(object, level, _, user)
+		return mcl_potions.healing_func(object, 4 * level, user)
 	end,
 })
 
@@ -407,8 +407,8 @@ mcl_potions.register_potion({
 	color = "#430A09",
 	uses_level = true,
 	has_arrow = true,
-	custom_effect = function(object, level)
-		return mcl_potions.healing_func(object, -6 * level)
+	custom_effect = function(object, level, _, user)
+		return mcl_potions.healing_func(object, -6 * level, user)
 	end,
 })
 
