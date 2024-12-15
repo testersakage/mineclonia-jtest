@@ -893,18 +893,18 @@ local function scale_speed_flying (speed, friction)
 	return speed * f
 end
 
-function mob_class:accelerate_relative (acc, speed)
+function mob_class:accelerate_relative (acc, speed_x, speed_y)
 	local yaw = self:get_yaw ()
 	local acc_x, acc_y, acc_z
 	local magnitude = vector.length (acc)
 	if magnitude > 1.0 then
-		acc_x = acc.x / magnitude * speed
-		acc_y = acc.y / magnitude * speed
-		acc_z = acc.z / magnitude * speed
+		acc_x = acc.x / magnitude * speed_x
+		acc_y = acc.y / magnitude * speed_y
+		acc_z = acc.z / magnitude * speed_x
 	else
-		acc_x = acc.x * speed
-		acc_y = acc.y * speed
-		acc_z = acc.z * speed
+		acc_x = acc.x * speed_x
+		acc_y = acc.y * speed_y
+		acc_z = acc.z * speed_x
 	end
 	local s = -math.sin (yaw)
 	local c = math.cos (yaw)
@@ -1138,9 +1138,9 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- Consequently, fv.y must be applied after fall_speed, with
 	-- gravity_drag in between.
 	local gravity_drag = 1
-	if self.gravity_drag and (not touching_ground
+	if self.gravity_drag and ((not touching_ground and v.y < 0)
 					or self._apply_gravity_drag_on_ground) then
-		gravity_drag = pow_by_step (self.gravity_drag, dtime)
+		gravity_drag = self.gravity_drag
 	end
 
 	local water_vec = not self.swims and self:check_water_flow (self_pos) or nil
@@ -1169,19 +1169,22 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		-- friction to acceleration (speed), not just the
 		-- previous velocity.
 		local r, z = pow_by_step (friction, dtime), friction
+		local base_water_drag = WATER_DRAG * gravity_drag
+		local p = pow_by_step (base_water_drag, dtime)
 		h_scale = (1 - r) / (1 - z)
-		speed = speed * h_scale
+		v_scale = (1 - p) / (1 - base_water_drag)
 
-		local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
-		p = pow_by_step (WATER_DRAG, dtime)
+		local speed_x, speed_y = speed * h_scale, speed * v_scale
+		local fv_x, fv_y, fv_z
+			= self:accelerate_relative (acc_dir, speed_x, speed_y)
 
 		-- Apply friction and acceleration.
 		v.x = v.x * r + fv_x
 		v.y = v.y * p
 		v.z = v.z * r + fv_z
 
-		-- Apply the new velocity in whole.
-		v_scale = (1 - p) / (1 - WATER_DRAG)
+		-- Apply vertical acceleration.
+		v.y = v.y + fv_y
 
 		-- Apply gravity unless this mob is sprinting.
 		if not self._sprinting then
@@ -1190,12 +1193,6 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 				v.y = -0.06
 			end
 		end
-		if v.y < 0 then
-			v.y = v.y * gravity_drag
-		end
-
-		-- Apply vertical acceleration.
-		v.y = v.y + fv_y
 
 		-- If colliding horizontally within water, detect
 		-- whether the result of this movement is vertically
@@ -1237,14 +1234,14 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 				v_scale = (1 - p) / (1 - JUMPING_LAVA_DRAG)
 			end
 
-			local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
+			local speed_x, speed_y
+				= speed * h_scale, speed * v_scale
+			local fv_x, fv_y, fv_z
+				= self:accelerate_relative (acc_dir, speed_x, speed_y)
 			v.x = v.x * r + fv_x
 			v.y = v.y * p
 			v.z = v.z * r + fv_z
 			v.y = v.y + (fall_speed / 4.0) * v_scale
-			if v.y < 0 then
-				v.y = v.y * gravity_drag
-			end
 			v.y = v.y + fv_y
 
 			-- If colliding horizontally within lava,
@@ -1271,13 +1268,14 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			h_scale = (1 - r) / (1 - z)
 			speed = speed * h_scale
 
-			local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
+			local fv_x, _, fv_z
+				= self:accelerate_relative (acc_dir, speed, speed)
 			v.x = v.x * r + fv_x
 			v.z = v.z * r + fv_z
 
 			p = pow_by_step (WATER_DRAG, dtime)
 			v_scale = (1 - p) / (1 - WATER_DRAG)
-			v.y = v.y * p + fv_y
+			v.y = v.y * p
 		end
 	else
 		-- If not standing on air, apply slippery to a base value of
@@ -1325,19 +1323,17 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		-- In Minetest, this is emulated by integrating the
 		-- full speed into the velocity after applying
 		-- friction to the same, which is more logical anyway.
+		local base_air_drag = AIR_DRAG * gravity_drag
 		local r, z = pow_by_step (friction, dtime), friction
+		local p = pow_by_step (base_air_drag, dtime)
 		h_scale = (1 - r) / (1 - z)
-		speed = speed * h_scale
-
-		local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed)
-		v_scale = (1 - p) / (1 - AIR_DRAG)
-		local new_y = v.y + fall_speed * v_scale
+		v_scale = (1 - p) / (1 - base_air_drag)
+		local speed_x, speed_y = speed * h_scale, speed * v_scale
+		local fv_x, fv_y, fv_z
+			= self:accelerate_relative (acc_dir, speed_x, speed_y)
 		v.x = v.x * r + fv_x
-		v.y = new_y * p
+		v.y = v.y * p + fall_speed * v_scale * base_air_drag
 		v.z = v.z * r + fv_z
-		if v.y < 0 then
-			v.y = v.y * gravity_drag
-		end
 		v.y = v.y + fv_y
 	end
 
@@ -1430,7 +1426,8 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 		scale = (1 - p) / (1 - friction)
 	end
 
-	local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed * scale)
+	local speed = speed * scale
+	local fv_x, fv_y, fv_z = self:accelerate_relative (acc_dir, speed, speed)
 	v.x = v.x * p + fv_x
 	v.y = v.y * p + fv_y
 	v.z = v.z * p + fv_z
@@ -1463,8 +1460,9 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 		p = pow_by_step (AQUATIC_WATER_DRAG, dtime)
 		local scale = (1 - p) / (1 - AQUATIC_WATER_DRAG)
 
+		local speed = acc_speed * scale
 		local fv_x, fv_y, fv_z
-			= self:accelerate_relative (acc_dir, acc_speed * scale)
+			= self:accelerate_relative (acc_dir, speed, speed)
 		v.x = v.x * p + fv_x
 		v.y = v.y * p + fv_y + acc_fixed * scale
 		v.z = v.z * p + fv_z
