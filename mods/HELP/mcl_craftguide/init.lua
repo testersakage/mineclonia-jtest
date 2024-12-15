@@ -19,6 +19,8 @@ DEFAULT_SIZE = math.min(MAX_LIMIT, math.max(MIN_LIMIT, DEFAULT_SIZE))
 
 local GRID_LIMIT = 5
 
+local PLAYER_PROGRESS_KEY = "mcl_craftguide:progress"
+
 local FMT = {
 	box     = "box[%f,%f;%f,%f;%s]",
 	label   = "label[%f,%f;%s]",
@@ -914,12 +916,34 @@ if progressive_mode then
 		local data = get_player_data(name)
 
 		if not data.progress and init ~= false then
-			-- intialize set of unlocked items and groups
 			data.progress = {}
 			local progress = data.progress
 			local meta = player:get_meta()
-			local inv_items = minetest.deserialize(meta:get_string("inv_items"))
 
+			if meta:contains("inv_items") then
+				-- compat
+				minetest.log("none", "[mcl_craftguide] converting old progress data for player '" .. name .. "'")
+				local data = meta:get_string("inv_items")
+				meta:set_string(PLAYER_PROGRESS_KEY, data)
+				meta:set_string("inv_items", "")
+			end
+
+			local inv_items
+			if meta:contains(PLAYER_PROGRESS_KEY) then
+				local data = meta:get_string(PLAYER_PROGRESS_KEY)
+
+				inv_items = minetest.deserialize(data)
+
+				if not inv_items or type(inv_items) ~= "table" then
+					minetest.log("error", "[mcl_craftguide] resetting corrupt player progress for player '" .. name .. "'")
+					meta:set_string(PLAYER_PROGRESS_KEY, "")
+					meta:set_string(PLAYER_PROGRESS_KEY .. "_corrupt", data)
+
+					inv_items = nil
+				end
+			end
+
+			-- unlock items, computing unlocked groups
 			for _, item in pairs(inv_items or {}) do
 				reveal_item(item, progress)
 			end
@@ -951,8 +975,14 @@ if progressive_mode then
 			end
 		end
 
-		local meta = player:get_meta()
-		meta:set_string("inv_items", minetest.serialize(inv_items))
+		if c > 0 then
+			local meta = player:get_meta()
+			meta:set_string(PLAYER_PROGRESS_KEY, minetest.serialize(inv_items))
+		else
+			-- don't write metadata if c == 0, because chances are
+			-- high that initialization was interrupted
+			minetest.log("none", "[mcl_craftguide] not saving empty progress for player '" .. player:get_player_name() .. "'")
+		end
 	end
 
 	local function reveal_inv_list(list, progress)
