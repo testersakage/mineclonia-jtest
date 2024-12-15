@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-15 03:29+0000\n"
+"Last-Translator: bright <bright@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.codeberg."
+"org/projects/mineclonia/mcl_core/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Stick"
 msgstr "木棍"
@@ -509,37 +510,37 @@ msgid "Spruce leaves are grown from Spruce trees."
 msgstr "云杉树叶从云杉树上生长出来。"
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "剥落的金合欢树皮"
 
 msgid "Stripped Acacia Log"
 msgstr "去皮的金合欢原木"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "剥落的桦树皮"
 
 msgid "Stripped Birch Log"
 msgstr "去皮的白桦原木"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "剥落的深色橡木树皮"
 
 msgid "Stripped Dark Oak Log"
 msgstr "去皮的深色橡木原木"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "剥落的丛林树木树皮"
 
 msgid "Stripped Jungle Log"
 msgstr "去皮的丛林原木"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "剥落的橡木树皮"
 
 msgid "Stripped Oak Log"
 msgstr "去皮的橡木原木"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "剥落的云杉树皮"
 
 msgid "Stripped Spruce Log"
 msgstr "去皮的云杉原木"
@@ -1188,4 +1189,3 @@ msgstr "苔藓石砖楼梯"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "苔藓石砖台阶"
-
