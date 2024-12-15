@@ -38,7 +38,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 	ARROW_ENTITY.initial_properties.textures = arrow_image (color, 100)
 	ARROW_ENTITY._itemstring = "mcl_potions:"..name.."_arrow"
 
-	function ARROW_ENTITY._extra_hit_func (obj)
+	function ARROW_ENTITY:_extra_hit_func (obj)
 		local potency, plus = 0, 0
 		if def._effect_list then
 		local ef_level
@@ -52,7 +52,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 			mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
 		end
 		end
-		if def.custom_effect then def.custom_effect(obj, potency+1) end
+		if def.custom_effect then def.custom_effect (obj, potency+1, nil, self._shooter) end
 	end
 
 	minetest.register_entity("mcl_potions:"..name.."_arrow_entity", ARROW_ENTITY)

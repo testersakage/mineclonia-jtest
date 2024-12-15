@@ -1614,7 +1614,7 @@ function dragon:do_phase_bellow_acid (self_pos, dtime)
 				radius = 5.0,
 				duration = 10.0,
 				radius_per_second = 0.0,
-				damage = 4.0,
+				damage = 6.0,
 			})
 		end
 		self._bellowed = true
@@ -2011,7 +2011,7 @@ local dragon_effect_cloud = {
 	_duration = 10.0,
 	_ttl = 10.0,
 	_time_to_refresh = 0.0,
-	_damage = 4.0,
+	_damage = 6.0,
 }
 
 function dragon_effect_cloud:configure ()
@@ -2032,8 +2032,9 @@ function dragon_effect_cloud:on_activate (staticdata, dtime)
 		if data then
 			self._radius = data.radius or 5.0
 			self._duration = data.duration or 10.0
-			self._ttl = data._ttl or 10.0
-			self._radius_per_second = data._radius_per_second or 0.0
+			self._ttl = data.ttl or 10.0
+			self._radius_per_second = data.radius_per_second or 0.0
+			self._damage = data.damage or 6.0
 		end
 	end
 	self:configure ()
@@ -2045,6 +2046,7 @@ function dragon_effect_cloud:get_staticdata ()
 		duration = self._duration,
 		ttl = self._ttl,
 		radius_per_second = self._radius_per_second,
+		damage = self._damage,
 	})
 end
 
@@ -2120,7 +2122,9 @@ function dragon_effect_cloud:on_step (dtime)
 
 				if box_intersection (cbox, cbox1) then
 					damage_immune[object] = 0.5
-					mcl_potions.healing_func (object, -4)
+					mcl_util.deal_damage (object, self._damage, {
+						type = "dragon_breath",
+					})
 				end
 			end
 		end
@@ -2226,7 +2230,7 @@ function dragon_fireball:on_step (dtime, moveresult)
 				radius = 3.0,
 				duration = 30,
 				radius_per_second = 4.0 / 30,
-				damage = 8.0,
+				damage = 12.0,
 			})
 		end
 	end

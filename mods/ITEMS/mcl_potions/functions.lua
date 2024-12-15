@@ -1958,7 +1958,7 @@ function mcl_potions.all_effects (object)
 	return val
 end
 
-function mcl_potions.healing_func(object, hp)
+function mcl_potions.healing_func (object, hp, source)
 	if not object or object:get_hp() <= 0 then return false end
 	local ent = object:get_luaentity()
 
@@ -1982,7 +1982,10 @@ function mcl_potions.healing_func(object, hp)
 			hp = -1
 		end
 
-		mcl_util.deal_damage(object, -hp, {type = "magic"})
+		mcl_util.deal_damage (object, -hp, {
+			type = "magic",
+			source = source,
+		})
 	end
 end
 
