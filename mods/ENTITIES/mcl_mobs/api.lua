@@ -468,7 +468,7 @@ function mob_class:on_step (dtime, moveresult)
 	self._targets_visible = {}
 	local should_drive = self:should_drive ()
 
-	if self:check_despawn(pos, dtime) then return true end
+	if self:check_despawn (pos, dtime) then return true end
 
 	-- Objects which are attached and those which are not physical
 	-- don't receive moveresults.  Create a placeholder object to

@@ -337,7 +337,11 @@ function mob_class:despawn_allowed ()
 	local nametag = self.nametag and self.nametag ~= ""
 	if self.can_despawn == true then
 		if not nametag and not self.tamed
-			and not self.persistent then
+			and not self.persistent
+		-- _just_portaled mobs should not despawn to allow
+		-- mapblocks containing them to be unloaded if no
+		-- players are nearby.
+			and not self._just_portaled then
 			return true
 		end
 	end
