@@ -110,22 +110,31 @@ function sheep:set_color (color)
 end
 
 function sheep:on_spawn ()
-	local r = math.random (0,100000)
-	local color
-	if r <= 81836 then -- 81.836%
-		color = "unicolor_white"
-	elseif r <= 81836 + 5000 then -- 5%
-		color = "unicolor_grey"
-	elseif r <= 81836 + 5000 + 5000 then-- 5%
-		color = "unicolor_darkgrey"
-	elseif r <= 81836 + 5000 + 5000 + 5000 then -- 5%
-		color = "unicolor_black"
-	elseif r <= 81836 + 5000 + 5000 + 5000 + 3000 then -- 3%
-		color = "unicolor_dark_orange"
-	else-- 0.164%
-		color = "unicolor_light_red"
+	-- Although the mobs framework takes measures not to run
+	-- on_spawn on existing mobs, the old framework did not do so
+	-- if on_spawn was not defined, with the result that old sheep
+	-- whose colors were already defined may still enter this
+	-- function.
+	if not rawget (self, "color") then
+		local r = math.random (0,100000)
+		local color
+		if r <= 81836 then -- 81.836%
+			color = "unicolor_white"
+		elseif r <= 81836 + 5000 then -- 5%
+			color = "unicolor_grey"
+		elseif r <= 81836 + 5000 + 5000 then-- 5%
+			color = "unicolor_darkgrey"
+		elseif r <= 81836 + 5000 + 5000 + 5000 then -- 5%
+			color = "unicolor_black"
+		elseif r <= 81836 + 5000 + 5000 + 5000 + 3000 then -- 3%
+			color = "unicolor_dark_orange"
+		else-- 0.164%
+			color = "unicolor_light_red"
+		end
+		self:set_color (color)
+	else
+		self:set_color (self.color)
 	end
-	self:set_color (color)
 end
 
 function sheep:on_rightclick (clicker)
