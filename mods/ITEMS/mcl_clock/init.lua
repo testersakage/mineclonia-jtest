@@ -44,6 +44,7 @@ minetest.register_craftitem("mcl_clock:clock", {
 		self._clock_timer = 5
 		self.object:set_properties({
 			visual = "upright_sprite",
+			visual_size = { x = 0.55, y = 0.55 },
 			textures = {
 				mcl_clock.images[mcl_clock.get_clock_frame() + 1],
 				mcl_clock.images[mcl_clock.get_clock_frame() + 1]
