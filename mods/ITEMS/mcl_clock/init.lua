@@ -78,7 +78,8 @@ minetest.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		local inv = player:get_inventory()
 		for s, stack in pairs(inv:get_list("main")) do
-			if stack:get_name() == "mcl_clock:clock"then
+			if minetest.get_item_group(stack:get_name(), "clock") > 0 then
+				stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
 				local frame
 				-- Clocks do not work in certain zones
 				if not mcl_worlds.clock_works(player:get_pos()) then
