@@ -475,6 +475,13 @@ function glow_squid:ai_step (dtime)
 	end
 end
 
+-- The mobs framework no longer respects min_light and max_light when
+-- modern spawning thresholds are enabled.
+
+function glow_squid.check_light (_, gotten_light, _, _)
+	return gotten_light == 0
+end
+
 mcl_mobs.register_mob ("mobs_mc:glow_squid", glow_squid)
 
 ------------------------------------------------------------------------
