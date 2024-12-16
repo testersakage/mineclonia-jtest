@@ -202,15 +202,16 @@ function mcl_itemframes.tpl_entity:on_activate(staticdata, dtime_s)
 end
 
 function mcl_itemframes.tpl_entity:on_step(dtime)
+	local def = minetest.registered_items[self._item]
+	if def and def._on_entity_step then
+		def._on_entity_step(self, dtime)
+	end
 	self._timer = (self._timer and self._timer - dtime) or 1
 	if self._timer > 0 then return end
 	self._timer = 1
 	if minetest.get_item_group(minetest.get_node(self._itemframe_pos).name, "itemframe") <= 0 then
 		self.object:remove()
 		return
-	end
-	if minetest.get_item_group(self._item, "clock") > 0 then
-		self:set_item(ItemStack("mcl_clock:clock_"..mcl_clock.get_clock_frame()))
 	end
 end
 
