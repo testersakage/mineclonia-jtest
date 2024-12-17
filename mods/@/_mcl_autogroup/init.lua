@@ -384,8 +384,8 @@ local function overwrite()
 	local hardness_lookup = get_hardness_lookup_for_groups(hardness_values)
 
 	for nname, ndef in pairs(minetest.registered_nodes) do
+		local override = {}
 		local newgroups = table.copy(ndef.groups)
-
 		if (nname ~= "ignore" and ndef.diggable) then
 			-- Automatically assign the "solid" group for solid nodes
 			if (ndef.walkable == nil or ndef.walkable == true)
@@ -421,10 +421,18 @@ local function overwrite()
 			-- creative_breakable group if it belongs to any digging
 			-- group.
 			newgroups["creative_breakable"] = 1
+			override.groups = newgroups
+		end
 
-			minetest.override_item(nname, {
-				groups = newgroups,
-			})
+		-- dig_by_water and destroy_by_lava.  In most (all?) instances the two
+		-- are wholly equivalent.
+		if core.get_item_group(nname, "dig_by_water") > 0 or core.get_item_group(nname, "destroy_by_lava_flow") > 0 then
+			override.floodable = true
+			override.on_flood = mcl_core.basic_flood
+		end
+
+		if table.count(override) > 0 then
+			core.override_item(nname, override)
 		end
 	end
 

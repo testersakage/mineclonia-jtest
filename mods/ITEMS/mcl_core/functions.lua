@@ -106,7 +106,7 @@ local function drop_attached_node(p)
 	end
 end
 
-local function basic_flood (pos, old_node, new_node)
+function mcl_core.basic_flood (pos, _, new_node)
 	if minetest.get_item_group (new_node.name, "water") > 0 then
 		drop_attached_node (pos)
 		minetest.dig_node (pos)
@@ -118,26 +118,6 @@ local function basic_flood (pos, old_node, new_node)
 		return true
 	end
 end
-
--- dig_by_water and destroy_by_lava.  In most (all?) instances the two
--- are wholly equivalent.
-
-local function init_water_and_lava_flow ()
-	for name, node in pairs (minetest.registered_nodes) do
-		-- dig_by_water and destroy_by_lava_flow are treated
-		-- as synonyms of each other, since Minecraft makes no
-		-- distinction between the two and this vastly
-		-- simplifies processing.
-		if node.groups.dig_by_water or node.groups.destroy_by_lava_flow then
-			minetest.override_item (name, {
-				floodable = true,
-				on_flood = basic_flood,
-			})
-		end
-	end
-end
-
-minetest.register_on_mods_loaded (init_water_and_lava_flow)
 
 -- Cactus mechanisms
 minetest.register_abm({
