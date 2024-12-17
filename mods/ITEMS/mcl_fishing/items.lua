@@ -53,7 +53,10 @@ minetest.register_craftitem("mcl_fishing:clownfish_raw", {
 })
 
 local function eat_pufferfish(itemstack, placer, pointed_thing)
-    mcl_potions.give_effect_by_level("poison", placer, 3, 60)
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if rc then return rc end
+
+	mcl_potions.give_effect_by_level("poison", placer, 3, 60)
     mcl_potions.give_effect_by_level("nausea", placer, 2, 60)
     return minetest.item_eat(1)(itemstack, placer, pointed_thing)
 end
