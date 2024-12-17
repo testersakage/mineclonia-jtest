@@ -182,7 +182,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	},
 	drawtype = "nodebox",
 	paramtype = "light",
-	paramtype2 = "facedir",
+	paramtype2 = "wallmounted",
 	sunlight_propagates = true,
 	node_box = node_box,
 	selection_box = node_box,
