@@ -45,12 +45,12 @@ local pot_face_rotations = {
 
 for name, def in pairs(mcl_pottery_sherds.defs) do
 	minetest.register_craftitem("mcl_pottery_sherds:"..name, {
-		description = ""..C(mcl_colors.YELLOW, S("@1 Pottery Sherd", def.description)),
+		description = S("@1 Pottery Sherd", def.description),
 		_tt_help = S("Used for crafting decorated pots"),
 		_doc_items_create_entry = false,
 		inventory_image = "mcl_pottery_sherds_"..name..".png",
 		wield_image = "mcl_pottery_sherds_"..name..".png",
-		groups = { pottery_sherd = 1, decorated_pot_recipe = 1 },
+		groups = { pottery_sherd = 1, decorated_pot_recipe = 1, rarity = 1 },
 		_mcl_pottery_sherd_name = name,
 	})
 end

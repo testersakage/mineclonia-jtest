@@ -1,5 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
 
 mcl_armor.register_set({
 	name = "gold",
@@ -29,11 +28,12 @@ mcl_armor.register_set({
 mcl_armor.register_set({
 	name = "chain",
 	descriptions = {
-		head = ""..C(mcl_colors.YELLOW, S("Chainmail Helmet")),
-		torso = ""..C(mcl_colors.YELLOW, S("Chainmail Chestplate")),
-		legs = ""..C(mcl_colors.YELLOW, S("Chainmail Leggings")),
-		feet = ""..C(mcl_colors.YELLOW, S("Chainmail Boots")),
+		head = S("Chainmail Helmet"),
+		torso = S("Chainmail Chestplate"),
+		legs = S("Chainmail Leggings"),
+		feet = S("Chainmail Boots"),
 	},
+	groups = {rarity = 1},
 	durability = 240,
 	enchantability = 12,
 	points = {
@@ -223,11 +223,11 @@ mcl_enchanting.enchantments.thorns = {
 -- Elytra
 
 minetest.register_tool("mcl_armor:elytra", {
-	description = ""..C(mcl_colors.DARK_PURPLE, S("Elytra")),
+	description = S("Elytra"),
 	_doc_items_longdesc = mcl_armor.longdesc,
 	_doc_items_usagehelp = mcl_armor.usage,
 	inventory_image = "mcl_armor_inv_elytra.png",
-	groups = {armor = 1, armor_torso = 1, non_combat_torso = 1, mcl_armor_uses = 10, elytra = 1, enchantability = 9},
+	groups = {armor = 1, armor_torso = 1, non_combat_torso = 1, mcl_armor_uses = 10, elytra = 1, enchantability = 9, rarity = 3},
 	sounds = {
 		_mcl_armor_equip = "mcl_armor_equip_leather",
 		_mcl_armor_unequip = "mcl_armor_unequip_leather",
