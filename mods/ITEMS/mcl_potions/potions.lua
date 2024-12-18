@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 mcl_potions.registered_potions = {}
 -- shorthand
@@ -618,7 +619,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "ominous",
-	desc_whole = S("Ominous Bottle"),
+	desc_whole = ""..C(mcl_colors.YELLOW, S("Ominous Bottle")),
 	_tt = nil,
 	_longdesc = S("Attracts danger."),
 	image = "mcl_potions_ominous_potion.png",

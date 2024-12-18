@@ -1,3 +1,4 @@
+mcl_banners = {}
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
@@ -16,8 +17,6 @@ local function round(num, idp)
 	local mult = 10^(idp or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
-
-mcl_banners = {}
 
 mcl_banners.colors = {
 	-- Format:
