@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 local mod_screwdriver = minetest.get_modpath("screwdriver")
 local on_rotate
@@ -365,8 +366,8 @@ minetest.register_craftitem("mcl_nether:netherbrick", {
 })
 
 minetest.register_craftitem("mcl_nether:netherite_upgrade_template", {
-	description	  = S("Netherite Upgrade Template"),
-	--_tt_help = S("Netherite Upgrade Template").."\n\n"..
+	description	= ""..C(mcl_colors.YELLOW, S("Netherite Upgrade Template")),
+	_tt_help = S("Smithing Template").."\n\n"..
 	minetest.colorize(mcl_colors.GRAY, S("Applies to:")).."\n"..minetest.colorize(mcl_colors.BLUE, " "..S("Diamond Armor")).."\n"..
 	minetest.colorize(mcl_colors.BLUE, " "..S("Diamond Tools")).."\n"..
 	minetest.colorize(mcl_colors.GRAY, S("Ingredients:")).."\n"..minetest.colorize(mcl_colors.BLUE, " "..S("Netherite Ingot")),

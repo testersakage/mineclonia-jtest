@@ -62,7 +62,23 @@ mcl_armor = {
 mcl_armor.trims = {
 	core_textures	= {},
 	blacklisted		= {["mcl_armor:elytra"]=true, ["mcl_armor:elytra_enchanted"]=true},
-	overlays        = {"sentry","dune","coast","wild","tide","ward","vex","rib","snout","eye","spire","silence","wayfinder","bolt","flow"},
+	overlays        = {
+		["sentry"] 	  = { dupe_item="mcl_core:cobble" },
+		["dune"] 	  = { dupe_item="mcl_core:sandstone" },
+		["coast"] 	  = { dupe_item="mcl_core:cobble" },
+		["wild"] 	  = { dupe_item="mcl_core:mossycobble" },
+		["tide"] 	  = { dupe_item="mcl_ocean:prismarine" },
+		["ward"] 	  = { dupe_item="mcl_deepslate:deepslate_cobbled", rarity_color="AQUA" },
+		["vex"] 	  = { dupe_item="mcl_core:cobble", rarity_color="AQUA" },
+		["rib"] 	  = { dupe_item="mcl_nether:netherrack" },
+		["snout"] 	  = { dupe_item="mcl_blackstone:blackstone" },
+		["eye"] 	  = { dupe_item="mcl_end:end_stone", rarity_color="AQUA" },
+		["spire"] 	  = { dupe_item="mcl_end:purpur_block", rarity_color="AQUA" },
+		["silence"]   = { dupe_item="mcl_deepslate:deepslate_cobbled", rarity_color="DARK_PURPLE" },
+		["wayfinder"] = { dupe_item="mcl_colorblocks:hardened_clay" },
+		["bolt"]      = { dupe_item="mcl_copper:block" },
+		["flow"]      = { dupe_item="mcl_mobitems:breeze_rod" }
+	},
 	colors			= {["amethyst"]="#8246a5",["gold"]="#ce9627",["emerald"]="#1b9958",["copper"]="#c36447",["diamond"]="#5faed8",["iron"]="#938e88",["lapis"]="#1c306b",["netherite"]="#302a26",["quartz"]="#c9bcb9",["redstone"]="#af2c23"},
 }
 
