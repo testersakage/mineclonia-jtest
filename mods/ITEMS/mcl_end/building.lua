@@ -1,5 +1,6 @@
 -- Building blocks and decorative nodes
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 local mod_screwdriver = minetest.get_modpath("screwdriver")
 
@@ -132,7 +133,7 @@ minetest.register_node("mcl_end:end_rod", {
 })
 
 minetest.register_node("mcl_end:dragon_egg", {
-	description = S("Dragon Egg"),
+	description = ""..C(mcl_colors.DARK_PURPLE, S("Dragon Egg")),
 	_doc_items_longdesc = S("A dragon egg is a decorative item which can be placed."),
 	tiles = {
 		"mcl_end_dragon_egg.png",

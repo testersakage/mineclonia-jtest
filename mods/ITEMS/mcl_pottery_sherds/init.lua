@@ -1,6 +1,7 @@
 mcl_pottery_sherds = {}
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
+local C = minetest.colorize
 
 mcl_pottery_sherds.defs = {
 	["angler"] = { description = S("Angler") },
@@ -44,7 +45,7 @@ local pot_face_rotations = {
 
 for name, def in pairs(mcl_pottery_sherds.defs) do
 	minetest.register_craftitem("mcl_pottery_sherds:"..name, {
-		description = S("@1 Pottery Sherd", def.description),
+		description = ""..C(mcl_colors.YELLOW, S("@1 Pottery Sherd", def.description)),
 		_tt_help = S("Used for crafting decorated pots"),
 		_doc_items_create_entry = false,
 		inventory_image = "mcl_pottery_sherds_"..name..".png",

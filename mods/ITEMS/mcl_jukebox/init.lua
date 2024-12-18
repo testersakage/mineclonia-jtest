@@ -39,7 +39,7 @@ function mcl_jukebox.register_record_definition(def)
 	local usagehelp = S("Place a music disc into an empty jukebox to play the music. Use the jukebox again to retrieve the music disc. The music can only be heard by you, not by other players.")
 	minetest.register_craftitem(":"..itemstring, {
 		description =
-			C(mcl_colors.AQUA, S("Music Disc")) .. "\n" ..
+			C(mcl_colors[def.rarity_color or "YELLOW"], S("Music Disc")) .. "\n" ..
 			C(mcl_colors.GRAY, S("@1—@2", def.author, def.title)),
 		_doc_items_create_entry = true,
 		_doc_items_entry_name = entryname,
