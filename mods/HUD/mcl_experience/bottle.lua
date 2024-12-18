@@ -54,6 +54,7 @@ end
 
 minetest.register_craftitem("mcl_experience:bottle", {
 	description = S("Bottle o' Enchanting"),
+	groups = {rarity = 1},
 	inventory_image = "mcl_experience_bottle.png",
 	wield_image = "mcl_experience_bottle.png",
 	on_use = function(itemstack, placer, _)

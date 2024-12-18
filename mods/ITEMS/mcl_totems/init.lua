@@ -1,5 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
+
 -- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
 local hud_elem_type_field = "type"
 if not minetest.features.hud_def_type_field then
@@ -13,14 +13,14 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 minetest.register_craftitem("mcl_totems:totem", {
-	description = ""..C(mcl_colors.YELLOW, S("Totem of Undying")),
+	description = S("Totem of Undying"),
 	_tt_help = minetest.colorize(mcl_colors.GREEN, S("Protects you from death while wielding it")),
 	_doc_items_longdesc = S("A totem of undying is a rare artifact which may safe you from certain death."),
 	_doc_items_usagehelp = S("The totem only works while you hold it in your hand. If you receive fatal damage, you are saved from death and you get a second chance with 1 HP. The totem is destroyed in the process, however."),
 	inventory_image = "mcl_totems_totem.png",
 	wield_image = "mcl_totems_totem.png",
 	stack_max = 1,
-	groups = {combat_item = 1, offhand_item = 1},
+	groups = {combat_item = 1, offhand_item = 1, rarity = 1},
 	_mcl_wieldview_item = "mcl_totems:totem_wielded",
 })
 minetest.register_alias("mobs_mc:totem", "mcl_totems:totem")

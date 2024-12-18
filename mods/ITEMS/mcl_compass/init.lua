@@ -224,7 +224,7 @@ mcl_compass.register_compass("recovery_compass", {
 		_doc_items_usagehelp = S("Recovery Compasses always point to the location of your last death, in case you haven't died yet, it will just randomly spin around"),
 		inventory_image = "mcl_compass_recovery_compass_01.png",
 		wield_image = "mcl_compass_recovery_compass_01.png",
-		groups = { compass = 3 },
+		groups = { compass = 3, rarity = 1 },
 		_mcl_compass_update = update_recovery_compass,
 		_mcl_compass_img_fmt = "mcl_compass_recovery_compass_%02d.png",
 	}

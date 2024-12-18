@@ -7,11 +7,11 @@ local heavy_core_longdesc = S("Solid Blocks of Steel. These are only forged if t
 local mace_longdesc = S("The mace is a slow melee weapon that deals incredible damage. “dig” key to use it. This weapon has a cooldown of 1.6 seconds, but if you fall the mace will deal more damage than if you are on the ground. The further you fall the more damage done. If you hit a mob or player then you will receive no fall damage, but beware. If you miss you will die. ")
 
 minetest.register_node("mcl_tools:heavy_core", {
-    description = "" ..minetest.colorize(mcl_colors.DARK_PURPLE, S("Heavy Core")),
+    description = S("Heavy Core"),
     _doc_long_desc = heavy_core_longdesc,
     tiles = {"mcl_tools_heavy_core_top.png", "mcl_tools_heavy_core_bottom.png", "mcl_tools_heavy_core_side.png"},
     is_ground_content = false,
-    groups = {pickaxey = 1, deco_block = 1 },
+    groups = {pickaxey = 1, deco_block = 1, rarity = 3},
     sounds = mcl_sounds.node_sound_stone_defaults(),
     paramtype2 = "facedir",
     drawtype = "nodebox",
@@ -28,10 +28,10 @@ minetest.register_node("mcl_tools:heavy_core", {
 
 --Mace
 minetest.register_tool("mcl_tools:mace", {
-	description = "" ..minetest.colorize(mcl_colors.DARK_PURPLE, S("Mace")),--S("Mace"),
+	description = S("Mace"),
 	_doc_items_longdesc = mace_longdesc,
 	inventory_image = "mcl_tools_mace.png",
-	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10, sword=1 },
+	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10, sword=1, rarity = 3 },
 	tool_capabilities = {
 		full_punch_interval = 1.6,
 		max_drop_level = 1,
