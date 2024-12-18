@@ -8,27 +8,27 @@ local function readable_name(str)
 end
 
 mcl_banners.patterns = {
-	["thing"] 		 = { craft_item="mcl_core:apple_gold_enchanted", rarity_color="AQUA" },
-	["skull"] 		 = { craft_item="mcl_heads:wither_skeleton", rarity_color="AQUA" },
-	["creeper"] 	 = { craft_item="mcl_heads:creeper", rarity_color="YELLOW" },
+	["thing"] 		 = { craft_item="mcl_core:apple_gold_enchanted", rarity=2 },
+	["skull"] 		 = { craft_item="mcl_heads:wither_skeleton", rarity=2 },
+	["creeper"] 	 = { craft_item="mcl_heads:creeper", rarity=1 },
 	["flower"] 		 = { craft_item="mcl_flowers:oxeye_daisy" },
 	["bricks"] 		 = { craft_item="mcl_core:brick_block" },
 	["curly_border"] = { craft_item="mcl_core:vine" },
 	["globe"] 		 = {},
-	["piglin"] 		 = { rarity_color="YELLOW" },
-	["guster"] 		 = { rarity_color="AQUA" },
-	["flow"] 		 = { rarity_color="AQUA" }
+	["piglin"] 		 = { rarity=1 },
+	["guster"] 		 = { rarity=2 },
+	["flow"] 		 = { rarity=2 }
 }
 
 for pattern, defs in pairs(mcl_banners.patterns) do
 	local color = mcl_colors[defs.rarity_color or "WHITE"]
 	minetest.register_craftitem("mcl_banners:pattern_"..pattern,{
-		description = C(color, S(readable_name(pattern).." Banner Pattern")),
+		description = S(readable_name(pattern).." Banner Pattern"),
 		_tt_help = C(mcl_colors.GRAY, S("Can be used to craft special banner designs on the loom")),
 		_doc_items_longdesc = S("Special Banner Pattern"),
 		inventory_image = "mcl_banners_pattern_"..pattern..".png",
 		wield_image = "mcl_banners_pattern_"..pattern..".png",
-		groups = { banner_pattern = 1 },
+		groups = { banner_pattern = 1, rarity = defs.rarity or 0 },
 		_pattern = pattern,
 	})
 

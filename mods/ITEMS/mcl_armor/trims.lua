@@ -9,15 +9,13 @@ local function readable_name(str)
 end
 
 for template_name, template_defs in pairs(mcl_armor.trims.overlays) do
-	local color = mcl_colors[template_defs.rarity_color]
-	if not color then color = mcl_colors.YELLOW end
 	minetest.register_craftitem(mod_registername .. template_name, {
-		description = ""..C(color, S("@1 Armor Trim", readable_name(template_name))),
+		description = S("@1 Armor Trim", readable_name(template_name)),
 		_tt_help = S("Smithing Template").."\n\n"..
-		minetest.colorize(mcl_colors.GRAY, S("Applies to:")).."\n"..minetest.colorize(mcl_colors.BLUE, " "..S("Armor")).."\n"..
-		minetest.colorize(mcl_colors.GRAY, S("Ingredients:")).."\n"..minetest.colorize(mcl_colors.BLUE, " "..S("Ingot & Crystals")),
+		C(mcl_colors.GRAY, S("Applies to:")).."\n"..C(mcl_colors.BLUE, " "..S("Armor")).."\n"..
+		C(mcl_colors.GRAY, S("Ingredients:")).."\n"..C(mcl_colors.BLUE, " "..S("Ingot & Crystals")),
 		inventory_image  = template_name .. "_armor_trim_smithing_template.png",
-		groups = { smithing_template  = 1 },
+		groups = { smithing_template = 1, rarity = template_defs.rarity or 1 },
 	})
 
 	if template_defs.dupe_item then

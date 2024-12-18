@@ -1,6 +1,5 @@
 -- Other nodes
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
 
 local mod_screwdriver = minetest.get_modpath("screwdriver")
 
@@ -126,7 +125,7 @@ mcl_flowerpots.register_potted_flower("mcl_core:deadbush", {
 })
 
 minetest.register_node("mcl_core:barrier", {
-	description = ""..C(mcl_colors.DARK_PURPLE, S("Barrier")),
+	description = S("Barrier"),
 	_doc_items_longdesc = S("Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."),
 	_doc_items_usagehelp = S("When you hold a barrier in hand, you reveal all placed barriers in a short distance around you."),
 	drawtype = "airlike",
@@ -136,7 +135,7 @@ minetest.register_node("mcl_core:barrier", {
 	tiles = {"blank.png"},
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1},
+	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1, rarity = 3},
 	on_blast = function() end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
@@ -181,7 +180,7 @@ minetest.register_node("mcl_core:barrier", {
 -- This node only exists because Minetest does not have support for “dimensions” yet and needs to
 -- be removed when support for this is implemented.
 minetest.register_node("mcl_core:realm_barrier", {
-	description = ""..C(mcl_colors.DARK_PURPLE, S("Realm Barrier")),
+	description = S("Realm Barrier"),
 	_doc_items_create_entry = false,
 	drawtype = "airlike",
 	paramtype = "light",
@@ -193,7 +192,7 @@ minetest.register_node("mcl_core:realm_barrier", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	pointable = false,
-	groups = {not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1},
+	groups = {not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1, rarity = 3},
 	on_blast = function() end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
@@ -217,7 +216,7 @@ local light_block_pattern = "^mcl_core:light_(%d+)$"
 
 for i = 0, 14 do --minetest.LIGHT_MAX
 	minetest.register_node("mcl_core:light_" .. i, {
-		description = ""..C(mcl_colors.DARK_PURPLE, S("Light")),
+		description = S("Light"),
 		_doc_items_longdesc = S("Lights are invisible blocks. They are used to light up adventure maps and the like."),
 		_doc_items_usagehelp = S("When you hold a light in hand, you reveal all placed lights in a short distance around you."),
 		drawtype = "airlike",
@@ -231,7 +230,7 @@ for i = 0, 14 do --minetest.LIGHT_MAX
 		wield_image = "mcl_core_light_" .. i .. ".png",
 		sunlight_propagates = true,
 		is_ground_content = false,
-		groups = {creative_breakable = 1, not_solid = 1, light_block = i + 1},
+		groups = {creative_breakable = 1, not_solid = 1, light_block = i + 1, rarity = 3},
 		on_blast = function() end,
 		on_use = function(itemstack, user, pointed_thing)
 			-- user:get_player_control() returns {} for non players, so we don't need user:is_player()

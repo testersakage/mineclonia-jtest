@@ -1,7 +1,5 @@
 -- mods/default/craftitems.lua
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
-
 --
 -- Crafting items
 --
@@ -173,12 +171,12 @@ minetest.register_craftitem("mcl_core:apple_gold", {
 })
 
 minetest.register_craftitem("mcl_core:apple_gold_enchanted", {
-	description = ""..C(mcl_colors.AQUA, S("Enchanted Golden Apple")),
+	description = S("Enchanted Golden Apple"),
 	_doc_items_longdesc = S("Golden apples are precious food items which can be eaten."),
 	wield_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
 	inventory_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
 	on_place = eat_gapple,
 	on_secondary_use = eat_gapple,
-	groups = { food = 2, eatable = 4, can_eat_when_full = 1 },
+	groups = { food = 2, eatable = 4, can_eat_when_full = 1, rarity = 2 },
 	_mcl_saturation = 9.6,
 })
