@@ -135,7 +135,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 })
 local conduit_box = { -0.25, -0.25, -0.25, 0.25, 0.25, 0.25, }
 minetest.register_node("mcl_conduits:conduit", {
-	description = ""..C(mcl_colors.YELLOW, S("Conduit")),
+	description = S("Conduit"),
 	_doc_longdesc = S("A conduit provides certain status effects to nearby players much like a beacon but under water"),
 	drawtype = "nodebox",
 	node_box = {
@@ -144,7 +144,7 @@ minetest.register_node("mcl_conduits:conduit", {
 	},
 	collisionbox = conduit_box,
 	selectionbox = conduit_box,
-	groups = { pickaxey = 1, deco_block = 1},
+	groups = { pickaxey = 1, deco_block = 1, rarity = 1 },
 	light_source = minetest.LIGHT_MAX,
 	tiles = { "mcl_conduit_conduit_node.png", },
 	_mcl_hardness = 3,
