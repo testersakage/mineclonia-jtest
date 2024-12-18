@@ -95,13 +95,13 @@ msgid "Crimson Trapdoor"
 msgstr "绯红活板门"
 
 msgid "Stripped Crimson Bark"
-msgstr ""
+msgstr "剥落的深红色树皮"
 
 msgid "Stripped Crimson Log"
 msgstr "去皮绯红原木"
 
 msgid "Stripped Warped Bark"
-msgstr ""
+msgstr "剥落的扭曲树皮"
 
 msgid "Stripped Warped Log"
 msgstr "去皮的扭曲原木"

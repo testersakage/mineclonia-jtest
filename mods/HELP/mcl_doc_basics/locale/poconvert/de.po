@@ -941,7 +941,7 @@ msgid "Other actions, like walking, do not exaust you."
 msgstr "Andere Aktionen, wie gehen, erschöpfen Sie nicht."
 
 msgid "Mobs"
-msgstr "Mobs"
+msgstr "Kreaturen"
 
 msgid "Mobs are the living beings in the world. This includes animals and monsters."
 msgstr "Mobs sind die lebenden Kreaturen in der Welt. Das schließt Tiere und Monster ein."

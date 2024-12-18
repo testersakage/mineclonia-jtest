@@ -107,7 +107,7 @@ msgid "Mangrove leaves are grown from Mangrove trees."
 msgstr "红树树叶从红树树上生长出来。"
 
 msgid "Stripped Mangrove Bark"
-msgstr ""
+msgstr "剥落的红树林树皮"
 
 msgid "Stripped Mangrove Log"
 msgstr "去皮红树原木"

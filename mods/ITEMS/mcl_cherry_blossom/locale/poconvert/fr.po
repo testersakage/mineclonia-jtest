@@ -77,7 +77,7 @@ msgid "Cherry leaves are grown from Cherry trees."
 msgstr "Les feuilles de cerisier poussent sur des cerisiers."
 
 msgid "Stripped Cherry Bark"
-msgstr ""
+msgstr "Écorce de cerisier décapée"
 
 msgid "Stripped Cherry Log"
 msgstr "Bûche de cerisier écorcée"

@@ -509,37 +509,37 @@ msgid "Spruce leaves are grown from Spruce trees."
 msgstr "云杉树叶从云杉树上生长出来。"
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "剥落的金合欢树皮"
 
 msgid "Stripped Acacia Log"
 msgstr "去皮的金合欢原木"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "剥落的桦树皮"
 
 msgid "Stripped Birch Log"
 msgstr "去皮的白桦原木"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "剥落的深色橡木树皮"
 
 msgid "Stripped Dark Oak Log"
 msgstr "去皮的深色橡木原木"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "剥落的丛林树木树皮"
 
 msgid "Stripped Jungle Log"
 msgstr "去皮的丛林原木"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "剥落的橡木树皮"
 
 msgid "Stripped Oak Log"
 msgstr "去皮的橡木原木"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "剥落的云杉树皮"
 
 msgid "Stripped Spruce Log"
 msgstr "去皮的云杉原木"

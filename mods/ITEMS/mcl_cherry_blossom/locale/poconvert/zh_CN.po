@@ -77,7 +77,7 @@ msgid "Cherry leaves are grown from Cherry trees."
 msgstr "樱桃树叶长在樱桃树上。"
 
 msgid "Stripped Cherry Bark"
-msgstr ""
+msgstr "剥落的樱桃树皮"
 
 msgid "Stripped Cherry Log"
 msgstr "去皮樱桃原木"

@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Daylight Sensor"
-msgstr "Capteur de luminosité"
+msgstr "Capteur de lumière"
 
 msgid "Provides redstone power when in sunlight"
 msgstr "Fournit une puissance de redstone en plein soleil"

@@ -41,7 +41,7 @@ msgid "Combat"
 msgstr "Kampf"
 
 msgid "Mobs"
-msgstr "Mobs"
+msgstr "Kreaturen"
 
 msgid "Brewing"
 msgstr "Gebräu"

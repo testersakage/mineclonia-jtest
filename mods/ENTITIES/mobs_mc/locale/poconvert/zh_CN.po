@@ -38,7 +38,7 @@ msgid "Creeper"
 msgstr "苦力怕"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "苦力怕"
 
 msgid "Dolphin"
 msgstr "海豚"
@@ -155,22 +155,22 @@ msgid "Wither Skeleton"
 msgstr "凋灵骷髅"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "大史莱姆"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "小史莱姆"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "极小史莱姆"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "大型岩浆怪"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "小型岩浆怪"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "微型岩浆怪"
 
 msgid "Magma Cube"
 msgstr "岩浆怪"
@@ -308,7 +308,7 @@ msgid "Wolf"
 msgstr "狼"
 
 msgid "Dog"
-msgstr ""
+msgstr "狗"
 
 msgid "Zombie"
 msgstr "僵尸"

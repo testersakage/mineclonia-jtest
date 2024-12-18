@@ -254,17 +254,17 @@ msgid "White Terracotta Slab"
 msgstr "白色陶瓦台阶"
 
 msgid "White Terracotta Stairs"
-msgstr ""
+msgstr "白色陶瓦楼梯"
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "黄色混凝土台阶"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "黄色混凝土楼梯"
 
 msgid "Yellow Terracotta Slab"
-msgstr ""
+msgstr "黄色陶瓦台阶"
 
 msgid "Yellow Terracotta Stairs"
-msgstr ""
+msgstr "黄色陶瓦楼梯"
 
