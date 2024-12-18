@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_minecarts x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-18 10:12+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_minecarts/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Sneak-click to remove"
 msgstr "Cliquer furtivement pour supprimer"
@@ -41,13 +43,15 @@ msgid "Sneak to dismount"
 msgstr "S'accroupir pour descendre"
 
 msgid "Minecart with Chest"
-msgstr "Wagonnet avec Coffre"
+msgstr "Wagonnet de stockage"
 
 msgid "Minecart with Furnace"
-msgstr "Wagonnet avec Four"
+msgstr "Wagonnet motorisé"
 
 msgid "A minecart with furnace is a vehicle that travels on rails. It can propel itself with fuel."
-msgstr "Une wagonnet avec un four est un véhicule qui se déplace sur rails. Il peut se propulser avec du carburant."
+msgstr ""
+"Une wagonnet motorisé est un véhicule qui se déplace sur rails. Il peut se "
+"propulser avec du carburant."
 
 msgid "Place it on rails. If you give it some coal, the furnace will start burning for a long time and the minecart will be able to move itself. Punch it to get it moving."
 msgstr "Placez-le sur des rails. Si vous lui donnez du charbon, le four commencera à brûler pendant longtemps et le wagonnet pourra se déplacer. Frappez-le pour le faire bouger."
@@ -56,25 +60,27 @@ msgid "To obtain the minecart and furnace, punch them while holding down the sne
 msgstr "Pour obtenir le wagonnet et le four, frappez-les tout en maintenant la touche furtive enfoncée."
 
 msgid "Minecart with Command Block"
-msgstr "Wagonnet avec Bloc de Commande"
+msgstr "Wagonnet à bloc de commande"
 
 msgid "Minecart with Hopper"
-msgstr "Wagonnet avec Entonoir"
+msgstr "Wagonnet à entonnoir"
 
 msgid "Minecart with TNT"
-msgstr "Wagonnet avec TNT"
+msgstr "Wagonnet à TNT"
 
 msgid "Can be ignited by tools or powered activator rail"
 msgstr "Peut être allumé par des outils ou un rail d'activation motorisé"
 
 msgid "A minecart with TNT is an explosive vehicle that travels on rail."
-msgstr "Un wagonnet avec de la TNT est un véhicule explosif qui se déplace sur rail."
+msgstr "Un wagonnet à TNT est un véhicule explosif qui se déplace sur rail."
 
 msgid "Place it on rails. Punch it to move it. The TNT is ignited with a flint and steel or when the minecart is on an powered activator rail."
 msgstr "Placez-le sur des rails. Frappez-le pour le déplacer. Le TNT est allumé avec un briquet ou lorsque le minecart est sur un rail d'activation alimenté."
 
 msgid "To obtain the minecart and TNT, punch them while holding down the sneak key. You can't do this if the TNT was ignited."
-msgstr "Pour obtenir la wagonnet et la TNT, frappez-les tout en maintenant la touche furtive enfoncée. Vous ne pouvez pas faire cela si le TNT a été allumé."
+msgstr ""
+"Pour obtenir le wagonnet et le TNT, frappez-les tout en maintenant la touche "
+"furtive enfoncée. Vous ne pouvez pas faire cela si le TNT a été allumé."
 
 msgid "Place them on the ground to build your railway, the rails will automatically connect to each other and will turn into curves, T-junctions, crossings and slopes as needed."
 msgstr "Placez-les sur le sol pour construire votre chemin de fer, les rails se connecteront automatiquement les uns aux autres et se transformeront en courbes, en jonctions en T, en traversées et en pentes au besoin."
@@ -89,19 +95,22 @@ msgid "Rails can be used to build transport tracks for minecarts. Normal rails s
 msgstr "Les rails peuvent être utilisés pour construire des voies de transport pour les wagonnets. Les rails ralentissent légèrement les wagonnets en raison de la friction."
 
 msgid "Powered Rail"
-msgstr "Rail allimenté"
+msgstr "Rail de propulsion"
 
 msgid "Speed up when powered, slow down when not powered"
-msgstr "Accélérez lorsqu'il est alimenté, ralentissez lorsqu'il n'est pas alimenté"
+msgstr "Accélérez lorsqu'il est alimenté, ralentissez lorsqu'il ne l'est pas"
 
 msgid "Rails can be used to build transport tracks for minecarts. Powered rails are able to accelerate and brake minecarts."
-msgstr "Les rails peuvent être utilisés pour construire des voies de transport pour les wagonnets. Les rails motorisés sont capables d'accélérer et de freiner les wagonnets."
+msgstr ""
+"Les rails peuvent être utilisés pour construire des voies de transport pour "
+"les wagonnets. Les rails de propulsion sont capables d'accélérer et de "
+"freiner les wagonnets."
 
 msgid "Without redstone power, the rail will brake minecarts. To make this rail accelerate minecarts, power it with redstone power."
 msgstr "Sans énergie de redstone, le rail freinera les wagonnets. Pour que ce rail accélère les minecarts, alimentez-le avec une source d'énergie redstone."
 
 msgid "Activator Rail"
-msgstr "Rail d'activation"
+msgstr "Rail déclencheur"
 
 msgid "Activates minecarts when powered"
 msgstr "Active les wagonnets lorsqu'il est alimenté"
@@ -113,7 +122,7 @@ msgid "To make this rail activate minecarts, power it with redstone power and se
 msgstr "Pour activer ce rail, activez les wagonnets, alimentez-le avec de l'énergie redstone et envoyez un wagonnet sur ce morceau de rail."
 
 msgid "Detector Rail"
-msgstr "Rail de détection"
+msgstr "Rail détecteur"
 
 msgid "Emits redstone power when a minecart is detected"
 msgstr "Émet de l'énergie redstone lorsqu'un wagonnet est détecté"
@@ -123,4 +132,3 @@ msgstr "Les rails peuvent être utilisés pour construire des voies de transport
 
 msgid "To detect a minecart and provide redstone power, connect it to redstone trails or redstone mechanisms and send any minecart over the rail."
 msgstr "Pour détecter un wagonnet et fournir une alimentation redstone, connectez-le aux câble redstone ou aux mécanismes redstone et envoyez n'importe quel wagonnet sur le rail."
-

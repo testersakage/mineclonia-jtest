@@ -3,21 +3,24 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-18 10:12+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_nether/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Glowstone"
-msgstr "Pierre Lumineuse"
+msgstr "Pierre lumineuse"
 
 msgid "Glowstone is a naturally-glowing block which is home to the Nether."
-msgstr "La Pierre Lumineuse est un bloc naturellement brillant originaire du Nether."
+msgstr ""
+"La Pierre lumineuse est un bloc naturellement brillant originaire du Nether."
 
 msgid "Nether Quartz Ore"
 msgstr "Minerai de quartz du Nether"
@@ -32,10 +35,12 @@ msgid "Ancient debris can be found in the nether and is very very rare."
 msgstr "Les débris antiques se trouvent dans le Nether et sont très rares."
 
 msgid "Block of Netherite"
-msgstr "Bloc de netherite"
+msgstr "Bloc de Netherite"
 
 msgid "Netherite block is very hard and can be made of 9 netherite ingots."
-msgstr "Les blocs de netherite sont très durs et peuvent être fabriqués à partir de 9 lingots de netherite."
+msgstr ""
+"Les blocs de Netherite sont très durs et peuvent être fabriqués à partir de "
+"9 lingots de netherite."
 
 msgid "Netherrack"
 msgstr "Netherrack"
@@ -44,7 +49,7 @@ msgid "Netherrack is a stone-like block home to the Nether. Starting a fire on t
 msgstr "La netherrack est un bloc de pierre originaire du Nether. Démarrer un feu sur ce bloc créera un feu éternel."
 
 msgid "Magma Block"
-msgstr "Bloc de Magma"
+msgstr "Bloc de magma"
 
 msgid "Burns your feet"
 msgstr "Vous brûle les pieds"
@@ -59,31 +64,35 @@ msgid "Reduces walking speed"
 msgstr "Réduit la vitesse de marche"
 
 msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "Le sable de l'âme est un bloc du Nether. On ne peut marcher que lentement sur le sable de l'âme. L'effet de ralentissement est amplifié lorsque le sable de l'âme est au-dessus de la glace, de la glace tassée ou d'un bloc de slime."
+msgstr ""
+"Le sable des âmes est un bloc du Nether. On ne peut marcher que lentement "
+"sur le sable des âmes. L'effet de ralentissement est amplifié lorsque le "
+"sable des âmes est au-dessus de la glace, de la glace tassée ou d'un bloc de "
+"slime."
 
 msgid "Nether Brick Block"
-msgstr "Bloc de Briques du Nether"
+msgstr "Bloc de briques du Nether"
 
 msgid "Red Nether Brick Block"
-msgstr "Bloc de Briques Rouges du Nether"
+msgstr "Bloc de briques rouges du Nether"
 
 msgid "Chiseled Nether Brick Block"
-msgstr "Bloc de briques du Nether sculptées"
+msgstr "Bloc de briques du Nether sculpté"
 
 msgid "Cracked Nether Bricks"
 msgstr "Briques du Nether craquelée"
 
 msgid "Nether Wart Block"
-msgstr "Bloc de Verrues du Nether"
+msgstr "Bloc de verrues du Nether"
 
 msgid "A nether wart block is a purely decorative block made from nether wart."
 msgstr "Un bloc de verrues du Nether est un bloc purement décoratif fabriqué à partir de verrues du Nether."
 
 msgid "Block of Quartz"
-msgstr "Bloc de Quartz"
+msgstr "Bloc de quartz"
 
 msgid "Chiseled Quartz Block"
-msgstr "Bloc de Quartz sculpté"
+msgstr "Bloc de quartz sculpté"
 
 msgid "Pillar Quartz Block"
 msgstr "Bloc de Quartz rayé"
@@ -198,4 +207,3 @@ msgstr "Les verrues du Nether sont des plantes originaires du Nether. Elles peuv
 
 msgid "Place this item on soul sand to plant it and watch it grow."
 msgstr "Placez cet article sur du sable d'âme pour le planter et regardez-le grandir."
-
