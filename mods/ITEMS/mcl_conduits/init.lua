@@ -1,6 +1,7 @@
 mcl_conduits = {}
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
+local C = minetest.colorize
 
 local check_interval = 5
 local conduit_nodes = { "mcl_ocean:prismarine",  "mcl_ocean:prismarine_brick", "mcl_ocean:prismarine_dark", "mcl_ocean:sea_lantern" }
@@ -134,7 +135,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 })
 local conduit_box = { -0.25, -0.25, -0.25, 0.25, 0.25, 0.25, }
 minetest.register_node("mcl_conduits:conduit", {
-	description = S("Conduit"),
+	description = ""..C(mcl_colors.YELLOW, S("Conduit")),
 	_doc_longdesc = S("A conduit provides certain status effects to nearby players much like a beacon but under water"),
 	drawtype = "nodebox",
 	node_box = {

@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 mcl_compass = {}
 
@@ -218,7 +219,7 @@ mcl_compass.register_compass("recovery_compass", {
 	name = "compass_recovery",
 	name_fmt = "mcl_compass:%d_recovery",
 	overrides = {
-		description = S("Recovery Compass"),
+		description = ""..C(mcl_colors.YELLOW, S("Recovery Compass")),
 		_tt_help = S("Points to your last death location"),
 		_doc_items_longdesc = S("Recovery Compasses are compasses that point to your last death location"),
 		_doc_items_usagehelp = S("Recovery Compasses always point to the location of your last death, in case you haven't died yet, it will just randomly spin around"),

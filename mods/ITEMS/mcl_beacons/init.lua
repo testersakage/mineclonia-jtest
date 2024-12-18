@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 mcl_beacons = {
 	blocks ={"mcl_core:diamondblock","mcl_core:ironblock","mcl_core:goldblock","mcl_core:emeraldblock","mcl_nether:netheriteblock"},
@@ -254,7 +255,7 @@ local function generate_beacon_formspec (pos, meta)
 end
 
 minetest.register_node("mcl_beacons:beacon", {
-	description = S("Beacon"),
+	description = ""..C(mcl_colors.AQUA, S("Beacon")),
 	drawtype = "mesh",
 	collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
 	mesh = "mcl_beacon.b3d",

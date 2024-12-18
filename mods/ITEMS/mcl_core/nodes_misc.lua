@@ -1,5 +1,6 @@
 -- Other nodes
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 local mod_screwdriver = minetest.get_modpath("screwdriver")
 
@@ -125,7 +126,7 @@ mcl_flowerpots.register_potted_flower("mcl_core:deadbush", {
 })
 
 minetest.register_node("mcl_core:barrier", {
-	description = S("Barrier"),
+	description = ""..C(mcl_colors.DARK_PURPLE, S("Barrier")),
 	_doc_items_longdesc = S("Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."),
 	_doc_items_usagehelp = S("When you hold a barrier in hand, you reveal all placed barriers in a short distance around you."),
 	drawtype = "airlike",
@@ -180,7 +181,7 @@ minetest.register_node("mcl_core:barrier", {
 -- This node only exists because Minetest does not have support for “dimensions” yet and needs to
 -- be removed when support for this is implemented.
 minetest.register_node("mcl_core:realm_barrier", {
-	description = S("Realm Barrier"),
+	description = ""..C(mcl_colors.DARK_PURPLE, S("Realm Barrier")),
 	_doc_items_create_entry = false,
 	drawtype = "airlike",
 	paramtype = "light",
@@ -216,7 +217,7 @@ local light_block_pattern = "^mcl_core:light_(%d+)$"
 
 for i = 0, 14 do --minetest.LIGHT_MAX
 	minetest.register_node("mcl_core:light_" .. i, {
-		description = S("Light"),
+		description = ""..C(mcl_colors.DARK_PURPLE, S("Light")),
 		_doc_items_longdesc = S("Lights are invisible blocks. They are used to light up adventure maps and the like."),
 		_doc_items_usagehelp = S("When you hold a light in hand, you reveal all placed lights in a short distance around you."),
 		drawtype = "airlike",
