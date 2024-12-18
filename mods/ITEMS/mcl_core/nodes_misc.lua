@@ -135,7 +135,7 @@ minetest.register_node("mcl_core:barrier", {
 	tiles = {"blank.png"},
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1},
+	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1, rarity = 3},
 	on_blast = function() end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
@@ -192,7 +192,7 @@ minetest.register_node("mcl_core:realm_barrier", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	pointable = false,
-	groups = {not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1},
+	groups = {not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1, rarity = 3},
 	on_blast = function() end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
@@ -230,7 +230,7 @@ for i = 0, 14 do --minetest.LIGHT_MAX
 		wield_image = "mcl_core_light_" .. i .. ".png",
 		sunlight_propagates = true,
 		is_ground_content = false,
-		groups = {creative_breakable = 1, not_solid = 1, light_block = i + 1},
+		groups = {creative_breakable = 1, not_solid = 1, light_block = i + 1, rarity = 3},
 		on_blast = function() end,
 		on_use = function(itemstack, user, pointed_thing)
 			-- user:get_player_control() returns {} for non players, so we don't need user:is_player()

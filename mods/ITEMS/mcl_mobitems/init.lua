@@ -235,7 +235,7 @@ minetest.register_craftitem("mcl_mobitems:nether_star", {
 	wield_image = "mcl_mobitems_nether_star.png",
 	inventory_image = "mcl_mobitems_nether_star.png",
 	-- TODO: Reveal item when it's useful
-	groups = { craftitem = 1, not_in_creative_inventory = 1 },
+	groups = { craftitem = 1, not_in_creative_inventory = 1, rarity = 2 },
 })
 
 minetest.register_craftitem("mcl_mobitems:leather", {
@@ -337,19 +337,19 @@ minetest.register_tool("mcl_mobitems:warped_fungus_on_a_stick", {
 })
 
 minetest.register_craftitem("mcl_mobitems:nautilus_shell", {
-	description = ""..C(mcl_colors.YELLOW, S("Nautilus Shell")),
+	description = S("Nautilus Shell"),
 	_tt_help = S("Used to craft a conduit"),
 	_doc_items_longdesc = S("The Nautilus Shell is used to craft a conduit. They can be obtained by fishing or killing a drowned that is wielding a shell."),
 	inventory_image = "mcl_mobitems_nautilus_shell.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, rarity = 1 },
 })
 
 minetest.register_craftitem("mcl_mobitems:heart_of_the_sea", {
-	description = ""..C(mcl_colors.YELLOW, S("Heart of the Sea")),
+	description = S("Heart of the Sea"),
 	_tt_help = S("Used to craft a conduit"),
 	_doc_items_longdesc = S("The Heart of the Sea is used to craft a conduit. They can be obtained by finding them in a buried treasure chest."),
 	inventory_image = "mcl_mobitems_heart_of_the_sea.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, rarity = 1 },
 })
 
 local horse_armor_use = S("Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor.")

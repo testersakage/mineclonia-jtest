@@ -291,7 +291,7 @@ minetest.register_node("mcl_beacons:beacon", {
 	allow_metadata_inventory_move = allow_metadata_inventory_move,
 	allow_metadata_inventory_take = allow_metadata_inventory_take,
 	light_source = minetest.LIGHT_MAX,
-	groups = {handy=1, deco_block=1},
+	groups = {handy=1, deco_block=1, rarity=2},
 	drop = "mcl_beacons:beacon",
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	_mcl_hardness = 3,

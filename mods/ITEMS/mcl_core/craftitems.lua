@@ -1,10 +1,4 @@
--- mods/default/craftitems.lua
-
 local S = minetest.get_translator(minetest.get_current_modname())
-
---
--- Crafting items
---
 
 minetest.register_craftitem("mcl_core:stick", {
 	description = S("Stick"),
@@ -179,6 +173,6 @@ minetest.register_craftitem("mcl_core:apple_gold_enchanted", {
 	inventory_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
 	on_place = eat_gapple,
 	on_secondary_use = eat_gapple,
-	groups = { food = 2, eatable = 4, can_eat_when_full = 1 },
+	groups = { food = 2, eatable = 4, can_eat_when_full = 1, rarity = 2 },
 	_mcl_saturation = 9.6,
 })
