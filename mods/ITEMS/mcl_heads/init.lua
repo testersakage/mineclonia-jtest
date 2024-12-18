@@ -1,5 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
 
 local equip_armor
 if minetest.get_modpath("mcl_armor") then
@@ -132,7 +131,11 @@ end
 --- @param head_def HeadDef head node definition
 function mcl_heads.register_head(head_def)
 	local name = "mcl_heads:" ..head_def.name
-
+	if head_def.groups then
+		for k, v in pairs(head_def.groups) do
+			mcl_heads.deftemplate.groups[k] = v
+		end
+	end
 	-- register the floor head node
 	minetest.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
 		description = head_def.description,
@@ -209,43 +212,48 @@ end
 mcl_heads.register_head{
 	name = "zombie",
 	texture = "mcl_heads_zombie.png",
-	description = ""..C(mcl_colors.YELLOW, S("Zombie Head")),
+	description = S("Zombie Head"),
 	longdesc = S("A zombie head is a small decorative block which resembles the head of a zombie. It can also be worn as a helmet, which reduces the detection range of zombies by 50%."),
 	range_mob = "mobs_mc:zombie",
 	range_factor = 0.5,
+	groups = {rarity = 1}
 }
 
 mcl_heads.register_head{
 	name = "creeper",
 	texture = "mcl_heads_creeper.png",
-	description = ""..C(mcl_colors.YELLOW, S("Creeper Head")),
+	description = S("Creeper Head"),
 	longdesc = S("A creeper head is a small decorative block which resembles the head of a creeper. It can also be worn as a helmet, which reduces the detection range of creepers by 50%."),
 	range_mob = "mobs_mc:creeper",
 	range_factor = 0.5,
+	groups = {rarity = 1}
 }
 
 -- Original Minecraft name: “Head”
 mcl_heads.register_head{
 	name = "steve",
 	texture = "mcl_heads_steve.png",
-	description = ""..C(mcl_colors.YELLOW, S("Human Head")),
+	description = S("Human Head"),
 	longdesc = S("A human head is a small decorative block which resembles the head of a human (i.e. a player character). It can also be worn as a helmet for fun, but does not offer any protection."),
+	groups = {rarity = 1}
 }
 
 mcl_heads.register_head{
 	name = "skeleton",
 	texture = "mcl_heads_skeleton.png",
-	description = ""..C(mcl_colors.YELLOW, S("Skeleton Skull")),
+	description = S("Skeleton Skull"),
 	longdesc = S("A skeleton skull is a small decorative block which resembles the skull of a skeleton. It can also be worn as a helmet, which reduces the detection range of skeletons by 50%."),
 	range_mob = "mobs_mc:skeleton",
 	range_factor = 0.5,
+	groups = {rarity = 1}
 }
 
 mcl_heads.register_head{
 	name = "wither_skeleton",
 	texture = "mcl_heads_wither_skeleton.png",
-	description = ""..C(mcl_colors.AQUA, S("Wither Skeleton Skull")),
+	description = S("Wither Skeleton Skull"),
 	longdesc = S("A wither skeleton skull is a small decorative block which resembles the skull of a wither skeleton. It can also be worn as a helmet for fun, but does not offer any protection."),
+	groups = {rarity = 2}
 }
 
 -- convert old placed heads

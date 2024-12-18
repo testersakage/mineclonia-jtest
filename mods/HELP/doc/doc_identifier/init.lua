@@ -1,5 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
 
 local mod_doc_basics = minetest.get_modpath("doc_basics")
 
@@ -156,7 +155,7 @@ function doc_identifier.liquid_mode(itemstack, user, pointed_thing)
 end
 
 minetest.register_tool("doc_identifier:identifier_solid", {
-	description = ""..C(mcl_colors.DARK_PURPLE, S("Lookup Tool")),
+	description = S("Lookup Tool"),
 	_tt_help = S("Show help for pointed thing"),
 	_doc_items_longdesc = S("This useful little helper can be used to quickly learn more about about one's closer environment. It identifies and analyzes blocks, items and other things and it shows extensive information about the thing on which it is used."),
 	_doc_items_usagehelp = S("Punch any block, item or other thing about you wish to learn more about. This will open up the appropriate help entry. The tool comes in two modes which are changed by using. In liquid mode, this tool points to liquids as well while in solid mode this is not the case."),
@@ -169,13 +168,14 @@ minetest.register_tool("doc_identifier:identifier_solid", {
 	on_use = doc_identifier.identify,
 	on_place = doc_identifier.liquid_mode,
 	on_secondary_use = doc_identifier.liquid_mode,
+	groups = {rarity = 3}
 })
 minetest.register_tool("doc_identifier:identifier_liquid", {
-	description = ""..C(mcl_colors.DARK_PURPLE, S("Lookup Tool")),
+	description = S("Lookup Tool"),
 	_doc_items_create_entry = false,
 	tool_capabilities = {},
 	range = 10,
-	groups = { not_in_creative_inventory = 1, not_in_craft_guide = 1, disable_repair = 1 },
+	groups = { not_in_creative_inventory = 1, not_in_craft_guide = 1, disable_repair = 1, rarity = 3 },
 	wield_image = "doc_identifier_identifier_liquid.png",
 	inventory_image = "doc_identifier_identifier_liquid.png",
 	liquids_pointable = true,
