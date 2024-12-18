@@ -309,7 +309,7 @@ Saturation decreases by doing things which exhaust you (highest exhaustion first
 • Jumping=• Springen
 • Mining a block=• Einen Block abbauen
 Other actions, like walking, do not exaust you.=Andere Aktionen, wie gehen, erschöpfen Sie nicht.
-Mobs=Mobs
+Mobs=Kreaturen
 Mobs are the living beings in the world. This includes animals and monsters.=Mobs sind die lebenden Kreaturen in der Welt. Das schließt Tiere und Monster ein.
 Mobs appear randomly throughout the world. This is called “spawning”. Each mob kind appears on particular block types at a given light level. The height also plays a role. Peaceful mobs tend to spawn at daylight while hostile ones prefer darkness. Most mobs can spawn on any solid block but some mobs only spawn on particular blocks (like grass blocks).=Monster tauchen zufällig in der Welt auf. Das nennt man „spawnen“. Jeder Mobart taucht auf bestimmten Blocktypen bei einer bestimmten Helligkeit auf. Die Höhe spielt auch eine Rolle. Friedliche Mobs neigen dazu, bei Tageslicht zu spawnen, während feindliche Mobs die Dunkelheit bevorzugen. Die meisten Mobs können auf jedem festen Block spawnen, aber einige Mobs können nur auf bestimmten Blöcken spawnen (wie Grasblöcke).
 Like players, mobs have hit points and sometimes armor points, too (which means you need better weapons to deal any damage at all). Also like players, hostile mobs can attack directly or at a distance. Mobs may drop random items after they die.=Wie Spieler haben Mobs Trefferpunkte und manchmal auch Rüstungspunkte (was bedeutet, dass Sie bessere Waffen benötigen, um überhaupt Schaden anrichten zu können). Auch wie bei Spielern können feindliche Mobs direkt angreifen oder aus der Ferne. Mobs können nach ihrem Tod zufällige Gegenstände abwerfen.
