@@ -79,6 +79,15 @@ local groups_mtg2mcl = {
 	["snappy"] = { group = "swordy", hardness = 0.2 },
 }
 
+local C = core.colorize
+
+-- maps rarity group rating to their colors; 1=uncommen, 2=rare, 3=epic
+local rarity_colors = {
+	mcl_colors.YELLOW,
+	mcl_colors.AQUA,
+	mcl_colors.DARK_PURPLE,
+}
+
 -- Get new groups and hardness
 local function convert_mtg_groups(nname)
 	local groups = table.copy(minetest.registered_nodes[nname].groups)
@@ -401,6 +410,14 @@ local function overwrite()
 
 			minetest.override_item(tname, {
 				tool_capabilities = toolcaps
+			})
+		end
+
+		local rarity_group = core.get_item_group(tname, "rarity")
+		if rarity_group > 0 and rarity_colors[rarity_group] then
+			local desc = tdef.description or tname
+			core.override_item(tname, {
+				description = C(rarity_colors[rarity_group], desc)
 			})
 		end
 
