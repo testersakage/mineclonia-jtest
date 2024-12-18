@@ -3,18 +3,20 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-18 10:12+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_mobitems/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Rotten Flesh"
-msgstr "Chair Putréfiée"
+msgstr "Chair putréfiée"
 
 msgid "80% chance of food poisoning"
 msgstr "80% de chances d'intoxication alimentaire"
@@ -23,19 +25,19 @@ msgid "Yuck! This piece of flesh clearly has seen better days. If you're really 
 msgstr "Beurk ! Ce morceau de chair a clairement connu des jours meilleurs. Si vous êtes vraiment désespéré, vous pouvez le manger pour restaurer quelques points de faim, mais il y a 80% de chances qu'il provoque une intoxication alimentaire, ce qui augmente votre faim pendant un certain temps."
 
 msgid "Raw Mutton"
-msgstr "Mouton Cru"
+msgstr "Mouton cru"
 
 msgid "Raw mutton is the flesh from a sheep and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr "Le mouton cru est la chair d'un mouton et peut être mangé en toute sécurité. La cuisson augmentera considérablement sa valeur nutritive."
 
 msgid "Cooked Mutton"
-msgstr "Mouton Cuit"
+msgstr "Mouton cuit"
 
 msgid "Cooked mutton is the cooked flesh from a sheep and is used as food."
 msgstr "Le mouton cuit est la chair cuite d'un mouton et est utilisé comme nourriture."
 
 msgid "Raw Beef"
-msgstr "Boeuf Cru"
+msgstr "Boeuf cru"
 
 msgid "Raw beef is the flesh from cows and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr "Le boeuf cru est la chair des vaches et peut être mangé en toute sécurité. La cuisson augmentera considérablement sa valeur nutritive."
@@ -47,7 +49,7 @@ msgid "Steak is cooked beef from cows and can be eaten."
 msgstr "Le steak est du boeuf cuit et peut être mangé."
 
 msgid "Raw Chicken"
-msgstr "Poulet Cru"
+msgstr "Poulet cru"
 
 msgid "30% chance of food poisoning"
 msgstr "30% de chances d'intoxication alimentaire"
@@ -56,31 +58,31 @@ msgid "Raw chicken is a food item which is not safe to consume. You can eat it t
 msgstr "Le poulet cru est un aliment qui n'est pas sûr à consommer. Vous pouvez le manger pour restaurer quelques points de faim, mais il y a 30% de chances de souffrir d'intoxication alimentaire, ce qui augmente votre taux de faim pendant un certain temps. La cuisson du poulet cru le rendra sûr à manger et augmentera sa valeur nutritive."
 
 msgid "Cooked Chicken"
-msgstr "Poulet Cuit"
+msgstr "Poulet rôti"
 
 msgid "A cooked chicken is a healthy food item which can be eaten."
-msgstr "Un poulet cuit est un aliment sain qui peut être mangé."
+msgstr "Un poulet rôti est un aliment sain qui peut être mangé."
 
 msgid "Raw Porkchop"
-msgstr "Porc Cru"
+msgstr "Côtelette de porc crue"
 
 msgid "A raw porkchop is the flesh from a pig and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr "Un porc cru est la chair d'un porc et peut être mangée en toute sécurité. La cuisson augmentera considérablement sa valeur nutritive."
 
 msgid "Cooked Porkchop"
-msgstr "Porc Cuit"
+msgstr "Côtelette de porc cuite"
 
 msgid "Cooked porkchop is the cooked flesh of a pig and is used as food."
 msgstr "Le porc cuit est la chair cuite d'un porc et est utilisé comme aliment."
 
 msgid "Raw Rabbit"
-msgstr "Lapin Cru"
+msgstr "Lapin cru"
 
 msgid "Raw rabbit is a food item from a dead rabbit. It can be eaten safely. Cooking it will increase its nutritional value."
 msgstr "Le lapin cru est un aliment provenant d'un lapin mort. Il peut être mangé en toute sécurité. La cuisson augmentera sa valeur nutritive."
 
 msgid "Cooked Rabbit"
-msgstr "Lapin Cuit"
+msgstr "Lapin cuit"
 
 msgid "This is a food item which can be eaten."
 msgstr "Il s'agit d'un aliment qui peut être mangé."
@@ -98,7 +100,7 @@ msgid "Use the placement key to drink the milk."
 msgstr "Utilisez la touche de placement pour boire le lait."
 
 msgid "Spider Eye"
-msgstr "Oeil d'Araignée"
+msgstr "Oeil d'araignée"
 
 msgid "Poisonous"
 msgstr "Toxique"
@@ -146,7 +148,7 @@ msgid "This item is mainly used for crafting."
 msgstr "Cet objet est principalement utilisé pour l'artisanat."
 
 msgid "Magma Cream"
-msgstr "Crème de Magma"
+msgstr "Crème de magma"
 
 msgid "Magma cream is a crafting component."
 msgstr "La crème de magma est un composant artisanal."
@@ -176,13 +178,13 @@ msgid "Feathers are used in crafting and are dropped from chickens."
 msgstr "Les plumes sont utilisées dans l'artisanat et tombent des poulets."
 
 msgid "Rabbit Hide"
-msgstr "Peau de Lapin"
+msgstr "Peau de lapin"
 
 msgid "Rabbit hide is used to create leather."
 msgstr "La peau de lapin est utilisée pour créer du cuir."
 
 msgid "Rabbit's Foot"
-msgstr "Patte de Lapin"
+msgstr "Patte de lapin"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr "Ce doit être votre jour de chance ! Placez cet article dans un cadre d'article pour la décoration."
@@ -200,7 +202,7 @@ msgid "Use the placement key with the saddle in your hand to try to put on the s
 msgstr "Utilisez la touche de placement avec la selle à la main pour essayer de mettre la selle. Les selles conviennent aux chevaux, mulets, ânes et cochons. Les chevaux, les mulets et les ânes doivent d'abord être apprivoisés, sinon ils rejetteront la selle. Les animaux sellés peuvent être montés en utilisant à nouveau la touche de placement."
 
 msgid "Rabbit Stew"
-msgstr "Ragout de Lapin"
+msgstr "Ragoût de lapin"
 
 msgid "Rabbit stew is a very nutricious food item."
 msgstr "Le ragoût de lapin est un aliment très nutritif."
@@ -215,13 +217,15 @@ msgid "Slimeball"
 msgstr "Boule de Slime"
 
 msgid "Slimeballs are used in crafting. They are dropped from slimes."
-msgstr "Les boules de slime sont utilisées dans l'artisanat. Ils sont lâchés par les Slimes."
+msgstr ""
+"Les boules de Slime sont utilisées dans l'artisanat. Ils sont lâchés par les "
+"Slimes."
 
 msgid "Gunpowder"
 msgstr "Poudre à canon"
 
 msgid "Carrot on a Stick"
-msgstr "Carotte sur un Batôn"
+msgstr "Carotte sur un batôn"
 
 msgid "Lets you ride a saddled pig"
 msgstr "Vous permet de monter un cochon sellé"
@@ -254,34 +258,42 @@ msgid "The Nautilus Shell is used to craft a conduit. They can be obtained by fi
 msgstr "La Coquille de nautile est utilisée pour fabriquer un conduit. Elles peuvent être obtenues en pêchant ou en tuant un noyé qui tient une coquille."
 
 msgid "Heart of the Sea"
-msgstr "Coeur de la Mer"
+msgstr "Coeur de la mer"
 
 msgid "The Heart of the Sea is used to craft a conduit. They can be obtained by finding them in a buried treasure chest."
-msgstr "Le Coeur de la Mer est utilisé pour fabriquer un conduit. Il peut être obtenu dans un coffre au trésor enterré."
+msgstr ""
+"Le coeur de la mer est utilisé pour fabriquer un conduit. Il peut être "
+"obtenu dans un coffre au trésor enterré."
 
 msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor."
 msgstr "Placez-la sur un cheval pour mettre l'armure de cheval. Les ânes et les mules ne peuvent pas porter d'armure de cheval."
 
 msgid "Leather Horse Armor"
-msgstr "Armure de cheval en cuivre"
+msgstr "Armure pour cheval en cuir"
 
 msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
-msgstr "L'armure de cheval en cuir peut être portée par les chevaux pour améliorer un peu leur protection contre les dégats."
+msgstr ""
+"L'armure pour cheval en cuir peut être portée par les chevaux pour améliorer "
+"un peu leur protection contre les dégats."
 
 msgid "Iron Horse Armor"
-msgstr "Armure de cheval en fer"
+msgstr "Armure pour cheval en fer"
 
 msgid "Iron horse armor can be worn by horses to increase their protection from harm a bit."
-msgstr "L'armure de cheval en fer peut être portée par les chevaux pour augmenter un peu leur protection contre les dommages."
+msgstr ""
+"L'armure pour cheval en fer peut être portée par les chevaux pour augmenter "
+"un peu leur protection contre les dommages."
 
 msgid "Golden Horse Armor"
-msgstr "Armure de cheval en or"
+msgstr "Armure pour cheval en or"
 
 msgid "Golden horse armor can be worn by horses to increase their protection from harm."
-msgstr "Une armure de cheval en or peut être portée par les chevaux pour augmenter leur protection contre les dommages."
+msgstr ""
+"Une armure pour cheval en or peut être portée par les chevaux pour augmenter "
+"leur protection contre les dommages."
 
 msgid "Diamond Horse Armor"
-msgstr "Armure de cheval en diamant"
+msgstr "Armure pour cheval en diamant"
 
 msgid "Diamond horse armor can be worn by horses to greatly increase their protection from harm."
 msgstr "Une armure de cheval en diament peut être portée par les chevaux pour augmenter fortement leur protection contre les dommages."
@@ -296,17 +308,19 @@ msgid "Use the Glow Ink Sac and the normal Item Frame to craft the Glow Item Fra
 msgstr "Utilisez la poche d'encre luisante et le cadre pour fabriquer le cadre luisant."
 
 msgid "Name Tag"
-msgstr "Étiquette de nom"
+msgstr "Étiquette"
 
 msgid "Give names to mobs"
-msgstr "Donne des noms aux mobs"
+msgstr "Donne des noms aux créatures"
 
 msgid "Set name at anvil"
 msgstr "Définir le nom sur l'enclume"
 
 msgid "A name tag is an item to name a mob."
-msgstr "Une étiquette de nom est un élément pour nommer un mob."
+msgstr "Une étiquette est un élément pour nommer une créature."
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
-msgstr "Avant d'utiliser l'étiquette de nom, vous devez définir un nom sur une enclume. Ensuite, vous pouvez utiliser l'étiquette de nom pour nommer un mob. Cela utilise l'étiquette de nom."
-
+msgstr ""
+"Avant d'utiliser l'étiquette, vous devez définir un nom sur une enclume. "
+"Ensuite, vous pouvez utiliser l'étiquette pour nommer une créature. Cela "
+"utilise l'étiquette."
