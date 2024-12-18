@@ -3243,7 +3243,7 @@ function villager:maybe_summon_golem (self_pos, n_villagers)
 			"Requesting golem: ",
 			#villagers, "/", n_villagers, " present",
 		})
-		if #villagers > n_villagers and self:summon_golem (self_pos) then
+		if #villagers >= n_villagers and self:summon_golem (self_pos) then
 			for _, villager in pairs (villagers) do
 				local entity = villager:get_luaentity ()
 				if entity then
@@ -5627,6 +5627,8 @@ function villager:calm_down (self_pos, dtime)
 		and not self._panic_source
 		and not self:seen_hostile_lately (self_pos) then
 		self._special_schedule = nil
+	elseif self:check_timer ("golem_summon", 5.0) then
+		self:maybe_summon_golem (self_pos, 3)
 	end
 end
 
