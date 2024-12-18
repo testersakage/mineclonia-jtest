@@ -325,11 +325,15 @@ minetest.register_node("mcl_lush_caves:spore_blossom", {
 	node_placement_prediction = "",
 	on_place = mcl_util.generate_on_place_plant_function(function(place_pos)
 		local above = vector.offset(place_pos,0,1,0)
-		local snn = minetest.get_node_or_nil(above).name
-		if not snn then return false end
-		if minetest.get_item_group(snn,"soil_sapling") > 0 then
-			return true
-		end
+		local node_above = minetest.get_node_or_nil(above)
+		if not node_above then return false end
+		local node_above_name = node_above.name
+		if not node_above_name then return false end
+		local is_opaque = minetest.get_item_group(node_above_name,"opaque") > 0
+		local is_upright_stair = minetest.get_item_group(node_above_name,"stair") > 0 and node_above.param2 < 20
+		local is_bottom_slab = minetest.get_item_group(node_above_name, "slab") > 0 and minetest.get_item_group(node_above_name, "slab_top") == 0
+		local is_valid = is_opaque or is_upright_stair or is_bottom_slab
+		return is_valid
 	end)
 })
 
