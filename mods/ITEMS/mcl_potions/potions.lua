@@ -1,5 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
 
 mcl_potions.registered_potions = {}
 -- shorthand
@@ -352,10 +351,10 @@ end
 
 
 minetest.register_craftitem("mcl_potions:dragon_breath", {
-	description = ""..C(mcl_colors.YELLOW, S("Dragon's Breath")),
+	description = S("Dragon's Breath"),
 	_longdesc = S("This item is used in brewing and can be combined with splash potions to create lingering potions."),
 	image = "mcl_potions_dragon_breath.png",
-	groups = { brewitem = 1, bottle = 1 },
+	groups = { brewitem = 1, bottle = 1, rarity = 1 },
 	stack_max = 64,
 })
 
@@ -619,7 +618,9 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "ominous",
-	desc_whole = ""..C(mcl_colors.YELLOW, S("Ominous Bottle")),
+	desc_whole = S("Ominous Bottle"),
+	groups = {brewitem=1, food=3, can_eat_when_full=1,
+	_mcl_potion=1, potion = 1, rarity = 1},
 	_tt = nil,
 	_longdesc = S("Attracts danger."),
 	image = "mcl_potions_ominous_potion.png",
@@ -630,7 +631,6 @@ mcl_potions.register_potion({
 	has_lingering = false,
 	vanishing = true,
 })
-
 
 -- COMPAT CODE
 local function replace_legacy_potion(itemstack)

@@ -1,5 +1,4 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
 
 local mod_target = minetest.get_modpath("mcl_target")
 
@@ -54,7 +53,8 @@ local function throw_xp_bottle(pos, dir, velocity)
 end
 
 minetest.register_craftitem("mcl_experience:bottle", {
-	description = ""..C(mcl_colors.YELLOW, S("Bottle o' Enchanting")),
+	description = S("Bottle o' Enchanting"),
+	groups = {rarity = 1},
 	inventory_image = "mcl_experience_bottle.png",
 	wield_image = "mcl_experience_bottle.png",
 	on_use = function(itemstack, placer, _)
