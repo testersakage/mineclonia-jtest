@@ -1,6 +1,7 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
+local C = minetest.colorize
 
 mcl_enchanting = {
 	book_offset = vector.new(0, 0.75, 0),
@@ -139,7 +140,7 @@ minetest.register_chatcommand("forceenchant", {
 })
 
 minetest.register_craftitem("mcl_enchanting:book_enchanted", {
-	description = S("Enchanted Book"),
+	description = ""..C(mcl_colors.YELLOW, S("Enchanted Book")),
 	inventory_image = "mcl_enchanting_book_enchanted.png" .. mcl_enchanting.overlay,
 	groups = {enchanted = 1, not_in_creative_inventory = 1, enchantability = 1},
 	_mcl_enchanting_enchanted_tool = "mcl_enchanting:book_enchanted",

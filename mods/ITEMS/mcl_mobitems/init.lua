@@ -230,7 +230,7 @@ minetest.register_craftitem("mcl_mobitems:ghast_tear", {
 })
 
 minetest.register_craftitem("mcl_mobitems:nether_star", {
-	description = S("Nether Star"),
+	description = ""..C(mcl_colors.AQUA, S("Nether Star")),
 	_doc_items_longdesc = S("A nether star is dropped when the Wither dies. Place it in an item frame to show the world how hardcore you are! Or just as decoration."),
 	wield_image = "mcl_mobitems_nether_star.png",
 	inventory_image = "mcl_mobitems_nether_star.png",
