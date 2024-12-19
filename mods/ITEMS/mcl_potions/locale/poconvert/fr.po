@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-19 07:45+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_potions/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"
 msgstr "<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"
@@ -26,7 +28,7 @@ msgid "Missing or invalid heal amount parameter!"
 msgstr "Paramètre de heal manquant ou invalide !"
 
 msgid "Player @1 healed by @2 HP."
-msgstr "La joueuse @1 guérit de @2 PV."
+msgstr "Le joueur @1 guérit de @2 PV."
 
 msgid "Player @1 harmed by @2 HP."
 msgstr "Le joueur @1 perd @2 PV."
@@ -35,7 +37,7 @@ msgid "Effects cleared for player @1"
 msgstr "Effets retirés pour le joueur @1"
 
 msgid "Removed effect @1 from player @2"
-msgstr "Effet @1 retiré de la joueuse @2"
+msgstr "Effet @1 du joueur @2 retiré"
 
 msgid "@1 is not an available status effect."
 msgstr "@1 n'est pas un effet disponible."
@@ -53,10 +55,10 @@ msgid "@1 effect given to player @2 for @3 seconds with factor of @4."
 msgstr "L'effet @1 est donné au joueur @2 pour @3 secondes avec un facteur de @4."
 
 msgid "@1 effect given to player @2 for @3 seconds."
-msgstr "L'effet @1 donné à la joueuse @2 pour @3 secondes."
+msgstr "L'effet @1 donné au joueur @2 pour @3 secondes."
 
 msgid "Giving effect @1 to player @2 failed."
-msgstr "Échec de l'application de l'effet @1 à la joueuse @2."
+msgstr "Échec de l'application de l'effet @1 au joueur @2."
 
 msgid "@1 effect on level @2 given to player @3 for @4 seconds."
 msgstr "L'effet @1 au niveau @2 est donné au joueur @3 pour @4 secondes."
@@ -83,16 +85,16 @@ msgid "Strength"
 msgstr "Force"
 
 msgid "+@1% melee damage"
-msgstr "+@1% dégât de contact"
+msgstr "+@1% dégât de mêlée"
 
 msgid "Weakness"
 msgstr "Faiblesse"
 
 msgid "-@1% melee damage"
-msgstr "-@1% dégât de contact"
+msgstr "-@1% dégât de mêlée"
 
 msgid "Water Breathing"
-msgstr "Respiration Aquatique"
+msgstr "Respiration aquatique"
 
 msgid "limitless breathing under water"
 msgstr "respiration illimitée sous l'eau"
@@ -137,13 +139,13 @@ msgid "moves body upwards at @1 nodes/s"
 msgstr "déplace le corps vers le haut de @1 bloc/s"
 
 msgid "Night Vision"
-msgstr "Vision Nocturne"
+msgstr "Vision nocturne"
 
 msgid "improved vision during the night"
 msgstr "vision améliorée durant la nuit"
 
 msgid "Darkness"
-msgstr "Ténèbres"
+msgstr "Obscurité"
 
 msgid "surrounded by darkness"
 msgstr "entouré de ténèbres"
@@ -152,7 +154,7 @@ msgid "not seeing anything beyond @1 nodes"
 msgstr "ne rien voir au-delà de @1 blocs"
 
 msgid "Glowing"
-msgstr "Luire"
+msgstr "Surbrillance"
 
 msgid "more visible at all times"
 msgstr "plus visible en permanence"
@@ -170,7 +172,7 @@ msgid "absorbs up to @1 incoming damage"
 msgstr "absorbe jusqu'à @1 dégât reçu"
 
 msgid "Fire Resistance"
-msgstr "Résistance au Feu"
+msgstr "Résistance au feu"
 
 msgid "resistance to fire damage"
 msgstr "résistance aux dégâts par le feu"
@@ -188,16 +190,16 @@ msgid "Bad Luck"
 msgstr "Malchance"
 
 msgid "Bad Omen"
-msgstr "Mauvais Présage"
+msgstr "Mauvais présage"
 
 msgid "danger is imminent"
 msgstr "le danger est imminent"
 
 msgid "Hero of the Village"
-msgstr "Héro du Village"
+msgstr "Héro du village"
 
 msgid "Withering"
-msgstr "Dépérissement"
+msgstr "Décomposition"
 
 msgid "-1 HP / @1 s, can kill"
 msgstr "-1 PV / @1 s, peut tuer"
@@ -251,28 +253,32 @@ msgid "Try different combinations to create potions."
 msgstr "Essayez différentes combinaisons pour créer des potions."
 
 msgid "Glass Bottle"
-msgstr "Bouteille en verre"
+msgstr "Fiole"
 
 msgid "Liquid container"
 msgstr "Récipient de liquide"
 
 msgid "A glass bottle is used as a container for liquids and can be used to collect water directly."
-msgstr "Une bouteille en verre est utilisée comme récipient pour les liquides et peut être utilisée pour collecter l'eau directement."
+msgstr ""
+"Une fiole est utilisée comme récipient pour les liquides et peut être "
+"utilisée pour collecter l'eau directement."
 
 msgid "To collect water, use it on a cauldron with water (which removes a level of water) or any water source (which removes no water)."
 msgstr "Pour collecter l'eau, cliquer droit sur un chaudron avec de l'eau (qui enlève un niveau d'eau) ou toute source d'eau (qui n'enlève pas d'eau)."
 
 msgid "Water Bottle"
-msgstr "Bouteille d'eau"
+msgstr "Fiole d'eau"
 
 msgid "Water bottles can be used to fill cauldrons. Drinking water has no effect."
-msgstr "Les bouteilles d'eau peuvent être utilisées pour remplir les chaudrons. L'eau potable n'a aucun effet."
+msgstr ""
+"Les fioles d'eau peuvent être utilisées pour remplir les chaudrons. L'eau "
+"potable n'a aucun effet."
 
 msgid "Use the “Place” key to drink. Place this item on a cauldron to pour the water into the cauldron."
 msgstr "Utilisez la touche \"Utiliser\" pour boire. Placez cet article sur un chaudron pour verser l'eau dans le chaudron."
 
 msgid "River Water Bottle"
-msgstr "Bouteille d'eau de rivière"
+msgstr "Fiole d'eau de rivière"
 
 msgid "River water bottles can be used to fill cauldrons. Drinking it has no effect."
 msgstr "Les bouteilles d'eau de rivière peuvent être utilisées pour remplir les chaudrons. La boire n'a aucun effet."
@@ -281,22 +287,22 @@ msgid "Use the “Place” key to drink. Place this item on a cauldron to pour t
 msgstr "Utilisez la touche \"Utiliser\" pour boire. Cliquer droit cet objet sur un chaudron pour verser l'eau de la rivière dans le chaudron."
 
 msgid "Splash Water Bottle"
-msgstr "Bouteille d'eau jetable"
+msgstr "Fiole d'eau jetable"
 
 msgid "Extinguishes fire and hurts some mobs"
-msgstr "Éteint le feu et blesse certains mobs"
+msgstr "Éteint le feu et blesse certaines créatures"
 
 msgid "A throwable water bottle that will shatter on impact, where it extinguishes nearby fire and hurts mobs that are vulnerable to water."
 msgstr "Une bouteille d'eau jetable qui se brisera à l'impact, où elle éteint le feu à proximité et blesse les mobs vulnérables à l'eau."
 
 msgid "Lingering Water Bottle"
-msgstr "Bouteille d'eau persistante"
+msgstr "Fiole d'eau persistante"
 
 msgid "A throwable water bottle that will shatter on impact, where it creates a cloud of water vapor that lingers on the ground for a while. This cloud extinguishes fire and hurts mobs that are vulnerable to water."
 msgstr "Une bouteille d'eau jetable qui se brisera à l'impact, où elle crée un nuage de vapeur d'eau qui s'attarde au sol pendant un moment. Ce nuage éteint le feu et blesse les mobs vulnérables à l'eau."
 
 msgid "Glistering Melon"
-msgstr "Melon étincelant"
+msgstr "Pastèque scintillante"
 
 msgid "This shiny melon is full of tiny gold nuggets and would be nice in an item frame. It isn't edible and not useful for anything else."
 msgstr "Ce melon brillant est plein de minuscules pépites d'or et serait joli dans un cadre d'objet. Il n'est pas comestible et n'est bon à rien d'autre."
@@ -341,7 +347,7 @@ msgid "@1 Arrow"
 msgstr "Flèche @1"
 
 msgid "Arrow @1"
-msgstr "@1 Flèche"
+msgstr "Flèche @1"
 
 msgid "Strange Tipped Arrow"
 msgstr "Flèche à pointe étrange"
@@ -359,19 +365,19 @@ msgid "Has an awkward taste and is used for brewing potions."
 msgstr "A un goût étrange et est utilisé pour préparer des potions."
 
 msgid "Mundane"
-msgstr "Banal"
+msgstr "banale"
 
 msgid "Has a terrible taste and is not really useful for brewing potions."
 msgstr "A un goût terrible et vraiment pas utile pour préparer des potions."
 
 msgid "Thick"
-msgstr "Épais"
+msgstr "épaisse"
 
 msgid "Has a bitter taste and is not really useful for brewing potions."
 msgstr "A un goût amer et vraiment pas utile pour préparer des potions."
 
 msgid "of Healing"
-msgstr "de Guérison"
+msgstr "de soin"
 
 msgid "+@1 HP"
 msgstr "+@1 PV"
@@ -380,7 +386,7 @@ msgid "Instantly heals."
 msgstr "Guérit instantanément."
 
 msgid "of Harming"
-msgstr "de Dégâts"
+msgstr "de dégâts"
 
 msgid "-@1 HP"
 msgstr "-@1 PV"
@@ -389,79 +395,81 @@ msgid "Instantly deals damage."
 msgstr "Inflige instantanément des dégâts."
 
 msgid "of Night Vision"
-msgstr "de Vision Nocturne"
+msgstr "de vision nocturne"
 
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "Augmente la luminosité perçue de la lumière sous un ciel sombre."
 
 msgid "of Swiftness"
-msgstr "de Rapidité"
+msgstr "de rapidité"
 
 msgid "Increases walking speed."
 msgstr "Augmente la vitesse de marche."
 
 msgid "of Slowness"
-msgstr "de Lenteur"
+msgstr "de lenteur"
 
 msgid "Decreases walking speed."
 msgstr "Diminue la vitesse de marche."
 
 msgid "of Leaping"
-msgstr "de Saut"
+msgstr "de saut"
 
 msgid "Increases jump strength."
 msgstr "Augmente la force de saut."
 
 msgid "of Decay"
-msgstr "de Flétrissement"
+msgstr "de flétrissure"
 
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
-msgstr "Applique l'effet de flétrissement qui inflige des dégâts à intervalles réguliers et peut tuer."
+msgstr ""
+"Applique l'effet whiter qui inflige des dégâts à intervalles réguliers et "
+"peut tuer."
 
 msgid "of Poison"
-msgstr "de Poison"
+msgstr "de poison"
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "Applique l'effet de poison qui inflige des dégâts à intervalles réguliers."
 
 msgid "of Regeneration"
-msgstr "de Régénération"
+msgstr "de régénération"
 
 msgid "Regenerates health over time."
 msgstr "Régénère la santé au fil du temps."
 
 msgid "of Invisibility"
-msgstr "d'Invisibilité"
+msgstr "d'invisibilité"
 
 msgid "Grants invisibility."
 msgstr "Accorde l'invisibilité."
 
 msgid "of Water Breathing"
-msgstr "de Respiration Aquatique"
+msgstr "de respiration aquatique"
 
 msgid "Grants limitless breath underwater."
 msgstr "Donne une respiration illimitée sous l'eau."
 
 msgid "of Fire Resistance"
-msgstr "de Résistance au Feu"
+msgstr "de résistance au feu"
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "Confère une immunité aux dommages causés par des sources de chaleur comme le feu."
 
 msgid "of Strength"
-msgstr "de Force"
+msgstr "de force"
 
 msgid "Increases attack power."
 msgstr "Augmente la puissance d'attaque."
 
 msgid "of Weakness"
-msgstr "de Faiblesse"
+msgstr "de faiblesse"
 
 msgid "Decreases attack power."
 msgstr "Diminue la puissance d'attaque."
 
 msgid "of Slow Falling"
-msgstr "de Chute Lente"
+msgstr "de chute lente"
 
 msgid "Instead of falling, you descend gracefully."
 msgstr "Au lieu de tomber, vous descendez gracieusement."
@@ -473,25 +481,25 @@ msgid "Decreases damage taken at the cost of speed."
 msgstr "Diminue les dégâts reçus aux dépends de la vitesse."
 
 msgid "of Luck"
-msgstr "de Chance"
+msgstr "de chance"
 
 msgid "Increases luck."
 msgstr "Augmente la chance."
 
 msgid "of Bad Luck"
-msgstr "de Malchance"
+msgstr "de malchance"
 
 msgid "Decreases luck."
 msgstr "Diminue la chance."
 
 msgid "Ominous Bottle"
-msgstr "Bouteille de Mauvais Augure"
+msgstr "Fiole funeste"
 
 msgid "Attracts danger."
 msgstr "Attire le danger."
 
 msgid "Unknown Potion"
-msgstr "Potion Inconnue"
+msgstr "Potion inconnue"
 
 msgid "Right-click to identify"
 msgstr "Cliquer-droit pour identifier"
@@ -504,4 +512,3 @@ msgstr "Une potion jetable qui explose à l'impact, où elle donne à tous les j
 
 msgid "This particular arrow is tipped and will give an effect when it hits a player or mob."
 msgstr "Cette flèche particulière est enchantée et donnera un effet lorsqu'elle touche un joueur ou un mob."
-
