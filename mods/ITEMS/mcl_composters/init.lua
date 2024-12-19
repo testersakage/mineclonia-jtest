@@ -57,7 +57,9 @@ local function composter_add_item(pos, node, player, itemstack, _)
 	end
 	local itemname = itemstack:get_name()
 	local chance = minetest.get_item_group(itemname, "compostability")
-	if chance > 0 then
+	-- get current compost level
+	local level = minetest.registered_nodes[node.name]["_mcl_compost_level"]
+	if chance > 0 and level < 7 then
 		if not minetest.is_creative_enabled(player:get_player_name()) then
 			itemstack:take_item()
 			minetest.sound_play({name="default_gravel_dug", gain=1}, {
@@ -68,8 +70,6 @@ local function composter_add_item(pos, node, player, itemstack, _)
 		-- calculate leveling up chance
 		local rand = math.random(0,100)
 		if chance >= rand then
-			-- get current compost level
-			local level = minetest.registered_nodes[node.name]["_mcl_compost_level"]
 			-- spawn green particles above new layer
 			mcl_bone_meal.add_bone_meal_particle(vector.offset(pos, 0, level/8, 0))
 			-- update composter block
