@@ -12,6 +12,7 @@ minetest.register_craftitem("mcl_honey:honeycomb", {
 	_doc_items_usagehelp = S("Use on copper blocks to prevent further oxidation."),
 	inventory_image = "mcl_honey_honeycomb.png",
 	groups = { craftitem = 1, preserves_copper = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_honey:honeycomb_block"}}
 })
 
 minetest.register_node("mcl_honey:honeycomb_block", {
@@ -37,6 +38,23 @@ minetest.register_craftitem("mcl_honey:honey_bottle", {
 	on_secondary_use = minetest.item_eat(6, "mcl_potions:glass_bottle"),
 	_mcl_saturation = 1.2,
 	stack_max = 16,
+	_mcl_crafting_output = {
+		single = {
+			output = "mcl_core:sugar 3",
+			replacements = {
+				{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" }
+			}
+		},
+		square2 = {
+			output = "mcl_honey:honey_block",
+			replacements = {
+				{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+				{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+				{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+				{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
+			}
+		}
+	}
 })
 
 minetest.register_node("mcl_honey:honey_block", {
@@ -67,40 +85,9 @@ minetest.register_node("mcl_honey:honey_block", {
 
 -- Crafting
 minetest.register_craft({
-	output = "mcl_honey:honeycomb_block",
-	recipe = {
-		{ "mcl_honey:honeycomb", "mcl_honey:honeycomb" },
-		{ "mcl_honey:honeycomb", "mcl_honey:honeycomb" },
-	},
-})
-
-minetest.register_craft({
-	output = "mcl_honey:honey_block",
-	recipe = {
-		{ "mcl_honey:honey_bottle", "mcl_honey:honey_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_honey:honey_bottle" },
-	},
-	replacements = {
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
-	},
-})
-
-minetest.register_craft({
 	output = "mcl_honey:honey_bottle 4",
 	recipe = {
 		{ "mcl_potions:glass_bottle", "mcl_potions:glass_bottle", "mcl_honey:honey_block" },
 		{ "mcl_potions:glass_bottle", "mcl_potions:glass_bottle", "" },
-	},
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "mcl_core:sugar 3",
-	recipe = { "mcl_honey:honey_bottle" },
-	replacements = {
-		{ "mcl_honey:honey_bottle", "mcl_potions:glass_bottle" },
 	},
 })

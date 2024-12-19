@@ -97,33 +97,19 @@ minetest.register_craftitem("mcl_ocean:prismarine_shard", {
 	_doc_items_longdesc = doc.sub.items.temp.craftitem,
 	inventory_image = "mcl_ocean_prismarine_shard.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {
+		square2 = {output = "mcl_ocean:prismarine"},
+		square3 = {output = "mcl_ocean:prismarine_brick"}
+	}
 })
 
 -- Crafting
-
 minetest.register_craft({
 	output = "mcl_ocean:sea_lantern",
 	recipe = {
 		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_shard"},
 		{"mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_crystals"},
 		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_shard"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_ocean:prismarine",
-	recipe = {
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_ocean:prismarine_brick",
-	recipe = {
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
-		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},
 	}
 })
 

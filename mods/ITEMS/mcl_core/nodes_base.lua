@@ -25,6 +25,7 @@ minetest.register_node("mcl_core:stone", {
 	_mcl_hardness = 1.5,
 	_mcl_silk_touch_drop = true,
 	_mcl_cooking_output = "mcl_core:stone_smooth",
+	_mcl_crafting_output = {square2 = {output = "mcl_core:stonebrick 4"}},
 	after_dig_node = function(_, _, _, digger)
 		if awards and awards.unlock and digger and digger:is_player() then
 			awards.unlock(digger:get_player_name(), "mcl:stoneAge")
@@ -286,6 +287,7 @@ minetest.register_node("mcl_core:granite", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_crafting_output = {square2 = {output = "mcl_core:granite_smooth 4"}}
 })
 
 minetest.register_node("mcl_core:granite_smooth", {
@@ -308,6 +310,7 @@ minetest.register_node("mcl_core:andesite", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_crafting_output = {square2 = {output = "mcl_core:andesite_smooth 4"}}
 })
 
 minetest.register_node("mcl_core:andesite_smooth", {
@@ -330,6 +333,7 @@ minetest.register_node("mcl_core:diorite", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_crafting_output = {square2 = {output = "mcl_core:diorite_smooth 4"}}
 })
 
 minetest.register_node("mcl_core:diorite_smooth", {
@@ -540,7 +544,8 @@ minetest.register_node("mcl_core:sand", {
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_mcl_cooking_output = "mcl_core:glass"
+	_mcl_cooking_output = "mcl_core:glass",
+	_mcl_crafting_output = {square2 = {output = "mcl_core:sandstone"}}
 })
 
 minetest.register_node("mcl_core:sandstone", {
@@ -552,7 +557,8 @@ minetest.register_node("mcl_core:sandstone", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
-	_mcl_cooking_output = "mcl_core:sandstonesmooth2"
+	_mcl_cooking_output = "mcl_core:sandstonesmooth2",
+	_mcl_crafting_output = {square2 = {output = "mcl_core:sandstonesmooth 4"}}
 })
 
 minetest.register_node("mcl_core:sandstonesmooth", {
@@ -602,7 +608,8 @@ minetest.register_node("mcl_core:redsand", {
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_mcl_cooking_output = "mcl_core:glass"
+	_mcl_cooking_output = "mcl_core:glass",
+	_mcl_crafting_output = {square2 = {output = "mcl_core:redsandstone"}}
 })
 
 minetest.register_node("mcl_core:redsandstone", {
@@ -613,7 +620,8 @@ minetest.register_node("mcl_core:redsandstone", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
-	_mcl_cooking_output = "mcl_core:redsandstonesmooth2"
+	_mcl_cooking_output = "mcl_core:redsandstonesmooth2",
+	_mcl_crafting_output = {square2 = {output = "mcl_core:redsandstonesmooth 4"}}
 })
 
 minetest.register_node("mcl_core:redsandstonesmooth", {
@@ -752,7 +760,8 @@ minetest.register_node("mcl_core:coalblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-	_mcl_burntime = 800
+	_mcl_burntime = 800,
+	_mcl_crafting_output = {single = {output = "mcl_core:coal_lump 9"}}
 })
 
 minetest.register_node("mcl_core:ironblock", {
@@ -764,6 +773,7 @@ minetest.register_node("mcl_core:ironblock", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_crafting_output = {single = {output = "mcl_core:iron_ingot 9"}}
 })
 
 minetest.register_node("mcl_core:goldblock", {
@@ -775,6 +785,7 @@ minetest.register_node("mcl_core:goldblock", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 3,
+	_mcl_crafting_output = {single = {output = "mcl_core:gold_ingot 9"}}
 })
 
 minetest.register_node("mcl_core:diamondblock", {
@@ -786,6 +797,7 @@ minetest.register_node("mcl_core:diamondblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_crafting_output = {single = {output = "mcl_core:diamond 9"}}
 })
 
 minetest.register_node("mcl_core:lapisblock", {
@@ -797,6 +809,7 @@ minetest.register_node("mcl_core:lapisblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
+	_mcl_crafting_output = {single = {output = "mcl_core:lapis 9"}}
 })
 
 minetest.register_node("mcl_core:emeraldblock", {
@@ -808,6 +821,7 @@ minetest.register_node("mcl_core:emeraldblock", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_crafting_output = {single = {output = "mcl_core:emerald 9"}}
 })
 
 minetest.register_node("mcl_core:obsidian", {
@@ -855,6 +869,7 @@ minetest.register_node("mcl_core:ice", {
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
+	_mcl_crafting_output = {square3 = {output = "mcl_core:packed_ice"}}
 })
 
 minetest.register_node("mcl_core:packed_ice", {

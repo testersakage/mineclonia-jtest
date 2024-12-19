@@ -163,6 +163,7 @@ minetest.register_craftitem("mcl_farming:beetroot_item", {
 	on_secondary_use = minetest.item_eat(1),
 	groups = {food = 2, eatable = 1, compostability = 65},
 	_mcl_saturation = 1.2,
+	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}}
 })
 
 minetest.register_craftitem("mcl_farming:beetroot_soup", {

@@ -74,6 +74,7 @@ minetest.register_node("mcl_nether:netheriteblock", {
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 50,
 	_mcl_silk_touch_drop = true,
+	_mcl_crafting_output = {single = {output = "mcl_nether:netherite_ingot 9"}}
 })
 
 -- For eternal fire on top of netherrack and magma blocks
@@ -245,7 +246,8 @@ minetest.register_node("mcl_nether:quartz_block", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
-	_mcl_cooking_output = "mcl_nether:quartz_smooth"
+	_mcl_cooking_output = "mcl_nether:quartz_smooth",
+	_mcl_crafting_output = {square2 = {output = "mcl_blackstone:quartz_brick 4"}}
 })
 
 minetest.register_node("mcl_nether:quartz_chiseled", {
@@ -336,6 +338,7 @@ minetest.register_craftitem("mcl_nether:glowstone_dust", {
 	_doc_items_longdesc = S("Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."),
 	inventory_image = "mcl_nether_glowstone_dust.png",
 	groups = { craftitem=1, brewitem=1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_nether:glowstone"}}
 })
 
 minetest.register_craftitem("mcl_nether:quartz", {
@@ -343,6 +346,7 @@ minetest.register_craftitem("mcl_nether:quartz", {
 	_doc_items_longdesc = S("Nether quartz is a versatile crafting ingredient."),
 	inventory_image = "mcl_nether_quartz.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_nether:quartz_block"}}
 })
 
 minetest.register_craftitem("mcl_nether:netherite_scrap", {
@@ -357,6 +361,7 @@ minetest.register_craftitem("mcl_nether:netherite_ingot", {
 	_doc_items_longdesc = S("Netherite ingots can be used with a smithing table to upgrade items to netherite."),
 	inventory_image = "mcl_nether_netherite_ingot.png",
 	groups = { craftitem = 1, fire_immune=1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_nether:netheriteblock"}}
 })
 
 minetest.register_craftitem("mcl_nether:netherbrick", {
@@ -364,6 +369,7 @@ minetest.register_craftitem("mcl_nether:netherbrick", {
 	_doc_items_longdesc = S("Nether bricks are the main crafting ingredient for crafting nether brick blocks and nether fences."),
 	inventory_image = "mcl_nether_netherbrick.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_nether:nether_brick"}}
 })
 
 minetest.register_craftitem("mcl_nether:netherite_upgrade_template", {
@@ -386,42 +392,10 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_nether:quartz_block",
-	recipe = {
-		{"mcl_nether:quartz", "mcl_nether:quartz"},
-		{"mcl_nether:quartz", "mcl_nether:quartz"},
-	}
-})
-
-minetest.register_craft({
 	output = "mcl_nether:quartz_pillar 2",
 	recipe = {
 		{"mcl_nether:quartz_block"},
 		{"mcl_nether:quartz_block"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_nether:glowstone",
-	recipe = {
-		{"mcl_nether:glowstone_dust", "mcl_nether:glowstone_dust"},
-		{"mcl_nether:glowstone_dust", "mcl_nether:glowstone_dust"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_nether:magma",
-	recipe = {
-		{"mcl_mobitems:magma_cream", "mcl_mobitems:magma_cream"},
-		{"mcl_mobitems:magma_cream", "mcl_mobitems:magma_cream"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_nether:nether_brick",
-	recipe = {
-		{"mcl_nether:netherbrick", "mcl_nether:netherbrick"},
-		{"mcl_nether:netherbrick", "mcl_nether:netherbrick"},
 	}
 })
 
@@ -449,39 +423,12 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_nether:nether_wart_block",
-	recipe = {
-		{"mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item"},
-		{"mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item"},
-		{"mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item", "mcl_nether:nether_wart_item"},
-	}
-})
-
-minetest.register_craft({
 	type = "shapeless",
 	output = "mcl_nether:netherite_ingot",
 	recipe = {
 		"mcl_nether:netherite_scrap", "mcl_nether:netherite_scrap", "mcl_nether:netherite_scrap",
 		"mcl_nether:netherite_scrap", "mcl_core:gold_ingot", "mcl_core:gold_ingot",
 		"mcl_core:gold_ingot", "mcl_core:gold_ingot", },
-})
-
-minetest.register_craft({
-	output = "mcl_nether:netheriteblock",
-	recipe = {
-		{"mcl_nether:netherite_ingot", "mcl_nether:netherite_ingot", "mcl_nether:netherite_ingot"},
-		{"mcl_nether:netherite_ingot", "mcl_nether:netherite_ingot", "mcl_nether:netherite_ingot"},
-		{"mcl_nether:netherite_ingot", "mcl_nether:netherite_ingot", "mcl_nether:netherite_ingot"}
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_nether:netherite_ingot 9",
-	recipe = {
-		{"mcl_nether:netheriteblock", "", ""},
-		{"", "", ""},
-		{"", "", ""}
-	}
 })
 
 dofile(minetest.get_modpath(minetest.get_current_modname()).."/nether_wart.lua")

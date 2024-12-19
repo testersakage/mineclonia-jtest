@@ -2,45 +2,6 @@ local block_type = { "", "_cut", "_chiseled", "_grate" }
 local block_exposure_level = { "", "_exposed", "_weathered", "_oxidized" }
 local waxed = { "", "_preserved" }
 
-minetest.register_craft({
-	output = "mcl_copper:block_raw",
-	recipe = {
-		{ "mcl_copper:raw_copper", "mcl_copper:raw_copper", "mcl_copper:raw_copper" },
-		{ "mcl_copper:raw_copper", "mcl_copper:raw_copper", "mcl_copper:raw_copper" },
-		{ "mcl_copper:raw_copper", "mcl_copper:raw_copper", "mcl_copper:raw_copper" }
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_copper:raw_copper 9",
-	recipe = {
-		{ "mcl_copper:block_raw" }
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_copper:block",
-	recipe = {
-		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
-		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
-		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" }
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_copper:copper_ingot 9",
-	recipe = {
-		{ "mcl_copper:block" }
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_copper:copper_ingot 9",
-	recipe = {
-		{ "mcl_copper:block_preserved" }
-	}
-})
-
 for _, x in ipairs(block_exposure_level) do
 	for _, w in ipairs(waxed) do
 		minetest.register_craft({

@@ -172,6 +172,7 @@ minetest.register_craftitem("mcl_mobitems:bone", {
 	inventory_image = "mcl_mobitems_bone.png",
 	groups = { craftitem=1 },
 	_mcl_toollike_wield = true,
+	_mcl_crafting_output = {single = {output = "mcl_bone_meal:bone_meal 3"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:ink_sac", {
@@ -179,6 +180,7 @@ minetest.register_craftitem("mcl_mobitems:ink_sac", {
 	_doc_items_longdesc = S("This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."),
 	inventory_image = "mcl_mobitems_ink_sac.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {single = {output = "mcl_dyes:black"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:string",{
@@ -186,6 +188,7 @@ minetest.register_craftitem("mcl_mobitems:string",{
 	_doc_items_longdesc = S("Strings are used in crafting."),
 	inventory_image = "mcl_mobitems_string.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_wool:white"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:blaze_rod", {
@@ -194,7 +197,8 @@ minetest.register_craftitem("mcl_mobitems:blaze_rod", {
 	wield_image = "mcl_mobitems_blaze_rod.png",
 	inventory_image = "mcl_mobitems_blaze_rod.png",
 	groups = { craftitem = 1 },
-	_mcl_burntime = 120
+	_mcl_burntime = 120,
+	_mcl_crafting_output = {single = {output = "mcl_mobitems:blaze_powder 2"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:breeze_rod", {
@@ -203,6 +207,7 @@ minetest.register_craftitem("mcl_mobitems:breeze_rod", {
 	wield_image = "mcl_mobitems_breeze_rod.png",
 	inventory_image = "mcl_mobitems_breeze_rod.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {single = {output = "mcl_charges:wind_charge 4"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:blaze_powder", {
@@ -219,6 +224,7 @@ minetest.register_craftitem("mcl_mobitems:magma_cream", {
 	wield_image = "mcl_mobitems_magma_cream.png",
 	inventory_image = "mcl_mobitems_magma_cream.png",
 	groups = { craftitem = 1, brewitem = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_nether:magma"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:ghast_tear", {
@@ -260,6 +266,7 @@ minetest.register_craftitem("mcl_mobitems:rabbit_hide", {
 	wield_image = "mcl_mobitems_rabbit_hide.png",
 	inventory_image = "mcl_mobitems_rabbit_hide.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_mobitems:leather"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:rabbit_foot", {
@@ -305,6 +312,7 @@ minetest.register_craftitem("mcl_mobitems:slimeball", {
 	_doc_items_longdesc = S("Slimeballs are used in crafting. They are dropped from slimes."),
 	inventory_image = "mcl_mobitems_slimeball.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_core:slimeblock"}}
 })
 
 minetest.register_craftitem("mcl_mobitems:gunpowder", {
@@ -442,19 +450,6 @@ minetest.register_alias("mcl_mobs:nametag", "mcl_mobitems:nametag")
 -----------
 
 minetest.register_craft({
-	output = "mcl_mobitems:leather",
-	recipe = {
-		{ "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide" },
-		{ "mcl_mobitems:rabbit_hide", "mcl_mobitems:rabbit_hide" },
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_mobitems:blaze_powder 2",
-	recipe = {{"mcl_mobitems:blaze_rod"}},
-})
-
-minetest.register_craft({
 	output = "mcl_mobitems:rabbit_stew",
 	recipe = {
 		{ "", "mcl_mobitems:cooked_rabbit", "", },
@@ -508,18 +503,6 @@ minetest.register_craft({
 	type = "shapeless",
 	output = "mcl_mobitems:magma_cream",
 	recipe = {"mcl_mobitems:blaze_powder", "mcl_mobitems:slimeball"},
-})
-
-minetest.register_craft({
-	output = "mcl_mobitems:slimeball 9",
-	recipe = {{"mcl_core:slimeblock"}},
-})
-
-minetest.register_craft({
-	output = "mcl_core:slimeblock",
-	recipe = {{"mcl_mobitems:slimeball","mcl_mobitems:slimeball","mcl_mobitems:slimeball",},
-		{"mcl_mobitems:slimeball","mcl_mobitems:slimeball","mcl_mobitems:slimeball",},
-		{"mcl_mobitems:slimeball","mcl_mobitems:slimeball","mcl_mobitems:slimeball",}},
 })
 
 minetest.register_craft({

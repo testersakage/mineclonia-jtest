@@ -554,4 +554,5 @@ minetest.register_craftitem("mcl_end:chorus_fruit_popped", {
 	wield_image = "mcl_end_chorus_fruit_popped.png",
 	inventory_image = "mcl_end_chorus_fruit_popped.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_end:purpur_block 4"}}
 })

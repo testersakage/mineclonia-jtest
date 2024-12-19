@@ -90,11 +90,3 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		recipe = {{"mcl_wool:"..color, "mcl_wool:"..color}},
 	})
 end
-
-minetest.register_craft({
-	output = "mcl_wool:white",
-	recipe = {
-		{ "mcl_mobitems:string", "mcl_mobitems:string" },
-		{ "mcl_mobitems:string", "mcl_mobitems:string" },
-	},
-})

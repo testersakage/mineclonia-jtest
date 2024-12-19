@@ -133,6 +133,7 @@ local pumpkin_base_def = {
 	_on_shears_place = carve_pumpkin,
 	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1,
+	_mcl_crafting_output = {single = {output = "mcl_farming:pumpkin_seeds 4"}}
 }
 
 local pumpkin_face_base_def = table.copy(pumpkin_base_def)
@@ -146,6 +147,7 @@ pumpkin_face_base_def.groups.armor_head=1
 pumpkin_face_base_def.groups.non_combat_armor_head=1
 pumpkin_face_base_def._mcl_armor_mob_range_factor = 0
 pumpkin_face_base_def._mcl_armor_mob_range_mob = "mobs_mc:enderman"
+pumpkin_face_base_def._mcl_crafting_output = nil
 
 pumpkin_face_base_def._mcl_armor_element = "head"
 pumpkin_face_base_def._mcl_armor_texture = "mcl_farming_pumpkin_face.png"
@@ -243,11 +245,6 @@ minetest.register_craft({
 	output = "mcl_farming:pumpkin_face_light",
 	recipe = {{"mcl_farming:pumpkin_face"},
 	{"mcl_torches:torch"}}
-})
-
-minetest.register_craft({
-	output = "mcl_farming:pumpkin_seeds 4",
-	recipe = {{"mcl_farming:pumpkin"}}
 })
 
 minetest.register_craftitem("mcl_farming:pumpkin_pie", {

@@ -390,6 +390,10 @@ function mcl_trees.register_wood(name, p)
 		},p.tree or {})
 		def.description = def.description or D(rname .. " Log")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The trunk of a " .. rname .. " tree.")
+		def._mcl_crafting_output = {
+			single = {output = "mcl_trees:wood_"..name.." "..wood_amount},
+			square2 = {output = "mcl_trees:bark_"..name.." 3"}
+		}
 		minetest.register_node(":mcl_trees:".."tree_"..name,def)
 	end
 
@@ -400,12 +404,6 @@ function mcl_trees.register_wood(name, p)
 		},p.wood or {})
 		def.description = def.description or D(rname .. " Planks")
 		minetest.register_node(":mcl_trees:wood_"..name, def)
-		minetest.register_craft({
-			output = "mcl_trees:wood_"..name.." "..wood_amount,
-			recipe = {
-				{ "mcl_trees:tree_"..name },
-			}
-		})
 	end
 
 	if p.bark == nil or type(p.bark) == "table" then
@@ -414,22 +412,11 @@ function mcl_trees.register_wood(name, p)
 			tiles = p.tree and p.tree.tiles and {p.tree.tiles[3]} or { minetest.get_current_modname().."_log_"..name..".png"},
 			is_ground_content = false,
 			_mcl_stripped_variant = (p.stripped_bark == nil or type(p.stripped_bark) == "table") and "mcl_trees:bark_stripped_"..name,
+			_mcl_crafting_output = {single = {output = "mcl_trees:wood_"..name.." "..wood_amount}}
+
 		}, p.bark or {})
 		def.description = def.description or D(rname .. " Bark")
 		minetest.register_node(":mcl_trees:bark_"..name,def)
-		minetest.register_craft({
-			output = "mcl_trees:bark_"..name.." 3",
-			recipe = {
-				{ "mcl_trees:tree_"..name, "mcl_trees:tree_"..name },
-				{ "mcl_trees:tree_"..name, "mcl_trees:tree_"..name },
-			}
-		})
-		minetest.register_craft({
-			output = "mcl_trees:wood_"..name.." "..wood_amount,
-			recipe = {
-				{ "mcl_trees:bark_"..name },
-			}
-		})
 	end
 
 	if p.stripped == nil or type(p.stripped) == "table" then
@@ -439,13 +426,11 @@ function mcl_trees.register_wood(name, p)
 		}, p.stripped or {})
 		def.description = def.description or D("Stripped " .. rname .. " Log")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped trunk of an ".. rname .. " tree.")
+		def._mcl_crafting_output = {
+			single = {output = "mcl_trees:wood_"..name.." "..wood_amount},
+			square2 = {output = "mcl_trees:bark_stripped_"..name.." 3"}
+		}
 		minetest.register_node(":mcl_trees:stripped_"..name, def)
-		minetest.register_craft({
-			output = "mcl_trees:wood_"..name.." "..wood_amount,
-			recipe = {
-				{ "mcl_trees:stripped_"..name },
-			}
-		})
 	end
 
 	if p.stripped_bark == nil or type(p.stripped_bark) == "table" then
@@ -455,20 +440,8 @@ function mcl_trees.register_wood(name, p)
 		}, p.stripped_bark or {})
 		def.description = def.description or D("Stripped " .. rname .. " Bark")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped wood of an " .. rname .. " tree.")
+		def._mcl_crafting_output = {single = {output = "mcl_trees:wood_"..name.." "..wood_amount}}
 		minetest.register_node(":mcl_trees:bark_stripped_"..name, def)
-		minetest.register_craft({
-			output = "mcl_trees:bark_stripped_"..name.." 3",
-			recipe = {
-				{ "mcl_trees:stripped_"..name, "mcl_trees:stripped_"..name },
-				{ "mcl_trees:stripped_"..name, "mcl_trees:stripped_"..name },
-			}
-		})
-		minetest.register_craft({
-			output = "mcl_trees:wood_"..name.." "..wood_amount,
-			recipe = {
-				{ "mcl_trees:bark_stripped_"..name },
-			}
-		})
 	end
 
 	if p.sapling == nil or type(p.sapling) == "table" then

@@ -584,6 +584,7 @@ minetest.register_craftitem("mcl_ocean:dried_kelp", {
 	on_place = minetest.item_eat(1),
 	on_secondary_use = minetest.item_eat(1),
 	_mcl_saturation = 0.6,
+	_mcl_crafting_output = {square3 = {output = "mcl_ocean:dried_kelp_block"}}
 })
 
 
@@ -608,22 +609,8 @@ minetest.register_node("mcl_ocean:dried_kelp_block", {
 	on_rotate = on_rotate,
 	_mcl_hardness = 0.5,
 	_mcl_blast_resistance = 2.5,
-	_mcl_burntime = 200
-})
-
-minetest.register_craft({
-	recipe = {
-		{ "mcl_ocean:dried_kelp","mcl_ocean:dried_kelp","mcl_ocean:dried_kelp" },
-		{ "mcl_ocean:dried_kelp","mcl_ocean:dried_kelp","mcl_ocean:dried_kelp" },
-		{ "mcl_ocean:dried_kelp","mcl_ocean:dried_kelp","mcl_ocean:dried_kelp" },
-	},
-	output = "mcl_ocean:dried_kelp_block",
-})
-minetest.register_craft({
-	recipe = {
-		{ "mcl_ocean:dried_kelp_block" },
-	},
-	output = "mcl_ocean:dried_kelp 9",
+	_mcl_burntime = 200,
+	_mcl_crafting_output = {single = {output = "mcl_ocean:dried_kelp 9"}}
 })
 
 --------------------------------------------------------------------------------

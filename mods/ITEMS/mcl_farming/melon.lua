@@ -143,19 +143,9 @@ minetest.register_craftitem("mcl_farming:melon_item", {
 	on_secondary_use = minetest.item_eat(2),
 	groups = {food = 2, eatable = 2, compostability = 50},
 	_mcl_saturation = 1.2,
-})
-
-minetest.register_craft({
-	output = "mcl_farming:melon_seeds",
-	recipe = {{"mcl_farming:melon_item"}}
-})
-
-minetest.register_craft({
-	output = "mcl_farming:melon",
-	recipe = {
-		{"mcl_farming:melon_item", "mcl_farming:melon_item", "mcl_farming:melon_item"},
-		{"mcl_farming:melon_item", "mcl_farming:melon_item", "mcl_farming:melon_item"},
-		{"mcl_farming:melon_item", "mcl_farming:melon_item", "mcl_farming:melon_item"},
+	_mcl_crafting_output = {
+		single = {output = "mcl_farming:melon_seeds"},
+		square3 = {output = "mcl_farming:melon"}
 	}
 })
 

@@ -122,6 +122,7 @@ minetest.register_craftitem("mcl_farming:wheat_item", {
 	_doc_items_usagehelp = S("Use the “Place” key on an animal to try to feed it wheat."),
 	inventory_image = "farming_wheat_harvested.png",
 	groups = {craftitem = 1, compostability = 65},
+	_mcl_crafting_output = {square3 = {output = "mcl_farming:hay_block"}}
 })
 
 minetest.register_craft({
@@ -181,22 +182,7 @@ minetest.register_node("mcl_farming:hay_block", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-})
-
-minetest.register_craft({
-	output = "mcl_farming:hay_block",
-	recipe = {
-		{"mcl_farming:wheat_item", "mcl_farming:wheat_item", "mcl_farming:wheat_item"},
-		{"mcl_farming:wheat_item", "mcl_farming:wheat_item", "mcl_farming:wheat_item"},
-		{"mcl_farming:wheat_item", "mcl_farming:wheat_item", "mcl_farming:wheat_item"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_farming:wheat_item 9",
-	recipe = {
-		{"mcl_farming:hay_block"},
-	}
+	_mcl_crafting_output = {single = {output = "mcl_farming:wheat_item 9"}}
 })
 
 if minetest.get_modpath("doc") then

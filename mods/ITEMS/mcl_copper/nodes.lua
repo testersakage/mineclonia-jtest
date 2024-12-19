@@ -42,6 +42,7 @@ minetest.register_node("mcl_copper:block_raw", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
+	_mcl_crafting_output = {single = {output = "mcl_copper:raw_copper 9"}}
 })
 
 local n_desc = {
@@ -72,6 +73,11 @@ for n, desc in pairs(n_desc) do
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
+		_mcl_crafting_output = {
+			single = {
+				output = n == "" and "mcl_copper:copper_ingot 9" or ""
+			}
+		}
 	})
 
 	minetest.register_node("mcl_copper:block"..n.."_cut", {

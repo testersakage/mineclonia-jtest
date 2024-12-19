@@ -17,6 +17,7 @@ minetest.register_node("mcl_end:end_stone", {
 	after_dig_node = mcl_end.check_detach_chorus_plant,
 	_mcl_blast_resistance = 9,
 	_mcl_hardness = 3,
+	_mcl_crafting_output = {square2 = {output = "mcl_end:end_bricks 4"}}
 })
 
 minetest.register_node("mcl_end:end_bricks", {
@@ -197,22 +198,6 @@ mcl_stairs.register_stair_and_slab("purpur_block", {
 })
 
 -- Crafting recipes
-minetest.register_craft({
-	output = "mcl_end:end_bricks 4",
-	recipe = {
-		{"mcl_end:end_stone", "mcl_end:end_stone"},
-		{"mcl_end:end_stone", "mcl_end:end_stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "mcl_end:purpur_block 4",
-	recipe = {
-		{"mcl_end:chorus_fruit_popped", "mcl_end:chorus_fruit_popped",},
-		{"mcl_end:chorus_fruit_popped", "mcl_end:chorus_fruit_popped",},
-	}
-})
-
 minetest.register_craft({
 	output = "mcl_end:end_rod 4",
 	recipe = {

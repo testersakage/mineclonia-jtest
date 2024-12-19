@@ -5,6 +5,7 @@ minetest.register_craftitem("mcl_copper:copper_ingot", {
 	_doc_items_longdesc = S("Molten Raw Copper. It is used to craft blocks."),
 	inventory_image = "mcl_copper_ingot.png",
 	groups = { craftitem = 1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_copper:block"}}
 })
 
 minetest.register_craftitem("mcl_copper:raw_copper", {
@@ -12,5 +13,6 @@ minetest.register_craftitem("mcl_copper:raw_copper", {
 	_doc_items_longdesc = S("Raw Copper. Mine a Copper Ore to get it."),
 	inventory_image = "mcl_copper_raw.png",
 	groups = { craftitem = 1, blast_furnace_smeltable = 1 },
-	_mcl_cooking_output = "mcl_copper:copper_ingot"
+	_mcl_cooking_output = "mcl_copper:copper_ingot",
+	_mcl_crafting_output = {square3 = {output = "mcl_copper:block_raw"}}
 })

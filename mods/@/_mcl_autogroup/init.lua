@@ -430,14 +430,63 @@ local function overwrite()
 			})
 		end
 
-		if tdef._mcl_cooking_output and type(tdef._mcl_cooking_output) == "string" and tdef._mcl_cooking_output ~= "" then
+		local cooking_output = tdef._mcl_cooking_output
+		if cooking_output and type(cooking_output) == "string" and cooking_output ~= "" then
 			minetest.register_craft({
 				type = "cooking",
 				recipe = tname,
-				output = tdef._mcl_cooking_output,
+				output = cooking_output,
 				cooktime = tdef._mcl_cooktime or 10,
 				replacements = tdef._mcl_cooking_replacements
 			})
+		end
+
+		local crafting_output = tdef._mcl_crafting_output
+		if crafting_output and type(crafting_output) == "table" then
+			local single = crafting_output.single
+			local square2 = crafting_output.square2
+			local square3 = crafting_output.square3
+
+			if single and type(single) == "table" then
+				local output = single.output
+				if type(output) == "string" and output ~= "" then
+					minetest.register_craft({
+						type = "shapeless",
+						recipe = {tname},
+						output = output,
+						replacements = single.replacements
+					})
+				end
+			end
+
+			if square2 and type(square2) == "table" then
+				local output = square2.output
+				if type(output) == "string" and output ~= "" then
+					minetest.register_craft({
+						recipe = {
+							{tname, tname},
+							{tname, tname}
+						},
+						output = output,
+						replacements = square2.replacements
+					})
+				end
+			end
+
+			if square3 and type(square3) == "table" then
+				local output = square3.output
+				if type(output) == "string" and output ~= "" then
+					minetest.register_craft({
+						recipe = {
+							{tname, tname, tname},
+							{tname, tname, tname},
+							{tname, tname, tname}
+						},
+						output = output,
+						replacements = square3.replacements
+					})
+				end
+			end
 		end
 	end
 end

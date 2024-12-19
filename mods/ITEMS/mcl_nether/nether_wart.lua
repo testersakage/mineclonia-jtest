@@ -137,6 +137,7 @@ minetest.register_craftitem("mcl_nether:nether_wart_item", {
 			end
 		end
 	end,
+	_mcl_crafting_output = {square3 = {output = {"mcl_nether:nether_wart_block"}}}
 })
 
 local names = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"}

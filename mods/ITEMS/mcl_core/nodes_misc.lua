@@ -20,6 +20,7 @@ minetest.register_node("mcl_core:bone_block", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
+	_mcl_crafting_output = {single = {output = "mcl_bone_meal:bone_meal 9"}}
 })
 
 minetest.register_node("mcl_core:slimeblock", {
@@ -54,6 +55,7 @@ minetest.register_node("mcl_core:slimeblock", {
 	_mcl_pistons_sticky = function(node, node_to, direction)
 		return node_to.name ~= "mcl_honey:honey_block"
 	end,
+	_mcl_crafting_output = {single = {output = "mcl_mobitems:slimeball 9"}}
 })
 
 minetest.register_node("mcl_core:cobweb", {

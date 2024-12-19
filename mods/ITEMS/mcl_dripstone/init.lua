@@ -200,14 +200,6 @@ local on_dripstone_destruct = function(pos)
 	end
 end
 
-minetest.register_craft({
-	output = "mcl_dripstone:dripstone_block",
-	recipe = {
-		{ "mcl_dripstone:pointed_dripstone", "mcl_dripstone:pointed_dripstone"},
-		{ "mcl_dripstone:pointed_dripstone", "mcl_dripstone:pointed_dripstone"},
-	}
-})
-
 minetest.register_craftitem("mcl_dripstone:pointed_dripstone", {
 	description = S("Pointed dripstone"),
 	_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
@@ -215,6 +207,7 @@ minetest.register_craftitem("mcl_dripstone:pointed_dripstone", {
 	inventory_image = "pointed_dripstone_tip.png",
 	on_place = on_dripstone_place,
 	on_secondary_use = on_dripstone_place,
+	_mcl_crafting_output = {square2 = {output = "mcl_dripstone:dripstone_block"}}
 })
 
 for i = 1, #dripstone_stages do

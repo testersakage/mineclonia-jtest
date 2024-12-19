@@ -329,6 +329,7 @@ minetest.register_craftitem("mcl_throwing:snowball", {
 	groups = { weapon_ranged = 1 },
 	on_use = mcl_throwing.get_player_throw_function("mcl_throwing:snowball_entity"),
 	_on_dispense = mcl_throwing.dispense_function,
+	_mcl_crafting_output = {square2 = {output = "mcl_core:snowblock"}}
 })
 
 -- Egg

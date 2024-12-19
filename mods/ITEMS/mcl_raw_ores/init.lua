@@ -9,7 +9,8 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		_doc_items_longdesc = longdesc,
 		inventory_image = texture..".png",
 		groups = { craftitem = 1, blast_furnace_smeltable = 1 },
-		_mcl_cooking_output = "mcl_core:"..ore.."_ingot"
+		_mcl_cooking_output = "mcl_core:"..ore.."_ingot",
+		_mcl_crafting_output = {square3 = {output = raw_ingot.."_block"}}
 	})
 
 	minetest.register_node(raw_ingot.."_block", {
@@ -25,22 +26,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5,
-	})
-
-	minetest.register_craft({
-		output = raw_ingot.."_block",
-		recipe = {
-			{ raw_ingot, raw_ingot, raw_ingot },
-			{ raw_ingot, raw_ingot, raw_ingot },
-			{ raw_ingot, raw_ingot, raw_ingot },
-		},
-	})
-
-	minetest.register_craft({
-		output = raw_ingot.." 9",
-		recipe = {
-			{ raw_ingot.."_block" },
-		},
+		_mcl_crafting_output = {single = {output = raw_ingot.." 9"}}
 	})
 end
 

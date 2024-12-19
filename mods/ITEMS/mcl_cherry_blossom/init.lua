@@ -82,7 +82,8 @@ minetest.register_node("mcl_cherry_blossom:pink_petals",{
 	_mcl_blast_resistance = 0,
 	_on_bone_meal = function(_, _, _ , pos, n)
 		minetest.add_item(pos,n.name)
-	end
+	end,
+	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}}
 })
 
 local cherry_particlespawner = {

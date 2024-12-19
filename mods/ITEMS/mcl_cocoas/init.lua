@@ -109,6 +109,7 @@ minetest.register_craftitem("mcl_cocoas:cocoa_beans", {
 	on_place = function(itemstack, placer, pointed_thing)
 		return cocoa_place(itemstack, placer, pointed_thing, "mcl_cocoas:cocoa_1")
 	end,
+	_mcl_crafting_output = {single = {output = "mcl_dyes:brown"}}
 })
 
 minetest.register_abm({

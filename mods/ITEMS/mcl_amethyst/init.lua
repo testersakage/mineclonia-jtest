@@ -37,6 +37,7 @@ minetest.register_craftitem("mcl_amethyst:amethyst_shard",{
 	_doc_items_longdesc = S("An amethyst shard is a crystalline mineral."),
 	inventory_image = "mcl_amethyst_amethyst_shard.png",
 	groups = {craftitem = 1},
+	_mcl_crafting_output = {square2 = {output = "mcl_amethyst:amethyst_block"}}
 })
 
 -- Calcite
@@ -170,14 +171,6 @@ minetest.register_node("mcl_amethyst:amethyst_cluster",{
 })
 
 -- Register Crafts
-minetest.register_craft({
-	output = "mcl_amethyst:amethyst_block",
-	recipe = {
-		{"mcl_amethyst:amethyst_shard", "mcl_amethyst:amethyst_shard"},
-		{"mcl_amethyst:amethyst_shard", "mcl_amethyst:amethyst_shard"},
-	},
-})
-
 minetest.register_craft({
 	output = "mcl_amethyst:tinted_glass 2",
 	recipe = {

@@ -23,7 +23,8 @@ minetest.register_craftitem("mcl_core:coal_lump", {
 	_doc_items_hidden = false,
 	inventory_image = "default_coal_lump.png",
 	groups = { craftitem=1, coal=1 },
-	_mcl_burntime = 80
+	_mcl_burntime = 80,
+	_mcl_crafting_output = {square3 = {output = "mcl_core:coalblock"}}
 })
 
 minetest.register_craftitem("mcl_core:charcoal_lump", {
@@ -40,6 +41,7 @@ minetest.register_craftitem("mcl_core:iron_nugget", {
 	_doc_items_longdesc = S("Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."),
 	inventory_image = "mcl_core_iron_nugget.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_core:iron_ingot"}}
 })
 
 minetest.register_craftitem("mcl_core:gold_nugget", {
@@ -47,6 +49,7 @@ minetest.register_craftitem("mcl_core:gold_nugget", {
 	_doc_items_longdesc = S("Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."),
 	inventory_image = "mcl_core_gold_nugget.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_core:gold_ingot"}}
 })
 
 minetest.register_craftitem("mcl_core:diamond", {
@@ -54,6 +57,7 @@ minetest.register_craftitem("mcl_core:diamond", {
 	_doc_items_longdesc = S("Diamonds are precious minerals and useful to create the highest tier of armor and tools."),
 	inventory_image = "default_diamond.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_core:diamondblock"}}
 })
 
 minetest.register_craftitem("mcl_core:clay_lump", {
@@ -62,7 +66,8 @@ minetest.register_craftitem("mcl_core:clay_lump", {
 	_doc_items_hidden = false,
 	inventory_image = "default_clay_lump.png",
 	groups = { craftitem=1 },
-	_mcl_cooking_output = "mcl_core:brick"
+	_mcl_cooking_output = "mcl_core:brick",
+	_mcl_crafting_output = {square2 = {output = "mcl_core:clay"}}
 })
 
 minetest.register_craftitem("mcl_core:iron_ingot", {
@@ -70,6 +75,10 @@ minetest.register_craftitem("mcl_core:iron_ingot", {
 	_doc_items_longdesc = S("Molten iron. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_steel_ingot.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {
+		single = {output = "mcl_core:iron_nugget 9"},
+		square3 = {output = "mcl_core:ironblock"}
+	}
 })
 
 minetest.register_craftitem("mcl_core:gold_ingot", {
@@ -77,6 +86,10 @@ minetest.register_craftitem("mcl_core:gold_ingot", {
 	_doc_items_longdesc = S("Molten gold. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_gold_ingot.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {
+		single = {output = "mcl_core:gold_nugget 9"},
+		square3 = {output = "mcl_core:goldblock"}
+	}
 })
 
 minetest.register_craftitem("mcl_core:emerald", {
@@ -84,6 +97,7 @@ minetest.register_craftitem("mcl_core:emerald", {
 	_doc_items_longdesc = S("Emeralds are used in villager trades as currency."),
 	inventory_image = "mcl_core_emerald.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_core:emeraldblock"}}
 })
 
 minetest.register_craftitem("mcl_core:lapis", {
@@ -91,6 +105,10 @@ minetest.register_craftitem("mcl_core:lapis", {
 	_doc_items_longdesc = S("Lapis Lazuli are required for enchanting items on an enchanting table."),
 	inventory_image = "mcl_core_lapis.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {
+		single = {output = "mcl_dyes:blue"},
+		square3 = {output = "mcl_core:lapisblock"}
+	}
 })
 
 minetest.register_craftitem("mcl_core:brick", {
@@ -98,6 +116,7 @@ minetest.register_craftitem("mcl_core:brick", {
 	_doc_items_longdesc = S("Bricks are used to craft brick blocks."),
 	inventory_image = "default_clay_brick.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {square2 = {output = "mcl_core:brick_block"}}
 })
 
 minetest.register_craftitem("mcl_core:flint", {
