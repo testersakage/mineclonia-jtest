@@ -1,7 +1,6 @@
 mcl_conduits = {}
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
-local C = minetest.colorize
 
 local check_interval = 5
 local conduit_nodes = { "mcl_ocean:prismarine",  "mcl_ocean:prismarine_brick", "mcl_ocean:prismarine_dark", "mcl_ocean:sea_lantern" }

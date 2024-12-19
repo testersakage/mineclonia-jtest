@@ -1,7 +1,6 @@
 mcl_pottery_sherds = {}
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
-local C = minetest.colorize
 
 mcl_pottery_sherds.defs = {
 	["angler"] = { description = S("Angler") },

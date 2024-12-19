@@ -21,7 +21,6 @@ mcl_banners.patterns = {
 }
 
 for pattern, defs in pairs(mcl_banners.patterns) do
-	local color = mcl_colors[defs.rarity_color or "WHITE"]
 	minetest.register_craftitem("mcl_banners:pattern_"..pattern,{
 		description = S(readable_name(pattern).." Banner Pattern"),
 		_tt_help = C(mcl_colors.GRAY, S("Can be used to craft special banner designs on the loom")),
