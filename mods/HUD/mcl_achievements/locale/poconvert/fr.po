@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-19 11:50+0000\n"
+"PO-Revision-Date: 2024-12-19 13:21+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -335,13 +335,13 @@ msgid "Pork Chop"
 msgstr "Côte de porc"
 
 msgid "Eat a cooked porkchop."
-msgstr "Mangez du porc cuit."
+msgstr "Cuisez et mangez une côtelette de porc."
 
 msgid "Rabbit Season"
 msgstr "Saison du lapin"
 
 msgid "Eat a cooked rabbit."
-msgstr "Mangez du lapin cuit."
+msgstr "Cuisez et mangez du lapin."
 
 msgid "Iron Belly"
 msgstr "Estomac d'acier"
@@ -380,7 +380,7 @@ msgid "Obtain an obsidian block."
 msgstr "Obtenez un bloc d'obsidienne."
 
 msgid "Hero of the Village"
-msgstr "Héro du village"
+msgstr "Héros du village"
 
 msgid "Successfully defend a village from a raid"
 msgstr "Défendez avec succès un village d'une invasion"
