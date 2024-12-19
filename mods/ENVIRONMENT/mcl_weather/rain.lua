@@ -50,7 +50,7 @@ function mcl_weather.is_exposed_to_rain (pos)
 	end
 	local name = minetest.get_biome_name (data.biome)
 	local def = minetest.registered_biomes[name]
-	return def._mcl_biome_type ~= "hot"
+	return def and def._mcl_biome_type ~= "hot"
 		and mcl_weather.is_outdoor (pos)
 		and not mcl_weather.has_snow (pos)
 end
