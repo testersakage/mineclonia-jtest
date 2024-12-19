@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-19 07:45+0000\n"
+"PO-Revision-Date: 2024-12-19 11:50+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -16,13 +16,13 @@ msgstr ""
 "X-Generator: Weblate 5.8.4\n"
 
 msgid "Benchmarking"
-msgstr "Fabriquer"
+msgstr "Au travail !"
 
 msgid "Craft a crafting table from 4 wooden planks."
 msgstr "Fabriquez un établi à partir de 4 planches de bois."
 
 msgid "Time to Mine!"
-msgstr "Elle paye pas de mine !"
+msgstr "Un outil qui paie pas de mine !"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr "Utilisez un établi pour fabriquer une pioche en bois à partir de planches et de bâtons."
@@ -31,7 +31,7 @@ msgid "Hot Topic"
 msgstr "Au fourneau !"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr "Utilise 8 pierres pour fabriquer un four."
+msgstr "Utilisez 8 pierres pour fabriquer un four."
 
 msgid "Time to Farm!"
 msgstr "Il est temps de cultiver !"
@@ -67,13 +67,13 @@ msgid "Librarian"
 msgstr "Bibliothécaire"
 
 msgid "Craft a bookshelf."
-msgstr "Fabriquez une Bibliothèque."
+msgstr "Fabriquez une bibliothèque."
 
 msgid "Isn't It Iron Pick"
 msgstr "Bonne Pioche !"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr "Fabriquer une pioche de fer avec des batons et du fer."
+msgstr "Fabriquez une pioche de fer avec des batons et du fer."
 
 msgid "DIAMONDS!"
 msgstr "DES DIAMANTS !"
@@ -85,7 +85,7 @@ msgid "Into Fire"
 msgstr "Dans le feu de l'action"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr "Ramassez une tige de feu sur le sol."
+msgstr "Ramassez un bâton de Blaze au sol."
 
 msgid "Cow Tipper"
 msgstr "Tanneur en devenir"
@@ -134,8 +134,10 @@ msgstr "L'âge du fer"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
-msgstr "Prenez un lingot de fer dans la fente de sortie d'un four.\n"
-"Conseil : Pour faire fondre un lingot de fer, mettez du combustible (comme du charbon) et du minerai de fer dans un four."
+msgstr ""
+"Prenez un lingot de fer dans l'emplacement de sortie d'un four.\n"
+"Conseil : Pour faire fondre un lingot de fer, mettez du combustible (comme "
+"du charbon) et du minerai de fer dans un four."
 
 msgid "Delicious Fish"
 msgstr "Un délicieux poisson"
@@ -189,7 +191,7 @@ msgid "Postmortal"
 msgstr "Aux frontières de la mort"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr "Utiliser un Totem d’immortalité pour tromper la mort."
+msgstr "Utiliser un totem d’immortalité pour tromper la mort."
 
 msgid "Sweet Dreams"
 msgstr "Bonne nuit les petits"
@@ -204,7 +206,7 @@ msgid "Charge a Respawn Anchor to the maximum."
 msgstr "Charger une Ancre de Réapparition au maximum."
 
 msgid "What A Deal!"
-msgstr "Adjugé, Vendu !"
+msgstr "Adjugé, vendu !"
 
 msgid "Successfully trade with a Villager."
 msgstr "Commercez avec succès avec un villageois."
@@ -251,7 +253,9 @@ msgid "Serious Dedication"
 msgstr "Sérieux dévouement"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
-msgstr "Utilisez un lingot de netherite pour améliorez une houe, puis réévaluez complètement vos choix de vie."
+msgstr ""
+"Utilisez un lingot de Netherite pour améliorez une houe, puis réévaluez "
+"complètement vos choix de vie."
 
 msgid "Local Brewery"
 msgstr "Apprenti chimiste"
@@ -283,7 +287,7 @@ msgid "The End... Again..."
 msgstr "Un air de déjà vu..."
 
 msgid "Respawn the Ender Dragon."
-msgstr "Faites renaître l'Ender Dragon."
+msgstr "Faites réapparaître l'Ender Dragon."
 
 msgid "Bee Our Guest"
 msgstr "J'irai butiner chez vous"
