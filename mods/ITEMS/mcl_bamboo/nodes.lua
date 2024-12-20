@@ -134,7 +134,7 @@ mcl_stairs.register_stair("bamboo_mosaic", {
 
 mcl_stairs.register_slab("bamboo_mosaic", {
 	baseitem = "mcl_bamboo:bamboo_mosaic",
-	description = S("Bamboo Mosaic Stairs"),
+	description = S("Bamboo Mosaic Slab"),
 	overrides = {_mcl_burntime = 15}
 })
 
