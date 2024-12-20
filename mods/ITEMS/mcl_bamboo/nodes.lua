@@ -61,7 +61,6 @@ local bamboo_def = {
 	_on_bone_meal = function(_, _, _, pos)
 		return mcl_bamboo.grow(pos)
 	end,
-	_mcl_crafting_output = {square3 = {output = "mcl_trees:tree_bamboo"}}
 }
 
 for i,it in pairs(mcl_bamboo.bamboo_itemstrings) do

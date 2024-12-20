@@ -1,6 +1,15 @@
 --- Originally created by michieal.
 -- These are just the recipes specific to bamboo now. The usual wood stuff is registered by mcl_trees
 minetest.register_craft({
+	output = "mcl_trees:tree_bamboo",
+	recipe = {
+		{"group:bamboo_tree","group:bamboo_tree","group:bamboo_tree"},
+		{"group:bamboo_tree","group:bamboo_tree","group:bamboo_tree"},
+		{"group:bamboo_tree","group:bamboo_tree","group:bamboo_tree"},
+	}
+})
+
+minetest.register_craft({
 	output = "mcl_bamboo:scaffolding 6",
 	recipe = {{"group:bamboo_tree", "mcl_mobitems:string", "group:bamboo_tree"},
 			 {"group:bamboo_tree", "", "group:bamboo_tree"},
