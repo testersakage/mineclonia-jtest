@@ -1274,7 +1274,8 @@ function mob_class:gwp_classify_node (context, pos)
 				-- immediately.
 				if penalties[class] < 0.0 then
 					worst = class
-					break
+					context.class_cache[hash] = worst
+					return worst
 				-- Otherwise select the worst class possible.
 				elseif worst == "OPEN" or penalty < penalties[class] then
 					penalty = penalties[class]
@@ -1283,9 +1284,8 @@ function mob_class:gwp_classify_node (context, pos)
 			end
 		end
 	end
-	cache = worst
-	context.class_cache[hash] = cache
-	return cache
+	context.class_cache[hash] = worst
+	return worst
 end
 
 function mob_class:gwp_classify_for_movement (pos)
@@ -2808,7 +2808,8 @@ local function airborne_gwp_classify_node (self, context, pos)
 				-- immediately.
 				if penalties[class] < 0.0 then
 					worst = class
-					break
+					context.class_cache[hash] = worst
+					return worst
 				-- Otherwise select the worst class possible.
 				elseif worst == "OPEN" or penalty < penalties[class] then
 					penalty = penalties[class]
@@ -2817,9 +2818,8 @@ local function airborne_gwp_classify_node (self, context, pos)
 			end
 		end
 	end
-	cache = worst
-	context.class_cache[hash] = cache
-	return cache
+	context.class_cache[hash] = worst
+	return worst
 end
 
 local function airborne_gwp_classify_for_movement (self, pos)
@@ -2846,8 +2846,7 @@ local function airborne_gwp_classify_for_movement (self, pos)
 				-- Report impassible nodes
 				-- immediately.
 				if penalties[class] < 0.0 then
-					worst = class
-					break
+					return worst
 				-- Otherwise select the worst class possible.
 				elseif worst == "OPEN" or penalty < penalties[class] then
 					penalty = penalties[class]
