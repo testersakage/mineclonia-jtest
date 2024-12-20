@@ -5,6 +5,7 @@
 
 local S = minetest.get_translator("mobs_mc")
 local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
+local mob_class = mcl_mobs.mob_class
 
 --###################
 --################### GHAST
@@ -63,7 +64,7 @@ local ghast = {
 	floats = 1,
 	fly = true,
 	-- True flight.
-	motion_step = mcl_mobs.mob_class.flying_step,
+	motion_step = mob_class.flying_step,
 	makes_footstep_sound = false,
 	instant_death = true,
 	fire_resistant = true,
@@ -75,6 +76,13 @@ local ghast = {
 ------------------------------------------------------------------------
 -- Ghast AI.
 ------------------------------------------------------------------------
+
+-- Ghasts should not notice players till they are within 4.0 blocks
+-- vertically.
+function ghast:should_attack (object)
+	return mob_class.should_attack (self, object)
+		and (object:get_pos ().y - self.object:get_pos ().y) <= 4.0
+end
 
 function ghast:do_go_pos (dtime, moveresult)
 	local target = self.movement_target or vector.zero ()
