@@ -21,6 +21,27 @@ Items can have these fields:
   If you don't do this, anvils will fail at properly restoring the description
   when their custom name gets cleared at an anvil. See `mcl_banners` for an
   example.
+* `_mcl_burntime`: _number_ that determines, in ticks, the amount of time an item
+  burns when used in furnaces, blast furnaces and smokers. Examples can be found
+  in `mcl_core/craftitems.lua`.
+* `_mcl_cooking_output`: _string_ that determines the burning result of an item
+  when used in furnaces, blast furnaces and smokers. Examples can be found in
+  `mcl_mobitems`.
+* `_mcl_fuel_replacements`: _table_ containing replacements for items used as fuel.
+  The only example in MCLA is the lava bucket, which when used as fuel leaves an empty
+  bucket in its place. See `mcl_buckets/register.lua`.
+* `_mcl_cooking_replacements`: _table_ containing replacements for items used in burning.
+  The only example in MCLA is the wet sponge. When an empty bucket is left in the
+  furnace's fuel slot while drying a wet sponge, it will be replaced by a bucket of water.
+  See `mcl_sponges`.
+* `_mcl_crafting_output`: _table_ used to eliminate the need to record recipes in simple shapes.
+  The currently supported shapes are `single`, when the item is used alone in any slot on the
+  crafting grid (shapeless), `square2` for recipes with the square shape of two by two slots and
+  `square3` for recipes with the square shape of three by three slots. Each of these shapes is a
+  key in the `_mcl_crafting_output` table. The values ​​of these keys are tables which must contain
+  the `output` key, a string with the crafting result depending on the format used. Each shape key
+  can also contain a special key called `replacements`, a table which determines which items will be replaced after crafting. The most complete example of `_mcl_crafting_output` is the honey bottle,
+  which has two simple shape recipes, both with replacements. See `mcl_honey`. Some simple recipes are no longer covered by this field due to the implementation of their APIs, as in the case of buttons and trapdoors.
 
 Tools can have these fields:
 
