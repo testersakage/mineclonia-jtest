@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-19 13:21+0000\n"
+"PO-Revision-Date: 2024-12-20 14:16+0000\n"
 "Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -241,7 +241,7 @@ msgid "-@1% mining and attack speed"
 msgstr "-@1% vitesse de minage et d'attaque"
 
 msgid "Conduit Power"
-msgstr "Force de Conduit"
+msgstr "Force de conduit"
 
 msgid "+@1% mining and attack speed in water"
 msgstr "+@1% vitesse de minage et d'attaque sous l'eau"
@@ -256,7 +256,7 @@ msgid "Glass Bottle"
 msgstr "Fiole"
 
 msgid "Liquid container"
-msgstr "Récipient de liquide"
+msgstr "Récipient à liquide"
 
 msgid "A glass bottle is used as a container for liquids and can be used to collect water directly."
 msgstr ""
@@ -353,16 +353,16 @@ msgid "Strange Tipped Arrow"
 msgstr "Flèche à pointe étrange"
 
 msgid "Dragon's Breath"
-msgstr "Souffle du dragon"
+msgstr "Souffle de dragon"
 
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr "Cet objet est utilisé dans le brassage et peut être combiné avec des potions d'éclaboussures pour créer des potions persistantes."
 
 msgid "Awkward"
-msgstr "Étrange"
+msgstr "étrange"
 
 msgid "Has an awkward taste and is used for brewing potions."
-msgstr "A un goût étrange et est utilisé pour préparer des potions."
+msgstr "À un goût étrange et est utilisé pour préparer des potions."
 
 msgid "Mundane"
 msgstr "banale"
