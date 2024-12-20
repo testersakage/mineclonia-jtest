@@ -209,25 +209,22 @@ function liquid.register_liquid(def)
     local n112 = core.get_node(p112)
     local n101 = core.get_node(p101)
     local n121 = core.get_node(p121)
-  
-  
-    -- if the mapblocks surrounding are not active we try later again.
-    if n111.name == 'ignore' then
-      return
-    elseif not (
-       core.compare_block_status(pos + {x=-16,y= 0,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 16,y= 0,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 0,y=-16,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 0,y= 16,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 0,y= 0,z=-16}, 'active') and
-       core.compare_block_status(pos + {x= 0,y= 0,z= 16}, 'active') 
-       ) then
-  
-      -- TODO There should be a better way to do that.
-      --core.after(5, flow_iteration, pos)
-      return
-    end
-  
+
+
+    if n011.name == 'ignore' or
+       n211.name == 'ignore' or
+       n110.name == 'ignore' or
+       n112.name == 'ignore' or
+       n101.name == 'ignore' or
+       n121.name == 'ignore' then
+
+
+       if is_liquid(n111) then
+         -- TODO how to handle that?
+       end
+       return
+     end
+
   
     local l111 = get_liquid_level(n111)
     local l011 = get_liquid_level(n011)
