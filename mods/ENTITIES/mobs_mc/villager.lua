@@ -3304,9 +3304,10 @@ function villager:validate_job_sites ()
 		local pos = self._job_site
 		local poi = mcl_villages.get_poi (pos)
 		local profession = professions_by_name[self._profession]
-		assert (profession)
 
-		if not poi or poi.data ~= profession.poi then
+		-- A self._profession of nil has been observed in
+		-- certain old villagers with job sites.
+		if not profession or not poi or poi.data ~= profession.poi then
 			self._job_site = nil
 			self._sensing["nearby_jobsites"] = nil
 
