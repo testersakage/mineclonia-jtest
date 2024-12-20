@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-20 14:16+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mclx_stairs/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Lapis Lazuli Stairs"
 msgstr "Escaleras de lapislázuli"
@@ -77,194 +79,193 @@ msgid "Double Terracotta Slab"
 msgstr "Losa doble de terracota"
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón negro"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón negro"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota negra"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota negra"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón azul"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón azul"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota azul"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota azul"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón marrón"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón marrón"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota marrón"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota marrón"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón cian"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón cian"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota cian"
 
 msgid "Cyan Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota cian"
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón verde"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón verde"
 
 msgid "Green Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota verde"
 
 msgid "Green Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota verde"
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón gris"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón gris"
 
 msgid "Grey Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota gris"
 
 msgid "Grey Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota gris"
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón azul claro"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón azul claro"
 
 msgid "Light Blue Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota azul claro"
 
 msgid "Light Blue Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota azul claro"
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón gris claro"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón gris claro"
 
 msgid "Light Grey Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota gris claro"
 
 msgid "Light Grey Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota gris claro"
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón verde lima"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón verde lima"
 
 msgid "Lime Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota verde lima"
 
 msgid "Lime Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota verde lima"
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón magenta"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón magenta"
 
 msgid "Magenta Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota magenta"
 
 msgid "Magenta Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota magenta"
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón naranja"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón naranja"
 
 msgid "Orange Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota naranja"
 
 msgid "Orange Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota naranja"
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón rosa"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón rosa"
 
 msgid "Pink Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota rosa"
 
 msgid "Pink Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota rosa"
 
 msgid "Purple Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón morado"
 
 msgid "Purple Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón morado"
 
 msgid "Purple Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota morado"
 
 msgid "Purple Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota morado"
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón rojo"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón rojo"
 
 msgid "Red Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota roja"
 
 msgid "Red Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota roja"
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón blanco"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón blanco"
 
 msgid "White Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota blanca"
 
 msgid "White Terracotta Stairs"
-msgstr ""
+msgstr "Escaleras de terracota blanca"
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "Losa de hormigón amarillo"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "Escaleras de hormigón amarillo"
 
 msgid "Yellow Terracotta Slab"
-msgstr ""
+msgstr "Losa de terracota amarilla"
 
 msgid "Yellow Terracotta Stairs"
-msgstr ""
-
+msgstr "Escaleras de terracota amarilla"
