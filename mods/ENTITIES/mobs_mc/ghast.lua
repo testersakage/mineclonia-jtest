@@ -82,7 +82,7 @@ local ghast = {
 -- vertically.
 function ghast:should_attack (object)
 	return mob_class.should_attack (self, object)
-		and (object:get_pos ().y - self.object:get_pos ().y) <= 4.0
+		and math.abs (object:get_pos ().y - self.object:get_pos ().y) <= 4.0
 end
 
 function ghast:do_go_pos (dtime, moveresult)
