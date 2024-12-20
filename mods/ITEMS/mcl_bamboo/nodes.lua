@@ -61,6 +61,7 @@ local bamboo_def = {
 	_on_bone_meal = function(_, _, _, pos)
 		return mcl_bamboo.grow(pos)
 	end,
+	_mcl_crafting_output = {square3 = {output = "mcl_trees:tree_bamboo"}}
 }
 
 for i,it in pairs(mcl_bamboo.bamboo_itemstrings) do
@@ -123,6 +124,18 @@ minetest.register_node("mcl_bamboo:bamboo_mosaic",  {
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 2,
 	_mcl_burntime = 15
+})
+
+mcl_stairs.register_stair("bamboo_mosaic", {
+	baseitem = "mcl_bamboo:bamboo_mosaic",
+	description = S("Bamboo Mosaic Stairs"),
+	overrides = {_mcl_burntime = 15}
+})
+
+mcl_stairs.register_slab("bamboo_mosaic", {
+	baseitem = "mcl_bamboo:bamboo_mosaic",
+	description = S("Bamboo Mosaic Stairs"),
+	overrides = {_mcl_burntime = 15}
 })
 
 local adjacents = {
