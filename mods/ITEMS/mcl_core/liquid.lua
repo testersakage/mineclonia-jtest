@@ -40,8 +40,12 @@ function liquid.register_liquid(def)
   local NAME_FLOWING = def.name_flowing
   assert(NAME_FLOWING)
 
-  local SLOPE_DISTANCE = def.liquid_slope_range or 0
-  assert(SLOPE_DISTANCE >= 0 and SLOPE_DISTANCE < 8)
+  local SLOPE_RANGE = def.liquid_slope_range or 0
+  assert(SLOPE_RANGE >= 0 and SLOPE_RANGE < 8)
+
+  local SLOPE_RANGE_MIN = def.liquid_slope_range_min or 0
+  assert(SLOPE_RANGE_MIN >= 0 and SLOPE_RANGE_MIN < 8)
+
 
   local FLOW_DISTANCE = def.liquid_range or 7
   assert(FLOW_DISTANCE >= 0 and FLOW_DISTANCE < 8)
@@ -300,7 +304,17 @@ function liquid.register_liquid(def)
           core.set_node(p101, make_liquid('down'))
   
         else
-          local found = find_nearest_slope_dir(p111, SLOPE_DISTANCE,
+
+          -- Calculate the actual slope distance.
+          -- It depends on the current level.
+          local slope_dist = math.floor((l111-1) * SLOPE_RANGE / 7)
+
+          -- But also allow a minimal distance.
+          if slope_dist < SLOPE_RANGE_MIN then
+            slope_dist = SLOPE_RANGE_MIN
+          end
+
+          local found = find_nearest_slope_dir(p111, slope_dist,
             function (pos)
               -- A slope had been found within the range, so the liquid shall
               -- flow only in that direction.
@@ -370,76 +384,13 @@ function liquid.register_liquid(def)
       if l110 ~= nil then queue_push(p110) end
       if l112 ~= nil then queue_push(p112) end
       if l101 ~= nil then queue_push(p101) end
+      if l101 ~= nil then queue_push(p121) end
     end
   end
   
   
-  core.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
-
-    --core.log('place')
-  
-    if newnode.name == NAME_SOURCE or newnode.name == NAME_FLOWING then
-      return
-    end
-  
-  
-    local p011 = pos + {x=-1,y=0,z= 0}
-    local p211 = pos + {x= 1,y=0,z= 0}
-    local p110 = pos + {x= 0,y=0,z=-1}
-    local p112 = pos + {x= 0,y=0,z= 1}
-    local p101 = pos + {x= 0,y=-1,z= 0}
-    local p121 = pos + {x= 0,y=1,z= 0}
-    local p111 = pos
-  
-    local n011 = core.get_node(p011)
-    local n211 = core.get_node(p211)
-    local n110 = core.get_node(p110)
-    local n112 = core.get_node(p112)
-    local n101 = core.get_node(p101)
-    local n121 = core.get_node(p121)
-    local n111 = newnode
-  
-  
-    if n011.name == NAME_SOURCE or n011.name == NAME_FLOWING then queue_push(p011) end
-    if n211.name == NAME_SOURCE or n211.name == NAME_FLOWING then queue_push(p211) end
-    if n110.name == NAME_SOURCE or n110.name == NAME_FLOWING then queue_push(p110) end
-    if n112.name == NAME_SOURCE or n112.name == NAME_FLOWING then queue_push(p112) end
-    if n101.name == NAME_SOURCE or n101.name == NAME_FLOWING then queue_push(p101) end
-    if n121.name == NAME_SOURCE or n121.name == NAME_FLOWING then queue_push(p121) end
-    --if n111.name == NAME_SOURCE or n111.name == NAME_FLOWING then queue_push(p111) end
-  end)
-  
-  minetest.register_on_dignode(function(pos, oldnode, digger)
-    --core.log('dig')
-    --
-
-    if oldnode.name == NAME_SOURCE or oldnode.name == NAME_FLOWING then
-      return
-    end
-  
-    pos = vector.new(pos)
-  
-    local p011 = pos + {x=-1,y=0,z= 0}
-    local p211 = pos + {x= 1,y=0,z= 0}
-    local p110 = pos + {x= 0,y=0,z=-1}
-    local p112 = pos + {x= 0,y=0,z= 1}
-    local p101 = pos + {x= 0,y=-1,z= 0}
-    local p121 = pos + {x= 0,y=1,z= 0}
-  
-    local n011 = core.get_node(p011)
-    local n211 = core.get_node(p211)
-    local n110 = core.get_node(p110)
-    local n112 = core.get_node(p112)
-    local n101 = core.get_node(p101)
-    local n121 = core.get_node(p121)
-  
-    if n011.name == NAME_SOURCE or n011.name == NAME_FLOWING then queue_push(p011) end
-    if n211.name == NAME_SOURCE or n211.name == NAME_FLOWING then queue_push(p211) end
-    if n110.name == NAME_SOURCE or n110.name == NAME_FLOWING then queue_push(p110) end
-    if n112.name == NAME_SOURCE or n112.name == NAME_FLOWING then queue_push(p112) end
-    if n101.name == NAME_SOURCE or n101.name == NAME_FLOWING then queue_push(p101) end
-    if n121.name == NAME_SOURCE or n121.name == NAME_FLOWING then queue_push(p121) end
-  end)
+  core.register_on_placenode(queue_push)
+  core.register_on_dignode(queue_push)
   
 
   local function set_common_defs(ndef)
@@ -487,7 +438,7 @@ function liquid.register_liquid(def)
     ndef._liquid_ticks       = TICKS
     ndef._liquid_renewable   = RENEWABLE
     ndef._liquid_range       = FLOW_DISTANCE
-    ndef._liquid_slope_range = SLOPE_DISTANCE
+    ndef._liquid_slope_range = SLOPE_RANGE
     
     if not ndef.groups then
       ndef.groups = { }
