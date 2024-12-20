@@ -298,7 +298,7 @@ mcl_mobs.register_arrow("mobs_mc:fireball", {
 	visual = "sprite",
 	visual_size = {x = 1, y = 1},
 	textures = {"mcl_fire_fire_charge.png"},
-	velocity = 24,
+	velocity = 19,
 	collisionbox = {-.5, -.5, -.5, .5, .5, .5},
 	_is_fireball = true,
 	_mcl_fishing_hookable = true,
