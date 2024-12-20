@@ -41,7 +41,7 @@ Items can have these fields:
   key in the `_mcl_crafting_output` table. The values ​​of these keys are tables which must contain
   the `output` key, a string with the crafting result depending on the format used. Each shape key
   can also contain a special key called `replacements`, a table which determines which items will be replaced after crafting. The most complete example of `_mcl_crafting_output` is the honey bottle,
-  which has two simple shape recipes, both with replacements. See `mcl_honey`. Some simple recipes are no longer covered by this field due to the implementation of their APIs, as in the case of buttons and trapdoors.
+  which has two simple shape recipes, both with replacements. See `mcl_honey`. Some simple recipes are no longer covered by this field due to the implementation of their APIs, as in the case of buttons and iron trapdoors.
 
 Tools can have these fields:
 
