@@ -19,7 +19,7 @@ local ghast = {
 	hp_max = 10,
 	xp_min = 5,
 	xp_max = 5,
-	collisionbox = {-2, 5, -2, 2, 9, 2},
+	collisionbox = {-2, 0, -2, 2, 4.0, 2},
 	doll_size_override = { x = 1.05, y = 1.05 },
 	visual = "mesh",
 	mesh = "mobs_mc_ghast.b3d",
@@ -58,7 +58,7 @@ local ghast = {
 	view_range = 100.0,
 	tracking_distance = 100.0,
 	arrow = "mobs_mc:fireball",
-	shoot_offset = 1,
+	shoot_offset = 0.3,
 	jump_height = 4,
 	head_eye_height = 2.6,
 	floats = 1,
@@ -68,6 +68,7 @@ local ghast = {
 	makes_footstep_sound = false,
 	instant_death = true,
 	fire_resistant = true,
+	lava_damage = 0,
 	does_not_prevent_sleep = true,
 	_projectile_gravity = false,
 	_impulse_time = 0.0,
@@ -101,20 +102,20 @@ function ghast:do_go_pos (dtime, moveresult)
 	if not self.attack then
 		local dir = math.atan2 (dir.z, dir.x) - math.pi/2
 		self:set_yaw (dir)
+	end
 
-		if moveresult.collides then
-			if not self._ghast_collide_time then
-				self._ghast_collide_time = dtime
-			else
-				self._ghast_collide_time
-					= self._ghast_collide_time + dtime
-			end
+	if moveresult.collides then
+		if not self._ghast_collide_time then
+			self._ghast_collide_time = dtime
+		else
+			self._ghast_collide_time
+				= self._ghast_collide_time + dtime
+		end
 
-			if self._ghast_collide_time > 1 then
-				-- If this mob has been colliding for
-				-- over a second, abandon this target.
-				self:halt_in_tracks ()
-			end
+		if self._ghast_collide_time > 1 then
+			-- If this mob has been colliding for
+			-- over a second, abandon this target.
+			self:halt_in_tracks ()
 		end
 	end
 end
@@ -146,6 +147,7 @@ local function ghast_move_randomly (self, self_pos)
 			= vector.offset (self_pos, x_delta, y_delta, z_delta)
 		if self:line_of_sight (self_pos, position) then
 			self:go_to_pos (position)
+			self._ghast_collide_time = 0
 		end
 	end
 end
