@@ -334,6 +334,10 @@ function hoglin:custom_attack ()
 		type = "mob",
 		source = self.object,
 	})
+	-- self.attack may be reset if the target dies or is removed.
+	if not self.attack or not self.attack:is_valid () then
+		return
+	end
 	local knockback = 1.0 - get_knockback_resistance (self.attack)
 	if knockback > 0 and not self.child then
 		local self_pos = self.object:get_pos ()
