@@ -202,8 +202,10 @@ function liquid.register_liquid(def)
         -- Get the next level from a table
         local new_level = level_tb[l111] or 0
 
-        if n101.name == NAME_SOURCE then
+        if n101.name == NAME_SOURCE and n111.name ~= NAME_SOURCE then
           -- the current node is on top of a source node. No more flowing here.
+          -- With the exception that when the current node is a source node as
+          -- well.
         elseif n101.name == NAME_FLOWING then
           if l101 < 8 then
             -- turn the liquid below into down-flowing
