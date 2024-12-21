@@ -381,7 +381,7 @@ function liquid.register_liquid(def)
       if l110 ~= nil then queue_push(p110) end
       if l112 ~= nil then queue_push(p112) end
       if l101 ~= nil then queue_push(p101) end
-      if l101 ~= nil then queue_push(p121) end
+      if l121 ~= nil then queue_push(p121) end
     end
   end
   
