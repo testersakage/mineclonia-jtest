@@ -56,34 +56,6 @@ function liquid.register_liquid(def)
     end 
   end
   
-  local function is_floodable(node, level)
-    local name = node.name
-    if name == 'air' then
-      return true
-  
-    elseif name == NAME_FLOWING then
-      local l = get_liquid_level(node)
-      if l <= level then
-        -- NOTE we update the node even though it already reached the required
-        -- level (we do `l <= level` instead of `l < level`). We do that
-        -- because otherwise the liquid will not have the change renew.
-        return true
-      else
-        return false
-      end
-
-    else 
-
-      local def = core.registered_nodes[name]
-      if def and def.floodable then 
-        return true
-      else
-        return false
-      end
-    end
-
-    return false
-  end
   
   local function is_liquid(node)
     return node.name == NAME_SOURCE or node.name == NAME_FLOWING
@@ -118,71 +90,6 @@ function liquid.register_liquid(def)
   end
   
   
-  local function find_slope(pos, max_distance, dir)
-  
-    for i = 1, max_distance do
-      pos = pos + dir
-      local n      = core.get_node(pos)
-      --core.log('name: '..n.name)
-      if not (n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING) then
-        return 255
-      end
-  
-      n = core.get_node(pos + { x = 0, y = -1, z = 0 })
-      if n.name == 'ignore' then
-        return nil
-      elseif n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING then
-        return i
-      end
-    end
-  
-    return 255
-  end
-  
-  local function find_nearest_slope_dir(pos, max_distance, on_found)
-  
-    local dp011 = {x=-1,y=0,z= 0}
-    local dp211 = {x= 1,y=0,z= 0}
-    local dp110 = {x= 0,y=0,z=-1}
-    local dp112 = {x= 0,y=0,z= 1}
-  
-    local d_min = 255
-  
-    local d011 = find_slope(pos, max_distance, dp011)
-    local d211 = find_slope(pos, max_distance, dp211)
-    local d110 = find_slope(pos, max_distance, dp110)
-    local d112 = find_slope(pos, max_distance, dp112)
-  
-    if d011 == nil then return nil end
-    if d211 == nil then return nil end
-    if d110 == nil then return nil end
-    if d112 == nil then return nil end
-
-    if d011 < d_min then
-      d_min = d011
-    end
-  
-    if d211 < d_min then
-      d_min = d211
-    end
-  
-    if d110 < d_min then
-      d_min = d110
-    end
-  
-    if d112 < d_min then
-      d_min = d112
-    end
-    
-    if d_min < 255 then
-      if d_min == d011 then on_found(pos+dp011) end
-      if d_min == d211 then on_found(pos+dp211) end
-      if d_min == d110 then on_found(pos+dp110) end
-      if d_min == d112 then on_found(pos+dp112) end
-      return true
-    end
-    return false
-  end
   
   local function flow_iteration(pos)
 
@@ -303,34 +210,109 @@ function liquid.register_liquid(def)
             slope_dist = SLOPE_RANGE_MIN
           end
 
-          local found = find_nearest_slope_dir(p111, slope_dist,
-            function (pos)
-              -- A slope had been found within the range, so the liquid shall
-              -- flow only in that direction.
-              local level = l111 - 1
-              if is_floodable(core.get_node(pos), level) then 
-                core.set_node(pos, make_liquid(level))
+
+          local function find_slope(pos, dir)
+          
+            for i = 1, slope_dist do
+              local n      = core.get_node(pos)
+              --core.log('name: '..n.name)
+              if not (n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING) then
+                return 255
               end
-            end)
-          if found == nil then
+          
+              n = core.get_node(pos + { x = 0, y = -1, z = 0 })
+              if n.name == 'ignore' then
+                return nil
+              elseif n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING then
+                return i
+              end
+
+              pos = pos + dir
+            end
+          
+            return 255
+          end
+  
+          -- find the nearest slope
+          local d011 = find_slope(p011, {x=-1,y=0,z= 0})
+          local d211 = find_slope(p211, {x= 1,y=0,z= 0})
+          local d110 = find_slope(p110, {x= 0,y=0,z=-1})
+          local d112 = find_slope(p112, {x= 0,y=0,z= 1})
+  
+          if d011 == nil or
+             d211 == nil or
+             d110 == nil or
+             d112 == nil then
+
             -- We hit an 'ignore' node
             -- TODO Find a performant solution to handle this.
             return
-          elseif not found then
+          end
+
+          local d_min = 255
+          if d011 < d_min then d_min = d011 end
+          if d211 < d_min then d_min = d211 end
+          if d110 < d_min then d_min = d110 end
+          if d112 < d_min then d_min = d112 end
+          
+
+          local new_level = l111 - 1
+          local new_node = make_liquid(new_level)
+
+          local function is_floodable(p, n, l, newnode)
+            local name = n.name
+            if name == 'air' then
+              return true
+
+            elseif name == NAME_FLOWING then
+              if l < new_level or (l == 7 and l == new_level) then
+                -- NOTE we update the node even though it already reached the required
+                -- level (we do `l <= level` instead of `l < level`). We do that
+                -- because otherwise the liquid will not have the change renew.
+                -- But we restrict that to only nodes that reached level 7.
+                return true
+              end
+            else 
+              local def = core.registered_nodes[name]
+              if def and def.floodable then 
+                if def.on_flood and def.on_flood(p, n, newnode) then
+                  return false
+                end
+                return true
+              end
+            end
+            return false
+          end
+
+
+          if d_min < 255 then
+            if d_min == d011 and is_floodable(p011, n011, l011, new_node) then
+              core.set_node(p011, new_node)
+            end
+            if d_min == d211 and is_floodable(p211, n211, l211, new_node) then
+              core.set_node(p211, new_node)
+            end
+            if d_min == d110 and is_floodable(p110, n110, l110, new_node) then
+              core.set_node(p110, new_node)
+            end
+            if d_min == d112 and is_floodable(p112, n112, l112, new_node) then
+              core.set_node(p112, new_node)
+            end
+
+          else
             -- There is no slope in the given range, the liquid shall spread in
             -- all directions.
-            local level = l111 - 1
-            if is_floodable(n011, level) then 
-              core.set_node(p011, make_liquid(level))
+            if is_floodable(p011, n011, l011, new_node) then 
+              core.set_node(p011, new_node)
             end
-            if is_floodable(n211, level) then 
-              core.set_node(p211, make_liquid(level))
+            if is_floodable(p211, n211, l211, new_node) then 
+              core.set_node(p211, new_node)
             end
-            if is_floodable(n110, level) then 
-              core.set_node(p110, make_liquid(level))
+            if is_floodable(p110, n110, l110, new_node) then 
+              core.set_node(p110, new_node)
             end
-            if is_floodable(n112, level) then 
-              core.set_node(p112, make_liquid(level))
+            if is_floodable(p112, n112, l112, new_node) then 
+              core.set_node(p112, new_node)
             end
           end
         end
