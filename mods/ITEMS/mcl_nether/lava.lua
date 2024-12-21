@@ -5,7 +5,7 @@ local S = core.get_translator(core.get_current_modname())
 
 
 liquid.register_liquid({
-  liquid_tick = 0.5,
+  liquid_tick = 1.0 / 2.0,
   liquid_range = 7,
   liquid_slope_range = 5,
   liquid_renewable = false,

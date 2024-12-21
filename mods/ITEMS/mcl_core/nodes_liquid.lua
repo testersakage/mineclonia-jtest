@@ -15,7 +15,7 @@ local LIGHT_LAVA = core.LIGHT_MAX
 
 
 liquid.register_liquid({
-  liquid_tick = 0.2,
+  liquid_tick = 1.0 / 4.0,
   liquid_range = 7,
   liquid_slope_range = 5,
   liquid_renewable = true,
@@ -111,8 +111,8 @@ end
 
 
 liquid.register_liquid({
-  liquid_tick = 1.0,
-  liquid_range = 4,
+  liquid_tick = 3.0/2.0,
+  liquid_range = 3,
   liquid_slope_range = 5,
   liquid_renewable = false,
 
