@@ -158,18 +158,18 @@ function mcl_lightning.strike_func(pos, pos2, objects)
 
 	-- Events caused by the lightning strike: Fire, damage, mob transformations, rare skeleton spawn
 
-	pos2.y = pos2.y + 1/2
-	if minetest.get_item_group(minetest.get_node({ x = pos2.x, y = pos2.y - 1, z = pos2.z }).name, "liquid") < 1 then
+	pos2:offset(0, 1/2, 0)
+	local node = minetest.get_node(vector.copy(pos2):offset(0, -1, 0))
+	if minetest.get_item_group(node.name, "liquid") < 1 then
 		if minetest.get_node(pos2).name == "air" then
 			-- Low chance for a lightning to spawn skeleton horse + skeletons
 			if rng:next(1,100) <= 3 then
 				minetest.add_entity(pos2, "mobs_mc:skeleton_horse")
 
-				local angle, posadd
-				angle = math.random(0, math.pi*2)
+				local angle, posadd = math.random(0, math.pi * 2), vector.zero()
 				for _= 1, 3 do
-					posadd = { x=math.cos(angle),y=0,z=math.sin(angle) }
-					posadd = vector.normalize(posadd)
+					posadd:offset(math.cos(angle), 0, math.sin(angle))
+					posadd:normalize()
 					local mob = minetest.add_entity(vector.add(pos2, posadd), "mobs_mc:skeleton")
 					if mob then
 						mob:set_yaw(angle-math.pi/2)

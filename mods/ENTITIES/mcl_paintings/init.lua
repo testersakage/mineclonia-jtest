@@ -194,7 +194,7 @@ minetest.register_craftitem("mcl_paintings:painting", {
 			local ymaxed = false
 			local negative = dir.x < 0 or dir.z > 0
 			-- Check maximum possible painting size
-			local t
+			local t = vector.zero()
 			for y=0,3 do
 			for x=0,3 do
 				local k = x
@@ -202,9 +202,9 @@ minetest.register_craftitem("mcl_paintings:painting", {
 					k = -k
 				end
 				if dir.z ~= 0 then
-					t = {x=k,y=y,z=0}
+					t:offset(k, y, 0)
 				else
-					t = {x=0,y=y,z=k}
+					t:offset(0, y, k)
 				end
 				local unode = minetest.get_node(vector.add(pointed_thing.under, t))
 				local anode = minetest.get_node(vector.add(ppos, t))
