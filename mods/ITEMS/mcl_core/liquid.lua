@@ -42,6 +42,18 @@ function liquid.register_liquid(def)
   local RENEWABLE = def.liquid_renewable or false
   local TICKS     = def.liquid_tick or 0.5
 
+
+  level_tb = {}
+  for i = 0, 8 do
+    level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) /  8) * 8 / (FLOW_DISTANCE+1))
+  end
+
+  core.log(dump(level_tb))
+
+  local MAX_FLOW_LEVEL = level_tb[8]
+
+
+
   local function get_liquid_level(node)
     if node.name == NAME_SOURCE then
       return 8
@@ -186,6 +198,10 @@ function liquid.register_liquid(def)
       if l111 == support_level then
         -- The current node is on its terminal level
         -- This means it is ready to spread.
+
+        -- Get the next level from a table
+        local new_level = level_tb[l111] or 0
+
         if n101.name == NAME_SOURCE then
           -- the current node is on top of a source node. No more flowing here.
         elseif n101.name == NAME_FLOWING then
@@ -199,7 +215,7 @@ function liquid.register_liquid(def)
           -- flow down
           core.set_node(p101, make_liquid('down'))
   
-        else
+        elseif new_level > 0 then
 
           -- Calculate the actual slope distance.
           -- It depends on the current level.
@@ -256,7 +272,7 @@ function liquid.register_liquid(def)
           if d112 < d_min then d_min = d112 end
           
 
-          local new_level = l111 - 1
+
           local new_node = make_liquid(new_level)
 
           local function is_floodable(p, n, l, newnode)
@@ -265,11 +281,12 @@ function liquid.register_liquid(def)
               return true
 
             elseif name == NAME_FLOWING then
-              if l < new_level or (l == 7 and l == new_level) then
-                -- NOTE we update the node even though it already reached the required
-                -- level (we do `l <= level` instead of `l < level`). We do that
-                -- because otherwise the liquid will not have the change renew.
-                -- But we restrict that to only nodes that reached level 7.
+              if l < new_level or (l == MAX_FLOW_LEVEL and l == new_level) then
+                -- NOTE we update the node even though it already reached the
+                -- required level (we do `l <= level` instead of `l < level`).
+                -- We do that because otherwise the liquid will not have the
+                -- change renew. But we restrict that to only nodes that
+                -- reached level 7.
                 return true
               end
             else 
