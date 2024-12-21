@@ -36,17 +36,17 @@ local hoe_on_place_function = function(wear_divisor)
 			return itemstack
 		end
 
-		local no_wear
+		local wear
 		local def = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
 		if def and def._on_hoe_place then
 			local nstack
-			nstack, no_wear = def._on_hoe_place(itemstack, user, pointed_thing)
+			nstack, wear = def._on_hoe_place(itemstack, user, pointed_thing)
 			if nstack then return nstack end
 		end
 
-		no_wear = no_wear or create_soil(pointed_thing.under, user:get_inventory())
+		wear = wear or create_soil(pointed_thing.under, user:get_inventory())
 
-		if not no_wear and not minetest.is_creative_enabled(user:get_player_name()) then
+		if wear and not minetest.is_creative_enabled(user:get_player_name()) then
 			itemstack:add_wear(65535/wear_divisor)
 		end
 		return itemstack
