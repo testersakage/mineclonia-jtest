@@ -86,8 +86,7 @@ function mcl_heads.deftemplate.on_place(itemstack, placer, pointed_thing)
 	if rc then return rc end
 
 	local above = pointed_thing.above
-	local dir = {x = under.x - above.x, y = under.y - above.y, z = under.z - above.z}
-	local wdir = minetest.dir_to_wallmounted(dir)
+	local wdir = minetest.dir_to_wallmounted(vector.subtract(under, above))
 
 	local itemstring = itemstack:get_name()
 	local placestack = ItemStack(itemstack)

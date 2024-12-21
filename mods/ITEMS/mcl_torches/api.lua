@@ -104,7 +104,7 @@ function mcl_torches.register_torch(def)
 			end
 
 			local above = pointed_thing.above
-			local wdir = minetest.dir_to_wallmounted({x = under.x - above.x, y = under.y - above.y, z = under.z - above.z})
+			local wdir = minetest.dir_to_wallmounted(vector.subtract(under, above))
 
 			if type(def.placement_prevented) == "function" then
 				if
