@@ -122,13 +122,9 @@ minetest.register_craftitem("mcl_farming:wheat_item", {
 	_doc_items_usagehelp = S("Use the “Place” key on an animal to try to feed it wheat."),
 	inventory_image = "farming_wheat_harvested.png",
 	groups = {craftitem = 1, compostability = 65},
-	_mcl_crafting_output = {square3 = {output = "mcl_farming:hay_block"}}
-})
-
-minetest.register_craft({
-	output = "mcl_farming:bread",
-	recipe = {
-		{"mcl_farming:wheat_item", "mcl_farming:wheat_item", "mcl_farming:wheat_item"},
+	_mcl_crafting_output = {
+		line_wide3 = {output = "mcl_farming:bread 3"},
+		square3 = {output = "mcl_farming:hay_block"}
 	}
 })
 
@@ -148,7 +144,6 @@ minetest.register_craftitem("mcl_farming:cookie", {
 	on_place = minetest.item_eat(2),
 	on_secondary_use = minetest.item_eat(2),
 })
-
 
 minetest.register_craftitem("mcl_farming:bread", {
 	description = S("Bread"),

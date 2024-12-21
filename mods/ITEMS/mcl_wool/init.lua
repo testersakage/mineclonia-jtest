@@ -46,8 +46,10 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_color = color,
 		_mcl_hardness = 0.8,
 		_mcl_blast_resistance = 0.8,
-		_mcl_burntime = 5
+		_mcl_burntime = 5,
+		_mcl_crafting_output = {line_wide2 = {output = "mcl_wool:"..color.."_carpet 3"}}
 	})
+
 	minetest.register_node("mcl_wool:"..color.."_carpet", {
 		description = D(colordef.readable_name .. " Carpet"),
 		_doc_items_create_entry = create_entry,
@@ -83,10 +85,5 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		type = "shapeless",
 		output = "mcl_wool:"..color,
 		recipe = { "group:wool", "mcl_dyes:"..color }
-	})
-
-	minetest.register_craft({
-		output = "mcl_wool:"..color.."_carpet 3",
-		recipe = {{"mcl_wool:"..color, "mcl_wool:"..color}},
 	})
 end

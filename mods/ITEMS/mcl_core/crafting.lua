@@ -67,13 +67,6 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mcl_core:paper 3",
-	recipe = {
-		{"mcl_core:reeds", "mcl_core:reeds", "mcl_core:reeds"},
-	}
-})
-
-minetest.register_craft({
 	output = "mcl_core:ladder 3",
 	recipe = {
 		{"mcl_core:stick", "", "mcl_core:stick"},

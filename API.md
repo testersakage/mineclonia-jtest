@@ -35,13 +35,23 @@ Items can have these fields:
   furnace's fuel slot while drying a wet sponge, it will be replaced by a bucket of water.
   See `mcl_sponges`.
 * `_mcl_crafting_output`: _table_ used to eliminate the need to record recipes in simple shapes.
-  The currently supported shapes are `single`, when the item is used alone in any slot on the
-  crafting grid (shapeless), `square2` for recipes with the square shape of two by two slots and
-  `square3` for recipes with the square shape of three by three slots. Each of these shapes is a
-  key in the `_mcl_crafting_output` table. The values of these keys are tables which must contain
-  the `output` key, a string with the crafting result depending on the format used. Each shape key
-  can also contain a special key called `replacements`, a table which determines which items will be replaced after crafting. The most complete example of `_mcl_crafting_output` is the honey bottle,
-  which has two simple shape recipes, both with replacements. See `mcl_honey`. Some simple recipes are no longer covered by this field due to the implementation of their APIs, as in the case of buttons and iron trapdoors.
+  The supported shapes are:
+  * `single`: Used when the item is used alone in any slot on the crafting grid (shapeless);
+  * `square2`: Used for recipes with the square shape of two by two grid slots;
+  * `square3`: Used for recipes with the square shape of three by three grid slots;
+  * `line_wide2`: Used for line-shaped recipes with width of two grid slots;
+  * `line_wide3`: Used for line-shaped recipes with width of three grid slots;
+  * `line_tall2`: Used for line-shaped recipes with heigth of two grid slots;
+  * `line_tall3`: Used for line-shaped recipes with heigth of three grid slots;
+
+  Each of these shapes is a key in the `_mcl_crafting_output` table. The values of these keys
+  are tables which must contain the `output` key, a string with the crafting result depending on the
+  format used. Each shape key can also contain a special key called `replacements`, a table which
+  determines which items will be replaced after crafting. The most complete example of
+  `_mcl_crafting_output` is the honey bottle, which has two simple shape recipes, both with
+  replacements. See `mcl_honey`. Other usage examples can be found in `mcl_copper`, `mcl_core`,
+  `mcl_farming`, and `mcl_wool`. Some simple recipes are no longer covered by this field due to the
+  implementation of their APIs, as in the case of buttons, slabs and iron trapdoors.
 
 Tools can have these fields:
 

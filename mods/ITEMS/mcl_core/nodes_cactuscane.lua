@@ -155,5 +155,8 @@ minetest.register_node("mcl_core:reeds", {
 	end,
 	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
-	_mcl_crafting_output = {single = {output = "mcl_core:sugar"}}
+	_mcl_crafting_output = {
+		single = {output = "mcl_core:sugar"},
+		line_wide3 = {output = "mcl_core:paper 3"}
+	}
 })

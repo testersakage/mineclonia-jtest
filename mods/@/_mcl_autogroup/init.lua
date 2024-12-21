@@ -88,6 +88,33 @@ local rarity_colors = {
 	mcl_colors.DARK_PURPLE,
 }
 
+-- shapes for simple recipes
+local shapes = {
+	-- single
+	single = {{"mat"}},
+	-- line_wide
+	line_wide2 = {{"mat", "mat"}},
+	line_wide3 = {{"mat", "mat", "mat"}},
+	-- line_tall
+	line_tall2 = {{"mat"}, {"mat"}},
+	line_tall3 = {{"mat"}, {"mat"}, {"mat"}},
+	-- square
+	square2 = {{"mat", "mat"}, {"mat", "mat"}},
+	square3 = {{"mat", "mat", "mat"}, {"mat", "mat", "mat"}, {"mat", "mat", "mat"}}
+}
+-- replaces "mat" tag
+local function replace_material_tag(shape, material)
+	local recipe = table.copy(shape)
+	for _, line in ipairs(recipe) do
+		for count, tag in ipairs(line) do
+			if tag == "mat" then
+				line[count] = material
+			end
+		end
+	end
+	return recipe
+end
+
 -- Get new groups and hardness
 local function convert_mtg_groups(nname)
 	local groups = table.copy(minetest.registered_nodes[nname].groups)
@@ -443,47 +470,12 @@ local function overwrite()
 
 		local crafting_output = tdef._mcl_crafting_output
 		if crafting_output and type(crafting_output) == "table" then
-			local single = crafting_output.single
-			local square2 = crafting_output.square2
-			local square3 = crafting_output.square3
-
-			if single and type(single) == "table" then
-				local output = single.output
-				if type(output) == "string" and output ~= "" then
+			for shape, defs in pairs(crafting_output) do
+				if type(defs.output) == "string" and defs.output ~= "" then
 					minetest.register_craft({
-						type = "shapeless",
-						recipe = {tname},
-						output = output,
-						replacements = single.replacements
-					})
-				end
-			end
-
-			if square2 and type(square2) == "table" then
-				local output = square2.output
-				if type(output) == "string" and output ~= "" then
-					minetest.register_craft({
-						recipe = {
-							{tname, tname},
-							{tname, tname}
-						},
-						output = output,
-						replacements = square2.replacements
-					})
-				end
-			end
-
-			if square3 and type(square3) == "table" then
-				local output = square3.output
-				if type(output) == "string" and output ~= "" then
-					minetest.register_craft({
-						recipe = {
-							{tname, tname, tname},
-							{tname, tname, tname},
-							{tname, tname, tname}
-						},
-						output = output,
-						replacements = square3.replacements
+						output = defs.output,
+						recipe = replace_material_tag(shapes[shape], tname),
+						replacements = defs.replacements
 					})
 				end
 			end

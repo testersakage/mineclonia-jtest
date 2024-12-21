@@ -100,12 +100,3 @@ mcl_lightning.register_on_strike(function(pos, pos2, objects, for_trap)
 
 	return lr, nil
 end)
-
-minetest.register_craft({
-	output = "mcl_lightning_rods:rod",
-	recipe = {
-		{ "", "mcl_copper:copper_ingot", "" },
-		{ "", "mcl_copper:copper_ingot", "" },
-		{ "", "mcl_copper:copper_ingot", "" },
-	},
-})
