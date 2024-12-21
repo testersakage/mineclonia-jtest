@@ -104,7 +104,7 @@ for size, def in pairs(bud_def) do
 		drop = "",
 		tiles = { 	"mcl_amethyst_amethyst_bud_" .. size .. ".png" },
 		inventory_image = "mcl_amethyst_amethyst_bud_" .. size .. ".png",
-		paramtype1 = "light",
+		paramtype = "light",
 		paramtype2 = "wallmounted",
 		drawtype = "plantlike",
 		use_texture_alpha = "clip",
@@ -128,6 +128,7 @@ end
 
 minetest.register_node("mcl_amethyst:amethyst_cluster",{
 	description = S("Amethyst Cluster"),
+	paramtype = "light",
 	_doc_items_longdesc = S("Amethyst Cluster is the final growth of amethyst bud."),
 	drop = {
 		max_items = 1,
