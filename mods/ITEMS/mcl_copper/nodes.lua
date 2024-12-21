@@ -101,6 +101,7 @@ for n, desc in pairs(n_desc) do
 		description = D(desc .. "Copper Grate"),
 		_doc_items_longdesc = D(desc .. "Copper Grate is mostly a decorative block."),
 		drawtype = "allfaces_optional",
+		paramtype = "light",
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_grate.png"},
 		use_texture_alpha = "blend",
 		is_ground_content = false,

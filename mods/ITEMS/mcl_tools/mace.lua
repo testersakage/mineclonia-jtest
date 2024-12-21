@@ -8,6 +8,7 @@ local mace_longdesc = S("The mace is a slow melee weapon that deals incredible d
 
 minetest.register_node("mcl_tools:heavy_core", {
     description = S("Heavy Core"),
+	paramtype = "light",
     _doc_long_desc = heavy_core_longdesc,
     tiles = {"mcl_tools_heavy_core_top.png", "mcl_tools_heavy_core_bottom.png", "mcl_tools_heavy_core_side.png"},
     is_ground_content = false,
