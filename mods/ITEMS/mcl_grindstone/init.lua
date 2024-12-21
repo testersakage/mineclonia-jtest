@@ -182,7 +182,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	},
 	drawtype = "nodebox",
 	paramtype = "light",
-	paramtype2 = "wallmounted",
+	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	node_box = node_box,
 	selection_box = node_box,
@@ -288,6 +288,28 @@ minetest.register_node("mcl_grindstone:grindstone", {
 		inv:set_size("input", 2)
 		inv:set_size("output", 1)
 		meta:set_string("formspec", grindstone_formspec)
+	end,
+	after_place_node = function(pos, placer, itemstack, pointed_thing)
+		-- scuffed wallmounted like implementation for compatibility
+		local pos_diff = vector.subtract(pos, placer:get_pos())
+		local dir = vector.subtract(pointed_thing.under, pointed_thing.above)
+		local facedir = 0
+
+		if dir.z == -1 then
+			facedir = 4
+		elseif dir.z == 1 then
+			facedir = 10
+		elseif dir.x == -1 then
+			facedir = 13
+		elseif dir.x == 1 then
+			facedir = 17
+		elseif dir.y ~= 0 then
+			facedir = math.abs(pos_diff.z) > math.abs(pos_diff.x) and 0 or 1
+			if dir.y == 1 then
+				facedir = facedir + 20
+			end
+		end
+		core.swap_node(pos, {name = "mcl_grindstone:grindstone", param2 = facedir})
 	end,
 	on_rightclick = function(pos, _, player)
 		if player and player:is_player() and not player:get_player_control().sneak then
