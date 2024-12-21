@@ -297,6 +297,33 @@ end
 
 local SIXTY_FIVE_DEG = math.rad (65)
 
+function wolf:get_tail_height ()
+	local health_max = 40 -- get_properties as always is far too expensive.
+	return self.health / health_max * SIXTY_FIVE_DEG
+end
+
+function wolf:update_tail ()
+	local anim = self._current_animation
+	if self.tamed and (anim == "stand" or anim == "walk"
+				or anim == "shake")
+		and self.object.set_bone_override then
+		-- Update tail height.
+		self.object:set_bone_override ("tail", {
+			rotation = {
+				vec = vector.new (-self:get_tail_height (), 0, 0),
+				absolute = false,
+			},
+		})
+	end
+end
+
+function wolf:do_custom (dtime)
+	if self.health ~= self._old_health then
+		self._old_health = self.health
+		self:update_tail ()
+	end
+end
+
 function wolf:set_animation (anim, custom_frame)
 	if self._shaking and anim == "stand" then
 		anim = "shake"
@@ -308,7 +335,7 @@ function wolf:set_animation (anim, custom_frame)
 		and self.object.set_bone_override then
 		self.object:set_bone_override ("tail", {
 		       rotation = {
-			       vec = vector.new (-SIXTY_FIVE_DEG, 0, 0),
+			       vec = vector.new (-self:get_tail_height (), 0, 0),
 			       absolute = false,
 		       },
 		})
@@ -702,6 +729,7 @@ function wolf:get_staticdata_table ()
 		supertable._owner_attacked_serial = nil
 		supertable._owner_target_serial = nil
 		supertable._was_attacking = nil
+		supertable._old_health = nil
 	end
 	return supertable
 end
