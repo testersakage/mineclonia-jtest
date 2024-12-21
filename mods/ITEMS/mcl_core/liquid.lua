@@ -63,7 +63,10 @@ function liquid.register_liquid(def)
   
     elseif name == NAME_FLOWING then
       local l = get_liquid_level(node)
-      if l < level then
+      if l <= level then
+        -- NOTE we update the node even though it already reached the required
+        -- level (we do `l <= level` instead of `l < level`). We do that
+        -- because otherwise the liquid will not have the change renew.
         return true
       else
         return false
