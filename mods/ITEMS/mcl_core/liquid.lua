@@ -2,17 +2,6 @@
 
 local liquid = {}
 
-
-
-function liquid.get_liquidtype(def)
-  return def._liquid_type or def.liquidtype
-end
-
-function liquid.get_liquidtype_n(name)
-  return liquid.get_liquidtype(core.registered_nodes[name])
-end
-
-
 local resume_counter = 1
 function liquid.register_liquid(def)
 
@@ -448,7 +437,6 @@ function liquid.register_liquid(def)
   def_source._liquid_type           = 'source'
   def_source.drawtype               = "liquid"
   def_source.groups.liquid_source   = 1
-
   core.register_node(NAME_SOURCE, def_source)
 
 
@@ -457,6 +445,37 @@ function liquid.register_liquid(def)
   def_flowing.drawtype              = "flowingliquid"
   def_flowing.groups.liquid_flowing = 1
   core.register_node(NAME_FLOWING, def_flowing)
+
+
+  core.register_on_mods_loaded(function()
+    -- Luanti activates the builtin liquid transformation based on the
+    -- `liquidtype`. Therefor we need to set it's value to 'none'.
+    -- BUT many mods also read that value to check if this node is a liquid.
+    -- This hack sets the value to the respective liquid type after Luanti red
+    -- its value.
+    -- This way mods see what they need, at least their callbacks do.
+
+    function set_liquidtype(name, liquidtype)
+      local mt = getmetatable(core.registered_nodes[name])
+      local oldidx = mt.__index
+      mt.__index = function(tbl, k)
+        if k == "liquidtype" then
+          return liquidtype
+        end
+        if type(oldidx) == "function" then return oldidx(tbl, k) end
+        if type(oldidx) == "table" and not rawget(tbl, k) then return oldidx[k] end
+        return tbl[k]
+      end
+      setmetatable(core.registered_nodes[name], mt)
+    end
+
+    set_liquidtype(NAME_SOURCE, 'source')
+    set_liquidtype(NAME_FLOWING, 'flowing')
+
+    assert(core.registered_nodes[NAME_SOURCE].liquidtype == 'source')
+    assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing')
+
+  end)
   
   
   core.register_lbm({
