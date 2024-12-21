@@ -1217,7 +1217,6 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			local speed = LAVA_SPEED
 			local r, z = pow_by_step (LAVA_FRICTION, dtime), LAVA_FRICTION
 			h_scale = (1 - r) / (1 - z)
-			speed = speed * h_scale
 			v_scale, p = h_scale, r
 
 			-- If this mob is not submerged in lava to a
@@ -1339,7 +1338,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 
 	if water_vec ~= nil and vector.length (water_vec) ~= 0 then
 		v.x = v.x + water_vec.x * LIQUID_FORCE * h_scale
-		v.y = v.y + water_vec.y * LIQUID_FORCE * h_scale
+		v.y = v.y + water_vec.y * LIQUID_FORCE * v_scale
 		v.z = v.z + water_vec.z * LIQUID_FORCE * h_scale
 	end
 

@@ -341,7 +341,10 @@ function mob_class:despawn_allowed ()
 		-- _just_portaled mobs should not despawn to allow
 		-- mapblocks containing them to be unloaded if no
 		-- players are nearby.
-			and not self._just_portaled then
+			and not self._just_portaled
+		-- Mobs that are attached to other objects should
+		-- never despawn.
+			and not self.object:get_attach () then
 			return true
 		end
 	end
