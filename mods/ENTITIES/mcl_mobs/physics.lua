@@ -1204,7 +1204,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			local diff_tick = v.y * 0.05
 			local dx = v.x * 0.05
 			local dy = diff_tick + 0.6 - traveled
-			local dz = v.z * 0.5
+			local dz = v.z * 0.05
 			local will_breach_water
 				= self:will_breach_water (self_pos, dx, dy, dz)
 			if will_breach_water then
@@ -1255,7 +1255,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 				local diff_tick = v.y * 0.05
 				local dx = v.x * 0.05
 				local dy = diff_tick + 0.6 - traveled
-				local dz = v.z * 0.5
+				local dz = v.z * 0.05
 				local will_breach_lava
 					= self:will_breach_water (self_pos, dx, dy, dz)
 				if will_breach_lava then
