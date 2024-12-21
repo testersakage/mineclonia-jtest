@@ -204,8 +204,8 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 
 	-- Check conditions. If okay, start generating
 	if check and (openings_counter < 1 or openings_counter > 5) then return end
-
-	minetest.log("info","[mcl_dungeons] Placing new dungeon at "..minetest.pos_to_string({x=x,y=y,z=z}))
+	local pos = vector.zero():offset(x, y, z)
+	minetest.log("info","[mcl_dungeons] Placing new dungeon at ".. minetest.pos_to_string(pos))
 	-- Okay! Spawning starts!
 
 	-- Remember spawner chest positions to set metadata later
@@ -373,8 +373,8 @@ local function dungeons_nodes(minp, maxp, blockseed)
 			local x = pr:next(minp.x, maxp.x-dim.x-1)
 			local y = pr:next(ymin  , ymax  -dim.y-1)
 			local z = pr:next(minp.z, maxp.z-dim.z-1)
-			local p1 = {x=x,y=y,z=z}
-			local p2 = {x = x+dim.x+1, y = y+dim.y+1, z = z+dim.z+1}
+			local p1 = vector.zero():offset(x, y, z)
+			local p2 = vector.copy(dim):add(vector.copy(p1):add(1))
 			minetest.log("verbose","[mcl_dungeons] size=" ..minetest.pos_to_string(dim) .. ", emerge from "..minetest.pos_to_string(p1) .. " to " .. minetest.pos_to_string(p2))
 			minetest.emerge_area(p1, p2, ecb_spawn_dungeon, {p1=p1, p2=p2, dim=dim, pr=pr})
 		end
@@ -384,7 +384,7 @@ end
 function mcl_dungeons.spawn_dungeon(p1, _, pr)
 	if not p1 or not pr or not p1.x or not p1.y or not p1.z then return end
 	local dim = dungeonsizes[pr:next(1, #dungeonsizes)]
-	local p2 = {x = p1.x+dim.x+1, y = p1.y+dim.y+1, z = p1.z+dim.z+1}
+	local p2 = table.copy(dim):add(p1:add(1))
 	minetest.log("verbose","[mcl_dungeons] size=" ..minetest.pos_to_string(dim) .. ", emerge from "..minetest.pos_to_string(p1) .. " to " .. minetest.pos_to_string(p2))
 	minetest.emerge_area(p1, p2, ecb_spawn_dungeon, {p1=p1, p2=p2, dim=dim, pr=pr, dontcheck=true})
 end

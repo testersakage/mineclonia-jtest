@@ -348,7 +348,7 @@ minetest.register_entity(":__builtin:item", {
 			self.object:set_properties({
 				physical = true
 			})
-			self.object:set_acceleration({x=0,y=-get_gravity(),z=0})
+			self.object:set_acceleration(vector.zero():offset(0, -get_gravity(), 0))
 		end
 	end,
 
@@ -359,8 +359,8 @@ minetest.register_entity(":__builtin:item", {
 				physical = false
 			})
 			if reset_movement ~= false then
-				self.object:set_velocity({x=0,y=0,z=0})
-				self.object:set_acceleration({x=0,y=0,z=0})
+				self.object:set_velocity(vector.zero())
+				self.object:set_acceleration(vector.zero())
 			end
 		end
 	end,
@@ -633,8 +633,8 @@ minetest.register_entity(":__builtin:item", {
 			self.object:set_properties({
 				physical = false
 			})
-			self.object:set_velocity({x=0,y=0,z=0})
-			self.object:set_acceleration({x=0,y=0,z=0})
+			self.object:set_velocity(vector.zero())
+			self.object:set_acceleration(vector.zero())
 			self._removal_timer = (self._removal_timer or 0.25) - dtime
 			if self._removal_timer < 0 then
 				self.object:remove()

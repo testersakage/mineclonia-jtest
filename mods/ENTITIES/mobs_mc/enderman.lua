@@ -308,7 +308,7 @@ mcl_mobs.register_mob("mobs_mc:enderman", {
 				local damage = true
 				local enderpos = self.object:get_pos()
 				enderpos.y = enderpos.y+2.89
-				local height = {x=enderpos.x, y=enderpos.y+512,z=enderpos.z}
+				local height = vector.copy(enderpos):offset(0, 512, 0)
 				local ray = minetest.raycast(enderpos, height, true)
 				-- Check for blocks above enderman.
 				for pointed_thing in ray do
