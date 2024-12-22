@@ -271,7 +271,7 @@ function mob_class:toggle_sit(clicker,p)
 	-- Display icon to show current order (sit or roam)
 	minetest.add_particle({
 		pos = vector.add(pos, pp),
-		velocity = vector.zero():offset(0, 0.2, 0),
+		velocity = vector.new(0, 0.2, 0),
 		expirationtime = 1,
 		size = 4,
 		texture = particle,
