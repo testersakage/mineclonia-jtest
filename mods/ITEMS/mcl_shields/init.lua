@@ -197,7 +197,7 @@ local function set_shield(player, block, i)
 		if i == 1 then
 			modify_shield(player, vector.new(-3, -5, 0), vector.new(0, 180, 0), i)
 		else
-			modify_shield(player, vector.new(3, -5, 0), vector.new(0, 0, 0), i)
+			modify_shield(player, vector.new(3, -5, 0), vector.zero(), i)
 		end
 	end
 	local shield = mcl_shields.players[player].shields[i]

@@ -138,7 +138,7 @@ function mcl_burning.set_on_fire(obj, burn_time)
 	local fire_entity = minetest.add_entity(obj:get_pos(), "mcl_burning:fire")
 	if fire_entity and fire_entity:get_pos() then
 		fire_entity:set_properties({visual_size = size})
-		fire_entity:set_attach(obj, "", vector.new(0, size.y * 5, 0), vector.new(0, 0, 0))
+		fire_entity:set_attach(obj, "", vector.new(0, size.y * 5, 0), vector.zero())
 	end
 
 	if obj:is_player() then

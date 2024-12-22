@@ -146,7 +146,7 @@ end
 
 local function update_wire_connections(pos)
 	local dirs = {
-		vector.new(0, 0, 0),
+		vector.zero(),
 		vector.new(1, 0, 0),
 		vector.new(-1, 0, 0),
 		vector.new(0, 0, 1),

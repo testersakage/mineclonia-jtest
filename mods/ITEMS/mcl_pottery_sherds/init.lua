@@ -36,9 +36,9 @@ local pot_face_positions = {
 }
 
 local pot_face_rotations = {
-	vector.new(0, 0, 0),
+	vector.zero(),
 	vector.new(0, 0.5 * math.pi, 0),
-	vector.new(0, 0, 0),
+	vector.zero(),
 	vector.new(0, -0.5 * math.pi, 0),
 }
 
