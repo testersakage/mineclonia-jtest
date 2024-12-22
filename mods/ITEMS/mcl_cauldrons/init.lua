@@ -101,9 +101,16 @@ local function bucket_place(itemstack,placer,pointed_thing)
 	if def and l and ( def._mcl_cauldrons_liquid == l or core.get_item_group(name, "cauldron") == 1 ) then
 		mcl_cauldrons.add_level(pointed_thing.under, 3, l)
 		if not core.is_creative_enabled(placer:get_player_name()) then
+			if itemstack:get_count() == 1 then
+				itemstack:set_name("mcl_buckets:bucket_empty")
+				return itemstack
+			end
 			itemstack:take_item()
 			local inv = placer:get_inventory()
-			inv:add_item("main","mcl_buckets:bucket_empty")
+			local rest = inv:add_item("main","mcl_buckets:bucket_empty")
+			if not rest:is_empty() then
+				mcl_util.drop_item_stack(pointed_thing.above, rest)
+			end
 		end
 	end
 	return itemstack
@@ -182,9 +189,16 @@ local function register_filled_cauldron(water_level, description, liquid)
 			if not core.is_creative_enabled(placer:get_player_name()) then
 				local def = core.registered_nodes[name]
 				if def and def._mcl_cauldrons_liquid and buckets[def._mcl_cauldrons_liquid] then
+					if itemstack:get_count() == 1 then
+						itemstack:set_name(buckets[def._mcl_cauldrons_liquid])
+						return itemstack
+					end
 					itemstack:take_item()
 					local inv = placer:get_inventory()
-					inv:add_item("main", buckets[def._mcl_cauldrons_liquid])
+					local rest = inv:add_item("main", buckets[def._mcl_cauldrons_liquid])
+					if not rest:is_empty() then
+						mcl_util.drop_item_stack(pointed_thing.above, rest)
+					end
 				end
 			end
 			return itemstack
