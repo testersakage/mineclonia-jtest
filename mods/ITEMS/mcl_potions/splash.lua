@@ -1,7 +1,7 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 local GRAVITY = tonumber(minetest.settings:get("movement_gravity"))
-
 local mod_target = minetest.get_modpath("mcl_target")
+local new = vector.new
 
 local function splash_image(colorstring, opacity)
 	if not opacity then
@@ -102,7 +102,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 				local texture, acc
 				if name == "water" then
 				texture = "mcl_particles_droplet_bottle.png"
-				acc = {x=0, y=-GRAVITY, z=0}
+				acc = new(0, -GRAVITY, 0)
 				else
 				if def.instant then
 					texture = "mcl_particles_instant_effect.png"
@@ -114,10 +114,10 @@ function mcl_potions.register_splash(name, descr, color, def)
 				minetest.add_particlespawner({
 					amount = 50,
 					time = 0.1,
-					minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
-					maxpos = {x=pos.x+d, y=pos.y+0.5+d, z=pos.z+d},
-					minvel = {x=-2, y=0, z=-2},
-					maxvel = {x=2, y=2, z=2},
+					minpos = pos:copy():add(new(-d, 0.5, -d)),
+					maxpos = pos:copy():add(new(d, 0.5 + d, d)),
+					minvel = new(-2, 0, -2),
+					maxvel = new(2, 2, 2),
 					minacc = acc,
 					maxacc = acc,
 					minexptime = 0.5,
@@ -173,21 +173,16 @@ end
 
 -- `thrower' may be an ObjectRef but must be a player name if it is a
 -- player and is to be serialized properly.
-function mcl_potions.throw_splash (potionname, dir, pos, thrower,
-				   potency, plus)
+function mcl_potions.throw_splash (potionname, dir, pos, thrower, potency, plus)
 	if not minetest.registered_items[potionname] then
-	minetest.log ("action", "Throwing nonexistent potion " .. potionname)
-	return
+		minetest.log ("action", "Throwing nonexistent potion " .. potionname)
+		return
 	end
-	local obj
-	= minetest.add_entity ({x=pos.x+dir.x,y=pos.y+dir.y,z=pos.z+dir.z},
-						   potionname .. "_flying")
-	if not obj then
-	return
-	end
+	local obj = minetest.add_entity(vector.zero():add(pos):add(dir), potionname .. "_flying")
+	if not obj then return end
 	local velocity = 10
-	obj:set_velocity ({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
-	obj:set_acceleration ({x=dir.x*-3, y=-9.8, z=dir.z*-3})
+	obj:set_velocity(dir:copy():multiply(velocity))
+	obj:set_acceleration(new(dir.x * -3, -9.8, dir.z * -3))
 	local ent = obj:get_luaentity ()
 	ent._thrower = thrower
 	ent._potency = potency

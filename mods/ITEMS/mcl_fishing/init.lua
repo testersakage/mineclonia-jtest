@@ -213,13 +213,13 @@ function bobber_ENTITY:on_step(dtime)
 	-- If in water, then bob.
 	if def.liquidtype == "source" and minetest.get_item_group(def.name, "water") ~= 0 then
 		if self._oldy == nil then
-			self.object:set_pos({x=self.object:get_pos().x,y=math.floor(self.object:get_pos().y)+.5,z=self.object:get_pos().z})
+			self.object:set_pos(vector.new(self.object:get_pos().x, math.floor(self.object:get_pos().y)+.5, self.object:get_pos().z))
 			self._oldy = self.object:get_pos().y
 			minetest.sound_play("watersplash", {pos=epos, gain=0.25}, true)
 		end
 		-- reset to original position after dive.
 		if self.object:get_pos().y > self._oldy then
-			self.object:set_pos({x=self.object:get_pos().x,y=self._oldy,z=self.object:get_pos().z})
+			self.object:set_pos(vector.new(self.object:get_pos().x, self._oldy, self.object:get_pos().z))
 			self.object:set_velocity(vector.zero())
 			self.object:set_acceleration(vector.zero())
 		end
@@ -227,9 +227,9 @@ function bobber_ENTITY:on_step(dtime)
 			for _ = 1, 2 do
 					-- Spray bubbles when there's a fish.
 					minetest.add_particle({
-						pos = {x=epos["x"]+math.random(-1,1)*math.random()/2,y=epos["y"]+0.1,z=epos["z"]+math.random(-1,1)*math.random()/2},
-						velocity = {x=0, y=4, z=0},
-						acceleration = {x=0, y=-5, z=0},
+						pos = vector.offset(vector.copy(epos), math.random(-1,1) * math.random() / 2, 0.1, math.random(-1,1) * math.random() / 2),
+						velocity = vector.new(0, 4, 0),
+						acceleration = vector.new(0, -5, 0),
 						expirationtime = math.random() * 0.5,
 						size = math.random(),
 						collisiondetection = true,
@@ -257,8 +257,8 @@ function bobber_ENTITY:on_step(dtime)
 				-- wait time is over time to dive.
 				minetest.sound_play("bloop", {pos=epos, gain=0.4}, true)
 				self._dive = true
-				self.object:set_velocity({x=0,y=-2,z=0})
-				self.object:set_acceleration({x=0,y=5,z=0})
+				self.object:set_velocity(vector.new(0, -2, 0))
+				self.object:set_acceleration(vector.new(0, 5, 0))
 				self._waittime = 0.8
 				self._time = 0
 			end
@@ -331,7 +331,7 @@ local function flying_bobber_on_step(self, dtime)
 			remove_bobber(player, self.object)
 		end
 	end
-	self._lastpos={x=pos.x, y=pos.y, z=pos.z} -- Set lastpos-->Node will be added at last pos outside the node
+	self._lastpos = vector.copy(pos) -- Set lastpos-->Node will be added at last pos outside the node
 end
 
 flying_bobber_ENTITY.on_step = flying_bobber_on_step
@@ -352,7 +352,7 @@ minetest.register_tool("mcl_fishing:fishing_rod", {
 	groups = { tool=1, fishing_rod=1, enchantability=1 },
 	inventory_image = "mcl_fishing_fishing_rod.png",
 	wield_image = "mcl_fishing_fishing_rod.png^[transformFY^[transformR90",
-	wield_scale = { x = 1.5, y = 1.5, z = 1 },
+	wield_scale = vector.new(1.5, 1.5, 1),
 	stack_max = 1,
 	on_place = fish,
 	on_secondary_use = fish,

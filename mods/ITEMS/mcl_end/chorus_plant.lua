@@ -3,6 +3,7 @@
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
+local new = vector.new
 --- Plant parts ---
 
 local MAX_FLOWER_AGE = 5 -- Maximum age of chorus flower before it dies
@@ -40,12 +41,12 @@ function mcl_end.detach_chorus_plant(start_pos, digger)
 	no_detach = {}
 
 	local neighbors = {
-		{ x=0, y=1, z=0 },
-		{ x=0, y=0, z=1 },
-		{ x=-1, y=0, z=0 },
-		{ x=0, y=0, z=-1 },
-		{ x=1, y=0, z=0 },
-		{ x=0, y=-1, z=0 },
+		new(0, 1, 0),
+		new(0, 0, 1),
+		new(-1, 0, 0),
+		new(0, 0, -1),
+		new(1, 0, 0),
+		new(0, -1, 0)
 	}
 	table.insert(neighbors, { x=0, y=-1, z=0 })
 	local tree_start_posses = {}
@@ -156,7 +157,7 @@ minetest.register_node("mcl_end:chorus_flower", {
 		end
 
 
-		local below = {x=pos.x, y=pos.y-1, z=pos.z}
+		local below = new(pos.x, pos.y - 1, pos.z)
 		local node_below = minetest.get_node(below)
 		local plant_ok = false
 		-- Condition 1
@@ -165,14 +166,14 @@ minetest.register_node("mcl_end:chorus_flower", {
 		-- Condition 2
 		elseif node_below.name == "air" then
 			local around = {
-				{ x= 1, y=0, z= 0 },
-				{ x=-1, y=0, z= 0 },
-				{ x= 0, y=0, z= 1 },
-				{ x= 0, y=0, z=-1 },
+				new(1, 0, 0),
+				new(-1, 0, 0),
+				new(0, 0, 1),
+				new(0, 0, -1)
 			}
 			local around_count = 0
 			for a=1, #around do
-				local pos_side = vector.add(pos, around[a])
+				local pos_side = pos:add(around[a])
 				local node_side = minetest.get_node(pos_side)
 				if node_side.name == "mcl_end:chorus_plant" then
 					around_count = around_count + 1
@@ -337,17 +338,17 @@ end
 -- Pos must be a chorus flower.
 function mcl_end.grow_chorus_plant_step(pos, node, pr)
 	local new_flower_buds = {}
-	local above = { x = pos.x, y = pos.y + 1, z = pos.z }
+	local above = new(pos.x, pos.y + 1, pos.z)
 	local node_above = minetest.get_node(above)
 	local around = {
-		{ x=-1, y=0, z= 0 },
-		{ x= 1, y=0, z= 0 },
-		{ x= 0, y=0, z=-1 },
-		{ x= 0, y=0, z= 1 },
+		new(-1, 0, 0),
+		new(1, 0, 0),
+		new(0, 0, -1),
+		new(0, 0, 1)
 	}
 	local air_around = true
 	for a=1, #around do
-		if minetest.get_node(vector.add(above, around[a])).name ~= "air" then
+		if minetest.get_node(above:add(around[a])).name ~= "air" then
 			air_around = false
 			break
 		end
@@ -357,13 +358,13 @@ function mcl_end.grow_chorus_plant_step(pos, node, pr)
 		local branching = false
 		local h = 0
 		for y=1, 4 do
-			local checkpos = {x=pos.x, y=pos.y-y, z=pos.z}
+			local checkpos = new(pos.x, pos.y - y, pos.z)
 			local node = minetest.get_node(checkpos)
 			if node.name == "mcl_end:chorus_plant" then
 				h = y
 				if not branching then
 					for a=1, #around do
-						local node_side = minetest.get_node(vector.add(checkpos, around[a]))
+						local node_side = minetest.get_node(checkpos:add(around[a]))
 						if node_side.name == "mcl_end:chorus_plant" then
 							branching = true
 						end
@@ -405,8 +406,8 @@ function mcl_end.grow_chorus_plant_step(pos, node, pr)
 				end
 				for _ = 1, branches do
 					local next_branch = pr:next(1, #around)
-					local branch = vector.add(pos, around[next_branch])
-					local below_branch = vector.add(branch, {x=0,y=-1,z=0})
+					local branch = pos:add(around[next_branch])
+					local below_branch = branch:add(new(0, -1, 0))
 					if minetest.get_node(below_branch).name == "air" then
 						table.insert(new_flowers, branch)
 					end
@@ -479,7 +480,7 @@ local function random_teleport(player)
 		local ground_level = false
 		-- Scan nodes from selected position until we hit ground
 		for t=0, 16 do
-			local tpos = {x=x, y=y-t, z=z}
+			local tpos = new(x, y - t, z)
 			local tnode = minetest.get_node(tpos)
 			if tnode.name == "mcl_core:void" or tnode.name == "ignore" then
 				break
@@ -510,7 +511,7 @@ local function random_teleport(player)
 				last_was_walkable = tdef.walkable
 				if streak >= 2 then
 					-- JACKPOT! Now we can teleport.
-					local goal = {x=tpos.x, y=tpos.y-1.5, z=tpos.z}
+					local goal = tpos:subtract(new(0, 1.5, 0))
 					player:set_pos(goal)
 					minetest.sound_play({name="mcl_end_teleport", gain=0.8}, {pos=goal, max_hear_distance=16}, true)
 					return true
