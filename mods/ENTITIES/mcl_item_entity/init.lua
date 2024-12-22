@@ -348,7 +348,7 @@ minetest.register_entity(":__builtin:item", {
 			self.object:set_properties({
 				physical = true
 			})
-			self.object:set_acceleration(vector.zero():offset(0, -get_gravity(), 0))
+			self.object:set_acceleration(vector.new(0, -get_gravity(), 0))
 		end
 	end,
 
