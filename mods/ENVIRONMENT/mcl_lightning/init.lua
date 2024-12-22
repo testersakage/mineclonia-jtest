@@ -166,9 +166,10 @@ function mcl_lightning.strike_func(pos, pos2, objects)
 			if rng:next(1,100) <= 3 then
 				minetest.add_entity(pos2, "mobs_mc:skeleton_horse")
 
-				local angle, posadd = math.random(0, math.pi * 2), vector.zero()
+				local angle, posadd
+				angle = math.random(0, math.pi * 2)
 				for _= 1, 3 do
-					posadd:offset(math.cos(angle), 0, math.sin(angle))
+					posadd = vector.new(math.cos(angle), 0, math.sin(angle))
 					posadd:normalize()
 					local mob = minetest.add_entity(vector.add(pos2, posadd), "mobs_mc:skeleton")
 					if mob then
