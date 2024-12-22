@@ -106,14 +106,18 @@ function liquid.register_liquid(def)
   local function flow_iteration(pos)
 
     local p111 = pos
+    local n111 = core.get_node(p111)
+    if n111.name == 'ignore' then
+      return
+    end
+
     local p011 = pos + {x=-1, y= 0, z= 0}
     local p211 = pos + {x= 1, y= 0, z= 0}
     local p101 = pos + {x= 0, y=-1, z= 0}
     local p121 = pos + {x= 0, y= 1, z= 0}
     local p110 = pos + {x= 0, y= 0, z=-1}
     local p112 = pos + {x= 0, y= 0, z= 1}
-  
-    local n111 = core.get_node(p111)
+
     local n011 = core.get_node(p011)
     local n211 = core.get_node(p211)
     local n110 = core.get_node(p110)
@@ -135,15 +139,6 @@ function liquid.register_liquid(def)
        end
        return
      end
-
-  
-    local l111 = get_liquid_level(n111)
-    local l011 = get_liquid_level(n011)
-    local l211 = get_liquid_level(n211)
-    local l110 = get_liquid_level(n110)
-    local l112 = get_liquid_level(n112)
-    local l101 = get_liquid_level(n101)
-    local l121 = get_liquid_level(n121)
   
   
     if RENEWABLE then
@@ -163,6 +158,15 @@ function liquid.register_liquid(def)
         return
       end
     end
+
+    -- These variables store the level or nil if the node isn't a liquid.
+    local l111 = get_liquid_level(n111)
+    local l011 = get_liquid_level(n011)
+    local l211 = get_liquid_level(n211)
+    local l110 = get_liquid_level(n110)
+    local l112 = get_liquid_level(n112)
+    local l101 = get_liquid_level(n101)
+    local l121 = get_liquid_level(n121)
   
     -- calculate the liquid level that is supported here.
     local support_level = 1
@@ -189,6 +193,8 @@ function liquid.register_liquid(def)
       end
     end
     -- subtract 1 so that the level reaches from 0 to 8
+    -- This variable tells us what level the current node should have.
+    -- If it is highter we will reduce it and if it is lower we increase it.
     support_level = support_level - 1
   
   
@@ -251,7 +257,9 @@ function liquid.register_liquid(def)
             return 255
           end
   
-          -- find the nearest slope
+          -- calculate the slope distance in each direction.
+          -- TODO This could be faster if all slopes were searched
+          -- simultaneously.
           local d011 = find_slope(p011, {x=-1,y=0,z= 0})
           local d211 = find_slope(p211, {x= 1,y=0,z= 0})
           local d110 = find_slope(p110, {x= 0,y=0,z=-1})
@@ -267,6 +275,7 @@ function liquid.register_liquid(def)
             return
           end
 
+          -- find out what slope is the nearest
           local d_min = 255
           if d011 < d_min then d_min = d011 end
           if d211 < d_min then d_min = d211 end
