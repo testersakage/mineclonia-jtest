@@ -1,7 +1,8 @@
 mcl_boats = {}
 local S = minetest.get_translator(minetest.get_current_modname())
-
-local boat_visual_size = {x = 1, y = 1, z = 1}
+local new = vector.new
+local zero = vector.zero()
+local boat_visual_size = vector.unit()
 local paddling_speed = 22
 local boat_y_offset = 0.35
 local boat_y_offset_ground = boat_y_offset + 0.6
@@ -39,7 +40,7 @@ end
 local function get_velocity(v, yaw, y)
 	local x = -math.sin(yaw) * v
 	local z =  math.cos(yaw) * v
-	return {x = x, y = y, z = z}
+	return new(x, y, z)
 end
 
 local function get_v(v)
@@ -51,28 +52,23 @@ local function check_object(obj)
 end
 
 local function get_visual_size(obj)
-	return obj:is_player() and {x = 1, y = 1, z = 1} or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
+	return obj:is_player() and vector.unit() or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
 end
 
 local function set_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, vector.zero())
+	boat._driver:set_attach(boat.object, "", new(0, 1.5, 1), zero)
 end
 
 local function set_double_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 0.42, z = 0.8}, vector.zero())
+	boat._driver:set_attach(boat.object, "", new(0, 0.42, 0.8), zero)
 	if boat._passenger:is_player() then
-		boat._passenger:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -6.2}, vector.zero())
+		boat._passenger:set_attach(boat.object, "", new(0, 0.42, -6.2), zero)
 	else
-		boat._passenger:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -4.5}, {x = 0, y = 270, z = 0})
+		boat._passenger:set_attach(boat.object, "", new(0, 0.42, -4.5), new(0, 270, 0))
 	end
 end
 local function set_choat_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, vector.zero())
+	boat._driver:set_attach(boat.object, "", new(0, 1.5, 1), zero)
 end
 
 local function attach_object(self, obj)
@@ -100,7 +96,7 @@ local function attach_object(self, obj)
 	if obj:is_player() then
 		local name = obj:get_player_name()
 		mcl_player.players[obj].attached = true
-		obj:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
+		obj:set_eye_offset(new(0, -5.5, 0), new(0, -4, 0))
 		minetest.after(0.2, function(name)
 			local player = minetest.get_player_by_name(name)
 			if player then
@@ -115,7 +111,7 @@ local function attach_object(self, obj)
 end
 
 local function detach_object(obj, change_pos)
-	if change_pos then change_pos = vector.new(0, 0.2, 0) end
+	if change_pos then change_pos = new(0, 0.2, 0) end
 	return mcl_util.detach_object(obj, change_pos)
 end
 
@@ -249,14 +245,14 @@ function boat:on_step(dtime, moveresult)
 	local p = self.object:get_pos()
 	local on_water = true
 	local on_ice = false
-	local in_water = flowlib.is_water({x=p.x, y=p.y-boat_y_offset+1, z=p.z})
-	local in_river_water = is_river_water({x=p.x, y=p.y-boat_y_offset+1, z=p.z})
-	local waterp = {x=p.x, y=p.y-boat_y_offset - 0.1, z=p.z}
+	local in_water = flowlib.is_water(new(p.x, p.y - boat_y_offset + 1, p.z))
+	local in_river_water = is_river_water(new(p.x, p.y - boat_y_offset + 1, p.z))
+	local waterp = new(p.x, p.y - boat_y_offset - 0.1, p.z)
 	if not flowlib.is_water(waterp) then
 		on_water = false
 		if not in_water and is_ice(waterp) then
 			on_ice = true
-		elseif is_fire({x=p.x, y=p.y-boat_y_offset, z=p.z}) then
+		elseif is_fire(new(p.x, p.y - boat_y_offset, p.z)) then
 			boat.on_death(self, nil)
 			self.object:remove()
 			return
@@ -390,7 +386,7 @@ function boat:on_step(dtime, moveresult)
 	if not flowlib.is_water(p) and not on_ice then
 		-- Not on water or inside water: Free fall
 		--local nodedef = minetest.registered_nodes[minetest.get_node(p).name]
-		new_acce = {x = 0, y = -9.8, z = 0}
+		new_acce = new(0, -9.8, 0)
 		new_velo = get_velocity(self._v, self.object:get_yaw(),
 			self.object:get_velocity().y)
 	else
@@ -400,9 +396,9 @@ function boat:on_step(dtime, moveresult)
 			if y >= 5 then
 				y = 5
 			elseif y < 0 then
-				new_acce = {x = 0, y = 10, z = 0}
+				new_acce = new(0, 10, 0)
 			else
-				new_acce = {x = 0, y = 2, z = 0}
+				new_acce = new(0, 2, 0)
 			end
 			new_velo = get_velocity(self._v, self.object:get_yaw(), y)
 			self.object:set_pos(self.object:get_pos())
@@ -413,11 +409,11 @@ function boat:on_step(dtime, moveresult)
 			if y < -0.2 then
 				y = -0.2
 			end
-			new_acce = vector.zero()
+			new_acce = zero
 			new_velo = get_velocity(self._v, self.object:get_yaw(), y)
 		else
 			-- On top of water
-			new_acce = vector.zero()
+			new_acce = zero
 			if math.abs(self.object:get_velocity().y) < 0 then
 				new_velo = get_velocity(self._v, self.object:get_yaw(), 0)
 			else
@@ -438,7 +434,7 @@ function boat:on_step(dtime, moveresult)
 	local yaw = self.object:get_yaw()
 	local anim = (boat_max_hp - hp - regen_timer * 2) / boat_max_hp * math.pi / 4
 
-	self.object:set_rotation(vector.new(anim, yaw, anim))
+	self.object:set_rotation(new(anim, yaw, anim))
 	self.object:set_velocity(new_velo)
 	self.object:set_acceleration(new_acce)
 end
@@ -550,7 +546,7 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 		end,
 		---@diagnostic disable-next-line: unused-local
 		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
-			local below = {x=droppos.x, y=droppos.y-1, z=droppos.z}
+			local below = droppos:copy():subtract(new(0, 1, 0))
 			local belownode = minetest.get_node(below)
 			-- Place boat as entity on or in water
 			if minetest.get_item_group(dropnode.name, "water") ~= 0 or (dropnode.name == "air" and minetest.get_item_group(belownode.name, "water") ~= 0) then

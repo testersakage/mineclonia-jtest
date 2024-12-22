@@ -1,5 +1,5 @@
 local enable_damage = minetest.settings:get_bool("enable_damage")
-
+local new = vector.new
 -- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
 local hud_elem_type_field = "type"
 if not minetest.features.hud_def_type_field then
@@ -30,10 +30,10 @@ function mcl_burning.get_collisionbox(obj, smaller, storage)
 		return box[1], box[2]
 	else
 		local box = obj:get_properties().collisionbox
-		local minp, maxp = vector.new(box[1], box[2], box[3]), vector.new(box[4], box[5], box[6])
-		local s_vec = vector.new(0.1, 0.1, 0.1)
-		local s_minp = vector.add(minp, s_vec)
-		local s_maxp = vector.subtract(maxp, s_vec)
+		local minp, maxp = new(box[1], box[2], box[3]), new(box[4], box[5], box[6])
+		local s_vec = new(0.1, 0.1, 0.1)
+		local s_minp = minp:add(s_vec)
+		local s_maxp = maxp:subtract(s_vec)
 		storage.collisionbox_cache = {{minp, maxp}, {s_minp, s_maxp}}
 		return minp, maxp
 	end
@@ -42,7 +42,7 @@ end
 function mcl_burning.get_touching_nodes(obj, nodenames, storage)
 	local pos = obj:get_pos()
 	local minp, maxp = mcl_burning.get_collisionbox(obj, true, storage)
-	local nodes = minetest.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
+	local nodes = minetest.find_nodes_in_area(pos:add(minp), pos:add(maxp), nodenames)
 	return nodes
 end
 
@@ -131,14 +131,14 @@ function mcl_burning.set_on_fire(obj, burn_time)
 	storage.fire_damage_timer = 0
 
 	local minp, maxp = mcl_burning.get_collisionbox(obj, false, storage)
-	local size = vector.subtract(maxp, minp)
-	size = vector.multiply(size, vector.new(1.1, 1.2, 1.1))
-	size = vector.divide(size, obj:get_properties().visual_size)
+	local size = maxp:subtract(minp)
+	size = size:multiply(new(1.1, 1.2, 1.1))
+	size = size:divide(obj:get_properties().visual_size)
 
 	local fire_entity = minetest.add_entity(obj:get_pos(), "mcl_burning:fire")
 	if fire_entity and fire_entity:get_pos() then
 		fire_entity:set_properties({visual_size = size})
-		fire_entity:set_attach(obj, "", vector.new(0, size.y * 5, 0), vector.zero())
+		fire_entity:set_attach(obj, "", new(0, size.y * 5, 0), vector.zero())
 	end
 
 	if obj:is_player() then
