@@ -197,7 +197,7 @@ local function placement_prevented_inner(params)
 	local under = params.pointed_thing.under
 	local node = minetest.get_node(under)
 	local above = params.pointed_thing.above
-	local wdir = minetest.dir_to_wallmounted(vector.subtract(under, above))
+	local wdir = minetest.dir_to_wallmounted(under:subtract(above))
 
 	-- on top of upside down
 	if groups.attaches_to_top and (node.param2 >= 20 and wdir == 1) then
@@ -252,7 +252,7 @@ local function placement_prevented_outer(params)
 	local under = params.pointed_thing.under
 	local node = minetest.get_node(under)
 	local above = params.pointed_thing.above
-	local wdir = minetest.dir_to_wallmounted(vector.subtract(under, above))
+	local wdir = minetest.dir_to_wallmounted(under:subtract(above))
 
 	-- on top of upside down
 	if groups.attaches_to_top and (node.param2 >= 20 and wdir == 1) then
