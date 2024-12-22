@@ -11,7 +11,7 @@ under the LGPLv2.1 license.
 --]]
 
 mcl_explosions = {}
-
+local new = vector.new
 local mod_fire = minetest.get_modpath("mcl_fire")
 local explosions_griefing = minetest.settings:get_bool("mcl_explosions_griefing", true)
 
@@ -63,8 +63,8 @@ local function compute_sphere_rays(radius)
 			for x = -radius, 0 do
 				local d = x * x + y * y + z * z
 				if d <= radius * radius then
-					add_ray(vector.new(x, y, z))
-					add_ray(vector.new(-x, y, z))
+					add_ray(new(x, y, z))
+					add_ray(new(-x, y, z))
 					break
 				end
 			end
@@ -76,8 +76,8 @@ local function compute_sphere_rays(radius)
 			for y = -radius, 0 do
 				local d = x * x + y * y + z * z
 				if d <= radius * radius then
-					add_ray(vector.new(x, y, z))
-					add_ray(vector.new(x, -y, z))
+					add_ray(new(x, y, z))
+					add_ray(new(x, -y, z))
 					break
 				end
 			end
@@ -89,8 +89,8 @@ local function compute_sphere_rays(radius)
 			for z = -radius, 0 do
 				local d = x * x + y * y + z * z
 				if d <= radius * radius then
-					add_ray(vector.new(x, y, z))
-					add_ray(vector.new(x, y, -z))
+					add_ray(new(x, y, z))
+					add_ray(new(x, y, -z))
 					break
 				end
 			end
@@ -98,7 +98,7 @@ local function compute_sphere_rays(radius)
 	end
 
 	for _, pos in pairs(sphere) do
-		rays[#rays + 1] = vector.normalize(pos)
+		rays[#rays + 1] = pos:normalize()
 	end
 
 	return rays
@@ -115,8 +115,8 @@ local function add_particles(pos, radius)
 		time = 0.125,
 		minpos = pos,
 		maxpos = pos,
-		minvel = vector.new(-radius, -radius, -radius),
-		maxvel = vector.new(radius, radius, radius),
+		minvel = vector.unit():multiply(-radius),
+		maxvel = vector.unit():multiply(radius),
 		minacc = vector.zero(),
 		maxacc = vector.zero(),
 		minexptime = 0.5,
@@ -154,8 +154,7 @@ end
 local function trace_explode(pos, strength, raydirs, radius, info, direct, source)
 	local vm = minetest.get_voxel_manip()
 
-	local emin, emax = vm:read_from_map(vector.subtract(pos, radius),
-		vector.add(pos, radius))
+	local emin, emax = vm:read_from_map(pos:subtract(radius), pos:add(radius))
 	local emin_x = emin.x
 	local emin_y = emin.y
 	local emin_z = emin.z
@@ -289,9 +288,9 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 				-- Punch entity with damage depending on explosion exposure and
 				-- distance to explosion
 				local exposure = count / N_EXPOSURE_RAYS
-				local punch_vec = vector.subtract(opos, pos)
-				local punch_dir = vector.normalize(punch_vec)
-				local impact = (1 - vector.length(punch_vec) / punch_radius) * exposure
+				local punch_vec = opos:subtract(pos)
+				local punch_dir = punch_vec:normalize()
+				local impact = (1 - punch_vec:length() / punch_radius) * exposure
 				if impact < 0 then
 					impact = 0
 				end
@@ -300,7 +299,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 				mcl_util.deal_damage(obj, damage, { type = "explosion", direct = direct, source = source })
 
 				if obj:is_player() or ent.tnt_knockback then
-					obj:add_velocity(vector.multiply(punch_dir, impact * 20))
+					obj:add_velocity(punch_dir:multiply(impact * 20))
 				end
 			end
 		end
@@ -367,11 +366,11 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 	-- Update falling nodes
 	for a = 1, #airs do
 		local p = airs[a]
-		minetest.check_for_falling(vector.offset(p, 0, 1, 0))
+		minetest.check_for_falling(p:offset(0, 1, 0))
 	end
 	for f = 1, #fires do
 		local p = fires[f]
-		minetest.check_for_falling(vector.offset(p, 0, 1, 0))
+		minetest.check_for_falling(p:offset(0, 1, 0))
 	end
 
 	-- Log explosion

@@ -1,7 +1,7 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
-local zero = vector.zero()
-local new = vector.new
+local new, zero = vector.new, vector.zero()
+
 -- Cooldown time and global storing of cooldown
 local cooldown_time = 1
 mcl_charges = {}

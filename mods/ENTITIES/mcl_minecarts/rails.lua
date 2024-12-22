@@ -59,6 +59,7 @@ register_rail("mcl_minecarts:rail",
 
 local golden_rail_tab = {}
 local opaque_tab = {}
+local new = vector.new
 
 minetest.register_on_mods_loaded(function()
 	for name, ndef in pairs(minetest.registered_nodes) do
@@ -74,18 +75,18 @@ minetest.register_on_mods_loaded(function()
 end)
 
 local directions = {
-	{ rail = vector.new(1, 0, 0) },
-	{ rail = vector.new(-1, 0, 0) },
-	{ rail = vector.new(0, 0, 1) },
-	{ rail = vector.new(0, 0, -1) },
-	{ rail = vector.new(1, 1, 0), obstruct = vector.new(0, 1, 0) },
-	{ rail = vector.new(-1, 1, 0), obstruct = vector.new(0, 1, 0) },
-	{ rail = vector.new(0, 1, 1), obstruct = vector.new(0, 1, 0) },
-	{ rail = vector.new(0, 1, -1), obstruct = vector.new(0, 1, 0) },
-	{ rail = vector.new(1, -1, 0), obstruct = vector.new(1, 0, 0) },
-	{ rail = vector.new(-1, -1, 0), obstruct = vector.new(-1, 0, 0) },
-	{ rail = vector.new(0, -1, 1), obstruct = vector.new(0, 0, 1) },
-	{ rail = vector.new(0, -1, -1), obstruct = vector.new(0, 0, -1) },
+	{ rail = new(1, 0, 0) },
+	{ rail = new(-1, 0, 0) },
+	{ rail = new(0, 0, 1) },
+	{ rail = new(0, 0, -1) },
+	{ rail = new(1, 1, 0), obstruct = new(0, 1, 0) },
+	{ rail = new(-1, 1, 0), obstruct = new(0, 1, 0) },
+	{ rail = new(0, 1, 1), obstruct = new(0, 1, 0) },
+	{ rail = new(0, 1, -1), obstruct = new(0, 1, 0) },
+	{ rail = new(1, -1, 0), obstruct = new(1, 0, 0) },
+	{ rail = new(-1, -1, 0), obstruct = new(-1, 0, 0) },
+	{ rail = new(0, -1, 1), obstruct = new(0, 0, 1) },
+	{ rail = new(0, -1, -1), obstruct = new(0, 0, -1) },
 }
 
 -- Propagate power from pos through powered rails. 'old_power' is the old power
@@ -186,7 +187,7 @@ local function push_minecart(pos)
 		local l = o:get_luaentity()
 		local v = o:get_velocity()
 		if l and string.sub(l.name, 1, 14) == "mcl_minecarts:"
-		and v and vector.equals(v, vector.zero())
+		and v and v:equals(vector.zero())
 		then
 			mcl_minecarts:set_velocity(l, dir)
 		end

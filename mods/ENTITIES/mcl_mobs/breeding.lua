@@ -3,6 +3,7 @@ local mob_class = mcl_mobs.mob_class
 local HORNY_TIME = 30*20
 local HORNY_AGAIN_TIME = 30*20 -- was 300 or 15*20
 local CHILD_GROW_TIME = 24000
+local new = vector.new
 
 function mob_class:use_shears(new_textures, shears_stack)
 	if minetest.get_item_group(shears_stack:get_name(), "shears") > 0 then
@@ -266,12 +267,12 @@ function mob_class:toggle_sit(clicker,p)
 		particle = "mobs_mc_wolf_icon_sit.png"
 		self:stay()
 	end
-	local pp = vector.new(0,1.4,0)
-	if p then pp = vector.offset(pp,0,p,0) end
+	local pp = new(0,1.4,0)
+	if p then pp = pp:offset(0, p, 0) end
 	-- Display icon to show current order (sit or roam)
 	minetest.add_particle({
-		pos = vector.add(pos, pp),
-		velocity = vector.new(0, 0.2, 0),
+		pos = pos:add(pp),
+		velocity = new(0, 0.2, 0),
 		expirationtime = 1,
 		size = 4,
 		texture = particle,
@@ -307,7 +308,7 @@ function mob_class:break_in(player)
 			end
 			temper_increase = 5
 		elseif self.driver and self.driver == player then
-			mcl_mobs.detach(player, vector.new(0, 0, 1))
+			mcl_mobs.detach(player, new(0, 0, 1))
 		end
 		self.temper = self.temper + temper_increase
 		return true

@@ -1,20 +1,20 @@
 local RADIUS = 4
 local damage_radius = (RADIUS / math.max(1, RADIUS)) * RADIUS
 local radius = 2
-
+local new, unit = vector.new, vector.unit
 mcl_charges.register_charge("wind_charge", "Wind Charge", {
 	hit_player = mcl_mobs.get_arrow_damage_func(0, "fireball"),
 	hit_mob = mcl_mobs.get_arrow_damage_func(6, "fireball"),
 	hit_node = function(self, pos, node)
 		mcl_charges.wind_burst(pos, damage_radius)
 		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
-		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
+		local v = new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		minetest.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
 			minacc = v,
 			maxacc = v,
-			minpos = vector.offset(pos, -0.8, 0.6, -0.8),
-			maxpos = vector.offset(pos, 0.8, 0.8, 0.8),
+			minpos = pos:offset(-0.8, 0.6, -0.8),
+			maxpos = pos:offset(unit():multiply(0.8)),
 		}))
 		minetest.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
 
@@ -42,26 +42,26 @@ mcl_charges.register_charge("wind_charge", "Wind Charge", {
 	hit_player_alt = function(_, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
 		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10))
-		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
+		local v = new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		minetest.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
 			minacc = v,
 			maxacc = v,
-			minpos = vector.offset(pos, -0.8, 0.6, -0.8),
-			maxpos = vector.offset(pos, 0.8, 0.8, 0.8),
+			minpos = pos:offset(-0.8, 0.6, -0.8),
+			maxpos = pos:offset(unit():multiply(0.8)),
 		}))
 		minetest.sound_play("tnt_explode", { pos = pos, gain = 0.5, max_hear_distance = 30, pitch = 2.5 }, true)
 	end,
 	hit_mob_alt = function(_, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
 		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10))
-		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
+		local v = new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		minetest.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
 			minacc = v,
 			maxacc = v,
-			minpos = vector.offset(pos, -0.8, 0.6, -0.8),
-			maxpos = vector.offset(pos, 0.8, 0.8, 0.8),
+			minpos = pos:offset(-0.8, 0.6, -0.8),
+			maxpos = pos:offset(unit():multiply(0.8)),
 		}))
 		minetest.sound_play("tnt_explode", { pos = pos, gain = 0.5, max_hear_distance = 30, pitch = 2.5 }, true)
 	end,

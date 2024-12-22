@@ -1,6 +1,7 @@
 -- Compatibility polyfills for legacy minetest
 --
 -- polyfill for minetest < 5.9
+local new = vector.new
 if not vector.random_direction then
 	function vector.random_direction()
 		-- Generate a random direction of unit length, via rejection sampling
@@ -11,7 +12,7 @@ if not vector.random_direction then
 		until l2 <= 1 and l2 >= 1e-6
 		-- normalize
 		local l = math.sqrt(l2)
-		return vector.new(x/l, y/l, z/l)
+		return new(x/l, y/l, z/l)
 	end
 end
 
@@ -103,12 +104,12 @@ if not minetest.get_node_boxes then
 	local connect_sides_order = {"top", "bottom", "front", "left", "back", "right"}
 
 	local connect_sides_directions = {
-		top = vector.new(0, 1, 0),
-		bottom = vector.new(0, -1, 0),
-		front = vector.new(0, 0, -1),
-		left = vector.new(-1, 0, 0),
-		back = vector.new(0, 0, 1),
-		right = vector.new(1, 0, 0),
+		top = new(0, 1, 0),
+		bottom = new(0, -1, 0),
+		front = new(0, 0, -1),
+		left = new(-1, 0, 0),
+		back = new(0, 0, 1),
+		right = new(1, 0, 0),
 	}
 	function minetest.get_node_boxes(type, pos)
 		local node = minetest.get_node(pos)

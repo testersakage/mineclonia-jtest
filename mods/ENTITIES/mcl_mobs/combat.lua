@@ -11,6 +11,8 @@ local enable_pathfinding = true
 
 local TIME_TO_FORGET_TARGET = 15
 
+local new = vector.new
+
 local function atan(x)
 	if not x or minetest.is_nan(x) then
 		return 0
@@ -48,7 +50,7 @@ local function blast_damage(pos, radius, source)
 	for obj in minetest.objects_inside_radius(pos, radius) do
 
 		local obj_pos = obj:get_pos()
-		local dist = vector.distance(pos, obj_pos)
+		local dist = pos:distance(obj_pos)
 		if dist < 1 then dist = 1 end
 
 		local damage = math.floor((4 / dist) * radius)
@@ -57,7 +59,7 @@ local function blast_damage(pos, radius, source)
 		obj:punch(source, 1.0, {
 			full_punch_interval = 1.0,
 			damage_groups = {fleshy = damage},
-		}, vector.direction(pos, obj_pos))
+		}, pos:direction(obj_pos))
 	end
 end
 
@@ -133,7 +135,7 @@ function mob_class:smart_mobs(s, _, _, dtime)
 		end, self)
 	end
 
-	if math.abs(vector.subtract(s,target_pos).y) > stepheight then
+	if math.abs(s:subtract(target_pos).y) > stepheight then
 
 		if height_switcher then
 			use_pathfind = true
@@ -572,7 +574,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 end
 
 function mob_class:do_runaway(hitter)
-	self:set_yaw( minetest.dir_to_yaw(vector.direction(hitter:get_pos(), self.object:get_pos())))
+	self:set_yaw(minetest.dir_to_yaw(hitter:get_pos():direction(self.object:get_pos())))
 	self:set_velocity( self.run_velocity)
 	self:set_state("runaway")
 	self:set_animation("run")
@@ -610,7 +612,7 @@ end
 function mob_class:check_aggro()
 	if not self.aggro or not self.attack then return end
 	if not self:check_timer("check_aggro", 5) then return end
-	if not self.attack:get_pos() or vector.distance(self.attack:get_pos(),self.object:get_pos()) > 128 then
+	if not self.attack:get_pos() or self.attack:get_pos():distance(self.object:get_pos()) > 128 then
 		self:clear_aggro()
 	end
 end
@@ -667,7 +669,7 @@ function mob_class:do_states_attack (dtime)
 	end
 
 	-- calculate distance from mob and enemy
-	local dist = vector.distance(p, s)
+	local dist = p:distance(s)
 
 	if self.attack_type == "explode" then
 
@@ -932,7 +934,7 @@ function mob_class:do_states_attack (dtime)
 		p.y = p.y - .5
 		s.y = s.y + .5
 
-		local dist = vector.distance(p, s)
+		local dist = p:distance(s)
 		local vec = {
 			x = p.x - s.x,
 			y = p.y - s.y,
@@ -945,7 +947,7 @@ function mob_class:do_states_attack (dtime)
 
 		self:set_yaw( yaw, 0, dtime)
 
-		local stay_away_from_player = vector.new(0,0,0)
+		local stay_away_from_player = vector.zero()
 
 		--strafe back and fourth
 
@@ -956,7 +958,7 @@ function mob_class:do_states_attack (dtime)
 			else
 				self:set_animation ("run")
 			end
-			stay_away_from_player=vector.multiply(vector.direction(p, s), 0.33)
+			stay_away_from_player = p:direction(s):multiply(0.33)
 		end
 
 		if self.strafes then
@@ -966,7 +968,7 @@ function mob_class:do_states_attack (dtime)
 			if math.random(40) == 1 then
 				self.strafe_direction = self.strafe_direction*-1
 			end
-			self.acc = vector.add(vector.multiply(vector.rotate_around_axis(vector.direction(s, p), vector.new(0,1,0), self.strafe_direction), 0.3*self.walk_velocity), stay_away_from_player)
+			self.acc = s:direction(p):rotate_around_axis(new(0, 1, 0), self.strafe_direction):multiply(0.3 * self.walk_velocity):add(stay_away_from_player)
 		else
 		    self:set_velocity (0)
 		end
@@ -977,7 +979,7 @@ function mob_class:do_states_attack (dtime)
 
 		if self.shoot_interval
 			and self.timer > self.shoot_interval
-			and not minetest.raycast(vector.add(p, vector.new(0,self.shoot_offset,0)), vector.add(self.attack:get_pos(), vector.new(0,1.5,0)), false, false):next()
+			and not minetest.raycast(p:add(p, new(0, self.shoot_offset, 0)), self.attack:get_pos():add(new(0,1.5,0)), false, false):next()
 			and math.random(1, 100) <= 60 then
 			self.timer = 0
 			self:set_animation ("shoot")
@@ -1019,7 +1021,7 @@ function mob_class:do_states_attack (dtime)
 				vec.z = vec.z * (v / amount)
 
 				if self.shoot_arrow then
-					vec = vector.normalize(vec)
+					vec = vec:normalize()
 					arrow = self:shoot_arrow(p, vec)
 				end
 

@@ -1,7 +1,6 @@
 mcl_boats = {}
 local S = minetest.get_translator(minetest.get_current_modname())
-local new = vector.new
-local zero = vector.zero()
+local new, zero = vector.new, vector.zero()
 local boat_visual_size = vector.unit()
 local paddling_speed = 22
 local boat_y_offset = 0.35
@@ -91,7 +90,7 @@ local function attach_object(self, obj)
 
 	local visual_size = get_visual_size(obj)
 	local yaw = self.object:get_yaw()
-	obj:set_properties({visual_size = vector.divide(visual_size, boat_visual_size)})
+	obj:set_properties({visual_size = visual_size:divide(boat_visual_size)})
 
 	if obj:is_player() then
 		local name = obj:get_player_name()
@@ -514,14 +513,14 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 			if rc then return rc end
 
 			local pos = table.copy(pointed_thing.under)
-			local dir = vector.subtract(pointed_thing.above, pointed_thing.under)
+			local dir = pointed_thing.above:subtract(pointed_thing.under)
 
 			if math.abs(dir.x) > 0.9 or math.abs(dir.z) > 0.9 then
-				pos = vector.add(pos, vector.multiply(dir, boat_side_offset))
+				pos = pos:add(dir:multiply(boat_side_offset))
 			elseif flowlib.is_water(pos) then
-				pos = vector.add(pos, vector.multiply(dir, boat_y_offset))
+				pos = pos:add(dir:multiply(boat_y_offset))
 			else
-				pos = vector.add(pos, vector.multiply(dir, boat_y_offset_ground))
+				pos = pos:add(dir:multiply(boat_y_offset_ground))
 			end
 			local boat_ent = "mcl_boats:boat"
 			local chest_tex = "blank.png"

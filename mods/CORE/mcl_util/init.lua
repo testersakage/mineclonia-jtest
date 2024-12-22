@@ -1,6 +1,7 @@
 local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
+local new, zero = vector.new, vector.zero()
 
 mcl_util = {}
 
@@ -67,7 +68,7 @@ function table.random_element(t)
 end
 
 function vector.unit()
-	return vector.new(1, 1, 1)
+	return new(1, 1, 1)
 end
 
 function mcl_util.get_luaentity_by_id(id)
@@ -179,23 +180,23 @@ end
 function mcl_util.get_double_container_neighbor_pos(pos, param2, side)
 	if side == "right" then
 		if param2 == 0 then
-			return vector.offset(pos, -1, 0, 0)
+			return pos:offset(-1, 0, 0)
 		elseif param2 == 1 then
-			return vector.offset(pos, 0, 0, 1)
+			return pos:offset(0, 0, 1)
 		elseif param2 == 2 then
-			return vector.offset(pos, 1, 0, 0)
+			return pos:offset(1, 0, 0)
 		elseif param2 == 3 then
-			return vector.offset(pos, 0, 0, -1)
+			return pos:offset(0, 0, -1)
 		end
 	else
 		if param2 == 0 then
-			return vector.offset(pos, 1, 0, 0)
+			return pos:offset(1, 0, 0)
 		elseif param2 == 1 then
-			return vector.offset(pos, 0, 0, -1)
+			return pos:offset(0, 0, -1)
 		elseif param2 == 2 then
-			return vector.offset(pos, -1, 0, 0)
+			return pos:offset(-1, 0, 0)
 		elseif param2 == 3 then
-			return vector.offset(pos, 0, 0, 1)
+			return pos:offset(0, 0, 1)
 		end
 	end
 end
@@ -412,8 +413,8 @@ end
 
 local function drop_item_stack(pos, stack)
 	if not stack or stack:is_empty() then return end
-	local drop_offset = vector.new(math.random() - 0.5, 0, math.random() - 0.5)
-	minetest.add_item(vector.add(pos, drop_offset), stack)
+	local drop_offset = new(math.random() - 0.5, 0, math.random() - 0.5)
+	minetest.add_item(pos:add(drop_offset), stack)
 end
 
 mcl_util.drop_item_stack = drop_item_stack
@@ -624,7 +625,7 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 			if armorgroups and not armorgroups.immortal then
 				local puncher = mcl_reason and mcl_reason.direct or target
 				if puncher and puncher.get_pos and puncher:get_pos() and target and target.get_pos and target:get_pos() and target.punch then
-					target:punch(puncher, 1.0, {full_punch_interval = 1.0, damage_groups = {fleshy = damage}}, vector.direction(puncher:get_pos(), target:get_pos()), damage)
+					target:punch(puncher, 1.0, {full_punch_interval = 1.0, damage_groups = {fleshy = damage}}, puncher:get_pos():direction(target:get_pos()), damage)
 				end
 			end
 		end
@@ -710,11 +711,11 @@ end
 -- The last "ignore" argument is either a table of nodename to ignore in the raycast or a func(pointed_thing) that
 -- returns true if that position in the ray shall be discounted.
 function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
-	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
+	local pos = player:get_pos():offset(0, player:get_properties().eye_height, 0)
 	local def = player:get_wielded_item():get_definition()
 	local range = math.ceil(def and def.range or ItemStack():get_definition().range or tonumber(minetest.settings:get("mcl_hand_range")) or 4.5)
-	local look_dir = vector.multiply(player:get_look_dir(), range)
-	local pos2 = vector.add(pos, look_dir)
+	local look_dir = player:get_look_dir():multiply(range)
+	local pos2 = pos:add(look_dir)
 	local ray = minetest.raycast(pos, pos2, objects, liquid)
 
 	if ignore then
@@ -820,15 +821,15 @@ function mcl_util.set_bone_position(obj, bone, pos, rot)
 	if obj.get_bone_override then --when < minetest 5.9 isn't supported anymore remove these checks and only use the "override" variant and radians
 		local ov = obj:get_bone_override(bone)
 		current_pos = ov.position.vec
-		current_rot = vector.apply(ov.rotation.vec, math.deg)
+		current_rot = ov.rotation.vec:apply(math.deg)
 	else
 		current_pos, current_rot = obj:get_bone_position(bone)
 	end
-	local pos_equal = not pos or vector.equals(vector.round(current_pos), vector.round(pos))
-	local rot_equal = not rot or vector.equals(vector.round(current_rot), vector.round(rot))
+	local pos_equal = not pos or current_pos:round():equals(pos:round())
+	local rot_equal = not rot or current_rot:round():equals(rot:round())
 	if not pos_equal or not rot_equal then
 		if obj.set_bone_override then --when < minetest 5.9 isn't supported anymore remove these checks and only use the "override" variant and radians
-			obj:set_bone_override(bone, {position = {vec = pos or current_pos, absolute = true}, rotation = {vec = vector.apply(rot or current_rot, math.rad), absolute = true}})
+			obj:set_bone_override(bone, {position = {vec = pos or current_pos, absolute = true}, rotation = {vec = (rot or current_rot):apply(math.rad), absolute = true}})
 		else
 			obj:set_bone_position(bone, pos or current_pos, rot or current_rot)
 		end
@@ -850,8 +851,8 @@ function mcl_util.bypass_buildable_to(func)
 	local function copy_pointed_thing(pointed_thing)
 		return {
 			type  = pointed_thing.type,
-			above = pointed_thing.above and vector.copy(pointed_thing.above),
-			under = pointed_thing.under and vector.copy(pointed_thing.under),
+			above = pointed_thing.above and pointed_thing.above:copy(),
+			under = pointed_thing.under and pointed_thing.under:copy(),
 			ref   = pointed_thing.ref,
 		}
 	end
@@ -866,7 +867,7 @@ function mcl_util.bypass_buildable_to(func)
 
 	local function check_attached_node(p, n, group_rating)
 		local def = minetest.registered_nodes[n.name]
-		local d = vector.zero()
+		local d = zero
 		if group_rating == 3 then
 			-- always attach to floor
 			d.y = -1
@@ -884,11 +885,11 @@ function mcl_util.bypass_buildable_to(func)
 				-- to voxelmanip placing a wallmounted node without resetting a
 				-- pre-existing param2 value that is out-of-range for facedir.
 				-- The fallback vector corresponds to param2 = 0.
-				d = minetest.facedir_to_dir(n.param2) or vector.new(0, 0, 1)
+				d = minetest.facedir_to_dir(n.param2) or new(0, 0, 1)
 			elseif (def.paramtype2 == "4dir" or
 				def.paramtype2 == "color4dir") then
 				-- Similar to facedir handling
-				d = minetest.fourdir_to_dir(n.param2) or vector.new(0, 0, 1)
+				d = minetest.fourdir_to_dir(n.param2) or new(0, 0, 1)
 			end
 		elseif def.paramtype2 == "wallmounted" or
 			def.paramtype2 == "colorwallmounted" then
@@ -897,11 +898,11 @@ function mcl_util.bypass_buildable_to(func)
 
 			-- The fallback vector here is used for the same reason as
 			-- for facedir nodes.
-			d = minetest.wallmounted_to_dir(n.param2) or vector.new(0, 1, 0)
+			d = minetest.wallmounted_to_dir(n.param2) or new(0, 1, 0)
 		else
 			d.y = -1
 		end
-		local p2 = vector.add(p, d)
+		local p2 = p:add(d)
 		local nn = minetest.get_node(p2).name
 		local def2 = minetest.registered_nodes[nn]
 		if def2 and not def2.walkable then
@@ -948,12 +949,12 @@ function mcl_util.bypass_buildable_to(func)
 		---------------------
 
 		-- Place above pointed node
-		local place_to = vector.copy(above)
+		local place_to = under:copy()
 
 		-- If node under is buildable_to, check for callback result and place into it instead
 		if olddef_under.buildable_to and not func(oldnode_under.name) then
 			log("info", "node under is buildable to")
-			place_to = vector.copy(under)
+			place_to = under:copy()
 		end
 
 		-------------------
@@ -977,7 +978,7 @@ function mcl_util.bypass_buildable_to(func)
 			newnode.param2 = def.place_param2
 		elseif (def.paramtype2 == "wallmounted" or
 			def.paramtype2 == "colorwallmounted") and not param2 then
-			local dir = vector.subtract(under, above)
+			local dir = under:subtract(above)
 			newnode.param2 = minetest.dir_to_wallmounted(dir)
 			-- Calculate the direction for furnaces and chests and stuff
 		elseif (def.paramtype2 == "facedir" or
@@ -986,7 +987,7 @@ function mcl_util.bypass_buildable_to(func)
 			def.paramtype2 == "color4dir") and not param2 then
 			local placer_pos = placer and placer:get_pos()
 			if placer_pos then
-				local dir = vector.subtract(above, placer_pos)
+				local dir = above:subtract(placer_pos)
 				newnode.param2 = minetest.dir_to_facedir(dir)
 				log("info", "facedir: " .. newnode.param2)
 			end
@@ -1043,7 +1044,7 @@ function mcl_util.bypass_buildable_to(func)
 		-- Run callback
 		if def.after_place_node then
 			-- Deepcopy place_to and pointed_thing because callback can modify it
-			local place_to_copy = vector.copy(place_to)
+			local place_to_copy = place_to:copy()
 			local pointed_thing_copy = copy_pointed_thing(pointed_thing)
 			if def.after_place_node(place_to_copy, placer, itemstack,
 				pointed_thing_copy) then
@@ -1054,7 +1055,7 @@ function mcl_util.bypass_buildable_to(func)
 		-- Run script hook
 		for _, callback in ipairs(minetest.registered_on_placenodes) do
 			-- Deepcopy pos, node and pointed_thing because callback can modify them
-			local place_to_copy = vector.copy(place_to)
+			local place_to_copy = place_to:copy()
 			local newnode_copy = {name = newnode.name, param1 = newnode.param1, param2 = newnode.param2}
 			local oldnode_copy = {name = oldnode.name, param1 = oldnode.param1, param2 = oldnode.param2}
 			local pointed_thing_copy = copy_pointed_thing(pointed_thing)
@@ -1107,12 +1108,12 @@ function mcl_util.traverse_tower(pos, dir, callback)
 	local i = 0
 	while minetest.get_node(pos).name == node.name do
 		if callback and callback(pos, dir, node) then
-			return pos,i,true
+			return pos, i, true
 		end
 		i = i + 1
-		pos = vector.offset(pos, 0, dir, 0)
+		pos = pos:offset(0, dir, 0)
 	end
-	return vector.offset(pos, 0, -dir, 0), i
+	return pos:offset(0, -dir, 0), i
 end
 
 -- Voxel manip function to replace a node type with another in an area
@@ -1203,8 +1204,8 @@ function mcl_util.circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
 	local c_to = minetest.get_content_id(mat_to)
 
 	-- Using new as y is not relative
-	local pos1 = vector.new(pos.x - radius, y, pos.z - radius)
-	local pos2 = vector.new(pos.x + radius, y, pos.z + radius)
+	local pos1 = new(pos.x - radius, y, pos.z - radius)
+	local pos2 = new(pos.x + radius, y, pos.z + radius)
 
 	local vm = minetest.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos1, pos2)
@@ -1337,13 +1338,13 @@ function mcl_util.detach_object(obj, change_pos, callback)
 	obj:set_properties({visual_size = get_visual_size(obj)})
 	if obj:is_player() then
 		mcl_player.players[obj].attached = nil
-		obj:set_eye_offset(vector.zero(), vector.zero())
+		obj:set_eye_offset(zero, zero)
 		mcl_player.player_set_animation(obj, "stand" , 30)
 	else
 		obj:get_luaentity()._old_visual_size = nil
 	end
 	if change_pos then
-		 obj:set_pos(vector.add(obj:get_pos(), change_pos))
+		 obj:set_pos(obj:get_pos():add(change_pos))
 	end
 	if callback then
 		minetest.after(0.1, function(obj)

@@ -1,3 +1,5 @@
+local new, zero = vector.new, vector.zero()
+
 function mcl_minecarts:get_sign(z)
 	if z == 0 then
 		return 0
@@ -37,24 +39,24 @@ function mcl_minecarts:is_rail(pos, railtype)
 end
 
 function mcl_minecarts:check_front_up_down(pos, dir_, check_down, railtype)
-	local dir = vector.new(dir_)
+	local dir = dir_:copy()
 	-- Front
 	dir.y = 0
-	local cur = vector.add(pos, dir)
+	local cur = pos:add(dir)
 	if mcl_minecarts:is_rail(cur, railtype) then
 		return dir
 	end
 	-- Up
 	if check_down then
 		dir.y = 1
-		cur = vector.add(pos, dir)
+		cur = pos:add(dir)
 		if mcl_minecarts:is_rail(cur, railtype) then
 			return dir
 		end
 	end
 	-- Down
 	dir.y = -1
-	cur = vector.add(pos, dir)
+	cur = pos:add(dir)
 	if mcl_minecarts:is_rail(cur, railtype) then
 		return dir
 	end
@@ -62,13 +64,13 @@ function mcl_minecarts:check_front_up_down(pos, dir_, check_down, railtype)
 end
 
 function mcl_minecarts:get_rail_direction(pos_, dir, ctrl, old_switch, railtype)
-	local pos = vector.round(pos_)
+	local pos = pos_:round()
 	local cur
 	local left_check, right_check = true, true
 
 	-- Check left and right
-	local left = vector.zero()
-	local right = vector.zero()
+	local left = zero
+	local right = zero
 	if dir.z ~= 0 and dir.x == 0 then
 		left.x = -dir.z
 		right.x = dir.z
@@ -131,14 +133,14 @@ function mcl_minecarts:get_rail_direction(pos_, dir, ctrl, old_switch, railtype)
 			return cur
 		end
 	end
-	return vector.zero()
+	return zero
 end
 
 local plane_adjacents = {
-	vector.new(-1,0,0),
-	vector.new(1,0,0),
-	vector.new(0,0,-1),
-	vector.new(0,0,1),
+	new(-1,0,0),
+	new(1,0,0),
+	new(0,0,-1),
+	new(0,0,1),
 }
 
 function mcl_minecarts:get_start_direction(pos)
@@ -146,20 +148,20 @@ function mcl_minecarts:get_start_direction(pos)
 	local i = 0
 	while (not dir and i < #plane_adjacents) do
 		i = i+1
-		local node = minetest.get_node_or_nil(vector.add(pos, plane_adjacents[i]))
+		local node = minetest.get_node_or_nil(pos:add(plane_adjacents[i]))
 		if node ~= nil
 		and minetest.get_item_group(node.name, "rail") == 0
 		and minetest.get_item_group(node.name, "solid") == 1
 		and minetest.get_item_group(node.name, "opaque") == 1
 		then
-			dir = mcl_minecarts:check_front_up_down(pos, vector.multiply(plane_adjacents[i], -1), true)
+			dir = mcl_minecarts:check_front_up_down(pos, plane_adjacents[i]:multiply(-1), true)
 		end
 	end
 	return dir
 end
 
 function mcl_minecarts:set_velocity(obj, dir, factor)
-	obj._velocity = vector.multiply(dir, factor or 3)
+	obj._velocity = dir:multiply(factor or 3)
 	obj._old_pos = nil
 	obj._punched = true
 end

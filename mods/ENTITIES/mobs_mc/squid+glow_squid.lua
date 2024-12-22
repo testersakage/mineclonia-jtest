@@ -5,16 +5,17 @@
 --###################
 
 local S = minetest.get_translator("mobs_mc")
+local unit = vector.unit
 
 local base_psdef = {
 	amount = 8,
 	time=0,
-	minpos = vector.new(-1,-1,-1),
-	maxpos = vector.new(1,1,1),
-	minvel = vector.new(-0.25,-0.25,-0.25),
-	maxvel = vector.new(0.25,0.25,0.25),
-	minacc = vector.new(-0.5,-0.5,-0.5),
-	maxacc = vector.new(0.5,0.5,0.5),
+	minpos = unit():multiply(-1),
+	maxpos = unit(),
+	minvel = unit():multiply(-0.25),
+	maxvel = unit():multiply(0.25),
+	minacc = unit():multiply(-0.5),
+	maxacc = unit():multiply(0.5),
 	minexptime = 1,
 	maxexptime = 2,
 	minsize = 0.8,

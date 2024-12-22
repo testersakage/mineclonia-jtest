@@ -7,7 +7,7 @@ local PI_THIRD = math.pi / 3 -- 60 degrees
 local player_transfer_distance = tonumber(minetest.settings:get("player_transfer_distance")) or 128
 if player_transfer_distance == 0 then player_transfer_distance = math.huge end
 
-
+local new, unit = vector.new, vector.unit
 -- custom particle effects
 function mcl_mobs.effect(pos, amount, texture, min_size, max_size, radius, gravity, glow, go_down)
 
@@ -30,10 +30,10 @@ function mcl_mobs.effect(pos, amount, texture, min_size, max_size, radius, gravi
 		time = 0.25,
 		minpos = pos,
 		maxpos = pos,
-		minvel = {x = -radius, y = ym, z = -radius},
-		maxvel = {x = radius, y = radius, z = radius},
-		minacc = {x = 0, y = gravity, z = 0},
-		maxacc = {x = 0, y = gravity, z = 0},
+		minvel = new(-radius, ym, -radius),
+		maxvel = unit():multiply(radius),
+		minacc = new(0, gravity, 0),
+		maxacc = new(0, gravity, 0),
 		minexptime = 0.1,
 		maxexptime = 1,
 		minsize = min_size,
@@ -46,27 +46,27 @@ end
 function mcl_mobs.death_effect(pos, yaw, collisionbox, rotate)
 	local min, max
 	if collisionbox then
-		min = {x=collisionbox[1], y=collisionbox[2], z=collisionbox[3]}
-		max = {x=collisionbox[4], y=collisionbox[5], z=collisionbox[6]}
+		min = new(collisionbox[1], collisionbox[2], collisionbox[3])
+		max = new(collisionbox[4], collisionbox[5], collisionbox[6])
 	else
-		min = { x = -0.5, y = 0, z = -0.5 }
-		max = { x = 0.5, y = 0.5, z = 0.5 }
+		min = new(-0.5, 0, -0.5)
+		max = unit():multiply(0.5)
 	end
 	if rotate then
-		min = vector.rotate(min, {x=0, y=yaw, z=math.pi/2})
-		max = vector.rotate(max, {x=0, y=yaw, z=math.pi/2})
+		min = min:rotate(new(0, yaw, math.pi / 2))
+		max = max:rotate(new(0, yaw, math.pi/2))
 		min, max = vector.sort(min, max)
-		min = vector.multiply(min, 0.5)
-		max = vector.multiply(max, 0.5)
+		min = min:multiply(0.5)
+		max = max:multiply(0.5)
 	end
 
 	minetest.add_particlespawner({
 		amount = 50,
 		time = 0.001,
-		minpos = vector.add(pos, min),
-		maxpos = vector.add(pos, max),
-		minvel = vector.new(-5,-5,-5),
-		maxvel = vector.new(5,5,5),
+		minpos = pos:add(min),
+		maxpos = pos:add(max),
+		minvel = unit():multiply(-5),
+		maxvel = unit():multiply(5),
 		minexptime = 1.1,
 		maxexptime = 1.5,
 		minsize = 1,
@@ -351,15 +351,15 @@ function mob_class:check_head_swivel(dtime, clear)
 				newr = vector.multiply(oldr, 0.9)
 			elseif self.attack and self.state == "attack" and not self.runaway then
 				if self.head_yaw == "y" then
-					newr = vector.new(mob_pitch, mob_yaw, 0)
+					newr = new(mob_pitch, mob_yaw, 0)
 				elseif self.head_yaw == "z" then
-					newr = vector.new(mob_pitch, 0, -mob_yaw)
+					newr = new(mob_pitch, 0, -mob_yaw)
 				end
 			else
 				if self.head_yaw == "y" then
-					newr = vector.new((mob_pitch-oldr.x)*.3+oldr.x, (mob_yaw-oldr.y)*.3+oldr.y, 0)
+					newr = new((mob_pitch-oldr.x)*.3+oldr.x, (mob_yaw-oldr.y)*.3+oldr.y, 0)
 				elseif self.head_yaw == "z" then
-					newr = vector.new((mob_pitch-oldr.x)*.3+oldr.x, 0, ((mob_yaw-oldr.y)*.3+oldr.y)*-3)
+					newr = new((mob_pitch-oldr.x)*.3+oldr.x, 0, ((mob_yaw-oldr.y)*.3+oldr.y)*-3)
 				end
 			end
 		end
@@ -367,7 +367,7 @@ function mob_class:check_head_swivel(dtime, clear)
 		newr = vector.multiply(oldr, 0.9)
 	end
 
-	local newp = vector.new(0, self.bone_eye_height, self.horizontal_head_height)
+	local newp = new(0, self.bone_eye_height, self.horizontal_head_height)
 	-- 0.02 is about 1.14 degrees tolerance, to update less often
 	if math.abs(oldr.x-newr.x) < 0.02 and math.abs(oldr.y-newr.y) < 0.02 and math.abs(oldr.z-newr.z) < 0.02 and vector.equals(oldp, newp) then return end
 

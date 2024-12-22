@@ -268,7 +268,7 @@ local function get_ignitable(pos)
 end
 -- Fire spreads from a still lava block similarly: any air block one above and up to one block sideways (including diagonals) or two above and two blocks sideways (including diagonals) that is adjacent to a flammable block may be turned into a fire block.
 local function get_ignitable_by_lava(pos)
-	return check_aircube(vector.add(pos,vector.new(-1,1,-1)),vector.add(pos,vector.new(1,1,1))) or check_aircube(vector.add(pos,vector.new(-2,2,-2)),vector.add(pos,vector.new(2,2,2))) or nil
+	return check_aircube(vector.add(pos,vector.new(-1,1,-1)),vector.add(pos,vector.unit())) or check_aircube(vector.add(pos,vector.new(-2,2,-2)),vector.add(pos,vector.new(2,2,2))) or nil
 end
 
 --

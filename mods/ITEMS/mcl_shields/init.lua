@@ -1,6 +1,6 @@
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
-
+local unit = vector.unit
 -- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
 local hud_elem_type_field = "type"
 if not minetest.features.hud_def_type_field then
@@ -40,7 +40,7 @@ minetest.register_tool("mcl_shields:shield", {
 	},
 	sound = {breaks = "default_tool_breaks"},
 	_repair_material = "group:wood",
-	wield_scale = vector.new(2, 2, 2),
+	wield_scale = unit():multiply(2),
 	_mcl_wieldview_item = "",
 })
 
@@ -68,7 +68,7 @@ minetest.register_entity("mcl_shields:shield_entity", {
 		pointable = false,
 		collide_with_objects = false,
 		textures = {"mcl_shield_base_nopattern.png"},
-		visual_size = vector.new(1, 1, 1),
+		visual_size = unit,
 	},
 	_blocking = false,
 	_shield_number = 2,
@@ -502,7 +502,7 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		},
 		sound = {breaks = "default_tool_breaks"},
 		_repair_material = "group:wood",
-		wield_scale = vector.new(2, 2, 2),
+		wield_scale = unit():multiply(2),
 		_shield_color = colortab[4],
 		_mcl_wieldview_item = "",
 	})
