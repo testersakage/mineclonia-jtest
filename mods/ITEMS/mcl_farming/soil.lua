@@ -66,7 +66,7 @@ minetest.register_abm({
 		end
 
 		-- Turn back into dirt when covered by solid node
-		local above_node = minetest.get_node_or_nil({x=pos.x,y=pos.y+1,z=pos.z})
+		local above_node = minetest.get_node_or_nil(vector.new(pos.x, pos.y + 1, pos.z))
 		if above_node then
 			if minetest.get_item_group(above_node.name, "solid") ~= 0 then
 				node.name = "mcl_core:dirt"
@@ -77,7 +77,7 @@ minetest.register_abm({
 
 		-- Check an area of 9×2×9 around the node for nodename (9×9 on same level and 9×9 below)
 		local function check_surroundings(pos, nodename)
-			local nodes = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4}, {x=pos.x+4,y=pos.y+1,z=pos.z+4}, {nodename})
+			local nodes = minetest.find_nodes_in_area(vector.new(pos.x - 4, pos.y, pos.z - 4), vector.new(pos.x + 4, pos.y + 1, pos.z + 4), {nodename})
 			return #nodes > 0
 		end
 
@@ -100,7 +100,7 @@ minetest.register_abm({
 			if not check_surroundings(pos, "ignore") then
 				if wet <= 0 then
 					--local n_def = minetest.registered_nodes[node.name] or nil
-					local nn = minetest.get_node_or_nil({x=pos.x,y=pos.y+1,z=pos.z})
+					local nn = minetest.get_node_or_nil(vector.new(pos.x, pos.y + 1, pos.z))
 					if not nn or not nn.name then
 						return
 					end

@@ -60,12 +60,12 @@ local function linger_particles(pos, d, texture, color)
 	minetest.add_particlespawner({
 		amount = 10 * d^2,
 		time = 1,
-		minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
-		maxpos = {x=pos.x+d, y=pos.y+1, z=pos.z+d},
-		minvel = {x=-0.5, y=0, z=-0.5},
-		maxvel = {x=0.5, y=0.5, z=0.5},
-		minacc = {x=-0.2, y=0, z=-0.2},
-		maxacc = {x=0.2, y=.05, z=0.2},
+		minpos = vector.copy(pos):add(vector.new(-d, 0.5, -d)),
+		maxpos = vector.copy(pos):add(vector.new(d, 1, d)),
+		minvel = vector.new(-0.5, 0, -0.5),
+		maxvel = vector.new(0.5, 0.5, 0.5),
+		minacc = vector.new(-0.2, 0, -0.2),
+		maxacc = vector.new(0.2, 0.05, 0.2),
 		minexptime = 1,
 		maxexptime = 2,
 		minsize = 2,
@@ -207,9 +207,9 @@ function mcl_potions.register_lingering(name, descr, color, def)
 			local dir = placer:get_look_dir();
 			local pos = placer:get_pos();
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
-			local obj = minetest.add_entity({x=pos.x+dir.x,y=pos.y+2+dir.y,z=pos.z+dir.z}, id.."_flying")
-			obj:set_velocity({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
-			obj:set_acceleration({x=dir.x*-3, y=-9.8, z=dir.z*-3})
+			local obj = minetest.add_entity(pos:add(vector.copy(dir)):add(vector.new(0, 2, 0)), id.."_flying")
+			obj:set_velocity(vector.copy(dir):multiply(velocity))
+			obj:set_acceleration(vector.new(dir.x*-3, -9.8, dir.z*-3))
 			local ent = obj:get_luaentity()
 			ent._thrower = placer:get_player_name()
 			ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
@@ -222,13 +222,13 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		end,
 		_on_dispense = function(item, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
-			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
+			local pos = s_pos:add(dropdir)
 			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
 			local obj = minetest.add_entity(pos, id.."_flying")
 			if obj and obj:get_pos() then
 				local velocity = 22
-				obj:set_velocity({x=dropdir.x*velocity,y=dropdir.y*velocity,z=dropdir.z*velocity})
-				obj:set_acceleration({x=dropdir.x*-3, y=-9.8, z=dropdir.z*-3})
+				obj:set_velocity(vector.copy(dropdir):multiply(velocity))
+				obj:set_acceleration(vector.new(dropdir.x * -3, -9.8, dropdir.z* - 3))
 				local ent = obj:get_luaentity()
 				ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
 				ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
