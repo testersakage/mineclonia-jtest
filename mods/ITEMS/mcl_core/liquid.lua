@@ -1,6 +1,8 @@
 
 
-local liquid = {}
+local liquid = {
+  node_read_cnt = 0
+}
 
 local resume_counter = 1
 function liquid.register_liquid(def)
@@ -107,6 +109,7 @@ function liquid.register_liquid(def)
 
     local p111 = pos
     local n111 = core.get_node(p111)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
     if n111.name == 'ignore' then
       return
     end
@@ -119,11 +122,17 @@ function liquid.register_liquid(def)
     local p112 = pos + {x= 0, y= 0, z= 1}
 
     local n011 = core.get_node(p011)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
     local n211 = core.get_node(p211)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
     local n110 = core.get_node(p110)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
     local n112 = core.get_node(p112)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
     local n101 = core.get_node(p101)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
     local n121 = core.get_node(p121)
+    liquid.node_read_cnt = liquid.node_read_cnt + 1
 
 
     if n011.name == 'ignore' or
@@ -234,57 +243,77 @@ function liquid.register_liquid(def)
             slope_dist = SLOPE_RANGE_MIN
           end
 
-
-          local function find_slope(pos, dir)
-          
-            for i = 1, slope_dist do
-              local n      = core.get_node(pos)
-              --core.log('name: '..n.name)
-              if not (n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING) then
-                return 255
+          local function floodable(pos)
+            local n = core.get_node(pos)
+            liquid.node_read_cnt = liquid.node_read_cnt + 1
+            if n.name == 'air' or n.name == NAME_FLOWING then
+              return true
+            elseif n.name == 'ignore' then
+              core.log('ignore')
+              return nil
+            else
+              local ndef = core.registered_nodes[n.name]
+              if ndef and ndef.floodable then
+                return true
               end
-          
-              n = core.get_node(pos + { x = 0, y = -1, z = 0 })
-              if n.name == 'ignore' then
-                return nil
-              elseif n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING then
-                return i
-              end
-
-              pos = pos + dir
             end
-          
-            return 255
-          end
-  
-          -- calculate the slope distance in each direction.
-          -- TODO This could be faster if all slopes were searched
-          -- simultaneously.
-          local d011 = find_slope(p011, {x=-1,y=0,z= 0})
-          local d211 = find_slope(p211, {x= 1,y=0,z= 0})
-          local d110 = find_slope(p110, {x= 0,y=0,z=-1})
-          local d112 = find_slope(p112, {x= 0,y=0,z= 1})
-  
-          if d011 == nil or
-             d211 == nil or
-             d110 == nil or
-             d112 == nil then
-
-            -- We hit an 'ignore' node
-            -- TODO Find a performant solution to handle this.
-            return
+            return false
           end
 
-          -- find out what slope is the nearest
-          local d_min = 255
-          if d011 < d_min then d_min = d011 end
-          if d211 < d_min then d_min = d211 end
-          if d110 < d_min then d_min = d110 end
-          if d112 < d_min then d_min = d112 end
-          
+          local function is_slope(pos)
+            local res = false
+            local s1 = floodable(pos)
+            if s1 == nil then
+              return nil
+            elseif s1 then
+              res = 1
+              local s2 = floodable({x=pos.x, y=pos.y - 1, z=pos.z})
+              if s2 == nil then
+                return nil
+              elseif s2 then
+                res = 2
+              end
+            end
+            return res
+          end
+
+          local state = {1,1,1,1}
+
+          for d = 1,slope_dist do
+
+            local function f(i)
+              if state[i] then
+                return state[i]
+              else
+                return '0'
+              end
+            end
+
+            core.log('l '..d..' '..f(1)..f(2)..f(3)..f(4))
+            state[1] = state[1] and is_slope({x=p111.x - d, y=p111.y, z=p111.z})
+            state[2] = state[2] and is_slope({x=p111.x + d, y=p111.y, z=p111.z})
+            state[3] = state[3] and is_slope({x=p111.x, y=p111.y, z=p111.z - d})
+            state[4] = state[4] and is_slope({x=p111.x, y=p111.y, z=p111.z + d})
+
+            if state[1] == nil or state[2] == nil or
+              state[3] == nil or state[4] == nil then
+              -- We hit an 'ignore' node
+              -- TODO Find a performant solution to handle this.
+              core.log('wtf')
+              return
+            end
 
 
-          local new_node = make_liquid(new_level)
+
+            core.log('l '..d..' '..f(1)..f(2)..f(3)..f(4))
+
+            if state[1] == 2 or state[2] == 2 or
+              state[3] == 2 or state[4] == 2 then
+              core.log('break')
+              break
+            end
+          end
+
 
           local function is_floodable(p, n, l, newnode)
             local name = n.name
@@ -313,23 +342,26 @@ function liquid.register_liquid(def)
           end
 
 
-          if d_min < 255 then
-            if d_min == d011 and is_floodable(p011, n011, l011, new_node) then
+          local new_node = make_liquid(new_level)
+
+          if state[1] == 2 or state[2] == 2 or
+             state[3] == 2 or state[4] == 2 then
+
+             core.log('ffo '..dump(state))
+
+            if state[1] == 2 and is_floodable(p011, n011, l011, new_node) then
               core.set_node(p011, new_node)
             end
-            if d_min == d211 and is_floodable(p211, n211, l211, new_node) then
+            if state[2] == 2 and is_floodable(p211, n211, l211, new_node) then
               core.set_node(p211, new_node)
             end
-            if d_min == d110 and is_floodable(p110, n110, l110, new_node) then
+            if state[3] == 2 and is_floodable(p110, n110, l110, new_node) then
               core.set_node(p110, new_node)
             end
-            if d_min == d112 and is_floodable(p112, n112, l112, new_node) then
+            if state[4] == 2 and is_floodable(p112, n112, l112, new_node) then
               core.set_node(p112, new_node)
             end
-
           else
-            -- There is no slope in the given range, the liquid shall spread in
-            -- all directions.
             if is_floodable(p011, n011, l011, new_node) then 
               core.set_node(p011, new_node)
             end
@@ -522,6 +554,11 @@ function liquid.register_liquid(def)
       for i, pos in ipairs(q) do
         flow_iteration(pos)
       end
+
+      if #q > 0 then
+        core.log('read-cnt= '..liquid.node_read_cnt)
+      end
+
       run()
     end)
   end
