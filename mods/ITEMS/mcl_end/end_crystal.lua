@@ -101,7 +101,7 @@ minetest.register_entity("mcl_end:crystal_beam", {
 	initial_properties = {
 		physical = false,
 		visual = "cube",
-		visual_size = {x = 1, y = 1, z = 1},
+		visual_size = vector.unit(),
 		textures = {
 			"mcl_end_crystal_beam.png^[transformR90",
 			"mcl_end_crystal_beam.png^[transformR90",

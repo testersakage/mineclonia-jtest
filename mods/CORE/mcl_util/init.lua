@@ -66,6 +66,10 @@ function table.random_element(t)
 	return t[rk], rk
 end
 
+function vector.unit()
+	return vector.new(1, 1, 1)
+end
+
 function mcl_util.get_luaentity_by_id(id)
 	for _, e in pairs(minetest.luaentities) do
 		if e._id == id then return e end
@@ -1324,7 +1328,7 @@ function minetest.get_natural_light(pos,tod)
 end
 
 local function get_visual_size(obj)
-	return obj:is_player() and {x = 1, y = 1, z = 1} or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
+	return obj:is_player() and vector.unit() or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
 end
 
 function mcl_util.detach_object(obj, change_pos, callback)

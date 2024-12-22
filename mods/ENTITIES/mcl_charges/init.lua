@@ -1,6 +1,7 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
-
+local zero = vector.zero()
+local new = vector.new
 -- Cooldown time and global storing of cooldown
 local cooldown_time = 1
 mcl_charges = {}
@@ -12,10 +13,10 @@ mcl_charges.wind_burst_spawner = {
 	texpool = {},
 	amount = 6,
 	time = 0.2,
-	minvel = vector.zero(),
-	maxvel = vector.zero(),
-	minacc = vector.new(-0.2, 0.0, -0.2),
-	maxacc = vector.new(0.2, 0.1, 0.2),
+	minvel = zero,
+	maxvel = zero,
+	minacc = new(-0.2, 0.0, -0.2),
+	maxacc = new(0.2, 0.1, 0.2),
 	minexptime = 0.95,
 	maxexptime = 0.95,
 	minsize = 12.0,
@@ -35,11 +36,11 @@ function mcl_charges.chorus_flower_effects(pos, radius)
 	minetest.add_particlespawner({
 		amount = 10,
 		time = 0.3,
-		minpos = vector.subtract(pos, radius / 2),
-		maxpos = vector.add(pos, radius / 2),
-		minvel = vector.new(-5, 0, -5),
-		maxvel = vector.new(5, 3, 5),
-		minacc = vector.new(0, -10, 0),
+		minpos = pos:subtract(radius / 2),
+		maxpos = pos:add(radius / 2),
+		minvel = new(-5, 0, -5),
+		maxvel = new(5, 3, 5),
+		minacc = new(0, -10, 0),
 		minexptime = 0.8,
 		maxexptime = 2.0,
 		minsize = radius * 0.66,
@@ -53,11 +54,11 @@ function mcl_charges.pot_effects(pos, radius)
 	minetest.add_particlespawner({
 		amount = 10,
 		time = 0.3,
-		minpos = vector.subtract(pos, radius / 2),
-		maxpos = vector.add(pos, radius / 2),
-		minvel = vector.new(-5, 0, -5),
-		maxvel = vector.new(5, 3, 5),
-		minacc = vector.new(0, -10, 0),
+		minpos = pos:subtract(radius / 2),
+		maxpos = pos:add(radius / 2),
+		minvel = new(-5, 0, -5),
+		maxvel = new(5, 3, 5),
+		minacc = new(0, -10, 0),
 		minexptime = 0.8,
 		maxexptime = 2.0,
 		minsize = radius * 0.66,
@@ -68,17 +69,17 @@ function mcl_charges.pot_effects(pos, radius)
 end
 -- knockback function
 function mcl_charges.wind_burst_velocity(pos1, pos2, old_vel, power)
-	if vector.equals(pos1, pos2) then
+	if pos1:equals(pos2) then
 		return old_vel
 	end
 
-	local vel = vector.multiply(vector.normalize(vector.direction(pos1, pos2)), power)
-	vel = vector.add(vel, old_vel)
-	vel = vector.add(vel, {x = math.random() - 0.5, y = math.random() - 0.5, z = math.random() - 0.5})
+	local vel = pos1:direction(pos2):normalize():multiply(power)
+	vel = vel:add(old_vel)
+	vel = vel:add(new(math.random() - 0.5, math.random() - 0.5, math.random() - 0.5))
 
-	if vector.length(vel) > 250 then
-		vel = vector.normalize(vel)
-		vel = vector.multiply(vel, 250)
+	if vel:length() > 250 then
+		vel = vel:normalize()
+		vel = vel:multiply(250)
 	end
 
 	return vel
@@ -89,10 +90,10 @@ local RADIUS = 4
 function mcl_charges.wind_burst(pos, radius)
 	for obj in minetest.objects_inside_radius(pos, radius) do
 		local obj_pos = obj:get_pos()
-		local dist = math.max(1, vector.distance(pos, obj_pos))
+		local dist = math.max(1, pos:distance(obj_pos))
 
 		if obj:is_player() then
-			obj:add_velocity(vector.multiply(vector.normalize(vector.subtract(obj_pos, pos)), mcl_util.float_random(1.8, 2.0) / dist * RADIUS))
+			obj:add_velocity(obj_pos:subtract(pos:normalize()):multiply(mcl_util.float_random(1.8, 2.0) / dist * RADIUS))
 		else
 			local luaobj = obj:get_luaentity()
 			if luaobj then
@@ -122,13 +123,9 @@ function mcl_charges.register_charge(name, descr, def)
 				local velocity = 30
 				local dir = placer:get_look_dir()
 				local playerpos = placer:get_pos()
-				local obj = minetest.add_entity({
-					x = playerpos.x + dir.x,
-					y = playerpos.y + 1.3 + dir.y,
-					z = playerpos.z + dir.z
-				}, "mcl_charges:" .. name .. "_flying")
-				local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-				local acc = vector.zero()
+				local obj = minetest.add_entity(playerpos:add(dir:copy():add(0, 1.3, 0)) "mcl_charges:" .. name .. "_flying")
+				local vec = dir:multiply(velocity)
+				local acc = zero
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
@@ -149,13 +146,9 @@ function mcl_charges.register_charge(name, descr, def)
 				local velocity = 30
 				local dir = placer:get_look_dir()
 				local playerpos = placer:get_pos()
-				local obj = minetest.add_entity({
-					x = playerpos.x + dir.x,
-					y = playerpos.y + 2 + dir.y,
-					z = playerpos.z + dir.z
-				}, "mcl_charges:" .. name .. "_flying")
-				local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-				local acc = vector.zero()
+				local obj = minetest.add_entity(playerpos:add(dir:copy():add(0, 2, 0)), "mcl_charges:" .. name .. "_flying")
+				local vec = dir:multiply(velocity)
+				local acc = zero
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
@@ -166,13 +159,13 @@ function mcl_charges.register_charge(name, descr, def)
 			end
 		end,
 		_on_dispense = function(stack, pos, _, _, dropdir)
-			local shootpos = vector.add(pos, vector.multiply(dropdir, 0.51))
+			local shootpos = pos:add(dropdir:multiply(0.51))
 			local charge = minetest.add_entity(shootpos, "mcl_charges:" .. name .. "_flying")
 			if charge and charge:get_pos() then
 				local ent_charge = charge:get_luaentity()
 				ent_charge._shot_from_dispenser = true
 				local v = ent_charge.velocity or 20
-				charge:set_velocity(vector.multiply(dropdir, v))
+				charge:set_velocity(dropdir:multiply(v))
 				ent_charge.switch = 1
 			end
 			stack:take_item()
@@ -196,7 +189,7 @@ function mcl_charges.register_charge(name, descr, def)
 			local pos = self.object:get_pos()
 			local node = minetest.get_node(pos)
 			local n = node.name
-			local dpos = vector.round(vector.new(pos)) -- digital pos
+			local dpos = new(pos):round() -- digital pos
 			if n ~= "air" then
 				def.hit_node(self, pos, node)
 				self.object:remove()
