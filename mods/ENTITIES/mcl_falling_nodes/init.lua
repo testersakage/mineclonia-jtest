@@ -220,7 +220,7 @@ minetest.register_entity(":__builtin:falling_node", {
 		end
 		local vel = self.object:get_velocity()
 		-- Fix position if entity does not move
-		if vector.equals(vel, {x = 0, y = 0, z = 0}) then
+		if vector.equals(vel, vector.zero()) then
 			local npos = vector.round(self.object:get_pos())
 			local npos2 = table.copy(npos)
 			npos2.y = npos2.y - 2

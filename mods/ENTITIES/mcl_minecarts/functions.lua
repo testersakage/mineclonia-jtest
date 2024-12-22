@@ -67,8 +67,8 @@ function mcl_minecarts:get_rail_direction(pos_, dir, ctrl, old_switch, railtype)
 	local left_check, right_check = true, true
 
 	-- Check left and right
-	local left = {x=0, y=0, z=0}
-	local right = {x=0, y=0, z=0}
+	local left = vector.zero()
+	local right = vector.zero()
 	if dir.z ~= 0 and dir.x == 0 then
 		left.x = -dir.z
 		right.x = dir.z
@@ -131,7 +131,7 @@ function mcl_minecarts:get_rail_direction(pos_, dir, ctrl, old_switch, railtype)
 			return cur
 		end
 	end
-	return {x=0, y=0, z=0}
+	return vector.zero()
 end
 
 local plane_adjacents = {

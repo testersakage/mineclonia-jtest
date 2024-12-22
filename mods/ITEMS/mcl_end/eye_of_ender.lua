@@ -64,7 +64,7 @@ minetest.register_entity("mcl_end:ender_eye", {
 				texture = "mcl_particles_teleport.png",
 				expirationtime = 1,
 				velocity = {x=math.random(-1, 1)*0.1, y=math.random(-30, 0)*0.1, z=math.random(-1, 1)*0.1},
-				acceleration = {x=0, y=0, z=0},
+				acceleration = vector.zero(),
 				size = 2.5,
 			})
 		end

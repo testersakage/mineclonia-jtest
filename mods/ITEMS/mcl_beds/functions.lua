@@ -148,7 +148,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		end
 
 		-- physics, eye_offset, etc
-		player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+		player:set_eye_offset(vector.zero(), vector.zero())
 		if player:get_look_vertical() > 0 then
 			player:set_look_vertical(0)
 		end
@@ -176,7 +176,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		mcl_beds.bed_pos[name] = bed_pos2
 		player_in_bed = player_in_bed + 1
 		-- physics, eye_offset, etc
-		player:set_eye_offset({x = 0, y = -13, z = 0}, {x = 0, y = 0, z = 0})
+		player:set_eye_offset({x = 0, y = -13, z = 0}, vector.zero())
 		player:set_look_horizontal(yaw)
 
 		-- With head tracking:

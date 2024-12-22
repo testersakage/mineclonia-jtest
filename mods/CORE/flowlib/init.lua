@@ -108,7 +108,7 @@ end
 
 local function quick_flow(pos, node)
 	if not node_is_liquid(node)  then
-		return {x = 0, y = 0, z = 0}
+		return vector.zero()
 	end
 	local x = quick_flow_logic(node,{x = pos.x-1, y = pos.y, z = pos.z},-1) + quick_flow_logic(node,{x = pos.x+1, y = pos.y, z = pos.z}, 1)
 	local z = quick_flow_logic(node,{x = pos.x, y = pos.y, z = pos.z-1},-1) + quick_flow_logic(node,{x = pos.x, y = pos.y, z = pos.z+1}, 1)

@@ -1333,7 +1333,7 @@ function mcl_util.detach_object(obj, change_pos, callback)
 	obj:set_properties({visual_size = get_visual_size(obj)})
 	if obj:is_player() then
 		mcl_player.players[obj].attached = nil
-		obj:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
+		obj:set_eye_offset(vector.zero(), vector.zero())
 		mcl_player.player_set_animation(obj, "stand" , 30)
 	else
 		obj:get_luaentity()._old_visual_size = nil

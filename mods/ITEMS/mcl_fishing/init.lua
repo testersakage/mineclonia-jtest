@@ -220,8 +220,8 @@ function bobber_ENTITY:on_step(dtime)
 		-- reset to original position after dive.
 		if self.object:get_pos().y > self._oldy then
 			self.object:set_pos({x=self.object:get_pos().x,y=self._oldy,z=self.object:get_pos().z})
-			self.object:set_velocity({x=0,y=0,z=0})
-			self.object:set_acceleration({x=0,y=0,z=0})
+			self.object:set_velocity(vector.zero())
+			self.object:set_acceleration(vector.zero())
 		end
 		if self._dive then
 			for _ = 1, 2 do

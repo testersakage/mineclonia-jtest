@@ -360,8 +360,8 @@ doll_def.on_activate = function(self, staticdata)
 		mob = default_mob
 	end
 	set_doll_properties(self.object, mob)
-	self.object:set_velocity({x=0, y=0, z=0})
-	self.object:set_acceleration({x=0, y=0, z=0})
+	self.object:set_velocity(vector.zero())
+	self.object:set_acceleration(vector.zero())
 	self.object:set_armor_groups({immortal=1})
 
 end

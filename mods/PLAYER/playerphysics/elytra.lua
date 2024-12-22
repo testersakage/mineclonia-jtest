@@ -74,8 +74,8 @@ mcl_player.register_globalstep(function(player, dtime)
 				speed_mult = elytra_vars.rocket_speed
 				minetest.add_particle({
 					pos = fly_pos,
-					velocity = {x = 0, y = 0, z = 0},
-					acceleration = {x = 0, y = 0, z = 0},
+					velocity = vector.zero(),
+					acceleration = vector.zero(),
 					expirationtime = mcl_util.float_random(0.3, 0.5),
 					size = mcl_util.float_random(1, 2),
 					collisiondetection = false,

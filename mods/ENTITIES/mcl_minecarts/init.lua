@@ -21,7 +21,7 @@ local function detach_driver(self)
 	if player then
 		mcl_player.players[player].attached = nil
 		player:set_detach()
-		player:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
+		player:set_eye_offset(vector.zero(), vector.zero())
 		mcl_player.player_set_animation(player, "stand" , 30)
 	end
 end
@@ -135,16 +135,16 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		_driver = nil, -- player who sits in and controls the minecart (only for minecart!)
 		_passenger = nil, -- for mobs
 		_punched = false, -- used to re-send _velocity and position
-		_velocity = {x=0, y=0, z=0}, -- only used on punch
+		_velocity = vector.zero(), -- only used on punch
 		_start_pos = nil, -- Used to calculate distance for “On A Rail” achievement
 		_last_float_check = nil, -- timestamp of last time the cart was checked to be still on a rail
 		_fueltime = nil, -- how many seconds worth of fuel is left. Only used by minecart with furnace
 		_boomtimer = nil, -- how many seconds are left before exploding
 		_blinktimer = nil, -- how many seconds are left before TNT blinking
 		_blink = false, -- is TNT blink texture active?
-		_old_dir = {x=0, y=0, z=0},
+		_old_dir = vector.zero(),
 		_old_pos = nil,
-		_old_vel = {x=0, y=0, z=0},
+		_old_vel = vector.zero(),
 		_old_switch = 0,
 		_railtype = nil,
 		_mcl_fishing_hookable = true,
@@ -179,7 +179,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 
 		if not puncher or not puncher:is_player() then
 			local cart_dir = mcl_minecarts:get_rail_direction(pos, {x=1, y=0, z=0}, nil, nil, self._railtype)
-			if vector.equals(cart_dir, {x=0, y=0, z=0}) then
+			if vector.equals(cart_dir, vector.zero()) then
 				return
 			end
 			mcl_minecarts:set_velocity(self, cart_dir)
@@ -231,7 +231,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		local punch_dir = mcl_minecarts:velocity_to_dir(puncher:get_look_dir())
 		punch_dir.y = 0
 		local cart_dir = mcl_minecarts:get_rail_direction(pos, punch_dir, nil, nil, self._railtype)
-		if vector.equals(cart_dir, {x=0, y=0, z=0}) then
+		if vector.equals(cart_dir, vector.zero()) then
 			return
 		end
 
@@ -315,7 +315,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 					end
 					mcl_player.players[player].attached = nil
 					player:set_detach()
-					player:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
+					player:set_eye_offset(vector.zero(), vector.zero())
 				end
 
 				-- Explode if already ignited
@@ -398,7 +398,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			vel = vector.add(vel, self._velocity)
 			self.object:set_velocity(vel)
 			self._old_dir.y = 0
-		elseif vector.equals(vel, {x=0, y=0, z=0}) and (not has_fuel) then
+		elseif vector.equals(vel, vector.zero()) and (not has_fuel) then
 			return
 		end
 
@@ -444,7 +444,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		-- Stop cart if velocity vector flips
 		if self._old_vel and self._old_vel.y == 0 and
 				(self._old_vel.x * vel.x < 0 or self._old_vel.z * vel.z < 0) then
-			self._old_vel = {x = 0, y = 0, z = 0}
+			self._old_vel = vector.zero()
 			self._old_pos = pos
 			self.object:set_velocity(vector.new())
 			self.object:set_acceleration(vector.new())
@@ -458,7 +458,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 				if math.abs(diff[v]) > 1.1 then
 					local expected_pos = vector.add(self._old_pos, self._old_dir)
 					dir, last_switch = mcl_minecarts:get_rail_direction(pos, self._old_dir, ctrl, self._old_switch, self._railtype)
-					if vector.equals(dir, {x=0, y=0, z=0}) then
+					if vector.equals(dir, vector.zero()) then
 						dir = false
 						pos = vector.new(expected_pos)
 						update.pos = true
@@ -483,9 +483,9 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			dir, last_switch = mcl_minecarts:get_rail_direction(pos, cart_dir, ctrl, self._old_switch, self._railtype)
 		end
 
-		local new_acc = {x=0, y=0, z=0}
-		if vector.equals(dir, {x=0, y=0, z=0}) and not has_fuel then
-			vel = {x=0, y=0, z=0}
+		local new_acc = vector.zero()
+		if vector.equals(dir, vector.zero()) and not has_fuel then
+			vel = vector.zero()
 			update.vel = true
 		else
 			-- If the direction changed
@@ -582,7 +582,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		end
 
 		-- stopped on "mcl_minecarts:golden_rail_on"
-		if vector.equals(vel, {x=0, y=0, z=0}) and restart_pos then
+		if vector.equals(vel, vector.zero()) and restart_pos then
 			local dir = mcl_minecarts:get_start_direction(restart_pos)
 			if dir then
 				mcl_minecarts:set_velocity(self, dir)
@@ -744,7 +744,7 @@ register_minecart(
 			self._driver = name
 			self._start_pos = self.object:get_pos()
 			mcl_player.players[clicker].attached = true
-			clicker:set_attach(self.object, "", {x=0, y=-1.75, z=-2}, {x=0, y=0, z=0})
+			clicker:set_attach(self.object, "", {x=0, y=-1.75, z=-2}, vector.zero())
 			clicker:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
 			minetest.after(0.2, function(name)
 				local player = minetest.get_player_by_name(name)

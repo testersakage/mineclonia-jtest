@@ -414,8 +414,8 @@ function mcl_mobs.register_arrow(name, def)
 			if def.tail and def.tail == 1 and def.tail_texture then
 				minetest.add_particle({
 					pos = pos,
-					velocity = {x = 0, y = 0, z = 0},
-					acceleration = {x = 0, y = 0, z = 0},
+					velocity = vector.zero(),
+					acceleration = vector.zero(),
 					expirationtime = def.expire or 0.25,
 					collisiondetection = false,
 					texture = def.tail_texture,

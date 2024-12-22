@@ -7,7 +7,7 @@ local noisemap = PerlinNoiseMap({
 	seed = minetest.get_mapgen_setting("seed") + 99999,
 	octaves = 4,
 	persist = 0.85,
-}, {x = (width*2)+1, y = 30, z = (width * 2) + 1}):get_3d_map({x = 0, y = 0, z = 0})
+}, {x = (width*2)+1, y = 30, z = (width * 2) + 1}):get_3d_map(vector.zero())
 
 local c_end_stone = minetest.get_content_id("mcl_end:end_stone")
 local y_offset = -2

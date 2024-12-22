@@ -143,8 +143,8 @@ local function xp_step(self, dtime)
 	if is_moving then
 		self.object:set_acceleration(gravity)
 	else
-		self.object:set_acceleration({x = 0, y = 0, z = 0})
-		self.object:set_velocity({x = 0, y = 0, z = 0})
+		self.object:set_acceleration(vector.zero())
+		self.object:set_velocity(vector.zero())
 	end
 end
 
@@ -202,7 +202,7 @@ minetest.register_entity("mcl_experience:orb", {
 		if not self.physical_state then
 			self.physical_state = true
 			self.object:set_properties({physical = true})
-			self.object:set_velocity({x=0, y=0, z=0})
+			self.object:set_velocity(vector.zero())
 			self.object:set_acceleration(gravity)
 		end
 	end,
@@ -211,8 +211,8 @@ minetest.register_entity("mcl_experience:orb", {
 		if self.physical_state then
 			self.physical_state = false
 			self.object:set_properties({physical = false})
-			self.object:set_velocity({x=0, y=0, z=0})
-			self.object:set_acceleration({x=0, y=0, z=0})
+			self.object:set_velocity(vector.zero())
+			self.object:set_acceleration(vector.zero())
 		end
 	end,
 	on_step = function(self, dtime)

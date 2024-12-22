@@ -173,7 +173,7 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 		{
 			{x=-1, y=1, z=0}, {x=1, y=1, z=0}, {x=0, y=1, z=0}, {x=0, y=2, z=0},
 			{x=-1, y=0, z=0}, {x=1, y=0, z=0}, {x=-1, y=2, z=0}, {x=1, y=2, z=0},
-			{x=0, y=0, z=0}, -- Different offset for upside down pattern
+			vector.zero(), -- Different offset for upside down pattern
 		},
 
 		-- Standing (z axis)
@@ -185,7 +185,7 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 		{
 			{x=0, y=1, z=-1}, {x=0, y=1, z=1}, {x=0, y=1, z=0}, {x=0, y=2, z=0},
 			{x=0, y=0, z=-1}, {x=0, y=0, z=1}, {x=0, y=2, z=-1}, {x=0, y=2, z=1},
-			{x=0, y=0, z=0},
+			vector.zero(),
 		},
 
 		-- Lying

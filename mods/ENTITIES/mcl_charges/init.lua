@@ -128,7 +128,7 @@ function mcl_charges.register_charge(name, descr, def)
 					z = playerpos.z + dir.z
 				}, "mcl_charges:" .. name .. "_flying")
 				local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-				local acc = {x = 0, y = 0, z = 0}
+				local acc = vector.zero()
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
@@ -155,7 +155,7 @@ function mcl_charges.register_charge(name, descr, def)
 					z = playerpos.z + dir.z
 				}, "mcl_charges:" .. name .. "_flying")
 				local vec = {x = dir.x * velocity, y = dir.y * velocity, z = dir.z * velocity}
-				local acc = {x = 0, y = 0, z = 0}
+				local acc = vector.zero()
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos

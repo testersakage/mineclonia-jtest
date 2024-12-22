@@ -609,7 +609,7 @@ local function create_corridor_section(waypoint, axis, sign, up_or_down, up_or_d
 	if sign then
 		segamount = 0-segamount
 	end
-	local vek = {x=0,y=0,z=0};
+	local vek = vector.zero();
 	local start = table.copy(waypoint)
 	if axis == "x" then
 		vek.x=segamount
@@ -956,7 +956,7 @@ local function create_corridor_system(main_cave_coords)
 	Prevents corridors starting in mid-air or in liquids. ]]
 	local check_coords = {
 		-- Center of the room, on the floor
-		{x=0,y=0,z=0},
+		vector.zero(),
 		-- Also check near the 4 bottom corners of the dirt room
 		{x= size-1, y=0, z=size-1},
 		{x=-size+1, y=0, z=size-1},

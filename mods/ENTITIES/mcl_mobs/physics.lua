@@ -612,7 +612,7 @@ function mob_class:do_env_damage()
 
 	-- don't fall when on ignore, just stand still
 	if self.standing_in == "ignore" then
-		self.object:set_velocity({x = 0, y = 0, z = 0})
+		self.object:set_velocity(vector.zero())
 	-- wither rose effect
 	elseif self.standing_in == "mcl_flowers:wither_rose" then
 		mcl_potions.give_effect_by_level("withering", self.object, 2, 2)
@@ -949,7 +949,7 @@ function mob_class:check_water_flow()
 			local f = 1.39
 			-- Set new item moving speed into the direciton of the liquid
 			local newv = vector.multiply(vec, f)
-			self.object:set_acceleration({x = 0, y = 0, z = 0})
+			self.object:set_acceleration(vector.zero())
 			self.object:set_velocity({x = newv.x, y = -0.22, z = newv.z})
 			self.physical_state = true
 			self._flowing = true

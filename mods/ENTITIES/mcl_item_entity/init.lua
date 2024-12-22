@@ -697,8 +697,8 @@ minetest.register_entity(":__builtin:item", {
 		end
 
 		if is_floating and self.physical_state == true then
-			self.object:set_velocity({x = 0, y = 0, z = 0})
-			self.object:set_acceleration({x = 0, y = 0, z = 0})
+			self.object:set_velocity(vector.zero())
+			self.object:set_acceleration(vector.zero())
 			self:disable_physics()
 		end
 
@@ -775,7 +775,7 @@ minetest.register_entity(":__builtin:item", {
 
 			-- Set new item moving speed accordingly
 			local newv = vector.multiply(shootdir, 3)
-			self.object:set_acceleration({x = 0, y = 0, z = 0})
+			self.object:set_acceleration(vector.zero())
 			self.object:set_velocity(newv)
 			self:disable_physics(false, false)
 
