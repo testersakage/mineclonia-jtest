@@ -85,7 +85,7 @@ local function spawn_item(self, pos)
 			itemstring = self._itemstring
 		end
 		local item = minetest.add_item(pos, itemstring)
-		item:set_velocity(vector.new(0, 0, 0))
+		item:set_velocity(vector.zero())
 		item:set_yaw(self.object:get_yaw())
 	end
 end
@@ -379,8 +379,8 @@ function ARROW_ENTITY.on_step(self, dtime)
 				self._lifetime = 0
 				self._stuckrechecktimer = 0
 
-				self.object:set_velocity(vector.new(0, 0, 0))
-				self.object:set_acceleration(vector.new(0, 0, 0))
+				self.object:set_velocity(vector.zero())
+				self.object:set_acceleration(vector.zero())
 
 				minetest.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
 

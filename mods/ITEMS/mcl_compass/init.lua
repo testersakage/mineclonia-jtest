@@ -66,7 +66,7 @@ local function get_compass_frame(pos, dir, itemstack)
 		-- Compasses only work in the overworld
 		if mcl_worlds.compass_works(pos) then
 			local spawn_pos = minetest.setting_get_pos("static_spawnpoint")
-				or vector.new(0, 0, 0)
+				or vector.zero()
 			return get_compass_angle(pos, spawn_pos, dir)
 		else
 			return random_frame
