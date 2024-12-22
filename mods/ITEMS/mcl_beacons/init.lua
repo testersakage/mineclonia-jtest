@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local new = vector.new
 
 mcl_beacons = {
 	blocks ={"mcl_core:diamondblock","mcl_core:ironblock","mcl_core:goldblock","mcl_core:emeraldblock","mcl_nether:netheriteblock"},
@@ -108,15 +109,16 @@ minetest.register_node("mcl_beacons:beacon_beam", {
 
 local function remove_beacon_beam(pos)
 	for y=pos.y, pos.y+301 do
-		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+		local newpos = new(pos.x, y, pos.z)
+		local node = minetest.get_node(newpos)
 		if node.name ~= "air" and node.name ~= "mcl_core:bedrock" and node.name ~= "mcl_core:void" then
 			if node.name == "ignore" then
-				minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
-				node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+				minetest.get_voxel_manip():read_from_map(newpos, newpos)
+				node = minetest.get_node(newpos)
 			end
 
 			if node.name == "mcl_beacons:beacon_beam" then
-				minetest.remove_node({x=pos.x,y=y,z=pos.z})
+				minetest.remove_node(newpos)
 			end
 		end
 	end
@@ -129,7 +131,7 @@ local function beacon_blockcheck(pos)
 			for block_z = (pos.z-y_offset),(pos.z+y_offset) do
 				local valid_block = false --boolean which stores if block is valid or not
 				for _, beacon_block in pairs(mcl_beacons.blocks) do
-					if beacon_block == minetest.get_node({x=block_x,y=block_y,z=block_z}).name and not valid_block then --is the block in the pyramid a valid beacon block
+					if beacon_block == minetest.get_node(new(block_x, block_y, block_z)).name and not valid_block then --is the block in the pyramid a valid beacon block
 						valid_block =true
 					end
 				end
@@ -146,7 +148,7 @@ end
 
 local function clear_obstructed_beam(pos)
 	for y=pos.y+1, pos.y+100 do
-		local nodename = minetest.get_node({x=pos.x,y=y, z = pos.z}).name
+		local nodename = minetest.get_node(new(pos.x, y, pos.z)).name
 		if nodename ~= "mcl_core:bedrock" and nodename ~= "air" and nodename ~= "mcl_core:void" and nodename ~= "ignore" then --ignore means not loaded, let's just assume that's air
 			if nodename ~="mcl_beacons:beacon_beam" then
 				if minetest.get_item_group(nodename,"glass") == 0 and minetest.get_item_group(nodename,"material_glass") == 0  then
@@ -311,19 +313,19 @@ minetest.register_abm{
 	interval = 1,
 	chance = 1,
 	action = function(pos)
-		local node_below = minetest.get_node({x=pos.x,y=pos.y-1,z=pos.z})
-		local node_above = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
+		local node_below = minetest.get_node(new(pos.x, pos.y - 1, pos.z))
+		local node_above = minetest.get_node(new(pos.x, pos.y + 1, pos.z))
 		local node_current = minetest.get_node(pos)
 
 		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
-			if minetest.get_node({x=pos.x,y=pos.y-2,z=pos.z}).name == "mcl_beacons:beacon" then
-				set_node_if_clear({x=pos.x,y=pos.y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
+			if minetest.get_node(new(pos.x, pos.y - 2, pos.z)).name == "mcl_beacons:beacon" then
+				set_node_if_clear(new(pos.x, pos.y - 1, pos.z),{name="mcl_beacons:beacon_beam",param2=0})
 			end
 			remove_beacon_beam(pos)
 		elseif node_above.name == "air" or (node_above.name == "mcl_beacons:beacon_beam" and node_above.param2 ~= node_current.param2) then
-			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node_current.param2})
+			set_node_if_clear(new(pos.x, pos.y + 1, pos.z),{name="mcl_beacons:beacon_beam",param2=node_current.param2})
 		elseif minetest.get_item_group(node_above.name, "glass") ~= 0 or minetest.get_item_group(node_above.name,"material_glass") ~= 0 then
-			set_node_if_clear({x=pos.x,y=pos.y+2,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
+			set_node_if_clear(new(pos.x, pos.y + 2, pos.z),{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
 		end
 	end,
 }
@@ -483,10 +485,11 @@ local function apply_beacon_formspec (sender, formname, fields)
 		local beam_palette_index = 0
 		remove_beacon_beam(pos)
 		for y = pos.y +1, pos.y + 201 do
-		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+		local newpos = new(pos.x, y, pos.z)
+		local node = minetest.get_node(newpos)
 		if node.name == "ignore" then
-			minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
-			node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+			minetest.get_voxel_manip():read_from_map(newpos, newpos)
+			node = minetest.get_node(newpos)
 		end
 
 		if minetest.get_item_group(node.name, "glass") ~= 0 or minetest.get_item_group(node.name,"material_glass") ~= 0 then
@@ -494,7 +497,7 @@ local function apply_beacon_formspec (sender, formname, fields)
 		end
 
 		if node.name == "air" then
-			minetest.set_node({x=pos.x,y=y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=beam_palette_index})
+			minetest.set_node(newpos,{name="mcl_beacons:beacon_beam",param2=beam_palette_index})
 		end
 		end
 		apply_effects_to_all_players(pos) --call it once outside the globalstep so the player gets the effect right after selecting it
