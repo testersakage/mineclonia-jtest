@@ -5192,8 +5192,8 @@ end
 local villager_food_points = {
 	["mcl_farming:bread"] = 4,
 	["mcl_farming:potato_item"] = 1,
-	["mcl_farming:carrot"] = 1,
-	["mcl_farming:beetroot"] = 1,
+	["mcl_farming:carrot_item"] = 1,
+	["mcl_farming:beetroot_item"] = 1,
 }
 
 local villager_food_items = {
