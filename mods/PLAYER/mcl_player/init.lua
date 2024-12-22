@@ -134,7 +134,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	if reason.type == "fall" then
 		local pos = obj:get_pos()
 		local node = minetest.get_node(pos)
-		local velocity = obj:get_velocity() or obj:get_player_velocity() or {x=0,y=-10,z=0}
+		local velocity = obj:get_velocity() or obj:get_player_velocity() or vector.new(0, -10, 0)
 		local v_axis_max = math.max(math.abs(velocity.x), math.abs(velocity.y), math.abs(velocity.z))
 		local step = {x = velocity.x / v_axis_max, y = velocity.y / v_axis_max, z = velocity.z / v_axis_max}
 		for _ = 1, math.ceil(v_axis_max/5)+1 do -- trace at least 1/5 of the way per second
