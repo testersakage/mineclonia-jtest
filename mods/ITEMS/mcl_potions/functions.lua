@@ -2015,7 +2015,7 @@ function mcl_potions._water_effect(pos, radius)
 	-- No radius: Splash, extinguish epos and 4 nodes around
 	if not radius then
 		local dirs = {
-			{x=0,y=0,z=0},
+			vector.zero(),
 			{x=0,y=0,z=-1},
 			{x=0,y=0,z=1},
 			{x=-1,y=0,z=0},

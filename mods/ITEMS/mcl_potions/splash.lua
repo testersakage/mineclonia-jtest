@@ -109,7 +109,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 				else
 					texture = "mcl_particles_effect.png"
 				end
-				acc = {x=0, y=0, z=0}
+				acc = vector.zero()
 				end
 				minetest.add_particlespawner({
 					amount = 50,

@@ -485,7 +485,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if self.knock_back
 		and tflp >= punch_interval then
 			-- direction error check
-			dir = dir or {x = 0, y = 0, z = 0}
+			dir = dir or vector.zero()
 
 			local v = self.object:get_velocity()
 			if not v then return end

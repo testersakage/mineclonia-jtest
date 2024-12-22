@@ -175,7 +175,7 @@ end
 function mob_class:reset_path()
 	self.path = {}
 	self.path.way = {} -- path to follow, table of positions
-	self.path.lastpos = {x = 0, y = 0, z = 0}
+	self.path.lastpos = vector.zero()
 	self.path.stuck = false
 	self.path.following = false
 	self.path.stuck_timer = 0

@@ -20,7 +20,7 @@ local rotations = {
 	"270"
 }
 
-local EMPTY_SCHEMATIC = { size = {x = 0, y = 0, z = 0}, data = { } }
+local EMPTY_SCHEMATIC = { size = vector.zero(), data = { } }
 
 function mcl_structures.is_disabled(structname)
 	return table.indexof(disabled_structures,structname) ~= -1

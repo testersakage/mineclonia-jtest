@@ -232,7 +232,7 @@ local function pearl_on_step(self, dtime)
 				-- Teleport and hurt player
 
 				-- First determine good teleport position
-				local dir = {x=0, y=0, z=0}
+				local dir = vector.zero()
 
 				local v = self.object:get_velocity()
 				if walkable then

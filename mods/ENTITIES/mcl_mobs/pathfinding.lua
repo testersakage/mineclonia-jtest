@@ -223,8 +223,8 @@ function mob_class:check_gowp()
 		self.current_target = nil
 		self:set_state("stand")
 		self.order = "stand"
-		self.object:set_velocity({x = 0, y = 0, z = 0})
-		self.object:set_acceleration({x = 0, y = 0, z = 0})
+		self.object:set_velocity(vector.zero())
+		self.object:set_acceleration(vector.zero())
 		if self.callback_arrived then return self.callback_arrived(self) end
 		return true
 	end
@@ -255,8 +255,8 @@ function mob_class:check_gowp()
 			self.waypoints = nil
 			self._target = nil
 			self._pf_last_failed = os.time()
-			self.object:set_velocity({x = 0, y = 0, z = 0})
-			self.object:set_acceleration({x = 0, y = 0, z = 0})
+			self.object:set_velocity(vector.zero())
+			self.object:set_acceleration(vector.zero())
 			return
 		end
 		self:go_to_pos(self.current_target["pos"])

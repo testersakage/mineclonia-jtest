@@ -55,7 +55,7 @@ local function force_detach(player)
 
 	player:set_detach()
 	mcl_player.players[player].attached = false
-	player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+	player:set_eye_offset(vector.zero(), vector.zero())
 	mcl_player.player_set_animation(player, "stand" , 30)
 	player:set_properties({visual_size = {x = 1, y = 1} })
 end
@@ -70,9 +70,9 @@ minetest.register_on_dieplayer(force_detach)
 
 function mob_class:attach(player)
 	local attach_at, eye_offset
-	self.player_rotation = self.player_rotation or {x = 0, y = 0, z = 0}
-	self.driver_attach_at = self.driver_attach_at or {x = 0, y = 0, z = 0}
-	self.driver_eye_offset = self.driver_eye_offset or {x = 0, y = 0, z = 0}
+	self.player_rotation = self.player_rotation or vector.zero()
+	self.driver_attach_at = self.driver_attach_at or vector.zero()
+	self.driver_eye_offset = self.driver_eye_offset or vector.zero()
 	self.driver_scale = self.driver_scale or {x = 1, y = 1}
 	self._last_jump = 0
 
@@ -90,7 +90,7 @@ function mob_class:attach(player)
 
 	player:set_attach(self.object, "", attach_at, self.player_rotation)
 	mcl_player.players[player].attached = true
-	player:set_eye_offset(eye_offset, {x = 0, y = 0, z = 0})
+	player:set_eye_offset(eye_offset, vector.zero())
 
 	player:set_properties({
 		visual_size = {
@@ -357,7 +357,7 @@ function mob_class:drive_controls(moving_anim, stand_anim, can_fly, dtime)
 	self.v = self.v - 0.02 * s
 	if s ~= get_sign(self.v) then
 
-		self.object:set_velocity({x = 0, y = 0, z = 0})
+		self.object:set_velocity(vector.zero())
 		self.v = 0
 		return
 	end

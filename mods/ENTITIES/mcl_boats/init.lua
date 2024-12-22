@@ -56,15 +56,15 @@ end
 
 local function set_attach(boat)
 	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+		{x = 0, y = 1.5, z = 1}, vector.zero())
 end
 
 local function set_double_attach(boat)
 	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 0.42, z = 0.8}, {x = 0, y = 0, z = 0})
+		{x = 0, y = 0.42, z = 0.8}, vector.zero())
 	if boat._passenger:is_player() then
 		boat._passenger:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -6.2}, {x = 0, y = 0, z = 0})
+			{x = 0, y = 0.42, z = -6.2}, vector.zero())
 	else
 		boat._passenger:set_attach(boat.object, "",
 			{x = 0, y = 0.42, z = -4.5}, {x = 0, y = 270, z = 0})
@@ -72,7 +72,7 @@ local function set_double_attach(boat)
 end
 local function set_choat_attach(boat)
 	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+		{x = 0, y = 1.5, z = 1}, vector.zero())
 end
 
 local function attach_object(self, obj)
@@ -413,11 +413,11 @@ function boat:on_step(dtime, moveresult)
 			if y < -0.2 then
 				y = -0.2
 			end
-			new_acce = {x = 0, y = 0, z = 0}
+			new_acce = vector.zero()
 			new_velo = get_velocity(self._v, self.object:get_yaw(), y)
 		else
 			-- On top of water
-			new_acce = {x = 0, y = 0, z = 0}
+			new_acce = vector.zero()
 			if math.abs(self.object:get_velocity().y) < 0 then
 				new_velo = get_velocity(self._v, self.object:get_yaw(), 0)
 			else
