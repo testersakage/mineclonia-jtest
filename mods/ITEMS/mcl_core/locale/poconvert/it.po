@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-23 13:04+0000\n"
+"PO-Revision-Date: 2024-12-23 18:52+0000\n"
 "Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -1138,28 +1138,28 @@ msgid "Smooth Sandstone Slab"
 msgstr "Lastra di arenaria liscia"
 
 msgid "Cut Sandstone Stairs"
-msgstr ""
+msgstr "Scalini di arenaria incisa"
 
 msgid "Cut Sandstone Slab"
-msgstr ""
+msgstr "Lastra di arenaria incisa"
 
 msgid "Red Sandstone Stairs"
-msgstr ""
+msgstr "Scalini di arenaria rossa"
 
 msgid "Red Sandstone Slab"
-msgstr ""
+msgstr "Lastra di arenaria rossa"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr ""
+msgstr "Scalini di arenaria rossa liscia"
 
 msgid "Smooth Red Sandstone Slab"
-msgstr ""
+msgstr "Lastra di arenaria rossa liscia"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr ""
+msgstr "Scalini di arenaria rossa incisa"
 
 msgid "Cut Red Sandstone Slab"
-msgstr ""
+msgstr "Lastra di arenaria rossa incisa"
 
 msgid "Stone Brick Stairs"
 msgstr ""
@@ -1168,7 +1168,7 @@ msgid "Stone Brick Slab"
 msgstr ""
 
 msgid "Polished Andesite Stairs"
-msgstr "Scalini di diorite levigata"
+msgstr "Scalini di andesite levigata"
 
 msgid "Polished Andesite Slab"
 msgstr "Lastra di andesite levigata"
@@ -1180,13 +1180,13 @@ msgid "Polished Granite Slab"
 msgstr "Lastra di granito levigato"
 
 msgid "Polished Diorite Stairs"
-msgstr "Scalini de diorite levigata"
+msgstr "Scalini di diorite levigata"
 
 msgid "Polished Diorite Slab"
 msgstr "Lastra di diorite levigata"
 
 msgid "Mossy Stone Brick Stairs"
-msgstr ""
+msgstr "Scalini di mattoni di pietra muschiosi"
 
 msgid "Mossy Stone Brick Slab"
-msgstr ""
+msgstr "Lastra di mattoni di pietra muschiosi"
