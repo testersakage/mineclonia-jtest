@@ -15,6 +15,9 @@ local wandering_trader = table.merge (villager_base, {
        },
        runaway_from = {
 	       "mobs_mc:zombie",
+	       "mobs_mc:baby_zombie",
+	       "mobs_mc:husk",
+	       "mobs_mc:baby_husk",
 	       "mobs_mc:evoker",
 	       "mobs_mc:vindicator",
 	       "mobs_mc:vex",
@@ -277,8 +280,9 @@ end
 local function wandering_trader_check_trading (self, self_pos, dtime, moveresult)
 	if self._halted_for_trading then
 		if self._immersion_depth >= 1
-			or not (moveresult.touching_ground
-				or moveresult.standing_on_object)
+			or (not moveresult.touching_ground
+				and not moveresult.standing_on_object
+				and not self.object:get_attach ())
 			or self.runaway_timer >= 4.5 then
 			self:stop_trading ()
 			self._halted_for_trading = false
@@ -505,7 +509,7 @@ local function spawn_wandering_trader ()
 			local trader_id = storage:get_int ("last_trader_id") + 1
 			storage:set_int ("last_trader_id", trader_id)
 			local entity = trader:get_luaentity ()
-			entity._life_timer = 2400
+			entity._life_timer = 1200
 			entity._trader_id = trader_id
 			entity._wander_to = base_position
 			entity:restrict_to (base_position, 16)
