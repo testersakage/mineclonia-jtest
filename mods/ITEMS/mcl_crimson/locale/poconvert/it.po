@@ -3,108 +3,110 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_crimson x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 18:52+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_crimson/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Warped Fungus"
-msgstr "Fungo Distorto"
+msgstr "Fungo distorto"
 
 msgid "Warped fungus is a mushroom found in the nether's warped forest."
 msgstr ""
 
 msgid "Twisting Vines"
-msgstr ""
+msgstr "Rampicante attorcigliato"
 
 msgid "Weeping Vines"
-msgstr ""
+msgstr "Rampicante piangente"
 
 msgid "Nether Sprouts"
-msgstr ""
+msgstr "Radici di nether"
 
 msgid "Warped Roots"
-msgstr ""
+msgstr "Radici distorte"
 
 msgid "Warped Wart Block"
-msgstr ""
+msgstr "Blocco di verruche distorte"
 
 msgid "Shroomlight"
-msgstr ""
+msgstr "Fungilume"
 
 msgid "Warped Nylium"
-msgstr ""
+msgstr "Necelio distorto"
 
 msgid "Crimson Fungus"
-msgstr ""
+msgstr "Fungo cremisi"
 
 msgid "Crimson fungus is a mushroom found in the nether's crimson forest."
 msgstr ""
 
 msgid "Crimson Roots"
-msgstr ""
+msgstr "Radici cremisi"
 
 msgid "Crimson Nylium"
-msgstr ""
+msgstr "Necelio cremisi"
 
 msgid "Crimson Bark"
-msgstr ""
+msgstr "Corteccia cremisi"
 
 msgid "Crimson Bark Slab"
-msgstr ""
+msgstr "Lastra di corteccia cremisi"
 
 msgid "Crimson Bark Stairs"
-msgstr ""
+msgstr "Scalini di corteccia cremisi"
 
 msgid "Crimson Button"
-msgstr ""
+msgstr "Pulsante cremisi"
 
 msgid "Crimson Door"
-msgstr ""
+msgstr "Porta cremisi"
 
 msgid "Crimson Fence"
-msgstr ""
+msgstr "Staccionata cremisi"
 
 msgid "Crimson Fence Gate"
-msgstr ""
+msgstr "Cancelletto cremisi"
 
 msgid "Crimson Log"
-msgstr ""
+msgstr "Tronco cremisi"
 
 msgid "Crimson Planks"
-msgstr ""
+msgstr "Assi cremisi"
 
 msgid "Crimson Pressure Plate"
-msgstr ""
+msgstr "Pedana a pressione cremisi"
 
 msgid "Crimson Sign"
-msgstr ""
+msgstr "Cartello cremisi"
 
 msgid "Crimson Slab"
-msgstr ""
+msgstr "Lastra cremisi"
 
 msgid "Crimson Stairs"
-msgstr ""
+msgstr "Scalini cremisi"
 
 msgid "Crimson Trapdoor"
-msgstr ""
+msgstr "Botola cremisi"
 
 msgid "Stripped Crimson Bark"
-msgstr ""
+msgstr "Corteccia levigata cremisi"
 
 msgid "Stripped Crimson Log"
-msgstr ""
+msgstr "Tronco cremisi scortecciato"
 
 msgid "Stripped Warped Bark"
-msgstr ""
+msgstr "corteccia distorta levigata"
 
 msgid "Stripped Warped Log"
-msgstr ""
+msgstr "Tronco distorto scortecciato"
 
 msgid "The stripped trunk of an Crimson tree."
 msgstr ""
@@ -125,44 +127,43 @@ msgid "The trunk of a Warped tree."
 msgstr ""
 
 msgid "Warped Bark"
-msgstr ""
+msgstr "Corteccia distorta"
 
 msgid "Warped Bark Slab"
-msgstr ""
+msgstr "Lastra di corteccia distorta"
 
 msgid "Warped Bark Stairs"
-msgstr ""
+msgstr "Scalini di corteccia distorta"
 
 msgid "Warped Button"
-msgstr ""
+msgstr "Pulsante distorto"
 
 msgid "Warped Door"
-msgstr ""
+msgstr "Porta distorta"
 
 msgid "Warped Fence"
-msgstr ""
+msgstr "Staccionata distorta"
 
 msgid "Warped Fence Gate"
-msgstr ""
+msgstr "Cancelletto distorto"
 
 msgid "Warped Log"
-msgstr ""
+msgstr "Tronco distorto"
 
 msgid "Warped Planks"
-msgstr ""
+msgstr "Assi distorte"
 
 msgid "Warped Pressure Plate"
-msgstr ""
+msgstr "Pedana a pressione distorta"
 
 msgid "Warped Sign"
-msgstr ""
+msgstr "Cartello distorto"
 
 msgid "Warped Slab"
-msgstr ""
+msgstr "Lastra distorta"
 
 msgid "Warped Stairs"
-msgstr ""
+msgstr "Scalini distorti"
 
 msgid "Warped Trapdoor"
-msgstr ""
-
+msgstr "Botola distorta"
