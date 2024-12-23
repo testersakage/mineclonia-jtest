@@ -1,6 +1,6 @@
 
 
-local liquid = { }
+local liquid = {}
 
 local resume_counter = 1
 function liquid.register_liquid(def)
@@ -11,7 +11,6 @@ function liquid.register_liquid(def)
   local function queue_push(item)
     local pos = item.pos
     local s = ''..pos.x..' '..pos.y..' '..pos.z;
-    core.log('push '..s)
     if uniq[s] == nil then
       uniq[s] = item
       table.insert(queue, item)
@@ -50,7 +49,6 @@ function liquid.register_liquid(def)
     level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) /  8) * 8 / (FLOW_DISTANCE+1))
   end
 
-  core.log(dump(level_tb))
 
   local MAX_FLOW_LEVEL = level_tb[8]
 
@@ -234,11 +232,14 @@ function liquid.register_liquid(def)
     for x = -8,8 do
       line = '> '
       for z = -8,8 do
-        local level = rmap[calc_hash(pos + vector.new(x, 0, z))]
+        local h = calc_hash(pos + vector.new(x, 0, z))
+        local level = rmap[h]
         if level then
           line = line..level..' '
-        else
+        elseif kmap[h] then
           line = line..'. '
+        else
+          line = line..'  '
         end
       end
       core.log(line)
@@ -257,47 +258,39 @@ function liquid.register_liquid(def)
     local map = item.map
 
     local p111 = pos
+    local n111 = core.get_node(p111)
+    if n111.name == 'ignore' then
+      return
+    end
+
     local p011 = pos + {x=-1, y= 0, z= 0}
     local p211 = pos + {x= 1, y= 0, z= 0}
     local p101 = pos + {x= 0, y=-1, z= 0}
     local p121 = pos + {x= 0, y= 1, z= 0}
     local p110 = pos + {x= 0, y= 0, z=-1}
     local p112 = pos + {x= 0, y= 0, z= 1}
-  
-    local n111 = core.get_node(p111)
+
     local n011 = core.get_node(p011)
     local n211 = core.get_node(p211)
     local n110 = core.get_node(p110)
     local n112 = core.get_node(p112)
     local n101 = core.get_node(p101)
     local n121 = core.get_node(p121)
-  
-  
-    -- if the mapblocks surrounding are not active we try later again.
-    if n111.name == 'ignore' then
-      return
-    elseif not (
-       core.compare_block_status(pos + {x=-16,y= 0,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 16,y= 0,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 0,y=-16,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 0,y= 16,z= 0}, 'active') and
-       core.compare_block_status(pos + {x= 0,y= 0,z=-16}, 'active') and
-       core.compare_block_status(pos + {x= 0,y= 0,z= 16}, 'active') 
-       ) then
-  
-      -- TODO There should be a better way to do that.
-      --core.after(5, flow_iteration, pos)
-      return
-    end
-  
-  
-    local l111 = get_liquid_level(n111)
-    local l011 = get_liquid_level(n011)
-    local l211 = get_liquid_level(n211)
-    local l110 = get_liquid_level(n110)
-    local l112 = get_liquid_level(n112)
-    local l101 = get_liquid_level(n101)
-    local l121 = get_liquid_level(n121)
+
+
+    if n011.name == 'ignore' or
+       n211.name == 'ignore' or
+       n110.name == 'ignore' or
+       n112.name == 'ignore' or
+       n101.name == 'ignore' or
+       n121.name == 'ignore' then
+
+
+       if is_liquid(n111) then
+         -- TODO how to handle that?
+       end
+       return
+     end
   
   
     if RENEWABLE then
@@ -317,6 +310,15 @@ function liquid.register_liquid(def)
         return
       end
     end
+
+    -- These variables store the level or nil if the node isn't a liquid.
+    local l111 = get_liquid_level(n111)
+    local l011 = get_liquid_level(n011)
+    local l211 = get_liquid_level(n211)
+    local l110 = get_liquid_level(n110)
+    local l112 = get_liquid_level(n112)
+    local l101 = get_liquid_level(n101)
+    local l121 = get_liquid_level(n121)
   
     -- calculate the liquid level that is supported here.
     local support_level = 1
@@ -343,6 +345,8 @@ function liquid.register_liquid(def)
       end
     end
     -- subtract 1 so that the level reaches from 0 to 8
+    -- This variable tells us what level the current node should have.
+    -- If it is highter we will reduce it and if it is lower we increase it.
     support_level = support_level - 1
   
   
@@ -352,8 +356,14 @@ function liquid.register_liquid(def)
       if l111 == support_level then
         -- The current node is on its terminal level
         -- This means it is ready to spread.
-        if n101.name == NAME_SOURCE then
+
+        -- Get the next level from a table
+        local new_level = level_tb[l111] or 0
+
+        if n101.name == NAME_SOURCE and n111.name ~= NAME_SOURCE then
           -- the current node is on top of a source node. No more flowing here.
+          -- With the exception that when the current node is a source node as
+          -- well.
         elseif n101.name == NAME_FLOWING then
           if l101 < 8 then
             -- turn the liquid below into down-flowing
@@ -361,15 +371,18 @@ function liquid.register_liquid(def)
           else
             -- The liquid already flows down
           end
-
         elseif n101.name == 'air' then
           -- flow down
           core.set_node(p101, make_liquid('down'))
   
-        else
+        elseif new_level > 0 then
+
+          -- Calculate the actual slope distance.
+          -- It depends on the current level.
+          local slope_dist = math.floor((l111-1) * SLOPE_RANGE / 7)
 
           if not map then
-            map = path_find(p111)
+            map = path_find(p111, slope_dist)
           end
 
           local m011 = map(p011)
@@ -437,11 +450,9 @@ function liquid.register_liquid(def)
       if l112 ~= nil then queue_push({pos=p112}) end
       if l101 ~= nil then queue_push({pos=p101}) end
     end
-
   end
   
   local function liquid_update(pos)
-    core.log('liquid_update')
     queue_push({pos = pos})
   end
   
@@ -559,8 +570,6 @@ function liquid.register_liquid(def)
   
   
     bulk_action = function(pos_list, dtime_s)
-
-      core.log('ok')
       core.after(5, function(pos_list)
         for i, pos in ipairs(pos_list) do
           liquid_update(pos)
@@ -579,22 +588,8 @@ function liquid.register_liquid(def)
       queue = {}
 
       for i, item in ipairs(q) do
-        --local kmap = path_find(item.pos)
-
-        --for x = -8,8 do
-        --  for z = -8,8 do
-        --    local p = item.pos + vector.new(x, 0, z)
-        --    local level = kmap(p)
-        --    if level then
-        --      --core.set_node(p, make_liquid(level))
-        --    end
-        --  end
-        --end
         flow_iteration(item)
-
-
       end
-
       run()
     end)
   end
