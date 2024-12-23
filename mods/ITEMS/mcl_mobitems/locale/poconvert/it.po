@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 20:39+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_mobitems/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Rotten Flesh"
 msgstr "Carne Marcia"
@@ -23,31 +25,31 @@ msgid "Yuck! This piece of flesh clearly has seen better days. If you're really 
 msgstr "Bleah! Questo pezzo di carne ha chiaramente visto tempi migliori. Se sei davvero disperata(o), puoi mangiarlo per ripristinare qualche punto di fame, ma c'è un 80% di probabilità che causi l'intossicazione alimentare, che aumenta la tua fame per un pò di tempo."
 
 msgid "Raw Mutton"
-msgstr ""
+msgstr "Carne ovina cruda"
 
 msgid "Raw mutton is the flesh from a sheep and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
 
 msgid "Cooked Mutton"
-msgstr ""
+msgstr "Carne ovina cotta"
 
 msgid "Cooked mutton is the cooked flesh from a sheep and is used as food."
 msgstr ""
 
 msgid "Raw Beef"
-msgstr ""
+msgstr "Manzo crudo"
 
 msgid "Raw beef is the flesh from cows and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
 
 msgid "Steak"
-msgstr ""
+msgstr "Bistecca"
 
 msgid "Steak is cooked beef from cows and can be eaten."
 msgstr ""
 
 msgid "Raw Chicken"
-msgstr ""
+msgstr "Pollo crudo"
 
 msgid "30% chance of food poisoning"
 msgstr ""
@@ -56,37 +58,37 @@ msgid "Raw chicken is a food item which is not safe to consume. You can eat it t
 msgstr ""
 
 msgid "Cooked Chicken"
-msgstr ""
+msgstr "Pollo cotto"
 
 msgid "A cooked chicken is a healthy food item which can be eaten."
 msgstr ""
 
 msgid "Raw Porkchop"
-msgstr ""
+msgstr "Costoletta di maiale cruda"
 
 msgid "A raw porkchop is the flesh from a pig and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
 
 msgid "Cooked Porkchop"
-msgstr ""
+msgstr "Costoletta di maiale cotta"
 
 msgid "Cooked porkchop is the cooked flesh of a pig and is used as food."
 msgstr ""
 
 msgid "Raw Rabbit"
-msgstr ""
+msgstr "Coniglio crudo"
 
 msgid "Raw rabbit is a food item from a dead rabbit. It can be eaten safely. Cooking it will increase its nutritional value."
 msgstr ""
 
 msgid "Cooked Rabbit"
-msgstr ""
+msgstr "Coniglio cotto"
 
 msgid "This is a food item which can be eaten."
 msgstr ""
 
 msgid "Milk"
-msgstr ""
+msgstr "Latte"
 
 msgid "Removes all status effects"
 msgstr ""
@@ -98,7 +100,7 @@ msgid "Use the placement key to drink the milk."
 msgstr ""
 
 msgid "Spider Eye"
-msgstr ""
+msgstr "Occhio di ragno"
 
 msgid "Poisonous"
 msgstr ""
@@ -107,7 +109,7 @@ msgid "Spider eyes are used mainly in crafting. If you're really desperate, you 
 msgstr ""
 
 msgid "Bone"
-msgstr ""
+msgstr "Osso"
 
 msgid "Bones can be used to tame wolves so they will protect you. They are also useful as a crafting ingredient."
 msgstr ""
@@ -116,79 +118,79 @@ msgid "Wield the bone near wolves to attract them. Use the “Place” key on th
 msgstr ""
 
 msgid "Squid Ink Sac"
-msgstr ""
+msgstr "Sacca d'inchiostro"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
 msgstr ""
 
 msgid "String"
-msgstr ""
+msgstr "Cordicella"
 
 msgid "Strings are used in crafting."
 msgstr ""
 
 msgid "Blaze Rod"
-msgstr ""
+msgstr "Verga di blaze"
 
 msgid "This is a crafting component dropped from dead blazes."
 msgstr ""
 
 msgid "Breeze Rod"
-msgstr ""
+msgstr "Verga di brezza"
 
 msgid "This is a crafting item dropped from breezes."
 msgstr ""
 
 msgid "Blaze Powder"
-msgstr ""
+msgstr "Polvere di blaze"
 
 msgid "This item is mainly used for crafting."
 msgstr ""
 
 msgid "Magma Cream"
-msgstr ""
+msgstr "Crema di magma"
 
 msgid "Magma cream is a crafting component."
 msgstr ""
 
 msgid "Ghast Tear"
-msgstr ""
+msgstr "Lacrima di ghast"
 
 msgid "Place this item in an item frame as decoration."
 msgstr ""
 
 msgid "Nether Star"
-msgstr ""
+msgstr "Stella del Nether"
 
 msgid "A nether star is dropped when the Wither dies. Place it in an item frame to show the world how hardcore you are! Or just as decoration."
 msgstr ""
 
 msgid "Leather"
-msgstr ""
+msgstr "Cuoio"
 
 msgid "Leather is a versatile crafting component."
 msgstr ""
 
 msgid "Feather"
-msgstr ""
+msgstr "Piuma"
 
 msgid "Feathers are used in crafting and are dropped from chickens."
 msgstr ""
 
 msgid "Rabbit Hide"
-msgstr ""
+msgstr "Pelle di coniglio"
 
 msgid "Rabbit hide is used to create leather."
 msgstr ""
 
 msgid "Rabbit's Foot"
-msgstr ""
+msgstr "Zampa di coniglio"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr ""
 
 msgid "Saddle"
-msgstr ""
+msgstr "Sella"
 
 msgid "Can be placed on animals to ride them"
 msgstr ""
@@ -200,28 +202,28 @@ msgid "Use the placement key with the saddle in your hand to try to put on the s
 msgstr ""
 
 msgid "Rabbit Stew"
-msgstr ""
+msgstr "Stufato di coniglio"
 
 msgid "Rabbit stew is a very nutricious food item."
 msgstr ""
 
 msgid "Shulker Shell"
-msgstr ""
+msgstr "Guscio di shulker"
 
 msgid "Shulker shells are used in crafting. They are dropped from dead shulkers."
 msgstr ""
 
 msgid "Slimeball"
-msgstr ""
+msgstr "Palla di gelatina"
 
 msgid "Slimeballs are used in crafting. They are dropped from slimes."
 msgstr ""
 
 msgid "Gunpowder"
-msgstr ""
+msgstr "Polvere da sparo"
 
 msgid "Carrot on a Stick"
-msgstr ""
+msgstr "Bastonne e carota"
 
 msgid "Lets you ride a saddled pig"
 msgstr ""
@@ -233,7 +235,7 @@ msgid "Place it on a saddled pig to mount it. You can now ride the pig like a ho
 msgstr ""
 
 msgid "Warped Fungus on a Stick"
-msgstr ""
+msgstr "Bastonne e fungo distorto"
 
 msgid "Lets you ride a strider"
 msgstr ""
@@ -245,7 +247,7 @@ msgid "Place it on a saddled strider to mount it. You can now ride the strider l
 msgstr ""
 
 msgid "Nautilus Shell"
-msgstr ""
+msgstr "Conchiglia di nautilo"
 
 msgid "Used to craft a conduit"
 msgstr ""
@@ -254,7 +256,7 @@ msgid "The Nautilus Shell is used to craft a conduit. They can be obtained by fi
 msgstr ""
 
 msgid "Heart of the Sea"
-msgstr ""
+msgstr "Cuore del mare"
 
 msgid "The Heart of the Sea is used to craft a conduit. They can be obtained by finding them in a buried treasure chest."
 msgstr ""
@@ -263,31 +265,31 @@ msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't we
 msgstr ""
 
 msgid "Leather Horse Armor"
-msgstr ""
+msgstr "Bardatura di cuoio"
 
 msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
 msgstr ""
 
 msgid "Iron Horse Armor"
-msgstr ""
+msgstr "Bardatura di ferro"
 
 msgid "Iron horse armor can be worn by horses to increase their protection from harm a bit."
 msgstr ""
 
 msgid "Golden Horse Armor"
-msgstr ""
+msgstr "Bardatura d'oro"
 
 msgid "Golden horse armor can be worn by horses to increase their protection from harm."
 msgstr ""
 
 msgid "Diamond Horse Armor"
-msgstr ""
+msgstr "Bardatura di diamante"
 
 msgid "Diamond horse armor can be worn by horses to greatly increase their protection from harm."
 msgstr ""
 
 msgid "Glow Ink Sac"
-msgstr ""
+msgstr "Sacca d'inchiostro luminescente"
 
 msgid "Use it to craft the Glow Item Frame."
 msgstr ""
@@ -296,7 +298,7 @@ msgid "Use the Glow Ink Sac and the normal Item Frame to craft the Glow Item Fra
 msgstr ""
 
 msgid "Name Tag"
-msgstr ""
+msgstr "Targhetta"
 
 msgid "Give names to mobs"
 msgstr ""
@@ -309,4 +311,3 @@ msgstr ""
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr ""
-
