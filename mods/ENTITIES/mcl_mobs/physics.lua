@@ -1483,6 +1483,11 @@ end
 local floor = math.floor
 
 mcl_mobs.mob_class.slowdown_nodes = {
+	["mcl_farming:sweet_berry_bush_0"] = {
+		x = 0.8,
+		y = 0.75,
+		z = 0.8,
+	},
 	["mcl_farming:sweet_berry_bush_1"] = {
 		x = 0.8,
 		y = 0.75,

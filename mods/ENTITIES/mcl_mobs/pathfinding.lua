@@ -3090,13 +3090,15 @@ function mob_class:gwp_open_door (door_node, node, dtime)
 	local def = minetest.registered_nodes[node.name]
 	-- Copy this position, lest it be modified by
 	-- the right click handler.
-	def.on_rightclick (door_node, node, self)
+	if def.on_rightclick then
+		def.on_rightclick (door_node, node, self)
+	end
 end
 
 function mob_class:gwp_open_and_memorize_door (door, dtime)
 	local node = minetest.get_node (door)
 	if minetest.get_item_group (node.name, "door") ~= 0
-		and minetest.get_item_group (node.name, "iron_door") == 0 then
+		and minetest.get_item_group (node.name, "door_iron") == 0 then
 		local door_node = mcl_util.get_nodepos (door)
 		if not mcl_doors.is_open (door_node) then
 			self:gwp_open_door (door_node, node, dtime)
