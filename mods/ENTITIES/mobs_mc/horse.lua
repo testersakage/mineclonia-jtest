@@ -467,19 +467,8 @@ function horse:get_staticdata_table ()
 	return supertable
 end
 
-function horse:mob_activate (staticdata, dtime)
-	if not mob_class.mob_activate (self, staticdata, dtime) then
-		return false
-	end
-	-- Erase obsolete drop lists.
-	self.drops = nil
-	-- Reconfigure maximum HP.
-	if self.hp_max then
-		self.object:set_properties ({
-				hp_max = self.hp_max,
-		})
-		self.health = math.min (self.health, self.hp_max)
-	end
+function horse:post_load_staticdata ()
+	mob_class.post_load_staticdata (self)
 	-- Update old horses.
 	if self._horse_armor and self._wearing_armor then
 		self._horse_armor_stack
@@ -496,6 +485,21 @@ function horse:mob_activate (staticdata, dtime)
 		self._horse_armor_stack = ""
 	end
 	self._horse_armor = nil
+end
+
+function horse:mob_activate (staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	-- Erase obsolete drop lists.
+	self.drops = nil
+	-- Reconfigure maximum HP.
+	if self.hp_max then
+		self.object:set_properties ({
+				hp_max = self.hp_max,
+		})
+		self.health = math.min (self.health, self.hp_max)
+	end
 	self._selectionbox_overloaded = false
 	self:init_attachment_position ()
 	return true
