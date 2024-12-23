@@ -445,7 +445,7 @@ local function d (node1, node2)
 	return vector.distance (node1, node2)
 end
 
-function h_to_nearest_target (node, context)
+local function h_to_nearest_target (node, context)
 	local best_distance
 	for _, target in ipairs (context.targets) do
 		local d = manhattan3d (node.x, node.y, node.z,
