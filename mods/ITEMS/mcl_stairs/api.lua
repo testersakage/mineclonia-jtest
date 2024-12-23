@@ -152,21 +152,28 @@ end
 -- Register stair function used internally for new and old API (not exposed
 -- externally).
 local function register_stair(subname, stairdef)
-	if stairdef.recipeitem and minetest.registered_items[stairdef.recipeitem] then
+	if type(stairdef.recipeitem) ~= "string" and stairdef.recipeitem == "" then
+		return
+	end
+
+	local recipe_item = stairdef.recipeitem
+	local ri_defs = minetest.registered_nodes[recipe_item]
+
+	if ri_defs then
 		if not stairdef.tiles then
-			stairdef.tiles = minetest.registered_items[stairdef.recipeitem].tiles
+			stairdef.tiles = ri_defs.tiles
 		end
 		if not stairdef.groups then
-			stairdef.groups = get_stairdef_groups(minetest.registered_items[stairdef.recipeitem])
+			stairdef.groups = get_stairdef_groups(ri_defs)
 		end
 		if not stairdef.sounds then
-			stairdef.sounds = minetest.registered_items[stairdef.recipeitem].sounds
+			stairdef.sounds = ri_defs.sounds
 		end
 		if not stairdef.hardness then
-			stairdef.hardness = minetest.registered_items[stairdef.recipeitem]._mcl_hardness
+			stairdef.hardness = ri_defs._mcl_hardness
 		end
 		if not stairdef.blast_resistance then
-			stairdef.blast_resistance = minetest.registered_items[stairdef.recipeitem]._mcl_blast_resistance
+			stairdef.blast_resistance = ri_defs._mcl_blast_resistance
 		end
 	end
 
@@ -248,13 +255,13 @@ local function register_stair(subname, stairdef)
 		placement_prevented = placement_prevented,
 	}, stairdef.overrides or {}))
 
-	if stairdef.recipeitem and stairdef.recipeitem ~= "" then
+	if recipe_item then
 		minetest.register_craft({
 			output = "mcl_stairs:stair_" .. subname .. " 4",
 			recipe = {
-				{stairdef.recipeitem, "", ""},
-				{stairdef.recipeitem, stairdef.recipeitem, ""},
-				{stairdef.recipeitem, stairdef.recipeitem, stairdef.recipeitem},
+				{recipe_item, "", ""},
+				{recipe_item, recipe_item, ""},
+				{recipe_item, recipe_item, recipe_item},
 			},
 		})
 
@@ -262,9 +269,9 @@ local function register_stair(subname, stairdef)
 		minetest.register_craft({
 			output = "mcl_stairs:stair_" .. subname .. " 4",
 			recipe = {
-				{"", "", stairdef.recipeitem},
-				{"", stairdef.recipeitem, stairdef.recipeitem},
-				{stairdef.recipeitem, stairdef.recipeitem, stairdef.recipeitem},
+				{"", "", recipe_item},
+				{"", recipe_item, recipe_item},
+				{recipe_item, recipe_item, recipe_item},
 			},
 		})
 	end
@@ -287,21 +294,28 @@ local function register_slab(subname, stairdef)
 	local upper_slab = lower_slab.."_top"
 	local double_slab = lower_slab.."_double"
 
-	if stairdef.recipeitem and minetest.registered_items[stairdef.recipeitem] then
+	if type(stairdef.recipeitem) ~= "string" or stairdef.recipeitem == "" then
+		return
+	end
+
+	local recipe_item = stairdef.recipeitem
+	local ri_defs = minetest.registered_nodes[recipe_item]
+
+	if ri_defs then
 		if not stairdef.tiles then
-			stairdef.tiles = minetest.registered_items[stairdef.recipeitem].tiles
+			stairdef.tiles = ri_defs.tiles
 		end
 		if not stairdef.groups then
-			stairdef.groups = minetest.registered_items[stairdef.recipeitem].groups
+			stairdef.groups = ri_defs.groups
 		end
 		if not stairdef.sounds then
-			stairdef.sounds = minetest.registered_items[stairdef.recipeitem].sounds
+			stairdef.sounds = ri_defs.sounds
 		end
 		if not stairdef.hardness then
-			stairdef.hardness = minetest.registered_items[stairdef.recipeitem]._mcl_hardness
+			stairdef.hardness = ri_defs._mcl_hardness
 		end
 		if not stairdef.blast_resistance then
-			stairdef.blast_resistance = minetest.registered_items[stairdef.recipeitem]._mcl_blast_resistance
+			stairdef.blast_resistance = ri_defs._mcl_blast_resistance
 		end
 	end
 
@@ -446,11 +460,11 @@ local function register_slab(subname, stairdef)
 		_mcl_baseitem = lower_slab,
 	})
 
-	if stairdef.recipeitem and stairdef.recipeitem ~= "" then
+	if recipe_item then
 		minetest.register_craft({
 			output = lower_slab .. " 6",
 			recipe = {
-				{stairdef.recipeitem, stairdef.recipeitem, stairdef.recipeitem},
+				{recipe_item, recipe_item, recipe_item},
 			},
 		})
 
