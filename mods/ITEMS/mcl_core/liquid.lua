@@ -98,12 +98,14 @@ function liquid.register_liquid(def)
       }
   
     end
-  
   end
 
 
-  local function is_floodable(n)
-    if n.name == 'air' or n.name == NAME_FLOWING then
+  local function is_floodable(n, level)
+    local nl = get_liquid_level(n)
+    if n.name == 'air' then
+      return 1
+    elseif nl and nl <= (level or 9) then
       return 1
     elseif n.name == 'ignore' then
       core.log('ignore')
@@ -118,7 +120,7 @@ function liquid.register_liquid(def)
   end
   
 
-  local function path_find(pos)
+  local function path_find(pos, slope_dist)
 
     local y = pos.y
 
@@ -138,7 +140,7 @@ function liquid.register_liquid(def)
       local h = calc_hash(pos)
       if kmap[h] == nil then
         local n = core.get_node(pos)
-        local f = n and is_floodable(n)
+        local f = n and is_floodable(n, level)
 
         if f and f == 1 then
           kmap[h] = level
@@ -153,13 +155,18 @@ function liquid.register_liquid(def)
       end
     end
 
-    local level = 8
-    kmap[calc_hash(pos)] = level
+    local orig_level = get_liquid_level(core.get_node(pos))
+    kmap[calc_hash(pos)] = orig_level
 
+
+    local level = orig_level
+    if level <= 1 then
+      return function (pos) return nil end
+    end
 
     list[#list+1] = pos
 
-    for i = 1, 8  do
+    for i = 1, 5 do
       local l = list
       list = {}
 
@@ -170,33 +177,10 @@ function liquid.register_liquid(def)
         step(p + vector.new( 0, 0,-1), level)
         step(p + vector.new( 0, 0, 1), level)
       end
-      if #found > 0 then
+      if level == 0 or #found > 0 then
         break
       end
     end 
-
-    --core.log('{')
-    --for i, m in pairs(kmap) do
-    --  core.log('  kmap['..i..'] = '..m)
-    --end
-    --core.log('}')
-
-
-    --for x = -8,8 do
-    --  line = '> '
-    --  for z = -8,8 do
-    --    local level = kmap[calc_hash(pos + vector.new(x, 0, z))]
-    --    if level then
-    --      line = line..level..' '
-    --    else
-    --      line = line..'. '
-    --    end
-    --  end
-    --  core.log(line)
-    --end
-
-
-    --core.log('list = '..dump(list))
 
     local rmap = {}
     if #found == 0 then
@@ -205,7 +189,7 @@ function liquid.register_liquid(def)
       list = found
 
 
-      for nlevel = level, 8 do
+      for nlevel = level, orig_level do
         l = list
         list = {}
         for i, p in ipairs(l) do
@@ -228,22 +212,23 @@ function liquid.register_liquid(def)
       end
     end
 
-    core.log('--------------------------')
-    for x = -8,8 do
-      line = '> '
-      for z = -8,8 do
-        local h = calc_hash(pos + vector.new(x, 0, z))
-        local level = rmap[h]
-        if level then
-          line = line..level..' '
-        elseif kmap[h] then
-          line = line..'. '
-        else
-          line = line..'  '
-        end
-      end
-      core.log(line)
-    end
+    --core.log('--------------------------')
+    --for x = -8,8 do
+    --  line = '| '
+    --  for z = -8,8 do
+    --    local h = calc_hash(pos + vector.new(x, 0, z))
+    --    local level = rmap[h]
+    --    if level then
+    --      line = line..level..' '
+    --    elseif kmap[h] then
+    --      line = line..'. '
+    --    else
+    --      line = line..'  '
+    --    end
+    --  end
+    --  line = line..' |'
+    --  core.log(line)
+    --end
 
 
     return function (pos)
@@ -358,7 +343,8 @@ function liquid.register_liquid(def)
         -- This means it is ready to spread.
 
         -- Get the next level from a table
-        local new_level = level_tb[l111] or 0
+        --local new_level = level_tb[l111] or 0
+        local new_level = support_level - 1
 
         if n101.name == NAME_SOURCE and n111.name ~= NAME_SOURCE then
           -- the current node is on top of a source node. No more flowing here.
@@ -379,42 +365,44 @@ function liquid.register_liquid(def)
 
           -- Calculate the actual slope distance.
           -- It depends on the current level.
-          local slope_dist = math.floor((l111-1) * SLOPE_RANGE / 7)
 
           if not map then
-            map = path_find(p111, slope_dist)
+            map = path_find(p111)
           end
 
-          local m011 = map(p011)
-          local m211 = map(p211)
-          local m110 = map(p110)
-          local m112 = map(p112)
+          function push()
+            local cnt_flood = 0
+            local new_liquid = make_liquid(new_level)
 
-          if m011 and l111 > m011 and is_floodable(p011) then
-            queue_push({pos=p011, map=map})
-            core.set_node(p011, make_liquid(m011))
+            function flood(pos)
+              local m = map(pos)
+              if m and m == new_level then
+                if is_floodable(pos, new_level) then
+                  queue_push({pos=pos, map=map})
+                  core.set_node(pos, new_liquid)
+                end
+                cnt_flood = cnt_flood + 1
+              end
+            end
+
+            flood(p011)
+            flood(p211)
+            flood(p110)
+            flood(p112)
+            return cnt_flood
+
           end
-
-          if m211 and l111 > m211 and is_floodable(p211) then
-            queue_push({pos=p211, map=map})
-            core.set_node(p211, make_liquid(m211))
-          end
-
-          if m110 and l111 > m110 and is_floodable(p110) then
-            queue_push({pos=p110, map=map})
-            core.set_node(p110, make_liquid(m110))
-          end
-
-          if m112 and l111 > m112 and is_floodable(p112) then
-            queue_push({pos=p112, map=map})
-            core.set_node(p112, make_liquid(m112))
+          if push() == 0 then
+            map = path_find(p111)
+            push()
           end
         end
 
       elseif l111 > support_level then
         -- The liquid level is too hight here we need to reduce it.
 
-        core.set_node(p111, make_liquid(support_level))
+        queue_push({pos=p111})
+        core.set_node(p111, make_liquid(l111 - 1))
   
         -- Neighboring nodes might need to be reduced as well
         if l011 ~= nil then queue_push({pos=p011}) end
@@ -426,19 +414,19 @@ function liquid.register_liquid(def)
         -- has completely gone
         if support_level == 0 and l101 ~= nil then queue_push({pos=p101}) end
 
-      else
-        -- The liquid level is too low. This happens only in case the algorithm
-        -- got interrupted. In normal circumstances this should never happen
-        -- because higher level pushes to lower level.
+      --else
+      --  -- The liquid level is too low. This happens only in case the algorithm
+      --  -- got interrupted. In normal circumstances this should never happen
+      --  -- because higher level pushes to lower level.
 
-        core.set_node(p111, make_liquid(support_level))
+      --  core.set_node(p111, make_liquid(support_level))
   
-        if l011 ~= nil then queue_push({pos=p011}) end
-        if l211 ~= nil then queue_push({pos=p211}) end
-        if l110 ~= nil then queue_push({pos=p110}) end
-        if l112 ~= nil then queue_push({pos=p112}) end
-        -- We update the node below as well just in case it got stuck as well.
-        if l101 ~= nil then queue_push({pos=p101}) end
+      --  if l011 ~= nil then queue_push({pos=p011}) end
+      --  if l211 ~= nil then queue_push({pos=p211}) end
+      --  if l110 ~= nil then queue_push({pos=p110}) end
+      --  if l112 ~= nil then queue_push({pos=p112}) end
+      --  -- We update the node below as well just in case it got stuck as well.
+      --  if l101 ~= nil then queue_push({pos=p101}) end
       end
     else
       -- It seams that the current node is not a liquid at all.
@@ -449,6 +437,7 @@ function liquid.register_liquid(def)
       if l110 ~= nil then queue_push({pos=p110}) end
       if l112 ~= nil then queue_push({pos=p112}) end
       if l101 ~= nil then queue_push({pos=p101}) end
+      if l121 ~= nil then queue_push({pos=p121}) end
     end
   end
   
