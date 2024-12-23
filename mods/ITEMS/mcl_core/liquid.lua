@@ -250,77 +250,192 @@ function liquid.register_liquid(def)
     end
   end
   
-  local vm = VoxelManip()
   
   local function flow_iteration(item)
-    core.log(dump(vm))
 
+    local pos = item.pos
     local map = item.map
-    local p111 = item.pos
 
-    core.log('iteration ('..p111.x..' '..p111.y..' '..p111.z..')')
+    local p111 = pos
+    local p011 = pos + {x=-1, y= 0, z= 0}
+    local p211 = pos + {x= 1, y= 0, z= 0}
+    local p101 = pos + {x= 0, y=-1, z= 0}
+    local p121 = pos + {x= 0, y= 1, z= 0}
+    local p110 = pos + {x= 0, y= 0, z=-1}
+    local p112 = pos + {x= 0, y= 0, z= 1}
+  
     local n111 = core.get_node(p111)
-
-    local l111 = get_liquid_level(n111)
-
-    local n111_max = false
-    local n111_liquid = false
-
-
-    if not l111 and is_floodable(n111) == 1 then
-      local p121 = p111 + vector.new( 0, 1, 0)
-      local n121 = core.get_node(p121)
-      if is_liquid(n121) then
-        core.set_node(p111, make_liquid('down'))
-        --vm:set_node_at(p111, ake_liquid('down'))
-        n111_max = true
-        n111_liquid = true
-        l111 = 8
-      elseif map then
-        local level = map(p111)
-        if level then
-          core.set_node(p111, make_liquid(level))
-          --vm:set_node_at(p111, make_liquid(level))
-          n111_liquid = true
-          l111 = level
-        end
-      end
-    elseif l111 == 8 then
-      n111_max = true
-      n111_liquid = true
-    elseif l111 then
-      n111_liquid = true
+    local n011 = core.get_node(p011)
+    local n211 = core.get_node(p211)
+    local n110 = core.get_node(p110)
+    local n112 = core.get_node(p112)
+    local n101 = core.get_node(p101)
+    local n121 = core.get_node(p121)
+  
+  
+    -- if the mapblocks surrounding are not active we try later again.
+    if n111.name == 'ignore' then
+      return
+    elseif not (
+       core.compare_block_status(pos + {x=-16,y= 0,z= 0}, 'active') and
+       core.compare_block_status(pos + {x= 16,y= 0,z= 0}, 'active') and
+       core.compare_block_status(pos + {x= 0,y=-16,z= 0}, 'active') and
+       core.compare_block_status(pos + {x= 0,y= 16,z= 0}, 'active') and
+       core.compare_block_status(pos + {x= 0,y= 0,z=-16}, 'active') and
+       core.compare_block_status(pos + {x= 0,y= 0,z= 16}, 'active') 
+       ) then
+  
+      -- TODO There should be a better way to do that.
+      --core.after(5, flow_iteration, pos)
+      return
     end
-
-    if n111_liquid then
-      local p101 = p111 + vector.new( 0,-1, 0)
-      local n101 = core.get_node(p101)
-      if is_floodable(n101) == 1 then
-        queue_push({pos = p101})
+  
+  
+    local l111 = get_liquid_level(n111)
+    local l011 = get_liquid_level(n011)
+    local l211 = get_liquid_level(n211)
+    local l110 = get_liquid_level(n110)
+    local l112 = get_liquid_level(n112)
+    local l101 = get_liquid_level(n101)
+    local l121 = get_liquid_level(n121)
+  
+  
+    if RENEWABLE then
+      count_sources = 0
+      if n011.name == NAME_SOURCE then count_sources = count_sources + 1 end
+      if n211.name == NAME_SOURCE then count_sources = count_sources + 1 end
+      if n110.name == NAME_SOURCE then count_sources = count_sources + 1 end
+      if n112.name == NAME_SOURCE then count_sources = count_sources + 1 end
+    
+      if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then 
+        -- Renew liquid
+        core.set_node(pos, { name=NAME_SOURCE })
+        if n011.name ~= NAME_SOURCE then queue_push({pos=p011}) end
+        if n211.name ~= NAME_SOURCE then queue_push({pos=p211}) end
+        if n110.name ~= NAME_SOURCE then queue_push({pos=p110}) end
+        if n112.name ~= NAME_SOURCE then queue_push({pos=p112}) end
         return
       end
     end
-
-    if n111_max then
-      map = path_find(p111)
+  
+    -- calculate the liquid level that is supported here.
+    local support_level = 1
+  
+    if l121 ~= nil then 
+      -- node above is a liquid
+      support_level = 9
+    elseif n111.name == NAME_SOURCE then
+      -- the current node is a source
+      support_level = 9
+    else
+      -- the neighboring node on the same Y-plan with the highest level counts
+      if l011 ~= nil and support_level < l011 then
+        support_level = l011
+      end
+      if l211 ~= nil and support_level < l211 then
+        support_level = l211
+      end
+      if l110 ~= nil and support_level < l110 then
+        support_level = l110
+      end
+      if l112 ~= nil and support_level < l112 then
+        support_level = l112
+      end
     end
+    -- subtract 1 so that the level reaches from 0 to 8
+    support_level = support_level - 1
+  
+  
+    if l111 ~= nil then
+      -- The current node is already a liquid
+  
+      if l111 == support_level then
+        -- The current node is on its terminal level
+        -- This means it is ready to spread.
+        if n101.name == NAME_SOURCE then
+          -- the current node is on top of a source node. No more flowing here.
+        elseif n101.name == NAME_FLOWING then
+          if l101 < 8 then
+            -- turn the liquid below into down-flowing
+            core.set_node(p101, make_liquid('down'))
+          else
+            -- The liquid already flows down
+          end
 
-    if n111_liquid and map then
+        elseif n101.name == 'air' then
+          -- flow down
+          core.set_node(p101, make_liquid('down'))
+  
+        else
 
-      local p011 = p111 + vector.new(-1, 0, 0)
-      local p211 = p111 + vector.new( 1, 0, 0)
-      local p110 = p111 + vector.new( 0, 0,-1)
-      local p112 = p111 + vector.new( 0, 0, 1)
+          if not map then
+            map = path_find(p111)
+          end
 
-      l011 = map(p011)
-      l211 = map(p211)
-      l110 = map(p110)
-      l112 = map(p112)
+          local m011 = map(p011)
+          local m211 = map(p211)
+          local m110 = map(p110)
+          local m112 = map(p112)
 
-      if l011 and l011 < l111 then queue_push({pos = p011, map = map}) end
-      if l211 and l211 < l111 then queue_push({pos = p211, map = map}) end
-      if l110 and l110 < l111 then queue_push({pos = p110, map = map}) end
-      if l112 and l112 < l111 then queue_push({pos = p112, map = map}) end
+          if m011 and l111 > m011 and is_floodable(p011) then
+            queue_push({pos=p011, map=map})
+            core.set_node(p011, make_liquid(m011))
+          end
+
+          if m211 and l111 > m211 and is_floodable(p211) then
+            queue_push({pos=p211, map=map})
+            core.set_node(p211, make_liquid(m211))
+          end
+
+          if m110 and l111 > m110 and is_floodable(p110) then
+            queue_push({pos=p110, map=map})
+            core.set_node(p110, make_liquid(m110))
+          end
+
+          if m112 and l111 > m112 and is_floodable(p112) then
+            queue_push({pos=p112, map=map})
+            core.set_node(p112, make_liquid(m112))
+          end
+        end
+
+      elseif l111 > support_level then
+        -- The liquid level is too hight here we need to reduce it.
+
+        core.set_node(p111, make_liquid(support_level))
+  
+        -- Neighboring nodes might need to be reduced as well
+        if l011 ~= nil then queue_push({pos=p011}) end
+        if l211 ~= nil then queue_push({pos=p211}) end
+        if l110 ~= nil then queue_push({pos=p110}) end
+        if l112 ~= nil then queue_push({pos=p112}) end
+
+        -- the node below might need an update as well, but only if the liquid
+        -- has completely gone
+        if support_level == 0 and l101 ~= nil then queue_push({pos=p101}) end
+
+      else
+        -- The liquid level is too low. This happens only in case the algorithm
+        -- got interrupted. In normal circumstances this should never happen
+        -- because higher level pushes to lower level.
+
+        core.set_node(p111, make_liquid(support_level))
+  
+        if l011 ~= nil then queue_push({pos=p011}) end
+        if l211 ~= nil then queue_push({pos=p211}) end
+        if l110 ~= nil then queue_push({pos=p110}) end
+        if l112 ~= nil then queue_push({pos=p112}) end
+        -- We update the node below as well just in case it got stuck as well.
+        if l101 ~= nil then queue_push({pos=p101}) end
+      end
+    else
+      -- It seams that the current node is not a liquid at all.
+      -- We update the neighbors because it might have been a liquid
+      -- previously.
+      if l011 ~= nil then queue_push({pos=p011}) end
+      if l211 ~= nil then queue_push({pos=p211}) end
+      if l110 ~= nil then queue_push({pos=p110}) end
+      if l112 ~= nil then queue_push({pos=p112}) end
+      if l101 ~= nil then queue_push({pos=p101}) end
     end
 
   end
