@@ -24,7 +24,7 @@ end)
 
 mcl_player.register_globalstep(function(player)
 	local pos = player:get_pos()
-	local npos = vector.add(pos, mcl_player.node_offsets.stand)
+	local npos = pos:add(mcl_player.node_offsets.stand)
 	local node = minetest.get_node(npos)
 	if on_walk[mcl_player.players[player].nodes.stand] then
 		on_walk[mcl_player.players[player].nodes.stand](npos, node, player)
@@ -33,11 +33,11 @@ mcl_player.register_globalstep(function(player)
 		registered_globals[i](npos, node, player)
 	end
 	if on_walk_through[mcl_player.players[player].nodes.feet] then
-		local npos = vector.add(pos, mcl_player.node_offsets.feet)
+		local npos = pos:add(mcl_player.node_offsets.feet)
 		on_walk_through[mcl_player.players[player].nodes.feet](npos, minetest.get_node(npos), player)
 	end
 	if on_walk_through[mcl_player.players[player].nodes.head] then
-		local npos = vector.add(pos, mcl_player.node_offsets.head)
+		local npos = pos:add(mcl_player.node_offsets.head)
 		on_walk_through[mcl_player.players[player].nodes.head](npos, minetest.get_node(npos), player)
 	end
 end)

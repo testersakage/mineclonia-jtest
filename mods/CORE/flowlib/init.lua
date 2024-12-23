@@ -16,7 +16,8 @@ local inv_roots = {
 
 local function to_unit_vector(dir_vector)
 	local sum = dir_vector.x * dir_vector.x + dir_vector.z * dir_vector.z
-	return {x = dir_vector.x * inv_roots[sum], y = dir_vector.y, z = dir_vector.z * inv_roots[sum]}
+	local ir_sum = inv_roots[sum]
+	return dir_vector:copy():schur(vector.new(ir_sum, 0, ir_sum))
 end
 
 local function is_touching(realpos,nodepos,radius)
@@ -49,7 +50,6 @@ local function node_is_lava(node)
 end
 
 flowlib.node_is_lava = node_is_lava
-
 
 local function is_liquid(pos)
 	return minetest.get_item_group(minetest.get_node(pos).name, "liquid") ~= 0
@@ -108,11 +108,11 @@ end
 
 local function quick_flow(pos, node)
 	if not node_is_liquid(node)  then
-		return {x = 0, y = 0, z = 0}
+		return vector.zero()
 	end
-	local x = quick_flow_logic(node,{x = pos.x-1, y = pos.y, z = pos.z},-1) + quick_flow_logic(node,{x = pos.x+1, y = pos.y, z = pos.z}, 1)
-	local z = quick_flow_logic(node,{x = pos.x, y = pos.y, z = pos.z-1},-1) + quick_flow_logic(node,{x = pos.x, y = pos.y, z = pos.z+1}, 1)
-	return to_unit_vector({x = x, y = 0, z = z})
+	local x = quick_flow_logic(node, pos:copy():subtract(vector.new(1, 0, 0)), -1) + quick_flow_logic(node, pos:copy():add(vector.new(1, 0,0 )), 1)
+	local z = quick_flow_logic(node, pos:copy():subtract(vector.new(0, 0, 1)), -1) + quick_flow_logic(node, pos:copy():add(vector.new(0, 0, 1)), 1)
+	return to_unit_vector(vector.new(x, 0, z))
 end
 
 flowlib.quick_flow = quick_flow
@@ -123,21 +123,25 @@ flowlib.quick_flow = quick_flow
 
 local function move_centre(pos, realpos, node, radius)
 	if is_touching(realpos.x, pos.x, radius) then
-		if is_liquid({x = pos.x-1, y = pos.y, z = pos.z}) then
-			node = minetest.get_node({x=pos.x-1, y = pos.y, z = pos.z})
-			pos = {x = pos.x-1, y = pos.y, z = pos.z}
-		elseif is_liquid({x = pos.x+1, y = pos.y, z = pos.z}) then
-			node = minetest.get_node({x = pos.x+1, y = pos.y, z = pos.z})
-			pos = {x = pos.x+1, y = pos.y, z = pos.z}
+		local pl = pos:copy():subtract(vector.new(1, 0, 0))
+		local pp = pos:copy():add(vector.new(1, 0, 0))
+		if is_liquid(pl) then
+			node = minetest.get_node(pl)
+			pos = pl
+		elseif is_liquid(pp) then
+			node = minetest.get_node(pp)
+			pos = pp
 		end
 	end
 	if is_touching(realpos.z, pos.z, radius) then
-		if is_liquid({x = pos.x, y = pos.y, z = pos.z - 1}) then
-			node = minetest.get_node({x = pos.x, y = pos.y, z = pos.z - 1})
-			pos = {x = pos.x, y = pos.y, z = pos.z - 1}
-		elseif is_liquid({x = pos.x, y = pos.y, z = pos.z + 1}) then
-			node = minetest.get_node({x = pos.x, y = pos.y, z = pos.z + 1})
-			pos = {x = pos.x, y = pos.y, z = pos.z + 1}
+		local pl = pos:copy():subtract(vector.new(0, 0, 1))
+		local pp = pos:copy():add(vector.new(0, 0, 1))
+		if is_liquid(pl) then
+			node = minetest.get_node(pl)
+			pos = pl
+		elseif is_liquid(pp) then
+			node = minetest.get_node(pp)
+			pos = pp
 		end
 	end
 	return pos, node

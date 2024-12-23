@@ -93,7 +93,7 @@ function check_events(dtime)
 				local start = true
 				if e.exclusive_to_area then
 					for _,ae in pairs(active_events) do
-						if e.name == ae.name and vector.distance(p.pos,ae.pos) < e.exclusive_to_area then start = false end
+						if e.name == ae.name and p.pos:distance(ae.pos) < e.exclusive_to_area then start = false end
 					end
 				end
 				if start then

@@ -22,7 +22,7 @@ function mcl_attached.drop_attached_node(p)
 	if def and def.preserve_metadata then
 		local oldmeta = minetest.get_meta(p):to_table().fields
 		-- Copy pos and node because the callback can modify them.
-		local pos_copy = vector.copy(p)
+		local pos_copy = p:copy()
 		local node_copy = { name = n.name, param1 = n.param1, param2 = n.param2 }
 		local drop_stacks = {}
 		for k, v in pairs(drops) do
@@ -38,11 +38,8 @@ function mcl_attached.drop_attached_node(p)
 
 	minetest.remove_node(p)
 	for _, item in pairs(drops) do
-		local pos = vector.offset(p,
-			math.random() / 2 - 0.25,
-			math.random() / 2 - 0.25,
-			math.random() / 2 - 0.25
-		)
+		local rand = math.random() / 2 - 0.25
+		local pos = p:offset(rand, rand, rand)
 		minetest.add_item(pos, item)
 	end
 end
@@ -72,7 +69,7 @@ function minetest.check_single_for_falling(pos)
 	then
 		local dir = minetest.facedir_to_dir(node.param2)
 		if dir then
-			if minetest.get_item_group(minetest.get_node(vector.add(pos, dir)).name, "solid") == 0 then
+			if minetest.get_item_group(minetest.get_node(pos:add(dir)).name, "solid") == 0 then
 				mcl_attached.drop_attached_node(pos)
 				return true
 			end
@@ -80,7 +77,7 @@ function minetest.check_single_for_falling(pos)
 	end
 
 	if minetest.get_item_group(node.name, "supported_node") ~= 0 then
-		local def = minetest.registered_nodes[minetest.get_node(vector.offset(pos, 0, -1, 0)).name]
+		local def = minetest.registered_nodes[minetest.get_node(pos:offset(0, -1, 0)).name]
 		if def and def.drawtype == "airlike" then
 			mcl_attached.drop_attached_node(pos)
 			return true
@@ -92,17 +89,17 @@ function minetest.check_single_for_falling(pos)
 		local apos
 		if vine_group == 1 or vine_group == 3 then
 			-- attached to bottom of same node type
-			apos = vector.offset(pos, 0, -1, 0)
+			apos = pos:offset(0, -1, 0)
 		elseif vine_group == 2 or vine_group == 4 then
 			-- attached to top of same node type
-			apos = vector.offset(pos, 0, 1, 0)
+			apos = pos:offset(0, 1, 0)
 		end
 		local aname = minetest.get_node(apos).name
 		if minetest.get_item_group(aname, "vinelike_node") ~= vine_group and
 			minetest.get_item_group(aname, "solid") == 0
 		then
 			if vine_group == 3 or vine_group == 4 then
-				apos = vector.add(pos, minetest.wallmounted_to_dir(node.param2))
+				apos = pos:add(minetest.wallmounted_to_dir(node.param2))
 				aname = minetest.get_node(apos).name
 				if minetest.get_item_group(aname, "solid") ~= 0 then
 					return false

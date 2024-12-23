@@ -40,7 +40,7 @@ local function valid_object_iterator_in_radius(objects, center, radius)
 			return
 		end
 		local p = obj:get_pos()
-		if p and vector.distance(p, center) <= radius then
+		if p and p:distance(center) <= radius then
 			return obj
 		end
 		return next_valid_object()
@@ -108,7 +108,7 @@ if not minetest.get_node_boxes then
 		front = vector.new(0, 0, -1),
 		left = vector.new(-1, 0, 0),
 		back = vector.new(0, 0, 1),
-		right = vector.new(1, 0, 0),
+		right = vector.new(1, 0, 0)
 	}
 	function minetest.get_node_boxes(type, pos)
 		local node = minetest.get_node(pos)
@@ -186,7 +186,7 @@ if not minetest.get_node_boxes then
 			for _, side in ipairs(connect_sides_order) do
 				if connect_sides[side] then
 					local direction = connect_sides_directions[side]
-					local neighbor = minetest.get_node(vector.add(pos, direction))
+					local neighbor = minetest.get_node(pos:add(direction))
 					local connects = connects_to(neighbor.name)
 					connected = connected or connects
 					connected_sides = connected_sides or (side ~= "top" and side ~= "bottom")

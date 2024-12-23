@@ -25,7 +25,7 @@ mcl_vars.gui_bg_img = "background9[1,1;1,1;mcl_base_textures_background9.png;tru
 mcl_vars.inventory_header = ""
 
 -- Tool wield size
-mcl_vars.tool_wield_scale = { x = 1.8, y = 1.8, z = 1 }
+mcl_vars.tool_wield_scale = vector.new(1.8, 1.8, 1)
 
 -- Mapgen variables
 local mg_name = minetest.get_mapgen_setting("mg_name")
@@ -183,7 +183,7 @@ end
 mcl_vars.mg_end_min = -27073 -- Carefully chosen to be at a mapchunk border
 mcl_vars.mg_end_max_official = mcl_vars.mg_end_min + minecraft_height_limit
 mcl_vars.mg_end_max = mcl_vars.mg_overworld_min - 2000
-mcl_vars.mg_end_platform_pos = { x = 100, y = mcl_vars.mg_end_min + 64, z = 0 }
+mcl_vars.mg_end_platform_pos = vector.new(100, mcl_vars.mg_end_min + 64, 0)
 mcl_vars.mg_end_exit_portal_pos = vector.new(0, mcl_vars.mg_end_min + 71, 0)
 
 -- Realm barrier used to safely separate the End from the void below the Overworld
