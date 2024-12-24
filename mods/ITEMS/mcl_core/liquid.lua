@@ -8,17 +8,6 @@ local liquid = {
 local resume_counter = 1
 function liquid.register_liquid(def)
 
-  local queue = {}
-  local uniq  = {}
-
-  local function queue_push(item)
-    local pos = item.pos
-    local s = ''..pos.x..' '..pos.y..' '..pos.z;
-    if uniq[s] == nil then
-      uniq[s] = item
-      table.insert(queue, item)
-    end
-  end
 
   local def_flowing = def.ndef_flowing
   local def_source = def.ndef_source
@@ -57,6 +46,22 @@ function liquid.register_liquid(def)
 
 
 
+
+  local queue = {}
+  local uniq  = {}
+
+  local changed_nodes = {}
+
+
+  local function queue_push(item)
+    local h = core.hash_node_position(item.pos)
+    if uniq[h] == nil then
+      uniq[h] = item
+      table.insert(queue, item)
+    end
+  end
+
+
   local function get_liquid_level(node)
     if node.name == NAME_SOURCE then
       return 8
@@ -71,6 +76,22 @@ function liquid.register_liquid(def)
     end 
   end
   
+
+  local function set_node(pos, node)
+    local h = core.hash_node_position(pos)
+    local other = changed_nodes[h]
+
+    if not other then
+      changed_nodes[h] = node
+    else
+      local ln = get_liquid_level(node)  or 0
+      local lo = get_liquid_level(other) or 0
+
+      if ln > lo then
+        changed_nodes[h] = node
+      end
+    end
+  end
   
   local function is_liquid(node)
     return node.name == NAME_SOURCE or node.name == NAME_FLOWING
@@ -127,9 +148,6 @@ function liquid.register_liquid(def)
 
     local y = pos.y
 
-    local function calc_hash(pos)
-      return pos.x..' '..pos.y..' '..pos.z
-    end
 
 
     local list = {}
@@ -140,7 +158,7 @@ function liquid.register_liquid(def)
     local found = {}
 
     local function step(pos, level)
-      local h = calc_hash(pos)
+      local h = core.hash_node_position(pos)
       if kmap[h] == nil then
         local n1 = core.get_node(pos)
         local n2= core.get_node(pos+vector.new(0,-1,0))
@@ -163,7 +181,7 @@ function liquid.register_liquid(def)
     end
 
     local orig_level = get_liquid_level(core.get_node(pos))
-    kmap[calc_hash(pos)] = orig_level
+    kmap[core.hash_node_position(pos)] = orig_level
 
 
     local level = orig_level
@@ -200,11 +218,11 @@ function liquid.register_liquid(def)
         l = list
         list = {}
         for i, p in ipairs(l) do
-          local h = calc_hash(p)
+          local h = core.hash_node_position(p)
           rmap[h] = kmap[h]
 
           local function back_trace(p)
-            local h = calc_hash(p)
+            local h = core.hash_node_position(p)
             local m = kmap[h]
             if m and m > nlevel then
               list[#list+1] = p
@@ -223,7 +241,7 @@ function liquid.register_liquid(def)
     for x = -8,8 do
       line = '| '
       for z = -8,8 do
-        local h = calc_hash(pos + vector.new(x, 0, z))
+        local h = core.hash_node_position(pos + vector.new(x, 0, z))
         local level = rmap[h]
         if level then
           line = line..level..' '
@@ -239,7 +257,7 @@ function liquid.register_liquid(def)
 
 
     return function (pos)
-      return rmap[calc_hash(pos)]
+      return rmap[core.hash_node_position(pos)]
     end
   end
   
@@ -294,7 +312,7 @@ function liquid.register_liquid(def)
     
       if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then 
         -- Renew liquid
-        core.set_node(pos, { name=NAME_SOURCE })
+        set_node(pos, { name=NAME_SOURCE })
         if n011.name ~= NAME_SOURCE then queue_push({pos=p011}) end
         if n211.name ~= NAME_SOURCE then queue_push({pos=p211}) end
         if n110.name ~= NAME_SOURCE then queue_push({pos=p110}) end
@@ -362,13 +380,13 @@ function liquid.register_liquid(def)
         elseif n101.name == NAME_FLOWING then
           if l101 < 8 then
             -- turn the liquid below into down-flowing
-            core.set_node(p101, make_liquid('down'))
+            set_node(p101, make_liquid('down'))
           else
             -- The liquid already flows down
           end
         elseif n101.name == 'air' then
           -- flow down
-          core.set_node(p101, make_liquid('down'))
+          set_node(p101, make_liquid('down'))
   
         elseif new_level > 0 then
 
@@ -388,7 +406,7 @@ function liquid.register_liquid(def)
               if m and m == new_level then
                 if new_level > (l or 0) and is_floodable(p) then
                   queue_push({pos=p, map=map})
-                  core.set_node(p, new_liquid)
+                  set_node(p, new_liquid)
                 end
                 cnt_flood = cnt_flood + 1
               end
@@ -411,8 +429,8 @@ function liquid.register_liquid(def)
         -- The liquid level is too hight here we need to reduce it.
 
         queue_push({pos=p111})
-        --core.set_node(p111, make_liquid(l111 - 1))
-        core.set_node(p111, make_liquid(support_level))
+        --set_node(p111, make_liquid(l111 - 1))
+        set_node(p111, make_liquid(support_level))
   
         -- Neighboring nodes might need to be reduced as well
         if l011 ~= nil then queue_push({pos=p011}) end
@@ -429,7 +447,7 @@ function liquid.register_liquid(def)
       --  -- got interrupted. In normal circumstances this should never happen
       --  -- because higher level pushes to lower level.
 
-      --  core.set_node(p111, make_liquid(support_level))
+      --  set_node(p111, make_liquid(support_level))
   
       --  if l011 ~= nil then queue_push({pos=p011}) end
       --  if l211 ~= nil then queue_push({pos=p211}) end
@@ -586,9 +604,19 @@ function liquid.register_liquid(def)
       uniq = {}
       queue = {}
 
+      changed_nodes = {}
+
       for i, item in ipairs(q) do
         flow_iteration(item)
       end
+
+      for h, node in pairs(changed_nodes) do
+        local pos = core.get_position_from_hash(h)
+
+        core.set_node(pos, node)
+      end
+
+
       if liquid.running then
         run()
       end
