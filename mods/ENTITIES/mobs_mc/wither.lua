@@ -885,6 +885,11 @@ local skull_def = {
 					      direct = self.object,
 					      type = "wither_skull",
 		})
+		-- This must come before mcl_explosions.explode, which
+		-- is liable to remove this object.
+		local v = self.object:get_velocity ()
+		v.y = 0
+		local dir = vector.normalize (v)
 		if mobs_griefing and not minetest.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
@@ -895,9 +900,6 @@ local skull_def = {
 			if shooter then shooter.health = shooter.health + 5 end
 			spawn_wither_rose(player)
 		else
-			local v = self.object:get_velocity ()
-			v.y = 0
-			local dir = vector.normalize (v)
 			mcl_player.player_knockback (player, self.object, dir, nil, 8.0)
 		end
 	end,
@@ -914,6 +916,9 @@ local skull_def = {
 					      direct = self.object,
 					      type = "wither_skull",
 		})
+		local v = self.object:get_velocity ()
+		v.y = 0
+		local dir = vector.normalize (v)
 		if mobs_griefing and not minetest.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
@@ -926,9 +931,6 @@ local skull_def = {
 			spawn_wither_rose(mob)
 		end
 		if l then
-			local v = self.object:get_velocity ()
-			v.y = 0
-			local dir = vector.normalize (v)
 			l:projectile_knockback (1, dir)
 		end
 	end,
