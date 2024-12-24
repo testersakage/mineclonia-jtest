@@ -3,48 +3,51 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-24 13:39+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_nether/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Glowstone"
 msgstr "Luminite"
 
 msgid "Glowstone is a naturally-glowing block which is home to the Nether."
-msgstr "La Luminite è un blocco che si illumina naturalmente originario del Nether."
+msgstr ""
+"La luminite è un blocco che si illumina naturalmente originario del Nether."
 
 msgid "Nether Quartz Ore"
-msgstr ""
+msgstr "Minerale di quarzo del Nether"
 
 msgid "Nether quartz ore is an ore containing nether quartz. It is commonly found around netherrack in the Nether."
 msgstr ""
 
 msgid "Ancient Debris"
-msgstr ""
+msgstr "Detriti antichi"
 
 msgid "Ancient debris can be found in the nether and is very very rare."
 msgstr ""
 
 msgid "Block of Netherite"
-msgstr ""
+msgstr "Blocco di netherite"
 
 msgid "Netherite block is very hard and can be made of 9 netherite ingots."
 msgstr ""
 
 msgid "Netherrack"
-msgstr ""
+msgstr "Netherrack"
 
 msgid "Netherrack is a stone-like block home to the Nether. Starting a fire on this block will create an eternal fire."
 msgstr ""
 
 msgid "Magma Block"
-msgstr ""
+msgstr "Blocco di magma"
 
 msgid "Burns your feet"
 msgstr ""
@@ -53,7 +56,7 @@ msgid "Magma blocks are hot solid blocks which hurt anyone standing on it, unles
 msgstr ""
 
 msgid "Soul Sand"
-msgstr ""
+msgstr "Sabbia delle anime"
 
 msgid "Reduces walking speed"
 msgstr ""
@@ -62,94 +65,94 @@ msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sa
 msgstr ""
 
 msgid "Nether Brick Block"
-msgstr ""
+msgstr "Blocco de mattoni del Nether"
 
 msgid "Red Nether Brick Block"
-msgstr ""
+msgstr "Blocco de mattoni del Nether rossi"
 
 msgid "Chiseled Nether Brick Block"
-msgstr ""
+msgstr "Mattoni del Nether cesellati"
 
 msgid "Cracked Nether Bricks"
-msgstr ""
+msgstr "Mattoni del Nether crepati"
 
 msgid "Nether Wart Block"
-msgstr ""
+msgstr "Blocco di verruche del Nether"
 
 msgid "A nether wart block is a purely decorative block made from nether wart."
 msgstr ""
 
 msgid "Block of Quartz"
-msgstr ""
+msgstr "Blocco di quarzo"
 
 msgid "Chiseled Quartz Block"
-msgstr ""
+msgstr "Blocco di quarzo cesellato"
 
 msgid "Pillar Quartz Block"
-msgstr ""
+msgstr "Pilastro di quarzo"
 
 msgid "Smooth Quartz"
-msgstr ""
+msgstr "Quarzo liscio"
 
 msgid "Quartz Stairs"
-msgstr ""
+msgstr "Scalini di quarzo"
 
 msgid "Quartz Slab"
-msgstr ""
+msgstr "Lastra di quarzo"
 
 msgid "Smooth Quartz Stairs"
-msgstr ""
+msgstr "Scalini di quarzo liscio"
 
 msgid "Smooth Quartz Slab"
-msgstr ""
+msgstr "Lastra di quarzo liscio"
 
 msgid "Nether Brick Stairs"
-msgstr ""
+msgstr "Scalini di mattoni del Nether"
 
 msgid "Nether Brick Slab"
-msgstr ""
+msgstr "Lastra di mattoni del Nether"
 
 msgid "Red Nether Brick Stairs"
-msgstr ""
+msgstr "Scalini di mattoni del Nether rossi"
 
 msgid "Red Nether Brick Slab"
-msgstr ""
+msgstr "Lastra di mattoni del Nether rossi"
 
 msgid "Nether Brick Fence"
-msgstr ""
+msgstr "Staccionata di mattoni del Nether"
 
 msgid "Glowstone Dust"
-msgstr ""
+msgstr "Polver di luminite"
 
 msgid "Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."
 msgstr ""
 
 msgid "Nether Quartz"
-msgstr ""
+msgstr "Quarzo del Nether"
 
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr ""
 
 msgid "Netherite Scrap"
-msgstr ""
+msgstr "Frammento di netherite"
 
 msgid "Netherite scrap is a crafting ingredient for netherite ingots."
 msgstr ""
 
 msgid "Netherite Ingot"
-msgstr ""
+msgstr "Lingotto di netherite"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
 msgstr ""
 
 msgid "Nether Brick"
-msgstr ""
+msgstr "Mattone del Nether"
 
 msgid "Nether bricks are the main crafting ingredient for crafting nether brick blocks and nether fences."
 msgstr ""
 
 msgid "Netherite Upgrade Template"
-msgstr ""
+msgstr "Miglioramento di netherite"
 
 msgid "Applies to:"
 msgstr ""
@@ -188,7 +191,7 @@ msgid "The mature nether wart is a plant from the Nether and reached its full si
 msgstr ""
 
 msgid "Nether Wart"
-msgstr ""
+msgstr "Verruca del Nether"
 
 msgid "Grows on soul sand"
 msgstr ""
@@ -198,4 +201,3 @@ msgstr ""
 
 msgid "Place this item on soul sand to plant it and watch it grow."
 msgstr ""
-
