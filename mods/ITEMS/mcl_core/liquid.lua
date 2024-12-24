@@ -1,6 +1,9 @@
 
 
-local liquid = {}
+local liquid = {
+  registered_liquids = {},
+  running = false
+}
 
 local resume_counter = 1
 function liquid.register_liquid(def)
@@ -139,18 +142,22 @@ function liquid.register_liquid(def)
     local function step(pos, level)
       local h = calc_hash(pos)
       if kmap[h] == nil then
-        local n = core.get_node(pos)
-        local f = n and is_floodable(n, level)
+        local n1 = core.get_node(pos)
+        local n2= core.get_node(pos+vector.new(0,-1,0))
 
-        if f and f == 1 then
-          kmap[h] = level
+        local l1 = n1 and get_liquid_level(n1)
+        local l2 = n2 and get_liquid_level(n2)
+
+        local f1 = n1 and is_floodable(n1)
+        local f2 = n2 and is_floodable(n2)
+
+        if f1 == 1 and f2 == 1 then 
+          found[#found+1] = pos
           list[#list+1] = pos
-
-          local n = core.get_node(pos+vector.new(0,-1,0))
-          local f = n and is_floodable(n)
-          if f and f == 1 then
-            found[#found+1] = pos
-          end
+          kmap[h] = level
+        elseif f1 == 1 and (l1 or 0) <= level then
+          list[#list+1] = pos
+          kmap[h] = level
         end
       end
     end
@@ -212,23 +219,23 @@ function liquid.register_liquid(def)
       end
     end
 
-    --core.log('--------------------------')
-    --for x = -8,8 do
-    --  line = '| '
-    --  for z = -8,8 do
-    --    local h = calc_hash(pos + vector.new(x, 0, z))
-    --    local level = rmap[h]
-    --    if level then
-    --      line = line..level..' '
-    --    elseif kmap[h] then
-    --      line = line..'. '
-    --    else
-    --      line = line..'  '
-    --    end
-    --  end
-    --  line = line..' |'
-    --  core.log(line)
-    --end
+    core.log('--------------------------')
+    for x = -8,8 do
+      line = '| '
+      for z = -8,8 do
+        local h = calc_hash(pos + vector.new(x, 0, z))
+        local level = rmap[h]
+        if level then
+          line = line..level..' '
+        elseif kmap[h] then
+          line = line..'. '
+        else
+          line = line..'  '
+        end
+      end
+      line = line..' |'
+      core.log(line)
+    end
 
 
     return function (pos)
@@ -329,11 +336,13 @@ function liquid.register_liquid(def)
         support_level = l112
       end
     end
+
+
     -- subtract 1 so that the level reaches from 0 to 8
     -- This variable tells us what level the current node should have.
     -- If it is highter we will reduce it and if it is lower we increase it.
     support_level = support_level - 1
-  
+
   
     if l111 ~= nil then
       -- The current node is already a liquid
@@ -374,21 +383,21 @@ function liquid.register_liquid(def)
             local cnt_flood = 0
             local new_liquid = make_liquid(new_level)
 
-            function flood(pos)
-              local m = map(pos)
+            function flood(p, l)
+              local m = map(p)
               if m and m == new_level then
-                if is_floodable(pos, new_level) then
-                  queue_push({pos=pos, map=map})
-                  core.set_node(pos, new_liquid)
+                if new_level > (l or 0) and is_floodable(p) then
+                  queue_push({pos=p, map=map})
+                  core.set_node(p, new_liquid)
                 end
                 cnt_flood = cnt_flood + 1
               end
             end
 
-            flood(p011)
-            flood(p211)
-            flood(p110)
-            flood(p112)
+            flood(p011, l011)
+            flood(p211, l211)
+            flood(p110, l110)
+            flood(p112, l112)
             return cnt_flood
 
           end
@@ -402,7 +411,8 @@ function liquid.register_liquid(def)
         -- The liquid level is too hight here we need to reduce it.
 
         queue_push({pos=p111})
-        core.set_node(p111, make_liquid(l111 - 1))
+        --core.set_node(p111, make_liquid(l111 - 1))
+        core.set_node(p111, make_liquid(support_level))
   
         -- Neighboring nodes might need to be reduced as well
         if l011 ~= nil then queue_push({pos=p011}) end
@@ -579,12 +589,36 @@ function liquid.register_liquid(def)
       for i, item in ipairs(q) do
         flow_iteration(item)
       end
-      run()
+      if liquid.running then
+        run()
+      end
     end)
   end
 
-  run()
+  liquid.registered_liquids[#liquid.registered_liquids+1] = run
+
+  --run()
 end
+
+function liquid.run()
+  for i, run in ipairs(liquid.registered_liquids) do
+    run()
+  end
+end
+
+core.register_chatcommand('liquid', {
+  func = function(name, param)
+    if param == 'step' then
+      liquid.running = false
+      liquid.run()
+    elseif param == 'run' then
+      liquid.running = true
+      liquid.run()
+    elseif param == 'stop' then
+      liquid.running = false
+    end
+  end
+})
 
 return liquid
 
