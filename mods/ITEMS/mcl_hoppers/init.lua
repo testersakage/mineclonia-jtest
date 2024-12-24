@@ -499,17 +499,57 @@ local function hopper_push(pos, to_pos)
 	return success
 end
 
+local hopper_interval = 1.0
+local cooldown = {}
+local function hopper_push_and_suck(pos, hopper_group)
+	local key = vector.to_string(pos)
+	local t = minetest.get_gametime()
+	if cooldown[key] and t - cooldown[key] < hopper_interval then return end
+	cooldown[key] = t
+
+	local to_pos
+	if hopper_group == 1 then
+		to_pos = vector.offset(pos, 0, -1, 0)
+	elseif hopper_group == 2 then
+		-- sucking hopper at the bottom?
+		local bottom = vector.offset(pos, 0, -1, 0)
+		local bottom_hopper_group = minetest.get_item_group(minetest.get_node(bottom).name, "hopper")
+		if bottom_hopper_group ~= 0 and mcl_redstone.get_power(bottom) == 0 then
+			hopper_push_and_suck(bottom, bottom_hopper_group)
+		end
+
+		-- Determine to which side the hopper is facing, get nodes
+		local face = minetest.get_node(pos).param2
+		if face == 0 then
+			to_pos = vector.offset(pos, -1, 0, 0)
+		elseif face == 1 then
+			to_pos = vector.offset(pos, 0, 0, 1)
+		elseif face == 2 then
+			to_pos = vector.offset(pos, 1, 0, 0)
+		elseif face == 3 then
+			to_pos = vector.offset(pos, 0, 0, -1)
+		else
+			minetest.log("error", "[mcl_hoppers] Unsupported param2="..face.." at "..vector.to_string(pos))
+			return
+		end
+	else
+		minetest.log("error", "[mcl_hoppers] Unsupported hopper_group="..hopper_group.." at "..vector.to_string(pos))
+		return
+	end
+
+	hopper_push(pos, to_pos)
+
+	return hopper_suck(pos)
+end
 
 minetest.register_abm({
 	label = "Hopper/container item exchange",
 	nodenames = { "mcl_hoppers:hopper" },
 	neighbors = { "group:container" },
-	interval = 1.0,
+	interval = hopper_interval,
 	chance = 1,
 	action = function(pos)
-		hopper_suck(pos)
-		local to_pos = vector.offset(pos, 0, -1, 0)
-		hopper_push(pos, to_pos)
+		hopper_push_and_suck(pos, 1)
 	end,
 })
 
@@ -517,27 +557,10 @@ minetest.register_abm({
 	label = "Side-hopper/container item exchange",
 	nodenames = { "mcl_hoppers:hopper_side" },
 	neighbors = { "group:container" },
-	interval = 1.0,
+	interval = hopper_interval,
 	chance = 1,
 	action = function(pos)
-		hopper_suck(pos)
-		-- Determine to which side the hopper is facing, get nodes
-		local face = minetest.get_node(pos).param2
-		local front = vector.zero()
-		if face == 0 then
-			front = vector.offset(pos, -1, 0, 0)
-		elseif face == 1 then
-			front = vector.offset(pos, 0, 0, 1)
-		elseif face == 2 then
-			front = vector.offset(pos, 1, 0, 0)
-		elseif face == 3 then
-			front = vector.offset(pos, 0, 0, -1)
-		end
-
-		local frontnode = minetest.get_node(front)
-		if not minetest.registered_nodes[frontnode.name] then return end
-
-		hopper_push(pos, front)
+		hopper_push_and_suck(pos, 2)
 	end
 })
 
