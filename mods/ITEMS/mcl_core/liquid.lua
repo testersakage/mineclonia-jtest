@@ -51,6 +51,7 @@ function liquid.register_liquid(def)
   local uniq  = {}
 
   local changed_nodes = {}
+  local read_nodes = {}
 
 
   local function queue_push(item)
@@ -92,6 +93,21 @@ function liquid.register_liquid(def)
       end
     end
   end
+
+  local function get_node(pos)
+    local h = core.hash_node_position(pos)
+    local node = read_nodes[h]
+
+    if node then
+      return node
+    else
+      node = core.get_node(pos)
+      read_nodes[h] = node
+      return node
+    end
+  end
+
+
   
   local function is_liquid(node)
     return node.name == NAME_SOURCE or node.name == NAME_FLOWING
@@ -160,8 +176,8 @@ function liquid.register_liquid(def)
     local function step(pos, level)
       local h = core.hash_node_position(pos)
       if kmap[h] == nil then
-        local n1 = core.get_node(pos)
-        local n2= core.get_node(pos+vector.new(0,-1,0))
+        local n1 = get_node(pos)
+        local n2= get_node(pos+vector.new(0,-1,0))
 
         local l1 = n1 and get_liquid_level(n1)
         local l2 = n2 and get_liquid_level(n2)
@@ -180,7 +196,7 @@ function liquid.register_liquid(def)
       end
     end
 
-    local orig_level = get_liquid_level(core.get_node(pos))
+    local orig_level = get_liquid_level(get_node(pos))
     kmap[core.hash_node_position(pos)] = orig_level
 
 
@@ -268,7 +284,7 @@ function liquid.register_liquid(def)
     local map = item.map
 
     local p111 = pos
-    local n111 = core.get_node(p111)
+    local n111 = get_node(p111)
     if n111.name == 'ignore' then
       return
     end
@@ -280,12 +296,12 @@ function liquid.register_liquid(def)
     local p110 = pos + {x= 0, y= 0, z=-1}
     local p112 = pos + {x= 0, y= 0, z= 1}
 
-    local n011 = core.get_node(p011)
-    local n211 = core.get_node(p211)
-    local n110 = core.get_node(p110)
-    local n112 = core.get_node(p112)
-    local n101 = core.get_node(p101)
-    local n121 = core.get_node(p121)
+    local n011 = get_node(p011)
+    local n211 = get_node(p211)
+    local n110 = get_node(p110)
+    local n112 = get_node(p112)
+    local n101 = get_node(p101)
+    local n121 = get_node(p121)
 
 
     if n011.name == 'ignore' or
@@ -604,6 +620,8 @@ function liquid.register_liquid(def)
       uniq = {}
       queue = {}
 
+
+      read_nodes = {}
       changed_nodes = {}
 
       for i, item in ipairs(q) do
