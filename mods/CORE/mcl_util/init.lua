@@ -224,6 +224,12 @@ local function is_not_shulker_box(itemstack)
 	return g == 0 or g == nil
 end
 
+local function is_room_for_item(stack, src_inventory, src_list, dst_inventory, dst_list)
+	local new_stack = ItemStack(stack)
+	new_stack:set_count(1)
+	return dst_inventory:room_for_item(dst_list, new_stack)
+end
+
 -- Moves a single item from one inventory to another.
 --- source_inventory: Inventory to take the item from
 --- source_list: List name of the source inventory from which to take the item
@@ -329,6 +335,17 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		end
 	end
 
+	-- Automatically select a destination list if omitted
+	if not destination_list then
+		-- Main inventory for most container types
+		if dctype == 2 or dctype == 3 or dctype == 5 or dctype == 6 or dctype == 7 then
+			destination_list = "main"
+			-- Furnace source slot
+		elseif dctype == 4 then
+			destination_list = "src"
+		end
+	end
+
 	-- Automatically select stack slot ID if set to automatic
 	if not source_stack_id then
 		source_stack_id = -1
@@ -338,8 +355,10 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		-- Prevent shulker box inception
 		if dctype == 3 then
 			cond = is_not_shulker_box
+		elseif minetest.get_item_group(dnode.name, "hopper") then
+			cond = is_room_for_item
 		end
-		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
+		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
 		if not source_stack_id then
 			-- Try again if source is a double container
 			if snode and sctype == 5 then
@@ -347,7 +366,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 				smeta = minetest.get_meta(spos)
 				sinv = smeta:get_inventory()
 
-				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
+				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
 				if not source_stack_id then
 					return false
 				end
@@ -371,16 +390,6 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 
 	-- If it's a container, put it into the container
 	if dctype ~= 0 then
-		-- Automatically select a destination list if omitted
-		if not destination_list then
-			-- Main inventory for most container types
-			if dctype == 2 or dctype == 3 or dctype == 5 or dctype == 6 or dctype == 7 then
-				destination_list = "main"
-				-- Furnace source slot
-			elseif dctype == 4 then
-				destination_list = "src"
-			end
-		end
 		if destination_list then
 			-- Move item
 			local ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
