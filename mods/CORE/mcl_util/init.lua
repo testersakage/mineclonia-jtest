@@ -329,6 +329,17 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		end
 	end
 
+	-- Automatically select a destination list if omitted
+	if not destination_list then
+		-- Main inventory for most container types
+		if dctype == 2 or dctype == 3 or dctype == 5 or dctype == 6 or dctype == 7 then
+			destination_list = "main"
+			-- Furnace source slot
+		elseif dctype == 4 then
+			destination_list = "src"
+		end
+	end
+
 	-- Automatically select stack slot ID if set to automatic
 	if not source_stack_id then
 		source_stack_id = -1
@@ -339,7 +350,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		if dctype == 3 then
 			cond = is_not_shulker_box
 		end
-		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
+		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
 		if not source_stack_id then
 			-- Try again if source is a double container
 			if snode and sctype == 5 then
@@ -347,7 +358,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 				smeta = minetest.get_meta(spos)
 				sinv = smeta:get_inventory()
 
-				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, dpos, cond)
+				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
 				if not source_stack_id then
 					return false
 				end
@@ -371,16 +382,6 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 
 	-- If it's a container, put it into the container
 	if dctype ~= 0 then
-		-- Automatically select a destination list if omitted
-		if not destination_list then
-			-- Main inventory for most container types
-			if dctype == 2 or dctype == 3 or dctype == 5 or dctype == 6 or dctype == 7 then
-				destination_list = "main"
-				-- Furnace source slot
-			elseif dctype == 4 then
-				destination_list = "src"
-			end
-		end
 		if destination_list then
 			-- Move item
 			local ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
