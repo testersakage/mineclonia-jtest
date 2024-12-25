@@ -628,7 +628,16 @@ function liquid.register_liquid(def)
 
       for h, node in pairs(changed_nodes) do
         local pos = core.get_position_from_hash(h)
-        core.set_node(pos, node)
+
+        local old = read_nodes[h]
+        local old_ndef = core.registered_nodes[old.name]
+        if old_ndef.on_flood then
+          if not old_ndef.on_flood(pos, old, node) then
+            core.set_node(pos, node)
+          end
+        else
+          core.set_node(pos, node)
+        end
       end
 
       if liquid.running then
