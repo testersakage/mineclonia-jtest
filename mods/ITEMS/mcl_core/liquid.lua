@@ -2,7 +2,8 @@
 
 local liquid = {
   registered_liquids = {},
-  running = false
+  running = true,
+  tick = 1.0
 }
 
 local resume_counter = 1
@@ -25,19 +26,16 @@ function liquid.register_liquid(def)
   local SLOPE_RANGE = def.liquid_slope_range or 0
   assert(SLOPE_RANGE >= 0 and SLOPE_RANGE < 8)
 
-  local SLOPE_RANGE_MIN = def.liquid_slope_range_min or 0
-  assert(SLOPE_RANGE_MIN >= 0 and SLOPE_RANGE_MIN < 8)
-
 
   local FLOW_DISTANCE = def.liquid_range or 7
   assert(FLOW_DISTANCE >= 0 and FLOW_DISTANCE < 8)
 
   local RENEWABLE = def.liquid_renewable or false
-  local TICKS     = def.liquid_tick or 0.5
+  local TICKS     = (def.liquid_tick or 0.5) * liquid.tick
 
 
-  level_tb = {}
-  for i = 0, 8 do
+  local level_tb = {}
+  for i = 0, 9 do
     level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) /  8) * 8 / (FLOW_DISTANCE+1))
   end
 
@@ -126,7 +124,7 @@ function liquid.register_liquid(def)
         name = NAME_SOURCE,
       }
   
-    elseif level <= 7-FLOW_DISTANCE then
+    elseif level <= 0 then
       return {
         name = 'air'
       }
@@ -145,7 +143,7 @@ function liquid.register_liquid(def)
     local nl = get_liquid_level(n)
     if n.name == 'air' then
       return 1
-    elseif nl and nl <= (level or 9) then
+    elseif nl then
       return 1
     elseif n.name == 'ignore' then
       core.log('ignore')
@@ -211,7 +209,7 @@ function liquid.register_liquid(def)
       local l = list
       list = {}
 
-      level = level - 1
+      level = level_tb[level]
       for i, p in ipairs(l) do
         step(p + vector.new(-1, 0, 0), level)
         step(p + vector.new( 1, 0, 0), level)
@@ -253,23 +251,23 @@ function liquid.register_liquid(def)
       end
     end
 
-    core.log('--------------------------')
-    for x = -8,8 do
-      line = '| '
-      for z = -8,8 do
-        local h = core.hash_node_position(pos + vector.new(x, 0, z))
-        local level = rmap[h]
-        if level then
-          line = line..level..' '
-        elseif kmap[h] then
-          line = line..'. '
-        else
-          line = line..'  '
-        end
-      end
-      line = line..' |'
-      core.log(line)
-    end
+    --core.log('--------------------------')
+    --for x = -8,8 do
+    --  line = '| '
+    --  for z = -8,8 do
+    --    local h = core.hash_node_position(pos + vector.new(x, 0, z))
+    --    local level = rmap[h]
+    --    if level then
+    --      line = line..level..' '
+    --    elseif kmap[h] then
+    --      line = line..'. '
+    --    else
+    --      line = line..'  '
+    --    end
+    --  end
+    --  line = line..' |'
+    --  core.log(line)
+    --end
 
 
     return function (pos)
@@ -375,7 +373,7 @@ function liquid.register_liquid(def)
     -- subtract 1 so that the level reaches from 0 to 8
     -- This variable tells us what level the current node should have.
     -- If it is highter we will reduce it and if it is lower we increase it.
-    support_level = support_level - 1
+    support_level = level_tb[support_level]
 
   
     if l111 ~= nil then
@@ -387,7 +385,7 @@ function liquid.register_liquid(def)
 
         -- Get the next level from a table
         --local new_level = level_tb[l111] or 0
-        local new_level = support_level - 1
+        local new_level = level_tb[support_level]
 
         if n101.name == NAME_SOURCE and n111.name ~= NAME_SOURCE then
           -- the current node is on top of a source node. No more flowing here.
@@ -630,10 +628,8 @@ function liquid.register_liquid(def)
 
       for h, node in pairs(changed_nodes) do
         local pos = core.get_position_from_hash(h)
-
         core.set_node(pos, node)
       end
-
 
       if liquid.running then
         run()
@@ -643,7 +639,9 @@ function liquid.register_liquid(def)
 
   liquid.registered_liquids[#liquid.registered_liquids+1] = run
 
-  --run()
+  if liquid.running then
+    run()
+  end
 end
 
 function liquid.run()
