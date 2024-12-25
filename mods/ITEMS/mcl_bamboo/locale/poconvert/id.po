@@ -3,79 +3,81 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-25 14:35+0000\n"
+"Last-Translator: Just Playing <jplay2@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Indonesian <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_bamboo/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
-msgstr ""
+msgstr "Blok yang terbuat dari batang bambu. Dapat dibuat menjadi papan bambu."
 
 msgid "Block of Bamboo"
-msgstr ""
+msgstr "Blok Bambu"
 
 msgid "Block of Stripped Bamboo"
-msgstr ""
+msgstr "Blok Bambu Ukir"
 
 msgid "Bamboo Raft"
-msgstr ""
+msgstr "Rakit Bambu"
 
 msgid "Chest Bamboo Raft"
-msgstr ""
+msgstr "Rakit Bambu Peti"
 
 msgid "Bamboo Button"
-msgstr ""
+msgstr "Tombol Bambu"
 
 msgid "Bamboo Door"
-msgstr ""
+msgstr "Pintu Bambu"
 
 msgid "Bamboo Fence"
-msgstr ""
+msgstr "Pagar Bambu"
 
 msgid "Bamboo Fence Gate"
-msgstr ""
+msgstr "Gerbang Pagar Bambu"
 
 msgid "Bamboo Planks"
-msgstr ""
+msgstr "Papan Bambu"
 
 msgid "Bamboo Pressure Plate"
-msgstr ""
+msgstr "Plat Bambu"
 
 msgid "Bamboo Sign"
-msgstr ""
+msgstr "Tanda Bambu"
 
 msgid "Bamboo Slab"
-msgstr ""
+msgstr "Lempeng Bambu"
 
 msgid "Bamboo Stairs"
-msgstr ""
+msgstr "Tangga Bambu"
 
 msgid "Bamboo Trapdoor"
-msgstr ""
+msgstr "Pintu Jebakan Bambu"
 
 msgid "Bamboo"
-msgstr ""
+msgstr "Bambu"
 
 msgid "Bamboo Plant"
-msgstr ""
+msgstr "Tanaman Bambu"
 
 msgid "Bamboo Mosaic Plank"
-msgstr ""
+msgstr "Papan Mosaik Bambu"
 
 msgid "Scaffolding"
-msgstr ""
+msgstr "Perancah"
 
 msgid "Scaffolding is a temporary structure to easily climb up while building that is easily removed"
 msgstr ""
+"Perancah adalah struktur sementara yang mudah dinaiki saat membangun dan "
+"mudah dipindahkan"
 
 msgid "Scaffolding horizontal"
-msgstr ""
+msgstr "Perancah Horizontal"
 
 msgid "Scaffolding block..."
-msgstr ""
-
+msgstr "Blok perancah..."
