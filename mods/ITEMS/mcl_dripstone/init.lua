@@ -155,6 +155,9 @@ local function update_dripstone(pos, direction)
 end
 
 local function on_dripstone_place(itemstack, player, pointed_thing)
+	local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
+	if rc then return rc end
+
 	if pointed_thing.type ~= "node" then return itemstack end
 	if minetest.get_item_group(minetest.get_node(pointed_thing.under).name, "solid") == 0 then return itemstack end
 	if pointed_thing.above.x ~= pointed_thing.under.x or pointed_thing.above.z ~= pointed_thing.under.z then return itemstack end
