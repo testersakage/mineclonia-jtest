@@ -7,7 +7,6 @@ local S = core.get_translator(core.get_current_modname())
 liquid.register_liquid({
   liquid_tick = 1.0 / 2.0,
   liquid_range = 7,
-  liquid_slope_range = 5,
   liquid_renewable = false,
   name_source = "mcl_nether:nether_lava_source",
   ndef_source = table.merge(core.registered_nodes["mcl_core:lava_source"], {
