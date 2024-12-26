@@ -1119,8 +1119,8 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 		type = "fixed",
 		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
 	},
-	tiles = animate_chests and {"blank.png"} or {"mcl_chests_ender.png"},
-	_chest_entity_textures = {"mcl_chests_ender.png"},
+	tiles = animate_chests and {"blank.png"} or tiles_chest_ender_small,
+	_chest_entity_textures = tiles_chest_ender_small,
 	_chest_entity_sound = "mcl_chests_enderchest",
 	_chest_entity_mesh = "mcl_chests_chest",
 	_chest_entity_animation_type = "chest",
@@ -1140,7 +1140,7 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", formspec_ender_chest)
-		create_entity(pos, "mcl_chests:ender_chest_small", {"mcl_chests_ender.png"}, minetest.get_node(pos).param2, false, "mcl_chests_enderchest", "mcl_chests_chest", "chest")
+		create_entity(pos, "mcl_chests:ender_chest_small", tiles_chest_ender_small, minetest.get_node(pos).param2, false, "mcl_chests_enderchest", "mcl_chests_chest", "chest")
 	end,
 	on_rightclick = function(pos, node, clicker)
 		local def = minetest.registered_nodes[minetest.get_node(vector.offset(pos, 0, 1, 0)).name]
