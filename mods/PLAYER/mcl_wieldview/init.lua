@@ -34,7 +34,11 @@ local function update_wieldview_entity(player, bone, position, rotation, get_ite
 		local item = get_item(player):get_name()
 
 		if item == luaentity._item then return end
-		if minetest.get_item_group(item, "shield") > 0  then return end
+		if minetest.get_item_group(item, "shield") > 0 then
+			luaentity.object:remove ()
+			wieldview_luaentites[bone][player] = nil
+			return
+		end
 		luaentity._item = item
 
 		local def = get_item(player):get_definition()

@@ -272,7 +272,12 @@ function mcl_armor.reenable_elytra (elytra)
 end
 
 function mcl_armor.update(obj)
-	local info = {points = 0, view_range_factors = {}, elytra_present = false}
+	local info = {
+		points = 0,
+		view_range_factors = {},
+		elytra_present = false,
+		depth_strider_level = 0,
+	}
 	local resp_lv = 0
 
 	local inv = mcl_util.get_inventory(obj)
@@ -321,6 +326,10 @@ function mcl_armor.update(obj)
 							info.view_range_factors[mob_range_mob] = def._mcl_armor_mob_range_factor
 						end
 					end
+				end
+				if i == 5 then
+					info.depth_strider_level
+						= mcl_enchanting.get_enchantment (itemstack, "depth_strider")
 				end
 			end
 		end

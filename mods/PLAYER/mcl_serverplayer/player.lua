@@ -95,9 +95,9 @@ function mcl_serverplayer.post_load_model (player, model)
 	local caps = {
 		pose_defs = poses,
 	}
-	-- TODO: reload animations server-side.
 	if mcl_serverplayer.is_csm_capable (player) then
 		mcl_serverplayer.send_player_capabilities (player, caps)
+		mcl_serverplayer.refresh_pose (player)
 	end
 	client_poses[player] = poses
 end
@@ -141,20 +141,24 @@ function mcl_serverplayer.init_player (client_state, player)
 
 	local inv = player:get_inventory ()
 	local stack = inv:get_stack ("armor", 3)
+	local boots = inv:get_stack ("armor", 5)
 	local can_fall_fly
 		= minetest.get_item_group (stack:get_name (), "elytra") > 0
 		and mcl_armor.elytra_usable (stack)
+	local level = mcl_enchanting.get_enchantment (stack, "depth_strider")
 	local initial_caps = {
 		pose_defs = client_poses[player],
 		movement_arresting_nodes
 			= mcl_serverplayer.movement_arresting_nodes,
 		can_sprint = can_sprint,
 		can_fall_fly = can_fall_fly,
+		depth_strider_level = level,
 	}
 	client_state.pose = POSE_STANDING
 	client_state.anim = "stand"
 	client_state.can_sprint = can_sprint
 	client_state.can_fall_fly = can_fall_fly
+	client_state.depth_strider_level = level
 	client_state.movement_statistics = {
 		dist_swum = 0.0,
 		dist_walked_in_water = 0.0,
@@ -172,6 +176,19 @@ function mcl_serverplayer.sprinting_locally (player)
 		return mcl_serverplayer.client_states[player].is_sprinting
 	end
 	return false
+end
+
+function mcl_serverplayer.set_depth_strider_level (player, level)
+	local state = mcl_serverplayer.client_states[player]
+	if not state then
+		return
+	end
+	if level ~= state.depth_strider_level then
+		state.depth_strider_level = level
+		mcl_serverplayer.send_player_capabilities (player, {
+			depth_strider_level = level,
+		})
+	end
 end
 
 function mcl_serverplayer.set_fall_flying_capable (player, can_fall_fly)
@@ -200,6 +217,13 @@ local function apply_pose (state, player, poseid)
 		collisionbox = pose_table.collisionbox,
 	})
 	player:set_animation (pose_table[state.anim])
+end
+
+function mcl_serverplayer.refresh_pose (player)
+	local state = mcl_serverplayer.client_states[player]
+	if state then
+		apply_pose (state, player, state.override_pose or state.pose)
+	end
 end
 
 function mcl_serverplayer.handle_playerpose (player, state, poseid)
@@ -284,6 +308,20 @@ local SEVENTY_FIVE_DEG = math.rad (75)
 local FIFTY_DEG = math.rad (50)
 local ONE_HUNDRED_AND_TEN_DEG = math.rad (110)
 
+local RIGHT_ARM_BLOCKING_OVERRIDE = {
+	rotation = {
+		vec = vector.new (20, -20, 0):apply (math.rad),
+		absolute = true,
+	},
+}
+
+local LEFT_ARM_BLOCKING_OVERRIDE = {
+	rotation = {
+		vec = vector.new (20, 20, 0):apply (math.rad),
+		absolute = true,
+	},
+}
+
 function mcl_serverplayer.animate_localplayer (state, player)
 	local look_dir = mcl_util.norm_radians (player:get_look_horizontal ())
 	local pose = state.override_pose or state.pose
@@ -308,6 +346,20 @@ function mcl_serverplayer.animate_localplayer (state, player)
 		player:set_bone_override ("Head_Control", {
 			rotation = { vec = rot, absolute = true, },
 		})
+		local blocking = mcl_shields.is_blocking (player)
+		-- Control arm rotation whilst blocking.
+		if blocking == 2 then
+			player:set_bone_override ("Arm_Right_Pitch_Control",
+						RIGHT_ARM_BLOCKING_OVERRIDE)
+			player:set_bone_override ("Arm_Left_Pitch_Control", nil)
+		elseif blocking == 1 then
+			player:set_bone_override ("Arm_Right_Pitch_Control", nil)
+			player:set_bone_override ("Arm_Left_Pitch_Control",
+						LEFT_ARM_BLOCKING_OVERRIDE)
+		else
+			player:set_bone_override ("Arm_Right_Pitch_Control", nil)
+			player:set_bone_override ("Arm_Left_Pitch_Control", nil)
+		end
 	elseif pose == POSE_SWIMMING then
 		local pitch = player:get_look_vertical ()
 		local move_yaw = mcl_util.norm_radians (state.move_yaw)
@@ -535,6 +587,12 @@ function mcl_serverplayer.override_pose (player, poseid)
 			apply_pose (state, player, state.pose)
 			mcl_serverplayer.send_posectrl (player, false)
 		end
+	end
+end
+
+function mcl_serverplayer.handle_blocking (player, blocking)
+	if mcl_serverplayer.is_csm_capable (player) then
+		mcl_serverplayer.send_shieldctrl (player, blocking)
 	end
 end
 
