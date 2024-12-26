@@ -355,7 +355,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		-- Prevent shulker box inception
 		if dctype == 3 then
 			cond = is_not_shulker_box
-		elseif minetest.get_item_group(dnode.name, "hopper") then
+		elseif minetest.get_item_group(dnode.name, "hopper") > 0 then
 			cond = is_room_for_item
 		end
 		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
