@@ -69,6 +69,7 @@ function mcl_armor.update_player(player, info)
 	meta:set_int("mcl_armor:armor_points", info.points)
 
 	mcl_armor.player_view_range_factors[player] = info.view_range_factors
+	mcl_serverplayer.set_fall_flying_capable (player, info.elytra_present)
 end
 
 local function is_armor_action(inventory_info)

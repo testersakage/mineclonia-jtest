@@ -158,7 +158,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		player:get_meta():set_string("mcl_beds:sleeping", "false")
 		hud_flags.wielditem = true
 		mcl_player.player_set_animation(player, "stand" , 30)
-
+		mcl_serverplayer.override_pose (player, nil)
 	-- lay down
 	else
 		local n1 = minetest.get_node({x = bed_pos.x,	y = bed_pos.y + 1,	z = bed_pos.z})
@@ -176,7 +176,9 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		mcl_beds.bed_pos[name] = bed_pos2
 		player_in_bed = player_in_bed + 1
 		-- physics, eye_offset, etc
-		player:set_eye_offset({x = 0, y = -13, z = 0}, {x = 0, y = 0, z = 0})
+		if not mcl_serverplayer.is_csm_capable (player) then
+			player:set_eye_offset({x = 0, y = -13, z = 0}, {x = 0, y = 0, z = 0})
+		end
 		player:set_look_horizontal(yaw)
 
 		-- With head tracking:
@@ -191,6 +193,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		mcl_player.players[player].attached = true
 		hud_flags.wielditem = false
 		mcl_player.player_set_animation(player, "lay" , 0)
+		mcl_serverplayer.override_pose (player, mcl_serverplayer.POSE_SLEEPING)
 	end
 
 	player:hud_set_flags(hud_flags)

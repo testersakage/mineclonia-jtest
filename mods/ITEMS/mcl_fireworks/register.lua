@@ -3,6 +3,15 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local description = S("Firework Rocket")
 
 local function use_rocket(itemstack, user, duration)
+	if mcl_serverplayer.is_csm_capable (user) then
+		if mcl_serverplayer.use_rocket (user, duration) then
+			if not minetest.is_creative_enabled (user:get_player_name()) then
+				itemstack:take_item()
+			end
+			minetest.sound_play("mcl_fireworks_rocket", {pos = user:get_pos()})
+		end
+		return itemstack
+	end
 	local elytra = mcl_player.players[user].elytra
 	if elytra.active and elytra.rocketing <= 0 then
 		elytra.rocketing = duration

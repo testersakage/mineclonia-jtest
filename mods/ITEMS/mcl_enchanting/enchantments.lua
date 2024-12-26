@@ -462,6 +462,11 @@ mcl_experience.register_on_add_xp(function(player, xp)
 			xp = 0
 		end
 
+		local tooldef = stack:get_definition ()
+		if tooldef and tooldef._on_repair then
+			tooldef._on_repair (stack)
+		end
+
 		stack:set_wear(math.floor(new_wear))
 		inv:set_stack(list, index, stack)
 	end

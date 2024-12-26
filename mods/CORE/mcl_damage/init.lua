@@ -15,7 +15,7 @@ mcl_damage = {
 		cactus = {},
 		sweet_berry = {},
 		fall = {bypasses_armor = true},
-		fly_into_wall = {bypasses_armor = true}, -- unused
+		fly_into_wall = {},
 		out_of_world = {bypasses_armor = true, bypasses_magic = true, bypasses_invulnerability = true, bypasses_totem = true},
 		generic = {bypasses_armor = true},
 		magic = {is_magic = true, bypasses_armor = true, bypasses_guardian = true,},

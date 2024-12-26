@@ -242,8 +242,37 @@ function mcl_armor.register_protection_enchantment(def)
 	}
 end
 
+function mcl_armor.elytra_usable (elytra)
+	local durability = mcl_util.calculate_durability (elytra)
+	local remaining = math.floor ((65536 - elytra:get_wear ())
+					* durability / 65536)
+	return remaining > 1
+end
+
+function mcl_armor.disable_elytra (elytra)
+	local meta = elytra:get_meta ()
+	if elytra:get_name () == "mcl_armor:elytra_enchanted" then
+		local img = "mcl_armor_broken_elytra.png" .. mcl_enchanting.overlay
+		meta:set_string ("inventory_image", img)
+	else
+		meta:set_string ("inventory_image", "mcl_armor_broken_elytra.png")
+	end
+end
+
+function mcl_armor.reenable_elytra (elytra)
+	if mcl_armor.elytra_usable (elytra) then
+		local meta = elytra:get_meta ()
+		if elytra:get_name () == "mcl_armor:elytra_enchanted" then
+			local img = "mcl_armor_inv_elytra.png" .. mcl_enchanting.overlay
+			meta:set_string ("inventory_image", img)
+		else
+			meta:set_string ("inventory_image", "mcl_armor_inv_elytra.png")
+		end
+	end
+end
+
 function mcl_armor.update(obj)
-	local info = {points = 0, view_range_factors = {}}
+	local info = {points = 0, view_range_factors = {}, elytra_present = false}
 	local resp_lv = 0
 
 	local inv = mcl_util.get_inventory(obj)
@@ -258,6 +287,10 @@ function mcl_armor.update(obj)
 			end
 
 			if not itemstack:is_empty() then
+				if minetest.get_item_group (itemname, "elytra") > 0
+					and mcl_armor.elytra_usable (itemstack) then
+					info.elytra_present = true
+				end
 				local def = itemstack:get_definition()
 
 				local texture = def._mcl_armor_texture

@@ -270,7 +270,8 @@ local function dolphin_swim_with_player (self, self_pos, dtime)
 	if player then
 		if not is_valid (player)
 			or vector.distance (player:get_pos (), self_pos) >= 16
-			or not mcl_player.players[player].is_swimming then
+			or (not mcl_player.players[player].is_swimming
+			    and not mcl_serverplayer.is_swimming (player)) then
 			self._swimming_with = nil
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
@@ -292,7 +293,9 @@ local function dolphin_swim_with_player (self, self_pos, dtime)
 		local cur_dist, closest_player
 		for player, meta in pairs (mcl_player.players) do
 			local pos
-			if self.attack ~= player and meta.is_swimming then
+			local is_swimming = meta.is_swimming
+				or mcl_serverplayer.is_swimming (player)
+			if self.attack ~= player and is_swimming then
 				pos = player:get_pos ()
 
 				if pos then

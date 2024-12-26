@@ -5,29 +5,34 @@ local animation_blend = 0.2
 
 local player_props_elytra = {
 	collisionbox = { -0.35, 0, -0.35, 0.35, 0.8, 0.35 },
-	eye_height = 0.6,
+	eye_height = 0.4,
 	nametag_color = { r = 225, b = 225, a = 225, g = 225 }
 }
 local player_props_riding = {
-	collisionbox = { -0.312, 0, -0.312, 0.312, 1.8, 0.312 },
-	eye_height = 1.6,
+	collisionbox = { -0.312, 0, -0.312, 0.312, 1.795, 0.312 },
+	eye_height = 1.62,
 	nametag_color = { r = 225, b = 225, a = 225, g = 225 }
 }
 local player_props_sneaking = {
-	collisionbox = { -0.312, 0, -0.312, 0.312, 1.8, 0.312 },
-	eye_height = 1.45,
+	collisionbox = { -0.312, 0, -0.312, 0.312, 1.495, 0.312 },
+	eye_height = 1.27,
 	nametag_color = { r = 225, b = 225, a = 0, g = 225 }
 }
 local player_props_swimming = {
-	collisionbox = { -0.312, 0, -0.312, 0.312, 0.8, 0.312 },
-	eye_height = 0.6,
+	collisionbox = { -0.312, 0, -0.312, 0.312, 0.6, 0.312 },
+	eye_height = 0.4,
 	nametag_color = { r = 225, b = 225, a = 225, g = 225 }
 }
 local player_props_normal = {
-	collisionbox = { -0.312, 0, -0.312, 0.312, 1.8, 0.312 },
-	eye_height = 1.6,
+	collisionbox = { -0.312, 0, -0.312, 0.312, 1.795, 0.312 },
+	eye_height = 1.62,
 	nametag_color = { r = 225, b = 225, a = 225, g = 225 }
 }
+mcl_player.player_props_elytra = player_props_elytra
+mcl_player.player_props_riding = player_props_riding
+mcl_player.player_props_sneaking = player_props_sneaking
+mcl_player.player_props_swimming = player_props_swimming
+mcl_player.player_props_normal = player_props_normal
 
 function mcl_player.player_register_model(name, def)
 	mcl_player.registered_player_models[name] = def
@@ -208,6 +213,7 @@ function mcl_player.player_set_model(player, model_name)
 		})
 		update_player_textures(player)
 		mcl_player.player_set_animation(player, "stand")
+		mcl_serverplayer.post_load_model (player, model)
 	end
 end
 
@@ -267,6 +273,9 @@ local function set_swimming(player, anim, anim_speed)
 end
 
 mcl_player.register_globalstep(function(player)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	local name = player:get_player_name()
 	local model_name = mcl_player.players[player].model
 	local model = model_name and mcl_player.registered_player_models[model_name]

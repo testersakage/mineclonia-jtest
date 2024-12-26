@@ -319,26 +319,38 @@ local function add_physics_factor(object, attribute, mob_field, id, factor, mob_
 	-- mob_field2 and 3 are for cases where two or more mob properties
 	-- must be adjusted, such as walk_velocity and run_velocity and
 	-- their ilk.
-	if object:is_player() then
-		playerphysics.add_physics_factor(object, attribute, id, factor)
+	if object:is_player () then
+		playerphysics.add_physics_factor (object, player_name,
+						  id, factor)
 	else
 		local entity = object:get_luaentity ()
-
-		if entity and entity.is_mob then entity:add_physics_factor(mob_field, id, factor) end
-		if mob_field2 then entity:add_physics_factor(mob_field2, id, factor) end
-		if mob_field3 then entity:add_physics_factor(mob_field3, id, factor) end
+		if entity and entity.is_mob then
+			entity:add_physics_factor (mob_field, id, factor)
+			if mob_field2 then
+				entity:add_physics_factor (mob_field2, id, factor)
+				if mob_field3 then
+					entity:add_physics_factor (mob_field3, id, factor)
+				end
+			end
+		end
 	end
 end
 
-local function remove_physics_factor (object, attribute, mob_field, id, mob_field2, mob_field3)
-	if object:is_player() then
-		playerphysics.remove_physics_factor (object, attribute, id)
+local function remove_physics_factor (object, player_name, mob_field,
+					  id, mob_field2, mob_field3)
+	if object:is_player () then
+		playerphysics.remove_physics_factor (object, player_name, id)
 	else
 		local entity = object:get_luaentity ()
-
-		if entity and entity.is_mob then entity:remove_physics_factor(mob_field, id) end
-		if mob_field2 then entity:remove_physics_factor (mob_field2, id) end
-		if mob_field3 then entity:remove_physics_factor (mob_field3, id) end
+		if entity and entity.is_mob then
+			entity:remove_physics_factor (mob_field, id)
+			if mob_field2 then
+				entity:remove_physics_factor (mob_field2, id)
+				if mob_field3 then
+					entity:remove_physics_factor (mob_field3, id)
+				end
+			end
+		end
 	end
 end
 
@@ -382,10 +394,21 @@ mcl_potions.register_effect({
 	on_start = function(object, factor)
 		add_physics_factor (object, "jump", "jump_height",
 				"mcl_potions:leaping", 1 + factor)
+		if not object:is_player () then
+			return
+		end
+		mcl_serverplayer.add_physics_factor (object, "safe_fall_distance",
+				"mcl_potions:leaping_fall_distance", 2.0 * factor,
+				"add")
 	end,
 	on_end = function(object)
 		remove_physics_factor (object, "jump", "jump_height",
 				   "mcl_potions:leaping")
+		if not object:is_player () then
+			return
+		end
+		mcl_serverplayer.remove_physics_factor (object, "safe_fall_distance",
+				"mcl_potions:leaping_fall_distance")
 	end,
 	particle_color = "#22FF4C",
 	uses_factor = true,
@@ -406,6 +429,10 @@ mcl_potions.register_effect({
 				"mcl_potions:slow_falling", 0.5)
 	end,
 	on_step = function(_, object)
+		if object:is_player ()
+			and mcl_serverplayer.is_csm_capable (object) then
+			return
+		end
 		local vel = object:get_velocity()
 
 		if vel then
@@ -438,13 +465,26 @@ mcl_potions.register_effect({
 		if object:is_player() then
 			playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", speed_to_fov_factor(1 + factor))
 		end
-		add_physics_factor(object, "speed", "movement_speed", "mcl_potions:swiftness", 1 + factor)
+		add_physics_factor (object, "speed", "movement_speed",
+				"mcl_potions:swiftness", 1 + factor)
+		if not object:is_player () then
+			return
+		end
+		mcl_serverplayer.add_physics_factor (object, "movement_speed",
+				"mcl_potions:swiftness", factor,
+				"add_multiplied_total")
 	end,
 	on_end = function(object)
 		if object:is_player() then
 			playerphysics.remove_physics_factor(object, "fov", "mcl_potions:swiftness")
 		end
-		remove_physics_factor (object, "speed", "movement_speed", "mcl_potions:swiftness")
+		remove_physics_factor (object, "speed", "movement_speed",
+				   "mcl_potions:swiftness")
+		if not object:is_player () then
+			return
+		end
+		mcl_serverplayer.remove_physics_factor (object, "movement_speed",
+				"mcl_potions:swiftness")
 	end,
 	particle_color = "#7CAFC6",
 	uses_factor = true,
@@ -465,13 +505,26 @@ mcl_potions.register_effect({
 		if object:is_player() then
 			playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", speed_to_fov_factor(1 - factor))
 		end
-		add_physics_factor(object, "speed", "movement_speed", "mcl_potions:slowness", 1 - factor)
+		add_physics_factor (object, "speed", "movement_speed",
+				"mcl_potions:slowness", 1 - factor)
+		if not object:is_player () then
+			return
+		end
+		mcl_serverplayer.add_physics_factor (object, "movement_speed",
+					     "mcl_potions:slowness", -factor,
+					     "add_multiplied_total")
 	end,
 	on_end = function(object)
 		if object:is_player() then
 			playerphysics.remove_physics_factor(object, "fov", "mcl_potions:slowness")
 		end
-		remove_physics_factor (object, "speed", "movement_speed", "mcl_potions:slowness")
+		remove_physics_factor (object, "speed", "movement_speed",
+				   "mcl_potions:slowness")
+		if not object:is_player () then
+			return
+		end
+		mcl_serverplayer.remove_physics_factor (object, "movement_speed",
+				"mcl_potions:slowness")
 	end,
 	particle_color = "#5A6C81",
 	uses_factor = true,
@@ -486,6 +539,9 @@ mcl_potions.register_effect({
 		return S("moves body upwards at @1 nodes/s", factor)
 	end,
 	on_step = function (_, object, factor)
+		if object:is_player () and mcl_serverplayer.is_csm_capable (object) then
+			return
+		end
 		local entity = object:get_luaentity ()
 		if not entity or not entity._levitation_immune then
 			local v = object:get_velocity ()
@@ -500,6 +556,9 @@ mcl_potions.register_effect({
 			local v = object:get_velocity()
 			if v then
 				add_physics_factor(object, "gravity", "fall_speed", "mcl_potions:levitation", 0)
+				if object:is_player () and mcl_serverplayer.is_csm_capable (object) then
+					return
+				end
 				object:set_acceleration(vector.zero())
 				object:add_velocity(vector.new(0, (0.9 * factor) - v.y, 0))
 			end
@@ -1394,6 +1453,9 @@ minetest.register_globalstep(function(dtime)
 				ent._mcl_potions["_EF_"..name] = nil
 			end
 			end
+			if object:is_player () then
+				mcl_serverplayer.remove_status_effect (object, name)
+			end
 		elseif object:is_player() then
 			if vals.dur == math.huge then
 			object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
@@ -1467,12 +1529,15 @@ function mcl_potions._reset_effects(object, set_hud)
 	for name, effect in pairs(registered_effects) do
 		local val = EF[name][object]
 		if val and effect.on_end then
-		effect.on_end (object)
+			effect.on_end (object)
 		end
 		if val and val.spawner then
 		minetest.delete_particlespawner (val.spawner)
 		end
 		if effect.after_end then table.insert(removed_effects, effect.after_end) end
+		if object:is_player () then
+			mcl_serverplayer.remove_status_effect (object, name)
+		end
 	end
 	for _, tbl in pairs (item_speed_effects) do
 		tbl[object] = nil
@@ -1596,6 +1661,24 @@ function mcl_potions._load_player_effects(player)
 	end
 end
 
+function mcl_potions.send_effects_to_client (player)
+	for effect, list in pairs (EF) do
+		if list[player] then
+			local def = registered_effects[effect]
+			local level = 1
+
+			if def.uses_level then
+				level = def.factor_to_level (list[player].factor)
+			end
+			mcl_serverplayer.send_register_status_effect (player, {
+				name = effect,
+				factor = list[player].factor or 0,
+				level = level,
+			})
+		end
+	end
+end
+
 function mcl_potions._load_entity_effects(entity)
 	if not entity or not entity._mcl_potions or entity._mcl_potions == {} then
 		return
@@ -1678,6 +1761,9 @@ function mcl_potions.clear_effect(object, effectname)
 		end
 		EF[effectname][object] = nil
 		if def.after_end then def.after_end(object) end
+		if object:is_player () then
+			mcl_serverplayer.remove_status_effect (object, effectname)
+		end
 	end
 	if item_speed_effects[effectname] then
 		item_speed_effects[effectname][object] = nil
@@ -1897,22 +1983,34 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 		end
 		EF[name][object] = vals
 		if edef.on_start then edef.on_start(object, factor) end
+		if object:is_player () then
+			mcl_serverplayer.add_status_effect (object, {
+				name = name,
+				factor = factor or 0,
+				level = mcl_potions.get_effect_level (object, name),
+			})
+		end
 	else
 		local present = EF[name][object]
 		present.no_particles = no_particles
 		if not edef.uses_factor or (edef.uses_factor and
 			(not edef.inv_factor and factor >= present.factor
 			 or edef.inv_factor and factor <= present.factor)) then
-				present.dur = math.max(duration, present.dur - present.timer)
-				present.timer = 0
-				if edef.uses_factor then
-					present.factor = factor
-					if edef.timer_uses_factor then present.step = factor end
-					if edef.on_start then edef.on_start(object, factor) end
-				end
-				if duration == "INF" then
-					present.dur = math.huge
-				end
+			present.dur = math.max(duration, present.dur - present.timer)
+			present.timer = 0
+			if edef.uses_factor then
+				present.factor = factor
+				if edef.timer_uses_factor then present.step = factor end
+				if edef.on_start then edef.on_start(object, factor) end
+			end
+			if duration == "INF" then
+				present.dur = math.huge
+			end
+			mcl_serverplayer.add_status_effect (object, {
+				name = name,
+				factor = factor or 0,
+				level = mcl_potions.get_effect_level (object, name),
+			})
 		else
 			-- on_reject must be called at all events if it
 			-- exists, as it will attempt to restore the
@@ -1920,7 +2018,7 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 			-- by `object' have already been spent.  This is
 			-- solely applicable to Absorption AFAICT.
 			if edef.on_reject then
-			return edef.on_reject (object, factor)
+				return edef.on_reject (object, factor)
 			end
 			return false
 		end

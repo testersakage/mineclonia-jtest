@@ -112,7 +112,8 @@ mcl_player.register_globalstep_slow(function(player)
 	-- without group disable_suffocation=1)
 	-- if swimming, check the feet node instead, because the head node will be above the player when swimming
 	local ndef = minetest.registered_nodes[mcl_player.players[player].nodes.head]
-	if mcl_player.players[player].is_swimming then
+	if mcl_player.players[player].is_swimming
+		or mcl_serverplayer.in_singleheight_pose (player) then
 		ndef = minetest.registered_nodes[mcl_player.players[player].nodes.feet]
 	end
 	if (ndef.walkable == nil or ndef.walkable == true)
@@ -131,6 +132,9 @@ end)
 
 -- Change the fall damage dealt depending on the block the player landed on
 mcl_damage.register_modifier(function(obj, damage, reason)
+	if obj:is_player () and mcl_serverplayer.is_csm_capable (obj) then
+		return
+	end
 	if reason.type == "fall" then
 		local pos = obj:get_pos()
 		local node = minetest.get_node(pos)
