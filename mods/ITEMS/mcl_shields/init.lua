@@ -282,6 +282,9 @@ local function handle_blocking(player)
 	local player_shield = mcl_shields.players[player]
 	local rmb = player:get_player_control().RMB
 	if not rmb then
+		if player_shield.blocking ~= 0 then
+			mcl_serverplayer.handle_blocking (player, 0)
+		end
 		player_shield.blocking = 0
 		return
 	end
@@ -294,12 +297,18 @@ local function handle_blocking(player)
 		if not_blocking then
 			minetest.after(0.05, function()
 				if (not_blocking or not shield_in_offhand) and shield_in_hand and rmb then
+					if player_shield.blocking ~= 2 then
+						mcl_serverplayer.handle_blocking (player, 2)
+					end
 					player_shield.blocking = 2
 					set_shield(player, true, 2)
 				end
 			end)
 		elseif not shield_in_offhand then
 			player_shield.blocking = 2
+			if player_shield.blocking ~= 2 then
+				mcl_serverplayer.handle_blocking (player, 2)
+			end
 		end
 	elseif shield_in_offhand then
 		local pointed_thing = mcl_util.get_pointed_thing(player, true)
@@ -323,14 +332,23 @@ local function handle_blocking(player)
 		if not_blocking then
 			minetest.after(0.05, function()
 				if (not_blocking or not shield_in_hand) and shield_in_offhand and rmb  and offhand_can_block then
+					if player_shield.blocking ~= 1 then
+						mcl_serverplayer.handle_blocking (player, 1)
+					end
 					player_shield.blocking = 1
 					set_shield(player, true, 1)
 				end
 			end)
 		elseif not shield_in_hand then
+			if player_shield.blocking ~= 1 then
+				mcl_serverplayer.handle_blocking (player, 1)
+			end
 			player_shield.blocking = 1
 		end
 	else
+		if player_shield.blocking ~= 0 then
+			mcl_serverplayer.handle_blocking (player, 0)
+		end
 		player_shield.blocking = 0
 	end
 end

@@ -47,6 +47,7 @@ local CLIENTBOUND_REMOVE_ATTRIBUTE_MODIFIER = 'AE'
 local CLIENTBOUND_REGISTER_STATUS_EFFECT = 'AF'
 local CLIENTBOUND_REMOVE_STATUS_EFFECT = 'AG'
 local CLIENTBOUND_POSECTRL = 'AH'
+local CLIENTBOUND_SHIELDCTRL = 'AI'
 
 local MAX_PAYLOAD = 65533
 
@@ -104,6 +105,12 @@ end
 function mcl_serverplayer.send_posectrl (player, override)
 	modchannels[player]:send_all (table.concat ({
 		CLIENTBOUND_POSECTRL, override or "",
+	}))
+end
+
+function mcl_serverplayer.send_shieldctrl (player, active_shield)
+	modchannels[player]:send_all (table.concat ({
+		CLIENTBOUND_SHIELDCTRL, active_shield,
 	}))
 end
 
