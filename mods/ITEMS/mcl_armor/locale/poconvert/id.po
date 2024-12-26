@@ -3,21 +3,26 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-25 14:35+0000\n"
+"Last-Translator: Just Playing <jplay2@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Indonesian <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_armor/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
-msgstr "Ini adalah bagian dari baju zirah yang dapat dipakai untuk mengurangi jumlah kerusakan yang Anda terima."
+msgstr ""
+"Ini adalah bagian dari pakaian zirah yang dapat dipakai untuk mengurangi "
+"jumlah kerusakan yang Anda terima."
 
 msgid "To equip it, put it on the corresponding armor slot in your inventory menu."
-msgstr "Untuk memakainya, letakkan pada slot baju zirah yang sesuai di menu inventaris Anda."
+msgstr ""
+"Untuk memakainya, letakkan pada slot pakaian zirah yang sesuai di menu "
+"inventaris Anda."
 
 msgid "Leather Cap"
 msgstr "Topi Kulit"
@@ -32,10 +37,10 @@ msgid "Leather Boots"
 msgstr "Sepatu Kulit"
 
 msgid "Colorize a piece of leather armor, or wash it"
-msgstr "Warnai sepotong baju zirah kulit, atau cucilah"
+msgstr "Warnai sepotong pakaian zirah kulit, atau cucilah"
 
 msgid "Not leather armor."
-msgstr "Bukan baju zirah kulit."
+msgstr "Bukan pakaian zirah kulit."
 
 msgid "Washed."
 msgstr "Dicuci."
@@ -50,7 +55,7 @@ msgid "Golden Helmet"
 msgstr "Helm Emas"
 
 msgid "Golden Chestplate"
-msgstr "Zirah Emas"
+msgstr "Baju Emas"
 
 msgid "Golden Leggings"
 msgstr "Celana Emas"
@@ -62,7 +67,7 @@ msgid "Chainmail Helmet"
 msgstr "Helm Rantai"
 
 msgid "Chainmail Chestplate"
-msgstr "Pelindung Dada Rantai"
+msgstr "Baju Rantai"
 
 msgid "Chainmail Leggings"
 msgstr "Celana Rantai"
@@ -74,7 +79,7 @@ msgid "Iron Helmet"
 msgstr "Helm Besi"
 
 msgid "Iron Chestplate"
-msgstr "Pelindung Dada Besi"
+msgstr "Baju Besi"
 
 msgid "Iron Leggings"
 msgstr "Celana Besi"
@@ -86,7 +91,7 @@ msgid "Diamond Helmet"
 msgstr "Helm Berlian"
 
 msgid "Diamond Chestplate"
-msgstr "Pelindung Dada Berlian"
+msgstr "Baju Berlian"
 
 msgid "Diamond Leggings"
 msgstr "Celana Berlian"
@@ -98,7 +103,7 @@ msgid "Netherite Helmet"
 msgstr "Helm Netherite"
 
 msgid "Netherite Chestplate"
-msgstr "Pelindung Dada Netherite"
+msgstr "Baju Netherite"
 
 msgid "Netherite Leggings"
 msgstr "Celana Netherite"
@@ -146,7 +151,9 @@ msgid "Curse of Binding"
 msgstr "Kutukan Pengikatan"
 
 msgid "Item cannot be removed from armor slots except due to death, breaking or in Creative Mode."
-msgstr "Item tidak dapat dihapus dari slot armor kecuali karena kematian, rusak atau dalam Mode Kreatif."
+msgstr ""
+"Barang tidak dapat dihapus dari slot pakaian Zirah kecuali karena kematian, "
+"rusak atau dalam Mode Kreatif."
 
 msgid "Thorns"
 msgstr "Duri"
@@ -155,13 +162,13 @@ msgid "Reflects some of the damage taken when hit, at the cost of reducing durab
 msgstr "Memantulkan sebagian kerusakan yang diterima saat terkena, dengan mengorbankan daya tahan pada setiap proses."
 
 msgid "Elytra"
-msgstr ""
+msgstr "Sayap"
 
 msgid "Smithing Template"
 msgstr "Templat Penempaan"
 
 msgid "@1 Armor Trim"
-msgstr "@1 hiasan baju besi"
+msgstr "@1 Hiasan Zirah"
 
 msgid "Applies to:"
 msgstr "Berlaku untuk:"
@@ -174,4 +181,3 @@ msgstr "Bahan-bahan:"
 
 msgid "Ingot & Crystals"
 msgstr "Batangan dan Kristal"
-

@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 13:04+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Stick"
 msgstr "Bâton"
@@ -509,37 +511,37 @@ msgid "Spruce leaves are grown from Spruce trees."
 msgstr "Les feuilles de sapin poussent sur les sapins."
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "Écorce d'acacia poncée"
 
 msgid "Stripped Acacia Log"
 msgstr "Bûche d'acacia écorcée"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "Écorce de bouleau poncée"
 
 msgid "Stripped Birch Log"
 msgstr "Bûche de bouleau écorcé"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "Écorce de chêne noir poncée"
 
 msgid "Stripped Dark Oak Log"
 msgstr "Bûche de chêne noir écorcée"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "Écorce d'acajou poncée"
 
 msgid "Stripped Jungle Log"
 msgstr "Bûche d'acajou écorcée"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "Écorce de chêne poncée"
 
 msgid "Stripped Oak Log"
 msgstr "Bûche de chêne écorcée"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "Écorce de sapin poncée"
 
 msgid "Stripped Spruce Log"
 msgstr "Bûche de sapin écorcée"
@@ -980,7 +982,7 @@ msgid "Stained glass is a decorative and mostly transparent block which comes in
 msgstr "Le verre est un bloc décoratif et principalement transparent qui se décline en différentes couleurs."
 
 msgid "Stained Glass"
-msgstr "Verre teinté"
+msgstr "Verre coloré"
 
 msgid "Flowing Water"
 msgstr "Eau qui coule"
@@ -1188,4 +1190,3 @@ msgstr "Escalier en pierre taillée moussue"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "Dalle en pierre taillée moussue"
-

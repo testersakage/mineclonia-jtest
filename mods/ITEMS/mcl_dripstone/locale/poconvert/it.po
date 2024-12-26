@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_dripstone x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-12-23 18:52+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_dripstone/it/>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
+
+msgid "Dripstone block"
+msgstr "Blocco di speleotema"
+
+msgid "Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"
+msgstr ""
+
+msgid "Pointed dripstone"
+msgstr "Speleotema appuntito"
+
+msgid "Pointed dripstone is what stalagmites and stalagtites are made of"
+msgstr ""
+
+msgid "Pointed dripstone (@1/@2)"
+msgstr "Speleotema appuntito (@1/@2)"

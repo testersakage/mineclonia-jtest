@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 18:52+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_farming/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Beetroot Seeds"
 msgstr "Semi di Barbabietola"
@@ -44,7 +46,7 @@ msgid "A mature beetroot plant is a farming plant which is ready to be harvested
 msgstr ""
 
 msgid "Beetroot"
-msgstr ""
+msgstr "Barbabietola"
 
 msgid "Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too."
 msgstr ""
@@ -53,7 +55,7 @@ msgid "Hold it in your hand and right-click to eat it. Rightclick an animal to f
 msgstr ""
 
 msgid "Beetroot Soup"
-msgstr ""
+msgstr "Zuppa di barbabietole"
 
 msgid "Beetroot soup is a food item."
 msgstr ""
@@ -77,7 +79,7 @@ msgid "Mature carrot plants are ready to be harvested for carrots. They won't gr
 msgstr ""
 
 msgid "Carrot"
-msgstr ""
+msgstr "Carota"
 
 msgid "Carrots can be eaten and planted. Pigs and rabbits like carrots."
 msgstr ""
@@ -86,7 +88,7 @@ msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmlan
 msgstr ""
 
 msgid "Golden Carrot"
-msgstr ""
+msgstr "Carota d'oro"
 
 msgid "A golden carrot is a precious food item which can be eaten. It is really, really filling!"
 msgstr ""
@@ -101,28 +103,28 @@ msgid "Use the hoe on a cultivatable block (by rightclicking it) to turn it into
 msgstr ""
 
 msgid "Wood Hoe"
-msgstr ""
+msgstr "Zappa di legno"
 
 msgid "Uses: @1"
 msgstr ""
 
 msgid "Stone Hoe"
-msgstr ""
+msgstr "Zappa di pietra"
 
 msgid "Iron Hoe"
-msgstr ""
+msgstr "Zappa di ferro"
 
 msgid "Golden Hoe"
-msgstr ""
+msgstr "Zappa d'oro"
 
 msgid "Diamond Hoe"
-msgstr ""
+msgstr "Zappa di diamante"
 
 msgid "Netherite Hoe"
-msgstr ""
+msgstr "Zappa di netherite"
 
 msgid "Melon Seeds"
-msgstr ""
+msgstr "Semi di anguria"
 
 msgid "Grows into a melon stem which in turn grows melons. Chickens like melon seeds."
 msgstr ""
@@ -131,7 +133,7 @@ msgid "Place the melon seeds on farmland (which can be created with a hoe) to pl
 msgstr ""
 
 msgid "Melon"
-msgstr ""
+msgstr "Anguria"
 
 msgid "A melon is a block which can be grown from melon stems, which in turn are grown from melon seeds. It can be harvested for melon slices."
 msgstr ""
@@ -152,7 +154,7 @@ msgid "A mature melon stem attempts to grow a melon at one of its four adjacent 
 msgstr ""
 
 msgid "Melon Slice"
-msgstr ""
+msgstr "Fetta di anguria"
 
 msgid "This is a food item which can be eaten."
 msgstr ""
@@ -173,7 +175,7 @@ msgid "Mature potato plants are ready to be harvested for potatoes. They won't g
 msgstr ""
 
 msgid "Potato"
-msgstr ""
+msgstr "Patata"
 
 msgid "Potatoes are food items which can be eaten, cooked in the furnace and planted. Pigs like potatoes."
 msgstr ""
@@ -182,13 +184,13 @@ msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmlan
 msgstr ""
 
 msgid "Baked Potato"
-msgstr ""
+msgstr "Patata al forno"
 
 msgid "Baked potatoes are food items which are more filling than the unbaked ones."
 msgstr ""
 
 msgid "Poisonous Potato"
-msgstr ""
+msgstr "Patata velenosa"
 
 msgid "60% chance of poisoning"
 msgstr ""
@@ -197,7 +199,7 @@ msgid "This potato doesn't look too healthy. You can eat it to restore hunger po
 msgstr ""
 
 msgid "Pumpkin Seeds"
-msgstr ""
+msgstr "Semi di zucca"
 
 msgid "Grows into a pumpkin stem which in turn grows pumpkins. Chickens like pumpkin seeds."
 msgstr ""
@@ -221,7 +223,7 @@ msgid "A mature pumpkin stem attempts to grow a pumpkin at one of its four adjac
 msgstr ""
 
 msgid "Faceless Pumpkin"
-msgstr ""
+msgstr "Zucca senza faccia"
 
 msgid "A faceless pumpkin is a decorative block. It can be carved with shears to obtain pumpkin seeds."
 msgstr ""
@@ -230,25 +232,25 @@ msgid "To carve a face into the pumpkin, use the shears on the side you want to 
 msgstr ""
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "Zucca"
 
 msgid "A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds."
 msgstr ""
 
 msgid "Jack o'Lantern"
-msgstr ""
+msgstr "Lanterna di zucca"
 
 msgid "A jack o'lantern is a traditional Halloween decoration made from a pumpkin. It glows brightly."
 msgstr ""
 
 msgid "Pumpkin Pie"
-msgstr ""
+msgstr "Torta di zucca"
 
 msgid "A pumpkin pie is a tasty food item which can be eaten."
 msgstr ""
 
 msgid "Farmland"
-msgstr ""
+msgstr "Terra zappata"
 
 msgid "Surface for crops"
 msgstr ""
@@ -269,10 +271,10 @@ msgid "Sweet Berry Bush (Stage @1)"
 msgstr ""
 
 msgid "Sweet Berry"
-msgstr ""
+msgstr "Bacche dolci"
 
 msgid "Wheat Seeds"
-msgstr ""
+msgstr "Semi di grano"
 
 msgid "Grows into a wheat plant. Chickens like wheat seeds."
 msgstr ""
@@ -287,7 +289,7 @@ msgid "Mature Wheat Plant"
 msgstr ""
 
 msgid "Wheat"
-msgstr ""
+msgstr "Grano"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
 msgstr ""
@@ -296,13 +298,13 @@ msgid "Use the “Place” key on an animal to try to feed it wheat."
 msgstr ""
 
 msgid "Cookie"
-msgstr ""
+msgstr "Biscotto"
 
 msgid "Bread"
-msgstr ""
+msgstr "Pane"
 
 msgid "Hay Bale"
-msgstr ""
+msgstr "Balla di fieno"
 
 msgid "Hay bales are decorative blocks made from wheat."
 msgstr ""
@@ -324,4 +326,3 @@ msgid "\n"
 "		They won't grow any further.\n"
 "	"
 msgstr ""
-

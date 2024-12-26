@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 13:04+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_beds/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Beds allow you to sleep at night and make the time pass faster."
 msgstr "I letti ti permettono di dormire di notte e velocizzano il passaggio del tempo."
@@ -35,7 +37,7 @@ msgid "Allows you to sleep"
 msgstr ""
 
 msgid "Bed"
-msgstr ""
+msgstr "Letto"
 
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr ""
@@ -107,53 +109,52 @@ msgid "New respawn position set!"
 msgstr "E' stata definita la nuova posizione di generazione!"
 
 msgid "Black Bed"
-msgstr ""
+msgstr "Letto nero"
 
 msgid "Blue Bed"
-msgstr ""
+msgstr "Letto blu"
 
 msgid "Brown Bed"
-msgstr ""
+msgstr "Letto marrone"
 
 msgid "Cyan Bed"
-msgstr ""
+msgstr "Letto ciano"
 
 msgid "Green Bed"
-msgstr ""
+msgstr "Letto verde"
 
 msgid "Grey Bed"
-msgstr ""
+msgstr "Letto grigio"
 
 msgid "Light Blue Bed"
-msgstr ""
+msgstr "Letto azzurro"
 
 msgid "Light Grey Bed"
-msgstr ""
+msgstr "Letto grigio chiaro"
 
 msgid "Lime Bed"
-msgstr ""
+msgstr "Letto lime"
 
 msgid "Magenta Bed"
-msgstr ""
+msgstr "Letto magenta"
 
 msgid "Orange Bed"
-msgstr ""
+msgstr "Letto arancione"
 
 msgid "Pink Bed"
-msgstr ""
+msgstr "Letto rosa"
 
 msgid "Purple Bed"
-msgstr ""
+msgstr "Letto viola"
 
 msgid "Red Bed"
-msgstr ""
+msgstr "Letto rosso"
 
 msgid "White Bed"
-msgstr ""
+msgstr "Letto bianco"
 
 msgid "Yellow Bed"
-msgstr ""
+msgstr "Letto giallo"
 
 msgid "Respawn Anchor"
-msgstr ""
-
+msgstr "Ancora della rinascita"

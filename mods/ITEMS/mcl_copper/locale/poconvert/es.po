@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-22 03:51+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_copper/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Copper Ingot"
 msgstr "Lingote de cobre"
@@ -29,13 +30,13 @@ msgid "Block of Copper"
 msgstr "Bloque de cobre"
 
 msgid "Block of Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Bloque de Cobre es principalmente un bloque decorativo."
 
 msgid "Chiseled Copper"
 msgstr "Cobre cincelado"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cincelado es principalmente un bloque decorativo."
 
 msgid "Copper Bulb"
 msgstr "Lámpara de cobre"
@@ -44,7 +45,7 @@ msgid "Copper Bulb On"
 msgstr "Lámpara de cobre encendida"
 
 msgid "Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La Lámpara de Cobre es principalmente un bloque decorativo."
 
 msgid "Copper Door"
 msgstr "Puerta de cobre"
@@ -53,7 +54,7 @@ msgid "Copper Grate"
 msgstr "Rejilla de cobre"
 
 msgid "Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La Rejilla de Cobre es principalmente un bloque decorativo."
 
 msgid "Copper Trapdoor"
 msgstr "Trampilla de cobre"
@@ -68,13 +69,13 @@ msgid "Cut Copper Stairs"
 msgstr "Escaleras de cobre cortado"
 
 msgid "Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cortado es principalmente un bloque decorativo."
 
 msgid "Exposed Chiseled Copper"
 msgstr "Cobre cincelado expuesto"
 
 msgid "Exposed Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cincelado Expuesto es principalmente un bloque decorativo."
 
 msgid "Exposed Copper"
 msgstr "Cobre expuesto"
@@ -86,7 +87,7 @@ msgid "Exposed Copper Bulb On"
 msgstr "Lámpara de cobre expuesto encendida"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La Lámpara de Cobre Expuesto es principalmente un bloque decorativo."
 
 msgid "Exposed Copper Door"
 msgstr "Puerta de cobre expuesto"
@@ -95,13 +96,13 @@ msgid "Exposed Copper Grate"
 msgstr "Rejilla de cobre expuesto"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La Rejilla de Cobre Expuesto es principalmente un bloque decorativo."
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Trampilla de cobre expuesto"
 
 msgid "Exposed Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Expuesto es principalmente un bloque decorativo."
 
 msgid "Exposed Cut Copper"
 msgstr "Cobre cortado expuesto"
@@ -113,13 +114,13 @@ msgid "Exposed Cut Copper Stairs"
 msgstr "Escaleras de cobre cortado expuesto"
 
 msgid "Exposed Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cortado Expuesto es principalmente un bloque decorativo."
 
 msgid "Oxidized Chiseled Copper"
 msgstr "Cobre cincelado oxidado"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cincelado Oxidado es principalmente un bloque decorativo."
 
 msgid "Oxidized Copper"
 msgstr "Cobre oxidado"
@@ -131,7 +132,7 @@ msgid "Oxidized Copper Bulb On"
 msgstr "Lámpara de cobre oxidado encendida"
 
 msgid "Oxidized Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La Lámpara de Cobre Oxidado es principalmente un bloque decorativo."
 
 msgid "Oxidized Copper Door"
 msgstr "Puerta de cobre oxidado"
@@ -140,13 +141,13 @@ msgid "Oxidized Copper Grate"
 msgstr "Rejilla de cobre oxidado"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La Rejilla de Cobre Oxidado es principalmente un bloque decorativo."
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Trampilla de cobre oxidado"
 
 msgid "Oxidized Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Oxidado es principalmente un bloque decorativo."
 
 msgid "Oxidized Cut Copper"
 msgstr "Cobre cortado oxidado"
@@ -158,7 +159,7 @@ msgid "Oxidized Cut Copper Stairs"
 msgstr "Escaleras de cobre cortado oxidado"
 
 msgid "Oxidized Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cortado Oxidado es principalmente un bloque decorativo."
 
 msgid "Waxed Block of Copper"
 msgstr "Bloque de cobre encerado"
@@ -188,7 +189,7 @@ msgid "Waxed Cut Copper Stairs"
 msgstr "Escaleras de cobre cortado encerado"
 
 msgid "Waxed Double @1"
-msgstr ""
+msgstr "Encerado Doble @1"
 
 msgid "Waxed Exposed Chiseled Copper"
 msgstr "Cobre cincelado expuesto encerado"
@@ -245,7 +246,7 @@ msgid "Waxed Oxidized Cut Copper Stairs"
 msgstr "Escaleras de cobre cortado oxidado encerado"
 
 msgid "Waxed Upper @1"
-msgstr ""
+msgstr "Parte Superior Encerada @1"
 
 msgid "Waxed Weathered Chiseled Copper"
 msgstr "Cobre cincelado degradado encerado"
@@ -278,7 +279,7 @@ msgid "Weathered Chiseled Copper"
 msgstr "Cobre cincelado degradado"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cincelado Degradado es principalmente un bloque decorativo."
 
 msgid "Weathered Copper"
 msgstr "Cobre degradado"
@@ -290,7 +291,7 @@ msgid "Weathered Copper Bulb On"
 msgstr "Lámpara de cobre degradado encendida"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La Lámpara de Cobre Degradado es principalmente un bloque decorativo."
 
 msgid "Weathered Copper Door"
 msgstr "Puerta de cobre degradado"
@@ -299,13 +300,13 @@ msgid "Weathered Copper Grate"
 msgstr "Rejilla de cobre degradado"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La Rejilla de Cobre Degradado es principalmente un bloque decorativo."
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Trampilla de cobre degradado"
 
 msgid "Weathered Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Degradado es principalmente un bloque decorativo."
 
 msgid "Weathered Cut Copper"
 msgstr "Cobre cortado degradado"
@@ -317,7 +318,7 @@ msgid "Weathered Cut Copper Stairs"
 msgstr "Escaleras de cobre cortado degradado"
 
 msgid "Weathered Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "El Cobre Cortado Degradado es principalmente un bloque decorativo."
 
 msgid "Copper Ore"
 msgstr "Mena de cobre"
@@ -330,4 +331,3 @@ msgstr "Bloque de cobre en bruto"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Un bloque utilizado para el almacenamiento compacto de cobre crudo."
-

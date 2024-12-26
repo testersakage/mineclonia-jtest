@@ -3,126 +3,128 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 18:52+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_deepslate/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Deepslate"
-msgstr "Ardesia Profonda"
+msgstr "Ardesia oscura"
 
 msgid "Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone."
 msgstr "L'ardesia profonda è un tipo di pietra trovato sottoterra a grandi profondità nell'Overworld. Funziona in maniera simile alla roccia classica, ma è più resistente."
 
 msgid "Infested Deepslate"
-msgstr "Ardesia Profonda Infestata"
+msgstr "Ardesia oscura infestata"
 
 msgid "Reinforced Deepslate"
-msgstr ""
+msgstr "Ardesia oscura armata"
 
 msgid "Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode."
 msgstr ""
 
 msgid "Deepslate Coal Ore"
-msgstr ""
+msgstr "Minerale di carbone in ardesia oscura"
 
 msgid "Deepslate Iron Ore"
-msgstr ""
+msgstr "Minerale di ferro in ardesia oscura"
 
 msgid "Deepslate Gold Ore"
-msgstr ""
+msgstr "Minerale d'oro in ardesia oscura"
 
 msgid "Deepslate Emerald Ore"
-msgstr ""
+msgstr "Minerale di smeraldo in ardesia oscura"
 
 msgid "Deepslate Diamond Ore"
-msgstr ""
+msgstr "Minerale di diamante in ardesia oscura"
 
 msgid "Deepslate Lapis Lazuli Ore"
-msgstr ""
+msgstr "Minerale di lapislazzuli in ardesia oscura"
 
 msgid "Deepslate Redstone Ore"
-msgstr ""
+msgstr "Minerale di redstone in ardesia oscura"
 
 msgid "Lit Deepslate Redstone Ore"
 msgstr ""
 
 msgid "Deepslate Copper Ore"
-msgstr ""
+msgstr "Minerale di rame in ardesia oscura"
 
 msgid "Cobbled Deepslate"
-msgstr ""
+msgstr "Pietrisco di ardesia oscura"
 
 msgid "Cobbled deepslate is a stone variant that functions similar to cobblestone or blackstone."
 msgstr ""
 
 msgid "Cobbled Deepslate Stairs"
-msgstr ""
+msgstr "Scalini di pietrisco di ardesia oscura"
 
 msgid "Cobbled Deepslate Slab"
-msgstr ""
+msgstr "Lastra di pietrisco di ardesia oscura"
 
 msgid "Cobbled Deepslate Wall"
-msgstr ""
+msgstr "Muretto di pietrisco di ardesia oscura"
 
 msgid "Polished Deepslate"
-msgstr ""
+msgstr "Ardesia oscura levigata"
 
 msgid "Polished deepslate is the stone-like polished version of deepslate."
 msgstr ""
 
 msgid "Polished Deepslate Stairs"
-msgstr ""
+msgstr "Scalini di ardesia oscura levigata"
 
 msgid "Polished Deepslate Slab"
-msgstr ""
+msgstr "Lastra di ardesia oscura levigata"
 
 msgid "Polished Deepslate Wall"
-msgstr ""
+msgstr "Muretto di ardesia oscura levigata"
 
 msgid "Deepslate Bricks"
-msgstr ""
+msgstr "Mattoni di ardesia oscura"
 
 msgid "Deepslate bricks are the brick version of deepslate."
 msgstr ""
 
 msgid "Deepslate Brick Stairs"
-msgstr ""
+msgstr "Scalini di mattoni di ardesia oscura"
 
 msgid "Deepslate Brick Slab"
-msgstr ""
+msgstr "Lastra di mattoni di ardesia oscura"
 
 msgid "Deepslate Brick Wall"
-msgstr ""
+msgstr "Muretto di mattoni di ardesia oscura"
 
 msgid "Cracked Deepslate Bricks"
-msgstr ""
+msgstr "Mattoni di ardesia oscura crepati"
 
 msgid "Deepslate Tiles"
-msgstr ""
+msgstr "Piastrelle di ardesia oscura"
 
 msgid "Deepslate tiles are a decorative variant of deepslate."
 msgstr ""
 
 msgid "Deepslate Tile Stairs"
-msgstr ""
+msgstr "Scalini di piastrelle di ardesia oscura"
 
 msgid "Deepslate Tile Slab"
-msgstr ""
+msgstr "Lastra di piastrelle di ardesia oscura"
 
 msgid "Deepslate Tiles Wall"
-msgstr ""
+msgstr "Muretto di piastrelle di ardesia oscura"
 
 msgid "Cracked Deepslate Tiles"
-msgstr ""
+msgstr "Piastrelle di ardesia oscura crepate"
 
 msgid "Chiseled Deepslate"
-msgstr ""
+msgstr "Ardesia oscura cesellata"
 
 msgid "@1 is a variant of @2 that can generate in deepslate and tuff blobs."
 msgstr ""
@@ -131,59 +133,58 @@ msgid "@1 are a cracked variant."
 msgstr ""
 
 msgid "Tuff"
-msgstr ""
+msgstr "Tufo"
 
 msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
 msgstr ""
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "Tufo cesellato"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
 msgstr ""
 
 msgid "Chiseled Tuff Bricks"
-msgstr ""
+msgstr "Mattoni di tufo cesellati"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr ""
 
 msgid "Tuff Stairs"
-msgstr ""
+msgstr "Scalini di tufo"
 
 msgid "Tuff Slab"
-msgstr ""
+msgstr "Lastra di tufo"
 
 msgid "Tuff Wall"
-msgstr ""
+msgstr "Muretto di tufo"
 
 msgid "Polished Tuff"
-msgstr ""
+msgstr "Tufo levigato"
 
 msgid "Polished tuff is a polished variant of the tuff block."
 msgstr ""
 
 msgid "Polished Tuff Stairs"
-msgstr ""
+msgstr "Scalini di tufo levigato"
 
 msgid "Polished Tuff Slab"
-msgstr ""
+msgstr "Lastra di tufo levigato"
 
 msgid "Polished Tuff Wall"
-msgstr ""
+msgstr "Muretto di tufo levigato"
 
 msgid "Tuff Bricks"
-msgstr ""
+msgstr "Mattoni di tufo"
 
 msgid "Tuff bricks are a brick variant of tuff."
 msgstr ""
 
 msgid "Tuff Bricks Stairs"
-msgstr ""
+msgstr "Scalini di mattoni di tufo"
 
 msgid "Tuff Bricks Slab"
-msgstr ""
+msgstr "Lastra di mattoni di tufo"
 
 msgid "Tuff Bricks Wall"
-msgstr ""
-
+msgstr "Muretto di mattoni di tufo"

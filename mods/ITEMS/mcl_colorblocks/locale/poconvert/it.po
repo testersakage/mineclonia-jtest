@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_colorblocks x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-23 13:04+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_colorblocks/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Terracotta is a basic building material. It comes in many different colors."
 msgstr "La terracotta è un materiale da costruzione basilare. È disponibile in molti colori diversi."
@@ -29,212 +31,211 @@ msgid "Turns into concrete on water contact"
 msgstr ""
 
 msgid "Terracotta"
-msgstr ""
+msgstr "Terracotta"
 
 msgid "Terracotta is a basic building material which comes in many different colors. This particular block is uncolored."
 msgstr ""
 
 msgid "Colored Terracotta"
-msgstr ""
+msgstr "Terracotta colorata"
 
 msgid "Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata"
 
 msgid "Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo"
 
 msgid "Concrete"
-msgstr ""
+msgstr "Calcestruzzo"
 
 msgid "Black Concrete"
-msgstr ""
+msgstr "Calcestruzzo nero"
 
 msgid "Black Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo nera"
 
 msgid "Black Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata nera"
 
 msgid "Black Terracotta"
-msgstr ""
+msgstr "Terracotta nera"
 
 msgid "Blue Concrete"
-msgstr ""
+msgstr "Calcestruzzo blu"
 
 msgid "Blue Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo blu"
 
 msgid "Blue Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata blu"
 
 msgid "Blue Terracotta"
-msgstr ""
+msgstr "Terracotta blu"
 
 msgid "Brown Concrete"
-msgstr ""
+msgstr "Calcestruzzo marrone"
 
 msgid "Brown Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo marrone"
 
 msgid "Brown Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata marrone"
 
 msgid "Brown Terracotta"
-msgstr ""
+msgstr "Terracotta marrone"
 
 msgid "Cyan Concrete"
-msgstr ""
+msgstr "Calcestruzzo ciano"
 
 msgid "Cyan Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo ciano"
 
 msgid "Cyan Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata ciano"
 
 msgid "Cyan Terracotta"
-msgstr ""
+msgstr "Terracotta ciano"
 
 msgid "Green Concrete"
-msgstr ""
+msgstr "Calcestruzzo verde"
 
 msgid "Green Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo verde"
 
 msgid "Green Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata verde"
 
 msgid "Green Terracotta"
-msgstr ""
+msgstr "Terracotta verde"
 
 msgid "Grey Concrete"
-msgstr ""
+msgstr "Calcestruzzo grigio"
 
 msgid "Grey Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo grigia"
 
 msgid "Grey Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata grigia"
 
 msgid "Grey Terracotta"
-msgstr ""
+msgstr "Terracotta grigia"
 
 msgid "Light Blue Concrete"
-msgstr ""
+msgstr "Calcestruzzo azzurro"
 
 msgid "Light Blue Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo azzurra"
 
 msgid "Light Blue Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata azzurra"
 
 msgid "Light Blue Terracotta"
-msgstr ""
+msgstr "Terracotta azzurra"
 
 msgid "Light Grey Concrete"
-msgstr ""
+msgstr "Calcestruzzo grigio chiaro"
 
 msgid "Light Grey Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo grigio chiaro"
 
 msgid "Light Grey Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata grigio chiaro"
 
 msgid "Light Grey Terracotta"
-msgstr ""
+msgstr "Terracotta grigio chiaro"
 
 msgid "Lime Concrete"
-msgstr ""
+msgstr "Calcestruzzo lime"
 
 msgid "Lime Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo lime"
 
 msgid "Lime Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata lime"
 
 msgid "Lime Terracotta"
-msgstr ""
+msgstr "Terracotta lime"
 
 msgid "Magenta Concrete"
-msgstr ""
+msgstr "Calcestruzzo magenta"
 
 msgid "Magenta Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo magenta"
 
 msgid "Magenta Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata magenta"
 
 msgid "Magenta Terracotta"
-msgstr ""
+msgstr "Terracotta magenta"
 
 msgid "Orange Concrete"
-msgstr ""
+msgstr "Calcestruzzo arancione"
 
 msgid "Orange Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo arancione"
 
 msgid "Orange Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata arancione"
 
 msgid "Orange Terracotta"
-msgstr ""
+msgstr "Terracotta arancione"
 
 msgid "Pink Concrete"
-msgstr ""
+msgstr "Calcestruzzo rosa"
 
 msgid "Pink Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo rosa"
 
 msgid "Pink Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata rosa"
 
 msgid "Pink Terracotta"
-msgstr ""
+msgstr "Terracotta rosa"
 
 msgid "Purple Concrete"
-msgstr ""
+msgstr "Calcestruzzo viola"
 
 msgid "Purple Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo viola"
 
 msgid "Purple Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata viola"
 
 msgid "Purple Terracotta"
-msgstr ""
+msgstr "Terracotta viola"
 
 msgid "Red Concrete"
-msgstr ""
+msgstr "Calcestruzzo rosso"
 
 msgid "Red Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo rossa"
 
 msgid "Red Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata rossa"
 
 msgid "Red Terracotta"
-msgstr ""
+msgstr "Terracotta rossa"
 
 msgid "White Concrete"
-msgstr ""
+msgstr "Calcestruzzo bianco"
 
 msgid "White Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo bianca"
 
 msgid "White Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata bianca"
 
 msgid "White Terracotta"
-msgstr ""
+msgstr "Terracotta bianca"
 
 msgid "Yellow Concrete"
-msgstr ""
+msgstr "Calcestruzzo giallo"
 
 msgid "Yellow Concrete Powder"
-msgstr ""
+msgstr "Polvere di calcestruzzo gialla"
 
 msgid "Yellow Glazed Terracotta"
-msgstr ""
+msgstr "Terracotta smaltata gialla"
 
 msgid "Yellow Terracotta"
-msgstr ""
-
+msgstr "Terracotta gialla"

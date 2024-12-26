@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-19 07:45+0000\n"
+"Last-Translator: Zozosticot <Zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_nether/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 msgid "Glowstone"
 msgstr "Pierre lumineuse"
@@ -89,37 +91,37 @@ msgid "Pillar Quartz Block"
 msgstr "Bloc de Quartz rayé"
 
 msgid "Smooth Quartz"
-msgstr "Quartz Lisse"
+msgstr "Quartz lisse"
 
 msgid "Quartz Stairs"
 msgstr "Escalier en quartz"
 
 msgid "Quartz Slab"
-msgstr "Dalle en quartz"
+msgstr "Dalle de quartz"
 
 msgid "Smooth Quartz Stairs"
 msgstr "Escalier en quartz lisse"
 
 msgid "Smooth Quartz Slab"
-msgstr "Dalle en quartz lisse"
+msgstr "Dalle de quartz lisse"
 
 msgid "Nether Brick Stairs"
-msgstr "Escalier en brique du Nether"
+msgstr "Escalier en briques du Nether"
 
 msgid "Nether Brick Slab"
-msgstr "Dalle en briques du Nether"
+msgstr "Dalle de briques du Nether"
 
 msgid "Red Nether Brick Stairs"
 msgstr "Escalier en briques rouges du Nether"
 
 msgid "Red Nether Brick Slab"
-msgstr "Dalle en briques rouges du Nether"
+msgstr "Dalle de briques rouges du Nether"
 
 msgid "Nether Brick Fence"
-msgstr "Barrière en brique du Nether"
+msgstr "Barrière en briques du Nether"
 
 msgid "Glowstone Dust"
-msgstr "Poudre Lumineuse"
+msgstr "Poudre lumineuse"
 
 msgid "Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."
 msgstr "La poudre lumineuse est la poussière qui sort des pierres lumineuses brisées. Elle est principalement utilisée dans l'artisanat."
@@ -149,7 +151,7 @@ msgid "Nether bricks are the main crafting ingredient for crafting nether brick 
 msgstr "Les briques du Nether sont le principal ingrédient pour la fabrication de blocs de briques et de clôtures du Nether."
 
 msgid "Netherite Upgrade Template"
-msgstr "Modèle de mise à niveau en Netherite"
+msgstr "Modèle d'amélioration en Netherite"
 
 msgid "Applies to:"
 msgstr "S'applique à :"
@@ -164,13 +166,13 @@ msgid "Ingredients:"
 msgstr "Ingrédients :"
 
 msgid "Nether Lava Source"
-msgstr "Source de Lave du Nether"
+msgstr "Source de lave du Nether"
 
 msgid "Flowing Nether Lava"
 msgstr "Lave du Nether en mouvement"
 
 msgid "Premature Nether Wart (Stage 1)"
-msgstr "Verrue du Néant prématurée (étape 1)"
+msgstr "Verrue du Nether prématurée (étape 1)"
 
 msgid "A premature nether wart has just recently been planted on soul sand. Nether wart slowly grows on soul sand in 4 stages (the second and third stages look identical). Although nether wart is home to the Nether, it grows in any dimension."
 msgstr "Une verrue du Nether prématurée vient d'être plantée sur du sable d'âme. La verrue du Nether pousse lentement sur le sable de l'âme en 4 étapes (les deuxième et troisième étapes semblent identiques). Bien que la verrue du Nether soit originaire du Nether, elle se développe dans toutes les dimensions."
@@ -198,4 +200,3 @@ msgstr "Les verrues du Nether sont des plantes originaires du Nether. Elles peuv
 
 msgid "Place this item on soul sand to plant it and watch it grow."
 msgstr "Placez cet article sur du sable d'âme pour le planter et regardez-le grandir."
-
