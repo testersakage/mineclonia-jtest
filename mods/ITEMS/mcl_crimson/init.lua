@@ -400,6 +400,7 @@ minetest.register_node("mcl_crimson:warped_wart_block", {
 	tiles = {"warped_wart_block.png"},
 	groups = {handy = 1, hoey = 7, swordy = 1, deco_block = 1, compostability = 85},
 	_mcl_hardness = 1,
+	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_leaves_defaults({
 			footstep={name="default_dirt_footstep", gain=0.7},
 			dug={name="default_dirt_footstep", gain=1.5},
