@@ -23,10 +23,6 @@ function liquid.register_liquid(def)
   local NAME_FLOWING = def.name_flowing
   assert(NAME_FLOWING)
 
-  local SLOPE_RANGE = def.liquid_slope_range or 0
-  assert(SLOPE_RANGE >= 0 and SLOPE_RANGE < 8)
-
-
   local FLOW_DISTANCE = def.liquid_range or 7
   assert(FLOW_DISTANCE >= 0 and FLOW_DISTANCE < 8)
 
@@ -34,19 +30,14 @@ function liquid.register_liquid(def)
   local TICKS     = (def.liquid_tick or 0.5) * liquid.tick
 
 
+  -- This table is a function that calculates then next lower liquid level.
   local level_tb = {}
   for i = 0, 9 do
     level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) /  8) * 8 / (FLOW_DISTANCE+1))
   end
 
 
-  local MAX_FLOW_LEVEL = level_tb[8]
-
-
-
-
   local queue = {}
-  local uniq  = {}
 
   local changed_nodes = {}
   local read_nodes = {}
@@ -54,9 +45,8 @@ function liquid.register_liquid(def)
 
   local function queue_push(item)
     local h = core.hash_node_position(item.pos)
-    if uniq[h] == nil then
-      uniq[h] = item
-      table.insert(queue, item)
+    if queue[h] == nil then
+      queue[h] = item
     end
   end
 
@@ -146,7 +136,7 @@ function liquid.register_liquid(def)
     elseif nl then
       return 1
     elseif n.name == 'ignore' then
-      core.log('ignore')
+      --core.log('ignore')
       return nil
     else
       local ndef = core.registered_nodes[n.name]
@@ -536,7 +526,6 @@ function liquid.register_liquid(def)
     ndef._liquid_ticks       = TICKS
     ndef._liquid_renewable   = RENEWABLE
     ndef._liquid_range       = FLOW_DISTANCE
-    ndef._liquid_slope_range = SLOPE_RANGE
     
     if not ndef.groups then
       ndef.groups = { }
@@ -599,11 +588,25 @@ function liquid.register_liquid(def)
   
     run_at_every_load = true,
   
-  
     bulk_action = function(pos_list, dtime_s)
       core.after(5, function(pos_list)
         for i, pos in ipairs(pos_list) do
-          liquid_update(pos)
+          local n111 =  core.get_node(pos + vector.new( 0, 0, 0))
+          local n011 =  core.get_node(pos + vector.new(-1, 0, 0))
+          local n211 =  core.get_node(pos + vector.new( 1, 0, 0))
+          local n110 =  core.get_node(pos + vector.new( 0, 0,-1))
+          local n112 =  core.get_node(pos + vector.new( 0, 0, 1))
+          local n101 =  core.get_node(pos + vector.new( 0,-1, 0))
+
+          if n101.name ~= NAME_SOURCE or 
+             n111.name ~= NAME_SOURCE or 
+             n011.name ~= NAME_SOURCE or 
+             n211.name ~= NAME_SOURCE or 
+             n110.name ~= NAME_SOURCE or 
+             n112.name ~= NAME_SOURCE then 
+
+            liquid_update(pos)
+           end
         end
       end, pos_list)
     end,
@@ -615,18 +618,19 @@ function liquid.register_liquid(def)
   local function run()
     core.after(TICKS, function()
       local q = queue
-      uniq = {}
       queue = {}
 
 
       read_nodes = {}
       changed_nodes = {}
 
-      for i, item in ipairs(q) do
+      for _, item in pairs(q) do
         flow_iteration(item)
       end
 
+--      local change_count = 0
       for h, node in pairs(changed_nodes) do
+--        change_count = change_count + 1
         local pos = core.get_position_from_hash(h)
 
         local old = read_nodes[h]
@@ -640,6 +644,8 @@ function liquid.register_liquid(def)
         end
       end
 
+--      core.log('debug', 'changes: '..change_count)
+--
       if liquid.running then
         run()
       end
