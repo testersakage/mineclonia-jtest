@@ -679,7 +679,7 @@ end
 
 function mcl_util.replace_mob (obj, mob_type, propagate_equipment)
 	local sacrifice = obj:get_luaentity ()
-	sacrifice:replace_with (mob_type, propagate_equipment)
+	return sacrifice:replace_with (mob_type, propagate_equipment)
 end
 
 -- This function is essentially a wrapper around minetest.raycast to get the currently pointed at "pointed_thing"
