@@ -217,6 +217,16 @@ minetest.register_craftitem("mcl_dripstone:pointed_dripstone", {
 
 for i = 1, #dripstone_stages do
 	local stage = dripstone_stages[i]
+	local add = ( i - 1 ) / 16
+	local box_top = {
+		type = "fixed",
+		fixed = { math.max(-0.5, -3/16 - add), -0.5, math.max(-0.5, -3/16 - add), math.min(0.5, 3/16 + add), 0.5, math.min(3/16 + add) },
+	}
+	local box_bottom = {
+		type = "fixed",
+		fixed = { math.max(-0.5, -3/16 - add), -0.5, math.max(-0.5, -3/16 - add), math.min(0.5, 3/16 + add), 0.5, math.min(0.5, 3/16 + add) },
+	}
+
 	minetest.register_node("mcl_dripstone:dripstone_top_" .. stage, {
 		description = S("Pointed dripstone (@1/@2)", i, #dripstone_stages),
 		_doc_items_longdesc = S("Pointed dripstone is what stalagmites and stalagtites are made of"),
@@ -228,6 +238,8 @@ for i = 1, #dripstone_stages do
 		sunlight_propagates = true,
 		paramtype = "light",
 		is_ground_content = false,
+		selection_box = box_top,
+		collision_box = box_top,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		on_destruct = on_dripstone_destruct,
 		_mcl_blast_resistance = 3,
@@ -245,6 +257,8 @@ for i = 1, #dripstone_stages do
 		sunlight_propagates = true,
 		paramtype = "light",
 		is_ground_content = false,
+		selection_box = box_bottom,
+		collision_box = box_bottom,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		on_destruct = on_dripstone_destruct,
 		_mcl_blast_resistance = 3,
