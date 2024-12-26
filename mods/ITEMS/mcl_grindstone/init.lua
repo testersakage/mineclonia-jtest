@@ -42,6 +42,10 @@ local function create_new_item(name_item, meta, wear)
 	local new_item = ItemStack(name_item)
 	if wear ~= nil then
 		new_item:set_wear(wear)
+		local tooldef = new_item:get_definition ()
+		if tooldef and tooldef._on_repair then
+			tooldef._on_repair (new_item)
+		end
 	end
 	local new_meta = new_item:get_meta()
 	new_meta:set_string("name", meta:get_string("name"))

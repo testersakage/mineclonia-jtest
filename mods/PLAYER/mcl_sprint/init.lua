@@ -18,7 +18,9 @@ local players = {}
 -- Returns nil if player does not exist.
 function mcl_sprint.is_sprinting(playername)
 	if players[playername] then
+		local player = minetest.get_player_by_name (playername)
 		return players[playername].sprinting
+			or mcl_serverplayer.sprinting_locally (playername)
 	else
 		return nil
 	end
@@ -31,7 +33,6 @@ minetest.register_on_joinplayer(function(player)
 		sprinting = false,
 		timeOut = 0,
 		shouldSprint = false,
-		clientSprint = false,
 		lastPos = player:get_pos(),
 		sprintDistance = 0,
 		fov = 1.0,
@@ -42,11 +43,6 @@ minetest.register_on_leaveplayer(function(player)
 	local playerName = player:get_player_name()
 	players[playerName] = nil
 end)
-
-local function cancelClientSprinting(name)
-	players[name].channel:send_all("")
-	players[name].clientSprint = false
-end
 
 local function setSprinting(playerName, sprinting) --Sets the state of a player (0=stopped/moving, 1=sprinting)
 	if not sprinting and not mcl_sprint.is_sprinting(playerName) then return end
@@ -104,15 +100,32 @@ local function get_top_node_tile(param2, paramtype2)
 end
 mcl_sprint.get_top_node_tile = get_top_node_tile
 
-minetest.register_on_modchannel_message(function(channel_name, sender, message)
-	if channel_name == "mcl_sprint:" .. sender then
-		players[sender].clientSprint = minetest.is_yes(message)
+function mcl_sprint.spawn_particles (player, self_pos)
+	-- Sprint node particles
+	local playerNode = minetest.get_node (vector.offset (self_pos, 0, -1, 0))
+	local def = minetest.registered_nodes[playerNode.name]
+	if def and def.walkable then
+		minetest.add_particlespawner({
+			amount = math.random(1, 2),
+			time = 1,
+			minpos = {x=-0.5, y=0.1, z=-0.5},
+			maxpos = {x=0.5, y=0.1, z=0.5},
+			minvel = {x=0, y=5, z=0},
+			maxvel = {x=0, y=5, z=0},
+			minacc = {x=0, y=-13, z=0},
+			maxacc = {x=0, y=-13, z=0},
+			minexptime = 0.1,
+			maxexptime = 1,
+			minsize = 0.5,
+			maxsize = 1.5,
+			collisiondetection = true,
+			attached = player,
+			vertical = false,
+			node = playerNode,
+			node_tile = get_top_node_tile(playerNode.param2, def.paramtype2),
+		})
 	end
-end)
-
-minetest.register_on_respawnplayer(function(player)
-	cancelClientSprinting(player:get_player_name())
-end)
+end
 
 minetest.register_globalstep(function()
 	--Get the gametime
@@ -121,13 +134,11 @@ minetest.register_globalstep(function()
 	--Loop through all connected players
 	for playerName, playerInfo in pairs(players) do
 		local player = minetest.get_player_by_name(playerName)
-		if player then
+		if player and not mcl_serverplayer.is_csm_capable (player) then
 			local ctrl = player:get_player_control()
 			--Check if the player should be sprinting
-			if players[playerName]["clientSprint"] or ctrl.aux1 and ctrl.up and not ctrl.sneak then
+			if ctrl.aux1 and ctrl.up and not ctrl.sneak then
 				players[playerName]["shouldSprint"] = true
-			else
-				players[playerName]["shouldSprint"] = false
 			end
 
 			local playerPos = player:get_pos()
@@ -143,30 +154,7 @@ minetest.register_globalstep(function()
 					players[playerName].sprintDistance = players[playerName].sprintDistance - superficial
 				end
 
-				-- Sprint node particles
-				local playerNode = minetest.get_node({x=playerPos["x"], y=playerPos["y"]-1, z=playerPos["z"]})
-				local def = minetest.registered_nodes[playerNode.name]
-				if def and def.walkable then
-					minetest.add_particlespawner({
-						amount = math.random(1, 2),
-						time = 1,
-						minpos = {x=-0.5, y=0.1, z=-0.5},
-						maxpos = {x=0.5, y=0.1, z=0.5},
-						minvel = {x=0, y=5, z=0},
-						maxvel = {x=0, y=5, z=0},
-						minacc = {x=0, y=-13, z=0},
-						maxacc = {x=0, y=-13, z=0},
-						minexptime = 0.1,
-						maxexptime = 1,
-						minsize = 0.5,
-						maxsize = 1.5,
-						collisiondetection = true,
-						attached = player,
-						vertical = false,
-						node = playerNode,
-						node_tile = get_top_node_tile(playerNode.param2, def.paramtype2),
-					})
-				end
+				mcl_sprint.spawn_particles (player, playerPos)
 			end
 
 			--Adjust player states

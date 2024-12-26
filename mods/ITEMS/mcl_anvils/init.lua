@@ -165,6 +165,11 @@ local function update_anvil_slots(meta, player)
 			if def1.type == "tool" and def2.type == "tool" then
 				local new_wear = calculate_repair(input1:get_wear(), input2:get_wear(), SAME_TOOL_REPAIR_BOOST)
 				input1:set_wear(new_wear)
+
+				local tooldef = input1:get_definition ()
+				if tooldef and tooldef._on_repair then
+					tooldef._on_repair (input1)
+				end
 			end
 
 			add_cost(meta, enchanting_level_requirements)
@@ -210,6 +215,9 @@ local function update_anvil_slots(meta, player)
 					local new_wear = calculate_repair(tool:get_wear(), MAX_WEAR, MATERIAL_TOOL_REPAIR_BOOST[materials_used])
 					add_cost(meta, 2)
 					tool:set_wear(new_wear)
+					if tooldef and tooldef._on_repair then
+						tooldef._on_repair (tool)
+					end
 					name_item = tool
 					new_output = name_item
 				else

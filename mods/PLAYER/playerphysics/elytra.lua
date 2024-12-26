@@ -18,6 +18,10 @@ local function clamp(num, min, max)
 end
 
 mcl_player.register_globalstep(function(player, dtime)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
+
 	local fly_pos = player:get_pos()
 	local fly_node = minetest.get_node({x = fly_pos.x, y = fly_pos.y - 0.1, z = fly_pos.z}).name
 	local player_vel = player:get_velocity()

@@ -216,6 +216,9 @@ end)
 
 -- JUMP EXHAUSTION
 mcl_player.register_globalstep(function(player, dtime)
+if mcl_serverplayer.is_csm_capable (player) then
+	return
+end
 local name = player:get_player_name()
 local node_stand, node_stand_below, node_head, node_feet, node_head_top
 
@@ -280,6 +283,9 @@ if player:get_player_control().jump and mcl_player.players[player].jump_cooldown
 end)
 
 mcl_player.register_globalstep_slow(function(player)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	--[[ Swimming: Cause exhaustion.
 	NOTE: As of 0.4.15, it only counts as swimming when you are with the feet inside the liquid!
 	Head alone does not count. We respect that for now. ]]
