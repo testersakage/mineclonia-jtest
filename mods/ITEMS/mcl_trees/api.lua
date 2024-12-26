@@ -161,6 +161,7 @@ end
 local tpl_log = {
 	_doc_items_hidden = false,
 	paramtype2 = "facedir",
+	is_ground_content = false,
 	groups = table.merge(wood_groups, {
 		tree = 1, building_block = 1, supports_mushrooms=2
 	}),
@@ -188,6 +189,7 @@ local tpl_leaves = {
 	waving = 2,
 	paramtype = "light",
 	paramtype2 = "color",
+	is_ground_content = false,
 	palette = "mcl_core_palette_leaves.png",
 	groups = {
 		handy = 1, hoey = 1, shearsy = 1, swordy = 1, dig_by_piston = 1,
