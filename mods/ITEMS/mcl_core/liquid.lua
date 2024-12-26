@@ -587,29 +587,27 @@ function liquid.register_liquid(def)
     nodenames = {NAME_SOURCE, NAME_FLOWING},
   
     run_at_every_load = true,
-  
-    bulk_action = function(pos_list, dtime_s)
-      core.after(5, function(pos_list)
-        for i, pos in ipairs(pos_list) do
-          local n111 =  core.get_node(pos + vector.new( 0, 0, 0))
-          local n011 =  core.get_node(pos + vector.new(-1, 0, 0))
-          local n211 =  core.get_node(pos + vector.new( 1, 0, 0))
-          local n110 =  core.get_node(pos + vector.new( 0, 0,-1))
-          local n112 =  core.get_node(pos + vector.new( 0, 0, 1))
-          local n101 =  core.get_node(pos + vector.new( 0,-1, 0))
 
-          if n101.name ~= NAME_SOURCE or 
-             n111.name ~= NAME_SOURCE or 
-             n011.name ~= NAME_SOURCE or 
-             n211.name ~= NAME_SOURCE or 
-             n110.name ~= NAME_SOURCE or 
-             n112.name ~= NAME_SOURCE then 
+    action = function(pos, node, dtime_s)
+      local n111 =  node
+      local n011 =  core.get_node(pos + vector.new(-1, 0, 0))
+      local n211 =  core.get_node(pos + vector.new( 1, 0, 0))
+      local n110 =  core.get_node(pos + vector.new( 0, 0,-1))
+      local n112 =  core.get_node(pos + vector.new( 0, 0, 1))
+      local n101 =  core.get_node(pos + vector.new( 0,-1, 0))
 
-            liquid_update(pos)
-           end
-        end
-      end, pos_list)
-    end,
+      if n101.name ~= NAME_SOURCE or 
+        n111.name ~= NAME_SOURCE or 
+        n011.name ~= NAME_SOURCE or 
+        n211.name ~= NAME_SOURCE or 
+        n110.name ~= NAME_SOURCE or 
+        n112.name ~= NAME_SOURCE then 
+
+        core.after(5, function()
+          liquid_update(pos)
+        end)
+      end
+     end,
   })
 
   resume_counter = resume_counter + 1
