@@ -646,7 +646,10 @@ function liquid.register_liquid(def)
     end)
   end
 
-  liquid.registered_liquids[#liquid.registered_liquids+1] = run
+  liquid.registered_liquids[#liquid.registered_liquids+1] = {
+    run = run,
+    update = liquid_update,
+  }
 
   if liquid.running then
     run()
@@ -654,8 +657,14 @@ function liquid.register_liquid(def)
 end
 
 function liquid.run()
-  for i, run in ipairs(liquid.registered_liquids) do
-    run()
+  for i, o in ipairs(liquid.registered_liquids) do
+    o.run()
+  end
+end
+
+function liquid.update(pos)
+  for i, o in ipairs(liquid.registered_liquids) do
+    o.update(pos)
   end
 end
 
