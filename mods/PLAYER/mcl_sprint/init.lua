@@ -20,7 +20,7 @@ function mcl_sprint.is_sprinting(playername)
 	if players[playername] then
 		local player = minetest.get_player_by_name (playername)
 		return players[playername].sprinting
-			or mcl_serverplayer.sprinting_locally (playername)
+			or mcl_serverplayer.sprinting_locally (player)
 	else
 		return nil
 	end
@@ -165,7 +165,6 @@ minetest.register_globalstep(function()
 				if (mcl_hunger.active and mcl_hunger.get_hunger(player) <= 6)
 				or (player:get_meta():get_string("mcl_beds:sleeping") == "true") then
 					sprinting = false
-					cancelClientSprinting(playerName)
 				else
 					sprinting = true
 				end

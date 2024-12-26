@@ -486,7 +486,7 @@ function mcl_serverplayer.handle_damage (player, payload)
 		end
 		local reason = {type = "fly_into_wall"}
 		mcl_damage.finish_reason (reason)
-		mcl_damage.damage_player (player, damage, reason)		
+		mcl_damage.damage_player (player, damage, reason)
 	else
 		local blurb = "Client requesting unknown damage: "
 			.. dump (payload)

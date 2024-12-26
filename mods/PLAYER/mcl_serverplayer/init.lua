@@ -61,7 +61,7 @@ end
 
 function mcl_serverplayer.send_rocket_use (player, duration)
 	modchannels[player]:send_all (table.concat ({
-		CLIENTBOUND_ROCKET_USE, duration,					  
+		CLIENTBOUND_ROCKET_USE, duration,
 	}))
 end
 
@@ -69,7 +69,7 @@ function mcl_serverplayer.send_register_attribute_modifier (player, modifier)
 	local modifier = minetest.write_json (modifier)
 	assert (#modifier <= MAX_PAYLOAD, "oversized ClientboundRegisterAttributeModifier")
 	modchannels[player]:send_all (table.concat ({
-		CLIENTBOUND_REGISTER_ATTRIBUTE_MODIFIER, modifier, 
+		CLIENTBOUND_REGISTER_ATTRIBUTE_MODIFIER, modifier,
 	}))
 end
 
