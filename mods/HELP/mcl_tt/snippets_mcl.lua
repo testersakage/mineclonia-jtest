@@ -53,10 +53,10 @@ end)
 tt.register_snippet(function(itemstring)
 	local def = minetest.registered_items[itemstring]
 	local s = ""
-	if def.groups.eatable and def.groups.eatable > 0 then
+	if def and def.groups.eatable and def.groups.eatable > 0 then
 		s = s .. S("Hunger points: +@1", def.groups.eatable)
 	end
-	if def._mcl_saturation and def._mcl_saturation > 0 then
+	if def and def._mcl_saturation and def._mcl_saturation > 0 then
 		if s ~= "" then
 			s = s .. "\n"
 		end
@@ -74,16 +74,16 @@ end)
 
 tt.register_snippet(function(itemstring)
 	local def = minetest.registered_items[itemstring]
-	if def.groups.place_flowerlike == 1 then
+	if def and def.groups.place_flowerlike == 1 then
 		return S("Grows on grass blocks or dirt")
-	elseif def.groups.place_flowerlike == 2 then
+	elseif def and def.groups.place_flowerlike == 2 then
 		return S("Grows on grass blocks, podzol, dirt or coarse dirt")
 	end
 end)
 
 tt.register_snippet(function(itemstring)
 	local def = minetest.registered_items[itemstring]
-	if def.groups.flammable then
+	if def and def.groups.flammable then
 		return S("Flammable")
 	end
 end)
@@ -109,20 +109,20 @@ end)
 tt.register_snippet(function(itemstring, _, itemstack)
 	if not itemstack then return end
 	local def = itemstack:get_definition()
-	if def.groups._mcl_potion ~= 1 then return end
+	if def and def.groups._mcl_potion ~= 1 then return end
 
 	local s = ""
 	local meta = itemstack:get_meta()
 	local potency = meta:get_int("mcl_potions:potion_potent")
 	local plus = meta:get_int("mcl_potions:potion_plus")
 	local sl_factor = 1
-	if def.groups.splash_potion == 1 then
+	if def and def.groups.splash_potion == 1 then
 		sl_factor = mcl_potions.SPLASH_FACTOR
-	elseif def.groups.ling_potion == 1 then
+	elseif def and def.groups.ling_potion == 1 then
 		sl_factor = mcl_potions.LINGERING_FACTOR
 	end
-	if def._dynamic_tt then s = s.. def._dynamic_tt((potency+1)*sl_factor).. "\n" end
-	local effects = def._effect_list
+	if def and def._dynamic_tt then s = s.. def._dynamic_tt((potency+1)*sl_factor).. "\n" end
+	local effects = def and def._effect_list
 	if effects then
 		local effect
 		local dur
