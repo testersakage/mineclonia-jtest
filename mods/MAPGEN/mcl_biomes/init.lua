@@ -1771,7 +1771,7 @@ local function register_biomes()
 		node_cave_liquid = "mcl_core:water_source",
 		depth_riverbed = 2,
 		y_min = mcl_vars.mg_overworld_min,
-		y_max = 0,
+		y_max = -1,
 		vertical_blend = 1,
 		humidity_point = 50,
 		heat_point = 50,
