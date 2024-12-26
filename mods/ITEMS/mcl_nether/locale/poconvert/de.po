@@ -151,6 +151,9 @@ msgstr "Netherziegel werden hauptsächlich zur Fertigung von Netherziegelblöcke
 msgid "Netherite Upgrade Template"
 msgstr ""
 
+msgid "Smithing Template"
+msgstr ""
+
 msgid "Applies to:"
 msgstr ""
 

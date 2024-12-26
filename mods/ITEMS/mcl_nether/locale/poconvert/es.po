@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-23 22:28+0000\n"
-"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_nether/es/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Glowstone"
 msgstr "Piedra luminosa"
@@ -25,9 +23,7 @@ msgid "Nether Quartz Ore"
 msgstr "Mineral de cuarzo del Nether"
 
 msgid "Nether quartz ore is an ore containing nether quartz. It is commonly found around netherrack in the Nether."
-msgstr ""
-"El mineral de cuarzo del Nether es un mineral que contiene cuarzo del "
-"Nether. Se encuentra comúnmente rodeado de netherrack en el Nether."
+msgstr "El mineral de cuarzo del Nether es un mineral que contiene cuarzo del Nether. Se encuentra comúnmente rodeado de netherrack en el Nether."
 
 msgid "Ancient Debris"
 msgstr "Escombros ancestrales"
@@ -39,9 +35,7 @@ msgid "Block of Netherite"
 msgstr "Bloque de netherita"
 
 msgid "Netherite block is very hard and can be made of 9 netherite ingots."
-msgstr ""
-"El bloque de netherita es muy duro y puede estar formado por 9 lingotes de "
-"netherita."
+msgstr "El bloque de netherita es muy duro y puede estar formado por 9 lingotes de netherita."
 
 msgid "Netherrack"
 msgstr "Netherrack"
@@ -157,6 +151,9 @@ msgstr "Los ladrillos del Nether son el ingrediente principal para la creacion d
 msgid "Netherite Upgrade Template"
 msgstr "Mejora de netherita"
 
+msgid "Smithing Template"
+msgstr ""
+
 msgid "Applies to:"
 msgstr "Se aplica a:"
 
@@ -204,3 +201,4 @@ msgstr "Las verrugas del nether son plantas que le pueden encontrar en el nether
 
 msgid "Place this item on soul sand to plant it and watch it grow."
 msgstr "Coloque este ítem en la arena de almas para plantarla y verla crecer."
+

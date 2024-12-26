@@ -48,8 +48,8 @@ Item cannot be removed from armor slots except due to death, breaking or in Crea
 Thorns=Шипы
 Reflects some of the damage taken when hit, at the cost of reducing durability with each proc.=Отражает немного полученного урона при ударе ценой снижения прочности при срабатывании.
 Elytra=Элитра
-Smithing Template=Кузнечный шаблон
 @1 Armor Trim=@1 Окантовка брони
+Smithing Template=Кузнечный шаблон
 Applies to:=Применяется для:
 Armor=Броня
 Ingredients:=Ингредиенты:

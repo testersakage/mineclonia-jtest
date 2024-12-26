@@ -157,11 +157,11 @@ msgstr "Reflektiert einen Teil des Schadens sobald getroffen, jedoch auf Kosten 
 msgid "Elytra"
 msgstr "Elytren"
 
-msgid "Smithing Template"
-msgstr "Schmiedevorlage"
-
 msgid "@1 Armor Trim"
 msgstr ""
+
+msgid "Smithing Template"
+msgstr "Schmiedevorlage"
 
 msgid "Applies to:"
 msgstr ""

@@ -48,8 +48,8 @@ Item cannot be removed from armor slots except due to death, breaking or in Crea
 Thorns=荆棘
 Reflects some of the damage taken when hit, at the cost of reducing durability with each proc.=受到攻击时会反弹部分所受伤害，但每次触发该效果都会损耗装备的耐久度。
 Elytra=鞘翅
-Smithing Template=锻造模板
 @1 Armor Trim=@1 盔甲纹饰
+Smithing Template=锻造模板
 Applies to:=适用于：
 Armor=护甲
 Ingredients:=原料：

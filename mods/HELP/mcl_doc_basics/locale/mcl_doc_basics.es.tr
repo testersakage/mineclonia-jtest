@@ -279,7 +279,7 @@ Cooking=
 Cooking (or smelting) is a form of crafting which does not involve a crafting grid. Cooking is done with a special block (like a furnace), an cookable item, a fuel item and time in order to yield a new item.=
 Each fuel item has a burning time. This is the time a single item of the fuel keeps a furnace burning.=
 Each cookable item requires time to be cooked. This time is specific to the item type and the item must be “on fire” for the whole cooking time to actually yield the result.=
-Hunger=
+Hunger=Hambre
 Hunger affects your health and your ability to sprint. Hunger is not in effect when damage is disabled.=
 Core hunger rules:=
 • You start with 20/20 hunger points (more points @= less hungry)=

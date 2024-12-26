@@ -157,10 +157,10 @@ msgstr "Reflekterer skade ved træfning, men koster holdbarhed ved hver brug."
 msgid "Elytra"
 msgstr "Elytra"
 
-msgid "Smithing Template"
+msgid "@1 Armor Trim"
 msgstr ""
 
-msgid "@1 Armor Trim"
+msgid "Smithing Template"
 msgstr ""
 
 msgid "Applies to:"

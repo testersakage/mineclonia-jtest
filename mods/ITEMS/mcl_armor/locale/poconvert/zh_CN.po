@@ -157,11 +157,11 @@ msgstr "受到攻击时会反弹部分所受伤害，但每次触发该效果都
 msgid "Elytra"
 msgstr "鞘翅"
 
-msgid "Smithing Template"
-msgstr "锻造模板"
-
 msgid "@1 Armor Trim"
 msgstr "@1 盔甲纹饰"
+
+msgid "Smithing Template"
+msgstr "锻造模板"
 
 msgid "Applies to:"
 msgstr "适用于："

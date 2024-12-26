@@ -157,10 +157,10 @@ msgstr "Reflete parte do dano tomado aos custos de reduzir a durabilidade com ca
 msgid "Elytra"
 msgstr "Elytra"
 
-msgid "Smithing Template"
+msgid "@1 Armor Trim"
 msgstr ""
 
-msgid "@1 Armor Trim"
+msgid "Smithing Template"
 msgstr ""
 
 msgid "Applies to:"

@@ -1,15 +1,15 @@
 # textdomain: mcl_commandblock
-Command blocks are not enabled on this server=Les blocks de commandes ne sont pas activés sur ce serveur
+Command blocks are not enabled on this server=Les blocs de commandes ne sont pas activés sur ce serveur
 Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands.=Erreur : la commande "@1" n'existe pas ; votre bloc de commande n'a pas été modifié. Utilisez la commande de discussion "help" pour obtenir la liste des commandes disponibles.
 Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash.=Erreur : la commande "@1" n'existe pas ; votre bloc de commande n'a pas été modifié. Utilisez la commande de discussion "help" pour obtenir la liste des commandes disponibles. Astuce : essayez de supprimer la barre oblique principale.
-Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.=Erreur : vous ne disposez pas de privilèges suffisants pour utiliser la commande "@1" (privilège manquant : @2) ! Le bloc de commandes n'a pas été modifié.
+Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.=Erreur : vous ne disposez pas de privilèges suffisants pour utiliser la commande "@1" (privilège manquant : @2) ! Le bloc de commande n'a pas été modifié.
 Error: No commander! Block must be replaced.=Erreur : pas de commandant ! Le bloc doit être remplacé.
 Commander: @1=Commandant : @1
 Submit=Soumettre
 No commands.=Aucune commande.
 Commands:=Commandes :
-Help=Aide
-Command Block=Bloc de Commande
+Help=Rubrique d'aide
+Command Block=Bloc de commande
 Placement denied. You need the “maphack” privilege to place command blocks.=Placement refusé. Vous avez besoin du privilège "maphack" pour placer des blocs de commande.
 Executes server commands when powered by redstone power=Exécute les commandes du serveur lorsqu'il est alimenté par l'alimentation Redstone
 Command blocks are mighty redstone components which are able to alter reality itself. In other words, they cause the server to execute server commands when they are supplied with redstone power.=Les blocs de commande sont des composants redstone puissants qui sont capables de modifier la réalité elle-même. En d'autres termes, ils obligent le serveur à exécuter des commandes serveur lorsqu'ils sont alimentés en redstone.

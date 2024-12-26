@@ -1,6 +1,6 @@
 # textdomain: mcl_books
 Book=Livre
-Books are used to make bookshelves and book and quills.=Les livres sont utilisés pour fabriquer des étagères et des livres avec unes plumes.
+Books are used to make bookshelves and book and quills.=Les livres sont utilisés pour fabriquer des étagères et des livres avec une plume.
 “@1”="@1"
 Copy of “@1”=Copie de "@1"
 Copy of Copy of “@1”=Copie de Copie de "@1"
@@ -8,7 +8,7 @@ Tattered Book=Livre en lambeaux
 by @1=par @1
 # as in “to sign a book”
 Sign=Signer
-Done=Fait
+Done=Terminé
 Book and Quill=Livre et plume
 Write down some notes=Prenez quelques notes
 This item can be used to write down some notes.=Cet élément peut être utilisé pour prendre quelques notes.

@@ -151,6 +151,9 @@ msgstr "ネザーレンガは、ネザーレンガブロックやネザーフェ
 msgid "Netherite Upgrade Template"
 msgstr ""
 
+msgid "Smithing Template"
+msgstr ""
+
 msgid "Applies to:"
 msgstr ""
 

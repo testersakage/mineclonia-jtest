@@ -157,11 +157,11 @@ msgstr "受けたダメージの一部を与え返せますが、その代わり
 msgid "Elytra"
 msgstr "エリトラ"
 
-msgid "Smithing Template"
-msgstr "鍛冶型"
-
 msgid "@1 Armor Trim"
 msgstr ""
+
+msgid "Smithing Template"
+msgstr "鍛冶型"
 
 msgid "Applies to:"
 msgstr ""

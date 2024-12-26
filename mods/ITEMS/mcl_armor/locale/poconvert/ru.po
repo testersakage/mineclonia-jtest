@@ -157,11 +157,11 @@ msgstr "Отражает немного полученного урона при
 msgid "Elytra"
 msgstr "Элитра"
 
-msgid "Smithing Template"
-msgstr "Кузнечный шаблон"
-
 msgid "@1 Armor Trim"
 msgstr "@1 Окантовка брони"
+
+msgid "Smithing Template"
+msgstr "Кузнечный шаблон"
 
 msgid "Applies to:"
 msgstr "Применяется для:"

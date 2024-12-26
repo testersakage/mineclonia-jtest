@@ -157,11 +157,11 @@ msgstr "Refleja una parte del daño recibido al golpear, a costa de reducir la d
 msgid "Elytra"
 msgstr "Élitros"
 
-msgid "Smithing Template"
-msgstr "Plantilla de herrería"
-
 msgid "@1 Armor Trim"
 msgstr "Adorno de armadura @1"
+
+msgid "Smithing Template"
+msgstr "Plantilla de herrería"
 
 msgid "Applies to:"
 msgstr "Se aplica a:"

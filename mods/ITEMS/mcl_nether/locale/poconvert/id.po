@@ -151,6 +151,9 @@ msgstr ""
 msgid "Netherite Upgrade Template"
 msgstr ""
 
+msgid "Smithing Template"
+msgstr ""
+
 msgid "Applies to:"
 msgstr "Berlaku untuk:"
 

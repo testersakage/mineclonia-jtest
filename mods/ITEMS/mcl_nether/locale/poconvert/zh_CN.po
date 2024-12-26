@@ -151,6 +151,9 @@ msgstr "下界砖是制作下界砖方块和下界栅栏的主要制作材料。
 msgid "Netherite Upgrade Template"
 msgstr "下界合金升级模板"
 
+msgid "Smithing Template"
+msgstr ""
+
 msgid "Applies to:"
 msgstr "适用于："
 

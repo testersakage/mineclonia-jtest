@@ -151,6 +151,9 @@ msgstr "Netherowe cegły są głównym składnikiem do wytwarzania bloków Nethe
 msgid "Netherite Upgrade Template"
 msgstr ""
 
+msgid "Smithing Template"
+msgstr ""
+
 msgid "Applies to:"
 msgstr ""
 
