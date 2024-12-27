@@ -4,74 +4,18 @@ local function on_bone_meal(itemstack,placer,pointed_thing,pos,node)
 	return mcl_farming.on_bone_meal(itemstack,placer,pointed_thing,pos,node,"plant_potato")
 end
 
--- Premature potato plants
-
-for i=1, 7 do
-	local texture, selbox
-	if i < 3 then
-		texture = "mcl_farming_potatoes_stage_0.png"
-		selbox = { -5/16, -0.5 ,-5/16, 5/16, -0.5+(3/16) ,5/16 }
-	elseif i < 5 then
-		texture = "mcl_farming_potatoes_stage_1.png"
-		selbox = { -6/16, -0.5 ,-6/16, 6/16, -0.5+(4/16) ,6/16 }
-	else
-		texture = "mcl_farming_potatoes_stage_2.png"
-		selbox = { -6/16, -0.5 ,-6/16, 6/16, -0.5+(6/16) ,6/16 }
-	end
-
-	local create, name, longdesc
-	if i==1 then
-		create = true
-		name = S("Premature Potato Plant")
-		longdesc = S("Potato plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature.")
-	else
-		create = false
-		if minetest.get_modpath("doc") then
-			doc.add_entry_alias("nodes", "mcl_farming:potato_1", "nodes", "mcl_farming:potato_"..i)
-		end
-	end
-
-	minetest.register_node("mcl_farming:potato_"..i, {
-		description = S("Premature Potato Plant (Stage @1)", i),
-		_doc_items_create_entry = create,
-		_doc_items_entry_name = name,
-		_doc_items_longdesc = longdesc,
-		paramtype = "light",
-		paramtype2 = "meshoptions",
-		sunlight_propagates = true,
-		place_param2 = 3,
-		walkable = false,
-		drawtype = "plantlike",
-		drop = "mcl_farming:potato_item",
-		tiles = { texture },
-		inventory_image = texture,
-		wield_image = texture,
-		selection_box = {
-			type = "fixed",
-			fixed = { selbox },
-		},
-		groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1},
-		sounds = mcl_sounds.node_sound_leaves_defaults(),
-		_mcl_blast_resistance = 0,
-		_on_bone_meal = on_bone_meal,
-		_mcl_baseitem = "mcl_farming:potato_item",
-	})
-end
-
--- Mature plant
-minetest.register_node("mcl_farming:potato", {
-	description = S("Mature Potato Plant"),
-	_doc_items_longdesc = S("Mature potato plants are ready to be harvested for potatoes. They won't grow any further."),
-	paramtype = "light",
-	paramtype2 = "meshoptions",
-	sunlight_propagates = true,
-	place_param2 = 3,
-	walkable = false,
-	drawtype = "plantlike",
-	tiles = {"mcl_farming_potatoes_stage_3.png"},
-	wield_image = "mcl_farming_potatoes_stage_3.png",
-	inventory_image = "mcl_farming_potatoes_stage_3.png",
-	drop = {
+mcl_farming.register_crop("potato", {
+	stages = 8,
+	descriptions = {
+		"Premature Potato Plant (Stage @1)",
+		"Mature Potato Plant"
+	},
+	premature_longdesc = S("Potato plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."),
+	entry_name = S("Premature Potato Plant"),
+	mature_longdesc = S("Mature potato plants are ready to be harvested for potatoes. They won't grow any further."),
+	on_bone_meal = on_bone_meal,
+	seed = "mcl_farming:potato_item",
+	full_grow_drop = {
 		items = {
 			{ items = {"mcl_farming:potato_item 1"} },
 			{ items = {"mcl_farming:potato_item 1"}, rarity = 2 },
@@ -80,23 +24,33 @@ minetest.register_node("mcl_farming:potato", {
 			{ items = {"mcl_farming:potato_item_poison 1"}, rarity = 50 }
 		}
 	},
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{ -6/16, -0.5 ,-6/16, 6/16, -0.5+(8/16) ,6/16 }
-		}
-	},
-	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1},
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_fortune_drop = {
+	fortune_drop = {
 		discrete_uniform_distribution = true,
 		items = {"mcl_farming:potato_item"},
 		min_count = 2,
 		max_count = 4,
 		cap = 5
 	},
-	_mcl_baseitem = "mcl_farming:potato_item",
+	boxes = {
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.375 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.375 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.25 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.25 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.25 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.125 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, -0.125 ,0.4375},
+		{-0.4375, -0.5 ,-0.4375, 0.4375, 0 ,0.4375},
+	},
+	tiles = {
+		"mcl_farming_potatoes_stage_0.png",
+		"mcl_farming_potatoes_stage_0.png",
+		"mcl_farming_potatoes_stage_1.png",
+		"mcl_farming_potatoes_stage_1.png",
+		"mcl_farming_potatoes_stage_1.png",
+		"mcl_farming_potatoes_stage_2.png",
+		"mcl_farming_potatoes_stage_2.png",
+		"mcl_farming_potatoes_stage_3.png",
+	}
 })
 
 minetest.register_craftitem("mcl_farming:potato_item", {
@@ -141,7 +95,7 @@ minetest.register_craftitem("mcl_farming:potato_item_poison", {
 	_mcl_saturation = 1.2,
 })
 
-mcl_farming:add_plant("plant_potato", "mcl_farming:potato", {"mcl_farming:potato_1", "mcl_farming:potato_2", "mcl_farming:potato_3", "mcl_farming:potato_4", "mcl_farming:potato_5", "mcl_farming:potato_6", "mcl_farming:potato_7"}, 19.75, 20)
+mcl_farming:add_plant("plant_potato", "mcl_farming:potato", {"mcl_farming:potato_0", "mcl_farming:potato_1", "mcl_farming:potato_2", "mcl_farming:potato_3", "mcl_farming:potato_4", "mcl_farming:potato_5", "mcl_farming:potato_6"}, 19.75, 20)
 
 minetest.register_on_item_eat(function (_, _, itemstack, user)
 
