@@ -34,7 +34,7 @@ function mcl_farming.register_crop(id, crop_defs)
 
         core.register_node(":mcl_farming:" .. id .. subname, table.merge({
             _doc_items_longdesc = longdesc,
-            _doc_items_create_entry = not (i == 0),
+            _doc_items_create_entry = i ~= 0,
             _doc_items_entry_name = i == 0 and crop_defs.entry_name,
             _mcl_baseitem = crop_defs.baseitem or crop_defs.seed,
             _mcl_blast_resistance = 0,
