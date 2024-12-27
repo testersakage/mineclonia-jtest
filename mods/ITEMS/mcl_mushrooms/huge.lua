@@ -134,6 +134,7 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 			-- Cap block with pores on at least 1 side.
 			-- These blocks are used internally.
 			block._doc_items_create_entry = false
+			block._mcl_silk_touch_drop = { "mcl_mushrooms:"..color.."_mushroom_block_cap_111111" }
 			block.groups.not_in_creative_inventory = 1
 			block.groups.not_in_craft_guide = 1
 			block.tiles = {}
