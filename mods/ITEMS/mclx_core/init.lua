@@ -3,7 +3,7 @@ local water_s = core.registered_nodes["mcl_core:water_source"]
 local water_f = core.registered_nodes["mcl_core:water_flowing"]
 core.register_node("mclx_core:river_water_source", table.merge(water_s, {
 	description = S("River Water Source"),
-  liquidtype = "source",
+	liquidtype = "source",
 	groups = table.merge(water_s.groups, {river_water = water_s.groups.water}),
 	liquid_range = 2,
 	waving = 3,
@@ -31,7 +31,7 @@ core.register_node("mclx_core:river_water_flowing", table.merge(water_f, {
 	groups = table.merge(water_f.groups, {river_water = water_f.groups.water}),
 	liquid_range = 2,
 	waving = 3,
-  liquidtype = "flowing",
+	liquidtype = "flowing",
 	liquid_alternative_flowing = "mclx_core:river_water_flowing",
 	liquid_alternative_source = "mclx_core:river_water_source",
 	liquid_renewable = false,

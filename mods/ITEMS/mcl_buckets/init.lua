@@ -261,11 +261,11 @@ core.register_craftitem("mcl_buckets:bucket_empty", {
 	stack_max = 16,
 	liquids_pointable = false,
 
-  pointabilities = {
-    nodes = {
-      ["group:liquid_source"] = true,
-    },
-  },
+	pointabilities = {
+		nodes = {
+			["group:liquid_source"] = true,
+		},
+	},
 
 	on_place = on_place_bucket_empty,
 	on_secondary_use = on_place_bucket_empty,
