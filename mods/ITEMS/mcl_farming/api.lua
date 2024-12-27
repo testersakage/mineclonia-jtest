@@ -21,7 +21,7 @@ function mcl_farming.register_crop(id, crop_defs)
     if not crop_defs.groups or type(crop_defs.groups) == "table" then
         new_groups = table.merge(crop_defs.groups or {}, {
             attached_node = 1, destroy_by_lava_flow = 1, dig_by_piston = 1, dig_by_water = 1,
-            dig_immediate = 3, not_in_creative_inventory = 1, plant = 1
+            dig_immediate = 3, not_in_creative_inventory = 1, plant = 1, unsticky = 1
         })
     end
 
