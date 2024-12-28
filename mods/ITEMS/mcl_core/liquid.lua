@@ -420,23 +420,24 @@ function liquid.register_liquid(def)
 				-- Get the next level from a table
 				local new_level = level_tb[support_level]
 
+				local d101 = core.registered_nodes[n101.name]
+
 				if n101.name == NAME_SOURCE and n111.name ~= NAME_SOURCE then
 					-- the current node is on top of a source node. No more flowing here.
 					-- With the exception that when the current node is a source node as
 					-- well.
-				elseif n101.name == NAME_FLOWING then
-					if l101 < 8 then
+				elseif
+						n101.name == 'air'        or
+						n101.name == NAME_FLOWING or
+						(d101 and d101.floodable) then
+
+					if not l101 or l101 < 8 then
 						-- turn the liquid below into down-flowing
 						queue_push({pos=p101, mode='ADD'})
 						set_node(p101, make_liquid('down'))
 					else
 						-- The liquid already flows down
 					end
-				elseif n101.name == 'air' then
-					-- flow down
-					queue_push({pos=p101, mode='ADD'})
-					set_node(p101, make_liquid('down'))
-
 				elseif new_level > 0 then
 
 					local is_new_map = false
