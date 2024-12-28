@@ -139,6 +139,8 @@ minetest.register_globalstep(function()
 			--Check if the player should be sprinting
 			if ctrl.aux1 and ctrl.up and not ctrl.sneak then
 				players[playerName]["shouldSprint"] = true
+			else
+				players[playerName]["shouldSprint"] = false
 			end
 
 			local playerPos = player:get_pos()
