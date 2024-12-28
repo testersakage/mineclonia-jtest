@@ -155,8 +155,8 @@ function mcl_armor.register_set(def)
 			groups[k] = v
 		end
 		local upgrade_item = nil
-		if def._mcl_upgradable and def._mcl_upgrade_item_material then
-			upgrade_item = itemstring:gsub("_[%l%d]*$",def._mcl_upgrade_item_material)
+		if def._mcl_upgradable_with and def._mcl_upgrade_item_material then
+			upgrade_item = itemstring:gsub("_[%l%d]*$", def._mcl_upgrade_item_material)
 		end
 
 		local on_place = mcl_armor.equip_on_use
@@ -188,8 +188,9 @@ function mcl_armor.register_set(def)
 			_on_break = on_break_callbacks[name] or def.on_break,
 			_mcl_armor_element = name,
 			_mcl_armor_texture = get_armor_texture(textures, name, modname, itemname, itemstring),
-			_mcl_upgradable = def._mcl_upgradable,
+			_mcl_upgradable_with = def._mcl_upgradable_with,
 			_mcl_upgrade_item = upgrade_item,
+			_mcl_upgrade_template = def._mcl_upgrade_template,
 			_mcl_cooking_output = def.cook_material
 		})
 

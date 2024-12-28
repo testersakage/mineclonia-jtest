@@ -90,8 +90,9 @@ mcl_armor.register_set({
 	craft_material = "mcl_core:diamond",
 	sound_equip = "mcl_armor_equip_diamond",
 	sound_unequip = "mcl_armor_unequip_diamond",
-	_mcl_upgradable = true,
+	_mcl_upgradable_with = "mcl_nether:netherite_ingot",
 	_mcl_upgrade_item_material = "_netherite",
+	_mcl_upgrade_template = "mcl_nether:netherite_upgrade_template"
 })
 
 mcl_armor.register_set({

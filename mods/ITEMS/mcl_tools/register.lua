@@ -193,7 +193,6 @@ mcl_tools.register_set("diamond", {
             full_punch_interval = 0.83333333,
             damage_groups = { fleshy = 5 }
         },
-        _mcl_upgradable = true,
         _mcl_upgrade_item = "mcl_tools:pick_netherite"
     },
     ["shovel"] = {
@@ -203,7 +202,6 @@ mcl_tools.register_set("diamond", {
             full_punch_interval = 1,
             damage_groups = { fleshy = 5 }
         },
-        _mcl_upgradable = true,
         _mcl_upgrade_item = "mcl_tools:shovel_netherite"
     },
     ["sword"] = {
@@ -213,7 +211,6 @@ mcl_tools.register_set("diamond", {
             full_punch_interval = 0.625,
             damage_groups = { fleshy = 7 }
         },
-        _mcl_upgradable = true,
         _mcl_upgrade_item = "mcl_tools:sword_netherite"
     },
     ["axe"] = {
@@ -223,9 +220,11 @@ mcl_tools.register_set("diamond", {
             full_punch_interval = 1,
             damage_groups = { fleshy = 9 }
         },
-        _mcl_upgradable = true,
         _mcl_upgrade_item = "mcl_tools:axe_netherite"
     }
+}, {
+    _mcl_upgradable_with = "mcl_nether:netherite_ingot",
+    _mcl_upgrade_template = "mcl_nether:netherite_upgrade_template"
 })
 
 --Netherite set

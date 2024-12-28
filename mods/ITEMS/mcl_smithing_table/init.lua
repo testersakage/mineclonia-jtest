@@ -1,5 +1,4 @@
 -- By EliasFleckenstein03 and Code-Sploit
-
 local S = minetest.get_translator("mcl_smithing_table")
 local F = minetest.formspec_escape
 local C = minetest.colorize
@@ -23,13 +22,14 @@ local smithing_materials = {
 function mcl_smithing_table.upgrade_item(itemstack)
 	local def = itemstack:get_definition()
 
-	if not def or not def._mcl_upgradable then
+	if not def or not def._mcl_upgradable_with or not def._mcl_upgrade_item then
 		return
 	end
-	local itemname = itemstack:get_name()
-	local upgrade_item = itemname:gsub("diamond", "netherite")
+	if not smithing_materials[def._mcl_upgradable_with] then return end
+	local item_name = itemstack:get_name()
+	local upgrade_item = def._mcl_upgrade_item
 
-	if def._mcl_upgrade_item and upgrade_item == itemname then
+	if upgrade_item == item_name then
 		return
 	end
 
@@ -37,7 +37,6 @@ function mcl_smithing_table.upgrade_item(itemstack)
 	mcl_armor.reload_trim_inv_image(itemstack)
 
 	-- Reload the ToolTips of the tool
-
 	tt.reload_itemstack_description(itemstack)
 
 	-- Only return itemstack if upgrade was successfull
@@ -122,16 +121,21 @@ local function reset_upgraded_item(pos)
 	local inv = minetest.get_meta(pos):get_inventory()
 	local upgraded_item
 
-	local original_itemname = inv:get_stack("upgrade_item", 1):get_name()
-	local template_present = minetest.get_item_group(inv:get_stack("template",1):get_name(), "smithing_template") > 0
-	local upgrade_template_present = inv:get_stack("template",1):get_name() == "mcl_nether:netherite_upgrade_template"
-	local is_armor = original_itemname:find("mcl_armor:") ~= nil
-	local is_trimmed = original_itemname:find("_trimmed") ~= nil
+	local upgrade_item = inv:get_stack("upgrade_item", 1)
+	local item_name = upgrade_item:get_name()
+	local item_defs = upgrade_item:get_definition()
+	local template_name = inv:get_stack("template", 1):get_name()
+	local no_template_needed = item_defs._mcl_upgrade_template == nil
+	local template_present = core.get_item_group(template_name, "smithing_template") > 0
+	local upgrade_template_present = (template_name == item_defs._mcl_upgrade_template) or no_template_needed
+	local is_armor = item_name:find("mcl_armor:") ~= nil
+	local is_trimmed = item_name:find("_trimmed") ~= nil
+	local mineral_name = inv:get_stack("mineral", 1):get_name()
 
-	if inv:get_stack("mineral", 1):get_name() == "mcl_nether:netherite_ingot" and upgrade_template_present then
-		upgraded_item = mcl_smithing_table.upgrade_item(inv:get_stack("upgrade_item", 1))
-	elseif template_present and is_armor and not is_trimmed and mcl_smithing_table.is_smithing_mineral(inv:get_stack("mineral", 1):get_name()) then
-		upgraded_item = mcl_smithing_table.upgrade_trimmed(inv:get_stack("upgrade_item", 1),inv:get_stack("mineral", 1),inv:get_stack("template", 1))
+	if mineral_name ~= "" and mineral_name == item_defs._mcl_upgradable_with and upgrade_template_present then
+		upgraded_item = mcl_smithing_table.upgrade_item(upgrade_item)
+	elseif template_present and is_armor and not is_trimmed and mcl_smithing_table.is_smithing_mineral(mineral_name) then
+		upgraded_item = mcl_smithing_table.upgrade_trimmed(upgrade_item, inv:get_stack("mineral", 1),inv:get_stack("template", 1))
 	end
 
 	inv:set_stack("upgraded_item", 1, upgraded_item)
