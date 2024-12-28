@@ -259,7 +259,7 @@ function liquid.register_liquid(def)
 
 			while #list > 0 do
 			--for nlevel = level, orig_level do
-				l = list
+				local l = list
 				list = {}
 				for i, p in ipairs(l) do
 					local h = core.hash_node_position(p)
@@ -351,7 +351,7 @@ function liquid.register_liquid(def)
 
 
 		if RENEWABLE then
-			count_sources = 0
+			local count_sources = 0
 			if n011.name == NAME_SOURCE then count_sources = count_sources + 1 end
 			if n211.name == NAME_SOURCE then count_sources = count_sources + 1 end
 			if n110.name == NAME_SOURCE then count_sources = count_sources + 1 end
@@ -448,7 +448,7 @@ function liquid.register_liquid(def)
 					end
 
 
-					function push()
+					local function push()
 						-- This function pushes the liquid in all four directions if the
 						-- map wants that and the real node there is actually floodable.
 						-- The number of *potential* floods are counted. If the count
@@ -456,7 +456,7 @@ function liquid.register_liquid(def)
 						local cnt_flood = 0
 						local new_liquid = make_liquid(new_level)
 
-						function flood(p, l)
+						local function flood(p, l)
 							local m = map(p)
 							if m and m == new_level then
 								if new_level > (l or 0) and is_floodable(p) then
@@ -599,7 +599,7 @@ function liquid.register_liquid(def)
 		-- its value.
 		-- This way mods see what they need, at least their callbacks do.
 
-		function set_liquidtype(name, liquidtype)
+		local function set_liquidtype(name, liquidtype)
 			local mt = getmetatable(core.registered_nodes[name])
 			local oldidx = mt.__index
 			mt.__index = function(tbl, k)
