@@ -194,7 +194,7 @@ function liquid.register_liquid(def)
 			local h = core.hash_node_position(pos)
 			if pmap[h] == nil then
 				local n1 = get_node(pos)
-				local n2= get_node(pos+vector.new(0,-1,0))
+				local n2= get_node(vector.offset(pos,  0,-1, 0))
 
 				local l1 = n1 and get_liquid_level(n1)
 
@@ -239,10 +239,10 @@ function liquid.register_liquid(def)
 
 			for i, p in ipairs(l) do
 				-- Step into all 4 directions
-				step(p + vector.new(-1, 0, 0), level)
-				step(p + vector.new( 1, 0, 0), level)
-				step(p + vector.new( 0, 0,-1), level)
-				step(p + vector.new( 0, 0, 1), level)
+				step(vector.offset(p, -1, 0, 0), level)
+				step(vector.offset(p,  1, 0, 0), level)
+				step(vector.offset(p,  0, 0,-1), level)
+				step(vector.offset(p,  0, 0, 1), level)
 			end
 		end 
 
@@ -275,10 +275,10 @@ function liquid.register_liquid(def)
 					end
 
 					-- Search the origin.
-					back_trace(p + vector.new(-1, 0, 0))
-					back_trace(p + vector.new( 1, 0, 0))
-					back_trace(p + vector.new( 0, 0,-1))
-					back_trace(p + vector.new( 0, 0, 1))
+					back_trace(vector.offset(p, -1, 0, 0))
+					back_trace(vector.offset(p,  1, 0, 0))
+					back_trace(vector.offset(p,  0, 0,-1))
+					back_trace(vector.offset(p,  0, 0, 1))
 				end
 			end
 		end
@@ -320,12 +320,12 @@ function liquid.register_liquid(def)
 			return
 		end
 
-		local p011 = pos + vector.new(-1,  0,  0)
-		local p211 = pos + vector.new( 1,  0,  0)
-		local p101 = pos + vector.new( 0, -1,  0)
-		local p121 = pos + vector.new( 0,  1,  0)
-		local p110 = pos + vector.new( 0,  0, -1)
-		local p112 = pos + vector.new( 0,  0,  1)
+		local p011 = vector.offset(pos, -1,  0,  0)
+		local p211 = vector.offset(pos,  1,  0,  0)
+		local p101 = vector.offset(pos,  0, -1,  0)
+		local p121 = vector.offset(pos,  0,  1,  0)
+		local p110 = vector.offset(pos,  0,  0, -1)
+		local p112 = vector.offset(pos,  0,  0,  1)
 
 		local n011 = get_node(p011)
 		local n211 = get_node(p211)
@@ -633,11 +633,11 @@ function liquid.register_liquid(def)
 
 		action = function(pos, node, dtime_s)
 			local n111 =	node
-			local n011 =	core.get_node(pos + vector.new(-1, 0, 0))
-			local n211 =	core.get_node(pos + vector.new( 1, 0, 0))
-			local n110 =	core.get_node(pos + vector.new( 0, 0,-1))
-			local n112 =	core.get_node(pos + vector.new( 0, 0, 1))
-			local n101 =	core.get_node(pos + vector.new( 0,-1, 0))
+			local n011 =	core.get_node(vector.offset(pos, -1, 0, 0))
+			local n211 =	core.get_node(vector.offset(pos,  1, 0, 0))
+			local n110 =	core.get_node(vector.offset(pos,  0, 0,-1))
+			local n112 =	core.get_node(vector.offset(pos,  0, 0, 1))
+			local n101 =	core.get_node(vector.offset(pos,  0,-1, 0))
 
 			if n101.name ~= NAME_SOURCE or 
 				n111.name ~= NAME_SOURCE or 
