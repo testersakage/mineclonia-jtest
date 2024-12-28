@@ -155,7 +155,12 @@ function mcl_armor.register_set(def)
 			groups[k] = v
 		end
 		local upgrade_item = nil
-		if def._mcl_upgradable_with and def._mcl_upgrade_item_material then
+		if def._mcl_upgradable and def._mcl_upgrade_item_material then
+			if type(def._mcl_upgrade_item_material) == "string" and
+			def._mcl_upgrade_item_material:find("netherite") and not
+			def._mcl_upgradable_with then
+				def._mcl_upgradable_with = "mcl_nether:netherite_ingot"
+			end
 			upgrade_item = itemstring:gsub("_[%l%d]*$", def._mcl_upgrade_item_material)
 		end
 
