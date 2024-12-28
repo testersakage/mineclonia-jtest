@@ -301,11 +301,13 @@ mcl_player.register_globalstep(function(player)
 		if parent then
 			mcl_util.set_properties(player, player_props_riding)
 			local parent_yaw = math.deg(parent:get_yaw())
+			mcl_util.set_bone_position(player,"Body_Control", nil, vector.zero())
 			hyaw = -limit_vel_yaw(yaw, parent_yaw) + parent_yaw
+		else
+			mcl_util.set_bone_position(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 		end
 
 		mcl_util.set_bone_position(player, "Head_Control", nil, vector.new(pitch, hyaw, 0))
-		mcl_util.set_bone_position(player,"Body_Control", nil, vector.zero())
 	else
 		local walking = control.up or control.down or control.left or control.right
 		local animation_speed_mod = model and model.animation_speed or 30
