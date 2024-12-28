@@ -111,6 +111,10 @@ local function get_arrow(player)
 	return arrow_stack, arrow_stack_id
 end
 
+function mcl_bows.get_arrow_stack_for_bow (player)
+	return get_arrow (player)
+end
+
 local function player_shoot_arrow (player, power, is_critical)
 	local arrow_stack, arrow_stack_id = get_arrow(player)
 	local arrow_itemstring
@@ -253,15 +257,47 @@ for level=0, 2 do
 	})
 end
 
+function mcl_bows.player_shoot (player, wielditem, usetime_us)
+	local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
+	local charge = math.max(math.min(usetime_us, BOW_CHARGE_TIME_FULL), 0)
+	local charge_ratio = charge / BOW_CHARGE_TIME_FULL
+	charge_ratio = math.max(math.min(charge_ratio, 1), 0)
+
+	-- Calculate damage and power.
+	local is_critical = false
+	if charge >= BOW_CHARGE_TIME_FULL then
+		is_critical = true
+	end
+
+	local has_shot = player_shoot_arrow (player, charge_ratio, is_critical)
+
+	if enchanted then
+		wielditem:set_name("mcl_bows:bow_enchanted")
+	else
+		wielditem:set_name("mcl_bows:bow")
+	end
+
+	if has_shot and not minetest.is_creative_enabled(player:get_player_name()) then
+		local durability = BOW_DURABILITY
+		local unbreaking = mcl_enchanting.get_enchantment(wielditem, "unbreaking")
+		if unbreaking > 0 then
+			durability = durability * (unbreaking + 1)
+		end
+		wielditem:add_wear(65535/durability)
+	end
+	player:set_wielded_item (wielditem)
+end
 
 controls.register_on_release(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	if key~="RMB" and key~="zoom" then return end
 	--local inv = minetest.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
 	if (wielditem:get_name()=="mcl_bows:bow_0" or wielditem:get_name()=="mcl_bows:bow_1" or wielditem:get_name()=="mcl_bows:bow_2" or
 		wielditem:get_name()=="mcl_bows:bow_0_enchanted" or wielditem:get_name()=="mcl_bows:bow_1_enchanted" or wielditem:get_name()=="mcl_bows:bow_2_enchanted") then
 
-		local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
 		local p_load = bow_load[player:get_player_name()]
 		local charge
 		-- Type sanity check
@@ -273,39 +309,15 @@ controls.register_on_release(function(player, key)
 			charge = 0
 			minetest.log("warning", "[mcl_bows] Player "..player:get_player_name().." fires arrow with non-numeric bow_load!")
 		end
-		charge = math.max(math.min(charge, BOW_CHARGE_TIME_FULL), 0)
-
-		local charge_ratio = charge / BOW_CHARGE_TIME_FULL
-		charge_ratio = math.max(math.min(charge_ratio, 1), 0)
-
-		-- Calculate damage and power.
-		local is_critical = false
-		if charge >= BOW_CHARGE_TIME_FULL then
-			is_critical = true
-		end
-
-		local has_shot = player_shoot_arrow (player, charge_ratio, is_critical)
-
-		if enchanted then
-			wielditem:set_name("mcl_bows:bow_enchanted")
-		else
-			wielditem:set_name("mcl_bows:bow")
-		end
-
-		if has_shot and not minetest.is_creative_enabled(player:get_player_name()) then
-			local durability = BOW_DURABILITY
-			local unbreaking = mcl_enchanting.get_enchantment(wielditem, "unbreaking")
-			if unbreaking > 0 then
-				durability = durability * (unbreaking + 1)
-			end
-			wielditem:add_wear(65535/durability)
-		end
-		player:set_wielded_item(wielditem)
+		mcl_bows.player_shoot (player, wielditem, charge)
 		reset_bow_state(player, true)
 	end
 end)
 
 controls.register_on_hold(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	local name = player:get_player_name()
 	local creative = minetest.is_creative_enabled(name)
 	if (key ~= "RMB" and key ~= "zoom") or not (creative or get_arrow(player)) then
@@ -359,12 +371,14 @@ end)
 
 minetest.register_globalstep(function()
 	for player in mcl_util.connected_players() do
-		local name = player:get_player_name()
-		local wielditem = player:get_wielded_item()
-		local wieldindex = player:get_wield_index()
-		--local controls = player:get_player_control()
-		if type(bow_load[name]) == "number" and ((wielditem:get_name()~="mcl_bows:bow_0" and wielditem:get_name()~="mcl_bows:bow_1" and wielditem:get_name()~="mcl_bows:bow_2" and wielditem:get_name()~="mcl_bows:bow_0_enchanted" and wielditem:get_name()~="mcl_bows:bow_1_enchanted" and wielditem:get_name()~="mcl_bows:bow_2_enchanted") or wieldindex ~= bow_index[name]) then
-			reset_bow_state(player, true)
+		if not mcl_serverplayer.is_csm_capable (player) then
+			local name = player:get_player_name()
+			local wielditem = player:get_wielded_item()
+			local wieldindex = player:get_wield_index()
+			--local controls = player:get_player_control()
+			if type(bow_load[name]) == "number" and ((wielditem:get_name()~="mcl_bows:bow_0" and wielditem:get_name()~="mcl_bows:bow_1" and wielditem:get_name()~="mcl_bows:bow_2" and wielditem:get_name()~="mcl_bows:bow_0_enchanted" and wielditem:get_name()~="mcl_bows:bow_1_enchanted" and wielditem:get_name()~="mcl_bows:bow_2_enchanted") or wieldindex ~= bow_index[name]) then
+				reset_bow_state(player, true)
+			end
 		end
 	end
 end)

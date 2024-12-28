@@ -37,6 +37,9 @@ local SERVERBOUND_MOVEMENT_STATE = 'ac'
 local SERVERBOUND_MOVEMENT_EVENT = 'ad'
 local SERVERBOUND_PLAYERANIM = 'ae'
 local SERVERBOUND_DAMAGE = 'af'
+local SERVERBOUND_GET_AMMO = 'ag'
+local SERVERBOUND_RELEASE_USEITEM = 'ah'
+local SERVERBOUND_VISUAL_WIELDITEM = 'ai'
 
 -- Clientbound messages.
 local CLIENTBOUND_HELLO = 'AA'
@@ -48,6 +51,8 @@ local CLIENTBOUND_REGISTER_STATUS_EFFECT = 'AF'
 local CLIENTBOUND_REMOVE_STATUS_EFFECT = 'AG'
 local CLIENTBOUND_POSECTRL = 'AH'
 local CLIENTBOUND_SHIELDCTRL = 'AI'
+local CLIENTBOUND_AMMOCTRL = 'AJ'
+local CLIENTBOUND_BOW_CAPABILITIES = 'AK'
 
 local MAX_PAYLOAD = 65533
 
@@ -114,6 +119,20 @@ function mcl_serverplayer.send_shieldctrl (player, active_shield)
 	}))
 end
 
+function mcl_serverplayer.send_ammoctrl (player, ammo, challenge)
+	modchannels[player]:send_all (table.concat ({
+		CLIENTBOUND_AMMOCTRL, ammo, ',', challenge,
+	}))
+end
+
+function mcl_serverplayer.send_bow_capabilities (player, capabilities)
+	local payload = core.write_json (capabilities)
+	assert (#payload <= MAX_PAYLOAD, "oversized ClientboundBowCapabilities")
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_BOW_CAPABILITIES, payload,
+	})
+end
+
 -----------------------------------------------------------------------
 -- Handshakes.  When a client joins, it is not considered CSM-enabled
 -- till a SERVERBOUND_HELLO packet is received containing the protocol
@@ -154,6 +173,7 @@ minetest.register_on_mods_loaded (function ()
 		tbl[name] = def1
 	end
 	serverbound_handshake.node_definitions = tbl
+	serverbound_handshake.bow_info = mcl_serverplayer.bow_info
 end)
 
 local function process_serverbound_hello (player, state, payload)
@@ -281,6 +301,32 @@ local function receive_modchannel_message_1 (player, message)
 				check_number (json.amount)
 			end
 			mcl_serverplayer.handle_damage (player, json)
+		elseif msgtype == SERVERBOUND_GET_AMMO then
+			local challenge = tonumber (payload)
+			if not challenge or challenge <= state.ammo_challenge then
+				error ("Invalid or out of order ServerboundGetAmmo message")
+			end
+			state.ammo_challenge = challenge
+			mcl_serverplayer.update_ammo (state, player, true)
+		elseif msgtype == SERVERBOUND_RELEASE_USEITEM then
+			local ctrlwords = string.split (payload, ',')
+			if #ctrlwords ~= 2
+				or not (tonumber (ctrlwords[1]))
+				or not (tonumber (ctrlwords[2]))
+				or tonumber (ctrlwords[2]) <= state.ammo_challenge then
+				error ("Invalid ServerboundReleaseUseitem message")
+			end
+			local usetime = tonumber (ctrlwords[1])
+			local challenge = tonumber (ctrlwords[2])
+			mcl_serverplayer.release_useitem (state, player, usetime, challenge)
+		elseif msgtype == SERVERBOUND_VISUAL_WIELDITEM then
+			local item = ItemStack (payload)
+
+			if not item:is_empty () then
+				state.visual_wielditem = item
+			else
+				state.visual_wielditem = nil
+			end
 		else
 			minetest.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",
@@ -308,4 +354,5 @@ end
 minetest.register_on_modchannel_message (receive_modchannel_message)
 
 local modpath = minetest.get_modpath (minetest.get_current_modname ())
-dofile(modpath .. "/player.lua")
+dofile (modpath .. "/player.lua")
+dofile (modpath .. "/items.lua")
