@@ -312,8 +312,7 @@ minetest.register_node("mcl_lush_caves:spore_blossom", {
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_spore_blossom.png"},
 	drawtype = "plantlike",
-	param2type = "meshoptions",
-	place_param2 = 4,
+	paramtype = "light",
 	groups = {handy = 1, plant = 1, deco_block = 1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	selection_box = {

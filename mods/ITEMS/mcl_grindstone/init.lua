@@ -181,6 +181,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 		"grindstone_front.png"
 	},
 	drawtype = "nodebox",
+	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	node_box = node_box,

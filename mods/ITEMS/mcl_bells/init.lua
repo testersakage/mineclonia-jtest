@@ -23,6 +23,7 @@ end
 
 minetest.register_node("mcl_bells:bell", {
 	description = S("Bell"),
+	paramtype = "light",
 	inventory_image = "mcl_bells_bell.png",
 	drawtype = "nodebox",
 	node_box = {
