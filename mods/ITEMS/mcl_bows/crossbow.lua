@@ -115,6 +115,10 @@ local function get_arrow(player)
 	return arrow_stack, arrow_stack_id
 end
 
+function mcl_bows.get_arrow_stack_for_crossbow (player)
+	return get_arrow (player)
+end
+
 local function player_shoot_arrow(wielditem, player, is_critical)
 	local arrow_itemstring = wielditem:get_meta():get("arrow")
 	local arrow_item_name = ItemStack(arrow_itemstring):get_name()
@@ -256,14 +260,64 @@ for level=0, 2 do
 	})
 end
 
+local function get_crossbow_charge_time (wielditem)
+	local enchantments = mcl_enchanting.get_enchantments (wielditem)
+	if enchantments.quick_charge then
+		return _BOW_CHARGE_TIME_FULL
+			- (enchantments.quick_charge * 0.13 * 1.0e+6)
+	end
+	return _BOW_CHARGE_TIME_FULL
+end
+
+function mcl_bows.crossbow_charge_time_multiplier (quick_charge)
+	local time = _BOW_CHARGE_TIME_FULL - (quick_charge * 0.13 * 1.0e+6)
+	return math.max (0.0, time / _BOW_CHARGE_TIME_FULL)
+end
+
+function mcl_bows.load_crossbow (player, wielditem, usetime)
+	local arrow_stack, arrow_stack_id = get_arrow(player)
+	local arrow_itemstring
+
+	if not arrow_stack or usetime < get_crossbow_charge_time (wielditem) then
+		return
+	end
+
+	if minetest.is_creative_enabled(player:get_player_name()) then
+		if arrow_stack then
+			arrow_itemstring = arrow_stack:get_name()
+		else
+			arrow_itemstring = "mcl_bows:arrow"
+		end
+	else
+		arrow_itemstring = arrow_stack:get_name()
+		arrow_stack:take_item()
+		player:get_inventory():set_stack("main", arrow_stack_id, arrow_stack)
+	end
+
+	wielditem:get_meta():set_string("arrow", arrow_itemstring)
+
+	if not mcl_enchanting.is_enchanted (wielditem:get_name ()) then
+		wielditem:set_name("mcl_bows:crossbow_loaded")
+	else
+		wielditem:set_name("mcl_bows:crossbow_loaded_enchanted")
+	end
+	player:set_wielded_item(wielditem)
+end
 
 controls.register_on_release(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	if key~="RMB" and key~="zoom" then return end
 	--local inv = minetest.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
 	if wielditem:get_name()=="mcl_bows:crossbow_2" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2" and minetest.is_creative_enabled(player:get_player_name()) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and minetest.is_creative_enabled(player:get_player_name()) then
 		local arrow_stack, arrow_stack_id = get_arrow(player)
 		local arrow_itemstring
+
+		if not arrow_stack then
+			return
+		end
 
 		if minetest.is_creative_enabled(player:get_player_name()) then
 			if arrow_stack then
@@ -326,6 +380,9 @@ controls.register_on_press(function(player, key)
 end)
 
 controls.register_on_hold(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	local name = player:get_player_name()
 	local creative = minetest.is_creative_enabled(name)
 	if key ~= "RMB" and key ~= "zoom" then
@@ -394,12 +451,14 @@ end)
 
 minetest.register_globalstep(function()
 	for player in mcl_util.connected_players() do
-		local name = player:get_player_name()
-		local wielditem = player:get_wielded_item()
-		local wieldindex = player:get_wield_index()
-		--local controls = player:get_player_control()
-		if type(bow_load[name]) == "number" and ((wielditem:get_name()~="mcl_bows:crossbow_0" and wielditem:get_name()~="mcl_bows:crossbow_1" and wielditem:get_name()~="mcl_bows:crossbow_2" and wielditem:get_name()~="mcl_bows:crossbow_0_enchanted" and wielditem:get_name()~="mcl_bows:crossbow_1_enchanted" and wielditem:get_name()~="mcl_bows:crossbow_2_enchanted") or wieldindex ~= bow_index[name]) then
-			reset_bow_state(player, true)
+		if not mcl_serverplayer.is_csm_capable (player) then
+			local name = player:get_player_name()
+			local wielditem = player:get_wielded_item()
+			local wieldindex = player:get_wield_index()
+			--local controls = player:get_player_control()
+			if type(bow_load[name]) == "number" and ((wielditem:get_name()~="mcl_bows:crossbow_0" and wielditem:get_name()~="mcl_bows:crossbow_1" and wielditem:get_name()~="mcl_bows:crossbow_2" and wielditem:get_name()~="mcl_bows:crossbow_0_enchanted" and wielditem:get_name()~="mcl_bows:crossbow_1_enchanted" and wielditem:get_name()~="mcl_bows:crossbow_2_enchanted") or wieldindex ~= bow_index[name]) then
+				reset_bow_state(player, true)
+			end
 		end
 	end
 end)

@@ -272,6 +272,23 @@ local function set_swimming(player, anim, anim_speed)
 	mcl_util.set_properties(player, player_props_swimming)
 end
 
+function mcl_player.position_wielditem (wielded_itemname, wielded_def, player)
+	-- Specific wielditem positions according to item
+	if wielded_def and wielded_def._mcl_toollike_wield then
+		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 4.7, 3.1), vector.new(-90, 225, 90))
+	elseif minetest.get_item_group(wielded_itemname, "bow") > 0 then
+		mcl_util.set_bone_position(player, "Wield_Item", vector.new(1, 4, 0), vector.new(90, 130, 115))
+	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 4 then
+		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 5.2, 1.2), vector.new(0, 180, 73))
+	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 0 then
+		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 5.2, 1.2), vector.new(0, 180, 45))
+	elseif wielded_def and wielded_def.inventory_image == "" then
+		mcl_util.set_bone_position(player,"Wield_Item", vector.new(0, 6, 2), vector.new(180, -45, 0))
+	else
+		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 5.3, 2), vector.new(90, 0, 0))
+	end
+end
+
 mcl_player.register_globalstep(function(player)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return
@@ -422,20 +439,7 @@ mcl_player.register_globalstep(function(player)
 		end
 	end
 
-	-- Specific wielditem positions according to item
-	if wielded_def and wielded_def._mcl_toollike_wield then
-		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 4.7, 3.1), vector.new(-90, 225, 90))
-	elseif minetest.get_item_group(wielded_itemname, "bow") > 0 then
-		mcl_util.set_bone_position(player, "Wield_Item", vector.new(1, 4, 0), vector.new(90, 130, 115))
-	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 4 then
-		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 5.2, 1.2), vector.new(0, 180, 73))
-	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 0 then
-		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 5.2, 1.2), vector.new(0, 180, 45))
-	elseif wielded_def.inventory_image == "" then
-		mcl_util.set_bone_position(player,"Wield_Item", vector.new(0, 6, 2), vector.new(180, -45, 0))
-	else
-		mcl_util.set_bone_position(player, "Wield_Item", vector.new(0, 5.3, 2), vector.new(90, 0, 0))
-	end
+	mcl_player.position_wielditem (wielded_itemname, wielded_def, player)
 
 	-- controls right and left arms pitch when shooting a bow or blocking
 	if mcl_shields.is_blocking(player) == 2 then

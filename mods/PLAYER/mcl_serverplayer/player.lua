@@ -48,6 +48,7 @@ function mcl_serverplayer.post_load_model (player, model)
 			walk = model.animations.walk,
 			mine = model.animations.mine,
 			walk_mine = model.animations.walk_mine,
+			walk_bow = model.animations.bow_walk,
 			collisionbox = mcl_player.player_props_normal.collisionbox,
 			eye_height = mcl_player.player_props_normal.eye_height,
 		},
@@ -55,6 +56,7 @@ function mcl_serverplayer.post_load_model (player, model)
 			stand = model.animations.sneak_stand,
 			walk = model.animations.sneak_walk,
 			mine = model.animations.sneak_mine,
+			walk_bow = model.animations.bow_sneak,
 			walk_mine = model.animations.sneak_walk_mine,
 			collisionbox = mcl_player.player_props_sneaking.collisionbox,
 			eye_height = mcl_player.player_props_sneaking.eye_height,
@@ -63,6 +65,7 @@ function mcl_serverplayer.post_load_model (player, model)
 			stand = model.animations.lay,
 			walk = model.animations.lay,
 			mine = model.animations.lay,
+			walk_bow = model.animations.lay,
 			walk_mine = model.animations.lay,
 			collisionbox = mcl_player.player_props_normal.collisionbox,
 			eye_height = 0.3,
@@ -71,6 +74,7 @@ function mcl_serverplayer.post_load_model (player, model)
 			stand = model.animations.fly,
 			walk = model.animations.fly,
 			mine = model.animations.fly,
+			walk_bow = model.animations.fly,
 			walk_mine = model.animations.fly,
 			collisionbox = mcl_player.player_props_elytra.collisionbox,
 			eye_height = mcl_player.player_props_elytra.eye_height,
@@ -79,6 +83,7 @@ function mcl_serverplayer.post_load_model (player, model)
 			stand = model.animations.swim_stand,
 			walk = model.animations.swim_walk,
 			mine = model.animations.swim_mine,
+			walk_bow = model.animations.swim_walk,
 			walk_mine = model.animations.swim_walk_mine,
 			collisionbox = mcl_player.player_props_swimming.collisionbox,
 			eye_height = mcl_player.player_props_swimming.eye_height,
@@ -87,6 +92,7 @@ function mcl_serverplayer.post_load_model (player, model)
 			stand = model.animations.die,
 			walk = model.animations.die,
 			mine = model.animations.die,
+			walk_bow = model.animations.die,
 			walk_mine = model.animations.die,
 			collisionbox = mcl_player.player_props_normal.collisionbox,
 			eye_height = mcl_player.player_props_normal.eye_height,
@@ -145,7 +151,7 @@ function mcl_serverplayer.init_player (client_state, player)
 	local can_fall_fly
 		= minetest.get_item_group (stack:get_name (), "elytra") > 0
 		and mcl_armor.elytra_usable (stack)
-	local level = mcl_enchanting.get_enchantment (stack, "depth_strider")
+	local level = mcl_enchanting.get_enchantment (boots, "depth_strider")
 	local initial_caps = {
 		pose_defs = client_poses[player],
 		movement_arresting_nodes
@@ -153,7 +159,10 @@ function mcl_serverplayer.init_player (client_state, player)
 		can_sprint = can_sprint,
 		can_fall_fly = can_fall_fly,
 		depth_strider_level = level,
+		gamemode = mcl_gamemode.get_gamemode (player),
 	}
+	client_state.ammo_challenge = 0
+	client_state.ammo = 0
 	client_state.pose = POSE_STANDING
 	client_state.anim = "stand"
 	client_state.can_sprint = can_sprint
@@ -322,6 +331,14 @@ local LEFT_ARM_BLOCKING_OVERRIDE = {
 	},
 }
 
+function mcl_serverplayer.get_visual_wielditem (player)
+	local state = mcl_serverplayer.client_states[player]
+	if state and state.visual_wielditem then
+		return state.visual_wielditem
+	end
+	return player:get_wielded_item ()
+end
+
 function mcl_serverplayer.animate_localplayer (state, player)
 	local look_dir = mcl_util.norm_radians (player:get_look_horizontal ())
 	local pose = state.override_pose or state.pose
@@ -406,6 +423,12 @@ function mcl_serverplayer.animate_localplayer (state, player)
 		player:set_bone_override ("Head_Control", {})
 		player:set_bone_override ("Body_Control", {})
 	end
+
+	local wielditem = state.visual_wielditem
+		or player:get_wielded_item ()
+	local wielded_def = wielditem:get_definition ()
+	local name = wielditem:get_name ()
+	mcl_player.position_wielditem (name, wielded_def, player)
 end
 
 function mcl_serverplayer.globalstep (player, dtime)
@@ -460,6 +483,7 @@ function mcl_serverplayer.globalstep (player, dtime)
 		end
 		state.fall_flown_ticks = fall_flown_ticks
 	end
+	mcl_serverplayer.update_ammo (state, player, false)
 end
 
 function mcl_serverplayer.handle_movement_event (player, event)
@@ -662,3 +686,15 @@ function mcl_serverplayer.remove_status_effect (player, id)
 		mcl_serverplayer.send_remove_status_effect (player, id)
 	end
 end
+
+------------------------------------------------------------------------
+-- Game modes.
+------------------------------------------------------------------------
+
+mcl_gamemode.register_on_gamemode_change (function (player, _, gamemode)
+	if mcl_serverplayer.is_csm_capable (player) then
+		mcl_serverplayer.send_player_capabilities (player, {
+			gamemode = gamemode,
+		})
+	end
+end)
