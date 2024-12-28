@@ -121,7 +121,11 @@ core.override_item("mcl_mobitems:turtle_egg", {
 			mcl_mobs.spawn_child(pos, "mobs_mc:turtle")
 			core.remove_node(pos)
 		else
-			start_egg_timer(pos)
+			-- wait 15 minutes of game time until early morning;
+			-- check time_speed setting, because the hatching time
+			-- window is rather small
+			local time_speed = tonumber(core.settings:get("time_speed")) or 72
+			core.get_node_timer(pos):start(900 / time_speed)
 		end
 		return false
 	end,
