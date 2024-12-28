@@ -82,7 +82,7 @@ function liquid.register_liquid(def)
 		-- This function puts the new node into a map.
 		-- If there is already a node in that map at the same location, the one
 		-- with the larger level wins. This is important do ensure symmetric flow
-		-- if the underlying structure is symmetric as well. It also prevents wired
+		-- if the underlying structure is symmetric as well. It also prevents weird
 		-- things from happening like half level liquids lingering around.
 
 
@@ -483,7 +483,7 @@ function liquid.register_liquid(def)
 				end
 
 			elseif l111 > support_level then
-				-- The liquid level is too hight here we need to reduce it.
+				-- The liquid level is too high here we need to reduce it.
 
 				if support_level > 0 then
 					queue_push({pos=p111, mode='REMOVE'})
