@@ -161,6 +161,8 @@ local serverbound_handshake = {}
 local keys_to_copy = {
 	"_mcl_velocity_factor",
 	"groups",
+	"liquidtype",
+	"_liquid_type",
 }
 
 minetest.register_on_mods_loaded (function ()
