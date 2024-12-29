@@ -28,13 +28,14 @@ function liquid.register_liquid(def)
 	local modname = minetest.get_current_modname()
 
 	local NAME_SOURCE  = def.name_source
-	assert(NAME_SOURCE)
+	assert(NAME_SOURCE, '"name_source" was nil')
 
 	local NAME_FLOWING = def.name_flowing
-	assert(NAME_FLOWING)
+	assert(NAME_FLOWING, '"name_flowing" was nil ')
 
 	local FLOW_DISTANCE = def.liquid_range or 7
-	assert(FLOW_DISTANCE >= 0 and FLOW_DISTANCE < 8)
+	assert(FLOW_DISTANCE >= 0 and FLOW_DISTANCE < 8,
+		'The liquid_range must be in range [0 <= x < 8]')
 
 	local RENEWABLE = def.liquid_renewable or false
 	local TICKS			= (def.liquid_tick or 0.5) * liquid.tick
@@ -606,8 +607,10 @@ function liquid.register_liquid(def)
 		set_liquidtype(NAME_SOURCE, 'source')
 		set_liquidtype(NAME_FLOWING, 'flowing')
 
-		assert(core.registered_nodes[NAME_SOURCE].liquidtype == 'source')
-		assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing')
+		assert(core.registered_nodes[NAME_SOURCE].liquidtype == 'source',
+			'This hack does no longer work')
+		assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing',
+			'This hack does no longer work')
 
 	end)
 
