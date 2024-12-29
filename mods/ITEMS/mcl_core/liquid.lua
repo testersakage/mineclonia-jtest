@@ -311,8 +311,11 @@ function liquid.register_liquid(def)
 
 	local function flow_iteration(item)
 
+		-- This is the position of the node to be updated
 		local pos = item.pos
+		-- This is the map that shows to where the liquid should spread.
 		local map = item.map
+		-- This tells us if the liquid should just sink without spread.
 		local is_sinking = item.is_sinking
 
 		local p111 = pos
