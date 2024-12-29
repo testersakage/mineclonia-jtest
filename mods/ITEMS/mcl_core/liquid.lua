@@ -8,7 +8,7 @@ local liquid = {
 	-- This is the initial state of the liquid transformation mod.
 	-- If set to false, liquids do not flow until they activated.
 
-	tick = 1.0
+	MAIN_TICK = 0.025
 	-- The main tick speed. Changing that tick affects all liquids
 	-- proportionally.
 }
@@ -38,7 +38,7 @@ function liquid.register_liquid(def)
 		'The liquid_range must be in range [0 <= x < 8]')
 
 	local RENEWABLE = def.liquid_renewable or false
-	local TICKS			= (def.liquid_tick or 0.5) * liquid.tick
+	local TICKS = def.liquid_tick or 0.5
 
 
 	-- This table is a function that calculates then next lower liquid level.
@@ -660,53 +660,56 @@ function liquid.register_liquid(def)
 	resume_counter = resume_counter + 1
 
 
-	local function run()
-		core.after(TICKS, function()
-			local q = update_next_set
+	local tick_dtime = 0.0
 
-			-- Reset the containers for reuse
-			update_next_set = {}
-			read_nodes = {}
-			changed_nodes = {}
+	local function tick()
+		tick_dtime = tick_dtime + liquid.MAIN_TICK
 
-			for _, item in pairs(q) do
-				-- Do the flow magic
-				flow_iteration(item)
-			end
 
-			for h, node in pairs(changed_nodes) do
-				local pos = core.get_position_from_hash(h)
+		-- If the TICKS is smaller than Luanti default tick we do multiple steps per
+		-- tick.
+		while tick_dtime >= TICKS do
+			tick_dtime = tick_dtime - TICKS
 
-				local old = read_nodes[h]
-				local old_ndef = core.registered_nodes[old.name]
-				if old_ndef.on_flood then
-					if not old_ndef.on_flood(pos, old, node) then
+			if next(update_next_set) ~= nil then
+				local q = update_next_set
+
+				-- Reset the containers for reuse
+				update_next_set = {}
+				read_nodes = {}
+				changed_nodes = {}
+
+				for _, item in pairs(q) do
+					-- Do the flow magic
+					flow_iteration(item)
+				end
+
+				for h, node in pairs(changed_nodes) do
+					local pos = core.get_position_from_hash(h)
+
+					local old = read_nodes[h]
+					local old_ndef = core.registered_nodes[old.name]
+					if old_ndef.on_flood then
+						if not old_ndef.on_flood(pos, old, node) then
+							core.set_node(pos, node)
+						end
+					else
 						core.set_node(pos, node)
 					end
-				else
-					core.set_node(pos, node)
 				end
 			end
-
-			if liquid.running then
-				run()
-			end
-		end)
+		end
 	end
 
 	liquid.registered_liquids[#liquid.registered_liquids+1] = {
-		run = run,
+		tick = tick,
 		update = liquid_update,
 	}
-
-	if liquid.running then
-		run()
-	end
 end
 
-function liquid.run()
+function liquid.tick()
 	for i, o in ipairs(liquid.registered_liquids) do
-		o.run()
+		o.tick()
 	end
 end
 
@@ -716,14 +719,19 @@ function liquid.update(pos)
 	end
 end
 
+core.register_globalstep(function(dtime)
+	if liquid.running then
+		liquid.tick()
+	end
+end)
+
 core.register_chatcommand('liquid', {
 	func = function(name, param)
 		if param == 'step' then
 			liquid.running = false
-			liquid.run()
+			liquid.tick()
 		elseif param == 'run' then
 			liquid.running = true
-			liquid.run()
 		elseif param == 'stop' then
 			liquid.running = false
 		end
