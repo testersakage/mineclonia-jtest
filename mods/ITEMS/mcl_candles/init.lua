@@ -3,7 +3,7 @@ local S = core.get_translator("mcl_candles")
 local candleboxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
 	{-0.15625, -0.5, -0.09375, 0.15625, -0.125, 0.09375},
-	{-3/16, -8/16, -3/16, 2/16, -2/16, 2/16},
+	{-0.15625, -0.5, -0.15625, 0.15625, -0.125, 0.21855},
 	{-3/16, -8/16, -3/16, 3/16, -2/16, 3/16}
 }
 
@@ -117,7 +117,7 @@ function extinguish(pos, node, clicker, itemstack, pointed_thing)
 	end
 end
 
-for i = 1, 2 do
+for i = 1, 3 do
 	local candle_n = {
 		collision_box = {fixed = candleboxes[i], type = "fixed"},
 		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
