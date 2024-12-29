@@ -67,15 +67,22 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 	-- Mushroom block (cap)
 	-- Each side can either be the cap or the pores texture.
 	-- Cubes have 6 sides, so there's a total of 2^6 = 64 combinations
+	local has_doc = minetest.get_modpath("doc")
+	local full_block = "mcl_mushrooms:"..color.."_mushroom_block_cap_111111"
+	local block_skin = "mcl_mushrooms_mushroom_block_skin_"..color..".png"
 	for s=0,63 do
+		-- bin is a binary string with 6 digits. Each digit stands for the
+		-- texture of one of the sides, in the same order as the tiles parameter.
+		-- 0 = pores; 1 = cap.
 		local block = table.copy(template)
 		local bin = to_binary(s)
+		local block_id = "mcl_mushrooms:"..color.."_mushroom_block_cap_"..bin
 		if s == 63 then
 			-- All-faces cap. This block is exposed to the player
 			block.description = d_cap
 			block._doc_items_longdesc = longdesc_cap
 			block._doc_items_usagehelp = S("By placing huge mushroom blocks of the same species next to each other, the sides that touch each other will turn into pores permanently.")
-			block.tiles = { "mcl_mushrooms_mushroom_block_skin_"..color..".png" }
+			block.tiles = { block_skin }
 
 			function block.on_construct(pos)
 				local sides = {
@@ -134,20 +141,20 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 			-- Cap block with pores on at least 1 side.
 			-- These blocks are used internally.
 			block._doc_items_create_entry = false
-			block._mcl_silk_touch_drop = { "mcl_mushrooms:"..color.."_mushroom_block_cap_111111" }
+			block._mcl_silk_touch_drop = { full_block }
 			block.groups.not_in_creative_inventory = 1
 			block.groups.not_in_craft_guide = 1
 			block.tiles = {}
 			for t=1, string.len(bin) do
 				if string.sub(bin, t, t) == "1" then
-					block.tiles[t] = "mcl_mushrooms_mushroom_block_skin_"..color..".png"
+					block.tiles[t] = block_skin
 				else
 					block.tiles[t] = "mcl_mushrooms_mushroom_block_inside.png"
 				end
 			end
 
-			if minetest.get_modpath("doc") then
-				doc.add_entry_alias("nodes", "mcl_mushrooms:"..color.."_mushroom_block_cap_111111", "nodes", "mcl_mushrooms:"..color.."_mushroom_block_cap_"..bin)
+			if has_doc then
+				doc.add_entry_alias("nodes", full_block, "nodes", block_id)
 			end
 		end
 
@@ -155,11 +162,7 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 		block.groups.huge_mushroom_cap = s
 
 		block._mcl_burntime = 15
-
-		-- bin is a binary string with 6 digits. Each digit stands for the
-		-- texture of one of the sides, in the same order as the tiles parameter.
-		-- 0 = pores; 1 = cap.
-		minetest.register_node("mcl_mushrooms:"..color.."_mushroom_block_cap_"..bin, block)
+		minetest.register_node(block_id, block)
 	end
 
 end
