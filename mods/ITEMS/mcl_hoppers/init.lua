@@ -4,15 +4,9 @@ local C = minetest.colorize
 
 -- Make hoppers collect in dropped items
 local function hopper_collect(pos)
-	local abovenode = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
-	if not minetest.registered_items[abovenode.name] then return end
-	-- Don't bother checking item enties if node above is a container (should save some CPU)
-	if minetest.get_item_group(abovenode.name, "container") ~= 0 then
-		return
-	end
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
-	local has_collected = false
+	local success = false
 	for object in minetest.objects_inside_radius(pos, 2) do
 		if not object:is_player() and object:get_luaentity() and object:get_luaentity().name == "__builtin:item" and not object:get_luaentity()._removed then
 			if inv and inv:room_for_item("main", ItemStack(object:get_luaentity().itemstring)) then
@@ -28,23 +22,23 @@ local function hopper_collect(pos)
 					inv:add_item("main", ItemStack(object:get_luaentity().itemstring))
 					object:get_luaentity().itemstring = ""
 					object:remove()
-					has_collected = true
+					success = true
 				end
 			end
 		end
 	end
-	return has_collected
+	return success
 end
 
 -- Pull an item from the container above into the hopper
 local function hopper_pull(pos)
-	local uppos = vector.offset(pos,0, 1, 0)
+	local uppos = vector.offset(pos, 0, 1, 0)
 
 	local upnode = minetest.get_node(uppos)
 	local updef = minetest.registered_nodes[upnode.name]
 
 	local success = false
-	if updef then
+	if updef and minetest.get_item_group(upnode.name, "container") ~= 0 then
 		if updef._on_hopper_out then
 			success = updef._on_hopper_out(uppos, pos)
 		end
@@ -54,6 +48,8 @@ local function hopper_pull(pos)
 		if success and updef._after_hopper_out then
 			updef._after_hopper_out(uppos)
 		end
+	else
+		success = hopper_collect(pos)
 	end
 	return success
 end
@@ -107,9 +103,7 @@ local function hopper_timer(pos, elapsed)
 
 	hopper_push(pos, to_pos)
 
-	if not hopper_collect(pos) then
-		hopper_pull(pos)
-	end
+	hopper_pull(pos)
 
 	return true
 end
