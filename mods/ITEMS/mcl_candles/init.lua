@@ -132,6 +132,12 @@ for i = 1, 2 do
 	}))
 	minetest.register_node("mcl_candles:candle_lit_"..i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
 		_on_ignite = nil,
+		_on_wind_charge_hit = function (pos)
+			local node = core.get_node(pos)
+			local group = core.get_item_group(node.name, "lit_candles")
+			node.name = "mcl_candles:candle_" .. group
+			core.swap_node(pos, node)
+		end,
 		groups = table.merge(tpl_lit_candle.groups, {candles = i, lit_candles = i}),
 		light_source = 3 * i,
 		on_rightclick = extinguish,
