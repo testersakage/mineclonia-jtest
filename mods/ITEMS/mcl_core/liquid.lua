@@ -439,7 +439,15 @@ function liquid.register_liquid(def)
 					else
 						-- The liquid already flows down
 					end
-				elseif new_level > 0 then
+				elseif new_level > 0 and
+						-- Liquids must not spread if they already have a way to flow
+						-- further. This could happen when a liquid node gets updated
+						-- manually. This is always the case when a node gets loaded from
+						-- the disk.
+						(not l011 or l011 > new_level) and
+						(not l211 or l211 > new_level) and
+						(not l110 or l110 > new_level) and
+						(not l112 or l112 > new_level) then
 
 					local is_new_map = false
 					if not map then
