@@ -56,6 +56,11 @@ end
 
 -- Move an item from the hopper into container (bottom or side)
 local function hopper_push(pos, to_pos)
+	if minetest.get_meta(pos):get_int("cooldown") ~= 0 then
+		minetest.get_meta(pos):set_int("cooldown", 0)
+		return false
+	end
+
 	local to_node = minetest.get_node(to_pos)
 	local to_def = minetest.registered_nodes[to_node.name]
 	local cgroup = minetest.get_item_group(to_node.name, "container")
@@ -71,6 +76,9 @@ local function hopper_push(pos, to_pos)
 		end
 		if success and to_def._after_hopper_in then
 			to_def._after_hopper_in(to_pos)
+		end
+		if success and minetest.get_item_group(to_node.name, "hopper") ~= 0 then
+			minetest.get_meta(to_pos):set_int("cooldown", 1)
 		end
 	end
 	return success
