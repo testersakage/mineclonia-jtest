@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-29 18:54+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Stick"
 msgstr "Palo"
@@ -179,7 +180,7 @@ msgid "Acacia Trapdoor"
 msgstr "Trampilla de acacia"
 
 msgid "Acacia leaves are grown from Acacia trees."
-msgstr ""
+msgstr "Las hojas de Acacia crecen en los árboles de Acacia."
 
 msgid "Birch Bark"
 msgstr "Corteza de abedul"
@@ -236,7 +237,7 @@ msgid "Birch Trapdoor"
 msgstr "Trampilla de abedul"
 
 msgid "Birch leaves are grown from Birch trees."
-msgstr ""
+msgstr "Las hojas de Abedul crecen en los árboles de Abedul."
 
 msgid "Black Stained Glass"
 msgstr "Cristal opaco"
@@ -305,7 +306,7 @@ msgid "Dark Oak Trapdoor"
 msgstr "Trampilla de roble oscuro"
 
 msgid "Dark Oak leaves are grown from Dark Oak trees."
-msgstr ""
+msgstr "Las hojas de Roble Oscuro crecen en los árboles de Roble Oscuro."
 
 msgid "Green Stained Glass"
 msgstr "Cristal tintado de verde"
@@ -368,7 +369,7 @@ msgid "Jungle Trapdoor"
 msgstr "Trampilla de jungla"
 
 msgid "Jungle leaves are grown from Jungle trees."
-msgstr ""
+msgstr "Las hojas de Jungla crecen en los árboles de Jungla."
 
 msgid "Light Blue Stained Glass"
 msgstr "Cristal tintado de azul claro"
@@ -437,7 +438,7 @@ msgid "Oak Trapdoor"
 msgstr "Trampilla de roble"
 
 msgid "Oak leaves are grown from Oak trees."
-msgstr ""
+msgstr "Las hojas de Roble crecen en los árboles de Roble."
 
 msgid "Orange Stained Glass"
 msgstr "Cristal tintado de naranja"
@@ -506,97 +507,97 @@ msgid "Spruce Trapdoor"
 msgstr "Trampilla de abeto"
 
 msgid "Spruce leaves are grown from Spruce trees."
-msgstr ""
+msgstr "Las hojas de Abeto crecen en los árboles de Abeto."
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "Leño de acacia sin corteza"
 
 msgid "Stripped Acacia Log"
 msgstr "Tronco de acacia sin corteza"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "Leño de abedul sin corteza"
 
 msgid "Stripped Birch Log"
 msgstr "Tronco de abedul sin corteza"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "Leño de roble oscuro sin corteza"
 
 msgid "Stripped Dark Oak Log"
 msgstr "Tronco de roble oscuro sin corteza"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "Leño de jungla sin corteza"
 
 msgid "Stripped Jungle Log"
 msgstr "Tronco de jungla sin corteza"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "Leño de roble sin corteza"
 
 msgid "Stripped Oak Log"
 msgstr "Tronco de roble sin corteza"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "Leño de abeto sin corteza"
 
 msgid "Stripped Spruce Log"
 msgstr "Tronco de abeto sin corteza"
 
 msgid "The stripped trunk of an Acacia tree."
-msgstr ""
+msgstr "El tronco sin corteza de un árbol de Acacia."
 
 msgid "The stripped trunk of an Birch tree."
-msgstr ""
+msgstr "El tronco sin corteza de un árbol de Abedul."
 
 msgid "The stripped trunk of an Dark Oak tree."
-msgstr ""
+msgstr "El tronco sin corteza de un árbol de Roble Oscuro."
 
 msgid "The stripped trunk of an Jungle tree."
-msgstr ""
+msgstr "El tronco sin corteza de un árbol de Jungla."
 
 msgid "The stripped trunk of an Oak tree."
-msgstr ""
+msgstr "El tronco sin corteza de un árbol de Roble."
 
 msgid "The stripped trunk of an Spruce tree."
-msgstr ""
+msgstr "El tronco sin corteza de un árbol de Abeto."
 
 msgid "The stripped wood of an Acacia tree."
-msgstr ""
+msgstr "La madera sin corteza de un árbol de Acacia."
 
 msgid "The stripped wood of an Birch tree."
-msgstr ""
+msgstr "La madera sin corteza de un árbol de Abedul."
 
 msgid "The stripped wood of an Dark Oak tree."
-msgstr ""
+msgstr "La madera sin corteza de un árbol de Roble Oscuro."
 
 msgid "The stripped wood of an Jungle tree."
-msgstr ""
+msgstr "La madera sin corteza de un árbol de Jungla."
 
 msgid "The stripped wood of an Oak tree."
-msgstr ""
+msgstr "La madera sin corteza de un árbol de Roble."
 
 msgid "The stripped wood of an Spruce tree."
-msgstr ""
+msgstr "La madera sin corteza de un árbol de Abeto."
 
 msgid "The trunk of a Acacia tree."
-msgstr ""
+msgstr "El tronco de un árbol de Acacia."
 
 msgid "The trunk of a Birch tree."
-msgstr ""
+msgstr "El tronco de un árbol de Abedul."
 
 msgid "The trunk of a Dark Oak tree."
-msgstr ""
+msgstr "El tronco de un árbol de Roble Oscuro."
 
 msgid "The trunk of a Jungle tree."
-msgstr ""
+msgstr "El tronco de un árbol de Jungla."
 
 msgid "The trunk of a Oak tree."
-msgstr ""
+msgstr "El tronco de un árbol de Roble."
 
 msgid "The trunk of a Spruce tree."
-msgstr ""
+msgstr "El tronco de un árbol de Abeto."
 
 msgid "White Stained Glass"
 msgstr "Cristal tintado de blanco"
@@ -731,7 +732,7 @@ msgid "Mycelium with Snow"
 msgstr "Micelio con nieve"
 
 msgid "Podzol"
-msgstr "Podzol"
+msgstr "Podsol"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
 msgstr "El podzol es un tipo de tierra que se encuentra en los bosques de taiga. Solo unas pocas plantas pueden sobrevivir en él."
@@ -1188,4 +1189,3 @@ msgstr "Escaleras de ladrillo de piedra musgosa"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "Losa de ladrillo de piedra musgosa"
-
