@@ -24,8 +24,20 @@ local tpl_candle = {
 			return true
 		end
 	end,
+	after_destruct = function (pos, oldnode)
+		local group = core.get_item_group(oldnode.name, "candles")
+		local item = ItemStack("mcl_candles:candle_1 " .. group)
+		local index = core.get_meta(pos):get("color")
+		if index then
+			local _, color_defs = mcl_dyes.palette_index_to_color(index)
+			item:get_meta():set_int("palette_index", index)
+			item:get_meta():set_string("description", S("@1 Candle", color_defs.readable_name))
+		end
+		return core.add_item(pos, item)
+	end,
 	description = S("Candle"),
 	drawtype = "mesh",
+	drop = "",
 	groups = {
 		axey = 1, candles = 1, deco_block = 1, dig_by_piston = 1, handy = 1, not_solid = 1, pickaxey = 1,
 		shearsy = 1, shovely = 1, swordy = 1, unlit_candles = 1
@@ -108,7 +120,6 @@ end
 for i = 1, 2 do
 	local candle_n = {
 		collision_box = {fixed = candleboxes[i], type = "fixed"},
-		drop = "mcl_candles:candle_1".." "..tostring(i),
 		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
 		selection_box = {fixed = candleboxes[i], type = "fixed"}
 	}
