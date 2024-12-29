@@ -549,11 +549,7 @@ function liquid.register_liquid(def)
 
 
 		-- remove attributes that might interfere.
-		ndef.liquidtype					 = nil
-		--ndef.liquid_viscosity		 = nil
-		--ndef.liquid_renewable		 = nil
-		--ndef.liquid_range				 = nil
-		--ndef.liquid_ticks				 = nil
+		ndef.liquidtype = nil
 
 
 		ndef.liquid_alternative_source	= NAME_SOURCE
@@ -566,10 +562,6 @@ function liquid.register_liquid(def)
 		end
 
 
-		ndef._liquid_ticks			 = TICKS
-		ndef._liquid_renewable	 = RENEWABLE
-		ndef._liquid_range			 = FLOW_DISTANCE
-
 		if not ndef.groups then
 			ndef.groups = { }
 		end
@@ -578,14 +570,12 @@ function liquid.register_liquid(def)
 
 
 	set_common_defs(def_source)
-	def_source._liquid_type						= 'source'
 	def_source.drawtype								= "liquid"
 	def_source.groups.liquid_source		= 1
 	core.register_node(NAME_SOURCE, def_source)
 
 
 	set_common_defs(def_flowing)
-	def_flowing._liquid_type					= 'flowing'
 	def_flowing.drawtype							= "flowingliquid"
 	def_flowing.groups.liquid_flowing = 1
 	core.register_node(NAME_FLOWING, def_flowing)
