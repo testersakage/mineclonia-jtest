@@ -13,6 +13,7 @@ mcl_dyes.colors = {
 		rgb = "#d0d6d7",
 		unicolor = "white",
 		mcl2 = "white",
+		palette_index = 0
 	},
 	["silver"] = {
 		readable_name = "Light Grey",
@@ -20,6 +21,7 @@ mcl_dyes.colors = {
 		rgb = "#818177",
 		unicolor = "grey",
 		mcl2 = "grey",
+		palette_index = 1
 	},
 	["grey"] = {
 		readable_name = "Grey",
@@ -27,6 +29,7 @@ mcl_dyes.colors = {
 		rgb = "#383c40",
 		unicolor = "darkgrey",
 		mcl2 = "dark_grey",
+		palette_index = 2
 	},
 	["black"] = {
 		readable_name = "Black",
@@ -34,6 +37,7 @@ mcl_dyes.colors = {
 		rgb = "#080a10",
 		unicolor = "black",
 		mcl2 = "black",
+		palette_index = 3
 	},
 	["purple"] = {
 		readable_name = "Purple",
@@ -41,6 +45,7 @@ mcl_dyes.colors = {
 		rgb = "#6821a0",
 		unicolor = "violet",
 		mcl2 = "violet",
+		palette_index = 4
 	},
 	["blue"] = {
 		readable_name = "Blue",
@@ -48,6 +53,7 @@ mcl_dyes.colors = {
 		rgb = "#2e3094",
 		unicolor = "blue",
 		mcl2 = "blue",
+		palette_index = 5
 	},
 	["light_blue"] = {
 		readable_name = "Light Blue",
@@ -55,6 +61,7 @@ mcl_dyes.colors = {
 		rgb = "#258ec9",
 		unicolor = "light_blue",
 		mcl2 = "lightblue",
+		palette_index = 6
 	},
 	["cyan"] = {
 		readable_name = "Cyan",
@@ -62,6 +69,7 @@ mcl_dyes.colors = {
 		rgb = "#167b8c",
 		unicolor = "cyan",
 		mcl2 = "cyan",
+		palette_index = 7
 	},
 	["green"] = {
 		readable_name = "Green",
@@ -69,6 +77,7 @@ mcl_dyes.colors = {
 		rgb = "#4b5e25",
 		unicolor = "dark_green",
 		mcl2 = "dark_green",
+		palette_index = 8
 	},
 	["lime"] = {
 		readable_name = "Lime",
@@ -76,6 +85,7 @@ mcl_dyes.colors = {
 		rgb = "#60ac19",
 		unicolor = "green",
 		mcl2 = "green",
+		palette_index = 9
 	},
 	["yellow"] = {
 		readable_name = "Yellow",
@@ -83,6 +93,7 @@ mcl_dyes.colors = {
 		rgb = "#f1b216",
 		unicolor = "yellow",
 		mcl2 = "yellow",
+		palette_index = 10
 	},
 	["brown"] = {
 		readable_name = "Brown",
@@ -90,6 +101,7 @@ mcl_dyes.colors = {
 		rgb = "#633d20",
 		unicolor = "dark_orange",
 		mcl2 = "brown",
+		palette_index = 11
 	},
 	["orange"] = {
 		readable_name = "Orange",
@@ -97,6 +109,7 @@ mcl_dyes.colors = {
 		rgb = "#e26501",
 		unicolor = "orange",
 		mcl2 = "orange",
+		palette_index = 12
 	},
 	["red"] = {
 		readable_name = "Red",
@@ -104,6 +117,7 @@ mcl_dyes.colors = {
 		rgb = "#912222",
 		unicolor = "red",
 		mcl2 = "red",
+		palette_index = 13
 	},
 	["magenta"] = {
 		readable_name = "Magenta",
@@ -111,6 +125,7 @@ mcl_dyes.colors = {
 		rgb = "#ab31a2",
 		unicolor = "red_violet",
 		mcl2 = "magenta",
+		palette_index = 14
 	},
 	["pink"] = {
 		readable_name = "Pink",
@@ -118,6 +133,7 @@ mcl_dyes.colors = {
 		rgb = "#d56791",
 		unicolor = "light_red",
 		mcl2 = "pink",
+		palette_index = 15
 	},
 }
 

@@ -1,28 +1,16 @@
 local S = minetest.get_translator("mcl_candles")
 
 local candleboxes = {
-	{-1/16, -8/16, -1/16, 1/16, -2/16, 1/16},
-	{-2/16, -8/16, -3/16, 2/16, -2/16, 2/16},
+	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
+	{-0.15625, -0.5, -0.09375, 0.15625, -0.125, 0.09375},
 	{-3/16, -8/16, -3/16, 2/16, -2/16, 2/16},
 	{-3/16, -8/16, -3/16, 3/16, -2/16, 3/16}
 }
 
 local tpl_candle = {
-	description = S("Candle"),
-	drawtype = "mesh",
-	groups = { axey = 1, dig_by_piston = 1, handy = 1, candles = 1, unlit_candles = 1, not_solid = 1, pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1 },
-	is_ground_content = false,
-	paramtype = "light",
-	paramtype2 = "color",
-	palette = "mcl_dyes_palette.png",
-	inventory_image = "mcl_candles_item.png",
-	wield_image = "mcl_candles_item.png",
-	tiles = { "mcl_candles_candle.png", "blank.png" },
-	node_placement_prediction = "",
-	sounds = mcl_sounds.node_sound_defaults(),
-	sunlight_propagates = true,
-	use_texture_alpha = "blend",
-	_on_dye_place = function(pos,color)
+	_mcl_blast_resistance = 0.1,
+	_mcl_hardness = 0.1,
+	_on_dye_place = function(pos, color)
 		local node = minetest.get_node(pos)
 		node.param2 = mcl_dyes.colors[color].palette_index
 		minetest.swap_node(pos, node)
@@ -36,23 +24,42 @@ local tpl_candle = {
 			return true
 		end
 	end,
-	_mcl_blast_resistance = 0.1,
-	_mcl_hardness = 0.1,
+	description = S("Candle"),
+	drawtype = "mesh",
+	groups = {
+		axey = 1, candles = 1, deco_block = 1, dig_by_piston = 1, handy = 1, not_solid = 1, pickaxey = 1,
+		shearsy = 1, shovely = 1, swordy = 1, unlit_candles = 1
+	},
+	inventory_image = "mcl_candles_item.png",
+	is_ground_content = false,
+	node_placement_prediction = "",
+	palette = "mcl_dyes_palette.png",
+	paramtype = "light",
+	paramtype2 = "color",
+	sounds = mcl_sounds.node_sound_defaults(),
+	sunlight_propagates = true,
+	tiles = {"mcl_candles_candle.png", "blank.png"},
+	use_texture_alpha = "blend",
+	wield_image = "mcl_candles_item.png"
 }
 
 local tpl_lit_candle = {
 	description = S("Lit Candle"),
-	groups = { axey = 1, dig_by_piston = 1, handy = 1, candles = 1, lit_candles = 1, not_in_creative_inventory = 1, not_solid = 1, pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1 },
+	groups = {
+		axey = 1, candles = 1, dig_by_piston = 1, handy = 1, lit_candles = 1,
+		not_in_creative_inventory = 1, not_solid = 1, pickaxey = 1, shearsy = 1,
+		shovely = 1, swordy = 1
+	},
     tiles = {
         "mcl_candles_candle.png",
         {
-            name = "fire_basic_flame_animated.png",
             animation = {
-                type = "vertical_frames",
-                aspect_w = 16,
                 aspect_h = 16,
-                length = 5.5
-            }
+				aspect_w = 16,
+				length = 5.5,
+				type = "vertical_frames"
+            },
+			name = "fire_basic_flame_animated.png"
         }
     }
 }
@@ -98,22 +105,35 @@ function extinguish(pos, node, clicker, itemstack, pointed_thing)
 	end
 end
 
-for i = 1, 1 do
+for i = 1, 2 do
 	local candle_n = {
-		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
+		collision_box = {fixed = candleboxes[i], type = "fixed"},
 		drop = "mcl_candles:candle_1".." "..tostring(i),
-		selection_box = {type = "fixed", fixed = candleboxes[i]},
-		collision_box = {type = "fixed", fixed = candleboxes[i]},
+		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
+		selection_box = {fixed = candleboxes[i], type = "fixed"}
 	}
 	local creative_group
-	if i ~= 1 then creative_group = { not_in_creative_inventory = 1 } end
-	minetest.register_node("mcl_candles:candle_"..i,table.merge(tpl_candle, candle_n,{
-		groups = table.merge(tpl_candle.groups, { candles = i, unlit_candles = i }, creative_group),
+	if i ~= 1 then creative_group = {not_in_creative_inventory = 1} end
+	minetest.register_node("mcl_candles:candle_"..i, table.merge(tpl_candle, candle_n, {
+		_get_all_virtual_items = function ()
+			local output = {deco = {}}
+			if i == 1 then
+				for _, colordef in pairs(mcl_dyes.colors) do
+					local stack = ItemStack("mcl_candles:candle_1")
+					stack:get_meta():set_int("palette_index", colordef.palette_index)
+					stack:get_meta():set_string("description", S("@1 Candle", colordef.readable_name))
+					local str_meta = stack:to_string()
+					table.insert(output.deco, str_meta)
+				end
+			end
+			return output
+		end,
+		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
 	}))
-	minetest.register_node("mcl_candles:candle_lit_"..i,table.merge(tpl_candle, tpl_lit_candle, candle_n,{
-		light_source = 3 * i,
-		groups = table.merge(tpl_lit_candle.groups, { candles = i, lit_candles = i }),
+	minetest.register_node("mcl_candles:candle_lit_"..i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
 		_on_ignite = nil,
+		groups = table.merge(tpl_lit_candle.groups, {candles = i, lit_candles = i}),
+		light_source = 3 * i,
 		on_rightclick = extinguish,
 	}))
 end
