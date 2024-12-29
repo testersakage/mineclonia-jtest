@@ -26,9 +26,12 @@ local tpl_candle = {
 	end,
 	after_destruct = function(pos, oldnode)
 		local param2 = oldnode.param2
+		local _, colordef = mcl_dyes.palette_index_to_color(param2)
+		local r_name = colordef.readable_name
 		local group = core.get_item_group(oldnode.name, "candles")
 		local item = ItemStack("mcl_candles:candle_1" .. " " .. group)
 		item:get_meta():set_string("palette_index", param2)
+		item:get_meta():set_string("description", S("@1 Candle", r_name))
 		return minetest.add_item(pos, item)
 	end,
 	description = S("Candle"),

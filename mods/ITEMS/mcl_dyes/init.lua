@@ -151,6 +151,12 @@ function mcl_dyes.mcl2_to_color(mcl2color)
 	end
 end
 
+function mcl_dyes.palette_index_to_color(index)
+	for k, v in pairs(mcl_dyes.colors) do
+		if v.palette_index == index then return k, v end
+	end
+end
+
 for k,v in pairs(mcl_dyes.colors) do
 	minetest.register_craftitem("mcl_dyes:" .. k, {
 		inventory_image = "mcl_dye_white.png^(mcl_dye_mask.png^[colorize:"..v.rgb..")",
