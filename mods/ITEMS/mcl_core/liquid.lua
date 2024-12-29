@@ -111,7 +111,7 @@ function liquid.register_liquid(def)
 		if node then
 			return node
 		else
-			node = core.get_node(pos)
+			node = core.get_node_or_nil(pos)
 			read_nodes[h] = node
 			return node
 		end
@@ -158,16 +158,14 @@ function liquid.register_liquid(def)
 		-- decisions, other factors are in play as well.
 
 		if n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING then
-			return 1
-		elseif n.name == 'ignore' then
-			return nil
+			return true
 		else
 			local ndef = core.registered_nodes[n.name]
 			if ndef and ndef.floodable then
-				return 1
+				return true
 			end
 		end
-		return 0
+		return false
 	end
 
 
@@ -188,6 +186,8 @@ function liquid.register_liquid(def)
 		-- to slope) (the result)
 		local rmap = {}
 
+		local ok = true
+
 		local function step(pos, level)
 			-- This function checks if the current position has an obstacle or a
 			-- slope.
@@ -195,18 +195,23 @@ function liquid.register_liquid(def)
 			local h = core.hash_node_position(pos)
 			if pmap[h] == nil then
 				local n1 = get_node(pos)
-				local n2= get_node(vector.offset(pos,  0,-1, 0))
+				local n2 = get_node(vector.offset(pos,  0,-1, 0))
 
-				local l1 = n1 and get_liquid_level(n1)
+				if not (n1 and n2) then
+					ok = false
+					return
+				end
 
-				local f1 = n1 and is_floodable(n1)
-				local f2 = n2 and is_floodable(n2)
+				local l1 = get_liquid_level(n1)
 
-				if f1 == 1 and f2 == 1 then 
+				local f1 = is_floodable(n1)
+				local f2 = is_floodable(n2)
+
+				if f1 and f2 then 
 					found[#found+1] = pos
 					list[#list+1] = pos
 					pmap[h] = level
-				elseif f1 == 1 and (l1 or 0) <= level then
+				elseif f1 and (l1 or 0) <= level then
 					list[#list+1] = pos
 					pmap[h] = level
 				end
@@ -244,67 +249,78 @@ function liquid.register_liquid(def)
 				step(vector.offset(p,  1, 0, 0), level)
 				step(vector.offset(p,  0, 0,-1), level)
 				step(vector.offset(p,  0, 0, 1), level)
+
+				if not ok then
+					break
+				end
+			end
+			if not ok then
+				break
 			end
 		end 
 
-		if #found == 0 then
-			-- If we hit the minimum level without finding a slope. The liquid shall
-			-- flow in all directions where there is no obstacle. The potential map
-			-- becomes the real map.
-			rmap = pmap
-		else 
-			-- If a slope within range was found we need to remove all levels that
-			-- are not part of the shortest path to those slopes.
+		if ok then
+			if #found == 0 then
+				-- If we hit the minimum level without finding a slope. The liquid
+				-- shall flow in all directions where there is no obstacle. The
+				-- potential map becomes the real map.
+				rmap = pmap
+			else 
+				-- If a slope within range was found we need to remove all levels that
+				-- are not part of the shortest path to those slopes.
 
-			list = found
+				list = found
 
-			while #list > 0 do
-			--for nlevel = level, orig_level do
-				local l = list
-				list = {}
-				for i, p in ipairs(l) do
-					local h = core.hash_node_position(p)
-					local level = pmap[h]
-					rmap[h] = level
-
-					local function back_trace(p)
+				while #list > 0 do
+					--for nlevel = level, orig_level do
+					local l = list
+					list = {}
+					for i, p in ipairs(l) do
 						local h = core.hash_node_position(p)
-						local m = pmap[h]
-						if m and m > level then
-							list[#list+1] = p
-						end
-					end
+						local level = pmap[h]
+						rmap[h] = level
 
-					-- Search the origin.
-					back_trace(vector.offset(p, -1, 0, 0))
-					back_trace(vector.offset(p,  1, 0, 0))
-					back_trace(vector.offset(p,  0, 0,-1))
-					back_trace(vector.offset(p,  0, 0, 1))
+						local function back_trace(p)
+							local h = core.hash_node_position(p)
+							local m = pmap[h]
+							if m and m > level then
+								list[#list+1] = p
+							end
+						end
+
+						-- Search the origin.
+						back_trace(vector.offset(p, -1, 0, 0))
+						back_trace(vector.offset(p,  1, 0, 0))
+						back_trace(vector.offset(p,  0, 0,-1))
+						back_trace(vector.offset(p,  0, 0, 1))
+					end
 				end
 			end
-		end
 
-		--core.log('--------------------------')
-		--for x = -8,8 do
-		--	line = '| '
-		--	for z = -8,8 do
-		--		local h = core.hash_node_position(pos + vector.new(x, 0, z))
-		--		local level = rmap[h]
-		--		if level then
-		--			line = line..level..' '
-		--		elseif pmap[h] then
-		--			line = line..'. '
-		--		else
-		--			line = line..'	'
-		--		end
-		--	end
-		--	line = line..' |'
-		--	core.log(line)
-		--end
+			--core.log('--------------------------')
+			--for x = -8,8 do
+			--	line = '| '
+			--	for z = -8,8 do
+			--		local h = core.hash_node_position(pos + vector.new(x, 0, z))
+			--		local level = rmap[h]
+			--		if level then
+			--			line = line..level..' '
+			--		elseif pmap[h] then
+			--			line = line..'. '
+			--		else
+			--			line = line..'	'
+			--		end
+			--	end
+			--	line = line..' |'
+			--	core.log(line)
+			--end
 
 
-		return function (pos)
-			return rmap[core.hash_node_position(pos)]
+			return function (pos)
+				return rmap[core.hash_node_position(pos)]
+			end
+		else
+			return nil
 		end
 	end
 
@@ -320,7 +336,7 @@ function liquid.register_liquid(def)
 
 		local p111 = pos
 		local n111 = get_node(p111)
-		if n111.name == 'ignore' then
+		if not n111 then
 			return
 		end
 
@@ -338,20 +354,9 @@ function liquid.register_liquid(def)
 		local n101 = get_node(p101)
 		local n121 = get_node(p121)
 
-
-		if n011.name == 'ignore' or
-			 n211.name == 'ignore' or
-			 n110.name == 'ignore' or
-			 n112.name == 'ignore' or
-			 n101.name == 'ignore' or
-			 n121.name == 'ignore' then
-
-
-			 if is_liquid(n111) then
-				 -- TODO how to handle that?
-			 end
-			 return
-		 end
+		if not ( n011 and n211 and n110 and n112 and n101 and n121 ) then 
+			return
+		end
 
 
 		if RENEWABLE then
@@ -456,6 +461,9 @@ function liquid.register_liquid(def)
 					if not map then
 						-- Make a new map if there is none.
 						map = path_find(p111)
+						if not map then
+							return
+						end
 						is_new_map = true
 					end
 
@@ -468,21 +476,21 @@ function liquid.register_liquid(def)
 						local cnt_flood = 0
 						local new_liquid = make_liquid(new_level)
 
-						local function flood(p, l)
+						local function flood(p, n, l)
 							local m = map(p)
 							if m and m == new_level then
-								if new_level > (l or 0) and is_floodable(p) then
+								if new_level > (l or 0) and is_floodable(n) then
 									update_next({pos=p, map=map})
 									set_node(p, new_liquid)
+									cnt_flood = cnt_flood + 1
 								end
-								cnt_flood = cnt_flood + 1
 							end
 						end
 
-						flood(p011, l011)
-						flood(p211, l211)
-						flood(p110, l110)
-						flood(p112, l112)
+						flood(p011, n011, l011)
+						flood(p211, n211, l211)
+						flood(p110, n110, l110)
+						flood(p112, n112, l112)
 						return cnt_flood
 
 					end
@@ -490,6 +498,9 @@ function liquid.register_liquid(def)
 					if push() == 0 and not is_new_map then
 						-- The map might be outdated, try once more with a new map
 						map = path_find(p111)
+						if not map then
+							return
+						end
 						push()
 					end
 				end
