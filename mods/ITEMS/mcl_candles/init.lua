@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_candles")
+local S = core.get_translator("mcl_candles")
 
 local candleboxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
@@ -11,16 +11,16 @@ local tpl_candle = {
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_on_dye_place = function(pos, color)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		node.param2 = mcl_dyes.colors[color].palette_index
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 	end,
 	_on_ignite = function(player, pointed_thing)
-		local n = minetest.get_node(pointed_thing.under)
-		local g = minetest.get_item_group(n.name, "candles")
+		local n = core.get_node(pointed_thing.under)
+		local g = core.get_item_group(n.name, "candles")
 		if g > 0 then
 			n.name = "mcl_candles:candle_lit_"..tostring(g)
-			minetest.swap_node(pointed_thing.under, n)
+			core.swap_node(pointed_thing.under, n)
 			return true
 		end
 	end,
@@ -70,20 +70,20 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc ~= nil then return rc end
 
-	local unode = minetest.get_node(pointed_thing.under)
+	local unode = core.get_node(pointed_thing.under)
 
-	local g = minetest.get_item_group(unode.name, "candles")
+	local g = core.get_item_group(unode.name, "candles")
 	if g > 0 then
 		if g < #candleboxes then
 			unode.name = "mcl_candles:candle_"..tostring(math.min(4, g + 1))
 			unode.param2 = itemstack:get_meta():get("palette_index")
-			minetest.swap_node(pointed_thing.under, unode)
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+			core.swap_node(pointed_thing.under, unode)
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
 	else
-		return minetest.item_place_node(itemstack, placer, pointed_thing)
+		return core.item_place_node(itemstack, placer, pointed_thing)
 	end
 
 	return itemstack
@@ -98,10 +98,10 @@ function extinguish(pos, node, clicker, itemstack, pointed_thing)
 		return
 	end
 
-	local g = minetest.get_item_group(node.name, "lit_candles")
+	local g = core.get_item_group(node.name, "lit_candles")
 	if g > 0 then
 		node.name = "mcl_candles:candle_"..tostring(g)
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 	end
 end
 
@@ -114,7 +114,7 @@ for i = 1, 2 do
 	}
 	local creative_group
 	if i ~= 1 then creative_group = {not_in_creative_inventory = 1} end
-	minetest.register_node("mcl_candles:candle_"..i, table.merge(tpl_candle, candle_n, {
+	core.register_node("mcl_candles:candle_"..i, table.merge(tpl_candle, candle_n, {
 		_get_all_virtual_items = function ()
 			local output = {deco = {}}
 			if i == 1 then
@@ -130,7 +130,7 @@ for i = 1, 2 do
 		end,
 		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
 	}))
-	minetest.register_node("mcl_candles:candle_lit_"..i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
+	core.register_node("mcl_candles:candle_lit_"..i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
 		_on_ignite = nil,
 		_on_wind_charge_hit = function (pos)
 			local node = core.get_node(pos)
@@ -148,26 +148,26 @@ local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
 	local i = 0
 	local dye, candle
 	for _, stack in pairs(old_craft_grid) do
-		if minetest.get_item_group(stack:get_name(), "candles") > 0 then
+		if core.get_item_group(stack:get_name(), "candles") > 0 then
 			candle = stack
 			i = i + 1
-		elseif minetest.get_item_group(stack:get_name(), "dye") > 0 then
+		elseif core.get_item_group(stack:get_name(), "dye") > 0 then
 			dye = stack
 			i = i + 1
 		end
 	end
 	if dye and candle and i == 2 then
 		local cdef = mcl_dyes.colors[dye:get_definition()._color]
-		local r = ItemStack(minetest.itemstring_with_palette(candle, cdef.palette_index))
+		local r = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index))
 		r:get_meta():set_string("description", S("@1 Candle", cdef.readable_name))
 		return r
 	end
 end
 
-minetest.register_craft_predict(candle_craft)
-minetest.register_on_craft(candle_craft)
+core.register_craft_predict(candle_craft)
+core.register_on_craft(candle_craft)
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_candles:candle_1",
 	recipe = {
 		{"mcl_mobitems:string"},
@@ -175,7 +175,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_candles:candle_1",
 	recipe = {
