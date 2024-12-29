@@ -15,24 +15,14 @@ local tpl_candle = {
 		node.param2 = mcl_dyes.colors[color].palette_index
 		core.swap_node(pos, node)
 	end,
-	_on_ignite = function(_, pointed_thing)
-		local node = core.get_node(pointed_thing.under)
-		local group = core.get_item_group(node.name, "candles")
-		if group > 0 then
-			node.name = "mcl_candles:candle_lit_" .. group
-			core.swap_node(pointed_thing.under, node)
+	_on_ignite = function(player, pointed_thing)
+		local n = core.get_node(pointed_thing.under)
+		local g = core.get_item_group(n.name, "candles")
+		if g > 0 then
+			n.name = "mcl_candles:candle_lit_"..tostring(g)
+			core.swap_node(pointed_thing.under, n)
 			return true
 		end
-	end,
-	after_destruct = function(pos, oldnode)
-		local param2 = oldnode.param2
-		local _, colordef = mcl_dyes.palette_index_to_color(param2)
-		local r_name = colordef.readable_name
-		local group = core.get_item_group(oldnode.name, "candles")
-		local item = ItemStack("mcl_candles:candle_1" .. " " .. group)
-		item:get_meta():set_string("palette_index", param2)
-		item:get_meta():set_string("description", S("@1 Candle", r_name))
-		return minetest.add_item(pos, item)
 	end,
 	description = S("Candle"),
 	drawtype = "mesh",
@@ -82,10 +72,10 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 
 	local unode = core.get_node(pointed_thing.under)
 
-	local group = core.get_item_group(unode.name, "candles")
-	if group > 0 then
-		if group < #candleboxes then
-			unode.name = "mcl_candles:candle_" .. math.min(4, group + 1)
+	local g = core.get_item_group(unode.name, "candles")
+	if g > 0 then
+		if g < #candleboxes then
+			unode.name = "mcl_candles:candle_"..tostring(math.min(4, g + 1))
 			unode.param2 = itemstack:get_meta():get("palette_index")
 			core.swap_node(pointed_thing.under, unode)
 			if not core.is_creative_enabled(placer:get_player_name()) then
@@ -99,7 +89,7 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-function extinguish(pos, node, clicker, _, _)
+function extinguish(pos, node, clicker, itemstack, pointed_thing)
 	if not clicker then
 		return
 	end
@@ -108,9 +98,9 @@ function extinguish(pos, node, clicker, _, _)
 		return
 	end
 
-	local group = core.get_item_group(node.name, "lit_candles")
-	if group > 0 then
-		node.name = "mcl_candles:candle_" .. group
+	local g = core.get_item_group(node.name, "lit_candles")
+	if g > 0 then
+		node.name = "mcl_candles:candle_"..tostring(g)
 		core.swap_node(pos, node)
 	end
 end
@@ -118,13 +108,13 @@ end
 for i = 1, 2 do
 	local candle_n = {
 		collision_box = {fixed = candleboxes[i], type = "fixed"},
-		drop = "",
-		mesh = "mcl_candles_candle_" .. i .. ".obj",
+		drop = "mcl_candles:candle_1".." "..tostring(i),
+		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
 		selection_box = {fixed = candleboxes[i], type = "fixed"}
 	}
 	local creative_group
 	if i ~= 1 then creative_group = {not_in_creative_inventory = 1} end
-	core.register_node("mcl_candles:candle_" .. i, table.merge(tpl_candle, candle_n, {
+	core.register_node("mcl_candles:candle_"..i, table.merge(tpl_candle, candle_n, {
 		_get_all_virtual_items = function ()
 			local output = {deco = {}}
 			if i == 1 then
@@ -140,7 +130,7 @@ for i = 1, 2 do
 		end,
 		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
 	}))
-	core.register_node("mcl_candles:candle_lit_" .. i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
+	core.register_node("mcl_candles:candle_lit_"..i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
 		_on_ignite = nil,
 		_on_wind_charge_hit = function (pos)
 			local node = core.get_node(pos)
@@ -154,7 +144,7 @@ for i = 1, 2 do
 	}))
 end
 
-local function candle_craft(_, _, old_craft_grid, _)
+local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
 	local i = 0
 	local dye, candle
 	for _, stack in pairs(old_craft_grid) do
