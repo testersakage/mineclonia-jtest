@@ -208,12 +208,10 @@ if minetest.get_modpath("screwdriver") then
 end
 
 -- Sidewars hopper (base definition)
-local def_hopper_side = {
+local def_hopper_side = table.merge(def_hopper, {
 	_doc_items_create_entry = false,
 	drop = "mcl_hoppers:hopper",
 	groups = {pickaxey=1, container=2,not_in_creative_inventory=1,hopper=2, _mcl_partial = 2},
-	drawtype = "nodebox",
-	paramtype = "light",
 	paramtype2 = "facedir",
 	tiles = {"mcl_hoppers_hopper_inside.png^mcl_hoppers_hopper_top.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png"},
 	node_box = {
@@ -241,63 +239,9 @@ local def_hopper_side = {
 			{ -0.5, -0.3, -0.1, 0.1, -0.1, 0.1 },
 		},
 	},
-	is_ground_content = false,
 
-	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", mcl_hoppers_formspec)
-		local inv = meta:get_inventory()
-		inv:set_size("main", 5)
-	end,
-	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
-
-	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
-		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
-			return 0
-		else
-			return count
-		end
-	end,
-	allow_metadata_inventory_take = function(pos, _, _, stack, player)
-		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
-			return 0
-		else
-			return stack:get_count()
-		end
-	end,
-	allow_metadata_inventory_put = function(pos, _, _, stack, player)
-		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
-			return 0
-		else
-			return stack:get_count()
-		end
-	end,
-	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in mcl_hoppers at "..minetest.pos_to_string(pos))
-	end,
-	on_metadata_inventory_put = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to mcl_hoppers at "..minetest.pos_to_string(pos))
-		mcl_redstone.update_comparators(pos)
-	end,
-	on_metadata_inventory_take = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from mcl_hoppers at "..minetest.pos_to_string(pos))
-		mcl_redstone.update_comparators(pos)
-	end,
 	on_rotate = on_rotate,
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-
-	_mcl_blast_resistance = 4.8,
-	_mcl_hardness = 3,
-}
+})
 
 local def_hopper_side_enabled = table.copy(def_hopper_side)
 def_hopper_side_enabled.description = S("Side Hopper")
