@@ -34,7 +34,12 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	if itemstack then
 		local unbreaking = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
 		if unbreaking > 0 then
-			use = math.floor(use / (0.6 + 0.4 / (unbreaking + 1)))
+			local elytra = minetest.get_item_group (itemstring, "elytra")
+			if elytra > 0 then
+				use = math.floor(use * (unbreaking + 1))
+			else
+				use = math.floor(use / (0.6 + 0.4 / (unbreaking + 1)))
+			end
 		end
 	end
 	if use > 0 then

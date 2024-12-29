@@ -578,15 +578,21 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 end
 
 function mcl_util.calculate_durability(itemstack)
+	local name = itemstack:get_name()
 	local unbreaking_level = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
-	local armor_uses = minetest.get_item_group(itemstack:get_name(), "mcl_armor_uses")
+	local armor_uses = minetest.get_item_group (name, "mcl_armor_uses")
+	local elytra = minetest.get_item_group (name, "elytra")
 
 	local uses
 
 	if armor_uses > 0 then
 		uses = armor_uses
 		if unbreaking_level > 0 then
-			uses = uses / (0.6 + 0.4 / (unbreaking_level + 1))
+			if elytra <= 0 then
+				uses = uses / (0.6 + 0.4 / (unbreaking_level + 1))
+			else
+				uses = uses * (unbreaking_level + 1)
+			end
 		end
 	else
 		local def = itemstack:get_definition()
