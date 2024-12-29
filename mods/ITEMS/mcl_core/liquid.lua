@@ -313,7 +313,7 @@ function liquid.register_liquid(def)
 
 		local pos = item.pos
 		local map = item.map
-		local mode = item.mode
+		local is_sinking = item.is_sinking
 
 		local p111 = pos
 		local n111 = get_node(p111)
@@ -360,12 +360,12 @@ function liquid.register_liquid(def)
 
 			if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then 
 				-- Renew liquid
-				update_next({pos=pos, mode='ADD'})
+				update_next({pos=pos})
 				set_node(pos, { name=NAME_SOURCE })
-				if n011.name ~= NAME_SOURCE then update_next({pos=p011, mode='ADD'}) end
-				if n211.name ~= NAME_SOURCE then update_next({pos=p211, mode='ADD'}) end
-				if n110.name ~= NAME_SOURCE then update_next({pos=p110, mode='ADD'}) end
-				if n112.name ~= NAME_SOURCE then update_next({pos=p112, mode='ADD'}) end
+				if n011.name ~= NAME_SOURCE then update_next({pos=p011}) end
+				if n211.name ~= NAME_SOURCE then update_next({pos=p211}) end
+				if n110.name ~= NAME_SOURCE then update_next({pos=p110}) end
+				if n112.name ~= NAME_SOURCE then update_next({pos=p112}) end
 				return
 			end
 		end
@@ -414,7 +414,7 @@ function liquid.register_liquid(def)
 		if l111 ~= nil then
 			-- The current node is already a liquid
 
-			if l111 == support_level and mode ~= 'REMOVE' then
+			if l111 == support_level and not is_sinking then
 				-- The current node is on its terminal level
 				-- This means it is ready to spread.
 
@@ -434,7 +434,7 @@ function liquid.register_liquid(def)
 
 					if not l101 or l101 < 8 then
 						-- turn the liquid below into down-flowing
-						update_next({pos=p101, mode='ADD'})
+						update_next({pos=p101})
 						set_node(p101, make_liquid('down'))
 					else
 						-- The liquid already flows down
@@ -469,7 +469,7 @@ function liquid.register_liquid(def)
 							local m = map(p)
 							if m and m == new_level then
 								if new_level > (l or 0) and is_floodable(p) then
-									update_next({pos=p, map=map, mode='ADD'})
+									update_next({pos=p, map=map})
 									set_node(p, new_liquid)
 								end
 								cnt_flood = cnt_flood + 1
@@ -495,39 +495,39 @@ function liquid.register_liquid(def)
 				-- The liquid level is too high here we need to reduce it.
 
 				if support_level > 0 then
-					update_next({pos=p111, mode='REMOVE'})
+					update_next({pos=p111, is_sinking=true})
 				end
 				set_node(p111, make_liquid(support_level))
 
 				-- Neighboring nodes might need to be reduced as well
-				if l011 ~= nil then update_next({pos=p011, mode="REMOVE"}) end
-				if l211 ~= nil then update_next({pos=p211, mode="REMOVE"}) end
-				if l110 ~= nil then update_next({pos=p110, mode="REMOVE"}) end
-				if l112 ~= nil then update_next({pos=p112, mode="REMOVE"}) end
+				if l011 ~= nil then update_next({pos=p011, is_sinking=true}) end
+				if l211 ~= nil then update_next({pos=p211, is_sinking=true}) end
+				if l110 ~= nil then update_next({pos=p110, is_sinking=true}) end
+				if l112 ~= nil then update_next({pos=p112, is_sinking=true}) end
 
 				-- the node below might need an update as well, but only if the liquid
 				-- has completely gone
 				if support_level == 0 and l101 ~= nil then
-					update_next({pos=p101, mode="REMOVE"})
+					update_next({pos=p101, is_sinking=true})
 				end
 			end
 		else
 			-- It seams that the current node is not a liquid at all.
 			-- We update the neighbors because it might have been a liquid
 			-- previously.
-			if l011 ~= nil then update_next({pos=p011, mode='ENTER'}) end
-			if l211 ~= nil then update_next({pos=p211, mode='ENTER'}) end
-			if l110 ~= nil then update_next({pos=p110, mode='ENTER'}) end
-			if l112 ~= nil then update_next({pos=p112, mode='ENTER'}) end
-			if l101 ~= nil then update_next({pos=p101, mode='ENTER'}) end
-			if l121 ~= nil then update_next({pos=p121, mode='ENTER'}) end
+			if l011 ~= nil then update_next({pos=p011}) end
+			if l211 ~= nil then update_next({pos=p211}) end
+			if l110 ~= nil then update_next({pos=p110}) end
+			if l112 ~= nil then update_next({pos=p112}) end
+			if l101 ~= nil then update_next({pos=p101}) end
+			if l121 ~= nil then update_next({pos=p121}) end
 		end
 	end
 
 	local function liquid_update(pos)
 		-- pos might not be a vector
 		local p = vector.copy(pos)
-		update_next({pos = p, mode = 'ENTER'})
+		update_next({pos = p})
 	end
 
 	core.register_on_placenode(liquid_update)
