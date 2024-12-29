@@ -65,106 +65,106 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 	minetest.register_node("mcl_mushrooms:"..color.."_mushroom_block_stem", stem)
 
 	-- Mushroom block (cap)
+	local function register_mushroom_cap(block, block_id, index)
+		block.groups.huge_mushroom = species_id
+		block.groups.huge_mushroom_cap = index
+		block._mcl_burntime = 15
+		minetest.register_node(block_id, block)
+	end
+
 	-- Each side can either be the cap or the pores texture.
 	-- Cubes have 6 sides, so there's a total of 2^6 = 64 combinations
 	local has_doc = minetest.get_modpath("doc")
 	local full_block = "mcl_mushrooms:"..color.."_mushroom_block_cap_111111"
 	local block_skin = "mcl_mushrooms_mushroom_block_skin_"..color..".png"
-	for s=0,63 do
+	-- Cap blocks with pores on at least 1 side. These blocks are used internally.
+	for s=0,62 do
 		-- bin is a binary string with 6 digits. Each digit stands for the
 		-- texture of one of the sides, in the same order as the tiles parameter.
 		-- 0 = pores; 1 = cap.
 		local block = table.copy(template)
 		local bin = to_binary(s)
 		local block_id = "mcl_mushrooms:"..color.."_mushroom_block_cap_"..bin
-		if s == 63 then
-			-- All-faces cap. This block is exposed to the player
-			block.description = d_cap
-			block._doc_items_longdesc = longdesc_cap
-			block._doc_items_usagehelp = S("By placing huge mushroom blocks of the same species next to each other, the sides that touch each other will turn into pores permanently.")
-			block.tiles = { block_skin }
-
-			function block.on_construct(pos)
-				local sides = {
-					{ { x= 0, y= 1, z= 0 }, 2 },
-					{ { x= 0, y=-1, z= 0 }, 1 },
-					{ { x= 1, y= 0, z= 0 }, 4 },
-					{ { x=-1, y= 0, z= 0 }, 3 },
-					{ { x= 0, y= 0, z= 1 }, 6 },
-					{ { x= 0, y= 0, z=-1 }, 5 },
-				}
-
-				-- Replace the side of a mushroom node. Returns the new node.
-				-- Or nil, if unchanged.
-				local function replace_side(_, node, side)
-					local bin = string.sub(node.name, -6)
-					if string.sub(bin, side, side) == "1" then
-						local new_bin
-						if side == 1 then
-							new_bin = "0" .. string.sub(bin, side+1, 6)
-						elseif side == 6 then
-							new_bin = string.sub(bin, 1, side-1) .. "0"
-						else
-							new_bin = string.sub(bin, 1, side-1) .. "0" .. string.sub(bin, side+1, 6)
-						end
-
-						return { name = string.sub(node.name, 1, -7) .. new_bin }
-					end
-				end
-
-				local node = minetest.get_node(pos)
-				local species_self = minetest.get_item_group(node.name, "huge_mushroom")
-				local node_update = table.copy(node)
-				for i=1, #sides do
-					local neighbor = vector.add(pos, sides[i][1])
-					local neighbor_node = minetest.get_node(neighbor)
-					local node_set = false
-					if minetest.get_item_group(neighbor_node.name, "huge_mushroom_cap") ~= 0 and minetest.get_item_group(neighbor_node.name, "huge_mushroom") == species_self then
-
-						local i2 = sides[i][2]
-						local node_return = replace_side(pos, node_update, i)
-						if node_return then
-							node_update = node_return
-							node_set = true
-						end
-						local new_neighbor = replace_side(neighbor, neighbor_node, i2)
-						if new_neighbor then
-							minetest.set_node(neighbor, new_neighbor)
-						end
-					end
-					if node_set then
-						minetest.set_node(pos, node_update)
-					end
-				end
-			end
-		else
-			-- Cap block with pores on at least 1 side.
-			-- These blocks are used internally.
-			block._doc_items_create_entry = false
-			block._mcl_silk_touch_drop = { full_block }
-			block.groups.not_in_creative_inventory = 1
-			block.groups.not_in_craft_guide = 1
-			block.tiles = {}
-			for t=1, string.len(bin) do
-				if string.sub(bin, t, t) == "1" then
-					block.tiles[t] = block_skin
-				else
-					block.tiles[t] = "mcl_mushrooms_mushroom_block_inside.png"
-				end
-			end
-
-			if has_doc then
-				doc.add_entry_alias("nodes", full_block, "nodes", block_id)
+		block._doc_items_create_entry = false
+		block._mcl_silk_touch_drop = { full_block }
+		block.groups.not_in_creative_inventory = 1
+		block.groups.not_in_craft_guide = 1
+		block.tiles = {}
+		for t=1, string.len(bin) do
+			if string.sub(bin, t, t) == "1" then
+				block.tiles[t] = block_skin
+			else
+				block.tiles[t] = "mcl_mushrooms_mushroom_block_inside.png"
 			end
 		end
 
-		block.groups.huge_mushroom = species_id
-		block.groups.huge_mushroom_cap = s
-
-		block._mcl_burntime = 15
-		minetest.register_node(block_id, block)
+		if has_doc then
+			doc.add_entry_alias("nodes", full_block, "nodes", block_id)
+		end
+		register_mushroom_cap(block, block_id, s)
 	end
 
+	-- All-faces cap. This block is exposed to the player.
+	-- On placement, check adjacent mushrooms and change that side to pores.
+	local block = table.copy(template)
+	block.description = d_cap
+	block._doc_items_longdesc = longdesc_cap
+	block._doc_items_usagehelp = S("By placing huge mushroom blocks of the same species next to each other, the sides that touch each other will turn into pores permanently.")
+	block.tiles = { block_skin }
+
+	function block.on_construct(pos)
+		local sides = {
+			{ { x= 0, y= 1, z= 0 }, 2 },
+			{ { x= 0, y=-1, z= 0 }, 1 },
+			{ { x= 1, y= 0, z= 0 }, 4 },
+			{ { x=-1, y= 0, z= 0 }, 3 },
+			{ { x= 0, y= 0, z= 1 }, 6 },
+			{ { x= 0, y= 0, z=-1 }, 5 },
+		}
+
+		-- Replace the side of a mushroom node. Returns the new node.
+		-- Or nil, if unchanged.
+		local function replace_side(_, node, side)
+			local bin = string.sub(node.name, -6)
+			if string.sub(bin, side, side) == "1" then
+				local new_bin
+				if side == 1 then
+					new_bin = "0" .. string.sub(bin, side+1, 6)
+				elseif side == 6 then
+					new_bin = string.sub(bin, 1, side-1) .. "0"
+				else
+					new_bin = string.sub(bin, 1, side-1) .. "0" .. string.sub(bin, side+1, 6)
+				end
+
+				return { name = string.sub(node.name, 1, -7) .. new_bin }
+			end
+		end
+
+		local node = minetest.get_node(pos)
+		local species_self = minetest.get_item_group(node.name, "huge_mushroom")
+		local node_update = table.copy(node)
+		for i=1, #sides do
+			local neighbor = vector.add(pos, sides[i][1])
+			local neighbor_node = minetest.get_node(neighbor)
+			local node_set = false
+			if minetest.get_item_group(neighbor_node.name, "huge_mushroom_cap") ~= 0 and minetest.get_item_group(neighbor_node.name, "huge_mushroom") == species_self then
+				local i2 = sides[i][2]
+				local node_return = replace_side(pos, node_update, i)
+				if node_return then
+					node_update = node_return
+					node_set = true
+				end
+				local new_neighbor = replace_side(neighbor, neighbor_node, i2)
+				if new_neighbor then
+					minetest.set_node(neighbor, new_neighbor)
+				end
+			end
+			if node_set then
+				minetest.set_node(pos, node_update)
+			end
+		end
+	end
+	register_mushroom_cap(block, full_block, 63)
 end
 
 
