@@ -250,6 +250,7 @@ function mcl_campfires.register_campfire(name, def)
 		end,
 		_mcl_campfires_smothered_form = name,
 		_pathfinding_class = "DAMAGE_FIRE",
+		damage_per_second = 2,
 	})
 end
 
