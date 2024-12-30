@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-29 23:13+0000\n"
+"PO-Revision-Date: 2024-12-30 02:45+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -343,10 +343,11 @@ msgid "• Follow the sun, then go left: Z decreases"
 msgstr "• Seguir el sol, luego ir a la izquierda: disminuye Z"
 
 msgid "• The side length of a full cube is 1"
-msgstr ""
+msgstr "• La longitud lateral de un cubo completo es 1"
 
 msgid "You can view your current position in the debug screen (open with [F5])."
 msgstr ""
+"Puede ver su posición actual en la pantalla de depuración (abrir con [F5])."
 
 msgid "Settings"
 msgstr "Configuración"
@@ -374,24 +375,32 @@ msgstr "Ayuda en línea"
 
 msgid "You may want to check out these online resources related to Minetest:"
 msgstr ""
+"Puede que desee consultar estos recursos en línea relacionados con Minetest:"
 
 msgid "Official homepage of Minetest: <https://minetest.net/>"
 msgstr "Página oficial de Minetest: <https://minetest.net/>"
 
 msgid "The main place to find the most recent version of Minetest."
-msgstr ""
+msgstr "El lugar principal para encontrar la versión más reciente de Minetest."
 
 msgid "Community wiki: <https://wiki.minetest.net/>"
 msgstr "Wiki de la comunidad: <https://wiki.minetest.net/>"
 
 msgid "A community-based documentation website for Minetest. Anyone with an account can edit it! It also features a documentation of Minetest Game."
 msgstr ""
+"Un sitio web de documentación comunitaria para Minetest. ¡Cualquiera con una "
+"cuenta puede editarla! También cuenta con una documentación de Minetest Game."
 
 msgid "Web forums: <https://forums.minetest.net/>"
 msgstr "Foros web: <https://forums.minetest.net/>"
 
 msgid "A web-based discussion platform where you can discuss everything related to Minetest. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages."
 msgstr ""
+"Una plataforma de discusión basada en la web donde puedes discutir todo lo "
+"relacionado con Minetest. Este es también un lugar donde se publican y "
+"discuten mods y juegos hechos por el jugador. Las discusiones son "
+"principalmente en inglés, pero también hay espacio para el debate en otros "
+"idiomas."
 
 msgid "Chat: <irc://irc.freenode.net#minetest>"
 msgstr ""
@@ -415,40 +424,51 @@ msgid "How to play:"
 msgstr "Cómo jugar:"
 
 msgid "• Punch a tree trunk until it breaks and collect wood"
-msgstr ""
+msgstr "• Golpea el tronco de un árbol hasta que se rompa y recoge madera"
 
 msgid "• Place the wood into the 2×2 grid (your “crafting grid”) in your inventory menu and craft 4 wood planks"
 msgstr ""
+"• Coloque la madera en la cuadrícula 2×2 (su “rejilla de crafteo”) en su "
+"menú de inventario y craftea 4 tablones de madera"
 
 msgid "• Place them in a 2×2 shape in the crafting grid to craft a crafting table"
 msgstr ""
+"• Colocarlos en forma 2×2 en la cuadrícula de crafteo para elaborar una mesa "
+"de trabajo"
 
 msgid "• Place the crafting table on the ground"
-msgstr ""
+msgstr "• Coloque la mesa de trabajo en el suelo"
 
 msgid "• Rightclick it for a 3×3 crafting grid"
-msgstr ""
+msgstr "• Haz clic derecho para obtener una cuadrícula de crafteo de 3x3"
 
 msgid "• Use the crafting guide (book icon) to learn all the possible crafting recipes"
 msgstr ""
+"• Utilice la guía de crafteo (icono del libro) para aprender todas las "
+"recetas de crafteo posibles"
 
 msgid "• Craft a wooden pickaxe so you can dig stone"
-msgstr ""
+msgstr "• Craftea un pico de madera para poder excavar piedra"
 
 msgid "• Different tools break different kinds of blocks. Try them out!"
 msgstr ""
+"• Diferentes herramientas rompen diferentes tipos de bloques. ¡Pruébalas!"
 
 msgid "• Read entries in this help to learn the rest"
-msgstr ""
+msgstr "• Lea las entradas en esta ayuda para aprender el resto"
 
 msgid "• Continue playing as you wish. There's no real goal, but you may want to check the advancements available from the inventory screen. Have fun!"
 msgstr ""
+"• Continuar jugando como quieras. No hay un objetivo real, pero es posible "
+"que desee comprobar los logros disponibles en la pantalla del inventario. "
+"¡Diviértete!"
 
 msgid "For the default controls, see the next section [Controls]."
 msgstr ""
+"Para los controles por defecto, consulte la siguiente sección [Controles]."
 
 msgid "Controls"
-msgstr ""
+msgstr "Controles"
 
 msgid "These are the default controls (which can be remapped in the 'Change keys' dialog):"
 msgstr ""
