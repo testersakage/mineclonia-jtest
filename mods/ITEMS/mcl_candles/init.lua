@@ -7,6 +7,13 @@ local candleboxes = {
 	{-3/16, -8/16, -3/16, 3/16, -2/16, 3/16}
 }
 
+local function set_candle_properties(stack, properties)
+	stack:get_meta():set_string("description", properties.description)
+	stack:get_meta():set_int("palette_index", properties.palette_index)
+	stack:get_meta():set_string("inventory_overlay", properties.image)
+	stack:get_meta():set_string("wield_overlay", properties.image)
+end
+
 local tpl_candle = {
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
@@ -30,8 +37,11 @@ local tpl_candle = {
 		local color = oldmeta.fields["mcl_candles:color_name"]
 		if color and color ~= "mcl_candles:no_color" then
 			local color_defs = mcl_dyes.colors[color]
-			item:get_meta():set_int("palette_index", color_defs.palette_index)
-			item:get_meta():set_string("description", S("@1 Candle", color_defs.readable_name))
+			set_candle_properties(item, {
+				description = S("@1 Candle", color_defs.readable_name),
+				palette_index = color_defs.palette_index,
+				image = "mcl_candles_item_" .. color .. ".png"
+			})
 		end
 		return core.add_item(pos, item)
 	end,
@@ -135,12 +145,15 @@ for i = 1, 3 do
 		_get_all_virtual_items = function ()
 			local output = {deco = {}}
 			if i == 1 then
-				for _, colordef in pairs(mcl_dyes.colors) do
+				for color, color_defs in pairs(mcl_dyes.colors) do
 					local stack = ItemStack("mcl_candles:candle_1")
-					stack:get_meta():set_int("palette_index", colordef.palette_index)
-					stack:get_meta():set_string("description", S("@1 Candle", colordef.readable_name))
-					local str_meta = stack:to_string()
-					table.insert(output.deco, str_meta)
+					local image = "mcl_candles_item_" .. color .. ".png"
+					set_candle_properties(stack, {
+						description = S("@1 Candle", color_defs.readable_name),
+						palette_index = color_defs.palette_index,
+						image = image
+					})
+					table.insert(output.deco, stack:to_string())
 				end
 			end
 			return output
