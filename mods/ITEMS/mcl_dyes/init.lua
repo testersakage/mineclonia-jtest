@@ -151,10 +151,15 @@ function mcl_dyes.mcl2_to_color(mcl2color)
 	end
 end
 
+---Returns the definition of a color based on it's palette_index.
+---@param index number
+---@return string|nil
+---@return table|nil
 function mcl_dyes.palette_index_to_color(index)
 	for k, v in pairs(mcl_dyes.colors) do
 		if v.palette_index == index then return k, v end
 	end
+	return nil
 end
 
 for k,v in pairs(mcl_dyes.colors) do
