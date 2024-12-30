@@ -218,7 +218,6 @@ function liquid.register_liquid(def)
 
 				if f1 and f2 then 
 					found[#found+1] = pos
-					search_list[#search_list+1] = pos
 					pmap[h] = level
 				elseif f1 and (l1 or 0) <= level then
 					search_list[#search_list+1] = pos
@@ -233,17 +232,15 @@ function liquid.register_liquid(def)
 		local level = orig_level
 
 		for i = 1, 5 do
-
-			local l = search_list
-			search_list = {}
-
 			-- Decrease the liquid level.
 			level = level_tb[level]
 
-			if level == 0 or #found > 0 then
-				-- condition for ending the loop earlier.
+			if level == 0 then
 				break
 			end
+
+			local l = search_list
+			search_list = {}
 
 			for i, p in ipairs(l) do
 				-- Step into all 4 directions
@@ -256,7 +253,8 @@ function liquid.register_liquid(def)
 					break
 				end
 			end
-			if not ok then
+
+			if not ok or #found > 0 then
 				break
 			end
 		end 
