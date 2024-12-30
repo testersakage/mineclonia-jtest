@@ -31,6 +31,9 @@ local tpl_candle = {
 			return true
 		end
 	end,
+	_on_set_item_entity = function (stack)
+		return stack, {wield_item = stack:to_string()}
+	end,
 	after_dig_node = function (pos, oldnode, oldmeta)
 		local group = core.get_item_group(oldnode.name, "candles")
 		local item = ItemStack("mcl_candles:candle_1 " .. group)
