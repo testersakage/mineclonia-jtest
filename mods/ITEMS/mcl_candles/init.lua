@@ -24,13 +24,13 @@ local tpl_candle = {
 			return true
 		end
 	end,
-	after_destruct = function (pos, oldnode)
+	after_dig_node = function (pos, oldnode, oldmeta)
 		local group = core.get_item_group(oldnode.name, "candles")
 		local item = ItemStack("mcl_candles:candle_1 " .. group)
-		local index = core.get_meta(pos):get("color")
-		if index then
-			local _, color_defs = mcl_dyes.palette_index_to_color(index)
-			item:get_meta():set_int("palette_index", index)
+		local color = oldmeta.fields["mcl_candles:color_name"]
+		if color and color ~= "mcl_candles:no_color" then
+			local color_defs = mcl_dyes.colors[color]
+			item:get_meta():set_int("palette_index", color_defs.palette_index)
 			item:get_meta():set_string("description", S("@1 Candle", color_defs.readable_name))
 		end
 		return core.add_item(pos, item)
@@ -95,7 +95,12 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 			end
 		end
 	else
-		return core.item_place_node(itemstack, placer, pointed_thing)
+		local item, pos = core.item_place_node(itemstack, placer, pointed_thing)
+		if item and pos then
+			local index = item:get_meta():get("palette_index")
+			local color, _ = mcl_dyes.palette_index_to_color(tonumber(index))
+			core.get_meta(pos):set_string("mcl_candles:color_name", color or "mcl_candles:no_color")
+		end
 	end
 
 	return itemstack
