@@ -1,10 +1,10 @@
 local S = core.get_translator("mcl_candles")
 
-local candleboxes = {
+local candle_boxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
 	{-0.15625, -0.5, -0.09375, 0.15625, -0.125, 0.09375},
-	{-0.15625, -0.5, -0.15625, 0.15625, -0.125, 0.21855},
-	{-3/16, -8/16, -3/16, 3/16, -2/16, 3/16}
+	{-0.15625, -0.5, -0.15625, 0.15625, -0.125, 0.21875},
+	{-0.1875, -0.5, -0.15625, 0.21875, -0.125, 0.21875}
 }
 
 local function set_candle_properties(stack, properties)
@@ -100,7 +100,7 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 
 	local g = core.get_item_group(unode.name, "candles")
 	if g > 0 then
-		if g < #candleboxes then
+		if g < #candle_boxes then
 			unode.name = "mcl_candles:candle_"..tostring(math.min(4, g + 1))
 			unode.param2 = itemstack:get_meta():get("palette_index")
 			core.swap_node(pointed_thing.under, unode)
@@ -136,11 +136,11 @@ function extinguish(pos, node, clicker, itemstack, pointed_thing)
 	end
 end
 
-for i = 1, 3 do
+for i = 1, #candle_boxes do
 	local candle_n = {
-		collision_box = {fixed = candleboxes[i], type = "fixed"},
+		collision_box = {fixed = candle_boxes[i], type = "fixed"},
 		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
-		selection_box = {fixed = candleboxes[i], type = "fixed"}
+		selection_box = {fixed = candle_boxes[i], type = "fixed"}
 	}
 	local creative_group
 	if i ~= 1 then creative_group = {not_in_creative_inventory = 1} end
