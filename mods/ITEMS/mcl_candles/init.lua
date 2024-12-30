@@ -71,6 +71,7 @@ local tpl_lit_candle = {
 				length = 5.5,
 				type = "vertical_frames"
             },
+			color = "white",
 			name = "fire_basic_flame_animated.png"
         }
     }
