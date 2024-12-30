@@ -37,8 +37,9 @@ local tpl_candle = {
 	after_dig_node = function (pos, oldnode, oldmeta)
 		local group = core.get_item_group(oldnode.name, "candles")
 		local item = ItemStack("mcl_candles:candle_1 " .. group)
-		local color = oldmeta.fields["mcl_candles:color_name"]
-		if color and color ~= "mcl_candles:no_color" then
+		local color_index = oldnode.param2 > 0 and oldnode.param2
+		local color = mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
+		if color then
 			local color_defs = mcl_dyes.colors[color]
 			set_candle_properties(item, {
 				description = S("@1 Candle", color_defs.readable_name),
@@ -58,7 +59,7 @@ local tpl_candle = {
 	inventory_image = "mcl_candles_item.png",
 	is_ground_content = false,
 	node_placement_prediction = "",
-	palette = "mcl_dyes_palette.png",
+	palette = "mcl_candles_palette.png",
 	paramtype = "light",
 	paramtype2 = "color",
 	sounds = mcl_sounds.node_sound_defaults(),
@@ -92,29 +93,30 @@ local tpl_lit_candle = {
 
 function tpl_candle.on_place(itemstack, placer, pointed_thing)
 	if not placer then return end
+
 	if mcl_util.check_position_protection(pointed_thing.under, placer) then return end
+
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
 	if rc ~= nil then return rc end
 
 	local unode = core.get_node(pointed_thing.under)
+	local group = core.get_item_group(unode.name, "candles")
 
-	local g = core.get_item_group(unode.name, "candles")
-	if g > 0 then
-		if g < #candle_boxes then
-			unode.name = "mcl_candles:candle_"..tostring(math.min(4, g + 1))
-			unode.param2 = itemstack:get_meta():get("palette_index")
-			core.swap_node(pointed_thing.under, unode)
+	if group > 0 then
+		if group < #candle_boxes then
+			local param2 = tonumber(itemstack:get_meta():get("palette_index")) or 0
+			unode.name = "mcl_candles:candle_" .. math.min(4, group + 1)
+			if param2 == unode.param2 then
+				core.swap_node(pointed_thing.under, unode)
+			end
+
 			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
 	else
-		local item, pos = core.item_place_node(itemstack, placer, pointed_thing)
-		if item and pos then
-			local index = item:get_meta():get("palette_index")
-			local color, _ = mcl_dyes.palette_index_to_color(tonumber(index))
-			core.get_meta(pos):set_string("mcl_candles:color_name", color or "mcl_candles:no_color")
-		end
+		return core.item_place_node(itemstack, placer, pointed_thing)
 	end
 
 	return itemstack
@@ -153,7 +155,7 @@ for i = 1, #candle_boxes do
 					local image = "mcl_candles_item_" .. color .. ".png"
 					set_candle_properties(stack, {
 						description = S("@1 Candle", color_defs.readable_name),
-						palette_index = color_defs.palette_index,
+						palette_index = color_defs.palette_index + 1,
 						image = image
 					})
 					table.insert(output.deco, stack:to_string())
@@ -191,7 +193,7 @@ local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
 	end
 	if dye and candle and i == 2 then
 		local cdef = mcl_dyes.colors[dye:get_definition()._color]
-		local r = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index))
+		local r = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
 		r:get_meta():set_string("description", S("@1 Candle", cdef.readable_name))
 		return r
 	end
