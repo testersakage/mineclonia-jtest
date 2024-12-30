@@ -38,7 +38,7 @@ local tpl_candle = {
 		local group = core.get_item_group(oldnode.name, "candles")
 		local item = ItemStack("mcl_candles:candle_1 " .. group)
 		local color_index = oldnode.param2 > 0 and oldnode.param2
-		local color = mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
+		local color = color_index and mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
 		if color then
 			local color_defs = mcl_dyes.colors[color]
 			set_candle_properties(item, {
@@ -82,7 +82,7 @@ local tpl_lit_candle = {
             animation = {
                 aspect_h = 16,
 				aspect_w = 16,
-				length = 5.5,
+				length = 1,
 				type = "vertical_frames"
             },
 			color = "white",
