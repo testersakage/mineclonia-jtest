@@ -10,7 +10,7 @@ end
 
 for template_name, template_defs in pairs(mcl_armor.trims.overlays) do
 	minetest.register_craftitem(mod_registername .. template_name, {
-		description = S("@1 Armor Trim", readable_name(template_name)),
+		description = S("@1 Armor Trim", S(readable_name(template_name))),
 		_tt_help = S("Smithing Template").."\n\n"..
 		C(mcl_colors.GRAY, S("Applies to:")).."\n"..C(mcl_colors.BLUE, " "..S("Armor")).."\n"..
 		C(mcl_colors.GRAY, S("Ingredients:")).."\n"..C(mcl_colors.BLUE, " "..S("Ingot & Crystals")),
