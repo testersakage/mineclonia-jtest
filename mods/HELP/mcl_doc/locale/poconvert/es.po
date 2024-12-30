@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-31 02:58+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
 msgstr "El agua puede entrar en este bloque y hacer que caiga como un ítem."
@@ -42,42 +43,52 @@ msgstr "Este bloque se desintegra rápidamente cuando no hay bloques de madera d
 
 msgid "This block quickly decays and disappears when there is no wood block of any species within a distance of @1. The block does not decay when the block has been placed by a player."
 msgstr ""
+"Este bloque se desintegra rápidamente y desaparece cuando no hay ningún "
+"bloque de madera de ninguna especie a una distancia de @1. El bloque no se "
+"desintegra cuando lo coloca un jugador."
 
 msgid "This plant can only grow on grass blocks and dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher."
 msgstr ""
+"Esta planta solo puede crecer en bloques de césped y tierra. Para "
+"sobrevivir, necesita tener una vista despejada del cielo o estar expuesta a "
+"un nivel de luz de 8 o superior."
 
 msgid "This plant can grow on grass blocks, podzol, dirt and coarse dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher."
 msgstr ""
+"Esta planta puede crecer en bloques de césped, podsol, tierra y tierra "
+"estéril. Para sobrevivir, necesita tener una vista despejada del cielo o "
+"estar expuesta a un nivel de luz de 8 o superior."
 
 msgid "This block is flammable."
 msgstr "Este bloque es inflamable."
 
 msgid "This block destroys any item it touches."
-msgstr ""
+msgstr "Este bloque destruye cualquier ítem que toque."
 
 msgid "To eat it, wield it, then rightclick."
-msgstr ""
+msgstr "Para comerlo, sostenlo y luego haz clic derecho."
 
 msgid "You can eat this even when your hunger bar is full."
-msgstr ""
+msgstr "Puedes comer esto incluso cuando tu barra de hambre está llena."
 
 msgid "You cannot eat this when your hunger bar is full."
-msgstr ""
+msgstr "No puedes comer esto cuando tu barra de hambre está llena."
 
 msgid "To drink it, wield it, then rightclick."
-msgstr ""
+msgstr "Para beberlo, sostenlo y luego haz clic derecho."
 
 msgid "You cannot drink this when your hunger bar is full."
-msgstr ""
+msgstr "No puedes beber esto cuando tu barra de hambre está llena."
 
 msgid "To consume it, wield it, then rightclick."
-msgstr ""
+msgstr "Para consumirlo, sostenlo y haz clic derecho."
 
 msgid "You cannot consume this when your hunger bar is full."
-msgstr ""
+msgstr "No puedes consumir esto cuando tu barra de hambre está llena."
 
 msgid "You have to wait for about 2 seconds before you can eat or drink again."
 msgstr ""
+"Tienes que esperar unos 2 segundos antes de poder comer o beber nuevamente."
 
 msgid "Hunger points restored: @1"
 msgstr "Puntos de hambre restaurados: @1"
@@ -86,16 +97,16 @@ msgid "Saturation points restored: @1%"
 msgstr "Puntos de saturación restaurados: @1%"
 
 msgid "It can be worn on the head."
-msgstr ""
+msgstr "Se puede usar en la cabeza."
 
 msgid "It can be worn on the torso."
-msgstr ""
+msgstr "Se puede usar en el torso."
 
 msgid "It can be worn on the legs."
-msgstr ""
+msgstr "Se puede usar en las piernas."
 
 msgid "It can be worn on the feet."
-msgstr ""
+msgstr "Se puede usar en los pies."
 
 msgid "Armor points: @1"
 msgstr "Puntos de armadura: @1"
@@ -104,143 +115,145 @@ msgid "Armor durability: @1"
 msgstr "Durabilidad de la armadura: @1"
 
 msgid "This item cannot be renamed at an anvil."
-msgstr ""
+msgstr "Este ítem no se puede renombrar en un yunque."
 
 msgid "This block crushes any block it falls into."
-msgstr ""
+msgstr "Este bloque aplasta cualquier bloque en el que caiga."
 
 msgid "When this block falls deeper than 1 block, it causes damage to any player it hits. The damage dealt is B×2−2 hit points with B = number of blocks fallen. The damage can never be more than 40 HP."
 msgstr ""
+"Cuando este bloque cae a más de 1 bloque de profundidad, causa daño a "
+"cualquier jugador al que golpee. El daño infligido es B×2−2 puntos de vida, "
+"donde B = número de bloques caídos. El daño nunca puede ser mayor a 40 PS."
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Pico de diamante"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Pico de hierro"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Pico de piedra"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Pico de oro"
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Pico de madera"
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Hacha de diamante"
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Hacha de hierro"
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Hacha de piedra"
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Hacha de oro"
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Hacha de madera"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Pala de diamante"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Pala de hierro"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Pala de piedra"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Pala de oro"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Pala de madera"
 
 msgid "This block can be mined by any tool instantly."
-msgstr ""
+msgstr "Este bloque puede ser minado por cualquier herramienta al instante."
 
 msgid "• Shears"
-msgstr ""
+msgstr "• Tijeras"
 
 msgid "• Sword"
-msgstr ""
+msgstr "• Espada"
 
 msgid "• Hand"
-msgstr ""
+msgstr "• Mano"
 
 msgid "This block can be mined by:"
-msgstr ""
+msgstr "Este bloque puede ser minado por:"
 
 msgid "Hardness: ∞"
-msgstr ""
+msgstr "Dureza: ∞"
 
 msgid "Hardness: @1"
-msgstr ""
+msgstr "Dureza: @1"
 
 msgid "Blast Resistance: @1"
-msgstr ""
+msgstr "Resistencia contra explosiones: @1"
 
 msgid "This block will not be destroyed by TNT explosions."
-msgstr ""
+msgstr "Este bloque no será destruido por las explosiones de Dinamita."
 
 msgid "This block drops itself when mined by shears."
-msgstr ""
+msgstr "Este bloque se dropea cuando es minado con tijeras."
 
 msgid "@1×@2"
 msgstr "@1×@2"
 
 msgid "This blocks drops the following when mined by shears: @1"
-msgstr ""
+msgstr "Este bloque dropea lo siguiente cuando se mina con tijeras: @1"
 
 msgid ", "
 msgstr ", "
 
 msgid "Painfully slow"
-msgstr ""
+msgstr "Dolorosamente lento"
 
 msgid "Very slow"
-msgstr ""
+msgstr "Muy lento"
 
 msgid "Slow"
-msgstr ""
+msgstr "Lento"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rápido"
 
 msgid "Very fast"
-msgstr ""
+msgstr "Muy rápido"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "Extremadamente rápido"
 
 msgid "Instantaneous"
 msgstr "Instantáneo"
 
 msgid "@1 uses"
-msgstr ""
+msgstr "@1 usos"
 
 msgid "Unlimited uses"
-msgstr ""
+msgstr "Usos ilimitados"
 
 msgid "Mining speed: @1"
-msgstr ""
+msgstr "Velocidad de minado: @1"
 
 msgid "Mining durability: @1"
-msgstr ""
+msgstr "Durabilidad de minado: @1"
 
 msgid "This tool is capable of mining."
 msgstr "Esta herramienta puede minar."
 
 msgid "Block breaking strength: @1"
-msgstr ""
+msgstr "Resistencia a la rotura del bloque: @1"
 
 msgid "This is a melee weapon which deals damage by punching."
 msgstr "Es un arma cuerpo a cuerpo que causa daño al golpear."
 
 msgid "Maximum damage: @1 HP"
-msgstr ""
+msgstr "Daño máximo: @1 PS"
 
 msgid "Full punch interval: @1 s"
 msgstr "Intervalo de golpe: @1 s"
-
