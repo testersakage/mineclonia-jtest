@@ -14,6 +14,26 @@ local function set_candle_properties(stack, properties)
 	stack:get_meta():set_string("wield_overlay", properties.image)
 end
 
+local function drop_candles(pos, node)
+	if not node then node = core.get_node(pos) end
+
+	local group = core.get_item_group(node.name, "candles")
+	local item = ItemStack("mcl_candles:candle_1 " .. group)
+	local color_index = node.param2 > 0 and node.param2
+	local color = color_index and mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
+
+	if color then
+		local color_defs = mcl_dyes.colors[color]
+		set_candle_properties(item, {
+			description = S("@1 Candle", color_defs.readable_name),
+			palette_index = color_defs.palette_index,
+			image = "mcl_candles_item_" .. color .. ".png"
+		})
+	end
+
+	return core.add_item(pos, item)
+end
+
 local tpl_candle = {
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
@@ -34,21 +54,7 @@ local tpl_candle = {
 	_on_set_item_entity = function (stack)
 		return stack, {wield_item = stack:to_string()}
 	end,
-	after_dig_node = function (pos, oldnode, oldmeta)
-		local group = core.get_item_group(oldnode.name, "candles")
-		local item = ItemStack("mcl_candles:candle_1 " .. group)
-		local color_index = oldnode.param2 > 0 and oldnode.param2
-		local color = color_index and mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
-		if color then
-			local color_defs = mcl_dyes.colors[color]
-			set_candle_properties(item, {
-				description = S("@1 Candle", color_defs.readable_name),
-				palette_index = color_defs.palette_index,
-				image = "mcl_candles_item_" .. color .. ".png"
-			})
-		end
-		return core.add_item(pos, item)
-	end,
+	after_dig_node = drop_candles,
 	description = S("Candle"),
 	drawtype = "mesh",
 	drop = "",
@@ -218,3 +224,90 @@ core.register_craft({
 		"group:dye",
 	}
 })
+
+local cake_box = {
+	fixed = {
+		{-0.4375, -0.5, -0.4375, 0.4375, 0, 0.4375},
+		{-0.0625, 0, -0.0625, 0.0625, 0.375, 0.0625}
+	},
+	type = "fixed"
+}
+
+local function looking_at_candle(pointer, pointed_thing)
+	if not pointer then return end
+
+	local pt_above = pointed_thing.above
+	local pt_under = pointed_thing.under
+
+	if pt_above.y > pt_under.y then
+		local f_pos_x = core.pointed_thing_to_face_pos(pointer, pointed_thing).x - pt_above.x
+		local f_pos_z = core.pointed_thing_to_face_pos(pointer, pointed_thing).z - pt_above.z
+		if f_pos_x * f_pos_x + f_pos_z * f_pos_z < 0.0062 then
+			return true
+		end
+	end
+
+	local f_pos = core.pointed_thing_to_face_pos(pointer, pointed_thing).y - pt_above.y
+
+	return (f_pos > 0.05)
+end
+
+local tpl_cake = {
+	--_on_ignite = function(player, pointed_thing)
+	--	local p_under = pointed_thing.under
+	--	local node = core.get_node(p_under)
+	--	if looking_at_candle(player, pointed_thing) then
+	--		local node = core.get_node(p_under)
+	--		local group = core.get_item_group(node.name, "lit_cake")
+	--		if group == 0 then
+	--			node.name = node.name .. "_lit"
+	--			minetest.swap_node(p_under, node)
+	--		end
+	--	else
+	--		drop_candles(p_under, node)
+	--		minetest.swap_node(p_under, {name = "mcl_cake:cake_6"})
+	--	end
+	--end,
+	collision_box = cake_box,
+	description = S("Cake"),
+	drawtype = "mesh",
+	--groups = {candles = 1, not_in_creative_inventory = 1},
+	mesh = "mcl_candles_cake.obj",
+	--on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)end,
+	palette = "mcl_candles_palette.png",
+	paramtype = "light",
+	paramtype2 = "color",
+	selection_box = cake_box,
+	tiles = {
+		{
+			color = "white",
+			name = "[combine:32x32:0,0=cake_top.png:15,0=cake_bottom.png:0,15=cake_side.png"
+		},
+		"mcl_candles_candle.png",
+		"blank.png"
+	},
+	use_texture_alpha = "blend"
+}
+
+core.register_node("mcl_candles:candle_cake", tpl_cake)
+core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
+	light_source = 3,
+	groups = table.merge(tpl_cake.groups, {lit_cake = 1}),
+	tiles = {
+		{
+			color = "white",
+			name = "[combine:32x32:0,0=cake_top.png:15,0=cake_bottom.png:0,15=cake_side.png"
+		},
+		"mcl_candles_candle.png",
+		{
+            animation = {
+                aspect_h = 16,
+				aspect_w = 16,
+				length = 1,
+				type = "vertical_frames"
+            },
+			color = "white",
+			name = "fire_basic_flame_animated.png"
+        }
+	}
+}))
