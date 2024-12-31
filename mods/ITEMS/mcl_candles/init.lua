@@ -210,9 +210,15 @@ local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
 		end
 	end
 	if dye and candle and i == 2 then
-		local cdef = mcl_dyes.colors[dye:get_definition()._color]
+		local color = dye:get_definition()._color
+		local cdef = mcl_dyes.colors[color]
 		local r = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
-		r:get_meta():set_string("description", S("@1 Candle", cdef.readable_name))
+		local prop = {
+			description = S("@1 Candle", cdef.readable_name),
+			palette_index = cdef.palette_index + 1,
+			image = "mcl_candles_item_" .. color .. ".png"
+		}
+		set_candle_properties(r, prop)
 		return r
 	end
 end
@@ -265,14 +271,19 @@ local function looking_at_candle(pointer, pointed_thing)
 end
 
 local tpl_cake = {
+	_food_particles = false,
 	collision_box = cake_box,
 	description = S("Cake"),
 	drawtype = "mesh",
-	groups = {not_in_creative_inventory = 1},
+	groups = {
+		attached_node = 1, dig_by_piston = 1, food = 2, handy = 1, no_eat_delay = 1,
+		not_in_creative_inventory = 1, unsticky = 1
+	},
 	mesh = "mcl_candles_cake.obj",
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		if not looking_at_candle(clicker, pointed_thing) then
 			drop_candles(pos, node)
+			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type = "nothing"})
 			core.swap_node(pos, {name = "mcl_cake:cake_6"})
 		else
 			if core.get_item_group(node.name, "lit_cake") > 0 then
