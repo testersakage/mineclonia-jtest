@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-30 02:45+0000\n"
+"PO-Revision-Date: 2024-12-31 23:36+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -159,7 +159,7 @@ msgid "• Everything else is to be read as literal text"
 msgstr "• Todo lo demás debe leerse como texto literal"
 
 msgid "Here are some examples to illustrate the command syntax:"
-msgstr ""
+msgstr "Aquí hay algunos ejemplos para ilustrar la sintaxis del comando:"
 
 msgid "• /mods: No parameters. Just enter “/mods”"
 msgstr "• /mods: No hay parámetros. Simplemente introduzca “/mods”"
@@ -171,6 +171,8 @@ msgstr ""
 
 msgid "• /give <name> <ItemString>: Two parameters. Example: “/give Player default:apple”"
 msgstr ""
+"• /give <nombre> <Cadena de ítem>: Dos parámetros. Ejemplo: “/give Jugador "
+"default:apple”"
 
 msgid "• /help [all|privs|<cmd>]: Valid inputs are “/help”, “/help all”, “/help privs”, or “/help ” followed by a command name, like “/help time”"
 msgstr ""
@@ -188,9 +190,14 @@ msgstr "Algunas observaciones finales:"
 
 msgid "• For /give and /giveme, you need an itemstring. This is an internally used unique item identifier which you may find in the item help if you have the “give” or “debug” privilege"
 msgstr ""
+"• Para /give y /giveme, necesitas una cadena de ítems. Se trata de un "
+"identificador de elemento único de uso interno que puedes encontrar en la "
+"ayuda del ítem si tienes el privilegio \"give\" o \"debug\""
 
 msgid "• For /spawnentity you need an entity name, which is another identifier"
 msgstr ""
+"• Para /spawnentity necesitas un nombre de una entidad, que es otro "
+"identificador"
 
 msgid "Privileges"
 msgstr "Privilegios"
@@ -252,9 +259,11 @@ msgstr "Modos de movimiento"
 
 msgid "You can enable some special movement modes that change how you move."
 msgstr ""
+"Puedes habilitar algunos modos de movimiento especiales que cambian la forma "
+"en que te mueves."
 
 msgid "Pitch movement mode:"
-msgstr ""
+msgstr "Modo de movimiento de inclinación:"
 
 msgid "• Description: If this mode is activated, the movement keys will move you relative to your current view pitch (vertical look angle) when you're in a liquid or in fly mode."
 msgstr ""
@@ -273,6 +282,9 @@ msgstr "Modo rápido:"
 
 msgid "• Description: Allows you to move much faster. Hold down the the “Use” key [E] to move faster. In the client configuration, you can further customize fast mode."
 msgstr ""
+"• Descripción: Te permite moverte mucho más rápido. Mantén pulsada la tecla "
+"\"Usar\" [E] para moverte más rápido. En la configuración del cliente, puede "
+"personalizar aún más el modo rápido."
 
 msgid "• Default key: [J]"
 msgstr "• Tecla por defecto: [J]"
@@ -285,6 +297,9 @@ msgstr "Modo de vuelo:"
 
 msgid "• Description: Gravity doesn't affect you and you can move freely in all directions. Use the jump key to rise and the sneak key to sink."
 msgstr ""
+"• Descripción: la gravedad no te afecta y puedes moverte libremente en todas "
+"las direcciones. Usa la tecla de saltar para subir y la tecla de caminar "
+"para caer."
 
 msgid "• Default key: [K]"
 msgstr "• Tecla por defecto: [K]"
@@ -297,6 +312,8 @@ msgstr "Modo noclip:"
 
 msgid "• Description: Allows you to move through walls. Only works when fly mode is enabled, too."
 msgstr ""
+"• Descripción: Permite moverse a través de las paredes. Solo funciona cuando "
+"el modo de vuelo está habilitado, también."
 
 msgid "• Default key: [H]"
 msgstr "• Tecla por defecto: [H]"
@@ -403,22 +420,25 @@ msgstr ""
 "idiomas."
 
 msgid "Chat: <irc://irc.freenode.net#minetest>"
-msgstr ""
+msgstr "Chat: <irc://irc.freenode.net#minetest>"
 
 msgid "A generic Internet Relay Chat channel for everything related to Minetest where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help."
 msgstr ""
+"Un canal de chat genérico de Internet Relay Chat para todo lo relacionado "
+"con Minetest, donde la gente puede reunirse para debatir en tiempo real. Si "
+"no entiendes el IRC, consulta la Wiki de la comunidad para obtener ayuda."
 
 msgid "Basics"
 msgstr "Conceptos básicos"
 
 msgid "Everything you need to know to get started with playing"
-msgstr ""
+msgstr "Todo lo que necesitas saber para empezar a jugar"
 
 msgid "Quick start"
 msgstr "Inicio rápido"
 
 msgid "This is a very brief introduction to the basic gameplay."
-msgstr ""
+msgstr "Esta es una introducción muy breve al juego básico."
 
 msgid "How to play:"
 msgstr "Cómo jugar:"
@@ -472,36 +492,38 @@ msgstr "Controles"
 
 msgid "These are the default controls (which can be remapped in the 'Change keys' dialog):"
 msgstr ""
+"Estos son los controles por defecto (que se pueden reasignar en el cuadro de "
+"diálogo 'Cambiar teclas'):"
 
 msgid "Basic movement:"
-msgstr ""
+msgstr "Movimiento básico:"
 
 msgid "• Moving the mouse around: Look around"
-msgstr ""
+msgstr "• Mover el ratón: Mirar alrededor"
 
 msgid "• W: Move forwards"
-msgstr ""
+msgstr "• W: Avanzar"
 
 msgid "• A: Move to the left"
-msgstr ""
+msgstr "• A: Moverse hacia la izquierda"
 
 msgid "• D: Move to the right"
-msgstr ""
+msgstr "• D: Moverse hacia la derecha"
 
 msgid "• S: Move backwards"
-msgstr ""
+msgstr "• S: Moverse hacia atrás"
 
 msgid "• E: Sprint (aux1)"
-msgstr ""
+msgstr "• E: Esprintar (aux1)"
 
 msgid "While standing on solid ground:"
-msgstr ""
+msgstr "Estando de pie sobre un suelo sólido:"
 
 msgid "• Space: Jump"
-msgstr ""
+msgstr "• Espacio: Saltar"
 
 msgid "• Shift: Sneak"
-msgstr ""
+msgstr "• Shift: Caminar"
 
 msgid "While on a ladder, swimming in a liquid or fly mode is active"
 msgstr ""
