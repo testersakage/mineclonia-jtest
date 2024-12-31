@@ -26,12 +26,14 @@ local POSE_CROUCHING = 2
 local POSE_SLEEPING = 3
 local POSE_FALL_FLYING = 4
 local POSE_SWIMMING = 5
-local POSE_DEATH = 6
+local POSE_MOUNTED = 6
+local POSE_DEATH = 7
 
 mcl_serverplayer.POSE_STANDING = POSE_STANDING
 mcl_serverplayer.POSE_CROUCHING = POSE_CROUCHING
 mcl_serverplayer.POSE_SLEEPING = POSE_SLEEPING
 mcl_serverplayer.POSE_FALL_FLYING = POSE_FALL_FLYING
+mcl_serverplayer.POSE_MOUNTED = POSE_MOUNTED
 mcl_serverplayer.POSE_DEATH = POSE_DEATH
 
 local PLAYER_EVENT_JUMP = 1
@@ -87,6 +89,15 @@ function mcl_serverplayer.post_load_model (player, model)
 			walk_mine = model.animations.swim_walk_mine,
 			collisionbox = mcl_player.player_props_swimming.collisionbox,
 			eye_height = mcl_player.player_props_swimming.eye_height,
+		},
+		[POSE_MOUNTED] = {
+			stand = model.animations.sit,
+			walk = model.animations.sit,
+			mine = model.animations.sit,
+			walk_bow = model.animations.sit,
+			walk_mine = model.animations.sit,
+			collisionbox = mcl_player.player_props_normal.collisionbox,
+			eye_height = mcl_player.player_props_normal.eye_height,
 		},
 		[POSE_DEATH] = {
 			stand = model.animations.die,
@@ -342,10 +353,17 @@ end
 function mcl_serverplayer.animate_localplayer (state, player)
 	local look_dir = mcl_util.norm_radians (player:get_look_horizontal ())
 	local pose = state.override_pose or state.pose
-	if pose == POSE_STANDING or pose == POSE_CROUCHING then
+	if pose == POSE_STANDING or pose == POSE_CROUCHING
+		or pose == POSE_MOUNTED then
 		-- Animate body.
 		local move_yaw = mcl_util.norm_radians (state.move_yaw)
 		local diff = mcl_util.norm_radians (move_yaw - look_dir)
+
+		if pose == POSE_MOUNTED then
+			move_yaw = 0.0
+			look_dir = 0.0
+			diff = 0.0
+		end
 
 		if diff > FOURTY_DEG then
 			move_yaw = look_dir + FOURTY_DEG
@@ -484,6 +502,7 @@ function mcl_serverplayer.globalstep (player, dtime)
 		state.fall_flown_ticks = fall_flown_ticks
 	end
 	mcl_serverplayer.update_ammo (state, player, false)
+	mcl_serverplayer.validate_mounting (state, player)
 end
 
 function mcl_serverplayer.handle_movement_event (player, event)

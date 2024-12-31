@@ -328,6 +328,8 @@ function mob_class:mob_activate (staticdata, dtime)
 	self._was_touching_ground = true
 	self._old_head_swivel_vector = nil
 	self._old_head_swivel_pos = nil
+	self._csm_driving = false
+	self._driving_sent = nil
 
 	if self.head_swivel then
 		self._head_swivel_pos
@@ -467,6 +469,22 @@ function mob_class:on_step (dtime, moveresult)
 	end
 	self._targets_visible = {}
 	local should_drive = self:should_drive ()
+
+	if self._csm_driving then
+		if should_drive and not self._driving_sent then
+			self._driving_sent = true
+			mcl_serverplayer.update_vehicle (self.driver, {
+				_driving = true,
+			})
+		elseif not should_drive and self._driving_sent then
+			self._driving_sent = false
+			if self.driver then
+			    mcl_serverplayer.update_vehicle (self.driver, {
+				    _driving = false,
+			    }, pos, self.object:get_velocity ())
+			end
+		end
+	end
 
 	if self:check_despawn (pos, dtime) then return true end
 

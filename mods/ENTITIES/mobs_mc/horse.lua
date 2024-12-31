@@ -9,10 +9,6 @@ local function attach_driver(self, clicker)
 		text=S("Sneak to dismount"),
 		color="white", stay = 60,
 	})
-	self.object:set_properties ({
-		selectionbox = {0,0,0,0,0,0},
-	})
-	self._selectionbox_overloaded = true
 	self:attach(clicker)
 end
 
@@ -606,14 +602,27 @@ function horse:post_attach (player)
 	local formspec = self:generate_inventory_formspec ()
 	mcl_player.set_inventory_formspec (player, formspec, 100)
 	mcl_entity_invs.load_inv (self, 15)
+	self.object:set_properties ({
+		selectionbox = {0,0,0,0,0,0},
+	})
+	self._selectionbox_overloaded = true
 end
 
-function horse:attach (player)
-	mob_class.attach (self, player)
-	if not self.tamed then
-		return
+function horse:attach (player, server_side)
+	if mob_class.attach (self, player, server_side) then
+		if self.tamed then
+			self:post_attach (player)
+		end
+		return true
 	end
-	self:post_attach (player)
+	return false
+end
+
+function horse:complete_attachment (player, state)
+	mob_class.complete_attachment (self, player, state)
+	if self.tamed then
+		self:post_attach (player)
+	end
 end
 
 function horse:detach (player)
