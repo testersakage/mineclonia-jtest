@@ -18,6 +18,9 @@ local function drop_candles(pos, node)
 	if not node then node = core.get_node(pos) end
 
 	local group = core.get_item_group(node.name, "candles")
+
+	if node.name:find("mcl_candles:candle_cake") then group = 1 end
+
 	local item = ItemStack("mcl_candles:candle_1 " .. group)
 	local color_index = node.param2 > 0 and node.param2
 	local color = color_index and mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
@@ -108,10 +111,19 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 
 	local unode = core.get_node(pointed_thing.under)
 	local group = core.get_item_group(unode.name, "candles")
+	local param2 = tonumber(itemstack:get_meta():get("palette_index")) or 0
+
+	if unode.name == "mcl_cake:cake" then
+		core.swap_node(pointed_thing.under, {name = "mcl_candles:candle_cake", param2 = param2})
+		if not core.is_creative_enabled(placer:get_player_name()) then
+			itemstack:take_item()
+		end
+
+		return itemstack
+	end
 
 	if group > 0 then
 		if group < #candle_boxes then
-			local param2 = tonumber(itemstack:get_meta():get("palette_index")) or 0
 			unode.name = "mcl_candles:candle_" .. math.min(4, group + 1)
 			if param2 == unode.param2 then
 				core.swap_node(pointed_thing.under, unode)
@@ -253,27 +265,28 @@ local function looking_at_candle(pointer, pointed_thing)
 end
 
 local tpl_cake = {
-	--_on_ignite = function(player, pointed_thing)
-	--	local p_under = pointed_thing.under
-	--	local node = core.get_node(p_under)
-	--	if looking_at_candle(player, pointed_thing) then
-	--		local node = core.get_node(p_under)
-	--		local group = core.get_item_group(node.name, "lit_cake")
-	--		if group == 0 then
-	--			node.name = node.name .. "_lit"
-	--			minetest.swap_node(p_under, node)
-	--		end
-	--	else
-	--		drop_candles(p_under, node)
-	--		minetest.swap_node(p_under, {name = "mcl_cake:cake_6"})
-	--	end
-	--end,
 	collision_box = cake_box,
 	description = S("Cake"),
 	drawtype = "mesh",
-	--groups = {candles = 1, not_in_creative_inventory = 1},
+	groups = {not_in_creative_inventory = 1},
 	mesh = "mcl_candles_cake.obj",
-	--on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)end,
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		if not looking_at_candle(clicker, pointed_thing) then
+			drop_candles(pos, node)
+			core.swap_node(pos, {name = "mcl_cake:cake_6"})
+		else
+			if core.get_item_group(node.name, "lit_cake") > 0 then
+				core.swap_node(pos, {name = node.name:gsub("_lit", "")})
+			else
+				if core.get_item_group(itemstack:get_name(), "flint_and_steel") > 0 then
+					core.swap_node(pos, {name = node.name .. "_lit"})
+					if not core.is_creative_enabled(clicker:get_player_name()) then
+						itemstack:add_wear()
+					end
+				end
+			end
+		end
+	end,
 	palette = "mcl_candles_palette.png",
 	paramtype = "light",
 	paramtype2 = "color",
@@ -281,7 +294,7 @@ local tpl_cake = {
 	tiles = {
 		{
 			color = "white",
-			name = "[combine:32x32:0,0=cake_top.png:15,0=cake_bottom.png:0,15=cake_side.png"
+			name = "[combine:32x32:0,0=cake_top.png:16,0=cake_bottom.png:0,16=cake_side.png"
 		},
 		"mcl_candles_candle.png",
 		"blank.png"
@@ -296,7 +309,7 @@ core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
 	tiles = {
 		{
 			color = "white",
-			name = "[combine:32x32:0,0=cake_top.png:15,0=cake_bottom.png:0,15=cake_side.png"
+			name = "[combine:32x32:0,0=cake_top.png:16,0=cake_bottom.png:0,16=cake_side.png"
 		},
 		"mcl_candles_candle.png",
 		{
