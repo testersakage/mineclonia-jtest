@@ -95,7 +95,7 @@ local tpl_lit_candle = {
 				type = "vertical_frames"
             },
 			color = "white",
-			name = "fire_basic_flame_animated.png"
+			name = "mcl_candles_flames.png"
         }
     }
 }
@@ -331,7 +331,7 @@ core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
 				type = "vertical_frames"
             },
 			color = "white",
-			name = "fire_basic_flame_animated.png"
+			name = "mcl_candles_flames.png"
         }
 	}
 }))
