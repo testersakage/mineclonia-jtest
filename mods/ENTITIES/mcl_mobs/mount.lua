@@ -28,12 +28,22 @@ end)
 minetest.register_on_leaveplayer(force_detach)
 minetest.register_on_dieplayer(force_detach)
 
-function mob_class:attach(player)
-	local attach_at, eye_offset
+function mob_class:attach (player, force_server_side)
 	self.player_rotation = self.player_rotation or {x = 0, y = 0, z = 0}
 	self.driver_attach_at = self.driver_attach_at or {x = 0, y = 0, z = 0}
 	self.driver_eye_offset = self.driver_eye_offset or {x = 0, y = 0, z = 0}
 	self.driver_scale = self.driver_scale or {x = 1, y = 1}
+	if not force_server_side
+		and mcl_serverplayer.is_csm_capable (player) then
+		mcl_serverplayer.begin_mount (player, self.object, self.name, {
+			bone = "",
+			position = self.driver_attach_at,
+			rotation = self.driver_rotation,
+		})
+		return false
+	end
+
+	local attach_at, eye_offset
 	self._last_jump = 0
 
 	local rot_view = 0
@@ -45,6 +55,7 @@ function mob_class:attach(player)
 	attach_at = self.driver_attach_at
 	eye_offset = self.driver_eye_offset
 	self.driver = player
+	self.driving_by_csm = false
 
 	force_detach(player)
 
@@ -67,6 +78,7 @@ function mob_class:attach(player)
 	end, player:get_player_name())
 
 	player:set_look_horizontal(self:get_yaw () - rot_view)
+	return true
 end
 
 
@@ -149,14 +161,10 @@ end
 
 local MAX_PHYSICS_DTIME = 0.075
 
+local ZERO_VECTOR = vector.zero ()
+
 function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	local dir = self.driver:get_look_horizontal ()
-	-- Move forward but steer the pig in the direction the
-	-- driver is facing.
-	local pos = self.object:get_pos ()
-	local elapsed, total
-	local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
-
 	self:set_yaw (dir)
 
 	-- Cancel any ongoing activity.
@@ -166,6 +174,24 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	if not self:navigation_finished () then
 		self:cancel_navigation ()
 	end
+
+	if self._csm_driving then
+		-- Driving is the responsibility of the client.
+		self:halt_in_tracks (false)
+
+		-- Detect whether this mob's course has deviated from
+		-- the client-specified course and send a movement
+		-- correction message if so.
+		mcl_serverplayer.maybe_correct_course (self.driver, self.object,
+						moveresult, dtime)
+		return
+	end
+
+	-- Move forward but steer the pig in the direction the
+	-- driver is facing.
+	local pos = self.object:get_pos ()
+	local elapsed, total
+	local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
 
 	if self._drive_boost_elapsed then
 		self._drive_boost_elapsed = self._drive_boost_elapsed + dtime
@@ -217,5 +243,38 @@ function mob_class:on_detach_child(child)
 	end
 	if self.driver == child then
 		self.driver = nil
+	end
+end
+
+------------------------------------------------------------------------
+--- Client-side steering.
+------------------------------------------------------------------------
+
+function mob_class:complete_attachment (player, state)
+	self.driver = player
+	self._csm_driving = true
+	self._driving_sent = nil
+	mcl_serverplayer.update_vehicle (player, {
+		movement_speed = self.movement_speed,
+		jump_height = self.jump_height,
+	})
+
+	player:set_properties ({
+		visual_size = {
+			x = self.driver_scale.x,
+			y = self.driver_scale.y
+		}
+	})
+end
+
+function mob_class:fallback_attach (player, state)
+	self:attach (player, true)
+end
+
+function mob_class:detach_client_driver (player)
+	if player == self.driver then
+		self.driver = nil
+		self._csm_driving = false
+		self:detach (player)
 	end
 end

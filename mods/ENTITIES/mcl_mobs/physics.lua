@@ -738,6 +738,18 @@ function mob_class:post_apply_physics_factor (field, oldvalue, value)
 				self.stupid_velocity = factor * value
 			end
 		end
+
+		if self.driver and self._csm_driving then
+			mcl_serverplayer.update_vehicle (self.driver, {
+				movement_speed = self.movement_speed,
+			})
+		end
+	elseif field == "jump_height" then
+		if self.driver and self._csm_driving then
+			mcl_serverplayer.update_vehicle (self.driver, {
+				jump_height = self.jump_height,
+			})
+		end
 	end
 end
 

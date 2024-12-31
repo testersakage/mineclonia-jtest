@@ -40,6 +40,10 @@ local SERVERBOUND_DAMAGE = 'af'
 local SERVERBOUND_GET_AMMO = 'ag'
 local SERVERBOUND_RELEASE_USEITEM = 'ah'
 local SERVERBOUND_VISUAL_WIELDITEM = 'ai'
+local SERVERBOUND_ACKNOWLEDGE_VEHICLE = 'aj'
+local SERVERBOUND_REFUSE_VEHICLE = 'ak'
+local SERVERBOUND_MOVE_VEHICLE = 'al'
+local SERVERBOUND_DISMOUNT_VEHICLE = 'am'
 
 -- Clientbound messages.
 local CLIENTBOUND_HELLO = 'AA'
@@ -53,6 +57,10 @@ local CLIENTBOUND_POSECTRL = 'AH'
 local CLIENTBOUND_SHIELDCTRL = 'AI'
 local CLIENTBOUND_AMMOCTRL = 'AJ'
 local CLIENTBOUND_BOW_CAPABILITIES = 'AK'
+local CLIENTBOUND_VEHICLE_HANDOFF = 'AL'
+local CLIENTBOUND_VEHICLE_POSITION = 'AM'
+local CLIENTBOUND_RESCIND_VEHICLE = 'AN'
+local CLIENTBOUND_VEHICLE_CAPABILITIES = 'AO'
 
 local MAX_PAYLOAD = 65533
 
@@ -130,6 +138,36 @@ function mcl_serverplayer.send_bow_capabilities (player, capabilities)
 	assert (#payload <= MAX_PAYLOAD, "oversized ClientboundBowCapabilities")
 	modchannels[player]:send_all (table.concat {
 		CLIENTBOUND_BOW_CAPABILITIES, payload,
+	})
+end
+
+function mcl_serverplayer.send_vehicle_handoff (player, vehicle_type, objid)
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_VEHICLE_HANDOFF,
+		vehicle_type, ",", objid,
+	})
+end
+
+function mcl_serverplayer.send_vehicle_position (player, objid, pos, v)
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_VEHICLE_POSITION,
+		objid, ",", pos.x, ",", pos.y, ",", pos.z,
+		",", v.x, ",", v.y, ",", v.z,
+	})
+end
+
+function mcl_serverplayer.send_rescind_vehicle (player, objid)
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_RESCIND_VEHICLE, objid,
+	})
+end
+
+function mcl_serverplayer.send_vehicle_capabilities (player, objid, capabilities)
+	capabilities.id = objid
+	local payload = core.write_json (capabilities)
+	assert (#payload <= MAX_PAYLOAD, "oversized ClientboundVehicleCapabilities")
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_VEHICLE_CAPABILITIES, payload,
 	})
 end
 
@@ -329,6 +367,37 @@ local function receive_modchannel_message_1 (player, message)
 			else
 				state.visual_wielditem = nil
 			end
+		elseif msgtype == SERVERBOUND_ACKNOWLEDGE_VEHICLE then
+			local id = tonumber (payload)
+			if not id then
+				error ("Invalid ServerboundAcknowledgeVehicle message")
+			end
+			mcl_serverplayer.handle_acknowledge_vehicle (player, state, id)
+		elseif msgtype == SERVERBOUND_REFUSE_VEHICLE then
+			local id = tonumber (payload)
+			if not id then
+				error ("Invalid ServerboundRefuseVehicle message")
+			end
+			mcl_serverplayer.handle_refuse_vehicle (player, state, id)
+		elseif msgtype == SERVERBOUND_MOVE_VEHICLE then
+			local id, x, y, z, vx, vy, vz
+				= unpack (payload:split (','))
+			if not id or not x or not y or not z or not vx or not vy or not vz then
+				error ("Parameters absent from ServerboundMoveVehicle message")
+			end
+			id = tonumber (id)
+			x = tonumber (x)
+			y = tonumber (y)
+			z = tonumber (z)
+			vx = tonumber (vx)
+			vy = tonumber (vy)
+			vz = tonumber (vz)
+			if not id or not x or not y or not z or not vx or not vy or not vz then
+				error ("Invalid ServerboundMoveVehicle message")
+			end
+			local pos = vector.new (x, y, z)
+			local vel = vector.new (vx, vy, vz)
+			mcl_serverplayer.handle_move_vehicle (player, state, id, pos, vel)
 		else
 			minetest.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",
@@ -358,3 +427,4 @@ minetest.register_on_modchannel_message (receive_modchannel_message)
 local modpath = minetest.get_modpath (minetest.get_current_modname ())
 dofile (modpath .. "/player.lua")
 dofile (modpath .. "/items.lua")
+dofile (modpath .. "/mount.lua")
