@@ -2,15 +2,11 @@ local modname			   = minetest.get_current_modname()
 local mod_registername	  = modname .. ":"
 local S					 = minetest.get_translator(modname)
 local C                 = minetest.colorize
-
-local function readable_name(str)
-	str = str:gsub("_", " ")
-    return (str:gsub("^%l", string.upper))
-end
+local D 			   = mcl_util.get_dynamic_translator()
 
 for template_name, template_defs in pairs(mcl_armor.trims.overlays) do
 	minetest.register_craftitem(mod_registername .. template_name, {
-		description = S("@1 Armor Trim", S(readable_name(template_name))),
+		description = D(template_defs.readable_name .. " Armor Trim"),
 		_tt_help = S("Smithing Template").."\n\n"..
 		C(mcl_colors.GRAY, S("Applies to:")).."\n"..C(mcl_colors.BLUE, " "..S("Armor")).."\n"..
 		C(mcl_colors.GRAY, S("Ingredients:")).."\n"..C(mcl_colors.BLUE, " "..S("Ingot & Crystals")),

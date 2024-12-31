@@ -63,23 +63,64 @@ mcl_armor.trims = {
 	core_textures	= {},
 	blacklisted		= {["mcl_armor:elytra"]=true, ["mcl_armor:elytra_enchanted"]=true},
 	overlays        = {
-		["sentry"] 	  = { dupe_item="mcl_core:cobble" },
-		["dune"] 	  = { dupe_item="mcl_core:sandstone" },
-		["coast"] 	  = { dupe_item="mcl_core:cobble" },
-		["wild"] 	  = { dupe_item="mcl_core:mossycobble" },
-		["tide"] 	  = { dupe_item="mcl_ocean:prismarine" },
-		["ward"] 	  = { dupe_item="mcl_deepslate:deepslate_cobbled", rarity=2 },
-		["vex"] 	  = { dupe_item="mcl_core:cobble", rarity=2},
-		["rib"] 	  = { dupe_item="mcl_nether:netherrack" },
-		["snout"] 	  = { dupe_item="mcl_blackstone:blackstone" },
-		["eye"] 	  = { dupe_item="mcl_end:end_stone", rarity=2 },
-		["spire"] 	  = { dupe_item="mcl_end:purpur_block", rarity=2 },
-		["silence"]   = { dupe_item="mcl_deepslate:deepslate_cobbled", rarity=3 },
-		["wayfinder"] = { dupe_item="mcl_colorblocks:hardened_clay" },
-		["bolt"]      = { dupe_item="mcl_copper:block" },
-		["flow"]      = { dupe_item="mcl_mobitems:breeze_rod" }
+		["sentry"] 	  = {
+			readable_name = "Sentry", dupe_item = "mcl_core:cobble"
+		},
+		["dune"] 	  = {
+			readable_name = "Dune", dupe_item = "mcl_core:sandstone"
+		},
+		["coast"] 	  = {
+			readable_name = "Coast", dupe_item = "mcl_core:cobble"
+		},
+		["wild"] 	  = {
+			readable_name = "Wild", dupe_item = "mcl_core:mossycobble"
+		},
+		["tide"] 	  = {
+			readable_name = "Tide", dupe_item = "mcl_ocean:prismarine"
+		},
+		["ward"] 	  = {
+			readable_name = "Ward", dupe_item = "mcl_deepslate:deepslate_cobbled", rarity = 2
+		},
+		["vex"] 	  = {
+			readable_name = "Vex", dupe_item = "mcl_core:cobble", rarity = 2
+		},
+		["rib"] 	  = {
+			readable_name = "Rib", dupe_item = "mcl_nether:netherrack"
+		},
+		["snout"] 	  = {
+			readable_name = "Snout", dupe_item = "mcl_blackstone:blackstone"
+		},
+		["eye"] 	  = {
+			readable_name = "Eye", dupe_item = "mcl_end:end_stone", rarity = 2
+		},
+		["spire"] 	  = {
+			readable_name = "Spire", dupe_item = "mcl_end:purpur_block", rarity = 2
+		},
+		["silence"]   = {
+			readable_name = "Silence", dupe_item = "mcl_deepslate:deepslate_cobbled", rarity = 3
+		},
+		["wayfinder"] = {
+			readable_name = "Wayfinder", dupe_item = "mcl_colorblocks:hardened_clay"
+		},
+		["bolt"]      = {
+			readable_name = "Bolt", dupe_item = "mcl_copper:block"
+		},
+		["flow"]      = {
+			readable_name = "Flow", dupe_item = "mcl_mobitems:breeze_rod"
+		}
 	},
-	colors			= {["amethyst"]="#8246a5",["gold"]="#ce9627",["emerald"]="#1b9958",["copper"]="#c36447",["diamond"]="#5faed8",["iron"]="#938e88",["lapis"]="#1c306b",["netherite"]="#302a26",["quartz"]="#c9bcb9",["redstone"]="#af2c23"},
+	colors			= {
+		["amethyst"]  = "#8246a5",
+		["gold"] 	  = "#ce9627",
+		["emerald"]   = "#1b9958",
+		["copper"] 	  = "#c36447",
+		["diamond"]   = "#5faed8",
+		["iron"] 	  = "#938e88",
+		["lapis"] 	  = "#1c306b",
+		["netherite"] = "#302a26",
+		["quartz"] 	  = "#c9bcb9",
+		["redstone"]  = "#af2c23"
+	}
 }
 
 local modpath = minetest.get_modpath("mcl_armor")
