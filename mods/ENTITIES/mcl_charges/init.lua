@@ -5,7 +5,7 @@ local modpath = minetest.get_modpath(modname)
 local cooldown_time = 1
 mcl_charges = {}
 mcl_charges_cooldown = {}
-local S = minetest.get_translator("mcl_charges")
+
 --Wind Charge Particle effects
 mcl_charges.wind_burst_spawner = {
 	texture = "mcl_charges_wind_burst_1.png",
@@ -108,7 +108,7 @@ end
 --throwable charge registry
 function mcl_charges.register_charge(name, descr, def)
 	minetest.register_craftitem("mcl_charges:" .. name .. "", {
-		description = S(descr),
+		description = descr,
 		inventory_image = "mcl_charges_" .. name .. ".png",
 
 		on_place = function(itemstack, placer, _)

@@ -1,8 +1,9 @@
+local S = core.get_translator("mcl_charges")
 local RADIUS = 4
 local damage_radius = (RADIUS / math.max(1, RADIUS)) * RADIUS
 local radius = 2
 
-mcl_charges.register_charge("wind_charge", "Wind Charge", {
+mcl_charges.register_charge("wind_charge", S("Wind Charge"), {
 	hit_player = mcl_mobs.get_arrow_damage_func(0, "fireball"),
 	hit_mob = mcl_mobs.get_arrow_damage_func(6, "fireball"),
 	hit_node = function(self, pos, node)
