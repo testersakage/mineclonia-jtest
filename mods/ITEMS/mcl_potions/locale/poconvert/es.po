@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-31 04:13+0000\n"
+"PO-Revision-Date: 2024-12-31 23:36+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/es/>\n"
@@ -16,15 +16,34 @@ msgstr ""
 
 msgid "<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"
 msgstr ""
+"<efecto>|heal|list|clear|remove <duración|cantidad a curar|efecto>|INF "
+"[<nivel>] [<factor>] [NOPART]"
 
 msgid "Add a status effect to yourself. Arguments: <effect>: name of status effect. Passing \"list\" as effect name lists available effects. Passing \"heal\" as effect name heals (or harms) by amount designed by the next parameter. Passing \"clear\" as effect name removes all effects. Passing \"remove\" as effect name removes the effect named by the next parameter. <duration>: duration in seconds. Passing \"INF\" as duration makes the effect infinite. (<heal-amount>: amount of healing when the effect is \"heal\", passing a negative value subtracts health. <effect>: name of a status effect to be removed when using \"remove\" as the previous parameter.) <level>: effect power determinant, bigger level results in more powerful effect for effects that depend on the level (no changes for other effects), defaults to 1, pass F to use low-level factor instead. <factor>: effect strength modifier, can mean different things depending on the effect, no changes for effects that do not depend on level/factor. NOPART at the end means no particles will be shown for this effect."
 msgstr ""
+"Añade un estado de efecto a ti mismo. Argumentos: <efecto>: nombre del "
+"estado de efecto. A pasar \"list\" como nombre del efecto enumera los "
+"efectos disponibles. A pasar \"heal\" como nombre del efecto cura (o daña) "
+"por la cantidad designada por el siguiente parámetro. A pasar \"clear\" como "
+"nombre del efecto elimina todos los efectos. A pasar \"remove\" como nombre "
+"del efecto elimina el efecto nombrado por el siguiente parámetro. <duración>:"
+" duración en segundos. A pasar \"INF\" como duración hace que el efecto sea "
+"infinito. (<cantidad a curar>: cantidad a curar cuando el efecto es \"heal\""
+", pasar un valor negativo resta salud. <efecto>: nombre de un estado de "
+"efecto que se eliminará cuando se use \"remove\" como parámetro anterior). "
+"<nivel>: determinante de la potencia del efecto, un nivel mayor da como "
+"resultado un efecto más poderoso para los efectos que dependen del nivel ("
+"sin cambios para otros efectos), por defecto 1, pase F para usar el factor "
+"de nivel bajo en su lugar. <factor>: modificador de la fuerza del efecto, "
+"puede significar cosas diferentes según el efecto, sin cambios para los "
+"efectos que no dependen del nivel/factor. NOPART al final significa que no "
+"se mostrarán partículas para este efecto."
 
 msgid "Missing effect parameter!"
 msgstr "¡Falta parámetro de efecto!"
 
 msgid "Missing or invalid heal amount parameter!"
-msgstr ""
+msgstr "¡Parámetro de cantidad a curar faltante o no válido!"
 
 msgid "Player @1 healed by @2 HP."
 msgstr "Jugador @1 curado por @2 PS."
@@ -45,22 +64,22 @@ msgid "Missing or invalid duration parameter!"
 msgstr "¡Parámetro de duración faltante o no válido!"
 
 msgid "Invalid level parameter!"
-msgstr ""
+msgstr "¡Parámetro de nivel no válido!"
 
 msgid "Missing or invalid factor parameter when level is F!"
-msgstr ""
+msgstr "¡Parámetro de factor faltante o no válido cuando el nivel es F!"
 
 msgid "@1 effect given to player @2 for @3 seconds with factor of @4."
-msgstr ""
+msgstr "@1 efecto dado al jugador @2 durante @3 segundos con un factor de @4."
 
 msgid "@1 effect given to player @2 for @3 seconds."
-msgstr ""
+msgstr "@1 efecto dado al jugador @2 durante @3 segundos."
 
 msgid "Giving effect @1 to player @2 failed."
-msgstr ""
+msgstr "Falló al dar el efecto @1 al jugador @2."
 
 msgid "@1 effect on level @2 given to player @3 for @4 seconds."
-msgstr ""
+msgstr "@1 efecto en el nivel @2 dado al jugador @3 durante @4 segundos."
 
 msgid "Invisiblity"
 msgstr "Invisibilidad"
@@ -96,13 +115,13 @@ msgid "Water Breathing"
 msgstr "Apnea"
 
 msgid "limitless breathing under water"
-msgstr ""
+msgstr "respiración ilimitada bajo el agua"
 
 msgid "Dolphin's Grace"
 msgstr "Gracia de delfín"
 
 msgid "swimming gracefully"
-msgstr ""
+msgstr "nadando con gracia"
 
 msgid "Leaping"
 msgstr "Salto"
@@ -117,7 +136,7 @@ msgid "Slow Falling"
 msgstr "Caída lenta"
 
 msgid "decreases gravity effects"
-msgstr ""
+msgstr "disminuye los efectos de la gravedad"
 
 msgid "Swiftness"
 msgstr "Velocidad"
@@ -135,52 +154,52 @@ msgid "Levitation"
 msgstr "Levitación"
 
 msgid "moves body upwards at @1 nodes/s"
-msgstr ""
+msgstr "mueve el cuerpo hacia arriba a @1 nodos/s"
 
 msgid "Night Vision"
 msgstr "Visión nocturna"
 
 msgid "improved vision during the night"
-msgstr ""
+msgstr "mejora de la visión durante la noche"
 
 msgid "Darkness"
 msgstr "Oscuridad"
 
 msgid "surrounded by darkness"
-msgstr ""
+msgstr "rodeado de oscuridad"
 
 msgid "not seeing anything beyond @1 nodes"
-msgstr ""
+msgstr "no ver nada más allá de @1 nodos"
 
 msgid "Glowing"
 msgstr "Luminiscencia"
 
 msgid "more visible at all times"
-msgstr ""
+msgstr "más visible en todo momento"
 
 msgid "Health Boost"
 msgstr "Salud mejorada"
 
 msgid "HP increased by @1"
-msgstr ""
+msgstr "PS aumentado en @1"
 
 msgid "Absorption"
 msgstr "Absorción"
 
 msgid "absorbs up to @1 incoming damage"
-msgstr ""
+msgstr "absorbe hasta @1 de daño entrante"
 
 msgid "Fire Resistance"
 msgstr "Cuerpo ignífugo"
 
 msgid "resistance to fire damage"
-msgstr ""
+msgstr "resistencia al daño por fuego"
 
 msgid "Resistance"
 msgstr "Resistencia"
 
 msgid "resist @1% of incoming damage"
-msgstr ""
+msgstr "resiste @1% del daño entrante"
 
 msgid "Luck"
 msgstr "Suerte"
@@ -192,7 +211,7 @@ msgid "Bad Omen"
 msgstr "Mal presagio"
 
 msgid "danger is imminent"
-msgstr ""
+msgstr "el peligro es inminente"
 
 msgid "Hero of the Village"
 msgstr "Héroe de la aldea"
@@ -201,49 +220,49 @@ msgid "Withering"
 msgstr "Descomposición"
 
 msgid "-1 HP / @1 s, can kill"
-msgstr ""
+msgstr "-1 PS / @1 s, puede matar"
 
 msgid "impaired sight"
-msgstr ""
+msgstr "visión reducida"
 
 msgid "Hunger"
 msgstr "Hambre"
 
 msgid "exhausts by @1 per second"
-msgstr ""
+msgstr "se agota por @1 por segundo"
 
 msgid "Nausea"
 msgstr "Náusea"
 
 msgid "not feeling very well..."
-msgstr ""
+msgstr "no se siente muy bien..."
 
 msgid "frequency: @1 / 1 s"
-msgstr ""
+msgstr "frecuencia: @1 / 1 s"
 
 msgid "Saturation"
 msgstr "Saturación"
 
 msgid "saturates by @1 per second"
-msgstr ""
+msgstr "saturado por @1 por segundo"
 
 msgid "Haste"
 msgstr "Prisa minera"
 
 msgid "+@1% mining and attack speed"
-msgstr ""
+msgstr "+@1% de minado y velocidad de ataque"
 
 msgid "Fatigue"
 msgstr "Fatiga"
 
 msgid "-@1% mining and attack speed"
-msgstr ""
+msgstr "-@1% de minado y velocidad de ataque"
 
 msgid "Conduit Power"
 msgstr "Canalización"
 
 msgid "+@1% mining and attack speed in water"
-msgstr ""
+msgstr "+@1% de minado y velocidad de ataque en el agua"
 
 msgid "Fermented Spider Eye"
 msgstr "Ojo de araña fermentado"
@@ -307,6 +326,10 @@ msgstr "Sin efecto"
 
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr ""
+"Una poción arrojadiza que se rompe al impactar, donde crea una nube mágica "
+"que permanece por un tiempo. Cualquier jugador o mob que se encuentre dentro "
+"de la nube recibirá el efecto o conjunto de efectos de la poción, "
+"posiblemente de forma repetida."
 
 msgid "Use the “Punch” key to throw it."
 msgstr "Usa la tecla \"Atacar\" para lanzarla."
@@ -315,7 +338,7 @@ msgid "Use the “Place” key to drink it."
 msgstr "Use la tecla \"Colocar\" para beberla."
 
 msgid "Drinking a potion gives you a particular effect or set of effects."
-msgstr ""
+msgstr "Beber una poción te da un efecto particular o un conjunto de efectos."
 
 msgid "@1 Potion @2"
 msgstr "Poción @1 @2"
@@ -345,7 +368,7 @@ msgid "Arrow @1"
 msgstr "Flecha @1"
 
 msgid "Strange Tipped Arrow"
-msgstr ""
+msgstr "Flecha con punta extraña"
 
 msgid "Dragon's Breath"
 msgstr "Aliento de dragón"
@@ -363,13 +386,13 @@ msgid "Mundane"
 msgstr "vulgar"
 
 msgid "Has a terrible taste and is not really useful for brewing potions."
-msgstr ""
+msgstr "Tiene un sabor terrible y no es realmente útil para preparar pociones."
 
 msgid "Thick"
 msgstr "densa"
 
 msgid "Has a bitter taste and is not really useful for brewing potions."
-msgstr ""
+msgstr "Tiene un sabor amargo y no es realmente útil para preparar pociones."
 
 msgid "of Healing"
 msgstr "de curación"
@@ -414,7 +437,7 @@ msgid "Increases jump strength."
 msgstr "Aumenta la fuerza del salto."
 
 msgid "of Decay"
-msgstr ""
+msgstr "de decadencia"
 
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr "Aplica el efecto wither que causa daño de intervalos regulares que puede matar."
@@ -453,55 +476,58 @@ msgid "of Strength"
 msgstr "de fuerza"
 
 msgid "Increases attack power."
-msgstr ""
+msgstr "Aumenta el poder de ataque."
 
 msgid "of Weakness"
 msgstr "de debilidad"
 
 msgid "Decreases attack power."
-msgstr ""
+msgstr "Disminuye el poder de ataque."
 
 msgid "of Slow Falling"
 msgstr "de caída lenta"
 
 msgid "Instead of falling, you descend gracefully."
-msgstr ""
+msgstr "En lugar de caer, desciendes con gracia."
 
 msgid "of the Turtle Master"
 msgstr "del maestro tortuga"
 
 msgid "Decreases damage taken at the cost of speed."
-msgstr ""
+msgstr "Reduce el daño recibido a costa de la velocidad."
 
 msgid "of Luck"
 msgstr "de suerte"
 
 msgid "Increases luck."
-msgstr ""
+msgstr "Aumenta la suerte."
 
 msgid "of Bad Luck"
 msgstr "de mala suerte"
 
 msgid "Decreases luck."
-msgstr ""
+msgstr "Disminuye la suerte."
 
 msgid "Ominous Bottle"
 msgstr "Frasco ominoso"
 
 msgid "Attracts danger."
-msgstr ""
+msgstr "Atrae el peligro."
 
 msgid "Unknown Potion"
-msgstr ""
+msgstr "Poción desconocida"
 
 msgid "Right-click to identify"
-msgstr ""
+msgstr "Haga clic derecho para identificar"
 
 msgid "Unknown Tipped Arrow"
-msgstr ""
+msgstr "Flecha con punta desconocida"
 
 msgid "A throwable potion that will shatter on impact, where it gives all nearby players and mobs a status effect or a set of status effects."
 msgstr ""
+"Una poción arrojadiza que se romperá al impactar, donde le da a todos los "
+"jugadores y mobs cercanos un estado de efecto o un conjunto de estado de "
+"efectos."
 
 msgid "This particular arrow is tipped and will give an effect when it hits a player or mob."
 msgstr "Esta flecha en concreto está encantada y producirá un efecto cuando alcance a una entidad."
