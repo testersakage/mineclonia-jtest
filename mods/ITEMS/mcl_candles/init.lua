@@ -1,4 +1,5 @@
 local S = core.get_translator("mcl_candles")
+local have_doc_mod = core.get_modpath("doc")
 
 local candle_boxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
@@ -15,7 +16,7 @@ local function set_candle_properties(stack, color)
 
 	if color_defs then
 		stack:get_meta():set_string("description", S("@1 Candle", color_defs.readable_name))
-		stack:get_meta():set_int("palette_index", color_defs.palette_index)
+		stack:get_meta():set_int("palette_index", color_defs.palette_index + 1)
 		stack:get_meta():set_string("inventory_overlay", image)
 		stack:get_meta():set_string("wield_overlay", image)
 	end
@@ -38,6 +39,7 @@ local function drop_candles(pos, node)
 end
 
 local tpl_candle = {
+	_doc_items_longdesc = S("A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."),
 	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_on_dye_place = function(pos, color)
@@ -79,6 +81,8 @@ local tpl_candle = {
 }
 
 local tpl_lit_candle = {
+	_doc_items_longdesc = nil,
+	_doc_items_create_entry = false,
 	description = S("Lit Candle"),
 	groups = {
 		axey = 1, candles = 1, dig_by_piston = 1, handy = 1, lit_candles = 1,
@@ -141,7 +145,7 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-function extinguish(pos, node, clicker, itemstack, pointed_thing)
+function extinguish(pos, node, clicker, _, _)
 	if not clicker then
 		return
 	end
@@ -158,27 +162,37 @@ function extinguish(pos, node, clicker, itemstack, pointed_thing)
 end
 
 for i = 1, #candle_boxes do
+	local creative_group
 	local candle_n = {
 		collision_box = {fixed = candle_boxes[i], type = "fixed"},
 		mesh = "mcl_candles_candle_" .. i .. ".obj",
 		selection_box = {fixed = candle_boxes[i], type = "fixed"}
 	}
-	local creative_group
-	if i ~= 1 then creative_group = {not_in_creative_inventory = 1} end
+
+	if i ~= 1 then
+		tpl_candle._doc_items_create_entry = false
+		creative_group = {not_in_creative_inventory = 1}
+	end
+
 	core.register_node("mcl_candles:candle_" .. i, table.merge(tpl_candle, candle_n, {
 		_get_all_virtual_items = function ()
 			local output = {deco = {}}
+
 			if i == 1 then
 				for color, _ in pairs(mcl_dyes.colors) do
 					local stack = ItemStack("mcl_candles:candle_1")
+
 					set_candle_properties(stack, color)
+
 					table.insert(output.deco, stack:to_string())
 				end
 			end
+
 			return output
 		end,
 		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
 	}))
+
 	core.register_node("mcl_candles:candle_lit_" .. i, table.merge({
 		_on_ignite = nil,
 		_on_wind_charge_hit = function (pos)
@@ -191,11 +205,16 @@ for i = 1, #candle_boxes do
 		light_source = 3 * i,
 		on_rightclick = extinguish
 	}, tpl_candle, tpl_lit_candle, candle_n))
+
+	if have_doc_mod then
+		doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
+	end
 end
 
 local function candle_craft(_, _, old_craft_grid, _)
 	local i = 0
 	local dye, candle
+
 	for _, stack in pairs(old_craft_grid) do
 		if core.get_item_group(stack:get_name(), "candles") > 0 then
 			candle = stack
@@ -205,11 +224,14 @@ local function candle_craft(_, _, old_craft_grid, _)
 			i = i + 1
 		end
 	end
+
 	if dye and candle and i == 2 then
 		local color = dye:get_definition()._color
 		local cdef = mcl_dyes.colors[color]
 		local result = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
+
 		set_candle_properties(result, color)
+
 		return result
 	end
 end
@@ -264,6 +286,7 @@ end
 
 local tpl_cake = {
 	_food_particles = false,
+	after_dig_node = drop_candles,
 	collision_box = cake_box,
 	description = S("Cake"),
 	drawtype = "mesh",
@@ -279,10 +302,10 @@ local tpl_cake = {
 			core.swap_node(pos, {name = "mcl_cake:cake_6"})
 		else
 			if core.get_item_group(node.name, "lit_cake") > 0 then
-				core.swap_node(pos, {name = node.name:gsub("_lit", "")})
+				core.swap_node(pos, {name = node.name:gsub("_lit", ""), param2 = node.param2})
 			else
 				if core.get_item_group(itemstack:get_name(), "flint_and_steel") > 0 then
-					core.swap_node(pos, {name = node.name .. "_lit"})
+					core.swap_node(pos, {name = node.name .. "_lit", param2 = node.param2})
 					if not core.is_creative_enabled(clicker:get_player_name()) then
 						itemstack:add_wear()
 					end
