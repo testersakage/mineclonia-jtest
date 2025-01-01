@@ -23,7 +23,7 @@ local function drop_candles(pos, node)
 
 	local item = ItemStack("mcl_candles:candle_1 " .. group)
 	local color_index = node.param2 > 0 and node.param2
-	local color = color_index and mcl_dyes.palette_index_to_color(tonumber(color_index) - 1)
+	local color = mcl_dyes.palette_index_to_color(color_index - 1)
 
 	if color then
 		local color_defs = mcl_dyes.colors[color]
@@ -62,8 +62,8 @@ local tpl_candle = {
 	drawtype = "mesh",
 	drop = "",
 	groups = {
-		axey = 1, candles = 1, deco_block = 1, dig_by_piston = 1, handy = 1, not_solid = 1, pickaxey = 1,
-		shearsy = 1, shovely = 1, swordy = 1, unlit_candles = 1
+		axey = 1, candles = 1, deco_block = 1, dig_by_piston = 1, handy = 1, not_solid = 1,
+		pickaxey = 1, shearsy = 1, shovely = 1, swordy = 1, unlit_candles = 1
 	},
 	inventory_image = "mcl_candles_item.png",
 	is_ground_content = false,
@@ -105,22 +105,23 @@ function tpl_candle.on_place(itemstack, placer, pointed_thing)
 
 	if mcl_util.check_position_protection(pointed_thing.under, placer) then return end
 
-	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-
-	if rc ~= nil then return rc end
-
 	local unode = core.get_node(pointed_thing.under)
 	local group = core.get_item_group(unode.name, "candles")
 	local param2 = tonumber(itemstack:get_meta():get("palette_index")) or 0
 
 	if unode.name == "mcl_cake:cake" then
 		core.swap_node(pointed_thing.under, {name = "mcl_candles:candle_cake", param2 = param2})
+
 		if not core.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item()
 		end
 
 		return itemstack
 	end
+
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
+	if rc ~= nil then return rc end
 
 	if group > 0 then
 		if group < #candle_boxes then
@@ -149,9 +150,9 @@ function extinguish(pos, node, clicker, itemstack, pointed_thing)
 		return
 	end
 
-	local g = core.get_item_group(node.name, "lit_candles")
-	if g > 0 then
-		node.name = "mcl_candles:candle_"..tostring(g)
+	local group = core.get_item_group(node.name, "lit_candles")
+	if group > 0 then
+		node.name = "mcl_candles:candle_" .. group
 		core.swap_node(pos, node)
 	end
 end
@@ -159,12 +160,12 @@ end
 for i = 1, #candle_boxes do
 	local candle_n = {
 		collision_box = {fixed = candle_boxes[i], type = "fixed"},
-		mesh = "mcl_candles_candle_"..tostring(i)..".obj",
+		mesh = "mcl_candles_candle_" .. i .. ".obj",
 		selection_box = {fixed = candle_boxes[i], type = "fixed"}
 	}
 	local creative_group
 	if i ~= 1 then creative_group = {not_in_creative_inventory = 1} end
-	core.register_node("mcl_candles:candle_"..i, table.merge(tpl_candle, candle_n, {
+	core.register_node("mcl_candles:candle_" .. i, table.merge(tpl_candle, candle_n, {
 		_get_all_virtual_items = function ()
 			local output = {deco = {}}
 			if i == 1 then
@@ -183,7 +184,7 @@ for i = 1, #candle_boxes do
 		end,
 		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
 	}))
-	core.register_node("mcl_candles:candle_lit_"..i, table.merge(tpl_candle, tpl_lit_candle, candle_n, {
+	core.register_node("mcl_candles:candle_lit_" .. i, table.merge({
 		_on_ignite = nil,
 		_on_wind_charge_hit = function (pos)
 			local node = core.get_node(pos)
@@ -193,11 +194,11 @@ for i = 1, #candle_boxes do
 		end,
 		groups = table.merge(tpl_lit_candle.groups, {candles = i, lit_candles = i}),
 		light_source = 3 * i,
-		on_rightclick = extinguish,
-	}))
+		on_rightclick = extinguish
+	}, tpl_candle, tpl_lit_candle, candle_n))
 end
 
-local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
+local function candle_craft(_, _, old_craft_grid, _)
 	local i = 0
 	local dye, candle
 	for _, stack in pairs(old_craft_grid) do
@@ -212,14 +213,14 @@ local function candle_craft(itemstack, player, old_craft_grid, craft_inv)
 	if dye and candle and i == 2 then
 		local color = dye:get_definition()._color
 		local cdef = mcl_dyes.colors[color]
-		local r = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
+		local result = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
 		local prop = {
 			description = S("@1 Candle", cdef.readable_name),
 			palette_index = cdef.palette_index + 1,
 			image = "mcl_candles_item_" .. color .. ".png"
 		}
-		set_candle_properties(r, prop)
-		return r
+		set_candle_properties(result, prop)
+		return result
 	end
 end
 
@@ -260,6 +261,7 @@ local function looking_at_candle(pointer, pointed_thing)
 	if pt_above.y > pt_under.y then
 		local f_pos_x = core.pointed_thing_to_face_pos(pointer, pointed_thing).x - pt_above.x
 		local f_pos_z = core.pointed_thing_to_face_pos(pointer, pointed_thing).z - pt_above.z
+
 		if f_pos_x * f_pos_x + f_pos_z * f_pos_z < 0.0062 then
 			return true
 		end
