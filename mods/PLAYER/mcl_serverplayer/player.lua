@@ -546,7 +546,7 @@ function mcl_serverplayer.use_rocket (user, duration)
 	end
 end
 
-function mcl_serverplayer.handle_damage (player, payload)
+function mcl_serverplayer.handle_damage (player, state, payload)
 	if payload.type == "fall" then
 		local damage = math.ceil (payload.amount)
 		if damage < 0 then
@@ -572,7 +572,15 @@ function mcl_serverplayer.handle_damage (player, payload)
 		local reason = {type = "fall"}
 		mcl_damage.finish_reason (reason)
 		mcl_damage.damage_player (player, damage, reason)
-		-- TODO: Display fall damage particles?
+
+		-- If payload.riding is set, it should designate a mob
+		-- that is the player's current vehicle.
+		if payload.riding then
+			local object = minetest.object_refs[payload.riding]
+			if object and object == state.vehicle then
+				mcl_util.deal_damage (object, damage, reason)
+			end
+		end
 	elseif payload.type == "kinetic" then
 		local damage = math.ceil (payload.amount)
 		if damage < 0 then
@@ -694,15 +702,29 @@ end
 -- Client-side status effects.
 ------------------------------------------------------------------------
 
-function mcl_serverplayer.add_status_effect (player, effect)
-	if mcl_serverplayer.is_csm_capable (player) then
-		mcl_serverplayer.send_register_status_effect (player, effect)
+function mcl_serverplayer.add_status_effect (object, effect)
+	if mcl_serverplayer.is_csm_capable (object) then
+		mcl_serverplayer.send_register_status_effect (object, effect)
+	else
+		-- This might be a mob interested in tracking its
+		-- status effects.
+		local entity = object:get_luaentity ()
+		if entity and entity.register_status_effect then
+			entity:register_status_effect (effect)
+		end
 	end
 end
 
-function mcl_serverplayer.remove_status_effect (player, id)
-	if mcl_serverplayer.is_csm_capable (player) then
-		mcl_serverplayer.send_remove_status_effect (player, id)
+function mcl_serverplayer.remove_status_effect (object, id)
+	if mcl_serverplayer.is_csm_capable (object) then
+		mcl_serverplayer.send_remove_status_effect (object, id)
+	else
+		-- This might be a mob interested in tracking its
+		-- status effects.
+		local entity = object:get_luaentity ()
+		if entity and entity.remove_status_effect then
+			entity:remove_status_effect (id)
+		end
 	end
 end
 

@@ -1453,9 +1453,7 @@ minetest.register_globalstep(function(dtime)
 				ent._mcl_potions["_EF_"..name] = nil
 			end
 			end
-			if object:is_player () then
-				mcl_serverplayer.remove_status_effect (object, name)
-			end
+			mcl_serverplayer.remove_status_effect (object, name)
 		elseif object:is_player() then
 			if vals.dur == math.huge then
 			object:hud_change(icon_ids[object:get_player_name()][vals.hud_index].timestamp,
@@ -1535,9 +1533,7 @@ function mcl_potions._reset_effects(object, set_hud)
 		minetest.delete_particlespawner (val.spawner)
 		end
 		if effect.after_end then table.insert(removed_effects, effect.after_end) end
-		if object:is_player () then
-			mcl_serverplayer.remove_status_effect (object, name)
-		end
+		mcl_serverplayer.remove_status_effect (object, name)
 	end
 	for _, tbl in pairs (item_speed_effects) do
 		tbl[object] = nil
@@ -1695,6 +1691,11 @@ function mcl_potions._load_entity_effects(entity)
 			if effect.on_load then
 				effect.on_load(object, EF[name][object].factor)
 			end
+			mcl_serverplayer.add_status_effect (object, {
+				name = name,
+				factor = EF[name][object].factor or 0,
+				level = mcl_potions.get_effect_level (object, name),
+			})
 		end
 	end
 end
@@ -1761,9 +1762,7 @@ function mcl_potions.clear_effect(object, effectname)
 		end
 		EF[effectname][object] = nil
 		if def.after_end then def.after_end(object) end
-		if object:is_player () then
-			mcl_serverplayer.remove_status_effect (object, effectname)
-		end
+		mcl_serverplayer.remove_status_effect (object, effectname)
 	end
 	if item_speed_effects[effectname] then
 		item_speed_effects[effectname][object] = nil
@@ -1983,13 +1982,11 @@ function mcl_potions.give_effect(name, object, factor, duration, no_particles)
 		end
 		EF[name][object] = vals
 		if edef.on_start then edef.on_start(object, factor) end
-		if object:is_player () then
-			mcl_serverplayer.add_status_effect (object, {
-				name = name,
-				factor = factor or 0,
-				level = mcl_potions.get_effect_level (object, name),
-			})
-		end
+		mcl_serverplayer.add_status_effect (object, {
+			name = name,
+			factor = factor or 0,
+			level = mcl_potions.get_effect_level (object, name),
+		})
 	else
 		local present = EF[name][object]
 		present.no_particles = no_particles

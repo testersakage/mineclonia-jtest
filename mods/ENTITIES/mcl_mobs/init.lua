@@ -139,6 +139,7 @@ mcl_mobs.mob_class = {
 	suffocation_timer = 0,
 	movement_speed = 14, -- https://minecraft.wiki/w/Attribute#movementSpeed
 	driver = nil,
+	_csm_driving_enabled = false,
 	_csm_driving = nil,
 	_driving_sent = nil,
 	pace_bonus = 1.0,
