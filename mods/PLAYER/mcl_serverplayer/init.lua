@@ -43,7 +43,7 @@ local SERVERBOUND_VISUAL_WIELDITEM = 'ai'
 local SERVERBOUND_ACKNOWLEDGE_VEHICLE = 'aj'
 local SERVERBOUND_REFUSE_VEHICLE = 'ak'
 local SERVERBOUND_MOVE_VEHICLE = 'al'
-local SERVERBOUND_DISMOUNT_VEHICLE = 'am'
+local SERVERBOUND_CONFIGURE_VEHICLE = 'am'
 
 -- Clientbound messages.
 local CLIENTBOUND_HELLO = 'AA'
@@ -340,7 +340,7 @@ local function receive_modchannel_message_1 (player, message)
 			elseif json.type == "kinetic" then
 				check_number (json.amount)
 			end
-			mcl_serverplayer.handle_damage (player, json)
+			mcl_serverplayer.handle_damage (player, state, json)
 		elseif msgtype == SERVERBOUND_GET_AMMO then
 			local challenge = tonumber (payload)
 			if not challenge or challenge <= state.ammo_challenge then
@@ -398,6 +398,12 @@ local function receive_modchannel_message_1 (player, message)
 			local pos = vector.new (x, y, z)
 			local vel = vector.new (vx, vy, vz)
 			mcl_serverplayer.handle_move_vehicle (player, state, id, pos, vel)
+		elseif msgtype == SERVERBOUND_CONFIGURE_VEHICLE then
+			local config = minetest.parse_json (payload)
+			if not config then
+				error ("Invalid configuration")
+			end
+			mcl_serverplayer.handle_configure_vehicle (player, state, config)
 		else
 			minetest.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",

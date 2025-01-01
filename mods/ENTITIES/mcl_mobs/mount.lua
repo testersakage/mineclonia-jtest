@@ -34,6 +34,7 @@ function mob_class:attach (player, force_server_side)
 	self.driver_eye_offset = self.driver_eye_offset or {x = 0, y = 0, z = 0}
 	self.driver_scale = self.driver_scale or {x = 1, y = 1}
 	if not force_server_side
+		and self._csm_driving_enabled
 		and mcl_serverplayer.is_csm_capable (player) then
 		mcl_serverplayer.begin_mount (player, self.object, self.name, {
 			bone = "",
@@ -184,6 +185,24 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 		-- correction message if so.
 		mcl_serverplayer.maybe_correct_course (self.driver, self.object,
 						moveresult, dtime)
+		-- Configure a suitable animation.
+		local v = self.object:get_velocity ()
+		local speed = math.sqrt (v.x * v.x + v.z * v.z)
+		if speed > 0.25 then
+			self:set_animation ("walk")
+		else
+			self:set_animation ("stand")
+		end
+
+		-- Process hog boosting.
+		if self._drive_boost_elapsed then
+			local total = self._drive_boost_total
+			self._drive_boost_elapsed
+				= self._drive_boost_elapsed + dtime
+			if self._drive_boost_elapsed > total then
+				self._drive_boost_elapsed = nil
+			end
+		end
 		return
 	end
 
@@ -232,6 +251,11 @@ function mob_class:hog_boost ()
 	end
 	self._drive_boost_elapsed = 0
 	self._drive_boost_total = (math.random (841) + 140) / 20.0
+	if self._csm_driving then
+		mcl_serverplayer.update_vehicle (self.driver, {
+			_drive_boost_total = self._drive_boost_total,
+		})
+	end
 	return true
 end
 
@@ -257,6 +281,10 @@ function mob_class:complete_attachment (player, state)
 	mcl_serverplayer.update_vehicle (player, {
 		movement_speed = self.movement_speed,
 		jump_height = self.jump_height,
+		_EF = self._EF,
+		ef_set = true,
+		_drive_boost_total = self._drive_boost_total,
+		_drive_boost_elapsed = self._drive_boost_elapsed,
 	})
 
 	player:set_properties ({
@@ -276,5 +304,48 @@ function mob_class:detach_client_driver (player)
 		self.driver = nil
 		self._csm_driving = false
 		self:detach (player)
+	end
+end
+
+function mob_class:set_touching_ground (touching_ground)
+	if touching_ground then
+		self.object:set_properties ({
+			stepheight = self._initial_step_height,
+		})
+		self._previously_floating = true
+	else
+		self.object:set_properties ({
+			stepheight = 0.0,
+		})
+		self._previously_floating = false
+	end
+end
+
+function mob_class:register_status_effect (effect)
+	if self._csm_driving_enabled then
+		if not self._EF then
+			self._EF = {}
+		end
+		self._EF[effect.name] = effect
+
+		if self.driver and self._csm_driving then
+			mcl_serverplayer.update_vehicle (self.driver, {
+				_EF = self._EF,
+				ef_set = true,
+			})
+		end
+	end
+end
+
+function mob_class:remove_status_effect (id)
+	if self._csm_driving_enabled and self._EF then
+		self._EF[id] = nil
+
+		if self.driver and self._csm_driving then
+			mcl_serverplayer.update_vehicle (self.driver, {
+				_EF = self._EF,
+				ef_set = true,
+			})
+		end
 	end
 end

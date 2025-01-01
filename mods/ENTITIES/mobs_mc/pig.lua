@@ -64,6 +64,7 @@ local pig = {
 	steer_class = "follow_item",
 	steer_item = "mcl_mobitems:carrot_on_a_stick",
 	follow_herd_bonus = 1.1,
+	_csm_driving_enabled = true,
 }
 
 ------------------------------------------------------------------------

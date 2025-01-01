@@ -132,6 +132,20 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, pos, vel)
 	state.vehicle_dtime = 0.0
 end
 
+function mcl_serverplayer.handle_configure_vehicle (player, state, config)
+	if not config.id or type (config.id) ~= "number" then
+		error ("Invalid vehicle configuration")
+	end
+	if not state.vehicle
+		or minetest.object_refs[config.id] ~= state.vehicle then
+		return
+	end
+	if config.touching_ground ~= nil then
+		local entity = state.vehicle:get_luaentity ()
+		entity:set_touching_ground (config.touching_ground)
+	end
+end
+
 function mcl_serverplayer.validate_mounting (state, player)
 	if state.pending_vehicle
 		and not state.pending_vehicle:is_valid () then
@@ -208,6 +222,10 @@ function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtim
 			local diff = math.sqrt (dx * dx + dz * dz)
 			if diff >= MAX_VELOCITY_TOLERANCE
 				or (v_new.y > 0 and (v_new.y - v_orig.y) > 0) then
+				if not moveresult then
+					local entity = object:get_luaentity ()
+					moveresult = entity._moveresult
+				end
 				correct_vel = not moveresult
 					or gravity_only_collisions (moveresult)
 			end
