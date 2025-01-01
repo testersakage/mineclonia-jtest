@@ -23,7 +23,7 @@ local function drop_candles(pos, node)
 
 	local item = ItemStack("mcl_candles:candle_1 " .. group)
 	local color_index = node.param2 > 0 and node.param2
-	local color = mcl_dyes.palette_index_to_color(color_index - 1)
+	local color = color_index and mcl_dyes.palette_index_to_color(color_index - 1)
 
 	if color then
 		local color_defs = mcl_dyes.colors[color]
