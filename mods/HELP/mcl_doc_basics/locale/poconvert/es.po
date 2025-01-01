@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-31 23:36+0000\n"
+"PO-Revision-Date: 2025-01-01 01:08+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -527,33 +527,41 @@ msgstr "• Shift: Caminar"
 
 msgid "While on a ladder, swimming in a liquid or fly mode is active"
 msgstr ""
+"Mientras se encuentra en una escalera, nadas en un líquido o el modo de "
+"vuelo está activo"
 
 msgid "• Space: Move up"
-msgstr ""
+msgstr "• Espacio: Moverse hacia arriba"
 
 msgid "• Shift: Move down"
-msgstr ""
+msgstr "• Shift: Moverse hacia abajo"
 
 msgid "Extended movement (requires privileges):"
-msgstr ""
+msgstr "Movimiento extendido (requiere privilegios):"
 
 msgid "• J: Toggle fast mode, makes you run or fly fast (requires “fast” privilege)"
 msgstr ""
+"• J: Alternar el modo rápido, te permite correr o volar rápido (requiere el "
+"privilegio \"fast\")"
 
 msgid "• K: Toggle fly mode, makes you move freely in all directions (requires “fly” privilege)"
 msgstr ""
+"• K: Alternar el modo de vuelo, lo que te permite moverte libremente en "
+"todas las direcciones (requiere el privilegio de \"fly\")"
 
 msgid "• H: Toggle noclip mode, makes you go through walls in fly mode (requires “noclip” privilege)"
 msgstr ""
+"• H: Alternar el modo noclip, lo que te permite atravesar paredes en modo de "
+"vuelo (requiere el privilegio “noclip”)"
 
 msgid "• E: Walk fast in fast mode"
-msgstr ""
+msgstr "• E: Caminar rápido en modo rápido"
 
 msgid "World interaction:"
-msgstr ""
+msgstr "Interacción del mundo:"
 
 msgid "• Left mouse button: Punch / mine blocks"
-msgstr ""
+msgstr "• Botón izquierdo del ratón: golpear / minar bloques"
 
 msgid "• Right mouse button: Build or use pointed block"
 msgstr ""
@@ -583,7 +591,7 @@ msgid "See the entry “Basics > Inventory”."
 msgstr ""
 
 msgid "Camera:"
-msgstr ""
+msgstr "Cámara:"
 
 msgid "• F7: Toggle camera mode"
 msgstr ""
@@ -622,7 +630,7 @@ msgid "• /: Start issuing a server command"
 msgstr ""
 
 msgid "Technical:"
-msgstr ""
+msgstr "Técnico:"
 
 msgid "• +: Increase minimal viewing distance"
 msgstr ""
@@ -652,7 +660,7 @@ msgid "A few things can not be pointed. Most blocks are pointable. A few blocks,
 msgstr ""
 
 msgid "Items"
-msgstr ""
+msgstr "Ítems"
 
 msgid "Items are things you can carry along and store in inventories. They can be used for crafting, smelting, building, mining, and more. Types of items include blocks, tools, weapons and items only used for crafting."
 msgstr ""
@@ -688,7 +696,7 @@ msgid "Blocks can also have their own inventory, e.g. chests and furnaces."
 msgstr ""
 
 msgid "Inventory controls:"
-msgstr ""
+msgstr "Controles de inventario:"
 
 msgid "Taking: You can take items from an occupied slot if the cursor holds nothing."
 msgstr ""
