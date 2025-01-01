@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-01 03:40+0000\n"
+"PO-Revision-Date: 2025-01-01 08:46+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -371,21 +371,36 @@ msgstr "Configuración"
 
 msgid "There is a large variety of settings to configure Minetest. Pretty much every aspect can be changed that way."
 msgstr ""
+"Existe una gran variedad de opciones para configurar Minetest. De esta "
+"manera, se pueden modificar prácticamente todos los aspectos."
 
 msgid "These are a few of the most important gameplay settings:"
-msgstr ""
+msgstr "Estos son algunos de los ajustes más importantes del juego:"
 
 msgid "• Damage enabled (enable_damage): Enables the health and breath attributes for all players. If disabled, players are immortal"
 msgstr ""
+"• Permitir daños (enable_damage): Habilita los atributos de salud y "
+"respiración para todos los jugadores. Si está desactivado, los jugadores son "
+"inmortales"
 
 msgid "• Creative Mode (creative_mode): Enables sandbox-style gameplay focusing on creativity rather than a challenging gameplay. The meaning depends on the game; usual changes are: Reduced dig times, easy access to almost all items, tools never wear off, etc."
 msgstr ""
+"• Modo creativo (creative_mode): permite un juego de estilo sandbox que se "
+"centra en la creatividad en lugar de en un juego desafiante. El significado "
+"depende del juego; los cambios habituales son: tiempos de minado reducidos, "
+"fácil acceso a casi todos los ítems, herramientas que nunca se desgastan, "
+"etc."
 
 msgid "• PvP (enable_pvp): Short for “Player vs Player”. If enabled, players can deal damage to each other"
 msgstr ""
+"• JcJ (enable_pvp): abreviatura de “Jugador contra Jugador”. Si está "
+"habilitado, los jugadores pueden causarse daño entre sí"
 
 msgid "For a full list of all available settings, use the “All Settings” dialog in the main menu."
 msgstr ""
+"Para obtener una lista completa de todas las configuraciones disponibles, "
+"utilice el cuadro de diálogo “Todas las configuraciones” en el menú "
+"principal."
 
 msgid "Online help"
 msgstr "Ayuda en línea"
@@ -567,22 +582,23 @@ msgid "• Right mouse button: Build or use pointed block"
 msgstr ""
 
 msgid "• Shift+Right mouse button: Build"
-msgstr ""
+msgstr "• Shift+Botón derecho del ratón: Construir"
 
 msgid "• Roll mouse wheel / B / N: Select next/previous item in hotbar"
 msgstr ""
+"• Rueda del ratón / B / N: Seleccione el siguiente/anterior ítem del hotbar"
 
 msgid "• 1-9: Select item in hotbar directly"
-msgstr ""
+msgstr "• 1-9: Selecciona un ítem del hotbar directamente"
 
 msgid "• Q: Drop item stack"
 msgstr ""
 
 msgid "• Shift+Q: Drop 1 item"
-msgstr ""
+msgstr "• Shift+Q: Tirar 1 ítem"
 
 msgid "• I: Show/hide inventory menu"
-msgstr ""
+msgstr "• I: Mostrar/ocultar el menú de inventario"
 
 msgid "Inventory interaction:"
 msgstr "Interacción de inventario:"
@@ -658,6 +674,9 @@ msgstr "Apuntar"
 
 msgid "“Pointing” means looking at something in range with the crosshair. Pointing is needed for interaction, like mining, punching, using, etc. Pointable things include blocks, players, computer enemies and objects."
 msgstr ""
+"\"Apuntar\" significa mirar algo en el rango con la retícula. Apuntar es "
+"necesario para la interacción, como minar, golpear, usar, etc. Las cosas "
+"apuntables incluyen bloques, jugadores, enemigos de computadora y objetos."
 
 msgid "To point something, it must be in the pointing range (also just called “range”) of your wielded item. There's a default range when you are not wielding anything. A pointed thing will be outlined or highlighted (depending on your settings). Pointing is not possible with the 3rd person front camera."
 msgstr ""
@@ -684,10 +703,10 @@ msgid "• Pointing range: How close things must be to be pointed while wielding
 msgstr ""
 
 msgid "• Group memberships: See “Basics > Groups”"
-msgstr ""
+msgstr "• Membresías de grupos: Ver “Conceptos básicos > Grupos”"
 
 msgid "• May be used for crafting or cooking"
-msgstr ""
+msgstr "• Puede usarse para crafteo o cocinar"
 
 msgid "Inventory"
 msgstr "Inventario"
@@ -706,27 +725,32 @@ msgstr "Controles de inventario:"
 
 msgid "Taking: You can take items from an occupied slot if the cursor holds nothing."
 msgstr ""
+"Tomar: puedes tomar ítems de un espacio ocupado si el cursor no contiene "
+"nada."
 
 msgid "• Left click: take entire item stack"
-msgstr ""
+msgstr "• Clic izquierdo: tomar toda la pila de ítems"
 
 msgid "• Right click: take half from the item stack (rounded up)"
 msgstr ""
+"• Clic derecho: tomar la mitad de la pila de ítems (redondeado hacia arriba)"
 
 msgid "• Middle click: take 10 items from the item stack"
-msgstr ""
+msgstr "• Clic central: toma 10 ítems de la pila de ítems"
 
 msgid "• Mouse wheel down: take 1 item from the item stack"
-msgstr ""
+msgstr "• Rueda del ratón hacia abajo: toma 1 ítem de la pila de ítems"
 
 msgid "• Mouse wheel up: put 1 item in the item stack (if you're holding an item stack of the same type)"
 msgstr ""
+"• Rueda del ratón hacia arriba: coloca 1 ítem en la pila de ítems (si tienes "
+"una pila de ítems del mismo tipo)"
 
 msgid "Putting: You can put items onto a slot if the cursor holds 1 or more items and the slot is either empty or contains an item stack of the same item type."
 msgstr ""
 
 msgid "• Left click: put entire item stack"
-msgstr ""
+msgstr "• Clic izquierdo: colocar toda la pila de ítems"
 
 msgid "• Right click or mouse wheel up: put 1 item of the item stack"
 msgstr ""
@@ -810,6 +834,8 @@ msgstr ""
 
 msgid "• Maximum damage: Damage which is dealt after a hit when the weapon was fully recovered"
 msgstr ""
+"• Daño máximo: daño que se inflige después de un golpe cuando el arma se "
+"recuperó por completo"
 
 msgid "• Full punch interval: Time it takes for fully recovering from a punch"
 msgstr ""
@@ -948,42 +974,50 @@ msgstr "Hambre"
 
 msgid "Hunger affects your health and your ability to sprint. Hunger is not in effect when damage is disabled."
 msgstr ""
+"El hambre afecta tu salud y tu capacidad de esprint. El hambre no da efecto "
+"cuando el daño está desactivado."
 
 msgid "Core hunger rules:"
-msgstr ""
+msgstr "Reglas básicas sobre el hambre:"
 
 msgid "• You start with 20/20 hunger points (more points = less hungry)"
-msgstr ""
+msgstr "• Comienzas con 20/20 puntos de hambre (más puntos = menos hambre)"
 
 msgid "• Actions like combat, jumping, sprinting, etc. decrease hunger points"
 msgstr ""
+"• Acciones como combatir, saltar, esprintar, etc. disminuyen los puntos de "
+"hambre"
 
 msgid "• Food restores hunger points"
-msgstr ""
+msgstr "• La comida restaura los puntos de hambre"
 
 msgid "• If your hunger bar decreases, you're hungry"
-msgstr ""
+msgstr "• Si tu barra de hambre disminuye, tienes hambre"
 
 msgid "• At 18-20 hunger points, you regenerate 1 HP every 4 seconds"
-msgstr ""
+msgstr "• En 18-20 puntos de hambre, regeneras 1 PS por cada 4 segundos"
 
 msgid "• At 6 hunger points or less, you can't sprint"
-msgstr ""
+msgstr "• En 6 puntos de hambre o menos, no se puede realizar un esprint"
 
 msgid "• At 0 hunger points, you lose 1 HP every 4 seconds (down to 1 HP)"
-msgstr ""
+msgstr "• En 0 puntos de hambre, pierdes 1 PS por cada 4 segundos (hasta 1 PS)"
 
 msgid "• Poisonous food decreases your health"
-msgstr ""
+msgstr "• La comida venenosa disminuye su salud"
 
 msgid "Details:"
 msgstr "Detalles:"
 
 msgid "You have 0-20 hunger points, indicated by 20 drumstick half-icons above the hotbar. You also have an invisible attribute: Saturation."
 msgstr ""
+"Tienes entre 0-20 puntos de hambre, que se indican con 20 íconos de medio "
+"muslo sobre el hotbar. También tienes un atributo invisible: Saturación."
 
 msgid "Hunger points reflect how full you are while saturation points reflect how long it takes until you're hungry again."
 msgstr ""
+"Los puntos de hambre reflejan lo lleno que estás, mientras que los puntos de "
+"saturación reflejan cuánto tiempo tardas en volver a tener hambre."
 
 msgid "Each food item increases both your hunger level as well your saturation."
 msgstr ""
@@ -1004,34 +1038,34 @@ msgid "Saturation decreases by doing things which exhaust you (highest exhaustio
 msgstr ""
 
 msgid "• Regenerating 1 HP"
-msgstr ""
+msgstr "• Regenerando 1 PS"
 
 msgid "• Suffering food poisoning"
-msgstr ""
+msgstr "• Sufrir intoxicación alimentaria"
 
 msgid "• Sprint-jumping"
-msgstr ""
+msgstr "• Esprint saltando"
 
 msgid "• Sprinting"
-msgstr ""
+msgstr "• Esprintar"
 
 msgid "• Attacking"
-msgstr ""
+msgstr "• Atacar"
 
 msgid "• Taking damage"
-msgstr ""
+msgstr "• Recibir daño"
 
 msgid "• Swimming"
-msgstr ""
+msgstr "• Nadar"
 
 msgid "• Jumping"
-msgstr ""
+msgstr "• Saltar"
 
 msgid "• Mining a block"
-msgstr ""
+msgstr "• Minar un bloque"
 
 msgid "Other actions, like walking, do not exaust you."
-msgstr ""
+msgstr "Otras acciones, como caminar, no te cansan."
 
 msgid "Mobs"
 msgstr "Mobs"
