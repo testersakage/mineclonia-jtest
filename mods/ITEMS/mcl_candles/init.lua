@@ -7,11 +7,18 @@ local candle_boxes = {
 	{-0.1875, -0.5, -0.15625, 0.21875, -0.125, 0.21875}
 }
 
-local function set_candle_properties(stack, properties)
-	stack:get_meta():set_string("description", properties.description)
-	stack:get_meta():set_int("palette_index", properties.palette_index)
-	stack:get_meta():set_string("inventory_overlay", properties.image)
-	stack:get_meta():set_string("wield_overlay", properties.image)
+local function set_candle_properties(stack, color)
+	if type(color) ~= "string" and color == "" then return end
+
+	local color_defs = mcl_dyes.colors[color]
+	local image = "mcl_candles_item_".. color .. ".png"
+
+	if color_defs then
+		stack:get_meta():set_string("description", S("@1 Candle", color_defs.readable_name))
+		stack:get_meta():set_int("palette_index", color_defs.palette_index)
+		stack:get_meta():set_string("inventory_overlay", image)
+		stack:get_meta():set_string("wield_overlay", image)
+	end
 end
 
 local function drop_candles(pos, node)
@@ -25,14 +32,7 @@ local function drop_candles(pos, node)
 	local color_index = node.param2 > 0 and node.param2
 	local color = color_index and mcl_dyes.palette_index_to_color(color_index - 1)
 
-	if color then
-		local color_defs = mcl_dyes.colors[color]
-		set_candle_properties(item, {
-			description = S("@1 Candle", color_defs.readable_name),
-			palette_index = color_defs.palette_index,
-			image = "mcl_candles_item_" .. color .. ".png"
-		})
-	end
+	if color then set_candle_properties(item, color) end
 
 	return core.add_item(pos, item)
 end
@@ -169,14 +169,9 @@ for i = 1, #candle_boxes do
 		_get_all_virtual_items = function ()
 			local output = {deco = {}}
 			if i == 1 then
-				for color, color_defs in pairs(mcl_dyes.colors) do
+				for color, _ in pairs(mcl_dyes.colors) do
 					local stack = ItemStack("mcl_candles:candle_1")
-					local image = "mcl_candles_item_" .. color .. ".png"
-					set_candle_properties(stack, {
-						description = S("@1 Candle", color_defs.readable_name),
-						palette_index = color_defs.palette_index + 1,
-						image = image
-					})
+					set_candle_properties(stack, color)
 					table.insert(output.deco, stack:to_string())
 				end
 			end
@@ -214,12 +209,7 @@ local function candle_craft(_, _, old_craft_grid, _)
 		local color = dye:get_definition()._color
 		local cdef = mcl_dyes.colors[color]
 		local result = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
-		local prop = {
-			description = S("@1 Candle", cdef.readable_name),
-			palette_index = cdef.palette_index + 1,
-			image = "mcl_candles_item_" .. color .. ".png"
-		}
-		set_candle_properties(result, prop)
+		set_candle_properties(result, color)
 		return result
 	end
 end
@@ -317,6 +307,11 @@ local tpl_cake = {
 
 core.register_node("mcl_candles:candle_cake", tpl_cake)
 core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
+	_on_wind_charge_hit = function (pos)
+		local node = core.get_node(pos)
+		node.name = "mcl_candles:candle_cake"
+		core.swap_node(pos, node)
+	end,
 	light_source = 3,
 	groups = table.merge(tpl_cake.groups, {lit_cake = 1}),
 	tiles = {
