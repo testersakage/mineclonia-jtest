@@ -1,6 +1,8 @@
 local mod_storage = minetest.get_mod_storage()
 local normal_vars_in_singlenode = false
 
+local modpath = core.get_modpath(core.get_current_modname())
+
 -- Some global variables (don't overwrite them!)
 mcl_vars = {}
 
@@ -361,3 +363,5 @@ else
 	mcl_vars.difficulty = 2
 	minetest.log ("warning", "mcl_difficulty is configured to an unknown value " .. difficulty)
 end
+
+dofile(modpath.."/outdated_warning.lua")
