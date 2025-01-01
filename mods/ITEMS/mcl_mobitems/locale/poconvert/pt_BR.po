@@ -3,93 +3,113 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-02 04:15+0000\n"
+"Last-Translator: JoseDouglas26 "
+"<josedouglas26@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_mobitems/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Rotten Flesh"
-msgstr ""
+msgstr "Carne Podre"
 
 msgid "80% chance of food poisoning"
-msgstr ""
+msgstr "80% de chance de intoxicação alimentar"
 
 msgid "Yuck! This piece of flesh clearly has seen better days. If you're really desperate, you can eat it to restore a few hunger points, but there's a 80% chance it causes food poisoning, which increases your hunger for a while."
 msgstr ""
+"Eca! Esse pedaço de carne claramente já viu dias melhores. Se você estiver "
+"realmente desesperado, você pode comê-la para restaurar alguns pontos de "
+"fome, mas tem 80% de chance de causar intoxicação alimentar, a qual aumenta "
+"sua fome por um tempo."
 
 msgid "Raw Mutton"
-msgstr ""
+msgstr "Carneiro Cru"
 
 msgid "Raw mutton is the flesh from a sheep and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
+"Carneiro cru é a carne de uma ovelha e pode ser comida com segurança. "
+"Cozinha-la aumentará significativamente seu valor nutricional."
 
 msgid "Cooked Mutton"
-msgstr ""
+msgstr "Carneiro Assado"
 
 msgid "Cooked mutton is the cooked flesh from a sheep and is used as food."
-msgstr ""
+msgstr "Carneiro assado é a carne cozida de uma ovelha e é usada como comida."
 
 msgid "Raw Beef"
-msgstr ""
+msgstr "Bife Cru"
 
 msgid "Raw beef is the flesh from cows and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
+"Bife cru é a carne das vacas e pode ser comida com segurança. Cozinha-la "
+"aumentará significativamente seu valor nutricional."
 
 msgid "Steak"
-msgstr ""
+msgstr "Filé"
 
 msgid "Steak is cooked beef from cows and can be eaten."
-msgstr ""
+msgstr "Filé é bife de vacas cozido e pode ser comido."
 
 msgid "Raw Chicken"
-msgstr ""
+msgstr "Frango Cru"
 
 msgid "30% chance of food poisoning"
-msgstr ""
+msgstr "30% de chance de intoxicação alimentar"
 
 msgid "Raw chicken is a food item which is not safe to consume. You can eat it to restore a few hunger points, but there's a 30% chance to suffer from food poisoning, which increases your hunger rate for a while. Cooking raw chicken will make it safe to eat and increases its nutritional value."
 msgstr ""
+"Frango cru é um item de comida que não é seguro para consumo. Você pode comê-"
+"lo para restaurar alguns pontos de fome, mas existe uma chance de 30% de "
+"sofrer de intoxicação alimentar, o que aumenta sua taxa de fome por um "
+"tempo. Cozinhar frango cru o tornará seguro para consumo e aumentará seu "
+"valor nutricional."
 
 msgid "Cooked Chicken"
-msgstr ""
+msgstr "Frango Assado"
 
 msgid "A cooked chicken is a healthy food item which can be eaten."
-msgstr ""
+msgstr "Um frango assado é um item de comida saudável que pode ser comido."
 
 msgid "Raw Porkchop"
-msgstr ""
+msgstr "Carne de Porco Crua"
 
 msgid "A raw porkchop is the flesh from a pig and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
+"Uma carne de porco crua é a carne de um porco e pode ser comida com "
+"segurança. Cozinha-la aumentará significativamente seu valor nutricional."
 
 msgid "Cooked Porkchop"
-msgstr ""
+msgstr "Carne de Porco Assada"
 
 msgid "Cooked porkchop is the cooked flesh of a pig and is used as food."
 msgstr ""
+"Carne de porco assada é a carne cozida de um porco e é usada como comida."
 
 msgid "Raw Rabbit"
-msgstr ""
+msgstr "Coelho Cru"
 
 msgid "Raw rabbit is a food item from a dead rabbit. It can be eaten safely. Cooking it will increase its nutritional value."
 msgstr ""
+"Coelho cru é um item de comida de um coelho morto. Pode ser comida com "
+"segurança. Cozinha-la aumentará seu valor nutricional."
 
 msgid "Cooked Rabbit"
-msgstr ""
+msgstr "Coelho Assado"
 
 msgid "This is a food item which can be eaten."
-msgstr ""
+msgstr "Esse é um item de comida que pode ser comido."
 
 msgid "Milk"
-msgstr ""
+msgstr "Leite"
 
 msgid "Removes all status effects"
-msgstr ""
+msgstr "Remove todos os efeitos"
 
 msgid "Milk is very refreshing and can be obtained by using a bucket on a cow. Drinking it will remove all status effects, but restores no hunger points."
 msgstr ""
@@ -98,16 +118,16 @@ msgid "Use the placement key to drink the milk."
 msgstr ""
 
 msgid "Spider Eye"
-msgstr ""
+msgstr "Olho de Aranha"
 
 msgid "Poisonous"
-msgstr ""
+msgstr "Venenoso"
 
 msgid "Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."
 msgstr ""
 
 msgid "Bone"
-msgstr ""
+msgstr "Osso"
 
 msgid "Bones can be used to tame wolves so they will protect you. They are also useful as a crafting ingredient."
 msgstr ""
@@ -116,79 +136,79 @@ msgid "Wield the bone near wolves to attract them. Use the “Place” key on th
 msgstr ""
 
 msgid "Squid Ink Sac"
-msgstr ""
+msgstr "Bolsa de Tinta"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
 msgstr ""
 
 msgid "String"
-msgstr ""
+msgstr "Linha"
 
 msgid "Strings are used in crafting."
-msgstr ""
+msgstr "Linhas são usadas em fabricação."
 
 msgid "Blaze Rod"
-msgstr ""
+msgstr "Vara de Blaze"
 
 msgid "This is a crafting component dropped from dead blazes."
 msgstr ""
 
 msgid "Breeze Rod"
-msgstr ""
+msgstr "Vara de Vórtice"
 
 msgid "This is a crafting item dropped from breezes."
 msgstr ""
 
 msgid "Blaze Powder"
-msgstr ""
+msgstr "Pó de Blaze"
 
 msgid "This item is mainly used for crafting."
 msgstr ""
 
 msgid "Magma Cream"
-msgstr ""
+msgstr "Creme de Magma"
 
 msgid "Magma cream is a crafting component."
 msgstr ""
 
 msgid "Ghast Tear"
-msgstr ""
+msgstr "Lágrima de Ghast"
 
 msgid "Place this item in an item frame as decoration."
 msgstr ""
 
 msgid "Nether Star"
-msgstr ""
+msgstr "Estrela do Nether"
 
 msgid "A nether star is dropped when the Wither dies. Place it in an item frame to show the world how hardcore you are! Or just as decoration."
 msgstr ""
 
 msgid "Leather"
-msgstr ""
+msgstr "Couro"
 
 msgid "Leather is a versatile crafting component."
 msgstr ""
 
 msgid "Feather"
-msgstr ""
+msgstr "Pena"
 
 msgid "Feathers are used in crafting and are dropped from chickens."
 msgstr ""
 
 msgid "Rabbit Hide"
-msgstr ""
+msgstr "Pele de Coelho"
 
 msgid "Rabbit hide is used to create leather."
 msgstr ""
 
 msgid "Rabbit's Foot"
-msgstr ""
+msgstr "Pé de Coelho"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr ""
 
 msgid "Saddle"
-msgstr ""
+msgstr "Sela"
 
 msgid "Can be placed on animals to ride them"
 msgstr ""
@@ -200,28 +220,28 @@ msgid "Use the placement key with the saddle in your hand to try to put on the s
 msgstr ""
 
 msgid "Rabbit Stew"
-msgstr ""
+msgstr "Ensopado de Coelho"
 
 msgid "Rabbit stew is a very nutricious food item."
 msgstr ""
 
 msgid "Shulker Shell"
-msgstr ""
+msgstr "Casco de Shulker"
 
 msgid "Shulker shells are used in crafting. They are dropped from dead shulkers."
 msgstr ""
 
 msgid "Slimeball"
-msgstr ""
+msgstr "Bola de Slime"
 
 msgid "Slimeballs are used in crafting. They are dropped from slimes."
 msgstr ""
 
 msgid "Gunpowder"
-msgstr ""
+msgstr "Pólvora"
 
 msgid "Carrot on a Stick"
-msgstr ""
+msgstr "Vara com Cenoura"
 
 msgid "Lets you ride a saddled pig"
 msgstr ""
@@ -233,7 +253,7 @@ msgid "Place it on a saddled pig to mount it. You can now ride the pig like a ho
 msgstr ""
 
 msgid "Warped Fungus on a Stick"
-msgstr ""
+msgstr "Vara com Fungo Distorcido"
 
 msgid "Lets you ride a strider"
 msgstr ""
@@ -245,16 +265,16 @@ msgid "Place it on a saddled strider to mount it. You can now ride the strider l
 msgstr ""
 
 msgid "Nautilus Shell"
-msgstr ""
+msgstr "Concha de Náutilo"
 
 msgid "Used to craft a conduit"
-msgstr ""
+msgstr "Usado para fabricar o canalizador"
 
 msgid "The Nautilus Shell is used to craft a conduit. They can be obtained by fishing or killing a drowned that is wielding a shell."
 msgstr ""
 
 msgid "Heart of the Sea"
-msgstr ""
+msgstr "Coração do Mar"
 
 msgid "The Heart of the Sea is used to craft a conduit. They can be obtained by finding them in a buried treasure chest."
 msgstr ""
@@ -263,31 +283,31 @@ msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't we
 msgstr ""
 
 msgid "Leather Horse Armor"
-msgstr ""
+msgstr "Armadura de Couro para Cavalo"
 
 msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
 msgstr ""
 
 msgid "Iron Horse Armor"
-msgstr ""
+msgstr "Armadura de Ferro para Cavalo"
 
 msgid "Iron horse armor can be worn by horses to increase their protection from harm a bit."
 msgstr ""
 
 msgid "Golden Horse Armor"
-msgstr ""
+msgstr "Armadura de Ouro para Cavalo"
 
 msgid "Golden horse armor can be worn by horses to increase their protection from harm."
 msgstr ""
 
 msgid "Diamond Horse Armor"
-msgstr ""
+msgstr "Armadura de Diamante para Cavalo"
 
 msgid "Diamond horse armor can be worn by horses to greatly increase their protection from harm."
 msgstr ""
 
 msgid "Glow Ink Sac"
-msgstr ""
+msgstr "Bolsa de Tinta Brilhante"
 
 msgid "Use it to craft the Glow Item Frame."
 msgstr ""
@@ -296,7 +316,7 @@ msgid "Use the Glow Ink Sac and the normal Item Frame to craft the Glow Item Fra
 msgstr ""
 
 msgid "Name Tag"
-msgstr ""
+msgstr "Etiqueta"
 
 msgid "Give names to mobs"
 msgstr ""
@@ -309,4 +329,3 @@ msgstr ""
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr ""
-
