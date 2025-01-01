@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-01 01:08+0000\n"
+"PO-Revision-Date: 2025-01-01 03:40+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -585,70 +585,76 @@ msgid "• I: Show/hide inventory menu"
 msgstr ""
 
 msgid "Inventory interaction:"
-msgstr ""
+msgstr "Interacción de inventario:"
 
 msgid "See the entry “Basics > Inventory”."
-msgstr ""
+msgstr "Véase la entrada \"Conceptos básicos > Inventario\"."
 
 msgid "Camera:"
 msgstr "Cámara:"
 
 msgid "• F7: Toggle camera mode"
-msgstr ""
+msgstr "• F7: Alternar el modo de cámara"
 
 msgid "Interface:"
-msgstr ""
+msgstr "Interfaz:"
 
 msgid "• Esc: Open menu window (pauses in single-player mode) or close window"
 msgstr ""
+"• Esc: abrir la ventana de menú (pausar en el modo de un jugador) o cerrar "
+"la ventana"
 
 msgid "• F1: Show/hide HUD"
-msgstr ""
+msgstr "• F1: Mostrar/ocultar el HUD"
 
 msgid "• F2: Show/hide chat"
-msgstr ""
+msgstr "• F2: Mostrar/ocultar el chat"
 
 msgid "• F9: Toggle minimap"
-msgstr ""
+msgstr "• F9: Alternar minimapa"
 
 msgid "• Shift+F9: Toggle minimap rotation mode"
-msgstr ""
+msgstr "• Shift+F9: Alternar el modo de rotación del minimapa"
 
 msgid "• F10: Open/close console/chat log"
-msgstr ""
+msgstr "• F10: Abrir/cerrar consola/registro de chat"
 
 msgid "• F12: Take a screenshot"
-msgstr ""
+msgstr "• F12: Toma una captura de pantalla"
 
 msgid "Server interaction:"
-msgstr ""
+msgstr "Interacción con el servidor:"
 
 msgid "• T: Open chat window (chat requires the “shout” privilege)"
 msgstr ""
+"• T: Abrir la ventana de chat (el chat requiere el privilegio \"shout\")"
 
 msgid "• /: Start issuing a server command"
-msgstr ""
+msgstr "• /: Inicia la emisión de un comando del servidor"
 
 msgid "Technical:"
 msgstr "Técnico:"
 
 msgid "• +: Increase minimal viewing distance"
-msgstr ""
+msgstr "• +: Aumentar la distancia mínima de visualización"
 
 msgid "• -: Decrease minimal viewing distance"
-msgstr ""
+msgstr "• -: Disminuir la distancia mínima de visualización"
 
 msgid "• F3: Enable/disable fog"
-msgstr ""
+msgstr "• F3: Activar/desactivar la niebla"
 
 msgid "• F5: Enable/disable debug screen which also shows your coordinates"
 msgstr ""
+"• F5: Habilitar/deshabilitar la pantalla de depuración que también muestra "
+"sus coordenadas"
 
 msgid "• F6: Only useful for developers. Enables/disables profiler"
 msgstr ""
+"• F6: Solo útil para desarrolladores. Habilita/deshabilita el perfilador"
 
 msgid "Pointing"
-msgstr ""
+msgstr "Apuntar"
 
 msgid "“Pointing” means looking at something in range with the crosshair. Pointing is needed for interaction, like mining, punching, using, etc. Pointable things include blocks, players, computer enemies and objects."
 msgstr ""
@@ -748,6 +754,9 @@ msgstr ""
 
 msgid "At the bottom of the screen you see some squares. This is called the “hotbar”, and contains the items you have put in the last row of your inventory."
 msgstr ""
+"En la parte inferior de la pantalla verás unos cuadrados. Estos se llama "
+"“hotbar”, y contienen los ítems que has colocado en la última fila de tu "
+"inventario."
 
 msgid "You can change the selected item with the mouse wheel or the keyboard:"
 msgstr ""
@@ -780,7 +789,7 @@ msgid "Usually tools have a durability which limits the amount of uses of it. Th
 msgstr ""
 
 msgid "Weapons"
-msgstr ""
+msgstr "Armas"
 
 msgid "Some items are usable as a melee weapon when wielded. Weapons share most of the properties of tools."
 msgstr ""
@@ -789,10 +798,12 @@ msgid "Melee weapons deal damage by punching players and other animate objects. 
 msgstr ""
 
 msgid "• Single punch: Left-click once to deal a single punch"
-msgstr ""
+msgstr "• Golpe único: Haga clic izquierdo una vez para dar un solo golpe"
 
 msgid "• Quick punching: Hold down the left mouse button to deal quick repeated punches"
 msgstr ""
+"• Golpes rápidos: mantén presionado el botón izquierdo del mouse para dar "
+"golpes rápidos y repetidos"
 
 msgid "There are two core attributes of melee weapons:"
 msgstr ""
@@ -840,7 +851,7 @@ msgid "• Group memberships: Group memberships are used to determine mining pro
 msgstr ""
 
 msgid "Mining"
-msgstr ""
+msgstr "Minería"
 
 msgid "Mining (or digging) is the process of breaking blocks to remove them. To mine a block, point it and hold down the left mouse button until it breaks."
 msgstr ""
@@ -861,10 +872,10 @@ msgid "• Drops items based on probability"
 msgstr ""
 
 msgid "• Drops nothing"
-msgstr ""
+msgstr "• No dropea nada"
 
 msgid "Building"
-msgstr ""
+msgstr "Construcción"
 
 msgid "Almost all blocks can be built (or placed). Building is very simple and has no delay."
 msgstr ""
@@ -966,7 +977,7 @@ msgid "• Poisonous food decreases your health"
 msgstr ""
 
 msgid "Details:"
-msgstr ""
+msgstr "Detalles:"
 
 msgid "You have 0-20 hunger points, indicated by 20 drumstick half-icons above the hotbar. You also have an invisible attribute: Saturation."
 msgstr ""
@@ -1038,13 +1049,13 @@ msgid "Most animals roam the world aimlessly while most hostile mobs hunt player
 msgstr ""
 
 msgid "Animals"
-msgstr ""
+msgstr "Animales"
 
 msgid "Animals are peaceful beings which roam the world aimlessly. You can feed, tame and breed them."
 msgstr ""
 
 msgid "Feeding:"
-msgstr ""
+msgstr "Alimentación:"
 
 msgid "Each animal has its own taste for food and doesn't just accept any food. To feed, hold an item in your hand and rightclick the animal."
 msgstr ""
@@ -1059,13 +1070,13 @@ msgid "Feeding heals animals instantly, depending on the quality of the food ite
 msgstr ""
 
 msgid "Taming:"
-msgstr ""
+msgstr "Domadura:"
 
 msgid "A few animals can be tamed. You can generally do more things with tamed animals and use other items on them. For example, tame horses can be saddled and tame wolves fight on your side."
 msgstr ""
 
 msgid "Breeding:"
-msgstr ""
+msgstr "Cría:"
 
 msgid "When you have fed an animal up to its maximum health, then feed it again, you will activate “Love Mode” and many hearts appear around the animal."
 msgstr ""
@@ -1074,13 +1085,13 @@ msgid "Two animals of the same species will start to breed if they are in Love M
 msgstr ""
 
 msgid "Baby animals:"
-msgstr ""
+msgstr "Animales bebés:"
 
 msgid "Baby animals are just like their adult couterparts, but they can't be tamed or bred and don't drop anything when they die. They grow to adults after a short time. When fed, they grow to adults faster."
 msgstr ""
 
 msgid "Minimap"
-msgstr ""
+msgstr "Minimapa"
 
 msgid "The minimap allows you to get an overhead view of your surroundings, as a HUD that appears in the top right corner."
 msgstr ""
@@ -1107,7 +1118,7 @@ msgid "• Toggle minimap rotation mode: [Shift]+[F9]"
 msgstr ""
 
 msgid "Camera"
-msgstr ""
+msgstr "Cámara"
 
 msgid "There are 3 different views which determine the way you see the world. The modes are:"
 msgstr ""
@@ -1305,19 +1316,19 @@ msgid "• Damage and armor: Objects and players have armor groups, weapons have
 msgstr ""
 
 msgid "• Other uses"
-msgstr ""
+msgstr "• Otros usos"
 
 msgid "In the item help, many important groups are usually mentioned and explained."
 msgstr ""
 
 msgid "Glossary"
-msgstr ""
+msgstr "Glosario"
 
 msgid "This is a list of commonly used terms:"
 msgstr ""
 
 msgid "Controls:"
-msgstr ""
+msgstr "Controles:"
 
 msgid "• Wielding: Holding an item in hand"
 msgstr ""
@@ -1356,7 +1367,7 @@ msgid "• Using a block: Right-clicking a block to access its special function"
 msgstr ""
 
 msgid "Items:"
-msgstr ""
+msgstr "Ítems:"
 
 msgid "• Item: A single thing that players can possess"
 msgstr ""
@@ -1425,7 +1436,7 @@ msgid "• noclip: Allows to fly through walls"
 msgstr ""
 
 msgid "Interface"
-msgstr ""
+msgstr "Interfaz"
 
 msgid "• Hotbar: Inventory slots at the bottom"
 msgstr ""
@@ -1440,7 +1451,7 @@ msgid "• Crosshair: Seen in the middle, used to point at things"
 msgstr ""
 
 msgid "Online multiplayer:"
-msgstr ""
+msgstr "Multijugador en línea:"
 
 msgid "• PvP: Player vs Player. If active, players can deal damage to each other"
 msgstr ""
@@ -1452,13 +1463,14 @@ msgid "• Protection: Mechanism to own areas of the world, which only allows th
 msgstr ""
 
 msgid "Technical terms:"
-msgstr ""
+msgstr "Términos técnicos:"
 
 msgid "• Minetest: This game engine"
-msgstr ""
+msgstr "• Minetest: este motor de juego"
 
 msgid "• Minetest Game: A game for Minetest by the Minetest developers"
 msgstr ""
+"• Minetest Game: un juego para Minetest por los desarrolladores de Minetest"
 
 msgid "• Game: A complete playing experience to be used in Minetest; such as a game or sandbox or similar"
 msgstr ""
@@ -1473,7 +1485,7 @@ msgid "• Node: Other word for “block”"
 msgstr ""
 
 msgid "Minetest"
-msgstr ""
+msgstr "Minetest"
 
 msgid "Minetest is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Minetest was originally created by Perttu Ahola (alias “celeron55”)."
 msgstr ""
