@@ -7,12 +7,6 @@ mcl_credits = {
 	people = dofile(minetest.get_modpath(modname) .. "/people.lua"),
 }
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 local function add_hud_element(def, huds, y)
 	def.alignment = {x = 0, y = 0}
 	def.position = {x = 0.5, y = 0}
@@ -35,7 +29,7 @@ function mcl_credits.show(player)
 		moving = {},
 		ids = {
 			player:hud_add({
-				[hud_elem_type_field] = "image",
+				type = "image",
 				text = "credits_bg.png",
 				position = {x = 0, y = 0},
 				alignment = {x = 1, y = 1},
@@ -43,7 +37,7 @@ function mcl_credits.show(player)
 				z_index = 1000,
 			}),
 			player:hud_add({
-				[hud_elem_type_field] = "text",
+				type = "text",
 				text = S("Sneak to skip"),
 				position = {x = 1, y = 1},
 				alignment = {x = -1, y = -1},
@@ -52,7 +46,7 @@ function mcl_credits.show(player)
 				number = 0xFFFFFF,
 			}),
 			player:hud_add({
-				[hud_elem_type_field] = "text",
+				type = "text",
 				text = "  "..S("Jump to speed up (additionally sprint)"),
 				position = {x = 0, y = 1},
 				alignment = {x = 1, y = -1},
@@ -63,12 +57,12 @@ function mcl_credits.show(player)
 		},
 	}
 	add_hud_element({
-		[hud_elem_type_field] = "image",
+		type = "image",
 		text = "mineclonia_logo.png",
 		scale = {x = 1, y = 1},
 	}, huds, 300)
 	add_hud_element({
-		[hud_elem_type_field] = "text",
+		type = "text",
 		text = mcl_credits.description,
 		number = 0x757575,
 		scale = {x = 5, y = 5},
@@ -76,7 +70,7 @@ function mcl_credits.show(player)
 	local y = 450
 	for _, group in ipairs(mcl_credits.people) do
 		add_hud_element({
-			[hud_elem_type_field] = "text",
+			type = "text",
 			text = group[1],
 			number = group[2],
 			scale = {x = 3, y = 3},
@@ -85,7 +79,7 @@ function mcl_credits.show(player)
 		for _, name in ipairs(group[3]) do
 			y = y + 25
 			add_hud_element({
-				[hud_elem_type_field] = "text",
+				type = "text",
 				text = name,
 				number = 0xFFFFFF,
 				scale = {x = 1, y = 1},
@@ -94,7 +88,7 @@ function mcl_credits.show(player)
 		y = y + 200
 	end
 	huds.icon = add_hud_element({
-		[hud_elem_type_field] = "image",
+		type = "image",
 		text = "mineclonia_icon.png",
 		scale = {x = 1, y = 1},
 	}, huds, y)

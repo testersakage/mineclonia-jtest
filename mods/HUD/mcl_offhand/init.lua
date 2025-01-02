@@ -1,11 +1,5 @@
 mcl_offhand = {}
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 local max_offhand_px = 128
 -- only supports up to 128px textures
 
@@ -107,7 +101,7 @@ mcl_player.register_globalstep(function(player)
 
 		if not offhand_hud.slot then
 			offhand_hud.slot = player:hud_add({
-				[hud_elem_type_field] = "image",
+				type = "image",
 				position = position,
 				offset = offset,
 				scale = {x = 0.46875, y = 0.46875},
@@ -117,7 +111,7 @@ mcl_player.register_globalstep(function(player)
 		end
 		if not offhand_hud.item then
 			offhand_hud.item = player:hud_add({
-				[hud_elem_type_field] = "image",
+				type = "image",
 				position = position,
 				offset = offset,
 				scale = {x = 0.375, y = 0.375},
@@ -131,7 +125,7 @@ mcl_player.register_globalstep(function(player)
 			if offhand_get_wear(player) > 0 then
 				local texture = "mcl_wear_bar.png^[colorize:#000000"
 				offhand_hud.wear_bar_bg = player:hud_add({
-					[hud_elem_type_field] = "image",
+					type = "image",
 					position = {x = 0.5, y = 1},
 					offset = {x = -320, y = -13},
 					scale = {x = 40, y = 3},
@@ -139,7 +133,7 @@ mcl_player.register_globalstep(function(player)
 					z_index = 2,
 				})
 				offhand_hud.wear_bar = player:hud_add({
-					[hud_elem_type_field] = "image",
+					type = "image",
 					position = {x = 0.5, y = 1},
 					offset = {x = -320, y = -13},
 					scale = {x = 10, y = 3},
@@ -152,7 +146,7 @@ mcl_player.register_globalstep(function(player)
 
 		if not offhand_hud.item_count and offhand_get_count(player) > 1 then
 			offhand_hud.item_count = player:hud_add({
-				[hud_elem_type_field] = "text",
+				type = "text",
 				position = {x = 0.5, y = 1},
 				offset = {x = -298, y = -18},
 				scale = {x = 1, y = 1},

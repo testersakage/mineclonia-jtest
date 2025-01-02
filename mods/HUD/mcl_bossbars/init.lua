@@ -6,12 +6,6 @@ mcl_bossbars = {
 	max_bars = tonumber(minetest.settings:get("max_bossbars")) or 4
 }
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 function mcl_bossbars.recalculate_colors()
 	local sorted = {}
 	local colors = mcl_bossbars.colors
@@ -156,7 +150,7 @@ mcl_player.register_globalstep(function(player, dtime)
 					image = bar.image,
 					text = bar.text,
 					text_id = player:hud_add({
-						[hud_elem_type_field] = "text",
+						type = "text",
 						text = bar.text,
 						number = bar.color,
 						position = {x = 0.5, y = 0},
@@ -164,7 +158,7 @@ mcl_player.register_globalstep(function(player, dtime)
 						offset = {x = 0, y = i * 40},
 					}),
 					image_id = player:hud_add({
-						[hud_elem_type_field] = "image",
+						type = "image",
 						text = bar.image,
 						position = {x = 0.5, y = 0},
 						alignment = {x = 0, y = 1},

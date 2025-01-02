@@ -1,11 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 local hud_totem = {}
 
 minetest.register_on_leaveplayer(function(player)
@@ -112,7 +106,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 				-- Big totem overlay
 				if obj:is_player () and not hud_totem[obj] then
 					hud_totem[obj] = obj:hud_add({
-						[hud_elem_type_field] = "image",
+						type = "image",
 						text = "mcl_totems_totem.png",
 						position = {x = 0.5, y = 1},
 						scale = {x = 17, y = 17},

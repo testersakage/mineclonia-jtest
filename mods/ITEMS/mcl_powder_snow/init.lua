@@ -92,7 +92,7 @@ local function show_freezing_hud(player, level)
 	local freezing_data = freezing_players[player]
 
 	freezing_data[1] = player:hud_add({
-		hud_elem_type = "image",
+		type = "image",
 		position = {x = 0, y = 0},
 		scale = {x = 2, y = 2},
 		text = freezing_stages[level],
@@ -102,7 +102,7 @@ local function show_freezing_hud(player, level)
 	})
 
 	freezing_data[2] = player:hud_add({
-		hud_elem_type = "image",
+		type = "image",
 		position = {x = 1, y = 0},
 		scale = {x = 2, y = 2},
 		text = freezing_stages[level] .. "^[transform4",
@@ -112,7 +112,7 @@ local function show_freezing_hud(player, level)
 	})
 
 	freezing_data[3] = player:hud_add({
-		hud_elem_type = "image",
+		type = "image",
 		position = {x = 0, y = 1},
 		scale = {x = 2, y = 2},
 		text = freezing_stages[level] .. "^[transform6",
@@ -122,7 +122,7 @@ local function show_freezing_hud(player, level)
 	})
 
 	freezing_data[4] = player:hud_add({
-		hud_elem_type = "image",
+		type = "image",
 		position = {x = 1, y = 1},
 		scale = {x = 2, y = 2},
 		text = freezing_stages[level] .. "^[transform6^[transform4",
