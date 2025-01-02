@@ -2,13 +2,6 @@ local S = minetest.get_translator("hudbars")
 local NS = function(s) return s end
 
 hb = {}
-
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 hb.hudtables = {}
 
 -- number of registered HUD bars
@@ -207,7 +200,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 		end
 		if hb.settings.bar_type == "progress_bar" then
 			ids.bg = player:hud_add({
-				[hud_elem_type_field] = "image",
+				type = "image",
 				position = pos,
 				scale = bgscale,
 				text = "hudbars_bar_background.png",
@@ -217,7 +210,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 			})
 			if textures.icon ~= nil then
 				ids.icon = player:hud_add({
-					[hud_elem_type_field] = "image",
+					type = "image",
 					position = pos,
 					scale = iconscale,
 					text = textures.icon,
@@ -243,7 +236,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 			bar_size = {x=24, y=24}
 		end
 		ids.bar = player:hud_add({
-			[hud_elem_type_field] = "statbar",
+			type = "statbar",
 			position = pos,
 			text = bar_image,
 			text2 = bgicon,
@@ -257,7 +250,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 		})
 		if hb.settings.bar_type == "progress_bar" then
 			ids.text = player:hud_add({
-				[hud_elem_type_field] = "text",
+				type = "text",
 				position = pos,
 				text = text,
 				alignment = {x=1,y=1},

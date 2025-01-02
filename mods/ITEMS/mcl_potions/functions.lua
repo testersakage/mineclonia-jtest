@@ -4,11 +4,6 @@ local EF = {}
 mcl_potions.registered_effects = {}
 local registered_effects = mcl_potions.registered_effects -- shorthand ref
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
 -- effects affecting item speed utilize numerous hacks, so they have to be counted separately
 local item_speed_effects = {}
 
@@ -643,7 +638,7 @@ mcl_potions.register_effect({
 							player:hud_change(hud_id, "scale", {x = scale, y = scale})
 						else
 							EF.glowing[object].waypoints[player] = player:hud_add({
-								[hud_elem_type_field] = "image_waypoint",
+								type = "image_waypoint",
 								position = {x = 0.5, y = 0.5},
 								scale = {x = scale, y = scale},
 								text = "mcl_potions_glow_waypoint.png",
@@ -841,7 +836,7 @@ mcl_potions.register_effect({
 	on_start = function(object)
 		if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
-			[hud_elem_type_field] = "image",
+			type = "image",
 			position = {x = 0.5, y = 0.5},
 			scale = {x = -101, y = -101},
 			text = "mcl_potions_blindness_hud.png",
@@ -852,7 +847,7 @@ mcl_potions.register_effect({
 	on_load = function(object)
 		if object:is_player () then
 		EF.blindness[object].vignette = object:hud_add({
-			[hud_elem_type_field] = "image",
+			type = "image",
 			position = {x = 0.5, y = 0.5},
 			scale = {x = -101, y = -101},
 			text = "mcl_potions_blindness_hud.png",
@@ -1226,7 +1221,7 @@ local function potions_init_icons(player)
 		local x = -52 * e - 2
 		local id = {}
 		id.img = player:hud_add({
-			[hud_elem_type_field] = "image",
+			type = "image",
 			text = "blank.png",
 			position = { x = 1, y = 0 },
 			offset = { x = x, y = 3 },
@@ -1235,7 +1230,7 @@ local function potions_init_icons(player)
 			z_index = 100,
 		})
 		id.label = player:hud_add({
-			[hud_elem_type_field] = "text",
+			type = "text",
 			text = "",
 			position = { x = 1, y = 0 },
 			offset = { x = x+22, y = 50 },
@@ -1246,7 +1241,7 @@ local function potions_init_icons(player)
 			number = 0xFFFFFF,
 		})
 		id.timestamp = player:hud_add({
-			[hud_elem_type_field] = "text",
+			type = "text",
 			text = "",
 			position = { x = 1, y = 0 },
 			offset = { x = x+22, y = 65 },
