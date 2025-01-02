@@ -71,6 +71,7 @@ function mcl_serverplayer.begin_mount (player, vehicle, vehicletype, attach_para
 		state.vehicle_pos = nil
 		state.vehicle_vel = nil
 		state.vehicle_dtime = nil
+		state.vehicle_tsc = nil
 	end
 
 	mcl_serverplayer.send_vehicle_handoff (player, vehicletype, id)
@@ -95,6 +96,7 @@ function mcl_serverplayer.handle_refuse_vehicle (player, state, objid)
 	state.vehicle_pos = nil
 	state.vehicle_vel = nil
 	state.vehicle_dtime = nil
+	state.vehicle_tsc = nil
 end
 
 function mcl_serverplayer.handle_acknowledge_vehicle (player, state, objid)
@@ -112,12 +114,15 @@ function mcl_serverplayer.handle_acknowledge_vehicle (player, state, objid)
 	state.vehicle_pos = nil
 	state.vehicle_vel = nil
 	state.vehicle_dtime = nil
+	state.vehicle_tsc = nil
 	state.pending_vehicle = nil
 	state.attach_params = nil
 	entity:complete_attachment (player, state)
 end
 
-function mcl_serverplayer.handle_move_vehicle (player, state, objid, pos, vel)
+local COS_5_DEG = math.cos (math.rad (5))
+
+function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, vel)
 	if not state.vehicle
 		or minetest.object_refs[objid] ~= state.vehicle then
 		return
@@ -125,11 +130,87 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, pos, vel)
 	-- If a course correction is required, send it to the client.
 	mcl_serverplayer.maybe_correct_course (player, state.vehicle, nil, 0.0)
 
-	state.vehicle:set_pos (pos)
-	state.vehicle:set_velocity (vel)
-	state.vehicle_pos = pos
-	state.vehicle_vel = vel
-	state.vehicle_dtime = 0.0
+	-- Predict movement ahead of this vehicle.  TSC is a
+	-- sub-millisecond counter specifying the time at which this
+	-- message was generated.  If the server is already aware of
+	-- the time of the first movement and consequently has frame
+	-- of reference synchronized with the client, the server may
+	-- rewind to the time of the previous movement, apply the new
+	-- velocity, and simulate the intervening period according to
+	-- the same.
+
+	if not state.vehicle_tsc then
+		state.vehicle_tsc = tsc / 5000
+		state.vehicle:set_pos (pos)
+		state.vehicle:set_velocity (vel)
+		state.vehicle_pos = pos
+		state.vehicle_vel = vel
+		state.vehicle_dtime = 0.0
+	else
+		local diff = (tsc / 5000) - state.vehicle_tsc
+		if diff > 0 then
+			-- Resynchronize with the client.
+			-- This is not supposed to take place.
+			state.vehicle_tsc = tsc / 5000
+		end
+
+		if false then
+			-- Simulating motion on the server would be
+			-- feasible with a collisionMove primitive in
+			-- the server modding API, but since that is
+			-- not forthcoming, this code is disabled.
+			state.vehicle_vel = vel
+			state.vehicle_pos = pos
+
+			-- Apply intervening movement.
+			if diff < 0 then
+				local mag = vector.multiply (vel, -diff)
+				local new = vector.add (pos, mag)
+				state.vehicle_pos = new
+			end
+			state.vehicle:set_pos (state.vehicle_pos)
+			state.vehicle:set_velocity (vel)
+			state.vehicle_dtime = 0.0
+		else
+			-- Don't adjust position if the new position
+			-- sits between its previously recorded
+			-- position and the current.
+			assert (state.vehicle_pos)
+			local update = false
+			local self_pos = state.vehicle:get_pos ()
+
+			if diff > 0 then
+				update = true
+			else
+				if vector.distance (pos, self_pos)
+					>= vector.length (vel) * -diff then
+					update = true
+				else
+					local v1 = vector.subtract (pos, state.vehicle_pos)
+					local v2 = vector.subtract (self_pos, state.vehicle_pos)
+					local dot = vector.dot (vector.normalize (v1),
+								vector.normalize (v2))
+					if dot > COS_5_DEG then
+						local prod = vector.dot (v1, v2)
+						if prod >= 1 or prod < 0 then
+							update = true
+						end
+					else
+						update = true
+					end
+				end
+			end
+			if update then
+				state.vehicle:set_pos (pos)
+				state.vehicle_pos = pos
+			else
+				state.vehicle_pos = self_pos
+			end
+			state.vehicle_vel = vel
+			state.vehicle:set_velocity (vel)
+			state.vehicle_dtime = 0.0
+		end
+	end
 end
 
 function mcl_serverplayer.handle_configure_vehicle (player, state, config)
@@ -146,7 +227,7 @@ function mcl_serverplayer.handle_configure_vehicle (player, state, config)
 	end
 end
 
-function mcl_serverplayer.validate_mounting (state, player)
+function mcl_serverplayer.validate_mounting (state, player, dtime)
 	if state.pending_vehicle
 		and not state.pending_vehicle:is_valid () then
 		state.pending_vehicle = nil
@@ -155,7 +236,13 @@ function mcl_serverplayer.validate_mounting (state, player)
 	if state.vehicle and not state.vehicle:is_valid () then
 		state.vehicle = nil
 		state.vehicle_id = nil
+		state.vehicle_tsc = nil
+		state.vehicle_pos = nil
+		state.vehicle_vel = nil
 		state.attach_params = nil
+	elseif state.vehicle_tsc then
+		local tsc = state.vehicle_tsc + dtime
+		state.vehicle_tsc = tsc
 	end
 end
 

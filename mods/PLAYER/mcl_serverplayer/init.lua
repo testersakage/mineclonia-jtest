@@ -380,11 +380,13 @@ local function receive_modchannel_message_1 (player, message)
 			end
 			mcl_serverplayer.handle_refuse_vehicle (player, state, id)
 		elseif msgtype == SERVERBOUND_MOVE_VEHICLE then
-			local id, x, y, z, vx, vy, vz
+			local id, tsc, x, y, z, vx, vy, vz
 				= unpack (payload:split (','))
-			if not id or not x or not y or not z or not vx or not vy or not vz then
+			if not id or not tsc or not x or not y or not z
+				or not vx or not vy or not vz then
 				error ("Parameters absent from ServerboundMoveVehicle message")
 			end
+			tsc = tonumber (tsc)
 			id = tonumber (id)
 			x = tonumber (x)
 			y = tonumber (y)
@@ -392,12 +394,13 @@ local function receive_modchannel_message_1 (player, message)
 			vx = tonumber (vx)
 			vy = tonumber (vy)
 			vz = tonumber (vz)
-			if not id or not x or not y or not z or not vx or not vy or not vz then
+			if not id or not tsc or not x or not y
+				or not z or not vx or not vy or not vz then
 				error ("Invalid ServerboundMoveVehicle message")
 			end
 			local pos = vector.new (x, y, z)
 			local vel = vector.new (vx, vy, vz)
-			mcl_serverplayer.handle_move_vehicle (player, state, id, pos, vel)
+			mcl_serverplayer.handle_move_vehicle (player, state, id, tsc, pos, vel)
 		elseif msgtype == SERVERBOUND_CONFIGURE_VEHICLE then
 			local config = minetest.parse_json (payload)
 			if not config then
