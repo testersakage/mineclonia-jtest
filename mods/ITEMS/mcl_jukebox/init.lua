@@ -4,12 +4,6 @@ local C = minetest.colorize
 mcl_jukebox = {}
 mcl_jukebox.registered_records = {}
 
--- TODO: when < minetest 5.9 isn't supported anymore, remove this variable check and replace all occurences of [hud_elem_type_field] with type
-local hud_elem_type_field = "type"
-if not minetest.features.hud_def_type_field then
-	hud_elem_type_field = "hud_elem_type"
-end
-
 local HEAR_DISTANCE = 65
 
 -- Player name-indexed table containing the currently heard track
@@ -83,7 +77,7 @@ local function now_playing(player, name)
 		player:hud_change(id, "text", text)
 	else
 		id = player:hud_add({
-			[hud_elem_type_field] = "text",
+			type = "text",
 			position = { x=0.5, y=0.8 },
 			offset = { x=0, y = 0 },
 			number = 0x55FFFF,
