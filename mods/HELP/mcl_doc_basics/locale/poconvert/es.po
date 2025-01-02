@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-01 17:27+0000\n"
+"PO-Revision-Date: 2025-01-02 04:15+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -579,7 +579,7 @@ msgid "• Left mouse button: Punch / mine blocks"
 msgstr "• Botón izquierdo del ratón: golpear / minar bloques"
 
 msgid "• Right mouse button: Build or use pointed block"
-msgstr ""
+msgstr "• Botón derecho del ratón: Construir o usar bloque apuntado"
 
 msgid "• Shift+Right mouse button: Build"
 msgstr "• Shift+Botón derecho del ratón: Construir"
@@ -592,7 +592,7 @@ msgid "• 1-9: Select item in hotbar directly"
 msgstr "• 1-9: Selecciona un ítem del hotbar directamente"
 
 msgid "• Q: Drop item stack"
-msgstr ""
+msgstr "• Q: Soltar pila de ítems"
 
 msgid "• Shift+Q: Drop 1 item"
 msgstr "• Shift+Q: Tirar 1 ítem"
@@ -716,6 +716,8 @@ msgstr ""
 
 msgid "You have your own inventory which is called your “player inventory”, you can open it with the inventory key (default: [I])."
 msgstr ""
+"Tienes tu propio inventario llamado tu “inventario de jugador”, puedes "
+"abrirlo con la tecla de inventario (por defecto: [I])."
 
 msgid "Blocks can also have their own inventory, e.g. chests and furnaces."
 msgstr ""
@@ -762,7 +764,7 @@ msgid "Exchanging: You can exchange items if the cursor holds 1 or more items an
 msgstr ""
 
 msgid "• Click: exchange item stacks"
-msgstr ""
+msgstr "• Click: intercambiar pilas de ítems"
 
 msgid "Throwing away: If you hold an item stack and click with it somewhere outside the GUI, the item stack gets thrown away into the world."
 msgstr ""
