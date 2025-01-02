@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 13:53+0000\n"
+"PO-Revision-Date: 2025-01-02 15:21+0000\n"
 "Last-Translator: JoseDouglas26 "
 "<josedouglas26@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
@@ -277,16 +277,16 @@ msgid "Waxed Weathered Cut Copper Stairs"
 msgstr "Escadas de Cobre Lapidado Desgastado Encerado"
 
 msgid "Weathered Chiseled Copper"
-msgstr ""
+msgstr "Cobre Talhado Desgastado"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Weathered Copper"
-msgstr ""
+msgstr "Cobre Desgastado"
 
 msgid "Weathered Copper Bulb"
-msgstr ""
+msgstr "Bulbo de Cobre Desgastado"
 
 msgid "Weathered Copper Bulb On"
 msgstr ""
@@ -295,28 +295,28 @@ msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr ""
 
 msgid "Weathered Copper Door"
-msgstr ""
+msgstr "Porta de Cobre Desgastado"
 
 msgid "Weathered Copper Grate"
-msgstr ""
+msgstr "Grade de Cobre Desgastado"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr ""
 
 msgid "Weathered Copper Trapdoor"
-msgstr ""
+msgstr "Alçapão de Cobre Desgastado"
 
 msgid "Weathered Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Weathered Cut Copper"
-msgstr ""
+msgstr "Cobre Lapidado Desgastado"
 
 msgid "Weathered Cut Copper Slab"
-msgstr ""
+msgstr "Laje de Cobre Lapidado Desgastado"
 
 msgid "Weathered Cut Copper Stairs"
-msgstr ""
+msgstr "Escadas de Cobre Lapidado Desgastado"
 
 msgid "Weathered Cut Copper is mostly a decorative block."
 msgstr ""
@@ -328,7 +328,7 @@ msgid "Some copper contained in stone, it is pretty common and can be found belo
 msgstr "Um pouco de cobre contido em rocha, é bem comum e pode ser encontrado abaixo do nível do mar."
 
 msgid "Block of Raw Copper"
-msgstr "Bloco de Cobre Crú"
+msgstr "Bloco de Cobre Cru"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Um bloco usado para armazenar minério de cobre compactado."
