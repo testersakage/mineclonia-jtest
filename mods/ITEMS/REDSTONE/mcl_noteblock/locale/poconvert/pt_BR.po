@@ -48,7 +48,7 @@ msgid "• Block of Gold: Bell"
 msgstr "• Bloco de Ouro: Sino"
 
 msgid "• Clay: Flute"
-msgstr ""
+msgstr "• Argila: Flauta"
 
 msgid "• Packed Ice: Chime"
 msgstr ""
