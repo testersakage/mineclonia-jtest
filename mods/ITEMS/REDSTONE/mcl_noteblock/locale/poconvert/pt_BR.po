@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_noteblock x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 15:34+0000\n"
+"PO-Revision-Date: 2025-01-02 17:00+0000\n"
 "Last-Translator: JoseDouglas26 "
 "<josedouglas26@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
@@ -51,34 +51,36 @@ msgid "• Clay: Flute"
 msgstr "• Argila: Flauta"
 
 msgid "• Packed Ice: Chime"
-msgstr ""
+msgstr "• Gelo Compactado: Carrilhão"
 
 msgid "• Wool: Guitar"
-msgstr ""
+msgstr "• Lã: Guitarra"
 
 msgid "• Bone Block: Xylophne"
-msgstr ""
+msgstr "• Bloco de Osso: Xilofone"
 
 msgid "• Block of Iron: Iron xylophne"
-msgstr ""
+msgstr "• Bloco de Ferro: Xilofone metálico"
 
 msgid "• Soul Sand: Cow bell"
-msgstr ""
+msgstr "• Areia das Almas: Chocalho"
 
 msgid "• Pumpkin: Didgeridoo"
-msgstr ""
+msgstr "• Abóbora: Didgeridoo"
 
 msgid "• Block of Emerald: Square wave"
-msgstr ""
+msgstr "• Bloco de Esmeralda: Bit"
 
 msgid "• Hay Bale: Banjo"
-msgstr ""
+msgstr "• Fardo de Feno: Banjo"
 
 msgid "• Glowstone: Electric piano"
-msgstr ""
+msgstr "• Pedra Luminosa: Piano elétrico"
 
 msgid "• Anything else: Piano"
-msgstr ""
+msgstr "• Outras coisas: Piano"
 
 msgid "The note block will only play a note when it is below air, otherwise, it stays silent."
 msgstr ""
+"O bloco musical apenas irá tocar uma nota quando estiver sob o ar, caso "
+"contrário, permanecerá silenciado."
