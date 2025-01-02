@@ -44,6 +44,9 @@ local function remove_scope(player)
 end
 
 controls.register_on_press(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	if key ~= "RMB" and key ~= "zoom" then return end
 	if spyglass_scope[player] == nil then
 		add_scope(player)
@@ -51,6 +54,9 @@ controls.register_on_press(function(player, key)
 end)
 
 controls.register_on_release(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	if key ~= "RMB" and key ~= "zoom" then return end
 	local ctrl = player:get_player_control()
 	if key == "RMB" and ctrl.zoom or key == "zoom" and ctrl.place then return end
@@ -58,6 +64,9 @@ controls.register_on_release(function(player, key)
 end)
 
 controls.register_on_hold(function(player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
 	if key ~= "RMB" and key ~= "zoom" then return end
 	local wielditem = player:get_wielded_item()
 	if wielditem:get_name() == "mcl_spyglass:spyglass" then
