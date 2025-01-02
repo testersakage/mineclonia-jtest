@@ -397,7 +397,7 @@ function mcl_inventory.set_creative_formspec(player)
 			inv_size = 0
 		end
 	end
-	local pagemax = math.max(1, math.floor((inv_size - 1) / (9 * 5) + 1))
+	
 	local name = "nix"
 	local main_list
 	local listrings = table.concat({
