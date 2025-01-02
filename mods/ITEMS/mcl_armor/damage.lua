@@ -55,7 +55,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 
 				if not flags.bypasses_armor
 					and minetest.get_item_group(itemname, "non_combat_armor") == 0
-					and minetest.get_item_group (itemname, "elytra") then
+					and minetest.get_item_group (itemname, "elytra") == 0 then
 					points = points + minetest.get_item_group(itemname, "mcl_armor_points")
 					toughness = toughness + minetest.get_item_group(itemname, "mcl_armor_toughness")
 
