@@ -4,8 +4,6 @@ mcl_player = {
 	players = {},
 }
 
-local default_fov = 86.1 --see <https://minecraft.gamepedia.com/Options#Video_settings>>>>
-
 local tpl_playerinfo = {
 	textures = { "character.png", "blank.png", "blank.png" },
 	model = "",
@@ -54,7 +52,6 @@ minetest.register_on_joinplayer(function(player)
 	mcl_player.players[player].inventory_formspecs = {}
 	mcl_player.players[player].nodes = {}
 	player:get_inventory():set_size("hand", 1)
-	player:set_fov(default_fov)
 	for bone, pos in pairs(bone_start_positions) do
 		mcl_util.set_bone_position(player, bone, pos, vector.zero())
 	end
