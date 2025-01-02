@@ -178,7 +178,7 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 
 	if self._csm_driving then
 		-- Driving is the responsibility of the client.
-		self:halt_in_tracks (false)
+		self:halt_in_tracks (false, true)
 
 		-- Detect whether this mob's course has deviated from
 		-- the client-specified course and send a movement

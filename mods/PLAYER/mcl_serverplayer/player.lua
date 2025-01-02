@@ -502,7 +502,7 @@ function mcl_serverplayer.globalstep (player, dtime)
 		state.fall_flown_ticks = fall_flown_ticks
 	end
 	mcl_serverplayer.update_ammo (state, player, false)
-	mcl_serverplayer.validate_mounting (state, player)
+	mcl_serverplayer.validate_mounting (state, player, dtime)
 end
 
 function mcl_serverplayer.handle_movement_event (player, event)
