@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 21:18+0000\n"
+"PO-Revision-Date: 2025-01-02 21:52+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -1287,7 +1287,7 @@ msgid "Press [F9] to make a minimap appear on the top right. The minimap helps y
 msgstr ""
 
 msgid "There are 2 minimap modes and 3 zoom levels."
-msgstr ""
+msgstr "Hay 2 modos de minimapa y 3 niveles de zoom."
 
 msgid "Surface mode (image 1) is a top-down view of the world, roughly resembling the colors of the blocks this world is made of. It only shows the topmost blocks, everything below is hidden, like a satellite photo. Surface mode is useful if you got lost."
 msgstr ""
@@ -1353,7 +1353,7 @@ msgid "Players are capable of walking, sneaking, jumping, climbing, swimming, di
 msgstr ""
 
 msgid "Players can take damage for a variety of reasons:"
-msgstr ""
+msgstr "Los jugadores pueden sufrir daños por diversas razones:"
 
 msgid "• Taking fall damage"
 msgstr "• Recibir daño por caída"
@@ -1420,7 +1420,7 @@ msgid "• Two renewable liquid blocks of the same type touch each other diagona
 msgstr ""
 
 msgid "• These blocks are also on the same height"
-msgstr ""
+msgstr "• Estos bloques también están a la misma altura"
 
 msgid "• One of the two “corners” is open space which allows liquids to flow in"
 msgstr ""
@@ -1435,7 +1435,7 @@ msgid "The physics for swimming and diving in a liquid are:"
 msgstr ""
 
 msgid "• The higher the viscosity, the slower you move"
-msgstr ""
+msgstr "• Cuanto mayor sea la viscosidad, más lento te moverás"
 
 msgid "• If you rest, you'll slowly sink"
 msgstr "• Si reposas, te hundirás lentamente"
@@ -1534,13 +1534,13 @@ msgid "• Sneaking: Walking slowly while (usually) avoiding to fall over edges"
 msgstr ""
 
 msgid "• Climbing: Moving up or down a climbable block"
-msgstr ""
+msgstr "• Escalada: subir o bajar un bloque escalable"
 
 msgid "Blocks:"
 msgstr "Bloques:"
 
 msgid "• Block: Cubes that the worlds are made of"
-msgstr ""
+msgstr "• Bloque: Cubos de los que están hechos los mundos"
 
 msgid "• Mining/digging: Using a mining tool to break a block"
 msgstr ""
@@ -1549,7 +1549,7 @@ msgid "• Building/placing: Putting a block somewhere"
 msgstr "• Construir/colocar: Poner un bloque en algún lugar"
 
 msgid "• Drop: Items you get after mining a block"
-msgstr ""
+msgstr "• Drop: Ítems que obtienes después de minar un bloque"
 
 msgid "• Using a block: Right-clicking a block to access its special function"
 msgstr ""
@@ -1558,7 +1558,7 @@ msgid "Items:"
 msgstr "Ítems:"
 
 msgid "• Item: A single thing that players can possess"
-msgstr ""
+msgstr "• Ítem: Una sola cosa que los jugadores pueden poseer"
 
 msgid "• Item stack: A collection of items of the same kind"
 msgstr ""
@@ -1574,7 +1574,7 @@ msgstr ""
 "• Inventario: proporciona varias ranuras de inventario para almacenamiento"
 
 msgid "• Player inventory: The main inventory of a player"
-msgstr ""
+msgstr "• Inventario del jugador: El inventario principal de un jugador"
 
 msgid "• Tool: An item which you can use to do special things with when wielding"
 msgstr ""
@@ -1592,16 +1592,16 @@ msgid "Gameplay:"
 msgstr "Jugabilidad:"
 
 msgid "• “heart”: A single health symbol, indicates 2 HP"
-msgstr ""
+msgstr "• “corazón”: un solo símbolo de corazón, indica 2 PS"
 
 msgid "• “bubble”: A single breath symbol, indicates 1 BP"
-msgstr ""
+msgstr "• “burbuja”: Un símbolo de una sola respiración, indica 1 BP"
 
 msgid "• HP: Hit point (equals half 1 “heart”)"
 msgstr "• PS: Punto de salud (equivale a medio corazón)"
 
 msgid "• BP: Breath point, indicates breath when diving"
-msgstr ""
+msgstr "• BP: Punto de respiración, indica la respiración al bucear"
 
 msgid "• Mob: Computer-controlled enemy"
 msgstr "• Mob: enemigo controlado por computadora"
