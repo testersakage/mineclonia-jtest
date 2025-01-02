@@ -397,7 +397,7 @@ function mcl_inventory.set_creative_formspec(player)
 			inv_size = 0
 		end
 	end
-	
+
 	local name = "nix"
 	local main_list
 	local listrings = table.concat({
