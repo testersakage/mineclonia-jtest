@@ -91,19 +91,7 @@ local function hopper_timer(pos, elapsed)
 		to_pos = vector.offset(pos, 0, -1, 0)
 	elseif hopper_group == 2 then
 		-- Determine to which side the hopper is facing, get nodes
-		local face = minetest.get_node(pos).param2
-		if face == 0 then
-			to_pos = vector.offset(pos, -1, 0, 0)
-		elseif face == 1 then
-			to_pos = vector.offset(pos, 0, 0, 1)
-		elseif face == 2 then
-			to_pos = vector.offset(pos, 1, 0, 0)
-		elseif face == 3 then
-			to_pos = vector.offset(pos, 0, 0, -1)
-		else
-			minetest.log("error", "[mcl_hoppers] Unsupported param2="..face.." at "..vector.to_string(pos))
-			return
-		end
+		to_pos = pos + minetest.fourdir_to_dir((minetest.get_node(pos).param2 + 3) % 4)
 	else
 		minetest.log("error", "[mcl_hoppers] Unsupported hopper_group="..hopper_group.." at "..vector.to_string(pos))
 		return
