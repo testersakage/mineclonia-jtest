@@ -200,8 +200,8 @@ function ARROW_ENTITY.on_step(self, dtime)
 		for obj in minetest.objects_inside_radius(self_pos, 1) do
 			if obj:is_player() then
 				if self._collectable and not minetest.is_creative_enabled(obj:get_player_name()) then
-					if obj:get_inventory():room_for_item("main", "mcl_bows:arrow") then
-						obj:get_inventory():add_item("main", "mcl_bows:arrow")
+					if obj:get_inventory():room_for_item("main", self._itemstring or "mcl_bows:arrow") then
+						obj:get_inventory():add_item("main", self._itemstring, or "mcl_bows:arrow")
 						minetest.sound_play("item_drop_pickup", {
 							pos = self_pos,
 							max_hear_distance = 16,

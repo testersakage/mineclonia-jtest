@@ -34,7 +34,7 @@ local bow_load = {}
 local bow_index = {}
 
 function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage, is_critical, bow_stack, collectable)
-	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, arrow_item.."_entity")
+	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, ItemStack(arrow_item):get_name().."_entity")
 	if not obj or not obj:get_pos() then return end
 	if power == nil then
 		power = 1.0
@@ -86,6 +86,7 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 	le._startpos = pos
 	le._knockback = knockback
 	le._collectable = collectable
+	le._itemstring = arrow_item
 	minetest.sound_play("mcl_bows_bow_shoot", {pos=pos, max_hear_distance=16}, true)
 	if shooter and shooter:is_player() then
 		if obj:get_luaentity().player == "" then
@@ -117,7 +118,7 @@ local function player_shoot_arrow (player, power, is_critical)
 
 	if minetest.is_creative_enabled(player:get_player_name()) then
 		if arrow_stack then
-			arrow_itemstring = arrow_stack:get_name()
+			arrow_itemstring = arrow_stack:to_string()
 		else
 			arrow_itemstring = "mcl_bows:arrow"
 		end
@@ -125,7 +126,7 @@ local function player_shoot_arrow (player, power, is_critical)
 		if not arrow_stack then
 			return false
 		end
-		arrow_itemstring = arrow_stack:get_name()
+		arrow_itemstring = arrow_stack:to_string()
 		if not (has_infinity_enchantment and minetest.get_item_group(arrow_itemstring, "ammo_bow_regular") > 0) then
 			arrow_stack:take_item()
 		end
@@ -139,11 +140,16 @@ local function player_shoot_arrow (player, power, is_critical)
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
+	arrow_itemstring = ItemStack(arrow_itemstring)
+	arrow_itemstring:set_count(1)
+	arrow_itemstring = arrow_itemstring:to_string()
+
 	local pos = {
 		x = playerpos.x,
 		y = playerpos.y + 1.5,
 		z = playerpos.z,
 	}
+
 	mcl_bows.shoot_arrow (arrow_itemstring, pos, dir, yaw, player,
 			      power, nil, is_critical, player:get_wielded_item (),
 			      not has_infinity_enchantment)
