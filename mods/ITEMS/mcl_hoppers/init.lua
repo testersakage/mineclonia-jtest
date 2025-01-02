@@ -452,6 +452,7 @@ minetest.register_abm({
 				end
 			end
 		end
+    mcl_redstone.update_comparators(pos)
 	end,
 })
 
