@@ -133,7 +133,7 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, v
 	-- Predict movement ahead of this vehicle.  TSC is a
 	-- sub-millisecond counter specifying the time at which this
 	-- message was generated.  If the server is already aware of
-	-- the time of the first movement and consequently has frame
+	-- the time of the first movement and consequently has a frame
 	-- of reference synchronized with the client, the server may
 	-- rewind to the time of the previous movement, apply the new
 	-- velocity, and simulate the intervening period according to
