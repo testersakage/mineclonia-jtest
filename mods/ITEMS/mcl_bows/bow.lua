@@ -203,6 +203,7 @@ end
 
 -- Resets the bow charging state and player speed. To be used when the player is no longer charging the bow
 local function reset_bow_state(player, also_reset_bows)
+	playerphysics.remove_physics_factor(player, "fov", "mcl_bows:bow_zoom")
 	bow_load[player:get_player_name()] = nil
 	bow_index[player:get_player_name()] = nil
 	if minetest.get_modpath("playerphysics") then
@@ -322,6 +323,8 @@ controls.register_on_hold(function(player, key)
 		end
 		bow_load[name] = minetest.get_us_time()
 		bow_index[name] = player:get_wield_index()
+
+		playerphysics.add_physics_factor(player, "fov", "mcl_bows:bow_zoom", 0.8)
 	else
 		if player:get_wield_index() == bow_index[name] then
 			if type(bow_load[name]) == "number" then

@@ -449,10 +449,12 @@ mcl_potions.register_effect({
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
+		playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", 1 + factor)
 		add_physics_factor (object, "speed", "movement_speed",
 				"mcl_potions:swiftness", 1 + factor)
 	end,
 	on_end = function(object)
+		playerphysics.remove_physics_factor(object, "fov", "mcl_potions:swiftness")
 		remove_physics_factor (object, "speed", "movement_speed",
 				   "mcl_potions:swiftness")
 	end,
@@ -472,10 +474,12 @@ mcl_potions.register_effect({
 		return S("-@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
+		playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", 1 - factor)
 		add_physics_factor (object, "speed", "movement_speed",
 				"mcl_potions:slowness", 1 - factor)
 	end,
 	on_end = function(object)
+		playerphysics.remove_physics_factor(object, "fov", "mcl_potions:slowness")
 		remove_physics_factor (object, "speed", "movement_speed",
 				   "mcl_potions:slowness")
 	end,
