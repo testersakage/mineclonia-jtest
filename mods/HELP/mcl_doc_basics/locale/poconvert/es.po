@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 19:05+0000\n"
+"PO-Revision-Date: 2025-01-02 21:18+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -1299,10 +1299,10 @@ msgid "There are also two different rotation modes. In “square mode”, the ro
 msgstr ""
 
 msgid "• Toggle minimap mode: [F9]"
-msgstr ""
+msgstr "• Alternar el modo minimapa: [F9]"
 
 msgid "• Toggle minimap rotation mode: [Shift]+[F9]"
-msgstr ""
+msgstr "• Alternar el modo de rotación del minimapa: [Shift]+[F9]"
 
 msgid "Camera"
 msgstr "Cámara"
@@ -1311,13 +1311,13 @@ msgid "There are 3 different views which determine the way you see the world. Th
 msgstr ""
 
 msgid "• 1: First-person view (default)"
-msgstr ""
+msgstr "• 1: Vista en primera persona (por defecto)"
 
 msgid "• 2: Third-person view from behind"
-msgstr ""
+msgstr "• 2: Vista en tercera persona desde atrás"
 
 msgid "• 3: Third-person view from the front"
-msgstr ""
+msgstr "• 3: Vista en tercera persona desde el frente"
 
 msgid "These camera modes can be toggled between by default pressing [F7]."
 msgstr ""
@@ -1326,7 +1326,7 @@ msgid "To zoom in the camera, you can use the Spyglass item."
 msgstr ""
 
 msgid "• Switch camera mode: [F7]"
-msgstr ""
+msgstr "• Cambiar el modo de cámara: [F7]"
 
 msgid "Sneaking"
 msgstr "Caminando"
@@ -1344,7 +1344,7 @@ msgid "Players"
 msgstr "Jugadores"
 
 msgid "Players are the characters which users control."
-msgstr ""
+msgstr "Los jugadores son los personajes que los usuarios controlan."
 
 msgid "Players are living beings. They start with a number of health points (HP) and a number of breath points (BP)."
 msgstr ""
@@ -1359,16 +1359,16 @@ msgid "• Taking fall damage"
 msgstr "• Recibir daño por caída"
 
 msgid "• Touching a block which causes direct damage"
-msgstr ""
+msgstr "• Tocar un bloque que provoque daño directo"
 
 msgid "• Drowning"
 msgstr "• Ahogamiento"
 
 msgid "• Being attacked by another player"
-msgstr ""
+msgstr "• Ser atacado por otro jugador"
 
 msgid "• Being attacked by a computer enemy"
-msgstr ""
+msgstr "• Ser atacado por un enemigo de computadora"
 
 msgid "At a health of 0, the player dies. The player can just respawn in the world, but their items will be lost at the place of death and will need to be retrieved. (unless mcl_keepInventory is enabled)"
 msgstr ""
@@ -1398,13 +1398,14 @@ msgid "Flowing liquids take a sloped form. Flowing liquids spread around the wor
 msgstr ""
 
 msgid "All liquids share the following properties:"
-msgstr ""
+msgstr "Todos los líquidos comparten las siguientes propiedades:"
 
 msgid "• All properties of blocks (including drowning damage)"
 msgstr ""
+"• Todas las propiedades de los bloques (incluido el daño por ahogamiento)"
 
 msgid "• Renewability: Renewable liquids can create new sources"
-msgstr ""
+msgstr "• Renovabilidad: Los líquidos renovables pueden crear nuevas fuentes"
 
 msgid "• Flowing range: How many flowing liquids are created at maximum per liquid source, it determines how far the liquid will spread. Possible are ranges from 0 to 8. At 0, no flowing liquids will be created. Image 5 shows a liquid of flowing range 2"
 msgstr ""
@@ -1437,7 +1438,7 @@ msgid "• The higher the viscosity, the slower you move"
 msgstr ""
 
 msgid "• If you rest, you'll slowly sink"
-msgstr ""
+msgstr "• Si reposas, te hundirás lentamente"
 
 msgid "• There is no fall damage for falling into a liquid as such"
 msgstr ""
@@ -1464,7 +1465,7 @@ msgid "Sunlight is the brightest light and always goes perfectly straight down f
 msgstr ""
 
 msgid "Blocks have 3 levels of transparency:"
-msgstr ""
+msgstr "Los bloques tienen 3 niveles de transparencia:"
 
 msgid "• Transparent: Sunlight goes through limitless, artificial light goes through with losses"
 msgstr ""
@@ -1473,7 +1474,7 @@ msgid "• Semi-transparent: Sunlight and artificial light go through with losse
 msgstr ""
 
 msgid "• Opaque: No light passes through"
-msgstr ""
+msgstr "• Opaco: No pasa la luz"
 
 msgid "Artificial light will lose one level of brightness for each transparent or semi-transparent block it passes through, until only darkness remains (image 1)."
 msgstr ""
@@ -1512,13 +1513,13 @@ msgid "Glossary"
 msgstr "Glosario"
 
 msgid "This is a list of commonly used terms:"
-msgstr ""
+msgstr "Esta es una lista de términos comúnmente utilizados:"
 
 msgid "Controls:"
 msgstr "Controles:"
 
 msgid "• Wielding: Holding an item in hand"
-msgstr ""
+msgstr "• Empuñadura: Sostener un ítem en la mano"
 
 msgid "• Pointing: Looking with the crosshair at something in range"
 msgstr ""
@@ -1545,7 +1546,7 @@ msgid "• Mining/digging: Using a mining tool to break a block"
 msgstr ""
 
 msgid "• Building/placing: Putting a block somewhere"
-msgstr ""
+msgstr "• Construir/colocar: Poner un bloque en algún lugar"
 
 msgid "• Drop: Items you get after mining a block"
 msgstr ""
@@ -1570,6 +1571,7 @@ msgstr ""
 
 msgid "• Inventory: Provides several inventory slots for storage"
 msgstr ""
+"• Inventario: proporciona varias ranuras de inventario para almacenamiento"
 
 msgid "• Player inventory: The main inventory of a player"
 msgstr ""
@@ -1596,13 +1598,13 @@ msgid "• “bubble”: A single breath symbol, indicates 1 BP"
 msgstr ""
 
 msgid "• HP: Hit point (equals half 1 “heart”)"
-msgstr ""
+msgstr "• PS: Punto de salud (equivale a medio corazón)"
 
 msgid "• BP: Breath point, indicates breath when diving"
 msgstr ""
 
 msgid "• Mob: Computer-controlled enemy"
-msgstr ""
+msgstr "• Mob: enemigo controlado por computadora"
 
 msgid "• Crafting: Combining multiple items to create new ones"
 msgstr ""
@@ -1611,7 +1613,7 @@ msgid "• Crafting guide: A helper which shows available crafting recipes"
 msgstr ""
 
 msgid "• Spawning: Appearing in the world"
-msgstr ""
+msgstr "• Generación: Aparecer en el mundo"
 
 msgid "• Respawning: Appearing again in the world after death"
 msgstr ""
@@ -1620,13 +1622,13 @@ msgid "• Group: Puts similar things together, often affects gameplay"
 msgstr ""
 
 msgid "• noclip: Allows to fly through walls"
-msgstr ""
+msgstr "• noclip: permite volar a través de las paredes"
 
 msgid "Interface"
 msgstr "Interfaz"
 
 msgid "• Hotbar: Inventory slots at the bottom"
-msgstr ""
+msgstr "• Hotbar: ranuras de inventario en la parte inferior"
 
 msgid "• Statbar: Indicator made out of half-symbols, used for health and breath"
 msgstr ""
