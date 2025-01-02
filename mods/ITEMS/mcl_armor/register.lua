@@ -230,7 +230,6 @@ minetest.register_tool("mcl_armor:elytra", {
 	groups = {
 		armor = 1,
 		armor_torso = 1,
-		non_combat_armor = 1,
 		mcl_armor_uses = 432,
 		elytra = 1,
 		enchantability = 9,
