@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_noteblock x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 15:33+0000\n"
+"PO-Revision-Date: 2025-01-02 15:34+0000\n"
 "Last-Translator: JoseDouglas26 "
 "<josedouglas26@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
@@ -33,19 +33,19 @@ msgstr ""
 "bloco musical:"
 
 msgid "• Glass: Sticks"
-msgstr ""
+msgstr "• Vidro: Baquetas"
 
 msgid "• Wood: Bass guitar"
-msgstr ""
+msgstr "• Madeira: Baixo"
 
 msgid "• Stone: Bass drum"
-msgstr ""
+msgstr "• Pedras: Bumbo"
 
 msgid "• Sand or gravel: Snare drum"
-msgstr ""
+msgstr "• Areias ou cascalho: Caixa"
 
 msgid "• Block of Gold: Bell"
-msgstr ""
+msgstr "• Bloco de Ouro: Sino"
 
 msgid "• Clay: Flute"
 msgstr ""
