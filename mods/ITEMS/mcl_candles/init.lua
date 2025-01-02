@@ -1,5 +1,4 @@
 local S = core.get_translator("mcl_candles")
-local have_doc_mod = core.get_modpath("doc")
 
 local candle_boxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
@@ -206,9 +205,8 @@ for i = 1, #candle_boxes do
 		on_rightclick = extinguish
 	}, tpl_candle, tpl_lit_candle, candle_n))
 
-	if have_doc_mod then
-		doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
-	end
+
+	doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
 end
 
 local function candle_craft(_, _, old_craft_grid, _)
