@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 04:15+0000\n"
+"PO-Revision-Date: 2025-01-02 12:16+0000\n"
 "Last-Translator: JoseDouglas26 "
 "<josedouglas26@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
@@ -118,16 +118,16 @@ msgid "Exposed Cut Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Oxidized Chiseled Copper"
-msgstr ""
+msgstr "Cobre Talhado Oxidado"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Oxidized Copper"
-msgstr ""
+msgstr "Cobre Oxidado"
 
 msgid "Oxidized Copper Bulb"
-msgstr ""
+msgstr "Bulbo de Cobre Oxidado"
 
 msgid "Oxidized Copper Bulb On"
 msgstr ""
@@ -136,142 +136,142 @@ msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr ""
 
 msgid "Oxidized Copper Door"
-msgstr ""
+msgstr "Porta de Cobre Oxidado"
 
 msgid "Oxidized Copper Grate"
-msgstr ""
+msgstr "Grade de Cobre Oxidado"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
-msgstr ""
+msgstr "Alçapão de Cobre Oxidado"
 
 msgid "Oxidized Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Oxidized Cut Copper"
-msgstr ""
+msgstr "Cobre Lapidado Oxidado"
 
 msgid "Oxidized Cut Copper Slab"
-msgstr ""
+msgstr "Laje de Cobre Lapidado Oxidado"
 
 msgid "Oxidized Cut Copper Stairs"
-msgstr ""
+msgstr "Escadas de Cobre Lapidado Oxidado"
 
 msgid "Oxidized Cut Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Waxed Block of Copper"
-msgstr ""
+msgstr "Bloco de Cobre Encerado"
 
 msgid "Waxed Chiseled Copper"
-msgstr ""
+msgstr "Cobre Talhado Encerado"
 
 msgid "Waxed Copper Bulb"
-msgstr ""
+msgstr "Bulbo de Cobre Encerado"
 
 msgid "Waxed Copper Bulb On"
 msgstr ""
 
 msgid "Waxed Copper Grate"
-msgstr ""
+msgstr "Grade de Cobre Encerado"
 
 msgid "Waxed Copper Trapdoor"
-msgstr ""
+msgstr "Alçapão de Cobre Encerado"
 
 msgid "Waxed Cut Copper"
-msgstr ""
+msgstr "Cobre Lapidado Encerado"
 
 msgid "Waxed Cut Copper Slab"
-msgstr ""
+msgstr "Laje de Cobre Lapidado Encerado"
 
 msgid "Waxed Cut Copper Stairs"
-msgstr ""
+msgstr "Escadas de Cobre Lapidado Encerado"
 
 msgid "Waxed Double @1"
 msgstr ""
 
 msgid "Waxed Exposed Chiseled Copper"
-msgstr ""
+msgstr "Cobre Talhado Exposto Encerado"
 
 msgid "Waxed Exposed Copper"
-msgstr ""
+msgstr "Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Copper Bulb"
-msgstr ""
+msgstr "Bulbo de Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Copper Bulb On"
 msgstr ""
 
 msgid "Waxed Exposed Copper Grate"
-msgstr ""
+msgstr "Grade de Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Copper Trapdoor"
-msgstr ""
+msgstr "Alçapão de Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Cut Copper"
-msgstr ""
+msgstr "Cobre Lapidado Exposto Encerado"
 
 msgid "Waxed Exposed Cut Copper Slab"
-msgstr ""
+msgstr "Laje de Cobre Lapidado Exposto Encerado"
 
 msgid "Waxed Exposed Cut Copper Stairs"
-msgstr ""
+msgstr "Escadas de Cobre Lapidado Exposto Encerado"
 
 msgid "Waxed Oxidized Chiseled Copper"
-msgstr ""
+msgstr "Cobre Talhado Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper"
-msgstr ""
+msgstr "Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper Bulb"
-msgstr ""
+msgstr "Bulbo de Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
-msgstr ""
+msgstr "Grade de Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper Trapdoor"
-msgstr ""
+msgstr "Alçapão de Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Cut Copper"
-msgstr ""
+msgstr "Cobre Lapidado Oxidado Encerado"
 
 msgid "Waxed Oxidized Cut Copper Slab"
-msgstr ""
+msgstr "Laje de Cobre Lapidado Oxidado Encerado"
 
 msgid "Waxed Oxidized Cut Copper Stairs"
-msgstr ""
+msgstr "Escadas de Cobre Lapidado Oxidado Encerado"
 
 msgid "Waxed Upper @1"
 msgstr ""
 
 msgid "Waxed Weathered Chiseled Copper"
-msgstr ""
+msgstr "Cobre Talhado Desgastado Encerado"
 
 msgid "Waxed Weathered Copper"
-msgstr ""
+msgstr "Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Bulb"
-msgstr ""
+msgstr "Bulbo de Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Bulb On"
 msgstr ""
 
 msgid "Waxed Weathered Copper Grate"
-msgstr ""
+msgstr "Grade de Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Trapdoor"
-msgstr ""
+msgstr "Alçapão de Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Cut Copper"
-msgstr ""
+msgstr "Cobre Lapidado Desgastado Encerado"
 
 msgid "Waxed Weathered Cut Copper Slab"
-msgstr ""
+msgstr "Laje de Cobre Lapidado Desgastado Encerado"
 
 msgid "Waxed Weathered Cut Copper Stairs"
 msgstr ""
