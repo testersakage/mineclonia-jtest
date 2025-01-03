@@ -7,6 +7,8 @@ local HOPPER_INTERVAL_TIME = 1 * GAMETICK_TIME -- 0.050s
 local HOPPER_COOLDOWN_TIME = 8 * GAMETICK_TIME -- 0.400s
 local EMPTY_HOPPER_COOLDOWN_TIME = 7 * GAMETICK_TIME -- 0.350s
 
+local FOURDIR_OFFSET = 3
+
 -- Make hoppers collect in dropped items
 local function hopper_collect(pos)
 	local meta = minetest.get_meta(pos)
@@ -99,7 +101,7 @@ local function hopper_timer(pos, elapsed)
 		to_pos = vector.offset(pos, 0, -1, 0)
 	elseif hopper_group == 2 then
 		-- Determine to which side the hopper is facing, get nodes
-		to_pos = pos + minetest.fourdir_to_dir((minetest.get_node(pos).param2 + 3) % 4)
+		to_pos = pos + minetest.fourdir_to_dir((minetest.get_node(pos).param2 + FOURDIR_OFFSET) % 4)
 	else
 		minetest.log("error", "[mcl_hoppers] Unsupported hopper_group="..hopper_group.." at "..vector.to_string(pos))
 		return
@@ -244,34 +246,21 @@ S("• Other containers: Normal interaction.").."\n\n"..
 S("Hoppers can be disabled when supplied with redstone power. Disabled hoppers don't move items.")
 def_hopper_enabled._doc_items_usagehelp = S("To place a hopper vertically, place it on the floor or a ceiling. To place it sideways, place it at the side of a block. Use the hopper to access its inventory.")
 def_hopper_enabled.on_place = function(itemstack, placer, pointed_thing)
-	local upos  = pointed_thing.under
-	local apos = pointed_thing.above
-
-	local uposnode = minetest.get_node(upos)
+	local uposnode = minetest.get_node(pointed_thing.under)
 	local uposnodedef = minetest.registered_nodes[uposnode.name]
 	if not uposnodedef then return itemstack end
 
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc then return rc end
 
-	local x = upos.x - apos.x
-	local z = upos.z - apos.z
-
+	local dir = vector.direction(pointed_thing.under, pointed_thing.above)
 	local fake_itemstack = ItemStack(itemstack)
 	local param2
-	if x == -1 then
+	if dir.y == 0 then
 		fake_itemstack:set_name("mcl_hoppers:hopper_side")
-		param2 = 0
-	elseif x == 1 then
-		fake_itemstack:set_name("mcl_hoppers:hopper_side")
-		param2 = 2
-	elseif z == -1 then
-		fake_itemstack:set_name("mcl_hoppers:hopper_side")
-		param2 = 3
-	elseif z == 1 then
-		fake_itemstack:set_name("mcl_hoppers:hopper_side")
-		param2 = 1
+		param2 = (minetest.dir_to_fourdir(dir) + FOURDIR_OFFSET ) % 4
 	end
+
 	local itemstack,_ = minetest.item_place_node(fake_itemstack, placer, pointed_thing, param2)
 	itemstack:set_name("mcl_hoppers:hopper")
 	return itemstack
