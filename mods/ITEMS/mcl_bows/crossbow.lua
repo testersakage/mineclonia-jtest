@@ -421,7 +421,7 @@ else
 		output = "mcl_bows:crossbow",
 		recipe = {
 			{"mcl_core:stick", "mcl_core:iron_ingot", "mcl_core:stick"},
-			{"mcl_mobitems:string", "mcl_tripwire_hooks:tripwire_hook", "mcl_mobitems:string"},
+			{"mcl_mobitems:string", "mcl_tripwire_hooks:hook", "mcl_mobitems:string"},
 			{"", "mcl_core:stick", ""},
 		}
 	})

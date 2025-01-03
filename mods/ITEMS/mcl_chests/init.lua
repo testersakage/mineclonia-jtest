@@ -1678,6 +1678,6 @@ minetest.register_lbm({
 
 core.register_craft({
 	output = "mcl_chests:trapped_chest",
-	recipe = {"mcl_chests:chest", "mcl_tripwire_hooks:tripwire_hook"},
+	recipe = {"mcl_chests:chest", "mcl_tripwire_hooks:hook"},
 	type = "shapeless"
 })
