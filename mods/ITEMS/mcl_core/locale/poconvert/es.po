@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-29 18:54+0000\n"
+"PO-Revision-Date: 2025-01-03 17:46+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/es/>\n"
@@ -240,7 +240,7 @@ msgid "Birch leaves are grown from Birch trees."
 msgstr "Las hojas de Abedul crecen en los árboles de Abedul."
 
 msgid "Black Stained Glass"
-msgstr "Cristal opaco"
+msgstr "Cristal tintado de negro"
 
 msgid "Blue Stained Glass"
 msgstr "Cristal tintado de azul"
@@ -612,46 +612,50 @@ msgid "One of the most common blocks in the world, almost the entire underground
 msgstr "Uno de los bloques más comunes en el mundo, casi todo el subsuelo consiste en piedra. A veces contiene minerales. Se puede crear piedra cuando el agua se encuentra con la lava."
 
 msgid "Coal Ore"
-msgstr "Mena de carbón"
+msgstr "Mineral de carbón"
 
 msgid "Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."
 msgstr "Algo de carbón contenido en la piedra, es muy común y se puede encontrar dentro de la piedra en grupos medianos a grandes en casi todas las alturas."
 
 msgid "Iron Ore"
-msgstr "Mena de hierro"
+msgstr "Mineral de hierro"
 
 msgid "Some iron contained in stone, it is prety common and can be found below sea level."
 msgstr "Algo de hierro contenido en piedra, es bastante común y se puede encontrar debajo del nivel del mar."
 
 msgid "Gold Ore"
-msgstr "Mena de oro"
+msgstr "Mineral de oro"
 
 msgid "This stone contains pure gold, a rare metal."
 msgstr "Esta piedra contiene oro puro, un metal raro."
 
 msgid "Redstone Ore"
-msgstr "Mena de redstone"
+msgstr "Mineral de redstone"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
-msgstr "El mena redstone se encuentra comúnmente cerca del fondo del mundo. Brilla cuando es golpeado o pisado."
+msgstr ""
+"El mineral de redstone se encuentra comúnmente cerca del fondo del mundo. "
+"Brilla cuando es golpeado o pisado."
 
 msgid "Lit Redstone Ore"
-msgstr "Mena de redstone encendida"
+msgstr "Mineral de redstone encendido"
 
 msgid "Lapis Lazuli Ore"
-msgstr "Mena de lapislázuli"
+msgstr "Mineral de lapislázuli"
 
 msgid "Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."
-msgstr "El mena de lapislázuli produce lapislázuli. Rara vez se puede encontrar en vetas cercanas al fondo del mundo."
+msgstr ""
+"El mineral de lapislázuli produce lapislázuli. Rara vez se puede encontrar "
+"en vetas cercanas al fondo del mundo."
 
 msgid "Emerald Ore"
-msgstr "Mena de esmeralda"
+msgstr "Mineral de esmeralda"
 
 msgid "Emerald ore is the ore of emeralds. It is very rare and can be found alone, not in clusters."
 msgstr "El mineral de esmeralda da esmeraldas. Es muy raro y solo se puede encontrar uno, no más."
 
 msgid "Diamond Ore"
-msgstr "Mena de diamante"
+msgstr "Mineral de diamante"
 
 msgid "Diamond ore is rare and can be found in clusters near the bottom of the world."
 msgstr "El mineral de diamante es raro y se puede encontrar en grupos cerca del fondo del mundo."
@@ -834,7 +838,9 @@ msgid "Bedrock"
 msgstr "Piedra base"
 
 msgid "Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode."
-msgstr "El lecho de roca es un tipo de roca muy duro. No se puede romper, destruir, recoger o mover por medios normales, a menos que esté en modo creativo."
+msgstr ""
+"La piedra base es un tipo de roca muy duro. No se puede romper, destruir, "
+"recoger o mover por medios normales, a menos que esté en modo creativo."
 
 msgid "In the End dimension, starting a fire on this block will create an eternal fire."
 msgstr "En la dimensión del end, encender un fuego en este bloque creará un fuego que nunca se apagará."
@@ -963,7 +969,10 @@ msgid "Ladder"
 msgstr "Escalera"
 
 msgid "A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."
-msgstr "Una escalera de mano te permite subir verticalmente. Las escaleras solo se pueden colocar al lado de bloques sólidos y no en vidrio, hojas, hielo, losas, piedra luminosa ni linternas marinas."
+msgstr ""
+"Una escalera de mano te permite subir verticalmente. Las escaleras solo se "
+"pueden colocar al lado de bloques sólidos y no en cristal, hojas, hielo, "
+"losas, piedra luminosa ni linternas marinas."
 
 msgid "Vines"
 msgstr "Enredadera"
@@ -972,16 +981,18 @@ msgid "Vines are climbable blocks which can be placed on the sides of solid full
 msgstr "Las enredaderas son bloques escalables que se pueden colocar a los laterales de bloques sólidos completos. Las enredaderas crecen y se extienden lentamente."
 
 msgid "Glass"
-msgstr "Vidrio"
+msgstr "Cristal"
 
 msgid "A decorative and mostly transparent block."
 msgstr "Un bloque decorativo y mayormente transparente."
 
 msgid "Stained glass is a decorative and mostly transparent block which comes in various different colors."
-msgstr "Los vidrios teñidos son bloques decorativos, en su mayoría transparentes, que se presentan en varios colores diferentes."
+msgstr ""
+"Los cristales teñidos son bloques decorativos, en su mayoría transparentes, "
+"que se presentan en varios colores diferentes."
 
 msgid "Stained Glass"
-msgstr "Vidrio teñido"
+msgstr "Cristal teñido"
 
 msgid "Flowing Water"
 msgstr "Agua que fluye"
