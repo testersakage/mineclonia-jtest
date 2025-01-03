@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-02 21:52+0000\n"
+"PO-Revision-Date: 2025-01-03 01:17+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -1118,6 +1118,8 @@ msgstr ""
 
 msgid "Each fuel item has a burning time. This is the time a single item of the fuel keeps a furnace burning."
 msgstr ""
+"Cada ítem combustible tiene un tiempo de combustión, que es el tiempo que un "
+"único ítem combustible mantiene encendido el horno."
 
 msgid "Each cookable item requires time to be cooked. This time is specific to the item type and the item must be “on fire” for the whole cooking time to actually yield the result."
 msgstr ""
@@ -1173,10 +1175,12 @@ msgstr ""
 "saturación reflejan cuánto tiempo tardas en volver a tener hambre."
 
 msgid "Each food item increases both your hunger level as well your saturation."
-msgstr ""
+msgstr "Cada alimento aumenta tanto tu nivel de hambre como tu saturación."
 
 msgid "Food with a high saturation boost has the advantage that it will take longer until you get hungry again."
 msgstr ""
+"La comida con un aumento de saturación alto tiene la ventaja de que tomará "
+"más tiempo hasta que vuelvas a tener hambre."
 
 msgid "A few food items might induce food poisoning by chance. When you're poisoned, the health and hunger symbols turn sickly green. Food poisoning drains your health by 1 HP per second, down to 1 HP. Food poisoning also drains your saturation. Food poisoning goes away after a while or when you drink milk."
 msgstr ""
@@ -1186,9 +1190,14 @@ msgstr ""
 
 msgid "If your saturation reaches 0, you're hungry and start to lose hunger points. Whenever you see the hunger bar decrease, it is a good time to eat."
 msgstr ""
+"Si tu saturación llega a 0, tienes hambre y comienzas a perder puntos de "
+"hambre. Cuando veas que la barra de hambre disminuye, es un buen momento "
+"para comer."
 
 msgid "Saturation decreases by doing things which exhaust you (highest exhaustion first):"
 msgstr ""
+"La saturación disminuye al hacer cosas que te agotan (el primer mayor "
+"agotamiento):"
 
 msgid "• Regenerating 1 HP"
 msgstr "• Regenerando 1 PS"
@@ -1225,6 +1234,7 @@ msgstr "Mobs"
 
 msgid "Mobs are the living beings in the world. This includes animals and monsters."
 msgstr ""
+"Los mobs son los seres vivos del mundo. Esto incluye animales y monstruos."
 
 msgid "Mobs appear randomly throughout the world. This is called “spawning”. Each mob kind appears on particular block types at a given light level. The height also plays a role. Peaceful mobs tend to spawn at daylight while hostile ones prefer darkness. Most mobs can spawn on any solid block but some mobs only spawn on particular blocks (like grass blocks)."
 msgstr ""
@@ -1234,27 +1244,40 @@ msgstr ""
 
 msgid "Most animals roam the world aimlessly while most hostile mobs hunt players. Animals can be fed, tamed and bred."
 msgstr ""
+"La mayoría de los animales vagan por el mundo sin rumbo fijo, mientras que "
+"la mayoría de los mobs hostiles cazan a los jugadores. Los animales pueden "
+"ser alimentados, domesticados y reproducidos."
 
 msgid "Animals"
 msgstr "Animales"
 
 msgid "Animals are peaceful beings which roam the world aimlessly. You can feed, tame and breed them."
 msgstr ""
+"Los animales son seres pacíficos que deambulan por el mundo sin rumbo fijo. "
+"Puedes alimentarlos, domesticarlos y reproducirlos."
 
 msgid "Feeding:"
 msgstr "Alimentación:"
 
 msgid "Each animal has its own taste for food and doesn't just accept any food. To feed, hold an item in your hand and rightclick the animal."
 msgstr ""
+"Cada animal tiene sus propios gustos en cuanto a la comida y no acepta "
+"cualquier alimento. Para alimentarlo, sostén un ítem en tu mano y haz clic "
+"derecho sobre el animal."
 
 msgid "Animals are attraced to the food they like and follow you as long you hold the food item in hand."
 msgstr ""
+"Los animales se sienten atraídos por la comida que les gusta y te siguen "
+"mientras tengas el alimento en la mano."
 
 msgid "Feeding an animal has three uses: Taming, healing and breeding."
 msgstr ""
+"Alimentar a un animal tiene tres usos: domesticarlo, curarlo y reproducirlo."
 
 msgid "Feeding heals animals instantly, depending on the quality of the food item."
 msgstr ""
+"La alimentación cura a los animales instantáneamente, dependiendo de la "
+"calidad del alimento."
 
 msgid "Taming:"
 msgstr "Domadura:"
@@ -1267,9 +1290,14 @@ msgstr "Cría:"
 
 msgid "When you have fed an animal up to its maximum health, then feed it again, you will activate “Love Mode” and many hearts appear around the animal."
 msgstr ""
+"Cuando hayas alimentado a un animal hasta su salud máxima, luego lo "
+"alimentas de nuevo, activarás el \"Modo Amor\" y aparecerán muchos corazones "
+"alrededor del animal."
 
 msgid "Two animals of the same species will start to breed if they are in Love Mode and close to each other. Soon a baby animal will pop up."
 msgstr ""
+"Dos animales de la misma especie comenzarán a reproducirse si están en modo "
+"amor y cerca uno del otro. Pronto aparecerá un animalito bebé."
 
 msgid "Baby animals:"
 msgstr "Animales bebés:"
@@ -1282,6 +1310,8 @@ msgstr "Minimapa"
 
 msgid "The minimap allows you to get an overhead view of your surroundings, as a HUD that appears in the top right corner."
 msgstr ""
+"El minimapa te permite obtener una vista aérea de tu entorno, como un HUD "
+"que aparece en la esquina superior derecha."
 
 msgid "Press [F9] to make a minimap appear on the top right. The minimap helps you to find your way around the world. Press it again to select different minimap modes and zoom levels. The minimap also shows the positions of other players."
 msgstr ""
@@ -1309,6 +1339,8 @@ msgstr "Cámara"
 
 msgid "There are 3 different views which determine the way you see the world. The modes are:"
 msgstr ""
+"Hay 3 diferentes puntos de vista que determinan la forma en que ves el "
+"mundo. Los modos son:"
 
 msgid "• 1: First-person view (default)"
 msgstr "• 1: Vista en primera persona (por defecto)"
@@ -1320,10 +1352,10 @@ msgid "• 3: Third-person view from the front"
 msgstr "• 3: Vista en tercera persona desde el frente"
 
 msgid "These camera modes can be toggled between by default pressing [F7]."
-msgstr ""
+msgstr "Estos modos de cámara se pueden alternar por defecto presionando [F7]."
 
 msgid "To zoom in the camera, you can use the Spyglass item."
-msgstr ""
+msgstr "Para hacer zoom en la cámara, puede utilizar el ítem del Catalejo."
 
 msgid "• Switch camera mode: [F7]"
 msgstr "• Cambiar el modo de cámara: [F7]"
@@ -1333,12 +1365,16 @@ msgstr "Caminando"
 
 msgid "Sneaking makes you walk slower and prevents you from falling off the edge of a block."
 msgstr ""
+"Caminando hace que camines más lento y evita que te caigas del borde de un "
+"bloque."
 
 msgid "To sneak, hold down the sneak key (default: [Shift]). When you release it, you stop sneaking. Careful: When you release the sneak key at a ledge, you might fall!"
 msgstr ""
 
 msgid "Sneaking only works when you stand on solid ground, are not in a liquid and don't climb."
 msgstr ""
+"Caminar solo funciona cuando estás en un terreno sólido, no estás en un "
+"líquido y no trepas."
 
 msgid "Players"
 msgstr "Jugadores"
@@ -1348,9 +1384,14 @@ msgstr "Los jugadores son los personajes que los usuarios controlan."
 
 msgid "Players are living beings. They start with a number of health points (HP) and a number of breath points (BP)."
 msgstr ""
+"Los jugadores son seres vivos. Comienzan con una cantidad determinada de "
+"puntos de salud (PS) y una cantidad determinada de puntos de respiración "
+"(BP)."
 
 msgid "Players are capable of walking, sneaking, jumping, climbing, swimming, diving, mining, building, fighting and using tools and blocks."
 msgstr ""
+"Los jugadores son capaces de caminar, ir sigilosamente, saltar, escalar, "
+"nadar, bucear, minar, construir, luchar y usar herramientas y bloques."
 
 msgid "Players can take damage for a variety of reasons:"
 msgstr "Los jugadores pueden sufrir daños por diversas razones:"
@@ -1378,18 +1419,27 @@ msgstr ""
 
 msgid "Damage can be disabled on any world. Without damage, players are immortal and health and breath are unimportant."
 msgstr ""
+"El daño puede ser desactivado en cualquier mundo. Sin daño, los jugadores "
+"son inmortales y la salud y la respiración no son importantes."
 
 msgid "In multiplayer, the name of other players is written above their head."
 msgstr ""
+"En el modo multijugador, el nombre de los otros jugadores se escribe sobre "
+"sus cabezas."
 
 msgid "Liquids"
 msgstr "Líquidos"
 
 msgid "Liquids are special dynamic blocks. Liquids like to spread and flow to their surrounding blocks. Players can swim and drown in them."
 msgstr ""
+"Los líquidos son bloques dinámicos especiales. A los líquidos les gusta "
+"extenderse y fluir hacia los bloques que los rodean. Los jugadores pueden "
+"nadar y ahogarse en ellos."
 
 msgid "Liquids usually come in two forms: In source form (S) and in flowing form (F)."
 msgstr ""
+"Los líquidos generalmente vienen en dos formas: en forma de fuente (S) y en "
+"forma de flujo (F)."
 
 msgid "Liquid sources have the shape of a full cube. A liquid source will generate flowing liquids around it from time to time, and, if the liquid is renewable, it also generates liquid sources. A liquid source can sustain itself. As long it is left alone, a liquid source will normally keep its place and does not drain out."
 msgstr ""
@@ -1412,27 +1462,38 @@ msgstr ""
 
 msgid "• Viscosity: How slow players move through it and how slow the liquid spreads"
 msgstr ""
+"• Viscosidad: qué tan lento se mueven los jugadores a través de él y qué tan "
+"lento se esparce el líquido"
 
 msgid "Renewable liquids create new liquid sources at open spaces (image 2). A new liquid source is created when:"
 msgstr ""
+"Los líquidos renovables crean nuevas fuentes de líquido en espacios abiertos "
+"(imagen 2). Una nueva fuente de líquido se crea cuando:"
 
 msgid "• Two renewable liquid blocks of the same type touch each other diagonally"
-msgstr ""
+msgstr "• Dos bloques líquidos renovables del mismo tipo se tocan en diagonal"
 
 msgid "• These blocks are also on the same height"
 msgstr "• Estos bloques también están a la misma altura"
 
 msgid "• One of the two “corners” is open space which allows liquids to flow in"
 msgstr ""
+"• Una de las dos “esquinas” es un espacio abierto que permite que los "
+"líquidos fluyan"
 
 msgid "When those criteria are met, the open space is filled with a new liquid source of the same type (image 3)."
 msgstr ""
+"Cuando se cumplen estos criterios, el espacio abierto se llena con una nueva "
+"fuente de líquido del mismo tipo (imagen 3)."
 
 msgid "Swimming in a liquid is fairly straightforward: The usual direction keys for basic movement, the jump key for rising and the sneak key for sinking."
 msgstr ""
+"Nadar en un líquido es bastante sencillo: las teclas de dirección habituales "
+"para el movimiento básico, la tecla de saltar para elevarse y la tecla de "
+"caminar para hundirse."
 
 msgid "The physics for swimming and diving in a liquid are:"
-msgstr ""
+msgstr "Las leyes físicas para nadar y bucear en un líquido son:"
 
 msgid "• The higher the viscosity, the slower you move"
 msgstr "• Cuanto mayor sea la viscosidad, más lento te moverás"
@@ -1441,13 +1502,15 @@ msgid "• If you rest, you'll slowly sink"
 msgstr "• Si reposas, te hundirás lentamente"
 
 msgid "• There is no fall damage for falling into a liquid as such"
-msgstr ""
+msgstr "• No hay daño por caída por caer en un líquido como tal"
 
 msgid "• If you fall into a liquid, you will be slowed down on impact (but don't stop instantly). Your impact depth is determined by your speed and the liquid viscosity. For a safe high drop into a liquid, make sure there is enough liquid above the ground, otherwise you might hit the ground and take fall damage"
 msgstr ""
 
 msgid "Liquids are often not pointable. But some special items are able to point all liquids."
 msgstr ""
+"Los líquidos no suelen poder apuntarse. Pero algunos ítems especiales son "
+"capaces de apuntar a todos los líquidos."
 
 msgid "Light"
 msgstr "Luz"
@@ -1456,10 +1519,12 @@ msgid "As the world is entirely block-based, so is the light in the world. Each 
 msgstr ""
 
 msgid "There are two types of light: Sunlight and artificial light."
-msgstr ""
+msgstr "Hay dos tipos de luz: la luz solar y la luz artificial."
 
 msgid "Artificial light is emitted by luminous blocks. Artificial light has a light level from 1-14."
 msgstr ""
+"La luz artificial se emite mediante bloques luminosos. La luz artificial "
+"tiene un nivel de luz de 1-14."
 
 msgid "Sunlight is the brightest light and always goes perfectly straight down from the sky at each time of the day. At night, the sunlight will become moonlight instead, which still provides a small amount of light. The light level of sunlight is 15."
 msgstr ""
@@ -1469,15 +1534,19 @@ msgstr "Los bloques tienen 3 niveles de transparencia:"
 
 msgid "• Transparent: Sunlight goes through limitless, artificial light goes through with losses"
 msgstr ""
+"• Transparente: La luz del sol pasa sin límites, la luz artificial pasa con "
+"pérdidas"
 
 msgid "• Semi-transparent: Sunlight and artificial light go through with losses"
-msgstr ""
+msgstr "• Semitransparente: La luz solar y la luz artificial pasan con pérdidas"
 
 msgid "• Opaque: No light passes through"
 msgstr "• Opaco: No pasa la luz"
 
 msgid "Artificial light will lose one level of brightness for each transparent or semi-transparent block it passes through, until only darkness remains (image 1)."
 msgstr ""
+"La luz artificial perderá un nivel de brillo por cada bloque transparente o "
+"semitransparente que atraviese, hasta que sólo quede oscuridad (imagen 1)."
 
 msgid "Sunlight will preserve its brightness as long it only passes fully transparent blocks. When it passes through a semi-transparent block, it turns to artificial light. Image 2 shows the difference."
 msgstr ""
@@ -1490,24 +1559,37 @@ msgstr "Grupos"
 
 msgid "Items, players and objects (animate and inanimate) can be members of any number of groups. Groups serve multiple purposes:"
 msgstr ""
+"Los ítems, jugadores y objetos (animados y inanimados) pueden ser miembros "
+"de cualquier número de grupos. Los grupos cumplen múltiples propósitos:"
 
 msgid "• Crafting recipes: Slots in a crafting recipe may not require a specific item, but instead an item which is a member of a particular group, or multiple groups"
 msgstr ""
 
 msgid "• Digging times: Diggable blocks belong to groups which are used to determine digging times. Mining tools are capable of digging blocks belonging to certain groups"
 msgstr ""
+"• Tiempos de excavación: Los bloques excavables pertenecen a grupos que se "
+"utilizan para determinar los tiempos de excavación. Las herramientas de "
+"minería son capaces de excavar bloques que pertenecen a ciertos grupos"
 
 msgid "• Block behavior: Blocks may show a special behaviour and interact with other blocks when they belong to a particular group"
 msgstr ""
+"• Comportamiento del bloque: Los bloques pueden mostrar un comportamiento "
+"especial e interactuar con otros bloques cuando pertenecen a un grupo "
+"particular"
 
 msgid "• Damage and armor: Objects and players have armor groups, weapons have damage groups. These groups determine damage. See also: “Basics > Weapons”"
 msgstr ""
+"• Daño y armadura: los objetos y los jugadores tienen grupos de armadura, "
+"las armas tienen grupos de daño. Estos grupos determinan el daño. Ver "
+"también: “Conceptos básicos > Armas”"
 
 msgid "• Other uses"
 msgstr "• Otros usos"
 
 msgid "In the item help, many important groups are usually mentioned and explained."
 msgstr ""
+"En la ayuda del ítem normalmente se mencionan y explican muchos grupos "
+"importantes."
 
 msgid "Glossary"
 msgstr "Glosario"
@@ -1522,16 +1604,18 @@ msgid "• Wielding: Holding an item in hand"
 msgstr "• Empuñadura: Sostener un ítem en la mano"
 
 msgid "• Pointing: Looking with the crosshair at something in range"
-msgstr ""
+msgstr "• Apuntar: mirar con la retícula a algo que esté dentro del alcance"
 
 msgid "• Dropping: Throwing an item or item stack to the ground"
-msgstr ""
+msgstr "• Dropear: Lanzar un ítem o una pila de ítems al suelo"
 
 msgid "• Punching: Attacking with left-click, is also used on blocks"
-msgstr ""
+msgstr "• Puñetazos: Atacar con clic izquierdo, también se utiliza en bloques"
 
 msgid "• Sneaking: Walking slowly while (usually) avoiding to fall over edges"
 msgstr ""
+"• Caminando: caminar lentamente mientras se evita (generalmente) caerse por "
+"los bordes"
 
 msgid "• Climbing: Moving up or down a climbable block"
 msgstr "• Escalada: subir o bajar un bloque escalable"
@@ -1544,6 +1628,7 @@ msgstr "• Bloque: Cubos de los que están hechos los mundos"
 
 msgid "• Mining/digging: Using a mining tool to break a block"
 msgstr ""
+"• Minado/excavación: uso de una herramienta de minería para romper un bloque"
 
 msgid "• Building/placing: Putting a block somewhere"
 msgstr "• Construir/colocar: Poner un bloque en algún lugar"
@@ -1553,6 +1638,8 @@ msgstr "• Drop: Ítems que obtienes después de minar un bloque"
 
 msgid "• Using a block: Right-clicking a block to access its special function"
 msgstr ""
+"• Usar un bloque: Haga clic derecho en un bloque para acceder a su función "
+"especial"
 
 msgid "Items:"
 msgstr "Ítems:"
@@ -1561,13 +1648,13 @@ msgid "• Item: A single thing that players can possess"
 msgstr "• Ítem: Una sola cosa que los jugadores pueden poseer"
 
 msgid "• Item stack: A collection of items of the same kind"
-msgstr ""
+msgstr "• Pila de ítems: Una colección de ítems del mismo tipo"
 
 msgid "• Maximum stack size: Maximum amount of items in an item stack"
-msgstr ""
+msgstr "• Tamaño máximo de pila: Cantidad máxima de ítems en una pila de ítems"
 
 msgid "• Slot / inventory slot: Can hold one item stack"
-msgstr ""
+msgstr "• Ranura / ranura de inventario: puede contener una pila de ítems"
 
 msgid "• Inventory: Provides several inventory slots for storage"
 msgstr ""
@@ -1578,15 +1665,21 @@ msgstr "• Inventario del jugador: El inventario principal de un jugador"
 
 msgid "• Tool: An item which you can use to do special things with when wielding"
 msgstr ""
+"• Herramienta: Un ítem que puedes usar para hacer cosas especiales al "
+"manejarlo"
 
 msgid "• Range: How far away things can be to be pointed by an item"
 msgstr ""
+"• Alcance: Qué tan lejos pueden estar las cosas para ser apuntadas por un "
+"ítem"
 
 msgid "• Mining tool: A tool which allows to break blocks"
-msgstr ""
+msgstr "• Herramienta de minería: Una herramienta que permite romper bloques"
 
 msgid "• Craftitem: An item which is (primarily or only) used for crafting"
 msgstr ""
+"• Ítem de crafteo: Un ítem que se utiliza (principalmente o únicamente) para "
+"craftear"
 
 msgid "Gameplay:"
 msgstr "Jugabilidad:"
@@ -1607,19 +1700,20 @@ msgid "• Mob: Computer-controlled enemy"
 msgstr "• Mob: enemigo controlado por computadora"
 
 msgid "• Crafting: Combining multiple items to create new ones"
-msgstr ""
+msgstr "• Crafteo: combinar varios ítems para crear otros nuevos"
 
 msgid "• Crafting guide: A helper which shows available crafting recipes"
 msgstr ""
+"• Guía de crafteo: un ayudante que muestra las recetas de crafteo disponibles"
 
 msgid "• Spawning: Appearing in the world"
 msgstr "• Generación: Aparecer en el mundo"
 
 msgid "• Respawning: Appearing again in the world after death"
-msgstr ""
+msgstr "• Reaparición: Aparecer nuevamente en el mundo después de la muerte"
 
 msgid "• Group: Puts similar things together, often affects gameplay"
-msgstr ""
+msgstr "• Grupo: reúne cosas similares, a menudo afecta el juego"
 
 msgid "• noclip: Allows to fly through walls"
 msgstr "• noclip: permite volar a través de las paredes"
@@ -1632,24 +1726,31 @@ msgstr "• Hotbar: ranuras de inventario en la parte inferior"
 
 msgid "• Statbar: Indicator made out of half-symbols, used for health and breath"
 msgstr ""
+"• Barra de estadística: Indicador formado por medio de símbolos, utilizado "
+"para la salud y la respiración"
 
 msgid "• Minimap: The map or radar at the top right"
-msgstr ""
+msgstr "• Minimapa: El mapa o radar en la parte superior derecha"
 
 msgid "• Crosshair: Seen in the middle, used to point at things"
-msgstr ""
+msgstr "• Retícula: se ve en el medio y se usa para apuntar a cosas"
 
 msgid "Online multiplayer:"
 msgstr "Multijugador en línea:"
 
 msgid "• PvP: Player vs Player. If active, players can deal damage to each other"
 msgstr ""
+"• JcJ: Jugador contra jugador. Si está activo, los jugadores pueden causarse "
+"daño entre sí"
 
 msgid "• Griefing: Destroying the buildings of other players against their will"
 msgstr ""
+"• Griefing: Destruir las construcciones de otros jugadores contra su voluntad"
 
 msgid "• Protection: Mechanism to own areas of the world, which only allows the owners to modify blocks inside"
 msgstr ""
+"• Protección: Mecanismo para poseer áreas del mundo, que solo permite a los "
+"propietarios modificar bloques dentro"
 
 msgid "Technical terms:"
 msgstr "Términos técnicos:"
@@ -1663,9 +1764,14 @@ msgstr ""
 
 msgid "• Game: A complete playing experience to be used in Minetest; such as a game or sandbox or similar"
 msgstr ""
+"• Juego: Una experiencia de juego completa para ser utilizada en Minetest; "
+"como un juego o sandbox o similar"
 
 msgid "• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them"
 msgstr ""
+"• Mod: Un subsistema único que agrega o modifica funcionalidad; es el "
+"componente básico de los juegos y se puede utilizar para mejorarlos o "
+"modificarlos aún más"
 
 msgid "• Privilege: Allows a player to do something"
 msgstr "• Privilegio: permite a un jugador hacer algo"
