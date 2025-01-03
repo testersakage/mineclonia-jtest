@@ -247,6 +247,7 @@ minetest.register_node("mcl_bamboo:scaffolding_horizontal", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	use_texture_alpha = "clip",
+	drop = "mcl_bamboo:scaffolding",
 	node_box = {
 		type = "fixed",
 		fixed = {
