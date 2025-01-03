@@ -124,7 +124,9 @@ local COS_5_DEG = math.cos (math.rad (5))
 
 function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, vel)
 	if not state.vehicle
-		or minetest.object_refs[objid] ~= state.vehicle then
+		or minetest.object_refs[objid] ~= state.vehicle
+	-- ???
+		or not minetest.object_refs[objid]:is_valid () then
 		return
 	end
 	-- If a course correction is required, send it to the client.
@@ -213,6 +215,18 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, v
 	end
 end
 
+function mcl_serverplayer.handle_turn_vehicle (player, state, objid, tsc, yaw)
+	if not state.vehicle
+		or minetest.object_refs[objid] ~= state.vehicle then
+		return
+	end
+
+	local entity = state.vehicle:get_luaentity ()
+	if entity then
+		entity:set_yaw (yaw)
+	end
+end
+
 function mcl_serverplayer.handle_configure_vehicle (player, state, config)
 	if not config.id or type (config.id) ~= "number" then
 		error ("Invalid vehicle configuration")
@@ -277,7 +291,7 @@ function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtim
 	local self_pos = object:get_pos ()
 	local state = mcl_serverplayer.client_states[driver]
 	if not state or state.vehicle ~= object
-		or not state.vehicle_vel or not state.vehicle_pos then
+		or not state.vehicle_vel or not state.vehicle_pos or not self_pos then
 		return
 	end
 
@@ -293,8 +307,10 @@ function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtim
 	local correct_vel = false
 	local correct_pos = false
 	local v_new = object:get_velocity ()
+	local v_mag = math.sqrt (v_orig.x * v_orig.x + v_orig.z * v_orig.z)
+	local tolerance = math.max (1.0, v_mag / 2.5)
 	state.vehicle_dtime = t
-	if d > MAX_POS_TOLERANCE then
+	if d > (MAX_POS_TOLERANCE * tolerance) then
 		correct_pos = true
 		correct_vel = true
 	else

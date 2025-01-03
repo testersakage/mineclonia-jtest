@@ -44,6 +44,7 @@ local SERVERBOUND_ACKNOWLEDGE_VEHICLE = 'aj'
 local SERVERBOUND_REFUSE_VEHICLE = 'ak'
 local SERVERBOUND_MOVE_VEHICLE = 'al'
 local SERVERBOUND_CONFIGURE_VEHICLE = 'am'
+local SERVERBOUND_TURN_VEHICLE = 'an'
 
 -- Clientbound messages.
 local CLIENTBOUND_HELLO = 'AA'
@@ -414,6 +415,18 @@ local function receive_modchannel_message_1 (player, message)
 				error ("Invalid configuration")
 			end
 			mcl_serverplayer.handle_configure_vehicle (player, state, config)
+		elseif msgtype == SERVERBOUND_TURN_VEHICLE then
+			local id, tsc, yaw = unpack (payload:split (','))
+			if not id or not tsc or not yaw then
+				error ("Parameters absent from ServerboundTurnVehicle message")
+			end
+			id = tonumber (id)
+			tsc = tonumber (tsc)
+			yaw = tonumber (yaw)
+			if not id or not tsc or not yaw then
+				error ("Invalid ServerboundTurnVehicle message")
+			end
+			mcl_serverplayer.handle_turn_vehicle (player, state, id, tsc, yaw)
 		else
 			minetest.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",

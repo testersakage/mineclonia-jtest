@@ -156,6 +156,7 @@ local boat = {
 			self._driver = nil
 		end
 	end,
+	_csm_driving = false,
 }
 
 minetest.register_on_respawnplayer(detach_object)
@@ -164,7 +165,16 @@ function boat.on_rightclick(self, clicker)
 	if self._passenger or not clicker or clicker:get_attach() or (self.name == "mcl_boats:chest_boat" and self._driver) then
 		return
 	end
-	attach_object(self, clicker)
+	if mcl_serverplayer.is_csm_capable (clicker) then
+		mcl_serverplayer.begin_mount (clicker, self.object, self.name, {
+			bone = "",
+			position = vector.zero (),
+			rotation = vector.zero (),
+		})
+	else
+		self._csm_driving = false
+		attach_object (self, clicker)
+	end
 end
 
 function boat:on_activate(staticdata)
@@ -243,7 +253,9 @@ function boat:on_step(dtime, moveresult)
 	-- mcl_burning.tick may remove object immediately
 	if not self.object:get_pos() then return end
 
+	self._moveresult = moveresult
 	self._v = get_v(self.object:get_velocity()) * get_sign(self._v)
+
 	local v_factor = 1
 	local v_slowdown = 0.02
 	local p = self.object:get_pos()
@@ -310,14 +322,20 @@ function boat:on_step(dtime, moveresult)
 	end
 
 	if self._driver then
-		if had_passenger and not self._passenger then
-			set_attach(self)
-		end
 		local ctrl = self._driver:get_player_control()
 		if ctrl and ctrl.sneak then
 			detach_object(self._driver, true)
 			self._driver = nil
 			return
+		end
+
+		if self._csm_driving then
+			-- TODO: animations.
+			return
+		end
+
+		if had_passenger and not self._passenger then
+			set_attach(self)
 		end
 		local yaw = self.object:get_yaw()
 		if ctrl and ctrl.up then
@@ -591,4 +609,33 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 			},
 		})
 	end
+end
+
+------------------------------------------------------------------------
+--- Client-side steering.
+------------------------------------------------------------------------
+
+function boat:complete_attachment (player, state)
+	attach_object (self, player)
+	self._csm_driving = true
+end
+
+function boat:fallback_attach (player, state)
+	attach_object (self, player)
+	self._csm_driving = false
+end
+
+function boat:set_touching_ground (touching_ground)
+end
+
+function boat:detach_client_driver (player)
+	if player == self._driver then
+		self._driver = nil
+		self._csm_driving = false
+		detach_object (player, true)
+	end
+end
+
+function boat:set_yaw (yaw)
+	self.object:set_yaw (yaw)
 end
