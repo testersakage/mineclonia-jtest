@@ -1546,5 +1546,11 @@ function mcl_util.get_nodepos (pos)
 	return vector.apply (pos, round_trunc)
 end
 
+function mcl_util.object_has_mc_physics (object)
+	local entity = object:get_luaentity ()
+	return mcl_serverplayer.is_csm_capable (object)
+		or (entity and entity.is_mob)
+end
+
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
 dofile(modpath.."/compat.lua")
