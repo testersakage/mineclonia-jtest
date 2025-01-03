@@ -156,24 +156,24 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, v
 			state.vehicle_tsc = tsc / 5000
 		end
 
-		if false then
-			-- Simulating motion on the server would be
-			-- feasible with a collisionMove primitive in
-			-- the server modding API, but since that is
-			-- not forthcoming, this code is disabled.
-			state.vehicle_vel = vel
-			state.vehicle_pos = pos
+		-- if false then
+		-- 	-- Simulating motion on the server would be
+		-- 	-- feasible with a collisionMove primitive in
+		-- 	-- the server modding API, but since that is
+		-- 	-- not forthcoming, this code is disabled.
+		-- 	state.vehicle_vel = vel
+		-- 	state.vehicle_pos = pos
 
-			-- Apply intervening movement.
-			if diff < 0 then
-				local mag = vector.multiply (vel, -diff)
-				local new = vector.add (pos, mag)
-				state.vehicle_pos = new
-			end
-			state.vehicle:set_pos (state.vehicle_pos)
-			state.vehicle:set_velocity (vel)
-			state.vehicle_dtime = 0.0
-		else
+		-- 	-- Apply intervening movement.
+		-- 	if diff < 0 then
+		-- 		local mag = vector.multiply (vel, -diff)
+		-- 		local new = vector.add (pos, mag)
+		-- 		state.vehicle_pos = new
+		-- 	end
+		-- 	state.vehicle:set_pos (state.vehicle_pos)
+		-- 	state.vehicle:set_velocity (vel)
+		-- 	state.vehicle_dtime = 0.0
+		-- else
 			-- Don't adjust position if the new position
 			-- sits between its previously recorded
 			-- position and the current.
@@ -211,7 +211,7 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, v
 			state.vehicle_vel = vel
 			state.vehicle:set_velocity (vel)
 			state.vehicle_dtime = 0.0
-		end
+		-- end
 	end
 end
 

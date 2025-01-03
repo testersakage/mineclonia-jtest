@@ -162,8 +162,6 @@ end
 
 local MAX_PHYSICS_DTIME = 0.075
 
-local ZERO_VECTOR = vector.zero ()
-
 function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	local dir = self.driver:get_look_horizontal ()
 	self:set_yaw (dir)
