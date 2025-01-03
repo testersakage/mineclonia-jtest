@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-03 21:56+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_enchanting/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Bane of Arthropods"
 msgstr "Perdición de los Artrópodos"
@@ -26,7 +27,7 @@ msgid "Channels a bolt of lightning toward a target. Works only during thunderst
 msgstr "Canaliza los rayos de una tormenta hacia el enemigo."
 
 msgid "Curse of Vanishing"
-msgstr "Maldición de Desaparición"
+msgstr "Maldición de desaparición"
 
 msgid "Item destroyed on death."
 msgstr "El objeto se destruye tras tu muerte."
@@ -44,7 +45,7 @@ msgid "Increases mining speed."
 msgstr "Incrementa la velocidad de minado."
 
 msgid "Fire Aspect"
-msgstr "Aspecto Ígneo"
+msgstr "Aspecto ígneo"
 
 msgid "Sets target on fire."
 msgstr "Incencia al enemigo."
@@ -62,7 +63,7 @@ msgid "Increases certain block drops."
 msgstr "Incrementa la cantidad de objetos que sueltan los bloques."
 
 msgid "Frost Walker"
-msgstr "Paso Helado"
+msgstr "Paso helado"
 
 msgid "Turns water beneath the player into frosted ice and prevents the damage from magma blocks."
 msgstr "Congela el agua bajo tus pies y evita el daño de los bloques de magma."
@@ -98,7 +99,7 @@ msgid "Trident returns after being thrown. Higher levels reduce return time."
 msgstr "El tridente regresa al portador tras lanzarlo."
 
 msgid "Luck of the Sea"
-msgstr "Suerte Marina"
+msgstr "Suerte marina"
 
 msgid "Increases rate of good loot (enchanting books, etc.)"
 msgstr "Incrementa la probabilidad de encontrar tesoros"
@@ -140,7 +141,7 @@ msgid "Increases arrow knockback."
 msgstr "Incrementa el empuje de las flechas."
 
 msgid "Quick Charge"
-msgstr "Carga Rápida"
+msgstr "Carga rápida"
 
 msgid "Decreases crossbow charging time."
 msgstr "Disminuye el tiempo de carga de las ballestas."
@@ -164,7 +165,7 @@ msgid "Increases damage."
 msgstr "Incrementa el daño."
 
 msgid "Silk Touch"
-msgstr "Toque de Seda"
+msgstr "Toque de seda"
 
 msgid "Mined blocks drop themselves."
 msgstr "Los bloques se minarán enteros."
@@ -176,7 +177,7 @@ msgid "Increases damage to undead mobs."
 msgstr "Incrementa el daño contra no-muertos."
 
 msgid "Soul Speed"
-msgstr "Velocidad de Almas"
+msgstr "Velocidad del alma"
 
 msgid "Increases walking speed on soul sand."
 msgstr "Incrementa la velocidad al caminar sobre arena de Almas."
@@ -218,7 +219,7 @@ msgid "Inventory"
 msgstr "Inventario"
 
 msgid "@1 Lapis Lazuli"
-msgstr "@1 Lapis Lázuli"
+msgstr "@1 Lapislázuli"
 
 msgid "@1 Enchantment Levels"
 msgstr "Nivel de encantamiento: @1"
@@ -251,13 +252,13 @@ msgid "'@1' is not a valid number"
 msgstr "'@1' no es un número válido"
 
 msgid "The number you have entered (@1) is too big, it must be at most @2."
-msgstr "@1 es muy grande, debe ser menor que @2"
+msgstr "@1 es muy grande, debe ser menor que @2."
 
 msgid "The number you have entered (@1) is too small, it must be at least @2."
-msgstr "@1 es muy pequeño, debe ser mayor a @2"
+msgstr "@1 es muy pequeño, debe ser mayor a @2."
 
 msgid "@1 can't be combined with @2."
-msgstr "@1 no se puede combinar con @2"
+msgstr "@1 no se puede combinar con @2."
 
 msgid "Enchanting succeded."
 msgstr "Encantado correctamente."
@@ -278,13 +279,15 @@ msgid "Enchanted Book"
 msgstr "Libro Encantado"
 
 msgid "Enchanting Table"
-msgstr "Mesa de Encantamientos"
+msgstr "Mesa de encantamientos"
 
 msgid "Spend experience, and lapis to enchant various items."
 msgstr "Gasta experiencia y Lapis para encantar varios ítems."
 
 msgid "Enchanting Tables will let you enchant armors, tools, weapons, and books with various abilities. But, at the cost of some experience, and lapis lazuli."
-msgstr "La mesa de Encantamientos dara a tus herramientas, armas o armadura algunas habilidades magicas. Pero a coste de algo de experiencia y lapis lázuli."
+msgstr ""
+"La mesa de Encantamientos dara a tus herramientas, armas o armadura algunas "
+"habilidades magicas. Pero a coste de algo de experiencia y lapislázuli."
 
 msgid "Rightclick the Enchanting Table to open the enchanting menu."
 msgstr "Clic derecho sobre la mesa de encantamientos para abrir la interfaz."
@@ -306,4 +309,3 @@ msgstr "Despues elige tu encantamiento, los niveles de experiencia y el lapis l�
 
 msgid "Enchant"
 msgstr "Encantamiento"
-
