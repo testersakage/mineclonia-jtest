@@ -41,6 +41,7 @@ minetest.register_node("mcl_powder_snow:powder_snow", {
 })
 
 mcl_buckets.register_liquid({
+	id = "powder_snow",
 	source_take = {"mcl_powder_snow:powder_snow"},
 	source_place = "mcl_powder_snow:powder_snow",
 	bucketname = "mcl_powder_snow:bucket_powder_snow",

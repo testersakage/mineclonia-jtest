@@ -52,6 +52,7 @@ local cauldron_ids = {
 	water = "",
 	river_water = "r",
 	lava = "_lava",
+	powder_snow = "_powder_snow"
 }
 
 local liquid_nodes = {
@@ -64,6 +65,7 @@ local buckets = {
 	water = "mcl_buckets:bucket_water",
 	river_water = "mcl_buckets:bucket_river_water",
 	lava = "mcl_buckets:bucket_lava",
+	powder_snow = "mcl_powder_snow:bucket_powder_snow"
 }
 
 function mcl_cauldrons.get_cauldron_name(level, liquid)
@@ -154,6 +156,8 @@ local function register_filled_cauldron(water_level, description, liquid)
 	elseif liquid == "lava" then
 		light_level = core.LIGHT_MAX
 		water_tex = "default_lava_source_animated.png^[verticalframe:16:0"
+	elseif liquid == "powder_snow" then
+		water_tex = "powder_snow.png"
 	else
 		cauldron_water = 1
 		water_tex = "default_water_source_animated.png^[verticalframe:16:0"
@@ -215,6 +219,7 @@ end
 for i=1,3 do
 	register_filled_cauldron(i, S("Cauldron (@1/3 Water)", i))
 	register_filled_cauldron(i, S("Cauldron (@1/3 Lava)", i),"lava")
+	register_filled_cauldron(i, S("Cauldron (@1/3 Powder Snow)", i), "powder_snow")
 	if core.get_modpath("mclx_core") then
 		register_filled_cauldron(i, S("Cauldron (@1/3 River Water)", i),"river_water")
 	end
