@@ -45,7 +45,7 @@ mcl_buckets.register_liquid({
 	source_place = "mcl_powder_snow:powder_snow",
 	bucketname = "mcl_powder_snow:bucket_powder_snow",
 	inventory_image = "bucket_powder_snow.png",
-	name = S("Powder snow"),
+	name = S("Powder Snow Bucket"),
 	longdesc = S("This bucket is filled powder snow"),
 	usagehelp = S("Place it to empty the bucket and place powder snow. Obtain by right clicking on a block of powder snow with an empty bucket."),
 	tt_help = S("Places a powder snow block"),
