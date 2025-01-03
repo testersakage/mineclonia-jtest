@@ -598,6 +598,31 @@ function liquid.register_liquid(def)
 
 
 	core.register_on_mods_loaded(function()
+
+		-- `liquids_pointable` does not work anymore. This should solve many
+		-- issues.
+		for name, ndef in pairs(core.registered_nodes) do
+			if ndef.liquids_pointable then
+				local p = table.copy(ndef.pointabilities or {})
+
+				if not p.nodes then
+					p.nodes = {}
+				end
+
+				if not p.nodes["group:liquid"] and
+					not p.nodes["group:liquid_source"] and
+					not p.nodes["group:liquid_flowing"] then
+
+					core.log("warning", 'Node "'..name..'" uses deprecated "liquids_pointable" attribute')
+					p.nodes["group:liquid"] = true
+					core.override_item(name, {
+						pointabilities = p
+					})
+				end
+			end
+		end
+
+
 		-- Luanti activates the builtin liquid transformation based on the
 		-- `liquidtype`. Therefor we need to set it's value to 'none'.
 		-- BUT many mods also read that value to check if this node is a liquid.
@@ -623,9 +648,10 @@ function liquid.register_liquid(def)
 		set_liquidtype(NAME_FLOWING, 'flowing')
 
 		assert(core.registered_nodes[NAME_SOURCE].liquidtype == 'source',
-			'This hack does no longer work')
+		'This hack does no longer work')
 		assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing',
-			'This hack does no longer work')
+		'This hack does no longer work')
+
 
 	end)
 
