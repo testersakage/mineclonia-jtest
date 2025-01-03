@@ -1675,3 +1675,9 @@ minetest.register_lbm({
 		minetest.get_meta(pos):set_string("formspec", "")
 	end,
 })
+
+core.register_craft({
+	output = "mcl_chests:trapped_chest",
+	recipe = {"mcl_chests:chest", "mcl_tripwire_hooks:tripwire_hook"},
+	type = "shapeless"
+})

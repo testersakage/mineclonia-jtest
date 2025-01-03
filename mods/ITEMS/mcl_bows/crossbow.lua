@@ -407,12 +407,21 @@ minetest.register_on_leaveplayer(function(player)
 	reset_bow_state(player, true)
 end)
 
-if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") then
+if not minetest.get_modpath("mcl_tripwire_hooks") then
 	minetest.register_craft({
 		output = "mcl_bows:crossbow",
 		recipe = {
 			{"mcl_core:stick", "mcl_core:iron_ingot", "mcl_core:stick"},
 			{"mcl_mobitems:string", "mcl_bows:arrow", "mcl_mobitems:string"},
+			{"", "mcl_core:stick", ""},
+		}
+	})
+else
+	core.register_craft({
+		output = "mcl_bows:crossbow",
+		recipe = {
+			{"mcl_core:stick", "mcl_core:iron_ingot", "mcl_core:stick"},
+			{"mcl_mobitems:string", "mcl_tripwire_hooks:tripwire_hook", "mcl_mobitems:string"},
 			{"", "mcl_core:stick", ""},
 		}
 	})
