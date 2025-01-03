@@ -32,6 +32,9 @@ local function hopper_collect(pos)
 			end
 		end
 	end
+	if success then
+		mcl_redstone.update_comparators(pos)
+	end
 	return success
 end
 
