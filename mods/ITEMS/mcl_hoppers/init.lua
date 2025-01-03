@@ -2,6 +2,11 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 local C = minetest.colorize
 
+local GAMETICK_TIME = 0.05
+local HOPPER_INTERVAL_TIME = 1 * GAMETICK_TIME -- 0.050s
+local HOPPER_COOLDOWN_TIME = 8 * GAMETICK_TIME -- 0.400s
+local EMPTY_HOPPER_COOLDOWN_TIME = 7 * GAMETICK_TIME -- 0.350s
+
 -- Make hoppers collect in dropped items
 local function hopper_collect(pos)
 	local meta = minetest.get_meta(pos)
@@ -56,17 +61,15 @@ end
 
 -- Move an item from the hopper into container (bottom or side)
 local function hopper_push(pos, to_pos)
-	if minetest.get_meta(pos):get_int("cooldown") ~= 0 then
-		minetest.get_meta(pos):set_int("cooldown", 0)
-		return false
-	end
-
 	local to_node = minetest.get_node(to_pos)
 	local to_def = minetest.registered_nodes[to_node.name]
 	local cgroup = minetest.get_item_group(to_node.name, "container")
 
 	local success = false
 	if to_def then
+		local to_empty_hopper = (minetest.get_item_group(to_node.name, "hopper") ~= 0) and
+			minetest.get_meta(to_pos):get_inventory():is_empty("main")
+
 		if to_def._on_hopper_in then
 			success = to_def._on_hopper_in(pos, to_pos)
 		end
@@ -74,11 +77,13 @@ local function hopper_push(pos, to_pos)
 		if not success and cgroup >= 2 and cgroup <= 6 then
 			success = mcl_util.move_item_container(pos, to_pos)
 		end
-		if success and to_def._after_hopper_in then
-			to_def._after_hopper_in(to_pos)
-		end
-		if success and minetest.get_item_group(to_node.name, "hopper") ~= 0 then
-			minetest.get_meta(to_pos):set_int("cooldown", 1)
+		if success then
+			if to_def._after_hopper_in then
+				to_def._after_hopper_in(to_pos)
+			end
+			if to_empty_hopper then
+				minetest.get_node_timer(to_pos):start(EMPTY_HOPPER_COOLDOWN_TIME)
+			end
 		end
 	end
 	return success
@@ -97,11 +102,11 @@ local function hopper_timer(pos, elapsed)
 		return
 	end
 
-	hopper_push(pos, to_pos)
+	local pushed = hopper_push(pos, to_pos)
+	local pulled = hopper_pull(pos)
 
-	hopper_pull(pos)
-
-	return true
+	minetest.get_node_timer(pos):start((pushed or pulled) and HOPPER_COOLDOWN_TIME or HOPPER_INTERVAL_TIME)
+	return false
 end
 
 --[[ BEGIN OF NODE DEFINITIONS ]]
@@ -168,7 +173,7 @@ local def_hopper = {
 		meta:set_string("formspec", mcl_hoppers_formspec)
 		local inv = meta:get_inventory()
 		inv:set_size("main", 5)
-		minetest.get_node_timer(pos):start(1)
+		minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
 	end,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 
@@ -298,7 +303,7 @@ def_hopper_disabled._mcl_redstone = {
 		if mcl_redstone.get_power(pos) == 0 then
 			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mcl_hoppers:hopper", param2=node.param2})
-			minetest.get_node_timer(pos):start(1)
+			minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
 		end
 	end,
 }
@@ -375,7 +380,7 @@ def_hopper_side_disabled._mcl_redstone = {
 		if mcl_redstone.get_power(pos) == 0 then
 			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name="mcl_hoppers:hopper_side", param2=node.param2})
-			minetest.get_node_timer(pos):start(1)
+			minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
 		end
 	end,
 }
@@ -505,7 +510,7 @@ minetest.register_lbm({
 	action = function(pos)
 		local timer = minetest.get_node_timer(pos)
 		if not timer:is_started() then
-			timer:start(1)
+			timer:start(HOPPER_INTERVAL_TIME)
 		end
 	end
 })
