@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-03 17:46+0000\n"
+"PO-Revision-Date: 2025-01-03 21:55+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/es/>\n"
@@ -739,10 +739,12 @@ msgid "Podzol"
 msgstr "Podsol"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
-msgstr "El podzol es un tipo de tierra que se encuentra en los bosques de taiga. Solo unas pocas plantas pueden sobrevivir en él."
+msgstr ""
+"El podsol es un tipo de tierra que se encuentra en los bosques de taiga. "
+"Solo unas pocas plantas pueden sobrevivir en él."
 
 msgid "Podzol with Snow"
-msgstr "Podzol con nieve"
+msgstr "Podsol con nieve"
 
 msgid "Dirt"
 msgstr "Tierra"
@@ -894,7 +896,7 @@ msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance.
 msgstr "La obsidiana es un mineral extremadamente duro con una enorme resistencia a la explosión. La obsidiana se forma cuando el agua se encuentra con la lava."
 
 msgid "Crying Obsidian"
-msgstr "Obsidiana Llorosa"
+msgstr "Obsidiana llorosa"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
 msgstr "La obsidiana llorosa es una obsidiana luminosa que se genera como parte de los portales en ruinas."
@@ -933,7 +935,7 @@ msgid "This block can only be placed on full solid blocks and on another top sno
 msgstr "Este bloque solo se puede colocar en bloques sólidos completos y en otra nieve (lo que aumenta su altura)."
 
 msgid "Snow"
-msgstr "Bloque de Nieve"
+msgstr "Bloque de nieve"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
 msgstr "Este es un bloque lleno de nieve. La nieve de este espesor generalmente se encuentra en áreas de frío extremo."
@@ -960,7 +962,12 @@ msgid "Grows on sand or dirt next to water"
 msgstr "Crece en la arena o en la tierra junto al agua"
 
 msgid "Sugar canes are a plant which has some uses in crafting. Sugar canes will slowly grow up to 3 blocks when they are next to water and are placed on a grass block, dirt, sand, red sand, podzol or coarse dirt. When a sugar cane is broken, all sugar canes connected above will break as well."
-msgstr "Las cañas de azúcar son una planta que tiene algunos usos en la elaboración. Las cañas de azúcar crecerán lentamente hasta 3 bloques cuando estén cerca del agua y se colocan en un bloque de césped, tierra, arena, arena roja, podzol o tierra infértil. Cuando se rompe una caña de azúcar, todas las cañas de azúcar conectadas arriba también se romperán."
+msgstr ""
+"Las cañas de azúcar son una planta que tiene algunos usos en la elaboración. "
+"Las cañas de azúcar crecerán lentamente hasta 3 bloques cuando estén cerca "
+"del agua y se colocan en un bloque de césped, tierra, arena, arena roja, "
+"podsol o tierra estéril. Cuando se rompe una caña de azúcar, todas las cañas "
+"de azúcar conectadas arriba también se romperán."
 
 msgid "Sugar canes can only be placed top of other sugar canes and on top of blocks on which they would grow."
 msgstr "Las cañas de azúcar solo se pueden colocar encima de otras cañas de azúcar y encima de los bloques en los que crecerían."
