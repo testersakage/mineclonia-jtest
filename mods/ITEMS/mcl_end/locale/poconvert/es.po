@@ -3,18 +3,19 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_end x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-03 21:56+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_end/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "End Stone"
-msgstr "Piedra del end"
+msgstr "Piedra del End"
 
 msgid "End Stone Bricks"
 msgstr "Ladrillos de piedra del End"
@@ -104,7 +105,7 @@ msgid "Place the End Crystal on Obsidian or Bedrock, then punch it or hit it wit
 msgstr "Coloca el cristal final sobre obsidiana o bedrock, luego golpéalo o lánzale una flecha para provocar una explosión enorme y probablemente mortal. Para generar a la Dragona del End, coloca uno a cada lado del Portal del End."
 
 msgid "Eye of Ender"
-msgstr "Ojo de Ender"
+msgstr "Ojo de ender"
 
 msgid "Guides the way to the mysterious End dimension"
 msgstr "Guía el camino hacia la misteriosa dimensión del End"
@@ -120,4 +121,3 @@ msgstr "Usa la tecla de ataque para liberar el ojo de Ender. Se elevará y volar
 
 msgid "To activate an End portal, eyes of ender need to be placed into each block of an intact End portal frame."
 msgstr "Para activar un portal del End, se deben colocar los ojos de ender en cada bloque de portal sin ojo."
-
