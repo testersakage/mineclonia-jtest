@@ -53,7 +53,7 @@ local function hopper_pull(pos)
 		if success and updef._after_hopper_out then
 			updef._after_hopper_out(uppos)
 		end
-	else
+	elseif minetest.get_item_group(upnode.name, "solid") == 0 then
 		success = hopper_collect(pos)
 	end
 	return success
