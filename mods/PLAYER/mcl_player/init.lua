@@ -187,16 +187,18 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	end
 
 	if damage > 0 then
-		local velocity
-			= player:get_velocity ()
+		local velocity = player:get_velocity ()
 		local standing
 			= velocity.y < 0.2 and velocity.y > -0.2 -- Very dubious test.
 		local knockback
 			= mcl_util.calculate_knockback (velocity, knockback * 0.5,
 							0, standing, dir.x, dir.z)
-		local delta
-			= vector.subtract (knockback, velocity)
-		player:add_velocity (delta)
+		if not mcl_serverplayer.is_csm_capable (player) then
+			local delta = vector.subtract (knockback, velocity)
+			player:add_velocity (delta)
+		else
+			mcl_serverplayer.send_knockback (player, knockback)
+		end
 	end
 end
 

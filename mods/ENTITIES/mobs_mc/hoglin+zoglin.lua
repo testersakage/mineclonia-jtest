@@ -356,7 +356,12 @@ function hoglin:custom_attack ()
 		else
 			v.y = math.random () * 20
 		end
-		self.attack:add_velocity (v)
+		if mcl_serverplayer.is_csm_capable (self.attack) then
+			local v1 = vector.add (v, self.attack:get_velocity ())
+			mcl_serverplayer.send_knockback (self.attack, v1)
+		else
+			self.attack:add_velocity (v)
+		end
 	end
 	if is_piglin (self.attack)
 		and self.child

@@ -61,6 +61,7 @@ local CLIENTBOUND_VEHICLE_HANDOFF = 'AL'
 local CLIENTBOUND_VEHICLE_POSITION = 'AM'
 local CLIENTBOUND_RESCIND_VEHICLE = 'AN'
 local CLIENTBOUND_VEHICLE_CAPABILITIES = 'AO'
+local CLIENTBOUND_KNOCKBACK = 'AP'
 
 local MAX_PAYLOAD = 65533
 
@@ -168,6 +169,12 @@ function mcl_serverplayer.send_vehicle_capabilities (player, objid, capabilities
 	assert (#payload <= MAX_PAYLOAD, "oversized ClientboundVehicleCapabilities")
 	modchannels[player]:send_all (table.concat {
 		CLIENTBOUND_VEHICLE_CAPABILITIES, payload,
+	})
+end
+
+function mcl_serverplayer.send_knockback (player, kb)
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_KNOCKBACK, kb.x, ",", kb.y, ",", kb.z,
 	})
 end
 
