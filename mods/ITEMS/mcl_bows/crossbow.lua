@@ -39,7 +39,7 @@ local bow_load = {}
 local bow_index = {}
 
 function shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
-	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, arrow_item.."_entity")
+	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, ItemStack(arrow_item):get_name().."_entity")
 	if not obj or not obj:get_pos() then return end
 	if damage == nil then
 		damage = 2
@@ -62,6 +62,7 @@ function shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, dama
 	le._is_critical = is_critical
 	le._startpos = pos
 	le._collectable = collectable
+	le._itemstring = arrow_item
 	minetest.sound_play("mcl_bows_crossbow_shoot", {pos=pos, max_hear_distance=16}, true)
 	if shooter and shooter:is_player() then
 		if obj:get_luaentity().player == "" then
@@ -116,8 +117,8 @@ end
 
 local function player_shoot_arrow(wielditem, player, is_critical)
 	local arrow_itemstring = wielditem:get_meta():get("arrow")
-
-	if not arrow_itemstring or minetest.get_item_group(arrow_itemstring, "ammo_crossbow") == 0 then
+	local arrow_item_name = ItemStack(arrow_itemstring):get_name()
+	if not arrow_itemstring or minetest.get_item_group(arrow_item_name, "ammo_crossbow") == 0 then
 		return false
 	end
 
@@ -266,15 +267,19 @@ controls.register_on_release(function(player, key)
 
 		if minetest.is_creative_enabled(player:get_player_name()) then
 			if arrow_stack then
-				arrow_itemstring = arrow_stack:get_name()
+				arrow_itemstring = arrow_stack:to_string()
 			else
 				arrow_itemstring = "mcl_bows:arrow"
 			end
 		else
-			arrow_itemstring = arrow_stack:get_name()
+			arrow_itemstring = arrow_stack:to_string()
 			arrow_stack:take_item()
 			player:get_inventory():set_stack("main", arrow_stack_id, arrow_stack)
 		end
+
+		arrow_itemstring = ItemStack(arrow_itemstring)
+		arrow_itemstring:set_count(1)
+		arrow_itemstring = arrow_itemstring:to_string()
 
 		wielditem:get_meta():set_string("arrow", arrow_itemstring)
 
