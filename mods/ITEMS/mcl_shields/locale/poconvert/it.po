@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_shields x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-03 23:49+0000\n"
+"PO-Revision-Date: 2025-01-04 00:41+0000\n"
 "Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -40,31 +40,31 @@ msgid "Yellow Shield"
 msgstr "Scudo giallo"
 
 msgid "Green Shield"
-msgstr ""
+msgstr "Scudo verde"
 
 msgid "Cyan Shield"
-msgstr ""
+msgstr "Scudo ciano"
 
 msgid "Blue Shield"
-msgstr ""
+msgstr "Scudo blu"
 
 msgid "Magenta Shield"
-msgstr ""
+msgstr "Scudo magenta"
 
 msgid "Orange Shield"
-msgstr ""
+msgstr "Scudo arancione"
 
 msgid "Violet Shield"
-msgstr ""
+msgstr "Scudo viola"
 
 msgid "Brown Shield"
-msgstr ""
+msgstr "Scudo marrone"
 
 msgid "Pink Shield"
-msgstr ""
+msgstr "Scudo rosa"
 
 msgid "Lime Shield"
-msgstr ""
+msgstr "Scudo lime"
 
 msgid "Light Blue Shield"
-msgstr "Scudo Azzurro"
+msgstr "Scudo azzurro"
