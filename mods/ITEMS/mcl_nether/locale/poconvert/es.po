@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-03 17:46+0000\n"
+"PO-Revision-Date: 2025-01-03 21:56+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_nether/es/>\n"
@@ -72,7 +72,7 @@ msgid "Chiseled Nether Brick Block"
 msgstr "Ladrillos del Nether cincelados"
 
 msgid "Cracked Nether Bricks"
-msgstr "Ladrillos del nether agrietados"
+msgstr "Ladrillos del Nether agrietados"
 
 msgid "Nether Wart Block"
 msgstr "Bloque de verrugas del Nether"
@@ -105,19 +105,19 @@ msgid "Smooth Quartz Slab"
 msgstr "Losa de cuarzo liso"
 
 msgid "Nether Brick Stairs"
-msgstr "Escaleras de ladrillos del nether"
+msgstr "Escaleras de ladrillos del Nether"
 
 msgid "Nether Brick Slab"
-msgstr "Losa de ladrillos del nether"
+msgstr "Losa de ladrillos del Nether"
 
 msgid "Red Nether Brick Stairs"
-msgstr "Escaleras de ladrillos del nether rojos"
+msgstr "Escaleras de ladrillos del Nether rojos"
 
 msgid "Red Nether Brick Slab"
-msgstr "Losa de ladrillos del nether rojos"
+msgstr "Losa de ladrillos del Nether rojos"
 
 msgid "Nether Brick Fence"
-msgstr "Valla de ladrillos del nether"
+msgstr "Valla de ladrillos del Nether"
 
 msgid "Glowstone Dust"
 msgstr "Polvo de piedra luminosa"
@@ -126,7 +126,7 @@ msgid "Glowstone dust is the dust which comes out of broken glowstones. It is ma
 msgstr "El polvo de piedra luminosa es el ítem que sale de las piedras luminosas cuando se rompen. Se utiliza principalmente en la elaboración."
 
 msgid "Nether Quartz"
-msgstr "Quarzo"
+msgstr "Cuarzo del Nether"
 
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "El cuarzo del nether es un ingrediente versátil."
