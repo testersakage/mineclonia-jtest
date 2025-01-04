@@ -247,7 +247,9 @@ function mcl_serverplayer.validate_mounting (state, player, dtime)
 		state.pending_vehicle = nil
 		minetest.log ("warning", "Pending vehicle disappeared")
 	end
-	if state.vehicle and not state.vehicle:is_valid () then
+	if state.vehicle and not state.vehicle:is_valid ()
+	-- Revoke server-side vehicle ownership once it is detached.
+		or player:get_attach () ~= state.vehicle then
 		state.vehicle = nil
 		state.vehicle_id = nil
 		state.vehicle_tsc = nil
