@@ -94,6 +94,46 @@ local function hopper_push(pos, to_pos)
 	return success
 end
 
+local function check_hopper_pull_from_mc(pos, entity, inv_size)
+	local inv = mcl_entity_invs.load_inv(entity, inv_size)
+	if inv then
+		return inv, minetest.get_meta(pos):get_inventory()
+	end
+end
+
+local function check_hopper_push_to_mc(pos, entity, inv_size)
+	local dest_inv = mcl_entity_invs.load_inv(entity, inv_size)
+	if dest_inv then
+		return minetest.get_meta(pos):get_inventory(), dest_inv
+	end
+end
+
+local function hopper_and_mc(pos, entity, mc_pos, check_function)
+	local DIST_FROM_MC = 1.5
+	if entity._inv_size > 0 and
+		(mc_pos.x >= pos.x - DIST_FROM_MC and mc_pos.x <= pos.x + DIST_FROM_MC) and
+		(mc_pos.z >= pos.z - DIST_FROM_MC and mc_pos.z <= pos.z + DIST_FROM_MC) then
+		local inv, dest_inv = check_function(pos, entity, entity._inv_size)
+		if not inv or not dest_inv then
+			return false
+		end
+		-- TODO: bug? in mcl_util.move_item(inv, "main", -1, dest_inv, "main")
+		for i = 1, entity._inv_size, 1 do
+			local stack = inv:get_stack("main", i)
+			if not stack:get_name() or stack:get_name() ~= "" then
+				if dest_inv:room_for_item("main", stack:peek_item()) then
+					dest_inv:add_item("main", stack:take_item())
+					inv:set_stack("main", i, stack)
+					mcl_redstone.update_comparators(pos)
+					-- Take one item and stop until next time
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
 local function hopper_timer(pos, elapsed)
 	local hopper_group = minetest.get_item_group(minetest.get_node(pos).name, "hopper")
 	local to_pos
@@ -107,8 +147,24 @@ local function hopper_timer(pos, elapsed)
 		return
 	end
 
+	-- Hopper interacts with container nodes
 	local pushed = hopper_push(pos, to_pos)
 	local pulled = hopper_pull(pos)
+
+	-- Hopper interacts with minecarts
+	for v in minetest.objects_inside_radius(pos, 3) do
+		local entity = v:get_luaentity()
+		if entity and (
+			entity.name == "mcl_minecarts:hopper_minecart" or
+			entity.name == "mcl_minecarts:chest_minecart") then
+			local mc_pos = entity.object:get_pos()
+			if (math.floor(mc_pos.y) == pos.y + 1) then
+				pulled = hopper_and_mc(pos, entity, mc_pos, check_hopper_pull_from_mc) or pulled
+			elseif (math.floor(mc_pos.y) == pos.y - 1) then
+				pushed = hopper_and_mc(pos, entity, mc_pos, check_hopper_push_to_mc) or pushed
+			end
+		end
+	end
 
 	minetest.get_node_timer(pos):start((pushed or pulled) and HOPPER_COOLDOWN_TIME or HOPPER_INTERVAL_TIME)
 	return false
@@ -356,69 +412,6 @@ def_hopper_side_disabled._mcl_redstone.update = redstone_update_off("mcl_hoppers
 minetest.register_node("mcl_hoppers:hopper_side_disabled", def_hopper_side_disabled)
 
 --[[ END OF NODE DEFINITIONS ]]
-
-local function check_hopper_pull_from_mc(pos, entity, inv_size)
-	local inv = mcl_entity_invs.load_inv(entity, inv_size)
-	if inv then
-		return inv, minetest.get_meta(pos):get_inventory()
-	end
-end
-
-local function check_hopper_push_to_mc(pos, entity, inv_size)
-	local dest_inv = mcl_entity_invs.load_inv(entity, inv_size)
-	if dest_inv then
-		return minetest.get_meta(pos):get_inventory(), dest_inv
-	end
-end
-
-local function hopper_and_mc(pos, entity, mc_pos, check_function)
-	local DIST_FROM_MC = 1.5
-	if entity._inv_size > 0 and
-		(mc_pos.x >= pos.x - DIST_FROM_MC and mc_pos.x <= pos.x + DIST_FROM_MC) and
-		(mc_pos.z >= pos.z - DIST_FROM_MC and mc_pos.z <= pos.z + DIST_FROM_MC) then
-		local inv, dest_inv = check_function(pos, entity, entity._inv_size)
-		if not inv or not dest_inv then
-			return
-		end
-		-- TODO: bug? in mcl_util.move_item(inv, "main", -1, dest_inv, "main")
-		for i = 1, entity._inv_size, 1 do
-			local stack = inv:get_stack("main", i)
-			if not stack:get_name() or stack:get_name() ~= "" then
-				if dest_inv:room_for_item("main", stack:peek_item()) then
-					dest_inv:add_item("main", stack:take_item())
-					inv:set_stack("main", i, stack)
-					mcl_redstone.update_comparators(pos)
-					-- Take one item and stop until next time
-					return
-				end
-			end
-		end
-	end
-end
-
---[[ BEGIN OF ABM DEFINITONS ]]
-
-minetest.register_abm({
-	label = "Hoppers interact with minecart",
-	nodenames = {"mcl_hoppers:hopper","mcl_hoppers:hopper_side"},
-	interval = HOPPER_INTERVAL_TIME,
-	chance = 1,
-	action = function(pos)
-		for v in minetest.objects_inside_radius(pos, 3) do
-			local entity = v:get_luaentity()
-			if entity and (
-				entity.name == "mcl_minecarts:hopper_minecart" or
-				entity.name == "mcl_minecarts:chest_minecart") then
-				local mc_pos = entity.object:get_pos()
-				if (math.floor(mc_pos.y) == pos.y + 1) then
-					hopper_and_mc(pos, entity, mc_pos, check_hopper_pull_from_mc)
-				elseif (math.floor(mc_pos.y) == pos.y - 1) then
-					hopper_and_mc(pos, entity, mc_pos, check_hopper_push_to_mc)
-				end
-			end
-		end
-	end,
-})
 
 minetest.register_craft({
 	output = "mcl_hoppers:hopper",
