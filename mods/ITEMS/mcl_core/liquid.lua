@@ -448,7 +448,7 @@ function liquid.register_liquid(def)
 					else
 						-- The liquid already flows down
 					end
-				elseif new_level > 0 then
+				elseif new_level and new_level > 0 then
 
 					local is_new_map = false
 					if not map then
@@ -472,10 +472,17 @@ function liquid.register_liquid(def)
 						local function flood(p, n, l)
 							local m = map(p)
 							if m and m == new_level then
-								if new_level > (l or 0) and is_floodable(n) then
-									update_next({pos=p, map=map})
-									set_node(p, new_liquid)
+								if is_floodable(n) then
 									cnt_flood = cnt_flood + 1
+
+									if new_level > (l or 0) then
+										update_next({pos=p, map=map})
+										set_node(p, new_liquid)
+
+									elseif n111.name == NAME_SOURCE and l and l == 7 then
+										-- Give it a chance to renew
+										update_next({pos=p, map=map})
+									end
 								end
 							end
 						end
