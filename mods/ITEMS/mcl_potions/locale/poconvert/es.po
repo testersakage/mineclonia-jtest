@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-31 23:36+0000\n"
+"PO-Revision-Date: 2025-01-04 18:27+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/es/>\n"
@@ -289,7 +289,9 @@ msgid "Water bottles can be used to fill cauldrons. Drinking water has no effect
 msgstr "Los frascos de agua se pueden usar para llenar calderos. Beber agua no tiene ningún efecto."
 
 msgid "Use the “Place” key to drink. Place this item on a cauldron to pour the water into the cauldron."
-msgstr "Use la tecla \"Acción\" para beber. Coloque este artículo en un caldero para verter el agua en el caldero."
+msgstr ""
+"Use la tecla \"Acción\" para beber. Coloque este objeto en un caldero para "
+"verter el agua en el caldero."
 
 msgid "River Water Bottle"
 msgstr "Frasco con agua de rio"
@@ -298,7 +300,9 @@ msgid "River water bottles can be used to fill cauldrons. Drinking it has no eff
 msgstr "Los frascos de agua de río se pueden usar para llenar calderos. Beberla no tiene ningún efecto."
 
 msgid "Use the “Place” key to drink. Place this item on a cauldron to pour the river water into the cauldron."
-msgstr "Use la tecla \"Acción\" para beber. Coloque este ítem en un caldero para verter el agua de río en el caldero."
+msgstr ""
+"Use la tecla \"Acción\" para beber. Coloque este objeto en un caldero para "
+"verter el agua de río en el caldero."
 
 msgid "Splash Water Bottle"
 msgstr "Frasco con agua arrojadizo"
