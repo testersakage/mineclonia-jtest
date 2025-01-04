@@ -165,7 +165,7 @@ function boat.on_rightclick(self, clicker)
 	if self._passenger or not clicker or clicker:get_attach() or (self.name == "mcl_boats:chest_boat" and self._driver) then
 		return
 	end
-	if mcl_serverplayer.is_csm_capable (clicker) then
+	if mcl_serverplayer.is_csm_capable (clicker) and not self._driver then
 		mcl_serverplayer.begin_mount (clicker, self.object, self.name, {
 			bone = "",
 			position = vector.zero (),
@@ -326,11 +326,24 @@ function boat:on_step(dtime, moveresult)
 		if ctrl and ctrl.sneak then
 			detach_object(self._driver, true)
 			self._driver = nil
+			self.object:set_animation ({x = 0, y = 0})
 			return
 		end
 
 		if self._csm_driving then
-			-- TODO: animations.
+			local v = self.object:get_velocity ()
+			local v_horiz = math.sqrt (v.x * v.x + v.z * v.z)
+			if v_horiz > 0 then
+				if self._animation == 0 then
+					self.object:set_animation ({x = 0, y = 40}, paddling_speed, 0, true)
+					self._animation = 1
+				end
+			else
+				if self._animation ~= 0 then
+					self.object:set_animation ({x = 0, y = 0})
+					self._animation = 0
+				end
+			end
 			return
 		end
 
@@ -615,9 +628,13 @@ end
 --- Client-side steering.
 ------------------------------------------------------------------------
 
+local ZERO_VECTOR = vector.zero ()
+
 function boat:complete_attachment (player, state)
 	attach_object (self, player)
 	self._csm_driving = true
+	self.object:set_velocity (ZERO_VECTOR)
+	self.object:set_acceleration (ZERO_VECTOR)
 end
 
 function boat:fallback_attach (player, state)

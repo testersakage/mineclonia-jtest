@@ -26,13 +26,15 @@ local POSE_CROUCHING = 2
 local POSE_SLEEPING = 3
 local POSE_FALL_FLYING = 4
 local POSE_SWIMMING = 5
-local POSE_MOUNTED = 6
-local POSE_DEATH = 7
+local POSE_SIT_MOUNTED = 6
+local POSE_MOUNTED = 7
+local POSE_DEATH = 8
 
 mcl_serverplayer.POSE_STANDING = POSE_STANDING
 mcl_serverplayer.POSE_CROUCHING = POSE_CROUCHING
 mcl_serverplayer.POSE_SLEEPING = POSE_SLEEPING
 mcl_serverplayer.POSE_FALL_FLYING = POSE_FALL_FLYING
+mcl_serverplayer.POSE_SIT_MOUNTED = POSE_SIT_MOUNTED
 mcl_serverplayer.POSE_MOUNTED = POSE_MOUNTED
 mcl_serverplayer.POSE_DEATH = POSE_DEATH
 
@@ -89,6 +91,15 @@ function mcl_serverplayer.post_load_model (player, model)
 			walk_mine = model.animations.swim_walk_mine,
 			collisionbox = mcl_player.player_props_swimming.collisionbox,
 			eye_height = mcl_player.player_props_swimming.eye_height,
+		},
+		[POSE_SIT_MOUNTED] = {
+			stand = model.animations.sit_mount,
+			walk = model.animations.sit_mount,
+			mine = model.animations.sit_mount,
+			walk_bow = model.animations.sit_mount,
+			walk_mine = model.animations.sit_mount,
+			collisionbox = mcl_player.player_props_normal.collisionbox,
+			eye_height = mcl_player.player_props_normal.eye_height,
 		},
 		[POSE_MOUNTED] = {
 			stand = model.animations.sit,
@@ -350,37 +361,55 @@ function mcl_serverplayer.get_visual_wielditem (player)
 	return player:get_wielded_item ()
 end
 
+local norm_radians = mcl_util.norm_radians
+
+local ZERO_OVERRIDE = {
+	rotation = {
+		vec = vector.zero (),
+		absolute = true,
+	},
+}
+
 function mcl_serverplayer.animate_localplayer (state, player)
-	local look_dir = mcl_util.norm_radians (player:get_look_horizontal ())
+	local look_dir = norm_radians (player:get_look_horizontal ())
 	local pose = state.override_pose or state.pose
 	if pose == POSE_STANDING or pose == POSE_CROUCHING
-		or pose == POSE_MOUNTED then
+		or pose == POSE_MOUNTED or pose == POSE_SIT_MOUNTED then
 		-- Animate body.
-		local move_yaw = mcl_util.norm_radians (state.move_yaw)
-		local diff = mcl_util.norm_radians (move_yaw - look_dir)
-
-		if pose == POSE_MOUNTED then
-			move_yaw = 0.0
-			look_dir = 0.0
-			diff = 0.0
+		if pose == POSE_MOUNTED or pose == POSE_SIT_MOUNTED then
+			local attach = player:get_attach ()
+			if attach then
+				local yaw = attach:get_yaw ()
+				local yrot = -norm_radians (look_dir - norm_radians (yaw))
+				local pitch = -player:get_look_vertical ()
+				player:set_bone_override ("Body_Control", ZERO_OVERRIDE)
+				player:set_bone_override ("Head_Control", {
+					rotation = {
+						vec = vector.new (pitch, yrot, 0),
+						absolute = true,
+					},
+				})
+			end
+		else
+			local move_yaw = norm_radians (state.move_yaw)
+			local diff = norm_radians (move_yaw - look_dir)
+			if diff > FOURTY_DEG then
+				move_yaw = look_dir + FOURTY_DEG
+			elseif diff < -FOURTY_DEG then
+				move_yaw = look_dir - FOURTY_DEG
+			end
+			state.move_yaw = move_yaw
+			local body = look_dir - move_yaw
+			local rot = vector.new (0, body, 0)
+			player:set_bone_override ("Body_Control", {
+				rotation = { vec = rot, absolute = true, },
+			})
+			rot.y = move_yaw - look_dir
+			rot.x = -player:get_look_vertical ()
+			player:set_bone_override ("Head_Control", {
+				rotation = { vec = rot, absolute = true, },
+			})
 		end
-
-		if diff > FOURTY_DEG then
-			move_yaw = look_dir + FOURTY_DEG
-		elseif diff < -FOURTY_DEG then
-			move_yaw = look_dir - FOURTY_DEG
-		end
-		state.move_yaw = move_yaw
-		local body = look_dir - move_yaw
-		local rot = vector.new (0, body, 0)
-		player:set_bone_override ("Body_Control", {
-			rotation = { vec = rot, absolute = true, },
-		})
-		rot.y = move_yaw - look_dir
-		rot.x = -player:get_look_vertical ()
-		player:set_bone_override ("Head_Control", {
-			rotation = { vec = rot, absolute = true, },
-		})
 		local blocking = mcl_shields.is_blocking (player)
 		-- Control arm rotation whilst blocking.
 		if blocking == 2 then
@@ -397,7 +426,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 		end
 	elseif pose == POSE_SWIMMING then
 		local pitch = player:get_look_vertical ()
-		local move_yaw = mcl_util.norm_radians (state.move_yaw)
+		local move_yaw = norm_radians (state.move_yaw)
 		local move_pitch = state.move_pitch
 		local rot = vector.new ((pitch - move_pitch) + TWENTY_DEG,
 			move_yaw - look_dir, 0)
@@ -413,7 +442,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 		state.move_yaw = move_yaw
 	elseif pose == POSE_FALL_FLYING then
 		local move_pitch = state.move_pitch
-		local move_yaw = mcl_util.norm_radians (state.move_yaw)
+		local move_yaw = norm_radians (state.move_yaw)
 		local xrot = move_pitch + FIFTY_DEG
 		local yrot = move_yaw - look_dir
 		local rot = vector.new (xrot, yrot, 0)
@@ -421,7 +450,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 			rotation = { vec = rot, absolute = true, },
 		})
 		local xrot = move_pitch + ONE_HUNDRED_AND_TEN_DEG
-		local yrot = -move_yaw + mcl_util.norm_radians (look_dir)
+		local yrot = -move_yaw + norm_radians (look_dir)
 		rot.x = xrot
 		rot.y = yrot
 		rot.z = math.pi
