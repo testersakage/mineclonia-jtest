@@ -42,7 +42,7 @@ local function on_bone_meal(_, _, _, pos, n)
 		offset = vector.new(-3,0,-3)
 	elseif n.name == "mcl_mushrooms:mushroom_red" then
 		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
-		offset = vector.new(-2,-1,-2)
+		offset = vector.new(-2,0,-2)
 	else
 		return
 	end
