@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 22:32+0000\n"
+"PO-Revision-Date: 2025-01-05 03:33+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/es/>\n"
@@ -18,7 +18,7 @@ msgid "Benchmarking"
 msgstr "Trabajo en la mesa"
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr "Fabrica una mesa de trabajo con 4 tablones de madera."
+msgstr "Crea una mesa de trabajo con 4 bloques de tablones de madera."
 
 msgid "Time to Mine!"
 msgstr "¡Hora de picar!"
@@ -55,7 +55,7 @@ msgid "Craft a cake using wheat, sugar, milk and an egg."
 msgstr "Fabrica una tarta con trigo, azúcar, leche y un huevo."
 
 msgid "Getting an Upgrade"
-msgstr "Mejorando herramientas"
+msgstr "Consiguiendo una mejora"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
 msgstr "Fabrica un pico de piedra con palos y rocas."
@@ -90,7 +90,7 @@ msgid "Into Fire"
 msgstr "Jugando con fuego"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr "Recoge una barra de fuego del suelo."
+msgstr "Recoge una vara de blaze del suelo."
 
 msgid "Cow Tipper"
 msgstr "Chupavacas"
@@ -173,10 +173,11 @@ msgid "We Need to Go Deeper"
 msgstr "Plus ultra"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
-msgstr "Usa obsidiana y un iniciador de fuego para construir un portal abisal."
+msgstr ""
+"Usa obsidiana y un iniciador de fuego para construir un portal del Nether."
 
 msgid "The End?"
-msgstr "¿El End?"
+msgstr "¿Se acabó?"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
@@ -196,7 +197,7 @@ msgid "Postmortal"
 msgstr "Post mortem"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr "Usa un tótem de inmortalidad para engañar a la muerte."
+msgstr "Usa el Tótem de la inmortalidad para engañar a la muerte."
 
 msgid "Sweet Dreams"
 msgstr "Dulces sueños"
@@ -211,7 +212,7 @@ msgid "Charge a Respawn Anchor to the maximum."
 msgstr "Carga un nexo de reaparición al máximo."
 
 msgid "What A Deal!"
-msgstr "¡Qué ofertón!"
+msgstr "¡Menudo ofertón!"
 
 msgid "Successfully trade with a Villager."
 msgstr "Comercia con un aldeano."
@@ -223,7 +224,7 @@ msgid "Catch a fish... without a fishing rod!"
 msgstr "Atrapa a un pez... ¡sin una caña de pescar!"
 
 msgid "The Cutest Predator"
-msgstr "El depredador más lindo"
+msgstr "El depredador más adorable"
 
 msgid "Catch an Axolotl with a bucket!"
 msgstr "¡Atrapa un Ajolote con un cubo!"
@@ -241,7 +242,7 @@ msgid "Kill the ender dragon. Good Luck!"
 msgstr "Mata al Enderdragón. Buena suerte!"
 
 msgid "Fishy Business"
-msgstr "Un asuno escamoso"
+msgstr "Un asunto escamoso"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
@@ -249,16 +250,17 @@ msgstr "Atrapa un pez.\n"
 "Sugerencia: Atrapa un pez, salmón, pez payaso, o pez globo."
 
 msgid "Country Lode, Take Me Home"
-msgstr "Magnetita llévame a casita"
+msgstr "Magnetita, llévame a casita"
 
 msgid "Use a compass on a Lodestone."
-msgstr "Usa una brújula sobre una magnetita."
+msgstr "Imanta una brújula con un bloque de magnetita."
 
 msgid "Serious Dedication"
-msgstr "Dedicación seria"
+msgstr "Malos hábitos"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
-msgstr "Usa un lingote de netherita para mejorar una azada, y luego revalúa lo que estás haciendo con tu vida."
+msgstr ""
+"Usa un lingote de netherita para mejorar una azada y replantéate tu vida."
 
 msgid "Local Brewery"
 msgstr "Destilería local"
@@ -306,22 +308,22 @@ msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr "Mueve una colmena que tenga 3 abejas usando una herramienta con toque de seda."
 
 msgid "Wax On"
-msgstr "Pon cera"
+msgstr "Encerado"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr "Encera un bloque de cobre con un panal de abejas para protegerlo de los elementos."
 
 msgid "Wax Off"
-msgstr "Quita cera"
+msgstr "Pulir cera"
 
 msgid "Scrape wax off of a copper block."
 msgstr "Quita la cera de un bloque de cobre."
 
 msgid "Crafting a New Look"
-msgstr "Fabricando un nuevo estilo"
+msgstr "Forjando una nueva imagen"
 
 msgid "Craft a trimmed armor at a Smithing Table"
-msgstr "Fabrica una armadura con diseño en una Mesa de Herrería"
+msgstr "Decora una pieza de armadura en una mesa de herrería"
 
 msgid "Smithing with Style"
 msgstr "Herrería con estilo"
@@ -368,7 +370,7 @@ msgid "Mine emerald ore."
 msgstr "Mina de esmeralda."
 
 msgid "Stone Age"
-msgstr "La edad de piedra"
+msgstr "La Edad de Piedra"
 
 msgid "Mine a stone with new pickaxe."
 msgstr "Mina piedra con tu nuevo pico."
