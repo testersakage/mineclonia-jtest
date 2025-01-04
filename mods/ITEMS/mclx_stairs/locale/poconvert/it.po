@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 00:41+0000\n"
+"PO-Revision-Date: 2025-01-04 00:48+0000\n"
 "Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
@@ -52,76 +52,76 @@ msgid "Cracked Deepslate Tile Slab"
 msgstr "Lastra di piastrelle di ardesia oscura crepati"
 
 msgid "End Stone Stairs"
-msgstr ""
+msgstr "Scalini di pietra dell'End"
 
 msgid "End Stone Slab"
-msgstr ""
+msgstr "Lastra di pietra dell'End"
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "Scalini di pietra liscia"
 
 msgid "Terracotta Stairs"
-msgstr ""
+msgstr "Scalini di terracotta"
 
 msgid "Terracotta Slab"
-msgstr ""
+msgstr "Lastra di terracotta"
 
 msgid "Concrete Slab"
-msgstr ""
+msgstr "Lastra di calcestruzzo"
 
 msgid "Double Concrete Slab"
 msgstr ""
 
 msgid "Concrete Stairs"
-msgstr ""
+msgstr "Scalini di calcestruzzo"
 
 msgid "Double Terracotta Slab"
 msgstr ""
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Lastra di calcestruzzo nero"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Scalini di calcestruzzo nero"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "Lastra di terracotta nera"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "Scalini di terracotta nera"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Lastra di calcestruzzo blu"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Scalini di calcestruzzo blu"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "Lastra di terracotta blu"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "Scalini di terracotta blu"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Lastra di calcestruzzo marrone"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Scalini di calcestruzzo marrone"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "Lastra di terracotta marrone"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "Scalini di terracotta marrone"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Lastra di calcestruzzo ciano"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Scalini di calcestruzzo ciano"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "Lastra di terracotta ciano"
 
 msgid "Cyan Terracotta Stairs"
 msgstr ""
