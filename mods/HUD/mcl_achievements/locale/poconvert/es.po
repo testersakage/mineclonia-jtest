@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 03:46+0000\n"
+"PO-Revision-Date: 2025-01-04 18:27+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/es/>\n"
@@ -18,25 +18,29 @@ msgid "Benchmarking"
 msgstr "Crea tu mesa de trabajo"
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr "Crea una mesa de trabajo con 4 tablas de madera procesada."
+msgstr "Fabrica una mesa de trabajo con 4 tablones de madera."
 
 msgid "Time to Mine!"
 msgstr "¡Hora de minar!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr "Usa una mesa de trabajo para hacer un pico de madera con tablas de madera procesada y palos de madera."
+msgstr ""
+"Usa una mesa de trabajo para fabricar un pico de madera a partir de tablones "
+"de madera y palos."
 
 msgid "Hot Topic"
 msgstr "Tema candente"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr "Usa 8 rocas para crear un horno."
+msgstr "Usa 8 rocas para fabricar un horno."
 
 msgid "Time to Farm!"
 msgstr "¡Hora de cultivar!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr "Usa una mesa de trabajo para hacer una azada de madera con tablas de madera procesada y palos de madera."
+msgstr ""
+"Usa una mesa de trabajo para fabricar una azada de madera a partir de "
+"tablones de madera y palos."
 
 msgid "Bake Bread"
 msgstr "Horneando pan"
@@ -48,31 +52,33 @@ msgid "The Lie"
 msgstr "El cocinero"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr "Crea una tarta con trigo, azúcar, leche y un huevo."
+msgstr "Fabrica una tarta con trigo, azúcar, leche y un huevo."
 
 msgid "Getting an Upgrade"
 msgstr "Obteniendo una mejora"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr "Crea un pico de piedra con palos y rocas."
+msgstr "Fabrica un pico de piedra con palos y rocas."
 
 msgid "Time to Strike!"
 msgstr "¡Hora de atacar!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr "Haz una espada de madera con tablas de madera y palos en una mesa de trabajo."
+msgstr ""
+"Fabrica una espada de madera usando tablones de madera y palos en una mesa "
+"de trabajo."
 
 msgid "Librarian"
 msgstr "Bibliotecario"
 
 msgid "Craft a bookshelf."
-msgstr "Crea una estantería."
+msgstr "Fabrica una estantería."
 
 msgid "Isn't It Iron Pick"
 msgstr "¿No es hierrónico?"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr "Crea un pico de hierro usando palos y hierro."
+msgstr "Fabrica un pico de hierro usando palos y hierro."
 
 msgid "DIAMONDS!"
 msgstr "¡Diamantes!"
@@ -99,8 +105,9 @@ msgstr "Obtén madera"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
-msgstr "Recoge un elemento de madera del suelo. \n"
-"Sugerencia: Golpee el tronco de un árbol hasta que salga como un elemento."
+msgstr ""
+"Recoge un objeto de madera del suelo. \n"
+"Sugerencia: Golpee el tronco de un árbol hasta que salga como un objeto."
 
 msgid "Who is Cutting Onions?"
 msgstr "¿Quién esta cortando cebollas?"
