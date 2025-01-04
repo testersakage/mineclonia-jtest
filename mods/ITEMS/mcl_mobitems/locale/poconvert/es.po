@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 03:46+0000\n"
+"PO-Revision-Date: 2025-01-04 18:27+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_mobitems/es/>\n"
@@ -126,7 +126,7 @@ msgstr "Saco de tinta"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
 msgstr ""
-"Este ítem lo sueltan los calamares cuando mueren. La tinta de calamar se "
+"Este objeto lo sueltan los calamares cuando mueren. La tinta de calamar se "
 "puede utilizar como ingrediente para fabricar libros con plumas o tinte "
 "negro."
 
@@ -146,13 +146,13 @@ msgid "Breeze Rod"
 msgstr "Vara de breeze"
 
 msgid "This is a crafting item dropped from breezes."
-msgstr "Este es un ítem que dropean los breezes."
+msgstr "Este es un objeto que deja caer los breezes."
 
 msgid "Blaze Powder"
 msgstr "Polvo de blaze"
 
 msgid "This item is mainly used for crafting."
-msgstr "Este artículo se usa principalmente para la fabricación."
+msgstr "Este objeto se usa principalmente para la fabricación."
 
 msgid "Magma Cream"
 msgstr "Crema de magma"
@@ -164,7 +164,7 @@ msgid "Ghast Tear"
 msgstr "Lágrima espectral"
 
 msgid "Place this item in an item frame as decoration."
-msgstr "Coloque este artículo en un marco de artículo como decoración."
+msgstr "Coloque este objeto en un marco de objetos como decoración."
 
 msgid "Nether Star"
 msgstr "Estrella del Nether"
@@ -194,7 +194,9 @@ msgid "Rabbit's Foot"
 msgstr "Pata de conejo"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
-msgstr "¡Debe ser tu día de suerte! Coloque este artículo en un marco de artículos para la decoración."
+msgstr ""
+"¡Debe ser tu día de suerte! Coloque este objeto en un marco de objetos para "
+"la decoración."
 
 msgid "Saddle"
 msgstr "Montura"
@@ -257,16 +259,20 @@ msgid "Nautilus Shell"
 msgstr "Caparazón de nautilo"
 
 msgid "Used to craft a conduit"
-msgstr "Se utiliza para crear un Canalizador"
+msgstr "Se utiliza para fabricar un canalizador"
 
 msgid "The Nautilus Shell is used to craft a conduit. They can be obtained by fishing or killing a drowned that is wielding a shell."
-msgstr "El caparazón de nautilo se utiliza para crear canalizadores. Se pueden obtener pescando o matando a un ahogado que lleva un caparazón."
+msgstr ""
+"El caparazón de nautilo se utiliza para fabricar canalizadores. Se pueden "
+"obtener pescando o matando a un ahogado que lleva un caparazón."
 
 msgid "Heart of the Sea"
 msgstr "Corazón del mar"
 
 msgid "The Heart of the Sea is used to craft a conduit. They can be obtained by finding them in a buried treasure chest."
-msgstr "El Corazón del Mar se utiliza para crear canalizadores. Se pueden obtener en un cofre del tesoro."
+msgstr ""
+"El Corazón del Mar se utiliza para fabricar canalizadores. Se pueden obtener "
+"en un cofre del tesoro."
 
 msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't wear horse armor."
 msgstr "Colóquelo en un caballo para ponerle la armadura de caballo. Los burros y las mulas no pueden usar armadura de caballo."
@@ -299,10 +305,12 @@ msgid "Glow Ink Sac"
 msgstr "Saco de tinta brillante"
 
 msgid "Use it to craft the Glow Item Frame."
-msgstr "Úselo para crear marcos luminosos."
+msgstr "Úselo para fabricar marcos luminosos."
 
 msgid "Use the Glow Ink Sac and the normal Item Frame to craft the Glow Item Frame."
-msgstr "Utiliza el saco de tinta brillante y el marco normal para crear el marco brillante."
+msgstr ""
+"Utiliza el saco de tinta brillante y el marco normal para fabricar el marco "
+"brillante."
 
 msgid "Name Tag"
 msgstr "Etiqueta"
