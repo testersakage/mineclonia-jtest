@@ -130,7 +130,7 @@ msgstr "Consigue el huevo de dragón.\n"
 "Sugerencia: Recoge el huevo del suelo, y colócalo en tu inventario."
 
 msgid "Sky's the Limit"
-msgstr "El cielo es el límite"
+msgstr "Hasta el infinito... ¡y más allá!"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
 msgstr "¿Encuentra los élitros y prepárate para volar al infinito y más allá!"
