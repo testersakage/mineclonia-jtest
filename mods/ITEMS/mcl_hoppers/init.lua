@@ -475,7 +475,7 @@ minetest.register_lbm({
 	label = "Add timers for older ABM driven hoppers",
 	name = "mcl_hoppers:add_timer",
 	nodenames = { "mcl_hoppers:hopper", "mcl_hoppers:hopper_side" },
-	run_at_every_load = true,
+	run_at_every_load = false,
 	action = function(pos)
 		local timer = minetest.get_node_timer(pos)
 		if not timer:is_started() then
