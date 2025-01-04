@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 18:27+0000\n"
+"PO-Revision-Date: 2025-01-04 19:51+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_enchanting/es/>\n"
@@ -297,7 +297,8 @@ msgid "Place a tool, armor, weapon or book into the top left slot, and then plac
 msgstr "Coloca una herramienta, arma, armadura o libro sobre la ranura izquierda, coloca de 1 a 3 Lapis lázulis en la ranura derecha."
 
 msgid "After placing your items in the slots, the enchanting options will be shown. Hover over the options to read what is available to you."
-msgstr "Coloca el ítem en su ranura y se mostraran los encantamientos a elegir."
+msgstr ""
+"Coloca el objeto en su ranura y se mostraran los encantamientos a elegir."
 
 msgid "These options are randomized, and dependent on experience level; but the enchantment strength can be increased."
 msgstr "Las opciones seran aleatorias dependiendo del nivel de experiencia, los niveles de encantamiento pueden ser aumentados."
