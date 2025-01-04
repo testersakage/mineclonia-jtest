@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 02:17+0000\n"
+"PO-Revision-Date: 2025-01-04 18:27+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_enchanting/es/>\n"
@@ -243,7 +243,7 @@ msgid "There is no such enchantment '@1'."
 msgstr "'@1' no es un encantamiento."
 
 msgid "The target doesn't hold an item."
-msgstr "El objetivo no sujeta un ítem."
+msgstr "El objetivo no sujeta un objeto."
 
 msgid "The selected enchantment can't be added to the target item."
 msgstr "El encantamiento seleccionado no puede añadirse a ese objeto."
@@ -283,7 +283,7 @@ msgid "Enchanting Table"
 msgstr "Mesa de encantamientos"
 
 msgid "Spend experience, and lapis to enchant various items."
-msgstr "Gasta experiencia y Lapis para encantar varios ítems."
+msgstr "Gasta experiencia y lapislázuli para encantar varios objetos."
 
 msgid "Enchanting Tables will let you enchant armors, tools, weapons, and books with various abilities. But, at the cost of some experience, and lapis lazuli."
 msgstr ""
@@ -306,7 +306,9 @@ msgid "To increase the enchantment strength, place bookshelves around the enchan
 msgstr "Para aumentar los niveles de encantamientos, coloca librerias alrededor y cerca de la mesa de encantamientos."
 
 msgid "After finally selecting your enchantment; left-click on the selection, and you will see both the lapis lazuli and your experience levels consumed. And, an enchanted item left in its place."
-msgstr "Despues elige tu encantamiento, los niveles de experiencia y el lapis lázuli seran consumidos y el encantamiento aplicado al objeto."
+msgstr ""
+"Despues elige tu encantamiento, los niveles de experiencia y el lapislázuli "
+"seran consumidos y el encantamiento aplicado al objeto."
 
 msgid "Enchant"
 msgstr "Encantamiento"
