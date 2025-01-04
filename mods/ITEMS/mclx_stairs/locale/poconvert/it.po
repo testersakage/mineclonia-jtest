@@ -3,51 +3,53 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-04 00:41+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mclx_stairs/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Lapis Lazuli Stairs"
-msgstr "Scale di Lapislazzuli"
+msgstr "Scale di lapislazzuli"
 
 msgid "Lapis Lazuli Slab"
-msgstr "Lastra di Lapislazzuli"
+msgstr "Lastra di lapislazzuli"
 
 msgid "Gold Stairs"
-msgstr ""
+msgstr "Scalini d'oro"
 
 msgid "Gold Slab"
-msgstr ""
+msgstr "Lastra d'oro"
 
 msgid "Iron Stairs"
-msgstr ""
+msgstr "Scalini di ferro"
 
 msgid "Iron Slab"
-msgstr ""
+msgstr "Lastra di ferro"
 
 msgid "Cracked Stone Brick Stairs"
-msgstr ""
+msgstr "Scalini di mattoni di pietra crepati"
 
 msgid "Cracked Stone Brick Slab"
-msgstr ""
+msgstr "Lastra di mattoni di pietra crepati"
 
 msgid "Cracked Deepslate Brick Stairs"
-msgstr ""
+msgstr "Scalini di mattoni di ardesia oscura crepati"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr ""
+msgstr "Lastra di mattoni di ardesia oscura crepati"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr ""
+msgstr "Scalini di piastrelle di ardesia oscura crepati"
 
 msgid "Cracked Deepslate Tile Slab"
-msgstr ""
+msgstr "Lastra di piastrelle di ardesia oscura crepati"
 
 msgid "End Stone Stairs"
 msgstr ""
@@ -267,4 +269,3 @@ msgstr ""
 
 msgid "Yellow Terracotta Stairs"
 msgstr ""
-
