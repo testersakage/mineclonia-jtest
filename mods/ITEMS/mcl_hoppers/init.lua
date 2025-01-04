@@ -357,50 +357,40 @@ minetest.register_node("mcl_hoppers:hopper_side_disabled", def_hopper_side_disab
 
 --[[ END OF NODE DEFINITIONS ]]
 
-local function hopper_pull_from_mc (mc_ent, dest_pos, inv_size)
-	local inv = mcl_entity_invs.load_inv(mc_ent, inv_size)
-	if not inv then
-		return false
-	end
-
-	local dest_meta = minetest.get_meta(dest_pos)
-	local dest_inv = dest_meta:get_inventory()
-	if not dest_inv then
-		return
-	end
-
-	for i = 1, mc_ent._inv_size,1 do
-		local stack = inv:get_stack("main", i)
-		if not stack:get_name() or stack:get_name() ~= "" then
-			if dest_inv:room_for_item("main", stack:peek_item()) then
-				dest_inv:add_item("main", stack:take_item())
-				inv:set_stack("main", i, stack)
-				-- Take one item and stop until next time
-				return
-			end
-		end
+local function check_hopper_pull_from_mc(pos, entity, inv_size)
+	local inv = mcl_entity_invs.load_inv(entity, inv_size)
+	if inv then
+		return inv, minetest.get_meta(pos):get_inventory()
 	end
 end
 
-local function hopper_push_to_mc(mc_ent, dest_pos, inv_size)
-	local dest_inv = mcl_entity_invs.load_inv(mc_ent, inv_size)
-	if not dest_inv then
-		return false
+local function check_hopper_push_to_mc(pos, entity, inv_size)
+	local dest_inv = mcl_entity_invs.load_inv(entity, inv_size)
+	if dest_inv then
+		return minetest.get_meta(pos):get_inventory(), dest_inv
 	end
+end
 
-	local meta = minetest.get_meta(dest_pos)
-	local inv = meta:get_inventory()
-	if not inv then
-		return
-	end
-	for i = 1, mc_ent._inv_size, 1 do
-		local stack = inv:get_stack("main", i)
-		if not stack:get_name() or stack:get_name() ~= "" then
-			if dest_inv:room_for_item("main", stack:peek_item()) then
-				dest_inv:add_item("main", stack:take_item())
-				inv:set_stack("main", i, stack)
-				-- Take one item and stop until next time
-				return
+local function hopper_and_mc(pos, entity, mc_pos, check_function)
+	local DIST_FROM_MC = 1.5
+	if entity._inv_size > 0 and
+		(mc_pos.x >= pos.x - DIST_FROM_MC and mc_pos.x <= pos.x + DIST_FROM_MC) and
+		(mc_pos.z >= pos.z - DIST_FROM_MC and mc_pos.z <= pos.z + DIST_FROM_MC) then
+		local inv, dest_inv = check_function(pos, entity, entity._inv_size)
+		if not inv or not dest_inv then
+			return
+		end
+		-- TODO: bug? in mcl_util.move_item(inv, "main", -1, dest_inv, "main")
+		for i = 1, entity._inv_size, 1 do
+			local stack = inv:get_stack("main", i)
+			if not stack:get_name() or stack:get_name() ~= "" then
+				if dest_inv:room_for_item("main", stack:peek_item()) then
+					dest_inv:add_item("main", stack:take_item())
+					inv:set_stack("main", i, stack)
+					mcl_redstone.update_comparators(pos)
+					-- Take one item and stop until next time
+					return
+				end
 			end
 		end
 	end
@@ -409,34 +399,21 @@ end
 --[[ BEGIN OF ABM DEFINITONS ]]
 
 minetest.register_abm({
-	label = "Hoppers pull from minecart",
+	label = "Hoppers interact with minecart",
 	nodenames = {"mcl_hoppers:hopper","mcl_hoppers:hopper_side"},
-	interval = 0.5,
+	interval = HOPPER_INTERVAL_TIME,
 	chance = 1,
 	action = function(pos)
 		for v in minetest.objects_inside_radius(pos, 3) do
 			local entity = v:get_luaentity()
-			if entity and entity.name then
-				if entity.name == "mcl_minecarts:hopper_minecart" or entity.name == "mcl_minecarts:chest_minecart"then
-					local hm_pos = entity.object:get_pos()
-					local DIST_FROM_MC = 1.5
-					if (hm_pos.y == pos.y + 1)
-							and (hm_pos.x >= pos.x - DIST_FROM_MC and hm_pos.x <= pos.x + DIST_FROM_MC)
-							and (hm_pos.z >= pos.z - DIST_FROM_MC and hm_pos.z <= pos.z + DIST_FROM_MC) then
-						if entity.name == "mcl_minecarts:hopper_minecart" then
-							hopper_pull_from_mc(entity, pos, 5)
-						elseif entity.name == "mcl_minecarts:chest_minecart" then
-							hopper_pull_from_mc(entity, pos, 27)
-						end
-					elseif (hm_pos.y == pos.y - 1)
-						and (hm_pos.x >= pos.x - DIST_FROM_MC and hm_pos.x <= pos.x + DIST_FROM_MC)
-						and (hm_pos.z >= pos.z - DIST_FROM_MC and hm_pos.z <= pos.z + DIST_FROM_MC) then
-						if entity.name == "mcl_minecarts:hopper_minecart" then
-							hopper_push_to_mc(entity, pos, 5)
-						elseif entity.name == "mcl_minecarts:chest_minecart" then
-							hopper_push_to_mc(entity, pos, 27)
-						end
-					end
+			if entity and (
+				entity.name == "mcl_minecarts:hopper_minecart" or
+				entity.name == "mcl_minecarts:chest_minecart") then
+				local mc_pos = entity.object:get_pos()
+				if (math.floor(mc_pos.y) == pos.y + 1) then
+					hopper_and_mc(pos, entity, mc_pos, check_hopper_pull_from_mc)
+				elseif (math.floor(mc_pos.y) == pos.y - 1) then
+					hopper_and_mc(pos, entity, mc_pos, check_hopper_push_to_mc)
 				end
 			end
 		end
