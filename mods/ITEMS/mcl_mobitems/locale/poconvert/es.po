@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-03 21:56+0000\n"
+"PO-Revision-Date: 2025-01-04 03:46+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_mobitems/es/>\n"
@@ -105,13 +105,18 @@ msgid "Poisonous"
 msgstr "Venenoso"
 
 msgid "Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."
-msgstr "Los ojos de araña se utilizan principalmente en la elaboración. Si estás realmente desesperado, puedes comerte un ojo de araña, pero te envenenará brevemente."
+msgstr ""
+"Los ojos de araña se utilizan principalmente en la fabricación. Si estás "
+"realmente desesperado, puedes comerte un ojo de araña, pero te envenenará "
+"brevemente."
 
 msgid "Bone"
 msgstr "Hueso"
 
 msgid "Bones can be used to tame wolves so they will protect you. They are also useful as a crafting ingredient."
-msgstr "Los huesos se pueden usar para domar a los lobos para que te protejan. También son útiles como ingrediente de elaboración."
+msgstr ""
+"Los huesos se pueden usar para domar a los lobos para que te protejan. "
+"También son útiles como ingrediente de fabricación."
 
 msgid "Wield the bone near wolves to attract them. Use the “Place” key on the wolf to give it a bone and tame it. You can then give commands to the tamed wolf by using the “Place” key on it."
 msgstr "Empuña el hueso cerca de los lobos para atraerlos. Usa la tecla \"Colocar\" en el lobo para darle un hueso y domesticarlo. Luego puede dar órdenes al lobo domesticado utilizando la tecla \"Colocar\"."
@@ -120,19 +125,22 @@ msgid "Squid Ink Sac"
 msgstr "Saco de tinta"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
-msgstr "Este ítem lo sueltan los calamares cuando mueren. La tinta de calamar se puede utilizar como ingrediente para elaborar libros con plumas o tinte negro."
+msgstr ""
+"Este ítem lo sueltan los calamares cuando mueren. La tinta de calamar se "
+"puede utilizar como ingrediente para fabricar libros con plumas o tinte "
+"negro."
 
 msgid "String"
 msgstr "Cuerda"
 
 msgid "Strings are used in crafting."
-msgstr "Las cuerdas se usan en la elaboración."
+msgstr "Las cuerdas se usan en la fabricación."
 
 msgid "Blaze Rod"
 msgstr "Vara de blaze"
 
 msgid "This is a crafting component dropped from dead blazes."
-msgstr "Este es un componente de artesanía caído de llamas muertas."
+msgstr "Este es un componente de fabricación caído de llamas muertas."
 
 msgid "Breeze Rod"
 msgstr "Vara de breeze"
@@ -144,13 +152,13 @@ msgid "Blaze Powder"
 msgstr "Polvo de blaze"
 
 msgid "This item is mainly used for crafting."
-msgstr "Este artículo se usa principalmente para la elaboración."
+msgstr "Este artículo se usa principalmente para la fabricación."
 
 msgid "Magma Cream"
 msgstr "Crema de magma"
 
 msgid "Magma cream is a crafting component."
-msgstr "La crema de magma es un componente de elaboración."
+msgstr "La crema de magma es un componente de fabricación."
 
 msgid "Ghast Tear"
 msgstr "Lágrima espectral"
@@ -168,13 +176,13 @@ msgid "Leather"
 msgstr "Cuero"
 
 msgid "Leather is a versatile crafting component."
-msgstr "El cuero es un componente de elaboración versátil."
+msgstr "El cuero es un componente de fabricación versátil."
 
 msgid "Feather"
 msgstr "Pluma"
 
 msgid "Feathers are used in crafting and are dropped from chickens."
-msgstr "Las plumas se usan en la elaboración y se sueltan de los pollos."
+msgstr "Las plumas se usan en la fabricación y se sueltan de los pollos."
 
 msgid "Rabbit Hide"
 msgstr "Piel de conejo"
@@ -216,7 +224,7 @@ msgid "Slimeball"
 msgstr "Bola de slime"
 
 msgid "Slimeballs are used in crafting. They are dropped from slimes."
-msgstr "Las bolas de slime se usan en la elaboración. Se obtienen de slimes."
+msgstr "Las bolas de slime se usan en la fabricación. Se obtienen de slimes."
 
 msgid "Gunpowder"
 msgstr "Pólvora"
