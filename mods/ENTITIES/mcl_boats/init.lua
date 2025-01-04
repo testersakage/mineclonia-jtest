@@ -165,7 +165,8 @@ function boat.on_rightclick(self, clicker)
 	if self._passenger or not clicker or clicker:get_attach() or (self.name == "mcl_boats:chest_boat" and self._driver) then
 		return
 	end
-	if mcl_serverplayer.is_csm_capable (clicker) and not self._driver then
+	if mcl_serverplayer.is_csm_capable (clicker)
+		and (not self._driver or not self._driver:is_player ()) then
 		mcl_serverplayer.begin_mount (clicker, self.object, self.name, {
 			bone = "",
 			position = vector.zero (),
