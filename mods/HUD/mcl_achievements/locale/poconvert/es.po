@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 19:40+0000\n"
+"PO-Revision-Date: 2025-01-04 22:24+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/es/>\n"
@@ -15,13 +15,13 @@ msgstr ""
 "X-Generator: Weblate 5.9.2\n"
 
 msgid "Benchmarking"
-msgstr "Crea tu mesa de trabajo"
+msgstr "Trabajo en la mesa"
 
 msgid "Craft a crafting table from 4 wooden planks."
 msgstr "Fabrica una mesa de trabajo con 4 tablones de madera."
 
 msgid "Time to Mine!"
-msgstr "¡Hora de minar!"
+msgstr "¡Hora de picar!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr ""
@@ -29,7 +29,7 @@ msgstr ""
 "de madera y palos."
 
 msgid "Hot Topic"
-msgstr "Tema candente"
+msgstr "Recién hecho"
 
 msgid "Use 8 cobblestones to craft a furnace."
 msgstr "Usa 8 rocas para fabricar un horno."
@@ -43,25 +43,25 @@ msgstr ""
 "tablones de madera y palos."
 
 msgid "Bake Bread"
-msgstr "Horneando pan"
+msgstr "Con un pan debajo del brazo"
 
 msgid "Use wheat to craft a bread."
 msgstr "Usa trigo para fabricar pan."
 
 msgid "The Lie"
-msgstr "El cocinero"
+msgstr "La mentira"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
 msgstr "Fabrica una tarta con trigo, azúcar, leche y un huevo."
 
 msgid "Getting an Upgrade"
-msgstr "Obteniendo una mejora"
+msgstr "Consiguiendo una mejora"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
 msgstr "Fabrica un pico de piedra con palos y rocas."
 
 msgid "Time to Strike!"
-msgstr "¡Hora de atacar!"
+msgstr "¡Hora de luchar!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
 msgstr ""
@@ -81,19 +81,19 @@ msgid "Craft a iron pickaxe using sticks and iron."
 msgstr "Fabrica un pico de hierro usando palos y hierro."
 
 msgid "DIAMONDS!"
-msgstr "¡Diamantes!"
+msgstr "¡DIAMANTES!"
 
 msgid "Pick up a diamond from the floor."
 msgstr "Recoge un diamante del suelo."
 
 msgid "Into Fire"
-msgstr "En el fuego"
+msgstr "Jugando con fuego"
 
 msgid "Pick up a blaze rod from the floor."
 msgstr "Recoge una barra de fuego del suelo."
 
 msgid "Cow Tipper"
-msgstr "Consiguiendo cuero"
+msgstr "Chupavacas"
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
@@ -101,7 +101,7 @@ msgstr "Recoja el cuero del suelo. \n"
 "Sugerencia: Las vacas y algunos otros animales tienen la oportunidad de soltar el cuero cuando mueren."
 
 msgid "Getting Wood"
-msgstr "Obtén madera"
+msgstr "Madera de líder"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
@@ -110,7 +110,7 @@ msgstr ""
 "Sugerencia: Golpee el tronco de un árbol hasta que salga como un objeto."
 
 msgid "Who is Cutting Onions?"
-msgstr "¿Quién esta cortando cebollas?"
+msgstr "¿Quién está cortando cebollas?"
 
 msgid "Pick up a crying obsidian from the floor."
 msgstr "Recoge una obsidiana llorosa del suelo."
@@ -136,7 +136,7 @@ msgid "Find the elytra and prepare to fly above and beyond!"
 msgstr "¿Encuentra los élitros y prepárate para volar al infinito y más allá!"
 
 msgid "Acquire Hardware"
-msgstr "Obteniendo un lingote"
+msgstr "Ponle hierro al asunto"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
@@ -144,7 +144,7 @@ msgstr "Obtén un lingote de hierro de un horno. \n"
 "Sugerencia: Para fundir un lingote de hierro, coloque un combustible (como carbón) y mineral de hierro en un horno."
 
 msgid "Delicious Fish"
-msgstr "Delicioso pescado"
+msgstr "Pescado delicioso"
 
 msgid "Take a cooked fish from a furnace.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
@@ -152,19 +152,19 @@ msgstr "Tome un pescado cocido de un horno. \n"
 "Sugerencia: Use una caña de pescar para atrapar un pez y cocínelo en un horno."
 
 msgid "On A Rail"
-msgstr "Viajando en un carril"
+msgstr "Todo sobre ruedas"
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
 msgstr "Viaje en vagoneta durante al menos 1000 metros desde su punto de partida en un solo viaje."
 
 msgid "Sniper Duel"
-msgstr "Duelo de arqueros"
+msgstr "Francocazadores"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
 msgstr "Mata a un esqueleto, esqueleto wither o errante con un arco y flechas desde una distancia de al menos 20 metros."
 
 msgid "Monster Hunter"
-msgstr "Cazador de Monstruos"
+msgstr "Cazamonstruos"
 
 msgid "Kill a monster."
 msgstr "Mata a un monstruo."
@@ -181,7 +181,7 @@ msgstr "¿El End?"
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
 msgstr ""
-"¿O el principio?\n"
+"¿O el comienzo?\n"
 "Sugerencia: Entra al portal del end."
 
 msgid "The Nether"
@@ -205,7 +205,7 @@ msgid "Sleep in a bed to change your respawn point."
 msgstr "Duerme en una cama para cambiar tu punto de reaparición."
 
 msgid "Not Quite \"Nine\" Lives"
-msgstr "No \"siete\" vidas exactamente"
+msgstr "No exactamente «siete» vidas"
 
 msgid "Charge a Respawn Anchor to the maximum."
 msgstr "Carga un nexo de reaparición al máximo."
@@ -270,7 +270,7 @@ msgstr ""
 "Sugerencia: Saca una poción o botella de cristal de la destiladora."
 
 msgid "Enchanter"
-msgstr "Aprendiz de mago"
+msgstr "Hechicero"
 
 msgid "Enchant an item using an Enchantment Table."
 msgstr "Encanta un objeto usando la mesa de encantamientos."
@@ -288,7 +288,7 @@ msgid "Use a fully powered beacon."
 msgstr "Utiliza un faro a máxima potencia."
 
 msgid "The End... Again..."
-msgstr "El fin... de nuevo..."
+msgstr "Se acabó... de nuevo..."
 
 msgid "Respawn the Ender Dragon."
 msgstr "Vuelve a invocar al Enderdragón."
@@ -306,19 +306,19 @@ msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr "Mueve una colmena que tenga 3 abejas usando una herramienta con toque de seda."
 
 msgid "Wax On"
-msgstr "Dar cera"
+msgstr "Pon cera"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr "Encera un bloque de cobre con un panal de abejas para protegerlo de los elementos."
 
 msgid "Wax Off"
-msgstr "Pulir cera"
+msgstr "Quita cera"
 
 msgid "Scrape wax off of a copper block."
 msgstr "Quita la cera de un bloque de cobre."
 
 msgid "Crafting a New Look"
-msgstr "Fabricando un Nuevo Estilo"
+msgstr "Fabricando un nuevo estilo"
 
 msgid "Craft a trimmed armor at a Smithing Table"
 msgstr "Fabrica una armadura con diseño en una Mesa de Herrería"
@@ -332,13 +332,13 @@ msgstr ""
 "Silence, Vex, Tide, Wayfinder"
 
 msgid "Dispense With This"
-msgstr "Prescinda de esto"
+msgstr "Pensando en dispensadores"
 
 msgid "Place a dispenser."
 msgstr "Coloca un dispensador."
 
 msgid "Pork Chop"
-msgstr "Chuleta de cerdo"
+msgstr "¡Qué chuleta!"
 
 msgid "Eat a cooked porkchop."
 msgstr "Come una chuleta de cerdo cocinado."
@@ -350,13 +350,13 @@ msgid "Eat a cooked rabbit."
 msgstr "Come un conejo cocinado."
 
 msgid "Iron Belly"
-msgstr "Vientre de hierro"
+msgstr "Estómago de acero"
 
 msgid "Get really desperate and eat rotten flesh."
 msgstr "Desesperate y come carne podrida."
 
 msgid "Pot Planter"
-msgstr "Jardinero"
+msgstr "Macetero"
 
 msgid "Place a flower pot."
 msgstr "Coloca una maceta."
