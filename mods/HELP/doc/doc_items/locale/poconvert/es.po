@@ -390,8 +390,8 @@ msgstr "objetos diversos"
 
 msgid "Item reference of items which are neither blocks, tools or weapons (esp. crafting items)"
 msgstr ""
-"Referencia de ítems que no son bloques, herramientas ni armas (especialmente "
-"ítems de fabricación)"
+"Referencia de objetos que no son bloques, herramientas ni armas ("
+"especialmente objetos de fabricación)"
 
 msgid "Mobs"
 msgstr "Criaturas"
