@@ -386,7 +386,7 @@ msgid "Durability: @1"
 msgstr "Durabilidad: @1"
 
 msgid "Miscellaneous items"
-msgstr "Ítems diversos"
+msgstr "objetos diversos"
 
 msgid "Item reference of items which are neither blocks, tools or weapons (esp. crafting items)"
 msgstr ""
