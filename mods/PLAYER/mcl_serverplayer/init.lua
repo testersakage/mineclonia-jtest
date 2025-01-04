@@ -209,6 +209,7 @@ local keys_to_copy = {
 	"groups",
 	"liquidtype",
 	"_liquid_type",
+	"climbable",
 }
 
 minetest.register_on_mods_loaded (function ()
