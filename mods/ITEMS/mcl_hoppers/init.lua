@@ -137,6 +137,25 @@ local mcl_hoppers_formspec = table.concat({
 	"listring[current_player;main]",
 })
 
+local function redstone_update_on(nodename)
+	return function(pos)
+		if mcl_redstone.get_power(pos) ~= 0 then
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, { name = nodename, param2 = node.param2})
+		end
+	end
+end
+
+local function redstone_update_off(nodename)
+	return function(pos)
+		if mcl_redstone.get_power(pos) == 0 then
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, { name = nodename, param2 = node.param2})
+			minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
+		end
+	end
+end
+
 -- Downwards hopper (base definition)
 local def_hopper = {
 	inventory_image = "mcl_hoppers_item.png",
@@ -227,6 +246,12 @@ local def_hopper = {
 
 	_mcl_blast_resistance = 4.8,
 	_mcl_hardness = 3,
+
+	_mcl_redstone = {
+		connects_to = function(node, dir)
+			return true
+		end,
+	},
 }
 
 -- Redstone variants (on/off) of downwards hopper.
@@ -265,17 +290,7 @@ def_hopper_enabled.on_place = function(itemstack, placer, pointed_thing)
 	itemstack:set_name("mcl_hoppers:hopper")
 	return itemstack
 end
-def_hopper_enabled._mcl_redstone = {
-	connects_to = function(node, dir)
-		return true
-	end,
-	update = function(pos)
-		if mcl_redstone.get_power(pos) ~= 0 then
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, {name="mcl_hoppers:hopper_disabled", param2=node.param2})
-		end
-	end,
-}
+def_hopper_enabled._mcl_redstone.update = redstone_update_on("mcl_hoppers:hopper_disabled")
 def_hopper_enabled.on_timer = hopper_timer
 
 minetest.register_node("mcl_hoppers:hopper", def_hopper_enabled)
@@ -287,33 +302,15 @@ def_hopper_disabled.inventory_image = nil
 def_hopper_disabled._doc_items_create_entry = false
 def_hopper_disabled.groups.not_in_creative_inventory = 1
 def_hopper_disabled.drop = "mcl_hoppers:hopper"
-def_hopper_disabled._mcl_redstone = {
-	connects_to = function(node, dir)
-		return true
-	end,
-	update = function(pos)
-		if mcl_redstone.get_power(pos) == 0 then
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, {name="mcl_hoppers:hopper", param2=node.param2})
-			minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
-		end
-	end,
-}
+def_hopper_disabled._mcl_redstone.update = redstone_update_off("mcl_hoppers:hopper")
 
 minetest.register_node("mcl_hoppers:hopper_disabled", def_hopper_disabled)
-
-
-
-local on_rotate
-if minetest.get_modpath("screwdriver") then
-	on_rotate = screwdriver.rotate_simple
-end
 
 -- Sidewars hopper (base definition)
 local def_hopper_side = table.merge(def_hopper, {
 	_doc_items_create_entry = false,
 	drop = "mcl_hoppers:hopper",
-	groups = {pickaxey=1, container=2,not_in_creative_inventory=1,hopper=2, _mcl_partial = 2},
+	groups = { pickaxey = 1, container = 2, not_in_creative_inventory = 1, hopper = 2, _mcl_partial = 2 },
 	paramtype2 = "facedir",
 	tiles = {"mcl_hoppers_hopper_inside.png^mcl_hoppers_hopper_top.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png", "mcl_hoppers_hopper_outside.png"},
 	node_box = {
@@ -342,40 +339,20 @@ local def_hopper_side = table.merge(def_hopper, {
 		},
 	},
 
-	on_rotate = on_rotate,
+	on_rotate = minetest.get_modpath("screwdriver") and screwdriver.rotate_simple,
 })
 
 local def_hopper_side_enabled = table.copy(def_hopper_side)
 def_hopper_side_enabled.description = S("Side Hopper")
-def_hopper_side_enabled._mcl_redstone = {
-	connects_to = function(node, dir)
-		return true
-	end,
-	update = function(pos)
-		if mcl_redstone.get_power(pos) ~= 0 then
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, {name="mcl_hoppers:hopper_side_disabled", param2=node.param2})
-		end
-	end,
-}
+def_hopper_side_enabled._mcl_redstone.update = redstone_update_on("mcl_hoppers:hopper_side_disabled")
 def_hopper_side_enabled.on_timer = hopper_timer
 
 minetest.register_node("mcl_hoppers:hopper_side", def_hopper_side_enabled)
 
 local def_hopper_side_disabled = table.copy(def_hopper_side)
 def_hopper_side_disabled.description = S("Disabled Side Hopper")
-def_hopper_side_disabled._mcl_redstone = {
-	connects_to = function(node, dir)
-		return true
-	end,
-	update = function(pos)
-		if mcl_redstone.get_power(pos) == 0 then
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, {name="mcl_hoppers:hopper_side", param2=node.param2})
-			minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
-		end
-	end,
-}
+def_hopper_side_disabled._mcl_redstone.update = redstone_update_off("mcl_hoppers:hopper_side")
+
 minetest.register_node("mcl_hoppers:hopper_side_disabled", def_hopper_side_disabled)
 
 --[[ END OF NODE DEFINITIONS ]]
