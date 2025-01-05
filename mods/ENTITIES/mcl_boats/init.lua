@@ -194,6 +194,8 @@ function boat:on_activate(staticdata)
 		self._v = data.v
 		self._last_v = self._v
 		self._itemstring = data.itemstring
+		self.leader = data.leader
+		self.tied_to_node = data.tied_to_node
 
 		-- Fall back to oak boat texture if no texture is set
 		if not data.textures then
@@ -226,7 +228,9 @@ function boat:get_staticdata()
 	return core.serialize({
 		v = self._v,
 		itemstring = self._itemstring,
-		textures = props and props.textures or nil
+		textures = props and props.textures or nil,
+		leader = self.leader,
+		tied_to_node = self.tied_to_node,
 	})
 end
 
@@ -264,6 +268,10 @@ function boat:on_step(dtime, moveresult)
 	if not self.object:get_pos() then return end
 
 	self._moveresult = moveresult
+
+	-- respawn lead, if necessary
+	mcl_mobs.check_lead(self)
+
 	self._v = get_v(self.object:get_velocity()) * get_sign(self._v)
 
 	local v_factor = 1
