@@ -47,13 +47,93 @@ function liquid.register_liquid(def)
 		level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) /  8) * 8 / (FLOW_DISTANCE+1))
 	end
 
-	local update_next_set = {}
 
+
+	----------------------------------------------------------------------
+	-- Variables for processing a burst of iterations
+	----------------------------------------------------------------------
+	
+	-- Swappable list of positions to be processed in the next iteration
+	local update_next_set_A = {}
+	local update_next_set_B = {}
+	local update_next_set = update_next_set_A
+
+	-- A list of nodes that have been changed during a burst.
 	local changed_nodes = {}
+	-- A list of nodes that have been red during the burst (caching)
 	local read_nodes = {}
 
 
+
+	----------------------------------------------------------------------
+	-- Variables for path finding to the nearest slope
+	----------------------------------------------------------------------
+
+	-- The list of nodes to be updated next.
+	-- Two of them for GC-free swapping
+	local pf_search_list_A = { }
+	local pf_search_list_B = { }
+	local pf_search_list
+
+	-- The map of potential liquid levels.
+	local pf_pmap = {}
+
+	-- An array of node positions that hit a slope.
+	-- Two of them for GC-free swapping
+	local pf_found_A = { }
+	local pf_found_B = { }
+	local pf_found
+
+	-- If false the path finding was not successful the whole iteration will be
+	-- void.
+	local pf_ok = true
+
+
+
+	----------------------------------------------------------------------
+	-- Variables for one liquid transformation iteration
+	----------------------------------------------------------------------
+
+	-- variables for the positions
+	local p111 -- center
+	local p011 -- left
+	local p211 -- right
+	local p101 -- below
+	local p121 -- above
+	local p110 -- in front
+	local p112 -- behind
+
+	-- variables for the nodes
+	local n111
+	local n011
+	local n211
+	local n110
+	local n112
+	local n101
+	local n121
+
+	-- variables for the liquid level
+	local l111
+	local l011
+	local l211
+	local l110
+	local l112
+	local l101
+	local l121
+
+	-- The map that show where the current liquid shall spread to.
+	local lt_map
+	-- The level of the new node when spreading
+	local lt_new_level
+	-- The node for the new liquid when spreading
+	local lt_new_liquid
+
+
+
+
 	local function update_next(item)
+		-- This function puts an item into the list that is processed in the next
+		-- iteration.
 		local h = core.hash_node_position(item.pos)
 		if update_next_set[h] == nil then
 			update_next_set[h] = item
@@ -179,22 +259,7 @@ function liquid.register_liquid(def)
 		return false
 	end
 
-	-- The list of nodes to be updated next.
-	-- Two of them for GC-free swapping
-	local pf_search_list_A = { }
-	local pf_search_list_B = { }
-	local pf_search_list
 
-	-- The map of potential liquid levels.
-	local pf_pmap = {}
-
-	-- An array of node positions that hit a slope.
-	-- Two of them for GC-free swapping
-	local pf_found_A = { }
-	local pf_found_B = { }
-	local pf_found
-
-	local pf_ok = true
 
 	local function pf_step(pos, level)
 		-- This function checks if the current position has an obstacle or a
@@ -376,34 +441,72 @@ function liquid.register_liquid(def)
 	end
 
 
+
+	local function lt_flood(p, n, l)
+		local cnt_flood = 0
+		local m = lt_map(p)
+		if m and m == lt_new_level then
+			if is_floodable(n) then
+				cnt_flood = 1
+
+				if lt_new_level > (l or 0) then
+					update_next({pos=p, map=lt_map})
+					set_node(p, lt_new_liquid)
+
+				elseif n111.name == NAME_SOURCE and l and l == 7 then
+					-- Give it a chance to renew
+					update_next({pos=p, map=lt_map})
+				end
+			end
+		end
+		return cnt_flood
+	end
+
+
+	local function lt_push_horizontal()
+		-- This function pushes the liquid in all four directions if the
+		-- map wants that and the real node there is actually floodable.
+		-- The number of *potential* floods are counted. If the count
+		-- remains 0, the map is no longer suitable.
+		local cnt_flood = 0
+		cnt_flood = cnt_flood + lt_flood(p011, n011, l011)
+		cnt_flood = cnt_flood + lt_flood(p211, n211, l211)
+		cnt_flood = cnt_flood + lt_flood(p110, n110, l110)
+		cnt_flood = cnt_flood + lt_flood(p112, n112, l112)
+		return cnt_flood
+
+	end
+
+
+
+
 	local function flow_iteration(item)
 
 		-- This is the position of the node to be updated
-		local pos = item.pos
+		p111 = item.pos
 		-- This is the map that shows to where the liquid should spread.
-		local map = item.map
+		lt_map = item.map
 		-- This tells us if the liquid should just sink without spread.
 		local is_sinking = item.is_sinking
 
-		local p111 = pos
-		local n111 = get_node(p111)
+		n111 = get_node(p111)
 		if not n111 then
 			return
 		end
 
-		local p011 = vector.offset(pos, -1,  0,  0)
-		local p211 = vector.offset(pos,  1,  0,  0)
-		local p101 = vector.offset(pos,  0, -1,  0)
-		local p121 = vector.offset(pos,  0,  1,  0)
-		local p110 = vector.offset(pos,  0,  0, -1)
-		local p112 = vector.offset(pos,  0,  0,  1)
+		p011 = vector.offset(p111, -1,  0,  0)
+		p211 = vector.offset(p111,  1,  0,  0)
+		p101 = vector.offset(p111,  0, -1,  0)
+		p121 = vector.offset(p111,  0,  1,  0)
+		p110 = vector.offset(p111,  0,  0, -1)
+		p112 = vector.offset(p111,  0,  0,  1)
 
-		local n011 = get_node(p011)
-		local n211 = get_node(p211)
-		local n110 = get_node(p110)
-		local n112 = get_node(p112)
-		local n101 = get_node(p101)
-		local n121 = get_node(p121)
+		n011 = get_node(p011)
+		n211 = get_node(p211)
+		n110 = get_node(p110)
+		n112 = get_node(p112)
+		n101 = get_node(p101)
+		n121 = get_node(p121)
 
 		if not ( n011 and n211 and n110 and n112 and n101 and n121 ) then 
 			return
@@ -419,8 +522,8 @@ function liquid.register_liquid(def)
 
 			if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then 
 				-- Renew liquid
-				update_next({pos=pos})
-				set_node(pos, { name=NAME_SOURCE })
+				update_next({pos=p111})
+				set_node(p111, { name=NAME_SOURCE })
 				if n011.name ~= NAME_SOURCE then update_next({pos=p011}) end
 				if n211.name ~= NAME_SOURCE then update_next({pos=p211}) end
 				if n110.name ~= NAME_SOURCE then update_next({pos=p110}) end
@@ -430,13 +533,13 @@ function liquid.register_liquid(def)
 		end
 
 		-- These variables store the level or nil if the node isn't a liquid.
-		local l111 = get_liquid_level(n111)
-		local l011 = get_liquid_level(n011)
-		local l211 = get_liquid_level(n211)
-		local l110 = get_liquid_level(n110)
-		local l112 = get_liquid_level(n112)
-		local l101 = get_liquid_level(n101)
-		local l121 = get_liquid_level(n121)
+		l111 = get_liquid_level(n111)
+		l011 = get_liquid_level(n011)
+		l211 = get_liquid_level(n211)
+		l110 = get_liquid_level(n110)
+		l112 = get_liquid_level(n112)
+		l101 = get_liquid_level(n101)
+		l121 = get_liquid_level(n121)
 
 		-- calculate the liquid level that is supported here.
 		local support_level = 1
@@ -478,7 +581,7 @@ function liquid.register_liquid(def)
 				-- This means it is ready to spread.
 
 				-- Get the next level from a table
-				local new_level = level_tb[support_level]
+				lt_new_level = level_tb[support_level]
 
 				local d101 = core.registered_nodes[n101.name]
 
@@ -498,60 +601,27 @@ function liquid.register_liquid(def)
 					else
 						-- The liquid already flows down
 					end
-				elseif new_level and new_level > 0 then
+				elseif lt_new_level and lt_new_level > 0 then
 
 					local is_new_map = false
-					if not map then
+					if not lt_map then
 						-- Make a new map if there is none.
-						map = path_find(p111)
-						if not map then
+						lt_map = path_find(p111)
+						if not lt_map then
 							return
 						end
 						is_new_map = true
 					end
 
+					lt_new_liquid = make_liquid(lt_new_level)
 
-					local function push()
-						-- This function pushes the liquid in all four directions if the
-						-- map wants that and the real node there is actually floodable.
-						-- The number of *potential* floods are counted. If the count
-						-- remains 0, the map is no longer suitable.
-						local cnt_flood = 0
-						local new_liquid = make_liquid(new_level)
-
-						local function flood(p, n, l)
-							local m = map(p)
-							if m and m == new_level then
-								if is_floodable(n) then
-									cnt_flood = cnt_flood + 1
-
-									if new_level > (l or 0) then
-										update_next({pos=p, map=map})
-										set_node(p, new_liquid)
-
-									elseif n111.name == NAME_SOURCE and l and l == 7 then
-										-- Give it a chance to renew
-										update_next({pos=p, map=map})
-									end
-								end
-							end
-						end
-
-						flood(p011, n011, l011)
-						flood(p211, n211, l211)
-						flood(p110, n110, l110)
-						flood(p112, n112, l112)
-						return cnt_flood
-
-					end
-
-					if push() == 0 and not is_new_map then
+					if lt_push_horizontal() == 0 and not is_new_map then
 						-- The map might be outdated, try once more with a new map
-						map = path_find(p111)
-						if not map then
+						lt_map = path_find(p111)
+						if not lt_map then
 							return
 						end
-						push()
+						lt_push_horizontal()
 					end
 				end
 
@@ -762,9 +832,16 @@ function liquid.register_liquid(def)
 				local q = update_next_set
 
 				-- Reset the containers for reuse
-				update_next_set = {}
-				read_nodes = {}
-				changed_nodes = {}
+				if update_next_set == update_next_set_A then
+					hmap_clear(update_next_set_B)
+					update_next_set = update_next_set_B
+				else
+					hmap_clear(update_next_set_A)
+					update_next_set = update_next_set_A
+				end
+
+				hmap_clear(read_nodes)
+				hmap_clear(changed_nodes)
 
 				for _, item in pairs(q) do
 					-- Do the flow magic
