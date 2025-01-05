@@ -117,6 +117,17 @@ function liquid.register_liquid(def)
 		end
 	end
 
+	local function hmap_clear(tb)
+		for k, _ in pairs(tb) do
+			tb[k] = nil
+		end
+	end
+
+	local function arr_clear(tb)
+		for k, _ in ipairs(tb) do
+			tb[k] = nil
+		end
+	end
 
 
 	local function is_liquid(node)
@@ -168,6 +179,60 @@ function liquid.register_liquid(def)
 		return false
 	end
 
+	-- The list of nodes to be updated next.
+	-- Two of them for GC-free swapping
+	local pf_search_list_A = { }
+	local pf_search_list_B = { }
+	local pf_search_list
+
+	-- The map of potential liquid levels.
+	local pf_pmap = {}
+
+	-- An array of node positions that hit a slope.
+	-- Two of them for GC-free swapping
+	local pf_found_A = { }
+	local pf_found_B = { }
+	local pf_found
+
+	local pf_ok = true
+
+	local function pf_step(pos, level)
+		-- This function checks if the current position has an obstacle or a
+		-- slope.
+
+		local h = core.hash_node_position(pos)
+		if pf_pmap[h] == nil then
+			local n1 = get_node(pos)
+			local n2 = get_node(vector.offset(pos,  0,-1, 0))
+
+			if not (n1 and n2) then
+				pf_ok = false
+				return
+			end
+
+			local l1 = get_liquid_level(n1)
+
+			local f1 = is_floodable(n1)
+			local f2 = is_floodable(n2)
+
+			if f1 and f2 then 
+				pf_found[#pf_found+1] = pos
+				pf_pmap[h] = level
+			elseif f1 and (l1 or 0) <= level then
+				pf_search_list[#pf_search_list+1] = pos
+				pf_pmap[h] = level
+			end
+		end
+	end
+
+	local function pf_back_trace(p, level)
+		local h = core.hash_node_position(p)
+		local m = pf_pmap[h]
+		if m and m > level then
+			pf_found[#pf_found+1] = p
+		end
+	end
+
 
 	local function path_find(pos, slope_dist)
 		-- This function searches the nearest slopes within a maximum path distance
@@ -181,53 +246,29 @@ function liquid.register_liquid(def)
 			return function (pos) return nil end
 		end
 
+		-- initialize the variables.
+		pf_ok = true
 
-		-- The list of nodes to be updated next.
-		local search_list = { pos }
+		arr_clear(pf_search_list_A)
+		arr_clear(pf_search_list_B)
+		pf_search_list = pf_search_list_A
 
-		-- The map of potential liquid levels.
-		local pmap = {}
+		pf_search_list[1] = pos
+
+		hmap_clear(pf_pmap)
 
 		-- An array of node positions that hit a slope.
-		local found = {}
+		arr_clear(pf_found_A)
+		arr_clear(pf_found_B)
+		pf_found = pf_found_A
 
 		-- The map containing the real paths (decreasing liquid levels from origin
 		-- to slope) (the result)
+		-- rmap is intentionally GC collectable, this reference will run wild!
 		local rmap = {}
 
-		local ok = true
 
-		local function step(pos, level)
-			-- This function checks if the current position has an obstacle or a
-			-- slope.
-
-			local h = core.hash_node_position(pos)
-			if pmap[h] == nil then
-				local n1 = get_node(pos)
-				local n2 = get_node(vector.offset(pos,  0,-1, 0))
-
-				if not (n1 and n2) then
-					ok = false
-					return
-				end
-
-				local l1 = get_liquid_level(n1)
-
-				local f1 = is_floodable(n1)
-				local f2 = is_floodable(n2)
-
-				if f1 and f2 then 
-					found[#found+1] = pos
-					pmap[h] = level
-				elseif f1 and (l1 or 0) <= level then
-					search_list[#search_list+1] = pos
-					pmap[h] = level
-				end
-			end
-		end
-
-
-		pmap[core.hash_node_position(pos)] = orig_level
+		pf_pmap[core.hash_node_position(pos)] = orig_level
 
 		local level = orig_level
 
@@ -239,61 +280,70 @@ function liquid.register_liquid(def)
 				break
 			end
 
-			local l = search_list
-			search_list = {}
+			local l = pf_search_list
+
+			-- Swap the search lists
+			if pf_search_list == pf_search_list_A then
+				arr_clear(pf_search_list_B)
+				pf_search_list = pf_search_list_B
+			else
+				arr_clear(pf_search_list_A)
+				pf_search_list = pf_search_list_A
+			end
 
 			for i, p in ipairs(l) do
 				-- Step into all 4 directions
-				step(vector.offset(p, -1, 0, 0), level)
-				step(vector.offset(p,  1, 0, 0), level)
-				step(vector.offset(p,  0, 0,-1), level)
-				step(vector.offset(p,  0, 0, 1), level)
+				pf_step(vector.offset(p, -1, 0, 0), level)
+				pf_step(vector.offset(p,  1, 0, 0), level)
+				pf_step(vector.offset(p,  0, 0,-1), level)
+				pf_step(vector.offset(p,  0, 0, 1), level)
 
-				if not ok then
+				if not pf_ok then
 					break
 				end
 			end
 
-			if not ok or #found > 0 then
+			if not pf_ok or #pf_found > 0 then
 				break
 			end
 		end 
 
-		if ok then
-			if #found == 0 then
+		if pf_ok then
+			if #pf_found == 0 then
 				-- If we hit the minimum level without finding a slope. The liquid
 				-- shall flow in all directions where there is no obstacle. The
 				-- potential map becomes the real map.
-				rmap = pmap
+				rmap = pf_pmap
+				-- Let the reference run wild
+				pf_pmap = {}
 			else 
 				-- If a slope within range was found we need to remove all levels that
 				-- are not part of the shortest path to those slopes.
 
-				local back_list = found
-				found = nil
 
-				while #back_list > 0 do
-					--for nlevel = level, orig_level do
-					local l = back_list
-					back_list = {}
+				while #pf_found > 0 do
+
+					local l = pf_found
+
+					if pf_found == pf_found_A then
+						arr_clear(pf_found_B)
+						pf_found = pf_found_B
+					else
+						arr_clear(pf_found_A)
+						pf_found = pf_found_A
+					end
+
 					for i, p in ipairs(l) do
 						local h = core.hash_node_position(p)
-						local level = pmap[h]
+						local level = pf_pmap[h]
 						rmap[h] = level
 
-						local function back_trace(p)
-							local h = core.hash_node_position(p)
-							local m = pmap[h]
-							if m and m > level then
-								back_list[#back_list+1] = p
-							end
-						end
 
 						-- Search the origin.
-						back_trace(vector.offset(p, -1, 0, 0))
-						back_trace(vector.offset(p,  1, 0, 0))
-						back_trace(vector.offset(p,  0, 0,-1))
-						back_trace(vector.offset(p,  0, 0, 1))
+						pf_back_trace(vector.offset(p, -1, 0, 0), level)
+						pf_back_trace(vector.offset(p,  1, 0, 0), level)
+						pf_back_trace(vector.offset(p,  0, 0,-1), level)
+						pf_back_trace(vector.offset(p,  0, 0, 1), level)
 					end
 				end
 			end
