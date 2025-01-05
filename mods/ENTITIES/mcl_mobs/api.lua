@@ -610,7 +610,7 @@ function mob_class:on_step (dtime, moveresult)
 		self:navigation_step (dtime, moveresult)
 		self:movement_step (dtime, moveresult)
 		self:motion_step (phys_dtime, moveresult, pos)
-		self:check_lead()
+		mcl_mobs.check_lead(self)
 	else
 		-- At times damage is applied and kills this mob
 		-- (removing its driver) between `should_drive' and
