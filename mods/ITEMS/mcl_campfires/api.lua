@@ -111,7 +111,7 @@ function mcl_campfires.take_item(pos, _, player, itemstack)
 	end
 end
 
-function mcl_campfires.register_campfire(name, def, dps)
+function mcl_campfires.register_campfire(name, def)
 	-- Define Campfire
 	minetest.register_node(name, {
 		description = def.description,
@@ -250,7 +250,7 @@ function mcl_campfires.register_campfire(name, def, dps)
 		end,
 		_mcl_campfires_smothered_form = name,
 		_pathfinding_class = "DAMAGE_FIRE",
-		damage_per_second = dps,
+		damage_per_second = def.damage * 2,
 	})
 end
 
