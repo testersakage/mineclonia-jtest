@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-05 03:33+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc_basics/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Advanced usage"
 msgstr "Utilisation avancée"
@@ -662,10 +664,13 @@ msgid "• Sneak+Left click: Automatically transfer item stack (Sneak is by defa
 msgstr "• Sneak+Clic gauche : Transfert automatique de la pile d'objets (Sneak est par défaut [Shift])"
 
 msgid "Hotbar"
-msgstr "Barre d'outils"
+msgstr "Barre d’accès rapide"
 
 msgid "At the bottom of the screen you see some squares. This is called the “hotbar”, and contains the items you have put in the last row of your inventory."
-msgstr "En bas de l'écran, vous voyez des carrés. C'est ce qu'on appelle la « barre d'outils », qui contient les objets que vous avez placés dans la dernière ligne de votre inventaire."
+msgstr ""
+"En bas de l'écran, vous voyez des carrés. C'est ce qu'on appelle la « barre "
+"d’accès rapides », qui contient les objets que vous avez placés dans la "
+"dernière ligne de votre inventaire."
 
 msgid "You can change the selected item with the mouse wheel or the keyboard:"
 msgstr "Vous pouvez modifier l'élément sélectionné à l'aide de la molette de la souris ou du clavier :"
@@ -686,7 +691,10 @@ msgid "Tools"
 msgstr "Outils"
 
 msgid "Some items may serve as a tool when wielded. Any item which has some special use which can be directly used by its wielder is considered a tool."
-msgstr "Certains articles peuvent servir d'outil lorsqu'ils sont utilisés. Tout objet ayant une utilité particulière pouvant être directement utilisé par son porteur est considéré comme un outil."
+msgstr ""
+"Certains objets peuvent servir d'outil lorsqu'ils sont utilisés. Tout objet "
+"ayant une utilité particulière pouvant être directement utilisé par son "
+"porteur est considéré comme un outil."
 
 msgid "A common subset of tools are mining tools. These are important to quickly break different types of blocks. Weapons are a kind of tool. There are of course many other possible tools. Special actions of tools are usually done by left-click or right-click."
 msgstr "Les outils d'extraction constituent un sous-ensemble commun d'outils. Ils sont importants pour briser rapidement différents types de blocs. Les armes sont une sorte d'outil. Il existe bien sûr de nombreux autres outils possibles. Les actions spéciales des outils se font généralement par un clic gauche ou un clic droit."
@@ -707,10 +715,14 @@ msgid "Melee weapons deal damage by punching players and other animate objects. 
 msgstr "Les armes de mêlée infligent des dégâts en frappant les joueurs et d'autres objets animés. Il y a deux façons d'attaquer :"
 
 msgid "• Single punch: Left-click once to deal a single punch"
-msgstr "• Coup de poing unique : Cliquez une fois avec le bouton gauche pour traiter un coup de poing"
+msgstr ""
+"• Coup de poing unique : Cliquez une fois avec le bouton gauche pour donner "
+"un coup de poing"
 
 msgid "• Quick punching: Hold down the left mouse button to deal quick repeated punches"
-msgstr "• Poinçonnage rapide : Maintenez le bouton gauche de la souris enfoncé pour effectuer des coups de poing répétés rapidement"
+msgstr ""
+"• Frappe rapide : Maintenez le bouton gauche de la souris enfoncé pour "
+"effectuer des coups de poing répétés rapidement"
 
 msgid "There are two core attributes of melee weapons:"
 msgstr "Il y a deux attributs principaux des armes de mêlée :"
@@ -1404,4 +1416,3 @@ msgstr "Minetest peut être joué seul ou en ligne avec plusieurs joueurs. Le je
 
 msgid "MineClonia is a game that is built on top of the Minetest engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
 msgstr "MineClonia est un jeu construit sur le moteur Minetest qui vise à créer un jeu aussi proche que possible de Minecraft. Il existe cependant de nombreux autres jeux pour Minetest, qui peuvent être installés à partir du menu principal du navigateur de contenu."
-
