@@ -9,7 +9,7 @@ mcl_campfires.register_campfire("mcl_campfires:campfire", {
 	drops = "mcl_core:charcoal_lump 2",
 	lightlevel = minetest.LIGHT_MAX,
 	damage = 1,
-}, 2.0)
+})
 
 -- Register Soul Campfire
 mcl_campfires.register_campfire("mcl_campfires:soul_campfire", {
@@ -23,7 +23,7 @@ mcl_campfires.register_campfire("mcl_campfires:soul_campfire", {
 	groups = {
 		soul_firelike = 1,
 	},
-}, 4.0)
+})
 
 -- Register Campfire Crafting
 minetest.register_craft({
