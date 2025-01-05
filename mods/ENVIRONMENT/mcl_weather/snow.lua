@@ -7,7 +7,7 @@ local psdef= {
 	amount = PARTICLES_COUNT_SNOW,
 	time = 0, --stay on til we turn it off
 	minpos = vector.new(-25,20,-25),
-	maxpos =vector.new(25,25,25),
+	maxpos = vector.new(25,25,25),
 	minvel = vector.new(-0.2,-1,-0.2),
 	maxvel = vector.new(0.2,-4,0.2),
 	minacc = vector.new(0,-1,0),
@@ -111,38 +111,57 @@ if mcl_weather.reg_weathers.snow == nil then
 	}
 end
 
-minetest.register_abm({
-	label = "Snow piles up",
-	nodenames = {"group:opaque","group:leaves","group:snow_cover"},
-	neighbors = {"air"},
-	interval = 27,
-	chance = 33,
-	min_y = mcl_vars.mg_overworld_min,
-	action = function(pos, node)
-		if (mcl_weather.state ~= "rain" and mcl_weather.state ~= "thunder" and mcl_weather.state ~= "snow")
-		or not mcl_weather.has_snow(pos)
-		or node.name == "mcl_core:snowblock" then
-			return end
+if mcl_weather.allow_abm then
+	minetest.register_abm({
+		label = "Snow piles up",
+		nodenames = {"group:opaque","group:leaves","group:snow_cover"},
+		neighbors = {"air"},
+		interval = 27,
+		chance = 33,
+		min_y = mcl_vars.mg_overworld_min,
+		action = function(pos, node)
+			if (mcl_weather.state ~= "rain" and mcl_weather.state ~= "thunder" and mcl_weather.state ~= "snow")
+			or not mcl_weather.has_snow(pos)
+			or node.name == "mcl_core:snowblock" then
+				return end
 
-		local above = vector.offset(pos,0,1,0)
-		local above_node = minetest.get_node(above)
+			local above = vector.offset(pos,0,1,0)
+			local above_node = minetest.get_node(above)
 
-		if above_node.name == "air" and mcl_weather.is_outdoor(pos) then
-			local nn = nil
-			if node.name:find("snow") then
-				local l = node.name:sub(-1)
-				l = tonumber(l)
-				if node.name == "mcl_core:snow" then
-					nn={name = "mcl_core:snow_2"}
-				elseif l and l < 7 then
-					nn={name="mcl_core:snow_"..tostring(math.min(8,l + 1))}
-				elseif l and l >= 7 then
-					nn={name = "mcl_core:snowblock"}
+			if above_node.name == "air" and mcl_weather.is_outdoor(pos) then
+				local nn = nil
+				if node.name:find("snow") then
+					local l = node.name:sub(-1)
+					l = tonumber(l)
+					if node.name == "mcl_core:snow" then
+						nn={name = "mcl_core:snow_2"}
+					elseif l and l < 7 then
+						nn={name="mcl_core:snow_"..tostring(math.min(8,l + 1))}
+					elseif l and l >= 7 then
+						nn={name = "mcl_core:snowblock"}
+					end
+					if nn then minetest.set_node(pos,nn) end
+				else
+					minetest.set_node(above,{name = "mcl_core:snow"})
 				end
-				if nn then minetest.set_node(pos,nn) end
-			else
-				minetest.set_node(above,{name = "mcl_core:snow"})
 			end
 		end
-	end
-})
+	})
+
+	-- Filling up cauldrons with powder snow
+	core.register_abm({
+		label = "Fill cauldrons with powder snow",
+		nodenames = {
+			"mcl_cauldrons:cauldron",
+			"mcl_cauldrons:cauldron_1_powder_snow",
+			"mcl_cauldrons:cauldron_2_powder_snow"
+		},
+		interval = 56.0,
+		chance = 1,
+		action = function(pos)
+			if mcl_weather.snow.init_done and mcl_weather.is_outdoor(pos) and mcl_weather.has_snow(pos) then
+				mcl_cauldrons.add_level(pos, 1, "powder_snow")
+			end
+		end
+	})
+end
