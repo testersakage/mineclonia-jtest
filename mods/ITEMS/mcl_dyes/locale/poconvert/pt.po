@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_dyes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-05 03:33+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_dyes/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "This item is a dye which is used for dyeing and crafting."
 msgstr ""
@@ -20,50 +22,49 @@ msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting.
 msgstr ""
 
 msgid "Black Dye"
-msgstr ""
+msgstr "Corante preto"
 
 msgid "Blue Dye"
-msgstr ""
+msgstr "Corante azul"
 
 msgid "Brown Dye"
-msgstr ""
+msgstr "Corante castanho"
 
 msgid "Cyan Dye"
-msgstr ""
+msgstr "Corante cíano"
 
 msgid "Green Dye"
-msgstr ""
+msgstr "Corante verde"
 
 msgid "Grey Dye"
-msgstr ""
+msgstr "Corante cinzento"
 
 msgid "Light Blue Dye"
-msgstr ""
+msgstr "Corante azul-claro"
 
 msgid "Light Grey Dye"
-msgstr ""
+msgstr "Corante cinzento-claro"
 
 msgid "Lime Dye"
-msgstr ""
+msgstr "Corante verde-lima"
 
 msgid "Magenta Dye"
-msgstr ""
+msgstr "Corante magenta"
 
 msgid "Orange Dye"
-msgstr ""
+msgstr "Corante laranja"
 
 msgid "Pink Dye"
-msgstr ""
+msgstr "Corante rosa"
 
 msgid "Purple Dye"
-msgstr ""
+msgstr "Corante roxo"
 
 msgid "Red Dye"
-msgstr ""
+msgstr "Corante vermelho"
 
 msgid "White Dye"
-msgstr ""
+msgstr "Corante branco"
 
 msgid "Yellow Dye"
-msgstr ""
-
+msgstr "Corante amarelo"
