@@ -351,9 +351,9 @@ core.register_lbm({
 
 core.register_lbm({
 	action = function(pos, node)
-		local level = node.name:sub(24):gsub("r", "")
+		local level = node.name:sub(24, -2)
 
-		core.swap_node(pos, {name = "mcl_cauldrons:cauldron_" .. level .. "_rive_water"})
+		core.swap_node(pos, {name = "mcl_cauldrons:cauldron_" .. level .. "_river_water"})
 	end,
 	label = "Replace old river water cauldrons",
 	name = "mcl_cauldrons:replace_river_water",
