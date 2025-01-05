@@ -1,35 +1,88 @@
 mcl_cauldrons = {}
+mcl_cauldrons.liquids = {
+	lava = {
+		bucket = "mcl_buckets:bucket_lava",
+		node = "mcl_core:lava_source"
+	},
+	powder_snow = {
+		bucket = "mcl_powder_snow:bucket_powder_snow",
+		node = "mcl_powder_snow:powder_snow"
+	},
+	river_water = {
+		bucket = "mcl_buckets:bucket_river_water",
+		node = "mclx_core:river_water_source"
+	},
+	water = {
+		bucket = "mcl_buckets:bucket_water",
+		node = "mcl_core:water_source"
+	}
+}
+
 local S = core.get_translator(core.get_current_modname())
 
--- Cauldron mod, adds cauldrons.
-
 local function sound_place(itemname, pos)
-	local def = core.registered_nodes[itemname]
-	if def and def.sounds and def.sounds.place then
-		core.sound_play(def.sounds.place, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
+	local n_defs = core.registered_nodes[itemname]
+
+	if n_defs and n_defs.sounds and n_defs.sounds.place then
+		core.sound_play(n_defs.sounds.place, {
+			gain = 1.0,
+			pitch = 1 + math.random(-10, 10) * 0.005,
+			pos = pos,
+		}, true)
 	end
 end
 
 local function sound_take(itemname, pos)
-	local def = core.registered_nodes[itemname]
-	if def and def.sounds and def.sounds.dug then
-		core.sound_play(def.sounds.dug, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
+	local n_defs = core.registered_nodes[itemname]
+
+	if n_defs and n_defs.sounds and n_defs.sounds.dug then
+		core.sound_play(n_defs.sounds.dug, {
+			gain = 1.0,
+			pitch = 1 + math.random(-10, 10) * 0.005,
+			pos = pos
+		}, true)
 	end
 end
 
--- Convenience function because the cauldron nodeboxes are very similar
-local function create_cauldron_nodebox(water_level)
-	local floor_y = -0.1875
+function mcl_cauldrons.get_cauldron_name(level, liquid)
+	level = math.min(3, level)
+	level = math.max(0, level)
 
-	if water_level == 1 then	-- 1/3 filled
-		floor_y = 1/16
-	elseif water_level == 2 then	-- 2/3 filled
-		floor_y = 4/16
-	elseif water_level == 3 then	-- full
-		floor_y = 7/16
+	if level == 0 then return "mcl_cauldrons:cauldron" end
+
+	return "mcl_cauldrons:cauldron_" .. level .. "_" .. liquid
+end
+
+function mcl_cauldrons.add_level(pos, amount, liquid)
+	local node = core.get_node(pos)
+
+	if minetest.get_item_group(node.name, "cauldron") == 0 then return end
+
+	amount = tonumber(amount) or 1
+
+	local level = core.get_item_group(node.name, "cauldron_filled")
+	local n_defs = core.registered_nodes[node.name]
+	local liquid = n_defs and n_defs._mcl_cauldrons_liquid or liquid
+
+	if amount ~= 0 and liquid then
+		if amount > 0 then
+			sound_place(mcl_cauldrons.liquids[liquid].node, pos)
+		else
+			sound_take(mcl_cauldrons.liquids[liquid].node, pos)
+		end
+
+		node.name = mcl_cauldrons.get_cauldron_name(level + amount, liquid)
+
+		mcl_redstone.swap_node(pos, node)
+
+		return true
 	end
+end
+
+local function get_node_box(level)
+	local floor_y = (level * 3 - 2) / 16
+
 	return {
-		type = "fixed",
 		fixed = {
 			{-0.5, -0.1875, -0.5, -0.375, 0.5, 0.5}, -- Left wall
 			{0.375, -0.1875, -0.5, 0.5, 0.5, 0.5}, -- Right wall
@@ -44,221 +97,268 @@ local function create_cauldron_nodebox(water_level)
 			{0.25, -0.5, 0.375, 0.375, -0.3125, 0.5}, -- Right back foot, part 2
 			{0.375, -0.5, -0.5, 0.5, -0.3125, -0.25}, -- Right front foot, part 1
 			{0.25, -0.5, -0.5, 0.375, -0.3125, -0.375}, -- Right front foot, part 2
-		}
+		},
+		type = "fixed"
 	}
 end
 
-local cauldron_ids = {
-	water = "",
-	river_water = "r",
-	lava = "_lava",
-}
+local function return_bucket(itemstack, placer, pointed_thing)
+	if not placer or not placer:is_player() then return end
 
-local liquid_nodes = {
-	water = "mcl_core:water_source",
-	river_water = "mclx_core:river_water_source",
-	lava = "mcl_core:lava_source",
-}
+	if not core.is_creative_enabled(placer:get_player_name()) then
+		if itemstack:get_count() == 1 then
+			itemstack:set_name("mcl_buckets:bucket_empty")
 
-local buckets = {
-	water = "mcl_buckets:bucket_water",
-	river_water = "mcl_buckets:bucket_river_water",
-	lava = "mcl_buckets:bucket_lava",
-}
-
-function mcl_cauldrons.get_cauldron_name(level, liquid)
-	level = math.min(3, level)
-	level = math.max(0, level)
-	if level == 0 then return "mcl_cauldrons:cauldron" end
-	return "mcl_cauldrons:cauldron_"..level..cauldron_ids[liquid or "water"]
-end
-
-function mcl_cauldrons.add_level(pos, amount, liquid)
-	local node = core.get_node(pos)
-	if minetest.get_item_group(node.name, "cauldron") == 0 then return end
-	amount = tonumber(amount) or 1
-	local water_level = core.get_item_group(node.name, "cauldron_filled")
-	local def = core.registered_nodes[node.name]
-	local liquid = def and def._mcl_cauldrons_liquid or liquid
-	if amount ~= 0 and liquid then
-		if amount > 0 then
-			sound_place(liquid_nodes[liquid], pos)
-		else
-			sound_take(liquid_nodes[liquid], pos)
+			return itemstack
 		end
-		node.name = mcl_cauldrons.get_cauldron_name(water_level + amount, liquid)
-		mcl_redstone.swap_node(pos, node)
-		return true
+
+		itemstack:take_item()
+
+		local inv = placer:get_inventory()
+		local rest = inv:add_item("main","mcl_buckets:bucket_empty")
+
+		if not rest:is_empty() then
+			mcl_util.drop_item_stack(pointed_thing.above, rest)
+		end
 	end
 end
 
-
-local function bucket_place(itemstack,placer,pointed_thing)
+local function bucket_place(itemstack, placer, pointed_thing)
 	local name = core.get_node(pointed_thing.under).name
-	if core.get_item_group(name, "cauldron_filled")  >= 3 then return itemstack end
-	local def = core.registered_nodes[name]
-	local l = itemstack:get_definition()._mcl_buckets_liquid
-	if def and l and ( def._mcl_cauldrons_liquid == l or core.get_item_group(name, "cauldron") == 1 ) then
-		mcl_cauldrons.add_level(pointed_thing.under, 3, l)
-		if not core.is_creative_enabled(placer:get_player_name()) then
+
+	if core.get_item_group(name, "cauldron_filled") >= 3 then return itemstack end
+
+	local n_defs = core.registered_nodes[name]
+	local c_liquid = n_defs and n_defs._mcl_cauldrons_liquid
+	local b_liquid = itemstack:get_definition()._mcl_buckets_liquid
+
+	if n_defs._mcl_cauldrons_fill_empty then
+		local sucess = core.place_node(pointed_thing.above, {
+			name = mcl_cauldrons.liquids[b_liquid].node
+		})
+
+		if sucess and not core.is_creative_enabled(placer:get_player_name()) then
+			return return_bucket(itemstack, placer, pointed_thing)
+		end
+	end
+
+	if c_liquid == b_liquid or core.get_item_group(name, "cauldron") == 1 then
+		mcl_cauldrons.add_level(pointed_thing.under, 3, b_liquid)
+
+		return_bucket(itemstack, placer, pointed_thing)
+	end
+
+	return itemstack
+end
+
+local function bucket_place_empty(itemstack, placer, pointed_thing)
+	local name = core.get_node(pointed_thing.under).name
+
+	if core.get_item_group(name, "cauldron_filled") < 3 then return itemstack end
+
+	mcl_cauldrons.add_level(pointed_thing.under, -3)
+
+	if not core.is_creative_enabled(placer:get_player_name()) then
+		local c_liquid = core.registered_nodes[name]._mcl_cauldrons_liquid
+		local bucket = c_liquid and mcl_cauldrons.liquids[c_liquid].bucket
+
+		if bucket then
 			if itemstack:get_count() == 1 then
-				itemstack:set_name("mcl_buckets:bucket_empty")
+				itemstack:set_name(bucket)
+
 				return itemstack
 			end
+
 			itemstack:take_item()
+
 			local inv = placer:get_inventory()
-			local rest = inv:add_item("main","mcl_buckets:bucket_empty")
+			local rest = inv:add_item("main", bucket)
+
 			if not rest:is_empty() then
 				mcl_util.drop_item_stack(pointed_thing.above, rest)
 			end
 		end
 	end
+
 	return itemstack
 end
 
--- Empty cauldron
 core.register_node("mcl_cauldrons:cauldron", {
-	description = S("Cauldron"),
-	_tt_help = S("Stores water"),
 	_doc_items_longdesc = S("Cauldrons are used to store water and slowly fill up under rain."),
 	_doc_items_usagehelp = S("Place a water bucket into the cauldron to fill it with water. Place an empty bucket on a full cauldron to retrieve the water. Place a water bottle into the cauldron to fill the cauldron to one third with water. Place a glass bottle in a cauldron with water to retrieve one third of the water."),
-	wield_image = "mcl_cauldrons_cauldron.png",
-	inventory_image = "mcl_cauldrons_cauldron.png",
-	use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false,
+	_mcl_blast_resistance = 2,
+	_mcl_hardness = 2,
+	_on_bucket_place = bucket_place,
+	_tt_help = S("Stores water"),
+	description = S("Cauldron"),
 	drawtype = "nodebox",
-	paramtype = "light",
+	groups = {_mcl_partial = 2, cauldron = 1, comparator_signal = 0, deco_block = 1, pickaxey = 1},
+	inventory_image = "mcl_cauldrons_cauldron.png",
 	is_ground_content = false,
-	groups = {pickaxey=1, deco_block=1, cauldron=1, comparator_signal=0, _mcl_partial=2},
-	node_box = create_cauldron_nodebox(0),
-	selection_box = { type = "regular" },
+	node_box = get_node_box(0),
+	paramtype = "light",
+	selection_box = {type = "regular"},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
 	tiles = {
 		"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_top.png",
 		"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_bottom.png",
 		"mcl_cauldrons_cauldron_side.png"
 	},
-	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_mcl_hardness = 2,
-	_mcl_blast_resistance = 2,
-	_on_bucket_place = bucket_place,
+	wield_image = "mcl_cauldrons_cauldron.png",
+	use_texture_alpha = "opaque"
 })
 
--- Template function for cauldrons with water
-local function register_filled_cauldron(water_level, description, liquid)
-	local id = mcl_cauldrons.get_cauldron_name(water_level, liquid)
-	local water_tex
-	local light_level = 0
-	local cauldron_water = 0
-	if liquid == "river_water" then
-		cauldron_water = 2
-		water_tex = "default_river_water_source_animated.png^[verticalframe:16:0"
-	elseif liquid == "lava" then
-		light_level = core.LIGHT_MAX
-		water_tex = "default_lava_source_animated.png^[verticalframe:16:0"
-	else
-		cauldron_water = 1
-		water_tex = "default_water_source_animated.png^[verticalframe:16:0"
+--- Register filled cauldrons based on it's bucket counterpart
+--- @param id string
+--- @param defs table
+--- @param overrides table|nil
+function mcl_cauldrons.register_filled_cauldron(id, defs, overrides)
+	if not mcl_cauldrons.liquids[id] then
+		mcl_cauldrons.liquids[id].bucket = defs.bucket
+		mcl_cauldrons.liquids[id].node = defs.node
 	end
-	core.register_node(id, {
-		description = description,
-		_doc_items_create_entry = false,
-		use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false,
-		drawtype = "nodebox",
-		paramtype = "light",
-		light_source = light_level,
-		is_ground_content = false,
-		groups = {pickaxey=1, not_in_creative_inventory=1, cauldron=(1+water_level), cauldron_filled=water_level, comparator_signal=water_level, cauldron_water = cauldron_water, _mcl_partial = 2},
-		node_box = create_cauldron_nodebox(water_level),
-		collision_box = create_cauldron_nodebox(0),
-		selection_box = { type = "regular" },
-		tiles = {
-			"("..water_tex..")^mcl_cauldrons_cauldron_top.png",
-			"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_bottom.png",
-			"mcl_cauldrons_cauldron_side.png"
-		},
-		sounds = mcl_sounds.node_sound_metal_defaults(),
-		drop = "mcl_cauldrons:cauldron",
-		_mcl_hardness = 2,
-		_mcl_blast_resistance = 2,
-		_mcl_cauldrons_liquid = liquid or "water",
-		_mcl_baseitem = "mcl_cauldrons:cauldron",
-		_on_bucket_place = bucket_place,
-		_on_bucket_place_empty  = function(itemstack,placer,pointed_thing)
-			local name = core.get_node(pointed_thing.under).name
-			if core.get_item_group(name, "cauldron_filled") < 3 then return itemstack end
-			mcl_cauldrons.add_level(pointed_thing.under, -3)
-			if not core.is_creative_enabled(placer:get_player_name()) then
-				local def = core.registered_nodes[name]
-				if def and def._mcl_cauldrons_liquid and buckets[def._mcl_cauldrons_liquid] then
-					if itemstack:get_count() == 1 then
-						itemstack:set_name(buckets[def._mcl_cauldrons_liquid])
-						return itemstack
-					end
-					itemstack:take_item()
-					local inv = placer:get_inventory()
-					local rest = inv:add_item("main", buckets[def._mcl_cauldrons_liquid])
-					if not rest:is_empty() then
-						mcl_util.drop_item_stack(pointed_thing.above, rest)
-					end
-				end
-			end
-			return itemstack
-		end,
-	})
 
-	-- Add entry aliases for the Help
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", "mcl_cauldrons:cauldron", "nodes", id)
-	end
-end
+	for i = 1, 3 do
+		local name = "mcl_cauldrons:cauldron_" .. i .. "_" .. id
 
--- Filled cauldrons (3 levels)
-for i=1,3 do
-	register_filled_cauldron(i, S("Cauldron (@1/3 Water)", i))
-	register_filled_cauldron(i, S("Cauldron (@1/3 Lava)", i),"lava")
-	if core.get_modpath("mclx_core") then
-		register_filled_cauldron(i, S("Cauldron (@1/3 River Water)", i),"river_water")
+		core.register_node(name, table.merge({
+			_doc_items_create_entry = false,
+			_mcl_baseitem = "mcl_cauldrons:cauldron",
+			_mcl_blast_resistance = 2,
+			_mcl_cauldrons_liquid = id,
+			_mcl_hardness = 2,
+			_on_bucket_place = bucket_place,
+			_on_bucket_place_empty = bucket_place_empty,
+			collision_box = get_node_box(0),
+			description = S(defs.description, i),
+			drawtype = "nodebox",
+			drop = "mcl_cauldrons:cauldron",
+			groups = table.merge({
+				_mcl_partial = 2, cauldron = (1 + i), cauldron_filled = i,
+				comparator_signal = i, not_in_creative_inventory = 1, pickaxey = 1
+			}, defs.groups or {}),
+			is_ground_content = false,
+			node_box = get_node_box(i),
+			paramtype = "light",
+			selection_box = {type = "regular"},
+			sounds = mcl_sounds.node_sound_metal_defaults(),
+			tiles = {
+				defs.liquid_texture.."^mcl_cauldrons_cauldron_top.png",
+				"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_bottom.png",
+				"mcl_cauldrons_cauldron_side.png"
+			},
+			use_texture_alpha = "opaque"
+		}, overrides or {}))
 	end
 end
 
 core.register_craft({
 	output = "mcl_cauldrons:cauldron",
 	recipe = {
-		{ "mcl_core:iron_ingot", "", "mcl_core:iron_ingot" },
-		{ "mcl_core:iron_ingot", "", "mcl_core:iron_ingot" },
-		{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot" },
+		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
+		{"mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot"}
 	}
 })
 
 local function cauldron_extinguish(obj,pos)
 	local node = core.get_node(pos)
+
 	if mcl_burning.is_burning(obj) then
 		mcl_burning.extinguish(obj)
+
 		local new_group = core.get_item_group(node.name, "cauldron_filled") - 1
-		core.swap_node(pos, {name = "mcl_cauldrons:cauldron" .. (new_group == 0 and "" or "_" .. new_group)})
+		local liquid = core.registered_nodes[node.name]._mcl_cauldrons_liquid
+		local subname = new_group == 0 and "" or new_group .. "_" .. liquid
+		local new_name = "mcl_cauldrons:cauldron_" .. subname
+
+		core.swap_node(pos, {name = new_name})
 	end
 end
 
 local etime = 0
+
 core.register_globalstep(function(dtime)
 	etime = dtime + etime
+
 	if etime < 0.5 then return end
+
 	etime = 0
+
 	for pl in mcl_util.connected_players() do
-		local n = core.find_node_near(pl:get_pos(),0.4,{"group:cauldron_filled"},true)
+		local n = core.find_node_near(pl:get_pos(), 0.4, {"group:cauldron_filled"}, true)
+
 		if n and not core.get_node(n).name:find("lava") then
-			cauldron_extinguish(pl,n)
+			cauldron_extinguish(pl, n)
 		elseif n and core.get_node(n).name:find("lava") then
-				mcl_burning.set_on_fire(pl, 5)
+			mcl_burning.set_on_fire(pl, 5)
 		end
 	end
-	for _,ent in pairs(core.luaentities) do
-		if ent.object:get_pos() and ent.is_mob then
-			local n = core.find_node_near(ent.object:get_pos(),0.4,{"group:cauldron_filled"},true)
+
+	for _, ent in pairs(core.luaentities) do
+		local pos = ent.object:get_pos()
+
+		if pos and ent.is_mob then
+			local n = core.find_node_near(pos, 0.4, {"group:cauldron_filled"}, true)
+
 			if n and not core.get_node(n).name:find("lava") then
-				cauldron_extinguish(ent.object,n)
+				cauldron_extinguish(ent.object, n)
 			elseif n and core.get_node(n).name:find("lava") then
 				mcl_burning.set_on_fire(ent.object, 5)
 			end
 		end
 	end
 end)
+
+mcl_cauldrons.register_filled_cauldron("lava", {
+	description = "Cauldron (@1/3) Lava",
+	liquid_texture = "default_lava_source_animated.png^[verticalframe:16:0"
+}, {light_source = core.LIGHT_MAX})
+
+mcl_cauldrons.register_filled_cauldron("powder_snow", {
+	description = "Cauldron (@1/3) Powder Snow",
+	liquid_texture = "powder_snow.png"
+}, {
+	_mcl_cauldrons_fill_empty = true
+})
+
+mcl_cauldrons.register_filled_cauldron("water", {
+	description = "Cauldron (@1/3) Water",
+	liquid_texture = "default_water_source_animated.png^[verticalframe:16:0"
+})
+
+if core.get_modpath("mclx_core") then
+	mcl_cauldrons.register_filled_cauldron("river_water", {
+		description = "Cauldron (@1/3) River Water",
+		liquid_texture = "default_river_water_source_animated.png^[verticalframe:16:0"
+	})
+end
+
+-- Legacy lbms
+core.register_lbm({
+	action = function(pos, node)
+		local level = node.name:sub(24)
+
+		core.swap_node(pos, {name = "mcl_cauldrons:cauldron_" .. level .. "_water"})
+	end,
+	label = "Replace old water cauldrons",
+	name = "mcl_cauldrons:replace_water",
+	nodenames = {
+		"mcl_cauldrons:cauldron_1", "mcl_cauldrons:cauldron_2", "mcl_cauldrons:cauldron_3"
+	},
+	run_at_every_load = false
+})
+
+core.register_lbm({
+	action = function(pos, node)
+		local level = node.name:sub(24):gsub("r", "")
+
+		core.swap_node(pos, {name = "mcl_cauldrons:cauldron_" .. level .. "_rive_water"})
+	end,
+	label = "Replace old river water cauldrons",
+	name = "mcl_cauldrons:replace_river_water",
+	nodenames = {
+		"mcl_cauldrons:cauldron_1r", "mcl_cauldrons:cauldron_2r", "mcl_cauldrons:cauldron_3r"
+	},
+	run_at_every_load = false
+})
