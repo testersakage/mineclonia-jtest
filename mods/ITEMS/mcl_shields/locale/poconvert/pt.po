@@ -3,67 +3,68 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_shields x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-05 03:33+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_shields/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Shield"
-msgstr ""
+msgstr "Escudo"
 
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr ""
 
 msgid "White Shield"
-msgstr ""
+msgstr "Escudo branco"
 
 msgid "Grey Shield"
-msgstr ""
+msgstr "Escudo cinzento"
 
 msgid "Light Grey Shield"
-msgstr ""
+msgstr "Escudo cinzento-claro"
 
 msgid "Black Shield"
-msgstr ""
+msgstr "Escudo preto"
 
 msgid "Red Shield"
-msgstr ""
+msgstr "Escudo vermelho"
 
 msgid "Yellow Shield"
-msgstr ""
+msgstr "Escudo amarelo"
 
 msgid "Green Shield"
-msgstr ""
+msgstr "Escudo verde"
 
 msgid "Cyan Shield"
-msgstr ""
+msgstr "Escudo cíano"
 
 msgid "Blue Shield"
-msgstr ""
+msgstr "Escudo azul"
 
 msgid "Magenta Shield"
-msgstr ""
+msgstr "Escudo magenta"
 
 msgid "Orange Shield"
-msgstr ""
+msgstr "Escudo laranja"
 
 msgid "Violet Shield"
-msgstr ""
+msgstr "Escudo roxo"
 
 msgid "Brown Shield"
-msgstr ""
+msgstr "Escudo castanho"
 
 msgid "Pink Shield"
-msgstr ""
+msgstr "Escudo rosa"
 
 msgid "Lime Shield"
-msgstr ""
+msgstr "Escudo verde-lima"
 
 msgid "Light Blue Shield"
-msgstr ""
-
+msgstr "Escudo azul-claro"
