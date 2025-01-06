@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-05 03:33+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/es/>\n"
@@ -32,7 +32,7 @@ msgid "Hot Topic"
 msgstr "Recién hecho"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr "Usa 8 rocas para fabricar un horno."
+msgstr "Usa 8 adoquines para fabricar un horno."
 
 msgid "Time to Farm!"
 msgstr "¡Hora de cultivar!"
@@ -43,7 +43,7 @@ msgstr ""
 "tablones de madera y palos."
 
 msgid "Bake Bread"
-msgstr "Con un pan debajo del brazo"
+msgstr "Hornea pan"
 
 msgid "Use wheat to craft a bread."
 msgstr "Usa trigo para fabricar pan."
@@ -58,10 +58,10 @@ msgid "Getting an Upgrade"
 msgstr "Consiguiendo una mejora"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr "Fabrica un pico de piedra con palos y rocas."
+msgstr "Fabrica un pico de piedra con palos y adoquín."
 
 msgid "Time to Strike!"
-msgstr "¡Hora de luchar!"
+msgstr "¡Hora de atacar!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
 msgstr ""
@@ -101,13 +101,13 @@ msgstr "Recoja el cuero del suelo. \n"
 "Sugerencia: Las vacas y algunos otros animales tienen la oportunidad de soltar el cuero cuando mueren."
 
 msgid "Getting Wood"
-msgstr "Madera de líder"
+msgstr "Buscamadera"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
-"Recoge un objeto de madera del suelo. \n"
-"Sugerencia: Golpee el tronco de un árbol hasta que salga como un objeto."
+"Recoge un ítem de madera del suelo. \n"
+"Sugerencia: Golpee el tronco de un árbol hasta que salga como un ítem."
 
 msgid "Who is Cutting Onions?"
 msgstr "¿Quién está cortando cebollas?"
@@ -170,7 +170,7 @@ msgid "Kill a monster."
 msgstr "Mata a un monstruo."
 
 msgid "We Need to Go Deeper"
-msgstr "Plus ultra"
+msgstr "Tenemos que ir más profundo"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
@@ -256,7 +256,7 @@ msgid "Use a compass on a Lodestone."
 msgstr "Imanta una brújula con un bloque de magnetita."
 
 msgid "Serious Dedication"
-msgstr "Malos hábitos"
+msgstr "Dedicación seria"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
 msgstr ""
@@ -275,7 +275,7 @@ msgid "Enchanter"
 msgstr "Hechicero"
 
 msgid "Enchant an item using an Enchantment Table."
-msgstr "Encanta un objeto usando la mesa de encantamientos."
+msgstr "Encanta un ítem usando la mesa de encantamientos."
 
 msgid "Bring Home the Beacon"
 msgstr "Hágase la luz"
@@ -340,7 +340,7 @@ msgid "Place a dispenser."
 msgstr "Coloca un dispensador."
 
 msgid "Pork Chop"
-msgstr "¡Qué chuleta!"
+msgstr "Chuleta de cerdo"
 
 msgid "Eat a cooked porkchop."
 msgstr "Come una chuleta de cerdo cocinado."
