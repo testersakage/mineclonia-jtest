@@ -310,6 +310,7 @@ mcl_cauldrons.register_filled_cauldron("lava", {
 
 mcl_cauldrons.register_filled_cauldron("water", {
 	description_name = S("Water"),
+	groups = {cauldron_water = 1},
 	liquid_texture = "default_water_source_animated.png^[verticalframe:16:0"
 })
 

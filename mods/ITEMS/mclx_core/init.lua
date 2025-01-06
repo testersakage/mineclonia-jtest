@@ -56,6 +56,7 @@ doc.add_entry_alias("nodes", "mclx_core:river_water_source", "nodes", "mclx_core
 mcl_cauldrons.register_filled_cauldron("river_water", {
 	bucket = "mcl_buckets:bucket_river_water",
 	description_name = S("River Water"),
+	groups = {cauldron_water = 1},
 	liquid_texture = "default_river_water_source_animated.png^[verticalframe:16:0",
 	node = "mclx_core:river_water_source"
 })
