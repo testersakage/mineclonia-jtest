@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_craftguide x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 18:27+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_craftguide/es/>\n"
@@ -72,10 +72,10 @@ msgid "Any stick"
 msgstr "Cualquier palo"
 
 msgid "Any item belonging to the @1 group"
-msgstr "Cualquier objeto del grupo @1"
+msgstr "Cualquier ítem del grupo @1"
 
 msgid "Any item belonging to the groups: @1"
-msgstr "Cualquier objeto de los grupos: @1"
+msgstr "Cualquier ítem de los grupos: @1"
 
 msgid "Cooking time: @1"
 msgstr "Tiempo de cocción: @1"
@@ -120,21 +120,21 @@ msgid "Next page"
 msgstr "Siguiente página"
 
 msgid "No item to show"
-msgstr "No hay objeto para mostrar"
+msgstr "No hay ítem para mostrar"
 
 msgid "Collect items to reveal more recipes"
-msgstr "Recolecta objetos para revelar más recetas"
+msgstr "Recolecta ítems para revelar más recetas"
 
 msgid "Invalid crafting ingredient: \"@1\" (dosent exist)"
 msgstr "Ingrediente de fabricación inválido: \"@1\" (no existe)"
 
 msgid "This item can be repaired at an anvil with: @1."
-msgstr "Este objeto puede ser reparado en un yunque con: @1."
+msgstr "Este ítem puede ser reparado en un yunque con: @1."
 
 msgid "This item can be repaired at an anvil with any wooden planks."
 msgstr ""
-"Este objeto puede ser reparado en un yunque con cualquier tabla de madera."
+"Este ítem puede ser reparado en un yunque con cualquier tabla de madera."
 
 msgid "This item can be repaired at an anvil with any item in the “@1” group."
 msgstr ""
-"Este objeto puede ser reparado en yunque con cualquier objeto del grupo: @1."
+"Este ítem puede ser reparado en yunque con cualquier ítem del grupo: @1."
