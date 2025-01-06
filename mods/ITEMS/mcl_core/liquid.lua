@@ -129,6 +129,20 @@ function liquid.register_liquid(def)
 	local lt_new_liquid
 
 
+	local function vector_add_to(v, x, y, z)
+		v.x = v.x + x
+		v.y = v.y + y
+		v.z = v.z + z
+	end
+
+	function get_position_from_hash(v, hash)
+		v.x = (hash % 65536) - 32768
+		hash  = math.floor(hash / 65536)
+		v.y = (hash % 65536) - 32768
+		hash  = math.floor(hash / 65536)
+		v.z = (hash % 65536) - 32768
+	end
+
 
 
 	local function update_next(item)
@@ -261,14 +275,28 @@ function liquid.register_liquid(def)
 
 
 
-	local function pf_step(pos, level)
+	local pf_step_pos = vector.zero()
+	local function pf_step(hpos, x, y, z, level)
 		-- This function checks if the current position has an obstacle or a
 		-- slope.
+		--
+		-- `hpos`  A hash of the position
+		-- `x`     The shift in the x direction
+		-- `y`     The shift in the y direction
+		-- `z`     The shift in the z direction
+		-- `level` The level at the new position
 
-		local h = core.hash_node_position(pos)
-		if pf_pmap[h] == nil then
-			local n1 = get_node(pos)
-			local n2 = get_node(vector.offset(pos,  0,-1, 0))
+		get_position_from_hash(pf_step_pos, hpos)
+		-- move one horizontal
+		vector_add_to(pf_step_pos, x, y, z)
+		local hpos_next = core.hash_node_position(pf_step_pos)
+
+		if pf_pmap[hpos_next] == nil then
+			local n1 = get_node(pf_step_pos)
+
+			-- move one down
+			vector_add_to(pf_step_pos, 0, -1, 0)
+			local n2 = get_node(pf_step_pos)
 
 			if not (n1 and n2) then
 				pf_ok = false
@@ -281,23 +309,36 @@ function liquid.register_liquid(def)
 			local f2 = is_floodable(n2)
 
 			if f1 and f2 then 
-				pf_found[#pf_found+1] = pos
-				pf_pmap[h] = level
+				pf_found[#pf_found+1] = hpos_next
+				pf_pmap[hpos_next] = level
 			elseif f1 and (l1 or 0) <= level then
-				pf_search_list[#pf_search_list+1] = pos
-				pf_pmap[h] = level
+				pf_search_list[#pf_search_list+1] = hpos_next
+				pf_pmap[hpos_next] = level
 			end
 		end
 	end
 
-	local function pf_back_trace(p, level)
-		local h = core.hash_node_position(p)
-		local m = pf_pmap[h]
+	local pf_back_trace_pos = vector.zero()
+	local function pf_back_trace(hpos, x, y, z, level)
+
+		get_position_from_hash(pf_back_trace_pos, hpos)
+		vector_add_to(pf_back_trace_pos, x, y, z)
+		local hpos_next = core.hash_node_position(pf_back_trace_pos)
+
+		local m = pf_pmap[hpos_next]
 		if m and m > level then
-			pf_found[#pf_found+1] = p
+			pf_found[#pf_found+1] = hpos_next
 		end
 	end
 
+	local function rmap_read(map, pos)
+		if map == 'DUMMY' then
+			return nil
+		end
+
+		local hpos = core.hash_node_position(pos)
+		return map[hpos]
+	end
 
 	local function path_find(pos, slope_dist)
 		-- This function searches the nearest slopes within a maximum path distance
@@ -308,7 +349,7 @@ function liquid.register_liquid(def)
 		local orig_level = get_liquid_level(get_node(pos))
 		if orig_level <= 1 then
 			-- If level of the origin is too small we return a dummy map. 
-			return function (pos) return nil end
+			return 'DUMMY'
 		end
 
 		-- initialize the variables.
@@ -318,7 +359,8 @@ function liquid.register_liquid(def)
 		arr_clear(pf_search_list_B)
 		pf_search_list = pf_search_list_A
 
-		pf_search_list[1] = pos
+		local h = core.hash_node_position(pos)
+		pf_search_list[1] = h
 
 		hmap_clear(pf_pmap)
 
@@ -333,7 +375,7 @@ function liquid.register_liquid(def)
 		local rmap = {}
 
 
-		pf_pmap[core.hash_node_position(pos)] = orig_level
+		pf_pmap[h] = orig_level
 
 		local level = orig_level
 
@@ -356,12 +398,12 @@ function liquid.register_liquid(def)
 				pf_search_list = pf_search_list_A
 			end
 
-			for i, p in ipairs(l) do
+			for i, hpos in ipairs(l) do
 				-- Step into all 4 directions
-				pf_step(vector.offset(p, -1, 0, 0), level)
-				pf_step(vector.offset(p,  1, 0, 0), level)
-				pf_step(vector.offset(p,  0, 0,-1), level)
-				pf_step(vector.offset(p,  0, 0, 1), level)
+				pf_step(hpos, -1, 0, 0, level)
+				pf_step(hpos,  1, 0, 0, level)
+				pf_step(hpos,  0, 0,-1, level)
+				pf_step(hpos,  0, 0, 1, level)
 
 				if not pf_ok then
 					break
@@ -398,17 +440,16 @@ function liquid.register_liquid(def)
 						pf_found = pf_found_A
 					end
 
-					for i, p in ipairs(l) do
-						local h = core.hash_node_position(p)
-						local level = pf_pmap[h]
-						rmap[h] = level
+					for i, hpos in ipairs(l) do
+						local level = pf_pmap[hpos]
+						rmap[hpos] = level
 
 
 						-- Search the origin.
-						pf_back_trace(vector.offset(p, -1, 0, 0), level)
-						pf_back_trace(vector.offset(p,  1, 0, 0), level)
-						pf_back_trace(vector.offset(p,  0, 0,-1), level)
-						pf_back_trace(vector.offset(p,  0, 0, 1), level)
+						pf_back_trace(hpos, -1, 0, 0, level)
+						pf_back_trace(hpos,  1, 0, 0, level)
+						pf_back_trace(hpos,  0, 0,-1, level)
+						pf_back_trace(hpos,  0, 0, 1, level)
 					end
 				end
 			end
@@ -431,10 +472,8 @@ function liquid.register_liquid(def)
 			--	core.log(line)
 			--end
 
+			return rmap
 
-			return function (pos)
-				return rmap[core.hash_node_position(pos)]
-			end
 		else
 			return nil
 		end
@@ -444,7 +483,7 @@ function liquid.register_liquid(def)
 
 	local function lt_flood(p, n, l)
 		local cnt_flood = 0
-		local m = lt_map(p)
+		local m = rmap_read(lt_map, p)
 		if m and m == lt_new_level then
 			if is_floodable(n) then
 				cnt_flood = 1
