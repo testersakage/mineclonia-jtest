@@ -3,9 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-05 03:33+0000\n"
-"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_enchanting/es/>\n"
 "Language: es\n"
@@ -31,7 +30,7 @@ msgid "Curse of Vanishing"
 msgstr "Maldición de desaparición"
 
 msgid "Item destroyed on death."
-msgstr "El objeto se destruye tras tu muerte."
+msgstr "El ítem se destruye tras tu muerte."
 
 msgid "Depth Strider"
 msgstr "Agilidad acuática"
@@ -61,7 +60,7 @@ msgid "Fortune"
 msgstr "Fortuna"
 
 msgid "Increases certain block drops."
-msgstr "Incrementa la cantidad de objetos que sueltan los bloques."
+msgstr "Incrementa la cantidad de ítems que sueltan los bloques."
 
 msgid "Frost Walker"
 msgstr "Paso helado"
@@ -115,7 +114,7 @@ msgid "Mending"
 msgstr "Reparación"
 
 msgid "Repair the item while gaining XP orbs."
-msgstr "Repara los objetos portados al recibir orbes de experiencia."
+msgstr "Repara los ítems portados al recibir orbes de experiencia."
 
 msgid "Multishot"
 msgstr "Multidisparo"
@@ -229,7 +228,7 @@ msgid "Level requirement: @1"
 msgstr "Nivel requerido: @1"
 
 msgid "Enchant an item"
-msgstr "Encantar objeto"
+msgstr "Encantar ítem"
 
 msgid "<player> <enchantment> [<level>]"
 msgstr "<jugador> <encantamiento> [<nivel>]"
@@ -244,10 +243,10 @@ msgid "There is no such enchantment '@1'."
 msgstr "'@1' no es un encantamiento."
 
 msgid "The target doesn't hold an item."
-msgstr "El objetivo no sujeta un objeto."
+msgstr "El objetivo no sujeta un ítem."
 
 msgid "The selected enchantment can't be added to the target item."
-msgstr "El encantamiento seleccionado no puede añadirse a ese objeto."
+msgstr "El encantamiento seleccionado no puede añadirse a ese ítem."
 
 msgid "'@1' is not a valid number"
 msgstr "'@1' no es un número válido"
@@ -266,13 +265,13 @@ msgid "Enchanting succeded."
 msgstr "Encantado correctamente."
 
 msgid "Forcefully enchant an item"
-msgstr "Encantar objeto a la fuerza"
+msgstr "Encantar ítem a la fuerza"
 
 msgid "Usage: /forceenchant <player> <enchantment> [<level>]"
 msgstr "Usa /forceenchant <jugador> <encantamiento> [<nivel>]"
 
 msgid "The target item is not enchantable."
-msgstr "El objeto del jugador no se puede encantar."
+msgstr "El ítem del jugador no se puede encantar."
 
 msgid "'@1' is not a valid number."
 msgstr "'@1' no es un número válido."
@@ -284,7 +283,7 @@ msgid "Enchanting Table"
 msgstr "Mesa de encantamientos"
 
 msgid "Spend experience, and lapis to enchant various items."
-msgstr "Gasta experiencia y lapislázuli para encantar varios objetos."
+msgstr "Gasta experiencia y lapislázuli para encantar varios ítems."
 
 msgid "Enchanting Tables will let you enchant armors, tools, weapons, and books with various abilities. But, at the cost of some experience, and lapis lazuli."
 msgstr ""
@@ -298,8 +297,7 @@ msgid "Place a tool, armor, weapon or book into the top left slot, and then plac
 msgstr "Coloca una herramienta, arma, armadura o libro sobre la ranura izquierda, coloca de 1 a 3 Lapis lázulis en la ranura derecha."
 
 msgid "After placing your items in the slots, the enchanting options will be shown. Hover over the options to read what is available to you."
-msgstr ""
-"Coloca el objeto en su ranura y se mostraran los encantamientos a elegir."
+msgstr "Coloca el ítem en su ranura y se mostraran los encantamientos a elegir."
 
 msgid "These options are randomized, and dependent on experience level; but the enchantment strength can be increased."
 msgstr "Las opciones seran aleatorias dependiendo del nivel de experiencia, los niveles de encantamiento pueden ser aumentados."
@@ -310,7 +308,7 @@ msgstr "Para aumentar los niveles de encantamientos, coloca librerias alrededor 
 msgid "After finally selecting your enchantment; left-click on the selection, and you will see both the lapis lazuli and your experience levels consumed. And, an enchanted item left in its place."
 msgstr ""
 "Despues elige tu encantamiento, los niveles de experiencia y el lapislázuli "
-"seran consumidos y el encantamiento aplicado al objeto."
+"seran consumidos y el encantamiento aplicado al ítem."
 
 msgid "Enchant"
 msgstr "Encantamiento"
