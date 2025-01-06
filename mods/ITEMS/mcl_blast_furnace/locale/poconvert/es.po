@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_blast_furnace x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 18:27+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_blast_furnace/es/>\n"
@@ -22,7 +22,7 @@ msgstr "Funde minerales más rápido que el horno"
 
 msgid "Blast Furnaces smelt several items, mainly ores and armor, using a furnace fuel, but twice as fast as a normal furnace."
 msgstr ""
-"Los altos hornos funden varios objetos, principalmente minerales y armadura, "
+"Los altos hornos funden varios ítems, principalmente minerales y armadura, "
 "usando combustible de horno, pero el doble de rápido que un horno normal."
 
 msgid "Use the blast furnace to open the furnace menu."
@@ -32,7 +32,7 @@ msgid "Place a furnace fuel in the lower slot and the source material in the upp
 msgstr "Coloque el combustible del horno en la ranura de arriba y el material a procesar en la ranura de abajo."
 
 msgid "The blast furnace will slowly use its fuel to smelt the item."
-msgstr "El alto horno usará lentamente su combustible para fundir el objeto."
+msgstr "El alto horno usará lentamente su combustible para fundir el ítem."
 
 msgid "The result will be placed into the output slot at the right side."
 msgstr "El resultado se colocará en la ranura de salida del lado derecho."
