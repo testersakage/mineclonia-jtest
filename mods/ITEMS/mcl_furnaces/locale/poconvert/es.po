@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_furnaces x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 18:27+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_furnaces/es/>\n"
@@ -24,11 +24,11 @@ msgid "Furnace"
 msgstr "Horno"
 
 msgid "Uses fuel to smelt or cook items"
-msgstr "Utiliza combustible para fundir o cocinar objetos"
+msgstr "Utiliza combustible para fundir o cocinar ítems"
 
 msgid "Furnaces cook or smelt several items, using a furnace fuel, into something else."
 msgstr ""
-"Los hornos cocinan o funden varios objetos, utilizando un combustible de "
+"Los hornos cocinan o funden varios ítems, utilizando un combustible de "
 "horno, en otra cosa."
 
 msgid "Use the furnace to open the furnace menu."
@@ -39,7 +39,7 @@ msgstr "Coloque el combustible del horno en la ranura de arriba y el material a 
 
 msgid "The furnace will slowly use its fuel to smelt the item."
 msgstr ""
-"El horno utilizará lentamente su combustible para fundir/cocinar el objeto."
+"El horno utilizará lentamente su combustible para fundir/cocinar el ítem."
 
 msgid "The result will be placed into the output slot at the right side."
 msgstr "El resultado se colocará en la ranura de salida del lado derecho."
