@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 18:27+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/es/>\n"
@@ -90,7 +90,9 @@ msgid "Lapis Lazuli"
 msgstr "Lapislázuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
-msgstr "Los lapislázuli son necesarios para encantar objetos en una mesa de encantamiento."
+msgstr ""
+"Los lapislázuli son necesarios para encantar ítems en una mesa de "
+"encantamiento."
 
 msgid "Brick"
 msgstr "Ladrillo"
@@ -854,10 +856,10 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr "En la dimensión del end, encender un fuego en este bloque creará un fuego que nunca se apagará."
 
 msgid "Cobblestone"
-msgstr "Roca"
+msgstr "Adoquín"
 
 msgid "Mossy Cobblestone"
-msgstr "Roca musgosa"
+msgstr "Adoquín musgoso"
 
 msgid "Block of Coal"
 msgstr "Bloque de carbón"
@@ -1029,7 +1031,9 @@ msgid "• When water is directly above or horizontally next to a lava source, t
 msgstr "• Cuando el agua está directamente arriba u horizontalmente al lado de una fuente de lava, la lava se convierte en obsidiana."
 
 msgid "• When flowing water touches flowing lava either from above or horizontally, the lava turns into cobblestone."
-msgstr "• Cuando el agua que fluye toca la lava que fluye desde arriba u horizontalmente, la lava se convierte en roca."
+msgstr ""
+"• Cuando el agua que fluye toca la lava que fluye desde arriba u "
+"horizontalmente, la lava se convierte en adoquín."
 
 msgid "• When water is directly below lava, the water turns into stone."
 msgstr "• Cuando el agua está directamente debajo de la lava, el agua se convierte en piedra."
@@ -1134,16 +1138,16 @@ msgid "Diorite Slab"
 msgstr "Losa de diorita"
 
 msgid "Cobblestone Stairs"
-msgstr "Escaleras de roca"
+msgstr "Escaleras de adoquín"
 
 msgid "Cobblestone Slab"
-msgstr "Losa de adoquines"
+msgstr "Losa de adoquín"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr "Escaleras de roca musgosa"
+msgstr "Escaleras de adoquín musgoso"
 
 msgid "Mossy Cobblestone Slab"
-msgstr "Losa de roca musgosa"
+msgstr "Losa de adoquín musgoso"
 
 msgid "Brick Stairs"
 msgstr "Escaleras de ladrillo"
