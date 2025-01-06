@@ -254,7 +254,10 @@ if mcl_weather.allow_abm then
 	-- Slowly fill up cauldrons
 	minetest.register_abm({
 		label = "Rain fills cauldrons with water",
-		nodenames = {"mcl_cauldrons:cauldron", "mcl_cauldrons:cauldron_1", "mcl_cauldrons:cauldron_2"},
+		nodenames = {
+			"mcl_cauldrons:cauldron",
+			"mcl_cauldrons:cauldron_1_water",
+			"mcl_cauldrons:cauldron_2_water"},
 		interval = 56.0,
 		chance = 1,
 		action = function(pos)
