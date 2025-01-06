@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 18:27+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_mobitems/es/>\n"
@@ -126,7 +126,7 @@ msgstr "Saco de tinta"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
 msgstr ""
-"Este objeto lo sueltan los calamares cuando mueren. La tinta de calamar se "
+"Este ítem lo sueltan los calamares cuando mueren. La tinta de calamar se "
 "puede utilizar como ingrediente para fabricar libros con plumas o tinte "
 "negro."
 
@@ -146,13 +146,13 @@ msgid "Breeze Rod"
 msgstr "Vara de breeze"
 
 msgid "This is a crafting item dropped from breezes."
-msgstr "Este es un objeto que deja caer los breezes."
+msgstr "Este es un ítem que deja caer los breezes."
 
 msgid "Blaze Powder"
 msgstr "Polvo de blaze"
 
 msgid "This item is mainly used for crafting."
-msgstr "Este objeto se usa principalmente para la fabricación."
+msgstr "Este ítem se usa principalmente para la fabricación."
 
 msgid "Magma Cream"
 msgstr "Crema de magma"
@@ -164,13 +164,15 @@ msgid "Ghast Tear"
 msgstr "Lágrima espectral"
 
 msgid "Place this item in an item frame as decoration."
-msgstr "Coloque este objeto en un marco de objetos como decoración."
+msgstr "Coloque este ítem en un marco de ítems como decoración."
 
 msgid "Nether Star"
 msgstr "Estrella del Nether"
 
 msgid "A nether star is dropped when the Wither dies. Place it in an item frame to show the world how hardcore you are! Or just as decoration."
-msgstr "Se cae una estrella cuando muere un Wither. ¡Colócalo en el marco de un objeto para mostrarle al mundo lo duro que eres! O simplemente como decoración."
+msgstr ""
+"Se cae una estrella cuando muere un Wither. ¡Colócalo en el marco de un ítem "
+"para mostrarle al mundo lo duro que eres! O simplemente como decoración."
 
 msgid "Leather"
 msgstr "Cuero"
@@ -195,8 +197,8 @@ msgstr "Pata de conejo"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr ""
-"¡Debe ser tu día de suerte! Coloque este objeto en un marco de objetos para "
-"la decoración."
+"¡Debe ser tu día de suerte! Coloque este ítem en un marco de ítems para la "
+"decoración."
 
 msgid "Saddle"
 msgstr "Montura"
