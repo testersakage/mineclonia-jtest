@@ -257,7 +257,8 @@ if mcl_weather.allow_abm then
 		nodenames = {
 			"mcl_cauldrons:cauldron",
 			"mcl_cauldrons:cauldron_1_water",
-			"mcl_cauldrons:cauldron_2_water"},
+			"mcl_cauldrons:cauldron_2_water"
+		},
 		interval = 56.0,
 		chance = 1,
 		action = function(pos)
