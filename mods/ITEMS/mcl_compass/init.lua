@@ -239,13 +239,12 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({ --TODO: update once echo shards are a thing
+minetest.register_craft({
 	output = "mcl_compass:" .. random_frame .. "_recovery",
 	recipe = {
-		{"","mcl_nether:netherite_ingot",""},
-		{"mcl_core:diamondblock","mcl_compass:" .. stereotype_frame ,"mcl_core:diamondblock"},
-		{"mcl_core:diamondblock","mcl_core:diamondblock","mcl_core:diamondblock"}
-
+		{"mcl_sculk:echo_shard","mcl_sculk:echo_shard", "mcl_sculk:echo_shard"},
+		{"mcl_sculk:echo_shard", "mcl_compass:" .. stereotype_frame , "mcl_sculk:echo_shard"},
+		{"mcl_sculk:echo_shard", "mcl_sculk:echo_shard", "mcl_sculk:echo_shard"}
 	}
 })
 

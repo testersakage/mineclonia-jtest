@@ -289,3 +289,10 @@ minetest.register_node("mcl_sculk:shrieker", {
 	_mcl_silk_touch_drop = true,
 })
 --]]
+
+core.register_craftitem("mcl_sculk:echo_shard", {
+	description = S("Echo Shard"),
+	groups = {craftitem = 1, rarity = 1},
+	inventory_image = "mcl_sculk_echo_shard.png",
+	wield_image = "mcl_sculk_echo_shard.png"
+})

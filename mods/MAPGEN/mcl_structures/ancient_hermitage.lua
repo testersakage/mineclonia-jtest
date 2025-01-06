@@ -36,6 +36,7 @@ mcl_structures.register_structure("ancient_hermitage",{
 				{ itemstring = "mcl_amethyst:amethyst_shard", weight = 3, amount_min = 1, amount_max = 15 },
 				{ itemstring = "mcl_lush_caves:glow_berry", weight = 3, amount_min = 1, amount_max = 15 },
 				{ itemstring = "mcl_sculk:sculk", weight = 3, amount_min = 4, amount_max = 10 },
+				{ itemstring = "mcl_sculk:echo_shard", weight = 3, amount_min = 1, amount_max = 3},
 				--{ itemstring = "mcl_candles:candle", weight = 3, amount_min = 1, amount_max = 4 },
 				{ itemstring = "mcl_experience:bottle", weight = 3, amount_min = 1, amount_max = 3 },
 				--{ itemstring = "mcl_sculk:sensor", weight = 3, amount_min = 1, amount_max = 3 },
@@ -43,7 +44,7 @@ mcl_structures.register_structure("ancient_hermitage",{
 
 				{ itemstring = "mcl_armor:leggings_iron", weight = 1, func = function(stack, pr)mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr) end },
 				{ itemstring = "mcl_armor:ward", weight = 1 },
-				-- { itemstring = "mcl_armor:silence", weight = 1 }, --TODO: Add silence armor trim
+				{ itemstring = "mcl_armor:silence", weight = 1 },
 
 				{ itemstring = "mcl_sculk:catalyst", weight = 2, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_compass:compass", weight = 2, amount_min = 1, amount_max = 1 },
