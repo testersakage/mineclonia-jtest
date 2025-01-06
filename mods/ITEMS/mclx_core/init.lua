@@ -1,6 +1,8 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+
 local water_s = minetest.registered_nodes["mcl_core:water_source"]
 local water_f = minetest.registered_nodes["mcl_core:water_flowing"]
+
 minetest.register_node("mclx_core:river_water_source", table.merge(water_s, {
 	description = S("River Water Source"),
 	groups = table.merge(water_s.groups, {river_water = water_s.groups.water}),
@@ -50,3 +52,10 @@ minetest.register_node("mclx_core:river_water_flowing", table.merge(water_f, {
 }))
 
 doc.add_entry_alias("nodes", "mclx_core:river_water_source", "nodes", "mclx_core:river_water_flowing")
+
+mcl_cauldrons.register_filled_cauldron("river_water", {
+	bucket = "mcl_buckets:bucket_river_water",
+	description_name = S("River Water"),
+	liquid_texture = "default_river_water_source_animated.png^[verticalframe:16:0",
+	node = "mclx_core:river_water_source"
+})

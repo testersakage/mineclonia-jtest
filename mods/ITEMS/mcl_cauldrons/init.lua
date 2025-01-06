@@ -4,14 +4,6 @@ mcl_cauldrons.liquids = {
 		bucket = "mcl_buckets:bucket_lava",
 		node = "mcl_core:lava_source"
 	},
-	powder_snow = {
-		bucket = "mcl_powder_snow:bucket_powder_snow",
-		node = "mcl_powder_snow:powder_snow"
-	},
-	river_water = {
-		bucket = "mcl_buckets:bucket_river_water",
-		node = "mclx_core:river_water_source"
-	},
 	water = {
 		bucket = "mcl_buckets:bucket_water",
 		node = "mcl_core:water_source"
@@ -214,6 +206,7 @@ core.register_node("mcl_cauldrons:cauldron", {
 --- @param overrides table|nil
 function mcl_cauldrons.register_filled_cauldron(id, defs, overrides)
 	if not mcl_cauldrons.liquids[id] then
+		mcl_cauldrons.liquids[id] = {}
 		mcl_cauldrons.liquids[id].bucket = defs.bucket
 		mcl_cauldrons.liquids[id].node = defs.node
 	end
@@ -221,7 +214,7 @@ function mcl_cauldrons.register_filled_cauldron(id, defs, overrides)
 	for i = 1, 3 do
 		local name = "mcl_cauldrons:cauldron_" .. i .. "_" .. id
 
-		core.register_node(name, table.merge({
+		core.register_node(":" .. name, table.merge({
 			_doc_items_create_entry = false,
 			_mcl_baseitem = "mcl_cauldrons:cauldron",
 			_mcl_blast_resistance = 2,
@@ -230,7 +223,7 @@ function mcl_cauldrons.register_filled_cauldron(id, defs, overrides)
 			_on_bucket_place = bucket_place,
 			_on_bucket_place_empty = bucket_place_empty,
 			collision_box = get_node_box(0),
-			description = S(defs.description, i),
+			description = S("Cauldron - " .. defs.description_name .. " (@1/3)", i),
 			drawtype = "nodebox",
 			drop = "mcl_cauldrons:cauldron",
 			groups = table.merge({
@@ -311,28 +304,14 @@ core.register_globalstep(function(dtime)
 end)
 
 mcl_cauldrons.register_filled_cauldron("lava", {
-	description = "Cauldron (@1/3) Lava",
+	description_name = S("Lava"),
 	liquid_texture = "default_lava_source_animated.png^[verticalframe:16:0"
 }, {light_source = core.LIGHT_MAX})
 
-mcl_cauldrons.register_filled_cauldron("powder_snow", {
-	description = "Cauldron (@1/3) Powder Snow",
-	liquid_texture = "powder_snow.png"
-}, {
-	_mcl_cauldrons_fill_empty = true
-})
-
 mcl_cauldrons.register_filled_cauldron("water", {
-	description = "Cauldron (@1/3) Water",
+	description_name = S("Water"),
 	liquid_texture = "default_water_source_animated.png^[verticalframe:16:0"
 })
-
-if core.get_modpath("mclx_core") then
-	mcl_cauldrons.register_filled_cauldron("river_water", {
-		description = "Cauldron (@1/3) River Water",
-		liquid_texture = "default_river_water_source_animated.png^[verticalframe:16:0"
-	})
-end
 
 -- Legacy lbms
 core.register_lbm({

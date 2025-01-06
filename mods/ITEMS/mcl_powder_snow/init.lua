@@ -52,6 +52,15 @@ mcl_buckets.register_liquid({
 	tt_help = S("Places a powder snow block"),
 })
 
+mcl_cauldrons.register_filled_cauldron("powder_snow", {
+	bucket = "mcl_powder_snow:bucket_powder_snow",
+	description_name = S("Powder Snow"),
+	node = "mcl_powder_snow:powder_snow",
+	liquid_texture = "powder_snow.png"
+}, {
+	_mcl_cauldrons_fill_empty = true
+})
+
 local freezing_stages =
 {
 	"freezing_1.png",
