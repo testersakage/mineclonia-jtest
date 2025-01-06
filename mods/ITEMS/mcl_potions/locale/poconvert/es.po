@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-04 19:52+0000\n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_potions/es/>\n"
@@ -290,7 +290,7 @@ msgstr "Los frascos de agua se pueden usar para llenar calderos. Beber agua no t
 
 msgid "Use the “Place” key to drink. Place this item on a cauldron to pour the water into the cauldron."
 msgstr ""
-"Use la tecla \"Acción\" para beber. Coloque este objeto en un caldero para "
+"Use la tecla \"Acción\" para beber. Coloque este ítem en un caldero para "
 "verter el agua en el caldero."
 
 msgid "River Water Bottle"
@@ -301,7 +301,7 @@ msgstr "Los frascos de agua de río se pueden usar para llenar calderos. Beberla
 
 msgid "Use the “Place” key to drink. Place this item on a cauldron to pour the river water into the cauldron."
 msgstr ""
-"Use la tecla \"Acción\" para beber. Coloque este objeto en un caldero para "
+"Use la tecla \"Acción\" para beber. Coloque este ítem en un caldero para "
 "verter el agua de río en el caldero."
 
 msgid "Splash Water Bottle"
@@ -379,8 +379,8 @@ msgstr "Aliento de dragón"
 
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr ""
-"Este objeto se utiliza en para preparar pociones y se puede combinar con "
-"objeto arrojadizas para crear pociones persistentes."
+"Este ítem se utiliza en para preparar pociones y se puede combinar con ítem "
+"arrojadizas para crear pociones persistentes."
 
 msgid "Awkward"
 msgstr "rara"
