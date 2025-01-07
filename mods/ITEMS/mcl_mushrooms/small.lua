@@ -35,38 +35,42 @@ local function on_bone_meal(_, _, _, pos, n)
 	end
 
 	-- Select schematic
-	local schematic, offset, height
-	height = 5
+	local schematic, stem, wide
+	local schem_height = 5
 	if n.name == "mcl_mushrooms:mushroom_brown" then
 		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_brown.mts"
-		offset = vector.new(-3,0,-3)
+    stem = "mcl_mushrooms:brown_mushroom_block_stem"
+    wide = 3
 	elseif n.name == "mcl_mushrooms:mushroom_red" then
 		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
-		offset = vector.new(-2,0,-2)
+    stem = "mcl_mushrooms:red_mushroom_block_stem"
+    wide = 2
 	else
 		return
 	end
-	-- Check space requirements
-	for i=1,3 do
-		local cpos = vector.add(pos, {x=0, y=i, z=0})
-		if minetest.get_node(cpos).name ~= "air" then
-			return
-		end
-	end
-	local minp, maxp = vector.offset(pos,-3,1,-3), vector.offset(pos,3,height,3)
-	local diff = vector.subtract(maxp, minp)
-	diff = vector.add(diff, vector.new(1,1,1))
-	local totalnodes = diff.x * diff.y * diff.z
-	local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
-	if #goodnodes < totalnodes then
-		return
-	end
 
-	-- Place the huge mushroom
-	minetest.remove_node(pos)
-	local place_pos = vector.add(pos, offset)
-	local ok = minetest.place_schematic(place_pos, schematic, 0, nil, false)
-	return ok ~= nil
+	-- Check space requirements
+  local base_height = math.random(0, 2)
+  if math.random(1, 12) == 1 then
+    -- has 1/12 chance grow twice as high (minus 1 block)
+    base_height = base_height * 2 + schem_height - 1
+  end
+  local minp, maxp = vector.offset(pos,-wide,1,-wide), vector.offset(pos,wide,base_height + schem_height,wide)
+  local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
+  local diff = vector.subtract(maxp, minp)
+  diff = vector.add(diff, vector.new(1,1,1))
+  local totalnodes = diff.x * diff.y * diff.z
+  if #goodnodes < totalnodes then
+    return
+  end
+
+  -- Place the huge mushroom
+  minetest.remove_node(pos)
+  local ok = minetest.place_schematic(vector.new(minp.x, maxp.y - schem_height, minp.z), schematic, 0, nil, false)
+  for i=0,base_height do
+    minetest.set_node(vector.offset(pos,0,i,0), {name=stem})
+  end
+  return ok ~= nil
 end
 
 minetest.register_node("mcl_mushrooms:mushroom_brown", {
