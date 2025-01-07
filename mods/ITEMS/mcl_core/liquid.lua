@@ -135,7 +135,7 @@ function liquid.register_liquid(def)
 		v.z = v.z + z
 	end
 
-	function get_position_from_hash(v, hash)
+	local function get_position_from_hash(v, hash)
 		v.x = (hash % 65536) - 32768
 		hash  = math.floor(hash / 65536)
 		v.y = (hash % 65536) - 32768
