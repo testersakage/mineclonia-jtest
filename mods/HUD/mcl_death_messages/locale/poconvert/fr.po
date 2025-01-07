@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_death_messages x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-06 21:58+0000\n"
+"PO-Revision-Date: 2025-01-07 11:01+0000\n"
 "Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
@@ -19,7 +19,7 @@ msgid "@1 went up in flames"
 msgstr "@1 a péri dans les flammes"
 
 msgid "@1 walked into fire whilst fighting @2"
-msgstr "@1 a marché dans le feu en combattant @2"
+msgstr "@1 a marché dans le feu en tentant de combattre (un(e)) @2"
 
 msgid "@1 was struck by lightning"
 msgstr "@1 s'est fait frapper par la foudre"
@@ -31,19 +31,19 @@ msgid "@1 burned to death"
 msgstr "@1 s'est fait carboniser à mort"
 
 msgid "@1 was burnt to a crisp whilst fighting @2"
-msgstr "@1 a été grillé comme une saucisse en combattant @2"
+msgstr "@1 s'est fait réduire en cendre en tentant de combattre (un(e)) @2"
 
 msgid "@1 tried to swim in lava"
 msgstr "@1 a essayé de nager dans la lave"
 
 msgid "@1 tried to swim in lava to escape @2"
-msgstr "@1 a essayé de nager dans la lave pour échapper à @2"
+msgstr "@1 a essayé de nager dans la lave pour fuir (un(e)) @2"
 
 msgid "@1 discovered the floor was lava"
 msgstr "@1 a découvert que le sol était fait de lave"
 
 msgid "@1 walked into danger zone due to @2"
-msgstr "@1 a marché dans une zone de danger à cause de @2"
+msgstr "@1 a marché dans une zone dangereuse à cause de/d'un(e) @2"
 
 msgid "@1 suffocated in a wall"
 msgstr "@1 a suffoqué dans un mur"
@@ -55,37 +55,37 @@ msgid "@1 drowned"
 msgstr "@1 s'est noyé(e)"
 
 msgid "@1 drowned whilst trying to escape @2"
-msgstr "@1 s'est noyé(e) en tentant d'échapper à @2"
+msgstr "@1 s'est noyé(e) en tentant de fuir (un(e)) @2"
 
 msgid "@1 starved to death"
 msgstr "@1 est mort(e) de faim"
 
 msgid "@1 starved to death whilst fighting @2"
-msgstr "@1 est mort(e) de faim en combattant @2"
+msgstr "@1 est mort(e) de faim en tentant de combattre (un(e)) @2"
 
 msgid "@1 was pricked to death"
 msgstr "@1 s'est fait piquer à mort par un cactus"
 
 msgid "@1 walked into a cactus whilst trying to escape @2"
-msgstr "@1 est rentré(e) dans un cactus en tentant d'échapper @2"
+msgstr "@1 a foncé dans un cactus en tentant de fuir (un(e)) @2"
 
 msgid "@1 hit the ground too hard"
-msgstr "@1 a heurté le sol trop fort"
+msgstr "@1 s'est écrasé(e) au sol"
 
 msgid "@1 hit the ground too hard whilst trying to escape @2"
-msgstr "@1 a heurté le sol trop fort en tentant d'échapper à @2"
+msgstr "@1 s'est écrasé(e) au sol en tentant de fuir (un(e)) @2"
 
 msgid "@1 experienced kinetic energy"
 msgstr "@1 a découvert l'énergie cinétique"
 
 msgid "@1 experienced kinetic energy whilst trying to escape @2"
-msgstr "@1 a découvert l'énergie cinétique en tentant d'échapper à @2"
+msgstr "@1 a découvert l'énergie cinétique en tentant de fuir (un(e)) @2"
 
 msgid "@1 fell out of the world"
 msgstr "@1 a littéralement quitté notre monde"
 
 msgid "@1 didn't want to live in the same world as @2"
-msgstr "@1 ne voulait pas vivre dans le même monde que @2"
+msgstr "@1 n'avait pas envie de vivre dans le même monde que @2"
 
 msgid "@1 died"
 msgstr "@1 est mort"
@@ -136,28 +136,28 @@ msgid "@1 was slain by @2"
 msgstr "@1 s'est fait tuer par un(e) @2"
 
 msgid "@1 was slain by @2 using @3"
-msgstr "@1 a été occis par @2 en utilisant @3"
+msgstr "@1 s'est fait tuer par (un(e)) @2 avec @3"
 
 msgid "@1 was shot by @2"
-msgstr "@1 a été abattu(e) par @2"
+msgstr "@1 s'est fait tirer dessus par (un(e)) @2"
 
 msgid "@1 was shot by @2 using @3"
-msgstr "@1 a été abattu(e) par @2 en utilisant @3"
+msgstr "@1 s'est fait tirer dessus par (un(e)) @2 avec @3"
 
 msgid "@1 was fireballed by @2"
-msgstr "@1 a reçu une balle de feu lancée par @2"
+msgstr "@1 s'est fait tuer par une boule de feu tirée par (un(e)) @2"
 
 msgid "@1 was fireballed by @2 using @3"
-msgstr "@1 a reçu une balle de feu lancée par @2 en utilisant @3"
+msgstr "@1 s'est fait tuer par une boule de feu tirée par (un(e)) @2 avec @3"
 
 msgid "@1 was killed trying to hurt @2"
-msgstr "@1 a été tué(e) en essayant de blesser @2"
+msgstr "@1 s'est fait tuer en tentant de blesser (un(e)) @2"
 
 msgid "@1 tried to hurt @2 and died by @3"
 msgstr "@1 a essayé de blesser @2 et est mort par @3"
 
 msgid "@1 blew up"
-msgstr "@1 a explosé"
+msgstr "@1 a péri dans une explosion"
 
 msgid "@1 was blown up by @2"
 msgstr "@1 a péri dans une explosion causée par (un(e)) @2"
@@ -181,4 +181,5 @@ msgid "@1 was poked to death by a sweet berry bush"
 msgstr "@1 s'est fait piquer à mort par un buisson à baies sucrées"
 
 msgid "@1 was poked to death by a sweet berry bush whilst trying to escape @2"
-msgstr "@1 a été tué par un buisson de baies sucrées alors qu'il tentait d'échapper à @2"
+msgstr ""
+"@1 a foncé dans un buisson à baies sucrées en tentant de fuir (un(e)) @2"
