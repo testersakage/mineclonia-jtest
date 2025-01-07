@@ -13,6 +13,7 @@ local nether_plants = {
 	},
 	["mcl_crimson:warped_nylium"] = {
 		"mcl_crimson:warped_roots",
+		"mcl_crimson:crimson_fungus",
 		"mcl_crimson:warped_fungus",
 		"mcl_crimson:twisting_vines",
 		"mcl_crimson:nether_sprouts",
