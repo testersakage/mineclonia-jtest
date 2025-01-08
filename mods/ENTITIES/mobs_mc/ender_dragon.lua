@@ -76,6 +76,7 @@ local dragon = {
 	_damage_sustained_on_podium = 0.0,
 	_death_routine_progress = 0.0,
 	_death_xp_time = 0.0,
+	_dragon_dead = false,
 }
 
 ------------------------------------------------------------------------
@@ -170,7 +171,7 @@ function dragon:restore_portal ()
 end
 
 function dragon:check_dying (dtime)
-	if not self.dead then
+	if not self._dragon_dead then
 		return
 	end
 
@@ -395,7 +396,9 @@ end
 function dragon:joint_sample (joint_no)
 	local idx = sample_idx (self._sample_ptr - (joint_no - 1))
 	local sample = self._heading_samples[idx]
-	return sample or self._heading_samples[1]
+	return sample or self._heading_samples[1] or {
+		0, self.object:get_pos (),
+	}
 end
 
 function dragon:set_yaw (yaw)
@@ -633,7 +636,7 @@ function dragon:motion_step (dtime, moveresult, self_pos)
 		v.x = v.x * x_drag_real
 		v.z = v.z * x_drag_real
 		v.y = v.y * y_drag
-	elseif not self.dead then
+	elseif not self._dragon_dead then
 		self._start_velocity = vector.zero ()
 		self.object:set_velocity (self._start_velocity)
 	end
@@ -1832,7 +1835,7 @@ function dragon:do_phase_death (self_pos, dtime)
 	end
 
 	if vector.distance (self_pos, podium) < 7.0 then
-		self.dead = true
+		self._dragon_dead = true
 		self._dragon_target = nil
 	end
 end
@@ -1852,7 +1855,7 @@ function dragon:apply_debug_nametag ()
 end
 
 function dragon:run_ai (dtime, moveresult)
-	if self.dead then
+	if self.dead or self._dragon_dead then
 		return
 	end
 	local self_pos = self.object:get_pos ()
