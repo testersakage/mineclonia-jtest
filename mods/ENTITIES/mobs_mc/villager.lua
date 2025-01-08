@@ -2757,7 +2757,7 @@ local function sense_nearby_bells (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
 	local result = minetest.find_nodes_in_area (aa, bb, {"mcl_bells:bell"})
-	local persist = 1.0 + pr:next (0, 20) / 20
+	local persist = 2.0 + pr:next (0, 20) / 20
 	return result, persist
 end
 
