@@ -49,16 +49,30 @@ local function on_bone_meal(_, _, _, pos, n)
 		return
 	end
 
-	-- Check space requirements
   local base_height = math.random(0, 2)
   if math.random(1, 12) == 1 then
     -- has 1/12 chance grow twice as high (minus 1 block)
     base_height = base_height * 2 + schem_height - 1
   end
   local minp, maxp = vector.offset(pos,-wide,1,-wide), vector.offset(pos,wide,base_height + schem_height,wide)
+
+  -- Find lowest possible height
+  local obstacles = minetest.find_nodes_in_area(minp, maxp, {"group:opaque"})
+  local lowest_y = maxp.y
+  for _, o in pairs(obstacles) do
+    if o.y < lowest_y then
+      lowest_y = o.y
+    end
+  end
+  local minimum_y = vector.offset(pos,0,schem_height,0).y
+  maxp.y = lowest_y
+  if maxp.y < minimum_y then
+    return
+  end
+
+	-- Check space requirements
   local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
   local diff = vector.subtract(maxp, minp)
-  diff = vector.add(diff, vector.new(1,1,1))
   local totalnodes = diff.x * diff.y * diff.z
   if #goodnodes < totalnodes then
     return
