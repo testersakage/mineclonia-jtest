@@ -254,35 +254,6 @@ function mcl_campfires.register_campfire(name, def)
 	})
 end
 
-local function burn_in_campfire(obj)
-	local p = obj:get_pos()
-	if p then
-		local n = minetest.find_node_near(p, 0.4, {"group:lit_campfire"}, true)
-		if n then
-			mcl_burning.set_on_fire(obj, 5)
-		end
-	end
-end
-
-local etime = 0
-minetest.register_globalstep(function(dtime)
-	etime = dtime + etime
-	if etime < 0.5 then return end
-	etime = 0
-	for pl in mcl_util.connected_players() do
-		local armor_feet = pl:get_inventory():get_stack("armor", 5)
-		if not mcl_enchanting.has_enchantment(armor_feet, "frost_walker")
-		 and not mcl_potions.has_effect(pl, "fire_resistance") then
-			burn_in_campfire(pl)
-		end
-	end
-	for _,ent in pairs(minetest.luaentities) do
-		if ent.is_mob then
-			burn_in_campfire(ent.object)
-		end
-	end
-end)
-
 function mcl_campfires.generate_smoke(pos)
 	local smoke_timer
 
