@@ -98,10 +98,8 @@ function mcl_torches.register_torch(def)
 			if not def then return itemstack end
 
 			-- Call on_rightclick if the pointed node defines it
-			if placer and placer:is_player() and not placer:get_player_control().sneak then
-				local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-				if rc ~= nil then return rc end --check for nil explicitly to determine if on_rightclick existed
-			end
+			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+			if rc ~= nil then return rc end --check for nil explicitly to determine if on_rightclick existed
 
 			local above = pointed_thing.above
 			local wdir = minetest.dir_to_wallmounted({x = under.x - above.x, y = under.y - above.y, z = under.z - above.z})

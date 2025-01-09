@@ -455,13 +455,13 @@ for _, colortab in pairs(mcl_banners.colors) do
 		stack_max = 16,
 		_mcl_burntime = 15,
 		on_place = function(itemstack, placer, pointed_thing)
+			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+			if rc then return rc end
 			local above = pointed_thing.above
 			local under = pointed_thing.under
 
 			local node_under = minetest.get_node(under)
 			if placer and not placer:get_player_control().sneak then
-				local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-				if rc then return rc end
 				if mcl_util.check_position_protection(under, placer) then return itemstack end
 
 				if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
