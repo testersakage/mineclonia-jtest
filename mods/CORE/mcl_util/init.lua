@@ -548,15 +548,31 @@ function mcl_util.get_color(colorstr)
 	end
 end
 
+function minetest.item_place(itemstack, placer, pointed_thing, param2)
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if rc ~= nil then return rc, nil end
+
+	if itemstack:get_definition().type == "node" then
+		return minetest.item_place_node(itemstack, placer, pointed_thing, param2)
+	end
+
+	return itemstack, nil
+end
+
 function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 	-- Call on_rightclick if the pointed node defines it
 	if pointed_thing and pointed_thing.type == "node" then
 		local pos = pointed_thing.under
 		local node = minetest.get_node(pos)
-		if player and player:is_player() and not player:get_player_control().sneak then
+		if player and player:is_player() then
 			local nodedef = minetest.registered_nodes[node.name]
+			local on_rightclick_optional = nodedef and nodedef._mcl_on_rightclick_optional
+			if on_rightclick_optional then
+				local rc = on_rightclick_optional(pos, node, player, itemstack, pointed_thing)
+				if rc ~= nil then return rc end
+			end
 			local on_rightclick = nodedef and nodedef.on_rightclick
-			if on_rightclick then
+			if not player:get_player_control().sneak and on_rightclick then
 				return on_rightclick(pos, node, player, itemstack, pointed_thing) or itemstack
 			end
 		end
