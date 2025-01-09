@@ -32,11 +32,11 @@ local function spread_nether_plants(pos,node)
 	if #targets == 0 then
 		-- give back the unapplied bonemeal
 		core.add_item(pos, "mcl_bone_meal:bone_meal")
---		core.check_for_falling(pos)
+		core.check_for_falling(pos)
 		return
 	end
 	table.shuffle(targets)
-	-- find clicked node and move to the beginngin of the targets
+	-- find clicked node and move to the beginning of the targets
 	for i, v in ipairs(targets) do
 		-- only move clicked node if it is a viable target
 		if v == pos then
