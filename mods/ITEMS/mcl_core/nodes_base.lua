@@ -991,7 +991,7 @@ local function on_place(itemstack, placer, pointed_thing)
 		local itemcount = itemstack:get_count()
 		local fakestack = ItemStack(itemstring.." "..itemcount)
 		fakestack:set_name("mcl_core:snow_"..(g+1))
-		itemstack = minetest.item_place(fakestack, placer, pointed_thing)
+		itemstack = minetest.item_place_node(fakestack, placer, pointed_thing)
 		minetest.sound_play(mcl_sounds.node_sound_snow_defaults().place, {pos = pointed_thing.under}, true)
 		itemstack:set_name(itemstring)
 		return itemstack

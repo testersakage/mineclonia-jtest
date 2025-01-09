@@ -133,7 +133,7 @@ function mcl_torches.register_torch(def)
 			end
 
 			local success
-			itemstack, success = minetest.item_place(fakestack, placer, pointed_thing, wdir)
+			itemstack, success = minetest.item_place_node(fakestack, placer, pointed_thing, wdir)
 			itemstack:set_name(itemstring)
 
 			if success and idef.sounds and idef.sounds.place then
