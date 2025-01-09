@@ -486,13 +486,11 @@ function mcl_util.generate_on_place_plant_function(condition)
 		end
 
 		-- Call on_rightclick if the pointed node defines it
-		local node = minetest.get_node(pointed_thing.under)
-		if placer and placer:is_player() and not placer:get_player_control().sneak then
-			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-			if rc ~= nil then return rc end
-		end
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc ~= nil then return rc end
 
 		local place_pos
+		local node = minetest.get_node(pointed_thing.under)
 		local def_under = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
 		local def_above = minetest.registered_nodes[minetest.get_node(pointed_thing.above).name]
 		if not def_under or not def_above then
