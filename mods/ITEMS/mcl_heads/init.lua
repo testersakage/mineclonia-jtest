@@ -96,14 +96,14 @@ function mcl_heads.deftemplate.on_place(itemstack, placer, pointed_thing)
 	-- place wall head node (elsewhere)
 	if wdir ~= 0 and wdir ~= 1 then
 		placestack:set_name(itemstring .."_wall")
-		itemstack = minetest.item_place(placestack, placer, pointed_thing, wdir)
+		itemstack = minetest.item_place_node(placestack, placer, pointed_thing, wdir)
 	-- place floor head node (floor and ceiling)
 	else
 		if wdir == 0 then
 			placestack:set_name(itemstring .."_ceiling")
 		end
 		local rot = normalize_rotation(placer:get_look_horizontal() * 180 / math.pi / 1.5)
-		itemstack = minetest.item_place(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
+		itemstack = minetest.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
 	end
 
 	-- restore item from angled and wall head nodes

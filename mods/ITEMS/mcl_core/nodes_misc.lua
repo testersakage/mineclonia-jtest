@@ -171,7 +171,7 @@ minetest.register_node("mcl_core:barrier", {
 			minetest.chat_send_player(name, "Placement denied. You need the “maphack” privilege to place barriers.")
 			return itemstack
 		end
-		local new_itemstack = minetest.item_place(itemstack, placer, pointed_thing)
+		local new_itemstack = minetest.item_place_node(itemstack, placer, pointed_thing)
 		return new_itemstack
 	end,
 })

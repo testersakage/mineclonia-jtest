@@ -277,7 +277,7 @@ minetest.register_node("mcl_mobspawners:spawner", {
 			return itemstack
 		end
 		local node_under = minetest.get_node(pointed_thing.under)
-		local new_itemstack, success = minetest.item_place(itemstack, placer, pointed_thing)
+		local new_itemstack, success = minetest.item_place_node(itemstack, placer, pointed_thing)
 		if success then
 			local placepos
 			local def = minetest.registered_nodes[node_under.name]

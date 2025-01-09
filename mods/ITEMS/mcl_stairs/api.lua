@@ -59,7 +59,7 @@ local function place_slab_normal(itemstack, placer, pointed_thing)
 		place:set_name(origdef._mcl_other_slab_half)
 	end
 
-	local ret = minetest.item_place(place, placer, pointed_thing, 0)
+	local ret = minetest.item_place_node(place, placer, pointed_thing, 0)
 	ret:set_name(origname)
 	return ret
 end
@@ -87,7 +87,7 @@ local function place_stair(itemstack, placer, pointed_thing)
 		end
 	end
 
-	return minetest.item_place(itemstack, placer, pointed_thing, param2)
+	return minetest.item_place_node(itemstack, placer, pointed_thing, param2)
 end
 
 local function placement_prevented(params)

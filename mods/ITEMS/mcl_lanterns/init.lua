@@ -172,7 +172,7 @@ function mcl_lanterns.register_lantern(name, def)
 			end
 
 			local success
-			itemstack, success = minetest.item_place(fakestack, placer, pointed_thing, wdir)
+			itemstack, success = minetest.item_place_node(fakestack, placer, pointed_thing, wdir)
 			itemstack:set_name(itemstring_floor)
 
 			if success then
@@ -286,7 +286,7 @@ minetest.register_node("mcl_lanterns:chain", {
 			param2 = 4
 		end
 
-		return minetest.item_place(itemstack, placer, pointed_thing, param2)
+		return minetest.item_place_node(itemstack, placer, pointed_thing, param2)
 	end,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,

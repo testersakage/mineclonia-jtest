@@ -128,7 +128,7 @@ minetest.register_node("mcl_lush_caves:hanging_roots", {
 			return itemstack
 		end
 		if pointed_thing.under.y > pointed_thing.above.y then
-			return minetest.item_place(itemstack, placer, pointed_thing)
+			return minetest.item_place_node(itemstack, placer, pointed_thing)
 		end
 	end,
 	node_placement_prediction = "",
