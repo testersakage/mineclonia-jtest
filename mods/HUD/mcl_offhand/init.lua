@@ -51,14 +51,6 @@ local function offhand_get_count(player)
 	return mcl_offhand.get_offhand(player):get_count()
 end
 
-minetest.register_on_joinplayer(function(player)
-	mcl_offhand[player] = {
-		hud = {},
-		last_wear = offhand_get_wear(player),
-		last_count = offhand_get_count(player),
-	}
-end)
-
 local function remove_hud(player, hud)
 	local offhand_hud = mcl_offhand[player].hud[hud]
 	if offhand_hud then
@@ -90,7 +82,14 @@ local function update_wear_bar(player, itemstack)
 end
 
 mcl_player.register_globalstep(function(player)
-	if not mcl_offhand[player] then return end
+	if not mcl_offhand[player] then
+		mcl_offhand[player] = {
+			hud = {},
+			last_wear = offhand_get_wear(player),
+			last_count = offhand_get_count(player),
+		}
+	end
+
 	local itemstack = mcl_offhand.get_offhand(player)
 	local offhand_item = itemstack:get_name()
 	local offhand_hud = mcl_offhand[player].hud
