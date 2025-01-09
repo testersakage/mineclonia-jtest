@@ -5,18 +5,20 @@ local modpath = core.get_modpath(modname)
 -- by debiankaios
 -- adapted for mcl2 by cora
 
+-- possible plants for each nylium type
+-- give plants a probablity of being chosen totalling 100%
 local nether_plants = {
 	["mcl_crimson:crimson_nylium"] = {
-		"mcl_crimson:crimson_roots",
-		"mcl_crimson:crimson_fungus",
-		"mcl_crimson:warped_fungus",
+		{ name = "mcl_crimson:warped_fungus", chance = 10 },
+		{ name = "mcl_crimson:crimson_fungus", chance = 20 },
+		{ name = "mcl_crimson:crimson_roots", chance = 70 },
 	},
 	["mcl_crimson:warped_nylium"] = {
-		"mcl_crimson:warped_roots",
-		"mcl_crimson:crimson_fungus",
-		"mcl_crimson:warped_fungus",
-		"mcl_crimson:twisting_vines",
-		"mcl_crimson:nether_sprouts",
+		{ name = "mcl_crimson:crimson_fungus", chance = 10 },
+		{ name = "mcl_crimson:warped_fungus", chance = 20 },
+		{ name = "mcl_crimson:warped_roots", chance = 30 },
+		{ name = "mcl_crimson:nether_sprouts", chance = 30 },
+		{ name = "mcl_crimson:twisting_vines", chance = 10 },
 	},
 }
 
@@ -25,14 +27,40 @@ local place_fungus = mcl_util.generate_on_place_plant_function(function(pos)
 end)
 
 local function spread_nether_plants(pos,node)
-	local n = node.name
-	local nn = core.find_nodes_in_area_under_air(vector.offset(pos,-5,-3,-5),vector.offset(pos,5,3,5),{n})
-	table.shuffle(nn)
-	nn[1] = pos
-	for i=1,math.random(1,math.min(#nn,12)) do
-		local p = vector.offset(nn[i],0,1,0)
+	local apply_to = node.name
+	local targets = core.find_nodes_in_area_under_air( vector.offset(pos,-2,-2,-2),vector.offset(pos,2,2,2),{apply_to} )
+	if #targets == 0 then
+		-- give back the unapplied bonemeal
+		core.add_item(pos, "mcl_bone_meal:bone_meal")
+--		core.check_for_falling(pos)
+		return
+	end
+	table.shuffle(targets)
+	-- find clicked node and move to the beginngin of the targets
+	for i, v in ipairs(targets) do
+		-- only move clicked node if it is a viable target
+		if v == pos then
+			table.remove(targets, i)
+			table.insert(targets, 1, v)
+		end
+	end
+	-- create distribution table based on likelyhood to occur in biome
+	local likelyhood = {}
+	local tally = 0
+	for i=1, #nether_plants[apply_to] do
+		likelyhood[i] = nether_plants[apply_to][i].chance + tally
+		tally = tally + likelyhood[i]
+	end
+	for i=1, math.random(1, math.min(#targets,8)) do
+		local p = vector.offset(targets[i],0,1,0)
 		if core.get_node(p).name == "air" then
-			core.set_node(p,{name=nether_plants[n][math.random(#nether_plants[n])]})
+			local plant_roll = math.random(100)
+			for ch=1, #likelyhood do
+				if plant_roll <= likelyhood[ch] then
+					core.set_node(p,{name = nether_plants[apply_to][ch].name})
+					break
+				end
+			end
 		end
 	end
 end
