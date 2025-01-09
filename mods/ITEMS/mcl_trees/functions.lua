@@ -106,14 +106,14 @@ local function check_2by2_saps(pos, node)
 	if #minetest.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) < 4 then return end
 	-- we need to check 4 possible 2x2 squares on the x/z plane each uniquely defined by one of the
 	-- diagonals of the position we're checking:
-	for dx in -1,1,2 do for dz in -1,1,2 do
+	for dx = -1, 1, 2 do for dz = -1, 1, 2 do
 		local d = vector.offset(pos, dx, 0, dz) --one of the 4 diagonal positions from this node
 		local xp = vector.new(d.x,pos.y,pos.z) --x neighbor
 		local zp = vector.new(pos.x,pos.y,d.z) --z neighbor
 
 		if minetest.get_node(d).name == n and minetest.get_node(xp).name == n and minetest.get_node(zp).name == n then
 			--if all the 3 acquired positions have the same nodename as the original node it must be a square
-			return {d,xp,zp}, vector.offset(pos, math.max(dx, 0), 0, math.max(dz, 0))
+			return {d, xp, zp}, vector.offset(pos, math.max(dx, 0), 0, math.max(dz, 0))
 		end
 	end; end
 end
