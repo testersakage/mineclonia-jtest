@@ -49,9 +49,7 @@ local function spread_nether_plants(pos,node)
 	local tally = 0
 	for i=1, #nether_plants[apply_to] do
 		likelyhood[i] = nether_plants[apply_to][i].chance + tally
-		core.chat_send_all("1 tally = "..tally)
 		tally = likelyhood[i]
-		core.chat_send_all("2 tally = "..tally)
 	end
 	for i=1, math.random(1, math.min(#targets,8)) do
 		local p = vector.offset(targets[i],0,1,0)
