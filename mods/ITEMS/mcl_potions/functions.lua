@@ -197,7 +197,7 @@ mcl_potions.register_effect({
 	on_end = function(object)
 		mcl_potions.make_invisible(object, false)
 	end,
-	particle_color = "#7F8392",
+	particle_color = "#F6F6F6",
 	uses_factor = false,
 })
 
@@ -217,7 +217,7 @@ mcl_potions.register_effect({
 			mcl_util.deal_damage(object, 1, {type = "magic"})
 		end
 	end,
-	particle_color = "#4E9331",
+	particle_color = "#87A363",
 	uses_factor = true,
 	lvl1_factor = 1.25,
 	lvl2_factor = 0.6,
@@ -258,7 +258,7 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("+@1% melee damage", 100*(factor-1))
 	end,
-	particle_color = "#932423",
+	particle_color = "#FFC700",
 	uses_factor = true,
 	lvl1_factor = 1.3,
 	lvl2_factor = 1.6,
@@ -271,7 +271,7 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("-@1% melee damage", 100*(1-factor))
 	end,
-	particle_color = "#485D48",
+	particle_color = "#484D48",
 	uses_factor = true,
 	lvl1_factor = 0.8,
 	lvl2_factor = 0.6,
@@ -311,7 +311,7 @@ mcl_potions.register_effect({
 			end
 		end
 	end,
-	particle_color = "#2E5299",
+	particle_color = "#98DAC0",
 	uses_factor = false,
 })
 
@@ -376,7 +376,7 @@ mcl_potions.register_effect({
 			remove_physics_factor (object, "speed", "movement_speed",
 					   "mcl_potions:dolphin")
 	end,
-	particle_color = "#6AABFD",
+	particle_color = "#88A3BE",
 	uses_factor = false,
 	timer_uses_factor = false,
 	hit_timer_step = 1,
@@ -410,7 +410,7 @@ mcl_potions.register_effect({
 		mcl_serverplayer.remove_physics_factor (object, "safe_fall_distance",
 				"mcl_potions:leaping_fall_distance")
 	end,
-	particle_color = "#22FF4C",
+	particle_color = "#FDFF84",
 	uses_factor = true,
 	lvl1_factor = 0.5,
 	lvl2_factor = 1,
@@ -445,7 +445,7 @@ mcl_potions.register_effect({
 		remove_physics_factor (object, "gravity", "fall_speed",
 				   "mcl_potions:slow_falling")
 	end,
-	particle_color = "#ACCCFF",
+	particle_color = "#F3CFB9",
 })
 
 mcl_mobs.make_physics_factor_persistent ("mcl_potions:slow_falling")
@@ -486,7 +486,7 @@ mcl_potions.register_effect({
 		mcl_serverplayer.remove_physics_factor (object, "movement_speed",
 				"mcl_potions:swiftness")
 	end,
-	particle_color = "#7CAFC6",
+	particle_color = "#33EBFF",
 	uses_factor = true,
 	lvl1_factor = 0.2,
 	lvl2_factor = 0.4,
@@ -526,7 +526,7 @@ mcl_potions.register_effect({
 		mcl_serverplayer.remove_physics_factor (object, "movement_speed",
 				"mcl_potions:slowness")
 	end,
-	particle_color = "#5A6C81",
+	particle_color = "#8BAFE0",
 	uses_factor = true,
 	lvl1_factor = 0.15,
 	lvl2_factor = 0.3,
@@ -567,7 +567,7 @@ mcl_potions.register_effect({
 	on_end = function (object)
 		remove_physics_factor(object, "gravity", "fall_speed", "mcl_potions:levitation")
 	end,
-	particle_color = "#420E7E",
+	particle_color = "#CEFFFF",
 	uses_factor = true,
 	lvl1_factor = 0.9,
 	lvl2_factor = 1.8,
@@ -605,7 +605,7 @@ mcl_potions.register_effect({
 		mcl_weather.skycolor.update_sky_color({object})
 		end
 	end,
-	particle_color = "#1F1FA1",
+	particle_color = "#C2FF66",
 	uses_factor = false,
 })
 
@@ -654,7 +654,7 @@ mcl_potions.register_effect({
 		}})
 		end
 	end,
-	particle_color = "#000000",
+	particle_color = "#292721",
 	uses_factor = true,
 	lvl1_factor = 30,
 	lvl2_factor = 20,
@@ -722,7 +722,7 @@ mcl_potions.register_effect({
 		end
 		EF.glowing[object].waypoints = {}
 	end,
-	particle_color = "#FFFF77",
+	particle_color = "#94A061",
 	uses_factor = false,
 })
 
@@ -743,7 +743,7 @@ mcl_potions.register_effect({
 		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT})
 		end
 	end,
-	particle_color = "#FF2222",
+	particle_color = "#F87D23",
 	uses_factor = true,
 	lvl1_factor = 4,
 	lvl2_factor = 8,
@@ -778,7 +778,7 @@ mcl_potions.register_effect({
 	on_end = function(object)
 		hb.change_hudbar(object, "absorption", 0)
 	end,
-	particle_color = "#B59500",
+	particle_color = "#2552A5",
 	uses_factor = true,
 	lvl1_factor = 4,
 	lvl2_factor = 8,
@@ -804,7 +804,7 @@ mcl_potions.register_effect({
 	get_tt = function()
 		return S("resistance to fire damage")
 	end,
-	particle_color = "#E49A3A",
+	particle_color = "#FF9900",
 	uses_factor = false,
 	damage_modifier = "is_fire",
 })
@@ -815,7 +815,7 @@ mcl_potions.register_effect({
 	get_tt = function(factor)
 		return S("resist @1% of incoming damage", math.floor(factor*100))
 	end,
-	particle_color = "#2552A5",
+	particle_color = "#9146F0",
 	uses_factor = true,
 	lvl1_factor = 0.2,
 	lvl2_factor = 0.4,
@@ -828,7 +828,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "luck",
 	description = S("Luck"),
-	particle_color = "#7BFF42",
+	particle_color = "#59C106",
 	on_start = function()
 		-- TODO: Luck that only influences loot tables as in
 		-- Minecraft.
@@ -839,7 +839,7 @@ mcl_potions.register_effect({
 mcl_potions.register_effect({
 	name = "bad_luck",
 	description = S("Bad Luck"),
-	particle_color = "#887343",
+	particle_color = "#C0A44D",
 	on_start = function()
 		-- TODO: Bad Luck that only influences loot tables as in
 		-- Minecraft.
@@ -853,7 +853,7 @@ mcl_potions.register_effect({
 	get_tt = function()
 		return S("danger is imminent")
 	end,
-	particle_color = "#472331",
+	particle_color = "#0B6138",
 	uses_factor = true,
 })
 
@@ -878,7 +878,7 @@ mcl_potions.register_effect({
 			mcl_util.deal_damage(object, 1, {type = "magic"})
 		end
 	end,
-	particle_color = "#292929",
+	particle_color = "#736156",
 	uses_factor = true,
 	lvl1_factor = 2,
 	lvl2_factor = 1,
@@ -919,7 +919,7 @@ mcl_potions.register_effect({
 		object:hud_remove(EF.blindness[object].vignette)
 		end
 	end,
-	particle_color = "#686868",
+	particle_color = "#1F1F23",
 	uses_factor = false,
 })
 
@@ -958,7 +958,7 @@ mcl_potions.register_effect({
 		mcl_hunger.reset_bars_poison_hunger(object)
 		end
 	end,
-	particle_color = "#83A061",
+	particle_color = "#587653",
 	uses_factor = true,
 	lvl1_factor = 100,
 	lvl2_factor = 200,
@@ -989,7 +989,7 @@ mcl_potions.register_effect({
 		})
 
 	end,
-	particle_color = "#60AA30",
+	particle_color = "#551D4A",
 	uses_factor = true,
 	lvl1_factor = 2,
 	lvl2_factor = 1,
@@ -1008,7 +1008,7 @@ mcl_potions.register_effect({
 		mcl_hunger.saturate(object:get_player_name(), dtime*factor)
 		end
 	end,
-	particle_color = "#CEAE29",
+	particle_color = "#F82423",
 	uses_factor = true,
 })
 
@@ -1077,7 +1077,7 @@ mcl_potions.register_effect({
 		mcl_potions._reset_haste_fatigue_item_meta(object)
 		end
 	end,
-	particle_color = "#FFFF00",
+	particle_color = "#D9C043",
 	uses_factor = true,
 	lvl1_factor = 0.2,
 	lvl2_factor = 0.4,
@@ -1101,7 +1101,7 @@ mcl_potions.register_effect({
 		mcl_potions._reset_haste_fatigue_item_meta(object)
 		end
 	end,
-	particle_color = "#64643D",
+	particle_color = "#4A4217",
 	uses_factor = true,
 	lvl1_factor = 0.3,
 	lvl2_factor = 0.09,
@@ -1139,7 +1139,7 @@ mcl_potions.register_effect({
 		haste_fatigue_hand_update(object)
 		mcl_potions._reset_haste_fatigue_item_meta(object)
 	end,
-	particle_color = "#1FB1BA",
+	particle_color = "#1DC2D1",
 	uses_factor = true,
 	lvl1_factor = 0.2,
 	lvl2_factor = 0.4,
