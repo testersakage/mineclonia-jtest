@@ -21,14 +21,14 @@ mcl_explosions_griefing (Explosion griefing) bool true
 # If disabled, no ores will be generated.
 mcl_generate_ores (Generate ores) bool true
 
-# Enable minetest mapgen dungeons
-mcl_enable_mt_dungeons (Native Minetest dungeons) bool false
+# Enable Luanti mapgen dungeons
+mcl_enable_mt_dungeons (Native Luanti dungeons) bool false
 
 # If enabled, the “flat” map generator generates a Classic Superflat world:
 # Completely flat, 1 layer of grass blocks on top of 2 layers of dirt on
 # top of a final layer of bedrock. No caves, trees or plants.
 # Also, if enabled, the setting “mgflat_flags” is ignored.
-# If disabled, Minetest's default flat map generator is used, that is, trees,
+# If disabled, Luanti's default flat map generator is used, that is, trees,
 # caves, and a deeper underground can be generated.
 #
 # Note: This setting has no effect on existing worlds.
