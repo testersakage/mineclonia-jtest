@@ -360,11 +360,7 @@ local function get_recipe_fs(data, iY, player)
 		cooktime, width = width, 1
 	elseif width == 0 then
 		shapeless = true
-		if #recipe.items <= 4 then
-			width = 2
-		else
-			width = math.min(3, #recipe.items)
-		end
+		width = #recipe.items <= 4 and 2 or 3
 	end
 
 	local rows = math.ceil(table.maxn(recipe.items) / width)

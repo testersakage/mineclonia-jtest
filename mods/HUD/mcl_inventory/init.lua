@@ -58,7 +58,12 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 	local grid_width = optional_width or pinv:get_width("craft")
 	local grid_height = optional_height or math.ceil(pinv:get_size("craft") / grid_width)
 	local craft_size = table.max_index(craft.items)
-	if craft.width > grid_width or math.ceil(craft_size / craft.width) > grid_height then
+	local craft_width = craft.width
+	if craft_width == 0 then
+		craft_width = craft_size <= 4 and 2 or 3
+	end
+
+	if craft_width > grid_width or math.ceil(craft_size / craft_width) > grid_height then
 		return false
 	end
 	local list = "_mcl_inventory_recipe_groups"
@@ -91,8 +96,8 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 			r[k+i] = ""
 		end
 		-- adapt from craft width to craft grid width
-		if (k % craft.width) == 0 then
-			for _ = 1, grid_width - craft.width do
+		if (k % craft_width) == 0 then
+			for _ = 1, grid_width - craft_width do
 				i = i + 1
 				r[k+i] = ""
 			end
