@@ -1,6 +1,6 @@
 mcl_inventory = {}
-dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/creative.lua")
-dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/survival.lua")
+dofile(core.get_modpath(core.get_current_modname()) .. "/creative.lua")
+dofile(core.get_modpath(core.get_current_modname()) .. "/survival.lua")
 
 ---Returns a single itemstack in the given inventory to the main inventory, or drop it when there's no space left.
 local function return_item(itemstack, dropper, pos, inv)
@@ -14,7 +14,7 @@ local function return_item(itemstack, dropper, pos, inv)
 			local p = vector.offset(pos, 0, 1.2, 0)
 			p.x = p.x + (math.random(1, 3) * 0.2)
 			p.z = p.z + (math.random(1, 3) * 0.2)
-			local obj = minetest.add_item(p, itemstack)
+			local obj = core.add_item(p, itemstack)
 			if obj then
 				v.x = v.x * 4
 				v.y = v.y * 4 + 2
@@ -25,7 +25,7 @@ local function return_item(itemstack, dropper, pos, inv)
 		end
 	else
 		-- Fallback for unexpected cases
-		minetest.add_item(pos, itemstack)
+		core.add_item(pos, itemstack)
 	end
 	return itemstack
 end
@@ -45,7 +45,7 @@ local function return_fields(player, name)
 end
 
 local function set_inventory(player)
-	if minetest.is_creative_enabled(player:get_player_name()) then
+	if core.is_creative_enabled(player:get_player_name()) then
 		mcl_inventory.set_creative_formspec(player)
 		return
 	end
@@ -80,7 +80,7 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 				local group = it:sub(7)
 				for index, stack in pairs(pinv:get_list(list)) do
 					local name = stack:get_name()
-					if minetest.get_item_group(name, group) > 0 then
+					if core.get_item_group(name, group) > 0 then
 						r[ki] = name
 						stack:take_item(1)
 						pinv:set_stack(list, index, stack)
@@ -166,29 +166,29 @@ function mcl_inventory.fill_grid(player)
 	end
 end
 
-minetest.register_on_player_receive_fields(function(player, _, fields)
+core.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_crafting_fillgrid then
 		mcl_inventory.fill_grid(player)
 	end
 end)
 
 -- Drop items in craft grid and reset inventory on closing
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.quit then
 		return_fields(player, "craft")
 		return_fields(player, "enchanting_lapis")
 		return_fields(player, "enchanting_item")
-		if not minetest.is_creative_enabled(player:get_player_name()) and (formname == "" or formname == "main") then
+		if not core.is_creative_enabled(player:get_player_name()) and (formname == "" or formname == "main") then
 			set_inventory(player)
 		end
 	end
 end)
 
-minetest.register_craft_predict(function(itemstack, player, old_craft_grid, inv) ---@diagnostic disable-line: unused-local
+core.register_craft_predict(function(itemstack, player, old_craft_grid, inv) ---@diagnostic disable-line: unused-local
 	if not player or not player:get_pos() then return end -- can apparently be called when player has already left !?
 	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
 		return_fields(player, "craft")
-		minetest.chat_send_player(player:get_player_name(), "Crafting table out of range!")
+		core.chat_send_player(player:get_player_name(), "Crafting table out of range!")
 	end
 end)
 
@@ -197,13 +197,13 @@ function mcl_inventory.update_inventory_formspec(player)
 end
 
 -- Drop crafting grid items on leaving
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	return_fields(player, "craft")
 	return_fields(player, "enchanting_lapis")
 	return_fields(player, "enchanting_item")
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	--init inventory
 	local inv = player:get_inventory()
 
@@ -220,7 +220,7 @@ minetest.register_on_joinplayer(function(player)
 	player:hud_set_hotbar_selected_image("mcl_inventory_hotbar_selected.png")
 
 	-- In Creative Mode, the initial inventory setup is handled in creative.lua
-	if not minetest.is_creative_enabled(player:get_player_name()) then
+	if not core.is_creative_enabled(player:get_player_name()) then
 		set_inventory(player)
 	end
 
