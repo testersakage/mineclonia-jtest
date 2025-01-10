@@ -133,7 +133,9 @@ end
 -- were power which is lowered/removed. 'fill_queue' is a queue of events were
 -- power is added/raised. 'update' is a table which gets populated with
 -- positions that should get redstone update events.
-local function propagate_wire(clear_queue, fill_queue, updates)
+local function propagate_wire(clear_nodes, fill_nodes, updates)
+	local fill_queue = mcl_util.queue()
+	local clear_queue = mcl_util.queue()
 	local nodecache = {}
 	local updates_ = {}
 
@@ -155,8 +157,9 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		return wireflag_tab[node.name] and node.param2 or 0
 	end
 
-	for _, entry in pairs(clear_queue.queue) do
+	for _, entry in pairs(clear_nodes) do
 		swap_node(entry.pos, {name = get_node(entry.pos).name, param2 = 0})
+		clear_queue:enqueue(entry)
 	end
 
 	while clear_queue:size() > 0 do
@@ -187,8 +190,9 @@ local function propagate_wire(clear_queue, fill_queue, updates)
 		end
 	end
 
-	for _, entry in pairs(fill_queue.queue) do
+	for _, entry in pairs(fill_nodes) do
 		swap_node(entry.pos, {name = get_node(entry.pos).name, param2 = entry.power})
+		fill_queue:enqueue(entry)
 	end
 
 	while fill_queue:size() > 0 do
@@ -305,21 +309,21 @@ end
 local function update_neighbours(pos, oldnode, newnode)
 	minetest.load_area(pos:subtract(20), pos:add(20))
 
-	local fill_queue = mcl_util.queue()
-	local clear_queue = mcl_util.queue()
+	local fill_nodes = {}
+	local clear_nodes = {}
 	local node = newnode or minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
 	local oldndef = oldnode and minetest.registered_nodes[oldnode.name]
 	local get_power = ndef and ndef._mcl_redstone and ndef._mcl_redstone.get_power
 	local old_get_power = oldndef and oldndef._mcl_redstone and oldndef._mcl_redstone.get_power
 
-	local function update_wire(pos, oldpower, dirs)
+	local function update_wire(pos, oldpower)
 		if oldpower then
-			clear_queue:enqueue({pos = pos, power = oldpower, dirs = dirs})
+			table.insert(clear_nodes, {pos = pos, power = oldpower})
 		end
 		local power = get_node_power_2(pos)
 
-		fill_queue:enqueue({pos = pos, power = power, dirs = dirs})
+		table.insert(fill_nodes, {pos = pos, power = power})
 	end
 
 	local hash = minetest.hash_node_position(pos)
@@ -354,7 +358,7 @@ local function update_neighbours(pos, oldnode, newnode)
 		end
 	end
 
-	propagate_wire(clear_queue, fill_queue)
+	propagate_wire(clear_nodes, fill_nodes)
 end
 
 -- Piston pusher nodes calls this during init to avoid circuits stopping if a
@@ -387,15 +391,15 @@ function mcl_redstone.swap_node(pos, node)
 end
 
 local function opaque_update_neighbours(pos, added)
-	local fill_queue = mcl_util.queue()
-	local clear_queue = mcl_util.queue()
+	local fill_nodes = {}
+	local clear_nodes = {}
 
 	local function update_wire(pos)
 		local oldpower = minetest.get_node(pos).param2
 		local power = get_node_power_2(pos)
 
-		clear_queue:enqueue({pos = pos, power = oldpower})
-		fill_queue:enqueue({pos = pos, power = power})
+		table.insert(clear_nodes, {pos = pos, power = oldpower})
+		table.insert(fill_nodes, {pos = pos, power = power})
 	end
 
 	for _, dir in pairs(sixdirs) do
@@ -409,21 +413,21 @@ local function opaque_update_neighbours(pos, added)
 		end
 	end
 
-	propagate_wire(clear_queue, fill_queue)
+	propagate_wire(clear_nodes, fill_nodes)
 end
 
 local function update_wire(pos, oldnode)
-	local fill_queue = mcl_util.queue()
-	local clear_queue = mcl_util.queue()
+	local fill_nodes = {}
+	local clear_nodes = {}
 	local node = minetest.get_node(pos)
 	local power = get_node_power_2(pos)
 
-	clear_queue:enqueue({pos = pos, power = oldnode and oldnode.param2 or 0})
+	table.insert(clear_nodes, {pos = pos, power = oldnode and oldnode.param2 or 0})
 	if wireflag_tab[node.name] then
-		fill_queue:enqueue({pos = pos, power = power})
+		table.insert(fill_nodes, {pos = pos, power = power})
 	end
 
-	propagate_wire(clear_queue, fill_queue)
+	propagate_wire(clear_nodes, fill_nodes)
 end
 
 -- Override nodes to perform redstone updates on changes.
