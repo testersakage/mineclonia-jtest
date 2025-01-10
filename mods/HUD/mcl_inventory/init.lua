@@ -74,26 +74,31 @@ function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_h
 	local i = 0
 	for k = 1, craft_size do
 		local it = craft.items[k]
+		local ki = k+i
 		if it then
 			if it:sub(1,6) == "group:" then
 				local group = it:sub(7)
 				for index, stack in pairs(pinv:get_list(list)) do
 					local name = stack:get_name()
 					if minetest.get_item_group(name, group) > 0 then
-						r[k+i] = name
+						r[ki] = name
 						stack:take_item(1)
 						pinv:set_stack(list, index, stack)
 					end
 				end
-				all_found = all_found and r[k+i]
+				if not r[ki] then
+					all_found = false
+					break
+				end
 			elseif pinv:contains_item(list, ItemStack(it)) then
-				r[k+i] = it
+				r[ki] = it
 				pinv:remove_item(list, ItemStack(it))
 			else
 				all_found = false
+				break
 			end
 		else
-			r[k+i] = ""
+			r[ki] = ""
 		end
 		-- adapt from craft width to craft grid width
 		if (k % craft_width) == 0 then
