@@ -17,7 +17,7 @@ doc.add_category("advanced", {
 doc.add_entry("advanced", "creative", {
 	name = S("Creative Mode"),
 	data = { text =
-S("Enabling Creative Mode in MineClone 2 applies the following changes:").."\n\n"..
+S("Enabling Creative Mode in MineClonia applies the following changes:").."\n\n"..
 
 S("• You keep the things you've placed").."\n"..
 S("• Creative inventory is available to obtain most items easily").."\n"..
@@ -57,7 +57,7 @@ S("• [Ctrl]+[K]: Delete all text after the cursor").."\n"..
 S("• [Page up]: Scroll up").."\n"..
 S("• [Page down]: Scroll down").."\n"..
 
-S("There is also an input history. Minetest saves your previous console inputs which you can quickly access later:").."\n\n"..
+S("There is also an input history. Luanti saves your previous console inputs which you can quickly access later:").."\n\n"..
 
 S("• [Up]: Go to previous entry in history").."\n"..
 S("• [Down]: Go to next entry in history")
@@ -70,7 +70,7 @@ S("Server commands (also called “chat commands”) are little helpers for adva
 
 S("Server commands can be entered by players using the chat to perform a special server action. There are a few commands which can be issued by everyone, but some commands only work if you have certain privileges granted on the server. There is a small set of basic commands which are always available, other commands can be added by mods.").."\n\n"..
 
-S("To issue a command, simply type it like a chat message or press Minetest's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Minetest command key does the same as the chat key, except that the slash is already entered.").."\n"..
+S("To issue a command, simply type it like a chat message or press Luanti's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Luanti command key does the same as the chat key, except that the slash is already entered.").."\n"..
 S("Commands may or may not give a response in the chat log, but errors will generally be shown in the chat. Try it for yourselves: Close this window and type in the “/mods” command. This will give you the list of available mods on this server.").."\n\n"..
 
 S("“/help all” is a very important command: You get a list of all available commands on the server, a short explanation and the allowed parameters. This command is also important because the available commands often differ per server.").."\n\n"..
@@ -191,17 +191,17 @@ S("For a full list of all available settings, use the “All Settings” dialog 
 doc.add_entry("advanced", "online", {
 	name = S("Online help"),
 	data = { text=
-S("You may want to check out these online resources related to Minetest:").."\n\n"..
+S("You may want to check out these online resources related to Luanti:").."\n\n"..
 
-S("Official homepage of Minetest: <https://minetest.net/>").."\n"..
-S("The main place to find the most recent version of Minetest.").."\n\n"..
+S("Official homepage of Luanti: <https://luanti.org/>").."\n"..
+S("The main place to find the most recent version of Luanti.").."\n\n"..
 
 S("Community wiki: <https://wiki.minetest.net/>").."\n"..
-S("A community-based documentation website for Minetest. Anyone with an account can edit it! It also features a documentation of Minetest Game.").."\n\n"..
+S("A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game.").."\n\n"..
 
-S("Web forums: <https://forums.minetest.net/>").."\n"..
-S("A web-based discussion platform where you can discuss everything related to Minetest. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages.").."\n\n"..
+S("Web forums: <https://forum.luanti.org/>").."\n"..
+S("A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages.").."\n\n"..
 
 S("Chat: <irc://irc.freenode.net#minetest>").."\n"..
-S("A generic Internet Relay Chat channel for everything related to Minetest where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help.")
+S("A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help.")
 }})
