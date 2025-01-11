@@ -245,18 +245,15 @@ core.register_craft({
 	}
 })
 
-local function cauldron_extinguish(obj,pos)
+local function cauldron_extinguish(obj, pos)
 	local node = core.get_node(pos)
 
 	if mcl_burning.is_burning(obj) then
 		mcl_burning.extinguish(obj)
 
-		local new_group = core.get_item_group(node.name, "cauldron_filled") - 1
 		local liquid = core.registered_nodes[node.name]._mcl_cauldrons_liquid
-		local subname = new_group == 0 and "" or new_group .. "_" .. liquid
-		local new_name = "mcl_cauldrons:cauldron_" .. subname
 
-		core.swap_node(pos, {name = new_name})
+		mcl_cauldrons.add_level(pos, -1, liquid)
 	end
 end
 
