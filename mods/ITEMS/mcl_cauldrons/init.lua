@@ -121,12 +121,12 @@ local function bucket_place(itemstack, placer, pointed_thing)
 	if core.get_item_group(name, "cauldron_filled") >= 3 then return itemstack end
 
 	local n_defs = core.registered_nodes[name]
-	local c_liquid = n_defs and n_defs._mcl_cauldrons_liquid
-	local b_liquid = itemstack:get_definition()._mcl_buckets_liquid
+	local cauldrons_liquid = n_defs and n_defs._mcl_cauldrons_liquid
+	local buckets_liquid = itemstack:get_definition()._mcl_buckets_liquid
 
 	if n_defs._mcl_cauldrons_fill_empty then
 		local sucess = core.place_node(pointed_thing.above, {
-			name = mcl_cauldrons.liquids[b_liquid].node
+			name = mcl_cauldrons.liquids[buckets_liquid].node
 		})
 
 		if sucess and not core.is_creative_enabled(placer:get_player_name()) then
@@ -134,8 +134,8 @@ local function bucket_place(itemstack, placer, pointed_thing)
 		end
 	end
 
-	if c_liquid == b_liquid or core.get_item_group(name, "cauldron") == 1 then
-		mcl_cauldrons.add_level(pointed_thing.under, 3, b_liquid)
+	if cauldrons_liquid == buckets_liquid or core.get_item_group(name, "cauldron") == 1 then
+		mcl_cauldrons.add_level(pointed_thing.under, 3, buckets_liquid)
 
 		return_bucket(itemstack, placer, pointed_thing)
 	end
