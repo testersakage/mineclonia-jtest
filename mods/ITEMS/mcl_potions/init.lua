@@ -77,9 +77,8 @@ minetest.register_craftitem("mcl_potions:glass_bottle", {
 					minetest.record_protection_violation(pointed_thing.under, pname)
 					return itemstack
 				end
-				get_water = true
 				river_water = cauldron_group == 2
-				mcl_cauldrons.add_level(pointed_thing.under, -1)
+				get_water = mcl_cauldrons.add_level(pointed_thing.under, -1) or false
 			end
 			if get_water then
 				local water_bottle
@@ -134,20 +133,8 @@ local function potion_image(colorstring, opacity)
 end
 
 
-
--- Cauldron fill up rules:
--- Adding any water increases the water level by 1, preserving the current water type
-local cauldron_levels = {
-	["mcl_core:water_source"] = {"", "_1", "_2", "_3"},
-	["mclx_core:river_water_source"] = {"", "_1r", "_2r", "_3r"},
-}
-local fill_cauldron = function(cauldron, water_type)
-	local base = "mcl_cauldrons:cauldron"
-	for index = 1, #cauldron_levels[water_type] do
-		if cauldron == (base .. cauldron_levels[water_type][index]) and index ~= #cauldron_levels[water_type] then
-			return base .. cauldron_levels[water_type][index + 1]
-		end
-	end
+local fill_cauldron = function(pos, water_type)
+	return mcl_cauldrons.add_level(pos, 1, water_type)
 end
 
 -- function to set node and empty water bottle (used for cauldrons and mud)
@@ -190,18 +177,17 @@ end
 
 local function water_bottle_on_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type == "node" then
-
-		local node = minetest.get_node(pointed_thing.under)
+		local pu = pointed_thing.under
+		local node = minetest.get_node(pu)
 
 		local cauldron = nil
 		if itemstack:get_name() == "mcl_potions:water" then -- regular water
-			cauldron = fill_cauldron(node.name, "mcl_core:water_source")
+			cauldron = fill_cauldron(pu, "water")
 		elseif itemstack:get_name() == "mcl_potions:river_water" then -- river water
-			cauldron = fill_cauldron(node.name, "mclx_core:river_water_source")
+			cauldron = fill_cauldron(pu, "river_water")
 		end
 
 		if cauldron then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, cauldron)
 			return ItemStack("mcl_potions:glass_bottle")
 		elseif node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud")

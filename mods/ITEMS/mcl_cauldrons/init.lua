@@ -47,6 +47,8 @@ function mcl_cauldrons.add_level(pos, amount, liquid)
 	local n_defs = core.registered_nodes[node.name]
 	local liquid = n_defs and n_defs._mcl_cauldrons_liquid or liquid
 
+	if amount > 0 and level == 3 then return end
+
 	if amount ~= 0 and liquid then
 		if amount > 0 then
 			sound_place(mcl_cauldrons.liquids[liquid].node, pos)
