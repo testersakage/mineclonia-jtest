@@ -1,6 +1,11 @@
 mcl_inventory = {}
-dofile(core.get_modpath(core.get_current_modname()) .. "/creative.lua")
-dofile(core.get_modpath(core.get_current_modname()) .. "/survival.lua")
+
+local modname = core.get_current_modname()
+local path = core.get_modpath(modname)
+local S = core.get_translator(modname)
+
+dofile(path .. "/creative.lua")
+dofile(path .. "/survival.lua")
 
 ---Returns a single itemstack in the given inventory to the main inventory, or drop it when there's no space left.
 local function return_item(itemstack, dropper, pos, inv)
@@ -188,7 +193,7 @@ core.register_craft_predict(function(itemstack, player, old_craft_grid, inv) ---
 	if not player or not player:get_pos() then return end -- can apparently be called when player has already left !?
 	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
 		return_fields(player, "craft")
-		core.chat_send_player(player:get_player_name(), "Crafting table out of range!")
+		core.chat_send_player(player:get_player_name(), S("Crafting table out of range!"))
 	end
 end)
 
