@@ -142,8 +142,8 @@ local function bucket_place_empty(itemstack, placer, pointed_thing)
 	mcl_cauldrons.add_level(pointed_thing.under, -3)
 
 	if not core.is_creative_enabled(placer:get_player_name()) then
-		local c_liquid = core.registered_nodes[name]._mcl_cauldrons_liquid
-		local bucket = c_liquid and mcl_cauldrons.liquids[c_liquid].bucket
+		local cauldrons_liquid = core.registered_nodes[name]._mcl_cauldrons_liquid
+		local bucket = cauldrons_liquid and mcl_cauldrons.liquids[cauldrons_liquid].bucket
 
 		if bucket then
 			if itemstack:get_count() == 1 then
