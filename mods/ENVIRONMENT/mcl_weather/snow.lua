@@ -7,7 +7,7 @@ local psdef= {
 	amount = PARTICLES_COUNT_SNOW,
 	time = 0, --stay on til we turn it off
 	minpos = vector.new(-25,20,-25),
-	maxpos =vector.new(25,25,25),
+	maxpos = vector.new(25,25,25),
 	minvel = vector.new(-0.2,-1,-0.2),
 	maxvel = vector.new(0.2,-4,0.2),
 	minacc = vector.new(0,-1,0),
@@ -151,7 +151,11 @@ if mcl_weather.allow_abm then
 	-- Filling up cauldrons with powder snow
 	core.register_abm({
 		label = "Fill cauldrons with powder snow",
-		nodenames = {"mcl_cauldrons:cauldron", "mcl_cauldrons:cauldron_1_powder_snow", "mcl_cauldrons:cauldron_2_powder_snow"},
+		nodenames = {
+			"mcl_cauldrons:cauldron",
+			"mcl_cauldrons:cauldron_1_powder_snow",
+			"mcl_cauldrons:cauldron_2_powder_snow"
+		},
 		interval = 56.0,
 		chance = 1,
 		action = function(pos)
