@@ -50,7 +50,7 @@ function mcl_cauldrons.add_level(pos, amount, liquid)
 
 	if minetest.get_item_group(node.name, "cauldron") == 0 then return end
 
-	amount = tonumber(amount) or 1
+	amount = amount or 1
 
 	local level = core.get_item_group(node.name, "cauldron_filled")
 	local n_defs = core.registered_nodes[node.name]
