@@ -214,7 +214,7 @@ function mcl_cauldrons.register_filled_cauldron(id, defs, overrides)
 			_on_bucket_place = bucket_place,
 			_on_bucket_place_empty = bucket_place_empty,
 			collision_box = get_node_box(0),
-			description = S("Cauldron - " .. defs.description_name .. " (@1/3)", i),
+			description = S("Cauldron - @1 (@2/3)", defs.description_name, i),
 			drawtype = "nodebox",
 			drop = "mcl_cauldrons:cauldron",
 			groups = table.merge({
