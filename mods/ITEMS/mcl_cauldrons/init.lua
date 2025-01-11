@@ -101,7 +101,7 @@ local function return_bucket(itemstack, placer, pointed_thing)
 		local rest = inv:add_item("main","mcl_buckets:bucket_empty")
 
 		if not rest:is_empty() then
-			mcl_util.drop_item_stack(pointed_thing.above, rest)
+			mcl_util.drop_item_stack(placer:get_pos(), rest)
 		end
 	end
 end
@@ -158,7 +158,7 @@ local function bucket_place_empty(itemstack, placer, pointed_thing)
 			local rest = inv:add_item("main", bucket)
 
 			if not rest:is_empty() then
-				mcl_util.drop_item_stack(pointed_thing.above, rest)
+				mcl_util.drop_item_stack(placer:get_pos(), rest)
 			end
 		end
 	end
