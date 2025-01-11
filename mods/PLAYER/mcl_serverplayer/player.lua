@@ -370,9 +370,23 @@ local ZERO_OVERRIDE = {
 	},
 }
 
+local DEFAULT_ANIMATION_SPEED = 30
+
 function mcl_serverplayer.animate_localplayer (state, player)
+	local speed = DEFAULT_ANIMATION_SPEED
 	local look_dir = norm_radians (player:get_look_horizontal ())
 	local pose = state.override_pose or state.pose
+	local blocking = mcl_shields.is_blocking (player)
+
+	if pose == POSE_CROUCHING or blocking ~= 0 then
+		speed = speed / 2
+	end
+
+	if speed ~= state.animation_speed then
+		player:set_animation_frame_speed (speed)
+		state.animation_speed = speed
+	end
+
 	if pose == POSE_STANDING or pose == POSE_CROUCHING
 		or pose == POSE_MOUNTED or pose == POSE_SIT_MOUNTED then
 		-- Animate body.
@@ -410,7 +424,6 @@ function mcl_serverplayer.animate_localplayer (state, player)
 				rotation = { vec = rot, absolute = true, },
 			})
 		end
-		local blocking = mcl_shields.is_blocking (player)
 		-- Control arm rotation whilst blocking.
 		if blocking == 2 then
 			player:set_bone_override ("Arm_Right_Pitch_Control",
