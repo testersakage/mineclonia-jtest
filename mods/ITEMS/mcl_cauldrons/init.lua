@@ -1,14 +1,5 @@
 mcl_cauldrons = {}
-mcl_cauldrons.liquids = {
-	lava = {
-		bucket = "mcl_buckets:bucket_lava",
-		node = "mcl_core:lava_source"
-	},
-	water = {
-		bucket = "mcl_buckets:bucket_water",
-		node = "mcl_core:water_source"
-	}
-}
+mcl_cauldrons.liquids = {}
 
 local S = core.get_translator(core.get_current_modname())
 
@@ -304,14 +295,18 @@ core.register_globalstep(function(dtime)
 end)
 
 mcl_cauldrons.register_filled_cauldron("lava", {
+	bucket = "mcl_buckets:bucket_lava",
 	description_name = S("Lava"),
-	liquid_texture = "default_lava_source_animated.png^[verticalframe:16:0"
+	liquid_texture = "default_lava_source_animated.png^[verticalframe:16:0",
+	node = "mcl_core:lava_source"
 }, {light_source = core.LIGHT_MAX})
 
 mcl_cauldrons.register_filled_cauldron("water", {
+	bucket = "mcl_buckets:bucket_water",
 	description_name = S("Water"),
 	groups = {cauldron_water = 1},
-	liquid_texture = "default_water_source_animated.png^[verticalframe:16:0"
+	liquid_texture = "default_water_source_animated.png^[verticalframe:16:0",
+	node = "mcl_core:water_source"
 })
 
 -- Legacy lbms
