@@ -132,11 +132,6 @@ local function potion_image(colorstring, opacity)
 	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
 end
 
-
-local fill_cauldron = function(pos, water_type)
-	return mcl_cauldrons.add_level(pos, 1, water_type)
-end
-
 -- function to set node and empty water bottle (used for cauldrons and mud)
 local function set_node_empty_bottle(itemstack, placer, pointed_thing, newitemstring)
 	local pname = placer:get_player_name()
@@ -182,9 +177,9 @@ local function water_bottle_on_place(itemstack, placer, pointed_thing)
 
 		local cauldron = nil
 		if itemstack:get_name() == "mcl_potions:water" then -- regular water
-			cauldron = fill_cauldron(pu, "water")
+			cauldron = mcl_cauldrons.add_level(pu, 1, "water")
 		elseif itemstack:get_name() == "mcl_potions:river_water" then -- river water
-			cauldron = fill_cauldron(pu, "river_water")
+			cauldron = mcl_cauldrons.add_level(pu, 1, "river_water")
 		end
 
 		if cauldron then
