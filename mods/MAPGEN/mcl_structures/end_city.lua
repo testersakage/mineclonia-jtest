@@ -34,6 +34,11 @@ mcl_structures.register_structure("end_shipwreck",{
 				mcl_itemframes.update_entity(fr)
 			end
 		end
+		local p1 = vector.offset(pos, -15, -9, -15)
+		local p2 = vector.offset(pos, 15, 9, 15)
+		for _,n in pairs(core.find_nodes_in_area(p1, p2, {"group:wall"})) do
+			mcl_walls.update_wall(n)
+		end
 		return spawn_shulkers(pos,def,pr)
 	end,
 	loot = {
