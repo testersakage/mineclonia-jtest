@@ -312,9 +312,9 @@ function mcl_doors:register_door(name, def)
 		_mcl_baseitem = name,
 		sounds = def.sounds,
 
-		after_dig_node = function(pos, oldnode, oldmeta, digger)
-			if oldmeta:get_int("rotation") == 1 then
-				oldmeta:set_int("rotation", 0)
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			if oldmetadata.fields["rotation"] == 1 then
+				oldmetadata.fields["rotation"] = 0
 			else
 				if not core.is_creative_enabled(digger:get_player_name()) then
 					core.add_item(pos, name)
@@ -476,9 +476,9 @@ function mcl_doors:register_door(name, def)
 		_mcl_baseitem = name,
 		sounds = def.sounds,
 
-		after_dig_node = function(pos, oldnode, oldmeta, digger)
-			if oldmeta:get_int("rotation") == 1 then
-				oldmeta:set_int("rotation", 0)
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			if oldmetadata.fields["rotation"] == 1 then
+				oldmetadata.fields["rotation"] = 0
 			else
 				if not core.is_creative_enabled(digger:get_player_name()) then
 					core.add_item(pos, name)
