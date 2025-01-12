@@ -21,7 +21,9 @@ local function set_candle_properties(stack, color)
 	end
 end
 
-local function drop_candles(pos, node)
+local function drop_candles(pos, node, _, digger)
+	if digger and digger:is_player() and core.is_creative_enabled(digger:get_player_name()) then return end
+
 	if not node then node = core.get_node(pos) end
 
 	local group = core.get_item_group(node.name, "candles")
@@ -295,7 +297,7 @@ local tpl_cake = {
 	mesh = "mcl_candles_cake.obj",
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		if not looking_at_candle(clicker, pointed_thing) then
-			drop_candles(pos, node)
+			drop_candles(pos, node, nil, clicker)
 			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type = "nothing"})
 			core.swap_node(pos, {name = "mcl_cake:cake_6"})
 		else
