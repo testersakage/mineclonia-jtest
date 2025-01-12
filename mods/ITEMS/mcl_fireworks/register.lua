@@ -28,7 +28,13 @@ local function use_rocket(itemstack, user, duration)
 end
 
 local function launch_rocket(pointed_thing, duration)
-	return core.add_entity(pointed_thing.under, "mcl_fireworks:rocket", core.serialize({flight_duration = duration}))
+	if core.add_entity(pointed_thing.above, "mcl_fireworks:rocket", core.serialize({flight_duration = duration})) then
+		core.sound_play("mcl_fireworks_rocket", {pos = pointed_thing.above})
+
+		return true
+	end
+
+	return false
 end
 
 local function register_rocket(n, duration, force)
@@ -38,9 +44,13 @@ local function register_rocket(n, duration, force)
 		inventory_image = "mcl_fireworks_rocket.png",
 		on_place = function(itemstack, placer, pointed_thing)
 			if not pointed_thing then return end
+
 			if launch_rocket(pointed_thing, duration) then
-				itemstack:take_item()
+				if not core.is_creative_enabled(placer:get_player_name()) then
+					itemstack:take_item()
+				end
 			end
+
 			return itemstack
 		end,
 		on_use = function(itemstack, user, pointed_thing)
