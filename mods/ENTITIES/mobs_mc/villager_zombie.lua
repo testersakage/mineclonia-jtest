@@ -282,46 +282,46 @@ end
 
 local zombie_villager_professions = {
 	armorer = {
-		texture = "mobs_mc_zombie_villager_armorer.png",
+		texture = "mobs_mc_zombie_villager_profession_armorer.png",
 	},
 	butcher = {
-		texture = "mobs_mc_zombie_villager_butcher.png",
+		texture = "mobs_mc_zombie_villager_profession_butcher.png",
 	},
 	cartographer = {
-		texture = "mobs_mc_zombie_villager_cartographer.png",
+		texture = "mobs_mc_zombie_villager_profession_cartographer.png",
 	},
 	cleric = {
-		texture = "mobs_mc_zombie_villager_cleric.png",
+		texture = "mobs_mc_zombie_villager_profession_cleric.png",
 	},
 	farmer = {
-		texture = "mobs_mc_zombie_villager_farmer.png",
+		texture = "mobs_mc_zombie_villager_profession_farmer.png",
 	},
 	fisherman = {
-		texture = "mobs_mc_zombie_villager_fisherman.png",
+		texture = "mobs_mc_zombie_villager_profession_fisherman.png",
 	},
 	fletcher = {
-		texture = "mobs_mc_zombie_villager_fletcher.png",
+		texture = "mobs_mc_zombie_villager_profession_fletcher.png",
 	},
 	leatherworker = {
-		texture = "mobs_mc_zombie_villager_leatherworker.png",
+		texture = "mobs_mc_zombie_villager_profession_leatherworker.png",
 	},
 	librarian = {
-		texture = "mobs_mc_zombie_villager_librarian.png",
+		texture = "mobs_mc_zombie_villager_profession_librarian.png",
 	},
 	mason = {
-		texture = "mobs_mc_zombie_villager_mason.png",
+		texture = "mobs_mc_zombie_villager_profession_mason.png",
 	},
 	shepherd = {
-		texture = "mobs_mc_zombie_villager_shepherd.png",
+		texture = "mobs_mc_zombie_villager_profession_shepherd.png",
 	},
 	toolsmith = {
-		texture = "mobs_mc_zombie_villager_toolsmith.png",
+		texture = "mobs_mc_zombie_villager_profession_toolsmith.png",
 	},
 	weaponsmith = {
-		texture = "mobs_mc_zombie_villager_weaponsmith.png",
+		texture = "mobs_mc_zombie_villager_profession_weaponsmith.png",
 	},
 	nitwit = {
-		texture = "mobs_mc_zombie_villager_nitwit.png",
+		texture = "mobs_mc_zombie_villager_profession_nitwit.png",
 	},
 }
 
@@ -386,7 +386,7 @@ function zombie_villager:get_overlaid_texture ()
 		and zombie_villager_professions[data.profession]
 	local textures = {}
 
-	table.insert (textures, "mobs_mc_zombie_villager.png")
+	table.insert (textures, "mobs_mc_zombie_villager_base.png")
 	if overlay ~= "" then
 		table.insert (textures, overlay)
 	end
