@@ -7,6 +7,7 @@ minetest.register_craftitem("mcl_fire:fire_charge", {
 	_doc_items_longdesc = S("Fire charges are primarily projectiles which can be launched from dispensers, they will fly in a straight line and burst into a fire on impact. Alternatively, they can be used to ignite fires directly."),
 	_doc_items_usagehelp = S("Put the fire charge into a dispenser and supply it with redstone power to launch it. To ignite a fire directly, simply place the fire charge on the ground, which uses it up."),
 	inventory_image = "mcl_fire_fire_charge.png",
+	groups = {craftitem = 1, tool = 1, firework_shape_modifier = 1},
 	on_place = function(itemstack, user, pointed_thing)
 		-- Use pointed node's on_rightclick function first, if present
 		local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)

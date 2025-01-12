@@ -33,6 +33,7 @@ mcl_heads.deftemplate = {
 		dig_by_piston = 1,
 		unsticky = 1,
 		_mcl_partial = 2,
+		firework_shape_modifier = 3
 	},
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 

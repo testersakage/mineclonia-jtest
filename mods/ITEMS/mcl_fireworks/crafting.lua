@@ -85,3 +85,9 @@ for i = 1, 8 do
 		recipe = insert_dyes(i, {"mcl_mobitems:gunpowder"})
 	}))
 end
+--[[
+local function star_craft(_, _, old_craft_grid, _)
+	for _, stack in pairs(old_craft_grid) do
+	end
+end
+]]

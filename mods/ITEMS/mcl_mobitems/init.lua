@@ -257,7 +257,7 @@ minetest.register_craftitem("mcl_mobitems:feather", {
 	_doc_items_longdesc = S("Feathers are used in crafting and are dropped from chickens."),
 	wield_image = "mcl_mobitems_feather.png",
 	inventory_image = "mcl_mobitems_feather.png",
-	groups = { craftitem = 1 },
+	groups = { craftitem = 1, firework_shape_modifier = 4 },
 })
 
 minetest.register_craftitem("mcl_mobitems:rabbit_hide", {
