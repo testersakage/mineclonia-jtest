@@ -1008,7 +1008,7 @@ local villager_professions = {
 		name = "armorer",
 		poi = "mcl_villages:armorer",
 		group = "mcl_blast_furnace:blast_furnace",
-		texture = "mobs_mc_villager_armorer.png",
+		texture = "mobs_mc_villager_profession_armorer.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1016,7 +1016,7 @@ local villager_professions = {
 		name = "butcher",
 		poi = "mcl_villages:butcher",
 		group = "mcl_smoker:smoker",
-		texture = "mobs_mc_villager_butcher.png",
+		texture = "mobs_mc_villager_profession_butcher.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1024,7 +1024,7 @@ local villager_professions = {
 		name = "cartographer",
 		poi = "mcl_villages:cartographer",
 		group = "mcl_cartography_table:cartography_table",
-		texture = "mobs_mc_villager_cartographer.png",
+		texture = "mobs_mc_villager_profession_cartographer.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1032,7 +1032,7 @@ local villager_professions = {
 		name = "cleric",
 		poi = "mcl_villages:cleric",
 		group = "group:brewing_stand",
-		texture = "mobs_mc_villager_cleric.png",
+		texture = "mobs_mc_villager_profession_cleric.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1040,7 +1040,7 @@ local villager_professions = {
 		name = "farmer",
 		poi = "mcl_villages:farmer",
 		group = "group:composter",
-		texture = "mobs_mc_villager_farmer.png",
+		texture = "mobs_mc_villager_profession_farmer.png",
 		extra_pick_up = {
 			"mcl_bone_meal:bone_meal",
 			"mcl_farming:wheat_item",
@@ -1053,7 +1053,7 @@ local villager_professions = {
 		name = "fisherman",
 		poi = "mcl_villages:fisherman",
 		group = "group:barrel",
-		texture = "mobs_mc_villager_fisherman.png",
+		texture = "mobs_mc_villager_profession_fisherman.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1061,7 +1061,7 @@ local villager_professions = {
 		name = "fletcher",
 		poi = "mcl_villages:fletcher",
 		group = "mcl_fletching_table:fletching_table",
-		texture = "mobs_mc_villager_fletcher.png",
+		texture = "mobs_mc_villager_profession_fletcher.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1069,7 +1069,7 @@ local villager_professions = {
 		name = "leatherworker",
 		poi = "mcl_villages:leatherworker",
 		group = "group:cauldron",
-		texture = "mobs_mc_villager_leatherworker.png",
+		texture = "mobs_mc_villager_profession_leatherworker.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1077,7 +1077,7 @@ local villager_professions = {
 		name = "librarian",
 		poi = "mcl_villages:librarian",
 		group = "group:lectern",
-		texture = "mobs_mc_villager_librarian.png",
+		texture = "mobs_mc_villager_profession_librarian.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1085,7 +1085,7 @@ local villager_professions = {
 		name = "mason",
 		poi = "mcl_villages:mason",
 		group = "mcl_stonecutter:stonecutter",
-		texture = "mobs_mc_villager_mason.png",
+		texture = "mobs_mc_villager_profession_mason.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1093,7 +1093,7 @@ local villager_professions = {
 		name = "shepherd",
 		poi = "mcl_villages:shepherd",
 		group = "mcl_loom:loom",
-		texture = "mobs_mc_villager_shepherd.png",
+		texture = "mobs_mc_villager_profession_shepherd.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1101,7 +1101,7 @@ local villager_professions = {
 		name = "toolsmith",
 		poi = "mcl_villages:toolsmith",
 		group = "mcl_smithing_table:table",
-		texture = "mobs_mc_villager_toolsmith.png",
+		texture = "mobs_mc_villager_profession_toolsmith.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1109,7 +1109,7 @@ local villager_professions = {
 		name = "weaponsmith",
 		poi = "mcl_villages:weaponsmith",
 		group = "mcl_grindstone:grindstone",
-		texture = "mobs_mc_villager_weaponsmith.png",
+		texture = "mobs_mc_villager_profession_weaponsmith.png",
 		extra_pick_up = {},
 	},
 	{
@@ -1117,7 +1117,7 @@ local villager_professions = {
 		name = "nitwit",
 		poi = nil,
 		group = nil,
-		texture = "mobs_mc_villager_nitwit.png",
+		texture = "mobs_mc_villager_profession_nitwit.png",
 		extra_pick_up = {},
 	},
 }
@@ -1177,7 +1177,7 @@ function villager:get_overlaid_texture ()
 		and professions_by_name[self._profession]
 	local textures = {}
 
-	table.insert (textures, "mobs_mc_villager.png")
+	table.insert (textures, "mobs_mc_villager_base.png")
 	if overlay ~= "" then
 		table.insert (textures, overlay)
 	end
