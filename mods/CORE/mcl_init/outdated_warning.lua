@@ -7,7 +7,7 @@ local fs_title = S("Outdated Client version detected!")
 local fs_notagain = S("Do not show again")
 local fs_leave = S("Leave Server")
 local fs_ignore = S("Ignore")
-local low_version_warning = S("You are connecting with an unsupported client. \nThis will generally not keep you from playing the game but you should expect some visual issues \nparticularly with mobs and certain items. \n To enjoy the best mineclonia experience use a minetest/luanti client of version 5.9.0 or greater")
+local low_version_warning = S("You are connecting with an unsupported client. This will generally not keep you from playing the game but you should expect some visual issues, particularly with mobs and certain items.\n\nTo enjoy the best mineclonia experience use a minetest/luanti client of version 5.9.0 or greater.")
 
 core.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
@@ -18,12 +18,13 @@ core.register_on_joinplayer(function(player)
 	if not skip_nag and last_confirm < current_protocol then
 		core.show_formspec(pn, "mcl_init:version_nagscreen", table.concat({
 			"formspec_version[4]",
-			"size[14.75,5.425]",
+			"size[14.75,5.925]",
 			"label[0.375,0.375;" .. F(C("#FF0000", fs_title)) .. "]",
-			"label[0.375,1.375;"..low_version_warning.."]",
-			"checkbox[0.375,3.5;notagain;"..F(C(mcl_formspec.label_color, fs_notagain)) .. "]",
-			"button_exit[0.375,4;2,1;leave;"..F(C(mcl_formspec.label_color, fs_leave)) .. "]",
-			"button_exit[2.575,4;2,1;ignore;"..F(C(mcl_formspec.label_color, fs_ignore)) .. "]",
+			--"label[0.375,1.375;"..low_version_warning.."]",
+			"textarea[0.375,0.875;12.0,3.5;;" .. minetest.formspec_escape(low_version_warning) .. ";]" ..
+			"checkbox[0.375,4.0;notagain;"..F(C(mcl_formspec.label_color, fs_notagain)) .. "]",
+			"button_exit[0.375,4.5;3,1;leave;"..F(C(mcl_formspec.label_color, fs_leave)) .. "]",
+			"button_exit[3.575,4.5;3,1;ignore;"..F(C(mcl_formspec.label_color, fs_ignore)) .. "]",
 		}))
 	end
 end)
