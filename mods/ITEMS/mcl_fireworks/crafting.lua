@@ -86,8 +86,27 @@ for i = 1, 8 do
 	}))
 end
 --[[
-local function star_craft(_, _, old_craft_grid, _)
+local function firework_craft(_, _, old_craft_grid, _)
+	local shape
+	local colors = {}
+
 	for _, stack in pairs(old_craft_grid) do
+		local shape_index = core.get_item_group(stack:get_name(), "firework_shape_modifier")
+
+		if shape then return end
+
+		if shape_index > 0 then
+			shape = mcl_fireworks.registered_shapes[shape_index]
+		else
+			shape = "default"
+		end
+
+		if core.get_item_group(stack:get_name(), "dye") > 0 then
+			table.insert(colors, stack:get_definition().rgb)
+		end
 	end
 end
+
+core.register_on_craft(firework_craft)
+core.register_craft_predict(firework_craft)
 ]]
