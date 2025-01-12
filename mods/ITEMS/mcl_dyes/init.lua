@@ -163,7 +163,7 @@ end
 
 for k,v in pairs(mcl_dyes.colors) do
 	minetest.register_craftitem("mcl_dyes:" .. k, {
-		inventory_image = "mcl_dye_white.png^(mcl_dye_mask.png^[colorize:"..v.rgb..")",
+		inventory_image = "mcl_dye.png^(mcl_dye_mask.png^[colorize:"..v.rgb..")",
 		description = D(v.readable_name .. " Dye"),
 		_doc_items_longdesc = S("This item is a dye which is used for dyeing and crafting."),
 		_doc_items_usagehelp = S("Rightclick on a sheep to dye its wool. Other things are dyed by crafting."),
