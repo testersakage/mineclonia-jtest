@@ -8,7 +8,7 @@ local function on_place_node(place_to, newnode,
 	-- Run script hook
 	for _, callback in pairs(minetest.registered_on_placenodes) do
 		-- Deep-copy pos, node and pointed_thing because callback can modify them
-		local place_to_copy = {x = place_to.x, y = place_to.y, z = place_to.z}
+		local place_to_copy = vector.copy(place_to)
 		local newnode_copy =
 			{name = newnode.name, param1 = newnode.param1, param2 = newnode.param2}
 		local oldnode_copy =
