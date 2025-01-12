@@ -2,7 +2,7 @@ core.register_entity("mcl_fireworks:rocket", {
     _flight_duration = 0,
     _stars = {},
     initial_properties = {
-        _climb_speed = 3,
+        _climb_speed = 15,
         collide_with_objects = false,
         glow = 14,
         physical = true,
@@ -22,4 +22,3 @@ core.register_entity("mcl_fireworks:rocket", {
         end
     end
 })
-

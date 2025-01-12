@@ -23,18 +23,26 @@ local function use_rocket(itemstack, user, duration)
 		mcl_title.set(user, "actionbar", { text = S("@1s power left. Not using rocket.", string.format("%.1f", elytra.rocketing)), color = "white", stay = 60 })
 	elseif minetest.get_item_group(user:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0 then
 		mcl_title.set(user, "actionbar", { text = S("Elytra not deployed. Jump while falling down to deploy."), color = "white", stay = 60 })
-	else
-		mcl_title.set(user, "actionbar", { text = S("Elytra not equipped."), color = "white", stay = 60 })
 	end
 	return itemstack
 end
 
+local function launch_rocket(pointed_thing, duration)
+	return core.add_entity(pointed_thing.under, "mcl_fireworks:rocket", core.serialize({flight_duration = duration}))
+end
 
 local function register_rocket(n, duration, force)
 	minetest.register_craftitem("mcl_fireworks:rocket_" .. n, {
 		description = description,
 		_tt_help = S("Flight Duration: @1s", string.format("%.1f", duration)),
 		inventory_image = "mcl_fireworks_rocket.png",
+		on_place = function(itemstack, placer, pointed_thing)
+			if not pointed_thing then return end
+			if launch_rocket(pointed_thing, duration) then
+				itemstack:take_item()
+			end
+			return itemstack
+		end,
 		on_use = function(itemstack, user, pointed_thing)
 			return use_rocket(itemstack, user, duration)
 		end,
