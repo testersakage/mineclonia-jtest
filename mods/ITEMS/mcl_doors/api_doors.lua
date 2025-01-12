@@ -177,7 +177,6 @@ function mcl_doors:register_door(name, def)
 		_mcl_hardness = def._mcl_hardness,
 		can_dig = check_player_priv,
 		drawtype = "nodebox",
-		drop = "",
 		groups = def.groups,
 		is_ground_content = false,
 		paramtype = "light",
@@ -193,6 +192,16 @@ function mcl_doors:register_door(name, def)
 			update = redstone_update_bottom,
 			init = function() end
 		},
+		after_destruct = function(pos, _)
+			local meta = core.get_meta(pos)
+
+			if meta:get_int("rotation") then
+				meta:set_int("rotation", 0)
+			else
+				core.remove_node(vector.offset(pos, 0, 1, 0))
+			end
+		end,
+		drop = name,
 		node_box = {
 			type = "fixed",
 			fixed = def.node_box_bottom
@@ -209,6 +218,16 @@ function mcl_doors:register_door(name, def)
 			update = redstone_update_top,
 			init = function() end
 		},
+		after_destruct = function(pos, _)
+			local meta = core.get_meta(pos)
+
+			if meta:get_int("rotation") then
+				meta:set_int("rotation", 0)
+			else
+				core.dig_node(vector.offset(pos, 0, -1, 0))
+			end
+		end,
+		drop = "",
 		node_box = {
 			type = "fixed",
 			fixed = def.node_box_top
@@ -335,18 +354,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_b_1", table.merge(tpl_doors, tpl_doors_bottom, {
 		tiles = {"blank.png", tt[2].."^[transformFXR90", tb[2], tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"},
-		after_destruct = function(bottom, _)
-			local meta_bottom = minetest.get_meta(bottom)
-			if meta_bottom:get_int("rotation") == 1 then
-				meta_bottom:set_int("rotation", 0)
-			else
-				minetest.add_item(bottom, name)
-				local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-				if minetest.get_node(bottom).name ~= name.."_b_2" and minetest.get_node(top).name == name.."_t_1" then
-					minetest.remove_node(top)
-				end
-			end
-		end,
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
@@ -386,18 +393,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_t_1", table.merge(tpl_doors, tpl_doors_top, {
 		tiles = {tt[2].."^[transformR90", "blank.png", tt[2], tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"},
-		after_destruct = function(top, oldnode)
-			local meta_top = minetest.get_meta(top)
-			if meta_top:get_int("rotation") == 1 then
-				meta_top:set_int("rotation", 0)
-			else
-				local bottom = { x = top.x, y = top.y - 1, z = top.z }
-				if minetest.get_node(top).name ~= name.."_t_2" and minetest.get_node(bottom).name == name.."_b_1" and oldnode.name == name.."_t_1" then
-					minetest.dig_node(bottom)
-				end
-			end
-		end,
-
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
@@ -437,19 +432,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_b_2", table.merge(tpl_doors, tpl_doors_bottom, {
 		tiles = {"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI", tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]},
-		after_destruct = function(bottom, _)
-			local meta_bottom = minetest.get_meta(bottom)
-			if meta_bottom:get_int("rotation") == 1 then
-				meta_bottom:set_int("rotation", 0)
-			else
-				local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-				minetest.add_item(bottom, name)
-				if minetest.get_node(bottom).name ~= name.."_b_1" and minetest.get_node(top).name == name.."_t_2" then
-					minetest.remove_node(top)
-				end
-			end
-		end,
-
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
@@ -489,18 +471,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_t_2", table.merge(tpl_doors, tpl_doors_top, {
 		tiles = {tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI", tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]},
-		after_destruct = function(top, oldnode)
-			local meta_top = minetest.get_meta(top)
-			if meta_top:get_int("rotation") == 1 then
-				meta_top:set_int("rotation", 0)
-			else
-				local bottom = { x = top.x, y = top.y - 1, z = top.z }
-				if minetest.get_node(top).name ~= name.."_t_1" and minetest.get_node(bottom).name == name.."_b_2" and oldnode.name == name.."_t_2" then
-					minetest.dig_node(bottom)
-				end
-			end
-		end,
-
 		on_rightclick = on_rightclick,
 		_on_wind_charge_hit = function(pos)
 			local node = minetest.get_node(pos)
