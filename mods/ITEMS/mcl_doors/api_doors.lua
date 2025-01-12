@@ -312,14 +312,15 @@ function mcl_doors:register_door(name, def)
 		_mcl_baseitem = name,
 		sounds = def.sounds,
 
-		after_destruct = function(bottom, _)
-			local meta_bottom = minetest.get_meta(bottom)
-			if meta_bottom:get_int("rotation") == 1 then
-				meta_bottom:set_int("rotation", 0)
+		after_dig_node = function(pos, oldnode, oldmeta, digger)
+			if oldmeta:get_int("rotation") == 1 then
+				oldmeta:set_int("rotation", 0)
 			else
-				minetest.add_item(bottom, name)
-				local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-				if minetest.get_node(bottom).name ~= name.."_b_2" and minetest.get_node(top).name == name.."_t_1" then
+				if not core.is_creative_enabled(digger:get_player_name()) then
+					core.add_item(pos, name)
+				end
+				local top = vector.offset(pos, 0, 1, 0)
+				if oldnode.name ~= name.."_b_2" and minetest.get_node(top).name == name.."_t_1" then
 					minetest.remove_node(top)
 				end
 			end
@@ -475,14 +476,15 @@ function mcl_doors:register_door(name, def)
 		_mcl_baseitem = name,
 		sounds = def.sounds,
 
-		after_destruct = function(bottom, _)
-			local meta_bottom = minetest.get_meta(bottom)
-			if meta_bottom:get_int("rotation") == 1 then
-				meta_bottom:set_int("rotation", 0)
+		after_dig_node = function(pos, oldnode, oldmeta, digger)
+			if oldmeta:get_int("rotation") == 1 then
+				oldmeta:set_int("rotation", 0)
 			else
-				local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-				minetest.add_item(bottom, name)
-				if minetest.get_node(bottom).name ~= name.."_b_1" and minetest.get_node(top).name == name.."_t_2" then
+				if not core.is_creative_enabled(digger:get_player_name()) then
+					core.add_item(pos, name)
+				end
+				local top = vector.offset(pos, 0, 1, 0)
+				if oldnode.name ~= name.."_b_1" and minetest.get_node(top).name == name.."_t_2" then
 					minetest.remove_node(top)
 				end
 			end
