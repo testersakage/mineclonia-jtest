@@ -101,6 +101,21 @@ function mcl_doors:register_door(name, def)
 		craftitem_groups.flammable = def.groups.flammable
 	end
 
+	local tpl_doors = {
+		_mcl_baseitem = name,
+		_mcl_blast_resistance = def._mcl_blast_resistance,
+		_mcl_hardness = def._mcl_hardness,
+		drawtype = "nodebox",
+		drop = "",
+		groups = def.groups,
+		is_ground_content = false,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		sounds = def.sounds,
+		sunlight_propagates = true,
+		use_texture_alpha = "clip"
+	}
+
 	minetest.register_craftitem(":"..name, {
 		description = def.description,
 		_tt_help = tt_help,
@@ -289,15 +304,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_b_1", {
+	minetest.register_node(":"..name.."_b_1", table.merge(tpl_doors, {
 		tiles = {"blank.png", tt[2].."^[transformFXR90", tb[2], tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
 			fixed = def.node_box_bottom
@@ -306,12 +314,6 @@ function mcl_doors:register_door(name, def)
 			type = "fixed",
 			fixed = def.selection_box_bottom
 		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
 		after_destruct = function(bottom, _)
 			local meta_bottom = minetest.get_meta(bottom)
 			if meta_bottom:get_int("rotation") == 1 then
@@ -359,7 +361,7 @@ function mcl_doors:register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
-	})
+	}))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -371,15 +373,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_t_1", {
+	minetest.register_node(":"..name.."_t_1", table.merge(tpl_doors, {
 		tiles = {tt[2].."^[transformR90", "blank.png", tt[2], tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
 			fixed = def.node_box_top
@@ -388,12 +383,6 @@ function mcl_doors:register_door(name, def)
 			type = "fixed",
 			fixed = def.selection_box_top
 		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
 		after_destruct = function(top, oldnode)
 			local meta_top = minetest.get_meta(top)
 			if meta_top:get_int("rotation") == 1 then
@@ -440,7 +429,7 @@ function mcl_doors:register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
-	})
+	}))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -452,15 +441,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_b_2", {
+	minetest.register_node(":"..name.."_b_2", table.merge(tpl_doors, {
 		tiles = {"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI", tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
 			fixed = def.node_box_bottom
@@ -469,12 +451,6 @@ function mcl_doors:register_door(name, def)
 			type = "fixed",
 			fixed = def.selection_box_bottom
 		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
 		after_destruct = function(bottom, _)
 			local meta_bottom = minetest.get_meta(bottom)
 			if meta_bottom:get_int("rotation") == 1 then
@@ -522,7 +498,7 @@ function mcl_doors:register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
-	})
+	}))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -534,15 +510,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_t_2", {
+	minetest.register_node(":"..name.."_t_2", table.merge(tpl_doors, {
 		tiles = {tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI", tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
 			fixed = def.node_box_top
@@ -551,12 +520,6 @@ function mcl_doors:register_door(name, def)
 			type = "fixed",
 			fixed = def.selection_box_top
 		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
 		after_destruct = function(top, oldnode)
 			local meta_top = minetest.get_meta(top)
 			if meta_top:get_int("rotation") == 1 then
@@ -603,7 +566,7 @@ function mcl_doors:register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
-	})
+	}))
 
 	-- Add entry aliases for the Help
 	if minetest.get_modpath("doc") then
