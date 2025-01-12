@@ -193,13 +193,7 @@ function mcl_doors:register_door(name, def)
 			init = function() end
 		},
 		after_destruct = function(pos, _)
-			local meta = core.get_meta(pos)
-
-			if meta:get_int("rotation") then
-				meta:set_int("rotation", 0)
-			else
-				core.remove_node(vector.offset(pos, 0, 1, 0))
-			end
+			core.remove_node(vector.offset(pos, 0, 1, 0))
 		end,
 		drop = name,
 		node_box = {
@@ -219,13 +213,7 @@ function mcl_doors:register_door(name, def)
 			init = function() end
 		},
 		after_destruct = function(pos, _)
-			local meta = core.get_meta(pos)
-
-			if meta:get_int("rotation") then
-				meta:set_int("rotation", 0)
-			else
-				core.dig_node(vector.offset(pos, 0, -1, 0))
-			end
+			core.dig_node(vector.offset(pos, 0, -1, 0))
 		end,
 		drop = "",
 		node_box = {
