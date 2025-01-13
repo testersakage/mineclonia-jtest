@@ -45,7 +45,7 @@ local function remove_scope(player)
 		player:hud_remove(spyglass_scope[player])
 		spyglass_scope[player] = nil
 		player:hud_set_flags({wielditem = true})
-		player:set_fov(86.1)
+		playerphysics.set_absolute_fov(player, 0)
 	end
 end
 
@@ -67,7 +67,7 @@ controls.register_on_hold(function(player, key)
 	if key ~= "RMB" and key ~= "zoom" then return end
 	local wielditem = player:get_wielded_item()
 	if wielditem:get_name() == "mcl_spyglass:spyglass" then
-		player:set_fov(8, false, 0.1)
+		playerphysics.set_absolute_fov(player, 8)
 		if spyglass_scope[player] == nil then
 			add_scope(player)
 		end
