@@ -16,19 +16,29 @@ core.register_entity("mcl_fireworks:rocket", {
         if not properties then return end
 
         self._flight_duration = properties.flight_duration
+
+        core.add_particlespawner({
+            attached = self.object,
+            amount = math.ceil(15 * self._flight_duration),
+            maxpos = vector.new(0.25, -1, 0.25),
+            minpos = vector.new(-0.25, -1, -0.25),
+            maxexptime = 0.75,
+            minexptime = 1.25,
+            maxvel = vector.zero(),
+            minvel = vector.zero(),
+            maxsize = 1.25,
+            minsize = 0.75,
+            collisiondetection = false,
+            vertical = true,
+            texture =  "mcl_particles_instant_effect.png"
+        })
     end,
     on_step = function(self, dtime, moveresult)
         self.object:set_velocity(vector.new(0, self.initial_properties._climb_speed, 0))
         self._flight_duration = self._flight_duration - dtime
 
         core.add_particle({
-            pos = self.object:get_pos(),
-            expirationtime = 1,
-            velocity = vector.zero(),
-            size = 1,
-            collisiondetection = false,
-            vertical = true,
-            texture = "mcl_particles_instant_effect.png"
+
         })
 
         if self._flight_duration <= 0 then
