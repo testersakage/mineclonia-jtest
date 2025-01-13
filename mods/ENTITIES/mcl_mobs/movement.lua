@@ -409,11 +409,14 @@ function mob_class:check_jockey_status ()
 	end
 
 	-- If this mob's mount has vanished, remove itself also.
-	if self.jockey_vehicle and not self.object:get_attach () then
-		minetest.log ("warning", "Jockeyed mob controlled by "
-			      .. self.name .. " disappeared abruptly")
-		self.object:remove ()
-		return true
+	if self.jockey_vehicle then
+		local attach = self.object:get_attach ()
+		if not attach or attach ~= self.jockey_vehicle then
+			minetest.log ("warning", "Jockeyed mob controlled by "
+				      .. self.name .. " disappeared abruptly")
+			self.object:remove ()
+			return true
+		end
 	end
 end
 
