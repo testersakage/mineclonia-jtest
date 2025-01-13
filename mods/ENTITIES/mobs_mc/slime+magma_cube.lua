@@ -174,35 +174,25 @@ local function slime_check_particle (self, dtime, moveresult)
 		and moveresult.touching_ground
 		and self._get_slime_particle then
 		local cbox = self.collisionbox
-		local radius = (cbox[6] - cbox[3])
+		local radius = (cbox[6] - cbox[3]) * 0.75
 		local self_pos = self.object:get_pos ()
-		for i = 1, math.round (radius * 32) do
-			local scale = math.random () * 0.5 + 0.5
-			local angle = math.random () * math.pi * 2
-			local x, z
-			x = math.sin (angle) * scale * radius
-			z = math.cos (angle) * scale * radius
-			minetest.add_particle ({
-					pos = vector.offset (self_pos, x, 0, z),
-					collisiondetection = true,
-					texture = self._get_slime_particle (),
-					time = 0.20,
-					velocity = {
-						x = math.random (-1, 1),
-						y = math.random (1, 2),
-						z = math.random (-1, 1),
-					},
-					acceleration = {
-						x = 0,
-						y = math.random(-9, -5),
-						z = 0,
-					},
-					collision_removal = true,
-					size = math.random (0.5, 1.5),
-					glow = self._slime_particle_glow,
-			})
-		end
-
+		local v = 1
+		minetest.add_particlespawner ({
+			amount = math.round (radius * 32),
+			minpos = vector.offset (self_pos, -radius, 0, -radius),
+			maxpos = vector.offset (self_pos, radius, 0, radius),
+			minvel = vector.new (-v, 0, -v),
+			maxvel = vector.new (v, 0, v),
+			minacc = vector.new (0, 0, 0),
+			maxacc = vector.new (0, 0, 0),
+			texture = self._get_slime_particle (),
+			time = 0.1,
+			minexptime = 0.1,
+			maxexptime = 0.6,
+			minsize = 0.5,
+			maxsize = 1.5,
+			glow = self._slime_particle_glow,
+		})
 	end
 	self._slime_was_touching_ground = moveresult.touching_ground
 end
