@@ -262,7 +262,7 @@ end
 
 function mcl_armor.update(obj)
 	local info = {points = 0, view_range_factors = {}}
-	local resp = 0
+	local resp_lv = 0
 
 	local inv = mcl_util.get_inventory(obj)
 
@@ -277,7 +277,6 @@ function mcl_armor.update(obj)
 
 			if not itemstack:is_empty() then
 				local def = itemstack:get_definition()
-				resp = math.max(mcl_enchanting.get_enchantments(itemstack).respiration or 0, resp or 0)
 
 				local texture = def._mcl_armor_texture
 
@@ -292,17 +291,20 @@ function mcl_armor.update(obj)
 
 				info.points = info.points + minetest.get_item_group(itemname, "mcl_armor_points")
 
-				local mob_range_mob = def._mcl_armor_mob_range_mob
+				if i == 2 then -- Head Armor; view range code assumes single piece
+					resp_lv = mcl_enchanting.get_enchantments(itemstack).respiration or resp_lv
 
-				if mob_range_mob then
-					local factor = info.view_range_factors[mob_range_mob]
+					local mob_range_mob = def._mcl_armor_mob_range_mob
+					if mob_range_mob then
+						local factor = info.view_range_factors[mob_range_mob]
 
-					if factor then
-						if factor > 0 then
-							info.view_range_factors[mob_range_mob] = factor * def._mcl_armor_mob_range_factor
+						if factor then
+							if factor > 0 then
+								info.view_range_factors[mob_range_mob] = factor * def._mcl_armor_mob_range_factor
+							end
+						else
+							info.view_range_factors[mob_range_mob] = def._mcl_armor_mob_range_factor
 						end
-					else
-						info.view_range_factors[mob_range_mob] = def._mcl_armor_mob_range_factor
 					end
 				end
 			end
@@ -312,7 +314,7 @@ function mcl_armor.update(obj)
 	info.texture = info.texture or "blank.png"
 
 	if obj:is_player() then
-		update_respiration(obj,resp)
+		update_respiration(obj, resp_lv)
 		mcl_armor.update_player(obj, info)
 	else
 		local luaentity = obj:get_luaentity()
