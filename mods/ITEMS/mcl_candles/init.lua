@@ -39,6 +39,16 @@ local function drop_candles(pos, node, _, digger)
 	return core.add_item(pos, item)
 end
 
+local function ignite_candle(pos)
+	local n = core.get_node(pos)
+	local g = core.get_item_group(n.name, "candles")
+	if g > 0 then
+		n.name = "mcl_candles:candle_lit_"..tostring(g)
+		core.swap_node(pos, n)
+		return true
+	end
+end
+
 local tpl_candle = {
 	_doc_items_longdesc = S("A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."),
 	_mcl_blast_resistance = 0.1,
@@ -48,14 +58,12 @@ local tpl_candle = {
 		node.param2 = mcl_dyes.colors[color].palette_index
 		core.swap_node(pos, node)
 	end,
-	_on_ignite = function(player, pointed_thing)
-		local n = core.get_node(pointed_thing.under)
-		local g = core.get_item_group(n.name, "candles")
-		if g > 0 then
-			n.name = "mcl_candles:candle_lit_"..tostring(g)
-			core.swap_node(pointed_thing.under, n)
-			return true
-		end
+	_on_ignite = function(_, pointed_thing)
+		return ignite_candle(pointed_thing.under)
+	end,
+	_on_arrow_hit = function(pos, arrow_luaentity)
+		if not mcl_burning.is_burning(arrow_luaentity.object) then return end
+		return ignite_candle(pos)
 	end,
 	_on_set_item_entity = function (stack)
 		return stack, {wield_item = stack:to_string()}
