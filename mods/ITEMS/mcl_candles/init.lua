@@ -193,9 +193,7 @@ for i = 1, #candle_boxes do
 		end,
 		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
 	}))
-
-	core.register_node("mcl_candles:candle_lit_" .. i, table.merge({
-		_on_ignite = nil,
+	local lit_candle = table.merge(tpl_candle, tpl_lit_candle, candle_n, {
 		_on_wind_charge_hit = function (pos)
 			local node = core.get_node(pos)
 			local group = core.get_item_group(node.name, "lit_candles")
@@ -205,7 +203,10 @@ for i = 1, #candle_boxes do
 		groups = table.merge(tpl_lit_candle.groups, {candles = i, lit_candles = i}),
 		light_source = 3 * i,
 		on_rightclick = extinguish
-	}, tpl_candle, tpl_lit_candle, candle_n))
+	})
+	lit_candle._on_ignite = nil
+	lit_candle._on_arrow_hit = nil
+	core.register_node("mcl_candles:candle_lit_" .. i, lit_candle)
 
 
 	doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
