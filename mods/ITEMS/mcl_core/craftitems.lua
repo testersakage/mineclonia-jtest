@@ -48,7 +48,7 @@ minetest.register_craftitem("mcl_core:gold_nugget", {
 	description = S("Gold Nugget"),
 	_doc_items_longdesc = S("Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."),
 	inventory_image = "mcl_core_gold_nugget.png",
-	groups = { craftitem=1 },
+	groups = { craftitem=1, firework_shape_modifier=2 },
 	_mcl_crafting_output = {square3 = {output = "mcl_core:gold_ingot"}}
 })
 
@@ -56,7 +56,7 @@ minetest.register_craftitem("mcl_core:diamond", {
 	description = S("Diamond"),
 	_doc_items_longdesc = S("Diamonds are precious minerals and useful to create the highest tier of armor and tools."),
 	inventory_image = "default_diamond.png",
-	groups = { craftitem=1, beacon_fuel = 1 },
+	groups = { craftitem=1, beacon_fuel = 1, firework_effect_modifier = 2 },
 	_mcl_crafting_output = {square3 = {output = "mcl_core:diamondblock"}}
 })
 

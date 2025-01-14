@@ -337,7 +337,7 @@ minetest.register_craftitem("mcl_nether:glowstone_dust", {
 	description = S("Glowstone Dust"),
 	_doc_items_longdesc = S("Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."),
 	inventory_image = "mcl_nether_glowstone_dust.png",
-	groups = { craftitem=1, brewitem=1 },
+	groups = { craftitem=1, brewitem=1, firework_effect_modifier=1 },
 	_mcl_crafting_output = {square2 = {output = "mcl_nether:glowstone"}}
 })
 
