@@ -91,9 +91,15 @@ local function get_armor_texture(textures, name, modname, itemname, itemstring)
 	if type(core_texture) == "function" then return core_texture end
 	mcl_armor.trims.core_textures[itemstring] = core_texture
 	local func = function(_, itemstack)
-		local overlay = itemstack:get_meta():get_string("mcl_armor:trim_overlay")
+		local meta = itemstack:get_meta()
+		local color = meta:get_string("mcl_armor:color")
+		local overlay = meta:get_string("mcl_armor:trim_overlay")
 		local stack_name = mcl_grindstone.remove_enchant_name(itemstack) -- gets original itemstring if enchanted, no need to store (nearly) identical values
 		local core_armor_texture = mcl_armor.trims.core_textures[stack_name]
+
+		if color ~= "" and color ~= nil then
+			core_armor_texture = core_armor_texture:gsub("_leather.png$", "_leather_desat.png").."^[multiply:"..color
+		end
 
 		if mcl_enchanting.is_enchanted(itemstack:get_name()) then -- working with the original stack to know wether to apply enchanting overlay or not
 			--  Far, Far in the future we may no longer _enchanted itemstrings...
