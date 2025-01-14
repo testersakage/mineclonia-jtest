@@ -816,9 +816,10 @@ mcl_enchanting.enchantments.wind_burst = {
 	anvil_book_factor = 4,
 }
 
--- Respiration breath_max adjustment
-function mcl_enchanting.update_respiration (player, resp_lv, has_turtle)
+-- Respiration breath_max adjustment.
+function mcl_enchanting.update_respiration (player, resp_lv)
 	if not player:is_player () then return end
+
 	resp_lv = math.ceil (tonumber (resp_lv))
 	local meta = player:get_meta ()
 	local old_resp = meta:get_int ("respiration_level") or 0
@@ -845,3 +846,18 @@ function mcl_enchanting.update_respiration (player, resp_lv, has_turtle)
 		end
 	end
 end
+
+-- Respiration drown damage adjustment.
+mcl_damage.register_modifier (function (obj, damage, reason)
+	if reason.type == "drown" and obj:is_player () then
+		local resp_lv = obj:get_meta ():get_int ("respiration_level") or 0
+		resp_lv = math.ceil (tonumber (resp_lv))
+		if resp_lv <= 0 then return damage end
+
+		-- chance to neglate damage = level / ( level + 1 ), thus
+		-- chance to suffer damage = 1 / ( level + 1 )
+		local roll = math.random( resp_lv + 1 )
+		return roll == 1 and damage or 0
+	end
+	return damage
+end)
