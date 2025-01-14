@@ -181,6 +181,14 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
+	local function get_other_half(node_name)
+		if node_name:find("_t_") then
+			return node_name:gsub("_t_", "_b_")
+		else
+			return node_name:gsub("_b_", "_t_")
+		end
+	end
+
 	local tpl_doors = {
 		_mcl_baseitem = name,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
@@ -190,6 +198,25 @@ function mcl_doors:register_door(name, def)
 		drop = "",
 		groups = def.groups,
 		is_ground_content = false,
+		on_rotate = function(pos, node, _, mode, _)
+			if mode == screwdriver.ROTATE_FACE then
+				local meta1 = core.get_meta(pos)
+				local dir = node.name:find("_b_") and 1 or -1
+				local pos2 = vector.offset(pos, 0, dir, 0)
+				local meta2 = core.get_meta(pos2)
+
+				meta1:set_int("rotation", 1)
+				node.param2 = screwdriver.rotate.facedir(pos, node, mode)
+				core.swap_node(pos, node)
+
+				meta2:set_int("rotation", 1)
+				node.name = get_other_half(node.name)
+				core.swap_node(pos2, node)
+
+				return true
+			end
+			return false
+		end,
 		paramtype = "light",
 		paramtype2 = "facedir",
 		sounds = def.sounds,
@@ -371,23 +398,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_b_1", table.merge({
 		on_rightclick = on_rightclick,
-		on_rotate = function(bottom, node, _, mode, _)
-			if mode == screwdriver.ROTATE_FACE then
-				local meta_bottom = minetest.get_meta(bottom)
-				meta_bottom:set_int("rotation", 1)
-				node.param2 = screwdriver.rotate.facedir(bottom, node, mode)
-				minetest.swap_node(bottom, node)
-
-				local top = {x=bottom.x,y=bottom.y+1,z=bottom.z}
-				local meta_top = minetest.get_meta(top)
-				meta_top:set_int("rotation", 1)
-				node.name = name .."_t_1"
-				minetest.swap_node(top, node)
-
-				return true
-			end
-			return false
-		end,
 		tiles = {
 			"blank.png", tt[2].."^[transformFXR90", tb[2],
 			tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"
@@ -406,23 +416,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_t_1", table.merge({
 		on_rightclick = on_rightclick,
-		on_rotate = function(top, node, _, mode, _)
-			if mode == screwdriver.ROTATE_FACE then
-				local meta_top = minetest.get_meta(top)
-				meta_top:set_int("rotation", 1)
-				node.param2 = screwdriver.rotate.facedir(top, node, mode)
-				minetest.swap_node(top, node)
-
-				local bottom = {x=top.x,y=top.y-1,z=top.z}
-				local meta_bottom = minetest.get_meta(bottom)
-				meta_bottom:set_int("rotation", 1)
-				node.name = name .."_b_1"
-				minetest.swap_node(bottom, node)
-
-				return true
-			end
-			return false
-		end,
 		tiles = {
 			tt[2].."^[transformR90", "blank.png", tt[2],
 			tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"
@@ -441,23 +434,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_b_2", table.merge({
 		on_rightclick = on_rightclick,
-		on_rotate = function(bottom, node, _, mode, _)
-			if mode == screwdriver.ROTATE_FACE then
-				local meta_bottom = minetest.get_meta(bottom)
-				meta_bottom:set_int("rotation", 1)
-				node.param2 = screwdriver.rotate.facedir(bottom, node, mode)
-				minetest.swap_node(bottom, node)
-
-				local top = {x=bottom.x,y=bottom.y+1,z=bottom.z}
-				local meta_top = minetest.get_meta(top)
-				meta_top:set_int("rotation", 1)
-				node.name = name .."_t_2"
-				minetest.swap_node(top, node)
-
-				return true
-			end
-			return false
-		end,
 		tiles = {
 			"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI",
 			tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]
@@ -476,23 +452,6 @@ function mcl_doors:register_door(name, def)
 
 	minetest.register_node(":"..name.."_t_2", table.merge({
 		on_rightclick = on_rightclick,
-		on_rotate = function(top, node, _, mode, _)
-			if mode == screwdriver.ROTATE_FACE then
-				local meta_top = minetest.get_meta(top)
-				meta_top:set_int("rotation", 1)
-				node.param2 = screwdriver.rotate.facedir(top, node, mode)
-				minetest.swap_node(top, node)
-
-				local bottom = {x=top.x,y=top.y-1,z=top.z}
-				local meta_bottom = minetest.get_meta(bottom)
-				meta_bottom:set_int("rotation", 1)
-				node.name = name .."_b_2"
-				minetest.swap_node(bottom, node)
-
-				return true
-			end
-			return false
-		end,
 		tiles = {
 			tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI",
 			tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]
@@ -506,5 +465,4 @@ function mcl_doors:register_door(name, def)
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_t_1")
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_t_2")
 	end
-
 end
