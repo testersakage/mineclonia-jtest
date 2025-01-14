@@ -2782,9 +2782,11 @@ local function sense_free_bells (self, self_pos)
 	return sites
 end
 
+local WANTED_ITEM_RANGE = 8.0
+
 local function sense_visible_wanted_items (self, self_pos)
 	local items = {}
-	for object in minetest.objects_inside_radius (self_pos, self.view_range) do
+	for object in minetest.objects_inside_radius (self_pos, WANTED_ITEM_RANGE) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "__builtin:item"
 			and check_item_timeout (self, entity) then
@@ -2800,9 +2802,11 @@ local function sense_visible_wanted_items (self, self_pos)
 	return items, persist
 end
 
+local ENTITY_VIEW_RANGE = 16.0
+
 local function sense_visible_living_entities (self, self_pos)
 	local entities = {}
-	for object in minetest.objects_inside_radius (self_pos, self.view_range) do
+	for object in minetest.objects_inside_radius (self_pos, ENTITY_VIEW_RANGE) do
 		local entity = object:get_luaentity ()
 		if object ~= self.object
 			and (object:is_player () or (entity and entity.is_mob)) then
@@ -3559,6 +3563,48 @@ function villager:acquire_bell (self_pos, dtime)
 	end
 end
 
+function villager:near_map_boundaries ()
+	-- Return whether this villager is so near the perimeter of
+	-- the loaded area of the map that any failure to navigate is
+	-- most likely to be a result of the map being unloaded.
+
+	if self._near_map_boundaries ~= nil then
+		return self._near_map_boundaries
+	end
+
+	local node_pos = self.object:get_pos ()
+	node_pos.x = math.floor (node_pos.x + 0.5)
+	node_pos.y = math.floor (node_pos.y + 0.5)
+	node_pos.z = math.floor (node_pos.z + 0.5)
+	if not minetest.get_node_or_nil (node_pos) then
+		self._near_map_boundaries = true
+		return true
+	end
+	node_pos.x = node_pos.x + 16
+	if not minetest.get_node_or_nil (node_pos) then
+		self._near_map_boundaries = true
+		return true
+	end
+	node_pos.x = node_pos.x - 32
+	if not minetest.get_node_or_nil (node_pos) then
+		self._near_map_boundaries = true
+		return true
+	end
+	node_pos.x = node_pos.x + 16
+	node_pos.z = node_pos.z + 16
+	if not minetest.get_node_or_nil (node_pos) then
+		self._near_map_boundaries = true
+		return true
+	end
+	node_pos.z = node_pos.z - 32
+	if not minetest.get_node_or_nil (node_pos) then
+		self._near_map_boundaries = true
+		return true
+	end
+	self._near_map_boundaries = false
+	return false
+end
+
 local function generate_wander_to (poi_field, activity_name, time_field, time_limit,
 			wander_threshold, tolerance, relinquish_job_site, start_conditions)
 	return function (self, self_pos, dtime)
@@ -3580,7 +3626,9 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 			self[time_field] = t
 
 			if t > time_limit then
-				relinquish_job_site (self)
+				if not self:near_map_boundaries () then
+					relinquish_job_site (self)
+				end
 				self[activity_name] = nil
 				self[time_field] = nil
 				return false
@@ -3600,7 +3648,11 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 					end
 
 					if status == "failed" then
-						relinquish_job_site (self)
+						if not self:near_map_boundaries () then
+							relinquish_job_site (self)
+						else
+							print ("declining to relinquish job site")
+						end
 						self[activity_name] = nil
 						self[time_field] = nil
 						return false
@@ -3617,10 +3669,10 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 				self:session_navigate (target, 0.5, 0.0)
 			end
 			self[activity_name] = 0
-
 			return true
 		elseif poi
 			and start_conditions (self)
+			and not self:near_map_boundaries ()
 			and manhattan3d (self, self_pos, poi) > tolerance then
 			self[activity_name] = 0
 
@@ -5813,6 +5865,7 @@ function villager:get_staticdata_table ()
 		supertable._player_wielditem = nil
 		supertable._displayed_trades = nil
 		supertable._wielditem_timer = nil
+		supertable._near_map_boundaries = nil
 
 		if supertable._trades then
 			-- It is possible for supertable._trade not to
@@ -5982,6 +6035,7 @@ function villager:ai_step (dtime)
 		self._hero_cooldown = t
 	end
 
+	self._near_map_boundaries = nil
 	self:tick_retry (dtime)
 	self:decay_gossips ()
 end
