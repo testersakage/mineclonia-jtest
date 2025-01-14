@@ -203,6 +203,10 @@ function mcl_doors:register_door(name, def)
 			init = function() end,
 			update = redstone_update_bottom
 		},
+		_on_wind_charge_hit = function(pos)
+			if mcl_doors.is_open(pos) then close(pos) else open(pos) end
+			return true
+		end,
 		after_dig_node = function(pos, _, oldmetadata, digger)
 			if oldmetadata.fields["rotation"] == 1 then
 				oldmetadata.fields["rotation"] = 0
@@ -229,6 +233,11 @@ function mcl_doors:register_door(name, def)
 			init = function() end,
 			update = redstone_update_top
 		},
+		_on_wind_charge_hit = function(pos)
+			pos.y = pos.y - 1
+			if mcl_doors.is_open(pos) then close(pos) else open(pos) end
+			return true
+		end,
 		after_dig_node = function(pos, _, oldmetadata, _)
 			if oldmetadata.fields["rotation"] == 1 then
 				oldmetadata.fields["rotation"] = 0
@@ -244,26 +253,6 @@ function mcl_doors:register_door(name, def)
 			fixed = def.selection_box_top,
 			type = "fixed"
 		}
-	}
-
-	local tpl_close = {
-		_on_wind_charge_hit = function(pos)
-			if not def.only_redstone_can_open then
-				open(pos)
-			end
-
-			return true
-		end,
-	}
-
-	local tpl_open = {
-		_on_wind_charge_hit = function(pos)
-			if not def.only_redstone_can_open then
-				close(pos)
-			end
-
-			return true
-		end
 	}
 
 	minetest.register_craftitem(":"..name, {
