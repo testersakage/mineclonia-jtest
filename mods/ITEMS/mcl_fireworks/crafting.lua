@@ -16,7 +16,7 @@ minetest.register_craft({
 	recipe = {"mcl_core:paper", "mcl_mobitems:gunpowder", "mcl_mobitems:gunpowder", "mcl_mobitems:gunpowder"},
 })
 
-local craft_defs = {
+local star_craft_defs = {
 	type = "shapeless",
 	output = "mcl_fireworks:star"
 }
@@ -31,11 +31,30 @@ local function insert_dyes(amount, recipe)
 	return result
 end
 
+local function insert_stars(amount, recipe)
+	local result = table.copy(recipe)
+
+	for _ = 1, amount do
+		table.insert(result, "mcl_fireworks:star")
+	end
+
+	return result
+end
+
 for i = 1, 8 do
-	-- 5 or less dyes
+	-- 5 or less stars/dyes
 	if i <= 5 then
-		-- 2 effect modifiers, 1 shape modifier and gunpowder
-		core.register_craft(table.merge(craft_defs, {
+		-- Firework rocket
+		core.register_craft({
+			output = "mcl_fireworks:rocket_3 3",
+			recipe = insert_stars(i, {
+				"mcl_core:paper", "mcl_mobitems:gunpowder",
+				"mcl_mobitems:gunpowder", "mcl_mobitems:gunpowder"
+			}),
+			type = "shapeless"
+		})
+		-- Firework star: 2 effect modifiers, 1 shape modifier and gunpowder
+		core.register_craft(table.merge(star_craft_defs, {
 			recipe = insert_dyes(i, {
 				"mcl_mobitems:gunpowder",
 				"group:firework_shape_modifier",
@@ -44,18 +63,26 @@ for i = 1, 8 do
 			})
 		}))
 	end
-	-- 6 or less dyes
+	-- 6 or less stars/dyes
 	if i <= 6 then
-		-- 1 effect modifier, 1 shape modifiers and gunpowder
-		core.register_craft(table.merge(craft_defs, {
+		-- Firework rocket
+		core.register_craft({
+			output = "mcl_fireworks:rocket_2 3",
+			recipe = insert_stars(i, {
+				"mcl_core:paper", "mcl_mobitems:gunpowder", "mcl_mobitems:gunpowder"
+			}),
+			type = "shapeless"
+		})
+		-- Firework star: 1 effect modifier, 1 shape modifiers and gunpowder
+		core.register_craft(table.merge(star_craft_defs, {
 			recipe = insert_dyes(i, {
 				"mcl_mobitems:gunpowder",
 				"group:firework_shape_modifier",
 				"group:firework_effect_modifier"
 			})
 		}))
-		-- 2 effect modifiers and gunpowder
-		core.register_craft(table.merge(craft_defs, {
+		-- Firework star: 2 effect modifiers and gunpowder
+		core.register_craft(table.merge(star_craft_defs, {
 			recipe = insert_dyes(i, {
 				"mcl_mobitems:gunpowder",
 				"group:firework_effect_modifier",
@@ -63,17 +90,23 @@ for i = 1, 8 do
 			})
 		}))
 	end
-	-- 7 or less dyes
+	-- 7 or less stars/dyes
 	if i <= 7 then
-		-- 1 shape modifier and gunpowder
-		core.register_craft(table.merge(craft_defs, {
+		-- Firework rocket
+		core.register_craft({
+			output = "mcl_fireworks:rocket_1 3",
+			recipe = insert_stars(i, {"mcl_core:paper", "mcl_mobitems:gunpowder"}),
+			type = "shapeless",
+		})
+		-- Firework star: 1 shape modifier and gunpowder
+		core.register_craft(table.merge(star_craft_defs, {
 			recipe = insert_dyes(i, {
 				"mcl_mobitems:gunpowder",
 				"group:firework_shape_modifier"
 			})
 		}))
-		-- 1 effect modifier and gunpowder
-		core.register_craft(table.merge(craft_defs, {
+		-- Firework star: 1 effect modifier and gunpowder
+		core.register_craft(table.merge(star_craft_defs, {
 			recipe = insert_dyes(i, {
 				"mcl_mobitems:gunpowder",
 				"group:firework_effect_modifier"
@@ -81,7 +114,7 @@ for i = 1, 8 do
 		}))
 	end
 	-- 8 or less dyes (only dyes and gunpowder)
-	core.register_craft(table.merge(craft_defs, {
+	core.register_craft(table.merge(star_craft_defs, {
 		recipe = insert_dyes(i, {"mcl_mobitems:gunpowder"})
 	}))
 end
