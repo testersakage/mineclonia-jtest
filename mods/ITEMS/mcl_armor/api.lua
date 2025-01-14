@@ -242,30 +242,6 @@ function mcl_armor.register_protection_enchantment(def)
 	}
 end
 
-local function update_respiration(player, resp_lv)
-	local meta = player:get_meta()
-	resp_lv = math.max (0, math.ceil (tonumber (resp_lv)))
-	-- Luanti's native breath seems to be not draining by 1 per second.
-	-- Also, non-10 breaths causes uneven hud bubble pop.
-	-- Default = 10 breath = roughly 19s (MC 15s).
-	-- Respiration III = 40 breath = roughly 78s (MC 60s).
-	local new_max = 10 + (10 * resp_lv)
-	local old_max = player:get_properties().breath_max
-	if new_max == old_max then return end
-
-	local old_breath = player:get_breath ()
-	player:set_properties ({breath_max = new_max})
-	if new_max > old_max then
-		if old_breath == old_max then
-			player:set_breath (new_max)
-		end
-	else -- new_max < old_max
-		if old_breath > new_max then
-			player:set_breath (new_max)
-		end
-	end
-end
-
 function mcl_armor.update(obj)
 	local info = {points = 0, view_range_factors = {}}
 	local resp_lv = 0
@@ -320,7 +296,7 @@ function mcl_armor.update(obj)
 	info.texture = info.texture or "blank.png"
 
 	if obj:is_player() then
-		update_respiration(obj, resp_lv)
+		mcl_enchanting.update_respiration(obj, resp_lv)
 		mcl_armor.update_player(obj, info)
 	else
 		local luaentity = obj:get_luaentity()
