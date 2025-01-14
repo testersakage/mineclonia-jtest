@@ -233,7 +233,7 @@ function mcl_doors:register_door(name, def)
 			if oldmetadata.fields["rotation"] == 1 then
 				oldmetadata.fields["rotation"] = 0
 			else
-				minetest.remove_node(vector.offset(pos, 0, 1, 0))
+				minetest.remove_node(vector.offset(pos, 0, -1, 0))
 			end
 		end,
 		node_box = {
