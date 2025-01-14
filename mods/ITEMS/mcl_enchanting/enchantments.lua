@@ -825,7 +825,7 @@ function mcl_enchanting.update_respiration (player, resp_lv)
 	if resp_lv < 0 then return end
 
 	-- Luanti's native breath seems to be not draining by 1 per second.
-	-- Also, non-10 breaths results in uneven hud bubble pop.
+	-- Also, non-10s breaths result in uneven hud bubble pop.
 	-- Default = 10 breath = roughly 19s (MC 15s).
 	-- Respiration III = 40 breath = roughly 78s (MC 60s).
 	local new_max = 10 + (10 * resp_lv)
@@ -846,15 +846,15 @@ function mcl_enchanting.update_respiration (player, resp_lv)
 	end
 end
 
--- Respiration drown damage adjustment.
+-- Respiration drown damage reduction.
 mcl_damage.register_modifier (function (obj, damage, reason)
 	if reason.type == "drown" and obj:is_player () then
 		local resp_lv = obj:get_meta ():get_int ("respiration_level") or 0
 		resp_lv = math.min (math.ceil (tonumber (resp_lv)), 255)
 		if resp_lv <= 0 then return damage end
 
-		-- chance to neglate damage = level / ( level + 1 ), thus
-		-- chance to suffer damage = 1 / ( level + 1 )
+		-- chance to resist damage = level / ( level + 1 ), thus
+		-- chance to take damage = 1 / ( level + 1 )
 		local roll = math.random( resp_lv + 1 )
 		return roll == 1 and damage or 0
 	end
