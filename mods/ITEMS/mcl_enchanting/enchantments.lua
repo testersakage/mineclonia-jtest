@@ -820,11 +820,9 @@ mcl_enchanting.enchantments.wind_burst = {
 function mcl_enchanting.update_respiration (player, resp_lv)
 	if not player:is_player () then return end
 
-	resp_lv = math.ceil (tonumber (resp_lv))
+	resp_lv = math.min (math.ceil (tonumber (resp_lv)), 255)
 	local meta = player:get_meta ()
-	local old_resp = meta:get_int ("respiration_level") or 0
-	if resp_lv < 0 or old_resp == resp_lv then return end
-	meta:set_int ("respiration_level", resp_lv)
+	if resp_lv < 0 then return end
 
 	-- Luanti's native breath seems to be not draining by 1 per second.
 	-- Also, non-10 breaths results in uneven hud bubble pop.
@@ -834,6 +832,7 @@ function mcl_enchanting.update_respiration (player, resp_lv)
 	local old_max = player:get_properties ().breath_max
 	if new_max == old_max then return end
 
+	meta:set_int ("respiration_level", resp_lv)
 	player:set_properties ({breath_max = new_max})
 	local old_breath = player:get_breath ()
 	if new_max > old_max then
@@ -851,7 +850,7 @@ end
 mcl_damage.register_modifier (function (obj, damage, reason)
 	if reason.type == "drown" and obj:is_player () then
 		local resp_lv = obj:get_meta ():get_int ("respiration_level") or 0
-		resp_lv = math.ceil (tonumber (resp_lv))
+		resp_lv = math.min (math.ceil (tonumber (resp_lv)), 255)
 		if resp_lv <= 0 then return damage end
 
 		-- chance to neglate damage = level / ( level + 1 ), thus
