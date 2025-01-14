@@ -573,7 +573,7 @@ mcl_enchanting.enchantments.quick_charge = {
 	anvil_book_factor = 1,
 }
 
--- implemented in mcl_armor/api.lua
+-- implemented below
 mcl_enchanting.enchantments.respiration = {
 	name = S("Respiration"),
 	max_level = 3,
@@ -815,3 +815,33 @@ mcl_enchanting.enchantments.wind_burst = {
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
 }
+
+-- Respiration breath_max adjustment
+function mcl_enchanting.update_respiration (player, resp_lv, has_turtle)
+	if not player:is_player () then return end
+	resp_lv = math.ceil (tonumber (resp_lv))
+	local meta = player:get_meta ()
+	local old_resp = meta:get_int ("respiration_level") or 0
+	if resp_lv < 0 or old_resp == resp_lv then return end
+	meta:set_int ("respiration_level", resp_lv)
+
+	-- Luanti's native breath seems to be not draining by 1 per second.
+	-- Also, non-10 breaths results in uneven hud bubble pop.
+	-- Default = 10 breath = roughly 19s (MC 15s).
+	-- Respiration III = 40 breath = roughly 78s (MC 60s).
+	local new_max = 10 + (10 * resp_lv)
+	local old_max = player:get_properties ().breath_max
+	if new_max == old_max then return end
+
+	player:set_properties ({breath_max = new_max})
+	local old_breath = player:get_breath ()
+	if new_max > old_max then
+		if old_breath == old_max then
+			player:set_breath (new_max)
+		end
+	else -- new_max < old_max
+		if old_breath > new_max then
+			player:set_breath (new_max)
+		end
+	end
+end
