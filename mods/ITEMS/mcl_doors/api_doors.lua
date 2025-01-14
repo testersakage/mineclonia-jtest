@@ -1,6 +1,4 @@
-mcl_doors = {}
-
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 function mcl_doors.is_open(pos)
 	local meta = core.get_meta(pos)
@@ -10,7 +8,7 @@ end
 -- This helper function calls on_place_node callbacks.
 local function on_place_node(place_to, newnode, placer, oldnode, itemstack, pointed_thing)
 	-- Run script hook
-	for _, callback in pairs(minetest.registered_on_placenodes) do
+	for _, callback in pairs(core.registered_on_placenodes) do
 		-- Deep-copy pos, node and pointed_thing because callback can modify them
 		local place_to_copy = vector.copy(place_to)
 		local newnode_copy = {
@@ -98,24 +96,24 @@ function mcl_doors:register_door(name, def)
 	end
 
 	local function on_open_close(pos, dir, check_name, replace, replace_dir)
-		local meta1 = minetest.get_meta(pos)
+		local meta1 = core.get_meta(pos)
 		pos.y = pos.y + dir
-		local meta2 = minetest.get_meta(pos)
+		local meta2 = core.get_meta(pos)
 
 		-- if name of other door is not the same as check_name -> return
-		if minetest.get_node(pos).name ~= check_name  then return end
+		if core.get_node(pos).name ~= check_name  then return end
 		-- swap directions if mirrored
 		local params = {3,0,1,2}
 		if meta1:get_int("is_open") == 0 and meta2:get_int("is_mirrored") == 0 or meta1:get_int("is_open") == 1 and meta2:get_int("is_mirrored") == 1 then
 			params = {1,2,3,0}
 		end
 
-		local p2 = minetest.get_node(pos).param2
+		local p2 = core.get_node(pos).param2
 		local np2 = params[p2 + 1]
 
-		minetest.swap_node(pos, {name = replace_dir, param2 = np2})
+		core.swap_node(pos, {name = replace_dir, param2 = np2})
 		pos.y = pos.y - dir
-		minetest.swap_node(pos, {name = replace, param2 = np2})
+		core.swap_node(pos, {name = replace, param2 = np2})
 
 		local door_switching_sound
 		if meta1:get_int("is_open") == 1 then
@@ -128,7 +126,7 @@ function mcl_doors:register_door(name, def)
 			meta2:set_int("is_open", 1)
 		end
 
-		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
+		core.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
 	end
 
 	local function open(pos)
@@ -223,7 +221,7 @@ function mcl_doors:register_door(name, def)
 				if not core.is_creative_enabled(digger:get_player_name()) then
 					core.add_item(pos, name)
 				end
-				minetest.remove_node(vector.offset(pos, 0, 1, 0))
+				core.remove_node(vector.offset(pos, 0, 1, 0))
 			end
 		end,
 		node_box = {
@@ -251,7 +249,7 @@ function mcl_doors:register_door(name, def)
 			if oldmetadata.fields["rotation"] == 1 then
 				oldmetadata.fields["rotation"] = 0
 			else
-				minetest.remove_node(vector.offset(pos, 0, -1, 0))
+				core.remove_node(vector.offset(pos, 0, -1, 0))
 			end
 		end,
 		node_box = {
@@ -264,7 +262,7 @@ function mcl_doors:register_door(name, def)
 		}
 	}
 
-	minetest.register_craftitem(":"..name, {
+	core.register_craftitem(":"..name, {
 		description = def.description,
 		_tt_help = tt_help,
 		_doc_items_longdesc = longdesc,
@@ -277,35 +275,35 @@ function mcl_doors:register_door(name, def)
 				return itemstack
 			end
 			local pn = placer:get_player_name()
-			if minetest.is_protected(pointed_thing.above, pn) and minetest.is_protected(pointed_thing.under, pn) then
+			if core.is_protected(pointed_thing.above, pn) and core.is_protected(pointed_thing.under, pn) then
 				return itemstack
 			end
 			local ptu = pointed_thing.under
-			local nu = minetest.get_node(ptu)
+			local nu = core.get_node(ptu)
 
 			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 			if rc then return rc end
 
 			local pt
-			if minetest.registered_nodes[nu.name] and minetest.registered_nodes[nu.name].buildable_to then
+			if core.registered_nodes[nu.name] and core.registered_nodes[nu.name].buildable_to then
 				pt = pointed_thing.under
 			else
 				pt = pointed_thing.above
 			end
 			local pt2 = {x=pt.x, y=pt.y, z=pt.z}
 			pt2.y = pt2.y+1
-			local ptname = minetest.get_node(pt).name
-			local pt2name = minetest.get_node(pt2).name
+			local ptname = core.get_node(pt).name
+			local pt2name = core.get_node(pt2).name
 			if
-				(minetest.registered_nodes[ptname] and not minetest.registered_nodes[ptname].buildable_to) or
-				(minetest.registered_nodes[pt2name] and not minetest.registered_nodes[pt2name].buildable_to)
+				(core.registered_nodes[ptname] and not core.registered_nodes[ptname].buildable_to) or
+				(core.registered_nodes[pt2name] and not core.registered_nodes[pt2name].buildable_to)
 			then
 				return itemstack
 			end
 
 			-- get left coordinate for checking if another door is there
 			local pt_left = {x=pt.x, y=pt.y, z=pt.z}
-			local p2 = minetest.dir_to_facedir(placer:get_look_dir())
+			local p2 = core.dir_to_facedir(placer:get_look_dir())
 
 			if p2 == 0 then
 				pt_left.x = pt_left.x-1
@@ -317,7 +315,7 @@ function mcl_doors:register_door(name, def)
 				pt_left.z = pt_left.z-1
 			end
 
-			local left_node = minetest.get_node(pt_left)
+			local left_node = core.get_node(pt_left)
 			local mirrored = false
 			local door_dir = 1
 			if left_node.name:sub(1, #name) == name then
@@ -327,22 +325,22 @@ function mcl_doors:register_door(name, def)
 			end
 
 			-- Set door nodes
-			minetest.set_node(pt, {name=name.."_b_"..door_dir, param2=p2})
-			minetest.set_node(pt2, {name=name.."_t_"..door_dir, param2=p2})
+			core.set_node(pt, {name=name.."_b_"..door_dir, param2=p2})
+			core.set_node(pt2, {name=name.."_t_"..door_dir, param2=p2})
 
 			if def.sounds and def.sounds.place then
-				minetest.sound_play(def.sounds.place, {pos=pt}, true)
+				core.sound_play(def.sounds.place, {pos=pt}, true)
 			end
 
 			if def.only_placer_can_open then
-				local meta = minetest.get_meta(pt)
+				local meta = core.get_meta(pt)
 				meta:set_string("doors_owner", "")
-				meta = minetest.get_meta(pt2)
+				meta = core.get_meta(pt2)
 				meta:set_string("doors_owner", "")
 			end
 
-			local meta1 = minetest.get_meta(pt)
-			local meta2 = minetest.get_meta(pt2)
+			local meta1 = core.get_meta(pt)
+			local meta2 = core.get_meta(pt2)
 			-- save mirror state for the correct door
 			if mirrored then
 				meta1:set_int("is_mirrored", 1)
@@ -354,12 +352,12 @@ function mcl_doors:register_door(name, def)
 			meta2:set_int("is_open", 0)
 
 
-			if not minetest.is_creative_enabled(pn) then
+			if not core.is_creative_enabled(pn) then
 				itemstack:take_item()
 			end
 
-			on_place_node(pt, minetest.get_node(pt), placer, nu, itemstack, pointed_thing)
-			on_place_node(pt2, minetest.get_node(pt2), placer, minetest.get_node({x=ptu.x,y=ptu.y+1,z=ptu.z}), itemstack, pointed_thing)
+			on_place_node(pt, core.get_node(pt), placer, nu, itemstack, pointed_thing)
+			on_place_node(pt2, core.get_node(pt2), placer, core.get_node({x=ptu.x,y=ptu.y+1,z=ptu.z}), itemstack, pointed_thing)
 
 			return itemstack
 		end,
@@ -378,7 +376,7 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_b_1", table.merge({
+	core.register_node(":"..name.."_b_1", table.merge({
 		on_rightclick = on_rightclick,
 		tiles = {
 			"blank.png", tt[2].."^[transformFXR90", tb[2],
@@ -396,7 +394,7 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_t_1", table.merge({
+	core.register_node(":"..name.."_t_1", table.merge({
 		on_rightclick = on_rightclick,
 		tiles = {
 			tt[2].."^[transformR90", "blank.png", tt[2],
@@ -414,7 +412,7 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_b_2", table.merge({
+	core.register_node(":"..name.."_b_2", table.merge({
 		on_rightclick = on_rightclick,
 		tiles = {
 			"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI",
@@ -432,7 +430,7 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_t_2", table.merge({
+	core.register_node(":"..name.."_t_2", table.merge({
 		on_rightclick = on_rightclick,
 		tiles = {
 			tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI",
@@ -441,7 +439,7 @@ function mcl_doors:register_door(name, def)
 	}, tpl_doors, tpl_top))
 
 	-- Add entry aliases for the Help
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_b_1")
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_b_2")
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_t_1")
