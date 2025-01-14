@@ -392,7 +392,7 @@ function mcl_doors:register_door(name, def)
 			"blank.png", tt[2].."^[transformFXR90", tb[2],
 			tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"
 		}
-	}, tpl_doors, tpl_bottom, tpl_close))
+	}, tpl_doors, tpl_bottom))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -427,7 +427,7 @@ function mcl_doors:register_door(name, def)
 			tt[2].."^[transformR90", "blank.png", tt[2],
 			tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"
 		}
-	}, tpl_doors, tpl_top, tpl_close))
+	}, tpl_doors, tpl_top))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -462,7 +462,7 @@ function mcl_doors:register_door(name, def)
 			"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI",
 			tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]
 		}
-	}, tpl_doors, tpl_bottom, tpl_open))
+	}, tpl_doors, tpl_bottom))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -497,7 +497,7 @@ function mcl_doors:register_door(name, def)
 			tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI",
 			tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]
 		}
-	}, tpl_doors, tpl_top, tpl_open))
+	}, tpl_doors, tpl_top))
 
 	-- Add entry aliases for the Help
 	if minetest.get_modpath("doc") then
