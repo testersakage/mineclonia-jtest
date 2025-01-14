@@ -8,44 +8,26 @@ function mcl_doors.is_open(pos)
 end
 
 -- This helper function calls on_place_node callbacks.
-local function on_place_node(place_to, newnode,
-	placer, oldnode, itemstack, pointed_thing)
+local function on_place_node(place_to, newnode, placer, oldnode, itemstack, pointed_thing)
 	-- Run script hook
 	for _, callback in pairs(minetest.registered_on_placenodes) do
 		-- Deep-copy pos, node and pointed_thing because callback can modify them
 		local place_to_copy = vector.copy(place_to)
-		local newnode_copy =
-			{name = newnode.name, param1 = newnode.param1, param2 = newnode.param2}
-		local oldnode_copy =
-			{name = oldnode.name, param1 = oldnode.param1, param2 = oldnode.param2}
+		local newnode_copy = {
+			name = newnode.name, param1 = newnode.param1, param2 = newnode.param2
+		}
+		local oldnode_copy = {
+			name = oldnode.name, param1 = oldnode.param1, param2 = oldnode.param2
+		}
 		local pointed_thing_copy = {
 			type  = pointed_thing.type,
 			above = vector.new(pointed_thing.above),
 			under = vector.new(pointed_thing.under),
 			ref   = pointed_thing.ref,
 		}
-		callback(place_to_copy, newnode_copy, placer,
-			oldnode_copy, itemstack, pointed_thing_copy)
+		callback(place_to_copy, newnode_copy, placer, oldnode_copy, itemstack, pointed_thing_copy)
 	end
 end
-
--- Registers a door
---  name: The name of the door
---  def: a table with the folowing fields:
---    description
---    inventory_image
---    groups
---    tiles_bottom: the tiles of the bottom part of the door {front, side}
---    tiles_top: the tiles of the bottom part of the door {front, side}
---    If the following fields are not defined the default values are used
---    node_box_bottom
---    node_box_top
---    selection_box_bottom
---    selection_box_top
---    only_placer_can_open: if true only the player who placed the door can
---                          open it
---    only_redstone_can_open: if true, the door can only be opened by redstone,
---                            not by rightclicking it
 
 function mcl_doors:register_door(name, def)
 	def.groups.not_in_creative_inventory = 1
@@ -117,14 +99,11 @@ function mcl_doors:register_door(name, def)
 
 	local function on_open_close(pos, dir, check_name, replace, replace_dir)
 		local meta1 = minetest.get_meta(pos)
-		pos.y = pos.y+dir
+		pos.y = pos.y + dir
 		local meta2 = minetest.get_meta(pos)
 
 		-- if name of other door is not the same as check_name -> return
-		if minetest.get_node(pos).name ~= check_name  then
-			return
-		end
-
+		if minetest.get_node(pos).name ~= check_name  then return end
 		-- swap directions if mirrored
 		local params = {3,0,1,2}
 		if meta1:get_int("is_open") == 0 and meta2:get_int("is_mirrored") == 0 or meta1:get_int("is_open") == 1 and meta2:get_int("is_mirrored") == 1 then
@@ -132,11 +111,11 @@ function mcl_doors:register_door(name, def)
 		end
 
 		local p2 = minetest.get_node(pos).param2
-		local np2 = params[p2+1]
+		local np2 = params[p2 + 1]
 
-		minetest.swap_node(pos, {name=replace_dir, param2=np2})
-		pos.y = pos.y-dir
-		minetest.swap_node(pos, {name=replace, param2=np2})
+		minetest.swap_node(pos, {name = replace_dir, param2 = np2})
+		pos.y = pos.y - dir
+		minetest.swap_node(pos, {name = replace, param2 = np2})
 
 		local door_switching_sound
 		if meta1:get_int("is_open") == 1 then
@@ -148,6 +127,7 @@ function mcl_doors:register_door(name, def)
 			meta1:set_int("is_open", 1)
 			meta2:set_int("is_open", 1)
 		end
+
 		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
 	end
 
@@ -165,6 +145,7 @@ function mcl_doors:register_door(name, def)
 
 	local function redstone_update_bottom(pos)
 		local pos2 = pos:offset(0, 1, 0)
+
 		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
 			open(pos)
 		else
@@ -174,6 +155,7 @@ function mcl_doors:register_door(name, def)
 
 	local function redstone_update_top(pos)
 		local pos2 = pos:offset(0, -1, 0)
+
 		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
 			open(pos2)
 		else
