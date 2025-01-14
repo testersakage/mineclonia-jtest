@@ -1,26 +1,13 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
--- Wrapper around mintest.pointed_thing_to_face_pos.
 local function get_fpos(placer, pointed_thing)
-	local fpos
-	-- Workaround: minetest.pointed_thing_to_face_pos crashes in MT 0.4.16 if
-	-- pointed_thing.under and pointed_thing.above are equal
-	-- FIXME: Remove this when MT got fixed.
-	if not vector.equals(pointed_thing.under, pointed_thing.above) then
-		-- The happy case: Everything is normal
-		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
-		fpos = finepos.y % 1
-	else
-		-- Fallback if both above and under are equal
-		fpos = 0
-	end
-	return fpos
+	local finepos = core.pointed_thing_to_face_pos(placer, pointed_thing)
+	return finepos.y % 1 or 0
 end
 
 ---- Trapdoor ----
-
 local on_rotate
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	on_rotate = function(pos, node, _, mode, _)
 		-- Flip trapdoor vertically
 		if mode == screwdriver.ROTATE_AXIS then
@@ -42,7 +29,7 @@ if minetest.get_modpath("screwdriver") then
 				node.param2 = minor
 				node.param2 = node.param2 + 20
 			end
-			minetest.set_node(pos, node)
+			core.set_node(pos, node)
 			return true
 		end
 	end
@@ -62,18 +49,18 @@ function mcl_doors:register_trapdoor(name, def)
 	end
 
 	local function punch(pos)
-		local me = minetest.get_node(pos)
+		local me = core.get_node(pos)
 		local tmp_node
 		-- Close
-		if minetest.get_item_group(me.name, "trapdoor") == 2 then
-			minetest.sound_play(def.sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
+		if core.get_item_group(me.name, "trapdoor") == 2 then
+			core.sound_play(def.sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
 			tmp_node = {name=name, param1=me.param1, param2=me.param2}
 		-- Open
 		else
-			minetest.sound_play(def.sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
+			core.sound_play(def.sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
 			tmp_node = {name=name.."_open", param1=me.param1, param2=me.param2}
 		end
-		minetest.set_node(pos, tmp_node)
+		core.set_node(pos, tmp_node)
 	end
 
 	local on_rightclick
@@ -104,12 +91,13 @@ function mcl_doors:register_trapdoor(name, def)
     end
 
 	-- Closed trapdoor
-
 	local tile_front = def.tile_front
 	local tile_side = def.tile_side
+
 	if not tile_side then
 		tile_side = tile_front
 	end
+
 	local tiles_closed = {
 		tile_front,
 		tile_front .. "^[transformFY",
@@ -120,81 +108,75 @@ function mcl_doors:register_trapdoor(name, def)
 	local groups_closed = groups
 	groups_closed.trapdoor = 1
 	groups_closed.deco_block = 1
-	minetest.register_node(":"..name, {
-		description = def.description,
-		_tt_help = tt_help,
-		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = usagehelp,
+
+	local tpl_trapdoor = {
+		_mcl_blast_resistance = def._mcl_blast_resistance,
+		_mcl_hardness = def._mcl_hardness,
+		_on_wind_charge_hit = function(pos)
+			if not def.only_redstone_can_open then punch(pos) end
+			return true
+		end,
+		_pathfinding_class = "TRAPDOOR",
 		drawtype = "nodebox",
-		tiles = tiles_closed,
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		inventory_image = def.inventory_image,
-		wield_image = def.wield_image,
 		is_ground_content = false,
+		on_rightclick = on_rightclick,
+		on_rotate = on_rotate,
 		paramtype = "light",
 		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		groups = groups_closed,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_burntime = def._mcl_burntime,
 		sounds = def.sounds,
-		node_box = {
-			type = "fixed",
-			fixed = {
-			{-8/16, -8/16, -8/16, 8/16, -5/16, 8/16},},
-		},
+		sunlight_propagates = true,
+		use_texture_alpha = "clip"
+	}
+
+	core.register_node(":"..name, table.merge(tpl_trapdoor, {
+		_doc_items_longdesc = longdesc,
+		_doc_items_usagehelp = usagehelp,
+		_mcl_burntime = def._mcl_burntime,
 		_mcl_redstone = {
-			update = function(pos, node)
-				if mcl_redstone.get_power(pos) ~= 0 then
-					punch(pos)
-				end
-			end,
 			init = function() end,
+			update = function(pos, _)
+				if mcl_redstone.get_power(pos) ~= 0 then punch(pos) end
+			end
+		},
+		_tt_help = tt_help,
+		description = def.description,
+		groups = groups_closed,
+		inventory_image = def.inventory_image,
+		node_box = {
+			fixed = {
+				{-8/16, -8/16, -8/16, 8/16, -5/16, 8/16}
+			},
+			type = "fixed"
 		},
 		on_place = function(itemstack, placer, pointed_thing)
-
-			if not placer or not placer:is_player() then
-				return itemstack
-			end
+			if not placer or not placer:is_player() then return itemstack end
 
 			local p0 = pointed_thing.under
 			local p1 = pointed_thing.above
 			local param2 = 0
 
 			local placer_pos = placer:get_pos()
-			if placer_pos then
-				param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
-			end
+			if placer_pos then param2 = core.dir_to_facedir(vector.subtract(p1, placer_pos)) end
 
 			local fpos = get_fpos(placer, pointed_thing)
 
-			--local origname = itemstack:get_name()
 			if p0.y - 1 == p1.y or (fpos > 0 and fpos < 0.5)
-					or (fpos < -0.5 and fpos > -0.999999999) then
+			or (fpos < -0.5 and fpos > -0.999999999) then
 				param2 = param2 + 20
+
 				if param2 == 21 then
 					param2 = 23
 				elseif param2 == 23 then
 					param2 = 21
 				end
 			end
-			return minetest.item_place(itemstack, placer, pointed_thing, param2)
-		end,
-		on_rightclick = on_rightclick,
-		on_rotate = on_rotate,
-		_on_wind_charge_hit = function(pos)
-			local node = minetest.get_node(pos)
-			if node.name ~= "mcl_doors:iron_trapdoor" then
-				punch(pos)
-			end
-			return true
-		end,
-		_pathfinding_class = "TRAPDOOR",
-	})
 
+			return core.item_place(itemstack, placer, pointed_thing, param2)
+		end,
+		tiles = tiles_closed,
+		wield_image = def.wield_image
+	}))
 	-- Open trapdoor
-
 	local groups_open = table.copy(groups)
 
 	local tiles_open = {
@@ -208,50 +190,29 @@ function mcl_doors:register_trapdoor(name, def)
 
 	groups_open.trapdoor = 2
 	groups_open.not_in_creative_inventory = 1
-	minetest.register_node(":"..name.."_open", {
-		drawtype = "nodebox",
-		tiles = tiles_open,
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		is_ground_content = false,
-		paramtype = "light",
-		paramtype2 = "facedir",
+
+	core.register_node(":"..name.."_open", table.merge(tpl_trapdoor, {
+		_mcl_baseitem = name,
+		_mcl_redstone = {
+			init = function() end,
+			update = function(pos, _)
+				if mcl_redstone.get_power(pos) == 0 then punch(pos) end
+			end
+		},
 		-- TODO: Implement Minecraft behaviour: Climbable if directly above
 		-- ladder w/ matching orientation.
 		-- Current behavour: Always climbable
 		climbable = true,
-		sunlight_propagates = true,
-		groups = groups_open,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
 		drop = name,
+		groups = groups_open,
 		node_box = {
-			type = "fixed",
-			fixed = {-0.5, -0.5, 5/16, 0.5, 0.5, 0.5}
+			fixed = {-0.5, -0.5, 5/16, 0.5, 0.5, 0.5},
+			type = "fixed"
 		},
-		on_rightclick = on_rightclick,
-		_mcl_redstone = {
-			update = function(pos, node)
-				if mcl_redstone.get_power(pos) == 0 then
-					punch(pos)
-				end
-			end,
-			init = function() end,
-		},
-		on_rotate = on_rotate,
-		_on_wind_charge_hit = function(pos)
-			local node = minetest.get_node(pos)
-			if node.name ~= "mcl_doors:iron_trapdoor_open" then
-				punch(pos)
-			end
-			return true
-		end,
-		_pathfinding_class = "TRAPDOOR",
-	})
+		tiles = tiles_open
+	}))
 
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", name, "nodes", name.."_open")
 	end
-
 end
