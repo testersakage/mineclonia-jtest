@@ -499,7 +499,7 @@ function mcl_inventory.set_creative_formspec(player)
 			"scroll_container[0.375,0.875;11.575,6;scroll;vertical;1.25]",
 			"list[detached:creative_" .. playername .. ";main;0,0;9," .. nb_lines .. ";]",
 			"scroll_container_end[]",
-			"scrollbaroptions[min=0;max=" .. math.max(nb_lines - 5, 0) .. ";smallstep=1;largesteps=1;arrows=hide]",
+			"scrollbaroptions[min=0;max=" .. math.max(nb_lines - 5, 0) .. ";smallstep=1;largestep=1;arrows=hide]",
 			"scrollbar[11.75,0.825;0.75,6.1;vertical;scroll;0]"
 		})
 	end
