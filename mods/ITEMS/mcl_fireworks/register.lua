@@ -72,4 +72,5 @@ core.register_craftitem("mcl_fireworks:star", {
 	description = S("Firework Star"),
 	groups = {firework_star = 1, not_in_creative_inventory = 1},
 	inventory_image = "mcl_fireworks_star.png",
+	wield_image = "mcl_fireworks_star.png"
 })

@@ -85,28 +85,40 @@ for i = 1, 8 do
 		recipe = insert_dyes(i, {"mcl_mobitems:gunpowder"})
 	}))
 end
---[[
-local function firework_craft(_, _, old_craft_grid, _)
+
+local function firework_craft(itemstack, _, old_craft_grid, _)
 	local shape
-	local colors = {}
+	local colors, effects = {}, {}
 
 	for _, stack in pairs(old_craft_grid) do
-		local shape_index = core.get_item_group(stack:get_name(), "firework_shape_modifier")
-
-		if shape then return end
+		local name =  stack:get_name()
+		local shape_index = core.get_item_group(name, "firework_shape_modifier")
+		local effect_index = core.get_item_group(name, "firework_effect_modifier")
 
 		if shape_index > 0 then
 			shape = mcl_fireworks.registered_shapes[shape_index]
-		else
-			shape = "default"
 		end
 
-		if core.get_item_group(stack:get_name(), "dye") > 0 then
-			table.insert(colors, stack:get_definition().rgb)
+		if effect_index > 0 then
+			table.insert(effects, mcl_fireworks.registered_effects[effect_index])
+		end
+
+		if core.get_item_group(name, "dye") > 0 then
+			local rgb = mcl_dyes.colors[stack:get_definition()._color].rgb
+			table.insert(colors, rgb)
 		end
 	end
+
+	if not shape then shape = "default" end
+
+	local meta = itemstack:get_meta()
+
+	meta:set_string("mcl_fireworks:shape", shape)
+	meta:set_string("mcl_fireworks:effects", core.serialize(effects))
+	meta:set_string("mcl_fireworks:colors", core.serialize(colors))
+
+	return itemstack
 end
 
 core.register_on_craft(firework_craft)
 core.register_craft_predict(firework_craft)
-]]
