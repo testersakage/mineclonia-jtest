@@ -2,6 +2,11 @@ mcl_doors = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
+function mcl_doors.is_open(pos)
+	local meta = core.get_meta(pos)
+	return meta:get_int("is_open") == 1
+end
+
 -- This helper function calls on_place_node callbacks.
 local function on_place_node(place_to, newnode,
 	placer, oldnode, itemstack, pointed_thing)
@@ -100,6 +105,166 @@ function mcl_doors:register_door(name, def)
 	if def.groups and def.groups.flammable then
 		craftitem_groups.flammable = def.groups.flammable
 	end
+
+	local function check_player_priv(pos, player)
+		if not def.only_placer_can_open then return true end
+
+		local meta = core.get_meta(pos)
+		local pn = player:get_player_name()
+
+		return meta:get_string("doors_owner") == pn
+	end
+
+	local function on_open_close(pos, dir, check_name, replace, replace_dir)
+		local meta1 = minetest.get_meta(pos)
+		pos.y = pos.y+dir
+		local meta2 = minetest.get_meta(pos)
+
+		-- if name of other door is not the same as check_name -> return
+		if minetest.get_node(pos).name ~= check_name  then
+			return
+		end
+
+		-- swap directions if mirrored
+		local params = {3,0,1,2}
+		if meta1:get_int("is_open") == 0 and meta2:get_int("is_mirrored") == 0 or meta1:get_int("is_open") == 1 and meta2:get_int("is_mirrored") == 1 then
+			params = {1,2,3,0}
+		end
+
+		local p2 = minetest.get_node(pos).param2
+		local np2 = params[p2+1]
+
+		minetest.swap_node(pos, {name=replace_dir, param2=np2})
+		pos.y = pos.y-dir
+		minetest.swap_node(pos, {name=replace, param2=np2})
+
+		local door_switching_sound
+		if meta1:get_int("is_open") == 1 then
+			door_switching_sound = def.sound_close
+			meta1:set_int("is_open", 0)
+			meta2:set_int("is_open", 0)
+		else
+			door_switching_sound = def.sound_open
+			meta1:set_int("is_open", 1)
+			meta2:set_int("is_open", 1)
+		end
+		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
+	end
+
+	local function open(pos)
+		on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
+	end
+
+	local function close(pos)
+		on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
+	end
+
+	local function redstone_connects_to(node, dir)
+		return true
+	end
+
+	local function redstone_update_bottom(pos)
+		local pos2 = pos:offset(0, 1, 0)
+		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
+			open(pos)
+		else
+			close(pos)
+		end
+	end
+
+	local function redstone_update_top(pos)
+		local pos2 = pos:offset(0, -1, 0)
+		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
+			open(pos2)
+		else
+			close(pos2)
+		end
+	end
+
+	local tpl_doors = {
+		_mcl_baseitem = name,
+		_mcl_blast_resistance = def._mcl_blast_resistance,
+		_mcl_hardness = def._mcl_hardness,
+		can_dig = check_player_priv,
+		drawtype = "nodebox",
+		drop = "",
+		groups = def.groups,
+		is_ground_content = false,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		sounds = def.sounds,
+		sunlight_propagates = true,
+		use_texture_alpha = "clip"
+	}
+
+	local tpl_bottom = {
+		_mcl_redstone = {
+			connects_to = redstone_connects_to,
+			init = function() end,
+			update = redstone_update_bottom
+		},
+		after_dig_node = function(pos, _, oldmetadata, digger)
+			if oldmetadata.fields["rotation"] == 1 then
+				oldmetadata.fields["rotation"] = 0
+			else
+				if not core.is_creative_enabled(digger:get_player_name()) then
+					core.add_item(pos, name)
+				end
+				minetest.remove_node(vector.offset(pos, 0, 1, 0))
+			end
+		end,
+		node_box = {
+			fixed = def.node_box_bottom,
+			type = "fixed"
+		},
+		selection_box = {
+			fixed = def.selection_box_bottom,
+			type = "fixed"
+		}
+	}
+
+	local tpl_top = {
+		_mcl_redstone = {
+			connects_to = redstone_connects_to,
+			init = function() end,
+			update = redstone_update_top
+		},
+		after_dig_node = function(pos, _, oldmetadata, _)
+			if oldmetadata.fields["rotation"] == 1 then
+				oldmetadata.fields["rotation"] = 0
+			else
+				minetest.remove_node(vector.offset(pos, 0, 1, 0))
+			end
+		end,
+		node_box = {
+			fixed = def.node_box_top,
+			type = "fixed"
+		},
+		selection_box = {
+			fixed = def.selection_box_top,
+			type = "fixed"
+		}
+	}
+
+	local tpl_close = {
+		_on_wind_charge_hit = function(pos)
+			if not def.only_redstone_can_open then
+				open(pos)
+			end
+
+			return true
+		end,
+	}
+
+	local tpl_open = {
+		_on_wind_charge_hit = function(pos)
+			if not def.only_redstone_can_open then
+				close(pos)
+			end
+
+			return true
+		end
+	}
 
 	minetest.register_craftitem(":"..name, {
 		description = def.description,
@@ -205,80 +370,6 @@ function mcl_doors:register_door(name, def)
 	local tt = def.tiles_top
 	local tb = def.tiles_bottom
 
-	local function on_open_close(pos, dir, check_name, replace, replace_dir)
-		local meta1 = minetest.get_meta(pos)
-		pos.y = pos.y+dir
-		local meta2 = minetest.get_meta(pos)
-
-		-- if name of other door is not the same as check_name -> return
-		if minetest.get_node(pos).name ~= check_name  then
-			return
-		end
-
-		-- swap directions if mirrored
-		local params = {3,0,1,2}
-		if meta1:get_int("is_open") == 0 and meta2:get_int("is_mirrored") == 0 or meta1:get_int("is_open") == 1 and meta2:get_int("is_mirrored") == 1 then
-			params = {1,2,3,0}
-		end
-
-		local p2 = minetest.get_node(pos).param2
-		local np2 = params[p2+1]
-
-		minetest.swap_node(pos, {name=replace_dir, param2=np2})
-		pos.y = pos.y-dir
-		minetest.swap_node(pos, {name=replace, param2=np2})
-
-		local door_switching_sound
-		if meta1:get_int("is_open") == 1 then
-			door_switching_sound = def.sound_close
-			meta1:set_int("is_open", 0)
-			meta2:set_int("is_open", 0)
-		else
-			door_switching_sound = def.sound_open
-			meta1:set_int("is_open", 1)
-			meta2:set_int("is_open", 1)
-		end
-		minetest.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
-	end
-
-	local function open(pos)
-		on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
-	end
-	local function close(pos)
-		on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
-	end
-
-	local function redstone_connects_to(node, dir)
-		return true
-	end
-
-	local function redstone_update_bottom(pos)
-		local pos2 = pos:offset(0, 1, 0)
-		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
-			open(pos)
-		else
-			close(pos)
-		end
-	end
-
-	local function redstone_update_top(pos)
-		local pos2 = pos:offset(0, -1, 0)
-		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
-			open(pos2)
-		else
-			close(pos2)
-		end
-	end
-
-	local function check_player_priv(pos, player)
-		if not def.only_placer_can_open then
-			return true
-		end
-		local meta = minetest.get_meta(pos)
-		local pn = player:get_player_name()
-		return meta:get_string("doors_owner") == pn
-	end
-
 	local on_rightclick
 	-- Disable on_rightclick if this is a redstone-only door
 	if not def.only_redstone_can_open then
@@ -289,58 +380,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_b_1", {
-		tiles = {"blank.png", tt[2].."^[transformFXR90", tb[2], tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
-		node_box = {
-			type = "fixed",
-			fixed = def.node_box_bottom
-		},
-		selection_box = {
-			type = "fixed",
-			fixed = def.selection_box_bottom
-		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
-		after_dig_node = function(pos, oldnode, oldmetadata, digger)
-			if oldmetadata.fields["rotation"] == 1 then
-				oldmetadata.fields["rotation"] = 0
-			else
-				if not core.is_creative_enabled(digger:get_player_name()) then
-					core.add_item(pos, name)
-				end
-				local top = vector.offset(pos, 0, 1, 0)
-				if oldnode.name ~= name.."_b_2" and minetest.get_node(top).name == name.."_t_1" then
-					minetest.remove_node(top)
-				end
-			end
-		end,
-
+	minetest.register_node(":"..name.."_b_1", table.merge({
 		on_rightclick = on_rightclick,
-		_on_wind_charge_hit = function(pos)
-			local node = minetest.get_node(pos)
-			if node.name ~= "mcl_doors:iron_door_b_1" then
-				open(pos)
-			end
-			return true
-		end,
-
-		_mcl_redstone = {
-			connects_to = redstone_connects_to,
-			update = redstone_update_bottom,
-			init = function() end,
-		},
-
 		on_rotate = function(bottom, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_bottom = minetest.get_meta(bottom)
@@ -358,9 +399,11 @@ function mcl_doors:register_door(name, def)
 			end
 			return false
 		end,
-
-		can_dig = check_player_priv,
-	})
+		tiles = {
+			"blank.png", tt[2].."^[transformFXR90", tb[2],
+			tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"
+		}
+	}, tpl_doors, tpl_bottom, tpl_close))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -372,56 +415,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_t_1", {
-		tiles = {tt[2].."^[transformR90", "blank.png", tt[2], tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
-		node_box = {
-			type = "fixed",
-			fixed = def.node_box_top
-		},
-		selection_box = {
-			type = "fixed",
-			fixed = def.selection_box_top
-		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
-		after_destruct = function(top, oldnode)
-			local meta_top = minetest.get_meta(top)
-			if meta_top:get_int("rotation") == 1 then
-				meta_top:set_int("rotation", 0)
-			else
-				local bottom = { x = top.x, y = top.y - 1, z = top.z }
-				if minetest.get_node(top).name ~= name.."_t_2" and minetest.get_node(bottom).name == name.."_b_1" and oldnode.name == name.."_t_1" then
-					minetest.dig_node(bottom)
-				end
-			end
-		end,
-
+	minetest.register_node(":"..name.."_t_1", table.merge({
 		on_rightclick = on_rightclick,
-		_on_wind_charge_hit = function(pos)
-			local node = minetest.get_node(pos)
-			if node.name ~= "mcl_doors:iron_door_t_1" then
-				open(pos)
-			end
-			return true
-		end,
-
-		_mcl_redstone = {
-			connects_to = redstone_connects_to,
-			update = redstone_update_top,
-			init = function() end,
-		},
-
 		on_rotate = function(top, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_top = minetest.get_meta(top)
@@ -439,9 +434,11 @@ function mcl_doors:register_door(name, def)
 			end
 			return false
 		end,
-
-		can_dig = check_player_priv,
-	})
+		tiles = {
+			tt[2].."^[transformR90", "blank.png", tt[2],
+			tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"
+		}
+	}, tpl_doors, tpl_top, tpl_close))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -453,58 +450,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_b_2", {
-		tiles = {"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI", tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
-		node_box = {
-			type = "fixed",
-			fixed = def.node_box_bottom
-		},
-		selection_box = {
-			type = "fixed",
-			fixed = def.selection_box_bottom
-		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
-		after_dig_node = function(pos, oldnode, oldmetadata, digger)
-			if oldmetadata.fields["rotation"] == 1 then
-				oldmetadata.fields["rotation"] = 0
-			else
-				if not core.is_creative_enabled(digger:get_player_name()) then
-					core.add_item(pos, name)
-				end
-				local top = vector.offset(pos, 0, 1, 0)
-				if oldnode.name ~= name.."_b_1" and minetest.get_node(top).name == name.."_t_2" then
-					minetest.remove_node(top)
-				end
-			end
-		end,
-
+	minetest.register_node(":"..name.."_b_2", table.merge({
 		on_rightclick = on_rightclick,
-		_on_wind_charge_hit = function(pos)
-			local node = minetest.get_node(pos)
-			if node.name ~= "mcl_doors:iron_door_b_2" then
-				close(pos)
-			end
-			return true
-		end,
-
-		_mcl_redstone = {
-			connects_to = redstone_connects_to,
-			update = redstone_update_bottom,
-			init = function() end,
-		},
-
 		on_rotate = function(bottom, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_bottom = minetest.get_meta(bottom)
@@ -522,9 +469,11 @@ function mcl_doors:register_door(name, def)
 			end
 			return false
 		end,
-
-		can_dig = check_player_priv,
-	})
+		tiles = {
+			"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI",
+			tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]
+		}
+	}, tpl_doors, tpl_bottom, tpl_open))
 
 	if def.only_redstone_can_open then
 		on_rightclick = nil
@@ -536,56 +485,8 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_t_2", {
-		tiles = {tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI", tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]},
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		sunlight_propagates = true,
-		is_ground_content = false,
-		drop = "",
-		drawtype = "nodebox",
-		node_box = {
-			type = "fixed",
-			fixed = def.node_box_top
-		},
-		selection_box = {
-			type = "fixed",
-			fixed = def.selection_box_top
-		},
-		groups = def.groups,
-		_mcl_hardness = def._mcl_hardness,
-		_mcl_blast_resistance = def._mcl_blast_resistance,
-		_mcl_baseitem = name,
-		sounds = def.sounds,
-
-		after_destruct = function(top, oldnode)
-			local meta_top = minetest.get_meta(top)
-			if meta_top:get_int("rotation") == 1 then
-				meta_top:set_int("rotation", 0)
-			else
-				local bottom = { x = top.x, y = top.y - 1, z = top.z }
-				if minetest.get_node(top).name ~= name.."_t_1" and minetest.get_node(bottom).name == name.."_b_2" and oldnode.name == name.."_t_2" then
-					minetest.dig_node(bottom)
-				end
-			end
-		end,
-
+	minetest.register_node(":"..name.."_t_2", table.merge({
 		on_rightclick = on_rightclick,
-		_on_wind_charge_hit = function(pos)
-			local node = minetest.get_node(pos)
-			if node.name ~= "mcl_doors:iron_door_t_2" then
-				close(pos)
-			end
-			return true
-		end,
-
-		_mcl_redstone = {
-			connects_to = redstone_connects_to,
-			update = redstone_update_top,
-			init = function() end,
-		},
-
 		on_rotate = function(top, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta_top = minetest.get_meta(top)
@@ -603,9 +504,11 @@ function mcl_doors:register_door(name, def)
 			end
 			return false
 		end,
-
-		can_dig = check_player_priv,
-	})
+		tiles = {
+			tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI",
+			tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]
+		}
+	}, tpl_doors, tpl_top, tpl_open))
 
 	-- Add entry aliases for the Help
 	if minetest.get_modpath("doc") then
@@ -615,9 +518,4 @@ function mcl_doors:register_door(name, def)
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_t_2")
 	end
 
-end
-
-function mcl_doors.is_open (pos)
-	local meta = minetest.get_meta (pos)
-	return meta:get_int ("is_open") == 1
 end
