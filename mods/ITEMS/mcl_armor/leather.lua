@@ -16,28 +16,11 @@ local function av(a, b)
 end
 
 local function calculate_color(first, last)
-    return {
+	return {
 		r = av(first.r, last.r),
 		g = av(first.g, last.g),
 		b = av(first.b, last.b),
-    }
-end
-local function get_texture_function(texture)
-	return function(_, itemstack)
-		local out
-		local color = itemstack:get_meta():get_string("mcl_armor:color")
-		if color == "" or color == nil then
-			out = texture
-		else
-			out = texture:gsub(".png$", "_desat.png").."^[multiply:"..color
-		end
-
-		if mcl_enchanting.is_enchanted(itemstack:get_name()) then
-			return out..mcl_enchanting.overlay
-		else
-			return out
-		end
-	end
+	}
 end
 
 function mcl_armor.colorize_leather_armor(itemstack, colorstring)
@@ -92,12 +75,6 @@ mcl_armor.register_set({
 		torso = 3,
 		legs = 2,
 		feet = 1,
-	},
-	textures = {
-		head = get_texture_function("mcl_armor_helmet_leather.png"),
-		torso = get_texture_function("mcl_armor_chestplate_leather.png"),
-		legs = get_texture_function("mcl_armor_leggings_leather.png"),
-		feet = get_texture_function("mcl_armor_boots_leather.png"),
 	},
 	craft_material = "mcl_mobitems:leather",
 	on_place = function(itemstack, placer, pointed_thing)
