@@ -61,7 +61,6 @@ function mcl_entity_invs.save_inv(ent)
 				ent._items[i] = it:to_string()
 			end
 		end
-		ent._inv = nil
 	end
 end
 
