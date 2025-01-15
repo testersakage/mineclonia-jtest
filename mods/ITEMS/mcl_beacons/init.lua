@@ -315,15 +315,24 @@ minetest.register_abm{
 		local node_above = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
 		local node_current = minetest.get_node(pos)
 
+		local beacon = minetest.find_nodes_in_area({x=pos.x,y=pos.y-100,z=pos.z},{x=pos.x,y=pos.y+100,z=pos.z},{"mcl_beacons:beacon"})
+		if #beacon > 0 then
+			local air_above = minetest.find_nodes_in_area({x=beacon[1].x, y=beacon[1].y, z=beacon[1].z}, {x=beacon[1].x, y=beacon[1].y+100, z=beacon[1].z}, {"air"})
+			if #air_above > 0 then
+				minetest.set_node({x=air_above[1].x, y=air_above[1].y, z=air_above[1].z}, {name="mcl_beacons:beacon_beam",param2=0})
+			end
+		end
+
 		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
 			if minetest.get_node({x=pos.x,y=pos.y-2,z=pos.z}).name == "mcl_beacons:beacon" then
 				set_node_if_clear({x=pos.x,y=pos.y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
 			end
-			remove_beacon_beam(pos)
 		elseif node_above.name == "air" or (node_above.name == "mcl_beacons:beacon_beam" and node_above.param2 ~= node_current.param2) then
 			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node_current.param2})
+		elseif minetest.get_item_group(node_below.name, "glass") ~= 0 or minetest.get_item_group(node_below.name,"material_glass") ~= 0 then
+			set_node_if_clear({x=pos.x,y=pos.y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
 		elseif minetest.get_item_group(node_above.name, "glass") ~= 0 or minetest.get_item_group(node_above.name,"material_glass") ~= 0 then
-			set_node_if_clear({x=pos.x,y=pos.y+2,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
+			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
 		end
 	end,
 }
