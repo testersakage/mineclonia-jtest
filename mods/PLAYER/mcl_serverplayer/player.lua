@@ -378,7 +378,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 	local pose = state.override_pose or state.pose
 	local blocking = mcl_shields.is_blocking (player)
 
-	if pose == POSE_CROUCHING or blocking ~= 0 then
+	if pose == POSE_CROUCHING or (blocking and blocking ~= 0) then
 		speed = speed / 2
 	end
 
