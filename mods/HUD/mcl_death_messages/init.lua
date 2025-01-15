@@ -191,9 +191,12 @@ mcl_damage.register_on_death(function(obj, reason)
 
 	if obj:is_player() then
 		send_to = true
+	else
+		local luaentity = obj:get_luaentity()
+		if luaentity and luaentity.tamed and luaentity.owner then
+			send_to = luaentity.owner
+		end
 	end
-
-	-- ToDo: add mob death messages for owned mobs, only send to owner (sent_to = "player name")
 
 	if send_to then
 		local messages = mcl_death_messages.messages[reason.type] or {}
@@ -213,7 +216,7 @@ mcl_damage.register_on_death(function(obj, reason)
 end)
 
 mcl_damage.register_on_damage(function(obj, damage, reason)
-      if mcl_util.get_hp (obj) - damage > 0 then
+	if mcl_util.get_hp (obj) - damage > 0 then
 		if reason.source then
 			mcl_death_messages.assist[obj] = {name = mcl_util.get_object_name(reason.source), timeout = 5}
 		else
