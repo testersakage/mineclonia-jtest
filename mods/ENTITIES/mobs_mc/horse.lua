@@ -385,12 +385,12 @@ function horse:set_armor (clicker)
 	local w = clicker:get_wielded_item ()
 	local iname = w:get_name ()
 	if self._horse_armor_stack == "" then
+		self:set_armor_1 (iname, w)
+		self:update_armor_inv ()
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
 			w:take_item()
 			clicker:set_wielded_item(w)
 		end
-		self:set_armor_1 (iname, w)
-		self:update_armor_inv ()
 		return true
 	end
 end
