@@ -1,7 +1,5 @@
 mcl_entity_invs = {}
 
-local open_invs = {}
-
 local function check_distance(inv,player,count)
 	for o in minetest.objects_inside_radius(player:get_pos(), 5) do
 		local l = o:get_luaentity()
@@ -49,6 +47,7 @@ function mcl_entity_invs.load_inv(ent,size)
 			inv:set_list("main",ent._items)
 		end
 	end
+	ent._inv = inv
 	return inv
 end
 
@@ -102,11 +101,7 @@ end
 
 function mcl_entity_invs.show_inv_form(ent,player,text)
 	if not ent._inv_id then return end
-	if not open_invs[ent] then
-		open_invs[ent] = 0
-	end
 	ent._inv = mcl_entity_invs.load_inv(ent,ent._inv_size)
-	open_invs[ent] = open_invs[ent] + 1
 	ent._inv_open = true
 	if ent.is_mob then
 		ent:stay()
@@ -132,19 +127,6 @@ local function on_remove(self,killer,oldf)
 	if oldf then return oldf(self,killer) end
 end
 
-minetest.register_on_player_receive_fields(function(_, formname, _)
-	for k, _ in pairs(open_invs) do
-		if formname == k._inv_id then
-			open_invs[k] = open_invs[k] - 1
-			if open_invs[k] < 1 then
-				minetest.remove_detached_inventory(k._inv_id)
-				open_invs[k] = nil
-				k._inv_open = nil
-			end
-		end
-	end
-end)
-
 function mcl_entity_invs.register_inv(entity_name,show_name,size,no_on_righclick,no_sneak)
 	assert(minetest.registered_entities[entity_name],"mcl_entity_invs.register_inv called with invalid entity: "..tostring(entity_name))
 	minetest.registered_entities[entity_name]._inv_size = size
@@ -160,6 +142,7 @@ function mcl_entity_invs.register_inv(entity_name,show_name,size,no_on_righclick
 			self._items = d._items
 			self._inv_size = d._inv_size
 			self._inv_open = nil
+			self._inv = mcl_entity_invs.load_inv(self, self._inv_size or 27)
 		else
 			self._inv_id="entity_inv_"..minetest.sha1(minetest.get_gametime()..minetest.pos_to_string(self.object:get_pos())..tostring(math.random()))
 			--gametime and position for collision safety and math.random salt to protect against position brute-force
@@ -202,21 +185,7 @@ function mcl_entity_invs.register_inv(entity_name,show_name,size,no_on_righclick
 		if removal then
 			on_remove(self)
 		end
+		minetest.remove_detached_inventory(self._inv_id)
 		if old_ode then return old_ode(self,removal) end
-	end
-
-	local old_od = minetest.registered_entities[entity_name].on_death
-	minetest.registered_entities[entity_name].on_death = function(self,killer)
-		if not self.is_mob then
-			return on_remove(self,killer,old_od)
-		end
-		if old_od then return old_od(self,killer) end
-	end
-	local old_odi = minetest.registered_entities[entity_name].on_die
-	minetest.registered_entities[entity_name].on_die = function(self,killer)
-		if self.is_mob then
-			return on_remove(self,killer,old_odi)
-		end
-		if old_odi then return old_odi(self,killer) end
 	end
 end
