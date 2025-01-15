@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local NS = function(s) return s end
 
 mcl_death_messages = {
@@ -142,7 +142,7 @@ local function get_item_killer_message(obj, messages, reason)
 		if itemname ~= "" then
 			itemname = "[" .. itemname .. "]"
 			if mcl_enchanting.is_enchanted(wielded:get_name()) then
-				itemname = minetest.colorize(mcl_colors.AQUA, itemname)
+				itemname = core.colorize(mcl_colors.AQUA, itemname)
 			end
 			return S(messages.item, mcl_util.get_object_name(obj), mcl_util.get_object_name(reason.source), itemname)
 		end
@@ -174,7 +174,7 @@ local function get_fallback_message(obj, _, reason)
 end
 
 mcl_damage.register_on_death(function(obj, reason)
-	if not minetest.settings:get_bool("mcl_showDeathMessages", true) then
+	if not core.settings:get_bool("mcl_showDeathMessages", true) then
 		return
 	end
 
@@ -199,9 +199,9 @@ mcl_damage.register_on_death(function(obj, reason)
 			get_fallback_message(obj, messages, reason)
 
 		if send_to == true then
-			minetest.chat_send_all(message)
+			core.chat_send_all(message)
 		else
-			minetest.chat_send_player(send_to, message)
+			core.chat_send_player(send_to, message)
 		end
 	end
 end)
@@ -216,7 +216,7 @@ mcl_damage.register_on_damage(function(obj, damage, reason)
 	end
 end)
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	for obj, tbl in pairs(mcl_death_messages.assist) do
 		tbl.timeout = tbl.timeout - dtime
 		if not obj:is_player() and not obj:get_luaentity() or tbl.timeout > 0 then
