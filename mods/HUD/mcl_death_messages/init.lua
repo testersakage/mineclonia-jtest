@@ -135,18 +135,9 @@ mcl_death_messages = {
 	},
 }
 
-local function get_wielded_item(object)
-	if object:is_player() then
-		return object:get_wielded_item()
-	else
-		-- ToDo: implement getting wielditems from mobs as soon as mobs have wielditems
-		return ItemStack()
-	end
-end
-
 local function get_item_killer_message(obj, messages, reason)
 	if messages.item then
-		local wielded = get_wielded_item(reason.source)
+		local wielded = mcl_util.get_wielditem(reason.source)
 		local itemname = wielded:get_meta():get_string("name")
 		if itemname ~= "" then
 			itemname = "[" .. itemname .. "]"
@@ -216,7 +207,7 @@ mcl_damage.register_on_death(function(obj, reason)
 end)
 
 mcl_damage.register_on_damage(function(obj, damage, reason)
-	if mcl_util.get_hp (obj) - damage > 0 then
+      if mcl_util.get_hp (obj) - damage > 0 then
 		if reason.source then
 			mcl_death_messages.assist[obj] = {name = mcl_util.get_object_name(reason.source), timeout = 5}
 		else
