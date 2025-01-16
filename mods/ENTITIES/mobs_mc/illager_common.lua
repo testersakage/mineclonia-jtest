@@ -129,9 +129,11 @@ function mobs_mc.find_surface_position (node_pos)
 		while v.y >= lim do
 			local node = minetest.get_node (v)
 			local def = minetest.registered_nodes[node.name]
+			local group_leaves = def and def.groups and def.groups.leaves or 0
+			local group_liquid = def and def.groups and def.groups.liquid or 0
 			if node.name ~= "ignore"
-				and not def.groups.leaves
-				and (def.groups.liquid or def.walkable) then
+				and group_leaves == 0
+				and (group_liquid ~= 0 or (def and def.walkable)) then
 				break
 			end
 			v.y = v.y - 1
