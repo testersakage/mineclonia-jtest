@@ -333,7 +333,8 @@ local function get_tooltip(item, groups, cooktime, burntime)
 			tooltip = S("Any item belonging to the groups: @1", table.concat(groupstr, ", "))
 		end
 	else
-		tooltip = minetest.registered_items[item].description
+		local def = minetest.registered_items[item]
+		tooltip = def and def.description or item
 	end
 
 	if not groups and cooktime then
