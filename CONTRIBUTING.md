@@ -28,6 +28,12 @@ Contributions of Minecraft features not yet implemented in Mineclonia are also
 welcome but should be complete before their inclusion. Assets like sounds and
 textures must come from sources which allow their use.
 
+Mineclonia has a minimum supported Luanti version which is defined in
+game.conf. When making contributions one should avoid relying on engine
+features which are not available in this version. If one sees reason to drop
+compatibility in order to use later engine features, then one should make an
+issue about it so it can be discussed.
+
 ## Code Guidelines
 * Each mod must provide `mod.conf`.
 * Mod names are snake case, and newly added mods start with `mcl_`, e.g.
