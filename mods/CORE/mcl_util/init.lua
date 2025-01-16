@@ -664,7 +664,7 @@ function mcl_util.get_inventory(object, create)
 		local luaentity = object:get_luaentity()
 		local inventory = luaentity.inventory
 
-		if create and not inventory and luaentity.create_inventory then
+		if luaentity and create and not inventory and luaentity.create_inventory then
 			inventory = luaentity:create_inventory()
 		end
 
