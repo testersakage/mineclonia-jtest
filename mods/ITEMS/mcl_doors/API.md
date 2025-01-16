@@ -40,3 +40,9 @@ Function used to register a new trapdoor
     * `tiles_front`: the tiles of the front part of the trapdoor
     * `tiles_top`: the tiles of the sides of the trapdoor
     * `wield_image`: trapdoor item wield image
+
+If the following fields are not defined the default values are used:
+
+* `only_redstone_can_open`: if true, the door can only be opened by redstone, not by rightclicking it
+* `sound_close`: sound that will be played when closing the door (default: "doors_door_close")
+* `sound_open`: sound that will be played when opening the door (default: "doors_door_open")
