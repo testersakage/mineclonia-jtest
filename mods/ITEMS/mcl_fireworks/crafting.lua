@@ -119,6 +119,41 @@ for i = 1, 8 do
 	}))
 end
 
+local function calculate_color(first, last)
+	local av = function(a, b) return (a + b) / 2 end
+	return {
+		r = av(first.r, last.r),
+		g = av(first.g, last.g),
+		b = av(first.b, last.b),
+    }
+end
+
+local function cs_to_table(color)
+	return {
+		r = tonumber(color:sub(2,3), 16),
+		g = tonumber(color:sub(4,5), 16),
+		b = tonumber(color:sub(6,7), 16),
+	}
+end
+
+local spec_to_string = core.colorspec_to_colorstring
+
+local function colorize_overlay(itemstack, colors)
+	local result
+
+	for _, color in pairs(colors) do
+		if not result then result = cs_to_table(color) end
+		result = calculate_color(cs_to_table(spec_to_string(result)), cs_to_table(color))
+	end
+
+	result = spec_to_string(result)
+
+	local image = "mcl_fireworks_star_overlay.png^[colorize:" .. result .. ":191"
+
+	itemstack:get_meta():set_string("inventory_overlay", image)
+	itemstack:get_meta():set_string("wield_overlay", image)
+end
+
 local function firework_craft(itemstack, _, old_craft_grid, _)
 	local shape
 	local colors, effects = {}, {}
@@ -144,11 +179,17 @@ local function firework_craft(itemstack, _, old_craft_grid, _)
 
 	if not shape then shape = "default" end
 
+	if #colors ~= 0 then
+		colorize_overlay(itemstack, colors)
+	end
+
 	local meta = itemstack:get_meta()
 
 	meta:set_string("mcl_fireworks:shape", shape)
 	meta:set_string("mcl_fireworks:effects", core.serialize(effects))
 	meta:set_string("mcl_fireworks:colors", core.serialize(colors))
+
+	tt.reload_itemstack_description(itemstack)
 
 	return itemstack
 end
