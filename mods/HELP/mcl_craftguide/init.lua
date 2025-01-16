@@ -8,6 +8,7 @@ local searches      = {}
 local usages_cache  = {}
 
 local progressive_mode = minetest.settings:get_bool("mcl_craftguide_progressive_mode", true)
+local strict_mode = progressive_mode or minetest.settings:get_bool("mcl_craftguide_strict_mode", true)
 
 local C = minetest.colorize
 local F = minetest.formspec_escape
@@ -993,7 +994,7 @@ if progressive_mode then
 
 	local function recipe_unlocked(recipe, progress)
 		for _, item in pairs(recipe.items) do
-			if not progress[item] then
+			if not (minetest.registered_items[item] and progress[item]) then
 				return
 			end
 		end
@@ -1051,6 +1052,34 @@ else
 		local name = player:get_player_name()
 		player_data[name] = nil
 	end)
+
+
+	if strict_mode then
+		local function recipe_unlocked(recipe)
+			for _, item in pairs(recipe.items) do
+				if not minetest.registered_items[item] then
+					return
+				end
+			end
+
+			return true
+		end
+
+		local function strict_filter(recipes, player)
+			local filtered, c = {}, 0
+			for i = 1, #recipes do
+				local recipe = recipes[i]
+				if recipe_unlocked(recipe) then
+					c = c + 1
+					filtered[c] = recipe
+				end
+			end
+
+			return filtered
+		end
+
+		mcl_craftguide.add_recipe_filter("Prevent unknown item filter", strict_filter)
+	end
 end
 
 function mcl_craftguide.show(name)
