@@ -315,43 +315,30 @@ mcl_potions.register_effect({
 	uses_factor = false,
 })
 
-local function add_physics_factor (object, player_name, mob_field,
-				   id, factor, mob_field2, mob_field3)
+local function add_physics_factor(object, attribute, mob_field, id, factor, mob_field2, mob_field3)
 	-- mob_field2 and 3 are for cases where two or more mob properties
 	-- must be adjusted, such as walk_velocity and run_velocity and
 	-- their ilk.
-	if object:is_player () then
-	playerphysics.add_physics_factor (object, player_name,
-					  id, factor)
+	if object:is_player() then
+		playerphysics.add_physics_factor(object, attribute, id, factor)
 	else
-	local entity = object:get_luaentity ()
-	if entity and entity.is_mob then
-		entity:add_physics_factor (mob_field, id, factor)
-		if mob_field2 then
-		entity:add_physics_factor (mob_field2, id, factor)
-		if mob_field3 then
-			entity:add_physics_factor (mob_field3, id, factor)
-		end
-		end
-	end
+		local entity = object:get_luaentity ()
+
+		if entity and entity.is_mob then entity:add_physics_factor(mob_field, id, factor) end
+		if mob_field2 then entity:add_physics_factor(mob_field2, id, factor) end
+		if mob_field3 then entity:add_physics_factor(mob_field3, id, factor) end
 	end
 end
 
-local function remove_physics_factor (object, player_name, mob_field,
-					  id, mob_field2, mob_field3)
-	if object:is_player () then
-	playerphysics.remove_physics_factor (object, player_name, id)
+local function remove_physics_factor (object, attribute, mob_field, id, mob_field2, mob_field3)
+	if object:is_player() then
+		playerphysics.remove_physics_factor (object, attribute, id)
 	else
-	local entity = object:get_luaentity ()
-	if entity and entity.is_mob then
-		entity:remove_physics_factor (mob_field, id)
-		if mob_field2 then
-		entity:remove_physics_factor (mob_field2, id)
-		if mob_field3 then
-			entity:remove_physics_factor (mob_field3, id)
-		end
-		end
-	end
+		local entity = object:get_luaentity ()
+
+		if entity and entity.is_mob then entity:remove_physics_factor(mob_field, id) end
+		if mob_field2 then entity:remove_physics_factor (mob_field2, id) end
+		if mob_field3 then entity:remove_physics_factor (mob_field3, id) end
 	end
 end
 
@@ -444,14 +431,16 @@ mcl_potions.register_effect({
 		return S("+@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
-		playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", 1 + factor)
-		add_physics_factor (object, "speed", "movement_speed",
-				"mcl_potions:swiftness", 1 + factor)
+		if object:is_player() then
+			playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", 1 + factor)
+		end
+		add_physics_factor(object, "speed", "movement_speed", "mcl_potions:swiftness", 1 + factor)
 	end,
 	on_end = function(object)
-		playerphysics.remove_physics_factor(object, "fov", "mcl_potions:swiftness")
-		remove_physics_factor (object, "speed", "movement_speed",
-				   "mcl_potions:swiftness")
+		if object:is_player() then
+			playerphysics.remove_physics_factor(object, "fov", "mcl_potions:swiftness")
+		end
+		remove_physics_factor (object, "speed", "movement_speed", "mcl_potions:swiftness")
 	end,
 	particle_color = "#7CAFC6",
 	uses_factor = true,
@@ -469,14 +458,16 @@ mcl_potions.register_effect({
 		return S("-@1% running speed", math.floor(factor*100))
 	end,
 	on_start = function(object, factor)
-		playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", 1 - factor)
-		add_physics_factor (object, "speed", "movement_speed",
-				"mcl_potions:slowness", 1 - factor)
+		if object:is_player() then
+			playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", 1 - factor)
+		end
+		add_physics_factor(object, "speed", "movement_speed", "mcl_potions:slowness", 1 - factor)
 	end,
 	on_end = function(object)
-		playerphysics.remove_physics_factor(object, "fov", "mcl_potions:slowness")
-		remove_physics_factor (object, "speed", "movement_speed",
-				   "mcl_potions:slowness")
+		if object:is_player() then
+			playerphysics.remove_physics_factor(object, "fov", "mcl_potions:slowness")
+		end
+		remove_physics_factor (object, "speed", "movement_speed", "mcl_potions:slowness")
 	end,
 	particle_color = "#5A6C81",
 	uses_factor = true,
