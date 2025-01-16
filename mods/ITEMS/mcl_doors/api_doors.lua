@@ -25,31 +25,21 @@ function mcl_doors:register_door(name, def)
 	def.groups.unsticky = 1
 	def.groups.door = 1
 
-	if not def.sound_open then
-		def.sound_open = "doors_door_open"
-	end
-	if not def.sound_close then
-		def.sound_close = "doors_door_close"
-	end
+	if not def.sound_open then def.sound_open = "doors_door_open" end
+	if not def.sound_close then def.sound_close = "doors_door_close" end
 
-	local box = {{-8/16, -8/16, -8/16, 8/16, 8/16, -5/16}}
+	local box = {{-0.5, -0.5, -0.5, 0.5, 0.5, -0.3125}}
 
-	if not def.node_box_bottom then
-		def.node_box_bottom = box
-	end
-	if not def.node_box_top then
-		def.node_box_top = box
-	end
-	if not def.selection_box_bottom then
-		def.selection_box_bottom= box
-	end
-	if not def.selection_box_top then
-		def.selection_box_top = box
-	end
+	if not def.node_box_bottom then def.node_box_bottom = box end
+	if not def.node_box_top then def.node_box_top = box end
+	if not def.selection_box_bottom then def.selection_box_bottom= box end
+	if not def.selection_box_top then def.selection_box_top = box end
 
 	local longdesc, usagehelp, tt_help
 	tt_help = def._tt_help
 	longdesc = def._doc_items_longdesc
+	usagehelp = def._doc_items_usagehelp
+
 	if not longdesc then
 		if def.only_redstone_can_open then
 			longdesc = S("This door is a 2-block high barrier which can be opened or closed by hand or by redstone power.")
@@ -57,7 +47,7 @@ function mcl_doors:register_door(name, def)
 			longdesc = S("This door is a 2-block high barrier which can only be opened by redstone power, not by hand.")
 		end
 	end
-	usagehelp = def._doc_items_usagehelp
+
 	if not usagehelp then
 		if def.only_redstone_can_open then
 			usagehelp = S("To open or close this door, send a redstone signal to its bottom half.")
@@ -65,6 +55,7 @@ function mcl_doors:register_door(name, def)
 			usagehelp = S("To open or close this door, rightclick it or send a redstone signal to its bottom half.")
 		end
 	end
+
 	if not tt_help then
 		if def.only_redstone_can_open then
 			tt_help = S("Openable by redstone power")
