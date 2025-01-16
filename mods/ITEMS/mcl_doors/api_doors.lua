@@ -6,23 +6,15 @@ function mcl_doors.is_open(pos)
 end
 
 -- This helper function calls on_place_node callbacks.
-local function on_place_node(place_to, newnode, placer, oldnode, itemstack, pointed_thing)
+local function on_place_node(place_defs, placer, itemstack)
 	-- Run script hook
 	for _, callback in pairs(core.registered_on_placenodes) do
 		-- Deep-copy pos, node and pointed_thing because callback can modify them
-		local place_to_copy = vector.copy(place_to)
-		local newnode_copy = {
-			name = newnode.name, param1 = newnode.param1, param2 = newnode.param2
-		}
-		local oldnode_copy = {
-			name = oldnode.name, param1 = oldnode.param1, param2 = oldnode.param2
-		}
-		local pointed_thing_copy = {
-			type  = pointed_thing.type,
-			above = vector.new(pointed_thing.above),
-			under = vector.new(pointed_thing.under),
-			ref   = pointed_thing.ref,
-		}
+		local place_to_copy = vector.copy(place_defs.place_to)
+		local newnode_copy = table.copy(place_defs.newnode)
+		local oldnode_copy = table.copy(place_defs.oldnode)
+		local pointed_thing_copy = table.copy(place_defs.pointed_thing)
+
 		callback(place_to_copy, newnode_copy, placer, oldnode_copy, itemstack, pointed_thing_copy)
 	end
 end
@@ -274,62 +266,50 @@ function mcl_doors:register_door(name, def)
 			if pointed_thing.type ~= "node" or not placer or not placer:is_player() then
 				return itemstack
 			end
-			local pn = placer:get_player_name()
-			if core.is_protected(pointed_thing.above, pn) and core.is_protected(pointed_thing.under, pn) then
-				return itemstack
-			end
-			local ptu = pointed_thing.under
-			local nu = core.get_node(ptu)
 
+			local pn = placer:get_player_name()
+			local pt = pointed_thing.above
+			local ptu = pointed_thing.under
+
+			if core.is_protected(pt, pn) and core.is_protected(ptu, pn) then return itemstack end
+
+			local ptunode = core.get_node(ptu)
+			local ptudefs = core.registered_nodes[ptunode.name]
 			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
 			if rc then return rc end
 
-			local pt
-			if core.registered_nodes[nu.name] and core.registered_nodes[nu.name].buildable_to then
-				pt = pointed_thing.under
-			else
-				pt = pointed_thing.above
-			end
-			local pt2 = {x=pt.x, y=pt.y, z=pt.z}
-			pt2.y = pt2.y+1
+			if ptudefs and ptudefs.buildable_to then pt = pointed_thing.under end
+
+			local pt2 = vector.offset(pt, 0, 1, 0)
 			local ptname = core.get_node(pt).name
 			local pt2name = core.get_node(pt2).name
-			if
-				(core.registered_nodes[ptname] and not core.registered_nodes[ptname].buildable_to) or
-				(core.registered_nodes[pt2name] and not core.registered_nodes[pt2name].buildable_to)
-			then
+			local ptdefs = core.registered_nodes[ptname]
+			local pt2defs = core.registered_nodes[pt2name]
+
+			if (ptdefs and not ptdefs.buildable_to) or (pt2defs and not pt2defs.buildable_to) then
 				return itemstack
 			end
-
 			-- get left coordinate for checking if another door is there
-			local pt_left = {x=pt.x, y=pt.y, z=pt.z}
 			local p2 = core.dir_to_facedir(placer:get_look_dir())
-
-			if p2 == 0 then
-				pt_left.x = pt_left.x-1
-			elseif p2 == 1 then
-				pt_left.z = pt_left.z+1
-			elseif p2 == 2 then
-				pt_left.x = pt_left.x+1
-			elseif p2 == 3 then
-				pt_left.z = pt_left.z-1
-			end
-
+			local offset_x = p2 % 2 == 0 and p2 -1 or 0
+			local offset_z = p2 % 2 ~= 0 and 2 - p2 or 0
+			local pt_left = vector.offset(pt, offset_x, 0, offset_z)
 			local left_node = core.get_node(pt_left)
 			local mirrored = false
 			local door_dir = 1
+
 			if left_node.name:sub(1, #name) == name then
 				mirrored = true
 				door_dir = 2
 				p2 = left_node.param2
 			end
-
 			-- Set door nodes
-			core.set_node(pt, {name=name.."_b_"..door_dir, param2=p2})
-			core.set_node(pt2, {name=name.."_t_"..door_dir, param2=p2})
+			core.set_node(pt, {name = name.."_b_"..door_dir, param2 = p2})
+			core.set_node(pt2, {name = name.."_t_"..door_dir, param2 = p2})
 
 			if def.sounds and def.sounds.place then
-				core.sound_play(def.sounds.place, {pos=pt}, true)
+				core.sound_play(def.sounds.place, {pos = pt}, true)
 			end
 
 			if def.only_placer_can_open then
@@ -346,18 +326,28 @@ function mcl_doors:register_door(name, def)
 				meta1:set_int("is_mirrored", 1)
 				meta2:set_int("is_mirrored", 1)
 			end
-
 			-- Save open state. 1 = open. 0 = closed
 			meta1:set_int("is_open", 0)
 			meta2:set_int("is_open", 0)
 
+			if not core.is_creative_enabled(pn) then itemstack:take_item() end
 
-			if not core.is_creative_enabled(pn) then
-				itemstack:take_item()
-			end
+			local place_defs_pt = {
+				newnode = core.get_node(pt),
+				oldnode = ptunode,
+				place_to = pt,
+				pointed_thing = pointed_thing
+			}
 
-			on_place_node(pt, core.get_node(pt), placer, nu, itemstack, pointed_thing)
-			on_place_node(pt2, core.get_node(pt2), placer, core.get_node({x=ptu.x,y=ptu.y+1,z=ptu.z}), itemstack, pointed_thing)
+			local place_defs_pt2 = {
+				newnode = core.get_node(pt2),
+				oldnode = core.get_node(vector.offset(ptu, 0, 1, 0)),
+				place_to = pt2,
+				pointed_thing = pointed_thing
+			}
+
+			on_place_node(place_defs_pt, placer, itemstack)
+			on_place_node(place_defs_pt2, placer, itemstack)
 
 			return itemstack
 		end,
@@ -437,7 +427,6 @@ function mcl_doors:register_door(name, def)
 			tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]
 		}
 	}, tpl_doors, tpl_top))
-
 	-- Add entry aliases for the Help
 	if core.get_modpath("doc") then
 		doc.add_entry_alias("craftitems", name, "nodes", name.."_b_1")
