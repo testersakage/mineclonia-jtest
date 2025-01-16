@@ -129,9 +129,7 @@ function mcl_doors:register_door(name, def)
 		on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
 	end
 
-	local function redstone_connects_to(node, dir)
-		return true
-	end
+	local function redstone_connects_to(_, _) return true end
 
 	local function redstone_update_bottom(pos)
 		local pos2 = pos:offset(0, 1, 0)
@@ -161,6 +159,18 @@ function mcl_doors:register_door(name, def)
 		end
 	end
 
+	local rightclick = function(pos, node, clicker)
+		if check_player_priv(pos, clicker) then
+			local name = node.name
+			local dir = name:find("_t_") and -1 or 1
+			local other_half = get_other_half(name)
+			local r_name = name:find("_1") and name:gsub("_1", "_2") or name:gsub("_2", "_1")
+			local r_dir = get_other_half(r_name)
+
+			on_open_close(pos, dir, other_half, r_name, r_dir)
+		end
+	end
+
 	local tpl_doors = {
 		_mcl_baseitem = name,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
@@ -170,6 +180,7 @@ function mcl_doors:register_door(name, def)
 		drop = "",
 		groups = def.groups,
 		is_ground_content = false,
+		on_rightclick = not def.only_redstone_can_open and rightclick or nil,
 		on_rotate = function(pos, node, _, mode, _)
 			if mode == screwdriver.ROTATE_FACE then
 				local meta1 = core.get_meta(pos)
@@ -356,72 +367,28 @@ function mcl_doors:register_door(name, def)
 	local tt = def.tiles_top
 	local tb = def.tiles_bottom
 
-	local on_rightclick
-	-- Disable on_rightclick if this is a redstone-only door
-	if not def.only_redstone_can_open then
-		on_rightclick = function(pos, _, clicker)
-			if check_player_priv(pos, clicker) then
-				on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
-			end
-		end
-	end
-
 	core.register_node(":"..name.."_b_1", table.merge({
-		on_rightclick = on_rightclick,
 		tiles = {
 			"blank.png", tt[2].."^[transformFXR90", tb[2],
 			tb[2].."^[transformFX", tb[1], tb[1].."^[transformFX"
 		}
 	}, tpl_doors, tpl_bottom))
 
-	if def.only_redstone_can_open then
-		on_rightclick = nil
-	else
-		on_rightclick = function(pos, _, clicker)
-			if check_player_priv(pos, clicker) then
-				on_open_close(pos, -1, name.."_b_1", name.."_t_2", name.."_b_2")
-			end
-		end
-	end
-
 	core.register_node(":"..name.."_t_1", table.merge({
-		on_rightclick = on_rightclick,
 		tiles = {
 			tt[2].."^[transformR90", "blank.png", tt[2],
 			tt[2].."^[transformFX", tt[1], tt[1].."^[transformFX"
 		}
 	}, tpl_doors, tpl_top))
 
-	if def.only_redstone_can_open then
-		on_rightclick = nil
-	else
-		on_rightclick = function(pos, _, clicker)
-			if check_player_priv(pos, clicker) then
-				on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
-			end
-		end
-	end
-
 	core.register_node(":"..name.."_b_2", table.merge({
-		on_rightclick = on_rightclick,
 		tiles = {
 			"blank.png", tt[2].."^[transformFXR90", tb[2].."^[transformI",
 			tb[2].."^[transformFX", tb[1].."^[transformFX", tb[1]
 		}
 	}, tpl_doors, tpl_bottom))
 
-	if def.only_redstone_can_open then
-		on_rightclick = nil
-	else
-		on_rightclick = function(pos, _, clicker)
-			if check_player_priv(pos, clicker) then
-				on_open_close(pos, -1, name.."_b_2", name.."_t_1", name.."_b_1")
-			end
-		end
-	end
-
 	core.register_node(":"..name.."_t_2", table.merge({
-		on_rightclick = on_rightclick,
 		tiles = {
 			tt[2].."^[transformR90", "blank.png", tt[2].."^[transformI",
 			tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]
