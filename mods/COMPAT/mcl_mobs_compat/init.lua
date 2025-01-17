@@ -54,3 +54,22 @@ function mcl_mobs.spawn_specific(name, dimension, type_of_spawning, biomes, min_
 	})
 end
 
+------------------------------------------------------------------------
+-- Mobs Redo compatibility.  Undefine the is_mob field of every mob
+-- registered through Mobs Redo, which field is not used by Mobs Redo
+-- and is only counterproductively defined for compatibility with
+-- Mineclone.
+------------------------------------------------------------------------
+
+if minetest.global_exists ("mobs") then
+	minetest.register_on_mods_loaded (function ()
+		for name, mob in pairs (core.registered_entities) do
+			if mob._cmi_is_mob and mob.is_mob then
+				mob.is_mob = false
+				local blurb = "[mcl_mobs_combat]: Undefining gratuitous"
+					.. " is_mob field in " .. name
+				minetest.log ("action", blurb)
+			end
+		end
+	end)
+end
