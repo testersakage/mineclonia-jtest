@@ -1,3 +1,5 @@
+local S = core.get_translator(core.get_current_modname())
+
 minetest.register_craft({
 	type = "shapeless",
 	output = "mcl_fireworks:rocket_1 3",
@@ -142,8 +144,8 @@ local function colorize_overlay(itemstack, colors)
 	local result
 
 	for _, color in pairs(colors) do
-		if not result then result = cs_to_table(color) end
-		result = calculate_color(cs_to_table(spec_to_string(result)), cs_to_table(color))
+		if not result then result = cs_to_table(color.rgb) end
+		result = calculate_color(cs_to_table(spec_to_string(result)), cs_to_table(color.rgb))
 	end
 
 	result = spec_to_string(result)
@@ -172,8 +174,9 @@ local function firework_craft(itemstack, _, old_craft_grid, _)
 		end
 
 		if core.get_item_group(name, "dye") > 0 then
-			local rgb = mcl_dyes.colors[stack:get_definition()._color].rgb
-			table.insert(colors, rgb)
+			local defs = mcl_dyes.colors[stack:get_definition()._color]
+
+			table.insert(colors, {desc = defs.readable_name, rgb = defs.rgb})
 		end
 	end
 
@@ -193,6 +196,21 @@ local function firework_craft(itemstack, _, old_craft_grid, _)
 
 	return itemstack
 end
+
+tt.register_priority_snippet(function(_, _, itemstack)
+	if not itemstack or core.get_item_group(itemstack:get_name(), "firework_star") ~= 1 then
+		return
+	end
+
+	local list = ""
+	local colors = core.deserialize(itemstack:get_meta():get_string("mcl_fireworks:colors"))
+
+	for i, color in pairs(colors) do
+		list = list .. " " .. color.desc .. (i < #colors and "\n" or "")
+	end
+
+	return core.colorize(mcl_colors.GRAY, S("Colors:") .. "\n" .. list)
+end)
 
 core.register_on_craft(firework_craft)
 core.register_craft_predict(firework_craft)
