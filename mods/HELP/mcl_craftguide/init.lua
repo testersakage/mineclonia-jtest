@@ -343,7 +343,7 @@ local function get_tooltip(item, groups, cooktime, burntime)
 			S("Cooking time: @1", C(mcl_colors.YELLOW, cooktime))
 	end
 
-	if not groups and burntime ~= 0 then
+	if not groups and burntime and burntime ~= 0 then
 		tooltip = tooltip .. "\n" ..
 			S("Burning time: @1", C(mcl_colors.YELLOW, burntime))
 	end
