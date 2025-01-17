@@ -43,6 +43,8 @@ function mcl_burning.get_touching_nodes(obj, nodenames, storage)
 		pos.y = pos.y + 1.5
 	end
 	local minp, maxp = mcl_burning.get_collisionbox(obj, true, storage)
+	for _, coord in pairs(minp) do if not minp[coord] then minp[coord] = 0 end end
+	for _, coord in pairs(maxp) do if not maxp[coord] then maxp[coord] = 0 end end
 	local nodes = minetest.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
 	return nodes
 end
