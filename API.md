@@ -53,6 +53,9 @@ Items can have these fields:
   `mcl_farming`, and `mcl_wool`. Some simple recipes are no longer covered by this field due to the
   implementation of their APIs, as in the case of buttons, slabs and iron trapdoors.
 
+* `_mcl_upgrade_template`: _itemstring_ with the name of the template that should be used to upgrade the item (e.g. "mcl_nether:netherite_upgrade_template"). It can be _nil_ if no template is needed to upgrade the item.
+* `mcl_upgradable_with`: _itemstring_ with the name of the item that should be used to upgrade the item material (e.g. "mcl_nether:netherite_ingot").
+
 Tools can have these fields:
 
 * `_mcl_diggroups`: Specifies the digging groups that a tool can dig and how
