@@ -171,7 +171,7 @@ function mcl_burning.extinguish(obj)
 end
 
 function mcl_burning.tick(obj, dtime, storage)
-	if storage.burn_time then
+	if storage and storage.burn_time then
 		storage.burn_time = storage.burn_time - dtime
 
 		if storage.burn_time <= 0 or mcl_burning.is_affected_by_rain(obj) or #mcl_burning.get_touching_nodes(obj, "group:puts_out_fire", storage) > 0 then
