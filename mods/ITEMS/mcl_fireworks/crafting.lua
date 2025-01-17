@@ -1,4 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
+local D = mcl_util.get_dynamic_translator("mcl_banners")
 
 minetest.register_craft({
 	type = "shapeless",
@@ -166,11 +167,11 @@ local function firework_craft(itemstack, _, old_craft_grid, _)
 		local effect_index = core.get_item_group(name, "firework_effect_modifier")
 
 		if shape_index > 0 then
-			shape = mcl_fireworks.registered_shapes[shape_index]
+			shape = mcl_fireworks.registered_shapes[shape_index].id
 		end
 
 		if effect_index > 0 then
-			table.insert(effects, mcl_fireworks.registered_effects[effect_index])
+			table.insert(effects, mcl_fireworks.registered_effects[effect_index].id)
 		end
 
 		if core.get_item_group(name, "dye") > 0 then
@@ -202,14 +203,29 @@ tt.register_priority_snippet(function(_, _, itemstack)
 		return
 	end
 
-	local list = ""
-	local colors = core.deserialize(itemstack:get_meta():get_string("mcl_fireworks:colors"))
+	local tt, shape, effect = "", "", ""
+	local meta = itemstack:get_meta()
 
-	for i, color in pairs(colors) do
-		list = list .. " " .. color.desc .. (i < #colors and "\n" or "")
+	for _, defs in pairs(mcl_fireworks.registered_shapes) do
+		if meta:get_string("mcl_fireworks:shape") == defs.id then shape = defs.desc end
 	end
 
-	return core.colorize(mcl_colors.GRAY, S("Colors:") .. "\n" .. list)
+	if shape == "" then shape = S("Small Ball") end
+	tt = tt .. shape .. "\n"
+
+	local colors = core.deserialize(meta:get_string("mcl_fireworks:colors"))
+
+	for i, color in pairs(colors) do
+		tt = tt .. D(color.desc) .. (i < #colors and ", " or "")
+	end
+
+	for _, effect in pairs(core.deserialize(meta:get_string("mcl_fireworks:effects"))) do
+		for _, defs in pairs(mcl_fireworks.registered_effects) do
+			if effect == defs.id then tt = tt .. "\n" .. defs.desc end
+		end
+	end
+
+	return core.colorize(mcl_colors.GRAY, tt)
 end)
 
 core.register_on_craft(firework_craft)
