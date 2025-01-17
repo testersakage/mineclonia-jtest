@@ -3650,8 +3650,6 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 					if status == "failed" then
 						if not self:near_map_boundaries () then
 							relinquish_job_site (self)
-						else
-							print ("declining to relinquish job site")
 						end
 						self[activity_name] = nil
 						self[time_field] = nil
