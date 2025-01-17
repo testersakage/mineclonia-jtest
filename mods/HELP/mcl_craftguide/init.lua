@@ -994,7 +994,7 @@ if progressive_mode then
 
 	local function recipe_unlocked(recipe, progress)
 		for _, item in pairs(recipe.items) do
-			if not (minetest.registered_items[item] and progress[item]) then
+			if not ((minetest.registered_items[item] or group_cache[item]) and progress[item]) then
 				return
 			end
 		end
@@ -1057,7 +1057,7 @@ else
 	if strict_mode then
 		local function recipe_unlocked(recipe)
 			for _, item in pairs(recipe.items) do
-				if not minetest.registered_items[item] then
+				if not (minetest.registered_items[item] or group_cache[item]) then
 					return
 				end
 			end
