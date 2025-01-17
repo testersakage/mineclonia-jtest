@@ -423,6 +423,10 @@ mcl_potions.register_effect({
 
 mcl_mobs.make_physics_factor_persistent ("mcl_potions:slow_falling")
 
+local function speed_to_fov_factor(factor)
+	return factor ^ 0.2
+end
+
 mcl_potions.register_effect({
 	name = "swiftness",
 	description = S("Swiftness"),
@@ -432,7 +436,7 @@ mcl_potions.register_effect({
 	end,
 	on_start = function(object, factor)
 		if object:is_player() then
-			playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", 1 + factor)
+			playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", speed_to_fov_factor(1 + factor))
 		end
 		add_physics_factor(object, "speed", "movement_speed", "mcl_potions:swiftness", 1 + factor)
 	end,
@@ -459,7 +463,7 @@ mcl_potions.register_effect({
 	end,
 	on_start = function(object, factor)
 		if object:is_player() then
-			playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", 1 - factor)
+			playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", speed_to_fov_factor(1 - factor))
 		end
 		add_physics_factor(object, "speed", "movement_speed", "mcl_potions:slowness", 1 - factor)
 	end,
