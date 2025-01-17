@@ -203,7 +203,7 @@ tt.register_priority_snippet(function(_, _, itemstack)
 		return
 	end
 
-	local tt, shape, effect = "", "", ""
+	local tt, shape = "", ""
 	local meta = itemstack:get_meta()
 
 	for _, defs in pairs(mcl_fireworks.registered_shapes) do
