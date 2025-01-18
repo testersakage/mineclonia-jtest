@@ -350,7 +350,7 @@ local function get_tooltip(item, groups, cooktime, burntime, fs_name)
 	end
 
 	if tooltip_append_itemname and not groups then
-		tooltip = tooltip .. "\n" .. item
+		tooltip = tooltip .. "\n[" .. item .. "]"
 	end
 
 	return string.format(FMT.tooltip, fs_name or item, F(tooltip))
