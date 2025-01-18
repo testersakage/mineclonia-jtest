@@ -24,24 +24,6 @@ mcl_tools.commondefs = {
 			}
 		}
 	},
-	["hoe"] = {
-		longdesc = S("Hoes are essential tools for growing crops. They are used to create farmland in order to plant seeds on it. Hoes can also be used as very weak weapons in a pinch."),
-		usagehelp = S("Use the hoe on a cultivatable block (by rightclicking it) to turn it into farmland. Dirt, grass blocks and grass paths are cultivatable blocks. Using a hoe on coarse dirt turns it into dirt."),
-		groups = { hoe = 1, tool = 1 },
-		diggroups = { hoey = {} },
-		craft_shapes = {
-			{
-				{ "material", "material" },
-				{ "mcl_core:stick", "" },
-				{ "mcl_core:stick", "" }
-			},
-			{
-				{ "material", "material" },
-				{ "", "mcl_core:stick" },
-				{ "", "mcl_core:stick" }
-			}
-		}
-	},
 	["pick"] = {
 		longdesc = S("Pickaxes are mining tools to mine hard blocks, such as stone. A pickaxe can also be used as weapon, but it is rather inefficient."),
 		groups = { pickaxe = 1, tool = 1 },
