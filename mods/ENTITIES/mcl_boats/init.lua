@@ -451,8 +451,11 @@ function boat:on_step(dtime, moveresult)
 		else
 			-- On top of water
 			new_acce = {x = 0, y = 0, z = 0}
-			if math.abs(self.object:get_velocity().y) < 0 then
+			if math.abs(self.object:get_velocity().y) < 1 then
+				local pos = self.object:get_pos()
+				pos.y = math.floor(pos.y) + boat_y_offset
 				new_velo = get_velocity(self._v, self.object:get_yaw(), 0)
+				self.object:set_pos(pos)
 			else
 				new_velo = get_velocity(self._v, self.object:get_yaw(),
 					self.object:get_velocity().y)
