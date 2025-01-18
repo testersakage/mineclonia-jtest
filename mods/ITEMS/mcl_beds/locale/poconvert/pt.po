@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-05 03:33+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_beds/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Beds allow you to sleep at night and make the time pass faster."
 msgstr ""
@@ -35,7 +37,7 @@ msgid "Allows you to sleep"
 msgstr ""
 
 msgid "Bed"
-msgstr ""
+msgstr "Cama"
 
 msgid "You can only sleep at night or during a thunderstorm."
 msgstr ""
@@ -107,53 +109,52 @@ msgid "New respawn position set!"
 msgstr ""
 
 msgid "Black Bed"
-msgstr ""
+msgstr "Cama preta"
 
 msgid "Blue Bed"
-msgstr ""
+msgstr "Cama azul"
 
 msgid "Brown Bed"
-msgstr ""
+msgstr "Cama castanha"
 
 msgid "Cyan Bed"
-msgstr ""
+msgstr "Cama cíano"
 
 msgid "Green Bed"
-msgstr ""
+msgstr "Cama verde"
 
 msgid "Grey Bed"
-msgstr ""
+msgstr "Cama cinzenta"
 
 msgid "Light Blue Bed"
-msgstr ""
+msgstr "Cama azul-clara"
 
 msgid "Light Grey Bed"
-msgstr ""
+msgstr "Cama cinzento-clara"
 
 msgid "Lime Bed"
-msgstr ""
+msgstr "Cama verde-lima"
 
 msgid "Magenta Bed"
-msgstr ""
+msgstr "Cama magenta"
 
 msgid "Orange Bed"
-msgstr ""
+msgstr "Cama laranja"
 
 msgid "Pink Bed"
-msgstr ""
+msgstr "Cama rosa"
 
 msgid "Purple Bed"
-msgstr ""
+msgstr "Cama roxa"
 
 msgid "Red Bed"
-msgstr ""
+msgstr "Cama vermelha"
 
 msgid "White Bed"
-msgstr ""
+msgstr "Cama branca"
 
 msgid "Yellow Bed"
-msgstr ""
+msgstr "Cama amarela"
 
 msgid "Respawn Anchor"
-msgstr ""
-
+msgstr "Âncora de renascimento"

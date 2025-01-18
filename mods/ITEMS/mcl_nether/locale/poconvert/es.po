@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-06 21:58+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_nether/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Glowstone"
 msgstr "Piedra luminosa"
@@ -71,7 +72,7 @@ msgid "Chiseled Nether Brick Block"
 msgstr "Ladrillos del Nether cincelados"
 
 msgid "Cracked Nether Bricks"
-msgstr "Ladrillos del nether agrietados"
+msgstr "Ladrillos del Nether agrietados"
 
 msgid "Nether Wart Block"
 msgstr "Bloque de verrugas del Nether"
@@ -104,55 +105,62 @@ msgid "Smooth Quartz Slab"
 msgstr "Losa de cuarzo liso"
 
 msgid "Nether Brick Stairs"
-msgstr "Escaleras de ladrillos del nether"
+msgstr "Escaleras de ladrillos del Nether"
 
 msgid "Nether Brick Slab"
-msgstr "Losa de ladrillos del nether"
+msgstr "Losa de ladrillos del Nether"
 
 msgid "Red Nether Brick Stairs"
-msgstr "Escaleras de ladrillos del nether rojos"
+msgstr "Escaleras de ladrillos del Nether rojos"
 
 msgid "Red Nether Brick Slab"
-msgstr "Losa de ladrillos del nether rojos"
+msgstr "Losa de ladrillos del Nether rojos"
 
 msgid "Nether Brick Fence"
-msgstr "Valla de ladrillos del nether"
+msgstr "Valla de ladrillos del Nether"
 
 msgid "Glowstone Dust"
 msgstr "Polvo de piedra luminosa"
 
 msgid "Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."
-msgstr "El polvo de piedra luminosa es el ítem que sale de las piedras luminosas cuando se rompen. Se utiliza principalmente en la elaboración."
+msgstr ""
+"El polvo de piedra luminosa es el ítem que sale de las piedras luminosas "
+"cuando se rompen. Se utiliza principalmente en la fabricación."
 
 msgid "Nether Quartz"
-msgstr "Quarzo"
+msgstr "Cuarzo del Nether"
 
 msgid "Nether quartz is a versatile crafting ingredient."
-msgstr "El cuarzo del nether es un ingrediente versátil."
+msgstr "El cuarzo del nether es un ingrediente de fabricación versátil."
 
 msgid "Netherite Scrap"
 msgstr "Fragmentos de netherita"
 
 msgid "Netherite scrap is a crafting ingredient for netherite ingots."
-msgstr "Los fragmentos de netherita se utilizan para crear lingotes de Netherita."
+msgstr ""
+"Los fragmentos de netherita se utilizan para crear lingotes de netherita."
 
 msgid "Netherite Ingot"
-msgstr "Lingote de Netherita"
+msgstr "Lingote de netherita"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
-msgstr "Los lingotes de Netherita se pueden usar en una mesa de herrería para actualizar ítems a Netherita."
+msgstr ""
+"Los lingotes de netherita se pueden usar en una mesa de herrería para "
+"actualizar ítems a netherita."
 
 msgid "Nether Brick"
 msgstr "Ladrillos del Nether"
 
 msgid "Nether bricks are the main crafting ingredient for crafting nether brick blocks and nether fences."
-msgstr "Los ladrillos del Nether son el ingrediente principal para la creacion de bloques de ladrillo y vallas del nether."
+msgstr ""
+"Los ladrillos del Nether son el ingrediente principal para la fabricación de "
+"bloques de ladrillo y vallas del nether."
 
 msgid "Netherite Upgrade Template"
 msgstr "Mejora de netherita"
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "Molde de herrería"
 
 msgid "Applies to:"
 msgstr "Se aplica a:"
@@ -201,4 +209,3 @@ msgstr "Las verrugas del nether son plantas que le pueden encontrar en el nether
 
 msgid "Place this item on soul sand to plant it and watch it grow."
 msgstr "Coloque este ítem en la arena de almas para plantarla y verla crecer."
-

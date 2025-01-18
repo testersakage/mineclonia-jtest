@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_tools x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-02 15:21+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_tools/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "An axe is your tool of choice to cut down trees, wood-based blocks and other blocks. Axes deal a lot of damage as well, but they are rather slow. Axes can be used to strip bark and hyphae from trunks. They can also be used to scrape blocks made of copper, reducing their oxidation stage or removing wax from waxed variants."
 msgstr ""
@@ -44,7 +46,7 @@ msgid "To shear sheep or carve faceless pumpkins, use the “place” key on the
 msgstr ""
 
 msgid "Shears"
-msgstr ""
+msgstr "Cesoie"
 
 msgid "Solid Blocks of Steel. These are only forged if those that are brave enough can defeat the trials that await them."
 msgstr "Blocchi di Acciaio Solido. Questi sono forgiati solo se coloro i quali sono abbastanza coraggiosi riescono a superare le prove che li attendono."
@@ -53,80 +55,79 @@ msgid "The mace is a slow melee weapon that deals incredible damage. “dig” k
 msgstr ""
 
 msgid "Heavy Core"
-msgstr "Nucleo Pesante"
+msgstr "Nucleo pesante"
 
 msgid "Mace"
-msgstr ""
+msgstr "Mazza"
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Piccone di legno"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Pala di legno"
 
 msgid "Wooden Sword"
-msgstr ""
+msgstr "Spada di legno"
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Ascia di legno"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Piccone di pietra"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Pala di pietra"
 
 msgid "Stone Sword"
-msgstr ""
+msgstr "Spada di pietra"
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Ascia di pietra"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Piccone di ferro"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Pala di ferro"
 
 msgid "Iron Sword"
-msgstr ""
+msgstr "Spada di ferro"
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Ascia di ferro"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Piccone d'oro"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Pala d'oro"
 
 msgid "Golden Sword"
-msgstr ""
+msgstr "Spada d'oro"
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Ascia d'oro"
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Piccone di diamante"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Pala di diamante"
 
 msgid "Diamond Sword"
-msgstr ""
+msgstr "Spada di diamante"
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Ascia di diamante"
 
 msgid "Netherite Pickaxe"
-msgstr ""
+msgstr "Piccone di netherite"
 
 msgid "Netherite Shovel"
-msgstr ""
+msgstr "Pala di netherite"
 
 msgid "Netherite Sword"
-msgstr ""
+msgstr "Spada di netherite"
 
 msgid "Netherite Axe"
-msgstr ""
-
+msgstr "Ascia di netherite"

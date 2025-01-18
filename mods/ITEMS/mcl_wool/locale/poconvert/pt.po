@@ -3,21 +3,23 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_wool x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-05 03:33+0000\n"
+"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_wool/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Carpet"
-msgstr ""
+msgstr "Tapete"
 
 msgid "Wool"
-msgstr ""
+msgstr "Lã"
 
 msgid "Wool is a decorative block which comes in many different colors."
 msgstr ""
@@ -26,98 +28,97 @@ msgid "Carpets are thin floor covers which come in many different colors."
 msgstr ""
 
 msgid "Black Carpet"
-msgstr ""
+msgstr "Tapete preto"
 
 msgid "Black Wool"
-msgstr ""
+msgstr "Lã preta"
 
 msgid "Blue Carpet"
-msgstr ""
+msgstr "Tapete azul"
 
 msgid "Blue Wool"
-msgstr ""
+msgstr "Lã azul"
 
 msgid "Brown Carpet"
-msgstr ""
+msgstr "Tapete castanho"
 
 msgid "Brown Wool"
-msgstr ""
+msgstr "Lã castanha"
 
 msgid "Cyan Carpet"
-msgstr ""
+msgstr "Tapete cíano"
 
 msgid "Cyan Wool"
-msgstr ""
+msgstr "Lã cíano"
 
 msgid "Green Carpet"
-msgstr ""
+msgstr "Tapete verde"
 
 msgid "Green Wool"
-msgstr ""
+msgstr "Lã verde"
 
 msgid "Grey Carpet"
-msgstr ""
+msgstr "Tapete cinzento"
 
 msgid "Grey Wool"
-msgstr ""
+msgstr "Lã cinzenta"
 
 msgid "Light Blue Carpet"
-msgstr ""
+msgstr "Tapete azul-claro"
 
 msgid "Light Blue Wool"
-msgstr ""
+msgstr "Lã azul-clara"
 
 msgid "Light Grey Carpet"
-msgstr ""
+msgstr "Tapete cinzento-claro"
 
 msgid "Light Grey Wool"
-msgstr ""
+msgstr "Lã cinzento-claro"
 
 msgid "Lime Carpet"
-msgstr ""
+msgstr "Tapete verde-lima"
 
 msgid "Lime Wool"
-msgstr ""
+msgstr "Lã verde-lima"
 
 msgid "Magenta Carpet"
-msgstr ""
+msgstr "Tapete magenta"
 
 msgid "Magenta Wool"
-msgstr ""
+msgstr "Lã magenta"
 
 msgid "Orange Carpet"
-msgstr ""
+msgstr "Tapete laranja"
 
 msgid "Orange Wool"
-msgstr ""
+msgstr "Lã laranja"
 
 msgid "Pink Carpet"
-msgstr ""
+msgstr "Tapete rosa"
 
 msgid "Pink Wool"
-msgstr ""
+msgstr "Lã rosa"
 
 msgid "Purple Carpet"
-msgstr ""
+msgstr "Tapete roxo"
 
 msgid "Purple Wool"
-msgstr ""
+msgstr "Lã roxa"
 
 msgid "Red Carpet"
-msgstr ""
+msgstr "Tapete vermelho"
 
 msgid "Red Wool"
-msgstr ""
+msgstr "Lã vermelha"
 
 msgid "White Carpet"
-msgstr ""
+msgstr "Tapete branco"
 
 msgid "White Wool"
-msgstr ""
+msgstr "Lã branca"
 
 msgid "Yellow Carpet"
-msgstr ""
+msgstr "Tapete amarelo"
 
 msgid "Yellow Wool"
-msgstr ""
-
+msgstr "Lã amarela"

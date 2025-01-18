@@ -3,135 +3,147 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-12-28 20:29+0000\n"
+"Last-Translator: bramaudi <bramaudi@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Indonesian <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_banners/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "White Banner"
 msgstr "Spanduk Putih"
 
 msgid "White"
-msgstr ""
+msgstr "Putih"
 
 msgid "Grey Banner"
-msgstr ""
+msgstr "Spanduk Abu-abu"
 
 msgid "Grey"
-msgstr ""
+msgstr "Abu-abu"
 
 msgid "Light Grey Banner"
-msgstr ""
+msgstr "Spanduk Abu-abu Terang"
 
 msgid "Light Grey"
-msgstr ""
+msgstr "Abu-abu Terang"
 
 msgid "Black Banner"
-msgstr ""
+msgstr "Spanduk Hitam"
 
 msgid "Black"
-msgstr ""
+msgstr "Hitam"
 
 msgid "Red Banner"
-msgstr ""
+msgstr "Spanduk Merah"
 
 msgid "Red"
-msgstr ""
+msgstr "Merah"
 
 msgid "Yellow Banner"
-msgstr ""
+msgstr "Spanduk Kuning"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Kuning"
 
 msgid "Green Banner"
-msgstr ""
+msgstr "Spanduk Hijau"
 
 msgid "Green"
-msgstr ""
+msgstr "Hijau"
 
 msgid "Cyan Banner"
-msgstr ""
+msgstr "Spanduk Sian"
 
 msgid "Cyan"
-msgstr ""
+msgstr "Sian"
 
 msgid "Blue Banner"
-msgstr ""
+msgstr "Spanduk Biru"
 
 msgid "Blue"
-msgstr ""
+msgstr "Biru"
 
 msgid "Magenta Banner"
-msgstr ""
+msgstr "Spanduk Magenta"
 
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 msgid "Orange Banner"
-msgstr ""
+msgstr "Spanduk Oranye"
 
 msgid "Orange"
-msgstr ""
+msgstr "Oranye"
 
 msgid "Purple Banner"
-msgstr ""
+msgstr "Spanduk Ungu"
 
 msgid "Violet"
-msgstr ""
+msgstr "Ungu lembayung"
 
 msgid "Brown Banner"
-msgstr ""
+msgstr "Spanduk Coklat"
 
 msgid "Brown"
-msgstr ""
+msgstr "Coklat"
 
 msgid "Pink Banner"
-msgstr ""
+msgstr "Spanduk Merah Muda"
 
 msgid "Pink"
-msgstr ""
+msgstr "Merah Muda"
 
 msgid "Lime Banner"
-msgstr ""
+msgstr "Spanduk Limau"
 
 msgid "Lime"
-msgstr ""
+msgstr "Limau"
 
 msgid "Light Blue Banner"
-msgstr ""
+msgstr "Spanduk Biru Terang"
 
 msgid "Light Blue"
-msgstr ""
+msgstr "Biru Terang"
 
 msgid "Banner"
-msgstr ""
+msgstr "Spanduk"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns using a lot of dye in crafting."
 msgstr ""
+"Spanduk adalah blok dekorasi warna-warni. Mereka dapat diletakkan di lantai "
+"atau tembok. Spanduk dapat dihiasi dengan berbagai macam pola menggunakan "
+"banyak pewarna pada kerajinan."
 
 msgid "Use crafting to draw a pattern on top of the banner. Emblazoned banners can be emblazoned again to combine various patterns. You can draw up to 12 layers on a banner that way. If the banner includes a gradient, only 3 layers are possible."
 msgstr ""
+"Gunakan kerajinan untuk menggambar pola di atas spanduk. Spanduk yang "
+"dihiasi dapat dihias lagi untuk berbagai kombinasi pola. Kamu dapat "
+"menggambar hingga 12 lapis spanduk. Jika spanduk terdapat gradasi, hanya "
+"memungkinkan 3 lapis saja."
 
 msgid "You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."
 msgstr ""
+"Kamu dapat menyalin spanduk dengan menaruh dua spanduk dengan warna sama "
+"pada kotak kerajinan—satu harus sudah dihias, yang lainnya harus bersih. "
+"Terakhir, kamu dapat menggunakan kuali berisi air untuk membilas spanduk "
+"untuk membersihkan lapisan paling atas."
 
 msgid "Preview Banner"
-msgstr ""
+msgstr "Pratinjau Spanduk"
 
 msgid "Paintable decoration"
-msgstr ""
+msgstr "Dekorasi yang bisa diwarnai"
 
 msgid "Can be used to craft special banner designs on the loom"
-msgstr ""
+msgstr "Bisa digunakan untuk membuat desain spanduk khusus pada alat tenun"
 
 msgid "Special Banner Pattern"
-msgstr ""
+msgstr "Pola Spanduk Khusus"
 
 msgid "@1 Bordure"
 msgstr ""
@@ -167,7 +179,7 @@ msgid "@1 Flower Charge"
 msgstr ""
 
 msgid "@1 Gradient"
-msgstr ""
+msgstr "@1 Gradasi"
 
 msgid "@1 Base Gradient"
 msgstr ""
@@ -260,8 +272,7 @@ msgid "@1 Guster"
 msgstr ""
 
 msgid "And one additional layer"
-msgstr ""
+msgstr "Dan satu lapisan tambahan"
 
 msgid "And @1 additional layers"
-msgstr ""
-
+msgstr "Dan @1 lapisan tambahan"

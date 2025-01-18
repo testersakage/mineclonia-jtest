@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_wool x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-02 04:15+0000\n"
+"Last-Translator: JoseDouglas26 "
+"<josedouglas26@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_wool/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Carpet"
 msgstr "Carpete"
@@ -20,104 +22,103 @@ msgid "Wool"
 msgstr "Lã"
 
 msgid "Wool is a decorative block which comes in many different colors."
-msgstr "Lã é um bloco decorativo ao qual vêm em várias cores diferentes."
+msgstr "Lã é um bloco decorativo que vem em várias cores diferentes."
 
 msgid "Carpets are thin floor covers which come in many different colors."
-msgstr "Carpetes são coberturas finas para o piso aos quais vêm em diferentes cores."
+msgstr "Carpetes são coberturas finas para o piso que vêm em diferentes cores."
 
 msgid "Black Carpet"
-msgstr ""
+msgstr "Carpete Preto"
 
 msgid "Black Wool"
-msgstr ""
+msgstr "Lã Preta"
 
 msgid "Blue Carpet"
-msgstr ""
+msgstr "Carpete Azul"
 
 msgid "Blue Wool"
-msgstr ""
+msgstr "Lã Azul"
 
 msgid "Brown Carpet"
-msgstr ""
+msgstr "Carpete Marrom"
 
 msgid "Brown Wool"
-msgstr ""
+msgstr "Lã Marrom"
 
 msgid "Cyan Carpet"
-msgstr ""
+msgstr "Carpete Ciano"
 
 msgid "Cyan Wool"
-msgstr ""
+msgstr "Lã Ciano"
 
 msgid "Green Carpet"
-msgstr ""
+msgstr "Carpete Verde"
 
 msgid "Green Wool"
-msgstr ""
+msgstr "Lã Verde"
 
 msgid "Grey Carpet"
-msgstr ""
+msgstr "Carpete Cinza"
 
 msgid "Grey Wool"
-msgstr ""
+msgstr "Lã Cinza"
 
 msgid "Light Blue Carpet"
-msgstr ""
+msgstr "Carpete Azul-Claro"
 
 msgid "Light Blue Wool"
-msgstr ""
+msgstr "Lã Azul-Claro"
 
 msgid "Light Grey Carpet"
-msgstr ""
+msgstr "Carpete Cinza-Claro"
 
 msgid "Light Grey Wool"
-msgstr ""
+msgstr "Lã Cinza-Claro"
 
 msgid "Lime Carpet"
-msgstr ""
+msgstr "Carpete Lima"
 
 msgid "Lime Wool"
-msgstr ""
+msgstr "Lã Lima"
 
 msgid "Magenta Carpet"
-msgstr ""
+msgstr "Carpete Magenta"
 
 msgid "Magenta Wool"
-msgstr ""
+msgstr "Lã Magenta"
 
 msgid "Orange Carpet"
-msgstr ""
+msgstr "Carpete Laranja"
 
 msgid "Orange Wool"
-msgstr ""
+msgstr "Lã Laranja"
 
 msgid "Pink Carpet"
-msgstr ""
+msgstr "Carpete Rosa"
 
 msgid "Pink Wool"
-msgstr ""
+msgstr "Lã Rosa"
 
 msgid "Purple Carpet"
-msgstr ""
+msgstr "Carpete Roxo"
 
 msgid "Purple Wool"
-msgstr ""
+msgstr "Lã Roxa"
 
 msgid "Red Carpet"
-msgstr ""
+msgstr "Carpete Vermelho"
 
 msgid "Red Wool"
-msgstr ""
+msgstr "Lã Vermelha"
 
 msgid "White Carpet"
-msgstr ""
+msgstr "Carpete Branco"
 
 msgid "White Wool"
-msgstr ""
+msgstr "Lã Branca"
 
 msgid "Yellow Carpet"
-msgstr ""
+msgstr "Carpete Amarelo"
 
 msgid "Yellow Wool"
-msgstr ""
-
+msgstr "Lã Amarela"
