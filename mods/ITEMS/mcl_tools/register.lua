@@ -8,7 +8,7 @@ mcl_tools.register_set("wood", {
     level = 1,
     speed = 2,
     max_drop_level = 1,
-    groups = { dig_class_speed = 2, enchantability = 15 }
+    groups = { dig_speed_class = 2, enchantability = 15 }
 }, {
     ["pick"] = {
         description = S("Wooden Pickaxe"),
@@ -52,7 +52,7 @@ mcl_tools.register_set("stone", {
     level = 3,
     speed = 4,
     max_drop_level = 3,
-    groups = { dig_class_speed = 3, enchantability = 5 }
+    groups = { dig_speed_class = 3, enchantability = 5 }
 }, {
     ["pick"] = {
         description = S("Stone Pickaxe"),
@@ -96,7 +96,7 @@ mcl_tools.register_set("iron", {
     level = 4,
     speed = 6,
     max_drop_level = 4,
-    groups = { dig_class_speed = 4, enchantability = 14 }
+    groups = { dig_speed_class = 4, enchantability = 14 }
 }, {
     ["pick"] = {
         description = S("Iron Pickaxe"),
@@ -140,7 +140,7 @@ mcl_tools.register_set("gold", {
     level = 2,
     speed = 12,
     max_drop_level = 2,
-    groups = { dig_class_speed = 6, enchantability = 22 }
+    groups = { dig_speed_class = 6, enchantability = 22 }
 }, {
     ["pick"] = {
         description = S("Golden Pickaxe"),
@@ -184,7 +184,7 @@ mcl_tools.register_set("diamond", {
     level = 5,
     speed = 8,
     max_drop_level = 5,
-    groups = { dig_class_speed = 5, enchantability = 10 }
+    groups = { dig_speed_class = 5, enchantability = 10 }
 }, {
     ["pick"] = {
         description = S("Diamond Pickaxe"),
@@ -236,7 +236,7 @@ mcl_tools.register_set("netherite", {
     level = 6,
     speed = 9.5,
     max_drop_level = 5,
-    groups = { dig_class_speed = 6, enchantability = 10, fire_immune = 1 }
+    groups = { dig_speed_class = 6, enchantability = 10, fire_immune = 1 }
 }, {
     ["pick"] = {
         description = S("Netherite Pickaxe"),
