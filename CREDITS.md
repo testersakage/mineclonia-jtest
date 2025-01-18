@@ -12,10 +12,9 @@
 
 ## Active Contributors
 * codiac
-* DragonWrangler1
 * JoseDouglas26
 * Brama Udi
-* amino
+* ellesheepy
 * Jürgen Rühle
 * kno10
 * Po Lu

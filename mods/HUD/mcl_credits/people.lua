@@ -14,10 +14,9 @@ return {
 	}},
 	{S("Active Contributors"), 0xF84355, {
 		"codiac",
-		"DragonWrangler1",
 		"JoseDouglas26",
 		"Brama Udi",
-		"amino",
+		"ellesheepy",
 		"Jürgen Rühle",
 		"kno10",
 		"Po Lu",
