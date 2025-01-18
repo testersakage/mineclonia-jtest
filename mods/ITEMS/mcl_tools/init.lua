@@ -176,6 +176,9 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 	local commondefs = mcl_tools.commondefs[toolname]
 	local tcs = table.copy(tooldefs.tool_capabilities or {})
 	tooldefs.tool_capabilities = nil
+	overrides = table.copy(overrides or {})
+	local tcs_overrides = overrides.tool_capabilities or {}
+	overrides.tool_capabilities = nil
 	local tooldefs = table.merge({
 		_doc_items_longdesc = commondefs.longdesc,
 		_doc_items_usagehelp = commondefs.usagehelp,
@@ -186,11 +189,11 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		tool_capabilities = table.merge(tcs, {
 			max_drop_level = materialdefs.max_drop_level,
 			punch_attack_uses = get_punch_uses(toolname, materialdefs)
-		}),
+		}, tcs_overrides, overrides.toolname),
 		on_place = mcl_tools.tool_place_funcs[toolname],
 		sound = { breaks = "default_tool_breaks" },
 		wield_scale = wield_scale
-	}, tooldefs, overrides or {})
+	}, tooldefs, overrides)
 
 	minetest.register_tool(itemstring, tooldefs)
 
