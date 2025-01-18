@@ -89,18 +89,18 @@ local wield_scale = mcl_vars.tool_wield_scale
 local function on_tool_place(itemstack, placer, pointed_thing, tool)
 	if pointed_thing.type ~= "node" then return end
 
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if rc ~= nil then return rc end
+
+	if minetest.is_protected(pointed_thing.under, placer:get_player_name()) then
+		minetest.record_protection_violation(pointed_thing.under, placer:get_player_name())
+		return itemstack
+	end
+
 	local node = minetest.get_node(pointed_thing.under)
 	local ndef = minetest.registered_nodes[node.name]
 	if not ndef then
 		return
-	end
-
-	if not placer:get_player_control().sneak and ndef.on_rightclick then
-		return minetest.item_place(itemstack, placer, pointed_thing)
-	end
-	if minetest.is_protected(pointed_thing.under, placer:get_player_name()) then
-		minetest.record_protection_violation(pointed_thing.under, placer:get_player_name())
-		return itemstack
 	end
 
 	if itemstack and type(ndef["_on_"..tool.."_place"]) == "function" then
