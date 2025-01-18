@@ -19,9 +19,6 @@ msgstr "El tipo de cultivo @1 no es compatible"
 msgid "The timer for this @1 has not run yet!"
 msgstr "¡El cronómetro para este @1 aún no se ha ejecutado!"
 
-msgid "A villager sleeps here"
-msgstr "Un aldeano duerme aquí"
-
 msgid "Prevent paths from being placed during villager generation. Replaced by air after village path generation"
 msgstr "Evita que se coloquen caminos durante la generación de aldeanos. Reemplazado con aire después de generar caminos de aldea"
 
@@ -30,4 +27,7 @@ msgstr "Marque el nodo como un buen lugar para que las rutas se conecten"
 
 msgid "A place to plant @1 crops"
 msgstr "Un lugar para plantar cultivos de @1"
+
+msgid "Example POI"
+msgstr ""
 

@@ -67,6 +67,12 @@ msgstr "Bambusz Növény"
 msgid "Bamboo Mosaic Plank"
 msgstr "Bambusz Mozaik"
 
+msgid "Bamboo Mosaic Stairs"
+msgstr ""
+
+msgid "Bamboo Mosaic Slab"
+msgstr ""
+
 msgid "Scaffolding"
 msgstr "Állványzat"
 

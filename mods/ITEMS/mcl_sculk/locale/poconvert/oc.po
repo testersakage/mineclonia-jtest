@@ -31,3 +31,6 @@ msgstr ""
 msgid "Sculk Shrieker"
 msgstr ""
 
+msgid "Echo Shard"
+msgstr ""
+

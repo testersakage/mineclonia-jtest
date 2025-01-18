@@ -19,9 +19,6 @@ msgstr "Getreideart @1 wird nicht unterstützt"
 msgid "The timer for this @1 has not run yet!"
 msgstr "Der Timer für dieses @1 wurde noch nicht gestartet!"
 
-msgid "A villager sleeps here"
-msgstr "Hier schläft ein Dorfbewohner"
-
 msgid "Prevent paths from being placed during villager generation. Replaced by air after village path generation"
 msgstr "Verhindert, dass während der Erstellung von Dörfern Pfade gebaut werden. Wird nach der Erzeugung des Dorfs durch Luft ersetzt"
 
@@ -30,4 +27,7 @@ msgstr "Markieren Sie den Knoten als einen guten Ort für Pfade, die eine Verbin
 
 msgid "A place to plant @1 crops"
 msgstr "Ein Platz zum Anpflanzen von @1-Pflanzen"
+
+msgid "Example POI"
+msgstr ""
 

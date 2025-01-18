@@ -1,5 +1,5 @@
 # textdomain: mcl_maps
-Empty Map=Carte Vierge
+Empty Map=Carte vierge
 Empty maps are not useful as maps, but they can be stacked and turned to maps which can be used.=Les cartes vierges ne sont pas utiles en tant que cartes, mais elles peuvent être empilées et transformées en cartes utilisables.
 Rightclick to create a filled map (which can't be stacked anymore).=Clic droit pour créer une carte remplie (qui ne peut plus être empilée).
 Map=Carte

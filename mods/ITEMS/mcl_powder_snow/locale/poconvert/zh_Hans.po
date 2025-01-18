@@ -19,8 +19,8 @@ msgstr "粉雪"
 msgid "This is a block of snow thats extra fluffy, this means players can sink in it"
 msgstr "这是一种格外松软的雪块，这意味着玩家可以陷进去"
 
-msgid "Powder snow"
-msgstr "粉雪"
+msgid "Powder Snow Bucket"
+msgstr ""
 
 msgid "This bucket is filled powder snow"
 msgstr "这个桶里装满了粉雪"

@@ -67,6 +67,12 @@ msgstr "Pianta di bambù"
 msgid "Bamboo Mosaic Plank"
 msgstr "Assi di bambù intrecciato"
 
+msgid "Bamboo Mosaic Stairs"
+msgstr ""
+
+msgid "Bamboo Mosaic Slab"
+msgstr ""
+
 msgid "Scaffolding"
 msgstr "Impalcatura"
 

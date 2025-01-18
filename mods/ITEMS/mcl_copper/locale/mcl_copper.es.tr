@@ -1,6 +1,6 @@
 # textdomain: mcl_copper
 Copper Ingot=Lingote de cobre
-Molten Raw Copper. It is used to craft blocks.=Cobre crudo fundido. Se utiliza para craftear bloques.
+Molten Raw Copper. It is used to craft blocks.=Cobre crudo fundido. Se utiliza para fabricar bloques.
 Raw Copper=Cobre crudo
 Raw Copper. Mine a Copper Ore to get it.=Cobre crudo. Pica un mineral de cobre para conseguirlo.
 Block of Copper=Bloque de cobre
@@ -101,7 +101,7 @@ Weathered Cut Copper=Cobre cortado degradado
 Weathered Cut Copper Slab=Losa de cobre cortado degradado
 Weathered Cut Copper Stairs=Escaleras de cobre cortado degradado
 Weathered Cut Copper is mostly a decorative block.=El Cobre Cortado Degradado es principalmente un bloque decorativo.
-Copper Ore=Mena de cobre
+Copper Ore=Mineral de cobre
 Some copper contained in stone, it is pretty common and can be found below sea level.=Algo de cobre se encuentra en la piedra, está bastante extendido y se puede encontrar por debajo del nivel del mar.
 Block of Raw Copper=Bloque de cobre en bruto
 A block used for compact raw copper storage.=Un bloque utilizado para el almacenamiento compacto de cobre crudo.

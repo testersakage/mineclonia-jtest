@@ -67,6 +67,12 @@ msgstr "Бамбуковое растение"
 msgid "Bamboo Mosaic Plank"
 msgstr "Бамбуковая мозаика"
 
+msgid "Bamboo Mosaic Stairs"
+msgstr ""
+
+msgid "Bamboo Mosaic Slab"
+msgstr ""
+
 msgid "Scaffolding"
 msgstr "Строительные леса"
 

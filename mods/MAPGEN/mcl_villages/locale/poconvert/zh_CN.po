@@ -19,9 +19,6 @@ msgstr "不支持作物类型@1"
 msgid "The timer for this @1 has not run yet!"
 msgstr "@1的计时器尚未运行！"
 
-msgid "A villager sleeps here"
-msgstr "村民就寝之处"
-
 msgid "Prevent paths from being placed during villager generation. Replaced by air after village path generation"
 msgstr "在村民生成期间阻止路径被放置。在村庄路径生成后由空气替代"
 
@@ -30,4 +27,7 @@ msgstr "将该节点标记为路径连接的理想位置"
 
 msgid "A place to plant @1 crops"
 msgstr "种植@1的地方"
+
+msgid "Example POI"
+msgstr ""
 

@@ -61,9 +61,6 @@ msgstr "Progrès"
 msgid "Switch stack size"
 msgstr "Basculer la taille de la pile"
 
-msgid "@1 / @2"
-msgstr "@1 / @2"
-
 msgid "Recipe book"
 msgstr "Livre de recette"
 
@@ -72,6 +69,9 @@ msgstr "Rubrique d'aide"
 
 msgid "Select player skin"
 msgstr "Sélectionnez l'apparence du joueur"
+
+msgid "Crafting table out of range!"
+msgstr ""
 
 msgid "Crafting"
 msgstr "Fabrication"

@@ -19,9 +19,6 @@ msgstr "Тип культуры @1 не поддерживается"
 msgid "The timer for this @1 has not run yet!"
 msgstr "Таймер для @1 еще не истек!"
 
-msgid "A villager sleeps here"
-msgstr "Здесь спит деревенский житель"
-
 msgid "Prevent paths from being placed during villager generation. Replaced by air after village path generation"
 msgstr "Предотвращает появление тропинок во время генерации деревни. Заменяется на воздух после генерации пути в деревне"
 
@@ -30,4 +27,7 @@ msgstr "Пометить узел как подходящее место для 
 
 msgid "A place to plant @1 crops"
 msgstr "Место для посадки @1 культуры"
+
+msgid "Example POI"
+msgstr ""
 

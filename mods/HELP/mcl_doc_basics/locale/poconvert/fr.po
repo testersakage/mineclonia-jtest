@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-05 03:33+0000\n"
-"Last-Translator: Zozosticot <zozosticot@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_doc_basics/fr/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Advanced usage"
 msgstr "Utilisation avancée"
@@ -24,8 +22,8 @@ msgstr "Informations avancées qui peuvent être utiles à connaître, mais qui 
 msgid "Creative Mode"
 msgstr "Mode Créatif"
 
-msgid "Enabling Creative Mode in MineClone 2 applies the following changes:"
-msgstr "L'activation du mode créatif dans MineClone 2 applique les modifications suivantes :"
+msgid "Enabling Creative Mode in MineClonia applies the following changes:"
+msgstr ""
 
 msgid "• You keep the things you've placed"
 msgstr "• Vous gardez les choses que vous avez placées"
@@ -111,8 +109,8 @@ msgstr "• [Page précédente] : Faites défiler vers le haut"
 msgid "• [Page down]: Scroll down"
 msgstr "• [Page suivante] : Faites défiler vers le bas"
 
-msgid "There is also an input history. Minetest saves your previous console inputs which you can quickly access later:"
-msgstr "Il existe également un historique des entrées. Minetest enregistre vos entrées de console précédentes auxquelles vous pouvez accéder rapidement plus tard :"
+msgid "There is also an input history. Luanti saves your previous console inputs which you can quickly access later:"
+msgstr ""
 
 msgid "• [Up]: Go to previous entry in history"
 msgstr "• [Haut] : Aller à l'entrée précédente de l'historique"
@@ -129,8 +127,8 @@ msgstr "Les commandes serveur (également appelées \"commandes de chat\") sont 
 msgid "Server commands can be entered by players using the chat to perform a special server action. There are a few commands which can be issued by everyone, but some commands only work if you have certain privileges granted on the server. There is a small set of basic commands which are always available, other commands can be added by mods."
 msgstr "Les commandes du serveur peuvent être saisies par les joueurs utilisant le chat pour effectuer une action spéciale du serveur. Il y a quelques commandes qui peuvent être émises par tout le monde, mais certaines commandes ne fonctionnent que si vous avez certains privilèges accordés sur le serveur. Il y a un petit ensemble de commandes de base qui sont toujours disponibles, d'autres commandes peuvent être ajoutées par des mods."
 
-msgid "To issue a command, simply type it like a chat message or press Minetest's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Minetest command key does the same as the chat key, except that the slash is already entered."
-msgstr "Pour lancer une commande, tapez-la simplement comme un message de discussion ou appuyez sur la touche de commande de Minetest (par défaut : [/]). Toutes les commandes doivent commencer par \"/\", par exemple \"/mods\". La touche de commande Minetest fait la même chose que la touche de conversation, sauf que la barre oblique est déjà entrée."
+msgid "To issue a command, simply type it like a chat message or press Luanti's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Luanti command key does the same as the chat key, except that the slash is already entered."
+msgstr ""
 
 msgid "Commands may or may not give a response in the chat log, but errors will generally be shown in the chat. Try it for yourselves: Close this window and type in the “/mods” command. This will give you the list of available mods on this server."
 msgstr "Les commandes peuvent ou non donner une réponse dans le journal de discussion, mais les erreurs seront généralement affichées dans la discussion. Essayez-le par vous-même : Fermez cette fenêtre et tapez la commande \"/mods\". Cela vous donnera la liste des mods disponibles sur ce serveur."
@@ -342,32 +340,32 @@ msgstr "Pour une liste complète de tous les paramètres disponibles, utilisez l
 msgid "Online help"
 msgstr "Aide en ligne"
 
-msgid "You may want to check out these online resources related to Minetest:"
-msgstr "Vous voudrez peut-être consulter ces ressources en ligne liées à Minetest :"
+msgid "You may want to check out these online resources related to Luanti:"
+msgstr ""
 
-msgid "Official homepage of Minetest: <https://minetest.net/>"
-msgstr "Page d'accueil officielle de Minetest : <https://minetest.net/>"
+msgid "Official homepage of Luanti: <https://luanti.org/>"
+msgstr ""
 
-msgid "The main place to find the most recent version of Minetest."
-msgstr "L'endroit principal pour trouver la version la plus récente de Minetest."
+msgid "The main place to find the most recent version of Luanti."
+msgstr ""
 
 msgid "Community wiki: <https://wiki.minetest.net/>"
 msgstr "Wiki de la communauté : <https://wiki.minetest.net/>"
 
-msgid "A community-based documentation website for Minetest. Anyone with an account can edit it! It also features a documentation of Minetest Game."
-msgstr "Un site Web de documentation communautaire pour Minetest. N'importe qui avec un compte peut le modifier ! C'est aussi une documentation pour Minetest."
+msgid "A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game."
+msgstr ""
 
-msgid "Web forums: <https://forums.minetest.net/>"
-msgstr "Forums internet : <https://forums.minetest.net/>"
+msgid "Web forums: <https://forum.luanti.org/>"
+msgstr ""
 
-msgid "A web-based discussion platform where you can discuss everything related to Minetest. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages."
-msgstr "Une plate-forme de discussion en ligne où vous pouvez discuter de tout ce qui concerne Minetest. C'est également un endroit où les mods et les jeux créés par les joueurs sont publiés et discutés. Les discussions se déroulent principalement en anglais, mais il existe également un espace de discussion dans d'autres langues."
+msgid "A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages."
+msgstr ""
 
 msgid "Chat: <irc://irc.freenode.net#minetest>"
 msgstr "Chat : <irc://irc.freenode.net#minetest>"
 
-msgid "A generic Internet Relay Chat channel for everything related to Minetest where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help."
-msgstr "Un canal de discussion générique pour tout ce qui concerne le Minetest où les gens peuvent se rencontrer pour discuter en temps réel. Si vous ne comprenez pas IRC, consultez le wiki de la communauté pour obtenir de l'aide."
+msgid "A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help."
+msgstr ""
 
 msgid "Basics"
 msgstr "Les bases"
@@ -667,10 +665,7 @@ msgid "Hotbar"
 msgstr "Barre d’accès rapide"
 
 msgid "At the bottom of the screen you see some squares. This is called the “hotbar”, and contains the items you have put in the last row of your inventory."
-msgstr ""
-"En bas de l'écran, vous voyez des carrés. C'est ce qu'on appelle la « barre "
-"d’accès rapides », qui contient les objets que vous avez placés dans la "
-"dernière ligne de votre inventaire."
+msgstr "En bas de l'écran, vous voyez des carrés. C'est ce qu'on appelle la « barre d’accès rapides », qui contient les objets que vous avez placés dans la dernière ligne de votre inventaire."
 
 msgid "You can change the selected item with the mouse wheel or the keyboard:"
 msgstr "Vous pouvez modifier l'élément sélectionné à l'aide de la molette de la souris ou du clavier :"
@@ -691,10 +686,7 @@ msgid "Tools"
 msgstr "Outils"
 
 msgid "Some items may serve as a tool when wielded. Any item which has some special use which can be directly used by its wielder is considered a tool."
-msgstr ""
-"Certains objets peuvent servir d'outil lorsqu'ils sont utilisés. Tout objet "
-"ayant une utilité particulière pouvant être directement utilisé par son "
-"porteur est considéré comme un outil."
+msgstr "Certains objets peuvent servir d'outil lorsqu'ils sont utilisés. Tout objet ayant une utilité particulière pouvant être directement utilisé par son porteur est considéré comme un outil."
 
 msgid "A common subset of tools are mining tools. These are important to quickly break different types of blocks. Weapons are a kind of tool. There are of course many other possible tools. Special actions of tools are usually done by left-click or right-click."
 msgstr "Les outils d'extraction constituent un sous-ensemble commun d'outils. Ils sont importants pour briser rapidement différents types de blocs. Les armes sont une sorte d'outil. Il existe bien sûr de nombreux autres outils possibles. Les actions spéciales des outils se font généralement par un clic gauche ou un clic droit."
@@ -715,14 +707,10 @@ msgid "Melee weapons deal damage by punching players and other animate objects. 
 msgstr "Les armes de mêlée infligent des dégâts en frappant les joueurs et d'autres objets animés. Il y a deux façons d'attaquer :"
 
 msgid "• Single punch: Left-click once to deal a single punch"
-msgstr ""
-"• Coup de poing unique : Cliquez une fois avec le bouton gauche pour donner "
-"un coup de poing"
+msgstr "• Coup de poing unique : Cliquez une fois avec le bouton gauche pour donner un coup de poing"
 
 msgid "• Quick punching: Hold down the left mouse button to deal quick repeated punches"
-msgstr ""
-"• Frappe rapide : Maintenez le bouton gauche de la souris enfoncé pour "
-"effectuer des coups de poing répétés rapidement"
+msgstr "• Frappe rapide : Maintenez le bouton gauche de la souris enfoncé pour effectuer des coups de poing répétés rapidement"
 
 msgid "There are two core attributes of melee weapons:"
 msgstr "Il y a deux attributs principaux des armes de mêlée :"
@@ -1384,14 +1372,14 @@ msgstr "• Protection : Mécanisme pour posséder des zones du monde, qui perme
 msgid "Technical terms:"
 msgstr "Termes techniques :"
 
-msgid "• Minetest: This game engine"
-msgstr "• Minetest : Ce moteur de jeu"
+msgid "• Luanti: This game engine"
+msgstr ""
 
-msgid "• Minetest Game: A game for Minetest by the Minetest developers"
-msgstr "• Minetest Game : Un jeu pour Minetest par les développeurs de Minetest"
+msgid "• Minetest Game: A game for Luanti by the Minetest developers"
+msgstr ""
 
-msgid "• Game: A complete playing experience to be used in Minetest; such as a game or sandbox or similar"
-msgstr "• Jeu : Une expérience de jeu complète à utiliser dans Minetest ; comme un jeu ou un bac à sable ou similaire"
+msgid "• Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar"
+msgstr ""
 
 msgid "• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them"
 msgstr "• Mod : un sous-système unique qui ajoute ou modifie des fonctionnalités ; est le bloc de construction de base des jeux et peut être utilisé pour les améliorer ou les modifier davantage"
@@ -1402,17 +1390,18 @@ msgstr "• Privilège : Permet à un joueur de faire quelque chose"
 msgid "• Node: Other word for “block”"
 msgstr "• Noeud : Autre mot pour \"bloc\""
 
-msgid "Minetest"
-msgstr "Minetest"
+msgid "Luanti"
+msgstr ""
 
-msgid "Minetest is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Minetest was originally created by Perttu Ahola (alias “celeron55”)."
-msgstr "Minetest est un moteur de jeu logiciel gratuit pour les jeux basés sur le gameplay voxel, inspiré d'InfiniMiner, Minecraft, etc. Minetest a été créé à l'origine par Perttu Ahola (alias «celeron55»)."
+msgid "Luanti (formely Minetest) is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Luanti was originally created by Perttu Ahola (alias “celeron55”)."
+msgstr ""
 
-msgid "A core feature of Minetest is the built-in modding capability, which all games consist of too. They can be as simple as adding a few decorational blocks or be very complex by e.g. introducing completely new gameplay concepts, generating a completely different kind of world, and many other things."
-msgstr "L'une des principales caractéristiques de Minetest est la capacité de modélisation intégrée, dont tous les jeux sont également dotés. Ils peuvent être aussi simples que l'ajout de quelques blocs décoratifs ou être très complexes, par exemple en introduisant des concepts de jeu complètement nouveaux, en générant un monde complètement différent, et bien d'autres choses encore."
+msgid "A core feature of Luanti is the built-in modding capability, which all games consist of too. They can be as simple as adding a few decorational blocks or be very complex by e.g. introducing completely new gameplay concepts, generating a completely different kind of world, and many other things."
+msgstr ""
 
-msgid "Minetest can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server."
-msgstr "Minetest peut être joué seul ou en ligne avec plusieurs joueurs. Le jeu en ligne fonctionnera immédiatement avec tous les mods, sans avoir besoin de logiciels supplémentaires car ils sont entièrement fournis par le serveur."
+msgid "Luanti can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server."
+msgstr ""
 
-msgid "MineClonia is a game that is built on top of the Minetest engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
-msgstr "MineClonia est un jeu construit sur le moteur Minetest qui vise à créer un jeu aussi proche que possible de Minecraft. Il existe cependant de nombreux autres jeux pour Minetest, qui peuvent être installés à partir du menu principal du navigateur de contenu."
+msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
+msgstr ""
+

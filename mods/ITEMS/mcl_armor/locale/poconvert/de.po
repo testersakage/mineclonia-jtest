@@ -46,6 +46,51 @@ msgstr ""
 msgid "Player isn't online"
 msgstr ""
 
+msgid "Bolt Armor Trim"
+msgstr ""
+
+msgid "Coast Armor Trim"
+msgstr ""
+
+msgid "Dune Armor Trim"
+msgstr ""
+
+msgid "Eye Armor Trim"
+msgstr ""
+
+msgid "Flow Armor Trim"
+msgstr ""
+
+msgid "Rib Armor Trim"
+msgstr ""
+
+msgid "Sentry Armor Trim"
+msgstr ""
+
+msgid "Silence Armor Trim"
+msgstr ""
+
+msgid "Snout Armor Trim"
+msgstr ""
+
+msgid "Spire Armor Trim"
+msgstr ""
+
+msgid "Tide Armor Trim"
+msgstr ""
+
+msgid "Vex Armor Trim"
+msgstr ""
+
+msgid "Ward Armor Trim"
+msgstr ""
+
+msgid "Wayfinder Armor Trim"
+msgstr ""
+
+msgid "Wild Armor Trim"
+msgstr ""
+
 msgid "Golden Helmet"
 msgstr "Goldhelm"
 
@@ -156,9 +201,6 @@ msgstr "Reflektiert einen Teil des Schadens sobald getroffen, jedoch auf Kosten 
 
 msgid "Elytra"
 msgstr "Elytren"
-
-msgid "@1 Armor Trim"
-msgstr ""
 
 msgid "Smithing Template"
 msgstr "Schmiedevorlage"

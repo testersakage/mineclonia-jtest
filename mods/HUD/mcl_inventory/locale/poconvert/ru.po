@@ -61,9 +61,6 @@ msgstr "Продвижение"
 msgid "Switch stack size"
 msgstr "Изменить размер стака"
 
-msgid "@1 / @2"
-msgstr "@1 / @2"
-
 msgid "Recipe book"
 msgstr "Книга рецептов"
 
@@ -72,6 +69,9 @@ msgstr "Справка"
 
 msgid "Select player skin"
 msgstr "Выбор скина"
+
+msgid "Crafting table out of range!"
+msgstr ""
 
 msgid "Crafting"
 msgstr "Крафт"

@@ -67,6 +67,12 @@ msgstr "Tanaman Bambu"
 msgid "Bamboo Mosaic Plank"
 msgstr "Papan Mosaik Bambu"
 
+msgid "Bamboo Mosaic Stairs"
+msgstr ""
+
+msgid "Bamboo Mosaic Slab"
+msgstr ""
+
 msgid "Scaffolding"
 msgstr "Perancah"
 

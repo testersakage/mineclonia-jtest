@@ -31,3 +31,6 @@ msgstr "Capteur sculk"
 msgid "Sculk Shrieker"
 msgstr "Hurleur sculk"
 
+msgid "Echo Shard"
+msgstr ""
+

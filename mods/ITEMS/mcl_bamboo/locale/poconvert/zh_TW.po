@@ -67,6 +67,12 @@ msgstr "竹子植株"
 msgid "Bamboo Mosaic Plank"
 msgstr ""
 
+msgid "Bamboo Mosaic Stairs"
+msgstr ""
+
+msgid "Bamboo Mosaic Slab"
+msgstr ""
+
 msgid "Scaffolding"
 msgstr "鷹架"
 

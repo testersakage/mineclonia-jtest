@@ -67,11 +67,14 @@ msgstr "Gardien de l'Elder"
 msgid "Hoglin"
 msgstr "Hoglin"
 
+msgid "Baby Hoglin"
+msgstr "Bébé Hoglin"
+
 msgid "Zoglin"
 msgstr "Zoglin"
 
-msgid "Baby Hoglin"
-msgstr "Bébé Hoglin"
+msgid "Sneak to dismount"
+msgstr "S'accroupir pour descendre"
 
 msgid "Horse"
 msgstr "Cheval"
@@ -87,9 +90,6 @@ msgstr "Âne"
 
 msgid "Mule"
 msgstr "Mule"
-
-msgid "Sneak to dismount"
-msgstr "S'accroupir pour descendre"
 
 msgid "Iron Golem"
 msgstr "Golem de fer"
@@ -112,14 +112,14 @@ msgstr "Cochon"
 msgid "Piglin"
 msgstr "Piglin"
 
-msgid "Zombiefied Piglin"
-msgstr "Piglin zombifié"
-
 msgid "Piglin Brute"
 msgstr "Piglin barbare"
 
 msgid "Zombie Piglin"
 msgstr "Piglin zombie"
+
+msgid "Zombified Piglin"
+msgstr "Piglin zombifié"
 
 msgid "Pillager"
 msgstr "Pillard"
@@ -211,32 +211,17 @@ msgstr "Vex"
 msgid "Villager"
 msgstr "Villageois"
 
-msgid "Evoker"
-msgstr "Invocateur"
+msgid "Armorer"
+msgstr "Armurier"
 
-msgid "Illusioner"
-msgstr "Illusionniste"
+msgid "Butcher"
+msgstr "Boucher"
 
-msgid "Vindicator"
-msgstr "Vindicateur"
+msgid "Cartographer"
+msgstr "Cartographe"
 
-msgid "Zombie Villager"
-msgstr "Zombie-villageois"
-
-msgid "@1 sleeps here"
-msgstr "@1 dort ici"
-
-msgid "A villager sleeps here"
-msgstr "Un villageois dort ici"
-
-msgid "@1 works here"
-msgstr "@1 travaille ici"
-
-msgid "A villager works here"
-msgstr "Un villageois travaille ici"
-
-msgid "Unemployed"
-msgstr "Sans profession"
+msgid "Cleric"
+msgstr "Prêtre"
 
 msgid "Farmer"
 msgstr "Fermier"
@@ -247,41 +232,26 @@ msgstr "Pêcheur"
 msgid "Fletcher"
 msgstr "Fléchier"
 
-msgid "Shepherd"
-msgstr "Berger"
+msgid "Leatherworker"
+msgstr "Tanneur"
 
 msgid "Librarian"
 msgstr "Bibliothécaire"
 
-msgid "Cartographer"
-msgstr "Cartographe"
-
-msgid "Armorer"
-msgstr "Armurier"
-
-msgid "Leatherworker"
-msgstr "Tanneur"
-
-msgid "Butcher"
-msgstr "Boucher"
-
-msgid "Weapon Smith"
-msgstr "Forgeron d'arme"
-
-msgid "Tool Smith"
-msgstr "Forgeron d'outil"
-
-msgid "Cleric"
-msgstr "Prêtre"
-
 msgid "Mason"
 msgstr "Maçon"
 
+msgid "Shepherd"
+msgstr "Berger"
+
+msgid "Toolsmith"
+msgstr ""
+
+msgid "Weaponsmith"
+msgstr ""
+
 msgid "Nitwit"
 msgstr "Idiot"
-
-msgid "Wandering Trader"
-msgstr "Marchand ambulant"
 
 msgid "Novice"
 msgstr "Novice"
@@ -298,6 +268,24 @@ msgstr "Expert"
 msgid "Master"
 msgstr "Maître"
 
+msgid "Evoker"
+msgstr "Invocateur"
+
+msgid "Illusioner"
+msgstr "Illusionniste"
+
+msgid "Vindicator"
+msgstr "Vindicateur"
+
+msgid "Zombie Villager"
+msgstr "Zombie-villageois"
+
+msgid "Wandering Trader"
+msgstr "Marchand ambulant"
+
+msgid "Trader Llama"
+msgstr ""
+
 msgid "Witch"
 msgstr "Sorcière"
 
@@ -306,9 +294,6 @@ msgstr "Wither"
 
 msgid "Wolf"
 msgstr "Loup"
-
-msgid "Dog"
-msgstr "Chien"
 
 msgid "Zombie"
 msgstr "Zombie"
@@ -321,7 +306,4 @@ msgstr "Zombie momifié"
 
 msgid "Baby Husk"
 msgstr "Bébé zombie momifié"
-
-msgid "Zombified Piglin"
-msgstr "Piglin zombifié"
 

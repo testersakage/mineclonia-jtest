@@ -31,3 +31,6 @@ msgstr "Скалк-сенсор"
 msgid "Sculk Shrieker"
 msgstr "Скалк-крикун"
 
+msgid "Echo Shard"
+msgstr ""
+

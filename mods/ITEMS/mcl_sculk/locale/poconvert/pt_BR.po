@@ -31,3 +31,6 @@ msgstr "Sensor Sculk"
 msgid "Sculk Shrieker"
 msgstr "Emissor Sculk"
 
+msgid "Echo Shard"
+msgstr ""
+

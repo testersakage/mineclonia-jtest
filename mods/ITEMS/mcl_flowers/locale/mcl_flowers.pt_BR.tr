@@ -1,7 +1,7 @@
 # textdomain: mcl_flowers
 This is a small flower. Small flowers are mainly used for dye production and can also be potted.=Isso é uma flor pequena. Flores pequenas são majoritariamente usadas para a produção de corantes e também podem ser envasadas.
 It can only be placed on a block on which it would also survive.=Apenas pode ser posicionada em um bloco ao qual vai sobreviver.
-@1 (Top Part)=
+@1 (Top Part)=@1 (Topo)
 Poppy=Papoula
 Dandelion=Dente-de-Leão
 Oxeye Daisy=Margarida
@@ -9,11 +9,11 @@ Orange Tulip=Tulipa Laranja
 Pink Tulip=Tulipa Rosa
 Red Tulip=Tulipa Vermelha
 White Tulip=Tulipa Branca
-Allium=Alho Silvestre
-Azure Bluet=Flor Silvestre Azul
-Blue Orchid=Orquídea Azul
-Wither Rose=Flor do Wither
-Lily of the Valley=Lírio do Vale
+Allium=Alho-Silvestre
+Azure Bluet=Flor-Silvestre-Azul
+Blue Orchid=Orquídea-Azul
+Wither Rose=Rosa do Wither
+Lily of the Valley=Lírio-do-Vale
 Cornflower=Centáurea
 Peony=Peônia
 A peony is a large plant which occupies two blocks. It is mainly used in dye production.=Uma peônia é uma planta alta que ocupa dois blocos. É majoritariamente usada para a produção de corante.

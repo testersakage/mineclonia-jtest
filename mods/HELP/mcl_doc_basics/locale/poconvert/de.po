@@ -22,8 +22,8 @@ msgstr "Fortgeschrittene Informationen, die nett zu wissen sind, aber nicht krit
 msgid "Creative Mode"
 msgstr "Kreativmodus"
 
-msgid "Enabling Creative Mode in MineClone 2 applies the following changes:"
-msgstr "Der Kreativmodus in MineClone 2 nimmt die folgenden Änderungen vor:"
+msgid "Enabling Creative Mode in MineClonia applies the following changes:"
+msgstr ""
 
 msgid "• You keep the things you've placed"
 msgstr "• Sie behalten die Dinge, die Sie platzieren"
@@ -109,8 +109,8 @@ msgstr "• [Bild auf]: Nach oben scrollen"
 msgid "• [Page down]: Scroll down"
 msgstr "• [Bild ab]: Nach unten rollen"
 
-msgid "There is also an input history. Minetest saves your previous console inputs which you can quickly access later:"
-msgstr "Es gibt auch eine Eingabe-Historie. Minetest merkt sich Ihre vorherigen Konsoleneingaben, auf die Sie später schnell zugreifen können:"
+msgid "There is also an input history. Luanti saves your previous console inputs which you can quickly access later:"
+msgstr ""
 
 msgid "• [Up]: Go to previous entry in history"
 msgstr "• [Rauf]: Zum vorherigen Eintrag in der Historie gehen"
@@ -127,8 +127,8 @@ msgstr "Serverbefehle (auch „Chat-Befehle“ genannt) sind kleine Helferlein f
 msgid "Server commands can be entered by players using the chat to perform a special server action. There are a few commands which can be issued by everyone, but some commands only work if you have certain privileges granted on the server. There is a small set of basic commands which are always available, other commands can be added by mods."
 msgstr "Serverbefehle können von Spielern im Chat eingegeben werden, um eine besondere Serveraktion auszulösen. Es gibt ein paar Befehle, die von jedem benutzt werden können, aber einige Befehle benötigen Privilegien, die vom Server gewährt werden. Es gibt eine kleine Menge an Grundbefehlen, die immer verfügbar sind, andere Befehle können von Mods hinzugefügt werden."
 
-msgid "To issue a command, simply type it like a chat message or press Minetest's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Minetest command key does the same as the chat key, except that the slash is already entered."
-msgstr "Um einen Befehl zu erteilen, geben Sie ihn einfach wie eine Chatnachricht ein oder drücken Sie Minetests Befehlstaste (Standard: [/]). Alle Befehle müssen mit „/“ beginnen, z.B. „/mods“. Die Minetestbefehlstaste macht das gleiche wie die Chattaste, nur, dass der Schrägstrich schon eingegeben wurde."
+msgid "To issue a command, simply type it like a chat message or press Luanti's command key (default: [/]). All commands have to begin with “/”, for example “/mods”. The Luanti command key does the same as the chat key, except that the slash is already entered."
+msgstr ""
 
 msgid "Commands may or may not give a response in the chat log, but errors will generally be shown in the chat. Try it for yourselves: Close this window and type in the “/mods” command. This will give you the list of available mods on this server."
 msgstr "Befehle können eine Rückmeldung im Chatprotokoll auslösen, müssen aber nicht. Fehlermeldungen tauchen grundsätzlich im Chat auf. Probieren Sie es aus: Schließen Sie dieses Fenster und geben Sie den „/mods“-Befehl ein. Damit erhalten Sie die Liste der vorhandenen Mods auf diesem Server."
@@ -340,32 +340,32 @@ msgstr "Für eine vollständige Liste aller verfügbaren Einstellungen, benutzen
 msgid "Online help"
 msgstr "Online-Hilfe"
 
-msgid "You may want to check out these online resources related to Minetest:"
-msgstr "Sie können diese Onlinequellen zum Thema Minetest besuchen:"
+msgid "You may want to check out these online resources related to Luanti:"
+msgstr ""
 
-msgid "Official homepage of Minetest: <https://minetest.net/>"
-msgstr "Offizielle Minetest-Homepage: <https://minetest.net/>"
+msgid "Official homepage of Luanti: <https://luanti.org/>"
+msgstr ""
 
-msgid "The main place to find the most recent version of Minetest."
-msgstr "Dort findet man die neueste Minetest-Version."
+msgid "The main place to find the most recent version of Luanti."
+msgstr ""
 
 msgid "Community wiki: <https://wiki.minetest.net/>"
 msgstr "Community-Wiki: <https://wiki.minetest.net/>"
 
-msgid "A community-based documentation website for Minetest. Anyone with an account can edit it! It also features a documentation of Minetest Game."
-msgstr "Eine gemeinschaftsbasierte Dokumentationswebpräsenz für Minetest. Jeder mit einem Benutzerkonto kann sie bearbeiten. Enthält auch die Hilfe zu Minetest Game."
+msgid "A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game."
+msgstr ""
 
-msgid "Web forums: <https://forums.minetest.net/>"
-msgstr "Webforen: <https://forums.minetest.net/>"
+msgid "Web forums: <https://forum.luanti.org/>"
+msgstr ""
 
-msgid "A web-based discussion platform where you can discuss everything related to Minetest. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages."
-msgstr "Eine webbasierte Diskussionsplattform, wo Sie über alles zum Thema Minetest diskutieren können. Dort werden auch spielergemachte Mods und Spiele veröffentlicht und diskutiert."
+msgid "A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages."
+msgstr ""
 
 msgid "Chat: <irc://irc.freenode.net#minetest>"
 msgstr "Chat: <irc://irc.freenode.net#minetest>"
 
-msgid "A generic Internet Relay Chat channel for everything related to Minetest where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help."
-msgstr "Ein allgemeiner Internet-Relay-Chat-Kanal für alles über Minetest, wo sich Menschen treffen können, um in Echtzeit zu diskutieren. Wenn Sie IRC nicht verstehen, sehen Sie im Community-Wiki für Hilfe nach."
+msgid "A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help."
+msgstr ""
 
 msgid "Basics"
 msgstr "Grundlagen"
@@ -1372,14 +1372,14 @@ msgstr "• Schutz: Mechanismus, um Eigentum an Gebieten in der Welt zu erlangen
 msgid "Technical terms:"
 msgstr "Technische Begriffe:"
 
-msgid "• Minetest: This game engine"
-msgstr "• Minetest: Diese Spiel-Engine"
+msgid "• Luanti: This game engine"
+msgstr ""
 
-msgid "• Minetest Game: A game for Minetest by the Minetest developers"
-msgstr "• Minetest Game: Ein Spiel für Minetest von den Minetest-Entwicklern"
+msgid "• Minetest Game: A game for Luanti by the Minetest developers"
+msgstr ""
 
-msgid "• Game: A complete playing experience to be used in Minetest; such as a game or sandbox or similar"
-msgstr "• Spiel: Ein vollständiges Spielerlebnis für Minetest, also ein richtiges Spiel oder auch nur eine Sandbox oder ähnliches"
+msgid "• Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar"
+msgstr ""
 
 msgid "• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them"
 msgstr "• Mod: Ein einzelnes Untersystem, welches Funktionalität hinzufügt oder modifiziert; ist das Fundament von Spielen und kann benutzt werden, um sie zu erweitern oder zu modifizieren"
@@ -1390,18 +1390,18 @@ msgstr "• Privileg: Erlaubt einem Spieler, etwas zu tun"
 msgid "• Node: Other word for “block”"
 msgstr "• Node: Anderes Wort für „Block“"
 
-msgid "Minetest"
-msgstr "Minetest"
-
-msgid "Minetest is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Minetest was originally created by Perttu Ahola (alias “celeron55”)."
-msgstr "Minetest ist eine freie Spiel-Engine für Spiele auf Voxelbasis, inspiriert von InfiniMiner, Minecraft, und so weiter. Minetest wurde ursprünglich erfunden von Perttu Ahola (alias „celeron55“)."
-
-msgid "A core feature of Minetest is the built-in modding capability, which all games consist of too. They can be as simple as adding a few decorational blocks or be very complex by e.g. introducing completely new gameplay concepts, generating a completely different kind of world, and many other things."
+msgid "Luanti"
 msgstr ""
 
-msgid "Minetest can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server."
-msgstr "Minetest kann alleine oder online mit mehreren Spielern gespielt werden. Das Onlinespiel funktioniert mit beliebigen Mods, es muss keine Zusatzsoftware installiert werden, da die Mods komplett vom Server zur Verfügung gestellt werden."
+msgid "Luanti (formely Minetest) is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Luanti was originally created by Perttu Ahola (alias “celeron55”)."
+msgstr ""
 
-msgid "MineClonia is a game that is built on top of the Minetest engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
+msgid "A core feature of Luanti is the built-in modding capability, which all games consist of too. They can be as simple as adding a few decorational blocks or be very complex by e.g. introducing completely new gameplay concepts, generating a completely different kind of world, and many other things."
+msgstr ""
+
+msgid "Luanti can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server."
+msgstr ""
+
+msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
 msgstr ""
 

@@ -19,8 +19,8 @@ msgstr "Neige poudreuse"
 msgid "This is a block of snow thats extra fluffy, this means players can sink in it"
 msgstr "Il s'agit d'un bloc de neige très pelucheux, ce qui signifie que les joueurs peuvent s'y enfoncer"
 
-msgid "Powder snow"
-msgstr "Neige poudreuse"
+msgid "Powder Snow Bucket"
+msgstr ""
 
 msgid "This bucket is filled powder snow"
 msgstr "Ce seau est rempli de neige poudreuse"

@@ -61,9 +61,6 @@ msgstr ""
 msgid "Switch stack size"
 msgstr ""
 
-msgid "@1 / @2"
-msgstr ""
-
 msgid "Recipe book"
 msgstr "合成教學"
 
@@ -72,6 +69,9 @@ msgstr "幫助"
 
 msgid "Select player skin"
 msgstr "選擇玩家皮膚"
+
+msgid "Crafting table out of range!"
+msgstr ""
 
 msgid "Crafting"
 msgstr "合成"

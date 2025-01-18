@@ -2,7 +2,7 @@
 Arrow=Flecha
 Ammunition=Munición
 Damage from bow: 1-10=Daño con arco: 1-10
-Damage from dispenser: 3=Daño por dispendsador: 3
+Damage from dispenser: 3=Daño por dispensador: 3
 Arrows are ammunition for bows and dispensers.=Las flechas son municiones para arcos y dispensadores.
 An arrow fired from a bow has a regular damage of 1-9. At full charge, there's a 20% chance of a critical hit dealing 10 damage instead. An arrow fired from a dispenser always deals 3 damage.=Una flecha disparada desde un arco tiene un daño regular de 1-9. A plena carga, hay un 20% de posibilidades de que un golpe crítico inflija 10 daños en su lugar. Una flecha disparada desde un dispensador siempre causa 3 de daño.
 Arrows might get stuck on solid blocks and can be retrieved again. They are also capable of pushing wooden buttons.=Las flechas pueden atascarse en bloques sólidos y pueden recuperarse nuevamente. También son capaces de presionar botones de madera.

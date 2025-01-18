@@ -67,6 +67,12 @@ msgstr "pęd bambusa"
 msgid "Bamboo Mosaic Plank"
 msgstr "deski bambusowe z mozaiką"
 
+msgid "Bamboo Mosaic Stairs"
+msgstr ""
+
+msgid "Bamboo Mosaic Slab"
+msgstr ""
+
 msgid "Scaffolding"
 msgstr "rusztowanie"
 

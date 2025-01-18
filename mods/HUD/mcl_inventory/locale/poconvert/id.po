@@ -61,9 +61,6 @@ msgstr ""
 msgid "Switch stack size"
 msgstr ""
 
-msgid "@1 / @2"
-msgstr ""
-
 msgid "Recipe book"
 msgstr ""
 
@@ -71,6 +68,9 @@ msgid "Help"
 msgstr "Bantuan"
 
 msgid "Select player skin"
+msgstr ""
+
+msgid "Crafting table out of range!"
 msgstr ""
 
 msgid "Crafting"
