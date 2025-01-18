@@ -594,7 +594,7 @@ function evoker_fangs:deal_fang_damage ()
 		if not recently_damaged[object] then
 			local entity = object:get_luaentity ()
 			if object:is_player ()
-				or (entity.is_mob and not entity._is_illager) then
+				or (entity and entity.is_mob and not entity._is_illager) then
 				local cbox = object:get_properties ().collisionbox
 				local pos = object:get_pos ()
 				cbox[1] = cbox[1] + pos.x
