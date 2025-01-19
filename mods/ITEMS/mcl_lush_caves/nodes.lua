@@ -230,16 +230,19 @@ minetest.register_node("mcl_lush_caves:rooted_dirt", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
-	_on_hoe_place = function(_, placer, pointed_thing)
-		local below = vector.offset(pointed_thing.under, 0, -1, 0)
-		if minetest.get_node(below).name == "mcl_lush_caves:hanging_roots" then
-			minetest.remove_node(below)
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
-				minetest.add_item(below, ItemStack("mcl_lush_caves:hanging_roots"))
+	_on_hoe_place = function(itemstack, placer, pointed_thing)
+		local rc, no_wear = mcl_farming.cultivate_dirt(itemstack, placer, pointed_thing)
+		if rc then
+			local below = vector.offset(pointed_thing.under, 0, -1, 0)
+			if minetest.get_node(below).name == "mcl_lush_caves:hanging_roots" then
+				minetest.remove_node(below)
+				if not minetest.is_creative_enabled(placer:get_player_name()) then
+					minetest.add_item(below, ItemStack("mcl_lush_caves:hanging_roots"))
+				end
 			end
 		end
-		-- no truthy return to not interrupt normal hoe_on_place
-		-- as this turns the rooted dirt to dirt as per cultivatable = 1 group
+
+		return rc, no_wear
 	end,
 })
 
