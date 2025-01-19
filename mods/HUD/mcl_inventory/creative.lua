@@ -472,7 +472,7 @@ function mcl_inventory.set_creative_formspec(player)
 			-- Advancements button
 			"image_button[11.575,3.325;1.1,1.1;mcl_achievements_button.png;__mcl_achievements;]",
 			--"style_type[image_button;border=;bgimg=;bgimg_pressed=]",
-			"tooltip[__mcl_achievements;" .. F(S("Advancements")) .. "]",
+			"tooltip[__mcl_achievements;" .. F(S("Achievements")) .. "]",
 
 			-- Switch stack size button
 			"image_button[11.575,4.575;1.1,1.1;default_apple.png;__switch_stack;]",

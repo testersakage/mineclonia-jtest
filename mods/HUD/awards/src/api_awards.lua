@@ -50,7 +50,7 @@ function awards.unlock(name, award)
 	-- Access Player Data
 	local data  = awards.player(name)
 	local awdef = awards.registered_awards[award]
-	assert(awdef, "Unable to unlock an award which doesn't exist!")
+	assert(awdef, "Unable to unlock an achievement that doesn't exist!")
 
 	if data.disabled or
 			(data.unlocked[award] and data.unlocked[award] == award) then
@@ -64,7 +64,7 @@ function awards.unlock(name, award)
 	end
 
 	-- Unlock Award
-	minetest.log("action", name.." has unlocked award "..award)
+	minetest.log("action", name.." has unlocked achievement "..award)
 	data.unlocked[award] = award
 	awards.save()
 
@@ -115,9 +115,9 @@ function awards.unlock(name, award)
 	if awards.show_mode == "chat" then
 		local chat_announce
 		if awdef.secret then
-			chat_announce = S("Secret Award Unlocked: @1", title)
+			chat_announce = S("Secret Achievement Unlocked: @1", title)
 		else
-			chat_announce = S("Award Unlocked: @1", title)
+			chat_announce = S("Achievement Unlocked: @1", title)
 		end
 		-- use the chat console to send it
 		minetest.chat_send_player(name, chat_announce)
@@ -137,13 +137,13 @@ function awards.unlock(name, award)
 		})
 		local hud_announce
 		if awdef.secret == true then
-			hud_announce = S("Secret Advancement Made!")
+			hud_announce = S("Secret Achievement Made!")
 		elseif awdef.type == "Goal" then
 			hud_announce = S("Goal Completed!")
 		elseif awdef.type == "Challenge" then
 			hud_announce = S("Challenge Completed!")
 		else
-			hud_announce = S("Advancement Made!")
+			hud_announce = S("Achievement Made!")
 		end
 		local two = player:hud_add({
 			type = "text",

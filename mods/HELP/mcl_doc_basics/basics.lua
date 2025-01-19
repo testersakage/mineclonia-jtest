@@ -28,7 +28,7 @@ S("• Use the crafting guide (book icon) to learn all the possible crafting rec
 S("• Craft a wooden pickaxe so you can dig stone").."\n"..
 S("• Different tools break different kinds of blocks. Try them out!").."\n"..
 S("• Read entries in this help to learn the rest").."\n"..
-S("• Continue playing as you wish. There's no real goal, but you may want to check the advancements available from the inventory screen. Have fun!").."\n\n"..
+S("• Continue playing as you wish. There's no real goal, but you may want to check the achievements available from the inventory screen. Have fun!").."\n\n"..
 
 S("For the default controls, see the next section [Controls].")
 }})

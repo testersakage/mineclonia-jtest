@@ -4,18 +4,18 @@ local S = awards.translator
 
 minetest.register_chatcommand("awards", {
 	params = S("[c|clear|disable|enable]"),
-	description = S("Show, clear, disable or enable your awards"),
+	description = S("Show, clear, disable or enable your achievements."),
 	func = function(name, param)
 		if param == "clear" then
 			awards.clear_player(name)
 			minetest.chat_send_player(name,
-			S("All your awards and statistics have been cleared. You can now start again."))
+			S("All your achievements and statistics have been cleared. You can now start again."))
 		elseif param == "disable" then
 			awards.disable(name)
-			minetest.chat_send_player(name, S("You have disabled awards."))
+			minetest.chat_send_player(name, S("You have disabled achievements."))
 		elseif param == "enable" then
 			awards.enable(name)
-			minetest.chat_send_player(name, S("You have enabled awards."))
+			minetest.chat_send_player(name, S("You have enabled achievements."))
 		elseif param == "c" then
 			awards.show_to(name, name, nil, true)
 		else
@@ -26,13 +26,13 @@ minetest.register_chatcommand("awards", {
 
 minetest.register_chatcommand("awd", {
 	params = S("<award ID>"),
-	description = S("Show details of an award"),
+	description = S("Show details of an achievement."),
 	func = function(name, param)
 		local def = awards.registered_awards[param]
 		if def then
 			minetest.chat_send_player(name, string.format("%s: %s", def.title, def.description))
 		else
-			minetest.chat_send_player(name, S("Award not found."))
+			minetest.chat_send_player(name, S("Achievement not found."))
 		end
 	end
 })
@@ -42,7 +42,7 @@ minetest.register_chatcommand("awpl", {
 		server = true
 	},
 	params = S("<name>"),
-	description = S("Get the awards statistics for the given player or yourself"),
+	description = S("Dump the achievement statistics of a player or yourself"),
 	func = function(name, param)
 		if not param or param == "" then
 			param = name
