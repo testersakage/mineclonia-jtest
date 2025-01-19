@@ -115,6 +115,7 @@ local witch = table.merge (raid_mob, {
 		bone = "arm",
 	},
 	wielditem_drop_probability = 0.085,
+	_can_serve_as_captain = false,
 })
 
 ------------------------------------------------------------------------
