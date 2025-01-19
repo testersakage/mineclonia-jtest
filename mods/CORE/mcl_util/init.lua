@@ -1540,6 +1540,5 @@ function mcl_util.get_nodepos (pos)
 	return vector.apply (pos, round_trunc)
 end
 
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
 dofile(modpath.."/compat.lua")
