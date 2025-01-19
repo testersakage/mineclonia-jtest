@@ -2,7 +2,7 @@ local has_awards = minetest.get_modpath("awards")
 
 mcl_item_entity = {}
 
-local MULTIPLE_AWARDS_DELAY = 3 --Delay when picking up 1 item prouces multiple awards.
+local MULTIPLE_AWARDS_DELAY = 3 --Delay when picking up 1 item produces multiple awards.
 
 --basic settings
 local item_drop_settings                 = {} --settings table
@@ -50,17 +50,29 @@ mcl_player.register_globalstep(function(player)
 	if player:get_hp() > 0 or not minetest.settings:get_bool("enable_damage") then
 		local pos = player:get_pos()
 
+		local radius = item_drop_settings.xp_radius_magnet
 		local checkpos = vector.offset(pos, 0, item_drop_settings.player_collect_height, 0)
 		--magnet and collection
-		for object in minetest.objects_inside_radius(checkpos, item_drop_settings.xp_radius_magnet) do
+		for object in minetest.objects_inside_radius(checkpos, radius) do
 			if not object:is_player() then
 				local le = object:get_luaentity()
+				local pos = object:get_pos()
 				if le and le.name == "__builtin:item" and not le._removed and
-				vector.distance(checkpos, object:get_pos()) < item_drop_settings.radius_magnet and
+				vector.distance(checkpos, pos) < item_drop_settings.radius_magnet and
 				le._magnet_timer and (le._insta_collect or (le.age > item_drop_settings.age)) then
 					le:pickup(player)
 				elseif le and le.name == "mcl_experience:orb" and not le.collected then
-					le.collector = player:get_player_name()
+					-- Find closest player of unclaimed orb
+					local collector, distance = player, 999999
+					for obj in core.objects_inside_radius(pos, radius) do
+						if obj:is_player() then
+							local dist = vector.distance(obj:get_pos(), pos)
+							if dist < distance then
+								collector, distance = obj, dist
+							end
+						end
+					end
+					le.collector = collector:get_player_name()
 					le.collected = true
 				end
 			end
