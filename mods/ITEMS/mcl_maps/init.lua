@@ -284,15 +284,29 @@ minetest.register_craft({
 	recipe = { "group:filled_map", "mcl_maps:empty_map" },
 })
 
+minetest.register_craft({
+	type = "shapeless",
+	output = "mcl_maps:filled_map",
+	recipe = { "group:filled_map", "group:compass" },
+})
+
 local function on_craft(itemstack, _, old_craft_grid, _)
+	local compass_present = false
 	if itemstack:get_name() == "mcl_maps:filled_map" then
 		for _, stack in pairs(old_craft_grid) do
+			if core.get_item_group(stack:get_name(), "compass") then
+				compass_present = true
+			end
 			if minetest.get_item_group(stack:get_name(), "filled_map") > 0 then
 				itemstack:get_meta():from_table(stack:get_meta():to_table())
-				return itemstack
 			end
 		end
 	end
+	if compass_present then
+		itemstack:get_meta():set_string("mcl_maps:marker", "mcl_maps_player_arrow.png")
+	end
+
+	return itemstack
 end
 
 minetest.register_on_craft(on_craft)
@@ -346,22 +360,24 @@ mcl_player.register_globalstep(function(player)
 		local minp = minetest.string_to_pos(meta:get_string("mcl_maps:minp"))
 		local maxp = minetest.string_to_pos(meta:get_string("mcl_maps:maxp"))
 
-		local marker = "mcl_maps_player_arrow.png"
+		local marker = meta:get("mcl_maps:marker")
 
-		if pos.x < minp.x then
-			marker = "mcl_maps_player_dot.png"
-			pos.x = minp.x
-		elseif pos.x > maxp.x then
-			marker = "mcl_maps_player_dot.png"
-			pos.x = maxp.x
-		end
+		if marker then
+			if pos.x < minp.x then
+				marker = "mcl_maps_player_dot.png"
+				pos.x = minp.x
+			elseif pos.x > maxp.x then
+				marker = "mcl_maps_player_dot.png"
+				pos.x = maxp.x
+			end
 
-		if pos.z < minp.z then
-			marker = "mcl_maps_player_dot.png"
-			pos.z = minp.z
-		elseif pos.z > maxp.z then
-			marker = "mcl_maps_player_dot.png"
-			pos.z = maxp.z
+			if pos.z < minp.z then
+				marker = "mcl_maps_player_dot.png"
+				pos.z = minp.z
+			elseif pos.z > maxp.z then
+				marker = "mcl_maps_player_dot.png"
+				pos.z = maxp.z
+			end
 		end
 
 		if marker == "mcl_maps_player_arrow.png" then
@@ -369,7 +385,7 @@ mcl_player.register_globalstep(function(player)
 			marker = marker .. "^[transformR" .. yaw
 		end
 
-		player:hud_change(hud.marker, "text", marker)
+		player:hud_change(hud.marker, "text", marker or "blank.png")
 		player:hud_change(hud.marker, "offset", { x = (6 - 140 / 2 + pos.x - minp.x) * 2, y = (6 - 140 + maxp.z - pos.z) * 2 })
 	elseif maps[player] then
 		player:hud_change(hud.map, "text", "blank.png")
