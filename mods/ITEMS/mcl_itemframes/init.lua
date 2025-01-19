@@ -113,6 +113,9 @@ function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 		return ostack
 	end
 	local pstack = ItemStack(ostack)
+	local imeta = ostack:get_meta()
+	local nmeta = core.get_meta(pos)
+	nmeta:set_string("infotext", imeta:get_string("name"))
 	local itemstack = pstack:take_item()
 	local inv = minetest.get_meta(pos):get_inventory()
 	drop_item(pos)
