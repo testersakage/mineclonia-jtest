@@ -249,7 +249,7 @@ function mcl_raids.spawn_raid(event)
 					local l = mob:get_luaentity()
 					if l then
 						if jockey then
-							mob:jock_to("mobs_mc:ravager", vector.new(0,14,0), vector.new(0,0,0))
+							l:jock_to("mobs_mc:ravager", vector.new(0,14,0), vector.new(0,0,0))
 						end
 						l.raidmob = true
 						event.health_max = event.health_max + l.health
