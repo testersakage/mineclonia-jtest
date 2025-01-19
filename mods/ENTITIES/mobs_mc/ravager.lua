@@ -1,5 +1,5 @@
 local S = core.get_translator("mobs_mc")
-mcl_mobs.register_mob("mobs_mc:ravager", {
+local ravager = {
 	description = S("Ravager"),
 	type = "monster",
 	spawn_class = "hostile",
@@ -43,6 +43,12 @@ mcl_mobs.register_mob("mobs_mc:ravager", {
 		run_start = 50, run_end = 90, run_speed = 20,
 		punch_start = 100, punch_end = 140, punch_speed = 20,
 	},
-})
+}
+
+ravager.ai_functions = {
+	mcl_mobs.mob_class.check_attack,
+}
+
+mcl_mobs.register_mob("mobs_mc:ravager", ravager)
 
 mcl_mobs.register_egg("mobs_mc:ravager", "Ravager", "#2b2522", "#1c1c1c", 0)
