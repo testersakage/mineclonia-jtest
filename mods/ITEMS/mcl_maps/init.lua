@@ -279,15 +279,6 @@ tt.register_priority_snippet(function(itemstring, _, itemstack)
 end)
 
 minetest.register_craft({
-	output = "mcl_maps:empty_map",
-	recipe = {
-		{ "mcl_core:paper", "mcl_core:paper", "mcl_core:paper" },
-		{ "mcl_core:paper", "group:compass", "mcl_core:paper" },
-		{ "mcl_core:paper", "mcl_core:paper", "mcl_core:paper" },
-	}
-})
-
-minetest.register_craft({
 	type = "shapeless",
 	output = "mcl_maps:filled_map 2",
 	recipe = { "group:filled_map", "mcl_maps:empty_map" },

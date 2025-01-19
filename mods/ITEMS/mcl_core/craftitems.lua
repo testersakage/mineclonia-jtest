@@ -15,6 +15,7 @@ minetest.register_craftitem("mcl_core:paper", {
 	_doc_items_longdesc = S("Paper is used to craft books and maps."),
 	inventory_image = "default_paper.png",
 	groups = { craftitem=1 },
+	_mcl_crafting_output = {square3 = {output = "mcl_maps:empty_map"}}
 })
 
 minetest.register_craftitem("mcl_core:coal_lump", {
