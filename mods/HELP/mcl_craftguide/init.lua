@@ -1007,15 +1007,6 @@ if progressive_mode then
 		end
 	end
 
-	local function reveal_inv_list(list, progress)
-		if not list then return false end
-		local changed = false
-		for _, stack in pairs(list) do
-			changed = changed or reveal_item(stack:get_name(), progress)
-		end
-		return changed
-	end
-
 	local function recipe_unlocked(recipe, progress, show_all)
 		for _, item in pairs(recipe.items) do
 			if not ((core.registered_items[item] or group_cache[item]) and (show_all or progress[item])) then
@@ -1042,22 +1033,13 @@ if progressive_mode then
 		return filtered
 	end
 
-	-- Workaround. Need engine support to detect when a player inventory
-	-- changes instead.
-	local function poll_new_items(player)
-		local inv = player:get_inventory()
-		local progress = get_progress(player)
-
-		local changed = reveal_inv_list(inv:get_list("main"), progress)
-		changed = changed or reveal_inv_list(inv:get_list("armor"), progress)
-		changed = changed or reveal_inv_list(inv:get_list("offhand"), progress)
-
-		if changed then
-			save_progress(player)
+	core.register_on_player_inventory_action(function(player, action, _, info)
+		if action == "put" then
+			if reveal_item(info.stack:get_name(), get_progress(player)) then
+				save_progress(player)
+			end
 		end
-	end
-
-	mcl_player.register_globalstep_slow(poll_new_items)
+	end)
 
 	mcl_craftguide.add_recipe_filter("Default progressive filter", progressive_filter)
 
