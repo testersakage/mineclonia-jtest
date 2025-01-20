@@ -197,9 +197,13 @@ end
 ---@param tools table
 ---@param overrides table|nil
 function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
-	if not mcl_tools.commondefs[toolname] then
-		mcl_tools.commondefs[toolname] = commondefs
+	if mcl_tools.commondefs[toolname] then
+		local msg = "[mcl_tools] mod '%s' trying to register tool '%s' a second time"
+		minetest.log("error", msg:format(minetest.get_current_modname(), toolname))
+		return
 	end
+
+	mcl_tools.commondefs[toolname] = commondefs
 
 	for setname, tooldefs in pairs(tools) do
 		local materialdefs = mcl_tools.sets[setname]
@@ -219,9 +223,13 @@ end
 ---@param tools table
 ---@param overrides table|nil
 function mcl_tools.register_set(setname, materialdefs, tools, overrides)
-	if not mcl_tools.sets[setname] then
-		mcl_tools.sets[setname] = materialdefs
+	if mcl_tools.sets[setname] then
+		local msg = "[mcl_tools] mod '%s' trying to register set '%s' a second time"
+		minetest.log("error", msg:format(minetest.get_current_modname(), setname))
+		return
 	end
+
+	mcl_tools.sets[setname] = materialdefs
 
 	for tool, defs in pairs(tools) do
 		if mcl_tools.commondefs[tool] then
