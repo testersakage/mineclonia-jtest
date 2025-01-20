@@ -309,6 +309,8 @@ local function on_craft(itemstack, _, old_craft_grid, _)
 	end
 	if compass_present then
 		itemstack:get_meta():set_string("mcl_maps:marker", "mcl_maps_player_arrow.png")
+	else
+		itemstack:get_meta():set_string("mcl_maps:marker", "blank.png")
 	end
 
 	return itemstack
@@ -367,7 +369,11 @@ mcl_player.register_globalstep(function(player)
 
 		local marker = meta:get("mcl_maps:marker")
 
-		if marker then
+		if wield:get_name() == "mcl_maps:filled_map_" .. hand_def._mcl_hand_id and not marker then
+			marker = "mcl_maps_player_arrow.png"
+		end
+
+		if marker and marker ~= "blank.png" then
 			if pos.x < minp.x then
 				marker = "mcl_maps_player_dot.png"
 				pos.x = minp.x
@@ -390,7 +396,7 @@ mcl_player.register_globalstep(function(player)
 			marker = marker .. "^[transformR" .. yaw
 		end
 
-		player:hud_change(hud.marker, "text", marker or "blank.png")
+		player:hud_change(hud.marker, "text", marker)
 		player:hud_change(hud.marker, "offset", { x = (6 - 140 / 2 + pos.x - minp.x) * 2, y = (6 - 140 + maxp.z - pos.z) * 2 })
 	elseif maps[player] then
 		player:hud_change(hud.map, "text", "blank.png")
