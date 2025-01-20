@@ -294,6 +294,7 @@ local function on_craft(itemstack, _, old_craft_grid, _)
 	local compass_present = false
 	if itemstack:get_name() == "mcl_maps:filled_map" then
 		for _, stack in pairs(old_craft_grid) do
+			if stack:get_meta():get("mcl_maps:marker") then return ItemStack(nil) end
 			if core.get_item_group(stack:get_name(), "compass") then
 				compass_present = true
 			end
