@@ -122,6 +122,8 @@ mcl_player.register_globalstep(function(player)
 			local item_hud = player:hud_get(offhand_hud.item)
 			if item_hud and item_hud.text ~= item_texture then
 				player:hud_change(offhand_hud.item, "text", item_texture)
+			elseif not item_hud then
+				offhand_hud.item = nil
 			end
 		end
 		if not offhand_hud.wear_bar_bg and minetest.registered_tools[offhand_item] then
