@@ -120,7 +120,7 @@ mcl_player.register_globalstep(function(player)
 			})
 		else
 			local item_hud = player:hud_get(offhand_hud.item)
-			if item_hud.text ~= item_texture then
+			if item_hud and item_hud.text ~= item_texture then
 				player:hud_change(offhand_hud.item, "text", item_texture)
 			end
 		end
