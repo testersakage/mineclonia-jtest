@@ -94,12 +94,19 @@ mcl_stairs.register_stair_and_slab("hardened_clay", {
 local canonical_color = "yellow"
 for name,cdef in pairs(mcl_dyes.colors) do
 	local is_canonical = name == canonical_color
+	local concrete_defs = core.registered_nodes["mcl_colorblocks:concrete_" .. name]
+	local clay_defs = core.registered_nodes["mcl_colorblocks:hardened_clay_" .. name]
+
+	concrete_defs.groups.stonecuttable = extra_nodes and 1
+	clay_defs.groups.stonecuttable = extra_nodes and 1
+
 	mcl_stairs.register_stair_and_slab("concrete_"..name, {
 		description_stair = D(cdef.readable_name .. " Concrete Stairs"),
 		description_slab = D(cdef.readable_name .. " Concrete Slab"),
 		groups={not_in_creative_inventory=extra_nodes and 0 or 1},
 		baseitem="mcl_colorblocks:concrete_"..name,
 		recipeitem=extra_nodes and "mcl_colorblocks:concrete_"..name or "",
+		overrides = {_mcl_stonecutter_recipes = {"mcl_colorblocks:concrete_"..name}}
 	})
 
 	mcl_stairs.register_stair_and_slab("hardened_clay_"..name, {
@@ -108,6 +115,7 @@ for name,cdef in pairs(mcl_dyes.colors) do
 		groups={not_in_creative_inventory=extra_nodes and 0 or 1},
 		baseitem="mcl_colorblocks:hardened_clay_"..name,
 		recipeitem=extra_nodes and "mcl_colorblocks:hardened_clay_"..name or "",
+		overrides = {_mcl_stonecutter_recipes = {"mcl_colorblocks:hardened_clay_"..name}}
 	})
 
 
