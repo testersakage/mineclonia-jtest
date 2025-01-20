@@ -913,8 +913,11 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+-- needed for chat command
+local reveal_item, get_progress, save_progress
+
 if progressive_mode then
-	local function reveal_item(item, progress)
+	function reveal_item(item, progress)
 		item = item and core.registered_aliases[item] or item
 		local def = item and core.registered_items[item]
 		if not def or item == "" or progress[item] then return false end
@@ -930,7 +933,7 @@ if progressive_mode then
 	end
 
 	-- Initialize progress from list of unlocked items in player meta if necessary
-	local function get_progress(player, init)
+	function get_progress(player, init)
 		local name = player:get_player_name()
 		local data = get_player_data(name)
 
@@ -976,7 +979,7 @@ if progressive_mode then
 	-- Groups are not stored, they need to be rebuilt each time, because
 	-- relevant group specifications as well as item groups may change on
 	-- game/mod updates.
-	local function save_progress(player)
+	function save_progress(player)
 		local progress = get_progress(player, false)
 
 		if not progress then
@@ -1127,3 +1130,56 @@ doc.sub.items.register_factoid(nil, "groups", function(_, def)
 	end
 	return ""
 end)
+
+core.register_chatcommand("mcl_craftguide",{
+	params = "show | progress (reset | show)",
+	privs = { },
+	func = function(player_name, param)
+		local player = core.get_player_by_name(player_name)
+		local params = param:split(" ")
+		if #params == 2 and params[1] == "progress" then
+			if not progressive_mode then
+				return false, S("progressive mode disabled")
+			elseif params[2] == "reset" then
+				local data = get_player_data(player_name)
+				-- trick loss prevention in save_progress to
+				-- force erasure of progress metadata
+				data.progress = {UNKNOWN = 1}
+				save_progress(player)
+				-- force reload of progress data
+				data.progress = nil
+				local progress = get_progress(player)
+				-- reveal contents of inventory (and save again)
+				local function reveal_inv_list(list)
+					for _, stack in pairs(list) do
+						reveal_item(stack:get_name(), progress)
+					end
+				end
+				local inv = player:get_inventory()
+				reveal_inv_list(inv:get_list("main"))
+				reveal_inv_list(inv:get_list("armor"))
+				reveal_inv_list(inv:get_list("offhand"))
+				save_progress(player)
+				return true, S("progress reset and saved")
+			elseif params[2] == "show" then
+				local progress = get_progress(player)
+				if not next(progress) then
+					core.chat_send_player(player_name, S("No items known yet"))
+					return true
+				end
+				core.chat_send_player(player_name, S("Recipes using the following items have been unlocked:"))
+				for item, _ in pairs(progress) do
+					if not group_cache[item] then
+						core.chat_send_player(player_name, "[" .. item .. "]: " .. ItemStack(item):get_short_description())
+					end
+				end
+				return true
+			end
+		elseif #params == 1 and params[1] == "show" then
+			mcl_craftguide.show(player_name)
+			return true
+		end
+
+		return false
+	end
+})
