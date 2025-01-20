@@ -235,7 +235,12 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 		if mcl_tools.commondefs[tool] then
 			register_tool(setname, materialdefs, tool, defs, overrides)
 		else
-			local msg = "[mcl_tools] mod '%s' trying to register unknown tool '%s' for set '%s'; dependency missing?"
+			local msg = "[mcl_tools] mod '%s' trying to register unknown tool '%s' for set '%s'"
+			if tool == "hoe" then
+				msg = msg .. "; dependency on 'mcl_farming' is needed"
+			else
+				msg = msg .. "; dependency missing?"
+			end
 			minetest.log("warning", msg:format(minetest.get_current_modname(), tool, setname))
 		end
 	end
