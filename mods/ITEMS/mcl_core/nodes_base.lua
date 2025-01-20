@@ -699,6 +699,7 @@ minetest.register_node("mcl_core:bedrock", {
 	is_ground_content = false,
 	on_blast = function() end,
 	drop = "",
+	place_param2 = 1,
 	_mcl_blast_resistance = 3600000,
 	_mcl_hardness = -1,
 

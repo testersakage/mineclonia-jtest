@@ -303,7 +303,7 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 			local pos1, pos2 = get_mapchunk_area(pos)
 			local h = minetest.hash_node_position(pos1)
 			if bedrock_replaced[h] then
-				if node.name == "mcl_core:bedrock" then
+				if node.name == "mcl_core:bedrock" and node.param2 == 0 then
 					node.name = "mcl_deepslate:deepslate"
 					minetest.set_node(pos, node)
 				end
