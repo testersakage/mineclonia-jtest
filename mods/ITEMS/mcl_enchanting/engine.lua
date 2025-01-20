@@ -573,13 +573,14 @@ function mcl_enchanting.show_enchanting_formspec(player)
 
 	local itemstack = inv:get_stack("enchanting_item", 1)
 	local player_levels = mcl_experience.get_level(player)
+	local is_creative = minetest.is_creative_enabled(name)
 	local y = 0.65
 	local any_enchantment = false
 	local table_slots = mcl_enchanting.get_table_slots(player, itemstack, num_bookshelves)
 	for i, slot in ipairs(table_slots) do
 		any_enchantment = any_enchantment or slot
 		local enough_lapis = inv:contains_item("enchanting_lapis", ItemStack({ name = "mcl_core:lapis", count = i }))
-		local enough_levels = slot and slot.level_requirement <= player_levels
+		local enough_levels = slot and slot.level_requirement <= player_levels or is_creative
 		local can_enchant = (slot and enough_lapis and enough_levels)
 		local ending = (can_enchant and "" or "_off")
 		local hover_ending = (can_enchant and "_hovered" or "_off")
@@ -596,11 +597,12 @@ function mcl_enchanting.show_enchanting_formspec(player)
 				" " ..
 				C("#FFFFFF") ..
 				" . . . ?\n\n" ..
-				(
-					enough_levels and
-					C(enough_lapis and "#818181" or "#FC5454") ..
-					F(S("@1 Lapis Lazuli", i)) .. "\n" .. C("#818181") .. F(S("@1 Enchantment Levels", i)) or
-					C("#FC5454") .. F(S("Level requirement: @1", slot.level_requirement))) .. "]" or "")
+				C(enough_lapis and "#818181" or "#FC5454") ..
+					F(S("@1 Lapis Lazuli", i)) ..
+				( is_creative and "" or "\n" .. ( enough_levels and
+					( C("#818181") .. F(S("@1 Enchantment Levels", i)) ) or
+					( C("#FC5454") .. F(S("Level requirement: @1", slot.level_requirement)) ) )) ..
+				"]" or "")
 			..
 			"style[button_" ..
 			i ..
@@ -648,11 +650,13 @@ function mcl_enchanting.handle_formspec_fields(player, formname, fields)
 		if not slot then
 			return
 		end
-		local player_level = mcl_experience.get_level(player)
-		if player_level < slot.level_requirement then
-			return
+		if not minetest.is_creative_enabled(name) then
+			local player_level = mcl_experience.get_level(player)
+			if player_level < slot.level_requirement then
+				return
+			end
+			mcl_experience.set_level(player, player_level - button_pressed)
 		end
-		mcl_experience.set_level(player, player_level - button_pressed)
 		inv:remove_item("enchanting_lapis", cost)
 		mcl_enchanting.set_enchanted_itemstring(itemstack)
 		mcl_enchanting.set_enchantments(itemstack, slot.enchantments)
