@@ -201,11 +201,15 @@ function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
 		mcl_tools.commondefs[toolname] = commondefs
 	end
 
-	for setname, _ in pairs(mcl_tools.sets) do
+	for setname, tooldefs in pairs(tools) do
 		local materialdefs = mcl_tools.sets[setname]
-		local tooldefs = tools[setname]
 
-		register_tool(setname, materialdefs, toolname, tooldefs, overrides)
+		if materialdefs then
+			register_tool(setname, materialdefs, toolname, tooldefs, overrides)
+		else
+			local msg = "[mcl_tools] mod '%s' trying to register tool '%s' for undefined set '%s'; dependency missing?"
+			minetest.log("warning", msg:format(minetest.get_current_modname(), toolname, setname))
+		end
 	end
 end
 
@@ -220,7 +224,12 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 	end
 
 	for tool, defs in pairs(tools) do
-		register_tool(setname, materialdefs, tool, defs, overrides)
+		if mcl_tools.commondefs[tool] then
+			register_tool(setname, materialdefs, tool, defs, overrides)
+		else
+			local msg = "[mcl_tools] mod '%s' trying to register unknown tool '%s' for set '%s'; dependency missing?"
+			minetest.log("warning", msg:format(minetest.get_current_modname(), tool, setname))
+		end
 	end
 end
 
