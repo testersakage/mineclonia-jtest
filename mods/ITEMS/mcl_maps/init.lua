@@ -28,7 +28,7 @@ local loaded_maps = {}
 
 local c_air = minetest.get_content_id("air")
 
-function mcl_maps.create_map(pos)
+function mcl_maps.create_map(oldstack, pos)
 	local minp = vector.multiply(vector.floor(vector.divide(pos, 128)), 128)
 	local maxp = vector.add(minp, vector.new(127, 127, 127))
 
@@ -44,9 +44,8 @@ function mcl_maps.create_map(pos)
 
 	creating_maps[id] = true
 	minetest.emerge_area(minp, maxp, function(_, _, calls_remaining)
-		if calls_remaining > 0 then
-			return
-		end
+		if calls_remaining > 0 then return end
+
 		local vm = minetest.get_voxel_manip()
 		local emin, emax = vm:read_from_map(minp, maxp)
 		local data = vm:get_data()
@@ -129,13 +128,15 @@ function mcl_maps.create_map(pos)
 		tga_encoder.image(pixels):save(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".tga")
 		creating_maps[id] = nil
 	end)
+	local marker = oldstack:get_meta():get("mcl_maps:marker")
+
+	if marker then itemstack:get_meta():set_string("mcl_maps:marker", marker) end
+
 	return itemstack
 end
 
 function mcl_maps.load_map(id, callback)
-	if not id or id == "" or creating_maps[id] then
-		return false
-	end
+	if not id or id == "" or creating_maps[id] then return false end
 
 	local texture = "mcl_maps_map_texture_" .. id .. ".tga"
 
@@ -163,14 +164,11 @@ function mcl_maps.load_map(id, callback)
 		end
 	end
 
-	if result == false then
-		return false
-	end
+	if result == false then return false end
 
 	if loaded_maps[id] then
-		if callback then
-			callback(texture)
-		end
+		if callback then callback(texture) end
+
 		return texture
 	end
 end
@@ -181,12 +179,11 @@ end
 
 local function fill_map(itemstack, placer, pointed_thing)
 	local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-	if new_stack then
-		return new_stack
-	end
+
+	if new_stack then return new_stack end
 
 	if minetest.settings:get_bool("enable_real_maps", true) then
-		local new_map = mcl_maps.create_map(placer:get_pos())
+		local new_map = mcl_maps.create_map(itemstack, placer:get_pos())
 		itemstack:take_item()
 		if itemstack:is_empty() then
 			return new_map
@@ -290,9 +287,16 @@ minetest.register_craft({
 	recipe = { "group:filled_map", "group:compass" },
 })
 
+minetest.register_craft({
+	type = "shapeless",
+	output = "mcl_maps:empty_map",
+	recipe = { "mcl_maps:empty_map", "group:compass" },
+})
+
 local function on_craft(itemstack, _, old_craft_grid, _)
 	local compass_present = false
-	if itemstack:get_name() == "mcl_maps:filled_map" then
+	local name = itemstack:get_name()
+	if name == "mcl_maps:empty_map" or name == "mcl_maps:filled_map" then
 		for _, stack in pairs(old_craft_grid) do
 			if stack:get_meta():get("mcl_maps:marker") then return ItemStack(nil) end
 			if core.get_item_group(stack:get_name(), "compass") then
