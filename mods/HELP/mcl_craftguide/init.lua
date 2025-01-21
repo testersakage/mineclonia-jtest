@@ -796,7 +796,7 @@ local function on_receive_fields(player, fields)
 		show_fs(player, name)
 
 	elseif fields.prev_alternate then
-		if #data.recipes == 1 then
+		if not data.recipes or #data.recipes == 1 then
 			return
 		end
 
@@ -805,7 +805,7 @@ local function on_receive_fields(player, fields)
 		show_fs(player, name)
 
 	elseif fields.next_alternate then
-		if #data.recipes == 1 then
+		if not data.recipes or #data.recipes == 1 then
 			return
 		end
 
@@ -846,17 +846,20 @@ local function on_receive_fields(player, fields)
 		data.iX = data.iX + (fields.size_inc and 1 or -1)
 		show_fs(player, name)
 	elseif fields.craft_inv and fields.craft_inv == "craft" then
-		local pinv = player:get_inventory()
-		if mcl_crafting_table.has_crafting_table(player) then
-			if not mcl_inventory.get_recipe_groups(pinv, data.recipes[data.rnum], 3, 3) then return end
-			mcl_crafting_table.show_crafting_form(player)
-		elseif data.recipes[data.rnum].width <= pinv:get_width("craft") and table.count(data.recipes[data.rnum].items, function(_,v) return not ItemStack(v):is_empty()  end) <= pinv:get_size("craft") then
-			if not mcl_inventory.get_recipe_groups(pinv, data.recipes[data.rnum], 2, 2) then return end
-			minetest.show_formspec(name, "", player:get_inventory_formspec())
-		else
+		local recipe = data.recipes and data.recipes[data.rnum]
+		if not recipe then
 			return
+		elseif mcl_crafting_table.has_crafting_table(player) then
+			mcl_crafting_table.show_crafting_form(player)
+		else
+			local count = table.count(recipe.items, function(_,v) return not ItemStack(v):is_empty()  end)
+			if recipe.width <= 2 and count <= 4 then
+				minetest.show_formspec(name, "", player:get_inventory_formspec())
+			else
+				return
+			end
 		end
-		mcl_inventory.to_craft_grid(player, data.recipes[data.rnum])
+		mcl_inventory.to_craft_grid(player, recipe)
 	else
 		local item
 		for field, _ in pairs(fields) do
