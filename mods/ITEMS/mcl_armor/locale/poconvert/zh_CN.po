@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-21 15:27+0000\n"
+"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_armor/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
 msgstr "这是一件可装备的盔甲，它能减少你所受到的伤害量。"
@@ -47,49 +48,49 @@ msgid "Player isn't online"
 msgstr "玩家未上线"
 
 msgid "Bolt Armor Trim"
-msgstr ""
+msgstr "镶铆盔甲纹饰"
 
 msgid "Coast Armor Trim"
-msgstr ""
+msgstr "海岸盔甲纹饰"
 
 msgid "Dune Armor Trim"
-msgstr ""
+msgstr "沙丘盔甲纹饰"
 
 msgid "Eye Armor Trim"
-msgstr ""
+msgstr "眼眸盔甲纹饰"
 
 msgid "Flow Armor Trim"
-msgstr ""
+msgstr "涡流盔甲纹饰"
 
 msgid "Rib Armor Trim"
-msgstr ""
+msgstr "肋骨盔甲纹饰"
 
 msgid "Sentry Armor Trim"
-msgstr ""
+msgstr "哨兵盔甲纹饰"
 
 msgid "Silence Armor Trim"
-msgstr ""
+msgstr "幽静盔甲纹饰"
 
 msgid "Snout Armor Trim"
-msgstr ""
+msgstr "猪鼻盔甲纹饰"
 
 msgid "Spire Armor Trim"
-msgstr ""
+msgstr "尖塔盔甲纹饰"
 
 msgid "Tide Armor Trim"
-msgstr ""
+msgstr "潮汐盔甲纹饰"
 
 msgid "Vex Armor Trim"
-msgstr ""
+msgstr "恼鬼盔甲纹饰"
 
 msgid "Ward Armor Trim"
-msgstr ""
+msgstr "监守盔甲纹饰"
 
 msgid "Wayfinder Armor Trim"
-msgstr ""
+msgstr "向导盔甲纹饰"
 
 msgid "Wild Armor Trim"
-msgstr ""
+msgstr "荒野盔甲纹饰"
 
 msgid "Golden Helmet"
 msgstr "金头盔"
@@ -216,4 +217,3 @@ msgstr "原料："
 
 msgid "Ingot & Crystals"
 msgstr "锭和晶体"
-
