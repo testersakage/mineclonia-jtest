@@ -59,7 +59,9 @@ local function set_inventory(player)
 	mcl_player.set_inventory_formspec (player, formspec, 0)
 end
 
-function mcl_inventory.get_recipe_groups(pinv, craft, optional_width, optional_height)
+function mcl_inventory.get_recipe_groups(player, craft, optional_width, optional_height)
+	return_fields(player, "craft")
+	local pinv = player:get_inventory()
 	local grid_width = optional_width or pinv:get_width("craft")
 	local grid_height = optional_height or math.ceil(pinv:get_size("craft") / grid_width)
 	local craft_size = table.max_index(craft.items)
@@ -136,7 +138,7 @@ function mcl_inventory.to_craft_grid(player, craft)
 	return_fields(player, "craft")
 	local pinv = player:get_inventory()
 	if craft.type == "normal" then
-		local recipe = mcl_inventory.get_recipe_groups(pinv, craft)
+		local recipe = mcl_inventory.get_recipe_groups(player, craft)
 		if recipe then
 			for k,it in pairs(recipe) do
 				local pit = ItemStack(it)
