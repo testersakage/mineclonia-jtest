@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-21 15:27+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/awards/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Secret Award Unlocked: @1"
 msgstr "秘密獎勵已解鎖：@1"
@@ -65,7 +67,7 @@ msgid "Error: No achivements available."
 msgstr "錯誤：沒有可用的成就。"
 
 msgid "OK"
-msgstr "好的"
+msgstr "好"
 
 msgid "(Secret Award)"
 msgstr "（祕密獎勵）"
@@ -95,13 +97,13 @@ msgid "Send a chat message"
 msgstr ""
 
 msgid "Chat @1 times"
-msgstr ""
+msgstr "聊天@1次"
 
 msgid "@1/@2 joins"
 msgstr ""
 
 msgid "Join once"
-msgstr ""
+msgstr "加入一次"
 
 msgid "Join @1 times"
 msgstr "加入 @1 次"
@@ -116,10 +118,10 @@ msgid "Die @1 times of @2"
 msgstr ""
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "死亡@1次。"
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "挖掘@1次"
 
 msgid "@1/@2 dug"
 msgstr ""
@@ -131,10 +133,10 @@ msgid "Mine: @1×@2"
 msgstr ""
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "挖掘 @1 個方塊。"
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "挖掘 @1 個方塊。"
 
 msgid "@1/@2 placed"
 msgstr ""
@@ -146,10 +148,10 @@ msgid "Place: @1×@2"
 msgstr ""
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "放置 @1 個方塊。"
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "放置 @1 個方塊。"
 
 msgid "@1/@2 crafted"
 msgstr ""
@@ -180,4 +182,3 @@ msgstr ""
 
 msgid "Eat @1 items."
 msgstr ""
-
