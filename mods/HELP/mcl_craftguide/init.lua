@@ -761,7 +761,7 @@ local function get_init_items()
 								usages_cache[ingredient] = usages_cache[ingredient] or {}
 								table.insert(usages_cache[ingredient], recipe)
 							else
-								minetest.log("warning", S("Invalid crafting ingredient: \"@1\" (dosent exist)", ingredient))
+								minetest.log("warning", "[mcl_craftguide] ingredient \"" .. ingredient .. "\" doesn't exist")
 							end
 						end
 					end
