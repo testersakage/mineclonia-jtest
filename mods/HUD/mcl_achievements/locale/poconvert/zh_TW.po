@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-21 15:27+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_achievements/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Benchmarking"
 msgstr ""
@@ -20,7 +22,7 @@ msgid "Craft a crafting table from 4 wooden planks."
 msgstr "使用 4 塊木板合成一張合成台。"
 
 msgid "Time to Mine!"
-msgstr "是時候挖掘了！"
+msgstr "挖掘時間！"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr "使用合成台用木板和木棒合成木鎬。"
@@ -80,13 +82,13 @@ msgid "Pick up a diamond from the floor."
 msgstr ""
 
 msgid "Into Fire"
-msgstr ""
+msgstr "火中取栗"
 
 msgid "Pick up a blaze rod from the floor."
 msgstr ""
 
 msgid "Cow Tipper"
-msgstr ""
+msgstr "鬥牛勇士"
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
@@ -132,7 +134,7 @@ msgid "Take an iron ingot from a furnace's output slot.\n"
 msgstr ""
 
 msgid "Delicious Fish"
-msgstr ""
+msgstr "年年有魚"
 
 msgid "Take a cooked fish from a furnace.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
@@ -207,7 +209,7 @@ msgid "Catch a fish... without a fishing rod!"
 msgstr ""
 
 msgid "The Cutest Predator"
-msgstr ""
+msgstr "最萌凶物"
 
 msgid "Catch an Axolotl with a bucket!"
 msgstr ""
@@ -219,13 +221,13 @@ msgid "Summon the wither from the dead."
 msgstr ""
 
 msgid "Free the End"
-msgstr ""
+msgstr "解放末地"
 
 msgid "Kill the ender dragon. Good Luck!"
 msgstr ""
 
 msgid "Fishy Business"
-msgstr ""
+msgstr "捕魚大業"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
@@ -251,7 +253,7 @@ msgid "Brew a Potion.\n"
 msgstr ""
 
 msgid "Enchanter"
-msgstr ""
+msgstr "魔咒師"
 
 msgid "Enchant an item using an Enchantment Table."
 msgstr ""
@@ -269,7 +271,7 @@ msgid "Use a fully powered beacon."
 msgstr ""
 
 msgid "The End... Again..."
-msgstr ""
+msgstr "末地…重演…"
 
 msgid "Respawn the Ender Dragon."
 msgstr ""
@@ -317,7 +319,7 @@ msgid "Place a dispenser."
 msgstr ""
 
 msgid "Pork Chop"
-msgstr ""
+msgstr "美味猪排"
 
 msgid "Eat a cooked porkchop."
 msgstr ""
@@ -375,4 +377,3 @@ msgstr ""
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
-
