@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-22 03:38+0000\n"
+"PO-Revision-Date: 2025-01-23 00:25+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -469,7 +469,7 @@ msgid "• Space: Jump"
 msgstr "• Espacio: Saltar"
 
 msgid "• Shift: Sneak"
-msgstr "• Shift: Ir sigilosamente"
+msgstr "• Shift: Agacharse"
 
 msgid "While on a ladder, swimming in a liquid or fly mode is active"
 msgstr "Mientras se encuentra en una escalera, nadas en un líquido o el modo de vuelo está activo"
@@ -508,10 +508,12 @@ msgid "• Shift+Right mouse button: Build"
 msgstr "• Shift+Botón derecho del ratón: Construir"
 
 msgid "• Roll mouse wheel / B / N: Select next/previous item in hotbar"
-msgstr "• Rueda del ratón / B / N: Seleccione el siguiente/anterior ítem del hotbar"
+msgstr ""
+"• Rueda del ratón / B / N: Seleccione el siguiente/anterior ítem de la barra "
+"de ítems"
 
 msgid "• 1-9: Select item in hotbar directly"
-msgstr "• 1-9: Selecciona un ítem del hotbar directamente"
+msgstr "• 1-9: Selecciona un ítem de la barra de ítems directamente"
 
 msgid "• Q: Drop item stack"
 msgstr "• Q: Soltar pila de ítems"
@@ -682,22 +684,29 @@ msgid "• Sneak+Left click: Automatically transfer item stack (Sneak is by defa
 msgstr "• Caminar+Clic izquierdo: Transferir automáticamente la pila de ítems (Caminar es [Shift] por defecto)"
 
 msgid "Hotbar"
-msgstr "Hotbar"
+msgstr "Barra de ítems"
 
 msgid "At the bottom of the screen you see some squares. This is called the “hotbar”, and contains the items you have put in the last row of your inventory."
-msgstr "En la parte inferior de la pantalla verás unos cuadrados. Estos se llama “hotbar”, y contienen los ítems que has colocado en la última fila de tu inventario."
+msgstr ""
+"En la parte inferior de la pantalla verás unos cuadrados. Estos se llama “"
+"barra de ítems”, y contienen los ítems que has colocado en la última fila de "
+"tu inventario."
 
 msgid "You can change the selected item with the mouse wheel or the keyboard:"
 msgstr "Puede cambiar el ítem seleccionado con la rueda del ratón o el teclado:"
 
 msgid "• Select previous item in hotbar: [Mouse wheel up] or [B]"
-msgstr "• Seleccionar el ítem anterior en el hotbar: [Rueda del ratón hacia arriba] o [B]"
+msgstr ""
+"• Seleccionar el ítem anterior de la barra de ítems: "
+"[Rueda del ratón hacia arriba] o [B]"
 
 msgid "• Select next item in hotbar: [Mouse wheel down] or [N]"
-msgstr "• Seleccionar el siguiente ítem en el hotbar: [Rueda del ratón hacia abajo] o [N]"
+msgstr ""
+"• Seleccionar el siguiente ítem de la barra de ítems: "
+"[Rueda del ratón hacia abajo] o [N]"
 
 msgid "• Select item in hotbar directly: [1]-[9]"
-msgstr "• Seleccionar un ítem directamente en el hotbar: [1]-[9]"
+msgstr "• Seleccionar un ítem directamente de la barra de ítems: [1]-[9]"
 
 msgid "The selected item is also your wielded item."
 msgstr "El ítem seleccionado es también el ítem que utilizas."
@@ -907,7 +916,10 @@ msgid "Details:"
 msgstr "Detalles:"
 
 msgid "You have 0-20 hunger points, indicated by 20 drumstick half-icons above the hotbar. You also have an invisible attribute: Saturation."
-msgstr "Tienes entre 0-20 puntos de hambre, que se indican con 20 íconos de medio muslo sobre el hotbar. También tienes un atributo invisible: Saturación."
+msgstr ""
+"Tienes entre 0-20 puntos de hambre, que se indican con 20 íconos de medio "
+"muslo sobre la barra de ítems. También tienes un atributo invisible: "
+"Saturación."
 
 msgid "Hunger points reflect how full you are while saturation points reflect how long it takes until you're hungry again."
 msgstr "Los puntos de hambre reflejan lo lleno que estás, mientras que los puntos de saturación reflejan cuánto tiempo tardas en volver a tener hambre."
@@ -1069,16 +1081,23 @@ msgid "• Switch camera mode: [F7]"
 msgstr "• Cambiar el modo de cámara: [F7]"
 
 msgid "Sneaking"
-msgstr "Ir sigilosamente"
+msgstr "Agacharse"
 
 msgid "Sneaking makes you walk slower and prevents you from falling off the edge of a block."
-msgstr "Ir sigilosamente hace que camines más lento y evita que te caigas del borde de un bloque."
+msgstr ""
+"Agacharse hace que camines más lento y evita que te caigas del borde de un "
+"bloque."
 
 msgid "To sneak, hold down the sneak key (default: [Shift]). When you release it, you stop sneaking. Careful: When you release the sneak key at a ledge, you might fall!"
-msgstr "Para ir sigilosamente, mantén presionada la tecla de caminar (por defecto: [Shift]). Cuando la sueltes, dejarás de ir sigilosamente. ¡Cuidado: cuando sueltes la tecla de caminar en un borde, podrías caerte!"
+msgstr ""
+"Para agacharse, mantén presionada la tecla de caminar (por defecto: [Shift])"
+". Cuando la sueltes, dejarás de ir agachado. ¡Cuidado: cuando sueltes la "
+"tecla de caminar en un borde, podrías caerte!"
 
 msgid "Sneaking only works when you stand on solid ground, are not in a liquid and don't climb."
-msgstr "Ir sigilosamente solo funciona cuando estás en un terreno sólido, no estás en un líquido y no trepas."
+msgstr ""
+"Agacharse solo funciona cuando estás en un terreno sólido, no estás en un "
+"líquido y no trepas."
 
 msgid "Players"
 msgstr "Jugadores"
@@ -1090,7 +1109,9 @@ msgid "Players are living beings. They start with a number of health points (HP)
 msgstr "Los jugadores son seres vivos. Comienzan con una cantidad determinada de puntos de salud (PS) y una cantidad determinada de puntos de respiración (BP)."
 
 msgid "Players are capable of walking, sneaking, jumping, climbing, swimming, diving, mining, building, fighting and using tools and blocks."
-msgstr "Los jugadores son capaces de caminar, ir sigilosamente, saltar, escalar, nadar, bucear, minar, construir, luchar y usar herramientas y bloques."
+msgstr ""
+"Los jugadores son capaces de caminar, agacharse, saltar, escalar, nadar, "
+"bucear, minar, construir, luchar y usar herramientas y bloques."
 
 msgid "Players can take damage for a variety of reasons:"
 msgstr "Los jugadores pueden sufrir daños por diversas razones:"
@@ -1270,7 +1291,9 @@ msgid "• Punching: Attacking with left-click, is also used on blocks"
 msgstr "• Puñetazos: Atacar con clic izquierdo, también se utiliza en bloques"
 
 msgid "• Sneaking: Walking slowly while (usually) avoiding to fall over edges"
-msgstr "• Ir sigilosamente: caminar lentamente mientras se evita (generalmente) caerse por los bordes"
+msgstr ""
+"• Agacharse: caminar lentamente mientras se evita (generalmente) caerse por "
+"los bordes"
 
 msgid "• Climbing: Moving up or down a climbable block"
 msgstr "• Escalada: subir o bajar un bloque escalable"
@@ -1366,7 +1389,7 @@ msgid "Interface"
 msgstr "Interfaz"
 
 msgid "• Hotbar: Inventory slots at the bottom"
-msgstr "• Hotbar: ranuras de inventario en la parte inferior"
+msgstr "• Barra de ítems: ranuras de inventario en la parte inferior"
 
 msgid "• Statbar: Indicator made out of half-symbols, used for health and breath"
 msgstr "• Barra de estadística: Indicador formado por medio de símbolos, utilizado para la salud y la respiración"
