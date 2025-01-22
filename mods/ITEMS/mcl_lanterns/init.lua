@@ -62,6 +62,9 @@ local function check_placement(node, wdir)
 						return true
 					end
 				end
+				if core.get_item_group(nn, "slab") > 0 and core.get_item_group(nn, "slab_top") <= 0 then
+					return true
+				end
 				return false
 			end
 		else --assuming wdir == 1
