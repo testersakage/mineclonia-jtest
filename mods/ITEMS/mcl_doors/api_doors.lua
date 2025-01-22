@@ -191,6 +191,17 @@ function mcl_doors:register_door(name, def)
 			end
 			return false
 		end,
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			local dir = oldnode.name:find("_t_") and -1 or 1
+			if oldmetadata.fields["rotation"] == 1 then
+				oldmetadata.fields["rotation"] = 0
+			else
+				if not core.is_creative_enabled(digger:get_player_name()) then
+					core.add_item(pos, name)
+				end
+				core.remove_node(vector.offset(pos, 0, dir, 0))
+			end
+		end,
 		paramtype = "light",
 		paramtype2 = "facedir",
 		sounds = def.sounds,
@@ -207,16 +218,6 @@ function mcl_doors:register_door(name, def)
 		_on_wind_charge_hit = function(pos)
 			if mcl_doors.is_open(pos) then close(pos) else open(pos) end
 			return true
-		end,
-		after_dig_node = function(pos, _, oldmetadata, digger)
-			if oldmetadata.fields["rotation"] == 1 then
-				oldmetadata.fields["rotation"] = 0
-			else
-				if not core.is_creative_enabled(digger:get_player_name()) then
-					core.add_item(pos, name)
-				end
-				core.remove_node(vector.offset(pos, 0, 1, 0))
-			end
 		end,
 		node_box = {
 			fixed = def.node_box_bottom,
@@ -238,13 +239,6 @@ function mcl_doors:register_door(name, def)
 			pos.y = pos.y - 1
 			if mcl_doors.is_open(pos) then close(pos) else open(pos) end
 			return true
-		end,
-		after_dig_node = function(pos, _, oldmetadata, _)
-			if oldmetadata.fields["rotation"] == 1 then
-				oldmetadata.fields["rotation"] = 0
-			else
-				core.remove_node(vector.offset(pos, 0, -1, 0))
-			end
 		end,
 		node_box = {
 			fixed = def.node_box_top,
