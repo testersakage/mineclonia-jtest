@@ -64,29 +64,6 @@ function mcl_cauldrons.add_level(pos, amount, liquid)
 	end
 end
 
-local function get_node_box(level)
-	local floor_y = (level * 3 - 2) / 16
-
-	return {
-		fixed = {
-			{-0.5, -0.1875, -0.5, -0.375, 0.5, 0.5}, -- Left wall
-			{0.375, -0.1875, -0.5, 0.5, 0.5, 0.5}, -- Right wall
-			{-0.375, -0.1875, 0.375, 0.375, 0.5, 0.5}, -- Back wall
-			{-0.375, -0.1875, -0.5, 0.375, 0.5, -0.375}, -- Front wall
-			{-0.5, -0.3125, -0.5, 0.5, floor_y, 0.5}, -- Floor
-			{-0.5, -0.5, -0.5, -0.375, -0.3125, -0.25}, -- Left front foot, part 1
-			{-0.375, -0.5, -0.5, -0.25, -0.3125, -0.375}, -- Left front foot, part 2
-			{-0.5, -0.5, 0.25, -0.375, -0.3125, 0.5}, -- Left back foot, part 1
-			{-0.375, -0.5, 0.375, -0.25, -0.3125, 0.5}, -- Left back foot, part 2
-			{0.375, -0.5, 0.25, 0.5, -0.3125, 0.5}, -- Right back foot, part 1
-			{0.25, -0.5, 0.375, 0.375, -0.3125, 0.5}, -- Right back foot, part 2
-			{0.375, -0.5, -0.5, 0.5, -0.3125, -0.25}, -- Right front foot, part 1
-			{0.25, -0.5, -0.5, 0.375, -0.3125, -0.375}, -- Right front foot, part 2
-		},
-		type = "fixed"
-	}
-end
-
 local function return_bucket(itemstack, placer, pointed_thing)
 	if not placer or not placer:is_player() then return end
 
@@ -168,30 +145,61 @@ local function bucket_place_empty(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-core.register_node("mcl_cauldrons:cauldron", {
-	_doc_items_longdesc = S("Cauldrons are used to store water and slowly fill up under rain."),
-	_doc_items_usagehelp = S("Place a water bucket into the cauldron to fill it with water. Place an empty bucket on a full cauldron to retrieve the water. Place a water bottle into the cauldron to fill the cauldron to one third with water. Place a glass bottle in a cauldron with water to retrieve one third of the water."),
+local function get_tiles(level, liquid_texture)
+	local base = "[combine:32x32:0,0=mcl_cauldrons_cauldron_side.png"..
+	":0,16=mcl_cauldrons_cauldron_inner.png:16,0=mcl_cauldrons_cauldron_top.png"..
+	":16,16=(mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_bottom.png)"
+
+	local tiles = {{color = "white", name = base}, "blank.png", "blank.png", "blank.png"}
+
+	if level and liquid_texture then for i = 1, level do tiles[i + 1] = liquid_texture end end
+
+	return tiles
+end
+
+local collision_box = {
+	fixed = {
+		{-0.5, -0.1875, -0.5, -0.375, 0.5, 0.5},
+		{0.375, -0.1875, -0.5, 0.5, 0.5, 0.5},
+		{-0.375, -0.1875, 0.375, 0.375, 0.5, 0.5},
+		{-0.375, -0.1875, -0.5, 0.375, 0.5, -0.375},
+		{-0.5, -0.3125, -0.5, 0.5, -0.1875, 0.5},
+		{-0.5, -0.5, -0.5, -0.375, -0.3125, -0.25},
+		{-0.375, -0.5, -0.5, -0.25, -0.3125, -0.375},
+		{-0.5, -0.5, 0.25, -0.375, -0.3125, 0.5},
+		{-0.375, -0.5, 0.375, -0.25, -0.3125, 0.5},
+		{0.375, -0.5, 0.25, 0.5, -0.3125, 0.5},
+		{0.25, -0.5, 0.375, 0.375, -0.3125, 0.5},
+		{0.375, -0.5, -0.5, 0.5, -0.3125, -0.25},
+		{0.25, -0.5, -0.5, 0.375, -0.3125, -0.375}
+	},
+	type = "fixed"
+}
+
+local tpl_cauldrons = {
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
 	_on_bucket_place = bucket_place,
-	_tt_help = S("Stores water"),
-	description = S("Cauldron"),
-	drawtype = "nodebox",
-	groups = {_mcl_partial = 2, cauldron = 1, comparator_signal = 0, deco_block = 1, pickaxey = 1},
-	inventory_image = "mcl_cauldrons_cauldron.png",
+	collision_box = collision_box,
+	drawtype = "mesh",
 	is_ground_content = false,
-	node_box = get_node_box(0),
+	mesh = "mcl_cauldrons_cauldron.obj",
 	paramtype = "light",
 	selection_box = {type = "regular"},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
-	tiles = {
-		"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_top.png",
-		"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_bottom.png",
-		"mcl_cauldrons_cauldron_side.png"
-	},
+	use_texture_alpha = "clip"
+}
+
+core.register_node("mcl_cauldrons:cauldron", table.merge(tpl_cauldrons, {
+	_doc_items_longdesc = S("Cauldrons are used to store water and slowly fill up under rain."),
+	_doc_items_usagehelp = S("Place a water bucket into the cauldron to fill it with water. Place an empty bucket on a full cauldron to retrieve the water. Place a water bottle into the cauldron to fill the cauldron to one third with water. Place a glass bottle in a cauldron with water to retrieve one third of the water."),
+	_tt_help = S("Stores water"),
+	description = S("Cauldron"),
+	groups = {_mcl_partial = 2, cauldron = 1, comparator_signal = 0, deco_block = 1, pickaxey = 1},
+	inventory_image = "mcl_cauldrons_cauldron.png",
+	tiles = get_tiles(0),
 	wield_image = "mcl_cauldrons_cauldron.png",
-	use_texture_alpha = "opaque"
-})
+}))
 
 --- Register filled cauldrons based on it's bucket counterpart
 --- @param id string
@@ -207,33 +215,19 @@ function mcl_cauldrons.register_filled_cauldron(id, defs, overrides)
 	for i = 1, 3 do
 		local name = "mcl_cauldrons:cauldron_" .. i .. "_" .. id
 
-		core.register_node(":" .. name, table.merge({
+		core.register_node(":" .. name, table.merge(tpl_cauldrons, {
 			_doc_items_create_entry = false,
 			_mcl_baseitem = "mcl_cauldrons:cauldron",
-			_mcl_blast_resistance = 2,
 			_mcl_cauldrons_liquid = id,
-			_mcl_hardness = 2,
-			_on_bucket_place = bucket_place,
 			_on_bucket_place_empty = bucket_place_empty,
-			collision_box = get_node_box(0),
 			description = S("Cauldron - @1 (@2/3)", defs.description_name, i),
-			drawtype = "nodebox",
 			drop = "mcl_cauldrons:cauldron",
 			groups = table.merge({
 				_mcl_partial = 2, cauldron = (1 + i), cauldron_filled = i,
 				comparator_signal = i, not_in_creative_inventory = 1, pickaxey = 1
 			}, defs.groups or {}),
-			is_ground_content = false,
-			node_box = get_node_box(i),
-			paramtype = "light",
-			selection_box = {type = "regular"},
-			sounds = mcl_sounds.node_sound_metal_defaults(),
-			tiles = {
-				defs.liquid_texture.."^mcl_cauldrons_cauldron_top.png",
-				"mcl_cauldrons_cauldron_inner.png^mcl_cauldrons_cauldron_bottom.png",
-				"mcl_cauldrons_cauldron_side.png"
-			},
-			use_texture_alpha = "opaque"
+			mesh = "mcl_cauldrons_cauldron.obj",
+			tiles = get_tiles(i, defs.liquid_texture)
 		}, overrides or {}))
 	end
 end
