@@ -582,6 +582,14 @@ function mcl_enchanting.show_enchanting_formspec(player)
 		local enough_lapis = inv:contains_item("enchanting_lapis", ItemStack({ name = "mcl_core:lapis", count = i }))
 		local enough_levels = slot and slot.level_requirement <= player_levels or is_creative
 		local can_enchant = (slot and enough_lapis and enough_levels)
+		local level_tooltip = ""
+		if slot and not is_creative then
+			if enough_levels then
+				level_tooltip = "\n" .. C("#818181") .. F(S("@1 Enchantment Levels", i))
+			else
+				level_tooltip = "\n" .. C("#FC5454") .. F(S("Level requirement: @1", slot.level_requirement))
+			end
+		end
 		local ending = (can_enchant and "" or "_off")
 		local hover_ending = (can_enchant and "_hovered" or "_off")
 		formspec = formspec
@@ -599,9 +607,7 @@ function mcl_enchanting.show_enchanting_formspec(player)
 				" . . . ?\n\n" ..
 				C(enough_lapis and "#818181" or "#FC5454") ..
 					F(S("@1 Lapis Lazuli", i)) ..
-				( is_creative and "" or "\n" .. ( enough_levels and
-					( C("#818181") .. F(S("@1 Enchantment Levels", i)) ) or
-					( C("#FC5454") .. F(S("Level requirement: @1", slot.level_requirement)) ) )) ..
+				level_tooltip ..
 				"]" or "")
 			..
 			"style[button_" ..
