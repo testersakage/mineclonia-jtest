@@ -49,7 +49,7 @@ local function check_placement(node, wdir)
 		--0: ceiling
 		--1: floor
 		if wdir == 0 then
-			if def.groups.solid or def.groups.opaque then
+			if core.get_item_group(nn, "solid") > 0 or core.get_item_group(nn, "opaque") > 0 then
 				return true
 			else
 				for _,i in ipairs(allowed_non_solid_nodes_ceiling) do
@@ -68,7 +68,7 @@ local function check_placement(node, wdir)
 				return false
 			end
 		else --assuming wdir == 1
-			if def.groups.solid or def.groups.opaque then
+			if core.get_item_group(nn, "solid") > 0 or core.get_item_group(nn, "opaque") > 0 then
 				return true
 			else
 				for _,i in ipairs(allowed_non_solid_nodes_floor) do
