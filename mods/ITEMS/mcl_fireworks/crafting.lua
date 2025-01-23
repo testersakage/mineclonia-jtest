@@ -128,7 +128,7 @@ local function calculate_color(first, last)
 		r = av(first.r, last.r),
 		g = av(first.g, last.g),
 		b = av(first.b, last.b),
-    }
+	}
 end
 
 local function cs_to_table(color)
