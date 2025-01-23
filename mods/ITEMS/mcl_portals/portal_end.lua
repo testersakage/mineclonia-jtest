@@ -151,6 +151,27 @@ local function show_credits(player)
 	end
 end
 
+local function teleport_object(obj, target, original_dim)
+	obj:set_pos(target)
+
+	if obj:is_player() then
+		-- Look towards the main End island
+		if original_dim ~= "end" then
+			obj:set_look_horizontal(math.pi/2)
+		-- Show credits
+		else
+			show_credits(obj)
+		end
+		mcl_worlds.dimension_change(obj, mcl_worlds.pos_to_dimension(target))
+		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
+	else
+		local l = obj:get_luaentity()
+		if l and l.is_mob then
+			l._just_portaled = 5
+		end
+	end
+end
+
 function mcl_portals.end_teleport(obj, pos)
 	if not obj then return end
 	local pos = pos or obj:get_pos()
@@ -166,40 +187,17 @@ function mcl_portals.end_teleport(obj, pos)
 		end
 
 		target = target or mcl_spawn.get_world_spawn_pos()
+		teleport_object(obj, target, dim)
 	else
 		-- End portal in any other dimension:
 		-- Teleport to the End at a fixed position.
 		-- The destination is built by mcl_structures.
 
-		local platform_pos = mcl_vars.mg_end_platform_pos
 		-- force emerge of target1 area
-		minetest.get_voxel_manip():read_from_map(platform_pos, platform_pos)
-		if not minetest.get_node_or_nil(platform_pos) then
-			minetest.emerge_area(vector.subtract(platform_pos, 3), vector.add(platform_pos, 3))
-		end
-
-		target = table.copy(platform_pos)
-		target.y = target.y + 1
-	end
-
-	-- Teleport
-	obj:set_pos(target)
-
-	if obj:is_player() then
-		-- Look towards the main End island
-		if dim ~= "end" then
-			obj:set_look_horizontal(math.pi/2)
-		-- Show credits
-		else
-			show_credits(obj)
-		end
-		mcl_worlds.dimension_change(obj, mcl_worlds.pos_to_dimension(target))
-		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
-	else
-		local l = obj:get_luaentity()
-		if l and l.is_mob then
-			l._just_portaled = 5
-		end
+		minetest.emerge_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8), vector.add(mcl_vars.mg_end_platform_pos, 8), function()
+			mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
+			teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
+		end)
 	end
 end
 
