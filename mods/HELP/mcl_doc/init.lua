@@ -409,3 +409,35 @@ doc.sub.items.register_factoid("tools", "misc", function(_, def)
 	return formstring
 end)
 
+--
+-- Sort entries by displayed names
+--
+
+-- Cache for cleaned and lowercased entry names
+local sortable_names = {}
+
+local function make_sortable (txt)
+	local result = sortable_names[txt]
+	if result then return result end
+	-- Drop escape commands (namespace/colour/style)
+	local result = txt:gsub("\x1b%([^)]*%)", ""):lower()
+	sortable_names[txt] = result
+	return result
+end
+
+local function entry_name_sorter (entry1, entry2)
+	if not entry1 or not entry2 then return entry1 == nil end
+	local a = make_sortable(entry1.name or "")
+	local b = make_sortable(entry2.name or "")
+	return a < b
+end
+
+core.register_on_mods_loaded(function()
+	for _, id in pairs({ "nodes", "craftitems", "mobs", }) do
+		local def = doc.get_category_definition(id)
+		if def then 
+			def.sorting = "function"
+			def.sorting_data = entry_name_sorter
+		end
+	end
+end)
