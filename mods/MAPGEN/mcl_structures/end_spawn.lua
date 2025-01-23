@@ -5,8 +5,14 @@ local modpath = minetest.get_modpath(modname)
 mcl_structures.register_structure("end_spawn_obsidian_platform",{
 	static_pos ={mcl_vars.mg_end_platform_pos},
 	place_func = function(pos, _, _)
-		local obby = minetest.find_nodes_in_area(vector.offset(pos,-2,0,-2),vector.offset(pos,2,0,2),{"air","mcl_end:end_stone"})
-		local air = minetest.find_nodes_in_area(vector.offset(pos,-2,1,-2),vector.offset(pos,2,3,2),{"air","mcl_end:end_stone"})
+		local obby = {}
+		local air = {}
+		for x = -2, 2 do for z = -2, 2 do
+			table.insert(obby, vector.offset(pos, x, 0, z))
+		end end
+		for x = -2, 2 do for y = 1, 3 do for z = -2, 2 do
+			table.insert(air, vector.offset(pos, x, y, z))
+		end end end
 		mcl_util.bulk_swap_node(obby,{name="mcl_core:obsidian"})
 		mcl_util.bulk_swap_node(air,{name="air"})
 		return true
