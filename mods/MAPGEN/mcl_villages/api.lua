@@ -10,45 +10,34 @@ mcl_villages.forced_blocks = {}
 
 local S = minetest.get_translator(minetest.get_current_modname())
 
-local jobsites_set = {}
-for _, jobsite in pairs(mobs_mc.jobsites) do
-	jobsites_set[jobsite] = true
-end
-
 local function job_count(schem_lua)
-	local count = 0
-	local look_after = [[name="]]
-	local check_offset = 1
-	local head_offset = 1
-	local node_name
-	local _
-
-	local sub = string.sub
-	local byte = string.byte
-	local find = string.find
-
-	while head_offset <= #schem_lua do
-		-- iterating over the whole shematic until we find an instance of "name="" appearing.
-		-- In that case, extract the node name and check if its inside the jobsite set
-		if byte(schem_lua, head_offset) == byte(look_after, check_offset) then
-			check_offset = check_offset + 1
+	local jobsites_nodes = {}
+	local jobsites_groups = {}
+	for _, jobsite in pairs(mobs_mc.jobsites) do
+		if jobsite:sub(1, 6) == "group:" then
+			jobsites_groups[jobsite:sub(7)] = 1
 		else
-			if check_offset == #look_after + 1 then
-				_, head_offset, node_name = find(schem_lua, [[^([^"]*)]], head_offset)
-
-				if (sub(node_name, 1, 13) == "mcl_cauldrons" and minetest.get_item_group(node_name, "cauldron") ~= 0)
-				or jobsites_set[node_name] then
-					count = count + 1
-				end
-			end
-			check_offset = 1
+			jobsites_nodes[jobsite] = 1
 		end
-		head_offset = head_offset + 1
 	end
 
+	local count = 0
+	for name in schem_lua:gmatch([[name="([^"]*)"]]) do
+		local hit = jobsites_nodes[name]
+		if not hit then
+			jobsites_nodes[name] = 0
+			for group, _ in pairs(jobsites_groups) do
+				if minetest.get_item_group(name, group) > 0 then
+					jobsites_nodes[name] = 1
+					break
+				end
+			end
+			hit = jobsites_nodes[name]
+		end
+		count = count + hit
+	end
 	return count
 end
-
 
 local function load_schema(name, mts)
 	local schem_lua = minetest.serialize_schematic(mts, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
