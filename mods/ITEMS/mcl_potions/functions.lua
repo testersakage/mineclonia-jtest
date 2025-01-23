@@ -1146,6 +1146,16 @@ mcl_potions.register_effect({
 	affects_item_speed = {factor_is_positive = true},
 })
 
+mcl_potions.register_effect({
+	name = "wind_charged",
+	description = S("Wind Charged"),
+	on_step = function(_, object)
+		--
+	end,
+	particle_color = "#BDC9FF",
+	uses_factor = false
+})
+
 -- implementation of haste and fatigue effects
 function mcl_potions.update_haste_and_fatigue(player)
 	local h_fac = mcl_potions.get_total_haste(player)

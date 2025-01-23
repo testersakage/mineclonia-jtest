@@ -617,6 +617,16 @@ mcl_potions.register_potion({
 })
 
 mcl_potions.register_potion({
+	name = "wind_charge",
+	desc_suffix = S("of Wind Charging"),
+	_tt = nil,
+	_longdesc = S("Creates a wind burst"),
+	color = "#BDC9FF",
+	_effect_list = {wind_charged = {}},
+	has_arrow = true
+})
+
+mcl_potions.register_potion({
 	name = "ominous",
 	desc_whole = S("Ominous Bottle"),
 	groups = {brewitem=1, food=3, can_eat_when_full=1,
