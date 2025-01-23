@@ -206,7 +206,7 @@ minetest.register_craftitem("mcl_mobitems:breeze_rod", {
 	_doc_items_longdesc = S("This is a crafting item dropped from breezes."),
 	wield_image = "mcl_mobitems_breeze_rod.png",
 	inventory_image = "mcl_mobitems_breeze_rod.png",
-	groups = { craftitem = 1 },
+	groups = { brewitem = 1, craftitem = 1 },
 	_mcl_crafting_output = {single = {output = "mcl_charges:wind_charge 4"}}
 })
 

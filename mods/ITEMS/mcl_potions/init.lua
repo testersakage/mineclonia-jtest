@@ -381,6 +381,7 @@ local awkward_table = {
 	["mcl_mobitems:spider_eye"] = "mcl_potions:poison",
 	["mcl_mobitems:rabbit_foot"] = "mcl_potions:leaping",
 	["mcl_mobitems:phantom_membrane"] = "mcl_potions:slow_falling", -- TODO add phantom membranes
+	["mcl_mobitems:breeze_rod"] = "mcl_potions:wind_charge"
 }
 -- API
 -- register a potion recipe brewed from awkward potion
