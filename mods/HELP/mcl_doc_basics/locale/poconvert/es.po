@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 00:25+0000\n"
+"PO-Revision-Date: 2025-01-23 01:53+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/es/>\n"
@@ -267,7 +267,10 @@ msgid "Fly mode:"
 msgstr "Modo de vuelo:"
 
 msgid "• Description: Gravity doesn't affect you and you can move freely in all directions. Use the jump key to rise and the sneak key to sink."
-msgstr "• Descripción: la gravedad no te afecta y puedes moverte libremente en todas las direcciones. Usa la tecla de saltar para subir y la tecla de caminar para caer."
+msgstr ""
+"• Descripción: la gravedad no te afecta y puedes moverte libremente en todas "
+"las direcciones. Usa la tecla de saltar para subir y la tecla de agacharse "
+"para caer."
 
 msgid "• Default key: [K]"
 msgstr "• Tecla por defecto: [K]"
@@ -681,7 +684,9 @@ msgid "Quick transfer: You can quickly transfer an item stack between a player's
 msgstr "Transferencia rápida: puedes transferir rápidamente una pila de ítems entre el inventario de un jugador y el inventario de un bloque, como un horno, un cofre o cualquier otro ítem con una ranura de inventario cuando se accede al inventario de ese bloque. El inventario de destino suele ser el inventario más relevante en este contexto."
 
 msgid "• Sneak+Left click: Automatically transfer item stack (Sneak is by default [Shift])"
-msgstr "• Caminar+Clic izquierdo: Transferir automáticamente la pila de ítems (Caminar es [Shift] por defecto)"
+msgstr ""
+"• Agacharse+Clic izquierdo: Transferir automáticamente la pila de ítems ("
+"Agacharse es [Shift] por defecto)"
 
 msgid "Hotbar"
 msgstr "Barra de ítems"
@@ -775,7 +780,9 @@ msgid "• Mining properties: By which tools it can be mined, how fast and how m
 msgstr "• Propiedades de minado: Con qué herramientas se puede minar, con qué rapidez y cuánto se desgastan las herramientas"
 
 msgid "• Climbable: While you are at a climbable block, you won't fall and you can move up and down with the jump and sneak keys"
-msgstr "• Escalable: mientras estés en un bloque escalable, no te caerás y podrás moverte hacia arriba y hacia abajo con las teclas de saltar y caminar"
+msgstr ""
+"• Escalable: mientras estés en un bloque escalable, no te caerás y podrás "
+"moverte hacia arriba y hacia abajo con las teclas de saltar y agacharse"
 
 msgid "• Drowning damage: See the entry “Basics > Player”"
 msgstr "• Daño por ahogamiento: Ver la entrada “Conceptos básicos > Jugador”"
@@ -817,7 +824,11 @@ msgid "Almost all blocks can be built (or placed). Building is very simple and h
 msgstr "Se pueden construir (o colocar) casi todos los bloques. La construcción es muy simple y no tiene demora."
 
 msgid "To build your wielded block, point at a block in the world and right-click. If this is not possible because the pointed block has a special right-click action, hold down the sneak key before right-clicking."
-msgstr "Para construir el bloque que empuñas, apunta a un bloque en el mundo y haz clic derecho. Si esto no es posible porque el bloque apuntado tiene una acción especial con el clic derecho, mantén presionada la tecla de caminar antes de hacer clic derecho."
+msgstr ""
+"Para construir el bloque que empuñas, apunta a un bloque en el mundo y haz "
+"clic derecho. Si esto no es posible porque el bloque apuntado tiene una "
+"acción especial con el clic derecho, mantén presionada la tecla de agacharse "
+"antes de hacer clic derecho."
 
 msgid "Blocks can almost always be built at pointable blocks. One exception are blocks attached to the floor; these can only be built on the floor."
 msgstr "Casi siempre es posible construir bloques en bloques apuntables. Una excepción son los bloques fijados al suelo, que solo se pueden construir en el suelo."
@@ -1090,9 +1101,9 @@ msgstr ""
 
 msgid "To sneak, hold down the sneak key (default: [Shift]). When you release it, you stop sneaking. Careful: When you release the sneak key at a ledge, you might fall!"
 msgstr ""
-"Para agacharse, mantén presionada la tecla de caminar (por defecto: [Shift])"
-". Cuando la sueltes, dejarás de ir agachado. ¡Cuidado: cuando sueltes la "
-"tecla de caminar en un borde, podrías caerte!"
+"Para agacharse, mantén presionada la tecla de agacharse (por defecto: [Shift]"
+"). Cuando la sueltes, dejarás de ir agachado. ¡Cuidado: cuando sueltes la "
+"tecla de agacharse en un borde, podrías caerte!"
 
 msgid "Sneaking only works when you stand on solid ground, are not in a liquid and don't climb."
 msgstr ""
@@ -1189,7 +1200,10 @@ msgid "When those criteria are met, the open space is filled with a new liquid s
 msgstr "Cuando se cumplen estos criterios, el espacio abierto se llena con una nueva fuente de líquido del mismo tipo (imagen 3)."
 
 msgid "Swimming in a liquid is fairly straightforward: The usual direction keys for basic movement, the jump key for rising and the sneak key for sinking."
-msgstr "Nadar en un líquido es bastante sencillo: las teclas de dirección habituales para el movimiento básico, la tecla de saltar para elevarse y la tecla de caminar para hundirse."
+msgstr ""
+"Nadar en un líquido es bastante sencillo: las teclas de dirección habituales "
+"para el movimiento básico, la tecla de saltar para elevarse y la tecla de "
+"agacharse para hundirse."
 
 msgid "The physics for swimming and diving in a liquid are:"
 msgstr "Las leyes físicas para nadar y bucear en un líquido son:"
