@@ -349,22 +349,16 @@ end
 
 -- Pointing range of itmes
 local function range_factoid(itemstring, def)
-	local handrange = minetest.registered_items[""].range
-	local itemrange = def.range
+	-- Get hand range.  Showing tool info, don't need creative hand range.
+	local handrange = minetest.registered_items[""].range or tonumber(core.settings:get("mcl_hand_range")) or 4.5
 	if itemstring == "" then
-		if handrange then
-			return S("Range: @1", itemrange)
-		else
-			return S("Range: 4")
-		end
-	else
-		if handrange == nil then handrange = 4 end
-		if itemrange then
-			return S("Range: @1", itemrange)
-		else
-			return S("Range: @1 (@2)", get_entry_name(""), handrange)
-		end
+		return S("Range: @1", handrange)
 	end
+	local itemrange = def.range
+	if itemrange then
+		return S("Range: @1", itemrange)
+	end
+	return S("Range: @1 (@2)", get_entry_name(""), handrange)
 end
 
 -- Smelting fuel factoid
