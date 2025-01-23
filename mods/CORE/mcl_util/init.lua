@@ -21,3 +21,5 @@ mcl_util.ringbuffer = dofile(modpath .. "/ringbuffer.lua")
 dofile(modpath .. "/roman.lua")
 -- Backwards compatibility
 dofile(modpath .. "/compat.lua")
+-- Shape library.
+dofile(modpath.."/shape.lua")
