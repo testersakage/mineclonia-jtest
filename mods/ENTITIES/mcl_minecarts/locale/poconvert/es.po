@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_minecarts x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 03:59+0000\n"
+"PO-Revision-Date: 2025-01-24 19:26+0000\n"
 "Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_minecarts/es/>\n"
@@ -80,7 +80,7 @@ msgstr "Colóquelo sobre rieles. Golpéalo para moverlo. El TNT se enciende con 
 
 msgid "To obtain the minecart and TNT, punch them while holding down the sneak key. You can't do this if the TNT was ignited."
 msgstr ""
-"Para obtener la vagoneta y la dinamita, golpéalos mientras mantienes "
+"Para obtener la vagoneta y la dinamita, golpéalas mientras mantienes "
 "presionada la tecla de agacharse. No puedes hacer esto si ya encendiste la "
 "dinamita."
 
