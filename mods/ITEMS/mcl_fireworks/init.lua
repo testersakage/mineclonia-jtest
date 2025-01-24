@@ -34,7 +34,7 @@ mcl_fireworks.registered_shapes = {
 					min = vector.new(rad, rad, rad),
 					max = vector.new(rad, rad, rad),
 				},
-				texpool = get_color_textures({"red", "black", "orange"}),
+				texpool = get_color_textures(self._effect.colors),
 			}))
 		end,
 	},
