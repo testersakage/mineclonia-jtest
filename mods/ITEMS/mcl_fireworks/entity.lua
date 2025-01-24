@@ -35,7 +35,9 @@ core.register_entity("mcl_fireworks:rocket", {
 		self.object:set_velocity(vector.new(0, self._climb_speed, 0))
 	end,
 	on_deactivate = function(self)
-		core.delete_particlespawner(self._trail_spawner)
+		if self._trail_spawner then
+			core.delete_particlespawner(self._trail_spawner)
+		end
 	end,
 	on_step = function(self, dtime)
 		self._flight_duration = self._flight_duration - dtime
