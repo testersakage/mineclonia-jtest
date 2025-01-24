@@ -2,7 +2,17 @@ local S = minetest.get_translator ("mobs_mc")
 local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
 
-local sheared_textures = { "blank.png", "mobs_mc_sheep.png" }
+local function sheared_textures(unicolor_group)
+	local color = mcl_dyes.colors["white"].rgb.."00"
+	local d = mcl_dyes.unicolor_to_dye(unicolor_group)
+	if d then
+		color = mcl_dyes.colors[d:gsub("^mcl_dyes:","")].rgb.."D0"
+	end
+	return {
+		"blank.png",
+		"mobs_mc_sheep.png^(mobs_mc_sheep_sheared.png^[colorize:"..color..")",
+	}
+end
 
 local function unicolor_to_wool(unicolor_group)
 	local d = mcl_dyes.unicolor_to_dye(unicolor_group)
@@ -20,7 +30,7 @@ local function sheep_texture(unicolor_group)
 	end
 	return {
 		"mobs_mc_sheep_fur.png^[colorize:"..color,
-		"mobs_mc_sheep.png",
+		"mobs_mc_sheep.png^(mobs_mc_sheep_sheared.png^[colorize:"..color..")",
 	}
 end
 
@@ -166,7 +176,7 @@ function sheep:on_rightclick (clicker)
 		pos.y = pos.y + 0.5
 		self.color = self.color or "unicolor_white"
 		minetest.add_item(pos, ItemStack(unicolor_to_wool(self.color).." "..math.random(1,3)))
-		self.base_texture = sheared_textures
+		self.base_texture = sheared_textures(self.color)
 		self:set_textures (self.base_texture)
 		self.drops = {{ name = "mcl_mobitems:mutton", chance = 1, min = 1, max = 2 },}
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
