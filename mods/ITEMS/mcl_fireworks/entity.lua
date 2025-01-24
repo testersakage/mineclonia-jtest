@@ -45,9 +45,9 @@ core.register_entity("mcl_fireworks:rocket", {
 		end
 	end,
 	_explode = function(self)
-		self._effect = "circle"
-		if self._effect then
-			local effect = mcl_fireworks.registered_effects[self._effect]
+		local shape = "ball"
+		if shape then
+			local effect = mcl_fireworks.registered_shapes[shape]
 			if effect then
 				if effect.func then
 					effect.func(self)
