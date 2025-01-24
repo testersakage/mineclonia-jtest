@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-24 19:26+0000\n"
+"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_core/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Stick"
 msgstr "木棍"
@@ -101,7 +102,7 @@ msgid "Sugar"
 msgstr "糖"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
-msgstr "来自甘蔗，用于制作甜食。"
+msgstr "取自甘蔗，可制作甜品。"
 
 msgid "Bowl"
 msgstr "碗"
@@ -128,7 +129,7 @@ msgid "Acacia Bark"
 msgstr "金合欢木树皮"
 
 msgid "Acacia Bark Slab"
-msgstr "金合欢木树皮半砖"
+msgstr "金合欢树皮台阶"
 
 msgid "Acacia Bark Stairs"
 msgstr "金合欢木树皮楼梯"
@@ -170,7 +171,7 @@ msgid "Acacia Sign"
 msgstr "金合欢木告示牌"
 
 msgid "Acacia Slab"
-msgstr "金合欢木半砖"
+msgstr "金合欢木台阶"
 
 msgid "Acacia Stairs"
 msgstr "金合欢木楼梯"
@@ -185,7 +186,7 @@ msgid "Birch Bark"
 msgstr "白桦木树皮"
 
 msgid "Birch Bark Slab"
-msgstr "白桦木树皮半砖"
+msgstr "白桦树皮台阶"
 
 msgid "Birch Bark Stairs"
 msgstr "白桦树皮楼梯"
@@ -227,7 +228,7 @@ msgid "Birch Sign"
 msgstr "白桦木告示牌"
 
 msgid "Birch Slab"
-msgstr "白桦木半砖"
+msgstr "白桦木台阶"
 
 msgid "Birch Stairs"
 msgstr "白桦木楼梯"
@@ -239,22 +240,22 @@ msgid "Birch leaves are grown from Birch trees."
 msgstr "白桦树叶从白桦树上生长出来。"
 
 msgid "Black Stained Glass"
-msgstr "黑色染色玻璃"
+msgstr "黑色玻璃"
 
 msgid "Blue Stained Glass"
-msgstr "蓝色染色玻璃"
+msgstr "蓝色玻璃"
 
 msgid "Brown Stained Glass"
-msgstr "棕色染色玻璃"
+msgstr "棕色玻璃"
 
 msgid "Cyan Stained Glass"
-msgstr "青色染色玻璃"
+msgstr "青色玻璃"
 
 msgid "Dark Oak Bark"
 msgstr "深色橡木树皮"
 
 msgid "Dark Oak Bark Slab"
-msgstr "深色橡木树皮半砖"
+msgstr "深色橡树皮台阶"
 
 msgid "Dark Oak Bark Stairs"
 msgstr "深色橡木树皮楼梯"
@@ -296,7 +297,7 @@ msgid "Dark Oak Sign"
 msgstr "深色橡木告示牌"
 
 msgid "Dark Oak Slab"
-msgstr "深色橡木半砖"
+msgstr "深色橡树台阶"
 
 msgid "Dark Oak Stairs"
 msgstr "深色橡木楼梯"
@@ -308,16 +309,16 @@ msgid "Dark Oak leaves are grown from Dark Oak trees."
 msgstr "深色橡木树叶由深色橡树生长而来。"
 
 msgid "Green Stained Glass"
-msgstr "绿色染色玻璃"
+msgstr "绿色玻璃"
 
 msgid "Grey Stained Glass"
-msgstr "灰色染色玻璃"
+msgstr "灰色玻璃"
 
 msgid "Jungle Bark"
 msgstr "丛林树皮"
 
 msgid "Jungle Bark Slab"
-msgstr "丛林树皮半砖"
+msgstr "丛林树皮台阶"
 
 msgid "Jungle Bark Stairs"
 msgstr "丛林树皮楼梯"
@@ -383,13 +384,13 @@ msgid "Magenta Stained Glass"
 msgstr "品红色染色玻璃"
 
 msgid "Oak Bark"
-msgstr "橡木树皮"
+msgstr "橡树皮"
 
 msgid "Oak Bark Slab"
-msgstr "橡木树皮台阶"
+msgstr "橡树皮台阶"
 
 msgid "Oak Bark Stairs"
-msgstr "橡木树皮楼梯"
+msgstr "橡树皮楼梯"
 
 msgid "Oak Boat"
 msgstr "橡木船"
@@ -416,19 +417,19 @@ msgid "Oak Log"
 msgstr "橡木原木"
 
 msgid "Oak Planks"
-msgstr "橡木木板"
+msgstr "橡木板"
 
 msgid "Oak Pressure Plate"
 msgstr "橡木压力板"
 
 msgid "Oak Sapling"
-msgstr "橡木树苗"
+msgstr "橡树苗"
 
 msgid "Oak Sign"
 msgstr "橡木告示牌"
 
 msgid "Oak Slab"
-msgstr "橡木板"
+msgstr "橡木台阶"
 
 msgid "Oak Stairs"
 msgstr "橡木楼梯"
@@ -440,16 +441,16 @@ msgid "Oak leaves are grown from Oak trees."
 msgstr "橡树的叶子是从橡树上长出来的。"
 
 msgid "Orange Stained Glass"
-msgstr "橙色染色玻璃"
+msgstr "橙色玻璃"
 
 msgid "Pink Stained Glass"
-msgstr "粉色染色玻璃"
+msgstr "粉色玻璃"
 
 msgid "Purple Stained Glass"
-msgstr "紫色染色玻璃"
+msgstr "紫色玻璃"
 
 msgid "Red Stained Glass"
-msgstr "红色染色玻璃"
+msgstr "红色玻璃"
 
 msgid "Spruce Bark"
 msgstr "云杉树皮"
@@ -497,7 +498,7 @@ msgid "Spruce Sign"
 msgstr "云杉告示牌"
 
 msgid "Spruce Slab"
-msgstr "云杉半砖"
+msgstr "云杉台阶"
 
 msgid "Spruce Stairs"
 msgstr "云杉楼梯"
@@ -527,7 +528,7 @@ msgid "Stripped Dark Oak Log"
 msgstr "去皮的深色橡木原木"
 
 msgid "Stripped Jungle Bark"
-msgstr "剥落的丛林树木树皮"
+msgstr "剥落丛林树皮"
 
 msgid "Stripped Jungle Log"
 msgstr "去皮的丛林原木"
@@ -1188,4 +1189,3 @@ msgstr "苔藓石砖楼梯"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "苔藓石砖台阶"
-
