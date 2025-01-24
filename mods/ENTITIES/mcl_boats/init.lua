@@ -475,6 +475,39 @@ function boat:on_step(dtime, moveresult)
 	self.object:set_acceleration(new_acce)
 end
 
+------------------------------------------------------------------------
+--- Client-side steering.
+------------------------------------------------------------------------
+
+local ZERO_VECTOR = vector.zero ()
+
+function boat:complete_attachment (player, state)
+	attach_object (self, player)
+	self._csm_driving = true
+	self.object:set_velocity (ZERO_VECTOR)
+	self.object:set_acceleration (ZERO_VECTOR)
+end
+
+function boat:fallback_attach (player, state)
+	attach_object (self, player)
+	self._csm_driving = false
+end
+
+function boat:set_touching_ground (touching_ground)
+end
+
+function boat:detach_client_driver (player)
+	if player == self._driver then
+		self._driver = nil
+		self._csm_driving = false
+		detach_object (player, true)
+	end
+end
+
+function boat:set_yaw (yaw)
+	self.object:set_yaw (yaw)
+end
+
 -- Register one entity for all boat types
 minetest.register_entity("mcl_boats:boat", boat)
 
@@ -623,37 +656,4 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 			},
 		})
 	end
-end
-
-------------------------------------------------------------------------
---- Client-side steering.
-------------------------------------------------------------------------
-
-local ZERO_VECTOR = vector.zero ()
-
-function boat:complete_attachment (player, state)
-	attach_object (self, player)
-	self._csm_driving = true
-	self.object:set_velocity (ZERO_VECTOR)
-	self.object:set_acceleration (ZERO_VECTOR)
-end
-
-function boat:fallback_attach (player, state)
-	attach_object (self, player)
-	self._csm_driving = false
-end
-
-function boat:set_touching_ground (touching_ground)
-end
-
-function boat:detach_client_driver (player)
-	if player == self._driver then
-		self._driver = nil
-		self._csm_driving = false
-		detach_object (player, true)
-	end
-end
-
-function boat:set_yaw (yaw)
-	self.object:set_yaw (yaw)
 end
