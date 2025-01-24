@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 18:29+0000\n"
+"PO-Revision-Date: 2025-01-24 19:26+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -16,13 +16,13 @@ msgstr ""
 "X-Generator: Weblate 5.9.2\n"
 
 msgid "This is a decorational block."
-msgstr "這是一個裝飾性方塊。"
+msgstr "此為裝飾性方塊。"
 
 msgid "This block is a building block for creating various buildings."
-msgstr "這是一個構造方塊，可以用來堆砌建築。"
+msgstr "此構造方塊可以用來堆砌建築。"
 
 msgid "This item is primarily used for crafting other items."
-msgstr "這件物品主要用於合成其他物品。"
+msgstr "此物品主要用於合成其他物品。"
 
 msgid "Hold it in your hand, then leftclick to eat it."
 msgstr "拿著它左按，就可以食用。"
@@ -31,10 +31,8 @@ msgid "Hold it in your hand, then leftclick to eat it. But why would you want to
 msgstr "拿著它左按，就可以食用。但為甚麼要吃？"
 
 msgid "This block's rotation is affected by the way you place it: Place it on the floor or ceiling for a vertical orientation; place it at the side for a horizontal orientation. Sneaking while placing it leads to a perpendicular orientation instead."
-msgstr ""
-"這個方塊的旋轉方向受放置方式影響：放置在地板或天花板上時，呈現垂直方向；放置"
-"在側面時，呈現水平方向。放置時按下潛行鍵（悄悄移動鍵）的話，呈現另一種垂直方"
-"向。"
+msgstr "此方塊的旋轉方向受放置方式影響：放置在地板或天花板上時是直置；放置在側面時是"
+"橫置。放置時按下潛行鍵，則垂直放置。"
 
 msgid "Hand"
 msgstr "手"
@@ -79,7 +77,7 @@ msgid "• @1, level @2: Unlimited"
 msgstr "・@1、等級 @2：無限次數"
 
 msgid "This tool is capable of mining."
-msgstr "這是一件開採工具。"
+msgstr "此工具能用來開採。"
 
 msgid "Maximum toughness levels:"
 msgstr "對象硬度上限："
@@ -91,7 +89,7 @@ msgid "Mining durability:"
 msgstr "開採耐久："
 
 msgid "This is a melee weapon which deals damage by punching."
-msgstr "這是一件近戰武器，能傷害所擊中的對象。"
+msgstr "此近戰武器能用來擊打敵人，造成傷害。"
 
 msgid "Maximum damage per hit:"
 msgstr "每次擊中的最大傷害："
@@ -121,7 +119,7 @@ msgid "This block can not be destroyed by ordinary mining tools."
 msgstr "一般的工具無法摧毀此方塊。"
 
 msgid "This block can be mined by mining tools which match any of the following mining ratings and its toughness level."
-msgstr "這個方塊可以被符合以下開採評級及硬度要求的工具開採。"
+msgstr "此方塊可以被符合以下開採評級及硬度要求的工具開採。"
 
 msgid "Mining ratings:"
 msgstr "開採等級："
@@ -139,13 +137,13 @@ msgid "Range: @1 (@2)"
 msgstr "距離：@1 (@2)"
 
 msgid "This tool can serve as a smelting fuel with a burning time of @1."
-msgstr "這件工具可以用作冶煉燃料，能燃燒 @1。"
+msgstr "此工具可以用作冶煉燃料，能燃燒 @1。"
 
 msgid "This block can serve as a smelting fuel with a burning time of @1."
-msgstr "這個方塊可以用作冶煉燃料，能燃燒 @1。"
+msgstr "此方塊可以用作冶煉燃料，能燃燒 @1。"
 
 msgid "This item can serve as a smelting fuel with a burning time of @1."
-msgstr "這件物品可以用作冶煉燃料，能燃燒 @1。"
+msgstr "此物品可以用作冶煉燃料，能燃燒 @1。"
 
 msgid " Using it as fuel turns it into: @1."
 msgstr " 被用作燃料後會轉化成@1。"
@@ -163,22 +161,22 @@ msgid "Maximum stack size: @1"
 msgstr "最大堆疊數：@1"
 
 msgid "This block points to liquids."
-msgstr ""
+msgstr "此方塊可以操作液體。"
 
 msgid "This tool points to liquids."
-msgstr ""
+msgstr "此工具可以操作液體。"
 
 msgid "This item points to liquids."
-msgstr ""
+msgstr "此物品可以操作液體。"
 
 msgid "Punches with this block don't work as usual; melee combat and mining are either not possible or work differently."
-msgstr ""
+msgstr "此方塊有特別的使用方式；拿著它時可能無法如常開採資源和擊打敵人。"
 
 msgid "Punches with this tool don't work as usual; melee combat and mining are either not possible or work differently."
-msgstr ""
+msgstr "此工具有特別的使用方式；拿著它時可能無法如常開採資源和擊打敵人。"
 
 msgid "Punches with this item don't work as usual; melee combat and mining are either not possible or work differently."
-msgstr ""
+msgstr "此物品有特別的使用方式；拿著它時可能無法如常開採資源和擊打敵人。"
 
 msgid "This block belongs to the @1 group."
 msgstr "所屬方塊群組：@1。"
@@ -217,7 +215,7 @@ msgid "Pointable: No"
 msgstr "可被指向：否"
 
 msgid "This block is a liquid with these properties:"
-msgstr "這個方塊是一種液體，具備以下特性："
+msgstr "此方塊屬是一種液體，具備以下特性："
 
 msgid "• Renewable"
 msgstr "・可再生"
@@ -241,43 +239,43 @@ msgid "This block causes a damage of @1 hit point per second."
 msgstr ""
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit points every 2 seconds."
-msgstr "這個方塊會令你消耗氧氣，耗盡後每 2 秒造成 @1 HP 溺水傷害。"
+msgstr "此方塊會令你消耗氧氣，耗盡後每 2 秒造成 @1 HP 溺水傷害。"
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit point every 2 seconds."
-msgstr "這個方塊會令你消耗氧氣，耗盡後每 2 秒造成 @1 HP 溺水傷害。"
+msgstr "此方塊會令你消耗氧氣，耗盡後每 2 秒造成 @1 HP 溺水傷害。"
 
 msgid "The fall damage on this block is increased by @1%."
-msgstr ""
+msgstr "此方塊所致的墜落傷害會增加 @1%。"
 
 msgid "This block negates all fall damage."
-msgstr ""
+msgstr "此方塊可以抵銷所有墜落傷害。"
 
 msgid "The fall damage on this block is reduced by @1%."
-msgstr ""
+msgstr "此方塊所致的墜落傷害會減少 @1%。"
 
 msgid "You can not jump while standing on this block."
-msgstr ""
+msgstr "站在此方塊上會令你無法跳躍。"
 
 msgid "This block can be climbed."
-msgstr ""
+msgstr "此方塊可以被攀爬。"
 
 msgid "This block will make you bounce off with an elasticity of @1%."
-msgstr ""
+msgstr "此方塊會將你回彈到 @1% 的高度。"
 
 msgid "This block is slippery."
-msgstr ""
+msgstr "可以在此方塊上滑行。"
 
 msgid "This block is completely silent when walked on, mined or built."
-msgstr ""
+msgstr "此方塊的開採、放置、在上面走動，皆不會產生聲音。"
 
 msgid "This block is completely silent when mined or built."
-msgstr ""
+msgstr "此方塊的開採和放置，皆不會產生聲音。"
 
 msgid "Walking on this block is completely silent."
-msgstr ""
+msgstr "在此方塊上走動時不會產生聲音。"
 
 msgid "Mining this block is completely silent."
-msgstr ""
+msgstr "開採此方塊時不會產生聲音。"
 
 msgid "Building this block is completely silent."
 msgstr ""
