@@ -6,7 +6,13 @@ local path = minetest.get_modpath(mod)
 mcl_fireworks.registered_shapes = {
 	ball = {
 		func = function(self)
-			local color = self._color or "#FF0000"
+			local colors = { "red", "black", "orange" }
+			local tex = {}
+			for _, c in pairs(colors) do
+				if mcl_dyes.colors[c] then
+					table.insert(tex, "mcl_particles_fire_flame.png^[colorize:"..mcl_dyes.colors[c].rgb)
+				end
+			end
 			local rad = math.random(2,5)
 			core.add_particlespawner({
 				pos = self.object:get_pos(),
@@ -20,7 +26,7 @@ mcl_fireworks.registered_shapes = {
 					min = vector.new(rad, rad, rad),
 					max = vector.new(rad, rad, rad),
 				},
-				texture = "mcl_particles_fire_flame.png^[colorize:"..color,
+				texpool = tex,
 				size = { min = 0.5, max = 1.5 },
 				glow = 14,
 			})
