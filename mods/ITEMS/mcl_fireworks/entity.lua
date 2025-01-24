@@ -1,8 +1,8 @@
 core.register_entity("mcl_fireworks:rocket", {
-	_flight_duration = 0,
+	_flight_duration = 1.5,
+	_climb_speed = 15,
 	_stars = {},
 	initial_properties = {
-		_climb_speed = 15,
 		collide_with_objects = false,
 		glow = 14,
 		physical = true,
@@ -15,8 +15,8 @@ core.register_entity("mcl_fireworks:rocket", {
 
 		if not properties then return end
 
-		self._flight_duration = properties.flight_duration
-		--self._stars = core.deserialize(properties.stars)
+		self._flight_duration = properties.flight_duration or self._flight_duration
+		self._effect = properties.effect
 
 		self._trail_spawner = core.add_particlespawner({
 			attached = self.object,
@@ -32,16 +32,29 @@ core.register_entity("mcl_fireworks:rocket", {
 			texture =  "mcl_particles_instant_effect.png",
 			time = 0,
 		})
+		self.object:set_velocity(vector.new(0, self._climb_speed, 0))
 	end,
 	on_deactivate = function(self)
 		core.delete_particlespawner(self._trail_spawner)
 	end,
 	on_step = function(self, dtime)
-		self.object:set_velocity(vector.new(0, self.initial_properties._climb_speed, 0))
 		self._flight_duration = self._flight_duration - dtime
 
 		if self._flight_duration <= 0 then
-			self.object:remove()
+			self:_explode()
 		end
-	end
+	end,
+	_explode = function(self)
+		self._effect = "circle"
+		if self._effect then
+			local effect = mcl_fireworks.registered_effects[self._effect]
+			if effect then
+				if effect.func then
+					effect.func(self)
+				end
+			end
+		end
+
+		self.object:remove()
+	end,
 })
