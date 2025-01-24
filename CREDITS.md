@@ -146,6 +146,13 @@
 * Sencyy
 * Sotis
 * Zozosticot
+* ellesheepy 
+* bright
+* Miguel P.L
+* Just Playing
+* JoseDouglas26
+* bramaudi
+* Dirk
 
 ## Special thanks
 * celeron55 for creating Luanti (Minetest)
