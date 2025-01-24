@@ -46,6 +46,15 @@ if it_is_christmas then
 	ender_chest_texture = { "mcl_chests_ender_present.png" }
 end
 
+local shulker_box_rotations = {
+	[0] = {x = 0, y = 0},                  -- ceiling
+	[1] = {x = -math.pi, y = 0},           -- floor
+	[2] = {x = math.pi/2, y = math.pi/2},  -- x+
+	[3] = {x = math.pi/2, y = -math.pi/2}, -- x-
+	[4] = {x = math.pi/2, y = math.pi},    -- z-
+	[5] = {x = math.pi/2, y = 0},          -- z+
+}
+
 -- Chest Entity
 local animate_chests = (minetest.settings:get_bool("animated_chests") ~= false)
 local entity_animations = {
@@ -101,9 +110,10 @@ minetest.register_entity("mcl_chests:chest", {
 		end
 	end,
 
-	initialize = function(self, node_pos, node_name, textures, dir, double, sound_prefix, mesh_prefix, animation_type)
+	initialize = function(self, node_pos, node_name, textures, dir, double, sound_prefix, mesh_prefix, animation_type, node_param2)
 		self.node_pos = node_pos
 		self.node_name = node_name
+		self.node_param2 = node_param2
 		self.sound_prefix = sound_prefix
 		self.animation_type = animation_type
 		local obj = self.object
@@ -139,6 +149,10 @@ minetest.register_entity("mcl_chests:chest", {
 	on_activate = function(self, initialization_data)
 		if initialization_data and initialization_data:find("\"###mcl_chests:chest###\"") then
 			self:initialize(unpack(minetest.deserialize(initialization_data)))
+			if self.animation_type == "shulker" and shulker_box_rotations[self.node_param2] then
+				local rot = {x = shulker_box_rotations[self.node_param2].x, y = shulker_box_rotations[self.node_param2].y, z = 0}
+				self.object:set_rotation(rot)
+			end
 		else
 			minetest.log("warning", "[mcl_chests] on_activate called without proper initialization_data ... removing entity")
 			self.object:remove()
@@ -1356,7 +1370,8 @@ for color, desc in pairs(boxtypes) do
 					return itemstack
 				end
 			end
-			return core.item_place_node(itemstack, placer, pointed_thing)
+			local dir = minetest.dir_to_wallmounted(vector.subtract(pointed_thing.above, pointed_thing.under))
+			return minetest.item_place_node(itemstack, placer, pointed_thing, dir)
 		end
 	end
 	minetest.register_node("mcl_chests:" .. color .. "_shulker_box", {
@@ -1469,11 +1484,11 @@ for color, desc in pairs(boxtypes) do
 		drop = "",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		--	TODO: Make shulker boxes rotatable
-		--	This doesn't work, it just destroys the inventory:
-		--	on_place = minetest.rotate_node,
 		on_construct = function(pos)
-			create_entity(pos, small_name, {mob_texture}, minetest.get_node(pos).param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
+			local param2 = minetest.get_node(pos).param2
+			local rot = {x = shulker_box_rotations[param2].x, y = shulker_box_rotations[param2].y, z = 0}
+			local entity = create_entity(pos, small_name, {mob_texture}, param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
+			entity.object:set_rotation(rot)
 		end,
 		after_place_node = function(pos, placer, itemstack, _)
 			-- normally not called (_small variant is never created as an item)
