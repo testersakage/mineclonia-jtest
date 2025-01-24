@@ -180,7 +180,7 @@ end
 
 local canonical_color = "yellow"
 -- Register glass pane (stained and unstained)
-local function pane(description, node, append)
+local function pane(description, node, append, color)
 	local texture1, longdesc, entry_name, create_entry
 	local is_canonical = true
 	local txappend = append
@@ -221,6 +221,7 @@ local function pane(description, node, append)
 		_mcl_blast_resistance = 0.3,
 		_mcl_hardness = 0.3,
 		_mcl_silk_touch_drop = true,
+		_color = color,
 	})
 
 	if mod_doc and not is_canonical then
@@ -252,5 +253,5 @@ pane(S("Glass Pane"), "mcl_core:glass", "_natural") -- triggers special case
 
 -- Stained Glass Panes
 for k,v in pairs(mcl_dyes.colors) do
-	pane(D(v.readable_name .. " Stained Glass Pane"), "mcl_core:glass_"..k, "_"..k)
+	pane(D("@1 Glass Pane", v.readable_name), "mcl_core:glass_"..k, "_"..k, k)
 end

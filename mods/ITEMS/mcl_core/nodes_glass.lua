@@ -61,6 +61,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_mcl_blast_resistance = 0.3,
 		_mcl_hardness = 0.3,
 		_mcl_silk_touch_drop = true,
+		_color = color,
 	})
 
 	minetest.register_craft({
