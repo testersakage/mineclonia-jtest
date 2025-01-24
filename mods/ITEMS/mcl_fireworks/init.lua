@@ -48,10 +48,31 @@ mcl_fireworks.registered_shapes = {
 					min = vector.new(rad, rad, rad),
 					max = vector.new(rad, rad, rad),
 				},
-				texpool = get_color_textures({"red", "black", "orange"}),
+				texpool = get_color_textures(self._effect.colors),
 			}))
 		end,
-	}
+	},
+	burst = {
+		func = function(self)
+			local rad = mcl_util.float_random(5,8)
+			core.add_particlespawner({
+				pos = self.object:get_pos(),
+				radius = {
+					min = vector.new(-0.2, rad, -0.2),
+					max = vector.new(0.2, rad*2, 0.2),
+				},
+				texpool = get_color_textures(self._effect.colors),
+				time = 1,
+				amount = 512,
+				minexptime = 0.8,
+				maxexptime = 3,
+				minacc = vector.new(-1.5, 8, -1.5),
+				maxacc = vector.new(1.5, 19, 1.5),
+				size = { min = 0.5, max = 1.5 },
+				glow = 14,
+			})
+		end,
+	},
 	--[[
 	--{id = "large_ball", desc = S("Large Ball")},
 	{id = "star", desc = S("Star-shaped")},

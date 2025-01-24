@@ -1,14 +1,18 @@
 core.register_entity("mcl_fireworks:rocket", {
 	_flight_duration = 1.5,
 	_climb_speed = 15,
-	_stars = {},
+	_effect = {
+		colors = { "red", "green", "orange", "blue" },
+		shape = "burst",
+		effects = { "trail" },
+	},
 	initial_properties = {
 		collide_with_objects = false,
 		glow = 14,
 		physical = true,
 		pointable = false,
 		textures = {"mcl_fireworks_rocket.png"},
-		visual = "sprite",
+		visual = "upright_sprite",
 	},
 	on_activate = function(self, staticdata)
 		local properties = core.deserialize(staticdata)
@@ -16,7 +20,7 @@ core.register_entity("mcl_fireworks:rocket", {
 		if not properties then return end
 
 		self._flight_duration = properties.flight_duration or self._flight_duration
-		self._effect = properties.effect
+		--self._effect = properties.effect or self._effect
 
 		self._trail_spawner = core.add_particlespawner({
 			attached = self.object,
