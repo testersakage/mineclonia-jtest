@@ -1358,21 +1358,20 @@ for color, desc in pairs(boxtypes) do
 		set_shulkerbox_meta(node_meta, stack_meta)
 	end
 
-	local on_place
-	if color ~= canonical_shulker_color then
-		on_place = function(itemstack, placer, pointed_thing)
-			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-			if rc then return rc end
-			if mcl_util.check_position_protection(pointed_thing.under, placer) then return itemstack end
+	local on_place = function(itemstack, placer, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc then return rc end
+		if mcl_util.check_position_protection(pointed_thing.under, placer) then return itemstack end
+		if color ~= canonical_shulker_color then
 			if minetest.get_item_group(minetest.get_node(pointed_thing.under).name, "cauldron_water") > 0 then
 				if mcl_cauldrons.add_level(pointed_thing.under, -1) then
 					itemstack:set_name("mcl_chests:"..canonical_shulker_color.."_shulker_box")
 					return itemstack
 				end
 			end
-			local dir = minetest.dir_to_wallmounted(vector.subtract(pointed_thing.above, pointed_thing.under))
-			return minetest.item_place_node(itemstack, placer, pointed_thing, dir)
 		end
+		local dir = minetest.dir_to_wallmounted(vector.subtract(pointed_thing.above, pointed_thing.under))
+		return minetest.item_place_node(itemstack, placer, pointed_thing, dir)
 	end
 	minetest.register_node("mcl_chests:" .. color .. "_shulker_box", {
 		description = desc,
