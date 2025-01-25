@@ -193,7 +193,7 @@ end
 local function create_entity(pos, node_name, textures, param2, double, sound_prefix, mesh_prefix, animation_type, dir, entity_pos)
 	if animate_chests or double then
 		dir, entity_pos = get_entity_info(pos, param2, double, dir, entity_pos)
-		local initialization_data = minetest.serialize({pos, node_name, textures, dir, double, sound_prefix, mesh_prefix, animation_type, "###mcl_chests:chest###"})
+		local initialization_data = minetest.serialize({pos, node_name, textures, dir, double, sound_prefix, mesh_prefix, animation_type, param2, "###mcl_chests:chest###"})
 		local obj = minetest.add_entity(entity_pos, "mcl_chests:chest", initialization_data)
 		if obj and obj:get_pos() then
 			local luaentity = obj:get_luaentity()
