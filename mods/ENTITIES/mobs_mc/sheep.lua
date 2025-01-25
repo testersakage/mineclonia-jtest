@@ -58,12 +58,13 @@ local sheep = {
 	description = S("Sheep"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	passive = true,
 	hp_min = 8,
 	hp_max = 8,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.45, -0.01, -0.45, 0.45, 1.29, 0.45},
+	collisionbox = {-0.45, 0.0, -0.45, 0.45, 1.3, 0.45},
 	head_swivel = "head.control",
 	bone_eye_height = 3.3,
 	head_eye_height = 1.235,
@@ -383,3 +384,14 @@ mcl_mobs.spawn_setup ({
 })
 
 mcl_mobs.register_egg ("mobs_mc:sheep", S("Sheep"), "#e7e7e7", "#ffb5b5", 0)
+
+------------------------------------------------------------------------
+-- Modern Sheep spawning.
+------------------------------------------------------------------------
+
+local sheep_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:sheep",
+	biomes = mobs_mc.farm_animal_biomes,
+	weight = 12,
+})
+mcl_mobs.register_spawner (sheep_spawner)

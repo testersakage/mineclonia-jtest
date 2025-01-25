@@ -26,12 +26,13 @@ local zombie_villager = table.merge (zombie, {
 	description = S("Zombie Villager"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	spawn_in_group = 1,
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 5,
 	xp_max = 5,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.95, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_villager_zombie.b3d",
 	head_swivel = "head.control",
@@ -536,3 +537,37 @@ mcl_mobs.spawn_setup ({
 
 -- spawn eggs
 mcl_mobs.register_egg ("mobs_mc:villager_zombie", S("Zombie Villager"), "#563d33", "#799c66", 0)
+
+------------------------------------------------------------------------
+-- Modern Zombie Villager spawning.
+------------------------------------------------------------------------
+
+local non_desert_biomes = {}
+local desert_biomes = {}
+
+for _, biome in pairs (mobs_mc.monster_biomes) do
+	if not biome:find ("Desert") then
+		table.insert (non_desert_biomes, biome)
+	else
+		table.insert (desert_biomes, biome)
+	end
+end
+
+local zombie_villager_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:villager_zombie",
+	weight = 5,
+	pack_max = 1,
+	pack_min = 1,
+	biomes = non_desert_biomes,
+})
+
+local zombie_villager_spawner_desert = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:villager_zombie",
+	weight = 1,
+	pack_max = 1,
+	pack_min = 1,
+	biomes = desert_biomes,
+})
+
+mcl_mobs.register_spawner (zombie_villager_spawner)
+mcl_mobs.register_spawner (zombie_villager_spawner_desert)

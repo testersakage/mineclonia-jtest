@@ -39,6 +39,7 @@ local spider = {
 	description = S("Spider"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	passive = false,
 	attack_type = "melee",
 	_melee_esp = true,
@@ -57,7 +58,7 @@ local spider = {
 	bone_eye_height = 1,
 	curiosity = 10,
 	head_yaw = "z",
-	collisionbox = {-0.7, -0.01, -0.7, 0.7, 0.89, 0.7},
+	collisionbox = {-0.7, 0.0, -0.7, 0.7, 0.9, 0.7},
 	visual = "mesh",
 	mesh = "mobs_mc_spider.b3d",
 	textures = {
@@ -298,7 +299,7 @@ local cave_spider = table.merge (spider, {
 	hp_min = 12,
 	hp_max = 12,
 	head_eye_height = 0.5625,
-	collisionbox = {-0.35, -0.01, -0.35, 0.35, 0.46, 0.35},
+	collisionbox = {-0.35, 0.0, -0.35, 0.35, 0.47, 0.35},
 	visual_size = {
 		x=0.55,
 		y=0.5,
@@ -344,3 +345,17 @@ mcl_mobs.spawn_setup ({
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:spider", S("Spider"), "#342d26", "#a80e0e", 0)
 mcl_mobs.register_egg("mobs_mc:cave_spider", S("Cave Spider"), "#0c424e", "#a80e0e", 0)
+
+---------------------------------------------------------------
+-- Modern Spider spawning.
+---------------------------------------------------------------
+
+local spider_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:spider",
+	weight = 100,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = mobs_mc.monster_biomes,
+})
+
+mcl_mobs.register_spawner (spider_spawner)

@@ -59,6 +59,7 @@ local witch = table.merge (raid_mob, {
 	description = S("Witch"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	can_despawn = true,
 	hp_min = 26,
 	hp_max = 26,
@@ -394,6 +395,20 @@ mcl_mobs.spawn_setup ({
 })
 
 mcl_mobs.register_egg ("mobs_mc:witch", S("Witch"), "#340000", "#51a03e", 0)
+
+------------------------------------------------------------------------
+-- Modern Witch spawning.
+------------------------------------------------------------------------
+
+local witch_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:witch",
+	weight = 5,
+	pack_max = 1,
+	pack_min = 1,
+	biomes = mobs_mc.monster_biomes,
+})
+
+mcl_mobs.register_spawner (witch_spawner)
 
 ------------------------------------------------------------------------
 -- Legacy Witch wielditem entity.  This entity is retained to avoid

@@ -72,12 +72,13 @@ local horse = {
 	description = S("Horse"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	spawn_in_group_min = 2,
 	spawn_in_group = 6,
 	visual = "mesh",
 	mesh = "mobs_mc_horse.b3d",
 	visual_size = {x=3.0, y=3.0},
-	collisionbox = {-0.69825, -0.01, -0.69825, 0.69825, 1.59, 0.69825},
+	collisionbox = {-0.69825, 0, -0.69825, 0.69825, 1.6, 0.69825},
 	runaway = true,
 	movement_speed = 6.75,
 	animation = {
@@ -1352,3 +1353,44 @@ mcl_mobs.register_egg("mobs_mc:skeleton_horse", S("Skeleton Horse"), "#68684f", 
 mcl_mobs.register_egg("mobs_mc:zombie_horse", S("Zombie Horse"), "#2a5a37", "#84d080", 0)
 mcl_mobs.register_egg("mobs_mc:donkey", S("Donkey"), "#534539", "#867566", 0)
 mcl_mobs.register_egg("mobs_mc:mule", S("Mule"), "#1b0200", "#51331d", 0)
+
+------------------------------------------------------------------------
+-- Modern Horse & Donkey Spawning.
+------------------------------------------------------------------------
+
+local horse_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:horse",
+	weight = 5,
+	pack_min = 2,
+	pack_max = 6,
+	biomes = {
+		"Plains",
+		"Plains_beach",
+		"SunflowerPlains",
+		"Savanna",
+		"Savanna_beach",
+		"SavannaM",
+		"Savanna_beach",
+		"Plains_beach",
+	},
+})
+
+local donkey_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:donkey",
+	weight = 1,
+	pack_min = 1,
+	pack_max = 3,
+	biomes = {
+		"Plains",
+		"Plains_beach",
+		"SunflowerPlains",
+		"Savanna",
+		"Savanna_beach",
+		"SavannaM",
+		"Savanna_beach",
+		"Plains_beach",
+	},
+})
+
+mcl_mobs.register_spawner (horse_spawner)
+mcl_mobs.register_spawner (donkey_spawner)

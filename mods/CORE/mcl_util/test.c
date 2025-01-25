@@ -1997,6 +1997,22 @@ test_faces (void)
   test (!decompose_AABBs (&test, &reference, 1));
   test (region_equal_p (&face, &test));
 
+  {
+    AABB fence_post = {
+      -0.125, -0.5, -0.125,
+      0.125, 1.0, 0.125,
+    };
+    AABB fence_post_wanted = {
+      -0.125, -0.5, -0.125,
+      0.125, 0.5, 0.125,
+    };
+
+    test (!decompose_AABBs (&stairs, &fence_post, 1));
+    test (!region_select_face (&face, &stairs, AXIS_Y, 0.5));
+    test (!decompose_AABBs (&test, &fence_post_wanted, 1));
+    test (region_equal_p (&test, &face));
+  }
+
   region_release (&stairs);
   region_release (&face);
   region_release (&test);

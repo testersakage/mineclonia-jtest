@@ -1533,7 +1533,7 @@ local function test_walk_AABBs ()
 
 	aabbs = {}
 	simple = mcl_util.decompose_AABBs ({basic_cube})
-	larger = mcl_util.decompose_AABBs ({larger_cube})
+	local larger = mcl_util.decompose_AABBs ({larger_cube})
 	rgn = larger:op (simple, mcl_util.OP_SUB)
 	rgn:walk (collect_AABBs, aabbs)
 	rgn = mcl_util.decompose_AABBs (aabbs)
@@ -1660,6 +1660,20 @@ local function test_faces ()
 		8.0, 8.0, 8.0,
 	}})
 	assert (face:equal_p (test))
+
+	local fence_post = {
+		-0.125, -0.5, -0.125,
+		0.125, 1.0, 0.125,
+	};
+	local fence_post_wanted = {
+		-0.125, -0.5, -0.125,
+		0.125, 0.5, 0.125,
+	};
+
+	stairs = mcl_util.decompose_AABBs ({fence_post})
+	face = stairs:select_face ("y", 0.5)
+	test = mcl_util.decompose_AABBs ({fence_post_wanted})
+	assert (test:equal_p (face))
 end
 
 local function test_empty_region ()

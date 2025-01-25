@@ -20,9 +20,6 @@ local dbg_spawn_counts = {}
 local aoc_range = 136
 local remove_far = true
 
-local timer_light = 30
-local timer_dark = 10
-local timer_light_level = 3
 local instant_despawn_range = 128
 local random_despawn_range = 32
 
@@ -37,10 +34,11 @@ local mob_cap = {
 }
 
 --do mobs spawn?
-local mobs_spawn = core.settings:get_bool("mobs_spawn", true) ~= false
-local spawn_protected = core.settings:get_bool("mobs_spawn_protected") ~= false
-local logging = core.settings:get_bool("mcl_logging_mobs_spawn", false)
-local mgname = core.get_mapgen_setting("mgname")
+local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
+local mobs_spawn_old = minetest.settings:get_bool("mobs_spawn_old", false) ~= false
+local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
+local logging = minetest.settings:get_bool("mcl_logging_mobs_spawn", false)
+local mgname = minetest.get_mapgen_setting("mgname")
 
 -- count how many mobs are in an area
 local function count_mobs(pos,r,mob_type)
@@ -459,7 +457,7 @@ local function get_next_mob_spawn_pos(pos)
 end
 
 
-if mobs_spawn then
+if mobs_spawn and mobs_spawn_old then
 	local cumulative_chance
 	local mob_library_worker_table
 	local function initialize_spawn_data()
@@ -566,6 +564,8 @@ function mob_class:despawn_ok (d_to_closest_player)
 	return true
 end
 
+local scale_chance = mcl_mobs.scale_chance
+
 function mob_class:check_despawn(pos, dtime)
 	if remove_far and self:despawn_allowed() then
 		local min_dist = math.huge
@@ -579,39 +579,15 @@ function mob_class:check_despawn(pos, dtime)
 			self:kill_me("no players within distance " .. instant_despawn_range)
 			return true
 		elseif min_dist > random_despawn_range then
-			if self.lifetimer then
-				self.lifetimer = self.lifetimer - dtime
-
-				if self.lifetimer <= 0 then
-					-- timer expired -> check random despawn chance
-
-					if math.random(1, 100) < (min_dist * min_dist) / 512 then
-						self:kill_me("random chance at distance " .. math.round(min_dist))
-						return true
-					end
-
-					-- survived despawn check -> fall through to refresh timer
-				else
-					-- timer not yet expired
-					return false
-				end
-
+			if math.random (1, scale_chance (800, dtime)) == 1 then
+				self:kill_me ("random chance at distance " .. math.round(min_dist))
+				return true
 			end
 
-			-- (re)set timer depending on light level
-			if (core.get_node_light(pos) or core.LIGHT_MAX )< timer_light_level then
-				self.lifetimer = timer_dark
-			else
-				self.lifetimer = timer_light
-			end
-
-			return false
-		else
-			-- too close -> disable timer
-			self.lifetimer = nil
 			return false
 		end
 	end
+	return false
 end
 
 function mob_class:kill_me(msg)
@@ -722,27 +698,583 @@ core.register_chatcommand("spawncheck",{
 	end
 })
 
-core.register_chatcommand("mobstats",{
+local SPAWN_DISTANCE = 6
+local MOB_CAP_DIVISOR = 289 * (168 / 289)
+
+minetest.register_chatcommand("mobstats",{
 	privs = { debug = true },
 	func = function(n, _)
-		core.chat_send_player(n,dump(dbg_spawn_counts))
-		local pos = core.get_player_by_name(n):get_pos()
-		core.chat_send_player(n,"mobs within 32 radius of player:"..count_mobs(pos,32))
-		core.chat_send_player(n,"total mobs:"..count_mobs_total())
-		core.chat_send_player(n,"spawning attempts since server start:"..dbg_spawn_attempts)
-		core.chat_send_player(n,"successful spawns since server start:"..dbg_spawn_succ)
+		if mobs_spawn_old then
+			minetest.chat_send_player(n,dump(dbg_spawn_counts))
+			local pos = minetest.get_player_by_name(n):get_pos()
+			minetest.chat_send_player(n,"mobs within 32 radius of player:"..count_mobs(pos,32))
+			minetest.chat_send_player(n,"total mobs:"..count_mobs_total())
+			minetest.chat_send_player(n,"spawning attempts since server start:"..dbg_spawn_attempts)
+			minetest.chat_send_player(n,"successful spawns since server start:"..dbg_spawn_succ)
 
 
-		local mob_counts, total_mobs = count_mobs_all()
-		if (total_mobs) then
-			core.log("action", "Total mobs found: " .. total_mobs)
+			local mob_counts, total_mobs = count_mobs_all()
+			if (total_mobs) then
+				minetest.log("action", "Total mobs found: " .. total_mobs)
+			end
+			if mob_counts then
+				for k, v1 in pairs(mob_counts) do
+					minetest.log("action", "k: " .. tostring(k))
+					minetest.log("action", "v1: " .. tostring(v1))
+				end
+			end
+		else
+			local mob_caps = {}
+			local n_players = #minetest.get_connected_players ()
+			local n_chunks = n_players
+				* ((SPAWN_DISTANCE * 2 + 1) * (SPAWN_DISTANCE * 2 + 1))
+			for category, data in pairs (mcl_mobs.spawn_categories) do
+				local global_max
+					= math.floor ((n_chunks * data.chunk_mob_cap)
+						/ MOB_CAP_DIVISOR)
+				mob_caps[category] = global_max
+			end
+
+			minetest.chat_send_player (n, table.concat ({
+				"Currently active mobs by category: ",
+				dump (mcl_mobs.active_mobs_by_category),
+				"\n",
+				"Chunk-derived mob caps (per-level): ",
+				dump (mob_caps), "\n",
+				"Chunk count: ", tostring (n_chunks),
+			}))
 		end
-		if mob_counts then
-			for k, v1 in pairs(mob_counts) do
-				core.log("action", "k: " .. tostring(k))
-				core.log("action", "v1: " .. tostring(v1))
+	end
+})
+
+------------------------------------------------------------------------
+-- Minecraft-like spawning mechanics.
+------------------------------------------------------------------------
+
+local active_mobs_by_category = {}
+local registered_spawners = {}
+mcl_mobs.active_mobs_by_category = active_mobs_by_category
+mcl_mobs.registered_spawners = registered_spawners
+
+-- https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.18.2/net/minecraft/world/entity/MobCategory.html
+
+local spawn_categories = {
+	["monster"] = {
+		chunk_mob_cap = 70,
+		is_friendly = false,
+		is_animal = false,
+	},
+	["creature"] = {
+		chunk_mob_cap = 10,
+		is_friendly = false,
+		is_animal = true,
+	},
+	["ambient"] = {
+		chunk_mob_cap = 15,
+		is_friendly = true,
+		is_animal = false,
+	},
+	["axolotl"] = {
+		chunk_mob_cap = 5,
+		is_friendly = true,
+		is_animal = false,
+	},
+	["underground_water_creature"] = {
+		chunk_mob_cap = 5,
+		is_friendly = true,
+		is_animal = false,
+	},
+	["water_creature"] = {
+		chunk_mob_cap = 5,
+		is_friendly = true,
+		is_animal = false,
+	},
+	["water_ambient"] = {
+		chunk_mob_cap = 5,
+		is_friendly = true,
+		is_animal = false,
+	},
+}
+mcl_mobs.spawn_categories = spawn_categories
+
+local pr = PcgRandom (os.time () + 95)
+
+local function get_nearest_player (pos, list)
+	local dist, pos_nearest, player = nil
+
+	for player_1, test_pos in pairs (list) do
+		local d = vector.distance (test_pos, pos)
+		if not dist or dist > d then
+			dist = d
+			pos_nearest = test_pos
+			player = player_1
+		end
+	end
+
+	return player, pos_nearest
+end
+
+local function get_eligible_spawn_type (pos, category)
+	local biome = core.get_biome_data (pos)
+	if not biome or not registered_spawners[biome.biome] then
+		return nil
+	end
+
+	-- TODO: reduced water ambient spawns
+
+	local mob_types = registered_spawners[biome.biome][category]
+	if not mob_types then
+		return nil
+	end
+	local weight = pr:next (1, mob_types.total_weight)
+	for _, spawner in ipairs (mob_types) do
+		weight = weight - spawner.weight
+		if weight <= 0 then
+			return spawner
+		end
+	end
+	return nil
+end
+
+local function spawn_a_pack (pos, players, category)
+	local player, player_pos = get_nearest_player (pos, players)
+	assert (player and player_pos)
+
+	local mob_def = get_eligible_spawn_type (pos, category)
+	if not mob_def then
+		return
+	end
+	local pack_size = pr:next (mob_def.pack_min, mob_def.pack_max)
+
+	local sdata = mob_def:prepare_to_spawn (pack_size, pos)
+	local spawn_pos
+
+	local spawned = {}
+	for i = 1, pack_size do
+		local dx = pr:next (0, 5) - pr:next (0, 5)
+		local dz = pr:next (0, 5) - pr:next (0, 5)
+		spawn_pos = vector.offset (pos, dx, 0.5, dz)
+		local dist = vector.distance (player_pos, spawn_pos)
+
+		-- Is it possible to spawn mobs here?
+		if dist < mob_def.despawn_distance
+			and dist > 24.0
+			and mob_def:test_spawn_position (spawn_pos, sdata)
+			and mob_def:test_spawn_clearance (spawn_pos, sdata) then
+			local object = mob_def:spawn (spawn_pos, #spawned + 1, sdata)
+			if object then
+				table.insert (spawned, object)
+			end
+		end
+	end
+	if logging and #spawned > 0 then
+		if #spawned == 1 then
+			local blurb = "[mcl_mobs] Spawned "
+				.. mob_def.name .. " at "
+				.. vector.to_string (spawn_pos)
+			minetest.log ("action", blurb)
+		else
+			local blurb = "[mcl_mobs] Spawned pack of "
+				.. #spawned .. " ".. mob_def.name
+				.. " around " .. vector.to_string (pos)
+			minetest.log ("action", blurb)
+		end
+	end
+	if #spawned > 0 then
+		mob_def:init_group (spawned, sdata)
+	end
+end
+
+function mcl_mobs.spawn_cycle (level, spawn_animals)
+	local chunks = {}
+	local chunk_to_data_map = {}
+	local players = {}
+	local chunk_ymin, chunk_ymax
+
+	-- Collect a list of chunks to evaluate for purposes of
+	-- spawning.
+
+	if level == "overworld" then
+		chunk_ymin = mcl_vars.mg_overworld_min
+		chunk_ymax = 300
+	elseif level == "nether" then
+		chunk_ymin = mcl_vars.mg_nether_min
+		chunk_ymax = mcl_vars.mg_nether_max - 1
+	elseif level == "end" then
+		chunk_ymin = mcl_vars.mg_end_min
+		chunk_ymax = mcl_vars.mg_end_max - 1
+	else
+		return
+	end
+
+	for player in mcl_util.connected_players () do
+		-- Players outside any dimension should not be
+		-- considered for spawning.
+		local pos = player:get_pos ()
+		local chunk_x = math.floor (pos.x / 16.0)
+		local chunk_z = math.floor (pos.z / 16.0)
+		local chunk_dim = mcl_worlds.pos_to_dimension (pos)
+		players[player] = pos
+
+		if chunk_dim == level then
+			for x = chunk_x - SPAWN_DISTANCE, chunk_x + SPAWN_DISTANCE do
+				for z = chunk_z - SPAWN_DISTANCE, chunk_z + SPAWN_DISTANCE do
+					local hash = ((x + 2048) * 4096) + (z + 2048)
+					if not chunk_to_data_map[hash] then
+						chunk_to_data_map[hash]	= {}
+						table.insert (chunks, hash)
+					end
+				end
+			end
+		end
+	end
+
+	local mobs_spawned = {}
+
+	-- Shuffle the list of chunks to be evaluated.
+	table.shuffle (chunks)
+
+	local test_pos = vector.zero ()
+	local n_chunks = #chunks
+
+	for _, chunk in pairs (chunks) do
+		local x = math.floor (chunk / 4096) - 2048
+		local z = chunk % 4096 - 2048
+		local center_x = (x * 16) + 7.5
+		local center_z = (z * 16) + 7.5
+		local eligible = false
+
+		-- Is any player within 128 blocks of this chunk
+		-- horizontally?
+		for _, pos in pairs (players) do
+			local dist = (pos.x - center_x) * (pos.x - center_x)
+				+ (pos.z - center_z) * (pos.z - center_z)
+			if dist < 16384.0 then
+				eligible = true
+				break
 			end
 		end
 
+		if eligible then
+			for key, _ in pairs (spawn_categories) do
+				mobs_spawned[key] = active_mobs_by_category[key] or 0
+			end
+			for category, existing in pairs (mobs_spawned) do
+				local data = spawn_categories[category]
+				if (data.is_animal and spawn_animals)
+					or (not data.is_animal and not spawn_animals) then
+					-- Verify that local and
+					-- global mob caps have not
+					-- been exceeded.
+					local global_max
+						= math.floor ((n_chunks * data.chunk_mob_cap)
+							/ MOB_CAP_DIVISOR)
+					-- local local_max
+					-- 	= 0 -- count_local_mobs (x, z, chunk_ymin, chunk_ymax) TODO
+
+					if existing < global_max then
+						-- Select a random position.
+						test_pos.x = pr:next (x * 16, x * 16 + 15)
+						test_pos.z = pr:next (z * 16, z * 16 + 15)
+						test_pos.y = pr:next (chunk_ymin, chunk_ymax)
+
+						-- Verify that the position is loaded.
+						if minetest.get_node_or_nil (test_pos) then
+							spawn_a_pack (test_pos, players, category)
+						end
+					end
+				end
+			end
+		end
 	end
+end
+
+local default_spawner = {
+	weight = 100,
+	biomes = {},
+	despawn_distance = 128,
+	spawn_placement = "ground", -- misc, ground, aquatic, lava
+	spawn_category = "misc", -- Should be identical to that of the
+				 -- mob def.
+	fire_immune = false,
+	pack_min = 4, -- TODO
+	pack_max = 4,
+}
+
+function mcl_mobs.register_spawner (spawner)
+	local spawner = table.merge (default_spawner, spawner)
+	table.insert (registered_spawners, spawner)
+end
+
+mcl_mobs.default_spawner = default_spawner
+
+-- Convert this table into a map between biome IDs and spawners
+-- once all biomes are registered.
+
+minetest.register_on_mods_loaded (function ()
+	local output = {}
+	local n = #registered_spawners
+	for i = 1, n do
+		local spawner = registered_spawners[i]
+		for _, biome in pairs (spawner.biomes) do
+			local id = core.get_biome_id (biome)
+			if not id then
+				core.log ("warning", table.concat ({
+					"Unknown biome in mob spawner for ",
+					spawner.name, ": ", biome,
+				}))
+			else
+				if not output[id] then
+					output[id] = {}
+				end
+
+				if not output[id][spawner.spawn_category] then
+					output[id][spawner.spawn_category] = {
+						total_weight = 0,
+					}
+				end
+
+				local list = output[id][spawner.spawn_category]
+				list.total_weight = list.total_weight + spawner.weight
+				table.insert (list, spawner)
+			end
+		end
+	end
+	registered_spawners = output
+	mcl_mobs.registered_spawners = registered_spawners
+end)
+
+------------------------------------------------------------------------
+-- Default spawning criteria.
+------------------------------------------------------------------------
+
+local cube = mcl_util.decompose_AABBs ({{
+	-0.5, -0.5, -0.5,
+	0.5, 0.5, 0.5,
+}})
+
+function mcl_mobs.is_up_face_sturdy (node)
+	local boxes = core.get_node_boxes ("collision_box", node)
+	local shape = mcl_util.decompose_AABBs (boxes)
+	local up_face = shape and shape:select_face ("y", 0.5)
+	return up_face and up_face:equal_p (cube)
+end
+
+function default_spawner:is_valid_spawn_ceiling (name)
+	local def = minetest.registered_nodes[name]
+	if name == "ignore"
+		or not def
+		or (def.walkable or def.liquidtype ~= "none")
+		or (def.groups.no_spawning_inside
+			and def.groups.no_spawning_inside ~= 0)
+		or (def.damage_per_second > 0)
+		or (not self.fire_immune
+			and def.groups.fire
+			and def.groups.fire ~= 0)
+		or (not self.fire_immune
+			and def.groups.lava
+			and def.groups.lava ~= 0) then
+		return false
+	end
+	return true
+end
+
+function default_spawner:test_spawn_position (spawn_pos, sdata)
+	local spawn_placement = self.spawn_placement
+	if spawn_placement == "misc" then
+		-- Just test that the position is loaded.
+		return minetest.get_node_or_nil (spawn_pos) ~= nil
+	elseif spawn_placement == "ground" then
+		local block_pos = mcl_util.get_nodepos (spawn_pos)
+		block_pos.y = block_pos.y - 1
+		local node_below = minetest.get_node (block_pos)
+		if minetest.get_item_group (node_below.name, "opaque") == 0
+			or node_below.name == "mcl_core:bedrock" then
+			return false
+		end
+		-- The up face of the supporting node must be sturdy.
+		if mcl_mobs.is_up_face_sturdy (block_pos) then
+			-- The block here and the block above must not
+			-- be opaque nor deal damage.
+			block_pos.y = block_pos.y + 1
+			local node_here = minetest.get_node (block_pos)
+			block_pos.y = block_pos.y + 1
+			local node_above = minetest.get_node (block_pos)
+
+			return self:is_valid_spawn_ceiling (node_here.name)
+				and self:is_valid_spawn_ceiling (node_above.name)
+		end
+		return false
+	elseif spawn_placement == "aquatic" then
+		local block_pos = mcl_util.get_nodepos (spawn_pos)
+		local node = minetest.get_node (block_pos)
+		if minetest.get_item_group (node.name, "water") > 0 then
+			block_pos.y = block_pos.y + 1
+			local above = minetest.get_node (block_pos)
+			return minetest.get_item_group (above.name, "opaque") == 0
+		end
+		return false
+	elseif spawn_placement == "lava" then
+		local block_pos = mcl_util.get_nodepos (spawn_pos)
+		local node = minetest.get_node (block_pos)
+		if minetest.get_item_group (node.name, "lava") > 0 then
+			return true
+		end
+	end
+	return false
+end
+
+local function box_intersection (box, other_box)
+	for index = 1, 3 do
+		if box[index] > other_box[index + 3]
+			or other_box[index] > box[index + 3] then
+			return false
+		end
+	end
+	return true
+end
+
+function default_spawner:test_collision (node, cbox)
+	local node_data = minetest.get_node (node)
+	if node_data.name == "ignore" then
+		return true
+	end
+	local def = minetest.registered_nodes[node_data.name]
+
+	if def and not def.walkable
+		and ((self.spawn_placement == "aquatic"
+			or self.spawn_placement == "lava")
+			or def.liquidtype == "none") then
+		return false
+	end
+
+	local boxes
+		= minetest.get_node_boxes ("collision_box", node, node_data)
+	for _, box in pairs (boxes) do
+		box[1] = box[1] + node.x
+		box[2] = box[2] + node.y
+		box[3] = box[3] + node.z
+		box[4] = box[4] + node.x
+		box[5] = box[5] + node.y
+		box[6] = box[6] + node.z
+
+		if box_intersection (box, cbox) then
+			return true
+		end
+	end
+	return false
+end
+
+function default_spawner:test_spawn_clearance (spawn_pos, sdata)
+	local mob_def = minetest.registered_entities[self.name]
+	if not mob_def then
+		return false
+	end
+	local cbox = mob_def.initial_properties.collisionbox
+	if not cbox then
+		return false
+	end
+
+	local cbox_1 = {
+		cbox[1] + spawn_pos.x + 0.01,
+		cbox[2] + spawn_pos.y + 0.01,
+		cbox[3] + spawn_pos.z + 0.01,
+		cbox[4] + spawn_pos.x - 0.01,
+		cbox[5] + spawn_pos.y - 0.01,
+		cbox[6] + spawn_pos.z - 0.01,
+	}
+	local xmin = math.floor (cbox[1] + 0.5 + spawn_pos.x)
+	local ymin = math.floor (cbox[2] + 0.5 + spawn_pos.y)
+	local zmin = math.floor (cbox[3] + 0.5 + spawn_pos.z)
+	local xmax = math.floor (cbox[4] + 0.5 + spawn_pos.x)
+	local ymax = math.floor (cbox[5] + 0.5 + spawn_pos.y)
+	local zmax = math.floor (cbox[6] + 0.5 + spawn_pos.z)
+	local v = vector.zero ()
+
+	for z = zmin, zmax do
+		v.z = z
+		for x = xmin, xmax do
+			v.x = x
+			for y = ymin, ymax do
+				v.y = y
+				if self:test_collision (v, cbox_1) then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+function default_spawner:spawn (spawn_pos, idx, sdata, pack_size)
+	local staticdata = sdata and minetest.serialize (sdata)
+	return minetest.add_entity (spawn_pos, self.name, staticdata)
+end
+
+function default_spawner:prepare_to_spawn (pack_size, center)
+	return nil
+end
+
+function default_spawner:init_group (list, sdata)
+	return
+end
+
+if not mobs_spawn_old then
+
+local spawn_timer = 0
+local passive_spawn_timer = 0
+
+minetest.register_globalstep (function (dtime)
+	spawn_timer = spawn_timer - dtime
+	passive_spawn_timer = passive_spawn_timer - dtime
+	if spawn_timer <= 0 then
+		mcl_mobs.spawn_cycle ("overworld", false)
+		mcl_mobs.spawn_cycle ("nether", false)
+		mcl_mobs.spawn_cycle ("end", false)
+		spawn_timer = 0.05
+	end
+	if passive_spawn_timer <= 0 then
+		mcl_mobs.spawn_cycle ("overworld", true)
+		mcl_mobs.spawn_cycle ("nether", true)
+		mcl_mobs.spawn_cycle ("end", true)
+		passive_spawn_timer = 10.0
+	end
+end)
+
+end
+
+------------------------------------------------------------------------
+-- Spawn testing utilities.
+------------------------------------------------------------------------
+
+local function evaluate_node_properties (itemstack, user, pointed_thing)
+	if not (user and user:is_player ()) then
+		return
+	end
+	local playername = user:get_player_name ()
+	if pointed_thing.type == "node" then
+		local node = minetest.get_node (pointed_thing.under)
+		minetest.chat_send_player (playername, table.concat ({
+			"Node: ", node.name, "\n",
+			"Up face sturdy: ",
+			tostring (mcl_mobs.is_up_face_sturdy (pointed_thing.under)),
+		}))
+	end
+end
+
+minetest.register_tool ("mcl_mobs:spawn_stick", {
+	description = "Evaluate node properties",
+	inventory_image = "default_stick.png^[colorize:purple:50",
+	groups = { testtool = 1, disable_repair = 1,
+		   not_in_creative_inventory = 1, },
+	on_use = evaluate_node_properties,
+})
+
+minetest.register_chatcommand ("spawn_cycle", {
+	privs = { server = true, },
+	params = "[ end | overworld | nether ]",
+	func = function (n, param)
+		mcl_mobs.spawn_cycle (param)
+		mcl_mobs.spawn_cycle (param, true)
+	end,
 })

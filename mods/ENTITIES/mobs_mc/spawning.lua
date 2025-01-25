@@ -1,0 +1,222 @@
+-------------------------------------------------------------------------
+-- Spawning initialization.
+-------------------------------------------------------------------------
+
+mobs_mc.overworld_biomes = {
+	"IcePlains",
+	"IcePlainsSpikes",
+	"ColdTaiga",
+	"ExtremeHills",
+	"ExtremeHillsM",
+	"ExtremeHills+",
+	"Taiga",
+	"MegaTaiga",
+	"MegaSpruceTaiga",
+	"StoneBeach",
+	"Plains",
+	"SunflowerPlains",
+	"Forest",
+	"FlowerForest",
+	"BirchForest",
+	"BirchForestM",
+	"RoofedForest",
+	"Swampland",
+	"Jungle",
+	"JungleM",
+	"JungleEdge",
+	"JungleEdgeM",
+	"BambooJungle",
+	"MushroomIsland",
+	"Desert",
+	"Savanna",
+	"SavannaM",
+	"Mesa",
+	"MesaBryce",
+	"MesaPlateauF",
+	"MesaPlateauFM",
+	"MangroveSwamp",
+}
+
+local n = #mobs_mc.overworld_biomes
+for i = 1, n do
+	local biome = mobs_mc.overworld_biomes[i]
+	table.insert (mobs_mc.overworld_biomes, biome .. "_underground")
+	table.insert (mobs_mc.overworld_biomes, biome .. "_ocean")
+	table.insert (mobs_mc.overworld_biomes, biome .. "_deep_ocean")
+	table.insert (mobs_mc.overworld_biomes, biome .. "_deep_underground")
+end
+table.insert (mobs_mc.overworld_biomes, "DripstoneCave")
+
+mobs_mc.farm_animal_biomes = {
+	"ExtremeHills",
+	"ExtremeHillsM",
+	"ExtremeHills+",
+	"Taiga",
+	"MegaTaiga",
+	"MegaSpruceTaiga",
+	"StoneBeach",
+	"Plains",
+	"SunflowerPlains",
+	"Forest",
+	"FlowerForest",
+	"BirchForest",
+	"BirchForestM",
+	"RoofedForest",
+	"Swampland",
+	"Jungle",
+	"JungleM",
+	"JungleEdge",
+	"JungleEdgeM",
+	"BambooJungle",
+	"Savanna",
+	"SavannaM",
+	"MangroveSwamp",
+}
+
+local n = #mobs_mc.farm_animal_biomes
+for i = 1, n do
+	local biome = mobs_mc.farm_animal_biomes[i]
+	table.insert (mobs_mc.farm_animal_biomes, biome .. "_underground")
+	table.insert (mobs_mc.farm_animal_biomes, biome .. "_ocean")
+	table.insert (mobs_mc.farm_animal_biomes, biome .. "_deep_ocean")
+	table.insert (mobs_mc.farm_animal_biomes, biome .. "_deep_underground")
+end
+
+mobs_mc.monster_biomes = {
+	"IcePlains",
+	"IcePlainsSpikes",
+	"ColdTaiga",
+	"ExtremeHills",
+	"ExtremeHillsM",
+	"ExtremeHills+",
+	"Taiga",
+	"MegaTaiga",
+	"MegaSpruceTaiga",
+	"StoneBeach",
+	"Plains",
+	"SunflowerPlains",
+	"Forest",
+	"FlowerForest",
+	"BirchForest",
+	"BirchForestM",
+	"RoofedForest",
+	"Swampland",
+	"Jungle",
+	"JungleM",
+	"JungleEdge",
+	"JungleEdgeM",
+	"BambooJungle",
+	"Desert",
+	"Savanna",
+	"SavannaM",
+	"Mesa",
+	"MesaBryce",
+	"MesaPlateauF",
+	"MesaPlateauFM",
+	"MangroveSwamp",
+}
+
+local n = #mobs_mc.monster_biomes
+for i = 1, n do
+	local biome = mobs_mc.monster_biomes[i]
+	table.insert (mobs_mc.monster_biomes, biome .. "_underground")
+	table.insert (mobs_mc.monster_biomes, biome .. "_ocean")
+	table.insert (mobs_mc.monster_biomes, biome .. "_deep_ocean")
+	table.insert (mobs_mc.monster_biomes, biome .. "_deep_underground")
+end
+
+-------------------------------------------------------------------------
+-- Default spawners.
+-------------------------------------------------------------------------
+
+-- Land animals.
+
+local default_spawner = mcl_mobs.default_spawner
+local animal_spawner = {
+	spawn_category = "creature",
+	spawn_placement = "ground",
+}
+
+function animal_spawner:test_supporting_node (node)
+	return minetest.get_item_group (node.name, "grass_block") > 0
+end
+
+function animal_spawner:test_spawn_position (spawn_pos, sdata)
+	local node = mcl_util.get_nodepos (spawn_pos)
+	local light = minetest.get_node_light (node)
+	if not light or light <= 8 then
+		return false
+	end
+	node.y = node.y - 1
+	local node_below = minetest.get_node (node)
+	if self:test_supporting_node (node_below) then
+		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+			return true
+		end
+	end
+	return false
+end
+
+mobs_mc.animal_spawner = animal_spawner
+
+-- Aquatic animals.
+
+local default_spawner = mcl_mobs.default_spawner
+local aquatic_animal_spawner = {
+	spawn_category = "water_ambient",
+	spawn_placement = "aquatic",
+}
+
+function aquatic_animal_spawner:test_spawn_position (spawn_pos, sdata)
+	if spawn_pos.y > 0.5 or spawn_pos.y < -12.5 then
+		return false
+	end
+
+	local node = mcl_util.get_nodepos (spawn_pos)
+	node.y = node.y - 1
+	local node_below = minetest.get_node (node)
+	node.y = node.y + 2
+	local node_above = minetest.get_node (node)
+	if minetest.get_item_group (node_below.name, "water") > 0
+		and minetest.get_item_group (node_above.name, "water") > 0 then
+		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+			return true
+		end
+	end
+	return false
+end
+
+mobs_mc.aquatic_animal_spawner = aquatic_animal_spawner
+
+-- Monsters.
+
+local monster_spawner = {
+	spawn_placement = "ground",
+	spawn_category = "monster",
+	pack_min = 4,
+	pack_max = 4,
+	max_artificial_light = 0,
+	max_light = 6,
+}
+
+function monster_spawner:test_spawn_position (spawn_pos, sdata)
+	if mcl_vars.difficulty == 0 then
+		return false
+	end
+	local node = mcl_util.get_nodepos (spawn_pos)
+	local natural_light = minetest.get_natural_light (node)
+	if not natural_light
+		or natural_light > self.max_light
+		or natural_light > math.random (0, 31) then
+		return false
+	end
+	local node_data = minetest.get_node (node)
+	local light = minetest.get_artificial_light (node_data.param1)
+	if not light or light > self.max_artificial_light then
+		return false
+	end
+
+	return default_spawner.test_spawn_position (self, spawn_pos, sdata)
+end
+
+mobs_mc.monster_spawner = monster_spawner

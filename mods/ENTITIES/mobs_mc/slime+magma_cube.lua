@@ -214,11 +214,12 @@ local slime_big = {
 	description = S("Slime - big"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	hp_min = 16,
 	hp_max = 16,
 	xp_min = 4,
 	xp_max = 4,
-	collisionbox = {-1.02, -0.01, -1.02, 1.02, 2.03, 1.02},
+	collisionbox = {-1.02, 0.0, -1.02, 1.02, 2.0, 1.02},
 	visual_size = {x=12.5, y=12.5},
 	textures = {{"mobs_mc_slime.png", "mobs_mc_slime.png"}},
 	visual = "mesh",
@@ -283,7 +284,7 @@ slime_small.hp_min = 4
 slime_small.hp_max = 4
 slime_small.xp_min = 2
 slime_small.xp_max = 2
-slime_small.collisionbox = {-0.51, -0.01, -0.51, 0.51, 1.00, 0.51}
+slime_small.collisionbox = {-0.51, 0.0, -0.51, 0.51, 1.00, 0.51}
 slime_small.visual_size = {x=6.25, y=6.25}
 slime_small.damage = 3
 slime_small.reach = 2.75
@@ -300,7 +301,7 @@ slime_tiny.hp_min = 1
 slime_tiny.hp_max = 1
 slime_tiny.xp_min = 1
 slime_tiny.xp_max = 1
-slime_tiny.collisionbox = {-0.2505, -0.01, -0.2505, 0.2505, 0.50, 0.2505}
+slime_tiny.collisionbox = {-0.2505, 0.0, -0.2505, 0.2505, 0.50, 0.2505}
 slime_tiny.visual_size = {x=3.125, y=3.125}
 slime_tiny.damage = 0
 slime_tiny.reach = 2.5
@@ -403,7 +404,7 @@ local magma_cube_big = {
 	hp_max = 16,
 	xp_min = 4,
 	xp_max = 4,
-	collisionbox = {-1.02, -0.01, -1.02, 1.02, 2.03, 1.02},
+	collisionbox = {-1.02, 0.0, -1.02, 1.02, 2.03, 1.02},
 	visual_size = {x=12.5, y=12.5},
 	textures = {{ "mobs_mc_magmacube.png", "mobs_mc_magmacube.png" }},
 	visual = "mesh",
@@ -476,7 +477,7 @@ magma_cube_small.hp_min = 4
 magma_cube_small.hp_max = 4
 magma_cube_small.xp_min = 2
 magma_cube_small.xp_max = 2
-magma_cube_small.collisionbox = {-0.51, -0.01, -0.51, 0.51, 1.00, 0.51}
+magma_cube_small.collisionbox = {-0.51, 0.0, -0.51, 0.51, 1.00, 0.51}
 magma_cube_small.visual_size = {x=6.25, y=6.25}
 magma_cube_small.damage = 3
 magma_cube_small.reach = 2.75
@@ -499,7 +500,7 @@ magma_cube_tiny.hp_min = 1
 magma_cube_tiny.hp_max = 1
 magma_cube_tiny.xp_min = 1
 magma_cube_tiny.xp_max = 1
-magma_cube_tiny.collisionbox = {-0.2505, -0.01, -0.2505, 0.2505, 0.50, 0.2505}
+magma_cube_tiny.collisionbox = {-0.2505, 0.0, -0.2505, 0.2505, 0.50, 0.2505}
 magma_cube_tiny.visual_size = {x=3.125, y=3.125}
 magma_cube_tiny.movement_speed = 4.0
 magma_cube_tiny.jump_height = 8.4
@@ -533,3 +534,100 @@ end
 mcl_mobs.register_egg("mobs_mc:magma_cube_big", S("Magma Cube"), "#350000", "#fcfc00")
 
 mcl_mobs.register_egg("mobs_mc:slime_big", S("Slime"), "#52a03e", "#7ebf6d")
+
+------------------------------------------------------------------------
+-- Modern Slime & Magma Cube spawning.
+------------------------------------------------------------------------
+
+local monster_spawner = mobs_mc.monster_spawner
+local slime_spawner = table.merge (monster_spawner, {
+	name = "mobs_mc:slime_big", -- Nominal name; governs collision tests.
+	weight = 100,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = mobs_mc.monster_biomes,
+	max_light = 15,
+})
+
+function slime_spawner:test_spawn_position (spawn_pos, sdata)
+	local biome = minetest.get_biome_data (spawn_pos)
+	if biome then
+		local name = minetest.get_biome_name (biome.biome)
+		if name == "Swampland" or name == "MangroveSwamp" then
+			if swamp_spawn (spawn_pos) then
+				return monster_spawner.test_spawn_position (self, spawn_pos, sdata)
+			end
+		end
+
+		if spawn_pos.y <= slime_chunk_spawn_max + 0.5
+			and in_slime_chunk (spawn_pos)
+			and math.random (1, 10) == 1 then
+			return monster_spawner.test_spawn_position (self, spawn_pos, sdata)
+		end
+	end
+	return false
+end
+
+function slime_spawner:spawn (spawn_pos, _)
+	local slime_type = "mobs_mc:slime_tiny"
+
+	local random = math.random (1, 3)
+	if math.random () < 0.5 * mcl_worlds.get_special_difficulty (spawn_pos) then
+		random = math.max (random + 1, 3)
+	end
+	if random == 2 then
+		slime_type = "mobs_mc:slime_small"
+	elseif random == 3 then
+		slime_type = "mobs_mc:slime_big"
+	end
+
+	return minetest.add_entity (spawn_pos, slime_type)
+end
+
+mcl_mobs.register_spawner (slime_spawner)
+
+local default_spawner = mcl_mobs.default_spawner
+
+local magma_cube_spawner = {
+	name = "mobs_mc:magma_cube_big",
+	spawn_category = "monster",
+	weight = 2,
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"Nether",
+	},
+}
+
+function magma_cube_spawner:test_spawn_position (spawn_pos, sdata)
+	return mcl_vars.difficulty > 0
+		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+end
+
+function magma_cube_spawner:spawn (spawn_pos, _)
+	local slime_type = "mobs_mc:magma_cube_tiny"
+
+	local random = math.random (1, 3)
+	if math.random () < 0.5 * mcl_worlds.get_special_difficulty (spawn_pos) then
+		random = math.max (random + 1, 3)
+	end
+	if random == 2 then
+		slime_type = "mobs_mc:magma_cube_small"
+	elseif random == 3 then
+		slime_type = "mobs_mc:magma_cube_big"
+	end
+
+	return minetest.add_entity (spawn_pos, slime_type)
+end
+
+local magma_cube_spawner_basalt_delta = table.merge (magma_cube_spawner, {
+	weight = 100,
+	pack_min = 2,
+	pack_max = 5,
+	biomes = {
+		"BasaltDelta",
+	},
+})
+
+mcl_mobs.register_spawner (magma_cube_spawner)
+mcl_mobs.register_spawner (magma_cube_spawner_basalt_delta)

@@ -25,6 +25,7 @@ local ocelot = {
 	description = S("Ocelot"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "monster",
 	persist_in_peaceful = false,
 	passive = false,
 	retaliates = false,
@@ -42,7 +43,7 @@ local ocelot = {
 	horizontal_head_height = -0,
 	head_yaw = "z",
 	curiosity = 4,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 0.69, 0.3},
+	collisionbox = {-0.3, 0, -0.3, 0.3, 0.7, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_cat.b3d",
 	textures = {"mobs_mc_cat_ocelot.png"},
@@ -1009,3 +1010,41 @@ end
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:ocelot", S("Ocelot"), "#efde7d", "#564434", 0)
 mcl_mobs.register_egg("mobs_mc:cat", S("Cat"), "#AA8755", "#505438", 0)
+
+------------------------------------------------------------------------
+-- Modern Ocelot spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+-- Yes, ozelots are monsters in Minecraft.
+local ocelot_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:ocelot",
+	weight = 2,
+	pack_min = 1,
+	pack_max = 1,
+	biomes = {
+		"Jungle",
+		"JungleEdgeM",
+		"JungleM",
+		"JungleEdge",
+		"BambooJungle",
+	},
+})
+
+local function floor_is_grass_or_leaves (spawn_pos)
+	local node_pos = mcl_util.get_nodepos (spawn_pos)
+	node_pos.y = node_pos.y - 1
+	local node = minetest.get_node (node_pos)
+	return minetest.get_item_group (node.name, "leaves") > 0
+		or minetest.get_item_group (node.name, "grass_block") > 0
+end
+
+function ocelot_spawner:test_spawn_position (spawn_pos, sdata)
+	return math.random (3) == 1
+		and spawn_pos.y >= 0.5
+		and floor_is_grass_or_leaves (spawn_pos)
+		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+end
+
+mcl_mobs.register_spawner (ocelot_spawner)

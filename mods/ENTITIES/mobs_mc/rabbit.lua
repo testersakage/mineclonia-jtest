@@ -7,6 +7,7 @@ local rabbit = {
 	description = S("Rabbit"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	spawn_in_group_min = 2,
 	spawn_in_group = 3,
 	passive = true,
@@ -15,7 +16,7 @@ local rabbit = {
 	hp_max = 3,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.2, -0.1, -0.2, 0.2, 0.49, 0.2},
+	collisionbox = {-0.2, 0.0, -0.2, 0.2, 0.5, 0.2},
 	head_swivel = "head.control",
 	bone_eye_height = 2,
 	head_eye_height = 0.5,
@@ -127,28 +128,31 @@ function rabbit:set_nametag (nametag)
 end
 
 function rabbit:on_spawn ()
-	local self_pos = self.object:get_pos ()
-	local data = core.get_biome_data (self_pos)
-	local random = math.random (100)
-	local name = core.get_biome_name (data.biome)
-	local definition = core.registered_biomes[name]
-	local texture
+	local texture = self._spawn_texture
 
-	if definition._mcl_biome_type == "cold"
-		or definition._mcl_biome_type == "snowy" then
-		if random < 80 then
-			texture = "mobs_mc_rabbit_white.png"
+	if not texture then
+		local self_pos = self.object:get_pos ()
+		local data = minetest.get_biome_data (self_pos)
+		local random = math.random (100)
+		local name = minetest.get_biome_name (data.biome)
+		local definition = minetest.registered_biomes[name]
+
+		if definition._mcl_biome_type == "cold"
+			or definition._mcl_biome_type == "snowy" then
+			if random < 80 then
+				texture = "mobs_mc_rabbit_white.png"
+			else
+				texture = "mobs_mc_rabbit_white_splotched.png"
+			end
+		elseif name:find ("Desert") then
+			texture = "mobs_mc_rabbit_gold.png"
+		elseif random < 50 then
+			texture = "mobs_mc_rabbit_brown.png"
+		elseif random < 90 then
+			texture = "mobs_mc_rabbit_salt.png"
 		else
-			texture = "mobs_mc_rabbit_white_splotched.png"
+			texture = "mobs_mc_rabbit_black.png"
 		end
-	elseif name:find ("Desert") then
-		texture = "mobs_mc_rabbit_gold.png"
-	elseif random < 50 then
-		texture = "mobs_mc_rabbit_brown.png"
-	elseif random < 90 then
-		texture = "mobs_mc_rabbit_salt.png"
-	else
-		texture = "mobs_mc_rabbit_black.png"
 	end
 	self.base_texture[0] = texture
 	self:set_textures (self.base_texture)
@@ -439,8 +443,11 @@ killer_bunny.ai_functions = {
 
 mcl_mobs.register_mob ("mobs_mc:killer_bunny", killer_bunny)
 
+------------------------------------------------------------------------
+-- Rabbit spawning.
+------------------------------------------------------------------------
 -- Mob spawning rules.
--- Different skins depending on spawn location <- we'll get to this when the spawning algorithm is fleshed out
+-- Different skins depending on spawn location.
 
 mcl_mobs.spawn_setup({
 	name = "mobs_mc:rabbit",
@@ -466,3 +473,104 @@ mcl_mobs.register_egg("mobs_mc:rabbit", S("Rabbit"), "#995f40", "#734831", 0)
 
 -- Note: This spawn egg does not exist in Minecraft
 mcl_mobs.register_egg("mobs_mc:killer_bunny", S("Killer Bunny"), "#f2f2f2", "#ff0000", 0)
+
+------------------------------------------------------------------------
+-- Modern Rabbit spawning.
+------------------------------------------------------------------------
+
+local rabbit_spawner_woody = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:rabbit",
+	weight = 4,
+	pack_min = 2,
+	pack_max = 3,
+	biomes = {
+		"FlowerForest",
+		"Taiga",
+		"MegaSpruceTaiga",
+		"MegaTaiga",
+	},
+})
+
+local default_spawner = mcl_mobs.default_spawner
+
+function rabbit_spawner_woody:test_spawn_position (spawn_pos, sdata)
+	local node = mcl_util.get_nodepos (spawn_pos)
+	local light = minetest.get_node_light (node)
+	if not light or light <= 8 then
+		return false
+	end
+	node.y = node.y - 1
+	local node_below = minetest.get_node (node)
+	if minetest.get_item_group (node_below.name, "grass_block") > 0
+		or node_below.name == "mcl_core:sand"
+		or node_below.name == "mcl_core:snowblock" then
+		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+			return true
+		end
+	end
+	return false
+end
+
+function rabbit_spawner_woody:prepare_to_spawn (pack_size, center)
+	-- Select a variant for the entire pack.
+	local texture
+	local data = minetest.get_biome_data (center)
+	local random = math.random (100)
+	local name = minetest.get_biome_name (data.biome)
+	local definition = minetest.registered_biomes[name]
+
+	if definition._mcl_biome_type == "cold"
+		or definition._mcl_biome_type == "snowy" then
+		if random < 80 then
+			texture = "mobs_mc_rabbit_white.png"
+		else
+			texture = "mobs_mc_rabbit_white_splotched.png"
+		end
+	elseif name:find ("Desert") then
+		texture = "mobs_mc_rabbit_gold.png"
+	elseif random < 50 then
+		texture = "mobs_mc_rabbit_brown.png"
+	elseif random < 90 then
+		texture = "mobs_mc_rabbit_salt.png"
+	else
+		texture = "mobs_mc_rabbit_black.png"
+	end
+	return {
+		_spawn_texture = texture,
+	}
+end
+
+local rabbit_spawner_cherry_grove = table.merge (rabbit_spawner_woody, {
+	weight = 2,
+	pack_min = 2,
+	pack_max = 3,
+	biomes = {
+		"CherryGrove",
+	},
+})
+
+local rabbit_spawner_snowy = table.merge (rabbit_spawner_woody, {
+	weight = 10,
+	pack_min = 2,
+	pack_max = 3,
+	biomes = {
+		"ColdTaiga",
+		"IcePlainsSpikes",
+		"IcePlains",
+		"ExtremeHills+_snowtop",
+	},
+})
+
+local rabbit_spawner_desert = table.merge (rabbit_spawner_woody, {
+	weight = 4,
+	pack_min = 2,
+	pack_max = 3,
+	biomes = {
+		"Desert",
+	},
+})
+
+mcl_mobs.register_spawner (rabbit_spawner_woody)
+mcl_mobs.register_spawner (rabbit_spawner_cherry_grove)
+mcl_mobs.register_spawner (rabbit_spawner_snowy)
+mcl_mobs.register_spawner (rabbit_spawner_desert)

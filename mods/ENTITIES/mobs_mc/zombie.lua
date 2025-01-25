@@ -63,6 +63,7 @@ local zombie = table.merge (posing_humanoid, {
 	description = S("Zombie"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 5,
@@ -85,7 +86,7 @@ local zombie = table.merge (posing_humanoid, {
 		undead = 90,
 		fleshy = 90,
 	},
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.95, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_zombie.b3d",
 	visual_size = {
@@ -746,7 +747,7 @@ mcl_mobs.register_mob ("mobs_mc:zombie", zombie)
 local baby_zombie = table.merge (zombie, {
 	description = S("Baby Zombie"),
 	visual_size = { x = 0.5, y = 0.5, z = 0.5 },
-	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.98, 0.25},
+	collisionbox = {-0.25, 0.0, -0.25, 0.25, 0.99, 0.25},
 	xp_min = 12,
 	xp_max = 12,
 	child = 1,
@@ -903,3 +904,66 @@ mcl_mobs.spawn_setup ({
 -- Spawn eggs
 mcl_mobs.register_egg ("mobs_mc:husk", S("Husk"), "#777361", "#ded88f", 0)
 mcl_mobs.register_egg ("mobs_mc:zombie", S("Zombie"), "#00afaf", "#799c66", 0)
+
+------------------------------------------------------------------------
+-- Modern Zombie & Husk spawning.
+------------------------------------------------------------------------
+
+local non_desert_biomes = {}
+local desert_biomes = {}
+
+for _, biome in pairs (mobs_mc.monster_biomes) do
+	if not biome:find ("Desert") then
+		table.insert (non_desert_biomes, biome)
+	else
+		table.insert (desert_biomes, biome)
+	end
+end
+
+local zombie_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:zombie",
+	weight = 95,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = non_desert_biomes,
+})
+
+function zombie_spawner:spawn (spawn_pos, idx, sdata, pack_size)
+	if math.random () < 0.05 then
+		return minetest.add_entity (spawn_pos, "mobs_mc:baby_zombie")
+	else
+		return minetest.add_entity (spawn_pos, "mobs_mc:zombie")
+	end
+end
+
+local zombie_spawner_desert = table.merge (zombie_spawner, {
+	weight = 19,
+	biomes = desert_biomes,
+})
+
+local husk_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:husk",
+	weight = 80,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = desert_biomes,
+})
+
+local monster_spawner = mobs_mc.monster_spawner
+
+function husk_spawner:test_spawn_position (spawn_pos, sdata)
+	return mcl_weather.is_outdoor (spawn_pos)
+		and monster_spawner.test_spawn_position (self, spawn_pos, sdata)
+end
+
+function husk_spawner:spawn (spawn_pos, idx, sdata, pack_size)
+	if math.random () < 0.05 then
+		return minetest.add_entity (spawn_pos, "mobs_mc:baby_husk")
+	else
+		return minetest.add_entity (spawn_pos, "mobs_mc:husk")
+	end
+end
+
+mcl_mobs.register_spawner (zombie_spawner)
+mcl_mobs.register_spawner (zombie_spawner_desert)
+mcl_mobs.register_spawner (husk_spawner)

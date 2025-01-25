@@ -10,6 +10,7 @@ local guardian = {
 	description = S("Guardian"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	spawn_in_group_min = 2,
 	spawn_in_group = 4,
 	hp_min = 30,

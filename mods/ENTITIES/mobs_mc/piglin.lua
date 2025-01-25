@@ -22,8 +22,9 @@ local piglin_base = {
 	passive = false,
 	mesh = "mobs_mc_piglin.b3d",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	persist_in_peaceful = true,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
+	collisionbox = {-0.3, 0, -0.3, 0.3, 1.95, 0.3},
 	visual = "mesh",
 	head_eye_height = 1.79,
 	floats = 0,
@@ -1670,6 +1671,7 @@ local zombie = mobs_mc.zombie
 local zombified_piglin = table.merge (zombie, {
 	description = S("Zombified Piglin"),
 	spawn_class = "passive",
+	_spawn_category = "monster",
 	prevents_sleep_when_hostile = true,
 	_neutral_to_players = true,
 	attack_npcs = false,
@@ -1727,7 +1729,7 @@ local zombified_piglin = table.merge (zombie, {
 	head_swivel = "Head",
 	bone_eye_height = 6.7495,
 	head_eye_height = 1.79,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.94, 0.3},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.95, 0.3},
 	makes_footstep_sound = true,
 	lava_damage = 0,
 	fire_damage = 0,
@@ -1915,3 +1917,60 @@ mcl_mobs.spawn_setup({
 mcl_mobs.register_egg("mobs_mc:piglin", S("Piglin"), "#7b4a17","#d5c381", 0)
 mcl_mobs.register_egg("mobs_mc:piglin_brute", S("Piglin Brute"), "#562b0c","#ddc89d", 0)
 mcl_mobs.register_egg("mobs_mc:zombified_piglin", S("Zombie Piglin"), "#ea9393", "#4c7129", 0)
+
+------------------------------------------------------------------------
+-- Modern Piglin & Zombie Pigman spawning.
+------------------------------------------------------------------------
+
+local piglin_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:piglin",
+	spawn_category = "monster",
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"Nether",
+	},
+	weight = 15,
+	max_artificial_light = 7,
+})
+
+local piglin_spawner_crimson_forest = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:piglin",
+	spawn_category = "monster",
+	pack_min = 3,
+	pack_max = 4,
+	biomes = {
+		"CrimsonForest",
+	},
+	weight = 5,
+	max_artificial_light = 7,
+})
+
+local zombified_piglin_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:zombified_piglin",
+	spawn_category = "monster",
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"Nether",
+	},
+	weight = 100,
+	max_artificial_light = 7,
+})
+
+local zombified_piglin_spawner_crimson_forest = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:zombified_piglin",
+	spawn_category = "monster",
+	pack_min = 2,
+	pack_max = 4,
+	biomes = {
+		"CrimsonForest",
+	},
+	weight = 1,
+	max_artificial_light = 7,
+})
+
+mcl_mobs.register_spawner (piglin_spawner)
+mcl_mobs.register_spawner (piglin_spawner_crimson_forest)
+mcl_mobs.register_spawner (zombified_piglin_spawner)
+mcl_mobs.register_spawner (zombified_piglin_spawner_crimson_forest)

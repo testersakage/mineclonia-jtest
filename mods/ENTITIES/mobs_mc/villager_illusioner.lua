@@ -20,6 +20,7 @@ local illusioner = table.merge (evoker, table.merge (posing_humanoid, {
 	description = S("Illusioner"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	attack_type = "bowshoot",
 	shoot_interval = 0.5,
 	hp_min = 32,

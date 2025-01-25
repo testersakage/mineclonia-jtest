@@ -11,6 +11,7 @@ local wither_def = {
 	description = S("Wither"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "misc",
 	hp_max = 600,
 	hp_min = 600,
 	xp_min = 50,
