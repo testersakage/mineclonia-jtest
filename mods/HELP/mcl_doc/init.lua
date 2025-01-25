@@ -435,7 +435,7 @@ end
 core.register_on_mods_loaded(function()
 	for _, id in pairs({ "nodes", "craftitems", "mobs", }) do
 		local def = doc.get_category_definition(id)
-		if def then 
+		if def then
 			def.sorting = "function"
 			def.sorting_data = entry_name_sorter
 		end
