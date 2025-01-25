@@ -152,7 +152,6 @@
 * Just Playing
 * JoseDouglas26
 * bramaudi
-* Dirk
 
 ## Special thanks
 * celeron55 for creating Luanti (Minetest)
