@@ -239,8 +239,7 @@ mcl_flowerpots.register_potted_flower("mcl_mangrove:propagule", {
 })
 
 local wlroots = {
-	description = S("water logged mangrove roots"),
-	_doc_items_entry_name = S("water logged mangrove roots"),
+	description = S("Water logged mangrove roots"),
 	_doc_items_longdesc =
 		S("Mangrove roots are decorative blocks that form as part of mangrove trees.").."\n\n"..
 		S("Mangrove roots, despite being a full block, can be waterlogged and do not flow water out").."\n\n"..
@@ -302,20 +301,21 @@ local wlroots = {
 		return itemstack
 	end
 }
-local rwlroots = table.copy(wlroots)
-
-rwlroots.tiles = {
-	{name="default_river_water_source_animated.png", animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=5.0}}
-}
-rwlroots.after_dig_node = function(pos)
-	local node = minetest.get_node(pos)
-	local dim = mcl_worlds.pos_to_dimension(pos)
-	if minetest.get_item_group(node.name, "water") == 0 and dim ~= "nether" then
-		minetest.set_node(pos, {name="mclx_core:river_water_source"})
-	else
-		minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+local rwlroots = table.merge(wlroots, {
+	description = S("River water logged mangrove roots"),
+	tiles = {
+		{name="default_river_water_source_animated.png", animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=5.0}}
+	},
+	after_dig_node = function(pos)
+		local node = minetest.get_node(pos)
+		local dim = mcl_worlds.pos_to_dimension(pos)
+		if minetest.get_item_group(node.name, "water") == 0 and dim ~= "nether" then
+			minetest.set_node(pos, {name="mclx_core:river_water_source"})
+		else
+			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+		end
 	end
-end
+})
 
 minetest.register_node("mcl_mangrove:water_logged_roots", wlroots)
 minetest.register_node("mcl_mangrove:river_water_logged_roots",rwlroots)
