@@ -569,19 +569,29 @@ local scale_chance = mcl_mobs.scale_chance
 function mob_class:check_despawn(pos, dtime)
 	if remove_far and self:despawn_allowed() then
 		local min_dist = math.huge
-		for player in mcl_util.connected_players() do
-			min_dist = math.min(min_dist, vector.distance(player:get_pos(), pos))
+		for player in mcl_util.connected_players () do
+			min_dist = math.min (min_dist, vector.distance (player:get_pos (), pos))
 		end
 
 		if not self:despawn_ok (min_dist) then
+			self._inactivity_timer = 0
 			return false
 		elseif min_dist > instant_despawn_range then
-			self:kill_me("no players within distance " .. instant_despawn_range)
+			self:kill_me ("no players within distance " .. instant_despawn_range)
 			return true
 		elseif min_dist > random_despawn_range then
-			if math.random (1, scale_chance (800, dtime)) == 1 then
-				self:kill_me ("random chance at distance " .. math.round(min_dist))
-				return true
+			if self._inactivity_timer >= 30.0 then
+				if math.random (1, scale_chance (800, dtime)) == 1 then
+					self:kill_me ("random chance at distance " .. math.round(min_dist))
+					return true
+				end
+			else
+				local t = self._inactivity_timer + dtime
+
+				-- This timer should be reset once a
+				-- player approaches, or when damage
+				-- is sustained from any source.
+				self._inactivity_timer = t
 			end
 
 			return false
@@ -741,7 +751,9 @@ minetest.register_chatcommand("mobstats",{
 				"\n",
 				"Chunk-derived mob caps (per-level): ",
 				dump (mob_caps), "\n",
-				"Chunk count: ", tostring (n_chunks),
+				"Chunk count: ", tostring (n_chunks), "\n",
+				"No. active mobs in total: ",
+				tostring (count_mobs_total ()), "\n"
 			}))
 		end
 	end
@@ -750,6 +762,37 @@ minetest.register_chatcommand("mobstats",{
 ------------------------------------------------------------------------
 -- Minecraft-like spawning mechanics.
 ------------------------------------------------------------------------
+
+function mob_class:announce_for_spawning ()
+	local category = self._spawn_category
+	local n_active = mcl_mobs.active_mobs_by_category[category]
+	if not n_active then
+		n_active = 0
+	end
+	mcl_mobs.active_mobs_by_category[category] = n_active + 1
+	self._activated = true
+end
+
+function mob_class:remove_for_spawning ()
+	self._activated = nil
+
+	-- Record this mob's absence.
+	local category = self._spawn_category
+	local n_active = mcl_mobs.active_mobs_by_category[category]
+	if not n_active or n_active <= 0 then
+		return
+	end
+	mcl_mobs.active_mobs_by_category[category] = n_active - 1
+end
+
+function mob_class:update_mob_caps ()
+	local persistent = (self.persistent or self.tamed)
+	if self._activated and persistent then
+		self:remove_for_spawning ()
+	elseif not self._activated and not persistent then
+		self:announce_for_spawning ()
+	end
+end
 
 local active_mobs_by_category = {}
 local registered_spawners = {}

@@ -478,13 +478,9 @@ function mob_class:mob_activate (staticdata, dtime)
 	self:remove_texture_mod ("^[colorize:#d42222:175")
 
 	-- Record this mob's presence for spawning.
-	local category = self._spawn_category
-	local n_active = mcl_mobs.active_mobs_by_category[category]
-	if not n_active then
-		n_active = 0
+	if not self.persistent or self.tamed then
+		self:announce_for_spawning ()
 	end
-	mcl_mobs.active_mobs_by_category[category] = n_active + 1
-	self._activated = true
 	return true
 end
 
@@ -517,7 +513,10 @@ function mob_class:on_step (dtime, moveresult)
 		end
 	end
 
-	if self:check_despawn (pos, dtime) then return true end
+	if self:check_despawn (pos, dtime) then
+		return true
+	end
+	self:update_mob_caps ()
 
 	-- Objects which are attached and those which are not physical
 	-- don't receive moveresults.  Create a placeholder object to

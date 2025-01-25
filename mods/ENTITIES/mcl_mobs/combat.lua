@@ -153,6 +153,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 		end
 	end
 	self:check_for_death (mcl_reason, damage)
+	self._inactivity_timer = 0
 	return true
 end
 
