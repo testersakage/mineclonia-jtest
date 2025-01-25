@@ -753,6 +753,12 @@ minetest.register_chatcommand("mobstats",{
 
 local active_mobs_by_category = {}
 local registered_spawners = {}
+
+-- This map between spawner lists and their total weight is rather
+-- contrived but avoids the creation of combined hash tables/arrays,
+-- which are NYIs in Luajit...
+local total_weight = {}
+
 mcl_mobs.active_mobs_by_category = active_mobs_by_category
 mcl_mobs.registered_spawners = registered_spawners
 
@@ -799,11 +805,18 @@ mcl_mobs.spawn_categories = spawn_categories
 
 local pr = PcgRandom (os.time () + 95)
 
+local function dist_sqr (a, b)
+	local dx = b.x - a.x
+	local dy = b.y - a.y
+	local dz = b.z - a.z
+	return dx * dx + dy * dy + dz * dz
+end
+
 local function get_nearest_player (pos, list)
 	local dist, pos_nearest, player = nil
 
 	for player_1, test_pos in pairs (list) do
-		local d = vector.distance (test_pos, pos)
+		local d = dist_sqr (test_pos, pos)
 		if not dist or dist > d then
 			dist = d
 			pos_nearest = test_pos
@@ -814,20 +827,9 @@ local function get_nearest_player (pos, list)
 	return player, pos_nearest
 end
 
-local function get_eligible_spawn_type (pos, category)
-	local biome = core.get_biome_data (pos)
-	if not biome or not registered_spawners[biome.biome] then
-		return nil
-	end
-
-	-- TODO: reduced water ambient spawns
-
-	local mob_types = registered_spawners[biome.biome][category]
-	if not mob_types then
-		return nil
-	end
-	local weight = pr:next (1, mob_types.total_weight)
-	for _, spawner in ipairs (mob_types) do
+local function get_weighted_value (mob_types)
+	local weight = math.random (total_weight[mob_types])
+	for _, spawner in pairs (mob_types) do
 		weight = weight - spawner.weight
 		if weight <= 0 then
 			return spawner
@@ -835,6 +837,24 @@ local function get_eligible_spawn_type (pos, category)
 	end
 	return nil
 end
+
+local function get_eligible_spawn_type (pos, category)
+	local biome = core.get_biome_data (pos)
+	if biome then
+		local spawners = registered_spawners[biome.biome]
+		if spawners then
+			-- XXX: reduce chances of spawning ambient water
+			-- creatures in rivers if possible.
+			local mob_types = spawners[category]
+			if mob_types then
+				return get_weighted_value (mob_types)
+			end
+		end
+	end
+	return nil
+end
+
+local spawn_a_pack_scratch = vector.zero ()
 
 local function spawn_a_pack (pos, players, category)
 	local player, player_pos = get_nearest_player (pos, players)
@@ -847,18 +867,21 @@ local function spawn_a_pack (pos, players, category)
 	local pack_size = pr:next (mob_def.pack_min, mob_def.pack_max)
 
 	local sdata = mob_def:prepare_to_spawn (pack_size, pos)
-	local spawn_pos
+	local spawn_pos = spawn_a_pack_scratch
+	spawn_pos.y = pos.y
 
 	local spawned = {}
 	for i = 1, pack_size do
 		local dx = pr:next (0, 5) - pr:next (0, 5)
 		local dz = pr:next (0, 5) - pr:next (0, 5)
-		spawn_pos = vector.offset (pos, dx, 0.5, dz)
-		local dist = vector.distance (player_pos, spawn_pos)
+		spawn_pos.x = pos.x + dx
+		spawn_pos.y = pos.y
+		spawn_pos.z = pos.z + dz
+		local dist = dist_sqr (player_pos, spawn_pos)
 
 		-- Is it possible to spawn mobs here?
-		if dist < mob_def.despawn_distance
-			and dist > 24.0
+		if dist < mob_def.despawn_distance_sqr
+			and dist > 576.0
 			and mob_def:test_spawn_position (spawn_pos, sdata)
 			and mob_def:test_spawn_clearance (spawn_pos, sdata) then
 			local object = mob_def:spawn (spawn_pos, #spawned + 1, sdata)
@@ -902,7 +925,7 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 		chunk_ymax = mcl_vars.mg_nether_max - 1
 	elseif level == "end" then
 		chunk_ymin = mcl_vars.mg_end_min
-		chunk_ymax = mcl_vars.mg_end_max - 1
+		chunk_ymax = mcl_vars.mg_end_max_official - 1
 	else
 		return
 	end
@@ -977,11 +1000,7 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 						test_pos.x = pr:next (x * 16, x * 16 + 15)
 						test_pos.z = pr:next (z * 16, z * 16 + 15)
 						test_pos.y = pr:next (chunk_ymin, chunk_ymax)
-
-						-- Verify that the position is loaded.
-						if minetest.get_node_or_nil (test_pos) then
-							spawn_a_pack (test_pos, players, category)
-						end
+						spawn_a_pack (test_pos, players, category)
 					end
 				end
 			end
@@ -992,7 +1011,7 @@ end
 local default_spawner = {
 	weight = 100,
 	biomes = {},
-	despawn_distance = 128,
+	despawn_distance_sqr = 128 * 128,
 	spawn_placement = "ground", -- misc, ground, aquatic, lava
 	spawn_category = "misc", -- Should be identical to that of the
 				 -- mob def.
@@ -1029,13 +1048,11 @@ minetest.register_on_mods_loaded (function ()
 				end
 
 				if not output[id][spawner.spawn_category] then
-					output[id][spawner.spawn_category] = {
-						total_weight = 0,
-					}
+					output[id][spawner.spawn_category] = {}
 				end
 
 				local list = output[id][spawner.spawn_category]
-				list.total_weight = list.total_weight + spawner.weight
+				total_weight[list] = (total_weight[list] or 0) + spawner.weight
 				table.insert (list, spawner)
 			end
 		end
@@ -1052,8 +1069,69 @@ local cube = mcl_util.decompose_AABBs ({{
 	-0.5, -0.5, -0.5,
 	0.5, 0.5, 0.5,
 }})
+local up_face_sturdy = {}
 
-function mcl_mobs.is_up_face_sturdy (node)
+minetest.register_on_mods_loaded (function ()
+	for node, def in pairs (minetest.registered_nodes) do
+		local node_type = def.paramtype2
+		if not def.walkable
+			or node_type == "flowingliquid" then
+			up_face_sturdy[node] = false
+		elseif node_type == "4dir"
+			or node_type == "degrotate"
+			or node_type == "color4dir"
+			or node_type == "color"
+			or node_type == "colordegrotate"
+			or node_type == "none" then
+			local boxes = def.node_box
+
+			if not boxes or boxes.type == "regular" then
+				up_face_sturdy[node] = true
+			elseif boxes.type == "fixed" then
+				-- Since these node types can only
+				-- rotate around the Y axis, it is
+				-- only necessary to verify that their
+				-- up faces are full cubes.
+
+				local fixed = boxes.fixed
+				if fixed and type (fixed[1]) == "number" then
+					fixed = {fixed}
+				end
+				local shape = mcl_util.decompose_AABBs (fixed)
+				local face = shape:select_face ("y", 0.5)
+				up_face_sturdy[node] = face:equal_p (cube)
+			end
+		else
+			-- Only full cubes can be sturdy once rotation
+			-- around other axes is involved.
+			local boxes = def.node_box
+
+			if not boxes or boxes.type == "regular" then
+				up_face_sturdy[node] = true
+			elseif boxes.type == "fixed" then
+				-- Since these node types can only
+				-- rotate around the Y axis, it is
+				-- only necessary to verify that their
+				-- up faces are full cubes.
+
+				local fixed = boxes.fixed
+				if fixed and type (fixed[1]) == "number" then
+					fixed = {fixed}
+				end
+				local shape = mcl_util.decompose_AABBs (fixed)
+				if shape:equal_p (cube) then
+					up_face_sturdy[node] = true
+				end
+			end
+		end
+	end
+end)
+
+function mcl_mobs.is_up_face_sturdy (node, node_data)
+	local sturdy = up_face_sturdy[node_data.name]
+	if sturdy ~= nil then
+		return sturdy
+	end
 	local boxes = core.get_node_boxes ("collision_box", node)
 	local shape = mcl_util.decompose_AABBs (boxes)
 	local up_face = shape and shape:select_face ("y", 0.5)
@@ -1093,7 +1171,7 @@ function default_spawner:test_spawn_position (spawn_pos, sdata)
 			return false
 		end
 		-- The up face of the supporting node must be sturdy.
-		if mcl_mobs.is_up_face_sturdy (block_pos) then
+		if mcl_mobs.is_up_face_sturdy (block_pos, node_below) then
 			-- The block here and the block above must not
 			-- be opaque nor deal damage.
 			block_pos.y = block_pos.y + 1
