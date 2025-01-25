@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-25 13:29+0000\n"
+"PO-Revision-Date: 2025-01-25 16:02+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -350,25 +350,25 @@ msgid "This block will randomly drop one of the following when mined: @1."
 msgstr "開採此方塊後會隨機掉落以下東西之一：@1"
 
 msgid "This block will randomly drop up to @1 drops of the following possible drops when mined: @2."
-msgstr ""
+msgstr "開採此方塊後會隨機掉落最多 @1 組的以下東西：@2"
 
 msgid " and "
-msgstr ""
+msgstr " , 和 "
 
 msgid "@1×@2"
-msgstr ""
+msgstr "@1×@2"
 
 msgid "@1 (<0.5%)"
-msgstr ""
+msgstr "@1 (<0.5%)"
 
 msgid "@1 (ca. @2%)"
-msgstr ""
+msgstr "@1 (約 @2%)"
 
 msgid "@1 (@2%)"
-msgstr ""
+msgstr "@1 (@2%)"
 
 msgid "Tools and weapons"
-msgstr ""
+msgstr "工具與武器"
 
 msgid "Item reference of all wieldable tools and weapons"
 msgstr ""
