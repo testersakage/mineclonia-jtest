@@ -148,6 +148,13 @@ return {
 		"Sencyy",
 		"Sotis",
 		"Zozosticot",
+		"ellesheepy",
+		"bright",
+		"Miguel P.L",
+		"Just Playing",
+		"JoseDouglas26",
+		"bramaudi",
+		"Dirk",
 	}},
 	{S("Special thanks"), 0x00FF60, {
 		"celeron55 for creating Luanti (Minetest)",
