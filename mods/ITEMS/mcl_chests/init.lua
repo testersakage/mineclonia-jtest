@@ -1484,10 +1484,12 @@ for color, desc in pairs(boxtypes) do
 		paramtype = "light",
 		paramtype2 = "facedir",
 		on_construct = function(pos)
-			local param2 = minetest.get_node(pos).param2
+			local param2 = minetest.get_node(pos).param2 or 1
 			local rot = {x = shulker_box_rotations[param2].x, y = shulker_box_rotations[param2].y, z = 0}
 			local entity = create_entity(pos, small_name, {mob_texture}, param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
-			entity.object:set_rotation(rot)
+			if entity and entity.object then
+				entity.object:set_rotation(rot)
+			end
 		end,
 		after_place_node = function(pos, placer, itemstack, _)
 			-- normally not called (_small variant is never created as an item)
