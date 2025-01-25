@@ -708,7 +708,7 @@ core.register_chatcommand("spawncheck",{
 	end
 })
 
-local SPAWN_DISTANCE = 6
+local SPAWN_DISTANCE = tonumber (minetest.settings:get ("active_block_range")) or 6
 local MOB_CAP_DIVISOR = 289 * (168 / 289)
 
 minetest.register_chatcommand("mobstats",{
@@ -918,7 +918,7 @@ local function spawn_a_pack (pos, players, category)
 		local dx = pr:next (0, 5) - pr:next (0, 5)
 		local dz = pr:next (0, 5) - pr:next (0, 5)
 		spawn_pos.x = pos.x + dx
-		spawn_pos.y = pos.y
+		spawn_pos.y = pos.y + 0.5
 		spawn_pos.z = pos.z + dz
 		local dist = dist_sqr (player_pos, spawn_pos)
 
@@ -1304,12 +1304,12 @@ function default_spawner:test_spawn_clearance (spawn_pos, sdata)
 		cbox[5] + spawn_pos.y - 0.01,
 		cbox[6] + spawn_pos.z - 0.01,
 	}
-	local xmin = math.floor (cbox[1] + 0.5 + spawn_pos.x)
-	local ymin = math.floor (cbox[2] + 0.5 + spawn_pos.y)
-	local zmin = math.floor (cbox[3] + 0.5 + spawn_pos.z)
-	local xmax = math.floor (cbox[4] + 0.5 + spawn_pos.x)
-	local ymax = math.floor (cbox[5] + 0.5 + spawn_pos.y)
-	local zmax = math.floor (cbox[6] + 0.5 + spawn_pos.z)
+	local xmin = math.floor (cbox_1[1] + 0.5)
+	local ymin = math.floor (cbox_1[2] + 0.5)
+	local zmin = math.floor (cbox_1[3] + 0.5)
+	local xmax = math.floor (cbox_1[4] + 0.5)
+	local ymax = math.floor (cbox_1[5] + 0.5)
+	local zmax = math.floor (cbox_1[6] + 0.5)
 	local v = vector.zero ()
 
 	for z = zmin, zmax do
@@ -1378,7 +1378,17 @@ local function evaluate_node_properties (itemstack, user, pointed_thing)
 		minetest.chat_send_player (playername, table.concat ({
 			"Node: ", node.name, "\n",
 			"Up face sturdy: ",
-			tostring (mcl_mobs.is_up_face_sturdy (pointed_thing.under)),
+			tostring (mcl_mobs.is_up_face_sturdy (pointed_thing.under, node)),
+		}))
+
+		local spawn_pos = vector.offset (pointed_thing.under, 0, 0.5, 0)
+		local zombie_spawner = table.merge (default_spawner, {
+			name = "mobs_mc:zombie",
+		})
+		minetest.chat_send_player (playername, table.concat ({
+			"Zombie clearance tests pass? ",
+			tostring (zombie_spawner:test_spawn_clearance (spawn_pos, {})),
+			"\n",
 		}))
 	end
 end
