@@ -171,7 +171,7 @@ local function generate_beacon_formspec (meta)
 end
 
 local function add_group(item, group)
-	local def = minetest.regisered_items[item]
+	local def = minetest.registered_items[item]
 	if def then
 		minetest.override_item(item, {
 			groups = table.merge(def.groups or {}, { [group] = 1 })
