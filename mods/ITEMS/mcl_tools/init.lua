@@ -127,7 +127,7 @@ local function get_tool_diggroups(materialdefs, toolname)
 	for _, diggroup in pairs(diggroups) do
 		diggroup.speed = materialdefs.speed
 		diggroup.level = materialdefs.level
-		diggroup.uses = materialdefs.uses
+		diggroup.uses = toolname == "sword" and materialdefs.uses / 2 or materialdefs.uses
 	end
 
 	return diggroups
