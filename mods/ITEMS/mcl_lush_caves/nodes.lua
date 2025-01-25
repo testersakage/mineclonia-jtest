@@ -77,7 +77,7 @@ end
 minetest.register_node("mcl_lush_caves:moss", {
 	description = S("Moss"),
 	_doc_items_longdesc = S("Moss is a green block found in lush caves"),
-	_doc_items_entry_name = "Moss",
+	_doc_items_entry_name = S("Moss"),
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_moss_block.png"},
 	groups = {handy=1, hoey=2, dirt=1, soil=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1, enderman_takable=1, building_block=1, grass_block_no_snow=1, compostability=65, dig_by_piston=1},
@@ -89,9 +89,9 @@ minetest.register_node("mcl_lush_caves:moss", {
 
 minetest.register_node("mcl_lush_caves:moss_carpet", {
 	description = S("Moss carpet"),
-	_doc_items_longdesc = S("Moss carpet"),
-	_doc_items_entry_name = "moss_carpet",
-
+	_doc_items_longdesc = S("A moss carpet is a flat variant of the moss block."),
+	_doc_items_entry_name = S("Moss Carpet"),
+	_doc_items_hidden = false,
 	is_ground_content = false,
 	tiles = {"mcl_lush_caves_moss_carpet.png"},
 	wield_image ="mcl_lush_caves_moss_carpet.png",
@@ -119,7 +119,8 @@ minetest.register_node("mcl_lush_caves:hanging_roots", {
 	description = S("Hanging roots"),
 	_doc_items_create_entry = S("Hanging roots"),
 	_doc_items_entry_name = S("Hanging roots"),
-	_doc_items_longdesc = S("Hanging roots"),
+	_doc_items_longdesc = S("Hanging roots are a decorative block found hanging from rooted dirt in lush caves."),
+	_doc_items_hidden = false,
 	paramtype = "light",
 	on_place = function(itemstack, placer, pointed_thing)
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -156,7 +157,8 @@ minetest.register_node("mcl_lush_caves:cave_vines", {
 	description = S("Cave vines"),
 	_doc_items_create_entry = S("Cave vines"),
 	_doc_items_entry_name = S("Cave vines"),
-	_doc_items_longdesc = S("Cave vines"),
+	_doc_items_longdesc = S("Cave vines are decorative blocks growing from the ceiling of lush caves."),
+	_doc_items_hidden = false,
 	paramtype = "light",
 	--paramtype2 = "meshoptions",
 	--place_param2 = 3,
@@ -185,10 +187,11 @@ minetest.register_node("mcl_lush_caves:cave_vines", {
 })
 
 minetest.register_node("mcl_lush_caves:cave_vines_lit", {
-	description = S("Cave vines"),
-	_doc_items_create_entry = S("Cave vines"),
-	_doc_items_entry_name = S("Cave vines"),
-	_doc_items_longdesc = S("Cave vines"),
+	description = S("Lit Cave vines"),
+	_doc_items_create_entry = S("Lit Cave vines"),
+	_doc_items_entry_name = S("Lit Cave vines"),
+	_doc_items_longdesc = S("Lit cave vines are light emitting decorative blocks growing from the ceiling of lush caves."),
+	_doc_items_hidden = false,
 	paramtype = "light",
 	--paramtype2 = "meshoptions",
 	--place_param2 = 3,
@@ -220,7 +223,7 @@ minetest.register_node("mcl_lush_caves:cave_vines_lit", {
 
 minetest.register_node("mcl_lush_caves:rooted_dirt", {
 	description = S("Rooted dirt"),
-	_doc_items_longdesc = S("Rooted dirt"),
+	_doc_items_longdesc = S("Rooted dirt is type of dirt found in lush caves."),
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_rooted_dirt.png"},
 	groups = {handy=1, shovely=1, dirt=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1},
@@ -243,6 +246,7 @@ minetest.register_node("mcl_lush_caves:rooted_dirt", {
 minetest.register_craftitem("mcl_lush_caves:glow_berry", {
 	description = S("Glow berry"),
 	_doc_items_longdesc = S("This is a food item which can be eaten."),
+	_doc_items_hidden = false,
 	inventory_image = "mcl_lush_caves_glow_berries.png",
 	on_secondary_use = minetest.item_eat(2),
 	groups = {food = 2, eatable = 2, compostability = 50},
@@ -292,6 +296,7 @@ register_leaves(
 	{
 		description = S("Azalea Leaves"),
 		_doc_items_longdesc = S("Leaves of an Azalea tree"),
+		_doc_items_hidden = false,
 		tiles = { "mcl_lush_caves_azalea_leaves.png" },
 	}
 )
@@ -301,6 +306,7 @@ register_leaves(
 	{
 		description = S("Flowering Azalea Leaves"),
 		_doc_items_longdesc = S("The Flowering Leaves of an Azalea tree"),
+		_doc_items_hidden = false,
 		tiles = { "mcl_lush_caves_azalea_leaves_flowering.png" },
 	}
 )
@@ -308,7 +314,7 @@ register_leaves(
 
 minetest.register_node("mcl_lush_caves:spore_blossom", {
 	description = S("Spore blossom"),
-	_doc_items_longdesc = S("Spore blossom"),
+	_doc_items_longdesc = S("Spore blossoms are a type of flower found in lush caves."),
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_spore_blossom.png"},
 	drawtype = "plantlike",
@@ -390,7 +396,7 @@ local azalea = table.merge(
 	tpl_azalea, {
 		description = S("Azalea"),
 		_doc_items_longdesc = S("Azalea is a small plant which often occurs in lush caves. It can be broken by hand or any tool. By using bone meal, azalea can be turned into an azalea tree."),
-		_doc_items_entry_name = "azalea",
+		_doc_items_hidden = false,
 		tiles = {
 			"mcl_lush_caves_azalea_top.png",
 			"mcl_lush_caves_azalea_bottom.png",
@@ -407,7 +413,8 @@ local azalea_flowering = table.merge(
 	tpl_azalea, {
 		description = S("Flowering Azalea"),
 		_doc_items_longdesc = S("Flowering azalea is a small plant which often occurs in lush caves. It can be broken by hand or any tool. By using bone meal, flowering azalea can be turned into an azalea tree."),
-		_doc_items_entry_name = "azalea_flowering",
+		_doc_items_entry_name = S("Flowering Azalea"),
+		_doc_items_hidden = false,
 		tiles = {
 			"mcl_lush_caves_azalea_flowering_top.png",
 			"mcl_lush_caves_azalea_flowering_bottom.png",
