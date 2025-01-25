@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-24 19:26+0000\n"
+"PO-Revision-Date: 2025-01-25 13:29+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -47,7 +47,7 @@ msgid "No"
 msgstr "否"
 
 msgid ", "
-msgstr "、 "
+msgstr ", "
 
 msgid "Unknown item (@1)"
 msgstr "不明物品 (@1)"
@@ -179,22 +179,22 @@ msgid "Punches with this item don't work as usual; melee combat and mining are e
 msgstr "此物品有特別的使用方式；拿著它時可能無法如常開採資源和擊打敵人。"
 
 msgid "This block belongs to the @1 group."
-msgstr "所屬方塊群組：@1。"
+msgstr "所屬方塊群組：@1"
 
 msgid "This tool belongs to the @1 group."
-msgstr "所屬工具群組：@1。"
+msgstr "所屬工具群組：@1"
 
 msgid "This item belongs to the @1 group."
-msgstr "所屬物品群組：@1。"
+msgstr "所屬物品群組：@1"
 
 msgid "This block belongs to these groups: @1."
-msgstr "所屬方塊群組：@1。"
+msgstr "所屬方塊群組：@1"
 
 msgid "This tool belongs to these groups: @1."
-msgstr "所屬工具群組：@1。"
+msgstr "所屬工具群組：@1"
 
 msgid "This item belongs to these groups: @1."
-msgstr "所屬物品群組：@1。"
+msgstr "所屬物品群組：@1"
 
 msgid "Blocks"
 msgstr "方塊"
@@ -278,76 +278,76 @@ msgid "Mining this block is completely silent."
 msgstr "開採此方塊時不會產生聲音。"
 
 msgid "Building this block is completely silent."
-msgstr ""
+msgstr "放置此方塊時不會產生聲音。"
 
 msgid "This block is affected by gravity and can fall."
-msgstr ""
+msgstr "此方塊受重力影響，會墜落。"
 
 msgid "Building another block at this block will place it inside and replace it."
 msgstr ""
 
 msgid "Falling blocks can go through this block; they destroy it when doing so."
-msgstr ""
+msgstr "此方塊會讓墜落的方塊穿過，並被壓毁。"
 
 msgid "This block will drop as an item when a falling block ends up inside it."
-msgstr ""
+msgstr "當此方塊被墜落的方塊壓壞時，會作為物品掉落。"
 
 msgid "This block is destroyed when a falling block ends up inside it."
-msgstr ""
+msgstr "當此方塊被墜落的方塊壓壞時，會被摧毀。"
 
 msgid "This block will drop as an item when it is not attached to a surrounding block."
-msgstr ""
+msgstr "當沒有可以依附的鄰接方塊時，此方塊會作為物品掉落。"
 
 msgid "This block will drop as an item when no collidable block is below it."
-msgstr ""
+msgstr "當下方沒有支撐時，此方塊會墜落。"
 
 msgid "Liquids can flow into this block and destroy it."
-msgstr ""
+msgstr "當接觸液體時，此方塊會被摧毀。"
 
 msgid "This block is a light source with a light level of @1."
-msgstr ""
+msgstr "此方塊提供光源，亮度為 @1。"
 
 msgid "This block glows faintly with a light level of @1."
-msgstr ""
+msgstr "此方塊會發光，亮度為 @1。"
 
 msgid "This block allows light to propagate with a small loss of brightness, and sunlight can even go through losslessly."
-msgstr ""
+msgstr "光線可以穿過此方塊。陽光能完全穿透，其他光會稍微變暗。"
 
 msgid "This block allows light to propagate with a small loss of brightness."
-msgstr ""
+msgstr "光線可以穿過此方塊，亮度會稍微變暗。"
 
 msgid "This block allows sunlight to propagate without loss in brightness."
-msgstr ""
+msgstr "陽光可以完全穿透此方塊。"
 
 msgid "Unknown Node"
 msgstr ""
 
 msgid "This block connects to this block: @1."
-msgstr ""
+msgstr "此方塊連接 @1 方塊。"
 
 msgid "This block connects to these blocks: @1."
-msgstr ""
+msgstr "此方塊連接以下方塊：@1"
 
 msgid "This block connects to blocks of the @1 group."
-msgstr ""
+msgstr "此方塊連接屬於 @1 群組的方塊。"
 
 msgid "This block connects to blocks of the following groups: @1."
-msgstr ""
+msgstr "此方塊連接屬於以下群組的方塊：@1"
 
 msgid "This block won't drop anything when mined."
-msgstr ""
+msgstr "開採此方塊後不會產生掉落物。"
 
 msgid "This block will drop the following when mined: @1×@2."
-msgstr ""
+msgstr "開採此方塊後會掉落這東西：@1 x@2"
 
 msgid "This block will drop the following when mined: @1."
 msgstr ""
 
 msgid "This block will drop the following items when mined: @1."
-msgstr ""
+msgstr "開採此方塊後會掉落這些東西：@1"
 
 msgid "This block will randomly drop one of the following when mined: @1."
-msgstr ""
+msgstr "開採此方塊後會隨機掉落以下東西之一：@1"
 
 msgid "This block will randomly drop up to @1 drops of the following possible drops when mined: @2."
 msgstr ""
