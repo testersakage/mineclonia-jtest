@@ -225,6 +225,7 @@ mcl_mobs.mob_class = {
 	_mcl_fishing_reelable = true,
 
 	--internal variables
+	_inactivity_timer = 0,
 	standing_in = "ignore",
 	standing_on = "ignore",
 	opinion_sound_cooloff = 7, -- used to prevent sound spam of particular sound types
