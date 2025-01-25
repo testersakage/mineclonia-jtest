@@ -1297,7 +1297,7 @@ function default_spawner:init_group (list, sdata)
 	return
 end
 
-if not mobs_spawn_old then
+if not mobs_spawn_old and mobs_spawn then
 
 local spawn_timer = 0
 local passive_spawn_timer = 0
