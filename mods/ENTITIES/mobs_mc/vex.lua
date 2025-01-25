@@ -15,6 +15,7 @@ local vex = {
 	description = S("Vex"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	passive = false,
 	attack_type = "null",
 	physical = false,

@@ -13,6 +13,7 @@ local squid = {
 		{ "mobs_mc_squid.png" }
 	},
 	type = "animal",
+	_spawn_category = "water_creature",
 	spawn_class = "water",
 	can_despawn = true,
 	passive = true,
@@ -410,6 +411,7 @@ end
 
 local glow_squid = table.merge (squid, {
 	description = S("Glow Squid"),
+	_spawn_category = "underground_water_creature",
 	textures = {
 		{ "extra_mobs_glow_squid.png" }
 	},
@@ -519,3 +521,103 @@ mcl_mobs.spawn_setup({
 
 -- spawn egg
 mcl_mobs.register_egg("mobs_mc:glow_squid", S("Glow Squid"), "#095757", "#87f6c0", 0)
+
+------------------------------------------------------------------------
+-- Modern Squid & Glow Squid spawning.
+------------------------------------------------------------------------
+
+local squid_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+	name = "mobs_mc:squid",
+	spawn_category = "water_creature",
+	biomes = {
+		"RoofedForest_ocean",
+		"JungleEdgeM_ocean",
+		"BirchForestM_ocean",
+		"BirchForest_ocean",
+		"Jungle_deep_ocean",
+		"Savanna_ocean",
+		"MesaPlateauF_ocean",
+		"ExtremeHillsM_deep_ocean",
+		"Savanna_deep_ocean",
+		"SunflowerPlains_ocean",
+		"Swampland_deep_ocean",
+		"Swampland_ocean",
+		"MegaSpruceTaiga_deep_ocean",
+		"ExtremeHillsM_ocean",
+		"JungleEdgeM_deep_ocean",
+		"SunflowerPlains_deep_ocean",
+		"BirchForest_deep_ocean",
+		"Mesa_ocean",
+		"StoneBeach_ocean",
+		"Plains_deep_ocean",
+		"JungleEdge_deep_ocean",
+		"SavannaM_deep_ocean",
+		"Desert_deep_ocean",
+		"Mesa_deep_ocean",
+		"Plains_ocean",
+		"MesaPlateauFM_ocean",
+		"Forest_deep_ocean",
+		"JungleM_deep_ocean",
+		"FlowerForest_deep_ocean",
+		"MushroomIsland_ocean",
+		"MegaTaiga_ocean",
+		"StoneBeach_deep_ocean",
+		"SavannaM_ocean",
+		"MesaPlateauF_deep_ocean",
+		"MesaBryce_deep_ocean",
+		"ExtremeHills+_deep_ocean",
+		"ExtremeHills_ocean",
+		"MushroomIsland_deep_ocean",
+		"Forest_ocean",
+		"MegaTaiga_deep_ocean",
+		"JungleEdge_ocean",
+		"MesaBryce_ocean",
+		"MegaSpruceTaiga_ocean",
+		"ExtremeHills+_ocean",
+		"Jungle_ocean",
+		"RoofedForest_deep_ocean",
+		"FlowerForest_ocean",
+		"ExtremeHills_deep_ocean",
+		"MesaPlateauFM_deep_ocean",
+		"Desert_ocean",
+		"Taiga_ocean",
+		"BirchForestM_deep_ocean",
+		"Taiga_deep_ocean",
+		"JungleM_ocean",
+	},
+	weight = 2,
+	pack_min = 1,
+	pack_max = 4,
+})
+
+mcl_mobs.register_spawner (squid_spawner)
+
+local default_spawner = mcl_mobs.default_spawner
+
+local glow_squid_spawner = {
+	name = "mobs_mc:glow_squid",
+	spawn_category = "underground_water_creature",
+	spawn_placement = "aquatic",
+	weight = 10,
+	pack_max = 6,
+	pack_min = 4,
+	biomes = mobs_mc.overworld_biomes,
+}
+
+function glow_squid_spawner:test_spawn_position (spawn_pos, sdata)
+	if spawn_pos.y > -32.5 then
+		return false
+	end
+
+	local node = mcl_util.get_nodepos (spawn_pos)
+	local light = minetest.get_node_light (node)
+
+	if light == 0 then
+		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+			return true
+		end
+	end
+	return false
+end
+
+mcl_mobs.register_spawner (glow_squid_spawner)

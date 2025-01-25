@@ -6,6 +6,7 @@ local tropical_fish = {
 	description = S("Tropical Fish"),
 	type = "animal",
 	spawn_class = "water_ambient",
+	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
 	hp_min = 3,
@@ -255,3 +256,46 @@ mcl_mobs.spawn_setup({
 
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:tropical_fish", S("Tropical Fish"), "#ef6915", "#fff9ef", 0)
+
+------------------------------------------------------------------------
+-- Modern Tropical Fish spawning.
+------------------------------------------------------------------------
+
+local tropical_fish_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+	name = "mobs_mc:tropical_fish",
+	biomes = {
+		"JungleEdgeM_ocean",
+		"Jungle_deep_ocean",
+		"BambooJungle_ocean",
+		"Savanna_ocean",
+		"MesaPlateauF_ocean",
+		"Savanna_deep_ocean",
+		"JungleEdgeM_deep_ocean",
+		"SunflowerPlains_deep_ocean",
+		"Mesa_ocean",
+		"JungleEdge_deep_ocean",
+		"SavannaM_deep_ocean",
+		"Desert_deep_ocean",
+		"Mesa_deep_ocean",
+		"MesaPlateauFM_ocean",
+		"JungleM_deep_ocean",
+		"SavannaM_ocean",
+		"MesaPlateauF_deep_ocean",
+		"MesaBryce_deep_ocean",
+		"JungleEdge_ocean",
+		"MesaBryce_ocean",
+		"Jungle_ocean",
+		"MesaPlateauFM_deep_ocean",
+		"Desert_ocean",
+		"JungleM_ocean",
+	},
+	weight = 25,
+	pack_min = 8,
+	pack_max = 8,
+})
+
+function tropical_fish_spawner:init_group (list, sdata)
+	mob_class.school_init_group (list)
+end
+
+mcl_mobs.register_spawner (tropical_fish_spawner)

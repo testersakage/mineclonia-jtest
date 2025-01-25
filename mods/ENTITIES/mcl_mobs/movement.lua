@@ -455,6 +455,18 @@ function mob_class:on_deactivate (removal)
 		self._jockey_staticdata.name = entity.name
 		self._jockey_rider = nil
 	end
+
+	if self._activated then
+		self._activated = nil
+
+		-- Record this mob's absence.
+		local category = self._spawn_category
+		local n_active = mcl_mobs.active_mobs_by_category[category]
+		if not n_active or n_active <= 0 then
+			return
+		end
+		mcl_mobs.active_mobs_by_category[category] = n_active - 1
+	end
 end
 
 function mob_class:jockey_death ()

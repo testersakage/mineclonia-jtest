@@ -143,18 +143,16 @@ bisect (edges, nmemb, value)
 
   while (low != high)
     {
-      int mid = low + (high - low) / 2;
+      int mid = (low + high) / 2;
 
-      if (edges[mid] > value)
-	high = mid;
-      else if (edges[mid] == value)
-	return edges + mid;
-      else
+      if (edges[mid] < value)
 	low = mid + 1;
+      else
+	high = mid;
     }
 
-  if (low == nmemb - 1 && edges[low] > value)
-    return NULL;
+  if (edges[low] > value)
+    return low > 0 ? edges + low - 1 : NULL;
 
   return edges + low;
 }

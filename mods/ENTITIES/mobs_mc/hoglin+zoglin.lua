@@ -16,6 +16,7 @@ local hoglin = {
 	type = "monster",
 	passive = false,
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	hp_min = 40,
 	hp_max = 40,
@@ -25,7 +26,7 @@ local hoglin = {
 	attack_type = "melee",
 	melee_interval = 2,
 	reach = 3,
-	collisionbox = {-.6, -0.01, -.6, .6, 1.4, .6},
+	collisionbox = {-.6, 0, -.6, .6, 1.4, .6},
 	visual = "mesh",
 	mesh = "extra_mobs_hoglin.b3d",
 	textures = { {
@@ -468,7 +469,7 @@ mcl_mobs.register_mob("mobs_mc:baby_hoglin", table.merge (hoglin, {
 -- Hoglin spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
+mcl_mobs.spawn_setup ({
 	name = "mobs_mc:hoglin",
 	type_of_spawning = "ground",
 	dimension = "nether",
@@ -482,6 +483,36 @@ mcl_mobs.spawn_setup({
 	},
 	chance = 200,
 })
+
+------------------------------------------------------------------------
+-- Modern Hoglin spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local hoglin_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:hoglin",
+	spawn_category = "monster",
+	pack_min = 3,
+	pack_max = 4,
+	biomes = {
+		"CrimsonForest",
+	},
+	weight = 9,
+})
+
+function hoglin_spawner:test_spawn_position (spawn_pos, sdata)
+	if mcl_vars.difficulty == 0 then
+		return false
+	end
+	local node_pos = mcl_util.get_nodepos (spawn_pos)
+	node_pos.y = node_pos.y - 1
+	local node = minetest.get_node (node_pos)
+	return node.name ~= "mcl_nether:nether_wart_block"
+		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+end
+
+mcl_mobs.register_spawner (hoglin_spawner)
 
 ------------------------------------------------------------------------
 -- Zoglins.

@@ -39,24 +39,22 @@ local function bitset_size (x, y, z)
 end
 
 local function bisect (edges, nmemb, value)
-	local low, high, mid = 1, nmemb
+	local low, high, mid = 0, nmemb - 1
 
-	while low ~= nmemb do
-		mid = low + floor ((high - low) / 2)
-		if edges[mid] > value then
-			high = mid
-		elseif edges[mid] == value then
-			return mid
-		else
+	while low ~= high do
+		mid = floor ((low + high) / 2)
+		if edges[mid + 1] < value then
 			low = mid + 1
+		else
+			high = mid
 		end
 	end
 
-	if low == nmemb and edges[low] > value then
-		return nil
+	if edges[low + 1] > value then
+		return low > 0 and low or nil
 	end
 
-	return low
+	return low + 1
 end
 
 local band = bit.band

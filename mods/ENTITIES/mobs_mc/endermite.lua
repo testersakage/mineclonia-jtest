@@ -9,6 +9,7 @@ local endermite = {
 	description = S("Endermite"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	passive = false,
 	hp_min = 8,
 	hp_max = 8,

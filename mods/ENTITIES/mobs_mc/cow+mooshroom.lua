@@ -7,13 +7,14 @@ local cow_def = {
 	description = S("Cow"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	runaway = true,
 	passive = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.45, -0.01, -0.45, 0.45, 1.39, 0.45},
+	collisionbox = {-0.45, 0.0, -0.45, 0.45, 1.4, 0.45},
 	spawn_in_group = 4,
 	spawn_in_group_min = 3,
 	visual = "mesh",
@@ -264,3 +265,33 @@ mcl_mobs.spawn_setup({
 -- spawn egg
 mcl_mobs.register_egg("mobs_mc:cow", S("Cow"), "#443626", "#a1a1a1", 0)
 mcl_mobs.register_egg("mobs_mc:mooshroom", S("Mooshroom"), "#a00f10", "#b7b7b7", 0)
+
+------------------------------------------------------------------------
+-- Modern Cow & Mooshroom spawning.
+------------------------------------------------------------------------
+
+local cow_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:cow",
+	biomes = mobs_mc.farm_animal_biomes,
+	weight = 12,
+})
+
+mcl_mobs.register_spawner (cow_spawner)
+
+local default_spawner = mcl_mobs.default_spawner
+local mooshroom_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:mooshroom",
+	biomes = {
+		"MushroomIslandShore",
+		"MushroomIsland",
+	},
+	weight = 8,
+	pack_min = 4,
+	pack_max = 8,
+})
+
+function mooshroom_spawner:test_supporting_node (node)
+	return minetest.get_item_group (node.name, "mycelium") > 0
+end
+
+mcl_mobs.register_spawner (mooshroom_spawner)

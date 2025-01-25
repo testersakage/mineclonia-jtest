@@ -236,13 +236,14 @@ local psdefs = {{
 local enderman = {
 	description = S("Enderman"),
 	type = "monster",
+	_spawn_category = "monster",
 	spawn_class = "passive",
 	retaliates = true,
 	hp_min = 40,
 	hp_max = 40,
 	xp_min = 5,
 	xp_max = 5,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 2.89, 0.3},
+	collisionbox = {-0.3, 0, -0.3, 0.3, 2.9, 0.3},
 	doll_size_override = { x = 0.8, y = 0.8 },
 	visual = "mesh",
 	mesh = "mobs_mc_enderman.b3d",
@@ -801,3 +802,54 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:enderman", S("Enderman"), "#252525", "#151515", 0)
+
+------------------------------------------------------------------------
+-- Modern Enderman spawning.
+------------------------------------------------------------------------
+
+local enderman_spawner_overworld = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:enderman",
+	spawn_category = "monster",
+	pack_min = 1,
+	pack_max = 4,
+	weight = 1,
+	biomes = mobs_mc.monster_biomes,
+})
+
+local enderman_spawner_nether = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:enderman",
+	spawn_category = "monster",
+	pack_min = 1,
+	pack_max = 4,
+	biomes = {
+		"WarpedForest",
+		"Nether",
+		"BasaltDelta",
+		"SoulsandValley",
+	},
+	weight = 1,
+	max_artificial_light = 7,
+})
+
+local enderman_spawner_end = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:enderman",
+	spawn_category = "monster",
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"End",
+		"EndBorder",
+		"EndIsland",
+		"EndHighlands",
+		"EndMidlands",
+		"EndBarrens",
+		"EndSmallIslands",
+	},
+	weight = 10,
+	max_artificial_light = 15,
+	max_light = 15,
+})
+
+mcl_mobs.register_spawner (enderman_spawner_overworld)
+mcl_mobs.register_spawner (enderman_spawner_nether)
+mcl_mobs.register_spawner (enderman_spawner_end)

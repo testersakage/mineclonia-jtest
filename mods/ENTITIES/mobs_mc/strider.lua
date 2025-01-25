@@ -15,6 +15,7 @@ local is_valid = mcl_util.is_valid_objectref
 local strider = {
 	description = S("Strider"),
 	type = "animal",
+	_spawn_category = "creature",
 	passive = true,
 	spawn_class = "passive",
 	runaway = true,
@@ -455,6 +456,35 @@ mcl_mobs.spawn_setup ({
 })
 
 mcl_mobs.register_egg ("mobs_mc:strider", S("Strider"), "#000000", "#FF0000", 0)
+
+------------------------------------------------------------------------
+-- Modern Strider spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+local strider_spawner = {
+	name = "mobs_mc:strider",
+	spawn_category = "creature",
+	spawn_placement = "lava",
+	weight = 60,
+	pack_min = 1,
+	pack_max = 2,
+	biomes = {
+		"WarpedForest",
+		"Nether",
+		"BasaltDelta",
+		"SoulsandValley",
+	},
+}
+
+function strider_spawner:test_spawn_position (spawn_pos, sdata)
+	local above = mcl_util.get_nodepos (spawn_pos)
+	above.y = above.y + 1
+	return minetest.get_node (above).name == "air"
+		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+end
+
+mcl_mobs.register_spawner (strider_spawner)
 
 -----------------------------------------------------------------------
 -- Legacy baby strider.

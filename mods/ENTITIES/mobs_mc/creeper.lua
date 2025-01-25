@@ -13,11 +13,12 @@ local mob_class = mcl_mobs.mob_class
 local creeper_defs = {
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 5,
 	xp_max = 5,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.69, 0.3},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_creeper.b3d",
 	visual_size = { x = 3, y = 3 },
@@ -315,3 +316,17 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:creeper", S("Creeper"), "#0da70a", "#000000", 0)
+
+---------------------------------------------------------------
+-- Modern Creeper spawning.
+---------------------------------------------------------------
+
+local creeper_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:creeper",
+	weight = 100,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = mobs_mc.monster_biomes,
+})
+
+mcl_mobs.register_spawner (creeper_spawner)

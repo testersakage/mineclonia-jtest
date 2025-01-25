@@ -159,7 +159,7 @@ function mob_class:get_staticdata_table ()
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
-	tmp._physics_factors = table.copy (self._physics_factors)
+	tmp._physics_factors = table.copy (self._physics_factors or {})
 	for field, factors in pairs (tmp._physics_factors) do
 		tmp[field] = factors.base
 
@@ -476,6 +476,15 @@ function mob_class:mob_activate (staticdata, dtime)
 		def.after_activate(self, staticdata, def, dtime)
 	end
 	self:remove_texture_mod ("^[colorize:#d42222:175")
+
+	-- Record this mob's presence for spawning.
+	local category = self._spawn_category
+	local n_active = mcl_mobs.active_mobs_by_category[category]
+	if not n_active then
+		n_active = 0
+	end
+	mcl_mobs.active_mobs_by_category[category] = n_active + 1
+	self._activated = true
 	return true
 end
 

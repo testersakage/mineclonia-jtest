@@ -21,6 +21,7 @@ local silverfish = {
 	description = S("Silverfish"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	passive = false,
 	group_attack = true,
 	reach = 1,

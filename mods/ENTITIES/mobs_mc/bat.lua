@@ -23,6 +23,7 @@ local bat = {
 	description = S("Bat"),
 	type = "animal",
 	spawn_class = "ambient",
+	_spawn_category = "ambient",
 	can_despawn = true,
 	spawn_in_group = 8,
 	passive = true,
@@ -30,7 +31,7 @@ local bat = {
 	hp_max = 6,
 	rotate = 180,
 	head_eye_height = 0.45,
-	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.89, 0.25},
+	collisionbox = {-0.25, 0.0, -0.25, 0.25, 0.89, 0.25},
 	visual = "mesh",
 	mesh = "mobs_mc_bat.b3d",
 	textures = {
@@ -190,9 +191,10 @@ mcl_mobs.register_mob ("mobs_mc:bat", bat)
 
 --[[ If the game has been launched between the 20th of October and the 3rd of November system time,
 -- the maximum spawn light level is increased. ]]
-local date = os.date("*t")
+local date = os.date ("*t")
 local maxlight
-if (date.month == 10 and date.day >= 20) or (date.month == 11 and date.day <= 3) then
+if (date.month == 10 and date.day >= 20)
+	or (date.month == 11 and date.day <= 3) then
 	maxlight = 6
 else
 	maxlight = 3
@@ -212,3 +214,41 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:bat", S("Bat"), "#4c3e30", "#0f0f0f", 0)
+
+------------------------------------------------------------------------
+-- Modern Bat spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local bat_spawner = {
+	name = "mobs_mc:bat",
+	spawn_category = "ambient",
+	spawn_placement = "ground",
+	pack_min = 8,
+	pack_max = 8,
+	weight = 10,
+	biomes = mobs_mc.overworld_biomes,
+}
+
+function bat_spawner:test_spawn_position (spawn_pos, sdata)
+	if spawn_pos.y < 0
+		and default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+		local node = minetest.get_node (spawn_pos)
+		local artificial_light = minetest.get_artificial_light (node.param1)
+		local date = os.date ("*t")
+
+		local maxlight
+		if (date.month == 10 and date.day >= 20)
+			or (date.month == 11 and date.day <= 3) then
+			maxlight = 6
+		else
+			maxlight = 3
+		end
+
+		return artificial_light <= maxlight
+	end
+	return false
+end
+
+mcl_mobs.register_spawner (bat_spawner)

@@ -15,6 +15,7 @@ local golem = {
 	description = S("Iron Golem"),
 	type = "npc",
 	spawn_class = "passive",
+	_spawn_category = "misc",
 	passive = true,
 	retaliates = true,
 	hp_min = 100,

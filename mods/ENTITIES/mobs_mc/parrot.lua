@@ -14,6 +14,7 @@ local parrot = {
 	description = S("Parrot"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	passive = true,
 	pathfinding = 1,
 	hp_min = 6,
@@ -25,7 +26,7 @@ local parrot = {
 	horizontal_head_height=0,
 	head_eye_height = 0.54,
 	curiosity = 10,
-	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.89, 0.25},
+	collisionbox = {-0.25, 0, -0.25, 0.25, 0.9, 0.25},
 	visual = "mesh",
 	mesh = "mobs_mc_parrot.b3d",
 	textures = {
@@ -365,3 +366,43 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:parrot", S("Parrot"), "#0da70a", "#ff0000", 0)
+
+------------------------------------------------------------------------
+-- Modern Parrot spawning.
+-----------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:parrot",
+	weight = 40,
+	pack_min = 1,
+	pack_max = 2,
+	biomes = {
+		"Jungle",
+		"JungleEdgeM",
+		"JungleM",
+		"JungleEdge",
+		"BambooJungle",
+	},
+})
+
+function parrot_spawner:test_spawn_position (spawn_pos, sdata)
+	local node = mcl_util.get_nodepos (spawn_pos)
+	local light = minetest.get_node_light (node)
+	if not light or light <= 8 then
+		return false
+	end
+	node.y = node.y - 1
+	local node_below = minetest.get_node (node)
+	if minetest.get_item_group (node_below.name, "grass_block") > 0
+		or minetest.get_item_group (node_below.name, "leaves") > 0
+		or minetest.get_item_group (node_below.name, "tree") > 0 then
+		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+			return true
+		end
+	end
+	return false
+end
+
+mcl_mobs.register_spawner (parrot_spawner)

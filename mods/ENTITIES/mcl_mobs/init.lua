@@ -218,6 +218,9 @@ mcl_mobs.mob_class = {
 	_old_head_swivel_pos = vector.zero (),
 	_head_axis_scale = nil,
 
+	-- Field consulted by new spawning routines.
+	_spawn_category = "misc",
+
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
 

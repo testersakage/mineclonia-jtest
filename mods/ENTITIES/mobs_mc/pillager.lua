@@ -6,6 +6,7 @@ local illager = mobs_mc.illager
 local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	description = S("Pillager"),
 	type = "monster",
+	_spawn_category = "monster",
 	spawn_class = "hostile",
 	hp_min = 24,
 	hp_max = 24,

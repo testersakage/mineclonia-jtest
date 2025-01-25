@@ -10,6 +10,7 @@ local axolotl = {
 	description = S("Axolotl"),
 	type = "animal",
 	spawn_class = "water",
+	_spawn_category = "axolotl",
 	can_despawn = true,
 	passive = false,
 	passive_towards_players = true,
@@ -308,6 +309,39 @@ mcl_mobs.spawn_setup ({
 		"LushCaves_underground",
 	},
 })
+
+------------------------------------------------------------------------
+-- Modern Axolotl spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local axolotl_spawner = {
+	name = "mobs_mc:axolotl",
+	spawn_category = "axolotl",
+	spawn_placement = "aquatic",
+	pack_min = 4,
+	pack_max = 6,
+	weight = 10,
+	biomes = {
+		"LushCaves_underground",
+		"LushCaves",
+	},
+}
+
+function axolotl_spawner:test_spawn_position (spawn_pos, sdata)
+	if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+		local node_below = mcl_util.get_nodepos (spawn_pos)
+		node_below.y = node_below.y - 1
+		local block = minetest.get_node (node_below)
+		if block.name == "mcl_core:clay" then
+			return true
+		end
+	end
+	return false
+end
+
+mcl_mobs.register_spawner (axolotl_spawner)
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:axolotl", S("Axolotl"), "#e890bf", "#b83D7e", 0)
