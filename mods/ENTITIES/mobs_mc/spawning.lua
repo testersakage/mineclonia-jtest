@@ -203,20 +203,25 @@ function monster_spawner:test_spawn_position (spawn_pos, sdata)
 	if mcl_vars.difficulty == 0 then
 		return false
 	end
+
 	local node = mcl_util.get_nodepos (spawn_pos)
-	local natural_light = minetest.get_natural_light (node)
-	if not natural_light
-		or natural_light > self.max_light
-		or natural_light > math.random (0, 31) then
-		return false
-	end
 	local node_data = minetest.get_node (node)
 	local light = minetest.get_artificial_light (node_data.param1)
 	if not light or light > self.max_artificial_light then
 		return false
 	end
 
-	return default_spawner.test_spawn_position (self, spawn_pos, sdata)
+	if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+		-- Natural light tests are expensive...
+		local natural_light = minetest.get_natural_light (node)
+		if not natural_light
+			or natural_light > self.max_light
+			or natural_light > math.random (0, 31) then
+			return false
+		end
+		return true
+	end
+	return false
 end
 
 mobs_mc.monster_spawner = monster_spawner

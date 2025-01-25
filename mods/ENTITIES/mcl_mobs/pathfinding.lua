@@ -1047,7 +1047,7 @@ local function get_partial_type (nodedef)
 			return "BLOCKED"
 		end
 		if fixed and type (fixed[1]) == "number" then
-			fixed = {fixed[1]}
+			fixed = {fixed}
 		end
 		boxes = fixed
 		if (#boxes == 1
