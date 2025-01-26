@@ -549,20 +549,24 @@ local slime_spawner = table.merge (monster_spawner, {
 	max_light = 15,
 })
 
-function slime_spawner:test_spawn_position (spawn_pos, sdata)
-	local biome = minetest.get_biome_data (spawn_pos)
+function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	local biome = minetest.get_biome_data (node_pos)
 	if biome then
 		local name = minetest.get_biome_name (biome.biome)
 		if name == "Swampland" or name == "MangroveSwamp" then
 			if swamp_spawn (spawn_pos) then
-				return monster_spawner.test_spawn_position (self, spawn_pos, sdata)
+				return monster_spawner.test_spawn_position (self, spawn_pos,
+									    node_pos, sdata,
+									    node_cache)
 			end
 		end
 
 		if spawn_pos.y <= slime_chunk_spawn_max + 0.5
 			and in_slime_chunk (spawn_pos)
 			and math.random (1, 10) == 1 then
-			return monster_spawner.test_spawn_position (self, spawn_pos, sdata)
+			return monster_spawner.test_spawn_position (self, spawn_pos,
+								    node_pos, sdata,
+								    node_cache)
 		end
 	end
 	return false
@@ -599,9 +603,11 @@ local magma_cube_spawner = {
 	},
 }
 
-function magma_cube_spawner:test_spawn_position (spawn_pos, sdata)
+function magma_cube_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	return mcl_vars.difficulty > 0
-		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+		and default_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache)
 end
 
 function magma_cube_spawner:spawn (spawn_pos, _)

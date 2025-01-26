@@ -278,7 +278,6 @@ local cow_spawner = table.merge (mobs_mc.animal_spawner, {
 
 mcl_mobs.register_spawner (cow_spawner)
 
-local default_spawner = mcl_mobs.default_spawner
 local mooshroom_spawner = table.merge (mobs_mc.animal_spawner, {
 	name = "mobs_mc:mooshroom",
 	biomes = {

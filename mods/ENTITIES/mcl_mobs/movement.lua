@@ -459,6 +459,12 @@ function mob_class:on_deactivate (removal)
 	if self._activated then
 		self:remove_for_spawning ()
 	end
+
+	if self.particlespawners then
+		for player in mcl_util.connected_players () do
+			self:remove_particlespawners (player)
+		end
+	end
 end
 
 function mob_class:jockey_death ()

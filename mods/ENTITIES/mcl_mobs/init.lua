@@ -255,6 +255,8 @@ function mcl_mobs.node_ok(pos, fallback)
 end
 
 --api and helpers
+-- -- profiler
+-- dofile (path .. "/profiler.lua")
 -- effects: sounds and particles mostly
 dofile(path .. "/effects.lua")
 -- physics: involuntary mob movement - particularly falling and death
