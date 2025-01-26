@@ -36,78 +36,22 @@ local function remove_beacon_beam(pos)
 end
 
 local function check_pyramid(pos)
+	local m = minetest.get_meta(pos)
 	for y_offset = 1,4 do
 		local block_y = pos.y - y_offset
 		for block_x = (pos.x-y_offset),(pos.x+y_offset) do
 			for block_z = (pos.z-y_offset),(pos.z+y_offset) do
 				if minetest.get_item_group(minetest.get_node(vector.new(block_x, block_y, block_z)).name, "beacon_block") == 0 then
+					m:set_int("power_level", y_offset -1)
 					return y_offset - 1
 				end
 			end
 		end
 		if y_offset == 4 then --all checks are done, beacon is maxed
-			return y_offset
+			m:set_int("power_level", 4)
+			return 4
 		end
 	end
-end
-
-local function clear_obstructed_beam(pos)
-	for y=pos.y+1, pos.y+100 do
-		local nodename = minetest.get_node({x=pos.x,y=y, z = pos.z}).name
-		if nodename ~= "mcl_core:bedrock" and nodename ~= "air" and nodename ~= "mcl_core:void" and nodename ~= "ignore" then --ignore means not loaded, let's just assume that's air
-			if nodename ~="mcl_beacons:beacon_beam" then
-				if minetest.get_item_group(nodename,"glass") == 0 and minetest.get_item_group(nodename,"material_glass") == 0  then
-					remove_beacon_beam(pos)
-					return true
-				end
-			end
-		end
-	end
-
-	return false
-end
-
-local function effect_player(effect, pos, power_level, effect_level,player)
-	local distance =  vector.distance(player:get_pos(), pos)
-	if distance > (power_level+1)*10 then return end
-	mcl_potions.give_effect_by_level (effect, player, effect_level, 16)
-end
-
-local function apply_effects_to_all_players(pos)
-	local meta = minetest.get_meta(pos)
-	local effect_string = meta:get_string("effect")
-	local effect_level = meta:get_int("effect_level")
-	local secondary = meta:get_string ("secondary_effect")
-
-	local power_level = check_pyramid(pos)
-
-	if effect_level == 2 and power_level < 4 then --no need to run loops when beacon is in an invalid setup :P
-		return
-	end
-
-	local beacon_distance = (power_level + 1) * 10
-
-	for player in mcl_util.connected_players(pos, beacon_distance) do
-		if vector.distance(pos, player:get_pos()) <= beacon_distance then
-			if not clear_obstructed_beam (pos) then
-				if effect_string and effect_string ~= "" then
-					effect_player (effect_string, pos, power_level, effect_level, player)
-				end
-				if secondary and secondary ~= "" and power_level == 4 then
-					effect_player (secondary, pos, power_level, 1, player)
-				end
-			end
-		end
-	end
-end
-
-local function allow_metadata_inventory_take_put(pos, _, _, stack, player)
-	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
-		return 0
-	end
-	return stack:get_count()
 end
 
 local effect_level = {
@@ -197,6 +141,69 @@ local function generate_beacon_formspec (meta, pos)
 		"listring[current_player;main]"
 	}
 	return table.concat(fs)
+end
+
+local function clear_obstructed_beam(pos)
+	for y=pos.y+1, pos.y+100 do
+		local nodename = minetest.get_node({x=pos.x,y=y, z = pos.z}).name
+		if nodename ~= "mcl_core:bedrock" and nodename ~= "air" and nodename ~= "mcl_core:void" and nodename ~= "ignore" then --ignore means not loaded, let's just assume that's air
+			if nodename ~="mcl_beacons:beacon_beam" then
+				if minetest.get_item_group(nodename,"glass") == 0 and minetest.get_item_group(nodename,"material_glass") == 0  then
+					remove_beacon_beam(pos)
+					return true
+				end
+			end
+		end
+	end
+
+	return false
+end
+
+local function effect_player(effect, pos, power_level, effect_level,player)
+	local distance =  vector.distance(player:get_pos(), pos)
+	if distance > (power_level+1)*10 then return end
+	mcl_potions.give_effect_by_level (effect, player, effect_level, 16)
+end
+
+local function apply_effects_to_all_players(pos)
+	local meta = minetest.get_meta(pos)
+	local effect_string = meta:get_string("effect")
+	local effect_level = meta:get_int("effect_level")
+	local secondary = meta:get_string ("secondary_effect")
+	local old_power_level = meta:get_int("power_level")
+
+	local power_level = check_pyramid(pos)
+	if old_power_level ~= power_level then
+		meta:set_string("formspec", generate_beacon_formspec(meta, pos))
+	end
+
+	if effect_level == 2 and power_level < 4 then --no need to run loops when beacon is in an invalid setup :P
+		return
+	end
+
+	local beacon_distance = (power_level + 1) * 10
+
+	for player in mcl_util.connected_players(pos, beacon_distance) do
+		if vector.distance(pos, player:get_pos()) <= beacon_distance then
+			if not clear_obstructed_beam (pos) then
+				if effect_string and effect_string ~= "" then
+					effect_player (effect_string, pos, power_level, effect_level, player)
+				end
+				if secondary and secondary ~= "" and power_level == 4 then
+					effect_player (secondary, pos, power_level, 1, player)
+				end
+			end
+		end
+	end
+end
+
+local function allow_metadata_inventory_take_put(pos, _, _, stack, player)
+	local name = player:get_player_name()
+	if minetest.is_protected(pos, name) then
+		minetest.record_protection_violation(pos, name)
+		return 0
+	end
+	return stack:get_count()
 end
 
 local function add_group(item, group)
