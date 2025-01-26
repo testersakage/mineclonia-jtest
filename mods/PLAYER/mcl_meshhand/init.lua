@@ -110,11 +110,13 @@ end
 
 mcl_gamemode.register_on_gamemode_change(mcl_meshhand.update_player)
 
+local original_on_place = minetest.registered_items[""].on_place
+
 -- This is needed to deal damage when punching mobs
 -- with random items in hand in survival mode
 minetest.override_item("", {
 	tool_capabilities = mcl_meshhand.survival_hand_tool_caps,
-	on_place = function(_, placer, pointed_thing)
+	on_place = function(itemstack, placer, pointed_thing)
 		if minetest.is_creative_enabled(placer:get_player_name()) then
 			local name = minetest.get_node(pointed_thing.under).name
 			local stack = ItemStack(name)
@@ -134,5 +136,8 @@ minetest.override_item("", {
 			end
 			return istack
 		end
+	  if original_on_place then
+	      return original_on_place(itemstack, placer, pointed_thing)
+	  end
 	end,
 })
