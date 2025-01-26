@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-24 19:26+0000\n"
+"PO-Revision-Date: 2025-01-26 04:25+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_core/zh_Hans/>\n"
@@ -279,25 +279,25 @@ msgid "Dark Oak Fence Gate"
 msgstr "深色橡木栅栏门"
 
 msgid "Dark Oak Leaves"
-msgstr "深色橡木树叶"
+msgstr "深色橡树叶"
 
 msgid "Dark Oak Log"
-msgstr "深色橡木原木"
+msgstr "深色橡树原木"
 
 msgid "Dark Oak Planks"
-msgstr "深色橡木木板"
+msgstr "深色橡木板"
 
 msgid "Dark Oak Pressure Plate"
 msgstr "深色橡木压力板"
 
 msgid "Dark Oak Sapling"
-msgstr "深色橡木树苗"
+msgstr "深色橡树苗"
 
 msgid "Dark Oak Sign"
 msgstr "深色橡木告示牌"
 
 msgid "Dark Oak Slab"
-msgstr "深色橡树台阶"
+msgstr "深色橡木台阶"
 
 msgid "Dark Oak Stairs"
 msgstr "深色橡木楼梯"
@@ -372,16 +372,16 @@ msgid "Jungle leaves are grown from Jungle trees."
 msgstr "丛林树叶由丛林木生长而来。"
 
 msgid "Light Blue Stained Glass"
-msgstr "淡蓝色染色玻璃"
+msgstr "浅蓝玻璃"
 
 msgid "Light Grey Stained Glass"
-msgstr "淡灰色染色玻璃"
+msgstr "浅灰玻璃"
 
 msgid "Lime Stained Glass"
-msgstr "酸橙色染色玻璃"
+msgstr "酸橙玻璃"
 
 msgid "Magenta Stained Glass"
-msgstr "品红色染色玻璃"
+msgstr "品红玻璃"
 
 msgid "Oak Bark"
 msgstr "橡树皮"
@@ -600,10 +600,10 @@ msgid "The trunk of a Spruce tree."
 msgstr "一棵云杉树的树干。"
 
 msgid "White Stained Glass"
-msgstr "白色染色玻璃"
+msgstr "白色玻璃"
 
 msgid "Yellow Stained Glass"
-msgstr "黄色染色玻璃"
+msgstr "黄色玻璃"
 
 msgid "Stone"
 msgstr "石头"
@@ -918,10 +918,12 @@ msgid "Stackable"
 msgstr "可堆叠物品"
 
 msgid "Top snow is a layer of snow. It melts near light sources other than the sun with a light level of 12 or higher."
-msgstr "顶层雪是一层积雪。在除太阳之外的光源附近，且光照等级达到12或更高时，它会融化。"
+msgstr "雪片雪是一层积雪。在除太阳之外的光源附近，且光照等级达到12或更高时，它会融化"
+"。"
 
 msgid "Top snow can be stacked and has one of 8 different height levels. At levels 2-8, top snow is collidable. Top snow drops 2-9 snowballs, depending on its height."
-msgstr "顶层雪可以堆叠，并且有8种不同的高度层级。在2至8级高度时，顶层雪是可碰撞的。根据其高度不同，破坏顶层雪会掉落2到9个雪球。"
+msgstr "雪片可堆叠，并且有8种不同的高度层级。在2至8级高度时，顶层雪是可碰撞的。根据其"
+"高度不同，破坏顶层雪会掉落2到9个雪球。"
 
 msgid "This block can only be placed on full solid blocks and on another top snow (which increases its height)."
 msgstr "这种方块只能放置在完整的实心方块以及另一层顶层雪（这会增加其高度）之上。"
@@ -939,7 +941,7 @@ msgid "Grows on sand"
 msgstr "长在沙土上"
 
 msgid "Contact damage: @1 per half second"
-msgstr "接触伤害：每半秒@1点"
+msgstr "接触伤害：每半秒掉@1点"
 
 msgid "This is a piece of cactus commonly found in dry areas, especially deserts. Over time, cacti will grow up to 3 blocks high on sand or red sand. A cactus hurts living beings touching it with a damage of 1 HP every half second. When a cactus block is broken, all cactus blocks connected above it will break as well."
 msgstr "这是一种常见于干旱地区，尤其是沙漠中的仙人掌。随着时间推移，仙人掌会在沙子或红沙上长到3格高。仙人掌会对触碰它的生物造成伤害，每半秒伤害1点生命值。当一格仙人掌方块被破坏时，与其相连的上方所有仙人掌方块也都会随之被破坏。"
@@ -978,7 +980,7 @@ msgid "A decorative and mostly transparent block."
 msgstr "一种具有装饰性且基本透明的方块。"
 
 msgid "Stained glass is a decorative and mostly transparent block which comes in various different colors."
-msgstr "染色玻璃是一种带有装饰性且基本透明的方块，有着各种各样不同的颜色。"
+msgstr "有色玻璃是一种带有装饰性且基本透明的方块，有着各种各样不同的颜色。"
 
 msgid "Stained Glass"
 msgstr "有色玻璃"
