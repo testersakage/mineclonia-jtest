@@ -110,20 +110,6 @@ local function allow_metadata_inventory_take_put(pos, _, _, stack, player)
 	return stack:get_count()
 end
 
-local function upgrade_effect_level_button (oldmeta)
-	local effect = oldmeta:get_string ("effect")
-	if effect and effect ~= "" then
-		local pdef = mcl_potions.registered_effects[effect] or { }
-		local tooltip = (pdef.description or "???") .. " II"
-		return ("image_button[8.5,3.5;1,1;"
-			.. (pdef.icon or "unknown.png")
-			.. ";upgrade_ii;]"
-			.. "tooltip[8.5,3.5;1,1;" .. tooltip .. "]")
-	else
-		return ""
-	end
-end
-
 local effect_level = {
 	swiftness = 1,
 	haste = 1,
@@ -133,16 +119,40 @@ local effect_level = {
 	regeneration = 4,
 }
 
-local function get_effect_button(effect, img, power_level, x, y)
-	if power_level >= effect_level[effect] then
+local function get_effect_button(effect, img, bdata, x, y)
+	if (bdata.secondary_effect == "regeneration" and effect == "regeneration") or bdata.effect == effect then
+		return "image["..x..","..y..";1,1;"..img.."]"
+	elseif bdata.power_level >= effect_level[effect] then
 		return "image_button["..x..","..y..";1,1;"..img..";"..effect..";]"
 	else
 		return "image["..x..","..y..";1,1;"..img.."^[colorize:"..mcl_colors.GRAY..":128;".."]"
 	end
 end
 
+local function get_effect_level_button(bdata)
+	if bdata.effect and bdata.effect ~= "" then
+		local geo = "8.5,3.5;1,1;"
+		local texmod = ""
+		local pdef = mcl_potions.registered_effects[bdata.effect] or { }
+		local tooltip = (pdef.description or "???") .. " II"
+		if bdata.power_level < 4 then
+			return ("image[".. geo .. (pdef.icon or "unknown.png").. "^[colorize:"..mcl_colors.GRAY..":128]".. "tooltip[".. geo .. tooltip .. "]")
+		elseif bdata.effect_level > 1 then
+			return ("image[".. geo .. (pdef.icon or "unknown.png").. "] tooltip[".. geo .. tooltip .. "]")
+		end
+		return ("image_button[".. geo .. (pdef.icon or "unknown.png")..texmod .. ";upgrade_ii;]".. "tooltip[".. geo .. tooltip .. "]")
+	else
+		return ""
+	end
+end
+
 local function generate_beacon_formspec (meta, pos)
-	local power_level = check_pyramid(pos)
+	local bdata = {
+		power_level = check_pyramid(pos),
+		effect = meta:get_string("effect"),
+		secondary_effect = meta:get_string("secondary_effect"),
+		effect_level = meta:get_int("effect_level")
+	}
 	local fs = {
 		"formspec_version[4]",
 		"size[11.75,14.425]",
@@ -153,19 +163,19 @@ local function generate_beacon_formspec (meta, pos)
 		"image[1,3;1,1;custom_beacon_symbol_3.png]",
 		"image[1,4.5;1,1;custom_beacon_symbol_2.png]",
 		"image[6,3.5;1,1;custom_beacon_symbol_1.png]",
-		get_effect_button("swiftness", "mcl_potions_effect_swift.png", power_level, 2.5, 1.5),
-		get_effect_button("haste", "mcl_potions_effect_haste.png", power_level, 3.5, 1.5),
-		get_effect_button("resistance", "mcl_potions_effect_resistance.png", power_level, 2.5, 3),
-		get_effect_button("leaping", "mcl_potions_effect_leaping.png", power_level, 3.5, 3),
-		get_effect_button("strength", "mcl_potions_effect_strong.png", power_level, 3.0, 4.5),
-		get_effect_button("regeneration", "mcl_potions_effect_regenerating.png", power_level, 7.5, 3.5),
+		get_effect_button("swiftness", "mcl_potions_effect_swift.png", bdata, 2.5, 1.5),
+		get_effect_button("haste", "mcl_potions_effect_haste.png", bdata, 3.5, 1.5),
+		get_effect_button("resistance", "mcl_potions_effect_resistance.png", bdata, 2.5, 3),
+		get_effect_button("leaping", "mcl_potions_effect_leaping.png", bdata, 3.5, 3),
+		get_effect_button("strength", "mcl_potions_effect_strong.png", bdata, 3.0, 4.5),
+		get_effect_button("regeneration", "mcl_potions_effect_regenerating.png", bdata, 7.5, 3.5),
 		"tooltip[swiftness;"..S("Swiftness").."]",
 		"tooltip[haste;"..S("Haste").."]",
 		"tooltip[resistance;"..S("Resistance").."]",
 		"tooltip[leaping;"..S("Leaping").."]",
 		"tooltip[strength;"..S("Strength").."]",
 		"tooltip[regeneration;"..S("Regeneration").."]",
-		upgrade_effect_level_button (meta),
+		get_effect_level_button(bdata),
 		"item_image[1,7;1,1;mcl_core:diamond]",
 		"item_image[2.2,7;1,1;mcl_core:emerald]",
 		"item_image[3.4,7;1,1;mcl_core:iron_ingot]",
