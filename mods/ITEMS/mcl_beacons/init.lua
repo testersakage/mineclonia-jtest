@@ -65,13 +65,14 @@ local effect_level = {
 
 local function get_effect_button(effect, img, bdata, x, y)
 	local pdef = mcl_potions.registered_effects[effect] or { }
-	local tt = "tooltip["..x..","..y..";1,1;".. ( pdef.description or "???" ).."]"
-	if (bdata.secondary_effect == "regeneration" and effect == "regeneration") or bdata.effect == effect then
-		return "image["..x..","..y..";1,1;"..img.."]"..tt
-	elseif bdata.power_level >= effect_level[effect] then
-		return "image_button["..x..","..y..";1,1;"..img..";"..effect..";]"
-	else
+	if bdata.power_level < effect_level[effect] then
+		local tt = "tooltip["..x..","..y..";1,1;".. ( pdef.description or "???" ).."("..S("Unavailable")..")]"
 		return "image["..x..","..y..";1,1;"..img.."^[colorize:"..mcl_colors.GRAY..":128;".."]"..tt
+	elseif (bdata.secondary_effect == "regeneration" and effect == "regeneration") or bdata.effect == effect then
+		local tt = "tooltip["..x..","..y..";1,1;".. ( pdef.description or "???" ).."("..S("Active")..")]"
+		return "image["..x..","..y..";1,1;"..img.."]"..tt
+	else
+		return "image_button["..x..","..y..";1,1;"..img..";"..effect..";]"
 	end
 end
 
@@ -80,13 +81,14 @@ local function get_effect_level_button(bdata)
 		local geo = "8.5,3.5;1,1;"
 		local texmod = ""
 		local pdef = mcl_potions.registered_effects[bdata.effect] or { }
-		local tooltip = (pdef.description or "???") .. " II"
 		if bdata.power_level < 4 then
-			return ("image[".. geo .. (pdef.icon or "unknown.png").. "^[colorize:"..mcl_colors.GRAY..":128]".. "tooltip[".. geo .. tooltip .. "]")
+			local tt = " tooltip["..geo..( pdef.description or "???" ).." II ("..S("Unavailable")..")]"
+			return "image[".. geo .. (pdef.icon or "unknown.png").. "^[colorize:"..mcl_colors.GRAY..":128] "..tt
 		elseif bdata.effect_level > 1 then
-			return ("image[".. geo .. (pdef.icon or "unknown.png").. "] tooltip[".. geo .. tooltip .. "]")
+			local tt = "tooltip["..geo..( pdef.description or "???" ).." II ("..S("Active")..")]"
+			return "image[".. geo .. (pdef.icon or "unknown.png").. "] "..tt
 		end
-		return ("image_button[".. geo .. (pdef.icon or "unknown.png")..texmod .. ";upgrade_ii;]".. "tooltip[".. geo .. tooltip .. "]")
+		return ("image_button[".. geo .. (pdef.icon or "unknown.png")..texmod .. ";upgrade_ii;] ".. " tooltip["..geo..(pdef.description or "???") .." II]")
 	else
 		return ""
 	end
