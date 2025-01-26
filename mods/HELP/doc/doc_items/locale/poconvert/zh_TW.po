@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-25 16:02+0000\n"
+"PO-Revision-Date: 2025-01-26 19:11+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -371,49 +371,50 @@ msgid "Tools and weapons"
 msgstr "工具與武器"
 
 msgid "Item reference of all wieldable tools and weapons"
-msgstr ""
+msgstr "可持用的工具及武器"
 
 msgid "Durability: @1 uses"
-msgstr ""
+msgstr "耐久度：使用 @1 次"
 
 msgid "Durability: @1"
-msgstr ""
+msgstr "耐久度：@1"
 
 msgid "Miscellaneous items"
-msgstr ""
+msgstr "其他物品"
 
 msgid "Item reference of items which are neither blocks, tools or weapons (esp. crafting items)"
-msgstr ""
+msgstr "不屬於方塊、工具、武器的其他物品，例如製作材料"
 
 msgid "Mobs"
-msgstr ""
+msgstr "生物"
 
 msgid "Different Mobs"
-msgstr ""
+msgstr "各種友善、敵對、或死或活的生物"
 
 msgid "Type: @1"
-msgstr ""
+msgstr "類型：@1"
 
 msgid "Spawning light levels (min / max): @1 / @2"
-msgstr ""
+msgstr "生成的亮度要求：@1 至 @2"
 
 msgid "Can Jump a height of @1 nodes"
-msgstr ""
+msgstr "跳躍高度 @1 格"
 
 msgid "Can Fly"
-msgstr ""
+msgstr "會飛行"
 
 msgid "Can Swim"
-msgstr ""
+msgstr "會游泳"
 
 msgid "Drops: "
-msgstr ""
+msgstr "掉落物： "
 
 msgid "Follows player when these items are held:"
-msgstr ""
+msgstr "會跟隨持有以下物品的玩家："
 
 msgid "A transparent block, basically empty space. It is usually left behind after digging something."
 msgstr ""
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
-msgstr ""
+msgstr "即使是空著的手，也有基本的開採和戰鬥能力。當你拿著既非工具也非武器的物品時，"
+"你的行動會視作徒手進行。"
