@@ -828,7 +828,7 @@ local enderman_spawner_nether = table.merge (mobs_mc.monster_spawner, {
 		"SoulsandValley",
 	},
 	weight = 1,
-	max_artificial_light = 7,
+	max_artificial_light = 15,
 })
 
 local enderman_spawner_end = table.merge (mobs_mc.monster_spawner, {
