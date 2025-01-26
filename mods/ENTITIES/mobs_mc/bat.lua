@@ -231,22 +231,27 @@ local bat_spawner = {
 	biomes = mobs_mc.overworld_biomes,
 }
 
-function bat_spawner:test_spawn_position (spawn_pos, sdata)
-	if spawn_pos.y < 0
-		and default_spawner.test_spawn_position (self, spawn_pos, sdata) then
-		local node = minetest.get_node (spawn_pos)
-		local artificial_light = minetest.get_artificial_light (node.param1)
-		local date = os.date ("*t")
+function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	if spawn_pos.y < 0 then
+		local eligible
+			= default_spawner.test_spawn_position (self, spawn_pos, node_pos,
+							       sdata, node_cache)
 
-		local maxlight
-		if (date.month == 10 and date.day >= 20)
-			or (date.month == 11 and date.day <= 3) then
-			maxlight = 6
-		else
-			maxlight = 3
+		if eligible then
+			local node = self:get_node (node_cache, 0, node_pos)
+			local artificial_light = minetest.get_artificial_light (node.param1)
+			local date = os.date ("*t")
+
+			local maxlight
+			if (date.month == 10 and date.day >= 20)
+				or (date.month == 11 and date.day <= 3) then
+				maxlight = 6
+			else
+				maxlight = 3
+			end
+
+			return artificial_light <= maxlight
 		end
-
-		return artificial_light <= maxlight
 	end
 	return false
 end

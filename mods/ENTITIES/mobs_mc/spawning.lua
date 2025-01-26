@@ -141,16 +141,16 @@ function animal_spawner:test_supporting_node (node)
 	return minetest.get_item_group (node.name, "grass_block") > 0
 end
 
-function animal_spawner:test_spawn_position (spawn_pos, sdata)
-	local node = mcl_util.get_nodepos (spawn_pos)
-	local light = minetest.get_node_light (node)
+function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	local light = minetest.get_node_light (node_pos)
 	if not light or light <= 8 then
 		return false
 	end
-	node.y = node.y - 1
-	local node_below = minetest.get_node (node)
+	local node_below = self:get_node (node_cache, -1, node_pos)
 	if self:test_supporting_node (node_below) then
-		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+		if default_spawner.test_spawn_position (self, spawn_pos,
+							node_pos, sdata,
+							node_cache) then
 			return true
 		end
 	end
@@ -167,19 +167,18 @@ local aquatic_animal_spawner = {
 	spawn_placement = "aquatic",
 }
 
-function aquatic_animal_spawner:test_spawn_position (spawn_pos, sdata)
+function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	if spawn_pos.y > 0.5 or spawn_pos.y < -12.5 then
 		return false
 	end
 
-	local node = mcl_util.get_nodepos (spawn_pos)
-	node.y = node.y - 1
-	local node_below = minetest.get_node (node)
-	node.y = node.y + 2
-	local node_above = minetest.get_node (node)
+	local node_below = self:get_node (node_cache, -1, node_pos)
+	local node_above = self:get_node (node_cache, 1, node_pos)
 	if minetest.get_item_group (node_below.name, "water") > 0
 		and minetest.get_item_group (node_above.name, "water") > 0 then
-		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+		if default_spawner.test_spawn_position (self, spawn_pos,
+							node_pos, sdata,
+							node_cache) then
 			return true
 		end
 	end
@@ -199,21 +198,21 @@ local monster_spawner = {
 	max_light = 6,
 }
 
-function monster_spawner:test_spawn_position (spawn_pos, sdata)
+function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	if mcl_vars.difficulty == 0 then
 		return false
 	end
 
-	local node = mcl_util.get_nodepos (spawn_pos)
-	local node_data = minetest.get_node (node)
+	local node_data = self:get_node (node_cache, 0, node_pos)
 	local light = minetest.get_artificial_light (node_data.param1)
 	if not light or light > self.max_artificial_light then
 		return false
 	end
 
-	if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
+	if default_spawner.test_spawn_position (self, spawn_pos, node_pos,
+						sdata, node_cache) then
 		-- Natural light tests are expensive...
-		local natural_light = minetest.get_natural_light (node)
+		local natural_light = minetest.get_natural_light (node_pos)
 		if not natural_light
 			or natural_light > self.max_light
 			or natural_light > math.random (0, 31) then

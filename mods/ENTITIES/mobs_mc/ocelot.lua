@@ -1032,19 +1032,19 @@ local ocelot_spawner = table.merge (mobs_mc.monster_spawner, {
 	},
 })
 
-local function floor_is_grass_or_leaves (spawn_pos)
-	local node_pos = mcl_util.get_nodepos (spawn_pos)
-	node_pos.y = node_pos.y - 1
-	local node = minetest.get_node (node_pos)
+function ocelot_spawner:floor_is_grass_or_leaves (node_pos, node_cache)
+	local node = self:get_node (node_cache, -1, node_pos)
 	return minetest.get_item_group (node.name, "leaves") > 0
 		or minetest.get_item_group (node.name, "grass_block") > 0
 end
 
-function ocelot_spawner:test_spawn_position (spawn_pos, sdata)
+function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	return math.random (3) == 1
 		and spawn_pos.y >= 0.5
-		and floor_is_grass_or_leaves (spawn_pos)
-		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+		and self:floor_is_grass_or_leaves (node_pos, node_cache)
+		and default_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache)
 end
 
 mcl_mobs.register_spawner (ocelot_spawner)

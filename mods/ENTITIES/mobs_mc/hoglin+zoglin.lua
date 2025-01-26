@@ -501,15 +501,15 @@ local hoglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	weight = 9,
 })
 
-function hoglin_spawner:test_spawn_position (spawn_pos, sdata)
+function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	if mcl_vars.difficulty == 0 then
 		return false
 	end
-	local node_pos = mcl_util.get_nodepos (spawn_pos)
-	node_pos.y = node_pos.y - 1
-	local node = minetest.get_node (node_pos)
+	local node = self:get_node (node_cache, -1, node_pos)
 	return node.name ~= "mcl_nether:nether_wart_block"
-		and default_spawner.test_spawn_position (self, spawn_pos, sdata)
+		and default_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache)
 end
 
 mcl_mobs.register_spawner (hoglin_spawner)

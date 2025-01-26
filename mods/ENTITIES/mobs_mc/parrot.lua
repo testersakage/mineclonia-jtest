@@ -371,8 +371,6 @@ mcl_mobs.register_egg("mobs_mc:parrot", S("Parrot"), "#0da70a", "#ff0000", 0)
 -- Modern Parrot spawning.
 -----------------------------------------------------------------------
 
-local default_spawner = mcl_mobs.default_spawner
-
 local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
 	name = "mobs_mc:parrot",
 	weight = 40,
@@ -387,22 +385,10 @@ local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
 	},
 })
 
-function parrot_spawner:test_spawn_position (spawn_pos, sdata)
-	local node = mcl_util.get_nodepos (spawn_pos)
-	local light = minetest.get_node_light (node)
-	if not light or light <= 8 then
-		return false
-	end
-	node.y = node.y - 1
-	local node_below = minetest.get_node (node)
-	if minetest.get_item_group (node_below.name, "grass_block") > 0
-		or minetest.get_item_group (node_below.name, "leaves") > 0
-		or minetest.get_item_group (node_below.name, "tree") > 0 then
-		if default_spawner.test_spawn_position (self, spawn_pos, sdata) then
-			return true
-		end
-	end
-	return false
+function parrot_spawner:test_supporting_node (node)
+	return  minetest.get_item_group (node.name, "grass_block") > 0
+		or minetest.get_item_group (node.name, "leaves") > 0
+		or minetest.get_item_group (node.name, "tree") > 0
 end
 
 mcl_mobs.register_spawner (parrot_spawner)

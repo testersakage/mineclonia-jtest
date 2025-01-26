@@ -951,9 +951,11 @@ local husk_spawner = table.merge (mobs_mc.monster_spawner, {
 
 local monster_spawner = mobs_mc.monster_spawner
 
-function husk_spawner:test_spawn_position (spawn_pos, sdata)
+function husk_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	return mcl_weather.is_outdoor (spawn_pos)
-		and monster_spawner.test_spawn_position (self, spawn_pos, sdata)
+		and monster_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache)
 end
 
 function husk_spawner:spawn (spawn_pos, idx, sdata, pack_size)
