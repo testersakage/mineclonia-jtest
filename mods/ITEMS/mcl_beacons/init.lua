@@ -120,12 +120,14 @@ local effect_level = {
 }
 
 local function get_effect_button(effect, img, bdata, x, y)
+	local pdef = mcl_potions.registered_effects[effect] or { }
+	local tt = "tooltip["..x..","..y..";1,1;".. ( pdef.description or "???" ).."]"
 	if (bdata.secondary_effect == "regeneration" and effect == "regeneration") or bdata.effect == effect then
-		return "image["..x..","..y..";1,1;"..img.."]"
+		return "image["..x..","..y..";1,1;"..img.."]"..tt
 	elseif bdata.power_level >= effect_level[effect] then
 		return "image_button["..x..","..y..";1,1;"..img..";"..effect..";]"
 	else
-		return "image["..x..","..y..";1,1;"..img.."^[colorize:"..mcl_colors.GRAY..":128;".."]"
+		return "image["..x..","..y..";1,1;"..img.."^[colorize:"..mcl_colors.GRAY..":128;".."]"..tt
 	end
 end
 
