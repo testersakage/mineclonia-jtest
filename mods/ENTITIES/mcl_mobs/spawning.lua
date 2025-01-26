@@ -1273,7 +1273,8 @@ function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 			return false
 		end
 		-- The up face of the supporting node must be sturdy.
-		if mcl_mobs.is_up_face_sturdy (node_pos, node_below) then
+		if node_below.name == "mcl_nether:soul_sand"
+			or mcl_mobs.is_up_face_sturdy (node_pos, node_below) then
 			-- The block here and the block above must not
 			-- be opaque nor deal damage.
 			local node_here = self:get_node (node_cache, 0, node_pos)
