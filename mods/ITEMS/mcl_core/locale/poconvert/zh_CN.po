@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-26 04:25+0000\n"
+"PO-Revision-Date: 2025-01-26 19:11+0000\n"
 "Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_core/zh_Hans/>\n"
@@ -327,7 +327,7 @@ msgid "Jungle Boat"
 msgstr "丛林船"
 
 msgid "Jungle Button"
-msgstr "丛林按钮"
+msgstr "丛林木按钮"
 
 msgid "Jungle Chest Boat"
 msgstr "丛林箱子船"
@@ -351,13 +351,13 @@ msgid "Jungle Planks"
 msgstr "丛林木板"
 
 msgid "Jungle Pressure Plate"
-msgstr "丛林压力板"
+msgstr "丛林木压力板"
 
 msgid "Jungle Sapling"
 msgstr "丛林树苗"
 
 msgid "Jungle Sign"
-msgstr "丛林告示牌"
+msgstr "丛林木告示牌"
 
 msgid "Jungle Slab"
 msgstr "丛林台阶"
