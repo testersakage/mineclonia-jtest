@@ -35,17 +35,13 @@ local function remove_beacon_beam(pos)
 	end
 end
 
-local function beacon_blockcheck(pos)
+local function check_pyramid(pos)
 	for y_offset = 1,4 do
 		local block_y = pos.y - y_offset
 		for block_x = (pos.x-y_offset),(pos.x+y_offset) do
 			for block_z = (pos.z-y_offset),(pos.z+y_offset) do
-				local valid_block = false --boolean which stores if block is valid or not
-				if minetest.get_item_group(minetest.get_node(vector.new(block_x, block_y, block_z)).name, "beacon_block") > 0 then
-					valid_block =true
-				end
-				if not valid_block then
-					return y_offset -1 --the last layer is complete, this one is missing or incomplete
+				if minetest.get_item_group(minetest.get_node(vector.new(block_x, block_y, block_z)).name, "beacon_block") == 0 then
+					return y_offset - 1
 				end
 			end
 		end
@@ -83,7 +79,7 @@ local function apply_effects_to_all_players(pos)
 	local effect_level = meta:get_int("effect_level")
 	local secondary = meta:get_string ("secondary_effect")
 
-	local power_level = beacon_blockcheck(pos)
+	local power_level = check_pyramid(pos)
 
 	if effect_level == 2 and power_level < 4 then --no need to run loops when beacon is in an invalid setup :P
 		return
@@ -204,7 +200,7 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 	if (fields.swiftness or fields.regeneration or fields.leaping
 	or fields.strength or fields.upgrade_ii or fields.resistance
 	or fields.haste) then
-		local power_level = beacon_blockcheck (pos)
+		local power_level = check_pyramid(pos)
 
 		if minetest.is_protected (pos, sender_name) then
 			minetest.record_protection_violation(pos, sender_name)
