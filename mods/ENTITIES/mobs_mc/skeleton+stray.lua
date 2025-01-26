@@ -451,6 +451,7 @@ local skeleton_spawner_soul_sand_valley = table.merge (mobs_mc.monster_spawner, 
 		"SoulsandValley",
 	},
 	max_light = 15,
+	max_artificial_light = 15,
 })
 
 local skeleton_spawner_cold = table.merge (mobs_mc.monster_spawner, {
