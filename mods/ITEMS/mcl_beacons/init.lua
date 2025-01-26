@@ -185,6 +185,16 @@ function mcl_beacons.register_beaconfuel(itemstring)
 	add_group(itemstring, "beacon_fuel")
 end
 
+local function set_effect(pos, effect)
+	local meta = core.get_meta(pos)
+	if meta:get_string("effect") == effect then return false end
+	meta:set_string ("effect", effect)
+	if meta:get_int ("effect_level") < 1 then
+		meta:set_int ("effect_level", 1)
+	end
+	return true
+end
+
 local function apply_beacon_formspec (pos, _, fields, sender)
 	local sender_name = sender:get_player_name ()
 	-- Return if the node is no longer a beacon.
@@ -228,51 +238,35 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 		end
 
 		local successful = false
+		local apply_cost = true
 
 		if fields.swiftness then
-			meta:set_string ("effect", "swiftness")
-			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-				meta:set_int ("effect_level", 1)
-			end
-			successful = true
+			successful = set_effect(pos, "swiftness")
 		elseif fields.haste then
-			meta:set_string ("effect", "haste")
-			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-				meta:set_int ("effect_level", 1)
-			end
-			successful = true
+			successful = set_effect(pos, "haste")
 		elseif fields.leaping and power_level >= 2 then
-			meta:set_string ("effect", "leaping")
-			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-				meta:set_int ("effect_level", 1)
-			end
-			successful = true
+			successful = set_effect(pos, "leaping")
 		elseif fields.resistance and power_level >= 2 then
-			meta:set_string ("effect", "resistance")
-			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-				meta:set_int ("effect_level", 1)
-			end
-			successful = true
+			successful = set_effect(pos, "resistance")
 		elseif fields.strength and power_level >= 3 then
-			meta:set_string ("effect","strength")
-			if minetest.get_meta (pos):get_int ("effect_level") < 1 then
-				meta:set_int ("effect_level", 1)
-			end
-			successful = true
+			successful = set_effect(pos, "strength")
 		elseif fields.regeneration and power_level == 4 then
+			if meta:get_string("effect") ~= "" and meta:get_string("effect_level") == 1 then apply_cost = false end
 			-- If a secondary effect is enabled, the effect level must
 			-- be reset to 1.
-			meta:set_int ("effect_level", 1)
-			meta:set_string ("secondary_effect", "regeneration")
-			successful = true
+			if meta:get_string("secondary_effect") ~= "regeneration" then
+				meta:set_int ("effect_level", 1)
+				meta:set_string ("secondary_effect", "regeneration")
+				successful = true
+			end
 		elseif fields.upgrade_ii and power_level == 4 then
+			if meta:get_string("effect") ~= "" and meta:get_string("secondary_effect") == "" then apply_cost = false end
 			-- Upgrade the primary effect to II but cancel the
 			-- secondary one.  Also verify that there is an effect to
 			-- upgrade.
-			if minetest.get_meta (pos):get_string ("effect")
-			and minetest.get_meta (pos):get_int ("effect_level") < 2 then
-			minetest.get_meta (pos):set_int ("effect_level", 2)
-			minetest.get_meta (pos):set_string ("secondary_effect", "")
+			if meta:get_string ("effect") ~= "" and meta:get_int ("effect_level") < 2 then
+				meta:set_int ("effect_level", 2)
+				meta:set_string ("secondary_effect", "")
 				successful = true
 			end
 		end
@@ -281,8 +275,11 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 				awards.unlock(sender_name, "mcl:maxed_beacon")
 			end
 			awards.unlock(sender_name, "mcl:beacon")
-			input:take_item ()
-			inv:set_stack("input",1,input)
+
+			if apply_cost then
+				input:take_item ()
+				inv:set_stack("input",1,input)
+			end
 
 			local beam_palette_index = 0
 			remove_beacon_beam(pos)
