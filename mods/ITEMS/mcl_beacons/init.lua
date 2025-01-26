@@ -124,46 +124,67 @@ local function upgrade_effect_level_button (oldmeta)
 	end
 end
 
-local function generate_beacon_formspec (meta)
-	return "formspec_version[4]"..
-	"size[11.75,14.425]"..
-	"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Beacon"))) .. "]"..
-	"label[0.5,1;"..minetest.formspec_escape(S("Primary Power:")).."]"..
-	"label[5.5,1;"..minetest.formspec_escape(S("Secondary Power:")).."]"..
-	"image[1,1.5;1,1;custom_beacon_symbol_4.png]"..
-	"image[1,3;1,1;custom_beacon_symbol_3.png]"..
-	"image[1,4.5;1,1;custom_beacon_symbol_2.png]"..
-	"image[6,3.5;1,1;custom_beacon_symbol_1.png]"..
-	"image_button[2.5,1.5;1,1;mcl_potions_effect_swift.png;swiftness;]"..
-	"image_button[3.5,1.5;1,1;mcl_potions_effect_haste.png;haste;]"..
-	"image_button[2.5,3;1,1;mcl_potions_effect_resistance.png;resistance;]"..
-	"image_button[3.5,3;1,1;mcl_potions_effect_leaping.png;leaping;]"..
-	"image_button[3.0,4.5;1,1;mcl_potions_effect_strong.png;strength;]"..
-	"image_button[7.5,3.5;1,1;mcl_potions_effect_regenerating.png;regeneration;]"..
-	"tooltip[swiftness;"..S("Swiftness").."]"..
-	"tooltip[haste;"..S("Haste").."]"..
-	"tooltip[resistance;"..S("Resistance").."]"..
-	"tooltip[leaping;"..S("Leaping").."]"..
-	"tooltip[strength;"..S("Strength").."]"..
-	"tooltip[regeneration;"..S("Regeneration").."]"..
-	upgrade_effect_level_button (meta)..
-	"item_image[1,7;1,1;mcl_core:diamond]"..
-	"item_image[2.2,7;1,1;mcl_core:emerald]"..
-	"item_image[3.4,7;1,1;mcl_core:iron_ingot]"..
-	"item_image[4.6,7;1,1;mcl_core:gold_ingot]"..
-	"item_image[5.8,7;1,1;mcl_nether:netherite_ingot]"..
-	mcl_formspec.get_itemslot_bg_v4(7.2,7,1,1)..
-	"list[context;input;7.2,7;1,1;]"..
+local effect_level = {
+	swiftness = 1,
+	haste = 1,
+	resistance = 2,
+	leaping = 2,
+	strength = 3,
+	regeneration = 4,
+}
 
-	"label[0.375,8.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]"..
-	mcl_formspec.get_itemslot_bg_v4(0.375, 9.1, 9, 3)..
-	"list[current_player;main;0.375,9.1;9,3;9]"..
+local function get_effect_button(effect, img, power_level, x, y)
+	if power_level >= effect_level[effect] then
+		return "image_button["..x..","..y..";1,1;"..img..";"..effect..";]"
+	else
+		return "image["..x..","..y..";1,1;"..img.."^[colorize:"..mcl_colors.GRAY..":128;".."]"
+	end
+end
 
-	mcl_formspec.get_itemslot_bg_v4(0.375, 13.05, 9, 1)..
-	"list[current_player;main;0.375,13.05;9,1;]"..
+local function generate_beacon_formspec (meta, pos)
+	local power_level = check_pyramid(pos)
+	local fs = {
+		"formspec_version[4]",
+		"size[11.75,14.425]",
+		"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Beacon"))) .. "]",
+		"label[0.5,1;"..minetest.formspec_escape(S("Primary Power:")).."]",
+		"label[5.5,1;"..minetest.formspec_escape(S("Secondary Power:")).."]",
+		"image[1,1.5;1,1;custom_beacon_symbol_4.png]",
+		"image[1,3;1,1;custom_beacon_symbol_3.png]",
+		"image[1,4.5;1,1;custom_beacon_symbol_2.png]",
+		"image[6,3.5;1,1;custom_beacon_symbol_1.png]",
+		get_effect_button("swiftness", "mcl_potions_effect_swift.png", power_level, 2.5, 1.5),
+		get_effect_button("haste", "mcl_potions_effect_haste.png", power_level, 3.5, 1.5),
+		get_effect_button("resistance", "mcl_potions_effect_resistance.png", power_level, 2.5, 3),
+		get_effect_button("leaping", "mcl_potions_effect_leaping.png", power_level, 3.5, 3),
+		get_effect_button("strength", "mcl_potions_effect_strong.png", power_level, 3.0, 4.5),
+		get_effect_button("regeneration", "mcl_potions_effect_regenerating.png", power_level, 7.5, 3.5),
+		"tooltip[swiftness;"..S("Swiftness").."]",
+		"tooltip[haste;"..S("Haste").."]",
+		"tooltip[resistance;"..S("Resistance").."]",
+		"tooltip[leaping;"..S("Leaping").."]",
+		"tooltip[strength;"..S("Strength").."]",
+		"tooltip[regeneration;"..S("Regeneration").."]",
+		upgrade_effect_level_button (meta),
+		"item_image[1,7;1,1;mcl_core:diamond]",
+		"item_image[2.2,7;1,1;mcl_core:emerald]",
+		"item_image[3.4,7;1,1;mcl_core:iron_ingot]",
+		"item_image[4.6,7;1,1;mcl_core:gold_ingot]",
+		"item_image[5.8,7;1,1;mcl_nether:netherite_ingot]",
+		mcl_formspec.get_itemslot_bg_v4(7.2,7,1,1),
+		"list[context;input;7.2,7;1,1;]",
 
-	"listring[context;input]"..
-	"listring[current_player;main]"
+		"label[0.375,8.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(0.375, 9.1, 9, 3),
+		"list[current_player;main;0.375,9.1;9,3;9]",
+
+		mcl_formspec.get_itemslot_bg_v4(0.375, 13.05, 9, 1),
+		"list[current_player;main;0.375,13.05;9,1;]",
+
+		"listring[context;input]",
+		"listring[current_player;main]"
+	}
+	return table.concat(fs)
 end
 
 local function add_group(item, group)
@@ -300,7 +321,7 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 			end
 			apply_effects_to_all_players(pos) --call it once outside the globalstep so the player gets the effect right after selecting it
 			-- Redisplay the formspec.
-			meta:set_string("formspec", generate_beacon_formspec(meta))
+			meta:set_string("formspec", generate_beacon_formspec(meta, pos))
 		end
 	end
 end
@@ -317,7 +338,7 @@ minetest.register_node("mcl_beacons:beacon", {
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
-		meta:set_string("formspec", generate_beacon_formspec(meta))
+		meta:set_string("formspec", generate_beacon_formspec(meta, pos))
 	end,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
 	on_destruct = remove_beacon_beam,
@@ -409,7 +430,7 @@ minetest.register_lbm({
 	run_at_every_load = false,
 	action = function(pos)
 		local m = minetest.get_meta(pos)
-		m:set_string("formspec", generate_beacon_formspec(m))
+		m:set_string("formspec", generate_beacon_formspec(m, pos))
 
 		if m:get_string ("effect") == "regeneration" then
 			m:set_string ("effect", "")
