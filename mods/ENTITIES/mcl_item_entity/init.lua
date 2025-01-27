@@ -47,17 +47,20 @@ mcl_item_entity.register_pickup_achievement("mcl_end:dragon_egg", "mcl:PickUpDra
 mcl_item_entity.register_pickup_achievement("mcl_armor:elytra", "mcl:skysTheLimit")
 
 mcl_player.register_globalstep(function(player)
-	if player:get_hp() > 0 or not minetest.settings:get_bool("enable_damage") then
-		local pos = player:get_pos()
-
-		local checkpos = vector.offset(pos, 0, item_drop_settings.player_collect_height, 0)
+	if player:get_hp() > 0 or not core.settings:get_bool("enable_damage") then
+		local player_height = item_drop_settings.player_collect_height
+		local player_pos = player:get_pos()
+		local range_item = item_drop_settings.radius_magnet
+		local range_xp = item_drop_settings.xp_radius_magnet
+		local min_age = item_drop_settings.age
+		local checkpos = vector.offset(player_pos, 0, player_height, 0)
 		--magnet and collection
-		for object in minetest.objects_inside_radius(checkpos, item_drop_settings.xp_radius_magnet) do
+		for object in core.objects_inside_radius(checkpos, range_xp) do
 			if not object:is_player() then
 				local le = object:get_luaentity()
 				if le and le.name == "__builtin:item" and not le._removed and
-				vector.distance(checkpos, object:get_pos()) < item_drop_settings.radius_magnet and
-				le._magnet_timer and (le._insta_collect or (le.age > item_drop_settings.age)) then
+				vector.distance(checkpos, object:get_pos()) < range_item and
+				le._magnet_timer and (le._insta_collect or (le.age > min_age)) then
 					le:pickup(player)
 				elseif le and le.name == "mcl_experience:orb" and not le.collected then
 					le.collector = player:get_player_name()
