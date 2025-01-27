@@ -52,7 +52,7 @@ mcl_tools.commondefs = {
 	["sword"] = {
 		longdesc = S("Swords are great in melee combat, as they are fast, deal high damage and can endure countless battles. Swords can also be used to cut down a few particular blocks, such as cobwebs."),
 		groups = { sword = 1, weapon = 1 },
-		diggroups = { swordy = {}, swordy_cobweb = {} },
+		diggroups = { swordy = {}, swordy_cobweb = {}, swordy_bamboo = {} },
 		craft_shapes = {
 			{
 				{ "material" },
@@ -233,6 +233,13 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 
 	for tool, defs in pairs(tools) do
 		if mcl_tools.commondefs[tool] then
+			if tool == "sword" then
+				defs = table.merge(defs, {
+					_mcl_diggroups = {
+						swordy_bamboo = { speed = 45, level = 1, uses = materialdefs.uses }
+					},
+				})
+			end
 			register_tool(setname, materialdefs, tool, defs, overrides)
 		else
 			local msg = "[mcl_tools] mod '%s' trying to register unknown tool '%s' for set '%s'"

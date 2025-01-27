@@ -14,6 +14,7 @@ mcl_autogroup.register_diggroup("shearsy_wool")
 mcl_autogroup.register_diggroup("shearsy_cobweb")
 mcl_autogroup.register_diggroup("swordy")
 mcl_autogroup.register_diggroup("swordy_cobweb")
+mcl_autogroup.register_diggroup("swordy_bamboo")
 mcl_autogroup.register_diggroup("hoey")
 
 -- Load files
