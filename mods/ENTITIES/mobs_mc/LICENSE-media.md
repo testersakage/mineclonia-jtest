@@ -313,6 +313,9 @@ Origin of those models:
 	* Source: <https://freesound.org/people/F.M.Audio/sounds/547580>
     * `mobs_mc_zombie_door_break.2.ogg` (CC BY 4.0)
         * Source: <https://freesound.org/people/F.M.Audio/sounds/547579>
+* [felix.blume](https://freesound.org/people/felix.blume/)
+    * `mobs_mc_dolphion_*.ogg` (CC0)
+        * Source: <https://freesound.org/people/felix.blume/sounds/408555/>
 
 Note: Many of these sounds have been more or less modified to fit the game.
 
