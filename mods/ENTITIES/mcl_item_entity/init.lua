@@ -46,8 +46,10 @@ mcl_item_entity.register_pickup_achievement("mcl_nether:ancient_debris", "mcl:hi
 mcl_item_entity.register_pickup_achievement("mcl_end:dragon_egg", "mcl:PickUpDragonEgg")
 mcl_item_entity.register_pickup_achievement("mcl_armor:elytra", "mcl:skysTheLimit")
 
+local enabled_damage = core.settings:get_bool("enable_damage")
+
 mcl_player.register_globalstep(function(player)
-	if player:get_hp() > 0 or not core.settings:get_bool("enable_damage") then
+	if player:get_hp() > 0 or not enabled_damage then
 		local player_height = item_drop_settings.player_collect_height
 		local connected
 
@@ -56,7 +58,7 @@ mcl_player.register_globalstep(function(player)
 			if #connected <= 1 then return player end
 			local result, distance, pos = player, range+1, object:get_pos()
 			for _, pc in pairs(connected) do
-				if player:is_valid() then
+				if pc:is_valid() and (pc:get_hp() > 0 or not enabled_damage) then
 					local hand_pos = vector.offset(pc:get_pos(), 0, player_height, 0)
 					local obj_dist = vector.distance(pos, hand_pos)
 					if obj_dist < range and obj_dist < distance then
