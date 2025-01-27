@@ -131,15 +131,17 @@ local function bottle_place(itemstack, placer, pointed_thing)
 	local cauldron_filled = core.get_item_group(node.name, "cauldron_filled")
 	if def and ndef and (cauldron_filled == 0 or def._mcl_cauldrons_liquid == ndef._mcl_cauldrons_liquid) then
 		mcl_cauldrons.add_level(pointed_thing.under, 1, def._mcl_cauldrons_liquid)
-		itemstack:set_name("mcl_potions:glass_bottle")
-		return itemstack
+		local bottle = ItemStack("mcl_potions:glass_bottle")
+		return mcl_inventory.give_and_take(placer, itemstack, bottle, "give_new")
 	end
 	local cauldron_filled = core.get_item_group(core.get_node(pointed_thing.under).name, "cauldron_filled")
 	if ndef and ndef._mcl_cauldrons_liquid and itemstack:get_name() == "mcl_potions:glass_bottle" and cauldron_filled > 0 then
 		mcl_cauldrons.add_level(pointed_thing.under, -1, ndef._mcl_cauldrons_liquid)
-		itemstack:set_name(water_bottles[ndef._mcl_cauldrons_liquid])
-		return itemstack
+		local bottle = ItemStack(water_bottles[ndef._mcl_cauldrons_liquid])
+		return mcl_inventory.give_and_take(placer, itemstack, bottle, "give")
 	end
+
+	return itemstack
 end
 
 -- Empty cauldron
