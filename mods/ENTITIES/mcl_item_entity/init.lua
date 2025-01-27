@@ -49,11 +49,28 @@ mcl_item_entity.register_pickup_achievement("mcl_armor:elytra", "mcl:skysTheLimi
 mcl_player.register_globalstep(function(player)
 	if player:get_hp() > 0 or not core.settings:get_bool("enable_damage") then
 		local player_height = item_drop_settings.player_collect_height
-		local player_pos = player:get_pos()
+		local connected
+
+		local function find_closest_player (object, range) -- Find players closest to object
+			if not connected then connected = core.get_connected_players() end
+			if #connected <= 1 then return player end
+			local result, distance, pos = player, range+1, object:get_pos()
+			for _, pc in pairs(connected) do
+				if player:is_valid() then
+					local hand_pos = vector.offset(pc:get_pos(), 0, player_height, 0)
+					local obj_dist = vector.distance(pos, hand_pos)
+					if obj_dist < range and obj_dist < distance then
+						result, distance = pc, obj_dist
+					end
+				end
+			end
+			return result
+		end
+
 		local range_item = item_drop_settings.radius_magnet
 		local range_xp = item_drop_settings.xp_radius_magnet
 		local min_age = item_drop_settings.age
-		local checkpos = vector.offset(player_pos, 0, player_height, 0)
+		local checkpos = vector.offset(player:get_pos(), 0, player_height, 0)
 		--magnet and collection
 		for object in core.objects_inside_radius(checkpos, range_xp) do
 			if not object:is_player() then
@@ -61,9 +78,9 @@ mcl_player.register_globalstep(function(player)
 				if le and le.name == "__builtin:item" and not le._removed and
 				vector.distance(checkpos, object:get_pos()) < range_item and
 				le._magnet_timer and (le._insta_collect or (le.age > min_age)) then
-					le:pickup(player)
+					le:pickup(find_closest_player(object, range_item))
 				elseif le and le.name == "mcl_experience:orb" and not le.collected then
-					le.collector = player:get_player_name()
+					le.collector = find_closest_player(object, range_xp):get_player_name()
 					le.collected = true
 				end
 			end
