@@ -212,7 +212,7 @@ function axolotl:should_continue_to_attack (object)
 	-- regeneration and remove mining fatigue.
 	if entity and entity.dead then
 		local attacker = entity._last_attacker
-		if is_valid (attacker)
+		if attacker and is_valid (attacker)
 			and attacker:is_player ()
 			and vector.distance (attacker:get_pos (),
 						self.object:get_pos ()) < 20 then
