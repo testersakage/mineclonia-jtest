@@ -35,6 +35,33 @@ local function remove_beacon_beam(pos)
 	end
 end
 
+local function create_beacon_beam(pos)
+	local meta = minetest.get_meta(pos)
+	local effect_string = meta:get_string("effect")
+	if effect_string == "" then return end
+
+	for y = pos.y +1, pos.y + 300 do
+		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+		local node_below = minetest.get_node({x=pos.x,y=y-1,z=pos.z})
+		local node_above = minetest.get_node({x=pos.x,y=y+1,z=pos.z})
+
+		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
+			if minetest.get_node({x=pos.x,y=y-2,z=pos.z}).name == "mcl_beacons:beacon" then
+				set_node_if_clear({x=pos.x,y=y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
+			end
+		end
+
+		if node_above.name == "air" or (node_above.name == "mcl_beacons:beacon_beam" and node_above.param2 ~= node.param2) then
+			set_node_if_clear({x=pos.x,y=y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node.param2})
+		end
+
+		if minetest.get_item_group(node_below.name, "glass") ~= 0 or minetest.get_item_group(node_below.name,"material_glass") ~= 0 then
+			set_node_if_clear({x=pos.x,y=y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
+			set_node_if_clear({x=pos.x,y=y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
+		end
+	end
+end
+
 local function check_pyramid(pos)
 	local m = minetest.get_meta(pos)
 	for y_offset = 1,4 do
@@ -323,23 +350,8 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 				inv:set_stack("input",1,input)
 			end
 
-			local beam_palette_index = 0
 			remove_beacon_beam(pos)
-			for y = pos.y +1, pos.y + 201 do
-				local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
-				if node.name == "ignore" then
-					minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
-					node = minetest.get_node({x=pos.x,y=y,z=pos.z})
-				end
-
-				if minetest.get_item_group(node.name, "glass") ~= 0 or minetest.get_item_group(node.name,"material_glass") ~= 0 then
-					beam_palette_index = get_beacon_beam(node.name)
-				end
-
-				if node.name == "air" then
-					minetest.set_node({x=pos.x,y=y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=beam_palette_index})
-				end
-			end
+			create_beacon_beam(pos)
 			apply_effects_to_all_players(pos) --call it once outside the globalstep so the player gets the effect right after selecting it
 			-- Redisplay the formspec.
 			meta:set_string("formspec", generate_beacon_formspec(meta, pos))
@@ -403,44 +415,13 @@ minetest.register_craft({
 })
 
 minetest.register_abm{
-	label="update beacon beam",
-	nodenames = {"mcl_beacons:beacon_beam"},
-	interval = 1,
-	chance = 1,
-	action = function(pos)
-		local node_below = minetest.get_node({x=pos.x,y=pos.y-1,z=pos.z})
-		local node_above = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
-		local node_current = minetest.get_node(pos)
-
-		local beacon = minetest.find_nodes_in_area({x=pos.x,y=pos.y-100,z=pos.z},{x=pos.x,y=pos.y+100,z=pos.z},{"mcl_beacons:beacon"})
-		if #beacon > 0 then
-			local air_above = minetest.find_nodes_in_area({x=beacon[1].x, y=beacon[1].y, z=beacon[1].z}, {x=beacon[1].x, y=beacon[1].y+100, z=beacon[1].z}, {"air"})
-			if #air_above > 0 then
-				minetest.set_node({x=air_above[1].x, y=air_above[1].y, z=air_above[1].z}, {name="mcl_beacons:beacon_beam",param2=0})
-			end
-		end
-
-		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
-			if minetest.get_node({x=pos.x,y=pos.y-2,z=pos.z}).name == "mcl_beacons:beacon" then
-				set_node_if_clear({x=pos.x,y=pos.y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
-			end
-		elseif node_above.name == "air" or (node_above.name == "mcl_beacons:beacon_beam" and node_above.param2 ~= node_current.param2) then
-			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node_current.param2})
-		elseif minetest.get_item_group(node_below.name, "glass") ~= 0 or minetest.get_item_group(node_below.name,"material_glass") ~= 0 then
-			set_node_if_clear({x=pos.x,y=pos.y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
-		elseif minetest.get_item_group(node_above.name, "glass") ~= 0 or minetest.get_item_group(node_above.name,"material_glass") ~= 0 then
-			set_node_if_clear({x=pos.x,y=pos.y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_above.name)})
-		end
-	end,
-}
-
-minetest.register_abm{
 	label="apply beacon effects to players",
 	nodenames = {"mcl_beacons:beacon"},
 	interval = 3,
 	chance = 1,
 	action = function(pos)
 		apply_effects_to_all_players(pos)
+		create_beacon_beam(pos)
 	end,
 }
 
