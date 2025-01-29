@@ -1,4 +1,5 @@
 -- Copyright (c) 2013-18 rubenwardy. MIT.
+
 local S = awards.translator
 
 function awards.register_award(name, def)
@@ -115,19 +116,19 @@ function awards.unlock(name, award)
 	if awards.show_mode == "chat" then
 		local chat_announce
 		if awdef.secret then
-			chat_announce = S("Secret Award Unlocked: @1", title)
+			chat_announce = S("Secret Award Unlocked: %s")
 		else
-			chat_announce = S("Award Unlocked: @1", title)
+			chat_announce = S("Award Unlocked: %s")
 		end
 		-- use the chat console to send it
-		minetest.chat_send_player(name, chat_announce)
+		minetest.chat_send_player(name, string.format(chat_announce, title))
 		if desc~="" then
 			minetest.chat_send_player(name, desc)
 		end
 	else
 		local player = minetest.get_player_by_name(name)
 		local one = player:hud_add({
-			type = "image",
+			hud_elem_type = "image",
 			name = "award_bg",
 			scale = {x = 2, y = 1},
 			text = background,
@@ -136,17 +137,13 @@ function awards.unlock(name, award)
 			alignment = {x = 0, y = -1}
 		})
 		local hud_announce
-		if awdef.secret == true then
-			hud_announce = S("Secret Advancement Made!")
-		elseif awdef.type == "Goal" then
-			hud_announce = S("Goal Completed!")
-		elseif awdef.type == "Challenge" then
-			hud_announce = S("Challenge Completed!")
+		if awdef.secret then
+			hud_announce = S("Secret Award Unlocked!")
 		else
-			hud_announce = S("Advancement Made!")
+			hud_announce = S("Award Unlocked!")
 		end
 		local two = player:hud_add({
-			type = "text",
+			hud_elem_type = "text",
 			name = "award_au",
 			number = 0xFFFFFF,
 			scale = {x = 100, y = 20},
@@ -156,7 +153,7 @@ function awards.unlock(name, award)
 			alignment = {x = 0, y = -1}
 		})
 		local three = player:hud_add({
-			type = "text",
+			hud_elem_type = "text",
 			name = "award_title",
 			number = 0xFFFFFF,
 			scale = {x = 100, y = 20},
@@ -166,7 +163,7 @@ function awards.unlock(name, award)
 			alignment = {x = 0, y = -1}
 		})
 		local four = player:hud_add({
-			type = "image",
+			hud_elem_type = "image",
 			name = "award_icon",
 			scale = {x = 2, y = 2}, -- adjusted for 32x32 from x/y = 4
 			text = icon,

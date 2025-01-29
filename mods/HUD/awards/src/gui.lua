@@ -2,7 +2,7 @@
 
 local S = awards.translator
 
-function awards.get_formspec(name, _, sid)
+function awards.get_formspec(name, to, sid)
 	local formspec = ""
 	local awards_list = awards.get_award_states(name)
 
@@ -120,7 +120,7 @@ function awards.show_to(name, to, sid, text)
 			minetest.chat_send_player(to, S("You have not unlocked any awards."))
 			return
 		end
-		minetest.chat_send_player(to, S("@1’s awards:", name))
+		minetest.chat_send_player(to, string.format(S("%s’s awards:"), name))
 
 		for str, _ in pairs(data.unlocked) do
 			local def = awards.registered_awards[str]
@@ -137,10 +137,13 @@ function awards.show_to(name, to, sid, text)
 			end
 		end
 	else
-
+		local deco = ""
+		if minetest.global_exists("default") then
+			deco = default.gui_bg .. default.gui_bg_img
+		end
 		-- Show formspec to user
 		minetest.show_formspec(to,"awards:awards",
-			"size[8,8.6]" ..
+			"size[8,8.6]" .. deco ..
 			awards.get_formspec(name, to, sid))
 	end
 end
@@ -162,3 +165,59 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 	return true
 end)
+
+if minetest.get_modpath("sfinv") then
+	sfinv.register_page("awards:awards", {
+		title = S("Awards"),
+		on_enter = function(self, player, context)
+			context.awards_idx = 1
+		end,
+		is_in_nav = function(self, player, context)
+			local data = awards.player(player:get_player_name())
+			return not data.disabled
+		end,
+		get = function(self, player, context)
+			local name = player:get_player_name()
+			return sfinv.make_formspec(player, context,
+				awards.get_formspec(name, name, context.awards_idx),
+				false)
+		end,
+		on_player_receive_fields = function(self, player, context, fields)
+			if fields.awards then
+				local event = minetest.explode_textlist_event(fields.awards)
+				if event.type == "CHG" then
+					context.awards_idx = event.index
+					sfinv.set_player_inventory_formspec(player, context)
+				end
+			end
+		end
+	})
+
+	local function check_and_reshow(name)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return
+		end
+
+		local context = sfinv.get_or_create_context(player)
+		if context.page ~= "awards:awards" then
+			return
+		end
+
+		sfinv.set_player_inventory_formspec(player, context)
+	end
+
+	awards.register_on_unlock(check_and_reshow)
+end
+
+if minetest.get_modpath("unified_inventory") ~= nil then
+	unified_inventory.register_button("awards", {
+		type = "image",
+		image = "awards_ui_icon.png",
+		tooltip = S("Awards"),
+		action = function(player)
+			local name = player:get_player_name()
+			awards.show_to(name, name, nil, false)
+		end,
+	})
+end

@@ -16,54 +16,52 @@ local function convert_data()
 		while name.name do
 			name = name.name
 		end
-		if type(name) == "string" then
-			data.name = name
-			print("Converting data for " .. name)
+		data.name = name
+		print("Converting data for " .. name)
 
-			-- Just rename counted
-			local counted = {
-				chats  = "chat",
-				deaths = "death",
-				joins  = "join",
-			}
-			for from, to in pairs(counted) do
-				data[to]   = data[from]
-				data[from] = nil
-			end
+		-- Just rename counted
+		local counted = {
+			chats  = "chat",
+			deaths = "death",
+			joins  = "join",
+		}
+		for from, to in pairs(counted) do
+			data[to]   = data[from]
+			data[from] = nil
+		end
 
-			data.death = {
-				unknown = data.death,
-				__total = data.death,
-			}
+		data.death = {
+			unknown = data.death,
+			__total = data.death,
+		}
 
-			-- Convert item db to new format
-			local counted_items = {
-				count = "dig",
-				place = "place",
-				craft = "craft",
-			}
-			for from, to in pairs(counted_items) do
-				local ret = {}
+		-- Convert item db to new format
+		local counted_items = {
+			count = "dig",
+			place = "place",
+			craft = "craft",
+		}
+		for from, to in pairs(counted_items) do
+			local ret = {}
 
-				local count = 0
-				if data[from] then
-					for modname, items in pairs(data[from]) do
-						for itemname, value in pairs(items) do
-							itemname = modname .. ":" .. itemname
-							local key = minetest.registered_aliases[itemname] or itemname
-							ret[key] = value
-							count = count + value
-						end
+			local count = 0
+			if data[from] then
+				for modname, items in pairs(data[from]) do
+					for itemname, value in pairs(items) do
+						itemname = modname .. ":" .. itemname
+						local key = minetest.registered_aliases[itemname] or itemname
+						ret[key] = value
+						count = count + value
 					end
 				end
-
-				ret.__total = count
-				data[from] = nil
-				data[to] = ret
 			end
 
-			__player_data[name] = data
+			ret.__total = count
+			data[from] = nil
+			data[to] = ret
 		end
+
+		__player_data[name] = data
 	end
 end
 
