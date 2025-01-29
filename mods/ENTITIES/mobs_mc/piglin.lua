@@ -1670,7 +1670,7 @@ local zombie = mobs_mc.zombie
 
 local zombified_piglin = table.merge (zombie, {
 	description = S("Zombified Piglin"),
-	spawn_class = "passive",
+	spawn_class = "hostile",
 	_spawn_category = "monster",
 	prevents_sleep_when_hostile = true,
 	_neutral_to_players = true,
