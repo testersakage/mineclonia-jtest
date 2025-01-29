@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-28 18:41+0000\n"
+"PO-Revision-Date: 2025-01-30 00:53+0000\n"
 "Last-Translator: balazsszalab "
 "<balazsszalab@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
@@ -313,7 +313,7 @@ msgid "This block will drop as an item when it is not attached to a surrounding 
 msgstr ""
 
 msgid "This block will drop as an item when no collidable block is below it."
-msgstr "Ez a blokk felvehető tárggyá változik, ha nincs tömör blokk alatta."
+msgstr "Ez a blokk felvehető tárgyként hullik le, ha nincs tömör blokk alatta."
 
 msgid "Liquids can flow into this block and destroy it."
 msgstr ""
