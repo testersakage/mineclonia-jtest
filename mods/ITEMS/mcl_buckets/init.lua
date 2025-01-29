@@ -116,11 +116,11 @@ local function bucket_get_pointed_thing(user)
 	end)
 end
 
-local function on_place_bucket(itemstack, user, _)
+local function on_place_bucket(itemstack, user, ptt)
 	local pointed_thing = bucket_get_pointed_thing(user)
 
 	-- Must be pointing to node
-	if not pointed_thing or pointed_thing.type ~= "node" then
+	if not pointed_thing or pointed_thing.type ~= "node" or ptt.type ~= "node" then
 		return
 	end
 
@@ -163,11 +163,11 @@ local function on_place_bucket(itemstack, user, _)
 	return itemstack
 end
 
-local function on_place_bucket_empty(itemstack, user, _)
+local function on_place_bucket_empty(itemstack, user, ptt)
 	local pointed_thing = bucket_get_pointed_thing(user)
 
 	-- Must be pointing to node
-	if not pointed_thing or pointed_thing.type ~= "node" then
+	if not pointed_thing or pointed_thing.type ~= "node" or ptt.type ~= "node" then
 		return itemstack
 	end
 
