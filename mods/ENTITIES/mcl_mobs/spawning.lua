@@ -708,9 +708,36 @@ core.register_chatcommand("spawncheck",{
 	end
 })
 
-local SPAWN_DISTANCE = tonumber (minetest.settings:get ("active_block_range")) or 6
-local MOB_CAP_DIVISOR = 289 * (168 / 289)
+local SPAWN_DISTANCE = tonumber (minetest.settings:get ("active_block_range")) or 4
+local MOB_CAP_DIVISOR = 289
 local MOB_CAP_RECIPROCAL = 1 / MOB_CAP_DIVISOR
+
+local function collect_unique_chunks (level)
+	local chunk_seen, chunks, players = {}, {}, {}
+	for player in mcl_util.connected_players () do
+		-- Players outside any dimension should not be
+		-- considered for spawning.
+		local pos = player:get_pos ()
+		local chunk_x = math.floor (pos.x / 16.0)
+		local chunk_z = math.floor (pos.z / 16.0)
+		local chunk_dim = mcl_worlds.pos_to_dimension (pos)
+		players[player] = pos
+
+		if chunk_dim == level then
+			for x = chunk_x - SPAWN_DISTANCE, chunk_x + SPAWN_DISTANCE do
+				for z = chunk_z - SPAWN_DISTANCE, chunk_z + SPAWN_DISTANCE do
+					local hash = ((x + 2048) * 4096) + (z + 2048)
+					local data = chunk_seen[hash]
+					if not data then
+						table.insert (chunks, hash)
+						chunk_seen[hash] = true
+					end
+				end
+			end
+		end
+	end
+	return chunks, players
+end
 
 minetest.register_chatcommand("mobstats",{
 	privs = { debug = true },
@@ -737,12 +764,14 @@ minetest.register_chatcommand("mobstats",{
 		else
 			local mob_caps = {}
 			local n_players = #minetest.get_connected_players ()
-			local n_chunks = n_players
-				* ((SPAWN_DISTANCE * 2 + 1) * (SPAWN_DISTANCE * 2 + 1))
+			local pos = minetest.get_player_by_name (n):get_pos ()
+			local level = mcl_worlds.pos_to_dimension (pos)
+			local n_chunks = #collect_unique_chunks (level)
 			for category, data in pairs (mcl_mobs.spawn_categories) do
 				local global_max
 					= math.floor ((n_chunks * data.chunk_mob_cap)
-						/ MOB_CAP_DIVISOR)
+						* MOB_CAP_RECIPROCAL)
+				global_max = math.max (global_max, data.min_chunk_mob_cap)
 				mob_caps[category] = global_max
 			end
 
@@ -811,36 +840,43 @@ mcl_mobs.registered_spawners = registered_spawners
 local spawn_categories = {
 	["monster"] = {
 		chunk_mob_cap = 70,
+		min_chunk_mob_cap = 45,
 		is_friendly = false,
 		is_animal = false,
 	},
 	["creature"] = {
 		chunk_mob_cap = 10,
+		min_chunk_mob_cap = 10,
 		is_friendly = false,
 		is_animal = true,
 	},
 	["ambient"] = {
 		chunk_mob_cap = 15,
+		min_chunk_mob_cap = 15,
 		is_friendly = true,
 		is_animal = false,
 	},
 	["axolotl"] = {
 		chunk_mob_cap = 5,
+		min_chunk_mob_cap = 5,
 		is_friendly = true,
 		is_animal = false,
 	},
 	["underground_water_creature"] = {
 		chunk_mob_cap = 5,
+		min_chunk_mob_cap = 5,
 		is_friendly = true,
 		is_animal = false,
 	},
 	["water_creature"] = {
 		chunk_mob_cap = 5,
+		min_chunk_mob_cap = 5,
 		is_friendly = true,
 		is_animal = false,
 	},
 	["water_ambient"] = {
 		chunk_mob_cap = 5,
+		min_chunk_mob_cap = 5,
 		is_friendly = true,
 		is_animal = false,
 	},
@@ -975,11 +1011,7 @@ local function spawn_a_pack (pos, players, category, scratch0)
 end
 
 function mcl_mobs.spawn_cycle (level, spawn_animals)
-	local event_name = "spawn_cycle for level " .. level
-	local chunks = {}
-	local chunk_to_data_map = {}
-	local local_mob_caps = {}
-	local players = {}
+	local chunk_seen = {}
 	local chunk_ymin, chunk_ymax
 	local scratch0 = vector.zero ()
 
@@ -999,39 +1031,7 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 		return
 	end
 
-	for player in mcl_util.connected_players () do
-		-- Players outside any dimension should not be
-		-- considered for spawning.
-		local pos = player:get_pos ()
-		local chunk_x = math.floor (pos.x / 16.0)
-		local chunk_z = math.floor (pos.z / 16.0)
-		local chunk_dim = mcl_worlds.pos_to_dimension (pos)
-		players[player] = pos
-
-		if chunk_dim == level then
-			for x = chunk_x - SPAWN_DISTANCE, chunk_x + SPAWN_DISTANCE do
-				for z = chunk_z - SPAWN_DISTANCE, chunk_z + SPAWN_DISTANCE do
-					local hash = ((x + 2048) * 4096) + (z + 2048)
-					local data = chunk_to_data_map[hash]
-					if not data then
-						data = {}
-						table.insert (chunks, hash)
-					end
-					chunk_to_data_map[hash] = data
-
-					-- -- Is the center of this chunk
-					-- -- within 128 nodes of this
-					-- -- player horizontally?
-					-- if horiz_dist_sqr (x + 16, z + 16, pos.x, pos.z)
-					-- 	< 16384.0 then
-					-- 	data.players_near = data.players_near or {}
-					-- 	table.insert (data.players_near, player)
-					-- end
-				end
-			end
-		end
-	end
-
+	local chunks, players = collect_unique_chunks (level)
 	local mobs_spawned = {}
 
 	-- Shuffle the list of chunks to be evaluated.
@@ -1076,15 +1076,23 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 				if (data.is_animal and spawn_animals)
 					or (not data.is_animal and not spawn_animals) then
 					local mob_cap = data.chunk_mob_cap
-					-- Verify that local and
-					-- global mob caps have not
-					-- been exceeded.
+					-- Verify that global mob caps
+					-- have not been exceeded.
 					local global_max
 						= math.floor ((n_chunks_orig * mob_cap)
 							* MOB_CAP_RECIPROCAL)
-					local local_mobs = 0
+					-- Although the number of
+					-- chunks loaded by default is
+					-- smaller than in Minecraft,
+					-- yet this disparity renders
+					-- it almost impossible for
+					-- certain animals to spawn.
+					-- A lower bound is placed on
+					-- their mob caps to address
+					-- this.
+					global_max = math.max (global_max, data.min_chunk_mob_cap)
 
-					if existing < global_max and local_mobs < mob_cap then
+					if existing < global_max then
 						-- Select a random position.
 						test_pos.x = math.random (x * 16, x * 16 + 15)
 						test_pos.z = math.random (z * 16, z * 16 + 15)
@@ -1105,7 +1113,7 @@ local default_spawner = {
 	spawn_category = "misc", -- Should be identical to that of the
 				 -- mob def.
 	fire_immune = false,
-	pack_min = 4, -- TODO
+	pack_min = 4,
 	pack_max = 4,
 }
 
