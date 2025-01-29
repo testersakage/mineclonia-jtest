@@ -785,6 +785,13 @@ minetest.register_chatcommand("mobstats",{
 				"No. active mobs in total: ",
 				tostring (count_mobs_total ()), "\n"
 			}))
+
+			local mob_counts, total_mobs = count_mobs_all ()
+			for k, v1 in pairs (mob_counts) do
+				minetest.chat_send_player (n, table.concat ({
+					"  ", k, ": ", tostring (v1),
+				}))
+			end
 		end
 	end
 })
