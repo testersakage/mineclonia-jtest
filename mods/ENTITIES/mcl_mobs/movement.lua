@@ -462,7 +462,8 @@ function mob_class:on_deactivate (removal)
 
 	if self.particlespawners then
 		for player in mcl_util.connected_players () do
-			self:remove_particlespawners (player)
+			local name = player:get_player_name ()
+			self:remove_particlespawners (name)
 		end
 	end
 end
