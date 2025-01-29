@@ -20,7 +20,7 @@ end
 
 mcl_banners.colors = {
 	-- Format:
-	-- [ID] = { banner description, wool, unified dyes color group, overlay color, dye, color name for emblazonings }
+	-- [ID] = { 0=color, 1=banner description, 2=wool, 3=unified dyes color group, 4=overlay color, 5=dye id, 6=color name for emblazonings }
 	["unicolor_white"] =      {"white",      S("White Banner"),      "mcl_wool:white", mcl_dyes.colors.white.rgb, "mcl_dyes:white", S("White") },
 	["unicolor_darkgrey"] =   {"grey",       S("Grey Banner"),       "mcl_wool:grey", mcl_dyes.colors.grey.rgb, "mcl_dyes:dark_grey", S("Grey") },
 	["unicolor_grey"] =       {"silver",     S("Light Grey Banner"), "mcl_wool:silver", mcl_dyes.colors.silver.rgb, "mcl_dyes:silver", S("Light Grey") },
@@ -421,7 +421,7 @@ for _, colortab in pairs(mcl_banners.colors) do
 		-- redraw the pattern textures as low-resolution pixel
 		-- art and use that instead.
 
-		local layer = "(([combine:20x40:-2,-2="..pattern.."^[resize:16x24^[colorize:"..color..":"..layer_ratio.."))"
+		local layer = "([combine:20x40:-2,-2=\\("..pattern.."\\^[resize\\:64x64\\)^[resize:16x24^[colorize:"..color..":"..layer_ratio..")"
 
 		function escape(text)
 			 return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
