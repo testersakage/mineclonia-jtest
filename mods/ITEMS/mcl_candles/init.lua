@@ -1,4 +1,5 @@
-local S = core.get_translator("mcl_candles")
+local S = core.get_translator(core.get_current_modname())
+local D = mcl_util.get_dynamic_translator(core.get_current_modname())
 
 local candle_boxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
@@ -14,7 +15,7 @@ local function set_candle_properties(stack, color)
 	local image = "mcl_candles_item_".. color .. ".png"
 
 	if color_defs then
-		stack:get_meta():set_string("description", S("@1 Candle", color_defs.readable_name))
+		stack:get_meta():set_string("description", D(color_defs.readable_name .. " Candle"))
 		stack:get_meta():set_int("palette_index", color_defs.palette_index + 1)
 		stack:get_meta():set_string("inventory_overlay", image)
 		stack:get_meta():set_string("wield_overlay", image)
