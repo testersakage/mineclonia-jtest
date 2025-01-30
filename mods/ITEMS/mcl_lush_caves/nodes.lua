@@ -258,7 +258,9 @@ minetest.register_craftitem("mcl_lush_caves:glow_berry", {
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
-		if vector.direction(pointed_thing.under, pointed_thing.above).y ~= -1 then return end
+		if vector.direction(pointed_thing.under, pointed_thing.above).y ~= -1 then
+			return core.do_item_eat(2, nil, itemstack, placer, pointed_thing)
+		end
 
 		if mcl_util.check_position_protection(pointed_thing.above, placer) then return end
 
