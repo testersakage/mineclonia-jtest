@@ -8,9 +8,15 @@ local liquid = {
 	-- This is the initial state of the liquid transformation mod.
 	-- If set to false, liquids do not flow until they activated.
 
-	MAIN_TICK = 0.025
+	MAIN_TICK = 0.025,
 	-- The main tick speed. Changing that tick affects all liquids
 	-- proportionally.
+
+  -- Store the original core functions that need to be overridden.
+  set_node = core.set_node,
+  add_node = core.add_node,
+  bulk_set_node = core.bulk_set_node,
+  remove_node = core.remove_node,
 }
 
 -- This counter is used generate unique names
@@ -765,30 +771,6 @@ function liquid.register_liquid(def)
 
 	core.register_on_mods_loaded(function()
 
-		-- `liquids_pointable` does not work anymore. This should solve many
-		-- issues.
-		for name, ndef in pairs(core.registered_items) do
-			if ndef.liquids_pointable then
-				local p = table.copy(ndef.pointabilities or {})
-
-				if not p.nodes then
-					p.nodes = {}
-				end
-
-				if not p.nodes["group:liquid"] and
-					not p.nodes["group:liquid_source"] and
-					not p.nodes["group:liquid_flowing"] then
-
-					core.log("warning", 'Node "'..name..'" uses deprecated "liquids_pointable" attribute')
-					p.nodes["group:liquid"] = true
-					core.override_item(name, {
-						pointabilities = p
-					})
-				end
-			end
-		end
-
-
 		-- Luanti activates the builtin liquid transformation based on the
 		-- `liquidtype`. Therefor we need to set it's value to 'none'.
 		-- BUT many mods also read that value to check if this node is a liquid.
@@ -894,10 +876,10 @@ function liquid.register_liquid(def)
 					local old_ndef = core.registered_nodes[old.name]
 					if old_ndef.on_flood then
 						if not old_ndef.on_flood(pos, old, node) then
-							core.set_node(pos, node)
+							liquid.set_node(pos, node)
 						end
 					else
-						core.set_node(pos, node)
+						liquid.set_node(pos, node)
 					end
 				end
 			end
@@ -940,6 +922,67 @@ core.register_chatcommand('liquid', {
 		end
 	end
 })
+
+
+core.register_on_mods_loaded(function()
+
+  -- `liquids_pointable` does not work anymore. This should solve many
+  -- issues.
+  for name, ndef in pairs(core.registered_items) do
+    if ndef.liquids_pointable then
+      local p = table.copy(ndef.pointabilities or {})
+
+      if not p.nodes then
+        p.nodes = {}
+      end
+
+      if not p.nodes["group:liquid"] and
+        not p.nodes["group:liquid_source"] and
+        not p.nodes["group:liquid_flowing"] then
+
+        core.log("warning", 'Node "'..name..'" uses deprecated "liquids_pointable" attribute')
+        p.nodes["group:liquid"] = true
+        core.override_item(name, {
+          pointabilities = p
+        })
+      end
+    end
+  end
+end)
+
+
+
+-- Override the set_node function so that it calls liquid.update() on every
+-- node change.
+core.set_node = function(pos, node)
+  liquid.set_node(pos, node);
+  liquid.update(pos);
+end
+
+-- Override the add_node function so that it calls liquid.update() on every
+-- node change.
+core.add_node = function(pos, node)
+  liquid.add_node(pos, node)
+  liquid.update(pos)
+end
+
+-- Override the bulk_set_node function so that it calls liquid.update() on every
+-- node change.
+core.bulk_set_node = function(postions, node)
+  liquid.bulk_set_node(positions, node)
+  for _, p in ipairs(positions) do
+    liquid.update(p)
+  end
+end
+
+-- Override the remove_node function so that it calls liquid.update() on every
+-- node change.
+core.remove_node = function(pos)
+  liquid.remove_node(pos)
+  liquid.update(pos)
+end
+
+
 
 return liquid
 
