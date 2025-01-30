@@ -767,7 +767,7 @@ function liquid.register_liquid(def)
 
 		-- `liquids_pointable` does not work anymore. This should solve many
 		-- issues.
-		for name, ndef in pairs(core.registered_nodes) do
+		for name, ndef in pairs(core.registered_items) do
 			if ndef.liquids_pointable then
 				local p = table.copy(ndef.pointabilities or {})
 
