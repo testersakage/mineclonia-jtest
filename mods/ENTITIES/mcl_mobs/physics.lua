@@ -350,18 +350,27 @@ function mob_class:endangered_by_sunlight ()
 	return false
 end
 
-local function get_weather_with_light (self_pos, time_of_day)
-	local light = minetest.get_natural_light (self_pos, time_of_day) or 0
+function mob_class:get_weather_with_light (self_pos, time_of_day)
+	-- Don't return natural light till the artificial light at
+	-- this position exceeds the threshold at which natural light
+	-- becomes significant, for natural light tests are expensive.
+	local local_light = core.get_node_light (self_pos)
 	local has_rain = mcl_weather.is_exposed_to_rain (self_pos)
+	if local_light > 10 then
+		local direct_light = minetest.get_natural_light (self_pos)
 
-	-- See: https://minecraft.wiki/w/Light#Internal_light_level
-	local weather = mcl_weather.get_weather ()
-	if weather == "thunder" then
-		light = math.max (0, 10 - (15 - light))
-	elseif weather == "rain" or weather == "snow" then
-		light = math.max (0, 12 - (15 - light))
+		-- See: https://minecraft.wiki/w/Light#Internal_light_level
+		local weather = mcl_weather.get_weather ()
+		local light = direct_light
+		if weather == "thunder" then
+			light = math.max (0, 10 - (15 - light))
+		elseif weather == "rain" or weather == "snow" then
+			light = math.max (0, 12 - (15 - light))
+		end
+		return light, direct_light, has_rain
+	else
+		return local_light, local_light, has_rain
 	end
-	return light, has_rain
 end
 
 -- environmental damage (water, lava, fire, light etc.)
@@ -387,10 +396,8 @@ function mob_class:do_env_damage()
 	if self.ignited_by_sunlight then
 		local head
 			= vector.offset (pos, 0, self.head_eye_height, 0)
-		local sunlight, has_rain
-			= get_weather_with_light (head, self.time_of_day)
-		local direct_sunlight
-			= minetest.get_natural_light (head, 0.5) or 0
+		local sunlight, direct_sunlight, has_rain
+			= self:get_weather_with_light (head, self.time_of_day)
 		self._direct_sunlight = direct_sunlight
 
 		if direct_sunlight >= 15 and sunlight >= 12
@@ -408,6 +415,9 @@ function mob_class:do_env_damage()
 						self:set_armor_texture ()
 					end
 				end
+			else
+				-- Unconditionally combust if no armor is equipped.
+				mcl_burning.set_on_fire (self.object, 10)
 			end
 		end
 	end
