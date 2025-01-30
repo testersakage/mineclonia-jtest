@@ -579,17 +579,6 @@ function mob_class:do_env_damage()
 end
 
 function mob_class:env_damage (pos)
-	-- Calculate depth of immersion.  This value is also utilized
-	-- by run_ai.
-	self._immersion_depth = 0
-	if ((self.floats or self.swims or self.amphibious)
-		and minetest.get_item_group (self.standing_in, "water") > 0)
-		or minetest.get_item_group (self.head_in, "water") > 0 then
-		local ymin = self.collisionbox[2]
-		local height = self.collisionbox[5] - ymin
-		self._immersion_depth = self:immersion_depth ("water", pos, height)
-	end
-
 	-- environmental damage timer (every 1 second)
 	if not self:check_timer("env_damage", 1) then return end
 	self:check_entity_cramming()
@@ -684,24 +673,7 @@ function mob_class:falling(pos)
 end
 
 function mob_class:check_water_flow (self_pos)
-	local node, nn, def
-	node = minetest.get_node_or_nil (self_pos)
-	if node then
-		nn = node.name
-		def = minetest.registered_nodes[nn]
-	end
-	-- Move item around on flowing liquids
-	if def and def.liquidtype == "flowing" then
-		-- Get flowing direction (function call from flowlib),
-		-- if there's a liquid.  NOTE: According to
-		-- Qwertymine, flowlib.quickflow is only reliable for
-		-- liquids with a flowing distance of 7.  Luckily,
-		-- this is exactly what we need if we only care about
-		-- water, which has this flowing distance.
-		local vec = flowlib.quick_flow (self_pos, node)
-		return vec
-	end
-	return nil
+	return self._water_current
 end
 
 function mob_class:check_dying (dtime)
@@ -895,6 +867,8 @@ local FLYING_AIR_SPEED		= 0.4
 local BASE_SLIPPERY		= 0.98
 local BASE_FRICTION		= 0.6
 local LIQUID_FORCE		= 0.28
+local LAVA_FORCE		= 0.09
+local LAVA_FORCE_NETHER		= 0.14
 local BASE_FRICTION3		= math.pow (0.6, 3)
 local FLYING_BASE_FRICTION3	= math.pow (BASE_FRICTION * AIR_FRICTION, 3)
 local LIQUID_JUMP_THRESHOLD	= 0.4
@@ -970,29 +944,6 @@ mcl_mobs.horiz_collision = horiz_collision
 
 local function clamp (num, min, max)
 	return math.min (max, math.max (num, min))
-end
-
-function mob_class:immersion_depth (liquidgroup, pos, max)
-	local start = pos.y
-	local ymax
-	local i = start
-	local limit = i + max + 1
-
-	while i < limit do
-		local pos = { x = pos.x, y = i, z = pos.z, }
-		local node = minetest.get_node (pos)
-		local def = minetest.registered_nodes[node.name]
-		if def and def.groups[liquidgroup] then
-			local height = 1
-			if def.liquidtype == "flowing" then
-				height = 0.1 + node.param2 * 0.1
-			end
-			ymax = math.floor (i + 0.5) + height - 0.5
-		end
-		i = i + 1
-	end
-
-	return ymax and ymax - start or 0
 end
 
 function mob_class:check_collision (self_pos)
@@ -1099,7 +1050,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- Note that mobs being controlled by a player should sink.
 	if self.floats == 1 and not self.driver and math.random (10) < 8 then
 		local depth = self._immersion_depth or 0
-		if depth > LIQUID_JUMP_THRESHOLD or standin.groups.lava then
+		if depth > LIQUID_JUMP_THRESHOLD or self._liquidtype == "lava" then
 			jumping = true
 		end
 	end
@@ -1107,9 +1058,8 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- Note: this does not exist in Minecraft and is only meant to
 	-- approximate floating in liquids for striders.
 	if self.floats_on_lava and math.random (10) < 8 then
-		local ymin = self.collisionbox[2]
-		local height = self.collisionbox[5] - ymin
-		local depth = self:immersion_depth ("lava", self_pos, height)
+		local depth = self._liquidtype == "lava"
+			and self._immersion_depth or 0
 		if depth > LAVA_JUMP_THRESHOLD then
 			jumping = true
 		elseif depth > 0 then
@@ -1165,10 +1115,11 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		gravity_drag = self.gravity_drag
 	end
 
-	local water_vec = not self.swims and self:check_water_flow (self_pos) or nil
+	local water_vec = self:check_water_flow (self_pos)
 	local velocity_factor = standon._mcl_velocity_factor or 1
+	local liquidtype = self._last_liquidtype
 
-	if standin.groups.water then
+	if liquidtype == "water" then
 		local saved_vy = v.y
 		local water_friction = self.water_friction
 		if self._sprinting then
@@ -1233,7 +1184,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 				v.y = 6.0
 			end
 		end
-	elseif standin.groups.lava then
+	elseif liquidtype == "lava" then
 		if not self.floats_on_lava then
 			local saved_vy = v.y
 			local speed = LAVA_SPEED
@@ -1244,12 +1195,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			-- If this mob is not submerged in lava to a
 			-- depth of LIQUID_JUMP_THRESHOLD, apply a
 			-- reduced drag.
-			local ymin
-				= self.collisionbox[2]
-			local height
-				= self.collisionbox[5] - ymin
-			local depth
-				= self:immersion_depth ("lava", self_pos, height)
+			local depth = self._immersion_depth
 			if depth <= LIQUID_JUMP_THRESHOLD then
 				p = pow_by_step (JUMPING_LAVA_DRAG, dtime)
 				v_scale = (1 - p) / (1 - JUMPING_LAVA_DRAG)
@@ -1359,13 +1305,13 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	end
 
 	if water_vec ~= nil and vector.length (water_vec) ~= 0 then
-		v.x = v.x + water_vec.x * LIQUID_FORCE * h_scale
-		v.y = v.y + water_vec.y * LIQUID_FORCE * v_scale
-		v.z = v.z + water_vec.z * LIQUID_FORCE * h_scale
+		v.x = v.x + water_vec.x * h_scale
+		v.y = v.y + water_vec.y * v_scale
+		v.z = v.z + water_vec.z * h_scale
 	end
 
 	if jumping then
-		if standin.groups.water or standin.groups.lava then
+		if liquidtype then
 			if self.floats == 1 or self.floats_on_lava then
 				v.y = v.y + LIQUID_JUMP_FORCE * v_scale
 			else
@@ -1502,8 +1448,6 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 	end
 end
 
-local floor = math.floor
-
 mcl_mobs.mob_class.slowdown_nodes = {
 	["mcl_farming:sweet_berry_bush_0"] = {
 		x = 0.8,
@@ -1554,54 +1498,141 @@ end
 
 local get_node_raw = mcl_mobs.get_node_raw
 
-local function get_node_name (nodepos)
+local function get_node (nodepos)
 	if get_node_raw then
 		local x, y, z = nodepos.x, nodepos.y, nodepos.z
-		local id, _, _ = get_node_raw (x, y, z)
-		return minetest.get_name_from_content_id (id)
+		local id, _, param2 = get_node_raw (x, y, z)
+		return minetest.get_name_from_content_id (id), param2
 	else
 		local node = minetest.get_node (nodepos)
-		return node.name
+		return node.name, node.param2
 	end
 end
 
-local post_motion_step_scratch = vector.zero ()
+function mob_class:check_one_immersion_depth (node, param2, base_y, pos, current, dimension)
+	local def = minetest.registered_nodes [node]
+	local liquid_type = def and (def.liquidtype or def._liquidtype)
+	if liquid_type and liquid_type ~= "none" then
+		local height
+		if def.liquid_type == "flowing" then
+			height = 0.1 + param2 * 0.1
+		else
+			height = 1.0
+		end
+		if pos.y + height - 0.5 > base_y then
+			local depth = ((pos.y - 0.5) + height - base_y)
+			if not self.swims then
+				local fluidtype
+				-- Integrate liquid current.
+				local v = flowlib.quick_flow (pos, {
+					name = node,
+					param2 = param2,
+				})
 
-function mob_class:post_motion_step (self_pos, dtime, moveresult)
-	-- Apply slowdowns from blocks that should impede movement.
-	local xmin, zmin, xmax, zmax, ymin, ymax
-	local slowdowns = self.slowdown_nodes
-	local v = post_motion_step_scratch
+				if depth < 0.4 then
+					v.x = v.x * depth
+					v.y = v.y * depth
+					v.z = v.z * depth
+				end
 
-	xmin = floor (self_pos.x + self.collisionbox[1] + 0.5)
-	zmin = floor (self_pos.z + self.collisionbox[3] + 0.5)
-	xmax = floor (self_pos.x + self.collisionbox[4] + 0.5)
-	zmax = floor (self_pos.z + self.collisionbox[6] + 0.5)
-	ymin = floor (self_pos.y + self.collisionbox[2] + 0.5)
-	ymax = floor (self_pos.y + self.collisionbox[5] + 0.5)
-	for z = zmin, zmax do
-		v.z = z
-		for x = xmin, xmax do
-			v.x = x
-			for y = ymin, ymax do
+				if def.groups.lava then
+					fluidtype = "lava"
+					local force = dimension == "nether"
+						and LAVA_FORCE_NETHER or LAVA_FORCE
+					current.x = current.x + v.x * force
+					current.y = current.y + v.y * force
+					current.z = current.y + v.z * force
+				else
+					fluidtype = "water"
+					current.x = current.x + v.x * LIQUID_FORCE
+					current.y = current.y + v.y * LIQUID_FORCE
+					current.z = current.y + v.z * LIQUID_FORCE
+				end
+				return depth, fluidtype
+			end
+			if def.groups.lava then
+				return depth, "lava"
+			else
+				return depth, "water"
+			end
+		end
+	end
+	return 0.0, nil
+end
+
+local check_standin_scratch = vector.zero ()
+
+function mob_class:check_standin (pos)
+	local cbox = self.collisionbox
+	local x0 = math.floor (cbox[1] + pos.x + 0.5)
+	local x1 = math.floor (cbox[4] + pos.x + 0.5)
+	local y0 = math.floor (cbox[2] + pos.y + 0.5)
+	local y1 = math.floor (cbox[5] + pos.y + 0.5)
+	local z0 = math.floor (cbox[3] + pos.z + 0.5)
+	local z1 = math.floor (cbox[6] + pos.z + 0.5)
+	local immersion_depth = 0.0
+	local worst_type = nil
+	local v = check_standin_scratch
+	local current = self._water_current
+	current.x = 0
+	current.y = 0
+	current.z = 0
+	local n_fluids = 0
+	local dimension = mcl_worlds.pos_to_dimension (pos)
+
+	for y = y0, y1 do
+		for x = x0, x1 do
+			for z = z0, z1 do
+				v.x = x
 				v.y = y
-				local node = get_node_name (v)
-				if slowdowns[node] then
-					local slowdown = slowdowns[node]
-					local v = self.object:get_velocity ()
-					v.x = v.x * pow_by_step (slowdown.x, dtime)
-					v.y = v.y * pow_by_step (slowdown.y, dtime)
-					v.z = v.z * pow_by_step (slowdown.z, dtime)
-					self.object:set_velocity (v)
+				v.z = z
+				local node, param2 = get_node (v)
+				local depth, liquidtype
+					= self:check_one_immersion_depth (node, param2, pos.y,
+									v, current, dimension)
+				immersion_depth = math.max (depth, immersion_depth)
+				if liquidtype then
+					n_fluids = n_fluids + 1
 
-					-- Indicate that the velocity must be reset
-					-- upon the next globalstep
-					self._was_stuck = true
-					break
+					if worst_type ~= "lava" then
+						worst_type = liquidtype
+					end
+				end
+				local factors = self.slowdown_nodes[node]
+				if factors then
+					self._stuck_in = factors
 				end
 			end
 		end
 	end
+	if n_fluids > 0 then
+		current.x = current.x / n_fluids
+		current.y = current.y / n_fluids
+		current.z = current.z / n_fluids
+	end
+	return immersion_depth, worst_type
+end
+
+function mob_class:post_motion_step (self_pos, dtime, moveresult)
+	-- Apply slowdowns from blocks that should impede movement.
+	local slowdown = self._stuck_in
+	if slowdown then
+		local v = self.object:get_velocity ()
+		v.x = v.x * pow_by_step (slowdown.x, dtime)
+		v.y = v.y * pow_by_step (slowdown.y, dtime)
+		v.z = v.z * pow_by_step (slowdown.z, dtime)
+		self.object:set_velocity (v)
+		self._stuck_in = nil
+		-- Indicate that the velocity must be reset
+		-- upon the next globalstep
+		self._was_stuck = true
+	end
+
+	self._last_liquidtype = self._liquidtype
+
+	----------------------------------------------------------------
+	-- Sprinting particles.
+	----------------------------------------------------------------
 
 	-- Generate sprinting particles if and standing on a surface
 	-- appropriate.

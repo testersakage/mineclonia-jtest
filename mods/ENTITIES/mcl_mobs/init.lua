@@ -100,7 +100,7 @@ mcl_mobs.mob_class = {
 	_projectile_gravity = true,
 	floats = 1,
 	floats_on_lava = false,
-	water_friction = 0.6,
+	water_friction = 0.8,
 	-- This is multiplied by water_friction as in Minecraft.
 	water_velocity = 0.4,
 	timer = 0,
@@ -231,6 +231,11 @@ mcl_mobs.mob_class = {
 	_direct_sunlight = 0,
 	_physics_factors = nil,
 	_immersion_depth = 0,
+	_activated = false,
+	_stuck_in = nil,
+	_water_current = vector.zero (),
+	_liquidtype = nil,
+	_last_liquidtype = nil,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"

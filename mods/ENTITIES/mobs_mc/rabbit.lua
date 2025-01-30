@@ -204,8 +204,7 @@ function rabbit:do_go_pos (dtime, moveresult)
 		self.acc_dir.x = 0
 		self.acc_dir.y = 0
 	else
-		local self_pos = self.object:get_pos ()
-		local depth = self:immersion_depth ("water", self_pos, 1.0)
+		local depth = self._immersion_depth
 		local factor = 1.0
 		if depth > self.head_eye_height then
 			factor = 1.5
