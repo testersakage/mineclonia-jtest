@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_crimson x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-30 00:53+0000\n"
+"PO-Revision-Date: 2025-01-30 03:27+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -28,31 +28,31 @@ msgid "Weeping Vines"
 msgstr "垂泣藤"
 
 msgid "Nether Sprouts"
-msgstr ""
+msgstr "地獄芽"
 
 msgid "Warped Roots"
-msgstr ""
+msgstr "扭曲蕈根"
 
 msgid "Warped Wart Block"
-msgstr ""
+msgstr "扭曲疙瘩塊"
 
 msgid "Shroomlight"
-msgstr ""
+msgstr "蕈光體"
 
 msgid "Warped Nylium"
-msgstr ""
+msgstr "扭曲菌絲石"
 
 msgid "Crimson Fungus"
-msgstr ""
+msgstr "緋紅蕈菇"
 
 msgid "Crimson fungus is a mushroom found in the nether's crimson forest."
-msgstr ""
+msgstr "緋紅蕈菇是地獄的緋紅森林的原生蘑菇。"
 
 msgid "Crimson Roots"
-msgstr ""
+msgstr "緋紅蕈根"
 
 msgid "Crimson Nylium"
-msgstr ""
+msgstr "緋紅菌絲石"
 
 msgid "Crimson Bark"
 msgstr ""
