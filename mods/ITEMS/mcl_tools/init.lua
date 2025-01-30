@@ -259,7 +259,7 @@ minetest.register_tool("mcl_tools:shears", {
 			full_punch_interval = 0.5,
 			max_drop_level=1,
 	},
-	on_place = mcl_tools.tool_place_funcs.shears,
+	on_place = mcl_tools.get_default_tool_place_func("shears"),
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
 	_mcl_diggroups = {
