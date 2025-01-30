@@ -354,10 +354,10 @@ function mob_class:get_weather_with_light (self_pos, time_of_day)
 	-- Don't return natural light till the artificial light at
 	-- this position exceeds the threshold at which natural light
 	-- becomes significant, for natural light tests are expensive.
-	local local_light = core.get_node_light (self_pos)
+	local local_light = core.get_node_light (self_pos) or 0
 	local has_rain = mcl_weather.is_exposed_to_rain (self_pos)
 	if local_light > 10 then
-		local direct_light = minetest.get_natural_light (self_pos)
+		local direct_light = minetest.get_natural_light (self_pos) or 0
 
 		-- See: https://minecraft.wiki/w/Light#Internal_light_level
 		local weather = mcl_weather.get_weather ()
