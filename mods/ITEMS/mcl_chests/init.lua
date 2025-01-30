@@ -1310,7 +1310,7 @@ tt.register_snippet(function(itemstring, _ , itemstack)
 					if not stack:is_empty() then
 						if i < shulker_num_tt_stacks then
 							local newline = d ~= "" and "\n" or ""
-							local item = (stack:get_short_description() or stack:get_description())
+							local item = core.strip_colors(stack:get_short_description() or stack:get_description())
 							local count = (stack:get_count() > 1 and ("x"..stack:get_count()) or "")
 							d = d..newline..item.." "..count
 						end
