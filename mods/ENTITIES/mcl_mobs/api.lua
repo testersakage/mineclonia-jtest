@@ -149,6 +149,11 @@ function mob_class:get_staticdata_table ()
 	tmp._old_head_swivel_vector = nil
 	tmp._old_head_swivel_pos = nil
 	tmp._head_swivel_pos = nil
+	tmp._activated = nil
+	tmp._water_current = nil
+	tmp._stuck_in = nil
+	tmp._liquidtype = nil
+	tmp._last_liquidtype = nil
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
@@ -318,6 +323,7 @@ function mob_class:mob_activate (staticdata, dtime)
 	self:post_load_staticdata ()
 	self.acc_dir = vector.zero ()
 	self.acc_speed = 0
+	self._water_current = vector.zero ()
 	self._initial_step_height = self.initial_properties.stepheight
 	self._previously_floating = nil
 	self._active_texture_list = nil
@@ -550,6 +556,11 @@ function mob_class:on_step (dtime, moveresult)
 		self:rotate_step (dtime)
 		return
 	end
+
+	-- Compute fluid immersion.
+	local immersion_depth, liquidtype = self:check_standin (pos)
+	self._immersion_depth = immersion_depth
+	self._liquidtype = liquidtype
 
 	if not should_drive then
 		local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
