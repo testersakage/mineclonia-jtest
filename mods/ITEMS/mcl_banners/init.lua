@@ -252,7 +252,7 @@ end
 -- This one is also used for the help entry to avoid spamming the help with 16 entries.
 minetest.register_node("mcl_banners:standing_banner", {
 	_doc_items_entry_name = S("Banner"),
-	_doc_items_image = "mcl_banners_item_base.png^mcl_banners_item_overlay.png",
+	_doc_items_image = "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png",
 	_doc_items_longdesc = S("Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."),
 	_doc_items_usagehelp = S("Emblazoned banners can be emblazoned again to combine patterns. Up to 12 patterns can be layered on a banner. To wash off a banner's top-most layer, using it on a cauldron with water .").."\n"..
 		S("An emblazoned banner can be copied by placing two banners of the same base color in the crafting grid — one needs to be emblazoned, the other one must be clean."),
@@ -271,8 +271,8 @@ minetest.register_node("mcl_banners:standing_banner", {
 	-- This texture is based on the banner base texture
 	tiles = { "mcl_banners_fallback_wood.png" },
 
-	inventory_image = "mcl_banners_item_base.png",
-	wield_image = "mcl_banners_item_base.png",
+	inventory_image = "mcl_banners_item_base_48.png",
+	wield_image = "mcl_banners_item_base_48.png",
 
 	selection_box = {type = "fixed", fixed= {-0.3, -0.5, -0.3, 0.3, 0.5, 0.3} },
 	groups = {axey=1,handy=1, attached_node = 1, not_in_creative_inventory = 1, banner = 1, not_in_craft_guide = 1, material_wood=1, dig_by_piston=1, flammable=-1, unmovable_by_piston = 1},
@@ -312,8 +312,8 @@ minetest.register_node("mcl_banners:hanging_banner", {
 	paramtype2 = "wallmounted",
 	sunlight_propagates = true,
 	drawtype = "nodebox",
-	inventory_image = "mcl_banners_item_base.png",
-	wield_image = "mcl_banners_item_base.png",
+	inventory_image = "mcl_banners_item_base_48.png",
+	wield_image = "mcl_banners_item_base_48.png",
 	tiles = { "mcl_banners_fallback_wood.png" },
 	node_box = {
 		type = "wallmounted",
@@ -366,33 +366,26 @@ for _, colortab in pairs(mcl_banners.colors) do
 		if pattern_name == "" then
 			if color then
 			-- Base texture with base color
-				base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:"..color..")^[resize:32x32"
+				item_texture = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..color..")"
 			else
-				base = "mcl_banners_item_base.png^mcl_banners_item_overlay.png^[resize:32x32"
+				item_texture = "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png"
 			end
-			item_texture = base
 		else
 			-- Banner item preview background
-			base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:#CCCCCC)^[resize:32x32"
+			base = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:#CCCCCC)^[resize:48x48"
 			desc = S("Preview Banner")
 			local pattern = "mcl_banners_" .. pattern_name .. ".png"
 
 			-- Generate layer texture
+			-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.  Item texture 48x48 offset 14,4.
 
-			-- TODO: The layer texture in the icon is squished
-			-- weirdly because the width/height aspect ratio of
-			-- the banner icon is 1:1.5, whereas the aspect ratio
-			-- of the banner entity is 1:2. A solution would be to
-			-- redraw the pattern textures as low-resolution pixel
-			-- art and use that instead.
-
-			local layer = "([combine:20x40:-2,-2=\\("..pattern.."\\^[resize\\:64x64\\)^[resize:16x24^[colorize:"..color..":255)"
+			local layer = "[combine:20x40:-1,-1=\\("..pattern.."\\^[resize\\:64x64\\)^[colorize:"..color..":255"
 
 			function escape(text)
 				 return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
 			end
 
-			item_texture = "[combine:32x32:0,0=" .. escape(base) .. ":8,4=" .. escape(layer)
+			item_texture = "[combine:48x48:0,0=" .. escape(base) .. ":14,4=" .. escape(layer)
 		end
 
 		-- Banner items.
