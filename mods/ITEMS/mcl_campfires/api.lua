@@ -350,7 +350,7 @@ minetest.register_entity("mcl_campfires:food_entity", {
 			if count_table(food_entities[self._campfire_poshash]) == 0 then
 				delete_entities(self._campfire_poshash or "")
 			end
-			minetest.add_item(self.object:get_pos() + campfire_spots[self._spot], self._drop)
+			minetest.add_item(self.object:get_pos() + ( campfire_spots[self._spot] / 1.5 ), self._drop) --divide by 1.5 since otherwise items easily clip through walls next to the fire
 			self.object:remove()
 		end
 	end,
