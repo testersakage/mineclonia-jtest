@@ -272,9 +272,9 @@ end
 minetest.register_node("mcl_banners:standing_banner", {
 	_doc_items_entry_name = S("Banner"),
 	_doc_items_image = "mcl_banners_item_base.png^mcl_banners_item_overlay.png",
-	_doc_items_longdesc = S("Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns using a lot of dye in crafting."),
-	_doc_items_usagehelp = S("Use crafting to draw a pattern on top of the banner. Emblazoned banners can be emblazoned again to combine various patterns. You can draw up to 12 layers on a banner that way. If the banner includes a gradient, only 3 layers are possible.").."\n"..
-S("You can copy the pattern of a banner by placing two banners of the same color in the crafting grid—one needs to be emblazoned, the other one must be clean. Finally, you can use a banner on a cauldron with water to wash off its top-most layer."),
+	_doc_items_longdesc = S("Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."),
+	_doc_items_usagehelp = S("Emblazoned banners can be emblazoned again to combine patterns. Up to 12 patterns can be layered on a banner. To wash off a banner's top-most layer, using it on a cauldron with water .").."\n"..
+		S("An emblazoned banner can be copied by placing two banners of the same base color in the crafting grid — one needs to be emblazoned, the other one must be clean."),
 	walkable = false,
 	is_ground_content = false,
 	paramtype = "light",
