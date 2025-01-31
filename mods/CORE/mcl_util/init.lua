@@ -642,12 +642,9 @@ function mcl_util.deal_damage(target, damage, mcl_reason)
 			end
 			return damage
 		else
-			local armorgroups = target:get_armor_groups()
-			if armorgroups and not armorgroups.immortal then
-				local puncher = mcl_reason and mcl_reason.direct or target
-				if puncher and puncher.get_pos and puncher:get_pos() and target and target.get_pos and target:get_pos() and target.punch then
-					target:punch(puncher, 1.0, {full_punch_interval = 1.0, damage_groups = {fleshy = damage}}, vector.direction(puncher:get_pos(), target:get_pos()), damage)
-				end
+			local puncher = mcl_reason and mcl_reason.direct or target
+			if puncher and puncher.get_pos and puncher:get_pos() and target and target.get_pos and target:get_pos() and target.punch then
+				target:punch(puncher, 1.0, {full_punch_interval = 1.0, damage_groups = {fleshy = damage}}, vector.direction(puncher:get_pos(), target:get_pos()), damage)
 			end
 		end
 	else
