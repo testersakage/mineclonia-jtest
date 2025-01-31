@@ -6,13 +6,21 @@ local dyerecipes = {}
 local preview_item_prefix = "mcl_banners:banner_preview_"
 
 for name,pattern in pairs(mcl_banners.patterns) do
-	for i=1,3 do for j = 1,3 do
-		if pattern[i] and pattern[i][j] == "group:dye" and table.indexof(dyerecipes,name) == -1 and pattern.type ~= "shapeless" then
-			table.insert(dyerecipes,name)
-			break
+	if pattern.type ~= "shapeless" and table.indexof(dyerecipes,name) == -1 then
+		local added = false
+		for i = 1,3 do
+			for j = 1,3 do
+				if pattern[i] and pattern[i][j] == "group:dye" then
+					table.insert(dyerecipes,name)
+					added = true
+					break
+				end
+			end
+			if added then break end
 		end
-	end	end
+	end
 end
+table.sort(dyerecipes)
 
 local function get_formspec(pos)
 	local patterns = {}
@@ -33,7 +41,7 @@ local function get_formspec(pos)
 				local name = preview_item_prefix .. pdef._pattern .. "-" .. color
 				table.insert(patterns,string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",0.1,0.1,1,1, it, "item_button_"..name, ""))
 			elseif dyerecipes and color then
-				for _, v in pairs(dyerecipes) do
+				for _, v in ipairs(dyerecipes) do
 					if x_len > 5 then
 						y_len = y_len + 1
 						x_len = 0.1
