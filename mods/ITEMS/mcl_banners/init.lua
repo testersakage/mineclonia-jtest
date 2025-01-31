@@ -43,53 +43,6 @@ mcl_banners.colors = {
 	["unicolor_light_blue"] = {"light_blue", S("Light Blue Banner"), "mcl_wool:light_blue", mcl_dyes.colors.light_blue.rgb, "mcl_dyes:light_blue", S("Light Blue") },
 }
 
-
-local pattern_names = {
-	"",
-	"border",
-	"bricks",
-	"circle",
-	"creeper",
-	"cross",
-	"curly_border",
-	"diagonal_up_left",
-	"diagonal_up_right",
-	"diagonal_right",
-	"diagonal_left",
-	"flower",
-	"gradient",
-	"gradient_up",
-	"half_horizontal_bottom",
-	"half_horizontal",
-	"half_vertical",
-	"half_vertical_right",
-	"thing",
-	"rhombus",
-	"skull",
-	"small_stripes",
-	"square_bottom_left",
-	"square_bottom_right",
-	"square_top_left",
-	"square_top_right",
-	"straight_cross",
-	"stripe_bottom",
-	"stripe_center",
-	"stripe_downleft",
-	"stripe_downright",
-	"stripe_left",
-	"stripe_middle",
-	"stripe_right",
-	"stripe_top",
-	"triangle_bottom",
-	"triangle_top",
-	"triangles_bottom",
-	"triangles_top",
-	"globe",
-	"piglin",
-	"guster",
-	"flow",
-}
-
 local colors_reverse = {}
 for k,v in pairs(mcl_banners.colors) do
 	colors_reverse["mcl_banners:banner_item_"..v[1]] = k
@@ -101,6 +54,14 @@ end
 
 -- Add pattern/emblazoning crafting recipes
 dofile(modpath.."/patterncraft.lua")
+
+
+local pattern_names = { "" }
+
+for id,_ in pairs(mcl_banners.patterns) do
+	table.insert(pattern_names, id)
+end
+table.sort(pattern_names)
 
 -- Overlay ratios (0-255)
 local base_color_ratio = 224
@@ -148,6 +109,7 @@ local function on_destruct_banner(pos, hanging)
 		local ent = v:get_luaentity()
 		if ent and ent.name == nodename then
 			v:remove()
+			break
 		end
 	end
 
