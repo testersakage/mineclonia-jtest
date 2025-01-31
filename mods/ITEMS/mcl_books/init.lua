@@ -36,7 +36,7 @@ local function make_description(title, author, generation)
 	else
 		desc = S("Tattered Book")
 	end
-	desc = desc .. "\n" .. minetest.colorize(mcl_colors.GRAY, S("by @1", author))
+	desc = desc .. "\n" .. C(mcl_colors.GRAY, S("by @1", author))
 	return desc
 end
 
@@ -52,9 +52,9 @@ local function write(itemstack, user, pointed_thing)
 	local formspec = "size[8,9]" ..
 		header ..
 		"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]" ..
-		"textarea[0.75,0.1;7.25,9;text;;" .. minetest.formspec_escape(text) .. "]" ..
-		"button[0.75,7.95;3,1;sign;" .. minetest.formspec_escape(S("Sign")) .. "]" ..
-		"button_exit[4.25,7.95;3,1;ok;" .. minetest.formspec_escape(S("Done")) .. "]"
+		"textarea[0.75,0.1;7.25,9;text;;" .. F(text) .. "]" ..
+		"button[0.75,7.95;3,1;sign;" .. F(S("Sign")) .. "]" ..
+		"button_exit[4.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"
 	minetest.show_formspec(user:get_player_name(), "mcl_books:writable_book", formspec)
 end
 
@@ -66,8 +66,8 @@ local function read(itemstack, user, pointed_thing)
 	local formspec = "size[8,9]" ..
 		header ..
 		"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]" ..
-		"textarea[0.75,0.1;7.25,9;;" .. minetest.formspec_escape(text) .. ";]" ..
-		"button_exit[2.25,7.95;3,1;ok;" .. minetest.formspec_escape(S("Done")) .. "]"
+		"textarea[0.75,0.1;7.25,9;;" .. F(text) .. ";]" ..
+		"button_exit[2.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"
 	minetest.show_formspec(user:get_player_name(), "mcl_books:written_book", formspec)
 end
 
@@ -105,13 +105,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					header ..
 					"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]" ..
 					"field[0.75,1;7.25,1;title;" ..
-					minetest.formspec_escape(minetest.colorize("#000000", S("Enter book title:"))) .. ";]" ..
+					F(C("#000000", S("Enter book title:"))) .. ";]" ..
 					"label[0.75,1.5;" ..
-					minetest.formspec_escape(minetest.colorize("#404040", S("by @1", name))) .. "]" ..
-					"button_exit[0.75,7.95;3,1;sign;" .. minetest.formspec_escape(S("Sign and Close")) .. "]" ..
+					F(C("#404040", S("by @1", name))) .. "]" ..
+					"button_exit[0.75,7.95;3,1;sign;" .. F(S("Sign and Close")) .. "]" ..
 					"tooltip[sign;" ..
-					minetest.formspec_escape(S("Note: The book will no longer be editable after signing")) .. "]" ..
-					"button[4.25,7.95;3,1;cancel;" .. minetest.formspec_escape(S("Cancel")) .. "]"
+					F(S("Note: The book will no longer be editable after signing")) .. "]" ..
+					"button[4.25,7.95;3,1;cancel;" .. F(S("Cancel")) .. "]"
 				minetest.show_formspec(player:get_player_name(), "mcl_books:signing", formspec)
 			end
 		end
