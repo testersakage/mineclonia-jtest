@@ -316,6 +316,11 @@ for _, colortab in pairs(mcl_banners.colors) do
 		local wool = colortab[3]
 		local color = colortab[4]
 
+		local recipe = mcl_banners.patterns[pattern_name]
+		if recipe and recipe.name then
+			desc = S(recipe.name, colortab[6])
+		end
+
 		local itemstring
 		if pattern_name == "" then
 			itemstring = "mcl_banners:banner_item_" .. itemid
@@ -323,7 +328,6 @@ for _, colortab in pairs(mcl_banners.colors) do
 			itemstring = "mcl_banners:banner_preview_" .. pattern_name .. "_" .. itemid
 		end
 
-		local base
 		local item_texture
 		if pattern_name == "" then
 			if color then
@@ -334,17 +338,13 @@ for _, colortab in pairs(mcl_banners.colors) do
 			end
 		else
 			-- Banner item preview background
-			base = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:#CCCCCC)^[resize:48x48"
-			desc = S("Preview Banner")
+			local base = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:#CCCCCC)^[resize:48x48"
 			local pattern = "mcl_banners_" .. pattern_name .. ".png"
-
-			-- Generate layer texture
 			-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.  Item texture 48x48 offset 14,4.
-
 			local layer = "[combine:20x40:-1,-1=\\("..pattern.."\\^[resize\\:64x64\\)^[colorize:"..color..":255"
 
 			function escape(text)
-				 return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
+				return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
 			end
 
 			item_texture = "[combine:48x48:0,0=" .. escape(base) .. ":14,4=" .. escape(layer)
