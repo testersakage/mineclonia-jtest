@@ -37,8 +37,7 @@ end
 
 local function create_beacon_beam(pos)
 	local meta = minetest.get_meta(pos)
-	local effect_string = meta:get_string("effect")
-	if effect_string == "" then return end
+	if meta:get_int("power_level") == 0 then return end
 
 	for y = pos.y +1, pos.y + 300 do
 		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
