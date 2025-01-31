@@ -7,7 +7,7 @@ local function readable_name(str)
     return (str:gsub("^%l", string.upper))
 end
 
-mcl_banners.patterns = {
+local special_patterns = {
 	["thing"] 		 = { craft_item="mcl_core:apple_gold_enchanted", rarity=2 },
 	["skull"] 		 = { craft_item="mcl_heads:wither_skeleton", rarity=2 },
 	["creeper"] 	 = { craft_item="mcl_heads:creeper", rarity=1 },
@@ -20,7 +20,7 @@ mcl_banners.patterns = {
 	["flow"] 		 = { rarity=2 }
 }
 
-for pattern, defs in pairs(mcl_banners.patterns) do
+for pattern, defs in pairs(special_patterns) do
 	minetest.register_craftitem("mcl_banners:pattern_"..pattern,{
 		description = S(readable_name(pattern).." Banner Pattern"),
 		_tt_help = C(mcl_colors.GRAY, S("Can be used to craft special banner designs on the loom")),
