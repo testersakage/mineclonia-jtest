@@ -45,49 +45,49 @@ mcl_banners.colors = {
 
 
 local pattern_names = {
-      "",
-      "border",
-      "bricks",
-      "circle",
-      "creeper",
-      "cross",
-      "curly_border",
-      "diagonal_up_left",
-      "diagonal_up_right",
-      "diagonal_right",
-      "diagonal_left",
-      "flower",
-      "gradient",
-      "gradient_up",
-      "half_horizontal_bottom",
-      "half_horizontal",
-      "half_vertical",
-      "half_vertical_right",
-      "thing",
-      "rhombus",
-      "skull",
-      "small_stripes",
-      "square_bottom_left",
-      "square_bottom_right",
-      "square_top_left",
-      "square_top_right",
-      "straight_cross",
-      "stripe_bottom",
-      "stripe_center",
-      "stripe_downleft",
-      "stripe_downright",
-      "stripe_left",
-      "stripe_middle",
-      "stripe_right",
-      "stripe_top",
-      "triangle_bottom",
-      "triangle_top",
-      "triangles_bottom",
-      "triangles_top",
-      "globe",
-      "piglin",
-      "guster",
-      "flow",
+	"",
+	"border",
+	"bricks",
+	"circle",
+	"creeper",
+	"cross",
+	"curly_border",
+	"diagonal_up_left",
+	"diagonal_up_right",
+	"diagonal_right",
+	"diagonal_left",
+	"flower",
+	"gradient",
+	"gradient_up",
+	"half_horizontal_bottom",
+	"half_horizontal",
+	"half_vertical",
+	"half_vertical_right",
+	"thing",
+	"rhombus",
+	"skull",
+	"small_stripes",
+	"square_bottom_left",
+	"square_bottom_right",
+	"square_top_left",
+	"square_top_right",
+	"straight_cross",
+	"stripe_bottom",
+	"stripe_center",
+	"stripe_downleft",
+	"stripe_downright",
+	"stripe_left",
+	"stripe_middle",
+	"stripe_right",
+	"stripe_top",
+	"triangle_bottom",
+	"triangle_top",
+	"triangles_bottom",
+	"triangles_top",
+	"globe",
+	"piglin",
+	"guster",
+	"flow",
 }
 
 local colors_reverse = {}
@@ -104,7 +104,6 @@ dofile(modpath.."/patterncraft.lua")
 
 -- Overlay ratios (0-255)
 local base_color_ratio = 224
-local layer_ratio = 255
 
 local standing_banner_entity_offset = { x=0, y=-0.499, z=0 }
 local hanging_banner_entity_offset = { x=0, y=-1.7, z=0 }
@@ -123,8 +122,7 @@ local function on_dig_banner(pos, _, digger)
 
 	local inv = minetest.get_meta(pos):get_inventory()
 	local item = inv:get_stack("banner", 1)
-	local item_str = item:is_empty() and "mcl_banners:banner_item_white"
-		or item:to_string()
+	local item_str = item:is_empty() and "mcl_banners:banner_item_white" or item:to_string()
 
 	minetest.handle_node_drops(pos, { item_str }, digger)
 
@@ -174,31 +172,25 @@ function mcl_banners.make_banner_texture(base_color, layers)
 	if mcl_banners.colors[base_color] then
 		colorize = mcl_banners.colors[base_color][4]
 	end
-	if colorize then
-		-- Base texture with base color
-		local base = "(mcl_banners_banner_base.png^[mask:mcl_banners_base_inverted.png)^((mcl_banners_banner_base.png^[colorize:"..colorize..":"..base_color_ratio..")^[mask:mcl_banners_base.png)"
+	if not colorize then return "mcl_banners_banner_base.png" end
+	-- Base texture with base color
+	local result = "(mcl_banners_banner_base.png^[mask:mcl_banners_base_inverted.png)^((mcl_banners_banner_base.png^[colorize:"..colorize..":"..base_color_ratio..")^[mask:mcl_banners_base.png)"
+	if not layers then return result end
 
-		-- Optional pattern layers
-		if layers then
-			local finished_banner = base
-			for l=1, #layers do
-				local layerinfo = layers[l]
-				if layerinfo and layerinfo.pattern and layerinfo.color and mcl_banners.colors[layerinfo.color] then
-					local pattern = "mcl_banners_" .. layerinfo.pattern .. ".png"
-					local color = mcl_banners.colors[layerinfo.color][4]
+	-- Optional pattern layers
+	for l=1, #layers do
+		local layerinfo = layers[l]
+		if layerinfo and layerinfo.pattern and layerinfo.color and mcl_banners.colors[layerinfo.color] then
+			local pattern = "mcl_banners_" .. layerinfo.pattern .. ".png"
+			local color = mcl_banners.colors[layerinfo.color][4]
 
-					-- Generate layer texture
-					local layer = "(("..pattern.."^[colorize:"..color..":"..layer_ratio..")^[mask:"..pattern..")"
+			-- Generate layer texture
+			local layer = "(("..pattern.."^[colorize:"..color..":255)^[mask:"..pattern..")"
 
-					finished_banner = finished_banner .. "^" .. layer
-				end
-			end
-			return finished_banner
+			result = result .. "^" .. layer
 		end
-		return base
-	else
-		return "mcl_banners_banner_base.png"
 	end
+	return result
 end
 
 local function spawn_banner_entity(pos, hanging, itemstack)
@@ -208,9 +200,8 @@ local function spawn_banner_entity(pos, hanging, itemstack)
 	else
 		banner = minetest.add_entity(pos, "mcl_banners:standing_banner")
 	end
-	if banner == nil then
-		return banner
-	end
+	if banner == nil then return banner end
+
 	local imeta = itemstack:get_meta()
 	local layers_raw = imeta:get_string("layers")
 	local layers = minetest.deserialize(layers_raw)
@@ -221,36 +212,25 @@ local function spawn_banner_entity(pos, hanging, itemstack)
 		banner:get_luaentity()._item_name = mname
 		banner:get_luaentity()._item_description = imeta:get_string("description")
 	end
-
 	return banner
 end
 
 local function respawn_banner_entity(pos, node, force)
-	local hanging = node.name == "mcl_banners:hanging_banner"
-	local offset
-	if hanging then
-		offset = hanging_banner_entity_offset
-	else
-		offset = standing_banner_entity_offset
-	end
-	-- Check if a banner entity already exists
+	local is_hanging = node.name == "mcl_banners:hanging_banner"
+	local offset = is_hanging and hanging_banner_entity_offset or standing_banner_entity_offset
 	local bpos = vector.add(pos, offset)
 	for v in minetest.objects_inside_radius(bpos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and (ent.name == "mcl_banners:standing_banner" or ent.name == "mcl_banners:hanging_banner") then
-			if force then
-				v:remove()
-			else
-				return
-			end
+			if not force then return end -- Banner exists, not forcing removal, just quit.
+			v:remove()
 		end
 	end
-	-- Spawn new entity
+
+	-- Spawn new entity and set rotation
 	local meta = minetest.get_meta(pos)
 	local banner_item = meta:get_inventory():get_stack("banner", 1)
-	local banner_entity = spawn_banner_entity(bpos, hanging, banner_item)
-
-	-- Set rotation
+	local banner_entity = spawn_banner_entity(bpos, is_hanging, banner_item)
 	local rotation_level = meta:get_int("rotation_level")
 	local final_yaw = rotation_level_to_yaw(rotation_level)
 	if banner_entity then
@@ -262,6 +242,7 @@ local function get_banner_stack(pos)
 	local inv = minetest.get_meta(pos):get_inventory()
 	return inv:get_stack("banner", 1)
 end
+
 -- Banner nodes.
 -- These are an invisible nodes which are only used to destroy the banner entity.
 -- All the important banner information (such as color) is stored in the entity.
@@ -321,6 +302,8 @@ minetest.register_node("mcl_banners:standing_banner", {
 	end,
 })
 
+local screwdriver_rot_by_param2 = { 0, 12, 4, 0, 8 }
+
 -- Hanging banner node
 minetest.register_node("mcl_banners:hanging_banner", {
 	walkable = false,
@@ -346,266 +329,240 @@ minetest.register_node("mcl_banners:hanging_banner", {
 
 	on_dig = on_dig_banner,
 	on_destruct = on_destruct_hanging_banner,
-	on_punch = function(pos, node)
-		respawn_banner_entity(pos, node)
-	end,
+	on_punch = respawn_banner_entity,
 	_mcl_hardness = 1,
 	_mcl_blast_resistance = 1,
 	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
-		if mode == screwdriver.ROTATE_FACE then
-			local r = screwdriver.rotate.wallmounted(pos, node, mode)
-			node.param2 = r
-			minetest.swap_node(pos, node)
-			local meta = minetest.get_meta(pos)
-			local rot = 0
-			if node.param2 == 2 then
-				rot = 12
-			elseif node.param2 == 3 then
-				rot = 4
-			elseif node.param2 == 4 then
-				rot = 0
-			elseif node.param2 == 5 then
-				rot = 8
-			end
-			meta:set_int("rotation_level", rot)
-			respawn_banner_entity(pos, node, true)
-			return true
-		else
-			return false
-		end
+		if mode ~= screwdriver.ROTATE_FACE then return false end
+		local r = screwdriver.rotate.wallmounted(pos, node, mode)
+		node.param2 = r
+		minetest.swap_node(pos, node)
+		local meta = minetest.get_meta(pos)
+		local rot = screwdriver_rot_by_param2[ r or 0 ] or 0
+		meta:set_int("rotation_level", rot)
+		respawn_banner_entity(pos, node, true)
+		return true
 	end,
 })
 
 -- for pattern_name, pattern in pairs(patterns) do
 for _, colortab in pairs(mcl_banners.colors) do
-    for _, pattern_name in ipairs(pattern_names) do
-	local itemid = colortab[1]
-	local desc = colortab[2]
-	local wool = colortab[3]
-	local colorize = colortab[4]
+	for _, pattern_name in ipairs(pattern_names) do
+		local itemid = colortab[1]
+		local desc = colortab[2]
+		local wool = colortab[3]
+		local color = colortab[4]
 
-	local itemstring
-	if pattern_name == "" then
-		itemstring = "mcl_banners:banner_item_" .. itemid
-	else
-		itemstring = "mcl_banners:banner_preview" .. "_" .. pattern_name .. "_" .. itemid
-	end
-
-	local inv
-	local base
-	local finished_banner
-	if pattern_name == "" then
-	    if colorize then
-		-- Base texture with base color
-		base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:"..colorize..")^[resize:32x32"
-	    else
-		base = "mcl_banners_item_base.png^mcl_banners_item_overlay.png^[resize:32x32"
-	    end
-	    finished_banner = base
-	else
-		-- Banner item preview background
-		base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:#CCCCCC)^[resize:32x32"
-
-		desc = S("Preview Banner")
-
-		local pattern = "mcl_banners_" .. pattern_name .. ".png"
-		local color = colorize
-
-		-- Generate layer texture
-
-		-- TODO: The layer texture in the icon is squished
-		-- weirdly because the width/height aspect ratio of
-		-- the banner icon is 1:1.5, whereas the aspect ratio
-		-- of the banner entity is 1:2. A solution would be to
-		-- redraw the pattern textures as low-resolution pixel
-		-- art and use that instead.
-
-		local layer = "([combine:20x40:-2,-2=\\("..pattern.."\\^[resize\\:64x64\\)^[resize:16x24^[colorize:"..color..":"..layer_ratio..")"
-
-		function escape(text)
-			 return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
+		local itemstring
+		if pattern_name == "" then
+			itemstring = "mcl_banners:banner_item_" .. itemid
+		else
+			itemstring = "mcl_banners:banner_preview_" .. pattern_name .. "_" .. itemid
 		end
 
-		finished_banner = "[combine:32x32:0,0=" .. escape(base) .. ":8,4=" .. escape(layer)
-	end
+		local base
+		local item_texture
+		if pattern_name == "" then
+			if color then
+			-- Base texture with base color
+				base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:"..color..")^[resize:32x32"
+			else
+				base = "mcl_banners_item_base.png^mcl_banners_item_overlay.png^[resize:32x32"
+			end
+			item_texture = base
+		else
+			-- Banner item preview background
+			base = "mcl_banners_item_base.png^(mcl_banners_item_overlay.png^[colorize:#CCCCCC)^[resize:32x32"
+			desc = S("Preview Banner")
+			local pattern = "mcl_banners_" .. pattern_name .. ".png"
 
-	inv = finished_banner
+			-- Generate layer texture
 
-	-- Banner items.
-	-- This is the player-visible banner item. It comes in 16 base colors with a lot of patterns.
-	-- The multiple items are really only needed for the different item images.
-	-- TODO: Combine the items into only 1 item.
-	local groups
-	if pattern_name == "" then
-		groups = { banner = 1, deco_block = 1, flammable = -1 }
-	else
-		groups = { not_in_creative_inventory = 1 }
-	end
+			-- TODO: The layer texture in the icon is squished
+			-- weirdly because the width/height aspect ratio of
+			-- the banner icon is 1:1.5, whereas the aspect ratio
+			-- of the banner entity is 1:2. A solution would be to
+			-- redraw the pattern textures as low-resolution pixel
+			-- art and use that instead.
 
-	minetest.register_craftitem(itemstring, {
-		description = desc,
-		_tt_help = S("Paintable decoration"),
-		_doc_items_create_entry = false,
-		inventory_image = inv,
-		wield_image = inv,
-		-- Banner group groups together the banner items, but not the nodes.
-		-- Used for crafting.
-		groups = groups,
-		stack_max = 16,
-		_mcl_burntime = 15,
-		on_place = function(itemstack, placer, pointed_thing)
-			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-			if rc then return rc end
-			local above = pointed_thing.above
-			local under = pointed_thing.under
+			local layer = "([combine:20x40:-2,-2=\\("..pattern.."\\^[resize\\:64x64\\)^[resize:16x24^[colorize:"..color..":255)"
 
-			local node_under = minetest.get_node(under)
-			if placer and not placer:get_player_control().sneak then
-				if mcl_util.check_position_protection(under, placer) then return itemstack end
+			function escape(text)
+				 return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
+			end
 
-				if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
-					if mcl_cauldrons.add_level(pointed_thing.under, -1) then
-						local imeta = itemstack:get_meta()
-						local layers_raw = imeta:get_string("layers")
-						local layers = minetest.deserialize(layers_raw)
-						if type(layers) == "table" and #layers > 0 then
-							table.remove(layers)
-							imeta:set_string("layers", minetest.serialize(layers))
-							local newdesc = mcl_banners.make_advanced_banner_description(itemstack:get_definition().description, layers)
-							local mname = imeta:get_string("name")
-							-- Don't change description if item has a name
-							if mname == "" then
-								imeta:set_string("description", newdesc)
+			item_texture = "[combine:32x32:0,0=" .. escape(base) .. ":8,4=" .. escape(layer)
+		end
+
+		-- Banner items.
+		-- This is the player-visible banner item. It comes in 16 base colors with a lot of patterns.
+		-- The multiple items are really only needed for the different item images.
+		-- TODO: Combine the items into only 1 item.
+		local groups
+		if pattern_name == "" then
+			groups = { banner = 1, deco_block = 1, flammable = -1 }
+		else
+			groups = { not_in_creative_inventory = 1 }
+		end
+
+		minetest.register_craftitem(itemstring, {
+			description = desc,
+			_tt_help = S("Paintable decoration"),
+			_doc_items_create_entry = false,
+			inventory_image = item_texture,
+			wield_image = item_texture,
+			-- Banner group groups together the banner items, but not the nodes.
+			-- Used for crafting.
+			groups = groups,
+			stack_max = 16,
+			_mcl_burntime = 15,
+			on_place = function(itemstack, placer, pointed_thing)
+				local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+				if rc then return rc end
+				local above = pointed_thing.above
+				local under = pointed_thing.under
+
+				local node_under = minetest.get_node(under)
+				if placer and not placer:get_player_control().sneak then
+					if mcl_util.check_position_protection(under, placer) then return itemstack end
+
+					if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
+						if mcl_cauldrons.add_level(pointed_thing.under, -1) then
+							local imeta = itemstack:get_meta()
+							local layers_raw = imeta:get_string("layers")
+							local layers = minetest.deserialize(layers_raw)
+							if type(layers) == "table" and #layers > 0 then
+								table.remove(layers)
+								imeta:set_string("layers", minetest.serialize(layers))
+								local newdesc = mcl_banners.make_advanced_banner_description(itemstack:get_definition().description, layers)
+								local mname = imeta:get_string("name")
+								-- Don't change description if item has a name
+								if mname == "" then
+									imeta:set_string("description", newdesc)
+								end
 							end
+							return itemstack
 						end
-
-						return itemstack
 					end
 				end
-			end
 
-			-- Update old pre 0.84.0 Ominous Banners with correct description.
-			local stackmeta = itemstack:get_meta()
-			if stackmeta:get_string("name"):find("Ominous Banner") then
-				local oban_layers = minetest.deserialize(stackmeta:get_string("layers"))
-				local banner_description = string.gsub(itemstack:get_definition().description, "White Banner", "Ominous Banner")
-				local description = mcl_banners.make_advanced_banner_description(banner_description, oban_layers)
-				stackmeta:set_string("description", description)
-				stackmeta:set_string("name", "")
-			end
-
-			-- Place the node!
-			local hanging = false
-
-			-- Standing or hanging banner. The placement rules are enforced by the node definitions
-			local _, success = minetest.item_place_node(ItemStack("mcl_banners:standing_banner"), placer, pointed_thing)
-			if not success then
-				-- Forbidden on ceiling
-				if pointed_thing.under.y ~= pointed_thing.above.y then
-					return itemstack
+				-- Update old pre 0.84.0 Ominous Banners with correct description.
+				local stackmeta = itemstack:get_meta()
+				if stackmeta:get_string("name"):find("Ominous Banner") then
+					local oban_layers = minetest.deserialize(stackmeta:get_string("layers"))
+					local banner_description = string.gsub(itemstack:get_definition().description, "White Banner", "Ominous Banner")
+					local description = mcl_banners.make_advanced_banner_description(banner_description, oban_layers)
+					stackmeta:set_string("description", description)
+					stackmeta:set_string("name", "")
 				end
-				_, success = minetest.item_place_node(ItemStack("mcl_banners:hanging_banner"), placer, pointed_thing)
+
+				-- Place the node!
+				local is_hanging = false
+
+				-- Standing or hanging banner. The placement rules are enforced by the node definitions
+				local _, success = minetest.item_place_node(ItemStack("mcl_banners:standing_banner"), placer, pointed_thing)
 				if not success then
+					-- Forbidden on ceiling
+					if pointed_thing.under.y ~= pointed_thing.above.y then
+						return itemstack
+					end
+					_, success = minetest.item_place_node(ItemStack("mcl_banners:hanging_banner"), placer, pointed_thing)
+					if not success then
+						return itemstack
+					end
+					is_hanging = true
+				end
+				local place_pos
+				local def_under = minetest.registered_nodes[node_under.name]
+				if def_under and def_under.buildable_to then
+					place_pos = under
+				else
+					place_pos = above
+				end
+				local bnode = minetest.get_node(place_pos)
+				if bnode.name ~= "mcl_banners:standing_banner" and bnode.name ~= "mcl_banners:hanging_banner" then
+					minetest.log("error", "[mcl_banners] The placed banner node is not what the mod expected!")
 					return itemstack
 				end
-				hanging = true
-			end
-			local place_pos
-			local def_under = minetest.registered_nodes[node_under.name]
-			if def_under and def_under.buildable_to then
-				place_pos = under
-			else
-				place_pos = above
-			end
-			local bnode = minetest.get_node(place_pos)
-			if bnode.name ~= "mcl_banners:standing_banner" and bnode.name ~= "mcl_banners:hanging_banner" then
-				minetest.log("error", "[mcl_banners] The placed banner node is not what the mod expected!")
-				return itemstack
-			end
-			local meta = minetest.get_meta(place_pos)
-			local inv = meta:get_inventory()
-			inv:set_size("banner", 1)
-			local store_stack = ItemStack(itemstack)
-			store_stack:set_count(1)
-			inv:set_stack("banner", 1, store_stack)
+				local meta = minetest.get_meta(place_pos)
+				local inv = meta:get_inventory()
+				inv:set_size("banner", 1)
+				local store_stack = ItemStack(itemstack)
+				store_stack:set_count(1)
+				inv:set_stack("banner", 1, store_stack)
 
-			-- Spawn entity
-			local entity_place_pos
-			if hanging then
-				entity_place_pos = vector.add(place_pos, hanging_banner_entity_offset)
-			else
-				entity_place_pos = vector.add(place_pos, standing_banner_entity_offset)
-			end
-			local banner_entity = spawn_banner_entity(entity_place_pos, hanging, itemstack)
-			-- Set rotation
-			local final_yaw, rotation_level
-			if hanging then
-				local pdir = vector.direction(pointed_thing.under, pointed_thing.above)
-				final_yaw = minetest.dir_to_yaw(pdir)
-				if pdir.x > 0 then
-					rotation_level = 4
-				elseif pdir.z > 0 then
-					rotation_level = 8
-				elseif pdir.x < 0 then
-					rotation_level = 12
+				-- Spawn entity
+				local entity_place_pos
+				local offset = is_hanging and hanging_banner_entity_offset or standing_banner_entity_offset
+				entity_place_pos = vector.add(place_pos, offset)
+				local banner_entity = spawn_banner_entity(entity_place_pos, is_hanging, itemstack)
+				-- Set rotation
+				local final_yaw, rotation_level
+				if is_hanging then
+					local pdir = vector.direction(pointed_thing.under, pointed_thing.above)
+					final_yaw = minetest.dir_to_yaw(pdir)
+					if pdir.x > 0 then
+						rotation_level = 4
+					elseif pdir.z > 0 then
+						rotation_level = 8
+					elseif pdir.x < 0 then
+						rotation_level = 12
+					else
+						rotation_level = 0
+					end
 				else
-					rotation_level = 0
+					-- Determine the rotation based on player's yaw
+					local yaw = placer:get_look_horizontal()
+					-- Select one of 16 possible rotations (0-15)
+					rotation_level = round((yaw / (math.pi*2)) * 16)
+					if rotation_level >= 16 then
+						rotation_level = 0
+					end
+					final_yaw = rotation_level_to_yaw(rotation_level)
 				end
-			else
-				-- Determine the rotation based on player's yaw
-				local yaw = placer:get_look_horizontal()
-				-- Select one of 16 possible rotations (0-15)
-				rotation_level = round((yaw / (math.pi*2)) * 16)
-				if rotation_level >= 16 then
-					rotation_level = 0
+				meta:set_int("rotation_level", rotation_level)
+
+				if banner_entity then
+					banner_entity:set_yaw(final_yaw)
 				end
-				final_yaw = rotation_level_to_yaw(rotation_level)
-			end
-			meta:set_int("rotation_level", rotation_level)
 
-			if banner_entity then
-				banner_entity:set_yaw(final_yaw)
-			end
+				if not minetest.is_creative_enabled(placer:get_player_name()) then
+					itemstack:take_item()
+				end
+				minetest.sound_play({name="default_place_node_hard", gain=1.0}, {pos = place_pos}, true)
 
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
-				itemstack:take_item()
-			end
-			minetest.sound_play({name="default_place_node_hard", gain=1.0}, {pos = place_pos}, true)
+				return itemstack
+			end,
 
-			return itemstack
-		end,
-
-		_mcl_generate_description = function(itemstack)
-			local meta = itemstack:get_meta()
-			local layers_raw = meta:get_string("layers")
-			if not layers_raw then
-				return nil
-			end
-			local layers = minetest.deserialize(layers_raw)
-			local desc = itemstack:get_definition().description
-			local newdesc = mcl_banners.make_advanced_banner_description(desc, layers)
-			meta:set_string("description", newdesc)
-			return newdesc
-		end,
-	})
-
-	if mod_mcl_core and minetest.get_modpath("mcl_wool") and pattern_name == "" then
-		minetest.register_craft({
-			output = itemstring,
-			recipe = {
-				{ wool, wool, wool },
-				{ wool, wool, wool },
-				{ "", "mcl_core:stick", "" },
-			}
+			_mcl_generate_description = function(itemstack)
+				local meta = itemstack:get_meta()
+				local layers_raw = meta:get_string("layers")
+				if not layers_raw then return nil end
+				local layers = minetest.deserialize(layers_raw)
+				local olddesc = itemstack:get_definition().description
+				local newdesc = mcl_banners.make_advanced_banner_description(olddesc, layers)
+				meta:set_string("description", newdesc)
+				return newdesc
+			end,
 		})
-	end
 
-	if mod_doc then
-		-- Add item to node alias
-		doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
+		if mod_mcl_core and minetest.get_modpath("mcl_wool") and pattern_name == "" then
+			minetest.register_craft({
+				output = itemstring,
+				recipe = {
+					{ wool, wool, wool },
+					{ wool, wool, wool },
+					{ "", "mcl_core:stick", "" },
+				}
+			})
+		end
+
+		if mod_doc then
+			-- Add item to node alias
+			doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
+		end
 	end
-    end
 end
 
 if mod_doc then

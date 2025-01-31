@@ -265,11 +265,11 @@ mcl_banners.patterns = patterns
 
 local function readable_name(str)
 	str = str:gsub("_", " ")
-    return (str:gsub("^%l", string.upper))
+	return (str:gsub("^%l", string.upper))
 end
 
 function mcl_banners.register_pattern(name,recipe)
-	mcl_banners.patterns[name] = table.merge({ name = readable_name(name) }, recipe)
+	patterns[name] = table.merge({ name = readable_name(name) }, recipe)
 end
 
 -- Just a simple reverse-lookup table from dye itemstring to banner color ID
