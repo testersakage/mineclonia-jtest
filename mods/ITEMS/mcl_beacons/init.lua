@@ -37,7 +37,10 @@ end
 
 local function create_beacon_beam(pos)
 	local meta = minetest.get_meta(pos)
-	if meta:get_int("power_level") == 0 then return end
+	if meta:get_int("power_level") == 0 then
+		remove_beacon_beam(pos)
+		return
+	end
 
 	for y = pos.y +1, pos.y + 300 do
 		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
@@ -202,6 +205,7 @@ local function apply_effects_to_all_players(pos)
 	local old_power_level = meta:get_int("power_level")
 
 	local power_level = check_pyramid(pos)
+	if power_level == 0 then return end
 	if old_power_level ~= power_level then
 		meta:set_string("formspec", generate_beacon_formspec(meta, pos))
 	end
