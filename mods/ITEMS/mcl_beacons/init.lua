@@ -174,8 +174,9 @@ end
 local function clear_obstructed_beam(pos)
 	for y=pos.y+1, pos.y+100 do
 		local nodename = minetest.get_node({x=pos.x,y=y, z = pos.z}).name
-		if nodename ~= "mcl_core:bedrock" and nodename ~= "air" and nodename ~= "mcl_core:void" and nodename ~= "ignore" then --ignore means not loaded, let's just assume that's air
-			if nodename ~="mcl_beacons:beacon_beam" then
+		local def = minetest.registered_nodes[nodename]
+		if def and def.groups.opaque and nodename ~= "mcl_core:bedrock" and nodename ~= "mcl_core:void" and nodename ~= "ignore" then --ignore means not loaded, let's just assume that's air
+			if nodename ~="mcl_beacons:beacon_beam" and nodename ~="mcl_beacons:beacon" then
 				if minetest.get_item_group(nodename,"glass") == 0 and minetest.get_item_group(nodename,"material_glass") == 0  then
 					remove_beacon_beam(pos)
 					return true
@@ -419,8 +420,10 @@ minetest.register_abm{
 	interval = 3,
 	chance = 1,
 	action = function(pos)
-		apply_effects_to_all_players(pos)
-		create_beacon_beam(pos)
+		if not clear_obstructed_beam(pos) then
+			apply_effects_to_all_players(pos)
+			create_beacon_beam(pos)
+		end
 	end,
 }
 
