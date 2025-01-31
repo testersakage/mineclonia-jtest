@@ -365,7 +365,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_on_dignode(function (pos, node)
+local function check_for_update(pos, node)
 	if node and measure_tab[node.name] then
 		mcl_redstone.update_comparators(pos)
 	end
@@ -380,11 +380,23 @@ minetest.register_on_dignode(function (pos, node)
 	if other_pos then
 		mcl_redstone.update_comparators(other_pos)
 	end
+end
+
+minetest.register_on_dignode(function (pos, node)
+	check_for_update(pos, node)
 end)
 
 minetest.register_on_placenode(function (pos, newnode, _, oldnode)
 	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
 		mcl_redstone.update_comparators(pos)
+	end
+end)
+
+mcl_pistons.register_on_move(function(moved_nodes)
+	for i = 1, #moved_nodes do
+		local moved_node = moved_nodes[i]
+		check_for_update(moved_node.old_pos, moved_node.node)
+		check_for_update(moved_node.pos, moved_node.node)
 	end
 end)
 
