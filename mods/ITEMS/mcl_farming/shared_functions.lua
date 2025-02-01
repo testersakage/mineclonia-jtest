@@ -168,282 +168,6 @@ function mcl_farming:place_seed(itemstack, placer, pointed_thing, plantname)
 	return itemstack
 end
 
-
---[[ Helper function to create a gourd (e.g. melon, pumpkin), the connected stem nodes as
-
-- full_unconnected_stem: itemstring of the full-grown but unconnected stem node. This node must already be done
-- connected_stem_basename: prefix of the itemstrings used for the 4 connected stem nodes to create
-- stem_itemstring: Desired itemstring of the fully-grown unconnected stem node
-- stem_def: Partial node definition of the fully-grown unconnected stem node. Many fields are already defined. You need to add `tiles` and `description` at minimum. Don't define on_construct without good reason
-- stem_drop: Drop probability table for all stem
-- gourd_itemstring: Desired itemstring of the full gourd node
-- gourd_def: (almost) full definition of the gourd node. This function will add on_construct and after_destruct to the definition for unconnecting any connected stems
-- grow_interval: Will attempt to grow a gourd periodically at this interval in seconds
-- grow_chance: Chance of 1/grow_chance to grow a gourd next to the full unconnected stem after grow_interval has passed. Must be a natural number
-- connected_stem_texture: Texture of the connected stem
-- gourd_on_construct_extra: Custom on_construct extra function for the gourd. Will be called after the stem check code
-]]
-
-function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, stem_itemstring, stem_def, stem_drop, gourd_itemstring, gourd_def, grow_interval, grow_chance, connected_stem_texture, gourd_on_construct_extra)
-
-	local connected_stem_names = {
-		connected_stem_basename .. "_r",
-		connected_stem_basename .. "_l",
-		connected_stem_basename .. "_t",
-		connected_stem_basename .. "_b",
-	}
-
-	local neighbors = {
-		{ x = -1, y = 0, z = 0 },
-		{ x = 1, y = 0, z = 0 },
-		{ x = 0, y = 0, z = -1 },
-		{ x = 0, y = 0, z = 1 },
-	}
-
-	-- Connect the stem at stempos to the first neighboring gourd block.
-	-- No-op if not a stem or no gourd block found
-	local function try_connect_stem(stempos)
-		local stem = minetest.get_node(stempos)
-		if stem.name ~= full_unconnected_stem then
-			return false
-		end
-		for n = 1, #neighbors do
-			local offset = neighbors[n]
-			local blockpos = vector.add(stempos, offset)
-			local block = minetest.get_node(blockpos)
-			if block.name == gourd_itemstring then
-				if offset.x == 1 then
-					minetest.set_node(stempos, { name = connected_stem_names[1] })
-				elseif offset.x == -1 then
-					minetest.set_node(stempos, { name = connected_stem_names[2] })
-				elseif offset.z == 1 then
-					minetest.set_node(stempos, { name = connected_stem_names[3] })
-				elseif offset.z == -1 then
-					minetest.set_node(stempos, { name = connected_stem_names[4] })
-				end
-				return true
-			end
-		end
-	end
-
-	-- Register gourd
-	if not gourd_def.after_destruct then
-		gourd_def.after_destruct = function(blockpos)
-			-- Disconnect any connected stems, turning them back to normal stems
-			for n = 1, #neighbors do
-				local offset = neighbors[n]
-				local expected_stem = connected_stem_names[n]
-				local stempos = vector.add(blockpos, offset)
-				local stem = minetest.get_node(stempos)
-				if stem.name == expected_stem then
-					minetest.add_node(stempos, { name = full_unconnected_stem })
-					try_connect_stem(stempos)
-				end
-			end
-		end
-	end
-	if not gourd_def.on_construct then
-		function gourd_def.on_construct(blockpos)
-			-- Connect all unconnected stems at full size
-			for n = 1, #neighbors do
-				local stempos = vector.add(blockpos, neighbors[n])
-				try_connect_stem(stempos)
-			end
-			-- Call custom on_construct
-			if gourd_on_construct_extra then
-				gourd_on_construct_extra(blockpos)
-			end
-		end
-	end
-	minetest.register_node(gourd_itemstring, gourd_def)
-
-	-- Register unconnected stem
-
-	-- Default values for the stem definition
-	if not stem_def.selection_box then
-		stem_def.selection_box = {
-			type = "fixed",
-			fixed = {
-				{ -0.15, -0.5, -0.15, 0.15, 0.5, 0.15 }
-			},
-		}
-	end
-	if not stem_def.paramtype then
-		stem_def.paramtype = "light"
-	end
-	if not stem_def.drawtype then
-		stem_def.drawtype = "plantlike"
-	end
-	if stem_def.walkable == nil then
-		stem_def.walkable = false
-	end
-	if stem_def.sunlight_propagates == nil then
-		stem_def.sunlight_propagates = true
-	end
-	if stem_def.drop == nil then
-		stem_def.drop = stem_drop
-	end
-	if stem_def.groups == nil then
-		stem_def.groups = { dig_immediate = 3, not_in_creative_inventory = 1, plant = 1, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow = 1, }
-	end
-	if stem_def.sounds == nil then
-		stem_def.sounds = mcl_sounds.node_sound_leaves_defaults()
-	end
-
-	if not stem_def.on_construct then
-		function stem_def.on_construct(stempos)
-			-- Connect stem to gourd (if possible)
-			try_connect_stem(stempos)
-		end
-	end
-	minetest.register_node(stem_itemstring, stem_def)
-
-	-- Register connected stems
-
-	local connected_stem_tiles = {
-		{ "blank.png", --top
-		  "blank.png", -- bottom
-		  "blank.png", -- right
-		  "blank.png", -- left
-		  connected_stem_texture, -- back
-		  connected_stem_texture .. "^[transformFX" --front
-		},
-		{ "blank.png", --top
-		  "blank.png", -- bottom
-		  "blank.png", -- right
-		  "blank.png", -- left
-		  connected_stem_texture .. "^[transformFX", --back
-		  connected_stem_texture, -- front
-		},
-		{ "blank.png", --top
-		  "blank.png", -- bottom
-		  connected_stem_texture .. "^[transformFX", -- right
-		  connected_stem_texture, -- left
-		  "blank.png", --back
-		  "blank.png", -- front
-		},
-		{ "blank.png", --top
-		  "blank.png", -- bottom
-		  connected_stem_texture, -- right
-		  connected_stem_texture .. "^[transformFX", -- left
-		  "blank.png", --back
-		  "blank.png", -- front
-		}
-	}
-	local connected_stem_nodebox = {
-		{ -0.5, -0.5, 0, 0.5, 0.5, 0 },
-		{ -0.5, -0.5, 0, 0.5, 0.5, 0 },
-		{ 0, -0.5, -0.5, 0, 0.5, 0.5 },
-		{ 0, -0.5, -0.5, 0, 0.5, 0.5 },
-	}
-	local connected_stem_selectionbox = {
-		{ -0.1, -0.5, -0.1, 0.5, 0.2, 0.1 },
-		{ -0.5, -0.5, -0.1, 0.1, 0.2, 0.1 },
-		{ -0.1, -0.5, -0.1, 0.1, 0.2, 0.5 },
-		{ -0.1, -0.5, -0.5, 0.1, 0.2, 0.1 },
-	}
-
-	for i = 1, 4 do
-		minetest.register_node(connected_stem_names[i], {
-			_doc_items_create_entry = false,
-			paramtype = "light",
-			sunlight_propagates = true,
-			walkable = false,
-			drop = stem_drop,
-			drawtype = "nodebox",
-			node_box = {
-				type = "fixed",
-				fixed = connected_stem_nodebox[i]
-			},
-			selection_box = {
-				type = "fixed",
-				fixed = connected_stem_selectionbox[i]
-			},
-			tiles = connected_stem_tiles[i],
-			use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
-			groups = { dig_immediate = 3, not_in_creative_inventory = 1, plant = 1, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow = 1, },
-			sounds = mcl_sounds.node_sound_leaves_defaults(),
-			_mcl_blast_resistance = 0,
-		})
-
-		if minetest.get_modpath("doc") then
-			doc.add_entry_alias("nodes", full_unconnected_stem, "nodes", connected_stem_names[i])
-		end
-	end
-
-	minetest.register_abm({
-		label = "Grow gourd stem to gourd (" .. full_unconnected_stem .. " → " .. gourd_itemstring .. ")",
-		nodenames = { full_unconnected_stem },
-		neighbors = { "air" },
-		interval = grow_interval,
-		chance = grow_chance,
-		action = function(stempos)
-			local light = minetest.get_node_light(stempos)
-			if light and light > 10 then
-				-- Check the four neighbors and filter out neighbors where gourds can't grow
-				local neighbors = {
-					{ x = -1, y = 0, z = 0 },
-					{ x = 1, y = 0, z = 0 },
-					{ x = 0, y = 0, z = -1 },
-					{ x = 0, y = 0, z = 1 },
-				}
-				local floorpos, floor
-				for n = #neighbors, 1, -1 do
-					local offset = neighbors[n]
-					local blockpos = vector.add(stempos, offset)
-					floorpos = vector.offset (blockpos, 0, -1,0) -- replaces { x = blockpos.x, y = blockpos.y - 1, z = blockpos.z }
-					floor = minetest.get_node(floorpos)
-					local block = minetest.get_node(blockpos)
-					local soilgroup = minetest.get_item_group(floor.name, "soil")
-					if not ((minetest.get_item_group(floor.name, "grass_block") == 1 or floor.name == "mcl_core:dirt" or soilgroup == 2 or soilgroup == 3) and block.name == "air") then
-						table.remove(neighbors, n)
-					end
-				end
-
-				-- Gourd needs at least 1 free neighbor to grow
-				if #neighbors > 0 then
-					-- From the remaining neighbors, grow randomly
-					local r = math.random(1, #neighbors)
-					local offset = neighbors[r]
-					local blockpos = vector.add(stempos, offset)
-					local p2
-					if offset.x == 1 then
-						minetest.set_node(stempos, { name = connected_stem_names[1] })
-						p2 = 3
-					elseif offset.x == -1 then
-						minetest.set_node(stempos, { name = connected_stem_names[2] })
-						p2 = 1
-					elseif offset.z == 1 then
-						minetest.set_node(stempos, { name = connected_stem_names[3] })
-						p2 = 2
-					elseif offset.z == -1 then
-						minetest.set_node(stempos, { name = connected_stem_names[4] })
-						p2 = 0
-					end
-					-- Place the gourd
-					if gourd_def.paramtype2 == "facedir" then
-						minetest.add_node(blockpos, { name = gourd_itemstring, param2 = p2 })
-					else
-						minetest.add_node(blockpos, { name = gourd_itemstring })
-					end
-
-					-- Reset farmland, etc. to dirt when the gourd grows on top
-
-					-- FIXED: The following 2 lines were missing, and wasn't being set (outside of the above loop that
-					-- finds the neighbors.)
-					-- FYI - don't factor this out thinking that the loop above is setting the positions correctly.
-					floorpos = vector.offset (blockpos, 0, -1,0) -- replaces { x = blockpos.x, y = blockpos.y - 1, z = blockpos.z }
-					floor = minetest.get_node(floorpos)
-					-- END OF FIX -------------------------------------
-					if minetest.get_item_group(floor.name, "dirtifies_below_solid") == 1 then
-						minetest.set_node(floorpos, { name = "mcl_core:dirt" })
-					end
-				end
-			end
-		end,
-	})
-end
-
 -- Used for growing gourd stems. Returns the intermediate color between startcolor and endcolor at a step
 -- * startcolor: ColorSpec in table form for the stem in its lowest growing stage
 -- * endcolor: ColorSpec in table form for the stem in its final growing stage
@@ -495,3 +219,134 @@ minetest.register_lbm({
 		mcl_farming:grow_plant(identifier, pos, node, false, false, low_speed)
 	end,
 })
+
+local connected_stem_nodebox = {
+	{-0.5, -0.5, 0, 0.5, 0.5, 0},
+	{-0.5, -0.5, 0, 0.5, 0.5, 0},
+	{0, -0.5, -0.5, 0, 0.5, 0.5},
+	{0, -0.5, -0.5, 0, 0.5, 0.5}
+}
+
+local connected_stem_selectionbox = {
+	{-0.1, -0.5, -0.1, 0.5, 0.2, 0.1},
+	{-0.5, -0.5, -0.1, 0.1, 0.2, 0.1},
+	{-0.1, -0.5, -0.1, 0.1, 0.2, 0.5},
+	{-0.1, -0.5, -0.5, 0.1, 0.2, 0.1}
+}
+
+function mcl_farming.get_stem_nodebox(index) return connected_stem_nodebox[index] end
+
+function mcl_farming.get_stem_selectionbox(index) return connected_stem_selectionbox[index] end
+
+function mcl_farming.get_stem_tiles(texture, index)
+	local connected_stem_tiles = {
+		{"blank.png", "blank.png", "blank.png", "blank.png", texture, texture .. "^[transformFX"},
+		{"blank.png", "blank.png", "blank.png", "blank.png", texture .. "^[transformFX", texture},
+		{"blank.png", "blank.png", texture .. "^[transformFX", texture, "blank.png", "blank.png"},
+		{"blank.png", "blank.png", texture, texture .. "^[transformFX", "blank.png", "blank.png"}
+	}
+	return connected_stem_tiles[index]
+end
+
+local neighbors = {
+	vector.new(-1, 0, 0),
+	vector.new(1, 0, 0),
+	vector.new(0, 0, -1),
+	vector.new(0, 0, 1)
+}
+
+local function get_connected_stem(name, neighbor)
+	if neighbor.x == -1 then
+		return name .. "_r"
+	elseif neighbor.x == 1 then
+		return name .. "_l"
+	elseif neighbor.z == -1 then
+		return name .. "_t"
+	elseif neighbor.z == 1 then
+		return name .. "_b"
+	end
+end
+
+function mcl_farming.unconnect_gourd(pos)
+	local gourd_defs = core.registered_nodes[core.get_node(pos).name]
+	local linked_name = gourd_defs._mcl_farming_linked_stem
+
+	for _, neighbor in pairs(neighbors) do
+		local expected_stem = get_connected_stem(linked_name, neighbor)
+		local stem_pos = vector.add(pos, neighbor)
+		local stem = core.get_node(stem_pos)
+		local stem_defs = core.registered_nodes[stem.name]
+
+		if stem.name == expected_stem then
+			core.add_node(stem_pos, {name = stem_defs._mcl_farming_unconnected_stem})
+			mcl_farming.try_connect_stem(stem_pos)
+		end
+	end
+end
+
+function mcl_farming.try_connect_gourd(pos)
+	for _, neighbor in pairs(neighbors) do
+		local stem_pos = vector.add(pos, neighbor)
+		mcl_farming.try_connect_stem(stem_pos)
+	end
+end
+
+function mcl_farming.try_connect_stem(pos)
+	local stem_defs = core.registered_nodes[core.get_node(pos).name]
+
+	for _, neighbor in pairs(neighbors) do
+		local block_pos = vector.add(pos, neighbor)
+		local block = core.get_node(block_pos)
+		local block_defs = core.registered_nodes[block.name]
+
+		if block.name == stem_defs._mcl_farming_gourd_name then
+			local linked_name = block_defs._mcl_farming_linked_stem
+
+			core.set_node(pos, {name = get_connected_stem(linked_name, neighbor)})
+
+			return true
+		end
+	end
+end
+
+function mcl_farming.add_gourd(unconnected_stem, connected_stem, gourd, interval, chance)
+	core.register_abm({
+		action = function(pos)
+			local light = core.get_node_light(pos)
+			local floor_block, floor_pos
+			if light and light > 10 then
+				for _, neighbor in pairs(neighbors) do
+					floor_pos = vector.offset(neighbor, 0, -1, 0)
+					floor_block = core.get_node(floor_pos)
+
+					local soil_group = core.get_item_group(floor_block.name, "soil")
+
+					if soil_group == 2 or soil_group == 3 then
+						local param2 = 0
+						local gourd_defs = core.registered_nodes[gourd]
+
+						if gourd_defs.paramtype2 == "facedir" then
+							if neighbor.x ~= 0 then
+								param2 = neighbor.x + 2
+							elseif neighbor.z ~= 0 then
+								param2 = neighbor.z + 1
+							end
+						end
+
+						core.set_node(pos, {name = get_connected_stem(connected_stem, neighbor)})
+						core.add_node(neighbor, {name = gourd, param2 = param2})
+					end
+
+					if core.get_item_group(floor_block.name, "dirtifies_below_solid") > 0 then
+						core.swap_node(floor_pos, {name = "mcl_core:dirt"})
+					end
+				end
+			end
+		end,
+		chance = chance,
+		interval = interval,
+		label = "Grow gourd stem to gourd (" .. unconnected_stem .. " → " .. gourd .. ")",
+		neighbors = {"air"},
+		nodenames = {unconnected_stem}
+	})
+end
