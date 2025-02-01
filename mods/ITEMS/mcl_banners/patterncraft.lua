@@ -323,43 +323,45 @@ craft_predict is set true when called from minetest.craft_preview, in this case,
 MUST NOT change the crafting grid.
 ]]
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
-	if minetest.get_item_group(itemstack:get_name(), "banner") ~= 1 then
-		return
-	end
+	local craftsize = player:get_inventory():get_size("craft")
+	if craftsize < 9 or itemstack:get_name() ~= "" then return end
 
 	--[[ Basic item checks: Banners and dyes ]]
 	local banner -- banner item
 	local banner2 -- second banner item (used when copying)
 	local dye -- itemstring of the dye being used
+	local pattern_obj -- itemstring of the pattern object being used
 	local banner_index -- crafting inventory index of the banner
 	local banner2_index
-	for i = 1, player:get_inventory():get_size("craft") do
+	for i = 1, craftsize do
 		local itemname = old_craft_grid[i]:get_name()
-		if minetest.get_item_group(itemname, "banner") == 1 then
-			if not banner then
-				banner = old_craft_grid[i]
-				banner_index = i
-			elseif not banner2 then
-				banner2 = old_craft_grid[i]
-				banner2_index = i
+		if itemname ~= "" then
+			if minetest.get_item_group(itemname, "banner") == 1 then
+				if not banner then
+					banner, banner_index = old_craft_grid[i], i
+				elseif not banner2 then
+					banner2, banner2_index = old_craft_grid[i], i
+				else
+					return -- Abort if more than two banners
+				end
+			elseif minetest.get_item_group(itemname, "dye") == 1 then
+				if not dye then
+					dye = itemname
+					dye_count = 1
+				elseif itemname ~= dye then
+					return -- Abort when mixing dyes
+				end
 			else
-				return
-			end
-		-- Check if all dyes are equal
-		elseif minetest.get_item_group(itemname, "dye") == 1 then
-			if dye == nil then
-				dye = itemname
-			elseif itemname ~= dye then
-				return ItemStack("")
+				if pattern_obj then return end -- Second non-banner, non-dye.  Abort!
+				pattern_obj = itemname
 			end
 		end
 	end
-	if not banner then
-		return
-	end
+	if not banner then return end
 
 	--[[ Check copy ]]
 	if banner2 then
+		if dye or pattern_obj then return end
 		-- Two banners found: This means copying!
 
 		local b1meta = banner:get_meta()
@@ -391,10 +393,12 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			src_desc = minetest.registered_items[src_banner:get_name()].description
 			src_index = banner_index
 		else
-			return ItemStack("")
+			return
 		end
 
 		-- Set output metadata
+		-- TODO: Copy banner name
+		itemstack = ItemStack(banner:get_name())
 		local imeta = itemstack:get_meta()
 		imeta:set_string("layers", src_layers_raw)
 		-- Generate new description. This clears any (anvil) name from the original banners.
@@ -410,6 +414,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 
 	-- No two banners found
 	-- From here on we check which banner pattern should be added
+	if not dye then return end
 
 	--[[ Check patterns ]]
 
@@ -421,16 +426,13 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 		layers = {}
 	end
 	-- Disallow crafting when a certain number of layers is reached or exceeded
-	if #layers >= max_layers_crafting then
-		return ItemStack("")
-	end
+	if #layers >= max_layers_crafting then return end
 
 	local matching_pattern = false
 	local max_i = player:get_inventory():get_size("craft")
 	-- Find the matching pattern
 	for pattern_name, pattern in pairs(patterns) do
-		-- Shaped / fixed
-		if pattern.type == nil then
+		if pattern.type == nil then -- Shaped / fixed
 			local pattern_ok = true
 			local inv_i = 1
 			-- This complex code just iterates through the pattern slots one-by-one and compares them with the pattern
@@ -486,37 +488,42 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			end
 		end
 
-		if matching_pattern then
-			break
-		end
+		if matching_pattern then break end
 	end
-	if not matching_pattern then
-		return ItemStack("")
-	end
-
-	-- Add the new layer and update other metadata
-	local color = dye_to_colorid_mapping[dye]
-	table.insert(layers, {pattern=matching_pattern, color=color})
-
-	local imeta = itemstack:get_meta()
-	imeta:set_string("layers", minetest.serialize(layers))
-
-	local mname = ometa:get_string("name")
-	-- Only change description if banner does not have a name
-	if mname == "" then
-		local odesc = itemstack:get_definition().description
-		local description = mcl_banners.make_advanced_banner_description(odesc, layers)
-		imeta:set_string("description", description)
-	else
-		imeta:set_string("description", ometa:get_string("description"))
-		imeta:set_string("name", mname)
-	end
+	if not matching_pattern then return end
 
 	if craft_predict then
 		local itemid_prefix = "mcl_banners:banner_preview"
 		local coloritemid = dye_to_itemid_mapping[dye]
 		return ItemStack(itemid_prefix .. "_" .. matching_pattern .. "_" .. coloritemid)
 	else
+		-- Add the new layer and update other metadata
+		local color = dye_to_colorid_mapping[dye]
+		table.insert(layers, {pattern=matching_pattern, color=color})
+
+		itemstack = ItemStack(banner:get_name())
+		local imeta = itemstack:get_meta()
+		imeta:set_string("layers", minetest.serialize(layers))
+
+		local mname = ometa:get_string("name")
+		-- Only change description if banner does not have a name
+		if mname == "" then
+			local odesc = itemstack:get_definition().description
+			local description = mcl_banners.make_advanced_banner_description(odesc, layers)
+			imeta:set_string("description", description)
+		else
+			imeta:set_string("description", ometa:get_string("description"))
+			imeta:set_string("name", mname)
+		end
+		
+		for i = 1, craftsize do
+			local grid = old_craft_grid[i]
+			local itemname = grid:get_name()
+			if not grid:is_empty() and itemname ~= "" then
+				grid:set_count( grid:get_count() - 1 )
+				craft_inv:set_stack("craft", i, grid)
+			end
+		end
 		return itemstack
 	end
 end
@@ -527,55 +534,6 @@ end)
 minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
 	return banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, false)
 end)
-
--- Register crafting recipes for all the patterns
-for _, pattern in pairs(patterns) do
-	-- Shaped and fixed recipes
-	if pattern.type == nil then
-		for _, colortab in pairs(mcl_banners.colors) do
-			local banner = "mcl_banners:banner_item_"..colortab[1]
-			local bannered = false
-			local recipe = {}
-			for row_id=1, #pattern do
-				local row = pattern[row_id]
-				local newrow = {}
-				for r=1, #row do
-					if row[r] == e and not bannered then
-						newrow[r] = banner
-						bannered = true
-					else
-						newrow[r] = row[r]
-					end
-				end
-				table.insert(recipe, newrow)
-			end
-			minetest.register_craft({
-				output = banner,
-				recipe = recipe,
-			})
-		end
-	-- Shapeless recipes
-	elseif pattern.type == "shapeless" then
-		for _, colortab in pairs(mcl_banners.colors) do
-			local banner = "mcl_banners:banner_item_"..colortab[1]
-			local orig = pattern[1]
-			local recipe = {}
-			for r=1, #orig do
-				if orig[r] == e then
-					recipe[r] = banner
-				else
-					recipe[r] = orig[r]
-				end
-			end
-
-			minetest.register_craft({
-				type = "shapeless",
-				output = banner,
-				recipe = recipe,
-			})
-		end
-	end
-end
 
 -- Register crafting recipe for copying the banner pattern
 for _, colortab in pairs(mcl_banners.colors) do
