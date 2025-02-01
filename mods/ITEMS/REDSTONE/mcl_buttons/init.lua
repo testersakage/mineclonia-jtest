@@ -76,8 +76,9 @@ function mcl_buttons.register_button(basename, def)
 	local push_sound = def.push_sound
 	local burntime = def.burntime
 
+	local push_duration_in_seconds = push_duration * mcl_redstone.tick_speed
 	local tt = S("Provides redstone power when pushed")
-	tt = tt .. "\n" .. S("Push duration: @1s", string.format("%.1f", push_duration))
+	tt = tt .. "\n" .. S("Push duration: @1s", string.format("%.1f", push_duration_in_seconds ))
 	if push_by_arrow then
 		tt = tt .. "\n" .. S("Pushable by arrow")
 	end
