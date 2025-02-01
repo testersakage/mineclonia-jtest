@@ -12,256 +12,313 @@ local max_layers_crafting = 12
 -- This is done to avoid huge tooltips.
 local max_layer_lines = 6
 
--- List of patterns with crafting rules
-local d = "group:dye" -- dye
-local e = "" -- empty slot (one of them must contain the banner)
-local patterns = {
-	["border"] = {
-		name = NS("@1 Bordure"),
-		{ d, d, d },
-		{ d, e, d },
-		{ d, d, d },
-	},
-	["bricks"] = {
-		name = NS("@1 Bricks"),
-		type = "shapeless",
-		{ e, "mcl_core:brick_block", d },
-	},
-	["circle"] = {
-		name = NS("@1 Roundel"),
-		{ e, e, e },
-		{ e, d, e },
-		{ e, e, e },
-	},
-	["creeper"] = {
-		name = NS("@1 Creeper Charge"),
-		type = "shapeless",
-		{ e, "mcl_heads:creeper", d },
-	},
-	["cross"] = {
-		name = NS("@1 Saltire"),
-		{ d, e, d },
-		{ e, d, e },
-		{ d, e, d },
-	},
-	["curly_border"] = {
-		name = NS("@1 Bordure Indented"),
-		type = "shapeless",
-		{ e, "mcl_core:vine", d },
-	},
-	["diagonal_up_left"] = {
-		name = NS("@1 Per Bend Inverted"),
-		{ e, e, e },
-		{ d, e, e },
-		{ d, d, e },
-	},
-	["diagonal_up_right"] = {
-		name = NS("@1 Per Bend Sinister Inverted"),
-		{ e, e, e },
-		{ e, e, d },
-		{ e, d, d },
-	},
-	["diagonal_right"] = {
-		name = NS("@1 Per Bend"),
-		{ e, d, d },
-		{ e, e, d },
-		{ e, e, e },
-	},
-	["diagonal_left"] = {
-		name = NS("@1 Per Bend Sinister"),
-		{ d, d, e },
-		{ d, e, e },
-		{ e, e, e },
-	},
-	["flower"] = {
-		name = NS("@1 Flower Charge"),
-		type = "shapeless",
-		{ e, "mcl_flowers:oxeye_daisy", d },
-	},
-	["gradient"] = {
-		name = NS("@1 Gradient"),
-		{ d, e, d },
-		{ e, d, e },
-		{ e, d, e },
-	},
-	["gradient_up"] = {
-		name = NS("@1 Base Gradient"),
-		{ e, d, e },
-		{ e, d, e },
-		{ d, e, d },
-	},
-	["half_horizontal_bottom"] = {
-		name = NS("@1 Per Fess Inverted"),
-		{ e, e, e },
-		{ d, d, d },
-		{ d, d, d },
-	},
-	["half_horizontal"] = {
-		name = NS("@1 Per Fess"),
-		{ d, d, d },
-		{ d, d, d },
-		{ e, e, e },
-	},
-	["half_vertical"] = {
-		name = NS("@1 Per Pale"),
-		{ d, d, e },
-		{ d, d, e },
-		{ d, d, e },
-	},
-	["half_vertical_right"] = {
-		name = NS("@1 Per Pale Inverted"),
-		{ e, d, d },
-		{ e, d, d },
-		{ e, d, d },
-	},
-	["thing"] = {
-		-- Symbol used for the “Thing”: U+1F65D 🙝
+local function populate_patterns () 
+	-- List of patterns with crafting rules
+	local d, e = "group:dye", ""
+	mcl_banners.patterns = {
+		["border"] = {
+			name = NS("@1 Bordure"),
+			{ d, d, d },
+			{ d, e, d },
+			{ d, d, d },
+		},
+		["bricks"] = {
+			name = NS("@1 Bricks"),
+			signature = "mcl_core:brick_block",
+		},
+		["circle"] = {
+			name = NS("@1 Roundel"),
+			{ e, e, e },
+			{ e, d, e },
+			{ e, e, e },
+		},
+		["creeper"] = {
+			name = NS("@1 Creeper Charge"),
+			signature = "mcl_heads:creeper",
+		},
+		["cross"] = {
+			name = NS("@1 Saltire"),
+			{ d, e, d },
+			{ e, d, e },
+			{ d, e, d },
+		},
+		["curly_border"] = {
+			name = NS("@1 Bordure Indented"),
+			signature = "mcl_core:vine",
+		},
+		["diagonal_up_left"] = {
+			name = NS("@1 Per Bend Inverted"),
+			{ e, e, e },
+			{ d, e, e },
+			{ d, d, e },
+		},
+		["diagonal_up_right"] = {
+			name = NS("@1 Per Bend Sinister Inverted"),
+			{ e, e, e },
+			{ e, e, d },
+			{ e, d, d },
+		},
+		["diagonal_right"] = {
+			name = NS("@1 Per Bend"),
+			{ e, d, d },
+			{ e, e, d },
+			{ e, e, e },
+		},
+		["diagonal_left"] = {
+			name = NS("@1 Per Bend Sinister"),
+			{ d, d, e },
+			{ d, e, e },
+			{ e, e, e },
+		},
+		["flower"] = {
+			name = NS("@1 Flower Charge"),
+			signature = "mcl_flowers:oxeye_daisy",
+		},
+		["gradient"] = {
+			name = NS("@1 Gradient"),
+			{ d, e, d },
+			{ e, d, e },
+			{ e, d, e },
+		},
+		["gradient_up"] = {
+			name = NS("@1 Base Gradient"),
+			{ e, d, e },
+			{ e, d, e },
+			{ d, e, d },
+		},
+		["half_horizontal_bottom"] = {
+			name = NS("@1 Per Fess Inverted"),
+			{ e, e, e },
+			{ d, d, d },
+			{ d, d, d },
+		},
+		["half_horizontal"] = {
+			name = NS("@1 Per Fess"),
+			{ d, d, d },
+			{ d, d, d },
+			{ e, e, e },
+		},
+		["half_vertical"] = {
+			name = NS("@1 Per Pale"),
+			{ d, d, e },
+			{ d, d, e },
+			{ d, d, e },
+		},
+		["half_vertical_right"] = {
+			name = NS("@1 Per Pale Inverted"),
+			{ e, d, d },
+			{ e, d, d },
+			{ e, d, d },
+		},
+		["thing"] = {
+			-- Symbol used for the “Thing”: U+1F65D 🙝
+			name = NS("@1 Thing Charge"),
+			signature = "mcl_banners:pattern_thing",
+		},
+		["globe"] = {
+			name = NS("@1 Globe Charge"),
+			signature = "mcl_banners:pattern_globe",
+		},
+		["piglin"] = {
+			name = NS("@1 Piglin Charge"),
+			signature = "mcl_banners:pattern_piglin",
+		},
+		["rhombus"] = {
+			name = NS("@1 Lozenge"),
+			{ e, d, e },
+			{ d, e, d },
+			{ e, d, e },
+		},
+		["skull"] = {
+			name = NS("@1 Skull Charge"),
+			signature = "mcl_banners:pattern_skull",
+		},
+		["small_stripes"] = {
+			name = NS("@1 Paly"),
+			{ d, e, d },
+			{ d, e, d },
+			{ e, e, e },
+		},
+		["square_bottom_left"] = {
+			name = NS("@1 Base Dexter Canton"),
+			{ e, e, e },
+			{ e, e, e },
+			{ d, e, e },
+		},
+		["square_bottom_right"] = {
+			name = NS("@1 Base Sinister Canton"),
+			{ e, e, e },
+			{ e, e, e },
+			{ e, e, d },
+		},
+		["square_top_left"] = {
+			name = NS("@1 Chief Dexter Canton"),
+			{ d, e, e },
+			{ e, e, e },
+			{ e, e, e },
+		},
+		["square_top_right"] = {
+			name = NS("@1 Chief Sinister Canton"),
+			{ e, e, d },
+			{ e, e, e },
+			{ e, e, e },
+		},
+		["straight_cross"] = {
+			name = NS("@1 Cross"),
+			{ e, d, e },
+			{ d, d, d },
+			{ e, d, e },
+		},
+		["stripe_bottom"] = {
+			name = NS("@1 Base"),
+			{ e, e, e },
+			{ e, e, e },
+			{ d, d, d },
+		},
+		["stripe_center"] = {
+			name = NS("@1 Pale"),
+			{ e, d, e },
+			{ e, d, e },
+			{ e, d, e },
+		},
+		["stripe_downleft"] = {
+			name = NS("@1 Bend Sinister"),
+			{ e, e, d },
+			{ e, d, e },
+			{ d, e, e },
+		},
+		["stripe_downright"] = {
+			name = NS("@1 Bend"),
+			{ d, e, e },
+			{ e, d, e },
+			{ e, e, d },
+		},
+		["stripe_left"] = {
+			name = NS("@1 Pale Dexter"),
+			{ d, e, e },
+			{ d, e, e },
+			{ d, e, e },
+		},
+		["stripe_middle"] = {
+			name = NS("@1 Fess"),
+			{ e, e, e },
+			{ d, d, d },
+			{ e, e, e },
+		},
+		["stripe_right"] = {
+			name = NS("@1 Pale Sinister"),
+			{ e, e, d },
+			{ e, e, d },
+			{ e, e, d },
+		},
+		["stripe_top"] = {
+			name = NS("@1 Chief"),
+			{ d, d, d },
+			{ e, e, e },
+			{ e, e, e },
+		},
+		["triangle_bottom"] = {
+			name = NS("@1 Chevron"),
+			{ e, e, e },
+			{ e, d, e },
+			{ d, e, d },
+		},
+		["triangle_top"] = {
+			name = NS("@1 Chevron Inverted"),
+			{ d, e, d },
+			{ e, d, e },
+			{ e, e, e },
+		},
+		["triangles_bottom"] = {
+			name = NS("@1 Base Indented"),
+			{ e, e, e },
+			{ d, e, d },
+			{ e, d, e },
+		},
+		["triangles_top"] = {
+			name = NS("@1 Chief Indented"),
+			{ e, d, e },
+			{ d, e, d },
+			{ e, e, e },
+		},
+		["flow"] = {
+			name = NS("@1 Flow"),
+			signature = "mcl_banners:pattern_flow",
+		},
+		["guster"] = {
+			name = NS("@1 Guster"),
+			signature = "mcl_banners:pattern_guster",
+		},
+	}
+end
+populate_patterns()
 
-		name = NS("@1 Thing Charge"),
-		type = "shapeless",
-		{ e, "mcl_banners:pattern_thing", d },
-	},
-	["globe"] = {
-		name = NS("@1 Globe Charge"),
-		type = "shapeless",
-		{ e, "mcl_banners:pattern_globe", d },
-	},
-	["piglin"] = {
-		name = NS("@1 Piglin Charge"),
-		type = "shapeless",
-		{ e, "mcl_banners:pattern_piglin", d },
-	},
-	["rhombus"] = {
-		name = NS("@1 Lozenge"),
-		{ e, d, e },
-		{ d, e, d },
-		{ e, d, e },
-	},
-	["skull"] = {
-		name = NS("@1 Skull Charge"),
-		type = "shapeless",
-		{ e, "mcl_banners:pattern_skull", d },
-	},
-	["small_stripes"] = {
-		name = NS("@1 Paly"),
-		{ d, e, d },
-		{ d, e, d },
-		{ e, e, e },
-	},
-	["square_bottom_left"] = {
-		name = NS("@1 Base Dexter Canton"),
-		{ e, e, e },
-		{ e, e, e },
-		{ d, e, e },
-	},
-	["square_bottom_right"] = {
-		name = NS("@1 Base Sinister Canton"),
-		{ e, e, e },
-		{ e, e, e },
-		{ e, e, d },
-	},
-	["square_top_left"] = {
-		name = NS("@1 Chief Dexter Canton"),
-		{ d, e, e },
-		{ e, e, e },
-		{ e, e, e },
-	},
-	["square_top_right"] = {
-		name = NS("@1 Chief Sinister Canton"),
-		{ e, e, d },
-		{ e, e, e },
-		{ e, e, e },
-	},
-	["straight_cross"] = {
-		name = NS("@1 Cross"),
-		{ e, d, e },
-		{ d, d, d },
-		{ e, d, e },
-	},
-	["stripe_bottom"] = {
-		name = NS("@1 Base"),
-		{ e, e, e },
-		{ e, e, e },
-		{ d, d, d },
-	},
-	["stripe_center"] = {
-		name = NS("@1 Pale"),
-		{ e, d, e },
-		{ e, d, e },
-		{ e, d, e },
-	},
-	["stripe_downleft"] = {
-		name = NS("@1 Bend Sinister"),
-		{ e, e, d },
-		{ e, d, e },
-		{ d, e, e },
-	},
-	["stripe_downright"] = {
-		name = NS("@1 Bend"),
-		{ d, e, e },
-		{ e, d, e },
-		{ e, e, d },
-	},
-	["stripe_left"] = {
-		name = NS("@1 Pale Dexter"),
-		{ d, e, e },
-		{ d, e, e },
-		{ d, e, e },
-	},
-	["stripe_middle"] = {
-		name = NS("@1 Fess"),
-		{ e, e, e },
-		{ d, d, d },
-		{ e, e, e },
-	},
-	["stripe_right"] = {
-		name = NS("@1 Pale Sinister"),
-		{ e, e, d },
-		{ e, e, d },
-		{ e, e, d },
-	},
-	["stripe_top"] = {
-		name = NS("@1 Chief"),
-		{ d, d, d },
-		{ e, e, e },
-		{ e, e, e },
-	},
-	["triangle_bottom"] = {
-		name = NS("@1 Chevron"),
-		{ e, e, e },
-		{ e, d, e },
-		{ d, e, d },
-	},
-	["triangle_top"] = {
-		name = NS("@1 Chevron Inverted"),
-		{ d, e, d },
-		{ e, d, e },
-		{ e, e, e },
-	},
-	["triangles_bottom"] = {
-		name = NS("@1 Base Indented"),
-		{ e, e, e },
-		{ d, e, d },
-		{ e, d, e },
-	},
-	["triangles_top"] = {
-		name = NS("@1 Chief Indented"),
-		{ e, d, e },
-		{ d, e, d },
-		{ e, e, e },
-	},
-	["flow"] = {
-		name = NS("@1 Flow"),
-		type = "shapeless",
-		{ e, "mcl_banners:pattern_flow", d },
-	},
-	["guster"] = {
-		name = NS("@1 Guster"),
-		type = "shapeless",
-		{ e, "mcl_banners:pattern_guster", d },
-	},
-}
-mcl_banners.patterns = patterns
+local pattern_index = {} -- Index of patterns by ordered dye index or by special item name
+function mcl_banners.rebuild_index ()
+	local pattern_by_dye_count = {} -- Boolean array of "does any shaped pattern exist at this dye count?"
+	pattern_index = {}
+	for pattern_id, pattern in pairs(mcl_banners.patterns) do
+		local signature, current = pattern.signature
+		if signature then
+			if pattern_index[signature] then
+				core.log("warning", "A banner pattern already exists for " .. signature)
+			else
+				pattern_index[signature] = {}
+				current = pattern_index[signature]
+				-- Register shapeless recipe for all colours.  Guarentee one banner, one dye, and one item.
+				for _, colortab in pairs(mcl_banners.colors) do
+					core.register_craft({
+						type = "shapeless",
+						output = "mcl_banners:banner_preview_" .. pattern_id .. "_" .. colortab[1],
+						recipe = { "group:banner", "mcl_dyes:" .. colortab[1], signature },
+					})
+				end
+			end
+		else
+			current = pattern_index
+			local grids = { pattern[1][1], pattern[1][2], pattern[1][3],
+			                pattern[2][1], pattern[2][2], pattern[2][3],
+			                pattern[3][1], pattern[3][2], pattern[3][3], } -- Flattened to match craft callback
+			for i = 1, 9 do
+				local item = grids[i]
+				if item == "group:dye" then
+					-- Found dye, build index
+					if not current[i] then current[i] = {} end
+					current = current[i]
+				elseif item == "" then
+					-- Empty slot, count dye and set flag
+					local dye_count = 0
+					for j = 1, 9 do
+						if grids[j] ~= "" then dye_count = dye_count + 1 end
+					end
+					pattern_by_dye_count[dye_count] = true
+				else
+					core.log("warning", "[mcl_banner] Shaped banner pattern can only have empty slots and dyes.  Found " .. item .. " in " .. pattern_id)
+				end
+			end
+		end
+		if current then
+			current.id = pattern_id
+			current.name = pattern.name
+		end
+	end
+
+	-- Register dummy shapeless recipes for _shaped_ patterns, by dye colour and dye count.
+	-- This guarentees that there will be exactly one banner, and all dyes are same colour.
+	for _, colortab in pairs(mcl_banners.colors) do
+		local color = colortab[1]
+		local dye, output = "mcl_dyes:" .. color, "mcl_banners:banner_item_" .. color
+		local recipe = {}
+		for i = 1, 8 do
+			recipe[i] = dye -- Add one dye per loop
+			if pattern_by_dye_count[i] then
+				recipe[i+1] = "group:banner" -- The banner, would be overwritten by next loop
+				core.register_craft({ type = "shapeless", output = output, recipe = recipe })
+			end
+		end
+	end
+end
+mcl_banners.rebuild_index()
 
 local function readable_name(str)
 	str = str:gsub("_", " ")
@@ -317,65 +374,59 @@ function mcl_banners.make_advanced_banner_description(description, layers)
 	end
 end
 
---[[ This is for handling all those complex pattern crafting recipes.
-Parameters same as for minetest.register_craft_predict.
-craft_predict is set true when called from minetest.craft_preview, in this case, this function
-MUST NOT change the crafting grid.
-]]
+-- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
+	local output_name = itemstack:get_name()
+	if output_name == "" or output_name:sub(1,19) ~= "mcl_banners:banner_" then return end
+	--if core.get_item_group(itemstack:get_name(), "banner") ~= 1 then return end
 	local craftsize = player:get_inventory():get_size("craft")
-	if craftsize < 9 or itemstack:get_name() ~= "" then return end
+	if craftsize < 9 then return ItemStack("") end -- Require crafting table.
 
-	--[[ Basic item checks: Banners and dyes ]]
+	-- Pattern Matching
 	local banner -- banner item
 	local banner2 -- second banner item (used when copying)
 	local dye -- itemstring of the dye being used
 	local pattern_obj -- itemstring of the pattern object being used
 	local banner_index -- crafting inventory index of the banner
 	local banner2_index
+	local current = pattern_index -- Cursor on pattern index tree.
 	for i = 1, craftsize do
 		local itemname = old_craft_grid[i]:get_name()
 		if itemname ~= "" then
-			if minetest.get_item_group(itemname, "banner") == 1 then
+			if core.get_item_group(itemname, "dye") == 1 then
+				if current then
+					current = current[i] -- Walk down the index.
+					-- Don't check nil here.  First dye can match an item recipe, even if current = nil.
+				elseif dye then
+					return ItemStack("") -- No match, second dye or more.  Abort.
+				end
+				dye = itemname
+			elseif core.get_item_group(itemname, "banner") == 1 then
 				if not banner then
 					banner, banner_index = old_craft_grid[i], i
-				elseif not banner2 then
-					banner2, banner2_index = old_craft_grid[i], i
 				else
-					return -- Abort if more than two banners
-				end
-			elseif minetest.get_item_group(itemname, "dye") == 1 then
-				if not dye then
-					dye = itemname
-					dye_count = 1
-				elseif itemname ~= dye then
-					return -- Abort when mixing dyes
+					banner2, banner2_index = old_craft_grid[i], i
+					break
 				end
 			else
-				if pattern_obj then return end -- Second non-banner, non-dye.  Abort!
+				-- TODO: Support item group to enable adding such patterns by mods.
 				pattern_obj = itemname
+				if dye then break end
 			end
 		end
 	end
-	if not banner then return end
+	if pattern_obj then current = pattern_index[pattern_obj] end
 
-	--[[ Check copy ]]
-	if banner2 then
-		if dye or pattern_obj then return end
-		-- Two banners found: This means copying!
-
+	-- Banner Copy
+	if banner2 then		
 		local b1meta = banner:get_meta()
 		local b2meta = banner2:get_meta()
 		local b1layers_raw = b1meta:get_string("layers")
 		local b2layers_raw = b2meta:get_string("layers")
-		local b1layers = minetest.deserialize(b1layers_raw)
-		local b2layers = minetest.deserialize(b2layers_raw)
-		if type(b1layers) ~= "table" then
-			b1layers = {}
-		end
-		if type(b2layers) ~= "table" then
-			b2layers = {}
-		end
+		local b1layers = core.deserialize(b1layers_raw)
+		local b2layers = core.deserialize(b2layers_raw)
+		if type(b1layers) ~= "table" then b1layers = {} end
+		if type(b2layers) ~= "table" then b2layers = {} end
 
 		-- For copying to be allowed, one banner has to have no layers while the other one has at least 1 layer.
 		-- The banner with layers will be used as a source.
@@ -384,126 +435,49 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			src_banner = banner2
 			src_layers = b2layers
 			src_layers_raw = b2layers_raw
-			src_desc = minetest.registered_items[src_banner:get_name()].description
 			src_index = banner2_index
 		elseif #b2layers == 0 and #b1layers > 0 then
 			src_banner = banner
 			src_layers = b1layers
 			src_layers_raw = b1layers_raw
-			src_desc = minetest.registered_items[src_banner:get_name()].description
 			src_index = banner_index
 		else
-			return
+			return ItemStack("") -- Both banners empty, or both has layers.
 		end
+		if #src_layers > max_layers_crafting then return ItemStack("") end -- Too many layers, e.g. code created banner.
+		src_desc = core.registered_items[src_banner:get_name()].description
 
 		-- Set output metadata
-		-- TODO: Copy banner name
-		itemstack = ItemStack(banner:get_name())
 		local imeta = itemstack:get_meta()
 		imeta:set_string("layers", src_layers_raw)
 		-- Generate new description. This clears any (anvil) name from the original banners.
 		imeta:set_string("description", mcl_banners.make_advanced_banner_description(src_desc, src_layers))
 
-		if not craft_predict then
-			-- Don't destroy source banner so this recipe is a true copy
+		if not craft_predict then -- Retain source banner, leaving output as true copy.
 			craft_inv:set_stack("craft", src_index, src_banner)
 		end
-
 		return itemstack
 	end
 
-	-- No two banners found
-	-- From here on we check which banner pattern should be added
-	if not dye then return end
-
-	--[[ Check patterns ]]
-
-	-- Get old layers
+	-- Add new layer.
+	if not current or not current.id then return ItemStack("") end -- No pattern found.
+	-- Get old layers.
 	local ometa = banner:get_meta()
-	local layers_raw = ometa:get_string("layers")
-	local layers = minetest.deserialize(layers_raw)
-	if type(layers) ~= "table" then
-		layers = {}
-	end
-	-- Disallow crafting when a certain number of layers is reached or exceeded
-	if #layers >= max_layers_crafting then return end
-
-	local matching_pattern = false
-	local max_i = player:get_inventory():get_size("craft")
-	-- Find the matching pattern
-	for pattern_name, pattern in pairs(patterns) do
-		if pattern.type == nil then -- Shaped / fixed
-			local pattern_ok = true
-			local inv_i = 1
-			-- This complex code just iterates through the pattern slots one-by-one and compares them with the pattern
-			for p=1, #pattern do
-				local row = pattern[p]
-				for r=1, #row do
-					local itemname = old_craft_grid[inv_i]:get_name()
-					local pitem = row[r]
-					if (pitem == d and minetest.get_item_group(itemname, "dye") == 0) or (pitem == e and itemname ~= e and inv_i ~= banner_index) then
-						pattern_ok = false
-						break
-					end
-					inv_i = inv_i + 1
-					if inv_i > max_i then
-						break
-					end
-				end
-				if inv_i > max_i then
-					break
-				end
-			end
-			-- Everything matched! We found our pattern!
-			if pattern_ok then
-				matching_pattern = pattern_name ---@diagnostic disable-line: cast-local-type
-				break
-			end
-
-		elseif pattern.type == "shapeless" then
-			local orig = pattern[1]
-			local no_mismatches_so_far = true
-			-- This code compares the craft grid with the required items
-			for o=1, #orig do
-				local item_ok = false
-				for i=1, max_i do
-					local itemname = old_craft_grid[i]:get_name()
-					if (orig[o] == e) or -- Empty slot: Always wins
-							(orig[o] ~= e and orig[o] == itemname) or -- non-empty slot: Exact item match required
-							(orig[o] == d and minetest.get_item_group(itemname, "dye") == 1) then -- Dye slot
-						item_ok = true
-						break
-					end
-				end
-				-- Sorry, item not found. :-(
-				if not item_ok then
-					no_mismatches_so_far = false
-					break
-				end
-			end
-			-- Ladies and Gentlemen, we have a winner!
-			if no_mismatches_so_far then
-				matching_pattern = pattern_name ---@diagnostic disable-line: cast-local-type
-				break
-			end
-		end
-
-		if matching_pattern then break end
-	end
-	if not matching_pattern then return end
+	local layers = core.deserialize(ometa:get_string("layers"))
+	if type(layers) ~= "table" then layers = {} end
+	if #layers >= max_layers_crafting then return ItemStack("") end -- Too many layers.
 
 	if craft_predict then
-		local itemid_prefix = "mcl_banners:banner_preview"
-		local coloritemid = dye_to_itemid_mapping[dye]
-		return ItemStack(itemid_prefix .. "_" .. matching_pattern .. "_" .. coloritemid)
+		local color = dye_to_itemid_mapping[dye]
+		return ItemStack("mcl_banners:banner_preview_" .. current.id .. "_" .. color)
 	else
 		-- Add the new layer and update other metadata
 		local color = dye_to_colorid_mapping[dye]
-		table.insert(layers, {pattern=matching_pattern, color=color})
+		table.insert(layers, {pattern=current.id, color=color})
 
 		itemstack = ItemStack(banner:get_name())
 		local imeta = itemstack:get_meta()
-		imeta:set_string("layers", minetest.serialize(layers))
+		imeta:set_string("layers", core.serialize(layers))
 
 		local mname = ometa:get_string("name")
 		-- Only change description if banner does not have a name
@@ -515,30 +489,21 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			imeta:set_string("description", ometa:get_string("description"))
 			imeta:set_string("name", mname)
 		end
-		
-		for i = 1, craftsize do
-			local grid = old_craft_grid[i]
-			local itemname = grid:get_name()
-			if not grid:is_empty() and itemname ~= "" then
-				grid:set_count( grid:get_count() - 1 )
-				craft_inv:set_stack("craft", i, grid)
-			end
-		end
 		return itemstack
 	end
 end
 
-minetest.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
 	return banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, true)
 end)
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
 	return banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, false)
 end)
 
 -- Register crafting recipe for copying the banner pattern
 for _, colortab in pairs(mcl_banners.colors) do
 	local banner = "mcl_banners:banner_item_"..colortab[1]
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = banner,
 		recipe = { banner, banner },
