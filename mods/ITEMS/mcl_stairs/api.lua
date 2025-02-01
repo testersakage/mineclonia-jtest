@@ -174,10 +174,6 @@ local function register_stair(subname, stairdef)
 		end
 	end
 
-	stairdef.groups.stair = 1
-	stairdef.groups.building_block = 1
-	stairdef.groups._mcl_partial = 2
-
 	local image_table = {}
 	for i, image in pairs(stairdef.tiles) do
 		image_table[i] = type(image) == "string" and { name = image } or table.copy(image)
@@ -192,7 +188,9 @@ local function register_stair(subname, stairdef)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = table.merge(stairdef.groups,{stair = 1}),
+		groups = table.merge(stairdef.groups, {
+			_mcl_partial = 2, building_block = 1, stair = 1
+		}),
 		sounds = stairdef.sounds,
 		node_box = {
 			type = "fixed",
@@ -325,9 +323,7 @@ local function register_slab(subname, stairdef)
 		-- Facedir intentionally left out (see below)
 		is_ground_content = false,
 		groups = table.merge(stairdef.groups, {
-					     slab = 1,
-					     building_block = 1,
-					     _mcl_partial=2,
+			_mcl_partial = 3, building_block = 1, slab = 1
 		}),
 		sounds = stairdef.sounds,
 		node_box = {
@@ -393,15 +389,12 @@ local function register_slab(subname, stairdef)
 		end,
 	}, stairdef.overrides or {})
 
-	minetest.register_node(":"..lower_slab, table.merge(nodedef,{
-		groups = table.merge(stairdef.groups,{slab = 1, _mcl_partial=3}),
-	}))
+	minetest.register_node(":"..lower_slab, nodedef)
 
 	-- Register the upper slab.
 	-- Using facedir is not an option, as this would rotate the textures as well and would make
 	-- e.g. upper sandstone slabs look completely wrong.
 	local topdef = table.copy(nodedef)
-	topdef.groups.slab = 1
 	topdef.groups._mcl_partial = 2
 	topdef.groups.slab_top = 1
 	topdef.groups.not_in_creative_inventory = 1
