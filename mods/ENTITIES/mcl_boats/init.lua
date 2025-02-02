@@ -327,6 +327,7 @@ function boat:on_step(dtime, moveresult)
 		if ctrl and ctrl.sneak then
 			detach_object(self._driver, true)
 			self._driver = nil
+			self._csm_driving = false
 			self.object:set_animation ({x = 0, y = 0})
 			return
 		end
