@@ -365,8 +365,8 @@ end
 -- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
 	local output_name = itemstack:get_name()
+	-- TODO: Update name check after meta-texture
 	if output_name == "" or output_name:sub(1,19) ~= "mcl_banners:banner_" then return end
-	--if core.get_item_group(itemstack:get_name(), "banner") ~= 1 then return end
 	local craftsize = player:get_inventory():get_size("craft")
 	if craftsize < 9 then return ItemStack("") end -- Require crafting table.
 
@@ -398,6 +398,8 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 					break
 				end
 			else
+				-- If found multiple wools of same colour, should be base banner.
+				if pattern_obj == itemname and core.get_item_group(itemname, "wool") then return end 
 				-- Enhancement: Support item group to enable adding such patterns by mods.
 				pattern_obj = itemname
 				if dye then break end
