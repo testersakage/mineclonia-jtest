@@ -12,12 +12,11 @@ if minetest.get_modpath("mcl_sounds") then
 end
 dofile(modpath.."/items.lua")
 
--- Helper function
-local function round(num, idp)
-	local mult = 10^(idp or 0)
-	return math.floor(num * mult + 0.5) / mult
-end
+-- Max. number lines in the descriptions for the banner layers.
+-- This is done to avoid huge tooltips.
+local max_layer_lines = 6
 
+-- Colours
 mcl_banners.colors = {
 	-- Format:
 	-- [ID] = { 0=color, 1=banner description, 2=wool, 3=unified dyes color group, 4=overlay color, 5=dye id, 6=color name for emblazonings }
@@ -52,9 +51,86 @@ function mcl_banners.color_reverse(itemname)
 	return colors_reverse[itemname]
 end
 
+
+-- Helper functions
+local function round(num, idp)
+	local mult = 10^(idp or 0)
+	return math.floor(num * mult + 0.5) / mult
+end
+
+function mcl_banners.read_layers (meta)
+	local raw = meta:get_string("layers")
+	local layers = core.deserialize(raw)
+	if type(layers) ~= "table" then return {}, "" end
+	return layers, raw
+end
+
+function mcl_banners.write_layers (meta, layers)
+	if type(layers) ~= "table" or #layers <= 0 then
+		meta:set_string("layers", "")
+	else
+		meta:set_string("layers", core.serialize(layers))
+	end
+end
+
+local function same_layers (A, B)
+	if type(A) ~= type(B) or type(A) ~= "table" or #A ~= #B then return false end
+	for i = 1, #A do
+		if A[i].pattern ~= B[i].pattern or A[i].color ~= B[i].color then
+			return false
+		end
+	end
+	return true
+end
+
+-- Update banner description, returning description, name
+function mcl_banners.update_description (itemstack)
+	local meta = itemstack:get_meta()
+	local name = meta:get_string("name")
+	local layers = mcl_banners.read_layers(meta)
+	if name ~= "" and name:find("Ominous Banner") then name = "" end -- Pre-0.84.0 Ominous Banners
+	if name == "" then
+		name = itemstack:get_definition().description
+		if itemstack:get_name() == "mcl_banners:banner_item_white"
+		and core.get_modpath("mcl_raids")
+		and same_layers(layers, mcl_raids.ominous_banner_layers) then
+			local orig_name = mcl_banners.colors["unicolor_white"][2] -- White Banner
+			name = name:gsub(orig_name:gsub("%W", "%%%1"), mcl_raids.ominous_banner_name)
+		end
+	else
+		name = core.colorize(tt.NAME_COLOR, name)
+	end
+	local newdesc = mcl_banners.make_advanced_banner_description(name, layers)
+	core.log( "warning", "UPDATE " .. itemstack:get_name() .. " = " .. newdesc )
+	meta:set_string("description", newdesc)
+	return newdesc, name
+end
+
+-- Create a banner description containing all the layer names
+function mcl_banners.make_advanced_banner_description (name, layers)
+	if layers == nil or #layers == 0 then return name end
+	local layerstrings = {}
+	for l=1, math.min(#layers, max_layer_lines) do
+		local layer = layers[l] -- {pattern="border", color="white"}
+		local colour_tab = layer and mcl_banners.colors[layer.color or ""]
+		if colour_tab then
+			local pattern_name = mcl_banners.patterns[layer.pattern].name
+			table.insert(layerstrings, S(pattern_name, colour_tab[6]))
+		end
+	end
+	if #layers == max_layer_lines + 1 then
+		table.insert(layerstrings, S("And one additional layer"))
+	elseif #layers > max_layer_lines + 1 then
+		table.insert(layerstrings, S("And @1 additional layers", #layers - max_layer_lines))
+	end
+
+	-- Final string concatenations: Just a list of strings
+	local append = table.concat(layerstrings, "\n")
+	return name .. "\n" .. core.colorize(mcl_colors.GRAY, append)
+end
+
 -- Add pattern/emblazoning crafting recipes
 dofile(modpath.."/patterncraft.lua")
-
 
 local pattern_names = { "" }
 
@@ -83,6 +159,7 @@ local function on_dig_banner(pos, _, digger)
 
 	local inv = minetest.get_meta(pos):get_inventory()
 	local item = inv:get_stack("banner", 1)
+	tt.reload_itemstack_description(item) -- Update description of pre-0.111 banners.
 	local item_str = item:is_empty() and "mcl_banners:banner_item_white" or item:to_string()
 
 	minetest.handle_node_drops(pos, { item_str }, digger)
@@ -156,24 +233,16 @@ function mcl_banners.make_banner_texture(base_color, layers)
 end
 
 local function spawn_banner_entity(pos, hanging, itemstack)
-	local banner
-	if hanging then
-		banner = minetest.add_entity(pos, "mcl_banners:hanging_banner")
-	else
-		banner = minetest.add_entity(pos, "mcl_banners:standing_banner")
-	end
+	local banner = core.add_entity(pos, hanging and "mcl_banners:hanging_banner" or "mcl_banners:standing_banner")
 	if banner == nil then return banner end
 
 	local imeta = itemstack:get_meta()
-	local layers_raw = imeta:get_string("layers")
-	local layers = minetest.deserialize(layers_raw)
+	local desc, name = mcl_banners.update_description(itemstack)
+	local layers = mcl_banners.read_layers(imeta)
 	local colorid = mcl_banners.color_reverse(itemstack:get_name())
 	banner:get_luaentity():_set_textures(colorid, layers)
-	local mname = imeta:get_string("name")
-	if mname and mname ~= "" then
-		banner:get_luaentity()._item_name = mname
-		banner:get_luaentity()._item_description = imeta:get_string("description")
-	end
+	banner:get_luaentity()._item_name = name
+	banner:get_luaentity()._item_description = desc
 	return banner
 end
 
@@ -385,31 +454,15 @@ for _, colortab in pairs(mcl_banners.colors) do
 					if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
 						if mcl_cauldrons.add_level(pointed_thing.under, -1) then
 							local imeta = itemstack:get_meta()
-							local layers_raw = imeta:get_string("layers")
-							local layers = minetest.deserialize(layers_raw)
-							if type(layers) == "table" and #layers > 0 then
+							local layers = mcl_banners.read_layers(imeta)
+							if #layers > 0 then
 								table.remove(layers)
-								imeta:set_string("layers", minetest.serialize(layers))
-								local newdesc = mcl_banners.make_advanced_banner_description(itemstack:get_definition().description, layers)
-								local mname = imeta:get_string("name")
-								-- Don't change description if item has a name
-								if mname == "" then
-									imeta:set_string("description", newdesc)
-								end
+								mcl_banners.write_layers(imeta, layers)
+								tt.reload_itemstack_description(itemstack)
 							end
 							return itemstack
 						end
 					end
-				end
-
-				-- Update old pre 0.84.0 Ominous Banners with correct description.
-				local stackmeta = itemstack:get_meta()
-				if stackmeta:get_string("name"):find("Ominous Banner") then
-					local oban_layers = minetest.deserialize(stackmeta:get_string("layers"))
-					local banner_description = string.gsub(itemstack:get_definition().description, "White Banner", "Ominous Banner")
-					local description = mcl_banners.make_advanced_banner_description(banner_description, oban_layers)
-					stackmeta:set_string("description", description)
-					stackmeta:set_string("name", "")
 				end
 
 				-- Place the node!
@@ -490,16 +543,7 @@ for _, colortab in pairs(mcl_banners.colors) do
 				return itemstack
 			end,
 
-			_mcl_generate_description = function(itemstack)
-				local meta = itemstack:get_meta()
-				local layers_raw = meta:get_string("layers")
-				if not layers_raw then return nil end
-				local layers = minetest.deserialize(layers_raw)
-				local olddesc = itemstack:get_definition().description
-				local newdesc = mcl_banners.make_advanced_banner_description(olddesc, layers)
-				meta:set_string("description", newdesc)
-				return newdesc
-			end,
+			_mcl_generate_description = mcl_banners.update_description,
 		})
 
 		if mod_mcl_core and minetest.get_modpath("mcl_wool") and pattern_name == "" then

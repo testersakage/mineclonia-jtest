@@ -107,17 +107,13 @@ end
 
 local function create_banner(stack, pattern, color)
 	local im = stack:get_meta()
-	local layers = {}
-	local old_layers = im:get_string("layers")
-	if old_layers ~= "" then
-		layers = minetest.deserialize(old_layers)
-	end
+	local layers = mcl_banners.read_layers(im)
 	table.insert(layers,{
 		pattern = pattern,
 		color = "unicolor_"..mcl_dyes.colors[color].unicolor
 	})
-	im:set_string("description", mcl_banners.make_advanced_banner_description(stack:get_definition().description, layers))
-	im:set_string("layers", minetest.serialize(layers))
+	mcl_banners.write_layers(im, layers)
+	tt.reload_itemstack_description(stack)
 	return stack
 end
 
