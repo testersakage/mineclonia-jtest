@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-03 14:21+0000\n"
+"Last-Translator: \"Miguel P.L\" "
+"<miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_achievements/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Benchmarking"
 msgstr "土台作り"
@@ -122,7 +124,7 @@ msgstr "ドラゴンの卵を所持しよう。\n"
 "ヒント：地面から卵を拾って、インベントリにしまいます。"
 
 msgid "Sky's the Limit"
-msgstr ""
+msgstr "空はどこまでも高く"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
 msgstr "エリトラを見つけ、空の彼方へ飛び立つ準備をしよう！"
@@ -156,7 +158,7 @@ msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distanc
 msgstr ""
 
 msgid "Monster Hunter"
-msgstr ""
+msgstr "モンスターハンター"
 
 msgid "Kill a monster."
 msgstr ""
@@ -168,7 +170,7 @@ msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr "黒曜石と火打ち石を使って、ネザーポータルを構築しよう。"
 
 msgid "The End?"
-msgstr ""
+msgstr "おしまい？"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
@@ -207,7 +209,7 @@ msgid "Successfully trade with a Villager."
 msgstr "村人との交易を成功させよう。"
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "戦術的漁業"
 
 msgid "Catch a fish... without a fishing rod!"
 msgstr ""
@@ -239,7 +241,7 @@ msgstr "魚を獲ろう。\n"
 "ヒント：タラ、サケ、クマノミ、フグ等を釣ります。"
 
 msgid "Country Lode, Take Me Home"
-msgstr ""
+msgstr "この道をずっとゆけば"
 
 msgid "Use a compass on a Lodestone."
 msgstr "ロードストーンにコンパスを使おう。"
@@ -307,13 +309,13 @@ msgid "Scrape wax off of a copper block."
 msgstr "銅ブロックから錆止めを削り落とそう。"
 
 msgid "Crafting a New Look"
-msgstr ""
+msgstr "おニューの衣装"
 
 msgid "Craft a trimmed armor at a Smithing Table"
 msgstr ""
 
 msgid "Smithing with Style"
-msgstr ""
+msgstr "オシャレな鍛冶職人"
 
 msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Silence, Vex, Tide, Wayfinder"
 msgstr ""
@@ -355,32 +357,31 @@ msgid "Mine emerald ore."
 msgstr "エメラルド鉱石を発掘しよう。"
 
 msgid "Stone Age"
-msgstr ""
+msgstr "石器時代"
 
 msgid "Mine a stone with new pickaxe."
 msgstr ""
 
 msgid "Hot Stuff"
-msgstr ""
+msgstr "ホットスタッフ"
 
 msgid "Put lava in a bucket."
 msgstr ""
 
 msgid "Ice Bucket Challenge"
-msgstr ""
+msgstr "アイス・バケツ・チャレンジ"
 
 msgid "Obtain an obsidian block."
 msgstr ""
 
 msgid "Hero of the Village"
-msgstr ""
+msgstr "村の英雄"
 
 msgid "Successfully defend a village from a raid"
-msgstr ""
+msgstr "襲撃から村を守る"
 
 msgid "Voluntary Exile"
-msgstr ""
+msgstr "自主的な亡命"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
-
