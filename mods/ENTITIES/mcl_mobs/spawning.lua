@@ -1169,6 +1169,11 @@ end)
 -- Default spawning criteria.
 ------------------------------------------------------------------------
 
+function mob_class:is_up_face_sturdy (pos)
+	local node = minetest.get_node (pos)
+	return mobs_mc.is_up_face_sturdy (pos, node)
+end
+
 local cube = mcl_util.decompose_AABBs ({{
 	-0.5, -0.5, -0.5,
 	0.5, 0.5, 0.5,
