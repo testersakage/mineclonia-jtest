@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-02 05:21+0000\n"
+"PO-Revision-Date: 2025-02-02 11:47+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
@@ -154,31 +154,31 @@ msgid "Acacia Fence Gate"
 msgstr "アカシアのフェンスゲート"
 
 msgid "Acacia Leaves"
-msgstr ""
+msgstr "アカシアの葉"
 
 msgid "Acacia Log"
-msgstr ""
+msgstr "アカシアの原木"
 
 msgid "Acacia Planks"
-msgstr ""
+msgstr "アカシアの板材"
 
 msgid "Acacia Pressure Plate"
-msgstr ""
+msgstr "アカシアの感圧板"
 
 msgid "Acacia Sapling"
-msgstr ""
+msgstr "アカシアの苗木"
 
 msgid "Acacia Sign"
-msgstr ""
+msgstr "アカシアの看板"
 
 msgid "Acacia Slab"
-msgstr ""
+msgstr "アカシアのハーフブロック"
 
 msgid "Acacia Stairs"
-msgstr ""
+msgstr "アカシアの階段"
 
 msgid "Acacia Trapdoor"
-msgstr ""
+msgstr "アカシアのトラップドア"
 
 msgid "Acacia leaves are grown from Acacia trees."
 msgstr ""
