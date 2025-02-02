@@ -523,23 +523,26 @@ local function enderman_ungrief (self, self_pos, dtime)
 	if pr:next (1, math.max (1, chance)) == 1 then
 		-- Select a random position around self_pos in which
 		-- to attempt to place the carried block.
-		local self_x = math.floor (self_pos.x + 0.05)
-		local self_z = math.floor (self_pos.z + 0.05)
+		local self_x = math.floor (self_pos.x + 0.5)
+		local self_z = math.floor (self_pos.z + 0.5)
 		local place_pos
 		repeat
 			place_pos = {
-				x = math.floor (self_pos.x + 0.5 + pr:next (-2, 2)),
+				x = math.floor (self_pos.x + 0.5 + pr:next (-1, 1)),
 				y = math.floor (self_pos.y + 0.5 + pr:next (0, 2)),
-				z = math.floor (self_pos.z + 0.5 + pr:next (-2, 2)),
+				z = math.floor (self_pos.z + 0.5 + pr:next (-1, 1)),
 			}
 		until place_pos.x ~= self_x or place_pos.z ~= self_z
 
+		local node_below = vector.offset (place_pos, 0, -1, 0)
+
 		-- Also check to see if protected.
-		if core.get_node (place_pos).name == "air"
-			and core.get_item_group(core.get_node(vector.offset(place_pos, 0, -1, 0)).name, "solid") > 0
-			and not core.is_protected (place_pos, "") then
+		if minetest.get_node (place_pos).name == "air"
+			and not minetest.is_protected (place_pos, "")
+		-- and whether the node below is sturdy.
+			and mcl_mobs:is_up_face_sturdy (node_below) then
 			-- ... but only if there's a free space
-			local success = core.place_node(place_pos, {name = self._taken_node})
+			local success = minetest.place_node (place_pos, {name = self._taken_node})
 			if success then
 				local def = core.registered_nodes[self._taken_node]
 				-- Update animation accordingly (removes visible block)
