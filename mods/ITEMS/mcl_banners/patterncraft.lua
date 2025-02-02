@@ -8,10 +8,6 @@ local NS = function(s) return s end
 -- Maximum number of layers which can be put on a banner by crafting.
 local max_layers_crafting = 12
 
--- Max. number lines in the descriptions for the banner layers.
--- This is done to avoid huge tooltips.
-local max_layer_lines = 6
-
 local function populate_patterns () 
 	-- List of patterns with crafting rules
 	local d, e = "group:dye", ""
@@ -266,7 +262,7 @@ function mcl_banners.rebuild_index ()
 				pattern_index[signature] = {}
 				current = pattern_index[signature]
 				-- Register shapeless recipe.
-				recipe = { "group:banner", "group:dye", signature }
+				local recipe = { "group:banner", "group:dye", signature }
 				core.register_craft({ type = "shapeless", output = dummy, recipe = recipe })
 			end
 		else
@@ -322,46 +318,6 @@ for _, colortab in pairs(mcl_banners.colors) do
 	dye_to_itemid_mapping[colortab[5]] = colortab[1]
 end
 
--- Create a banner description containing all the layer names
-function mcl_banners.make_advanced_banner_description(description, layers)
-	if layers == nil or #layers == 0 then
-		-- No layers, revert to default
-		return ""
-	else
-		local layerstrings = {}
-		for l=1, #layers do
-			-- Prevent excess length description
-			if l > max_layer_lines then
-				break
-			end
-			-- Layer text line.
-			if mcl_banners.colors[layers[l]] then
-				local color = mcl_banners.colors[layers[l].color][6]
-				local pattern_name = patterns[layers[l].pattern].name
-				table.insert(layerstrings, S(pattern_name, color))
-			end
-		end
-		-- Warn about missing information
-		if #layers == max_layer_lines + 1 then
-			table.insert(layerstrings, S("And one additional layer"))
-		elseif #layers > max_layer_lines + 1 then
-			table.insert(layerstrings, S("And @1 additional layers", #layers - max_layer_lines))
-		end
-
-		-- Final string concatenations: Just a list of strings
-		local append = table.concat(layerstrings, "\n")
-		description = description .. "\n" .. minetest.colorize(mcl_colors.GRAY, append)
-		return description
-	end
-end
-
-function mcl_banners.parse_layers (meta)
-	local raw = meta:get_string("layers")
-	local layers = core.deserialize(raw)
-	if type(layers) ~= "table" then return {}, "" end
-	return layers, raw
-end
-
 -- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
 	local output_name = itemstack:get_name()
@@ -371,12 +327,9 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	if craftsize < 9 then return ItemStack("") end -- Require crafting table.
 
 	-- Pattern Matching
-	local banner -- banner item
-	local banner2 -- second banner item (used when copying)
-	local dye -- itemstring of the dye being used
-	local pattern_obj -- itemstring of the pattern object being used
-	local banner_index -- crafting inventory index of the banner
-	local banner2_index
+	local banner, banner_index -- banner item and its crafting inventory index
+	local banner2, banner2_index -- second banner item (used when copying) and its index
+	local dye, pattern_obj -- itemstring of the dye and non-dye/banner object
 	local current = pattern_index -- Cursor on pattern index tree.
 	for i = 1, craftsize do
 		local itemname = old_craft_grid[i]:get_name()
@@ -413,8 +366,8 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 		local b1name, b2name = banner:get_name(), banner2:get_name()
 		if b1name ~= b2name then return ItemStack("") end -- Different base colours.
 
-		local b1layers, b1_raw = mcl_banners.parse_layers(banner :get_meta())
-		local b2layers, b2_raw = mcl_banners.parse_layers(banner2:get_meta())
+		local b1layers, b1_raw = mcl_banners.read_layers(banner :get_meta())
+		local b2layers, b2_raw = mcl_banners.read_layers(banner2:get_meta())
 
 		-- For copying to be allowed, one banner has to have no layers while the other one has at least 1 layer.
 		-- The banner with layers will be used as a source.
@@ -433,14 +386,12 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 			return ItemStack("") -- Both banners empty, or both has layers.
 		end
 		if #src_layers > max_layers_crafting then return ItemStack("") end -- Too many layers, e.g. code created banner.
-		src_desc = core.registered_items[src_banner:get_name()].description
 
 		-- Set output metadata.
 		itemstack = ItemStack(b1name)
 		local imeta = itemstack:get_meta()
 		imeta:set_string("layers", src_layers_raw)
-		-- Generate new description. This clears any (anvil) name from the original banners.
-		imeta:set_string("description", mcl_banners.make_advanced_banner_description(src_desc, src_layers))
+		tt.reload_itemstack_description(itemstack)
 
 		if not craft_predict then -- Retain source banner, leaving output as true copy.
 			craft_inv:set_stack("craft", src_index, src_banner)
@@ -452,7 +403,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	if not current or not current.id then return ItemStack("") end -- No pattern found.
 	-- Get old layers.
 	local ometa = banner:get_meta()
-	local layers = mcl_banners.parse_layers(ometa)
+	local layers = mcl_banners.read_layers(ometa)
 	if #layers >= max_layers_crafting then return ItemStack("") end -- Too many layers.
 
 	if craft_predict then
@@ -465,18 +416,10 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 
 		itemstack = ItemStack(banner:get_name())
 		local imeta = itemstack:get_meta()
-		imeta:set_string("layers", core.serialize(layers))
-
 		local mname = ometa:get_string("name")
-		-- Change description if banner is nameless.
-		if mname == "" then
-			local odesc = itemstack:get_definition().description
-			local description = mcl_banners.make_advanced_banner_description(odesc, layers)
-			imeta:set_string("description", description)
-		else
-			imeta:set_string("description", ometa:get_string("description"))
-			imeta:set_string("name", mname)
-		end
+		imeta:set_string("name", mname)
+		mcl_banners.write_layers(imeta, layers)
+		tt.reload_itemstack_description(itemstack)
 		return itemstack
 	end
 end

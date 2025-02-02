@@ -1,4 +1,5 @@
 -- mcl_raids
+local S = core.get_translator(core.get_current_modname())
 mcl_raids = {}
 
 -- Define the amount of illagers to spawn each wave.
@@ -69,6 +70,7 @@ local oban_layers = {
 	}
 }
 
+mcl_raids.ominous_banner_name = S("Ominous Banner")
 mcl_raids.ominous_banner_layers = oban_layers
 
 local oban_def = table.copy(minetest.registered_entities["mcl_banners:standing_banner"])
@@ -83,10 +85,8 @@ minetest.register_entity(":mcl_raids:ominous_banner",oban_def)
 
 function mcl_raids.drop_obanner(pos)
 	local it = ItemStack("mcl_banners:banner_item_white")
-	it:get_meta():set_string("layers",minetest.serialize(oban_layers))
-	local banner_description = string.gsub(it:get_definition().description, "White Banner", "Ominous Banner")
-	local description = mcl_banners.make_advanced_banner_description(banner_description, oban_layers)
-	it:get_meta():set_string("description", description)
+	it:set_meta("layers", core.serialize(oban_layers))
+	tt.reload_itemstack_description(it)
 	minetest.add_item(pos,it)
 end
 
