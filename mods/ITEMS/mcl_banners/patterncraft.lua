@@ -253,9 +253,9 @@ local function populate_patterns ()
 end
 populate_patterns()
 
-local pattern_index = {} -- Index of patterns by ordered dye index or by special item name
+local pattern_index = {} -- Index of patterns by ordered dye index or by special item name.
 function mcl_banners.rebuild_index ()
-	local pattern_by_dye_count = {} -- Boolean array of "does any shaped pattern exist at this dye count?"
+	local dummy = "mcl_banners:banner_item_white" -- Dummy banner output.  Must be in the banner group.
 	pattern_index = {}
 	for pattern_id, pattern in pairs(mcl_banners.patterns) do
 		local signature, current = pattern.signature
@@ -265,14 +265,9 @@ function mcl_banners.rebuild_index ()
 			else
 				pattern_index[signature] = {}
 				current = pattern_index[signature]
-				-- Register shapeless recipe for all colours.  Guarentee one banner, one dye, and one item.
-				for _, colortab in pairs(mcl_banners.colors) do
-					core.register_craft({
-						type = "shapeless",
-						output = "mcl_banners:banner_preview_" .. pattern_id .. "_" .. colortab[1],
-						recipe = { "group:banner", "mcl_dyes:" .. colortab[1], signature },
-					})
-				end
+				-- Register shapeless recipe.
+				recipe = { "group:banner", "group:dye", signature }
+				core.register_craft({ type = "shapeless", output = dummy, recipe = recipe })
 			end
 		else
 			current = pattern_index
@@ -282,17 +277,10 @@ function mcl_banners.rebuild_index ()
 			for i = 1, 9 do
 				local item = grids[i]
 				if item == "group:dye" then
-					-- Found dye, build index
+					-- Found dye, build index.
 					if not current[i] then current[i] = {} end
 					current = current[i]
-				elseif item == "" then
-					-- Empty slot, count dye and set flag
-					local dye_count = 0
-					for j = 1, 9 do
-						if grids[j] ~= "" then dye_count = dye_count + 1 end
-					end
-					pattern_by_dye_count[dye_count] = true
-				else
+				elseif item ~= "" then
 					core.log("warning", "[mcl_banner] Shaped banner pattern can only have empty slots and dyes.  Found " .. item .. " in " .. pattern_id)
 				end
 			end
@@ -303,19 +291,12 @@ function mcl_banners.rebuild_index ()
 		end
 	end
 
-	-- Register dummy shapeless recipes for _shaped_ patterns, by dye colour and dye count.
-	-- This guarentees that there will be exactly one banner, and all dyes are same colour.
-	for _, colortab in pairs(mcl_banners.colors) do
-		local color = colortab[1]
-		local dye, output = "mcl_dyes:" .. color, "mcl_banners:banner_item_" .. color
-		local recipe = {}
-		for i = 1, 8 do
-			recipe[i] = dye -- Add one dye per loop
-			if pattern_by_dye_count[i] then
-				recipe[i+1] = "group:banner" -- The banner, would be overwritten by next loop
-				core.register_craft({ type = "shapeless", output = output, recipe = recipe })
-			end
-		end
+	-- Register dummy shapeless recipes for _shaped_ patterns, by dye count.
+	local recipe = {}
+	for i = 1, 8 do
+		recipe[i] = "group:dye" -- Add one dye per loop.
+		recipe[i+1] = "group:banner" -- The banner, will be overwritten by next loop.
+		core.register_craft({ type = "shapeless", output = dummy, recipe = recipe })
 	end
 end
 mcl_banners.rebuild_index()
@@ -374,6 +355,13 @@ function mcl_banners.make_advanced_banner_description(description, layers)
 	end
 end
 
+function mcl_banners.parse_layers (meta)
+	local raw = meta:get_string("layers")
+	local layers = core.deserialize(raw)
+	if type(layers) ~= "table" then return {}, "" end
+	return layers, raw
+end
+
 -- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
 	local output_name = itemstack:get_name()
@@ -400,6 +388,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 				elseif dye then
 					return ItemStack("") -- No match, second dye or more.  Abort.
 				end
+				if dye and dye ~= itemname then return ItemStack("") end -- Mixing different dyes.
 				dye = itemname
 			elseif core.get_item_group(itemname, "banner") == 1 then
 				if not banner then
@@ -409,7 +398,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 					break
 				end
 			else
-				-- TODO: Support item group to enable adding such patterns by mods.
+				-- Enhancement: Support item group to enable adding such patterns by mods.
 				pattern_obj = itemname
 				if dye then break end
 			end
@@ -418,15 +407,12 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	if pattern_obj then current = pattern_index[pattern_obj] end
 
 	-- Banner Copy
-	if banner2 then		
-		local b1meta = banner:get_meta()
-		local b2meta = banner2:get_meta()
-		local b1layers_raw = b1meta:get_string("layers")
-		local b2layers_raw = b2meta:get_string("layers")
-		local b1layers = core.deserialize(b1layers_raw)
-		local b2layers = core.deserialize(b2layers_raw)
-		if type(b1layers) ~= "table" then b1layers = {} end
-		if type(b2layers) ~= "table" then b2layers = {} end
+	if banner2 then
+		local b1name, b2name = banner:get_name(), banner2:get_name()
+		if b1name ~= b2name then return ItemStack("") end -- Different base colours.
+
+		local b1layers, b1_raw = mcl_banners.parse_layers(banner :get_meta())
+		local b2layers, b2_raw = mcl_banners.parse_layers(banner2:get_meta())
 
 		-- For copying to be allowed, one banner has to have no layers while the other one has at least 1 layer.
 		-- The banner with layers will be used as a source.
@@ -434,12 +420,12 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 		if #b1layers == 0 and #b2layers > 0 then
 			src_banner = banner2
 			src_layers = b2layers
-			src_layers_raw = b2layers_raw
+			src_layers_raw = b2_raw
 			src_index = banner2_index
 		elseif #b2layers == 0 and #b1layers > 0 then
 			src_banner = banner
 			src_layers = b1layers
-			src_layers_raw = b1layers_raw
+			src_layers_raw = b1_raw
 			src_index = banner_index
 		else
 			return ItemStack("") -- Both banners empty, or both has layers.
@@ -447,7 +433,8 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 		if #src_layers > max_layers_crafting then return ItemStack("") end -- Too many layers, e.g. code created banner.
 		src_desc = core.registered_items[src_banner:get_name()].description
 
-		-- Set output metadata
+		-- Set output metadata.
+		itemstack = ItemStack(b1name)
 		local imeta = itemstack:get_meta()
 		imeta:set_string("layers", src_layers_raw)
 		-- Generate new description. This clears any (anvil) name from the original banners.
@@ -463,15 +450,14 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	if not current or not current.id then return ItemStack("") end -- No pattern found.
 	-- Get old layers.
 	local ometa = banner:get_meta()
-	local layers = core.deserialize(ometa:get_string("layers"))
-	if type(layers) ~= "table" then layers = {} end
+	local layers = mcl_banners.parse_layers(ometa)
 	if #layers >= max_layers_crafting then return ItemStack("") end -- Too many layers.
 
 	if craft_predict then
 		local color = dye_to_itemid_mapping[dye]
 		return ItemStack("mcl_banners:banner_preview_" .. current.id .. "_" .. color)
 	else
-		-- Add the new layer and update other metadata
+		-- Add new layer and copy or regen other metadata.
 		local color = dye_to_colorid_mapping[dye]
 		table.insert(layers, {pattern=current.id, color=color})
 
@@ -480,7 +466,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 		imeta:set_string("layers", core.serialize(layers))
 
 		local mname = ometa:get_string("name")
-		-- Only change description if banner does not have a name
+		-- Change description if banner is nameless.
 		if mname == "" then
 			local odesc = itemstack:get_definition().description
 			local description = mcl_banners.make_advanced_banner_description(odesc, layers)
@@ -500,12 +486,9 @@ core.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
 	return banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, false)
 end)
 
--- Register crafting recipe for copying the banner pattern
-for _, colortab in pairs(mcl_banners.colors) do
-	local banner = "mcl_banners:banner_item_"..colortab[1]
-	core.register_craft({
-		type = "shapeless",
-		output = banner,
-		recipe = { banner, banner },
-	})
-end
+-- Recipe for banner copy.
+core.register_craft({
+	type = "shapeless",
+	output = "mcl_banners:banner_item_white",
+	recipe = { "group:banner", "group:banner" },
+})
