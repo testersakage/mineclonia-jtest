@@ -540,7 +540,7 @@ local function enderman_ungrief (self, self_pos, dtime)
 		if minetest.get_node (place_pos).name == "air"
 			and not minetest.is_protected (place_pos, "")
 		-- and whether the node below is sturdy.
-			and mcl_mobs:is_up_face_sturdy (node_below) then
+			and self:is_up_face_sturdy (node_below) then
 			-- ... but only if there's a free space
 			local success = minetest.place_node (place_pos, {name = self._taken_node})
 			if success then
