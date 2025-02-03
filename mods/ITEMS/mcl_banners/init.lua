@@ -505,6 +505,10 @@ for _, colortab in pairs(mcl_banners.colors) do
 				local offset = is_hanging and hanging_banner_entity_offset or standing_banner_entity_offset
 				entity_place_pos = vector.add(place_pos, offset)
 				local banner_entity = spawn_banner_entity(entity_place_pos, is_hanging, itemstack)
+				local name = itemstack:get_meta():get_string("name")
+				if name ~= "" then
+					meta:set_string("infotext", name)
+				end
 				-- Set rotation
 				local final_yaw, rotation_level
 				if is_hanging then
