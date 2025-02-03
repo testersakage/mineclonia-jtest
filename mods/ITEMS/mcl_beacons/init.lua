@@ -3,6 +3,33 @@ local C = minetest.colorize
 local F = minetest.formspec_escape
 
 mcl_beacons = {}
+
+local beacon_sounds = {}
+
+local function start_beacon_sound(pos)
+	local hash = core.hash_node_position(pos)
+	if beacon_sounds[hash] then
+		core.sound_stop(beacon_sounds[hash])
+	else
+		core.sound_play("mcl_beacons_activate", {pos=pos, gain=1.0, max_hear_distance=7})
+	end
+	beacon_sounds[hash] = core.sound_play("mcl_beacons_beam_idle", {
+		pos = pos,
+		gain = 0.1,
+		max_hear_distance = 7,
+		loop = true
+	})
+end
+
+local function stop_beacon_sound(pos)
+	local hash = core.hash_node_position(pos)
+	if beacon_sounds[hash] then
+		core.sound_play("mcl_beacons_deactivate", {pos=pos, gain=1.0, max_hear_distance=7})
+		core.sound_stop(beacon_sounds[hash])
+		beacon_sounds[hash] = nil
+	end
+end
+
 local function get_beacon_beam(glass_nodename)
 	if glass_nodename == "air" then return 0 end
 	local def = minetest.registered_nodes[glass_nodename]
@@ -20,6 +47,7 @@ local function set_node_if_clear(pos,node)
 end
 
 local function remove_beacon_beam(pos)
+	stop_beacon_sound(pos)
 	for y=pos.y, pos.y+301 do
 		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
 		if node.name ~= "air" and node.name ~= "mcl_core:bedrock" and node.name ~= "mcl_core:void" then
@@ -41,6 +69,8 @@ local function create_beacon_beam(pos)
 		remove_beacon_beam(pos)
 		return
 	end
+
+	start_beacon_sound(pos)
 
 	for y = pos.y +1, pos.y + 300 do
 		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
