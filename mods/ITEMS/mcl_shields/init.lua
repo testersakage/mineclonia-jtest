@@ -542,7 +542,7 @@ end
 
 local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	if not string.find(itemstack:get_name(), "mcl_shields:shield_") then
-		return itemstack
+		return
 	end
 
 	local shield_stack
@@ -561,7 +561,12 @@ local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 		if string.find(banner_name, "mcl_banners:banner") and shield_stack then
 			local banner_meta = banner_stack:get_meta()
 			local layers = mcl_banners.read_layers(banner_meta)
+			if #layers > mcl_banners.max_craftable_layers then
+				return ItemStack("") -- Too many layers to be placed on a shield.
+			end
+
 			local new_shield_meta = itemstack:get_meta()
+			-- TODO: Review shield description in case of base banner
 			if #layers > 0 then
 				local color = banner_stack:get_definition()._unicolor
 				local texture = mcl_banners.make_banner_texture(color, layers)
