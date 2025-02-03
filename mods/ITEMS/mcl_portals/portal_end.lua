@@ -344,8 +344,8 @@ minetest.override_item("mcl_end:ender_eye", {
 			if has_doc then
 				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:end_portal_frame")
 			end
-			minetest.sound_play(
-				"default_place_node_hard",
+			core.sound_play(
+				"mcl_portals_place_frame_eye_"..math.random(1,3),
 				{pos = pointed_thing.under, gain = 0.5, max_hear_distance = 16}, true)
 			if not minetest.is_creative_enabled(user:get_player_name()) then
 				itemstack:take_item() -- 1 use
