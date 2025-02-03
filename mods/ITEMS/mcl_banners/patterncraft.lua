@@ -1,4 +1,3 @@
-local S = minetest.get_translator(minetest.get_current_modname())
 local NS = function(s) return s end
 
 -- Pattern crafting. This file contains the code for crafting all the
@@ -8,7 +7,7 @@ local NS = function(s) return s end
 -- Maximum number of layers which can be put on a banner by crafting.
 local max_layers_crafting = 12
 
-local function populate_patterns () 
+local function populate_patterns ()
 	-- List of patterns with crafting rules
 	local d, e = "group:dye", ""
 	mcl_banners.patterns = {
@@ -297,25 +296,9 @@ function mcl_banners.rebuild_index ()
 end
 mcl_banners.rebuild_index()
 
-local function readable_name(str)
-	str = str:gsub("_", " ")
-	return (str:gsub("^%l", string.upper))
-end
-
-function mcl_banners.register_pattern(name,recipe)
-	patterns[name] = table.merge({ name = readable_name(name) }, recipe)
-end
-
--- Just a simple reverse-lookup table from dye itemstring to banner color ID
--- to avoid some pointless future iterations.
-local dye_to_colorid_mapping = {}
-for colorid, colortab in pairs(mcl_banners.colors) do
-	dye_to_colorid_mapping[colortab.dye_itemname] = colorid
-end
-
-local dye_to_itemid_mapping = {}
-for _, colortab in pairs(mcl_banners.colors) do
-	dye_to_itemid_mapping[colortab.dye_itemname] = colortab.color_key
+function mcl_banners.register_craft_pattern(name, pattern)
+	-- TODO: Validate pattern has name and either [3] or signature.
+	mcl_banners.patterns[name] = pattern
 end
 
 -- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.
@@ -352,7 +335,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 				end
 			else
 				-- If found multiple wools of same colour, should be base banner.
-				if pattern_obj == itemname and core.get_item_group(itemname, "wool") then return end 
+				if pattern_obj == itemname and core.get_item_group(itemname, "wool") then return end
 				-- Enhancement: Support item group to enable adding such patterns by mods.
 				pattern_obj = itemname
 				if dye then break end
@@ -371,7 +354,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 
 		-- For copying to be allowed, one banner has to have no layers while the other one has at least 1 layer.
 		-- The banner with layers will be used as a source.
-		local src_banner, src_layers, src_layers_raw, src_desc, src_index
+		local src_banner, src_layers, src_layers_raw, src_index
 		if #b1layers == 0 and #b2layers > 0 then
 			src_banner = banner2
 			src_layers = b2layers
@@ -405,19 +388,20 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	local ometa = banner:get_meta()
 	local layers = mcl_banners.read_layers(ometa)
 	if #layers >= max_layers_crafting then return ItemStack("") end -- Too many layers.
+	-- Get dye colour.
+	local dye_def = core.registered_items[dye]
+	local dye_color = dye_def and dye_def._color and mcl_dyes.colors[dye_def._color]
+	dye_color = dye_color and dye_color.unicolor
+	if not dye_color then return ItemStack("") end -- Dye or dye colour not found.
 
 	if craft_predict then
-		local color = dye_to_itemid_mapping[dye]
-		return ItemStack("mcl_banners:banner_preview_" .. current.id .. "_" .. color)
+		return ItemStack("mcl_banners:banner_preview_" .. current.id .. "_" .. dye_color)
 	else
-		-- Add new layer and copy or regen other metadata.
-		local color = dye_to_colorid_mapping[dye]
-		table.insert(layers, {pattern=current.id, color=color})
-
+		local oname = ometa:get_string("name")
 		itemstack = ItemStack(banner:get_name())
 		local imeta = itemstack:get_meta()
-		local mname = ometa:get_string("name")
-		imeta:set_string("name", mname)
+		imeta:set_string("name", oname)
+		table.insert(layers, {pattern=current.id, color="unicolor_" .. dye_color})
 		mcl_banners.write_layers(imeta, layers)
 		tt.reload_itemstack_description(itemstack)
 		return itemstack

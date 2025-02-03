@@ -560,11 +560,10 @@ local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 		local banner_name = banner_stack:get_name()
 		if string.find(banner_name, "mcl_banners:banner") and shield_stack then
 			local banner_meta = banner_stack:get_meta()
-			local layers_meta = banner_meta:get_string("layers")
+			local layers = mcl_banners.read_layers(banner_meta)
 			local new_shield_meta = itemstack:get_meta()
-			if layers_meta ~= "" then
-				local color = mcl_banners.color_reverse(banner_name)
-				local layers = minetest.deserialize(layers_meta)
+			if #layers > 0 then
+				local color = banner_stack:get_definition()._unicolor
 				local texture = mcl_banners.make_banner_texture(color, layers)
 				new_shield_meta:set_string("description", mcl_banners.make_advanced_banner_description(itemstack:get_description(), layers))
 				new_shield_meta:set_string("mcl_shields:shield_custom_pattern_texture", to_shield_texture(texture))
