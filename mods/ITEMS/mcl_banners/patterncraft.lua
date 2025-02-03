@@ -310,12 +310,12 @@ end
 -- to avoid some pointless future iterations.
 local dye_to_colorid_mapping = {}
 for colorid, colortab in pairs(mcl_banners.colors) do
-	dye_to_colorid_mapping[colortab[5]] = colorid
+	dye_to_colorid_mapping[colortab.dye_itemname] = colorid
 end
 
 local dye_to_itemid_mapping = {}
 for _, colortab in pairs(mcl_banners.colors) do
-	dye_to_itemid_mapping[colortab[5]] = colortab[1]
+	dye_to_itemid_mapping[colortab.dye_itemname] = colortab.color_key
 end
 
 -- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.

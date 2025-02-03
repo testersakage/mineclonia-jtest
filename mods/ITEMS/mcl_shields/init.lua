@@ -499,11 +499,11 @@ local shield_colors = {
 }
 
 for colorkey, colortab in pairs(mcl_banners.colors) do
-	local color = colortab[1]
+	local color = colortab.color_key
 	minetest.register_tool("mcl_shields:shield_" .. color, {
 		description = shield_colors[colorkey],
 		_doc_items_longdesc = S("A shield is a tool used for protecting the player against attacks."),
-		inventory_image = "mcl_shield.png^(mcl_shield_item_overlay.png^[colorize:" .. colortab[4] ..")",
+		inventory_image = "mcl_shield.png^(mcl_shield_item_overlay.png^[colorize:" .. colortab.rgb ..")",
 		stack_max = 1,
 		groups = {
 			shield = 1,
@@ -515,7 +515,7 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		sound = {breaks = "default_tool_breaks"},
 		_repair_material = "group:wood",
 		wield_scale = vector.new(2, 2, 2),
-		_shield_color = colortab[4],
+		_shield_color = colortab.rgb,
 		_mcl_wieldview_item = "",
 	})
 
