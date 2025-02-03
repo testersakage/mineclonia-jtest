@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-30 00:53+0000\n"
+"PO-Revision-Date: 2025-02-03 14:21+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -31,13 +31,13 @@ msgid "Block of Copper"
 msgstr "銅方塊"
 
 msgid "Block of Copper is mostly a decorative block."
-msgstr ""
+msgstr "銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Chiseled Copper"
 msgstr "浮雕銅方塊"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "浮雕銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Copper Bulb"
 msgstr "銅燈"
@@ -46,7 +46,7 @@ msgid "Copper Bulb On"
 msgstr "銅燈（亮）"
 
 msgid "Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "銅燈大致上是一種裝飾性方塊。"
 
 msgid "Copper Door"
 msgstr "銅門"
@@ -55,7 +55,7 @@ msgid "Copper Grate"
 msgstr "銅柵欄門"
 
 msgid "Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "銅柵欄門大致上是一種裝飾性方塊。"
 
 msgid "Copper Trapdoor"
 msgstr "銅活板門"
@@ -70,13 +70,13 @@ msgid "Cut Copper Stairs"
 msgstr "切制銅階梯"
 
 msgid "Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "切制銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Exposed Chiseled Copper"
 msgstr "浮雕斑駁銅方塊"
 
 msgid "Exposed Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "浮雕斑駁銅方塊主要是裝飾用的方塊。"
 
 msgid "Exposed Copper"
 msgstr "斑駁銅方塊"
@@ -88,7 +88,7 @@ msgid "Exposed Copper Bulb On"
 msgstr "斑駁銅燈（亮）"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "斑駁銅燈大致上是一種裝飾性方塊。"
 
 msgid "Exposed Copper Door"
 msgstr "斑駁銅門"
@@ -97,13 +97,13 @@ msgid "Exposed Copper Grate"
 msgstr "斑駁銅柵欄門"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "斑駁銅柵欄門大致上是一種裝飾性方塊。"
 
 msgid "Exposed Copper Trapdoor"
 msgstr "斑駁銅活板門"
 
 msgid "Exposed Copper is mostly a decorative block."
-msgstr ""
+msgstr "斑駁銅大致上是一種裝飾性方塊。"
 
 msgid "Exposed Cut Copper"
 msgstr "斑駁切制銅方塊"
@@ -115,13 +115,13 @@ msgid "Exposed Cut Copper Stairs"
 msgstr "斑駁切制銅階梯"
 
 msgid "Exposed Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "斑駁切制銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Oxidized Chiseled Copper"
 msgstr "浮雕氧化銅方塊"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "浮雕氧化銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Oxidized Copper"
 msgstr "氧化銅方塊"
@@ -133,7 +133,7 @@ msgid "Oxidized Copper Bulb On"
 msgstr "氧化銅燈（亮）"
 
 msgid "Oxidized Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "氧化銅燈大致上是一種裝飾性方塊。"
 
 msgid "Oxidized Copper Door"
 msgstr "氧化銅門"
@@ -142,13 +142,13 @@ msgid "Oxidized Copper Grate"
 msgstr "氧化銅柵欄門"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "氧化銅柵欄門大致上是一種裝飾性方塊。"
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "氧化銅活板門"
 
 msgid "Oxidized Copper is mostly a decorative block."
-msgstr ""
+msgstr "氧化銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Oxidized Cut Copper"
 msgstr "氧化切制銅方塊"
@@ -160,7 +160,7 @@ msgid "Oxidized Cut Copper Stairs"
 msgstr "氧化切制銅階梯"
 
 msgid "Oxidized Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "氧化切制銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Waxed Block of Copper"
 msgstr "上蠟銅方塊"
@@ -280,7 +280,7 @@ msgid "Weathered Chiseled Copper"
 msgstr "風化浮雕銅方塊"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "風化浮雕銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Weathered Copper"
 msgstr "風化銅方塊"
@@ -292,7 +292,7 @@ msgid "Weathered Copper Bulb On"
 msgstr "風化銅燈（亮）"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "風化銅燈大致上是一種裝飾性方塊。"
 
 msgid "Weathered Copper Door"
 msgstr "風化銅門"
@@ -301,34 +301,34 @@ msgid "Weathered Copper Grate"
 msgstr "風化銅柵欄門"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "風化銅柵欄門大致上是一種裝飾性方塊。"
 
 msgid "Weathered Copper Trapdoor"
 msgstr "風化銅活板門"
 
 msgid "Weathered Copper is mostly a decorative block."
-msgstr ""
+msgstr "風化銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Weathered Cut Copper"
-msgstr ""
+msgstr "風化切制銅方塊"
 
 msgid "Weathered Cut Copper Slab"
-msgstr ""
+msgstr "風化切制銅台階"
 
 msgid "Weathered Cut Copper Stairs"
-msgstr ""
+msgstr "風化切制銅階梯"
 
 msgid "Weathered Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "風化切制銅方塊大致上是一種裝飾性方塊。"
 
 msgid "Copper Ore"
 msgstr "銅礦石"
 
 msgid "Some copper contained in stone, it is pretty common and can be found below sea level."
-msgstr ""
+msgstr "含銅的石，頗為常見，特別是海平面以下。"
 
 msgid "Block of Raw Copper"
 msgstr "銅原礦方塊"
 
 msgid "A block used for compact raw copper storage."
-msgstr ""
+msgstr "銅原礦方塊是壓縮的銅。"
