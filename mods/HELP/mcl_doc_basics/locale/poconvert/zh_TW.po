@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-02 05:21+0000\n"
+"PO-Revision-Date: 2025-02-03 14:21+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -370,7 +370,7 @@ msgid "A generic Internet Relay Chat channel for everything related to Luanti wh
 msgstr ""
 
 msgid "Basics"
-msgstr ""
+msgstr "基礎"
 
 msgid "Everything you need to know to get started with playing"
 msgstr ""
