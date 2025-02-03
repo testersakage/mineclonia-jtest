@@ -4,15 +4,17 @@ local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
 local D = mcl_util.get_dynamic_translator(modname)
 
+-- Maximum number of layers which can be put on a banner by players.
+mcl_banners.max_craftable_layers = 12
+
+-- Max. number layers to be displayed in item descriptions.
+local max_layer_lines = 6
+
 local node_sounds
 if minetest.get_modpath("mcl_sounds") then
 	node_sounds = mcl_sounds.node_sound_wood_defaults()
 end
 dofile(modpath.."/items.lua")
-
--- Max. number lines in the descriptions for the banner layers.
--- This is done to avoid huge tooltips.
-local max_layer_lines = 6
 
 -- Format:
 -- mcl_banners.colors.unicolor_grey = {
@@ -268,7 +270,7 @@ minetest.register_node("mcl_banners:standing_banner", {
 	_doc_items_entry_name = S("Banner"),
 	_doc_items_image = "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png",
 	_doc_items_longdesc = S("Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."),
-	_doc_items_usagehelp = S("Emblazoned banners can be emblazoned again to combine patterns. Up to 12 patterns can be layered on a banner. To wash off a banner's top-most layer, using it on a cauldron with water .").."\n"..
+	_doc_items_usagehelp = S("Emblazoned banners can be emblazoned again to combine patterns. Up to @1 patterns can be layered on a banner. To wash off a banner's top-most layer, using it on a cauldron with water.", mcl_banners.max_craftable_layers).."\n"..
 		S("An emblazoned banner can be copied by placing two banners of the same base color in the crafting grid — one needs to be emblazoned, the other one must be clean."),
 	walkable = false,
 	is_ground_content = false,

@@ -36,6 +36,11 @@ local function get_formspec(pos)
 		local x_len = 0.1
 		local y_len = 0.1
 		if not inv:is_empty("banner") then
+			local banner = inv:get_stack("banner", 1)
+			local layers = mcl_banners.read_layers(banner:get_meta())
+			if #layers >= mcl_banners.max_craftable_layers then
+				color = nil -- Too many layers to add more.  Disable patterns.
+			end
 			if color and pdef and pdef._pattern then
 				local it = preview_item_prefix .. pdef._pattern .. "_" .. color
 				local name = preview_item_prefix .. pdef._pattern .. "-" .. color

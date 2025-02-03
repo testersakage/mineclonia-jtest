@@ -4,9 +4,6 @@ local NS = function(s) return s end
 -- emblazonings you can put on the banners. It's quite complicated;
 -- run-of-the-mill crafting won't work here.
 
--- Maximum number of layers which can be put on a banner by crafting.
-local max_layers_crafting = 12
-
 local function populate_patterns ()
 	-- List of patterns with crafting rules
 	local d, e = "group:dye", ""
@@ -368,7 +365,9 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 		else
 			return ItemStack("") -- Both banners empty, or both has layers.
 		end
-		if #src_layers > max_layers_crafting then return ItemStack("") end -- Too many layers, e.g. code created banner.
+		if #src_layers > mcl_banners.max_craftable_layers then
+			return ItemStack("") -- Too many layers to be copied, e.g. code created banner.
+		end
 
 		-- Set output metadata.
 		itemstack = ItemStack(b1name)
@@ -387,7 +386,9 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	-- Get old layers.
 	local ometa = banner:get_meta()
 	local layers = mcl_banners.read_layers(ometa)
-	if #layers >= max_layers_crafting then return ItemStack("") end -- Too many layers.
+	if #layers >= mcl_banners.max_craftable_layers then
+		return ItemStack("") -- Too many layers to add another one.
+	end
 	-- Get dye colour.
 	local dye_def = core.registered_items[dye]
 	local dye_color = dye_def and dye_def._color and mcl_dyes.colors[dye_def._color]
