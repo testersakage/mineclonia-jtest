@@ -2,6 +2,7 @@ mcl_banners = {}
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 local mod_mcl_core = minetest.get_modpath("mcl_core")
 local mod_doc = minetest.get_modpath("doc")
@@ -16,41 +17,45 @@ dofile(modpath.."/items.lua")
 -- This is done to avoid huge tooltips.
 local max_layer_lines = 6
 
--- Colours
+-- Format:
+-- mcl_banners.colors.unicolor_grey = {
+--    banner_name = D("Grey Banner"),
+--    color_key = "silver", -- used in banner, wool, and dye itemname
+--    color_name = "Grey", -- English, for use by dynamic translation
+--    wool_itemname = "mcl_wool:silver",
+--    dye_itemname = "mcl_dyes:silver",
+--    rgb = "#818177",
+-- }
 mcl_banners.colors = {
-	-- Format:
-	-- [ID] = { 0=color, 1=banner description, 2=wool, 3=unified dyes color group, 4=overlay color, 5=dye id, 6=color name for emblazonings }
-	["unicolor_white"] =      {"white",      S("White Banner"),      "mcl_wool:white", mcl_dyes.colors.white.rgb, "mcl_dyes:white", S("White") },
-	["unicolor_darkgrey"] =   {"grey",       S("Grey Banner"),       "mcl_wool:grey", mcl_dyes.colors.grey.rgb, "mcl_dyes:dark_grey", S("Grey") },
-	["unicolor_grey"] =       {"silver",     S("Light Grey Banner"), "mcl_wool:silver", mcl_dyes.colors.silver.rgb, "mcl_dyes:silver", S("Light Grey") },
-	["unicolor_black"] =      {"black",      S("Black Banner"),      "mcl_wool:black", mcl_dyes.colors.black.rgb, "mcl_dyes:black", S("Black") },
-	["unicolor_red"] =        {"red",        S("Red Banner"),        "mcl_wool:red", mcl_dyes.colors.red.rgb, "mcl_dyes:red", S("Red") },
-	["unicolor_yellow"] =     {"yellow",     S("Yellow Banner"),     "mcl_wool:yellow", mcl_dyes.colors.yellow.rgb, "mcl_dyes:yellow", S("Yellow") },
-	["unicolor_dark_green"] = {"green",      S("Green Banner"),      "mcl_wool:green", mcl_dyes.colors.green.rgb, "mcl_dyes:green", S("Green") },
-	["unicolor_cyan"] =       {"cyan",       S("Cyan Banner"),       "mcl_wool:cyan", mcl_dyes.colors.cyan.rgb, "mcl_dyes:cyan", S("Cyan") },
-	["unicolor_blue"] =       {"blue",       S("Blue Banner"),       "mcl_wool:blue", mcl_dyes.colors.blue.rgb, "mcl_dyes:blue", S("Blue") },
-	["unicolor_red_violet"] = {"magenta",    S("Magenta Banner"),    "mcl_wool:magenta", mcl_dyes.colors.magenta.rgb, "mcl_dyes:magenta", S("Magenta")},
-	["unicolor_orange"] =     {"orange",     S("Orange Banner"),     "mcl_wool:orange", mcl_dyes.colors.orange.rgb, "mcl_dyes:orange", S("Orange") },
-	["unicolor_violet"] =     {"purple",     S("Purple Banner"),     "mcl_wool:purple", mcl_dyes.colors.purple.rgb, "mcl_dyes:violet", S("Violet") },
-	["unicolor_brown"] =      {"brown",      S("Brown Banner"),      "mcl_wool:brown", mcl_dyes.colors.brown.rgb, "mcl_dyes:brown", S("Brown") },
-	["unicolor_dark_orange"] ={"brown",      S("Brown Banner"),      "mcl_wool:brown", mcl_dyes.colors.brown.rgb, "mcl_dyes:brown", S("Brown") },
-	["unicolor_pink"] =       {"pink",       S("Pink Banner"),       "mcl_wool:pink", mcl_dyes.colors.pink.rgb, "mcl_dyes:pink", S("Pink") },
-	["unicolor_light_red"] =  {"pink",       S("Pink Banner"),       "mcl_wool:pink", mcl_dyes.colors.pink.rgb, "mcl_dyes:pink", S("Pink") },
-	["unicolor_lime"] =       {"lime",       S("Lime Banner"),       "mcl_wool:lime", mcl_dyes.colors.lime.rgb, "mcl_dyes:lime", S("Lime") },
-	["unicolor_green"] =      {"lime",       S("Lime Banner"),       "mcl_wool:lime", mcl_dyes.colors.lime.rgb, "mcl_dyes:lime", S("Lime") },
-	--the duplicate lines for brown/dark_orange, lime/green and pink/light_red are needed because mcl_banners previously used the wrong unicolor color names
-	["unicolor_light_blue"] = {"light_blue", S("Light Blue Banner"), "mcl_wool:light_blue", mcl_dyes.colors.light_blue.rgb, "mcl_dyes:light_blue", S("Light Blue") },
+	-- Backward compatibility with previously wrong unicolor color names.
+	["unicolor_brown"] = { color_key = "brown" },
+	["unicolor_pink"]  = { color_key = "pink"  },
+	["unicolor_lime"]  = { color_key = "lime"  },
+	-- Up to date dye colours are added to this list below.
 }
 
 local colors_reverse = {}
-for k,v in pairs(mcl_banners.colors) do
-	colors_reverse["mcl_banners:banner_item_"..v[1]] = k
-end
-
 function mcl_banners.color_reverse(itemname)
 	return colors_reverse[itemname]
 end
 
+local function init_colors ()
+	local dye_colors = mcl_dyes.colors
+	for k,v in pairs(mcl_dyes.colors) do
+		mcl_banners.colors["unicolor_" .. v.unicolor] = { color_key = k }
+	end
+	for k,v in pairs(mcl_banners.colors) do
+		local dye_key = v.color_key -- Set above, "silver"
+		local color = dye_colors[dye_key]
+		v.color_name = color.readable_name -- "Grey"
+		v.banner_name = D(color.readable_name .. " Banner") -- "Grey Banner"
+		v.wool_itemname = "mcl_wool:" .. dye_key -- "mcl_wool:silver"
+		v.dye_itemname = "mcl_dyes:" .. dye_key -- "mcl_dyes:silver"
+		v.rgb = color.rgb -- "#d0d6d7"
+		colors_reverse["mcl_banners:banner_item_"..dye_key] = k
+	end
+end
+init_colors()
 
 -- Helper functions
 local function round(num, idp)
@@ -94,7 +99,7 @@ function mcl_banners.update_description (itemstack)
 		if itemstack:get_name() == "mcl_banners:banner_item_white"
 		and core.get_modpath("mcl_raids")
 		and same_layers(layers, mcl_raids.ominous_banner_layers) then
-			local orig_name = mcl_banners.colors["unicolor_white"][2] -- White Banner
+			local orig_name = mcl_banners.colors["unicolor_white"].banner_name
 			name = name:gsub(orig_name:gsub("%W", "%%%1"), mcl_raids.ominous_banner_name)
 		end
 	else
@@ -115,7 +120,7 @@ function mcl_banners.make_advanced_banner_description (name, layers)
 		local colour_tab = layer and mcl_banners.colors[layer.color or ""]
 		if colour_tab then
 			local pattern_name = mcl_banners.patterns[layer.pattern].name
-			table.insert(layerstrings, S(pattern_name, colour_tab[6]))
+			table.insert(layerstrings, S(pattern_name, colour_tab.color_name))
 		end
 	end
 	if #layers == max_layer_lines + 1 then
@@ -134,7 +139,7 @@ dofile(modpath.."/patterncraft.lua")
 
 local pattern_names = { "" }
 
-for id,_ in pairs(mcl_banners.patterns) do
+for id, _ in pairs(mcl_banners.patterns) do
 	table.insert(pattern_names, id)
 end
 table.sort(pattern_names)
@@ -209,7 +214,7 @@ end
 function mcl_banners.make_banner_texture(base_color, layers)
 	local colorize
 	if mcl_banners.colors[base_color] then
-		colorize = mcl_banners.colors[base_color][4]
+		colorize = mcl_banners.colors[base_color].rgb
 	end
 	if not colorize then return "mcl_banners_banner_base.png" end
 	-- Base texture with base color
@@ -221,7 +226,7 @@ function mcl_banners.make_banner_texture(base_color, layers)
 		local layerinfo = layers[l]
 		if layerinfo and layerinfo.pattern and layerinfo.color and mcl_banners.colors[layerinfo.color] then
 			local pattern = "mcl_banners_" .. layerinfo.pattern .. ".png"
-			local color = mcl_banners.colors[layerinfo.color][4]
+			local color = mcl_banners.colors[layerinfo.color].rgb
 
 			-- Generate layer texture
 			local layer = "(("..pattern.."^[colorize:"..color..":255)^[mask:"..pattern..")"
@@ -380,31 +385,25 @@ minetest.register_node("mcl_banners:hanging_banner", {
 -- for pattern_name, pattern in pairs(patterns) do
 for _, colortab in pairs(mcl_banners.colors) do
 	for _, pattern_name in ipairs(pattern_names) do
-		local itemid = colortab[1]
-		local desc = colortab[2]
-		local wool = colortab[3]
-		local color = colortab[4]
+		local desc = colortab.banner_name
+		local color = colortab.rgb
 
 		local recipe = mcl_banners.patterns[pattern_name]
 		if recipe and recipe.name then
-			desc = S(recipe.name, colortab[6])
+			desc = S(recipe.name, colortab.color_name)
 		end
 
 		local itemstring
 		if pattern_name == "" then
-			itemstring = "mcl_banners:banner_item_" .. itemid
+			itemstring = "mcl_banners:banner_item_" .. colortab.color_key
 		else
-			itemstring = "mcl_banners:banner_preview_" .. pattern_name .. "_" .. itemid
+			itemstring = "mcl_banners:banner_preview_" .. pattern_name .. "_" .. colortab.color_key
 		end
 
 		local item_texture
 		if pattern_name == "" then
-			if color then
 			-- Base texture with base color
-				item_texture = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..color..")"
-			else
-				item_texture = "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png"
-			end
+			item_texture = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..color..")"
 		else
 			-- Banner item preview background
 			local base = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:#CCCCCC)^[resize:48x48"
@@ -551,6 +550,7 @@ for _, colortab in pairs(mcl_banners.colors) do
 		})
 
 		if mod_mcl_core and minetest.get_modpath("mcl_wool") and pattern_name == "" then
+			local wool = colortab.wool_itemname
 			minetest.register_craft({
 				output = itemstring,
 				recipe = {
