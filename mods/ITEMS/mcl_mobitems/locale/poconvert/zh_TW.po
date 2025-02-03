@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-03 14:21+0000\n"
+"PO-Revision-Date: 2025-02-03 14:49+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -103,7 +103,7 @@ msgid "Spider Eye"
 msgstr "蜘蛛眼"
 
 msgid "Poisonous"
-msgstr ""
+msgstr "有毒"
 
 msgid "Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."
 msgstr ""
@@ -184,7 +184,7 @@ msgid "Rabbit hide is used to create leather."
 msgstr ""
 
 msgid "Rabbit's Foot"
-msgstr ""
+msgstr "兔子腳"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr ""
@@ -202,7 +202,7 @@ msgid "Use the placement key with the saddle in your hand to try to put on the s
 msgstr ""
 
 msgid "Rabbit Stew"
-msgstr ""
+msgstr "兔肉煮"
 
 msgid "Rabbit stew is a very nutricious food item."
 msgstr ""
@@ -223,7 +223,7 @@ msgid "Gunpowder"
 msgstr "火藥"
 
 msgid "Carrot on a Stick"
-msgstr ""
+msgstr "胡蘿蔔釣竿"
 
 msgid "Lets you ride a saddled pig"
 msgstr ""
@@ -235,7 +235,7 @@ msgid "Place it on a saddled pig to mount it. You can now ride the pig like a ho
 msgstr ""
 
 msgid "Warped Fungus on a Stick"
-msgstr ""
+msgstr "扭曲蕈菇釣竿"
 
 msgid "Lets you ride a strider"
 msgstr ""
@@ -247,7 +247,7 @@ msgid "Place it on a saddled strider to mount it. You can now ride the strider l
 msgstr ""
 
 msgid "Nautilus Shell"
-msgstr ""
+msgstr "鸚鵡螺殼"
 
 msgid "Used to craft a conduit"
 msgstr ""
@@ -256,7 +256,7 @@ msgid "The Nautilus Shell is used to craft a conduit. They can be obtained by fi
 msgstr ""
 
 msgid "Heart of the Sea"
-msgstr ""
+msgstr "海洋之心"
 
 msgid "The Heart of the Sea is used to craft a conduit. They can be obtained by finding them in a buried treasure chest."
 msgstr ""
@@ -265,31 +265,31 @@ msgid "Place it on a horse to put on the horse armor. Donkeys and mules can't we
 msgstr ""
 
 msgid "Leather Horse Armor"
-msgstr ""
+msgstr "皮革馬鎧"
 
 msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
 msgstr ""
 
 msgid "Iron Horse Armor"
-msgstr ""
+msgstr "鐵馬鎧"
 
 msgid "Iron horse armor can be worn by horses to increase their protection from harm a bit."
 msgstr ""
 
 msgid "Golden Horse Armor"
-msgstr ""
+msgstr "金馬鎧"
 
 msgid "Golden horse armor can be worn by horses to increase their protection from harm."
 msgstr ""
 
 msgid "Diamond Horse Armor"
-msgstr ""
+msgstr "鑽石馬鎧"
 
 msgid "Diamond horse armor can be worn by horses to greatly increase their protection from harm."
 msgstr ""
 
 msgid "Glow Ink Sac"
-msgstr ""
+msgstr "螢光墨囊"
 
 msgid "Use it to craft the Glow Item Frame."
 msgstr ""
@@ -307,7 +307,7 @@ msgid "Set name at anvil"
 msgstr "在鐵砧上設置名字"
 
 msgid "A name tag is an item to name a mob."
-msgstr "命名牌是一個用於命名生物的物品"
+msgstr "命名牌可用來給生物命名。"
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr "在使用名字標籤之前，你需要在一個鐵砧上設置一個名字。然後你就可以用名字標籤來給生物命名。這會消耗命名牌。"
