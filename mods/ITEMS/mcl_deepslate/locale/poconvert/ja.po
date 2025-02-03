@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-03 14:21+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_deepslate/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Deepslate"
 msgstr "深層岩"
@@ -23,7 +25,7 @@ msgid "Infested Deepslate"
 msgstr "虫喰い深層岩"
 
 msgid "Reinforced Deepslate"
-msgstr ""
+msgstr "強化された深層岩"
 
 msgid "Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode."
 msgstr ""
@@ -92,13 +94,13 @@ msgid "Deepslate bricks are the brick version of deepslate."
 msgstr "深層岩レンガは、深層岩のレンガバージョンです。"
 
 msgid "Deepslate Brick Stairs"
-msgstr ""
+msgstr "深層岩レンガの階段"
 
 msgid "Deepslate Brick Slab"
-msgstr ""
+msgstr "深層岩レンガのハーフブロック"
 
 msgid "Deepslate Brick Wall"
-msgstr ""
+msgstr "深層岩レンガの塀"
 
 msgid "Cracked Deepslate Bricks"
 msgstr "ひび割れた深層岩レンガ"
@@ -110,13 +112,13 @@ msgid "Deepslate tiles are a decorative variant of deepslate."
 msgstr "深層岩タイルは、深層岩の装飾バージョンです。"
 
 msgid "Deepslate Tile Stairs"
-msgstr ""
+msgstr "深層岩タイルの階段"
 
 msgid "Deepslate Tile Slab"
-msgstr ""
+msgstr "深層岩タイルのハーフブロック"
 
 msgid "Deepslate Tiles Wall"
-msgstr ""
+msgstr "深層岩タイルの塀"
 
 msgid "Cracked Deepslate Tiles"
 msgstr "ひび割れた深層岩タイル"
@@ -137,53 +139,52 @@ msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in undergr
 msgstr ""
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "模様入りの凝灰岩"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
 msgstr ""
 
 msgid "Chiseled Tuff Bricks"
-msgstr ""
+msgstr "模様入りの凝灰岩レンガ"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr ""
 
 msgid "Tuff Stairs"
-msgstr ""
+msgstr "凝灰岩の階段"
 
 msgid "Tuff Slab"
-msgstr ""
+msgstr "凝灰岩のハーフブロック"
 
 msgid "Tuff Wall"
-msgstr ""
+msgstr "凝灰岩の塀"
 
 msgid "Polished Tuff"
-msgstr ""
+msgstr "磨かれた凝灰岩"
 
 msgid "Polished tuff is a polished variant of the tuff block."
 msgstr ""
 
 msgid "Polished Tuff Stairs"
-msgstr ""
+msgstr "磨かれた凝灰岩の階段"
 
 msgid "Polished Tuff Slab"
-msgstr ""
+msgstr "磨かれた凝灰岩のハーフブロック"
 
 msgid "Polished Tuff Wall"
-msgstr ""
+msgstr "磨かれた凝灰岩の塀"
 
 msgid "Tuff Bricks"
-msgstr ""
+msgstr "凝灰岩レンガ"
 
 msgid "Tuff bricks are a brick variant of tuff."
 msgstr ""
 
 msgid "Tuff Bricks Stairs"
-msgstr ""
+msgstr "凝灰岩レンガの階段"
 
 msgid "Tuff Bricks Slab"
-msgstr ""
+msgstr "凝灰岩レンガのハーフブロック"
 
 msgid "Tuff Bricks Wall"
-msgstr ""
-
+msgstr "凝灰岩レンガの塀"
