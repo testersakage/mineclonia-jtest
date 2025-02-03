@@ -163,7 +163,6 @@ local function teleport_object(obj, target, original_dim)
 			show_credits(obj)
 		end
 		mcl_worlds.dimension_change(obj, mcl_worlds.pos_to_dimension(target))
-		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
 	else
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
@@ -188,6 +187,7 @@ function mcl_portals.end_teleport(obj, pos)
 
 		target = target or mcl_spawn.get_world_spawn_pos()
 		teleport_object(obj, target, dim)
+		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
 	else
 		-- End portal in any other dimension:
 		-- Teleport to the End at a fixed position.
@@ -198,6 +198,7 @@ function mcl_portals.end_teleport(obj, pos)
 			mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
 			teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
 		end)
+		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
 	end
 end
 
