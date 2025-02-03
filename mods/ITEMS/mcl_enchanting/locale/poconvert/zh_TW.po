@@ -4,7 +4,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2025-02-03 14:21+0000\n"
-"Last-Translator: milklikecomputer <brilliunt7164@proton.me>\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_enchanting/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -93,13 +94,13 @@ msgid "Increases mob loot."
 msgstr "增加被殺死生物的掉落物數量。"
 
 msgid "Loyalty"
-msgstr ""
+msgstr "忠誠"
 
 msgid "Trident returns after being thrown. Higher levels reduce return time."
 msgstr ""
 
 msgid "Luck of the Sea"
-msgstr ""
+msgstr "海洋的祝福"
 
 msgid "Increases rate of good loot (enchanting books, etc.)"
 msgstr ""
@@ -111,10 +112,10 @@ msgid "Decreases time until rod catches something."
 msgstr ""
 
 msgid "Mending"
-msgstr ""
+msgstr "修補"
 
 msgid "Repair the item while gaining XP orbs."
-msgstr ""
+msgstr "在獲得經驗球時修復耐久度。"
 
 msgid "Multishot"
 msgstr ""
