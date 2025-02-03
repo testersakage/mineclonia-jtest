@@ -26,6 +26,20 @@ local function destroy_portal(pos)
 	end
 end
 
+local function find_valid_spawn(target, attempts)
+	local minp, maxp = vector.subtract(target,8), vector.add(target,8)
+	core.load_area(minp, maxp)
+	attempts = attempts or 1
+	local nn = minetest.find_nodes_in_area_under_air(minp,maxp,{"group:solid"})
+	if #nn > 0 then
+		target = nn[math.random(#nn)]
+		target = vector.offset(target, 0,1,0)
+		return target
+	else
+		return find_valid_spawn(vector.offset(target,0,attempts,0), attempts + 1)
+	end
+end
+
 local ep_scheme = {
 	{ o={x=0, y=0, z=1}, p=1 },
 	{ o={x=0, y=0, z=2}, p=1 },
@@ -186,6 +200,8 @@ function mcl_portals.end_teleport(obj, pos)
 		end
 
 		target = target or mcl_spawn.get_world_spawn_pos()
+		target = find_valid_spawn(target)
+
 		teleport_object(obj, target, dim)
 		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
 	else
