@@ -207,6 +207,9 @@ function zombie_villager:on_rightclick (clicker)
 			self._curer = playername
 			self.shaking = true
 			self.persistent = true
+
+			core.sound_play("mobs_mc_zombie_villager_cure",
+					{pos=self.object:get_pos(), gain=0.6, max_hear_range=6}, true)
 		end
 	end
 end
