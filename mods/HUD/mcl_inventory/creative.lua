@@ -43,24 +43,30 @@ minetest.register_on_mods_loaded(function()
 			end
 
 			local function is_tool(def)
-				return def.groups.tool or (def.tool_capabilities and def.tool_capabilities.damage_groups == nil)
+				return (def.groups.tool and def.groups.tool ~= 0) or (def.tool_capabilities and def.tool_capabilities.damage_groups == nil)
 			end
 
 			local function is_weapon_or_armor(def)
-				return def.groups.weapon or def.groups.weapon_ranged or def.groups.ammo or def.groups.combat_item or
-					(
-						(
-							def.groups.armor_head or def.groups.armor_torso or def.groups.armor_legs or def.groups.armor_feet or
-							def.groups.horse_armor) and def.groups.non_combat_armor ~= 1)
+				return (def.groups.weapon and def.groups.weapon ~= 0) or
+				( def.groups.weapon_ranged and def.groups.weapon_ranged ~= 0 ) or
+				( def.groups.ammo and def.groups.ammo ~= 0) or
+				( def.groups.combat_item and def.groups.combat_item ~= 0 ) or
+					((
+						( def.groups.armor_head and def.groups.armor_head ~= 0 ) or
+					    ( def.groups.armor_torso and def.groups.armor_torso ~= 0 ) or
+						( def.groups.armor_legs and def.groups.armor_legs ~= 0 ) or
+						( def.groups.armor_feet and def.groups.armor_feet ~= 0 ) or
+						( def.groups.horse_armor and def.groups.horse_armor ~= 0 )) and
+					def.groups.non_combat_armor ~= 1)
 			end
 
 			-- Is set to true if it was added in any category besides misc
 			local nonmisc = false
-			if def.groups.building_block then
+			if core.get_item_group(name, "building_block") ~= 0 then
 				table.insert(inventory_lists["blocks"], name)
 				nonmisc = true
 			end
-			if def.groups.deco_block then
+			if core.get_item_group(name, "deco_block") ~= 0 then
 				table.insert(inventory_lists["deco"], name)
 				nonmisc = true
 			end
@@ -68,11 +74,11 @@ minetest.register_on_mods_loaded(function()
 				table.insert(inventory_lists["redstone"], name)
 				nonmisc = true
 			end
-			if def.groups.transport then
+			if core.get_item_group(name, "transport") ~= 0 then
 				table.insert(inventory_lists["rail"], name)
 				nonmisc = true
 			end
-			if (def.groups.food and not def.groups.brewitem) or def.groups.eatable then
+			if (core.get_item_group(name, "food") ~= 0 and core.get_item_group(name, "brewitem") == 0 ) or core.get_item_group(name, "eatable") ~= 0 then
 				table.insert(inventory_lists["food"], name)
 				nonmisc = true
 			end
@@ -84,11 +90,11 @@ minetest.register_on_mods_loaded(function()
 				table.insert(inventory_lists["combat"], name)
 				nonmisc = true
 			end
-			if def.groups.spawn_egg == 1 then
+			if core.get_item_group(name, "spawn_egg") ~= 0 then
 				table.insert(inventory_lists["mobs"], name)
 				nonmisc = true
 			end
-			if def.groups.brewitem then
+			if core.get_item_group(name, "brewitem") ~= 0 then
 				local str = name
 				if def.groups._mcl_potion == 1 then
 					local stack = ItemStack(name)
@@ -98,7 +104,7 @@ minetest.register_on_mods_loaded(function()
 				table.insert(inventory_lists["brew"], str)
 				nonmisc = true
 			end
-			if def.groups.craftitem then
+			if core.get_item_group(name, "craftitem") ~= 0 then
 				table.insert(inventory_lists["matr"], name)
 				nonmisc = true
 			end
