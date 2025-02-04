@@ -14,43 +14,45 @@ end)
 -- doc_items factoids
 
 -- dig_by_water
-doc.sub.items.register_factoid("nodes", "drop_destroy", function(_, def)
-	if def.groups.dig_by_water then
+doc.sub.items.register_factoid("nodes", "drop_destroy", function(itemstring, _)
+	if core.get_item_group(itemstring, "dig_by_water") ~= 0 then
 		return S("Water can flow into this block and cause it to drop as an item.")
 	end
 	return ""
 end)
 
 -- usable by hoes
-doc.sub.items.register_factoid("nodes", "groups", function(_, def)
-	if def.groups.cultivatable == 1 then
+doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
+	local cultivatable = core.get_item_group(itemstring, "cultivatable")
+	if cultivatable == 1 then
 		return S("This block can be turned into dirt with a hoe.")
-	elseif def.groups.cultivatable == 2 then
+	elseif cultivatable == 2 then
 		return S("This block can be turned into farmland with a hoe.")
 	end
 	return ""
 end)
 
 -- usable by shovels
-doc.sub.items.register_factoid("nodes", "groups", function(_, def)
-	if def.groups.path_creation_possible then
+doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
+	if core.get_item_group(itemstring, "path_creation_possible") ~= 0 then
 		return S("This block can be turned into grass path with a shovel.")
 	end
 	return ""
 end)
 
 -- soil
-doc.sub.items.register_factoid("nodes", "groups", function(_, def)
+doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
 	local datastring = ""
-	if def.groups.soil_sapling == 2 then
+	local soil_sapling = core.get_item_group(itemstring, "soil_sapling")
+	if soil_sapling == 2 then
 		datastring = datastring .. S("This block acts as a soil for all saplings.") .. "\n"
-	elseif def.groups.soil_sapling == 1 then
+	elseif soil_sapling == 1 then
 		datastring = datastring .. S("This block acts as a soil for some saplings.") .. "\n"
 	end
-	if def.groups.soil_sugarcane then
+	if core.get_item_group(itemstring, "soil_sugarcane") ~= 0 then
 		datastring = datastring .. S("Sugar canes will grow on this block.") .. "\n"
 	end
-	if def.groups.soil_nether_wart then
+	if core.get_item_group(itemstring, "soil_nether_wart") then
 		datastring = datastring .. S("Nether wart will grow on this block.") .. "\n"
 	end
 	return datastring
@@ -58,7 +60,7 @@ end)
 
 doc.sub.items.register_factoid("nodes", "groups", function(itemstring, def)
 	local formstring = ""
-	if def.groups.leafdecay then
+	if core.get_item_group(itemstring, "leafdecay") ~= 0 then
 		if def.drop ~= "" and def.drop and def.drop ~= itemstring then
 			formstring = S("This block quickly decays when there is no wood block of any species within a distance of @1. When decaying, it disappears and may drop one of its regular drops. The block does not decay when the block has been placed by a player.", def.groups.leafdecay)
 		else
@@ -69,26 +71,27 @@ doc.sub.items.register_factoid("nodes", "groups", function(itemstring, def)
 end)
 
 -- nodes which have flower placement rules
-doc.sub.items.register_factoid("nodes", "groups", function(_, def)
-	if def.groups.place_flowerlike == 1 then
+doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
+	local flowerlike = core.get_item_group(itemstring, "place_flowerlike")
+	if flowerlike == 1 then
 		return S("This plant can only grow on grass blocks and dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher.")
-	elseif def.groups.place_flowerlike == 2 then
+	elseif flowerlike == 2 then
 		return S("This plant can grow on grass blocks, podzol, dirt and coarse dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher.")
 	end
 	return ""
 end)
 
 -- flammable
-doc.sub.items.register_factoid("nodes", "groups", function(_, def)
-	if def.groups.flammable then
+doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
+	if core.get_item_group(itemstring, "flammable") ~= 0 then
 		return S("This block is flammable.")
 	end
 	return ""
 end)
 
 -- destroys_items
-doc.sub.items.register_factoid("nodes", "groups", function(_, def)
-	if def.groups.destroys_items then
+doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
+	if core.get_item_group(itemstring, "destroys_items") then
 		return S("This block destroys any item it touches.")
 	end
 	return ""
@@ -96,37 +99,39 @@ end)
 
 
 -- Comestibles
-doc.sub.items.register_factoid(nil, "use", function(_, def)
+doc.sub.items.register_factoid(nil, "use", function(itemstring, def)
 	local s = ""
-	if def.groups.eatable and not def._doc_items_usagehelp then
-		if def.groups.food == 2 then
+	if core.get_item_group(itemstring, "eatable") ~= 0 and not def._doc_items_usagehelp then
+		local food = core.get_item_group(itemstring, "food")
+		local can_eat_when_full = core.get_item_group(itemstring, "can_eat_when_full")
+		if food == 2 then
 			s = s .. S("To eat it, wield it, then rightclick.")
-			if def.groups.can_eat_when_full == 1 then
+			if can_eat_when_full == 1 then
 				s = s .. "\n" .. S("You can eat this even when your hunger bar is full.")
 			else
 				s = s .. "\n" .. S("You cannot eat this when your hunger bar is full.")
 			end
-		elseif def.groups.food == 3 then
+		elseif food == 3 then
 			s = s .. S("To drink it, wield it, then rightclick.")
-			if def.groups.can_eat_when_full ~= 1 then
+			if can_eat_when_full ~= 1 then
 				s = s .. "\n" .. S("You cannot drink this when your hunger bar is full.")
 			end
 		else
 			s = s .. S("To consume it, wield it, then rightclick.")
-			if def.groups.can_eat_when_full ~= 1 then
+			if can_eat_when_full ~= 1 then
 				s = s .. "\n" .. S("You cannot consume this when your hunger bar is full.")
 			end
 		end
-		if def.groups.no_eat_delay ~= 1 then
+		if core.get_item_group(itemstring, "no_eat_delay") ~= 1 then
 			s = s .. "\n" .. S("You have to wait for about 2 seconds before you can eat or drink again.")
 		end
 	end
 	return s
 end)
 
-doc.sub.items.register_factoid(nil, "groups", function(_, def)
+doc.sub.items.register_factoid(nil, "groups", function(itemstring, def)
 	local s = ""
-	if def.groups.eatable and def.groups.eatable > 0 then
+	if core.get_item_group(itemstring, "eatable") > 0 then
 		s = s .. S("Hunger points restored: @1", def.groups.eatable)
 	end
 	if def._mcl_saturation and def._mcl_saturation > 0 then
@@ -299,7 +304,7 @@ doc.sub.items.register_factoid("nodes", "drops", function(_, def)
 end)
 
 -- Digging capabilities of tool
-doc.sub.items.register_factoid("tools", "misc", function(_, def)
+doc.sub.items.register_factoid("tools", "misc", function(itemstring, def)
 	if not def.tool_capabilities then
 		return ""
 	end
@@ -322,7 +327,7 @@ doc.sub.items.register_factoid("tools", "misc", function(_, def)
 		end
 
 		-- Digging speed
-		local speed_class = def.groups and def.groups.dig_speed_class
+		local speed_class = core.get_item_group(itemstring, "dig_speed_class")
 		if speed_class == 1 then
 			speedstr = S("Painfully slow")
 		elseif speed_class == 2 then
