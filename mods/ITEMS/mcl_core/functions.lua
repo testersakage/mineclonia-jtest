@@ -244,8 +244,7 @@ minetest.register_abm({
 
 			-- If this was mycelium, uproot plant above
 			if n2.name == "mcl_core:mycelium" then
-				local tad = minetest.registered_nodes[minetest.get_node(above).name]
-				if tad and tad.groups and tad.groups.non_mycelium_plant then
+				if core.get_item_group(core.get_node(above).name, "non_mycelium_plant") > 0 then
 					minetest.dig_node(above)
 				end
 			end
