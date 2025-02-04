@@ -214,17 +214,18 @@ function mcl_portals.end_teleport(obj, pos)
 	if not pos then return end
 	local dim = mcl_worlds.pos_to_dimension(pos)
 
-	local target
+	local target, player_spawn
 	if dim == "end" then
 		-- End portal in the End:
 		-- Teleport back to the player's spawn or world spawn in the Overworld.
 		if obj:is_player() then
-			target = mcl_spawn.get_player_spawn_pos(obj)
+			target, player_spawn = mcl_spawn.get_player_spawn_pos(obj)
 		end
 
 		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
-		target = target or mcl_spawn.get_world_spawn_pos()
-		target = find_valid_spawn(target)
+		if not target or not player_spawn then
+			target = find_valid_spawn(mcl_spawn.get_world_spawn_pos())
+		end
 		teleport_object(obj, target, dim)
 	else
 		-- End portal in any other dimension:
