@@ -446,7 +446,7 @@ function mob_class:do_env_damage()
 
 	local frozen = false
 	-- water damage
-	if self.water_damage > 0 and nodef.groups.water then
+	if self.water_damage > 0 and nodef.groups.water and nodef.groups.water > 0 then
 		local fatal = self:damage_mob ("environment", self.water_damage)
 		pos.y = pos.y + 1
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png", nil, nil, 1, nil)
@@ -455,7 +455,7 @@ function mob_class:do_env_damage()
 			return true
 		end
 	-- magma damage
-	elseif self.fire_damage > 0 and (nodef2.groups.fire) then
+	elseif self.fire_damage > 0 and nodef2.groups.fire and nodef2.groups.fire > 0 then
 		if self.fire_damage ~= 0 then
 			if self:damage_mob ("hot_floor", self.fire_damage) then
 				return true
@@ -499,7 +499,7 @@ function mob_class:do_env_damage()
 			end
 		end
 	-- damage_per_second node check
-	elseif nodef.damage_per_second ~= 0 and not nodef.groups.lava and not nodef.groups.fire then
+	elseif nodef.damage_per_second ~= 0 and ( not nodef.groups.lava or nodef.groups.lava == 0 ) and ( not nodef.groups.fire or nodef.groups.fire == 0 ) then
 		local fatal = self:damage_mob ("environment", nodef.damage_per_second)
 		pos.y = pos.y + 1
 		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png")
@@ -645,7 +645,7 @@ function mob_class:falling(pos)
 	local node = mcl_mobs.node_ok (pos, "air")
 	if node.name == "mcl_powder_snow:powder_snow" then
 		self.reset_fall_damage = 1
-	elseif minetest.registered_nodes[node.name].groups.water then
+	elseif core.registered_nodes[node.name].groups.water and core.registered_nodes[node.name].groups.water > 0 then
 		-- Reset fall damage when falling into water first.
 		self.reset_fall_damage = 1
 	else
@@ -944,6 +944,29 @@ mcl_mobs.horiz_collision = horiz_collision
 
 local function clamp (num, min, max)
 	return math.min (max, math.max (num, min))
+end
+
+function mob_class:immersion_depth (liquidgroup, pos, max)
+	local start = pos.y
+	local ymax
+	local i = start
+	local limit = i + max + 1
+
+	while i < limit do
+		local pos = { x = pos.x, y = i, z = pos.z, }
+		local node = minetest.get_node (pos)
+		local def = minetest.registered_nodes[node.name]
+		if def and def.groups[liquidgroup] and def.groups[liquidgroup] > 0 then
+			local height = 1
+			if def.liquidtype == "flowing" then
+				height = 0.1 + node.param2 * 0.1
+			end
+			ymax = math.floor (i + 0.5) + height - 0.5
+		end
+		i = i + 1
+	end
+
+	return ymax and ymax - start or 0
 end
 
 function mob_class:check_collision (self_pos)
@@ -1367,11 +1390,11 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 	acc_dir.x = acc_dir.x * p
 	acc_dir.z = acc_dir.z * p
 
-	if standin.groups.water then
+	if standin.groups.water and standin.groups.water > 0 then
 		speed = FLYING_LIQUID_SPEED
 		p = pow_by_step (WATER_DRAG, dtime)
 		scale = (1 - p) / (1 - WATER_DRAG)
-	elseif standin.groups.lava then
+	elseif standin.groups.lava and standin.groups.lava > 0 then
 		speed = FLYING_LIQUID_SPEED
 		p = pow_by_step (LAVA_FRICTION, dtime)
 		scale = (1 - p) / (1 - LAVA_FRICTION)
@@ -1415,7 +1438,7 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 	end
 
 	local standin = minetest.registered_nodes[self.standing_in]
-	if standin.groups.water then
+	if standin.groups.water and standin.groups.water > 0 then
 		local acc_speed = self.acc_speed
 		local acc_dir = self.acc_dir
 		local acc_fixed = self._acc_y_fixed or 0
