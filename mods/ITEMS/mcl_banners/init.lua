@@ -395,13 +395,13 @@ local function init_banner_registration ()
 				local base = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:#CCCCCC)^[resize:48x48"
 				local pattern = "mcl_banners_" .. pattern_id .. ".png"
 				-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.  Item texture 48x48 offset 14,4.
-				local layer = "[combine:20x40:-1,-1=\\("..pattern.."\\^[resize\\:64x64\\)^[colorize:"..color..":255"
+				local layer = "[combine:20x40:-1,-1="..pattern.."^[colorize:"..color..":255^[mask:"..pattern.."^[resize:64x64"
 
 				function escape(text)
 					return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
 				end
 
-				item_texture = "[combine:48x48:0,0=" .. escape(base) .. ":14,4=" .. escape(layer)
+				item_texture = "[combine:48x48:0,0=" .. escape(base) .. ":14,4=" .. escape(escape(layer))
 			end
 
 			-- Banner items.
