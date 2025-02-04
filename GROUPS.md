@@ -70,7 +70,7 @@ Please read <https://minecraft.wiki/w/Breaking> to learn how digging times work 
 * `cauldron`: Cauldron. 1: Empty. 2-4: Water height
 * `anvil`: Anvil. 1: No damage. 2-3: Higher damage levels
 * `no_rename=1`: Item cannot be renamed by anvil
-* `comparator_signal=X`: If set, this node outputs a constant (!) comparator signal output of strength X.
+* `comparator_signal=X`: Marks the node as comparator measurable with a constant (!) reading of power level 0 (!) <= X <= 15. This triggers automatic comparator updates when this node is placed/dug normally or changed using `mcl_redstone.swap_node`.
 * `redstone_conductive=1`: If set, the node conducts redstone power even if not opaque. Use to override default behavior.
 * `redstone_not_conductive=1`: If set, the node does NOT conduct redstone power. Use to override default behavior.
 * `piston=X`: Piston (main body) (1 = normal, 2 = sticky)
