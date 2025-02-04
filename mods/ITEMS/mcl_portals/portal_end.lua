@@ -48,6 +48,9 @@ local function find_valid_spawn(target, attempts)
 	local minp, maxp = vector.subtract(target,8), vector.add(target,8)
 	core.load_area(minp, maxp)
 	attempts = attempts or 1
+	if attempts > 10 then
+		return mcl_spawn.get_world_spawn_pos()
+	end
 	local nn = minetest.find_nodes_in_area_under_air(minp,maxp,{"group:solid"})
 	if #nn > 0 then
 		for _, n in pairs(nn) do
