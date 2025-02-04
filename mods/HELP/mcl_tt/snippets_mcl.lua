@@ -51,7 +51,7 @@ end)
 tt.register_snippet(function(itemstring)
 	local def = minetest.registered_items[itemstring]
 	local s = ""
-	if def and def.groups.eatable and def.groups.eatable > 0 then
+	if core.get_item_group(itemstring, "eatable") > 0 then
 		s = s .. S("Hunger points: +@1", def.groups.eatable)
 	end
 	if def and def._mcl_saturation and def._mcl_saturation > 0 then
@@ -64,24 +64,22 @@ tt.register_snippet(function(itemstring)
 end)
 
 tt.register_snippet(function(itemstring)
-	--local def = minetest.registered_items[itemstring]
-	if minetest.get_item_group(itemstring, "crush_after_fall") == 1 then
+	if core.get_item_group(itemstring, "crush_after_fall") == 1 then
 		return S("Deals damage when falling"), mcl_colors.YELLOW
 	end
 end)
 
 tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
-	if def and def.groups.place_flowerlike == 1 then
+	local place_flowerlike = core.get_item_group(itemstring, "place_flowerlike")
+	if place_flowerlike == 1 then
 		return S("Grows on grass blocks or dirt")
-	elseif def and def.groups.place_flowerlike == 2 then
+	elseif place_flowerlike == 2 then
 		return S("Grows on grass blocks, podzol, dirt or coarse dirt")
 	end
 end)
 
 tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
-	if def and def.groups.flammable then
+	if core.get_item_group(itemstring, "flammable") ~= 0 then
 		return S("Flammable")
 	end
 end)
@@ -111,16 +109,16 @@ end)
 tt.register_snippet(function(itemstring, _, itemstack)
 	if not itemstack then return end
 	local def = itemstack:get_definition()
-	if def and def.groups._mcl_potion ~= 1 then return end
+	if core.get_item_group(itemstring, "_mcl_potion") ~= 1 then return end
 
 	local s = ""
 	local meta = itemstack:get_meta()
 	local potency = meta:get_int("mcl_potions:potion_potent")
 	local plus = meta:get_int("mcl_potions:potion_plus")
 	local sl_factor = 1
-	if def and def.groups.splash_potion == 1 then
+	if core.get_item_group(itemstring, "splash_potion") == 1 then
 		sl_factor = mcl_potions.SPLASH_FACTOR
-	elseif def and def.groups.ling_potion == 1 then
+	elseif core.get_item_group(itemstring, "ling_potion") == 1 then
 		sl_factor = mcl_potions.LINGERING_FACTOR
 	end
 	if def and def._dynamic_tt then s = s.. def._dynamic_tt((potency+1)*sl_factor).. "\n" end
