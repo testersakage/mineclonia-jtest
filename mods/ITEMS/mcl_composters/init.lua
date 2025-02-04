@@ -240,7 +240,8 @@ minetest.register_node("mcl_composters:composter", {
 	groups = {
 		handy=1, material_wood=1, deco_block=1, dirtifier=1,
 		flammable=2, fire_encouragement=3, fire_flammability=4,
-		container = 1, composter = 1, _mcl_partial = 2,
+		comparator_signal=0, container = 1, composter = 1,
+		_mcl_partial = 2,
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.6,
