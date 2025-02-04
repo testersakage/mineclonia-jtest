@@ -114,9 +114,7 @@ end
 function mob_class:expel_underwater_drivers ()
 	-- Detach the driver if submerged.
 	if self.driver then
-		local headin = minetest.registered_nodes[self.head_in]
-
-		if headin.groups.water then
+		if core.get_item_group(self.head_in, "water") > 0 then
 			self:detach (self.driver)
 			return
 		end
