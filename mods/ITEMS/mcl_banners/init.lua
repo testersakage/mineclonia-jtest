@@ -101,13 +101,14 @@ end
 -- Create a banner description containing all the layer names
 function mcl_banners.make_advanced_banner_description (name, layers)
 	if layers == nil or #layers == 0 then return name end
+	local patterns, colors = mcl_banners.patterns, mcl_banners.colors
 	local layerstrings = {}
 	for l=1, math.min(#layers, max_layer_lines) do
 		local layer = layers[l] -- {pattern="border", color="white"}
-		local colour_tab = layer and mcl_banners.colors[layer.color or ""]
+		local colour_tab = layer and colors[layer.color or ""]
 		if colour_tab then
-			local pattern_name = mcl_banners.patterns[layer.pattern].name
-			table.insert(layerstrings, S(pattern_name, colour_tab.color_name))
+			local pattern_name = patterns[layer.pattern].name
+			table.insert(layerstrings, D(colour_tab.color_name .. pattern_name))
 		end
 	end
 	if #layers == max_layer_lines + 1 then
@@ -375,7 +376,7 @@ local function init_banner_registration ()
 
 			local recipe = patterns[pattern_id]
 			if recipe and recipe.name then
-				desc = S(recipe.name, colortab.color_name)
+				desc = D(colortab.color_name .. recipe.name)
 			end
 
 			local itemstring
