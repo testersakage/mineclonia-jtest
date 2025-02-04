@@ -513,7 +513,7 @@ local function dolphin_gwp_basic_classify (pos)
 	local def = minetest.registered_nodes[name]
 	if not def then
 		value = "BLOCKED"
-	elseif not def.groups.water then
+	elseif not def.groups.water or def.groups.water == 0 then
 		-- Enable dolphins to (attempt to) surface into and
 		-- breathe air.
 		if not def.walkable then
