@@ -70,3 +70,8 @@ The function takes no argument and should return a table with following format:
     }
 }
 ```
+
+Note that `_get_all_virtual_items` functions will be executed once after all mods have been loaded and before the server starts, meaning that
+
+* the dynamic translation pattern can be used in a `_get_all_virtual_items` function
+* adding or overriding a `_get_all_virtual_items` function in a `register_on_mods_loaded` handler won't work reliably
