@@ -187,7 +187,9 @@ local function show_credits(player)
 end
 
 local function teleport_object(obj, target, original_dim)
-	obj:set_pos(target)
+	core.after(0.1, function ()
+		obj:set_pos(target)
+	end)
 
 	if obj:is_player() then
 		-- Look towards the main End island
