@@ -11,14 +11,21 @@ local candle_boxes = {
 local function set_candle_properties(stack, color)
 	if type(color) ~= "string" and color == "" then return end
 
-	local color_defs = mcl_dyes.colors[color]
+	local color_def = mcl_dyes.colors[color]
 	local image = "mcl_candles_item_".. color .. ".png"
 
-	if color_defs then
-		stack:get_meta():set_string("description", D(color_defs.readable_name .. " Candle"))
-		stack:get_meta():set_int("palette_index", color_defs.palette_index + 1)
+	if color_def then
+		stack:get_meta():set_string("description", D(color_def.readable_name .. " Candle"))
+		stack:get_meta():set_int("palette_index", color_def.palette_index + 1)
 		stack:get_meta():set_string("inventory_overlay", image)
 		stack:get_meta():set_string("wield_overlay", image)
+	end
+end
+
+-- Dynamic translation strings.
+if mcl_dyes.colors then
+	for color, _ in pairs(mcl_dyes.colors) do
+		set_candle_properties(ItemStack("mcl_candles:candle_1"), color)
 	end
 end
 
@@ -99,19 +106,19 @@ local tpl_lit_candle = {
 		not_in_creative_inventory = 1, not_solid = 1, pickaxey = 1, shearsy = 1,
 		shovely = 1, swordy = 1
 	},
-    tiles = {
-        "mcl_candles_candle.png",
-        {
-            animation = {
-                aspect_h = 16,
+	tiles = {
+		"mcl_candles_candle.png",
+		{
+			animation = {
+				aspect_h = 16,
 				aspect_w = 16,
 				length = 1,
 				type = "vertical_frames"
-            },
+			},
 			color = "white",
 			name = "mcl_candles_flames.png"
-        }
-    }
+		}
+	}
 }
 
 function tpl_candle.on_place(itemstack, placer, pointed_thing)
@@ -216,7 +223,6 @@ for i = 1, #candle_boxes do
 	lit_candle._on_ignite = nil
 	lit_candle._on_arrow_hit = nil
 	core.register_node("mcl_candles:candle_lit_" .. i, lit_candle)
-
 
 	doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
 end
@@ -354,14 +360,14 @@ core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
 		},
 		"mcl_candles_candle.png",
 		{
-            animation = {
-                aspect_h = 16,
+			animation = {
+				aspect_h = 16,
 				aspect_w = 16,
 				length = 1,
 				type = "vertical_frames"
-            },
+			},
 			color = "white",
 			name = "mcl_candles_flames.png"
-        }
+		}
 	}
 }))
