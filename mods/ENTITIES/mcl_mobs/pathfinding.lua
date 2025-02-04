@@ -1124,9 +1124,9 @@ minetest.register_on_mods_loaded (function ()
 			value = def._pathfinding_class
 		elseif def.damage_per_second ~= 0 then
 			value = "DAMAGE_OTHER"
-		elseif def.groups.door then
+		elseif core.get_item_group(name, "door") > 0 then
 			value = nil
-			if def.groups.door_iron then
+			if core.get_item_group(name, "door_iron") > 0 then
 				gwp_door_classes[key] = "DOOR_IRON_CLOSED"
 			else
 				gwp_door_classes[key] = "DOOR_WOOD_CLOSED"
@@ -2072,7 +2072,7 @@ local function waterbound_gwp_basic_classify (pos)
 	end
 	local name = gwp_nodevalue_to_name (nodevalue)
 	local def = minetest.registered_nodes[name]
-	if not def or not def.groups.water then
+	if not def or not def.groups.water or def.groups.water <= 0 then
 		value = "BLOCKED"
 	end
 	return value
