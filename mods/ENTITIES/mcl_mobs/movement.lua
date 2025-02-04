@@ -1638,7 +1638,7 @@ function mob_class:pitchswim_do_go_pos (dtime, moveresult)
 
 	-- Orient the mob vertically.
 	local speed = self.movement_velocity
-	if standin.groups.water then
+	if standin.groups.water and standin.groups.water > 0 then
 		local xz_mag = math.sqrt (dx * dx + dz * dz)
 		local des_pitch
 		if xz_mag > 1.0e-5 or xz_mag < -1.0e-5 then
