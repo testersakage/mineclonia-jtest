@@ -61,12 +61,11 @@ end
 
 local function activate_dropper(pos, droppos, dropdir, inv, stack_)
 	local dropnode = minetest.get_node(droppos)
-	local dropnodedef = minetest.registered_nodes[dropnode.name]
 	local dropitem = ItemStack(stack_.stack)
 	dropitem:set_count(1)
 
 	local dropped = mcl_util.move_item_container(pos, droppos, nil, stack_.stackpos)
-	if not dropped and not dropnodedef.groups.container then
+	if not dropped and core.get_item_group(dropnode.name, "container") == 0 then
 		drop(pos, droppos, dropitem, inv, stack_)
 	end
 	mcl_redstone.update_comparators(pos)
