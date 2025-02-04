@@ -606,7 +606,7 @@ function mcl_serverplayer.handle_damage (player, state, payload)
 		for _, node in pairs (payload.collisions) do
 			local name = minetest.get_node (node).name
 			local def = minetest.registered_nodes[name]
-			if def and def.groups.fall_damage_add_percent then
+			if core.get_item_group(name, "fall_damage_add_percent") ~= 0 then
 				local this = def.groups.fall_damage_add_percent
 				if this < 0 then
 					greatest = this
