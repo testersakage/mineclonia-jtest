@@ -5680,22 +5680,11 @@ register_dimension_biomes()
 register_dimension_ores()
 register_dimension_decorations()
 
-local deco_ids_fungus ={
-	minetest.get_decoration_id("mcl_biomes:crimson_tree1"),
-	minetest.get_decoration_id("mcl_biomes:crimson_tree2"),
-	minetest.get_decoration_id("mcl_biomes:crimson_tree3"),
-	minetest.get_decoration_id("mcl_biomes:warped_tree1"),
-	minetest.get_decoration_id("mcl_biomes:warped_tree2"),
-	minetest.get_decoration_id("mcl_biomes:warped_tree3")
-}
 local deco_ids_trees = {
 	minetest.get_decoration_id("mcl_biomes:mangrove_tree_1"),
 	minetest.get_decoration_id("mcl_biomes:mangrove_tree_2"),
 	minetest.get_decoration_id("mcl_biomes:mangrove_tree_3"),
 }
-for _,f in pairs(deco_ids_fungus) do
-	minetest.set_gen_notify({decoration=true}, { f })
-end
 for _,f in pairs(deco_ids_trees) do
 	minetest.set_gen_notify({decoration=true}, { f })
 end
@@ -5736,15 +5725,7 @@ local function chorus_gen (gennotify, pr)
 	end
 end
 
-local function crimson_warped_gen(gennotify)
-	for _, f in pairs(deco_ids_fungus) do
-		for _, pos in ipairs(gennotify["decoration#" .. f] or {}) do
-			minetest.fix_light(vector.offset(pos, -8, -8, -8), vector.offset(pos, 8, 8, 8))
-		end
-	end
-end
-
-if deco_id_chorus_plant or deco_ids_fungus or deco_ids_trees then
+if deco_id_chorus_plant or deco_ids_trees then
 	mcl_mapgen_core.register_generator("chorus_grow", nil, function(minp, maxp, blockseed)
 		local gennotify = minetest.get_mapgen_object("gennotify")
 		local pr = PseudoRandom(blockseed + 14)
@@ -5765,10 +5746,6 @@ if deco_id_chorus_plant or deco_ids_fungus or deco_ids_trees then
 
 		if not (maxp.y < mcl_vars.mg_end_min or minp.y > mcl_vars.mg_end_max) then
 			chorus_gen(gennotify, pr)
-		end
-
-		if not (maxp.y < mcl_vars.mg_nether_min or minp.y > mcl_vars.mg_nether_max) then
-			crimson_warped_gen(gennotify)
 		end
 	end)
 end
