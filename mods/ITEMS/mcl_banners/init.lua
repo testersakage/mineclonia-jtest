@@ -52,6 +52,10 @@ local function round(num, idp)
 	return math.floor(num * mult + 0.5) / mult
 end
 
+local function escape(text) -- Escape texture string
+	return text:gsub("\\", "\\\\"):gsub("%^", "\\%^"):gsub(":", "\\:")
+end
+
 function mcl_banners.read_layers (meta)
 	local raw = meta:get_string("layers")
 	local layers = core.deserialize(raw)
@@ -79,12 +83,12 @@ end
 
 -- Update banner description, returning description, name
 function mcl_banners.update_description (itemstack)
-	local meta = itemstack:get_meta()
+	local def, meta = itemstack:get_definition(), itemstack:get_meta()
 	local name = meta:get_string("name")
 	local layers = mcl_banners.read_layers(meta)
 	if name ~= "" and name:find("Ominous Banner") then name = "" end -- Pre-0.84.0 Ominous Banners
 	if name == "" then
-		name = itemstack:get_definition().description
+		name = def.description
 		if core.get_modpath("mcl_raids")
 		and mcl_raids.is_banner_item(itemstack, layers) then
 			local orig_name = mcl_banners.colors["unicolor_white"].banner_name
@@ -95,6 +99,10 @@ function mcl_banners.update_description (itemstack)
 	end
 	local newdesc = mcl_banners.make_advanced_banner_description(name, layers)
 	meta:set_string("description", newdesc)
+
+	local image = mcl_banners.make_banner_texture(def._unicolor, layers, "item")
+	meta:set_string("inventory_overlay", image)
+	meta:set_string("wield_overlay", image)
 	return newdesc, name
 end
 
@@ -192,30 +200,48 @@ local function on_destruct_hanging_banner(pos)
 	return on_destruct_banner(pos, true)
 end
 
-function mcl_banners.make_banner_texture(base_color, layers)
-	local colorize
+function mcl_banners.make_banner_texture(base_color, layers, is_item)
+	local colorize, result
 	if mcl_banners.colors[base_color] then
 		colorize = mcl_banners.colors[base_color].rgb
 	end
-	if not colorize then return "mcl_banners_banner_base.png" end
-	-- Base texture with base color
-	local result = "(mcl_banners_banner_base.png^[mask:mcl_banners_base_inverted.png)^((mcl_banners_banner_base.png^[colorize:"..colorize..":"..base_color_ratio..")^[mask:mcl_banners_base.png)"
+
+	-- Vanilla, non-coloured banner.
+	if not colorize then 
+		if is_item then
+			return "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png"
+		else
+			return "mcl_banners_banner_base.png"
+		end
+	end
+
+	-- Base texture with base color.
+	if is_item then
+		result = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..colorize..":"..base_color_ratio..")"
+	else
+		result = "(mcl_banners_banner_base.png^[mask:mcl_banners_base_inverted.png)^((mcl_banners_banner_base.png^[colorize:"..colorize..":"..base_color_ratio..")^[mask:mcl_banners_base.png)"
+	end
 	if not layers then return result end
 
-	-- Optional pattern layers
+	-- Pattern Layers.
+	local coats = ""
 	for l=1, #layers do
 		local layerinfo = layers[l]
 		if layerinfo and layerinfo.pattern and layerinfo.color and mcl_banners.colors[layerinfo.color] then
 			local pattern = "mcl_banners_" .. layerinfo.pattern .. ".png"
 			local color = mcl_banners.colors[layerinfo.color].rgb
-
-			-- Generate layer texture
-			local layer = "(("..pattern.."^[colorize:"..color..":255)^[mask:"..pattern..")"
-
-			result = result .. "^" .. layer
+			coats = coats .. "^("..pattern.."^[colorize:"..color..":255^[mask:"..pattern..")"
 		end
 	end
-	return result
+
+	-- Combine base with patterns.
+	if not is_item or coats == "" then
+		return result .. coats -- Banners texture is simple, empty layers too.
+	end
+    -- Banner Item texture size 48x48 offset 14,4.  Pattern resize required to support theme packs.
+	-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.  Can be larger but must have same resolution.
+	return "[combine:48x48:0,0=" .. escape(result)
+	    .. ":14,4=" .. escape("[combine:20x40:-1,-1=" .. escape(coats:sub(2).."^[resize:64x64") )
 end
 
 local function spawn_banner_entity(pos, hanging, itemstack)
@@ -269,7 +295,7 @@ end
 -- This one is also used for the help entry to avoid spamming the help with 16 entries.
 minetest.register_node("mcl_banners:standing_banner", {
 	_doc_items_entry_name = S("Banner"),
-	_doc_items_image = "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png",
+	_doc_items_image = mcl_banners.make_banner_texture("", nil, "item"),
 	_doc_items_longdesc = S("Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."),
 	_doc_items_usagehelp = S("Emblazoned banners can be emblazoned again to combine patterns. Up to @1 patterns can be layered on a banner. To wash off a banner's top-most layer, using it on a cauldron with water.", mcl_banners.max_craftable_layers).."\n"..
 		S("An emblazoned banner can be copied by placing two banners of the same base color in the crafting grid — one needs to be emblazoned, the other one must be clean."),
@@ -372,36 +398,23 @@ local function init_banner_registration ()
 		local color_id = colortab.color_key
 		for pattern_id, _ in pairs(patterns) do
 			local desc = colortab.banner_name
-			local color = colortab.rgb
-
 			local recipe = patterns[pattern_id]
 			if recipe and recipe.name then
 				desc = D(colortab.color_name .. recipe.name)
 			end
 
-			local itemstring
+			local itemstring, item_texture
 			if pattern_id == "" then
 				itemstring = "mcl_banners:banner_item_" .. color_id
+				item_texture = mcl_banners.make_banner_texture(uni_key, nil, "item")
 			else
 				itemstring = "mcl_banners:banner_preview_" .. pattern_id .. "_" .. color_id
-			end
-
-			local item_texture
-			if pattern_id == "" then
-				-- Base texture with base color
-				item_texture = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..color..")"
-			else
-				-- Banner item preview background
-				local base = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:#CCCCCC)^[resize:48x48"
-				local pattern = "mcl_banners_" .. pattern_id .. ".png"
-				-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.  Item texture 48x48 offset 14,4.
-				local layer = "[combine:20x40:-1,-1="..pattern.."^[colorize:"..color..":255^[mask:"..pattern.."^[resize:64x64"
-
-				function escape(text)
-					return text:gsub("%^", "\\%^"):gsub(":", "\\:") -- :gsub("%(", "\\%("):gsub("%)", "\\%)")
+				item_texture = { { color = uni_key, pattern = pattern_id } }
+				if uni_key == "unicolor_white" or uni_key == "unicolor_grey" then
+					item_texture = mcl_banners.make_banner_texture("unicolor_darkgrey", item_texture, "item")
+				else
+					item_texture = mcl_banners.make_banner_texture("unicolor_grey", item_texture, "item")
 				end
-
-				item_texture = "[combine:48x48:0,0=" .. escape(base) .. ":14,4=" .. escape(escape(layer))
 			end
 
 			-- Banner items.
