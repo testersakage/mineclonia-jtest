@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-03 14:21+0000\n"
+"PO-Revision-Date: 2025-02-05 10:10+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
@@ -31,13 +31,13 @@ msgid "Block of Copper"
 msgstr "銅ブロック"
 
 msgid "Block of Copper is mostly a decorative block."
-msgstr ""
+msgstr "銅ブロックは主な装飾ブロックです。"
 
 msgid "Chiseled Copper"
 msgstr "模様入りの銅"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "模様入りの銅は主な装飾ブロックです。"
 
 msgid "Copper Bulb"
 msgstr "銅の電球"
@@ -46,7 +46,7 @@ msgid "Copper Bulb On"
 msgstr "点灯した銅の電球"
 
 msgid "Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "銅の電球は主な装飾ブロックです。"
 
 msgid "Copper Door"
 msgstr "銅のドア"
@@ -55,7 +55,7 @@ msgid "Copper Grate"
 msgstr "銅の格子"
 
 msgid "Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "銅の格子は主な装飾ブロックです。"
 
 msgid "Copper Trapdoor"
 msgstr "銅のトラップドア"
@@ -70,13 +70,13 @@ msgid "Cut Copper Stairs"
 msgstr "切り込み入りの銅の階段"
 
 msgid "Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "切り込み入りの銅は主な装飾ブロックです。"
 
 msgid "Exposed Chiseled Copper"
 msgstr "風化した模様入りの銅"
 
 msgid "Exposed Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "風化した模様入りの銅は主な装飾ブロックです。"
 
 msgid "Exposed Copper"
 msgstr "風化した銅"
@@ -88,7 +88,7 @@ msgid "Exposed Copper Bulb On"
 msgstr "点灯した風化した銅の電球"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "風化した銅の電球は主な装飾ブロックです。"
 
 msgid "Exposed Copper Door"
 msgstr "風化した銅のドア"
@@ -97,13 +97,13 @@ msgid "Exposed Copper Grate"
 msgstr "風化した銅の格子"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "風化した銅の格子は主な装飾ブロックです。"
 
 msgid "Exposed Copper Trapdoor"
 msgstr "風化した銅のトラップドア"
 
 msgid "Exposed Copper is mostly a decorative block."
-msgstr ""
+msgstr "風化した銅ブロックは主な装飾ブロックです。"
 
 msgid "Exposed Cut Copper"
 msgstr "風化した切り込み入りの銅"
@@ -115,13 +115,13 @@ msgid "Exposed Cut Copper Stairs"
 msgstr "風化した切り込み入りの銅の階段"
 
 msgid "Exposed Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "風化した切り込み入りの銅は主な装飾ブロックです。"
 
 msgid "Oxidized Chiseled Copper"
 msgstr "酸化した模様入りの銅"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "酸化した模様入りの銅は主な装飾ブロックです。"
 
 msgid "Oxidized Copper"
 msgstr "酸化した銅"
@@ -133,7 +133,7 @@ msgid "Oxidized Copper Bulb On"
 msgstr "点灯した酸化した銅の電球"
 
 msgid "Oxidized Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "酸化した銅の電球は主な装飾ブロックです。"
 
 msgid "Oxidized Copper Door"
 msgstr "酸化した銅のドア"
@@ -142,13 +142,13 @@ msgid "Oxidized Copper Grate"
 msgstr "酸化した銅の格子"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "酸化した銅の格子は主な装飾ブロックです。"
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "酸化した銅のトラップドア"
 
 msgid "Oxidized Copper is mostly a decorative block."
-msgstr ""
+msgstr "酸化した銅は主な装飾ブロックです。"
 
 msgid "Oxidized Cut Copper"
 msgstr "酸化した切り込み入りの銅"
@@ -160,7 +160,7 @@ msgid "Oxidized Cut Copper Stairs"
 msgstr "酸化した切り込み入りの銅の階段"
 
 msgid "Oxidized Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "酸化した切り込み入りの銅は主な装飾ブロックです。"
 
 msgid "Waxed Block of Copper"
 msgstr "錆止めされた銅ブロック"
@@ -247,7 +247,7 @@ msgid "Waxed Oxidized Cut Copper Stairs"
 msgstr "錆止めされた酸化した切り込み入りの銅の階段"
 
 msgid "Waxed Upper @1"
-msgstr ""
+msgstr "錆止めされた上部 @1"
 
 msgid "Waxed Weathered Chiseled Copper"
 msgstr "錆止めされた錆びた模様入りの銅"
@@ -280,7 +280,7 @@ msgid "Weathered Chiseled Copper"
 msgstr "錆びた模様入りの銅"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "錆びた模様入りの銅は主な装飾ブロックです。"
 
 msgid "Weathered Copper"
 msgstr "錆びた銅"
@@ -292,7 +292,7 @@ msgid "Weathered Copper Bulb On"
 msgstr "点灯した錆びた銅の電球"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "錆びた銅の電球は主な装飾ブロックです。"
 
 msgid "Weathered Copper Door"
 msgstr "錆びた銅のドア"
@@ -301,13 +301,13 @@ msgid "Weathered Copper Grate"
 msgstr "錆びた銅の格子"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "錆びた銅の格子は主な装飾ブロックです。"
 
 msgid "Weathered Copper Trapdoor"
 msgstr "錆びた銅のトラップドア"
 
 msgid "Weathered Copper is mostly a decorative block."
-msgstr ""
+msgstr "錆びた銅は主な装飾ブロックです。"
 
 msgid "Weathered Cut Copper"
 msgstr "錆びた切り込み入りの銅"
@@ -319,7 +319,7 @@ msgid "Weathered Cut Copper Stairs"
 msgstr "錆びた切り込み入りの銅の階段"
 
 msgid "Weathered Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "錆びた切り込み入りの銅は主な装飾ブロックです。"
 
 msgid "Copper Ore"
 msgstr "銅鉱石"
