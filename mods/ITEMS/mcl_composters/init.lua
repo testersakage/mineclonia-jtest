@@ -46,7 +46,7 @@ local function create_bonemeal(pos, node, no_drop, no_validate)
 		return false
 	end
 	-- reset composter to empty
-	minetest.swap_node(pos, {name="mcl_composters:composter"})
+	mcl_redstone.swap_node(pos, {name="mcl_composters:composter"})
 	local stack = ItemStack("mcl_bone_meal:bone_meal")
 	if not no_drop then
 		minetest.add_item(pos, stack)
@@ -76,7 +76,7 @@ local function compost_item(pos, node, itemstack, auto_cycle)
 			-- spawn green particles above new layer
 			mcl_bone_meal.add_bone_meal_particle(vector.offset(pos, 0, level/8, 0))
 			level = level + 1
-			minetest.swap_node(pos, {name = "mcl_composters:composter_" .. level})
+			mcl_redstone.swap_node(pos, {name = "mcl_composters:composter_" .. level})
 			minetest.sound_play({name="default_grass_footstep", gain=0.4}, {
 				pos = pos,
 				gain= 0.4,
@@ -140,7 +140,7 @@ end
 local function composter_ready(pos, _)
 	-- verify that full composter is still there
 	if get_composter_level(pos) ~= 7 then return false end
-	minetest.swap_node(pos, {name = "mcl_composters:composter_ready"})
+	mcl_redstone.swap_node(pos, {name = "mcl_composters:composter_ready"})
 	-- maybe spawn particles again?
 	minetest.sound_play({name="default_dig_snappy", gain=1}, {
 		pos = pos,
