@@ -112,12 +112,10 @@ function mcl_banners.make_advanced_banner_description (name, layers)
 	local patterns, colors = mcl_banners.patterns, mcl_banners.colors
 	local layerstrings = {}
 	for l=1, math.min(#layers, max_layer_lines) do
-		local layer = layers[l] -- {pattern="border", color="white"}
-		local colour_tab = layer and colors[layer.color or ""]
-		if colour_tab then
-			local pattern_name = patterns[layer.pattern].name
-			-- TODO: Reuse make_pattern_name
-			table.insert(layerstrings, D(colour_tab.color_name .. pattern_name))
+		local layer = layers[l]
+		local layer_name, valid = mcl_banners.make_pattern_name(layer.color, layer.pattern)
+		if valid then
+			table.insert(layerstrings, layer_name)
 		end
 	end
 	if #layers == max_layer_lines + 1 then
@@ -201,17 +199,23 @@ local function on_destruct_hanging_banner(pos)
 	return on_destruct_banner(pos, true)
 end
 
+-- Generate coloured pattern name, used in loom pattern tooltip and banner/shield item descriptions.
+-- Param unicolor: unicolor key ("unicolor_grey") or mod.colors item (with .color_name)
+-- Param pattern_id: pattern key ("circle") or mod.patterns item (with .name)
+-- Return: Localised name, pattern is valid
 function mcl_banners.make_pattern_name(unicolor, pattern_id)
-	local colortab = mcl_banners.colors[unicolor]
-	if not colortab then
-		if not pattern_id or pattern_id == "" then return unicolor end
-		return unicolor .. " " .. pattern_id
+	local colortab, pattern = unicolor, pattern_id
+	if type(unicolor) ~= "table" then
+		colortab = mcl_banners.colors[unicolor]
 	end
-	local recipe = mcl_banners.patterns[pattern_id]
-	if not recipe then
-		return unicolor .. " " .. pattern_id
+	if type(pattern_id) ~= "table" then
+		pattern = mcl_banners.patterns[pattern_id]
 	end
-	return D(colortab.color_name .. recipe.name)
+	if not colortab or not colortab.color_name
+	or not pattern or not pattern.name then
+		return unicolor .. " " .. pattern_id, false
+	end
+	return D(colortab.color_name .. " " .. pattern.name), true
 end
 
 function mcl_banners.make_banner_texture(base_color, layers, is_item)
@@ -407,21 +411,15 @@ minetest.register_node("mcl_banners:hanging_banner", {
 -- TODO: Combine the items into only 1 item.
 local function init_banner_registration ()
 	local mod_wool = core.get_modpath("mcl_core") and core.get_modpath("mcl_wool")
-	local mod_doc = minetest.get_modpath("doc")
-	local patterns = mcl_banners.patterns
-	patterns[""] = {}
+	local mod_doc = core.get_modpath("doc")
 	for uni_key, colortab in pairs(mcl_banners.colors) do
 		local color_id = colortab.color_key
 		local itemstring = "mcl_banners:banner_item_" .. color_id
 		local item_texture = mcl_banners.make_banner_texture(uni_key, nil, "item")
 
 		-- Generate pattern names for localisation.
-		-- TODO: Reuse make_pattern_name
-		for pattern_id, _ in pairs(patterns) do
-			local recipe = patterns[pattern_id]
-			if recipe and recipe.name then
-				D(colortab.color_name .. recipe.name)
-			end
+		for _, recipe in pairs(mcl_banners.patterns) do
+			mcl_banners.make_pattern_name(colortab, recipe)
 		end
 
 		minetest.register_craftitem(itemstring, {
@@ -581,9 +579,9 @@ local entity_standing = {
 
 	_base_color = nil, -- base color of banner
 	_layers = nil, -- table of layers painted over the base color.
-		-- This is a table of tables with each table having the following fields:
-			-- color: layer color ID (see colors table above)
-			-- pattern: name of pattern (see list above)
+		-- This is a table of tables with each subtable having the following fields:
+			-- color: layer color ID, e.g. "unicolor_grey"
+			-- pattern: layer pattern ID, e.g. "circle"
 
 	get_staticdata = function(self)
 		local out = { _base_color = self._base_color, _layers = self._layers, _name = self._name }
