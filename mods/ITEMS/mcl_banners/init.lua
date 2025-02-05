@@ -116,6 +116,7 @@ function mcl_banners.make_advanced_banner_description (name, layers)
 		local colour_tab = layer and colors[layer.color or ""]
 		if colour_tab then
 			local pattern_name = patterns[layer.pattern].name
+			-- TODO: Reuse make_pattern_name
 			table.insert(layerstrings, D(colour_tab.color_name .. pattern_name))
 		end
 	end
@@ -402,6 +403,8 @@ minetest.register_node("mcl_banners:hanging_banner", {
 	end,
 })
 
+-- Banner items. Comes in 16 base colors, with patterned texture dynamically generated.
+-- TODO: Combine the items into only 1 item.
 local function init_banner_registration ()
 	local mod_wool = core.get_modpath("mcl_core") and core.get_modpath("mcl_wool")
 	local mod_doc = minetest.get_modpath("doc")
@@ -409,128 +412,108 @@ local function init_banner_registration ()
 	patterns[""] = {}
 	for uni_key, colortab in pairs(mcl_banners.colors) do
 		local color_id = colortab.color_key
+		local itemstring = "mcl_banners:banner_item_" .. color_id
+		local item_texture = mcl_banners.make_banner_texture(uni_key, nil, "item")
+
+		-- Generate pattern names for localisation.
+		-- TODO: Reuse make_pattern_name
 		for pattern_id, _ in pairs(patterns) do
-			local desc = colortab.banner_name
 			local recipe = patterns[pattern_id]
 			if recipe and recipe.name then
-				desc = D(colortab.color_name .. recipe.name)
+				D(colortab.color_name .. recipe.name)
 			end
+		end
 
-			local itemstring, item_texture
-			if pattern_id == "" then
-				itemstring = "mcl_banners:banner_item_" .. color_id
-				item_texture = mcl_banners.make_banner_texture(uni_key, nil, "item")
-			else
-				itemstring = "mcl_banners:banner_preview_" .. pattern_id .. "_" .. color_id
-				item_texture = { { color = uni_key, pattern = pattern_id } }
-				if uni_key == "unicolor_white" or uni_key == "unicolor_grey" then
-					item_texture = mcl_banners.make_banner_texture("unicolor_darkgrey", item_texture, "item")
-				else
-					item_texture = mcl_banners.make_banner_texture("unicolor_grey", item_texture, "item")
-				end
-			end
+		minetest.register_craftitem(itemstring, {
+			description = colortab.banner_name,
+			_tt_help = S("Paintable decoration"),
+			_doc_items_create_entry = false,
+			inventory_image = item_texture,
+			wield_image = item_texture,
+			-- Banner group groups together the banner items, but not the nodes.
+			-- Used for crafting.
+			groups = { banner = 1, deco_block = 1, flammable = -1 },
+			stack_max = 16,
+			_mcl_burntime = 15,
+			_unicolor = uni_key,
+			on_place = function(itemstack, placer, pointed_thing)
+				local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+				if rc then return rc end
+				local above = pointed_thing.above
+				local under = pointed_thing.under
 
-			-- Banner items.
-			-- This is the player-visible banner item. It comes in 16 base colors with a lot of patterns.
-			-- The multiple items are really only needed for the different item images.
-			-- TODO: Combine the items into only 1 item.
-			local groups
-			if pattern_id == "" then
-				groups = { banner = 1, deco_block = 1, flammable = -1 }
-			else
-				groups = { not_in_creative_inventory = 1 }
-			end
+				local node_under = minetest.get_node(under)
+				if placer and not placer:get_player_control().sneak then
+					if mcl_util.check_position_protection(under, placer) then return itemstack end
 
-			minetest.register_craftitem(itemstring, {
-				description = desc,
-				_tt_help = S("Paintable decoration"),
-				_doc_items_create_entry = false,
-				inventory_image = item_texture,
-				wield_image = item_texture,
-				-- Banner group groups together the banner items, but not the nodes.
-				-- Used for crafting.
-				groups = groups,
-				stack_max = 16,
-				_mcl_burntime = 15,
-				_unicolor = uni_key,
-				on_place = function(itemstack, placer, pointed_thing)
-					local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-					if rc then return rc end
-					local above = pointed_thing.above
-					local under = pointed_thing.under
-
-					local node_under = minetest.get_node(under)
-					if placer and not placer:get_player_control().sneak then
-						if mcl_util.check_position_protection(under, placer) then return itemstack end
-
-						if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
-							if mcl_cauldrons.add_level(pointed_thing.under, -1) then
-								local imeta = itemstack:get_meta()
-								local layers = mcl_banners.read_layers(imeta)
-								if #layers > 0 then
-									table.remove(layers)
-									mcl_banners.write_layers(imeta, layers)
-									tt.reload_itemstack_description(itemstack)
-								end
-								return itemstack
+					if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
+						if mcl_cauldrons.add_level(pointed_thing.under, -1) then
+							local imeta = itemstack:get_meta()
+							local layers = mcl_banners.read_layers(imeta)
+							if #layers > 0 then
+								table.remove(layers)
+								mcl_banners.write_layers(imeta, layers)
+								tt.reload_itemstack_description(itemstack)
 							end
-						end
-					end
-
-					-- Place the node!
-					local is_hanging = false
-
-					-- Standing or hanging banner. The placement rules are enforced by the node definitions
-					local _, success = minetest.item_place_node(ItemStack("mcl_banners:standing_banner"), placer, pointed_thing)
-					if not success then
-						-- Forbidden on ceiling
-						if pointed_thing.under.y ~= pointed_thing.above.y then
 							return itemstack
 						end
-						_, success = minetest.item_place_node(ItemStack("mcl_banners:hanging_banner"), placer, pointed_thing)
-						if not success then
-							return itemstack
-						end
-						is_hanging = true
 					end
-					local place_pos
-					local def_under = minetest.registered_nodes[node_under.name]
-					if def_under and def_under.buildable_to then
-						place_pos = under
-					else
-						place_pos = above
-					end
-					local bnode = minetest.get_node(place_pos)
-					if bnode.name ~= "mcl_banners:standing_banner" and bnode.name ~= "mcl_banners:hanging_banner" then
-						minetest.log("error", "[mcl_banners] The placed banner node is not what the mod expected!")
+				end
+
+				-- Place the node!
+				local is_hanging = false
+
+				-- Standing or hanging banner. The placement rules are enforced by the node definitions
+				local _, success = minetest.item_place_node(ItemStack("mcl_banners:standing_banner"), placer, pointed_thing)
+				if not success then
+					-- Forbidden on ceiling
+					if pointed_thing.under.y ~= pointed_thing.above.y then
 						return itemstack
 					end
-					local meta = minetest.get_meta(place_pos)
-					local inv = meta:get_inventory()
-					inv:set_size("banner", 1)
-					local store_stack = ItemStack(itemstack)
-					store_stack:set_count(1)
-					inv:set_stack("banner", 1, store_stack)
-
-					-- Spawn entity
-					local entity_place_pos
-					local offset = is_hanging and hanging_banner_entity_offset or standing_banner_entity_offset
-					entity_place_pos = vector.add(place_pos, offset)
-					local banner_entity = spawn_banner_entity(entity_place_pos, is_hanging, itemstack)
-					local name = itemstack:get_meta():get_string("name")
-					if name ~= "" then
-						meta:set_string("infotext", name)
+					_, success = minetest.item_place_node(ItemStack("mcl_banners:hanging_banner"), placer, pointed_thing)
+					if not success then
+						return itemstack
 					end
-					-- Set rotation
-					local final_yaw, rotation_level
-					if is_hanging then
-						local pdir = vector.direction(pointed_thing.under, pointed_thing.above)
-						final_yaw = minetest.dir_to_yaw(pdir)
-						if pdir.x > 0 then
-							rotation_level = 4
-						elseif pdir.z > 0 then
-							rotation_level = 8
-						elseif pdir.x < 0 then
+					is_hanging = true
+				end
+				local place_pos
+				local def_under = minetest.registered_nodes[node_under.name]
+				if def_under and def_under.buildable_to then
+					place_pos = under
+				else
+					place_pos = above
+				end
+				local bnode = minetest.get_node(place_pos)
+				if bnode.name ~= "mcl_banners:standing_banner" and bnode.name ~= "mcl_banners:hanging_banner" then
+					minetest.log("error", "[mcl_banners] The placed banner node is not what the mod expected!")
+					return itemstack
+				end
+				local meta = minetest.get_meta(place_pos)
+				local inv = meta:get_inventory()
+				inv:set_size("banner", 1)
+				local store_stack = ItemStack(itemstack)
+				store_stack:set_count(1)
+				inv:set_stack("banner", 1, store_stack)
+
+				-- Spawn entity
+				local entity_place_pos
+				local offset = is_hanging and hanging_banner_entity_offset or standing_banner_entity_offset
+				entity_place_pos = vector.add(place_pos, offset)
+				local banner_entity = spawn_banner_entity(entity_place_pos, is_hanging, itemstack)
+				local name = itemstack:get_meta():get_string("name")
+				if name ~= "" then
+					meta:set_string("infotext", name)
+				end
+				-- Set rotation
+				local final_yaw, rotation_level
+				if is_hanging then
+					local pdir = vector.direction(pointed_thing.under, pointed_thing.above)
+					final_yaw = minetest.dir_to_yaw(pdir)
+					if pdir.x > 0 then
+						rotation_level = 4
+					elseif pdir.z > 0 then
+						rotation_level = 8
+					elseif pdir.x < 0 then
 						rotation_level = 12
 					else
 						rotation_level = 0
@@ -559,33 +542,30 @@ local function init_banner_registration ()
 				return itemstack
 			end,
 
-				_mcl_generate_description = mcl_banners.update_description,
+			_mcl_generate_description = mcl_banners.update_description,
+		})
+
+		if mod_wool then
+			local wool = "mcl_wool:" .. color_id
+			core.register_craft({
+				output = itemstring,
+				recipe = {
+					{ wool, wool, wool },
+					{ wool, wool, wool },
+					{ "", "mcl_core:stick", "" },
+				}
 			})
-
-			if mod_wool and pattern_id == "" then
-				local wool = "mcl_wool:" .. color_id
-				core.register_craft({
-					output = itemstring,
-					recipe = {
-						{ wool, wool, wool },
-						{ wool, wool, wool },
-						{ "", "mcl_core:stick", "" },
-					}
-				})
-			end
-
-			if mod_doc then
-				doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
-			end
+		end
+		if mod_doc then
+			doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
 		end
 	end
-	
+
 	if mod_doc then
 		doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "nodes", "mcl_banners:hanging_banner")
 	end
 end
 init_banner_registration()
-
 
 -- Banner entities.
 local entity_standing = {
