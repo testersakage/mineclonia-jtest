@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-03 23:12+0000\n"
+"PO-Revision-Date: 2025-02-05 10:10+0000\n"
 "Last-Translator: \"Miguel P.L\" "
 "<miguel_pl@users.noreply.translate.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
@@ -152,7 +152,7 @@ msgid "Travel by minecart for at least 1000 meters from your starting point in a
 msgstr "Viaje en vagoneta durante al menos 1000 metros desde su punto de partida en un solo viaje."
 
 msgid "Sniper Duel"
-msgstr "Francocazadores"
+msgstr "Duelo de francotiradores"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
 msgstr "Mata a un esqueleto, esqueleto wither o errante con un arco y flechas desde una distancia de al menos 20 metros."
