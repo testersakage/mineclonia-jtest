@@ -535,6 +535,7 @@ local function enderman_ungrief (self, self_pos, dtime)
 
 		-- Also check to see if protected.
 		if minetest.get_node (place_pos).name == "air"
+			and core.get_item_group(core.get_node(vector.offset(place_pos, 0, -1, 0)).name, "solid") > 0
 			and not minetest.is_protected (place_pos, "") then
 			-- ... but only if there's a free space
 			local success = minetest.place_node(place_pos, {name = self._taken_node})
