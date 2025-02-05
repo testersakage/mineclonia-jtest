@@ -394,18 +394,14 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	dye_color = dye_color and dye_color.unicolor
 	if not dye_color then return ItemStack("") end -- Dye or dye colour not found.
 
-	if craft_predict then
-		return ItemStack("mcl_banners:banner_preview_" .. current.id .. "_" .. dye_color)
-	else
-		local oname = ometa:get_string("name")
-		itemstack = ItemStack(banner:get_name())
-		local imeta = itemstack:get_meta()
-		imeta:set_string("name", oname)
-		table.insert(layers, {pattern=current.id, color="unicolor_" .. dye_color})
-		mcl_banners.write_layers(imeta, layers)
-		tt.reload_itemstack_description(itemstack)
-		return itemstack
-	end
+	local oname = ometa:get_string("name")
+	itemstack = ItemStack(banner:get_name())
+	local imeta = itemstack:get_meta()
+	imeta:set_string("name", oname)
+	table.insert(layers, {pattern=current.id, color="unicolor_" .. dye_color})
+	mcl_banners.write_layers(imeta, layers)
+	tt.reload_itemstack_description(itemstack)
+	return itemstack
 end
 
 core.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
