@@ -37,6 +37,7 @@ local function get_formspec(pos)
 		local y_len = 0.1
 		if not inv:is_empty("banner") then
 			local banner = inv:get_stack("banner", 1)
+			local def = banner:get_definition()
 			local layers = mcl_banners.read_layers(banner:get_meta())
 			if #layers >= mcl_banners.max_craftable_layers then
 				color = nil -- Too many layers to add more.  Disable patterns.
@@ -51,9 +52,12 @@ local function get_formspec(pos)
 						y_len = y_len + 1
 						x_len = 0.1
 					end
-					local it = preview_item_prefix .. v .. "_" .. color
-					local name = preview_item_prefix .. v .. "-" .. color
-					table.insert(patterns,string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",x_len,y_len,1,1, it, "item_button_"..name, ""))
+					local name = "item_button_" .. preview_item_prefix .. v .. "-" .. color
+					local new_layers = table.copy(layers)
+					table.insert(new_layers, { color = "unicolor_"..color, pattern = v })
+					local it = core.formspec_escape(mcl_banners.make_banner_texture(def._unicolor, new_layers, "item"))
+					table.insert(patterns,string.format("image_button[%f,%f;%f,%f;%s;%s;%s]",x_len,y_len,1,1, it, name, ""))
+					table.insert(patterns,string.format("tooltip[%s;%s]", name, mcl_banners.make_pattern_name("unicolor_"..color, v)))
 					x_len = x_len + 1
 					count = count + 1
 				end

@@ -200,6 +200,19 @@ local function on_destruct_hanging_banner(pos)
 	return on_destruct_banner(pos, true)
 end
 
+function mcl_banners.make_pattern_name(unicolor, pattern_id)
+	local colortab = mcl_banners.colors[unicolor]
+	if not colortab then
+		if not pattern_id or pattern_id == "" then return unicolor end
+		return unicolor .. " " .. pattern_id
+	end
+	local recipe = mcl_banners.patterns[pattern_id]
+	if not recipe then
+		return unicolor .. " " .. pattern_id
+	end
+	return D(colortab.color_name .. recipe.name)
+end
+
 function mcl_banners.make_banner_texture(base_color, layers, is_item)
 	local colorize, result
 	if mcl_banners.colors[base_color] then
@@ -518,33 +531,33 @@ local function init_banner_registration ()
 						elseif pdir.z > 0 then
 							rotation_level = 8
 						elseif pdir.x < 0 then
-							rotation_level = 12
-						else
-							rotation_level = 0
-						end
+						rotation_level = 12
 					else
-						-- Determine the rotation based on player's yaw
-						local yaw = placer:get_look_horizontal()
-						-- Select one of 16 possible rotations (0-15)
-						rotation_level = round((yaw / (math.pi*2)) * 16)
-						if rotation_level >= 16 then
-							rotation_level = 0
-						end
-						final_yaw = rotation_level_to_yaw(rotation_level)
+						rotation_level = 0
 					end
-					meta:set_int("rotation_level", rotation_level)
-
-					if banner_entity then
-						banner_entity:set_yaw(final_yaw)
+				else
+					-- Determine the rotation based on player's yaw
+					local yaw = placer:get_look_horizontal()
+					-- Select one of 16 possible rotations (0-15)
+					rotation_level = round((yaw / (math.pi*2)) * 16)
+					if rotation_level >= 16 then
+						rotation_level = 0
 					end
+					final_yaw = rotation_level_to_yaw(rotation_level)
+				end
+				meta:set_int("rotation_level", rotation_level)
 
-					if not minetest.is_creative_enabled(placer:get_player_name()) then
-						itemstack:take_item()
-					end
-					minetest.sound_play({name="default_place_node_hard", gain=1.0}, {pos = place_pos}, true)
+				if banner_entity then
+					banner_entity:set_yaw(final_yaw)
+				end
 
-					return itemstack
-				end,
+				if not minetest.is_creative_enabled(placer:get_player_name()) then
+					itemstack:take_item()
+				end
+				minetest.sound_play({name="default_place_node_hard", gain=1.0}, {pos = place_pos}, true)
+
+				return itemstack
+			end,
 
 				_mcl_generate_description = mcl_banners.update_description,
 			})
