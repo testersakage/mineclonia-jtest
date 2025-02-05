@@ -301,6 +301,17 @@ for level = 1, 7 do
 	register_filled_composter(level)
 end
 
+minetest.register_lbm({
+	name = "mcl_composters:start_composter_7",
+	nodenames = {
+		"mcl_composters:composter_7",
+	},
+	run_at_every_load = true,
+	action = function(pos)
+		minetest.get_node_timer(pos):start(1)
+	end,
+})
+
 --- Register composter that is ready to be harvested.
 --
 minetest.register_node("mcl_composters:composter_ready", {
