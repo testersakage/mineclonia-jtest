@@ -3,9 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-03 14:21+0000\n"
-"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
-"\n"
+"PO-Revision-Date: 2025-02-05 16:18+0000\n"
+"Last-Translator: milklikecomputer <brilliunt7164@proton.me>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_enchanting/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -97,19 +96,19 @@ msgid "Loyalty"
 msgstr "忠誠"
 
 msgid "Trident returns after being thrown. Higher levels reduce return time."
-msgstr ""
+msgstr "使三叉戟在與任何方塊或實體接觸後返回投擲的玩家。附魔等級越高返回得越快。"
 
 msgid "Luck of the Sea"
 msgstr "海洋的祝福"
 
 msgid "Increases rate of good loot (enchanting books, etc.)"
-msgstr ""
+msgstr "增加釣魚時獲取好戰利品（附魔書等）的機率。"
 
 msgid "Lure"
-msgstr ""
+msgstr "魚餌"
 
 msgid "Decreases time until rod catches something."
-msgstr ""
+msgstr "減少釣魚時的上鉤等待時間。"
 
 msgid "Mending"
 msgstr "修補"
@@ -118,46 +117,46 @@ msgid "Repair the item while gaining XP orbs."
 msgstr "在獲得經驗球時修復耐久度。"
 
 msgid "Multishot"
-msgstr ""
+msgstr "分裂箭矢"
 
 msgid "Shoot 3 arrows at the cost of one."
-msgstr ""
+msgstr "使弩一次射出三支箭（僅須消耗一根箭）的附魔。"
 
 msgid "Piercing"
-msgstr ""
+msgstr "貫穿"
 
 msgid "Arrows passes through multiple objects."
-msgstr ""
+msgstr "使射出的箭可擊穿多個實體。"
 
 msgid "Power"
-msgstr ""
+msgstr "強力"
 
 msgid "Increases arrow damage."
-msgstr ""
+msgstr "增加射出的箭矢造成的傷害。"
 
 msgid "Punch"
-msgstr ""
+msgstr "衝擊"
 
 msgid "Increases arrow knockback."
-msgstr ""
+msgstr "增加射出的箭矢的擊退距離。"
 
 msgid "Quick Charge"
-msgstr ""
+msgstr "快速上弦"
 
 msgid "Decreases crossbow charging time."
-msgstr ""
+msgstr "加快弩上弦的速度。"
 
 msgid "Respiration"
-msgstr ""
+msgstr "水中呼吸"
 
 msgid "Extends underwater breathing time."
-msgstr ""
+msgstr "延長水下的呼吸時間。"
 
 msgid "Riptide"
-msgstr ""
+msgstr "波濤"
 
 msgid "Trident launches player with itself when thrown. Works only in water or rain."
-msgstr ""
+msgstr "投擲三叉戟時，三叉戟會帶著玩家一起飛出。只能在水中或雨中使用。"
 
 msgid "Sharpness"
 msgstr ""
