@@ -1377,7 +1377,7 @@ if minetest.get_modpath("mcla_generate_translation_strings") then
 		return function(s, ...)
 			local mod = textdomain or minetest.get_current_modname()
 			mcla_generated_translations[mod] = mcla_generated_translations[mod] or {}
-			table.insert(mcla_generated_translations[mod], s)
+			mcla_generated_translations[mod][s] = true
 			return minetest.translate(mod, s, ...)
 		end
 	end
