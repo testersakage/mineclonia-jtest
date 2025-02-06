@@ -52,7 +52,7 @@ local function round(num, idp)
 	return math.floor(num * mult + 0.5) / mult
 end
 
-local function escape(text) -- Escape texture string
+function mcl_banners.escape_texture (text) -- Escape texture string
 	return text:gsub("\\", "\\\\"):gsub("%^", "\\%^"):gsub(":", "\\:")
 end
 
@@ -218,48 +218,70 @@ function mcl_banners.make_pattern_name(unicolor, pattern_id)
 	return D(colortab.color_name .. " " .. pattern.name), true
 end
 
-function mcl_banners.make_banner_texture(base_color, layers, is_item)
+mcl_banners.banner_texture_builder = { -- Images are not scaled; all must have same resolution.
+	blank = "mcl_banners_banner_base.png",
+	base = function (rgb, ratio)
+		return "(mcl_banners_banner_base.png^[mask:mcl_banners_base_inverted.png)"
+		    .. "^((mcl_banners_banner_base.png^[colorize:"..rgb..":"..ratio..")^[mask:mcl_banners_base.png)"
+	end,
+}
+
+mcl_banners.item_texture_builder = {
+	blank = "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png",
+	base = function (rgb, ratio)
+		return "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..rgb..":"..ratio..")"
+	end,
+	layer = nil, -- function (previous_result, rgb, pattern)
+	combine = function (base, layers)
+		if layers == "" then return base end
+		local escape = mcl_banners.escape_texture
+		-- Banner Item texture size 48x48 offset 14,4.  Pattern resize required to support theme packs.
+		-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.
+		return "[combine:48x48:0,0=" .. escape(base)
+		    .. ":14,4=" .. escape("[combine:20x40:-1,-1=" .. escape(layers:sub(2).."^[resize:64x64") )
+	end,
+}
+
+function mcl_banners.make_banner_texture (base_color, layers, builder)
 	local colorize, result
 	if mcl_banners.colors[base_color] then
 		colorize = mcl_banners.colors[base_color].rgb
 	end
 
+	builder = builder or mcl_banners.banner_texture_builder
+	if builder == "item" then builder = mcl_banners.item_texture_builder end
+
 	-- Vanilla, non-coloured banner.
-	if not colorize then 
-		if is_item then
-			return "mcl_banners_item_base_48.png^mcl_banners_item_overlay_48.png"
-		else
-			return "mcl_banners_banner_base.png"
-		end
+	if not colorize then
+		result = builder.blank
+		if type(result) == "function" then result = result() end
+		return result
 	end
 
 	-- Base texture with base color.
-	if is_item then
-		result = "mcl_banners_item_base_48.png^(mcl_banners_item_overlay_48.png^[colorize:"..colorize..":"..base_color_ratio..")"
-	else
-		result = "(mcl_banners_banner_base.png^[mask:mcl_banners_base_inverted.png)^((mcl_banners_banner_base.png^[colorize:"..colorize..":"..base_color_ratio..")^[mask:mcl_banners_base.png)"
-	end
-	if not layers then return result end
+	result = builder.base(colorize, base_color_ratio)
 
 	-- Pattern Layers.
 	local coats = ""
-	for l=1, #layers do
-		local layerinfo = layers[l]
-		if layerinfo and layerinfo.pattern and layerinfo.color and mcl_banners.colors[layerinfo.color] then
-			local pattern = "mcl_banners_" .. layerinfo.pattern .. ".png"
-			local color = mcl_banners.colors[layerinfo.color].rgb
-			coats = coats .. "^("..pattern.."^[colorize:"..color..":255^[mask:"..pattern..")"
+	if layers and #layers > 0 then
+		for l=1, #layers do
+			local layerinfo = layers[l]
+			if layerinfo and layerinfo.pattern and layerinfo.color and mcl_banners.colors[layerinfo.color] then
+				local pattern = "mcl_banners_" .. layerinfo.pattern .. ".png"
+				local color = mcl_banners.colors[layerinfo.color].rgb
+				if builder.layers then
+					coats = builder.layers(coats, color, pattern)
+				else
+					coats = coats .. "^("..pattern.."^[colorize:"..color..":255^[mask:"..pattern..")"
+				end
+			end
 		end
 	end
 
 	-- Combine base with patterns.
-	if not is_item or coats == "" then
-		return result .. coats -- Banners texture is simple, empty layers too.
-	end
-    -- Banner Item texture size 48x48 offset 14,4.  Pattern resize required to support theme packs.
-	-- Pattern Texture size 64x64, Front at offset 1,1 size 20x40.  Can be larger but must have same resolution.
-	return "[combine:48x48:0,0=" .. escape(result)
-	    .. ":14,4=" .. escape("[combine:20x40:-1,-1=" .. escape(coats:sub(2).."^[resize:64x64") )
+	if not builder.combine then return result .. coats end
+	result = builder.combine(result, coats)
+	return result
 end
 
 local function spawn_banner_entity(pos, hanging, itemstack)
