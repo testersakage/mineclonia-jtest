@@ -24,7 +24,7 @@ local hud = "mcl_shield_hud.png"
 minetest.register_tool("mcl_shields:shield", {
 	description = S("Shield"),
 	_doc_items_longdesc = S("A shield is a tool used for protecting the player against attacks."),
-	inventory_image = "mcl_shield.png",
+	inventory_image = "mcl_shield_48.png",
 	stack_max = 1,
 	groups = {
 		shield = 1,
@@ -53,6 +53,21 @@ end
 local function shield_is_enchanted(obj, i)
 	return mcl_enchanting.is_enchanted(wielded_item(obj, i))
 end
+
+local shield_texture_builder = {
+	blank = function() return shield_texture_builder.combine("mcl_banners_banner_base.png","") end,
+	base = function (rgb, ratio)
+		local banner = "mcl_banners_banner_base.png"
+		if rgb then banner = "(" .. banner .. "^[colorize:"..rgb..":"..ratio .. ")" end
+		return banner -- Passed as "base" in combine()
+	end,
+	combine = function (base, layers)
+		local escape = mcl_banners.escape_texture
+		-- Enlarge base texture for banner placement.  Banner patterns need to be resized and offset to leave only front.
+		local shield = "[combine:128x128:0,0=mcl_shield_base_nopattern.png\\^[resize\\:128x128"
+		return shield .. ":4,4=" .. escape("[combine:20x40:-1,-1=" .. escape(base .. layers .."^[resize:64x64"))
+	end,
+}
 
 minetest.register_entity("mcl_shields:shield_entity", {
 	initial_properties = {
@@ -86,10 +101,9 @@ minetest.register_entity("mcl_shields:shield_entity", {
 			if meta_texture ~= "" then
 				shield_texture = meta_texture
 			else
-				local color = minetest.registered_items[item]._shield_color
-				if color then
-					shield_texture = "mcl_shield_base_nopattern.png^(mcl_shield_pattern_base.png^[colorize:" .. color .. ")"
-				end
+				local color = minetest.registered_items[item]._shield_color_key
+				shield_texture = mcl_banners.make_banner_texture(color, nil, shield_texture_builder)
+				itemstack:get_meta():set_string("mcl_shields:shield_custom_pattern_texture", texture)
 			end
 		end
 
@@ -99,9 +113,8 @@ minetest.register_entity("mcl_shields:shield_entity", {
 
 		if self._texture_copy ~= shield_texture then
 			self.object:set_properties({textures = {shield_texture}})
+			self._texture_copy = shield_texture
 		end
-
-		self._texture_copy = shield_texture
 	end,
 })
 
@@ -280,6 +293,7 @@ end
 
 local function handle_blocking(player)
 	local player_shield = mcl_shields.players[player]
+	if not player_shield then return end
 	local rmb = player:get_player_control().RMB
 	if not rmb then
 		if player_shield.blocking ~= 0 then
@@ -503,7 +517,8 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 	minetest.register_tool("mcl_shields:shield_" .. color, {
 		description = shield_colors[colorkey],
 		_doc_items_longdesc = S("A shield is a tool used for protecting the player against attacks."),
-		inventory_image = "mcl_shield.png^(mcl_shield_item_overlay.png^[colorize:" .. colortab.rgb ..")",
+		inventory_image = "mcl_shield_48.png^(mcl_banners_item_overlay_48.png^[colorize:" .. colortab.rgb ..")",
+		wield_image = "mcl_shield_48.png",
 		stack_max = 1,
 		groups = {
 			shield = 1,
@@ -515,7 +530,7 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		sound = {breaks = "default_tool_breaks"},
 		_repair_material = "group:wood",
 		wield_scale = vector.new(2, 2, 2),
-		_shield_color = colortab.rgb,
+		_shield_color_key = colorkey,
 		_mcl_wieldview_item = "",
 	})
 
@@ -532,51 +547,52 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 	})
 end
 
-local function to_shield_texture(banner_texture)
-	return banner_texture
-	:gsub("mcl_banners_base_inverted.png", "mcl_shield_base_nopattern.png^mcl_shield_pattern_base.png")
-	:gsub("mcl_banners_banner_base.png", "mcl_shield_base_nopattern.png^mcl_shield_pattern_base.png")
-	:gsub("mcl_banners_base", "mcl_shield_pattern_base")
-	:gsub("mcl_banners", "mcl_shield_pattern")
-end
-
 local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	if not string.find(itemstack:get_name(), "mcl_shields:shield_") then
 		return
 	end
 
-	local shield_stack
+	local shield_stack, banner_stack
 	for i = 1, player:get_inventory():get_size("craft") do
 		local stack = old_craft_grid[i]
 		local name = stack:get_name()
-		if minetest.get_item_group(name, "shield") then
-			shield_stack = stack
-			break
+		if name ~= "" then
+			if core.get_item_group(name, "shield") > 0 then
+				if shield_stack then return end
+				shield_stack = stack
+			elseif core.get_item_group(name, "banner") > 0 then
+				if banner_stack then return end
+				banner_stack = stack
+			else
+				return
+			end
+			if shield_stack and banner_stack then break end
 		end
 	end
+	if not shield_stack or not banner_stack then return end
 
-	for i = 1, player:get_inventory():get_size("craft") do
-		local banner_stack = old_craft_grid[i]
-		local banner_name = banner_stack:get_name()
-		if string.find(banner_name, "mcl_banners:banner") and shield_stack then
-			local banner_meta = banner_stack:get_meta()
-			local layers = mcl_banners.read_layers(banner_meta)
-			if #layers > mcl_banners.max_craftable_layers then
-				return ItemStack("") -- Too many layers to be placed on a shield.
-			end
-
-			local new_shield_meta = itemstack:get_meta()
-			-- TODO: Review shield description in case of base banner
-			if #layers > 0 then
-				local color = banner_stack:get_definition()._unicolor
-				local texture = mcl_banners.make_banner_texture(color, layers)
-				new_shield_meta:set_string("description", mcl_banners.make_advanced_banner_description(itemstack:get_description(), layers))
-				new_shield_meta:set_string("mcl_shields:shield_custom_pattern_texture", to_shield_texture(texture))
-			end
-			itemstack:set_wear(shield_stack:get_wear())
-			break
-		end
+	local b = mcl_banners
+	local banner_meta = banner_stack:get_meta()
+	local layers = b.read_layers(banner_meta)
+	if #layers > b.max_craftable_layers then
+		return ItemStack("") -- Too many layers to be placed on a shield.
 	end
+
+	local new_shield_meta = itemstack:get_meta()
+	-- TODO: Review shield description in case of base banner
+	if #layers > 0 then
+		local shield_name = itemstack:get_description()
+		local color = banner_stack:get_definition()._unicolor
+
+		local texture = b.make_banner_texture(color, layers, shield_texture_builder)
+		new_shield_meta:set_string("description", b.make_advanced_banner_description(shield_name, layers))
+		new_shield_meta:set_string("mcl_shields:shield_custom_pattern_texture", texture)
+
+		local item_image = b.make_banner_texture(color, layers, "item")
+		item_image = item_image:gsub("mcl_banners_item_base_48.png", "mcl_shield_48.png")
+		new_shield_meta:set_string("inventory_overlay", item_image)
+	end
+	itemstack:set_wear(shield_stack:get_wear())
 end
 
 minetest.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
