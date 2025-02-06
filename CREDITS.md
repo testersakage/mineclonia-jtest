@@ -50,6 +50,13 @@
 * ChrisPHP
 * 3raven
 * ShadowRoi
+* DragonWrangler1
+* amino
+* teknomunk
+* nixnoxus
+* laireia
+* Eliy21
+* ROllerozxa
 
 ## Original Mod Authors
 * Wuzzy
@@ -151,7 +158,10 @@
 * Miguel P.L
 * Just Playing
 * JoseDouglas26
-* bramaudi
+* balazsszalab
+* milklikecomputer
+* CodePoet2005
+* real_mineplayer
 
 ## Special thanks
 * celeron55 for creating Luanti (Minetest)
