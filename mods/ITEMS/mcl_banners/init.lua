@@ -133,7 +133,7 @@ end
 dofile(modpath.."/patterncraft.lua")
 
 -- Overlay ratios (0-255)
-local base_color_ratio = 224
+local base_color_ratio = 255
 
 local standing_banner_entity_offset = { x=0, y=-0.499, z=0 }
 local hanging_banner_entity_offset = { x=0, y=-1.7, z=0 }

@@ -3,7 +3,7 @@ local C = minetest.colorize
 local F = minetest.formspec_escape
 
 local dyerecipes = {}
-local preview_item_prefix = "mcl_banners:banner_preview_"
+local preview_item_prefix = "mcl_banners_preview_"
 
 for name,pattern in pairs(mcl_banners.patterns) do
 	if pattern.type ~= "shapeless" and table.indexof(dyerecipes,name) == -1 then
@@ -22,6 +22,16 @@ for name,pattern in pairs(mcl_banners.patterns) do
 end
 table.sort(dyerecipes)
 
+function get_formspec_preview_button (x, y, layers, base_def, unicolor, pattern_id)
+	local name = "item_button_" .. preview_item_prefix .. pattern_id .. "-" .. unicolor
+	local new_layers = table.copy(layers)
+	table.insert(new_layers, { color = "unicolor_"..unicolor, pattern = pattern_id })
+	local it = core.formspec_escape(mcl_banners.make_banner_texture(base_def._unicolor, new_layers, "item"))
+	local result = string.format("image_button[%f,%f;%f,%f;%s;%s;%s]",x,y,1,1, it, name, "")
+	result = result .. string.format("tooltip[%s;%s]", name, mcl_banners.make_pattern_name("unicolor_"..unicolor, pattern_id))
+	return result
+end
+
 local function get_formspec(pos)
 	local patterns = {}
 	local count = 0
@@ -29,35 +39,31 @@ local function get_formspec(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		local color
-		local def = minetest.registered_items[inv:get_stack("dye", 1):get_name()]
+		local dye_name = inv:get_stack("dye", 1):get_name()
+		local def = minetest.registered_items[dye_name]
 		local pitem = inv:get_stack("pattern", 1):get_name()
 		local pdef = minetest.registered_items[pitem]
-		if def and def.groups.dye and def._color then color = def._color end
+		if def and core.get_item_group(dye_name, "dye") > 0 and def._color then
+			color = mcl_dyes.colors[def._color].unicolor
+		end
 		local x_len = 0.1
 		local y_len = 0.1
 		if not inv:is_empty("banner") then
 			local banner = inv:get_stack("banner", 1)
-			local def = banner:get_definition()
+			local bdef = banner:get_definition()
 			local layers = mcl_banners.read_layers(banner:get_meta())
 			if #layers >= mcl_banners.max_craftable_layers then
 				color = nil -- Too many layers to add more.  Disable patterns.
 			end
 			if color and pdef and pdef._pattern then
-				local it = preview_item_prefix .. pdef._pattern .. "_" .. color
-				local name = preview_item_prefix .. pdef._pattern .. "-" .. color
-				table.insert(patterns,string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",0.1,0.1,1,1, it, "item_button_"..name, ""))
+				table.insert(patterns, get_formspec_preview_button(0.1, 0.1, layers, bdef, color, pdef._pattern))
 			elseif dyerecipes and color then
 				for _, v in ipairs(dyerecipes) do
 					if x_len > 5 then
 						y_len = y_len + 1
 						x_len = 0.1
 					end
-					local name = "item_button_" .. preview_item_prefix .. v .. "-" .. color
-					local new_layers = table.copy(layers)
-					table.insert(new_layers, { color = "unicolor_"..color, pattern = v })
-					local it = core.formspec_escape(mcl_banners.make_banner_texture(def._unicolor, new_layers, "item"))
-					table.insert(patterns,string.format("image_button[%f,%f;%f,%f;%s;%s;%s]",x_len,y_len,1,1, it, name, ""))
-					table.insert(patterns,string.format("tooltip[%s;%s]", name, mcl_banners.make_pattern_name("unicolor_"..color, v)))
+					table.insert(patterns, get_formspec_preview_button(x_len, y_len, layers, bdef, color, v))
 					x_len = x_len + 1
 					count = count + 1
 				end
