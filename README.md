@@ -25,7 +25,6 @@ Version: 0.110.0
 * No hamburgers (but villagers follow dropped food as in Minecraft)
 * No renamed mobs (e.g. Creepers remain Creepers, not Stalkers)
 * Overhauled mob pathfinding, physics, and AI
-* More features but almost 10k lines of code less
 
 ### Gameplay
 You start in a randomly-generated world made entirely of cubes. You can explore
