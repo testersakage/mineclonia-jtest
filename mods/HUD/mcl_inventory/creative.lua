@@ -503,8 +503,8 @@ function mcl_inventory.set_creative_formspec(player)
 
 			-- DO NOT Reenable this code without verifying that the performance issues are fixed
 			-- in all supported luanti versions.
-			-- Since The luanti dev-team does not appear to plan fixing the underlying issue
-			-- ( https://github.com/luanti-org/luanti/issues/13920 ) extra care should be
+			-- Since the underlying issue has been around for a long time
+			-- ( https://github.com/luanti-org/luanti/issues/6905 ) extra care should be
 			-- taken to verify that it is indeed fixed before.
 			-- Even without particularly notable issues you can see very clear drops in FPS
 			-- and peaks in draw calls in the (F5) debugging graphs in luanti.
