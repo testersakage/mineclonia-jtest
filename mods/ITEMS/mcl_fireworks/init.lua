@@ -25,6 +25,7 @@ end
 
 mcl_fireworks.registered_shapes = {
 	ball = {
+		id = 1,
 		func = function(self)
 			local rad = mcl_util.float_random(2,4)
 			core.add_particlespawner(table.merge(tpl_ball_ps, {
@@ -39,6 +40,7 @@ mcl_fireworks.registered_shapes = {
 		end,
 	},
 	large_ball = {
+		id = 2,
 		func = function(self)
 			local rad = mcl_util.float_random(5,8)
 			core.add_particlespawner(table.merge(tpl_ball_ps, {
@@ -52,7 +54,10 @@ mcl_fireworks.registered_shapes = {
 			}))
 		end,
 	},
+	star = { id = 3 },
+	creeper = { id = 4 },
 	burst = {
+		id = 5,
 		func = function(self)
 			local rad = mcl_util.float_random(5,8)
 			core.add_particlespawner({
@@ -80,11 +85,24 @@ mcl_fireworks.registered_shapes = {
 	{id = "burst", desc = S("Burst")}
 	--]]
 }
-
 mcl_fireworks.registered_effects = {
---	{id = "twinkle", desc = S("Twinkle")},
---	{id = "trail", desc = S("Trail")}
+	twinkle = { id = 1 },
+	trail = { id = 2 },
 }
+
+mcl_fireworks.index_shape = {}
+mcl_fireworks.index_effect = {}
+for k, v in pairs(mcl_fireworks.registered_shapes) do
+	if v.id then
+		mcl_fireworks.index_shape[v.id] = k
+	end
+end
+
+for k, v in pairs(mcl_fireworks.registered_effects) do
+	if v.id then
+		mcl_fireworks.index_effect[v.id] = k
+	end
+end
 
 dofile(path .. "/entity.lua")
 dofile(path .. "/register.lua")

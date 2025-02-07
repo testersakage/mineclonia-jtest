@@ -20,7 +20,7 @@ core.register_entity("mcl_fireworks:rocket", {
 		if not properties then return end
 
 		self._flight_duration = properties.flight_duration or self._flight_duration
-		--self._effect = properties.effect or self._effect
+		self._effect = properties.effect or self._effect
 
 		self._trail_spawner = core.add_particlespawner({
 			attached = self.object,

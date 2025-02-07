@@ -165,13 +165,12 @@ local function firework_craft(itemstack, _, old_craft_grid, _)
 		local name =  stack:get_name()
 		local shape_index = core.get_item_group(name, "firework_shape_modifier")
 		local effect_index = core.get_item_group(name, "firework_effect_modifier")
+		local shapedef = mcl_fireworks.registered_shapes[mcl_fireworks.index_shape[shape_index] or "ball"]
+		shape = shapedef.id
 
-		if shape_index > 0 then
-			shape = mcl_fireworks.registered_shapes[shape_index].id
-		end
-
+		local effectdef = mcl_fireworks.registered_effects[mcl_fireworks.index_effect[effect_index] or ""]
 		if effect_index > 0 then
-			table.insert(effects, mcl_fireworks.registered_effects[effect_index].id)
+			table.insert(effects, effectdef.id)
 		end
 
 		if core.get_item_group(name, "dye") > 0 then

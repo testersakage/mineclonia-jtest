@@ -49,7 +49,7 @@ local function register_rocket(n, duration, force)
 			shape = shape ~= "" and shape or "ball"
 			local effects = core.deserialize(m:get_string("mcl_fireworks:effects"))
 			local colors = core.deserialize(m:get_string("mcl_fireworks:colors"))
-			if launch_rocket(pointed_thing, duration, { shape = shape, effects = effects, colors = colors }) then
+			if launch_rocket(pointed_thing, duration, { shape = shape or "ball", effects = effects or {}, colors = colors or {} }) then
 				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
