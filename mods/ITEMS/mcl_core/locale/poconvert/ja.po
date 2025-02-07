@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-03 14:21+0000\n"
+"PO-Revision-Date: 2025-02-07 13:52+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
@@ -511,94 +511,94 @@ msgid "Spruce leaves are grown from Spruce trees."
 msgstr ""
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "樹皮を剥いだアカシアの木"
 
 msgid "Stripped Acacia Log"
 msgstr "樹皮を剥いだアカシアの原木"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "樹皮を剥いだシラカバの木"
 
 msgid "Stripped Birch Log"
 msgstr "樹皮を剥いだシラカバの原木"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "樹皮を剥いだダークオークの木"
 
 msgid "Stripped Dark Oak Log"
 msgstr "樹皮を剥いだダークオークの原木"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "樹皮を剥いだジャングルの木"
 
 msgid "Stripped Jungle Log"
 msgstr "樹皮を剥いだジャングルの原木"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "樹皮を剥いだオークの木"
 
 msgid "Stripped Oak Log"
 msgstr "樹皮を剥いだオークの原木"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "樹皮を剥いだトウヒの木"
 
 msgid "Stripped Spruce Log"
 msgstr "樹皮を剥いだトウヒの原木"
 
 msgid "The stripped trunk of an Acacia tree."
-msgstr ""
+msgstr "皮を剥いだ後のアカシアの木の幹。"
 
 msgid "The stripped trunk of an Birch tree."
-msgstr ""
+msgstr "皮を剥いだ後のシラカバの木の幹。"
 
 msgid "The stripped trunk of an Dark Oak tree."
-msgstr ""
+msgstr "皮を剥いだ後のダークオークの木の幹。"
 
 msgid "The stripped trunk of an Jungle tree."
-msgstr ""
+msgstr "皮を剥いだ後のジャングルの木の幹。"
 
 msgid "The stripped trunk of an Oak tree."
-msgstr ""
+msgstr "皮を剥いだ後のオークの木の幹。"
 
 msgid "The stripped trunk of an Spruce tree."
-msgstr ""
+msgstr "皮を剥いだ後のトウヒの木の幹。"
 
 msgid "The stripped wood of an Acacia tree."
-msgstr ""
+msgstr "皮を剥いだ後のアカシアの木。"
 
 msgid "The stripped wood of an Birch tree."
-msgstr ""
+msgstr "皮を剥いだ後のシラカバの木。"
 
 msgid "The stripped wood of an Dark Oak tree."
-msgstr ""
+msgstr "皮を剥いだ後のダークオークの木。"
 
 msgid "The stripped wood of an Jungle tree."
-msgstr ""
+msgstr "皮を剥いだ後のジャングルの木。"
 
 msgid "The stripped wood of an Oak tree."
-msgstr ""
+msgstr "皮を剥いだ後のオークの木。"
 
 msgid "The stripped wood of an Spruce tree."
-msgstr ""
+msgstr "皮を剥いだ後のトウヒの木。"
 
 msgid "The trunk of a Acacia tree."
-msgstr ""
+msgstr "アカシアの木の幹。"
 
 msgid "The trunk of a Birch tree."
-msgstr ""
+msgstr "シラカバの木の幹。"
 
 msgid "The trunk of a Dark Oak tree."
-msgstr ""
+msgstr "ダークオークの木の幹。"
 
 msgid "The trunk of a Jungle tree."
-msgstr ""
+msgstr "ジャングルの木の幹。"
 
 msgid "The trunk of a Oak tree."
-msgstr ""
+msgstr "オークの木の幹。"
 
 msgid "The trunk of a Spruce tree."
-msgstr ""
+msgstr "トウヒの木の幹。"
 
 msgid "White Stained Glass"
 msgstr "白色の色付きガラス板"
@@ -715,7 +715,7 @@ msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful bl
 msgstr "草原とは、土に草を被せたものです。草原は、さまざまな植物を育てることができる、資源的なブロックです。クワで農地にしたり、シャベルでオフロードにしたりできます。光に当たると、近くの土の上に草がゆっくりと広がっていきます。不透明なブロックや液体の下では、草原は土に戻ることがあります。"
 
 msgid "Dirt with Snow"
-msgstr ""
+msgstr "雪が積もった土"
 
 msgid "Grass Path"
 msgstr "オフロード"
@@ -730,7 +730,7 @@ msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other
 msgstr "菌糸は土の一種であり、キノコに最適な土壌です。他の土系ブロックと違い、クワで農地に変えられません。光に当たると、菌糸は近くの土の上にゆっくりと広がっていきます。不透明なブロックや液体の下では、それはやがて土に戻ります。"
 
 msgid "Mycelium with Snow"
-msgstr ""
+msgstr "雪が積もった菌糸"
 
 msgid "Podzol"
 msgstr "ポドゾル"
@@ -739,7 +739,7 @@ msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are ab
 msgstr "ポドゾルとは、タイガの森で見つかる土の一種です。その上で生きられる植物はごくわずかです。"
 
 msgid "Podzol with Snow"
-msgstr ""
+msgstr "雪が積もったポドゾル"
 
 msgid "Dirt"
 msgstr "土"
