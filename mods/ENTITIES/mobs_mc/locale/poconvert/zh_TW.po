@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-31 13:38+0000\n"
+"PO-Revision-Date: 2025-02-07 18:56+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -19,40 +19,40 @@ msgid "Axolotl"
 msgstr "六角恐龍"
 
 msgid "Bat"
-msgstr ""
+msgstr "蝙蝠"
 
 msgid "Blaze"
-msgstr ""
+msgstr "烈焰使者"
 
 msgid "Chicken"
-msgstr ""
+msgstr "雞"
 
 msgid "Cod"
-msgstr ""
+msgstr "鱈魚"
 
 msgid "Cow"
-msgstr ""
+msgstr "牛"
 
 msgid "Mooshroom"
-msgstr ""
+msgstr "蘑菇牛"
 
 msgid "Creeper"
-msgstr ""
+msgstr "苦力怕"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "苦力怕"
 
 msgid "Dolphin"
-msgstr ""
+msgstr "海豚"
 
 msgid "Ender Dragon"
-msgstr ""
+msgstr "終界龍"
 
 msgid "Enderman"
-msgstr ""
+msgstr "終界使者"
 
 msgid "Endermite"
-msgstr ""
+msgstr "終界蟎"
 
 msgid "Ghast"
 msgstr "地獄幽靈"
@@ -61,19 +61,19 @@ msgid "Ghast Fireball"
 msgstr "地獄幽靈火球"
 
 msgid "Guardian"
-msgstr ""
+msgstr "深海守衛"
 
 msgid "Elder Guardian"
-msgstr ""
+msgstr "遠古深海守衛"
 
 msgid "Hoglin"
-msgstr ""
+msgstr "豬布獸"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "幼體豬布獸"
 
 msgid "Zoglin"
-msgstr ""
+msgstr "僵屍豬布獸"
 
 msgid "Sneak to dismount"
 msgstr "潛行以停止騎乘"
@@ -88,97 +88,97 @@ msgid "Zombie Horse"
 msgstr "殭屍馬"
 
 msgid "Donkey"
-msgstr ""
+msgstr "驢"
 
 msgid "Mule"
-msgstr ""
+msgstr "騾"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "鐵巨人"
 
 msgid "Llama"
-msgstr ""
+msgstr "羊駝"
 
 msgid "Ocelot"
-msgstr ""
+msgstr "虎貓"
 
 msgid "Cat"
 msgstr "貓"
 
 msgid "Parrot"
-msgstr ""
+msgstr "鸚鵡"
 
 msgid "Pig"
 msgstr "豬"
 
 msgid "Piglin"
-msgstr ""
+msgstr "豬布林"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "豬布林蠻兵"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "僵屍豬布林"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "僵屍化豬布林"
 
 msgid "Pillager"
-msgstr ""
+msgstr "掠奪者"
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "北極熊"
 
 msgid "Rabbit"
-msgstr ""
+msgstr "兔"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "殺手兔"
 
 msgid "Salmon"
-msgstr ""
+msgstr "鮭魚"
 
 msgid "Sheep"
 msgstr "羊"
 
 msgid "Shulker"
-msgstr ""
+msgstr "界伏蚌"
 
 msgid "Silverfish"
-msgstr ""
+msgstr "蠹魚"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "骷髏"
 
 msgid "Stray"
-msgstr ""
+msgstr "流髑"
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "凋零骷髏"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "史萊姆．大"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "史萊姆．中"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "史萊姆．小"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "岩漿史萊姆．大"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "岩漿史萊姆．中"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "岩漿史萊姆．小"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "岩漿史萊姆"
 
 msgid "Slime"
-msgstr ""
+msgstr "史萊姆"
 
 msgid "Snow Golem"
 msgstr ""
