@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-07 13:52+0000\n"
+"PO-Revision-Date: 2025-02-07 16:41+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
@@ -87,13 +87,13 @@ msgid "Strength"
 msgstr "剛力"
 
 msgid "+@1% melee damage"
-msgstr ""
+msgstr "近接攻撃の威力が@1%上昇する"
 
 msgid "Weakness"
 msgstr "弱化"
 
 msgid "-@1% melee damage"
-msgstr ""
+msgstr "近接攻撃の威力が@1%低下する"
 
 msgid "Water Breathing"
 msgstr "吸気"
@@ -111,10 +111,10 @@ msgid "Leaping"
 msgstr "跳躍"
 
 msgid "+@1% jumping power"
-msgstr ""
+msgstr "ジャンプの高さが@1%上昇"
 
 msgid "-@1% jumping power"
-msgstr ""
+msgstr "ジャンプの高さが@1%低下"
 
 msgid "Slow Falling"
 msgstr "低速落下"
@@ -126,13 +126,13 @@ msgid "Swiftness"
 msgstr "加速"
 
 msgid "+@1% running speed"
-msgstr ""
+msgstr "疾走速度が@1%上昇する"
 
 msgid "Slowness"
 msgstr "減速"
 
 msgid "-@1% running speed"
-msgstr ""
+msgstr "疾走速度が@1%低下する"
 
 msgid "Levitation"
 msgstr "浮遊"
@@ -168,7 +168,7 @@ msgid "HP increased by @1"
 msgstr ""
 
 msgid "Absorption"
-msgstr ""
+msgstr "ダメージ吸収"
 
 msgid "absorbs up to @1 incoming damage"
 msgstr ""
@@ -177,22 +177,22 @@ msgid "Fire Resistance"
 msgstr "耐火"
 
 msgid "resistance to fire damage"
-msgstr ""
+msgstr "火によるダメージを軽減"
 
 msgid "Resistance"
-msgstr ""
+msgstr "耐性"
 
 msgid "resist @1% of incoming damage"
-msgstr ""
+msgstr "ダメージを@1%軽減"
 
 msgid "Luck"
-msgstr ""
+msgstr "幸運"
 
 msgid "Bad Luck"
-msgstr ""
+msgstr "不運"
 
 msgid "Bad Omen"
-msgstr ""
+msgstr "不吉な予感"
 
 msgid "danger is imminent"
 msgstr ""
@@ -201,22 +201,23 @@ msgid "Hero of the Village"
 msgstr ""
 
 msgid "Withering"
-msgstr ""
+msgstr "衰弱"
 
 msgid "-1 HP / @1 s, can kill"
 msgstr ""
 
 msgid "impaired sight"
-msgstr ""
+msgstr "盲目"
 
+#, fuzzy
 msgid "Hunger"
-msgstr ""
+msgstr "満腹度"
 
 msgid "exhausts by @1 per second"
 msgstr ""
 
 msgid "Nausea"
-msgstr ""
+msgstr "吐き気"
 
 msgid "not feeling very well..."
 msgstr ""
@@ -225,34 +226,34 @@ msgid "frequency: @1 / 1 s"
 msgstr ""
 
 msgid "Saturation"
-msgstr ""
+msgstr "満腹度回復"
 
 msgid "saturates by @1 per second"
 msgstr ""
 
 msgid "Haste"
-msgstr ""
+msgstr "採掘速度上昇"
 
 msgid "+@1% mining and attack speed"
-msgstr ""
+msgstr "採掘速度と攻撃速度が@1%上昇する"
 
 msgid "Fatigue"
-msgstr ""
+msgstr "採掘速度低下"
 
 msgid "-@1% mining and attack speed"
-msgstr ""
+msgstr "採掘速度と攻撃速度が@1%低下する"
 
 msgid "Conduit Power"
-msgstr ""
+msgstr "コンジットパワー"
 
 msgid "+@1% mining and attack speed in water"
-msgstr ""
+msgstr "水中での採掘速度と攻撃速度が@1%上昇する"
 
 msgid "Fermented Spider Eye"
 msgstr "発酵したクモの目"
 
 msgid "Try different combinations to create potions."
-msgstr "いろいろな組み合わせを試して、ポーションを作ってみましょう。 "
+msgstr "いろいろな組み合わせを試して、ポーションを作ってみましょう。"
 
 msgid "Glass Bottle"
 msgstr "ガラス瓶"
@@ -321,34 +322,34 @@ msgid "Drinking a potion gives you a particular effect or set of effects."
 msgstr ""
 
 msgid "@1 Potion @2"
-msgstr ""
+msgstr "@1のポーション @2"
 
 msgid "@1 Potion"
-msgstr "ポーション（@1）"
+msgstr "@1のポーション"
 
 msgid "Potion @1"
-msgstr ""
+msgstr "ポーション（@1）"
 
 msgid "Strange Potion"
-msgstr ""
+msgstr "奇妙なポーション"
 
 msgid "Splash @1"
-msgstr ""
+msgstr "スプラッシュ@1"
 
 msgid "Lingering @1"
-msgstr ""
+msgstr "残留@1"
 
 msgid "@1 Arrow @2"
-msgstr ""
+msgstr "@1の矢 @2"
 
 msgid "@1 Arrow"
-msgstr ""
+msgstr "@1の矢"
 
 msgid "Arrow @1"
-msgstr ""
+msgstr "矢（@1）"
 
 msgid "Strange Tipped Arrow"
-msgstr ""
+msgstr "奇妙な矢"
 
 msgid "Dragon's Breath"
 msgstr "ドラゴンブレス"
@@ -360,7 +361,7 @@ msgid "Awkward"
 msgstr ""
 
 msgid "Has an awkward taste and is used for brewing potions."
-msgstr "味に癖があり、ポーションの醸造に使用されます。 "
+msgstr "味に癖があり、ポーションの醸造に使用されます。"
 
 msgid "Mundane"
 msgstr ""
@@ -375,43 +376,43 @@ msgid "Has a bitter taste and is not really useful for brewing potions."
 msgstr ""
 
 msgid "of Healing"
-msgstr ""
+msgstr "治癒"
 
 msgid "+@1 HP"
-msgstr ""
+msgstr "+@1 HP"
 
 msgid "Instantly heals."
 msgstr "即座に治癒します。"
 
 msgid "of Harming"
-msgstr ""
+msgstr "負傷"
 
 msgid "-@1 HP"
-msgstr ""
+msgstr "-@1 HP"
 
 msgid "Instantly deals damage."
 msgstr "即座にダメージを与えます。"
 
 msgid "of Night Vision"
-msgstr ""
+msgstr "暗視"
 
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "暗い空の下で、光の明るさを感じやすくします。"
 
 msgid "of Swiftness"
-msgstr ""
+msgstr "俊敏"
 
 msgid "Increases walking speed."
-msgstr "歩行速度が上がります。 "
+msgstr "歩行速度が上がります。"
 
 msgid "of Slowness"
-msgstr ""
+msgstr "遅さ"
 
 msgid "Decreases walking speed."
-msgstr "歩行速度が下がります。 "
+msgstr "歩行速度が下がります。"
 
 msgid "of Leaping"
-msgstr ""
+msgstr "跳躍"
 
 msgid "Increases jump strength."
 msgstr "ジャンプ力を高めます。"
