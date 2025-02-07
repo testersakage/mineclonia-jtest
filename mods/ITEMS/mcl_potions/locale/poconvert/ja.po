@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-07 16:41+0000\n"
+"PO-Revision-Date: 2025-02-07 17:25+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
@@ -69,7 +69,7 @@ msgid "Invisiblity"
 msgstr "透明化"
 
 msgid "body is invisible"
-msgstr "プレイヤーのモデルを消滅させ"
+msgstr "不可視性を付与します"
 
 msgid "Poison"
 msgstr "毒薬"
@@ -232,13 +232,13 @@ msgid "saturates by @1 per second"
 msgstr ""
 
 msgid "Haste"
-msgstr "採掘速度上昇"
+msgstr "俊敏"
 
 msgid "+@1% mining and attack speed"
 msgstr "採掘速度と攻撃速度が@1%上昇する"
 
 msgid "Fatigue"
-msgstr "採掘速度低下"
+msgstr "鈍化"
 
 msgid "-@1% mining and attack speed"
 msgstr "採掘速度と攻撃速度が@1%低下する"
@@ -418,58 +418,58 @@ msgid "Increases jump strength."
 msgstr "ジャンプ力を高めます。"
 
 msgid "of Decay"
-msgstr ""
+msgstr "衰弱"
 
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr ""
 
 msgid "of Poison"
-msgstr ""
+msgstr "毒"
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "一定間隔でダメージを与える毒効果を及ぼします。"
 
 msgid "of Regeneration"
-msgstr ""
+msgstr "再生能力"
 
 msgid "Regenerates health over time."
 msgstr "時間経過でヘルスを回復します。"
 
 msgid "of Invisibility"
-msgstr ""
+msgstr "透明化"
 
 msgid "Grants invisibility."
 msgstr "不可視性を付与します。"
 
 msgid "of Water Breathing"
-msgstr ""
+msgstr "水中呼吸"
 
 msgid "Grants limitless breath underwater."
 msgstr "水中で無限の呼吸を付与します。"
 
 msgid "of Fire Resistance"
-msgstr ""
+msgstr "火炎耐性"
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "火などの熱源から受けるダメージに対する免疫力を付与します。"
 
 msgid "of Strength"
-msgstr ""
+msgstr "剛力"
 
 msgid "Increases attack power."
-msgstr ""
+msgstr "攻撃の威力が上昇する。"
 
 msgid "of Weakness"
-msgstr ""
+msgstr "弱化"
 
 msgid "Decreases attack power."
-msgstr ""
+msgstr "攻撃の威力が低下する。"
 
 msgid "of Slow Falling"
-msgstr ""
+msgstr "落下速度低下"
 
 msgid "Instead of falling, you descend gracefully."
-msgstr ""
+msgstr "落下速度を低下させ。"
 
 msgid "of the Turtle Master"
 msgstr ""
@@ -478,31 +478,31 @@ msgid "Decreases damage taken at the cost of speed."
 msgstr ""
 
 msgid "of Luck"
-msgstr ""
+msgstr "幸運"
 
 msgid "Increases luck."
 msgstr ""
 
 msgid "of Bad Luck"
-msgstr ""
+msgstr "不運"
 
 msgid "Decreases luck."
 msgstr ""
 
 msgid "Ominous Bottle"
-msgstr ""
+msgstr "不吉な瓶"
 
 msgid "Attracts danger."
 msgstr ""
 
 msgid "Unknown Potion"
-msgstr ""
+msgstr "未知のポーション"
 
 msgid "Right-click to identify"
 msgstr ""
 
 msgid "Unknown Tipped Arrow"
-msgstr ""
+msgstr "未知の矢"
 
 msgid "A throwable potion that will shatter on impact, where it gives all nearby players and mobs a status effect or a set of status effects."
 msgstr ""
