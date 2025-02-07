@@ -36,11 +36,9 @@ function mcl_smithing_table.upgrade_item(itemstack)
 	itemstack:set_name(upgrade_item)
 	mcl_armor.reload_trim_inv_image(itemstack)
 
-	-- Reload the ToolTips of the tool
-
+	mcl_enchanting.load_enchantments(itemstack)
 	tt.reload_itemstack_description(itemstack)
 
-	-- Only return itemstack if upgrade was successfull
 	return itemstack
 end
 
