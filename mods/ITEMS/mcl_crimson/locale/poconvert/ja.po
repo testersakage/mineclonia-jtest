@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_crimson x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-05 03:21+0000\n"
+"PO-Revision-Date: 2025-02-07 13:52+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
@@ -76,7 +76,7 @@ msgid "Crimson Fence Gate"
 msgstr "真紅のフェンスゲート"
 
 msgid "Crimson Log"
-msgstr "真紅の菌糸"
+msgstr "真紅の幹"
 
 msgid "Crimson Planks"
 msgstr "真紅の板材"
@@ -97,34 +97,34 @@ msgid "Crimson Trapdoor"
 msgstr "真紅のトラップドア"
 
 msgid "Stripped Crimson Bark"
-msgstr ""
+msgstr "皮を剥いだ後の真紅の菌糸"
 
 msgid "Stripped Crimson Log"
-msgstr "表皮を剥いだ真紅の菌糸"
+msgstr "表皮を剥いだ真紅の幹"
 
 msgid "Stripped Warped Bark"
-msgstr ""
+msgstr "皮を剥いだ後の歪んだ菌糸"
 
 msgid "Stripped Warped Log"
-msgstr "表皮を剥いだ歪んだ菌糸"
+msgstr "表皮を剥いだ歪んだ幹"
 
 msgid "The stripped trunk of an Crimson tree."
-msgstr ""
+msgstr "皮を剥いだ後の真紅の幹。"
 
 msgid "The stripped trunk of an Warped tree."
-msgstr ""
+msgstr "皮を剥いだ後の歪んだ幹。"
 
 msgid "The stripped wood of an Crimson tree."
-msgstr ""
+msgstr "皮を剥いだ後の真紅の菌糸。"
 
 msgid "The stripped wood of an Warped tree."
-msgstr ""
+msgstr "皮を剥いだ後の歪んだ菌糸。"
 
 msgid "The trunk of a Crimson tree."
-msgstr ""
+msgstr "真紅の菌糸。"
 
 msgid "The trunk of a Warped tree."
-msgstr ""
+msgstr "歪んだ菌糸。"
 
 msgid "Warped Bark"
 msgstr "歪んだ表皮"
@@ -148,7 +148,7 @@ msgid "Warped Fence Gate"
 msgstr "歪んだフェンスゲート"
 
 msgid "Warped Log"
-msgstr "歪んだ菌糸"
+msgstr "歪んだ幹"
 
 msgid "Warped Planks"
 msgstr "歪んだ板材"
