@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_end x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-07 07:32+0000\n"
+"PO-Revision-Date: 2025-02-07 13:52+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -82,7 +82,7 @@ msgid "Chorus Fruit"
 msgstr "歌萊果"
 
 msgid "Randomly teleports you when eaten"
-msgstr ""
+msgstr "食用時將你隨機傳送"
 
 msgid "A chorus fruit is an edible fruit from the chorus plant which is home to the End. Eating it teleports you to the top of a random solid block nearby, provided you won't end up inside a liquid, solid or harmful blocks. Teleportation might fail if there are very few or no places to teleport to."
 msgstr ""
@@ -115,7 +115,7 @@ msgid "This item is used to locate End portal shrines in the Overworld and to ac
 msgstr ""
 
 msgid "NOTE: The End dimension is currently incomplete and might change in future versions."
-msgstr ""
+msgstr "注意：終界目前還不完整，在未來的版本中可能會有變化。"
 
 msgid "Use the attack key to release the eye of ender. It will rise and fly in the horizontal direction of the closest end portal shrine. If you're very close, the eye of ender will take the direct path to the End portal shrine instead. After a few seconds, it stops. It may drop as an item, but there's a 20% chance it shatters."
 msgstr ""
