@@ -230,6 +230,14 @@ minetest.register_node("mcl_lush_caves:rooted_dirt", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_on_bone_meal = function(_, _, _, pos, _)
+		local under = vector.offset(pos, 0, -1, 0)
+		if core.get_node(under).name == "air" then
+			core.swap_node(under, {name = "mcl_lush_caves:hanging_roots"})
+			return true
+		end
+		return false
+	end,
 	_on_hoe_place = function(itemstack, placer, pointed_thing)
 		local rc, no_wear = mcl_farming.cultivate_dirt(itemstack, placer, pointed_thing)
 		if rc then
