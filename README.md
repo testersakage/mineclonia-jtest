@@ -7,7 +7,7 @@ An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of MineCl
 on stability, multiplayer performance and features. For information about
 migrating from MineClone 2 to Mineclonia, see [MIGRATING.md](../../../src/branch/main/MIGRATING.md).
 
-Version: 0.110.0
+Version: 0.111.0
 
 ### Differences from MineClone 2 (now VoxeLibre)
 * Overworld depth increased from 64 to 128 nodes
