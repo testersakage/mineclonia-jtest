@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-08 02:27+0000\n"
+"PO-Revision-Date: 2025-02-08 05:42+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -247,64 +247,64 @@ msgid "Shepherd"
 msgstr "牧羊人"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "工具匠"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "武器匠"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "傻仔"
 
 msgid "Novice"
-msgstr ""
+msgstr "新手"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "學徒"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "老手"
 
 msgid "Expert"
-msgstr ""
+msgstr "專家"
 
 msgid "Master"
-msgstr ""
+msgstr "大師"
 
 msgid "Evoker"
-msgstr ""
+msgstr "喚魔者"
 
 msgid "Illusioner"
-msgstr ""
+msgstr "幻術師"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "衛道士"
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "僵屍村民"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "流浪商人"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "旅商羊駝"
 
 msgid "Witch"
-msgstr ""
+msgstr "女巫"
 
 msgid "Wither"
-msgstr ""
+msgstr "凋靈"
 
 msgid "Wolf"
-msgstr ""
+msgstr "狼"
 
 msgid "Zombie"
-msgstr ""
+msgstr "僵屍"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "小僵屍"
 
 msgid "Husk"
-msgstr ""
+msgstr "屍殼"
 
 msgid "Baby Husk"
-msgstr ""
+msgstr "小屍殼"
