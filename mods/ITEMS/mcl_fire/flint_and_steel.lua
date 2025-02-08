@@ -74,6 +74,11 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 	end,
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_uses = 65,
+	_placement_def = {
+		inherit = "node_defaults",
+		["mobs_mc:creeper"] = "default",
+		["mobs_mc:creeper_charged"] = "default",
+	},
 })
 
 minetest.register_craft({
