@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-22 08:25+0000\n"
+"Last-Translator: Miguel_PL <miguel_pl@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_armor/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
 msgstr "Esta es una pieza de armadura equipable que reduce la cantidad de daño que recibes."
@@ -47,49 +48,49 @@ msgid "Player isn't online"
 msgstr "La persona no está en línea"
 
 msgid "Bolt Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de remaches"
 
 msgid "Coast Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura costera"
 
 msgid "Dune Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de las dunas"
 
 msgid "Eye Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de ojos"
 
 msgid "Flow Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de espiral"
 
 msgid "Rib Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de costillas"
 
 msgid "Sentry Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de centinela"
 
 msgid "Silence Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de silencio"
 
 msgid "Snout Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de hocico"
 
 msgid "Spire Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de agujas"
 
 msgid "Tide Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de la marea"
 
 msgid "Vex Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de vex"
 
 msgid "Ward Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de warden"
 
 msgid "Wayfinder Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura de buscacaminos"
 
 msgid "Wild Armor Trim"
-msgstr ""
+msgstr "Diseño de armadura salvaje"
 
 msgid "Golden Helmet"
 msgstr "Casco de oro"
@@ -216,4 +217,3 @@ msgstr "Ingredientes:"
 
 msgid "Ingot & Crystals"
 msgstr "Lingotes y Cristales"
-

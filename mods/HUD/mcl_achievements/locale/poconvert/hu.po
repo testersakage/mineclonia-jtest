@@ -3,75 +3,82 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-01-30 00:53+0000\n"
+"Last-Translator: balazsszalab "
+"<balazsszalab@users.noreply.translate.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_achievements/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Benchmarking"
 msgstr "Asztalos"
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr "Készíts kézműves asztalt 4 fadeszkából."
+msgstr "Barkácsolj barkácsasztalt 4 fadeszkából."
 
 msgid "Time to Mine!"
 msgstr "Ideje bányászni!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr "A kézműves asztal segítségével fadeszkákból és botokból készíthetsz egy facsákányt."
+msgstr ""
+"Használd a barkácsasztalt, és barkácsolj egy facsákányt fadeszkákból és "
+"botokból."
 
 msgid "Hot Topic"
 msgstr "Forró kemence"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr "Használj 8 zúzottkövet a kemence megépítéséhez."
+msgstr "Használj 8 zúzottkövet, és barkácsolj egy kemencét."
 
 msgid "Time to Farm!"
 msgstr "Ideje gazdálkodni!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr "A kézműves asztal segítségével készíts kapát fadeszkákból és botokból."
+msgstr ""
+"Használd a barkácsasztalt, és barkácsolj egy fakapát fadeszkákból és "
+"botokból."
 
 msgid "Bake Bread"
 msgstr "Kenyérsütés"
 
 msgid "Use wheat to craft a bread."
-msgstr "Használj búzát a kenyér elkészítéséhez."
+msgstr "Használj búzát, és barkácsolj belőle egy kenyeret."
 
 msgid "The Lie"
 msgstr "Kamusüti"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr "Készíts süteményt búza, cukor, tej és tojás felhasználásával."
+msgstr "Barkácsolj süteményt búza, cukor, tej és tojás felhasználásával."
 
 msgid "Getting an Upgrade"
 msgstr "A fejlődés útján"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr "Készíts kőcsákányt botok és zúzottkő felhasználásával."
+msgstr "Barkácsolj kőcsákányt botok és zúzottkő felhasználásával."
 
 msgid "Time to Strike!"
 msgstr "Ideje lecsapni!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr "Készíts fakardot fadeszkák és botok felhasználásával."
+msgstr ""
+"Barkácsolj fakardot fadeszkák és botok felhasználásával egy barkácsasztalon."
 
 msgid "Librarian"
 msgstr "Könyvtáros"
 
 msgid "Craft a bookshelf."
-msgstr "Készíts könyvespolcot."
+msgstr "Barkácsolj egy könyvespolcot."
 
 msgid "Isn't It Iron Pick"
 msgstr "Vassal jobban hasad"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr "Készíts vascsákányt botok és vas felhasználásával."
+msgstr "Barkácsolj egy vascsákányt botok és vas felhasználásával."
 
 msgid "DIAMONDS!"
 msgstr "GYÉMÁNTOK!"
@@ -98,8 +105,9 @@ msgstr "Favágó"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
-msgstr "Vegyél fel egy fadarabot a földről.\n"
-"Tipp: Ütögess egy fatörzset, amíg az ki nem ugrik fadarabként."
+msgstr ""
+"Vegyél fel egy tárgyként a földön lévő fadarabot.\n"
+"Tipp: Ütögess egy fatörzset, amíg az tárgyként le nem hullik."
 
 msgid "Who is Cutting Onions?"
 msgstr "Ki szeletel itt hagymát?"
@@ -229,7 +237,7 @@ msgid "Free the End"
 msgstr "Szabadíts fel a Véget"
 
 msgid "Kill the ender dragon. Good Luck!"
-msgstr "Öld meg a Végzetsárkányt. Sok szerencsét!"
+msgstr "Öld meg a végsárkányt. Sok szerencsét!"
 
 msgid "Fishy Business"
 msgstr "Kifogni az aranyhalat"
@@ -263,7 +271,7 @@ msgid "Enchanter"
 msgstr "Varázsló"
 
 msgid "Enchant an item using an Enchantment Table."
-msgstr "Varázsolj el egy tárgyat egy varázsasztal segítségével."
+msgstr "Varázsolj el egy tárgyat egy varázslóasztal segítségével."
 
 msgid "Bring Home the Beacon"
 msgstr "Hozd haza a jelzőfényt"
@@ -281,7 +289,7 @@ msgid "The End... Again..."
 msgstr "A Vég ... már megint..."
 
 msgid "Respawn the Ender Dragon."
-msgstr "Támaszd fel a Végsárkányt."
+msgstr "Támaszd fel a végsárkányt."
 
 msgid "Bee Our Guest"
 msgstr "Barátaink a méhek"
@@ -308,10 +316,10 @@ msgid "Scrape wax off of a copper block."
 msgstr "Kapard le a méhviaszt a rézblokkról."
 
 msgid "Crafting a New Look"
-msgstr "Egy új megjelenés"
+msgstr "Barkácsolj új külsőt"
 
 msgid "Craft a trimmed armor at a Smithing Table"
-msgstr "Készíts egy testreszabott páncélt a kovácsasztalnál"
+msgstr "Barkácsolj egy díszített páncélt a kovácsasztalnál"
 
 msgid "Smithing with Style"
 msgstr "Stílusos kovácsmunka"
@@ -384,4 +392,3 @@ msgstr "Önkéntes száműzetés"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "Öld meg a rablók vezérét. Talán fontold meg, hogy egyelőre távol maradsz a helyi falvaktól..."
-

@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-07 17:25+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"awards/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Secret Award Unlocked: @1"
 msgstr ""
@@ -92,7 +94,7 @@ msgid "@1/@2 chat messages"
 msgstr "@1/@2 チャットメッセージ"
 
 msgid "Send a chat message"
-msgstr ""
+msgstr "チャットメッセージを送信"
 
 msgid "Chat @1 times"
 msgstr ""
@@ -125,31 +127,31 @@ msgid "@1/@2 dug"
 msgstr "@1/@2 掘った"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "採掘：@1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "採掘：@1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "採掘：@1 ブロック。"
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "採掘：@1 ブロック。"
 
 msgid "@1/@2 placed"
 msgstr "@1/@2 置いた"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "設置：@1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "設置：@1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "設置：@1 ブロック。"
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "設置：@1 ブロック。"
 
 msgid "@1/@2 crafted"
 msgstr "@1/@2 クラフトした"
@@ -161,10 +163,10 @@ msgid "Craft: @1×@2"
 msgstr "クラフト： @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "クラフト： @1 アイテム"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "クラフト： @1 アイテム。"
 
 msgid "@1/@2 eaten"
 msgstr "@1/@2 食した"
@@ -180,4 +182,3 @@ msgstr ""
 
 msgid "Eat @1 items."
 msgstr ""
-

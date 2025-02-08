@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-07 13:52+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_nether/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Glowstone"
 msgstr "グローストーン"
@@ -29,10 +31,10 @@ msgid "Ancient Debris"
 msgstr "古代の残骸"
 
 msgid "Ancient debris can be found in the nether and is very very rare."
-msgstr ""
+msgstr "古代の残骸は、ネザーに生成される珍しい鉱石であり。"
 
 msgid "Block of Netherite"
-msgstr ""
+msgstr "ネザライトブロック"
 
 msgid "Netherite block is very hard and can be made of 9 netherite ingots."
 msgstr "ネザライトブロックは、非常に硬く、9個のネザライトインゴットから作れます。"
@@ -68,10 +70,10 @@ msgid "Red Nether Brick Block"
 msgstr "赤いネザーレンガブロック"
 
 msgid "Chiseled Nether Brick Block"
-msgstr ""
+msgstr "模様入りのネザーレンガ"
 
 msgid "Cracked Nether Bricks"
-msgstr ""
+msgstr "ひび割れたネザーレンガ"
 
 msgid "Nether Wart Block"
 msgstr "ネザーウォートブロック"
@@ -92,31 +94,31 @@ msgid "Smooth Quartz"
 msgstr "滑らかなクォーツ"
 
 msgid "Quartz Stairs"
-msgstr ""
+msgstr "クォーツの階段"
 
 msgid "Quartz Slab"
-msgstr ""
+msgstr "クォーツのハーフブロック"
 
 msgid "Smooth Quartz Stairs"
-msgstr ""
+msgstr "滑らかなクォーツの階段"
 
 msgid "Smooth Quartz Slab"
-msgstr ""
+msgstr "滑らかなクォーツのハーフブロック"
 
 msgid "Nether Brick Stairs"
-msgstr ""
+msgstr "ネザーレンガの階段"
 
 msgid "Nether Brick Slab"
-msgstr ""
+msgstr "ネザーレンガのハーフブロック"
 
 msgid "Red Nether Brick Stairs"
-msgstr ""
+msgstr "赤いネザーレンガの階段"
 
 msgid "Red Nether Brick Slab"
-msgstr ""
+msgstr "赤いネザーレンガのハーフブロック"
 
 msgid "Nether Brick Fence"
-msgstr ""
+msgstr "ネザーレンガのフェンス"
 
 msgid "Glowstone Dust"
 msgstr "グローストーンダスト"
@@ -149,19 +151,19 @@ msgid "Nether bricks are the main crafting ingredient for crafting nether brick 
 msgstr "ネザーレンガは、ネザーレンガブロックやネザーフェンスを製作するための主なクラフト材料です。"
 
 msgid "Netherite Upgrade Template"
-msgstr ""
+msgstr "ネザライト強化用鍛冶型"
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "鍛冶型"
 
 msgid "Applies to:"
 msgstr ""
 
 msgid "Diamond Armor"
-msgstr ""
+msgstr "ダイヤモンド防具"
 
 msgid "Diamond Tools"
-msgstr ""
+msgstr "ダイヤモンド武器と道具"
 
 msgid "Ingredients:"
 msgstr ""
@@ -201,4 +203,3 @@ msgstr "ネザーウォート（ウォート＝イボ）は、ネザーに生息
 
 msgid "Place this item on soul sand to plant it and watch it grow."
 msgstr "このアイテムをソウルサンドの上に置いて植えると、その成長を見ることができます。"
-
