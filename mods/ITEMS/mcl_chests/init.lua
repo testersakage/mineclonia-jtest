@@ -1159,7 +1159,7 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 		material_stone = 1,
 		chest_entity = 1,
 		not_in_creative_inventory = 1,
-		_mcl_partial = 1,
+		_mcl_partial = 2,
 		piglin_protected = 1,
 		unmovable_by_piston = 1,
 	},
