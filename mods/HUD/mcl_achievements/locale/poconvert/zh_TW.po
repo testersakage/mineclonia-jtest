@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-08 05:42+0000\n"
+"PO-Revision-Date: 2025-02-08 09:32+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -76,7 +76,7 @@ msgid "Craft a iron pickaxe using sticks and iron."
 msgstr ""
 
 msgid "DIAMONDS!"
-msgstr ""
+msgstr "璀璨耀眼"
 
 msgid "Pick up a diamond from the floor."
 msgstr ""
@@ -95,33 +95,33 @@ msgid "Pick up leather from the floor.\n"
 msgstr ""
 
 msgid "Getting Wood"
-msgstr ""
+msgstr "一草一木"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
 
 msgid "Who is Cutting Onions?"
-msgstr ""
+msgstr "悲天憫人"
 
 msgid "Pick up a crying obsidian from the floor."
 msgstr ""
 
 msgid "Hidden in the Depths"
-msgstr ""
+msgstr "深藏不露"
 
 msgid "Pick up an Ancient Debris from the floor."
 msgstr ""
 
 msgid "The Next Generation"
-msgstr ""
+msgstr "新世代"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
 
 msgid "Sky's the Limit"
-msgstr ""
+msgstr "沖上雲霄"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
 msgstr ""
@@ -172,7 +172,7 @@ msgid "Or the beginning?\n"
 msgstr ""
 
 msgid "The Nether"
-msgstr "地獄"
+msgstr "赴湯蹈火"
 
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
@@ -215,7 +215,7 @@ msgid "Catch an Axolotl with a bucket!"
 msgstr ""
 
 msgid "Withering Heights"
-msgstr ""
+msgstr "借屍還魂"
 
 msgid "Summon the wither from the dead."
 msgstr ""
@@ -240,32 +240,32 @@ msgid "Use a compass on a Lodestone."
 msgstr ""
 
 msgid "Serious Dedication"
-msgstr ""
+msgstr "躬耕樂道"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
 msgstr ""
 
 msgid "Local Brewery"
-msgstr ""
+msgstr "本地釀製"
 
 msgid "Brew a Potion.\n"
 "Hint: Take a potion or glass bottle out of the brewing stand."
 msgstr ""
 
 msgid "Enchanter"
-msgstr "魔咒師"
+msgstr "附魔師"
 
 msgid "Enchant an item using an Enchantment Table."
 msgstr ""
 
 msgid "Bring Home the Beacon"
-msgstr ""
+msgstr "標開得勝"
 
 msgid "Use a beacon."
 msgstr ""
 
 msgid "Beaconator"
-msgstr ""
+msgstr "標芒畢露"
 
 msgid "Use a fully powered beacon."
 msgstr ""
@@ -289,13 +289,13 @@ msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr ""
 
 msgid "Wax On"
-msgstr ""
+msgstr "添蠟"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
 msgstr ""
 
 msgid "Wax Off"
-msgstr ""
+msgstr "除蠟"
 
 msgid "Scrape wax off of a copper block."
 msgstr ""
@@ -325,7 +325,7 @@ msgid "Eat a cooked porkchop."
 msgstr ""
 
 msgid "Rabbit Season"
-msgstr ""
+msgstr "品兔佳期"
 
 msgid "Eat a cooked rabbit."
 msgstr ""
@@ -349,19 +349,19 @@ msgid "Mine emerald ore."
 msgstr ""
 
 msgid "Stone Age"
-msgstr ""
+msgstr "石器時代"
 
 msgid "Mine a stone with new pickaxe."
 msgstr ""
 
 msgid "Hot Stuff"
-msgstr ""
+msgstr "炙手可熱"
 
 msgid "Put lava in a bucket."
 msgstr ""
 
 msgid "Ice Bucket Challenge"
-msgstr ""
+msgstr "冰桶挑戰"
 
 msgid "Obtain an obsidian block."
 msgstr ""
