@@ -195,8 +195,8 @@ local function register_stair(subname, stairdef)
 		node_box = {
 			type = "fixed",
 			fixed = {
-				{-0.5, -0.5, -0.5, 0.5, 0, 0.5},
-				{-0.5, 0, 0, 0.5, 0.5, 0.5},
+				{-0.5001, -0.5001, -0.5001, 0.5001, 0, 0.5001},
+				{-0.5001, 0, 0, 0.5001, 0.5001, 0.5001},
 			},
 		},
 		selection_box = {
@@ -328,7 +328,7 @@ local function register_slab(subname, stairdef)
 		sounds = stairdef.sounds,
 		node_box = {
 			type = "fixed",
-			fixed = {-0.5, -0.5, -0.5, 0.5, 0, 0.5},
+			fixed = {-0.5001, -0.5001, -0.5001, 0.5001, 0, 0.5001},
 		},
 		on_place = function(itemstack, placer, pointed_thing)
 			if not placer then return end
@@ -417,7 +417,7 @@ local function register_slab(subname, stairdef)
 	end
 	topdef.node_box = {
 		type = "fixed",
-		fixed = {-0.5, 0, -0.5, 0.5, 0.5, 0.5},
+		fixed = {-0.5001, 0, -0.5001, 0.5001, 0.5001, 0.5001},
 	}
 	topdef.selection_box = {
 		type = "fixed",
