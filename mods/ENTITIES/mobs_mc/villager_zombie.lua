@@ -160,7 +160,7 @@ local zombie_villager = table.merge (zombie, {
 		},
 	},
 	_reinforcement_type = "mobs_mc:villager_zombie",
-	_placeable_by_default = false,
+	_unplaceable_by_default = true,
 })
 
 ------------------------------------------------------------------------
