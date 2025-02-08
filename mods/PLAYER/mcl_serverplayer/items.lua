@@ -162,7 +162,11 @@ for name, item in pairs (minetest.registered_items) do
 		and item.groups.food and item.groups.food > 0 then
 		handshake_item_defs[name] = "magic_victuals"
 	elseif item.groups.eatable and item.groups.food > 0 then
-		handshake_item_defs[name] = "victuals"
+		if item._mcl_places_plant then
+			handshake_item_defs[name] = "farmable_victuals"
+		else
+			handshake_item_defs[name] = "victuals"
+		end
 	elseif item.groups.crossbow and item.groups.crossbow > 0 then
 		handshake_item_defs[name] = "bows"
 	elseif item.groups.bow and item.groups.bow > 0 then
@@ -275,6 +279,15 @@ local magic_foods = {
 }
 
 handshake_item_defs["magic_victuals"] = magic_foods
+
+-- Foods placeable on farmland.
+local magic_foods = {
+	inherit = "victuals",
+	["mcl_farming:soil"] = "default",
+	["mcl_farming:soil_wet"] = "default",
+}
+
+handshake_item_defs["farmable_victuals"] = magic_foods
 
 -- Bows.
 local bows = {
