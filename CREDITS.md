@@ -22,6 +22,7 @@
 * Lars Müller
 * the-real-herowl
 * nooneatall
+* nixnoxus
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -53,7 +54,6 @@
 * DragonWrangler1
 * amino
 * teknomunk
-* nixnoxus
 * laireia
 * Eliy21
 * ROllerozxa
@@ -163,6 +163,39 @@
 * milklikecomputer
 * CodePoet2005
 * real_mineplayer
+
+* 3raven
+* Ame-chan-angel
+* Benny
+* bramaudi
+* bright
+* collectanos
+* Cwpute
+* Dirk
+* ellesheepy
+* Enlive
+* fnetX
+* Gaemy
+* hugoalh
+* JoseDouglas26
+* j-r
+* Just Playing
+* Kyoushi
+* liulitchi
+* metmj
+* Miguel P.L
+* Miguel_PL
+* milklikecomputer
+* mugcake
+* Oldcoinmania
+* phileas
+* Pietro Cappuccino
+* RadonPrunus
+* Sencyy
+* Sotis
+* wilker
+* XP_42319
+* Zozosticot
 
 ## Special thanks
 * celeron55 for creating Luanti (Minetest)
