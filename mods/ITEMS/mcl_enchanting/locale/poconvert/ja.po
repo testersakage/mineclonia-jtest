@@ -217,14 +217,14 @@ msgstr ""
 msgid "Inventory"
 msgstr "インベントリ"
 
-msgid "@1 Lapis Lazuli"
-msgstr "@1 ラピスラズリ"
-
 msgid "@1 Enchantment Levels"
 msgstr "@1 エンチャントレベル"
 
 msgid "Level requirement: @1"
 msgstr "必要レベル：@1"
+
+msgid "@1 Lapis Lazuli"
+msgstr "@1 ラピスラズリ"
 
 msgid "Enchant an item"
 msgstr "アイテムにエンチャントする"

@@ -1,0 +1,21 @@
+# textdomain: mcl_candles
+A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced.=La bougie est un bloc qui émet de la lumière quand elle est allumée avec un briquet. Elle se décline en seize couleurs. Il est possible de placer jusqu'à quatre bougies de la même couleur sur un même bloc, ce qui influe sur la quantité de lumière émise.
+Candle=Bougie
+Lit Candle=Bougie allumée
+Cake=Gâteau
+Black Candle=
+Blue Candle=
+Brown Candle=
+Cyan Candle=
+Green Candle=
+Grey Candle=
+Light Blue Candle=
+Light Grey Candle=
+Lime Candle=
+Magenta Candle=
+Orange Candle=
+Pink Candle=
+Purple Candle=
+Red Candle=
+White Candle=
+Yellow Candle=

@@ -1,5 +1,13 @@
 # textdomain: mcl_beacons
+Unavailable=
+Active=
+Beacon=信标
 Primary Power:=主要效果:
 Secondary Power:=辅助效果:
-Inventory:=背包:
-Beacon=信标
+Swiftness=
+Haste=
+Resistance=
+Leaping=
+Strength=
+Regeneration=
+Inventory=

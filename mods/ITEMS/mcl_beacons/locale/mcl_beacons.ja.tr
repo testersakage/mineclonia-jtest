@@ -1,5 +1,13 @@
 # textdomain: mcl_beacons
+Unavailable=
+Active=
+Beacon=ビーコン
 Primary Power:=プライマリーパワー：
 Secondary Power:=
-Inventory:=インベントリ：
-Beacon=
+Swiftness=
+Haste=
+Resistance=
+Leaping=
+Strength=
+Regeneration=
+Inventory=

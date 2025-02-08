@@ -1,5 +1,13 @@
 # textdomain: mcl_beacons
+Unavailable=
+Active=
+Beacon=烽火台
 Primary Power:=
 Secondary Power:=
-Inventory:=物品欄：
-Beacon=烽火台
+Swiftness=
+Haste=
+Resistance=
+Leaping=
+Strength=
+Regeneration=
+Inventory=

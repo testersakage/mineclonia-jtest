@@ -3,22 +3,19 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-30 00:53+0000\n"
-"Last-Translator: CodePoet2005 "
-"<codepoet2005@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Dutch <https://translate.codeberg.org/projects/mineclonia/"
-"doc_items/nl/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a decorational block."
 msgstr "Dit is een decoratief blok."
 
-#, fuzzy
 msgid "This block is a building block for creating various buildings."
 msgstr "Dit blok is een bouwblok,  voor het maken van verschillende bouwwerken."
 
@@ -128,9 +125,6 @@ msgid "Toughness level: @1"
 msgstr ""
 
 msgid "Range: @1"
-msgstr ""
-
-msgid "Range: 4"
 msgstr ""
 
 msgid "Range: @1 (@2)"
@@ -417,3 +411,4 @@ msgstr ""
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr ""
+

@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-28 07:21+0000\n"
-"Last-Translator: liulitchi <liulitchi@users.noreply.translate.codeberg.org>\n"
-"Language-Team: Chinese (Simplified Han script) <https://"
-"translate.codeberg.org/projects/mineclonia/doc_items/zh_Hans/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a decorational block."
 msgstr "这是一个装饰性方块。"
@@ -127,9 +126,6 @@ msgstr "韧性等级:@1"
 
 msgid "Range: @1"
 msgstr "范围:@1"
-
-msgid "Range: 4"
-msgstr "范围: 4"
 
 msgid "Range: @1 (@2)"
 msgstr "范围: @1 (@2)"
@@ -415,3 +411,4 @@ msgstr "一种透明方块，基本就是空白空间。通常在挖掘某物后
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr "无论何时你未手持任何物品，你使用的手就相当于一件有着自身功能的工具。当你手持的物品并非挖矿工具或武器时，它的表现就如同是手一样。"
+

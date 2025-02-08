@@ -1,7 +1,7 @@
 # textdomain: mcl_vaults
-Vault=
-Ejects loot when opened with the key=
+Vault=宝物庫
+Ejects loot when opened with the key=キーで開くと戦利品が排出されます
 A vault ejects loot when opened with the right key. It can only be opened once by each player.=
-Trial Key=
-Ominous Trial Key=
-Ominous Vault=
+Trial Key=トライアルキー
+Ominous Trial Key=不吉な試練の鍵
+Ominous Vault=不吉な宝物庫

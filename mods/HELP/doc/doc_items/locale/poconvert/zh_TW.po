@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-26 19:11+0000\n"
-"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
-"\n"
-"Language-Team: Chinese (Traditional Han script) <https://"
-"translate.codeberg.org/projects/mineclonia/doc_items/zh_Hant/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a decorational block."
 msgstr "此為裝飾性方塊。"
@@ -31,8 +29,7 @@ msgid "Hold it in your hand, then leftclick to eat it. But why would you want to
 msgstr "拿著它左按，就可以食用。但為甚麼要吃？"
 
 msgid "This block's rotation is affected by the way you place it: Place it on the floor or ceiling for a vertical orientation; place it at the side for a horizontal orientation. Sneaking while placing it leads to a perpendicular orientation instead."
-msgstr "此方塊的旋轉方向受放置方式影響：放置在地板或天花板上時是直置；放置在側面時是"
-"橫置。放置時按下潛行鍵，則垂直放置。"
+msgstr "此方塊的旋轉方向受放置方式影響：放置在地板或天花板上時是直置；放置在側面時是橫置。放置時按下潛行鍵，則垂直放置。"
 
 msgid "Hand"
 msgstr "手"
@@ -129,9 +126,6 @@ msgstr "硬度：@1"
 
 msgid "Range: @1"
 msgstr "距離：@1"
-
-msgid "Range: 4"
-msgstr ""
 
 msgid "Range: @1 (@2)"
 msgstr "距離：@1 (@2)"
@@ -416,5 +410,5 @@ msgid "A transparent block, basically empty space. It is usually left behind aft
 msgstr ""
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
-msgstr "即使是空著的手，也有基本的開採和戰鬥能力。當你拿著既非工具也非武器的物品時，"
-"你的行動會視作徒手進行。"
+msgstr "即使是空著的手，也有基本的開採和戰鬥能力。當你拿著既非工具也非武器的物品時，你的行動會視作徒手進行。"
+
