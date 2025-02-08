@@ -1,6 +1,6 @@
 # Mineclonia
 
-[![ContentDB](https://content.minetest.net/packages/ryvnf/mineclonia/shields/downloads/)](https://content.minetest.net/packages/ryvnf/mineclonia/)
+[![ContentDB](https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/)](https://content.luanti.org/packages/ryvnf/mineclonia/)
 [![Translation status](https://translate.codeberg.org/widget/mineclonia/svg-badge.svg)](https://translate.codeberg.org/engage/mineclonia/)
 
 An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of MineClone 2 with focus
@@ -93,7 +93,7 @@ Use the `/giveme` chat command to obtain them. See the in-game help for
 an explanation.
 
 ## Installation
-This game requires [Luanti](http://minetest.net) to run (version 5.10 or
+This game requires [Luanti](https://luanti.org) to run (version 5.10 or
 later). So you need to install Luanti first. Only stable versions of Luanti
 are officially supported. There is no support for running Mineclonia in
 development versions of Luanti.
@@ -107,7 +107,7 @@ The Mineclonia repository is hosted at [Codeberg](https://codeberg.org).
 To contribute or report issues, head there.
 
 * Codeberg: <https://codeberg.org/mineclonia/mineclonia>
-* ContentDB: <https://content.minetest.net/packages/ryvnf/mineclonia/>
+* ContentDB: <https://content.luanti.org/packages/ryvnf/mineclonia/>
 * Discord:  https://discord.gg/WAwpPWHTXZ
 * Matrix: #mineclonia:matrix.org
 
