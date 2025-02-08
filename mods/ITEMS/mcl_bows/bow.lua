@@ -130,7 +130,7 @@ local function player_shoot_arrow (player, power, is_critical)
 		if not arrow_stack then
 			return false
 		end
-		arrow_itemstring = arrow_stack:to_string()
+		arrow_itemstring = arrow_stack:get_name()
 		if not (has_infinity_enchantment and minetest.get_item_group(arrow_itemstring, "ammo_bow_regular") > 0) then
 			arrow_stack:take_item()
 		end
