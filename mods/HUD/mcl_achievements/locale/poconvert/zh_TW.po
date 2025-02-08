@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-21 23:28+0000\n"
+"PO-Revision-Date: 2025-02-08 05:42+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -16,13 +16,13 @@ msgstr ""
 "X-Generator: Weblate 5.9.2\n"
 
 msgid "Benchmarking"
-msgstr ""
+msgstr "量枘製鑿"
 
 msgid "Craft a crafting table from 4 wooden planks."
 msgstr "使用 4 塊木板合成一張合成台。"
 
 msgid "Time to Mine!"
-msgstr "挖掘時間！"
+msgstr "來挖掘吧！"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr "使用合成台用木板和木棒合成木鎬。"
@@ -34,31 +34,31 @@ msgid "Use 8 cobblestones to craft a furnace."
 msgstr "使用 8 塊鵝卵石合成一個熔爐。"
 
 msgid "Time to Farm!"
-msgstr "是時候務農了！"
+msgstr "來農耕吧！"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
 msgstr ""
 
 msgid "Bake Bread"
-msgstr ""
+msgstr "麵包烘焙"
 
 msgid "Use wheat to craft a bread."
 msgstr ""
 
 msgid "The Lie"
-msgstr ""
+msgstr "謊言"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
 msgstr ""
 
 msgid "Getting an Upgrade"
-msgstr ""
+msgstr "挖掘升級！"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
 msgstr ""
 
 msgid "Time to Strike!"
-msgstr "是時候出擊了！"
+msgstr "來出擊吧！"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
 msgstr ""
@@ -70,7 +70,7 @@ msgid "Craft a bookshelf."
 msgstr ""
 
 msgid "Isn't It Iron Pick"
-msgstr ""
+msgstr "破銅煉鐵"
 
 msgid "Craft a iron pickaxe using sticks and iron."
 msgstr ""
@@ -147,19 +147,19 @@ msgid "Travel by minecart for at least 1000 meters from your starting point in a
 msgstr ""
 
 msgid "Sniper Duel"
-msgstr ""
+msgstr "狙擊對決"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
 msgstr ""
 
 msgid "Monster Hunter"
-msgstr ""
+msgstr "魔物獵人"
 
 msgid "Kill a monster."
 msgstr ""
 
 msgid "We Need to Go Deeper"
-msgstr ""
+msgstr "潛行凶間"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
@@ -172,7 +172,7 @@ msgid "Or the beginning?\n"
 msgstr ""
 
 msgid "The Nether"
-msgstr ""
+msgstr "地獄"
 
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
@@ -185,25 +185,25 @@ msgid "Use a Totem of Undying to cheat death."
 msgstr ""
 
 msgid "Sweet Dreams"
-msgstr ""
+msgstr "一夜好眠"
 
 msgid "Sleep in a bed to change your respawn point."
 msgstr ""
 
 msgid "Not Quite \"Nine\" Lives"
-msgstr ""
+msgstr "貓有九命"
 
 msgid "Charge a Respawn Anchor to the maximum."
 msgstr ""
 
 msgid "What A Deal!"
-msgstr ""
+msgstr "貨如輪轉"
 
 msgid "Successfully trade with a Villager."
 msgstr ""
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "求生捕魚術"
 
 msgid "Catch a fish... without a fishing rod!"
 msgstr ""
@@ -221,13 +221,13 @@ msgid "Summon the wither from the dead."
 msgstr ""
 
 msgid "Free the End"
-msgstr "解放末地"
+msgstr "有始有終"
 
 msgid "Kill the ender dragon. Good Luck!"
 msgstr ""
 
 msgid "Fishy Business"
-msgstr "捕魚大業"
+msgstr "魚樂無窮"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
@@ -271,7 +271,7 @@ msgid "Use a fully powered beacon."
 msgstr ""
 
 msgid "The End... Again..."
-msgstr "末地…重演…"
+msgstr "終界…重生…"
 
 msgid "Respawn the Ender Dragon."
 msgstr ""
