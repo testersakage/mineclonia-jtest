@@ -37,6 +37,7 @@ minetest.register_tool("mcl_shields:shield", {
 	_repair_material = "group:wood",
 	wield_scale = vector.new(2, 2, 2),
 	_mcl_wieldview_item = "",
+	_placement_class = "shield",
 })
 
 local function wielded_item(obj, i)
@@ -356,9 +357,28 @@ local function is_rmb_conflicting_node(nodename)
 	return nodedef and nodedef.on_rightclick
 end
 
+function mcl_shields.set_blocking (player, blocking)
+	local player_shield = mcl_shields.players[player]
+	if player_shield then
+		player_shield.blocking = blocking
+	end
+end
+
 local function handle_blocking(player)
 	local player_shield = mcl_shields.players[player]
 	if not player_shield then return end
+
+	if mcl_serverplayer.is_csm_at_least (player, 1) then
+		local shield_in_offhand
+			= mcl_shields.wielding_shield (player, 1)
+		local shield_in_hand
+			= mcl_shields.wielding_shield (player)
+		if not shield_in_hand and not shield_in_offhand then
+			player_shield.blocking = 0
+		end
+		return
+	end
+
 	local rmb = player:get_player_control().RMB
 	if not rmb then
 		if player_shield.blocking ~= 0 then

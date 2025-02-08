@@ -63,6 +63,7 @@ local creeper_defs = {
 	floats = 1,
 	reach = 3,
 	pace_bonus = 0.8,
+	_placeable_by_default = false,
 }
 
 ---------------------------------------------------------------
