@@ -82,13 +82,14 @@ function mcl_banners.is_same_layers (A, B)
 end
 
 -- Update banner description, returning description, name
-function mcl_banners.update_description (itemstack)
+function mcl_banners.update_description (itemstack, limit)
 	local def, meta = itemstack:get_definition(), itemstack:get_meta()
 	local name = meta:get_string("name")
 	local layers = mcl_banners.read_layers(meta)
+	local def_name = def.description
 	if name ~= "" and name:find("Ominous Banner") then name = "" end -- Pre-0.84.0 Ominous Banners
 	if name == "" then
-		name = def.description
+		name = def_name
 		if core.get_modpath("mcl_raids")
 		and mcl_raids.is_banner_item(itemstack, layers) then
 			local orig_name = mcl_banners.colors["unicolor_white"].banner_name
@@ -97,30 +98,31 @@ function mcl_banners.update_description (itemstack)
 	else
 		name = core.colorize(tt.NAME_COLOR, name)
 	end
-	local newdesc = mcl_banners.make_advanced_banner_description(name, layers)
+	local newdesc = mcl_banners.make_advanced_banner_description(name, layers, limit)
 	meta:set_string("description", newdesc)
 
 	local image = mcl_banners.make_banner_texture(def._unicolor, layers, "item")
 	meta:set_string("inventory_overlay", image)
 	meta:set_string("wield_overlay", image)
-	return newdesc, name
+	return newdesc, name, def_name
 end
 
 -- Create a banner description containing all the layer names
-function mcl_banners.make_advanced_banner_description (name, layers)
+function mcl_banners.make_advanced_banner_description (name, layers, limit)
 	if layers == nil or #layers == 0 then return name end
 	local patterns, colors = mcl_banners.patterns, mcl_banners.colors
 	local layerstrings = {}
-	for l=1, math.min(#layers, max_layer_lines) do
+	if type(limit) ~= "number" or limit < 0 then limit = max_layer_lines end
+	for l=1, math.min(#layers, limit) do
 		local layer = layers[l]
 		local layer_name, valid = mcl_banners.make_pattern_name(layer.color, layer.pattern)
 		if valid then
 			table.insert(layerstrings, layer_name)
 		end
 	end
-	if #layers == max_layer_lines + 1 then
+	if #layers == limit + 1 then
 		table.insert(layerstrings, S("And one additional layer"))
-	elseif #layers > max_layer_lines + 1 then
+	elseif #layers > limit + 1 then
 		table.insert(layerstrings, S("And @1 additional layers", #layers - max_layer_lines))
 	end
 
