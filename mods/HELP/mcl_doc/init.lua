@@ -1,11 +1,11 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Disable built-in factoids; it is planned to add custom ones as replacements
 doc.sub.items.disable_core_factoid("node_mining")
 doc.sub.items.disable_core_factoid("tool_capabilities")
 
 -- Help button callback
-minetest.register_on_player_receive_fields(function(player, _, fields)
+core.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_doc then
 		doc.show_doc(player:get_player_name())
 	end
@@ -137,12 +137,12 @@ end)
 
 -- Armor
 doc.sub.items.register_factoid(nil, "use", function(itemstring, _)
-	--local def = minetest.registered_items[itemstring]
+	--local def = core.registered_items[itemstring]
 	local s = ""
-	local head = minetest.get_item_group(itemstring, "armor_head")
-	local torso = minetest.get_item_group(itemstring, "armor_torso")
-	local legs = minetest.get_item_group(itemstring, "armor_legs")
-	local feet = minetest.get_item_group(itemstring, "armor_feet")
+	local head = core.get_item_group(itemstring, "armor_head")
+	local torso = core.get_item_group(itemstring, "armor_torso")
+	local legs = core.get_item_group(itemstring, "armor_legs")
+	local feet = core.get_item_group(itemstring, "armor_feet")
 	if head > 0 then
 		s = s .. S("It can be worn on the head.")
 		s = s .. "\n"
@@ -162,10 +162,10 @@ doc.sub.items.register_factoid(nil, "use", function(itemstring, _)
 	return s
 end)
 doc.sub.items.register_factoid(nil, "groups", function(itemstring, _)
-	--local def = minetest.registered_items[itemstring]
+	--local def = core.registered_items[itemstring]
 	local s = ""
-	local use = minetest.get_item_group(itemstring, "mcl_armor_uses")
-	local pts = minetest.get_item_group(itemstring, "mcl_armor_points")
+	local use = core.get_item_group(itemstring, "mcl_armor_uses")
+	local pts = core.get_item_group(itemstring, "mcl_armor_points")
 	if pts > 0 then
 		s = s .. S("Armor points: @1", pts)
 		s = s .. "\n"
@@ -177,7 +177,7 @@ doc.sub.items.register_factoid(nil, "groups", function(itemstring, _)
 end)
 
 doc.sub.items.register_factoid(nil, "groups", function(itemstring, _)
-	if minetest.get_item_group(itemstring, "no_rename") == 1 then
+	if core.get_item_group(itemstring, "no_rename") == 1 then
 		return S("This item cannot be renamed at an anvil.")
 	else
 		return ""
@@ -186,7 +186,7 @@ end)
 
 doc.sub.items.register_factoid("nodes", "gravity", function(itemstring, _)
 	local s = ""
-	if minetest.get_item_group(itemstring, "crush_after_fall") == 1 then
+	if core.get_item_group(itemstring, "crush_after_fall") == 1 then
 		s = s .. S("This block crushes any block it falls into.")
 	end
 	return s
@@ -194,7 +194,7 @@ end)
 
 doc.sub.items.register_factoid("nodes", "gravity", function(itemstring, _)
 	local s = ""
-	if minetest.get_item_group(itemstring, "crush_after_fall") == 1 then
+	if core.get_item_group(itemstring, "crush_after_fall") == 1 then
 		s = s .. S("When this block falls deeper than 1 block, it causes damage to any player it hits. The damage dealt is B×2−2 hit points with B = number of blocks fallen. The damage can never be more than 40 HP.")
 	end
 	return s
@@ -280,7 +280,7 @@ doc.sub.items.register_factoid("nodes", "drops", function(_, def)
 			local item = ItemStack(def._mcl_shears_drop[d])
 			local itemname = item:get_name()
 			local itemcount = item:get_count()
-			local idef = minetest.registered_items[itemname]
+			local idef = core.registered_items[itemname]
 			local text
 			if idef.description and idef.description ~= "" then
 				text = idef.description
