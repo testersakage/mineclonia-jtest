@@ -1004,9 +1004,9 @@ if progressive_mode then
 		return changed
 	end
 
-	local function recipe_unlocked(recipe, progress)
+	local function recipe_unlocked(recipe, progress, show_all)
 		for _, item in pairs(recipe.items) do
-			if not ((minetest.registered_items[item] or group_cache[item]) and progress[item]) then
+			if not ((minetest.registered_items[item] or group_cache[item]) and (show_all or progress[item])) then
 				return
 			end
 		end
@@ -1015,16 +1015,13 @@ if progressive_mode then
 	end
 
 	local function progressive_filter(recipes, player)
-		if minetest.is_creative_enabled(player:get_player_name()) then
-			return recipes
-		end
-
+		local show_all = minetest.is_creative_enabled(player:get_player_name())
 		local progress = get_progress(player)
 
 		local filtered, c = {}, 0
 		for i = 1, #recipes do
 			local recipe = recipes[i]
-			if recipe_unlocked(recipe, progress) then
+			if recipe_unlocked(recipe, progress, show_all) then
 				c = c + 1
 				filtered[c] = recipe
 			end
