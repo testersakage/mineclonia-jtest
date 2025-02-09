@@ -6,7 +6,7 @@ local dyerecipes = {}
 local preview_item_prefix = "mcl_banners_preview_"
 
 for name,pattern in pairs(mcl_banners.patterns) do
-	if pattern.type ~= "shapeless" and table.indexof(dyerecipes,name) == -1 then
+	if not pattern.signature and table.indexof(dyerecipes,name) == -1 then
 		local added = false
 		for i = 1,3 do
 			for j = 1,3 do
@@ -34,44 +34,45 @@ end
 
 local function get_formspec(pos)
 	local patterns = {}
-	local count = 0
+	local max_y = -2.4 -- Pattern container content height 3.5, minus border 0.2, minus first row 1
 	if pos then
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		local color
-		local dye_name = inv:get_stack("dye", 1):get_name()
-		local def = minetest.registered_items[dye_name]
-		local pitem = inv:get_stack("pattern", 1):get_name()
-		local pdef = minetest.registered_items[pitem]
-		if def and core.get_item_group(dye_name, "dye") > 0 and def._color then
-			color = mcl_dyes.colors[def._color].unicolor
-		end
-		local x_len = 0.1
-		local y_len = 0.1
 		if not inv:is_empty("banner") then
 			local banner = inv:get_stack("banner", 1)
-			local bdef = banner:get_definition()
 			local layers = mcl_banners.read_layers(banner:get_meta())
-			if #layers >= mcl_banners.max_craftable_layers then
-				color = nil -- Too many layers to add more.  Disable patterns.
-			end
-			local light_colours = { "white", "grey", "green", "light_red" } -- If white / light-grey / lime / pink,
-			local base_color = table.indexof( light_colours, color ) > 0 and "darkgrey" or "grey" -- Make base dark grey
-			if color and pdef and pdef._pattern then
-				table.insert(patterns, get_formspec_preview_button(0.1, 0.1, nil, base_color, color, pdef._pattern))
-			elseif dyerecipes and color then
-				for _, v in ipairs(dyerecipes) do
-					if x_len > 5 then
-						y_len = y_len + 1
-						x_len = 0.1
+			if #layers < mcl_banners.max_craftable_layers then
+				local color
+				local dye_name = inv:get_stack("dye", 1):get_name()
+				local dye_def = minetest.registered_items[dye_name]
+				if dye_def and core.get_item_group(dye_name, "dye") > 0 and dye_def._color then
+					color = mcl_dyes.colors[dye_def._color].unicolor
+					if color then
+						local pitem = inv:get_stack("pattern", 1):get_name()
+						local pdef = minetest.registered_items[pitem]
+						local light_colours = { "white", "grey", "green", "light_red" } -- If white / light-grey / lime / pink,
+						local base_color = table.indexof( light_colours, color ) > 0 and "darkgrey" or "grey" -- Make base dark grey
+						if pdef and pdef._pattern then
+							table.insert(patterns, get_formspec_preview_button(0.1, 0.1, nil, base_color, color, pdef._pattern))
+						else
+							local x_len = 0.1
+							local y_len = 0.1
+							for _, v in ipairs(dyerecipes) do
+								if x_len > 5 then
+									y_len = y_len + 1
+									x_len = 0.1
+									max_y = max_y + 1
+								end
+								table.insert(patterns, get_formspec_preview_button(x_len, y_len, nil, base_color, color, v))
+								x_len = x_len + 1
+							end
+						end
 					end
-					table.insert(patterns, get_formspec_preview_button(x_len, y_len, nil, base_color, color, v))
-					x_len = x_len + 1
-					count = count + 1
 				end
 			end
 		end
 	end
+	if max_y < 0 then max_y = 0 else max_y = math.ceil(max_y * 10) end
 
 	local formspec = "formspec_version[4]"..
 	"size[11.75,10.425]"..
