@@ -22,11 +22,11 @@ for name,pattern in pairs(mcl_banners.patterns) do
 end
 table.sort(dyerecipes)
 
-function get_formspec_preview_button (x, y, layers, base_def, unicolor, pattern_id)
+function get_formspec_preview_button (x, y, layers, base_unicolor, unicolor, pattern_id)
 	local name = "item_button_" .. preview_item_prefix .. pattern_id .. "-" .. unicolor
-	local new_layers = table.copy(layers)
+	local new_layers = table.copy(layers or {})
 	table.insert(new_layers, { color = "unicolor_"..unicolor, pattern = pattern_id })
-	local it = core.formspec_escape(mcl_banners.make_banner_texture(base_def._unicolor, new_layers, "item"))
+	local it = core.formspec_escape(mcl_banners.make_banner_texture("unicolor_"..base_unicolor, new_layers, "item"))
 	local result = string.format("image_button[%f,%f;%f,%f;%s;%s;%s]",x,y,1,1, it, name, "")
 	result = result .. string.format("tooltip[%s;%s]", name, mcl_banners.make_pattern_name("unicolor_"..unicolor, pattern_id))
 	return result
@@ -55,15 +55,17 @@ local function get_formspec(pos)
 			if #layers >= mcl_banners.max_craftable_layers then
 				color = nil -- Too many layers to add more.  Disable patterns.
 			end
+			local light_colours = { "white", "grey", "green", "light_red" } -- If white / light-grey / lime / pink,
+			local base_color = table.indexof( light_colours, color ) > 0 and "darkgrey" or "grey" -- Make base dark grey
 			if color and pdef and pdef._pattern then
-				table.insert(patterns, get_formspec_preview_button(0.1, 0.1, layers, bdef, color, pdef._pattern))
+				table.insert(patterns, get_formspec_preview_button(0.1, 0.1, nil, base_color, color, pdef._pattern))
 			elseif dyerecipes and color then
 				for _, v in ipairs(dyerecipes) do
 					if x_len > 5 then
 						y_len = y_len + 1
 						x_len = 0.1
 					end
-					table.insert(patterns, get_formspec_preview_button(x_len, y_len, layers, bdef, color, v))
+					table.insert(patterns, get_formspec_preview_button(x_len, y_len, nil, base_color, color, v))
 					x_len = x_len + 1
 					count = count + 1
 				end
