@@ -86,7 +86,7 @@ local function compost_item(pos, node, itemstack, auto_cycle)
 				minetest.get_node_timer(pos):start(1)
 			end
 		end
-		return true
+		return chance > 0
 	end
 end
 
