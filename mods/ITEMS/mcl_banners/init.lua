@@ -255,7 +255,7 @@ function mcl_banners.make_banner_texture (base_color, layers, builder)
 
 	-- Vanilla, non-coloured banner.
 	if not colorize then
-		result = builder.blank
+		result = builder.blank or "blank.png"
 		if type(result) == "function" then result = result() end
 		return result
 	end

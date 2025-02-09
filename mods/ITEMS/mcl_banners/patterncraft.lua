@@ -370,7 +370,9 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 
 		-- Set output metadata.
 		itemstack = ItemStack(b1name)
-		local imeta = itemstack:get_meta()
+		local imeta, smeta = itemstack:get_meta(), src_banner:get_meta()
+		local src_name = smeta:get_string("name")
+		if src_name then imeta:set_string("name", src_name) end
 		imeta:set_string("layers", src_layers_raw)
 		tt.reload_itemstack_description(itemstack)
 
@@ -398,7 +400,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	itemstack = ItemStack(banner:get_name())
 	local imeta = itemstack:get_meta()
 	imeta:set_string("name", oname)
-	table.insert(layers, {pattern=current.id, color="unicolor_" .. dye_color})
+	table.insert(layers, {color="unicolor_" .. dye_color, pattern=current.id})
 	mcl_banners.write_layers(imeta, layers)
 	tt.reload_itemstack_description(itemstack)
 	return itemstack
