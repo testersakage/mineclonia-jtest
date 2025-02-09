@@ -532,7 +532,7 @@ local function get_recipe_fs(data, iY, player)
 		local has_table = mcl_crafting_table.has_crafting_table(player)
 		local width = has_table and 3 or 2
 		local height = has_table and 3 or 2
-		if mcl_inventory.get_recipe_groups(player, recipe, width, height) then
+		if recipe.type == "normal" and mcl_inventory.get_recipe_groups(player, recipe, width, height) then
 			fs[#fs + 1] = string.format("image_button[%f,%f;%f,%f;%s;%s_inv;%s]",
 				output_X + 2.7,
 				iY + 2.2,
