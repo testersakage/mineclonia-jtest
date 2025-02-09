@@ -83,7 +83,7 @@ local function get_formspec(pos)
 						if selected_preview ~= "" then
 							local banner_color = banner:get_definition()._unicolor
 							local preview_layers = table.copy( layers )
-							table.insert( preview_layers, { color = "unicolor_"..color, pattern = selected_preview } )
+							table.insert(preview_layers, {color = "unicolor_"..color, pattern = selected_preview})
 							preview_texture = mcl_banners.make_banner_texture(banner_color, preview_layers, "item")
 							preview_texture = "[combine:30x48:-9,0=" .. mcl_banners.escape_texture(preview_texture)
 							preview_texture = core.formspec_escape(preview_texture)
@@ -149,6 +149,8 @@ end
 local function create_banner(stack, pattern, color)
 	local im = stack:get_meta()
 	local layers = mcl_banners.read_layers(im)
+	local max = mcl_banners.max_craftable_layers
+	if #layers >= max then return end
 	table.insert(layers,{
 		pattern = pattern,
 		color = "unicolor_"..mcl_dyes.colors[color].unicolor
@@ -251,7 +253,7 @@ minetest.register_node("mcl_loom:loom", {
 						local banner = inv:get_stack("banner",1)
 						local cbanner = banner:peek_item()
 						local new_banner = create_banner(cbanner,pattern_id,cdef._color)
-						if not inv:is_empty("output") then
+						if new_banner and not inv:is_empty("output") then
 							local output_stack = inv:get_stack("output",1)
 							if output_stack:get_free_space() > 0 then
 								local max_layers = mcl_banners.max_craftable_layers
@@ -260,13 +262,13 @@ minetest.register_node("mcl_loom:loom", {
 								if out_desc == new_desc and out_name == new_name then
 									new_banner:set_count(output_stack:get_count() + 1)
 								else
-									pattern_id = nil
+									new_banner = nil
 								end
 							else
-								pattern_id = nil
+								new_banner = nil
 							end
 						end
-						if pattern_id then
+						if new_banner then
 							dye:take_item()
 							inv:set_stack("dye", 1, dye)
 							banner:take_item()
