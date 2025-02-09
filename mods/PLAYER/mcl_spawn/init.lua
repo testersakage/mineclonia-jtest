@@ -200,6 +200,14 @@ function mcl_spawn.get_player_spawn_pos(player)
 		end
 		-- We here if we didn't find suitable place for respawn
 	end
+
+	-- Find proper solid nodes as platform for player to spawn
+	local minp, maxp = vector.subtract(mcl_spawn.get_world_spawn_pos(), 8), vector.add(mcl_spawn.get_world_spawn_pos(), 8)
+	local solid = core.find_nodes_in_area_under_air(minp, maxp, {"group:solid"})
+	if #solid > 0 then
+		return vector.offset(solid[1], 0,1,0)
+	end
+
 	return mcl_spawn.get_world_spawn_pos(), false
 end
 
