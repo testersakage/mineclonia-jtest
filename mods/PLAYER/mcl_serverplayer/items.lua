@@ -191,6 +191,7 @@ local hand = {
 
 for node, def in pairs (minetest.registered_nodes) do
 	if def.on_rightclick
+		or def._configures_formspec
 		or (def.groups.container and def.groups.container > 0) then
 		hand[node] = "default"
 	end
@@ -243,6 +244,7 @@ local placeable_on_actionable = {
 -- right click menus.
 for node, def in pairs (minetest.registered_nodes) do
 	if def.on_rightclick
+		or def._configures_formspec
 		or (def.groups.container and def.groups.container > 0) then
 		placeable_on_actionable[node] = "default"
 	end
