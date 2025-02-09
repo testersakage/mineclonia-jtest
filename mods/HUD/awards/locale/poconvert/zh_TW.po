@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-09 07:45+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/awards/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Secret Award Unlocked: @1"
 msgstr "秘密獎勵已解鎖：@1"
@@ -32,7 +34,7 @@ msgid "Advancement Made!"
 msgstr "進度達成！"
 
 msgid "[c|clear|disable|enable]"
-msgstr ""
+msgstr "[c|clear|disable|enable]"
 
 msgid "Show, clear, disable or enable your awards"
 msgstr "顯示、清除、停用或啟用你的獎勵"
@@ -65,7 +67,7 @@ msgid "Error: No achivements available."
 msgstr "錯誤：找不到成就。"
 
 msgid "OK"
-msgstr "好吧"
+msgstr "好的"
 
 msgid "(Secret Award)"
 msgstr "（祕密獎勵）"
@@ -89,25 +91,25 @@ msgid "@1’s awards:"
 msgstr "@1 的獎勵："
 
 msgid "@1/@2 chat messages"
-msgstr ""
+msgstr "@1/@2 項聊天訊息"
 
 msgid "Send a chat message"
 msgstr "發送聊天訊息"
 
 msgid "Chat @1 times"
-msgstr "聊天@1次"
+msgstr "發送 @1 項聊天訊息"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "登入 @1/@2 次"
 
 msgid "Join once"
-msgstr "加入一次"
+msgstr "登入一次"
 
 msgid "Join @1 times"
-msgstr "加入 @1 次"
+msgstr "登入 @1 次"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2 次死亡"
 
 msgid "Die once of @1"
 msgstr "死於 @1 一次"
@@ -122,28 +124,28 @@ msgid "Mine @1 times"
 msgstr "挖掘@1次"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2 次開採"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "開採：@1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "開採：@1×@2"
 
 msgid "Mine @1 block."
-msgstr "挖掘 @1 個方塊。"
+msgstr "開採 @1 個方塊。"
 
 msgid "Mine @1 blocks."
-msgstr "挖掘 @1 個方塊。"
+msgstr "開採 @1 個方塊。"
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "放置了 @1/@2"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "放置：@1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "放置：@1×@2"
 
 msgid "Place @1 block."
 msgstr "放置 @1 個方塊。"
@@ -152,32 +154,31 @@ msgid "Place @1 blocks."
 msgstr "放置 @1 個方塊。"
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "合成 @1/@2 次"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "合成：@1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "合成：@1×@2"
 
 msgid "Craft @1 item"
-msgstr "製作 @1 個物品"
+msgstr "合成 @1 件物品"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "合成 @1 件物品。"
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "進食 @1/@2 次"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "進食@1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "進食@1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "進食 @1 次"
 
 msgid "Eat @1 items."
-msgstr ""
-
+msgstr "進食 @1 次。"
