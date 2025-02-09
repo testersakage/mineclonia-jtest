@@ -201,6 +201,6 @@ S("A community-based documentation website for Luanti. Anyone with an account ca
 S("Web forums: <https://forum.luanti.org/>").."\n"..
 S("A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages.").."\n\n"..
 
-S("Chat: <irc://irc.freenode.net#luanti>").."\n"..
+S("Chat: <irc://irc.libera.chat/#luanti>").."\n"..
 S("A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help.")
 }})
