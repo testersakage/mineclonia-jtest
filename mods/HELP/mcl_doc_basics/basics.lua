@@ -1,5 +1,5 @@
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 --
 -- Basics
@@ -9,7 +9,7 @@ doc.add_category("basics", {
 	name = S("Basics"),
 	description = S("Everything you need to know to get started with playing"),
 	sorting = "custom",
-	sorting_data = {"quick_start", "controls", "point", "items", "inventory", "hotbar", "tools", "weapons", "nodes", "mine", "build", "craft", "cook", "hunger", "mobs", "animals", "minimap", "cam", "sneak", "players", "liquids", "light", "groups", "glossary", "minetest"},
+	sorting_data = {"quick_start", "controls", "point", "items", "inventory", "hotbar", "tools", "weapons", "nodes", "mine", "build", "craft", "cook", "hunger", "mobs", "animals", "minimap", "cam", "sneak", "players", "liquids", "light", "groups", "glossary", "core"},
 	build_formspec = doc.entry_builders.text_and_gallery,
 })
 
@@ -589,23 +589,23 @@ S("• Protection: Mechanism to own areas of the world, which only allows the ow
 
 S("Technical terms:").."\n"..
 S("• Luanti: This game engine").."\n"..
-S("• Minetest Game: A game for Luanti by the Minetest developers").."\n"..
+S("• core Game: A game for Luanti by the core developers").."\n"..
 S("• Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar").."\n"..
 S("• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them").."\n"..
 S("• Privilege: Allows a player to do something").."\n"..
 S("• Node: Other word for “block”")
 }})
 
-doc.add_entry("basics", "minetest", {
+doc.add_entry("basics", "core", {
 	name = S("Luanti"),
 	data = {
 		text =
-S("Luanti (formely Minetest) is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Luanti was originally created by Perttu Ahola (alias “celeron55”).").."\n\n"..
+S("Luanti (formely core) is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Luanti was originally created by Perttu Ahola (alias “celeron55”).").."\n\n"..
 
 S("A core feature of Luanti is the built-in modding capability, which all games consist of too. They can be as simple as adding a few decorational blocks or be very complex by e.g. introducing completely new gameplay concepts, generating a completely different kind of world, and many other things.").."\n\n"..
 
 S("Luanti can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server.").."\n\n"..
 
-S("MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser.")
+S("MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for core however, that can be installed from the main menu content browser.")
 }})
 
