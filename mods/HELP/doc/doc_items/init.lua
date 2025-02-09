@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local NS = function(s) return s end
 
 doc.sub.items = {}
@@ -14,8 +14,8 @@ doc.sub.items.temp.eat_bad = S("Hold it in your hand, then leftclick to eat it. 
 doc.sub.items.temp.rotate_node = S("This block's rotation is affected by the way you place it: Place it on the floor or ceiling for a vertical orientation; place it at the side for a horizontal orientation. Sneaking while placing it leads to a perpendicular orientation instead.")
 
 doc.sub.items.settings = {}
-doc.sub.items.settings.friendly_group_names = minetest.settings:get_bool("doc_items_friendly_group_names", false)
-doc.sub.items.settings.itemstring = minetest.settings:get_bool("doc_items_show_itemstrings", false)
+doc.sub.items.settings.friendly_group_names = core.settings:get_bool("doc_items_friendly_group_names", false)
+doc.sub.items.settings.itemstring = core.settings:get_bool("doc_items_show_itemstrings", false)
 
 -- Local stuff
 local groupdefs = {}
@@ -102,21 +102,21 @@ end
 
 -- Extract suitable item description for formspec
 local function description_for_formspec(itemstring)
-	if minetest.registered_items[itemstring] == nil then
+	if core.registered_items[itemstring] == nil then
 		-- Huh? The item doesn't exist for some reason. Better give a dummy string
-		minetest.log("warning", "[doc] Unknown item detected: "..tostring(itemstring))
+		core.log("warning", "[doc] Unknown item detected: "..tostring(itemstring))
 		return S("Unknown item (@1)", tostring(itemstring))
 	end
-	local description = minetest.registered_items[itemstring].description
+	local description = core.registered_items[itemstring].description
 	if description == nil or description == "" then
-		return minetest.formspec_escape(itemstring)
+		return core.formspec_escape(itemstring)
 	else
-		return minetest.formspec_escape(scrub_newlines(description))
+		return core.formspec_escape(scrub_newlines(description))
 	end
 end
 
 local function get_entry_name(itemstring)
-	local def = minetest.registered_items[itemstring]
+	local def = core.registered_items[itemstring]
 	if def._doc_items_entry_name then
 		return def._doc_items_entry_name
 	elseif item_name_overrides[itemstring] then
@@ -350,7 +350,7 @@ end
 -- Pointing range of itmes
 local function range_factoid(itemstring, def)
 	-- Get hand range.  Showing tool info, don't need creative hand range.
-	local handrange = minetest.registered_items[""].range or tonumber(core.settings:get("mcl_hand_range")) or 4.5
+	local handrange = core.registered_items[""].range or tonumber(core.settings:get("mcl_hand_range")) or 4.5
 	if itemstring == "" then
 		return S("Range: @1", handrange)
 	end
@@ -368,7 +368,7 @@ local function factoid_fuel(itemstring, ctype)
 	end
 
 	local formstring = ""
-	local result, decremented =  minetest.get_craft_result({method = "fuel", items = {itemstring}})
+	local result, decremented =  core.get_craft_result({method = "fuel", items = {itemstring}})
 	if result and result.time > 0 then
 		local base
 		local burntext = burntime_to_text(result.time)
@@ -395,7 +395,7 @@ local function factoid_itemstring(itemstring, playername)
 		return ""
 	end
 
-	local privs = minetest.get_player_privs(playername)
+	local privs = core.get_player_privs(playername)
 	if doc.sub.items.settings.itemstring or (privs.give or privs.debug) then
 		return S("Itemstring: \"@1\"", itemstring)
 	else
@@ -410,7 +410,7 @@ local function entry_image(data)
 		-- Hand
 		if data.itemstring == "" then
 			formstring = formstring .. "image["..(doc.FORMSPEC.ENTRY_END_X-1)..","..doc.FORMSPEC.ENTRY_START_Y..";1,1;"..
-				minetest.registered_items[""].wield_image.."]"
+				core.registered_items[""].wield_image.."]"
 		-- Other items
 		elseif data.image then
 			formstring = formstring .. "image["..(doc.FORMSPEC.ENTRY_END_X-1)..","..doc.FORMSPEC.ENTRY_START_Y..";1,1;"..data.image.."]"
@@ -578,7 +578,7 @@ doc.add_category("nodes", {
 			local formstring = entry_image(data)
 			local datastring = factoids_header(data, "nodes")
 
-			local liquid = data.def.liquidtype ~= "none" and minetest.get_item_group(data.itemstring, "fake_liquid") == 0
+			local liquid = data.def.liquidtype ~= "none" and core.get_item_group(data.itemstring, "fake_liquid") == 0
 			if not forbidden_core_factoids.basics then
 				datastring = datastring .. S("Collidable: @1", yesno(data.def.walkable)) .. "\n"
 				if data.def.pointable == true then
@@ -1131,7 +1131,7 @@ doc.add_category("mobs", {
 	build_formspec = function(d, _)
 		local data = mcl_mobs.registered_mobs[d.name]
 		local min_light = data.min_light or (data.spawn_class == "hostile" and 0) or 7
-		local max_light = data.max_light or (data.spawn_class == "hostile" and 7) or minetest.LIGHT_MAX + 1
+		local max_light = data.max_light or (data.spawn_class == "hostile" and 7) or core.LIGHT_MAX + 1
 		if data then
 			local datastring = ""
 
@@ -1235,7 +1235,7 @@ local function gather_descs()
 	}
 
 	-- 1st pass: Gather groups of interest
-	for id, def in pairs(minetest.registered_items) do
+	for id, def in pairs(core.registered_items) do
 		-- Gather all groups used for mining
 		if def.tool_capabilities then
 			local groupcaps = def.tool_capabilities.groupcaps
@@ -1249,7 +1249,7 @@ local function gather_descs()
 		end
 
 		-- ... and gather all groups which appear in crafting recipes
-		local crafts = minetest.get_all_craft_recipes(id)
+		local crafts = core.get_all_craft_recipes(id)
 		if crafts then
 			for c=1,#crafts do
 				for _, v in pairs(crafts[c].items) do
@@ -1279,18 +1279,18 @@ local function gather_descs()
 
 	-- Set default air text
 	-- Custom longdesc and usagehelp may be set by mods through the add_helptexts function
-	if minetest.registered_items["air"]._doc_items_longdesc then
-		help.longdesc["air"] = minetest.registered_items["air"]._doc.items_longdesc
+	if core.registered_items["air"]._doc_items_longdesc then
+		help.longdesc["air"] = core.registered_items["air"]._doc.items_longdesc
 	else
 		help.longdesc["air"] = S("A transparent block, basically empty space. It is usually left behind after digging something.")
 	end
-	if minetest.registered_items["ignore"]._doc_items_create_entry then
-		suppressed["ignore"] = minetest.registered_items["ignore"]._doc_items_create_entry == true
+	if core.registered_items["ignore"]._doc_items_create_entry then
+		suppressed["ignore"] = core.registered_items["ignore"]._doc_items_create_entry == true
 	end
 
 	-- Add entry for the default tool (“hand”)
 	-- Custom longdesc and usagehelp may be set by mods through the add_helptexts function
-	local handdef = minetest.registered_items[""]
+	local handdef = core.registered_items[""]
 	if handdef._doc_items_create_entry ~= false then
 		if handdef._doc_items_longdesc then
 			help.longdesc[""] = handdef._doc_items_longdesc
@@ -1358,13 +1358,13 @@ local function gather_descs()
 	end
 
 	-- Add node entries
-	add_entries(minetest.registered_nodes, "nodes")
+	add_entries(core.registered_nodes, "nodes")
 
 	-- Add tool entries
-	add_entries(minetest.registered_tools, "tools")
+	add_entries(core.registered_tools, "tools")
 
 	-- Add craftitem entries
-	add_entries(minetest.registered_craftitems, "craftitems")
+	add_entries(core.registered_craftitems, "craftitems")
 end
 
 --[[ Reveal items as the player progresses through the game.
@@ -1378,13 +1378,13 @@ local function reveal_item(playername, itemstring)
 	if itemstring == nil or itemstring == "" or playername == nil or playername == "" then
 		return false
 	end
-	if minetest.registered_nodes[itemstring] then
+	if core.registered_nodes[itemstring] then
 		category_id = "nodes"
-	elseif minetest.registered_tools[itemstring] then
+	elseif core.registered_tools[itemstring] then
 		category_id = "tools"
-	elseif minetest.registered_craftitems[itemstring] then
+	elseif core.registered_craftitems[itemstring] then
 		category_id = "craftitems"
-	elseif minetest.registered_items[itemstring] then
+	elseif core.registered_items[itemstring] then
 		category_id = "craftitems"
 	else
 		return false
@@ -1401,7 +1401,7 @@ local function reveal_items_in_inventory(player)
 	end
 end
 
-minetest.register_on_dignode(function(_, oldnode, digger)
+core.register_on_dignode(function(_, oldnode, digger)
 	if digger == nil then return end
 	local playername = digger:get_player_name()
 	if playername and playername ~= "" and oldnode then
@@ -1410,7 +1410,7 @@ minetest.register_on_dignode(function(_, oldnode, digger)
 	end
 end)
 
-minetest.register_on_punchnode(function(_, node, puncher, _)
+core.register_on_punchnode(function(_, node, puncher, _)
 	if puncher == nil then return end
 	local playername = puncher:get_player_name()
 	if playername and playername ~= "" and node then
@@ -1418,7 +1418,7 @@ minetest.register_on_punchnode(function(_, node, puncher, _)
 	end
 end)
 
-minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
+core.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
 	if placer == nil then return end
 	local playername = placer:get_player_name()
 	if playername and playername ~= "" and itemstack and not itemstack:is_empty() then
@@ -1426,7 +1426,7 @@ minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack
 	end
 end)
 
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv) ---@diagnostic disable-line: unused-local
+core.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv) ---@diagnostic disable-line: unused-local
 	if player == nil then return end
 	local playername = player:get_player_name()
 	if playername and playername ~= "" and itemstack and not itemstack:is_empty() then
@@ -1434,7 +1434,7 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 	end
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info) ---@diagnostic disable-line: unused-local
+core.register_on_player_inventory_action(function(player, action, inventory, inventory_info) ---@diagnostic disable-line: unused-local
 	if player == nil then return end
 	local playername = player:get_player_name()
 	local itemstack
@@ -1446,7 +1446,7 @@ minetest.register_on_player_inventory_action(function(player, action, inventory,
 	end
 end)
 
-minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, user, pointed_thing) ---@diagnostic disable-line: unused-local
+core.register_on_item_eat(function(hp_change, replace_with_item, itemstack, user, pointed_thing) ---@diagnostic disable-line: unused-local
 	if user == nil then return end
 	local playername = user:get_player_name()
 	if playername and playername ~= "" and itemstack and not itemstack:is_empty() then
@@ -1457,7 +1457,7 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, 
 	end
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	reveal_items_in_inventory(player)
 end)
 
@@ -1469,7 +1469,7 @@ TODO: If possible, try to replace this functionality by updating the revealed it
 
 local checktime = 8
 local timer = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	timer = timer + dtime
 	if timer > checktime then
 		for pl in mcl_util.connected_players() do
@@ -1479,4 +1479,4 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-minetest.register_on_mods_loaded(gather_descs)
+core.register_on_mods_loaded(gather_descs)
