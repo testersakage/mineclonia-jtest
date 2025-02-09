@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_doc_basics = minetest.get_modpath("doc_basics")
+local mod_doc_basics = core.get_modpath("doc_basics")
 
 local doc_identifier = {}
 
@@ -40,7 +40,7 @@ function doc_identifier.identify(itemstack, user, pointed_thing)
 			message = message .. "\n\n"
 
 			if mod then
-				if minetest.get_modpath(mod) then
+				if core.get_modpath(mod) then
 					message = message .. S("It appears to originate from the mod “@1”, which is enabled.", mod)
 					message = message .. "\n"
 				else
@@ -58,19 +58,19 @@ function doc_identifier.identify(itemstack, user, pointed_thing)
 		elseif itype == "player" then
 			message = S("This is a player.")
 		end
-		minetest.show_formspec(
+		core.show_formspec(
 			username,
 			"doc_identifier:error_missing_item_info",
 			"size[10,"..vsize..";]" ..
-			"textarea[0.5,0.2;10,"..(vsize-0.2)..";;;"..minetest.formspec_escape(message).."]" ..
-			"button_exit[3.75,"..(-0.5+vsize)..";3,1;okay;"..minetest.formspec_escape(S("OK")).."]"
+			"textarea[0.5,0.2;10,"..(vsize-0.2)..";;;"..core.formspec_escape(message).."]" ..
+			"button_exit[3.75,"..(-0.5+vsize)..";3,1;okay;"..core.formspec_escape(S("OK")).."]"
 		)
 	end
 	if pointed_thing.type == "node" then
 		local pos = pointed_thing.under
-		local node = minetest.get_node(pos)
-		if minetest.registered_nodes[node.name] then
-			--local nodedef = minetest.registered_nodes[node.name]
+		local node = core.get_node(pos)
+		if core.registered_nodes[node.name] then
+			--local nodedef = core.registered_nodes[node.name]
 			if(node.name == "ignore") then
 				show_message(username, "error_ignore")
 			elseif doc.entry_exists("nodes", node.name) then
@@ -96,21 +96,21 @@ function doc_identifier.identify(itemstack, user, pointed_thing)
 			local ro = doc_identifier.registered_objects[le.name]
 			-- Dropped items
 			if le.name == "__builtin:item" then
-				local itemstring = ItemStack(minetest.deserialize(le:get_staticdata()).itemstring):get_name()
+				local itemstring = ItemStack(core.deserialize(le:get_staticdata()).itemstring):get_name()
 				if doc.entry_exists("nodes", itemstring) then
 					doc.show_entry(username, "nodes", itemstring, true)
 				elseif doc.entry_exists("tools", itemstring) then
 					doc.show_entry(username, "tools", itemstring, true)
 				elseif doc.entry_exists("craftitems", itemstring) then
 					doc.show_entry(username, "craftitems", itemstring, true)
-				elseif minetest.registered_items[itemstring] == nil or itemstring == "unknown" then
+				elseif core.registered_items[itemstring] == nil or itemstring == "unknown" then
 					show_message(username, "error_unknown", itemstring)
 				else
 					show_message(username, "error_item")
 				end
 			-- Falling nodes
 			elseif le.name == "__builtin:falling_node" then
-				local itemstring = minetest.deserialize(le:get_staticdata()).name
+				local itemstring = core.deserialize(le:get_staticdata()).name
 				if doc.entry_exists("nodes", itemstring) then
 					doc.show_entry(username, "nodes", itemstring, true)
 				end
@@ -118,7 +118,7 @@ function doc_identifier.identify(itemstack, user, pointed_thing)
 			elseif ro and doc.entry_exists (ro.category, ro.entry) then
 				doc.show_entry(username, ro.category, ro.entry, true)
 			-- Undefined object (error)
-			elseif minetest.registered_entities[le.name] == nil then
+			elseif core.registered_entities[le.name] == nil then
 				show_message(username, "error_unknown", le.name)
 			-- Other object (undocumented)
 			else
@@ -154,7 +154,7 @@ function doc_identifier.liquid_mode(itemstack, user, pointed_thing)
 	return ItemStack("doc_identifier:identifier_liquid")
 end
 
-minetest.register_tool("doc_identifier:identifier_solid", {
+core.register_tool("doc_identifier:identifier_solid", {
 	description = S("Lookup Tool"),
 	_tt_help = S("Show help for pointed thing"),
 	_doc_items_longdesc = S("This useful little helper can be used to quickly learn more about about one's closer environment. It identifies and analyzes blocks, items and other things and it shows extensive information about the thing on which it is used."),
@@ -170,7 +170,7 @@ minetest.register_tool("doc_identifier:identifier_solid", {
 	on_secondary_use = doc_identifier.liquid_mode,
 	groups = {rarity = 3}
 })
-minetest.register_tool("doc_identifier:identifier_liquid", {
+core.register_tool("doc_identifier:identifier_liquid", {
 	description = S("Lookup Tool"),
 	_doc_items_create_entry = false,
 	tool_capabilities = {},
@@ -184,21 +184,21 @@ minetest.register_tool("doc_identifier:identifier_liquid", {
 	on_secondary_use = doc_identifier.solid_mode,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "doc_identifier:identifier_solid",
 	recipe = { {"group:stick", "group:stick" },
 		   {"", "group:stick"},
 		   {"group:stick", ""} }
 })
 
-if minetest.get_modpath("mcl_core") then
-	minetest.register_craft({
+if core.get_modpath("mcl_core") then
+	core.register_craft({
 		output = "doc_identifier:identifier_solid",
 		recipe = { { "mcl_core:glass" },
 			   { "group:stick" } }
 	})
 end
 
-minetest.register_alias("doc_identifier:identifier", "doc_identifier:identifier_solid")
+core.register_alias("doc_identifier:identifier", "doc_identifier:identifier_solid")
 
 doc.add_entry_alias("tools", "doc_identifier:identifier_solid", "tools", "doc_identifier:identifier_liquid")
