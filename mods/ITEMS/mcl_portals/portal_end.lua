@@ -192,6 +192,7 @@ end
 local function teleport_object(obj, target, original_dim)
 	core.after(0.1, function ()
 		obj:set_pos(target)
+		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.05, max_hear_distance = 16}, true)
 	end)
 
 	if obj:is_player() then
@@ -225,7 +226,6 @@ function mcl_portals.end_teleport(obj, pos)
 			target, player_spawn = mcl_spawn.get_player_spawn_pos(obj)
 		end
 
-		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
 		if not target or not player_spawn then
 			target = find_valid_spawn(mcl_spawn.get_world_spawn_pos())
 		end
@@ -235,7 +235,6 @@ function mcl_portals.end_teleport(obj, pos)
 		-- Teleport to the End at a fixed position.
 		-- The destination is built by mcl_structures.
 
-		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.5, max_hear_distance = 16}, true)
 		core.load_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8), vector.add(mcl_vars.mg_end_platform_pos, 8))
 		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
 		teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
