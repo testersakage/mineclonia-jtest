@@ -138,7 +138,7 @@ dofile(modpath.."/patterncraft.lua")
 local base_color_ratio = 255
 
 local standing_banner_entity_offset = { x=0, y=-0.499, z=0 }
-local hanging_banner_entity_offset = { x=0, y=-1.7, z=0 }
+local hanging_banner_entity_offset = { x=0, y=-1.5, z=0 }
 
 local function rotation_level_to_yaw(rotation_level)
 	return (rotation_level * (math.pi/8)) + math.pi
@@ -644,6 +644,7 @@ local entity_standing = {
 minetest.register_entity("mcl_banners:standing_banner", entity_standing)
 
 local entity_hanging = table.copy(entity_standing)
+entity_hanging.initial_properties.visual_size = { x=2.499, y=2.28 }
 entity_hanging.initial_properties.mesh = "amc_banner_hanging.b3d"
 minetest.register_entity("mcl_banners:hanging_banner", entity_hanging)
 
