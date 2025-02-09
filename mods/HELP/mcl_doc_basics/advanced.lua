@@ -1,4 +1,3 @@
-
 local S = core.get_translator(core.get_current_modname())
 
 --
@@ -196,12 +195,12 @@ S("You may want to check out these online resources related to Luanti:").."\n\n"
 S("Official homepage of Luanti: <https://luanti.org/>").."\n"..
 S("The main place to find the most recent version of Luanti.").."\n\n"..
 
-S("Community wiki: <https://wiki.core.net/>").."\n"..
-S("A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of core Game.").."\n\n"..
+S("Community wiki: <https://wiki.luanti.org/>").."\n"..
+S("A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game.").."\n\n"..
 
 S("Web forums: <https://forum.luanti.org/>").."\n"..
 S("A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages.").."\n\n"..
 
-S("Chat: <irc://irc.freenode.net#core>").."\n"..
+S("Chat: <irc://irc.freenode.net#luanti>").."\n"..
 S("A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help.")
 }})
