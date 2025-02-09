@@ -1101,7 +1101,7 @@ function mcl_craftguide.show(name)
 		data.items_raw = get_filtered_items(player)
 		search(data)
 	end
-	minetest.show_formspec(name, "mcl_craftguide", make_formspec(name))
+	show_fs(player, name)
 end
 
 doc.sub.items.register_factoid(nil, "groups", function(_, def)
