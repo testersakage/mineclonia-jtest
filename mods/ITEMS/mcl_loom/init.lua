@@ -39,18 +39,18 @@ local function can_add_layer(pos) -- Make sure banner and dye are valid, and ret
 	local meta = core.get_meta(pos)
 	if not meta then return end
 	local inv = meta:get_inventory()
-	if not inv or inv:is_empty("banner") or inv:is_empty("dye") then return end
+	if not inv or inv:is_empty("banner") or inv:is_empty("dye") then return inv end
 
 	local banner = inv:get_stack("banner", 1)
 	local layers = mcl_banners.read_layers(banner:get_meta())
-	if #layers >= mcl_banners.max_craftable_layers then return end
+	if #layers >= mcl_banners.max_craftable_layers then return inv end
 
 	local dye, pattern = inv:get_stack("dye", 1), inv:get_stack("pattern", 1)
 	local d_name, p_name = dye:get_name(), pattern:get_name()
 	local d_def, p_def = core.registered_items[d_name], core.registered_items[p_name]
-	if not d_def or not d_def._color or core.get_item_group(d_name, "dye") <= 0 then return end
+	if not d_def or not d_def._color or core.get_item_group(d_name, "dye") <= 0 then return inv end
 	local color_def = mcl_dyes.colors[d_def._color]
-	if not color_def or not color_def.unicolor then return end
+	if not color_def or not color_def.unicolor then return inv end
 
 	return inv, banner, layers, dye, color_def.unicolor, pattern, p_def and p_def._pattern
 end
@@ -59,7 +59,7 @@ local function get_formspec(pos)
 	local patterns = {}
 	local max_y = -2.2 -- Pattern container content height 3.5, minus border 0.2, minus first row 1.1
 	local preview_texture, preview_tooltip = "blank.png", ""
-	local _, banner, layers, _, color, _, pattern_id = can_add_layer(pos)
+	local inv, banner, layers, _, color, _, pattern_id = can_add_layer(pos)
 	if color then
 		local selected_preview = selected_pattern_by_pos[tostring(pos)] or ""
 		local light_colours = { "white", "grey", "green", "light_red" } -- If white / light-grey / lime / pink,
@@ -97,6 +97,8 @@ local function get_formspec(pos)
 			b.write_layers(banner:get_meta(), preview_layers)
 			preview_tooltip = "tooltip[btn_loom_craft;"..esc(b.update_description(banner, b.max_craftable_layers)).."]"
 		end
+	elseif inv:is_empty("banner") then
+		selected_pattern_by_pos[tostring(pos)] = nil -- Clear pattern selection when banner is emptied
 	end
 	if max_y < 0 then max_y = 0 else max_y = math.ceil(max_y * 10) end -- Convert content height to scrollbar max
 
