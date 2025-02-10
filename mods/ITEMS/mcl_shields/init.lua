@@ -54,6 +54,34 @@ local function shield_is_enchanted(obj, i)
 	return mcl_enchanting.is_enchanted(wielded_item(obj, i))
 end
 
+local rgb_to_unicolor
+
+local function migrate_standalone_shield_texture(texture)
+	-- Build colour mapping, required to parse layer info from old texture
+	if not rgb_to_unicolor then
+		rgb_to_unicolor = {}
+		for _, v in pairs( mcl_dyes.colors ) do
+			rgb_to_unicolor[v.rgb:lower()] = v.unicolor
+		end
+	end
+	-- Rebuild layers from texture.
+	-- Example: (mcl_shield_base_nopattern.png^mcl_shield_pattern_base.png^[mask:mcl_shield_base_nopattern.png^mcl_shield_pattern_base.png)^((mcl_shield_base_nopattern.png^mcl_shield_pattern_base.png^[colorize:#f1b216:224)^[mask:mcl_shield_pattern_base.png)^((mcl_shield_pattern_rhombus.png^[colorize:#912222:255)^[mask:mcl_shield_pattern_rhombus.png)^((mcl_shield_pattern_globe.png^[colorize:#60ac19:255)^[mask:mcl_shield_pattern_globe.png)
+	local layers = {}
+	for layer in texture:gmatch("mcl_shield_pattern_([%w_]+%.png%^%[colorize:#[%w]+)") do
+		-- layer = base.png^[colorize:#f1b216, rhombus.png^[colorize:#912222, globe.png^[colorize:#60ac19
+		local i,j = layer:find( "%.png%^%[colorize:" )
+		local pattern, colour = layer:sub(1, i-1), layer:sub(j+1):lower()
+		if pattern ~= "base" then -- Base colour already coded in itemstring, only need layers.
+			if not rgb_to_unicolor[colour] then
+				core.log("warning", "Cannot migrate old shield banner pattern: "..colour.." not found in dye")
+				return nil
+			end
+			table.insert(layers, { color = "unicolor_"..rgb_to_unicolor[colour], pattern = pattern } )
+		end
+	end
+	return layers
+end
+
 local shield_texture_builder = {
 	blank = function() return shield_texture_builder.combine("mcl_banners_banner_base.png","") end,
 	base = function (rgb, ratio)
@@ -97,13 +125,27 @@ minetest.register_entity("mcl_shields:shield_entity", {
 			if i == 1 then
 				itemstack = player:get_inventory():get_stack("offhand", 1)
 			end
-			local meta_texture = itemstack:get_meta():get_string("mcl_shields:shield_custom_pattern_texture")
+			local meta = itemstack:get_meta()
+			local meta_texture = meta:get_string("mcl_shields:banner_texture")
 			if meta_texture ~= "" then
 				shield_texture = meta_texture
 			else
 				local color = minetest.registered_items[item]._shield_color_key
-				shield_texture = mcl_banners.make_banner_texture(color, nil, shield_texture_builder)
-				itemstack:get_meta():set_string("mcl_shields:shield_custom_pattern_texture", texture)
+				local standalone_texture = meta:get_string("mcl_shields:shield_custom_pattern_texture")
+				if standalone_texture then -- Parse layers from standalone pattern texture
+					layers = migrate_standalone_shield_texture(standalone_texture) -- May be nil
+					if layers then
+						mcl_banners.write_layers(meta, layers)
+					else
+						shield_texture = standalone_texture
+					end
+				else
+					layers = mcl_banners.read_layers(meta) -- Non-nil
+				end
+				if layers then
+					shield_texture = mcl_banners.make_banner_texture(color, layers, shield_texture_builder)
+					meta:set_string("mcl_shields:banner_texture", texture)
+				end
 			end
 		end
 
@@ -579,14 +621,14 @@ local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	end
 
 	local new_shield_meta = itemstack:get_meta()
-	-- TODO: Review shield description in case of base banner
 	if #layers > 0 then
 		local shield_name = itemstack:get_description()
 		local color = banner_stack:get_definition()._unicolor
 
 		local texture = b.make_banner_texture(color, layers, shield_texture_builder)
 		new_shield_meta:set_string("description", b.make_advanced_banner_description(shield_name, layers))
-		new_shield_meta:set_string("mcl_shields:shield_custom_pattern_texture", texture)
+		mcl_banners.write_layers(new_shield_meta, layers) -- Store layers to future proof (regen texture or sth)
+		new_shield_meta:set_string("mcl_shields:banner_texture", texture)
 
 		local item_image = b.make_banner_texture(color, layers, "item")
 		item_image = item_image:gsub("mcl_banners_item_base_48.png", "mcl_shield_48.png")
