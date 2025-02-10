@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-10 00:27+0000\n"
+"PO-Revision-Date: 2025-02-10 11:28+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -141,7 +141,7 @@ msgid "Take a cooked fish from a furnace.\n"
 msgstr ""
 
 msgid "On A Rail"
-msgstr ""
+msgstr "一路順風"
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
 msgstr ""
@@ -165,11 +165,13 @@ msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
 
 msgid "The End?"
-msgstr ""
+msgstr "終了？"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
 msgstr ""
+"還是開始？\n"
+"提示：進入終界門。"
 
 msgid "The Nether"
 msgstr "赴湯蹈火"
@@ -179,7 +181,7 @@ msgid "Bring summer clothes.\n"
 msgstr ""
 
 msgid "Postmortal"
-msgstr ""
+msgstr "置之死地"
 
 msgid "Use a Totem of Undying to cheat death."
 msgstr ""
@@ -301,13 +303,13 @@ msgid "Scrape wax off of a copper block."
 msgstr ""
 
 msgid "Crafting a New Look"
-msgstr ""
+msgstr "煥然一新"
 
 msgid "Craft a trimmed armor at a Smithing Table"
 msgstr ""
 
 msgid "Smithing with Style"
-msgstr ""
+msgstr "千姿百態"
 
 msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Silence, Vex, Tide, Wayfinder"
 msgstr ""
@@ -367,7 +369,7 @@ msgid "Obtain an obsidian block."
 msgstr ""
 
 msgid "Hero of the Village"
-msgstr ""
+msgstr "村莊英雄"
 
 msgid "Successfully defend a village from a raid"
 msgstr ""
