@@ -1,4 +1,3 @@
-
 local S = core.get_translator(core.get_current_modname())
 
 --
@@ -9,7 +8,7 @@ doc.add_category("basics", {
 	name = S("Basics"),
 	description = S("Everything you need to know to get started with playing"),
 	sorting = "custom",
-	sorting_data = {"quick_start", "controls", "point", "items", "inventory", "hotbar", "tools", "weapons", "nodes", "mine", "build", "craft", "cook", "hunger", "mobs", "animals", "minimap", "cam", "sneak", "players", "liquids", "light", "groups", "glossary", "core"},
+	sorting_data = {"quick_start", "controls", "point", "items", "inventory", "hotbar", "tools", "weapons", "nodes", "mine", "build", "craft", "cook", "hunger", "mobs", "animals", "minimap", "cam", "sneak", "players", "liquids", "light", "groups", "glossary", "luanti"},
 	build_formspec = doc.entry_builders.text_and_gallery,
 })
 
