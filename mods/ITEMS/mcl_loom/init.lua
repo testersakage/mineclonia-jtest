@@ -58,7 +58,7 @@ end
 local function get_formspec(pos)
 	local patterns = {}
 	local max_y = -2.2 -- Pattern container content height 3.5, minus border 0.2, minus first row 1.1
-	local preview_texture = "blank.png"
+	local preview_texture, preview_tooltip = "blank.png", ""
 	local _, banner, layers, _, color, _, pattern_id = can_add_layer(pos)
 	if color then
 		local selected_preview = selected_pattern_by_pos[tostring(pos)] or ""
@@ -87,12 +87,15 @@ local function get_formspec(pos)
 			end
 		end
 		if selected_preview ~= "" then
+			local b, esc = mcl_banners, core.formspec_escape
 			local banner_color = banner:get_definition()._unicolor
 			local preview_layers = table.copy(layers)
 			table.insert(preview_layers, {color = "unicolor_"..color, pattern = selected_preview})
-			preview_texture = mcl_banners.make_banner_texture(banner_color, preview_layers, "item")
-			preview_texture = "[combine:30x48:-9,0=" .. mcl_banners.escape_texture(preview_texture)
-			preview_texture = core.formspec_escape(preview_texture)
+			preview_texture = b.make_banner_texture(banner_color, preview_layers, "item")
+			preview_texture = "[combine:30x48:-9,0=" .. b.escape_texture(preview_texture)
+			preview_texture = esc(preview_texture)
+			b.write_layers(banner:get_meta(), preview_layers)
+			preview_tooltip = "tooltip[btn_loom_craft;"..esc(b.update_description(banner, b.max_craftable_layers)).."]"
 		end
 	end
 	if max_y < 0 then max_y = 0 else max_y = math.ceil(max_y * 10) end -- Convert content height to scrollbar max
@@ -119,7 +122,8 @@ local function get_formspec(pos)
 	"scroll_container_end[]"..
 	"scrollbaroptions[arrows=show;thumbsize=30;min=0;max="..max_y.."]"..
 	"scrollbar[7.25,0.7;0.4,3.6;vertical;pattern_scroll;]"..
-	"image_button[7.85,0.7;2.25,3.6;"..preview_texture..";item_button_loom_craft_banner;]"..
+	"image_button[7.85,0.7;2.25,3.6;"..preview_texture..";btn_loom_craft;]"..
+	preview_tooltip..
 
 	-- Output and inventory
 	mcl_formspec.get_itemslot_bg_v4(10.375,2,1,1)..
@@ -226,7 +230,7 @@ minetest.register_node("mcl_loom:loom", {
 				if tostring(k) ~= "" and k:find("^item_button_"..preview_item_prefix) then -- Select pattern
 					local str = k:gsub("^item_button_"..preview_item_prefix,"")
 					selected_pattern_by_pos[pos_str] = str
-				elseif k == "item_button_loom_craft_banner" and ( pattern_id or p_id ) then -- Craft
+				elseif k == "btn_loom_craft" and ( pattern_id or p_id ) then -- Craft
 					if p_id then
 						pattern_id = p_id -- If using pattern, override pattern_id.
 					elseif not pattern_id or table.indexof(dyerecipes,pattern_id) == -1 then
