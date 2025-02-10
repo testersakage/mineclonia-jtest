@@ -150,7 +150,7 @@ mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function
 	return ok, colorize
 end)
 
-function mcl_flowers.register_simple_flower(flowername, def)
+function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 	local nodename = "mcl_flowers:"..flowername
 	local groups = {
 		attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
@@ -170,7 +170,7 @@ function mcl_flowers.register_simple_flower(flowername, def)
 		image=def.image,
 		simple_selection_box=def.simple_selection_box,
 	}
-	core.register_node(":"..nodename, {
+	core.register_node(":"..nodename, table.merge({
 		description = def.desc,
 		_doc_items_longdesc = smallflowerlongdesc,
 		_doc_items_usagehelp = mcl_flowers.plant_usage_help,
@@ -194,7 +194,7 @@ function mcl_flowers.register_simple_flower(flowername, def)
 		_mcl_silk_touch_drop = def._mcl_silk_touch_drop,
 		_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 		_mcl_crafting_output = def._mcl_crafting_output
-	})
+	}, node_defs or {}))
 	if def.potted then
 		mcl_flowerpots.register_potted_flower(nodename, {
 			name = flowername,
@@ -209,7 +209,7 @@ end
 
 function mcl_flowers.register_ground_flower(flowername, def, add_def)
 	local nodename = "mcl_flowers:"..flowername
-	core.register_craftitem(":"..itemname, table.merge({
+	core.register_craftitem(":"..nodename, table.merge({
 	description = def.desc,
 	_doc_items_longdesc = def.longdesc,
 	inventory_image = def.image,
