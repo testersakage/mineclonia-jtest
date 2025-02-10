@@ -180,7 +180,7 @@ local function show_credits(player)
 	local meta = player:get_meta()
 	local completed_end = meta:get_int("completed_end")
 
-	if completed_end == 0 then
+	if completed_end == 0 and minetest.is_singleplayer() then
 		meta:set_int("completed_end", 1)
 		for _, func in ipairs(mcl_portals.registered_on_beat_game) do
 			func(player)
