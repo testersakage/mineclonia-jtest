@@ -221,7 +221,7 @@ local function get_player_data(name, init)
 end
 
 local function get_item_recipes(item_name)
-	local recipes = minetest.get_all_craft_recipes(item_name) or {}
+	local recipes = core.get_all_craft_recipes(item_name) or {}
 	if custom_crafts[item_name] then
 		for _, v in pairs(custom_crafts[item_name]) do
 			recipes[#recipes + 1] = v
@@ -735,17 +735,6 @@ local function reset_data(data)
 	data.show_usages = nil
 	data.recipes     = nil
 	data.items       = data.items_raw
-end
-
-local function get_item_recipes(item_name)
-	local recipes = core.get_all_craft_recipes(item_name) or {}
-	if custom_crafts[item_name] then
-		for _, v in pairs(custom_crafts[item_name]) do
-			recipes[#recipes + 1] = v
-		end
-	end
-
-	return recipes
 end
 
 local function get_init_items()

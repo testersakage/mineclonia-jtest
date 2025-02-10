@@ -15,7 +15,7 @@ function tt.register_priority_snippet(func)
 	table.insert(tt.registered_snippets, 1, func)
 end
 
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/snippets.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/snippets.lua")
 
 -- Apply item description updates
 
@@ -29,7 +29,7 @@ local function apply_snippets(desc, itemstring, toolcaps, itemstack)
 		if str then
 			desc = desc .. "\n"
 			if snippet_color then
-				desc = desc .. minetest.colorize(snippet_color, str)
+				desc = desc .. core.colorize(snippet_color, str)
 			else
 				desc = desc .. str
 			end
@@ -43,18 +43,18 @@ local function should_change(itemstring, def)
 end
 
 local function append_snippets()
-	for itemstring, def in pairs(minetest.registered_items) do
+	for itemstring, def in pairs(core.registered_items) do
 		if should_change(itemstring, def) then
 			local orig_desc = def.description
 			local desc = apply_snippets(orig_desc, itemstring, def.tool_capabilities, nil)
 			if desc ~= orig_desc then
-				minetest.override_item(itemstring, { description = desc, _tt_original_description = orig_desc })
+				core.override_item(itemstring, { description = desc, _tt_original_description = orig_desc })
 			end
 		end
 	end
 end
 
-minetest.register_on_mods_loaded(append_snippets)
+core.register_on_mods_loaded(append_snippets)
 
 function tt.reload_itemstack_description(itemstack)
 	local itemstring = itemstack:get_name()
@@ -73,7 +73,7 @@ function tt.reload_itemstack_description(itemstack)
 							     orig_desc)
 		end
 		if meta:get_string("name") ~= "" then
-			orig_desc = minetest.colorize(tt.NAME_COLOR, meta:get_string("name"))
+			orig_desc = core.colorize(tt.NAME_COLOR, meta:get_string("name"))
 		end
 		local desc = apply_snippets(orig_desc, itemstring, toolcaps or def.tool_capabilities, itemstack)
 		meta:set_string("description", desc)

@@ -595,7 +595,7 @@ S("• Privilege: Allows a player to do something").."\n"..
 S("• Node: Other word for “block”")
 }})
 
-doc.add_entry("basics", "core", {
+doc.add_entry("basics", "luanti", {
 	name = S("Luanti"),
 	data = {
 		text =
