@@ -185,6 +185,10 @@ mcl_signs_editable (Editable signs) bool false
 # that looted that vault and prevents them from looting the same vault again.
 mcl_vaults_looter_list_length (Vault memory size) int 128 1 1024
 
+# Doc mod keep player help entries revealed in file doc.mt inside the world folder
+doc_keep_player_entries_in_file (Keep doc entries in file) bool true
+
+
 [Graphics]
 # Whether to animate chests when open / close
 animated_chests (Animated chests) bool true

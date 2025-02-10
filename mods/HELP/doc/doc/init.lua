@@ -605,6 +605,8 @@ do
 	end
 end
 
+local save_file_setting = core.settings:get_bool("doc_keep_player_entries_in_file", true)
+
 function doc.save_to_file()
 	local savetable = {}
 	savetable.players_stored_data = {}
@@ -612,6 +614,7 @@ function doc.save_to_file()
 		savetable.players_stored_data[name] = playerdata.stored_data
 	end
 
+	if save_file_setting then
 	local savestring = minetest.serialize(savetable)
 
 	local filepath = minetest.get_worldpath().."/doc.mt"
@@ -622,6 +625,7 @@ function doc.save_to_file()
 		minetest.log("info", "[doc] Wrote player data into "..filepath..".")
 	else
 		minetest.log("error", "[doc] Failed to write player data into "..filepath..".")
+	end
 	end
 end
 
