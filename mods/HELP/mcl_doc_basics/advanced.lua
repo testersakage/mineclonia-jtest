@@ -176,7 +176,7 @@ doc.add_entry("advanced", "settings", {
 	name = S("Settings"),
 	data = {
 		text =
-S("There is a large variety of settings to configure core. Pretty much every aspect can be changed that way.").."\n\n"..
+S("There is a large variety of settings to configure Luanti. Pretty much every aspect can be changed that way.").."\n\n"..
 
 S("These are a few of the most important gameplay settings:").."\n\n"..
 
