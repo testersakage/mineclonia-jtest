@@ -1,13 +1,13 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Armor
 tt.register_snippet(function(itemstring)
-	--local def = minetest.registered_items[itemstring]
+	--local def = core.registered_items[itemstring]
 	local s = ""
-	local head = minetest.get_item_group(itemstring, "armor_head")
-	local torso = minetest.get_item_group(itemstring, "armor_torso")
-	local legs = minetest.get_item_group(itemstring, "armor_legs")
-	local feet = minetest.get_item_group(itemstring, "armor_feet")
+	local head = core.get_item_group(itemstring, "armor_head")
+	local torso = core.get_item_group(itemstring, "armor_torso")
+	local legs = core.get_item_group(itemstring, "armor_legs")
+	local feet = core.get_item_group(itemstring, "armor_feet")
 	if head > 0 then
 		s = s .. S("Head armor")
 	end
@@ -23,10 +23,10 @@ tt.register_snippet(function(itemstring)
 	return s ~= "" and s or nil
 end)
 tt.register_snippet(function(itemstring, _, itemstack)
-	--local def = minetest.registered_items[itemstring]
+	--local def = core.registered_items[itemstring]
 	local s = ""
-	local use = minetest.get_item_group(itemstring, "mcl_armor_uses")
-	local pts = minetest.get_item_group(itemstring, "mcl_armor_points")
+	local use = core.get_item_group(itemstring, "mcl_armor_uses")
+	local pts = core.get_item_group(itemstring, "mcl_armor_points")
 	if pts > 0 then
 		s = s .. S("Armor points: @1", pts)
 		s = s .. "\n"
@@ -34,7 +34,7 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	if itemstack then
 		local unbreaking = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
 		if unbreaking > 0 then
-			local elytra = minetest.get_item_group (itemstring, "elytra")
+			local elytra = core.get_item_group (itemstring, "elytra")
 			if elytra > 0 then
 				use = math.floor(use * (unbreaking + 1))
 			else
@@ -49,14 +49,14 @@ tt.register_snippet(function(itemstring, _, itemstack)
 end)
 -- Horse armor
 tt.register_snippet(function(itemstring)
-	local armor_g = minetest.get_item_group(itemstring, "horse_armor")
+	local armor_g = core.get_item_group(itemstring, "horse_armor")
 	if armor_g and armor_g > 0 then
 		return S("Protection: @1%", 100 - armor_g)
 	end
 end)
 
 tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
+	local def = core.registered_items[itemstring]
 	local s = ""
 	if def and def.groups.eatable and def.groups.eatable > 0 then
 		s = s .. S("Hunger points: +@1", def.groups.eatable)
@@ -71,14 +71,14 @@ tt.register_snippet(function(itemstring)
 end)
 
 tt.register_snippet(function(itemstring)
-	--local def = minetest.registered_items[itemstring]
-	if minetest.get_item_group(itemstring, "crush_after_fall") == 1 then
+	--local def = core.registered_items[itemstring]
+	if core.get_item_group(itemstring, "crush_after_fall") == 1 then
 		return S("Deals damage when falling"), mcl_colors.YELLOW
 	end
 end)
 
 tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
+	local def = core.registered_items[itemstring]
 	if def and def.groups.place_flowerlike == 1 then
 		return S("Grows on grass blocks or dirt")
 	elseif def and def.groups.place_flowerlike == 2 then
@@ -87,7 +87,7 @@ tt.register_snippet(function(itemstring)
 end)
 
 tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
+	local def = core.registered_items[itemstring]
 	if def and def.groups.flammable then
 		return S("Flammable")
 	end
@@ -146,7 +146,7 @@ tt.register_snippet(function(itemstring, _, itemstack)
 			else roman_lvl = "" end
 			s = s.. effect.description.. roman_lvl.. " (".. timestamp.. ")\n"
 			if effect.uses_factor then factor = effect.level_to_factor(ef_level) end
-			if effect.get_tt then ef_tt = minetest.colorize("grey", effect.get_tt(factor)) else ef_tt = "" end
+			if effect.get_tt then ef_tt = core.colorize("grey", effect.get_tt(factor)) else ef_tt = "" end
 			if ef_tt ~= "" then s = s.. ef_tt.. "\n" end
 		end
 	end
