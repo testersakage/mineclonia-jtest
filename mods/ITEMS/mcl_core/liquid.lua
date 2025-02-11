@@ -968,7 +968,7 @@ end
 
 -- Override the bulk_set_node function so that it calls liquid.update() on every
 -- node change.
-core.bulk_set_node = function(postions, node)
+core.bulk_set_node = function(positions, node)
   liquid.bulk_set_node(positions, node)
   for _, p in ipairs(positions) do
     liquid.update(p)
