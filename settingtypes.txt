@@ -168,10 +168,6 @@ mcl_extra_nodes (Additional nodes) bool true
 # Enable piston movement of inventory nodes.
 mcl_inv_nodes_movable (Movable inventory nodes) bool true
 
-# Make iron golems teleport home when they are far away and
-# villagers teleport home when the night is skipped.
-mcl_mob_allow_nav_hacks (Mob navigation hacks) bool false
-
 # Allow players to create Minecraft-like maps.
 enable_real_maps (Real maps) bool true
 
