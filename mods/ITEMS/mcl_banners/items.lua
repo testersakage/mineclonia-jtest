@@ -1,6 +1,6 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
-local C = minetest.colorize
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local C = core.colorize
 
 local function readable_name(str)
 	str = str:gsub("_", " ")
@@ -21,7 +21,7 @@ local special_patterns = {
 }
 
 for pattern, defs in pairs(special_patterns) do
-	minetest.register_craftitem("mcl_banners:pattern_"..pattern,{
+	core.register_craftitem("mcl_banners:pattern_"..pattern,{
 		description = S(readable_name(pattern).." Banner Pattern"),
 		_tt_help = C(mcl_colors.GRAY, S("Can be used to craft special banner designs on the loom")),
 		_doc_items_longdesc = S("Special Banner Pattern"),
@@ -32,7 +32,7 @@ for pattern, defs in pairs(special_patterns) do
 	})
 
 	if defs.craft_item and type(defs.craft_item) == "string" then
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_banners:pattern_"..pattern,
 			recipe = { "mcl_core:paper", defs.craft_item },
 			type = "shapeless"

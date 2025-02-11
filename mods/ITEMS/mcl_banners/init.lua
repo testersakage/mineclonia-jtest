@@ -1,7 +1,7 @@
 mcl_banners = {}
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator(modname)
 
 -- Maximum number of layers which can be put on a banner by players.
@@ -11,7 +11,7 @@ mcl_banners.max_craftable_layers = 12
 local max_layer_lines = 6
 
 local node_sounds
-if minetest.get_modpath("mcl_sounds") then
+if core.get_modpath("mcl_sounds") then
 	node_sounds = mcl_sounds.node_sound_wood_defaults()
 end
 dofile(modpath.."/items.lua")
@@ -156,23 +156,23 @@ end
 local function on_dig_banner(pos, _, digger)
 	-- Check protection
 	local name = digger:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return
 	end
 
-	local inv = minetest.get_meta(pos):get_inventory()
+	local inv = core.get_meta(pos):get_inventory()
 	local item = inv:get_stack("banner", 1)
 	tt.reload_itemstack_description(item) -- Update description of pre-0.111 banners.
 	local item_str = item:is_empty() and "mcl_banners:banner_item_white" or item:to_string()
 
-	minetest.handle_node_drops(pos, { item_str }, digger)
+	core.handle_node_drops(pos, { item_str }, digger)
 
 	item:set_count(0)
 	inv:set_stack("banner", 1, item)
 
 	-- Remove node
-	minetest.remove_node(pos)
+	core.remove_node(pos)
 end
 
 local function on_destruct_banner(pos, hanging)
@@ -186,7 +186,7 @@ local function on_destruct_banner(pos, hanging)
 	end
 	-- Find this node's banner entity and remove it
 	local checkpos = vector.add(pos, offset)
-	for v in minetest.objects_inside_radius(checkpos, 0.5) do
+	for v in core.objects_inside_radius(checkpos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and ent.name == nodename then
 			v:remove()
@@ -195,10 +195,10 @@ local function on_destruct_banner(pos, hanging)
 	end
 
 	-- Drop item only if it was not handled in on_dig_banner
-	local inv = minetest.get_meta(pos):get_inventory()
+	local inv = core.get_meta(pos):get_inventory()
 	local item = inv:get_stack("banner", 1)
 	if not item:is_empty() then
-		minetest.handle_node_drops(pos, {item:to_string()})
+		core.handle_node_drops(pos, {item:to_string()})
 	end
 end
 
@@ -313,7 +313,7 @@ local function respawn_banner_entity(pos, node, force)
 	local is_hanging = node.name == "mcl_banners:hanging_banner"
 	local offset = is_hanging and hanging_banner_entity_offset or standing_banner_entity_offset
 	local bpos = vector.add(pos, offset)
-	for v in minetest.objects_inside_radius(bpos, 0.5) do
+	for v in core.objects_inside_radius(bpos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and (ent.name == "mcl_banners:standing_banner" or ent.name == "mcl_banners:hanging_banner") then
 			if not force then return end -- Banner exists, not forcing removal, just quit.
@@ -322,7 +322,7 @@ local function respawn_banner_entity(pos, node, force)
 	end
 
 	-- Spawn new entity and set rotation
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local banner_item = meta:get_inventory():get_stack("banner", 1)
 	local banner_entity = spawn_banner_entity(bpos, is_hanging, banner_item)
 	local rotation_level = meta:get_int("rotation_level")
@@ -333,7 +333,7 @@ local function respawn_banner_entity(pos, node, force)
 end
 
 local function get_banner_stack(pos)
-	local inv = minetest.get_meta(pos):get_inventory()
+	local inv = core.get_meta(pos):get_inventory()
 	return inv:get_stack("banner", 1)
 end
 
@@ -344,7 +344,7 @@ end
 
 -- Standing banner node
 -- This one is also used for the help entry to avoid spamming the help with 16 entries.
-minetest.register_node("mcl_banners:standing_banner", {
+core.register_node("mcl_banners:standing_banner", {
 	_doc_items_entry_name = S("Banner"),
 	_doc_items_image = mcl_banners.make_banner_texture("", nil, "item"),
 	_doc_items_longdesc = S("Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."),
@@ -384,7 +384,7 @@ minetest.register_node("mcl_banners:standing_banner", {
 	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local rot = meta:get_int("rotation_level")
 			rot = (rot - 1) % 16
 			meta:set_int("rotation_level", rot)
@@ -399,7 +399,7 @@ minetest.register_node("mcl_banners:standing_banner", {
 local screwdriver_rot_by_param2 = { 0, 12, 4, 0, 8 }
 
 -- Hanging banner node
-minetest.register_node("mcl_banners:hanging_banner", {
+core.register_node("mcl_banners:hanging_banner", {
 	walkable = false,
 	is_ground_content = false,
 	paramtype = "light",
@@ -431,8 +431,8 @@ minetest.register_node("mcl_banners:hanging_banner", {
 		if mode ~= screwdriver.ROTATE_FACE then return false end
 		local r = screwdriver.rotate.wallmounted(pos, node, mode)
 		node.param2 = r
-		minetest.swap_node(pos, node)
-		local meta = minetest.get_meta(pos)
+		core.swap_node(pos, node)
+		local meta = core.get_meta(pos)
 		local rot = screwdriver_rot_by_param2[ r or 0 ] or 0
 		meta:set_int("rotation_level", rot)
 		respawn_banner_entity(pos, node, true)
@@ -455,7 +455,7 @@ local function init_banner_registration ()
 			mcl_banners.make_pattern_name(colortab, recipe)
 		end
 
-		minetest.register_craftitem(itemstring, {
+		core.register_craftitem(itemstring, {
 			description = colortab.banner_name,
 			_tt_help = S("Paintable decoration"),
 			_doc_items_create_entry = false,
@@ -473,11 +473,11 @@ local function init_banner_registration ()
 				local above = pointed_thing.above
 				local under = pointed_thing.under
 
-				local node_under = minetest.get_node(under)
+				local node_under = core.get_node(under)
 				if placer and not placer:get_player_control().sneak then
 					if mcl_util.check_position_protection(under, placer) then return itemstack end
 
-					if minetest.get_item_group(node_under.name, "cauldron_water") > 0 then
+					if core.get_item_group(node_under.name, "cauldron_water") > 0 then
 						if mcl_cauldrons.add_level(pointed_thing.under, -1) then
 							local imeta = itemstack:get_meta()
 							local layers = mcl_banners.read_layers(imeta)
@@ -495,31 +495,31 @@ local function init_banner_registration ()
 				local is_hanging = false
 
 				-- Standing or hanging banner. The placement rules are enforced by the node definitions
-				local _, success = minetest.item_place_node(ItemStack("mcl_banners:standing_banner"), placer, pointed_thing)
+				local _, success = core.item_place_node(ItemStack("mcl_banners:standing_banner"), placer, pointed_thing)
 				if not success then
 					-- Forbidden on ceiling
 					if pointed_thing.under.y ~= pointed_thing.above.y then
 						return itemstack
 					end
-					_, success = minetest.item_place_node(ItemStack("mcl_banners:hanging_banner"), placer, pointed_thing)
+					_, success = core.item_place_node(ItemStack("mcl_banners:hanging_banner"), placer, pointed_thing)
 					if not success then
 						return itemstack
 					end
 					is_hanging = true
 				end
 				local place_pos
-				local def_under = minetest.registered_nodes[node_under.name]
+				local def_under = core.registered_nodes[node_under.name]
 				if def_under and def_under.buildable_to then
 					place_pos = under
 				else
 					place_pos = above
 				end
-				local bnode = minetest.get_node(place_pos)
+				local bnode = core.get_node(place_pos)
 				if bnode.name ~= "mcl_banners:standing_banner" and bnode.name ~= "mcl_banners:hanging_banner" then
-					minetest.log("error", "[mcl_banners] The placed banner node is not what the mod expected!")
+					core.log("error", "[mcl_banners] The placed banner node is not what the mod expected!")
 					return itemstack
 				end
-				local meta = minetest.get_meta(place_pos)
+				local meta = core.get_meta(place_pos)
 				local inv = meta:get_inventory()
 				inv:set_size("banner", 1)
 				local store_stack = ItemStack(itemstack)
@@ -539,7 +539,7 @@ local function init_banner_registration ()
 				local final_yaw, rotation_level
 				if is_hanging then
 					local pdir = vector.direction(pointed_thing.under, pointed_thing.above)
-					final_yaw = minetest.dir_to_yaw(pdir)
+					final_yaw = core.dir_to_yaw(pdir)
 					if pdir.x > 0 then
 						rotation_level = 4
 					elseif pdir.z > 0 then
@@ -565,10 +565,10 @@ local function init_banner_registration ()
 					banner_entity:set_yaw(final_yaw)
 				end
 
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
-				minetest.sound_play({name="default_place_node_hard", gain=1.0}, {pos = place_pos}, true)
+				core.sound_play({name="default_place_node_hard", gain=1.0}, {pos = place_pos}, true)
 
 				return itemstack
 			end,
@@ -618,11 +618,11 @@ local entity_standing = {
 
 	get_staticdata = function(self)
 		local out = { _base_color = self._base_color, _layers = self._layers, _name = self._name }
-		return minetest.serialize(out)
+		return core.serialize(out)
 	end,
 	on_activate = function(self, staticdata)
 		if staticdata and staticdata ~= "" then
-			local inp = minetest.deserialize(staticdata)
+			local inp = core.deserialize(staticdata)
 			self._base_color = inp._base_color
 			self._layers = inp._layers
 			self._name = inp._name
@@ -650,15 +650,15 @@ local entity_standing = {
 	end,
 	_mcl_pistons_unmovable = true
 }
-minetest.register_entity("mcl_banners:standing_banner", entity_standing)
+core.register_entity("mcl_banners:standing_banner", entity_standing)
 
 local entity_hanging = table.copy(entity_standing)
 entity_hanging.initial_properties.visual_size = { x=2.499, y=2.28 }
 entity_hanging.initial_properties.mesh = "amc_banner_hanging.b3d"
-minetest.register_entity("mcl_banners:hanging_banner", entity_hanging)
+core.register_entity("mcl_banners:hanging_banner", entity_hanging)
 
 -- FIXME: Prevent entity destruction by /clearobjects
-minetest.register_lbm({
+core.register_lbm({
 	label = "Respawn banner entities",
 	name = "mcl_banners:respawn_entities",
 	run_at_every_load = true,
