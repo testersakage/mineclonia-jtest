@@ -8,6 +8,11 @@ mcl_gamemode = {
 	registered_on_gamemode_change = {}
 }
 
+local gamemode_aliases = {
+	survival = { "0", "s", },
+	creative = { "1", "c", }
+}
+
 function mcl_gamemode.register_on_gamemode_change(func)
 	table.insert(mcl_gamemode.registered_on_gamemode_change, func)
 end
@@ -30,6 +35,12 @@ function mcl_gamemode.get_gamemode(p)
 end
 
 function mcl_gamemode.set_gamemode(p, gm)
+	for _, v in pairs(mcl_gamemode.gamemodes) do
+		if table.indexof(gamemode_aliases[v], gm) ~= -1 then
+			gm = v
+			break
+		end
+	end
 	if table.indexof(mcl_gamemode.gamemodes, gm) == -1 then return false end
 	local old_gm = mcl_gamemode.get_gamemode(p)
 	p:get_meta():set_string("gamemode", gm)
@@ -41,7 +52,7 @@ end
 
 minetest.register_chatcommand("gamemode",{
 	params = S("[<gamemode>] [<player>]"),
-	description = S("Change gamemode (survival/creative) for yourself or player"),
+	description = S("Change gamemode (survival/creative/0/1/s/c) for yourself or player"),
 	privs = { server = true },
 	func = function(n,param)
 		local p
