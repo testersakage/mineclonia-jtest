@@ -41,9 +41,17 @@ minetest.register_tool("mcl_shields:shield", {
 local function wielded_item(obj, i)
 	local itemstack = obj:get_wielded_item()
 	if i == 1 then
-		itemstack = obj:get_inventory():get_stack("offhand", 1)
+		itemstack = mcl_offhand.get_offhand(obj)
 	end
-	return itemstack:get_name()
+	return itemstack:get_name(), itemstack
+end
+
+local function set_wielded_item(player, stack, i)
+	if i ~= 1 then
+		player:set_wielded_item(stack)
+	else
+		mcl_offhand.set_offhand(player, stack)
+	end
 end
 
 function mcl_shields.wielding_shield(obj, i)
@@ -56,7 +64,7 @@ end
 
 local rgb_to_unicolor
 
-local function migrate_standalone_shield_texture(texture)
+local function migrate_custom_shield_texture(texture)
 	-- Build colour mapping, required to parse layer info from old texture
 	if not rgb_to_unicolor then
 		rgb_to_unicolor = {}
@@ -97,6 +105,26 @@ local shield_texture_builder = {
 	end,
 }
 
+local function set_shield_layers(itemstack, layers)
+	if not itemstack then return end
+	local itemname, meta = itemstack:get_name(), itemstack:get_meta()
+	local def = core.registered_items[itemname]
+	if not meta or not def or not def._shield_color_key then return end
+	local b, base_colour = mcl_banners, def._shield_color_key
+	local name = meta:get_string("name")
+	if name == "" then name = def.description end
+
+	local texture = b.make_banner_texture(base_colour, layers, shield_texture_builder)
+	meta:set_string("description", b.make_advanced_banner_description(name, layers))
+	if layers and #layers > 0 then mcl_banners.write_layers(meta, layers) end
+	meta:set_string("mcl_shields:banner_texture", texture)
+
+	local item_image = b.make_banner_texture(base_colour, layers, "item")
+	item_image = item_image:gsub("mcl_banners_item_base_48.png", "mcl_shield_48.png")
+	meta:set_string("inventory_overlay", item_image)
+	return texture
+end
+
 minetest.register_entity("mcl_shields:shield_entity", {
 	initial_properties = {
 		visual = "mesh",
@@ -118,33 +146,24 @@ minetest.register_entity("mcl_shields:shield_entity", {
 		end
 		local shield_texture = "mcl_shield_base_nopattern.png"
 		local i = self._shield_number
-		local item = wielded_item(player, i)
+		local item, itemstack = wielded_item(player, i)
 
-		if item ~= "mcl_shields:shield" and item ~= "mcl_shields:shield_enchanted" then
-			local itemstack = player:get_wielded_item()
-			if i == 1 then
-				itemstack = player:get_inventory():get_stack("offhand", 1)
-			end
+		if item ~= "mcl_shields:shield" and item ~= "mcl_shields:shield_enchanted" then -- Bannered shield?
 			local meta = itemstack:get_meta()
 			local meta_texture = meta:get_string("mcl_shields:banner_texture")
 			if meta_texture ~= "" then
 				shield_texture = meta_texture
 			else
-				local color = minetest.registered_items[item]._shield_color_key
-				local standalone_texture = meta:get_string("mcl_shields:shield_custom_pattern_texture")
-				if standalone_texture then -- Parse layers from standalone pattern texture
-					layers = migrate_standalone_shield_texture(standalone_texture) -- May be nil
-					if layers then
-						mcl_banners.write_layers(meta, layers)
-					else
-						shield_texture = standalone_texture
-					end
+				local custom_texture = meta:get_string("mcl_shields:shield_custom_pattern_texture")
+				if custom_texture then -- Parse layers from custom standalone pattern texture.
+					shield_texture = custom_texture
+					layers = migrate_custom_shield_texture(custom_texture) -- May be nil
 				else
 					layers = mcl_banners.read_layers(meta) -- Non-nil
 				end
 				if layers then
-					shield_texture = mcl_banners.make_banner_texture(color, layers, shield_texture_builder)
-					meta:set_string("mcl_shields:banner_texture", texture)
+					shield_texture = set_shield_layers(itemstack, layers)
+					set_wielded_item(player, itemstack, i) -- Update item texture and description.
 				end
 			end
 		end
@@ -168,14 +187,8 @@ function mcl_shields.is_blocking(obj)
 	if not obj:is_player() then return end
 	if mcl_shields.players[obj] then
 		local blocking = mcl_shields.players[obj].blocking
-		if blocking <= 0 then
-			return
-		end
-
-		local shieldstack = obj:get_wielded_item()
-		if blocking == 1 then
-			shieldstack = obj:get_inventory():get_stack("offhand", 1)
-		end
+		if blocking <= 0 then return end
+		local _, shieldstack = wielded_item(obj, blocking)
 		return blocking, shieldstack
 	end
 end
@@ -619,21 +632,7 @@ local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	if #layers > b.max_craftable_layers then
 		return ItemStack("") -- Too many layers to be placed on a shield.
 	end
-
-	local new_shield_meta = itemstack:get_meta()
-	if #layers > 0 then
-		local shield_name = itemstack:get_description()
-		local color = banner_stack:get_definition()._unicolor
-
-		local texture = b.make_banner_texture(color, layers, shield_texture_builder)
-		new_shield_meta:set_string("description", b.make_advanced_banner_description(shield_name, layers))
-		mcl_banners.write_layers(new_shield_meta, layers) -- Store layers to future proof (regen texture or sth)
-		new_shield_meta:set_string("mcl_shields:banner_texture", texture)
-
-		local item_image = b.make_banner_texture(color, layers, "item")
-		item_image = item_image:gsub("mcl_banners_item_base_48.png", "mcl_shield_48.png")
-		new_shield_meta:set_string("inventory_overlay", item_image)
-	end
+	set_shield_layers(itemstack, layers)
 	itemstack:set_wear(shield_stack:get_wear())
 end
 
