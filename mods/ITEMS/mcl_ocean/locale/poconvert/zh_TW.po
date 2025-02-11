@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_ocean x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-11 15:05+0000\n"
+"PO-Revision-Date: 2025-02-11 22:05+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -115,10 +115,10 @@ msgid "Corals fans grow on top of coral blocks and need to be inside a water sou
 msgstr ""
 
 msgid "Needs water to live"
-msgstr ""
+msgstr "需要水才能存活"
 
 msgid "Grows on coral block of same species"
-msgstr ""
+msgstr "長在同種珊瑚方塊上"
 
 msgid "Kelp"
 msgstr ""
