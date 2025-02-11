@@ -81,8 +81,10 @@ local function generate_modifier_func(name, dmg_flag, mod_func, is_type)
 end
 
 local function change_text_hud_if_changed(obj, hud_id, new_value)
-	local old_value = obj:hud_get(hud_id).text
-	if old_value ~= new_value then
+	if not obj:is_player() or not hud_id then return end
+	local hud = obj:hud_get(hud_id)
+	if not hud then return end
+	if hud.text ~= new_value then
 		obj:hud_change(hud_id, "text", new_value)
 	end
 end
