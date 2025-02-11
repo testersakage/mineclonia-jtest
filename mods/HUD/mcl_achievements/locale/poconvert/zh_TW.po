@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-10 19:58+0000\n"
+"PO-Revision-Date: 2025-02-11 15:05+0000\n"
 "Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
 "\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -236,7 +236,7 @@ msgid "Catch a fish.\n"
 msgstr ""
 
 msgid "Country Lode, Take Me Home"
-msgstr ""
+msgstr "磐石之安"
 
 msgid "Use a compass on a Lodestone."
 msgstr ""
@@ -279,13 +279,13 @@ msgid "Respawn the Ender Dragon."
 msgstr ""
 
 msgid "Bee Our Guest"
-msgstr ""
+msgstr "待蜂之道"
 
 msgid "Use a campfire to collect a bottle of honey from a beehive without aggrivating the bees inside."
 msgstr ""
 
 msgid "Total Beelocation"
-msgstr ""
+msgstr "舉家遷移"
 
 msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr ""
@@ -315,7 +315,7 @@ msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Si
 msgstr ""
 
 msgid "Dispense With This"
-msgstr ""
+msgstr "一觸即發"
 
 msgid "Place a dispenser."
 msgstr ""
@@ -339,13 +339,13 @@ msgid "Get really desperate and eat rotten flesh."
 msgstr ""
 
 msgid "Pot Planter"
-msgstr ""
+msgstr "花好月圓"
 
 msgid "Place a flower pot."
 msgstr ""
 
 msgid "The Haggler"
-msgstr ""
+msgstr "討價還價"
 
 msgid "Mine emerald ore."
 msgstr ""
@@ -375,7 +375,7 @@ msgid "Successfully defend a village from a raid"
 msgstr ""
 
 msgid "Voluntary Exile"
-msgstr ""
+msgstr "亂世凶年"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
