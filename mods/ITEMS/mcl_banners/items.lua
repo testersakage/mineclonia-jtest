@@ -1,5 +1,6 @@
 local modname = core.get_current_modname()
 local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 local C = core.colorize
 
 local function readable_name(str)
@@ -22,7 +23,7 @@ local special_patterns = {
 
 for pattern, defs in pairs(special_patterns) do
 	core.register_craftitem("mcl_banners:pattern_"..pattern,{
-		description = S(readable_name(pattern).." Banner Pattern"),
+		description = D(readable_name(pattern).." Banner Pattern"),
 		_tt_help = C(mcl_colors.GRAY, S("Can be used to craft special banner designs on the loom")),
 		_doc_items_longdesc = S("Special Banner Pattern"),
 		inventory_image = "mcl_banners_pattern_"..pattern..".png",
