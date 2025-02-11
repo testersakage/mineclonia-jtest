@@ -595,6 +595,7 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		wield_scale = vector.new(2, 2, 2),
 		_shield_color_key = colorkey,
 		_mcl_wieldview_item = "",
+		_mcl_generate_description = mcl_banners.update_description,
 	})
 
 	local banner = "mcl_banners:banner_item_" .. color
