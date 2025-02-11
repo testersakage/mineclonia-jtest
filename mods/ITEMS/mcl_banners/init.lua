@@ -84,7 +84,9 @@ end
 -- Update banner description, returning description, name
 function mcl_banners.update_description (itemstack, limit)
 	local def, meta = itemstack:get_definition(), itemstack:get_meta()
-	local name = meta:get_string("name")
+	local name, itemname = meta:get_string("name"), itemstack:get_name()
+	local orig_desc = def._tt_original_description or def.description
+	local base_name = orig_desc:gsub("%W", "%%%1")
 	local layers = mcl_banners.read_layers(meta)
 	local def_name = def.description
 	if name ~= "" and name:find("Ominous Banner") then name = "" end -- Pre-0.84.0 Ominous Banners
@@ -92,18 +94,25 @@ function mcl_banners.update_description (itemstack, limit)
 		name = def_name
 		if core.get_modpath("mcl_raids")
 		and mcl_raids.is_banner_item(itemstack, layers) then
-			local orig_name = mcl_banners.colors["unicolor_white"].banner_name
-			name = name:gsub(orig_name:gsub("%W", "%%%1"), mcl_raids.ominous_banner_name)
+			name = def_name:gsub(base_name, mcl_raids.ominous_banner_name)
 		end
 	else
-		name = core.colorize(tt.NAME_COLOR, name)
+		name = def_name:gsub(base_name, core.colorize(tt.NAME_COLOR, name))
+	end
+	if mcl_enchanting.is_enchanted(itemname) then -- Enchanted shield
+		local enchantments = mcl_enchanting.get_enchantments(itemstack)
+		for enchantment, level in pairs(enchantments) do
+			name = name .. "\n" .. mcl_enchanting.get_colorized_enchantment_description(enchantment, level)
+		end
 	end
 	local newdesc = mcl_banners.make_advanced_banner_description(name, layers, limit)
 	meta:set_string("description", newdesc)
 
-	local image = mcl_banners.make_banner_texture(def._unicolor, layers, "item")
-	meta:set_string("inventory_overlay", image)
-	meta:set_string("wield_overlay", image)
+	if core.get_item_group(itemname, "banner") > 0 then
+		local image = mcl_banners.make_banner_texture(def._unicolor, layers, "item")
+		meta:set_string("inventory_overlay", image)
+		meta:set_string("wield_overlay", image)
+	end
 	return newdesc, name, def_name
 end
 

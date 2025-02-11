@@ -112,16 +112,17 @@ local function set_shield_layers(itemstack, layers)
 	if not meta or not def or not def._shield_color_key then return end
 	local b, base_colour = mcl_banners, def._shield_color_key
 	local name = meta:get_string("name")
-	if name == "" then name = def.description end
+	if name == "" then name = itemstack:get_description() end
 
-	local texture = b.make_banner_texture(base_colour, layers, shield_texture_builder)
-	meta:set_string("description", b.make_advanced_banner_description(name, layers))
 	if layers and #layers > 0 then mcl_banners.write_layers(meta, layers) end
-	meta:set_string("mcl_shields:banner_texture", texture)
+	b.update_description(itemstack)
 
 	local item_image = b.make_banner_texture(base_colour, layers, "item")
 	item_image = item_image:gsub("mcl_banners_item_base_48.png", "mcl_shield_48.png")
 	meta:set_string("inventory_overlay", item_image)
+
+	local texture = b.make_banner_texture(base_colour, layers, shield_texture_builder)
+	meta:set_string("mcl_shields:banner_texture", texture)
 	return texture
 end
 
@@ -151,20 +152,27 @@ minetest.register_entity("mcl_shields:shield_entity", {
 		if item ~= "mcl_shields:shield" and item ~= "mcl_shields:shield_enchanted" then -- Bannered shield?
 			local meta = itemstack:get_meta()
 			local meta_texture = meta:get_string("mcl_shields:banner_texture")
-			if meta_texture ~= "" then
+			if meta_texture and meta_texture ~= "" then
 				shield_texture = meta_texture
 			else
 				local custom_texture = meta:get_string("mcl_shields:shield_custom_pattern_texture")
-				if custom_texture then -- Parse layers from custom standalone pattern texture.
+				if custom_texture and custom_texture ~= "" then -- Parse layers from custom standalone pattern texture.
 					shield_texture = custom_texture
 					layers = migrate_custom_shield_texture(custom_texture) -- May be nil
+					if layers then -- Item image would be broken on downgrade anyway, may as well remove old cache.
+						meta:set_string("mcl_shields:shield_custom_pattern_texture", nil)
+					end
 				else
 					layers = mcl_banners.read_layers(meta) -- Non-nil
 				end
 				if layers then
-					shield_texture = set_shield_layers(itemstack, layers)
-					set_wielded_item(player, itemstack, i) -- Update item texture and description.
+					local texture = set_shield_layers(itemstack, layers)
+					if texture then
+						shield_texture = texture
+					end
 				end
+				meta:set_string("mcl_shields:banner_texture", shield_texture)
+				set_wielded_item(player, itemstack, i)
 			end
 		end
 
@@ -603,7 +611,7 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 end
 
 local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
-	if not string.find(itemstack:get_name(), "mcl_shields:shield_") then
+	if not string.find(itemstack:get_name(), "^mcl_shields:shield_") then
 		return
 	end
 
@@ -626,11 +634,23 @@ local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	end
 	if not shield_stack or not banner_stack then return end
 
-	local b = mcl_banners
+	local b, e = mcl_banners, mcl_enchanting
 	local banner_meta = banner_stack:get_meta()
 	local layers = b.read_layers(banner_meta)
 	if #layers > b.max_craftable_layers then
 		return ItemStack("") -- Too many layers to be placed on a shield.
+	end
+
+	-- Data copy
+	local item_meta, shield_meta = itemstack:get_meta(), shield_stack:get_meta()
+	local banner_name, shield_name = banner_meta:get_string("name"), shield_meta:get_string("name")
+	if shield_name and shield_name ~= "" then
+		item_meta:set_string("name", shield_name)
+	elseif banner_name and banner_name ~= "" then
+		item_meta:set_string("name", banner_name)
+	end
+	if e.is_enchanted(shield_stack:get_name()) then
+		e.set_enchantments(itemstack, e.get_enchantments(shield_stack))
 	end
 	set_shield_layers(itemstack, layers)
 	itemstack:set_wear(shield_stack:get_wear())
