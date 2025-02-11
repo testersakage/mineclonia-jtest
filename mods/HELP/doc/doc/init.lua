@@ -163,7 +163,7 @@ function doc.mark_entry_as_revealed(playername, category_id, entry_id)
 	if not entry then
 		return
 	end
-	if doc.data.players[playername].stored_data.revealed[category_id] == nil then
+	if doc.data.players[playername] and doc.data.players[playername].stored_data.revealed and doc.data.players[playername].stored_data.revealed[category_id] == nil then
 		doc.data.players[playername].stored_data.revealed[category_id] = {} ---@diagnostic disable-line: need-check-nil
 		doc.data.players[playername].stored_data.revealed_count[category_id] = doc.get_entry_count(category_id) - doc.data.categories[category_id].hidden_count ---@diagnostic disable-line: need-check-nil
 	end
