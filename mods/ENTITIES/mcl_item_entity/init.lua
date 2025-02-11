@@ -512,7 +512,7 @@ minetest.register_entity(":__builtin:item", {
 		end
 		self._on_entity_step = stack:get_definition()._on_entity_step
 		self.itemstring = stack:to_string()
-		local s = 0.2 + 0.1 * (count / max_count)
+		local s = math.min(0.4, math.max(0.1, 0.2 + 0.1 * (count / max_count)))
 		local wield_scale = (def and type(def.wield_scale) == "table" and tonumber(def.wield_scale.x)) or 1
 		local c = s
 		s = s / wield_scale
