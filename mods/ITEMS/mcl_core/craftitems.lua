@@ -185,7 +185,7 @@ minetest.register_craftitem("mcl_core:apple_gold", {
 	_mcl_saturation = 9.6,
 	_placement_def = {
 		["mobs_mc:villager_zombie"] = "default",
-		inherit = "victuals",
+		inherit = "magic_victuals",
 	},
 })
 
