@@ -459,7 +459,22 @@ mcl_potions.register_effect({
 
 mcl_mobs.make_physics_factor_persistent ("mcl_potions:slow_falling")
 
-local function speed_to_fov_factor(factor)
+mcl_player.register_player_setting("mcl_potions:fov_effect_strength", {
+        type = "slider",
+	options = {
+		{ name = "weak", description = S("Weak") },
+		{ name = "strong", description = S("Strong") },
+	},
+	section = "Graphics",
+	short_desc = S("Potion FoV effect strength"),
+	long_desc = S("Select strength of the FoV change of the swiftness and slowness effects."),
+	ui_default = "weak",
+})
+
+local function speed_to_fov_factor(player, factor)
+	if mcl_player.get_player_setting(player, "mcl_potions:fov_effect_strength") == "strong" then
+		return factor
+	end
 	return factor ^ 0.2
 end
 
@@ -472,7 +487,7 @@ mcl_potions.register_effect({
 	end,
 	on_start = function(object, factor)
 		if object:is_player() then
-			playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", speed_to_fov_factor(1 + factor))
+			playerphysics.add_physics_factor(object, "fov", "mcl_potions:swiftness", speed_to_fov_factor(object, 1 + factor))
 		end
 		add_physics_factor (object, "speed", "movement_speed",
 				"mcl_potions:swiftness", 1 + factor)
@@ -512,7 +527,7 @@ mcl_potions.register_effect({
 	end,
 	on_start = function(object, factor)
 		if object:is_player() then
-			playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", speed_to_fov_factor(1 - factor))
+			playerphysics.add_physics_factor(object, "fov", "mcl_potions:slowness", speed_to_fov_factor(object, 1 - factor))
 		end
 		add_physics_factor (object, "speed", "movement_speed",
 				"mcl_potions:slowness", 1 - factor)
