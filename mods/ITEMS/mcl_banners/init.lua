@@ -101,8 +101,12 @@ function mcl_banners.update_description (itemstack, limit)
 	end
 	if mcl_enchanting.is_enchanted(itemname) then -- Enchanted shield
 		local enchantments = mcl_enchanting.get_enchantments(itemstack)
+		local old_name = name
 		for enchantment, level in pairs(enchantments) do
 			name = name .. "\n" .. mcl_enchanting.get_colorized_enchantment_description(enchantment, level)
+		end
+		if name ~= old_name then
+			name = name .. "\n"
 		end
 	end
 	local newdesc = mcl_banners.make_advanced_banner_description(name, layers, limit)
