@@ -737,6 +737,14 @@ local function reset_data(data)
 	data.items       = data.items_raw
 end
 
+local function get_item_recipes(item_name)
+	local recipes = core.get_all_craft_recipes(item_name) or {}
+	if custom_crafts[item_name] then
+		for _, v in pairs(custom_crafts[item_name]) do
+			recipes[#recipes + 1] = v
+		end
+	end
+
 	return recipes
 end
 
