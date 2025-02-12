@@ -220,12 +220,23 @@ local function get_player_data(name, init)
 	return player_data[name]
 end
 
+local function get_item_recipes(item_name)
+	local recipes = minetest.get_all_craft_recipes(item_name) or {}
+	if custom_crafts[item_name] then
+		for _, v in pairs(custom_crafts[item_name]) do
+			recipes[#recipes + 1] = v
+		end
+	end
+
+	return recipes
+end
+
 local function get_filtered_items(player)
 	local items, c = {}, 0
 
 	for i = 1, #init_items do
 		local item = init_items[i]
-		local recipes = core.get_all_craft_recipes(item)
+		local recipes = get_item_recipes(item)
 		local usages = usages_cache[item]
 
 		if recipes and #apply_recipe_filters(recipes, player) > 0 or
@@ -240,7 +251,7 @@ end
 
 local function get_recipes(item, data, player)
 	item = core.registered_aliases[item] or item
-	local recipes = core.get_all_craft_recipes(item)
+	local recipes = get_item_recipes(item)
 	local usages = usages_cache[item]
 
 	if recipes then
