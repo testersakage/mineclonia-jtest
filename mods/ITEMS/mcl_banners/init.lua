@@ -671,3 +671,14 @@ core.register_lbm({
 		respawn_banner_entity(pos, node)
 	end,
 })
+
+-- Update hanging banner to new offset and scale to avoid darkened by unlit block below.
+core.register_lbm({
+	label = "Update hanging banner",
+	name = "mcl_banners:resacle_hanging_banners",
+	run_at_every_load = false,
+	nodenames = {"mcl_banners:hanging_banner"},
+	action = function(pos, node)
+		respawn_banner_entity(pos, node, true)
+	end,
+})
