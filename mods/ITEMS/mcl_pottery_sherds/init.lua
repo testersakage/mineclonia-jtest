@@ -174,7 +174,7 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = { handy = 1, pickaxey = 1, dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1, not_in_creative_inventory = 1, _mcl_partial = 2, },
+	groups = { handy = 1, pickaxey = 1, dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1, not_in_creative_inventory = 1, pathfinder_partial = 2, },
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "",
 	_mcl_hardness = 0,
