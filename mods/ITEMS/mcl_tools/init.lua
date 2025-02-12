@@ -124,10 +124,14 @@ end
 local function get_tool_diggroups(materialdefs, toolname)
 	local diggroups = mcl_tools.commondefs[toolname].diggroups
 
-	for _, diggroup in pairs(diggroups) do
+	for groupname, diggroup in pairs(diggroups) do
 		diggroup.speed = materialdefs.speed
 		diggroup.level = materialdefs.level
 		diggroup.uses = toolname == "sword" and materialdefs.uses / 2 or materialdefs.uses
+		if groupname == "swordy_bamboo" then
+			diggroup.speed = 45
+			diggroup.level = 1
+		end
 	end
 
 	return diggroups
@@ -233,13 +237,6 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 
 	for tool, defs in pairs(tools) do
 		if mcl_tools.commondefs[tool] then
-			if tool == "sword" then
-				defs = table.merge(defs, {
-					_mcl_diggroups = {
-						swordy_bamboo = { speed = 45, level = 1, uses = materialdefs.uses }
-					},
-				})
-			end
 			register_tool(setname, materialdefs, tool, defs, overrides)
 		else
 			local msg = "[mcl_tools] mod '%s' trying to register unknown tool '%s' for set '%s'"
