@@ -221,7 +221,7 @@ local function get_player_data(name, init)
 end
 
 local function get_item_recipes(item_name)
-	local recipes = minetest.get_all_craft_recipes(item_name) or {}
+	local recipes = core.get_all_craft_recipes(item_name) or {}
 	if custom_crafts[item_name] then
 		for _, v in pairs(custom_crafts[item_name]) do
 			recipes[#recipes + 1] = v
@@ -761,7 +761,7 @@ local function get_init_items()
 								usages_cache[ingredient] = usages_cache[ingredient] or {}
 								table.insert(usages_cache[ingredient], recipe)
 							else
-								minetest.log("warning", "[mcl_craftguide] ingredient \"" .. ingredient .. "\" doesn't exist")
+								core.log("warning", "[mcl_craftguide] ingredient \"" .. ingredient .. "\" doesn't exist")
 							end
 						end
 					end
