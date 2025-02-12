@@ -63,7 +63,7 @@ minetest.register_node("mcl_honey:honey_block", {
 	tiles = {"mcl_honey_block_side.png"},
 	is_ground_content = false,
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or true,
-	groups = { handy = 1, deco_block = 1, fall_damage_add_percent = -80, _mcl_partial = 2, },
+	groups = { handy = 1, deco_block = 1, fall_damage_add_percent = -80, pathfinder_partial = 2, },
 	paramtype = "light",
 	drawtype = "nodebox",
 	node_box = {
