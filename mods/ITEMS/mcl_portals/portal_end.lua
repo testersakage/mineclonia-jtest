@@ -190,10 +190,8 @@ local function show_credits(player)
 end
 
 local function teleport_object(obj, target, original_dim)
-	core.after(0.1, function ()
-		obj:set_pos(target)
-		minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.05, max_hear_distance = 16}, true)
-	end)
+	obj:set_pos(target)
+	minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.05, max_hear_distance = 16}, true)
 
 	if obj:is_player() then
 		-- Look towards the main End island
