@@ -3,8 +3,9 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-09 12:25+0000\n"
-"Last-Translator: milklikecomputer <brilliunt7164@proton.me>\n"
+"PO-Revision-Date: 2025-02-12 13:57+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_enchanting/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -219,19 +220,19 @@ msgid "Inventory"
 msgstr "物品欄"
 
 msgid "@1 Enchantment Levels"
-msgstr ""
+msgstr "附魔等級 @1"
 
 msgid "Level requirement: @1"
-msgstr ""
+msgstr "等級花費：@1"
 
 msgid "@1 Lapis Lazuli"
-msgstr ""
+msgstr "青金石花費：@1"
 
 msgid "Enchant an item"
-msgstr ""
+msgstr "給物品附魔"
 
 msgid "<player> <enchantment> [<level>]"
-msgstr ""
+msgstr "<玩家> <附魔> [<等級>]"
 
 msgid "Usage: /enchant <player> <enchantment> [<level>]"
 msgstr ""
@@ -261,7 +262,7 @@ msgid "@1 can't be combined with @2."
 msgstr ""
 
 msgid "Enchanting succeded."
-msgstr ""
+msgstr "成功附魔。"
 
 msgid "Forcefully enchant an item"
 msgstr ""
@@ -276,10 +277,10 @@ msgid "'@1' is not a valid number."
 msgstr ""
 
 msgid "Enchanted Book"
-msgstr ""
+msgstr "附魔書"
 
 msgid "Enchanting Table"
-msgstr ""
+msgstr "附魔台"
 
 msgid "Spend experience, and lapis to enchant various items."
 msgstr ""
@@ -306,4 +307,4 @@ msgid "After finally selecting your enchantment; left-click on the selection, an
 msgstr ""
 
 msgid "Enchant"
-msgstr ""
+msgstr "附魔"
