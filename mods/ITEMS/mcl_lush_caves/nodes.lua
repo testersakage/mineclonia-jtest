@@ -296,16 +296,16 @@ local function register_leaves(subname, def)
 	def.palette = ""
 	def.paramtype2 = "none"
 	local d = mcl_trees.generate_leaves_def(
-		"mcl_lush_caves:", subname, def,
+		"mcl_trees:", subname, def,
 		{"mcl_lush_caves:azalea_flowering", "mcl_lush_caves:azalea"}, false, {20, 16, 12, 10})
 	d.leaves_def.groups.biomecolor = nil
 	d.orphan_leaves_def.groups.biomecolor = nil
-	minetest.register_node(d["leaves_id"], d["leaves_def"])
-	minetest.register_node(d["orphan_leaves_id"], d["orphan_leaves_def"])
+	minetest.register_node(":"..d["leaves_id"], d["leaves_def"])
+	minetest.register_node(":"..d["orphan_leaves_id"], d["orphan_leaves_def"])
 end
 
 register_leaves(
-	"azalea_leaves",
+	"leaves_azalea",
 	{
 		description = S("Azalea Leaves"),
 		_doc_items_longdesc = S("Leaves of an Azalea tree"),
@@ -315,7 +315,7 @@ register_leaves(
 )
 
 register_leaves(
-	"azalea_leaves_flowering",
+	"leaves_azalea_flowering",
 	{
 		description = S("Flowering Azalea Leaves"),
 		_doc_items_longdesc = S("The Flowering Leaves of an Azalea tree"),
@@ -324,6 +324,8 @@ register_leaves(
 	}
 )
 
+core.register_alias("mcl_lush_caves:azalea_leaves", "mcl_trees:leaves_azalea")
+core.register_alias("mcl_lush_caves:azalea_leaves_flowering", "mcl_trees:leaves_azalea_flowering")
 
 minetest.register_node("mcl_lush_caves:spore_blossom", {
 	description = S("Spore blossom"),
