@@ -216,7 +216,10 @@ end
 function mcl_itemframes.tpl_entity:on_step(dtime)
 	local def = minetest.registered_items[self._item]
 	if def and def._on_entity_step then
-		def._on_entity_step(self, dtime)
+		local r = def._on_entity_step(self, dtime, self._item)
+		if type(r) == "string" then
+			self._item = r
+		end
 	end
 	self._timer = (self._timer and self._timer - dtime) or 1
 	if self._timer > 0 then return end
