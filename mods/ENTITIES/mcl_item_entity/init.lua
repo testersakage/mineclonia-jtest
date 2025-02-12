@@ -692,7 +692,10 @@ minetest.register_entity(":__builtin:item", {
 		end
 
 		if self._on_entity_step then
-			self:_on_entity_step(dtime, moveresult)
+			local r = self:_on_entity_step(dtime, self.itemstring)
+			if type(r) == "string" then
+				self.itemstring = r
+			end
 		end
 
 		-- If no collector was found for a long enough time, declare the magnet as disabled
