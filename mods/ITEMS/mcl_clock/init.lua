@@ -48,7 +48,6 @@ minetest.register_craftitem("mcl_clock:clock", {
 		m:set_string("inventory_image", mcl_clock.images[mcl_clock.get_clock_frame() + 1])
 		m:set_string("wield_image", mcl_clock.images[mcl_clock.get_clock_frame() + 1])
 		self.object:set_properties({
-			visual = "item",
 			wield_item = stack:to_string()
 		})
 	end
