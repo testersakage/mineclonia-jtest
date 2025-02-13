@@ -596,6 +596,14 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		_shield_color_key = colorkey,
 		_mcl_wieldview_item = "",
 		_mcl_generate_description = mcl_banners.update_description,
+		_on_set_item_entity = function (stack)
+			local meta = stack:get_meta()
+			local pattern = meta:get_string("inventory_overlay")
+			if pattern and pattern ~= "" then
+				meta:set_string("wield_overlay", pattern)
+			end
+			return stack, {wield_item = stack:to_string()}
+		end,
 	})
 
 	local banner = "mcl_banners:banner_item_" .. color
