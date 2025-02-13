@@ -166,13 +166,6 @@ function minetest.handle_node_drops(pos, drops, digger)
 	local diggroups = tooldef and tooldef._mcl_diggroups
 	local shearsy_level = diggroups and diggroups.shearsy and diggroups.shearsy.level
 
-	--[[ Special node drops when dug by shears by reading _mcl_shears_drop or with a silk touch tool reading _mcl_silk_touch_drop
-	from the node definition.
-	Definition of _mcl_shears_drop / _mcl_silk_touch_drop:
-	* true: Drop itself when dug by shears / silk touch tool
-	* table: Drop every itemstring in this table when dug by shears _mcl_silk_touch_drop
-	]]
-
 	local enchantments = tool and mcl_enchanting.get_enchantments(tool)
 
 	local silk_touch_drop = false
