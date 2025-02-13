@@ -254,8 +254,12 @@ function mcl_portals.end_portal_teleport(pos)
 				return
 			end
 
-			mcl_portals.end_teleport(obj, objpos)
-			awards.unlock(obj:get_player_name(), "mcl:enterEndPortal")
+			if obj:is_player() and mcl_player.players[obj].attached == true then
+				-- do nothing if player is attached to something in portal
+			else
+				mcl_portals.end_teleport(obj, objpos)
+				awards.unlock(obj:get_player_name(), "mcl:enterEndPortal")
+			end
 		end
 	end
 end
