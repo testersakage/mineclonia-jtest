@@ -445,7 +445,7 @@ core.register_node("mcl_banners:hanging_banner", {
 })
 
 -- Banner items. Comes in 16 base colors, with patterned texture dynamically generated.
--- TODO: Combine the items into only 1 item.
+-- Combine the items into only 1 item was opposed by erle as it hinders adding banner to map.
 local function init_banner_registration ()
 	local mod_wool = core.get_modpath("mcl_core") and core.get_modpath("mcl_wool")
 	local mod_doc = core.get_modpath("doc")
@@ -576,7 +576,9 @@ local function init_banner_registration ()
 
 				return itemstack
 			end,
-
+			_on_set_item_entity = function (stack)
+				return stack, {wield_item = stack:to_string()}
+			end,
 			_mcl_generate_description = mcl_banners.update_description,
 		})
 

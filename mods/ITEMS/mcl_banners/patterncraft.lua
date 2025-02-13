@@ -300,7 +300,6 @@ end
 -- Deduce whether the provided dye pattern is actually valid, and set output depending on predict or not.
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
 	local output_name = itemstack:get_name()
-	-- TODO: Update name check after meta-texture
 	if output_name == "" or output_name:sub(1,19) ~= "mcl_banners:banner_" then return end
 	local craftsize = player:get_inventory():get_size("craft")
 	if craftsize < 9 then return ItemStack("") end -- Require crafting table.
