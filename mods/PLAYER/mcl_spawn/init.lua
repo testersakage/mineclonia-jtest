@@ -206,6 +206,7 @@ end
 function mcl_spawn.spawn(player)
 	local pos, in_bed = mcl_spawn.get_player_spawn_pos(player)
 	if in_bed then
+		player:set_velocity(vector.zero())
 		player:set_pos(pos)
 		return true
 	end
@@ -226,6 +227,7 @@ function mcl_spawn.spawn(player)
 			end
 		end
 
+		player:set_velocity(vector.zero())
 		player:set_pos(pos:offset(0, 0.5, 0))
 	end)
 	return false
