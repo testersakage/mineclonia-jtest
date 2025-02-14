@@ -156,6 +156,7 @@ minetest.register_entity("mcl_shields:shield_entity", {
 			if meta_texture and meta_texture ~= "" then
 				shield_texture = meta_texture
 			else
+				meta:set_string("wield_overlay", "") -- Clear inner face (wield_texture) to show raw shield.
 				local custom_texture = meta:get_string("mcl_shields:shield_custom_pattern_texture")
 				if custom_texture and custom_texture ~= "" then -- Parse layers from custom standalone pattern texture.
 					shield_texture = custom_texture
@@ -580,9 +581,10 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		_mcl_generate_description = mcl_banners.update_description,
 		_on_set_item_entity = function (stack)
 			local meta = stack:get_meta()
+			meta:set_string("mcl_shields:banner_texture", "") -- Force texture rebuild to clear wield texture.
 			local pattern = meta:get_string("inventory_overlay")
 			if pattern and pattern ~= "" then
-				meta:set_string("wield_overlay", pattern)
+				meta:set_string("wield_overlay", pattern) -- Set texture of dropped item.
 			end
 			return stack, {wield_item = stack:to_string()}
 		end,
