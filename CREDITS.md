@@ -47,7 +47,7 @@
 * MrRar
 * kabou
 * FaceDeer
-* Nils Dagsson Moskopp
+* Ælla Chiana Moskopp
 * ChrisPHP
 * 3raven
 * ShadowRoi
