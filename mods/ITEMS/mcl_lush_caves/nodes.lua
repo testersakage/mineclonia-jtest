@@ -88,10 +88,8 @@ minetest.register_node("mcl_lush_caves:moss", {
 })
 
 minetest.register_node("mcl_lush_caves:moss_carpet", {
-	description = S("Moss carpet"),
+	description = S("Moss Carpet"),
 	_doc_items_longdesc = S("A moss carpet is a flat variant of the moss block."),
-	_doc_items_entry_name = S("Moss Carpet"),
-	_doc_items_hidden = false,
 	is_ground_content = false,
 	tiles = {"mcl_lush_caves_moss_carpet.png"},
 	wield_image ="mcl_lush_caves_moss_carpet.png",
