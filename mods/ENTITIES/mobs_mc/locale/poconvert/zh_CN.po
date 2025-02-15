@@ -202,9 +202,6 @@ msgstr "小炽足兽"
 msgid "Tropical Fish"
 msgstr "热带鱼"
 
-msgid "Tropical fish"
-msgstr "热带鱼"
-
 msgid "Vex"
 msgstr "恼鬼"
 

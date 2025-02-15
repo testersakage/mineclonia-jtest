@@ -202,9 +202,6 @@ msgstr "Lavagante Bebé"
 msgid "Tropical Fish"
 msgstr "Pez Tropical"
 
-msgid "Tropical fish"
-msgstr "Pez tropical"
-
 msgid "Vex"
 msgstr "Vex"
 

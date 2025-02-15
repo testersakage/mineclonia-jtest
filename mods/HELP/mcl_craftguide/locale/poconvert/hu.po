@@ -124,9 +124,6 @@ msgstr "Nincs megjeleníthető tárgy"
 msgid "Collect items to reveal more recipes"
 msgstr "Gyűjts tárgyakat további receptek felfedéséhez"
 
-msgid "Invalid crafting ingredient: \"@1\" (dosent exist)"
-msgstr "Érvénytelen barkácsolási hozzávaló: \"@1\" (nem létezik)"
-
 msgid "This item can be repaired at an anvil with: @1."
 msgstr "Ez a tárgy megjavítható egy üllőnél, ezzel: @1."
 

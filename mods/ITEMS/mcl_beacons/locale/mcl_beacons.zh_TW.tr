@@ -1,9 +1,9 @@
 # textdomain: mcl_beacons
-Unavailable=
+Unavailable=不可用
 Active=
 Beacon=烽火台
-Primary Power:=
-Secondary Power:=
+Primary Power:=主效果：
+Secondary Power:=次效果：
 Swiftness=
 Haste=
 Resistance=

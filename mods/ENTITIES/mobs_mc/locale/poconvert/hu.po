@@ -202,9 +202,6 @@ msgstr "Álomfutócska"
 msgid "Tropical Fish"
 msgstr "Trópusi Hal"
 
-msgid "Tropical fish"
-msgstr "Trópusi hal"
-
 msgid "Vex"
 msgstr "Bosszancs"
 

@@ -202,9 +202,6 @@ msgstr "子供のストライダー"
 msgid "Tropical Fish"
 msgstr "熱帯魚"
 
-msgid "Tropical fish"
-msgstr "熱帯魚"
-
 msgid "Vex"
 msgstr "ヴェックス"
 

@@ -25,13 +25,10 @@ msgstr ""
 msgid "Moss is a green block found in lush caves"
 msgstr ""
 
-msgid "Moss carpet"
+msgid "Moss Carpet"
 msgstr ""
 
 msgid "A moss carpet is a flat variant of the moss block."
-msgstr ""
-
-msgid "Moss Carpet"
 msgstr ""
 
 msgid "Hanging roots"

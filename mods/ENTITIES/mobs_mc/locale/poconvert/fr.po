@@ -202,9 +202,6 @@ msgstr "Bébé arpenteur"
 msgid "Tropical Fish"
 msgstr "Poisson Tropical"
 
-msgid "Tropical fish"
-msgstr "Poisson tropical"
-
 msgid "Vex"
 msgstr "Vex"
 

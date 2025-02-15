@@ -202,9 +202,6 @@ msgstr "幼體熾足獸"
 msgid "Tropical Fish"
 msgstr "熱帶魚"
 
-msgid "Tropical fish"
-msgstr ""
-
 msgid "Vex"
 msgstr "惱鬼"
 

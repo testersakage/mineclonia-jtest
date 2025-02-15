@@ -124,9 +124,6 @@ msgstr "無項目可顯示"
 msgid "Collect items to reveal more recipes"
 msgstr "搜羅物品以揭露更多配方。"
 
-msgid "Invalid crafting ingredient: \"@1\" (dosent exist)"
-msgstr "無效配方：材料“@1”不存在。"
-
 msgid "This item can be repaired at an anvil with: @1."
 msgstr "此物品可以用鐵砧消費@1修復。"
 
