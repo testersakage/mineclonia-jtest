@@ -532,8 +532,8 @@ function villager_base:set_trade (player, inv, id)
 
 	-- Move items from the player's inventory into the input
 	-- slots.
-	move_stack (p_inv, "main", inv, "input", wanted1, 1)
-	move_stack (p_inv, "main", inv, "input", wanted2, 2)
+	move_stack (p_inv, "main", inv, "input", wanted1, 1, pos)
+	move_stack (p_inv, "main", inv, "input", wanted2, 2, pos)
 end
 
 function villager_base:update_offer (inv, player, idx, sounds)
