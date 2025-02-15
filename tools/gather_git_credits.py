@@ -16,8 +16,8 @@ SINCE_ACTIVE = "six months ago ago"
 # all time, for "Previous Contributors"
 SINCE_PREVIOUS = "1970"
 
-CUTOFF_ACTIVE = 150
-CUTOFF_PREVIOUS = 1050
+CUTOFF_ACTIVE = 100
+CUTOFF_PREVIOUS = 500
 
 def load(since):
 	points = defaultdict(int)
