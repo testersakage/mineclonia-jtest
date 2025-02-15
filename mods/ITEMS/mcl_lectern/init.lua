@@ -21,7 +21,7 @@ local function get_formspec(text, title, author)
 	end
 	fs = fs .."textarea[0.75,1.24;7.20,7.5;;" .. F(text or "") .. ";]" ..
 	"button_exit[1.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"..
-	"button[4.25,7.95;3,1;take;" .. F(S("Take Book")) .. "]"
+	"button_exit[4.25,7.95;3,1;take;" .. F(S("Take Book")) .. "]"
 	return fs
 end
 
