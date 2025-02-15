@@ -142,12 +142,8 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 				inv:add_item("main", is)
 			end
 			node.name = "mcl_lectern:lectern"
-			mcl_redstone.swap_node(pos,node)
-			nm:set_string("formspec","")
-			nm:set_string("infotext","")
-			nm:set_string("pages","")
-			nm:set_string("book_item","")
-			nm:set_string("page","")
+			core.set_node(pos, node)
+			mcl_redstone.swap_node(pos, node)
 		elseif fields and fields.ok then
 			-- simulate a page turn
 			-- TODO: actually implement multi page books
