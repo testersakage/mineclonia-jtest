@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-11 15:05+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_banners/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "White Banner"
 msgstr "白色の旗"
@@ -110,7 +112,7 @@ msgid "Light Blue"
 msgstr "空色"
 
 msgid "Banner"
-msgstr ""
+msgstr "旗"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns using a lot of dye in crafting."
 msgstr "旗は、背の高いカラフルな装飾ブロックです。床や壁に配置できます。クラフトで染料を多用すると、さまざまな模様のエンブレムが作れます。"
@@ -188,10 +190,10 @@ msgid "@1 Thing Charge"
 msgstr "@1 何かの模様"
 
 msgid "@1 Globe Charge"
-msgstr ""
+msgstr "@1地球の模様"
 
 msgid "@1 Piglin Charge"
-msgstr ""
+msgstr "@1ブタの鼻の模様"
 
 msgid "@1 Lozenge"
 msgstr "@1 菱形"
@@ -248,20 +250,19 @@ msgid "@1 Chevron Inverted"
 msgstr "@1 上に逆三角形"
 
 msgid "@1 Base Indented"
-msgstr "@1 下に波形 "
+msgstr "@1 下に波形"
 
 msgid "@1 Chief Indented"
 msgstr "@1 上に波形"
 
 msgid "@1 Flow"
-msgstr ""
+msgstr "@1渦巻き模様"
 
 msgid "@1 Guster"
-msgstr ""
+msgstr "@1風巻く者の模様"
 
 msgid "And one additional layer"
 msgstr "さらにレイヤーを1枚追加"
 
 msgid "And @1 additional layers"
 msgstr "さらにレイヤーを@1枚追加"
-

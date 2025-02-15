@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_enchanting x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-12 13:57+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_enchanting/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Bane of Arthropods"
 msgstr "節肢剋星"
@@ -158,58 +160,58 @@ msgid "Trident launches player with itself when thrown. Works only in water or r
 msgstr "投擲三叉戟時，三叉戟會帶著玩家一起飛出。只能在水中或雨中使用。"
 
 msgid "Sharpness"
-msgstr ""
+msgstr "鋒利"
 
 msgid "Increases damage."
-msgstr ""
+msgstr "增加攻擊傷害。"
 
 msgid "Silk Touch"
-msgstr ""
+msgstr "絲綢之觸"
 
 msgid "Mined blocks drop themselves."
-msgstr ""
+msgstr "使被挖掘的方塊掉落自身的方塊物品。"
 
 msgid "Smite"
-msgstr ""
+msgstr "不死剋星"
 
 msgid "Increases damage to undead mobs."
-msgstr ""
+msgstr "對不死生物造成額外傷害。"
 
 msgid "Soul Speed"
-msgstr ""
+msgstr "靈魂疾走"
 
 msgid "Increases walking speed on soul sand."
-msgstr ""
+msgstr "提高玩家在靈魂砂和靈魂土上的移動速度。"
 
 msgid "Sweeping Edge"
-msgstr ""
+msgstr "橫掃之刃"
 
 msgid "Increases sweeping attack damage."
-msgstr ""
+msgstr "增加橫掃攻擊的傷害。"
 
 msgid "Unbreaking"
-msgstr ""
+msgstr "耐久"
 
 msgid "Increases item durability."
-msgstr ""
+msgstr "降低物品耐久度消耗機率。"
 
 msgid "Density"
-msgstr ""
+msgstr "緻密"
 
 msgid "Increases mace damage when falling."
-msgstr ""
+msgstr "增加重錘下落攻擊的傷害。"
 
 msgid "Breach"
-msgstr ""
+msgstr "破甲"
 
 msgid "Reduces target's armor effectiveness."
-msgstr ""
+msgstr "降低目標的護甲效果。"
 
 msgid "Wind Burst"
-msgstr ""
+msgstr "風爆"
 
 msgid "Emits a burst of wind from a mace smash attack."
-msgstr ""
+msgstr "使重錘攻擊後產生風爆。"
 
 msgid "Unknown Enchantment"
 msgstr ""
@@ -218,19 +220,19 @@ msgid "Inventory"
 msgstr "物品欄"
 
 msgid "@1 Enchantment Levels"
-msgstr ""
+msgstr "附魔等級 @1"
 
 msgid "Level requirement: @1"
-msgstr ""
+msgstr "等級花費：@1"
 
 msgid "@1 Lapis Lazuli"
-msgstr ""
+msgstr "青金石花費：@1"
 
 msgid "Enchant an item"
-msgstr ""
+msgstr "給物品附魔"
 
 msgid "<player> <enchantment> [<level>]"
-msgstr ""
+msgstr "<玩家> <附魔> [<等級>]"
 
 msgid "Usage: /enchant <player> <enchantment> [<level>]"
 msgstr ""
@@ -260,7 +262,7 @@ msgid "@1 can't be combined with @2."
 msgstr ""
 
 msgid "Enchanting succeded."
-msgstr ""
+msgstr "成功附魔。"
 
 msgid "Forcefully enchant an item"
 msgstr ""
@@ -275,10 +277,10 @@ msgid "'@1' is not a valid number."
 msgstr ""
 
 msgid "Enchanted Book"
-msgstr ""
+msgstr "附魔書"
 
 msgid "Enchanting Table"
-msgstr ""
+msgstr "附魔台"
 
 msgid "Spend experience, and lapis to enchant various items."
 msgstr ""
@@ -305,5 +307,4 @@ msgid "After finally selecting your enchantment; left-click on the selection, an
 msgstr ""
 
 msgid "Enchant"
-msgstr ""
-
+msgstr "附魔"

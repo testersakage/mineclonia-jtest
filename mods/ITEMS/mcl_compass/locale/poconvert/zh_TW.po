@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_compass x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-10 19:58+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_compass/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Compass"
 msgstr "羅盤"
@@ -26,13 +28,13 @@ msgid "A Compass always points to the world spawn point when the player is in th
 msgstr "當玩家位於主世界時，羅盤會指向世界生成點。在其他維度，它會隨機旋轉。"
 
 msgid "Lodestone Compass"
-msgstr "磁石羅盤"
+msgstr "定位磁石"
 
 msgid "Points to a lodestone"
-msgstr "指向一塊磁石"
+msgstr "指向一塊定位石"
 
 msgid "Lodestone compasses resemble regular compasses, but they point to a specific lodestone."
-msgstr "磁石羅盤類似於一般羅盤，但是它們指向特定的磁石。"
+msgstr "定位羅盤會持續指向特定的定位石。"
 
 msgid "A Lodestone compass can be made from an ordinary compass by using it on a lodestone.  After becoming a lodestone compass, it always points to its linked lodestone, provided that they are in the same dimension.  If not in the same dimension, the lodestone compass spins randomly, similarly to a regular compass when outside the overworld.  A lodestone compass can be relinked with another lodestone."
 msgstr ""
@@ -50,5 +52,4 @@ msgid "Recovery Compasses always point to the location of your last death, in ca
 msgstr ""
 
 msgid "Lodestone"
-msgstr "磁石"
-
+msgstr "定位石"

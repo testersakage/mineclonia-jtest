@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_candles x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-02-11 15:05+0000\n"
+"Last-Translator: ellesheepy <ellesheepy@users.noreply.translate.codeberg.org>"
+"\n"
+"Language-Team: Japanese <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_candles/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."
 msgstr ""
@@ -26,50 +28,49 @@ msgid "Cake"
 msgstr "ケーキ"
 
 msgid "Black Candle"
-msgstr ""
+msgstr "黒色のキャンドル"
 
 msgid "Blue Candle"
-msgstr ""
+msgstr "青色のキャンドル"
 
 msgid "Brown Candle"
-msgstr ""
+msgstr "茶色のキャンドル"
 
 msgid "Cyan Candle"
-msgstr ""
+msgstr "青緑色のキャンドル"
 
 msgid "Green Candle"
-msgstr ""
+msgstr "緑色のキャンドル"
 
 msgid "Grey Candle"
-msgstr ""
+msgstr "灰色のキャンドル"
 
 msgid "Light Blue Candle"
-msgstr ""
+msgstr "空色のキャンドル"
 
 msgid "Light Grey Candle"
-msgstr ""
+msgstr "薄灰色のキャンドル"
 
 msgid "Lime Candle"
-msgstr ""
+msgstr "黄緑色のキャンドル"
 
 msgid "Magenta Candle"
-msgstr ""
+msgstr "赤紫色のキャンドル"
 
 msgid "Orange Candle"
-msgstr ""
+msgstr "橙色のキャンドル"
 
 msgid "Pink Candle"
-msgstr ""
+msgstr "桃色のキャンドル"
 
 msgid "Purple Candle"
-msgstr ""
+msgstr "紫色のキャンドル"
 
 msgid "Red Candle"
-msgstr ""
+msgstr "赤色のキャンドル"
 
 msgid "White Candle"
-msgstr ""
+msgstr "白色のキャンドル"
 
 msgid "Yellow Candle"
-msgstr ""
-
+msgstr "黄色のキャンドル"
