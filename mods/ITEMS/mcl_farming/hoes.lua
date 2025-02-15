@@ -48,8 +48,11 @@ local hoe_common_defs = {
 		}
 	},
 	_placement_def = {
-		["mcl_farmland:soil"] = "default",
-		["mcl_farmland:soil_wet"] = "default",
+		["mcl_lush_caves:rooted_dirt"] = "default",
+		["mcl_core:dirt_with_grass"] = "default",
+		["mcl_core:grass_path"] = "default",
+		["mcl_core:dirt"] = "default",
+		["mcl_core:coarse_dirt"] = "default",
 		inherit = "placeable_on_actionable",
 	},
 }
