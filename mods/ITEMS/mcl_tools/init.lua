@@ -179,7 +179,8 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		on_place = mcl_tools.tool_place_funcs[toolname],
 		sound = { breaks = "default_tool_breaks" },
 		wield_scale = wield_scale,
-		_placement_def = "placeable_on_actionable",
+		_placement_def = commondefs._placement_def
+			or "placeable_on_actionable",
 	}, tooldefs, overrides)
 
 	minetest.register_tool(itemstring, tooldefs)
