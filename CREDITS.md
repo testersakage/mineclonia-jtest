@@ -57,6 +57,12 @@
 * laireia
 * Eliy21
 * ROllerozxa
+* BlockMen
+* debiankaios
+* debian044
+* zitanyang
+* Code-Sploit
+* Rootyjr
 
 ## Original Mod Authors
 * Wuzzy
