@@ -73,6 +73,10 @@ mcl_trees.register_wood("bamboo",{
 	},
 })
 
+if minetest.registered_nodes["mcl_trees:stripped_bamboo"] then
+	minetest.registered_nodes["mcl_trees:stripped_bamboo"]._mcl_crafting_output = nil
+end
+
 minetest.register_abm({
 	label = "Bamboo growth",
 	nodenames = {"group:bamboo_tree"},
