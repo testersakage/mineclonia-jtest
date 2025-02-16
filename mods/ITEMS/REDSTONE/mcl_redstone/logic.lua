@@ -296,38 +296,9 @@ function mcl_redstone.update_node(pos)
 	mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = pos
 end
 
--- Piston pusher nodes calls this during init to avoid circuits stopping if a
--- piston was extended just before a server restart. It is not a clean solution
--- but it works.
-function mcl_redstone._update_neighbours(pos, oldnode, newnode)
-	update_neighbours(pos, oldnode, newnode)
-	if  (oldnode and action_tab[oldnode.name])
-			or (newnode and action_tab[newnode.name]) then
-		local callbacks = {}
-
-		for _, func in pairs(oldnode and action_tab[oldnode.name] or {}) do
-			callbacks[func] = true
-		end
-		for _, func in pairs(newnode and action_tab[newnode.name] or {}) do
-			callbacks[func] = true
-		end
-
-		for func, _ in pairs(callbacks) do
-			func(pos, oldnode, newnode)
-		end
-	end
-end
-
-function mcl_redstone.swap_node(pos, node)
-	local oldnode = minetest.get_node(pos)
-	if not node then print(debug.traceback("trying to place nil")) end
-	minetest.swap_node(pos, node)
-	mcl_redstone._update_neighbours(pos, oldnode, node)
-end
-
 -- Update neighbouring wires and components at pos. Oldnode is the previous
 -- node at the position.
-function update_neighbours(pos, oldnode, newnode)
+local function update_neighbours(pos, oldnode, newnode)
 	minetest.load_area(pos:subtract(20), pos:add(20))
 
 	local fill_queue = mcl_util.queue()
@@ -380,6 +351,35 @@ function update_neighbours(pos, oldnode, newnode)
 	end
 
 	propagate_wire(clear_queue, fill_queue)
+end
+
+-- Piston pusher nodes calls this during init to avoid circuits stopping if a
+-- piston was extended just before a server restart. It is not a clean solution
+-- but it works.
+function mcl_redstone._update_neighbours(pos, oldnode, newnode)
+	update_neighbours(pos, oldnode, newnode)
+	if  (oldnode and action_tab[oldnode.name])
+			or (newnode and action_tab[newnode.name]) then
+		local callbacks = {}
+
+		for _, func in pairs(oldnode and action_tab[oldnode.name] or {}) do
+			callbacks[func] = true
+		end
+		for _, func in pairs(newnode and action_tab[newnode.name] or {}) do
+			callbacks[func] = true
+		end
+
+		for func, _ in pairs(callbacks) do
+			func(pos, oldnode, newnode)
+		end
+	end
+end
+
+function mcl_redstone.swap_node(pos, node)
+	local oldnode = minetest.get_node(pos)
+	if not node then print(debug.traceback("trying to place nil")) end
+	minetest.swap_node(pos, node)
+	mcl_redstone._update_neighbours(pos, oldnode, node)
 end
 
 local function opaque_update_neighbours(pos, added)
