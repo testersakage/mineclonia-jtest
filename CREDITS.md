@@ -23,6 +23,7 @@
 * the-real-herowl
 * nooneatall
 * nixnoxus
+* Ælla Chiana Moskopp
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -47,7 +48,6 @@
 * MrRar
 * kabou
 * FaceDeer
-* Ælla Chiana Moskopp
 * ChrisPHP
 * 3raven
 * ShadowRoi
