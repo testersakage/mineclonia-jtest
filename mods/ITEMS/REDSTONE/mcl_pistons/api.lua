@@ -65,6 +65,8 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		if minetest.get_item_group(nn.name, "dig_by_piston") == 1 then
 			-- if we want the node to drop, e.g. sugar cane, do not count towards push limit
 			table.insert(dig_nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
+		elseif np == piston_pos then
+			-- do not count pushing piston towards push limit
 		else
 			if not def.buildable_to then
 				table.insert(nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
