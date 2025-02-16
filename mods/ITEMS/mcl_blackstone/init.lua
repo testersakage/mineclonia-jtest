@@ -47,7 +47,7 @@ minetest.register_node("mcl_blackstone:nether_gold", {
 	description = S("Nether Gold Ore"),
 	tiles = {"mcl_nether_gold_ore.png"},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	groups = {cracky = 3, pickaxey=1, material_stone=1, xp=1, building_block=1, piglin_protected=1},
+	groups = {cracky = 3, pickaxey=1, material_stone=1, xp=1, building_block=1, piglin_protected=1, blast_furnace_smeltable = 1},
 	drop = {
 		max_items = 1,
 		items = {
