@@ -39,7 +39,7 @@ minetest.register_node("mcl_nether:quartz_ore", {
 	description = S("Nether Quartz Ore"),
 	_doc_items_longdesc = S("Nether quartz ore is an ore containing nether quartz. It is commonly found around netherrack in the Nether."),
 	tiles = {"mcl_nether_quartz_ore.png"},
-	groups = {pickaxey=1, building_block=1, material_stone=1, xp=3},
+	groups = {pickaxey=1, building_block=1, material_stone=1, xp=3, blast_furnace_smeltable = 1},
 	drop = "mcl_nether:quartz",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 3,
