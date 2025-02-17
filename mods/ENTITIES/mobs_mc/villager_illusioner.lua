@@ -233,41 +233,29 @@ function illusioner:is_armor_texture_slot (i)
 end
 
 function illusioner:set_bone_override (name, rot)
-	local object = self.object
-	if object.set_bone_override then
-		object:set_bone_override (name, {
-			  rotation = {
-				  vec = rot,
-				  absolute = true,
-				  interpolation = 0.1,
-			  },
-		})
-	else
-		local rot = vector.apply (rot, math.deg)
-		self.object:set_bone_position (name, nil, rot)
-	end
+	self.object:set_bone_override (name, {
+		  rotation = {
+			  vec = rot,
+			  absolute = true,
+			  interpolation = 0.1,
+		  },
+	})
 end
 
 function illusioner:set_bone_position (name, pos, yaw)
-	local object = self.object
-	if object.set_bone_override then
-		local rotation = vector.new (0, -yaw, 0)
-		object:set_bone_override (name, {
-			  position = {
-				  vec = pos,
-				  absolute = true,
-				  interpolation = 0.1,
-			  },
-			  rotation = {
-				  vec = rotation,
-				  absolute = true,
-				  interpolation = 0.1,
-			  },
-		})
-	else
-		local rotation = vector.new (0, -math.deg (yaw), 0)
-		self.object:set_bone_position (name, pos, rotation)
-	end
+	local rotation = vector.new (0, -yaw, 0)
+	self.object:set_bone_override (name, {
+		  position = {
+			  vec = pos,
+			  absolute = true,
+			  interpolation = 0.1,
+		  },
+		  rotation = {
+			  vec = rotation,
+			  absolute = true,
+			  interpolation = 0.1,
+		  },
+	})
 end
 
 local ZERO = vector.new (0, 6.61948, 0)

@@ -205,15 +205,7 @@ end
 
 function shulker:attach_to_face (facedir)
 	local override = shulker_attachment_parameters[facedir]
-	if self.object.set_bone_override then
-		self.object:set_bone_override ("root", override)
-	else
-		local pos = override.position
-			and override.position.vec
-			or vector.zero ()
-		local rot = vector.apply (override.rotation.vec, math.deg)
-		self.object:set_bone_position ("root", pos, rot)
-	end
+	self.object:set_bone_override ("root", override)
 	self._face = facedir
 	self:extend_cbox_to (0)
 	self._cbox_retract_delay = 0
@@ -462,40 +454,31 @@ function shulker:shulker_look_at (self_pos, target_pos)
 	local yaw = math.atan2 (proj_orth, proj_opposite) - math.pi / 2
 	local rot = vector.new (0, yaw, 0)
 
-	if self.object.set_bone_override then
-		self.object:set_bone_override ("head", {
-		       position = {
-			       vec = HEAD_POS,
-			       absolute = true,
-		       },
-		       rotation = {
-			       vec = rot,
-			       absolute = true,
-			       interpolation = 0.2,
-		       },
-		})
-	else
-		rot.y = math.deg (rot.y)
-		self.object:set_bone_position ("head", HEAD_POS, rot)
-	end
+	self.object:set_bone_override ("head", {
+		   position = {
+			   vec = HEAD_POS,
+			   absolute = true,
+		   },
+		   rotation = {
+			   vec = rot,
+			   absolute = true,
+			   interpolation = 0.2,
+		   },
+	})
 end
 
 function shulker:stop_looking ()
-	if self.object.set_bone_override then
-		self.object:set_bone_override ("head", {
-		       position = {
-			       vec = HEAD_POS,
-			       absolute = true,
-		       },
-		       rotation = {
-			       vec = vector.zero (),
-			       absolute = true,
-			       interpolation = 0.2,
-		       },
-		})
-	else
-		self.object:set_bone_position ("head", HEAD_POS, vector.zero ())
-	end
+	self.object:set_bone_override ("head", {
+		   position = {
+			   vec = HEAD_POS,
+			   absolute = true,
+		   },
+		   rotation = {
+			   vec = vector.zero (),
+			   absolute = true,
+			   interpolation = 0.2,
+		   },
+	})
 end
 
 ------------------------------------------------------------------------

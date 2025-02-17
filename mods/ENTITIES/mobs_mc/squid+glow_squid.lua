@@ -173,18 +173,13 @@ local pow_by_step = mcl_mobs.pow_by_step
 function squid:set_body_roll (roll)
 	-- Squid must be rotated around their body bone, not the
 	-- bottom of their collision box.
-	if self.object.set_bone_override then
-		self.object:set_bone_override ("root", {
-			rotation = {
-				vec = vector.new (math.pi / 2, 0, math.pi + roll),
-				interpolate = 0.1,
-				absolute = true,
-			},
-		})
-	else
-		local rot = vector.new (90, 0, 180 + math.deg (roll))
-		self.object:set_bone_position ("root", nil, rot)
-	end
+	self.object:set_bone_override ("root", {
+		rotation = {
+			vec = vector.new (math.pi / 2, 0, math.pi + roll),
+			interpolate = 0.1,
+			absolute = true,
+		},
+	})
 	self._body_roll = roll
 	return 0
 end
