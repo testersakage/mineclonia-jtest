@@ -224,16 +224,13 @@ end
 local function candle_craft(_, _, old_craft_grid, _)
 	local i = 0
 	local dye, candle
-	local dye_count, candle_count = 0, 0
 
 	for _, stack in pairs(old_craft_grid) do
 		if core.get_item_group(stack:get_name(), "candles") > 0 then
 			candle = stack
-			candle_count = stack:get_count()
 			i = i + 1
 		elseif core.get_item_group(stack:get_name(), "dye") > 0 then
 			dye = stack
-			dye_count = stack:get_count()
 			i = i + 1
 		end
 	end
@@ -242,8 +239,8 @@ local function candle_craft(_, _, old_craft_grid, _)
 		local color = dye:get_definition()._color
 		local cdef = mcl_dyes.colors[color]
 		local result = ItemStack(core.itemstring_with_palette(candle, cdef.palette_index + 1))
-		local count = candle_count > dye_count and dye_count or candle_count
-		result:set_count(count)
+
+		result:set_count(1)
 
 		set_candle_properties(result, color)
 
