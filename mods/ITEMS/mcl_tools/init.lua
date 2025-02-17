@@ -271,6 +271,15 @@ minetest.register_tool("mcl_tools:shears", {
 		shearsy_wool = { speed = 5, level = 1, uses = 238 },
 		shearsy_cobweb = { speed = 15, level = 1, uses = 238 }
 	},
+	_on_dispense = function(stack, _, droppos, dropnode, dropdir)
+		if core.get_item_group(dropnode.name, "honey_level") == 5 then
+			core.swap_node(droppos, {name = dropnode.name:gsub("_5", ""), param2 = dropnode.param2})
+			core.add_item(vector.add(droppos, dropdir), "mcl_honey:honeycomb 3")
+			stack:add_wear(65535/238)
+		end
+		return stack
+	end,
+	_dispense_into_walkable = true
 })
 
 minetest.register_craft({
