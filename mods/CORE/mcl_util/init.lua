@@ -817,7 +817,7 @@ function mcl_util.set_properties(obj, props)
 	end
 end
 
-function mcl_util.set_bone_position(obj, bone, pos, rot)
+function mcl_util.set_bone_position(obj, bone, pos, rot, scale)
 	local current_pos, current_rot
 	if obj.get_bone_override then --when < minetest 5.9 isn't supported anymore remove these checks and only use the "override" variant and radians
 		local ov = obj:get_bone_override(bone)
@@ -830,7 +830,11 @@ function mcl_util.set_bone_position(obj, bone, pos, rot)
 	local rot_equal = not rot or vector.equals(vector.round(current_rot), vector.round(rot))
 	if not pos_equal or not rot_equal then
 		if obj.set_bone_override then --when < minetest 5.9 isn't supported anymore remove these checks and only use the "override" variant and radians
-			obj:set_bone_override(bone, {position = {vec = pos or current_pos, absolute = true}, rotation = {vec = vector.apply(rot or current_rot, math.rad), absolute = true}})
+			obj:set_bone_override(bone, {
+				position = pos and { vec = pos, absolute = true } or nil,
+				rotation = rot and { vec = vector.apply(rot, math.rad), absolute = true } or nil,
+				scale = scale and { vec = scale, absolute = true } or nil,
+			})
 		else
 			obj:set_bone_position(bone, pos or current_pos, rot or current_rot)
 		end
