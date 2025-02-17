@@ -1777,10 +1777,12 @@ local zombified_piglin_poses = {
 		Arm_Left_Pitch_Control = {
 			nil,
 			vector.new (85, 0, 0),
+			vector.new(1, -1, -1),
 		},
 		Arm_Right_Pitch_Control = {
 			nil,
 			vector.new (85, 0, 0),
+			vector.new(1, -1, -1),
 		},
 		Arm_Left = {
 			nil,
@@ -1795,10 +1797,12 @@ local zombified_piglin_poses = {
 		Arm_Left_Pitch_Control = {
 			nil,
 			vector.new (110, 0, 0),
+			vector.new(1, -1, -1),
 		},
 		Arm_Right_Pitch_Control = {
 			nil,
 			vector.new (110, 0, 0),
+			vector.new(1, -1, -1),
 		},
 		Arm_Left = {
 			nil,
@@ -1815,10 +1819,12 @@ mcl_mobs.define_composite_pose (zombified_piglin_poses, "jockey", {
 	["Leg_Left"] = {
 		vector.new (-1, 0, 0),
 		vector.new (-90, 35, 0),
+		vector.new(1, -1, -1),
 	},
 	["Leg_Right"] = {
 		vector.new (1, 0, 0),
 		vector.new (-90, -35, 0),
+		vector.new(1, -1, -1),
 	},
 })
 
