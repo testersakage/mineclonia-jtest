@@ -75,6 +75,7 @@ minetest.register_node("mcl_blackstone:basalt_polished", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1},
 	_mcl_blast_resistance = 4.2,
 	_mcl_hardness = 1.25,
+	_mcl_stonecutter_recipes = {"mcl_blackstone:basalt"},
 })
 minetest.register_node("mcl_blackstone:basalt", {
 	description = S("Basalt"),
@@ -97,7 +98,6 @@ minetest.register_node("mcl_blackstone:basalt_smooth", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1},
 	_mcl_blast_resistance = 4.2,
 	_mcl_hardness = 1.25,
-	_mcl_stonecutter_recipes = {"mcl_blackstone:basalt"},
 })
 minetest.register_node("mcl_blackstone:blackstone_polished", {
 	description = S("Polished Blackstone"),
