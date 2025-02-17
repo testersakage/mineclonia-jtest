@@ -36,8 +36,8 @@ mcl_player.node_offsets = nodeinfo_pos
 -- (Set in on_joinplayer)
 local bone_start_positions = {
 	Head_Control =            vector.new(0, 6.75, 0),
-	Arm_Right_Pitch_Control = vector.new(-3, 5.785, 0),
-	Arm_Left_Pitch_Control =  vector.new(3, 5.785, 0),
+	Arm_Right_Pitch_Control = vector.new(0, 0, 0),
+	Arm_Left_Pitch_Control =  vector.new(0, 0, 0),
 	Body_Control =            vector.new(0, 6.75, 0),
 }
 
