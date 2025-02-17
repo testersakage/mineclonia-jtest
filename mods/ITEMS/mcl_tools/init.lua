@@ -275,7 +275,7 @@ minetest.register_tool("mcl_tools:shears", {
 		if core.get_item_group(dropnode.name, "honey_level") == 5 then
 			core.swap_node(droppos, {name = dropnode.name:gsub("_5", ""), param2 = dropnode.param2})
 			core.add_item(vector.add(droppos, dropdir), "mcl_honey:honeycomb 3")
-			stack:add_wear(65535/238)
+			stack:add_wear_by_uses(238)
 		end
 		return stack
 	end,
