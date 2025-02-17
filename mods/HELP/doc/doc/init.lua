@@ -585,53 +585,33 @@ doc.entry_builders.formspec = function(data)
 end
 
 --[[ Internal stuff ]]
+function doc.player_save_data(player)
+	local name = player:get_player_name()
+	local meta = player:get_meta()
+	meta:set_string("doc:revealed_data", core.serialize(doc.data.players[name].stored_data))
+end
 
--- Loading and saving player data
-do
-	local filepath = minetest.get_worldpath().."/doc.mt"
-	local file = io.open(filepath, "r")
-	if file then
-		minetest.log("info", "[doc] doc.mt opened.")
-		local string = file:read()
-		io.close(file)
-		if(string ~= nil) then
-			local savetable = minetest.deserialize(string)
-			for name, players_stored_data in pairs(savetable.players_stored_data) do
-				doc.data.players[name] = {}
-				doc.data.players[name].stored_data = players_stored_data
-			end
-			minetest.log("info", "[doc] doc.mt successfully read.")
-		end
+function doc.player_load_data(player)
+	local name = player:get_player_name()
+	local meta = player:get_meta()
+	local d = meta:get_string("doc:revealed_data")
+	if d ~= "" then
+		doc.data.players[name] = {}
+		doc.data.players[name].stored_data = core.deserialize(d)
 	end
 end
 
-function doc.save_to_file()
-	local savetable = {}
-	savetable.players_stored_data = {}
-	for name, playerdata in pairs(doc.data.players) do
-		savetable.players_stored_data[name] = playerdata.stored_data
-	end
-
-	local savestring = minetest.serialize(savetable)
-
-	local filepath = minetest.get_worldpath().."/doc.mt"
-	local file = io.open(filepath, "w")
-	if file then
-		file:write(savestring)
-		io.close(file)
-		minetest.log("info", "[doc] Wrote player data into "..filepath..".")
-	else
-		minetest.log("error", "[doc] Failed to write player data into "..filepath..".")
-	end
-end
-
-minetest.register_on_leaveplayer(function(_)
-	doc.save_to_file()
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	doc.player_save_data(player)
+	doc.data.players[name] = nil
 end)
 
 minetest.register_on_shutdown(function()
 	minetest.log("info", "[doc] Server shuts down. Player data is about to be saved.")
-	doc.save_to_file()
+	for _, pl in pairs(core.get_connected_players()) do
+		doc.player_save_data(pl)
+	end
 end)
 
 --[[ Functions for internal use ]]
@@ -1111,6 +1091,7 @@ minetest.register_chatcommand("helpform", {
 )
 
 minetest.register_on_joinplayer(function(player)
+	doc.player_load_data(player)
 	local playername = player:get_player_name()
 	local playerdata = doc.data.players[playername]
 	if playerdata == nil then
