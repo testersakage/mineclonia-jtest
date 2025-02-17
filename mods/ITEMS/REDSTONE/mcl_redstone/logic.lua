@@ -83,10 +83,15 @@ local function iterate_wire_neighbours(wireflags)
 	end, wireflags
 end
 
--- Get power from direct neighbours at pos. Returns weak and strong power.
+-- Get power from direct neighbours at pos. Returns "weak" and "strong" power.
+--  weak:                soft powered. (i.e. activates components, doesn't power blocks.)
+--  strong:              hard powered, strong power
+--  weak_from_wire_only: hard powered, weak power. (doesn't power wire through blocks.)
 local function get_node_power(pos, include_wire)
 	local weak = 0
 	local strong = 0
+	local weak_from_wire_only = 0
+
 	for i, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
 		local node2 = minetest.get_node(pos2)
@@ -101,10 +106,11 @@ local function get_node_power(pos, include_wire)
 		elseif include_wire and wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			-- Wire is above or pointing towards this node.
 			weak = math.max(weak, node2.param2)
+			weak_from_wire_only = math.max(weak_from_wire_only, node2.param2)
 		end
 	end
 
-	return weak, strong
+	return weak, strong, weak_from_wire_only
 end
 
 -- Get strong power from neighbours (including opaque nodes) at pos.
@@ -256,7 +262,8 @@ function mcl_redstone.get_power(pos, dir, option)
 		elseif opaque_tab[node2.name] then
 			power = math.max(power, opaque_tab[node2.name])
 			if option ~= "direct" then
-				power = math.max(power, get_node_power(pos2, true))
+				local _, strong, weak_from_wire = get_node_power(pos2, true)
+				power = math.max(power, math.max(strong, weak_from_wire))
 			end
 		end
 	end
