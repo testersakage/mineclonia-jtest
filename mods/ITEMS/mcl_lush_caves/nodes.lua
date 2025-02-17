@@ -374,7 +374,7 @@ local tpl_azalea = {
 		plant = 1, non_mycelium_plant = 1,
 		dig_by_piston = 1, dig_by_water = 1,
 		flammable = 2, fire_encouragement = 30, fire_flammability = 60,
-		deco_block = 1, pathfinder_partial = 2,
+		deco_block = 1, pathfinder_partial = 2, attached_node = 3
 	},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	paramtype = "light",
