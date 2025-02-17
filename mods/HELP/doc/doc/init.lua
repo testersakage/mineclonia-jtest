@@ -614,6 +614,13 @@ minetest.register_on_shutdown(function()
 	end
 end)
 
+-- compat with old exposed save function
+function doc.save_to_file()
+	core.log("warning", "[doc] DEPRECATED function doc.save_to_file called. This will not actually put data in the doc.mt file but save all online player data to their player meta instantly.")
+	for _, pl in pairs(core.get_connected_players()) do doc.player_save_data(pl) end
+end
+
+
 --[[ Functions for internal use ]]
 
 function doc.formspec_core(tab)
