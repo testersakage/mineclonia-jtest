@@ -108,6 +108,11 @@ mcl_enable_hunger (Hunger) bool true
 # This setting is only read at startup.
 mobs_spawn (Spawn mobs naturally) bool true
 
+# If enabled, only peaceful mobs will appear naturally.
+# This does not affect mob spawners.
+# This setting is only read at startup.
+only_peaceful_mobs (Spawn only peaceful mobs) bool false
+
 # Allow mobs to spawn in protected areas.
 # This does not affect mob spawners.
 mobs_spawn_protected (Spawn mobs in protected areas) bool false
