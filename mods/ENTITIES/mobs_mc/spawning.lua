@@ -2,6 +2,9 @@
 -- Spawning initialization.
 -------------------------------------------------------------------------
 
+local only_peaceful_mobs
+	= minetest.settings:get_bool ("only_peaceful_mobs", false)
+
 mobs_mc.overworld_biomes = {
 	"IcePlains",
 	"IcePlainsSpikes",
@@ -199,7 +202,7 @@ local monster_spawner = {
 }
 
 function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
-	if mcl_vars.difficulty == 0 then
+	if mcl_vars.difficulty == 0 or only_peaceful_mobs then
 		return false
 	end
 
