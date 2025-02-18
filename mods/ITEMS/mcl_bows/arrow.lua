@@ -44,8 +44,7 @@ S("Arrows might get stuck on solid blocks and can be retrieved again. They are a
 		-- Shoot arrow
 		local shootpos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 		local yaw = math.atan2(dropdir.z, dropdir.x) + YAW_OFFSET
-		mcl_bows.shoot_arrow (itemstack:get_name(), shootpos, dropdir,
-				      yaw, nil, 0.366666)
+		mcl_bows.shoot_arrow (itemstack:get_name(), shootpos, dropdir, yaw, nil, 0.366666)
 	end,
 })
 
@@ -111,6 +110,18 @@ local function damage_particles(pos, is_critical)
 	end
 end
 
+-- Multiply x and z velocity by given factor.
+function ARROW_ENTITY:multiply_xz_velocity (factor)
+	local vel = vector.copy(self.object:get_velocity())
+	if math.abs(vel.x) >= 0.001 then
+		vel.x = vel.x * factor
+	end
+	if math.abs(vel.z) >= 0.001 then
+		vel.z = vel.z * factor
+	end
+	self.object:set_velocity(vel)
+end
+
 function ARROW_ENTITY:arrow_knockback (object, damage)
 	local entity = object:get_luaentity ()
 	local v = self.object:get_velocity ()
@@ -131,7 +142,7 @@ function ARROW_ENTITY:arrow_knockback (object, damage)
 		-- Apply an additional horizontal force of
 		-- self._knockback * 0.6 * 20 * 0.546 to the object.
 		local total_kb = self._knockback * (1.0 - resistance) * 12 * 0.546
-		local v = vector.multiply (dir, total_kb)
+		v = vector.multiply (dir, total_kb)
 
 		-- And a vertical force of 2.0 * 0.91.
 		v.y = v.y + 2.0 * 0.91 * (1.0 - resistance)
@@ -155,346 +166,360 @@ function ARROW_ENTITY:calculate_damage (v)
 	return math.floor (damage + crit_bonus)
 end
 
-function ARROW_ENTITY.on_step(self, dtime)
-	mcl_burning.tick(self.object, dtime, self)
-	-- mcl_burning.tick may remove object immediately
-	if not self.object:get_pos() then return end
+function ARROW_ENTITY:do_particle()
+	if not self._is_critical or self._partical_id then return end
+	core.add_particlespawner({
+		amount = 20,
+		time = .2,
+		minpos = vector.new(0,0,0),
+		maxpos = vector.new(0,0,0),
+		minvel = vector.new(-0.1,-0.1,-0.1),
+		maxvel = vector.new(0.1,0.1,0.1),
+		minexptime = 0.5,
+		maxexptime = 0.5,
+		minsize = 2,
+		maxsize = 2,
+		attached = self.object,
+		collisiondetection = false,
+		vertical = false,
+		texture = "mobs_mc_arrow_particle.png",
+		glow = 1,
+	})
+end
 
-
-	local self_pos = self.object:get_pos ()
-	local pos = self._lastpos.x and self._lastpos or self._startpos
-	if not pos or vector.distance (pos, self_pos) > 2.5 then
-		pos = self_pos
+-- Calculate damage, knockback, burning, and tipped effect to target.
+function ARROW_ENTITY:apply_effects(obj)
+	local dmg = self:calculate_damage(self.object:get_velocity())
+	local reason = {
+		type = "arrow",
+		source = self._shooter,
+		direct = self.object,
+	}
+	local damage = mcl_util.deal_damage(obj, dmg, reason)
+	self:arrow_knockback(obj, damage)
+	if mcl_burning.is_burning(self.object) then
+		mcl_burning.set_on_fire(obj, 5)
 	end
-	local dpos = vector.round(vector.copy(self_pos)) -- digital pos
-	local node = core.get_node(dpos)
+	if self._extra_hit_func then
+		self:_extra_hit_func(obj)
+	end
+end
+
+-- Remove burning status, crit particle effect, and finally the arrow object.
+function ARROW_ENTITY:remove(delay)
+	mcl_burning.extinguish(self.object)
+	if not delay or delay <= 0 then
+		self.object:remove()
+	else
+		core.after(delay, function() self:remove() end)
+	end
+end
+
+-- Process hitting a non-player object.  Return true to play damage particle and sound.
+function ARROW_ENTITY:on_hit_object(obj, lua)
+	if not lua or (not lua.is_mob and not lua._hittable_by_projectile)
+	or lua.name == "mobs_mc:enderman" then
+		return false
+	end
+	self:apply_effects(obj)
+	return true
+end
+
+-- Process hitting a player, deflect & ignore if shield blocked, otherwise attach.
+function ARROW_ENTITY:on_hit_player(obj)
+	if not enable_pvp then return false end
+	-- TODO: Checking facing
+	if mcl_shields.is_blocking(obj) then -- Blocked by shield
+		self._blocked = true
+		self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
+	else -- Hit and attach to player.
+		self:apply_effects(obj)
+		self._in_player = true
+		local placement
+		self._placement = math.random(1, 2)
+		if self._placement == 1 then
+			placement = "front"
+		else
+			placement = "back"
+		end
+		self._in_player = true
+		if self._placement == 2 then
+			self._rotation_station = 90
+		else
+			self._rotation_station = -90
+		end
+		self._y_position = random_arrow_positions("y", placement)
+		self._x_position = random_arrow_positions("x", placement)
+		if self._y_position > 6 and self._x_position < 2 and self._x_position > -2 then
+			self._attach_parent = "Head"
+			self._y_position = self._y_position - 6
+		elseif self._x_position > 2 then
+			self._attach_parent = "Arm_Right"
+			self._y_position = self._y_position - 3
+			self._x_position = self._x_position - 2
+		elseif self._x_position < -2 then
+			self._attach_parent = "Arm_Left"
+			self._y_position = self._y_position - 3
+			self._x_position = self._x_position + 2
+		else
+			self._attach_parent = "Body"
+		end
+		self._z_rotation = math.random(-30, 30)
+		self._y_rotation = math.random( -30, 30)
+		self.object:set_attach(
+			obj, self._attach_parent,
+			vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
+			vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
+		)
+	end
+	self:remove(150)
+	return "stop"
+end
+
+function ARROW_ENTITY:set_stuck (node_pos, node)
+	local selfobj = self.object
+	local self_pos = selfobj:get_pos()
+	self._stuck = true
+	self._lifetime = 0
+	self._dragtime = 0
+	self._stuckrechecktimer = 0
+	if not self._stuckin then self._stuckin = node_pos end
+	selfobj:set_velocity(vector.new(0, 0, 0))
+	selfobj:set_acceleration(vector.new(0, 0, 0))
+	core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
+
+	local self_node_pos = vector.round(vector.copy(self_pos))
+	local self_node = core.get_node(self_node_pos)
+	local def = core.registered_nodes[self_node.name]
+	if (def and def._on_arrow_hit) then   -- Entities: Button, Candle etc.
+		def._on_arrow_hit(self_node_pos, self)
+	else                                  -- Nodes: TNT, Campfire, Target etc.
+		def = core.registered_nodes[node.name]
+		if (def and def._on_arrow_hit) then
+			def._on_arrow_hit(self._stuckin, self)
+		end
+	end
+
+	return "stop"
+end
+
+-- Hit a non-liquid node.  Either arrow could be stopped by engine or on its way to target.
+function ARROW_ENTITY:on_solid_hit (node_pos, node, def)
+	if not node then 
+		node = core.get_node(node_pos)
+	end
+	if node.name == "air" or node.name == "ignore" then return end
+
+	if not def then
+		def = core.registered_nodes[node.name or ""]
+	end
+	-- If node is non-walkable, unknown or ignore, don't make arrow stuck.
+	-- This causes a deflection in the engine.
+	if not def or def.walkable == false or def.name == "ignore" then
+		self._stuckin = nil
+		if self._deflection_cooloff <= 0 then
+			-- Lose 1/3 of velocity on deflection
+			local vel = self.object:get_velocity()
+			local newvel = vector.multiply(vel, 0.6667)
+			self.object:set_velocity(newvel)
+			-- Set deflection cooloff to prevent many deflections happening in quick succession.
+			self._deflection_cooloff = 1.0
+		end
+		return
+	end
+
+	-- Set fire to arrows which pass through lava or fire.
+	if core.get_item_group(node.name, "set_on_fire") > 0 then
+		mcl_burning.set_on_fire(self.object, ARROW_TIMEOUT)
+	end
+	return self:set_stuck(node_pos, node)
+end
+
+function ARROW_ENTITY:on_liquid_passthrough (node, def)
+	-- Slow down arrow in liquids
+	local v = def.liquid_viscosity or 0
+	--local old_v = self._viscosity
+	self._viscosity = v
+	local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
+	self:multiply_xz_velocity(vpenalty)
+end
+
+-- Handle "arrow hitting things".  Return "stop" if arrow is stopped by this thing.
+function ARROW_ENTITY:on_intersect(ray_hit)
+	local selfobj = self.object
+	local result
+	if ray_hit.type == "object" then
+		local obj = ray_hit.ref
+		if obj:is_valid() and obj:get_hp() > 0
+		and ( obj ~= self._shooter or self._lifetime > 0.5 ) then
+			if obj:is_player() then
+				result = self:on_hit_player(obj)
+			else
+				result = self:on_hit_object(obj, obj:get_luaentity())
+			end
+		end
+		if result then
+			local shooter = self._shooter
+			local self_pos = selfobj:get_pos()
+			if not self._blocked then
+				if obj:is_player() and shooter and shooter:is_valid() and shooter:is_player() then
+					-- “Ding” sound for hitting another player
+					core.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=shooter:get_player_name()}, true)
+				end
+				damage_particles(vector.add(self_pos, vector.multiply(selfobj:get_velocity(), 0.1)), self._is_critical)
+			end
+			core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
+			if result ~= "stop" then
+				self:remove()
+			end
+		end
+	elseif ray_hit.type == "node" then
+		local hit_node_pos = core.get_pointed_thing_position(ray_hit)
+		local hit_node_str = hit_node_pos.x .. "," .. hit_node_pos.y .. "," .. hit_node_pos.z
+		local hit_node =  core.get_node(hit_node_pos)
+		local def = core.registered_nodes[hit_node.name or ""]
+
+		if def and def.liquidtype ~= "none" then
+			result = self:on_liquid_passthrough(hit_node, def)
+		elseif def then
+			self._stuckin = hit_node_pos
+			result = self:on_solid_hit(hit_node_pos, hit_node, def)
+		end
+	end
+	return result
+end
+
+function ARROW_ENTITY:on_step(dtime)
+	local selfobj = self.object
+	mcl_burning.tick(self.object, dtime, self)
+	local self_pos = selfobj:get_pos()
+	-- mcl_burning.tick may remove object immediately
+	if not self_pos then return end
+
+	local last_pos = self._lastpos.x and self._lastpos or self._startpos
+	if not last_pos or vector.distance (last_pos, self_pos) > 2.5 then
+		last_pos = self_pos
+	end
 
 	self._lifetime = self._lifetime + dtime
 	if self._lifetime > ARROW_TIMEOUT then
-		mcl_burning.extinguish(self.object)
-		self.object:remove()
+		self:remove()
 		return
 	end
 
 	if self._stuck then
-		self._stuckrechecktimer = self._stuckrechecktimer + dtime
-		-- Drop arrow as item when it is no longer stuck
-		-- FIXME: Arrows are a bit slow to react and continue to float in mid air for a few seconds.
-		if self._stuckrechecktimer > STUCK_RECHECK_TIME then
-			local stuckin_def
-			if self._stuckin then
-				stuckin_def = core.registered_nodes[core.get_node(self._stuckin).name]
-			end
-			-- TODO: In MC, arrow just falls down without turning into an item
-			if stuckin_def and stuckin_def.walkable == false then
-				if self._collectable then
-					spawn_item(self, pos)
-				end
-				mcl_burning.extinguish(self.object)
-				self.object:remove()
-				return
-			end
-			self._stuckrechecktimer = 0
-		end
-		-- Pickup arrow if player is nearby (not in Creative Mode)
-		for obj in core.objects_inside_radius(self_pos, 1) do
-			if obj:is_player() then
-				if self._collectable and not core.is_creative_enabled(obj:get_player_name()) then
-					if obj:get_inventory():room_for_item("main", self._itemstring or "mcl_bows:arrow") then
-						obj:get_inventory():add_item("main", self._itemstring or "mcl_bows:arrow")
-						core.sound_play("item_drop_pickup", {
-							pos = self_pos,
-							max_hear_distance = 16,
-							gain = 1.0,
-						}, true)
-					end
-				end
-				mcl_burning.extinguish(self.object)
-				self.object:remove()
-				return
-			end
-		end
-
-	-- Check for object "collision". Done every tick (hopefully this is not too stressing)
-	else
-
-		if self._is_critical and self._in_player == false then
-			core.add_particlespawner({
-				amount = 20,
-				time = .2,
-				minpos = vector.new(0,0,0),
-				maxpos = vector.new(0,0,0),
-				minvel = vector.new(-0.1,-0.1,-0.1),
-				maxvel = vector.new(0.1,0.1,0.1),
-				minexptime = 0.5,
-				maxexptime = 0.5,
-				minsize = 2,
-				maxsize = 2,
-				attached = self.object,
-				collisiondetection = false,
-				vertical = false,
-				texture = "mobs_mc_arrow_particle.png",
-				glow = 1,
-			})
-		end
-
-		local closest_object
-		local closest_distance
-
-		if self._deflection_cooloff > 0 then
-			self._deflection_cooloff = self._deflection_cooloff - dtime
-		end
-
-		local v = self.object:get_velocity()
-		--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-		local raycast = core.raycast(pos, vector.add(self_pos, vector.multiply(v, 0.04)), true, false)
-		for hitpoint in raycast do
-			if hitpoint.type == "object" then
-				-- find the closest object that is in the way of the arrow
-				local ok = false
-				if hitpoint.ref:is_player() and enable_pvp then
-					ok = true
-				elseif not hitpoint.ref:is_player() and hitpoint.ref:get_luaentity() then
-					if (hitpoint.ref:get_luaentity().is_mob or hitpoint.ref:get_luaentity()._hittable_by_projectile) then
-						ok = true
-					end
-				end
-				if ok then
-					local dist = vector.distance(hitpoint.ref:get_pos(), self_pos)
-					if not closest_object or not closest_distance then
-						closest_object = hitpoint.ref
-						closest_distance = dist
-					elseif dist < closest_distance then
-						closest_object = hitpoint.ref
-						closest_distance = dist
-					end
-				end
-			end
-		end
-
-		if closest_object then
-			local obj = closest_object
-			local is_player = obj:is_player()
-			local lua = obj:get_luaentity()
-			if (obj == self._shooter and self._lifetime > 0.5 or obj ~= self._shooter)
-				and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
-				if obj:get_hp() > 0 then
-					-- Check if there is no solid node between arrow and object
-					local ray = core.raycast(self.object:get_pos(), obj:get_pos(), true)
-					for pointed_thing in ray do
-						if pointed_thing.type == "object" and pointed_thing.ref == closest_object then
-							-- Target reached! We can proceed now.
-							break
-						elseif pointed_thing.type == "node" then
-							local nn = core.get_node(core.get_pointed_thing_position(pointed_thing)).name
-							local def = core.registered_nodes[nn]
-							if (not def) or def.walkable then
-								-- There's a node in the way. Delete arrow without damage
-								mcl_burning.extinguish(self.object)
-								self.object:remove()
-								return
-							end
-						end
-					end
-
-					if is_player then
-						if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
-							-- “Ding” sound for hitting another player
-							core.sound_play({name="mcl_bows_hit_player", gain=0.07}, {to_player=self._shooter:get_player_name()}, true)
-						end
-					end
-
-					-- Punch target object but avoid hurting enderman.
-					if not lua or lua.name ~= "mobs_mc:enderman" then
-						if not self._in_player then
-							damage_particles(vector.add(self_pos, vector.multiply(v, 0.1)), self._is_critical)
-						end
-						if mcl_burning.is_burning(self.object) then
-							mcl_burning.set_on_fire(obj, 5)
-						end
-						if not self._in_player and not self._blocked then
-							local reason = {
-								type = "arrow",
-								source = self._shooter,
-								direct = self.object,
-							}
-							local dmg = self:calculate_damage (v)
-							local damage = mcl_util.deal_damage (obj, dmg, reason)
-							self:arrow_knockback (obj, damage)
-							if self._extra_hit_func then
-								self:_extra_hit_func(obj)
-							end
-							if obj:is_player() then
-								if not mcl_shields.is_blocking(obj) then
-									local placement
-									self._placement = math.random(1, 2)
-									if self._placement == 1 then
-										placement = "front"
-									else
-										placement = "back"
-									end
-									self._in_player = true
-									if self._placement == 2 then
-										self._rotation_station = 90
-									else
-										self._rotation_station = -90
-									end
-									self._y_position = random_arrow_positions("y", placement)
-									self._x_position = random_arrow_positions("x", placement)
-									if self._y_position > 6 and self._x_position < 2 and self._x_position > -2 then
-										self._attach_parent = "Head"
-										self._y_position = self._y_position - 6
-									elseif self._x_position > 2 then
-										self._attach_parent = "Arm_Right"
-										self._y_position = self._y_position - 3
-										self._x_position = self._x_position - 2
-									elseif self._x_position < -2 then
-										self._attach_parent = "Arm_Left"
-										self._y_position = self._y_position - 3
-										self._x_position = self._x_position + 2
-									else
-										self._attach_parent = "Body"
-									end
-									self._z_rotation = math.random(-30, 30)
-									self._y_rotation = math.random( -30, 30)
-									self.object:set_attach(
-										obj, self._attach_parent,
-										vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
-										vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
-									)
-								else
-									self._blocked = true
-									self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
-								end
-								core.after(150, function()
-									self.object:remove()
-								end)
-							else
-								self.object:remove()
-							end
-						end
-					end
-
-					if not self._in_player and not self._blocked then
-						core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
-					end
-				end
-				if not obj:is_player() then
-					mcl_burning.extinguish(self.object)
-					if self._piercing == 0 then
-						self.object:remove()
-					end
-				end
-				return
-			end
-		end
+		self:step_on_stuck(last_pos, dtime)
+		return
 	end
 
-	-- Check for node collision
-	if self._lastpos.x~=nil and not self._stuck then
-		local def = core.registered_nodes[node.name]
-		local vel = self.object:get_velocity()
-		-- Arrow has stopped in one axis, so it probably hit something.
-		-- This detection is a bit clunky, but sadly, MT does not offer a direct collision detection for us. :-(
-		if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
-			-- Check for the node to which the arrow is pointing
-			local dir
-			if math.abs(vel.y) < 0.00001 then
-				if self._lastpos.y < self_pos.y then
-					dir = vector.new(0, 1, 0)
-				else
-					dir = vector.new(0, -1, 0)
-				end
+	self:do_particle()
+
+	if self._deflection_cooloff > 0 then
+		self._deflection_cooloff = self._deflection_cooloff - dtime
+	end
+
+	-- Check if arrow has stopped moving in one axis, which probably means it hit something.
+	-- This detection is a bit clunky, but MT does not offer a direct collision detection. :-(
+	local result = nil
+	local vel = selfobj:get_velocity()
+	if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
+		local dir
+		if math.abs(vel.y) < 0.00001 then
+			if last_pos.y < self_pos.y then
+				dir = vector.new(0, 1, 0)
 			else
-				dir = core.facedir_to_dir(core.dir_to_facedir(core.yaw_to_dir(self.object:get_yaw()-YAW_OFFSET)))
-			end
-			self._stuckin = vector.add(dpos, dir)
-			local snode = core.get_node(self._stuckin)
-			local sdef = core.registered_nodes[snode.name]
-
-			-- If node is non-walkable, unknown or ignore, don't make arrow stuck.
-			-- This causes a deflection in the engine.
-			if not sdef or sdef.walkable == false or snode.name == "ignore" then
-				self._stuckin = nil
-				if self._deflection_cooloff <= 0 then
-					-- Lose 1/3 of velocity on deflection
-					local newvel = vector.multiply(vel, 0.6667)
-
-					self.object:set_velocity(newvel)
-					-- Reset deflection cooloff timer to prevent many deflections happening in quick succession
-					self._deflection_cooloff = 1.0
-				end
-				-- Set fire to arrows which pass through lava or fire.
-				if core.get_item_group(node.name, "set_on_fire") > 0 then
-					mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
-				end
-			else
-
-				-- Node was walkable, make arrow stuck
-				self._stuck = true
-				self._lifetime = 0
-				self._stuckrechecktimer = 0
-
-				self.object:set_velocity(vector.new(0, 0, 0))
-				self.object:set_acceleration(vector.new(0, 0, 0))
-
-				core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
-
-				local bdef = core.registered_nodes[node.name]
-				if (bdef and bdef._on_arrow_hit) then
-					bdef._on_arrow_hit(dpos, self)
-				elseif (sdef and sdef._on_arrow_hit) then
-					sdef._on_arrow_hit(self._stuckin, self)
-				end
-				-- Extinguish this stuck arrow.
-				mcl_burning.extinguish (self.object)
+				dir = vector.new(0, -1, 0)
 			end
 		else
-		    if (def and def.liquidtype ~= "none") then
-				-- Slow down arrow in liquids
-				local v = def.liquid_viscosity
-				if not v then
-					v = 0
-				end
-				--local old_v = self._viscosity
-				self._viscosity = v
-				local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
-				if math.abs(vel.x) > 0.001 then
-					vel.x = vel.x * vpenalty
-				end
-				if math.abs(vel.z) > 0.001 then
-					vel.z = vel.z * vpenalty
-				end
-				self.object:set_velocity(vel)
+			dir = core.facedir_to_dir(core.dir_to_facedir(core.yaw_to_dir(selfobj:get_yaw()-YAW_OFFSET)))
+		end
+		local dpos = vector.round(vector.copy(self_pos))
+		local stuck_pos = vector.add(dpos, dir)
+		local stuck_node = core.get_node(stuck_pos)
+		self._stuckin = stuck_pos
+		result = self:on_solid_hit(stuck_pos, stuck_node)
+		if result ~= "stop" then -- Arrow is stuck at air or other non-stopping block.
+			self:set_stuck(stuck_pos, stuck_node)
+		end
+		return
+	end
+
+	-- Predicting froward motion in anticipation of lag
+	if result ~= "stop" then
+		local vel = selfobj:get_velocity()
+		local predict = vector.add(self_pos, vector.multiply(vector.copy(vel), 0.05))
+		for ray_hit in core.raycast(self_pos, predict, true, true) do
+			if ray_hit.type == "node" then
+				break -- Hit a node, stop prediction and defer to next step.
 			end
-			-- Set fire to arrows which pass through lava or fire.
-			if core.get_item_group(node.name, "set_on_fire") > 0 then
-				mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
-			end
+			result = self:on_intersect(ray_hit) -- Hit mob or player.
+			if result == "stop" then break end
 		end
 	end
 
 	-- Update yaw
 	if not self._stuck then
-		local vel = self.object:get_velocity()
-		local yaw = core.dir_to_yaw(vel)+YAW_OFFSET
-		local pitch = dir_to_pitch(vel)
-		self.object:set_rotation({ x = 0, y = yaw, z = pitch })
+		local vel = selfobj:get_velocity()
+		if vel then
+			local yaw = core.dir_to_yaw(vel)+YAW_OFFSET
+			local pitch = dir_to_pitch(vel)
+			selfobj:set_rotation({ x = 0, y = yaw, z = pitch })
+		end
 	end
 
 	-- Update internal variable
 	self._lastpos = self_pos
 end
 
+function ARROW_ENTITY:step_on_stuck(last_pos, dtime)
+	local timer = ( self._stuckrechecktimer or 0 ) + dtime
+	self._stuckrechecktimer = timer
+	-- Drop arrow as item when it is no longer stuck
+	-- FIXME: Arrows are a bit slow to react and continue to float in mid air for a few seconds.
+	if timer > STUCK_RECHECK_TIME then
+		local stuckin_def
+		if self._stuckin then
+			stuckin_def = core.registered_nodes[core.get_node(self._stuckin).name]
+		end
+		-- TODO: In MC, arrow just falls down without turning into an item
+		if stuckin_def and stuckin_def.walkable == false then
+			if self._collectable then
+				spawn_item(self, last_pos)
+			end
+			self:remove()
+			return
+		end
+		self._stuckrechecktimer = 0
+	end
+
+	local self_pos = self.object:get_pos()
+	-- Pickup arrow if player is nearby (not in Creative Mode)
+	for obj in core.objects_inside_radius(self_pos, 1) do
+		if obj and obj:is_valid() and obj:is_player() then
+			if self._collectable and not core.is_creative_enabled(obj:get_player_name()) then
+				if obj:get_inventory():room_for_item("main", self._itemstring or "mcl_bows:arrow") then
+					obj:get_inventory():add_item("main", self._itemstring or "mcl_bows:arrow")
+					core.sound_play("item_drop_pickup", {
+						pos = self_pos,
+						max_hear_distance = 16,
+						gain = 1.0,
+					}, true)
+				end
+			end
+			self:remove()
+		end
+	end
+end
+
 -- Force recheck of stuck arrows when punched.
 -- Otherwise, punching has no effect.
-function ARROW_ENTITY.on_punch(self)
+function ARROW_ENTITY:on_punch()
 	if self._stuck then
 		self._stuckrechecktimer = STUCK_RECHECK_TIME
 	end
 end
 
-function ARROW_ENTITY.get_staticdata(self)
+function ARROW_ENTITY:get_staticdata()
 	local out = {
 		lastpos = self._lastpos,
 		startpos = self._startpos,
@@ -516,22 +541,20 @@ function ARROW_ENTITY.get_staticdata(self)
 	return core.serialize(out)
 end
 
-function ARROW_ENTITY.on_activate(self, staticdata)
+function ARROW_ENTITY:on_activate(staticdata)
 	local data = core.deserialize(staticdata)
 	if data then
 		-- First, check if the arrow is already past its life timer. If
 		-- yes, delete it. If starttime is nil always delete it.
 		self._lifetime = core.get_gametime() - (data.starttime or 0)
 		if self._lifetime > ARROW_TIMEOUT then
-			mcl_burning.extinguish(self.object)
-			self.object:remove()
+			self:remove()
 			return
 		end
 		self._stuck = data.stuck
 		if data.stuck then
 			-- Perform a stuck recheck on the next step.
 			self._stuckrechecktimer = STUCK_RECHECK_TIME
-
 			self._stuckin = data.stuckin
 		end
 
@@ -548,9 +571,8 @@ function ARROW_ENTITY.on_activate(self, staticdata)
 				self._shooter = shooter
 			end
 		end
-
 		if data.stuckin_player then
-			self.object:remove()
+			self:remove()
 		end
 	end
 	self.object:set_armor_groups({ immortal = 1 })
