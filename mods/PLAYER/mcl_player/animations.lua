@@ -283,7 +283,7 @@ local function set_swimming(player, anim, anim_speed)
 	anim = anim or "swim_stand"
 	mcl_player.player_set_animation(player, anim, anim_speed)
 	set_bone_pos(player, "Head_Control", nil, vector.new(pitch - math.deg(dir_to_pitch(vel)) + 20, mcl_player.players[player].vel_yaw - yaw, 0))
-	set_bone_pos(player,"Body_Control", nil, vector.new((75 + math.deg(dir_to_pitch(vel))), mcl_player.players[player].vel_yaw - yaw, 180))
+	set_bone_pos(player,"Body_Control", nil, vector.new((75 + math.deg(dir_to_pitch(vel))), mcl_player.players[player].vel_yaw - yaw, 0))
 	mcl_util.set_properties(player, player_props_swimming)
 end
 
@@ -374,7 +374,7 @@ mcl_player.register_globalstep(function(player)
 			mcl_player.player_set_animation(player, "die")
 		elseif elytra then --using elytra
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch - math.deg(dir_to_pitch(player_velocity)) + 50, player_vel_yaw - yaw, 0))
-			set_bone_pos(player, "Body_Control", nil, vector.new(math.deg(dir_to_pitch(player_velocity)) + 110, -player_vel_yaw + yaw, 180))
+			set_bone_pos(player, "Body_Control", nil, vector.new(math.deg(dir_to_pitch(player_velocity)) + 110, -player_vel_yaw + yaw, 0))
 			-- sets eye height, and nametag color accordingly
 			mcl_util.set_properties(player, player_props_elytra)
 		elseif walking and (math.abs(velocity.x) > 0.35 or math.abs(velocity.z) > 0.35) then --walking
