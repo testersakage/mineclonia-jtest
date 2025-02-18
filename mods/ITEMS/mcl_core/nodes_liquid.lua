@@ -95,10 +95,7 @@ S("• When water is directly below lava, the water turns into stone."),
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
 	after_destruct = function(pos)
-		local opos = vector.offset(pos, 0, 1, 0)
-		local node = core.get_node(opos)
-
-		if node.name == "mcl_flowers:waterlily" then core.dig_node(opos) end
+		mcl_attached.drop_attached_node(vector.offset(pos, 0, 1, 0))
 	end
 })
 
