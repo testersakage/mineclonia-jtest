@@ -82,7 +82,11 @@ local dig_hive = function(pos, node, _, digger)
 end
 
 local function full_tiles(base_tiles)
-	base_tiles[6] = base_tiles[6]:gsub(".png", "_honey.png")
+	local result = table.copy(base_tiles)
+
+	result[6] = result[6]:gsub(".png", "_honey.png")
+
+	return result
 end
 
 local function register_hives(id, defs, merges)
@@ -98,12 +102,11 @@ local function register_hives(id, defs, merges)
 			drop = "",
 			groups = table.merge(defs.groups or {}, {
 				axey = 1, deco_block = empty and 1 or nil, honey_level = i,
-				not_in_creative_inventory = not empty and 1 or nil, unmovable_by_piston = 1
+				not_in_creative_inventory = (not empty) and 1 or nil, unmovable_by_piston = 1
 			}),
 			on_rightclick = full and honey_harvest or nil,
 			paramtype2 = "4dir",
 			sounds = mcl_sounds.node_sound_wood_defaults(),
-			stack_max = empty and 64 or 1,
 			tiles = not full and defs.base_tiles or full_tiles(defs.base_tiles)
 		}))
 	end
@@ -147,7 +150,7 @@ minetest.register_craft({
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
 		{"mcl_honey:honeycomb", "mcl_honey:honeycomb", "mcl_honey:honeycomb"},
-		{"group:wood", "group:wood", "group:wood"},
+		{"group:wood", "group:wood", "group:wood"}
 	}
 })
 
