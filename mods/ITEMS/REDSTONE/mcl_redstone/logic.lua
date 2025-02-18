@@ -122,7 +122,7 @@ local function get_node_power_2(pos)
 
 		if opaque_tab[node2.name] then
 			local _, power2 = get_node_power(pos2)
-			max = math.max(max, power2, opaque_tab[node2.name])
+			max = math.max(max, power2)
 		end
 	end
 
@@ -259,12 +259,9 @@ function mcl_redstone.get_power(pos, dir, option)
 			power = math.max(power, power2)
 		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			power = math.max(power, node2.param2)
-		elseif opaque_tab[node2.name] then
-			power = math.max(power, opaque_tab[node2.name])
-			if option ~= "direct" then
-				local _, strong, weak_from_wire = get_node_power(pos2, true)
-				power = math.max(power, math.max(strong, weak_from_wire))
-			end
+		elseif opaque_tab[node2.name] and option ~= "direct" then
+			local _, strong, weak_from_wire = get_node_power(pos2, true)
+			power = math.max(power, math.max(strong, weak_from_wire))
 		end
 	end
 
@@ -350,7 +347,7 @@ local function update_neighbours(pos, oldnode, newnode)
 
 					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
 					if wireflag_tab[node3.name] then
-						update_wire(pos3, math.max(oldpower2, 0, opaque_tab[node2.name]))
+						update_wire(pos3, math.max(oldpower2, 0))
 					end
 				end
 			end
@@ -434,7 +431,7 @@ minetest.register_on_mods_loaded(function()
 	for name, ndef in pairs(minetest.registered_nodes) do
 		local old_construct = ndef.on_construct
 		local old_destruct = ndef.after_destruct
-		if minetest.get_item_group(name, "opaque") ~= 0 and minetest.get_item_group(name, "solid") ~= 0 then
+		if opaque_tab[name] then
 			minetest.override_item(name, {
 				on_construct = function(pos)
 					if old_construct then
