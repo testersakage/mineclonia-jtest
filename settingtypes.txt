@@ -193,9 +193,6 @@ mcl_vaults_looter_list_length (Vault memory size) int 128 1 1024
 # Whether to animate chests when open / close
 animated_chests (Animated chests) bool true
 
-# Enable dust particles in the nether
-mcl_nether_dust (Nether dust particles) bool true
-
 # If enabled, mobs will emit damage particles when they get hurt
 mcl_damage_particles (Damage particles) bool true
 

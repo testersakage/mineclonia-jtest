@@ -1,8 +1,9 @@
 mcl_weather.nether_dust = {}
 mcl_weather.nether_dust.particlespawners = {}
 
-local enable_nether_dust = minetest.settings:get_bool("mcl_nether_dust", true)
 local PARTICLES_COUNT_NETHER_DUST = 150
+
+local S = minetest.get_translator("mcl_weather")
 
 local psdef= {
 	amount = PARTICLES_COUNT_NETHER_DUST,
@@ -24,7 +25,7 @@ local psdef= {
 }
 
 mcl_weather.nether_dust.add_particlespawners = function(player)
-	if not enable_nether_dust then
+	if not mcl_player.get_player_setting(player, "mcl_weather:nether_dust", true) then
 		return
 	end
 
@@ -50,7 +51,7 @@ mcl_weather.nether_dust.delete_particlespawners = function(player)
 end
 
 local function update_player_particles(player)
-	if not mcl_worlds.has_dust(player:get_pos()) then
+	if not (mcl_worlds.has_dust(player:get_pos()) and mcl_player.get_player_setting(player, "mcl_weather:nether_dust", true)) then
 		mcl_weather.nether_dust.delete_particlespawners(player)
 	elseif not mcl_weather.nether_dust.particlespawners[player:get_player_name()] then
 		mcl_weather.nether_dust.add_particlespawners(player)
@@ -63,3 +64,11 @@ minetest.register_on_joinplayer(update_player_particles)
 minetest.register_on_leaveplayer(function(player)
 	mcl_weather.nether_dust.delete_particlespawners(player)
 end)
+
+mcl_player.register_player_setting("mcl_weather:nether_dust", {
+        type = "boolean",
+	section = "Graphics",
+	short_desc = S("Enable dust particles in the nether"),
+	ui_default = true,
+	on_change = update_player_particles,
+})
