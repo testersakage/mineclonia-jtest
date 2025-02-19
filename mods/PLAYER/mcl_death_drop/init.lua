@@ -34,8 +34,8 @@ minetest.register_on_dieplayer(function(player)
 				table.insert(dropspots,pos)
 			end
 			if inv then
-				for _, stack in ipairs(inv:get_list(listname)) do
-					local p = vector.offset(dropspots[math.random(#dropspots)],math.random()-0.5,math.random()-0.5,math.random()-0.5)
+				for _, stack in pairs(inv:get_list(listname)) do
+					local p = vector.offset(dropspots[math.random(#dropspots)], mcl_util.float_random(-0.25, 0.25), mcl_util.float_random(-0.25, 0.25), mcl_util.float_random(-0.25, 0.25))
 					if not void_deadly and drop and not mcl_enchanting.has_enchantment(stack, "curse_of_vanishing") then
 						local def = minetest.registered_items[stack:get_name()]
 						if def and def.on_drop then
