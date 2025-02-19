@@ -48,19 +48,29 @@ minetest.register_craft({
 
 minetest.register_craftitem("mcl_potions:glass_bottle", {
 	_dispense_into_walkable = true,
-	_on_dispense = function(stack, _, droppos, dropnode, dropdir)
+	_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
+		local new_stack
 		local node_name = dropnode.name
+		local inv = core.get_meta(pos):get_inventory()
 		if core.get_item_group(node_name, "honey_level") == 5 then
 			core.swap_node(droppos, {name = node_name:gsub("_5", ""), param2 = dropnode.param2})
-			core.add_item(vector.add(droppos, dropdir), "mcl_honey:honey_bottle")
+			new_stack = ItemStack("mcl_honey:honey_bottle")
+			droppos = vector.add(droppos, dropdir)
 		elseif core.get_item_group(node_name, "water") then
 			local water_type = "water"
 			local defs = core.registered_nodes[node_name]
 			local is_source = defs and defs.liquidtype == "source"
 			if core.get_item_group(node_name, "river_water") then water_type = "river_water" end
-			if is_source then core.add_item(droppos, "mcl_potions:" .. water_type) end
+			if is_source then new_stack = ItemStack("mcl_potions:" .. water_type) end
 		end
-		stack:take_item()
+		if new_stack then
+			if inv:room_for_item("main", new_stack) then
+				inv:add_item("main", new_stack)
+			else
+				core.add_item(droppos, new_stack)
+			end
+			stack:take_item()
+		end
 		return stack
 	end,
 	description = S("Glass Bottle"),
