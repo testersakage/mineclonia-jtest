@@ -40,6 +40,12 @@ local function hopper_collect(pos)
 	return success
 end
 
+local function is_full_solid(pos, nodename)
+	local boxes = core.get_node_boxes("collision_box", pos)
+	if boxes and boxes[1] and boxes[1][5] < 0.5 then return false end
+	return core.get_item_group(nodename, "solid") ~= 0
+end
+
 -- Pull an item from the container above into the hopper
 local function hopper_pull(pos)
 	local uppos = vector.offset(pos, 0, 1, 0)
@@ -58,7 +64,7 @@ local function hopper_pull(pos)
 		if success and updef._after_hopper_out then
 			updef._after_hopper_out(uppos)
 		end
-	elseif minetest.get_item_group(upnode.name, "solid") == 0 then
+	elseif not is_full_solid(uppos, upnode.name) then
 		success = hopper_collect(pos)
 	end
 	return success
