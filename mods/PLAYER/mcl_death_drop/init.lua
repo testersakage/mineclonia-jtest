@@ -30,6 +30,11 @@ minetest.register_on_dieplayer(function(player)
 			local listname = mcl_death_drop.registered_dropped_lists[l].listname
 			local drop = mcl_death_drop.registered_dropped_lists[l].drop
 			local dropspots = minetest.find_nodes_in_area(vector.offset(pos,-3,0,-3),vector.offset(pos,3,0,3),{"air"})
+			for k, v in pairs(dropspots) do
+				if not core.line_of_sight(pos, v) then
+					table.remove(dropspots, k)
+				end
+			end
 			if #dropspots == 0 then
 				table.insert(dropspots,pos)
 			end
