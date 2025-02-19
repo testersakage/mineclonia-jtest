@@ -47,6 +47,16 @@ minetest.register_craft({
 })
 
 minetest.register_craftitem("mcl_potions:glass_bottle", {
+	_dispense_into_walkable = true,
+	_on_dispense = function(stack, _, droppos, dropnode, dropdir)
+		local node_name = dropnode.name
+		if core.get_item_group(node_name, "honey_level") == 5 then
+			core.swap_node(droppos, {name = node_name:gsub("_5", ""), param2 = dropnode.param2})
+			core.add_item(vector.add(droppos, dropdir), "mcl_honey:honey_bottle")
+		end
+		stack:take_item()
+		return stack
+	end,
 	description = S("Glass Bottle"),
 	_tt_help = S("Liquid container"),
 	_doc_items_longdesc = S("A glass bottle is used as a container for liquids and can be used to collect water directly."),
