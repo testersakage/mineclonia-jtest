@@ -115,9 +115,9 @@ function awards.unlock(name, award)
 	if awards.show_mode == "chat" then
 		local chat_announce
 		if awdef.secret then
-			chat_announce = S("Secret Award Unlocked: @1", title)
+			chat_announce = S("Secret Advancement Unlocked: @1", title)
 		else
-			chat_announce = S("Award Unlocked: @1", title)
+			chat_announce = S("Advancement Unlocked: @1", title)
 		end
 		-- use the chat console to send it
 		minetest.chat_send_player(name, chat_announce)
