@@ -355,7 +355,6 @@ minetest.register_craftitem("mcl_potions:dragon_breath", {
 	_longdesc = S("This item is used in brewing and can be combined with splash potions to create lingering potions."),
 	image = "mcl_potions_dragon_breath.png",
 	groups = { brewitem = 1, bottle = 1, rarity = 1 },
-	stack_max = 64,
 })
 
 mcl_potions.register_potion({
