@@ -90,7 +90,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 							-- Only insert as connected if node isn't the piston itself
 							if vector.equals(piston_pos, offset_pos) then
 								if not vector.equals(movedir, dir) then
-									-- Don't allow pushing if chain of sticky blocks loops back and connects to the piston, e.g. from the side 
+									-- Don't allow pushing if chain of sticky blocks loops back and connects to the piston, e.g. from the side
 									return
 								end
 							else
