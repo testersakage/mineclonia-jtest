@@ -29,6 +29,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
     local enough_drops = defs.drops and #defs.drops == defs.stages
     local enough_selheights = #defs.sel_heights == defs.stages
     local enough_selwidths = defs.sel_widths and #defs.sel_widths == defs.stages
+    local enough_stagegroup = defs.groups_per_stage and #defs.groups_per_stage == defs.stages
     local enough_textures = #defs.textures == defs.stages
 
     if not defs.drops then defs.drops = {} end
@@ -40,6 +41,10 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
 
         if not enough_selwidths and not defs.single_sel_width then
             defs.sel_widths[i] = get_indexed_parameter(defs.sel_widths, i)
+        end
+
+        if not enough_stagegroup and defs.groups_per_stage then
+            defs.groups_per_stage[i] = get_indexed_parameter(defs.groups_per_stage, i)
         end
 
         if not enough_textures then
@@ -54,6 +59,10 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         local stage = (not mature and "_" .. (defs.initial_stage_zero and i - 1 or i) or "")
         local subname = id .. stage
         local texture = defs.textures[i]
+
+        if mature and defs.last_stage_index then
+            subname = id .. "_" .. defs.last_stage_index
+        end
 
         if not enough_drops then
             defs.drops[i] = get_indexed_parameter(defs.drops, i)
@@ -71,7 +80,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
             groups = table.merge(defs.groups or {}, {
                 attached_node = 3, destroy_by_lava_flow = 1, dig_by_piston = 1, dig_by_water = 1,
                 dig_immediate = 1, not_in_creative_inventory = 1, plant = 1, unsticky = 1, [id] = i
-            }, defs.groups_per_stage and defs.groups_per_stage[i]),
+            }, defs.groups_per_stage and defs.groups_per_stage[i] or {}),
             inventory_image = texture,
             selection_box = {
                 fixed = {-sel_width, -0.5, -sel_width, sel_width, sel_height, sel_width},
