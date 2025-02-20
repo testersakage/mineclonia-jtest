@@ -53,7 +53,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         end
 
         core.register_node(mod .. ":" .. subname, table.merge(tpl_crop, {
-            _doc_items_create_entry = premature or nil,
+            _doc_items_create_entry = premature or mature,
             _doc_items_entry_name = premature and defs.premature_desc or nil,
             _doc_items_longdesc = longdesc,
             _mcl_baseitem = defs.seed,
@@ -74,7 +74,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
             wield_image = texture
         }, overrides or {}))
 
-        if not (mature and premature) then
+        if not (mature or premature) then
             doc.add_entry_alias("nodes", id_orig, "nodes", mod .. ":" .. subname)
         end
     end
