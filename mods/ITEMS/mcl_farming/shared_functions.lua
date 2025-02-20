@@ -137,38 +137,6 @@ function mcl_farming:grow_plant(identifier, pos, node, stages, ignore_light, low
 	return true
 end
 
-function mcl_farming:place_seed(itemstack, placer, pointed_thing, plantname)
-	local pt = pointed_thing
-	if not pt then
-		return
-	end
-	if pt.type ~= "node" then
-		return
-	end
-
-	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-	if rc then return rc end
-
-	local pos = { x = pt.above.x, y = pt.above.y - 1, z = pt.above.z }
-	local farmland = minetest.get_node(pos)
-	pos = { x = pt.above.x, y = pt.above.y, z = pt.above.z }
-	local place_s = minetest.get_node(pos)
-
-	if string.find(farmland.name, "mcl_farming:soil") and string.find(place_s.name, "air") then
-		minetest.sound_play(minetest.registered_nodes[plantname].sounds.place, { pos = pos }, true)
-		minetest.add_node(pos, { name = plantname, param2 = minetest.registered_nodes[plantname].place_param2 })
-		--local intervals_counter = get_intervals_counter(pos, 1, 1)
-	else
-		return
-	end
-
-	if not minetest.is_creative_enabled(placer:get_player_name()) then
-		itemstack:take_item()
-	end
-	return itemstack
-end
-
-
 --[[ Helper function to create a gourd (e.g. melon, pumpkin), the connected stem nodes as
 
 - full_unconnected_stem: itemstring of the full-grown but unconnected stem node. This node must already be done

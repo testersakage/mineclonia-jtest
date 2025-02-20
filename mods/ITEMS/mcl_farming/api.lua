@@ -13,10 +13,12 @@ local tpl_crop = {
 }
 
 local function get_indexed_parameter(parameter, index)
+    index = tostring(index)
     for k, v in pairs(parameter) do
-        if type(k) ~= "string" then return end
-        for current_index in k:gmatch("%d+") do
-            if current_index == index then return v end
+        if type(k) == "string" then
+            for current_index in k:gmatch("%d+") do
+                if current_index == index then return v end
+            end
         end
     end
 end
@@ -26,6 +28,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
     local id_orig = mod .. ":" .. id .. "_" .. (defs.initial_stage_zero and 0 or 1)
     local enough_drops = defs.drops and #defs.drops == defs.stages
     local enough_selheights = #defs.sel_heights == defs.stages
+    local enough_selwidths = defs.sel_widths and #defs.sel_widths == defs.stages
     local enough_textures = #defs.textures == defs.stages
 
     if not defs.drops then defs.drops = {} end
@@ -36,14 +39,14 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         end
 
         if not enough_textures then
-            defs.texture[i] = get_indexed_parameter(defs.textures, i)
+            defs.textures[i] = get_indexed_parameter(defs.textures, i)
         end
 
         local mature, premature = i == defs.stages, i == 1
         local desc = not mature and S("@1 (Stage @2)", defs.premature_desc, i) or defs.mature_desc
         local longdesc = premature and defs.premature_longdesc or mature and defs.mature_longdesc
         local sel_height = defs.sel_heights[i]
-        local sel_width = defs.sel_widths[i]
+        local sel_width = enough_selwidths and defs.sel_widths[i] or defs.single_sel_width
         local stage = (not mature and "_" .. (defs.initial_stage_zero and i - 1 or i) or "")
         local subname = id .. stage
         local texture = defs.textures[i]
