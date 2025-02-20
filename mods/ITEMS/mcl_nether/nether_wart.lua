@@ -62,37 +62,23 @@ core.register_craftitem("mcl_nether:nether_wart_item", {
 	wield_image = "mcl_nether_nether_wart.png"
 })
 
-local names = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"}
-
-minetest.register_abm({
-	label = "Nether wart growth",
-	nodenames = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"},
-	neighbors = {"group:soil_nether_wart"},
-	interval = 35,
-	chance = 11,
+core.register_abm({
 	action = function(pos, node)
-		pos.y = pos.y-1
-		if minetest.get_item_group(minetest.get_node(pos).name, "soil_nether_wart") == 0 then
-			return
-		end
-		pos.y = pos.y+1
-		local step = nil
-		for i,name in ipairs(names) do
-			if name == node.name then
-				step = i
-				break
+		local stage = node.name:sub(24)
+
+		if stage then
+			if tonumber(stage) < 2 then
+				node.name = node.name:gsub(stage, tostring(tonumber(stage) + 1))
+			else
+				node.name = node.name:gsub("_" .. stage, "")
 			end
+
+			core.swap_node(pos, node)
 		end
-		if step == nil then
-			return
-		end
-		local new_node = {name=names[step+1]}
-		if new_node.name == nil then
-			new_node.name = "mcl_nether:nether_wart"
-		end
-		new_node.param = node.param
-		new_node.param2 = node.param2
-		minetest.set_node(pos, new_node)
-	end
+	end,
+	chance = 11,
+	interval = 35,
+	label = "Nether wart growth",
+	nodenames = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"}
 })
 
