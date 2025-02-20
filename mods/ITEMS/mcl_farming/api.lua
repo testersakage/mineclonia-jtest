@@ -22,11 +22,11 @@ local function get_indexed_parameter(parameter, index)
 end
 
 function mcl_farming.register_simple_crop(id, defs, overrides)
-    local id_orig = "mcl_farming:" .. id .. "_" .. (defs.initial_stage_zero and 0 or 1)
+    local mod = core.get_current_modname()
+    local id_orig = mod .. ":" .. id .. "_" .. (defs.initial_stage_zero and 0 or 1)
     local enough_drops = defs.drops and #defs.drops == defs.stages
     local enough_selheights = #defs.sel_heights == defs.stages
     local enough_textures = #defs.textures == defs.stages
-    local mod = core.get_current_modname()
 
     if not defs.drops then defs.drops = {} end
 
@@ -40,7 +40,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         end
 
         local mature, premature = i == defs.stages, i == 1
-        local desc = premature and S("@1 (Stage @2)", defs.premature_desc, i) or defs.mature_desc
+        local desc = not mature and S("@1 (Stage @2)", defs.premature_desc, i) or defs.mature_desc
         local longdesc = premature and defs.premature_longdesc or mature and defs.mature_longdesc
         local sel_height = defs.sel_heights[i]
         local sel_width = defs.sel_widths[i]
@@ -74,8 +74,8 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
             wield_image = texture
         }, overrides or {}))
 
-        if not mature and not premature then
-            doc.add_entry_alias("nodes", id_orig, "nodes", "mcl_farming:" .. subname)
+        if not (mature and premature) then
+            doc.add_entry_alias("nodes", id_orig, "nodes", mod .. ":" .. subname)
         end
     end
 end
