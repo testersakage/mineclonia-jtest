@@ -170,6 +170,10 @@ function mcl_farming.register_stems(id, defs, overrides)
         local name = mod .. ":" .. id .. "_" .. mature and "unconnect" or i
         local texture = "[combine:16x16:0," .. (8 - i) * 2 .. "=" .. defs.texture
 
+        if mature and defs.connected_stem_subname then
+            name = mod .. ":" .. defs.connected_stem_subname .. "_unconnect"
+        end
+
         core.register_node(name, table.merge(tpl_stem, {
             _doc_items_create_entry = mature or premature,
             _doc_items_entry_name = premature and defs.premature_desc or nil,
@@ -205,7 +209,8 @@ function mcl_farming.register_stems(id, defs, overrides)
         local dir = {"_r", "_l", "_t", "_b"}
 
         for i = 1, 4 do
-            local name = mod .. ":" .. id .. "_linked_" .. dir[i]
+            local subname = mature and defs.connected_stem_subname .. "_linked_" .. dir[i]
+            local name = mod .. ":" .. subname or id .. "_linked_" .. dir[i]
 
             core.register_node(name, table.merge(tpl_stem_connected, {
                 _doc_items_create_entry = false,

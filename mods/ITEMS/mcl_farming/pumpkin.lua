@@ -1,7 +1,8 @@
 local S = core.get_translator(core.get_current_modname())
 local mod_screwdriver = core.get_modpath("screwdriver")
 -- Pumpkin stems
-mcl_farming.register_stems("pumpkintige", {
+mcl_farming.register_stems("pumpkin", {
+	connected_stem_subname = "pumpkintige",
 	connected_stem_texture = "mcl_farming_pumpkin_stem_connected.png",
 	gourd = "mcl_farming:pumpkin",
 	mature_desc = S("Mature Pumpkin Stem"),
