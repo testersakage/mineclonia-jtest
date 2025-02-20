@@ -65,6 +65,9 @@ function awards.unlock(name, award)
 
 	-- Unlock Award
 	minetest.log("action", name.." has unlocked award "..award)
+	if minetest.settings:get_bool("mcl_showAdvancementMessages", true) then
+		minetest.chat_send_all(S("@1 has made the advancement @2", name, minetest.colorize(mcl_colors.GREEN, "[" .. (awdef.title or award) .. "]")))
+	end
 	data.unlocked[award] = award
 	awards.save()
 
