@@ -168,14 +168,13 @@ minetest.register_tool("doc_identifier:identifier_solid", {
 	on_use = doc_identifier.identify,
 	on_place = doc_identifier.liquid_mode,
 	on_secondary_use = doc_identifier.liquid_mode,
-	groups = {rarity = 3}
 })
 minetest.register_tool("doc_identifier:identifier_liquid", {
 	description = S("Lookup Tool"),
 	_doc_items_create_entry = false,
 	tool_capabilities = {},
 	range = 10,
-	groups = { not_in_creative_inventory = 1, not_in_craft_guide = 1, disable_repair = 1, rarity = 3 },
+	groups = { not_in_creative_inventory = 1, not_in_craft_guide = 1, disable_repair = 1 },
 	wield_image = "doc_identifier_identifier_liquid.png",
 	inventory_image = "doc_identifier_identifier_liquid.png",
 	liquids_pointable = true,
