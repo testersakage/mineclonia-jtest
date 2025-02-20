@@ -25,6 +25,43 @@ local tpl_stem = {
     walkable = false
 }
 
+local tpl_stem_connected = {
+    _mcl_blast_resistance = 0,
+    _mcl_hardness = 0,
+    drawtype = "nodebox",
+    paramtype = "light",
+    paramtype2 = "color",
+    sounds = mcl_sounds.node_sound_leaves_defaults(),
+    sunlight_propagates = true,
+    use_texture_alpha = "clip",
+    walkable = false
+}
+
+local nodeboxes = {
+    {-0.5, -0.5, 0, 0.5, 0.5, 0},
+    {-0.5, -0.5, 0, 0.5, 0.5, 0},
+    {0, -0.5, -0.5, 0, 0.5, 0.5},
+    {0, -0.5, -0.5, 0, 0.5, 0.5}
+}
+
+local selectionboxes = {
+    {-0.1, -0.5, -0.1, 0.5, 0.2, 0.1},
+    {-0.5, -0.5, -0.1, 0.1, 0.2, 0.1},
+    {-0.1, -0.5, -0.1, 0.1, 0.2, 0.5},
+    {-0.1, -0.5, -0.5, 0.1, 0.2, 0.1}
+}
+
+local function get_connected_stem_tiles(texture, index)
+    local textures = {
+        {"blank.png", "blank.png", "blank.png", "blank.png", texture, texture .. "^[transform:FX"},
+        {"blank.png", "blank.png", "blank.png", "blank.png", texture .. "^[transform:FX", texture},
+        {"blank.png", "blank.png", texture .. "^[transform:FX", texture, "blank.png", "blank.png"},
+        {"blank.png", "blank.png", texture, texture .. "^[transform:FX", "blank.png", "blank.png"}
+    }
+
+    return textures[index]
+end
+
 local function get_indexed_parameter(parameter, index)
     index = tostring(index)
     for k, v in pairs(parameter) do
@@ -163,6 +200,26 @@ function mcl_farming.register_stems(id, defs, overrides)
 
         if not (mature or premature) then
             doc.add_entry_alias("nodes", id_orig, "nodes", name)
+        end
+
+        local dir = {"_r", "_l", "_t", "_b"}
+
+        for i = 1, 4 do
+            local name = mod .. ":" .. id .. "_linked_" .. dir[i]
+
+            core.register_node(name, table.merge(tpl_stem_connected, {
+                _doc_items_create_entry = false,
+                drop = get_stem_drops(defs.seed, 8),
+                groups = {
+                    attached_node = 3, destroy_by_lava_flow = 1, dig_by_piston = 1,
+                    dig_by_water = 1, dig_immediate = 3, not_in_creative_inventory = 1, plant = 1
+                },
+                node_box = {fixed = nodeboxes[i], type = "fixed"},
+                selection_box = {fixed = selectionboxes[i], type = "fixed"},
+                tiles = get_connected_stem_tiles(defs.connected_stem_texture, i)
+            }))
+
+            doc.add_entry_alias("nodes", mod .. ":" .. id .. "_unconnect", "nodes", name)
         end
     end
 end
