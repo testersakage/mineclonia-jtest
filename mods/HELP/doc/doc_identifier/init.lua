@@ -186,18 +186,9 @@ minetest.register_tool("doc_identifier:identifier_liquid", {
 
 minetest.register_craft({
 	output = "doc_identifier:identifier_solid",
-	recipe = { {"group:stick", "group:stick" },
-		   {"", "group:stick"},
-		   {"group:stick", ""} }
+	recipe = { { "mcl_core:glass" },
+		   { "group:stick" } }
 })
-
-if minetest.get_modpath("mcl_core") then
-	minetest.register_craft({
-		output = "doc_identifier:identifier_solid",
-		recipe = { { "mcl_core:glass" },
-			   { "group:stick" } }
-	})
-end
 
 minetest.register_alias("doc_identifier:identifier", "doc_identifier:identifier_solid")
 
