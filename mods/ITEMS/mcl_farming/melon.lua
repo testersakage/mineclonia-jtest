@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 -- Melon stems
 mcl_farming.register_stems("melontige", {
 	connected_stem_texture = "mcl_farming_melon_stem_connected.png",
@@ -36,7 +36,7 @@ core.register_node("mcl_farming:melon", {
 	},
 	groups = {
 		axey = 1, building_block = 1, compostability = 65, dig_by_piston = 1,
-		enderman_takable = 1, handy = 1, plant = 1, unsticky = 1
+		enderman_takable = 1, handy = 1, melon = 1, plant = 1, unsticky = 1
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	tiles = {"farming_melon_top.png", "farming_melon_top.png", "farming_melon_side.png"}

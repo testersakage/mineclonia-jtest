@@ -254,3 +254,58 @@ function mcl_farming.place_plant(itemstack, placer, pointed_thing)
 
     return itemstack
 end
+
+function mcl_farming.carve_pumpkin(itemstack, placer, pointed_thing)
+    if pointed_thing.type ~= "node" then return end
+
+    local above, under = pointed_thing.above, pointed_thing.under
+    if above.y ~= under.y then return end
+
+    if not core.is_creative_enabled(placer:get_player_name()) then
+		local toolname = itemstack:get_name()
+		local wear = mcl_autogroup.get_wear(toolname, "shearsy")
+
+		itemstack:add_wear(wear)
+	end
+
+    core.sound_play("default_grass_footstep", {max_hear_distance = 16, pos = above}, true)
+
+    local dir = vector.subtract(under, above)
+	local param2 = core.dir_to_facedir(dir)
+
+    core.set_node(under, {name = "mcl_farming:pumpkin_face", param2 = param2})
+	core.add_item(above, "mcl_farming:pumpkin_seeds 4")
+
+    return itemstack, true
+end
+
+mcl_farming.pumpkin_hud = {}
+
+function mcl_farming.add_pumpkin_hud(player)
+	pumpkin_hud[player] = {
+        --this is a fake crosshair, because hotbar and crosshair doesn't support z_index
+		--TODO: remove this and add correct z_index values
+		fake_crosshair = player:hud_add({
+			position = {x = 0.5, y = 0.5},
+			scale = {x = 1, y = 1},
+			text = "crosshair.png",
+			type = "image",
+            z_index = -100
+		}),
+		pumpkin_blur = player:hud_add({
+			position = {x = 0.5, y = 0.5},
+			scale = {x = -101, y = -101},
+			text = "mcl_farming_pumpkin_hud.png",
+			type = "image",
+            z_index = -200
+		})
+	}
+end
+
+function mcl_farming.remove_pumpkin_hud(player)
+    if pumpkin_hud[player] then
+        player:hud_remove(pumpkin_hud[player].pumpkin_blur)
+        player:hud_remove(pumpkin_hud[player].fake_crosshair)
+        pumpkin_hud[player] = nil
+    end
+end
