@@ -3,10 +3,23 @@ local S = core.get_translator(core.get_current_modname())
 local tpl_crop = {
     _mcl_blast_resistance = 0,
     _mcl_hardness = 0,
+    _on_bone_meal = mcl_farming.bone_meal_crop,
     drawtype = "plantlike",
     paramtype = "light",
     paramtype2 = "meshoptions",
     place_param2 = 3,
+    sounds = mcl_sounds.node_sound_leaves_defaults(),
+    sunlight_propagates = true,
+    walkable = false
+}
+
+local tpl_stem = {
+    _mcl_blast_resistance = 0,
+    _mcl_hardness = 0,
+    _on_bone_meal = mcl_farming.bone_meal_stem,
+    drawtype = "plantlike",
+    paramtype = "light",
+    paramtype2 = "color",
     sounds = mcl_sounds.node_sound_leaves_defaults(),
     sunlight_propagates = true,
     walkable = false
@@ -56,25 +69,24 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         local longdesc = premature and defs.premature_longdesc or mature and defs.mature_longdesc
         local sel_height = defs.sel_heights[i]
         local sel_width = defs.single_sel_width or defs.sel_widths[i]
-        local stage = (not mature and "_" .. (defs.initial_stage_zero and i - 1 or i) or "")
-        local subname = id .. stage
+        local subname = (not mature and "_" .. (defs.initial_stage_zero and i - 1 or i) or "")
+        local name = mod .. ":" .. id .. subname
         local texture = defs.textures[i]
 
         if mature and defs.last_stage_index then
-            subname = id .. "_" .. defs.last_stage_index
+            name = mod .. ":" .. id .. "_" .. defs.last_stage_index
         end
 
         if not enough_drops then
             defs.drops[i] = get_indexed_parameter(defs.drops, i)
         end
 
-        core.register_node(mod .. ":" .. subname, table.merge(tpl_crop, {
-            _doc_items_create_entry = premature or mature,
+        core.register_node(name, table.merge(tpl_crop, {
+            _doc_items_create_entry = mature or premature,
             _doc_items_entry_name = premature and defs.premature_desc or nil,
             _doc_items_longdesc = longdesc,
             _mcl_baseitem = defs.seed,
             _mcl_fortune_drop = mature and defs.fortune_drop,
-            _on_bone_meal = not mature and mcl_farming.bone_meal_crop,
             description = desc,
             drop = defs.drops[i] or premature and defs.seed or defs.mature_drop,
             groups = table.merge(defs.groups or {}, {
@@ -91,7 +103,66 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         }, overrides or {}))
 
         if not (mature or premature) then
-            doc.add_entry_alias("nodes", id_orig, "nodes", mod .. ":" .. subname)
+            doc.add_entry_alias("nodes", id_orig, "nodes", name)
+        end
+    end
+end
+
+local function get_stem_drops(seed, index)
+    local rarity = {
+        {6, 3, 3, 2, 2, 2, 3, 3},
+		{81, 22, 10, 6, 5, 3, 3, 3},
+		{3333, 417, 125, 53, 27, 16, 10, 10}
+    }
+
+    return {
+        {items = {seed}, rarity = rarity[1][index]},
+        {items = {seed .. " 2"}, rarity = rarity[2][index]},
+        {items = {seed .. " 3"}, rarity = rarity[3][index]}
+    }
+end
+
+function mcl_farming.register_stems(id, defs, overrides)
+    local mod = core.get_current_modname()
+    local id_orig = mod .. ":" .. id .. "_1"
+
+    for i = 1, 8 do
+        local mature, premature = i == 8, i == 1
+        local desc = not mature and S("@1 (Stage @2)", defs.premature_desc, i) or defs.mature_desc
+        local longdesc = premature and defs.premature_longdesc or mature and defs.mature_longdesc
+        local name = mod .. ":" .. id .. "_" .. mature and "unconnect" or i
+        local texture = "[combine:16x16:0," .. (8 - i) * 2 .. "=" .. defs.texture
+
+        core.register_node(name, table.merge(tpl_stem, {
+            _doc_items_create_entry = mature or premature,
+            _doc_items_entry_name = premature and defs.premature_desc or nil,
+            _doc_items_longdesc = longdesc,
+            _mcl_baseitem = defs.seed,
+            _mcl_farming_gourd = defs.gourd,
+            description = desc,
+            drop = {
+                items = get_stem_drops(defs.seed, i),
+                max_items = 1
+            },
+            groups = table.merge(defs.groups or {}, {
+                attached_node = 3, destroy_by_lava_flow = 1, dig_by_piston = 1, dig_by_water = 1,
+                dig_immediate = 3, not_in_creative_inventory = 1, plant = 1, [id] = i
+            }),
+            inventory_image = texture,
+            palette = "mcl_farming_" .. id .. "_palette.png",
+            place_param2 = i - 1,
+            selection_box = {
+                fixed = {
+                    -0.1875, -0.5, -0.1875, 0.1875, -0.5 + i / 8, 0.1875
+                },
+                type = "fixed"
+            },
+            tiles = {texture},
+            wield_image = texture
+        }, overrides or {}))
+
+        if not (mature or premature) then
+            doc.add_entry_alias("nodes", id_orig, "nodes", name)
         end
     end
 end
