@@ -282,7 +282,7 @@ end
 mcl_farming.pumpkin_hud = {}
 
 function mcl_farming.add_pumpkin_hud(player)
-	pumpkin_hud[player] = {
+	mcl_farming.pumpkin_hud[player] = {
         --this is a fake crosshair, because hotbar and crosshair doesn't support z_index
 		--TODO: remove this and add correct z_index values
 		fake_crosshair = player:hud_add({
@@ -303,9 +303,9 @@ function mcl_farming.add_pumpkin_hud(player)
 end
 
 function mcl_farming.remove_pumpkin_hud(player)
-    if pumpkin_hud[player] then
-        player:hud_remove(pumpkin_hud[player].pumpkin_blur)
-        player:hud_remove(pumpkin_hud[player].fake_crosshair)
-        pumpkin_hud[player] = nil
+    if mcl_farming.pumpkin_hud[player] then
+        player:hud_remove(mcl_farming.pumpkin_hud[player].pumpkin_blur)
+        player:hud_remove(mcl_farming.pumpkin_hud[player].fake_crosshair)
+        mcl_farming.pumpkin_hud[player] = nil
     end
 end
