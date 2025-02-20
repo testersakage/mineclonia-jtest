@@ -46,10 +46,10 @@ end
 
 local longdesc
 if explosions_griefing then
-	longdesc = S("An explosive device. When it explodes, it will hurt living beings and destroy blocks around it. TNT has an explosion radius of @1. With a small chance, blocks may drop as an item (as if being mined) rather than being destroyed. TNT can be ignited by tools, explosions, fire, lava and redstone signals."
+	longdesc = S("An explosive device. When it explodes, it will hurt living beings and destroy blocks around it. TNT has an explosion power of @1. With a small chance, blocks may drop as an item (as if being mined) rather than being destroyed. TNT can be ignited by tools, explosions, fire, lava and redstone signals."
 		, TNT_RANGE)
 else
-	longdesc = S("An explosive device. When it explodes, it will hurt living beings. TNT has an explosion radius of @1. TNT can be ignited by tools, explosions, fire, lava and redstone signals."
+	longdesc = S("An explosive device. When it explodes, it will hurt living beings. TNT has an explosion power of @1. TNT can be ignited by tools, explosions, fire, lava and redstone signals."
 		, TNT_RANGE)
 end
 
