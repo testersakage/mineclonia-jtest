@@ -122,7 +122,7 @@ local main_page_static = table.concat({
 
 	--Achievements button
 	"image_button[10.325,4.075;1.1,1.1;mcl_achievements_button.png;__mcl_achievements;]",
-	"tooltip[__mcl_achievements;" .. F(S("Achievements")) .. "]",
+	"tooltip[__mcl_achievements;" .. F(S("Advancements")) .. "]",
 
 	--Listring
 	"listring[current_player;main]",
