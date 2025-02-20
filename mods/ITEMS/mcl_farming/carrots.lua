@@ -22,12 +22,12 @@ mcl_farming.register_simple_crop("carrot", {
 	premature_desc = S("Premature Carrot Plant"),
 	premature_longdesc = S("Carrot plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."),
 	seed = "mcl_farming:carrot_item",
-	sel_heights = {["1; 2"] = -0.375, ["3; 4"] = -0.25, ["5; 6; 7"] = -0.125, ["8"] = 0},
+	sel_heights = {["1, 2"] = -0.375, ["3, 4"] = -0.25, ["5, 6, 7"] = -0.125, ["8"] = 0},
 	single_sel_width = 0.4375,
 	stages = 8,
 	textures = {
-		["1; 2"] = "farming_carrot_1.png", ["3; 4"] = "farming_carrot_2.png",
-		["5; 6; 7"] = "farming_carrot_3.png", ["8"] = "farming_carrot_4.png"
+		["1, 2"] = "farming_carrot_1.png", ["3, 4"] = "farming_carrot_2.png",
+		["5, 6, 7"] = "farming_carrot_3.png", ["8"] = "farming_carrot_4.png"
 	}
 })
 -- Craftitems

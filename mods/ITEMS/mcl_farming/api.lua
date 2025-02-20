@@ -82,3 +82,34 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         end
     end
 end
+
+function mcl_farming.place_plant(itemstack, placer, pointed_thing)
+    if pointed_thing.type ~= "node" then return end
+
+    local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
+    if rc then return rc end
+
+    local idefs = itemstack:get_definition()
+    local plant = idefs and idefs._mcl_places_plant
+    local above = pointed_thing.above
+    local anode = core.get_node(above)
+    local unode = core.get_node(pointed_thing.under)
+
+    if unode.name:find("mcl_farming:soil") and anode.name:find("air") then
+        local spec = core.registered_nodes[plant].sounds.place
+        core.place_node(above, {name = plant})
+        core.sound_play(spec, {max_hear_distance = 16, pos = above}, true)
+
+        if not core.is_creative_enabled(placer:get_player_name()) then
+            itemstack:take_item()
+        end
+    elseif core.get_item_group(itemstack:get_name(), "food") > 0 then
+        local hp = core.get_item_group(itemstack:get_name(), "eatable")
+        local replacement = idefs._mcl_farming_eat_replacement
+
+        return core.do_item_eat(hp, replacement, itemstack, placer, pointed_thing)
+    end
+
+    return itemstack
+end
