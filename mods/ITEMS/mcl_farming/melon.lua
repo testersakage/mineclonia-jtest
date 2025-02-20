@@ -1,6 +1,7 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 -- Melon stems
 mcl_farming.register_stems("melontige", {
+	connected_stem_texture = "mcl_farming_melon_stem_connected.png",
 	gourd = "mcl_farming:melon",
 	mature_desc = S("Mature Melon Stem"),
 	mature_longdesc = S("A mature melon stem attempts to grow a melon at one of its four adjacent blocks. A melon can only grow on top of farmland, dirt, or a grass block. When a melon is next to a melon stem, the melon stem immediately bends and connects to the melon. While connected, a melon stem can't grow another melon. As soon all melons around the stem have been removed, it loses the connection and is ready to grow another melon."),
