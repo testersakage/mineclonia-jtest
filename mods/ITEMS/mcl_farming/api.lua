@@ -38,6 +38,10 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
             defs.sel_heights[i] = get_indexed_parameter(defs.sel_heights, i)
         end
 
+        if not enough_selwidths and not defs.single_sel_width then
+            defs.sel_widths[i] = get_indexed_parameter(defs.sel_widths, i)
+        end
+
         if not enough_textures then
             defs.textures[i] = get_indexed_parameter(defs.textures, i)
         end
@@ -46,7 +50,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         local desc = not mature and S("@1 (Stage @2)", defs.premature_desc, i) or defs.mature_desc
         local longdesc = premature and defs.premature_longdesc or mature and defs.mature_longdesc
         local sel_height = defs.sel_heights[i]
-        local sel_width = enough_selwidths and defs.sel_widths[i] or defs.single_sel_width
+        local sel_width = defs.single_sel_width or defs.sel_widths[i]
         local stage = (not mature and "_" .. (defs.initial_stage_zero and i - 1 or i) or "")
         local subname = id .. stage
         local texture = defs.textures[i]
