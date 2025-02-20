@@ -86,11 +86,16 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
 							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0
 							and (inv_nodes_movable or minetest.get_item_group(offset_node.name, "container") == 0) then
-							if vector.equals(piston_pos, offset_pos) and not vector.equals(movedir, dir) then
-								return
-							end
 
-							table.insert(connected, offset_pos)
+							-- Only insert as connected if node isn't the piston itself
+							if vector.equals(piston_pos, offset_pos) then
+								if not vector.equals(movedir, dir) then
+									-- Don't allow pushing if chain of sticky blocks loops back and connects to the piston, e.g. from the side 
+									return
+								end
+							else
+								table.insert(connected, offset_pos)
+							end
 						end
 					end
 				end
