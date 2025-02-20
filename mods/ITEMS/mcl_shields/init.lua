@@ -113,8 +113,6 @@ local function set_shield_layers(itemstack, layers)
 	local def = core.registered_items[itemname]
 	if not meta or not def or not def._shield_color_key then return end
 	local b, base_colour = mcl_banners, def._shield_color_key
-	local name = meta:get_string("name")
-	if name == "" then name = itemstack:get_description() end
 
 	if layers and #layers > 0 then mcl_banners.write_layers(meta, layers) end
 	b.update_description(itemstack)
