@@ -70,8 +70,6 @@ minetest.register_chatcommand("gamemode",{
 
 		if gm == "survival" and minetest.is_creative_enabled() then
 			return true, S("Player @1 is still in creative mode because world is in creative mode", n)
-		else
-			msg = S("Gamemode for player @1: @2", n, mcl_gamemode.get_gamemode(p))
 		end
 
 		--Result message - show effective game mode
