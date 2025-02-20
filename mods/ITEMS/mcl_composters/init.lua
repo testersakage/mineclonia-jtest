@@ -193,7 +193,6 @@ end
 
 local function on_hopper_out(uppos, pos)
 	-- Get bonemeal from composter above
-	local upnode = minetest.get_node(uppos)
 	local stack = create_bonemeal(uppos, nil, true)
 	if stack then
 		local meta = minetest.get_meta(pos)

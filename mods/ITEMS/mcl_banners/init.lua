@@ -123,7 +123,6 @@ end
 -- Create a banner description containing all the layer names
 function mcl_banners.make_advanced_banner_description (name, layers, limit)
 	if layers == nil or #layers == 0 then return name end
-	local patterns, colors = mcl_banners.patterns, mcl_banners.colors
 	local layerstrings = {}
 	if type(limit) ~= "number" or limit < 0 then limit = max_layer_lines end
 	for l=1, math.min(#layers, limit) do

@@ -1,5 +1,3 @@
-local NS = function(s) return s end
-
 -- Pattern crafting. This file contains the code for crafting all the
 -- emblazonings you can put on the banners through the crafting table.
 
