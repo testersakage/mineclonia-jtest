@@ -60,7 +60,7 @@ minetest.register_craftitem("mcl_potions:glass_bottle", {
 			local water_type = "water"
 			local defs = core.registered_nodes[node_name]
 			local is_source = defs and defs.liquidtype == "source"
-			if core.get_item_group(node_name, "river_water") then water_type = "river_water" end
+			if core.get_item_group(node_name, "river_water") ~= 0 then water_type = "river_water" end
 			if is_source then new_stack = ItemStack("mcl_potions:" .. water_type) end
 		end
 		if new_stack then
