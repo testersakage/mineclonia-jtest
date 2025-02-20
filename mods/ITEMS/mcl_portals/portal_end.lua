@@ -254,7 +254,7 @@ function mcl_portals.end_portal_teleport(pos)
 				return
 			end
 
-			if obj:is_player() and mcl_player.players[obj].attached == true then
+			if obj:is_player() and mcl_player.players[obj].attached == true then --luacheck: ignore 542 (empty if branch)
 				-- do nothing if player is attached to something in portal
 			else
 				mcl_portals.end_teleport(obj, objpos)
