@@ -28,6 +28,8 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
     local enough_textures = #defs.textures == defs.stages
     local mod = core.get_current_modname()
 
+    if not defs.drops then defs.drops = {} end
+
     for i = 1, defs.stages do
         if not enough_selheights then
             defs.sel_heights[i] = get_indexed_parameter(defs.sel_heights, i)
@@ -39,27 +41,26 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
 
         local mature, premature = i == defs.stages, i == 1
         local desc = premature and S("@1 (Stage @2)", defs.premature_desc, i) or defs.mature_desc
+        local longdesc = premature and defs.premature_longdesc or mature and defs.mature_longdesc
         local sel_height = defs.sel_heights[i]
         local sel_width = defs.sel_widths[i]
-        local subname = id .. "_" .. (not mature and (defs.initial_stage_zero and i - 1 or i) or "")
+        local stage = (not mature and "_" .. (defs.initial_stage_zero and i - 1 or i) or "")
+        local subname = id .. stage
         local texture = defs.textures[i]
 
-        if type(defs.drops) == "nil" then
-            defs.drops = {}
-            defs.drops[i] = premature and defs.seed or defs.mature_drop
-        elseif not enough_drops then
+        if not enough_drops then
             defs.drops[i] = get_indexed_parameter(defs.drops, i)
         end
 
         core.register_node(mod .. ":" .. subname, table.merge(tpl_crop, {
             _doc_items_create_entry = premature or nil,
             _doc_items_entry_name = premature and defs.premature_desc or nil,
-            _doc_items_longdesc = premature and defs.premature_longdesc or defs.mature_longdesc,
+            _doc_items_longdesc = longdesc,
             _mcl_baseitem = defs.seed,
             _mcl_fortune_drop = mature and defs.fortune_drop,
             _on_bone_meal = not mature and mcl_farming.bone_meal_crop,
             description = desc,
-            drop = defs.drops[i],
+            drop = defs.drops[i] or premature and defs.seed or defs.mature_drop,
             groups = table.merge(defs.groups or {}, {
                 attached_node = 3, destroy_by_lava_flow = 1, dig_by_piston = 1, dig_by_water = 1,
                 dig_immediate = 1, not_in_creative_inventory = 1, plant = 1, unsticky = 1, [id] = i
