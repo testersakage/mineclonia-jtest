@@ -92,7 +92,8 @@ local function migrate_custom_shield_texture(texture)
 end
 
 local shield_texture_builder = {
-	blank = function() return shield_texture_builder.combine("mcl_banners_banner_base.png","") end,
+	-- luacheck will flag this style of "function table" as non-standard global hence add an exception
+	blank = function() return shield_texture_builder.combine("mcl_banners_banner_base.png","") end, -- luacheck: globals shield_texture_builder
 	base = function (rgb, ratio)
 		local banner = "mcl_banners_banner_base.png"
 		if rgb then banner = "(" .. banner .. "^[colorize:"..rgb..":"..ratio .. ")" end
