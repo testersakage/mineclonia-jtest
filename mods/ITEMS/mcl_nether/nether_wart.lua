@@ -1,143 +1,65 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-
-minetest.register_node("mcl_nether:nether_wart_0", {
-	description = S("Premature Nether Wart (Stage 1)"),
-	_doc_items_longdesc = S("A premature nether wart has just recently been planted on soul sand. Nether wart slowly grows on soul sand in 4 stages (the second and third stages look identical). Although nether wart is home to the Nether, it grows in any dimension."),
-	paramtype = "light",
-	paramtype2 = "meshoptions",
-	place_param2 = 3,
-	walkable = false,
-	drawtype = "plantlike",
-	drop = "mcl_nether:nether_wart_item",
-	tiles = {"mcl_nether_nether_wart_stage_0.png"},
-	wield_image = "mcl_nether_nether_wart_stage_0.png",
-	inventory_image = "mcl_nether_nether_wart_stage_0.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, -0.125, 0.5}
-		},
-	},
-	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1, unsticky = 1},
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-})
-
-minetest.register_node("mcl_nether:nether_wart_1", {
-	description = S("Premature Nether Wart (Stage 2)"),
-	_doc_items_create_entry = false,
-	paramtype = "light",
-	paramtype2 = "meshoptions",
-	place_param2 = 3,
-	walkable = false,
-	drawtype = "plantlike",
-	drop = "mcl_nether:nether_wart_item",
-	tiles = {"mcl_nether_nether_wart_stage_1.png"},
-	wield_image = "mcl_nether_nether_wart_stage_1.png",
-	inventory_image = "mcl_nether_nether_wart_stage_1.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.15, 0.5}
-		},
-	},
-	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1, unsticky = 1},
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-})
-
-minetest.register_node("mcl_nether:nether_wart_2", {
-	description = S("Premature Nether Wart (Stage 3)"),
-	_doc_items_create_entry = false,
-	paramtype = "light",
-	paramtype2 = "meshoptions",
-	place_param2 = 3,
-	walkable = false,
-	drawtype = "plantlike",
-	drop = "mcl_nether:nether_wart_item",
-	tiles = {"mcl_nether_nether_wart_stage_1.png"},
-	wield_image = "mcl_nether_nether_wart_stage_1.png",
-	inventory_image = "mcl_nether_nether_wart_stage_1.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.15, 0.5}
-		},
-	},
-	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1, unsticky = 1},
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-})
-
-minetest.register_node("mcl_nether:nether_wart", {
-	description = S("Mature Nether Wart"),
-	_doc_items_longdesc = S("The mature nether wart is a plant from the Nether and reached its full size and won't grow any further. It is ready to be harvested for its items."),
-	paramtype = "light",
-	paramtype2 = "meshoptions",
-	place_param2 = 3,
-	walkable = false,
-	drawtype = "plantlike",
-	drop = {
-		max_items = 2,
+local S = core.get_translator(core.get_current_modname())
+-- Nether warts
+mcl_farming.register_simple_crop("nether_wart", {
+	initial_stage_zero = true,
+	mature_desc = S("Mature Nether Wart"),
+	mature_drop = {
 		items = {
-			{ items = {"mcl_nether:nether_wart_item 2"}, rarity = 1 },
-			{ items = {"mcl_nether:nether_wart_item 2"}, rarity = 3 },
-			{ items = {"mcl_nether:nether_wart_item 1"}, rarity = 3 },
+			{items = {"mcl_nether:nether_wart_item 2"}},
+			{items = {"mcl_nether:nether_wart_item 3"}, rarity = 3},
+			{items = {"mcl_nether:nether_wart_item 4"}, rarity = 3}
 		},
+		max_items = 1
 	},
-	tiles = {"mcl_nether_nether_wart_stage_2.png"},
-	wield_image = "mcl_nether_nether_wart_stage_2.png",
-	inventory_image = "mcl_nether_nether_wart_stage_2.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.45, 0.5}
-		},
-	},
-	groups = {dig_immediate=3, not_in_creative_inventory=1,plant=1,attached_node=1,dig_by_water=1,destroy_by_lava_flow=1,dig_by_piston=1, unsticky = 1},
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_fortune_drop = {
-		discrete_uniform_distribution = true,
-		items = {"mcl_nether:nether_wart_item"},
-		min_count = 2,
-		max_count = 4,
+	mature_longdesc = S("The mature nether wart is a plant from the Nether and reached its full size and won't grow any further. It is ready to be harvested for its items."),
+	premature_desc = S("Premature Nether Wart"),
+	premature_longdesc = S("A premature nether wart has just recently been planted on soul sand. Nether wart slowly grows on soul sand in 4 stages (the second and third stages look identical). Although nether wart is home to the Nether, it grows in any dimension."),
+	seed = "mcl_nether:nether_wart_item",
+	sel_heights = {["1"] = -0.125, ["2, 3"] = 0.125, ["4"] = 0.4375},
+	single_sel_width = 0.5,
+	stages = 4,
+	textures = {
+		["1"] = "mcl_nether_nether_wart_stage_0.png",
+		["2, 3"] = "mcl_nether_nether_wart_stage_1.png",
+		["4"] = "mcl_nether_nether_wart_stage_2.png"
 	}
 })
-
-minetest.register_craftitem("mcl_nether:nether_wart_item", {
-	description = S("Nether Wart"),
-	_tt_help = S("Grows on soul sand"),
+-- Craftitems
+core.register_craftitem("mcl_nether:nether_wart_item", {
 	_doc_items_longdesc = S("Nether warts are plants home to the Nether. They can be planted on soul sand and grow in 4 stages."),
 	_doc_items_usagehelp = S("Place this item on soul sand to plant it and watch it grow."),
+	_mcl_crafting_output = {square3 = {output = {"mcl_nether:nether_wart_block"}}},
+	_tt_help = S("Grows on soul sand"),
+	description = S("Nether Wart"),
+	groups = {brewitem = 1, compostability = 30, craftitem = 1},
 	inventory_image = "mcl_nether_nether_wart.png",
-	wield_image = "mcl_nether_nether_wart.png",
-	groups = {craftitem = 1, brewitem = 1, compostability = 30},
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" then
-			return itemstack
-		end
+		if pointed_thing.type ~= "node" then return end
 
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
 		if rc then return rc end
 
-		local placepos = pointed_thing.above
-		local soilpos = table.copy(placepos)
-		soilpos.y = soilpos.y - 1
+		local above = pointed_thing.above
+		local anode = core.get_node(above)
+		local unode = core.get_node(pointed_thing.under)
 
-		-- Check for correct soil type
-		local chk = minetest.get_item_group(minetest.get_node(soilpos).name, "soil_nether_wart")
-		if chk and chk ~= 0 then
-			-- Check if node above soil node allows placement
-			if minetest.registered_items[minetest.get_node(placepos).name].buildable_to then
-				-- Place nether wart
-				minetest.sound_play({name="default_place_node", gain=1.0}, {pos=placepos}, true)
-				minetest.set_node(placepos, {name="mcl_nether:nether_wart_0", param2 = 3})
+		if core.get_item_group(unode.name, "soil_nether_wart") then
+			local adefs = core.registered_nodes[anode.name]
 
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+			if adefs and adefs.buildable_to then
+				core.place_node(above, {name = "mcl_nether:nether_wart_0"})
+				core.sound_play("default_place_node", {max_hear_distance = 16, pos = above}, true)
+
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
-				return itemstack
 			end
 		end
+
+		return itemstack
 	end,
-	_mcl_crafting_output = {square3 = {output = {"mcl_nether:nether_wart_block"}}}
+	wield_image = "mcl_nether_nether_wart.png"
 })
 
 local names = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"}
@@ -174,8 +96,3 @@ minetest.register_abm({
 	end
 })
 
-if minetest.get_modpath("doc") then
-	for i=1,2 do
-		doc.add_entry_alias("nodes", "mcl_nether:nether_wart_0", "nodes", "mcl_nether:nether_wart_"..i)
-	end
-end
