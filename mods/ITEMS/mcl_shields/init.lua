@@ -155,6 +155,7 @@ minetest.register_entity("mcl_shields:shield_entity", {
 			if meta_texture and meta_texture ~= "" then
 				shield_texture = meta_texture
 			else
+				local layers
 				meta:set_string("wield_overlay", "") -- Clear inner face (wield_texture) to show raw shield.
 				local custom_texture = meta:get_string("mcl_shields:shield_custom_pattern_texture")
 				if custom_texture and custom_texture ~= "" then -- Parse layers from custom standalone pattern texture.
