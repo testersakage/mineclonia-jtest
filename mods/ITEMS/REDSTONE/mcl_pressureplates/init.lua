@@ -11,10 +11,12 @@ local pp_box_on = {
 	fixed = { -7/16, -8/16, -7/16, 7/16, -7.5/16, 7/16 },
 }
 
+mcl_pressureplates = {}
+
 local function update_pp(pos)
 	local node = minetest.get_node(pos)
-	local basename = minetest.registered_nodes[node.name].pressureplate_basename
-	local activated_by = minetest.registered_nodes[node.name].pressureplate_activated_by
+	local basename = minetest.registered_nodes[node.name]._mcl_pressureplate_basename
+	local activated_by = minetest.registered_nodes[node.name]._mcl_pressureplate_activated_by
 
 	-- This is a workaround for a strange bug that occurs when the server is started
 	-- For some reason the first time on_timer is called, the pos is wrong
@@ -107,25 +109,8 @@ local function update_pp(pos)
 	return true
 end
 
--- Register a Pressure Plate
--- basename:    base name of the pressure plate
--- description:	description displayed in the player's inventory
--- textures_off:textures of the pressure plate when inactive
--- textures_on:	textures of the pressure plate when active
--- image_w:	wield image of the pressure plate
--- image_i:	inventory image of the pressure plate
--- recipe:	crafting recipe of the pressure plate
--- sounds:	sound table (like in minetest.register_node)
--- plusgroups:	group memberships (attached_node=1 and not_in_creative_inventory=1 are already used)
--- activated_by: optinal table with elements denoting by which entities this pressure plate is triggered
---		Possible table fields:
---		* player=true: Player
---		* mob=true: Mob
---		By default, is triggered by all entities
--- longdesc:	Customized long description for the in-game help (if omitted, a dummy text is used)
-
-function mcl_redstone.register_pressure_plate(basename, description, textures_off, textures_on, image_w, image_i, recipe, sounds, plusgroups, activated_by, longdesc, burntime)
-	local groups_off = table.copy(plusgroups)
+function mcl_pressureplates.register_pressure_plate(basename, def)
+	local groups_off = table.copy(def.groups)
 	groups_off.attached_node = 1
 	groups_off.dig_by_piston = 1
 	groups_off.unsticky = 1
@@ -135,28 +120,27 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 	groups_on.dig_by_piston = 1
 	groups_on.unsticky = 1
 	groups_on.pressure_plate = 2
-	if not longdesc then
-		longdesc = S("A pressure plate is a redstone component which supplies its surrounding blocks with redstone power while someone or something rests on top of it.")
-	end
+
 	local tt = S("Provides redstone power when pushed")
-	if not activated_by then
+	if not def.activated_by then
 		tt = tt .. "\n" .. S("Pushable by players, mobs and objects")
-	elseif activated_by.mob and activated_by.player then
+	elseif def.activated_by.mob and def.activated_by.player then
 		tt = tt .. "\n" .. S("Pushable by players and mobs")
-	elseif activated_by.mob then
+	elseif def.activated_by.mob then
 		tt = tt .. "\n" .. S("Pushable by mobs")
-	elseif activated_by.player then
+	elseif def.activated_by.player then
 		tt = tt .. "\n" .. S("Pushable by players")
 	end
 
+	local basename = "mcl_pressureplates:pressure_plate"..basename
 	local commdef = {
 		drawtype = "nodebox",
-		inventory_image = image_i,
-		wield_image = image_w,
+		wield_image = def.texture,
 		paramtype = "light",
 		walkable = false,
-		description = description,
-		drop = basename .. "_off",
+		description = def.description,
+		tiles = { def.texture },
+		drop = basename.."_off",
 		on_timer = update_pp,
 		_on_walk_through = function(pos)
 			update_pp(vector.round(pos))
@@ -164,11 +148,11 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		on_construct = function(pos)
 			minetest.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
 		end,
-		sounds = sounds,
+		sounds = def.sounds,
 		is_ground_content = false,
-		pressureplate_basename = basename,
-		pressureplate_activated_by = activated_by or { any = true },
-		_mcl_burntime = burntime,
+		_mcl_pressureplate_basename = basename,
+		_mcl_pressureplate_activated_by = def.activated_by or { any = true },
+		_mcl_burntime = def.burntime,
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 		_mcl_redstone = {
@@ -182,15 +166,13 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		node_box = pp_box_off,
 		selection_box = pp_box_off,
 		groups = groups_off,
-		tiles = textures_off,
-		_doc_items_longdesc = longdesc,
+		_doc_items_longdesc = def.longdesc,
 		_tt_help = tt,
 	}))
 	minetest.register_node(":"..basename.."_on", table.merge(commdef, {
 		node_box = pp_box_on,
 		selection_box = pp_box_on,
 		groups = groups_on,
-		tiles = textures_on,
 		description = "",
 		_doc_items_create_entry = false,
 		_mcl_redstone = table.merge(commdef._mcl_redstone, {
@@ -200,8 +182,8 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 		}),
 	}))
 	minetest.register_craft({
-		output = basename .. "_off",
-		recipe = recipe,
+		output = basename.."_off",
+		recipe = {{def.recipeitem, def.recipeitem}},
 	})
 
 	if minetest.get_modpath("doc") then
@@ -209,28 +191,22 @@ function mcl_redstone.register_pressure_plate(basename, description, textures_of
 	end
 end
 
-mcl_redstone.register_pressure_plate(
-	"mcl_pressureplates:pressure_plate_stone",
-	S("Stone Pressure Plate"),
-	{"default_stone.png"},
-	{"default_stone.png"},
-	"default_stone.png",
-	nil,
-	{{"mcl_core:stone", "mcl_core:stone"}},
-	mcl_sounds.node_sound_stone_defaults(),
-	{pickaxey=1, material_stone=1},
-	{ player = true, mob = true },
-	S("A stone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."))
+mcl_pressureplates.register_pressure_plate("stone", {
+	description = S("Stone Pressure Plate"),
+	texture = "default_stone.png",
+	recipeitem = "mcl_core:stone",
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	groups = {pickaxey=1, material_stone=1},
+	activated_by = { player = true, mob = true },
+	longdesc = S("A stone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."),
+})
 
-mcl_redstone.register_pressure_plate(
-	"mcl_pressureplates:pressure_plate_polished_blackstone",
-	S("Polished Blackstone Pressure Plate"),
-	{"mcl_blackstone_polished.png"},
-	{"mcl_blackstone_polished.png"},
-	"mcl_blackstone_polished.png",
-	nil,
-	{{"mcl_blackstone:blackstone_polished", "mcl_blackstone:blackstone_polished"}},
-	mcl_sounds.node_sound_stone_defaults(),
-	{pickaxey=1, material_stone=1},
-	{ player = true, mob = true },
-	S("A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."))
+mcl_pressureplates.register_pressure_plate("polished_blackstone", {
+	description = S("Polished Blackstone Pressure Plate"),
+	texture = "mcl_blackstone_polished.png",
+	recipeitem = "mcl_blackstone_polished.png",
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	groups = {pickaxey=1, material_stone=1},
+	activated_by = { player = true, mob = true },
+	longdesc = S("A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."),
+})

@@ -613,24 +613,20 @@ function mcl_trees.register_wood(name, p)
 
 	if p.pressure_plate == nil or type(p.pressure_plate) == "table" then
 		p.pressure_plate = p.pressure_plate or {}
-		mcl_redstone.register_pressure_plate(
+		mcl_pressureplates.register_pressure_plate(name, {
 			"mcl_pressureplates:pressure_plate_"..name,
 			p.pressure_plate.description or D(rname .. " Pressure Plate"),
-			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
-			p.wood and p.wood.tiles or { minetest.get_current_modname().."_planks_"..name..".png"},
-			p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
-			nil,
-			{{"mcl_trees:wood_"..name, "mcl_trees:wood_"..name}},
-			mcl_sounds.node_sound_wood_defaults(),
-			{axey=1, material_wood=1},
-			nil,
-			S("A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."),
-			p.pressure_plate._mcl_burntime or 15
-		)
+			texture = p.wood and p.wood.tiles[1] or {minetest.get_current_modname().."_planks_"..name..".png"},
+			recipeitem = "mcl_trees:wood_"..name,
+			sounds = mcl_sounds.node_sound_wood_defaults(),
+			groups = {axey=1, material_wood=1},
+			longdesc = S("A wooden pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."),
+			burntime = p.pressure_plate._mcl_burntime or 15
+		})
 	end
 	if p.button == nil or type(p.button) == "table" then
 		p.button = p.button or {}
-		mcl_buttons.register_button(name, {
+		mcl_pressureplates.register_pressure_plate(name, {
 			description = p.button.description or D(rname .. " Button"),
 			texture = p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
 			recipeitem = "mcl_trees:wood_"..name,
