@@ -17,6 +17,7 @@ local function update_pp(pos)
 	local node = minetest.get_node(pos)
 	local basename = minetest.registered_nodes[node.name]._mcl_pressureplate_basename
 	local activated_by = minetest.registered_nodes[node.name]._mcl_pressureplate_activated_by
+	local weighted = minetest.registered_nodes[node.name]._mcl_pressureplate_weighted
 
 	-- This is a workaround for a strange bug that occurs when the server is started
 	-- For some reason the first time on_timer is called, the pos is wrong
@@ -70,19 +71,23 @@ local function update_pp(pos)
 		return false
 	end
 
-	if node.name == basename .. "_on" then
-		local disable = true
+	local function count_obj_touching_plate_pos(pos)
+		local n = 0
 		for obj in minetest.objects_inside_radius(pos, 1) do
 			if
 				obj_does_activate(obj, activated_by) and
 				obj_touching_plate_pos(obj, pos)
 			then
-				disable = false
+				n = n + 1
 				minetest.get_meta(pos):set_string("deact_time", "")
-				break
 			end
 		end
-		if disable then
+		return n
+	end
+
+	local n_entities = count_obj_touching_plate_pos(pos)
+	if node.name == basename .. "_on" then
+		if n_entities == 0 then
 			local meta = minetest.get_meta(pos)
 			local deact_time = meta:get_float("deact_time")
 			local current_time = minetest.get_us_time()
@@ -95,17 +100,12 @@ local function update_pp(pos)
 				meta:set_string("deact_time", "")
 			end
 		end
-	elseif node.name == basename .. "_off" then
-		for obj in minetest.objects_inside_radius(pos, 1) do
-			if
-				obj_does_activate(obj, activated_by) and
-				obj_touching_plate_pos(obj, pos)
-			then
-				minetest.set_node(pos, { name = basename .. "_on" })
-				break
-			end
-		end
 	end
+	if n_entities > 0 then
+		local power = math.min(weighted and (n_entities / weighted) or 15, 15)
+		minetest.set_node(pos, { name = basename .. "_on", param2 = power })
+	end
+
 	return true
 end
 
@@ -132,7 +132,7 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		tt = tt .. "\n" .. S("Pushable by players")
 	end
 
-	local basename = "mcl_pressureplates:pressure_plate"..basename
+	local basename = "mcl_pressureplates:pressure_plate_"..basename
 	local commdef = {
 		drawtype = "nodebox",
 		wield_image = def.texture,
@@ -152,6 +152,7 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		is_ground_content = false,
 		_mcl_pressureplate_basename = basename,
 		_mcl_pressureplate_activated_by = def.activated_by or { any = true },
+		_mcl_pressureplate_weighted = def.weighted,
 		_mcl_burntime = def.burntime,
 		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
@@ -176,8 +177,8 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		description = "",
 		_doc_items_create_entry = false,
 		_mcl_redstone = table.merge(commdef._mcl_redstone, {
-			get_power = function(pos, dir)
-				return dir.y ~= 1 and 15 or 0, dir.y < 0
+			get_power = function(node, dir)
+				return dir.y ~= 1 and node.param2 or 0, dir.y < 0
 			end,
 		}),
 	}))
@@ -209,4 +210,24 @@ mcl_pressureplates.register_pressure_plate("polished_blackstone", {
 	groups = {pickaxey=1, material_stone=1},
 	activated_by = { player = true, mob = true },
 	longdesc = S("A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."),
+})
+
+mcl_pressureplates.register_pressure_plate("light", {
+	description = S("Light Weighted Pressure Plate"),
+	texture = "default_gold_block.png",
+	recipeitem = "mcl_core:goldblock.png",
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	groups = {pickaxey=1},
+	weighted = 1,
+	longdesc = S("A heavy weighted pressure plate is a redstone component which supplies its surrounding blocks with one redstone power for every movable object (including dropped items, players and mobs) that rests on top of it."),
+})
+
+mcl_pressureplates.register_pressure_plate("heavy", {
+	description = S("Heavy Weighted Pressure Plate"),
+	texture = "default_steel_block.png",
+	recipeitem = "mcl_core:ironblock.png",
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	groups = {pickaxey=1},
+	weighted = 10,
+	longdesc = S("A heavy weighted pressure plate is a redstone component which supplies its surrounding blocks with one redstone power for every 10 movable objects (including dropped items, players and mobs) that rest on top of it."),
 })
