@@ -79,8 +79,7 @@ function mcl_copper.get_undecayed(nodename, amount)
 	return dc.nodes[ci]
 end
 
-local function particles(pointed_thing, texture)
-	local pos = pointed_thing.under
+function mcl_copper.spawn_particles(pos, texture)
 	minetest.add_particlespawner({
 		amount = 8,
 		time = 1,
@@ -115,7 +114,7 @@ local function undecay(itemstack, _, pointed_thing)
 	local node = minetest.get_node(pointed_thing.under)
 	node.name = mcl_copper.get_undecayed(node.name)
 	minetest.swap_node(pointed_thing.under,node)
-	particles(pointed_thing)
+	mcl_copper.spawn_particles(pointed_thing.under)
 	return itemstack
 end
 
@@ -187,7 +186,7 @@ local function register_preserve(nodename,def,chaindef)
 				node.name = node.name.."_preserved"
 				if minetest.registered_nodes[node.name] then
 					minetest.swap_node(pointed_thing.under,node)
-					particles(pointed_thing, "mcl_copper_anti_oxidation_particle.png^[colorize:#d1d553:125")
+					mcl_copper.spawn_particles(pointed_thing.under, "mcl_copper_anti_oxidation_particle.png^[colorize:#d1d553:125")
 					if not minetest.is_creative_enabled(placer and placer:get_player_name() or "") then
 						itemstack:take_item()
 					end

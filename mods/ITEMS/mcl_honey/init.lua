@@ -13,6 +13,7 @@ minetest.register_craftitem("mcl_honey:honeycomb", {
 			local new_name = dropnode.name .. "_preserved"
 
 			if core.registered_nodes[new_name] then
+				mcl_copper.spawn_particles(droppos, "mcl_copper_anti_oxidation_particle.png^[colorize:#d1d553:125")
 				core.swap_node(droppos, {name = new_name, param2 = dropnode.param2})
 				stack:take_item()
 			end
