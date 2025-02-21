@@ -105,8 +105,8 @@ local function get_node_power(pos, include_wire)
 			end
 		elseif include_wire and wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
 			-- Wire is above or pointing towards this node.
-			weak = math.max(weak, node2.param2)
-			weak_from_wire_only = math.max(weak_from_wire_only, node2.param2)
+			weak = math.max(weak, bit.band(node2.param2, 0xF))
+			weak_from_wire_only = math.max(weak_from_wire_only, bit.band(node2.param2, 0xF))
 		end
 	end
 
@@ -153,12 +153,24 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 		nodecache[h] = node
 	end
 
+	local function set_power(pos, power)
+		local node = get_node(pos)
+		node.param2 = bit.bor(bit.band(node.param2, 0xF0), power)
+		node.dirty = true
+	end
+
 	local function get_power(node)
-		return wireflag_tab[node.name] and node.param2 or 0
+		if wireflag_tab[node.name] then
+			return bit.band(node.param2, 0xF), bit.rshift(node.param2, 4)
+		end
+		return 0, 0
 	end
 
 	for _, entry in pairs(clear_nodes) do
-		swap_node(entry.pos, {name = get_node(entry.pos).name, param2 = 0})
+		swap_node(entry.pos, {
+			name = get_node(entry.pos).name,
+			param2 = 0
+		})
 		clear_queue:enqueue(entry)
 	end
 
@@ -171,18 +183,19 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 		updates_[minetest.hash_node_position(pos)] = pos
 
 		for dir in iterate_wire_neighbours(wireflag_tab[node.name] or 0xFF) do
-			-- core.debug(dump(dir))
 			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
 				local pos2 = pos:add(dir.wire)
 				local node2 = get_node(pos2)
-				local power2 = get_power(node2)
+				local power2, power2_direct = get_power(node2)
 
 				if power2 > 0 then
 					if power2 < power then
-						swap_node(pos2, {name = node2.name, param2 = 0})
+						set_power(pos2, 0)
 						clear_queue:enqueue({pos = pos2, power = power2})
+						if power2_direct > 0 then
+							table.insert(fill_nodes, {pos = pos2, power = power2_direct})
+						end
 					else
-						swap_node(pos2, {name = node2.name, param2 = power2})
 						fill_queue:enqueue({pos = pos2, power = power2})
 					end
 				end
@@ -191,7 +204,10 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 	end
 
 	for _, entry in pairs(fill_nodes) do
-		swap_node(entry.pos, {name = get_node(entry.pos).name, param2 = entry.power})
+		swap_node(entry.pos, {
+			name = get_node(entry.pos).name,
+			param2 = bit.bor(bit.lshift(entry.power, 4), entry.power)
+		})
 		fill_queue:enqueue(entry)
 	end
 
@@ -208,7 +224,7 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 				local pos2 = pos:add(dir.wire)
 				local node2 = get_node(pos2)
 				if wireflag_tab[node2.name] and get_power(node2) < power2 then
-					swap_node(pos2, {name = node2.name, param2 = power2})
+					set_power(pos2, power2)
 					fill_queue:enqueue({pos = pos2, power = power2})
 				end
 			end
@@ -262,7 +278,7 @@ function mcl_redstone.get_power(pos, dir, option)
 			local power2 = get_power_tab[node2.name](node2, -dir)
 			power = math.max(power, power2)
 		elseif wireflag_tab[node2.name] and (i == 5 or check_bit(wireflag_tab[node2.name], i)) then
-			power = math.max(power, node2.param2)
+			power = math.max(power, bit.band(node2.param2, 0xF))
 		elseif opaque_tab[node2.name] and option ~= "direct" then
 			local _, strong, weak_from_wire = get_node_power(pos2, true)
 			power = math.max(power, math.max(strong, weak_from_wire))
@@ -395,7 +411,7 @@ local function opaque_update_neighbours(pos, added)
 	local clear_nodes = {}
 
 	local function update_wire(pos)
-		local oldpower = minetest.get_node(pos).param2
+		local oldpower = bit.band(minetest.get_node(pos).param2, 0xF)
 		local power = get_node_power_2(pos)
 
 		table.insert(clear_nodes, {pos = pos, power = oldpower})
