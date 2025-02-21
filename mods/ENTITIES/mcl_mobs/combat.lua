@@ -247,6 +247,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	and weapon then
 		local wear = math.floor(65535/tool_capabilities.punch_attack_uses)
 		weapon:add_wear(wear)
+		tt.reload_itemstack_description(weapon)
 		hitter:set_wielded_item(weapon)
 	end
 
