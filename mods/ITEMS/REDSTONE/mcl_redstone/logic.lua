@@ -46,18 +46,15 @@ local wiredirs_down = {
 local function iterate_wire_neighbours(wireflags)
 	local i = 1
 	local state = 0
-	-- core.debug("IMPORTANT!", wireflags)
 	-- `state` is a special variable that meansL
 	-- 0: now returning entry from the block to the side
 	-- 1: now returning entry from the block to the side and up
 	-- 2: now returning entry from the block to the side and down
 	return function(wireflags)
-		-- core.debug("ITER!", wireflags, i, state)
 		if state == 0 then
 			while i <= 8 do
 				local val = bit.band(wireflags, bit.bor(i, bit.lshift(i, 4)))
 				local tmp = wiredirs[i]
-				-- core.debug("pop", val)
 				if val == i then
 					-- if goes to the side of that block
 					state = 2
@@ -69,7 +66,6 @@ local function iterate_wire_neighbours(wireflags)
 				end
 				i = i * 2
 			end
-			-- core.debug("terminate")
 			return
 		elseif state == 1 then
 			state = 2
