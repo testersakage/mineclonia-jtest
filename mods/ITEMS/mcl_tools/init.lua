@@ -98,6 +98,7 @@ local function on_tool_place(itemstack, placer, pointed_thing, tool)
 		if tdef and tdef._mcl_diggroups then
 			for group, _ in pairs(tdef._mcl_diggroups) do
 				itemstack:add_wear(mcl_autogroup.get_wear(itemstack:get_name(), group))
+				tt.reload_itemstack_description(itemstack)
 				return itemstack
 			end
 		end
@@ -264,6 +265,13 @@ minetest.register_tool("mcl_tools:shears", {
 	description = S("Shears"),
 	_doc_items_longdesc = shears_longdesc,
 	_doc_items_usagehelp = shears_use,
+	after_use = function(itemstack, user, _, digparams)
+		if not core.is_creative_enabled(user:get_player_name()) then
+			tt.reload_itemstack_description(itemstack)
+			itemstack:add_wear(digparams.wear)
+		end
+		return itemstack
+	end,
 	inventory_image = "default_tool_shears.png",
 	wield_image = "default_tool_shears.png",
 	stack_max = 1,
