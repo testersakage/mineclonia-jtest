@@ -1268,7 +1268,7 @@ function mcl_potions.check_on_death(obj)
 		local dist1, dist2 = vector.offset(pos, -1, -1, -1), vector.offset(pos, 1, 1, 1)
 		local nodes = core.find_nodes_in_area_under_air(dist1, dist2, "group:solid")
 
-		for _ = 2, math.random(2, 3) do
+		for _ = 1, math.random(2, 3) do
 			if #nodes == 0 then return end
 
 			local pos_index = math.random(1, #nodes)
