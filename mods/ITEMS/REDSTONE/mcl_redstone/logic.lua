@@ -288,6 +288,8 @@ local function schedule_update(pos, update)
 	local delay = update.delay or 1
 	local priority = update.priority or 1000
 	local oldnode = minetest.get_node(pos)
+	update.param2 = update.param2 or 0
+
 	mcl_redstone._schedule_update(delay, priority, pos, update, oldnode)
 end
 
