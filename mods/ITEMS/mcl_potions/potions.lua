@@ -631,6 +631,46 @@ mcl_potions.register_potion({
 	vanishing = true,
 })
 
+mcl_potions.register_potion({
+	name = "infestation",
+	desc_suffix = S("of Infestation"),
+	_tt = nil,
+	_longdesc = S("Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."),
+	color = "#8C9B8C",
+	_effect_list = {infested = {}},
+	has_arrow = true
+})
+
+mcl_potions.register_potion({
+	name = "oozing",
+	desc_suffix = S("of Oozing"),
+	_tt = nil,
+	_longdesc = S("Causes 2 medium slimes to spawn on death. It not applies to slimes."),
+	color = "#99FFA3",
+	_effect_list = {oozing = {}},
+	has_arrow = true
+})
+
+mcl_potions.register_potion({
+	name = "weaving",
+	desc_suffix = S("of Weaving"),
+	_tt = nil,
+	_longdesc = S("Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."),
+	color = "#78695A",
+	_effect_list = {weaving = {}},
+	has_arrow = true,
+})
+
+mcl_potions.register_potion({
+	name = "wind_charged",
+	desc_suffix = S("of Wind Charging"),
+	_tt = nil,
+	_longdesc = S("Causes A wind burst on death."),
+	color = "#BDC9FF",
+	_effect_list = {wind_charged = {}},
+	has_arrow = true,
+})
+
 -- COMPAT CODE
 local function replace_legacy_potion(itemstack)
 	local name = itemstack:get_name()

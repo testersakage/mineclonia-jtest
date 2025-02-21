@@ -1155,6 +1155,136 @@ mcl_potions.register_effect({
 	affects_item_speed = {factor_is_positive = true},
 })
 
+mcl_potions.register_effect({
+	name = "infested",
+	description = S("Infested"),
+	res_condition = function(obj)
+		if obj:is_player() then return false end
+
+		local ent = obj:get_luaentity()
+
+		if ent and ent.is_mob and ent.name ~= "mobs_mc:silverfish" then return false end
+
+		return true
+	end,
+	get_tt = function(_)
+		return S("Causes 1-3 silverfish to spawn with a 5% chance when damaged")
+	end,
+	particle_color = "#8C9B8C",
+	uses_factor = false
+})
+
+function mcl_potions.check_on_damage(obj)
+	if mcl_potions.get_effect(obj, "infested") then
+		if math.random() < 0.05 then
+			local amount = math.random(1, 3)
+			for i = 1, amount do
+				core.add_entity(obj:get_pos(), "mobs_mc:silverfish")
+			end
+		end
+	end
+end
+
+mcl_damage.register_on_damage(function(obj)
+	mcl_potions.check_on_damage(obj)
+end)
+
+mcl_potions.register_effect({
+	name = "oozing",
+	description = S("Oozing"),
+	res_condition = function(obj)
+		if obj:is_player() then return false end
+
+		local ent = obj:get_luaentity()
+
+		if ent and ent.is_mob and not ent.name:find("mobs_mc:slime") then return false end
+
+		return true
+	end,
+	get_tt = function(_)
+		return S("Causes 2 medium slimes to spawn on death")
+	end,
+	particle_color = "#99FFA3",
+	uses_factor = false
+})
+
+mcl_potions.register_effect({
+	name = "weaving",
+	description = S("Weaving"),
+	res_condition = function(obj)
+		if obj:is_player() then return false end
+
+		local ent = obj:get_luaentity()
+
+		if ent and ent.is_mob then return false end
+
+		return true
+	end,
+	get_tt = function(_)
+		return S("Causes 2-3 cobwebs to appear on death")
+	end,
+	particle_color = "#78695A",
+	uses_factor = false
+})
+
+mcl_potions.register_effect({
+	name = "wind_charged",
+	description = S("Wind Charged"),
+	res_condition = function(obj)
+		if obj:is_player() then return false end
+
+		local ent = obj:get_luaentity()
+
+		if ent and ent.is_mob then return false end
+
+		return true
+	end,
+	get_tt = function(_)
+		return S("Causes a wind burst on death")
+	end,
+	particle_color = "#BDC9FF",
+	uses_factor = false
+})
+
+function mcl_potions.check_on_death(obj)
+	local pos = vector.round(obj:get_pos())
+
+	if mcl_potions.get_effect(obj, "oozing") then
+		local dist1, dist2 = vector.offset(pos, -2, -2, -2), vector.offset(pos, 2, 2, 2)
+		local nodes = core.find_nodes_in_area_under_air(dist1, dist2, "group:solid")
+
+		for _ = 1, 2 do
+			local spawn_pos
+
+			if #nodes == 0 then
+				spawn_pos = pos
+			else
+				spawn_pos = vector.offset(nodes[math.random(#nodes)], 0, 1, 0)
+			end
+
+			core.add_entity(spawn_pos, "mobs_mc:slime_small")
+		end
+	elseif mcl_potions.get_effect(obj, "weaving") then
+		local dist1, dist2 = vector.offset(pos, -1, -1, -1), vector.offset(pos, 1, 1, 1)
+		local nodes = core.find_nodes_in_area_under_air(dist1, dist2, "group:solid")
+
+		for _ = 2, math.random(2, 3) do
+			if #nodes == 0 then return end
+
+			local pos_index = math.random(1, #nodes)
+
+			core.place_node(vector.offset(nodes[pos_index], 0, 1, 0), {name = "mcl_core:cobweb"})
+			table.remove(nodes, pos_index)
+		end
+	elseif mcl_potions.get_effect(obj, "wind_charged") then
+		mcl_charges.wind_burst(pos, 6)
+	end
+end
+
+mcl_damage.register_on_death(function(obj)
+	mcl_potions.check_on_death(obj)
+end)
+
 -- implementation of haste and fatigue effects
 function mcl_potions.update_haste_and_fatigue(player)
 	local h_fac = mcl_potions.get_total_haste(player)
