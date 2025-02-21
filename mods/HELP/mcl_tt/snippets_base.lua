@@ -35,7 +35,7 @@ local function newline(str)
 end
 
 -- Digging capabilities of tool
-tt.register_snippet(function(itemstring, toolcaps)
+tt.register_snippet(function(itemstring, toolcaps, itemstack)
 	local def = minetest.registered_items[itemstring]
 	if not toolcaps then
 		return
@@ -82,8 +82,11 @@ tt.register_snippet(function(itemstring, toolcaps)
 			-- Default from tool.h
 			base_uses = 20
 		end
+
+		local real_uses = base_uses * math.pow(3, maxlevel)
+
 		if def and def._doc_items_durability == nil and base_uses > 0 then
-			local real_uses = base_uses * math.pow(3, maxlevel)
+
 			if real_uses < 65535 then
 				miningusesstr = S("@1 uses", real_uses)
 			else
@@ -95,7 +98,11 @@ tt.register_snippet(function(itemstring, toolcaps)
 			capstr = capstr .. S("Mining speed: @1", speedstr) .. "\n"
 		end
 		if miningusesstr ~= "" then
+			local wear = itemstack and itemstack:get_wear() or 0
+			local remuses = math.round((1 - (wear / 65535)) * real_uses)
+
 			capstr = capstr .. S("Mining durability: @1", miningusesstr) .. "\n"
+			capstr = capstr .. S("Remaining uses: @1", S("@1 uses", remuses)) .. "\n"
 		end
 
 		-- Only show one group at max

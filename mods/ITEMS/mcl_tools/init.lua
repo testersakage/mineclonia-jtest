@@ -171,6 +171,13 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		_mcl_diggroups = get_tool_diggroups(materialdefs, toolname),
 		_mcl_toollike_wield = true,
 		_repair_material = materialdefs.material,
+		after_use = function(itemstack, user, _, digparams)
+			if not core.is_creative_enabled(user:get_player_name()) then
+				tt.reload_itemstack_description(itemstack)
+				itemstack:add_wear(digparams.wear)
+			end
+			return itemstack
+		end,
 		groups = table.merge(commondefs.groups, materialdefs.groups, { offhand_item = 1 }),
 		tool_capabilities = table.merge(tcs, {
 			max_drop_level = materialdefs.max_drop_level,
