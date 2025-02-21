@@ -15,9 +15,13 @@ The pressureplate definition should have the following fields:
     description = "",       -- Description of pressure plate
     texture = "",           -- Texture of the pressure plate
     recipeitem = "",        -- Item used to craft the pressure plate
-    sounds = "",            -- Sounds
-    groups = "",            -- Group memberships
-	longdesc = "",          -- Long description for documentation
+    sounds = {},            -- Sounds
+    groups = {},            -- Group memberships
+    longdesc = "",          -- Long description for documentation
+
+    weighted = nil,
+    -- Nil for unweighted pressure plates. For weighted pressure plates, how
+    -- many entities need to be on it for one level of power output.
 
     activated_by = "",
     -- Table specifying which entities will trigger the pressure plate.
