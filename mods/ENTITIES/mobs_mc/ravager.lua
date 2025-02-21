@@ -4,6 +4,8 @@ local ravager = {
 	type = "monster",
 	spawn_class = "hostile",
 	attack_type = "melee",
+	passive = false,
+	attack_players = true,
 	attack_animals = true,
 	attack_npcs = true,
 	knockback_resistance = 1.0,
@@ -36,7 +38,8 @@ local ravager = {
 	suffocation = false,
 	all_damage = false,
 	knock_back = true,
-	specific_attack = { "player", "mobs_mc:iron_golem", "mobs_mc:villager", "mobs_mc:wandering_trader" },
+	movement_speed = 8,
+	specific_attack = { "mobs_mc:iron_golem", "mobs_mc:villager", "mobs_mc:wandering_trader" },
 	animation = {
 		stand_start = 1, stand_end = 40, stand_speed = 10,
 		walk_start = 50, walk_end = 90, speed_normal = 10,
@@ -46,6 +49,7 @@ local ravager = {
 }
 
 ravager.ai_functions = {
+	mcl_mobs.mob_class.check_pace,
 	mcl_mobs.mob_class.check_attack,
 }
 
