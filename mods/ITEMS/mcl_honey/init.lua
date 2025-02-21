@@ -7,6 +7,18 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 -- Honeycomb
 minetest.register_craftitem("mcl_honey:honeycomb", {
+	_dispense_into_walkable = true,
+	_on_dispense = function(stack, _, droppos, dropnode)
+		if not dropnode.name:find("_preserved") then
+			local new_name = dropnode.name .. "_preserved"
+
+			if core.registered_nodes[new_name] then
+				core.swap_node(droppos, {name = new_name, param2 = dropnode.param2})
+				stack:take_item()
+			end
+		end
+		return stack
+	end,
 	description = S("Honeycomb"),
 	_doc_items_longdesc = S("Used to craft beehives and protect copper blocks from further oxidation."),
 	_doc_items_usagehelp = S("Use on copper blocks to prevent further oxidation."),
