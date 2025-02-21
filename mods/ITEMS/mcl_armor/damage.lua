@@ -1,6 +1,7 @@
 local function use_durability(obj, inv, index, stack, uses)
 	local def = stack:get_definition()
 	mcl_util.use_item_durability(stack, uses)
+	tt.reload_itemstack_description(stack)
 	if stack:is_empty() and def and def._on_break then
 		stack = def._on_break(obj) or stack
 	end

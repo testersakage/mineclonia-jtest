@@ -23,7 +23,6 @@ tt.register_snippet(function(itemstring)
 	return s ~= "" and s or nil
 end)
 tt.register_snippet(function(itemstring, _, itemstack)
-	--local def = minetest.registered_items[itemstring]
 	local s = ""
 	local use = minetest.get_item_group(itemstring, "mcl_armor_uses")
 	local pts = minetest.get_item_group(itemstring, "mcl_armor_points")
@@ -43,7 +42,10 @@ tt.register_snippet(function(itemstring, _, itemstack)
 		end
 	end
 	if use > 0 then
-		s = s .. S("Armor durability: @1", use)
+		local wear = itemstack and itemstack:get_wear() or 0
+		local remdur = math.round((1 - wear / 65535) * use)
+		s = s .. S("Armor durability: @1", use) .. "\n"
+		s = s .. S("Remaining durability: @1", remdur)
 	end
 	return s ~= "" and s or nil
 end)
