@@ -377,6 +377,11 @@ core.register_node("mcl_banners:standing_banner", {
 	sounds = node_sounds,
 	drop = "", -- Item drops are handled in entity code
 
+	--disallow any direct interaction with the banner inventory
+	allow_metadata_inventory_put = function() return 0 end,
+	allow_metadata_inventory_take = function() return 0 end,
+	allow_metadata_inventory_move = function() return 0 end,
+
 	on_dig = on_dig_banner,
 	on_destruct = on_destruct_standing_banner,
 	on_punch = function(pos, node)
@@ -423,6 +428,11 @@ core.register_node("mcl_banners:hanging_banner", {
 	stack_max = 16,
 	sounds = node_sounds,
 	drop = "", -- Item drops are handled in entity code
+
+	--disallow any direct interaction with the banner inventory
+	allow_metadata_inventory_put = function() return 0 end,
+	allow_metadata_inventory_take = function() return 0 end,
+	allow_metadata_inventory_move = function() return 0 end,
 
 	on_dig = on_dig_banner,
 	on_destruct = on_destruct_hanging_banner,
