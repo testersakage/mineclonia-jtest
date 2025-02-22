@@ -82,6 +82,7 @@ local ARROW_ENTITY={
 	_viscosity=0,   -- Viscosity of node the arrow is currently in
 	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
 	_partical_id=nil,
+	_ignored=nil,
 }
 
 -- Drop arrow as item at pos
@@ -222,6 +223,7 @@ end
 -- Remove burning status, crit particle effect, and finally the arrow object.
 function ARROW_ENTITY:remove(delay, preserve_particle)
 	mcl_burning.extinguish(self.object)
+	self._ignored = nil
 	if not preserve_particle then self:stop_particle() end
 	if not delay or delay <= 0 then
 		self.object:remove()
@@ -243,7 +245,7 @@ function ARROW_ENTITY:on_hit_object(obj, lua)
 	return true
 end
 
--- Process hitting a player, deflect & ignore if shield blocked, otherwise attach.
+-- Process hitting a player, deflect if shield blocked, otherwise attach.
 function ARROW_ENTITY:on_hit_player(obj)
 	if not enable_pvp then return false end
 	-- TODO: Checking facing
@@ -297,6 +299,7 @@ function ARROW_ENTITY:set_stuck (node_pos, node)
 	self._lifetime = 0
 	self._dragtime = 0
 	self._stuckrechecktimer = 0
+	self._ignored = nil
 	if not self._stuckin then self._stuckin = node_pos end
 	selfobj:set_velocity(vector.new(0, 0, 0))
 	selfobj:set_acceleration(vector.new(0, 0, 0))
@@ -344,10 +347,13 @@ end
 function ARROW_ENTITY:on_intersect(ray_hit)
 	local selfobj = self.object
 	local result
+	local ignored = self._ignored or {}
+	local orig_ignore_count = #ignored
 	if ray_hit.type == "object" then
 		local obj = ray_hit.ref
 		if obj:is_valid() and obj:get_hp() > 0
-		and ( obj ~= self._shooter or self._lifetime > 0.5 ) then
+		and ( obj ~= self._shooter or self._lifetime > 0.5 )
+		and table.indexof(ignored, obj) == -1 then
 			if obj:is_player() then
 				result = self:on_hit_player(obj)
 			else
@@ -355,6 +361,7 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 			end
 		end
 		if result then
+			table.insert(ignored, obj)
 			local shooter = self._shooter
 			local self_pos = selfobj:get_pos()
 			if not self._blocked then
@@ -372,15 +379,22 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 		end
 	elseif ray_hit.type == "node" then
 		local hit_node_pos = core.get_pointed_thing_position(ray_hit)
-		local hit_node =  core.get_node(hit_node_pos)
-		local def = core.registered_nodes[hit_node.name or ""]
+		local hit_node_str = hit_node_pos.x .. "," .. hit_node_pos.y .. "," .. hit_node_pos.z
+		if table.indexof(ignored, hit_node_str) == -1 then
+			local hit_node =  core.get_node(hit_node_pos)
+			local def = core.registered_nodes[hit_node.name or ""]
 
-		if def and def.liquidtype ~= "none" then
-			result = self:on_liquid_passthrough(hit_node, def)
-		elseif def then
-			self._stuckin = hit_node_pos
-			result = self:on_solid_hit(hit_node_pos, hit_node)
+			if def and def.liquidtype ~= "none" then
+				result = self:on_liquid_passthrough(hit_node, def)
+			elseif def then
+				self._stuckin = hit_node_pos
+				result = self:on_solid_hit(hit_node_pos, hit_node, def)
+			end
+			table.insert(ignored, hit_node_str)
 		end
+	end
+	if #ignored ~= orig_ignore_count then
+		self._ignored = ignored
 	end
 	return result
 end
