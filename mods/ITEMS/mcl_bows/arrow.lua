@@ -13,6 +13,9 @@ local STUCK_RECHECK_TIME = 5
 -- Range for stuck arrow to be collected by player
 local PICKUP_RANGE = 2
 
+-- Each block of liquid set velocity to LIQUID_RATE%
+local LIQUID_RATE = 0.73 -- Lost most horizontal speed at 8 liquid blocks.
+
 --local GRAVITY = 9.81
 
 local YAW_OFFSET = -math.pi/2
@@ -79,7 +82,6 @@ local ARROW_ENTITY={
 	_is_arrow = true,
 	_in_player = false,
 	_blocked = false,
-	_viscosity=0,   -- Viscosity of node the arrow is currently in
 	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
 	_partical_id=nil,
 	_ignored=nil,
@@ -326,21 +328,14 @@ function ARROW_ENTITY:on_solid_hit (node_pos, node)
 		node = core.get_node(node_pos)
 	end
 	if node.name == "air" or node.name == "ignore" then return end
-
-	-- Set fire to arrows which pass through lava or fire.
-	if core.get_item_group(node.name, "set_on_fire") > 0 then
-		mcl_burning.set_on_fire(self.object, ARROW_TIMEOUT)
-	end
 	return self:set_stuck(node_pos, node)
 end
 
 function ARROW_ENTITY:on_liquid_passthrough (node, def)
-	-- Slow down arrow in liquids
-	local v = def.liquid_viscosity or 0
-	--local old_v = self._viscosity
-	self._viscosity = v
-	local vpenalty = math.max(0.1, 0.98 - 0.1 * v)
-	self:multiply_xz_velocity(vpenalty)
+	-- Slow down arrow in liquids. 8 water blocks shall kill most horizontal velocity.
+	-- Water visco = 1, Lava visco = 7, but mc lava seems to not slowdown arrows a lot?
+	--local v = def.liquid_viscosity or 0
+	self:multiply_xz_velocity(LIQUID_RATE)
 end
 
 -- Handle "arrow hitting things".  Return "stop" if arrow is stopped by this thing.
@@ -383,6 +378,12 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 		if table.indexof(ignored, hit_node_str) == -1 then
 			local hit_node =  core.get_node(hit_node_pos)
 			local def = core.registered_nodes[hit_node.name or ""]
+			-- Set fire when passing through lava or fire, or put out fire when passing through water.
+			if core.get_item_group(hit_node.name, "set_on_fire") > 0 then
+				mcl_burning.set_on_fire(selfobj, ARROW_TIMEOUT)
+			elseif core.get_item_group(hit_node.name, "puts_out_fire") > 0 then
+				mcl_burning.extinguish(selfobj)
+			end
 
 			if def and def.liquidtype ~= "none" then
 				result = self:on_liquid_passthrough(hit_node, def)
