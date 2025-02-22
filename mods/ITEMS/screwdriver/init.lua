@@ -106,10 +106,8 @@ end
 screwdriver.rotate.colorwallmounted = screwdriver.rotate.wallmounted
 
 -- Handles rotation
-function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
-	if pointed_thing.type ~= "node" then
-		return
-	end
+function screwdriver.handler(itemstack, user, pointed_thing, mode)
+	if pointed_thing.type ~= "node" then return end
 
 	local pos = pointed_thing.under
 	local player_name = user and user:get_player_name() or ""
@@ -121,23 +119,21 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 
 	local node = minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
-	if not ndef then
-		return itemstack
-	end
+
+	if not ndef then return itemstack end
 	-- can we rotate this paramtype2?
 	local fn = screwdriver.rotate[ndef.paramtype2]
-	if not fn and not ndef.on_rotate then
-		return itemstack
-	end
+
+	if not fn and not ndef.on_rotate then return itemstack end
 
 	local should_rotate = true
 	local new_param2
+
 	if fn then
 		new_param2 = fn(pos, node, mode)
 	else
 		new_param2 = node.param2
 	end
-
 	-- Node provides a handler, so let the handler decide instead if the node can be rotated
 	if ndef.on_rotate then
 		-- Copy pos and node because callback can modify it
@@ -159,13 +155,13 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 		node.param2 = new_param2
 		minetest.swap_node(pos, node)
 		minetest.check_for_falling(pos)
-		if ndef.after_rotate then
-			ndef.after_rotate(vector.new(pos))
-		end
+
+		if ndef.after_rotate then ndef.after_rotate(vector.new(pos)) end
 	end
 
 	if not (minetest.is_creative_enabled(user:get_player_name())) then
 		itemstack:add_wear_by_uses(mcl_util.calculate_durability(itemstack))
+		tt.reload_itemstack_description(itemstack)
 	end
 
 	return itemstack
@@ -173,17 +169,17 @@ end
 
 -- Screwdriver
 minetest.register_tool("screwdriver:screwdriver", {
+	_mcl_uses = 238,
 	description = S("Screwdriver"),
 	inventory_image = "screwdriver.png",
 	wield_image = "screwdriver.png^[transformFX",
 	groups = { tool = 1, enchantability = -1 },
-	_mcl_uses = 200,
 	on_use = function(itemstack, user, pointed_thing)
-		screwdriver.handler(itemstack, user, pointed_thing, screwdriver.ROTATE_FACE, 200)
+		screwdriver.handler(itemstack, user, pointed_thing, screwdriver.ROTATE_FACE)
 		return itemstack
 	end,
 	on_place = function(itemstack, user, pointed_thing)
-		screwdriver.handler(itemstack, user, pointed_thing, screwdriver.ROTATE_AXIS, 200)
+		screwdriver.handler(itemstack, user, pointed_thing, screwdriver.ROTATE_AXIS)
 		return itemstack
 	end,
 })
