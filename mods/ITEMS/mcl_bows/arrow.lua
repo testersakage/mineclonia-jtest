@@ -252,9 +252,14 @@ function ARROW_ENTITY:on_hit_object(obj, lua)
 	return true
 end
 
--- Process hitting a player, deflect if shield blocked, otherwise attach.
+-- Process hitting a player, deflect if shield blocked, or attach if not piercing.
 function ARROW_ENTITY:on_hit_player(obj)
 	if not enable_pvp then return false end
+	local piercing = self._piercing or 0
+	if piercing > 0 then -- Piercing ignore shield.
+		self:apply_effects(obj)
+		return true
+	end
 	-- TODO: Checking facing
 	if mcl_shields.is_blocking(obj) then -- Blocked by shield
 		self._blocked = true
@@ -306,6 +311,7 @@ function ARROW_ENTITY:set_stuck (node_pos, node)
 	self._lifetime = 0
 	self._dragtime = 0
 	self._stuckrechecktimer = 0
+	self._piercing = 0
 	self._ignored = nil
 	if not self._stuckin then self._stuckin = node_pos end
 	selfobj:set_velocity(vector.new(0, 0, 0))
@@ -329,14 +335,14 @@ end
 
 -- Hit a non-liquid node.  Either arrow could be stopped by engine or on its way to target.
 function ARROW_ENTITY:on_solid_hit (node_pos, node)
-	if not node then 
+	if not node then
 		node = core.get_node(node_pos)
 	end
 	if node.name == "air" or node.name == "ignore" then return end
 	return self:set_stuck(node_pos, node)
 end
 
-function ARROW_ENTITY:on_liquid_passthrough (node, def)
+function ARROW_ENTITY:on_liquid_passthrough (node, def) ---@diagnostic disable-line: unused-local
 	-- Slow down arrow in liquids. 8 water blocks shall kill most horizontal velocity.
 	-- Water visco = 1, Lava visco = 7, but mc lava seems to not slowdown arrows a lot?
 	--local v = def.liquid_viscosity or 0
@@ -372,9 +378,15 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 				damage_particles(vector.add(self_pos, vector.multiply(selfobj:get_velocity(), 0.1)), self._is_critical)
 			end
 			core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
+			-- Reduce piercing if not stopped
 			if result ~= "stop" then
-				self:remove()
-				result = "stop"
+				local piercing = self._piercing or 0
+				if piercing <= 1 then
+					self:remove()
+					result = "stop"
+				elseif piercing > 1 then
+					self._piercing = piercing - 1
+				end
 			end
 		end
 	elseif ray_hit.type == "node" then
@@ -557,6 +569,7 @@ function ARROW_ENTITY:get_staticdata()
 		startpos = self._startpos,
 		dragtime = self._dragtime,
 		damage = self._damage,
+		piercing = self._piercing,
 		is_critical = self._is_critical,
 		stuck = self._stuck,
 		stuckin = self._stuckin,
@@ -596,6 +609,7 @@ function ARROW_ENTITY:on_activate(staticdata)
 		self._startpos = data.startpos or self.object:get_pos()
 		self._dragtime = data.dragtime or 0
 		self._damage = data.damage or 0
+		self._piercing = data.piercing or 0
 		self._is_critical = data.is_critical or false
 		self._itemstring = data.itemstring
 		self._is_arrow = true
