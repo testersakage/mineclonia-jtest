@@ -6,6 +6,8 @@ local enable_pvp = core.settings:get_bool("enable_pvp")
 local ARROW_TIMEOUT = 60
 -- Time after which stuck arrow is rechecked for being stuck
 local STUCK_RECHECK_TIME = 5
+-- Range for stuck arrow to be collected by player
+local PICKUP_RANGE = 1
 
 --local GRAVITY = 9.81
 
@@ -235,15 +237,9 @@ function ARROW_ENTITY:on_hit_player(obj)
 	else -- Hit and attach to player.
 		self:apply_effects(obj)
 		self._in_player = true
-		local placement
 		self._placement = math.random(1, 2)
-		if self._placement == 1 then
-			placement = "front"
-		else
-			placement = "back"
-		end
-		self._in_player = true
-		if self._placement == 2 then
+		local placement = self._placement == 1 and "front" or "back"
+		if placement == "back" then
 			self._rotation_station = 90
 		else
 			self._rotation_station = -90
@@ -381,20 +377,18 @@ function ARROW_ENTITY:on_step(dtime)
 	local self_pos = selfobj:get_pos()
 	-- mcl_burning.tick may remove object immediately
 	if not self_pos then return end
-
 	local last_pos = self._lastpos.x and self._lastpos or self._startpos
-	if not last_pos or vector.distance (last_pos, self_pos) > 2.5 then
-		last_pos = self_pos
+
+	if self._in_player or self._blocked or self._stuck then
+		if self._stuck then
+			self:step_on_stuck(last_pos, dtime)
+		end
+		return
 	end
 
 	self._lifetime = self._lifetime + dtime
 	if self._lifetime > ARROW_TIMEOUT then
 		self:remove()
-		return
-	end
-
-	if self._stuck then
-		self:step_on_stuck(last_pos, dtime)
 		return
 	end
 
@@ -480,7 +474,7 @@ function ARROW_ENTITY:step_on_stuck(last_pos, dtime)
 
 	local self_pos = self.object:get_pos()
 	-- Pickup arrow if player is nearby (not in Creative Mode)
-	for obj in core.objects_inside_radius(self_pos, 1) do
+	for obj in core.objects_inside_radius(self_pos, PICKUP_RANGE) do
 		if obj and obj:is_valid() and obj:is_player() then
 			if self._collectable and not core.is_creative_enabled(obj:get_player_name()) then
 				if obj:get_inventory():room_for_item("main", self._itemstring or "mcl_bows:arrow") then
