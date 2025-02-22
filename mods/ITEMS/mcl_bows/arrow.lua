@@ -77,6 +77,7 @@ local ARROW_ENTITY={
 	_blocked = false,
 	_viscosity=0,   -- Viscosity of node the arrow is currently in
 	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
+	_partical_id=nil,
 }
 
 -- Drop arrow as item at pos
@@ -170,9 +171,9 @@ end
 
 function ARROW_ENTITY:do_particle()
 	if not self._is_critical or self._partical_id then return end
-	core.add_particlespawner({
-		amount = 20,
-		time = .2,
+	self._partical_id = core.add_particlespawner({
+		amount = ARROW_TIMEOUT * 50,
+		time = ARROW_TIMEOUT,
 		minpos = vector.new(0,0,0),
 		maxpos = vector.new(0,0,0),
 		minvel = vector.new(-0.1,-0.1,-0.1),
@@ -207,12 +208,23 @@ function ARROW_ENTITY:apply_effects(obj)
 	end
 end
 
+-- Remove critical partical effect
+function ARROW_ENTITY:stop_particle()
+	if not self._partical_id then return end
+	core.delete_particlespawner(self._partical_id)
+	self._partical_id = nil
+end
+
 -- Remove burning status, crit particle effect, and finally the arrow object.
-function ARROW_ENTITY:remove(delay)
+function ARROW_ENTITY:remove(delay, preserve_particle)
 	mcl_burning.extinguish(self.object)
+	if not preserve_particle then self:stop_particle() end
 	if not delay or delay <= 0 then
 		self.object:remove()
 	else
+		if not self._in_player or not self._blocked then
+			core.log("warning", "Delayed arrow removal should be done after setting it to an ignored state.")
+		end
 		core.after(delay, function() self:remove() end)
 	end
 end
@@ -275,6 +287,7 @@ end
 function ARROW_ENTITY:set_stuck (node_pos, node)
 	local selfobj = self.object
 	local self_pos = selfobj:get_pos()
+	self:stop_particle()
 	self._stuck = true
 	self._lifetime = 0
 	self._dragtime = 0
@@ -300,15 +313,11 @@ function ARROW_ENTITY:set_stuck (node_pos, node)
 end
 
 -- Hit a non-liquid node.  Either arrow could be stopped by engine or on its way to target.
-function ARROW_ENTITY:on_solid_hit (node_pos, node, def)
+function ARROW_ENTITY:on_solid_hit (node_pos, node)
 	if not node then 
 		node = core.get_node(node_pos)
 	end
 	if node.name == "air" or node.name == "ignore" then return end
-
-	if not def then
-		def = core.registered_nodes[node.name or ""]
-	end
 
 	-- Set fire to arrows which pass through lava or fire.
 	if core.get_item_group(node.name, "set_on_fire") > 0 then
@@ -353,11 +362,11 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 			core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
 			if result ~= "stop" then
 				self:remove()
+				result = "stop"
 			end
 		end
 	elseif ray_hit.type == "node" then
 		local hit_node_pos = core.get_pointed_thing_position(ray_hit)
-		local hit_node_str = hit_node_pos.x .. "," .. hit_node_pos.y .. "," .. hit_node_pos.z
 		local hit_node =  core.get_node(hit_node_pos)
 		local def = core.registered_nodes[hit_node.name or ""]
 
@@ -365,7 +374,7 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 			result = self:on_liquid_passthrough(hit_node, def)
 		elseif def then
 			self._stuckin = hit_node_pos
-			result = self:on_solid_hit(hit_node_pos, hit_node, def)
+			result = self:on_solid_hit(hit_node_pos, hit_node)
 		end
 	end
 	return result
@@ -551,14 +560,25 @@ function ARROW_ENTITY:on_activate(staticdata)
 				self._shooter = shooter
 			end
 		end
+		if not self._startpos then
+			self._startpos = self.object:get_pos()
+		end
 		if data.stuckin_player then
 			self:remove()
+			return
 		end
+		self:do_particle()
+	else
+		core.after(0, function() self:do_particle() end) -- Runs almost immediately for singleplayer.
 	end
 	self.object:set_armor_groups({ immortal = 1 })
 end
 
-core.register_on_respawnplayer(function(player)
+function ARROW_ENTITY:on_deactivate()
+	self:stop_particle()
+end
+
+minetest.register_on_respawnplayer(function(player)
 	for _, obj in pairs(player:get_children()) do
 		local ent = obj:get_luaentity()
 		if ent and ent.name and string.find(ent.name, "mcl_bows:arrow_entity") then
