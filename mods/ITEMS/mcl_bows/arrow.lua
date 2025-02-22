@@ -3,11 +3,15 @@ local S = core.get_translator(core.get_current_modname())
 local enable_pvp = core.settings:get_bool("enable_pvp")
 
 -- Time in seconds after which a stuck arrow is deleted
-local ARROW_TIMEOUT = 60
+local ARROW_TIMEOUT = 120
+-- Time in seconds after which a blocked arrow is deleted
+local BLOCKED_ARROW_TIMEOUT = 3
+-- Time in seconds after which an attached arrow is deleted
+local ATTACHED_ARROW_TIMEOUT = 30
 -- Time after which stuck arrow is rechecked for being stuck
 local STUCK_RECHECK_TIME = 5
 -- Range for stuck arrow to be collected by player
-local PICKUP_RANGE = 1
+local PICKUP_RANGE = 2
 
 --local GRAVITY = 9.81
 
@@ -62,7 +66,7 @@ local ARROW_ENTITY={
 		collide_with_objects = false,
 	},
 
-	_fire_damage_resistant = true,
+	fire_damage_resistant = true,
 	_lastpos={},
 	_startpos=nil,
 	_damage=1,	-- Damage on impact
@@ -246,6 +250,7 @@ function ARROW_ENTITY:on_hit_player(obj)
 	if mcl_shields.is_blocking(obj) then -- Blocked by shield
 		self._blocked = true
 		self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
+		self:remove(BLOCKED_ARROW_TIMEOUT, false)
 	else -- Hit and attach to player.
 		self:apply_effects(obj)
 		self._in_player = true
@@ -279,8 +284,8 @@ function ARROW_ENTITY:on_hit_player(obj)
 			vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
 			vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
 		)
+		self:remove(ATTACHED_ARROW_TIMEOUT, true)
 	end
-	self:remove(150)
 	return "stop"
 end
 
@@ -382,13 +387,12 @@ end
 
 function ARROW_ENTITY:on_step(dtime)
 	local selfobj = self.object
-	mcl_burning.tick(self.object, dtime, self)
 	local self_pos = selfobj:get_pos()
-	-- mcl_burning.tick may remove object immediately
 	if not self_pos then return end
 	local last_pos = self._lastpos.x and self._lastpos or self._startpos
 
 	if self._in_player or self._blocked or self._stuck then
+		mcl_burning.tick(selfobj, dtime, self)
 		if self._stuck then
 			self:step_on_stuck(last_pos, dtime)
 		end
@@ -407,30 +411,41 @@ function ARROW_ENTITY:on_step(dtime)
 		self._deflection_cooloff = self._deflection_cooloff - dtime
 	end
 
+	local result = nil
+	-- Raycasting movement during dtime to handle lava, water, and hits.
+	for ray_hit in core.raycast(last_pos, self_pos, true, true) do
+		result = self:on_intersect(ray_hit)
+		if result == "stop" then break end
+	end
+
+	-- Put out fire if exposed to rain, or if burning expires.
+	mcl_burning.tick(selfobj, dtime, self)
+
 	-- Check if arrow has stopped moving in one axis, which probably means it hit something.
 	-- This detection is a bit clunky, but MT does not offer a direct collision detection. :-(
-	local result = nil
-	local vel = selfobj:get_velocity()
-	if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
-		local dir
-		if math.abs(vel.y) < 0.00001 then
-			if last_pos.y < self_pos.y then
-				dir = vector.new(0, 1, 0)
+	if result ~= "stop" then
+		local vel = selfobj:get_velocity()
+		if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
+			local dir
+			if math.abs(vel.y) < 0.00001 then
+				if last_pos.y < self_pos.y then
+					dir = vector.new(0, 1, 0)
+				else
+					dir = vector.new(0, -1, 0)
+				end
 			else
-				dir = vector.new(0, -1, 0)
+				dir = core.facedir_to_dir(core.dir_to_facedir(core.yaw_to_dir(selfobj:get_yaw()-YAW_OFFSET)))
 			end
-		else
-			dir = core.facedir_to_dir(core.dir_to_facedir(core.yaw_to_dir(selfobj:get_yaw()-YAW_OFFSET)))
+			local dpos = vector.round(vector.copy(self_pos))
+			local stuck_pos = vector.add(dpos, dir)
+			local stuck_node = core.get_node(stuck_pos)
+			self._stuckin = stuck_pos
+			result = self:on_solid_hit(stuck_pos, stuck_node)
+			if result ~= "stop" then -- Arrow is stuck at air or other non-stopping block.
+				self:set_stuck(stuck_pos, stuck_node)
+			end
+			return
 		end
-		local dpos = vector.round(vector.copy(self_pos))
-		local stuck_pos = vector.add(dpos, dir)
-		local stuck_node = core.get_node(stuck_pos)
-		self._stuckin = stuck_pos
-		result = self:on_solid_hit(stuck_pos, stuck_node)
-		if result ~= "stop" then -- Arrow is stuck at air or other non-stopping block.
-			self:set_stuck(stuck_pos, stuck_node)
-		end
-		return
 	end
 
 	-- Predicting froward motion in anticipation of lag
