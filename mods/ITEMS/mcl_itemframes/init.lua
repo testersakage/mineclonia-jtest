@@ -280,13 +280,29 @@ awards.register_achievement("mcl_itemframes:glowframe", {
 	type = "Advancement",
 	group = "Overworld",
 })
+local function remove_unattached_frame(pos)
+	local node = core.get_node(pos)
+	local param2_dir = {
+		vector.offset(pos, 0, 1, 0),
+		vector.offset(pos, 0, -1, 0),
+		vector.offset(pos, 1, 0, 0),
+		vector.offset(pos, -1, 0, 0),
+		vector.offset(pos, 0, 0, 1),
+		vector.offset(pos, 0, 0, -1)
+	}
+
+	if core.get_node(param2_dir[node.param2 + 1]).name:find("air") then
+		core.remove_node(pos)
+	end
+end
 
 minetest.register_lbm({
-	label = "Respawn item frame item entities",
+	label = "Respawn item frame item entities and remove unattached item frames",
 	name = "mcl_itemframes:respawn_entities",
 	nodenames = { "group:itemframe" },
 	run_at_every_load = true,
-	action = function(pos,_)
+	action = function(pos, _)
+		remove_unattached_frame(pos)
 		update_entity(pos)
 	end
 })
