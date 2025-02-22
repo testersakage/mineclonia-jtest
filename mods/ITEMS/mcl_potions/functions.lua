@@ -2134,7 +2134,9 @@ end
 function mcl_potions._water_effect(pos, radius)
 	local epos = {x=pos.x, y=pos.y+0.5, z=pos.z}
 	local dnode = minetest.get_node({x=pos.x,y=pos.y-0.5,z=pos.z})
-	if minetest.get_item_group(dnode.name, "fire") ~= 0 or minetest.get_item_group(dnode.name, "lit_campfire") ~= 0 then
+	if minetest.get_item_group(dnode.name, "fire") ~= 0 or
+	minetest.get_item_group(dnode.name, "lit_campfire") ~= 0 or
+	minetest.get_item_group(dnode.name, "lit_candles") ~= 0 then
 		epos.y = pos.y - 0.5
 	end
 	local exting = false
@@ -2150,6 +2152,7 @@ function mcl_potions._water_effect(pos, radius)
 		for d=1, #dirs do
 			local tpos = vector.add(epos, dirs[d])
 			local node = minetest.get_node(tpos)
+			local candle_group = minetest.get_item_group(node.name, "lit_candles")
 			if minetest.get_item_group(node.name, "fire") ~= 0 then
 				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
 				minetest.remove_node(tpos)
@@ -2159,6 +2162,10 @@ function mcl_potions._water_effect(pos, radius)
 				local def = minetest.registered_nodes[node.name]
 				minetest.set_node(tpos, {name = def._mcl_campfires_smothered_form, param2 = node.param2})
 				exting = true
+			elseif candle_group ~= 0 then
+				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
+				minetest.set_node(tpos, {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
+				exting = true
 			end
 		end
 	-- Has radius: lingering, extinguish all nodes in area
@@ -2166,15 +2173,19 @@ function mcl_potions._water_effect(pos, radius)
 		local nodes = minetest.find_nodes_in_area(
 			{x=epos.x-radius,y=epos.y,z=epos.z-radius},
 			{x=epos.x+radius,y=epos.y,z=epos.z+radius},
-			{"group:fire", "group:lit_campfire"})
+			{"group:fire", "group:lit_campfire", "group:lit_candles"})
 		for n=1, #nodes do
 			local node = minetest.get_node(nodes[n])
+			local candle_group = minetest.get_item_group(node.name, "lit_candles")
 			minetest.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.25, max_hear_distance = 16}, true)
 			if minetest.get_item_group(node.name, "fire") ~= 0 then
 				minetest.remove_node(nodes[n])
 			elseif minetest.get_item_group(node.name, "lit_campfire") ~= 0 then
 				local def = minetest.registered_nodes[node.name]
 				minetest.set_node(nodes[n], {name = def._mcl_campfires_smothered_form, param2 = node.param2})
+			elseif candle_group ~= 0 then
+				minetest.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.1, max_hear_distance = 16}, true)
+				minetest.set_node(nodes[n], {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
 			end
 			exting = true
 		end
