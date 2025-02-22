@@ -615,8 +615,8 @@ function mcl_trees.register_wood(name, p)
 		p.pressure_plate = p.pressure_plate or {}
 		mcl_pressureplates.register_pressure_plate(name, {
 			"mcl_pressureplates:pressure_plate_"..name,
-			p.pressure_plate.description or D(rname .. " Pressure Plate"),
-			texture = p.wood and p.wood.tiles[1] or {minetest.get_current_modname().."_planks_"..name..".png"},
+			description = p.pressure_plate.description or D(rname .. " Pressure Plate"),
+			texture = p.wood and p.wood.tiles and p.wood.tiles[1] or (minetest.get_current_modname().."_planks_"..name..".png"),
 			recipeitem = "mcl_trees:wood_"..name,
 			sounds = mcl_sounds.node_sound_wood_defaults(),
 			groups = {axey=1, material_wood=1},
