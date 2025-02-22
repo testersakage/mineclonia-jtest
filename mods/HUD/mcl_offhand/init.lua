@@ -92,7 +92,8 @@ mcl_player.register_globalstep(function(player)
 
 	local itemstack = mcl_offhand.get_offhand(player)
 	local offhand_item = itemstack:get_name()
-	local offhand_hud = mcl_offhand[player].hud
+	local offhand = mcl_offhand[player]
+	local offhand_hud = offhand.hud
 	local item = minetest.registered_items[offhand_item]
 	if offhand_item ~= "" and item then
 		local meta_texture = itemstack:get_meta():get_string("inventory_overlay")
@@ -165,9 +166,9 @@ mcl_player.register_globalstep(function(player)
 		end
 
 		if offhand_hud.wear_bar then
-			if offhand_hud.last_wear ~= offhand_get_wear(player) then
+			if offhand.last_wear ~= offhand_get_wear(player) then
 				update_wear_bar(player, itemstack)
-				offhand_hud.last_wear = offhand_get_wear(player)
+				offhand.last_wear = offhand_get_wear(player)
 			end
 			if offhand_get_wear(player) <= 0 or not minetest.registered_tools[offhand_item] then
 				remove_hud(player, "wear_bar_bg")
@@ -176,9 +177,9 @@ mcl_player.register_globalstep(function(player)
 		end
 
 		if offhand_hud.item_count then
-			if offhand_hud.last_count ~= offhand_get_count(player) then
+			if offhand.last_count ~= offhand_get_count(player) then
 				player:hud_change(offhand_hud.item_count, "text", offhand_get_count(player))
-				offhand_hud.last_count = offhand_get_count(player)
+				offhand.last_count = offhand_get_count(player)
 			end
 			if offhand_get_count(player) <= 1 then
 				remove_hud(player, "item_count")
