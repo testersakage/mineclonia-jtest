@@ -84,7 +84,8 @@ local function fish(itemstack, player, pointed_thing)
 	end
 	local pos = player:get_pos()
 
-	local durability = 65
+	local idefs = itemstack:get_definition()
+	local durability = idefs._mcl_uses
 	local unbreaking = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
 	if unbreaking > 0 then
 		durability = durability * (unbreaking + 1)
@@ -144,10 +145,10 @@ local function fish(itemstack, player, pointed_thing)
 			mcl_experience.throw_xp(pos, math.random(1,6))
 
 			if not minetest.is_creative_enabled(player:get_player_name()) then
-				local idef = itemstack:get_definition()
-				itemstack:add_wear(65535/durability) -- 65 uses
-				if itemstack:get_count() == 0 and idef.sound and idef.sound.breaks then
-					minetest.sound_play(idef.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
+				itemstack:add_wear(65535/durability)
+				tt.reload_itemstack_description(itemstack)
+				if itemstack:get_count() == 0 and idefs.sound and idefs.sound.breaks then
+					minetest.sound_play(idefs.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
 				end
 			end
 		end
@@ -158,10 +159,10 @@ local function fish(itemstack, player, pointed_thing)
 		local def = minetest.registered_nodes[node.name]
 		if def.walkable then
 			if not minetest.is_creative_enabled(player:get_player_name()) then
-				local idef = itemstack:get_definition()
-				itemstack:add_wear((65535/durability)*2) -- if so and not creative then wear double like in MC.
-				if itemstack:get_count() == 0 and idef.sound and idef.sound.breaks then
-					minetest.sound_play(idef.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
+				itemstack:add_wear((65535/durability)*2)
+				tt.reload_itemstack_description(itemstack)
+				if itemstack:get_count() == 0 and idefs.sound and idefs.sound.breaks then
+					minetest.sound_play(idefs.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
 				end
 			end
 		end
@@ -349,7 +350,7 @@ minetest.register_tool("mcl_fishing:fishing_rod", {
 	_tt_help = S("Catches fish in water"),
 	_doc_items_longdesc = S("Fishing rods can be used to catch fish."),
 	_doc_items_usagehelp = S("Rightclick to launch the bobber. When it sinks right-click again to reel in an item. Who knows what you're going to catch?"),
-	groups = { tool = 1, fishing_rod = 1, enchantability = 1, offhand_item = 1 },
+	groups = { tool = 2, fishing_rod = 1, enchantability = 1, offhand_item = 1 },
 	inventory_image = "mcl_fishing_fishing_rod.png",
 	wield_image = "mcl_fishing_fishing_rod.png^[transformFY^[transformR90",
 	wield_scale = { x = 1.5, y = 1.5, z = 1 },
@@ -357,7 +358,7 @@ minetest.register_tool("mcl_fishing:fishing_rod", {
 	on_place = fish,
 	on_secondary_use = fish,
 	sound = { breaks = "default_tool_breaks" },
-	_mcl_uses = 65,
+	_mcl_uses = 384,
 	_mcl_toollike_wield = true,
 	_mcl_burntime = 15
 })

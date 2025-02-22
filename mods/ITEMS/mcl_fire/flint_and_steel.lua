@@ -8,7 +8,7 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 	_doc_items_usagehelp = S("Rightclick the surface of a block to attempt to light a fire in front of it or ignite the block. A few blocks have an unique reaction when ignited."),
 	inventory_image = "mcl_fire_flint_and_steel.png",
 	stack_max = 1,
-	groups = { tool = 1, flint_and_steel = 1, enchantability = -1, offhand_item = 1 },
+	groups = { tool = 2, flint_and_steel = 1, enchantability = -1, offhand_item = 1 },
 	on_place = function(itemstack, user, pointed_thing)
 		-- Use pointed node's on_rightclick function first, if present
         local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
@@ -23,6 +23,7 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 		end
 
 		local idef = itemstack:get_definition()
+		local uses = idef._mcl_uses
 		minetest.sound_play(
 			"fire_flint_and_steel",
 			{pos = pointed_thing.above, gain = 0.5, max_hear_distance = 8},
@@ -46,34 +47,36 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 		end
 		if (not minetest.is_creative_enabled(user:get_player_name())) and used == true then
 			itemstack:add_wear_by_uses(mcl_util.calculate_durability(itemstack))
+			tt.reload_itemstack_description(itemstack)
 		end
 		return itemstack
 	end,
 	_dispense_into_walkable = true,
 	_on_dispense = function(stack, _, droppos, dropnode, _)
-		-- Ignite air
+		local uses = stack:get_definition()._mcl_uses
 		if dropnode.name == "air" then
 			minetest.set_node(droppos, {name="mcl_fire:fire"})
 			if not minetest.is_creative_enabled("") then
-				stack:add_wear(65535/65) -- 65 uses
+				stack:add_wear(65535/uses)
 			end
 		-- Ignite TNT
 		elseif dropnode.name == "mcl_tnt:tnt" then
 			tnt.ignite(droppos)
 			if not minetest.is_creative_enabled("") then
-				stack:add_wear(65535/65) -- 65 uses
+				stack:add_wear(65535/uses)
 			end
 		-- Ignite Campfire
 		elseif minetest.get_item_group(dropnode.name, "campfire") ~= 0 then
 			minetest.set_node(droppos, {name=dropnode.name.."_lit"})
 			if not minetest.is_creative_enabled("") then
-				stack:add_wear(65535/65) -- 65 uses
+				stack:add_wear(65535/uses)
 			end
 		end
+		tt.reload_itemstack_description(stack)
 		return stack
 	end,
 	sound = { breaks = "default_tool_breaks" },
-	_mcl_uses = 65,
+	_mcl_uses = 64,
 	_placement_def = {
 		inherit = "node_defaults",
 		["mobs_mc:creeper"] = "default",

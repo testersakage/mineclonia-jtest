@@ -37,7 +37,7 @@ function mcl_sus_nodes.get_random_item(pos)
 	end
 end
 
-local function brush_node(_, _, pointed_thing)
+local function brush_node(itemstack, user, pointed_thing)
 	if pointed_thing and pointed_thing.type == "node" then
 		local pos = minetest.get_pointed_thing_position(pointed_thing)
 		local node = minetest.get_node(pos)
@@ -84,7 +84,13 @@ local function brush_node(_, _, pointed_thing)
 		else
 			minetest.swap_node(pos,{name=def._mcl_sus_nodes_main.."_"..item_entities[ph]._stage})
 		end
+
+		if not core.is_creative_enabled(user:get_player_name()) then
+			itemstack:add_wear_by_uses(itemstack:get_definition()._mcl_uses)
+			tt.reload_itemstack_description(itemstack)
+		end
 	end
+	return itemstack
 end
 
 local function overlay_tiles(orig,overlay)
@@ -200,10 +206,11 @@ minetest.register_tool("mcl_sus_nodes:brush", {
 	_doc_items_usagehelp = S("Use the brush on a suspicious node to uncover its secrets"),
 	_doc_items_hidden = false,
 	inventory_image = "mcl_sus_nodes_brush.png",
-	groups = { tool=1, brush = 1, dig_speed_class=0, enchantability=0 },
+	groups = { tool=2, brush = 1, dig_speed_class=0, enchantability=0 },
 	on_use = brush_node,
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
+	_mcl_uses = 64,
 })
 
 minetest.register_craft({

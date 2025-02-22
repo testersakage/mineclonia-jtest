@@ -29,7 +29,7 @@ minetest.register_tool("mcl_shields:shield", {
 	stack_max = 1,
 	groups = {
 		shield = 1,
-		weapon = 1,
+		weapon = 2,
 		enchantability = -1,
 		offhand_item = 1,
 	},
@@ -38,6 +38,7 @@ minetest.register_tool("mcl_shields:shield", {
 	wield_scale = vector.new(2, 2, 2),
 	_mcl_wieldview_item = "",
 	_placement_class = "shield",
+	_mcl_uses = 336,
 })
 
 local function wielded_item(obj, i)
@@ -207,7 +208,7 @@ end
 mcl_damage.register_modifier(function(obj, damage, reason)
 	local type = reason.type
 	local damager = reason.direct
-	local blocking, shieldstack = mcl_shields.is_blocking(obj)
+	local blocking, shieldstack = mcl_shields.is_blocking(obj), obj:get_wielded_item()
 
 	if not (obj:is_player() and blocking and mcl_shields.types[type] and damager) then
 		return
@@ -229,14 +230,15 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		return
 	end
 
-	local durability = 336
+	local durability = shieldstack:get_definition()._mcl_uses
 	local unbreaking = mcl_enchanting.get_enchantment(shieldstack, mcl_shields.enchantments[2])
 	if unbreaking > 0 then
 		durability = durability * (unbreaking + 1)
 	end
 
 	if not minetest.is_creative_enabled(obj:get_player_name()) and damage >= 3 then
-		shieldstack:add_wear(65535 / durability) ---@diagnostic disable-line: need-check-nil
+		shieldstack:add_wear(65535 / durability)
+		tt.reload_itemstack_description(shieldstack)
 		if blocking == 2 then
 			obj:set_wielded_item(shieldstack)
 		else

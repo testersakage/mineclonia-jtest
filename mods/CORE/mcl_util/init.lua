@@ -613,6 +613,13 @@ function mcl_util.calculate_durability(itemstack)
 	return uses or 0
 end
 
+function mcl_util.get_remaining_uses(itemstack)
+	local wear = itemstack and itemstack:get_wear() or 0
+	local uses = mcl_util.calculate_durability(itemstack)
+
+	return math.round((1 - wear / 65535) * uses)
+end
+
 function mcl_util.use_item_durability(itemstack, n)
 	local uses = mcl_util.calculate_durability(itemstack)
 	itemstack:add_wear(65535 / uses * n)

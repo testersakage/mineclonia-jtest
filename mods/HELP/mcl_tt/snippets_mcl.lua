@@ -104,14 +104,20 @@ tt.register_snippet(function(itemstring)
 		return S("Creeper view range: -50%")
 	end
 end)
-
+-- Tools that do not dig or punch entities
 tt.register_snippet(function(itemstring, _, itemstack)
-	if itemstring:sub(1, 23) == "mcl_fishing:fishing_rod" or itemstring:sub(1, 12) == "mcl_bows:bow" then
-		return S("Durability: @1", S("@1 uses", mcl_util.calculate_durability(itemstack or ItemStack(itemstring))))
+	if not itemstack then itemstack = ItemStack(itemstring) end
+	local function get_uses_tt(uses) return S("@1 uses", uses) end
+
+	if core.get_item_group(itemstring, "tool") == 2 or core.get_item_group(itemstring, "weapon") == 2 then
+		local tt = ""
+
+		tt = tt .. S("Durability: @1", get_uses_tt(mcl_util.calculate_durability(itemstack))) .. "\n"
+		tt = tt .. S("Remaining uses: @1", get_uses_tt(mcl_util.get_remaining_uses(itemstack)))
+
+		return tt
 	end
 end)
-
-
 -- Potions info
 tt.register_snippet(function(itemstring, _, itemstack)
 	if not itemstack then return end

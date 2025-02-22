@@ -186,7 +186,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 		return itemstack
 	end,
 	touch_interaction = "short_dig_long_place",
-	groups = {weapon = 1, weapon_ranged = 1, bow = 1, enchantability = 1, offhand_item = 1},
+	groups = {weapon = 2, weapon_ranged = 1, bow = 1, enchantability = 1, offhand_item = 1},
 	_mcl_uses = 385,
 	_mcl_burntime = 15
 })
@@ -284,6 +284,7 @@ function mcl_bows.player_shoot (player, wielditem, usetime_us)
 			durability = durability * (unbreaking + 1)
 		end
 		wielditem:add_wear(65535/durability)
+		tt.reload_itemstack_description(wielditem)
 	end
 	player:set_wielded_item (wielditem)
 end
