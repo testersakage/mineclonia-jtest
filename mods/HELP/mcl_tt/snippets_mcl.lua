@@ -1,39 +1,27 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-
 -- Armor
-tt.register_snippet(function(itemstring)
-	--local def = minetest.registered_items[itemstring]
+tt.register_snippet(function(itemstring, _, itemstack)
 	local s = ""
 	local head = minetest.get_item_group(itemstring, "armor_head")
 	local torso = minetest.get_item_group(itemstring, "armor_torso")
 	local legs = minetest.get_item_group(itemstring, "armor_legs")
 	local feet = minetest.get_item_group(itemstring, "armor_feet")
-	if head > 0 then
-		s = s .. S("Head armor")
-	end
-	if torso > 0 then
-		s = s .. S("Torso armor")
-	end
-	if legs > 0 then
-		s = s .. S("Legs armor")
-	end
-	if feet > 0 then
-		s = s .. S("Feet armor")
-	end
-	return s ~= "" and s or nil
-end)
-tt.register_snippet(function(itemstring, _, itemstack)
-	local s = ""
 	local use = minetest.get_item_group(itemstring, "mcl_armor_uses")
 	local pts = minetest.get_item_group(itemstring, "mcl_armor_points")
-	if pts > 0 then
-		s = s .. S("Armor points: @1", pts)
-		s = s .. "\n"
-	end
+
+	if head > 0 then s = s .. S("Head armor") end
+	if torso > 0 then s = s .. S("Torso armor") end
+	if legs > 0 then s = s .. S("Legs armor") end
+	if feet > 0 then s = s .. S("Feet armor") end
+
+	if pts > 0 then s = s .. S("Armor points: @1", pts) .. "\n" end
+
 	if itemstack then
 		local unbreaking = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
+
 		if unbreaking > 0 then
-			local elytra = minetest.get_item_group (itemstring, "elytra")
+			local elytra = minetest.get_item_group(itemstring, "elytra")
+
 			if elytra > 0 then
 				use = math.floor(use * (unbreaking + 1))
 			else
@@ -41,14 +29,17 @@ tt.register_snippet(function(itemstring, _, itemstack)
 			end
 		end
 	end
+
 	if use > 0 then
-		local wear = itemstack and itemstack:get_wear() or 0
-		local remdur = math.round((1 - wear / 65535) * use)
+		local remdur = mcl_util.get_remaining_uses(itemstack or ItemStack(itemstring))
+
 		s = s .. S("Armor durability: @1", use) .. "\n"
 		s = s .. S("Remaining durability: @1", remdur)
 	end
+
 	return s ~= "" and s or nil
 end)
+
 -- Horse armor
 tt.register_snippet(function(itemstring)
 	local armor_g = minetest.get_item_group(itemstring, "horse_armor")
@@ -73,7 +64,6 @@ tt.register_snippet(function(itemstring)
 end)
 
 tt.register_snippet(function(itemstring)
-	--local def = minetest.registered_items[itemstring]
 	if minetest.get_item_group(itemstring, "crush_after_fall") == 1 then
 		return S("Deals damage when falling"), mcl_colors.YELLOW
 	end
@@ -87,14 +77,14 @@ tt.register_snippet(function(itemstring)
 		return S("Grows on grass blocks, podzol, dirt or coarse dirt")
 	end
 end)
-
+-- Flammable items
 tt.register_snippet(function(itemstring)
 	local def = minetest.registered_items[itemstring]
 	if def and def.groups.flammable then
 		return S("Flammable")
 	end
 end)
-
+-- Heads
 tt.register_snippet(function(itemstring)
 	if itemstring == "mcl_heads:zombie" then
 		return S("Zombie view range: -50%")

@@ -1,39 +1,11 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 
---[[local function get_min_digtime(caps)
-	local mintime
-	local unique = true
-	local maxlevel = caps.maxlevel
-	if not maxlevel then
-		maxlevel = 1
-	end
-	if maxlevel > 1 then
-		unique = false
-	end
-	if caps.times then
-		for r=1,3 do
-			local time = caps.times[r]
-			if time and maxlevel > 1 then
-				time = time / maxlevel
-			end
-			if time and ((not mintime) or (time < mintime)) then
-				if mintime and (time < mintime) then
-					unique = false
-				end
-				mintime = time
-			end
-		end
-	end
-	return mintime, unique
-end]]
-
 local function newline(str)
 	if str ~= "" then
 		str = str .. "\n"
 	end
 	return str
 end
-
 -- Digging capabilities of tool
 tt.register_snippet(function(itemstring, toolcaps, itemstack)
 	local def = minetest.registered_items[itemstring]
@@ -159,25 +131,6 @@ tt.register_snippet(function(itemstring, toolcaps, itemstack)
 	return ret
 end)
 
--- Weapon stats
---[[tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
-end)]]
-
--- Food
-tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
-	local desc
-	if def and def._tt_food then
-		desc = S("Food item")
-		if def._tt_food_hp then
-			local msg = S("+@1 food points", def._tt_food_hp)
-			desc = desc .. "\n" .. msg
-		end
-	end
-	return desc
-end)
-
 -- Node info
 tt.register_snippet(function(itemstring)
 	local def = minetest.registered_items[itemstring]
@@ -250,4 +203,3 @@ tt.register_snippet(function(itemstring)
 
 	return desc ~= "" and desc or nil, false
 end)
-
