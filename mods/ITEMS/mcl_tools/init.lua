@@ -277,12 +277,13 @@ minetest.register_tool("mcl_tools:shears", {
 	stack_max = 1,
 	groups = { tool=1, shears=1, dig_speed_class=4, enchantability=-1, offhand_item = 1 },
 	tool_capabilities = {
-			full_punch_interval = 0.5,
-			max_drop_level=1,
+		full_punch_interval = 0.5,
+		max_drop_level=1,
 	},
 	on_place = mcl_tools.get_default_tool_place_func("shears"),
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
+	_mcl_uses = 238,
 	_mcl_diggroups = {
 		shearsy = { speed = 1.5, level = 1, uses = 238 },
 		shearsy_wool = { speed = 5, level = 1, uses = 238 },
@@ -292,7 +293,8 @@ minetest.register_tool("mcl_tools:shears", {
 		if core.get_item_group(dropnode.name, "honey_level") == 5 then
 			core.swap_node(droppos, {name = dropnode.name:gsub("_5", ""), param2 = dropnode.param2})
 			core.add_item(vector.add(droppos, dropdir), "mcl_honey:honeycomb 3")
-			stack:add_wear_by_uses(238)
+			stack:add_wear_by_uses(stack:get_definition()._mcl_uses)
+			tt.reload_itemstack_description(stack)
 		end
 		return stack
 	end,
