@@ -210,6 +210,9 @@ local function water_bottle_on_place(itemstack, placer, pointed_thing)
 		elseif candle_group > 0 then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_" .. candle_group, node.param2)
 			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
+		elseif node.name == "mcl_candles:candle_cake_lit" then
+			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_cake", node.param2)
+			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
 		end
 
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)

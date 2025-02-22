@@ -2136,7 +2136,8 @@ function mcl_potions._water_effect(pos, radius)
 	local dnode = minetest.get_node({x=pos.x,y=pos.y-0.5,z=pos.z})
 	if minetest.get_item_group(dnode.name, "fire") ~= 0 or
 	minetest.get_item_group(dnode.name, "lit_campfire") ~= 0 or
-	minetest.get_item_group(dnode.name, "lit_candles") ~= 0 then
+	minetest.get_item_group(dnode.name, "lit_candles") ~= 0 or
+	minetest.get_item_group(dnode.name, "lit_cake") then
 		epos.y = pos.y - 0.5
 	end
 	local exting = false
@@ -2166,6 +2167,9 @@ function mcl_potions._water_effect(pos, radius)
 				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
 				minetest.set_node(tpos, {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
 				exting = true
+			elseif minetest.get_item_group(node.name, "lit_cake") ~= 0 then
+				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
+				minetest.set_node(tpos, {name = node.name:gsub("_lit", ""), param2 = node.param2})
 			end
 		end
 	-- Has radius: lingering, extinguish all nodes in area
@@ -2173,7 +2177,7 @@ function mcl_potions._water_effect(pos, radius)
 		local nodes = minetest.find_nodes_in_area(
 			{x=epos.x-radius,y=epos.y,z=epos.z-radius},
 			{x=epos.x+radius,y=epos.y,z=epos.z+radius},
-			{"group:fire", "group:lit_campfire", "group:lit_candles"})
+			{"group:fire", "group:lit_campfire", "group:lit_candles", "group:lit_cake"})
 		for n=1, #nodes do
 			local node = minetest.get_node(nodes[n])
 			local candle_group = minetest.get_item_group(node.name, "lit_candles")
@@ -2186,6 +2190,8 @@ function mcl_potions._water_effect(pos, radius)
 			elseif candle_group ~= 0 then
 				minetest.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.1, max_hear_distance = 16}, true)
 				minetest.set_node(nodes[n], {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
+			elseif minetest.get_item_group(node.name, "lit_cake") then
+				minetest.set_node(nodes[n], {name = node.name:gsub("_lit", ""), param2 = node.param2})
 			end
 			exting = true
 		end
