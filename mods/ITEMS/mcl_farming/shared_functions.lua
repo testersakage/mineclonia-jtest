@@ -476,7 +476,7 @@ function mcl_farming:get_seed_or_eat_callback(plantname, hp_change)
 	end
 end
 
-function mcl_farming.on_bone_meal(_, _, _, pos, n, plant,stages)
+function mcl_farming.on_bone_meal(_, _, _, pos, n, plant, stages)
 	local stages = stages or math.random(2, 5)
 	return mcl_farming:grow_plant(plant, pos, n, stages, true)
 end
