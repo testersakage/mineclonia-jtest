@@ -205,7 +205,7 @@ mcl_pressureplates.register_pressure_plate("stone", {
 mcl_pressureplates.register_pressure_plate("polished_blackstone", {
 	description = S("Polished Blackstone Pressure Plate"),
 	texture = "mcl_blackstone_polished.png",
-	recipeitem = "mcl_blackstone_polished.png",
+	recipeitem = "mcl_blackstone:blackstone_polished",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey=1, material_stone=1},
 	activated_by = { player = true, mob = true },
@@ -215,7 +215,7 @@ mcl_pressureplates.register_pressure_plate("polished_blackstone", {
 mcl_pressureplates.register_pressure_plate("light", {
 	description = S("Light Weighted Pressure Plate"),
 	texture = "default_gold_block.png",
-	recipeitem = "mcl_core:goldblock.png",
+	recipeitem = "mcl_core:gold_ingot",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey=1},
 	weighted = 1,
@@ -225,7 +225,7 @@ mcl_pressureplates.register_pressure_plate("light", {
 mcl_pressureplates.register_pressure_plate("heavy", {
 	description = S("Heavy Weighted Pressure Plate"),
 	texture = "default_steel_block.png",
-	recipeitem = "mcl_core:ironblock.png",
+	recipeitem = "mcl_core:iron_ingot",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey=1},
 	weighted = 10,
