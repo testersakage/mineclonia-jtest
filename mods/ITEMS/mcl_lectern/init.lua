@@ -170,7 +170,7 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 		end,
 		get_power = function(node, dir)
 			local powered = node.param2 >= 128
-			return powered and 15 or 0, false
+			return powered and 15 or 0, dir.y < 0
 		end,
 		update = function(_, node)
 			local powered = node.param2 >= 128
