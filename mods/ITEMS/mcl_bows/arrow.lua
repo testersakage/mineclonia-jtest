@@ -13,6 +13,10 @@ local STUCK_RECHECK_TIME = 5
 -- Range for stuck arrow to be collected by player
 local PICKUP_RANGE = 2
 
+-- For each DRAG_TICK second, set velocity to DRAG_RATE%
+local DRAG_TICK = 0.05
+local DRAG_RATE = 0.99
+
 -- Each block of liquid set velocity to LIQUID_RATE%
 local LIQUID_RATE = 0.73 -- Lost most horizontal speed at 8 liquid blocks.
 
@@ -76,6 +80,7 @@ local ARROW_ENTITY={
 	_is_critical=false, -- Whether this arrow would deal critical damage
 	_stuck=false,   -- Whether arrow is stuck
 	_lifetime=0,-- Amount of time (in seconds) the arrow has existed
+	_dragtime=0,-- Amount of time (in seconds) the arrow has slowed down
 	_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
 	_stuckin=nil,	--Position of node in which arow is stuck.
 	_shooter=nil,	-- ObjectRef of player or mob who shot it
@@ -426,6 +431,14 @@ function ARROW_ENTITY:on_step(dtime)
 		self._deflection_cooloff = self._deflection_cooloff - dtime
 	end
 
+	-- Apply drag
+	if self._lifetime >= self._dragtime + DRAG_TICK then
+		repeat
+			self:multiply_xz_velocity(DRAG_RATE)
+			self._dragtime = self._dragtime + DRAG_TICK
+		until self._lifetime < self._dragtime + DRAG_TICK
+	end
+
 	local result = nil
 	-- Raycasting movement during dtime to handle lava, water, and hits.
 	for ray_hit in core.raycast(last_pos, self_pos, true, true) do
@@ -542,6 +555,7 @@ function ARROW_ENTITY:get_staticdata()
 	local out = {
 		lastpos = self._lastpos,
 		startpos = self._startpos,
+		dragtime = self._dragtime,
 		damage = self._damage,
 		is_critical = self._is_critical,
 		stuck = self._stuck,
@@ -565,8 +579,8 @@ function ARROW_ENTITY:on_activate(staticdata)
 	if data then
 		-- First, check if the arrow is already past its life timer. If
 		-- yes, delete it. If starttime is nil always delete it.
-		self._lifetime = core.get_gametime() - (data.starttime or 0)
-		if self._lifetime > ARROW_TIMEOUT then
+		self._lifetime = minetest.get_gametime() - (data.starttime or 0)
+		if self._lifetime > ARROW_TIMEOUT or data.stuckin_player then
 			self:remove()
 			return
 		end
@@ -579,9 +593,10 @@ function ARROW_ENTITY:on_activate(staticdata)
 
 		-- Get the remaining arrow state
 		self._lastpos = data.lastpos
-		self._startpos = data.startpos
-		self._damage = data.damage
-		self._is_critical = data.is_critical
+		self._startpos = data.startpos or self.object:get_pos()
+		self._dragtime = data.dragtime or 0
+		self._damage = data.damage or 0
+		self._is_critical = data.is_critical or false
 		self._itemstring = data.itemstring
 		self._is_arrow = true
 		if data.shootername then
@@ -589,13 +604,6 @@ function ARROW_ENTITY:on_activate(staticdata)
 			if shooter and shooter:is_player() then
 				self._shooter = shooter
 			end
-		end
-		if not self._startpos then
-			self._startpos = self.object:get_pos()
-		end
-		if data.stuckin_player then
-			self:remove()
-			return
 		end
 		self:do_particle()
 	else
