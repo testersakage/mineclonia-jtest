@@ -313,20 +313,6 @@ function ARROW_ENTITY:on_solid_hit (node_pos, node, def)
 	if not def then
 		def = core.registered_nodes[node.name or ""]
 	end
-	-- If node is non-walkable, unknown or ignore, don't make arrow stuck.
-	-- This causes a deflection in the engine.
-	if not def or def.walkable == false or def.name == "ignore" then
-		self._stuckin = nil
-		if self._deflection_cooloff <= 0 then
-			-- Lose 1/3 of velocity on deflection
-			local vel = self.object:get_velocity()
-			local newvel = vector.multiply(vel, 0.6667)
-			self.object:set_velocity(newvel)
-			-- Set deflection cooloff to prevent many deflections happening in quick succession.
-			self._deflection_cooloff = 1.0
-		end
-		return
-	end
 
 	-- Set fire to arrows which pass through lava or fire.
 	if core.get_item_group(node.name, "set_on_fire") > 0 then
