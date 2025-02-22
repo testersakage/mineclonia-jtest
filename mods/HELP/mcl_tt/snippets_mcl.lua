@@ -1,6 +1,8 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 -- Armor
 tt.register_snippet(function(itemstring, _, itemstack)
+	if core.get_item_group(itemstring, "armor") < 1 then return end
+
 	local s = ""
 	local head = minetest.get_item_group(itemstring, "armor_head")
 	local torso = minetest.get_item_group(itemstring, "armor_torso")
@@ -13,6 +15,8 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	if torso > 0 then s = s .. S("Torso armor") end
 	if legs > 0 then s = s .. S("Legs armor") end
 	if feet > 0 then s = s .. S("Feet armor") end
+
+	s = s .. "\n"
 
 	if pts > 0 then s = s .. S("Armor points: @1", pts) .. "\n" end
 
@@ -33,8 +37,7 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	if use > 0 then
 		local remdur = mcl_util.get_remaining_uses(itemstack or ItemStack(itemstring))
 
-		s = s .. S("Armor durability: @1", use) .. "\n"
-		s = s .. S("Remaining durability: @1", remdur)
+		s = s .. S("Armor durability: @1 / @2", remdur, use)
 	end
 
 	return s ~= "" and s or nil
@@ -97,15 +100,12 @@ end)
 -- Tools that do not dig or punch entities
 tt.register_snippet(function(itemstring, _, itemstack)
 	if not itemstack then itemstack = ItemStack(itemstring) end
-	local function get_uses_tt(uses) return S("@1 uses", uses) end
 
 	if core.get_item_group(itemstring, "tool") == 2 or core.get_item_group(itemstring, "weapon") == 2 then
-		local tt = ""
+		local remuses = mcl_util.get_remaining_uses(itemstack)
+		local uses = mcl_util.calculate_durability(itemstack)
 
-		tt = tt .. S("Durability: @1", get_uses_tt(mcl_util.calculate_durability(itemstack))) .. "\n"
-		tt = tt .. S("Remaining uses: @1", get_uses_tt(mcl_util.get_remaining_uses(itemstack)))
-
-		return tt
+		return S("Durability: @1 / @2", remuses, uses)
 	end
 end)
 -- Potions info

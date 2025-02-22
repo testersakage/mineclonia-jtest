@@ -73,8 +73,7 @@ tt.register_snippet(function(itemstring, toolcaps, itemstack)
 			if not itemstack then itemstack = ItemStack(itemstring) end
 			local remuses = mcl_util.get_remaining_uses(itemstack)
 
-			capstr = capstr .. S("Mining durability: @1", miningusesstr) .. "\n"
-			capstr = capstr .. S("Remaining uses: @1", S("@1 uses", remuses)) .. "\n"
+			capstr = capstr .. S("Mining durability: @1 / @2", remuses, miningusesstr) .. "\n"
 		end
 
 		-- Only show one group at max
