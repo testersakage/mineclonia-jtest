@@ -39,7 +39,7 @@ local function honey_harvest(pos, node, player, itemstack)
 		--Once bees exist this branch should spawn them and/or make them aggro
 		if not campfire[1] then mcl_util.deal_damage(player, 10, {type = "mob"}) end
 		node.name = original_block
-		core.swap_node(pos, node)
+		mcl_redstone.swap_node(pos, node)
 	end
 	return mcl_util.return_itemstack_if_alive(player, itemstack)
 	-- returning the old itemstack here would result in it still being in hand *after* death
@@ -86,7 +86,7 @@ local tpl_beehive = {
 		"mcl_beehives_beehive_side.png", "mcl_beehives_beehive_front.png",
 	},
 	paramtype2 = "facedir",
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, beehive = 1, unmovable_by_piston = 1},
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, beehive = 1, unmovable_by_piston = 1,  comparator_signal = 0},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.6,
 	_mcl_burntime = 15,
@@ -107,7 +107,7 @@ local tpl_bee_nest = table.merge(tpl_beehive, {
 		"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_side.png",
 		"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_front.png",
 	},
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, bee_nest = 1 },
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, bee_nest = 1,  comparator_signal = 0 },
 	_mcl_hardness = 0.3,
 	_mcl_baseitem = "mcl_beehives:bee_nest",
 })
@@ -117,12 +117,12 @@ core.register_node("mcl_beehives:beehive", tpl_beehive)
 for l = 1, 4 do
 	local name = "mcl_beehives:beehive_" .. l
 	core.register_node(name, table.merge(tpl_beehive, {
-		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = l, unmovable_by_piston = 1},
+		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = l, unmovable_by_piston = 1,  comparator_signal = l},
 	}))
 end
 
 core.register_node("mcl_beehives:beehive_5", table.merge(tpl_beehive, {
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = 5, unmovable_by_piston = 1},
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = 5, unmovable_by_piston = 1,  comparator_signal = 5},
 	on_rightclick = honey_harvest,
 	tiles = {
 		"mcl_beehives_beehive_end.png", "mcl_beehives_beehive_end.png",
@@ -137,7 +137,7 @@ core.register_node("mcl_beehives:bee_nest", tpl_bee_nest)
 for i = 1, 4 do
 	local name = "mcl_beehives:bee_nest_"..i
 	core.register_node(name, table.merge(tpl_bee_nest, {
-		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = i },
+		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = i,  comparator_signal = i },
 	}))
 end
 
@@ -147,7 +147,7 @@ core.register_node("mcl_beehives:bee_nest_5", table.merge(tpl_bee_nest, {
 		"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_side.png",
 		"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_front_honey.png",
 	},
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = 5 },
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = 5,  comparator_signal = 5 },
 	on_rightclick = honey_harvest,
 }))
 
@@ -167,7 +167,7 @@ function mcl_beehives.add_level(pos, add_levels)
 		local honey_level = core.get_item_group(node.name, "honey_level")
 		honey_level = math.min(honey_level + add_levels, 5)
 		node.name = def._mcl_baseitem.."_"..honey_level
-		core.swap_node(pos, node)
+		mcl_redstone.swap_node(pos, node)
 	end
 end
 
