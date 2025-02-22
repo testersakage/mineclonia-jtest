@@ -98,8 +98,8 @@ tt.register_snippet(function(itemstring, toolcaps, itemstack)
 			capstr = capstr .. S("Mining speed: @1", speedstr) .. "\n"
 		end
 		if miningusesstr ~= "" then
-			local wear = itemstack and itemstack:get_wear() or 0
-			local remuses = math.round((1 - (wear / 65535)) * real_uses)
+			if not itemstack then itemstack = ItemStack(itemstring) end
+			local remuses = mcl_util.get_remaining_uses(itemstack)
 
 			capstr = capstr .. S("Mining durability: @1", miningusesstr) .. "\n"
 			capstr = capstr .. S("Remaining uses: @1", S("@1 uses", remuses)) .. "\n"
