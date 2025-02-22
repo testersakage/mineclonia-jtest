@@ -173,10 +173,9 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	local knockback = 1
 
 	if hitter then
-		local wielditem = mcl_util.get_wielditem (hitter)
-		knockback = knockback
-			+ mcl_enchanting.get_enchantment (wielditem,
-							"knockback")
+		local wielditem = mcl_util.get_wielditem(hitter)
+		knockback = knockback + mcl_enchanting.get_enchantment(wielditem, "knockback")
+		tt.reload_itemstack_description(wielditem)
 	end
 
 	-- Throwables should always deal knockback.
