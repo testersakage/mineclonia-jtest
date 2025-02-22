@@ -174,8 +174,8 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 		_repair_material = materialdefs.material,
 		after_use = function(itemstack, user, _, digparams)
 			if not core.is_creative_enabled(user:get_player_name()) then
-				tt.reload_itemstack_description(itemstack)
 				itemstack:add_wear(digparams.wear)
+				tt.reload_itemstack_description(itemstack)
 			end
 			return itemstack
 		end,
@@ -267,8 +267,8 @@ minetest.register_tool("mcl_tools:shears", {
 	_doc_items_usagehelp = shears_use,
 	after_use = function(itemstack, user, _, digparams)
 		if not core.is_creative_enabled(user:get_player_name()) then
-			tt.reload_itemstack_description(itemstack)
 			itemstack:add_wear(digparams.wear)
+			tt.reload_itemstack_description(itemstack)
 		end
 		return itemstack
 	end,
