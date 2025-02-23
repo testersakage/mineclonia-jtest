@@ -99,6 +99,7 @@ minetest.register_node("mcl_cartography_table:cartography_table", {
 	groups = { axey = 2, handy = 1, deco_block = 1, material_wood = 1, flammable = 1 },
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
+	_mcl_burntime = 15,
 	on_construct = function(pos)
 		local inv = minetest.get_meta(pos):get_inventory()
 		inv:set_size("input", 2)
