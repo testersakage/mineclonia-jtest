@@ -42,13 +42,41 @@ local CATEGORYFIELDSIZE = {
 	HEIGHT = math.floor(doc.FORMSPEC.HEIGHT-1),
 }
 
+local function new_player_data()
+	return {
+		-- Gallery index, stores current index of first displayed image in a gallery
+		galidx = 1,
+		-- Maximum gallery index (index of last image in gallery)
+		maxgalidx = 1,
+		-- Number of rows in a gallery of the current entry
+		galrows = 1,
+		-- Table for persistant data
+		stored_data = {
+			-- Contains viewed entries indexed by category
+			viewed = {},
+			-- Count viewed entries indexed by category
+			viewed_count = {},
+			-- Contains revealed/unhidden entries indexed by category
+			revealed = {},
+			-- Count revealed entries indexed by category
+			revealed_count = {},
+		},
+	}
+end
+
 doc.data = {}
 doc.data.categories = {}
 doc.data.aliases = {}
 -- Default order (includes categories of other mods from the Docuentation System modpack)
 doc.data.category_order = {"basics", "nodes", "tools", "craftitems", "advanced", "mobs"}
 doc.data.category_count = 0
-doc.data.players = {}
+-- Return empty player data for offline players
+doc.data.players = setmetatable({}, {
+	__index = function(table, playername)
+		table[playername] = new_player_data()
+		return table[playername]
+	end,
+ })
 
 -- Space for additional APIs
 doc.sub = {}
@@ -593,12 +621,13 @@ end
 
 function doc.player_load_data(player)
 	local name = player:get_player_name()
+	doc.data.players[name] = new_player_data()
 	local meta = player:get_meta()
 	local d = meta:get_string("doc:revealed_data")
 	if d ~= "" then
-		doc.data.players[name] = {}
 		doc.data.players[name].stored_data = core.deserialize(d)
 	end
+	return d ~= ""
 end
 
 minetest.register_on_leaveplayer(function(player)
@@ -1098,31 +1127,10 @@ minetest.register_chatcommand("helpform", {
 )
 
 minetest.register_on_joinplayer(function(player)
-	doc.player_load_data(player)
-	local playername = player:get_player_name()
-	local playerdata = doc.data.players[playername]
-	if playerdata == nil then
-		-- Initialize player data
-		doc.data.players[playername] = {}
-		playerdata = doc.data.players[playername]
-		-- Gallery index, stores current index of first displayed image in a gallery
-		playerdata.galidx = 1
-		-- Maximum gallery index (index of last image in gallery)
-		playerdata.maxgalidx = 1
-		-- Number of rows in an gallery of the current entry
-		playerdata.galrows = 1
-		-- Table for persistant data
-		playerdata.stored_data = {}
-		-- Contains viewed entries
-		playerdata.stored_data.viewed = {}
-		-- Count viewed entries
-		playerdata.stored_data.viewed_count = {}
-		-- Contains revealed/unhidden entries
-		playerdata.stored_data.revealed = {}
-		-- Count revealed entries
-		playerdata.stored_data.revealed_count = {}
-	else
+	if doc.player_load_data(player) then
 		-- Completely rebuild viewed and revealed counts from scratch
+		local playername = player:get_player_name()
+		local playerdata = doc.data.players[playername]
 		for cid, cat in pairs(doc.data.categories) do
 			if playerdata.stored_data.viewed[cid] == nil then
 				playerdata.stored_data.viewed[cid] = {}
