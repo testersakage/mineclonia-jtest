@@ -193,25 +193,23 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 	end
 
-	-- Positions/nodes where objects should be moved
+	-- Collect positions/nodes where objects should be moved.
 	local move_positions = {}
-
 	for id, n in ipairs(nodes) do
-		-- If moving up, dont push objects already on the block. The second table.insert does it already
+		-- If moving up, dont add positions above moved nodes. The second table.insert does it already.
 		if movedir.y ~= 1 then
 			table.insert(move_positions, {pos = n.old_pos:offset(0, 1, 0), node = n, is_pulled = true})
 		end
 		table.insert(move_positions, {pos = n.pos, node = n, is_pulled = false})
 	end
 
-	-- Make sure to move objects dug by piston head as well.
+	-- Make sure that objects dug by piston head gets moved as well.
 	for id, n in ipairs(dig_nodes) do
 		table.insert(move_positions, {pos = n.old_pos, node = n, is_pulled = false})
 	end
 
-	-- remember already moved objects. So they dont get moved more than once
+	-- Search for and move objects. Make sure they dont get moved more than once.
 	local moved_objects = {}
-
 	for id, p in ipairs(move_positions) do
 		local objects = minetest.get_objects_inside_radius(p.pos, 0.9)
 		for _, obj in ipairs(objects) do
