@@ -1015,6 +1015,10 @@ if progressive_mode then
 	end
 
 	local function progressive_filter(recipes, player)
+		if minetest.is_creative_enabled(player:get_player_name()) then
+			return recipes
+		end
+
 		local progress = get_progress(player)
 
 		local filtered, c = {}, 0
@@ -1064,7 +1068,6 @@ else
 		local name = player:get_player_name()
 		player_data[name] = nil
 	end)
-
 
 	if strict_mode then
 		local function recipe_unlocked(recipe)
