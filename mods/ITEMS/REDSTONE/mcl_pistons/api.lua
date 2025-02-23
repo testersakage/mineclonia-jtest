@@ -210,12 +210,18 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 	-- Search for and move objects. Make sure they dont get moved more than once.
 	local moved_objects = {}
+	local processed = {}
 	for id, p in ipairs(move_positions) do
-		local objects = minetest.get_objects_inside_radius(p.pos, 0.9)
-		for _, obj in ipairs(objects) do
-			if not moved_objects[obj] then
-				move_object(obj, p.node, p.is_pulled)
-				moved_objects[obj] = true
+		local h = minetest.hash_node_position(p.pos)
+		if not processed[h] then
+			processed[h] = true
+			
+			local objects = minetest.get_objects_inside_radius(p.pos, 0.9)
+			for _, obj in ipairs(objects) do
+				if not moved_objects[obj] then
+					move_object(obj, p.node, p.is_pulled)
+					moved_objects[obj] = true
+				end
 			end
 		end
 	end
