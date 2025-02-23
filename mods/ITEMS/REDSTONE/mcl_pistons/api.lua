@@ -203,12 +203,12 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 		table.insert(move_positions, {pos = n.pos, node = n, is_pulled = false})
 	end
-	
+
 	-- Make sure to move objects dug by piston head as well.
 	for id, n in ipairs(dig_nodes) do
 		table.insert(move_positions, {pos = n.old_pos, node = n, is_pulled = false})
 	end
-	
+
 	-- remember already moved objects. So they dont get moved more than once
 	local moved_objects = {}
 
