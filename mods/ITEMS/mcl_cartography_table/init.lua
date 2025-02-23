@@ -38,42 +38,32 @@ local function refresh_cartography(pos, player)
 	local inv = minetest.get_meta(pos):get_inventory()
 	local map = inv:get_stack("input", 2)
 	local texture = mcl_maps.load_map_item(map)
-	local marker = inv:get_stack("input", 1):get_name()
+	local marker = inv:get_stack("input", 1)
+	local marker_name = marker:get_name()
+	local base_map_bg, base_map_img = "image[5.125,0.5;4,4;mcl_maps_map_background.png]", ""
 
-	if marker == "mcl_maps:empty_map" then
-		if texture then
+	if texture then base_map_img = "image[5.375,0.75;3.5,3.5;" .. texture .. "]" end
+
+	if map and texture and marker:is_empty() then
+		formspec = formspec .. table.concat{base_map_bg, base_map_img}
+	elseif map and texture and marker then
+		if marker_name == "mcl_maps:empty_map" then
 			formspec = formspec .. table.concat({
 				"image[6.125,0.5;3,3;mcl_maps_map_background.png]",
 				"image[6.375,0.75;2.5,2.5;" .. texture .. "]",
 				"image[5.125,1.5;3,3;mcl_maps_map_background.png]",
 				"image[5.375,1.75;2.5,2.5;" .. texture .. "]"
 			})
-		else
-			formspec = formspec .. table.concat({
-				"image[6.125,0.5;3,3;mcl_maps_map_background.png]",
-				"image[5.125,1.5;3,3;mcl_maps_map_background.png]"
-			})
-		end
-		if not map:is_empty() then
-			map:set_count(2)
+
 			inv:set_stack("output", 1, map)
+		elseif marker_name == "mcl_panes:pane_natural_flat" then
+			formspec = formspec .. table.concat({
+				base_map_bg, base_map_img, "image[8.375,3.75;0.5,0.5;mcl_core_barrier.png]"
+			})
+		--elseif marker_name == "mcl_core:paper" then
 		end
 	else
-		formspec = formspec .. "image[5.125,0.5;4,4;mcl_maps_map_background.png]"
-		--formspec = formspec .. "box[5.125,0.5;4,4;#FFFFFF]"
-		if texture then formspec = formspec .. "image[5.375,0.75;3.5,3.5;" .. texture .. "]" end
-		if marker == "xpanes:pane_natural_flat" and not map:is_empty() then
-			if map:get_meta():get_int("locked") == 1 then
-				formspec = formspec .. table.concat({
-					"image[3.2,2;1,1;mcl_core_barrier.png]",
-					"image[8.375,3.75;0.5,0.5;mcl_core_barrier.png]"
-				})
-			else
-				formspec = formspec .. "image[8.375,3.75;0.5,0.5;mcl_core_barrier.png]"
-				map:get_meta():set_int("locked", 1)
-				inv:set_stack("output", 1, map)
-			end
-		end
+		formspec = formspec .. base_map_bg
 	end
 
 	minetest.show_formspec(player:get_player_name(), "mcl_cartography_table", formspec)
@@ -95,8 +85,7 @@ minetest.register_node("mcl_cartography_table:cartography_table", {
 		"cartography_table_side3.png", "cartography_table_side1.png"
 	},
 	is_ground_content = false,
-	paramtype2 = "facedir",
-	groups = { axey = 2, handy = 1, deco_block = 1, material_wood = 1, flammable = 1 },
+	groups = {axey = 1, handy = 1, deco_block = 1, material_wood = 1},
 	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
 	_mcl_burntime = 15,
@@ -120,18 +109,19 @@ minetest.register_node("mcl_cartography_table:cartography_table", {
 	on_metadata_inventory_take = function(pos, listname, _, _, player)
 		local inv = minetest.get_meta(pos):get_inventory()
 		if listname == "output" then
-			local first = inv:get_stack("input", 2); first:take_item(); inv:set_stack("input", 2, first)
-			local second = inv:get_stack("input", 1); second:take_item(); inv:set_stack("input", 1, second)
+			local marker = inv:get_stack("input", 1)
+			marker:take_item()
+			inv:set_stack("input", 1, marker)
 		else
 			inv:set_stack("output", 1, "")
 		end
 		refresh_cartography(pos, player)
 	end,
 	allow_metadata_inventory_move = function() return 0 end,
-	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		return 0 and minetest.is_protected(pos, player:get_player_name()) or stack:get_count()
 	end,
-	on_rightclick = function(pos, node, player, itemstack)
+	on_rightclick = function(pos, _, player, _)
 		if not player:get_player_control().sneak then refresh_cartography(pos, player) end
 	end,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
