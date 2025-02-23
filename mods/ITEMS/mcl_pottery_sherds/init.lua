@@ -1,6 +1,7 @@
 mcl_pottery_sherds = {}
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
+local D = mcl_util.get_dynamic_translator()
 
 mcl_pottery_sherds.defs = {
 	["angler"] = { description = S("Angler") },
@@ -44,7 +45,7 @@ local pot_face_rotations = {
 
 for name, def in pairs(mcl_pottery_sherds.defs) do
 	minetest.register_craftitem("mcl_pottery_sherds:"..name, {
-		description = S("@1 Pottery Sherd", def.description),
+		description = D(def.description.." Pottery Sherd"),
 		_tt_help = S("Used for crafting decorated pots"),
 		_doc_items_create_entry = false,
 		inventory_image = "mcl_pottery_sherds_"..name..".png",
@@ -129,7 +130,8 @@ local function get_sherd_desc(face)
 	if face == nil then
 		return minetest.registered_items["mcl_core:brick"].description
 	end
-	return S("@1 Pottery Sherd", mcl_pottery_sherds.defs[face].description)
+	local description = mcl_pottery_sherds.defs[face].description
+	return D(description.." Pottery Sherd")
 end
 
 tt.register_snippet(function(_, _, stack)
