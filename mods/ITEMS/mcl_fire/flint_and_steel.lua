@@ -23,7 +23,6 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 		end
 
 		local idef = itemstack:get_definition()
-		local uses = idef._mcl_uses
 		minetest.sound_play(
 			"fire_flint_and_steel",
 			{pos = pointed_thing.above, gain = 0.5, max_hear_distance = 8},
