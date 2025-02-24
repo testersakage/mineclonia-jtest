@@ -1,6 +1,7 @@
 local S = core.get_translator(core.get_current_modname())
 -- Beetroot crops
 mcl_farming.register_simple_crop("beetroot", {
+	chance = 3,
 	fortune_drop = {
 		cap = 5,
 		discrete_uniform_distribution = true,
@@ -10,6 +11,7 @@ mcl_farming.register_simple_crop("beetroot", {
 		min_count = 1
 	},
 	initial_stage_zero = true,
+	interval = 68,
 	mature_desc = S("Mature Beetroot Plant"),
 	mature_drop = {
 		items = {
@@ -88,5 +90,3 @@ core.register_craft({
 
 core.register_alias("beetroot_seeds", "mcl_farming:beetroot_seeds")
 core.register_alias("beetroot", "mcl_farming:beetroot_item")
-
-mcl_farming:add_plant("plant_beetroot", "mcl_farming:beetroot", {"mcl_farming:beetroot_0", "mcl_farming:beetroot_1", "mcl_farming:beetroot_2"}, 68, 3)

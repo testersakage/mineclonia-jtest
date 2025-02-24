@@ -24,6 +24,7 @@ local function get_indexed_parameter(parameter, index)
 end
 
 function mcl_farming.register_simple_crop(id, defs, overrides)
+    local mature_name, premature_names = "", {}
     local mod, mod_prefix = core.get_current_modname(), ""
     local id_orig = mod .. ":" .. id .. "_" .. (defs.initial_stage_zero and 0 or 1)
     local enough_drops = defs.drops and #defs.drops == defs.stages
@@ -101,5 +102,13 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         if not (mature or premature) then
             doc.add_entry_alias("nodes", id_orig, "nodes", name)
         end
+
+        if mature then
+            mature_name = name
+        else
+            table.insert(premature_names, name)
+        end
     end
+
+    mcl_farming:add_plant("plant_" .. id, mature_name, premature_names, defs.interval, defs.chance)
 end

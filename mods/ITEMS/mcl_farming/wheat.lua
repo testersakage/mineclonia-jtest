@@ -2,6 +2,7 @@ local S = core.get_translator(core.get_current_modname())
 local mod_screwdriver = core.get_modpath("screwdriver")
 -- Wheat crops
 mcl_farming.register_simple_crop("wheat", {
+	chance = 20,
 	fortune_drop = {
 		cap = 7,
 		discrete_uniform_distribution = true,
@@ -10,6 +11,7 @@ mcl_farming.register_simple_crop("wheat", {
 		max_count = 6,
 		min_count = 1
 	},
+	interval = 25,
 	mature_desc = S("Mature Wheat Plant"),
 	mature_drop = {
 		items = {
@@ -113,5 +115,3 @@ core.register_node("mcl_farming:hay_block", {
 		"mcl_farming_hayblock_side.png"
 	}
 })
-
-mcl_farming:add_plant("plant_wheat", "mcl_farming:wheat", {"mcl_farming:wheat_1", "mcl_farming:wheat_2", "mcl_farming:wheat_3", "mcl_farming:wheat_4", "mcl_farming:wheat_5", "mcl_farming:wheat_6", "mcl_farming:wheat_7"}, 25, 20)

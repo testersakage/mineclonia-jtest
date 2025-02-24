@@ -1,6 +1,7 @@
 local S = core.get_translator(core.get_current_modname())
 -- Sweet berry bushes
 mcl_farming.register_simple_crop("sweet_berry_bush", {
+	chance = 3,
 	drops = {
 		["1, 2"] = "",
 		["3"] = {
@@ -20,6 +21,7 @@ mcl_farming.register_simple_crop("sweet_berry_bush", {
 	},
 	groups_per_stage = {["1"] = nil, ["2, 3, 4"] = {sweet_berry_thorny = 1}},
 	initial_stage_zero = true,
+	interval = 68,
 	last_stage_index = 3,
 	mature_desc = S("Mature Sweet Berry Bush"),
 	mature_longdesc = S("Mature sweet berry bush can be harvest and can drop 2-3 sweet berries."),
@@ -151,6 +153,3 @@ for i = 0, 3 do
 end
 
 core.register_alias("mcl_sweet_berry:sweet_berry", "mcl_farming:sweet_berry")
-
--- TODO: Find proper interval and chance values for sweet berry bushes. Current interval and chance values are copied from mcl_farming:beetroot which has similar growth stages.
-mcl_farming:add_plant("plant_sweet_berry_bush", "mcl_farming:sweet_berry_bush_3", {"mcl_farming:sweet_berry_bush_0", "mcl_farming:sweet_berry_bush_1", "mcl_farming:sweet_berry_bush_2"}, 68, 3)

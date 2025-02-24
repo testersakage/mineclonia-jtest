@@ -1,6 +1,7 @@
 local S = core.get_translator(core.get_current_modname())
 -- Carrot crops
 mcl_farming.register_simple_crop("carrot", {
+	chance = 20,
 	fortune_drop = {
 		cap = 5,
 		discrete_uniform_distribution = true,
@@ -8,6 +9,7 @@ mcl_farming.register_simple_crop("carrot", {
 		max_count = 4,
 		min_count = 2
 	},
+	interval = 25,
 	mature_desc = S("Mature Carrot Plant"),
 	mature_drop = {
 		items = {
@@ -68,5 +70,3 @@ core.register_craft({
 		{"mcl_core:gold_nugget", "mcl_core:gold_nugget", "mcl_core:gold_nugget"}
 	}
 })
-
-mcl_farming:add_plant("plant_carrot", "mcl_farming:carrot", {"mcl_farming:carrot_1", "mcl_farming:carrot_2", "mcl_farming:carrot_3", "mcl_farming:carrot_4", "mcl_farming:carrot_5", "mcl_farming:carrot_6", "mcl_farming:carrot_7"}, 25, 20)

@@ -1,6 +1,7 @@
 local S = core.get_translator(core.get_current_modname())
 -- Potato crops
 mcl_farming.register_simple_crop("potato", {
+	chance = 20,
 	fortune_drop = {
 		cap = 5,
 		discrete_uniform_distribution = true,
@@ -8,6 +9,7 @@ mcl_farming.register_simple_crop("potato", {
 		max_count = 4,
 		min_count = 2
 	},
+	interval = 19.75,
 	mature_desc = S("Mature Potato Plant"),
 	mature_drop = {
 		items = {
@@ -85,5 +87,3 @@ core.register_on_item_eat(function (_, _, itemstack, user)
 		end
 	end
 end)
-
-mcl_farming:add_plant("plant_potato", "mcl_farming:potato", {"mcl_farming:potato_1", "mcl_farming:potato_2", "mcl_farming:potato_3", "mcl_farming:potato_4", "mcl_farming:potato_5", "mcl_farming:potato_6", "mcl_farming:potato_7"}, 19.75, 20)
