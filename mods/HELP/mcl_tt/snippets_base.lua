@@ -1,133 +1,98 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function newline(str)
-	if str ~= "" then
-		str = str .. "\n"
-	end
+	if str ~= "" then str = str .. "\n" end
+
 	return str
 end
--- Digging capabilities of tool
+
+local function newtab(str)
+	if str ~= "" then str = str .. "\t" end
+
+	return str
+end
+
+-- Capabilities for tools and melee weapon
 tt.register_snippet(function(itemstring, toolcaps, itemstack)
-	local def = minetest.registered_items[itemstring]
-	if not toolcaps then
-		return
-	end
-	local groupcaps = toolcaps.groupcaps
-	if not groupcaps then
-		return
-	end
-	local minestring = ""
-	local capstr = ""
+	local final_result = ""
+	local defs = core.registered_items[itemstring]
+	local tool = core.get_item_group(itemstring, "tool") == 1
+	local weapon = core.get_item_group(itemstring, "weapon") == 1
+
+	if not (tool or weapon) or not toolcaps then return end
+
 	local caplines = 0
-	for _,v in pairs(groupcaps) do
-		local speedstr = ""
-		local miningusesstr = ""
-		-- Mining capabilities
+	local mining_caps = newline(S("When mining:"))
+	local attack_caps = newline(S("When attacking:"))
+
+	for _, v in pairs(toolcaps.groupcaps) do
 		caplines = caplines + 1
-		local maxlevel = v.maxlevel
-		if not maxlevel then
-			-- Default from tool.h
-			maxlevel = 1
-		end
 
-		-- Digging speed
-		local speed_class = def and def.groups and def.groups.dig_speed_class
-		if speed_class == 1 then
-			speedstr = S("Painfully slow")
-		elseif speed_class == 2 then
-			speedstr = S("Very slow")
-		elseif speed_class == 3 then
-			speedstr = S("Slow")
-		elseif speed_class == 4 then
-			speedstr = S("Fast")
-		elseif speed_class == 5 then
-			speedstr = S("Very fast")
-		elseif speed_class == 6 then
-			speedstr = S("Extremely fast")
-		elseif speed_class == 7 then
-			speedstr = S("Instantaneous")
-		end
+		local max_level = v.maxlevel or 1
+		local base_uses = v.uses or 20
 
-		-- Number of mining uses
-		local base_uses = v.uses
-		if not base_uses then
-			-- Default from tool.h
-			base_uses = 20
-		end
+		if defs and defs._doc_items_durability == nil and base_uses > 0 then
+			local dur_str
+			local real_uses = base_uses * math.pow(3, max_level)
+			local current_dur = mcl_util.get_remaining_uses(itemstack or ItemStack(itemstring))
 
-		local real_uses = base_uses * math.pow(3, maxlevel)
-
-		if def and def._doc_items_durability == nil and base_uses > 0 then
+			if weapon then real_uses = toolcaps.punch_attack_uses end
 
 			if real_uses < 65535 then
-				miningusesstr = S("@1 uses", real_uses)
+				dur_str = S("@1 / @2 uses", current_dur, real_uses)
 			else
-				miningusesstr = S("Unlimited uses")
+				dur_str = S("Unlimited uses")
 			end
+
+			final_result = final_result .. S("Durability: @1", dur_str)
+			newline(final_result)
 		end
 
-		if speedstr ~= "" then
-			capstr = capstr .. S("Mining speed: @1", speedstr) .. "\n"
-		end
-		if miningusesstr ~= "" then
-			if not itemstack then itemstack = ItemStack(itemstring) end
-			local remuses = mcl_util.get_remaining_uses(itemstack)
+		local speed_class = core.get_item_group(itemstring, "dig_speed_class")
+		local speed_classes = {
+			S("Painfully slow"),
+			S("Very slow"),
+			S("Slow"),
+			S("Fast"),
+			S("Very fast"),
+			S("Extremely fast"),
+			S("Instantaneous")
+		}
 
-			capstr = capstr .. S("Mining durability: @1 / @2", remuses, miningusesstr) .. "\n"
-		end
+		if not speed_classes[speed_class] and speed_class > 7 then speed_class = 7 end
 
-		-- Only show one group at max
+		mining_caps = newtab(mining_caps) .. S("Mining speed: @1", speed_classes[speed_class])
+
 		break
 	end
+
 	if caplines > 0 then
-		-- Capabilities
-		minestring = minestring .. capstr
-		-- Max. drop level
-		local mdl = toolcaps.max_drop_level
-		if not toolcaps.max_drop_level then
-			mdl = 0
-		end
-		minestring = minestring .. S("Block breaking strength: @1", mdl)
+		mining_caps = newline(mining_caps)
+
+		local mdl = toolcaps.max_drop_level or 0
+
+		mining_caps = newtab(mining_caps) .. S("Block breaking strength: @1", mdl)
 	end
 
-	local weaponstring = ""
-	-- Weapon stats
 	if toolcaps.damage_groups then
 		for group, damage in pairs(toolcaps.damage_groups) do
-			local msg = ""
-			if group == "fleshy" then
-				if damage >= 0 then
-					msg = S("Damage: @1", damage)
-				else
-					msg = S("Healing: @1", math.abs(damage))
-				end
+			if group == "fleshy" and damage >= 0 then
+				attack_caps = newtab(attack_caps) .. S("Damage: @1", damage)
 			end
-			weaponstring = newline(weaponstring)
-			weaponstring = weaponstring .. msg
 		end
-		local full_punch_interval = toolcaps.full_punch_interval
-		if not full_punch_interval then
-			full_punch_interval = 1
-		end
-		weaponstring = newline(weaponstring)
-		weaponstring = weaponstring .. S("Full punch interval: @1s", string.format("%.2f", full_punch_interval))
+
+		local fpi = toolcaps.full_punch_interval or 1
+
+		attack_caps = newtab(newline(attack_caps)) .. S("Full punch interval: @1s", fpi)
 	end
 
-	local ret
-	if minetest.get_item_group(itemstring, "weapon") == 1 then
-		ret = weaponstring
-		ret = newline(ret)
-		ret = ret .. minestring
-	else
-		ret = minestring
-		ret = newline(ret)
-		ret = ret .. weaponstring
+	if tool then
+		final_result = newline(final_result) .. newline(mining_caps) .. attack_caps
+	elseif weapon then
+		final_result = newline(final_result) .. newline(attack_caps) .. mining_caps
 	end
 
-	if ret == "" then
-		ret = nil
-	end
-	return ret
+	return final_result
 end)
 
 -- Node info

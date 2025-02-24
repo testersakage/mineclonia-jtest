@@ -617,6 +617,10 @@ function mcl_util.get_remaining_uses(itemstack)
 	local wear = itemstack and itemstack:get_wear() or 0
 	local uses = mcl_util.calculate_durability(itemstack)
 
+	if core.get_item_group(itemstack:get_name(), "weapon") == 1 then
+		uses = itemstack:get_tool_capabilities().punch_attack_uses
+	end
+
 	return math.round((1 - wear / 65535) * uses)
 end
 
