@@ -313,6 +313,7 @@ minetest.register_node("mcl_portals:end_portal_frame", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	paramtype = "light",
 	light_source = 1,
+	drop = "",
 
 	on_rotate = rotate_frame,
 
@@ -332,6 +333,7 @@ minetest.register_node("mcl_portals:end_portal_frame_eye", {
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	_mcl_baseitem = "mcl_portals:end_portal_frame",
+	drop = "",
 	node_box = {
 		type = "fixed",
 		fixed = {
