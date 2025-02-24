@@ -177,6 +177,7 @@ minetest.register_tool("screwdriver:screwdriver", {
 	inventory_image = "screwdriver.png",
 	wield_image = "screwdriver.png^[transformFX",
 	groups = { tool = 1, enchantability = -1 },
+	_mcl_uses = 200,
 	on_use = function(itemstack, user, pointed_thing)
 		screwdriver.handler(itemstack, user, pointed_thing, screwdriver.ROTATE_FACE, 200)
 		return itemstack
