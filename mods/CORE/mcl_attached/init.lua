@@ -36,7 +36,7 @@ function mcl_attached.drop_attached_node(p)
 		minetest.sound_play(def.sounds.fall, { pos = p }, true)
 	end
 
-	minetest.remove_node(p)
+	if def.groups.supported_node == 1 then minetest.remove_node(p) end
 	for _, item in pairs(drops) do
 		local pos = vector.offset(p,
 			math.random() / 2 - 0.25,
