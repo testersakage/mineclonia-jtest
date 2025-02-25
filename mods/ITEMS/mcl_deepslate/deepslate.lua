@@ -39,7 +39,7 @@ minetest.register_node("mcl_deepslate:deepslate_reinforced", {
 	is_ground_content = false,
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
-	groups = { stone = 1, building_block = 1, material_stone = 1 },
+	groups = { handy = 1, stone = 1, building_block = 1, material_stone = 1 },
 	drop = "",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = screwdriver.rotate_3way,
