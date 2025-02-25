@@ -1,53 +1,40 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_node("mcl_farming:soil", {
-	tiles = {"mcl_farming_farmland_dry.png", "default_dirt.png"},
-	description = S("Farmland"),
-	_tt_help = S("Surface for crops").."\n"..S("Can become wet"),
-	_doc_items_longdesc = S("Farmland is used for farming, a necessary surface to plant crops. It is created when a hoe is used on dirt or a similar block. Plants are able to grow on farmland, but slowly. Farmland will become hydrated farmland (on which plants grow faster) when it rains or a water source is nearby. This block will turn back to dirt when a solid block appears above it or a piston arm extends above it."),
-	drop = "mcl_core:dirt",
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			-- 15/16 of the normal height
-			{-0.5, -0.5, -0.5, 0.5, 0.4375, 0.5},
-		}
-	},
-	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		meta:set_int("wet", 0)
-	end,
-	groups = {handy=1, shovely=1, dirtifies_below_solid=1, dirtifier=1, soil=2, soil_sapling=1, soil_fungus=1, deco_block=1, pathfinder_partial = 2 },
-	sounds = mcl_sounds.node_sound_dirt_defaults(),
+local tpl_soil = {
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
-	pathfinder_partial = 2,
-})
-
-minetest.register_node("mcl_farming:soil_wet", {
-	tiles = {"mcl_farming_farmland_wet.png", "default_dirt.png"},
-	description = S("Hydrated Farmland"),
-	_doc_items_longdesc = S("Hydrated farmland is used in farming, this is where you can plant and grow some plants. It is created when farmland is under rain or near water. Without water, this block will dry out eventually. This block will turn back to dirt when a solid block appears above it or a piston arm extends above it."),
-	drop = "mcl_core:dirt",
 	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.4375, 0.5},
-		}
+	drop = "mcl_core:dirt",
+	groups = {
+		deco_block = 1, dirtifier = 1, dirtifies_below_solid = 1, handy = 1,
+		pathfinder_partial = 2, shovely = 1, soil = 1, soil_fungus = 1, soil_sapling = 1
 	},
+	node_box = {fixed = {-0.5, -0.5, -0.5, 0.5, 0.4375, 0.5}, type = "fixed"},
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		meta:set_int("wet", 7)
+		local node = core.get_node(pos)
+		local meta = core.get_meta(pos)
+
+		meta:set_int("wet", node.name:find("_wet") and 7 or 0)
 	end,
-	groups = {handy=1,shovely=1, not_in_creative_inventory=1, dirtifies_below_solid=1, dirtifier=1, soil=3, soil_sapling=1, soil_fungus=1, pathfinder_partial = 2, },
-	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	_mcl_blast_resistance = 0.5,
-	_mcl_hardness = 0.6,
-})
+	paramtype = "light",
+	sounds = mcl_sounds.node_sound_dirt_defaults()
+}
+
+core.register_node("mcl_farming:soil", table.merge(tpl_soil, {
+	_doc_items_longdesc = S("Farmland is used for farming, a necessary surface to plant crops. It is created when a hoe is used on dirt or a similar block. Plants are able to grow on farmland, but slowly. Farmland will become hydrated farmland (on which plants grow faster) when it rains or a water source is nearby. This block will turn back to dirt when a solid block appears above it or a piston arm extends above it."),
+	_tt_help = S("Surface for crops").."\n"..S("Can become wet"),
+	description = S("Farmland"),
+	tiles = {"mcl_farming_farmland_dry.png", "default_dirt.png"}
+}))
+
+core.register_node("mcl_farming:soil_wet", table.merge({
+	_doc_items_longdesc = S("Hydrated farmland is used in farming, this is where you can plant and grow some plants. It is created when farmland is under rain or near water. Without water, this block will dry out eventually. This block will turn back to dirt when a solid block appears above it or a piston arm extends above it."),
+	description = S("Hydrated Farmland"),
+	groups = table.merge(tpl_soil.groups, {
+		deco_block = nil, not_in_creative_inventory = 1, soil = 3
+	}),
+	tiles = {"mcl_farming_farmland_wet.png", "default_dirt.png"}
+}))
 
 minetest.register_abm({
 	label = "Farmland hydration",

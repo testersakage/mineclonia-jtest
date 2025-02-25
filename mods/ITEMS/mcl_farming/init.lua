@@ -14,3 +14,12 @@ dofile(minetest.get_modpath("mcl_farming").."/carrots.lua")
 dofile(minetest.get_modpath("mcl_farming").."/potatoes.lua")
 dofile(minetest.get_modpath("mcl_farming").."/beetroot.lua")
 dofile(minetest.get_modpath("mcl_farming").."/sweet_berry.lua")
+
+--[[local path = core.get_modpath(core.get_current_modname())
+
+for _, file in pairs(core.get_dir_list(path, false)) do
+    if file:sub(-4) == ".lua" and file ~= "init.lua" then
+        dofile(path .. "/" .. file)
+    end
+end
+]]
