@@ -197,7 +197,7 @@ function mcl_armor.register_set(def)
 			_mcl_cooking_output = def.cook_material
 		})
 
-		if def.craft_material then
+		if def.craft_material ~= "mcl_nether:netherite_ingot" and def.craft_material then
 			minetest.register_craft({
 				output = itemstring,
 				recipe = element.craft(def.craft_material),
