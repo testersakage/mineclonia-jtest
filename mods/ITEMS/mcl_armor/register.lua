@@ -111,6 +111,7 @@ mcl_armor.register_set({
 	},
 	groups = { fire_immune=1 },
 	toughness = 2,
+	repair_material = "mcl_nether:netherite_ingot",
 	sound_equip = "mcl_armor_equip_diamond",
 	sound_unequip = "mcl_armor_unequip_diamond",
 })
