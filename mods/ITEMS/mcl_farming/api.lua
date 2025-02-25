@@ -1,6 +1,13 @@
 local S = core.get_translator(core.get_current_modname())
 
-local function apply_bone_meal(info, pos, node)
+function mcl_farming.get_id_by_name(name)
+    return name:match(":(.-)_%d$") or name:match(":(.+)")
+end
+
+function mcl_farming.bone_meal_crop(_, _, _, pos, node)
+    local id = mcl_farming.get_id_by_name(node.name)
+    local info = mcl_farming.registered_crops[id]
+
     local nodes = info.nodes
     local stages = info.bone_meal_stages or math.random(2, 5)
     local bone_meal_chance =  info.bone_meal_chance
@@ -17,17 +24,6 @@ local function apply_bone_meal(info, pos, node)
     core.swap_node(pos, node)
 
     return true
-end
-
-function mcl_farming.get_id_by_name(name)
-    return name:match(":(.-)_%d$") or name:match(":(.+)")
-end
-
-function mcl_farming.bone_meal_crop(_, _, _, pos, node)
-    local id = mcl_farming.get_id_by_name(node.name)
-    local info = mcl_farming.registered_crops[id]
-
-    return apply_bone_meal(info, pos, node)
 end
 
 local tpl_crop = {

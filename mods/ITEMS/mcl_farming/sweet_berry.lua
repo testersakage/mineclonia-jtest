@@ -48,10 +48,9 @@ mcl_farming.register_simple_crop("sweet_berry_bush", {
 			end
 
 			if itemstack:get_name() == "mcl_bone_meal:bone_meal" then
-				mcl_farming.on_bone_meal(nil, nil, nil, pos, node, "plant_sweet_berry_bush", 1)
-				mcl_bone_meal.add_bone_meal_particle(pos)
+				mcl_farming.bone_meal_crop(nil, nil, nil, pos, node)
 
-				if not core.is_creative_enabled(player_name) then itemstack:take_item() end
+				return itemstack
 			end
 
 			local stage = tonumber(node.name:sub(30))
