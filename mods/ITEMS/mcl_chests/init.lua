@@ -1170,8 +1170,6 @@ minetest.register_node("mcl_chests:ender_chest_small", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "mcl_core:obsidian 8",
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", formspec_ender_chest)
 		create_entity(pos, "mcl_chests:ender_chest_small", tiles_chest_ender_small, minetest.get_node(pos).param2, false, "mcl_chests_enderchest", "mcl_chests_chest", "chest")
 	end,
 	on_rightclick = function(pos, node, clicker)
