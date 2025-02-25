@@ -448,6 +448,36 @@ local function overwrite()
 			})
 		end
 
+		if core.get_item_group(tname, "tool") >= 1 then
+			local old_op = tdef and tdef.on_place
+
+			core.override_item(tname, {
+				on_place = function(itemstack, placer, pointed_thing)
+					local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
+					if rc then return rc end
+
+					if mcl_util.check_position_protection(pointed_thing.under, placer) then
+						return itemstack
+					end
+
+					old_op(itemstack, placer, pointed_thing)
+
+					if not core.is_creative_enabled(placer:get_player_name()) then
+						local unb_level = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
+						local wear_chance = 1 / (unb_level + 1)
+
+						if math.random() <= wear_chance then
+							itemstack:add_wear(tdef._mcl_on_place_wear or 1)
+							tt.reload_itemstack_description(itemstack)
+						end
+					end
+
+					return itemstack
+				end
+			})
+		end
+
 		local rarity_group = core.get_item_group(tname, "rarity")
 		if rarity_group > 0 and rarity_colors[rarity_group] then
 			local desc = tdef.description or tname
