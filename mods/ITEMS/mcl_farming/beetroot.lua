@@ -1,6 +1,8 @@
 local S = core.get_translator(core.get_current_modname())
 -- Beetroot crops
 mcl_farming.register_simple_crop("beetroot", {
+	bone_meal_chance = 0.75,
+	bone_meal_stages = 1,
 	chance = 3,
 	fortune_drop = {
 		cap = 5,
@@ -34,12 +36,6 @@ mcl_farming.register_simple_crop("beetroot", {
 		"mcl_farming_beetroot_0.png", "mcl_farming_beetroot_1.png",
 		"mcl_farming_beetroot_2.png", "mcl_farming_beetroot_3.png"
 	}
-}, {
-	_on_bone_meal = function(_, _, _, pos, node)
-		if math.random() <= 0.75 then
-			return mcl_farming.on_bone_meal(_, _, _, pos, node, "plant_beetroot", 1)
-		end
-	end
 })
 -- Craftitems
 core.register_craftitem("mcl_farming:beetroot_seeds", {
@@ -50,7 +46,7 @@ core.register_craftitem("mcl_farming:beetroot_seeds", {
 	description = S("Beetroot Seeds"),
 	groups = {compostability = 30, craftitem = 1},
 	inventory_image = "mcl_farming_beetroot_seeds.png",
-	on_place = mcl_farming.place_plant,
+	on_place = mcl_farming.place_crop,
 	wield_image = "mcl_farming_beetroot_seeds.png"
 })
 

@@ -71,7 +71,6 @@ mcl_farming.register_simple_crop("sweet_berry_bush", {
 	end,
 	place_param2 = 8
 })
-
 -- Craftitems
 core.register_craftitem("mcl_farming:sweet_berry", {
 	_mcl_saturation = 0.4,

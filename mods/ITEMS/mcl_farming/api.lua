@@ -1,5 +1,35 @@
 local S = core.get_translator(core.get_current_modname())
 
+local function apply_bone_meal(info, pos, node)
+    local nodes = info.nodes
+    local stages = info.bone_meal_stages or math.random(2, 5)
+    local bone_meal_chance =  info.bone_meal_chance
+    local stage = table.indexof(nodes, node.name)
+
+    if bone_meal_chance < 1 and math.random() > bone_meal_chance then return true end
+
+    if stages == 1 and stage + 1 <= #nodes then
+        node.name = nodes[stage + 1]
+    elseif stages + stage <= #nodes then
+        node.name = nodes[stage + stages]
+    end
+
+    core.swap_node(pos, node)
+
+    return true
+end
+
+function mcl_farming.get_id_by_name(name)
+    return name:match(":(.-)_%d$") or name:match(":(.+)")
+end
+
+function mcl_farming.bone_meal_crop(_, _, _, pos, node)
+    local id = mcl_farming.get_id_by_name(node.name)
+    local info = mcl_farming.registered_crops[id]
+
+    return apply_bone_meal(info, pos, node)
+end
+
 local tpl_crop = {
     _mcl_blast_resistance = 0,
     _mcl_hardness = 0,
@@ -24,6 +54,14 @@ local function get_indexed_parameter(parameter, index)
 end
 
 function mcl_farming.register_simple_crop(id, defs, overrides)
+    if not mcl_farming.registered_crops[id] then
+        mcl_farming.registered_crops[id] = {
+            bone_meal_chance = defs.bone_meal_chance or 1,
+            bone_meal_stages = defs.bone_meal_stages,
+            nodes = {},
+        }
+    end
+
     local mature_name, premature_names = "", {}
     local mod, mod_prefix = core.get_current_modname(), ""
     local id_orig = mod .. ":" .. id .. "_" .. (defs.initial_stage_zero and 0 or 1)
@@ -77,7 +115,7 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
             _doc_items_longdesc = longdesc,
             _mcl_baseitem = defs.seed,
             _mcl_fortune_drop = mature and defs.fortune_drop,
-            _on_bone_meal = mcl_farming.bone_meal_plant,
+            _on_bone_meal = mcl_farming.bone_meal_crop,
             description = desc,
             drop = defs.drops[i] or premature and defs.seed or defs.mature_drop,
             groups = table.merge(defs.groups or {}, {
@@ -108,7 +146,40 @@ function mcl_farming.register_simple_crop(id, defs, overrides)
         else
             table.insert(premature_names, name)
         end
+
+        table.insert(mcl_farming.registered_crops[id].nodes, name)
     end
 
     mcl_farming:add_plant("plant_" .. id, mature_name, premature_names, defs.interval, defs.chance)
+end
+
+function mcl_farming.place_crop(itemstack, placer, pointed_thing)
+    if pointed_thing.type ~= "node" then return end
+
+    local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
+    if rc then return rc end
+
+    local idefs = itemstack:get_definition()
+    local plant = idefs and idefs._mcl_places_plant
+    local above = pointed_thing.above
+    local anode = core.get_node(above)
+    local unode = core.get_node(pointed_thing.under)
+
+    if unode.name:find("mcl_farming:soil") and anode.name:find("air") then
+        local spec = core.registered_nodes[plant].sounds.place
+        core.place_node(above, {name = plant})
+        core.sound_play(spec, {max_hear_distance = 16, pos = above}, true)
+
+        if not core.is_creative_enabled(placer:get_player_name()) then
+            itemstack:take_item()
+        end
+    elseif core.get_item_group(itemstack:get_name(), "food") > 0 then
+        local hp = core.get_item_group(itemstack:get_name(), "eatable")
+        local replacement = idefs._mcl_farming_eat_replacement
+
+        return core.do_item_eat(hp, replacement, itemstack, placer, pointed_thing)
+    end
+
+    return itemstack
 end

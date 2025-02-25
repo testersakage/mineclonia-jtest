@@ -31,10 +31,6 @@ mcl_farming.register_simple_crop("carrot", {
 		["1, 2"] = "farming_carrot_1.png", ["3, 4"] = "farming_carrot_2.png",
 		["5, 6, 7"] = "farming_carrot_3.png", ["8"] = "farming_carrot_4.png"
 	}
-}, {
-	_on_bone_meal = function(_, _, _, pos, node)
-		return mcl_farming.on_bone_meal(_, _, _, pos, node, "plant_carrot")
-	end
 })
 -- Craftitems
 core.register_craftitem("mcl_farming:carrot_item", {
@@ -46,7 +42,7 @@ core.register_craftitem("mcl_farming:carrot_item", {
 	description = S("Carrot"),
 	groups = {compostability = 65, eatable = 3, food = 2},
 	inventory_image = "farming_carrot.png",
-	on_place = mcl_farming.place_plant,
+	on_place = mcl_farming.place_crop,
 	on_secondary_use = core.item_eat(3),
 	wield_image = "farming_carrot.png"
 })

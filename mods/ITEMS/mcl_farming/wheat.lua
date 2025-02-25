@@ -36,10 +36,6 @@ mcl_farming.register_simple_crop("wheat", {
 		"mcl_farming_wheat_stage_4.png", "mcl_farming_wheat_stage_5.png",
 		"mcl_farming_wheat_stage_6.png", "mcl_farming_wheat_stage_7.png"
 	}
-}, {
-	_on_bone_meal = function(_, _, _, pos, node)
-		return mcl_farming.on_bone_meal(_,_,_, pos, node, "plant_wheat")
-	end
 })
 -- Craftitems
 core.register_craftitem("mcl_farming:bread", {
@@ -85,7 +81,7 @@ core.register_craftitem("mcl_farming:wheat_seeds", {
 	description = S("Wheat Seeds"),
 	groups = {compostability = 30, craftitem = 1},
 	inventory_image = "mcl_farming_wheat_seeds.png",
-	on_place = mcl_farming.place_plant,
+	on_place = mcl_farming.place_crop,
 	wield_image = "mcl_farming_wheat_seeds.png"
 })
 -- Recipes

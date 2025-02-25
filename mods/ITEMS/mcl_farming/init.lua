@@ -1,4 +1,5 @@
 mcl_farming = {}
+mcl_farming.registered_crops = {}
 -- IMPORTANT API AND HELPER FUNCTIONS --
 -- Contain functions for planting seed, addind plant growth and gourds (melon/pumpkin-like)
 dofile(minetest.get_modpath("mcl_farming").."/shared_functions.lua")

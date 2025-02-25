@@ -34,10 +34,6 @@ mcl_farming.register_simple_crop("potato", {
 		["5, 6, 7"] = "mcl_farming_potatoes_stage_2.png",
 		["8"] = "mcl_farming_potatoes_stage_3.png"
 	}
-}, {
-	_on_bone_meal = function(_, _, _, pos, node)
-		return mcl_farming.on_bone_meal(_,_,_, pos, node, "plant_potato")
-	end
 })
 -- Craftitems
 core.register_craftitem("mcl_farming:potato_item", {
@@ -52,7 +48,7 @@ core.register_craftitem("mcl_farming:potato_item", {
 		campfire_cookable = 1, compostability = 65, eatable = 1, food = 2, smoker_cookable = 1
 	},
 	inventory_image = "farming_potato.png",
-	on_place = mcl_farming.place_plant,
+	on_place = mcl_farming.place_crop,
 	on_secondary_use = core.item_eat(1),
 	wield_image = "farming_potato.png"
 })
