@@ -23,6 +23,7 @@ minetest.register_node("mclx_core:river_water_source", table.merge(water_s, {
 			backface_culling = false,
 		}
 	},
+	after_destruct = minetest.check_for_falling,
 }))
 
 minetest.register_node("mclx_core:river_water_flowing", table.merge(water_f, {

@@ -94,12 +94,7 @@ S("• When water is directly below lava, the water turns into stone."),
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
-	after_destruct = function(pos)
-		local upos = vector.offset(pos, 0, 1, 0)
-		if core.get_item_group(core.get_node(upos).name, "supported_node") > 0 then
-			mcl_attached.drop_attached_node(upos)
-		end
-	end
+	after_destruct = minetest.check_for_falling,
 })
 
 minetest.register_node("mcl_core:lava_flowing", {
@@ -202,6 +197,7 @@ S("• When lava is directly above water, the water turns into stone."),
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
+	after_destruct = minetest.check_for_falling,
 })
 
 local function emit_lava_particle(pos)
