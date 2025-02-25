@@ -24,7 +24,6 @@
 * Evoker: Mesh and animation by toby109tt  / https://github.com/22i
 * Vindicator: Mesh and animation by toby109tt  / https://github.com/22i
 * Zombie Villager: Mesh and animation by toby109tt  / https://github.com/22i
-
 * Witch: Mesh and animation by toby109tt  / https://github.com/22i
 
 ### Monsters
@@ -48,3 +47,14 @@
 * Spider: by AspireMint (fishyWET (CC-BY-SA 3.0 license for texture)
 * Vex: KrupnoPavel
 * Wither: Mesh and animation by toby109tt  / https://github.com/22i
+
+## Mobs sounds
+### Illagers
+* Zombie Villager Cure: Mixed by @bramaudi from
+	- [V-ktor - explosion09.wav](https://freesound.org/people/V-ktor/sounds/434431/)
+	- [V-ktor - explosion11.wav](https://freesound.org/people/V-ktor/sounds/435414/)
+	- [antonsoederberg - Freeze sound effect FX](https://freesound.org/people/antonsoederberg/sounds/685253/)
+	- [JarredGibb - Ice 2 - Slow](https://freesound.org/people/JarredGibb/sounds/263908/)
+	- [bevibeldesign - Huge Explosion Part 2 - Impact](https://freesound.org/people/bevibeldesign/sounds/366088/)
+	- [heltonyan - EXPLDsgn_Anime Explosion 7](https://freesound.org/people/heltonyan/)
+
