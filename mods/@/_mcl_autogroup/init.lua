@@ -465,10 +465,11 @@ local function overwrite()
 
 					if not core.is_creative_enabled(placer:get_player_name()) then
 						local unb_level = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
+						local uses = tdef._mcl_uses or mcl_util.calculate_durability(itemstack)
 						local wear_chance = 1 / (unb_level + 1)
 
 						if math.random() <= wear_chance then
-							itemstack:add_wear(tdef._mcl_on_place_wear or 1)
+							itemstack:add_wear_by_uses(uses * (tdef._mcl_on_place_wear or 1))
 							tt.reload_itemstack_description(itemstack)
 						end
 					end

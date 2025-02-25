@@ -35,7 +35,7 @@ core.register_tool("mcl_fire:flint_and_steel", {
 	},
 	_tt_help = S("Starts fires and ignites blocks"),
 	description = S("Flint and Steel"),
-	groups = {enchantability = -1, flint_and_steel = 1, offhand_item = 1, tool = 1},
+	groups = {enchantability = -1, flint_and_steel = 1, offhand_item = 1, tool = 2},
 	inventory_image = "mcl_fire_flint_and_steel.png",
 	on_place = function(_, placer, pointed_thing)
 		local node = core.get_node(pointed_thing.under)
@@ -58,8 +58,8 @@ core.register_tool("mcl_fire:flint_and_steel", {
 	wield_image = "mcl_fire_flint_and_steel.png"
 })
 
-minetest.register_craft({
-	type = "shapeless",
+core.register_craft({
 	output = "mcl_fire:flint_and_steel",
-	recipe = { "mcl_core:iron_ingot", "mcl_core:flint"},
+	recipe = {"mcl_core:iron_ingot", "mcl_core:flint"},
+	type = "shapeless"
 })

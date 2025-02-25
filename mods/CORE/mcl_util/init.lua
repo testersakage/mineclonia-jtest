@@ -579,38 +579,40 @@ end
 
 function mcl_util.calculate_durability(itemstack)
 	local name = itemstack:get_name()
-	local unbreaking_level = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
-	local armor_uses = minetest.get_item_group (name, "mcl_armor_uses")
-	local elytra = minetest.get_item_group (name, "elytra")
+	local armor_uses = core.get_item_group(name, "mcl_armor_uses")
 
 	local uses
 
 	if armor_uses > 0 then
 		uses = armor_uses
-		if unbreaking_level > 0 then
-			if elytra <= 0 then
-				uses = uses / (0.6 + 0.4 / (unbreaking_level + 1))
-			else
-				uses = uses * (unbreaking_level + 1)
-			end
-		end
 	else
 		local def = itemstack:get_definition()
+
 		if def then
 			local fixed_uses = def._mcl_uses
+
 			if fixed_uses then
 				uses = fixed_uses
-				if unbreaking_level > 0 then
-					uses = uses * (unbreaking_level + 1)
-				end
 			end
 		end
 
 		local _, groupcap = next(itemstack:get_tool_capabilities().groupcaps)
+
 		uses = uses or (groupcap or {}).uses
 	end
 
 	return uses or 0
+end
+
+function mcl_util.get_remaining_uses(itemstack)
+	local wear = itemstack and itemstack:get_wear() or 0
+	local uses = mcl_util.calculate_durability(itemstack)
+
+	if core.get_item_group(itemstack:get_name(), "weapon") == 1 then
+		uses = itemstack:get_tool_capabilities().punch_attack_uses
+	end
+
+	return math.round((1 - wear / 65535) * uses)
 end
 
 function mcl_util.use_item_durability(itemstack, n)
