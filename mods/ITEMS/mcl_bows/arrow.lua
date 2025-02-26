@@ -2,10 +2,10 @@ local S = core.get_translator(core.get_current_modname())
 
 local enable_pvp = core.settings:get_bool("enable_pvp")
 
+local SHIELD_BLOCK_ARC = 180 -- A shield's effective arc in degree. 180 degrees equals frontal half.
+
 -- Time in seconds after which a stuck arrow is deleted
 local ARROW_TIMEOUT = 120
--- Time in seconds after which a blocked arrow is deleted
-local BLOCKED_ARROW_TIMEOUT = 3
 -- Time in seconds after which an attached arrow is deleted
 local ATTACHED_ARROW_TIMEOUT = 30
 -- Time after which stuck arrow is rechecked for being stuck
@@ -23,6 +23,8 @@ local LIQUID_RATE = 0.73 -- Lost most horizontal speed at 8 liquid blocks.
 --local GRAVITY = 9.81
 
 local YAW_OFFSET = -math.pi/2
+
+local SHIELD_BLOCK_COSINE = -math.cos(SHIELD_BLOCK_ARC/2) -- Actual value for angle check.
 
 local function dir_to_pitch(dir)
 	--local dir2 = vector.normalize(dir)
@@ -123,6 +125,10 @@ local function damage_particles(pos, is_critical)
 			texture = "mcl_particles_crit.png^[colorize:#bc7a57:127",
 		})
 	end
+end
+
+function ARROW_ENTITY:get_last_pos()
+	return self._lastpos.x and self._lastpos or self._startpos
 end
 
 -- Multiply x and z velocity by given factor.
@@ -260,46 +266,53 @@ function ARROW_ENTITY:on_hit_player(obj)
 		self:apply_effects(obj)
 		return true
 	end
-	-- TODO: Checking facing
-	if mcl_shields.is_blocking(obj) then -- Blocked by shield
-		self._blocked = true
-		self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
-		self:remove(BLOCKED_ARROW_TIMEOUT, false)
-	else -- Hit and attach to player.
-		self:apply_effects(obj)
-		self._in_player = true
-		self._placement = math.random(1, 2)
-		local placement = self._placement == 1 and "front" or "back"
-		if placement == "back" then
-			self._rotation_station = 90
-		else
-			self._rotation_station = -90
+
+	-- Calculate normalized direction vectors and dot product (angle of attack).
+	local player_pos = obj:get_pos()
+	player_pos.y = player_pos.y + ( obj:get_properties().eye_height * 2/3 ) -- Loose approximation of shield centre.
+	local arrow_direction = vector.normalize(vector.subtract(player_pos, self:get_last_pos()))
+	local player_look_dir = vector.normalize(obj:get_look_dir())
+	local dot_product = vector.dot(arrow_direction, player_look_dir)
+
+	if mcl_shields.is_blocking(obj) then -- Shield is raised.
+		-- Negative dot product means player is facing the arrow, with -1 meaning directly in the front.
+		-- e.g. -0.7071 means the angle is at 45 degree, i.e. within a 90 degree arc.
+		if dot_product <= SHIELD_BLOCK_COSINE then
+			self._blocked = true
+			self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
+			-- TODO: Move arrow if it has moved pass the player.
+			return "break"-- Stop further collision check as the arrow has changed direction.
 		end
-		self._y_position = random_arrow_positions("y", placement)
-		self._x_position = random_arrow_positions("x", placement)
-		if self._y_position > 6 and self._x_position < 2 and self._x_position > -2 then
-			self._attach_parent = "Head"
-			self._y_position = self._y_position - 6
-		elseif self._x_position > 2 then
-			self._attach_parent = "Arm_Right"
-			self._y_position = self._y_position - 3
-			self._x_position = self._x_position - 2
-		elseif self._x_position < -2 then
-			self._attach_parent = "Arm_Left"
-			self._y_position = self._y_position - 3
-			self._x_position = self._x_position + 2
-		else
-			self._attach_parent = "Body"
-		end
-		self._z_rotation = math.random(-30, 30)
-		self._y_rotation = math.random( -30, 30)
-		self.object:set_attach(
-			obj, self._attach_parent,
-			vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
-			vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
-		)
-		self:remove(ATTACHED_ARROW_TIMEOUT, true)
 	end
+
+	self:apply_effects(obj)
+	self._in_player = true
+	local placement = dot_product < 0 and "front" or "back"
+	self._rotation_station = placement == "front" and -90 or 90
+	self._y_position = random_arrow_positions("y", placement)
+	self._x_position = random_arrow_positions("x", placement)
+	if self._y_position > 6 and self._x_position < 2 and self._x_position > -2 then
+		self._attach_parent = "Head"
+		self._y_position = self._y_position - 6
+	elseif self._x_position > 2 then
+		self._attach_parent = "Arm_Right"
+		self._y_position = self._y_position - 3
+		self._x_position = self._x_position - 2
+	elseif self._x_position < -2 then
+		self._attach_parent = "Arm_Left"
+		self._y_position = self._y_position - 3
+		self._x_position = self._x_position + 2
+	else
+		self._attach_parent = "Body"
+	end
+	self._z_rotation = math.random(-30, 30)
+	self._y_rotation = math.random( -30, 30)
+	self.object:set_attach(
+		obj, self._attach_parent,
+		vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
+		vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
+	)
+	self:remove(ATTACHED_ARROW_TIMEOUT, true)
 	return "stop"
 end
 
@@ -354,7 +367,6 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 	local selfobj = self.object
 	local result
 	local ignored = self._ignored or {}
-	local orig_ignore_count = #ignored
 	if ray_hit.type == "object" then
 		local obj = ray_hit.ref
 		if obj:is_valid() and obj:get_hp() > 0
@@ -366,17 +378,15 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 				result = self:on_hit_object(obj, obj:get_luaentity())
 			end
 		end
-		if result then
+		if result and result ~= "break" then
 			table.insert(ignored, obj)
 			local shooter = self._shooter
 			local self_pos = selfobj:get_pos()
-			if not self._blocked then
-				if obj:is_player() and shooter and shooter:is_valid() and shooter:is_player() then
-					-- “Ding” sound for hitting another player
-					core.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=shooter:get_player_name()}, true)
-				end
-				damage_particles(vector.add(self_pos, vector.multiply(selfobj:get_velocity(), 0.1)), self._is_critical)
+			if obj:is_player() and shooter and shooter:is_valid() and shooter:is_player() then
+				-- “Ding” sound for hitting another player
+				core.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=shooter:get_player_name()}, true)
 			end
+			damage_particles(vector.add(self_pos, vector.multiply(selfobj:get_velocity(), 0.1)), self._is_critical)
 			core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
 			-- Reduce piercing if not stopped
 			if result ~= "stop" then
@@ -411,7 +421,7 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 			table.insert(ignored, hit_node_str)
 		end
 	end
-	if #ignored ~= orig_ignore_count then
+	if not self._ignored and #ignored > 0 then
 		self._ignored = ignored
 	end
 	return result
@@ -421,7 +431,7 @@ function ARROW_ENTITY:on_step(dtime)
 	local selfobj = self.object
 	local self_pos = selfobj:get_pos()
 	if not self_pos then return end
-	local last_pos = self._lastpos.x and self._lastpos or self._startpos
+	local last_pos = self:get_last_pos()
 
 	if self._in_player or self._blocked or self._stuck then
 		mcl_burning.tick(selfobj, dtime, self)
@@ -439,10 +449,6 @@ function ARROW_ENTITY:on_step(dtime)
 
 	self:do_particle()
 
-	if self._deflection_cooloff > 0 then
-		self._deflection_cooloff = self._deflection_cooloff - dtime
-	end
-
 	-- Apply drag
 	if self._lifetime >= self._dragtime + DRAG_TICK then
 		repeat
@@ -455,7 +461,7 @@ function ARROW_ENTITY:on_step(dtime)
 	-- Raycasting movement during dtime to handle lava, water, and hits.
 	for ray_hit in core.raycast(last_pos, self_pos, true, true) do
 		result = self:on_intersect(ray_hit)
-		if result == "stop" then break end
+		if result == "stop" or result == "break" then break end
 	end
 
 	-- Put out fire if exposed to rain, or if burning expires.
@@ -488,9 +494,10 @@ function ARROW_ENTITY:on_step(dtime)
 		end
 	end
 
-	-- Predicting froward motion in anticipation of lag
+	-- Predicting froward motion in anticipation of lag.  Pos and vel could be changed by shield.
 	if result ~= "stop" then
 		local vel = selfobj:get_velocity()
+		self_pos = selfobj:get_pos()
 		local predict = vector.add(self_pos, vector.multiply(vector.copy(vel), 0.05))
 		for ray_hit in core.raycast(self_pos, predict, true, true) do
 			if ray_hit.type == "node" then
