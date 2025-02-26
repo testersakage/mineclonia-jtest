@@ -60,7 +60,8 @@ Please read <https://minecraft.wiki/w/Breaking> to learn how digging times work 
 * `can_eat_when_full=1`: Only for foodstuffs. This item can be eaten when the user has a full hunger bar
 * `attached_node_facedir=1`: Like `attached_node`, but for facedir nodes
 * `supported_node=1`: Like `attached_node`, but can be placed on any nodes that do not have the `drawtype="airlike"` attribute.
-* `supported_node=2`: Like `attached_node`, but can be placed on any nodes that have the `drawtype="liquid"` attribute.
+* `floating_node=1`: Like `attached_node`, but can be placed on any nodes that have the `drawtype="liquid"` attribute.
+* `floating_node>1`: Like `floating_node`, but requires the liquid group value of the supporting node to match the floating_node value.
 * `vinelike_node`: Like `attached_node`, but attaches also to other nodes with the same `vinelike_node` group rating
     * `vinelike_node=1`: attaches to the top of either a vinelike node or a solid block below it
     * `vinelike_node=2`: attaches to the bottom of either a vinelike node or a solid block above it

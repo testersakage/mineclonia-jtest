@@ -80,9 +80,11 @@ function minetest.check_single_for_falling(pos)
 	end
 
 	local supported = minetest.get_item_group(node.name, "supported_node")
-	if supported ~= 0 then
-		local def = minetest.registered_nodes[minetest.get_node(vector.offset(pos, 0, -1, 0)).name]
-		if def and (def.drawtype == "airlike" or (supported == 2 and def.drawtype ~= "liquid")) then
+	local floating = minetest.get_item_group(node.name, "floating_node")
+	if supported ~= 0 or floating ~= 0 then
+		local supporting_node = minetest.get_node(vector.offset(pos, 0, -1, 0))
+		local def = minetest.registered_nodes[supporting_node.name]
+		if def and (def.drawtype == "airlike" or (floating ~= 0 and def.drawtype ~= "liquid") or (floating > 1 and minetest.get_item_group(supporting_node.name, "liquid") ~= floating)) then
 			mcl_attached.drop_attached_node(pos)
 			return true
 		end
