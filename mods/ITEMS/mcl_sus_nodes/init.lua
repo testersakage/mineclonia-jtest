@@ -200,10 +200,11 @@ minetest.register_tool("mcl_sus_nodes:brush", {
 	_doc_items_usagehelp = S("Use the brush on a suspicious node to uncover its secrets"),
 	_doc_items_hidden = false,
 	inventory_image = "mcl_sus_nodes_brush.png",
-	groups = { tool=1, brush = 1, dig_speed_class=0, enchantability=0 },
+	groups = { tool=2, brush = 1, dig_speed_class=0, enchantability=0 },
 	on_use = brush_node,
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
+	_mcl_uses = 64
 })
 
 minetest.register_craft({

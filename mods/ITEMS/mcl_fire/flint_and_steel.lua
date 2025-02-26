@@ -8,7 +8,7 @@ minetest.register_tool("mcl_fire:flint_and_steel", {
 	_doc_items_usagehelp = S("Rightclick the surface of a block to attempt to light a fire in front of it or ignite the block. A few blocks have an unique reaction when ignited."),
 	inventory_image = "mcl_fire_flint_and_steel.png",
 	stack_max = 1,
-	groups = { tool = 1, flint_and_steel = 1, enchantability = -1, offhand_item = 1 },
+	groups = { tool = 2, flint_and_steel = 1, enchantability = -1, offhand_item = 1 },
 	on_place = function(itemstack, user, pointed_thing)
 		-- Use pointed node's on_rightclick function first, if present
         local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)

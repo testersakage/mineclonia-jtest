@@ -329,8 +329,9 @@ minetest.register_tool("mcl_mobitems:carrot_on_a_stick", {
 	_doc_items_usagehelp = S("Place it on a saddled pig to mount it. You can now ride the pig like a horse. Pigs will also walk towards you when you just wield the carrot on a stick."),
 	wield_image = "mcl_mobitems_carrot_on_a_stick.png^[transformFY^[transformR90",
 	inventory_image = "mcl_mobitems_carrot_on_a_stick.png",
-	groups = { transport = 1 },
+	groups = { tool = 2, transport = 1 },
 	_mcl_toollike_wield = true,
+	_mcl_uses = 26
 })
 
 minetest.register_tool("mcl_mobitems:warped_fungus_on_a_stick", {
@@ -340,8 +341,9 @@ minetest.register_tool("mcl_mobitems:warped_fungus_on_a_stick", {
 	_doc_items_usagehelp = S("Place it on a saddled strider to mount it. You can now ride the strider like a horse. Striders will also walk towards you when you just wield the fungus on a stick."),
 	wield_image = "mcl_mobitems_warped_fungus_on_a_stick.png^[transformFY^[transformR90",
 	inventory_image = "mcl_mobitems_warped_fungus_on_a_stick.png",
-	groups = { transport = 1 },
+	groups = { tool = 2, transport = 1 },
 	_mcl_toollike_wield = true,
+	_mcl_uses = 100
 })
 
 minetest.register_craftitem("mcl_mobitems:nautilus_shell", {
