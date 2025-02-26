@@ -1,40 +1,31 @@
 local S = minetest.get_translator(minetest.get_current_modname())
-
 -- Armor
-tt.register_snippet(function(itemstring)
-	--local def = minetest.registered_items[itemstring]
-	local s = ""
+tt.register_snippet(function(itemstring, _, itemstack)
+	if core.get_item_group(itemstring, "armor") < 1 then return end
+
+	local final_result = ""
 	local head = minetest.get_item_group(itemstring, "armor_head")
 	local torso = minetest.get_item_group(itemstring, "armor_torso")
 	local legs = minetest.get_item_group(itemstring, "armor_legs")
 	local feet = minetest.get_item_group(itemstring, "armor_feet")
-	if head > 0 then
-		s = s .. S("Head armor")
-	end
-	if torso > 0 then
-		s = s .. S("Torso armor")
-	end
-	if legs > 0 then
-		s = s .. S("Legs armor")
-	end
-	if feet > 0 then
-		s = s .. S("Feet armor")
-	end
-	return s ~= "" and s or nil
-end)
-tt.register_snippet(function(itemstring, _, itemstack)
-	--local def = minetest.registered_items[itemstring]
-	local s = ""
 	local use = minetest.get_item_group(itemstring, "mcl_armor_uses")
 	local pts = minetest.get_item_group(itemstring, "mcl_armor_points")
-	if pts > 0 then
-		s = s .. S("Armor points: @1", pts)
-		s = s .. "\n"
-	end
+
+	if head > 0 then final_result = final_result .. S("Head armor") end
+	if torso > 0 then final_result = final_result .. S("Torso armor") end
+	if legs > 0 then final_result = final_result .. S("Legs armor") end
+	if feet > 0 then final_result = final_result .. S("Feet armor") end
+
+	final_result = final_result .. "\n"
+
+	if pts > 0 then final_result = final_result .. S("Armor points: @1", pts) .. "\n" end
+
 	if itemstack then
 		local unbreaking = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
+
 		if unbreaking > 0 then
-			local elytra = minetest.get_item_group (itemstring, "elytra")
+			local elytra = minetest.get_item_group(itemstring, "elytra")
+
 			if elytra > 0 then
 				use = math.floor(use * (unbreaking + 1))
 			else
@@ -42,10 +33,12 @@ tt.register_snippet(function(itemstring, _, itemstack)
 			end
 		end
 	end
+
 	if use > 0 then
-		s = s .. S("Armor durability: @1", use)
+		final_result = final_result .. S("Armor durability: @1", use)
 	end
-	return s ~= "" and s or nil
+
+	return final_result ~= "" and final_result or nil
 end)
 -- Horse armor
 tt.register_snippet(function(itemstring)
@@ -103,12 +96,16 @@ tt.register_snippet(function(itemstring)
 	end
 end)
 
+-- Other tools and weapon
 tt.register_snippet(function(itemstring, _, itemstack)
-	if itemstring:sub(1, 23) == "mcl_fishing:fishing_rod" or itemstring:sub(1, 12) == "mcl_bows:bow" then
-		return S("Durability: @1", S("@1 uses", mcl_util.calculate_durability(itemstack or ItemStack(itemstring))))
+	if not itemstack then itemstack = ItemStack(itemstring) end
+
+	if core.get_item_group(itemstring, "tool") == 2 or core.get_item_group(itemstring, "weapon") == 2 then
+		local uses = mcl_util.calculate_durability(itemstack)
+
+		return S("Durability: @1", S("@1 uses", uses))
 	end
 end)
-
 
 -- Potions info
 tt.register_snippet(function(itemstring, _, itemstack)

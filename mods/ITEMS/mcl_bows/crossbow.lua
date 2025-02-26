@@ -190,7 +190,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 		return itemstack
 	end,
 	touch_interaction = "short_dig_long_place",
-	groups = {weapon = 1, weapon_ranged = 1, crossbow = 5, enchantability = 1, not_in_creative_inventory = 1, offhand_item = 1},
+	groups = {weapon = 2, weapon_ranged = 1, crossbow = 5, enchantability = 1, not_in_creative_inventory = 1, offhand_item = 1},
 	_mcl_uses = 326,
 	_mcl_burntime = 15
 })

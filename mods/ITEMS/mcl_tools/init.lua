@@ -262,8 +262,8 @@ minetest.register_tool("mcl_tools:shears", {
 	stack_max = 1,
 	groups = { tool=1, shears=1, dig_speed_class=4, enchantability=-1, offhand_item = 1 },
 	tool_capabilities = {
-			full_punch_interval = 0.5,
-			max_drop_level=1,
+		full_punch_interval = 0.5,
+		max_drop_level=1,
 	},
 	on_place = mcl_tools.get_default_tool_place_func("shears"),
 	sound = { breaks = "default_tool_breaks" },
@@ -281,7 +281,8 @@ minetest.register_tool("mcl_tools:shears", {
 		end
 		return stack
 	end,
-	_dispense_into_walkable = true
+	_dispense_into_walkable = true,
+	_mcl_uses = 238
 })
 
 minetest.register_craft({

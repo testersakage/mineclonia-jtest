@@ -29,7 +29,7 @@ minetest.register_tool("mcl_shields:shield", {
 	stack_max = 1,
 	groups = {
 		shield = 1,
-		weapon = 1,
+		weapon = 2,
 		enchantability = -1,
 		offhand_item = 1,
 	},
@@ -38,6 +38,7 @@ minetest.register_tool("mcl_shields:shield", {
 	wield_scale = vector.new(2, 2, 2),
 	_mcl_wieldview_item = "",
 	_placement_class = "shield",
+	_mcl_uses = 336
 })
 
 local function wielded_item(obj, i)
