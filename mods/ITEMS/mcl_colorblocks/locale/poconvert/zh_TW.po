@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_colorblocks x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-26 23:46+0000\n"
+"PO-Revision-Date: 2025-02-26 23:49+0000\n"
 "Last-Translator: ellesheepy <your.sheepy@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_colorblocks/zh_Hant/>\n"
@@ -21,8 +21,8 @@ msgid "Glazed terracotta is a decorative block with a complex pattern. It can be
 msgstr "釉陶是有繁華花紋的裝飾性方塊。從不同角度放置可以控制其面向。"
 
 msgid "Concrete powder is used for creating concrete, but it can also be used as decoration itself. It comes in different colors. Concrete powder turns into concrete of the same color when it comes in contact with water."
-msgstr "混凝土粉末有多種顏色，可以製作混凝土，也可以直接用來裝飾。混凝土粉末遇水就會"
-"變成混凝土，顏色不變。"
+msgstr "水泥有多種顏色，可以製作混凝土，也可以直接用來裝飾。水泥遇水就會變成混凝土，"
+"顏色不變。"
 
 msgid "Concrete is a decorative block which comes in many different colors. It is notable for having a very strong and clean color."
 msgstr "混凝土是多彩的裝飾性方塊，顏色鮮艷明亮。"
@@ -43,7 +43,7 @@ msgid "Glazed Terracotta"
 msgstr "釉陶"
 
 msgid "Concrete Powder"
-msgstr "混凝土粉末"
+msgstr "水泥"
 
 msgid "Concrete"
 msgstr "混凝土"
