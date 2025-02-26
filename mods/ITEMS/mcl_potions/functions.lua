@@ -1161,6 +1161,7 @@ function mcl_potions.update_haste_and_fatigue(player)
 	local f_fac = mcl_potions.get_total_fatigue(player)
 	if mcl_gamemode.get_gamemode(player) == "creative" then return end
 	local item = player:get_wielded_item()
+	if core.get_item_group(item.name, "tool") ~= 1 then return end
 	local meta = item:get_meta()
 	local item_haste = meta:get_float("mcl_potions:haste")
 	local item_fatig = 1 - meta:get_float("mcl_potions:fatigue")
