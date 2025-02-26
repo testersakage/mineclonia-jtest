@@ -144,8 +144,8 @@ These groups are used mostly for informational purposes
     * `torch=2`: Torch at wall
 * `liquid`: Block is a liquid
     * `liquid=1`: Unspecified type
-    * `liquid=2`: Water
-    * `liquid=3`: Lava
+    * `liquid=3`: Water
+    * `liquid=2`: Lava
 * `fence=1`: Fence
 * `fence_gate=1`: Fence gate
 * `fence_wood=1`: Wooden fence
