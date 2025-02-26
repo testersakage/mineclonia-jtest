@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_tt x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-25 10:21+0000\n"
+"PO-Revision-Date: 2025-02-27 00:14+0000\n"
 "Last-Translator: ellesheepy <your.sheepy@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_tt/zh_Hant/>\n"
@@ -15,25 +15,25 @@ msgstr ""
 "X-Generator: Weblate 5.9.2\n"
 
 msgid "Painfully slow"
-msgstr ""
+msgstr "痛苦難熬"
 
 msgid "Very slow"
-msgstr ""
+msgstr "非常慢"
 
 msgid "Slow"
-msgstr ""
+msgstr "慢"
 
 msgid "Fast"
-msgstr ""
+msgstr "快"
 
 msgid "Very fast"
-msgstr ""
+msgstr "非常快"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "極快"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "瞬間"
 
 msgid "Unlimited uses"
 msgstr "可無限使用"
@@ -45,7 +45,7 @@ msgid "Mining durability: @1"
 msgstr "開採耐久：@1"
 
 msgid "Block breaking strength: @1"
-msgstr ""
+msgstr "對方塊破壞力：@1"
 
 msgid "Damage: @1"
 msgstr "傷害：@1 HP"
@@ -105,7 +105,7 @@ msgid "Luminance: @1"
 msgstr "亮度：@1"
 
 msgid "@1 uses"
-msgstr ""
+msgstr "@1 次"
 
 msgid "Head armor"
 msgstr "頭部盔甲"
