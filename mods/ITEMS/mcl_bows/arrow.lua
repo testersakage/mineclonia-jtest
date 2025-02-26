@@ -149,8 +149,7 @@ function ARROW_ENTITY:arrow_knockback (object, damage)
 	v.y = 0
 	local dir = vector.normalize (v)
 
-	-- Utilize different methods of applying knockback for
-	-- consistency's sake.
+	-- Utilize different methods of applying knockback for consistency.
 	if entity and entity.is_mob then
 		entity:projectile_knockback (1, dir)
 	elseif object:is_player () then
@@ -158,8 +157,7 @@ function ARROW_ENTITY:arrow_knockback (object, damage)
 	end
 
 	if self._knockback and self._knockback > 0 then
-		local resistance
-			= entity and entity.knockback_resistance or 0
+		local resistance = entity and entity.knockback_resistance or 0
 		-- Apply an additional horizontal force of
 		-- self._knockback * 0.6 * 20 * 0.546 to the object.
 		local total_kb = self._knockback * (1.0 - resistance) * 12 * 0.546
@@ -184,7 +182,7 @@ function ARROW_ENTITY:calculate_damage (v)
 	if self._is_critical then
 		crit_bonus = math.random (damage / 2 + 2)
 	end
-	return math.floor (damage + crit_bonus)
+	return math.ceil (damage + crit_bonus)
 end
 
 function ARROW_ENTITY:do_particle()
@@ -241,7 +239,7 @@ function ARROW_ENTITY:remove(delay, preserve_particle)
 	if not delay or delay <= 0 then
 		self.object:remove()
 	else
-		if not self._in_player or not self._blocked then
+		if not self._in_player then
 			core.log("warning", "Delayed arrow removal should be done after setting it to an ignored state.")
 		end
 		core.after(delay, function() self:remove() end)
@@ -370,7 +368,7 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 	if ray_hit.type == "object" then
 		local obj = ray_hit.ref
 		if obj:is_valid() and obj:get_hp() > 0
-		and ( obj ~= self._shooter or self._lifetime > 0.5 )
+		and ( obj ~= self._shooter or self._lifetime > 0.2 )
 		and table.indexof(ignored, obj) == -1 then
 			if obj:is_player() then
 				result = self:on_hit_player(obj)
@@ -433,7 +431,7 @@ function ARROW_ENTITY:on_step(dtime)
 	if not self_pos then return end
 	local last_pos = self:get_last_pos()
 
-	if self._in_player or self._blocked or self._stuck then
+	if self._in_player or self._stuck then
 		mcl_burning.tick(selfobj, dtime, self)
 		if self._stuck then
 			self:step_on_stuck(last_pos, dtime)
@@ -508,7 +506,7 @@ function ARROW_ENTITY:on_step(dtime)
 		end
 	end
 
-	-- Update yaw
+	-- Update yaw and internal variable.
 	if not self._stuck then
 		local vel = selfobj:get_velocity()
 		if vel then
@@ -517,8 +515,6 @@ function ARROW_ENTITY:on_step(dtime)
 			selfobj:set_rotation({ x = 0, y = yaw, z = pitch })
 		end
 	end
-
-	-- Update internal variable
 	self._lastpos = self_pos
 end
 
@@ -577,6 +573,7 @@ function ARROW_ENTITY:get_staticdata()
 		dragtime = self._dragtime,
 		damage = self._damage,
 		piercing = self._piercing,
+		blocked = self._blocked,
 		is_critical = self._is_critical,
 		stuck = self._stuck,
 		stuckin = self._stuckin,
@@ -617,6 +614,7 @@ function ARROW_ENTITY:on_activate(staticdata)
 		self._dragtime = data.dragtime or 0
 		self._damage = data.damage or 0
 		self._piercing = data.piercing or 0
+		self._blocked = data.blocked or false
 		self._is_critical = data.is_critical or false
 		self._itemstring = data.itemstring
 		self._is_arrow = true
