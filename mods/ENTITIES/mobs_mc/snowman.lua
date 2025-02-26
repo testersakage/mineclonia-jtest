@@ -75,7 +75,8 @@ local snow_golem = {
 -- Remove pumpkin if using shears
 function snow_golem:on_rightclick (clicker)
 	local item = clicker:get_wielded_item()
-	if self.gotten ~= true and minetest.get_item_group(item:get_name(), "shears") > 0 then
+	local item_name = item:get_name()
+	if self.gotten ~= true and minetest.get_item_group(item_name, "shears") > 0 then
 		-- Remove pumpkin
 		self.gotten = true
 		self.base_texture = sheared_textures
@@ -90,7 +91,8 @@ function snow_golem:on_rightclick (clicker)
 
 		-- Wear out
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
-			item:add_wear(mobs_mc.shears_wear)
+			local wear = mcl_autogroup.get_wear(item:get_name(), "shearsy")
+			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
 		end
 	end

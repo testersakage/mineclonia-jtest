@@ -154,8 +154,9 @@ function sheep:on_rightclick (clicker)
 	end
 
 	local item = clicker:get_wielded_item()
+	local item_name = item:get_name()
 	-- Dye sheep
-	if minetest.get_item_group(item:get_name(), "dye") == 1 and not self.gotten then
+	if minetest.get_item_group(item_name, "dye") == 1 and not self.gotten then
 		local idef = item:get_definition()
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
 			item:take_item()
@@ -169,7 +170,7 @@ function sheep:on_rightclick (clicker)
 		return
 	end
 	if self.child then return end
-	if minetest.get_item_group(item:get_name(), "shears") > 0 and not self.gotten then
+	if minetest.get_item_group(item_name, "shears") > 0 and not self.gotten then
 		self.gotten = true
 		local pos = self.object:get_pos()
 		minetest.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
@@ -180,7 +181,8 @@ function sheep:on_rightclick (clicker)
 		self:set_textures (self.base_texture)
 		self.drops = {{ name = "mcl_mobitems:mutton", chance = 1, min = 1, max = 2 },}
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
-			item:add_wear(mobs_mc.shears_wear)
+			local wear = mcl_autogroup.get_wear(item_name(), "shearsy")
+			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
 		end
 		return
