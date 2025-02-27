@@ -4,8 +4,10 @@ local enable_pvp = core.settings:get_bool("enable_pvp")
 
 local SHIELD_BLOCK_ARC = 180 -- A shield's effective arc in degree. 180 degrees equals frontal half.
 
+-- Time in seconds to despawn an arrow.
+local ARROW_LIFETIME = 120
 -- Time in seconds after which a stuck arrow is deleted
-local ARROW_TIMEOUT = 120
+local STUCK_ARROW_TIMEOUT = 60
 -- Time in seconds after which an attached arrow is deleted
 local ATTACHED_ARROW_TIMEOUT = 30
 -- Time after which stuck arrow is rechecked for being stuck
@@ -18,7 +20,7 @@ local DRAG_TICK = 0.05
 local DRAG_RATE = 0.99
 
 -- Each block of liquid set velocity to LIQUID_RATE%
-local LIQUID_RATE = 0.73 -- Lost most horizontal speed at 8 liquid blocks.
+local LIQUID_RATE = 0.74 -- Bow arrow lost most horizontal speed at 8 liquid blocks.
 
 --local GRAVITY = 9.81
 
@@ -84,12 +86,11 @@ local ARROW_ENTITY={
 	_lifetime=0,-- Amount of time (in seconds) the arrow has existed
 	_dragtime=0,-- Amount of time (in seconds) the arrow has slowed down
 	_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
-	_stuckin=nil,	--Position of node in which arow is stuck.
-	_shooter=nil,	-- ObjectRef of player or mob who shot it
+	_stuckin=nil,	--Position of node in which arrow is stuck.
+	_shooter=nil,	-- ObjectRef of player or mob who shot it.
 	_is_arrow = true,
 	_in_player = false,
-	_blocked = false,
-	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
+	_blocked = nil, -- Name of last player who deflected this arrow with a shield.
 	_partical_id=nil,
 	_ignored=nil,
 }
@@ -188,8 +189,8 @@ end
 function ARROW_ENTITY:do_particle()
 	if not self._is_critical or self._partical_id then return end
 	self._partical_id = core.add_particlespawner({
-		amount = ARROW_TIMEOUT * 50,
-		time = ARROW_TIMEOUT,
+		amount = ARROW_LIFETIME * 50,
+		time = ARROW_LIFETIME,
 		minpos = vector.new(0,0,0),
 		maxpos = vector.new(0,0,0),
 		minvel = vector.new(-0.1,-0.1,-0.1),
@@ -224,26 +225,27 @@ function ARROW_ENTITY:apply_effects(obj)
 	end
 end
 
--- Remove critical partical effect
+-- Remove critical partical effects.
 function ARROW_ENTITY:stop_particle()
 	if not self._partical_id then return end
 	core.delete_particlespawner(self._partical_id)
 	self._partical_id = nil
 end
 
--- Remove burning status, crit particle effect, and finally the arrow object.
-function ARROW_ENTITY:remove(delay, preserve_particle)
-	mcl_burning.extinguish(self.object)
-	self._ignored = nil
-	if not preserve_particle then self:stop_particle() end
-	if not delay or delay <= 0 then
-		self.object:remove()
-	else
-		if not self._in_player then
-			core.log("warning", "Delayed arrow removal should be done after setting it to an ignored state.")
-		end
-		core.after(delay, function() self:remove() end)
+-- Remove particle effect, clear most object fields, extinguish fire (optional), and optionally set remaining life.
+function ARROW_ENTITY:cut_off(lifetime, keep_fire)
+	if not keep_fire then mcl_burning.extinguish(self.object) end
+	self._startpos, self._ignored = nil, nil -- last pos is used by stuck step to spawn arrow item
+	self:stop_particle()
+	if lifetime then
+		self._lifetime = ARROW_LIFETIME - lifetime
 	end
+end
+
+-- Remove burning status, crit particle effect, and finally the arrow object.
+function ARROW_ENTITY:remove()
+	self:cut_off()
+	self.object:remove()
 end
 
 -- Process hitting a non-player object.  Return true to play damage particle and sound.
@@ -310,16 +312,15 @@ function ARROW_ENTITY:on_hit_player(obj)
 		vector.new(self._x_position, self._y_position, random_arrow_positions("z", placement)),
 		vector.new(0, self._rotation_station + self._y_rotation, self._z_rotation)
 	)
-	self:remove(ATTACHED_ARROW_TIMEOUT, true)
+	self:cut_off(ATTACHED_ARROW_TIMEOUT)
 	return "stop"
 end
 
 function ARROW_ENTITY:set_stuck (node_pos, node)
 	local selfobj = self.object
 	local self_pos = selfobj:get_pos()
-	self:stop_particle()
+	self:cut_off(STUCK_ARROW_TIMEOUT, "keep fire")
 	self._stuck = true
-	self._lifetime = 0
 	self._dragtime = 0
 	self._stuckrechecktimer = 0
 	self._piercing = 0
@@ -405,7 +406,7 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 			local def = core.registered_nodes[hit_node.name or ""]
 			-- Set fire when passing through lava or fire, or put out fire when passing through water.
 			if core.get_item_group(hit_node.name, "set_on_fire") > 0 then
-				mcl_burning.set_on_fire(selfobj, ARROW_TIMEOUT)
+				mcl_burning.set_on_fire(selfobj, ARROW_LIFETIME)
 			elseif core.get_item_group(hit_node.name, "puts_out_fire") > 0 then
 				mcl_burning.extinguish(selfobj)
 			end
@@ -431,17 +432,17 @@ function ARROW_ENTITY:on_step(dtime)
 	if not self_pos then return end
 	local last_pos = self:get_last_pos()
 
+	self._lifetime = self._lifetime + dtime
+	if self._lifetime > ARROW_LIFETIME then
+		self:remove()
+		return
+	end
+
 	if self._in_player or self._stuck then
 		mcl_burning.tick(selfobj, dtime, self)
 		if self._stuck then
 			self:step_on_stuck(last_pos, dtime)
 		end
-		return
-	end
-
-	self._lifetime = self._lifetime + dtime
-	if self._lifetime > ARROW_TIMEOUT then
-		self:remove()
 		return
 	end
 
@@ -582,7 +583,7 @@ function ARROW_ENTITY:get_staticdata()
 	}
 	-- If _lifetime is missing for some reason, assume the maximum
 	if not self._lifetime then
-		self._lifetime = ARROW_TIMEOUT
+		self._lifetime = ARROW_LIFETIME
 	end
 	out.starttime = core.get_gametime() - self._lifetime
 	if self._shooter and self._shooter:is_player() then
@@ -597,7 +598,7 @@ function ARROW_ENTITY:on_activate(staticdata)
 		-- First, check if the arrow is already past its life timer. If
 		-- yes, delete it. If starttime is nil always delete it.
 		self._lifetime = minetest.get_gametime() - (data.starttime or 0)
-		if self._lifetime > ARROW_TIMEOUT or data.stuckin_player then
+		if self._lifetime > ARROW_LIFETIME or data.stuckin_player then
 			self:remove()
 			return
 		end
