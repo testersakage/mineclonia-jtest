@@ -2,6 +2,9 @@ local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator(modname)
 
+local SHIELD_BLOCK_ARC = 180 -- A shield's effective arc in degree. 180 degrees equals frontal half.
+local SHIELD_BLOCK_COSINE = -math.cos(SHIELD_BLOCK_ARC/2) -- Actual value for angle check.
+
 mcl_shields = {
 	types = {
 		mob = true,
@@ -195,8 +198,11 @@ for _, e in pairs(mcl_shields.enchantments) do
 	mcl_enchanting.enchantments[e].secondary.shield = true
 end
 
+-- Check if a player is holding up his/her shield.
+-- Return nil if no shield or shield is not raised.
+-- Otherwise return shield hand (1 = offhand, 2 = mainhand), shield itemstack
 function mcl_shields.is_blocking(obj)
-	if not obj:is_player() then return end
+	if not obj or not obj:is_player() then return end
 	if mcl_shields.players[obj] then
 		local blocking = mcl_shields.players[obj].blocking
 		if blocking <= 0 then return end
@@ -205,30 +211,84 @@ function mcl_shields.is_blocking(obj)
 	end
 end
 
-mcl_damage.register_modifier(function(obj, damage, reason)
-	local type = reason.type
-	local damager = reason.direct
+-- Find attack angle relative to a player's position, height, and view angle.
+-- Return the dot product of normalised attack vector and normalised view vector.
+-- -1 means the attack is at the center of view.  -0.7 or -cos(45°) means attack is at a frontal 45 degree.
+-- 0 means exactly perpendicular (side/top/bottom). >0 means it come from the rear.
+function mcl_shields.find_angle (attack_pos, obj)
+	local obj_pos = obj:get_pos()
+	obj_pos.y = obj_pos.y + ( obj:get_properties().eye_height * 2/3 ) -- Loose approximation of shield centre.
+	local attack_direction = vector.normalize(vector.subtract(obj_pos, attack_pos))
+	local player_look_dir = vector.normalize(obj:get_look_dir())
+	return vector.dot(attack_direction, player_look_dir)
+end
+
+-- Check whether the player can block an attack at this moment.
+-- obj is player.  dpos_or_dot can be the attack position OR angle of attack (see find_angle).
+-- if reason is not null, the type of attack will be checked.
+-- if dpos/dot is provided, or deducible from reason, attack angle will be checked.
+-- When attack is not blockable, return false and reason (string)
+-- When attack is bloackable, return true, {blocking,itemstack}, is_angle_checked.
+function mcl_shields.can_block (obj, dpos_or_dot, reason)
+	if not obj or not obj:is_player() then return false, "non-player" end
+
 	local blocking, shieldstack = mcl_shields.is_blocking(obj)
+	if not blocking then return false, "no-shield" end
 
-	if not (obj:is_player() and blocking and mcl_shields.types[type] and damager) then
-		return
+	if reason then
+		local type = reason.type
+		if not mcl_shields.types[type] then return false, "non-blockable" end
+		if not dpos_or_dot then
+			local damager = reason.direct
+			local entity = damager and damager:get_luaentity()
+			if entity then
+				if entity._shooter then
+					damager = entity._shooter
+				elseif entity._saved_shooter_pos then
+					-- Used for removed / killed entities before the projectile hits the player
+					dpos_or_dot = entity._saved_shooter_pos
+				end
+			end
+			if not dpos_or_dot and damager then
+				dpos_or_dot = damager:get_pos()
+			end
+		end
 	end
 
-	local entity = damager:get_luaentity()
-	if entity and entity._shooter then
-		damager = entity._shooter
+	if dpos_or_dot then
+		local angle
+		if type(dpos_or_dot) == "number" then
+			angle = dpos_or_dot
+		else
+			angle = mcl_shields.find_angle(dpos_or_dot, obj)
+		end
+		if angle > SHIELD_BLOCK_COSINE then return false, "non-frontal" end
 	end
 
-	local dpos = damager:get_pos()
+	return true, { blocking, shieldstack }, dpos_or_dot
+end
 
-	-- Used for removed / killed entities before the projectile hits the player
-	if entity and not entity._shooter and entity._saved_shooter_pos then
-		dpos = entity._saved_shooter_pos
-	end
+-- Add wear to a player's active shield.
+-- If damage is provided, will not add wear if damage is below threshold.
+-- blockstack is usually returned by can_block, and can be nil.
+-- Shield state will be checked regardless of whether it is provided or not.
+-- n is number of use to reduce, default 1.
+-- When wear is not reduced, return false and reason (string).
+-- Otherwise return true.
+function mcl_shields.add_wear (obj, damage, blockstack, n)
+	if not obj or not obj:is_player() then return false, "non-player" end
+	if not core.is_creative_enabled(obj:get_player_name()) then return false, "creative" end
 
-	if not dpos or vector.dot(obj:get_look_dir(), vector.subtract(dpos, obj:get_pos())) < 0 then
-		return
+	if damage and damage < 3 then return false, "threshold" end
+	if n and n <= 0 then return false, "use-count" end
+
+	local blocking, shieldstack
+	if blockstack then
+		blocking, shieldstack = blockstack[0], blockstack[1]
+	else
+		blocking, shieldstack = mcl_shields.is_blocking(obj)
 	end
+	if not blocking then return false, "no-shield" end
 
 	local durability = 336
 	local unbreaking = mcl_enchanting.get_enchantment(shieldstack, mcl_shields.enchantments[2])
@@ -236,17 +296,23 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		durability = durability * (unbreaking + 1)
 	end
 
-	if not core.is_creative_enabled(obj:get_player_name()) and damage >= 3 then
-		shieldstack:add_wear(65535 / durability) ---@diagnostic disable-line: need-check-nil
-		if blocking == 2 then
-			obj:set_wielded_item(shieldstack)
-		else
-			obj:get_inventory():set_stack("offhand", 1, shieldstack)
-			mcl_inventory.update_inventory_formspec(obj)
-		end
+	shieldstack:add_wear(65535 / durability * (n or 1))
+	if blocking == 2 then
+		obj:set_wielded_item(shieldstack)
+	else
+		obj:get_inventory():set_stack("offhand", 1, shieldstack)
+		mcl_inventory.update_inventory_formspec(obj)
 	end
-	core.sound_play({name = "mcl_block"}, {pos = obj:get_pos(), max_hear_distance = 16})
-	return 0
+	return true
+end
+
+mcl_damage.register_modifier(function(obj, damage, reason)
+	local can_block, stack, dpos = mcl_shields.can_block (obj, nil, reason)
+	if can_block and dpos then
+		mcl_shields.add_wear(obj, damage, stack)
+		core.sound_play({name = "mcl_block"}, {pos = obj:get_pos(), max_hear_distance = 16})
+		return 0
+	end
 end)
 
 local function modify_shield(player, vpos, vrot, i)

@@ -2,8 +2,6 @@ local S = core.get_translator(core.get_current_modname())
 
 local enable_pvp = core.settings:get_bool("enable_pvp")
 
-local SHIELD_BLOCK_ARC = 180 -- A shield's effective arc in degree. 180 degrees equals frontal half.
-
 -- Time in seconds to despawn an arrow.
 local ARROW_LIFETIME = 120
 -- Time in seconds after which a stuck arrow is deleted
@@ -25,8 +23,6 @@ local LIQUID_RATE = 0.74 -- Bow arrow lost most horizontal speed at 8 liquid blo
 --local GRAVITY = 9.81
 
 local YAW_OFFSET = -math.pi/2
-
-local SHIELD_BLOCK_COSINE = -math.cos(SHIELD_BLOCK_ARC/2) -- Actual value for angle check.
 
 local function dir_to_pitch(dir)
 	--local dir2 = vector.normalize(dir)
@@ -176,6 +172,7 @@ function ARROW_ENTITY:arrow_knockback (object, damage)
 end
 
 function ARROW_ENTITY:calculate_damage (v)
+	if not v then v = self.object:get_velocity() end
 	local crit_bonus = 0
 	local multiplier = vector.length (v) / 20
 	local damage = (self._damage or 2) * multiplier
@@ -209,7 +206,7 @@ end
 
 -- Calculate damage, knockback, burning, and tipped effect to target.
 function ARROW_ENTITY:apply_effects(obj)
-	local dmg = self:calculate_damage(self.object:get_velocity())
+	local dmg = self:calculate_damage()
 	local reason = {
 		type = "arrow",
 		source = self._shooter,
@@ -267,22 +264,16 @@ function ARROW_ENTITY:on_hit_player(obj)
 		return true
 	end
 
-	-- Calculate normalized direction vectors and dot product (angle of attack).
-	local player_pos = obj:get_pos()
-	player_pos.y = player_pos.y + ( obj:get_properties().eye_height * 2/3 ) -- Loose approximation of shield centre.
-	local arrow_direction = vector.normalize(vector.subtract(player_pos, self:get_last_pos()))
-	local player_look_dir = vector.normalize(obj:get_look_dir())
-	local dot_product = vector.dot(arrow_direction, player_look_dir)
-
-	if mcl_shields.is_blocking(obj) then -- Shield is raised.
-		-- Negative dot product means player is facing the arrow, with -1 meaning directly in the front.
-		-- e.g. -0.7071 means the angle is at 45 degree, i.e. within a 90 degree arc.
-		if dot_product <= SHIELD_BLOCK_COSINE then
-			self._blocked = true
-			self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
-			-- TODO: Move arrow if it has moved pass the player.
-			return "break"-- Stop further collision check as the arrow has changed direction.
-		end
+	local dot_product = mcl_shields.find_angle(self:get_last_pos(), obj)
+	local can_block, stack = mcl_shields.can_block(obj, dot_product)
+	if can_block then
+		local vec = self.object:get_velocity()
+		local damage = self:calculate_damage(vec)
+		mcl_shields.add_wear(obj, damage, stack)
+		self._blocked = obj:get_player_name()
+		self.object:set_velocity(vector.multiply(vec, -0.25))
+		-- TODO: Move arrow if it has moved pass the player.
+		return "break"-- Stop further collision check as the arrow has changed direction.
 	end
 
 	self:apply_effects(obj)
