@@ -26,44 +26,6 @@ local function destroy_portal(pos)
 	end
 end
 
-local function check_spawn_space(pos, size, y_offset)
-    y_offset = y_offset or 1
-    local half = math.floor(size / 2)
-    local pos1 = {
-        x = pos.x - half,
-        y = pos.y + y_offset,
-        z = pos.z - half
-    }
-    local pos2 = {
-        x = pos.x + half - (size % 2 == 0 and 1 or 0),
-        y = pos.y + y_offset + size - 1,
-        z = pos.z + half - (size % 2 == 0 and 1 or 0)
-    }
-    local air_nodes = minetest.find_nodes_in_area(pos1, pos2, {"air"})
-    local required_air = size * size * size
-    return #air_nodes == required_air
-end
-
-local function find_valid_spawn(target, attempts)
-	local minp, maxp = vector.subtract(target,8), vector.add(target,8)
-	core.load_area(minp, maxp)
-	attempts = attempts or 1
-	if attempts > 10 then
-		return mcl_spawn.get_world_spawn_pos()
-	end
-	local nn = minetest.find_nodes_in_area_under_air(minp,maxp,{"group:solid"})
-	if #nn > 0 then
-		for _, n in pairs(nn) do
-			if check_spawn_space(n, 2) then
-				return vector.offset(n,-0.5,1,-0.5)
-			end
-		end
-		return find_valid_spawn(vector.add(target,attempts), attempts + 1)
-	else
-		return find_valid_spawn(vector.add(target,attempts), attempts + 1)
-	end
-end
-
 local ep_scheme = {
 	{ o={x=0, y=0, z=1}, p=1 },
 	{ o={x=0, y=0, z=2}, p=1 },
@@ -219,17 +181,10 @@ function mcl_portals.end_teleport(obj, pos)
 	if not pos then return end
 	local dim = mcl_worlds.pos_to_dimension(pos)
 
-	local target, player_spawn
 	if dim == "end" then
 		-- End portal in the End:
 		-- Teleport back to the player's spawn or world spawn in the Overworld.
-		if obj:is_player() then
-			target, player_spawn = mcl_spawn.get_player_spawn_pos(obj)
-		end
-
-		if not target or not player_spawn then
-			target = find_valid_spawn(mcl_spawn.get_world_spawn_pos())
-		end
+		local target = mcl_spawn.get_player_spawn_pos(obj)
 		teleport_object(obj, target, dim)
 	else
 		-- End portal in any other dimension:
