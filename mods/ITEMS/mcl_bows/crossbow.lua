@@ -128,11 +128,11 @@ local function player_shoot_arrow(wielditem, player, is_critical)
 		return false
 	end
 
-	local playerpos = player:get_pos()
+	local playerpos = mcl_bows.add_bow_height(player:get_pos())
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
-	mcl_bows.shoot_arrow_crossbow (arrow_itemstring, {x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, dir, yaw, player, BOW_MAX_SPEED, nil, is_critical, player:get_wielded_item(), true)
+	mcl_bows.shoot_arrow_crossbow (arrow_itemstring, playerpos, dir, yaw, player, BOW_MAX_SPEED, nil, is_critical, player:get_wielded_item(), true)
 	return true
 end
 
