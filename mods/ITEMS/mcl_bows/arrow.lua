@@ -124,15 +124,23 @@ local function damage_particles(pos, is_critical)
 	end
 end
 
+-- Add player bow height to position, which is simply y += 1.5
+function mcl_bows.add_bow_height(pos)
+	pos = vector.copy(pos)
+	pos.y = pos.y + 1.5
+	return pos
+end
+
 -- Add inaccuracy to a _direction_ vector (before speed is applied).
 -- Player has an inaccuracy of 1, dispenser 6, mobs varies by difficulty (input nil)
 -- The distribution will form a bell shape, loosely speaking.
 function mcl_bows.add_inaccuracy(dir, inaccuracy)
 	if not inaccuracy then
-		inaccuracy = 14 - mcl_vars.difficulty * 4 -- 1/Easy = 10, 2/Normal = 6, 3/Hard = 2
+		inaccuracy = 14 - mcl_vars.difficulty * 4 -- 1:Easy = 10, 2:Normal = 6, 3:Hard = 2
 	end
 	if inaccuracy == 0 then return dir end
 	dir = vector.copy(dir)
+	-- Reference: https://midnight.wiki.gg/wiki/Ebonite_Arrow
 	dir.x = dir.x + mcl_util.dist_triangular(0, 0.0172275 * inaccuracy)
 	dir.y = dir.y + mcl_util.dist_triangular(0, 0.0172275 * inaccuracy)
 	dir.z = dir.z + mcl_util.dist_triangular(0, 0.0172275 * inaccuracy)
@@ -261,7 +269,7 @@ function ARROW_ENTITY:remove()
 end
 
 -- Process hitting a non-player object.  Return true to play damage particle and sound.
-function ARROW_ENTITY:on_hit_object(obj, lua)
+function ARROW_ENTITY:on_hit_object(obj, lua, _)
 	if not lua or (not lua.is_mob and not lua._hittable_by_projectile)
 	or lua.name == "mobs_mc:enderman" then
 		return false
@@ -271,7 +279,7 @@ function ARROW_ENTITY:on_hit_object(obj, lua)
 end
 
 -- Process hitting a player, deflect if shield blocked, or attach if not piercing.
-function ARROW_ENTITY:on_hit_player(obj)
+function ARROW_ENTITY:on_hit_player(obj, _, ray_hit)
 	if not enable_pvp then return false end
 	local piercing = self._piercing or 0
 	if piercing > 0 then -- Piercing ignore shield.
@@ -279,21 +287,22 @@ function ARROW_ENTITY:on_hit_player(obj)
 		return true
 	end
 
-	local dot_product = mcl_shields.find_angle(self:get_last_pos(), obj)
-	local can_block, stack = mcl_shields.can_block(obj, dot_product)
+	local dot_attack = mcl_shields.find_angle(self:get_last_pos(), obj)
+	local can_block, stack = mcl_shields.can_block(obj, dot_attack)
 	if can_block then
 		local vec = self.object:get_velocity()
 		local damage = self:calculate_damage(vec)
 		mcl_shields.add_wear(obj, damage, stack)
 		self._blocked = obj:get_player_name()
-		self.object:set_velocity(vector.multiply(vec, -0.25))
-		-- TODO: Move arrow if it has moved pass the player.
+		self.object:set_velocity(vector.multiply(vec, -0.15))
+		-- Intersection point can be in the past or future.
+		self.object:set_pos(ray_hit.intersection_point or mcl_bows.add_bow_height(obj:get_pos()))
 		return "break"-- Stop further collision check as the arrow has changed direction.
 	end
 
 	self:apply_effects(obj)
 	self._in_player = true
-	local placement = dot_product < 0 and "front" or "back"
+	local placement = dot_attack < 0 and "front" or "back"
 	self._rotation_station = placement == "front" and -90 or 90
 	self._y_position = random_arrow_positions("y", placement)
 	self._x_position = random_arrow_positions("x", placement)
@@ -375,12 +384,12 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 	if ray_hit.type == "object" then
 		local obj = ray_hit.ref
 		if obj:is_valid() and obj:get_hp() > 0
-		and ( obj ~= self._shooter or self._lifetime > 0.2 )
+		and ( obj ~= self._shooter or not vector.equals(self:get_last_pos(), self._startpos) )
 		and table.indexof(ignored, obj) == -1 then
 			if obj:is_player() then
-				result = self:on_hit_player(obj)
+				result = self:on_hit_player(obj, obj:get_luaentity(), ray_hit)
 			else
-				result = self:on_hit_object(obj, obj:get_luaentity())
+				result = self:on_hit_object(obj, obj:get_luaentity(), ray_hit)
 			end
 		end
 		if result and result ~= "break" then

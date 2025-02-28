@@ -138,7 +138,7 @@ local function player_shoot_arrow (player, power, is_critical)
 	if not arrow_itemstring then
 		return false
 	end
-	local playerpos = player:get_pos()
+	local playerpos = mcl_bows.add_bow_height(player:get_pos())
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
@@ -146,13 +146,7 @@ local function player_shoot_arrow (player, power, is_critical)
 	arrow_itemstring:set_count(1)
 	arrow_itemstring = arrow_itemstring:to_string()
 
-	local pos = {
-		x = playerpos.x,
-		y = playerpos.y + 1.5,
-		z = playerpos.z,
-	}
-
-	mcl_bows.shoot_arrow (arrow_itemstring, pos, dir, yaw, player,
+	mcl_bows.shoot_arrow (arrow_itemstring, playerpos, dir, yaw, player,
 			      power, nil, is_critical, player:get_wielded_item (),
 			      not has_infinity_enchantment)
 	return true
