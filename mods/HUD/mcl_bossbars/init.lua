@@ -1,10 +1,24 @@
+local S = minetest.get_translator(minetest.get_current_modname())
+
 mcl_bossbars = {
 	bars = {},
 	huds = {},
 	static = {},
 	colors = {"light_purple", "blue", "red", "green", "yellow", "dark_purple", "white"},
-	max_bars = tonumber(minetest.settings:get("max_bossbars")) or 4
 }
+
+mcl_player.register_player_setting("mcl_bossbars:max_bossbars", {
+        type = "slider",
+	options = {
+		{ name = "0", description = S("None") },
+		{ min = 1, max = 5 },
+		{ name = "9999", description = S("Unlimited") },
+	},
+	section = "HUD",
+	short_desc = S("Maximum number of boss bars to display simultaneously"),
+	long_desc = S("Multiple bosses can be active at the same time. To not clutter your screen, you may limit the number of simultaneously displayed boss bars."),
+	ui_default = "4",
+})
 
 function mcl_bossbars.recalculate_colors()
 	local sorted = {}
@@ -125,6 +139,7 @@ mcl_player.register_globalstep(function(player, dtime)
 	local name = player:get_player_name()
 	local bars = mcl_bossbars.bars[name]
 	local huds = mcl_bossbars.huds[name]
+	local max_bars = mcl_player.get_player_setting(player, "mcl_bossbars:max_bossbars", 4)
 	table.sort(bars, function(a, b) return a.priority < b.priority end)
 	local huds_new = {}
 	local bars_new = {}
@@ -144,7 +159,7 @@ mcl_player.register_globalstep(function(player, dtime)
 		end
 
 		if bar and not hud then
-			if i < mcl_bossbars.max_bars then
+			if i < max_bars then
 				hud = {
 					color = bar.color,
 					image = bar.image,
