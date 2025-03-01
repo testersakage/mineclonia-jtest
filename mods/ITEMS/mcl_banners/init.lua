@@ -677,10 +677,11 @@ local entity_standing = {
 }
 core.register_entity("mcl_banners:standing_banner", entity_standing)
 
-local entity_hanging = table.copy(entity_standing)
-entity_hanging.initial_properties.visual_size = { x=2.499, y=2.28 }
-entity_hanging.initial_properties.mesh = "amc_banner_hanging.b3d"
-core.register_entity("mcl_banners:hanging_banner", table.merge(entity_hanging, {
+core.register_entity("mcl_banners:hanging_banner", table.merge(entity_standing, {
+	initial_properties = table.merge(entity_standing.initial_properties, {
+		visual_size = { x=2.499, y=2.28 },
+		mesh = "amc_banner_hanging.b3d"
+	}),
 	_set_banner_node = function(self)
 		self._node_pos = vector.offset(self.object:get_pos(), 0, 1, 0)
 	end
