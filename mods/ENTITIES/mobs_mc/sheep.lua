@@ -181,7 +181,7 @@ function sheep:on_rightclick (clicker)
 		self:set_textures (self.base_texture)
 		self.drops = {{ name = "mcl_mobitems:mutton", chance = 1, min = 1, max = 2 },}
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
-			local wear = mcl_autogroup.get_wear(item_name(), "shearsy")
+			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
 			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
 		end
