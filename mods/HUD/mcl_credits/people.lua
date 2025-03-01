@@ -25,6 +25,8 @@ return {
 		"the-real-herowl",
 		"nooneatall",
 		"nixnoxus",
+		"Ælla Chiana Moskopp",
+		"Raylight",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
@@ -49,7 +51,6 @@ return {
 		"MrRar",
 		"kabou",
 		"FaceDeer",
-		"Ælla Chiana Moskopp",
 		"ChrisPHP",
 		"3raven",
 		"ShadowRoi",
