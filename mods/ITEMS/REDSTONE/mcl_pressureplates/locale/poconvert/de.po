@@ -13,9 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "A pressure plate is a redstone component which supplies its surrounding blocks with redstone power while someone or something rests on top of it."
-msgstr "Eine Druckplatte ist eine Redstonekomponente, die ihre benachbarten Blöcke mit Redstoneenergie versorgt, wenn sich jemand oder etwas auf ihr befindet."
-
 msgid "Provides redstone power when pushed"
 msgstr "Gibt Redstoneenergie, wenn gedrückt"
 
@@ -42,4 +39,16 @@ msgstr "Druckplatte aus poliertem Schwarzstein"
 
 msgid "A polished blackstone pressure plate is a redstone component which supplies its surrounding blocks with redstone power while a player or mob stands on top of it. It is not triggered by anything else."
 msgstr "Eine Druckplatte aus poliertem Schwarzstein ist eine Redstone-Komponente, die die umliegenden Blöcke mit Redstone-Energie versorgt, solange ein Spieler oder eine Kreatur auf ihr steht. Sie wird durch nichts anderes ausgelöst."
+
+msgid "Light Weighted Pressure Plate"
+msgstr ""
+
+msgid "A heavy weighted pressure plate is a redstone component which supplies its surrounding blocks with one redstone power for every movable object (including dropped items, players and mobs) that rests on top of it."
+msgstr ""
+
+msgid "Heavy Weighted Pressure Plate"
+msgstr ""
+
+msgid "A heavy weighted pressure plate is a redstone component which supplies its surrounding blocks with one redstone power for every 10 movable objects (including dropped items, players and mobs) that rest on top of it."
+msgstr ""
 

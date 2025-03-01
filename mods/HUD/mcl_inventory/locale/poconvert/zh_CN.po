@@ -55,9 +55,6 @@ msgstr "生存物品栏"
 msgid "Not in Creative Inventory"
 msgstr "不在创造模式物品栏中"
 
-msgid "Advancements"
-msgstr "进度"
-
 msgid "Switch stack size"
 msgstr "切换堆叠数量"
 
@@ -70,6 +67,9 @@ msgstr "配方书"
 msgid "Help"
 msgstr "帮助"
 
+msgid "Advancements"
+msgstr "进度"
+
 msgid "Select player skin"
 msgstr "选择玩家皮肤"
 
@@ -81,7 +81,4 @@ msgstr "制作"
 
 msgid "Fill Craft Grid"
 msgstr "填满制作网格"
-
-msgid "Achievements"
-msgstr "成就"
 

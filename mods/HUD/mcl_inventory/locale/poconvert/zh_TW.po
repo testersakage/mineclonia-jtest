@@ -55,9 +55,6 @@ msgstr "生存模式物品欄"
 msgid "Not in Creative Inventory"
 msgstr ""
 
-msgid "Advancements"
-msgstr ""
-
 msgid "Switch stack size"
 msgstr ""
 
@@ -70,6 +67,9 @@ msgstr "合成教學"
 msgid "Help"
 msgstr "幫助"
 
+msgid "Advancements"
+msgstr ""
+
 msgid "Select player skin"
 msgstr "選擇玩家皮膚"
 
@@ -81,7 +81,4 @@ msgstr "合成"
 
 msgid "Fill Craft Grid"
 msgstr ""
-
-msgid "Achievements"
-msgstr "成就"
 

@@ -19,32 +19,32 @@ msgstr "Schild"
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr "Der Schild ist eine Schutzwaffe, die den Spieler vor Angriffen schützt."
 
-msgid "White Shield"
-msgstr "Weißer Schild"
-
-msgid "Grey Shield"
-msgstr "Grauer Schild"
-
-msgid "Light Grey Shield"
-msgstr "Hellgrauer Schild"
-
 msgid "Black Shield"
 msgstr "Schwarzer Schild"
 
-msgid "Red Shield"
-msgstr "Roter Schild"
+msgid "Blue Shield"
+msgstr "Blauer Schild"
 
-msgid "Yellow Shield"
-msgstr "Gelber Schild"
-
-msgid "Green Shield"
-msgstr "Grüner Schild"
+msgid "Brown Shield"
+msgstr "Brauner Schild"
 
 msgid "Cyan Shield"
 msgstr "Türkiser Schild"
 
-msgid "Blue Shield"
-msgstr "Blauer Schild"
+msgid "Green Shield"
+msgstr "Grüner Schild"
+
+msgid "Grey Shield"
+msgstr "Grauer Schild"
+
+msgid "Light Blue Shield"
+msgstr "Hellblauer Schild"
+
+msgid "Light Grey Shield"
+msgstr "Hellgrauer Schild"
+
+msgid "Lime Shield"
+msgstr "Hellgrüner Schild"
 
 msgid "Magenta Shield"
 msgstr "Magenta Schild"
@@ -52,18 +52,18 @@ msgstr "Magenta Schild"
 msgid "Orange Shield"
 msgstr "Oranger Schild"
 
-msgid "Violet Shield"
-msgstr "Violetter Schild"
-
-msgid "Brown Shield"
-msgstr "Brauner Schild"
-
 msgid "Pink Shield"
 msgstr "Rosa Schild"
 
-msgid "Lime Shield"
-msgstr "Hellgrüner Schild"
+msgid "Purple Shield"
+msgstr ""
 
-msgid "Light Blue Shield"
-msgstr "Hellblauer Schild"
+msgid "Red Shield"
+msgstr "Roter Schild"
+
+msgid "White Shield"
+msgstr "Weißer Schild"
+
+msgid "Yellow Shield"
+msgstr "Gelber Schild"
 

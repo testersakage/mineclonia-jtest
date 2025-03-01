@@ -157,11 +157,8 @@ msgstr "锻造模板"
 msgid "Applies to:"
 msgstr "适用于："
 
-msgid "Diamond Armor"
-msgstr "钻石盔甲"
-
-msgid "Diamond Tools"
-msgstr "钻石工具"
+msgid "Diamond Equipment"
+msgstr ""
 
 msgid "Ingredients:"
 msgstr "原料："

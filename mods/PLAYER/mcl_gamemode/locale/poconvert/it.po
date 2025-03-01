@@ -22,7 +22,10 @@ msgstr ""
 msgid "Player not online"
 msgstr ""
 
-msgid "Failed to set Gamemode @1 for player @2"
+msgid "Failed to set gamemode @1 for player @2"
+msgstr ""
+
+msgid "Player @1 is still in creative mode because world is in creative mode"
 msgstr ""
 
 msgid "Gamemode for player @1: @2"

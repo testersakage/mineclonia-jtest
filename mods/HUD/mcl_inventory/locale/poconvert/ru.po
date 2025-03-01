@@ -55,9 +55,6 @@ msgstr "Инвентарь выживания"
 msgid "Not in Creative Inventory"
 msgstr "Нет в творческом инвентаре"
 
-msgid "Advancements"
-msgstr "Продвижение"
-
 msgid "Switch stack size"
 msgstr "Изменить размер стака"
 
@@ -70,6 +67,9 @@ msgstr "Книга рецептов"
 msgid "Help"
 msgstr "Справка"
 
+msgid "Advancements"
+msgstr "Продвижение"
+
 msgid "Select player skin"
 msgstr "Выбор скина"
 
@@ -81,7 +81,4 @@ msgstr "Крафт"
 
 msgid "Fill Craft Grid"
 msgstr "Заполните сетку крафта"
-
-msgid "Achievements"
-msgstr "Достижения"
 

@@ -55,9 +55,6 @@ msgstr "Überlebensinventar"
 msgid "Not in Creative Inventory"
 msgstr "Nicht im Kreativ-Inventar"
 
-msgid "Advancements"
-msgstr "Fortschritte"
-
 msgid "Switch stack size"
 msgstr "Wechsle die Größe des Stapels"
 
@@ -70,6 +67,9 @@ msgstr "Fertigungsbuch"
 msgid "Help"
 msgstr "Hilfe"
 
+msgid "Advancements"
+msgstr "Fortschritte"
+
 msgid "Select player skin"
 msgstr "Spieleraussehen ändern"
 
@@ -81,7 +81,4 @@ msgstr "Fertigen"
 
 msgid "Fill Craft Grid"
 msgstr "Fülle das Fertigungsraster"
-
-msgid "Achievements"
-msgstr "Errungenschaften"
 

@@ -19,32 +19,32 @@ msgstr "盾"
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr "盾は、攻撃からプレイヤーを守るために使う道具です。"
 
-msgid "White Shield"
-msgstr "盾（白色）"
-
-msgid "Grey Shield"
-msgstr "盾（灰色）"
-
-msgid "Light Grey Shield"
-msgstr "盾（薄灰色）"
-
 msgid "Black Shield"
 msgstr "盾（黒色）"
 
-msgid "Red Shield"
-msgstr "盾（赤色）"
+msgid "Blue Shield"
+msgstr "盾（青色）"
 
-msgid "Yellow Shield"
-msgstr "盾（黄色）"
-
-msgid "Green Shield"
-msgstr "盾（緑色）"
+msgid "Brown Shield"
+msgstr "盾（茶色）"
 
 msgid "Cyan Shield"
 msgstr "盾（青緑色）"
 
-msgid "Blue Shield"
-msgstr "盾（青色）"
+msgid "Green Shield"
+msgstr "盾（緑色）"
+
+msgid "Grey Shield"
+msgstr "盾（灰色）"
+
+msgid "Light Blue Shield"
+msgstr "盾（空色）"
+
+msgid "Light Grey Shield"
+msgstr "盾（薄灰色）"
+
+msgid "Lime Shield"
+msgstr "盾（黄緑色）"
 
 msgid "Magenta Shield"
 msgstr "盾（赤紫色）"
@@ -52,18 +52,18 @@ msgstr "盾（赤紫色）"
 msgid "Orange Shield"
 msgstr "盾（橙色）"
 
-msgid "Violet Shield"
-msgstr "盾（紫色）"
-
-msgid "Brown Shield"
-msgstr "盾（茶色）"
-
 msgid "Pink Shield"
 msgstr "盾（桃色）"
 
-msgid "Lime Shield"
-msgstr "盾（黄緑色）"
+msgid "Purple Shield"
+msgstr ""
 
-msgid "Light Blue Shield"
-msgstr "盾（空色）"
+msgid "Red Shield"
+msgstr "盾（赤色）"
+
+msgid "White Shield"
+msgstr "盾（白色）"
+
+msgid "Yellow Shield"
+msgstr "盾（黄色）"
 

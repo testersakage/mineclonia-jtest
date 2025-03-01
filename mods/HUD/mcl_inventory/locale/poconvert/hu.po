@@ -55,9 +55,6 @@ msgstr "Túlélőkészlet"
 msgid "Not in Creative Inventory"
 msgstr "Nem található a Kreatív készletben"
 
-msgid "Advancements"
-msgstr "Kihívások"
-
 msgid "Switch stack size"
 msgstr "Köteg méretének állítása"
 
@@ -70,6 +67,9 @@ msgstr "Receptkönyv"
 msgid "Help"
 msgstr "Segítség"
 
+msgid "Advancements"
+msgstr "Kihívások"
+
 msgid "Select player skin"
 msgstr "Játékos kinézetének beállítása"
 
@@ -81,7 +81,4 @@ msgstr "Barkácsolás"
 
 msgid "Fill Craft Grid"
 msgstr "Barkácsrács kitöltése"
-
-msgid "Achievements"
-msgstr "Elért eredmények"
 

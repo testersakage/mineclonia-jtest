@@ -22,8 +22,11 @@ msgstr ""
 msgid "Player not online"
 msgstr "プレーヤーがオンラインではありません"
 
-msgid "Failed to set Gamemode @1 for player @2"
-msgstr "プレイヤー @2 のゲームモード @1 を設定できませんでした"
+msgid "Failed to set gamemode @1 for player @2"
+msgstr ""
+
+msgid "Player @1 is still in creative mode because world is in creative mode"
+msgstr ""
 
 msgid "Gamemode for player @1: @2"
 msgstr "プレイヤー@1のゲームモード:@2"

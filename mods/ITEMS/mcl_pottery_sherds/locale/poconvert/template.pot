@@ -13,78 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Angler"
-msgstr ""
-
-msgid "Archer"
-msgstr ""
-
-msgid "Arms Up"
-msgstr ""
-
-msgid "Blade"
-msgstr ""
-
-msgid "Brewer"
-msgstr ""
-
-msgid "Burn"
-msgstr ""
-
-msgid "Danger"
-msgstr ""
-
-msgid "Explorer"
-msgstr ""
-
-msgid "Friend"
-msgstr ""
-
-msgid "Heartbreak"
-msgstr ""
-
-msgid "Heart"
-msgstr ""
-
-msgid "Howl"
-msgstr ""
-
-msgid "Miner"
-msgstr ""
-
-msgid "Mourner"
-msgstr ""
-
-msgid "Plenty"
-msgstr ""
-
-msgid "Prize"
-msgstr ""
-
-msgid "Sheaf"
-msgstr ""
-
-msgid "Shelter"
-msgstr ""
-
-msgid "Skull"
-msgstr ""
-
-msgid "Snort"
-msgstr ""
-
-msgid "Flow"
-msgstr ""
-
-msgid "Guster"
-msgstr ""
-
-msgid "Scrape"
-msgstr ""
-
-msgid "@1 Pottery Sherd"
-msgstr ""
-
 msgid "Used for crafting decorated pots"
 msgstr ""
 
@@ -95,5 +23,74 @@ msgid "Pots are decorative blocks."
 msgstr ""
 
 msgid "Specially decorated pots can be crafted using pottery sherds"
+msgstr ""
+
+msgid "Angler Pottery Sherd"
+msgstr ""
+
+msgid "Archer Pottery Sherd"
+msgstr ""
+
+msgid "Arms Up Pottery Sherd"
+msgstr ""
+
+msgid "Blade Pottery Sherd"
+msgstr ""
+
+msgid "Brewer Pottery Sherd"
+msgstr ""
+
+msgid "Burn Pottery Sherd"
+msgstr ""
+
+msgid "Danger Pottery Sherd"
+msgstr ""
+
+msgid "Explorer Pottery Sherd"
+msgstr ""
+
+msgid "Flow Pottery Sherd"
+msgstr ""
+
+msgid "Friend Pottery Sherd"
+msgstr ""
+
+msgid "Guster Pottery Sherd"
+msgstr ""
+
+msgid "Heart Pottery Sherd"
+msgstr ""
+
+msgid "Heartbreak Pottery Sherd"
+msgstr ""
+
+msgid "Howl Pottery Sherd"
+msgstr ""
+
+msgid "Miner Pottery Sherd"
+msgstr ""
+
+msgid "Mourner Pottery Sherd"
+msgstr ""
+
+msgid "Plenty Pottery Sherd"
+msgstr ""
+
+msgid "Prize Pottery Sherd"
+msgstr ""
+
+msgid "Scrape Pottery Sherd"
+msgstr ""
+
+msgid "Sheaf Pottery Sherd"
+msgstr ""
+
+msgid "Shelter Pottery Sherd"
+msgstr ""
+
+msgid "Skull Pottery Sherd"
+msgstr ""
+
+msgid "Snort Pottery Sherd"
 msgstr ""
 

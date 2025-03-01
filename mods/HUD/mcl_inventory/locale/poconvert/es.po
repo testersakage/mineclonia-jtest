@@ -55,9 +55,6 @@ msgstr "Inventario de supervivencia"
 msgid "Not in Creative Inventory"
 msgstr "No está en el inventario de creativo"
 
-msgid "Advancements"
-msgstr "Progresos"
-
 msgid "Switch stack size"
 msgstr "Cambiar la cantidad de ítems por pila"
 
@@ -70,6 +67,9 @@ msgstr "Libro de recetas"
 msgid "Help"
 msgstr "Ayuda"
 
+msgid "Advancements"
+msgstr "Progresos"
+
 msgid "Select player skin"
 msgstr "Seleccionar aspecto del jugador"
 
@@ -81,7 +81,4 @@ msgstr "Fabricación"
 
 msgid "Fill Craft Grid"
 msgstr "Llenar la cuadrícula de fabricación"
-
-msgid "Achievements"
-msgstr "Logros"
 

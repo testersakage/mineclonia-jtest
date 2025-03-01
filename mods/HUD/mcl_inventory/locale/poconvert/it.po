@@ -55,9 +55,6 @@ msgstr ""
 msgid "Not in Creative Inventory"
 msgstr ""
 
-msgid "Advancements"
-msgstr "Progressi"
-
 msgid "Switch stack size"
 msgstr ""
 
@@ -70,6 +67,9 @@ msgstr "Libro delle ricette"
 msgid "Help"
 msgstr ""
 
+msgid "Advancements"
+msgstr "Progressi"
+
 msgid "Select player skin"
 msgstr ""
 
@@ -81,7 +81,4 @@ msgstr "Assemblaggio"
 
 msgid "Fill Craft Grid"
 msgstr ""
-
-msgid "Achievements"
-msgstr "Imprese"
 

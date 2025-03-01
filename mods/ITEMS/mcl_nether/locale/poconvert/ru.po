@@ -157,11 +157,8 @@ msgstr ""
 msgid "Applies to:"
 msgstr "Применяется для:"
 
-msgid "Diamond Armor"
-msgstr "Алмазная броня"
-
-msgid "Diamond Tools"
-msgstr "Алмазные инструменты"
+msgid "Diamond Equipment"
+msgstr ""
 
 msgid "Ingredients:"
 msgstr "Ингредиенты:"

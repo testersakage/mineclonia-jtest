@@ -94,8 +94,8 @@ msgstr "Enderkristall"
 msgid "Ignited by a punch or a hit with an arrow"
 msgstr "Entzündbar durch einen Schlag oder einen Treffer mit einem Pfeil"
 
-msgid "Explosion radius: @1"
-msgstr "Explosionsradius: @1"
+msgid "Explosion power: @1"
+msgstr ""
 
 msgid "End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."
 msgstr "Enderkristalle sind explosiv. Sie können auf Obsidian oder Grundgestein platziert werden. Man kann sie durch einen Schlag oder einen Treffer mit einem Pfeil entzünden. Außerdem können sie benutzt werden, um den Enderdrachen zu erzeugen, in dem man je einen auf jeder Seite des Endausgangsportals platziert."

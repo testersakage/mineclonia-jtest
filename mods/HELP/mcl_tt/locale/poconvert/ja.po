@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Unlimited uses"
+msgstr "無限に使用可能"
+
 msgid "Painfully slow"
 msgstr "苦痛レベルで遅い"
 
@@ -34,23 +37,14 @@ msgstr "とてつもなく速い"
 msgid "Instantaneous"
 msgstr "即時"
 
-msgid "Unlimited uses"
-msgstr "無限に使用可能"
-
 msgid "Mining speed: @1"
 msgstr "採掘速度：@1"
-
-msgid "Mining durability: @1"
-msgstr "採掘耐久度：@1"
 
 msgid "Block breaking strength: @1"
 msgstr "ブロック破壊力：@1"
 
 msgid "Damage: @1"
 msgstr "ダメージ：@1"
-
-msgid "Healing: @1"
-msgstr "回復：@1"
 
 msgid "Full punch interval: @1s"
 msgstr "全力攻撃の間隔：@1秒"
@@ -106,6 +100,9 @@ msgstr "発光：@1"
 msgid "@1 uses"
 msgstr "@1 使用"
 
+msgid "Durability: @1"
+msgstr "耐久度：@1"
+
 msgid "Head armor"
 msgstr "頭具"
 
@@ -153,7 +150,4 @@ msgstr "スケルトンに見つかる距離：-50%"
 
 msgid "Creeper view range: -50%"
 msgstr "クリーパーに見つかる距離：-50%"
-
-msgid "Durability: @1"
-msgstr "耐久度：@1"
 

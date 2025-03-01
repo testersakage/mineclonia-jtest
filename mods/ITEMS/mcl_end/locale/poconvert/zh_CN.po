@@ -94,8 +94,8 @@ msgstr "末影水晶"
 msgid "Ignited by a punch or a hit with an arrow"
 msgstr "通过击打或用箭射中点燃"
 
-msgid "Explosion radius: @1"
-msgstr "爆炸半径：@1"
+msgid "Explosion power: @1"
+msgstr ""
 
 msgid "End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."
 msgstr "末影水晶是爆炸装置。它们可放置在黑曜石或基岩上。通过击打或用箭射中可将其点燃。末影水晶也可通过放置在末地出口传送门的每一侧来召唤末影龙。"

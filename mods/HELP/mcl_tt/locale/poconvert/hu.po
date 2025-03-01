@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Unlimited uses"
+msgstr "Korlátlan használat"
+
 msgid "Painfully slow"
 msgstr "Irtó lassú"
 
@@ -34,23 +37,14 @@ msgstr "Irtó gyors"
 msgid "Instantaneous"
 msgstr "Villámgyors"
 
-msgid "Unlimited uses"
-msgstr "Korlátlan használat"
-
 msgid "Mining speed: @1"
 msgstr "Bányász sebesség: @1"
-
-msgid "Mining durability: @1"
-msgstr "Bányász tartósság: @1"
 
 msgid "Block breaking strength: @1"
 msgstr "Blokktörő erő: @1"
 
 msgid "Damage: @1"
 msgstr "Sérülés: @1"
-
-msgid "Healing: @1"
-msgstr "Gyógyítás: @1"
 
 msgid "Full punch interval: @1s"
 msgstr "Lendítési idő: @1s"
@@ -106,6 +100,9 @@ msgstr "Fényesség: @1"
 msgid "@1 uses"
 msgstr "@1 használat"
 
+msgid "Durability: @1"
+msgstr "Tartósság: @1"
+
 msgid "Head armor"
 msgstr "Sisak"
 
@@ -153,7 +150,4 @@ msgstr "Csontváz látótávolság: -50%"
 
 msgid "Creeper view range: -50%"
 msgstr "Creeper látótávolság: -50%"
-
-msgid "Durability: @1"
-msgstr "Tartósság: @1"
 

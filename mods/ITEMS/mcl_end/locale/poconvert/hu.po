@@ -94,8 +94,8 @@ msgstr "Végkristály"
 msgid "Ignited by a punch or a hit with an arrow"
 msgstr "Ütéssel vagy nyíllövéssel lángra gyújtható"
 
-msgid "Explosion radius: @1"
-msgstr "Robbanási kör: @1"
+msgid "Explosion power: @1"
+msgstr ""
 
 msgid "End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."
 msgstr "A végkristály egy robbanószerkezet. Obszidiánra vagy alapkőzetre helyezhetők. Gyújtsd be őket egy ütéssel vagy egy nyíllal. A végkristályok felhasználhatók a Végsárkány megidézéséhez is, ehhez a Végkijárat minden oldalára helyezz egyet."

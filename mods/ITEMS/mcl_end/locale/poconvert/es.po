@@ -94,8 +94,8 @@ msgstr "Cristal del End"
 msgid "Ignited by a punch or a hit with an arrow"
 msgstr "Explota por un golpe o un impacto de una flecha"
 
-msgid "Explosion radius: @1"
-msgstr "Radio de explosión: @1"
+msgid "Explosion power: @1"
+msgstr ""
 
 msgid "End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."
 msgstr "Los cristales del End son entidades explosivas. Se pueden colocar sobre obsidiana o bedrock. Hazlos explotar con un golpe o con una flecha. Los cristales finales también se pueden usar para generar al dragón de End colocando uno a cada lado del portal del End."

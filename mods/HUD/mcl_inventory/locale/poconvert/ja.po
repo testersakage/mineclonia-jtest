@@ -55,9 +55,6 @@ msgstr "サバイバル インベントリ"
 msgid "Not in Creative Inventory"
 msgstr ""
 
-msgid "Advancements"
-msgstr "進捗"
-
 msgid "Switch stack size"
 msgstr "スタックサイズを変更します"
 
@@ -70,6 +67,9 @@ msgstr "レシピ本"
 msgid "Help"
 msgstr "ヘルプ"
 
+msgid "Advancements"
+msgstr "進捗"
+
 msgid "Select player skin"
 msgstr "プレイヤースキン選択"
 
@@ -81,7 +81,4 @@ msgstr "クラフト"
 
 msgid "Fill Craft Grid"
 msgstr ""
-
-msgid "Achievements"
-msgstr "実績"
 

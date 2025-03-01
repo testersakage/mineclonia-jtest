@@ -19,31 +19,31 @@ msgstr ""
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr ""
 
-msgid "White Shield"
-msgstr ""
-
-msgid "Grey Shield"
-msgstr ""
-
-msgid "Light Grey Shield"
-msgstr ""
-
 msgid "Black Shield"
 msgstr ""
 
-msgid "Red Shield"
+msgid "Blue Shield"
 msgstr ""
 
-msgid "Yellow Shield"
-msgstr ""
-
-msgid "Green Shield"
+msgid "Brown Shield"
 msgstr ""
 
 msgid "Cyan Shield"
 msgstr ""
 
-msgid "Blue Shield"
+msgid "Green Shield"
+msgstr ""
+
+msgid "Grey Shield"
+msgstr ""
+
+msgid "Light Blue Shield"
+msgstr ""
+
+msgid "Light Grey Shield"
+msgstr ""
+
+msgid "Lime Shield"
 msgstr ""
 
 msgid "Magenta Shield"
@@ -52,18 +52,18 @@ msgstr ""
 msgid "Orange Shield"
 msgstr ""
 
-msgid "Violet Shield"
-msgstr ""
-
-msgid "Brown Shield"
-msgstr ""
-
 msgid "Pink Shield"
 msgstr ""
 
-msgid "Lime Shield"
+msgid "Purple Shield"
 msgstr ""
 
-msgid "Light Blue Shield"
+msgid "Red Shield"
+msgstr ""
+
+msgid "White Shield"
+msgstr ""
+
+msgid "Yellow Shield"
 msgstr ""
 

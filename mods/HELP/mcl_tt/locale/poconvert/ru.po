@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Unlimited uses"
+msgstr "не ограничено"
+
 msgid "Painfully slow"
 msgstr "Крайне медленно"
 
@@ -34,23 +37,14 @@ msgstr "Экстремально бвстро"
 msgid "Instantaneous"
 msgstr "мгновенно"
 
-msgid "Unlimited uses"
-msgstr "не ограничено"
-
 msgid "Mining speed: @1"
 msgstr "Скорость добычи: @1"
-
-msgid "Mining durability: @1"
-msgstr "Прочность при добыче: @1"
 
 msgid "Block breaking strength: @1"
 msgstr "Сила добычи: @1"
 
 msgid "Damage: @1"
 msgstr "Урон: @1"
-
-msgid "Healing: @1"
-msgstr "Исцеление: @1"
 
 msgid "Full punch interval: @1s"
 msgstr "Интервал удара: @1 с"
@@ -106,6 +100,9 @@ msgstr "Свечение: @1"
 msgid "@1 uses"
 msgstr "@1"
 
+msgid "Durability: @1"
+msgstr "Прочность: @1"
+
 msgid "Head armor"
 msgstr "Броня для головы"
 
@@ -153,7 +150,4 @@ msgstr "Дальность зрения скелета: -50%"
 
 msgid "Creeper view range: -50%"
 msgstr "Дальность зрения крипера: -50%"
-
-msgid "Durability: @1"
-msgstr "Прочность: @1"
 

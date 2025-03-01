@@ -94,8 +94,8 @@ msgstr "Kryształ Kresu"
 msgid "Ignited by a punch or a hit with an arrow"
 msgstr "Zapalane przez uderzenie lub strzałę"
 
-msgid "Explosion radius: @1"
-msgstr "Promień wybuchu: @1"
+msgid "Explosion power: @1"
+msgstr ""
 
 msgid "End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."
 msgstr "Kryształy kresu to wybuchowe narzędzia. Mogą być postawione na obsydianie bądź skale macierzystej. Zapal je uderzeniem bądź strzałą. Kryształy kresu mogą być również wykorzystane do przywołania smoka Kresu, jeśli ułoży się po jednym na każdym boku Portalu wyjścia z Kresu."

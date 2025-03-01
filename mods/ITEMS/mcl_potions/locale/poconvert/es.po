@@ -244,6 +244,30 @@ msgstr "Canalización"
 msgid "+@1% mining and attack speed in water"
 msgstr "+@1% de minado y velocidad de ataque en el agua"
 
+msgid "Infested"
+msgstr ""
+
+msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged"
+msgstr ""
+
+msgid "Oozing"
+msgstr ""
+
+msgid "Causes 2 medium slimes to spawn on death"
+msgstr ""
+
+msgid "Weaving"
+msgstr ""
+
+msgid "Causes 2-3 cobwebs to appear on death"
+msgstr ""
+
+msgid "Wind Charged"
+msgstr ""
+
+msgid "Causes a wind burst on death"
+msgstr ""
+
 msgid "Fermented Spider Eye"
 msgstr "Ojo de araña fermentado"
 
@@ -489,6 +513,30 @@ msgstr "Frasco ominoso"
 
 msgid "Attracts danger."
 msgstr "Atrae el peligro."
+
+msgid "of Infestation"
+msgstr ""
+
+msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."
+msgstr ""
+
+msgid "of Oozing"
+msgstr ""
+
+msgid "Causes 2 medium slimes to spawn on death. It not applies to slimes."
+msgstr ""
+
+msgid "of Weaving"
+msgstr ""
+
+msgid "Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."
+msgstr ""
+
+msgid "of Wind Charging"
+msgstr ""
+
+msgid "Causes A wind burst on death."
+msgstr ""
 
 msgid "Unknown Potion"
 msgstr "Poción desconocida"

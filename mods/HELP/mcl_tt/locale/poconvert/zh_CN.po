@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Unlimited uses"
+msgstr "可无限使用"
+
 msgid "Painfully slow"
 msgstr "超慢"
 
@@ -34,23 +37,14 @@ msgstr "极快"
 msgid "Instantaneous"
 msgstr "即时"
 
-msgid "Unlimited uses"
-msgstr "可无限使用"
-
 msgid "Mining speed: @1"
 msgstr "挖掘速率：@1"
-
-msgid "Mining durability: @1"
-msgstr "挖掘耐久：@1"
 
 msgid "Block breaking strength: @1"
 msgstr "破坏方块强度：@1"
 
 msgid "Damage: @1"
 msgstr "伤害：@1"
-
-msgid "Healing: @1"
-msgstr "治疗：@1"
 
 msgid "Full punch interval: @1s"
 msgstr "完整攻击间隔： @1秒"
@@ -106,6 +100,9 @@ msgstr "亮度：@1"
 msgid "@1 uses"
 msgstr "用了@1次"
 
+msgid "Durability: @1"
+msgstr "耐久度：@1"
+
 msgid "Head armor"
 msgstr "头盔"
 
@@ -153,7 +150,4 @@ msgstr "骷髅视野：-50%"
 
 msgid "Creeper view range: -50%"
 msgstr "苦力怕视野：-50%"
-
-msgid "Durability: @1"
-msgstr "耐久度：@1"
 

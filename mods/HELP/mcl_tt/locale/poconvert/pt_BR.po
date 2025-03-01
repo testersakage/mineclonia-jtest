@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Unlimited uses"
+msgstr "Usos ilimitados"
+
 msgid "Painfully slow"
 msgstr "Dolorosamente lento"
 
@@ -34,23 +37,14 @@ msgstr "Extremamente rápido"
 msgid "Instantaneous"
 msgstr ""
 
-msgid "Unlimited uses"
-msgstr "Usos ilimitados"
-
 msgid "Mining speed: @1"
 msgstr "Velocidade de mineração: @1"
-
-msgid "Mining durability: @1"
-msgstr "Durabilidade de mineração: @1"
 
 msgid "Block breaking strength: @1"
 msgstr "Força de quebra do bloco: @1"
 
 msgid "Damage: @1"
 msgstr " Dano: @1"
-
-msgid "Healing: @1"
-msgstr "Cura: @1"
 
 msgid "Full punch interval: @1s"
 msgstr "Intervalo completo de batida: @1s"
@@ -106,6 +100,9 @@ msgstr "Bliho: @1"
 msgid "@1 uses"
 msgstr "@1 usos"
 
+msgid "Durability: @1"
+msgstr "Durabilidade: @1"
+
 msgid "Head armor"
 msgstr "Armadura de cabeça"
 
@@ -153,7 +150,4 @@ msgstr "Alcançe de visão do esqueleto: -50%"
 
 msgid "Creeper view range: -50%"
 msgstr "Alcançe de visão do creeper: -50%"
-
-msgid "Durability: @1"
-msgstr "Durabilidade: @1"
 

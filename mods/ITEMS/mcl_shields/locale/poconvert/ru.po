@@ -19,32 +19,32 @@ msgstr "Щит"
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr "Щит это инструмент, используемый для защиты игрока от атак."
 
-msgid "White Shield"
-msgstr "Белый щит"
-
-msgid "Grey Shield"
-msgstr "Серый щит"
-
-msgid "Light Grey Shield"
-msgstr "Светло-серый щит"
-
 msgid "Black Shield"
 msgstr "Чёрный щит"
 
-msgid "Red Shield"
-msgstr "Красный щит"
+msgid "Blue Shield"
+msgstr "Синий щит"
 
-msgid "Yellow Shield"
-msgstr "Жёлтый щит"
-
-msgid "Green Shield"
-msgstr "Зелёный щит"
+msgid "Brown Shield"
+msgstr "Коричневый щит"
 
 msgid "Cyan Shield"
 msgstr "Бирюзовый щит"
 
-msgid "Blue Shield"
-msgstr "Синий щит"
+msgid "Green Shield"
+msgstr "Зелёный щит"
+
+msgid "Grey Shield"
+msgstr "Серый щит"
+
+msgid "Light Blue Shield"
+msgstr "Голубой щит"
+
+msgid "Light Grey Shield"
+msgstr "Светло-серый щит"
+
+msgid "Lime Shield"
+msgstr "Лаймовый щит"
 
 msgid "Magenta Shield"
 msgstr "Сиреневый щит"
@@ -52,18 +52,18 @@ msgstr "Сиреневый щит"
 msgid "Orange Shield"
 msgstr "Оранжевый щит"
 
-msgid "Violet Shield"
-msgstr "Фиолетовый щит"
-
-msgid "Brown Shield"
-msgstr "Коричневый щит"
-
 msgid "Pink Shield"
 msgstr "Розовый щит"
 
-msgid "Lime Shield"
-msgstr "Лаймовый щит"
+msgid "Purple Shield"
+msgstr ""
 
-msgid "Light Blue Shield"
-msgstr "Голубой щит"
+msgid "Red Shield"
+msgstr "Красный щит"
+
+msgid "White Shield"
+msgstr "Белый щит"
+
+msgid "Yellow Shield"
+msgstr "Жёлтый щит"
 

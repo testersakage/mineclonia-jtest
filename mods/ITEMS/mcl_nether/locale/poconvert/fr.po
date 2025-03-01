@@ -157,11 +157,8 @@ msgstr "Modèle de forge"
 msgid "Applies to:"
 msgstr "S'applique à :"
 
-msgid "Diamond Armor"
-msgstr "Armure en diamant"
-
-msgid "Diamond Tools"
-msgstr "Outils en diamant"
+msgid "Diamond Equipment"
+msgstr ""
 
 msgid "Ingredients:"
 msgstr "Ingrédients :"

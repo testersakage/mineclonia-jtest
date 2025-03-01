@@ -13,78 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Angler"
-msgstr "de pêcheur"
-
-msgid "Archer"
-msgstr "d'archer"
-
-msgid "Arms Up"
-msgstr "de figure"
-
-msgid "Blade"
-msgstr "de lame"
-
-msgid "Brewer"
-msgstr "d'alchimiste"
-
-msgid "Burn"
-msgstr "de feu"
-
-msgid "Danger"
-msgstr "de danger"
-
-msgid "Explorer"
-msgstr "d'explorateur"
-
-msgid "Friend"
-msgstr "d'ami"
-
-msgid "Heartbreak"
-msgstr "de coeur brisé"
-
-msgid "Heart"
-msgstr "de coeur"
-
-msgid "Howl"
-msgstr "de loup"
-
-msgid "Miner"
-msgstr "de mineur"
-
-msgid "Mourner"
-msgstr "de pleureur"
-
-msgid "Plenty"
-msgstr "de richesse"
-
-msgid "Prize"
-msgstr "de joyau"
-
-msgid "Sheaf"
-msgstr "d'épis"
-
-msgid "Shelter"
-msgstr "d'abri"
-
-msgid "Skull"
-msgstr "de crâne"
-
-msgid "Snort"
-msgstr "de renifleur"
-
-msgid "Flow"
-msgstr "de tourbillon"
-
-msgid "Guster"
-msgstr "de rafaleur"
-
-msgid "Scrape"
-msgstr "de hache"
-
-msgid "@1 Pottery Sherd"
-msgstr "Tesson de poterie @1"
-
 msgid "Used for crafting decorated pots"
 msgstr "Utilisé pour fabriquer des vases décorés"
 
@@ -96,4 +24,73 @@ msgstr "Les vases sont des blocs décoratifs."
 
 msgid "Specially decorated pots can be crafted using pottery sherds"
 msgstr "Des vases spécialement décorés peuvent être fabriqués à partir de tessons de poterie"
+
+msgid "Angler Pottery Sherd"
+msgstr ""
+
+msgid "Archer Pottery Sherd"
+msgstr ""
+
+msgid "Arms Up Pottery Sherd"
+msgstr ""
+
+msgid "Blade Pottery Sherd"
+msgstr ""
+
+msgid "Brewer Pottery Sherd"
+msgstr ""
+
+msgid "Burn Pottery Sherd"
+msgstr ""
+
+msgid "Danger Pottery Sherd"
+msgstr ""
+
+msgid "Explorer Pottery Sherd"
+msgstr ""
+
+msgid "Flow Pottery Sherd"
+msgstr ""
+
+msgid "Friend Pottery Sherd"
+msgstr ""
+
+msgid "Guster Pottery Sherd"
+msgstr ""
+
+msgid "Heart Pottery Sherd"
+msgstr ""
+
+msgid "Heartbreak Pottery Sherd"
+msgstr ""
+
+msgid "Howl Pottery Sherd"
+msgstr ""
+
+msgid "Miner Pottery Sherd"
+msgstr ""
+
+msgid "Mourner Pottery Sherd"
+msgstr ""
+
+msgid "Plenty Pottery Sherd"
+msgstr ""
+
+msgid "Prize Pottery Sherd"
+msgstr ""
+
+msgid "Scrape Pottery Sherd"
+msgstr ""
+
+msgid "Sheaf Pottery Sherd"
+msgstr ""
+
+msgid "Shelter Pottery Sherd"
+msgstr ""
+
+msgid "Skull Pottery Sherd"
+msgstr ""
+
+msgid "Snort Pottery Sherd"
+msgstr ""
 

@@ -19,32 +19,32 @@ msgstr "盾牌"
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr ""
 
-msgid "White Shield"
-msgstr "白色盾牌"
-
-msgid "Grey Shield"
-msgstr "灰色盾牌"
-
-msgid "Light Grey Shield"
-msgstr "淺灰色盾牌"
-
 msgid "Black Shield"
 msgstr "黑色盾牌"
 
-msgid "Red Shield"
-msgstr "紅色盾牌"
+msgid "Blue Shield"
+msgstr "藍色盾牌"
 
-msgid "Yellow Shield"
-msgstr "黃色盾牌"
-
-msgid "Green Shield"
-msgstr "綠色盾牌"
+msgid "Brown Shield"
+msgstr "棕色盾牌"
 
 msgid "Cyan Shield"
 msgstr "青色盾牌"
 
-msgid "Blue Shield"
-msgstr "藍色盾牌"
+msgid "Green Shield"
+msgstr "綠色盾牌"
+
+msgid "Grey Shield"
+msgstr "灰色盾牌"
+
+msgid "Light Blue Shield"
+msgstr "淺藍色盾牌"
+
+msgid "Light Grey Shield"
+msgstr "淺灰色盾牌"
+
+msgid "Lime Shield"
+msgstr "淺綠色盾牌"
 
 msgid "Magenta Shield"
 msgstr "洋紅色盾牌"
@@ -52,18 +52,18 @@ msgstr "洋紅色盾牌"
 msgid "Orange Shield"
 msgstr "橙色盾牌"
 
-msgid "Violet Shield"
-msgstr ""
-
-msgid "Brown Shield"
-msgstr "棕色盾牌"
-
 msgid "Pink Shield"
 msgstr "粉紅色盾牌"
 
-msgid "Lime Shield"
-msgstr "淺綠色盾牌"
+msgid "Purple Shield"
+msgstr ""
 
-msgid "Light Blue Shield"
-msgstr "淺藍色盾牌"
+msgid "Red Shield"
+msgstr "紅色盾牌"
+
+msgid "White Shield"
+msgstr "白色盾牌"
+
+msgid "Yellow Shield"
+msgstr "黃色盾牌"
 

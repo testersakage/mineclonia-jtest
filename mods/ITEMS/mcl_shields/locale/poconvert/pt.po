@@ -19,32 +19,32 @@ msgstr "Escudo"
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr ""
 
-msgid "White Shield"
-msgstr "Escudo branco"
-
-msgid "Grey Shield"
-msgstr "Escudo cinzento"
-
-msgid "Light Grey Shield"
-msgstr "Escudo cinzento-claro"
-
 msgid "Black Shield"
 msgstr "Escudo preto"
 
-msgid "Red Shield"
-msgstr "Escudo vermelho"
+msgid "Blue Shield"
+msgstr "Escudo azul"
 
-msgid "Yellow Shield"
-msgstr "Escudo amarelo"
-
-msgid "Green Shield"
-msgstr "Escudo verde"
+msgid "Brown Shield"
+msgstr "Escudo castanho"
 
 msgid "Cyan Shield"
 msgstr "Escudo cíano"
 
-msgid "Blue Shield"
-msgstr "Escudo azul"
+msgid "Green Shield"
+msgstr "Escudo verde"
+
+msgid "Grey Shield"
+msgstr "Escudo cinzento"
+
+msgid "Light Blue Shield"
+msgstr "Escudo azul-claro"
+
+msgid "Light Grey Shield"
+msgstr "Escudo cinzento-claro"
+
+msgid "Lime Shield"
+msgstr "Escudo verde-lima"
 
 msgid "Magenta Shield"
 msgstr "Escudo magenta"
@@ -52,18 +52,18 @@ msgstr "Escudo magenta"
 msgid "Orange Shield"
 msgstr "Escudo laranja"
 
-msgid "Violet Shield"
-msgstr "Escudo roxo"
-
-msgid "Brown Shield"
-msgstr "Escudo castanho"
-
 msgid "Pink Shield"
 msgstr "Escudo rosa"
 
-msgid "Lime Shield"
-msgstr "Escudo verde-lima"
+msgid "Purple Shield"
+msgstr ""
 
-msgid "Light Blue Shield"
-msgstr "Escudo azul-claro"
+msgid "Red Shield"
+msgstr "Escudo vermelho"
+
+msgid "White Shield"
+msgstr "Escudo branco"
+
+msgid "Yellow Shield"
+msgstr "Escudo amarelo"
 

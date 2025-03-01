@@ -94,7 +94,7 @@ msgstr ""
 msgid "Ignited by a punch or a hit with an arrow"
 msgstr ""
 
-msgid "Explosion radius: @1"
+msgid "Explosion power: @1"
 msgstr ""
 
 msgid "End Crystals are explosive devices. They can be placed on Obsidian or Bedrock. Ignite them by a punch or a hit with an arrow. End Crystals can also be used the spawn the Ender Dragon by placing one at each side of the End Exit Portal."

@@ -157,11 +157,8 @@ msgstr "Plantilla de herrería"
 msgid "Applies to:"
 msgstr "Se aplica a:"
 
-msgid "Diamond Armor"
-msgstr "Armadura de diamante"
-
-msgid "Diamond Tools"
-msgstr "Herramientas de diamante"
+msgid "Diamond Equipment"
+msgstr ""
 
 msgid "Ingredients:"
 msgstr "Ingredientes:"

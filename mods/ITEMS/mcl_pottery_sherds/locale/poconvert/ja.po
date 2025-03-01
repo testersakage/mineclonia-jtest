@@ -13,78 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Angler"
-msgstr "釣り人"
-
-msgid "Archer"
-msgstr "射手"
-
-msgid "Arms Up"
-msgstr "両腕を挙"
-
-msgid "Blade"
-msgstr "剣"
-
-msgid "Brewer"
-msgstr "醸造家"
-
-msgid "Burn"
-msgstr "炎"
-
-msgid "Danger"
-msgstr "脅威"
-
-msgid "Explorer"
-msgstr "探検家"
-
-msgid "Friend"
-msgstr "友"
-
-msgid "Heartbreak"
-msgstr "傷心"
-
-msgid "Heart"
-msgstr "心"
-
-msgid "Howl"
-msgstr "遠吠え"
-
-msgid "Miner"
-msgstr "鉱夫"
-
-msgid "Mourner"
-msgstr "哀悼者"
-
-msgid "Plenty"
-msgstr "富"
-
-msgid "Prize"
-msgstr "宝物"
-
-msgid "Sheaf"
-msgstr "麦束"
-
-msgid "Shelter"
-msgstr "木陰"
-
-msgid "Skull"
-msgstr "頭蓋骨"
-
-msgid "Snort"
-msgstr "鼻を鳴らす動物"
-
-msgid "Flow"
-msgstr "渦巻"
-
-msgid "Guster"
-msgstr "風巻く者"
-
-msgid "Scrape"
-msgstr "斧"
-
-msgid "@1 Pottery Sherd"
-msgstr "@1の壺の欠片"
-
 msgid "Used for crafting decorated pots"
 msgstr ""
 
@@ -95,5 +23,74 @@ msgid "Pots are decorative blocks."
 msgstr ""
 
 msgid "Specially decorated pots can be crafted using pottery sherds"
+msgstr ""
+
+msgid "Angler Pottery Sherd"
+msgstr ""
+
+msgid "Archer Pottery Sherd"
+msgstr ""
+
+msgid "Arms Up Pottery Sherd"
+msgstr ""
+
+msgid "Blade Pottery Sherd"
+msgstr ""
+
+msgid "Brewer Pottery Sherd"
+msgstr ""
+
+msgid "Burn Pottery Sherd"
+msgstr ""
+
+msgid "Danger Pottery Sherd"
+msgstr ""
+
+msgid "Explorer Pottery Sherd"
+msgstr ""
+
+msgid "Flow Pottery Sherd"
+msgstr ""
+
+msgid "Friend Pottery Sherd"
+msgstr ""
+
+msgid "Guster Pottery Sherd"
+msgstr ""
+
+msgid "Heart Pottery Sherd"
+msgstr ""
+
+msgid "Heartbreak Pottery Sherd"
+msgstr ""
+
+msgid "Howl Pottery Sherd"
+msgstr ""
+
+msgid "Miner Pottery Sherd"
+msgstr ""
+
+msgid "Mourner Pottery Sherd"
+msgstr ""
+
+msgid "Plenty Pottery Sherd"
+msgstr ""
+
+msgid "Prize Pottery Sherd"
+msgstr ""
+
+msgid "Scrape Pottery Sherd"
+msgstr ""
+
+msgid "Sheaf Pottery Sherd"
+msgstr ""
+
+msgid "Shelter Pottery Sherd"
+msgstr ""
+
+msgid "Skull Pottery Sherd"
+msgstr ""
+
+msgid "Snort Pottery Sherd"
 msgstr ""
 

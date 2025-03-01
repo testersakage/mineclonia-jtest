@@ -13,11 +13,14 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Secret Award Unlocked: @1"
-msgstr "秘密獎勵已解鎖：@1"
+msgid "@1 has made the advancement @2"
+msgstr ""
 
-msgid "Award Unlocked: @1"
-msgstr "獎勵已解鎖：@1"
+msgid "Secret Advancement Unlocked: @1"
+msgstr ""
+
+msgid "Advancement Unlocked: @1"
+msgstr ""
 
 msgid "Secret Advancement Made!"
 msgstr "秘密進度達成！"
@@ -34,59 +37,59 @@ msgstr "進度達成！"
 msgid "[c|clear|disable|enable]"
 msgstr "[c|clear|disable|enable]"
 
-msgid "Show, clear, disable or enable your awards"
-msgstr "顯示、清除、停用或啟用你的獎勵"
+msgid "Show, clear, disable or enable your advancements"
+msgstr ""
 
-msgid "All your awards and statistics have been cleared. You can now start again."
-msgstr "你的所有獎勵和統計數據已經清除。你現在可以重新開始。"
+msgid "All your advancements and statistics have been cleared. You can now start again."
+msgstr ""
 
-msgid "You have disabled awards."
-msgstr "你已停用獎勵。"
+msgid "You have disabled advancements."
+msgstr ""
 
-msgid "You have enabled awards."
-msgstr "你已啟用獎勵。"
+msgid "You have enabled advancements."
+msgstr ""
 
-msgid "<award ID>"
-msgstr "<獎勵 ID>"
+msgid "<advancement ID>"
+msgstr ""
 
-msgid "Show details of an award"
-msgstr "顯示獎勵詳情"
+msgid "Show details of an advancement"
+msgstr ""
 
-msgid "Award not found."
-msgstr "找不到獎勵。"
+msgid "Advancement not found."
+msgstr ""
 
 msgid "<name>"
 msgstr "<名稱>"
 
-msgid "Get the awards statistics for the given player or yourself"
-msgstr "取得指定玩家或自己的獎勵統計資料"
+msgid "Get the advancement statistics for the given player or yourself"
+msgstr ""
 
-msgid "Error: No achivements available."
-msgstr "錯誤：找不到成就。"
+msgid "Error: No advancements available."
+msgstr ""
 
 msgid "OK"
 msgstr "好的"
 
-msgid "(Secret Award)"
-msgstr "（祕密獎勵）"
+msgid "(Secret Advancement)"
+msgstr ""
 
-msgid "Unlock this award to find out what it is."
-msgstr "解鎖此獎勵以瞭解其內容。"
+msgid "Unlock this advancement to find out what it is."
+msgstr ""
 
 msgid "@1 (unlocked)"
 msgstr "@1 （未解鎖）"
 
-msgid "You've disabled awards. Type /awards enable to reenable."
-msgstr "你已停用獎勵，輸入 /awards enable 來重新啟用它。"
+msgid "You've disabled advancements. Type /awards enable to reenable."
+msgstr ""
 
-msgid "Error: No award available."
-msgstr "錯誤：沒有可用的獎勵。"
+msgid "Error: No advancement available."
+msgstr ""
 
-msgid "You have not unlocked any awards."
-msgstr "你尚未解鎖任何獎勵。"
+msgid "You have not unlocked any advancement."
+msgstr ""
 
-msgid "@1’s awards:"
-msgstr "@1 的獎勵："
+msgid "@1’s advancement:"
+msgstr ""
 
 msgid "@1/@2 chat messages"
 msgstr "@1/@2 項聊天訊息"

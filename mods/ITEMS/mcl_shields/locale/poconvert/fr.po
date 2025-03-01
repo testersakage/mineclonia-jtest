@@ -19,32 +19,32 @@ msgstr "Bouclier"
 msgid "A shield is a tool used for protecting the player against attacks."
 msgstr "Un bouclier est un outil utilisé pour protéger le joueur contre les attaques."
 
-msgid "White Shield"
-msgstr "Bouclier blanc"
-
-msgid "Grey Shield"
-msgstr "Bouclier gris"
-
-msgid "Light Grey Shield"
-msgstr "Bouclier gris clair"
-
 msgid "Black Shield"
 msgstr "Bouclier noir"
 
-msgid "Red Shield"
-msgstr "Bouclier rouge"
+msgid "Blue Shield"
+msgstr "Bouclier bleu"
 
-msgid "Yellow Shield"
-msgstr "Bouclier jaune"
-
-msgid "Green Shield"
-msgstr "Bouclier vert"
+msgid "Brown Shield"
+msgstr "Bouclier marron"
 
 msgid "Cyan Shield"
 msgstr "Bouclier cyan"
 
-msgid "Blue Shield"
-msgstr "Bouclier bleu"
+msgid "Green Shield"
+msgstr "Bouclier vert"
+
+msgid "Grey Shield"
+msgstr "Bouclier gris"
+
+msgid "Light Blue Shield"
+msgstr "Bouclier bleu clair"
+
+msgid "Light Grey Shield"
+msgstr "Bouclier gris clair"
+
+msgid "Lime Shield"
+msgstr "Bouclier vert clair"
 
 msgid "Magenta Shield"
 msgstr "Bouclier magenta"
@@ -52,18 +52,18 @@ msgstr "Bouclier magenta"
 msgid "Orange Shield"
 msgstr "Bouclier orange"
 
-msgid "Violet Shield"
-msgstr "Bouclier violet"
-
-msgid "Brown Shield"
-msgstr "Bouclier marron"
-
 msgid "Pink Shield"
 msgstr "Bouclier rose"
 
-msgid "Lime Shield"
-msgstr "Bouclier vert clair"
+msgid "Purple Shield"
+msgstr ""
 
-msgid "Light Blue Shield"
-msgstr "Bouclier bleu clair"
+msgid "Red Shield"
+msgstr "Bouclier rouge"
+
+msgid "White Shield"
+msgstr "Bouclier blanc"
+
+msgid "Yellow Shield"
+msgstr "Bouclier jaune"
 
