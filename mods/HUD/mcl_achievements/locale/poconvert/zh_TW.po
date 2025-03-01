@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-01 13:33+0000\n"
+"Last-Translator: ellesheepy <your.sheepy@gmail.com>\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_achievements/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 msgid "Benchmarking"
 msgstr "量枘製鑿"
@@ -23,7 +24,7 @@ msgid "Time to Mine!"
 msgstr "來挖掘吧！"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr "使用合成台用木板和木棒合成木鎬。"
+msgstr "用木板和木棒，在合成台上合成出一柄木鎬。"
 
 msgid "Hot Topic"
 msgstr "熱門焦點"
@@ -35,55 +36,55 @@ msgid "Time to Farm!"
 msgstr "來農耕吧！"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr ""
+msgstr "用木板和木棒，在合成台上合成出一柄木鋤。"
 
 msgid "Bake Bread"
 msgstr "麵包烘焙"
 
 msgid "Use wheat to craft a bread."
-msgstr ""
+msgstr "用小麥合成出一條麵包。"
 
 msgid "The Lie"
 msgstr "謊言"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr ""
+msgstr "用小麥、糖、牛奶和雞蛋合成出一個蛋糕。"
 
 msgid "Getting an Upgrade"
 msgstr "挖掘升級！"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr ""
+msgstr "用鵝卵石和木棒合成出一柄石鎬。"
 
 msgid "Time to Strike!"
 msgstr "來出擊吧！"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr ""
+msgstr "用木板和木棒合成出一柄木劍。"
 
 msgid "Librarian"
 msgstr "圖書管理員"
 
 msgid "Craft a bookshelf."
-msgstr ""
+msgstr "合成一座書架。"
 
 msgid "Isn't It Iron Pick"
 msgstr "破銅煉鐵"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr ""
+msgstr "用鐵錠和木棒合成出一柄鐵鎬。"
 
 msgid "DIAMONDS!"
 msgstr "璀璨耀眼"
 
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "獲得鑽石。"
 
 msgid "Into Fire"
 msgstr "火中取栗"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr ""
+msgstr "獲得烈焰桿。"
 
 msgid "Cow Tipper"
 msgstr "鬥牛勇士"
@@ -91,6 +92,8 @@ msgstr "鬥牛勇士"
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
 msgstr ""
+"獲得皮革。\n"
+"提示：牛是可靠的皮革來源。"
 
 msgid "Getting Wood"
 msgstr "一草一木"
@@ -98,31 +101,33 @@ msgstr "一草一木"
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
+"獲得原木。\n"
+"提示：毆打樹幹直到它屈服。"
 
 msgid "Who is Cutting Onions?"
 msgstr "抹去眼淚"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "獲得哭泣的黑曜石。"
 
 msgid "Hidden in the Depths"
 msgstr "深藏不露"
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr ""
+msgstr "獲得遠古遺骸。"
 
 msgid "The Next Generation"
 msgstr "新世代"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
-msgstr ""
+msgstr "獲得龍蛋。"
 
 msgid "Sky's the Limit"
-msgstr "沖上雲霄"
+msgstr "衝上雲霄"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
-msgstr ""
+msgstr "獲得鞘翅，準備展翅翱翔！"
 
 msgid "Acquire Hardware"
 msgstr "吃飯傢伙"
@@ -130,6 +135,8 @@ msgstr "吃飯傢伙"
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
 msgstr ""
+"從熔爐中取出鐵錠。\n"
+"提示：將鐵礦和燃料加入熔爐，冶煉就會自動開始。"
 
 msgid "Delicious Fish"
 msgstr "年年有魚"
@@ -137,6 +144,8 @@ msgstr "年年有魚"
 msgid "Take a cooked fish from a furnace.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
+"從熔爐中取出烤魚。\n"
+"提示：用釣竿獲得魚，然後用熔爐烤。"
 
 msgid "On A Rail"
 msgstr "東方快車"
@@ -148,19 +157,19 @@ msgid "Sniper Duel"
 msgstr "狙擊對決"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
-msgstr ""
+msgstr "用弓箭在最少 20 米外狙殺一隻骷髏、凋零骷髏或流浪者。"
 
 msgid "Monster Hunter"
 msgstr "魔物獵人"
 
 msgid "Kill a monster."
-msgstr ""
+msgstr "獵殺一隻怪物。"
 
 msgid "We Need to Go Deeper"
 msgstr "潛行凶間"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
-msgstr ""
+msgstr "用黑曜石和生火工具做出一扇地獄傳送門。"
 
 msgid "The End?"
 msgstr "終了？"
@@ -176,30 +185,32 @@ msgstr "赴湯蹈火"
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
 msgstr ""
+"準備清涼穿著。\n"
+"提示：進入地獄。"
 
 msgid "Postmortal"
 msgstr "置之死地"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr ""
+msgstr "用不死圖騰逃避死亡。"
 
 msgid "Sweet Dreams"
 msgstr "一夜好眠"
 
 msgid "Sleep in a bed to change your respawn point."
-msgstr ""
+msgstr "在床上入睡，改變重生點。"
 
 msgid "Not Quite \"Nine\" Lives"
 msgstr "貓有九命"
 
 msgid "Charge a Respawn Anchor to the maximum."
-msgstr ""
+msgstr "將一個重生錨充到最滿。"
 
 msgid "What A Deal!"
 msgstr "貨如輪轉"
 
 msgid "Successfully trade with a Villager."
-msgstr ""
+msgstr "成功與村民交易。"
 
 msgid "Tactical Fishing"
 msgstr "求生捕魚術"
@@ -376,4 +387,3 @@ msgstr "亂世凶年"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
-
