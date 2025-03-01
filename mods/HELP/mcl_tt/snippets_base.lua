@@ -6,12 +6,6 @@ local function newline(str)
 	return str
 end
 
-local function newtab(str)
-	if str ~= "" then str = str .. "\t" end
-
-	return str
-end
-
 -- Capabilities for tools and melee weapon
 tt.register_snippet(function(itemstring, toolcaps, _)
 	local final_result = ""
@@ -22,8 +16,8 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 	if not (tool or weapon) or not toolcaps then return end
 
 	local caplines = 0
-	local mining_caps = newline(S("When mining:"))
-	local attack_caps = newline(S("When attacking:"))
+	local mining_caps = ""
+	local attack_caps = ""
 
 	for _, v in pairs(toolcaps.groupcaps) do
 		caplines = caplines + 1
@@ -60,7 +54,7 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 
 		if not speed_classes[speed_class] and speed_class > 7 then speed_class = 7 end
 
-		mining_caps = newtab(mining_caps) .. S("Mining speed: @1", speed_classes[speed_class])
+		mining_caps = mining_caps .. S("Mining speed: @1", speed_classes[speed_class])
 
 		break
 	end
@@ -70,19 +64,19 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 
 		local mdl = toolcaps.max_drop_level or 0
 
-		mining_caps = newtab(mining_caps) .. S("Block breaking strength: @1", mdl)
+		mining_caps = mining_caps .. S("Block breaking strength: @1", mdl)
 	end
 
 	if toolcaps.damage_groups then
 		for group, damage in pairs(toolcaps.damage_groups) do
 			if group == "fleshy" and damage >= 0 then
-				attack_caps = newtab(attack_caps) .. S("Damage: @1", damage)
+				attack_caps = attack_caps .. S("Damage: @1", damage)
 			end
 		end
 
 		local fpi = math.floor(toolcaps.full_punch_interval * 100 + 0.5) / 100
 
-		attack_caps = newtab(newline(attack_caps)) .. S("Full punch interval: @1s", fpi)
+		attack_caps = newline(attack_caps) .. S("Full punch interval: @1s", fpi)
 	end
 
 	if tool then
