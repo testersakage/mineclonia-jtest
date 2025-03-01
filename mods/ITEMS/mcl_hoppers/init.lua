@@ -40,6 +40,9 @@ local function hopper_collect(pos)
 	return success
 end
 
+-- This tries to check if a node can be considered "full" or not. This in order
+-- to make items get sucked through nodes like mud, like they are supposed to.
+-- The check may erroneuosly classify some nodes as not solid.
 local function is_full_solid(pos, nodename)
 	local boxes = core.get_node_boxes("collision_box", pos)
 	if boxes and boxes[1] and boxes[1][5] < 0.5 then return false end
