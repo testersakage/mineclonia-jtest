@@ -4313,8 +4313,8 @@ local function register_decorations()
 			place_on = {"mcl_core:dirt_with_grass"},
 			sidelen = 80,
 			noise_params = {
-				offset = 0.007,
-				scale = 0.08,
+				offset = 0.0005,
+				scale = 0.015,
 				spread = {x = 250, y = 250, z = 250},
 				seed = 13+i,
 				octaves = 3,
@@ -4939,7 +4939,7 @@ local function register_decorations()
 	minetest.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt_with_grass"},
-		fill_ratio = 0.6,
+		fill_ratio = 0.1,
 		biomes = {"CherryGrove"},
 		y_min = mcl_vars.mg_overworld_min,
 		y_max = mcl_vars.mg_overworld_max,
