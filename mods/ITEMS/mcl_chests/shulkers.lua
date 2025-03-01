@@ -10,6 +10,7 @@ local canonical_shulker_color = "violet"
 local normal_canonical_name = "mcl_chests:" .. canonical_shulker_color .. "_shulker_box"
 local small_canonical_name = normal_canonical_name .. "_small"
 local num_tt_stacks = 5 --number of stacks to show in shulker tooltip
+local shulker_tt_empty = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents")
 
 --WARNING: after formspec v4 update, old shulker boxes will need to be placed again to get the new formspec
 local function formspec_shulker_box(name)
@@ -55,15 +56,19 @@ tt.register_snippet(function(itemstring, _ , itemstack)
 			local stack = ItemStack(v)
 			if not stack:is_empty() then
 				if i < num_tt_stacks then
-					d = d .. "\n " ..(stack:get_short_description() or stack:get_description()) .. ( stack:get_count() > 1 and (" x"..stack:get_count()) or "" )
+					local newline = d ~= "" and "\n" or ""
+					local item = core.strip_colors(stack:get_short_description() or stack:get_description())
+					local count = (stack:get_count() > 1 and ("x"..stack:get_count()) or "")
+					d = d..newline..item.." "..count
 				end
 				i = i + 1
 			end
 		end
 		if d ~= "" and i - num_tt_stacks > 0 then
-			d = d .. "\n and "..tostring(i - num_tt_stacks).." more"
+			d = d .. "\n "..S("and @1 more", tostring(i - num_tt_stacks))
 		end
-		return d, mcl_colors.WHITE
+		if i > 0 then return d, mcl_colors.GRAY end
+		return shulker_tt_empty, mcl_colors.GREEN
 	end
 end)
 
@@ -115,7 +120,7 @@ for c, cdef in pairs(mcl_dyes.colors) do
 
 	minetest.register_node(normal_name, {
 		description = desc,
-		_tt_help = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents"),
+		_tt_help = shulker_tt_empty,
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = entry_name,
 		_doc_items_longdesc = longdesc,
@@ -189,7 +194,7 @@ for c, cdef in pairs(mcl_dyes.colors) do
 
 	minetest.register_node(small_name, {
 		description = desc,
-		_tt_help = S("27 inventory slots") .. "\n" .. S("Can be carried around with its contents"),
+		_tt_help = shulker_tt_empty,
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = entry_name,
 		_doc_items_longdesc = longdesc,
@@ -302,7 +307,7 @@ for c, cdef in pairs(mcl_dyes.colors) do
 			local meta = minetest.get_meta(pos)
 			local inv = meta:get_inventory()
 			return inv, "main",
-				mcl_util.select_stack(hop_inv, hop_list, inv, "main", mcl_chests.is_not_shulker_box, 1)
+				mcl_util.select_stack(hop_inv, hop_list, inv, "main", mcl_chests.is_not_shulker_box)
 		end,
 	})
 
