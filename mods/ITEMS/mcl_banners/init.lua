@@ -636,6 +636,13 @@ local entity_standing = {
 		return core.serialize(out)
 	end,
 	on_activate = function(self, staticdata)
+		self:_set_banner_node()
+		if core.get_item_group(core.get_node(self._node_pos).name, "banner") <= 0 then
+			core.log("warning", "[mcl_banners] Orphan banner entity found at "..core.pos_to_string(self.object:get_pos(), 0).." removing it.")
+			self.object:remove()
+			return
+		end
+
 		if staticdata and staticdata ~= "" then
 			local inp = core.deserialize(staticdata)
 			self._base_color = inp._base_color
@@ -663,6 +670,9 @@ local entity_standing = {
 		end
 		self.object:set_properties({textures = {mcl_banners.make_banner_texture(self._base_color, self._layers)}})
 	end,
+	_set_banner_node = function(self)
+		self._node_pos = self.object:get_pos()
+	end,
 	_mcl_pistons_unmovable = true
 }
 core.register_entity("mcl_banners:standing_banner", entity_standing)
@@ -670,7 +680,11 @@ core.register_entity("mcl_banners:standing_banner", entity_standing)
 local entity_hanging = table.copy(entity_standing)
 entity_hanging.initial_properties.visual_size = { x=2.499, y=2.28 }
 entity_hanging.initial_properties.mesh = "amc_banner_hanging.b3d"
-core.register_entity("mcl_banners:hanging_banner", entity_hanging)
+core.register_entity("mcl_banners:hanging_banner", table.merge(entity_hanging, {
+	_set_banner_node = function(self)
+		self._node_pos = vector.offset(self.object:get_pos(), 0, 1, 0)
+	end
+}))
 
 -- FIXME: Prevent entity destruction by /clearobjects
 core.register_lbm({
