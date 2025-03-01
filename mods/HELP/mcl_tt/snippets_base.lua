@@ -60,11 +60,11 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 	end
 
 	if caplines > 0 then
-		mining_caps = newline(mining_caps)
-
 		local mdl = toolcaps.max_drop_level or 0
 
-		mining_caps = mining_caps .. S("Block breaking strength: @1", mdl)
+		if itemstring:find("pick_") then
+			mining_caps = newline(mining_caps) .. S("Block breaking strength: @1", mdl)
+		end
 	end
 
 	if toolcaps.damage_groups then
@@ -80,9 +80,13 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 	end
 
 	if tool then
-		final_result = newline(final_result) .. newline(mining_caps) .. attack_caps
+		final_result = newline(final_result) .. mining_caps
+
+		if attack_caps ~= "" then final_result = newline(final_result) .. attack_caps end
 	elseif weapon then
-		final_result = newline(final_result) .. newline(attack_caps) .. mining_caps
+		final_result = newline(final_result) .. attack_caps
+
+		if mining_caps ~= "" then final_result = newline(final_result) .. mining_caps end
 	end
 
 	return final_result
