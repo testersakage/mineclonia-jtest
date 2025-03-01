@@ -62,7 +62,7 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 	if caplines > 0 then
 		local mdl = toolcaps.max_drop_level or 0
 
-		if itemstring:find("pick_") then
+		if core.get_item_group(itemstring, "pickaxe") > 0 then
 			mining_caps = newline(mining_caps) .. S("Block breaking strength: @1", mdl)
 		end
 	end
