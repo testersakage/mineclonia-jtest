@@ -125,6 +125,18 @@ local function get_node_power_2(pos)
 	return max
 end
 
+-- Set/add a position to mcl_redstone._pending_updates.
+-- TODO: "update_tab[node_name] and pos or nil" can result in unsetting a position
+--       if node_name is provided. Written this way to preserve the exact behavior
+--       prior to this commit.
+local function set_pending_update(pos, node_name)
+	if node_name then
+		mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = update_tab[node_name] and pos or nil
+	else
+		mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = pos
+	end
+end
+
 -- Propagate redstone power through wires. 'clear_queue' is a queue of events
 -- were power which is lowered/removed. 'fill_queue' is a queue of events were
 -- power is added/raised. 'update' is a table which gets populated with
@@ -237,16 +249,13 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 		for _, dir in pairs(sixdirs) do
 			local pos2 = pos:add(dir)
 			local node2 = get_node(pos2)
-			local hash2 = minetest.hash_node_position(pos2)
+			set_pending_update(pos2, node2.name)
 
-			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
 			if opaque_tab[node2.name] then
 				for _, dir in pairs(sixdirs) do
 					local pos3 = pos2:add(dir)
 					local node3 = get_node(pos3)
-					local hash3 = minetest.hash_node_position(pos3)
-
-					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
+					set_pending_update(pos3, node3.name)
 				end
 			end
 		end
@@ -315,7 +324,7 @@ end
 
 -- TODO: A bit ugly, could be refactored.
 function mcl_redstone.update_node(pos)
-	mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = pos
+	set_pending_update(pos)
 end
 
 -- Update neighbouring wires and components at pos. Oldnode is the previous
@@ -340,8 +349,7 @@ local function update_neighbours(pos, oldnode, newnode)
 		table.insert(fill_nodes, {pos = pos, power = power})
 	end
 
-	local hash = minetest.hash_node_position(pos)
-	mcl_redstone._pending_updates[hash] = update_tab[node.name] and pos or nil
+	set_pending_update(pos, node.name)
 
 	if not (get_power or old_get_power) then return end
 
@@ -352,18 +360,16 @@ local function update_neighbours(pos, oldnode, newnode)
 
 		if power2 ~= oldpower2 then
 			local node2 = minetest.get_node(pos2)
-			local hash2 = minetest.hash_node_position(pos2)
+			set_pending_update(pos2, node2.name)
 
-			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
 			if wireflag_tab[node2.name] then
 				update_wire(pos2, oldpower2)
 			elseif opaque_tab[node2.name] then
 				for i, dir in pairs(sixdirs) do
 					local pos3 = pos2:add(dir)
 					local node3 = minetest.get_node(pos3)
-					local hash3 = minetest.hash_node_position(pos3)
+					set_pending_update(pos3, node3.name)
 
-					mcl_redstone._pending_updates[hash3] = update_tab[node3.name] and pos3 or nil
 					if wireflag_tab[node3.name] then
 						update_wire(pos3, math.max(oldpower2, 0))
 					end
