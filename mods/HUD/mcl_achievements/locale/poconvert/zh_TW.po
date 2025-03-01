@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-01 12:31+0000\n"
+"PO-Revision-Date: 2025-03-01 13:33+0000\n"
 "Last-Translator: ellesheepy <your.sheepy@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_achievements/zh_Hant/>\n"
@@ -185,30 +185,32 @@ msgstr "赴湯蹈火"
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
 msgstr ""
+"準備清涼穿著。\n"
+"提示：進入地獄。"
 
 msgid "Postmortal"
 msgstr "置之死地"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr ""
+msgstr "用不死圖騰逃避死亡。"
 
 msgid "Sweet Dreams"
 msgstr "一夜好眠"
 
 msgid "Sleep in a bed to change your respawn point."
-msgstr ""
+msgstr "在床上入睡，改變重生點。"
 
 msgid "Not Quite \"Nine\" Lives"
 msgstr "貓有九命"
 
 msgid "Charge a Respawn Anchor to the maximum."
-msgstr ""
+msgstr "將一個重生錨充到最滿。"
 
 msgid "What A Deal!"
 msgstr "貨如輪轉"
 
 msgid "Successfully trade with a Villager."
-msgstr ""
+msgstr "成功與村民交易。"
 
 msgid "Tactical Fishing"
 msgstr "求生捕魚術"
