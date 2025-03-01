@@ -62,9 +62,7 @@ minetest.register_globalstep(function(dtime)
 				if is_immortal or not enable_damage then
 					-- If damage is disabled, we can't kill players.
 					-- So we just teleport the player back to spawn.
-					local spawn = mcl_spawn.get_player_spawn_pos(player)
-					player:set_pos(spawn)
-					mcl_worlds.dimension_change(player, mcl_worlds.pos_to_dimension(spawn))
+					player:respawn()
 					minetest.chat_send_player(player:get_player_name(), S("The void is off-limits to you!"))
 				elseif enable_damage and not is_immortal then
 					-- Damage enabled, not immortal: Deal void damage (4 HP / 0.5 seconds)
