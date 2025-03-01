@@ -128,8 +128,9 @@ function mooshroom:on_rightclick (clicker)
 	if self.child then return end
 
 	local item = clicker:get_wielded_item()
+	local item_name = item:get_name()
 	-- Use shears to get mushrooms and turn mooshroom into cow
-	if minetest.get_item_group(item:get_name(), "shears") > 0 then
+	if minetest.get_item_group(item_name, "shears") > 0 then
 		local pos = self.object:get_pos()
 		minetest.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
 
@@ -141,11 +142,12 @@ function mooshroom:on_rightclick (clicker)
 		mcl_util.replace_mob(self.object, "mobs_mc:cow")
 
 		if not minetest.is_creative_enabled(clicker:get_player_name()) then
-			item:add_wear(mobs_mc.shears_wear)
+			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
 		end
 		-- Use bucket to milk
-	elseif item:get_name() == "mcl_buckets:bucket_empty" and clicker:get_inventory() then
+	elseif item_name == "mcl_buckets:bucket_empty" and clicker:get_inventory() then
 		local inv = clicker:get_inventory()
 		inv:remove_item("main", "mcl_buckets:bucket_empty")
 		minetest.sound_play("mobs_mc_cow_milk", {pos=self.object:get_pos(), gain=0.6})
@@ -158,7 +160,7 @@ function mooshroom:on_rightclick (clicker)
 			minetest.add_item(pos, {name = "mcl_mobitems:milk_bucket"})
 		end
 		-- Use bowl to get mushroom stew
-	elseif item:get_name() == "mcl_core:bowl" and clicker:get_inventory() then
+	elseif item_name == "mcl_core:bowl" and clicker:get_inventory() then
 		local inv = clicker:get_inventory()
 		inv:remove_item("main", "mcl_core:bowl")
 		minetest.sound_play("mobs_mc_cow_mushroom_stew", {pos=self.object:get_pos(), gain=0.6})

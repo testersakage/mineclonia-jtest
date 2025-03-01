@@ -11,7 +11,6 @@ for x=-2, 2 do
 	end
 end
 
-mobs_mc.shears_wear = 276
 mobs_mc.water_level = tonumber(minetest.settings:get("water_level")) or 0
 
 -- Load mobs in the right order.
