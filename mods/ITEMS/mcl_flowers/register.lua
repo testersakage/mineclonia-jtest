@@ -105,7 +105,7 @@ mcl_flowers.register_ground_flower("pink_petals", {
 	tiles = {"mcl_cherry_blossom_pink_petals.png","mcl_flowers_wildflower_stem.png"},
 	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}}
 })
-core.register_alias("mcl_cherry_blossom:pink_petals", "mcl_flowers:pink_petals")
+core.register_alias("mcl_cherry_blossom:pink_petals", "mcl_flowers:pink_petals_4")
 
 mcl_flowers.add_large_plant("peony", {
 	desc = S("Peony"),
