@@ -428,8 +428,7 @@ local function opaque_update_neighbours(pos, added)
 		if wireflag_tab[node2.name] then
 			update_wire(pos2)
 		elseif update_tab[node2.name] then
-			local hash2 = minetest.hash_node_position(pos2)
-			mcl_redstone._pending_updates[hash2] = update_tab[node2.name] and pos2 or nil
+			set_pending_update(pos2, node2.name)
 		end
 	end
 
