@@ -632,7 +632,7 @@ mcl_potions.register_potion({
 })
 
 mcl_potions.register_potion({
-	name = "infestation",
+	name = "infested",
 	desc_suffix = S("of Infestation"),
 	_tt = nil,
 	_longdesc = S("Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."),
