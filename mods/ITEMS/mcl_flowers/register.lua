@@ -92,6 +92,21 @@ mcl_flowers.register_simple_flower("cornflower", {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:blue"}}
 })
 
+mcl_flowers.register_ground_flower("wildflowers", {
+	desc = S("Wildflowers"),
+	image = "mcl_flowers_wildflower.png",
+	tiles = {"mcl_flowers_wildflower.png","mcl_flowers_wildflower_stem.png"},
+	_mcl_crafting_output = {single = {output = "mcl_dyes:yellow"}}
+})
+mcl_flowers.register_ground_flower("pink_petals", {
+	desc = S("Pink Petals"),
+	longdesc = S("Pink Petals are ground decoration of cherry grove biomes"),
+	image = "mcl_cherry_blossom_pink_petals.png",
+	tiles = {"mcl_cherry_blossom_pink_petals.png","mcl_flowers_wildflower_stem.png"},
+	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}}
+})
+core.register_alias("mcl_cherry_blossom:pink_petals", "mcl_flowers:pink_petals")
+
 mcl_flowers.add_large_plant("peony", {
 	desc = S("Peony"),
 	longdesc = S("A peony is a large plant which occupies two blocks. It is mainly used in dye production."),

@@ -4936,15 +4936,29 @@ local function register_decorations()
 		y_max = mcl_vars.mg_overworld_max,
 	})
 
-	minetest.register_decoration({
-		deco_type = "simple",
-		place_on = {"mcl_core:dirt_with_grass"},
-		fill_ratio = 0.1,
-		biomes = {"CherryGrove"},
-		y_min = mcl_vars.mg_overworld_min,
-		y_max = mcl_vars.mg_overworld_max,
-		decoration = "mcl_cherry_blossom:pink_petals",
-	})
+	-- Pink Petals
+	for i=1,4 do
+		minetest.register_decoration({
+			deco_type = "simple",
+			place_on = {"mcl_core:dirt_with_grass"},
+			fill_ratio = 0.03,
+			biomes = {"CherryGrove"},
+			y_min = mcl_vars.mg_overworld_min,
+			y_max = mcl_vars.mg_overworld_max,
+			decoration = "mcl_flowers:pink_petals_"..i,
+		})
+
+		-- Wildflowers
+		minetest.register_decoration({
+			deco_type = "simple",
+			place_on = {"mcl_core:dirt_with_grass"},
+			fill_ratio = 0.003,
+			biomes = {"BirchForest","BirchForestM","ExtremeHills", "ExtremeHillsM", "ExtremeHills+"},
+			y_min = mcl_vars.mg_overworld_min,
+			y_max = mcl_vars.mg_overworld_max,
+			decoration = "mcl_flowers:wildflowers_"..i,
+		})
+	end
 
 	-- Grasses and ferns
 	local grass_forest = {"Plains", "Taiga", "Forest", "FlowerForest", "BirchForest", "BirchForestM", "RoofedForest", "Swampland" }
