@@ -167,6 +167,93 @@ function mcl_flowers.register_simple_flower(name, def)
 	end
 end
 
+function mcl_flowers.register_ground_flower(name, def)
+	local newname = "mcl_flowers:"..name
+
+	minetest.register_craftitem(":"..newname, {
+    description = def.desc,
+		_doc_items_longdesc = def.longdesc,
+    inventory_image = def.image,
+    wield_image = def.image,
+    groups = {
+			craftitem = 1,
+			attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
+			dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
+			plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
+			flammable = 2, fire_encouragement = 60, fire_flammability = 100,
+			compostability = 65, unsticky = 1
+		},
+		_mcl_crafting_output = def._mcl_crafting_output,
+
+    on_place = function(itemstack, placer, pointed_thing)
+			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+			if rc then return rc end
+
+			local pos = pointed_thing.under
+			local node = minetest.get_node(pos)
+			local above_pos = {x=pos.x, y=pos.y+1, z=pos.z}
+			local above_node = minetest.get_node(above_pos)
+			local node_def = minetest.registered_nodes[node.name]
+
+			-- Swap the node in place if it's part of the progression
+			local swap_map = {
+				[newname.."_1"] = newname.."_2",
+				[newname.."_2"] = newname.."_3",
+				[newname.."_3"] = newname.."_4",
+			}
+
+			if swap_map[node.name] then
+				itemstack:take_item(1)
+				minetest.set_node(pos, {name = swap_map[node.name]})
+			else
+				local max_cycle = node_def and node_def.groups and node_def.groups.wildflower and node_def.groups.wildflower > 0 and node_def.groups.wildflower < 5
+				-- If not already part of the cycle, place _1 above
+				if above_node.name == "air" and not max_cycle then
+					-- Only placeable on soil node
+					if core.get_item_group(node.name, "soil") == 0 then
+						return itemstack
+					else
+						itemstack:take_item(1)
+						minetest.set_node(above_pos, {name = newname.."_1"})
+					end
+				end
+			end
+
+			return itemstack
+    end,
+	})
+
+	for i = 1,4 do
+		minetest.register_node(":"..newname.."_"..i, {
+			description = def.desc,
+			_doc_items_create_entry = false,
+			drawtype = "mesh",
+			mesh = "mcl_flowers_wildflower_"..i..".obj",
+			tiles = def.tiles,
+			use_texture_alpha = "clip",
+			paramtype = "light",
+			paramtype2 = "facedir",
+			sunlight_propagates = true,
+			walkable = false,
+			selection_box = {type = "fixed", fixed = {-1/2, -1/2, -1/2, 1/2, -5/16, 1/2}},
+			stack_max = 64,
+			groups = {
+				attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
+				dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
+				plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
+				flammable = 2, fire_encouragement = 60, fire_flammability = 100,
+				compostability = 65, unsticky = 1,
+				not_in_creative_inventory = 1,
+				not_in_craft_guide = 1
+			},
+			sounds = mcl_sounds.node_sound_leaves_defaults(),
+			drop = newname.." "..i,
+			node_placement_prediction = "",
+			_on_bone_meal = mcl_flowers.on_bone_meal_simple,
+		})
+	end
+end
+
 local tpl_large_plant_top = {
 	drawtype = "plantlike",
 	_doc_items_create_entry = true,
