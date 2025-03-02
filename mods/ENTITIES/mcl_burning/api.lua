@@ -1,5 +1,7 @@
 local enable_damage = minetest.settings:get_bool("enable_damage")
 
+local collisionbox_cache = {}
+
 function mcl_burning.get_storage(obj)
 	return obj:is_player() and mcl_burning.storage[obj] or obj:get_luaentity()
 end
@@ -19,7 +21,7 @@ function mcl_burning.is_affected_by_rain(obj)
 end
 
 function mcl_burning.get_collisionbox(obj, smaller, storage)
-	local cache = storage.collisionbox_cache
+	local cache = collisionbox_cache[obj]
 	if cache then
 		local box = cache[smaller and 2 or 1]
 		return box[1], box[2]
@@ -29,7 +31,7 @@ function mcl_burning.get_collisionbox(obj, smaller, storage)
 		local s_vec = vector.new(0.1, 0.1, 0.1)
 		local s_minp = vector.add(minp, s_vec)
 		local s_maxp = vector.subtract(maxp, s_vec)
-		storage.collisionbox_cache = {{minp, maxp}, {s_minp, s_maxp}}
+		collisionbox_cache[obj] = {{minp, maxp}, {s_minp, s_maxp}}
 		return minp, maxp
 	end
 end
