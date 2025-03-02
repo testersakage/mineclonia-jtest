@@ -22,8 +22,11 @@ mcl_redstone._wireflag_tab = {}
 
 minetest.register_on_mods_loaded(function()
 	for name, ndef in pairs(minetest.registered_nodes) do
-		-- TODO: We need a way to treat specific blocks (slime blocks) as non-opaque
-		if minetest.get_item_group(name, "opaque") ~= 0 and minetest.get_item_group(name, "solid") ~= 0 then
+		if minetest.get_item_group(name, "opaque") ~= 0
+		 and minetest.get_item_group(name, "solid") ~= 0
+		 and minetest.get_item_group(name, "redstone_not_conductive") ~= 1 then
+			mcl_redstone._solid_opaque_tab[name] = 0
+		elseif minetest.get_item_group(name, "redstone_conductive") == 1 then
 			mcl_redstone._solid_opaque_tab[name] = 0
 		end
 	end
