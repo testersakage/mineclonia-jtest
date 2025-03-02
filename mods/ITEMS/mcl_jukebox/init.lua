@@ -200,6 +200,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 				clicker:hud_remove(active_huds[cname])
 				active_huds[cname] = nil
 			end
+			mcl_redstone.update_comparators(pos)
 		else
 			inv:set_size("main", 1) -- if the inventory isn't initialized it registers as empty - initialize it to be sure so discs are not "swallowed" by the jukebox
 			-- Jukebox is empty: Play track if player holds music record
@@ -209,6 +210,7 @@ minetest.register_node("mcl_jukebox:jukebox", {
 				put_itemstack:set_count(1)
 				inv:set_stack("main", 1, put_itemstack)
 				itemstack:take_item()
+				mcl_redstone.update_comparators(pos)
 			end
 		end
 		return itemstack
@@ -276,20 +278,23 @@ mcl_jukebox.register_record({
 	texture = "mcl_jukebox_record_13.png",
 	sound = "mcl_jukebox_track_1",
 	exclude_from_creeperdrop = false,
+	comparator_signal = 1,
 })
 mcl_jukebox.register_record({
 	title = "The Energetic Rat (Jordach's Mix)",
 	author = "SoundHelix",
 	id = "wait",
 	texture = "mcl_jukebox_record_wait.png",
-	sound = "mcl_jukebox_track_2"
+	sound = "mcl_jukebox_track_2",
+	comparator_signal = 12,
 })
 mcl_jukebox.register_record({
 	title = "Eastern Feeling",
 	author = "Jordach",
 	id = "blocks",
 	texture = "mcl_jukebox_record_blocks.png",
-	sound = "mcl_jukebox_track_3"
+	sound = "mcl_jukebox_track_3",
+	comparator_signal = 3,
 })
 mcl_jukebox.register_record({
 	title = "Minetest",
@@ -297,6 +302,7 @@ mcl_jukebox.register_record({
 	id = "far",
 	texture = "mcl_jukebox_record_far.png",
 	sound = "mcl_jukebox_track_4",
+	comparator_signal = 5,
 })
 mcl_jukebox.register_record({
 	title =  "Soaring over the sea",
@@ -305,6 +311,7 @@ mcl_jukebox.register_record({
 	texture = "mcl_jukebox_record_chirp.png",
 	sound = "mcl_jukebox_track_5",
 	exclude_from_creeperdrop = true,
+	comparator_signal = 4,
 })
 mcl_jukebox.register_record({
 	title = "Winter Feeling",
@@ -312,14 +319,15 @@ mcl_jukebox.register_record({
 	id = "strad",
 	texture = "mcl_jukebox_record_strad.png",
 	sound = "mcl_jukebox_track_6",
-
+	comparator_signal = 9,
 })
 mcl_jukebox.register_record({
 	title = "Synthgroove (Jordach's Mix)",
 	author = "HeroOfTheWinds",
 	id = "mellohi",
 	texture = "mcl_jukebox_record_mellohi.png",
-	sound = "mcl_jukebox_track_7"
+	sound = "mcl_jukebox_track_7",
+	comparator_signal = 7,
 })
 mcl_jukebox.register_record({
 	title = "The Clueless Frog (Jordach's Mix)",
@@ -328,6 +336,7 @@ mcl_jukebox.register_record({
 	texture = "mcl_jukebox_record_mall.png",
 	sound = "mcl_jukebox_track_8",
 	exclude_from_creeperdrop = true,
+	comparator_signal = 6,
 })
 
 --add backward compatibility

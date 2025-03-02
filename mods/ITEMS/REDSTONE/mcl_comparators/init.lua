@@ -94,6 +94,13 @@ local function measure_lectern(pos)
 	return power
 end
 
+local function measure_jukebox(pos)
+	local inv = minetest.get_inventory({type="node", pos=pos})
+	local record = inv and inv:get_stack("main", 1)
+	local def = record and mcl_jukebox.registered_records[record:get_name()]
+	return def and def.comparator_signal or 0
+end
+
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
 local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
@@ -125,6 +132,7 @@ local measure_tab = {
 	["mcl_furnaces:furnace"] = measure_furnace,
 	["mcl_blast_furnace:blast_furnace"] = measure_furnace,
 	["mcl_smoker:smoker"] = measure_furnace,
+	["mcl_jukebox:jukebox"] = measure_jukebox,
 	["mcl_lectern:lectern_with_book"] = measure_lectern,
 	--[[ initalized using after_mods_loaded
 	["mcl_beds:respawn_anchor"] = measure_constant(comparator_signal),
@@ -147,7 +155,6 @@ local measure_tab = {
 	--["command_block"] = measure_command_block,
 	--["crafter"] = measure_crafter,
 	--["item_frame"] = measure_item_frame,
-	--["jukebox"] = measure_jukebox,
 	--["sculc_sensor"] = measure_sculc_sensor,
 }
 
