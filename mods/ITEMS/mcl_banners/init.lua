@@ -149,8 +149,8 @@ dofile(modpath.."/patterncraft.lua")
 -- Overlay ratios (0-255)
 local base_color_ratio = 255
 
-local standing_banner_entity_offset = { x=0, y=-0.499, z=0 }
-local hanging_banner_entity_offset = { x=0, y=-1.5, z=0 }
+local standing_banner_entity_offset = vector.new(0, -0.499, 0)
+local hanging_banner_entity_offset = vector.new(0, -1.5, 0)
 
 local function rotation_level_to_yaw(rotation_level)
 	return (rotation_level * (math.pi/8)) + math.pi
@@ -671,7 +671,7 @@ local entity_standing = {
 		self.object:set_properties({textures = {mcl_banners.make_banner_texture(self._base_color, self._layers)}})
 	end,
 	_set_banner_node = function(self)
-		self._node_pos = self.object:get_pos()
+		self._node_pos = self.object:get_pos():subtract(standing_banner_entity_offset):round()
 	end,
 	_mcl_pistons_unmovable = true
 }
@@ -683,7 +683,7 @@ core.register_entity("mcl_banners:hanging_banner", table.merge(entity_standing, 
 		mesh = "amc_banner_hanging.b3d"
 	}),
 	_set_banner_node = function(self)
-		self._node_pos = vector.offset(self.object:get_pos(), 0, 1, 0)
+		self._node_pos = self.object:get_pos():subtract(hanging_banner_entity_offset):round()
 	end
 }))
 
