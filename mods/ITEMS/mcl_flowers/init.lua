@@ -240,7 +240,7 @@ function mcl_flowers.register_ground_flower(name, def)
 			groups = {
 				attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
 				dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
-				plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
+				plant = 1, flower = 1, wildflower=i, place_flowerlike = 1, non_mycelium_plant = 1,
 				flammable = 2, fire_encouragement = 60, fire_flammability = 100,
 				compostability = 65, unsticky = 1,
 				not_in_creative_inventory = 1,
