@@ -40,6 +40,7 @@ function mcl_maps.create_map(pos)
 	meta:set_string("mcl_maps:id", id)
 	meta:set_string("mcl_maps:minp", minetest.pos_to_string(minp))
 	meta:set_string("mcl_maps:maxp", minetest.pos_to_string(maxp))
+	meta:set_int("date", os.time())
 	tt.reload_itemstack_description(itemstack)
 
 	creating_maps[id] = true
