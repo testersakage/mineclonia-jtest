@@ -219,23 +219,19 @@ function mcl_portals.end_teleport(obj, pos)
 	if not pos then return end
 	local dim = mcl_worlds.pos_to_dimension(pos)
 
-	local target, player_spawn
 	if dim == "end" then
 		-- End portal in the End:
 		-- Teleport back to the player's spawn or world spawn in the Overworld.
 		if obj:is_player() then
-			target, player_spawn = mcl_spawn.get_player_spawn_pos(obj)
+			obj:respawn()
+		else
+			local target = find_valid_spawn(mcl_spawn.get_world_spawn_pos())
+			teleport_object(obj, target, dim)
 		end
-
-		if not target or not player_spawn then
-			target = find_valid_spawn(mcl_spawn.get_world_spawn_pos())
-		end
-		teleport_object(obj, target, dim)
 	else
 		-- End portal in any other dimension:
 		-- Teleport to the End at a fixed position.
 		-- The destination is built by mcl_structures.
-
 		core.load_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8), vector.add(mcl_vars.mg_end_platform_pos, 8))
 		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
 		teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
