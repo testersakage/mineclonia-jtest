@@ -69,7 +69,7 @@ local tpl_candle = {
 	_on_set_item_entity = function (stack)
 		return stack, {wield_item = stack:to_string()}
 	end,
-	after_dig_node = drop_candles,
+	on_destruct = drop_candles,
 	description = S("Candle"),
 	drawtype = "mesh",
 	drop = "",
@@ -298,7 +298,7 @@ end
 
 local tpl_cake = {
 	_food_particles = false,
-	after_dig_node = drop_candles,
+	on_destruct = drop_candles,
 	collision_box = cake_box,
 	description = S("Cake"),
 	drawtype = "mesh",
