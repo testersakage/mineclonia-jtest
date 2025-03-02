@@ -71,6 +71,8 @@ Please read <https://minecraft.wiki/w/Breaking> to learn how digging times work 
 * `anvil`: Anvil. 1: No damage. 2-3: Higher damage levels
 * `no_rename=1`: Item cannot be renamed by anvil
 * `comparator_signal=X`: If set, this node outputs a constant (!) comparator signal output of strength X.
+* `redstone_conductive=1`: If set, the node conducts redstone power even if not opaque. Use to override default behavior.
+* `redstone_not_conductive=1`: If set, the node does NOT conduct redstone power. Use to override default behavior.
 * `piston=X`: Piston (main body) (1 = normal, 2 = sticky)
 * `piston_pusher=X`: Piston pusher (1 = normal, 2 = sticky)
 * `hopper=X`: Hopper (1 = downwards, 2 = sideways)
