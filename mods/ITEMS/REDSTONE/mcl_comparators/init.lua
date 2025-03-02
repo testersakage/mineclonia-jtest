@@ -127,6 +127,8 @@ local measure_tab = {
 	["mcl_smoker:smoker"] = measure_furnace,
 	["mcl_lectern:lectern_with_book"] = measure_lectern,
 	--[[ initalized using after_mods_loaded
+	["mcl_beds:respawn_anchor"] = measure_constant(comparator_signal),
+	["mcl_beds:respawn_anchor_charged_xxx"] = measure_constant(comparator_signal),
 	["mcl_brewing:stand_xxx"] = measure_brewing_stand,
 	["mcl_chests:xxx_shulker_box"] = measure_inventory,
 	["mcl_cauldron:cauldron_xxx"] = measure_constant(comparator_signal),
@@ -146,7 +148,6 @@ local measure_tab = {
 	--["crafter"] = measure_crafter,
 	--["item_frame"] = measure_item_frame,
 	--["jukebox"] = measure_jukebox,
-	--["respawn_anchor"] = measure_respawn_anchor,
 	--["sculc_sensor"] = measure_sculc_sensor,
 }
 

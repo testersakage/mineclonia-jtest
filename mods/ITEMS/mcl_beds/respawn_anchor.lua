@@ -11,7 +11,7 @@ for i=0,4 do
 
 	local function rightclick(pos, node, player, itemstack)
 		if itemstack.get_name(itemstack) == "mcl_nether:glowstone" and i ~= 4 then
-			minetest.set_node(pos, {name="mcl_beds:respawn_anchor_charged_" .. i+1})
+			mcl_redstone.swap_node(pos, {name="mcl_beds:respawn_anchor_charged_" .. i+1})
 			itemstack:take_item()
 		elseif mcl_worlds.pos_to_dimension(pos) ~= "nether" then
 			if node.name ~= "mcl_beds:respawn_anchor" then --only charged respawn anchors are exploding in the overworld & end in minecraft
@@ -39,7 +39,7 @@ for i=0,4 do
 			},
 			is_ground_content = false,
 			on_rightclick = rightclick,
-			groups = {pickaxey=1, material_stone=1, deco_block=1, respawn_anchor=1},
+			groups = {pickaxey=1, material_stone=1, deco_block=1, respawn_anchor=1, comparator_signal = 0},
 			_mcl_hardness = 22.5,
 			sounds= mcl_sounds.node_sound_stone_defaults(),
 			use_texture_alpha = "blend",
@@ -57,7 +57,7 @@ for i=0,4 do
 				"respawn_anchor_side"..i ..".png"
 			},
 			on_rightclick = rightclick,
-			groups = {pickaxey=1, material_stone=1, not_in_creative_inventory=1, respawn_anchor=1},
+			groups = {pickaxey=1, material_stone=1, not_in_creative_inventory=1, respawn_anchor=1, comparator_signal = 4*i-1},
 			_mcl_hardness = 22.5,
 			sounds= mcl_sounds.node_sound_stone_defaults(),
 			_mcl_baseitem = "mcl_beds:respawn_anchor",
