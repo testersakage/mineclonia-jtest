@@ -52,7 +52,13 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 			S("Instantaneous")
 		}
 
-		if not speed_classes[speed_class] and speed_class > 7 then speed_class = 7 end
+		if not speed_classes[speed_class] then
+			if speed_class == 0 then
+				speed_class = 1
+			elseif speed_class > 7 then
+				speed_class = 7
+			end
+		end
 
 		mining_caps = mining_caps .. S("Mining speed: @1", speed_classes[speed_class])
 
