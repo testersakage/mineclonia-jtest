@@ -141,6 +141,14 @@ function mcl_player.set_player_setting(player, name, value)
 	end
 end
 
+mcl_player.register_player_setting("mcl_player:mobile_ui", {
+        type = "boolean",
+	section = "Graphics",
+	short_desc = S("Adapt UI for a better experience on touchscreen devices"),
+	long_desc = S("May enlarge elements, add additional space, and change elements, e.g. add buttons to replace the missing enter key.\nNote that currently this is only implemented for a very limited number of formspecs."),
+	ui_default = "false",
+})
+
 local function get_sorted_setting_names()
 	local names = {}
 	for name, _ in pairs(player_settings) do
@@ -160,10 +168,14 @@ end
 local function generate_setting_fragment(player, name, def, fs)
 	local raw_value = mcl_player.get_player_setting(player, name)
 	local value = raw_value == nil and def.ui_default or raw_value
+	local b_size = fs.mobile and 0.5 or 0.25
+	local b_size_2 = b_size / 2
+	local padding = fs.mobile and 0.125 or 0
 	local y = fs.y
+	y = y + padding
 	if raw_value ~= nil then
 		fs:add(
-			"button[0.5,", y - 0.125, ";0.25,0.25;",
+			"button[", 0.625 - b_size_2, ",", y - b_size_2, ";", b_size, ",", b_size, ";",
 			"__reset__", name, ";X]",
 			"tooltip[",
 			"__reset__", name, ";",
@@ -178,13 +190,14 @@ local function generate_setting_fragment(player, name, def, fs)
 		)
 	end
 	if def.type == "boolean" then
+		local x_off = fs.mobile and 0.5 or 0
 		fs:add(
-			"checkbox[1,", y, ";",
+			"checkbox[", 1 + x_off, ",", y, ";",
 			name, ";",
 			F(C(setting_name_color, def.short_desc)), ";",
 			value, "]"
 		)
-		fs.y = y + 0.5
+		y = y + 0.5
 	elseif def.type == "enum" then
 		local selected
 		fs:add(
@@ -215,13 +228,14 @@ local function generate_setting_fragment(player, name, def, fs)
 			#def.options + 1,
 			";true]"
 		)
-		fs.y = y + 0.85
+		y = y + 0.85
 	elseif def.type == "slider" then
+		local sb_height = fs.mobile and 0.5 or 0.25
 		local count = #def.options
 		local selected
 		fs:add(
 			"label[1,", y, ";", F(C(setting_name_color, def.short_desc)), "]",
-			"scroll_container[5.25,", y + 0.175, ";5,0.3;", name, ";vertical;1]"
+			"scroll_container[5.25,", y + 0.05 + sb_height / 2, ";5,0.3;", name, ";vertical;1]"
 		)
 
 		for i, option in ipairs(def.options) do
@@ -246,10 +260,12 @@ local function generate_setting_fragment(player, name, def, fs)
 		fs:add(
 			"scroll_container_end[]",
 			"scrollbaroptions[thumbsize=1;arrows=show;smallstep=1;min=1;max=", count, "]",
-			"scrollbar[1,", y + 0.175, ";4,0.25;horizontal;", name, ";", selected, "]"
+			"scrollbar[1,", y + 0.175, ";4,", sb_height, ";horizontal;", name, ";", selected, "]"
 		)
-		fs.y = y + 0.85
+		y = y + 0.6 + sb_height
 	end
+
+	fs.y = y + padding
 end
 
 local function generate_section_label(section, fs)
@@ -266,6 +282,7 @@ local player_fs_info = {}
 local function generate_settings_formspec (player)
 	local fs_info = player_fs_info[player]
 	local fs = new_stringbuilder()
+	fs.mobile = mcl_player.get_player_setting(player, "mcl_player:mobile_ui", false)
 	fs:add(
 		"formspec_version[6]",
 		"size[11.75,10.9]",
@@ -285,7 +302,7 @@ local function generate_settings_formspec (player)
 	end
 
 	-- Generic settings area
-	x = 0.5
+	x = fs.mobile and 0.625 or 0.5
 	local height = 8
 	local scroll_factor = 0.01
 	fs:add(
@@ -306,7 +323,7 @@ local function generate_settings_formspec (player)
 	end
 
 	-- scroll factor is 0.01, height is 8
-	local width = 0.25
+	local width = fs.mobile and 0.5 or 0.25
 	local scroll_max = math.ceil(math.max(0, fs.y - height) / scroll_factor)
 	local thumb_size = math.floor((height / fs.y) * scroll_max)
 	local scroll = 0
