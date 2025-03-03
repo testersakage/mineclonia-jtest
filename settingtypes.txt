@@ -233,10 +233,6 @@ mcl_redstone_update_tick (Redstone update tick) float 0.1
 # The time budget allowed for redstone updates each tick (as a fraction of update tick time)
 mcl_redstone_time_budget (Redstone time budget) float 0.2
 
-# How far from players redstone updates will take place, stated in mapblocks
-# (16 nodes). Only has effect on multiplayer servers.
-mcl_redstone_update_range (Redstone update range) int 8
-
 # The maximum number of queued redstone events. If exceeded redstone circuits will stop working.
 mcl_redstone_event_max (Maximum queued redstone events) int 65535
 
