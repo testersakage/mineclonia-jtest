@@ -1,6 +1,4 @@
 mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
-local MULTIPLAYER = not minetest.is_singleplayer()
-local UPDATE_RANGE = (tonumber(minetest.settings:get("mcl_redstone_update_range")) or 8) * 16
 local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
 local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
 
@@ -146,20 +144,18 @@ local function get_time()
 	return minetest.get_us_time() / 1e6
 end
 
-local function debug_log(tick, nevents, nupdates, nfaraway, npending, time, aborted)
+local function debug_log(tick, nevents, nupdates, npending, time, aborted)
 	if not minetest.settings:get_bool("mcl_redstone_debug_eventqueue", false)
 			or (nevents == 0 and nupdates == 0) then
 		return
 	end
 
 	local saborted = aborted and ", was aborted" or ""
-	local sfaraway = nfaraway ~= 0 and string.format(", %d far away events", nfaraway) or ""
 	minetest.log(string.format(
-		"[mcl_redstone] tick %d, %d events and %d updates processed%s, %d pending events, took %f ms%s",
+		"[mcl_redstone] tick %d, %d events and %d updates processed, %d pending events, took %f ms%s",
 		tick,
 		nevents,
 		nupdates,
-		sfaraway,
 		npending,
 		time / 1000,
 		saborted
@@ -172,14 +168,6 @@ function mcl_redstone.tick_step()
 		table.insert(player_poses, player:get_pos())
 	end
 
-	local function too_far_away(event)
-		local distance = 0
-		for _, player_pos in pairs(player_poses) do
-			distance = math.min(distance, vector.distance(event.pos, player_pos))
-		end
-		return distance > UPDATE_RANGE
-	end
-
 	if eventqueue:size() > MAX_EVENTS then
 		minetest.log("error", string.format("[mcl_redstone]: Maximum number of queued redstone events (%d) exceeded, deleting all of them.", MAX_EVENTS))
 		clear_all_pending_events()
@@ -189,13 +177,12 @@ function mcl_redstone.tick_step()
 	local endtime = starttime + TIME_BUDGET
 	local nevents = 0
 	local nupdates = 0
-	local nfaraway = 0
 
 	local function log_redstone_events(aborted)
 		local time = get_time() - starttime
 		local npending = eventqueue:size()
 
-		debug_log(current_tick, nevents, nupdates, nfaraway, npending, time, aborted)
+		debug_log(current_tick, nevents, nupdates, npending, time, aborted)
 	end
 
 	local last_tick = current_tick
@@ -206,12 +193,8 @@ function mcl_redstone.tick_step()
 		end
 
 		local event = eventqueue:dequeue()
-		if MULTIPLAYER and event.pos and too_far_away(event) then
-			nfaraway = nfaraway + 1
-		else
-			nevents = nevents + 1
-			handle_event(event)
-		end
+		nevents = nevents + 1
+		handle_event(event)
 		last_tick = event.tick
 	end
 
