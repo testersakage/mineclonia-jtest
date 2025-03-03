@@ -151,11 +151,21 @@ function mcl_skins.update_player_skin(player)
 	mcl_player.player_set_model(player, model)
 end
 
+-- Check if skin is valid. It has happened that player meta contains an invalid
+-- skin definition which results in crashes.
+local function skin_is_valid(skin)
+	return skin.base or skin.simple_skins_id
+end
+
 -- Load player skin on join
 minetest.register_on_joinplayer(function(player)
 	local skin = player:get_meta():get_string("mcl_skins:skin")
 	if skin then
 		skin = minetest.deserialize(skin)
+		if skin and not skin_is_valid(skin) then
+			core.log("error", "[mcl_skins] Skin for player "..(player:get_player_name()).." was invalid")
+			skin = nil
+		end
 	end
 	if skin then
 		if not mcl_skins.texture_to_simple_skin[skin.simple_skins_id] then
