@@ -7,7 +7,7 @@ An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of MineCl
 on stability, multiplayer performance and features. For information about
 migrating from MineClone 2 to Mineclonia, see [MIGRATING.md](../../../src/branch/main/MIGRATING.md).
 
-Version: 0.112.0
+Version: 0.112.1
 
 ### Differences from MineClone 2 (now VoxeLibre)
 * Overworld depth increased from 64 to 128 nodes
@@ -25,6 +25,8 @@ Version: 0.112.0
 * No hamburgers (but villagers follow dropped food as in Minecraft)
 * No renamed mobs (e.g. Creepers remain Creepers, not Stalkers)
 * Overhauled mob pathfinding, physics, and AI
+* Candles
+* More copper variants
 
 ### Gameplay
 You start in a randomly-generated world made entirely of cubes. You can explore
