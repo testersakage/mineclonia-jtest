@@ -180,11 +180,9 @@ local tpl_large_plant_top = {
 
 local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 	groups = {
-		attached_node = 3, deco_block = 1,
-		dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1,
-		flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-		plant = 1, double_plant = 1, non_mycelium_plant = 1, flower = 1,
-		compostability = 65
+		compostability = 65, deco_block = 1, dig_by_water = 1, destroy_by_lava_flow = 1,
+		dig_by_piston = 1, flammable = 2, fire_encouragement = 60, fire_flammability = 100,
+		plant = 1, double_plant = 1, non_mycelium_plant = 1, flower = 1, supported_node = 1
 	},
 	on_place = function(itemstack, placer, pointed_thing)
 		-- We can only place on nodes
@@ -271,7 +269,7 @@ function mcl_flowers.add_large_plant(name, def)
 		table.update(def.bottom.groups, { place_flowerlike = 2, handy = 1, shearsy = 1 })
 	end
 
-	table.update(def.top.groups, { not_in_creative_inventory=1, handy = 1, shearsy = 1, double_plant=2, attached_node=3 })
+	table.update(def.top.groups, { not_in_creative_inventory=1, handy = 1, shearsy = 1, double_plant=2, supported_node = 1})
 
 	if def.grass_color then
 		def.bottom.paramtype2 = "color"
