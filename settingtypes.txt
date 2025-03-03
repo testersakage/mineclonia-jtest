@@ -245,6 +245,11 @@ mcl_villages_allow_water_villages (Spawn village buildings on top of water) bool
 # Note that mob icons does not exist for all mobs.
 mcl_old_spawn_icons (Old spawn icons instead of eggs) bool false
 
+# Enables the serverside functionality for the mineclonia CSM.
+# Enabling this setting by itself will do nothing. A special luanti fork and the csm (mcl_localplayer).
+# is needed to take advantage of this.
+mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
+
 [Debugging]
 # If enabled mapgen timings will be dumped to log
 mcl_logging_mapgen (Log chunk generation) bool false
