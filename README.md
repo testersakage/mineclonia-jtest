@@ -27,6 +27,7 @@ Version: 0.112.1
 * Overhauled mob pathfinding, physics, and AI
 * Candles
 * More copper variants
+* Tools API (mcl_tools)
 
 ### Gameplay
 You start in a randomly-generated world made entirely of cubes. You can explore
