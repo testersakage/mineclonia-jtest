@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-03 03:19+0000\n"
+"PO-Revision-Date: 2025-03-03 03:51+0000\n"
 "Last-Translator: \"Miguel P.L\" <miguel_pl@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "awards/es/>\n"
@@ -57,7 +57,7 @@ msgid "Show details of an advancement"
 msgstr ""
 
 msgid "Advancement not found."
-msgstr ""
+msgstr "Progreso no encontrado."
 
 msgid "<name>"
 msgstr "<nombre>"
@@ -72,22 +72,24 @@ msgid "OK"
 msgstr "Aceptar"
 
 msgid "(Secret Advancement)"
-msgstr ""
+msgstr "(Progreso secreto)"
 
 msgid "Unlock this advancement to find out what it is."
-msgstr ""
+msgstr "Desbloquea este progreso para descubrir de qué se trata."
 
 msgid "@1 (unlocked)"
 msgstr "@1 (desbloqueado)"
 
 msgid "You've disabled advancements. Type /awards enable to reenable."
 msgstr ""
+"Has desactivado los progresos. Escribe /awards enable para volver a "
+"activarlos."
 
 msgid "Error: No advancement available."
-msgstr ""
+msgstr "Error: No hay progresos disponibles."
 
 msgid "You have not unlocked any advancement."
-msgstr ""
+msgstr "No has desbloqueado ningún progreso."
 
 msgid "@1’s advancement:"
 msgstr ""
