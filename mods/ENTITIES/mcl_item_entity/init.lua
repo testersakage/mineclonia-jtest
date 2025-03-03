@@ -131,6 +131,8 @@ end
 
 local doTileDrops = minetest.settings:get_bool("mcl_doTileDrops", true)
 
+-- local variable to pass the wielded tool from node_dig
+local wielded_tool
 ---@diagnostic disable-next-line: duplicate-set-field
 function minetest.handle_node_drops(pos, drops, digger)
 	-- NOTE: This function override allows digger to be nil.
@@ -154,7 +156,7 @@ function minetest.handle_node_drops(pos, drops, digger)
 	local tool
 	local is_book
 	if digger and digger:is_player() then
-		tool = digger:get_wielded_item()
+		tool = wielded_tool or digger:get_wielded_item()
 		is_book = tool:get_name() == "mcl_enchanting:book_enchanted"
 		tooldef = minetest.registered_items[tool:get_name()]
 
@@ -282,21 +284,10 @@ end
 -- before dropping things.
 local old_mt_node_dig = minetest.node_dig
 function minetest.node_dig(pos, node, digger)
-	local wielded = digger and digger:is_player() and digger:get_wielded_item()
-	local def = minetest.registered_nodes[node.name]
-	if wielded and def then
-		local wdef = wielded:get_definition()
-		local tp = wielded:get_tool_capabilities()
-		local dp = minetest.get_dig_params(def and def.groups, tp, wielded:get_wear())
-		if wdef and not wdef.after_use then
-			if not minetest.is_creative_enabled(digger:get_player_name()) then
-				if wielded:get_wear() + dp.wear >= 65535 then
-					minetest.handle_node_drops(pos, minetest.get_node_drops(node, wielded and wielded:get_name()), digger)
-				end
-			end
-		end
-	end
-	return old_mt_node_dig(pos, node, digger)
+	wielded_tool = digger and digger:is_player() and ItemStack(digger:get_wielded_item())
+	local rc = old_mt_node_dig(pos, node, digger)
+	wielded_tool = nil
+	return rc
 end
 
 --modify builtin:item
