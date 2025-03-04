@@ -1,15 +1,17 @@
-# Mineclonia
+<div align="center">
+    <img src="https://codeberg.org/mineclonia/mineclonia/raw/branch/main/menu/icon.png">
+    <h1> Mineclonia </h1>
+    <img href="https://content.luanti.org/packages/ryvnf/mineclonia/"><img src="https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/" alt="ContentDB"></a>
+    <a href="https://translate.codeberg.org/engage/mineclonia/"><img src="https://translate.codeberg.org/widget/mineclonia/svg-badge.svg" alt="Translation status"></a>
+</div>
 
-[![ContentDB](https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/)](https://content.luanti.org/packages/ryvnf/mineclonia/)
-[![Translation status](https://translate.codeberg.org/widget/mineclonia/svg-badge.svg)](https://translate.codeberg.org/engage/mineclonia/)
-
-An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of MineClone 2 with focus
+An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of VoxeLibre (formerly MineClone2) with focus
 on stability, multiplayer performance and features. For information about
-migrating from MineClone 2 to Mineclonia, see [MIGRATING.md](../../../src/branch/main/MIGRATING.md).
+migrating from VoxeLibre (formerly MineClone2) to Mineclonia, see [MIGRATING.md](../../../src/branch/main/MIGRATING.md).
 
 Version: 0.112.2
 
-### Differences from MineClone 2 (now VoxeLibre)
+### Differences from VoxeLibre (formerly MineClone2)
 * Overworld depth increased from 64 to 128 nodes
 * Improved nether portals
 * Improved leaf decay
@@ -21,7 +23,7 @@ Version: 0.112.2
 * Functional loom to apply banner patterns
 * Lush caves biome
 * Cherry grove biome
-* No in-game music, twice as small compared to MineClone 2
+* No in-game music, twice as small compared to VoxeLibre (formerly MineClone2)
 * No hamburgers (but villagers follow dropped food as in Minecraft)
 * No renamed mobs (e.g. Creepers remain Creepers, not Stalkers)
 * Overhauled mob pathfinding, physics, and AI
