@@ -17,7 +17,25 @@ mcl_trees.register_wood("pale_oak",{
             "mcl_pale_garden_stripped_pale_oak_side.png"
         }
     },
-    wood = {tiles = {"mcl_pale_garden_planks_pale_oak.png"}}
+    wood = {tiles = {"mcl_pale_garden_planks_pale_oak.png"}},
+    door = {
+        inventory_image = "mcl_pale_garden_pale_oak_door.png",
+        tiles_bottom = {
+            "mcl_pale_garden_pale_oak_door_bottom.png^[transformFX",
+            "mcl_pale_garden_pale_oak_door_bottom.png"
+        },
+        tiles_top = {
+            "mcl_pale_garden_pale_oak_door_top.png^[transformFX",
+            "mcl_pale_garden_pale_oak_door_top.png"
+        }
+    },
+    trapdoor = {
+		tile_front = "mcl_pale_garden_pale_oak_trapdoor.png",
+		tile_side = "mcl_pale_garden_pale_oak_trapdoor.png",
+		wield_image = "mcl_pale_garden_pale_oak_trapdoor.png"
+	},
+    fence = {tiles = {"mcl_pale_garden_planks_pale_oak.png"}},
+    fence_gate = {tiles = {"mcl_pale_garden_planks_pale_oak.png"}}
 })
 
 mcl_flowers.register_simple_flower("closed_eyeblossom", {
@@ -176,6 +194,24 @@ mcl_stairs.register_stair_and_slab("resin_bricks", {
     description_stair = S("Resin Bricks Stairs"),
     overrides = {_mcl_stonecutter_recipes = {"mcl_pale_garden:resin_bricks"}},
     recipeitem = "mcl_pale_garden:resin_bricks"
+})
+
+core.register_node("mcl_pale_garden:chiseled_resin_bricks", {
+    _mcl_blast_resistance = 6,
+    _mcl_hardness = 1.5,
+    _mcl_stonecutter_recipes = {"mcl_pale_garden:resin_bricks"},
+    description = S("Chiseled Resin Bricks"),
+    groups = {building_block = 1, pickaxey = 1},
+    sounds = mcl_sounds.node_sound_defaults(),
+    tiles = {"mcl_pale_garden_chiseled_resin_bricks.png"}
+})
+
+core.register_craft({
+    output = "mcl_pale_garden:chiseled_resin_bricks",
+    recipe = {
+        {"mcl_stairs:slab_resin_bricks"},
+        {"mcl_stairs:slab_resin_bricks"}
+    }
 })
 
 core.register_craftitem("mcl_pale_garden:resin_brick", {
