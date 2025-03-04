@@ -130,3 +130,58 @@ core.register_node("mcl_pale_garden:pale_moss_carpet", {
 	wield_image = "mcl_pale_garden_pale_moss_block.png",
 	wield_scale = {x = 1, y = 1, z = 0.5}
 })
+
+core.register_node("mcl_pale_garden:resin_block", {
+    _mcl_blast_resistance = 0,
+    _mcl_crafting_output = {single = {output = "mcl_pale_garden:resin_clump 9"}},
+    _mcl_hardness = 0,
+    description = S("Block of Resin"),
+    groups = {building_block = 1, dig_immediate = 3},
+    sounds = mcl_sounds.node_sound_defaults(),
+    tiles = {"mcl_pale_garden_resin_block.png"}
+})
+
+core.register_node("mcl_pale_garden:resin_clump", {
+    _mcl_blast_resistance = 0,
+    _mcl_cooking_output = "mcl_pale_garden:resin_brick",
+    _mcl_crafting_output = {square3 = {output = "mcl_pale_garden:resin_block"}},
+    _mcl_hardness = 0,
+    description = S("Resin Clump"),
+    drawtype = "signlike",
+    groups = {craftitem = 1, dig_immediate = 3},
+    inventory_image = "mcl_pale_garden_resin_clump_inv.png",
+    paramtype = "light",
+    paramtype2 = "wallmounted",
+    selection_box = {fixed = {-0.5, -0.5, -0.5, 0.5, -0.4375, 0.5}, type = "fixed"},
+    sounds = mcl_sounds.node_sound_defaults(),
+    sunlight_propagates = true,
+    tiles = {"mcl_pale_garden_resin_clump.png"},
+    use_texture_alpha = "blend",
+    walkable = false,
+    wield_image = "mcl_pale_garden_resin_clump_inv.png"
+})
+
+core.register_node("mcl_pale_garden:resin_bricks", {
+    _mcl_blast_resistance = 6,
+    _mcl_hardness = 1.5,
+    description = S("Resin Bricks"),
+    groups = {building_block = 1, pickaxey = 1},
+    sounds = mcl_sounds.node_sound_defaults(),
+    tiles = {"mcl_pale_garden_resin_bricks.png"}
+})
+
+mcl_stairs.register_stair_and_slab("resin_bricks", {
+    baseitem = "mcl_pale_garden:resin_bricks",
+    description_slab = S("Resin Bricks Slab"),
+    description_stair = S("Resin Bricks Stairs"),
+    overrides = {_mcl_stonecutter_recipes = {"mcl_pale_garden:resin_bricks"}},
+    recipeitem = "mcl_pale_garden:resin_bricks"
+})
+
+core.register_craftitem("mcl_pale_garden:resin_brick", {
+    _mcl_crafting_output = {square2 = {output = "mcl_pale_garden:resin_bricks"}},
+    description = S("Resin Brick"),
+    groups = {craftitem = 1},
+    inventory_image = "mcl_pale_garden_resin_brick.png",
+    wield_image = "mcl_pale_garden_resin_brick.png"
+})
