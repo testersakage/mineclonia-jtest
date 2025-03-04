@@ -158,18 +158,18 @@ for name, item in pairs (minetest.registered_items) do
 		if class == "shield" then
 			handshake_item_defs[name] = "shields"
 		end
-	elseif item.groups.can_eat_when_full and item.groups.can_eat_when_full > 0
-		and item.groups.food and item.groups.food > 0 then
+	elseif core.get_item_group(name, "can_eat_when_full") > 0
+		and core.get_item_group(name, "food") > 0 then
 		handshake_item_defs[name] = "magic_victuals"
-	elseif item.groups.eatable and item.groups.food > 0 then
+	elseif core.get_item_group(name, "eatable") > 0 and core.get_item_group(name, "food") > 0 then
 		if item._mcl_places_plant then
 			handshake_item_defs[name] = "farmable_victuals"
 		else
 			handshake_item_defs[name] = "victuals"
 		end
-	elseif item.groups.crossbow and item.groups.crossbow > 0 then
+	elseif core.get_item_group(name, "crossbow") > 0 then
 		handshake_item_defs[name] = "bows"
-	elseif item.groups.bow and item.groups.bow > 0 then
+	elseif core.get_item_group(name, "bow") > 0 then
 		handshake_item_defs[name] = "bows"
 	elseif item.on_place and minetest.registered_nodes[name] then
 		-- Probably a node.  Default to being used on nodes.
@@ -192,7 +192,7 @@ local hand = {
 for node, def in pairs (minetest.registered_nodes) do
 	if def.on_rightclick
 		or def._configures_formspec
-		or (def.groups.container and def.groups.container > 0) then
+		or core.get_item_group(node, "container") > 0 then
 		hand[node] = "default"
 	end
 end
@@ -245,7 +245,7 @@ local placeable_on_actionable = {
 for node, def in pairs (minetest.registered_nodes) do
 	if def.on_rightclick
 		or def._configures_formspec
-		or (def.groups.container and def.groups.container > 0) then
+		or core.get_item_group(node, "container") > 0 then
 		placeable_on_actionable[node] = "default"
 	end
 end
