@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-04 00:15+0000\n"
+"PO-Revision-Date: 2025-03-04 00:36+0000\n"
 "Last-Translator: ellesheepy <your.sheepy@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_achievements/zh_Hant/>\n"
@@ -223,7 +223,7 @@ msgid "Withering Heights"
 msgstr "借屍還魂"
 
 msgid "Summon the wither from the dead."
-msgstr "令凋零復活。"
+msgstr "召喚凋零。"
 
 msgid "Free the End"
 msgstr "有始有終"
@@ -250,7 +250,7 @@ msgid "Serious Dedication"
 msgstr "躬耕樂道"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
-msgstr ""
+msgstr "將一柄鋤用獄髓錠升級，並參悟人生。"
 
 msgid "Local Brewery"
 msgstr "本地釀製"
@@ -258,30 +258,32 @@ msgstr "本地釀製"
 msgid "Brew a Potion.\n"
 "Hint: Take a potion or glass bottle out of the brewing stand."
 msgstr ""
+"釀製一瓶藥水。\n"
+"提示：從釀造台取出一瓶藥水。"
 
 msgid "Enchanter"
 msgstr "附魔師"
 
 msgid "Enchant an item using an Enchantment Table."
-msgstr ""
+msgstr "用附魔台給一件物件附魔。"
 
 msgid "Bring Home the Beacon"
-msgstr "標開得勝"
+msgstr "玉不掩光"
 
 msgid "Use a beacon."
-msgstr ""
+msgstr "使用烽火台。"
 
 msgid "Beaconator"
-msgstr "標芒畢露"
+msgstr "珠不掩輝"
 
 msgid "Use a fully powered beacon."
-msgstr ""
+msgstr "使用最大功率的烽火台。"
 
 msgid "The End... Again..."
 msgstr "終界…重生…"
 
 msgid "Respawn the Ender Dragon."
-msgstr ""
+msgstr "復活終界龍。"
 
 msgid "Bee Our Guest"
 msgstr "待蜂之道"
