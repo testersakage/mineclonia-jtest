@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-04 00:15+0000\n"
+"Last-Translator: ellesheepy <your.sheepy@gmail.com>\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_achievements/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Benchmarking"
 msgstr "量枘製鑿"
@@ -210,25 +211,25 @@ msgid "Tactical Fishing"
 msgstr "求生捕魚術"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "捕魚，但不用釣竿！"
 
 msgid "The Cutest Predator"
 msgstr "最萌凶物"
 
 msgid "Catch an Axolotl with a bucket!"
-msgstr ""
+msgstr "用桶捕獲一尾蠑螈！"
 
 msgid "Withering Heights"
 msgstr "借屍還魂"
 
 msgid "Summon the wither from the dead."
-msgstr ""
+msgstr "令凋零復活。"
 
 msgid "Free the End"
 msgstr "有始有終"
 
 msgid "Kill the ender dragon. Good Luck!"
-msgstr ""
+msgstr "打敗終界龍。祝好運！"
 
 msgid "Fishy Business"
 msgstr "魚樂無窮"
@@ -236,12 +237,14 @@ msgstr "魚樂無窮"
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
 msgstr ""
+"捕獲一條魚。\n"
+"提示：鱈魚、三文魚、熱帶魚、河豚皆可。"
 
 msgid "Country Lode, Take Me Home"
 msgstr "磐石之安"
 
 msgid "Use a compass on a Lodestone."
-msgstr ""
+msgstr "對著定位石使用羅盤。"
 
 msgid "Serious Dedication"
 msgstr "躬耕樂道"
@@ -381,4 +384,3 @@ msgstr "亂世凶年"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
-
