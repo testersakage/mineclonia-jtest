@@ -669,6 +669,25 @@ function mcl_core.bottle_dirt(itemstack, placer, pointed_thing)
 	end
 end
 
+function mcl_core.get_bottle_place_on_water(bottle)
+	return function(itemstack, placer, pointed_thing)
+		if itemstack:get_name() == "mcl_potions:glass_bottle" then
+			local inv = placer:get_inventory()
+			local nstack = ItemStack(bottle)
+			if inv:room_for_item("main", nstack) then
+				inv:add_item("main", nstack)
+			else
+				core.add_item(pointed_thing.above, nstack)
+			end
+			if not core.is_creative_enabled(placer:get_player_name()) then
+				itemstack:take_item()
+			end
+		end
+		return itemstack
+	end
+end
+
+
 function mcl_core.bone_meal_grass(_, _, pointed_thing)
 	local flowers_table_plains = {
 		"mcl_flowers:dandelion",
