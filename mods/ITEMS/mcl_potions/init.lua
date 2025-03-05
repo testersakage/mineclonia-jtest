@@ -82,59 +82,14 @@ core.register_craftitem("mcl_potions:glass_bottle", {
 	groups = {brewitem=1, empty_bottle = 1},
 	liquids_pointable = true,
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type == "node" then
-			local node = core.get_node(pointed_thing.under)
-			local def = core.registered_nodes[node.name]
+		local node = core.get_node(pointed_thing.under)
+		local def = core.registered_nodes[node.name]
 
-			-- Try to fill glass bottle with water
-			local get_water = false
-			--local from_liquid_source = false
-			local river_water = false
-			local cauldron_group = core.get_item_group(node.name, "cauldron_water")
-			if def and def.groups and def.groups.water and def.liquidtype == "source" then
-				-- Water source
-				get_water = true
-				--from_liquid_source = true
-				river_water = node.name == "mclx_core:river_water_source"
-			-- Or reduce water level of cauldron by 1
-			elseif cauldron_group > 0 then
-				local pname = placer:get_player_name()
-				if core.is_protected(pointed_thing.under, pname) then
-					core.record_protection_violation(pointed_thing.under, pname)
-					return itemstack
-				end
-				get_water = true
-				river_water = cauldron_group == 2
-				mcl_cauldrons.add_level(pointed_thing.under, -1)
-			end
-			if get_water then
-				local water_bottle
-				if river_water then
-					water_bottle = ItemStack("mcl_potions:river_water")
-				else
-					water_bottle = ItemStack("mcl_potions:water")
-				end
-				-- Replace with water bottle, if possible, otherwise
-				-- place the water potion at a place where's space
-				local inv = placer:get_inventory()
-				core.sound_play("mcl_potions_bottle_fill", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
-				if core.is_creative_enabled(placer:get_player_name()) then
-					-- Don't replace empty bottle in creative for convenience reasons
-					if not inv:contains_item("main", water_bottle) then
-						inv:add_item("main", water_bottle)
-					end
-				elseif itemstack:get_count() == 1 then
-					return water_bottle
-				else
-					if inv:room_for_item("main", water_bottle) then
-						inv:add_item("main", water_bottle)
-					else
-						core.add_item(placer:get_pos(), water_bottle)
-					end
-					itemstack:take_item()
-				end
-			end
+		if def and def._on_bottle_place then
+			local r = def._on_bottle_place(itemstack, placer, pointed_thing)
+			if r then return r end
 		end
+
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 		return itemstack
@@ -157,23 +112,6 @@ local function potion_image(colorstring, opacity)
 		opacity = 127
 	end
 	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
-end
-
-
-
--- Cauldron fill up rules:
--- Adding any water increases the water level by 1, preserving the current water type
-local cauldron_levels = {
-	["mcl_core:water_source"] = {"", "_1", "_2", "_3"},
-	["mclx_core:river_water_source"] = {"", "_1r", "_2r", "_3r"},
-}
-local fill_cauldron = function(cauldron, water_type)
-	local base = "mcl_cauldrons:cauldron"
-	for index = 1, #cauldron_levels[water_type] do
-		if cauldron == (base .. cauldron_levels[water_type][index]) and index ~= #cauldron_levels[water_type] then
-			return base .. cauldron_levels[water_type][index + 1]
-		end
-	end
 end
 
 -- function to set node and empty water bottle (used for cauldrons and mud)
@@ -216,22 +154,15 @@ end
 
 local function water_bottle_on_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type == "node" then
-
-		local node = core.get_node(pointed_thing.under)
-
-		local cauldron = nil
-		if itemstack:get_name() == "mcl_potions:water" then -- regular water
-			cauldron = fill_cauldron(node.name, "mcl_core:water_source")
-		elseif itemstack:get_name() == "mcl_potions:river_water" then -- river water
-			cauldron = fill_cauldron(node.name, "mclx_core:river_water_source")
+		local def = core.registered_nodes[core.get_node(pointed_thing.under).name]
+		if def and def._on_bottle_place then
+			local r = def._on_bottle_place(itemstack, placer, pointed_thing)
+			if r then return r end
 		end
-
+		local node = core.get_node(pointed_thing.under)
 		local candle_group = core.get_item_group(node.name, "lit_candles")
 
-		if cauldron then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, cauldron)
-			return ItemStack("mcl_potions:glass_bottle")
-		elseif node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
+		if node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud")
 		elseif candle_group > 0 then
 			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_" .. candle_group, node.param2)
@@ -264,6 +195,7 @@ core.register_craftitem("mcl_potions:water", {
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
 	_dispense_into_walkable = true,
+	_mcl_cauldrons_liquid = "water",
 	on_secondary_use = core.item_eat(0, "mcl_potions:glass_bottle"),
 })
 
@@ -281,6 +213,7 @@ core.register_craftitem("mcl_potions:river_water", {
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
 	_dispense_into_walkable = true,
+	_mcl_cauldrons_liquid = "river_water",
 	on_secondary_use = core.item_eat(0, "mcl_potions:glass_bottle"),
 
 })
