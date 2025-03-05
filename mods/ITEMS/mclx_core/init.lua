@@ -12,6 +12,7 @@ core.register_node("mclx_core:river_water_source", table.merge(water_s, {
 	_doc_items_longdesc = S("River water has the same properties as water, but has a reduced flowing distance and is not renewable."),
 	_doc_items_entry_name = S("River Water"),
 	_doc_items_hidden = core.get_mapgen_setting("mg_name") ~= "valleys",
+	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:river_water"),
 	post_effect_color = {a=192, r=0x2c, g=0x88, b=0x8c},
 	tiles = {
 		{name="default_river_water_source_animated.png", animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=5.0}}
@@ -35,6 +36,7 @@ core.register_node("mclx_core:river_water_flowing", table.merge(water_f, {
 	liquid_renewable = false,
 	tiles = {"default_river_water_flowing_animated.png^[verticalframe:64:0"},
 	post_effect_color = {a=192, r=0x2c, g=0x88, b=0x8c},
+	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:river_water"),
 	special_tiles = {
 		{
 			image="default_river_water_flowing_animated.png",
