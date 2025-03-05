@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_pressureplates x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-05 07:17+0000\n"
+"Last-Translator: liulitchi <liulitchi@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_pressureplates/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Provides redstone power when pushed"
 msgstr "按下时提供红石能量"
@@ -41,14 +42,13 @@ msgid "A polished blackstone pressure plate is a redstone component which suppli
 msgstr "磨制黑石压力板是一种红石组件，当玩家或生物站在其上方时，它会为其周围的方块提供红石能量。除此之外，它不会被别的任何东西触发。"
 
 msgid "Light Weighted Pressure Plate"
-msgstr ""
+msgstr "轻质测重压力板"
 
 msgid "A heavy weighted pressure plate is a redstone component which supplies its surrounding blocks with one redstone power for every movable object (including dropped items, players and mobs) that rests on top of it."
 msgstr ""
 
 msgid "Heavy Weighted Pressure Plate"
-msgstr ""
+msgstr "轻质测重压力板"
 
 msgid "A heavy weighted pressure plate is a redstone component which supplies its surrounding blocks with one redstone power for every 10 movable objects (including dropped items, players and mobs) that rest on top of it."
 msgstr ""
-
