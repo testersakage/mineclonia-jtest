@@ -221,3 +221,46 @@ core.register_craftitem("mcl_pale_garden:resin_brick", {
     inventory_image = "mcl_pale_garden_resin_brick.png",
     wield_image = "mcl_pale_garden_resin_brick.png"
 })
+
+local tpl_heart = {
+    _mcl_blast_resistance = 10,
+    _mcl_fortune_drop = mcl_core.fortune_drop_ore,
+    _mcl_hardness = 10,
+    drop = {
+        items = {
+            {items = {"mcl_pale_garden:resin_clump"}},
+            {items = {"mcl_pale_garden:resin_clump 2"}, rarity = 3},
+            {items = {"mcl_pale_garden:resin_clump 3"}, rarity = 3}
+        },
+        max_items = 1
+    },
+    paramtype2 = "facedir",
+    sounds = mcl_sounds.node_sound_wood_defaults()
+}
+
+core.register_node("mcl_pale_garden:creaking_heart", table.merge(tpl_heart, {
+    _mcl_silk_touch_drop = true,
+    description = S("Creaking Heart"),
+    groups = {axey = 1, creaking_heart = 1, unmovable_by_piston = 1},
+    on_place = mcl_util.rotate_axis,
+    tiles = {
+        "mcl_pale_garden_creaking_heart_top.png",
+        "mcl_pale_garden_creaking_heart_top.png",
+        "mcl_pale_garden_creaking_heart.png"
+    }
+}))
+
+-- Missing dormant creaking heart
+
+core.register_node("mcl_pale_garden:creaking_heart_active", table.merge(tpl_heart, {
+    _mcl_silk_touch_drop = "mcl_pale_garden:creaking_heart",
+    description = S("Active Creaking Heart"),
+    groups = {
+        active_heart = 1, axey = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1
+    },
+    tiles = {
+        "mcl_pale_garden_creaking_heart_top_active.png",
+        "mcl_pale_garden_creaking_heart_top_active.png",
+        "mcl_pale_garden_creaking_heart_active.png"
+    }
+}))
