@@ -115,7 +115,7 @@ local function potion_image(colorstring, opacity)
 end
 
 -- function to set node and empty water bottle (used for cauldrons and mud)
-local function set_node_empty_bottle(itemstack, placer, pointed_thing, newitemstring, old_param2)
+function mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, newitemstring, old_param2)
 	local pname = placer:get_player_name()
 	if core.is_protected(pointed_thing.under, pname) then
 		core.record_protection_violation(pointed_thing.under, pname)
@@ -162,13 +162,11 @@ local function water_bottle_on_place(itemstack, placer, pointed_thing)
 		local node = core.get_node(pointed_thing.under)
 		local candle_group = core.get_item_group(node.name, "lit_candles")
 
-		if node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud")
-		elseif candle_group > 0 then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_" .. candle_group, node.param2)
+		if candle_group > 0 then
+			mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_" .. candle_group, node.param2)
 			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
 		elseif node.name == "mcl_candles:candle_cake_lit" then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_cake", node.param2)
+			mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_cake", node.param2)
 			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
 		end
 
