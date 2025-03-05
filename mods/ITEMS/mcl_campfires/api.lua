@@ -258,7 +258,7 @@ function mcl_campfires.generate_smoke(pos)
 	local smoke_timer
 
 	if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_farming:hay_block" then
-		smoke_timer = 8
+		smoke_timer = 8.25
 	else
 		smoke_timer = 4.75
 	end
@@ -268,21 +268,20 @@ function mcl_campfires.generate_smoke(pos)
 		if not player_particlespawners[pl] then player_particlespawners[pl] = {} end
 		if not player_particlespawners[pl][ph] and vector.distance(pos, pl:get_pos()) < PARTICLE_DISTANCE then
 			player_particlespawners[pl][ph] = minetest.add_particlespawner({
-				amount = 2,
+				amount = 4,
 				time = 0,
-				minpos = vector.offset(pos,-0.25,0.25,-0.25),
-				maxpos = vector.offset(pos,0.25,0.25,0.25),
-				minvel = vector.new(-0.1,0.5,-0.1),
-				maxvel = vector.new(0.1,1.2,0.1),
-				minacc = vector.new(-0.1,0.2,-0.1),
-				maxacc = vector.new(0.1,0.5,0.1),
+				minpos = vector.offset(pos, -0.125, 0.25, -0.125),
+				maxpos = vector.offset(pos, 0.125, 0.25, 0.125),
+				minvel = vector.new(-0.05, 0.5, -0.05),
+				maxvel = vector.new(0.05, 1.2, 0.05),
+				minacc = vector.new(-0.05, 0.2, -0.05),
+				maxacc = vector.new(0.05, 0.5, 0.05),
 				minexptime = smoke_timer - 2,
 				maxexptime = smoke_timer,
-				minsize = 3,
-				maxsize = 5,
+				minsize = 5,
+				maxsize = 8,
 				collisiondetection = true,
 				vertical = true,
-				texture = "mcl_campfires_particle_9.png",
 				playername = pl:get_player_name(),
 				texpool = {
 					{ name = "mcl_campfires_particle_1.png" },
@@ -394,7 +393,7 @@ minetest.register_entity("mcl_campfires:food_entity", {
 minetest.register_abm({
 	label = "Campfire Smoke",
 	nodenames = {"group:lit_campfire"},
-	interval = 2,
-	chance = 2,
+	interval = 4,
+	chance = 1,
 	action = mcl_campfires.generate_smoke,
 })
