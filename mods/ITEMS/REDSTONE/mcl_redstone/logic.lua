@@ -126,9 +126,6 @@ local function get_node_power_2(pos)
 end
 
 -- Set/add a position to mcl_redstone._pending_updates.
--- TODO: "update_tab[node_name] and pos or nil" can result in unsetting a position
---       if node_name is provided. Written this way to preserve the exact behavior
---       prior to this commit.
 local function set_pending_update(pos, node_name)
 	if node_name then
 		mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = update_tab[node_name] and pos or nil
