@@ -232,20 +232,68 @@ local tpl_heart = {
     _mcl_blast_resistance = 10,
     _mcl_fortune_drop = mcl_core.fortune_drop_ore,
     _mcl_hardness = 10,
-    drop = {
-        items = {
-            {items = {"mcl_pale_garden:resin_clump"}},
-            {items = {"mcl_pale_garden:resin_clump 2"}, rarity = 3},
-            {items = {"mcl_pale_garden:resin_clump 3"}, rarity = 3}
-        },
-        max_items = 1
-    },
+    after_dig_node = function(pos, oldnode, oldmetadata, digger)
+        local tool = digger:get_wielded_item()
+
+        if not tool then return end
+
+        local silk_touch = mcl_enchanting.get_enchantment(tool, "silk_touch")
+        local fortune = mcl_enchanting.get_enchantment(tool, "fortune")
+        local creative = core.is_creative_enabled(digger:get_player_name())
+
+        if silk_touch == 1 then
+            -- Check for creaking heart variants
+            if oldnode.name ~= "mcl_pale_garden:creaking_heart" then
+                oldnode.name = "mcl_pale_garden:creaking_heart"
+            end
+
+            core.add_item(pos, oldnode.name)
+        else
+            if oldmetadata.fields["mcl_pale_garden:is_natural"] == "true" then
+                local xp_amount = math.random(20, 24)
+
+                if not creative then mcl_experience.throw_xp(pos, xp_amount) end
+            end
+
+            local clump_amount = math.random(1, 3)
+
+            if fortune >= 1 then clump_amount = clump_amount * fortune end
+
+            if not creative then core.add_item(pos, "mcl_pale_garden:resin_clump " .. clump_amount) end
+        end
+
+        tool:add_wear(mcl_autogroup.get_wear(tool:get_name(), "axey"))
+        digger:set_wielded_item(tool)
+    end,
+    after_place_node = function(pos, placer, _, _)
+        core.get_meta(pos):set_string("mcl_pale_garden:is_natural", "false")
+
+        return core.is_creative_enabled(placer:get_player_name())
+    end,
+    drop = "",
+    on_construct = function(pos)
+        core.get_meta(pos):set_string("mcl_pale_garden:is_natural", "true")
+    end,
+    on_place = function(itemstack, placer, pointed_thing)
+        if pointed_thing.type ~= "node" then return end
+
+        local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+
+        if rc then return rc end
+
+        local pos = pointed_thing.under
+
+        core.get_meta(pos):set_string("mcl_pale_garden:is_natural", "false")
+
+        if not core.is_creative_enabled(placer:get_player_name()) then itemstack:take_item() end
+
+        return itemstack
+    end,
     paramtype2 = "facedir",
     sounds = mcl_sounds.node_sound_wood_defaults()
 }
 
 core.register_node("mcl_pale_garden:creaking_heart", table.merge(tpl_heart, {
-    _mcl_silk_touch_drop = true,
     description = S("Creaking Heart"),
     groups = {axey = 1, creaking_heart = 1, unmovable_by_piston = 1},
     on_place = mcl_util.rotate_axis,
@@ -259,7 +307,6 @@ core.register_node("mcl_pale_garden:creaking_heart", table.merge(tpl_heart, {
 -- Missing dormant creaking heart
 
 core.register_node("mcl_pale_garden:creaking_heart_active", table.merge(tpl_heart, {
-    _mcl_silk_touch_drop = "mcl_pale_garden:creaking_heart",
     description = S("Active Creaking Heart"),
     groups = {
         active_heart = 1, axey = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1
