@@ -154,27 +154,16 @@ end
 
 local function water_bottle_on_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type == "node" then
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc then return rc end
+
 		local def = core.registered_nodes[core.get_node(pointed_thing.under).name]
 		if def and def._on_bottle_place then
 			local r = def._on_bottle_place(itemstack, placer, pointed_thing)
 			if r then return r end
 		end
-		local node = core.get_node(pointed_thing.under)
-		local candle_group = core.get_item_group(node.name, "lit_candles")
 
-		if candle_group > 0 then
-			mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_" .. candle_group, node.param2)
-			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
-		elseif node.name == "mcl_candles:candle_cake_lit" then
-			mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_cake", node.param2)
-			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
-		end
-
-		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-		if rc then return rc end
 	end
-
-
 	-- Drink the water by default
 	return core.do_item_eat(0, "mcl_potions:glass_bottle", itemstack, placer, pointed_thing)
 end
