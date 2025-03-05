@@ -1,8 +1,14 @@
-local S = core.get_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local schem_path = core.get_modpath(modname) .. "/schematics/"
 
 mcl_trees.register_wood("pale_oak",{
     readable_name = "Pale Oak",
     sign_color = "#ECDDE3",
+    tree_schems_2x2 = {
+        {file = schem_path .. "mcl_pale_garden_pale_oak_tree_1.mts", offset = vector.new(1, 0, 1)},
+        {file = schem_path .. "mcl_pale_garden_pale_oak_tree_2.mts"}
+    },
     tree = {
         tiles = {
             "mcl_pale_garden_log_pale_oak_top.png",
@@ -264,3 +270,26 @@ core.register_node("mcl_pale_garden:creaking_heart_active", table.merge(tpl_hear
         "mcl_pale_garden_creaking_heart_active.png"
     }
 }))
+
+core.register_node("mcl_pale_garden:pale_hanging_moss", {
+    _mcl_blast_resistance = 0,
+    _mcl_hardness = 0,
+    _mcl_silk_touch_drop = true,
+    drawtype = "plantlike",
+    drop = {
+        items = {
+            {items = {"mcl_pale_garden:pale_hanging_moss"}, tool_groups = {"shears"}}
+        }
+    },
+    groups = {
+        compostability = 30, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
+        supported_node = 1
+    },
+    inventory_image = "mcl_pale_garden_pale_hanging_moss.png",
+    paramtype = "light",
+    sounds = mcl_sounds.node_sound_leaves_defaults(),
+    sunlight_propagates = true,
+    tiles = {"mcl_pale_garden_pale_hanging_moss.png"},
+    walkable = false,
+    wield_image = "mcl_pale_garden_pale_hanging_moss.png"
+})
