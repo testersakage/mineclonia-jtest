@@ -482,6 +482,7 @@ core.register_node("mcl_core:dirt", {
 	groups = {handy=1, shovely=1, dirt=1, soil=1, soil_sapling=2, soil_sugarcane=1, soil_bamboo=1, soil_fungus=1, cultivatable=2, enderman_takable=1, building_block=1, converts_to_moss=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_on_shovel_place = mcl_core.make_dirtpath,
+	_on_bottle_place = 	mcl_core.bottle_dirt,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 })
@@ -493,6 +494,7 @@ core.register_node("mcl_core:coarse_dirt", {
 	groups = { handy=1, shovely=1, dirt=3, soil=1, soil_sugarcane=1, soil_bamboo=1, soil_fungus=1, cultivatable=1, enderman_takable=1, building_block=1, soil_sapling=2, converts_to_moss=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_on_shovel_place = mcl_core.make_dirtpath,
+	_on_bottle_place = 	mcl_core.bottle_dirt,
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 })
