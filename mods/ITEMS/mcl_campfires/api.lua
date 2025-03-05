@@ -258,9 +258,9 @@ function mcl_campfires.generate_smoke(pos)
 	local smoke_timer
 
 	if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_farming:hay_block" then
-		smoke_timer = 8.25
+		smoke_timer = 11.5
 	else
-		smoke_timer = 4.75
+		smoke_timer = 7.25
 	end
 
 	local ph = minetest.hash_node_position(pos)
@@ -278,25 +278,24 @@ function mcl_campfires.generate_smoke(pos)
 				maxacc = vector.new(0.05, 0.5, 0.05),
 				minexptime = smoke_timer - 2,
 				maxexptime = smoke_timer,
-				minsize = 5,
-				maxsize = 8,
+				minsize = 7,
+				maxsize = 10,
 				collisiondetection = true,
-				vertical = true,
 				playername = pl:get_player_name(),
 				texpool = {
-					{ name = "mcl_campfires_particle_1.png" },
-					{ name = "mcl_campfires_particle_2.png" },
-					{ name = "mcl_campfires_particle_3.png" },
-					{ name = "mcl_campfires_particle_4.png" },
-					{ name = "mcl_campfires_particle_5.png" },
-					{ name = "mcl_campfires_particle_6.png" },
-					{ name = "mcl_campfires_particle_7.png" },
-					{ name = "mcl_campfires_particle_8.png" },
-					{ name = "mcl_campfires_particle_9.png" },
-					{ name = "mcl_campfires_particle_10.png" },
-					{ name = "mcl_campfires_particle_11.png" },
-					{ name = "mcl_campfires_particle_11.png" },
-					{ name = "mcl_campfires_particle_12.png" },
+					{ name = "mcl_campfires_particle_1.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_2.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_3.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_4.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_5.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_6.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_7.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_8.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_9.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_10.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_11.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_11.png", alpha_tween = {1, 0.25} },
+					{ name = "mcl_campfires_particle_12.png", alpha_tween = {1, 0.25} },
 				}
 			})
 		end
