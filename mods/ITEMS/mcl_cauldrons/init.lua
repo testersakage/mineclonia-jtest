@@ -123,7 +123,7 @@ local function bucket_place(itemstack,placer,pointed_thing)
 	return itemstack
 end
 
-local function botle_place(itemstack, placer, pointed_thing)
+local function bottle_place(itemstack, placer, pointed_thing)
 	local def = itemstack:get_definition()
 	local node = core.get_node(pointed_thing.under)
 	local ndef = core.registered_nodes[node.name]
@@ -165,7 +165,7 @@ core.register_node("mcl_cauldrons:cauldron", {
 	_mcl_hardness = 2,
 	_mcl_blast_resistance = 2,
 	_on_bucket_place = bucket_place,
-	_on_bottle_place = botle_place,
+	_on_bottle_place = bottle_place,
 })
 
 -- Template function for cauldrons with water
@@ -208,7 +208,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		_mcl_blast_resistance = 2,
 		_mcl_cauldrons_liquid = liquid or "water",
 		_mcl_baseitem = "mcl_cauldrons:cauldron",
-		_on_bottle_place = botle_place,
+		_on_bottle_place = bottle_place,
 		_on_bucket_place = bucket_place,
 		_on_bucket_place_empty  = function(itemstack,placer,pointed_thing)
 			local name = core.get_node(pointed_thing.under).name
