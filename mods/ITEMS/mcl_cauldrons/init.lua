@@ -68,6 +68,11 @@ local buckets = {
 	powder_snow = "mcl_powder_snow:bucket_powder_snow"
 }
 
+local water_bottles = {
+	water = "mcl_potions:water",
+	river_water = "mcl_potions:river_water",
+}
+
 function mcl_cauldrons.get_cauldron_name(level, liquid)
 	level = math.min(3, level)
 	level = math.max(0, level)
@@ -118,6 +123,25 @@ local function bucket_place(itemstack,placer,pointed_thing)
 	return itemstack
 end
 
+local function botle_place(itemstack, placer, pointed_thing)
+	local def = itemstack:get_definition()
+	local node = core.get_node(pointed_thing.under)
+	local ndef = core.registered_nodes[node.name]
+
+	local cauldron_filled = core.get_item_group(node.name, "cauldron_filled")
+	if def and ndef and (cauldron_filled == 0 or def._mcl_cauldrons_liquid == ndef._mcl_cauldrons_liquid) then
+		mcl_cauldrons.add_level(pointed_thing.under, 1, def._mcl_cauldrons_liquid)
+		itemstack:set_name("mcl_potions:glass_bottle")
+		return itemstack
+	end
+	local cauldron_filled = core.get_item_group(core.get_node(pointed_thing.under).name, "cauldron_filled")
+	if ndef and ndef._mcl_cauldrons_liquid and itemstack:get_name() == "mcl_potions:glass_bottle" and cauldron_filled > 0 then
+		mcl_cauldrons.add_level(pointed_thing.under, -1, ndef._mcl_cauldrons_liquid)
+		itemstack:set_name(water_bottles[ndef._mcl_cauldrons_liquid])
+		return itemstack
+	end
+end
+
 -- Empty cauldron
 core.register_node("mcl_cauldrons:cauldron", {
 	description = S("Cauldron"),
@@ -141,6 +165,7 @@ core.register_node("mcl_cauldrons:cauldron", {
 	_mcl_hardness = 2,
 	_mcl_blast_resistance = 2,
 	_on_bucket_place = bucket_place,
+	_on_bottle_place = botle_place,
 })
 
 -- Template function for cauldrons with water
@@ -183,6 +208,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		_mcl_blast_resistance = 2,
 		_mcl_cauldrons_liquid = liquid or "water",
 		_mcl_baseitem = "mcl_cauldrons:cauldron",
+		_on_bottle_place = botle_place,
 		_on_bucket_place = bucket_place,
 		_on_bucket_place_empty  = function(itemstack,placer,pointed_thing)
 			local name = core.get_node(pointed_thing.under).name
