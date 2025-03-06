@@ -244,7 +244,13 @@ mcl_torches.register_torch({
 	groups = {dig_immediate = 3, deco_block = 1, soul_firelike = 1,},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	particles = {
-		smoke = "mcl_torches_smoke.png^[colorize:black:223",
+		smoke = {
+			"mcl_particles_sponge1.png",
+			"mcl_particles_sponge2.png",
+			"mcl_particles_sponge3.png",
+			"mcl_particles_sponge4.png",
+			"mcl_particles_sponge5.png",
+		},
 		flame = "mcl_particles_soul_fire_flame.png"
 	}
 })

@@ -21,7 +21,16 @@ mcl_torches.register_torch({
 	light = 7,
 	groups = {dig_immediate=3, dig_by_water=1, redstone_torch=1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	particles = {smoke = "mcl_torches_smoke.png^[colorize:red:223"}
+	particles = {
+		smoke = {
+			"mcl_particles_sponge1.png",
+			"mcl_particles_sponge2.png",
+			"mcl_particles_sponge3.png",
+			"mcl_particles_sponge4.png",
+			"mcl_particles_sponge5.png",
+		},
+		smoke_color = "red"
+	}
 })
 
 local burnout_tab = {}
