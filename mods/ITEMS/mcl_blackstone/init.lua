@@ -243,8 +243,10 @@ mcl_torches.register_torch({
 	light = 12, --soul torches are a bit dimmer than normal torches
 	groups = {dig_immediate = 3, deco_block = 1, soul_firelike = 1,},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	particles = true,
-	flame_type = 2,
+	particles = {
+		smoke = "mcl_torches_smoke.png^[colorize:black:223",
+		flame = "mcl_particles_soul_fire_flame.png"
+	}
 })
 
 mcl_walls.register_wall_def("mcl_blackstone:wall", {
