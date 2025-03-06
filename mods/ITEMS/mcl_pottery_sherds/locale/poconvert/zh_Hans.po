@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_pottery_sherds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 12:06+0000\n"
+"Last-Translator: liulitchi <liulitchi@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_pottery_sherds/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Used for crafting decorated pots"
 msgstr "用于制作装饰的罐子"
@@ -26,71 +27,70 @@ msgid "Specially decorated pots can be crafted using pottery sherds"
 msgstr "可以使用陶片来制作特别装饰过的罐子"
 
 msgid "Angler Pottery Sherd"
-msgstr ""
+msgstr "垂钓纹样陶片"
 
 msgid "Archer Pottery Sherd"
-msgstr ""
+msgstr "弓箭纹样陶片"
 
 msgid "Arms Up Pottery Sherd"
-msgstr ""
+msgstr "举臂纹样陶片"
 
 msgid "Blade Pottery Sherd"
-msgstr ""
+msgstr "利刃纹样陶片"
 
 msgid "Brewer Pottery Sherd"
-msgstr ""
+msgstr "佳酿纹样陶片"
 
 msgid "Burn Pottery Sherd"
-msgstr ""
+msgstr "烈焰纹样陶片"
 
 msgid "Danger Pottery Sherd"
-msgstr ""
+msgstr "危机纹样陶片"
 
 msgid "Explorer Pottery Sherd"
-msgstr ""
+msgstr "探险纹样陶片"
 
 msgid "Flow Pottery Sherd"
-msgstr ""
+msgstr "涡流纹样陶片"
 
 msgid "Friend Pottery Sherd"
-msgstr ""
+msgstr "挚友纹样陶片"
 
 msgid "Guster Pottery Sherd"
-msgstr ""
+msgstr "旋风纹样陶片"
 
 msgid "Heart Pottery Sherd"
-msgstr ""
+msgstr "爱心纹样陶片"
 
 msgid "Heartbreak Pottery Sherd"
-msgstr ""
+msgstr "心碎纹样陶片"
 
 msgid "Howl Pottery Sherd"
-msgstr ""
+msgstr "狼嚎纹样陶片"
 
 msgid "Miner Pottery Sherd"
-msgstr ""
+msgstr "采矿纹样陶片"
 
 msgid "Mourner Pottery Sherd"
-msgstr ""
+msgstr "悲恸纹样陶片"
 
 msgid "Plenty Pottery Sherd"
-msgstr ""
+msgstr "富饶纹样陶片"
 
 msgid "Prize Pottery Sherd"
-msgstr ""
+msgstr "珍宝纹样陶片"
 
 msgid "Scrape Pottery Sherd"
-msgstr ""
+msgstr "刮削纹样陶片"
 
 msgid "Sheaf Pottery Sherd"
-msgstr ""
+msgstr "麦捆纹样陶片"
 
 msgid "Shelter Pottery Sherd"
-msgstr ""
+msgstr "树荫纹样陶片"
 
 msgid "Skull Pottery Sherd"
-msgstr ""
+msgstr "头颅纹样陶片"
 
 msgid "Snort Pottery Sherd"
-msgstr ""
-
+msgstr "嗅探纹样陶片"
