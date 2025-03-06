@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"PO-Revision-Date: 2025-03-06 15:11+0000\n"
 "Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/ru/>\n"
@@ -45,13 +45,15 @@ msgid "Paintable decoration"
 msgstr "Раскрашиваемая декорация"
 
 msgid "Can be used to craft special banner designs on the loom"
-msgstr "Можно использовать для изготовления специальных флагов на ткацком станке"
+msgstr ""
+"Можно использовать для изготовления специальных дизайнов флагов на ткацком "
+"станке"
 
 msgid "Special Banner Pattern"
 msgstr "Специальный узор флага"
 
 msgid "Black Banner"
-msgstr "Чёрное знамя"
+msgstr "Чёрный флаг"
 
 msgid "Black Base"
 msgstr "Чёрная основа"
@@ -177,10 +179,10 @@ msgid "Black Skull Charge"
 msgstr "Чёрный череп"
 
 msgid "Black Thing Charge"
-msgstr "Чёрная штука"
+msgstr "Чёрное нечто"
 
 msgid "Blue Banner"
-msgstr "Синее знамя"
+msgstr "Синий флаг"
 
 msgid "Blue Base"
 msgstr "Синяя основа"
@@ -306,13 +308,13 @@ msgid "Blue Skull Charge"
 msgstr "Синий череп"
 
 msgid "Blue Thing Charge"
-msgstr "Синяя штука"
+msgstr "Синее нечто"
 
 msgid "Bricks Banner Pattern"
 msgstr "Узор флага «Муровка»"
 
 msgid "Brown Banner"
-msgstr "Коричневое знамя"
+msgstr "Коричневый флаг"
 
 msgid "Brown Base"
 msgstr "Коричневая основа"
@@ -438,7 +440,7 @@ msgid "Brown Skull Charge"
 msgstr "Коричневый череп"
 
 msgid "Brown Thing Charge"
-msgstr "Коричневая штука"
+msgstr "Коричневое нечто"
 
 msgid "Creeper Banner Pattern"
 msgstr "Узор флага «Крипер»"
@@ -447,7 +449,7 @@ msgid "Curly border Banner Pattern"
 msgstr "Узор флага «Зубчатая кайма»"
 
 msgid "Cyan Banner"
-msgstr "Бирюзовое знамя"
+msgstr "Бирюзовый флаг"
 
 msgid "Cyan Base"
 msgstr "Бирюзовая основа"
@@ -573,7 +575,7 @@ msgid "Cyan Skull Charge"
 msgstr "Бирюзовый череп"
 
 msgid "Cyan Thing Charge"
-msgstr "Бирюзовая штука"
+msgstr "Бирюзовое нечто"
 
 msgid "Flow Banner Pattern"
 msgstr "Узор флага «Поток»"
@@ -585,136 +587,136 @@ msgid "Globe Banner Pattern"
 msgstr "Узор флага «Глобус»"
 
 msgid "Green Banner"
-msgstr "Зеленое знамя"
+msgstr "Зелёный флаг"
 
 msgid "Green Base"
-msgstr "Зеленая основа"
+msgstr "Зелёная основа"
 
 msgid "Green Base Dexter Canton"
-msgstr "Зеленый левый нижний угол"
+msgstr "Зелёный левый нижний угол"
 
 msgid "Green Base Gradient"
-msgstr "Зеленый градиент снизу"
+msgstr "Зелёный градиент снизу"
 
 msgid "Green Base Indented"
-msgstr "Зеленые зубцы снизу"
+msgstr "Зелёные зубцы снизу"
 
 msgid "Green Base Sinister Canton"
-msgstr "Зеленый правый нижний угол"
+msgstr "Зелёный правый нижний угол"
 
 msgid "Green Bend"
-msgstr "Зеленая перевязь"
+msgstr "Зелёная перевязь"
 
 msgid "Green Bend Sinister"
-msgstr "Зеленая левосторонняя перевязь"
+msgstr "Зелёная левосторонняя перевязь"
 
 msgid "Green Bordure"
-msgstr "Зеленая кайма"
+msgstr "Зелёная кайма"
 
 msgid "Green Bordure Indented"
-msgstr "Зеленая зубчатая кайма"
+msgstr "Зелёная зубчатая кайма"
 
 msgid "Green Bricks"
-msgstr "Зеленая кирпичная кладка"
+msgstr "Зелёная кирпичная кладка"
 
 msgid "Green Chevron"
-msgstr "Зеленый шеврон"
+msgstr "Зелёный шеврон"
 
 msgid "Green Chevron Inverted"
-msgstr "Зеленый перевернутый шеврон"
+msgstr "Зелёный перевернутый шеврон"
 
 msgid "Green Chief"
-msgstr "Зеленая полоса сверху"
+msgstr "Зелёная полоса сверху"
 
 msgid "Green Chief Dexter Canton"
-msgstr "Зеленый левый верхний угол"
+msgstr "Зелёный левый верхний угол"
 
 msgid "Green Chief Indented"
-msgstr "Зеленые зубцы сверху"
+msgstr "Зелёные зубцы сверху"
 
 msgid "Green Chief Sinister Canton"
-msgstr "Зеленый правый верхний угол"
+msgstr "Зелёный правый верхний угол"
 
 msgid "Green Creeper Charge"
-msgstr "Зеленое лицо крипера"
+msgstr "Зелёное лицо крипера"
 
 msgid "Green Cross"
-msgstr "Зеленый крест"
+msgstr "Зелёный крест"
 
 msgid "Green Fess"
-msgstr "Зеленая полоса по центру"
+msgstr "Зелёная полоса по центру"
 
 msgid "Green Flow"
-msgstr "Зеленый поток"
+msgstr "Зелёный поток"
 
 msgid "Green Flower Charge"
-msgstr "Зеленый цветок"
+msgstr "Зелёный цветок"
 
 msgid "Green Globe Charge"
-msgstr "Зеленый глобус"
+msgstr "Зелёный глобус"
 
 msgid "Green Gradient"
-msgstr "Зеленый градиент"
+msgstr "Зелёный градиент"
 
 msgid "Green Guster"
-msgstr "Зеленый вихревик"
+msgstr "Зелёный вихревик"
 
 msgid "Green Lozenge"
-msgstr "Зеленый ромб"
+msgstr "Зелёный ромб"
 
 msgid "Green Pale"
-msgstr "Зеленый столб"
+msgstr "Зелёный столб"
 
 msgid "Green Pale Dexter"
-msgstr "Зеленый левый край"
+msgstr "Зелёный левый край"
 
 msgid "Green Pale Sinister"
-msgstr "Зеленый правый край"
+msgstr "Зелёный правый край"
 
 msgid "Green Paly"
-msgstr "Зеленые вертикальные полосы"
+msgstr "Зелёные вертикальные полосы"
 
 msgid "Green Per Bend"
-msgstr "Зеленый скос"
+msgstr "Зелёный скос"
 
 msgid "Green Per Bend Inverted"
-msgstr "Зеленый обратный скос"
+msgstr "Зелёный обратный скос"
 
 msgid "Green Per Bend Sinister"
-msgstr "Зеленый скос слева"
+msgstr "Зелёный скос слева"
 
 msgid "Green Per Bend Sinister Inverted"
-msgstr "Зеленый обратный скос слева"
+msgstr "Зелёный обратный скос слева"
 
 msgid "Green Per Fess"
-msgstr "Зеленое верхнее пересечение"
+msgstr "Зелёное верхнее пересечение"
 
 msgid "Green Per Fess Inverted"
-msgstr "Зеленое нижнее пересечение"
+msgstr "Зелёное нижнее пересечение"
 
 msgid "Green Per Pale"
-msgstr "Зеленое левое рассечение"
+msgstr "Зелёное левое рассечение"
 
 msgid "Green Per Pale Inverted"
-msgstr "Зеленое правое рассечение"
+msgstr "Зелёное правое рассечение"
 
 msgid "Green Piglin Charge"
-msgstr "Зеленый пиглин"
+msgstr "Зелёный пиглин"
 
 msgid "Green Roundel"
-msgstr "Зеленый круг"
+msgstr "Зелёный круг"
 
 msgid "Green Saltire"
-msgstr "Зеленый косой крест"
+msgstr "Зелёный косой крест"
 
 msgid "Green Skull Charge"
-msgstr "Зеленый череп"
+msgstr "Зелёный череп"
 
 msgid "Green Thing Charge"
-msgstr "Зеленая штука"
+msgstr "Зелёное нечто"
 
 msgid "Grey Banner"
-msgstr "Серое знамя"
+msgstr "Серый флаг"
 
 msgid "Grey Base"
 msgstr "Серая основа"
@@ -840,13 +842,13 @@ msgid "Grey Skull Charge"
 msgstr "Серый череп"
 
 msgid "Grey Thing Charge"
-msgstr "Серая штука"
+msgstr "Серое нечто"
 
 msgid "Guster Banner Pattern"
 msgstr "Узор флага «Вихрь»"
 
 msgid "Light Blue Banner"
-msgstr "Голубое знамя"
+msgstr "Голубый флаг"
 
 msgid "Light Blue Base"
 msgstr "Голубая основа"
@@ -972,10 +974,10 @@ msgid "Light Blue Skull Charge"
 msgstr "Голубой череп"
 
 msgid "Light Blue Thing Charge"
-msgstr "Голубая штука"
+msgstr "Голубое нечто"
 
 msgid "Light Grey Banner"
-msgstr "Светло-серое знамя"
+msgstr "Светло-серый флаг"
 
 msgid "Light Grey Base"
 msgstr "Светло-серая основа"
@@ -1101,10 +1103,10 @@ msgid "Light Grey Skull Charge"
 msgstr "Светло-серый череп"
 
 msgid "Light Grey Thing Charge"
-msgstr "Светло-серая штука"
+msgstr "Светло-серое нечто"
 
 msgid "Lime Banner"
-msgstr "Лаймовое знамя"
+msgstr "Лаймовый флаг"
 
 msgid "Lime Base"
 msgstr "Лаймовая основа"
@@ -1230,10 +1232,10 @@ msgid "Lime Skull Charge"
 msgstr "Лаймовый череп"
 
 msgid "Lime Thing Charge"
-msgstr "Лаймовая штука"
+msgstr "Лаймовое нечто"
 
 msgid "Magenta Banner"
-msgstr "Пурпурное знамя"
+msgstr "Пурпурный флаг"
 
 msgid "Magenta Base"
 msgstr "Пурпурная основа"
@@ -1359,10 +1361,10 @@ msgid "Magenta Skull Charge"
 msgstr "Пурпурный череп"
 
 msgid "Magenta Thing Charge"
-msgstr "Пурпурная штука"
+msgstr "Пурпурное нечто"
 
 msgid "Orange Banner"
-msgstr "Оранжевое знамя"
+msgstr "Оранжевый флаг"
 
 msgid "Orange Base"
 msgstr "Оранжевая основа"
@@ -1488,13 +1490,13 @@ msgid "Orange Skull Charge"
 msgstr "Оранжевый череп"
 
 msgid "Orange Thing Charge"
-msgstr "Оранжевая штука"
+msgstr "Оранжевое нечто"
 
 msgid "Piglin Banner Pattern"
 msgstr "Узор флага «Пиглин»"
 
 msgid "Pink Banner"
-msgstr "Розовое знамя"
+msgstr "Розовый флаг"
 
 msgid "Pink Base"
 msgstr "Розовая основа"
@@ -1620,10 +1622,10 @@ msgid "Pink Skull Charge"
 msgstr "Розовый череп"
 
 msgid "Pink Thing Charge"
-msgstr "Розовая штука"
+msgstr "Розовое нечто"
 
 msgid "Purple Banner"
-msgstr "Фиолетовое знамя"
+msgstr "Фиолетовый флаг"
 
 msgid "Purple Base"
 msgstr "Фиолетовая основа"
@@ -1749,10 +1751,10 @@ msgid "Purple Skull Charge"
 msgstr "Фиолетовый череп"
 
 msgid "Purple Thing Charge"
-msgstr "Фиолетовая штука"
+msgstr "Фиолетовое нечто"
 
 msgid "Red Banner"
-msgstr "Красное знамя"
+msgstr "Красный флаг"
 
 msgid "Red Base"
 msgstr "Красная основа"
@@ -1878,7 +1880,7 @@ msgid "Red Skull Charge"
 msgstr "Красный череп"
 
 msgid "Red Thing Charge"
-msgstr "Красная штука"
+msgstr "Красное нечто"
 
 msgid "Skull Banner Pattern"
 msgstr "Узор флага «Череп»"
@@ -1887,7 +1889,7 @@ msgid "Thing Banner Pattern"
 msgstr "Узор флага «Нечто»"
 
 msgid "White Banner"
-msgstr "Белое знамя"
+msgstr "Белый флаг"
 
 msgid "White Base"
 msgstr "Белая основа"
@@ -2013,10 +2015,10 @@ msgid "White Skull Charge"
 msgstr "Белый череп"
 
 msgid "White Thing Charge"
-msgstr "Белая штука"
+msgstr "Белое нечто"
 
 msgid "Yellow Banner"
-msgstr "Жёлтое знамя"
+msgstr "Жёлтый флаг"
 
 msgid "Yellow Base"
 msgstr "Жёлтая основа"
@@ -2142,4 +2144,4 @@ msgid "Yellow Skull Charge"
 msgstr "Жёлтый череп"
 
 msgid "Yellow Thing Charge"
-msgstr "Жёлтая штука"
+msgstr "Жёлтое нечто"
