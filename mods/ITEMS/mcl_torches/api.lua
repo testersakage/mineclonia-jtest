@@ -330,14 +330,18 @@ core.register_on_leaveplayer(function(player)
 end)
 
 core.register_abm({
-	action = generate_particles,
-	chance = 1,
-	interval = 4,
 	label = "Torch Particles",
-	nodenames = {"group:torch"}
+	nodenames = {"group:torch"},
+	interval = 4,
+	chance = 1,
+	action = generate_particles
 })
 
 core.register_abm({
+	label = "Remove Torch Particles",
+	nodenames = {"group:redstone_torch"},
+	interval = 4,
+	chance = 1,
 	action = function(pos, node)
 		if core.get_item_group(node.name, "redstone_torch") ~= 2 then return end
 
@@ -351,8 +355,4 @@ core.register_abm({
 			player_ps[pl][ph] = nil
 		end
 	end,
-	chance = 1,
-	interval = 4,
-	label = "Remove Torch Particles",
-	nodenames = {"group:redstone_torch"}
 })
