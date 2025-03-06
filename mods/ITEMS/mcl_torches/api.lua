@@ -1,5 +1,26 @@
 local player_ps = {}
 local particle_distance = 32
+
+local function create_texpool(textures, color)
+	local result = {}
+	local ratios = {"233", "255"}
+	local colors = {"black", "silver", "gray"}
+
+	for _, texture in pairs(textures) do
+		for i = 1, #colors do
+			for j = 1, #ratios do
+				table.insert(result, {
+					alpha_tween = {1, 0.25},
+					name = texture .. "^[colorize:" .. (color or colors[i]) .. ":" .. ratios[j],
+					scale_tween = {1, 0.25}
+				})
+			end
+		end
+	end
+
+	return result
+end
+
 -- Check if placement at given node is allowed
 local function check_placement_allowed(node, wdir)
 	-- Torch placement rules: Disallow placement on some nodes. General rule: Solid, opaque, full cube collision box nodes are allowed.
@@ -202,7 +223,7 @@ local function generate_particles(pos, node)
 	local add_to_pos = vector.new(0, 0.125, 0)
 	local flame = n_defs._mcl_torches_particles.flame
 	local smoke = n_defs._mcl_torches_particles.smoke
-
+	local smoke_color = n_defs._mcl_torches_particles.smoke_color
 
 	if is_wall then
 		if node.param2 == 2 then
@@ -255,7 +276,7 @@ local function generate_particles(pos, node)
 				minsize = 1,
 				minvel = vector.new(-0.025, 0.125, -0.025),
 				playername = pl:get_player_name(),
-				texture = {name = smoke, alpha_tween = {1, 0.25}, scale_tween = {1, 0.5}},
+				texpool = create_texpool(smoke, smoke_color),
 				time = 0,
 			})
 		end
