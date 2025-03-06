@@ -3,36 +3,38 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_tt x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_tt/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Unlimited uses"
 msgstr "не ограничено"
 
 msgid "Painfully slow"
-msgstr "Крайне медленно"
+msgstr "крайне медленно"
 
 msgid "Very slow"
-msgstr "Очень низкая"
+msgstr "очень медленно"
 
 msgid "Slow"
-msgstr "Медленно"
+msgstr "медленно"
 
 msgid "Fast"
-msgstr "Высокая"
+msgstr "быстро"
 
 msgid "Very fast"
-msgstr "Очень высокая"
+msgstr "очень быстро"
 
 msgid "Extremely fast"
-msgstr "Экстремально бвстро"
+msgstr "экстремально быстро"
 
 msgid "Instantaneous"
 msgstr "мгновенно"
@@ -50,10 +52,10 @@ msgid "Full punch interval: @1s"
 msgstr "Интервал удара: @1 с"
 
 msgid "Food item"
-msgstr "Пищевой продукт"
+msgstr "Предмет пищи"
 
 msgid "+@1 food points"
-msgstr "+@1 ед. питания"
+msgstr "+@1 очков пищи"
 
 msgid "Contact damage: @1 per second"
 msgstr "Урон при контакте: @1 HP/с"
@@ -116,7 +118,7 @@ msgid "Feet armor"
 msgstr "Броня для ступней"
 
 msgid "Armor points: @1"
-msgstr "Очки защиты: @1"
+msgstr "Очки брони: @1"
 
 msgid "Armor durability: @1"
 msgstr "Прочность брони: @1"
@@ -150,4 +152,3 @@ msgstr "Дальность зрения скелета: -50%"
 
 msgid "Creeper view range: -50%"
 msgstr "Дальность зрения крипера: -50%"
-
