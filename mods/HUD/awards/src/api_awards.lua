@@ -132,7 +132,7 @@ function awards.unlock(name, award)
 		local one = player:hud_add({
 			type = "image",
 			name = "award_bg",
-			scale = {x = 2, y = 1},
+			scale = {x = 1, y = 1},
 			text = background,
 			position = {x = 0.5, y = 0.05},
 			offset = {x = 0, y = 138},
