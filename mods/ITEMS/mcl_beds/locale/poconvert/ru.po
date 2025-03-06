@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_beds/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Beds allow you to sleep at night and make the time pass faster."
 msgstr "На кровати можно спать по ночам и заставлять ночь проходить быстрее."
@@ -89,13 +91,13 @@ msgid "You're in bed."
 msgstr "Вы в кровати."
 
 msgid "@1/@2 players currently in bed."
-msgstr "@1/@2 игроков сейчас в постели."
+msgstr "@1/@2 игроков сейчас в кроватях."
 
 msgid "You exceeded the maximum number of messages per 10 seconds!"
 msgstr "Вы превысили максимальный лимит сообщений в 10 секунд!"
 
 msgid "You are missing the 'shout' privilege! It's required in order to talk in chat..."
-msgstr "Вам нужна привилегия “shout”, чтобы писать в чат."
+msgstr "Вам нужна привилегия «shout», чтобы писать в чат."
 
 msgid "Sorry, but you have to wait @1 seconds until you may use this button again!"
 msgstr "Вам нужно подождать еще @1 с. прежде чем вы сможете нажать эту кнопку снова!"
@@ -107,53 +109,52 @@ msgid "New respawn position set!"
 msgstr "Задана новая точка возрождения!"
 
 msgid "Black Bed"
-msgstr ""
+msgstr "Чёрная кровать"
 
 msgid "Blue Bed"
-msgstr ""
+msgstr "Синяя кровать"
 
 msgid "Brown Bed"
-msgstr ""
+msgstr "Коричневая кровать"
 
 msgid "Cyan Bed"
-msgstr ""
+msgstr "Бирюзовая кровать"
 
 msgid "Green Bed"
-msgstr ""
+msgstr "Зелёная кровать"
 
 msgid "Grey Bed"
-msgstr ""
+msgstr "Серая кровать"
 
 msgid "Light Blue Bed"
-msgstr ""
+msgstr "Голубая кровать"
 
 msgid "Light Grey Bed"
-msgstr ""
+msgstr "Светло-серая кровать"
 
 msgid "Lime Bed"
-msgstr ""
+msgstr "Лаймовая кровать"
 
 msgid "Magenta Bed"
-msgstr ""
+msgstr "Сиреневая кровать"
 
 msgid "Orange Bed"
-msgstr ""
+msgstr "Оранжевая кровать"
 
 msgid "Pink Bed"
-msgstr ""
+msgstr "Розовая кровать"
 
 msgid "Purple Bed"
-msgstr ""
+msgstr "Фиолетовая кровать"
 
 msgid "Red Bed"
-msgstr ""
+msgstr "Красная кровать"
 
 msgid "White Bed"
-msgstr ""
+msgstr "Белая кровать"
 
 msgid "Yellow Bed"
-msgstr ""
+msgstr "Жёлтая кровать"
 
 msgid "Respawn Anchor"
 msgstr "Якорь возрождения"
-
