@@ -203,6 +203,18 @@ function mcl_torches.register_torch(def)
 		},
 		sounds = def.sounds,
 		on_rotate = false,
+		on_destruct = function(pos)
+			local ph = core.hash_node_position(pos)
+
+			for k, v in pairs(player_ps) do
+				if v[ph] then
+					if v[ph].flame then core.delete_particlespawner(v[ph].flame) end
+					if v[ph].smoke then core.delete_particlespawner(v[ph].smoke) end
+
+					player_ps[k][ph] = nil
+				end
+			end
+		end,
 	}
 	minetest.register_node(itemstring_wall, walldef)
 
@@ -210,6 +222,10 @@ function mcl_torches.register_torch(def)
 	if minetest.get_modpath("doc") then
 		doc.add_entry_alias("nodes", itemstring, "nodes", itemstring_wall)
 	end
+end
+
+local function in_range(npos, ppos)
+	return vector.distance(npos, ppos) < particle_distance
 end
 
 local function generate_particles(pos, node)
@@ -238,7 +254,7 @@ local function generate_particles(pos, node)
 	end
 
 	for pl in mcl_util.connected_players() do
-		local in_range = vector.distance(pos, pl:get_pos()) < particle_distance
+		local in_range = in_range(pos, pl:get_pos())
 		if not player_ps[pl] then player_ps[pl] = {} end
 		if not player_ps[pl][ph] then player_ps[pl][ph] = {} end
 		if not player_ps[pl][ph].flame and in_range and flame then
@@ -249,12 +265,12 @@ local function generate_particles(pos, node)
 				maxacc = vector.zero(),
 				maxexptime = 1.25,
 				maxpos = vector.add(pos, add_to_pos),
-				maxsize = 3,
+				maxsize = 5,
 				maxvel = vector.zero(),
 				minacc = vector.zero(),
 				minexptime = 0.75,
 				minpos = vector.add(pos, add_to_pos),
-				minsize = 1,
+				minsize = 2,
 				minvel = vector.zero(),
 				playername = pl:get_player_name(),
 				texture = {name = flame, scale_tween = {1, 0.5}},
@@ -266,15 +282,15 @@ local function generate_particles(pos, node)
 				amount = 1,
 				collisiondetection = false,
 				maxacc = vector.zero(),
-				maxexptime = 2.5,
+				maxexptime = 4.5,
 				maxpos = vector.add(pos, vector.add(add_to_pos, 0.0625, 0.125, 0.0625)),
 				maxsize = 2,
-				maxvel = vector.new(0.025, 0.25, 0.025),
+				maxvel = vector.new(0.025, 0.3125, 0.025),
 				minacc = vector.zero(),
-				minexptime = 1,
+				minexptime = 2,
 				minpos = vector.add(pos, vector.add(add_to_pos, -0.0625, 0.125, -0.0625)),
 				minsize = 1,
-				minvel = vector.new(-0.025, 0.125, -0.025),
+				minvel = vector.new(-0.025, 0.25, -0.025),
 				playername = pl:get_player_name(),
 				texpool = create_texpool(smoke, smoke_color),
 				time = 0,
@@ -287,7 +303,7 @@ local function generate_particles(pos, node)
 			if not pl or not pl:get_pos() then
 				if sp.flame then core.delete_particlespawner(sp.flame) end
 				if sp.smoke then core.delete_particlespawner(sp.smoke) end
-			elseif player_ps[pl][ph] and vector.distance(pos, pl:get_pos()) > particle_distance then
+			elseif player_ps[pl][ph] and not in_range(pos, pl:get_pos()) then
 				if player_ps[pl][ph].flame then
 					core.delete_particlespawner(player_ps[pl][ph].flame)
 				end
@@ -319,4 +335,24 @@ core.register_abm({
 	interval = 4,
 	label = "Torch Particles",
 	nodenames = {"group:torch"}
+})
+
+core.register_abm({
+	action = function(pos, node)
+		if core.get_item_group(node.name, "redstone_torch") ~= 2 then return end
+
+		local ph = core.hash_node_position(pos)
+
+		for pl in mcl_util.connected_players() do
+			if player_ps[pl] and player_ps[pl][ph] and player_ps[pl][ph].smoke then
+				core.delete_particlespawner(player_ps[pl][ph].smoke)
+			end
+
+			player_ps[pl][ph] = nil
+		end
+	end,
+	chance = 1,
+	interval = 4,
+	label = "Remove Torch Particles",
+	nodenames = {"group:redstone_torch"}
 })
