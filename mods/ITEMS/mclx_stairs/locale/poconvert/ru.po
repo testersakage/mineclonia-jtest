@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:13+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mclx_stairs/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Lapis Lazuli Stairs"
 msgstr "Лазуритовые ступени"
@@ -20,46 +22,46 @@ msgid "Lapis Lazuli Slab"
 msgstr "Лазуритовая плита"
 
 msgid "Gold Stairs"
-msgstr "Лестница из золота"
+msgstr "Золотые ступени"
 
 msgid "Gold Slab"
 msgstr "Плита из золота"
 
 msgid "Iron Stairs"
-msgstr "Железная лестница"
+msgstr "Железные ступени"
 
 msgid "Iron Slab"
 msgstr "Железная плита"
 
 msgid "Cracked Stone Brick Stairs"
-msgstr "Ступени из потрескавшихся каменных кирпичей"
+msgstr "Ступени из потрескавшегося каменного кирпича"
 
 msgid "Cracked Stone Brick Slab"
-msgstr "Плита из потрескавшихся каменных кирпичей"
+msgstr "Плита из потрескавшегося каменного кирпича"
 
 msgid "Cracked Deepslate Brick Stairs"
-msgstr "Лестница из кирпича глубинного сланца с трещинами"
+msgstr "Ступени из потрескавшегося сланцевого кирпича"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr "Плита из кирпича глубинного сланца с трещинами"
+msgstr "Плита из потрескавшегося сланцевого кирпича"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr "Лестница с растрескавшейся плиткой глубинного сланца"
+msgstr "Ступени из потрескавшейся сланцевой плитки"
 
 msgid "Cracked Deepslate Tile Slab"
-msgstr "Растрескавшаяся плитка глубинного сланца"
+msgstr "Плита из потрескавшейся сланцевой плитки"
 
 msgid "End Stone Stairs"
-msgstr "Лестница из камня края"
+msgstr "Ступени из камня Края"
 
 msgid "End Stone Slab"
-msgstr "Плита из камня края"
+msgstr "Плита из камня Края"
 
 msgid "Smooth Stone Stairs"
-msgstr "Лестница из гладкого камня"
+msgstr "Ступени из гладкого камня"
 
 msgid "Terracotta Stairs"
-msgstr "Терракотовая лестница"
+msgstr "Терракотовые ступени"
 
 msgid "Terracotta Slab"
 msgstr "Терракотовая плита"
@@ -77,194 +79,193 @@ msgid "Double Terracotta Slab"
 msgstr "Двойная терракотовая плита"
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Чёрная бетонная плита"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Чёрные бетонные ступени"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "Чёрная керамическая плита"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "Чёрные керамические ступени"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Синяя бетонная плита"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Синие бетонные ступени"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "Синяя керамическая плита"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "Синие керамические ступени"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Коричневая бетонная плита"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Коричневые бетонные ступени"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "Коричневая керамическая плита"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "Коричневые керамические ступени"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Бирюзовая бетонная плита"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Бирюзовые бетонные ступени"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "Бирюзовая керамическая плита"
 
 msgid "Cyan Terracotta Stairs"
-msgstr ""
+msgstr "Бирюзовые керамические ступени"
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "Зелёная бетонная плита"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "Зелёные бетонные ступени"
 
 msgid "Green Terracotta Slab"
-msgstr ""
+msgstr "Зелёная керамическая плита"
 
 msgid "Green Terracotta Stairs"
-msgstr ""
+msgstr "Зелёные керамические ступени"
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "Серая бетонная плита"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "Серые бетонные ступени"
 
 msgid "Grey Terracotta Slab"
-msgstr ""
+msgstr "Серая керамическая плита"
 
 msgid "Grey Terracotta Stairs"
-msgstr ""
+msgstr "Серые керамические ступени"
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "Голубая бетонная плита"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "Голубые бетонные ступени"
 
 msgid "Light Blue Terracotta Slab"
-msgstr ""
+msgstr "Голубая керамическая плита"
 
 msgid "Light Blue Terracotta Stairs"
-msgstr ""
+msgstr "Голубые керамические ступени"
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "Светло-серая бетонная плита"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "Светло-серые бетонные ступени"
 
 msgid "Light Grey Terracotta Slab"
-msgstr ""
+msgstr "Светло-серая керамическая плита"
 
 msgid "Light Grey Terracotta Stairs"
-msgstr ""
+msgstr "Светло-серые керамические ступени"
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "Лаймовая бетонная плита"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "Лаймовые бетонные ступени"
 
 msgid "Lime Terracotta Slab"
-msgstr ""
+msgstr "Лаймовая керамическая плита"
 
 msgid "Lime Terracotta Stairs"
-msgstr ""
+msgstr "Лаймовые керамические ступени"
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "Сиреневая бетонная плита"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "Сиреневые бетонные ступени"
 
 msgid "Magenta Terracotta Slab"
-msgstr ""
+msgstr "Сиреневая керамическая плита"
 
 msgid "Magenta Terracotta Stairs"
-msgstr ""
+msgstr "Сиреневые керамические ступени"
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "Оранжевая бетонная плита"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "Оранжевые бетонные ступени"
 
 msgid "Orange Terracotta Slab"
-msgstr ""
+msgstr "Оранжевая керамическая плита"
 
 msgid "Orange Terracotta Stairs"
-msgstr ""
+msgstr "Оранжевые керамические ступени"
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "Розовая бетонная плита"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "Розовые бетонные ступени"
 
 msgid "Pink Terracotta Slab"
-msgstr ""
+msgstr "Розовая керамическая плита"
 
 msgid "Pink Terracotta Stairs"
-msgstr ""
+msgstr "Розовые керамические ступени"
 
 msgid "Purple Concrete Slab"
-msgstr ""
+msgstr "Фиолетовая бетонная плита"
 
 msgid "Purple Concrete Stairs"
-msgstr ""
+msgstr "Фиолетовые бетонные ступени"
 
 msgid "Purple Terracotta Slab"
-msgstr ""
+msgstr "Фиолетовая керамическая плита"
 
 msgid "Purple Terracotta Stairs"
-msgstr ""
+msgstr "Фиолетовые керамические ступени"
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "Красная бетонная плита"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "Красные бетонные ступени"
 
 msgid "Red Terracotta Slab"
-msgstr ""
+msgstr "Красная керамическая плита"
 
 msgid "Red Terracotta Stairs"
-msgstr ""
+msgstr "Красные керамические ступени"
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "Белая бетонная плита"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "Белые бетонные ступени"
 
 msgid "White Terracotta Slab"
-msgstr ""
+msgstr "Белая керамическая плита"
 
 msgid "White Terracotta Stairs"
-msgstr ""
+msgstr "Белые керамические ступени"
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "Жёлтая бетонная плита"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "Жёлтые бетонные ступени"
 
 msgid "Yellow Terracotta Slab"
-msgstr ""
+msgstr "Жёлтая керамическая плита"
 
 msgid "Yellow Terracotta Stairs"
-msgstr ""
-
+msgstr "Жёлтые керамические ступени"
