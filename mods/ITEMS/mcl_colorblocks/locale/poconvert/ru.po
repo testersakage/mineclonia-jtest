@@ -3,27 +3,31 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_colorblocks x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_colorblocks/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Terracotta is a basic building material. It comes in many different colors."
-msgstr "Керамика это базовый строительный материал. Она бывает разных цветов."
+msgstr "Керамика — это базовый строительный материал. Она бывает разных цветов."
 
 msgid "Glazed terracotta is a decorative block with a complex pattern. It can be rotated by placing it in different directions."
-msgstr "Глазурованная керамика это декоративный блок со сложным орнаментом."
+msgstr "Глазурованная керамика — это декоративный блок со сложным орнаментом."
 
 msgid "Concrete powder is used for creating concrete, but it can also be used as decoration itself. It comes in different colors. Concrete powder turns into concrete of the same color when it comes in contact with water."
 msgstr "Цемент используется для создания бетона, хотя также может быть декорацией сам по себе. Он бывает разных цветов. При контакте с водой цемент превращается в бетон того же цвета."
 
 msgid "Concrete is a decorative block which comes in many different colors. It is notable for having a very strong and clean color."
-msgstr "Бетон это декоративный блок, который может быть разных цветов. Бетон приметен своим хорошим и чистым цветом."
+msgstr ""
+"Бетон — это декоративный блок, который может быть разных цветов. Бетон "
+"приметен своим хорошим и чистым цветом."
 
 msgid "Turns into concrete on water contact"
 msgstr "Превращается в бетон при контакте с водой"
@@ -32,7 +36,9 @@ msgid "Terracotta"
 msgstr "Терракота"
 
 msgid "Terracotta is a basic building material which comes in many different colors. This particular block is uncolored."
-msgstr "Терракота это базовый строительный материал, который может быть разных цветов. Конкретно этот блок не окрашен."
+msgstr ""
+"Терракота — это базовый строительный материал, который может быть разных "
+"цветов. Конкретно этот блок не окрашен."
 
 msgid "Colored Terracotta"
 msgstr "Окрашенная керамика"
@@ -47,194 +53,193 @@ msgid "Concrete"
 msgstr "Бетон"
 
 msgid "Black Concrete"
-msgstr ""
+msgstr "Чёрный бетон"
 
 msgid "Black Concrete Powder"
-msgstr ""
+msgstr "Чёрный цемент"
 
 msgid "Black Glazed Terracotta"
-msgstr ""
+msgstr "Чёрная глазурованная керамика"
 
 msgid "Black Terracotta"
-msgstr ""
+msgstr "Чёрная керамика"
 
 msgid "Blue Concrete"
-msgstr ""
+msgstr "Синий бетон"
 
 msgid "Blue Concrete Powder"
-msgstr ""
+msgstr "Синий цемент"
 
 msgid "Blue Glazed Terracotta"
-msgstr ""
+msgstr "Синяя глазурованная керамика"
 
 msgid "Blue Terracotta"
-msgstr ""
+msgstr "Синяя керамика"
 
 msgid "Brown Concrete"
-msgstr ""
+msgstr "Коричневый бетон"
 
 msgid "Brown Concrete Powder"
-msgstr ""
+msgstr "Коричневый цемент"
 
 msgid "Brown Glazed Terracotta"
-msgstr ""
+msgstr "Коричневая глазурованная керамика"
 
 msgid "Brown Terracotta"
-msgstr ""
+msgstr "Коричневая керамика"
 
 msgid "Cyan Concrete"
-msgstr ""
+msgstr "Бирюзовый бетон"
 
 msgid "Cyan Concrete Powder"
-msgstr ""
+msgstr "Бирюзовый цемент"
 
 msgid "Cyan Glazed Terracotta"
-msgstr ""
+msgstr "Бирюзовая глазурованная керамика"
 
 msgid "Cyan Terracotta"
-msgstr ""
+msgstr "Бирюзовая керамика"
 
 msgid "Green Concrete"
-msgstr ""
+msgstr "Зелёный бетон"
 
 msgid "Green Concrete Powder"
-msgstr ""
+msgstr "Зелёный цемент"
 
 msgid "Green Glazed Terracotta"
-msgstr ""
+msgstr "Зелёная глазурованная керамика"
 
 msgid "Green Terracotta"
-msgstr ""
+msgstr "Зелёная керамика"
 
 msgid "Grey Concrete"
-msgstr ""
+msgstr "Серый бетон"
 
 msgid "Grey Concrete Powder"
-msgstr ""
+msgstr "Серый цемент"
 
 msgid "Grey Glazed Terracotta"
-msgstr ""
+msgstr "Серая глазурованная керамика"
 
 msgid "Grey Terracotta"
-msgstr ""
+msgstr "Серая керамика"
 
 msgid "Light Blue Concrete"
-msgstr ""
+msgstr "Голубой бетон"
 
 msgid "Light Blue Concrete Powder"
-msgstr ""
+msgstr "Голубой цемент"
 
 msgid "Light Blue Glazed Terracotta"
-msgstr ""
+msgstr "Голубая глазурованная керамика"
 
 msgid "Light Blue Terracotta"
-msgstr ""
+msgstr "Голубая керамика"
 
 msgid "Light Grey Concrete"
-msgstr ""
+msgstr "Светло-серый бетон"
 
 msgid "Light Grey Concrete Powder"
-msgstr ""
+msgstr "Светло-серый цемент"
 
 msgid "Light Grey Glazed Terracotta"
-msgstr ""
+msgstr "Светло-серая глазурованная керамика"
 
 msgid "Light Grey Terracotta"
-msgstr ""
+msgstr "Светло-серая керамика"
 
 msgid "Lime Concrete"
-msgstr ""
+msgstr "Лаймовый бетон"
 
 msgid "Lime Concrete Powder"
-msgstr ""
+msgstr "Лаймовый цемент"
 
 msgid "Lime Glazed Terracotta"
-msgstr ""
+msgstr "Лаймовая глазурованная керамика"
 
 msgid "Lime Terracotta"
-msgstr ""
+msgstr "Лаймовая керамика"
 
 msgid "Magenta Concrete"
-msgstr ""
+msgstr "Сиреневый бетон"
 
 msgid "Magenta Concrete Powder"
-msgstr ""
+msgstr "Сиреневый цемент"
 
 msgid "Magenta Glazed Terracotta"
-msgstr ""
+msgstr "Сиреневая глазурованная керамика"
 
 msgid "Magenta Terracotta"
-msgstr ""
+msgstr "Сиреневая керамика"
 
 msgid "Orange Concrete"
-msgstr ""
+msgstr "Оранжевый бетон"
 
 msgid "Orange Concrete Powder"
-msgstr ""
+msgstr "Оранжевый цемент"
 
 msgid "Orange Glazed Terracotta"
-msgstr ""
+msgstr "Оранжевая глазурованная керамика"
 
 msgid "Orange Terracotta"
-msgstr ""
+msgstr "Оранжевая керамика"
 
 msgid "Pink Concrete"
-msgstr ""
+msgstr "Розовый бетон"
 
 msgid "Pink Concrete Powder"
-msgstr ""
+msgstr "Розовый цемент"
 
 msgid "Pink Glazed Terracotta"
-msgstr ""
+msgstr "Розовая глазурованная керамика"
 
 msgid "Pink Terracotta"
-msgstr ""
+msgstr "Розовая керамика"
 
 msgid "Purple Concrete"
-msgstr ""
+msgstr "Фиолетовый бетон"
 
 msgid "Purple Concrete Powder"
-msgstr ""
+msgstr "Фиолетовый цемент"
 
 msgid "Purple Glazed Terracotta"
-msgstr ""
+msgstr "Фиолетовая глазурованная керамика"
 
 msgid "Purple Terracotta"
-msgstr ""
+msgstr "Фиолетовая керамика"
 
 msgid "Red Concrete"
-msgstr ""
+msgstr "Красный бетон"
 
 msgid "Red Concrete Powder"
-msgstr ""
+msgstr "Красный цемент"
 
 msgid "Red Glazed Terracotta"
-msgstr ""
+msgstr "Красная глазурованная керамика"
 
 msgid "Red Terracotta"
-msgstr ""
+msgstr "Красная керамика"
 
 msgid "White Concrete"
-msgstr ""
+msgstr "Белый бетон"
 
 msgid "White Concrete Powder"
-msgstr ""
+msgstr "Белый цемент"
 
 msgid "White Glazed Terracotta"
-msgstr ""
+msgstr "Белая глазурованная керамика"
 
 msgid "White Terracotta"
-msgstr ""
+msgstr "Белая керамика"
 
 msgid "Yellow Concrete"
-msgstr ""
+msgstr "Жёлтый бетон"
 
 msgid "Yellow Concrete Powder"
-msgstr ""
+msgstr "Жёлтый цемент"
 
 msgid "Yellow Glazed Terracotta"
-msgstr ""
+msgstr "Жёлтая глазурованная керамика"
 
 msgid "Yellow Terracotta"
-msgstr ""
-
+msgstr "Жёлтая керамика"
