@@ -1,26 +1,6 @@
 local player_ps = {}
 local particle_distance = 32
 
-local function create_texpool(textures, color)
-	local result = {}
-	local ratios = {"233", "255"}
-	local colors = {"black", "silver", "gray"}
-
-	for _, texture in pairs(textures) do
-		for i = 1, #colors do
-			for j = 1, #ratios do
-				table.insert(result, {
-					alpha_tween = {1, 0.25},
-					name = texture .. "^[colorize:" .. (color or colors[i]) .. ":" .. ratios[j],
-					scale_tween = {1, 0.25}
-				})
-			end
-		end
-	end
-
-	return result
-end
-
 -- Check if placement at given node is allowed
 local function check_placement_allowed(node, wdir)
 	-- Torch placement rules: Disallow placement on some nodes. General rule: Solid, opaque, full cube collision box nodes are allowed.
@@ -239,7 +219,6 @@ local function generate_particles(pos, node)
 	local add_to_pos = vector.new(0, 0.125, 0)
 	local flame = n_defs._mcl_torches_particles.flame
 	local smoke = n_defs._mcl_torches_particles.smoke
-	local smoke_color = n_defs._mcl_torches_particles.smoke_color
 
 	if is_wall then
 		if node.param2 == 2 then
@@ -261,40 +240,35 @@ local function generate_particles(pos, node)
 			player_ps[pl][ph].flame = core.add_particlespawner({
 				amount = 1,
 				collisiondetection = false,
-				glow = 14,
-				maxacc = vector.zero(),
-				maxexptime = 1.25,
 				maxpos = vector.add(pos, add_to_pos),
-				maxsize = 5,
-				maxvel = vector.zero(),
-				minacc = vector.zero(),
-				minexptime = 0.75,
 				minpos = vector.add(pos, add_to_pos),
-				minsize = 2,
+				maxvel = vector.zero(),
 				minvel = vector.zero(),
+				maxacc = vector.zero(),
+				minacc = vector.zero(),
+				maxexptime = 1,
+				minexptime = 0.5,
+				maxsize = 5,
+				minsize = 2,
+				glow = 14,
 				playername = pl:get_player_name(),
 				texture = {name = flame, scale_tween = {1, 0.5}},
 				time = 0
 			})
 		end
 		if not player_ps[pl][ph].smoke and in_range and smoke then
-			player_ps[pl][ph].smoke = core.add_particlespawner({
+			player_ps[pl][ph].smoke = core.add_particlespawner(table.merge(smoke.ps_defs, {
 				amount = 1,
 				collisiondetection = false,
-				maxacc = vector.zero(),
-				maxexptime = 4.5,
-				maxpos = vector.add(pos, vector.add(add_to_pos, 0.0625, 0.125, 0.0625)),
+				maxpos = vector.add(pos, vector.add(add_to_pos, smoke.maxpos_to_add)),
+				minpos = vector.add(pos, vector.add(add_to_pos, smoke.minpos_to_add)),
 				maxsize = 2,
-				maxvel = vector.new(0.025, 0.3125, 0.025),
-				minacc = vector.zero(),
-				minexptime = 2,
-				minpos = vector.add(pos, vector.add(add_to_pos, -0.0625, 0.125, -0.0625)),
 				minsize = 1,
-				minvel = vector.new(-0.025, 0.25, -0.025),
+				maxexptime = 1,
+				minexptime = 0.5,
 				playername = pl:get_player_name(),
-				texpool = create_texpool(smoke, smoke_color),
-				time = 0,
-			})
+				time = 0
+			}))
 		end
 	end
 

@@ -15,11 +15,49 @@ mcl_torches.register_torch({
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	particles = {
 		smoke = {
-			"mcl_particles_sponge1.png",
-			"mcl_particles_sponge2.png",
-			"mcl_particles_sponge3.png",
-			"mcl_particles_sponge4.png",
-			"mcl_particles_sponge5.png",
+			maxpos_to_add = vector.new(0.0625, 0.1875, 0.0625),
+			minpos_to_add = vector.new(-0.0625, 0.125, -0.0625),
+			ps_defs = {
+				maxvel = vector.new(0.025, 0.3125, 0.025),
+				minvel = vector.new(-0.025, 0.25, -0.025),
+				maxacc = vector.new(0, 0.5, 0),
+				minacc = vector.new(0, 0.5, 0),
+				texpool = {
+					{
+						name = "mcl_torches_smoke_anim.png^[colorize:black",
+						animation = {
+							type = "vertical_frames",
+							aspect_h = 16,
+							aspect_w = 16,
+							length = 1
+						},
+						scale_tween = {1, 0.25},
+						alpha_tween = {1, 0.25}
+					},
+					{
+						name = "mcl_torches_smoke_anim.png^[colorize:gray",
+						animation = {
+							type = "vertical_frames",
+							aspect_h = 16,
+							aspect_w = 16,
+							length = 1
+						},
+						scale_tween = {1, 0.25},
+						alpha_tween = {1, 0.25}
+					},
+					{
+						name = "mcl_torches_smoke_anim.png^[colorize:silver",
+						animation = {
+							type = "vertical_frames",
+							aspect_h = 16,
+							aspect_w = 16,
+							length = 1
+						},
+						scale_tween = {1, 0.25},
+						alpha_tween = {1, 0.25}
+					}
+				}
+			}
 		},
 		flame = "mcl_particles_fire_flame.png"
 	}
