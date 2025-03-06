@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-04 17:12+0000\n"
+"PO-Revision-Date: 2025-03-06 12:06+0000\n"
 "Last-Translator: liulitchi <liulitchi@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/awards/zh_Hans/>\n"
@@ -15,16 +15,16 @@ msgstr ""
 "X-Generator: Weblate 5.10.2\n"
 
 msgid "@1 has made the advancement @2"
-msgstr "@1已完成@2成就"
+msgstr "@1已完成@2进度"
 
 msgid "Secret Advancement Unlocked: @1"
-msgstr "已解锁私密成就：@1"
+msgstr "已解锁私密进度：@1"
 
 msgid "Advancement Unlocked: @1"
-msgstr "成就已解锁：@1"
+msgstr "进度已解锁：@1"
 
 msgid "Secret Advancement Made!"
-msgstr "完成私密成就！"
+msgstr "完成私密进度！"
 
 msgid "Goal Completed!"
 msgstr "达成目标！"
@@ -33,31 +33,31 @@ msgid "Challenge Completed!"
 msgstr "完成挑战！"
 
 msgid "Advancement Made!"
-msgstr "完成成就！"
+msgstr "完成进度！"
 
 msgid "[c|clear|disable|enable]"
 msgstr "[c|clear|disable|enable]"
 
 msgid "Show, clear, disable or enable your advancements"
-msgstr "显示、清除、禁用或启用成就"
+msgstr "显示、清除、禁用或启用进度"
 
 msgid "All your advancements and statistics have been cleared. You can now start again."
-msgstr "你所有成就和统计数据都已清除，现在可以重新开始。"
+msgstr "你所有进度和统计数据都已清除，现在可以重新开始。"
 
 msgid "You have disabled advancements."
-msgstr "已禁用成就系统。"
+msgstr "已禁用进度系统。"
 
 msgid "You have enabled advancements."
-msgstr "已启用成就系统。"
+msgstr "已启用进度系统。"
 
 msgid "<advancement ID>"
 msgstr "<advancement ID>"
 
 msgid "Show details of an advancement"
-msgstr "显示成就细节"
+msgstr "显示进度细节"
 
 msgid "Advancement not found."
-msgstr "未发现成就。"
+msgstr "未发现进度。"
 
 msgid "<name>"
 msgstr "<name>"
@@ -66,7 +66,7 @@ msgid "Get the advancement statistics for the given player or yourself"
 msgstr "获取指定玩家或本人的成就统计数据"
 
 msgid "Error: No advancements available."
-msgstr "错误：无可用成就。"
+msgstr "错误：无可用进度。"
 
 msgid "OK"
 msgstr "OK"
