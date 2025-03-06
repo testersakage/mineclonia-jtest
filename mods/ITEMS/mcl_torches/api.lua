@@ -1,3 +1,5 @@
+local player_ps = {}
+local particle_distance = 32
 -- Check if placement at given node is allowed
 local function check_placement_allowed(node, wdir)
 	-- Torch placement rules: Disallow placement on some nodes. General rule: Solid, opaque, full cube collision box nodes are allowed.
@@ -43,18 +45,15 @@ function mcl_torches.register_torch(def)
 	def.light = def.light or 14
 	def.mesh_floor = def.mesh_floor or "mcl_torches_torch_floor.obj"
 	def.mesh_wall = def.mesh_wall or "mcl_torches_torch_wall.obj"
-	def.flame_type = def.flame_type or 1
 
 	local groups = def.groups or {}
 
 	groups.attached_node = 1
 	groups.torch = 1
-	groups.torch_particles = def.particles and 1
 	groups.dig_by_water = 1
 	groups.destroy_by_lava_flow = 1
 	groups.dig_by_piston = 1
 	groups.unsticky = 1
-	groups.flame_type = def.flame_type or 1
 	groups.attaches_to_top = 1
 	groups.attaches_to_side = 1
 	groups.offhand_item = 1
@@ -66,6 +65,7 @@ function mcl_torches.register_torch(def)
 		_doc_items_usagehelp = def.doc_items_usagehelp,
 		_doc_items_hidden = def.doc_items_hidden,
 		_doc_items_create_entry = def._doc_items_create_entry,
+		_mcl_torches_particles = def.particles,
 		drawtype = "mesh",
 		mesh = def.mesh_floor,
 		inventory_image = def.icon,
@@ -86,6 +86,18 @@ function mcl_torches.register_torch(def)
 		},
 		sounds = def.sounds,
 		node_placement_prediction = "",
+		on_destruct = function(pos)
+			local ph = core.hash_node_position(pos)
+
+			for k, v in pairs(player_ps) do
+				if v[ph] then
+					if v[ph].flame then core.delete_particlespawner(v[ph].flame) end
+					if v[ph].smoke then core.delete_particlespawner(v[ph].smoke) end
+
+					player_ps[k][ph] = nil
+				end
+			end
+		end,
 		on_place = function(itemstack, placer, pointed_thing)
 			if pointed_thing.type ~= "node" then
 				-- no interaction possible with entities, for now.
@@ -150,6 +162,7 @@ function mcl_torches.register_torch(def)
 	groups_wall.not_in_creative_inventory = 1
 
 	local walldef = {
+		_mcl_torches_particles = def.particles,
 		drawtype = "mesh",
 		mesh = def.mesh_wall,
 		tiles = def.tiles,
@@ -177,3 +190,112 @@ function mcl_torches.register_torch(def)
 		doc.add_entry_alias("nodes", itemstring, "nodes", itemstring_wall)
 	end
 end
+
+local function generate_particles(pos, node)
+	local ph = core.hash_node_position(pos)
+	local n_name = node.name
+	local is_wall = core.get_item_group(n_name, "torch") == 2
+	local n_defs = core.registered_nodes[n_name]
+
+	if not n_defs or not n_defs._mcl_torches_particles then return end
+
+	local add_to_pos = vector.new(0, 0.125, 0)
+	local flame = n_defs._mcl_torches_particles.flame
+	local smoke = n_defs._mcl_torches_particles.smoke
+
+
+	if is_wall then
+		if node.param2 == 2 then
+			add_to_pos = vector.new(0.25, 0.375, 0)
+		elseif node.param2 == 3 then
+			add_to_pos = vector.new(-0.25, 0.375, 0)
+		elseif node.param2 == 4 then
+			add_to_pos = vector.new(0, 0.375, 0.25)
+		elseif node.param2 == 5 then
+			add_to_pos = vector.new(0, 0.375, -0.25)
+		end
+	end
+
+	for pl in mcl_util.connected_players() do
+		local in_range = vector.distance(pos, pl:get_pos()) < particle_distance
+		if not player_ps[pl] then player_ps[pl] = {} end
+		if not player_ps[pl][ph] then player_ps[pl][ph] = {} end
+		if not player_ps[pl][ph].flame and in_range and flame then
+			player_ps[pl][ph].flame = core.add_particlespawner({
+				amount = 1,
+				collisiondetection = false,
+				glow = 14,
+				maxacc = vector.zero(),
+				maxexptime = 1.25,
+				maxpos = vector.add(pos, add_to_pos),
+				maxsize = 3,
+				maxvel = vector.zero(),
+				minacc = vector.zero(),
+				minexptime = 0.75,
+				minpos = vector.add(pos, add_to_pos),
+				minsize = 1,
+				minvel = vector.zero(),
+				playername = pl:get_player_name(),
+				texture = {name = flame, scale_tween = {1, 0.5}},
+				time = 0
+			})
+		end
+		if not player_ps[pl][ph].smoke and in_range and smoke then
+			player_ps[pl][ph].smoke = core.add_particlespawner({
+				amount = 1,
+				collisiondetection = false,
+				maxacc = vector.zero(),
+				maxexptime = 2.5,
+				maxpos = vector.add(pos, vector.add(add_to_pos, 0.0625, 0.125, 0.0625)),
+				maxsize = 2,
+				maxvel = vector.new(0.025, 0.25, 0.025),
+				minacc = vector.zero(),
+				minexptime = 1,
+				minpos = vector.add(pos, vector.add(add_to_pos, -0.0625, 0.125, -0.0625)),
+				minsize = 1,
+				minvel = vector.new(-0.025, 0.125, -0.025),
+				playername = pl:get_player_name(),
+				texture = {name = smoke, alpha_tween = {1, 0.25}, scale_tween = {1, 0.5}},
+				time = 0,
+			})
+		end
+	end
+
+	for pl, pt in pairs(player_ps) do
+		for _, sp in pairs(pt) do
+			if not pl or not pl:get_pos() then
+				if sp.flame then core.delete_particlespawner(sp.flame) end
+				if sp.smoke then core.delete_particlespawner(sp.smoke) end
+			elseif player_ps[pl][ph] and vector.distance(pos, pl:get_pos()) > particle_distance then
+				if player_ps[pl][ph].flame then
+					core.delete_particlespawner(player_ps[pl][ph].flame)
+				end
+				if player_ps[pl][ph].smoke then
+					core.delete_particlespawner(player_ps[pl][ph].smoke)
+				end
+
+				player_ps[pl][ph] = nil
+			end
+		end
+
+		if not pl or not pl:get_pos() then player_ps[pl][ph] = nil end
+	end
+end
+
+core.register_on_leaveplayer(function(player)
+	if player_ps[player] then
+		for _, v in pairs(player_ps[player]) do
+			core.delete_particlespawner(v)
+		end
+
+		player_ps[player] = nil
+	end
+end)
+
+core.register_abm({
+	action = generate_particles,
+	chance = 1,
+	interval = 4,
+	label = "Torch Particles",
+	nodenames = {"group:torch"}
+})
