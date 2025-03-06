@@ -13,7 +13,8 @@ end
 
 local function set_moss_with_chance_vegetation(pos)
 	core.set_node(pos, { name = "mcl_pale_garden:pale_moss_block" })
-	if math.random() < 0.6 then		local vegetation = random_moss_vegetation()
+	if math.random() < 0.6 then
+        local vegetation = random_moss_vegetation()
 		local pos_up = vector.offset(pos, 0, 1, 0)
 		if vegetation == "mcl_flowers:double_grass" then
 			local pos_up2 = vector.offset(pos, 0, 2, 0)

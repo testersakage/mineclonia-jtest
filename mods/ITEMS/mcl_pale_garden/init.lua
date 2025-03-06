@@ -1,5 +1,6 @@
 local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 local schempath = modpath .. "/schematics/"
 
 --dofile(modpath .. "/biome.lua")
@@ -146,40 +147,15 @@ core.register_node("mcl_pale_garden:creaking_heart_active", {
 	tiles = ach_textures
 })
 
---[[
-minetest.register_node("vlf_pale_garden:closed_eyeblossom", {
-	description = ("Closed Eyeblossom"),
-	drawtype = "plantlike",
-	waving = 1,
-	tiles = { "eyeblossom_stem.png^closed_eyeblossom.png" },
-	inventory_image = "eyeblossom_stem.png^closed_eyeblossom.png",
-	wield_image = "eyeblossom_stem.png^closed_eyeblossom.png",
-	sunlight_propagates = true,
-	paramtype = "light",
-	walkable = false,
-	groups = {
-		attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
-		dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
-		plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
-		flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-		compostability = 65, unsticky = 1
-	},
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	node_placement_prediction = "",
-	on_place = mcl_flowers.on_place_flower,
-	selection_box = {
-		type = "fixed",
-		fixed = { -5/16, -0.5, -5/16, 5/16, 5/16, 5/16 },
-	},
-	--_mcl_silk_touch_drop = ,
-	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
-})
-mcl_flowerpots.register_potted_flower("vlf_pale_garden:closed_eyeblossom", {
-	name = "closed_eyeblossom",
-	desc = ("Closed Eyeblossom"),
-	image = "(eyeblossom_stem.png^closed_eyeblossom.png)",
+mcl_flowers.register_simple_flower("closed_eyeblossom", {
+    _mcl_crafting_output = {single = {output = "mcl_dyes:grey"}},
+    desc = S("Closed Eyeblossom"),
+    image = "mcl_pale_garden_closed_eyeblossom.png",
+    potted = true,
+    selection_box = {-0.25, -0.5, -0.25, 0.25, 0.3125, 0.25}
 })
 
+--[[
 minetest.register_node("vlf_pale_garden:open_eyeblossom", {
 	description = ("Open Eyeblossom"),
 	drawtype = "plantlike",
