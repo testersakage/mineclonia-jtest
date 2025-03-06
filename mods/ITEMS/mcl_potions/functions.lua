@@ -2017,15 +2017,20 @@ function mcl_potions.make_invisible(obj_ref, hide)
 	if obj_ref:is_player() then
 		if hide then
 			mcl_player.player_set_visibility(obj_ref, false)
+			obj_ref:set_properties({show_on_minimap = false})
 			obj_ref:set_nametag_attributes({ color = { a = 0 } })
 		else
 			mcl_player.player_set_visibility(obj_ref, true)
+			obj_ref:set_properties({show_on_minimap = true})
 			obj_ref:set_nametag_attributes({ color = { r = 255, g = 255, b = 255, a = 255 } })
 		end
 	else
-		local luaentity = obj_ref:get_luaentity()
-		if luaentity and luaentity.set_invisible then
-			luaentity:set_invisible (hide)
+		if hide then
+			local luaentity = obj_ref:get_luaentity()
+			EF.invisibility[obj_ref].old_size = luaentity.visual_size
+			obj_ref:set_properties({ visual_size = { x = 0, y = 0 }, show_on_minimap = false })
+		else
+			obj_ref:set_properties({ visual_size = EF.invisibility[obj_ref].old_size, show_on_minimap = true })
 		end
 	end
 end
