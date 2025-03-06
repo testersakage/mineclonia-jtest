@@ -16,6 +16,7 @@ mcl_trees.register_wood("pale_oak",{
             "mcl_pale_garden_log_pale_oak.png"
         }
     },
+    leaves = {palette = "", paramtype2 = "none"},
     stripped = {
         tiles = {
             "mcl_pale_garden_stripped_pale_oak_top.png",
