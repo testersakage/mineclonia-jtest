@@ -23,13 +23,24 @@ mcl_torches.register_torch({
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	particles = {
 		smoke = {
-			"mcl_particles_sponge1.png",
-			"mcl_particles_sponge2.png",
-			"mcl_particles_sponge3.png",
-			"mcl_particles_sponge4.png",
-			"mcl_particles_sponge5.png",
-		},
-		smoke_color = "red"
+			maxpos_to_add = vector.new(0.0625, 0.125, 0.0625),
+			minpos_to_add = vector.new(-0.0625, 0.00625, -0.0625),
+			ps_defs = {
+				maxvel = vector.zero(),
+				minvel = vector.zero(),
+				maxacc = vector.zero(),
+				minacc = vector.zero(),
+				texture = "mcl_torches_smoke_anim.png^[colorize:red",
+				animation = {
+					alpha_tween = {1, 0.25},
+					scale_tween = {1, 0.25},
+					type = "vertical_frames",
+					aspect_h = 16,
+					aspect_w = 16,
+					length = 1
+				}
+			}
+		}
 	}
 })
 
