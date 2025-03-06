@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_armor/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
 msgstr "Это часть надеваемой брони, уменьшающая получаемый вами урон."
@@ -20,16 +22,16 @@ msgid "To equip it, put it on the corresponding armor slot in your inventory men
 msgstr "Чтобы надеть, поместите в соответствующий слот брони в вашем инвентаря."
 
 msgid "Leather Cap"
-msgstr "Кожаная кепка"
+msgstr "Кожаный шлем"
 
 msgid "Leather Tunic"
-msgstr "Кожаная туника"
+msgstr "Кожаная кираса"
 
 msgid "Leather Pants"
-msgstr "Кожаные брюки"
+msgstr "Кожаные поножи"
 
 msgid "Leather Boots"
-msgstr "Кожаные сапоги"
+msgstr "Кожаные ботинки"
 
 msgid "Colorize a piece of leather armor, or wash it"
 msgstr "Раскрасьте кожаную броню или почистите ее"
@@ -47,49 +49,49 @@ msgid "Player isn't online"
 msgstr "Игрок не в сети"
 
 msgid "Bolt Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Ось»"
 
 msgid "Coast Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Берег»"
 
 msgid "Dune Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Дюна»"
 
 msgid "Eye Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Око»"
 
 msgid "Flow Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Поток»"
 
 msgid "Rib Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Ребро»"
 
 msgid "Sentry Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Страж»"
 
 msgid "Silence Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Тишина»"
 
 msgid "Snout Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Рыло»"
 
 msgid "Spire Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Шпиль»"
 
 msgid "Tide Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Прилив»"
 
 msgid "Vex Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Досаждатель»"
 
 msgid "Ward Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Хранитель»"
 
 msgid "Wayfinder Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Искатель»"
 
 msgid "Wild Armor Trim"
-msgstr ""
+msgstr "Отделка брони «Дебри»"
 
 msgid "Golden Helmet"
 msgstr "Золотой шлем"
@@ -107,13 +109,13 @@ msgid "Chainmail Helmet"
 msgstr "Кольчужный шлем"
 
 msgid "Chainmail Chestplate"
-msgstr "Кольчужный нагрудник"
+msgstr "Кольчуга"
 
 msgid "Chainmail Leggings"
-msgstr "Кольчужные леггинсы"
+msgstr "Кольчужные поножи"
 
 msgid "Chainmail Boots"
-msgstr "Кольчужные сапоги"
+msgstr "Кольчужные ботинки"
 
 msgid "Iron Helmet"
 msgstr "Железный шлем"
@@ -209,11 +211,10 @@ msgid "Applies to:"
 msgstr "Применяется для:"
 
 msgid "Armor"
-msgstr "Броня"
+msgstr "Защита"
 
 msgid "Ingredients:"
 msgstr "Ингредиенты:"
 
 msgid "Ingot & Crystals"
 msgstr "Слитки и кристаллы"
-
