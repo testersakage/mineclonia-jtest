@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_wool x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:13+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_wool/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Carpet"
 msgstr "Ковёр"
@@ -20,104 +22,103 @@ msgid "Wool"
 msgstr "Шерсть"
 
 msgid "Wool is a decorative block which comes in many different colors."
-msgstr "Шерсть это декоративный блок, который может быть разных цветов."
+msgstr "Шерсть — это декоративный блок, который может быть разных цветов."
 
 msgid "Carpets are thin floor covers which come in many different colors."
-msgstr "Ковры это тонкие напольные покрытия, которые бывают разных цветов."
+msgstr "Ковры — это тонкие напольные покрытия, которые бывают разных цветов."
 
 msgid "Black Carpet"
-msgstr ""
+msgstr "Чёрный ковёр"
 
 msgid "Black Wool"
-msgstr ""
+msgstr "Чёрная шерсть"
 
 msgid "Blue Carpet"
-msgstr ""
+msgstr "Синий ковёр"
 
 msgid "Blue Wool"
-msgstr ""
+msgstr "Синяя шерсть"
 
 msgid "Brown Carpet"
-msgstr ""
+msgstr "Коричневый ковёр"
 
 msgid "Brown Wool"
-msgstr ""
+msgstr "Коричневая шерсть"
 
 msgid "Cyan Carpet"
-msgstr ""
+msgstr "Бирюзовый ковёр"
 
 msgid "Cyan Wool"
-msgstr ""
+msgstr "Бирюзовая шерсть"
 
 msgid "Green Carpet"
-msgstr ""
+msgstr "Зелёный ковёр"
 
 msgid "Green Wool"
-msgstr ""
+msgstr "Зелёная шерсть"
 
 msgid "Grey Carpet"
-msgstr ""
+msgstr "Серый ковёр"
 
 msgid "Grey Wool"
-msgstr ""
+msgstr "Серая шерсть"
 
 msgid "Light Blue Carpet"
-msgstr ""
+msgstr "Голубой ковёр"
 
 msgid "Light Blue Wool"
-msgstr ""
+msgstr "Голубая шерсть"
 
 msgid "Light Grey Carpet"
-msgstr ""
+msgstr "Светло-серый ковёр"
 
 msgid "Light Grey Wool"
-msgstr ""
+msgstr "Светло-серая шерсть"
 
 msgid "Lime Carpet"
-msgstr ""
+msgstr "Лаймовый ковёр"
 
 msgid "Lime Wool"
-msgstr ""
+msgstr "Лаймовая шерсть"
 
 msgid "Magenta Carpet"
-msgstr ""
+msgstr "Сиреневый ковёр"
 
 msgid "Magenta Wool"
-msgstr ""
+msgstr "Сиреневая шерсть"
 
 msgid "Orange Carpet"
-msgstr ""
+msgstr "Оранжевый ковёр"
 
 msgid "Orange Wool"
-msgstr ""
+msgstr "Оранжевая шерсть"
 
 msgid "Pink Carpet"
-msgstr ""
+msgstr "Розовый ковёр"
 
 msgid "Pink Wool"
-msgstr ""
+msgstr "Розовая шерсть"
 
 msgid "Purple Carpet"
-msgstr ""
+msgstr "Фиолетовый ковёр"
 
 msgid "Purple Wool"
-msgstr ""
+msgstr "Фиолетовая шерсть"
 
 msgid "Red Carpet"
-msgstr ""
+msgstr "Красный ковёр"
 
 msgid "Red Wool"
-msgstr ""
+msgstr "Красная шерсть"
 
 msgid "White Carpet"
-msgstr ""
+msgstr "Белый ковёр"
 
 msgid "White Wool"
-msgstr ""
+msgstr "Белая шерсть"
 
 msgid "Yellow Carpet"
-msgstr ""
+msgstr "Жёлтый ковёр"
 
 msgid "Yellow Wool"
-msgstr ""
-
+msgstr "Жёлтая шерсть"
