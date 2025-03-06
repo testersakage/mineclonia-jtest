@@ -193,7 +193,8 @@ function mcl_flowers.register_ground_flower(name, def)
 			local node = minetest.get_node(pos)
 			local above_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 			local above_node = minetest.get_node(above_pos)
-			local node_def = minetest.registered_nodes[node.name]
+			local wildflower_group = minetest.get_item_group(node.name, "wildflower")
+			local creative = minetest.is_creative_enabled(placer:get_player_name())
 
 			-- Swap the node in place if it's part of the progression
 			local swap_map = {
@@ -203,17 +204,17 @@ function mcl_flowers.register_ground_flower(name, def)
 			}
 
 			if swap_map[node.name] then
-				itemstack:take_item(1)
+				if not creative then itemstack:take_item(1) end
 				minetest.set_node(pos, {name = swap_map[node.name]})
 			else
-				local max_cycle = node_def and node_def.groups and node_def.groups.wildflower and node_def.groups.wildflower > 0 and node_def.groups.wildflower < 5
+				local max_cycle = wildflower_group > 0 and wildflower_group < 5
 				-- If not already part of the cycle, place _1 above
 				if above_node.name == "air" and not max_cycle then
 					-- Only placeable on soil node
 					if core.get_item_group(node.name, "soil") == 0 then
 						return itemstack
 					else
-						itemstack:take_item(1)
+						if not creative then itemstack:take_item(1) end
 						minetest.set_node(above_pos, {name = newname.."_1"})
 					end
 				end
