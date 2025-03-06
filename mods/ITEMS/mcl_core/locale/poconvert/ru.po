@@ -3,21 +3,25 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Stick"
 msgstr "Палка"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
-msgstr "Палки это универсальный материал, используемый для крафта различных предметов, присутствует во многих рецептах."
+msgstr ""
+"Палки — это универсальный материал, используемый для крафта различных "
+"предметов, присутствует во многих рецептах."
 
 msgid "Paper"
 msgstr "Бумага"
@@ -29,37 +33,53 @@ msgid "Coal"
 msgstr "Уголь"
 
 msgid "“Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things."
-msgstr "“Уголь” относится к угольным кускам, добываемым из угольной руды, которую можно встретить под землёй. Уголь это стандартное печное топливо, но он также нужен, чтобы сделать факелы, угольные блоки и некоторые другие предметы."
+msgstr ""
+"«Уголь» относится к угольным кускам, добываемым из угольной руды, которую "
+"можно встретить под землёй. Уголь это стандартное печное топливо, но он "
+"также нужен, чтобы сделать факелы, угольные блоки и некоторые другие "
+"предметы."
 
 msgid "Charcoal"
 msgstr "Древесный уголь"
 
 msgid "Charcoal is an alternative furnace fuel created by cooking wood in a furnace. It has the same burning time as coal and also shares many of its crafting recipes, but it can not be used to create coal blocks."
-msgstr "Древесный уголь это альтернативное печное топливо, получаемое путём сжигания древесины в качестве ингредиента в печи. Оно имеет такую же длительность горения, как и каменный уголь, но из него нельзя сделать угольные блоки."
+msgstr ""
+"Древесный уголь — это альтернативное печное топливо, получаемое путём "
+"сжигания древесины в качестве ингредиента в печи. Оно имеет такую же "
+"длительность горения, как и каменный уголь, но из него нельзя сделать "
+"угольные блоки."
 
 msgid "Iron Nugget"
 msgstr "Железный самородок"
 
 msgid "Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."
-msgstr "Железные самородки это маленькие частички чистого железа, которые можно объединять в железные слитки."
+msgstr ""
+"Железные самородки — это маленькие частички чистого железа, которые можно "
+"объединять в железные слитки."
 
 msgid "Gold Nugget"
 msgstr "Золотой самородок"
 
 msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."
-msgstr "Золотые самородки это мелкие частички чистого золота, которые можно объединять в золотые слитки."
+msgstr ""
+"Золотые самородки — это мелкие частички чистого золота, которые можно "
+"объединять в золотые слитки."
 
 msgid "Diamond"
 msgstr "Алмаз"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
-msgstr "Алмазы это драгоценные камни, используемые для создания брони и инструментов высшего качества."
+msgstr ""
+"Алмазы — это драгоценные камни, используемые для создания брони и "
+"инструментов высшего качества."
 
 msgid "Clay Ball"
 msgstr "Глина"
 
 msgid "Clay balls are a raw material, mainly used to create bricks in the furnace."
-msgstr "Глина это необработанный материал, в основном используемый для создания кирпичей при помощи печи."
+msgstr ""
+"Глина — это необработанный материал, в основном используемый для создания "
+"кирпичей при помощи печи."
 
 msgid "Iron Ingot"
 msgstr "Железный слиток"
@@ -95,7 +115,7 @@ msgid "Flint"
 msgstr "Кремень"
 
 msgid "Flint is a raw material."
-msgstr "Кремень это необработанный материал."
+msgstr "Кремень — это необработанный материал."
 
 msgid "Sugar"
 msgstr "Сахар"
@@ -113,496 +133,496 @@ msgid "Apple"
 msgstr "Яблоко"
 
 msgid "Apples are food items which can be eaten."
-msgstr "Яблоки это съедобный продукт."
+msgstr "Яблоки — это съедобный продукт."
 
 msgid "Golden Apple"
 msgstr "Золотое яблоко"
 
 msgid "Golden apples are precious food items which can be eaten."
-msgstr "Золотые яблоки это ценный съедобный продукт."
+msgstr "Золотые яблоки — это ценный съедобный продукт."
 
 msgid "Enchanted Golden Apple"
 msgstr "Зачарованное золотое яблоко"
 
 msgid "Acacia Bark"
-msgstr ""
+msgstr "Акациевая кора"
 
 msgid "Acacia Bark Slab"
-msgstr ""
+msgstr "Плита из акациевой коры"
 
 msgid "Acacia Bark Stairs"
-msgstr ""
+msgstr "Ступени из акациевой коры"
 
 msgid "Acacia Boat"
-msgstr ""
+msgstr "Акациевая лодка"
 
 msgid "Acacia Button"
-msgstr ""
+msgstr "Акациевая кнопка"
 
 msgid "Acacia Chest Boat"
-msgstr ""
+msgstr "Акациевая лодка с сундуком"
 
 msgid "Acacia Door"
-msgstr ""
+msgstr "Акациевая дверь"
 
 msgid "Acacia Fence"
-msgstr ""
+msgstr "Акациевый забор"
 
 msgid "Acacia Fence Gate"
-msgstr ""
+msgstr "Акациевая калитка"
 
 msgid "Acacia Leaves"
-msgstr ""
+msgstr "Акациевая листва"
 
 msgid "Acacia Log"
-msgstr ""
+msgstr "Акациевая древесина"
 
 msgid "Acacia Planks"
-msgstr ""
+msgstr "Акациевые доски"
 
 msgid "Acacia Pressure Plate"
-msgstr ""
+msgstr "Акациевая нажимная плита"
 
 msgid "Acacia Sapling"
-msgstr ""
+msgstr "Саженец акации"
 
 msgid "Acacia Sign"
-msgstr ""
+msgstr "Акациевая табличка"
 
 msgid "Acacia Slab"
-msgstr ""
+msgstr "Акациевая плита"
 
 msgid "Acacia Stairs"
-msgstr ""
+msgstr "Акациевые ступени"
 
 msgid "Acacia Trapdoor"
-msgstr ""
+msgstr "Акациевый люк"
 
 msgid "Acacia leaves are grown from Acacia trees."
-msgstr ""
+msgstr "Листва акации произрастает на деревьях акации."
 
 msgid "Birch Bark"
-msgstr ""
+msgstr "Берёзовая кора"
 
 msgid "Birch Bark Slab"
-msgstr ""
+msgstr "Плита из берёзовой коры"
 
 msgid "Birch Bark Stairs"
-msgstr ""
+msgstr "Ступени из берёзовой коры"
 
 msgid "Birch Boat"
-msgstr ""
+msgstr "Берёзовая лодка"
 
 msgid "Birch Button"
-msgstr ""
+msgstr "Берёзовая кнопка"
 
 msgid "Birch Chest Boat"
-msgstr ""
+msgstr "Берёзовая лодка с сундуком"
 
 msgid "Birch Door"
-msgstr ""
+msgstr "Берёзовая дверь"
 
 msgid "Birch Fence"
-msgstr ""
+msgstr "Берёзовый забор"
 
 msgid "Birch Fence Gate"
-msgstr ""
+msgstr "Берёзовая калитка"
 
 msgid "Birch Leaves"
-msgstr ""
+msgstr "Берёзовая листва"
 
 msgid "Birch Log"
-msgstr ""
+msgstr "Берёзовая древесина"
 
 msgid "Birch Planks"
-msgstr ""
+msgstr "Берёзовые доски"
 
 msgid "Birch Pressure Plate"
-msgstr ""
+msgstr "Берёзовая нажимная плита"
 
 msgid "Birch Sapling"
-msgstr ""
+msgstr "Саженец берёзы"
 
 msgid "Birch Sign"
-msgstr ""
+msgstr "Березовая табличка"
 
 msgid "Birch Slab"
-msgstr ""
+msgstr "Берёзовая плита"
 
 msgid "Birch Stairs"
-msgstr ""
+msgstr "Берёзовые ступени"
 
 msgid "Birch Trapdoor"
-msgstr ""
+msgstr "Берёзовый люк"
 
 msgid "Birch leaves are grown from Birch trees."
-msgstr ""
+msgstr "Листва берёзы произрастает на берёзах."
 
 msgid "Black Stained Glass"
-msgstr ""
+msgstr "Чёрное стекло"
 
 msgid "Blue Stained Glass"
-msgstr ""
+msgstr "Синее стекло"
 
 msgid "Brown Stained Glass"
-msgstr ""
+msgstr "Коричневое стекло"
 
 msgid "Cyan Stained Glass"
-msgstr ""
+msgstr "Бирюзовое стекло"
 
 msgid "Dark Oak Bark"
-msgstr ""
+msgstr "Кора тёмного дуба"
 
 msgid "Dark Oak Bark Slab"
-msgstr ""
+msgstr "Плита из коры тёмного дуба"
 
 msgid "Dark Oak Bark Stairs"
-msgstr ""
+msgstr "Ступени из коры тёмного дуба"
 
 msgid "Dark Oak Boat"
-msgstr ""
+msgstr "Лодка из тёмного дуба"
 
 msgid "Dark Oak Button"
-msgstr ""
+msgstr "Кнопка из тёмного дуба"
 
 msgid "Dark Oak Chest Boat"
-msgstr ""
+msgstr "Лодка из тёмного дуба с сундуком"
 
 msgid "Dark Oak Door"
-msgstr ""
+msgstr "Дверь из тёмного дуба"
 
 msgid "Dark Oak Fence"
-msgstr ""
+msgstr "Забор из тёмного дуба"
 
 msgid "Dark Oak Fence Gate"
-msgstr ""
+msgstr "Калитка из тёмного дуба"
 
 msgid "Dark Oak Leaves"
-msgstr ""
+msgstr "Листва тёмного дуба"
 
 msgid "Dark Oak Log"
-msgstr ""
+msgstr "Древесина тёмного дуба"
 
 msgid "Dark Oak Planks"
-msgstr ""
+msgstr "Доски из тёмного дуба"
 
 msgid "Dark Oak Pressure Plate"
-msgstr ""
+msgstr "Нажимная плита из тёмного дуба"
 
 msgid "Dark Oak Sapling"
-msgstr ""
+msgstr "Саженец тёмного дуба"
 
 msgid "Dark Oak Sign"
-msgstr ""
+msgstr "Табличка из тёмного дуба"
 
 msgid "Dark Oak Slab"
-msgstr ""
+msgstr "Плита из тёмного дуба"
 
 msgid "Dark Oak Stairs"
-msgstr ""
+msgstr "Ступени из тёмного дуба"
 
 msgid "Dark Oak Trapdoor"
-msgstr ""
+msgstr "Люк из тёмного дуба"
 
 msgid "Dark Oak leaves are grown from Dark Oak trees."
-msgstr ""
+msgstr "Листва тёмного дуба произрастает на деревьях тёмного дуба."
 
 msgid "Green Stained Glass"
-msgstr ""
+msgstr "Зелёное стекло"
 
 msgid "Grey Stained Glass"
-msgstr ""
+msgstr "Серое стекло"
 
 msgid "Jungle Bark"
-msgstr ""
+msgstr "Кора тропического дерева"
 
 msgid "Jungle Bark Slab"
-msgstr ""
+msgstr "Плита из коры тропического дерева"
 
 msgid "Jungle Bark Stairs"
-msgstr ""
+msgstr "Ступени из коры тропического дерева"
 
 msgid "Jungle Boat"
-msgstr ""
+msgstr "Лодка из тропического дерева"
 
 msgid "Jungle Button"
-msgstr ""
+msgstr "Кнопка из тропического дерева"
 
 msgid "Jungle Chest Boat"
-msgstr ""
+msgstr "Лодка из тропического дерева с сундуком"
 
 msgid "Jungle Door"
-msgstr ""
+msgstr "Дверь из тропического дерева"
 
 msgid "Jungle Fence"
-msgstr ""
+msgstr "Забор из тропического дерева"
 
 msgid "Jungle Fence Gate"
-msgstr ""
+msgstr "Калитка из тропического дерева"
 
 msgid "Jungle Leaves"
-msgstr ""
+msgstr "Листва тропического дерева"
 
 msgid "Jungle Log"
-msgstr ""
+msgstr "Древесина тропического дерева"
 
 msgid "Jungle Planks"
-msgstr ""
+msgstr "Доски из тропического дерева"
 
 msgid "Jungle Pressure Plate"
-msgstr ""
+msgstr "Нажимная плита из тропического дерева"
 
 msgid "Jungle Sapling"
-msgstr ""
+msgstr "Саженец тропического дерева"
 
 msgid "Jungle Sign"
-msgstr ""
+msgstr "Табличка из тропического дерева"
 
 msgid "Jungle Slab"
-msgstr ""
+msgstr "Плита из тропического дерева"
 
 msgid "Jungle Stairs"
-msgstr ""
+msgstr "Ступени из тропического дерева"
 
 msgid "Jungle Trapdoor"
-msgstr ""
+msgstr "Люк из тропического дерева"
 
 msgid "Jungle leaves are grown from Jungle trees."
-msgstr ""
+msgstr "Листва тропического дерева произрастает на тропических деревьях."
 
 msgid "Light Blue Stained Glass"
-msgstr ""
+msgstr "Голубое стекло"
 
 msgid "Light Grey Stained Glass"
-msgstr ""
+msgstr "Светло-серое стекло"
 
 msgid "Lime Stained Glass"
-msgstr ""
+msgstr "Лаймовое стекло"
 
 msgid "Magenta Stained Glass"
-msgstr ""
+msgstr "Сиреневое стекло"
 
 msgid "Oak Bark"
-msgstr ""
+msgstr "Дубовая кора"
 
 msgid "Oak Bark Slab"
-msgstr ""
+msgstr "Плита из дубовой коры"
 
 msgid "Oak Bark Stairs"
-msgstr ""
+msgstr "Ступени из дубовой коры"
 
 msgid "Oak Boat"
-msgstr ""
+msgstr "Дубовая лодка"
 
 msgid "Oak Button"
-msgstr ""
+msgstr "Дубовая кнопка"
 
 msgid "Oak Chest Boat"
-msgstr ""
+msgstr "Дубовая лодка с сундуком"
 
 msgid "Oak Door"
-msgstr ""
+msgstr "Дубовая дверь"
 
 msgid "Oak Fence"
-msgstr ""
+msgstr "Дубовый забор"
 
 msgid "Oak Fence Gate"
-msgstr ""
+msgstr "Дубовая калитка"
 
 msgid "Oak Leaves"
-msgstr ""
+msgstr "Дубовая листва"
 
 msgid "Oak Log"
-msgstr ""
+msgstr "Дубовая древесина"
 
 msgid "Oak Planks"
-msgstr ""
+msgstr "Дубовые доски"
 
 msgid "Oak Pressure Plate"
-msgstr ""
+msgstr "Дубовая нажимная плита"
 
 msgid "Oak Sapling"
-msgstr ""
+msgstr "Саженец дуба"
 
 msgid "Oak Sign"
-msgstr ""
+msgstr "Дубовая табличка"
 
 msgid "Oak Slab"
-msgstr ""
+msgstr "Дубовая плита"
 
 msgid "Oak Stairs"
-msgstr ""
+msgstr "Дубовые ступени"
 
 msgid "Oak Trapdoor"
-msgstr ""
+msgstr "Дубовый люк"
 
 msgid "Oak leaves are grown from Oak trees."
-msgstr ""
+msgstr "Листва дуба произрастает на дубовых деревьях."
 
 msgid "Orange Stained Glass"
-msgstr ""
+msgstr "Оранжевое стекло"
 
 msgid "Pink Stained Glass"
-msgstr ""
+msgstr "Розовое стекло"
 
 msgid "Purple Stained Glass"
-msgstr ""
+msgstr "Фиолетовое стекло"
 
 msgid "Red Stained Glass"
-msgstr ""
+msgstr "Красное стекло"
 
 msgid "Spruce Bark"
-msgstr ""
+msgstr "Еловая кора"
 
 msgid "Spruce Bark Slab"
-msgstr ""
+msgstr "Плита из еловой коры"
 
 msgid "Spruce Bark Stairs"
-msgstr ""
+msgstr "Ступени из еловой коры"
 
 msgid "Spruce Boat"
-msgstr ""
+msgstr "Еловая лодка"
 
 msgid "Spruce Button"
-msgstr ""
+msgstr "Еловая кнопка"
 
 msgid "Spruce Chest Boat"
-msgstr ""
+msgstr "Еловая лодка с сундуком"
 
 msgid "Spruce Door"
-msgstr ""
+msgstr "Еловая дверь"
 
 msgid "Spruce Fence"
-msgstr ""
+msgstr "Еловый забор"
 
 msgid "Spruce Fence Gate"
-msgstr ""
+msgstr "Еловая калитка"
 
 msgid "Spruce Leaves"
-msgstr ""
+msgstr "Еловая хвоя"
 
 msgid "Spruce Log"
-msgstr ""
+msgstr "Еловая древесина"
 
 msgid "Spruce Planks"
-msgstr ""
+msgstr "Еловые доски"
 
 msgid "Spruce Pressure Plate"
-msgstr ""
+msgstr "Еловая нажимная плита"
 
 msgid "Spruce Sapling"
-msgstr ""
+msgstr "Саженец ели"
 
 msgid "Spruce Sign"
-msgstr ""
+msgstr "Еловая табличка"
 
 msgid "Spruce Slab"
-msgstr ""
+msgstr "Еловая плита"
 
 msgid "Spruce Stairs"
-msgstr ""
+msgstr "Еловые ступени"
 
 msgid "Spruce Trapdoor"
-msgstr ""
+msgstr "Еловый люк"
 
 msgid "Spruce leaves are grown from Spruce trees."
-msgstr ""
+msgstr "Хвоя растёт на еловых деревьях."
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "Обтёсанная акациевая кора"
 
 msgid "Stripped Acacia Log"
-msgstr ""
+msgstr "Обтёсанная акациевая древесина"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "Обтёсанная берёзовая кора"
 
 msgid "Stripped Birch Log"
-msgstr ""
+msgstr "Обтёсанная берёзовая древесина"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "Обтёсанная кора тёмного дуба"
 
 msgid "Stripped Dark Oak Log"
-msgstr ""
+msgstr "Обтёсанная древесина тёмного дуба"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "Обтёсанная кора тропического дерева"
 
 msgid "Stripped Jungle Log"
-msgstr ""
+msgstr "Обтёсанная тропическая древесина"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "Обтёсанная дубовая кора"
 
 msgid "Stripped Oak Log"
-msgstr ""
+msgstr "Обтёсанная дубовая древесина"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "Обтёсанная еловая кора"
 
 msgid "Stripped Spruce Log"
-msgstr ""
+msgstr "Обтёсанная еловая древесина"
 
 msgid "The stripped trunk of an Acacia tree."
-msgstr ""
+msgstr "Обтёсанное акациевое бревно."
 
 msgid "The stripped trunk of an Birch tree."
-msgstr ""
+msgstr "Обтёсанное берёзовое бревно."
 
 msgid "The stripped trunk of an Dark Oak tree."
-msgstr ""
+msgstr "Обтёсанное бревно тёмного дуба."
 
 msgid "The stripped trunk of an Jungle tree."
-msgstr ""
+msgstr "Обтёсанное бревно тропического дерева."
 
 msgid "The stripped trunk of an Oak tree."
-msgstr ""
+msgstr "Обтёсанное дубовое бревно."
 
 msgid "The stripped trunk of an Spruce tree."
-msgstr ""
+msgstr "Обтёсанное еловое бревно."
 
 msgid "The stripped wood of an Acacia tree."
-msgstr ""
+msgstr "Обтёсанная акациевая кора."
 
 msgid "The stripped wood of an Birch tree."
-msgstr ""
+msgstr "Обтёсанная берёзовая кора."
 
 msgid "The stripped wood of an Dark Oak tree."
-msgstr ""
+msgstr "Обтёсанная кора тёмного дуба."
 
 msgid "The stripped wood of an Jungle tree."
-msgstr ""
+msgstr "Обтёсанная тропическая кора."
 
 msgid "The stripped wood of an Oak tree."
-msgstr ""
+msgstr "Обтёсанная дубовая кора."
 
 msgid "The stripped wood of an Spruce tree."
-msgstr ""
+msgstr "Обтёсанная еловая кора."
 
 msgid "The trunk of a Acacia tree."
-msgstr ""
+msgstr "Акациевое бревно."
 
 msgid "The trunk of a Birch tree."
-msgstr ""
+msgstr "Берёзовое бревно."
 
 msgid "The trunk of a Dark Oak tree."
-msgstr ""
+msgstr "Бревно тёмного дуба."
 
 msgid "The trunk of a Jungle tree."
-msgstr ""
+msgstr "Бревно тропического дерева."
 
 msgid "The trunk of a Oak tree."
-msgstr ""
+msgstr "Дубовое бревно."
 
 msgid "The trunk of a Spruce tree."
-msgstr ""
+msgstr "Еловое бревно."
 
 msgid "White Stained Glass"
-msgstr ""
+msgstr "Белое стекло"
 
 msgid "Yellow Stained Glass"
-msgstr ""
+msgstr "Жёлтое стекло"
 
 msgid "Stone"
 msgstr "Камень"
@@ -641,7 +661,9 @@ msgid "Lapis Lazuli Ore"
 msgstr "Лазуритовая руда"
 
 msgid "Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."
-msgstr "Лазуритовая руда это руда лазурита. Она изредка встречается в виде скоплений в нижних слоях мира."
+msgstr ""
+"Лазуритовая руда — это руда лазурита. Она изредка встречается в виде "
+"скоплений в нижних слоях мира."
 
 msgid "Emerald Ore"
 msgstr "Изумрудная руда"
@@ -659,7 +681,7 @@ msgid "Stone Bricks"
 msgstr "Каменные кирпичи"
 
 msgid "Chiseled Stone Bricks"
-msgstr "Декоративные каменные кирпичи"
+msgstr "Резные каменные кирпичи"
 
 msgid "Cracked Stone Bricks"
 msgstr "Потрескавшиеся каменные кирпичи"
@@ -674,43 +696,48 @@ msgid "Granite"
 msgstr "Гранит"
 
 msgid "Granite is an igneous rock."
-msgstr "Гранит это камень вулканической породы."
+msgstr "Гранит — это камень вулканической породы."
 
 msgid "Polished Granite"
 msgstr "Полированный гранит"
 
 msgid "Polished granite is a decorative building block made from granite."
-msgstr "Гладкий гранит это декоративный строительный блок из гранита."
+msgstr "Полированный гранит — это декоративный строительный блок из гранита."
 
 msgid "Andesite"
 msgstr "Андезит"
 
 msgid "Andesite is an igneous rock."
-msgstr "Андезит это камень вулканической природы."
+msgstr "Андезит — это камень вулканической природы."
 
 msgid "Polished Andesite"
 msgstr "Полированный андезит"
 
 msgid "Polished andesite is a decorative building block made from andesite."
-msgstr "Гладкий андезит это декоративный строительный блок из андезита."
+msgstr "Полированный андезит — это декоративный строительный блок из андезита."
 
 msgid "Diorite"
 msgstr "Диорит"
 
 msgid "Diorite is an igneous rock."
-msgstr "Диорит это камень вулканической природы."
+msgstr "Диорит — это камень вулканической природы."
 
 msgid "Polished Diorite"
 msgstr "Полированный диорит"
 
 msgid "Polished diorite is a decorative building block made from diorite."
-msgstr "Гладкий диорит это декоративный строительный блок из диорита."
+msgstr "Полированный диорит — это декоративный строительный блок из диорита."
 
 msgid "Grass Block"
 msgstr "Дёрн"
 
 msgid "A grass block is dirt with a grass cover. Grass blocks are resourceful blocks which allow the growth of all sorts of plants. They can be turned into farmland with a hoe and turned into grass paths with a shovel. In light, the grass slowly spreads onto dirt nearby. Under an opaque block or a liquid, a grass block may turn back to dirt."
-msgstr "Дёрн это блок земли, покрытый травой. Дёрн удобен тем, что на нём могут расти разнообразные растения. Дёрн можно превратить в грядку при помощи мотыги или в тропинку при помощи лопаты. При наличии света дёрн понемногу распространяется на блоки земли по соседству. Под непрозрачным блоком или жидкостью дёрн может превратиться обратно в землю."
+msgstr ""
+"Дёрн — это блок земли, покрытый травой. Дёрн удобен тем, что на нём могут "
+"расти разнообразные растения. Дёрн можно превратить в грядку при помощи "
+"мотыги или в тропинку при помощи лопаты. При наличии света дёрн понемногу "
+"распространяется на блоки земли по соседству. Под непрозрачным блоком или "
+"жидкостью дёрн может превратиться обратно в землю."
 
 msgid "Dirt with Snow"
 msgstr "Земля со снегом"
@@ -725,7 +752,12 @@ msgid "Mycelium"
 msgstr "Мицелий"
 
 msgid "Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other dirt-type blocks, it can not be turned into farmland with a hoe. In light, mycelium slowly spreads over nearby dirt. Under an opaque block or a liquid, it eventually turns back into dirt."
-msgstr "Мицелий это идеальная почва для грибов. В отличие от других земляных блоков, он не может быть превращён в грядку при помощи мотыги. При наличии освещения мицелий медленно распространяется по соседствующие с ним блоки земли. Под непрозрачным блоком или жидкостью со временем превращается обратно в землю."
+msgstr ""
+"Мицелий — это идеальная почва для грибов. В отличие от других земляных "
+"блоков, он не может быть превращён в грядку при помощи мотыги. При наличии "
+"освещения мицелий медленно распространяется по соседствующие с ним блоки "
+"земли. Под непрозрачным блоком или жидкостью со временем превращается "
+"обратно в землю."
 
 msgid "Mycelium with Snow"
 msgstr "Мицелий со снегом"
@@ -734,7 +766,9 @@ msgid "Podzol"
 msgstr "Подзол"
 
 msgid "Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."
-msgstr "Подзол это тип земли, встречающийся в таёжных лесах. Только несколько растений имеют способность выжить на нём."
+msgstr ""
+"Подзол — это тип земли, встречающийся в таёжных лесах. Только несколько "
+"растений имеют способность выжить на нём."
 
 msgid "Podzol with Snow"
 msgstr "Подзол со снегом"
@@ -743,13 +777,17 @@ msgid "Dirt"
 msgstr "Земля"
 
 msgid "Dirt acts as a soil for a few plants. When in light, this block may grow a grass or mycelium cover if such blocks are nearby."
-msgstr "Земля это почва для некоторых растений. Под освещением на этом блоке может прорасти трава или мицелий, если такие блоки уже есть поблизости."
+msgstr ""
+"Земля — это почва для некоторых растений. Под освещением на этом блоке может "
+"прорасти трава или мицелий, если такие блоки уже есть поблизости."
 
 msgid "Coarse Dirt"
 msgstr "Каменистая земля"
 
 msgid "Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."
-msgstr "Каменистая земля это почва для некоторых растений и похожа на обычную землю, но на ней никогда не растёт трава."
+msgstr ""
+"Каменистая земля — это почва для некоторых растений и похожа на обычную "
+"землю, но на ней никогда не растёт трава."
 
 msgid "Gravel"
 msgstr "Гравий"
@@ -767,25 +805,25 @@ msgid "Sandstone"
 msgstr "Песчаник"
 
 msgid "Sandstone is compressed sand and is a rather soft kind of stone."
-msgstr "Песчаник это сжатый песок, некая разновидность камня."
+msgstr "Песчаник — это сжатый песок, некая разновидность камня."
 
 msgid "Cut Sandstone"
 msgstr "Резной песчаник"
 
 msgid "Cut sandstone is a decorative building block."
-msgstr "Резной песчаник это декоративный строительный блок."
+msgstr "Резной песчаник — это декоративный строительный блок."
 
 msgid "Chiseled Sandstone"
 msgstr "Декоративный песчаник"
 
 msgid "Chiseled sandstone is a decorative building block."
-msgstr "Декоративный песчаник это декоративный строительный блок."
+msgstr "Декоративный песчаник — это декоративный строительный блок."
 
 msgid "Smooth Sandstone"
 msgstr "Гладкий песчаник"
 
 msgid "Smooth sandstone is compressed sand and is a rather soft kind of stone."
-msgstr "Гладкий песчаник это сжатый песок, некая разновидность камня."
+msgstr "Гладкий песчаник — это сжатый песок, некая разновидность камня."
 
 msgid "Red Sand"
 msgstr "Красный песок"
@@ -797,43 +835,48 @@ msgid "Red Sandstone"
 msgstr "Красный песчаник"
 
 msgid "Red sandstone is compressed red sand and is a rather soft kind of stone."
-msgstr "Красный песчаник это сжатый красный песок, некая разновидность камня."
+msgstr "Красный песчаник — это сжатый красный песок, некая разновидность камня."
 
 msgid "Cut Red Sandstone"
 msgstr "Резной красный песчаник"
 
 msgid "Cut red sandstone is a decorative building block."
-msgstr "Резной красный песчаник это декоративный строительный блок."
+msgstr "Резной красный песчаник — это декоративный строительный блок."
 
 msgid "Chiseled Red Sandstone"
 msgstr "Декоративный красный песчаник"
 
 msgid "Chiseled red sandstone is a decorative building block."
-msgstr "Декоративный красный песчаник это декоративный строительный блок."
+msgstr "Декоративный красный песчаник — это декоративный строительный блок."
 
 msgid "Smooth Red Sandstone"
 msgstr "Гладкий красный песчаник"
 
 msgid "Smooth red sandstone is a decorative building block."
-msgstr "Гладкий красный песчаник это декоративный строительный блок."
+msgstr "Гладкий красный песчаник — это декоративный строительный блок."
 
 msgid "Clay"
 msgstr "Глиняный блок"
 
 msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
-msgstr "Глиняный блок это тип почвы, часто встречающийся на побережьях под водой."
+msgstr ""
+"Глиняный блок — это тип почвы, часто встречающийся на побережьях под водой."
 
 msgid "Brick Block"
 msgstr "Кирпичный блок"
 
 msgid "Brick blocks are a good building material for building solid houses and can take quite a punch."
-msgstr "Кирпичные блоки это отличный строительный материал для создания прочных домов, они выдерживают довольно сильные удары."
+msgstr ""
+"Кирпичные блоки — это отличный строительный материал для создания прочных "
+"домов, они выдерживают довольно сильные удары."
 
 msgid "Bedrock"
 msgstr "Бедрок"
 
 msgid "Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode."
-msgstr "Бедрок это очень твёрдый камень. Его невозможно сломать, добыть или сдвинуть обычным способом, за исключением творческого режима."
+msgstr ""
+"Бедрок — это очень твёрдый камень. Его невозможно сломать, добыть или "
+"сдвинуть обычным способом, за исключением творческого режима."
 
 msgid "In the End dimension, starting a fire on this block will create an eternal fire."
 msgstr "В измерении Края разжигание огня на этом блоке создаст вечный огонь."
@@ -869,7 +912,7 @@ msgid "A block of diamond is mostly a shiny decorative block but also useful as 
 msgstr "Алмазный блок это, прежде всего, декоративный блок, но он также удобен для компактного хранения алмазов."
 
 msgid "Block of Lapis Lazuli"
-msgstr ""
+msgstr "Лазуритовый блок"
 
 msgid "A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."
 msgstr "Блок лазурита это, прежде всего, декоративный блок, но он также удобен для компактного хранения лазурита."
@@ -884,28 +927,37 @@ msgid "Obsidian"
 msgstr "Обсидиан"
 
 msgid "Obsidian is an extremely hard mineral with an enourmous blast-resistance. Obsidian is formed when water meets lava."
-msgstr "Обсидиан это чрезвычайно твёрдый минерал с высочайшей взрывоустойчивостью."
+msgstr ""
+"Обсидиан — это чрезвычайно твёрдый минерал с высочайшей взрывоустойчивостью."
 
 msgid "Crying Obsidian"
 msgstr "Плачущий обсидиан"
 
 msgid "Crying obsidian is a luminous obsidian that can generate as part of ruined portals."
-msgstr "Плачущий обсидиан это светящийся обсидиан который может сгенерироваться как часть разрушенных порталов."
+msgstr ""
+"Плачущий обсидиан — это светящийся обсидиан который может сгенерироваться "
+"как часть разрушенных порталов."
 
 msgid "Ice"
 msgstr "Лёд"
 
 msgid "Ice is a solid block usually found in cold areas. It melts near block light sources at a light level of 12 or higher. When it melts or is broken while resting on top of another block, it will turn into a water source."
-msgstr "Лёд это твёрдый блок, обычно встречающийся в холодных областях. Он тает, когда рядом имеется источник света уровня 12 и выше. Если он тает или ломается, будучи расположенным на другом блоке, то превращается в источник воды."
+msgstr ""
+"Лёд — это твёрдый блок, обычно встречающийся в холодных областях. Он тает, "
+"когда рядом имеется источник света уровня 12 и выше. Если он тает или "
+"ломается, будучи расположенным на другом блоке, то превращается в источник "
+"воды."
 
 msgid "Packed Ice"
 msgstr "Плотный лёд"
 
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
-msgstr "Плотный лёд это сжатая форма льда. Он непрозрачный и твёрдый."
+msgstr "Плотный лёд — это сжатая форма льда. Он непрозрачный и твёрдый."
 
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
-msgstr "Подмороженный лёд это быстро исчезающий твёрдый блок. Он растает через несколько секунд, превратившись в источник воды."
+msgstr ""
+"Подмороженный лёд — это быстро исчезающий твёрдый блок. Он растает через "
+"несколько секунд, превратившись в источник воды."
 
 msgid "Frosted Ice"
 msgstr "Подмороженный лёд"
@@ -953,7 +1005,11 @@ msgid "Grows on sand or dirt next to water"
 msgstr "Растёт на песке или земле рядом с водой"
 
 msgid "Sugar canes are a plant which has some uses in crafting. Sugar canes will slowly grow up to 3 blocks when they are next to water and are placed on a grass block, dirt, sand, red sand, podzol or coarse dirt. When a sugar cane is broken, all sugar canes connected above will break as well."
-msgstr "Сахарный тростник это растение, используемое в крафте. Если тростник находится по соседству с водой на дёрне, земле, песке, красном песке, подзоле или каменистой земле, он будет медленно расти вверх до 3 блоков. Если сломать тростник, все верхние части также сломаются."
+msgstr ""
+"Сахарный тростник — это растение, используемое в крафте. Если тростник "
+"находится по соседству с водой на дёрне, земле, песке, красном песке, "
+"подзоле или каменистой земле, он будет медленно расти вверх до 3 блоков. "
+"Если сломать тростник, все верхние части также сломаются."
 
 msgid "Sugar canes can only be placed top of other sugar canes and on top of blocks on which they would grow."
 msgstr "Сахарный тростник может быть помещён только на верхушку другого сахарного тростника, либо на верхнюю часть другого блока, на котором он может расти."
@@ -968,7 +1024,9 @@ msgid "Vines"
 msgstr "Лоза"
 
 msgid "Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."
-msgstr "Лоза это блок, по которому можно карабкаться, он может быть помещён по сторонам твёрдого блока."
+msgstr ""
+"Лоза — это блок, по которому можно карабкаться, он может быть помещён по "
+"сторонам твёрдого блока."
 
 msgid "Glass"
 msgstr "Стекло"
@@ -977,7 +1035,9 @@ msgid "A decorative and mostly transparent block."
 msgstr "Декоративный и преимущественно прозрачный блок."
 
 msgid "Stained glass is a decorative and mostly transparent block which comes in various different colors."
-msgstr "Окрашенное стекло это декоративный прозрачный блок, встречающийся в различных расцветках."
+msgstr ""
+"Окрашенное стекло — это декоративный прозрачный блок, встречающийся в "
+"различных расцветках."
 
 msgid "Stained Glass"
 msgstr "Окрашенное стекло"
@@ -1031,7 +1091,9 @@ msgid "Bone Block"
 msgstr "Костный блок"
 
 msgid "Bone blocks are decorative blocks and a compact storage of bone meal."
-msgstr "Костные блоки это декоративные блоки, а также способ компактного хранения костной муки."
+msgstr ""
+"Костные блоки — это декоративные блоки, а также способ компактного хранения "
+"костной муки."
 
 msgid "Slime Block"
 msgstr "Блок слизи"
@@ -1052,25 +1114,33 @@ msgid "Dead Bush"
 msgstr "Мёртвый куст"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
-msgstr "Мёртвые кусты это непримечательные растения, часто встречающиеся в засушливых областях. Их можно собирать, чтобы сделать из них палки."
+msgstr ""
+"Мёртвые кусты — это непримечательные растения, часто встречающиеся в "
+"засушливых областях. Их можно собирать, чтобы сделать из них палки."
 
 msgid "Barrier"
 msgstr "Барьер"
 
 msgid "Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."
-msgstr "Барьеры это невидимые блоки-препятствия. Они могут использоваться, например, для создания границ карты. Монстры и животные не будут спауниться на барьерах. Заборы с барьерами не соединяются. Другие блоки могут строиться на барьерах, как на любых других блоках."
+msgstr ""
+"Барьеры — это невидимые блоки-препятствия. Они могут использоваться, "
+"например, для создания границ карты. Монстры и животные не будут спауниться "
+"на барьерах. Заборы с барьерами не соединяются. Другие блоки могут строиться "
+"на барьерах, как на любых других блоках."
 
 msgid "When you hold a barrier in hand, you reveal all placed barriers in a short distance around you."
 msgstr "Когда вы держите барьер в руке, вы видите все барьеры, размещённые вокруг вас вблизи."
 
 msgid "Realm Barrier"
-msgstr "Барьер области"
+msgstr "Барьер мира"
 
 msgid "Light"
 msgstr "Свет"
 
 msgid "Lights are invisible blocks. They are used to light up adventure maps and the like."
-msgstr "Свет это невидимые блоки. Используются для подсветки приключенческих карт и всё в этом роде."
+msgstr ""
+"Свет — это невидимые блоки. Используются для подсветки приключенческих карт "
+"и всё в этом роде."
 
 msgid "When you hold a light in hand, you reveal all placed lights in a short distance around you."
 msgstr "Когда вы держите свет в руке, вы видите все расставленные блоки света на небольшой дистанции от вас."
@@ -1085,7 +1155,7 @@ msgid "Stone Slab"
 msgstr "Каменная плита"
 
 msgid "Smooth Stone Slab"
-msgstr "Гладкая каменная плита"
+msgstr "Плита из гладкого камня"
 
 msgid "Andesite Stairs"
 msgstr "Андезитовые ступени"
@@ -1100,92 +1170,91 @@ msgid "Granite Slab"
 msgstr "Гранитная плита"
 
 msgid "Diorite Stairs"
-msgstr "Диоритовая лестница"
+msgstr "Диоритовые ступени"
 
 msgid "Diorite Slab"
 msgstr "Диоритовая плита"
 
 msgid "Cobblestone Stairs"
-msgstr "Лестница из булыжника"
+msgstr "Ступени из булыжника"
 
 msgid "Cobblestone Slab"
 msgstr "Плита из булыжника"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr "Лестница из мшистого булыжника"
+msgstr "Ступени из замшелого булыжника"
 
 msgid "Mossy Cobblestone Slab"
-msgstr "Плита из мшистого булыжника"
+msgstr "Плита из замшелого булыжника"
 
 msgid "Brick Stairs"
-msgstr "Кирпичная лестница"
+msgstr "Кирпичные ступени"
 
 msgid "Brick Slab"
 msgstr "Кирпичная плита"
 
 msgid "Sandstone Stairs"
-msgstr "Лестница из песчаника"
+msgstr "Ступени из песчаника"
 
 msgid "Sandstone Slab"
 msgstr "Плита из песчаника"
 
 msgid "Smooth Sandstone Stairs"
-msgstr "Гладкая лестница из песчаника"
+msgstr "Ступени из гладкого песчаника"
 
 msgid "Smooth Sandstone Slab"
-msgstr "Гладкая плита из песчаника"
+msgstr "Плита из гладкого песчаника"
 
 msgid "Cut Sandstone Stairs"
-msgstr "Лестница из резного песчаника"
+msgstr "Ступени из резного песчаника"
 
 msgid "Cut Sandstone Slab"
 msgstr "Плита из резного песчаника"
 
 msgid "Red Sandstone Stairs"
-msgstr "Лестница из красного песчаника"
+msgstr "Ступени из красного песчаника"
 
 msgid "Red Sandstone Slab"
 msgstr "Плита из красного песчаника"
 
 msgid "Smooth Red Sandstone Stairs"
-msgstr "Лестница из гладкого красного песчаника"
+msgstr "Ступени из гладкого красного песчаника"
 
 msgid "Smooth Red Sandstone Slab"
 msgstr "Плита из гладкого красного песчаника"
 
 msgid "Cut Red Sandstone Stairs"
-msgstr "Лестница из резаного красного песчаника"
+msgstr "Ступени из резного красного песчаника"
 
 msgid "Cut Red Sandstone Slab"
-msgstr "Плита из резаного красного песчаника"
+msgstr "Плита из резного красного песчаника"
 
 msgid "Stone Brick Stairs"
-msgstr "Лестница из каменного кирпича"
+msgstr "Ступени из каменного кирпича"
 
 msgid "Stone Brick Slab"
 msgstr "Плита из каменного кирпича"
 
 msgid "Polished Andesite Stairs"
-msgstr "Лестница из полированного андезита"
+msgstr "Ступени из полированного андезита"
 
 msgid "Polished Andesite Slab"
 msgstr "Плита из полированного андезита"
 
 msgid "Polished Granite Stairs"
-msgstr "Лестница из полированного гранита"
+msgstr "Ступени из полированного гранита"
 
 msgid "Polished Granite Slab"
 msgstr "Плита из полированного гранита"
 
 msgid "Polished Diorite Stairs"
-msgstr "Лестница из полированного диорита"
+msgstr "Ступени из полированного диорита"
 
 msgid "Polished Diorite Slab"
 msgstr "Плита из полированного диорита"
 
 msgid "Mossy Stone Brick Stairs"
-msgstr "Лестница из кирпича мшистого камня"
+msgstr "Ступени из замшелого каменного кирпича"
 
 msgid "Mossy Stone Brick Slab"
-msgstr "Плита из кирпича мшистого камня"
-
+msgstr "Плита из замшелого каменного кирпича"
