@@ -26,13 +26,13 @@ mcl_torches.register_torch({
 			maxpos_to_add = vector.new(0.0625, 0.125, 0.0625),
 			minpos_to_add = vector.new(-0.0625, 0.00625, -0.0625),
 			ps_defs = {
-				maxsize = 1,
-				minsize = 0.5,
+				maxsize = 1.25,
+				minsize = 0.75,
 				maxvel = vector.zero(),
 				minvel = vector.zero(),
 				maxacc = vector.zero(),
 				minacc = vector.zero(),
-				texture = "mcl_torches_smoke_anim.png^[colorize:red",
+				texture = "mcl_torches_smoke_anim.png^[colorize:darkred",
 				animation = {
 					type = "vertical_frames",
 					aspect_h = 16,
@@ -76,7 +76,7 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_off", "mcl_redstone_to
 					}
 				end
 			end,
-		}
+		},
 	})
 end
 

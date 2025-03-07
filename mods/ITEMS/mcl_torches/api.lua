@@ -1,4 +1,4 @@
-local player_ps = {}
+mcl_torches.player_ps = {}
 local particle_distance = 32
 
 -- Check if placement at given node is allowed
@@ -90,12 +90,12 @@ function mcl_torches.register_torch(def)
 		on_destruct = function(pos)
 			local ph = core.hash_node_position(pos)
 
-			for k, v in pairs(player_ps) do
+			for k, v in pairs(mcl_torches.player_ps) do
 				if v[ph] then
 					if v[ph].flame then core.delete_particlespawner(v[ph].flame) end
 					if v[ph].smoke then core.delete_particlespawner(v[ph].smoke) end
 
-					player_ps[k][ph] = nil
+					mcl_torches.player_ps[k][ph] = nil
 				end
 			end
 		end,
@@ -186,12 +186,12 @@ function mcl_torches.register_torch(def)
 		on_destruct = function(pos)
 			local ph = core.hash_node_position(pos)
 
-			for k, v in pairs(player_ps) do
+			for k, v in pairs(mcl_torches.player_ps) do
 				if v[ph] then
 					if v[ph].flame then core.delete_particlespawner(v[ph].flame) end
 					if v[ph].smoke then core.delete_particlespawner(v[ph].smoke) end
 
-					player_ps[k][ph] = nil
+					mcl_torches.player_ps[k][ph] = nil
 				end
 			end
 		end,
@@ -234,10 +234,10 @@ local function generate_particles(pos, node)
 
 	for pl in mcl_util.connected_players() do
 		local in_range = in_range(pos, pl:get_pos())
-		if not player_ps[pl] then player_ps[pl] = {} end
-		if not player_ps[pl][ph] then player_ps[pl][ph] = {} end
-		if not player_ps[pl][ph].flame and in_range and flame then
-			player_ps[pl][ph].flame = core.add_particlespawner({
+		if not mcl_torches.player_ps[pl] then mcl_torches.player_ps[pl] = {} end
+		if not mcl_torches.player_ps[pl][ph] then mcl_torches.player_ps[pl][ph] = {} end
+		if not mcl_torches.player_ps[pl][ph].flame and in_range and flame then
+			mcl_torches.player_ps[pl][ph].flame = core.add_particlespawner({
 				amount = 1,
 				collisiondetection = false,
 				maxpos = vector.add(pos, add_to_pos),
@@ -256,8 +256,8 @@ local function generate_particles(pos, node)
 				time = 0
 			})
 		end
-		if not player_ps[pl][ph].smoke and in_range and smoke then
-			player_ps[pl][ph].smoke = core.add_particlespawner(table.merge({
+		if not mcl_torches.player_ps[pl][ph].smoke and in_range and smoke then
+			mcl_torches.player_ps[pl][ph].smoke = core.add_particlespawner(table.merge({
 				amount = 1,
 				collisiondetection = false,
 				maxpos = vector.add(pos, vector.add(add_to_pos, smoke.maxpos_to_add)),
@@ -272,34 +272,34 @@ local function generate_particles(pos, node)
 		end
 	end
 
-	for pl, pt in pairs(player_ps) do
+	for pl, pt in pairs(mcl_torches.player_ps) do
 		for _, sp in pairs(pt) do
 			if not pl or not pl:get_pos() then
 				if sp.flame then core.delete_particlespawner(sp.flame) end
 				if sp.smoke then core.delete_particlespawner(sp.smoke) end
-			elseif player_ps[pl][ph] and not in_range(pos, pl:get_pos()) then
-				if player_ps[pl][ph].flame then
-					core.delete_particlespawner(player_ps[pl][ph].flame)
+			elseif mcl_torches.player_ps[pl][ph] and not in_range(pos, pl:get_pos()) then
+				if mcl_torches.player_ps[pl][ph].flame then
+					core.delete_particlespawner(mcl_torches.player_ps[pl][ph].flame)
 				end
-				if player_ps[pl][ph].smoke then
-					core.delete_particlespawner(player_ps[pl][ph].smoke)
+				if mcl_torches.player_ps[pl][ph].smoke then
+					core.delete_particlespawner(mcl_torches.player_ps[pl][ph].smoke)
 				end
 
-				player_ps[pl][ph] = nil
+				mcl_torches.player_ps[pl][ph] = nil
 			end
 		end
 
-		if not pl or not pl:get_pos() then player_ps[pl][ph] = nil end
+		if not pl or not pl:get_pos() then mcl_torches.player_ps[pl][ph] = nil end
 	end
 end
 
 core.register_on_leaveplayer(function(player)
-	if player_ps[player] then
-		for _, v in pairs(player_ps[player]) do
+	if mcl_torches.player_ps[player] then
+		for _, v in pairs(mcl_torches.player_ps[player]) do
 			core.delete_particlespawner(v)
 		end
 
-		player_ps[player] = nil
+		mcl_torches.player_ps[player] = nil
 	end
 end)
 
@@ -314,7 +314,7 @@ core.register_abm({
 core.register_abm({
 	label = "Remove Torch Particles",
 	nodenames = {"group:redstone_torch"},
-	interval = 4,
+	interval = 2,
 	chance = 1,
 	action = function(pos, node)
 		if core.get_item_group(node.name, "redstone_torch") ~= 2 then return end
@@ -322,11 +322,11 @@ core.register_abm({
 		local ph = core.hash_node_position(pos)
 
 		for pl in mcl_util.connected_players() do
-			if player_ps[pl] and player_ps[pl][ph] and player_ps[pl][ph].smoke then
-				core.delete_particlespawner(player_ps[pl][ph].smoke)
+			if mcl_torches.player_ps[pl] and mcl_torches.player_ps[pl][ph] and mcl_torches.player_ps[pl][ph].smoke then
+				core.delete_particlespawner(mcl_torches.player_ps[pl][ph].smoke)
 			end
 
-			player_ps[pl][ph] = nil
+			mcl_torches.player_ps[pl][ph] = nil
 		end
 	end,
 })
