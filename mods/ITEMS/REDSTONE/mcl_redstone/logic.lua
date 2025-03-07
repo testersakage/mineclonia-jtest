@@ -127,11 +127,10 @@ end
 
 -- Set/add a position to mcl_redstone._pending_updates.
 local function set_pending_update(pos, node_name)
-	if node_name then
-		mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = update_tab[node_name] and pos or nil
-	else
-		mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = pos
+	if node_name and not update_tab[node_name] then
+		return
 	end
+	mcl_redstone._pending_updates[minetest.hash_node_position(pos)] = pos
 end
 
 -- Propagate redstone power through wires. 'clear_queue' is a queue of events
