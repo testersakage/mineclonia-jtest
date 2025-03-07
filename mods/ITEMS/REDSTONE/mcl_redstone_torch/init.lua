@@ -26,14 +26,14 @@ mcl_torches.register_torch({
 			maxpos_to_add = vector.new(0.0625, 0.125, 0.0625),
 			minpos_to_add = vector.new(-0.0625, 0.00625, -0.0625),
 			ps_defs = {
+				maxsize = 1,
+				minsize = 0.5,
 				maxvel = vector.zero(),
 				minvel = vector.zero(),
 				maxacc = vector.zero(),
 				minacc = vector.zero(),
 				texture = "mcl_torches_smoke_anim.png^[colorize:red",
 				animation = {
-					alpha_tween = {1, 0.25},
-					scale_tween = {1, 0.25},
 					type = "vertical_frames",
 					aspect_h = 16,
 					aspect_w = 16,

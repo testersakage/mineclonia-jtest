@@ -257,7 +257,7 @@ local function generate_particles(pos, node)
 			})
 		end
 		if not player_ps[pl][ph].smoke and in_range and smoke then
-			player_ps[pl][ph].smoke = core.add_particlespawner(table.merge(smoke.ps_defs, {
+			player_ps[pl][ph].smoke = core.add_particlespawner(table.merge({
 				amount = 1,
 				collisiondetection = false,
 				maxpos = vector.add(pos, vector.add(add_to_pos, smoke.maxpos_to_add)),
@@ -268,7 +268,7 @@ local function generate_particles(pos, node)
 				minexptime = 0.5,
 				playername = pl:get_player_name(),
 				time = 0
-			}))
+			}, smoke.ps_defs))
 		end
 	end
 
