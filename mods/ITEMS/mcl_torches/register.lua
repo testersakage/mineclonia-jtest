@@ -30,9 +30,7 @@ mcl_torches.register_torch({
 							aspect_h = 16,
 							aspect_w = 16,
 							length = 1
-						},
-						scale_tween = {1, 0.25},
-						alpha_tween = {1, 0.25}
+						}
 					},
 					{
 						name = "mcl_torches_smoke_anim.png^[colorize:gray",
@@ -41,9 +39,7 @@ mcl_torches.register_torch({
 							aspect_h = 16,
 							aspect_w = 16,
 							length = 1
-						},
-						scale_tween = {1, 0.25},
-						alpha_tween = {1, 0.25}
+						}
 					},
 					{
 						name = "mcl_torches_smoke_anim.png^[colorize:silver",
@@ -52,9 +48,7 @@ mcl_torches.register_torch({
 							aspect_h = 16,
 							aspect_w = 16,
 							length = 1
-						},
-						scale_tween = {1, 0.25},
-						alpha_tween = {1, 0.25}
+						}
 					}
 				}
 			}
