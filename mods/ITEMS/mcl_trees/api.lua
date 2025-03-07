@@ -412,7 +412,7 @@ function mcl_trees.register_wood(name, p)
 	if bark_enabled then
 		local def = table.merge(tpl_log, {
 			_doc_items_longdesc = S("This is a decorative block surrounded by the bark of a tree trunk."),
-			tiles = p.tree and p.tree.tiles and {p.tree.tiles[3]} or { minetest.get_current_modname().."_log_"..name..".png"},
+			tiles = p.tree and p.tree.tiles and {p.tree.tiles[3]} or { modname.."_log_"..name..".png"},
 			is_ground_content = false,
 			_mcl_stripped_variant = stripped_bark_enabled and "mcl_trees:bark_stripped_"..name or nil,
 			_mcl_crafting_output = {single = {output = "mcl_trees:wood_"..name.." "..wood_amount}}
@@ -425,7 +425,7 @@ function mcl_trees.register_wood(name, p)
 	if p.stripped == nil or type(p.stripped) == "table" then
 		local def = table.merge(tpl_log, {
 			_doc_items_hidden = false,
-			tiles = { minetest.get_current_modname().."_stripped_"..name.."_top.png",  "mcl_core_stripped_"..name.."_top.png", "mcl_core_stripped_"..name.."_side.png"},
+			tiles = { modname.."_stripped_"..name.."_top.png",  modname.."_stripped_"..name.."_top.png", modname.."_stripped_"..name.."_side.png"},
 		}, p.stripped or {})
 		def.description = def.description or D("Stripped " .. rname .. " Log")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped trunk of an ".. rname .. " tree.")
@@ -438,7 +438,7 @@ function mcl_trees.register_wood(name, p)
 
 	if stripped_bark_enabled then
 		local def = table.merge(tpl_log, {
-			tiles = { minetest.get_current_modname().."_stripped_"..name.."_side.png"},
+			tiles = { modname.."_stripped_"..name.."_side.png"},
 			is_ground_content = false,
 		}, p.stripped_bark or {})
 		def.description = def.description or D("Stripped " .. rname .. " Bark")
@@ -449,9 +449,9 @@ function mcl_trees.register_wood(name, p)
 
 	if p.sapling == nil or type(p.sapling) == "table" then
 		local def = table.merge(tpl_sapling, {
-			tiles = { minetest.get_current_modname().."_sapling_"..name..".png"},
-			inventory_image = minetest.get_current_modname().."_sapling_"..name..".png",
-			wield_image = minetest.get_current_modname().."_sapling_"..name..".png",
+			tiles = { modname.."_sapling_"..name..".png"},
+			inventory_image = modname.."_sapling_"..name..".png",
+			wield_image = modname.."_sapling_"..name..".png",
 		}, p.sapling or {})
 		def.description = def.description or D(rname .. " Sapling")
 		minetest.register_node(":mcl_trees:sapling_"..name, def)
@@ -460,7 +460,7 @@ function mcl_trees.register_wood(name, p)
 
 	if p.leaves == nil or type(p.leaves) == "table" then
 		local def = table.merge({
-				tiles = { minetest.get_current_modname().."_leaves_"..name..".png"},
+				tiles = { modname.."_leaves_"..name..".png"},
 		}, p.leaves or {})
 		def.description = def.description or D(rname .. " Leaves")
 		def._doc_items_longdesc = def._doc_items_longdesc or D(rname .. " leaves are grown from " .. rname .. " trees.")
@@ -617,7 +617,7 @@ function mcl_trees.register_wood(name, p)
 		mcl_pressureplates.register_pressure_plate(name, {
 			"mcl_pressureplates:pressure_plate_"..name,
 			description = p.pressure_plate.description or D(rname .. " Pressure Plate"),
-			texture = p.wood and p.wood.tiles and p.wood.tiles[1] or (minetest.get_current_modname().."_planks_"..name..".png"),
+			texture = p.wood and p.wood.tiles and p.wood.tiles[1] or (modname.."_planks_"..name..".png"),
 			recipeitem = "mcl_trees:wood_"..name,
 			sounds = mcl_sounds.node_sound_wood_defaults(),
 			groups = {axey=1, material_wood=1},
@@ -629,7 +629,7 @@ function mcl_trees.register_wood(name, p)
 		p.button = p.button or {}
 		mcl_buttons.register_button(name, {
 			description = p.button.description or D(rname .. " Button"),
-			texture = p.wood and p.wood.tiles[1] or "mcl_core_planks_"..name..".png",
+			texture = p.wood and p.wood.tiles[1] or modname.."_planks_"..name..".png",
 			recipeitem = "mcl_trees:wood_"..name,
 			sounds = mcl_sounds.node_sound_wood_defaults(),
 			groups = {material_wood=1,handy=1,axey=1},
@@ -644,7 +644,7 @@ function mcl_trees.register_wood(name, p)
 	if (p.sapling == nil or type(p.sapling) == "table") and (p.potted_sapling == nil or type(p.potted_sapling) == "table") then
 		local def = table.merge({
 			name = "sapling_"..name,
-			image = minetest.get_current_modname().."_sapling_"..name..".png",
+			image = modname.."_sapling_"..name..".png",
 		},p.potted_sapling or {})
 		def.desc = def.desc or D(rname .. " Sapling")
 		mcl_flowerpots.register_potted_flower("mcl_trees:sapling_"..name, def)
