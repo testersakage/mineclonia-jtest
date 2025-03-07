@@ -584,7 +584,12 @@ function mob_class:on_step (dtime, moveresult)
 		self:movement_step (dtime, moveresult)
 		self:motion_step (phys_dtime, moveresult, pos)
 	else
-		self:drive ("walk", "stand", false, dtime, moveresult)
+		-- At times damage is applied and kills this mob
+		-- (removing its driver) between `should_drive' and
+		-- the call to `drive' itself.
+		if self.driver then
+			self:drive ("walk", "stand", false, dtime, moveresult)
+		end
 	end
 
 	self:post_motion_step (pos, dtime, moveresult)

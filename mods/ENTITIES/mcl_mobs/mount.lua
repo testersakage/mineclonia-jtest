@@ -173,6 +173,8 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	end
 
 	if self._csm_driving then
+		local self_pos = self.object:get_pos ()
+		local vel = self.object:get_velocity ()
 		-- Driving is the responsibility of the client.
 		self:halt_in_tracks (false, true)
 
@@ -180,7 +182,7 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 		-- the client-specified course and send a movement
 		-- correction message if so.
 		mcl_serverplayer.maybe_correct_course (self.driver, self.object,
-						moveresult, dtime)
+					moveresult, dtime, self_pos, vel)
 		-- Configure a suitable animation.
 		local v = self.object:get_velocity ()
 		local speed = math.sqrt (v.x * v.x + v.z * v.z)
@@ -303,6 +305,10 @@ function mob_class:detach_client_driver (player)
 	end
 end
 
+function mob_class:max_delta_movement ()
+	return self.movement_speed * 5.0
+end
+
 function mob_class:set_touching_ground (touching_ground)
 	if touching_ground then
 		self.object:set_properties ({
@@ -345,3 +351,4 @@ function mob_class:remove_status_effect (id)
 		end
 	end
 end
+
