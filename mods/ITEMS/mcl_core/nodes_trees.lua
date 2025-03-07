@@ -50,6 +50,7 @@ mcl_trees.register_wood("dark_oak",{
 	sign_color="#625048",
 	tree_schems_2x2 = {
 		{ file = modpath.."/schematics/mcl_core_dark_oak.mts"},
+		{ file = modpath.."/schematics/mcl_core_dark_oak_2.mts"}
 	},
 	tree = { tiles = {"mcl_core_log_big_oak_top.png", "mcl_core_log_big_oak_top.png","mcl_core_log_big_oak.png"} },
 	leaves = {

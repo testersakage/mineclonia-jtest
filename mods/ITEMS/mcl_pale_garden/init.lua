@@ -6,8 +6,8 @@ mcl_trees.register_wood("pale_oak",{
     readable_name = "Pale Oak",
     sign_color = "#ECDDE3",
     tree_schems_2x2 = {
-        {file = schem_path .. "mcl_pale_garden_pale_oak_tree_1.mts", offset = vector.new(1, 0, 1)},
-        {file = schem_path .. "mcl_pale_garden_pale_oak_tree_2.mts"}
+        {file = schem_path .. "mcl_pale_garden_pale_oak_1.mts", offset = vector.new(1, 0, 1)},
+        {file = schem_path .. "mcl_pale_garden_pale_oak_2.mts"}
     },
     tree = {
         tiles = {

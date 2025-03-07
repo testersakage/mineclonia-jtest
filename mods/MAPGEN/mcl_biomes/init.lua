@@ -4306,6 +4306,26 @@ local function register_decorations()
 		rotation = "random",
 	})
 
+	minetest.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow"},
+		sidelen = 16,
+		noise_params = {
+			offset = 0.05,
+			scale = 0.0015,
+			spread = {x = 125, y = 125, z = 125},
+			seed = 223,
+			octaves = 3,
+			persist = 0.66
+		},
+		biomes = {"RoofedForest"},
+		y_min = 4,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = mod_mcl_core.."/schematics/mcl_core_dark_oak_2.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+	})
+
 	-- Cherry
 	for i=1,3 do
 		minetest.register_decoration({
