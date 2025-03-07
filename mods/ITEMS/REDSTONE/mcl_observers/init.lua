@@ -74,7 +74,7 @@ local commdef = {
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = false,
-	groups = {pickaxey=1, material_stone=1, not_opaque=1, },
+	groups = {pickaxey=1, material_stone=1, redstone_not_conductive=1, },
 	_mcl_blast_resistance = 3.5,
 	_mcl_hardness = 3.5,
 	drop = "mcl_observers:observer_off",
