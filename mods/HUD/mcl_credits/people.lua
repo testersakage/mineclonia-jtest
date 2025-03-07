@@ -14,7 +14,6 @@ return {
 	}},
 	{S("Active Contributors"), 0xF84355, {
 		"codiac",
-		"JoseDouglas26",
 		"Brama Udi",
 		"ellesheepy",
 		"Jürgen Rühle",
@@ -166,7 +165,6 @@ return {
 		"bright",
 		"Miguel P.L",
 		"Just Playing",
-		"JoseDouglas26",
 		"bramaudi",
 		"balazsszalab",
 		"milklikecomputer",
@@ -185,7 +183,6 @@ return {
 		"fnetX",
 		"Gaemy",
 		"hugoalh",
-		"JoseDouglas26",
 		"j-r",
 		"Just Playing",
 		"Kyoushi",

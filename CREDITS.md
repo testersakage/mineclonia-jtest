@@ -12,7 +12,6 @@
 
 ## Active Contributors
 * codiac
-* JoseDouglas26
 * Brama Udi
 * ellesheepy
 * Jürgen Rühle
@@ -160,11 +159,10 @@
 * Sencyy
 * Sotis
 * Zozosticot
-* ellesheepy 
+* ellesheepy
 * bright
 * Miguel P.L
 * Just Playing
-* JoseDouglas26
 * bramaudi
 * balazsszalab
 * milklikecomputer
@@ -184,7 +182,6 @@
 * fnetX
 * Gaemy
 * hugoalh
-* JoseDouglas26
 * j-r
 * Just Playing
 * Kyoushi
