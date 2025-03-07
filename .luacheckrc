@@ -154,6 +154,7 @@ globals = {
 	"mcl_portals",
 	"mcl_potions",
 	"mcl_pottery_sherds",
+	"mcl_pressureplates",
 	"mcl_privs",
 	"mcl_raids",
 	"mcl_raw_ores",
