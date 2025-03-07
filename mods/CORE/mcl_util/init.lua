@@ -1,6 +1,7 @@
 local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
+local pcgrandom = PcgRandom(os.time())
 
 mcl_util = {}
 
@@ -1097,6 +1098,11 @@ end
 function mcl_util.get_pos_biomecolor(pos)
 	local biomedef = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]
 	return biomedef and biomedef._mcl_palette_index or 0
+end
+
+function mcl_util.get_pos_biomecolor4dir(pos)
+	local biomedef = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]
+	return 4 * (biomedef and biomedef._mcl_palette_index or 0) + pcgrandom:next(0, 3)
 end
 
 function mcl_util.traverse_tower(pos, dir, callback)
