@@ -385,9 +385,10 @@ function mcl_trees.register_wood(name, p)
 	local wood_amount = p.wood_amount or 4
 	local bark_enabled = p.bark == nil or type(p.bark) == "table"
 	local stripped_bark_enabled = p.stripped_bark == nil or type(p.stripped_bark) == "table"
+	local modname = core.get_current_modname()
 	if p.tree == nil or type(p.tree) == "table" then
 		local def = table.merge(tpl_log,{
-			tiles = { minetest.get_current_modname().."_log_"..name.."_top.png",  "mcl_core_log_"..name.."_top.png", "mcl_core_log_"..name..".png"},
+			tiles = { modname.."_log_"..name.."_top.png",  modname.."_log_"..name.."_top.png", modname.."_log_"..name..".png"},
 			_mcl_stripped_variant = (p.stripped == nil or type(p.stripped) == "table") and "mcl_trees:stripped_"..name,
 		},p.tree or {})
 		def.description = def.description or D(rname .. " Log")
@@ -402,7 +403,7 @@ function mcl_trees.register_wood(name, p)
 	if p.wood == nil or type(p.wood) == "table" then
 		local def =  table.merge(tpl_wood,{
 			_doc_items_longdesc = doc.sub.items.temp.build,
-			tiles = { minetest.get_current_modname().."_planks_"..name..".png"},
+			tiles = { modname.."_planks_"..name..".png"},
 		},p.wood or {})
 		def.description = def.description or D(rname .. " Planks")
 		minetest.register_node(":mcl_trees:wood_"..name, def)
