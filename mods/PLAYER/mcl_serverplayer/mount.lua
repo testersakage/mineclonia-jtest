@@ -111,9 +111,9 @@ function mcl_serverplayer.handle_acknowledge_vehicle (player, state, objid)
 			state.attach_params.rotation)
 	state.vehicle = entity.object
 	state.vehicle_id = objid
-	state.vehicle_pos = nil
-	state.vehicle_vel = nil
-	state.vehicle_dtime = nil
+	state.vehicle_pos = entity.object:get_pos ()
+	state.vehicle_vel = vector.zero ()
+	state.vehicle_dtime = 0
 	state.vehicle_tsc = nil
 	state.pending_vehicle = nil
 	state.attach_params = nil
@@ -121,6 +121,7 @@ function mcl_serverplayer.handle_acknowledge_vehicle (player, state, objid)
 end
 
 local COS_5_DEG = math.cos (math.rad (5))
+local PLACEHOLDER_VECTOR = vector.new (1.0e+6, 1.0e+6, 1.0e+6)
 
 function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, vel)
 	if not state.vehicle
@@ -129,8 +130,30 @@ function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, v
 		or not core.object_refs[objid]:is_valid () then
 		return
 	end
+
+	local entity = state.vehicle:get_luaentity ()
+	local max_delta_movement = entity:max_delta_movement ()
+	if vector.length (vel) > max_delta_movement then
+		local dir = vector.normalize (vel)
+		local vel_1 = vector.multiply (dir, max_delta_movement)
+		vel.x = vel_1.x
+		vel.z = vel_1.z
+	end
+
 	-- If a course correction is required, send it to the client.
-	mcl_serverplayer.maybe_correct_course (player, state.vehicle, nil, 0.0)
+	local corrected_pos, corrected_vel
+		= mcl_serverplayer.maybe_correct_course (player, state.vehicle,
+							 nil, 0.0, pos, vel)
+
+	-- Enforce course corrections after they are produced.
+	if corrected_pos
+		and not vector.equals (corrected_pos, PLACEHOLDER_VECTOR) then
+		pos = corrected_pos
+	end
+	if corrected_vel
+		and not vector.equals (corrected_vel, PLACEHOLDER_VECTOR) then
+		vel = corrected_vel
+	end
 
 	-- Predict movement ahead of this vehicle.  TSC is a
 	-- sub-millisecond counter specifying the time at which this
@@ -287,24 +310,24 @@ local function gravity_only_collisions (moveresult)
 	return true
 end
 
-local PLACEHOLDER_VECTOR = vector.new (1.0e+6, 1.0e+6, 1.0e+6)
-
-function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtime)
-	local self_pos = object:get_pos ()
+function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtime, pos, vel)
 	local state = mcl_serverplayer.client_states[driver]
 	if not state or state.vehicle ~= object
-		or not state.vehicle_vel or not state.vehicle_pos or not self_pos then
+		or not state.vehicle_vel or not state.vehicle_pos
+		or not object:is_valid () then
 		return
 	end
 
-	-- Decide whether to send a position correction.
+	-- Decide whether to send a position correction.  N.B. that
+	-- this function is called to reconcile both client movement
+	-- with the server and server movement with the client.
 	local v_orig = state.vehicle_vel
 	local t = state.vehicle_dtime + dtime
 	local movement = vector.multiply (v_orig, t)
 	local predict_pos = vector.add (movement, state.vehicle_pos)
-	local dx = predict_pos.x - self_pos.x
-	local dy = (predict_pos.y - self_pos.y) * 0.25
-	local dz = predict_pos.z - self_pos.z
+	local dx = predict_pos.x - pos.x
+	local dy = (predict_pos.y - pos.y) * 0.25
+	local dz = predict_pos.z - pos.z
 	local d = math.sqrt (dx * dx + dy * dy + dz * dz)
 	local correct_vel = false
 	local correct_pos = false
@@ -338,7 +361,7 @@ function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtim
 	end
 
 	if correct_pos or correct_vel then
-		local pos = correct_pos and self_pos
+		local pos = correct_pos and state.vehicle_pos
 			or PLACEHOLDER_VECTOR
 		local vel = correct_vel and v_new
 			or PLACEHOLDER_VECTOR
@@ -350,5 +373,7 @@ function mcl_serverplayer.maybe_correct_course (driver, object, moveresult, dtim
 			state.vehicle:set_velocity (vel)
 		end
 		mcl_serverplayer.send_vehicle_position (driver, id, pos, vel)
+		return pos, vel
 	end
+	return nil, nil
 end
