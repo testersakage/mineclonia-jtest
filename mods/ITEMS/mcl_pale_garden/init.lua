@@ -9,22 +9,7 @@ mcl_trees.register_wood("pale_oak",{
         {file = schem_path .. "mcl_pale_garden_pale_oak_1.mts", offset = vector.new(1, 0, 1)},
         {file = schem_path .. "mcl_pale_garden_pale_oak_2.mts"}
     },
-    tree = {
-        tiles = {
-            "mcl_pale_garden_log_pale_oak_top.png",
-            "mcl_pale_garden_log_pale_oak_top.png",
-            "mcl_pale_garden_log_pale_oak.png"
-        }
-    },
     leaves = {palette = "", paramtype2 = "none"},
-    stripped = {
-        tiles = {
-            "mcl_pale_garden_stripped_pale_oak_top.png",
-            "mcl_pale_garden_stripped_pale_oak_top.png",
-            "mcl_pale_garden_stripped_pale_oak_side.png"
-        }
-    },
-    wood = {tiles = {"mcl_pale_garden_planks_pale_oak.png"}},
     door = {
         inventory_image = "mcl_pale_garden_pale_oak_door.png",
         tiles_bottom = {
@@ -326,25 +311,66 @@ core.register_node("mcl_pale_garden:creaking_heart_active", table.merge(tpl_hear
     tiles = ach_textures
 }))
 
-core.register_node("mcl_pale_garden:pale_hanging_moss", {
+local tpl_hanging_groups = {
+    destroy_by_lava_flow = 1, dig_by_piston = 1, dig_by_water = 1, dig_immediate = 3,
+    plant = 1, vinelike_node = 2
+}
+
+local tpl_hanging = {
     _mcl_blast_resistance = 0,
     _mcl_hardness = 0,
-    _mcl_silk_touch_drop = true,
     drawtype = "plantlike",
     drop = {
         items = {
             {items = {"mcl_pale_garden:pale_hanging_moss"}, tool_groups = {"shears"}}
         }
     },
-    groups = {
-        compostability = 30, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
-        supported_node = 1
-    },
-    inventory_image = "mcl_pale_garden_pale_hanging_moss.png",
-    paramtype = "light",
     sounds = mcl_sounds.node_sound_leaves_defaults(),
     sunlight_propagates = true,
+    walkable = false
+}
+
+core.register_node("mcl_pale_garden:pale_hanging_moss", table.merge(tpl_hanging, {
+    _mcl_silk_touch_drop = true,
+    description = S("Pale Hanging Moss"),
+    groups = table.merge(tpl_hanging_groups, {deco_block = 1}),
+    inventory_image = "mcl_pale_garden_pale_hanging_moss_tip.png",
+    on_destruct = function(pos)
+        local a_node = core.get_node(vector.offset(pos, 0, 1, 0))
+
+        if a_node and a_node.name == "mcl_pale_garden:pale_hanging_moss" then
+            core.swap_node(pos, {name = "mcl_pale_garden:pale_hanging_moss_tip"})
+        end
+    end,
     tiles = {"mcl_pale_garden_pale_hanging_moss.png"},
-    walkable = false,
-    wield_image = "mcl_pale_garden_pale_hanging_moss.png"
-})
+    wield_image = "mcl_pale_garden_pale_hanging_moss_tip.png"
+}))
+
+core.register_node("mcl_pale_garden:pale_hanging_moss_tip", table.merge(tpl_hanging, {
+    _mcl_silk_touch_drop = "mcl_pale_garden:pale_hanging_moss",
+    _on_bone_meal = function(_, _, _, pos)
+		local pos_below = vector.offset(pos, 0, -1, 0)
+
+        core.swap_node(pos, {name = "mcl_pale_garden:pale_hanging_moss"})
+		core.place_node(pos_below, {name = "mcl_pale_garden:pale_hanging_moss_tip"})
+
+		return true
+	end,
+    description = S("Pale Hanging Moss Tip"),
+    groups = table.merge(tpl_hanging_groups, {not_in_creative_inventory = 1}),
+    on_construct = function(pos)
+        local a_node = core.get_node(vector.offset(pos, 0, 1, 0))
+
+        if a_node and a_node.name == "mcl_pale_garden:pale_hanging_moss_tip" then
+            core.swap_node(pos, {name = "mcl_pale_garden:pale_hanging_moss"})
+        end
+    end,
+    on_destruct = function(pos)
+        local a_node = core.get_node(vector.offset(pos, 0, 1, 0))
+
+        if a_node and a_node.name == "mcl_pale_garden:pale_hanging_moss" then
+            core.swap_node(pos, {name = "mcl_pale_garden:pale_hanging_moss_tip"})
+        end
+    end,
+    tiles = {"mcl_pale_garden_pale_hanging_moss_tip.png"},
+}))
