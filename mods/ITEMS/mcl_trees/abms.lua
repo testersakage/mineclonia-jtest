@@ -69,7 +69,7 @@ minetest.register_lbm({
 	run_at_every_load = false,
 	action = function(pos, n)
 		if minetest.get_item_group(n.name,"biomecolor") == 0 then return end
-		local p2 = mcl_util.get_pos_p2(pos)
+		local p2 = mcl_util.get_pos_biomecolor(pos)
 		if n.param2 ~= p2 then
 			n.param2 = p2
 			minetest.swap_node(pos, n)
