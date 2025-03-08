@@ -288,7 +288,7 @@ do
 		description = S("List all biomes"),
 		params = "",
 		privs = { debug = true },
-		func = function(name, _)
+		func = function()
 			local success, biomes = findbiome.list_biomes()
 			-- Error checking before sending them in chat
 			if success == false then -- send error message
