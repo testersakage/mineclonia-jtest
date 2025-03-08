@@ -5,13 +5,21 @@ minetest.register_node("mcl_powder_snow:powder_snow", {
 	_doc_items_longdesc = S("This is a block of snow thats extra fluffy, this means players can sink in it"),
 	_doc_items_hidden = false,
 	tiles = {"powder_snow.png"},
-	groups = {shovely=2, snow_cover=1, not_in_creative_inventory = 1, disable_suffocation = 1},
+	paramtype2 = "4dir",
+	groups = {shovely=2, snow_cover=1, not_in_creative_inventory = 1, disable_suffocation = 1, random4dir = 1},
 	sounds = mcl_sounds.node_sound_snow_defaults(),
 	post_effect_color = "#CFD7DBFF",
 	walkable = false,
 	move_resistance = 3,
 	is_ground_content = false, -- set to false to potentially create huge drops into caves >:)
-	on_construct = mcl_core.on_snow_construct,
+	on_construct = function(pos)
+		local node = core.get_node(pos)
+		core.swap_node(pos, {
+			name = node.name,
+			param2 = mcl_util.get_pos_random4dir(pos)
+		})
+		mcl_core.on_snow_construct(pos)
+	end,
 	after_destruct = mcl_core.after_snow_destruct,
 	on_rightclick = function(pos, _, clicker, itemstack, pointed_thing)
 		if itemstack:get_name() ==  "mcl_buckets:bucket_empty" then
