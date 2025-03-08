@@ -32,19 +32,6 @@ local stringbuilder_meta = {
 	get = table.concat,
 }
 
-local function iloop(list, func)
-	local i = 0
-	local function iterate()
-		i = i + 1
-		if i <= #list then
-			return iterate, func(i, list[i])
-		else
-			return nil
-		end
-	end
-	return iterate
-end
-
 local function new_stringbuilder()
 	return setmetatable({}, { __index = stringbuilder_meta })
 end
@@ -97,7 +84,6 @@ function mcl_player.register_player_setting(name, def)
 				end
 			end
 			def.options = options
-			print(dump(def.options))
 		end
 		def._translated_section = def.section and D(def.section) or S("Misc")
 		def.section = def.section or "Misc"
