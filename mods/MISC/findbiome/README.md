@@ -1,5 +1,15 @@
 # Minetest mod: findbiome
 
+## Mineclonia integration
+
+This mod is intended to be fully compatible with its
+[upstream version](https://codeberg.org/Wuzzy/minetest_findbiome.git).
+Changes are:
+
+- removal of support for mapgen v6 (which is disabled in Mineclonia)
+- translations taken from Mineclonia's weblate repository
+- silencing luacheck warnings using Mineclonia's .luacheckrc
+
 ## Description
 This is a mod to help with mod/game development for Minetest.
 It adds a command (“findbiome”) to find a biome nearby and teleport you to it
