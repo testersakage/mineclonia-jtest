@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 17:45+0000\n"
+"PO-Revision-Date: 2025-03-09 17:47+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1371,28 +1371,28 @@ msgid "Orange Base Sinister Canton"
 msgstr "Canton d'orangé en pointe à sénestre"
 
 msgid "Orange Bend"
-msgstr ""
+msgstr "Bande d'orangé"
 
 msgid "Orange Bend Sinister"
-msgstr ""
+msgstr "Barre d'orangé à sénestre"
 
 msgid "Orange Bordure"
-msgstr ""
+msgstr "Bordure d'orangé"
 
 msgid "Orange Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'orangé"
 
 msgid "Orange Bricks"
-msgstr ""
+msgstr "Champ maçonné d'orangé"
 
 msgid "Orange Chevron"
-msgstr ""
+msgstr "Mantelé d'orangé"
 
 msgid "Orange Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'orangé"
 
 msgid "Orange Chief"
-msgstr ""
+msgstr "Chef d'orangé"
 
 msgid "Orange Chief Dexter Canton"
 msgstr ""
