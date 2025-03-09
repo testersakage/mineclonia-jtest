@@ -327,7 +327,8 @@ minetest.register_craftitem("mcl_throwing:snowball", {
 	inventory_image = "mcl_throwing_snowball.png",
 	stack_max = 16,
 	groups = { weapon_ranged = 1 },
-	on_use = mcl_throwing.get_player_throw_function("mcl_throwing:snowball_entity"),
+	on_place = mcl_throwing.get_player_throw_function("mcl_throwing:snowball_entity"),
+	on_secondary_use = mcl_throwing.get_player_throw_function("mcl_throwing:snowball_entity"),
 	_on_dispense = mcl_throwing.dispense_function,
 	_mcl_crafting_output = {square2 = {output = "mcl_core:snowblock"}}
 })
@@ -340,7 +341,8 @@ minetest.register_craftitem("mcl_throwing:egg", {
 	_doc_items_usagehelp = how_to_throw,
 	inventory_image = "mcl_throwing_egg.png",
 	stack_max = 16,
-	on_use = mcl_throwing.get_player_throw_function("mcl_throwing:egg_entity"),
+	on_place = mcl_throwing.get_player_throw_function("mcl_throwing:egg_entity"),
+	on_secondary_use = mcl_throwing.get_player_throw_function("mcl_throwing:egg_entity"),
 	_on_dispense = mcl_throwing.dispense_function,
 	_dispense_into_walkable = true,
 	groups = { craftitem = 1 },
