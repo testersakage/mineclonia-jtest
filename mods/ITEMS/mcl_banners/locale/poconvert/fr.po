@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 18:11+0000\n"
+"PO-Revision-Date: 2025-03-09 18:33+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1566,97 +1566,97 @@ msgid "Pink Pale"
 msgstr "Pal de carnation"
 
 msgid "Pink Pale Dexter"
-msgstr ""
+msgstr "Pal de carnation à dextre"
 
 msgid "Pink Pale Sinister"
-msgstr ""
+msgstr "Pal de carnation à sénestre"
 
 msgid "Pink Paly"
-msgstr ""
+msgstr "Quatre pals de carnation"
 
 msgid "Pink Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de carnation"
 
 msgid "Pink Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de carnation"
 
 msgid "Pink Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de carnation"
 
 msgid "Pink Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de carnation"
 
 msgid "Pink Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de carnation"
 
 msgid "Pink Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de carnation"
 
 msgid "Pink Per Pale"
-msgstr ""
+msgstr "Parti, au premier de carnation"
 
 msgid "Pink Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de carnation"
 
 msgid "Pink Piglin Charge"
-msgstr ""
+msgstr "Groin de carnation"
 
 msgid "Pink Roundel"
-msgstr ""
+msgstr "Tourteau de carnation"
 
 msgid "Pink Saltire"
-msgstr ""
+msgstr "Sautoir de carnation"
 
 msgid "Pink Skull Charge"
-msgstr ""
+msgstr "Crâne de carnation"
 
 msgid "Pink Thing Charge"
-msgstr ""
+msgstr "Symbole de carnation"
 
 msgid "Purple Banner"
 msgstr "Bannière violette"
 
 msgid "Purple Base"
-msgstr ""
+msgstr "Champagne de mûre"
 
 msgid "Purple Base Dexter Canton"
-msgstr ""
+msgstr "Canton de mûre en pointe à dextre"
 
 msgid "Purple Base Gradient"
-msgstr ""
+msgstr "Dégradé de mûre en pointe"
 
 msgid "Purple Base Indented"
-msgstr ""
+msgstr "Émanchures de mûre en pointe"
 
 msgid "Purple Base Sinister Canton"
-msgstr ""
+msgstr "Canton de mûre en pointe à sénestre"
 
 msgid "Purple Bend"
-msgstr ""
+msgstr "Bande de mûre"
 
 msgid "Purple Bend Sinister"
-msgstr ""
+msgstr "Barre de mûre à sénestre"
 
 msgid "Purple Bordure"
-msgstr ""
+msgstr "Bordure de mûre"
 
 msgid "Purple Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de mûre"
 
 msgid "Purple Bricks"
-msgstr ""
+msgstr "Champ maçonné de mûre"
 
 msgid "Purple Chevron"
-msgstr ""
+msgstr "Mantelé de mûre"
 
 msgid "Purple Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de mûre"
 
 msgid "Purple Chief"
-msgstr ""
+msgstr "Chef de mûre"
 
 msgid "Purple Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de mûre en chef à dextre"
 
 msgid "Purple Chief Indented"
 msgstr ""
