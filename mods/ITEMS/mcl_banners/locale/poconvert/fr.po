@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 18:08+0000\n"
+"PO-Revision-Date: 2025-03-09 18:11+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1545,25 +1545,25 @@ msgid "Pink Fess"
 msgstr "Fasce de carnation"
 
 msgid "Pink Flow"
-msgstr ""
+msgstr "Tourbillon de carnation"
 
 msgid "Pink Flower Charge"
-msgstr ""
+msgstr "Fleur de carnation"
 
 msgid "Pink Globe Charge"
-msgstr ""
+msgstr "Globe de carnation"
 
 msgid "Pink Gradient"
-msgstr ""
+msgstr "Dégradé de carnation"
 
 msgid "Pink Guster"
-msgstr ""
+msgstr "Rafaleur de carnation"
 
 msgid "Pink Lozenge"
-msgstr ""
+msgstr "Losange de carnation"
 
 msgid "Pink Pale"
-msgstr ""
+msgstr "Pal de carnation"
 
 msgid "Pink Pale Dexter"
 msgstr ""
