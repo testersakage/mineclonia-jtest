@@ -384,15 +384,21 @@ local function get_recipe_fs(data, iY, player)
 	local rows = math.ceil(table.maxn(recipe.items) / width)
 	local rightest, btn_size = 0, 1.1
 	local s_btn_size
-	local btn_lab = data.show_usages and S("Usages") or S("Recipes")
+	local label1 = data.show_usages and S("Usages") or S("Recipes")
+	local label2 = string.format("%u / %u", data.rnum, #data.recipes)
 	local text_y = iY + 3.3 + (0.8 / 4)
-
-	fs[#fs + 1] = "label["..data.iX - 2.6 - 1.15 ..",".. text_y ..";"..btn_lab.."]"
+	local arrow_btn_w = 0.8
+	local arrow_btn2_x = data.iX - 2.6 + 1.5
+	local label2_length = (#label2 + 2) * 0.11
+	local label2_x = arrow_btn2_x - label2_length
+	local arrow_btn1_x = label2_x - arrow_btn_w
+	local label1_x = arrow_btn1_x - (data.show_usages and 0.8 or 1.20)
 
 	if #data.recipes > 1 then
-		fs[#fs + 1] = "image_button["..data.iX - 2.6 ..","..iY + 3.3 ..";0.8,0.8;craftguide_prev_icon.png;prev_alternate;]"..
-			"label["..data.iX - 2.6 + 0.705 ..",".. text_y ..";"..string.format("%u / %u", data.rnum, #data.recipes).."]" ..
-			"image_button["..data.iX - 2.6 + 1.5 ..","..iY + 3.3 ..";0.8,0.8;craftguide_next_icon.png;next_alternate;]"
+		fs[#fs + 1] = "label["..label1_x..",".. text_y ..";"..label1.."]"..
+			"image_button["..arrow_btn1_x..","..iY + 3.3 ..";"..arrow_btn_w..","..arrow_btn_w..";craftguide_prev_icon.png;prev_alternate;]"..
+			"label["..label2_x..",".. text_y ..";"..label2.."]" ..
+			"image_button["..arrow_btn2_x..","..iY + 3.3 ..";"..arrow_btn_w..","..arrow_btn_w..";craftguide_next_icon.png;next_alternate;]"
 	end
 
 	if width > GRID_LIMIT or rows > GRID_LIMIT then
