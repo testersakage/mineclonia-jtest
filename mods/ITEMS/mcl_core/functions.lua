@@ -328,6 +328,30 @@ core.register_lbm({
 	end,
 })
 
+-- Rotate old biomecolor4dir nodes
+minetest.register_lbm({
+	label = "Rotate old biomecolor4dir nodes",
+	name = "mcl_core:rotate_old_biomecolor4dir",
+	nodenames = {"group:biomecolor4dir"},
+	action = function(pos, node)
+		minetest.swap_node(pos, table.merge(node, {
+			param2 = mcl_util.get_pos_biomecolor4dir(pos)
+		}))
+	end,
+})
+
+-- Rotate old random4dir nodes
+minetest.register_lbm({
+	label = "Rotate old random4dir nodes",
+	name = "mcl_core:rotate_old_random4dir",
+	nodenames = {"group:random4dir"},
+	action = function(pos, node)
+		minetest.swap_node(pos, table.merge(node, {
+			param2 = mcl_util.get_pos_random4dir(pos)
+		}))
+	end,
+})
+
 ---------------------
 -- Vine generating --
 ---------------------
