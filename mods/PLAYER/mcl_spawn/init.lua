@@ -204,6 +204,9 @@ function mcl_spawn.get_player_spawn_pos(player)
 end
 
 function mcl_spawn.spawn(player)
+	if not core.settings:get_bool("mcl_keepInventory", false) then
+		mcl_inventory.clear_inv_lists(player:get_inventory(), { "main", "armor", "offhand" })
+	end
 	local pos, in_bed = mcl_spawn.get_player_spawn_pos(player)
 	if in_bed then
 		player:set_pos(pos)
