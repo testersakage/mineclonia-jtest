@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 17:57+0000\n"
+"PO-Revision-Date: 2025-03-09 18:08+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1470,79 +1470,79 @@ msgid "Orange Piglin Charge"
 msgstr "Groin d'orangé"
 
 msgid "Orange Roundel"
-msgstr ""
+msgstr "Tourteau d'orangé"
 
 msgid "Orange Saltire"
-msgstr ""
+msgstr "Sautoir d'orangé"
 
 msgid "Orange Skull Charge"
-msgstr ""
+msgstr "Crâne d'orangé"
 
 msgid "Orange Thing Charge"
-msgstr ""
+msgstr "Symbole d'orangé"
 
 msgid "Piglin Banner Pattern"
-msgstr ""
+msgstr "Motif de groin pour bannière"
 
 msgid "Pink Banner"
 msgstr "Bannière rose"
 
 msgid "Pink Base"
-msgstr ""
+msgstr "Champagne de carnation"
 
 msgid "Pink Base Dexter Canton"
-msgstr ""
+msgstr "Canton de carnation en pointe à dextre"
 
 msgid "Pink Base Gradient"
-msgstr ""
+msgstr "Dégradé de carnation en pointe"
 
 msgid "Pink Base Indented"
-msgstr ""
+msgstr "Émanchures de carnation en pointe"
 
 msgid "Pink Base Sinister Canton"
-msgstr ""
+msgstr "Canton de carnation en pointe à sénestre"
 
 msgid "Pink Bend"
-msgstr ""
+msgstr "Bande de carnation"
 
 msgid "Pink Bend Sinister"
-msgstr ""
+msgstr "Barre de carnation à sénestre"
 
 msgid "Pink Bordure"
-msgstr ""
+msgstr "Bordure de carnation"
 
 msgid "Pink Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de carnation"
 
 msgid "Pink Bricks"
-msgstr ""
+msgstr "Champ maçonné de carnation"
 
 msgid "Pink Chevron"
-msgstr ""
+msgstr "Mantelé de carnation"
 
 msgid "Pink Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de carnation"
 
 msgid "Pink Chief"
-msgstr ""
+msgstr "Chef de carnation"
 
 msgid "Pink Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de carnation en chef à dextre"
 
 msgid "Pink Chief Indented"
-msgstr ""
+msgstr "Émanchures de carnation en chef"
 
 msgid "Pink Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de carnation en chef à sénestre"
 
 msgid "Pink Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de carnation"
 
 msgid "Pink Cross"
-msgstr ""
+msgstr "Croix de carnation"
 
 msgid "Pink Fess"
-msgstr ""
+msgstr "Fasce de carnation"
 
 msgid "Pink Flow"
 msgstr ""
