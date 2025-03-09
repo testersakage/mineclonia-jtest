@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 17:51+0000\n"
+"PO-Revision-Date: 2025-03-09 17:56+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1428,43 +1428,43 @@ msgid "Orange Guster"
 msgstr "Rafaleur d'orangé"
 
 msgid "Orange Lozenge"
-msgstr ""
+msgstr "Losange d'orangé"
 
 msgid "Orange Pale"
-msgstr ""
+msgstr "Pal d'orangé"
 
 msgid "Orange Pale Dexter"
-msgstr ""
+msgstr "Pal d'orangé à dextre"
 
 msgid "Orange Pale Sinister"
-msgstr ""
+msgstr "Pal d'orangé à sénestre"
 
 msgid "Orange Paly"
-msgstr ""
+msgstr "Quatre pals d'orangé"
 
 msgid "Orange Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'orangé"
 
 msgid "Orange Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'orangé"
 
 msgid "Orange Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'orangé"
 
 msgid "Orange Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'orangé"
 
 msgid "Orange Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'orangé"
 
 msgid "Orange Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'orangé"
 
 msgid "Orange Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'orangé"
 
 msgid "Orange Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'orangé"
 
 msgid "Orange Piglin Charge"
 msgstr ""
