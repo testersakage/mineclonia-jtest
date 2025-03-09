@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://codeberg.org/mineclonia/mineclonia/raw/branch/main/menu/icon.png">
     <h1> Mineclonia </h1>
-    <img href="https://content.luanti.org/packages/ryvnf/mineclonia/"><img src="https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/" alt="ContentDB"></a>
+    <a href="https://content.luanti.org/packages/ryvnf/mineclonia/"><img src="https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/" alt="ContentDB"></a>
     <a href="https://translate.codeberg.org/engage/mineclonia/"><img src="https://translate.codeberg.org/widget/mineclonia/svg-badge.svg" alt="Translation status"></a>
 </div>
 
