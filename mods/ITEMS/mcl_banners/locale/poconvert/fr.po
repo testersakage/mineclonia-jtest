@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 17:49+0000\n"
+"PO-Revision-Date: 2025-03-09 17:51+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1407,25 +1407,25 @@ msgid "Orange Creeper Charge"
 msgstr "Face de Creeper d'orangé"
 
 msgid "Orange Cross"
-msgstr ""
+msgstr "Croix d'orangé"
 
 msgid "Orange Fess"
-msgstr ""
+msgstr "Fasce d'orangé"
 
 msgid "Orange Flow"
-msgstr ""
+msgstr "Tourbillon d'orangé"
 
 msgid "Orange Flower Charge"
-msgstr ""
+msgstr "Fleur d'orangé"
 
 msgid "Orange Globe Charge"
-msgstr ""
+msgstr "Globe d'orangé"
 
 msgid "Orange Gradient"
-msgstr ""
+msgstr "Dégradé d'orangé"
 
 msgid "Orange Guster"
-msgstr ""
+msgstr "Rafaleur d'orangé"
 
 msgid "Orange Lozenge"
 msgstr ""
