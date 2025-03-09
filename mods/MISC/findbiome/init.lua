@@ -1,19 +1,34 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local NS = function(s) return s end
+
+findbiome = {}
 
 local water_level = tonumber(minetest.get_mapgen_setting("water_level"))
 
--- Calculate the maximum playable limit
-local mapgen_limit = tonumber(minetest.get_mapgen_setting("mapgen_limit"))
-local chunksize = tonumber(minetest.get_mapgen_setting("chunksize"))
-local playable_limit = math.max(mapgen_limit - (chunksize + 1) * 16, 0)
+-- Calculate the playable area of the world
+local playable_limit_min, playable_limit_max
+if minetest.get_mapgen_edges then
+	-- Modern method by just asking Minetest
+	playable_limit_min, playable_limit_max = minetest.get_mapgen_edges()
+else
+	-- Legacy method for older Minetest versions
+	-- by calculating an estimate ourself
+	-- (it's not perfect but close enough)
+	local BLOCKSIZE = 16
+	local mapgen_limit = tonumber(minetest.get_mapgen_setting("mapgen_limit"))
+	local chunksize = tonumber(minetest.get_mapgen_setting("chunksize"))
+	local limit_estimate = math.max(mapgen_limit - (chunksize + 1) * BLOCKSIZE, 0)
+	playable_limit_min = vector.new(-limit_estimate, -limit_estimate, -limit_estimate)
+	playable_limit_max = vector.new(limit_estimate, limit_estimate, limit_estimate)
+end
 
--- Parameters
--------------
+-- Default parameters
+---------------------
 
 -- Resolution of search grid in nodes.
-local res = 64
+local DEFAULT_SEARCH_GRID_RESOLUTION = 64
 -- Number of points checked in the square search grid (edge * edge).
-local checks = 128 * 128
+local DEFAULT_CHECKED_POINTS = 128 * 128
 
 -- End of parameters
 --------------------
@@ -29,7 +44,8 @@ local dirs = {
 
 -- Returns true if pos is within the world boundaries
 local function is_in_world(pos)
-	return not (math.abs(pos.x) > playable_limit or math.abs(pos.y) > playable_limit or math.abs(pos.z) > playable_limit)
+	return not (pos.x < playable_limit_min.x or pos.y < playable_limit_min.y or pos.z < playable_limit_min.z or
+		pos.x > playable_limit_max.x or pos.y > playable_limit_max.y or pos.z > playable_limit_max.z)
 end
 
 -- Checks if pos is within the biome's boundaries. If it isn't, places pos inside the boundaries.
@@ -49,12 +65,12 @@ local function adjust_pos_to_biome_limits(pos, biome_id)
 		if biome[ax.."_min"] then
 			min = biome[ax.."_min"]
 		else
-			min = -playable_limit
+			min = playable_limit_min[ax]
 		end
 		if biome[ax.."_max"] then
 			max = biome[ax.."_max"]
 		else
-			max = playable_limit
+			max = playable_limit_max[ax]
 		end
 		min = tonumber(min)
 		max = tonumber(max)
@@ -62,14 +78,14 @@ local function adjust_pos_to_biome_limits(pos, biome_id)
 			out_of_bounds = true
 			bpos[ax] = min
 			if max-min > 16 then
-				bpos[ax] = math.max(bpos[ax] + 8, -playable_limit)
+				bpos[ax] = math.max(bpos[ax] + 8, playable_limit_min[ax])
 			end
 		end
 		if bpos[ax] > max then
 			out_of_bounds = true
 			bpos[ax] = max
 			if max-min > 16 then
-				bpos[ax] = math.min(bpos[ax] - 8, playable_limit)
+				bpos[ax] = math.min(bpos[ax] - 8, playable_limit_max[ax])
 			end
 		end
 	end
@@ -89,15 +105,15 @@ local function find_default_biome()
 		if not y then
 			y = 0
 		end
-		return { x = 0, y = y, z = 0 }
+		return vector.new(0, y, 0)
 	end
-	local pos = {}
+	local pos = vector.new()
 	-- Just check a lot of random positions
 	-- It's a crappy algorithm but better than nothing.
-	for _ = 1, 100 do
-		pos.x = math.random(-playable_limit, playable_limit)
-		pos.y = math.random(-playable_limit, playable_limit)
-		pos.z = math.random(-playable_limit, playable_limit)
+	for _=1, 100 do
+		pos.x = math.random(playable_limit_min.x, playable_limit_max.x)
+		pos.y = math.random(playable_limit_min.y, playable_limit_max.y)
+		pos.z = math.random(playable_limit_min.z, playable_limit_max.z)
 		local biome_data = minetest.get_biome_data(pos)
 		if biome_data and minetest.get_biome_name(biome_data.biome) == "default" then
 			return pos
@@ -106,7 +122,14 @@ local function find_default_biome()
 	return nil
 end
 
-local function find_biome(pos, biomes)
+function findbiome.find_biome(pos, biomes, res, checks)
+	if not res then
+		res = DEFAULT_SEARCH_GRID_RESOLUTION
+	end
+	if not checks then
+		checks = DEFAULT_CHECKED_POINTS
+	end
+
 	pos = vector.round(pos)
 	-- Pos: Starting point for biome checks. This also sets the y co-ordinate for all
 	-- points checked, so the suitable biomes must be active at this y.
@@ -157,14 +180,14 @@ local function find_biome(pos, biomes)
 						local good_spawn_height = pos.y <= water_level + 16 and pos.y >= water_level
 						local spawn_y = minetest.get_spawn_level(spos.x, spos.z)
 						if spawn_y then
-							spawn_pos = {x = spos.x, y = spawn_y, z = spos.z}
+							spawn_pos = vector.new(spos.x, spawn_y, spos.z)
 						elseif not good_spawn_height then
-							spawn_pos = {x = spos.x, y = spos.y, z = spos.z}
+							spawn_pos = vector.new(spos.x, spos.y, spos.z)
 						elseif attempt >= 2 then
-							spawn_pos = {x = spos.x, y = spos.y, z = spos.z}
+							spawn_pos = vector.new(spos.x, spos.y, spos.z)
 						end
 						if spawn_pos then
-							local _,outside = adjust_pos_to_biome_limits(spawn_pos, biome_id)
+							local _, outside = adjust_pos_to_biome_limits(spawn_pos, biome_id)
 							if is_in_world(spawn_pos) and not outside then
 								return true
 							end
@@ -199,6 +222,26 @@ minetest.register_on_mods_loaded(function()
 	mods_loaded = true
 end)
 
+function findbiome.list_biomes()
+	local biomes = {}
+	local b = 0
+	if not mods_loaded then
+		table.insert(biomes, NS("Wait until all mods have loaded!"))
+		return false, biomes
+	end
+	biomes = {}
+	for k, _ in pairs(minetest.registered_biomes) do
+		table.insert(biomes, k)
+		b = b + 1
+	end
+	if b == 0 then
+		return true, biomes
+	else
+		table.sort(biomes)
+		return true, biomes
+	end
+end
+
 -- Register chat commands
 do
 	minetest.register_chatcommand("findbiome", {
@@ -231,7 +274,7 @@ do
 			if invalid_biome then
 				return false, S("Biome does not exist!")
 			end
-			local biome_pos, success = find_biome(pos, {param})
+			local biome_pos, success = findbiome.find_biome(pos, {param})
 			if success then
 				player:set_pos(biome_pos)
 				return true, S("Biome found at @1.", minetest.pos_to_string(biome_pos))
@@ -246,24 +289,17 @@ do
 		params = "",
 		privs = { debug = true },
 		func = function(name, _)
-			if not mods_loaded then
-				return false
-			end
-			local biomes
-			local b = 0
-			biomes = {}
-			for k, _ in pairs(minetest.registered_biomes) do
-				table.insert(biomes, k)
-				b = b + 1
-			end
-			if b == 0 then
-				return true, S("No biomes.")
-			else
-				table.sort(biomes)
-				for b=1, #biomes do
-					minetest.chat_send_player(name, biomes[b])
+			local success, biomes = findbiome.list_biomes()
+			-- Error checking before sending them in chat
+			if success == false then -- send error message
+				return false, S(biomes[1])
+			else -- it worked, send all biomes
+				if #biomes == 0 then
+					return true, S("No biomes.")
+				else
+					table.sort(biomes)
+					return true, table.concat(biomes, "\n")
 				end
-				return true
 			end
 		end,
 	})
