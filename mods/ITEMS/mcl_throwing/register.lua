@@ -55,19 +55,23 @@ local pearl_ENTITY={
 }
 
 local function check_object_hit(self, pos, dmg)
+	local thrower = self._thrower
+	if type(thrower) == "string" then
+		thrower = core.get_player_by_name(thrower)
+	end
+
 	for object in minetest.objects_inside_radius(pos, 1.5) do
 		local entity = object:get_luaentity()
 		if not entity or entity.name ~= self.object:get_luaentity().name then
-			local is_player = object:is_player ()
-			local is_valid_entity
-				= entity and (entity.is_mob == true or entity._hittable_by_projectile)
-			if is_player or is_valid_entity and (self._thrower ~= object) then
-				local pl = self._thrower and self._thrower.is_player and self._thrower or type(self._thrower) == "string" and minetest.get_player_by_name(self._thrower)
+			local is_player = object:is_player()
+			local is_valid_entity = entity and (entity.is_mob == true or entity._hittable_by_projectile)
+			if (is_player or is_valid_entity) and (thrower ~= object or self.timer > 0.5) then
+				local pl = thrower and thrower.is_player and thrower or type(thrower) == "string" and minetest.get_player_by_name(thrower)
 				if pl then
 					object:punch(pl, 1.0, {
-							     full_punch_interval = 1.0,
-							     damage_groups = dmg,
-							      }, nil)
+						full_punch_interval = 1.0,
+						damage_groups = dmg,
+					}, nil)
 					return true
 				end
 			end
