@@ -1812,7 +1812,7 @@ msgid "Red Globe Charge"
 msgstr "Globe de gueules"
 
 msgid "Red Gradient"
-msgstr ""
+msgstr "Dégradé de gueules"
 
 msgid "Red Guster"
 msgstr ""
