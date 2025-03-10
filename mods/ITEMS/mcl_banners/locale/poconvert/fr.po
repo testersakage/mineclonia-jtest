@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-10 02:31+0000\n"
+"PO-Revision-Date: 2025-03-10 02:36+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1824,37 +1824,37 @@ msgid "Red Pale"
 msgstr "Pal de gueules"
 
 msgid "Red Pale Dexter"
-msgstr ""
+msgstr "Pal de gueules à dextre"
 
 msgid "Red Pale Sinister"
-msgstr ""
+msgstr "Pal de gueules à sénestre"
 
 msgid "Red Paly"
-msgstr ""
+msgstr "Quatre pals de gueules"
 
 msgid "Red Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de gueules"
 
 msgid "Red Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de gueules"
 
 msgid "Red Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de gueules"
 
 msgid "Red Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de gueules"
 
 msgid "Red Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de gueules"
 
 msgid "Red Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de gueules"
 
 msgid "Red Per Pale"
-msgstr ""
+msgstr "Parti, au premier de gueules"
 
 msgid "Red Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de gueules"
 
 msgid "Red Piglin Charge"
 msgstr ""
