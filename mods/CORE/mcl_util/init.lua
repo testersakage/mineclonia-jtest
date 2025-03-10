@@ -1546,3 +1546,4 @@ end
 
 mcl_util.ringbuffer = dofile(modpath.."/ringbuffer.lua")
 dofile(modpath.."/compat.lua")
+dofile(modpath.."/shape.lua")

@@ -1029,7 +1029,14 @@ mob_class.gwp_floortypes = {
 	IGNORE = "IGNORE",
 }
 
-local function get_partial_type (nodedef)
+local half_cube = mcl_util.decompose_AABBs ({
+	{
+		-0.25, -0.25, -0.25,
+		0.25, 0.25, 0.25,
+	},
+})
+
+local function get_partial_type (name, nodedef)
 	if nodedef.groups.pathfinder_partial == 3 then
 		return "SLAB"
 	elseif nodedef.groups.pathfinder_partial == 2 then
@@ -1038,28 +1045,32 @@ local function get_partial_type (nodedef)
 		return "OPEN"
 	end
 
-	local boxes = nodedef.node_box
+	local boxes = nodedef.collision_box or nodedef.node_box
 
 	-- Return whether the node is the default cube.
 	if not boxes or boxes.type == "regular" then
-		local fixed = boxes and boxes.fixed
-		if not fixed then
+		return "BLOCKED"
+	elseif boxes.type == "fixed" or boxes.type == "connected" then
+		-- ALways read from the default box.
+		local fixed = boxes.fixed
+
+		if type (fixed[1]) == "number" then
+			fixed = {fixed}
+		end
+		local shape = mcl_util.decompose_AABBs (fixed)
+		if not shape then
+			error (name .. "'s collision box is too complex to be evaluated by the pathfinder")
+		end
+		-- The assumption is that any node whose cbox
+		-- intersects with a centered half cube obstructs mob
+		-- movement.
+		if shape:intersect_p (half_cube) then
 			return "BLOCKED"
 		end
-		if fixed and type (fixed[1]) == "number" then
-			fixed = {fixed[1]}
-		end
-		boxes = fixed
-		if (#boxes == 1
-			and boxes[1][1] <= -0.5
-			and boxes[1][2] <= -0.5
-			and boxes[1][3] <= -0.5
-			and boxes[1][4] >= 0.5
-			and boxes[1][5] >= 0.5
-			and boxes[1][6] >= 0.5) then
-			return "BLOCKED"
-		end
+	elseif boxes.type == "leveled" or boxes.type == "wallmounted" then
+		return "BLOCKED"
 	end
+
 	return "OPEN"
 end
 
@@ -1132,7 +1143,7 @@ minetest.register_on_mods_loaded (function ()
 				gwp_door_classes[key] = "DOOR_WOOD_CLOSED"
 			end
 		elseif def.walkable then
-			value = get_partial_type (def)
+			value = get_partial_type (name, def)
 		end
 		gwp_fixed_ground_height[key]
 			= gwp_compute_fixed_ground_height (def)
