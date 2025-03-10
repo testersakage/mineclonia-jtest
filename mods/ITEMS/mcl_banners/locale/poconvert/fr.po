@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-10 02:45+0000\n"
+"PO-Revision-Date: 2025-03-10 03:14+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -25,6 +25,10 @@ msgstr "Bannière"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."
 msgstr ""
+"Les bannières sont de grands blocs décoratifs colorés. Elles peuvent être "
+"placées sur le sol et sur les murs. Les bannières peuvent être ornées d'une "
+"variété de motifs en les plaçant avec un colorant dans le métier à tisser, "
+"ou avec beaucoup de colorants dans l'établi."
 
 msgid "Emblazoned banners can be emblazoned again to combine patterns. Up to @1 patterns can be layered on a banner. To wash off a banner's top-most layer, use it on a cauldron with water."
 msgstr ""
@@ -1923,214 +1927,214 @@ msgid "White Chief Dexter Canton"
 msgstr "Canton d'argent en chef à dextre"
 
 msgid "White Chief Indented"
-msgstr ""
+msgstr "Émanchures d'argent en chef"
 
 msgid "White Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'argent en chef à sénestre"
 
 msgid "White Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'argent"
 
 msgid "White Cross"
-msgstr ""
+msgstr "Croix d'argent"
 
 msgid "White Fess"
-msgstr ""
+msgstr "Fasce d'argent"
 
 msgid "White Flow"
-msgstr ""
+msgstr "Tourbillon d'argent"
 
 msgid "White Flower Charge"
-msgstr ""
+msgstr "Fleur d'argent"
 
 msgid "White Globe Charge"
-msgstr ""
+msgstr "Globe d'argent"
 
 msgid "White Gradient"
-msgstr ""
+msgstr "Dégradé d'argent"
 
 msgid "White Guster"
-msgstr ""
+msgstr "Rafaleur d'argent"
 
 msgid "White Lozenge"
-msgstr ""
+msgstr "Losange d'argent"
 
 msgid "White Pale"
-msgstr ""
+msgstr "Pal d'argent"
 
 msgid "White Pale Dexter"
-msgstr ""
+msgstr "Pal d'argent à dextre"
 
 msgid "White Pale Sinister"
-msgstr ""
+msgstr "Pal d'argent à sénestre"
 
 msgid "White Paly"
-msgstr ""
+msgstr "Quatre pals d'argent"
 
 msgid "White Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'argent"
 
 msgid "White Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'argent"
 
 msgid "White Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'argent"
 
 msgid "White Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'argent"
 
 msgid "White Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'argent"
 
 msgid "White Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'argent"
 
 msgid "White Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'argent"
 
 msgid "White Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'argent"
 
 msgid "White Piglin Charge"
-msgstr ""
+msgstr "Groin d'argent"
 
 msgid "White Roundel"
-msgstr ""
+msgstr "Tourteau d'argent"
 
 msgid "White Saltire"
-msgstr ""
+msgstr "Sautoir d'argent"
 
 msgid "White Skull Charge"
-msgstr ""
+msgstr "Crâne d'argent"
 
 msgid "White Thing Charge"
-msgstr ""
+msgstr "Symbole d'argent"
 
 msgid "Yellow Banner"
 msgstr "Bannière jaune"
 
 msgid "Yellow Base"
-msgstr ""
+msgstr "Champagne d'or"
 
 msgid "Yellow Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'or en pointe à dextre"
 
 msgid "Yellow Base Gradient"
-msgstr ""
+msgstr "Dégradé d'or en pointe"
 
 msgid "Yellow Base Indented"
-msgstr ""
+msgstr "Émanchures d'or en pointe"
 
 msgid "Yellow Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'or en pointe à sénestre"
 
 msgid "Yellow Bend"
-msgstr ""
+msgstr "Bande d'or"
 
 msgid "Yellow Bend Sinister"
-msgstr ""
+msgstr "Barre d'or à sénestre"
 
 msgid "Yellow Bordure"
-msgstr ""
+msgstr "Bordure d'or"
 
 msgid "Yellow Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'or"
 
 msgid "Yellow Bricks"
-msgstr ""
+msgstr "Champ maçonné d'or"
 
 msgid "Yellow Chevron"
-msgstr ""
+msgstr "Mantelé d'or"
 
 msgid "Yellow Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'or"
 
 msgid "Yellow Chief"
-msgstr ""
+msgstr "Chef d'or"
 
 msgid "Yellow Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'or en chef à dextre"
 
 msgid "Yellow Chief Indented"
-msgstr ""
+msgstr "Émanchures d'or en chef"
 
 msgid "Yellow Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'or en chef à sénestre"
 
 msgid "Yellow Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'or"
 
 msgid "Yellow Cross"
-msgstr ""
+msgstr "Croix d'or"
 
 msgid "Yellow Fess"
-msgstr ""
+msgstr "Fasce d'or"
 
 msgid "Yellow Flow"
-msgstr ""
+msgstr "Tourbillon d'or"
 
 msgid "Yellow Flower Charge"
-msgstr ""
+msgstr "Fleur d'or"
 
 msgid "Yellow Globe Charge"
-msgstr ""
+msgstr "Globe d'or"
 
 msgid "Yellow Gradient"
-msgstr ""
+msgstr "Dégradé d'or"
 
 msgid "Yellow Guster"
-msgstr ""
+msgstr "Rafaleur d'or"
 
 msgid "Yellow Lozenge"
-msgstr ""
+msgstr "Losange d'or"
 
 msgid "Yellow Pale"
-msgstr ""
+msgstr "Pal d'or"
 
 msgid "Yellow Pale Dexter"
-msgstr ""
+msgstr "Pal d'or à dextre"
 
 msgid "Yellow Pale Sinister"
-msgstr ""
+msgstr "Pal d'or à sénestre"
 
 msgid "Yellow Paly"
-msgstr ""
+msgstr "Quatre pals d'or"
 
 msgid "Yellow Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'or"
 
 msgid "Yellow Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'or"
 
 msgid "Yellow Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'or"
 
 msgid "Yellow Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'or"
 
 msgid "Yellow Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'or"
 
 msgid "Yellow Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'or"
 
 msgid "Yellow Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'or"
 
 msgid "Yellow Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'or"
 
 msgid "Yellow Piglin Charge"
-msgstr ""
+msgstr "Groin d'or"
 
 msgid "Yellow Roundel"
-msgstr ""
+msgstr "Tourteau d'or"
 
 msgid "Yellow Saltire"
-msgstr ""
+msgstr "Sautoir d'or"
 
 msgid "Yellow Skull Charge"
-msgstr ""
+msgstr "Crâne d'or"
 
 msgid "Yellow Thing Charge"
-msgstr ""
+msgstr "Symbole d'or"
