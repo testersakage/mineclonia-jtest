@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-10 02:25+0000\n"
+"PO-Revision-Date: 2025-03-10 02:29+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1773,34 +1773,34 @@ msgid "Red Bordure Indented"
 msgstr "Bordure cannelée de gueules"
 
 msgid "Red Bricks"
-msgstr ""
+msgstr "Champ maçonné de gueules"
 
 msgid "Red Chevron"
-msgstr ""
+msgstr "Mantelé de gueules"
 
 msgid "Red Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de gueules"
 
 msgid "Red Chief"
-msgstr ""
+msgstr "Chef de gueules"
 
 msgid "Red Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de gueules en chef à dextre"
 
 msgid "Red Chief Indented"
-msgstr ""
+msgstr "Émanchures de gueules en chef"
 
 msgid "Red Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de gueules en chef à sénestre"
 
 msgid "Red Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de gueules"
 
 msgid "Red Cross"
-msgstr ""
+msgstr "Croix de gueules"
 
 msgid "Red Fess"
-msgstr ""
+msgstr "Fasce de gueules"
 
 msgid "Red Flow"
 msgstr ""
