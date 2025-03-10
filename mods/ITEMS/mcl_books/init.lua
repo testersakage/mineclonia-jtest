@@ -2,7 +2,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
 local C = minetest.colorize
 
-local max_text_length = 4500 -- TODO: Increase to 12800 when scroll bar was added to written book
+local max_text_length =  12800
 local max_title_length = 64
 
 local bookshelf_inv = minetest.settings:get_bool("mcl_bookshelf_inventories", true)
@@ -97,6 +97,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				meta:set_string("text", text)
 				player:set_wielded_item(stack)
 			elseif fields.sign then
+				local overlength = string.len(fields.text) - max_text_length
+				local ov_warning = ""
+				if overlength > 0 then
+					ov_warning = "label[0.75, 2.5;".. F(C(mcl_colors.RED, S("Text is @1 characters too long for one book.\nIt will be capped at @2 characters.", overlength, max_text_length))).."]"
+				end
 				meta:set_string("text", text)
 				player:set_wielded_item(stack)
 
@@ -108,6 +113,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					F(C("#000000", S("Enter book title:"))) .. ";]" ..
 					"label[0.75,1.5;" ..
 					F(C("#404040", S("by @1", name))) .. "]" ..
+					ov_warning..
 					"button_exit[0.75,7.95;3,1;sign;" .. F(S("Sign and Close")) .. "]" ..
 					"tooltip[sign;" ..
 					F(S("Note: The book will no longer be editable after signing")) .. "]" ..
