@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 03:29+0000\n"
+"PO-Revision-Date: 2025-03-10 18:07+0000\n"
 "Last-Translator: \"Miguel P.L\" <miguel_pl@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/es/>\n"
@@ -48,28 +48,28 @@ msgid "Black Base"
 msgstr "Base negra"
 
 msgid "Black Base Dexter Canton"
-msgstr ""
+msgstr "Cantón en base negra a diestra"
 
 msgid "Black Base Gradient"
-msgstr ""
+msgstr "Gradiente en base negra"
 
 msgid "Black Base Indented"
-msgstr ""
+msgstr "Base negra dentada"
 
 msgid "Black Base Sinister Canton"
-msgstr ""
+msgstr "Cantón en base negra a siniestra"
 
 msgid "Black Bend"
-msgstr ""
+msgstr "Banda negra"
 
 msgid "Black Bend Sinister"
-msgstr ""
+msgstr "Banda negra a siniestra"
 
 msgid "Black Bordure"
-msgstr ""
+msgstr "Bordura negra"
 
 msgid "Black Bordure Indented"
-msgstr ""
+msgstr "Bordura negra dentada"
 
 msgid "Black Bricks"
 msgstr ""
