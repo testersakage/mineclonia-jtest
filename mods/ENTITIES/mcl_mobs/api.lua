@@ -613,9 +613,6 @@ function mob_class:on_step (dtime, moveresult)
 	self:check_particlespawners(dtime)
 	self:check_item_pickup()
 
-	if self.opinion_sound_cooloff > 0 then
-		self.opinion_sound_cooloff = self.opinion_sound_cooloff - dtime
-	end
 	-- Mob plays random sound at times.
 	local chance = scale_chance (70, dtime)
 	if math.random (1, chance) == 1 then
