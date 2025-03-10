@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 18:33+0000\n"
+"PO-Revision-Date: 2025-03-10 02:25+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1659,118 +1659,118 @@ msgid "Purple Chief Dexter Canton"
 msgstr "Canton de mûre en chef à dextre"
 
 msgid "Purple Chief Indented"
-msgstr ""
+msgstr "Émanchures de mûre en chef"
 
 msgid "Purple Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de mûre en chef à sénestre"
 
 msgid "Purple Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de mûre"
 
 msgid "Purple Cross"
-msgstr ""
+msgstr "Croix de mûre"
 
 msgid "Purple Fess"
-msgstr ""
+msgstr "Fasce de mûre"
 
 msgid "Purple Flow"
-msgstr ""
+msgstr "Tourbillon de mûre"
 
 msgid "Purple Flower Charge"
-msgstr ""
+msgstr "Fleur de mûre"
 
 msgid "Purple Globe Charge"
-msgstr ""
+msgstr "Globe de mûre"
 
 msgid "Purple Gradient"
-msgstr ""
+msgstr "Dégradé de mûre"
 
 msgid "Purple Guster"
-msgstr ""
+msgstr "Rafaleur de mûre"
 
 msgid "Purple Lozenge"
-msgstr ""
+msgstr "Losange de mûre"
 
 msgid "Purple Pale"
-msgstr ""
+msgstr "Pal de mûre"
 
 msgid "Purple Pale Dexter"
-msgstr ""
+msgstr "Pal de mûre à dextre"
 
 msgid "Purple Pale Sinister"
-msgstr ""
+msgstr "Pal de mûre à sénestre"
 
 msgid "Purple Paly"
-msgstr ""
+msgstr "Quatre pals de mûre"
 
 msgid "Purple Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de mûre"
 
 msgid "Purple Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de mûre"
 
 msgid "Purple Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de mûre"
 
 msgid "Purple Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de mûre"
 
 msgid "Purple Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de mûre"
 
 msgid "Purple Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de mûre"
 
 msgid "Purple Per Pale"
-msgstr ""
+msgstr "Parti, au premier de mûre"
 
 msgid "Purple Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de mûre"
 
 msgid "Purple Piglin Charge"
-msgstr ""
+msgstr "Groin de mûre"
 
 msgid "Purple Roundel"
-msgstr ""
+msgstr "Tourteau de mûre"
 
 msgid "Purple Saltire"
-msgstr ""
+msgstr "Sautoir de mûre"
 
 msgid "Purple Skull Charge"
-msgstr ""
+msgstr "Crâne de mûre"
 
 msgid "Purple Thing Charge"
-msgstr ""
+msgstr "Symbole de mûre"
 
 msgid "Red Banner"
 msgstr "Bannière rouge"
 
 msgid "Red Base"
-msgstr ""
+msgstr "Champagne de gueules"
 
 msgid "Red Base Dexter Canton"
-msgstr ""
+msgstr "Canton de gueules en pointe à dextre"
 
 msgid "Red Base Gradient"
-msgstr ""
+msgstr "Dégradé de gueules en pointe"
 
 msgid "Red Base Indented"
-msgstr ""
+msgstr "Émanchures de gueules en pointe"
 
 msgid "Red Base Sinister Canton"
-msgstr ""
+msgstr "Canton de gueules en pointe à sénestre"
 
 msgid "Red Bend"
-msgstr ""
+msgstr "Bande de gueules"
 
 msgid "Red Bend Sinister"
-msgstr ""
+msgstr "Barre de gueules à sénestre"
 
 msgid "Red Bordure"
-msgstr ""
+msgstr "Bordure de gueules"
 
 msgid "Red Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de gueules"
 
 msgid "Red Bricks"
 msgstr ""
