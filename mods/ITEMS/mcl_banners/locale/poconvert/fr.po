@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-10 02:41+0000\n"
+"PO-Revision-Date: 2025-03-10 02:45+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1890,37 +1890,37 @@ msgid "White Base Gradient"
 msgstr "Dégradé d'argent en pointe"
 
 msgid "White Base Indented"
-msgstr ""
+msgstr "Émanchures d'argent en pointe"
 
 msgid "White Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'argent en pointe à sénestre"
 
 msgid "White Bend"
-msgstr ""
+msgstr "Bande d'argent"
 
 msgid "White Bend Sinister"
-msgstr ""
+msgstr "Barre d'argent à sénestre"
 
 msgid "White Bordure"
-msgstr ""
+msgstr "Bordure d'argent"
 
 msgid "White Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'argent"
 
 msgid "White Bricks"
-msgstr ""
+msgstr "Champ maçonné d'argent"
 
 msgid "White Chevron"
-msgstr ""
+msgstr "Mantelé d'argent"
 
 msgid "White Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'argent"
 
 msgid "White Chief"
-msgstr ""
+msgstr "Chef d'argent"
 
 msgid "White Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'argent en chef à dextre"
 
 msgid "White Chief Indented"
 msgstr ""
