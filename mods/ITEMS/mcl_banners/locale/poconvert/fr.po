@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-10 02:37+0000\n"
+"PO-Revision-Date: 2025-03-10 02:41+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fr/>\n"
@@ -1869,25 +1869,25 @@ msgid "Red Skull Charge"
 msgstr "Crâne de gueules"
 
 msgid "Red Thing Charge"
-msgstr ""
+msgstr "Symbole de gueules"
 
 msgid "Skull Banner Pattern"
-msgstr ""
+msgstr "Motif de crâne pour bannière"
 
 msgid "Thing Banner Pattern"
-msgstr ""
+msgstr "Motif de symbole pour bannière"
 
 msgid "White Banner"
 msgstr "Bannière blanche"
 
 msgid "White Base"
-msgstr ""
+msgstr "Champagne d'argent"
 
 msgid "White Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'argent en pointe à dextre"
 
 msgid "White Base Gradient"
-msgstr ""
+msgstr "Dégradé d'argent en pointe"
 
 msgid "White Base Indented"
 msgstr ""
