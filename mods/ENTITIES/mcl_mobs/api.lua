@@ -627,10 +627,6 @@ function mob_class:on_step (dtime, moveresult)
 	end
 	self:run_ai (dtime, moveresult)
 
-	if self.jump_sound_cooloff > 0 then
-		self.jump_sound_cooloff = self.jump_sound_cooloff - dtime
-	end
-
 	if not self.object:get_luaentity() then
 		return false
 	end
