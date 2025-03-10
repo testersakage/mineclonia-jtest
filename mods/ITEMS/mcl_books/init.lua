@@ -79,7 +79,7 @@ minetest.register_craftitem("mcl_books:writable_book", {
 	_doc_items_usagehelp = S(
 			"Hold it in the hand, then rightclick to read the current notes and edit then. You can edit the text as often as you like. You can also sign the book which turns it into a written book which you can stack, but it can't be edited anymore.")
 		.. "\n" ..
-		S("A book can hold up to 4500 characters. The title length is limited to 64 characters."),
+		S("A book can hold up to @1 characters. The title length is limited to @2 characters.", max_text_length, max_title_length),
 	inventory_image = "mcl_books_book_writable.png",
 	groups = { book = 1 },
 	stack_max = 1,
