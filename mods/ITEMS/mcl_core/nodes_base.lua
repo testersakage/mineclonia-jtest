@@ -5,6 +5,19 @@ local S = minetest.get_translator(minetest.get_current_modname())
 ice_drawtype = "liquid"
 ice_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or true
 
+local function replace_random4dir(pos)
+	local node = core.get_node(pos)
+	core.swap_node(pos, {
+		name = node.name,
+		param2 = mcl_util.get_pos_random4dir(pos)
+	})
+end
+
+local function snow_on_construct(pos)
+	replace_random4dir(pos)
+	mcl_core.on_snow_construct(pos)
+end
+
 mcl_core.fortune_drop_ore = {
 	discrete_uniform_distribution = true,
 	min_count = 2,
@@ -388,6 +401,7 @@ mcl_core.register_snowed_node("mcl_core:dirt_with_grass_snow", "mcl_core:dirt_wi
 minetest.register_node("mcl_core:grass_path", {
 	tiles = {"mcl_core_grass_path_top.png", "default_dirt.png", "mcl_core_grass_path_side.png"},
 	description = S("Grass Path"),
+	paramtype2 = "4dir",
 	_doc_items_longdesc = S("Grass paths are a decorative variant of grass blocks. Their top has a different color and they are a bit lower than grass blocks, making them useful to build footpaths. Grass paths can be created with a shovel. A grass path turns into dirt when it is below a solid block."),
 	drop = "mcl_core:dirt",
 	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
@@ -400,7 +414,8 @@ minetest.register_node("mcl_core:grass_path", {
 			{-0.5, -0.5, -0.5, 0.5, 0.4375, 0.5},
 		}
 	},
-	groups = {handy=1,shovely=1, cultivatable=2, dirtifies_below_solid=1, dirtifier=1, deco_block=1, pathfinder_partial=2, },
+	groups = {handy=1,shovely=1, cultivatable=2, dirtifies_below_solid=1, dirtifier=1, deco_block=1, pathfinder_partial=2,  random4dir=1},
+	on_construct = replace_random4dir,
 	sounds = mcl_sounds.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.1},
 	}),
@@ -410,15 +425,18 @@ minetest.register_node("mcl_core:grass_path", {
 
 minetest.register_node("mcl_core:mycelium", {
 	description = S("Mycelium"),
+	paramtype2 = "4dir",
 	_doc_items_longdesc = S("Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other dirt-type blocks, it can not be turned into farmland with a hoe. In light, mycelium slowly spreads over nearby dirt. Under an opaque block or a liquid, it eventually turns back into dirt."),
 	tiles = {"mcl_core_mycelium_top.png", "default_dirt.png", {name="mcl_core_mycelium_side.png", tileable_vertical=false}},
-	groups = { handy=1, shovely=1, dirt=2, spreading_dirt_type=1, enderman_takable=1, building_block=1, soil_sapling=2, soil_bamboo=1, soil_fungus=1, mycelium=1, supports_mushrooms=1, converts_to_moss=1 },
+	groups = { handy=1, shovely=1, dirt=2, spreading_dirt_type=1, enderman_takable=1, building_block=1, soil_sapling=2, soil_bamboo=1, soil_fungus=1, mycelium=1, supports_mushrooms=1, converts_to_moss=1, random4dir=1},
 	drop = "mcl_core:dirt",
 	sounds = mcl_sounds.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.1},
 	}),
-
-	on_construct = mcl_core.on_snowable_construct,
+	on_construct = function(pos)
+		replace_random4dir(pos)
+		mcl_core.on_snowable_construct(pos)
+	end,
 	_on_shovel_place = mcl_core.make_dirtpath,
 	_mcl_snowed = "mcl_core:mycelium_snow",
 	_mcl_blast_resistance = 0.6,
@@ -459,12 +477,16 @@ minetest.register_abm({
 
 minetest.register_node("mcl_core:podzol", {
 	description = S("Podzol"),
+	paramtype2 = "4dir",
 	_doc_items_longdesc = S("Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."),
 	tiles = {"mcl_core_dirt_podzol_top.png", "default_dirt.png", {name="mcl_core_dirt_podzol_side.png", tileable_vertical=false}},
-groups = {handy=1, shovely=3, dirt=2, soil=1, soil_sapling=2, soil_sugarcane=1, soil_bamboo = 1, soil_fungus=1, enderman_takable=1, building_block=1, supports_mushrooms=1, converts_to_moss=1},
+groups = {handy=1, shovely=3, dirt=2, soil=1, soil_sapling=2, soil_sugarcane=1, soil_bamboo = 1, soil_fungus=1, enderman_takable=1, building_block=1, supports_mushrooms=1, converts_to_moss=1, random4dir=1},
 	drop = "mcl_core:dirt",
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	on_construct = mcl_core.on_snowable_construct,
+	on_construct = function(pos)
+		replace_random4dir(pos)
+		mcl_core.on_snowable_construct(pos)
+	end,
 	_on_shovel_place = mcl_core.make_dirtpath,
 	_mcl_snowed = "mcl_core:podzol_snow",
 	_mcl_blast_resistance = 0.8,
@@ -500,7 +522,7 @@ minetest.register_node("mcl_core:gravel", {
 	description = S("Gravel"),
 	_doc_items_longdesc = S("This block consists of a couple of loose stones and can't support itself."),
 	tiles = {"default_gravel.png"},
-	groups = {handy=1,shovely=1, falling_node=1, enderman_takable=1, building_block=1, material_sand=1, soil_bamboo = 1,},
+	groups = {handy=1,shovely=1, falling_node=1, enderman_takable=1, building_block=1, material_sand=1, soil_bamboo = 1},
 	drop = {
 		max_items = 1,
 		items = {
@@ -1005,15 +1027,6 @@ local function on_place(itemstack, placer, pointed_thing)
 	else
 		return itemstack
 	end
-end
-
-local function snow_on_construct(pos)
-	local node = core.get_node(pos)
-	core.swap_node(pos, {
-		name = node.name,
-		param2 = mcl_util.get_pos_random4dir(pos)
-	})
-	mcl_core.on_snow_construct(pos)
 end
 
 for i=1,8 do
