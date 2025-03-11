@@ -100,8 +100,8 @@ local zombie = table.merge (posing_humanoid, {
 	},
 	makes_footstep_sound = true,
 	sounds = {
-		random = "mobs_mc_zombie_growl",
-		war_cry = "mobs_mc_zombie_growl",
+		random = {name="mobs_mc_zombie_growl", gain=0.5},
+		war_cry = {name="mobs_mc_zombie_growl", gain=0.5},
 		death = "mobs_mc_zombie_death",
 		damage = "mobs_mc_zombie_hurt",
 	},
