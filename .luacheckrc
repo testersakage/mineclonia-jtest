@@ -13,6 +13,7 @@ globals = {
 	"tt",
 	"mesecon",
 	"mcl_lightning",
+	"biomeinfo",
 	"controls",
 	"flowlib",
 	"awards",
