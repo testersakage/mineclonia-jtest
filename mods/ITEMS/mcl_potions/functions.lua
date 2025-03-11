@@ -2043,14 +2043,15 @@ function mcl_potions.make_invisible(obj_ref, hide)
 		end
 	else
 		local luaentity = obj_ref:get_luaentity()
-		if hide then
-			EF.invisibility[obj_ref].old_size = luaentity.visual_size
-			obj_ref:set_properties({ visual_size = { x = 0, y = 0 }, show_on_minimap = false })
-			obj_ref:set_nametag_attributes({ text = " ", color = EMPTY_color, bgcolor = EMPTY_color })
-		else
-			obj_ref:set_properties({ visual_size = EF.invisibility[obj_ref].old_size, show_on_minimap = true })
-			obj_ref:set_nametag_attributes({ text = luaentity.nametag, color = WHITE_color, bgcolor = false })
-			-- TODO integrate this with mob naming better...
+		if luaentity and luaentity.set_invisible then
+			luaentity:set_invisible(hide)
+			-- TODO: check whether this stuff should be moved to mcl_mobs
+			local show = not hide and luaentity.nametag or false
+			local nametag = show and luaentity.nametag or " "
+			local color = show and WHITE_color or EMPTY_color
+			obj_ref:set_nametag_attributes({ text = nametag, color = color })
+			-- TODO: check whether named mobs should be shown on the minimap (currently they aren't)
+			--obj_ref:set_properties ({show_on_minimap = show})
 		end
 	end
 end
