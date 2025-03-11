@@ -862,7 +862,7 @@ local function on_receive_fields(player, fields)
 		else
 			local count = table.count(recipe.items, function(_,v) return not ItemStack(v):is_empty()  end)
 			if recipe.width <= 2 and count <= 4 then
-				minetest.show_formspec(name, "", player:get_inventory_formspec())
+				mcl_inventory.show_inventory(player)
 			else
 				return
 			end

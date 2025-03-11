@@ -480,8 +480,8 @@ function mcl_inventory.set_creative_formspec(player)
 			"tooltip[__switch_stack;" .. F(S("Switch stack size")) .. "]",
 
 			-- Skins button
-			"image_button[11.575,5.825;1.1,1.1;mcl_skins_button.png;__mcl_skins;]",
-			"tooltip[__mcl_skins;" .. F(S("Select player skin")) .. "]",
+			"image_button[11.575,5.825;1.1,1.1;mcl_player_settings.png;__mcl_player_settings;]",
+			"tooltip[__mcl_player_settings;" .. F(S("Player settings")) .. "]",
 		})
 
 		-- For shortcuts

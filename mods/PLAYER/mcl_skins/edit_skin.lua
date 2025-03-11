@@ -436,6 +436,13 @@ function mcl_skins.show_formspec(player)
 	minetest.show_formspec(player_name, "mcl_skins:skins", formspec)
 end
 
+mcl_player.register_player_settings_button({
+	field = "__mcl_skins",
+	icon = "mcl_skins_button.png",
+	description = S("Select player skin"),
+	priority = 1000,
+})
+
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.__mcl_skins then
 		mcl_skins.show_formspec(player)

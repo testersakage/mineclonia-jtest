@@ -6,6 +6,8 @@ Puts the specified craft on the players crafting grid from player's inventory. T
 ## `mcl_inventory.fill_grid(player)`
 Maximizes all itemstacks on the crafting grid grom the player's inventory equally for bulk crafting.
 
+## `mcl_inventory.show_inventory(player)`
+
 ## `mcl_inventory.register_survival_inventory_tab(def)`
 
 ```lua

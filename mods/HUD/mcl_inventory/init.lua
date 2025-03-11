@@ -187,9 +187,23 @@ function mcl_inventory.clear_inv_lists(inv, lists)
 	end
 end
 
+function mcl_inventory.show_inventory(player)
+	minetest.show_formspec(player:get_player_name(), "", player:get_inventory_formspec())
+end
+
+mcl_player.register_player_settings_button({
+	field = "__mcl_inventory",
+	icon = "crafting_creative_prev.png",
+	description = S("Return to player inventory"),
+	priority = math.huge, -- first
+})
+
 core.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_crafting_fillgrid then
 		mcl_inventory.fill_grid(player)
+	elseif fields.__mcl_inventory then
+		mcl_inventory.show_inventory(player)
+		return false
 	end
 end)
 

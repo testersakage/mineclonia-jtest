@@ -117,8 +117,8 @@ local main_page_static = table.concat({
 	"tooltip[__mcl_doc;" .. F(S("Help")) .. "]",
 
 	--Skins button
-	"image_button[9.075,4.075;1.1,1.1;mcl_skins_button.png;__mcl_skins;]",
-	"tooltip[__mcl_skins;" .. F(S("Select player skin")) .. "]",
+	"image_button[9.075,4.075;1.1,1.1;mcl_player_settings.png;__mcl_player_settings;]",
+	"tooltip[__mcl_player_settings;" .. F(S("Player settings")) .. "]",
 
 	--Achievements button
 	"image_button[10.325,4.075;1.1,1.1;mcl_achievements_button.png;__mcl_achievements;]",

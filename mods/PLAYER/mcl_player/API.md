@@ -66,3 +66,76 @@ mcl_player.player_get_animation(player)
 		},
 	}
 
+
+
+
+
+## Player settings
+
+```lua
+-- Register a new settings button. It will automatically be added to the player
+-- settings page.
+mcl_player.register_player_settings_button({
+
+	-- The formspec field name that is listened for.
+	field = "__mcl_skins",
+
+	-- The icon to display on the button.
+	icon = "mcl_skins_button.png",
+
+	-- The tooltip text to add to the button.
+	description = S("Select player skin"),
+
+	-- Buttons are displayed in order of devreasing priority.
+	priority = 1000,
+})
+
+-- Register a new player setting. It will automatically be added to the player
+-- settings page.
+mcl_player.register_player_setting("mcl_inventory:quick_move_to_craftgrid_", {
+
+	-- Required type of setting. Either "boolean", "enum", or "slider".
+	type = "boolean"
+
+	-- Array of enum values with descriptions and - only for type "slider" - ranges.
+	-- Required for type "enum" and "slider".
+	options = {
+		{ name = "0", description = S("None") },
+                { min = 10, max = 100, step = 10 } -- ranges are only supported for type "slider"
+		{ name = "999", description = S("Unlimited") },
+	},
+
+	-- Required short description of setting.
+	short_desc = S("Quick move items to craftgrid"),
+
+	-- Optional longer description of setting.
+	long_desc = S("Moves items to crafgrid when shift-clicking in inventory instead of moving between hotbar and main inventory. Defaults to the value of the corresponding server setting."),
+
+	-- Optional section this setting belongs to. Default ist "Misc". This
+	-- string will be translated in the textdomain of mcl_player.
+	section = nil,
+
+	-- Optional callback run when the setting is changed.
+	on_change = function()
+	end,
+
+	-- Default value used for intializing the settings UI when the player
+	-- setting is not explicitly set. Should correspond to the actual
+	-- default value used in code affected by this setting (might not always
+	-- be possible).
+	settings_ui_default = minetest.settings:get_bool("mcl_quick_move_to_craftgrid", false),
+}
+
+-- Get the value of a player setting. It will automatically be converted to the
+-- correct type. Returns `nil` if setting hasn't been registered or isn't set
+-- and no `default` parameter is specified.
+mcl_player.get_player_setting(player, name, default)
+
+-- Set the value of a player setting. Setting `value` nil will remove the
+-- setting from player meta.
+mcl_inventory.set_player_setting(player, name, value)
+
+-- Show the player settings formspec.
+mcl_player.show_player_settings(player)
+
+```
