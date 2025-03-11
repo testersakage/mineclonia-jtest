@@ -39,8 +39,8 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 		"mobs_mc:witch",
 	},
 	sounds = {
-		random = "mobs_mc_pillager_grunt2",
-		war_cry = "mobs_mc_pillager_grunt1",
+		random = {name = "mobs_mc_pillager_grunt2", gain=0.5},
+		war_cry = {name = "mobs_mc_pillager_grunt1", gain=0.5},
 		death = "mobs_mc_pillager_ow2",
 		damage = "mobs_mc_pillager_ow1",
 		distance = 16,
