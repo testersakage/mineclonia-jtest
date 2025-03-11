@@ -23,7 +23,7 @@ local PLAYER_USE_CROSSBOW_SPEED = tonumber(minetest.settings:get("movement_speed
 local BOW_MAX_SPEED = 3.15 * 20
 
 local function play_load_sound(id, pos)
-	minetest.sound_play("mcl_bows_crossbow_drawback_"..id, {pos=pos, max_hear_distance=12}, true)
+	minetest.sound_play({name = "mcl_bows_crossbow_drawback_"..id, gain=0.07}, {pos=pos, max_hear_distance=16}, true)
 end
 
 --[[ Store the charging state of each player.
@@ -38,7 +38,7 @@ local bow_load = {}
 -- Another player table, this one stores the wield index of the bow being charged
 local bow_index = {}
 
-function shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
+function shoot_arrow_crossbow_1(arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
 	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, ItemStack(arrow_item):get_name().."_entity")
 	if not obj or not obj:get_pos() then return end
 	if damage == nil then
@@ -63,7 +63,7 @@ function shoot_arrow_crossbow_1 (arrow_item, pos, dir, yaw, shooter, speed, dama
 	le._startpos = pos
 	le._collectable = collectable
 	le._itemstring = arrow_item
-	minetest.sound_play("mcl_bows_crossbow_shoot", {pos=pos, max_hear_distance=16}, true)
+	minetest.sound_play({name="mcl_bows_crossbow_shoot", gain=0.035}, {pos=pos, max_hear_distance=32}, true)
 	if shooter and shooter:is_player() then
 		if obj:get_luaentity().player == "" then
 			obj:get_luaentity().player = shooter
@@ -343,7 +343,7 @@ controls.register_on_release(function(player, key)
 			wielditem:set_name("mcl_bows:crossbow_loaded_enchanted")
 		end
 		player:set_wielded_item(wielditem)
-		minetest.sound_play("mcl_bows_crossbow_load", {pos=player:get_pos(), max_hear_distance=16}, true)
+		minetest.sound_play({name="mcl_bows_crossbow_load", gain=0.07}, {pos=player:get_pos(), max_hear_distance=16}, true)
 	else
 		reset_bow_state(player, true)
 	end
