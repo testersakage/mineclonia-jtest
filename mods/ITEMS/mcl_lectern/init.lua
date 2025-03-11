@@ -6,6 +6,7 @@
 
 local S = minetest.get_translator(minetest.get_current_modname())
 local F = minetest.formspec_escape
+local H = core.hypertext_escape
 
 local function get_formspec(text, title, author)
 	local fs = "size[8,9]" ..
@@ -14,10 +15,10 @@ local function get_formspec(text, title, author)
 	"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]"
 
 	if title ~= "" then
-		fs = fs .. "scroll_container[0,0.5;8,0.7;;vertical]hypertext[0,-0.2;8,10;title;<style color=black font=normal size=24><center>"..F(title or "").."</center></style>]scroll_container_end[]"
+		fs = fs .. "scroll_container[0,0.5;8,0.7;;vertical]hypertext[0,-0.2;8,10;title;<style color=black font=normal size=24><center>"..H(F(title or "")).."</center></style>]scroll_container_end[]"
 	end
 	if author ~= "" then
-		fs = fs .. "scroll_container[0.75,1.0;7.25,0.5;;vertical]hypertext[0,-0.2;7.25,10;author;<style color=black font=normal size=12>by </style><style color=#1E1E1E font=mono size=14>"..F(author or "").."</style>]scroll_container_end[]"
+		fs = fs .. "scroll_container[0.75,1.0;7.25,0.5;;vertical]hypertext[0,-0.2;7.25,10;author;<style color=black font=normal size=12>by </style><style color=#1E1E1E font=mono size=14>"..H(F(author or "")).."</style>]scroll_container_end[]"
 	end
 	fs = fs .."textarea[0.75,1.24;7.20,7.5;;" .. F(text or "") .. ";]" ..
 	"button_exit[1.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"..
