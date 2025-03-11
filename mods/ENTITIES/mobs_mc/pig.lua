@@ -39,9 +39,9 @@ local pig = {
 		},
 	},
 	sounds = {
-		random = "mobs_pig",
-		death = "mobs_pig_angry",
-		damage = "mobs_pig",
+		random = {name="mobs_pig", gain=0.5},
+		death = {name="mobs_pig_angry", gain=0.75},
+		damage = {name="mobs_pig_angry", gain=0.75},
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
