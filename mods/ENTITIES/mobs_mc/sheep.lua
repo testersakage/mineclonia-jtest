@@ -81,7 +81,7 @@ local sheep = {
 	runaway = true,
 	drops = get_sheep_drops (),
 	sounds = {
-		random = "mobs_sheep",
+		random = {name="mobs_sheep", gain=0.4},
 		death = "mobs_sheep",
 		damage = "mobs_sheep",
 		sounds = "mobs_mc_animal_eat_generic",
