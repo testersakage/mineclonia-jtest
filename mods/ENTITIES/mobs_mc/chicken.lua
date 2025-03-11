@@ -48,14 +48,14 @@ local chicken = {
 	fall_damage = 0,
 	gravity_drag = 0.6,
 	sounds = {
-		random = "mobs_mc_chicken_buck",
+		random = {name="mobs_mc_chicken_buck", gain=0.7},
 		damage = "mobs_mc_chicken_hurt",
 		death = "mobs_mc_chicken_hurt",
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
 	sounds_child = {
-		random = "mobs_mc_chicken_child",
+		random = {name="mobs_mc_chicken_child", gain=0.7},
 		damage = "mobs_mc_chicken_child",
 		death = "mobs_mc_chicken_child",
 		eat = "mobs_mc_animal_eat_generic",
