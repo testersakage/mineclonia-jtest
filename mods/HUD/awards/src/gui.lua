@@ -18,7 +18,7 @@ function awards.get_formspec(name, _, sid)
 	local sdef = sitem.def
 	if sdef and sdef.secret and not sitem.unlocked then
 		formspec = formspec .. "label[1,2.75;"..
-				minetest.formspec_escape(S("(Secret Advancement)")).."]"..
+				minetest.formspec_escape(S("(Hidden Advancement)")).."]"..
 				"image[1,0;3,3;awards_unknown.png]"
 		if sdef and sdef.description then
 			formspec = formspec	.. "textarea[0.25,3.25;4.8,1.7;;"..
@@ -81,7 +81,7 @@ function awards.get_formspec(name, _, sid)
 			first = false
 
 			if def.secret and not award.unlocked then
-				formspec = formspec .. "#707070"..minetest.formspec_escape(S("(Secret Advancement)"))
+				formspec = formspec .. "#707070"..minetest.formspec_escape(S("(Hidden Advancement)"))
 			else
 				local title = award.name
 				if def and def.title then
