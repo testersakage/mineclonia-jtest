@@ -335,9 +335,8 @@ minetest.register_lbm({
 	name = "mcl_core:rotate_old_biomecolor4dir",
 	nodenames = {"group:biomecolor4dir"},
 	action = function(pos, node)
-		minetest.swap_node(pos, table.merge(node, {
-			param2 = mcl_util.get_pos_biomecolor4dir(pos)
-		}))
+		node.param2 = mcl_util.get_pos_biomecolor4dir(pos)
+		minetest.swap_node(pos, node)
 	end,
 })
 
@@ -347,9 +346,8 @@ minetest.register_lbm({
 	name = "mcl_core:rotate_old_random4dir",
 	nodenames = {"group:random4dir"},
 	action = function(pos, node)
-		minetest.swap_node(pos, table.merge(node, {
-			param2 = mcl_util.get_pos_random4dir(pos)
-		}))
+		node.param2 = mcl_util.get_pos_random4dir(pos)
+		minetest.swap_node(pos, node)
 	end,
 })
 
