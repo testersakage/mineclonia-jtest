@@ -118,7 +118,7 @@ function awards.unlock(name, award)
 	if awards.show_mode == "chat" then
 		local chat_announce
 		if awdef.secret then
-			chat_announce = S("Secret Advancement Unlocked: @1", title)
+			chat_announce = S("Hidden Advancement Unlocked: @1", title)
 		else
 			chat_announce = S("Advancement Unlocked: @1", title)
 		end
@@ -138,16 +138,16 @@ function awards.unlock(name, award)
 			offset = {x = 0, y = 138},
 			alignment = {x = 0, y = -1}
 		})
-		local hud_announce
-		if awdef.secret == true then
-			hud_announce = S("Secret Advancement Made!")
-		elseif awdef.type == "Goal" then
-			hud_announce = S("Goal Completed!")
-		elseif awdef.type == "Challenge" then
-			hud_announce = S("Challenge Completed!")
-		else
-			hud_announce = S("Advancement Made!")
-		end
+        local hud_announce
+        if awdef.secret == true then
+	        hud_announce = minetest.colorize("#ff0000", S("Hidden Advancement Made!"))
+        elseif awdef.type == "Goal" then
+            hud_announce = minetest.colorize("#ffff00", S("Goal Completed!"))
+        elseif awdef.type == "Challenge" then
+            hud_announce = minetest.colorize("#fc86fc", S("Challenge Completed!"))
+        else
+            hud_announce = minetest.colorize("#ffff00", S("Advancement Made!"))
+        end
 		local two = player:hud_add({
 			type = "text",
 			name = "award_au",
