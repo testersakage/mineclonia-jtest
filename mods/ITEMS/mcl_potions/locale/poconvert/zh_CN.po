@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-12 18:59+0000\n"
+"PO-Revision-Date: 2025-03-12 21:51+0000\n"
 "Last-Translator: liulitchi <liulitchi@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_potions/zh_Hans/>\n"
@@ -261,7 +261,7 @@ msgid "Weaving"
 msgstr "盘丝"
 
 msgid "Causes 2-3 cobwebs to appear on death"
-msgstr ""
+msgstr "死亡后，生成 2～3 张蜘蛛网"
 
 msgid "Wind Charged"
 msgstr "蓄风"
@@ -516,28 +516,28 @@ msgid "Attracts danger."
 msgstr "招致危险。"
 
 msgid "of Infestation"
-msgstr ""
+msgstr "寄生"
 
 msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."
-msgstr ""
+msgstr "受伤后，会有 5% 的概率生成 1～3 只蠹虫。对蠹虫无效。"
 
 msgid "of Oozing"
-msgstr ""
+msgstr "渗浆"
 
 msgid "Causes 2 medium slimes to spawn on death. It not applies to slimes."
-msgstr ""
+msgstr "死亡后会生成两只中型史莱姆。对史莱姆无效。"
 
 msgid "of Weaving"
-msgstr ""
+msgstr "盘丝"
 
 msgid "Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."
-msgstr ""
+msgstr "死亡后，会出现 2～3 张蜘蛛网。穿越蜘蛛网时还会降低步速。"
 
 msgid "of Wind Charging"
-msgstr ""
+msgstr "蓄风"
 
 msgid "Causes A wind burst on death."
-msgstr ""
+msgstr "死亡后产生风爆。"
 
 msgid "Unknown Potion"
 msgstr "未知药水"
