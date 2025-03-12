@@ -760,6 +760,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 
 	mcl_inventory.set_creative_formspec(player)
+	mcl_inventory.show_inventory(player)
 end)
 
 
