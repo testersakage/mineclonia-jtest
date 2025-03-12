@@ -587,7 +587,7 @@ awards.register_achievement("mcl:hero_of_the_village", {
 	title = S("Hero of the Village"),
 	description = S("Successfully defend a village from a raid"),
 	icon = "mcl_raids_hero_of_the_village_icon.png",
-	type = "Advancement",
+	type = "Challenge",
 	group = "Adventure",
 	secret = true,
 	reward_xp = 100,
