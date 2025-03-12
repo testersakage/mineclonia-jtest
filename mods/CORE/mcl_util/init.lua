@@ -825,9 +825,9 @@ function mcl_util.set_bone_position(obj, bone, pos, rot, scale)
 	local rot_equal = not rot or vector.equals(vector.round(current_rot), vector.round(rot))
 	if not pos_equal or not rot_equal then
 		obj:set_bone_override(bone, {
-			position = pos and { vec = pos, absolute = true } or nil,
-			rotation = rot and { vec = vector.apply(rot, math.rad), absolute = true } or nil,
-			scale = scale and { vec = scale, absolute = true } or nil,
+			position = pos and { vec = pos, absolute = true, interpolation = 0.1, } or nil,
+			rotation = rot and { vec = vector.apply(rot, math.rad), absolute = true, interpolation = 0.1, } or nil,
+			scale = scale and { vec = scale, absolute = true, interpolation = 0.1, } or nil,
 		})
 	end
 end
