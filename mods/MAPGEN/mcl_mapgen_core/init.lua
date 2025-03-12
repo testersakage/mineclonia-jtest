@@ -237,7 +237,7 @@ minetest.register_on_mods_loaded(function()
 		end
 	end
 	for k, v in pairs(minetest.registered_biomes) do
-		biome_id_p2[minetest.get_biome_id(k)] = v._mcl_palette_index or 255
+		biome_id_p2[minetest.get_biome_id(k)] = v._mcl_palette_index or 0
 	end
 end)
 
