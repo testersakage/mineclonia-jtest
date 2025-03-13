@@ -1058,7 +1058,7 @@ for i=1,8 do
 			mcl_core.clear_snow_dirt(npos, node)
 		end,
 		node_box = node_box,
-		groups = {shovely=2, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1, pathfinder_partial = i < 5 and 1 or 2},
+		groups = {shovely=1, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1, pathfinder_partial = i < 5 and 1 or 2},
 		sounds = mcl_sounds.node_sound_snow_defaults(),
 		on_construct = mcl_core.on_snow_construct,
 		on_place = on_place,
@@ -1075,7 +1075,7 @@ minetest.register_node("mcl_core:snowblock", {
 	_doc_items_longdesc = S("This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."),
 	_doc_items_hidden = false,
 	tiles = {"default_snow.png"},
-	groups = {shovely=2, building_block=1, snow_cover=1},
+	groups = {shovely=1, building_block=1, snow_cover=1},
 	sounds = mcl_sounds.node_sound_snow_defaults(),
 	on_construct = mcl_core.on_snow_construct,
 	after_destruct = mcl_core.after_snow_destruct,
