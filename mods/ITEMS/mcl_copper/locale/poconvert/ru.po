@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-13 02:02+0000\n"
+"PO-Revision-Date: 2025-03-13 08:47+0000\n"
 "Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_copper/ru/>\n"
@@ -34,10 +34,10 @@ msgid "Block of Copper is mostly a decorative block."
 msgstr "Медный блок — это декоративный блок."
 
 msgid "Chiseled Copper"
-msgstr "Декоративный медный блок"
+msgstr "Точёный медный блок"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr "Декоративный медный блок — это декоративный блок."
+msgstr "Точёный медный блок — это декоративный блок."
 
 msgid "Copper Bulb"
 msgstr "Медная лампа"
@@ -64,7 +64,7 @@ msgid "Cut Copper"
 msgstr "Резной медный блок"
 
 msgid "Cut Copper Slab"
-msgstr "Резной медный люк"
+msgstr "Резная медная плита"
 
 msgid "Cut Copper Stairs"
 msgstr "Резные медные ступени"
@@ -73,10 +73,10 @@ msgid "Cut Copper is mostly a decorative block."
 msgstr "Резной медный блок — это декоративный блок."
 
 msgid "Exposed Chiseled Copper"
-msgstr "Потемневший декоративный медный блок"
+msgstr "Потемневший точёный медный блок"
 
 msgid "Exposed Chiseled Copper is mostly a decorative block."
-msgstr "Потемневший декоративный медный блок — это декоративный блок."
+msgstr "Потемневший точёный медный блок — это декоративный блок."
 
 msgid "Exposed Copper"
 msgstr "Потемневший медный блок"
@@ -118,10 +118,10 @@ msgid "Exposed Cut Copper is mostly a decorative block."
 msgstr "Потемневший резной медный блок — это декоративный блок."
 
 msgid "Oxidized Chiseled Copper"
-msgstr "Окисленный декоративный медный блок"
+msgstr "Окисленный точёный медный блок"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
-msgstr "Окисленный декоративный медный блок — это декоративный блок."
+msgstr "Окисленный точёный медный блок — это декоративный блок."
 
 msgid "Oxidized Copper"
 msgstr "Окисленный медный блок"
@@ -193,7 +193,7 @@ msgid "Waxed Double @1"
 msgstr "Вощёная двойная @1"
 
 msgid "Waxed Exposed Chiseled Copper"
-msgstr "Вощёный потемневший декоративный медный блок"
+msgstr "Вощёный потемневший точёный медный блок"
 
 msgid "Waxed Exposed Copper"
 msgstr "Вощёный потемневший медный блок"
@@ -220,7 +220,7 @@ msgid "Waxed Exposed Cut Copper Stairs"
 msgstr "Вощёные потемневшие резные медные ступени"
 
 msgid "Waxed Oxidized Chiseled Copper"
-msgstr "Вощёный окисленный декоративный медный блок"
+msgstr "Вощёный окисленный точёный медный блок"
 
 msgid "Waxed Oxidized Copper"
 msgstr "Вощёный окисленный медный блок"
@@ -250,7 +250,7 @@ msgid "Waxed Upper @1"
 msgstr "Вощёная верхняя @1"
 
 msgid "Waxed Weathered Chiseled Copper"
-msgstr "Вощёный состаренный резной декоративный блок"
+msgstr "Вощёный состаренный точёный медный блок"
 
 msgid "Waxed Weathered Copper"
 msgstr "Вощёный состаренный медный блок"
@@ -277,10 +277,10 @@ msgid "Waxed Weathered Cut Copper Stairs"
 msgstr "Вощёные состаренные резные медные ступени"
 
 msgid "Weathered Chiseled Copper"
-msgstr "Состаренный декоративный медный блок"
+msgstr "Состаренный точёный медный блок"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr "Состаренный декоративный медный блок — это декоративный блок."
+msgstr "Состаренный точёный медный блок — это декоративный блок."
 
 msgid "Weathered Copper"
 msgstr "Состаренный медный блок"
