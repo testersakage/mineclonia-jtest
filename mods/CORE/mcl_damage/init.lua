@@ -170,6 +170,7 @@ end
 
 function mcl_damage.damage_player (player, amount, mcl_reason)
   core.after(0, function()
+	if not mcl_util.is_valid_objectref(player) then return end
 	if not mcl_reason.flags then
 	  mcl_damage.finish_reason (mcl_reason)
 	end
