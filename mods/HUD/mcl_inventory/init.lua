@@ -173,20 +173,6 @@ function mcl_inventory.fill_grid(player)
 	end
 end
 
-function mcl_inventory.clear_inv_lists(inv, lists)
-	if not lists then
-		lists = {}
-		for k, _ in pairs(inv:get_lists()) do
-			table.insert(lists, k)
-		end
-	end
-	for _, list in pairs({"main", "armor", "offhand"}) do
-		for i = 1, inv:get_size(list) do
-			inv:set_stack(list, i, ItemStack(""))
-		end
-	end
-end
-
 function mcl_inventory.show_inventory(player)
 	minetest.show_formspec(player:get_player_name(), "", player:get_inventory_formspec())
 end
