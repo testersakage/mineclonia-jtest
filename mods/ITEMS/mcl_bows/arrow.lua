@@ -2,6 +2,8 @@ local S = core.get_translator(core.get_current_modname())
 
 local enable_pvp = core.settings:get_bool("enable_pvp")
 
+local GRAVITY = 9.81
+
 -- Time in seconds to despawn an arrow.
 local ARROW_LIFETIME = 120
 -- Time in seconds after which a stuck arrow is deleted
@@ -9,7 +11,7 @@ local STUCK_ARROW_TIMEOUT = 60
 -- Time in seconds after which an attached arrow is deleted
 local ATTACHED_ARROW_TIMEOUT = 30
 -- Time after which stuck arrow is rechecked for being stuck
-local STUCK_RECHECK_TIME = 5
+local STUCK_RECHECK_TIME = 0.25
 -- Range for stuck arrow to be collected by player
 local PICKUP_RANGE = 2
 
@@ -331,7 +333,7 @@ function ARROW_ENTITY:on_hit_player(obj, _, ray_hit)
 	return "stop"
 end
 
-function ARROW_ENTITY:set_stuck (node_pos, node)
+function ARROW_ENTITY:set_stuck (node_pos, node, self_node)
 	local selfobj = self.object
 	local self_pos = selfobj:get_pos()
 	self:cut_off(STUCK_ARROW_TIMEOUT, "keep fire")
@@ -345,8 +347,10 @@ function ARROW_ENTITY:set_stuck (node_pos, node)
 	selfobj:set_acceleration(vector.new(0, 0, 0))
 	core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
 
-	local self_node_pos = vector.round(vector.copy(self_pos))
-	local self_node = core.get_node(self_node_pos)
+	if not self_node then
+		local self_node_pos = vector.round(vector.copy(self_pos))
+		self_node = core.get_node(self_node_pos)
+	end
 	local def = core.registered_nodes[self_node.name]
 	if (def and def._on_arrow_hit) then   -- Entities: Button, Candle etc.
 		def._on_arrow_hit(self_node_pos, self)
@@ -485,7 +489,8 @@ function ARROW_ENTITY:on_step(dtime)
 	-- This detection is a bit clunky, but MT does not offer a direct collision detection. :-(
 	if result ~= "stop" then
 		local vel = selfobj:get_velocity()
-		if (math.abs(vel.x) < 0.0001) or (math.abs(vel.z) < 0.0001) or (math.abs(vel.y) < 0.00001) then
+		local no_x, no_z, no_y = math.abs(vel.x) < 0.0001, math.abs(vel.z) < 0.0001, math.abs(vel.y) < 0.00001
+		if no_x or no_z or no_y then
 			local dir
 			if math.abs(vel.y) < 0.00001 then
 				if last_pos.y < self_pos.y then
@@ -502,9 +507,16 @@ function ARROW_ENTITY:on_step(dtime)
 			self._stuckin = stuck_pos
 			result = self:on_solid_hit(stuck_pos, stuck_node)
 			if result ~= "stop" then -- Arrow is stuck at air or other non-stopping block.
-				self:set_stuck(stuck_pos, stuck_node)
+				local self_node_pos = vector.round(vector.copy(self_pos))
+				local self_node = core.get_node(self_node_pos)
+				if ( self_node.name ~= "air" and self_node.name ~= "ignore" )
+				or ( no_x and no_y and no_z ) then
+					self:set_stuck(stuck_pos, stuck_node, self_node)
+					return
+				end
+			else
+				return
 			end
-			return
 		end
 	end
 
@@ -536,40 +548,38 @@ end
 
 function ARROW_ENTITY:step_on_stuck(last_pos, dtime)
 	local timer = ( self._stuckrechecktimer or 0 ) + dtime
-	self._stuckrechecktimer = timer
-	-- Drop arrow as item when it is no longer stuck
-	-- FIXME: Arrows are a bit slow to react and continue to float in mid air for a few seconds.
-	if timer > STUCK_RECHECK_TIME then
-		local stuckin_def
-		if self._stuckin then
-			stuckin_def = core.registered_nodes[core.get_node(self._stuckin).name]
-		end
-		-- TODO: In MC, arrow just falls down without turning into an item
-		if stuckin_def and stuckin_def.walkable == false then
-			if self._collectable then
-				spawn_item(self, last_pos)
+	-- Drop arrow when it is no longer stuck
+	if timer < STUCK_RECHECK_TIME then
+		self._stuckrechecktimer = timer
+		return
+	end
+	self._stuckrechecktimer = 0
+
+	local self_pos = self.object:get_pos()
+	-- Convert to a collectable item if a player is nearby (not in Creative Mode)
+	for obj in core.objects_inside_radius(self_pos, PICKUP_RANGE) do
+		if obj and obj:is_valid() and obj:is_player() and self._collectable then
+			if not core.is_creative_enabled(obj:get_player_name()) then
+				spawn_item(self, self_pos)
 			end
 			self:remove()
 			return
 		end
-		self._stuckrechecktimer = 0
 	end
 
-	local self_pos = self.object:get_pos()
-	-- Pickup arrow if player is nearby (not in Creative Mode)
-	for obj in core.objects_inside_radius(self_pos, PICKUP_RANGE) do
-		if obj and obj:is_valid() and obj:is_player() then
-			if self._collectable and not core.is_creative_enabled(obj:get_player_name()) then
-				if obj:get_inventory():room_for_item("main", self._itemstring or "mcl_bows:arrow") then
-					obj:get_inventory():add_item("main", self._itemstring or "mcl_bows:arrow")
-					core.sound_play("item_drop_pickup", {
-						pos = self_pos,
-						max_hear_distance = 16,
-						gain = 1.0,
-					}, true)
-				end
-			end
-			self:remove()
+	if self._stuckin then
+		local stuckin_name = core.get_node(self._stuckin).name
+		if stuckin_name == "air" then
+		-- local stuckin_def = core.registered_nodes[stuckin_name]
+		-- if stuckin_def and stuckin_def.walkable == false then
+			self._stuck = false
+			self._stuckin = nil
+			self._startpos = self_pos
+			self._lastpos = self_pos
+			self._lifetime = 0
+			self._dragtime = 0
+			self._is_critical = false
+			self.object:set_acceleration({x=0, y=-GRAVITY, z=0})
 		end
 	end
 end
