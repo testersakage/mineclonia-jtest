@@ -1,3 +1,5 @@
+local has_molten_sailor = minetest.get_modpath("molten_sailor_mcl") ~= nil
+
 mcl_damage = {
 	modifiers = {},
 	damage_callbacks = {},
@@ -264,7 +266,12 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 		local nodedef = minetest.registered_nodes[mt_reason.node]
 
 		if nodedef.damage_per_second then
-		  hp_change = -nodedef.damage_per_second
+			-- lava suit protects from taking direct damage from lava
+			if has_molten_sailor and nodedef.groups["lava"] ~= nil and molten_sailor_mcl.has_full_lava_suit(player) then
+				hp_change = 0
+			else
+				hp_change = -nodedef.damage_per_second
+			end
 		end
 	end
 

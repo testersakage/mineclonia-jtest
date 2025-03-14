@@ -1,4 +1,5 @@
 local enable_damage = minetest.settings:get_bool("enable_damage")
+local has_molten_sailor = minetest.get_modpath("molten_sailor_mcl") ~= nil
 
 local collisionbox_cache = {}
 
@@ -103,8 +104,14 @@ function mcl_burning.set_on_fire(obj, burn_time)
 		return
 	end
 
-	if obj:is_player() and not enable_damage then
-		return
+	if obj:is_player() then
+      if not enable_damage then
+         return
+      end
+		-- lava suit protects from setting on fire
+		if has_molten_sailor and molten_sailor_mcl.has_full_lava_suit(obj) then
+			return
+		end
 	else
 		local max_fire_prot_lvl = 0
 		local inv = mcl_util.get_inventory(obj)
