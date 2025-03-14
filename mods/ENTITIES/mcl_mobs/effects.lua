@@ -414,15 +414,10 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 		return
 	end
 
-	if self.object.get_bone_override then -- minetest >= 5.9
-		self.object:set_bone_override (self.head_swivel, {
-			position = { vec = newp, absolute = true, interpolation = 0.1 },
-			rotation = { vec = newr, absolute = true, interpolation = 0.1 },
-		})
-	else -- minetest < 5.9
-		local deg = vector.apply (newr, math.deg)
-		self.object:set_bone_position (self.head_swivel, newp, deg)
-	end
+	self.object:set_bone_override (self.head_swivel, {
+		position = { vec = newp, absolute = true, interpolation = 0.1 },
+		rotation = { vec = newr, absolute = true, interpolation = 0.1 },
+	})
 	self._old_head_swivel_pos = newp
 	self._old_head_swivel_vector = newr
 end
@@ -655,36 +650,23 @@ function posing_humanoid:apply_arm_pose (pose)
 				local scale = v[3]
 				local pos = pos
 				local rot = rot
-				if self.object.set_bone_override then
-					self.object:set_bone_override (k, {
-						position = pos and {
-							vec = pos,
-							absolute = true,
-							interpolation = 0.1,
-						},
-						rotation = rot and {
-							vec = rot,
-							absolute = true,
-							interpolation = 0.1,
-						},
-						scale = scale and {
-							vec = scale,
-							absolute = true,
-							interpolation = 0.1,
-						},
-					})
-				else
-					local pos = pos or ZERO_VECTOR
-					-- If scale is 0.0, set its
-					-- position to an enormously
-					-- distant location.
-					if scale and vector.equals (scale, ZERO_VECTOR) then
-						pos = vector.new (-3000, -3000, -3000)
-					end
-
-					local rot = vector.apply (rot or ZERO_VECTOR, math.deg)
-					self.object:set_bone_position (k, pos, rot)
-				end
+				self.object:set_bone_override (k, {
+					position = pos and {
+						vec = pos,
+						absolute = true,
+						interpolation = 0.1,
+					},
+					rotation = rot and {
+						vec = rot,
+						absolute = true,
+						interpolation = 0.1,
+					},
+					scale = scale and {
+						vec = scale,
+						absolute = true,
+						interpolation = 0.1,
+					},
+				})
 				if k == self.head_swivel then
 					self._old_head_swivel_vector = rot
 				end
