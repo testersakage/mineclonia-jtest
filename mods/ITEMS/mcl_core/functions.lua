@@ -351,6 +351,88 @@ minetest.register_lbm({
 	end,
 })
 
+-- Check if a mapblock has a suspicious amount neighboring nodes with the same
+-- param2.
+local function likely_unupdated_mapblock(pos, node)
+	local minpos = pos:add(-1)
+	local maxpos = pos:add(1)
+	local nodes = core.find_nodes_in_area(minpos, maxpos, node.name)
+	for _, pos2 in pairs(nodes) do
+		local node2 = core.get_node(pos2)
+		if node.param2 ~= node2.param2 then
+			return false
+		end
+	end
+	return #nodes >= 4
+end
+
+local function update_mapblock_biomecolor4dir(pos, node)
+	local minpos = (pos / 16):floor() * 16
+	local maxpos = minpos:add(15)
+	local nodes = core.find_nodes_in_area(minpos, maxpos, "group:biomecolor4dir")
+
+	for _, pos2 in pairs(nodes) do
+		node.param2 = mcl_util.get_pos_biomecolor4dir(pos2)
+		minetest.swap_node(pos2, node)
+	end
+	return true
+
+end
+
+local function update_mapblock_random4dir(pos, node)
+	local minpos = (pos / 16):floor() * 16
+	local maxpos = minpos:add(15)
+	local nodes = core.find_nodes_in_area(minpos, maxpos, "group:random4dir")
+
+	for _, pos2 in pairs(nodes) do
+		node.param2 = mcl_util.get_pos_random4dir(pos2)
+		minetest.swap_node(pos2, node)
+	end
+	return true
+
+end
+
+-- As of writing this Luanti has a bug that makes lbms not be performed
+-- reliably across all mapblocks (see
+-- https://github.com/luanti-org/luanti/issues/15902).
+--
+-- We work around this by in addition to the LBM using an ABM. In order to be
+-- more lightweight it will first do a couple of checks before proceeding with
+-- the update. In the future these could probably be disabled along with
+-- renaming the LBMs so they are performed again for patched engine versions.
+core.register_abm({
+	label = "Rotate old biomecolor4dir nodes (ABM workaround)",
+	nodenames = {"mcl_core:dirt_with_grass", "mcl_core:dirt_with_grass_snow"},
+	interval = 15,
+	chance = 40,
+	catch_up = false,
+	action = function(pos, node)
+		-- Nodes with param2 > 32 cannot be unupdated mapblocks.
+		if node.param2 < 32 and likely_unupdated_mapblock(pos, node) then
+			update_mapblock_biomecolor4dir(pos, node)
+		end
+	end,
+})
+core.register_abm({
+	label = "Rotate old biomecolor4dir nodes (ABM workaround)",
+	nodenames = {
+		"mcl_core:grass_path", "mcl_core:mycelium", "mcl_core:podzol",
+		"mcl_core:mycelium_snow", "mcl_core:podzol_snow",
+		"mcl_core:snow_0", "mcl_core:snow_1", "mcl_core:snow_2", "mcl_core:snow_3",
+		"mcl_core:snow_4", "mcl_core:snow_5", "mcl_core:snow_6", "mcl_core:snow_7",
+		"mcl_core:snow",
+	},
+	interval = 15,
+	chance = 40,
+	catch_up = false,
+	action = function(pos, node)
+		-- Nodes with param2 ~= 0 cannot be unupdated mapblocks.
+		if node.param2 == 0 and likely_unupdated_mapblock(pos, node) then
+			update_mapblock_random4dir(pos, node)
+		end
+	end,
+})
+
 ---------------------
 -- Vine generating --
 ---------------------
