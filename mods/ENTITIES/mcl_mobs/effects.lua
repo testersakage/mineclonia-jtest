@@ -416,8 +416,8 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 
 	if self.object.get_bone_override then -- minetest >= 5.9
 		self.object:set_bone_override (self.head_swivel, {
-			position = { vec = newp, absolute = true },
-			rotation = { vec = newr, absolute = true },
+			position = { vec = newp, absolute = true, interpolation = 0.1 },
+			rotation = { vec = newr, absolute = true, interpolation = 0.1 },
 		})
 	else -- minetest < 5.9
 		local deg = vector.apply (newr, math.deg)
@@ -660,14 +660,17 @@ function posing_humanoid:apply_arm_pose (pose)
 						position = pos and {
 							vec = pos,
 							absolute = true,
+							interpolation = 0.1,
 						},
 						rotation = rot and {
 							vec = rot,
 							absolute = true,
+							interpolation = 0.1,
 						},
 						scale = scale and {
 							vec = scale,
 							absolute = true,
+							interpolation = 0.1,
 						},
 					})
 				else
