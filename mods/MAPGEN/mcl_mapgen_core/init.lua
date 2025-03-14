@@ -230,6 +230,7 @@ end
 local biome_id_p2 = {}
 local biomecolor_nodes = {}
 local biomecolor4dir_nodes = {}
+local random4dir_nodes = {}
 local pcgrandom = PcgRandom(os.time())
 
 minetest.register_on_mods_loaded(function()
@@ -238,6 +239,8 @@ minetest.register_on_mods_loaded(function()
 			table.insert(biomecolor_nodes, n)
 		elseif minetest.get_item_group(n, "biomecolor4dir") > 0 then
 			table.insert(biomecolor4dir_nodes, n)
+		elseif minetest.get_item_group(n, "random4dir") > 0 then
+			table.insert(random4dir_nodes, n)
 		end
 	end
 	for k, v in pairs(minetest.registered_biomes) do
@@ -264,6 +267,12 @@ local function set_param2_nodes(vm, data, data2, emin, emax, area, minp, maxp, b
 	for _, n in pairs(nodes) do
 		local p_pos = area:index(n.x, n.y, n.z)
 		data2[p_pos] = 4 * (biome_id_p2[biomemap[aream:index(n.x, 0, n.z)]] or 0) + pcgrandom:next(0, 3)
+		lvm_used = true
+	end
+	local nodes = minetest.find_nodes_in_area(minp, maxp, random4dir_nodes)
+	for _, n in pairs(nodes) do
+		local p_pos = area:index(n.x, n.y, n.z)
+		data2[p_pos] = pcgrandom:next(0, 3)
 		lvm_used = true
 	end
 	return lvm_used

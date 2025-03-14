@@ -1105,6 +1105,10 @@ function mcl_util.get_pos_biomecolor4dir(pos)
 	return 4 * (biomedef and biomedef._mcl_palette_index or 0) + pcgrandom:next(0, 3)
 end
 
+function mcl_util.get_pos_random4dir(pos)
+	return pcgrandom:next(0, 3)
+end
+
 function mcl_util.traverse_tower(pos, dir, callback)
 	local node = minetest.get_node(pos)
 	local i = 0

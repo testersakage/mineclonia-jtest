@@ -1007,6 +1007,15 @@ local function on_place(itemstack, placer, pointed_thing)
 	end
 end
 
+local function snow_on_construct(pos)
+	local node = core.get_node(pos)
+	core.swap_node(pos, {
+		name = node.name,
+		param2 = mcl_util.get_pos_random4dir(pos)
+	})
+	mcl_core.on_snow_construct(pos)
+end
+
 for i=1,8 do
 	local id, desc, longdesc, usagehelp, tt_help, help, walkable, drawtype, node_box
 	if i == 1 then
@@ -1043,6 +1052,7 @@ for i=1,8 do
 		wield_image = "default_snow.png",
 		wield_scale = { x=1, y=1, z=i },
 		paramtype = "light",
+		paramtype2 = "4dir",
 		sunlight_propagates = true,
 		buildable_to = true,
 		node_placement_prediction = "", -- to prevent client flickering when stacking snow
@@ -1055,9 +1065,9 @@ for i=1,8 do
 			mcl_core.clear_snow_dirt(npos, node)
 		end,
 		node_box = node_box,
-		groups = {shovely=1, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1, pathfinder_partial = i < 5 and 1 or 2},
+		groups = {shovely=1, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1, pathfinder_partial = i < 5 and 1 or 2, random4dir=1},
 		sounds = mcl_sounds.node_sound_snow_defaults(),
-		on_construct = mcl_core.on_snow_construct,
+		on_construct = snow_on_construct,
 		on_place = on_place,
 		after_destruct = mcl_core.after_snow_destruct,
 		drop = "mcl_throwing:snowball "..(i+1),
@@ -1072,9 +1082,10 @@ minetest.register_node("mcl_core:snowblock", {
 	_doc_items_longdesc = S("This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."),
 	_doc_items_hidden = false,
 	tiles = {"default_snow.png"},
-	groups = {shovely=1, building_block=1, snow_cover=1},
+	paramtype2 = "4dir",
+	groups = {shovely=1, building_block=1, snow_cover=1, random4dir=1},
 	sounds = mcl_sounds.node_sound_snow_defaults(),
-	on_construct = mcl_core.on_snow_construct,
+	on_construct = snow_on_construct,
 	after_destruct = mcl_core.after_snow_destruct,
 	drop = "mcl_throwing:snowball 4",
 	_mcl_blast_resistance = 0.1,

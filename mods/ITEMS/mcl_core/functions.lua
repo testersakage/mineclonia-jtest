@@ -501,6 +501,9 @@ function mcl_core.register_snowed_node(itemstring_snowed, itemstring_clear, tile
 		def.groups.grass_block_snow = 1
 	end
 
+	-- Remove biomecoloring from grass nodes
+	def.groups.biomecolor4dir = nil
+
 	-- Enderman must never take this because this block is supposed to be always buried below snow.
 	def.groups.enderman_takable = nil
 
