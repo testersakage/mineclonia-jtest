@@ -23,6 +23,20 @@ function mcl_potions.register_splash(name, descr, color, def)
 	local groups = {brewitem=1, not_in_creative_inventory=0,
 			bottle=1, splash_potion=1, _mcl_potion=1}
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
+
+	local function on_use(item, placer, pointed_thing)
+		local dir = placer:get_look_dir()
+		local pos = placer:get_pos()
+		local potency = item:get_meta():get_int("mcl_potions:potion_potent")
+		local plus = item:get_meta():get_int("mcl_potions:potion_plus")
+		local name = placer:get_player_name()
+		pos.y = pos.y + placer:get_properties().eye_height
+		mcl_potions.throw_splash(id, dir, pos, name, potency, plus)
+		if not minetest.is_creative_enabled(name) then
+			item:take_item()
+		end
+		return item
+	end
 	minetest.register_craftitem(id, {
 		description = descr,
 		_tt_help = def._tt,
@@ -40,19 +54,8 @@ function mcl_potions.register_splash(name, descr, color, def)
 		_base_potion = def.base_potion,
 		inventory_image = splash_image(color),
 		groups = groups,
-		on_use = function(item, placer, pointed_thing)
-			local dir = placer:get_look_dir ()
-			local pos = placer:get_pos ()
-			local potency = item:get_meta():get_int ("mcl_potions:potion_potent")
-			local plus = item:get_meta():get_int ("mcl_potions:potion_plus")
-			pos.y = pos.y + placer:get_properties ().eye_height
-			mcl_potions.throw_splash (id, dir, pos, placer:get_player_name (),
-						  potency, plus)
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
-				item:take_item()
-			end
-			return item
-		end,
+		on_place = on_use,
+		on_secondary_use = on_use,
 		_on_dispense = function(item, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
