@@ -786,6 +786,21 @@ function minetest.handle_node_drops(pos, drops, digger)
 			-- If there is a player
 			local inv = digger:get_inventory()
 			if inv then
+				local dug_node = minetest.get_node(pos)
+				local nodedef = minetest.registered_nodes[dug_node.name]
+				if nodedef._mcl_shears_drop then
+					if nodedef._mcl_shears_drop == true then
+						drops = { dug_node.name }
+					else
+						drops = nodedef._mcl_shears_drop
+					end
+				elseif nodedef._mcl_silk_touch_drop then
+					if nodedef._mcl_silk_touch_drop == true then
+						drops = { dug_node.name }
+					else
+						drops = nodedef._mcl_silk_touch_drop
+					end
+				end
 				for _, item in ipairs(drops) do
 					if not inv:contains_item("main", item, true) then
 						inv:add_item("main", item)
