@@ -426,6 +426,16 @@ local function handle_blocking(player)
 			end
 		end
 
+		if pointed_thing and pointed_thing.type == "object" then
+			local ent = pointed_thing.ref:get_luaentity()
+			if ent then
+				local def = core.registered_entities[ent.name]
+				if def.on_rightclick and not def._unplaceable_by_default then
+					return
+				end
+			end
+		end
+
 		if not offhand_can_block then
 			return
 		end
