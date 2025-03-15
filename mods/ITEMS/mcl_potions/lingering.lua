@@ -185,6 +185,25 @@ function mcl_potions.register_lingering(name, descr, color, def)
 	local groups = {brewitem=1, not_in_creative_inventory = 0,
 			bottle=1, ling_potion=1, _mcl_potion=1}
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
+
+	local function on_use(item, placer, pointed_thing)
+		local velocity = 12
+		local dir = placer:get_look_dir();
+		local pos = placer:get_pos();
+		minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+		local obj = minetest.add_entity({x=pos.x+dir.x,y=pos.y+2+dir.y,z=pos.z+dir.z}, id.."_flying")
+		obj:set_velocity({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
+		obj:set_acceleration({x=dir.x*-3, y=-9.8, z=dir.z*-3})
+		local ent = obj:get_luaentity()
+		ent._thrower = placer:get_player_name()
+		ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
+		ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
+		ent._effect_list = def._effect_list
+		if not minetest.is_creative_enabled(placer:get_player_name()) then
+			item:take_item()
+		end
+		return item
+	end
 	minetest.register_craftitem(id, {
 		description = descr,
 		_tt_help = def._tt,
@@ -202,24 +221,8 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		_default_extend_level = def._default_extend_level,
 		inventory_image = lingering_image(color),
 		groups = groups,
-		on_use = function(item, placer, pointed_thing)
-			local velocity = 12
-			local dir = placer:get_look_dir();
-			local pos = placer:get_pos();
-			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
-			local obj = minetest.add_entity({x=pos.x+dir.x,y=pos.y+2+dir.y,z=pos.z+dir.z}, id.."_flying")
-			obj:set_velocity({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
-			obj:set_acceleration({x=dir.x*-3, y=-9.8, z=dir.z*-3})
-			local ent = obj:get_luaentity()
-			ent._thrower = placer:get_player_name()
-			ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
-			ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
-			ent._effect_list = def._effect_list
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
-				item:take_item()
-			end
-			return item
-		end,
+		on_secondary_use = on_use,
+		on_place = on_use,
 		_on_dispense = function(item, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
