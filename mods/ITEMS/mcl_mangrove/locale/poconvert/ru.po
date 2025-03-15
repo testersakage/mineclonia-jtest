@@ -3,21 +3,25 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mangrove x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_mangrove/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Mangrove Roots"
 msgstr "Мангровые корни"
 
 msgid "Mangrove roots are decorative blocks that form as part of mangrove trees."
-msgstr "Мангровые корни это декоративный блок который формирует часть мангровых деревьев."
+msgstr ""
+"Мангровые корни — это декоративный блок который формирует часть мангровых "
+"деревьев."
 
 msgid "Mangrove Propagule"
 msgstr "Мангровый отросток"
@@ -32,19 +36,21 @@ msgid "Hanging Propagule"
 msgstr "Свисающий мангровый отросток"
 
 msgid "Grows on Mangrove leaves"
-msgstr "Растет на мангровой листве"
+msgstr "Растёт на мангровой листве"
 
 msgid "Water logged mangrove roots"
-msgstr ""
+msgstr "Затопленные мангровые корни"
 
 msgid "Mangrove roots, despite being a full block, can be waterlogged and do not flow water out"
-msgstr "Мангровые корни, не смотря на то что это полный блок, может быть затоплен и не выпускать воду наружу"
+msgstr ""
+"Мангровые корни, не смотря на то что это полный блок, может быть затоплен и "
+"не выпускать воду наружу"
 
 msgid "These cannot be crafted yet only occure when get in contact of water."
 msgstr "Нельзя скрафтить, появляется только при контакте с водой."
 
 msgid "River water logged mangrove roots"
-msgstr ""
+msgstr "Затопленные мангровые корни"
 
 msgid "Muddy Mangrove Roots"
 msgstr "Грязные мангровые корни"
@@ -53,74 +59,75 @@ msgid "crafted with Mud and Mangrove roots"
 msgstr "Крафтится с помощью грязи и мангровых корней"
 
 msgid "Muddy Mangrove Roots is a block from mangrove swamp.It drowns player a bit inside it."
-msgstr "Грязные мангровые корни это блок из мангровых болот. Игрок немного погружается внутрь них."
+msgstr ""
+"Грязные мангровые корни — это блок из мангровых болот. Игрок немного "
+"погружается внутрь них."
 
 msgid "Mangrove Bark"
-msgstr ""
+msgstr "Мангровая кора"
 
 msgid "Mangrove Bark Slab"
-msgstr ""
+msgstr "Плита из мангровой коры"
 
 msgid "Mangrove Bark Stairs"
-msgstr ""
+msgstr "Ступени из мангровой коры"
 
 msgid "Mangrove Boat"
-msgstr ""
+msgstr "Мангровая лодка"
 
 msgid "Mangrove Button"
-msgstr ""
+msgstr "Мангровая кнопка"
 
 msgid "Mangrove Chest Boat"
-msgstr ""
+msgstr "Мангровая лодка с сундуком"
 
 msgid "Mangrove Door"
-msgstr ""
+msgstr "Мангровая дверь"
 
 msgid "Mangrove Fence"
-msgstr ""
+msgstr "Мангровый забор"
 
 msgid "Mangrove Fence Gate"
-msgstr ""
+msgstr "Мангровая калитка"
 
 msgid "Mangrove Leaves"
-msgstr ""
+msgstr "Мангровые листья"
 
 msgid "Mangrove Log"
-msgstr ""
+msgstr "Мангровая древесина"
 
 msgid "Mangrove Planks"
-msgstr ""
+msgstr "Мангровые доски"
 
 msgid "Mangrove Pressure Plate"
-msgstr ""
+msgstr "Мангровая нажимная плита"
 
 msgid "Mangrove Sign"
-msgstr ""
+msgstr "Мангровая табличка"
 
 msgid "Mangrove Slab"
-msgstr ""
+msgstr "Мангровая плита"
 
 msgid "Mangrove Stairs"
-msgstr ""
+msgstr "Мангровые ступени"
 
 msgid "Mangrove Trapdoor"
-msgstr ""
+msgstr "Мангровый люк"
 
 msgid "Mangrove leaves are grown from Mangrove trees."
-msgstr ""
+msgstr "Мангровые листья растут на мангровых деревьях."
 
 msgid "Stripped Mangrove Bark"
-msgstr ""
+msgstr "Обтёсанная мангровая кора"
 
 msgid "Stripped Mangrove Log"
-msgstr ""
+msgstr "Обтёсанная мангровая древесина"
 
 msgid "The stripped trunk of an Mangrove tree."
-msgstr ""
+msgstr "Обтёсанная мангровая кора."
 
 msgid "The stripped wood of an Mangrove tree."
-msgstr ""
+msgstr "Обтёсанная мангровая древесина."
 
 msgid "The trunk of a Mangrove tree."
-msgstr ""
-
+msgstr "Ствол мангрового дерева."

@@ -3,18 +3,20 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
-msgstr "Вода может затечь в этот блок и вызвать его выпадение в качестве предмета."
+msgstr "Этот блок выпадет в качестве предмета если вода затечёт в него."
 
 msgid "This block can be turned into dirt with a hoe."
 msgstr "Этот блок можно превратить в землю с помощью мотыги."
@@ -23,7 +25,7 @@ msgid "This block can be turned into farmland with a hoe."
 msgstr "Этот блок можно превратить в грядку с помощью мотыги."
 
 msgid "This block can be turned into grass path with a shovel."
-msgstr "Этот блок можно превратить в тропинку с травой с помощью лопаты."
+msgstr "Этот блок можно превратить в тропинку с помощью лопаты."
 
 msgid "This block acts as a soil for all saplings."
 msgstr "Этот блок служит почвой для всех саженцев."
@@ -32,16 +34,22 @@ msgid "This block acts as a soil for some saplings."
 msgstr "Этот блок служит почвой для некоторых саженцев."
 
 msgid "Sugar canes will grow on this block."
-msgstr "На этом блоке будет расти сахарный тростник."
+msgstr "На этом блоке может расти сахарный тростник."
 
 msgid "Nether wart will grow on this block."
-msgstr "На этом блоке будет расти адский нарост."
+msgstr "На этом блоке может расти адский нарост."
 
 msgid "This block quickly decays when there is no wood block of any species within a distance of @1. When decaying, it disappears and may drop one of its regular drops. The block does not decay when the block has been placed by a player."
-msgstr "Этот блок быстро саморазрушается, если на дистанции @1 метров отсутствуют блоки дерева любого типа. При разрушении может выпасть его обычный дроп. Блок не саморазрушается если он был поставлен игроком."
+msgstr ""
+"Этот блок быстро саморазрушается, если на дистанции @1 блоков отсутствуют "
+"блоки дерева любого типа. При разрушении может выпасть его обычный дроп. "
+"Блок не саморазрушается если он был поставлен игроком."
 
 msgid "This block quickly decays and disappears when there is no wood block of any species within a distance of @1. The block does not decay when the block has been placed by a player."
-msgstr "Этот блок быстро саморазрушается и исчезает, если на дистанции @1 метров отсутствуют блоки дерева любого типа. Блок не саморазрушается если он был поставлен игроком."
+msgstr ""
+"Этот блок быстро саморазрушается и исчезает, если на дистанции @1 блоков "
+"отсутствуют блоки дерева любого типа. Блок не саморазрушается если он был "
+"поставлен игроком."
 
 msgid "This plant can only grow on grass blocks and dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher."
 msgstr "Это растение может расти только на блоках дёрна и грязи. Для жизни ему нужно иметь беспрепятственный обзор на небо сверху, либо уровень света 8 и выше."
@@ -83,7 +91,7 @@ msgid "Hunger points restored: @1"
 msgstr "Восстанавливает очков голода: @1"
 
 msgid "Saturation points restored: @1%"
-msgstr "Восстановлено насыщение: @1%"
+msgstr "Восстанавливает насыщение: @1%"
 
 msgid "It can be worn on the head."
 msgstr "Это можно носить на голове."
@@ -197,13 +205,13 @@ msgid ", "
 msgstr ", "
 
 msgid "Painfully slow"
-msgstr "Крайне медленно"
+msgstr "крайне медленно"
 
 msgid "Very slow"
 msgstr "очень медленно"
 
 msgid "Slow"
-msgstr "Медленно"
+msgstr "медленно"
 
 msgid "Fast"
 msgstr "быстро"
@@ -212,7 +220,7 @@ msgid "Very fast"
 msgstr "очень быстро"
 
 msgid "Extremely fast"
-msgstr "Экстремально бвстро"
+msgstr "экстремально быстро"
 
 msgid "Instantaneous"
 msgstr "мгновенно"
@@ -230,17 +238,16 @@ msgid "Mining durability: @1"
 msgstr "Прочность при добыче: @1"
 
 msgid "This tool is capable of mining."
-msgstr "Этот инструмент используется для добычи."
+msgstr "Этим инструментом можно добывать."
 
 msgid "Block breaking strength: @1"
 msgstr "Сила добычи: @1"
 
 msgid "This is a melee weapon which deals damage by punching."
-msgstr "Это оружие ближнего боя, оно наносит урон при ударе."
+msgstr "Это орудие ближнего боя, наносящее урон при ударе."
 
 msgid "Maximum damage: @1 HP"
 msgstr "Максимальный урон: @1 HP"
 
 msgid "Full punch interval: @1 s"
 msgstr "Интервал удара: @1 с"
-

@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-10 03:24+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Stick"
 msgstr "Bâton"
@@ -839,10 +840,10 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr "Dans la dimension End, démarrer un feu sur ce bloc créera un feu éternel."
 
 msgid "Cobblestone"
-msgstr "Pierre"
+msgstr "Pierres"
 
 msgid "Mossy Cobblestone"
-msgstr "Pierre moussue"
+msgstr "Pierres moussues"
 
 msgid "Block of Coal"
 msgstr "Bloc de charbon"
@@ -1109,13 +1110,13 @@ msgid "Cobblestone Stairs"
 msgstr "Escalier en pierre"
 
 msgid "Cobblestone Slab"
-msgstr "Dalle en pierre"
+msgstr "Dalle de pierres"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr "Escalier en pierre moussue"
+msgstr "Escalier en pierres moussues"
 
 msgid "Mossy Cobblestone Slab"
-msgstr "Dalle en pierre moussue"
+msgstr "Dalle de pierres moussues"
 
 msgid "Brick Stairs"
 msgstr "Escalier en brique"
@@ -1188,4 +1189,3 @@ msgstr "Escalier en pierre taillée moussue"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "Dalle en pierre taillée moussue"
-

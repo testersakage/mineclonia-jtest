@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_crimson x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_crimson/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Warped Fungus"
 msgstr "Искажённый грибок"
@@ -53,116 +55,115 @@ msgid "Crimson Nylium"
 msgstr "Багровый нилий"
 
 msgid "Crimson Bark"
-msgstr ""
+msgstr "Багровая кора"
 
 msgid "Crimson Bark Slab"
-msgstr ""
+msgstr "Плита из багровой коры"
 
 msgid "Crimson Bark Stairs"
-msgstr ""
+msgstr "Ступени из багровой коры"
 
 msgid "Crimson Button"
-msgstr ""
+msgstr "Багровая кнопка"
 
 msgid "Crimson Door"
-msgstr ""
+msgstr "Багровая дверь"
 
 msgid "Crimson Fence"
-msgstr ""
+msgstr "Багровый забор"
 
 msgid "Crimson Fence Gate"
-msgstr ""
+msgstr "Багровая калитка"
 
 msgid "Crimson Log"
-msgstr ""
+msgstr "Багровая древесина"
 
 msgid "Crimson Planks"
-msgstr ""
+msgstr "Багровые доски"
 
 msgid "Crimson Pressure Plate"
-msgstr ""
+msgstr "Багровая нажимная плита"
 
 msgid "Crimson Sign"
-msgstr ""
+msgstr "Багровая табличка"
 
 msgid "Crimson Slab"
-msgstr ""
+msgstr "Багровая плита"
 
 msgid "Crimson Stairs"
-msgstr ""
+msgstr "Багровые ступени"
 
 msgid "Crimson Trapdoor"
-msgstr ""
+msgstr "Багровый люк"
 
 msgid "Stripped Crimson Bark"
-msgstr ""
+msgstr "Обтёсанная багровая кора"
 
 msgid "Stripped Crimson Log"
-msgstr ""
+msgstr "Обтёсанная багровая древесина"
 
 msgid "Stripped Warped Bark"
-msgstr ""
+msgstr "Обтёсанная искажённая кора"
 
 msgid "Stripped Warped Log"
-msgstr ""
+msgstr "Обтёсанная искажённая древесина"
 
 msgid "The stripped trunk of an Crimson tree."
-msgstr ""
+msgstr "Обтёсанное багровое бревно."
 
 msgid "The stripped trunk of an Warped tree."
-msgstr ""
+msgstr "Обтёсанное искажённое бревно."
 
 msgid "The stripped wood of an Crimson tree."
-msgstr ""
+msgstr "Обтёсанная багровая кора."
 
 msgid "The stripped wood of an Warped tree."
-msgstr ""
+msgstr "Обтёсанная искажённая кора."
 
 msgid "The trunk of a Crimson tree."
-msgstr ""
+msgstr "Багровое бревно."
 
 msgid "The trunk of a Warped tree."
-msgstr ""
+msgstr "Искажённое бревно."
 
 msgid "Warped Bark"
-msgstr ""
+msgstr "Искажённая кора"
 
 msgid "Warped Bark Slab"
-msgstr ""
+msgstr "Плита из искажённой коры"
 
 msgid "Warped Bark Stairs"
-msgstr ""
+msgstr "Ступени из искажённой коры"
 
 msgid "Warped Button"
-msgstr ""
+msgstr "Искажённая кнопка"
 
 msgid "Warped Door"
-msgstr ""
+msgstr "Искажённая дверь"
 
 msgid "Warped Fence"
-msgstr ""
+msgstr "Искажённый забор"
 
 msgid "Warped Fence Gate"
-msgstr ""
+msgstr "Искажённая калитка"
 
 msgid "Warped Log"
-msgstr ""
+msgstr "Искажённая древесина"
 
 msgid "Warped Planks"
-msgstr ""
+msgstr "Искажённые доски"
 
 msgid "Warped Pressure Plate"
-msgstr ""
+msgstr "Искажённая нажимная плита"
 
 msgid "Warped Sign"
-msgstr ""
+msgstr "Искаженная табличка"
 
 msgid "Warped Slab"
-msgstr ""
+msgstr "Искажённая плита"
 
 msgid "Warped Stairs"
-msgstr ""
+msgstr "Искажённые ступени"
 
 msgid "Warped Trapdoor"
-msgstr ""
-
+msgstr "Искажённый люк"

@@ -3,73 +3,77 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_candles x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:13+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_candles/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."
 msgstr ""
+"Свеча — это блок, излучающий свет при поджигании с помощью огнива. Они "
+"бывают шестнадцати цветов. В одном блоке можно разместить до четырёх свечей "
+"одного цвета, что влияет на количество излучаемого света."
 
 msgid "Candle"
-msgstr ""
+msgstr "Свеча"
 
 msgid "Lit Candle"
-msgstr ""
+msgstr "Зажжённая свеча"
 
 msgid "Cake"
-msgstr ""
+msgstr "Торт"
 
 msgid "Black Candle"
-msgstr ""
+msgstr "Чёрная свеча"
 
 msgid "Blue Candle"
-msgstr ""
+msgstr "Синяя свеча"
 
 msgid "Brown Candle"
-msgstr ""
+msgstr "Коричневая свеча"
 
 msgid "Cyan Candle"
-msgstr ""
+msgstr "Бирюзовая свеча"
 
 msgid "Green Candle"
-msgstr ""
+msgstr "Зелёная свеча"
 
 msgid "Grey Candle"
-msgstr ""
+msgstr "Серая свеча"
 
 msgid "Light Blue Candle"
-msgstr ""
+msgstr "Голубая свеча"
 
 msgid "Light Grey Candle"
-msgstr ""
+msgstr "Светло-серая свеча"
 
 msgid "Lime Candle"
-msgstr ""
+msgstr "Лаймовая свеча"
 
 msgid "Magenta Candle"
-msgstr ""
+msgstr "Сиреневая свеча"
 
 msgid "Orange Candle"
-msgstr ""
+msgstr "Оранжевая свеча"
 
 msgid "Pink Candle"
-msgstr ""
+msgstr "Розовая свеча"
 
 msgid "Purple Candle"
-msgstr ""
+msgstr "Фиолетовая свеча"
 
 msgid "Red Candle"
-msgstr ""
+msgstr "Красная свеча"
 
 msgid "White Candle"
-msgstr ""
+msgstr "Белая свеча"
 
 msgid "Yellow Candle"
-msgstr ""
-
+msgstr "Жёлтая свеча"

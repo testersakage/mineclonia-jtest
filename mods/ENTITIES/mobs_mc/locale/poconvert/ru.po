@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-06 06:12+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Axolotl"
 msgstr "Аксолотль"
@@ -68,7 +70,7 @@ msgid "Hoglin"
 msgstr "Хоглин"
 
 msgid "Baby Hoglin"
-msgstr "Малыш Хоглин"
+msgstr "Хоглин-ребёнок"
 
 msgid "Zoglin"
 msgstr "Зоглин"
@@ -119,7 +121,7 @@ msgid "Zombie Piglin"
 msgstr "Зомби-пиглин"
 
 msgid "Zombified Piglin"
-msgstr "Зомбированный Пиглин"
+msgstr "Зомбированный пиглин"
 
 msgid "Pillager"
 msgstr "Разбойник"
@@ -158,19 +160,19 @@ msgid "Slime - big"
 msgstr "Слизень - большой"
 
 msgid "Slime - small"
-msgstr "Слизень - малый"
+msgstr "Слизень - средний"
 
 msgid "Slime - tiny"
-msgstr "Слизень - крошечный"
+msgstr "Слизень - маленький"
 
 msgid "Magma Cube - big"
-msgstr "Куб Магмы - большой"
+msgstr "Лавовый куб - большой"
 
 msgid "Magma Cube - small"
-msgstr "Куб Магмы - малый"
+msgstr "Лавовый куб - средний"
 
 msgid "Magma Cube - tiny"
-msgstr "Куб Магмы - крошечный"
+msgstr "Лавовый куб - маленький"
 
 msgid "Magma Cube"
 msgstr "Лавовый куб"
@@ -197,7 +199,7 @@ msgid "Strider"
 msgstr "Страйдер"
 
 msgid "Baby Strider"
-msgstr "Малыш-страйдер"
+msgstr "Детёныш страйдера"
 
 msgid "Tropical Fish"
 msgstr "Тропическая рыба"
@@ -218,7 +220,7 @@ msgid "Cartographer"
 msgstr "Картограф"
 
 msgid "Cleric"
-msgstr "Церковник"
+msgstr "Священник"
 
 msgid "Farmer"
 msgstr "Фермер"
@@ -236,16 +238,16 @@ msgid "Librarian"
 msgstr "Библиотекарь"
 
 msgid "Mason"
-msgstr "Мейсон"
+msgstr "Каменщик"
 
 msgid "Shepherd"
 msgstr "Пастух"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "Инструментальщик"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "Оружейник"
 
 msgid "Nitwit"
 msgstr "Нищий"
@@ -257,7 +259,7 @@ msgid "Apprentice"
 msgstr "Ученик"
 
 msgid "Journeyman"
-msgstr "Подмастерье"
+msgstr "Умелец"
 
 msgid "Expert"
 msgstr "Эксперт"
@@ -281,7 +283,7 @@ msgid "Wandering Trader"
 msgstr "Бродячий торговец"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "Лама торговца"
 
 msgid "Witch"
 msgstr "Ведьма"
@@ -303,4 +305,3 @@ msgstr "Кадавр"
 
 msgid "Baby Husk"
 msgstr "Кадавр-ребёнок"
-

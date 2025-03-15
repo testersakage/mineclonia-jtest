@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-03-10 03:14+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_banners/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "And one additional layer"
 msgstr "Et une couche supplémentaire"
@@ -24,6 +25,10 @@ msgstr "Bannière"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."
 msgstr ""
+"Les bannières sont de grands blocs décoratifs colorés. Elles peuvent être "
+"placées sur le sol et sur les murs. Les bannières peuvent être ornées d'une "
+"variété de motifs en les plaçant avec un colorant dans le métier à tisser, "
+"ou avec beaucoup de colorants dans l'établi."
 
 msgid "Emblazoned banners can be emblazoned again to combine patterns. Up to @1 patterns can be layered on a banner. To wash off a banner's top-most layer, use it on a cauldron with water."
 msgstr ""
@@ -44,2093 +49,2092 @@ msgid "Black Banner"
 msgstr "Bannière noire"
 
 msgid "Black Base"
-msgstr ""
+msgstr "Champagne de sable"
 
 msgid "Black Base Dexter Canton"
-msgstr ""
+msgstr "Canton de sable en pointe à dextre"
 
 msgid "Black Base Gradient"
-msgstr ""
+msgstr "Dégradé de sable en pointe"
 
 msgid "Black Base Indented"
-msgstr ""
+msgstr "Émanchures de sable en pointe"
 
 msgid "Black Base Sinister Canton"
-msgstr ""
+msgstr "Canton de sable en pointe à sénestre"
 
 msgid "Black Bend"
-msgstr ""
+msgstr "Bande de sable"
 
 msgid "Black Bend Sinister"
-msgstr ""
+msgstr "Barre de sable à sénestre"
 
 msgid "Black Bordure"
-msgstr ""
+msgstr "Bordure de sable"
 
 msgid "Black Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de sable"
 
 msgid "Black Bricks"
-msgstr ""
+msgstr "Champ maçonné de sable"
 
 msgid "Black Chevron"
-msgstr ""
+msgstr "Mantelé de sable"
 
 msgid "Black Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de sable"
 
 msgid "Black Chief"
-msgstr ""
+msgstr "Chef de sable"
 
 msgid "Black Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de sable en chef à dextre"
 
 msgid "Black Chief Indented"
-msgstr ""
+msgstr "Émanchures de sable en chef"
 
 msgid "Black Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de sable en chef à sénestre"
 
 msgid "Black Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de sable"
 
 msgid "Black Cross"
-msgstr ""
+msgstr "Croix de sable"
 
 msgid "Black Fess"
-msgstr ""
+msgstr "Fasce de sable"
 
 msgid "Black Flow"
-msgstr ""
+msgstr "Tourbillon de sable"
 
 msgid "Black Flower Charge"
-msgstr ""
+msgstr "Fleur de sable"
 
 msgid "Black Globe Charge"
-msgstr ""
+msgstr "Globe de sable"
 
 msgid "Black Gradient"
-msgstr ""
+msgstr "Dégradé de sable"
 
 msgid "Black Guster"
-msgstr ""
+msgstr "Rafaleur de sable"
 
 msgid "Black Lozenge"
-msgstr ""
+msgstr "Losange de sable"
 
 msgid "Black Pale"
-msgstr ""
+msgstr "Pal de sable"
 
 msgid "Black Pale Dexter"
-msgstr ""
+msgstr "Pal de sable à dextre"
 
 msgid "Black Pale Sinister"
-msgstr ""
+msgstr "Pal de sable à sénestre"
 
 msgid "Black Paly"
-msgstr ""
+msgstr "Quatre pals de sable"
 
 msgid "Black Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de sable"
 
 msgid "Black Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de sable"
 
 msgid "Black Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de sable"
 
 msgid "Black Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de sable"
 
 msgid "Black Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de sable"
 
 msgid "Black Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de sable"
 
 msgid "Black Per Pale"
-msgstr ""
+msgstr "Parti, au premier de sable"
 
 msgid "Black Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de sable"
 
 msgid "Black Piglin Charge"
-msgstr ""
+msgstr "Groin de sable"
 
 msgid "Black Roundel"
-msgstr ""
+msgstr "Tourteau de sable"
 
 msgid "Black Saltire"
-msgstr ""
+msgstr "Sautoir de sable"
 
 msgid "Black Skull Charge"
-msgstr ""
+msgstr "Crâne de sable"
 
 msgid "Black Thing Charge"
-msgstr ""
+msgstr "Symbole de sable"
 
 msgid "Blue Banner"
 msgstr "Bannière bleue"
 
 msgid "Blue Base"
-msgstr ""
+msgstr "Champagne d'azur"
 
 msgid "Blue Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'azur en pointe à dextre"
 
 msgid "Blue Base Gradient"
-msgstr ""
+msgstr "Dégradé d'azur en pointe"
 
 msgid "Blue Base Indented"
-msgstr ""
+msgstr "Émanchures d'azur en pointe"
 
 msgid "Blue Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'azur en pointe à sénestre"
 
 msgid "Blue Bend"
-msgstr ""
+msgstr "Bande d'azur"
 
 msgid "Blue Bend Sinister"
-msgstr ""
+msgstr "Barre d'azur à sénestre"
 
 msgid "Blue Bordure"
-msgstr ""
+msgstr "Bordure d'azur"
 
 msgid "Blue Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'azur"
 
 msgid "Blue Bricks"
-msgstr ""
+msgstr "Champ maçonné d'azur"
 
 msgid "Blue Chevron"
-msgstr ""
+msgstr "Mantelé d'azur"
 
 msgid "Blue Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'azur"
 
 msgid "Blue Chief"
-msgstr ""
+msgstr "Chef d'azur"
 
 msgid "Blue Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'azur en chef à dextre"
 
 msgid "Blue Chief Indented"
-msgstr ""
+msgstr "Émanchures d'azur en chef"
 
 msgid "Blue Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'azur en chef à sénestre"
 
 msgid "Blue Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'azur"
 
 msgid "Blue Cross"
-msgstr ""
+msgstr "Croix d'azur"
 
 msgid "Blue Fess"
-msgstr ""
+msgstr "Fasce d'azur"
 
 msgid "Blue Flow"
-msgstr ""
+msgstr "Tourbillon d'azur"
 
 msgid "Blue Flower Charge"
-msgstr ""
+msgstr "Fleur d'azur"
 
 msgid "Blue Globe Charge"
-msgstr ""
+msgstr "Globe d'azur"
 
 msgid "Blue Gradient"
-msgstr ""
+msgstr "Dégradé d'azur"
 
 msgid "Blue Guster"
-msgstr ""
+msgstr "Rafaleur d'azur"
 
 msgid "Blue Lozenge"
-msgstr ""
+msgstr "Losange d'azur"
 
 msgid "Blue Pale"
-msgstr ""
+msgstr "Pal d'azur"
 
 msgid "Blue Pale Dexter"
-msgstr ""
+msgstr "Pal d'azur à dextre"
 
 msgid "Blue Pale Sinister"
-msgstr ""
+msgstr "Pal d'azur à sénestre"
 
 msgid "Blue Paly"
-msgstr ""
+msgstr "Quatre pals d'azur"
 
 msgid "Blue Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'azur"
 
 msgid "Blue Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'azur"
 
 msgid "Blue Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'azur"
 
 msgid "Blue Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'azur"
 
 msgid "Blue Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'azur"
 
 msgid "Blue Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'azur"
 
 msgid "Blue Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'azur"
 
 msgid "Blue Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'azur"
 
 msgid "Blue Piglin Charge"
-msgstr ""
+msgstr "Groin d'azur"
 
 msgid "Blue Roundel"
-msgstr ""
+msgstr "Tourteau d'azur"
 
 msgid "Blue Saltire"
-msgstr ""
+msgstr "Sautoir d'azur"
 
 msgid "Blue Skull Charge"
-msgstr ""
+msgstr "Crâne d'azur"
 
 msgid "Blue Thing Charge"
-msgstr ""
+msgstr "Symbole d'azur"
 
 msgid "Bricks Banner Pattern"
-msgstr ""
+msgstr "Motif de champ maçonné pour bannière"
 
 msgid "Brown Banner"
 msgstr "Bannière marron"
 
 msgid "Brown Base"
-msgstr ""
+msgstr "Champagne de tanné"
 
 msgid "Brown Base Dexter Canton"
-msgstr ""
+msgstr "Canton de tanné en pointe à dextre"
 
 msgid "Brown Base Gradient"
-msgstr ""
+msgstr "Dégradé de tanné en pointe"
 
 msgid "Brown Base Indented"
-msgstr ""
+msgstr "Émanchures de tanné en pointe"
 
 msgid "Brown Base Sinister Canton"
-msgstr ""
+msgstr "Canton de tanné en pointe à sénestre"
 
 msgid "Brown Bend"
-msgstr ""
+msgstr "Bande de tanné"
 
 msgid "Brown Bend Sinister"
-msgstr ""
+msgstr "Barre de tanné à sénestre"
 
 msgid "Brown Bordure"
-msgstr ""
+msgstr "Bordure de tanné"
 
 msgid "Brown Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de tanné"
 
 msgid "Brown Bricks"
-msgstr ""
+msgstr "Champ maçonné de tanné"
 
 msgid "Brown Chevron"
-msgstr ""
+msgstr "Mantelé de tanné"
 
 msgid "Brown Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de tanné"
 
 msgid "Brown Chief"
-msgstr ""
+msgstr "Chef de tanné"
 
 msgid "Brown Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de tanné en chef à dextre"
 
 msgid "Brown Chief Indented"
-msgstr ""
+msgstr "Émanchures de tanné en chef"
 
 msgid "Brown Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de tanné en chef à sénestre"
 
 msgid "Brown Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de tanné"
 
 msgid "Brown Cross"
-msgstr ""
+msgstr "Croix de tanné"
 
 msgid "Brown Fess"
-msgstr ""
+msgstr "Fasce de tanné"
 
 msgid "Brown Flow"
-msgstr ""
+msgstr "Tourbillon de tanné"
 
 msgid "Brown Flower Charge"
-msgstr ""
+msgstr "Fleur de tanné"
 
 msgid "Brown Globe Charge"
-msgstr ""
+msgstr "Globe de tanné"
 
 msgid "Brown Gradient"
-msgstr ""
+msgstr "Dégradé de tanné"
 
 msgid "Brown Guster"
-msgstr ""
+msgstr "Rafaleur de tanné"
 
 msgid "Brown Lozenge"
-msgstr ""
+msgstr "Losange de tanné"
 
 msgid "Brown Pale"
-msgstr ""
+msgstr "Pal de tanné"
 
 msgid "Brown Pale Dexter"
-msgstr ""
+msgstr "Pal de tanné à dextre"
 
 msgid "Brown Pale Sinister"
-msgstr ""
+msgstr "Pal de tanné à sénestre"
 
 msgid "Brown Paly"
-msgstr ""
+msgstr "Quatre pals de tanné"
 
 msgid "Brown Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de tanné"
 
 msgid "Brown Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de tanné"
 
 msgid "Brown Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de tanné"
 
 msgid "Brown Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de tanné"
 
 msgid "Brown Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de tanné"
 
 msgid "Brown Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de tanné"
 
 msgid "Brown Per Pale"
-msgstr ""
+msgstr "Parti, au premier de tanné"
 
 msgid "Brown Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de tanné"
 
 msgid "Brown Piglin Charge"
-msgstr ""
+msgstr "Groin de tanné"
 
 msgid "Brown Roundel"
-msgstr ""
+msgstr "Tourteau de tanné"
 
 msgid "Brown Saltire"
-msgstr ""
+msgstr "Sautoir de tanné"
 
 msgid "Brown Skull Charge"
-msgstr ""
+msgstr "Crâne de tanné"
 
 msgid "Brown Thing Charge"
-msgstr ""
+msgstr "Symbole de tanné"
 
 msgid "Creeper Banner Pattern"
 msgstr ""
 
 msgid "Curly border Banner Pattern"
-msgstr ""
+msgstr "Motif de bordure cannelée pour bannière"
 
 msgid "Cyan Banner"
 msgstr "Bannière cyan"
 
 msgid "Cyan Base"
-msgstr ""
+msgstr "Champagne de cyan"
 
 msgid "Cyan Base Dexter Canton"
-msgstr ""
+msgstr "Canton de cyan en pointe à dextre"
 
 msgid "Cyan Base Gradient"
-msgstr ""
+msgstr "Dégradé de cyan en pointe"
 
 msgid "Cyan Base Indented"
-msgstr ""
+msgstr "Émanchures de cyan en pointe"
 
 msgid "Cyan Base Sinister Canton"
-msgstr ""
+msgstr "Canton de cyan en pointe à sénestre"
 
 msgid "Cyan Bend"
-msgstr ""
+msgstr "Bande de cyan"
 
 msgid "Cyan Bend Sinister"
-msgstr ""
+msgstr "Barre de cyan à sénestre"
 
 msgid "Cyan Bordure"
-msgstr ""
+msgstr "Bordure de cyan"
 
 msgid "Cyan Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de cyan"
 
 msgid "Cyan Bricks"
-msgstr ""
+msgstr "Champ maçonné de cyan"
 
 msgid "Cyan Chevron"
-msgstr ""
+msgstr "Mantelé de cyan"
 
 msgid "Cyan Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de cyan"
 
 msgid "Cyan Chief"
-msgstr ""
+msgstr "Chef de cyan"
 
 msgid "Cyan Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de cyan en chef à dextre"
 
 msgid "Cyan Chief Indented"
-msgstr ""
+msgstr "Émanchures de cyan en chef"
 
 msgid "Cyan Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de cyan en chef à sénestre"
 
 msgid "Cyan Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de cyan"
 
 msgid "Cyan Cross"
-msgstr ""
+msgstr "Croix de cyan"
 
 msgid "Cyan Fess"
-msgstr ""
+msgstr "Fasce de cyan"
 
 msgid "Cyan Flow"
-msgstr ""
+msgstr "Tourbillon de cyan"
 
 msgid "Cyan Flower Charge"
-msgstr ""
+msgstr "Fleur de cyan"
 
 msgid "Cyan Globe Charge"
-msgstr ""
+msgstr "Globe de cyan"
 
 msgid "Cyan Gradient"
-msgstr ""
+msgstr "Dégradé de cyan"
 
 msgid "Cyan Guster"
-msgstr ""
+msgstr "Rafaleur de cyan"
 
 msgid "Cyan Lozenge"
-msgstr ""
+msgstr "Losange de cyan"
 
 msgid "Cyan Pale"
-msgstr ""
+msgstr "Pal de cyan"
 
 msgid "Cyan Pale Dexter"
-msgstr ""
+msgstr "Pal de cyan à dextre"
 
 msgid "Cyan Pale Sinister"
-msgstr ""
+msgstr "Pal de cyan à sénestre"
 
 msgid "Cyan Paly"
-msgstr ""
+msgstr "Quatre pals de cyan"
 
 msgid "Cyan Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de cyan"
 
 msgid "Cyan Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de cyan"
 
 msgid "Cyan Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de cyan"
 
 msgid "Cyan Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de cyan"
 
 msgid "Cyan Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de cyan"
 
 msgid "Cyan Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de cyan"
 
 msgid "Cyan Per Pale"
-msgstr ""
+msgstr "Parti, au premier de cyan"
 
 msgid "Cyan Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de cyan"
 
 msgid "Cyan Piglin Charge"
-msgstr ""
+msgstr "Groin de cyan"
 
 msgid "Cyan Roundel"
-msgstr ""
+msgstr "Tourteau de cyan"
 
 msgid "Cyan Saltire"
-msgstr ""
+msgstr "Sautoir de cyan"
 
 msgid "Cyan Skull Charge"
-msgstr ""
+msgstr "Crâne de cyan"
 
 msgid "Cyan Thing Charge"
-msgstr ""
+msgstr "Symbole de cyan"
 
 msgid "Flow Banner Pattern"
-msgstr ""
+msgstr "Motif de tourbillon pour bannière"
 
 msgid "Flower Banner Pattern"
-msgstr ""
+msgstr "Motif de fleur pour bannière"
 
 msgid "Globe Banner Pattern"
-msgstr ""
+msgstr "Motif de globe pour bannière"
 
 msgid "Green Banner"
 msgstr "Bannière verte"
 
 msgid "Green Base"
-msgstr ""
+msgstr "Champagne de sinople"
 
 msgid "Green Base Dexter Canton"
-msgstr ""
+msgstr "Canton de sinople en pointe à dextre"
 
 msgid "Green Base Gradient"
-msgstr ""
+msgstr "Dégradé de sinople en pointe"
 
 msgid "Green Base Indented"
-msgstr ""
+msgstr "Émanchures de sinople en pointe"
 
 msgid "Green Base Sinister Canton"
-msgstr ""
+msgstr "Canton de sinople en pointe à sénestre"
 
 msgid "Green Bend"
-msgstr ""
+msgstr "Bande de sinople"
 
 msgid "Green Bend Sinister"
-msgstr ""
+msgstr "Barre de sinople à sénestre"
 
 msgid "Green Bordure"
-msgstr ""
+msgstr "Bordure de sinople"
 
 msgid "Green Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de sinople"
 
 msgid "Green Bricks"
-msgstr ""
+msgstr "Champ maçonné de sinople"
 
 msgid "Green Chevron"
-msgstr ""
+msgstr "Mantelé de sinople"
 
 msgid "Green Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de sinople"
 
 msgid "Green Chief"
-msgstr ""
+msgstr "Chef de sinople"
 
 msgid "Green Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de sinople en chef à dextre"
 
 msgid "Green Chief Indented"
-msgstr ""
+msgstr "Émanchures de sinople en chef"
 
 msgid "Green Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de sinople en chef à sénestre"
 
 msgid "Green Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de sinople"
 
 msgid "Green Cross"
-msgstr ""
+msgstr "Croix de sinople"
 
 msgid "Green Fess"
-msgstr ""
+msgstr "Fasce de sinople"
 
 msgid "Green Flow"
-msgstr ""
+msgstr "Tourbillon de sinople"
 
 msgid "Green Flower Charge"
-msgstr ""
+msgstr "Fleur de sinople"
 
 msgid "Green Globe Charge"
-msgstr ""
+msgstr "Globe de sinople"
 
 msgid "Green Gradient"
-msgstr ""
+msgstr "Dégradé de sinople"
 
 msgid "Green Guster"
-msgstr ""
+msgstr "Rafaleur de sinople"
 
 msgid "Green Lozenge"
-msgstr ""
+msgstr "Losange de sinople"
 
 msgid "Green Pale"
-msgstr ""
+msgstr "Pal de sinople"
 
 msgid "Green Pale Dexter"
-msgstr ""
+msgstr "Pal de sinople à dextre"
 
 msgid "Green Pale Sinister"
-msgstr ""
+msgstr "Pal de sinople à sénestre"
 
 msgid "Green Paly"
-msgstr ""
+msgstr "Quatre pals de sinople"
 
 msgid "Green Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de sinople"
 
 msgid "Green Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de sinople"
 
 msgid "Green Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de sinople"
 
 msgid "Green Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de sinople"
 
 msgid "Green Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de sinople"
 
 msgid "Green Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de sinople"
 
 msgid "Green Per Pale"
-msgstr ""
+msgstr "Parti, au premier de sinople"
 
 msgid "Green Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de sinople"
 
 msgid "Green Piglin Charge"
-msgstr ""
+msgstr "Groin de sinople"
 
 msgid "Green Roundel"
-msgstr ""
+msgstr "Tourteau de sinople"
 
 msgid "Green Saltire"
-msgstr ""
+msgstr "Sautoir de sinople"
 
 msgid "Green Skull Charge"
-msgstr ""
+msgstr "Crâne de sinople"
 
 msgid "Green Thing Charge"
-msgstr ""
+msgstr "Symbole de sinople"
 
 msgid "Grey Banner"
 msgstr "Bannière grise"
 
 msgid "Grey Base"
-msgstr ""
+msgstr "Champagne d'acier"
 
 msgid "Grey Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'acier en pointe à dextre"
 
 msgid "Grey Base Gradient"
-msgstr ""
+msgstr "Dégradé d'acier en pointe"
 
 msgid "Grey Base Indented"
-msgstr ""
+msgstr "Émanchures d'acier en pointe"
 
 msgid "Grey Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'acier en pointe à sénestre"
 
 msgid "Grey Bend"
-msgstr ""
+msgstr "Bande d'acier"
 
 msgid "Grey Bend Sinister"
-msgstr ""
+msgstr "Barre d'acier à sénestre"
 
 msgid "Grey Bordure"
-msgstr ""
+msgstr "Bordure d'acier"
 
 msgid "Grey Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'acier"
 
 msgid "Grey Bricks"
-msgstr ""
+msgstr "Champ maçonné d'acier"
 
 msgid "Grey Chevron"
-msgstr ""
+msgstr "Mantelé d'acier"
 
 msgid "Grey Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'acier"
 
 msgid "Grey Chief"
-msgstr ""
+msgstr "Chef d'acier"
 
 msgid "Grey Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'acier en chef à dextre"
 
 msgid "Grey Chief Indented"
-msgstr ""
+msgstr "Émanchures d'acier en chef"
 
 msgid "Grey Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'acier en chef à sénestre"
 
 msgid "Grey Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'acier"
 
 msgid "Grey Cross"
-msgstr ""
+msgstr "Croix d'acier"
 
 msgid "Grey Fess"
-msgstr ""
+msgstr "Fasce d'acier"
 
 msgid "Grey Flow"
-msgstr ""
+msgstr "Tourbillon d'acier"
 
 msgid "Grey Flower Charge"
-msgstr ""
+msgstr "Fleur d'acier"
 
 msgid "Grey Globe Charge"
-msgstr ""
+msgstr "Globe d'acier"
 
 msgid "Grey Gradient"
-msgstr ""
+msgstr "Dégradé d'acier"
 
 msgid "Grey Guster"
-msgstr ""
+msgstr "Rafaleur d'acier"
 
 msgid "Grey Lozenge"
-msgstr ""
+msgstr "Losange d'acier"
 
 msgid "Grey Pale"
-msgstr ""
+msgstr "Pal d'acier"
 
 msgid "Grey Pale Dexter"
-msgstr ""
+msgstr "Pal d'acier à dextre"
 
 msgid "Grey Pale Sinister"
-msgstr ""
+msgstr "Pal d'acier à sénestre"
 
 msgid "Grey Paly"
-msgstr ""
+msgstr "Quatre pals d'acier"
 
 msgid "Grey Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'acier"
 
 msgid "Grey Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'acier"
 
 msgid "Grey Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'acier"
 
 msgid "Grey Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'acier"
 
 msgid "Grey Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'acier"
 
 msgid "Grey Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'acier"
 
 msgid "Grey Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'acier"
 
 msgid "Grey Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'acier"
 
 msgid "Grey Piglin Charge"
-msgstr ""
+msgstr "Groin d'acier"
 
 msgid "Grey Roundel"
-msgstr ""
+msgstr "Tourteau d'acier"
 
 msgid "Grey Saltire"
-msgstr ""
+msgstr "Sautoir d'acier"
 
 msgid "Grey Skull Charge"
-msgstr ""
+msgstr "Crâne d'acier"
 
 msgid "Grey Thing Charge"
-msgstr ""
+msgstr "Symbole d'acier"
 
 msgid "Guster Banner Pattern"
-msgstr ""
+msgstr "Motif de rafaleur pour bannière"
 
 msgid "Light Blue Banner"
 msgstr "Bannière bleu clair"
 
 msgid "Light Blue Base"
-msgstr ""
+msgstr "Champagne de bleu céleste"
 
 msgid "Light Blue Base Dexter Canton"
-msgstr ""
+msgstr "Canton de bleu céleste en pointe à dextre"
 
 msgid "Light Blue Base Gradient"
-msgstr ""
+msgstr "Dégradé de bleu céleste en pointe"
 
 msgid "Light Blue Base Indented"
-msgstr ""
+msgstr "Émanchures de bleu céleste en pointe"
 
 msgid "Light Blue Base Sinister Canton"
-msgstr ""
+msgstr "Canton de bleu céleste en pointe à sénestre"
 
 msgid "Light Blue Bend"
-msgstr ""
+msgstr "Bande de bleu céleste"
 
 msgid "Light Blue Bend Sinister"
-msgstr ""
+msgstr "Barre de bleu céleste à sénestre"
 
 msgid "Light Blue Bordure"
-msgstr ""
+msgstr "Bordure de bleu céleste"
 
 msgid "Light Blue Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de bleu céleste"
 
 msgid "Light Blue Bricks"
-msgstr ""
+msgstr "Champ maçonné de bleu céleste"
 
 msgid "Light Blue Chevron"
-msgstr ""
+msgstr "Mantelé de bleu céleste"
 
 msgid "Light Blue Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de bleu céleste"
 
 msgid "Light Blue Chief"
-msgstr ""
+msgstr "Chef de bleu céleste"
 
 msgid "Light Blue Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de bleu céleste en chef à dextre"
 
 msgid "Light Blue Chief Indented"
-msgstr ""
+msgstr "Émanchures de bleu céleste en chef"
 
 msgid "Light Blue Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de bleu céleste en chef à sénestre"
 
 msgid "Light Blue Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de bleu céleste"
 
 msgid "Light Blue Cross"
-msgstr ""
+msgstr "Croix de bleu céleste"
 
 msgid "Light Blue Fess"
-msgstr ""
+msgstr "Fasce de bleu céleste"
 
 msgid "Light Blue Flow"
-msgstr ""
+msgstr "Tourbillon de bleu céleste"
 
 msgid "Light Blue Flower Charge"
-msgstr ""
+msgstr "Fleur de bleu céleste"
 
 msgid "Light Blue Globe Charge"
-msgstr ""
+msgstr "Globe de bleu céleste"
 
 msgid "Light Blue Gradient"
-msgstr ""
+msgstr "Dégradé de bleu céleste"
 
 msgid "Light Blue Guster"
-msgstr ""
+msgstr "Rafaleur de bleu céleste"
 
 msgid "Light Blue Lozenge"
-msgstr ""
+msgstr "Losange de bleu céleste"
 
 msgid "Light Blue Pale"
-msgstr ""
+msgstr "Pal de bleu céleste"
 
 msgid "Light Blue Pale Dexter"
-msgstr ""
+msgstr "Pal de bleu céleste à dextre"
 
 msgid "Light Blue Pale Sinister"
-msgstr ""
+msgstr "Pal de bleu céleste à sénestre"
 
 msgid "Light Blue Paly"
-msgstr ""
+msgstr "Quatre pals de bleu céleste"
 
 msgid "Light Blue Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de bleu céleste"
 
 msgid "Light Blue Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de bleu céleste"
 
 msgid "Light Blue Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de bleu céleste"
 
 msgid "Light Blue Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de bleu céleste"
 
 msgid "Light Blue Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de bleu céleste"
 
 msgid "Light Blue Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de bleu céleste"
 
 msgid "Light Blue Per Pale"
-msgstr ""
+msgstr "Parti, au premier de bleu céleste"
 
 msgid "Light Blue Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de bleu céleste"
 
 msgid "Light Blue Piglin Charge"
-msgstr ""
+msgstr "Groin de bleu céleste"
 
 msgid "Light Blue Roundel"
-msgstr ""
+msgstr "Tourteau de bleu céleste"
 
 msgid "Light Blue Saltire"
-msgstr ""
+msgstr "Sautoir de bleu céleste"
 
 msgid "Light Blue Skull Charge"
-msgstr ""
+msgstr "Crâne de bleu céleste"
 
 msgid "Light Blue Thing Charge"
-msgstr ""
+msgstr "Symbole de bleu céleste"
 
 msgid "Light Grey Banner"
 msgstr "Bannière gris clair"
 
 msgid "Light Grey Base"
-msgstr ""
+msgstr "Champagne d'argent grisé"
 
 msgid "Light Grey Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'argent grisé en pointe à dextre"
 
 msgid "Light Grey Base Gradient"
-msgstr ""
+msgstr "Dégradé d'argent grisé en pointe"
 
 msgid "Light Grey Base Indented"
-msgstr ""
+msgstr "Émanchures d'argent grisé en pointe"
 
 msgid "Light Grey Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'argent grisé en pointe à sénestre"
 
 msgid "Light Grey Bend"
-msgstr ""
+msgstr "Bande d'argent grisé"
 
 msgid "Light Grey Bend Sinister"
-msgstr ""
+msgstr "Barre d'argent grisé à sénestre"
 
 msgid "Light Grey Bordure"
-msgstr ""
+msgstr "Bordure d'argent grisé"
 
 msgid "Light Grey Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'argent grisé"
 
 msgid "Light Grey Bricks"
-msgstr ""
+msgstr "Champ maçonné d'argent grisé"
 
 msgid "Light Grey Chevron"
-msgstr ""
+msgstr "Mantelé d'argent grisé"
 
 msgid "Light Grey Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'argent grisé"
 
 msgid "Light Grey Chief"
-msgstr ""
+msgstr "Chef d'argent grisé"
 
 msgid "Light Grey Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'argent grisé en chef à dextre"
 
 msgid "Light Grey Chief Indented"
-msgstr ""
+msgstr "Émanchures d'argent grisé en chef"
 
 msgid "Light Grey Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'argent grisé en chef à sénestre"
 
 msgid "Light Grey Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'argent grisé"
 
 msgid "Light Grey Cross"
-msgstr ""
+msgstr "Croix d'argent grisé"
 
 msgid "Light Grey Fess"
-msgstr ""
+msgstr "Fasce d'argent grisé"
 
 msgid "Light Grey Flow"
-msgstr ""
+msgstr "Tourbillon d'argent grisé"
 
 msgid "Light Grey Flower Charge"
-msgstr ""
+msgstr "Fleur d'argent grisé"
 
 msgid "Light Grey Globe Charge"
-msgstr ""
+msgstr "Globe d'argent grisé"
 
 msgid "Light Grey Gradient"
-msgstr ""
+msgstr "Dégradé d'argent grisé"
 
 msgid "Light Grey Guster"
-msgstr ""
+msgstr "Rafaleur d'argent grisé"
 
 msgid "Light Grey Lozenge"
-msgstr ""
+msgstr "Losange d'argent grisé"
 
 msgid "Light Grey Pale"
-msgstr ""
+msgstr "Pal d'argent grisé"
 
 msgid "Light Grey Pale Dexter"
-msgstr ""
+msgstr "Pal d'argent grisé à dextre"
 
 msgid "Light Grey Pale Sinister"
-msgstr ""
+msgstr "Pal d'argent grisé à sénestre"
 
 msgid "Light Grey Paly"
-msgstr ""
+msgstr "Quatre pals d'argent grisé"
 
 msgid "Light Grey Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'argent grisé"
 
 msgid "Light Grey Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'argent grisé"
 
 msgid "Light Grey Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'argent grisé"
 
 msgid "Light Grey Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'argent grisé"
 
 msgid "Light Grey Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'argent grisé"
 
 msgid "Light Grey Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'argent grisé"
 
 msgid "Light Grey Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'argent grisé"
 
 msgid "Light Grey Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'argent grisé"
 
 msgid "Light Grey Piglin Charge"
-msgstr ""
+msgstr "Groin d'argent grisé"
 
 msgid "Light Grey Roundel"
-msgstr ""
+msgstr "Tourteau d'argent grisé"
 
 msgid "Light Grey Saltire"
-msgstr ""
+msgstr "Sautoir d'argent grisé"
 
 msgid "Light Grey Skull Charge"
-msgstr ""
+msgstr "Crâne d'argent grisé"
 
 msgid "Light Grey Thing Charge"
-msgstr ""
+msgstr "Symbole d'argent grisé"
 
 msgid "Lime Banner"
 msgstr "Bannière vert clair"
 
 msgid "Lime Base"
-msgstr ""
+msgstr "Champagne de sinople clair"
 
 msgid "Lime Base Dexter Canton"
-msgstr ""
+msgstr "Canton de sinople clair en pointe à dextre"
 
 msgid "Lime Base Gradient"
-msgstr ""
+msgstr "Dégradé de sinople clair en pointe"
 
 msgid "Lime Base Indented"
-msgstr ""
+msgstr "Émanchures de sinople clair en pointe"
 
 msgid "Lime Base Sinister Canton"
-msgstr ""
+msgstr "Canton de sinople clair en pointe à sénestre"
 
 msgid "Lime Bend"
-msgstr ""
+msgstr "Bande de sinople clair"
 
 msgid "Lime Bend Sinister"
-msgstr ""
+msgstr "Barre de sinople clair à sénestre"
 
 msgid "Lime Bordure"
-msgstr ""
+msgstr "Bordure de sinople clair"
 
 msgid "Lime Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de sinople clair"
 
 msgid "Lime Bricks"
-msgstr ""
+msgstr "Champ maçonné de sinople clair"
 
 msgid "Lime Chevron"
-msgstr ""
+msgstr "Mantelé de sinople clair"
 
 msgid "Lime Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de sinople clair"
 
 msgid "Lime Chief"
-msgstr ""
+msgstr "Chef de sinople clair"
 
 msgid "Lime Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de sinople clair en chef à dextre"
 
 msgid "Lime Chief Indented"
-msgstr ""
+msgstr "Émanchures de sinople clair en chef"
 
 msgid "Lime Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de sinople clair en chef à sénestre"
 
 msgid "Lime Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de sinople clair"
 
 msgid "Lime Cross"
-msgstr ""
+msgstr "Croix de sinople clair"
 
 msgid "Lime Fess"
-msgstr ""
+msgstr "Fasce de sinople clair"
 
 msgid "Lime Flow"
-msgstr ""
+msgstr "Tourbillon de sinople clair"
 
 msgid "Lime Flower Charge"
-msgstr ""
+msgstr "Fleur de sinople clair"
 
 msgid "Lime Globe Charge"
-msgstr ""
+msgstr "Globe de sinople clair"
 
 msgid "Lime Gradient"
-msgstr ""
+msgstr "Dégradé de sinople clair"
 
 msgid "Lime Guster"
-msgstr ""
+msgstr "Rafaleur de sinople clair"
 
 msgid "Lime Lozenge"
-msgstr ""
+msgstr "Losange de sinople clair"
 
 msgid "Lime Pale"
-msgstr ""
+msgstr "Pal de sinople clair"
 
 msgid "Lime Pale Dexter"
-msgstr ""
+msgstr "Pal de sinople clair à dextre"
 
 msgid "Lime Pale Sinister"
-msgstr ""
+msgstr "Pal de sinople clair à sénestre"
 
 msgid "Lime Paly"
-msgstr ""
+msgstr "Quatre pals de sinople clair"
 
 msgid "Lime Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de sinople clair"
 
 msgid "Lime Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de sinople clair"
 
 msgid "Lime Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de sinople clair"
 
 msgid "Lime Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de sinople clair"
 
 msgid "Lime Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de sinople clair"
 
 msgid "Lime Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de sinople clair"
 
 msgid "Lime Per Pale"
-msgstr ""
+msgstr "Parti, au premier de sinople clair"
 
 msgid "Lime Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de sinople clair"
 
 msgid "Lime Piglin Charge"
-msgstr ""
+msgstr "Groin de sinople clair"
 
 msgid "Lime Roundel"
-msgstr ""
+msgstr "Tourteau de sinople clair"
 
 msgid "Lime Saltire"
-msgstr ""
+msgstr "Sautoir de sinople clair"
 
 msgid "Lime Skull Charge"
-msgstr ""
+msgstr "Crâne de sinople clair"
 
 msgid "Lime Thing Charge"
-msgstr ""
+msgstr "Symbole de sinople clair"
 
 msgid "Magenta Banner"
 msgstr "Bannière magenta"
 
 msgid "Magenta Base"
-msgstr ""
+msgstr "Champagne de pourpre"
 
 msgid "Magenta Base Dexter Canton"
-msgstr ""
+msgstr "Canton de pourpre en pointe à dextre"
 
 msgid "Magenta Base Gradient"
-msgstr ""
+msgstr "Dégradé de pourpre en pointe"
 
 msgid "Magenta Base Indented"
-msgstr ""
+msgstr "Émanchures de pourpre en pointe"
 
 msgid "Magenta Base Sinister Canton"
-msgstr ""
+msgstr "Canton de pourpre en pointe à sénestre"
 
 msgid "Magenta Bend"
-msgstr ""
+msgstr "Bande de pourpre"
 
 msgid "Magenta Bend Sinister"
-msgstr ""
+msgstr "Barre de pourpre à sénestre"
 
 msgid "Magenta Bordure"
-msgstr ""
+msgstr "Bordure de pourpre"
 
 msgid "Magenta Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de pourpre"
 
 msgid "Magenta Bricks"
-msgstr ""
+msgstr "Champ maçonné de pourpre"
 
 msgid "Magenta Chevron"
-msgstr ""
+msgstr "Mantelé de pourpre"
 
 msgid "Magenta Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de pourpre"
 
 msgid "Magenta Chief"
-msgstr ""
+msgstr "Chef de pourpre"
 
 msgid "Magenta Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de pourpre en chef à dextre"
 
 msgid "Magenta Chief Indented"
-msgstr ""
+msgstr "Émanchures de pourpre en chef"
 
 msgid "Magenta Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de pourpre en chef à sénestre"
 
 msgid "Magenta Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de pourpre"
 
 msgid "Magenta Cross"
-msgstr ""
+msgstr "Croix de pourpre"
 
 msgid "Magenta Fess"
-msgstr ""
+msgstr "Fasce de pourpre"
 
 msgid "Magenta Flow"
-msgstr ""
+msgstr "Tourbillon de pourpre"
 
 msgid "Magenta Flower Charge"
-msgstr ""
+msgstr "Fleur de pourpre"
 
 msgid "Magenta Globe Charge"
-msgstr ""
+msgstr "Globe de pourpre"
 
 msgid "Magenta Gradient"
-msgstr ""
+msgstr "Dégradé de pourpre"
 
 msgid "Magenta Guster"
-msgstr ""
+msgstr "Rafaleur de pourpre"
 
 msgid "Magenta Lozenge"
-msgstr ""
+msgstr "Losange de pourpre"
 
 msgid "Magenta Pale"
-msgstr ""
+msgstr "Pal de pourpre"
 
 msgid "Magenta Pale Dexter"
-msgstr ""
+msgstr "Pal de pourpre à dextre"
 
 msgid "Magenta Pale Sinister"
-msgstr ""
+msgstr "Pal de pourpre à sénestre"
 
 msgid "Magenta Paly"
-msgstr ""
+msgstr "Quatre pals de pourpre"
 
 msgid "Magenta Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de pourpre"
 
 msgid "Magenta Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de pourpre"
 
 msgid "Magenta Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de pourpre"
 
 msgid "Magenta Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de pourpre"
 
 msgid "Magenta Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de pourpre"
 
 msgid "Magenta Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de pourpre"
 
 msgid "Magenta Per Pale"
-msgstr ""
+msgstr "Parti, au premier de pourpre"
 
 msgid "Magenta Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de pourpre"
 
 msgid "Magenta Piglin Charge"
-msgstr ""
+msgstr "Groin de pourpre"
 
 msgid "Magenta Roundel"
-msgstr ""
+msgstr "Tourteau de pourpre"
 
 msgid "Magenta Saltire"
-msgstr ""
+msgstr "Sautoir de pourpre"
 
 msgid "Magenta Skull Charge"
-msgstr ""
+msgstr "Crâne de pourpre"
 
 msgid "Magenta Thing Charge"
-msgstr ""
+msgstr "Symbole de pourpre"
 
 msgid "Orange Banner"
 msgstr "Bannière orange"
 
 msgid "Orange Base"
-msgstr ""
+msgstr "Champagne d'orangé"
 
 msgid "Orange Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'orangé en pointe à dextre"
 
 msgid "Orange Base Gradient"
-msgstr ""
+msgstr "Dégradé d'orangé en pointe"
 
 msgid "Orange Base Indented"
-msgstr ""
+msgstr "Émanchures d'orangé en pointe"
 
 msgid "Orange Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'orangé en pointe à sénestre"
 
 msgid "Orange Bend"
-msgstr ""
+msgstr "Bande d'orangé"
 
 msgid "Orange Bend Sinister"
-msgstr ""
+msgstr "Barre d'orangé à sénestre"
 
 msgid "Orange Bordure"
-msgstr ""
+msgstr "Bordure d'orangé"
 
 msgid "Orange Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'orangé"
 
 msgid "Orange Bricks"
-msgstr ""
+msgstr "Champ maçonné d'orangé"
 
 msgid "Orange Chevron"
-msgstr ""
+msgstr "Mantelé d'orangé"
 
 msgid "Orange Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'orangé"
 
 msgid "Orange Chief"
-msgstr ""
+msgstr "Chef d'orangé"
 
 msgid "Orange Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'orangé en chef à dextre"
 
 msgid "Orange Chief Indented"
-msgstr ""
+msgstr "Émanchures d'orangé en chef"
 
 msgid "Orange Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'orangé en chef à sénestre"
 
 msgid "Orange Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'orangé"
 
 msgid "Orange Cross"
-msgstr ""
+msgstr "Croix d'orangé"
 
 msgid "Orange Fess"
-msgstr ""
+msgstr "Fasce d'orangé"
 
 msgid "Orange Flow"
-msgstr ""
+msgstr "Tourbillon d'orangé"
 
 msgid "Orange Flower Charge"
-msgstr ""
+msgstr "Fleur d'orangé"
 
 msgid "Orange Globe Charge"
-msgstr ""
+msgstr "Globe d'orangé"
 
 msgid "Orange Gradient"
-msgstr ""
+msgstr "Dégradé d'orangé"
 
 msgid "Orange Guster"
-msgstr ""
+msgstr "Rafaleur d'orangé"
 
 msgid "Orange Lozenge"
-msgstr ""
+msgstr "Losange d'orangé"
 
 msgid "Orange Pale"
-msgstr ""
+msgstr "Pal d'orangé"
 
 msgid "Orange Pale Dexter"
-msgstr ""
+msgstr "Pal d'orangé à dextre"
 
 msgid "Orange Pale Sinister"
-msgstr ""
+msgstr "Pal d'orangé à sénestre"
 
 msgid "Orange Paly"
-msgstr ""
+msgstr "Quatre pals d'orangé"
 
 msgid "Orange Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'orangé"
 
 msgid "Orange Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'orangé"
 
 msgid "Orange Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'orangé"
 
 msgid "Orange Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'orangé"
 
 msgid "Orange Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'orangé"
 
 msgid "Orange Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'orangé"
 
 msgid "Orange Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'orangé"
 
 msgid "Orange Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'orangé"
 
 msgid "Orange Piglin Charge"
-msgstr ""
+msgstr "Groin d'orangé"
 
 msgid "Orange Roundel"
-msgstr ""
+msgstr "Tourteau d'orangé"
 
 msgid "Orange Saltire"
-msgstr ""
+msgstr "Sautoir d'orangé"
 
 msgid "Orange Skull Charge"
-msgstr ""
+msgstr "Crâne d'orangé"
 
 msgid "Orange Thing Charge"
-msgstr ""
+msgstr "Symbole d'orangé"
 
 msgid "Piglin Banner Pattern"
-msgstr ""
+msgstr "Motif de groin pour bannière"
 
 msgid "Pink Banner"
 msgstr "Bannière rose"
 
 msgid "Pink Base"
-msgstr ""
+msgstr "Champagne de carnation"
 
 msgid "Pink Base Dexter Canton"
-msgstr ""
+msgstr "Canton de carnation en pointe à dextre"
 
 msgid "Pink Base Gradient"
-msgstr ""
+msgstr "Dégradé de carnation en pointe"
 
 msgid "Pink Base Indented"
-msgstr ""
+msgstr "Émanchures de carnation en pointe"
 
 msgid "Pink Base Sinister Canton"
-msgstr ""
+msgstr "Canton de carnation en pointe à sénestre"
 
 msgid "Pink Bend"
-msgstr ""
+msgstr "Bande de carnation"
 
 msgid "Pink Bend Sinister"
-msgstr ""
+msgstr "Barre de carnation à sénestre"
 
 msgid "Pink Bordure"
-msgstr ""
+msgstr "Bordure de carnation"
 
 msgid "Pink Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de carnation"
 
 msgid "Pink Bricks"
-msgstr ""
+msgstr "Champ maçonné de carnation"
 
 msgid "Pink Chevron"
-msgstr ""
+msgstr "Mantelé de carnation"
 
 msgid "Pink Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de carnation"
 
 msgid "Pink Chief"
-msgstr ""
+msgstr "Chef de carnation"
 
 msgid "Pink Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de carnation en chef à dextre"
 
 msgid "Pink Chief Indented"
-msgstr ""
+msgstr "Émanchures de carnation en chef"
 
 msgid "Pink Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de carnation en chef à sénestre"
 
 msgid "Pink Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de carnation"
 
 msgid "Pink Cross"
-msgstr ""
+msgstr "Croix de carnation"
 
 msgid "Pink Fess"
-msgstr ""
+msgstr "Fasce de carnation"
 
 msgid "Pink Flow"
-msgstr ""
+msgstr "Tourbillon de carnation"
 
 msgid "Pink Flower Charge"
-msgstr ""
+msgstr "Fleur de carnation"
 
 msgid "Pink Globe Charge"
-msgstr ""
+msgstr "Globe de carnation"
 
 msgid "Pink Gradient"
-msgstr ""
+msgstr "Dégradé de carnation"
 
 msgid "Pink Guster"
-msgstr ""
+msgstr "Rafaleur de carnation"
 
 msgid "Pink Lozenge"
-msgstr ""
+msgstr "Losange de carnation"
 
 msgid "Pink Pale"
-msgstr ""
+msgstr "Pal de carnation"
 
 msgid "Pink Pale Dexter"
-msgstr ""
+msgstr "Pal de carnation à dextre"
 
 msgid "Pink Pale Sinister"
-msgstr ""
+msgstr "Pal de carnation à sénestre"
 
 msgid "Pink Paly"
-msgstr ""
+msgstr "Quatre pals de carnation"
 
 msgid "Pink Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de carnation"
 
 msgid "Pink Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de carnation"
 
 msgid "Pink Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de carnation"
 
 msgid "Pink Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de carnation"
 
 msgid "Pink Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de carnation"
 
 msgid "Pink Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de carnation"
 
 msgid "Pink Per Pale"
-msgstr ""
+msgstr "Parti, au premier de carnation"
 
 msgid "Pink Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de carnation"
 
 msgid "Pink Piglin Charge"
-msgstr ""
+msgstr "Groin de carnation"
 
 msgid "Pink Roundel"
-msgstr ""
+msgstr "Tourteau de carnation"
 
 msgid "Pink Saltire"
-msgstr ""
+msgstr "Sautoir de carnation"
 
 msgid "Pink Skull Charge"
-msgstr ""
+msgstr "Crâne de carnation"
 
 msgid "Pink Thing Charge"
-msgstr ""
+msgstr "Symbole de carnation"
 
 msgid "Purple Banner"
 msgstr "Bannière violette"
 
 msgid "Purple Base"
-msgstr ""
+msgstr "Champagne de mûre"
 
 msgid "Purple Base Dexter Canton"
-msgstr ""
+msgstr "Canton de mûre en pointe à dextre"
 
 msgid "Purple Base Gradient"
-msgstr ""
+msgstr "Dégradé de mûre en pointe"
 
 msgid "Purple Base Indented"
-msgstr ""
+msgstr "Émanchures de mûre en pointe"
 
 msgid "Purple Base Sinister Canton"
-msgstr ""
+msgstr "Canton de mûre en pointe à sénestre"
 
 msgid "Purple Bend"
-msgstr ""
+msgstr "Bande de mûre"
 
 msgid "Purple Bend Sinister"
-msgstr ""
+msgstr "Barre de mûre à sénestre"
 
 msgid "Purple Bordure"
-msgstr ""
+msgstr "Bordure de mûre"
 
 msgid "Purple Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de mûre"
 
 msgid "Purple Bricks"
-msgstr ""
+msgstr "Champ maçonné de mûre"
 
 msgid "Purple Chevron"
-msgstr ""
+msgstr "Mantelé de mûre"
 
 msgid "Purple Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de mûre"
 
 msgid "Purple Chief"
-msgstr ""
+msgstr "Chef de mûre"
 
 msgid "Purple Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de mûre en chef à dextre"
 
 msgid "Purple Chief Indented"
-msgstr ""
+msgstr "Émanchures de mûre en chef"
 
 msgid "Purple Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de mûre en chef à sénestre"
 
 msgid "Purple Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de mûre"
 
 msgid "Purple Cross"
-msgstr ""
+msgstr "Croix de mûre"
 
 msgid "Purple Fess"
-msgstr ""
+msgstr "Fasce de mûre"
 
 msgid "Purple Flow"
-msgstr ""
+msgstr "Tourbillon de mûre"
 
 msgid "Purple Flower Charge"
-msgstr ""
+msgstr "Fleur de mûre"
 
 msgid "Purple Globe Charge"
-msgstr ""
+msgstr "Globe de mûre"
 
 msgid "Purple Gradient"
-msgstr ""
+msgstr "Dégradé de mûre"
 
 msgid "Purple Guster"
-msgstr ""
+msgstr "Rafaleur de mûre"
 
 msgid "Purple Lozenge"
-msgstr ""
+msgstr "Losange de mûre"
 
 msgid "Purple Pale"
-msgstr ""
+msgstr "Pal de mûre"
 
 msgid "Purple Pale Dexter"
-msgstr ""
+msgstr "Pal de mûre à dextre"
 
 msgid "Purple Pale Sinister"
-msgstr ""
+msgstr "Pal de mûre à sénestre"
 
 msgid "Purple Paly"
-msgstr ""
+msgstr "Quatre pals de mûre"
 
 msgid "Purple Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de mûre"
 
 msgid "Purple Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de mûre"
 
 msgid "Purple Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de mûre"
 
 msgid "Purple Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de mûre"
 
 msgid "Purple Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de mûre"
 
 msgid "Purple Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de mûre"
 
 msgid "Purple Per Pale"
-msgstr ""
+msgstr "Parti, au premier de mûre"
 
 msgid "Purple Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de mûre"
 
 msgid "Purple Piglin Charge"
-msgstr ""
+msgstr "Groin de mûre"
 
 msgid "Purple Roundel"
-msgstr ""
+msgstr "Tourteau de mûre"
 
 msgid "Purple Saltire"
-msgstr ""
+msgstr "Sautoir de mûre"
 
 msgid "Purple Skull Charge"
-msgstr ""
+msgstr "Crâne de mûre"
 
 msgid "Purple Thing Charge"
-msgstr ""
+msgstr "Symbole de mûre"
 
 msgid "Red Banner"
 msgstr "Bannière rouge"
 
 msgid "Red Base"
-msgstr ""
+msgstr "Champagne de gueules"
 
 msgid "Red Base Dexter Canton"
-msgstr ""
+msgstr "Canton de gueules en pointe à dextre"
 
 msgid "Red Base Gradient"
-msgstr ""
+msgstr "Dégradé de gueules en pointe"
 
 msgid "Red Base Indented"
-msgstr ""
+msgstr "Émanchures de gueules en pointe"
 
 msgid "Red Base Sinister Canton"
-msgstr ""
+msgstr "Canton de gueules en pointe à sénestre"
 
 msgid "Red Bend"
-msgstr ""
+msgstr "Bande de gueules"
 
 msgid "Red Bend Sinister"
-msgstr ""
+msgstr "Barre de gueules à sénestre"
 
 msgid "Red Bordure"
-msgstr ""
+msgstr "Bordure de gueules"
 
 msgid "Red Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée de gueules"
 
 msgid "Red Bricks"
-msgstr ""
+msgstr "Champ maçonné de gueules"
 
 msgid "Red Chevron"
-msgstr ""
+msgstr "Mantelé de gueules"
 
 msgid "Red Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé de gueules"
 
 msgid "Red Chief"
-msgstr ""
+msgstr "Chef de gueules"
 
 msgid "Red Chief Dexter Canton"
-msgstr ""
+msgstr "Canton de gueules en chef à dextre"
 
 msgid "Red Chief Indented"
-msgstr ""
+msgstr "Émanchures de gueules en chef"
 
 msgid "Red Chief Sinister Canton"
-msgstr ""
+msgstr "Canton de gueules en chef à sénestre"
 
 msgid "Red Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper de gueules"
 
 msgid "Red Cross"
-msgstr ""
+msgstr "Croix de gueules"
 
 msgid "Red Fess"
-msgstr ""
+msgstr "Fasce de gueules"
 
 msgid "Red Flow"
-msgstr ""
+msgstr "Tourbillon de gueules"
 
 msgid "Red Flower Charge"
-msgstr ""
+msgstr "Fleur de gueules"
 
 msgid "Red Globe Charge"
-msgstr ""
+msgstr "Globe de gueules"
 
 msgid "Red Gradient"
-msgstr ""
+msgstr "Dégradé de gueules"
 
 msgid "Red Guster"
-msgstr ""
+msgstr "Rafaleur de gueules"
 
 msgid "Red Lozenge"
-msgstr ""
+msgstr "Losange de gueules"
 
 msgid "Red Pale"
-msgstr ""
+msgstr "Pal de gueules"
 
 msgid "Red Pale Dexter"
-msgstr ""
+msgstr "Pal de gueules à dextre"
 
 msgid "Red Pale Sinister"
-msgstr ""
+msgstr "Pal de gueules à sénestre"
 
 msgid "Red Paly"
-msgstr ""
+msgstr "Quatre pals de gueules"
 
 msgid "Red Per Bend"
-msgstr ""
+msgstr "Tranché, au premier de gueules"
 
 msgid "Red Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second de gueules"
 
 msgid "Red Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier de gueules"
 
 msgid "Red Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second de gueules"
 
 msgid "Red Per Fess"
-msgstr ""
+msgstr "Coupé, au premier de gueules"
 
 msgid "Red Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second de gueules"
 
 msgid "Red Per Pale"
-msgstr ""
+msgstr "Parti, au premier de gueules"
 
 msgid "Red Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second de gueules"
 
 msgid "Red Piglin Charge"
-msgstr ""
+msgstr "Groin de gueules"
 
 msgid "Red Roundel"
-msgstr ""
+msgstr "Tourteau de gueules"
 
 msgid "Red Saltire"
-msgstr ""
+msgstr "Sautoir de gueules"
 
 msgid "Red Skull Charge"
-msgstr ""
+msgstr "Crâne de gueules"
 
 msgid "Red Thing Charge"
-msgstr ""
+msgstr "Symbole de gueules"
 
 msgid "Skull Banner Pattern"
-msgstr ""
+msgstr "Motif de crâne pour bannière"
 
 msgid "Thing Banner Pattern"
-msgstr ""
+msgstr "Motif de symbole pour bannière"
 
 msgid "White Banner"
 msgstr "Bannière blanche"
 
 msgid "White Base"
-msgstr ""
+msgstr "Champagne d'argent"
 
 msgid "White Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'argent en pointe à dextre"
 
 msgid "White Base Gradient"
-msgstr ""
+msgstr "Dégradé d'argent en pointe"
 
 msgid "White Base Indented"
-msgstr ""
+msgstr "Émanchures d'argent en pointe"
 
 msgid "White Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'argent en pointe à sénestre"
 
 msgid "White Bend"
-msgstr ""
+msgstr "Bande d'argent"
 
 msgid "White Bend Sinister"
-msgstr ""
+msgstr "Barre d'argent à sénestre"
 
 msgid "White Bordure"
-msgstr ""
+msgstr "Bordure d'argent"
 
 msgid "White Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'argent"
 
 msgid "White Bricks"
-msgstr ""
+msgstr "Champ maçonné d'argent"
 
 msgid "White Chevron"
-msgstr ""
+msgstr "Mantelé d'argent"
 
 msgid "White Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'argent"
 
 msgid "White Chief"
-msgstr ""
+msgstr "Chef d'argent"
 
 msgid "White Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'argent en chef à dextre"
 
 msgid "White Chief Indented"
-msgstr ""
+msgstr "Émanchures d'argent en chef"
 
 msgid "White Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'argent en chef à sénestre"
 
 msgid "White Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'argent"
 
 msgid "White Cross"
-msgstr ""
+msgstr "Croix d'argent"
 
 msgid "White Fess"
-msgstr ""
+msgstr "Fasce d'argent"
 
 msgid "White Flow"
-msgstr ""
+msgstr "Tourbillon d'argent"
 
 msgid "White Flower Charge"
-msgstr ""
+msgstr "Fleur d'argent"
 
 msgid "White Globe Charge"
-msgstr ""
+msgstr "Globe d'argent"
 
 msgid "White Gradient"
-msgstr ""
+msgstr "Dégradé d'argent"
 
 msgid "White Guster"
-msgstr ""
+msgstr "Rafaleur d'argent"
 
 msgid "White Lozenge"
-msgstr ""
+msgstr "Losange d'argent"
 
 msgid "White Pale"
-msgstr ""
+msgstr "Pal d'argent"
 
 msgid "White Pale Dexter"
-msgstr ""
+msgstr "Pal d'argent à dextre"
 
 msgid "White Pale Sinister"
-msgstr ""
+msgstr "Pal d'argent à sénestre"
 
 msgid "White Paly"
-msgstr ""
+msgstr "Quatre pals d'argent"
 
 msgid "White Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'argent"
 
 msgid "White Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'argent"
 
 msgid "White Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'argent"
 
 msgid "White Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'argent"
 
 msgid "White Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'argent"
 
 msgid "White Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'argent"
 
 msgid "White Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'argent"
 
 msgid "White Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'argent"
 
 msgid "White Piglin Charge"
-msgstr ""
+msgstr "Groin d'argent"
 
 msgid "White Roundel"
-msgstr ""
+msgstr "Tourteau d'argent"
 
 msgid "White Saltire"
-msgstr ""
+msgstr "Sautoir d'argent"
 
 msgid "White Skull Charge"
-msgstr ""
+msgstr "Crâne d'argent"
 
 msgid "White Thing Charge"
-msgstr ""
+msgstr "Symbole d'argent"
 
 msgid "Yellow Banner"
 msgstr "Bannière jaune"
 
 msgid "Yellow Base"
-msgstr ""
+msgstr "Champagne d'or"
 
 msgid "Yellow Base Dexter Canton"
-msgstr ""
+msgstr "Canton d'or en pointe à dextre"
 
 msgid "Yellow Base Gradient"
-msgstr ""
+msgstr "Dégradé d'or en pointe"
 
 msgid "Yellow Base Indented"
-msgstr ""
+msgstr "Émanchures d'or en pointe"
 
 msgid "Yellow Base Sinister Canton"
-msgstr ""
+msgstr "Canton d'or en pointe à sénestre"
 
 msgid "Yellow Bend"
-msgstr ""
+msgstr "Bande d'or"
 
 msgid "Yellow Bend Sinister"
-msgstr ""
+msgstr "Barre d'or à sénestre"
 
 msgid "Yellow Bordure"
-msgstr ""
+msgstr "Bordure d'or"
 
 msgid "Yellow Bordure Indented"
-msgstr ""
+msgstr "Bordure cannelée d'or"
 
 msgid "Yellow Bricks"
-msgstr ""
+msgstr "Champ maçonné d'or"
 
 msgid "Yellow Chevron"
-msgstr ""
+msgstr "Mantelé d'or"
 
 msgid "Yellow Chevron Inverted"
-msgstr ""
+msgstr "Mantelé renversé d'or"
 
 msgid "Yellow Chief"
-msgstr ""
+msgstr "Chef d'or"
 
 msgid "Yellow Chief Dexter Canton"
-msgstr ""
+msgstr "Canton d'or en chef à dextre"
 
 msgid "Yellow Chief Indented"
-msgstr ""
+msgstr "Émanchures d'or en chef"
 
 msgid "Yellow Chief Sinister Canton"
-msgstr ""
+msgstr "Canton d'or en chef à sénestre"
 
 msgid "Yellow Creeper Charge"
-msgstr ""
+msgstr "Face de Creeper d'or"
 
 msgid "Yellow Cross"
-msgstr ""
+msgstr "Croix d'or"
 
 msgid "Yellow Fess"
-msgstr ""
+msgstr "Fasce d'or"
 
 msgid "Yellow Flow"
-msgstr ""
+msgstr "Tourbillon d'or"
 
 msgid "Yellow Flower Charge"
-msgstr ""
+msgstr "Fleur d'or"
 
 msgid "Yellow Globe Charge"
-msgstr ""
+msgstr "Globe d'or"
 
 msgid "Yellow Gradient"
-msgstr ""
+msgstr "Dégradé d'or"
 
 msgid "Yellow Guster"
-msgstr ""
+msgstr "Rafaleur d'or"
 
 msgid "Yellow Lozenge"
-msgstr ""
+msgstr "Losange d'or"
 
 msgid "Yellow Pale"
-msgstr ""
+msgstr "Pal d'or"
 
 msgid "Yellow Pale Dexter"
-msgstr ""
+msgstr "Pal d'or à dextre"
 
 msgid "Yellow Pale Sinister"
-msgstr ""
+msgstr "Pal d'or à sénestre"
 
 msgid "Yellow Paly"
-msgstr ""
+msgstr "Quatre pals d'or"
 
 msgid "Yellow Per Bend"
-msgstr ""
+msgstr "Tranché, au premier d'or"
 
 msgid "Yellow Per Bend Inverted"
-msgstr ""
+msgstr "Tranché, au second d'or"
 
 msgid "Yellow Per Bend Sinister"
-msgstr ""
+msgstr "Taillé, au premier d'or"
 
 msgid "Yellow Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Taillé, au second d'or"
 
 msgid "Yellow Per Fess"
-msgstr ""
+msgstr "Coupé, au premier d'or"
 
 msgid "Yellow Per Fess Inverted"
-msgstr ""
+msgstr "Coupé, au second d'or"
 
 msgid "Yellow Per Pale"
-msgstr ""
+msgstr "Parti, au premier d'or"
 
 msgid "Yellow Per Pale Inverted"
-msgstr ""
+msgstr "Parti, au second d'or"
 
 msgid "Yellow Piglin Charge"
-msgstr ""
+msgstr "Groin d'or"
 
 msgid "Yellow Roundel"
-msgstr ""
+msgstr "Tourteau d'or"
 
 msgid "Yellow Saltire"
-msgstr ""
+msgstr "Sautoir d'or"
 
 msgid "Yellow Skull Charge"
-msgstr ""
+msgstr "Crâne d'or"
 
 msgid "Yellow Thing Charge"
-msgstr ""
-
+msgstr "Symbole d'or"
