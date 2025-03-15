@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Pink Petals"
-msgstr "櫻花花瓣"
-
-msgid "Pink Petals are ground decoration of cherry grove biomes"
-msgstr "櫻花花瓣是櫻花林生物群落的地面裝飾。"
-
 msgid "Cherry Bark"
 msgstr "櫻花樹皮"
 

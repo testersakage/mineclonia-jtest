@@ -31,9 +31,6 @@ msgstr ""
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr ""
 
-msgid "Redstone"
-msgstr "Redstone"
-
-msgid "Redstone Trail (@1)"
+msgid "Redstone Dust"
 msgstr ""
 

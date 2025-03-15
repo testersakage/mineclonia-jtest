@@ -43,6 +43,6 @@ msgstr "Teleportuje przy uderzeniu za 5 HP"
 msgid "An ender pearl is an item which can be used for teleportation at the cost of health. It can be thrown and teleport the thrower to its impact location when it hits a solid block or a plant. Each teleportation hurts the user by 5 hit points."
 msgstr "Perła kresu jest przedmiotem, który można wykorzystać do teleportacji kosztem zdrowia. Może być rzucona, a rzucający zostanie przeteleportowany w miejsce gdzie uderzyła ona stały blok lub roślinę."
 
-msgid "Use the place/use key to throw."
+msgid "Use the place key to throw."
 msgstr ""
 

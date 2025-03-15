@@ -52,8 +52,12 @@ msgstr "Este ítem se puede usar para escribir algunas notas."
 msgid "Hold it in the hand, then rightclick to read the current notes and edit then. You can edit the text as often as you like. You can also sign the book which turns it into a written book which you can stack, but it can't be edited anymore."
 msgstr "Sosténgalo en la mano, luego haga clic derecho para leer las notas actuales y luego edite. Puede editar el texto con la frecuencia que desee. También puede firmar el libro que lo convierte en un libro escrito que puede apilar, pero ya no se puede editar."
 
-msgid "A book can hold up to 4500 characters. The title length is limited to 64 characters."
-msgstr "Un libro puede contener hasta 4500 caracteres. La longitud del título está limitada a 64 caracteres."
+msgid "A book can hold up to @1 characters. The title length is limited to @2 characters."
+msgstr ""
+
+msgid "Text is @1 characters too long for one book.\n"
+"It will be capped at @2 characters."
+msgstr ""
 
 msgid "Enter book title:"
 msgstr "Inserta el título del libro:"

@@ -31,9 +31,6 @@ msgstr "Helyezd a vöröskő port a földre, hogy nyomvonalat alkosson. A nyomvo
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr "Olvasd el a vöröskő eszközök leírását, hogy megismerd, hogyan működnek együtt."
 
-msgid "Redstone"
-msgstr "Vöröskő"
-
-msgid "Redstone Trail (@1)"
-msgstr "Vöröskő Nyomvonal (@1)"
+msgid "Redstone Dust"
+msgstr ""
 

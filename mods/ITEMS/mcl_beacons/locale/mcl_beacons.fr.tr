@@ -1,13 +1,13 @@
 # textdomain: mcl_beacons
-Unavailable=
-Active=
+Unavailable=Invalide
+Active=Active
 Beacon=Balise
 Primary Power:=Pouvoir primaire :
 Secondary Power:=Pouvoir secondaire :
-Swiftness=
-Haste=
-Resistance=
-Leaping=
-Strength=
-Regeneration=
-Inventory=
+Swiftness=Rapidité
+Haste=Célérité
+Resistance=Résistance
+Leaping=Saut
+Strength=Force
+Regeneration=Régénération
+Inventory=Inventaire

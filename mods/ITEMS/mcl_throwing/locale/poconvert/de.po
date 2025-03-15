@@ -43,6 +43,6 @@ msgstr "Teleportiert Sie beim Aufprall, kostet 5 TP"
 msgid "An ender pearl is an item which can be used for teleportation at the cost of health. It can be thrown and teleport the thrower to its impact location when it hits a solid block or a plant. Each teleportation hurts the user by 5 hit points."
 msgstr "Eine Enderperle ist ein Gegenstand, der zur Teleportation benutzt werden kann auf Kosten der Gesundheit. Sie kann geworfen werden und teleportiert den Werfer zur Einschlagsstelle, wenn sie einen Block oder eine Pflanze trifft. Jede Teleportation verletzt den Werfer um 5 Trefferpunkte."
 
-msgid "Use the place/use key to throw."
-msgstr "Verwende zum Werfen die Taste zum Platzieren/Verwenden."
+msgid "Use the place key to throw."
+msgstr ""
 

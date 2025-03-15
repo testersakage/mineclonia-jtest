@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Enable dust particles in the nether"
+msgstr ""
+
 msgid "Gives ability to control weather"
 msgstr "Befolyásolhatod az időjárást"
 

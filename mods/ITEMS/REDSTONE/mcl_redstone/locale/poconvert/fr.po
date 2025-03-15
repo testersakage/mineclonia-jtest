@@ -31,9 +31,6 @@ msgstr "Placez de la redstone sur le sol pour construire un sillon de redstone. 
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr "Lisez les entrées d'aide sur les autres composants Redstone pour savoir comment les composants Redstone interagissent."
 
-msgid "Redstone"
-msgstr "Redstone"
-
-msgid "Redstone Trail (@1)"
-msgstr "Sentier Redstone (@1)"
+msgid "Redstone Dust"
+msgstr ""
 

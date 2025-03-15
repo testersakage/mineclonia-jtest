@@ -31,9 +31,6 @@ msgstr ""
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr "レッドストーン部品がどのように相互作用するかについては、他のレッドストーン部品のヘルプエントリーをお読みください。"
 
-msgid "Redstone"
-msgstr "レッドストーン"
-
-msgid "Redstone Trail (@1)"
-msgstr "レッドストーン導線 (@1)"
+msgid "Redstone Dust"
+msgstr ""
 

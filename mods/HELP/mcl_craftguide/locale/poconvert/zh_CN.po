@@ -88,9 +88,6 @@ msgstr "用途"
 msgid "Recipes"
 msgstr "配方"
 
-msgid "@1 of @2"
-msgstr "@2的@1"
-
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "配方太大，无法显示（@1×@2）"
 

@@ -70,8 +70,11 @@ msgstr "Segítség"
 msgid "Advancements"
 msgstr "Kihívások"
 
-msgid "Select player skin"
-msgstr "Játékos kinézetének beállítása"
+msgid "Player settings"
+msgstr ""
+
+msgid "Return to player inventory"
+msgstr ""
 
 msgid "Crafting table out of range!"
 msgstr ""

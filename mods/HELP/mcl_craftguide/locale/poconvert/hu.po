@@ -88,9 +88,6 @@ msgstr "Használata"
 msgid "Recipes"
 msgstr "Receptek"
 
-msgid "@1 of @2"
-msgstr "@1 / @2"
-
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "Túl nagy a recept a megjelenítéshez (@1x@2)"
 

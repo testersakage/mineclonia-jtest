@@ -52,3 +52,6 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
+msgid "Select player skin"
+msgstr ""
+

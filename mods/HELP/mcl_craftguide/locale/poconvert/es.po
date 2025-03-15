@@ -88,9 +88,6 @@ msgstr "Usos"
 msgid "Recipes"
 msgstr "Recetas"
 
-msgid "@1 of @2"
-msgstr "@1 de @2"
-
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "La receta es muy grande para ser mostrada (@1×@2)"
 

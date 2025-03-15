@@ -1,4 +1,5 @@
 # textdomain: mcl_weather
+Enable dust particles in the nether=
 Gives ability to control weather=Befolyásolhatod az időjárást
 Changes the weather to the specified parameter.=Megváltoztatja az időjárást.
 Error: No weather specified.=Hiba: nem adtál meg időjárást.

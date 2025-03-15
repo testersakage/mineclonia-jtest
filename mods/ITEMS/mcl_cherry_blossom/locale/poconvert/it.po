@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Pink Petals"
-msgstr "Petali rosa"
-
-msgid "Pink Petals are ground decoration of cherry grove biomes"
-msgstr "I Petali Rosati sono la decorazione del suolo dei biomi dei boschetti di ciliegio"
-
 msgid "Cherry Bark"
 msgstr "Corteccia di ciliegio"
 

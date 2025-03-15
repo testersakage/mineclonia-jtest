@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Wait until all mods have loaded!"
+msgstr ""
+
+msgid "Not supported. The “biomeinfo” mod is required for v6 mapgen support!"
+msgstr ""
+
 msgid "Find and teleport to biome"
 msgstr "Znajdź i teleportuj do biomu"
 

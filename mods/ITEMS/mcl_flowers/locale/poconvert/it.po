@@ -61,6 +61,15 @@ msgstr "Mughetto"
 msgid "Cornflower"
 msgstr "Fiordaliso"
 
+msgid "Wildflowers"
+msgstr ""
+
+msgid "Pink Petals"
+msgstr ""
+
+msgid "Pink Petals are ground decoration of cherry grove biomes"
+msgstr ""
+
 msgid "Peony"
 msgstr "Peonia"
 

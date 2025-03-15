@@ -52,7 +52,11 @@ msgstr ""
 msgid "Hold it in the hand, then rightclick to read the current notes and edit then. You can edit the text as often as you like. You can also sign the book which turns it into a written book which you can stack, but it can't be edited anymore."
 msgstr ""
 
-msgid "A book can hold up to 4500 characters. The title length is limited to 64 characters."
+msgid "A book can hold up to @1 characters. The title length is limited to @2 characters."
+msgstr ""
+
+msgid "Text is @1 characters too long for one book.\n"
+"It will be capped at @2 characters."
 msgstr ""
 
 msgid "Enter book title:"

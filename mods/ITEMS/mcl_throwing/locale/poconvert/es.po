@@ -43,6 +43,6 @@ msgstr "Te teletransportara en caso de impactar con un bloque por un costo de 5 
 msgid "An ender pearl is an item which can be used for teleportation at the cost of health. It can be thrown and teleport the thrower to its impact location when it hits a solid block or a plant. Each teleportation hurts the user by 5 hit points."
 msgstr "Una perla ender es un ítem que se puede usar para teletransportarse a costa de la salud. Se puede lanzar y teletransportar al lanzador a su ubicación de impacto cuando golpea un bloque sólido o una planta. Cada teletransportación perjudica al usuario por 5 puntos de daño."
 
-msgid "Use the place/use key to throw."
-msgstr "Usa la tecla colocar/usar para lanzar."
+msgid "Use the place key to throw."
+msgstr ""
 

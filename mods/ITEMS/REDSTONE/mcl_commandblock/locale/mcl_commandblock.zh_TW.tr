@@ -2,9 +2,9 @@
 Command blocks are not enabled on this server=本伺服器已停用指令方塊
 Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands.=錯誤：命令“@1”不存在；你的指令方塊未被更改。請在聊天使用“help”列出可用的指令。
 Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash.=錯誤：命令“@1”不存在；你的指令方塊未被更改。請在聊天使用“help”列出可用的指令。提示：試刪掉起始的鈄杠。
-Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.=
-Error: No commander! Block must be replaced.=
-Commander: @1=
+Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.=錯誤：你的權限不足以使用“@1”！（需要 @2 權限）指令方塊未變更。
+Error: No commander! Block must be replaced.=錯誤：找不到指令者。指令方塊需要被替換。
+Commander: @1=指令者：@1
 Submit=提交
 No commands.=無指令。
 Commands:=指令：

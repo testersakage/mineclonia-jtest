@@ -43,6 +43,6 @@ msgstr "撞击时会将你传送走，代价是损失5点生命值"
 msgid "An ender pearl is an item which can be used for teleportation at the cost of health. It can be thrown and teleport the thrower to its impact location when it hits a solid block or a plant. Each teleportation hurts the user by 5 hit points."
 msgstr "末影珍珠是一种可用于以损耗生命值为代价进行传送的物品。它可以被投掷出去，当它击中一个固体方块或植物时，能将投掷者传送到其撞击位置。每次传送都会使使用者损失5点生命值。"
 
-msgid "Use the place/use key to throw."
-msgstr "使用放置/使用键来进行投掷。"
+msgid "Use the place key to throw."
+msgstr ""
 

@@ -52,3 +52,6 @@ msgstr "スキン設定画面を開きます。"
 msgid "Select"
 msgstr "選択"
 
+msgid "Select player skin"
+msgstr ""
+

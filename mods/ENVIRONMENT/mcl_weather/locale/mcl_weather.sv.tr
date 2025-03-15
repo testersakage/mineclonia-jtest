@@ -1,4 +1,5 @@
 # textdomain: mcl_weather
+Enable dust particles in the nether=
 Gives ability to control weather=
 Changes the weather to the specified parameter.=
 Error: No weather specified.=

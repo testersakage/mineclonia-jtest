@@ -1,14 +1,15 @@
 # textdomain: mcl_skins
 Templates=Шаблоны
 Arm size=Толщина рук
-Bases=Цвета кожи
+Bases=Цвет кожи
 Footwears=Обувь
 Eyes=Глаза
-Mouths=Рты
+Mouths=Рот
 Bottoms=Ноги
-Tops=Туловища
-Hairs=Причёски
+Tops=Торс
+Hairs=Причёска
 Headwears=Головные уборы
 Skins=Скины
 Open skin configuration screen.=Открыть настройки скина.
 Select=Выбрать
+Select player skin=

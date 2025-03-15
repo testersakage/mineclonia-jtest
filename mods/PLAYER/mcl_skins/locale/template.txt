@@ -12,3 +12,4 @@ Headwears=
 Skins=
 Open skin configuration screen.=
 Select=
+Select player skin=

@@ -1,7 +1,7 @@
 # textdomain: mcl_vaults
-Vault=
-Ejects loot when opened with the key=
-A vault ejects loot when opened with the right key. It can only be opened once by each player.=
-Trial Key=
-Ominous Trial Key=
-Ominous Vault=
+Vault=Хранилище
+Ejects loot when opened with the key=Выбрасывает лут при открытии ключом
+A vault ejects loot when opened with the right key. It can only be opened once by each player.=Хранилище выбрасывает лут при открытии правильным ключом. Оно может быть открыто каждым игроком только раз.
+Trial Key=Ключ испытаний
+Ominous Trial Key=Зловещий ключ испытаний
+Ominous Vault=Зловещее хранилище

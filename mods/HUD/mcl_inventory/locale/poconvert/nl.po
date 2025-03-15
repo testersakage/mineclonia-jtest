@@ -70,7 +70,10 @@ msgstr ""
 msgid "Advancements"
 msgstr ""
 
-msgid "Select player skin"
+msgid "Player settings"
+msgstr ""
+
+msgid "Return to player inventory"
 msgstr ""
 
 msgid "Crafting table out of range!"

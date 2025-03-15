@@ -118,6 +118,18 @@ msgstr ""
 msgid "decreases gravity effects"
 msgstr ""
 
+msgid "Weak"
+msgstr ""
+
+msgid "Strong"
+msgstr ""
+
+msgid "Potion FoV effect strength"
+msgstr ""
+
+msgid "Select strength of the FoV change of the swiftness and slowness effects."
+msgstr ""
+
 msgid "Swiftness"
 msgstr "Schnelligkeit"
 

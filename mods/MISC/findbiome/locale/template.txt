@@ -1,17 +1,19 @@
 # textdomain: findbiome
 # mod title
-Find Biome=
-# mod description
-Adds commands to list and find biomes=
-
 # mod strings
 Wait until all mods have loaded!=
+Not supported. The “biomeinfo” mod is required for v6 mapgen support!=
 Find and teleport to biome=
 <biome>=
 No player.=
-Biome does not exist!=
 Biome found at @1.=
 No biome found!=
+Biome does not exist!=
 List all biomes=
 No biomes.=
-Not supported. The “biomeinfo” mod is required for v6 mapgen support!=
+
+
+##### not used anymore #####
+
+# mod description
+Adds commands to list and find biomes=

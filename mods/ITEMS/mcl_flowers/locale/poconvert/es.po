@@ -61,6 +61,15 @@ msgstr "Iirio del valle"
 msgid "Cornflower"
 msgstr "Aciano"
 
+msgid "Wildflowers"
+msgstr ""
+
+msgid "Pink Petals"
+msgstr ""
+
+msgid "Pink Petals are ground decoration of cherry grove biomes"
+msgstr ""
+
 msgid "Peony"
 msgstr "Peonía"
 

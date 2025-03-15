@@ -52,3 +52,6 @@ msgstr "Ouvrir l'écran de configuration du costume."
 msgid "Select"
 msgstr "Sélectionner"
 
+msgid "Select player skin"
+msgstr ""
+

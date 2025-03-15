@@ -31,9 +31,6 @@ msgstr ""
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr "Przeczytaj wpisy na temat innych czerwienitowych mechanizmów, by dowiedzieć się jak wchodzą ze sobą w interakcję."
 
-msgid "Redstone"
-msgstr "Redstone"
-
-msgid "Redstone Trail (@1)"
-msgstr "Ścieżka czerwienitu (@1)"
+msgid "Redstone Dust"
+msgstr ""
 

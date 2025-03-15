@@ -1,8 +1,8 @@
 # textdomain: awards
 @1 has made the advancement @2=
-Secret Advancement Unlocked: @1=
+Hidden Advancement Unlocked: @1=
 Advancement Unlocked: @1=
-Secret Advancement Made!=
+Hidden Advancement Made!=
 Goal Completed!=
 Challenge Completed!=
 Advancement Made!=
@@ -18,7 +18,7 @@ Advancement not found.=
 Get the advancement statistics for the given player or yourself=
 Error: No advancements available.=
 OK=OK
-(Secret Advancement)=
+(Hidden Advancement)=
 Unlock this advancement to find out what it is.=
 @1 (unlocked)=
 You've disabled advancements. Type /awards enable to reenable.=

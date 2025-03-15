@@ -16,13 +16,13 @@ msgstr ""
 msgid "@1 has made the advancement @2"
 msgstr ""
 
-msgid "Secret Advancement Unlocked: @1"
+msgid "Hidden Advancement Unlocked: @1"
 msgstr ""
 
 msgid "Advancement Unlocked: @1"
 msgstr ""
 
-msgid "Secret Advancement Made!"
+msgid "Hidden Advancement Made!"
 msgstr ""
 
 msgid "Goal Completed!"
@@ -70,7 +70,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-msgid "(Secret Advancement)"
+msgid "(Hidden Advancement)"
 msgstr ""
 
 msgid "Unlock this advancement to find out what it is."

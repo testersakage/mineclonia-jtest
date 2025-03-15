@@ -70,8 +70,11 @@ msgstr "帮助"
 msgid "Advancements"
 msgstr "进度"
 
-msgid "Select player skin"
-msgstr "选择玩家皮肤"
+msgid "Player settings"
+msgstr ""
+
+msgid "Return to player inventory"
+msgstr ""
 
 msgid "Crafting table out of range!"
 msgstr "离工作台太远！"

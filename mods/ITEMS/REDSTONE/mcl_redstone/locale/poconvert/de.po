@@ -31,9 +31,6 @@ msgstr "Platzieren Sie Redstone auf dem Boden, um eine Redstone-Spur auszulegen.
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr "Lesen Sie die Hilfeeinträge über andere Redstone-Komponenten, um zu erfahren, wie sie interagieren."
 
-msgid "Redstone"
-msgstr "Redstone"
-
-msgid "Redstone Trail (@1)"
-msgstr "Redstone-Spur (@1)"
+msgid "Redstone Dust"
+msgstr ""
 

@@ -31,9 +31,6 @@ msgstr "将红石放置在地面上以构建红石线路。这些线路会自动
 msgid "Read the help entries on the other redstone components to learn how redstone components interact."
 msgstr "阅读其他红石组件的帮助条目，以了解红石组件是如何相互作用的。"
 
-msgid "Redstone"
-msgstr "红石"
-
-msgid "Redstone Trail (@1)"
-msgstr "红石线路(@1)"
+msgid "Redstone Dust"
+msgstr ""
 

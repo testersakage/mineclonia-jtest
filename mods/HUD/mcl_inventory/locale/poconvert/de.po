@@ -70,8 +70,11 @@ msgstr "Hilfe"
 msgid "Advancements"
 msgstr "Fortschritte"
 
-msgid "Select player skin"
-msgstr "Spieleraussehen ändern"
+msgid "Player settings"
+msgstr ""
+
+msgid "Return to player inventory"
+msgstr ""
 
 msgid "Crafting table out of range!"
 msgstr ""

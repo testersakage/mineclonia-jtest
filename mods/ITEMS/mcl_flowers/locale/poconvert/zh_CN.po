@@ -61,6 +61,15 @@ msgstr "铃兰"
 msgid "Cornflower"
 msgstr "矢车菊"
 
+msgid "Wildflowers"
+msgstr ""
+
+msgid "Pink Petals"
+msgstr ""
+
+msgid "Pink Petals are ground decoration of cherry grove biomes"
+msgstr ""
+
 msgid "Peony"
 msgstr "牡丹"
 

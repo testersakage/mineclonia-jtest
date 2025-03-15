@@ -1,8 +1,8 @@
 # textdomain: awards
 @1 has made the advancement @2=
-Secret Advancement Unlocked: @1=
+Hidden Advancement Unlocked: @1=
 Advancement Unlocked: @1=
-Secret Advancement Made!=秘密進度達成！
+Hidden Advancement Made!=
 Goal Completed!=目標已完成！
 Challenge Completed!=挑戰已完成！
 Advancement Made!=進度達成！
@@ -18,7 +18,7 @@ Advancement not found.=
 Get the advancement statistics for the given player or yourself=
 Error: No advancements available.=
 OK=好的
-(Secret Advancement)=
+(Hidden Advancement)=
 Unlock this advancement to find out what it is.=
 @1 (unlocked)=@1 （未解鎖）
 You've disabled advancements. Type /awards enable to reenable.=

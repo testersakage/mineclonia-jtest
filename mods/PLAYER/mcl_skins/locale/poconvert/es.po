@@ -52,3 +52,6 @@ msgstr "Abrir pantalla de configuración de aspectos."
 msgid "Select"
 msgstr "Seleccionar"
 
+msgid "Select player skin"
+msgstr ""
+
