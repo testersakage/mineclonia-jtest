@@ -24,6 +24,7 @@
 * nixnoxus
 * Ælla Chiana Moskopp
 * Raylight
+* Miguel_PL
 
 ## Previous Contributors
 * Lizzy Fleckenstein

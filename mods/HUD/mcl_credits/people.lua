@@ -26,6 +26,7 @@ return {
 		"nixnoxus",
 		"Ælla Chiana Moskopp",
 		"Raylight",
+		"Miguel_PL",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
@@ -161,7 +162,7 @@ return {
 		"Sencyy",
 		"Sotis",
 		"Zozosticot",
-		"ellesheepy ",
+		"ellesheepy",
 		"bright",
 		"Miguel P.L",
 		"Just Playing",
