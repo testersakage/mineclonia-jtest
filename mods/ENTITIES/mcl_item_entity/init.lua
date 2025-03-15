@@ -135,20 +135,9 @@ local doTileDrops = minetest.settings:get_bool("mcl_doTileDrops", true)
 local wielded_tool
 ---@diagnostic disable-next-line: duplicate-set-field
 function minetest.handle_node_drops(pos, drops, digger)
-	-- NOTE: This function override allows digger to be nil.
-	-- This means there is no digger. This is a special case which allows this function to be called
-	-- by hand. Creative Mode is intentionally ignored in this case.
-	if digger and digger:is_player() and minetest.is_creative_enabled(digger:get_player_name()) then
-		local inv = digger:get_inventory()
-		if inv then
-			for _, item in ipairs(drops) do
-				if not inv:contains_item("main", item, true) then
-					inv:add_item("main", item)
-				end
-			end
-		end
+	if not doTileDrops then
 		return
-	elseif not doTileDrops then return end
+	end
 
 	-- Check if node will yield its useful drop by the digger's tool
 	local dug_node = minetest.get_node(pos)
