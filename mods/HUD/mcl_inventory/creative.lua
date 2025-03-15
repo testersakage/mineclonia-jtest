@@ -773,46 +773,6 @@ minetest.register_on_placenode(function(_, _, placer, _, itemstack)
 	end
 end)
 
-local old_mt_handle_node_drops = minetest.handle_node_drops
-
----@diagnostic disable-next-line: duplicate-set-field
-function minetest.handle_node_drops(pos, drops, digger)
-	if digger and minetest.is_creative_enabled(digger:get_player_name()) then
-		if not digger or not digger:is_player() then
-			for _, item in ipairs(drops) do
-				minetest.add_item(pos, item)
-			end
-		else
-			-- If there is a player
-			local inv = digger:get_inventory()
-			if inv then
-				local dug_node = minetest.get_node(pos)
-				local nodedef = minetest.registered_nodes[dug_node.name]
-				if nodedef._mcl_shears_drop then
-					if nodedef._mcl_shears_drop == true then
-						drops = { dug_node.name }
-					else
-						drops = nodedef._mcl_shears_drop
-					end
-				elseif nodedef._mcl_silk_touch_drop then
-					if nodedef._mcl_silk_touch_drop == true then
-						drops = { dug_node.name }
-					else
-						drops = nodedef._mcl_silk_touch_drop
-					end
-				end
-				for _, item in ipairs(drops) do
-					if not inv:contains_item("main", item, true) then
-						inv:add_item("main", item)
-					end
-				end
-			end
-		end
-	else
-		return old_mt_handle_node_drops(pos, drops, digger)
-	end
-end
-
 minetest.register_on_joinplayer(function(player)
 	-- Initialize variables and inventory
 	local name = player:get_player_name()
