@@ -315,15 +315,12 @@ controls.register_on_release(function(player, key)
 	if key~="RMB" and key~="zoom" then return end
 	--local inv = core.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
-	if fully_drawn(wielditem:get_name()) and (get_arrow(player) or minetest.is_creative_enabled(player:get_player_name())) then
-		local arrow_stack, arrow_stack_id = get_arrow(player)
+	local creative = minetest.is_creative_enabled(player:get_player_name())
+	local arrow_stack, arrow_stack_id = get_arrow(player)
+
+	if fully_drawn(wielditem:get_name()) and (creative or arrow_stack) then
 		local arrow_itemstring
-
-		if not arrow_stack then
-			return
-		end
-
-		if core.is_creative_enabled(player:get_player_name()) then
+		if minetest.is_creative_enabled(player:get_player_name()) then
 			if arrow_stack then
 				arrow_itemstring = arrow_stack:to_string()
 			else
