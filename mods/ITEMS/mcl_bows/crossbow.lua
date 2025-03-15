@@ -304,6 +304,10 @@ function mcl_bows.load_crossbow (player, wielditem, usetime)
 	player:set_wielded_item(wielditem)
 end
 
+local function fully_drawn(name)
+	return name == "mcl_bows:crossbow_2" or name == "mcl_bows:crossbow_2_enchanted"
+end
+
 controls.register_on_release(function(player, key)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return
@@ -311,7 +315,7 @@ controls.register_on_release(function(player, key)
 	if key~="RMB" and key~="zoom" then return end
 	--local inv = core.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
-	if wielditem:get_name()=="mcl_bows:crossbow_2" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2" and core.is_creative_enabled(player:get_player_name()) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and core.is_creative_enabled(player:get_player_name()) then
+	if fully_drawn(wielditem:get_name()) and (get_arrow(player) or minetest.is_creative_enabled(player:get_player_name())) then
 		local arrow_stack, arrow_stack_id = get_arrow(player)
 		local arrow_itemstring
 
