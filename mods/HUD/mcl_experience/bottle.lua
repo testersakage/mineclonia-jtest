@@ -52,18 +52,21 @@ local function throw_xp_bottle(pos, dir, velocity)
 	obj:set_acceleration(acceleration)
 end
 
+local function on_use(itemstack, placer, _)
+	throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10)
+	if not minetest.is_creative_enabled(placer:get_player_name()) then
+		itemstack:take_item()
+	end
+	return itemstack
+end
+
 minetest.register_craftitem("mcl_experience:bottle", {
 	description = S("Bottle o' Enchanting"),
 	groups = {rarity = 1},
 	inventory_image = "mcl_experience_bottle.png^[colorize:purple:50",
 	wield_image = "mcl_experience_bottle.png^[colorize:purple:50",
-	on_use = function(itemstack, placer, _)
-		throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10)
-		if not minetest.is_creative_enabled(placer:get_player_name()) then
-			itemstack:take_item()
-		end
-		return itemstack
-	end,
+	on_place = on_use,
+	on_secondary_use = on_use,
 	_on_dispense = function(_, pos, _, _, dir)
 		throw_xp_bottle(vector.add(pos, vector.multiply(dir, 0.51)), dir, 10)
 	end
