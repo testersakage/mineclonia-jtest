@@ -150,7 +150,7 @@ dofile(modpath.."/patterncraft.lua")
 local base_color_ratio = 255
 
 local standing_banner_entity_offset = vector.new(0, -0.499, 0)
-local hanging_banner_entity_offset = vector.new(0, -1.7, 0)
+local hanging_banner_entity_offset = vector.new(0, -0.64, 0)
 
 local function rotation_level_to_yaw(rotation_level)
 	return (rotation_level * (math.pi/8)) + math.pi
