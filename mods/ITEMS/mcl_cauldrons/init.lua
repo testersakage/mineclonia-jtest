@@ -126,7 +126,6 @@ core.register_node("mcl_cauldrons:cauldron", {
 	_doc_items_usagehelp = S("Place a water bucket into the cauldron to fill it with water. Place an empty bucket on a full cauldron to retrieve the water. Place a water bottle into the cauldron to fill the cauldron to one third with water. Place a glass bottle in a cauldron with water to retrieve one third of the water."),
 	wield_image = "mcl_cauldrons_cauldron.png",
 	inventory_image = "mcl_cauldrons_cauldron.png",
-	use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false,
 	drawtype = "nodebox",
 	paramtype = "light",
 	is_ground_content = false,
@@ -165,7 +164,6 @@ local function register_filled_cauldron(water_level, description, liquid)
 	core.register_node(id, {
 		description = description,
 		_doc_items_create_entry = false,
-		use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false,
 		drawtype = "nodebox",
 		paramtype = "light",
 		light_source = light_level,

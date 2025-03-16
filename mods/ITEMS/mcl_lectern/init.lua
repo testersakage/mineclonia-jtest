@@ -33,7 +33,6 @@ local lectern_tpl = {
 	_doc_items_usagehelp = S("Place the Lectern on a solid node for best results. May attract villagers, so it's best to place outside of where you call 'home'."),
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	paramtype = "light",
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	paramtype2 = "facedir",
 	drawtype = "mesh",
 	mesh = "mcl_lectern_lectern.obj",

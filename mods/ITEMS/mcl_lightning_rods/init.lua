@@ -17,7 +17,6 @@ local rod_def = {
 	is_ground_content = false,
 	paramtype = "light",
 	paramtype2 = "facedir",
-	use_texture_alpha = "opaque",
 	groups = { pickaxey = 2, attracts_lightning = 1 },
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	selection_box = cbox,

@@ -68,7 +68,6 @@ for i=0,4 do
 				}
 			},
 			light_source = light_level[i],
-			use_texture_alpha = "opaque",
 		})
 	end
  end

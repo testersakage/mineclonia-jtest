@@ -45,7 +45,6 @@ end
 
 local commdef = {
 	drawtype = "nodebox",
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	walkable = true,
 	selection_box = {
 		type = "fixed",

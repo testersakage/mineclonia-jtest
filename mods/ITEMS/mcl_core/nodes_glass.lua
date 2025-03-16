@@ -54,7 +54,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		paramtype = "light",
 		paramtype2 = "glasslikeliquidlevel",
 		sunlight_propagates = true,
-		use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or true,
+		use_texture_alpha = "blend",
 		groups = {handy=1, glass=1, building_block=1, material_glass=1, ["basecolor_"..color] = 1},
 		sounds = mcl_sounds.node_sound_glass_defaults(),
 		drop = "",

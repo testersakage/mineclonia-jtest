@@ -246,7 +246,7 @@ do
 			paramtype = "light",
 			paramtype2 = "color",
 			palette = "redstone_palette_power.png",
-			use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
+			use_texture_alpha = "clip",
 			sunlight_propagates = true,
 			selection_box = selectionbox,
 			node_box = nodebox,

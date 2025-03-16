@@ -34,7 +34,6 @@ mcl_heads.deftemplate = {
 		unsticky = 1,
 		pathfinder_partial = 2,
 	},
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 
 	sunlight_propagates = true,
 	sounds = mcl_sounds.node_sound_defaults{

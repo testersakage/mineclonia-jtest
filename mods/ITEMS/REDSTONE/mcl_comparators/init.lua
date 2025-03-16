@@ -251,7 +251,6 @@ for _, mode in pairs{"comp", "sub"} do
 			_doc_items_usagehelp = usagehelp,
 			drawtype = "nodebox",
 			tiles = get_tiles(state, mode),
-			use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 			walkable = true,
 			selection_box = collision_box,
 			collision_box = collision_box,
