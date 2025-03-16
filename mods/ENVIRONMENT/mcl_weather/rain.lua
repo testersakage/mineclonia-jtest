@@ -66,7 +66,7 @@ function mcl_weather.has_rain(pos)
 end
 
 function mcl_weather.rain.sound_handler(player)
-	return minetest.sound_play("weather_rain", {
+	return minetest.sound_play({name = "weather_rain", gain = 0.6}, {
 		to_player = player:get_player_name(),
 		loop = true,
 	})
