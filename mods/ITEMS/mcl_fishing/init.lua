@@ -156,7 +156,7 @@ local function fish(itemstack, player, pointed_thing)
 		epos.y = math.floor(epos.y)
 		local node = minetest.get_node(epos)
 		local def = minetest.registered_nodes[node.name]
-		if def.walkable then
+		if def and def.walkable then
 			if not minetest.is_creative_enabled(player:get_player_name()) then
 				local idef = itemstack:get_definition()
 				itemstack:add_wear((65535/durability)*2) -- if so and not creative then wear double like in MC.
@@ -211,7 +211,7 @@ function bobber_ENTITY:on_step(dtime)
 	end
 
 	-- If in water, then bob.
-	if def.liquidtype == "source" and minetest.get_item_group(def.name, "water") ~= 0 then
+	if def and (def.liquidtype == "source" and minetest.get_item_group(def.name, "water") ~= 0) then
 		if self._oldy == nil then
 			self.object:set_pos({x=self.object:get_pos().x,y=math.floor(self.object:get_pos().y)+.5,z=self.object:get_pos().z})
 			self._oldy = self.object:get_pos().y
