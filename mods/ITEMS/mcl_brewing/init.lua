@@ -387,7 +387,7 @@ local tpl_brewing_stand = {
 	groups = {pickaxey = 1, container = 1, not_in_creative_inventory = 1, not_in_craft_guide = 1,
 			brewing_stand = 1, pathfinder_partial = 2},
 	tiles = tiles,
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "clip" or true,
+	use_texture_alpha = "clip",
 	drop = "mcl_brewing:stand",
 	paramtype = "light",
 	light_source = 1,

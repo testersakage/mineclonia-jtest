@@ -752,7 +752,7 @@ minetest.register_node("mcl_portals:portal", {
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or true,
+	use_texture_alpha = "blend",
 	walkable = false,
 	is_ground_content = false,
 	drop = "",

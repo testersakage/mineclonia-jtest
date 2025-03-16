@@ -27,7 +27,6 @@ mcl_itemframes.tpl_node = {
 	node_box = fbox,
 	selection_box = fbox,
 	collision_box = fbox,
-	use_texture_alpha = "opaque",
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	sunlight_propagates = true,

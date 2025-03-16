@@ -4,7 +4,6 @@ mcl_meshhand = { }
 -- This is a fake node that should never be placed in the world
 local node_def = {
 	description = "",
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	visual_scale = 1,
 	wield_scale = {x=1,y=1,z=1},
 	paramtype = "light",

@@ -27,7 +27,6 @@ end
 local commdef = {
 	drawtype = "mesh",
 	tiles = {"default_cobble.png^mesecons_walllever_lever.png"},
-	use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "opaque" or false,
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
