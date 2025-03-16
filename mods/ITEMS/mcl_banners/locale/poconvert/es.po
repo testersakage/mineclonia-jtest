@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-04-15 19:26+0000\n"
+"Last-Translator: \"Miguel P.L\" <miguel_pl@noreply.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_banners/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "And one additional layer"
 msgstr "Y una capa adicional"
@@ -44,19 +45,19 @@ msgid "Black Banner"
 msgstr "Estandarte negro"
 
 msgid "Black Base"
-msgstr "Base negra"
+msgstr "Campaña negra"
 
 msgid "Black Base Dexter Canton"
-msgstr "Cantón en base negra a diestra"
+msgstr "Cantón negro en campaña a diestra"
 
 msgid "Black Base Gradient"
-msgstr "Gradiente en base negra"
+msgstr "Gradiente negro en base"
 
 msgid "Black Base Indented"
 msgstr "Base negra dentada"
 
 msgid "Black Base Sinister Canton"
-msgstr "Cantón en base negra a siniestra"
+msgstr "Cantón negro en campaña a siniestra"
 
 msgid "Black Bend"
 msgstr "Banda negra"
@@ -71,7 +72,7 @@ msgid "Black Bordure Indented"
 msgstr "Bordura negra dentada"
 
 msgid "Black Bricks"
-msgstr "Ladrillos negros"
+msgstr "Mazonado negro"
 
 msgid "Black Chevron"
 msgstr "Chevrón negro"
@@ -80,358 +81,358 @@ msgid "Black Chevron Inverted"
 msgstr "Chevrón negro invertido"
 
 msgid "Black Chief"
-msgstr ""
+msgstr "Jefe negro"
 
 msgid "Black Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón negro en jefe a diestra"
 
 msgid "Black Chief Indented"
-msgstr ""
+msgstr "Jefe negro dentado"
 
 msgid "Black Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón negro en jefe a siniestra"
 
 msgid "Black Creeper Charge"
-msgstr ""
+msgstr "Estampado negro de creeper"
 
 msgid "Black Cross"
-msgstr ""
+msgstr "Cruz negra"
 
 msgid "Black Fess"
-msgstr ""
+msgstr "Franja negra"
 
 msgid "Black Flow"
-msgstr ""
+msgstr "Estampado negro de espiral"
 
 msgid "Black Flower Charge"
-msgstr ""
+msgstr "Estampado negro de flor"
 
 msgid "Black Globe Charge"
-msgstr ""
+msgstr "Planeta negro"
 
 msgid "Black Gradient"
-msgstr ""
+msgstr "Gradiente negro"
 
 msgid "Black Guster"
-msgstr ""
+msgstr "Estampado negro de breeze"
 
 msgid "Black Lozenge"
-msgstr ""
+msgstr "Rombo negro"
 
 msgid "Black Pale"
-msgstr ""
+msgstr "Palo negro"
 
 msgid "Black Pale Dexter"
-msgstr ""
+msgstr "Palo negro a diestra"
 
 msgid "Black Pale Sinister"
-msgstr ""
+msgstr "Palo negro a siniestra"
 
 msgid "Black Paly"
-msgstr ""
+msgstr "Bastonado negro"
 
 msgid "Black Per Bend"
-msgstr ""
+msgstr "Tronchado negro"
 
 msgid "Black Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado negro invertido"
 
 msgid "Black Per Bend Sinister"
-msgstr ""
+msgstr "Tajado negro"
 
 msgid "Black Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado negro invertido"
 
 msgid "Black Per Fess"
-msgstr ""
+msgstr "Cortado negro"
 
 msgid "Black Per Fess Inverted"
-msgstr ""
+msgstr "Cortado negro invertido"
 
 msgid "Black Per Pale"
-msgstr ""
+msgstr "Flanco negro"
 
 msgid "Black Per Pale Inverted"
-msgstr ""
+msgstr "Flanco negro invertido"
 
 msgid "Black Piglin Charge"
-msgstr ""
+msgstr "Hocico negro"
 
 msgid "Black Roundel"
-msgstr ""
+msgstr "Roel negro"
 
 msgid "Black Saltire"
-msgstr ""
+msgstr "Aspa negra"
 
 msgid "Black Skull Charge"
-msgstr ""
+msgstr "Estampado negro de calavera"
 
 msgid "Black Thing Charge"
-msgstr ""
+msgstr "Estampado negro de una cosa"
 
 msgid "Blue Banner"
 msgstr "Estandarte azul"
 
 msgid "Blue Base"
-msgstr ""
+msgstr "Campaña azul"
 
 msgid "Blue Base Dexter Canton"
-msgstr ""
+msgstr "Cantón azul en campaña a diestra"
 
 msgid "Blue Base Gradient"
-msgstr ""
+msgstr "Gradiente azul en base"
 
 msgid "Blue Base Indented"
-msgstr ""
+msgstr "Base azul dentada"
 
 msgid "Blue Base Sinister Canton"
-msgstr ""
+msgstr "Cantón azul en campaña a siniestra"
 
 msgid "Blue Bend"
-msgstr ""
+msgstr "Banda azul"
 
 msgid "Blue Bend Sinister"
-msgstr ""
+msgstr "Banda azul a siniestra"
 
 msgid "Blue Bordure"
-msgstr ""
+msgstr "Bordura azul"
 
 msgid "Blue Bordure Indented"
-msgstr ""
+msgstr "Bordura azul dentada"
 
 msgid "Blue Bricks"
-msgstr ""
+msgstr "Mazonado azul"
 
 msgid "Blue Chevron"
-msgstr ""
+msgstr "Chevrón azul"
 
 msgid "Blue Chevron Inverted"
-msgstr ""
+msgstr "Chevrón azul invertido"
 
 msgid "Blue Chief"
-msgstr ""
+msgstr "Jefe azul"
 
 msgid "Blue Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón azul en jefe a diestra"
 
 msgid "Blue Chief Indented"
-msgstr ""
+msgstr "Jefe azul dentado"
 
 msgid "Blue Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón azul en jefe a siniestra"
 
 msgid "Blue Creeper Charge"
-msgstr ""
+msgstr "Estampado azul de creeper"
 
 msgid "Blue Cross"
-msgstr ""
+msgstr "Cruz azul"
 
 msgid "Blue Fess"
-msgstr ""
+msgstr "Franja azul"
 
 msgid "Blue Flow"
-msgstr ""
+msgstr "Estampado azul de espiral"
 
 msgid "Blue Flower Charge"
-msgstr ""
+msgstr "Estampado azul de flor"
 
 msgid "Blue Globe Charge"
-msgstr ""
+msgstr "Planeta azul"
 
 msgid "Blue Gradient"
-msgstr ""
+msgstr "Gradiente azul"
 
 msgid "Blue Guster"
-msgstr ""
+msgstr "Estampado azul de breeze"
 
 msgid "Blue Lozenge"
-msgstr ""
+msgstr "Rombo azul"
 
 msgid "Blue Pale"
-msgstr ""
+msgstr "Palo azul"
 
 msgid "Blue Pale Dexter"
-msgstr ""
+msgstr "Palo azul a diestra"
 
 msgid "Blue Pale Sinister"
-msgstr ""
+msgstr "Palo azul a siniestra"
 
 msgid "Blue Paly"
-msgstr ""
+msgstr "Bastonado azul"
 
 msgid "Blue Per Bend"
-msgstr ""
+msgstr "Tronchado azul"
 
 msgid "Blue Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado azul invertido"
 
 msgid "Blue Per Bend Sinister"
-msgstr ""
+msgstr "Tajado azul"
 
 msgid "Blue Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado azul invertido"
 
 msgid "Blue Per Fess"
-msgstr ""
+msgstr "Cortado azul"
 
 msgid "Blue Per Fess Inverted"
-msgstr ""
+msgstr "Cortado azul invertido"
 
 msgid "Blue Per Pale"
-msgstr ""
+msgstr "Flanco azul"
 
 msgid "Blue Per Pale Inverted"
-msgstr ""
+msgstr "Flanco azul invertido"
 
 msgid "Blue Piglin Charge"
-msgstr ""
+msgstr "Hocico azul"
 
 msgid "Blue Roundel"
-msgstr ""
+msgstr "Roel azul"
 
 msgid "Blue Saltire"
-msgstr ""
+msgstr "Aspa azul"
 
 msgid "Blue Skull Charge"
-msgstr ""
+msgstr "Estampado azul de calavera"
 
 msgid "Blue Thing Charge"
-msgstr ""
+msgstr "Estampado azul de una cosa"
 
 msgid "Bricks Banner Pattern"
-msgstr ""
+msgstr "Estampado de mazonado"
 
 msgid "Brown Banner"
 msgstr "Estandarte marrón"
 
 msgid "Brown Base"
-msgstr ""
+msgstr "Campaña marrón"
 
 msgid "Brown Base Dexter Canton"
-msgstr ""
+msgstr "Cantón marrón en campaña a diestra"
 
 msgid "Brown Base Gradient"
-msgstr ""
+msgstr "Gradiente marrón en base"
 
 msgid "Brown Base Indented"
-msgstr ""
+msgstr "Base marrón dentada"
 
 msgid "Brown Base Sinister Canton"
-msgstr ""
+msgstr "Cantón marrón en campaña a siniestra"
 
 msgid "Brown Bend"
-msgstr ""
+msgstr "Banda marrón"
 
 msgid "Brown Bend Sinister"
-msgstr ""
+msgstr "Banda marrón a siniestra"
 
 msgid "Brown Bordure"
-msgstr ""
+msgstr "Bordura marrón"
 
 msgid "Brown Bordure Indented"
-msgstr ""
+msgstr "Bordura marrón dentada"
 
 msgid "Brown Bricks"
-msgstr ""
+msgstr "Mazonado marrón"
 
 msgid "Brown Chevron"
-msgstr ""
+msgstr "Chevrón marrón"
 
 msgid "Brown Chevron Inverted"
-msgstr ""
+msgstr "Chevrón marrón invertido"
 
 msgid "Brown Chief"
-msgstr ""
+msgstr "Jefe marrón"
 
 msgid "Brown Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón marrón en jefe a diestra"
 
 msgid "Brown Chief Indented"
-msgstr ""
+msgstr "Jefe marrón dentado"
 
 msgid "Brown Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón marrón en jefe a siniestra"
 
 msgid "Brown Creeper Charge"
-msgstr ""
+msgstr "Estampado marrón de creeper"
 
 msgid "Brown Cross"
-msgstr ""
+msgstr "Cruz marrón"
 
 msgid "Brown Fess"
-msgstr ""
+msgstr "Franja marrón"
 
 msgid "Brown Flow"
-msgstr ""
+msgstr "Estampado marrón de espiral"
 
 msgid "Brown Flower Charge"
-msgstr ""
+msgstr "Estampado marrón de flor"
 
 msgid "Brown Globe Charge"
-msgstr ""
+msgstr "Planeta marrón"
 
 msgid "Brown Gradient"
-msgstr ""
+msgstr "Gradiente marrón"
 
 msgid "Brown Guster"
-msgstr ""
+msgstr "Estampado marrón de breeze"
 
 msgid "Brown Lozenge"
-msgstr ""
+msgstr "Rombo marrón"
 
 msgid "Brown Pale"
-msgstr ""
+msgstr "Palo marrón"
 
 msgid "Brown Pale Dexter"
-msgstr ""
+msgstr "Palo marrón a diestra"
 
 msgid "Brown Pale Sinister"
-msgstr ""
+msgstr "Palo marrón a siniestra"
 
 msgid "Brown Paly"
-msgstr ""
+msgstr "Bastonado marrón"
 
 msgid "Brown Per Bend"
-msgstr ""
+msgstr "Tronchado marrón"
 
 msgid "Brown Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado marrón invertido"
 
 msgid "Brown Per Bend Sinister"
-msgstr ""
+msgstr "Tajado marrón"
 
 msgid "Brown Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado marrón invertido"
 
 msgid "Brown Per Fess"
-msgstr ""
+msgstr "Cortado marrón"
 
 msgid "Brown Per Fess Inverted"
-msgstr ""
+msgstr "Cortado marrón invertido"
 
 msgid "Brown Per Pale"
-msgstr ""
+msgstr "Flanco marrón"
 
 msgid "Brown Per Pale Inverted"
-msgstr ""
+msgstr "Flanco marrón invertido"
 
 msgid "Brown Piglin Charge"
-msgstr ""
+msgstr "Hocico marrón"
 
 msgid "Brown Roundel"
-msgstr ""
+msgstr "Roel marrón"
 
 msgid "Brown Saltire"
-msgstr ""
+msgstr "Aspa marrón"
 
 msgid "Brown Skull Charge"
-msgstr ""
+msgstr "Estampado marrón de calavera"
 
 msgid "Brown Thing Charge"
-msgstr ""
+msgstr "Estampado marrón de una cosa"
 
 msgid "Creeper Banner Pattern"
-msgstr ""
+msgstr "Estandarte con estampado de creeper"
 
 msgid "Curly border Banner Pattern"
 msgstr ""
@@ -2133,4 +2134,3 @@ msgstr ""
 
 msgid "Yellow Thing Charge"
 msgstr ""
-

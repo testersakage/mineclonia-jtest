@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-04-04 07:36+0000\n"
+"Last-Translator: Githabnet <githabnet@noreply.codeberg.org>\n"
+"Language-Team: Ukrainian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_achievements/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 msgid "Benchmarking"
 msgstr ""
@@ -62,10 +64,10 @@ msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
 msgstr ""
 
 msgid "Librarian"
-msgstr ""
+msgstr "Бібліотекар"
 
 msgid "Craft a bookshelf."
-msgstr ""
+msgstr "Змайструйте книжкову полицю."
 
 msgid "Isn't It Iron Pick"
 msgstr ""
@@ -74,10 +76,11 @@ msgid "Craft a iron pickaxe using sticks and iron."
 msgstr ""
 
 msgid "DIAMONDS!"
-msgstr ""
+msgstr "ДІАМАНТИ!"
 
+#, fuzzy
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "Підберіть діамант."
 
 msgid "Into Fire"
 msgstr ""
@@ -99,8 +102,9 @@ msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
 
+#, fuzzy
 msgid "Who is Cutting Onions?"
-msgstr ""
+msgstr "Хто нарізає цибулю?"
 
 msgid "Pick up a crying obsidian from the floor."
 msgstr ""
@@ -112,11 +116,14 @@ msgid "Pick up an Ancient Debris from the floor."
 msgstr ""
 
 msgid "The Next Generation"
-msgstr ""
+msgstr "Нове покоління"
 
+#, fuzzy
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
+"Тримайте яйце дракона.\n"
+"Підказка: Підніміть яйце з землі і покладіть його в інвентар."
 
 msgid "Sky's the Limit"
 msgstr ""
@@ -151,10 +158,10 @@ msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distanc
 msgstr ""
 
 msgid "Monster Hunter"
-msgstr ""
+msgstr "Мисливець на монстрів"
 
 msgid "Kill a monster."
-msgstr ""
+msgstr "Вбийте монстра."
 
 msgid "We Need to Go Deeper"
 msgstr ""
@@ -163,7 +170,7 @@ msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr ""
 
 msgid "The End?"
-msgstr ""
+msgstr "Кінець?"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
@@ -201,10 +208,10 @@ msgid "Successfully trade with a Villager."
 msgstr ""
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "Рибальська кмітливість"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "Зловити рибу... без вудки!"
 
 msgid "The Cutest Predator"
 msgstr ""
@@ -225,7 +232,7 @@ msgid "Kill the ender dragon. Good Luck!"
 msgstr ""
 
 msgid "Fishy Business"
-msgstr ""
+msgstr "На гачку"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
@@ -326,13 +333,14 @@ msgid "Rabbit Season"
 msgstr ""
 
 msgid "Eat a cooked rabbit."
-msgstr ""
+msgstr "З'їжте вареного кролика."
 
 msgid "Iron Belly"
-msgstr ""
+msgstr "Залізний шлунок"
 
+#, fuzzy
 msgid "Get really desperate and eat rotten flesh."
-msgstr ""
+msgstr "Зневірься та з'їси гнилу плоть."
 
 msgid "Pot Planter"
 msgstr ""
@@ -347,13 +355,13 @@ msgid "Mine emerald ore."
 msgstr ""
 
 msgid "Stone Age"
-msgstr ""
+msgstr "Кам'яна доба"
 
 msgid "Mine a stone with new pickaxe."
 msgstr ""
 
 msgid "Hot Stuff"
-msgstr ""
+msgstr "Гаряча штучка"
 
 msgid "Put lava in a bucket."
 msgstr ""
@@ -371,8 +379,7 @@ msgid "Successfully defend a village from a raid"
 msgstr ""
 
 msgid "Voluntary Exile"
-msgstr ""
+msgstr "Добровільне вигнання"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
-
