@@ -222,7 +222,9 @@ read_globals = {
 		fields = {
 			update = { read_only = false },
 			update_nil = { read_only = false },
+			update_deep = { read_only = false },
 			merge = { read_only = false },
+			merge_deep = { read_only = false },
 			"copy",
 			"indexof",
 			"insert_all",
