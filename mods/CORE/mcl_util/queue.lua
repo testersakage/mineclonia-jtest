@@ -36,8 +36,6 @@ local queue_class = {
 
 queue_class.__index = queue_class
 
-local function queue()
+return function()
 	return setmetatable({3, 3}, queue_class)
 end
-
-return queue

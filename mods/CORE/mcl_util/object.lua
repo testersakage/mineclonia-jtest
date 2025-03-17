@@ -45,13 +45,15 @@ function mcl_util.get_object_name(object)
 	end
 end
 
-function mcl_util.replace_mob (obj, mob_type, propagate_equipment)
-	local sacrifice = obj:get_luaentity ()
-	return sacrifice:replace_with (mob_type, propagate_equipment)
+function mcl_util.replace_mob(obj, mob_type, propagate_equipment)
+	local sacrifice = obj:get_luaentity()
+	return sacrifice:replace_with(mob_type, propagate_equipment)
 end
 
 local function get_visual_size(obj)
-	return obj:is_player() and {x = 1, y = 1, z = 1} or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
+	return obj:is_player() and vector.new(1, 1, 1)
+		or obj:get_luaentity()._old_visual_size
+		or obj:get_properties().visual_size
 end
 
 function mcl_util.detach_object(obj, change_pos, callback)
@@ -60,7 +62,7 @@ function mcl_util.detach_object(obj, change_pos, callback)
 	obj:set_properties({visual_size = get_visual_size(obj)})
 	if obj:is_player() then
 		mcl_player.players[obj].attached = nil
-		obj:set_eye_offset({x=0, y=0, z=0},{x=0, y=0, z=0})
+		obj:set_eye_offset(vector.zero(), vector.zero())
 		mcl_player.player_set_animation(obj, "stand", 30)
 	else
 		obj:get_luaentity()._old_visual_size = nil
@@ -165,7 +167,7 @@ local function props_changed(props, oldprops)
 	return changed, p
 end
 
---tests for roundN
+-- tests for roundN
 local test_round1 = 15
 local test_round2 = 15.00199999999
 local test_round3 = 15.00111111
@@ -194,7 +196,7 @@ assert(close_enough(test_eh, test_eh_close))
 assert(not close_enough(test_eh, test_eh_diff))
 assert(not close_enough(test_nt, test_nt_diff)) --no floats involved here
 
---tests for properties_changed
+-- tests for properties_changed
 local test_properties_set1 = {collisionbox = {-0.35, 0, -0.35, 0.35, 0.8, 0.35}, eye_height = 0.65,
 	nametag_color = {r = 225, b = 225, a = 225, g = 225}}
 local test_properties_set2 = {collisionbox = {-0.35, 0, -0.35, 0.35, 0.8, 0.35}, eye_height = 1.35,
