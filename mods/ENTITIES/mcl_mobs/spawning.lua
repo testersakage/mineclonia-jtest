@@ -107,8 +107,8 @@ local spawn_defaults = {
 	max_light = minetest.LIGHT_MAX + 1,
 	chance = 1000,
 	aoc = aoc_range,
-	min_height = -31000,
-	max_height = 31000,
+	min_height = -mcl_vars.mapgen_limit,
+	max_height = mcl_vars.mapgen_limit,
 }
 
 local spawn_defaults_meta = { __INDEX = spawn_defaults }
@@ -394,7 +394,7 @@ local MOB_SPAWN_ZONE_INNER = 24
 local MOB_SPAWN_ZONE_OUTER = 128
 
 
-local SPAWN_MAPGEN_LIMIT  = 30911
+local SPAWN_MAPGEN_LIMIT = math.abs(mcl_vars.mapgen_edge_min)
 
 local function math_round(x) return (x > 0) and math.floor(x + 0.5) or math.ceil(x - 0.5) end
 

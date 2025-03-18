@@ -783,10 +783,10 @@ Mobs can be added to the natural spawn cycle using
 	aoc = 5,
 	--"active object count", don't spawn mob if this amount of other mobs is already in the area
 
-	min_height = -30912,
+	min_height = -mcl_vars.mapgen_limit,
 	--minimum Y position this rule applies to
 
-	max_height = 30927,
+	max_height = mcl_vars.mapgen_limit,
 	--maximum Y position this rule applies to
 
 	check_position = function(pos) end,

@@ -125,7 +125,7 @@ end
 
 
 function mcl_structures.find_lowest_y(pp)
-	local y = 31000
+	local y = mcl_vars.mapgen_limit
 	for _,p in pairs(pp) do
 		if p.y < y then y = p.y end
 	end
@@ -133,7 +133,7 @@ function mcl_structures.find_lowest_y(pp)
 end
 
 function mcl_structures.find_highest_y(pp)
-	local y = -31000
+	local y = -mcl_vars.mapgen_limit
 	for _,p in pairs(pp) do
 		if p.y > y then y = p.y end
 	end
@@ -287,8 +287,8 @@ function mcl_structures.register_structure_spawn(def)
 	minetest.register_abm({
 		label = "Spawn "..def.name,
 		nodenames = def.spawnon,
-		min_y = def.y_min or -31000,
-		max_y = def.y_max or 31000,
+		min_y = def.y_min or -mcl_vars.mapgen_limit,
+		max_y = def.y_max or mcl_vars.mapgen_limit,
 		interval = def.interval or 60,
 		chance = def.chance or 5,
 		action = function(pos, _, _, active_object_count_wider)

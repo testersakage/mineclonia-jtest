@@ -6,14 +6,9 @@ local DEATH_DELAY = 0.5
 
 local mobs_drop_items = minetest.settings:get_bool("mobs_drop_items") ~= false
 
--- check if within physical map limits (-30911 to 30927)
+-- check if within physical map limits
 local function within_limits(pos, radius)
-	local wmin, wmax = -30912, 30928
-	if mcl_vars then
-		if mcl_vars.mapgen_edge_min and mcl_vars.mapgen_edge_max then
-			wmin, wmax = mcl_vars.mapgen_edge_min, mcl_vars.mapgen_edge_max
-		end
-	end
+	local wmin, wmax = mcl_vars.mapgen_edge_min, mcl_vars.mapgen_edge_max
 	if radius then
 		wmin = wmin - radius
 		wmax = wmax + radius
