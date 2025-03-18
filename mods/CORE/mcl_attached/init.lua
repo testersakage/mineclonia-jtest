@@ -79,13 +79,44 @@ function minetest.check_single_for_falling(pos)
 		end
 	end
 
-	local supported = minetest.get_item_group(node.name, "supported_node")
-	if supported ~= 0 then
+	if minetest.get_item_group(node.name, "attached_node_wallmounted") ~= 0 then
+		local dir = minetest.wallmounted_to_dir(node.param2)
+		if dir then
+			if minetest.get_item_group(minetest.get_node(vector.add(pos, dir)).name, "solid") == 0 then
+				mcl_attached.drop_attached_node(pos)
+				return true
+			end
+		end
+	end
+
+	if minetest.get_item_group(node.name, "supported_node") ~= 0 then
 		local supporting_node = minetest.get_node(vector.offset(pos, 0, -1, 0))
 		local def = minetest.registered_nodes[supporting_node.name]
 		if def and def.drawtype == "airlike" then
 			mcl_attached.drop_attached_node(pos)
 			return true
+		end
+	end
+
+	if minetest.get_item_group(node.name, "supported_node_facedir") ~= 0 then
+		local dir = minetest.facedir_to_dir(node.param2)
+		if dir then
+			local def = minetest.registered_nodes[minetest.get_node(vector.add(pos, dir)).name]
+			if def and def.drawtype == "airlike" then
+				mcl_attached.drop_attached_node(pos)
+				return true
+			end
+		end
+	end
+
+	if minetest.get_item_group(node.name, "supported_node_wallmounted") ~= 0 then
+		local dir = minetest.wallmounted_to_dir(node.param2)
+		if dir then
+			local def = minetest.registered_nodes[minetest.get_node(vector.add(pos, dir)).name]
+			if def and def.drawtype == "airlike" then
+				mcl_attached.drop_attached_node(pos)
+				return true
+			end
 		end
 	end
 
