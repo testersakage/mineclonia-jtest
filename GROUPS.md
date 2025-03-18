@@ -233,6 +233,8 @@ These groups are used mostly for informational purposes
 * `supports_mushrooms=1`: Mushrooms can be placend and stay on this node regardless of light level.
 * `supports_mushrooms=2`: Mushrooms stay on this node regardless of light level but can't be placed directly.
 
+* `nectar_bearing=1`: Node has nectar and bees can collect it.
+
 ## Fake item groups
 These groups put similar items together which should all be treated by the gameplay or the GUI as a single item.
 You should not add custom items to these groups for no good reason, this is likely to cause a ton of conflicts.
