@@ -3,6 +3,10 @@ local normal_vars_in_singlenode = false
 
 local modpath = core.get_modpath(core.get_current_modname())
 
+local chunksize = tonumber(minetest.settings:get("chunksize")) or 5
+
+assert(chunksize == 5, 'Mineclonia does not support the "Chunk size" setting being anything but 5. Reset the advanced setting in the settings menu to play.')
+
 -- Some global variables (don't overwrite them!)
 mcl_vars = {}
 
