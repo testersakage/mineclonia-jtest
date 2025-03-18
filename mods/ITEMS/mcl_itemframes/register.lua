@@ -25,6 +25,27 @@ mcl_itemframes.register_itemframe("glow_frame", {
 	object_properties = {glow = 15},
 })
 
+mcl_itemframes.register_itemframe("invisible_frame", {
+	node = {
+		description = S("Invisible Item Frame"),
+		drawtype = "airlike",
+		_tt_help = S("Can hold an item but is invisible"),
+		inventory_image = "mcl_itemframes_invisible_item_frame.png",
+		wield_image = "mcl_itemframes_invisible_item_frame.png",
+	},
+})
+
+mcl_itemframes.register_itemframe("invisible_glow_frame", {
+	node = {
+		description = S("Invisible Glow Item Frame"),
+		drawtype = "airlike",
+		_tt_help = S("Can hold an item and glows but is invisible"),
+		inventory_image = "mcl_itemframes_invisible_glow_item_frame.png",
+		wield_image = "mcl_itemframes_invisible_glow_item_frame.png",
+	},
+	object_properties = {glow = 15},
+})
+
 awards.register_achievement("mcl_itemframes:glowframe", {
 	title = S("Glow and Behold!"),
 	description = S("Craft a glow item frame."),
