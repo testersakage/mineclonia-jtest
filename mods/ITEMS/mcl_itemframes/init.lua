@@ -22,9 +22,9 @@ local map_props = {
 }
 
 mcl_itemframes.tpl_node = {
-	drawtype = "nodebox",
+	drawtype = "mesh",
 	is_ground_content = false,
-	node_box = fbox,
+	mesh = "mcl_itemframes_frame.obj",
 	selection_box = fbox,
 	collision_box = fbox,
 	paramtype = "light",
@@ -248,7 +248,7 @@ mcl_itemframes.register_itemframe("frame", {
 		_tt_help = S("Can hold an item"),
 		_doc_items_longdesc = S("Item frames are decorative blocks in which items can be placed."),
 		_doc_items_usagehelp = S("Just place any item on the item frame. Use the item frame again to retrieve the item."),
-		tiles = { "mcl_itemframes_item_frame.png" },
+		tiles = { "mcl_itemframes_itemframe_background.png" },
 		inventory_image = "mcl_itemframes_item_frame.png",
 		wield_image = "mcl_itemframes_item_frame.png",
 	},
@@ -260,7 +260,7 @@ mcl_itemframes.register_itemframe("glow_frame", {
 		_tt_help = S("Can hold an item and glows"),
 		_doc_items_longdesc = S("Item frames are decorative blocks in which items can be placed."),
 		_doc_items_usagehelp = S("Just place any item on the item frame. Use the item frame again to retrieve the item."),
-		tiles = { "mcl_itemframes_glow_item_frame.png" },
+		tiles = { "mcl_itemframes_glow_item_frame_border.png" },
 		inventory_image = "mcl_itemframes_glow_item_frame.png",
 		wield_image = "mcl_itemframes_glow_item_frame.png",
 	},
