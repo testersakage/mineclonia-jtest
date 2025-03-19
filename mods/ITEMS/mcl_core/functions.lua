@@ -366,30 +366,23 @@ local function likely_unupdated_mapblock(pos, node)
 	return #nodes >= 4
 end
 
-local function update_mapblock_biomecolor4dir(pos, node)
+local function update_mapblock(pos)
 	local minpos = (pos / 16):floor() * 16
 	local maxpos = minpos:add(15)
-	local nodes = core.find_nodes_in_area(minpos, maxpos, "group:biomecolor4dir")
 
+	local nodes = core.find_nodes_in_area(minpos, maxpos, "group:biomecolor4dir")
 	for _, pos2 in pairs(nodes) do
+		local node = core.get_node(pos2)
 		node.param2 = mcl_util.get_pos_biomecolor4dir(pos2)
 		minetest.swap_node(pos2, node)
 	end
-	return true
 
-end
-
-local function update_mapblock_random4dir(pos, node)
-	local minpos = (pos / 16):floor() * 16
-	local maxpos = minpos:add(15)
 	local nodes = core.find_nodes_in_area(minpos, maxpos, "group:random4dir")
-
 	for _, pos2 in pairs(nodes) do
-		node.param2 = mcl_util.get_pos_random4dir(pos2)
+		local node = core.get_node(pos2)
+		node.param2 = mcl_util.get_pos_biomecolor4dir(pos2)
 		minetest.swap_node(pos2, node)
 	end
-	return true
-
 end
 
 -- As of writing this Luanti has a bug that makes lbms not be performed
@@ -409,7 +402,7 @@ core.register_abm({
 	action = function(pos, node)
 		-- Nodes with param2 > 32 cannot be unupdated mapblocks.
 		if node.param2 < 32 and likely_unupdated_mapblock(pos, node) then
-			update_mapblock_biomecolor4dir(pos, node)
+			update_mapblock(pos)
 		end
 	end,
 })
@@ -428,7 +421,7 @@ core.register_abm({
 	action = function(pos, node)
 		-- Nodes with param2 ~= 0 cannot be unupdated mapblocks.
 		if node.param2 == 0 and likely_unupdated_mapblock(pos, node) then
-			update_mapblock_random4dir(pos, node)
+			update_mapblock(pos)
 		end
 	end,
 })
