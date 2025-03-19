@@ -395,13 +395,15 @@ end
 core.register_abm({
 	label = "Rotate old biomecolor4dir nodes (ABM workaround)",
 	nodenames = {"mcl_core:dirt_with_grass", "mcl_core:dirt_with_grass_snow"},
-	interval = 15,
-	chance = 40,
+	interval = 1,
+	chance = 1,
 	catch_up = false,
 	action = function(pos, node)
 		-- Nodes with param2 > 32 cannot be unupdated mapblocks.
-		if node.param2 < 32 and likely_unupdated_mapblock(pos, node) then
-			update_mapblock(pos)
+		for i = 1, 3 do
+			if node.param2 < 32 and likely_unupdated_mapblock(pos, node) then
+				update_mapblock(pos)
+			end
 		end
 	end,
 })
@@ -414,13 +416,15 @@ core.register_abm({
 		"mcl_core:snow_4", "mcl_core:snow_5", "mcl_core:snow_6", "mcl_core:snow_7",
 		"mcl_core:snow",
 	},
-	interval = 15,
-	chance = 40,
+	interval = 1,
+	chance = 1,
 	catch_up = false,
 	action = function(pos, node)
 		-- Nodes with param2 ~= 0 cannot be unupdated mapblocks.
-		if node.param2 == 0 and likely_unupdated_mapblock(pos, node) then
-			update_mapblock(pos)
+		for i = 1, 3 do
+			if node.param2 == 0 and likely_unupdated_mapblock(pos, node) then
+				update_mapblock(pos)
+			end
 		end
 	end,
 })
