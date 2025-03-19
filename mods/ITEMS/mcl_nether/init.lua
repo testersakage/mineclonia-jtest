@@ -347,6 +347,7 @@ core.register_craftitem("mcl_nether:quartz", {
 	_doc_items_longdesc = S("Nether quartz is a versatile crafting ingredient."),
 	inventory_image = "mcl_nether_quartz.png",
 	groups = { craftitem = 1 },
+	_mcl_armor_trim_color = "#c9bcb9",
 	_mcl_crafting_output = {square2 = {output = "mcl_nether:quartz_block"}}
 })
 
@@ -362,6 +363,7 @@ core.register_craftitem("mcl_nether:netherite_ingot", {
 	_doc_items_longdesc = S("Netherite ingots can be used with a smithing table to upgrade items to netherite."),
 	inventory_image = "mcl_nether_netherite_ingot.png",
 	groups = { craftitem = 1, fire_immune=1, beacon_fuel = 1 },
+	_mcl_armor_trim_color = "#302a26",
 	_mcl_crafting_output = {square3 = {output = "mcl_nether:netheriteblock"}}
 })
 
