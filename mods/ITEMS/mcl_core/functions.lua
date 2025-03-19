@@ -385,14 +385,13 @@ local function update_mapblock(pos)
 	end
 end
 
--- As of writing this Luanti has a bug that makes lbms not be performed
--- reliably across all mapblocks (see
--- https://github.com/luanti-org/luanti/issues/15902).
---
--- We work around this by in addition to the LBM using an ABM. In order to be
--- more lightweight it will first do a couple of checks before proceeding with
--- the update. In the future these could probably be disabled along with
--- renaming the LBMs so they are performed again for patched engine versions.
+-- In Luanti <=5.11 there was a bug were some generated mapblocks would not get
+-- an activation timestamp. The bug has been fixed but not retroactively which
+-- means that we cannot rely on the LBM for all old mapblocks. Because of this
+-- we have a lightweight ABM which is always running in order to catch
+-- mapblocks that the LBMs miss. Unfortunately these ABMs will have to remain
+-- in place forever unless Luanti were to add some way to have LBMs run on old
+-- mapblocks without an activation timestamp (which is probably unlikely).
 core.register_abm({
 	label = "Rotate old biomecolor4dir nodes (ABM workaround)",
 	nodenames = {"mcl_core:dirt_with_grass", "mcl_core:dirt_with_grass_snow"},
