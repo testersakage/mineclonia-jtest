@@ -234,6 +234,7 @@ These groups are used mostly for informational purposes
 * `supports_mushrooms=2`: Mushrooms stay on this node regardless of light level but can't be placed directly.
 
 * `nectar_bearing=1`: Node has nectar and bees can collect it.
+* `fertilizable_crop=1`: Node is a crop that can be fertilized by e.g. bees.
 
 ## Fake item groups
 These groups put similar items together which should all be treated by the gameplay or the GUI as a single item.
