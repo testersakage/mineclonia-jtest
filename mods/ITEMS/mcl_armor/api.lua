@@ -353,7 +353,7 @@ function mcl_armor.update(obj)
 	end
 end
 
-function mcl_armor.trim(itemstack, overlay, color_string)
+function mcl_armor.trim(itemstack, overlay, trim_material)
 	local def = itemstack:get_definition()
 	if not def._mcl_armor_texture and not mcl_armor.trims.blacklisted[itemstack:get_name()] then return end
 	local meta = itemstack:get_meta()
@@ -375,7 +375,7 @@ function mcl_armor.trim(itemstack, overlay, color_string)
 		inv_overlay = "^(boots_trim.png"
 		piece_overlay = piece_overlay .. "_boots"
 	end
-	local color = mcl_armor.trims.colors[color_string]
+	local color = trim_material:get_definition()._mcl_armor_trim_color
 	inv_overlay = inv_overlay .. "^[colorize:" .. color .. ":150)"
 	piece_overlay = piece_overlay .. ".png"
 

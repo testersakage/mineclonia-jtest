@@ -57,6 +57,7 @@ core.register_craftitem("mcl_core:diamond", {
 	_doc_items_longdesc = S("Diamonds are precious minerals and useful to create the highest tier of armor and tools."),
 	inventory_image = "default_diamond.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
+	_mcl_armor_trim_color = "#5faed8",
 	_mcl_crafting_output = {square3 = {output = "mcl_core:diamondblock"}}
 })
 
@@ -75,6 +76,7 @@ core.register_craftitem("mcl_core:iron_ingot", {
 	_doc_items_longdesc = S("Molten iron. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_steel_ingot.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
+	_mcl_armor_trim_color = "#938e88",
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:iron_nugget 9"},
 		square3 = {output = "mcl_core:ironblock"}
@@ -86,6 +88,7 @@ core.register_craftitem("mcl_core:gold_ingot", {
 	_doc_items_longdesc = S("Molten gold. It is used to craft armor, tools, and whatnot."),
 	inventory_image = "default_gold_ingot.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
+	_mcl_armor_trim_color = "#ce9627",
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:gold_nugget 9"},
 		square3 = {output = "mcl_core:goldblock"}
@@ -97,6 +100,7 @@ core.register_craftitem("mcl_core:emerald", {
 	_doc_items_longdesc = S("Emeralds are used in villager trades as currency."),
 	inventory_image = "mcl_core_emerald.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
+	_mcl_armor_trim_color = "#1b9958",
 	_mcl_crafting_output = {square3 = {output = "mcl_core:emeraldblock"}}
 })
 
@@ -105,6 +109,7 @@ core.register_craftitem("mcl_core:lapis", {
 	_doc_items_longdesc = S("Lapis Lazuli are required for enchanting items on an enchanting table."),
 	inventory_image = "mcl_core_lapis.png",
 	groups = { craftitem=1 },
+	_mcl_armor_trim_color = "#1c306b",
 	_mcl_crafting_output = {
 		single = {output = "mcl_dyes:blue"},
 		square3 = {output = "mcl_core:lapisblock"}
