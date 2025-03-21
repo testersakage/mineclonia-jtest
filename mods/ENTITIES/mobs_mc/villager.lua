@@ -3203,28 +3203,28 @@ function villager:desires_golem (gmt)
 end
 
 function villager:summon_golem (self_pos)
-	local aa = vector.offset (self_pos, -8, -6, -8)
-	local bb = vector.offset (self_pos, 8, 6, 8)
-	local nn = core.find_nodes_in_area_under_air (aa, bb, {
-		"group:solid", "group:water",
+	local aa = vector.offset (self_pos, -8, -5, -8)
+	local bb = vector.offset (self_pos, 8, 5, 8)
+	local nn = minetest.find_nodes_in_area_under_air (aa, bb, {
+		"group:solid", "group:water"
 	})
 	table.shuffle (nn)
 	for _, n in pairs (nn) do
-		local c1 = vector.offset (n, 0, 1, 0)
-		local c2 = vector.offset (n, 0, 3, 0)
-		local up = core.find_nodes_in_area (c1, c2, {"air"})
-		local lim = vector.offset (n, 0, -1, 0)
-		local down = core.find_nodes_in_area (n, lim, {"group:water"})
-		local floor_is_water
-			= core.get_item_group (core.get_node (n).name, "water") ~= 0
-		if floor_is_water and down and #down == 1
-			or not floor_is_water and up and #up >= 3 then
-			local spawnpos
-				= floor_is_water
-					and vector.offset (n, 0, -0.5, 0)
-					or vector.offset (n, 0, 0.5, 0)
-			local golem = core.add_entity (spawnpos, "mobs_mc:iron_golem")
-
+		local half = 1/2
+		local air = minetest.find_nodes_in_area(
+			vector.offset(n, -half, 1, -half),
+			vector.offset(n, half, 3, half),
+			{"air"}
+		)
+		local required_air = 2*3*2
+		local nb = core.get_node(vector.offset(n,0,-1,0))
+		local nb_solid = core.get_item_group(nb.name, "solid") == 1
+		if #air >= required_air and nb_solid then
+			local spawnpos = vector.offset(n,-0.5,0.5,-0.5)
+			if core.get_item_group(core.get_node(n).name, "water") ~= 0 then
+				spawnpos = vector.offset(spawnpos,0,-1,0)
+			end
+			local golem = minetest.add_entity (spawnpos, "mobs_mc:iron_golem")
 			if golem then
 				return true
 			end
