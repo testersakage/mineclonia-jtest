@@ -72,27 +72,29 @@ function mcl_potions.register_arrow(name, desc, color, def)
 end
 
 local function on_craft(itemstack, _, old_craft_grid)
-	local potion_meta
+	if core.get_item_group(itemstack:get_name(), "tipped_arrow") == 1 then
+		local potion_meta
 
-	for _, stack in pairs(old_craft_grid) do
-		if core.get_item_group(stack:get_name(), "ling_potion") == 1 then
-			potion_meta = stack:get_meta()
+		for _, stack in pairs(old_craft_grid) do
+			if core.get_item_group(stack:get_name(), "ling_potion") == 1 then
+				potion_meta = stack:get_meta()
+			end
 		end
+
+		if potion_meta then
+			local potency = potion_meta:get_int("mcl_potions:potion_potent")
+			local extend = potion_meta:get_int("mcl_potions:potion_plus")
+
+			if potency and potency > 0 then
+				itemstack:get_meta():set_int("mcl_potions:potion_potent", potency)
+			end
+			if extend and extend > 0 then
+				itemstack:get_meta():set_int("mcl_potions:potion_plus", extend)
+			end
+		end
+
+		tt.reload_itemstack_description(itemstack)
 	end
-
-	if potion_meta then
-		local potency = potion_meta:get_int("mcl_potions:potion_potent")
-		local extend = potion_meta:get_int("mcl_potions:potion_plus")
-
-		if potency and potency > 0 then
-			itemstack:get_meta():set_int("mcl_potions:potion_potent", potency)
-		end
-		if extend and extend > 0 then
-			itemstack:get_meta():set_int("mcl_potions:potion_plus", extend)
-		end
-	end
-
-	tt.reload_itemstack_description(itemstack)
 
 	return itemstack
 end
