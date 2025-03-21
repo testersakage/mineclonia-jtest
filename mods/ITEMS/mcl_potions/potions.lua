@@ -71,7 +71,7 @@ local function generate_on_use(vanish, effects, _, on_use, custom_effect)
 		for name, details in pairs(effects) do
 			ef_level = mcl_potions.level_from_details (details, potency)
 			dur = mcl_potions.duration_from_details (details, potency,
-								 plus, 1.0)
+								 plus)
 			mcl_potions.give_effect_by_level(name, user, ef_level, dur)
 		end
 
@@ -104,7 +104,7 @@ function mcl_potions.consume_potion (mob, id, potency, plus)
 	for name, details in pairs (def._effect_list) do
 	ef_level = mcl_potions.level_from_details (details, potency)
 	dur = mcl_potions.duration_from_details (details, potency,
-						 plus, 1.0)
+						 plus)
 	mcl_potions.give_effect_by_level (name, mob, ef_level, dur)
 	end
 	if def.custom_effect then

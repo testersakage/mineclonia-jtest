@@ -149,7 +149,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 							local dur
 							for name, details in pairs(def._effect_list) do
 								ef_level = mcl_potions.level_from_details (details, potency)
-								dur = mcl_potions.duration_from_details (details, potency, plus, mcl_potions.SPLASH_FACTOR)
+								dur = mcl_potions.duration_from_details (details, potency, plus)
 								if rad > 0 then
 									mcl_potions.give_effect_by_level(name, obj, ef_level, redux_map[rad]*dur)
 								else
@@ -159,7 +159,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 						end
 
 						if def.custom_effect then
-							local power = (potency+1) * mcl_potions.SPLASH_FACTOR
+							local power = potency + 1
 							local thrower = self._thrower
 							if type (thrower) == "string" then
 								thrower = minetest.get_player_by_name (thrower)
