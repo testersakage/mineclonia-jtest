@@ -116,10 +116,10 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	local potency = meta:get_int("mcl_potions:potion_potent")
 	local plus = meta:get_int("mcl_potions:potion_plus")
 	local sl_factor = 1
-	if core.get_item_group(itemstring, "splash_potion") == 1 then
-		sl_factor = mcl_potions.SPLASH_FACTOR
-	elseif core.get_item_group(itemstring, "ling_potion") == 1 then
+	if core.get_item_group(itemstring, "ling_potion") == 1 then
 		sl_factor = mcl_potions.LINGERING_FACTOR
+	elseif core.get_item_group(itemstring, "tipped_arrow") == 1 then
+		sl_factor = mcl_potions.TIPPED_FACTOR
 	end
 	if def and def._dynamic_tt then s = s.. def._dynamic_tt((potency+1)*sl_factor).. "\n" end
 	local effects = def and def._effect_list

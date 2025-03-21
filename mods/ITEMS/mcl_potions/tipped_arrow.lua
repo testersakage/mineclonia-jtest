@@ -13,7 +13,7 @@ end
 
 function mcl_potions.register_arrow(name, desc, color, def)
 	local tt = def._tt or ""
-	local groups = {ammo=1, ammo_bow=1, ammo_crossbow=1, brewitem=1, _mcl_potion=1}
+	local groups = {ammo=1, ammo_bow=1, ammo_crossbow=1, brewitem=1, tipped_arrow = 1, _mcl_potion=1}
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
 	core.register_craftitem("mcl_potions:"..name.."_arrow", table.merge (arrow_def, {
 		description = desc,
@@ -48,7 +48,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 			ef_level = mcl_potions.level_from_details (details, potency)
 			dur = mcl_potions.duration_from_details (details, potency,
 								 plus,
-								 mcl_potions.SPLASH_FACTOR)
+								 mcl_potions.TIPPED_FACTOR)
 			mcl_potions.give_effect_by_level(name, obj, ef_level, dur)
 		end
 		end
@@ -70,3 +70,32 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		doc.sub.identifier.register_object("mcl_bows:arrow_entity", "craftitems", "mcl_bows:arrow")
 	end
 end
+
+local function on_craft(itemstack, _, old_craft_grid)
+	local potion_meta
+
+	for _, stack in pairs(old_craft_grid) do
+		if core.get_item_group(stack:get_name(), "ling_potion") == 1 then
+			potion_meta = stack:get_meta()
+		end
+	end
+
+	if potion_meta then
+		local potency = potion_meta:get_int("mcl_potions:potion_potent")
+		local extend = potion_meta:get_int("mcl_potions:potion_plus")
+
+		if potency and potency > 0 then
+			itemstack:get_meta():set_int("mcl_potions:potion_potent", potency)
+		end
+		if extend and extend > 0 then
+			itemstack:get_meta():set_int("mcl_potions:potion_plus", extend)
+		end
+	end
+
+	tt.reload_itemstack_description(itemstack)
+
+	return itemstack
+end
+
+core.register_craft_predict(on_craft)
+core.register_on_craft(on_craft)

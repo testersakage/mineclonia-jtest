@@ -21,8 +21,8 @@ mcl_potions.II_FACTOR = mcl_potions.POTENT_FACTOR -- TODO remove at some point
 mcl_potions.DURATION_PLUS = mcl_potions.DURATION * mcl_potions.PLUS_FACTOR -- TODO remove at some point
 mcl_potions.DURATION_2 = mcl_potions.DURATION / mcl_potions.II_FACTOR -- TODO remove at some point
 
-mcl_potions.SPLASH_FACTOR = 0.75
 mcl_potions.LINGERING_FACTOR = 0.25
+mcl_potions.TIPPED_FACTOR = 0.125
 
 dofile(modpath .. "/functions.lua")
 dofile(modpath .. "/commands.lua")

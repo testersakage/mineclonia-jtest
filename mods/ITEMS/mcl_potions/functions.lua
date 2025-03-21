@@ -2110,7 +2110,7 @@ function mcl_potions.duration_from_details (details, potency, plus, attenuation)
 		  math.pow (details.potent_factor
 				or mcl_potions.POTENT_FACTOR, potency)
 		  or 1)
-		   * attenuation)
+		   * (attenuation or 1))
 	else
 	dur = details.dur
 	end
