@@ -287,7 +287,10 @@ local sign_wall = table.merge(sign_tpl,{
 	mesh = "mcl_signs_signonwallmount.obj",
 	paramtype2 = "wallmounted",
 	selection_box = { type = "wallmounted", wall_side = { -0.5, -7 / 28, -0.5, -23 / 56, 7 / 28, 0.5 }},
-	groups = { axey = 1, handy = 2, sign = 1, deco_block = 1, unmovable_by_piston = 1 },
+	groups = {
+		axey = 1, handy = 2, sign = 1, deco_block = 1,
+		unmovable_by_piston = 1, supported_node_wallmounted = 1
+	},
 	_mcl_sign_type = "wall",
 })
 
