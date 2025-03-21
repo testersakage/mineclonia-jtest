@@ -37,6 +37,8 @@ Items can have these fields:
   If you don't do this, anvils will fail at properly restoring the description
   when their custom name gets cleared at an anvil. See `mcl_banners` for an
   example.
+* `_mcl_armor_trim_color`: _colorstring_ used to determine the color that will be
+  applied during armor trimming when used in the smithing table.
 * `_mcl_burntime`: _number_ that determines, in ticks, the amount of time an item
   burns when used in furnaces, blast furnaces and smokers. Examples can be found
   in `mcl_core/craftitems.lua`.
