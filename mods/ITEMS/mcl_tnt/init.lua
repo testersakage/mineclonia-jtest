@@ -85,11 +85,12 @@ core.register_node("mcl_tnt:tnt", {
 		tnt.ignite(pos)
 		return true
 	end,
-	_on_dispense = function(stack, _, droppos, dropnode)
-		-- Place and ignite TNT
-		if core.registered_nodes[dropnode.name].buildable_to then
-			core.set_node(droppos, { name = stack:get_name() })
-			tnt.ignite(droppos)
+	_on_dispense = function(_, _, droppos, dropnode)
+		local name = dropnode.name
+		if core.get_item_group(name, "solid") ~= 1 and core.get_item_group(name, "opaque") ~= 1 then
+			local fr = mcl_util.float_random
+			local pos = vector.offset(droppos, fr(-0.025, 0.025), 0, fr(-0.025, 0.025))
+			spawn_tnt(pos, "mcl_tnt:tnt")
 		end
 	end,
 	_on_arrow_hit = function(_, arrowent)
