@@ -8,6 +8,8 @@ from libtextureconverter.gui import main as launch_gui
 from libtextureconverter.config import SUPPORTED_MINECRAFT_VERSION, working_dir, appname, home
 from libtextureconverter.utils import handle_default_minecraft_texture, find_all_minecraft_resourcepacks
 from libtextureconverter.common import convert_resource_packs
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 def main():
     make_texture_pack = True
