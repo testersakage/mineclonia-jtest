@@ -258,7 +258,7 @@ awards.register_achievement("mcl:snipeSkeleton", {
 awards.register_achievement("mcl:monsterHunter", {
 	title = S("Monster Hunter"),
 	description = S("Kill a monster."),
-	icon = "mobs_mc_spawn_icon_zombie.png",
+	icon = "default_tool_steelsword.png",
 	type = "Advancement",
 	group = "Adventure",
 })
