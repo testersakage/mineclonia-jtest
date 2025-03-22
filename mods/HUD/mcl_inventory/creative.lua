@@ -5,10 +5,15 @@ local C = core.colorize
 local show_nici = core.settings:get_bool("mcl_creative_show_nici_tab", false)
 
 mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory", {
-	type = "boolean",
-	section = "Graphics",
+	type = "enum",
+	options = {
+		{ name = "auto", description = S("Auto (use scroll bar if client version >= 5.11)") },
+		{ name = "false", description = S("Off (use paging buttons, much better performance on client < 5.11)") },
+		{ name = "true", description = S("On (more MC like experience, may be sluggish on client < 5.11)") },
+	},
+	section = "Inventory",
 	short_desc = S("Enable scroll bar on creative inventory"),
-	ui_default = false,
+	ui_default = "auto",
 	on_change = mcl_inventory.set_creative_formspec
 })
 
@@ -505,7 +510,12 @@ function mcl_inventory.set_creative_formspec(player)
 			"listring[current_player;offhand]"..
 			"listring[current_player;main]"
 	else
-		if mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory", false) then
+		local scroll_setting = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory", "auto")
+		local scroll = scroll_setting == "true"
+		if scroll_setting == "auto" then
+			scroll = core.get_player_information(playername).protocol_version >= 47
+		end
+		if scroll then
 			local nb_lines = math.ceil(inv_size / 9)
 			main_list = table.concat({
 				mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
