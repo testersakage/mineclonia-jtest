@@ -147,6 +147,7 @@ local function set_inv_search(filter, player)
 	local playername = player:get_player_name()
 	local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 	local creative_list = {}
+	filter = string.lower(filter)
 	filter = string.trim(filter)
 	local lang = minetest.get_player_information(playername).lang_code
 	for name, def in pairs(minetest.registered_items) do
@@ -712,7 +713,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		set_inv_page("all", player)
 		page = "nix"
 	elseif fields.search and not fields.creative_next and not fields.creative_prev then
-		set_inv_search(string.lower(fields.search), player)
+		set_inv_search(fields.search, player)
 		page = "nix"
 	elseif fields.__switch_stack then
 		local switch = 1
