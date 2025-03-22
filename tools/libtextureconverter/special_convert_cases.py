@@ -777,6 +777,15 @@ def convert_grass_textures(
         os.system("convert -size 16x16 canvas:transparent " +
                   shlex.quote(grass_palette_file))
 
+        dirt_grass_shadow_file = target_dir(
+            "/textures",
+            make_texture_pack,
+            output_dir,
+            output_dir_name,
+            mineclone2_path) + "/mcl_dirt_grass_shadow.png"
+        os.system("convert -size 16x16 canvas:transparent " +
+                  shlex.quote(dirt_grass_shadow_file))
+
         for i, color in enumerate(grass_colors):
             if color[0][0] == "#":
                 os.system("convert -size 1x1 xc:\"" +
