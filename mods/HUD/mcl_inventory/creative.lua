@@ -147,8 +147,9 @@ local function set_inv_search(filter, player)
 	local playername = player:get_player_name()
 	local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 	local creative_list = {}
-	local lang = core.get_player_information(playername).lang_code
-	for name, def in pairs(core.registered_items) do
+	filter = string.trim(filter)
+	local lang = minetest.get_player_information(playername).lang_code
+	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0)
 		and def.description and
 			def.description ~= "" then
