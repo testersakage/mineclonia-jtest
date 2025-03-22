@@ -7,6 +7,7 @@ import tempfile
 import sys
 import argparse
 import glob
+import shlex
 
 
 def convert_standard_textures(
@@ -124,8 +125,8 @@ def convert_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tem
         description_file.close()
 
         # Create preview image (screenshot.png)
-        os.system("convert -size 300x200 canvas:transparent "+target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png")
-        os.system("composite "+base_dir+"/pack.png "+target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png -gravity center "+target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png")
+        os.system("convert -size 300x200 canvas:transparent " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png"))
+        os.system("composite " + shlex.quote(base_dir + "/pack.png") + " " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png") + " -gravity center " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png"))
 
     print("Textures conversion COMPLETE!")
     if failed_conversions > 0:
