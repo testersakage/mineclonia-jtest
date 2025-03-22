@@ -90,13 +90,8 @@ def colorize_alpha(
     try:
         with Image(filename=source) as source_image:
             with Image(filename=tempfile2_name) as tempfile2_image:
-                # Perform composite operation with Dst_In blend mode
-                tempfile2_image.composite(source_image, 0, 0, operator='dst_in')
-
-                # Set alpha channel
-                tempfile2_image.alpha_channel = 'set'
-
-                # Save the result
+                # Copy the opacity channel from source_image to tempfile2_image
+                tempfile2_image.composite(source_image, 0, 0, operator='copy_opacity')
                 tempfile2_image.save(filename=destination)
     except Exception as e:
         warnings.warn(f"An error occurred during the second image processing operation: {e}")
