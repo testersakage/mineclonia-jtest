@@ -1,4 +1,3 @@
-mcl_bamboo = {}
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 local S = minetest.get_translator("mcl_bamboo")
@@ -71,15 +70,4 @@ mcl_trees.register_wood("bamboo",{
 			selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
 		},
 	},
-})
-
-minetest.register_abm({
-	label = "Bamboo growth",
-	nodenames = {"group:bamboo_tree"},
-	neighbors = {"group:soil_sapling","group:soil_bamboo"},
-	interval = 15,
-	chance = 10,
-	action = function(pos,node)
-		mcl_bamboo.grow(pos)
-	end,
 })

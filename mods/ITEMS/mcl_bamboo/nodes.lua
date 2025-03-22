@@ -1,7 +1,6 @@
 local S = minetest.get_translator("mcl_bamboo")
 local SCAFFOLD_HEIGHT_LIMIT = 320
-
-mcl_bamboo.bamboo_itemstrings = {
+local bamboo_itemstrings = {
 	"mcl_bamboo:bamboo",
 	"mcl_bamboo:bamboo_1",
 	"mcl_bamboo:bamboo_2",
@@ -15,7 +14,7 @@ local boxes = {
 	{-0.125, -0.5, 0.125, -0.3125, 0.5, 0.3125},
 }
 
-function mcl_bamboo.grow(pos)
+local function grow_bamboo(pos)
 	local pr = PseudoRandom(minetest.hash_node_position(pos))
 	local max_height = pr:next(12,16)
 	local bottom = mcl_util.traverse_tower(pos,-1)
@@ -54,16 +53,16 @@ local bamboo_def = {
 		if minetest.get_item_group(node_below.name, "bamboo_tree") > 0 then
 			node = node_below
 		else
-			node.name = mcl_bamboo.bamboo_itemstrings[math.random(#mcl_bamboo.bamboo_itemstrings)]
+			node.name = bamboo_itemstrings[math.random(#bamboo_itemstrings)]
 		end
 		minetest.swap_node(pos,node)
 	end,
 	_on_bone_meal = function(_, _, _, pos)
-		return mcl_bamboo.grow(pos)
+		return grow_bamboo(pos)
 	end,
 }
 
-for i,it in pairs(mcl_bamboo.bamboo_itemstrings) do
+for i,it in pairs(bamboo_itemstrings) do
 	local d = table.copy(bamboo_def)
 	if it ~= "mcl_bamboo:bamboo" then
 		table.update(d, {groups = table.merge(bamboo_def.groups, {not_in_creative_inventory = 1})})
@@ -276,5 +275,16 @@ minetest.register_node("mcl_bamboo:scaffolding_horizontal", {
 				mcl_util.safe_place(above, {name = "mcl_bamboo:scaffolding"})
 			end
 		end
+	end
+})
+
+minetest.register_abm({
+	label = "Bamboo growth",
+	nodenames = {"group:bamboo_tree"},
+	neighbors = {"group:soil_sapling", "group:soil_bamboo"},
+	interval = 15,
+	chance = 10,
+	action = function(pos)
+		grow_bamboo(pos)
 	end
 })
