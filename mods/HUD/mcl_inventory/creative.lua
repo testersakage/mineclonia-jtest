@@ -497,43 +497,25 @@ function mcl_inventory.set_creative_formspec(player)
 			"listring[current_player;offhand]"..
 			"listring[current_player;main]"
 	else
-
-		--local nb_lines = math.ceil(inv_size / 9)
-		-- Creative inventory slots
-		main_list = table.concat({
-			mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
-
-			-- TODO: Enable this code once the performance issues caused by long lists of items
-			-- are fixed in luanti and all supported versions.
-			-- see: https://codeberg.org/mineclonia/mineclonia/issues/2740
-
-			-- DO NOT Reenable this code without verifying that the performance issues are fixed
-			-- in all supported luanti versions.
-			-- Since the underlying issue has been around for a long time
-			-- ( https://github.com/luanti-org/luanti/issues/6905 ) extra care should be
-			-- taken to verify that it is indeed fixed before.
-			-- Even without particularly notable issues you can see very clear drops in FPS
-			-- and peaks in draw calls in the (F5) debugging graphs in luanti.
-			-- See the codeberg issue above for more details.
-
-			-- To enable this code uncomment the next part and remove the rest of the formspec
-			-- (The list and the paging buttons)
-			-- Also uncomment the "local nb_lines = .." line above.
-
-
-			--"scroll_container[0.375,0.875;11.575,6;scroll;vertical;1.25]",
-			--"list[detached:creative_" .. playername .. ";main;0,0;9," .. nb_lines .. ";]",
-			--"scroll_container_end[]",
-			--"scrollbaroptions[min=0;max=" .. math.max(nb_lines - 5, 0) .. ";smallstep=1;largestep=1;arrows=hide]",
-			--"scrollbar[11.75,0.825;0.75,6.1;vertical;scroll;0]"
-
-			"list[detached:creative_" .. playername .. ";main;0.375,0.875;9,5;" .. tostring(start_i) .. "]",
-
-			-- Page buttons
-			"label[11.65,4.33;" .. F(S("@1 / @2", pagenum, pagemax)) .. "]",
-			"image_button[11.575,4.58;1.1,1.1;crafting_creative_prev.png^[transformR270;creative_prev;]",
-			"image_button[11.575,5.83;1.1,1.1;crafting_creative_next.png^[transformR270;creative_next;]",
-		})
+		if mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory", false) then
+			local nb_lines = math.ceil(inv_size / 9)
+			main_list = table.concat({
+				mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
+				"scroll_container[0.375,0.875;11.575,6;scroll;vertical;1.25]",
+				"list[detached:creative_" .. playername .. ";main;0,0;9," .. nb_lines .. ";]",
+				"scroll_container_end[]",
+				"scrollbaroptions[min=0;max=" .. math.max(nb_lines - 5, 0) .. ";smallstep=1;largestep=1;arrows=hide]",
+				"scrollbar[11.75,0.825;0.75,6.1;vertical;scroll;0]"
+			})
+		else
+			main_list = table.concat({
+				mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
+				"list[detached:creative_" .. playername .. ";main;0.375,0.875;9,5;" .. tostring(start_i) .. "]",
+				"label[11.65,4.33;" .. F(S("@1 / @2", pagenum, pagemax)) .. "]",
+				"image_button[11.575,4.58;1.1,1.1;crafting_creative_prev.png^[transformR270;creative_prev;]",
+				"image_button[11.575,5.83;1.1,1.1;crafting_creative_next.png^[transformR270;creative_next;]",
+			})
+		end
 	end
 
 	local function tab(current_tab, this_tab)

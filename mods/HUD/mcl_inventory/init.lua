@@ -184,6 +184,14 @@ mcl_player.register_player_settings_button({
 	priority = math.huge, -- first
 })
 
+mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory", {
+	type = "boolean",
+	section = "Graphics",
+	short_desc = S("Enable scroll bar on creative inventory"),
+	ui_default = false,
+	on_change = mcl_inventory.set_creative_formspec
+})
+
 core.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_crafting_fillgrid then
 		mcl_inventory.fill_grid(player)
