@@ -120,14 +120,13 @@ if mcl_weather.allow_abm then
 		chance = 33,
 		min_y = mcl_vars.mg_overworld_min,
 		action = function(pos, node)
+			local abovehalf = vector.offset(pos,0,0.5,0)
 			if (mcl_weather.state ~= "rain" and mcl_weather.state ~= "thunder" and mcl_weather.state ~= "snow")
-			or not mcl_weather.has_snow(pos)
+			or not mcl_weather.has_snow(abovehalf)
 			or node.name == "mcl_core:snowblock" then
 				return end
-
 			local above = vector.offset(pos,0,1,0)
 			local above_node = minetest.get_node(above)
-
 			if above_node.name == "air" and mcl_weather.is_outdoor(pos) then
 				local nn = nil
 				if node.name:find("snow") then
