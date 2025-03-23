@@ -726,8 +726,8 @@ local compat_arrow_def = {
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,
 }
-minetest.register_craftitem(compat, compat_def)
-minetest.register_craftitem(compat_arrow, compat_arrow_def)
+minetest.register_craftitem(compat, table.copy(compat_def))
+minetest.register_craftitem(compat_arrow, table.copy(compat_arrow_def))
 
 local old_potions_plus = {
 	"fire_resistance", "water_breathing", "invisibility", "regeneration", "poison",
@@ -739,14 +739,14 @@ local old_potions_2 = {
 }
 
 for _, name in pairs(old_potions_2) do
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2", compat_def)
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2_splash", compat_def)
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2_lingering", compat_def)
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2_arrow", compat_arrow_def)
+	minetest.register_craftitem("mcl_potions:" .. name .. "_2", table.copy(compat_def))
+	minetest.register_craftitem("mcl_potions:" .. name .. "_2_splash", table.copy(compat_def))
+	minetest.register_craftitem("mcl_potions:" .. name .. "_2_lingering", table.copy(compat_def))
+	minetest.register_craftitem("mcl_potions:" .. name .. "_2_arrow", table.copy(compat_arrow_def))
 end
 for _, name in pairs(old_potions_plus) do
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus", compat_def)
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_splash", compat_def)
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_lingering", compat_def)
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_arrow", compat_arrow_def)
+	minetest.register_craftitem("mcl_potions:" .. name .. "_plus", table.copy(compat_def))
+	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_splash", table.copy(compat_def))
+	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_lingering", table.copy(compat_def))
+	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_arrow", table.copy(compat_arrow_def))
 end
