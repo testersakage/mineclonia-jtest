@@ -520,7 +520,7 @@ local function random_teleport(player)
 					-- JACKPOT! Now we can teleport.
 					local goal = {x=tpos.x, y=tpos.y-1.5, z=tpos.z}
 					player:set_pos(goal)
-					core.sound_play({name="mcl_end_teleport", gain=0.8}, {pos=goal, max_hear_distance=16}, true)
+					minetest.sound_play({name="mcl_end_teleport", gain=0.7}, {object=player, max_hear_distance=16}, true)
 					return true
 				end
 			end
