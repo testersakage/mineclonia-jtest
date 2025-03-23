@@ -139,7 +139,7 @@ mcl_player.register_globalstep(function(player, dtime)
 	local name = player:get_player_name()
 	local bars = mcl_bossbars.bars[name]
 	local huds = mcl_bossbars.huds[name]
-	local max_bars = mcl_player.get_player_setting(player, "mcl_bossbars:max_bossbars", 4)
+	local max_bars = tonumber(mcl_player.get_player_setting(player, "mcl_bossbars:max_bossbars", 4)) or 4
 	table.sort(bars, function(a, b) return a.priority < b.priority end)
 	local huds_new = {}
 	local bars_new = {}
