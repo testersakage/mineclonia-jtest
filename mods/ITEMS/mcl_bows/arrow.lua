@@ -297,6 +297,13 @@ function ARROW_ENTITY.on_step(self, dtime)
 						end
 					end
 
+					if is_player then
+						if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
+							-- “Ding” sound for hitting another player
+							minetest.sound_play({name="mcl_bows_hit_player", gain=0.07}, {to_player=self._shooter:get_player_name()}, true)
+						end
+					end
+
 					-- Punch target object but avoid hurting enderman.
 					if not lua or lua.name ~= "mobs_mc:enderman" then
 						if not self._in_player then
@@ -365,14 +372,6 @@ function ARROW_ENTITY.on_step(self, dtime)
 							else
 								self.object:remove()
 							end
-						end
-					end
-
-
-					if is_player then
-						if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
-							-- “Ding” sound for hitting another player
-							core.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
 						end
 					end
 
