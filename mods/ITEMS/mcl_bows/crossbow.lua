@@ -22,8 +22,8 @@ local PLAYER_USE_CROSSBOW_SPEED = tonumber(core.settings:get("movement_speed_cro
 
 local BOW_MAX_SPEED = 3.15 * 20
 
-local function play_load_sound(id, pos)
-	minetest.sound_play({name = "mcl_bows_crossbow_drawback_"..id, gain=0.3}, {pos=pos, max_hear_distance=16}, true)
+local function play_load_sound(id, object)
+	minetest.sound_play({name = "mcl_bows_crossbow_drawback_"..id, gain=0.3}, {object=object, max_hear_distance=16}, true)
 end
 
 --[[ Store the charging state of each player.
@@ -79,7 +79,8 @@ end
 function mcl_bows.shoot_arrow_crossbow (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
 	local has_multishot_enchantment
 		= crossbow_stack and mcl_enchanting.has_enchantment (crossbow_stack, "multishot")
-	minetest.sound_play({name="mcl_bows_crossbow_shoot", gain=0.15}, {pos=pos, max_hear_distance=32}, true)
+	local soundparam = {object=shooter, pos=not shooter and pos or nil, max_hear_distance=32}
+	minetest.sound_play({name="mcl_bows_crossbow_shoot", gain=0.15}, soundparam, true)
 	if has_multishot_enchantment then
 		-- calculate rotation by 10 degrees 'left' and 'right' of facing direction
 		local pitch = get_pitch (dir)
@@ -344,7 +345,7 @@ controls.register_on_release(function(player, key)
 			wielditem:set_name("mcl_bows:crossbow_loaded_enchanted")
 		end
 		player:set_wielded_item(wielditem)
-		minetest.sound_play({name="mcl_bows_crossbow_load", gain=0.3}, {pos=player:get_pos(), max_hear_distance=16}, true)
+		minetest.sound_play({name="mcl_bows_crossbow_load", gain=0.3}, {object=player, max_hear_distance=16}, true)
 	else
 		reset_bow_state(player, true)
 	end
@@ -406,10 +407,10 @@ controls.register_on_hold(function(player, key)
 			local enchanted = mcl_enchanting.is_enchanted(wielditem:get_name())
 			if enchanted then
 				wielditem:set_name("mcl_bows:crossbow_0_enchanted")
-				play_load_sound(0, player:get_pos())
+				play_load_sound(0, player)
 			else
 				wielditem:set_name("mcl_bows:crossbow_0")
-				play_load_sound(0, player:get_pos())
+				play_load_sound(0, player)
 			end
 			player:set_wielded_item(wielditem)
 			if core.get_modpath("playerphysics") then
@@ -423,24 +424,24 @@ controls.register_on_hold(function(player, key)
 			if type(bow_load[name]) == "number" then
 				if wielditem:get_name() == "mcl_bows:crossbow_0" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
 					wielditem:set_name("mcl_bows:crossbow_1")
-					play_load_sound(1, player:get_pos())
-				elseif wielditem:get_name() == "mcl_bows:crossbow_0_enchanted" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
+					play_load_sound(1, player)
+				elseif wielditem:get_name() == "mcl_bows:crossbow_0_enchanted" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
 					wielditem:set_name("mcl_bows:crossbow_1_enchanted")
-					play_load_sound(1, player:get_pos())
-				elseif wielditem:get_name() == "mcl_bows:crossbow_1" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
+					play_load_sound(1, player)
+				elseif wielditem:get_name() == "mcl_bows:crossbow_1" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
 					wielditem:set_name("mcl_bows:crossbow_2")
-					play_load_sound(2, player:get_pos())
-				elseif wielditem:get_name() == "mcl_bows:crossbow_1_enchanted" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
+					play_load_sound(2, player)
+				elseif wielditem:get_name() == "mcl_bows:crossbow_1_enchanted" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
 					wielditem:set_name("mcl_bows:crossbow_2_enchanted")
-					play_load_sound(2, player:get_pos())
+					play_load_sound(2, player)
 				end
 			else
 				if wielditem:get_name() == "mcl_bows:crossbow_0" or wielditem:get_name() == "mcl_bows:crossbow_1" or wielditem:get_name() == "mcl_bows:crossbow_2" then
 					wielditem:set_name("mcl_bows:crossbow")
-					play_load_sound(1, player:get_pos())
+					play_load_sound(1, player)
 				elseif wielditem:get_name() == "mcl_bows:crossbow_0_enchanted" or wielditem:get_name() == "mcl_bows:crossbow_1_enchanted" or wielditem:get_name() == "mcl_bows:crossbow_2_enchanted" then
 					wielditem:set_name("mcl_bows:crossbow_enchanted")
-					play_load_sound(1, player:get_pos())
+					play_load_sound(1, player)
 				end
 			end
 			player:set_wielded_item(wielditem)
