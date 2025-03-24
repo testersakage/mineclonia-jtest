@@ -187,5 +187,4 @@ is not as fleshed out as it should be. Use at your own risk!
 * Panes (like glass panes and iron bars): `ITEMS/xpanes`
 * `_on_ignite` callback: `ITEMS/mcl_fire`
 * Farming: `ITEMS/mcl_farming`
-* Anything related to redstone: Don't touch (yet)
 * Any other mod not explicitly mentioned above
