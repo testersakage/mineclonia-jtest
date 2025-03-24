@@ -1,4 +1,16 @@
 # API
+## Note about undocumented APIs
+In Mineclonia there are many API functions which are used internally between
+mods. These functions are usually exposed globally. They are however not meant
+to be used externally unless they are part of a documented modding API
+(documented in `API.md` files). There are no guarantees that Mineclonia will
+stay compatible with such undocumented API functions in the future.
+
+If one wants to use such an API for an external mod, then one should first make
+an issue on the Mineclonia repo about recognizing it as an external API and
+documenting it as such. Everything that is undocumented should be avoided when
+creating third party mods.
+
 ## Groups
 Mineclonia makes very extensive use of groups. Making sure your items and
 objects have the correct group memberships is very important. Groups are
