@@ -516,6 +516,15 @@ function mcl_inventory.set_creative_formspec(player)
 		local scroll_setting = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory", "auto")
 		local scroll = scroll_setting == "true"
 		if scroll_setting == "auto" then
+			--[[
+				Lunati 5.11 has been reported as performant
+				enough to allow enabling the scrolling creative
+				inventory by default. This corresponds to
+				protocol version 47+. When Luanti 5.11+ is
+				required for Mineclonia servers then the
+				hardcoded 47 (and most of this comment) can be
+				replaced by core.protocol_versions["5.11.0"]
+			]]
 			scroll = core.get_player_information(playername).protocol_version >= 47
 		end
 		if scroll then
