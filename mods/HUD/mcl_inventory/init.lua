@@ -299,11 +299,11 @@ function mcl_inventory.give_and_take(player, wield_stack, reward_stack, creative
 	local inv = player:get_inventory()
 	local contains = inv:contains_item("main", reward_stack, true)
 	if not creative or creative_behavior ~= "give_new" or not contains then
-		if inv:room_for_item("main", reward_stack) then
+		if wield_stack:is_empty() then
+			return reward_stack
+		elseif inv:room_for_item("main", reward_stack) then
 			inv:add_item("main", reward_stack)
 			return wield_stack
-		elseif wield_stack:is_empty() then
-			return reward_stack
 		else
 			core.add_item(player:get_pos(), reward_stack)
 			return wield_stack
