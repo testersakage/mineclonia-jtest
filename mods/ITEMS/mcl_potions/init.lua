@@ -130,9 +130,8 @@ function mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, new
 
 	if core.is_creative_enabled(placer:get_player_name()) then
 		return itemstack
-	else
-		return "mcl_potions:glass_bottle"
 	end
+	return ItemStack("mcl_potions:glass_bottle")
 end
 
 -- used for water bottles and river water bottles

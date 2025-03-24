@@ -664,7 +664,7 @@ function mcl_core.bottle_dirt(itemstack, placer, pointed_thing)
 	local def = itemstack:get_definition()
 	if def._mcl_cauldrons_liquid then
 		local node = core.get_node(pointed_thing.under)
-		mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud", node.param2)
+		itemstack = mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud", node.param2) or itemstack
 		return itemstack
 	end
 end
