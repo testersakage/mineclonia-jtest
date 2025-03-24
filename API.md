@@ -189,9 +189,3 @@ is not as fleshed out as it should be. Use at your own risk!
 * Farming: `ITEMS/mcl_farming`
 * Anything related to redstone: Don't touch (yet)
 * Any other mod not explicitly mentioned above
-
-### Planned APIs
-* Custom banner patterns
-* Custom dimensions
-* Custom portals
-* Proper sky and weather APIs
