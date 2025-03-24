@@ -1,4 +1,8 @@
 # API
+This file contains general documentation about APIs in Mineclonia. For
+documentation about APIs of specific mods, check the `API.md` files in their
+mod directories.
+
 ## Note about undocumented APIs
 In Mineclonia there are many API functions which are used internally between
 mods. These functions are usually exposed globally. They are however not meant
