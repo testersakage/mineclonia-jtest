@@ -1655,7 +1655,7 @@ function mcl_potions._reset_haste_fatigue_item_meta(player)
 			meta:set_string("mcl_potions:haste", "")
 			meta:set_string("mcl_potions:fatigue", "")
 			meta:set_tool_capabilities()
-			mcl_enchanting.update_groupcaps(item, true)
+			mcl_enchanting.load_enchantments(item)
 		end
 	end
 	inv:set_lists(lists)
