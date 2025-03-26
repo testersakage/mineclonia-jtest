@@ -224,6 +224,7 @@ local groups = {
 	dig_by_piston = 1,
 	unsticky = 1,
 	attached_node = 1,
+	redstone_comparator = 1,
 }
 
 for _, mode in pairs{"comp", "sub"} do
