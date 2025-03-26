@@ -23,8 +23,9 @@ local boxes = {
 	},
 }
 
-local function is_repeater(node)
-	return minetest.get_item_group(node.name, "redstone_repeater") > 0
+local function is_repeater_or_comparator(node)
+	return minetest.get_item_group(node.name, "redstone_repeater") > 0 or
+	       minetest.get_item_group(node.name, "redstone_comparator") > 0
 end
 
 local function check_locked(pos, node)
@@ -34,10 +35,10 @@ local function check_locked(pos, node)
 	local right_node = minetest.get_node(pos:add(right))
 	local left_node = minetest.get_node(pos:add(left))
 
-	if is_repeater(right_node) and mcl_redstone.get_power(pos, right) > 0 then
+	if is_repeater_or_comparator(right_node) and mcl_redstone.get_power(pos, right) > 0 then
 		return true
 	end
-	if is_repeater(left_node) and mcl_redstone.get_power(pos, left) > 0 then
+	if is_repeater_or_comparator(left_node) and mcl_redstone.get_power(pos, left) > 0 then
 		return true
 	end
 	return false
