@@ -330,7 +330,7 @@ core.register_node("mcl_lush_caves:spore_blossom", {
 	description = S("Spore blossom"),
 	_doc_items_longdesc = S("Spore blossoms are a type of flower found in lush caves."),
 	_doc_items_hidden = false,
-	tiles = {"mcl_lush_caves_spore_blossom_base.png", "mcl_lush_caves_spore_blossom.png^[transformR180"},
+	tiles = {"mcl_lush_caves_spore_blossom_base.png", "mcl_lush_caves_spore_blossom.png"},
 	drawtype = "mesh",
 	mesh = "mcl_lush_caves_spore_blossom.obj",
 	use_texture_alpha = "clip",
