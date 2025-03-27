@@ -225,7 +225,7 @@ awards.register_achievement("mcl:acquireIron", {
 })
 awards.register_achievement("mcl:cookFish", {
 	title = S("Delicious Fish"),
-	description = S("Take a cooked fish from a furnace.\nHint: Use a fishing rod to catch a fish and cook it in a furnace."),
+	description = S("Take a cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\nHint: Use a fishing rod to catch a fish and cook it in a furnace."),
 	icon = "mcl_fishing_fish_cooked.png",
 	type = "Advancement",
 	group = "Husbandry",
