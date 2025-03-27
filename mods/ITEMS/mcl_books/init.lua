@@ -175,7 +175,11 @@ minetest.register_craftitem("mcl_books:written_book", {
 	groups = { not_in_creative_inventory = 1, book = 1, no_rename = 1 },
 	stack_max = 16,
 	on_place = read,
-	on_secondary_use = read
+	on_secondary_use = read,
+	_mcl_generate_description = function(itemstack)
+		local m = itemstack:get_meta()
+		m:set_string("description", make_description(m:get_string("title"), m:get_string("author"), tonumber(m:get_string("generation")) or 0))
+	end,
 })
 
 --This adds 8 recipes containing 1 written book and 1-8 writeable book
