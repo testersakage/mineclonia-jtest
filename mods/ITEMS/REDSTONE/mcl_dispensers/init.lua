@@ -52,11 +52,13 @@ local function drop(pos, droppos, dropitem, inv, stack_)
 		math.random(-pos_variation, pos_variation) / 1000
 	)
 	local item_entity = minetest.add_item(droppos, dropitem)
-	local drop_vel = vector.subtract(droppos, pos)
-	local speed = 3
-	item_entity:set_velocity(vector.multiply(drop_vel, speed))
-	stack_.stack:take_item()
-	inv:set_stack("main", stack_.stackpos, stack_.stack)
+	if item_entity then
+		local drop_vel = vector.subtract(droppos, pos)
+		local speed = 3
+		item_entity:set_velocity(vector.multiply(drop_vel, speed))
+		stack_.stack:take_item()
+		inv:set_stack("main", stack_.stackpos, stack_.stack)
+	end
 end
 
 local function activate_dropper(pos, droppos, dropdir, inv, stack_)
