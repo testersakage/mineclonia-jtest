@@ -215,6 +215,8 @@ function mcl_furnaces.on_metadata_inventory_take(pos, listname, _, stack, player
 			awards.unlock(player:get_player_name(), "mcl:acquireIron")
 		elseif stack:get_name() == "mcl_fishing:fish_cooked" then
 			awards.unlock(player:get_player_name(), "mcl:cookFish")
+		elseif stack:get_name() == "mcl_fishing:salmon_cooked" then
+			awards.unlock(player:get_player_name(), "mcl:cookFish")
 		end
 		mcl_furnaces.give_xp(pos, player)
 	end
