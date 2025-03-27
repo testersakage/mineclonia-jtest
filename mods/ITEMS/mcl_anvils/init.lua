@@ -377,7 +377,7 @@ end
 
 local anvildef = {
 	groups = { pickaxey = 1, falling_node = 1, falling_node_damage = 1, crush_after_fall = 1, deco_block = 1, anvil = 1, container = 69, pathfinder_partial = 2,},
-	tiles = {"mcl_anvils_anvil_base.png", "mcl_anvils_anvil_top_damaged_0.png^[transformR90"},
+	tiles = {"mcl_anvils_anvil_base.png", "mcl_anvils_anvil_top_damaged_0.png"},
 	_tt_help = S("Repair and rename items"),
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -585,14 +585,14 @@ local anvildef1 = table.merge(anvildef, {
 	description = S("Slightly Damaged Anvil"),
 	_doc_items_create_entry = false,
 	groups = table.merge(anvildef.groups, {anvil = 2}),
-	tiles = {"mcl_anvils_anvil_base.png", "mcl_anvils_anvil_top_damaged_1.png^[transformR90"}
+	tiles = {"mcl_anvils_anvil_base.png", "mcl_anvils_anvil_top_damaged_1.png"}
 })
 minetest.register_node("mcl_anvils:anvil_damage_1", anvildef1)
 
 minetest.register_node("mcl_anvils:anvil_damage_2", table.merge(anvildef1, {
 	description = S("Very Damaged Anvil"),
 	groups = table.merge(anvildef.groups, {anvil = 3}),
-	tiles = {"mcl_anvils_anvil_base.png", "mcl_anvils_anvil_top_damaged_2.png^[transformR90"}
+	tiles = {"mcl_anvils_anvil_base.png", "mcl_anvils_anvil_top_damaged_2.png"}
 }))
 
 if minetest.get_modpath("mcl_core") then
