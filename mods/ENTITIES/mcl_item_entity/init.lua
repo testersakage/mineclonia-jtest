@@ -46,6 +46,7 @@ mcl_item_entity.register_pickup_achievement("mcl_nether:ancient_debris", "mcl:hi
 mcl_item_entity.register_pickup_achievement("mcl_end:dragon_egg", "mcl:PickUpDragonEgg")
 mcl_item_entity.register_pickup_achievement("mcl_armor:elytra", "mcl:skysTheLimit")
 mcl_item_entity.register_pickup_achievement("mcl_fishing:fish_cooked", "mcl:cookFish")
+mcl_item_entity.register_pickup_achievement("mcl_fishing:salmon_cooked", "mcl:cookFish")
 
 local enabled_damage = core.settings:get_bool("enable_damage")
 local online_players
