@@ -335,7 +335,7 @@ core.register_node("mcl_lush_caves:spore_blossom", {
 	mesh = "mcl_lush_caves_spore_blossom.obj",
 	use_texture_alpha = "clip",
 	paramtype = "light",
-	groups = {handy = 1, plant = 1, deco_block = 1},
+	groups = {handy = 1, plant = 1, deco_block = 1, attached_node = 4},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	selection_box = {
 		type = "fixed",
