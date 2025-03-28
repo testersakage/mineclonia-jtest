@@ -25,7 +25,12 @@ minetest.register_craft({
 	recipe = { "mcl_core:paper", "mcl_core:paper", "mcl_core:paper", "mcl_mobitems:leather", }
 })
 
-local function make_description(title, author, generation)
+local function make_description(itemstack)
+	local m = itemstack:get_meta()
+	local title = m:get_string("title")
+	local author = m:get_string("author")
+	local generation = m:get_int("generation")
+
 	local desc
 	if generation == 0 then
 		desc = S("“@1”", title)
@@ -37,7 +42,7 @@ local function make_description(title, author, generation)
 		desc = S("Tattered Book")
 	end
 	desc = desc .. "\n" .. C(mcl_colors.GRAY, S("by @1", author))
-	return desc
+	m:set_string("description", desc)
 end
 
 local function cap_text_length(text, max_length)
@@ -137,10 +142,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			meta:set_string("author", name)
 			meta:set_int("date", os.time())
 			meta:set_string("text", text)
-			meta:set_string("description", make_description(title, name, 0))
-
 			-- The book copy counter. 0 = original, 1 = copy of original, 2 = copy of copy of original, …
 			meta:set_int("generation", 0)
+
+			tt.reload_itemstack_description(newbook)
 
 			player:set_wielded_item(newbook)
 		else
@@ -176,10 +181,7 @@ minetest.register_craftitem("mcl_books:written_book", {
 	stack_max = 16,
 	on_place = read,
 	on_secondary_use = read,
-	_mcl_generate_description = function(itemstack)
-		local m = itemstack:get_meta()
-		m:set_string("description", make_description(m:get_string("title"), m:get_string("author"), tonumber(m:get_string("generation")) or 0))
-	end,
+	_mcl_generate_description = make_description,
 })
 
 --This adds 8 recipes containing 1 written book and 1-8 writeable book
@@ -231,9 +233,9 @@ local function craft_copy_book(itemstack, player, old_craft_grid, _)
 	if generation < 1 then
 		generation = 1
 	end
-
-	imeta:set_string("description", make_description(ometa:get_string("title"), ometa:get_string("author"), generation))
 	imeta:set_int("generation", generation)
+
+	tt.reload_itemstack_description(itemstack)
 	return itemstack, original, index
 end
 minetest.register_craft_predict(craft_copy_book)
