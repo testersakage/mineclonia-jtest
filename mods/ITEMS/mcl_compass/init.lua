@@ -276,7 +276,7 @@ minetest.register_craft({
 	output = "mcl_compass:lodestone",
 	recipe = {
 		{"mcl_core:stonebrickcarved","mcl_core:stonebrickcarved","mcl_core:stonebrickcarved"},
-		{"mcl_core:stonebrickcarved", "mcl_nether:netherite_ingot", "mcl_core:stonebrickcarved"},
+		{"mcl_core:stonebrickcarved", "mcl_core:iron_ingot", "mcl_core:stonebrickcarved"},
 		{"mcl_core:stonebrickcarved", "mcl_core:stonebrickcarved", "mcl_core:stonebrickcarved"}
 	}
 })
