@@ -339,7 +339,7 @@ core.register_node("mcl_lush_caves:spore_blossom", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	selection_box = {
 		type = "fixed",
-		fixed = {-0.375, 0.375, -0.375, 0.375, 0.5, 0.375},
+		fixed = {-0.375, 0.3125, -0.375, 0.375, 0.5, 0.375},
 	},
 	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
