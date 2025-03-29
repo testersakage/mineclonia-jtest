@@ -15,7 +15,6 @@ local function set_candle_properties(stack, color)
 	local image = "mcl_candles_item_".. color .. ".png"
 
 	if color_defs then
-		stack:get_meta():set_string("description", D(color_defs.readable_name .. " Candle"))
 		stack:get_meta():set_int("palette_index", color_defs.palette_index + 1)
 		stack:get_meta():set_string("inventory_overlay", image)
 		stack:get_meta():set_string("wield_overlay", image)
@@ -36,6 +35,8 @@ local function drop_candles(pos, node, _, digger)
 	local color = color_index and mcl_dyes.palette_index_to_color(color_index - 1)
 
 	if color then set_candle_properties(item, color) end
+
+	tt.reload_itemstack_description(item)
 
 	return core.add_item(pos, item)
 end
@@ -68,6 +69,15 @@ local tpl_candle = {
 	end,
 	_on_set_item_entity = function (stack)
 		return stack, {wield_item = stack:to_string()}
+	end,
+	_mcl_generate_description = function(itemstack)
+		local m = itemstack:get_meta()
+		local color = mcl_dyes.palette_index_to_color(m:get_int("palette_index") - 1)
+		local c = ""
+		if mcl_dyes.colors[color] then
+			c = mcl_dyes.colors[color].readable_name .. " "
+		end
+		m:set_string("description", D(c.. "Candle"))
 	end,
 	on_destruct = drop_candles,
 	description = S("Candle"),
@@ -194,6 +204,8 @@ for i = 1, #candle_boxes do
 
 					set_candle_properties(stack, color)
 
+					tt.reload_itemstack_description(stack)
+
 					table.insert(output.deco, stack:to_string())
 				end
 			end
@@ -243,6 +255,8 @@ local function candle_craft(_, _, old_craft_grid, _)
 		result:set_count(1)
 
 		set_candle_properties(result, color)
+
+		tt.reload_itemstack_description(result)
 
 		return result
 	end
