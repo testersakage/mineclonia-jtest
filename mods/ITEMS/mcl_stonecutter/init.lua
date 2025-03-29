@@ -97,12 +97,13 @@ local function update_stonecutter_slots(pos,str)
 	local inv = meta:get_inventory()
 	local input = inv:get_stack("input", 1)
 	local name = input:get_name()
-	if minetest.get_item_group(name,"stonecuttable") > 0 then
-
-		meta:set_string("formspec", show_stonecutter_formspec(name))
-	else
-		meta:set_string("formspec", show_stonecutter_formspec(nil))
-	end
+	core.after(0.1, function ()
+		if minetest.get_item_group(name,"stonecuttable") > 0 then
+			meta:set_string("formspec", show_stonecutter_formspec(name))
+		else
+			meta:set_string("formspec", show_stonecutter_formspec(nil))
+		end
+	end)
 
 	if recipes[name] and table.indexof(recipes[name],str) ~= -1 and yields[str] then
 		local cut_item = ItemStack(str)
