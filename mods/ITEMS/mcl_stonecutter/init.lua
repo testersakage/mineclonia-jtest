@@ -73,6 +73,9 @@ local function show_stonecutter_formspec(input)
 	mcl_formspec.get_itemslot_bg_v4(9.5,1.5,1,1)..
 	"list[context;output;9.5,1.5;1,1;]"..
 
+	"image_button[9.5,2.8;1,1;mcl_crafting_table_inv_fill.png;__mcl_crafting_fillgrid;]"..
+	"tooltip[__mcl_crafting_fillgrid;" .. F(S("Fill Craft Grid")) .. "]"..
+
 	"label[0.375,4.7;" .. F(C(mcl_formspec.label_color, S("Inventory"))) .. "]"..
 	mcl_formspec.get_itemslot_bg_v4(0.375, 5.1, 9, 3)..
 	"list[current_player;main;0.375,5.1;9,3;9]"..
@@ -112,6 +115,25 @@ local function update_stonecutter_slots(pos,str)
 		inv:set_stack("output", 1, cut_item)
 	else
 		inv:set_stack("output", 1, "")
+	end
+end
+
+-- Fill the output to max
+local function fill_stonecutter_slots(pos)
+	local meta = minetest.get_meta(pos)
+	local inv = meta:get_inventory()
+	local input = inv:get_stack("input", 1)
+	local output = inv:get_stack("output", 1)
+	local name = input:get_name()
+	local str = output:get_name()
+
+	if recipes[name] and table.indexof(recipes[name], str) ~= -1 and yields[str] then
+		local cut_item = ItemStack(str)
+		cut_item:set_count(math.min(
+			input:get_count() * yields[str],
+			output:get_stack_max()
+		))
+		inv:set_stack("output", 1, cut_item)
 	end
 end
 
@@ -261,6 +283,9 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 						update_stonecutter_slots(pos, str)
 					end
 				end
+			end
+			if fields.__mcl_crafting_fillgrid then
+				fill_stonecutter_slots(pos)
 			end
 		end
 	end,
