@@ -47,7 +47,7 @@ mcl_walls.register_wall_def("mcl_walls:redsandstone", {
 mcl_walls.register_wall_def("mcl_walls:stonebrick", {
 	description = S("Stone Brick Wall"),
 	source = "mcl_core:stonebrick",
-	_mcl_stonecutter_recipes = {"mcl_core:stonebrick",},
+	_mcl_stonecutter_recipes = {"mcl_core:stonebrick", "mcl_core:stone"},
 })
 mcl_walls.register_wall_def("mcl_walls:stonebrickmossy", {
 	description = S("Mossy Stone Brick Wall"),

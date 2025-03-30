@@ -125,7 +125,7 @@ minetest.register_node("mcl_blackstone:blackstone_brick_polished", {
 	tiles = {"mcl_blackstone_polished_bricks.png"},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	is_ground_content = false,
-	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1},
+	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1, stonecuttable=1},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
@@ -148,6 +148,7 @@ minetest.register_node("mcl_blackstone:quartz_brick", {
 	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1},
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
+	_mcl_stonecutter_recipes = {"mcl_nether:quartz_block"},
 })
 minetest.register_node("mcl_blackstone:soul_soil", {
 	description = S("Soul Soil"),
@@ -209,19 +210,25 @@ mcl_stairs.register_stair_and_slab("blackstone", {
 	baseitem = "mcl_blackstone:blackstone",
 	description_stair = S("Blackstone Stairs"),
 	description_slab = S("Blackstone Slab"),
-	overrides = {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}}, {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}}
+	overrides = {
+		_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"}
+	},
 })
 mcl_stairs.register_stair_and_slab("blackstone_polished", {
 	baseitem = "mcl_blackstone:blackstone_polished",
 	description_stair = S("Polished Blackstone Stairs"),
 	description_slab = S("Polished Blackstone Slab"),
-	overrides = {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}, {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}
+	overrides = {
+		_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}
+	},
 })
 mcl_stairs.register_stair_and_slab("blackstone_brick_polished", {
 	baseitem = "mcl_blackstone:blackstone_brick_polished",
-	description_stair = S("Blackstone Brick Stairs"),
-	description_slab = S("Blackstone Brick Slab"),
-	overrides = {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}, {_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"}}
+	description_stair = S("Polished Blackstone Brick Stairs"),
+	description_slab = S("Polished Blackstone Brick Slab"),
+	overrides = {
+		_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished", "mcl_blackstone:blackstone_brick_polished"}
+	},
 })
 minetest.register_alias("mcl_stairs:slab_blackstone_chiseled_polished_top", "mcl_stairs:slab_blackstone_polished_top")
 minetest.register_alias("mcl_stairs:slab_blackstone_chiseled_polished", "mcl_stairs:slab_blackstone_polished")
@@ -251,6 +258,16 @@ mcl_walls.register_wall_def("mcl_blackstone:wall", {
 	description = S("Blackstone Wall"),
 	source = "mcl_blackstone:blackstone",
 	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone"},
+})
+mcl_walls.register_wall_def("mcl_blackstone:polishedwall", {
+	description = S("Polished Blackstone Wall"),
+	source = "mcl_blackstone:blackstone_polished",
+	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished"},
+})
+mcl_walls.register_wall_def("mcl_blackstone:polishedbrickwall", {
+	description = S("Polished Blackstone Brick Wall"),
+	source = "mcl_blackstone:blackstone_brick_polished",
+	_mcl_stonecutter_recipes = {"mcl_blackstone:blackstone", "mcl_blackstone:blackstone_polished", "mcl_blackstone:blackstone_brick_polished"},
 })
 
 minetest.register_craft({

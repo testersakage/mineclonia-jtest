@@ -116,7 +116,7 @@ register_deepslate_variant("bricks", {
 		description = S("Deepslate Bricks"),
 		_doc_items_longdesc = S("Deepslate bricks are the brick version of deepslate."),
 		groups = { stonecuttable = 1 },
-		_mcl_stonecutter_recipes = { "mcl_deepslate:deepslate_cobbled", "mcl_deepslate:deepslate_polished", "mcl_deepslate:deepslate_bricks", },
+		_mcl_stonecutter_recipes = { "mcl_deepslate:deepslate_cobbled", "mcl_deepslate:deepslate_polished" },
 		_mcl_cooking_output = "mcl_deepslate:deepslate_bricks_cracked",
 		_mcl_crafting_output = {square2 = {output = "mcl_deepslate:deepslate_tiles 4"}}
 	},

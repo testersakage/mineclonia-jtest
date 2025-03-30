@@ -214,6 +214,7 @@ minetest.register_node("mcl_nether:red_nether_brick", table.merge(nether_brick,{
 local chiseled_nether_brick = table.copy(nether_brick)
 chiseled_nether_brick.description = S("Chiseled Nether Brick Block")
 chiseled_nether_brick.tiles = {"mcl_nether_chiseled_nether_bricks.png"}
+chiseled_nether_brick._mcl_stonecutter_recipes = {"mcl_nether:nether_brick"}
 minetest.register_node("mcl_nether:chiseled_nether_brick", chiseled_nether_brick)
 
 local cracked_nether_brick = table.copy(nether_brick)
@@ -242,7 +243,7 @@ minetest.register_node("mcl_nether:quartz_block", {
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	is_ground_content = false,
 	tiles = {"mcl_nether_quartz_block_top.png", "mcl_nether_quartz_block_bottom.png", "mcl_nether_quartz_block_side.png"},
-	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1, stonecuttable = 1},
+	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1, stonecuttable=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
