@@ -28,13 +28,17 @@ license of Mineclonia.
 ## License of media (textures and sounds)
 No non-free licenses are used anywhere.
 
-The textures, unless otherwise noted, are based on the Pixel Perfection resource
-pack for Minecraft 1.11, authored by XSSheep. Most textures are verbatim copies,
-while some textures have been changed or redone from scratch. The glazed
-terracotta textures have been created by
+Textures, unless otherwise noted, are based on the Pixel Perfection by XSSheep
+and Pixel Perfection Legacy by Nova Wostra resource packs. Most textures are
+verbatim copies, while some textures have been changed or redone from scratch.
+The glazed terracotta textures have been created by
 [MysticTempest](https://github.com/MysticTempest).
 
-Source: <https://www.planetminecraft.com/texture_pack/131pixel-perfection/>
+Pixel Perfection by XSSeep: <https://www.planetminecraft.com/texture_pack/131pixel-perfection/>
+License: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
+
+Pixel Perfection Legacy by Nova Wostra (fan update of Pixel Perfection):
+<https://www.curseforge.com/minecraft/texture-packs/pixel-perfection-legacy>
 License: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 
 The main menu images are release under:
