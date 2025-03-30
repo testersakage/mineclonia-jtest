@@ -55,6 +55,7 @@ minetest.register_node("mcl_end:purpur_pillar", {
 	on_rotate = on_rotate,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
+	_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}
 })
 
 minetest.register_node("mcl_end:end_rod", {
