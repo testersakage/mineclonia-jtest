@@ -271,9 +271,6 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 
 		if mcl_util.check_position_protection(pointed_thing.above, placer) then return end
 
-		local node = core.get_node(pointed_thing.under)
-		if core.get_item_group(node.name, "solid") == 0 then return end
-
 		local vine
 		if math.random() < 0.11 then
 			vine = "mcl_lush_caves:cave_vines_lit"
@@ -281,9 +278,13 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 			vine = "mcl_lush_caves:cave_vines"
 		end
 
-		core.place_node(pointed_thing.under, {name=vine}, placer)
-		core.sound_play(core.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
-		if not core.is_creative_enabled(placer:get_player_name()) then
+		local node = core.get_node(pointed_thing.under)
+		local different_vine = core.get_item_group(node.name, "vinelike_node") == 2 and node.name ~= vine
+		if different_vine then return end
+
+		minetest.place_node(pointed_thing.under, {name=vine}, placer)
+		minetest.sound_play(minetest.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
+		if not minetest.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item(1)
 		end
 		return itemstack

@@ -144,6 +144,12 @@ function core.check_single_for_falling(pos)
 		if core.get_item_group(aname, "vinelike_node") ~= vine_group and
 			core.get_item_group(aname, "solid") == 0
 		then
+			if vine_group == 2 then
+				local def = core.registered_nodes[aname]
+				if (def and def.drawtype ~= "airlike") then
+					return false
+				end
+			end
 			if vine_group == 3 or vine_group == 4 then
 				apos = vector.add(pos, core.wallmounted_to_dir(node.param2))
 				aname = core.get_node(apos).name
