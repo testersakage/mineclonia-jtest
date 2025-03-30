@@ -233,7 +233,9 @@ for i = 1, #candle_boxes do
 	doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
 end
 
-local function candle_craft(_, _, old_craft_grid, _)
+local function candle_craft(output, _, old_craft_grid, _)
+	if not (output and output:get_name() == "mcl_candles:candle_1") then return end
+
 	local i = 0
 	local dye, candle
 
