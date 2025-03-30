@@ -170,7 +170,7 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
+			{-7/16, -0.5, -7/16, 7/16, 0.5, 7/16}
 		},
 	},
 	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
@@ -204,7 +204,7 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
+			{-7/16, -0.5, -7/16, 7/16, 0.5, 7/16}
 		},
 	},
 	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
