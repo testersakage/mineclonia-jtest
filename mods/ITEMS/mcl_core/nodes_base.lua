@@ -462,14 +462,14 @@ minetest.register_node("mcl_core:podzol", {
 	description = S("Podzol"),
 	_doc_items_longdesc = S("Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."),
 	tiles = {"mcl_core_dirt_podzol_top.png", "default_dirt.png", {name="mcl_core_dirt_podzol_side.png", tileable_vertical=false}},
-groups = {handy=1, shovely=3, dirt=2, soil=1, soil_sapling=2, soil_sugarcane=1, soil_bamboo = 1, soil_fungus=1, enderman_takable=1, building_block=1, supports_mushrooms=1, converts_to_moss=1},
+	groups = {handy=1, shovely=3, dirt=2, soil=1, soil_sapling=2, soil_sugarcane=1, soil_bamboo = 1, soil_fungus=1, enderman_takable=1, building_block=1, supports_mushrooms=1, converts_to_moss=1},
 	drop = "mcl_core:dirt",
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	on_construct = mcl_core.on_snowable_construct,
 	_on_shovel_place = mcl_core.make_dirtpath,
 	_mcl_snowed = "mcl_core:podzol_snow",
-	_mcl_blast_resistance = 0.8,
-	_mcl_hardness = 0.8,
+	_mcl_blast_resistance = 0.5,
+	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
 })
 mcl_core.register_snowed_node("mcl_core:podzol_snow", "mcl_core:podzol", nil, nil, false, S("Podzol with Snow"))
