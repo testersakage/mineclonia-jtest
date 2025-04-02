@@ -221,15 +221,6 @@ local doc_string =
 	S("When you have found a good combination, the brewing will commence automatically and steam starts to appear, using up the fuel and brewing material. The potions will soon be ready.").."\n"..
 	S("Different combinations of brewing materials and liquids will give different results. Try to experiment!")
 
-local tiles = {
-	"mcl_brewing_top.png", 	--top
-	"mcl_brewing_base.png", 	--bottom
-	"mcl_brewing_side.png", 	--right
-	"mcl_brewing_side.png", 	--left
-	"mcl_brewing_side.png", 	--back
-	"mcl_brewing_side.png^[transformFX",   --front
-}
-
 local function sort_stack(stack)
 	if stack:get_name() == "mcl_mobitems:blaze_powder" then
 		return "fuel"
@@ -386,15 +377,28 @@ local tpl_brewing_stand = {
 	_tt_help = S("Brew Potions"),
 	groups = {pickaxey = 1, container = 1, not_in_creative_inventory = 1, not_in_craft_guide = 1,
 			brewing_stand = 1, pathfinder_partial = 2},
-	tiles = tiles,
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack.png",
+	},
+	wield_image = "mcl_brewing_stand_inv.png",
+	inventory_image = "mcl_brewing_stand_inv.png",
 	use_texture_alpha = "clip",
 	drop = "mcl_brewing:stand",
 	paramtype = "light",
 	light_source = 1,
 	sunlight_propagates = true,
 	is_ground_content = false,
-	paramtype2 = "facedir",
-	drawtype = "nodebox",
+	drawtype = "mesh",
+	mesh = "mcl_brewing_stand.obj",
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{-6/16, -8/16, -6/16, 6/16, 6/16, 6/16}
+		}
+	},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1,
@@ -434,279 +438,64 @@ core.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
 	_doc_items_usagehelp = doc_string,
 	groups = {pickaxey = 1, brewitem = 1, container = 1, brewing_stand = 1,
 			pathfinder_partial = 2,},
-	node_box = {
-		type = "fixed",
-		fixed = {
-
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
 }))
-core.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-7/16, -6/16 ,-7/16 , -6/16,  1/16, -6/16 }, -- bottle 1
-			{-6/16, -6/16 ,-6/16 , -5/16,  3/16, -5/16 }, -- bottle 1
-			{-5/16, -6/16 ,-5/16 , -4/16,  3/16, -4/16 }, -- bottle 1
-			{-4/16, -6/16 ,-4/16 , -3/16,  3/16, -3/16 }, -- bottle 1
-			{-3/16, -6/16 ,-3/16 , -2/16,  1/16, -2/16 }, -- bottle 1
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack.png",
+	}
 }))
-
-core.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-
-			{7/16, -6/16 ,-7/16 , 6/16,  1/16, -6/16 }, -- bottle 2
-			{6/16, -6/16 ,-6/16 , 5/16,  3/16, -5/16 }, -- bottle 2
-			{5/16, -6/16 ,-5/16 , 4/16,  3/16, -4/16 }, -- bottle 2
-			{4/16, -6/16 ,-4/16 , 3/16,  3/16, -3/16 }, -- bottle 2
-			{3/16, -6/16 ,-3/16 , 2/16,  1/16, -2/16 }, -- bottle 2
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack.png",
+	}
 }))
-
-core.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, -6/16 , 2/16 , 1/16, 1/16, 7/16 }, -- bottle 3
-			{0/16, 1/16 , 3/16 , 1/16,  3/16, 6/16 }, -- bottle 3
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack_bottle.png",
+	}
 }))
-
-core.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-7/16, -6/16 ,-7/16 , -6/16,  1/16, -6/16 }, -- bottle 1
-			{-6/16, -6/16 ,-6/16 , -5/16,  3/16, -5/16 }, -- bottle 1
-			{-5/16, -6/16 ,-5/16 , -4/16,  3/16, -4/16 }, -- bottle 1
-			{-4/16, -6/16 ,-4/16 , -3/16,  3/16, -3/16 }, -- bottle 1
-			{-3/16, -6/16 ,-3/16 , -2/16,  1/16, -2/16 }, -- bottle 1
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-
-			{7/16, -6/16 ,-7/16 , 6/16,  1/16, -6/16 }, -- bottle 2
-			{6/16, -6/16 ,-6/16 , 5/16,  3/16, -5/16 }, -- bottle 2
-			{5/16, -6/16 ,-5/16 , 4/16,  3/16, -4/16 }, -- bottle 2
-			{4/16, -6/16 ,-4/16 , 3/16,  3/16, -3/16 }, -- bottle 2
-			{3/16, -6/16 ,-3/16 , 2/16,  1/16, -2/16 }, -- bottle 2
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack.png",
+	}
 }))
-
-core.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-7/16, -6/16 ,-7/16 , -6/16,  1/16, -6/16 }, -- bottle 1
-			{-6/16, -6/16 ,-6/16 , -5/16,  3/16, -5/16 }, -- bottle 1
-			{-5/16, -6/16 ,-5/16 , -4/16,  3/16, -4/16 }, -- bottle 1
-			{-4/16, -6/16 ,-4/16 , -3/16,  3/16, -3/16 }, -- bottle 1
-			{-3/16, -6/16 ,-3/16 , -2/16,  1/16, -2/16 }, -- bottle 1
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, -6/16 , 2/16 , 1/16, 1/16, 7/16 }, -- bottle 3
-			{0/16, 1/16 , 3/16 , 1/16,  3/16, 6/16 }, -- bottle 3
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack_bottle.png",
+	}
 }))
-
-core.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-			{7/16, -6/16 ,-7/16 , 6/16,  1/16, -6/16 }, -- bottle 2
-			{6/16, -6/16 ,-6/16 , 5/16,  3/16, -5/16 }, -- bottle 2
-			{5/16, -6/16 ,-5/16 , 4/16,  3/16, -4/16 }, -- bottle 2
-			{4/16, -6/16 ,-4/16 , 3/16,  3/16, -3/16 }, -- bottle 2
-			{3/16, -6/16 ,-3/16 , 2/16,  1/16, -2/16 }, -- bottle 2
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, -6/16 , 2/16 , 1/16, 1/16, 7/16 }, -- bottle 3
-			{0/16, 1/16 , 3/16 , 1/16,  3/16, 6/16 }, -- bottle 3
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack_bottle.png",
+	}
 }))
-
-core.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-1/16, -5/16, -1/16, 1/16, 8/16, 1/16}, -- heat plume
-			{ 2/16, -8/16, -8/16, 8/16, -6/16, -2/16}, -- base
-			{-8/16, -8/16, -8/16, -2/16, -6/16, -2/16}, -- base
-			{-3/16, -8/16, 2/16, 3/16, -6/16, 8/16}, -- base
-
-			{-7/16, -6/16 ,-7/16 , -6/16,  1/16, -6/16 }, -- bottle 1
-			{-6/16, -6/16 ,-6/16 , -5/16,  3/16, -5/16 }, -- bottle 1
-			{-5/16, -6/16 ,-5/16 , -4/16,  3/16, -4/16 }, -- bottle 1
-			{-4/16, -6/16 ,-4/16 , -3/16,  3/16, -3/16 }, -- bottle 1
-			{-3/16, -6/16 ,-3/16 , -2/16,  1/16, -2/16 }, -- bottle 1
-
-			{-5/16, 3/16 ,-5/16 , -4/16,  7/16, -4/16 }, -- line 1
-			{-4/16, 6/16 ,-4/16 , -3/16,  8/16, -3/16 }, -- line 1
-			{-3/16, 7/16 ,-3/16 , -2/16,  8/16, -2/16 }, -- line 1
-			{-2/16, 7/16 ,-2/16 , -1/16,  8/16, -1/16 }, -- line 1
-
-
-			{7/16, -6/16 ,-7/16 , 6/16,  1/16, -6/16 }, -- bottle 2
-			{6/16, -6/16 ,-6/16 , 5/16,  3/16, -5/16 }, -- bottle 2
-			{5/16, -6/16 ,-5/16 , 4/16,  3/16, -4/16 }, -- bottle 2
-			{4/16, -6/16 ,-4/16 , 3/16,  3/16, -3/16 }, -- bottle 2
-			{3/16, -6/16 ,-3/16 , 2/16,  1/16, -2/16 }, -- bottle 2
-
-			{5/16, 3/16 ,-5/16 ,4/16,  7/16, -4/16 }, -- line 2
-			{4/16, 6/16 ,-4/16 ,3/16,  8/16, -3/16 }, -- line 2
-			{3/16, 7/16 ,-3/16 ,2/16,  8/16, -2/16 }, -- line 2
-			{2/16, 7/16 ,-2/16 ,1/16,  8/16, -1/16 }, -- line 2
-
-			{0/16, -6/16 , 2/16 , 1/16, 1/16, 7/16 }, -- bottle 3
-			{0/16, 1/16 , 3/16 , 1/16,  3/16, 6/16 }, -- bottle 3
-
-			{0/16, 7/16 , 1/16 , 1/16, 8/16, 3/16 }, -- line 3
-			{0/16, 6/16 , 3/16 , 1/16, 7/16, 5/16 }, -- line 3
-			{0/16, 3/16 , 4/16 , 1/16, 6/16, 5/16 }, -- line 3
-		}
-	},
+minetest.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
+	tiles = {
+		"mcl_brewing_stand.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack_bottle.png",
+		"mcl_brewing_rack_bottle.png",
+	}
 }))
-
-core.register_craft({
+minetest.register_craft({
 	output = "mcl_brewing:stand_000",
 	recipe = {
 		{ "", "mcl_mobitems:blaze_rod", "" },
