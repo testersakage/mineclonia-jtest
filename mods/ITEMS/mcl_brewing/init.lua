@@ -409,6 +409,7 @@ local tpl_brewing_stand = {
 	allow_metadata_inventory_move = allow_move,
 	on_metadata_inventory_put = on_put,
 	on_metadata_inventory_take = start_stand_if_not_empty,
+	on_metadata_inventory_move = start_stand_if_not_empty,
 	on_construct = function(pos)
 		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
