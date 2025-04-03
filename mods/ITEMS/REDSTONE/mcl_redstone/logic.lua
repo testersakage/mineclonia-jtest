@@ -5,6 +5,7 @@ local opaque_tab = mcl_redstone._solid_opaque_tab
 local get_power_tab = {}
 local update_tab = {}
 local init_tab = {}
+local on_observer_change_tab = {}
 
 local action_tab = mcl_redstone._action_tab
 
@@ -237,7 +238,10 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 
 	for hash, node in pairs(nodecache) do
 		if node.dirty then
-			core.swap_node(core.get_position_from_hash(hash), node)
+			minetest.swap_node(minetest.get_position_from_hash(hash), node)
+			-- TODO: BUG - Observers might trigger despite no change in power level, since
+			-- wire propagation swaps certain nodes just to change the upper bits in param2.
+			mcl_redstone._notify_observer_neighbours(pos)
 		end
 	end
 
@@ -399,6 +403,17 @@ function mcl_redstone._update_neighbours(pos, oldnode, newnode)
 	end
 end
 
+function mcl_redstone._notify_observer_neighbours(pos)
+	for _, dir in pairs(sixdirs) do
+		local pos2 = pos:add(dir)
+		local node2 = minetest.get_node(pos2)
+
+		if on_observer_change_tab[node2.name] then
+			on_observer_change_tab[node2.name](pos2, node2, pos)
+		end
+	end
+end
+
 function mcl_redstone.swap_node(pos, node)
 	local oldnode = core.get_node(pos)
 	if not node then print(debug.traceback("trying to place nil")) end
@@ -459,6 +474,7 @@ core.register_on_mods_loaded(function()
 					mcl_redstone._update_opaque_connections(pos)
 					mcl_redstone.after(0, function()
 						opaque_update_neighbours(pos)
+						mcl_redstone._notify_observer_neighbours(pos)
 					end)
 				end,
 				after_destruct = function(pos, oldnode)
@@ -468,6 +484,7 @@ core.register_on_mods_loaded(function()
 					mcl_redstone._update_opaque_connections(pos)
 					mcl_redstone.after(0, function()
 						opaque_update_neighbours(pos)
+						mcl_redstone._notify_observer_neighbours(pos)
 					end)
 				end,
 			})
@@ -494,9 +511,10 @@ core.register_on_mods_loaded(function()
 
 		if ndef._mcl_redstone then
 			local init = ndef._mcl_redstone.init or ndef._mcl_redstone.update
-			get_power_tab[name] = ndef._mcl_redstone.get_power
-			init_tab[name] = init
-			update_tab[name] = ndef._mcl_redstone.update
+			get_power_tab[name]          = ndef._mcl_redstone.get_power
+			init_tab[name]               = init
+			update_tab[name]             = ndef._mcl_redstone.update
+			on_observer_change_tab[name] = ndef._mcl_redstone.on_observer_neighbor_change
 
 			local old_construct = ndef.on_construct
 			local old_destruct = ndef.after_destruct
@@ -520,6 +538,7 @@ core.register_on_mods_loaded(function()
 						if ndef._mcl_redstone.get_power then
 							update_neighbours(pos)
 						end
+						mcl_redstone._notify_observer_neighbours(pos)
 					end)
 				end,
 				after_destruct = function(pos, oldnode)
@@ -533,6 +552,12 @@ core.register_on_mods_loaded(function()
 						mcl_redstone._abort_pending_update(pos)
 						mcl_redstone.after(0, function()
 							update_neighbours(pos, oldnode)
+							mcl_redstone._notify_observer_neighbours(pos)
+						end)
+					else
+						mcl_redstone.after(0, function()
+							update_neighbours(pos, oldnode)
+							mcl_redstone._notify_observer_neighbours(pos)
 						end)
 					end
 				end,
