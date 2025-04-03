@@ -77,6 +77,7 @@ local function handle_update_event(event)
 	end
 	core.swap_node(event.pos, event.node)
 	mcl_redstone._update_neighbours(event.pos, event.oldnode, event.node)
+	mcl_redstone._notify_observer_neighbours(event.pos)
 end
 
 local function handle_event(event)

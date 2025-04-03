@@ -213,6 +213,8 @@ local offdef = {
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
 						piston_on(pos, node)
+						-- Needed because piston_on sets piston node without triggering on_construct/after_destruct.
+						mcl_redstone._notify_observer_neighbours(pos)
 					end
 				end)
 			end
@@ -246,6 +248,8 @@ local ondef = {
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
 						piston_off(pos, node, detach)
+						-- Needed because piston_off sets piston node without triggering on_construct/after_destruct.
+						mcl_redstone._notify_observer_neighbours(pos)
 					end
 				end)
 			end
