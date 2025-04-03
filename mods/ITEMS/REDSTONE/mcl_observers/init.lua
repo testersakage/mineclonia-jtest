@@ -2,55 +2,75 @@ local S = core.get_translator(core.get_current_modname())
 
 mcl_observers = {}
 
-function mcl_observers.observer_activate(pos)
-	local oldnode = core.get_node(pos)
-	mcl_redstone.after(1, function()
-		local node = core.get_node(pos)
-		if oldnode.name ~= node.name or oldnode.param2 ~= node.param2 then
-			return
-		end
-		local ndef = core.registered_nodes[node.name]
-		core.set_node(pos, {name = ndef._mcl_observer_on, param2 = node.param2})
-	end)
+-- Holds positions where observer updates are scheduled
+local scheduled_observer_updates = {}
+
+local function is_update_scheduled(pos)
+	return scheduled_observer_updates[minetest.hash_node_position(pos)]
+end
+local function set_scheduled_update(pos)
+	scheduled_observer_updates[minetest.hash_node_position(pos)] = true
+end
+local function clear_scheduled_update(pos)
+	scheduled_observer_updates[minetest.hash_node_position(pos)] = nil
 end
 
--- Scan the node in front of the observer and update the observer state if
--- needed.
---
--- TODO: Also scan metadata changes.
--- TODO: Ignore some node changes.
-local function observer_scan(pos, initialize)
-	local node = core.get_node(pos)
-	local front
+local function get_front_dir(node)
 	if node.name == "mcl_observers:observer_up_off" or node.name == "mcl_observers:observer_up_on" then
-		front = vector.add(pos, {x=0, y=1, z=0})
+		return {x=0, y=1, z=0}
 	elseif node.name == "mcl_observers:observer_down_off" or node.name == "mcl_observers:observer_down_on" then
-		front = vector.add(pos, {x=0, y=-1, z=0})
+		return {x=0, y=-1, z=0}
 	else
-		front = vector.add(pos, core.facedir_to_dir(node.param2))
+		return minetest.facedir_to_dir(node.param2)
 	end
-	local frontnode = core.get_node(front)
-	local meta = core.get_meta(pos)
-	local oldnode = meta:get_string("node_name")
-	local oldparam2 = meta:get_string("node_param2")
-	local meta_needs_updating = false
-	if oldnode ~= "" and not initialize then
-		if not (frontnode.name == oldnode and tostring(frontnode.param2) == oldparam2) then
-			-- Node state changed! Activate observer
-			local ndef = core.registered_nodes[node.name]
-			core.set_node(pos, {name = ndef._mcl_observer_on, param2 = node.param2})
-			meta_needs_updating = true
-		end
-	else
-		meta_needs_updating = true
-	end
-	if meta_needs_updating then
-		meta:set_string("node_name", frontnode.name)
-		meta:set_string("node_param2", tostring(frontnode.param2))
-	end
-	return frontnode
 end
 
+local function get_front_pos(pos, node)
+	return vector.add(pos, get_front_dir(node))
+end
+
+local function on_scheduled(pos)
+	local node  = minetest.get_node(pos)
+	local is_on = minetest.get_item_group(node.name, "observer") == 2
+	local ndef  = minetest.registered_nodes[node.name]
+
+	clear_scheduled_update(pos)
+
+	if minetest.get_item_group(node.name, "observer") == 0 then
+		return
+	end
+
+	if is_on then
+		mcl_redstone.swap_node(pos, {name = ndef._mcl_observer_off, param2 = node.param2})
+	else
+		mcl_redstone.swap_node(pos, {name = ndef._mcl_observer_on, param2 = node.param2})
+		set_scheduled_update(pos)
+		mcl_redstone.after(1, function() on_scheduled(pos) end)
+	end
+
+	-- TODO/NOTE: Could reorder or place in mcl_redstone.swap_node.
+	-- Leads to different pulse pattern for observer <-> observer clock:
+	-- 3-tick on-off-off instead of 2-tick on-off (when using an ordered event queue).
+	-- This is due to _notify_observer_neighbours being called before mcl_redstone.after.
+	mcl_redstone._notify_observer_neighbours(pos)
+end
+
+-- mcl_pistons.push calls this after doing set_node.
+function mcl_observers.observer_activate(pos)
+	local node  = minetest.get_node(pos)
+	local ndef  = minetest.registered_nodes[node.name]
+	local is_on = minetest.get_item_group(node.name, "observer") == 2
+
+	if is_on then
+		mcl_redstone.swap_node(pos, {name = ndef._mcl_observer_off, param2 = node.param2})
+		mcl_redstone._notify_observer_neighbours(pos)
+	end
+
+	if not is_update_scheduled(pos) then
+		set_scheduled_update(pos)
+		mcl_redstone.after(1, function() on_scheduled(vector.copy(pos)) end)	-- TODO: vector.copy probably not needed.
+	end
+end
 
 -- Vertical orientation (CURRENTLY DISABLED)
 local function observer_orientate(pos, placer)
@@ -77,32 +97,32 @@ local commdef = {
 	groups = {pickaxey=1, material_stone=1, redstone_not_conductive=1, },
 	_mcl_hardness = 3.5,
 	drop = "mcl_observers:observer_off",
-	on_construct = function(pos)
-		local timer = core.get_node_timer(pos)
-		if not timer:is_started() then
-			timer:start(mcl_redstone.tick_speed)
+
+	after_destruct = function(pos, oldnode)
+		if is_update_scheduled(pos) then
+			clear_scheduled_update(pos)
 		end
 	end,
+
 	_mcl_redstone = {},
 }
 local commdef_off = table.merge(commdef, {
 	groups = table.merge(commdef.groups, {observer=1}),
-	on_timer = function(pos, elapsed)
-		observer_scan(pos)
-		return true
-	end,
+	_mcl_redstone = table.merge(commdef._mcl_redstone, {
+		on_observer_neighbor_change = function(pos, node, from_pos)
+			if not vector.equals(get_front_pos(pos, node), from_pos) then
+				return
+			end
+			if not is_update_scheduled(pos) then
+				set_scheduled_update(pos)
+				mcl_redstone.after(1, function() on_scheduled(pos) end)
+			end
+		end,
+	}),
 })
 local commdef_on = table.merge(commdef, {
 	_doc_items_create_entry = false,
 	groups = table.merge(commdef.groups, {observer=2}),
-	on_timer = function(pos, elapsed)
-		local node = core.get_node(pos)
-		local ndef = core.registered_nodes[node.name]
-		core.set_node(pos, {
-			name = ndef._mcl_observer_off,
-			param2 = node.param2,
-		})
-	end,
 })
 
 core.register_node("mcl_observers:observer_off", table.merge(commdef_off, {
