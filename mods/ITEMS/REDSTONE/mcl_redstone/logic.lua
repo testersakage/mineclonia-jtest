@@ -238,8 +238,9 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 
 	for hash, node in pairs(nodecache) do
 		if node.dirty then
-			minetest.swap_node(minetest.get_position_from_hash(hash), node)
-			-- TODO: BUG - Observers might trigger despite no change in power level, since
+			local pos = minetest.get_position_from_hash(hash)
+			minetest.swap_node(pos, node)
+			-- TODO: BUG - Observers might trigger despite no change in power level since
 			-- wire propagation swaps certain nodes just to change the upper bits in param2.
 			mcl_redstone._notify_observer_neighbours(pos)
 		end
