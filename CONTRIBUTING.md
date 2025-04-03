@@ -25,8 +25,12 @@ modding support.
 
 Contributions which fix bugs or incomplete features are always welcome.
 Contributions of Minecraft features not yet implemented in Mineclonia are also
-welcome but should be complete before their inclusion. Assets like sounds and
-textures must come from sources which allow their use.
+welcome but should be complete before their inclusion.
+
+Assets like sounds and textures must come from sources which allow their use.
+We generally prefer to use textures from pixel perfection when available, but
+they have to be checked beforehand because in some cases they are modified
+Minecraft textures which prevents their use.
 
 Mineclonia has a minimum supported Luanti version which is defined in
 game.conf. When making contributions one should avoid relying on engine
