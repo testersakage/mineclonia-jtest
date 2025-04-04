@@ -40,8 +40,8 @@ end
 if minetest.get_modpath("mcla_generate_translation_strings") then
 	mcla_generated_translations = {}
 	function mcl_util.get_dynamic_translator(textdomain)
-		local mod = textdomain or minetest.get_current_modname()
 		return function(s, ...)
+			local mod = textdomain or minetest.get_current_modname()
 			mcla_generated_translations[mod] = mcla_generated_translations[mod] or {}
 			mcla_generated_translations[mod][s] = true
 			return minetest.translate(mod, s, ...)
@@ -49,9 +49,18 @@ if minetest.get_modpath("mcla_generate_translation_strings") then
 	end
 else
 	function mcl_util.get_dynamic_translator(textdomain)
-		local mod = textdomain or minetest.get_current_modname()
-		return function(s, ...)
-			return minetest.translate(mod, s, ...)
+		if textdomain then
+			return function(s, ...)
+				return minetest.translate(textdomain, s, ...)
+			end
+		else
+			-- current mod is used as textdomain for each invocation
+			-- not supported after mods loaded
+			return function(s, ...)
+				local mod = minetest.get_current_modname()
+				assert(mod, "Dynamic translator with dynamic textdomain must not be used after mods have been loaded")
+				return minetest.translate(mod, s, ...)
+			end
 		end
 	end
 end
