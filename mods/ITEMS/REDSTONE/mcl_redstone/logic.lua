@@ -489,6 +489,25 @@ core.register_on_mods_loaded(function()
 					end)
 				end,
 			})
+		elseif minetest.get_item_group(name, "redstone_wire") == 0 and not ndef._mcl_redstone then
+			minetest.override_item(name, {
+				on_construct = function(pos)
+					if old_construct then
+						old_construct(pos)
+					end
+					mcl_redstone.after(0, function()
+						mcl_redstone._notify_observer_neighbours(pos)
+					end)
+				end,
+				after_destruct = function(pos, oldnode)
+					if old_destruct then
+						old_destruct(pos, oldnode)
+					end
+					mcl_redstone.after(0, function()
+						mcl_redstone._notify_observer_neighbours(pos)
+					end)
+				end,
+			})
 		end
 
 		if core.get_item_group(name, "redstone_wire") ~= 0 then
