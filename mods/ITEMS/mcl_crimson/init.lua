@@ -126,12 +126,14 @@ mcl_trees.register_wood("crimson",{
 	sapling=false,
 	leaves=false,
 	tree = {
+		description = S("Crimson Stem"),
 		tiles = {"crimson_hyphae.png", "crimson_hyphae.png","crimson_hyphae_side.png" },
 		groups = table.merge(nether_wood_groups,{tree = 1}),
 		_mcl_burntime = 0,
 		_mcl_cooking_output = ""
 	},
 	bark = {
+		description = S("Crimson Hyphae"),
 		tiles = {"crimson_hyphae_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
 		_mcl_burntime = 0,
@@ -143,12 +145,14 @@ mcl_trees.register_wood("crimson",{
 		_mcl_burntime = 0
 	},
 	stripped = {
+		description = S("Stripped Crimson Stem"),
 		tiles = {"stripped_crimson_stem_top.png", "stripped_crimson_stem_top.png","stripped_crimson_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1}),
 		_mcl_burntime = 0,
 		_mcl_cooking_output = ""
 	},
 	stripped_bark = {
+		description = S("Stripped Crimson Hyphae"),
 		tiles = {"stripped_crimson_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
 		_mcl_burntime = 0,
@@ -189,12 +193,14 @@ mcl_trees.register_wood("warped",{
 	sapling=false,
 	leaves=false,
 	tree = {
+		description = S("Warped Stem"),
 		tiles = {"warped_hyphae.png", "warped_hyphae.png","warped_hyphae_side.png" },
 		groups = table.merge(nether_wood_groups,{tree = 1}),
 		_mcl_burntime = 0,
 		_mcl_cooking_output = ""
 	},
 	bark = {
+		description = S("Warped Hyphae"),
 		tiles = {"warped_hyphae_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
 		_mcl_burntime = 0,
@@ -206,12 +212,14 @@ mcl_trees.register_wood("warped",{
 		_mcl_burntime = 0
 	},
 	stripped = {
+		description = S("Stripped Warped Stem"),
 		tiles = {"stripped_warped_stem_top.png", "stripped_warped_stem_top.png","stripped_warped_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1}),
 		_mcl_burntime = 0,
 		_mcl_cooking_output = ""
 	},
 	stripped_bark = {
+		description = S("Stripped Warped Hyphae"),
 		tiles = {"stripped_warped_stem_side.png"},
 		groups = table.merge(nether_wood_groups,{tree = 1, bark = 1}),
 		_mcl_burntime = 0,
