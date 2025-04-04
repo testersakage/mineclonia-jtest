@@ -18,6 +18,10 @@ local queue_class = {
 		return value
 	end,
 
+	peek = function(self)
+		return self[self[2]]
+	end,
+
 	size = function(self)
 		return self[1] - self[2]
 	end,
