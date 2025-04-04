@@ -1,7 +1,7 @@
 mcl_pottery_sherds = {}
 local modname = minetest.get_current_modname()
 local S = minetest.get_translator(modname)
-local D = mcl_util.get_dynamic_translator()
+local D = mcl_util.get_dynamic_translator(modname)
 
 mcl_pottery_sherds.defs = {
 	["angler"] = { description = "Angler" },
