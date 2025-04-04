@@ -146,6 +146,13 @@ tt.register_snippet(function(_, _, stack)
 		get_sherd_desc(faces[3]),
 		get_sherd_desc(faces[4]),
 	}
+
+	for k, v in pairs(faces) do
+		faces[k] = "mcl_pottery_sherds_pattern_"..v..".png"
+	end
+	table.insert(faces, 1, "blank.png")
+	meta:set_string("inventory_overlay", core.inventorycube(unpack(faces)))
+
 	return table.concat(facedescs, "\n")
 end)
 
