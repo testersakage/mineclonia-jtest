@@ -2,68 +2,21 @@ mcl_redstone.tick_speed = tonumber(core.settings:get("mcl_redstone_update_tick")
 local MAX_EVENTS = tonumber(core.settings:get("mcl_redstone_max_events")) or 65535
 local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(core.settings:get("mcl_redstone_time_budget")) or 0.2))
 
+-- Set this to true to use an alternative event queue implementation
+-- that preserves insertion order for events with the same priority/tick.
+local EXPERIMENTAL_USE_ORDERED_EVENT_QUEUE = false
+
 mcl_redstone.is_tick_frozen = false
 
 mcl_redstone._pending_updates = {}
 
-local function priority_queue()
-	local priority_queue = {
-		heap = {},
-	}
-
-	function priority_queue:enqueue(prio, val)
-		table.insert(self.heap, { val = val, prio = prio })
-
-		local i = #self.heap
-		while i ~= 1 and self.heap[math.floor(i / 2)].prio > self.heap[i].prio do
-			local p = math.floor(i / 2)
-			self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
-			i = p
-		end
-	end
-
-	local function heapify(heap, i)
-		local l = math.floor(2 * i)
-		local r = math.floor(2 * i + 1)
-		local min = i
-
-		if l <= #heap and heap[l].prio < heap[i].prio then
-			min = l
-		end
-		if r <= #heap and heap[r].prio < heap[min].prio then
-			min = r
-		end
-		if min ~= i then
-			heap[i], heap[min] = heap[min], heap[i]
-			heapify(heap, min)
-		end
-	end
-
-	function priority_queue:dequeue()
-		if #self.heap == 0 then
-			return nil
-		end
-
-		local root = self.heap[1]
-		self.heap[1] = self.heap[#self.heap]
-		self.heap[#self.heap] = nil
-		heapify(self.heap, 1)
-
-		return root.val
-	end
-
-	function priority_queue:peek()
-		return #self.heap ~= 0 and self.heap[1].val or nil
-	end
-
-	function priority_queue:size()
-		return #self.heap
-	end
-
-	return priority_queue
+local eventqueue
+if EXPERIMENTAL_USE_ORDERED_EVENT_QUEUE then
+	eventqueue = mcl_redstone._priority_queue_ordered()
+else
+	eventqueue = mcl_redstone._priority_queue()
 end
 
-local eventqueue = priority_queue()
 local current_tick = 0
 
 -- Table containing the highest priority update event for each node position.
