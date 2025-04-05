@@ -1,5 +1,4 @@
 
-
 local liquid = {
 	registered_liquids = {},
 	-- A list of registered liquids
@@ -12,11 +11,11 @@ local liquid = {
 	-- The main tick speed. Changing that tick affects all liquids
 	-- proportionally.
 
-  -- Store the original core functions that need to be overridden.
-  set_node = core.set_node,
-  add_node = core.add_node,
-  bulk_set_node = core.bulk_set_node,
-  remove_node = core.remove_node,
+	-- Store the original core functions that need to be overridden.
+	set_node = core.set_node,
+	add_node = core.add_node,
+	bulk_set_node = core.bulk_set_node,
+	remove_node = core.remove_node,
 }
 
 -- This counter is used generate unique names
@@ -26,14 +25,11 @@ local resume_counter = 1
 function liquid.register_liquid(def)
 	-- This function generates a new liquid transformation.
 
-	local def_flowing = def.ndef_flowing
-	local def_source = def.ndef_source
-
 	local wait_count = 0
 
 	local modname = minetest.get_current_modname()
 
-	local NAME_SOURCE  = def.name_source
+	local NAME_SOURCE = def.name_source
 	assert(NAME_SOURCE, '"name_source" was nil')
 
 	local NAME_FLOWING = def.name_flowing
@@ -50,7 +46,7 @@ function liquid.register_liquid(def)
 	-- This table is a function that calculates then next lower liquid level.
 	local level_tb = {}
 	for i = 0, 9 do
-		level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) /  8) * 8 / (FLOW_DISTANCE+1))
+		level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) / 8) * 8 / (FLOW_DISTANCE+1))
 	end
 
 
@@ -143,9 +139,9 @@ function liquid.register_liquid(def)
 
 	local function get_position_from_hash(v, hash)
 		v.x = (hash % 65536) - 32768
-		hash  = math.floor(hash / 65536)
+		hash = math.floor(hash / 65536)
 		v.y = (hash % 65536) - 32768
-		hash  = math.floor(hash / 65536)
+		hash = math.floor(hash / 65536)
 		v.z = (hash % 65536) - 32768
 	end
 
@@ -193,7 +189,7 @@ function liquid.register_liquid(def)
 		if not other then
 			changed_nodes[h] = node
 		else
-			local ln = get_liquid_level(node)  or 0
+			local ln = get_liquid_level(node) or 0
 			local lo = get_liquid_level(other) or 0
 
 			if ln > lo then
@@ -713,60 +709,53 @@ function liquid.register_liquid(def)
 	core.register_on_dignode(liquid_update)
 
 
-	local function set_common_defs(ndef)
+	local function fix_ndef(ndef_name)
+		local ndef = core.registered_nodes[ndef_name]
+		local groups = table.copy(ndef.groups or {})
+		local drawtype
 
-		if ndef.on_construct ~= nil then
-			local on_construct = ndef.on_construct
-			ndef.on_construct = function(pos)
+		if ndef.liquidtype == 'source' then
+			groups["liquid_source"] = 1
+			drawtype                = "liquid"
+		elseif ndef.liquidtype == 'flowing' then
+			groups["liquid_flowing"] = 1
+			drawtype                = "flowingliquid"
+		end
+
+		local on_construct = ndef.on_construct
+		local after_destruct = ndef.after_destruct
+
+		local liquid_move_physics = ndef.liquid_move_physics
+		if liquid_move_physics == nil then
+			liquid_move_physics = true
+		end
+
+
+		core.override_item(ndef.name, {
+			drawtype            = drawtype,
+			paramtype           = "light",
+			paramtype2          = "flowingliquid",
+			groups              = groups,
+			liquid_move_physics = liquid_move_physics,
+			on_construct = function(pos)
 				liquid_update(pos)
-				on_construct(pos)
-			end
-		else
-			ndef.on_construct = liquid_update
-		end
-
-		if ndef.after_destruct ~= nil then
-			local after_destruct = ndef.after_destruct
-			ndef.after_destruct = function(pos)
+				if on_construct then
+					on_construct(pos)
+				end
+			end,
+			after_destruct = function(pos)
 				liquid_update(pos)
-				after_destruct(pos)
-			end
-		else
-			ndef.after_destruct = liquid_update
-		end
-
-
-		-- remove attributes that might interfere.
-		ndef.liquidtype = nil
-
-
-		ndef.liquid_alternative_source	= NAME_SOURCE
-		ndef.liquid_alternative_flowing = NAME_FLOWING
-		ndef.paramtype					 = "light"
-		ndef.paramtype2					 = "flowingliquid"
-
-		if ndef.liquid_move_physics == nil then
-			ndef.liquid_move_physics = true
-		end
-
-
-		if not ndef.groups then
-			ndef.groups = { }
-		end
+				if after_destruct then
+					after_destruct(pos)
+				end
+			end,
+		}, {'liquidtype'})
 
 	end
 
 
-	set_common_defs(def_source)
-	def_source.drawtype								= "liquid"
-	def_source.groups.liquid_source		= 1
-	core.register_node(NAME_SOURCE, def_source)
-
-
-	set_common_defs(def_flowing)
-	def_flowing.drawtype							= "flowingliquid"
-	def_flowing.groups.liquid_flowing = 1
-	core.register_node(NAME_FLOWING, def_flowing)
+	fix_ndef(NAME_SOURCE)
+	fix_ndef(NAME_FLOWING)
 
 
 	core.register_on_mods_loaded(function()
@@ -796,9 +785,9 @@ function liquid.register_liquid(def)
 		set_liquidtype(NAME_FLOWING, 'flowing')
 
 		assert(core.registered_nodes[NAME_SOURCE].liquidtype == 'source',
-		'This hack does no longer work')
+		'This hack does no longer work ('..NAME_SOURCE..')')
 		assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing',
-		'This hack does no longer work')
+		'This hack does no longer work ('..NAME_FLOWING..')')
 
 
 	end)
@@ -814,12 +803,12 @@ function liquid.register_liquid(def)
 		run_at_every_load = true,
 
 		action = function(pos, node, dtime_s)
-			local n111 =	node
-			local n011 =	core.get_node(vector.offset(pos, -1, 0, 0))
-			local n211 =	core.get_node(vector.offset(pos,  1, 0, 0))
-			local n110 =	core.get_node(vector.offset(pos,  0, 0,-1))
-			local n112 =	core.get_node(vector.offset(pos,  0, 0, 1))
-			local n101 =	core.get_node(vector.offset(pos,  0,-1, 0))
+			local n111 = node
+			local n011 = core.get_node(vector.offset(pos, -1, 0, 0))
+			local n211 = core.get_node(vector.offset(pos,  1, 0, 0))
+			local n110 = core.get_node(vector.offset(pos,  0, 0,-1))
+			local n112 = core.get_node(vector.offset(pos,  0, 0, 1))
+			local n101 = core.get_node(vector.offset(pos,  0,-1, 0))
 
 			if n101.name ~= NAME_SOURCE or 
 				n111.name ~= NAME_SOURCE or 
@@ -926,63 +915,64 @@ core.register_chatcommand('liquid', {
 
 core.register_on_mods_loaded(function()
 
-  -- `liquids_pointable` does not work anymore. This should solve many
-  -- issues.
-  for name, ndef in pairs(core.registered_items) do
-    if ndef.liquids_pointable then
-      local p = table.copy(ndef.pointabilities or {})
+	-- `liquids_pointable` does not work anymore. This should solve many
+	-- issues.
+	for name, ndef in pairs(core.registered_items) do
+		if ndef.liquids_pointable then
+			local p = table.copy(ndef.pointabilities or {})
 
-      if not p.nodes then
-        p.nodes = {}
-      end
+			if not p.nodes then
+				p.nodes = {}
+			end
 
-      if not p.nodes["group:liquid"] and
-        not p.nodes["group:liquid_source"] and
-        not p.nodes["group:liquid_flowing"] then
+			if not p.nodes["group:liquid"] and
+				not p.nodes["group:liquid_source"] and
+				not p.nodes["group:liquid_flowing"] then
 
-        core.log("warning", 'Node "'..name..'" uses deprecated "liquids_pointable" attribute')
-        p.nodes["group:liquid"] = true
-        core.override_item(name, {
-          pointabilities = p
-        })
-      end
-    end
-  end
+				core.log("warning", 'Node "'..name..'" uses deprecated "liquids_pointable" attribute')
+				p.nodes["group:liquid"] = true
+				core.override_item(name, {
+					pointabilities = p
+				})
+			end
+		end
+	end
 end)
-
 
 
 -- Override the set_node function so that it calls liquid.update() on every
 -- node change.
 core.set_node = function(pos, node)
-  liquid.set_node(pos, node);
-  liquid.update(pos);
+	liquid.set_node(pos, node);
+	liquid.update(pos);
 end
 
 -- Override the add_node function so that it calls liquid.update() on every
 -- node change.
 core.add_node = function(pos, node)
-  liquid.add_node(pos, node)
-  liquid.update(pos)
+	liquid.add_node(pos, node)
+	liquid.update(pos)
 end
 
 -- Override the bulk_set_node function so that it calls liquid.update() on every
 -- node change.
 core.bulk_set_node = function(positions, node)
-  liquid.bulk_set_node(positions, node)
-  for _, p in ipairs(positions) do
-    liquid.update(p)
-  end
+	liquid.bulk_set_node(positions, node)
+	for _, p in ipairs(positions) do
+		liquid.update(p)
+	end
 end
 
 -- Override the remove_node function so that it calls liquid.update() on every
 -- node change.
 core.remove_node = function(pos)
-  liquid.remove_node(pos)
-  liquid.update(pos)
+	liquid.remove_node(pos)
+	liquid.update(pos)
 end
 
 
 
-return liquid
+mcl_liquid = {}
+mcl_liquid.register_liquid = liquid.register_liquid
+
 
