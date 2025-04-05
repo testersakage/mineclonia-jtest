@@ -233,6 +233,21 @@ mcl_redstone_time_budget (Redstone time budget) float 0.2
 # The maximum number of queued redstone events. If exceeded redstone circuits will stop working.
 mcl_redstone_event_max (Maximum queued redstone events) int 65535
 
+
+[Liquid]
+# Enables MT like liquid transformation
+mcl_liquid_enable (Enable custom liquid transformation) bool false
+
+# Set the default time per Luanti tick. 
+# If this value is the same as the Luanti tick, the specified individual liquid tick is accurate.
+mcl_liquid_tick (Seconds per Luanti tick) float 0.025 0.0 1000.0
+
+# The maximum number of updates per tick per liquid type. 
+# If the number of updates exceeds this limit, the update gets dropped, and the
+# liquid stops until the block gets loaded again. 
+mcl_liquid_update_max (Maximal number of updates per liquid type per tick) float 1000000
+
+
 [Experimental]
 # If disabled, command blocks will be unusable (but still present).
 mcl_enable_commandblocks (Command blocks) bool true
@@ -252,13 +267,6 @@ mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 # Set this to true to use an alternative event queue implementation
 # that preserves insertion order for events with the same priority/tick.
 mcl_redstone_ordered_event_queue (Enable ordered event queue) bool false
-
-# Enables MT like liquid transformation
-mcl_liquid_enable (MT like liquid transformation) bool false
-
-# Set the default time per Luanti tick. 
-# If this value is the same as the Luanti tick, the specified individual liquid tick is accurate.
-mcl_liquid_tick (seconds per Luanti tick) float 0.025 0.0 1000.0
 
 [Debugging]
 # If enabled mapgen timings will be dumped to log
