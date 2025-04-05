@@ -180,7 +180,7 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 		end
 
 		local img1 = faces[3] and "mcl_pottery_sherds_pattern_"..faces[3]..".png" or "blank.png"
-		local img2 = faces[4] and "mcl_pottery_sherds_pattern_"..faces[4]..".png" or "blank.png"
+		local img2 = faces[2] and "mcl_pottery_sherds_pattern_"..faces[2]..".png" or "blank.png"
 
 		local img = core.inventorycube("blank.png", img2, img1)
 		meta:set_string("inventory_overlay", img)
