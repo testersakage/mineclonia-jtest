@@ -369,16 +369,14 @@ controls.register_on_hold(function(player, key)
 	end
 end)
 
-core.register_globalstep(function()
-	for player in mcl_util.connected_players() do
-		if not mcl_serverplayer.is_csm_capable (player) then
-			local name = player:get_player_name()
-			local wielditem = player:get_wielded_item()
-			local wieldindex = player:get_wield_index()
-			--local controls = player:get_player_control()
-			if type(bow_load[name]) == "number" and ((wielditem:get_name()~="mcl_bows:bow_0" and wielditem:get_name()~="mcl_bows:bow_1" and wielditem:get_name()~="mcl_bows:bow_2" and wielditem:get_name()~="mcl_bows:bow_0_enchanted" and wielditem:get_name()~="mcl_bows:bow_1_enchanted" and wielditem:get_name()~="mcl_bows:bow_2_enchanted") or wieldindex ~= bow_index[name]) then
-				reset_bow_state(player, true)
-			end
+mcl_player.register_globalstep(function(player)
+	if not mcl_serverplayer.is_csm_capable (player) then
+		local name = player:get_player_name()
+		local wielditem = player:get_wielded_item()
+		local wieldindex = player:get_wield_index()
+		--local controls = player:get_player_control()
+		if type(bow_load[name]) == "number" and ((wielditem:get_name()~="mcl_bows:bow_0" and wielditem:get_name()~="mcl_bows:bow_1" and wielditem:get_name()~="mcl_bows:bow_2" and wielditem:get_name()~="mcl_bows:bow_0_enchanted" and wielditem:get_name()~="mcl_bows:bow_1_enchanted" and wielditem:get_name()~="mcl_bows:bow_2_enchanted") or wieldindex ~= bow_index[name]) then
+			reset_bow_state(player, true)
 		end
 	end
 end)
