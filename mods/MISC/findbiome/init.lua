@@ -1,10 +1,8 @@
-local S = minetest.get_translator("findbiome")
+local S = minetest.get_translator(minetest.get_current_modname())
 local NS = function(s) return s end
 
 findbiome = {}
 
-local mod_biomeinfo = minetest.get_modpath("biomeinfo") ~= nil
-local mg_name = minetest.get_mapgen_setting("mg_name")
 local water_level = tonumber(minetest.get_mapgen_setting("water_level"))
 
 -- Calculate the playable area of the world
@@ -203,45 +201,18 @@ function findbiome.find_biome(pos, biomes, res, checks)
 		end
 		return false
 	end
-	local function search_v6()
-		if not mod_biomeinfo then return
-			false
-		end
-		for _ = 1, checks do
-			local found_biome = biomeinfo.get_v6_biome(pos)
-			for i = 1, #biomes do
-				local searched_biome = biomes[i]
-				if found_biome == searched_biome then
-					local spawn_y = minetest.get_spawn_level(pos.x, pos.z)
-					if spawn_y then
-						spawn_pos = vector.new(pos.x, spawn_y, pos.z)
-						if is_in_world(spawn_pos) then
-							return true
-						end
-					end
-				end
-			end
 
-			pos = next_pos()
+	-- Table of suitable biomes
+	biome_ids = {}
+	for i=1, #biomes do
+		local id = minetest.get_biome_id(biomes[i])
+		if not id then
+			return nil, false
 		end
-
-		return false
+		table.insert(biome_ids, id)
 	end
+	success = search()
 
-	if mg_name == "v6" then
-		success = search_v6()
-	else
-		-- Table of suitable biomes
-		biome_ids = {}
-		for i=1, #biomes do
-			local id = minetest.get_biome_id(biomes[i])
-			if not id then
-				return nil, false
-			end
-			table.insert(biome_ids, id)
-		end
-		success = search()
-	end
 	return spawn_pos, success
 
 end
@@ -258,19 +229,10 @@ function findbiome.list_biomes()
 		table.insert(biomes, NS("Wait until all mods have loaded!"))
 		return false, biomes
 	end
-	if mg_name == "v6" then
-		if not mod_biomeinfo then
-			table.insert(biomes, NS("Not supported. The “biomeinfo” mod is required for v6 mapgen support!"))
-			return false, biomes
-		end
-		biomes = biomeinfo.get_active_v6_biomes()
-		b = #biomes
-	else
-		biomes = {}
-		for k, _ in pairs(minetest.registered_biomes) do
-			table.insert(biomes, k)
-			b = b + 1
-		end
+	biomes = {}
+	for k, _ in pairs(minetest.registered_biomes) do
+		table.insert(biomes, k)
+		b = b + 1
 	end
 	if b == 0 then
 		return true, biomes
@@ -296,31 +258,18 @@ do
 			end
 			local pos = player:get_pos()
 			local invalid_biome = true
-			if mg_name == "v6" then
-				if not mod_biomeinfo then
-					return false, S("Not supported. The “biomeinfo” mod is required for v6 mapgen support!")
+			if param == "default" then
+				local biome_pos = find_default_biome()
+				if biome_pos then
+					player:set_pos(biome_pos)
+					return true, S("Biome found at @1.", minetest.pos_to_string(biome_pos))
+				else
+					return false, S("No biome found!")
 				end
-				local biomes = biomeinfo.get_active_v6_biomes()
-				for b=1, #biomes do
-					if param == biomes[b] then
-						invalid_biome = false
-						break
-					end
-				end
-			else
-				if param == "default" then
-					local biome_pos = find_default_biome()
-					if biome_pos then
-						player:set_pos(biome_pos)
-						return true, S("Biome found at @1.", minetest.pos_to_string(biome_pos))
-					else
-						return false, S("No biome found!")
-					end
-				end
-				local id = minetest.get_biome_id(param)
-				if id then
-					invalid_biome = false
-				end
+			end
+			local id = minetest.get_biome_id(param)
+			if id then
+				invalid_biome = false
 			end
 			if invalid_biome then
 				return false, S("Biome does not exist!")
@@ -339,7 +288,7 @@ do
 		description = S("List all biomes"),
 		params = "",
 		privs = { debug = true },
-		func = function(name, param)
+		func = function()
 			local success, biomes = findbiome.list_biomes()
 			-- Error checking before sending them in chat
 			if success == false then -- send error message
