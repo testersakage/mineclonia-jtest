@@ -174,22 +174,23 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 		if not faces then return nil end
 		local def = stack:get_definition()
 
-		local facedescs = {
-			get_sherd_desc(faces[1]),
-			get_sherd_desc(faces[2]),
-			get_sherd_desc(faces[3]),
-			get_sherd_desc(faces[4]),
-		}
+		local facedescs = {}
+		local faceimgs = {}
 
-		for k, v in pairs(faces) do
-			faces[k] = "mcl_pottery_sherds_pattern_"..v..".png"
+		for i = 1, 4 do
+			facedescs[i] = get_sherd_desc(faces[i])
+			if faces[i] then
+				faceimgs[i] = "mcl_pottery_sherds_pattern_"..faces[i]..".png"
+			else
+				faceimgs[i] = "blank.png"
+			end
 		end
-		table.insert(faces, 1, "blank.png")
-		local img = core.inventorycube(unpack(faces))
+
+		table.insert(faceimgs, 1, "blank.png")
+		local img = core.inventorycube(unpack(faceimgs))
 		meta:set_string("inventory_overlay", img)
 		meta:set_string("wield_overlay", img)
-
-		meta:set_string("description", def.description.. "\n" .. table.concat(facedescs, "\n"))
+		meta:set_string("description", def.description.. "\n" .. core.colorize(mcl_colors.GREEN,table.concat(facedescs, "\n")))
 	end,
 	after_place_node = function(pos, _, itemstack, _)
 		local meta = minetest.get_meta(pos)
