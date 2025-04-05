@@ -245,7 +245,7 @@ do
 			connects_to = {"group:solid"},
 			paramtype = "light",
 			paramtype2 = "color",
-			palette = "redstone_palette_power.png",
+			palette = "mcl_redstone_palette_power.png",
 			use_texture_alpha = "clip",
 			sunlight_propagates = true,
 			selection_box = selectionbox,
