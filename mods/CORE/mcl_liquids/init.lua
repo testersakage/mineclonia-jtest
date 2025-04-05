@@ -3,8 +3,10 @@ This is a liquid transformation mod that aims to work more similar to the
 liquids seen in Minecraft. 
 --]]
 
+local S = core.get_translator(core.get_current_modname())
 
-if not core.settings:get_bool('mcl_enable_liquid_transformation', false) then
+
+if not core.settings:get_bool('mcl_liquid_enable', false) then
 	mcl_liquid = {
 		register_liquid = function(def)
 		end
@@ -21,11 +23,11 @@ end
 -- If set to false, liquids do not flow until they activated.
 local is_running = true
 
+local MAIN_TICK_DEFAULT = tonumber(core.settings:get('mcl_liquid_tick')) or 0.025
 
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
-local MAIN_TICK = 0.025
-
+local main_tick = MAIN_TICK_DEFAULT
 
 -- A list of registered liquids
 local registered_liquids = {}
@@ -68,7 +70,7 @@ The `def` is a table consists of the following properties:
   if true, the liquid will be renewable. It defaults to false.
 
 - liquid_tick:
-	The time between ticks. Lower values make liquids flow faster.
+	The time in [seconds] between ticks. Lower values make liquids flow faster.
 	The liquid tick can be be shorter than the Luanti tick. Liquids could
 	therefore transform almost instantly or even instantly when setting this
 	value to 0.0.
@@ -884,7 +886,7 @@ local function register_liquid(def)
 	local tick_dtime = 0.0
 
 	local function tick()
-		tick_dtime = tick_dtime + MAIN_TICK
+		tick_dtime = tick_dtime + main_tick
 
 
 		-- If the TICKS is smaller than Luanti default tick we do multiple steps per
@@ -963,18 +965,59 @@ core.register_globalstep(function(dtime)
 	end
 end)
 
+core.register_privilege("liquid", {
+	description = S('Allows to change the runtime behaviour of liquids')
+})
+
 core.register_chatcommand('liquid', {
+	params = 'run | stop | step',
+	description = S('This command is used to debug liquid transformation'),
+	privs = {liquid=true},
+
 	func = function(name, param)
 		if param == 'step' then
 			is_running = false
 			liquid_tick()
+			return true
 		elseif param == 'run' then
 			is_running = true
+			return true
 		elseif param == 'stop' then
 			is_running = false
+			return true
+		else
+			return false
 		end
 	end
 })
+
+core.register_chatcommand('liquid-tick', {
+	params = '<seconds> | default | get',
+	description = S('This command sets the time passed between Luanti ticks.')..' '..
+	              S('If this value is larger than the actual tick, liquids become faster than specified.'),
+	privs = {liquid=true},
+
+	func = function(name, param)
+		if param == 'default' then
+			main_tick = MAIN_TICK_DEFAULT
+			return true
+		elseif param == 'get' then
+			return true, ''..main_tick
+		else
+			new_tick = tonumber(param)
+			if new_tick == nil then
+				return false
+			elseif new_tick >= 0.0 then
+				main_tick = new_tick
+				return true
+			else
+				return false, 'Invalid tick interval: '..param..''
+			end
+		end
+	end
+})
+
+
 
 
 core.register_on_mods_loaded(function()
@@ -1036,7 +1079,7 @@ end
 
 
 
--- Export the liquid api functions
+-- Export the liquid API functions
 mcl_liquid = {
 	register_liquid = register_liquid
 }

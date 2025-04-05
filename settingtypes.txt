@@ -254,7 +254,11 @@ mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 mcl_redstone_ordered_event_queue (Enable ordered event queue) bool false
 
 # Enables MT like liquid transformation
-mcl_enable_liquid_transformation (MT like liquid transformation) bool false
+mcl_liquid_enable (MT like liquid transformation) bool false
+
+# Set the default time per Luanti tick. 
+# If this value is the same as the Luanti tick, the specified individual liquid tick is accurate.
+mcl_liquid_tick (seconds per Luanti tick) float 0.025 0.0 1000.0
 
 [Debugging]
 # If enabled mapgen timings will be dumped to log
