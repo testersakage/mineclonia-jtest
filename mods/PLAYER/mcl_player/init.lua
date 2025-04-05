@@ -20,6 +20,7 @@ local tpl_playerinfo = {
 	is_swimming = false,
 	nodes = {},
 	inventory_formspecs = {},
+	joinplayer_done = false, --will be set to true in _mcl_autogroup (last mod) on_joinplayer
 }
 
 local nodeinfo_pos = { --offset positions of the "nodeinfo" nodes.
