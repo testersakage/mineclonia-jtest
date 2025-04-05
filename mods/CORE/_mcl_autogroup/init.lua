@@ -492,3 +492,10 @@ local function overwrite()
 end
 
 overwrite()
+
+core.register_on_mods_loaded(function ()
+	core.register_on_joinplayer(function(player)
+		--attempt for this to be the last on_joinplayer function to be run
+		mcl_player.players[player].joinplayer_done = true
+	end)
+end)

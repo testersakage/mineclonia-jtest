@@ -27,14 +27,6 @@ function mcl_util.is_valid_objectref (object)
 end
 end
 
-local joinplayer_done = {}
-
-core.register_on_mods_loaded(function()
-	core.register_on_joinplayer(function(player)
-		joinplayer_done[player] = true
-	end)
-end)
-
 local is_valid = mcl_util.is_valid_objectref
 
 local function valid_object_iterator(objects)
@@ -45,7 +37,7 @@ local function valid_object_iterator(objects)
 		if obj == nil then
 			return
 		end
-		if is_valid(obj) and obj:is_player() and joinplayer_done[obj] then
+		if obj:is_player() and mcl_player.players[obj] and mcl_player.players[obj].joinplayer_done and is_valid(obj) then
 			return obj
 		elseif not obj:is_player() and is_valid (obj) then
 			return obj
