@@ -1,29 +1,80 @@
+--[[
+This is a liquid transformation mod that aims to work more similar to the
+liquids seen in Minecraft. 
+--]]
 
-local liquid = {
-	registered_liquids = {},
-	-- A list of registered liquids
 
-	running = true,
-	-- This is the initial state of the liquid transformation mod.
-	-- If set to false, liquids do not flow until they activated.
+if not core.settings:get_bool('mcl_enable_liquid_transformation', false) then
+	mcl_liquid = {
+		register_liquid = function(def)
+		end
+	}
+	return
+end
 
-	MAIN_TICK = 0.025,
-	-- The main tick speed. Changing that tick affects all liquids
-	-- proportionally.
+--------------------------------------------------------------------------------
+-- Variables that are the same for all liquids
+--------------------------------------------------------------------------------
 
-	-- Store the original core functions that need to be overridden.
-	set_node = core.set_node,
-	add_node = core.add_node,
-	bulk_set_node = core.bulk_set_node,
-	remove_node = core.remove_node,
-}
+
+-- This is the initial state of the liquid transformation mod.
+-- If set to false, liquids do not flow until they activated.
+local is_running = true
+
+
+-- The main tick speed. Changing that tick affects all liquids
+-- proportionally.
+local MAIN_TICK = 0.025
+
+
+-- A list of registered liquids
+local registered_liquids = {}
+
+
+-- Store the original core functions that need to be overridden.
+local core_set_node = core.set_node
+local core_add_node = core.add_node
+local core_bulk_set_node = core.bulk_set_node
+local core_remove_node = core.remove_node
+
 
 -- This counter is used generate unique names
 local resume_counter = 1
 
 
-function liquid.register_liquid(def)
-	-- This function generates a new liquid transformation.
+
+
+--------------------------------------------------------------------------------
+-- Top level functions
+--------------------------------------------------------------------------------
+
+
+--[[
+
+This function applies the transformation mechanic to liquid nodes.
+
+The `def` is a table consists of the following properties:
+
+- name_source:
+  The name of the liquid source node, that already exists.
+
+- name_flowing:
+  The name of the liquid flowing node, that already exists.
+
+- liquid_range:
+  The range of the liquid. It defaults to 7.
+
+- liquid_renewable:
+  if true, the liquid will be renewable. It defaults to false.
+
+- liquid_tick:
+	The time between ticks. Lower values make liquids flow faster.
+	The liquid tick can be be shorter than the Luanti tick. Liquids could
+	therefore transform almost instantly or even instantly when setting this
+	value to 0.0.
+
+--]]
+local function register_liquid(def)
 
 	local wait_count = 0
 
@@ -40,7 +91,10 @@ function liquid.register_liquid(def)
 		'The liquid_range must be in range [0 <= x < 8]')
 
 	local RENEWABLE = def.liquid_renewable or false
+
 	local TICKS = def.liquid_tick or 0.5
+	assert(TICKS >= 0.0,
+		'The liquid_tick must be in range [0.0 <= x]')
 
 
 	-- This table is a function that calculates then next lower liquid level.
@@ -700,7 +754,7 @@ function liquid.register_liquid(def)
 	end
 
 	local function liquid_update(pos)
-		-- pos might not be a vector
+		-- pos might not be a vector or not immutable.
 		local p = vector.copy(pos)
 		update_next({pos = p})
 	end
@@ -830,7 +884,7 @@ function liquid.register_liquid(def)
 	local tick_dtime = 0.0
 
 	local function tick()
-		tick_dtime = tick_dtime + liquid.MAIN_TICK
+		tick_dtime = tick_dtime + MAIN_TICK
 
 
 		-- If the TICKS is smaller than Luanti default tick we do multiple steps per
@@ -865,49 +919,59 @@ function liquid.register_liquid(def)
 					local old_ndef = core.registered_nodes[old.name]
 					if old_ndef.on_flood then
 						if not old_ndef.on_flood(pos, old, node) then
-							liquid.set_node(pos, node)
+							core_set_node(pos, node)
 						end
 					else
-						liquid.set_node(pos, node)
+						core_set_node(pos, node)
 					end
 				end
+			elseif TICKS == 0.0 then
+				tick_dtime = 0.0
+				break
 			end
 		end
 	end
 
-	liquid.registered_liquids[#liquid.registered_liquids+1] = {
+	registered_liquids[#registered_liquids+1] = {
 		tick = tick,
 		update = liquid_update,
 	}
 end
 
-function liquid.tick()
-	for i, o in ipairs(liquid.registered_liquids) do
+
+--[[
+This function is called once per tick to update all registered liquids.
+--]]
+local function liquid_tick()
+	for i, o in ipairs(registered_liquids) do
 		o.tick()
 	end
 end
 
-function liquid.update(pos)
-	for i, o in ipairs(liquid.registered_liquids) do
+--[[
+This function notifies the registered liquids about a node that has changed.
+--]]
+local function liquid_update(pos)
+	for i, o in ipairs(registered_liquids) do
 		o.update(pos)
 	end
 end
 
 core.register_globalstep(function(dtime)
-	if liquid.running then
-		liquid.tick()
+	if is_running then
+		liquid_tick()
 	end
 end)
 
 core.register_chatcommand('liquid', {
 	func = function(name, param)
 		if param == 'step' then
-			liquid.running = false
-			liquid.tick()
+			is_running = false
+			liquid_tick()
 		elseif param == 'run' then
-			liquid.running = true
+			is_running = true
 		elseif param == 'stop' then
-			liquid.running = false
+			is_running = false
 		end
 	end
 })
@@ -940,39 +1004,41 @@ core.register_on_mods_loaded(function()
 end)
 
 
--- Override the set_node function so that it calls liquid.update() on every
+-- Override the set_node function so that it calls liquid_update() on every
 -- node change.
 core.set_node = function(pos, node)
-	liquid.set_node(pos, node);
-	liquid.update(pos);
+	core_set_node(pos, node);
+	liquid_update(pos);
 end
 
--- Override the add_node function so that it calls liquid.update() on every
+-- Override the add_node function so that it calls liquid_update() on every
 -- node change.
 core.add_node = function(pos, node)
-	liquid.add_node(pos, node)
-	liquid.update(pos)
+	core_add_node(pos, node)
+	liquid_update(pos)
 end
 
--- Override the bulk_set_node function so that it calls liquid.update() on every
+-- Override the bulk_set_node function so that it calls liquid_update() on every
 -- node change.
 core.bulk_set_node = function(positions, node)
-	liquid.bulk_set_node(positions, node)
+	core_bulk_set_node(positions, node)
 	for _, p in ipairs(positions) do
-		liquid.update(p)
+		liquid_update(p)
 	end
 end
 
--- Override the remove_node function so that it calls liquid.update() on every
+-- Override the remove_node function so that it calls liquid_update() on every
 -- node change.
 core.remove_node = function(pos)
-	liquid.remove_node(pos)
-	liquid.update(pos)
+	core_remove_node(pos)
+	liquid_update(pos)
 end
 
 
 
-mcl_liquid = {}
-mcl_liquid.register_liquid = liquid.register_liquid
+-- Export the liquid api functions
+mcl_liquid = {
+	register_liquid = register_liquid
+}
 
 

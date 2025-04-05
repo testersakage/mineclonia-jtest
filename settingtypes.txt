@@ -250,6 +250,9 @@ mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 # that preserves insertion order for events with the same priority/tick.
 mcl_redstone_ordered_event_queue (Enable ordered event queue) bool false
 
+# Enables MT like liquid transformation
+mcl_enable_liquid_transformation (MT like liquid transformation) bool false
+
 [Debugging]
 # If enabled mapgen timings will be dumped to log
 mcl_logging_mapgen (Log chunk generation) bool false
