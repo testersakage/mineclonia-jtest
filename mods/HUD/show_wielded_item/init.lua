@@ -6,13 +6,13 @@ local huds = {}
 local dtimes = {}
 local dlimit = 3  -- HUD element will be hidden after this many seconds
 
-local hudbars_mod = minetest.get_modpath("hudbars")
+local hudbars_mod = core.get_modpath("hudbars")
 
 local function set_hud(player)
 	if not player:is_player() then return end
 	local player_name = player:get_player_name()
 	-- Fixed offset in config file
-	local fixed = tonumber(minetest.settings:get("show_wielded_item_y_offset"))
+	local fixed = tonumber(core.settings:get("show_wielded_item_y_offset"))
 	local off
 	if fixed and fixed ~= -1 then
 		-- Manual offset
@@ -25,7 +25,7 @@ local function set_hud(player)
 			-- Tweak offset if hudbars mod was found
 
 			local rows = math.floor((#hb.get_hudbar_identifiers()-1) / 2) + 1
-			local vmargin = tonumber(minetest.settings:get("hudbars_vmargin")) or 24
+			local vmargin = tonumber(core.settings:get("hudbars_vmargin")) or 24
 			off.y = -101 - vmargin*rows
 		end
 
@@ -46,7 +46,7 @@ local function set_hud(player)
 	})
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	set_hud(player)
 
 	local name = player:get_player_name()
@@ -54,7 +54,7 @@ minetest.register_on_joinplayer(function(player)
 	wieldindex[name] = player:get_wield_index()
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	wield[name] = nil
 	wieldindex[name] = nil
@@ -91,7 +91,7 @@ mcl_player.register_globalstep(function(player, dtime)
 		if huds[player_name] then
 
 			-- Get description (various fallback checks for old Minetest versions)
-			local def = minetest.registered_items[wname]
+			local def = core.registered_items[wname]
 			local desc
 			if wstack.get_short_description then
 				-- get_short_description()
@@ -121,7 +121,7 @@ mcl_player.register_globalstep(function(player, dtime)
 			-- Print description
 			if desc then
 				-- Optionally append the 'technical' itemname
-				local tech = minetest.settings:get_bool("show_wielded_item_itemname", false)
+				local tech = core.settings:get_bool("show_wielded_item_itemname", false)
 				if tech and desc ~= "" then
 					desc = desc .. " ["..wname.."]"
 				end

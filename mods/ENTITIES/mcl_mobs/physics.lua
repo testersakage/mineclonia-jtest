@@ -4,7 +4,7 @@ local ENTITY_CRAMMING_MAX = 24
 local CRAMMING_DAMAGE = 3
 local DEATH_DELAY = 0.5
 
-local mobs_drop_items = minetest.settings:get_bool("mobs_drop_items") ~= false
+local mobs_drop_items = core.settings:get_bool("mobs_drop_items") ~= false
 
 -- check if within physical map limits
 local function within_limits(pos, radius)
@@ -67,14 +67,14 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 		if num > 0 then
 			item = dropdef.name
 			if cooked then
-				local output = minetest.get_craft_result({ method = "cooking", width = 1, items = {item}})
+				local output = core.get_craft_result({ method = "cooking", width = 1, items = {item}})
 				if output and output.item and not output.item:is_empty() then
 					item = output.item:get_name()
 				end
 			end
 
 			for _ = 1, num do
-				obj = minetest.add_item(pos, ItemStack(item .. " " .. 1))
+				obj = core.add_item(pos, ItemStack(item .. " " .. 1))
 			end
 
 			if obj and obj:get_luaentity() then
@@ -110,7 +110,7 @@ function mob_class:collision (pos)
 	local z = 0
 	local cbox = self.collisionbox
 	local width = -cbox[1] + cbox[4]
-	for object in minetest.objects_inside_radius (pos, width) do
+	for object in core.objects_inside_radius (pos, width) do
 		local ent = object:get_luaentity()
 		local is_player = object:is_player ()
 		-- Sleeping players shouldn't ever be pushed around.
@@ -189,7 +189,7 @@ function mob_class:check_for_death (mcl_reason, damage)
 		self.health = math.min (self.health, hp_max)
 
 		-- Remove damage overlay.
-		minetest.after (0.5, function (self)
+		core.after (0.5, function (self)
 			if self and not self.dead and self.object
 				and self.object:get_pos () then
 				self:remove_texture_mod ("^[colorize:#d42222:175")
@@ -240,7 +240,7 @@ function mob_class:check_for_death (mcl_reason, damage)
 
 	local killed_by_player = false
 	if self.last_player_hit_time
-		and minetest.get_gametime() - self.last_player_hit_time <= 5 then
+		and core.get_gametime() - self.last_player_hit_time <= 5 then
 		killed_by_player  = true
 	end
 
@@ -263,7 +263,7 @@ function mob_class:check_for_death (mcl_reason, damage)
 			if ((not self.child) or self.type ~= "animal") then
 				local pos = self.object:get_pos()
 				local xp_amount = math.random(self.xp_min, self.xp_max)
-				if not minetest.is_creative_enabled(self.last_player_hit_name)
+				if not core.is_creative_enabled(self.last_player_hit_name)
 					and not mcl_sculk.handle_death(pos, xp_amount) then
 					mcl_experience.throw_xp(pos, xp_amount)
 				end
@@ -287,7 +287,7 @@ function mob_class:check_for_death (mcl_reason, damage)
 	if length <= 0 then
 		kill(self)
 	else
-		minetest.after(length, kill, self)
+		core.after(length, kill, self)
 	end
 
 	return true
@@ -298,7 +298,7 @@ function mob_class:is_in_node (self_pos, itemstring) --can be group:...
 	local pos = self_pos
 	local v1 = vector.offset (pos, cb[1], cb[2], cb[3])
 	local v2 = vector.offset (pos, cb[4], cb[5], cb[6])
-	local nn = minetest.find_nodes_in_area (v1, v2, {itemstring})
+	local nn = core.find_nodes_in_area (v1, v2, {itemstring})
 	if nn and #nn > 0 then return true end
 end
 
@@ -320,8 +320,8 @@ function mob_class:respire ()
 end
 
 local function get_internal_light_level ()
-	local tod = minetest.get_timeofday ()
-	local ratio = minetest.time_to_day_night_ratio (tod)
+	local tod = core.get_timeofday ()
+	local ratio = core.time_to_day_night_ratio (tod)
 	local light = math.floor (ratio * 15)
 
 	-- See: https://minecraft.wiki/w/Light#Internal_light_level
@@ -352,7 +352,7 @@ function mob_class:get_weather_with_light (self_pos, time_of_day)
 	local local_light = core.get_node_light (self_pos) or 0
 	local has_rain = mcl_weather.is_exposed_to_rain (self_pos)
 	if local_light > 10 then
-		local direct_light = minetest.get_natural_light (self_pos) or 0
+		local direct_light = core.get_natural_light (self_pos) or 0
 
 		-- See: https://minecraft.wiki/w/Light#Internal_light_level
 		local weather = mcl_weather.get_weather ()
@@ -378,7 +378,7 @@ function mob_class:do_env_damage()
 	local pos = self.object:get_pos()
 	if not pos then return end
 
-	self.time_of_day = minetest.get_timeofday()
+	self.time_of_day = core.get_timeofday()
 	-- remove mob if beyond map limits
 	if not within_limits(pos, 0) then
 		self:safe_remove()
@@ -426,9 +426,9 @@ function mob_class:do_env_damage()
 		mcl_potions.give_effect_by_level("withering", self.object, 2, 2)
 	end
 
-	local nodef = minetest.registered_nodes[self.standing_in]
-	local nodef2 = minetest.registered_nodes[self.standing_on]
-	local head_nodedef = minetest.registered_nodes[self.head_in]
+	local nodef = core.registered_nodes[self.standing_in]
+	local nodef2 = core.registered_nodes[self.standing_on]
+	local head_nodedef = core.registered_nodes[self.head_in]
 
 	-- rain
 	if self.rain_damage > 0 then
@@ -507,7 +507,7 @@ function mob_class:do_env_damage()
 	if self.initial_properties.breath_max ~= -1 then
 		local drowning = false
 		if self.breathes_in_water then
-			if minetest.get_item_group(self.standing_in, "water") == 0 then
+			if core.get_item_group(self.standing_in, "water") == 0 then
 				drowning = true
 			end
 		elseif head_nodedef.drowning > 0 then
@@ -599,7 +599,7 @@ function mob_class:check_entity_cramming()
 	local p = self.object:get_pos()
 	if not p then return end
 	local mobs = {}
-	for o in minetest.objects_inside_radius(p, 0.5) do
+	for o in core.objects_inside_radius(p, 0.5) do
 		local l = o:get_luaentity()
 		if l and l.is_mob and l.health > 0 then table.insert(mobs,l) end
 	end
@@ -653,7 +653,7 @@ function mob_class:falling(pos)
 			local d = (self.old_y or self_pos.y) - self_pos.y
 
 			if d > 5 and n ~= "air" and n ~= "ignore" and self.reset_fall_damage ~= 1 then
-				local add = minetest.get_item_group(self.standing_on, "fall_damage_add_percent")
+				local add = core.get_item_group(self.standing_on, "fall_damage_add_percent")
 				local damage = d - 5
 				if add ~= 0 then
 					damage = damage + damage * (add/100)
@@ -949,8 +949,8 @@ function mob_class:immersion_depth (liquidgroup, pos, max)
 
 	while i < limit do
 		local pos = { x = pos.x, y = i, z = pos.z, }
-		local node = minetest.get_node (pos)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node (pos)
+		local def = core.registered_nodes[node.name]
 		if def and def.groups[liquidgroup] and def.groups[liquidgroup] > 0 then
 			local height = 1
 			if def.liquidtype == "flowing" then
@@ -989,15 +989,15 @@ local function box_intersection (box, other_box)
 end
 
 local function will_breach_water_1 (node, cbox)
-	local node_data = minetest.get_node (node)
-	local def = minetest.registered_nodes[node_data.name]
+	local node_data = core.get_node (node)
+	local def = core.registered_nodes[node_data.name]
 
 	if def and not def.walkable and def.liquidtype == "none" then
 		return false
 	end
 
 	local boxes
-		= minetest.get_node_boxes ("collision_box", node, node_data)
+		= core.get_node_boxes ("collision_box", node, node_data)
 	for _, box in pairs (boxes) do
 		box[1] = box[1] + node.x
 		box[2] = box[2] + node.y
@@ -1053,8 +1053,8 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	if not moveresult then
 		return
 	end
-	local standin = minetest.registered_nodes[self.standing_in]
-	local standon = minetest.registered_nodes[self.standing_on]
+	local standin = core.registered_nodes[self.standing_in]
+	local standon = core.registered_nodes[self.standing_on]
 	local acc_dir = self.acc_dir
 	local acc_speed = self.acc_speed
 	local fall_speed = self._acc_no_gravity and 0 or self.fall_speed
@@ -1373,8 +1373,8 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 	if not moveresult then
 		return
 	end
-	local standin = minetest.registered_nodes[self.standing_in]
-	local standon = minetest.registered_nodes[self.standing_on]
+	local standin = core.registered_nodes[self.standing_in]
+	local standon = core.registered_nodes[self.standing_on]
 	local touching_ground = moveresult.touching_ground
 		or moveresult.standing_on_object
 	local v = self.object:get_velocity ()
@@ -1432,7 +1432,7 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 		return
 	end
 
-	local standin = minetest.registered_nodes[self.standing_in]
+	local standin = core.registered_nodes[self.standing_in]
 	if standin.groups.water and standin.groups.water > 0 then
 		local acc_speed = self.acc_speed
 		local acc_dir = self.acc_dir
@@ -1503,7 +1503,7 @@ local function standing_in_liquid_or_walkable (self)
 	if self.standing_in == "air" then
 		return false
 	end
-	local def = minetest.registered_nodes[self.standing_in]
+	local def = core.registered_nodes[self.standing_in]
 	return not def and def.liquidtype ~= "flowing" and not def.walkable
 end
 
@@ -1520,15 +1520,15 @@ local function get_node (nodepos)
 	if get_node_raw then
 		local x, y, z = nodepos.x, nodepos.y, nodepos.z
 		local id, _, param2 = get_node_raw (x, y, z)
-		return minetest.get_name_from_content_id (id), param2
+		return core.get_name_from_content_id (id), param2
 	else
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return node.name, node.param2
 	end
 end
 
 function mob_class:check_one_immersion_depth (node, param2, base_y, pos, current, dimension)
-	local def = minetest.registered_nodes [node]
+	local def = core.registered_nodes [node]
 	local liquid_type = def and (def.liquidtype or def._liquidtype)
 	if liquid_type and liquid_type ~= "none" then
 		local height
@@ -1655,7 +1655,7 @@ function mob_class:post_motion_step (self_pos, dtime, moveresult)
 	-- Generate sprinting particles if and standing on a surface
 	-- appropriate.
 	if self:display_sprinting_particles () then
-		local def = minetest.registered_nodes[self.standing_on]
+		local def = core.registered_nodes[self.standing_on]
 		if def and def.walkable then
 			local p2 = self.standing_on_param2
 			local p2_type = def.paramtype2
@@ -1666,7 +1666,7 @@ function mob_class:post_motion_step (self_pos, dtime, moveresult)
 			v.x = v.x * -0.2
 			v.z = v.z * -0.2
 			v.y = 2.15
-			minetest.add_particlespawner ({
+			core.add_particlespawner ({
 					amount = math.random (1, 2),
 					time = 1,
 					minpos = {

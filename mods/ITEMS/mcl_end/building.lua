@@ -1,14 +1,14 @@
 -- Building blocks and decorative nodes
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_screwdriver = minetest.get_modpath("screwdriver")
+local mod_screwdriver = core.get_modpath("screwdriver")
 
 local on_rotate
 if mod_screwdriver then
 	on_rotate = screwdriver.rotate_3way
 end
 
-minetest.register_node("mcl_end:end_stone", {
+core.register_node("mcl_end:end_stone", {
 	description = S("End Stone"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_end_end_stone.png"},
@@ -20,7 +20,7 @@ minetest.register_node("mcl_end:end_stone", {
 	_mcl_crafting_output = {square2 = {output = "mcl_end:end_bricks 4"}}
 })
 
-minetest.register_node("mcl_end:end_bricks", {
+core.register_node("mcl_end:end_bricks", {
 	description = S("End Stone Bricks"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_end_end_bricks.png"},
@@ -32,7 +32,7 @@ minetest.register_node("mcl_end:end_bricks", {
 	_mcl_stonecutter_recipes = {"mcl_end:end_stone"},
 })
 
-minetest.register_node("mcl_end:purpur_block", {
+core.register_node("mcl_end:purpur_block", {
 	description = S("Purpur Block"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_end_purpur_block.png"},
@@ -43,7 +43,7 @@ minetest.register_node("mcl_end:purpur_block", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_end:purpur_pillar", {
+core.register_node("mcl_end:purpur_pillar", {
 	description = S("Purpur Pillar"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	paramtype2 = "facedir",
@@ -58,7 +58,7 @@ minetest.register_node("mcl_end:purpur_pillar", {
 	_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}
 })
 
-minetest.register_node("mcl_end:end_rod", {
+core.register_node("mcl_end:end_rod", {
 	description = S("End Rod"),
 	_doc_items_longdesc = S("End rods are decorative light sources."),
 	tiles = {
@@ -111,7 +111,7 @@ minetest.register_node("mcl_end:end_rod", {
 				y = p1.y - placer_pos.y,
 				z = p1.z - placer_pos.z
 			}
-			param2 = minetest.dir_to_facedir(dir)
+			param2 = core.dir_to_facedir(dir)
 		end
 
 		if p0.y - 1 == p1.y then
@@ -126,14 +126,14 @@ minetest.register_node("mcl_end:end_rod", {
 			param2 = 4
 		end
 
-		return minetest.item_place(itemstack, placer, pointed_thing, param2)
+		return core.item_place(itemstack, placer, pointed_thing, param2)
 	end,
 
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	_mcl_blast_resistance = 0,
 })
 
-minetest.register_node("mcl_end:dragon_egg", {
+core.register_node("mcl_end:dragon_egg", {
 	description = S("Dragon Egg"),
 	_doc_items_longdesc = S("A dragon egg is a decorative item which can be placed."),
 	tiles = {
@@ -170,14 +170,14 @@ minetest.register_node("mcl_end:dragon_egg", {
 	_mcl_blast_resistance = 9,
 	_mcl_hardness = 3,
 	on_punch = function(pos, node, puncher)
-		if not minetest.is_protected(pos, puncher:get_player_name()) then
+		if not core.is_protected(pos, puncher:get_player_name()) then
 			local max_dist = vector.new(15, 7, 15)
-			local positions = minetest.find_nodes_in_area(vector.subtract(pos, max_dist), vector.add(pos, max_dist), "air", false)
+			local positions = core.find_nodes_in_area(vector.subtract(pos, max_dist), vector.add(pos, max_dist), "air", false)
 			if #positions > 0 then
 				local tpos = positions[math.random(#positions)]
-				minetest.remove_node(pos)
-				minetest.set_node(tpos, node)
-				minetest.check_for_falling(tpos)
+				core.remove_node(pos)
+				core.set_node(tpos, node)
+				core.check_for_falling(tpos)
 			end
 		end
 	end,
@@ -199,7 +199,7 @@ mcl_stairs.register_stair_and_slab("purpur_block", {
 })
 
 -- Crafting recipes
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_end:end_rod 4",
 	recipe = {
 		{"mcl_mobitems:blaze_rod"},

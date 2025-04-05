@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
+local peaceful = core.settings:get_bool("only_peaceful_mobs", false)
 
 local explosion_strength = 6
 
@@ -17,7 +17,7 @@ for _, dir in pairs(directions) do
 end
 
 local function find_crystal(pos)
-	for obj in minetest.objects_inside_radius(pos, 0) do
+	for obj in core.objects_inside_radius(pos, 0) do
 		local luaentity = obj:get_luaentity()
 		if luaentity and luaentity.name == "mcl_end:crystal" then
 			return luaentity
@@ -42,7 +42,7 @@ local function crystal_explode(self, puncher)
 	end
 	-- Enable dragons to detect explosions by slightly deferring
 	-- object deletion.
-	minetest.after (0.1, self.object.remove, self.object)
+	core.after (0.1, self.object.remove, self.object)
 	mcl_explosions.explode(vector.add(self.object:get_pos(), {x = 0, y = 1.5, z = 0}), strength, {}, self.object, source)
 	return true
 end
@@ -52,12 +52,12 @@ local function set_crystal_animation(self)
 end
 
 local function spawn_crystal(pos)
-	minetest.add_entity(pos, "mcl_end:crystal")
+	core.add_entity(pos, "mcl_end:crystal")
 	if not vector.equals(pos, vector.floor(pos)) then return end
 	if mcl_worlds.pos_to_dimension(pos) ~= "end" then return end
 	local portal_center
 	for _, dir in pairs(directions) do
-		local node = minetest.get_node(vector.add(pos, dir))
+		local node = core.get_node(vector.add(pos, dir))
 		if node.name == "mcl_portals:portal_end" then
 			portal_center = vector.add(pos, vector.multiply(dir, 3))
 			break
@@ -70,7 +70,7 @@ local function spawn_crystal(pos)
 		crystals[i] = find_crystal(crystal_pos)
 		if not crystals[i] then return end
 	end
-	for o in minetest.objects_inside_radius(pos, 64) do
+	for o in core.objects_inside_radius(pos, 64) do
 		local l = o:get_luaentity()
 		if l and l.name == "mobs_mc:enderdragon" then return end
 		if not peaceful then
@@ -83,10 +83,10 @@ local function spawn_crystal(pos)
 		crystal_explode(crystal)
 	end
 	local portal_pos = vector.add(portal_center, vector.new(0, -1, 0))
-	mcl_structures.place_structure(portal_pos,mcl_structures.registered_structures["end_exit_portal"],PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
+	mcl_structures.place_structure(portal_pos,mcl_structures.registered_structures["end_exit_portal"],PseudoRandom(core.get_mapgen_setting("seed")),-1)
 end
 
-minetest.register_entity("mcl_end:crystal", {
+core.register_entity("mcl_end:crystal", {
 	initial_properties = {
 		physical = true,
 		visual = "mesh",
@@ -103,7 +103,7 @@ minetest.register_entity("mcl_end:crystal", {
 	_mcl_pistons_unmovable = true
 })
 
-minetest.register_entity("mcl_end:crystal_beam", {
+core.register_entity("mcl_end:crystal_beam", {
 	initial_properties = {
 		physical = false,
 		visual = "cube",
@@ -150,13 +150,13 @@ minetest.register_entity("mcl_end:crystal_beam", {
 	end,
 })
 
-minetest.register_craftitem("mcl_end:crystal", {
+core.register_craftitem("mcl_end:crystal", {
 	inventory_image = "mcl_end_crystal_item.png",
 	description = S("End Crystal"),
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.type == "node" then
-			local pos = minetest.get_pointed_thing_position(pointed_thing)
-			local node = minetest.get_node(pos)
+			local pos = core.get_pointed_thing_position(pointed_thing)
+			local node = core.get_node(pos)
 			local node_name = node.name
 
 			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -164,7 +164,7 @@ minetest.register_craftitem("mcl_end:crystal", {
 
 			if find_crystal(pos) then return itemstack end
 			if node_name == "mcl_core:obsidian" or node_name == "mcl_core:bedrock" then
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
 				spawn_crystal(pos)
@@ -178,7 +178,7 @@ minetest.register_craftitem("mcl_end:crystal", {
 
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_end:crystal",
 	recipe = {
 		{"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
@@ -187,4 +187,4 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_alias("mcl_end_crystal:end_crystal", "mcl_end:crystal")
+core.register_alias("mcl_end_crystal:end_crystal", "mcl_end:crystal")

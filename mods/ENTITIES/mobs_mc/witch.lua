@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local raid_mob = mobs_mc.raid_mob
 
@@ -152,14 +152,14 @@ local function witch_consume_potion (self, wielditem)
 		pitch = 1 + math.random (-10, 10) * 0.005,
 		object = self.object,
 	}
-	minetest.sound_play ("survival_thirst_drink", sound, true)
+	core.sound_play ("survival_thirst_drink", sound, true)
 end
 
 local witch_potion_items = {
 	{
 		potion = "mcl_potions:water_breathing",
 		test = function (self)
-			local head_nodedef = minetest.registered_nodes[self.head_in]
+			local head_nodedef = core.registered_nodes[self.head_in]
 			return (not mcl_potions.has_effect (self.object, "water_breathing")
 				and head_nodedef and head_nodedef.drowning > 0)
 		end,
@@ -343,7 +343,7 @@ function witch:attack_default (self_pos, dtime, esp)
 		and self:check_timer ("raider_target", 5.0) then
 		local nearest, dist = nil, nil
 		-- Locate the nearest illager in need of healing.
-		for object in minetest.objects_inside_radius (self_pos, self.view_range) do
+		for object in core.objects_inside_radius (self_pos, self.view_range) do
 			local entity = object:get_luaentity ()
 			if entity and entity._is_raid_mob
 				and entity.name ~= self.name then
@@ -415,4 +415,4 @@ local witch_potion_entity = {
 	end,
 }
 
-minetest.register_entity ("mobs_mc:witch_potion", witch_potion_entity)
+core.register_entity ("mobs_mc:witch_potion", witch_potion_entity)

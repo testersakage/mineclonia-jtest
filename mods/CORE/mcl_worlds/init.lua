@@ -125,11 +125,11 @@ end
 local DIM_UPDATE = 1
 local dimtimer = 0
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	last_dimension[player:get_player_name()] = mcl_worlds.pos_to_dimension(player:get_pos())
 end)
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	-- regular updates based on iterval
 	dimtimer = dimtimer + dtime;
 	if dimtimer >= DIM_UPDATE then
@@ -145,7 +145,7 @@ minetest.register_globalstep(function(dtime)
 end)
 
 function mcl_worlds.get_cloud_parameters()
-	local mg_name = minetest.get_mapgen_setting("mg_name")
+	local mg_name = core.get_mapgen_setting("mg_name")
 	if mg_name == "valleys" or mg_name == "carpathian" then
 		return {
 			height = 384, --valleys and carpathian have a much higher average elevation thus often "normal" landscape ends up in the clouds
@@ -172,7 +172,7 @@ end
 -- the Minetest wiki.
 ------------------------------------------------------------------------
 
-local mod_storage = minetest.get_mod_storage ()
+local mod_storage = core.get_mod_storage ()
 
 local function round_trunc (pos)
 	return math.floor (pos + 0.5)
@@ -217,7 +217,7 @@ function mcl_worlds.get_regional_difficulty (pos)
 		return 0
 	end
 	local inhabited_time = mcl_worlds.chunk_inhabited_time (pos)
-	local total_daytime = minetest.get_day_count () * 24000
+	local total_daytime = core.get_day_count () * 24000
 	local daytime_factor, chunk_factor
 	if total_daytime > 1512000 then -- 63 days
 		daytime_factor = 0.25
@@ -225,7 +225,7 @@ function mcl_worlds.get_regional_difficulty (pos)
 		daytime_factor = 0
 	else
 		total_daytime
-			= total_daytime + minetest.get_timeofday () * 24000
+			= total_daytime + core.get_timeofday () * 24000
 		daytime_factor = (total_daytime - 72000) / 5760000
 	end
 	chunk_factor = math.min (inhabited_time / 360000, 1.0)

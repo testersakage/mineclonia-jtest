@@ -1,6 +1,6 @@
 mcl_fishing = {}
 --Fishing Rod, Bobber, and Flying Bobber mechanics and Bobber artwork by Rootyjr.
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_fishing.loot_fish = {
 	{ itemstring = "mcl_fishing:fish_raw", weight = 60 },
@@ -138,36 +138,36 @@ local function fish(itemstack, player, pointed_thing)
 					awards.unlock(player:get_player_name(), "mcl:killCow")
 				end
 			else
-				minetest.add_item(pos, item)
+				core.add_item(pos, item)
 			end
 
 			mcl_experience.throw_xp(pos, math.random(1,6))
 
-			if not minetest.is_creative_enabled(player:get_player_name()) then
+			if not core.is_creative_enabled(player:get_player_name()) then
 				local idef = itemstack:get_definition()
 				itemstack:add_wear(65535/durability) -- 65 uses
 				if itemstack:get_count() == 0 and idef.sound and idef.sound.breaks then
-					minetest.sound_play(idef.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
+					core.sound_play(idef.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
 				end
 			end
 		end
 		--Check if object is on land.
 		local epos = ent.object:get_pos()
 		epos.y = math.floor(epos.y)
-		local node = minetest.get_node(epos)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node(epos)
+		local def = core.registered_nodes[node.name]
 		if def and def.walkable then
-			if not minetest.is_creative_enabled(player:get_player_name()) then
+			if not core.is_creative_enabled(player:get_player_name()) then
 				local idef = itemstack:get_definition()
 				itemstack:add_wear((65535/durability)*2) -- if so and not creative then wear double like in MC.
 				if itemstack:get_count() == 0 and idef.sound and idef.sound.breaks then
-					minetest.sound_play(idef.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
+					core.sound_play(idef.sound.breaks, {pos=player:get_pos(), gain=0.5}, true)
 				end
 			end
 		end
 		--Destroy bobber.
 		remove_bobber(player)
-		minetest.sound_play("reel", {object=player, gain=0.1, max_hear_distance=16}, true)
+		core.sound_play("reel", {object=player, gain=0.1, max_hear_distance=16}, true)
 		return itemstack
 	--If no bobber or flying_bobber exists then throw bobber.
 	else
@@ -180,9 +180,9 @@ end
 function bobber_ENTITY:check_player()
 	local player
 	if self.player and self.player ~= "" then
-		player = minetest.get_player_by_name(self.player)
+		player = core.get_player_by_name(self.player)
 		if player and player:get_pos() and vector.distance(player:get_pos(), self.object:get_pos()) <= 33 and
-			minetest.get_item_group(player:get_wielded_item():get_name(), "fishing_rod") > 0 then
+			core.get_item_group(player:get_wielded_item():get_name(), "fishing_rod") > 0 then
 			return true
 		end
 	end
@@ -194,12 +194,12 @@ function bobber_ENTITY:on_step(dtime)
 	self.timer=self.timer+dtime
 	local epos = self.object:get_pos()
 	epos.y = math.floor(epos.y)
-	local node = minetest.get_node(epos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(epos)
+	local def = core.registered_nodes[node.name]
 
 	--If we have no player, remove self.
 	if not self:check_player() then return end
-	local player = minetest.get_player_by_name(self.player)
+	local player = core.get_player_by_name(self.player)
 
 	if self._hooked and self._reeling then
 		local dst = vector.distance(player:get_pos(), self.object:get_pos())
@@ -211,11 +211,11 @@ function bobber_ENTITY:on_step(dtime)
 	end
 
 	-- If in water, then bob.
-	if def and (def.liquidtype == "source" and minetest.get_item_group(def.name, "water") ~= 0) then
+	if def and (def.liquidtype == "source" and core.get_item_group(def.name, "water") ~= 0) then
 		if self._oldy == nil then
 			self.object:set_pos({x=self.object:get_pos().x,y=math.floor(self.object:get_pos().y)+.5,z=self.object:get_pos().z})
 			self._oldy = self.object:get_pos().y
-			minetest.sound_play("watersplash", {pos=epos, gain=0.25}, true)
+			core.sound_play("watersplash", {pos=epos, gain=0.25}, true)
 		end
 		-- reset to original position after dive.
 		if self.object:get_pos().y > self._oldy then
@@ -226,7 +226,7 @@ function bobber_ENTITY:on_step(dtime)
 		if self._dive then
 			for _ = 1, 2 do
 					-- Spray bubbles when there's a fish.
-					minetest.add_particle({
+					core.add_particle({
 						pos = {x=epos["x"]+math.random(-1,1)*math.random()/2,y=epos["y"]+0.1,z=epos["z"]+math.random(-1,1)*math.random()/2},
 						velocity = {x=0, y=4, z=0},
 						acceleration = {x=0, y=-5, z=0},
@@ -255,7 +255,7 @@ function bobber_ENTITY:on_step(dtime)
 				self._time = self._time + dtime
 			else
 				-- wait time is over time to dive.
-				minetest.sound_play("bloop", {pos=epos, gain=0.4}, true)
+				core.sound_play("bloop", {pos=epos, gain=0.4}, true)
 				self._dive = true
 				self.object:set_velocity({x=0,y=-2,z=0})
 				self.object:set_acceleration({x=0,y=5,z=0})
@@ -266,7 +266,7 @@ function bobber_ENTITY:on_step(dtime)
 	end
 end
 
-minetest.register_entity("mcl_fishing:bobber_entity", bobber_ENTITY)
+core.register_entity("mcl_fishing:bobber_entity", bobber_ENTITY)
 
 local flying_bobber_ENTITY={
 	initial_properties = {
@@ -292,19 +292,19 @@ local function flying_bobber_on_step(self, dtime)
 	end
 	self.timer=self.timer+dtime
 	local pos = self.object:get_pos()
-	local node = minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
-	local player = minetest.get_player_by_name(self._thrower)
+	local node = core.get_node(pos)
+	local def = core.registered_nodes[node.name]
+	local player = core.get_player_by_name(self._thrower)
 
 	if not player or not player:get_pos() or vector.distance(player:get_pos(), self.object:get_pos()) > 33 then
 		remove_bobber(player, self.object)
 		return
 	end
 
-	for obj in minetest.objects_inside_radius(pos, 0.4) do
+	for obj in core.objects_inside_radius(pos, 0.4) do
 		local ent = obj:get_luaentity()
 		if ent and ent._mcl_fishing_hookable then
-			bobbers[player] = minetest.add_entity(ent.object:get_pos(), "mcl_fishing:bobber_entity")
+			bobbers[player] = core.add_entity(ent.object:get_pos(), "mcl_fishing:bobber_entity")
 			ent.object:set_attach(bobbers[player])
 			local bent = bobbers[player]:get_luaentity()
 			if bent then
@@ -319,8 +319,8 @@ local function flying_bobber_on_step(self, dtime)
 	-- Destroy when hitting a solid node
 	if self._lastpos.x~=nil then
 		if (def and (def.walkable or def.liquidtype == "flowing" or def.liquidtype == "source")) or not def then
-			if minetest.get_item_group(node.name, "water") > 0 then
-				bobbers[player] = minetest.add_entity(self._lastpos, "mcl_fishing:bobber_entity")
+			if core.get_item_group(node.name, "water") > 0 then
+				bobbers[player] = core.add_entity(self._lastpos, "mcl_fishing:bobber_entity")
 				local ent = bobbers[player]:get_luaentity()
 				if ent then
 					ent.player = self._thrower
@@ -336,15 +336,15 @@ end
 
 flying_bobber_ENTITY.on_step = flying_bobber_on_step
 
-minetest.register_entity("mcl_fishing:flying_bobber_entity", flying_bobber_ENTITY)
+core.register_entity("mcl_fishing:flying_bobber_entity", flying_bobber_ENTITY)
 
 mcl_throwing.register_throwable_object("mcl_fishing:flying_bobber", "mcl_fishing:flying_bobber_entity", 5)
 
-minetest.register_on_dieplayer(function(player) remove_bobber(player) end)
-minetest.register_on_leaveplayer(function(player) remove_bobber(player) end)
+core.register_on_dieplayer(function(player) remove_bobber(player) end)
+core.register_on_leaveplayer(function(player) remove_bobber(player) end)
 
 -- Fishing Rod
-minetest.register_tool("mcl_fishing:fishing_rod", {
+core.register_tool("mcl_fishing:fishing_rod", {
 	description = S("Fishing Rod"),
 	_tt_help = S("Catches fish in water"),
 	_doc_items_longdesc = S("Fishing rods can be used to catch fish."),
@@ -362,4 +362,4 @@ minetest.register_tool("mcl_fishing:fishing_rod", {
 	_mcl_burntime = 15
 })
 
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/items.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/items.lua")

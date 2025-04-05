@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local pr = PseudoRandom (os.time () *10)
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
@@ -165,13 +165,13 @@ local wolf_variants = {
 
 local variant_by_biome = {}
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 	for name, variant in pairs (wolf_variants) do
 		if variant.biomes then
 			for _, biome in pairs (variant.biomes) do
-				local id = minetest.get_biome_id (biome)
+				local id = core.get_biome_id (biome)
 				if not id then
-					minetest.log ("warning", "[mobs_mc] Invalid biome " .. biome)
+					core.log ("warning", "[mobs_mc] Invalid biome " .. biome)
 				else
 					variant_by_biome[id] = name
 				end
@@ -282,7 +282,7 @@ function wolf:update_textures ()
 	if not self._wolf_variant then
 		-- Establish which variant to spawn.
 		local self_pos = self.object:get_pos ()
-		local biome = minetest.get_biome_data (self_pos)
+		local biome = core.get_biome_data (self_pos)
 		local variant
 			= (biome and variant_by_biome[biome.biome]) or "pale"
 		self._wolf_variant = variant
@@ -349,7 +349,7 @@ end
 
 function wolf:add_shake_particles ()
 	local start = self.child and 0.15 or 0.3
-	minetest.add_particlespawner ({
+	core.add_particlespawner ({
 		time = 1.0,
 		amount = 180,
 		exptime = 100,
@@ -504,7 +504,7 @@ function wolf:on_rightclick (clicker)
 	end
 
 	local playername = clicker:get_player_name ()
-	local creative = minetest.is_creative_enabled (playername)
+	local creative = core.is_creative_enabled (playername)
 	local stack = clicker:get_wielded_item ()
 	local name = stack:get_name ()
 	local self_pos = self.object:get_pos ()
@@ -524,12 +524,12 @@ function wolf:on_rightclick (clicker)
 		end
 
 		if playername == self.owner
-			and minetest.get_item_group (name, "dye") == 1 then
+			and core.get_item_group (name, "dye") == 1 then
 			local consumed = false
 			-- Dye if possible.
 			for group, color in pairs (colors) do
 				-- Check if color is supported
-				if minetest.get_item_group (name, group) == 1 then
+				if core.get_item_group (name, group) == 1 then
 					if color ~= self._collar_color then
 						self._collar_color = color
 						consumed = true
@@ -617,7 +617,7 @@ mcl_damage.register_modifier (function (obj, damage, reason)
 	return damage
 end)
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	for key, value in pairs (player_damage_sources) do
 		local ttl = value[3]
 		ttl = ttl - dtime

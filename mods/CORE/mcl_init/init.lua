@@ -1,4 +1,4 @@
-local mod_storage = minetest.get_mod_storage()
+local mod_storage = core.get_mod_storage()
 local normal_vars_in_singlenode = false
 
 local modpath = core.get_modpath(core.get_current_modname())
@@ -30,7 +30,7 @@ mcl_vars.inventory_header = ""
 mcl_vars.tool_wield_scale = { x = 1.8, y = 1.8, z = 1 }
 
 -- Mapgen variables
-local mg_name = minetest.get_mapgen_setting("mg_name")
+local mg_name = core.get_mapgen_setting("mg_name")
 local minecraft_height_limit = 320
 
 local singlenode = mg_name == "singlenode"
@@ -38,16 +38,16 @@ local singlenode = mg_name == "singlenode"
 -- The classic superflat setting is stored in mod storage so it remains
 -- constant after the world has been created.
 if not mod_storage:get("mcl_superflat_classic") then
-	local superflat = mg_name == "flat" and minetest.get_mapgen_setting("mcl_superflat_classic") == "true"
+	local superflat = mg_name == "flat" and core.get_mapgen_setting("mcl_superflat_classic") == "true"
 	mod_storage:set_string("mcl_superflat_classic", superflat and "true" or "false")
 end
 mcl_vars.superflat = mod_storage:get_string("mcl_superflat_classic") == "true"
 
 -- Calculate mapgen_edge_min/mapgen_edge_max
-mcl_vars.chunksize = math.max(1, tonumber(minetest.get_mapgen_setting("chunksize")) or 5)
-mcl_vars.MAP_BLOCKSIZE = math.max(1, minetest.MAP_BLOCKSIZE or 16)
-mcl_vars.mapgen_limit = math.max(1, tonumber(minetest.get_mapgen_setting("mapgen_limit")) or 31000)
-mcl_vars.MAX_MAP_GENERATION_LIMIT = math.max(1, minetest.MAX_MAP_GENERATION_LIMIT or 31000)
+mcl_vars.chunksize = math.max(1, tonumber(core.get_mapgen_setting("chunksize")) or 5)
+mcl_vars.MAP_BLOCKSIZE = math.max(1, core.MAP_BLOCKSIZE or 16)
+mcl_vars.mapgen_limit = math.max(1, tonumber(core.get_mapgen_setting("mapgen_limit")) or 31000)
+mcl_vars.MAX_MAP_GENERATION_LIMIT = math.max(1, core.MAX_MAP_GENERATION_LIMIT or 31000)
 local central_chunk_offset = -math.floor(mcl_vars.chunksize / 2)
 mcl_vars.central_chunk_offset_in_nodes = central_chunk_offset * mcl_vars.MAP_BLOCKSIZE
 mcl_vars.chunk_size_in_nodes = mcl_vars.chunksize * mcl_vars.MAP_BLOCKSIZE
@@ -131,7 +131,7 @@ elseif singlenode then
 	mcl_vars.mg_bedrock_is_rough = false
 else
 	-- Classic superflat
-	local ground = minetest.get_mapgen_setting("mgflat_ground_level")
+	local ground = core.get_mapgen_setting("mgflat_ground_level")
 	ground = tonumber(ground)
 	if not ground then
 		ground = 8
@@ -160,7 +160,7 @@ mcl_vars.mg_nether_min = -29067 -- Carefully chosen to be at a mapchunk border
 mcl_vars.mg_nether_max = mcl_vars.mg_nether_min + 128
 mcl_vars.mg_bedrock_nether_bottom_min = mcl_vars.mg_nether_min
 mcl_vars.mg_bedrock_nether_top_max = mcl_vars.mg_nether_max
-mcl_vars.mg_nether_deco_max = mcl_vars.mg_nether_max -11 -- this is so ceiling decorations don't spill into other biomes as bedrock generation calls minetest.generate_decorations to put netherrack under the bedrock
+mcl_vars.mg_nether_deco_max = mcl_vars.mg_nether_max -11 -- this is so ceiling decorations don't spill into other biomes as bedrock generation calls core.generate_decorations to put netherrack under the bedrock
 if not mcl_vars.superflat then
 	mcl_vars.mg_bedrock_nether_bottom_max = mcl_vars.mg_bedrock_nether_bottom_min + 4
 	mcl_vars.mg_bedrock_nether_top_min = mcl_vars.mg_bedrock_nether_top_max - 4
@@ -196,8 +196,8 @@ mcl_vars.mg_realm_barrier_overworld_end_min = mcl_vars.mg_end_max - 11
 mcl_vars.mg_dungeons = true
 
 -- Set default stack sizes
-minetest.nodedef_default.stack_max = 64
-minetest.craftitemdef_default.stack_max = 64
+core.nodedef_default.stack_max = 64
+core.craftitemdef_default.stack_max = 64
 
 -- Set random seed for all other mods (Remember to make sure no other mod calls this function)
 math.randomseed(os.time())
@@ -239,16 +239,16 @@ function mcl_vars.is_generated(pos)
 	return false
 end
 
--- Do minetest.get_node and if it returns "ignore", then try again after loading
+-- Do core.get_node and if it returns "ignore", then try again after loading
 -- its area using a voxel manipulator.
 function mcl_vars.get_node(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if node.name ~= "ignore" then
 		return node
 	end
 
-	minetest.get_voxel_manip():read_from_map(pos, pos)
-	return minetest.get_node(pos)
+	core.get_voxel_manip():read_from_map(pos, pos)
+	return core.get_node(pos)
 end
 
 -- Register ABMs to update from old mapgen depth to new. The ABMs are limited in
@@ -267,7 +267,7 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 	local bedrock_regen_max_y = mcl_vars.mg_overworld_min_old + 4
 
 	local void_replaced = {}
-	minetest.register_abm({
+	core.register_abm({
 		label = "Replace old world depth void",
 		name = ":mcl_mapgen_core:replace_old_void",
 		nodenames = { "mcl_core:void" },
@@ -277,21 +277,21 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 		max_y = void_regen_max_y,
 		action = function(pos)
 			local pos1, pos2 = get_mapchunk_area(pos)
-			local h = minetest.hash_node_position(pos1)
+			local h = core.hash_node_position(pos1)
 			if void_replaced[h] then
 				return
 			end
 			void_replaced[h] = true
 
 			pos2.y = math.min(pos2.y, void_regen_max_y)
-			minetest.after(0, function()
-				minetest.delete_area(pos1, pos2)
+			core.after(0, function()
+				core.delete_area(pos1, pos2)
 			end)
 		end
 	})
 
 	local bedrock_replaced = {}
-	minetest.register_abm({
+	core.register_abm({
 		label = "Replace old world depth bedrock",
 		name = ":mcl_mapgen_core:replace_old_bedrock",
 		nodenames = { "mcl_core:void", "mcl_core:bedrock" },
@@ -301,11 +301,11 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 		max_y = bedrock_regen_max_y,
 		action = function(pos, node)
 			local pos1, pos2 = get_mapchunk_area(pos)
-			local h = minetest.hash_node_position(pos1)
+			local h = core.hash_node_position(pos1)
 			if bedrock_replaced[h] then
 				if node.name == "mcl_core:bedrock" and node.param2 == 0 then
 					node.name = "mcl_deepslate:deepslate"
-					minetest.set_node(pos, node)
+					core.set_node(pos, node)
 				end
 				return
 			end
@@ -314,8 +314,8 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 			pos1.y = math.max(pos1.y, bedrock_regen_min_y)
 			pos2.y = math.min(pos2.y, bedrock_regen_max_y)
 
-			minetest.after(0, function()
-				local vm = minetest.get_voxel_manip()
+			core.after(0, function()
+				local vm = core.get_voxel_manip()
 				local emin, emax = vm:read_from_map(pos1, pos2)
 				local data = vm:get_data()
 				local a = VoxelArea:new{
@@ -323,9 +323,9 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 					MaxEdge = emax,
 				}
 
-				local c_void = minetest.get_content_id("mcl_core:void")
-				local c_bedrock = minetest.get_content_id("mcl_core:bedrock")
-				local c_deepslate = minetest.get_content_id("mcl_deepslate:deepslate")
+				local c_void = core.get_content_id("mcl_core:void")
+				local c_bedrock = core.get_content_id("mcl_core:bedrock")
+				local c_deepslate = core.get_content_id("mcl_deepslate:deepslate")
 
 				local n = 0
 				for z = pos1.z, pos2.z do
@@ -348,7 +348,7 @@ if mcl_vars.mg_overworld_min_old ~= mcl_vars.mg_overworld_min then
 end
 
 -- Difficulty.  Peaceful is 0, normal is 1,
-local difficulty = minetest.settings:get ("mcl_difficulty")
+local difficulty = core.settings:get ("mcl_difficulty")
 if difficulty == "peaceful" then
 	mcl_vars.difficulty = 0
 elseif difficulty == "easy" then
@@ -361,7 +361,7 @@ elseif difficulty == "hard" then
 	mcl_vars.difficulty = 3
 else
 	mcl_vars.difficulty = 2
-	minetest.log ("warning", "mcl_difficulty is configured to an unknown value " .. difficulty)
+	core.log ("warning", "mcl_difficulty is configured to an unknown value " .. difficulty)
 end
 
 dofile(modpath.."/outdated_warning.lua")

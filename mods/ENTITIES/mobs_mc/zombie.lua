@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
 
@@ -284,7 +284,7 @@ local CHICKEN_ATTACHMENT_POS = vector.new (0, 1.76, 0)
 
 function zombie:find_chicken ()
 	local self_pos = self.object:get_pos ()
-	for object in minetest.objects_inside_radius (self_pos, 8) do
+	for object in core.objects_inside_radius (self_pos, 8) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:chicken"
 			and not entity.dead
@@ -440,9 +440,9 @@ function zombie:break_door_step (door_node, dtime, velocity)
 	self._door_break_time = t
 	self.ai_idle_time = 0
 
-	if t >= DOOR_BREAK_TIME and not minetest.is_protected (door_node, "") then
-		minetest.dig_node (door_node)
-		minetest.sound_play ("default_dig_choppy", {
+	if t >= DOOR_BREAK_TIME and not core.is_protected (door_node, "") then
+		core.dig_node (door_node)
+		core.sound_play ("default_dig_choppy", {
 			pos = door_node,
 			gain = 0.5,
 		})
@@ -454,7 +454,7 @@ function zombie:break_door_step (door_node, dtime, velocity)
 		local progress = math.floor (t / 12 * 10)
 		if progress ~= self._door_break_progress then
 			self._door_break_progress = progress
-			minetest.sound_play ("mobs_mc_zombie_door_break", {
+			core.sound_play ("mobs_mc_zombie_door_break", {
 				     pos = door_node,
 				     gain = 0.5,
 			})
@@ -469,9 +469,9 @@ function zombie:break_door_step (door_node, dtime, velocity)
 end
 
 local function is_closed_wooden_door (pos)
-	local node = minetest.get_node (pos)
-	return minetest.get_item_group (node.name, "door") > 0
-		and minetest.get_item_group (node.name, "door_iron") == 0
+	local node = core.get_node (pos)
+	return core.get_item_group (node.name, "door") > 0
+		and core.get_item_group (node.name, "door_iron") == 0
 		and not mcl_doors.is_open (node)
 end
 
@@ -572,21 +572,21 @@ end
 
 local function is_dark (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local light = minetest.get_node_light (nodepos)
+	local light = core.get_node_light (nodepos)
 	return light and light <= 4.0
 end
 
 local function is_clear (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and not def.walkable and def.liquidtype == "none"
 end
 
 local function is_solid (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable and def.groups.solid
 end
 
@@ -633,7 +633,7 @@ function zombie:receive_damage (mcl_reason, damage)
 				and is_clear (pos, 0, 0, 0) and is_clear (pos, 0, 1, 0)
 				and is_free_of_living_players (pos, 7.0) then
 				local floor = vector.offset (pos, 0, -0.5, 0)
-				local object = minetest.add_entity (floor, self._reinforcement_type)
+				local object = core.add_entity (floor, self._reinforcement_type)
 				if object then
 					local entity = object:get_luaentity ()
 					self:add_physics_factor ("_spawn_reinforcements_chance",

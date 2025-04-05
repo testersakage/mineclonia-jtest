@@ -1,5 +1,5 @@
-local S = minetest.get_translator ("mobs_mc")
-local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
+local S = core.get_translator ("mobs_mc")
+local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
 
 local function sheared_textures(unicolor_group)
@@ -156,9 +156,9 @@ function sheep:on_rightclick (clicker)
 	local item = clicker:get_wielded_item()
 	local item_name = item:get_name()
 	-- Dye sheep
-	if minetest.get_item_group(item_name, "dye") == 1 and not self.gotten then
+	if core.get_item_group(item_name, "dye") == 1 and not self.gotten then
 		local idef = item:get_definition()
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			item:take_item()
 			clicker:set_wielded_item(item)
 		end
@@ -170,17 +170,17 @@ function sheep:on_rightclick (clicker)
 		return
 	end
 	if self.child then return end
-	if minetest.get_item_group(item_name, "shears") > 0 and not self.gotten then
+	if core.get_item_group(item_name, "shears") > 0 and not self.gotten then
 		self.gotten = true
 		local pos = self.object:get_pos()
-		minetest.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
 		pos.y = pos.y + 0.5
 		self.color = self.color or "unicolor_white"
-		minetest.add_item(pos, ItemStack(unicolor_to_wool(self.color).." "..math.random(1,3)))
+		core.add_item(pos, ItemStack(unicolor_to_wool(self.color).." "..math.random(1,3)))
 		self.base_texture = sheared_textures(self.color)
 		self:set_textures (self.base_texture)
 		self.drops = {{ name = "mcl_mobitems:mutton", chance = 1, min = 1, max = 2 },}
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
 			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
@@ -200,7 +200,7 @@ function sheep:on_breed (parent1, parent2)
 		local dye2 = mcl_dyes.unicolor_to_dye(color[2])
 		local output
 		if dye1 and dye2 then
-			output = minetest.get_craft_result({items = {dye1, dye2}, method="normal"})
+			output = core.get_craft_result({items = {dye1, dye2}, method="normal"})
 		end
 		if output and not output.item:is_empty() then
 			local ndef = output.item:get_definition()
@@ -221,14 +221,14 @@ function sheep:on_breed (parent1, parent2)
 end
 
 function sheep:_on_dispense (dropitem, pos, droppos, dropnode, dropdir)
-	if minetest.get_item_group(dropitem:get_name(), "shears") > 0 then
+	if core.get_item_group(dropitem:get_name(), "shears") > 0 then
 		local pos = self.object:get_pos()
 		self.base_texture = { "blank.png", "mobs_mc_sheep.png" }
 		dropitem = self:use_shears({ "blank.png", "mobs_mc_sheep.png" }, dropitem)
 
 		self.color = self.color or "unicolor_white"
 		if self.drops[2] then
-			minetest.add_item(pos, unicolor_to_wool(self.color) .. " " .. math.random(1, 3))
+			core.add_item(pos, unicolor_to_wool(self.color) .. " " .. math.random(1, 3))
 		end
 		self.drops = {{ name = "mcl_mobitems:mutton", chance = 1, min = 1, max = 2 },}
 		return dropitem
@@ -260,16 +260,16 @@ local function sheep_graze (self, self_pos, dtime)
 		if self._grazing <= 0.4
 			and not self._node_destroyed then
 
-			local node = minetest.get_node (self_pos)
+			local node = core.get_node (self_pos)
 			local consumed = false
 			if node.name == "mcl_flowers:tallgrass" then
-				minetest.remove_node (self_pos)
+				core.remove_node (self_pos)
 				consumed = true
 			else
 				local offset = vector.offset (self_pos, 0, -1, 0)
-				local below = minetest.get_node (offset)
+				local below = core.get_node (offset)
 				if below.name == "mcl_core:dirt_with_grass" then
-					minetest.set_node (offset, {
+					core.set_node (offset, {
 						name = "mcl_core:dirt",
 					})
 					consumed = true
@@ -295,12 +295,12 @@ local function sheep_graze (self, self_pos, dtime)
 		return true
 	elseif math.random (scale_chance (base_chance, dtime)) == 1 then
 		local node_valid = false
-		local node = minetest.get_node (self_pos)
+		local node = core.get_node (self_pos)
 		if node.name == "mcl_flowers:tallgrass" then
 			node_valid = true
 		else
 			local offset = vector.offset (self_pos, 0, -1, 0)
-			local below = minetest.get_node (offset)
+			local below = core.get_node (offset)
 			if below.name == "mcl_core:dirt_with_grass" then
 				node_valid = true
 			end

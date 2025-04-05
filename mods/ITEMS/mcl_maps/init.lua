@@ -1,19 +1,19 @@
 mcl_maps = {}
 
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
-local storage = minetest.get_mod_storage()
-local worldpath = minetest.get_worldpath()
+local storage = core.get_mod_storage()
+local worldpath = core.get_worldpath()
 local map_textures_path = worldpath .. "/mcl_maps/"
 --local last_finished_id = storage:get_int("next_id") - 1
 
-minetest.mkdir(map_textures_path)
+core.mkdir(map_textures_path)
 
 local function load_json_file(name)
 	local file = assert(io.open(modpath .. "/" .. name .. ".json", "r"))
-	local data = minetest.parse_json(file:read("*all"))
+	local data = core.parse_json(file:read("*all"))
 	file:close()
 	return data
 end
@@ -26,7 +26,7 @@ local color_cache = {}
 local creating_maps = {}
 local loaded_maps = {}
 
-local c_air = minetest.get_content_id("air")
+local c_air = core.get_content_id("air")
 
 function mcl_maps.create_map(pos)
 	local minp = vector.multiply(vector.floor(vector.divide(pos, 128)), 128)
@@ -38,17 +38,17 @@ function mcl_maps.create_map(pos)
 	storage:set_int("next_id", next_id + 1)
 	local id = tostring(next_id)
 	meta:set_string("mcl_maps:id", id)
-	meta:set_string("mcl_maps:minp", minetest.pos_to_string(minp))
-	meta:set_string("mcl_maps:maxp", minetest.pos_to_string(maxp))
+	meta:set_string("mcl_maps:minp", core.pos_to_string(minp))
+	meta:set_string("mcl_maps:maxp", core.pos_to_string(maxp))
 	meta:set_int("date", os.time())
 	tt.reload_itemstack_description(itemstack)
 
 	creating_maps[id] = true
-	minetest.emerge_area(minp, maxp, function(_, _, calls_remaining)
+	core.emerge_area(minp, maxp, function(_, _, calls_remaining)
 		if calls_remaining > 0 then
 			return
 		end
-		local vm = minetest.get_voxel_manip()
+		local vm = core.get_voxel_manip()
 		local emin, emax = vm:read_from_map(minp, maxp)
 		local data = vm:get_data()
 		local param2data = vm:get_param2_data()
@@ -67,8 +67,8 @@ function mcl_maps.create_map(pos)
 					if c_id ~= c_air then
 						color = color_cache[c_id]
 						if color == nil then
-							local nodename = minetest.get_name_from_content_id(c_id)
-							local def = minetest.registered_nodes[nodename]
+							local nodename = core.get_name_from_content_id(c_id)
+							local def = core.registered_nodes[nodename]
 							if def then
 								local texture
 								if def.palette and def.palette ~= "" and ( def.paramtype2 == "color" or
@@ -143,19 +143,19 @@ function mcl_maps.load_map(id, callback)
 	local result = true
 
 	if not loaded_maps[id] then
-		if not minetest.features.dynamic_add_media_table then
-			-- minetest.dynamic_add_media() blocks in
+		if not core.features.dynamic_add_media_table then
+			-- core.dynamic_add_media() blocks in
 			-- Minetest 5.3 and 5.4 until media loads
 			loaded_maps[id] = true
-			result = minetest.dynamic_add_media(map_textures_path .. texture, function()
+			result = core.dynamic_add_media(map_textures_path .. texture, function()
 			end)
 			if callback then
 				callback(texture)
 			end
 		else
-			-- minetest.dynamic_add_media() never blocks
+			-- core.dynamic_add_media() never blocks
 			-- in Minetest 5.5, callback runs after load
-			result = minetest.dynamic_add_media(map_textures_path .. texture, function()
+			result = core.dynamic_add_media(map_textures_path .. texture, function()
 				loaded_maps[id] = true
 				if callback then
 					callback(texture)
@@ -186,7 +186,7 @@ local function fill_map(itemstack, placer, pointed_thing)
 		return new_stack
 	end
 
-	if minetest.settings:get_bool("enable_real_maps", true) then
+	if core.settings:get_bool("enable_real_maps", true) then
 		local new_map = mcl_maps.create_map(placer:get_pos())
 		itemstack:take_item()
 		if itemstack:is_empty() then
@@ -196,14 +196,14 @@ local function fill_map(itemstack, placer, pointed_thing)
 			if inv:room_for_item("main", new_map) then
 				inv:add_item("main", new_map)
 			else
-				minetest.add_item(placer:get_pos(), new_map)
+				core.add_item(placer:get_pos(), new_map)
 			end
 			return itemstack
 		end
 	end
 end
 
-minetest.register_craftitem("mcl_maps:empty_map", {
+core.register_craftitem("mcl_maps:empty_map", {
 	description = S("Empty Map"),
 	_doc_items_longdesc = S("Empty maps are not useful as maps, but they can be stacked and turned to maps which can be used."),
 	_doc_items_usagehelp = S("Rightclick to create a filled map (which can't be stacked anymore)."),
@@ -221,7 +221,7 @@ local filled_def = {
 	groups = { not_in_creative_inventory = 1, filled_map = 1, tool = 1 },
 }
 
-minetest.register_craftitem("mcl_maps:filled_map", filled_def)
+core.register_craftitem("mcl_maps:filled_map", filled_def)
 
 local filled_wield_def = table.copy(filled_def)
 filled_wield_def.visual_scale = 1
@@ -229,11 +229,11 @@ filled_wield_def.wield_scale = { x = 1, y = 1, z = 1 }
 filled_wield_def.paramtype = "light"
 filled_wield_def.drawtype = "mesh"
 filled_wield_def.node_placement_prediction = ""
-filled_wield_def.range = minetest.registered_items[""].range
+filled_wield_def.range = core.registered_items[""].range
 filled_wield_def.on_place = mcl_util.call_on_rightclick
 filled_wield_def._mcl_wieldview_item = "mcl_maps:filled_map"
 
-local mcl_skins_enabled = minetest.global_exists("mcl_skins")
+local mcl_skins_enabled = core.global_exists("mcl_skins")
 
 if mcl_skins_enabled then
 	-- Generate a node for every skin
@@ -244,33 +244,33 @@ if mcl_skins_enabled then
 			female._mcl_hand_id = skin.id
 			female.mesh = "mcl_meshhand_female.b3d"
 			female.tiles = { skin.texture }
-			minetest.register_node("mcl_maps:filled_map_" .. skin.id, female)
+			core.register_node("mcl_maps:filled_map_" .. skin.id, female)
 		else
 			local male = table.copy(filled_wield_def)
 			male._mcl_hand_id = skin.id
 			male.mesh = "mcl_meshhand.b3d"
 			male.tiles = { skin.texture }
-			minetest.register_node("mcl_maps:filled_map_" .. skin.id, male)
+			core.register_node("mcl_maps:filled_map_" .. skin.id, male)
 		end
 	end
 else
 	filled_wield_def._mcl_hand_id = "hand"
 	filled_wield_def.mesh = "mcl_meshhand.b3d"
 	filled_wield_def.tiles = { "character.png" }
-	minetest.register_node("mcl_maps:filled_map_hand", filled_wield_def)
+	core.register_node("mcl_maps:filled_map_hand", filled_wield_def)
 end
 
-local old_add_item = minetest.add_item
-function minetest.add_item(pos, stack)
+local old_add_item = core.add_item
+function core.add_item(pos, stack)
 	stack = ItemStack(stack)
-	if minetest.get_item_group(stack:get_name(), "filled_map") > 0 then
+	if core.get_item_group(stack:get_name(), "filled_map") > 0 then
 		stack:set_name("mcl_maps:filled_map")
 	end
 	return old_add_item(pos, stack)
 end
 
 tt.register_priority_snippet(function(itemstring, _, itemstack)
-	if itemstack and minetest.get_item_group(itemstring, "filled_map") > 0 then
+	if itemstack and core.get_item_group(itemstring, "filled_map") > 0 then
 		local id = itemstack:get_meta():get_string("mcl_maps:id")
 		if id ~= "" then
 			return "#" .. id, mcl_colors.GRAY
@@ -278,7 +278,7 @@ tt.register_priority_snippet(function(itemstring, _, itemstack)
 	end
 end)
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_maps:empty_map",
 	recipe = {
 		{ "mcl_core:paper", "mcl_core:paper", "mcl_core:paper" },
@@ -287,7 +287,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_maps:filled_map 2",
 	recipe = { "group:filled_map", "mcl_maps:empty_map" },
@@ -296,7 +296,7 @@ minetest.register_craft({
 local function on_craft(itemstack, _, old_craft_grid, _)
 	if itemstack:get_name() == "mcl_maps:filled_map" then
 		for _, stack in pairs(old_craft_grid) do
-			if minetest.get_item_group(stack:get_name(), "filled_map") > 0 then
+			if core.get_item_group(stack:get_name(), "filled_map") > 0 then
 				itemstack:get_meta():from_table(stack:get_meta():to_table())
 				return itemstack
 			end
@@ -304,13 +304,13 @@ local function on_craft(itemstack, _, old_craft_grid, _)
 	end
 end
 
-minetest.register_on_craft(on_craft)
-minetest.register_craft_predict(on_craft)
+core.register_on_craft(on_craft)
+core.register_craft_predict(on_craft)
 
 local maps = {}
 local huds = {}
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local map_def = {
 		type = "image",
 		text = "blank.png",
@@ -327,7 +327,7 @@ minetest.register_on_joinplayer(function(player)
 	}
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	maps[player] = nil
 	huds[player] = nil
 end)
@@ -352,8 +352,8 @@ mcl_player.register_globalstep(function(player)
 
 		local pos = vector.round(player:get_pos())
 		local meta = wield:get_meta()
-		local minp = minetest.string_to_pos(meta:get_string("mcl_maps:minp"))
-		local maxp = minetest.string_to_pos(meta:get_string("mcl_maps:maxp"))
+		local minp = core.string_to_pos(meta:get_string("mcl_maps:minp"))
+		local maxp = core.string_to_pos(meta:get_string("mcl_maps:maxp"))
 
 		local marker = "mcl_maps_player_arrow.png"
 

@@ -1,17 +1,17 @@
 mcl_structures.registered_structures = {}
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
-local disabled_structures = minetest.settings:get("mcl_disabled_structures")
+local disabled_structures = core.settings:get("mcl_disabled_structures")
 if disabled_structures then	disabled_structures = disabled_structures:split(",")
 else disabled_structures = {} end
 
-local peaceful = minetest.settings:get_bool("only_peaceful_mobs", false)
-local mob_cap_player = tonumber(minetest.settings:get("mcl_mob_cap_player")) or 75
-local mob_cap_animal = tonumber(minetest.settings:get("mcl_mob_cap_animal")) or 10
-local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
+local peaceful = core.settings:get_bool("only_peaceful_mobs", false)
+local mob_cap_player = tonumber(core.settings:get("mcl_mob_cap_player")) or 75
+local mob_cap_animal = tonumber(core.settings:get("mcl_mob_cap_animal")) or 10
+local mobs_spawn = core.settings:get_bool("mobs_spawn", true) ~= false
 
-local logging = minetest.settings:get_bool("mcl_logging_structures",true)
+local logging = core.settings:get_bool("mcl_logging_structures",true)
 mcl_structures.DBG = false
 
 local rotations = {
@@ -29,7 +29,7 @@ end
 
 local function ecb_place(blockpos, action, calls_remaining, param) ---@diagnostic disable-line: unused-local
 	if calls_remaining >= 1 then return end
-	minetest.place_schematic(param.pos, param.schematic, param.rotation, param.replacements, param.force_placement, param.flags)
+	core.place_schematic(param.pos, param.schematic, param.rotation, param.replacements, param.force_placement, param.flags)
 	if param.after_placement_callback and param.p1 and param.p2 then
 		param.after_placement_callback(param.p1, param.p2, param.size, param.rotation, param.pr, param.callback_param)
 	end
@@ -37,9 +37,9 @@ end
 
 function mcl_structures.place_schematic(pos, schematic, rotation, replacements, force_placement, flags, after_placement_callback, pr, callback_param)
 	if type(schematic) ~= "table" and not mcl_util.file_exists(schematic) then
-		minetest.log("warning","[mcl_structures] schematic file "..tostring(schematic).." does not exist.")
+		core.log("warning","[mcl_structures] schematic file "..tostring(schematic).." does not exist.")
 		return end
-	local s = loadstring(minetest.serialize_schematic(schematic, "lua", {lua_use_comments = false, lua_num_indent_spaces = 0}) .. " return schematic")()
+	local s = loadstring(core.serialize_schematic(schematic, "lua", {lua_use_comments = false, lua_num_indent_spaces = 0}) .. " return schematic")()
 	if s and s.size then
 		local x, z = s.size.x, s.size.z
 		if rotation then
@@ -55,9 +55,9 @@ function mcl_structures.place_schematic(pos, schematic, rotation, replacements, 
 		end
 		local p1 = {x=pos.x    , y=pos.y           , z=pos.z    }
 		local p2 = {x=pos.x+x-1, y=pos.y+s.size.y-1, z=pos.z+z-1}
-		minetest.log("verbose", "[mcl_structures] size=" ..minetest.pos_to_string(s.size) .. ", rotation=" .. tostring(rotation) .. ", emerge from "..minetest.pos_to_string(p1) .. " to " .. minetest.pos_to_string(p2))
+		core.log("verbose", "[mcl_structures] size=" ..core.pos_to_string(s.size) .. ", rotation=" .. tostring(rotation) .. ", emerge from "..core.pos_to_string(p1) .. " to " .. core.pos_to_string(p2))
 		local param = {pos=vector.new(pos), schematic=s, rotation=rotation, replacements=replacements, force_placement=force_placement, flags=flags, p1=p1, p2=p2, after_placement_callback = after_placement_callback, size=vector.new(s.size), pr=pr, callback_param=callback_param}
-		minetest.emerge_area(p1, p2, ecb_place, param)
+		core.emerge_area(p1, p2, ecb_place, param)
 		return true
 	end
 end
@@ -66,7 +66,7 @@ function mcl_structures.get_struct(file)
 	local localfile = modpath.."/schematics/"..file
 	local file, errorload = io.open(localfile, "rb")
 	if errorload then
-		minetest.log("error", "[mcl_structures] Could not open this struct: "..localfile)
+		core.log("error", "[mcl_structures] Could not open this struct: "..localfile)
 		return nil
 	end
 	if file then
@@ -79,8 +79,8 @@ end
 -- Call on_construct on pos.
 -- Useful to init chests from formspec.
 local function init_node_construct(pos)
-	local node = minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(pos)
+	local def = core.registered_nodes[node.name]
 	if def and def.on_construct then
 		def.on_construct(pos)
 		return true
@@ -92,11 +92,11 @@ mcl_structures.init_node_construct = init_node_construct
 function mcl_structures.fill_chests(p1,p2,loot,pr)
 	for it,lt in pairs(loot) do
 		if it ~= "SUS" then --don't try to generate loot for "sus nodes" here, this happens when a player brushes a suspicious node
-			local nodes = minetest.find_nodes_in_area(p1, p2, it)
+			local nodes = core.find_nodes_in_area(p1, p2, it)
 			for _,p in pairs(nodes) do
 				local lootitems = mcl_loot.get_multi_loot(lt, pr)
 				mcl_structures.init_node_construct(p)
-				local meta = minetest.get_meta(p)
+				local meta = core.get_meta(p)
 				local inv = meta:get_inventory()
 				mcl_loot.fill_inventory(inv, "main", lootitems, pr)
 			end
@@ -112,7 +112,7 @@ local function generate_loot(pos, def, pr)
 end
 
 function mcl_structures.construct_nodes(p1,p2,nodes)
-	local nn=minetest.find_nodes_in_area(p1,p2,nodes)
+	local nn=core.find_nodes_in_area(p1,p2,nodes)
 	for _,p in pairs(nn) do
 		mcl_structures.init_node_construct(p)
 	end
@@ -144,24 +144,24 @@ function mcl_structures.spawn_mobs(mob, spawnon, p1 ,p2 ,_ ,n , water)
 	n = n or 1
 	local sp = {}
 	if water then
-		local nn = minetest.find_nodes_in_area(p1,p2,spawnon)
+		local nn = core.find_nodes_in_area(p1,p2,spawnon)
 		for _, v in pairs(nn) do
-			if minetest.get_item_group(minetest.get_node(vector.offset(v,0,1,0)).name,"water") > 0 then
+			if core.get_item_group(core.get_node(vector.offset(v,0,1,0)).name,"water") > 0 then
 				table.insert(sp,v)
 			end
 		end
 	else
-		sp = minetest.find_nodes_in_area_under_air(p1,p2,spawnon)
+		sp = core.find_nodes_in_area_under_air(p1,p2,spawnon)
 	end
 	table.shuffle(sp)
 	for i,node in pairs(sp) do
 		if not peaceful and i <= n then
 			local pos = vector.offset(node,0,1,0)
 			if pos then
-				minetest.add_entity(vector.offset(pos,0,-0.5,0),mob)
+				core.add_entity(vector.offset(pos,0,-0.5,0),mob)
 			end
 		end
-		minetest.get_meta(node):set_string("spawnblock","yes")
+		core.get_meta(node):set_string("spawnblock","yes")
 	end
 end
 
@@ -179,13 +179,13 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 		local ground_p1 = vector.offset(pos,-def.sidelen/2,-1,-def.sidelen/2)
 		local ground_p2 = vector.offset(pos,def.sidelen/2,-1,def.sidelen/2)
 
-		local solid = minetest.find_nodes_in_area(ground_p1,ground_p2,{"group:solid"})
+		local solid = core.find_nodes_in_area(ground_p1,ground_p2,{"group:solid"})
 		if #solid < ( def.sidelen * def.sidelen ) then
 			if def.make_foundation then
 				mcl_util.create_ground_turnip(vector.offset(pos, 0, -1, 0), def.sidelen, def.sidelen)
 			else
 				if log_enabled then
-					minetest.log("warning","[mcl_structures] "..def.name.." at "..minetest.pos_to_string(pp).." not placed. No solid ground.")
+					core.log("warning","[mcl_structures] "..def.name.." at "..core.pos_to_string(pp).." not placed. No solid ground.")
 				end
 				return false
 			end
@@ -193,7 +193,7 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 	end
 	if def.on_place and not def.on_place(pos,def,pr,blockseed) then
 		if log_enabled then
-			minetest.log("warning","[mcl_structures] "..def.name.." at "..minetest.pos_to_string(pp).." not placed. Conditions not satisfied.")
+			core.log("warning","[mcl_structures] "..def.name.." at "..core.pos_to_string(pp).." not placed. Conditions not satisfied.")
 		end
 		return false
 	end
@@ -230,7 +230,7 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 				return ap(pp, def, pr, blockseed)
 			end,pr)
 			if log_enabled then
-				minetest.log("info","[mcl_structures] "..def.name.." placed at "..minetest.pos_to_string(pp))
+				core.log("info","[mcl_structures] "..def.name.." placed at "..core.pos_to_string(pp))
 			end
 			return true
 		end
@@ -239,13 +239,13 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 			if def.loot then generate_loot(pp,def,pr) end
 			if def.construct_nodes then construct_nodes(pp, def) end
 			if log_enabled then
-				minetest.log("info","[mcl_structures] "..def.name.." placed at "..minetest.pos_to_string(pp))
+				core.log("info","[mcl_structures] "..def.name.." placed at "..core.pos_to_string(pp))
 			end
 			return true
 		end
 	end
 	if log_enabled then
-		minetest.log("warning","[mcl_structures] placing "..def.name.." failed at "..minetest.pos_to_string(pos))
+		core.log("warning","[mcl_structures] placing "..def.name.." failed at "..core.pos_to_string(pos))
 	end
 end
 
@@ -258,8 +258,8 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 		def.fill_ratio = def.fill_ratio or 1.1/80/80 -- aim for 1 per chunk, control via chunk probability
 	end
 	if not nospawn and def.place_on then
-		minetest.register_on_mods_loaded(function() --make sure all previous decorations and biomes have been registered
-			def.deco = minetest.register_decoration({
+		core.register_on_mods_loaded(function() --make sure all previous decorations and biomes have been registered
+			def.deco = core.register_decoration({
 				name = "mcl_structures:deco_"..name,
 				deco_type = "schematic",
 				schematic = EMPTY_SCHEMATIC,
@@ -274,8 +274,8 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 				y_max = def.y_max,
 				y_min = def.y_min
 			})
-			def.deco_id = minetest.get_decoration_id("mcl_structures:deco_"..name)
-			minetest.set_gen_notify({decoration=true}, { def.deco_id })
+			def.deco_id = core.get_decoration_id("mcl_structures:deco_"..name)
+			core.set_gen_notify({decoration=true}, { def.deco_id })
 			--catching of gennotify happens in mcl_mapgen_core
 		end)
 	end
@@ -284,7 +284,7 @@ end
 
 function mcl_structures.register_structure_spawn(def)
 	--name,y_min,y_max,spawnon,biomes,chance,interval,limit,underwater
-	minetest.register_abm({
+	core.register_abm({
 		label = "Spawn "..def.name,
 		nodenames = def.spawnon,
 		min_y = def.y_min or -mcl_vars.mapgen_limit,
@@ -299,19 +299,19 @@ function mcl_structures.register_structure_spawn(def)
 				return
 			end
 			local p = vector.offset(pos,0,1,0)
-			if not def.underwater and minetest.get_node(p).name ~= "air" then return end
-			if minetest.get_meta(pos):get_string("spawnblock") == "" then return end
+			if not def.underwater and core.get_node(p).name ~= "air" then return end
+			if core.get_meta(pos):get_string("spawnblock") == "" then return end
 			if def.biomes then
-				if table.indexof(def.biomes,minetest.get_biome_name(minetest.get_biome_data(p).biome)) == -1 then
+				if table.indexof(def.biomes,core.get_biome_name(core.get_biome_data(p).biome)) == -1 then
 					return
 				end
 			end
-			local mobdef = minetest.registered_entities[def.name]
+			local mobdef = core.registered_entities[def.name]
 			if mobdef.can_spawn and not mobdef.can_spawn(p) then return end
-			local staticdata = minetest.serialize ({
+			local staticdata = core.serialize ({
 				_structure_spawn = 1,
 			})
-			minetest.add_entity (vector.offset(p,0,-0.5,0), def.name, staticdata)
+			core.add_entity (vector.offset(p,0,-0.5,0), def.name, staticdata)
 		end,
 	})
 end

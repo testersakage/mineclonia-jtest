@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local C = core.colorize
+local F = core.formspec_escape
 
 local dyerecipes = {}
 local preview_item_prefix = "mcl_banners_preview_"
@@ -150,27 +150,27 @@ local function get_formspec(pos)
 end
 
 local function update_formspec(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	meta:set_string("formspec", get_formspec(pos))
 end
 
 local function sort_stack(stack)
 	for group, list in pairs({ banner = "banner", dye = "dye", banner_pattern = "pattern" }) do
-		if minetest.get_item_group(stack:get_name(), group) > 0 then return list end
+		if core.get_item_group(stack:get_name(), group) > 0 then return list end
 	end
 end
 
 local function allow_put(pos, listname, _, stack, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	elseif listname == "output" then return 0
-	elseif listname == "banner" and minetest.get_item_group(stack:get_name(),"banner") == 0 then return 0
-	elseif listname == "dye" and minetest.get_item_group(stack:get_name(),"dye") == 0 then return 0
-	elseif listname == "pattern" and minetest.get_item_group(stack:get_name(),"banner_pattern") == 0 then return 0
+	elseif listname == "banner" and core.get_item_group(stack:get_name(),"banner") == 0 then return 0
+	elseif listname == "dye" and core.get_item_group(stack:get_name(),"dye") == 0 then return 0
+	elseif listname == "pattern" and core.get_item_group(stack:get_name(),"banner_pattern") == 0 then return 0
 	elseif listname == "sorter" then
-		local inv = minetest.get_meta(pos):get_inventory()
+		local inv = core.get_meta(pos):get_inventory()
 		local trg = sort_stack(stack)
 		if trg then
 			local stack1 = ItemStack(stack):take_item()
@@ -186,7 +186,7 @@ local function allow_put(pos, listname, _, stack, player)
 	end
 end
 
-minetest.register_node("mcl_loom:loom", {
+core.register_node("mcl_loom:loom", {
 	description = S("Loom"),
 	_tt_help = S("Used to create banner designs"),
 	_doc_items_longdesc = S("This is the shepherd villager's work station. It is used to create banner designs."),
@@ -203,7 +203,7 @@ minetest.register_node("mcl_loom:loom", {
 	_mcl_hardness = 2.5,
 	_mcl_burntime = 15,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("sorter", 1)
 		inv:set_size("banner", 1)
@@ -219,8 +219,8 @@ minetest.register_node("mcl_loom:loom", {
 	on_rightclick = update_formspec,
 	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
-		if minetest.is_protected(pos, sender_name) then
-			minetest.record_protection_violation(pos, sender_name)
+		if core.is_protected(pos, sender_name) then
+			core.record_protection_violation(pos, sender_name)
 			return
 		end
 
@@ -279,8 +279,8 @@ minetest.register_node("mcl_loom:loom", {
 	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		if listname == "sorter" then return 0 end
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -288,7 +288,7 @@ minetest.register_node("mcl_loom:loom", {
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, _, player)
 		if from_list == "sorter" or to_list == "sorter" then return 0 end
-		local inv = minetest.get_meta(pos):get_inventory()
+		local inv = core.get_meta(pos):get_inventory()
 		local stack = inv:get_stack(from_list,from_index)
 		return allow_put(pos, to_list, to_index, stack, player)
 	end,
@@ -296,7 +296,7 @@ minetest.register_node("mcl_loom:loom", {
 	on_metadata_inventory_move = update_formspec,
 	on_metadata_inventory_put = function(pos, listname, _, stack, _)
 		if listname == "sorter" then
-			local inv = minetest.get_meta(pos):get_inventory()
+			local inv = core.get_meta(pos):get_inventory()
 			inv:add_item(sort_stack(stack), stack)
 			inv:set_stack("sorter", 1, ItemStack(""))
 		end
@@ -305,7 +305,7 @@ minetest.register_node("mcl_loom:loom", {
 	on_metadata_inventory_take = update_formspec
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_loom:loom",
 	recipe = {
 		{ "", "", "" },
@@ -314,13 +314,13 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update Loom formspecs and invs to allow new sneak+click behavior",
 	name = "mcl_loom:update_coolsneak",
 	nodenames = { "mcl_loom:loom" },
 	run_at_every_load = false,
 	action = function(pos)
-		minetest.get_meta(pos):get_inventory():set_size("sorter", 1)
+		core.get_meta(pos):get_inventory():set_size("sorter", 1)
 		update_formspec(pos)
 	end,
 })

@@ -85,7 +85,7 @@ function mcl_loot.get_loot(loot_definitions, pr)
 
 				table.insert(items, stack)
 			elseif not item.nothing then
-				minetest.log("error", "[mcl_loot] INTERNAL ERROR! Failed to select random loot item!")
+				core.log("error", "[mcl_loot] INTERNAL ERROR! Failed to select random loot item!")
 			end
 		end
 	end

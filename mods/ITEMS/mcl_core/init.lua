@@ -18,7 +18,7 @@ mcl_autogroup.register_diggroup("swordy_bamboo")
 mcl_autogroup.register_diggroup("hoey")
 
 -- Load files
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 dofile(modpath.."/functions.lua")
 dofile(modpath.."/nodes_base.lua") -- Simple solid cubic nodes with simple definitions
 dofile(modpath.."/nodes_liquid.lua") -- Liquids

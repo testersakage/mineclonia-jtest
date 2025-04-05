@@ -1,9 +1,9 @@
 mcl_paintings = {}
 
-local modname = minetest.get_current_modname()
-dofile(minetest.get_modpath(modname).."/paintings.lua")
+local modname = core.get_current_modname()
+dofile(core.get_modpath(modname).."/paintings.lua")
 
-local S = minetest.get_translator(modname)
+local S = core.get_translator(modname)
 
 local wood = "[combine:16x16:-192,0=mcl_paintings_paintings.png"
 
@@ -71,12 +71,12 @@ local function set_entity(object)
 	local eymin, eymax = size_to_minmax_entity(ysize)
 	local visual_size = { x=xsize-0.0001, y=ysize-0.0001, z=1/32 }
 	if not ent._xsize or not ent._ysize or not ent._motive then
-		minetest.log("error", "[mcl_paintings] Painting loaded with missing painting values!")
+		core.log("error", "[mcl_paintings] Painting loaded with missing painting values!")
 		return
 	end
 	local painting = get_painting(xsize, ysize, ent._motive)
 	if not painting then
-		minetest.log("error", "[mcl_paintings] No painting found for size "
+		core.log("error", "[mcl_paintings] No painting found for size "
 				..xsize..","..ysize..", motive number "..ent._motive.."!")
 		return
 	end
@@ -96,14 +96,14 @@ local function set_entity(object)
 		textures = { wood, wood, wood, wood, painting, wood },
 	})
 
-	local dir = minetest.wallmounted_to_dir(wallm)
+	local dir = core.wallmounted_to_dir(wallm)
 	if not dir then
 		return
 	end
-	object:set_yaw(minetest.dir_to_yaw(dir))
+	object:set_yaw(core.dir_to_yaw(dir))
 end
 
-minetest.register_entity("mcl_paintings:painting", {
+core.register_entity("mcl_paintings:painting", {
 	initial_properties = {
 		visual = "cube",
 		visual_size = { x=0.999, y=0.999, z=1/32 },
@@ -123,7 +123,7 @@ minetest.register_entity("mcl_paintings:painting", {
 	on_activate = function(self, staticdata)
 		self.object:set_armor_groups({immortal = 1})
 		if staticdata and staticdata ~= "" then
-			local data = minetest.deserialize(staticdata)
+			local data = core.deserialize(staticdata)
 			if data then
 				self._facing = data._facing
 				self._pos = data._pos
@@ -142,7 +142,7 @@ minetest.register_entity("mcl_paintings:painting", {
 			_xsize = self._xsize,
 			_ysize = self._ysize,
 		}
-		return minetest.serialize(data)
+		return core.serialize(data)
 	end,
 	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage) ---@diagnostic disable-line: unused-local
 		-- Drop as item on punch
@@ -154,12 +154,12 @@ minetest.register_entity("mcl_paintings:painting", {
 			end
 			if not mcl_util.check_position_protection(pos, puncher) then
 				-- Slightly delay removing the painting so nodes behind it won't be dug (particularly in creative mode)
-				minetest.after(0.15, function(object)
+				core.after(0.15, function(object)
 					if object and object:get_pos() then
 						object:remove()
 					end
-					if not minetest.is_creative_enabled(kname) then
-						minetest.add_item(pos, "mcl_paintings:painting")
+					if not core.is_creative_enabled(kname) then
+						core.add_item(pos, "mcl_paintings:painting")
 					end
 				end, self.object)
 			end
@@ -167,7 +167,7 @@ minetest.register_entity("mcl_paintings:painting", {
 	end,
 })
 
-minetest.register_craftitem("mcl_paintings:painting", {
+core.register_craftitem("mcl_paintings:painting", {
 	description = S("Painting"),
 	inventory_image = "mcl_paintings_painting.png",
 	groups = {deco_block = 1},
@@ -185,7 +185,7 @@ minetest.register_craftitem("mcl_paintings:painting", {
 			-- Ceiling/floor paintings are not supported
 			return itemstack
 		end
-		local wallm = minetest.dir_to_wallmounted(dir)
+		local wallm = core.dir_to_wallmounted(dir)
 		if wallm then
 			local ppos = pointed_thing.above
 			local xmax
@@ -206,10 +206,10 @@ minetest.register_craftitem("mcl_paintings:painting", {
 				else
 					t = {x=0,y=y,z=k}
 				end
-				local unode = minetest.get_node(vector.add(pointed_thing.under, t))
-				local anode = minetest.get_node(vector.add(ppos, t))
-				local udef = minetest.registered_nodes[unode.name]
-				local adef = minetest.registered_nodes[anode.name]
+				local unode = core.get_node(vector.add(pointed_thing.under, t))
+				local anode = core.get_node(vector.add(ppos, t))
+				local udef = core.registered_nodes[unode.name]
+				local adef = core.registered_nodes[anode.name]
 				if (not (udef and udef.walkable)) or (not adef or adef.walkable) then
 					xmaxes[y+1] = x
 					if x == 0 and not ymaxed then
@@ -256,7 +256,7 @@ minetest.register_craftitem("mcl_paintings:painting", {
 			if mcl_util.check_position_protection(ppos2, placer) then return itemstack end
 			local painting, pid = get_random_painting(xsize, ysize)
 			if not painting then
-				minetest.log("error", "[mcl_paintings] No painting found for size "..xsize..","..ysize.."!")
+				core.log("error", "[mcl_paintings] No painting found for size "..xsize..","..ysize.."!")
 				return itemstack
 			end
 			local staticdata = {
@@ -266,14 +266,14 @@ minetest.register_craftitem("mcl_paintings:painting", {
 				_xsize = xsize,
 				_ysize = ysize,
 			}
-			local obj = minetest.add_entity(pposa, "mcl_paintings:painting", minetest.serialize(staticdata))
+			local obj = core.add_entity(pposa, "mcl_paintings:painting", core.serialize(staticdata))
 			if not obj then
 				return itemstack
 			end
 		else
 			return itemstack
 		end
-		if not minetest.is_creative_enabled(placer:get_player_name()) then
+		if not core.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item()
 		end
 		return itemstack
@@ -282,7 +282,7 @@ minetest.register_craftitem("mcl_paintings:painting", {
 
 mcl_wip.register_wip_item("mcl_paintings:painting")
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_paintings:painting",
 	recipe = {
 		{ "mcl_core:stick", "mcl_core:stick", "mcl_core:stick" },

@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 local cow_def = {
@@ -83,14 +83,14 @@ function cow_def:on_rightclick (clicker)
 	if item:get_name() == "mcl_buckets:bucket_empty" and clicker:get_inventory() then
 		local inv = clicker:get_inventory()
 		inv:remove_item("main", "mcl_buckets:bucket_empty")
-		minetest.sound_play("mobs_mc_cow_milk", {pos=self.object:get_pos(), gain=0.6})
+		core.sound_play("mobs_mc_cow_milk", {pos=self.object:get_pos(), gain=0.6})
 		-- if room add bucket of milk to inventory, otherwise drop as item
 		if inv:room_for_item("main", {name = "mcl_mobitems:milk_bucket"}) then
 			clicker:get_inventory():add_item("main", "mcl_mobitems:milk_bucket")
 		else
 			local pos = self.object:get_pos()
 			pos.y = pos.y + 0.5
-			minetest.add_item(pos, {name = "mcl_mobitems:milk_bucket"})
+			core.add_item(pos, {name = "mcl_mobitems:milk_bucket"})
 		end
 	end
 end
@@ -130,18 +130,18 @@ function mooshroom:on_rightclick (clicker)
 	local item = clicker:get_wielded_item()
 	local item_name = item:get_name()
 	-- Use shears to get mushrooms and turn mooshroom into cow
-	if minetest.get_item_group(item_name, "shears") > 0 then
+	if core.get_item_group(item_name, "shears") > 0 then
 		local pos = self.object:get_pos()
-		minetest.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
 
 		if self.base_texture[1] == "mobs_mc_mooshroom_brown.png" then
-			minetest.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_mushrooms:mushroom_brown 5")
+			core.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_mushrooms:mushroom_brown 5")
 		else
-			minetest.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_mushrooms:mushroom_red 5")
+			core.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_mushrooms:mushroom_red 5")
 		end
 		mcl_util.replace_mob(self.object, "mobs_mc:cow")
 
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
 			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
@@ -150,27 +150,27 @@ function mooshroom:on_rightclick (clicker)
 	elseif item_name == "mcl_buckets:bucket_empty" and clicker:get_inventory() then
 		local inv = clicker:get_inventory()
 		inv:remove_item("main", "mcl_buckets:bucket_empty")
-		minetest.sound_play("mobs_mc_cow_milk", {pos=self.object:get_pos(), gain=0.6})
+		core.sound_play("mobs_mc_cow_milk", {pos=self.object:get_pos(), gain=0.6})
 		-- If room, add milk to inventory, otherwise drop as item
 		if inv:room_for_item("main", {name="mcl_mobitems:milk_bucket"}) then
 			clicker:get_inventory():add_item("main", "mcl_mobitems:milk_bucket")
 		else
 			local pos = self.object:get_pos()
 			pos.y = pos.y + 0.5
-			minetest.add_item(pos, {name = "mcl_mobitems:milk_bucket"})
+			core.add_item(pos, {name = "mcl_mobitems:milk_bucket"})
 		end
 		-- Use bowl to get mushroom stew
 	elseif item_name == "mcl_core:bowl" and clicker:get_inventory() then
 		local inv = clicker:get_inventory()
 		inv:remove_item("main", "mcl_core:bowl")
-		minetest.sound_play("mobs_mc_cow_mushroom_stew", {pos=self.object:get_pos(), gain=0.6})
+		core.sound_play("mobs_mc_cow_mushroom_stew", {pos=self.object:get_pos(), gain=0.6})
 		-- If room, add mushroom stew to inventory, otherwise drop as item
 		if inv:room_for_item("main", {name="mcl_mushrooms:mushroom_stew"}) then
 			clicker:get_inventory():add_item("main", "mcl_mushrooms:mushroom_stew")
 		else
 			local pos = self.object:get_pos()
 			pos.y = pos.y + 0.5
-			minetest.add_item(pos, {name = "mcl_mushrooms:mushroom_stew"})
+			core.add_item(pos, {name = "mcl_mushrooms:mushroom_stew"})
 		end
 	end
 end
@@ -186,12 +186,12 @@ function mooshroom:_on_lightning_strike ()
 end
 
 function mooshroom:_on_dispense (dropitem, pos, droppos, dropnode, dropdir)
-	if minetest.get_item_group(dropitem:get_name(), "shears") > 0 then
+	if core.get_item_group(dropitem:get_name(), "shears") > 0 then
 		local droppos = vector.offset(pos, 0, 1.4, 0)
 		if self.base_texture[1] == "mobs_mc_mooshroom_brown.png" then
-			minetest.add_item(droppos, "mcl_mushrooms:mushroom_brown 5")
+			core.add_item(droppos, "mcl_mushrooms:mushroom_brown 5")
 		else
-			minetest.add_item(droppos, "mcl_mushrooms:mushroom_red 5")
+			core.add_item(droppos, "mcl_mushrooms:mushroom_red 5")
 		end
 		mcl_util.replace_mob(self.object, "mobs_mc:cow")
 		return dropitem

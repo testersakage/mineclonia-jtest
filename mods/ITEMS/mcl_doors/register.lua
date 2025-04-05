@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 --- Iron Door ---
 mcl_doors:register_door("mcl_doors:iron_door", {
@@ -18,7 +18,7 @@ mcl_doors:register_door("mcl_doors:iron_door", {
 	only_redstone_can_open = true,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_doors:iron_door 3",
 	recipe = {
 		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"},
@@ -43,7 +43,7 @@ mcl_doors:register_trapdoor("mcl_doors:iron_trapdoor", {
 	only_redstone_can_open = true,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_doors:iron_trapdoor",
 	recipe = {
 		{"mcl_core:iron_ingot", "mcl_core:iron_ingot"},

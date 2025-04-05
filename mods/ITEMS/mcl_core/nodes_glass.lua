@@ -1,9 +1,9 @@
 -- Glass nodes
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local mod_doc = minetest.get_modpath("doc")
+local mod_doc = core.get_modpath("doc")
 
-minetest.register_node("mcl_core:glass", {
+core.register_node("mcl_core:glass", {
 	description = S("Glass"),
 	_doc_items_longdesc = S("A decorative and mostly transparent block."),
 	drawtype = "glasslike_framed_optional",
@@ -43,7 +43,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 	if messy_textures[color] then
 		texcol = messy_textures[color]
 	end
-	minetest.register_node("mcl_core:glass_"..color, {
+	core.register_node("mcl_core:glass_"..color, {
 		description = D(colordef.readable_name .. " Stained Glass"),
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = entry_name,
@@ -64,7 +64,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_color = color,
 	})
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_core:glass_"..color.." 8",
 		recipe = {
 			{"mcl_core:glass","mcl_core:glass","mcl_core:glass"},
@@ -79,4 +79,4 @@ for color,colordef in pairs(mcl_dyes.colors) do
 end
 
 -- legacy: for some reason glass was the only place where grey was spelled with an a
-minetest.register_alias("mcl_core:glass_gray","mcl_core:glass_grey")
+core.register_alias("mcl_core:glass_gray","mcl_core:glass_grey")

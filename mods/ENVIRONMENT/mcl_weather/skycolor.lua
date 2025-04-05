@@ -5,7 +5,7 @@ local water_color = "#3F76E4"
 
 function mcl_weather.set_sky_box_clear(player, sky, fog)
 	local pos = player:get_pos()
-	if minetest.get_item_group(minetest.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name, "water") ~= 0 then return end
+	if core.get_item_group(core.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name, "water") ~= 0 then return end
 	local sc = {
 			day_sky = "#7BA4FF",
 			day_horizon = "#C0D8FF",
@@ -35,7 +35,7 @@ end
 
 function mcl_weather.set_sky_color(player, def)
 	local pos = player:get_pos()
-	if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, 1.5, 0)).name, "water") ~= 0 then return end
+	if core.get_item_group(core.get_node(vector.offset(pos, 0, 1.5, 0)).name, "water") ~= 0 then return end
 	player:set_sky({
 		type = def.type,
 		sky_color = def.sky_color,
@@ -106,7 +106,7 @@ mcl_weather.skycolor = {
 			else arg = 0 end
 		else
 			-- Apply night vision only for dark sky
-			local is_dark = minetest.get_timeofday() > 0.8 or minetest.get_timeofday() < 0.2 or mcl_weather.state ~= "none"
+			local is_dark = core.get_timeofday() > 0.8 or core.get_timeofday() < 0.2 or mcl_weather.state ~= "none"
 			local pos = player:get_pos()
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if (has_night_vision or is_visited_shepherd) and is_dark and dim ~= "nether" and dim ~= "end" then
@@ -130,11 +130,11 @@ mcl_weather.skycolor = {
 			local pos = player:get_pos()
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			local has_weather = (mcl_worlds.has_weather(pos) and (mcl_weather.state == "snow" or mcl_weather.state =="rain" or mcl_weather.state == "thunder") and mcl_weather.has_snow(pos)) or ((mcl_weather.state =="rain" or mcl_weather.state == "thunder") and mcl_weather.has_rain(pos))
-			local checkname = minetest.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name
-			if minetest.get_item_group(checkname, "water") ~= 0 then
-				local biome_index = minetest.get_biome_data(player:get_pos()).biome
-				local biome_name = minetest.get_biome_name(biome_index)
-				local biome = minetest.registered_biomes[biome_name]
+			local checkname = core.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name
+			if core.get_item_group(checkname, "water") ~= 0 then
+				local biome_index = core.get_biome_data(player:get_pos()).biome
+				local biome_name = core.get_biome_name(biome_index)
+				local biome = core.registered_biomes[biome_name]
 				if biome then water_color = biome._mcl_waterfogcolor end
 				if not biome then water_color = "#3F76E4" end
 				if checkname == "mclx_core:river_water_source" or checkname == "mclx_core:river_water_flowing" then water_color = "#0084FF" end
@@ -157,11 +157,11 @@ mcl_weather.skycolor = {
 			if dim == "overworld" then
 				local biomesky
 				local biomefog
-				local biome_index = minetest.get_biome_data(player:get_pos()).biome
-				local biome_name = minetest.get_biome_name(biome_index)
-				local biome = minetest.registered_biomes[biome_name]
+				local biome_index = core.get_biome_data(player:get_pos()).biome
+				local biome_name = core.get_biome_name(biome_index)
+				local biome = core.registered_biomes[biome_name]
 				if biome then
-					--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
+					--core.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
 					biomesky = biome._mcl_skycolor
 					biomefog = biome._mcl_fogcolor
 				end
@@ -221,7 +221,7 @@ mcl_weather.skycolor = {
 						-- The light is basically derived by the distance of the current time to
 						-- 0.5 which means midday/noon. i.e. the key here is 1 - math.abs(0.5 - w)
 						-- the rest is just modifications and a minimum light level of 0.2
-						local w = minetest.get_timeofday()
+						local w = core.get_timeofday()
 						local light = math.max(0.2,((1 - math.abs(0.5 - w)) * lf) - 0.15)
 						mcl_weather.skycolor.override_day_night_ratio(player, light)
 					else
@@ -231,11 +231,11 @@ mcl_weather.skycolor = {
 			elseif dim == "end" then
 				local biomesky = "#000000"
 				--local biomefog = "#A080A0"
-				local biome_index = minetest.get_biome_data(player:get_pos()).biome
-				local biome_name = minetest.get_biome_name(biome_index)
-				local biome = minetest.registered_biomes[biome_name]
+				local biome_index = core.get_biome_data(player:get_pos()).biome
+				local biome_name = core.get_biome_name(biome_index)
+				local biome = core.registered_biomes[biome_name]
 				if biome then
-					--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
+					--core.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
 					biomesky = biome._mcl_skycolor
 					--biomefog = biome._mcl_fogcolor -- The End biomes seemingly don't use the fog colour, despite having this value according to the wiki. The sky colour is seemingly used for both sky and fog?
 				end
@@ -252,11 +252,11 @@ mcl_weather.skycolor = {
 			elseif dim == "nether" then
 				--local biomesky = "#6EB1FF"
 				local biomefog = "#330808"
-				local biome_index = minetest.get_biome_data(player:get_pos()).biome
-				local biome_name = minetest.get_biome_name(biome_index)
-				local biome = minetest.registered_biomes[biome_name]
+				local biome_index = core.get_biome_data(player:get_pos()).biome
+				local biome_name = core.get_biome_name(biome_index)
+				local biome = core.registered_biomes[biome_name]
 				if biome then
-					--minetest.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
+					--core.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
 					--biomesky = biome._mcl_skycolor -- The Nether biomes seemingly don't use the sky colour, despite having this value according to the wiki. The fog colour is used for both sky and fog.
 					biomefog = biome._mcl_fogcolor
 				end
@@ -320,7 +320,7 @@ mcl_weather.skycolor = {
 		get_players = function(players)
 			if players == nil or #players == 0 then
 				if mods_loaded then
-					players = minetest.get_connected_players()
+					players = core.get_connected_players()
 				elseif players == nil then
 					players = {}
 				end
@@ -341,8 +341,8 @@ mcl_weather.skycolor = {
 }
 
 local timer = 0
-minetest.register_globalstep(function(dtime)
-	if mcl_weather.skycolor.active ~= true or #minetest.get_connected_players() == 0 then
+core.register_globalstep(function(dtime)
+	if mcl_weather.skycolor.active ~= true or #core.get_connected_players() == 0 then
 		return
 	end
 
@@ -384,13 +384,13 @@ local function initsky(player)
 	player:set_clouds(mcl_worlds.get_cloud_parameters() or {height=mcl_worlds.layer_to_y(127), speed={x=-2, z=0}, thickness=4, color="#FFF0FEF"})
 end
 
-minetest.register_on_joinplayer(initsky)
-minetest.register_on_respawnplayer(initsky)
+core.register_on_joinplayer(initsky)
+core.register_on_respawnplayer(initsky)
 
 mcl_worlds.register_on_dimension_change(function(player)
 	mcl_weather.skycolor.update_sky_color({player})
 end)
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	mods_loaded = true
 end)

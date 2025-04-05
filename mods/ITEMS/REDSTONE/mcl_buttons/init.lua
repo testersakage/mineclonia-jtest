@@ -1,12 +1,12 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_buttons = {}
 
 -- Push the button
 function mcl_buttons.push_button(pos, node)
-	local def = minetest.registered_nodes[node.name]
-	minetest.set_node(pos, {name="mcl_buttons:button_"..def._mcl_button_basename.."_on", param2=node.param2})
-	minetest.sound_play(def._mcl_redstone_push_sound, {pos=pos}, true)
+	local def = core.registered_nodes[node.name]
+	core.set_node(pos, {name="mcl_buttons:button_"..def._mcl_button_basename.."_on", param2=node.param2})
+	core.sound_play(def._mcl_redstone_push_sound, {pos=pos}, true)
 end
 
 local function on_button_place(itemstack, placer, pointed_thing)
@@ -16,8 +16,8 @@ local function on_button_place(itemstack, placer, pointed_thing)
 	end
 
 	local under = pointed_thing.under
-	local node = minetest.get_node(under)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(under)
+	local def = core.registered_nodes[node.name]
 	if not def then return end
 	local groups = def.groups
 
@@ -28,8 +28,8 @@ local function on_button_place(itemstack, placer, pointed_thing)
 	if def.buildable_to then
 		local dir = vector.subtract(pointed_thing.above, pointed_thing.under)
 		local actual = vector.subtract(under, dir)
-		local actualnode = minetest.get_node(actual)
-		def = minetest.registered_nodes[actualnode.name]
+		local actualnode = core.get_node(actual)
+		def = core.registered_nodes[actualnode.name]
 		groups = def.groups
 	end
 
@@ -54,11 +54,11 @@ local function on_button_place(itemstack, placer, pointed_thing)
 	end
 
 	local idef = itemstack:get_definition()
-	local itemstack, success = minetest.item_place_node(itemstack, placer, pointed_thing)
+	local itemstack, success = core.item_place_node(itemstack, placer, pointed_thing)
 
 	if success then
 		if idef.sounds and idef.sounds.place then
-			minetest.sound_play(idef.sounds.place, {pos=pointed_thing.above, gain=1}, true)
+			core.sound_play(idef.sounds.place, {pos=pointed_thing.above, gain=1}, true)
 		end
 	end
 	return itemstack
@@ -113,7 +113,7 @@ function mcl_buttons.register_button(basename, def)
 		},
 	}
 
-	minetest.register_node(":mcl_buttons:button_"..basename.."_off", table.merge(commdef, {
+	core.register_node(":mcl_buttons:button_"..basename.."_off", table.merge(commdef, {
 		node_box = {
 			type = "wallmounted",
 			wall_side = { -8/16, -2/16, -4/16, -6/16, 2/16, 4/16 },
@@ -126,8 +126,8 @@ function mcl_buttons.register_button(basename, def)
 		end,
 		sounds = sounds,
 		_on_arrow_hit = function(pos, arrowent)
-			local node = minetest.get_node(pos)
-			local bdir = minetest.wallmounted_to_dir(node.param2)
+			local node = core.get_node(pos)
+			local bdir = core.wallmounted_to_dir(node.param2)
 			if vector.equals(vector.add(pos, bdir), arrowent._stuckin) then
 				mcl_buttons.push_button(pos, node)
 				return true
@@ -135,7 +135,7 @@ function mcl_buttons.register_button(basename, def)
 		end,
 	}))
 
-	minetest.register_node(":mcl_buttons:button_"..basename.."_on", table.merge(commdef, {
+	core.register_node(":mcl_buttons:button_"..basename.."_on", table.merge(commdef, {
 		node_box = {
 			type = "wallmounted",
 			wall_side = { -8/16, -2/16, -4/16, -7/16, 2/16, 4/16 },
@@ -147,11 +147,11 @@ function mcl_buttons.register_button(basename, def)
 		_doc_items_create_entry = false,
 		_mcl_redstone = table.merge(commdef._mcl_redstone, {
 			get_power = function(node, dir)
-				return 15, node.param2 == minetest.dir_to_wallmounted(dir)
+				return 15, node.param2 == core.dir_to_wallmounted(dir)
 			end,
 			init = function(pos, node)
 				mcl_redstone.after(push_duration, function()
-					minetest.sound_play(push_sound, {pos=pos, pitch=0.9}, true)
+					core.sound_play(push_sound, {pos=pos, pitch=0.9}, true)
 				end)
 				return {
 					delay = push_duration,
@@ -162,7 +162,7 @@ function mcl_buttons.register_button(basename, def)
 		}),
 	}))
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_buttons:button_"..basename.."_off",
 		recipe = {{ recipeitem }},
 	})
@@ -193,7 +193,7 @@ mcl_buttons.register_button("polished_blackstone", {
 })
 
 -- Add entry aliases for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_buttons:button_wood_off", "nodes", "mcl_buttons:button_wood_on")
 	doc.add_entry_alias("nodes", "mcl_buttons:button_stone_off", "nodes", "mcl_buttons:button_stone_on")
 end

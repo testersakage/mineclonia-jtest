@@ -1,7 +1,7 @@
 mcl_info = {}
 
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 local player_dbg = {}
 
 local refresh_interval      = .63
@@ -35,10 +35,10 @@ function mcl_info.register_debug_field(name,def)
 end
 
 local function nodeinfo(pos)
-	local n = minetest.get_node_or_nil(pos)
+	local n = core.get_node_or_nil(pos)
 	if not n then return "" end
-	local l = minetest.get_node_light(pos)
-	local ld = minetest.get_node_light(pos,0.5)
+	local l = core.get_node_light(pos)
+	local ld = core.get_node_light(pos,0.5)
 	local r = n.name .. " p1:"..n.param1.." p2:"..n.param2
 	if l and ld then
 		r = r .. " Light: "..l.."/"..ld
@@ -97,26 +97,26 @@ local function info()
 			player:hud_change(huds[name][2], "text", text)
 		end
 	end
-	minetest.after(refresh_interval, info)
+	core.after(refresh_interval, info)
 end
-minetest.after(0,info)
+core.after(0,info)
 
-minetest.register_on_leaveplayer(function(p)
+core.register_on_leaveplayer(function(p)
 	local name = p:get_player_name()
 	huds[name] = nil
 	player_dbg[name] = nil
 end)
 
-minetest.register_chatcommand("debug",{
+core.register_chatcommand("debug",{
 	description = S("Set debug bit mask: 0 = disable, 1 = player coords, 2 = coordinates, 3 = biome name, 4 = all"),
 	params = S("<bitmask>"),
 	privs = { debug = true },
 	func = function(name, params)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if params == "" then return true, "Debug bitmask is "..player_setting(player) end
 		local dbg = math.floor(tonumber(params) or default_debug)
 		if dbg < -1 or dbg > 4 then
-			minetest.chat_send_player(name, S("Error! Possible values are integer numbers from @1 to @2", -1, 4))
+			core.chat_send_player(name, S("Error! Possible values are integer numbers from @1 to @2", -1, 4))
 			return false,"Current bitmask: "..player_setting(player)
 		end
 		return true, "Debug bit mask set to "..player_setting(player,dbg)
@@ -124,18 +124,18 @@ minetest.register_chatcommand("debug",{
 })
 
 -- register normal user access to debug levels 1 and 0.
-minetest.register_chatcommand("whereami", {
+core.register_chatcommand("whereami", {
 	description = S("Set location bit mask: 0 = disable, 1 = coordinates"),
 	params = S("<bitmask>"),
 	-- privs = { },
 	func = function(name, params)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if params == "" then
 			return true, "Location bitmask is " .. player_setting(player)
 		end
 		local loc_lev = math.floor(tonumber(params) or default_debug)
 		if loc_lev < 0 or loc_lev > 4 then
-			minetest.chat_send_player(name, S("Error! Possible values are integer numbers from @1 to @2", 0, 1))
+			core.chat_send_player(name, S("Error! Possible values are integer numbers from @1 to @2", 0, 1))
 			return false, "Current bitmask: " .. player_setting(player)
 		end
 		return true, "Location bit mask set to " .. player_setting(player, loc_lev)
@@ -155,7 +155,7 @@ mcl_info.register_debug_field ("Local Difficulty", {
 	       return string.format ("%.2f // %.2f (Day %d)",
 					mcl_worlds.get_regional_difficulty (pos),
 					mcl_worlds.get_special_difficulty (pos),
-					minetest.get_day_count ())
+					core.get_day_count ())
        end,
 })
 
@@ -186,8 +186,8 @@ mcl_info.register_debug_field("Node below",{
 mcl_info.register_debug_field("Biome",{
 	level = 3,
 	func = function(_, pos)
-		local biome_data = minetest.get_biome_data(pos)
-		local biome = biome_data and minetest.get_biome_name(biome_data.biome) or "No biome"
+		local biome_data = core.get_biome_data(pos)
+		local biome = biome_data and core.get_biome_name(biome_data.biome) or "No biome"
 		if biome_data then
 			return string.format("%s (%s), Humidity: %.1f, Temperature: %.1f",biome, biome_data.biome, biome_data.humidity, biome_data.heat)
 		end

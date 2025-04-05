@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Simple solid cubic nodes, most of them are the ground materials and simple building blocks
 
@@ -12,7 +12,7 @@ mcl_core.fortune_drop_ore = {
 	multiply = true,
 }
 
-minetest.register_node("mcl_core:stone", {
+core.register_node("mcl_core:stone", {
 	description = S("Stone"),
 	_doc_items_longdesc = S("One of the most common blocks in the world, almost the entire underground consists of stone. It sometimes contains ores. Stone may be created when water meets lava."),
 	_doc_items_hidden = false,
@@ -32,7 +32,7 @@ minetest.register_node("mcl_core:stone", {
 	end,
 })
 
-minetest.register_node("mcl_core:stone_with_coal", {
+core.register_node("mcl_core:stone_with_coal", {
 	description = S("Coal Ore"),
 	_doc_items_longdesc = S("Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."),
 	_doc_items_hidden = false,
@@ -47,7 +47,7 @@ minetest.register_node("mcl_core:stone_with_coal", {
 	_mcl_cooking_output = "mcl_core:coal_lump"
 })
 
-minetest.register_node("mcl_core:stone_with_iron", {
+core.register_node("mcl_core:stone_with_iron", {
 	description = S("Iron Ore"),
 	_doc_items_longdesc = S("Some iron contained in stone, it is prety common and can be found below sea level."),
 	tiles = {"mcl_core_iron_ore.png"},
@@ -62,7 +62,7 @@ minetest.register_node("mcl_core:stone_with_iron", {
 })
 
 
-minetest.register_node("mcl_core:stone_with_gold", {
+core.register_node("mcl_core:stone_with_gold", {
 	description = S("Gold Ore"),
 	_doc_items_longdesc = S("This stone contains pure gold, a rare metal."),
 	tiles = {"mcl_core_gold_ore.png"},
@@ -78,16 +78,16 @@ minetest.register_node("mcl_core:stone_with_gold", {
 
 local redstone_timer = 68.28
 local function redstone_ore_activate(pos, node, puncher, pointed_thing)
-	local nodedef = minetest.registered_nodes[minetest.get_node(pos).name]
-	minetest.swap_node(pos, {name=nodedef._mcl_ore_lit})
-	local t = minetest.get_node_timer(pos)
+	local nodedef = core.registered_nodes[core.get_node(pos).name]
+	core.swap_node(pos, {name=nodedef._mcl_ore_lit})
+	local t = core.get_node_timer(pos)
 	t:start(redstone_timer)
 	if puncher and pointed_thing then
-		return minetest.node_punch(pos, node, puncher, pointed_thing)
+		return core.node_punch(pos, node, puncher, pointed_thing)
 	end
 end
 
-minetest.register_node("mcl_core:stone_with_redstone", {
+core.register_node("mcl_core:stone_with_redstone", {
 	description = S("Redstone Ore"),
 	_doc_items_longdesc = S("Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."),
 	tiles = {"mcl_core_redstone_ore.png"},
@@ -121,14 +121,14 @@ minetest.register_node("mcl_core:stone_with_redstone", {
 })
 
 local function redstone_ore_reactivate(pos, node, puncher, pointed_thing)
-	local t = minetest.get_node_timer(pos)
+	local t = core.get_node_timer(pos)
 	t:start(redstone_timer)
 	if puncher and pointed_thing then
-		return minetest.node_punch(pos, node, puncher, pointed_thing)
+		return core.node_punch(pos, node, puncher, pointed_thing)
 	end
 end
 -- Light the redstone ore up when it has been touched
-minetest.register_node("mcl_core:stone_with_redstone_lit", {
+core.register_node("mcl_core:stone_with_redstone_lit", {
 	description = S("Lit Redstone Ore"),
 	_doc_items_create_entry = false,
 	tiles = {"mcl_core_redstone_ore.png"},
@@ -153,8 +153,8 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 	on_walk_over = redstone_ore_reactivate, -- Uses walkover mod
 	-- Turn back to normal node after some time has passed
 	on_timer = function(pos)
-		local nodedef = minetest.registered_nodes[minetest.get_node(pos).name]
-		minetest.swap_node(pos, {name=nodedef._mcl_ore_unlit})
+		local nodedef = core.registered_nodes[core.get_node(pos).name]
+		core.swap_node(pos, {name=nodedef._mcl_ore_unlit})
 	end,
 	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
@@ -168,7 +168,7 @@ minetest.register_node("mcl_core:stone_with_redstone_lit", {
 	_mcl_ore_unlit = "mcl_core:stone_with_redstone",
 })
 
-minetest.register_node("mcl_core:stone_with_lapis", {
+core.register_node("mcl_core:stone_with_lapis", {
 	description = S("Lapis Lazuli Ore"),
 	_doc_items_longdesc = S("Lapis lazuli ore is the ore of lapis lazuli. It can be rarely found in clusters near the bottom of the world."),
 	tiles = {"mcl_core_lapis_ore.png"},
@@ -192,7 +192,7 @@ minetest.register_node("mcl_core:stone_with_lapis", {
 	_mcl_cooking_output = "mcl_core:lapis"
 })
 
-minetest.register_node("mcl_core:stone_with_emerald", {
+core.register_node("mcl_core:stone_with_emerald", {
 	description = S("Emerald Ore"),
 	_doc_items_longdesc = S("Emerald ore is the ore of emeralds. It is very rare and can be found alone, not in clusters."),
 	tiles = {"mcl_core_emerald_ore.png"},
@@ -206,7 +206,7 @@ minetest.register_node("mcl_core:stone_with_emerald", {
 	_mcl_cooking_output = "mcl_core:emerald"
 })
 
-minetest.register_node("mcl_core:stone_with_diamond", {
+core.register_node("mcl_core:stone_with_diamond", {
 	description = S("Diamond Ore"),
 	_doc_items_longdesc = S("Diamond ore is rare and can be found in clusters near the bottom of the world."),
 	tiles = {"mcl_core_diamond_ore.png"},
@@ -220,7 +220,7 @@ minetest.register_node("mcl_core:stone_with_diamond", {
 	_mcl_cooking_output = "mcl_core:diamond"
 })
 
-minetest.register_node("mcl_core:stonebrick", {
+core.register_node("mcl_core:stonebrick", {
 	description = S("Stone Bricks"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"default_stone_brick.png"},
@@ -233,7 +233,7 @@ minetest.register_node("mcl_core:stonebrick", {
 	_mcl_cooking_output = "mcl_core:stonebrickcracked"
 })
 
-minetest.register_node("mcl_core:stonebrickcarved", {
+core.register_node("mcl_core:stonebrickcarved", {
 	description = S("Chiseled Stone Bricks"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_core_stonebrick_carved.png"},
@@ -245,7 +245,7 @@ minetest.register_node("mcl_core:stonebrickcarved", {
 	_mcl_stonecutter_recipes = { "mcl_core:stone", "mcl_core:stonebrick" },
 })
 
-minetest.register_node("mcl_core:stonebrickcracked", {
+core.register_node("mcl_core:stonebrickcracked", {
 	description = S("Cracked Stone Bricks"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_core_stonebrick_cracked.png"},
@@ -256,7 +256,7 @@ minetest.register_node("mcl_core:stonebrickcracked", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_core:stonebrickmossy", {
+core.register_node("mcl_core:stonebrickmossy", {
 	description = S("Mossy Stone Bricks"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_core_stonebrick_mossy.png"},
@@ -267,7 +267,7 @@ minetest.register_node("mcl_core:stonebrickmossy", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_core:stone_smooth", {
+core.register_node("mcl_core:stone_smooth", {
 	description = S("Smooth Stone"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"mcl_stairs_stone_slab_top.png"},
@@ -278,7 +278,7 @@ minetest.register_node("mcl_core:stone_smooth", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_core:granite", {
+core.register_node("mcl_core:granite", {
 	description = S("Granite"),
 	_doc_items_longdesc = S("Granite is an igneous rock."),
 	tiles = {"mcl_core_granite.png"},
@@ -289,7 +289,7 @@ minetest.register_node("mcl_core:granite", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:granite_smooth 4"}}
 })
 
-minetest.register_node("mcl_core:granite_smooth", {
+core.register_node("mcl_core:granite_smooth", {
 	description = S("Polished Granite"),
 	_doc_items_longdesc = S("Polished granite is a decorative building block made from granite."),
 	tiles = {"mcl_core_granite_smooth.png"},
@@ -301,7 +301,7 @@ minetest.register_node("mcl_core:granite_smooth", {
 	_mcl_stonecutter_recipes = { "mcl_core:granite" },
 })
 
-minetest.register_node("mcl_core:andesite", {
+core.register_node("mcl_core:andesite", {
 	description = S("Andesite"),
 	_doc_items_longdesc = S("Andesite is an igneous rock."),
 	tiles = {"mcl_core_andesite.png"},
@@ -312,7 +312,7 @@ minetest.register_node("mcl_core:andesite", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:andesite_smooth 4"}}
 })
 
-minetest.register_node("mcl_core:andesite_smooth", {
+core.register_node("mcl_core:andesite_smooth", {
 	description = S("Polished Andesite"),
 	_doc_items_longdesc = S("Polished andesite is a decorative building block made from andesite."),
 	tiles = {"mcl_core_andesite_smooth.png"},
@@ -324,7 +324,7 @@ minetest.register_node("mcl_core:andesite_smooth", {
 	_mcl_stonecutter_recipes = { "mcl_core:andesite" },
 })
 
-minetest.register_node("mcl_core:diorite", {
+core.register_node("mcl_core:diorite", {
 	description = S("Diorite"),
 	_doc_items_longdesc = S("Diorite is an igneous rock."),
 	tiles = {"mcl_core_diorite.png"},
@@ -335,7 +335,7 @@ minetest.register_node("mcl_core:diorite", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:diorite_smooth 4"}}
 })
 
-minetest.register_node("mcl_core:diorite_smooth", {
+core.register_node("mcl_core:diorite_smooth", {
 	description = S("Polished Diorite"),
 	_doc_items_longdesc = S("Polished diorite is a decorative building block made from diorite."),
 	tiles = {"mcl_core_diorite_smooth.png"},
@@ -348,7 +348,7 @@ minetest.register_node("mcl_core:diorite_smooth", {
 })
 
 -- Grass Block
-minetest.register_node("mcl_core:dirt_with_grass", {
+core.register_node("mcl_core:dirt_with_grass", {
 	description = S("Grass Block"),
 	_doc_items_longdesc = S("A grass block is dirt with a grass cover. Grass blocks are resourceful blocks which allow the growth of all sorts of plants. They can be turned into farmland with a hoe and turned into grass paths with a shovel. In light, the grass slowly spreads onto dirt nearby. Under an opaque block or a liquid, a grass block may turn back to dirt."),
 	_doc_items_hidden = false,
@@ -370,11 +370,11 @@ minetest.register_node("mcl_core:dirt_with_grass", {
 		footstep = {name="default_grass_footstep", gain=0.1},
 	}),
 	on_construct = function(pos)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		if node.param2 == 0 then
 			local new_node = mcl_core.get_grass_block_type(pos)
 			if new_node.param2 ~= 0 or new_node.name ~= "mcl_core:dirt_with_grass" then
-				minetest.set_node(pos, new_node)
+				core.set_node(pos, new_node)
 			end
 		end
 		return mcl_core.on_snowable_construct(pos)
@@ -387,7 +387,7 @@ minetest.register_node("mcl_core:dirt_with_grass", {
 })
 mcl_core.register_snowed_node("mcl_core:dirt_with_grass_snow", "mcl_core:dirt_with_grass", nil, nil, true, S("Dirt with Snow"))
 
-minetest.register_node("mcl_core:grass_path", {
+core.register_node("mcl_core:grass_path", {
 	tiles = {"mcl_core_grass_path_top.png", "default_dirt.png", "mcl_core_grass_path_side.png"},
 	description = S("Grass Path"),
 	_doc_items_longdesc = S("Grass paths are a decorative variant of grass blocks. Their top has a different color and they are a bit lower than grass blocks, making them useful to build footpaths. Grass paths can be created with a shovel. A grass path turns into dirt when it is below a solid block."),
@@ -409,7 +409,7 @@ minetest.register_node("mcl_core:grass_path", {
 	_mcl_hardness = 0.6,
 })
 
-minetest.register_node("mcl_core:mycelium", {
+core.register_node("mcl_core:mycelium", {
 	description = S("Mycelium"),
 	_doc_items_longdesc = S("Mycelium is a type of dirt and the ideal soil for mushrooms. Unlike other dirt-type blocks, it can not be turned into farmland with a hoe. In light, mycelium slowly spreads over nearby dirt. Under an opaque block or a liquid, it eventually turns back into dirt."),
 	tiles = {"mcl_core_mycelium_top.png", "default_dirt.png", {name="mcl_core_mycelium_side.png", tileable_vertical=false}},
@@ -430,15 +430,15 @@ mcl_core.register_snowed_node("mcl_core:mycelium_snow", "mcl_core:mycelium", nil
 
 local PARTICLE_ABM_DISTANCE = 16
 
---if minetest.settings:get("mcl_node_particles") == "full" then
-minetest.register_abm({
+--if core.settings:get("mcl_node_particles") == "full" then
+core.register_abm({
 	label = "Townaura particles",
 	nodenames = {"group:mycelium"},
 	interval = 2,
 	chance = 30,
 	action = function(pos)
 		for player in mcl_util.connected_players(pos, PARTICLE_ABM_DISTANCE) do
-			minetest.add_particlespawner({
+			core.add_particlespawner({
 				time = 2,
 				amount = 5,
 				minpos = vector.offset(pos,-2,0.51,-2),
@@ -458,7 +458,7 @@ minetest.register_abm({
 })
 --end
 
-minetest.register_node("mcl_core:podzol", {
+core.register_node("mcl_core:podzol", {
 	description = S("Podzol"),
 	_doc_items_longdesc = S("Podzol is a type of dirt found in taiga forests. Only a few plants are able to survive on it."),
 	tiles = {"mcl_core_dirt_podzol_top.png", "default_dirt.png", {name="mcl_core_dirt_podzol_side.png", tileable_vertical=false}},
@@ -474,7 +474,7 @@ minetest.register_node("mcl_core:podzol", {
 })
 mcl_core.register_snowed_node("mcl_core:podzol_snow", "mcl_core:podzol", nil, nil, false, S("Podzol with Snow"))
 
-minetest.register_node("mcl_core:dirt", {
+core.register_node("mcl_core:dirt", {
 	description = S("Dirt"),
 	_doc_items_longdesc = S("Dirt acts as a soil for a few plants. When in light, this block may grow a grass or mycelium cover if such blocks are nearby."),
 	_doc_items_hidden = false,
@@ -486,7 +486,7 @@ minetest.register_node("mcl_core:dirt", {
 	_mcl_hardness = 0.5,
 })
 
-minetest.register_node("mcl_core:coarse_dirt", {
+core.register_node("mcl_core:coarse_dirt", {
 	description = S("Coarse Dirt"),
 	_doc_items_longdesc = S("Coarse dirt acts as a soil for some plants and is similar to dirt, but it will never grow a cover."),
 	tiles = {"mcl_core_coarse_dirt.png"},
@@ -497,7 +497,7 @@ minetest.register_node("mcl_core:coarse_dirt", {
 	_mcl_hardness = 0.5,
 })
 
-minetest.register_node("mcl_core:gravel", {
+core.register_node("mcl_core:gravel", {
 	description = S("Gravel"),
 	_doc_items_longdesc = S("This block consists of a couple of loose stones and can't support itself."),
 	tiles = {"default_gravel.png"},
@@ -533,7 +533,7 @@ minetest.register_node("mcl_core:gravel", {
 })
 
 -- sandstone --
-minetest.register_node("mcl_core:sand", {
+core.register_node("mcl_core:sand", {
 	description = S("Sand"),
 	_doc_items_longdesc = S("Sand is found in large quantities at beaches and deserts."),
 	_doc_items_hidden = false,
@@ -546,7 +546,7 @@ minetest.register_node("mcl_core:sand", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:sandstone"}}
 })
 
-minetest.register_node("mcl_core:sandstone", {
+core.register_node("mcl_core:sandstone", {
 	description = S("Sandstone"),
 	_doc_items_hidden = false,
 	_doc_items_longdesc = S("Sandstone is compressed sand and is a rather soft kind of stone."),
@@ -559,7 +559,7 @@ minetest.register_node("mcl_core:sandstone", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:sandstonesmooth 4"}}
 })
 
-minetest.register_node("mcl_core:sandstonesmooth", {
+core.register_node("mcl_core:sandstonesmooth", {
 	description = S("Cut Sandstone"),
 	_doc_items_longdesc = S("Cut sandstone is a decorative building block."),
 	tiles = {"mcl_core_sandstone_top.png", "mcl_core_sandstone_bottom.png", "mcl_core_sandstone_smooth.png"},
@@ -571,7 +571,7 @@ minetest.register_node("mcl_core:sandstonesmooth", {
 	_mcl_stonecutter_recipes = { "mcl_core:sandstone" },
 })
 
-minetest.register_node("mcl_core:sandstonecarved", {
+core.register_node("mcl_core:sandstonecarved", {
 	description = S("Chiseled Sandstone"),
 	_doc_items_longdesc = S("Chiseled sandstone is a decorative building block."),
 	tiles = {"mcl_core_sandstone_top.png", "mcl_core_sandstone_bottom.png", "mcl_core_sandstone_carved.png"},
@@ -583,7 +583,7 @@ minetest.register_node("mcl_core:sandstonecarved", {
 	_mcl_stonecutter_recipes = { "mcl_core:sandstone" },
 })
 
-minetest.register_node("mcl_core:sandstonesmooth2", {
+core.register_node("mcl_core:sandstonesmooth2", {
 	description = S("Smooth Sandstone"),
 	_doc_items_hidden = false,
 	_doc_items_longdesc = S("Smooth sandstone is compressed sand and is a rather soft kind of stone."),
@@ -598,7 +598,7 @@ minetest.register_node("mcl_core:sandstonesmooth2", {
 
 -- red sandstone --
 
-minetest.register_node("mcl_core:redsand", {
+core.register_node("mcl_core:redsand", {
 	description = S("Red Sand"),
 	_doc_items_longdesc = S("Red sand is found in large quantities in mesa biomes."),
 	tiles = {"mcl_core_red_sand.png"},
@@ -610,7 +610,7 @@ minetest.register_node("mcl_core:redsand", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:redsandstone"}}
 })
 
-minetest.register_node("mcl_core:redsandstone", {
+core.register_node("mcl_core:redsandstone", {
 	description = S("Red Sandstone"),
 	_doc_items_longdesc = S("Red sandstone is compressed red sand and is a rather soft kind of stone."),
 	tiles = {"mcl_core_red_sandstone_top.png", "mcl_core_red_sandstone_bottom.png", "mcl_core_red_sandstone_normal.png"},
@@ -622,7 +622,7 @@ minetest.register_node("mcl_core:redsandstone", {
 	_mcl_crafting_output = {square2 = {output = "mcl_core:redsandstonesmooth 4"}}
 })
 
-minetest.register_node("mcl_core:redsandstonesmooth", {
+core.register_node("mcl_core:redsandstonesmooth", {
 	description = S("Cut Red Sandstone"),
 	_doc_items_longdesc = S("Cut red sandstone is a decorative building block."),
 	tiles = {"mcl_core_red_sandstone_top.png", "mcl_core_red_sandstone_bottom.png", "mcl_core_red_sandstone_smooth.png"},
@@ -634,7 +634,7 @@ minetest.register_node("mcl_core:redsandstonesmooth", {
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
 })
 
-minetest.register_node("mcl_core:redsandstonecarved", {
+core.register_node("mcl_core:redsandstonecarved", {
 	description = S("Chiseled Red Sandstone"),
 	_doc_items_longdesc = S("Chiseled red sandstone is a decorative building block."),
 	tiles = {"mcl_core_red_sandstone_top.png", "mcl_core_red_sandstone_bottom.png", "mcl_core_red_sandstone_carved.png"},
@@ -646,7 +646,7 @@ minetest.register_node("mcl_core:redsandstonecarved", {
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
 })
 
-minetest.register_node("mcl_core:redsandstonesmooth2", {
+core.register_node("mcl_core:redsandstonesmooth2", {
 	description = S("Smooth Red Sandstone"),
 	_doc_items_longdesc = S("Smooth red sandstone is a decorative building block."),
 	tiles = {"mcl_core_red_sandstone_top.png"},
@@ -660,7 +660,7 @@ minetest.register_node("mcl_core:redsandstonesmooth2", {
 
 ---
 
-minetest.register_node("mcl_core:clay", {
+core.register_node("mcl_core:clay", {
 	description = S("Clay"),
 	_doc_items_longdesc = S("Clay is a versatile kind of earth commonly found at beaches underwater."),
 	_doc_items_hidden = false,
@@ -674,7 +674,7 @@ minetest.register_node("mcl_core:clay", {
 	_mcl_cooking_output = "mcl_colorblocks:hardened_clay"
 })
 
-minetest.register_node("mcl_core:brick_block", {
+core.register_node("mcl_core:brick_block", {
 	-- Original name: “Bricks”
 	description = S("Brick Block"),
 	_doc_items_longdesc = S("Brick blocks are a good building material for building solid houses and can take quite a punch."),
@@ -687,7 +687,7 @@ minetest.register_node("mcl_core:brick_block", {
 })
 
 
-minetest.register_node("mcl_core:bedrock", {
+core.register_node("mcl_core:bedrock", {
 	description = S("Bedrock"),
 	_doc_items_longdesc = S("Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode.").."\n"..
 		S("In the End dimension, starting a fire on this block will create an eternal fire."),
@@ -704,21 +704,21 @@ minetest.register_node("mcl_core:bedrock", {
 	-- Eternal fire on top of bedrock, if in the End dimension
 	after_destruct = function(pos)
 		pos.y = pos.y + 1
-		if minetest.get_node(pos).name == "mcl_fire:eternal_fire" then
-			minetest.remove_node(pos)
+		if core.get_node(pos).name == "mcl_fire:eternal_fire" then
+			core.remove_node(pos)
 		end
 	end,
 	_on_ignite = function(player, pointed_thing)
 		local pos = pointed_thing.under
 		local dim = mcl_worlds.pos_to_dimension(pos)
 		local flame_pos = {x = pos.x, y = pos.y + 1, z = pos.z}
-		local fn = minetest.get_node(flame_pos)
+		local fn = core.get_node(flame_pos)
 		local pname = player:get_player_name()
-		if minetest.is_protected(flame_pos, pname) then
-			return minetest.record_protection_violation(flame_pos, pname)
+		if core.is_protected(flame_pos, pname) then
+			return core.record_protection_violation(flame_pos, pname)
 		end
 		if dim == "end" and fn.name == "air" and pointed_thing.under.y < pointed_thing.above.y then
-			minetest.set_node(flame_pos, {name = "mcl_fire:eternal_fire"})
+			core.set_node(flame_pos, {name = "mcl_fire:eternal_fire"})
 			return true
 		else
 			return false
@@ -726,7 +726,7 @@ minetest.register_node("mcl_core:bedrock", {
 	end,
 })
 
-minetest.register_node("mcl_core:cobble", {
+core.register_node("mcl_core:cobble", {
 	description = S("Cobblestone"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	_doc_items_hidden = false,
@@ -739,7 +739,7 @@ minetest.register_node("mcl_core:cobble", {
 	_mcl_cooking_output = "mcl_core:stone"
 })
 
-minetest.register_node("mcl_core:mossycobble", {
+core.register_node("mcl_core:mossycobble", {
 	description = S("Mossy Cobblestone"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	tiles = {"default_mossycobble.png"},
@@ -750,7 +750,7 @@ minetest.register_node("mcl_core:mossycobble", {
 	_mcl_hardness = 2,
 })
 
-minetest.register_node("mcl_core:coalblock", {
+core.register_node("mcl_core:coalblock", {
 	description = S("Block of Coal"),
 	_doc_items_longdesc = S("Blocks of coal are useful as a compact storage of coal and very useful as a furnace fuel. A block of coal is as efficient as 10 coal."),
 	tiles = {"default_coal_block.png"},
@@ -763,7 +763,7 @@ minetest.register_node("mcl_core:coalblock", {
 	_mcl_crafting_output = {single = {output = "mcl_core:coal_lump 9"}}
 })
 
-minetest.register_node("mcl_core:ironblock", {
+core.register_node("mcl_core:ironblock", {
 	description = S("Block of Iron"),
 	_doc_items_longdesc = S("A block of iron is mostly a decorative block but also useful as a compact storage of iron ingots."),
 	tiles = {"default_steel_block.png"},
@@ -775,7 +775,7 @@ minetest.register_node("mcl_core:ironblock", {
 	_mcl_crafting_output = {single = {output = "mcl_core:iron_ingot 9"}}
 })
 
-minetest.register_node("mcl_core:goldblock", {
+core.register_node("mcl_core:goldblock", {
 	description = S("Block of Gold"),
 	_doc_items_longdesc = S("A block of gold is mostly a shiny decorative block but also useful as a compact storage of gold ingots."),
 	tiles = {"default_gold_block.png"},
@@ -787,7 +787,7 @@ minetest.register_node("mcl_core:goldblock", {
 	_mcl_crafting_output = {single = {output = "mcl_core:gold_ingot 9"}}
 })
 
-minetest.register_node("mcl_core:diamondblock", {
+core.register_node("mcl_core:diamondblock", {
 	description = S("Block of Diamond"),
 	_doc_items_longdesc = S("A block of diamond is mostly a shiny decorative block but also useful as a compact storage of diamonds."),
 	tiles = {"default_diamond_block.png"},
@@ -799,7 +799,7 @@ minetest.register_node("mcl_core:diamondblock", {
 	_mcl_crafting_output = {single = {output = "mcl_core:diamond 9"}}
 })
 
-minetest.register_node("mcl_core:lapisblock", {
+core.register_node("mcl_core:lapisblock", {
 	description = S("Block of Lapis Lazuli"),
 	_doc_items_longdesc = S("A lapis lazuli block is mostly a decorative block but also useful as a compact storage of lapis lazuli."),
 	tiles = {"mcl_core_lapis_block.png"},
@@ -811,7 +811,7 @@ minetest.register_node("mcl_core:lapisblock", {
 	_mcl_crafting_output = {single = {output = "mcl_core:lapis 9"}}
 })
 
-minetest.register_node("mcl_core:emeraldblock", {
+core.register_node("mcl_core:emeraldblock", {
 	description = S("Block of Emerald"),
 	_doc_items_longdesc = S("A block of emerald is mostly a shiny decorative block but also useful as a compact storage of emeralds."),
 	tiles = {"mcl_core_emerald_block.png"},
@@ -823,7 +823,7 @@ minetest.register_node("mcl_core:emeraldblock", {
 	_mcl_crafting_output = {single = {output = "mcl_core:emerald 9"}}
 })
 
-minetest.register_node("mcl_core:obsidian", {
+core.register_node("mcl_core:obsidian", {
 	description = S("Obsidian"),
 	_doc_items_longdesc = S("Obsidian is an extremely hard mineral with an enourmous blast-resistance. Obsidian is formed when water meets lava."),
 	tiles = {"default_obsidian.png"},
@@ -839,7 +839,7 @@ minetest.register_node("mcl_core:obsidian", {
 	end,
 })
 
-minetest.register_node("mcl_core:crying_obsidian", {
+core.register_node("mcl_core:crying_obsidian", {
 	description = S("Crying Obsidian"),
 	_doc_items_longdesc = S("Crying obsidian is a luminous obsidian that can generate as part of ruined portals."),
 	tiles = {"default_obsidian.png^mcl_core_crying_obsidian.png"},
@@ -851,7 +851,7 @@ minetest.register_node("mcl_core:crying_obsidian", {
 	_mcl_hardness = 50,
 })
 
-minetest.register_node("mcl_core:ice", {
+core.register_node("mcl_core:ice", {
 	description = S("Ice"),
 	_doc_items_longdesc = S("Ice is a solid block usually found in cold areas. It melts near block light sources at a light level of 12 or higher. When it melts or is broken while resting on top of another block, it will turn into a water source."),
 	drawtype = ice_drawtype,
@@ -871,7 +871,7 @@ minetest.register_node("mcl_core:ice", {
 	_mcl_crafting_output = {square3 = {output = "mcl_core:packed_ice"}}
 })
 
-minetest.register_node("mcl_core:packed_ice", {
+core.register_node("mcl_core:packed_ice", {
 	description = S("Packed Ice"),
 	_doc_items_longdesc = S("Packed ice is a compressed form of ice. It is opaque and solid."),
 	tiles = {"mcl_core_ice_packed.png"},
@@ -888,17 +888,17 @@ for i=0,3 do
 	local ice = {}
 	function ice.increase_age(pos, ice_near, first_melt)
 		-- Increase age of frosted age or turn to water source if too old
-		local nn = minetest.get_node(pos).name
+		local nn = core.get_node(pos).name
 		local age = tonumber(string.sub(nn, -1))
 		local dim = mcl_worlds.pos_to_dimension(pos)
 		if age == nil then return end
 		if age < 3 then
-			minetest.swap_node(pos, { name = "mcl_core:frosted_ice_"..(age+1) })
+			core.swap_node(pos, { name = "mcl_core:frosted_ice_"..(age+1) })
 		else
 			if dim ~= "nether" then
-				minetest.set_node(pos, { name = "mcl_core:water_source" })
+				core.set_node(pos, { name = "mcl_core:water_source" })
 			else
-				minetest.remove_node(pos)
+				core.remove_node(pos)
 			end
 		end
 		-- Spread aging to neighbor blocks, but not recursively
@@ -913,7 +913,7 @@ for i=0,3 do
 	if use_doc then
 		longdesc = S("Frosted ice is a short-lived solid block. It melts into a water source within a few seconds.")
 	end
-	minetest.register_node("mcl_core:frosted_ice_"..i, {
+	core.register_node("mcl_core:frosted_ice_"..i, {
 		description = S("Frosted Ice"),
 		_doc_items_create_entry = use_doc,
 		_doc_items_longdesc = longdesc,
@@ -926,20 +926,20 @@ for i=0,3 do
 		drop = "",
 		sounds = mcl_sounds.node_sound_ice_defaults(),
 		on_construct = function(pos)
-			local timer = minetest.get_node_timer(pos)
+			local timer = core.get_node_timer(pos)
 			timer:start(1.5)
 		end,
 		on_timer = function(pos)
-			local ice_near = minetest.find_nodes_in_area(
+			local ice_near = core.find_nodes_in_area(
 				{ x = pos.x - 1, y = pos.y - 1, z = pos.z - 1 },
 				{ x = pos.x + 1, y = pos.y + 1, z = pos.z + 1 },
 				{ "group:frosted_ice" }
 			)
 			-- Check condition to increase age
-			if (#ice_near < 4 and minetest.get_node_light(pos) > (11 - i)) or math.random(1, 3) == 1 then
+			if (#ice_near < 4 and core.get_node_light(pos) > (11 - i)) or math.random(1, 3) == 1 then
 				ice.increase_age(pos, ice_near, true)
 			end
-			local timer = minetest.get_node_timer(pos)
+			local timer = core.get_node_timer(pos)
 			timer:start(1.5)
 		end,
 		_mcl_blast_resistance = 0.5,
@@ -947,7 +947,7 @@ for i=0,3 do
 	})
 
 	-- Add entry aliases for the Help
-	if minetest.get_modpath("doc") and i > 0 then
+	if core.get_modpath("doc") and i > 0 then
 		doc.add_entry_alias("nodes", "mcl_core:frosted_ice_0", "nodes", "mcl_core:frosted_ice_"..i)
 	end
 end
@@ -958,7 +958,7 @@ local function on_place(itemstack, placer, pointed_thing)
 		-- no interaction possible with entities
 		return itemstack
 	end
-	local def = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
+	local def = core.registered_nodes[core.get_node(pointed_thing.under).name]
 	local above = pointed_thing.above
 	local under = pointed_thing.under
 
@@ -972,15 +972,15 @@ local function on_place(itemstack, placer, pointed_thing)
 	else
 		target = above
 	end
-	local tnode = minetest.get_node(target)
+	local tnode = core.get_node(target)
 
 	-- Stack snow
-	local g = minetest.get_item_group(tnode.name, "top_snow")
+	local g = core.get_item_group(tnode.name, "top_snow")
 	if g == 8 then
 		local p = vector.offset(target, 0,1,0)
-		if minetest.get_node(p).name == "air" then
-			minetest.set_node(p, {name="mcl_core:snow"})
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+		if core.get_node(p).name == "air" then
+			core.set_node(p, {name="mcl_core:snow"})
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
@@ -990,19 +990,19 @@ local function on_place(itemstack, placer, pointed_thing)
 		local itemcount = itemstack:get_count()
 		local fakestack = ItemStack(itemstring.." "..itemcount)
 		fakestack:set_name("mcl_core:snow_"..(g+1))
-		itemstack = minetest.item_place_node(fakestack, placer, pointed_thing)
-		minetest.sound_play(mcl_sounds.node_sound_snow_defaults().place, {pos = pointed_thing.under}, true)
+		itemstack = core.item_place_node(fakestack, placer, pointed_thing)
+		core.sound_play(mcl_sounds.node_sound_snow_defaults().place, {pos = pointed_thing.under}, true)
 		itemstack:set_name(itemstring)
 		return itemstack
 	end
 
 	-- Place snow normally
 	local below = {x=target.x, y=target.y-1, z=target.z}
-	local bnode = minetest.get_node(below)
+	local bnode = core.get_node(below)
 
-	if minetest.get_item_group(bnode.name, "solid") == 1 then
-		minetest.sound_play(mcl_sounds.node_sound_snow_defaults().place, {pos = below}, true)
-		return minetest.item_place_node(itemstack, placer, pointed_thing)
+	if core.get_item_group(bnode.name, "solid") == 1 then
+		core.sound_play(mcl_sounds.node_sound_snow_defaults().place, {pos = below}, true)
+		return core.item_place_node(itemstack, placer, pointed_thing)
 	else
 		return itemstack
 	end
@@ -1020,7 +1020,7 @@ for i=1,8 do
 	else
 		id = "mcl_core:snow_"..i
 		help = false
-		if minetest.get_modpath("doc") then
+		if core.get_modpath("doc") then
 			doc.add_entry_alias("nodes", "mcl_core:snow", "nodes", id)
 		end
 		walkable = true
@@ -1033,7 +1033,7 @@ for i=1,8 do
 		}
 	end
 
-	minetest.register_node(id, {
+	core.register_node(id, {
 		description = desc,
 		_tt_help = tt_help,
 		_doc_items_longdesc = longdesc,
@@ -1052,7 +1052,7 @@ for i=1,8 do
 		floodable = true,
 		on_flood = function(pos)
 			local npos = {x=pos.x, y=pos.y-1, z=pos.z}
-			local node = minetest.get_node(npos)
+			local node = core.get_node(npos)
 			mcl_core.clear_snow_dirt(npos, node)
 		end,
 		node_box = node_box,
@@ -1068,7 +1068,7 @@ for i=1,8 do
 	})
 end
 
-minetest.register_node("mcl_core:snowblock", {
+core.register_node("mcl_core:snowblock", {
 	description = S("Snow"),
 	_doc_items_longdesc = S("This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."),
 	_doc_items_hidden = false,
@@ -1084,7 +1084,7 @@ minetest.register_node("mcl_core:snowblock", {
 })
 
 -- Add entry aliases for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_core:stone_with_redstone", "nodes", "mcl_core:stone_with_redstone_lit")
 	doc.add_entry_alias("nodes", "mcl_core:water_source", "nodes", "mcl_core:water_flowing")
 	doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_core:lava_flowing")

@@ -1,7 +1,7 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local mod_mcl_core = minetest.get_modpath("mcl_core")
-local mod_mclx_core = minetest.get_modpath("mclx_core")
-local has_awards = minetest.get_modpath("awards")
+local S = core.get_translator(core.get_current_modname())
+local mod_mcl_core = core.get_modpath("mcl_core")
+local mod_mclx_core = core.get_modpath("mclx_core")
+local has_awards = core.get_modpath("awards")
 
 if mod_mcl_core then
 	-- Lava bucket
@@ -45,7 +45,7 @@ if mod_mcl_core then
 		extra_check = function(pos, _)
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				return false, true
 			end
 		end,
@@ -69,7 +69,7 @@ if mod_mclx_core then
 			-- Evaporate water if used in Nether
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				return false, true
 			end
 		end,

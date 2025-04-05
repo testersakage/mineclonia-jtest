@@ -60,7 +60,7 @@ if mcl_hunger.active then
 	end
 
 	function mcl_hunger.exhaust(playername, increase)
-		local player = minetest.get_player_by_name(playername)
+		local player = core.get_player_by_name(playername)
 		if not player or mcl_vars.difficulty == 0 then return false end
 		mcl_hunger.set_exhaustion(player, mcl_hunger.get_exhaustion(player) + increase)
 		if mcl_hunger.get_exhaustion(player) >= mcl_hunger.EXHAUST_LVL then
@@ -87,7 +87,7 @@ if mcl_hunger.active then
 	end
 
 	function mcl_hunger.saturate(playername, increase, update_hudbar)
-		local player = minetest.get_player_by_name(playername)
+		local player = core.get_player_by_name(playername)
 		local ok = mcl_hunger.set_saturation(player,
 			math.min(mcl_hunger.get_saturation(player) + increase, mcl_hunger.get_hunger(player)))
 		if update_hudbar ~= false then

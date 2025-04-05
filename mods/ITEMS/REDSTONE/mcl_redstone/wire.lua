@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local nodebox_wire = {
 	{-1/16, -.5, -8/16, 1/16, -.5+1/64, -1/16}, -- z negative
@@ -86,7 +86,7 @@ local function update_wire(pos)
 		{ dir = vector.new(1, 0, 0), mask = 0x8 },
 	}
 
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	local present = wireflag_tab[node.name] ~= nil
 	local wireflags = 0
 
@@ -95,9 +95,9 @@ local function update_wire(pos)
 		local obstruct = (wire.y < 0 and wire:multiply(vector.new(1, 0, 1))) or
 			(wire.y > 0 and wire:multiply(vector.new(0, 1, 0))) or
 			nil
-		if not obstruct or not opaque_tab[minetest.get_node(pos:add(obstruct)).name] then
+		if not obstruct or not opaque_tab[core.get_node(pos:add(obstruct)).name] then
 			local pos2 = pos:add(wire)
-			local node2 = minetest.get_node(pos2)
+			local node2 = core.get_node(pos2)
 
 			if wireflag_tab[node2.name] then
 				wireflags = bit.bor(wireflags, entry.mask)
@@ -106,8 +106,8 @@ local function update_wire(pos)
 	end
 	for _, entry in pairs(fourdir_tab) do
 		local pos2 = pos:add(entry.dir)
-		local node2 = minetest.get_node(pos2)
-		local ndef2 = minetest.registered_nodes[node2.name]
+		local node2 = core.get_node(pos2)
+		local ndef2 = core.registered_nodes[node2.name]
 		if ndef2 then
 			local redstone = ndef2._mcl_redstone
 			local connects_to = redstone and redstone.connects_to
@@ -119,7 +119,7 @@ local function update_wire(pos)
 	end
 
 	if present then
-		minetest.swap_node(pos, {
+		core.swap_node(pos, {
 			name = wireflags_to_name(make_legal(wireflags)),
 			param2 = node.param2,
 		})
@@ -136,7 +136,7 @@ function mcl_redstone._update_opaque_connections(pos)
 	}
 	for _, dir in pairs(dirs) do
 		local pos2 = pos:add(dir)
-		if wireflag_tab[minetest.get_node(pos2).name] then
+		if wireflag_tab[core.get_node(pos2).name] then
 			update_wire(pos2)
 		end
 	end
@@ -160,7 +160,7 @@ local function update_wire_connections(pos)
 	}
 	for _, dir in pairs(dirs) do
 		local pos2 = pos:add(dir)
-		if wireflag_tab[minetest.get_node(pos2).name] then
+		if wireflag_tab[core.get_node(pos2).name] then
 			update_wire(pos2)
 		end
 	end
@@ -224,23 +224,23 @@ do
 		local on_rightclick
 		if wire == 0 then
 			on_rightclick = function(pos)
-				minetest.swap_node(pos, {
+				core.swap_node(pos, {
 					name = "mcl_redstone:wire_0f",
-					param2 = minetest.get_node(pos).param2,
+					param2 = core.get_node(pos).param2,
 				})
 			end
 		elseif bit.band(wire, 0xf) == 0xf then
 			on_rightclick = function(pos)
-				minetest.swap_node(pos, {
+				core.swap_node(pos, {
 					name = "mcl_redstone:redstone",
-					param2 = minetest.get_node(pos).param2,
+					param2 = core.get_node(pos).param2,
 				})
 				update_wire_connections(pos)
 			end
 		end
 
 		local name = wireflags_to_name(wire)
-		minetest.register_node(name, {
+		core.register_node(name, {
 			drawtype = "nodebox",
 			connects_to = {"group:solid"},
 			paramtype = "light",
@@ -285,8 +285,8 @@ local fourdirs = {
 function mcl_redstone._connect_with_wires(pos)
 	for _, dir in pairs(fourdirs) do
 		local pos2 = pos:add(dir)
-		local node = minetest.get_node(pos2)
-		if minetest.get_item_group(node.name, "redstone_wire") ~= 0 then
+		local node = core.get_node(pos2)
+		if core.get_item_group(node.name, "redstone_wire") ~= 0 then
 			update_wire(pos2)
 		end
 	end

@@ -73,7 +73,7 @@ local oban_layers = {
 mcl_raids.ominous_banner_name = S("Ominous Banner")
 mcl_raids.ominous_banner_layers = oban_layers
 
-local oban_def = table.copy(minetest.registered_entities["mcl_banners:standing_banner"])
+local oban_def = table.copy(core.registered_entities["mcl_banners:standing_banner"])
 oban_def.initial_properties.visual_size = { x=1, y=1 }
 local old_step = oban_def.on_step
 oban_def.on_step = function(self)
@@ -81,13 +81,13 @@ oban_def.on_step = function(self)
 	if old_step then return old_step(self.dtime) end
 end
 
-minetest.register_entity(":mcl_raids:ominous_banner",oban_def)
+core.register_entity(":mcl_raids:ominous_banner",oban_def)
 
 function mcl_raids.drop_obanner(pos)
 	local it = ItemStack("mcl_banners:banner_item_white")
 	mcl_banners.write_layers(it:get_meta(), oban_layers)
 	tt.reload_itemstack_description(it)
-	minetest.add_item(pos,it)
+	core.add_item(pos,it)
 end
 
 function mcl_raids.is_banner_item (stack, layers)
@@ -124,8 +124,8 @@ function mcl_raids.find_surface_position (node_pos)
 		local lim
 			= math.max (mcl_vars.mg_overworld_min, node_pos.y - 512)
 		while v.y >= lim do
-			local node = minetest.get_node (v)
-			local def = minetest.registered_nodes[node.name]
+			local node = core.get_node (v)
+			local def = core.registered_nodes[node.name]
 			if node.name ~= "ignore"
 				and (def.groups.liquid or def.walkable) then
 				break
@@ -153,19 +153,19 @@ local pr = PcgRandom (os.time () + 970)
 local r = 1 / 2147483647
 
 local function is_opaque (node)
-	return minetest.get_item_group (node.name, "opaque") > 0
+	return core.get_item_group (node.name, "opaque") > 0
 end
 
 local function is_clear (node)
-	return minetest.get_item_group (node.name, "liquid") == 0
-		and not minetest.registered_nodes[node.name].walkable
+	return core.get_item_group (node.name, "liquid") == 0
+		and not core.registered_nodes[node.name].walkable
 end
 
 local function is_opaque_or_snow (node)
 	if is_opaque (node) then
 		return true
 	end
-	local snow = minetest.get_item_group (node.name, "top_snow")
+	local snow = core.get_item_group (node.name, "top_snow")
 	return snow > 0 and snow <= 4
 end
 
@@ -190,9 +190,9 @@ function mcl_raids.do_spawn_pos_phase (phaseno, center, attempts)
 		if attempts == 2
 			or mcl_villages.get_poi_heat (surface) < 4 then
 			-- Is this surface walkable and loaded...
-			local node = minetest.get_node (surface)
-			local node_above = minetest.get_node (above)
-			local node_below = minetest.get_node (below)
+			local node = core.get_node (surface)
+			local node_above = core.get_node (above)
+			local node_below = core.get_node (below)
 			if node.name ~= "ignore"
 				and node_above.name ~= "ignore"
 				and node_below.name ~= "ignore"
@@ -223,8 +223,8 @@ function mcl_raids.spawn_raid(event)
 	mcl_bells.ring_once (pos)
 	local spawn_pos = mcl_raids.select_spawn_position (event.pos)
 	if spawn_pos then
-		minetest.log("action", "[mcl_raids] Raid Spawn Position selected at "
-			     .. minetest.pos_to_string (spawn_pos) .. ".")
+		core.log("action", "[mcl_raids] Raid Spawn Position selected at "
+			     .. core.pos_to_string (spawn_pos) .. ".")
 		event.health_max = 0
 		local w
 		if event.stage <= #waves then
@@ -239,7 +239,7 @@ function mcl_raids.spawn_raid(event)
 				local datatable = {
 					_raid_spawn = 1,
 				}
-				local staticdata = minetest.serialize (datatable)
+				local staticdata = core.serialize (datatable)
 				local mob = mcl_mobs.spawn (p, m, staticdata)
 				if mob then
 					local l = mob:get_luaentity()
@@ -261,17 +261,17 @@ function mcl_raids.spawn_raid(event)
 			end
 		end
 		event._raidcaptain = captain
-		minetest.log("action", "[mcl_raids] Raid Spawned. "
+		core.log("action", "[mcl_raids] Raid Spawned. "
 			     .. "Illager Count: " .. #event.mobs .. ".")
 		return #event.mobs == 0
 	else
-		minetest.log("action", "[mcl_raids] Raid Spawn Postion not chosen.")
+		core.log("action", "[mcl_raids] Raid Spawn Postion not chosen.")
 	end
 	return true
 end
 
 function mcl_raids.find_villager(pos)
-	for objects in minetest.objects_inside_radius(pos, 8) do
+	for objects in core.objects_inside_radius(pos, 8) do
 		local object = objects:get_luaentity()
 		if object and object.name == "mobs_mc:villager" then
 			return true
@@ -280,7 +280,7 @@ function mcl_raids.find_villager(pos)
 end
 
 function mcl_raids.find_bed(pos)
-	return minetest.find_node_near(pos,32,{"group:bed"})
+	return core.find_node_near(pos,32,{"group:bed"})
 end
 
 function mcl_raids.find_village(pos)
@@ -313,7 +313,7 @@ local function check_mobs(self)
 		end
 	end
 	if #m == 0 then --if no valid mobs in table search if there are any (reloaded ones) in the area
-		for o in minetest.objects_inside_radius(self.pos, 128) do
+		for o in core.objects_inside_radius(self.pos, 128) do
 			local l = o:get_luaentity()
 			if l and l.raidmob then
 				local l = o:get_luaentity()
@@ -353,7 +353,7 @@ mcl_events.register_event("raid",{
 		self.mobs = {}
 		self.health_max = 1
 		self.health = 0
-		local lv = mcl_potions.get_effect_level(minetest.get_player_by_name(self.player), "bad_omen")
+		local lv = mcl_potions.get_effect_level(core.get_player_by_name(self.player), "bad_omen")
 		if lv and lv > 1 then self.max_stage = 6 end
 	end,
 	cond_progress = function(self)
@@ -373,7 +373,7 @@ mcl_events.register_event("raid",{
 		return self.stage >= self.max_stage and #self.mobs < 1
 	end,
 	on_complete = function(self)
-	    local player = minetest.get_player_by_name (self.player)
+	    local player = core.get_player_by_name (self.player)
 	    awards.unlock (self.player,"mcl:hero_of_the_village")
 
 	    if player then
@@ -383,16 +383,16 @@ mcl_events.register_event("raid",{
 	end,
 })
 
-minetest.register_chatcommand("dump_banner_layers",{
+core.register_chatcommand("dump_banner_layers",{
 	privs = {debug = true},
 	func = function(pname)
-		local p = minetest.get_player_by_name(pname)
+		local p = core.get_player_by_name(pname)
 		mcl_raids.drop_obanner(vector.offset(p:get_pos(),1,1,1))
-		for v in minetest.objects_inside_radius(p:get_pos(), 5) do
+		for v in core.objects_inside_radius(p:get_pos(), 5) do
 			local l = v:get_luaentity()
 			if l and l.name == "mcl_banners:standing_banner" then
-				minetest.log(dump(l._base_color))
-				minetest.log(dump(l._layers))
+				core.log(dump(l._base_color))
+				core.log(dump(l._layers))
 			end
 		end
 	end

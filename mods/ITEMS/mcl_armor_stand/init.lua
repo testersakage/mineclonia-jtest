@@ -1,17 +1,17 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Spawn a stand entity
 local function spawn_stand_entity(pos, node)
-	local luaentity = minetest.add_entity(pos, "mcl_armor_stand:armor_entity"):get_luaentity()
+	local luaentity = core.add_entity(pos, "mcl_armor_stand:armor_entity"):get_luaentity()
 	if luaentity then
-		luaentity:update_rotation(node or minetest.get_node(pos))
+		luaentity:update_rotation(node or core.get_node(pos))
 		return luaentity
 	end
 end
 
 -- Find a stand entity or spawn one
 local function get_stand_entity(pos, node)
-	for obj in minetest.objects_inside_radius(pos, 0) do
+	for obj in core.objects_inside_radius(pos, 0) do
 		local luaentity = obj:get_luaentity()
 		if luaentity and luaentity.name == "mcl_armor_stand:armor_entity" then
 			return luaentity
@@ -36,17 +36,17 @@ end
 
 -- Drop all armor on the ground when it got destroyed
 local function drop_inventory(pos)
-	local inv = minetest.get_meta(pos):get_inventory()
+	local inv = core.get_meta(pos):get_inventory()
 	for _, stack in pairs(inv:get_list("armor")) do
 		if not stack:is_empty() then
 			local p = {x=pos.x+math.random(0, 10)/10-0.5, y=pos.y, z=pos.z+math.random(0, 10)/10-0.5}
-			minetest.add_item(p, stack)
+			core.add_item(p, stack)
 		end
 	end
 end
 
 -- TODO: The armor stand should be an entity
-minetest.register_node("mcl_armor_stand:armor_stand", {
+core.register_node("mcl_armor_stand:armor_stand", {
 	description = S("Armor Stand"),
 	_tt_help = S("Displays pieces of armor"),
 	_doc_items_longdesc = S("An armor stand is a decorative object which can display different pieces of armor. Anything which players can wear as armor can also be put on an armor stand."),
@@ -78,8 +78,8 @@ minetest.register_node("mcl_armor_stand:armor_stand", {
 	on_rightclick = function(pos, node, clicker, itemstack, _)
 		local protname = clicker:get_player_name()
 
-		if minetest.is_protected(pos, protname) then
-			minetest.record_protection_violation(pos, protname)
+		if core.is_protected(pos, protname) then
+			core.record_protection_violation(pos, protname)
 			return itemstack
 		end
 
@@ -88,7 +88,7 @@ minetest.register_node("mcl_armor_stand:armor_stand", {
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
 			node.param2 = (node.param2 + 1) % 4
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			get_stand_entity(pos, node):update_rotation(node)
 			return true
 		end
@@ -96,7 +96,7 @@ minetest.register_node("mcl_armor_stand:armor_stand", {
 	end,
 })
 
-minetest.register_entity("mcl_armor_stand:armor_entity", {
+core.register_entity("mcl_armor_stand:armor_entity", {
 	initial_properties = {
 		physical = true,
 		visual = "mesh",
@@ -114,12 +114,12 @@ minetest.register_entity("mcl_armor_stand:armor_entity", {
 	on_activate = function(self)
 		self.object:set_armor_groups({immortal = 1})
 		self.node_pos = vector.round(self.object:get_pos())
-		self.inventory = minetest.get_meta(self.node_pos):get_inventory()
+		self.inventory = core.get_meta(self.node_pos):get_inventory()
 		migrate_inventory(self.inventory)
 		mcl_armor.update(self.object)
 	end,
 	on_step = function(self)
-		if minetest.get_node(self.node_pos).name ~= "mcl_armor_stand:armor_stand" then
+		if core.get_node(self.node_pos).name ~= "mcl_armor_stand:armor_stand" then
 			self.object:remove()
 		end
 	end,
@@ -127,11 +127,11 @@ minetest.register_entity("mcl_armor_stand:armor_entity", {
 		self.object:set_properties({textures = {info.texture}})
 	end,
 	update_rotation = function(self, node)
-		self.object:set_yaw(minetest.dir_to_yaw(minetest.facedir_to_dir(node.param2)))
+		self.object:set_yaw(core.dir_to_yaw(core.facedir_to_dir(node.param2)))
 	end,
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Respawn armor stand entities",
 	name = "mcl_armor_stand:respawn_entities",
 	nodenames = {"mcl_armor_stand:armor_stand"},
@@ -141,7 +141,7 @@ minetest.register_lbm({
 	end,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_armor_stand:armor_stand",
 	recipe = {
 		{"mcl_core:stick", "mcl_core:stick", "mcl_core:stick"},
@@ -151,10 +151,10 @@ minetest.register_craft({
 })
 
 -- Legacy handling
-minetest.register_alias("3d_armor_stand:armor_stand", "mcl_armor_stand:armor_stand")
-minetest.register_entity(":3d_armor_stand:armor_entity", {
+core.register_alias("3d_armor_stand:armor_stand", "mcl_armor_stand:armor_stand")
+core.register_entity(":3d_armor_stand:armor_entity", {
 	on_activate = function(self)
-		minetest.log("action", "[mcl_armor_stand] Removing legacy entity: 3d_armor_stand:armor_entity")
+		core.log("action", "[mcl_armor_stand] Removing legacy entity: 3d_armor_stand:armor_entity")
 		self.object:remove()
 	end,
 	static_save = false,

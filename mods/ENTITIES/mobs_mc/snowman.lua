@@ -3,10 +3,10 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local snow_trail_frequency = 0.5 -- Time in seconds between depositions of snow trails
 local mob_class = mcl_mobs.mob_class
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
+local mobs_griefing = core.settings:get_bool("mobs_griefing") ~= false
 
 local sheared_textures = {
 	"mobs_mc_snowman.png",
@@ -76,21 +76,21 @@ local snow_golem = {
 function snow_golem:on_rightclick (clicker)
 	local item = clicker:get_wielded_item()
 	local item_name = item:get_name()
-	if self.gotten ~= true and minetest.get_item_group(item_name, "shears") > 0 then
+	if self.gotten ~= true and core.get_item_group(item_name, "shears") > 0 then
 		-- Remove pumpkin
 		self.gotten = true
 		self.base_texture = sheared_textures
 		self:set_textures (sheared_textures)
 
 		local pos = self.object:get_pos()
-		minetest.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
 
-		if minetest.registered_items["mcl_farming:pumpkin_face"] then
-			minetest.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_farming:pumpkin_face")
+		if core.registered_items["mcl_farming:pumpkin_face"] then
+			core.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_farming:pumpkin_face")
 		end
 
 		-- Wear out
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			local wear = mcl_autogroup.get_wear(item:get_name(), "shearsy")
 			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
@@ -99,7 +99,7 @@ function snow_golem:on_rightclick (clicker)
 end
 
 function snow_golem:_on_dispense (dropitem, pos, droppos, dropnode, dropdir)
-	if minetest.get_item_group(dropitem:get_name(), "shears") > 0 then
+	if core.get_item_group(dropitem:get_name(), "shears") > 0 then
 		if not self.gotten then
 			dropitem = self:use_shears ({
 				"mobs_mc_snowman.png",
@@ -123,9 +123,9 @@ function snow_golem:ai_step (dtime)
 	-- Is this biome inhospitable?
 	if self:check_timer ("biome_damage", 0.5) then
 		local self_pos = self.object:get_pos ()
-		local biome = minetest.get_biome_data (self_pos)
-		local name = biome and minetest.get_biome_name (biome.biome)
-		local def = name and minetest.registered_biomes[name]
+		local biome = core.get_biome_data (self_pos)
+		local name = biome and core.get_biome_name (biome.biome)
+		local def = name and core.registered_biomes[name]
 
 		if def and def._mcl_biome_type == "hot" then
 			self:damage_mob ("on_fire", 1.0)
@@ -145,16 +145,16 @@ function snow_golem:ai_step (dtime)
 		self._snowtimer = 0
 		local pos = self.object:get_pos ()
 		local below = {x=pos.x, y=pos.y-1, z=pos.z}
-		local def = minetest.registered_nodes[minetest.get_node(pos).name]
+		local def = core.registered_nodes[core.get_node(pos).name]
 		-- Node at snow golem's position must be replacable
 		if def and def.buildable_to and def.liquidtype == "none" then
 			-- Node below must be walkable
 			-- and a full cube (this prevents oddities like top snow on top snow, lower slabs, etc.)
-			local belowdef = minetest.registered_nodes[minetest.get_node(below).name]
+			local belowdef = core.registered_nodes[core.get_node(below).name]
 			if belowdef and belowdef.walkable
 				and (belowdef.node_box == nil or belowdef.node_box.type == "regular") then
 				-- Place top snow
-				minetest.set_node(pos, {name = "mcl_core:snow"})
+				core.set_node(pos, {name = "mcl_core:snow"})
 			end
 		end
 	end
@@ -175,7 +175,7 @@ local summon_particles = function(obj)
 	local min = {x=cb[1], y=cb[2], z=cb[3]}
 	local max = {x=cb[4], y=cb[5], z=cb[6]}
 	local pos = obj:get_pos()
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 60,
 		time = 0.1,
 		minpos = vector.add(pos, min),
@@ -209,17 +209,17 @@ function mobs_mc.check_snow_golem_summon(pos, player)
 		local b1 = checks[c][1]
 		local b2 = checks[c][2]
 		local place = checks[c][3]
-		local b1n = minetest.get_node(b1)
-		local b2n = minetest.get_node(b2)
+		local b1n = core.get_node(b1)
+		local b2n = core.get_node(b2)
 		if b1n.name == "mcl_core:snowblock" and b2n.name == "mcl_core:snowblock" then
 			-- Remove the pumpkin and both snow blocks and summon the snow golem
-			minetest.remove_node(pos)
-			minetest.remove_node(b1)
-			minetest.remove_node(b2)
-			minetest.check_for_falling(pos)
-			minetest.check_for_falling(b1)
-			minetest.check_for_falling(b2)
-			local obj = minetest.add_entity(place, "mobs_mc:snowman")
+			core.remove_node(pos)
+			core.remove_node(b1)
+			core.remove_node(b2)
+			core.check_for_falling(pos)
+			core.check_for_falling(b1)
+			core.check_for_falling(b2)
+			local obj = core.add_entity(place, "mobs_mc:snowman")
 			if obj then
 				summon_particles(obj)
 				local l = obj:get_luaentity()

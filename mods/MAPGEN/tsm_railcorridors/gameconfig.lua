@@ -16,7 +16,7 @@ tsm_railcorridors.nodes = {
 
 -- This generates dark oak wood in mesa biomes and oak wood everywhere else.
 function tsm_railcorridors.nodes.corridor_woods_function(_, node)
-	if minetest.get_item_group(node.name, "hardened_clay") ~= 0 then
+	if core.get_item_group(node.name, "hardened_clay") ~= 0 then
 		return "mcl_trees:wood_dark_oak", "mcl_fences:dark_oak_fence"
 	else
 		return "mcl_trees:wood_oak", "mcl_fences:oak_fence"

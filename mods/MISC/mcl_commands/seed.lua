@@ -1,10 +1,10 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_chatcommand("seed", {
+core.register_chatcommand("seed", {
 	description = S("Displays the world seed"),
 	params = "",
 	privs = {},
 	func = function(name)
-		minetest.chat_send_player(name, "Seed: ["..minetest.colorize(mcl_colors.GREEN, ""..minetest.get_mapgen_setting("seed")).."]")
+		core.chat_send_player(name, "Seed: ["..core.colorize(mcl_colors.GREEN, ""..core.get_mapgen_setting("seed")).."]")
 	end
 })

@@ -4,7 +4,7 @@ local waxed = { "", "_preserved" }
 
 for _, x in ipairs(block_exposure_level) do
 	for _, w in ipairs(waxed) do
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_copper:block"..x.."_cut"..w.." 4",
 			recipe = {
 				{ "mcl_copper:block"..x..w, "mcl_copper:block"..x..w },
@@ -16,7 +16,7 @@ end
 
 for _, x in ipairs(block_exposure_level) do
 	for _, w in ipairs(waxed) do
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_copper:block"..x.."_grate"..w.." 4",
 			recipe = {
 				{ "", "mcl_copper:block"..x..w, "" },
@@ -29,7 +29,7 @@ end
 
 for _, x in ipairs(block_exposure_level) do
 	for _, w in ipairs(waxed) do
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_copper:block"..x.."_chiseled"..w.." 4",
 			recipe = {
 				{ "mcl_stairs:slab_copper"..x.."_cut"..w },
@@ -40,7 +40,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_stairs:slab_copper"..x.."_cut_preserved 6",
 		recipe = {
 			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
@@ -49,7 +49,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_stairs:stair_copper"..x.."_cut_preserved 4",
 		recipe = {
 			{ "", "", "mcl_copper:block"..x.."_cut_preserved" },
@@ -60,7 +60,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_stairs:stair_copper"..x.."_cut_preserved 4",
 		recipe = {
 			{ "mcl_copper:block"..x.."_cut_preserved", "", "" },
@@ -72,7 +72,7 @@ end
 
 for _, x in ipairs(block_exposure_level) do
 	for _, w in ipairs(waxed) do
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_copper:bulb"..x.."_off"..w.." 4",
 			recipe = {
 				{ "", "mcl_copper:block"..x..w, "" },
@@ -83,7 +83,7 @@ for _, x in ipairs(block_exposure_level) do
 	end
 end
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_copper:door 3",
 	recipe = {
 		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
@@ -92,7 +92,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_copper:trapdoor 2",
 	recipe = {
 		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
@@ -102,7 +102,7 @@ minetest.register_craft({
 
 for _, t in ipairs(block_type) do
 	for _, x in ipairs(block_exposure_level) do
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_copper:block"..x..t.."_preserved",
 			recipe = {
 				{ "mcl_copper:block"..x..t, "mcl_honey:honeycomb" }
@@ -112,7 +112,7 @@ for _, t in ipairs(block_type) do
 end
 
 -- for _, x in ipairs(block_exposure_level) do
--- 	minetest.register_craft({
+-- 	core.register_craft({
 -- 		output = "mcl_copper:door"..x.."_preserved",
 -- 		recipe = {
 -- 			{ "mcl_copper:door"..x, "mcl_honey:honeycomb" }
@@ -121,7 +121,7 @@ end
 -- end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_copper:trapdoor"..x.."_preserved",
 		recipe = {
 			{ "mcl_copper:trapdoor"..x, "mcl_honey:honeycomb" }
@@ -130,7 +130,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_copper:bulb"..x.."_off_preserved",
 		recipe = {
 			{ "mcl_copper:bulb"..x.."_off", "mcl_honey:honeycomb" }
@@ -139,7 +139,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_stairs:slab_copper"..x.."_cut_preserved",
 		recipe = {
 			{ "mcl_stairs:slab_copper"..x.."_cut", "mcl_honey:honeycomb" }
@@ -148,7 +148,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 for _, x in ipairs(block_exposure_level) do
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_stairs:stair_copper"..x.."_cut_preserved",
 		recipe = {
 			{ "mcl_stairs:stair_copper"..x.."_cut", "mcl_honey:honeycomb" }

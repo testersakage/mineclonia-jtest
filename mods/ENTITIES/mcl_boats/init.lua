@@ -1,5 +1,5 @@
 mcl_boats = {}
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local boat_visual_size = {x = 1, y = 1, z = 1}
 local paddling_speed = 22
@@ -9,12 +9,12 @@ local boat_side_offset = 1.001
 local boat_max_hp = 4
 
 local function is_group(pos, group)
-	local nn = minetest.get_node(pos).name
-	return minetest.get_item_group(nn, group) ~= 0
+	local nn = core.get_node(pos).name
+	return core.get_item_group(nn, group) ~= 0
 end
 
 local function is_river_water(p)
-	local n = minetest.get_node(p).name
+	local n = core.get_node(p).name
 	if n == "mclx_core:river_water_source" or n == "mclx_core:river_water_flowing" then
 		return true
 	end
@@ -101,8 +101,8 @@ local function attach_object(self, obj)
 		local name = obj:get_player_name()
 		mcl_player.players[obj].attached = true
 		obj:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
-		minetest.after(0.2, function(name)
-			local player = minetest.get_player_by_name(name)
+		core.after(0.2, function(name)
+			local player = core.get_player_by_name(name)
 			if player then
 				mcl_player.player_set_animation(player, "sit" , 30)
 			end
@@ -151,7 +151,7 @@ local boat = {
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
 	on_detach_child = function(self, child)
-		if self._driver and minetest.is_player(child) and minetest.is_player(self._driver) and self._driver == child then
+		if self._driver and core.is_player(child) and core.is_player(self._driver) and self._driver == child then
 			detach_object(self._driver)
 			self._driver = nil
 		end
@@ -159,7 +159,7 @@ local boat = {
 	_csm_driving = false,
 }
 
-minetest.register_on_respawnplayer(detach_object)
+core.register_on_respawnplayer(detach_object)
 
 function boat.on_rightclick(self, clicker)
 	if self._passenger or not clicker or clicker:get_attach() or (self.name == "mcl_boats:chest_boat" and self._driver) then
@@ -180,7 +180,7 @@ end
 
 function boat:on_activate(staticdata)
 	self.object:set_armor_groups({fleshy = 125})
-	local data = minetest.deserialize(staticdata)
+	local data = core.deserialize(staticdata)
 	if type(data) == "table" then
 		self._v = data.v
 		self._last_v = self._v
@@ -214,7 +214,7 @@ end
 
 function boat:get_staticdata()
 	local props = self.object:get_properties()
-	return minetest.serialize({
+	return core.serialize({
 		v = self._v,
 		itemstring = self._itemstring,
 		textures = props and props.textures or nil
@@ -224,13 +224,13 @@ end
 function boat:on_death(killer)
 	mcl_burning.extinguish(self.object)
 
-	if killer and killer:is_player() and minetest.is_creative_enabled(killer:get_player_name()) then
+	if killer and killer:is_player() and core.is_creative_enabled(killer:get_player_name()) then
 		local inv = killer:get_inventory()
 		if not inv:contains_item("main", self._itemstring) then
 			inv:add_item("main", self._itemstring)
 		end
 	else
-		minetest.add_item(self.object:get_pos(), self._itemstring)
+		core.add_item(self.object:get_pos(), self._itemstring)
 	end
 	if self._driver then
 		detach_object(self._driver)
@@ -298,8 +298,8 @@ function boat:on_step(dtime, moveresult)
 	if moveresult and moveresult.collides then
 		for _, collision in pairs(moveresult.collisions) do
 			local pos = collision.node_pos
-			if collision.type == "node" and minetest.get_item_group(minetest.get_node(pos).name, "dig_by_boat") > 0 then
-				minetest.dig_node(pos)
+			if collision.type == "node" and core.get_item_group(core.get_node(pos).name, "dig_by_boat") > 0 then
+				core.dig_node(pos)
 			end
 		end
 	end
@@ -398,7 +398,7 @@ function boat:on_step(dtime, moveresult)
 			self._animation = 0
 		end
 
-		for obj in minetest.objects_inside_radius(self.object:get_pos(), 1.3) do
+		for obj in core.objects_inside_radius(self.object:get_pos(), 1.3) do
 			local entity = obj:get_luaentity()
 			if entity and entity.is_mob then
 				attach_object(self, obj)
@@ -422,7 +422,7 @@ function boat:on_step(dtime, moveresult)
 	local new_acce
 	if not flowlib.is_water(p) and not on_ice then
 		-- Not on water or inside water: Free fall
-		--local nodedef = minetest.registered_nodes[minetest.get_node(p).name]
+		--local nodedef = core.registered_nodes[core.get_node(p).name]
 		new_acce = {x = 0, y = -9.8, z = 0}
 		new_velo = get_velocity(self._v, self.object:get_yaw(),
 			self.object:get_velocity().y)
@@ -510,7 +510,7 @@ function boat:set_yaw (yaw)
 end
 
 -- Register one entity for all boat types
-minetest.register_entity("mcl_boats:boat", boat)
+core.register_entity("mcl_boats:boat", boat)
 
 local cboat = table.copy(boat)
 cboat._itemstring = "mcl_boats:chest_boat"
@@ -530,7 +530,7 @@ function cboat:on_death (killer)
 	end
 end
 
-minetest.register_entity("mcl_boats:chest_boat", cboat)
+core.register_entity("mcl_boats:chest_boat", cboat)
 mcl_entity_invs.register_inv("mcl_boats:chest_boat","Boat",27)
 
 local doc_itemstring_boat
@@ -575,7 +575,7 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 		texture = "mcl_boats_texture_" .. name .. "_boat.png"
 	end
 
-	minetest.register_craftitem(":"..itemstring, table.merge({
+	core.register_craftitem(":"..itemstring, table.merge({
 		description = S(name.." Boat"),
 		_tt_help = tt_help,
 		_doc_items_create_entry = help,
@@ -611,7 +611,7 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 				boat_ent = "mcl_boats:chest_boat"
 				chest_tex = "mcl_chests_normal.png"
 			end
-			local boat = minetest.add_entity(pos, boat_ent)
+			local boat = core.add_entity(pos, boat_ent)
 			if boat and boat:get_pos() then
 				local ent = boat:get_luaentity()
 				ent._itemstring = itemstring
@@ -621,7 +621,7 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 					ent[k] = v
 				end
 			end
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 			return itemstack
@@ -629,27 +629,27 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 		---@diagnostic disable-next-line: unused-local
 		_on_dispense = function(stack, pos, droppos, dropnode, dropdir)
 			local below = {x=droppos.x, y=droppos.y-1, z=droppos.z}
-			local belownode = minetest.get_node(below)
+			local belownode = core.get_node(below)
 			-- Place boat as entity on or in water
-			if minetest.get_item_group(dropnode.name, "water") ~= 0 or (dropnode.name == "air" and minetest.get_item_group(belownode.name, "water") ~= 0) then
-				minetest.add_entity(droppos, "mcl_boats:boat")
+			if core.get_item_group(dropnode.name, "water") ~= 0 or (dropnode.name == "air" and core.get_item_group(belownode.name, "water") ~= 0) then
+				core.add_entity(droppos, "mcl_boats:boat")
 			else
-				minetest.add_item(droppos, stack)
+				core.add_item(droppos, stack)
 			end
 		end,
 	},item_def or {}))
 
 	local c = "mcl_trees:wood_"..name
 	if itemstring:find("chest") then
-		minetest.register_craft({
+		core.register_craft({
 			output = itemstring,
 			recipe = {
 				{"mcl_chests:chest"},
 				{"mcl_boats:boat_"..name:gsub("_chest","")},
 			},
 		})
-	elseif minetest.registered_nodes[c] then
-		minetest.register_craft({
+	elseif core.registered_nodes[c] then
+		core.register_craft({
 			output = itemstring,
 			recipe = {
 				{c, "", c},

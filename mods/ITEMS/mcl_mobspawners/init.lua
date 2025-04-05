@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_mobspawners = {}
 
@@ -8,7 +8,7 @@ local default_mob = "mobs_mc:pig"
 --local spawner_default = default_mob.." 0 15 4 15"
 
 local function get_mob_textures(mob)
-	local list = minetest.registered_entities[mob].texture_list
+	local list = core.registered_entities[mob].texture_list
 	if type(list[1]) == "table" then
 		return list[1]
 	else
@@ -17,7 +17,7 @@ local function get_mob_textures(mob)
 end
 
 local function find_doll(pos)
-	for obj in minetest.objects_inside_radius(pos, 0.5) do
+	for obj in core.objects_inside_radius(pos, 0.5) do
 		if not obj:is_player() then
 			if obj and obj:get_luaentity().name == "mcl_mobspawners:doll" then
 				return obj
@@ -27,7 +27,7 @@ local function find_doll(pos)
 end
 
 local function spawn_doll(pos)
-	return minetest.add_entity({x=pos.x, y=pos.y-0.3, z=pos.z}, "mcl_mobspawners:doll")
+	return core.add_entity({x=pos.x, y=pos.y-0.3, z=pos.z}, "mcl_mobspawners:doll")
 end
 
 local spawn_count_overrides = {
@@ -40,7 +40,7 @@ local spawn_count_overrides = {
 }
 
 local function set_doll_properties(doll, mob)
-	local mobinfo = minetest.registered_entities[mob]
+	local mobinfo = core.registered_entities[mob]
 	if not mobinfo then return end
 	local xs, ys
 	if mobinfo.doll_size_override then
@@ -63,7 +63,7 @@ local function set_doll_properties(doll, mob)
 end
 
 local function respawn_doll(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local mob = meta:get_string("Mob")
 	local doll
 	if mob and mob ~= "" then
@@ -101,7 +101,7 @@ function mcl_mobspawners.setup_spawner(pos, Mob, MinLight, MaxLight, MaxMobsInAr
 	if MaxMobsInArea == nil then MaxMobsInArea = 4  end
 	if PlayerDistance == nil then PlayerDistance = 15 end
 	if YOffset == nil then YOffset = 0 end
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	meta:set_string("Mob", Mob)
 	meta:set_int("MinLight", MinLight)
 	meta:set_int("MaxLight", MaxLight)
@@ -118,7 +118,7 @@ function mcl_mobspawners.setup_spawner(pos, Mob, MinLight, MaxLight, MaxMobsInAr
 
 
 	-- Start spawning very soon
-	local t = minetest.get_node_timer(pos)
+	local t = core.get_node_timer(pos)
 	t:start(2)
 end
 
@@ -127,7 +127,7 @@ end
 local function spawn_mobs(pos)
 
 	-- get meta
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 
 	-- get settings
 	local mob = meta:get_string("Mob")
@@ -144,7 +144,7 @@ local function spawn_mobs(pos)
 
 	-- are we spawning a registered mob?
 	if not mcl_mobs.spawning_mobs[mob] then
-		minetest.log("error", "[mcl_mobspawners] Mob Spawner: Mob doesn't exist: "..mob)
+		core.log("error", "[mcl_mobspawners] Mob Spawner: Mob doesn't exist: "..mob)
 		return
 	end
 
@@ -153,14 +153,14 @@ local function spawn_mobs(pos)
 	local ent
 
 
-	local timer = minetest.get_node_timer(pos)
+	local timer = core.get_node_timer(pos)
 
 	-- spawn mob if player detected and in range
 	if pla > 0 then
 
 		local in_range = 0
 
-		for oir in minetest.objects_inside_radius(pos, pla) do
+		for oir in core.objects_inside_radius(pos, pla) do
 
 			if oir:is_player() then
 
@@ -193,7 +193,7 @@ local function spawn_mobs(pos)
 	end
 
 	-- count mob objects of same type in area
-	for obj in minetest.objects_inside_radius(pos, 8) do
+	for obj in core.objects_inside_radius(pos, 8) do
 		ent = obj:get_luaentity()
 
 		if ent and ent.name and ent.name == mob then
@@ -208,7 +208,7 @@ local function spawn_mobs(pos)
 	end
 
 	-- find air blocks within 8×3×8 nodes of spawner
-	local air = minetest.find_nodes_in_area(
+	local air = core.find_nodes_in_area(
 		{x = pos.x - 4, y = pos.y - 1 + yof, z = pos.z - 4},
 		{x = pos.x + 4, y = pos.y + 1 + yof, z = pos.z + 4},
 		{"air"})
@@ -226,13 +226,13 @@ local function spawn_mobs(pos)
 			end
 			local air_index = math.random(#air)
 			local pos2 = air[air_index]
-			local lig = minetest.get_node_light(pos2) or 0
+			local lig = core.get_node_light(pos2) or 0
 
 			pos2.y = pos2.y + 0.5
 
 			-- only if light levels are within range
 			if lig >= mlig and lig <= xlig then
-				minetest.add_entity(pos2, mob)
+				core.add_entity(pos2, mob)
 			end
 			table.remove(air, air_index)
 		end
@@ -245,11 +245,11 @@ end
 
 -- The mob spawner node.
 -- PLACEMENT INSTRUCTIONS:
--- If this node is placed by a player, minetest.item_place, etc. default settings are applied
+-- If this node is placed by a player, core.item_place, etc. default settings are applied
 -- automatially.
--- IF this node is placed by ANY other method (e.g. minetest.set_node, LuaVoxelManip), you
+-- IF this node is placed by ANY other method (e.g. core.set_node, LuaVoxelManip), you
 -- MUST call mcl_mobspawners.setup_spawner right after the spawner has been placed.
-minetest.register_node("mcl_mobspawners:spawner", {
+core.register_node("mcl_mobspawners:spawner", {
 	tiles = {"mob_spawner.png"},
 	drawtype = "glasslike",
 	paramtype = "light",
@@ -271,16 +271,16 @@ minetest.register_node("mcl_mobspawners:spawner", {
 		if rc then return rc end
 
 		local name = placer:get_player_name()
-		local privs = minetest.get_player_privs(name)
+		local privs = core.get_player_privs(name)
 		if not privs.maphack then
-			minetest.chat_send_player(name, "Placement denied. You need the “maphack” privilege to place mob spawners.")
+			core.chat_send_player(name, "Placement denied. You need the “maphack” privilege to place mob spawners.")
 			return itemstack
 		end
-		local node_under = minetest.get_node(pointed_thing.under)
-		local new_itemstack, success = minetest.item_place_node(itemstack, placer, pointed_thing)
+		local node_under = core.get_node(pointed_thing.under)
+		local new_itemstack, success = core.item_place_node(itemstack, placer, pointed_thing)
 		if success then
 			local placepos
-			local def = minetest.registered_nodes[node_under.name]
+			local def = core.registered_nodes[node_under.name]
 			if def and def.buildable_to then
 				placepos = pointed_thing.under
 			else
@@ -293,21 +293,21 @@ minetest.register_node("mcl_mobspawners:spawner", {
 
 	on_rightclick = function(pos, _, clicker, itemstack, _)
 		if not clicker:is_player() then return itemstack end
-		if minetest.get_item_group(itemstack:get_name(),"spawn_egg") == 0 then return itemstack end
+		if core.get_item_group(itemstack:get_name(),"spawn_egg") == 0 then return itemstack end
 		local name = clicker:get_player_name()
-		local privs = minetest.get_player_privs(name)
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		local privs = core.get_player_privs(name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return itemstack
 		end
 		if not privs.maphack then
-			minetest.chat_send_player(name, S("You need the “maphack” privilege to change the mob spawner."))
+			core.chat_send_player(name, S("You need the “maphack” privilege to change the mob spawner."))
 			return itemstack
 		end
 
 		mcl_mobspawners.setup_spawner(pos, itemstack:get_name())
 
-		if not minetest.is_creative_enabled(name) then
+		if not core.is_creative_enabled(name) then
 			itemstack:take_item()
 		end
 		return itemstack
@@ -369,7 +369,7 @@ end
 doll_def.on_step = function(self, dtime)
 	-- Check if spawner is still present. If not, delete the entity
 	self.timer = self.timer + dtime
-	local n = minetest.get_node_or_nil(self.object:get_pos())
+	local n = core.get_node_or_nil(self.object:get_pos())
 	if self.timer > 1 then
 		if n and n.name and n.name ~= "mcl_mobspawners:spawner" then
 			self.object:remove()
@@ -379,10 +379,10 @@ end
 
 doll_def.on_punch = function() end
 
-minetest.register_entity("mcl_mobspawners:doll", doll_def)
+core.register_entity("mcl_mobspawners:doll", doll_def)
 
 -- FIXME: Doll can get destroyed by /clearobjects
-minetest.register_lbm({
+core.register_lbm({
 	label = "Respawn mob spawner dolls",
 	name = "mcl_mobspawners:respawn_entities",
 	nodenames = { "mcl_mobspawners:spawner" },

@@ -1,10 +1,10 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function get_bed_next_node(pos, node)
-	local node = node or minetest.get_node_or_nil(pos)
+	local node = node or core.get_node_or_nil(pos)
 	if not node then return end
 
-	local dir = minetest.facedir_to_dir(node.param2)
+	local dir = core.facedir_to_dir(node.param2)
 
 	local pos2, bottom
 	if string.sub(node.name, -4) == "_top" then
@@ -14,7 +14,7 @@ local function get_bed_next_node(pos, node)
 		bottom = true
 	end
 
-	local node2 = minetest.get_node(pos2)
+	local node2 = core.get_node(pos2)
 	return pos2, node2, bottom, dir
 end
 
@@ -27,7 +27,7 @@ local function rotate(pos, node, user, mode, new_param2)
 	if not node2 then return end
 
 	local name = node2.name
-	if minetest.get_item_group(name, "bed") ~= 2 or node.param2 ~= node2.param2 then return false end
+	if core.get_item_group(name, "bed") ~= 2 or node.param2 ~= node2.param2 then return false end
 
 	if bottom then
 		name = string.sub(name, 1, -5)
@@ -35,13 +35,13 @@ local function rotate(pos, node, user, mode, new_param2)
 		name = string.sub(name, 1, -8)
 	end
 
-	if minetest.is_protected(p, user:get_player_name()) then
-		minetest.record_protection_violation(p, user:get_player_name())
+	if core.is_protected(p, user:get_player_name()) then
+		core.record_protection_violation(p, user:get_player_name())
 		return false
 	end
 
 	local newp
-	local new_dir = minetest.facedir_to_dir(new_param2)
+	local new_dir = core.facedir_to_dir(new_param2)
 
 	if bottom then
 		 newp = vector.add(pos, new_dir)
@@ -49,40 +49,40 @@ local function rotate(pos, node, user, mode, new_param2)
 		 newp = vector.subtract(pos, new_dir)
 	end
 
-	local node3 = minetest.get_node_or_nil(newp)
+	local node3 = core.get_node_or_nil(newp)
 	if not node3 then return false end
 
-	local node_def = minetest.registered_nodes[node3.name]
+	local node_def = core.registered_nodes[node3.name]
 	if not node_def or not node_def.buildable_to then return false end
 
-	if minetest.is_protected(newp, user:get_player_name()) then
-		minetest.record_protection_violation(newp, user:get_player_name())
+	if core.is_protected(newp, user:get_player_name()) then
+		core.record_protection_violation(newp, user:get_player_name())
 		return false
 	end
 
 	node.param2 = new_param2
 	-- do not remove_node here - it will trigger destroy_bed()
-	minetest.swap_node(p, {name = "air"})
-	minetest.swap_node(pos, node)
-	minetest.swap_node(newp, {name = name .. (bottom and "_top" or "_bottom"), param2 = new_param2})
+	core.swap_node(p, {name = "air"})
+	core.swap_node(pos, node)
+	core.swap_node(newp, {name = name .. (bottom and "_top" or "_bottom"), param2 = new_param2})
 
 	return true
 end
 
 
 local function destruct_bed(pos, oldnode)
-	local node = oldnode or minetest.get_node_or_nil(pos)
+	local node = oldnode or core.get_node_or_nil(pos)
 	if not node then return end
 
 	local pos2, node2, bottom = get_bed_next_node(pos, oldnode)
 
 	if bottom then
 		if node2 and string.sub(node2.name, -4) == "_top" then
-			minetest.remove_node(pos2)
+			core.remove_node(pos2)
 		end
 	else
 		if node2 and string.sub(node2.name, -7) == "_bottom" then
-			minetest.remove_node(pos2)
+			core.remove_node(pos2)
 		end
 	end
 end
@@ -90,7 +90,7 @@ end
 local function kick_player_after_destruct(destruct_pos)
 	for name, player_bed_pos in pairs(mcl_beds.bed_pos) do
 		if vector.distance(destruct_pos, player_bed_pos) < 0.1 then
-			local player = minetest.get_player_by_name(name)
+			local player = core.get_player_by_name(name)
 			if player and player:is_player() then
 				mcl_beds.kick_player(player)
 				break
@@ -101,12 +101,12 @@ end
 
 local beddesc = S("Beds allow you to sleep at night and make the time pass faster.")
 local beduse = S("To use a bed, stand close to it and right-click the bed to sleep in it. Sleeping only works when the sun sets, at night or during a thunderstorm. The bed must also be clear of any danger.")
-if minetest.settings:get_bool("enable_bed_respawn") == false then
+if core.settings:get_bool("enable_bed_respawn") == false then
 	beddesc = beddesc .. "\n" .. S("You have heard of other worlds in which a bed would set the start point for your next life. But this world is not one of them.")
 else
 	beddesc = beddesc .. "\n" .. S("By using a bed, you set the starting point for your next life. If you die, you will start your next life at this bed, unless it is obstructed or destroyed.")
 end
-if minetest.settings:get_bool("enable_bed_night_skip") == false then
+if core.settings:get_bool("enable_bed_night_skip") == false then
 	beddesc = beddesc .. "\n" .. S("In this world, going to bed won't skip the night, but it will skip thunderstorms.")
 else
 	beddesc = beddesc .. "\n" .. S("Sleeping allows you to skip the night. The night is skipped when all players in this world went to sleep. The night is skipped after sleeping for a few seconds. Thunderstorms can be skipped in the same manner.")
@@ -122,7 +122,7 @@ function mcl_beds.register_bed(name, def)
 			fixed = {-0.5, -0.5, -0.5, 0.5, 0.06, 0.5},
 		}
 
-	minetest.register_node(name .. "_bottom", {
+	core.register_node(name .. "_bottom", {
 		description = def.description,
 		_tt_help = S("Allows you to sleep"),
 
@@ -156,43 +156,43 @@ function mcl_beds.register_bed(name, def)
 			if rc then return rc end
 
 			local pos
-			local undername = minetest.get_node(under).name
-			if minetest.registered_items[undername] and minetest.registered_items[undername].buildable_to then
+			local undername = core.get_node(under).name
+			if core.registered_items[undername] and core.registered_items[undername].buildable_to then
 				pos = under
 			else
 				pos = pointed_thing.above
 			end
 
-			if minetest.is_protected(pos, player_name) and
-					not minetest.check_player_privs(player_name, "protection_bypass") then
-				minetest.record_protection_violation(pos, player_name)
+			if core.is_protected(pos, player_name) and
+					not core.check_player_privs(player_name, "protection_bypass") then
+				core.record_protection_violation(pos, player_name)
 				return itemstack
 			end
 
-			local node_def = minetest.registered_nodes[minetest.get_node(pos).name]
+			local node_def = core.registered_nodes[core.get_node(pos).name]
 			if not node_def or not node_def.buildable_to then
 				return itemstack
 			end
 
 			local dir = placer and placer:is_player() and placer:get_look_dir() and
-				minetest.dir_to_facedir(placer:get_look_dir()) or 0
-			local botpos = vector.add(pos, minetest.facedir_to_dir(dir))
+				core.dir_to_facedir(placer:get_look_dir()) or 0
+			local botpos = vector.add(pos, core.facedir_to_dir(dir))
 
-			if minetest.is_protected(botpos, player_name) and
-					not minetest.check_player_privs(player_name, "protection_bypass") then
-				minetest.record_protection_violation(botpos, player_name)
+			if core.is_protected(botpos, player_name) and
+					not core.check_player_privs(player_name, "protection_bypass") then
+				core.record_protection_violation(botpos, player_name)
 				return itemstack
 			end
 
-			local botdef = minetest.registered_nodes[minetest.get_node(botpos).name]
+			local botdef = core.registered_nodes[core.get_node(botpos).name]
 			if not botdef or not botdef.buildable_to then
 				return itemstack
 			end
 
-			minetest.set_node(pos, {name = name .. "_bottom", param2 = dir})
-			minetest.set_node(botpos, {name = name .. "_top", param2 = dir})
+			core.set_node(pos, {name = name .. "_bottom", param2 = dir})
+			core.set_node(botpos, {name = name .. "_top", param2 = dir})
 
-			if not minetest.is_creative_enabled(player_name) then
+			if not core.is_creative_enabled(player_name) then
 				itemstack:take_item()
 			end
 			return itemstack
@@ -211,7 +211,7 @@ function mcl_beds.register_bed(name, def)
 
 
 
-	minetest.register_node(name .. "_top", {
+	core.register_node(name .. "_top", {
 		drawtype = "mesh",
 		mesh = "mcl_beds_bed_top.obj",
 		tiles = def.tiles,
@@ -235,10 +235,10 @@ function mcl_beds.register_bed(name, def)
 		_mcl_baseitem = name .. "_bottom",
 	})
 
-	minetest.register_alias(name, name .. "_bottom")
+	core.register_alias(name, name .. "_bottom")
 
 	if def.recipe then
-		minetest.register_craft({
+		core.register_craft({
 			output = name,
 			recipe = def.recipe
 		})

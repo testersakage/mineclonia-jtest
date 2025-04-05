@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_torches.register_torch({
 	name = "redstone_torch_off",
@@ -26,7 +26,7 @@ mcl_torches.register_torch({
 local burnout_tab = {}
 
 local function inc_burnout(pos)
-	local h = minetest.hash_node_position(pos)
+	local h = core.hash_node_position(pos)
 	burnout_tab[h] = (burnout_tab[h] or 0) + 1
 	mcl_redstone.after(30, function()
 		burnout_tab[h] = burnout_tab[h] > 1 and burnout_tab[h] - 1 or nil
@@ -34,21 +34,21 @@ local function inc_burnout(pos)
 end
 
 local function check_burnout(pos)
-	return (burnout_tab[minetest.hash_node_position(pos)] or 0) >= 8
+	return (burnout_tab[core.hash_node_position(pos)] or 0) >= 8
 end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_off", "mcl_redstone_torch:redstone_torch_off_wall" }) do
-	minetest.override_item(name, {
+	core.override_item(name, {
 		_mcl_redstone = {
 			update = function(pos, node)
-				if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) == 0 then
+				if mcl_redstone.get_power(pos, core.wallmounted_to_dir(node.param2)) == 0 then
 					if check_burnout(pos) then
-						minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+						core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 						return
 					end
 
 
-					local ndef = minetest.registered_nodes[node.name]
+					local ndef = core.registered_nodes[node.name]
 					return {
 						name = ndef._mcl_redstone_torch_on,
 						param2 = node.param2,
@@ -60,19 +60,19 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_off", "mcl_redstone_to
 end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_torch:redstone_torch_on_wall" }) do
-	minetest.override_item(name, {
+	core.override_item(name, {
 		_mcl_redstone = {
 			connects_to = function(node, dir)
 				return true
 			end,
 			get_power = function(node, dir)
-				return minetest.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0, dir.y > 0
+				return core.dir_to_wallmounted(dir) ~= node.param2 and 15 or 0, dir.y > 0
 			end,
 			update = function(pos, node)
-				if mcl_redstone.get_power(pos, minetest.wallmounted_to_dir(node.param2)) > 0 then
+				if mcl_redstone.get_power(pos, core.wallmounted_to_dir(node.param2)) > 0 then
 					inc_burnout(pos)
 
-					local ndef = minetest.registered_nodes[node.name]
+					local ndef = core.registered_nodes[node.name]
 					return {
 						name = ndef._mcl_redstone_torch_off,
 						param2 = node.param2,
@@ -84,20 +84,20 @@ for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_tor
 end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on_wall", "mcl_redstone_torch:redstone_torch_off_wall" }) do
-	minetest.override_item(name, {
+	core.override_item(name, {
 		_mcl_redstone_torch_on = "mcl_redstone_torch:redstone_torch_on_wall",
 		_mcl_redstone_torch_off = "mcl_redstone_torch:redstone_torch_off_wall",
 	})
 end
 
 for _, name in pairs({ "mcl_redstone_torch:redstone_torch_on", "mcl_redstone_torch:redstone_torch_off" }) do
-	minetest.override_item(name, {
+	core.override_item(name, {
 		_mcl_redstone_torch_on = "mcl_redstone_torch:redstone_torch_on",
 		_mcl_redstone_torch_off = "mcl_redstone_torch:redstone_torch_off",
 	})
 end
 
-minetest.register_node("mcl_redstone_torch:redstoneblock", {
+core.register_node("mcl_redstone_torch:redstoneblock", {
 	description = S("Block of Redstone"),
 	_tt_help = S("Provides redstone power"),
 	_doc_items_longdesc = S("A block of redstone permanently supplies redstone power to its surrounding blocks."),
@@ -118,14 +118,14 @@ minetest.register_node("mcl_redstone_torch:redstoneblock", {
 	_mcl_hardness = 5,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_redstone_torch:redstone_torch_on",
 	recipe = {
 		{"mcl_redstone:redstone"},
 		{"mcl_core:stick"},}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_redstone_torch:redstoneblock",
 	recipe = {
 		{"mcl_redstone:redstone","mcl_redstone:redstone","mcl_redstone:redstone"},
@@ -134,7 +134,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_redstone:redstone 9",
 	recipe = {
 		{"mcl_redstone_torch:redstoneblock"},

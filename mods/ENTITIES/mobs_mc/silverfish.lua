@@ -2,8 +2,8 @@
 --################### SILVERFISH
 --###################
 
-local S = minetest.get_translator("mobs_mc")
-local mob_griefing = minetest.settings:get_bool("mobs_griefing", true)
+local S = core.get_translator("mobs_mc")
+local mob_griefing = core.settings:get_bool("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
 
 ------------------------------------------------------------------------
@@ -72,10 +72,10 @@ function silverfish:ai_step (dtime)
 		local p0 = vector.offset (self_pos, -10, -5, -10)
 		local p1 = vector.offset (self_pos, 10, 5, 10)
 		local silverfish_nodes
-			= minetest.find_nodes_in_area (p0, p1, {"group:spawns_silverfish"})
+			= core.find_nodes_in_area (p0, p1, {"group:spawns_silverfish"})
 		for _, p in pairs (silverfish_nodes) do
-			minetest.remove_node (p)
-			minetest.add_entity (p, "mobs_mc:silverfish")
+			core.remove_node (p)
+			core.add_entity (p, "mobs_mc:silverfish")
 			mcl_mobs.effect (p, 32, "mcl_particles_smoke.png",
 					0.5, 1.5, 1, 1, 0)
 			-- Spread silverfish revival over a number of
@@ -132,10 +132,10 @@ local function silverfish_return_to_block (self, self_pos, dtime)
 		node_pos.y = node_pos.y + dir.y
 		node_pos.z = node_pos.z + dir.z
 
-		local node = minetest.get_node (node_pos)
+		local node = core.get_node (node_pos)
 		local replacement = replacements[node.name]
 		if replacement then
-			minetest.set_node (node_pos, {name = replacement})
+			core.set_node (node_pos, {name = replacement})
 			mcl_mobs.effect (self_pos, 32, "mcl_particles_smoke.png",
 					0.5, 1.5, 1, 1, 0)
 			self:safe_remove ()

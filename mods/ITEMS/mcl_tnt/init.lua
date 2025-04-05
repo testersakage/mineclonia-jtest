@@ -1,5 +1,5 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local explosions_griefing = minetest.settings:get_bool("mcl_explosions_griefing", true)
+local S = core.get_translator(core.get_current_modname())
+local explosions_griefing = core.settings:get_bool("mcl_explosions_griefing", true)
 
 tnt = {}
 
@@ -7,8 +7,8 @@ tnt.BOOMTIMER = 4
 tnt.BLINKTIMER = 0.25
 
 local function spawn_tnt(pos, entname)
-	minetest.sound_play("tnt_ignite", { pos = pos, gain = 1.0, max_hear_distance = 15 }, true)
-	local ent = minetest.add_entity(pos, entname)
+	core.sound_play("tnt_ignite", { pos = pos, gain = 1.0, max_hear_distance = 15 }, true)
+	local ent = core.add_entity(pos, entname)
 	if ent then
 		ent:set_armor_groups({ immortal = 1 })
 	end
@@ -16,9 +16,9 @@ local function spawn_tnt(pos, entname)
 end
 
 function tnt.ignite(pos)
-	minetest.remove_node(pos)
+	core.remove_node(pos)
 	local e = spawn_tnt(pos, "mcl_tnt:tnt")
-	minetest.check_for_falling(pos)
+	core.check_for_falling(pos)
 	return e
 end
 
@@ -26,7 +26,7 @@ end
 ---
 ---Intended to be called every step.
 function tnt.smoke_step(pos)
-	minetest.add_particle({
+	core.add_particle({
 		pos                = vector.offset(pos, 0, 0.5, 0),
 		velocity           = vector.new(math.random() * 0.2 - 0.1, 1.0 + math.random(), math.random() * 0.2 - 0.1),
 		acceleration       = vector.new(0, -0.1, 0),
@@ -40,7 +40,7 @@ end
 local TNT_RANGE = 3
 
 local sounds
-if minetest.get_modpath("mcl_sounds") then
+if core.get_modpath("mcl_sounds") then
 	sounds = mcl_sounds.node_sound_wood_defaults()
 end
 
@@ -53,7 +53,7 @@ else
 		, TNT_RANGE)
 end
 
-minetest.register_node("mcl_tnt:tnt", {
+core.register_node("mcl_tnt:tnt", {
 	tiles = {
 		"default_tnt_top.png",
 		"default_tnt_bottom.png",
@@ -87,8 +87,8 @@ minetest.register_node("mcl_tnt:tnt", {
 	end,
 	_on_dispense = function(stack, _, droppos, dropnode)
 		-- Place and ignite TNT
-		if minetest.registered_nodes[dropnode.name].buildable_to then
-			minetest.set_node(droppos, { name = stack:get_name() })
+		if core.registered_nodes[dropnode.name].buildable_to then
+			core.set_node(droppos, { name = stack:get_name() })
 			tnt.ignite(droppos)
 		end
 	end,
@@ -139,10 +139,10 @@ local TNT = {
 function TNT:check_water_flow(p)
 	-- Add water flowing for TNT
 	local node, nn, def
-	node = minetest.get_node_or_nil(p)
+	node = core.get_node_or_nil(p)
 	if node then
 		nn = node.name
-		def = minetest.registered_nodes[nn]
+		def = core.registered_nodes[nn]
 	end
 
 	-- Move item around on flowing liquids
@@ -186,7 +186,7 @@ function TNT:on_activate(_, _)
 end
 
 --[[local function add_effects(pos, radius, drops)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 64,
 		time = 0.5,
 		minpos = vector.subtract(pos, radius / 2),
@@ -210,14 +210,14 @@ end
 		local count = stack:get_count()
 		if count > most then
 			most = count
-			local def = minetest.registered_nodes[name]
+			local def = core.registered_nodes[name]
 			if def and def.tiles and def.tiles[1] then
 				texture = def.tiles[1]
 			end
 		end
 	end
 
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 32,
 		time = 0.1,
 		minpos = vector.subtract(pos, radius / 2),
@@ -255,10 +255,10 @@ function TNT:on_step(dtime, _)
 	end
 end
 
-minetest.register_entity("mcl_tnt:tnt", TNT)
+core.register_entity("mcl_tnt:tnt", TNT)
 
-if minetest.get_modpath("mcl_mobitems") then
-	minetest.register_craft({
+if core.get_modpath("mcl_mobitems") then
+	core.register_craft({
 		output = "mcl_tnt:tnt",
 		recipe = {
 			{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" },
@@ -268,6 +268,6 @@ if minetest.get_modpath("mcl_mobitems") then
 	})
 end
 
-if minetest.get_modpath("doc_identifier") then
+if core.get_modpath("doc_identifier") then
 	doc.sub.identifier.register_object("mcl_tnt:tnt", "nodes", "mcl_tnt:tnt")
 end

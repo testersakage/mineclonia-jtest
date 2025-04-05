@@ -12,10 +12,10 @@ local DEFAULT_COLOR = "#000000"
 
 local SIGN_GLOW_INTENSITY = 14
 
-local signs_editable = minetest.settings:get_bool("mcl_signs_editable", false)
+local signs_editable = core.settings:get_bool("mcl_signs_editable", false)
 
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
 
 local sign_tpl = {
 	paramtype = "light",
@@ -45,10 +45,10 @@ local sign_tpl = {
 local function normalize_rotation(rot) return math.floor(0.5 + rot / 15) * 15 end
 
 local function get_signdata(pos)
-	local node = minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
-	if not def or minetest.get_item_group(node.name,"sign") < 1 then return end
-	local meta = minetest.get_meta(pos)
+	local node = core.get_node(pos)
+	local def = core.registered_nodes[node.name]
+	if not def or core.get_item_group(node.name,"sign") < 1 then return end
+	local meta = core.get_meta(pos)
 	local text = meta:get_string("text")
 	local color = meta:get_string("color")
 	local glow = meta:get_string("glow")
@@ -61,12 +61,12 @@ local function get_signdata(pos)
 	local typ = "standing"
 	if def.paramtype2  == "wallmounted" then
 		typ = "wall"
-		local dir = minetest.wallmounted_to_dir(node.param2)
+		local dir = core.wallmounted_to_dir(node.param2)
 		spos = vector.add(vector.offset(pos,0,-0.25,0),dir * 0.41 )
-		yaw = minetest.dir_to_yaw(dir)
+		yaw = core.dir_to_yaw(dir)
 	else
 		yaw = math.rad(((node.param2 * 1.5 ) + 1 ) % 360)
-		local dir = minetest.yaw_to_dir(yaw)
+		local dir = core.yaw_to_dir(yaw)
 		spos = vector.add(vector.offset(pos,0,0.08,0),dir * -0.05)
 	end
 	if color == "" then color = DEFAULT_COLOR end
@@ -82,7 +82,7 @@ local function get_signdata(pos)
 end
 
 local function set_signmeta(pos,def)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	if def.text then meta:set_string("text",def.text) end
 	if def.color then meta:set_string("color",def.color) end
 	if def.glow then meta:set_string("glow",def.glow) end
@@ -100,7 +100,7 @@ After line 3, another info block may follow. This repeats until the end of the f
 
 All character files must be 5 or 6 pixels wide (5 pixels are preferred)
 ]]
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 local chars_file = io.open(modpath .. "/characters.txt", "r")
 -- FIXME: Support more characters (many characters are missing). Currently ASCII and Latin-1 Supplement are supported.
 assert(chars_file,"[mcl_signs] characters.txt not found")
@@ -218,8 +218,8 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	end
 
 	local under = pointed_thing.under
-	local node = minetest.get_node(under)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(under)
+	local def = core.registered_nodes[node.name]
 	if not def then return itemstack end
 
 	if mcl_util.call_on_rightclick(itemstack, placer, pointed_thing) then
@@ -228,7 +228,7 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 
 	local above = pointed_thing.above
 	local dir = {x = under.x - above.x, y = under.y - above.y, z = under.z - above.z}
-	local wdir = minetest.dir_to_wallmounted(dir)
+	local wdir = core.dir_to_wallmounted(dir)
 
 	local itemstring = itemstack:get_name()
 	local placestack = ItemStack(itemstack)
@@ -238,11 +238,11 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	-- place on wall
 	if wdir ~= 0 and wdir ~= 1 then
 		placestack:set_name("mcl_signs:wall_sign_"..def._mcl_sign_wood)
-		itemstack, pos = minetest.item_place_node(placestack, placer, pointed_thing, wdir)
+		itemstack, pos = core.item_place_node(placestack, placer, pointed_thing, wdir)
 	elseif wdir == 1 then -- standing, not ceiling
 		placestack:set_name("mcl_signs:standing_sign_"..def._mcl_sign_wood)
 		local rot = normalize_rotation(placer:get_look_horizontal() * 180 / math.pi / 1.5)
-		itemstack, pos = minetest.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
+		itemstack, pos = core.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
 	else
 		return itemstack
 	end
@@ -260,7 +260,7 @@ function sign_tpl.on_rightclick(pos, _, clicker, itemstack, _)
 			end
 			set_signmeta(pos,{glow="true",color=data.color})
 			mcl_signs.update_sign(pos)
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			if not core.is_creative_enabled(clicker:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
@@ -294,25 +294,25 @@ local sign_wall = table.merge(sign_tpl,{
 --Formspec
 function mcl_signs.show_formspec(player, pos)
 	if not pos then return end
-	local old_text = minetest.get_meta(pos):get_string("text")
-	minetest.show_formspec(player:get_player_name(),
+	local old_text = core.get_meta(pos):get_string("text")
+	core.show_formspec(player:get_player_name(),
 		"mcl_signs:set_text_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z,
 		"size[6,3]textarea[0.25,0.25;6,1.5;text;" ..
-		F(S("Enter sign text:")) .. ";"..minetest.formspec_escape(old_text) .."]label[0,1.5;" ..
+		F(S("Enter sign text:")) .. ";"..core.formspec_escape(old_text) .."]label[0,1.5;" ..
 		F(S("Maximum line length: 15")) .. "\n" ..
 		F(S("Maximum lines: 4")) ..
 		"]button_exit[0,2.5;6,1;submit;" .. F(S("Done")) .. "]"
 	)
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname:find("mcl_signs:set_text_") == 1 then
 		local x, y, z = formname:match("mcl_signs:set_text_(.-)_(.-)_(.*)")
 		local pos = { x = tonumber(x), y = tonumber(y), z = tonumber(z) }
 		if not pos or not pos.x or not pos.y or not pos.z or not fields or not fields.text then
 			return
 		end
-		if not mcl_util.check_position_protection(pos, player) and (signs_editable or minetest.get_meta(pos):get_string("text") == "") then
+		if not mcl_util.check_position_protection(pos, player) and (signs_editable or core.get_meta(pos):get_string("text") == "") then
 			set_signmeta(pos,{
 				text = tostring(fields.text):sub(1, 256), --limit saved text to 256 characters (4 lines x 15 chars = 60 so this should be more than is ever needed).
 			})
@@ -325,7 +325,7 @@ end)
 function mcl_signs.get_text_entity (pos, force_remove)
 	local text_entity
 	local i = 0
-	for v in minetest.objects_inside_radius(pos, 0.5) do
+	for v in core.objects_inside_radius(pos, 0.5) do
 		local ent = v:get_luaentity()
 		if ent and ent.name == "mcl_signs:text" then
 			i = i + 1
@@ -349,7 +349,7 @@ function mcl_signs.update_sign(pos)
 	elseif not data then
 		return false
 	elseif not text_entity then
-		text_entity = minetest.add_entity(data.text_pos, "mcl_signs:text")
+		text_entity = core.add_entity(data.text_pos, "mcl_signs:text")
 		if not text_entity or not text_entity:get_pos() then return end
 	end
 
@@ -366,7 +366,7 @@ function mcl_signs.update_sign(pos)
 	return true
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	nodenames = {"group:sign"},
 	name = "mcl_signs:restore_entities",
 	label = "Restore sign text",
@@ -376,7 +376,7 @@ minetest.register_lbm({
 	end
 })
 
-minetest.register_entity("mcl_signs:text", {
+core.register_entity("mcl_signs:text", {
 	initial_properties = {
 		pointable = false,
 		visual = "upright_sprite",
@@ -408,8 +408,8 @@ function mcl_signs.register_sign(name,color,def)
 		_mcl_sign_wood = name,
 	}
 
-	minetest.register_node(":mcl_signs:standing_sign_"..name, table.merge(sign_tpl, newfields, def or {}))
-	minetest.register_node(":mcl_signs:wall_sign_"..name,table.merge(sign_wall, newfields, def or {}))
+	core.register_node(":mcl_signs:standing_sign_"..name, table.merge(sign_tpl, newfields, def or {}))
+	core.register_node(":mcl_signs:wall_sign_"..name,table.merge(sign_wall, newfields, def or {}))
 
 	table.insert(mcl_signs.old_rotnames,"mcl_signs:standing_sign22_5_"..name)
 	table.insert(mcl_signs.old_rotnames,"mcl_signs:standing_sign45_"..name)

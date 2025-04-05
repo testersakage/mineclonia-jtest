@@ -3,14 +3,14 @@
 ------------------------------------------------------------------------
 
 local mob_class = mcl_mobs.mob_class
-local F = minetest.formspec_escape
-local S = minetest.get_translator ("mobs_mc")
-local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
+local F = core.formspec_escape
+local S = core.get_translator ("mobs_mc")
+local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 local is_valid = mcl_util.is_valid_objectref
 local villager_verbose
-	= minetest.settings:get_bool ("villager_verbose", false)
+	= core.settings:get_bool ("villager_verbose", false)
 local villager_debug
-	= minetest.settings:get_bool ("villager_debug", false)
+	= core.settings:get_bool ("villager_debug", false)
 
 mobs_mc.jobsites = {}
 
@@ -237,7 +237,7 @@ end
 
 local function get_trading_inventory (player)
 	local trade_inv_name = "mobs_mc:trade_" .. player:get_player_name ()
-	return minetest.get_inventory ({
+	return core.get_inventory ({
 		type = "detached",
 		name = trade_inv_name,
 	})
@@ -261,7 +261,7 @@ local function return_item (itemstack, dropper, pos, inv_p)
 			}
 			p.x = p.x + (math.random (1,3) * 0.2)
 			p.z = p.z + (math.random (1,3) * 0.2)
-			local obj = minetest.add_item (p, itemstack)
+			local obj = core.add_item (p, itemstack)
 			if obj then
 				v.x = v.x * 4
 				v.y = v.y * 4 + 2
@@ -272,7 +272,7 @@ local function return_item (itemstack, dropper, pos, inv_p)
 		end
 	else
 		-- Fallback for unexpected cases.
-		minetest.add_item (pos, itemstack)
+		core.add_item (pos, itemstack)
 	end
 	return itemstack
 end
@@ -302,7 +302,7 @@ function villager_base:stop_trading ()
 		if is_valid (player) then
 			local formname = "mobs_mc:trading_formspec"
 			return_fields (player)
-			minetest.close_formspec (player:get_player_name (), formname)
+			core.close_formspec (player:get_player_name (), formname)
 		end
 		self:trading_stopped (player)
 	end
@@ -482,12 +482,12 @@ function inv_class:on_take (listname, index, stack, player)
 		entity:update_offer (self, player, trade_id, false)
 		if listname == "output" then
 			entity:show_trade_formspec (player, trade_id)
-			minetest.sound_play ("mobs_mc_villager_accept", {
+			core.sound_play ("mobs_mc_villager_accept", {
 				to_player = player:get_player_name (),
 				object = self.object,
 			}, true)
 		else
-			minetest.sound_play ("mobs_mc_villager_deny", {
+			core.sound_play ("mobs_mc_villager_deny", {
 				to_player = player:get_player_name (),
 				object = self.object,
 			}, true)
@@ -553,12 +553,12 @@ function villager_base:update_offer (inv, player, idx, sounds)
 		and (wanted2:is_empty () or inv:contains_item ("input", wanted2)) then
 		inv:set_stack ("output", 1, trade:get_offered ())
 		if sounds then
-			minetest.sound_play ("mobs_mc_villager_accept",
+			core.sound_play ("mobs_mc_villager_accept",
 					     sound, true)
 		end
 	else
 		inv:set_stack ("output", 1, ItemStack ())
-		minetest.sound_play ("mobs_mc_villager_deny",
+		core.sound_play ("mobs_mc_villager_deny",
 				     sound, true)
 	end
 end
@@ -769,7 +769,7 @@ function villager_base:show_trade_formspec (player, tradenum)
 	local playername = player:get_player_name ()
 	local trade_inv_name = "mobs_mc:trade_" .. playername
 	local formspec_name = F ("detached:" .. trade_inv_name)
-	local inv = minetest.get_inventory ({
+	local inv = core.get_inventory ({
 		type = "detached",
 		name = trade_inv_name,
 	})
@@ -855,7 +855,7 @@ function villager_base:show_trade_formspec (player, tradenum)
 
 	local header
 	local title = self:get_dialog_label ()
-	local label = minetest.colorize ("#313131", title)
+	local label = core.colorize ("#313131", title)
 	if self:show_trade_progress_bar () then
 		local progress = self:tier_progress ()
 		header = string.format (fs_header_template,
@@ -876,18 +876,18 @@ function villager_base:show_trade_formspec (player, tradenum)
 		table.insert (formspec, str)
 	end
 
-	minetest.sound_play ("mobs_mc_villager_trade", {
+	core.sound_play ("mobs_mc_villager_trade", {
 		to_player = playername,
 		object = self.object,
 	}, true)
 	str = table.concat (formspec)
-	minetest.show_formspec (playername, "mobs_mc:trading_formspec", str)
+	core.show_formspec (playername, "mobs_mc:trading_formspec", str)
 	trading_players[player] = self.object
 	self._trading_with[player] = tradenum
 	return true
 end
 
-minetest.register_on_player_receive_fields (function (player, formname, fields)
+core.register_on_player_receive_fields (function (player, formname, fields)
 	if formname == "mobs_mc:trading_formspec" then
 		if fields.quit then
 			return_fields (player)
@@ -921,15 +921,15 @@ minetest.register_on_player_receive_fields (function (player, formname, fields)
 	end
 end)
 
-minetest.register_on_joinplayer (function (player)
+core.register_on_joinplayer (function (player)
 	local playername = player:get_player_name ()
 	local inv_name = "mobs_mc:trade_" .. playername
-	local inv = minetest.get_inventory ({
+	local inv = core.get_inventory ({
 		type = "detached",
 		name = inv_name,
 	})
 	if not inv then
-		inv = minetest.create_detached_inventory (inv_name, inv_class,
+		inv = core.create_detached_inventory (inv_name, inv_class,
 							  playername)
 	end
 	inv:set_size ("input", 2)
@@ -938,7 +938,7 @@ minetest.register_on_joinplayer (function (player)
 	inv:set_size ("offered", 1)
 end)
 
-minetest.register_on_leaveplayer (function (player)
+core.register_on_leaveplayer (function (player)
 	local trading = trading_players[player]
 	if trading and is_valid (trading) then
 		local entity = trading:get_luaentity ()
@@ -1140,7 +1140,7 @@ local function get_profession (job_site_name)
 				local len = #profession.group
 				local group = profession.group:sub (7, len)
 
-				if minetest.get_item_group (job_site_name, group) > 0 then
+				if core.get_item_group (job_site_name, group) > 0 then
 					return profession
 				end
 			end
@@ -1232,7 +1232,7 @@ function villager:angry_villager_effect ()
 		},
 		texture = "mcl_particles_angry_villager.png",
 	}
-	minetest.add_particlespawner (particlespawner)
+	core.add_particlespawner (particlespawner)
 end
 
 function villager:happy_villager_effect ()
@@ -1264,7 +1264,7 @@ function villager:happy_villager_effect ()
 		},
 		texture = "mcl_particles_bonemeal.png^[colorize:#00EE00:125",
 	}
-	minetest.add_particlespawner (particlespawner)
+	core.add_particlespawner (particlespawner)
 end
 
 function villager:on_grown ()
@@ -1287,7 +1287,7 @@ end
 
 function villager:begin_sleep ()
 	self._sleeping_pose = true
-	self._last_slept_gmt = minetest.get_gametime ()
+	self._last_slept_gmt = core.get_gametime ()
 	self.collisionbox = {
 		-0.25, 0, -0.25, 0.25, 0.3, 0.25,
 	}
@@ -1316,7 +1316,7 @@ function villager:wake_up ()
 	else
 		self:set_animation ("walk")
 	end
-	self._last_awoken_gmt = minetest.get_gametime ()
+	self._last_awoken_gmt = core.get_gametime ()
 end
 
 ------------------------------------------------------------------------
@@ -2022,8 +2022,8 @@ function villager:restock_if_needed ()
 		trade.uses = 0
 	end
 	self:update_trades (self._trades)
-	self._last_restock_gmt = minetest.get_gametime ()
-	self._last_restock_day = minetest.get_day_count ()
+	self._last_restock_gmt = core.get_gametime ()
+	self._last_restock_day = core.get_day_count ()
 	self._restocks_remaining = self._restocks_remaining - 1
 end
 
@@ -2037,8 +2037,8 @@ function villager:next_working_day ()
 	end
 	self:update_trades (self._trades)
 	self._restocks_remaining = 2
-	self._last_restock_day = minetest.get_day_count ()
-	self._last_restock_gmt = minetest.get_gametime ()
+	self._last_restock_day = core.get_day_count ()
+	self._last_restock_gmt = core.get_gametime ()
 end
 
 function villager:check_head_swivel (self_pos, dtime, clear)
@@ -2079,7 +2079,7 @@ function villager:on_rightclick (clicker)
 			self._head_nod_timeout = 1.0
 		end
 
-		minetest.sound_play ("mobs_mc_villager_deny", {
+		core.sound_play ("mobs_mc_villager_deny", {
 			to_player = clicker:get_player_name (),
 			object = self.object,
 		}, true)
@@ -2097,7 +2097,7 @@ end
 
 local function villager_log (str)
 	if villager_verbose then
-		minetest.chat_send_all (str)
+		core.chat_send_all (str)
 	end
 end
 
@@ -2106,7 +2106,7 @@ local function villager_type_from_biome (biomedata)
 		return "plains"
 	end
 
-	local name = minetest.get_biome_name (biomedata.biome)
+	local name = core.get_biome_name (biomedata.biome)
 
 	if name:find ("Mesa")
 		or name:find ("Desert") then
@@ -2134,7 +2134,7 @@ function villager:on_spawn ()
 
 	if not rawget (self, "_villager_type") then
 		local self_pos = self.object:get_pos ()
-		local biomedata = minetest.get_biome_data (self_pos)
+		local biomedata = core.get_biome_data (self_pos)
 		local villager_type = villager_type_from_biome (biomedata)
 		self._villager_type = villager_type
 		self.base_texture[1] = self:get_overlaid_texture ()
@@ -2288,7 +2288,7 @@ function villager:conceive_child (mate_entity, bed)
 	local villager_type
 	if random < 0.5 then
 		local self_pos = self.object:get_pos ()
-		local biomedata = minetest.get_biome_data (self_pos)
+		local biomedata = core.get_biome_data (self_pos)
 		villager_type = villager_type_from_biome (biomedata)
 	elseif random < 0.75 then
 		villager_type = self._villager_type
@@ -2296,12 +2296,12 @@ function villager:conceive_child (mate_entity, bed)
 		villager_type = mate_entity._villager_type
 	end
 
-	local staticdata = minetest.serialize ({
+	local staticdata = core.serialize ({
 		child = true,
 		_villager_type = villager_type,
 	})
 	local self_pos = self.object:get_pos ()
-	local villager = minetest.add_entity (self_pos, "mobs_mc:villager", staticdata)
+	local villager = core.add_entity (self_pos, "mobs_mc:villager", staticdata)
 	if villager then
 		local entity = villager:get_luaentity ()
 		entity:claim_home (bed)
@@ -2387,7 +2387,7 @@ function villager:decay_gossips ()
 	-- One would expect these memories to fade whenever a villager
 	-- climbs into bed, but it is not so in Minecraft.
 	local t = self._last_gossip_decay_gmt
-	local gmt = minetest.get_gametime ()
+	local gmt = core.get_gametime ()
 	if t == 0 then
 		self._last_gossip_decay_gmt = gmt
 	elseif gmt - t >= 1200 then
@@ -2420,7 +2420,7 @@ function villager:gossip_with (self_pos, interlocutor)
 
 	local old = table.copy (self._reputation)
 
-	local gmt = minetest.get_gametime ()
+	local gmt = core.get_gametime ()
 	if (gmt - interlocutor._last_gossip_gmt) >= 60 then
 		interlocutor._last_gossip_gmt = gmt
 		interlocutor:copy_gossips (self)
@@ -2468,7 +2468,7 @@ local function check_item_timeout (self, itementity)
 	return itementity._dropped_by_villager ~= self.object
 		or not itementity._dropped_by_villager_gmt
 		or (itementity._dropped_by_villager_gmt
-			> minetest.get_gametime () - 2)
+			> core.get_gametime () - 2)
 end
 
 function villager:default_pickup (object, stack, _, _)
@@ -2507,7 +2507,7 @@ local function manhattan3d (self, v1, v2)
 	return d
 end
 
-local hash_pos = minetest.hash_node_position
+local hash_pos = core.hash_node_position
 
 local function find_nearest_village_section (section, min_heat)
 	-- "Mob AI uses these definitions in various cases. For
@@ -2538,7 +2538,7 @@ local function find_nearest_village_section (section, min_heat)
 end
 
 local function check_bell_occupancy (bell)
-	local meta = minetest.get_meta (bell)
+	local meta = core.get_meta (bell)
 	return meta:get_int ("mcl_villages:bell_users") <= 32
 end
 
@@ -2582,7 +2582,7 @@ function villager:relinquish_bell ()
 
 	local poi = mcl_villages.get_poi (pos)
 	if poi and poi.data == BELL_POI then
-		local meta = minetest.get_meta (pos)
+		local meta = core.get_meta (pos)
 		local remaining_users
 			= math.max (meta:get_int ("mcl_villages:bell_users") - 1, 0)
 		meta:set_int ("mcl_villages:bell_users", remaining_users)
@@ -2596,7 +2596,7 @@ end
 
 local function acquire_bell (pos, limit)
 	local poi = mcl_villages.get_poi (pos)
-	local meta = minetest.get_meta (pos)
+	local meta = core.get_meta (pos)
 	if poi and poi.data == BELL_POI then
 		local users = meta:get_int ("mcl_villages:bell_users")
 		if users <= (limit or 32) - 1 then
@@ -2690,7 +2690,7 @@ local function sense_nearby_jobsites (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
 	local groups = profession and profession.group or jobsite_groups
-	local result = minetest.find_nodes_in_area (aa, bb, groups)
+	local result = core.find_nodes_in_area (aa, bb, groups)
 	local persist = 2.0 + pr:next (0, 20) / 20
 	return result, persist
 end
@@ -2719,7 +2719,7 @@ local function sense_nearby_beds (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
 	local nodes
-		= minetest.find_nodes_in_area (aa, bb, {"group:bed_bottom"})
+		= core.find_nodes_in_area (aa, bb, {"group:bed_bottom"})
 	local result = nodes
 	local persist = 2.0 + pr:next (0, 40) / 40
 	return result, persist
@@ -2727,7 +2727,7 @@ end
 
 local function sense_nearby_hideout (self, self_pos)
 	local nearby
-		= minetest.find_node_near (self_pos, 32, {"group:bed_bottom"}, true)
+		= core.find_node_near (self_pos, 32, {"group:bed_bottom"}, true)
 		or self._home
 	local persist = 2.0 + pr:next (0, 40) / 40
 	return nearby, persist
@@ -2756,7 +2756,7 @@ end
 local function sense_nearby_bells (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
-	local result = minetest.find_nodes_in_area (aa, bb, {"mcl_bells:bell"})
+	local result = core.find_nodes_in_area (aa, bb, {"mcl_bells:bell"})
 	local persist = 2.0 + pr:next (0, 20) / 20
 	return result, persist
 end
@@ -2786,7 +2786,7 @@ local WANTED_ITEM_RANGE = 8.0
 
 local function sense_visible_wanted_items (self, self_pos)
 	local items = {}
-	for object in minetest.objects_inside_radius (self_pos, WANTED_ITEM_RANGE) do
+	for object in core.objects_inside_radius (self_pos, WANTED_ITEM_RANGE) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "__builtin:item"
 			and check_item_timeout (self, entity) then
@@ -2806,7 +2806,7 @@ local ENTITY_VIEW_RANGE = 16.0
 
 local function sense_visible_living_entities (self, self_pos)
 	local entities = {}
-	for object in minetest.objects_inside_radius (self_pos, ENTITY_VIEW_RANGE) do
+	for object in core.objects_inside_radius (self_pos, ENTITY_VIEW_RANGE) do
 		local entity = object:get_luaentity ()
 		if object ~= self.object
 			and (object:is_player () or (entity and entity.is_mob)) then
@@ -2929,7 +2929,7 @@ local function sense_nearby_farmland (self, self_pos)
 	local pos = mcl_util.get_nodepos (self_pos)
 	local aa = vector.offset (pos, -4, -2, -4)
 	local bb = vector.offset (pos, 4, 2, 4)
-	local nodes = minetest.find_nodes_in_area (aa, bb, soil_groups)
+	local nodes = core.find_nodes_in_area (aa, bb, soil_groups)
 	table.shuffle (nodes)
 	local persist = 1.0 + math.random (0, 20) / 20
 	return nodes, persist
@@ -2939,12 +2939,12 @@ local function sense_harvestable_farmland (self, self_pos)
 	local pos = mcl_util.get_nodepos (self_pos)
 	local aa = vector.offset (pos, -2, -2, -2)
 	local bb = vector.offset (pos, 2, 0, 2)
-	local nodes = minetest.find_nodes_in_area (aa, bb, soil_groups)
+	local nodes = core.find_nodes_in_area (aa, bb, soil_groups)
 	table.shuffle (nodes)
 	local valid = {}
 	for _, node in pairs (nodes) do
 		local above = vector.offset (node, 0, 1, 0)
-		local info = minetest.get_node (above)
+		local info = core.get_node (above)
 
 		if is_mature_crop_or_air (info) then
 			table.insert (valid, node)
@@ -2961,12 +2961,12 @@ local function sense_random_immature_crop (self, self_pos)
 	local pos = mcl_util.get_nodepos (self_pos)
 	local aa = vector.offset (pos, -2, -1, -2)
 	local bb = vector.offset (pos, 2, 1, 2)
-	local nodes = minetest.find_nodes_in_area (aa, bb, {"group:plant"})
+	local nodes = core.find_nodes_in_area (aa, bb, {"group:plant"})
 	table.shuffle (nodes)
 
 	for _, pos in pairs (nodes) do
-		local node = minetest.get_node (pos)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node (pos)
+		local def = core.registered_nodes[node.name]
 
 		-- XXX: wouldn't better criteria be in order...
 		if table.indexof (villager_seeds, def._mcl_baseitem) ~= -1
@@ -3014,7 +3014,7 @@ end
 
 local function sense_jumpable_bed (self, self_pos)
 	local nearby
-		= minetest.find_node_near (self_pos, 16, {"group:bed_bottom"}, true)
+		= core.find_node_near (self_pos, 16, {"group:bed_bottom"}, true)
 	local persist = 1.5 + pr:next (0, 20) / 20
 	return nearby, persist
 end
@@ -3023,8 +3023,8 @@ local function sense_villagers_requesting_golem (self, self_pos)
 	local aa = vector.offset (self_pos, -10, -10, -10)
 	local bb = vector.offset (self_pos, 10, 10, 10)
 	local villagers = {}
-	local gmt = minetest.get_gametime ()
-	for object in minetest.objects_in_area (aa, bb) do
+	local gmt = core.get_gametime ()
+	for object in core.objects_in_area (aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:villager"
 			and entity:desires_golem (gmt) then
@@ -3186,7 +3186,7 @@ function villager:detect_golem (self_pos, dtime)
 		for _, obj in pairs (nearby_entities) do
 			local entity = obj:get_luaentity ()
 			if entity and entity.name == "mobs_mc:iron_golem" then
-				self._last_golem_gmt = minetest.get_gametime ()
+				self._last_golem_gmt = core.get_gametime ()
 				break
 			end
 		end
@@ -3205,25 +3205,25 @@ end
 function villager:summon_golem (self_pos)
 	local aa = vector.offset (self_pos, -8, -6, -8)
 	local bb = vector.offset (self_pos, 8, 6, 8)
-	local nn = minetest.find_nodes_in_area_under_air (aa, bb, {
+	local nn = core.find_nodes_in_area_under_air (aa, bb, {
 		"group:solid", "group:water",
 	})
 	table.shuffle (nn)
 	for _, n in pairs (nn) do
 		local c1 = vector.offset (n, 0, 1, 0)
 		local c2 = vector.offset (n, 0, 3, 0)
-		local up = minetest.find_nodes_in_area (c1, c2, {"air"})
+		local up = core.find_nodes_in_area (c1, c2, {"air"})
 		local lim = vector.offset (n, 0, -1, 0)
-		local down = minetest.find_nodes_in_area (n, lim, {"group:water"})
+		local down = core.find_nodes_in_area (n, lim, {"group:water"})
 		local floor_is_water
-			= minetest.get_item_group (minetest.get_node (n).name, "water") ~= 0
+			= core.get_item_group (core.get_node (n).name, "water") ~= 0
 		if floor_is_water and down and #down == 1
 			or not floor_is_water and up and #up >= 3 then
 			local spawnpos
 				= floor_is_water
 					and vector.offset (n, 0, -0.5, 0)
 					or vector.offset (n, 0, 0.5, 0)
-			local golem = minetest.add_entity (spawnpos, "mobs_mc:iron_golem")
+			local golem = core.add_entity (spawnpos, "mobs_mc:iron_golem")
 
 			if golem then
 				return true
@@ -3235,7 +3235,7 @@ function villager:summon_golem (self_pos)
 end
 
 function villager:maybe_summon_golem (self_pos, n_villagers)
-	local gmt = minetest.get_gametime ()
+	local gmt = core.get_gametime ()
 	if self:desires_golem (gmt) then
 		-- Attempt to locate a minimum of five villagers (if
 		-- not panicking) or three villagers (if panicking)
@@ -3280,7 +3280,7 @@ function villager:answer_bell (self_pos, dtime)
 			if mcl_raids.find_active_raid (self_pos) then
 				return
 			end
-			local time = minetest.get_gametime ()
+			local time = core.get_gametime ()
 			if time - self._last_alarm_gmt <= 15 then
 				self._special_schedule = "BELL_RANG"
 				self._interaction_target = nil
@@ -3419,11 +3419,11 @@ local function remove_provisional_poi (pos)
 end
 
 function villager:claim_poi (target)
-	local node = minetest.get_node (target)
+	local node = core.get_node (target)
 	local profession = get_profession (node.name)
 	if not profession or (self._profession
 				and self._profession ~= profession.name) then
-		minetest.log ("warning", table.concat ({
+		core.log ("warning", table.concat ({
 			"Attempting to claim an invalid job site: ",
 			vector.to_string (target),
 			" (type = ",
@@ -3576,28 +3576,28 @@ function villager:near_map_boundaries ()
 	node_pos.x = math.floor (node_pos.x + 0.5)
 	node_pos.y = math.floor (node_pos.y + 0.5)
 	node_pos.z = math.floor (node_pos.z + 0.5)
-	if not minetest.get_node_or_nil (node_pos) then
+	if not core.get_node_or_nil (node_pos) then
 		self._near_map_boundaries = true
 		return true
 	end
 	node_pos.x = node_pos.x + 16
-	if not minetest.get_node_or_nil (node_pos) then
+	if not core.get_node_or_nil (node_pos) then
 		self._near_map_boundaries = true
 		return true
 	end
 	node_pos.x = node_pos.x - 32
-	if not minetest.get_node_or_nil (node_pos) then
+	if not core.get_node_or_nil (node_pos) then
 		self._near_map_boundaries = true
 		return true
 	end
 	node_pos.x = node_pos.x + 16
 	node_pos.z = node_pos.z + 16
-	if not minetest.get_node_or_nil (node_pos) then
+	if not core.get_node_or_nil (node_pos) then
 		self._near_map_boundaries = true
 		return true
 	end
 	node_pos.z = node_pos.z - 32
-	if not minetest.get_node_or_nil (node_pos) then
+	if not core.get_node_or_nil (node_pos) then
 		self._near_map_boundaries = true
 		return true
 	end
@@ -3695,11 +3695,11 @@ function villager:check_wake_up (self_pos, dtime)
 end
 
 local function not_bed_bottom (name)
-	return minetest.get_item_group (name, "bed") ~= 1
+	return core.get_item_group (name, "bed") ~= 1
 end
 
 local function is_bed_occupied (bed_pos)
-	for object in minetest.objects_inside_radius (bed_pos, 0.5) do
+	for object in core.objects_inside_radius (bed_pos, 0.5) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:villager"
 			and entity._villager_sleeping
@@ -3712,11 +3712,11 @@ local function is_bed_occupied (bed_pos)
 end
 
 local function get_sleep_position (bed_pos)
-	local bed = minetest.get_node (bed_pos)
+	local bed = core.get_node (bed_pos)
 	if not_bed_bottom (bed.name) or is_bed_occupied (bed_pos) then
 		return nil
 	end
-	local dir = minetest.facedir_to_dir (bed.param2)
+	local dir = core.facedir_to_dir (bed.param2)
 	local offset = vector.multiply (dir, 0.35)
 	local yaw = math.atan2 (dir.z, dir.x) + math.pi / 2
 	return vector.offset (vector.add (offset, bed_pos), 0, 0.06, 0), yaw
@@ -3730,7 +3730,7 @@ function villager:sleep (self_pos, dtime)
 			self._villager_sleeping = false
 			return false
 		end
-		local node = minetest.get_node (home)
+		local node = core.get_node (home)
 		if (node.name ~= "ignore"
 		    and not_bed_bottom (node.name))
 			or vector.distance (self_pos, home) >= 0.5 then
@@ -3741,7 +3741,7 @@ function villager:sleep (self_pos, dtime)
 		return true
 	else
 		local home = self._home
-		local gametime = minetest.get_gametime ()
+		local gametime = core.get_gametime ()
 
 		if (gametime - self._last_slept_gmt) >= 6
 			and home
@@ -3764,8 +3764,8 @@ end
 function villager:find_a_home (self_pos, dtime)
 	if self._finding_a_home then
 		local home = self._finding_a_home
-		local node = minetest.get_node (home)
-		if self._home or minetest.get_item_group (node.name, "bed") == 0 then
+		local node = core.get_node (home)
+		if self._home or core.get_item_group (node.name, "bed") == 0 then
 			self._finding_a_home = nil
 			return false
 		end
@@ -3944,13 +3944,13 @@ function villager:craft_bread (self_pos)
 end
 
 function villager:use_workstation (self_pos, job_site)
-	local gmt = minetest.get_gametime ()
-	local day = minetest.get_day_count ()
+	local gmt = core.get_gametime ()
+	local day = core.get_day_count ()
 	self._last_labored_gmt = gmt
 	self:check_restock (gmt, day)
 
 	if self._profession == "farmer" then
-		if minetest.is_protected (job_site, "") then
+		if core.is_protected (job_site, "") then
 			return
 		end
 
@@ -4124,14 +4124,14 @@ function villager:farm (self_pos, dtime)
 
 			if dist < 1.75 then
 				local above = vector.offset (target, 0, 1, 0)
-				local node = minetest.get_node (above)
+				local node = core.get_node (above)
 				if is_mature_crop (node)
-					and not minetest.is_protected (above, "") then
-					minetest.dig_node (above, self.object)
+					and not core.is_protected (above, "") then
+					core.dig_node (above, self.object)
 				elseif node.name == "air"
-					and not minetest.is_protected (above, "") then
+					and not core.is_protected (above, "") then
 					local seed = self:get_farmable_seed ()
-					local node = minetest.get_node (target)
+					local node = core.get_node (target)
 					if seed and is_farmland (node) then
 						local def = seed:get_definition ()
 						local plant = def._mcl_places_plant
@@ -4139,7 +4139,7 @@ function villager:farm (self_pos, dtime)
 						local what = {
 							name = plant,
 						}
-						minetest.place_node (above, what, self.object)
+						core.place_node (above, what, self.object)
 					elseif seed then
 						self:add_to_inventory (seed)
 					end
@@ -4211,8 +4211,8 @@ function villager:fertilize_farmland (self_pos, dtime)
 		end
 
 		if idx and dist <= 1.5 then
-			local node = minetest.get_node (target)
-			local def = minetest.registered_nodes[node.name]
+			local node = core.get_node (target)
+			local def = core.registered_nodes[node.name]
 			if def._on_bone_meal
 				and table.indexof (villager_seeds,
 						   def._mcl_baseitem) ~= -1 then
@@ -4781,7 +4781,7 @@ function villager:throw_gifts (self_pos, recipient, pos)
 		local throwing_pos
 			= vector.offset (self_pos, 0, 1.9 * 0.6, 0)
 		local dir = vector.direction (self_pos, pos)
-		local obj = minetest.add_item (throwing_pos, item)
+		local obj = core.add_item (throwing_pos, item)
 
 		-- Indicate that this item should not be collected by
 		-- this mob for at least two seconds.
@@ -4789,7 +4789,7 @@ function villager:throw_gifts (self_pos, recipient, pos)
 			local entity = obj:get_luaentity ()
 			entity._dropped_by_villager = self.object
 			entity._dropped_by_villager_gmt
-				= minetest.get_gametime ()
+				= core.get_gametime ()
 			dir = vector.multiply (dir, 6.0)
 			obj:set_velocity (dir)
 		end
@@ -5064,8 +5064,8 @@ villager.village_aware_pacing
 local function is_y_colliding_with_bed (moveresult)
 	for _, collision in pairs (moveresult.collisions) do
 		if collision.axis == "y" and collision.type == "node" then
-			local node = minetest.get_node (collision.node_pos)
-			if minetest.get_item_group (node.name, "bed") > 0 then
+			local node = core.get_node (collision.node_pos)
+			if core.get_item_group (node.name, "bed") > 0 then
 				return true
 			end
 		end
@@ -5312,7 +5312,7 @@ function villager:throw_some_of (self_pos, target_pos, items)
 		local throwing_pos
 			= vector.offset (self_pos, 0, 1.9 * 0.6, 0)
 		local dir = vector.direction (self_pos, target_pos)
-		local obj = minetest.add_item (throwing_pos, stack)
+		local obj = core.add_item (throwing_pos, stack)
 
 		-- Indicate that this item should not be collected by
 		-- this mob for at least two seconds.
@@ -5320,7 +5320,7 @@ function villager:throw_some_of (self_pos, target_pos, items)
 			local entity = obj:get_luaentity ()
 			entity._dropped_by_villager = self.object
 			entity._dropped_by_villager_gmt
-				= minetest.get_gametime ()
+				= core.get_gametime ()
 			dir = vector.multiply (dir, 4.0)
 			obj:set_velocity (dir)
 		end
@@ -5619,7 +5619,7 @@ villager.wander_to_bell
 
 function villager:locate_cover (self_pos, dtime)
 	-- Time out after two minutes.
-	local gametime = minetest.get_gametime ()
+	local gametime = core.get_gametime ()
 	if gametime - self._last_alarm_gmt > 120 then
 		self._moving_to_cover = false
 		self._special_schedule = nil
@@ -5913,7 +5913,7 @@ local function stable_sort (array, less)
 end
 
 function villager:schedule ()
-	local tod = minetest.get_timeofday () * 24000
+	local tod = core.get_timeofday () * 24000
 	local minecraft_tod
 		= (tod - 6000 + self._stagger_schedules_by) % 24000
 	local ai_functions = {}
@@ -6177,8 +6177,8 @@ local hashpos = mcl_mobs.gwp_hashpos
 local is_top_slab = {}
 local is_bottom_slab = {}
 
-minetest.register_on_mods_loaded (function ()
-	for name, _ in pairs (minetest.registered_nodes) do
+core.register_on_mods_loaded (function ()
+	for name, _ in pairs (core.registered_nodes) do
 		local value = mcl_mobs.gwp_name_to_nodevalue (name)
 		if core.get_item_group(name, "slab_top") > 0 then
 			is_top_slab[value] = true
@@ -6233,7 +6233,7 @@ function villager:gwp_classify_node (context, pos)
 	local hash = hashpos (context, pos.x, pos.y, pos.z)
 	local cache = context.class_cache[hash]
 
-	-- This is very expensive, as minetest.get_node conses too
+	-- This is very expensive, as core.get_node conses too
 	-- much.
 	if cache then
 		return cache
@@ -6358,11 +6358,11 @@ function villager:claim_poi_for_upgrade (old_jobsite)
 			vector.to_string (old_jobsite),
 			" as it has already been claimed.",
 		}
-		minetest.log ("warning", table.concat (template))
+		core.log ("warning", table.concat (template))
 	else
 		-- Verify that this mob's profession matches the poi
 		-- block type before laying claim to the POI.
-		local node = minetest.get_node (old_jobsite)
+		local node = core.get_node (old_jobsite)
 		local profession = get_profession (node.name)
 		if not profession or (node.name ~= "ignore"
 				      and profession.name ~= self._profession) then
@@ -6373,7 +6373,7 @@ function villager:claim_poi_for_upgrade (old_jobsite)
 				self._profession or "unemployed",
 				" has changed and it could not be reclaimed.",
 			}
-			minetest.log ("warning", table.concat (template))
+			core.log ("warning", table.concat (template))
 		else
 			-- If a provisional POI exists now (as when a new
 			-- villager has decided to attempt to claim it),
@@ -6391,17 +6391,17 @@ function villager:claim_poi_for_upgrade (old_jobsite)
 end
 
 local function identify_bottom_piece_of_bed (old_bed)
-	local node = minetest.get_node (old_bed)
+	local node = core.get_node (old_bed)
 	if node.name == "ignore" then
 		-- Assume that this was a bottom piece.
 		return old_bed
-	elseif minetest.get_item_group (node.name, "bed") == 1 then
+	elseif core.get_item_group (node.name, "bed") == 1 then
 		return old_bed
-	elseif minetest.get_item_group (node.name, "bed") == 2 then
-		local dir = minetest.facedir_to_dir (node.param2)
+	elseif core.get_item_group (node.name, "bed") == 2 then
+		local dir = core.facedir_to_dir (node.param2)
 		local bottom_piece = vector.subtract (old_bed, dir)
-		local node1 = minetest.get_node (bottom_piece)
-		if minetest.get_item_group (node1.name, "bed") == 1 then
+		local node1 = core.get_node (bottom_piece)
+		if core.get_item_group (node1.name, "bed") == 1 then
 			return bottom_piece
 		end
 	end
@@ -6416,7 +6416,7 @@ function villager:claim_home_for_upgrade (old_bed)
 			self._profession or "unemployed",
 			"'s bed disappeared while being upgraded",
 		}
-		minetest.log ("warning", table.concat (template))
+		core.log ("warning", table.concat (template))
 		return
 	end
 
@@ -6429,7 +6429,7 @@ function villager:claim_home_for_upgrade (old_bed)
 			vector.to_string (bottom),
 			" as it has already been claimed",
 		}
-		minetest.log ("warning", table.concat (template))
+		core.log ("warning", table.concat (template))
 	else
 		self:claim_home (bottom)
 		self._bed = nil
@@ -6439,14 +6439,14 @@ end
 local function search_upward_for_bell (bell_pos)
 	-- If this is an ignore node, assume that the bell is two
 	-- nodes above the old _bell field.
-	local data = minetest.get_node (bell_pos)
+	local data = core.get_node (bell_pos)
 	if data.name == "ignore" then
 		return vector.offset (bell_pos, 0, 2, 0)
 	end
 
 	for i = 0, 8 do
 		local node = vector.offset (bell_pos, 0, i, 0)
-		if minetest.get_node (node).name == "mcl_bells:bell" then
+		if core.get_node (node).name == "mcl_bells:bell" then
 			return node
 		end
 	end
@@ -6464,7 +6464,7 @@ function villager:claim_bell_for_upgrade (old_bell)
 				or "(unknown)",
 			" vanished prior to upgrade.",
 		}
-		minetest.log ("warning", table.concat (template))
+		core.log ("warning", table.concat (template))
 	else
 		-- Don't limit the number of users coming from an
 		-- upgrade.
@@ -6478,7 +6478,7 @@ local function convert_old_trades (tradestring, tier)
 	if type (tradestring) ~= "string" then
 		return {}
 	end
-	local trades = minetest.deserialize (tradestring)
+	local trades = core.deserialize (tradestring)
 	local new_trades = {}
 	for _, trade in ipairs (trades) do
 		-- Limit these trades to those belonging to the

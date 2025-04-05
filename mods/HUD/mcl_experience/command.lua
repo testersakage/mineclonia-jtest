@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_chatcommand("xp", {
+core.register_chatcommand("xp", {
 	params = S("[[<player>] <xp>]"),
 	description = S("Gives a player some XP"),
 	privs = {server=true},
@@ -18,10 +18,10 @@ minetest.register_chatcommand("xp", {
 			xp = tonumber(P[i]) ---@diagnostic disable-line: cast-local-type
 		end
 		if i < 2 then
-			player = minetest.get_player_by_name(name)
+			player = core.get_player_by_name(name)
 		end
 		if i == 2 then
-			player = minetest.get_player_by_name(P[1])
+			player = core.get_player_by_name(P[1])
 		end
 
 		if not xp then

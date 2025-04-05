@@ -1,7 +1,7 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
-local S = minetest.get_translator(modname)
+local S = core.get_translator(modname)
 
 mcl_hunger = {}
 
@@ -12,7 +12,7 @@ If the damage setting is changed within the game, this does NOT
 update the hunger mechanic, so the game must be restarted for this
 to take effect. ]]
 mcl_hunger.active = false
-if minetest.settings:get_bool("enable_damage") == true and minetest.settings:get_bool("mcl_enable_hunger") ~= false then
+if core.settings:get_bool("enable_damage") == true and core.settings:get_bool("mcl_enable_hunger") ~= false then
 	mcl_hunger.active = true
 end
 
@@ -49,7 +49,7 @@ if mcl_hunger.active == true then
 -- Read debug mode setting
 -- The setting should only be read at the beginning, this mod is not
 -- prepared to change this setting later.
-mcl_hunger.debug = minetest.settings:get_bool("mcl_hunger_debug")
+mcl_hunger.debug = core.settings:get_bool("mcl_hunger_debug")
 if mcl_hunger.debug == nil then
 	mcl_hunger.debug = false
 end
@@ -98,7 +98,7 @@ if mcl_hunger.debug then
 	hb.register_hudbar("exhaustion", 0xFFFFFF, S("Exhaust."), { icon = "mcl_hunger_icon_exhaustion.png", bgicon = "mcl_hunger_bgicon_exhaustion.png", bar = "mcl_hunger_bar_exhaustion.png" }, 0, mcl_hunger.EXHAUST_LVL, false, nil, nil, 1)
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	mcl_hunger.init_player(player)
 	init_hud(player)
@@ -106,7 +106,7 @@ minetest.register_on_joinplayer(function(player)
 	mcl_hunger.last_eat[name] = -1
 end)
 
-minetest.register_on_respawnplayer(function(player)
+core.register_on_respawnplayer(function(player)
 	-- reset hunger, related values and poison
 	local name = player:get_player_name()
 
@@ -123,14 +123,14 @@ minetest.register_on_respawnplayer(function(player)
 end)
 
 -- PvP combat exhaustion
-minetest.register_on_punchplayer(function(victim, puncher, time_from_last_punch, tool_capabilities, dir, damage) ---@diagnostic disable-line: unused-local
+core.register_on_punchplayer(function(victim, puncher, time_from_last_punch, tool_capabilities, dir, damage) ---@diagnostic disable-line: unused-local
 	if puncher:is_player() then
 		mcl_hunger.exhaust(puncher:get_player_name(), mcl_hunger.EXHAUST_ATTACK)
 	end
 end)
 
 -- Exhaust on taking damage
-minetest.register_on_player_hpchange(function(player, hp_change)
+core.register_on_player_hpchange(function(player, hp_change)
 	if hp_change < 0 then
 		local name = player:get_player_name()
 		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_DAMAGE)
@@ -241,11 +241,11 @@ if player:get_player_control().jump and mcl_player.players[player].jump_cooldown
 	if not node_stand or not node_stand_below or not node_head or not node_feet then
 		return
 	end
-	if (not minetest.registered_nodes[node_stand]
-	or not minetest.registered_nodes[node_stand_below]
-	or not minetest.registered_nodes[node_head]
-	or not minetest.registered_nodes[node_feet]
-	or not minetest.registered_nodes[node_head_top]) then
+	if (not core.registered_nodes[node_stand]
+	or not core.registered_nodes[node_stand_below]
+	or not core.registered_nodes[node_head]
+	or not core.registered_nodes[node_feet]
+	or not core.registered_nodes[node_head_top]) then
 		return
 	end
 
@@ -262,13 +262,13 @@ if player:get_player_control().jump and mcl_player.players[player].jump_cooldown
 	as of 0.4.15.
 	]]
 
-	if minetest.get_item_group(node_feet, "liquid") == 0 and
-			minetest.get_item_group(node_stand, "liquid") == 0 and
-			not minetest.registered_nodes[node_feet].climbable and
-			not minetest.registered_nodes[node_stand].climbable and
-			(minetest.registered_nodes[node_stand].walkable or minetest.registered_nodes[node_stand_below].walkable)
-			and minetest.get_item_group(node_stand, "disable_jump") == 0
-			and minetest.get_item_group(node_stand_below, "disable_jump") == 0 then
+	if core.get_item_group(node_feet, "liquid") == 0 and
+			core.get_item_group(node_stand, "liquid") == 0 and
+			not core.registered_nodes[node_feet].climbable and
+			not core.registered_nodes[node_stand].climbable and
+			(core.registered_nodes[node_stand].walkable or core.registered_nodes[node_stand_below].walkable)
+			and core.get_item_group(node_stand, "disable_jump") == 0
+			and core.get_item_group(node_stand_below, "disable_jump") == 0 then
 	-- Cause exhaustion for jumping
 	if mcl_sprint.is_sprinting(name) then
 		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_SPRINT_JUMP)
@@ -289,8 +289,8 @@ mcl_player.register_globalstep_slow(function(player)
 	--[[ Swimming: Cause exhaustion.
 	NOTE: As of 0.4.15, it only counts as swimming when you are with the feet inside the liquid!
 	Head alone does not count. We respect that for now. ]]
-	if not player:get_attach() and (minetest.get_item_group(mcl_player.players[player].nodes.node_feet, "liquid") ~= 0 or
-			minetest.get_item_group(mcl_player.players[player].nodes.node_stand, "liquid") ~= 0) then
+	if not player:get_attach() and (core.get_item_group(mcl_player.players[player].nodes.node_feet, "liquid") ~= 0 or
+			core.get_item_group(mcl_player.players[player].nodes.node_stand, "liquid") ~= 0) then
 		local lastPos = mcl_player.players[player].lastPos
 		if lastPos then
 			local dist = vector.distance(lastPos, player:get_pos())
@@ -309,7 +309,7 @@ end)
 --[[ IF HUNGER IS NOT ENABLED ]]
 else
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	mcl_hunger.init_player(player)
 	mcl_hunger.last_eat[player:get_player_name()] = -1
 end)

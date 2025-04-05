@@ -1,20 +1,20 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local PISTON_MAXIMUM_PUSH = 12
 
 -- Remove pusher of piston.
 -- To be used when piston was destroyed or dug.
 local function piston_remove_pusher(pos, oldnode)
-	local pistonspec = minetest.registered_nodes[oldnode.name]._piston_spec
+	local pistonspec = core.registered_nodes[oldnode.name]._piston_spec
 
-	local dir = -minetest.facedir_to_dir(oldnode.param2)
+	local dir = -core.facedir_to_dir(oldnode.param2)
 	local pusherpos = vector.add(pos, dir)
-	local pushername = minetest.get_node(pusherpos).name
+	local pushername = core.get_node(pusherpos).name
 
 	if pushername == pistonspec.pusher then -- make sure there actually is a pusher
-		minetest.remove_node(pusherpos)
-		minetest.check_for_falling(pusherpos)
-		minetest.sound_play("piston_retract", {
+		core.remove_node(pusherpos)
+		core.check_for_falling(pusherpos)
+		core.sound_play("piston_retract", {
 			pos = pos,
 			max_hear_distance = 31,
 			gain = 0.3,
@@ -25,18 +25,18 @@ end
 -- Remove base node of piston.
 -- To be used when pusher was destroyed.
 local function piston_remove_base(pos, oldnode)
-	local basenodename = minetest.registered_nodes[oldnode.name].corresponding_piston
-	local pistonspec = minetest.registered_nodes[basenodename]._piston_spec
+	local basenodename = core.registered_nodes[oldnode.name].corresponding_piston
+	local pistonspec = core.registered_nodes[basenodename]._piston_spec
 
-	local dir = -minetest.facedir_to_dir(oldnode.param2)
+	local dir = -core.facedir_to_dir(oldnode.param2)
 	local basepos = vector.subtract(pos, dir)
-	local basename = minetest.get_node(basepos).name
+	local basename = core.get_node(basepos).name
 
 	if basename == pistonspec.onname then -- make sure there actually is a base node
-		minetest.remove_node(basepos)
-		minetest.add_item(basepos, pistonspec.offname)
-		minetest.check_for_falling(basepos)
-		minetest.sound_play("piston_retract", {
+		core.remove_node(basepos)
+		core.add_item(basepos, pistonspec.offname)
+		core.check_for_falling(basepos)
+		core.sound_play("piston_retract", {
 			pos = pos,
 			max_hear_distance = 31,
 			gain = 0.3,
@@ -45,13 +45,13 @@ local function piston_remove_base(pos, oldnode)
 end
 
 local function piston_on(pos, node)
-	local pistonspec = minetest.registered_nodes[node.name]._piston_spec
+	local pistonspec = core.registered_nodes[node.name]._piston_spec
 
-	local dir = -minetest.facedir_to_dir(node.param2)
+	local dir = -core.facedir_to_dir(node.param2)
 	local np = vector.add(pos, dir)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 
-	local objects = minetest.get_objects_inside_radius(np, 0.9)
+	local objects = core.get_objects_inside_radius(np, 0.9)
 	for _, obj in ipairs(objects) do
 		if vector.equals(obj:get_pos():round(), np) then
 			local l = obj:get_luaentity()
@@ -61,7 +61,7 @@ local function piston_on(pos, node)
 		end
 	end
 
-	local objects = minetest.get_objects_inside_radius(pos, 0.9)
+	local objects = core.get_objects_inside_radius(pos, 0.9)
 	for _, obj in ipairs(objects) do
 		if vector.equals(obj:get_pos():round(), pos) then
 			local l = obj:get_luaentity()
@@ -73,13 +73,13 @@ local function piston_on(pos, node)
 
 	local success = mcl_pistons.push(np, dir, PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
 	if success then
-		minetest.swap_node(pos, {param2 = node.param2, name = pistonspec.onname})
-		minetest.set_node(np, {param2 = node.param2, name = pistonspec.pusher})
-		local below = minetest.get_node({x=np.x,y=np.y-1,z=np.z})
+		core.swap_node(pos, {param2 = node.param2, name = pistonspec.onname})
+		core.set_node(np, {param2 = node.param2, name = pistonspec.pusher})
+		local below = core.get_node({x=np.x,y=np.y-1,z=np.z})
 		if below.name == "mcl_farming:soil" or below.name == "mcl_farming:soil_wet" then
-			minetest.set_node({x=np.x,y=np.y-1,z=np.z}, {name = "mcl_core:dirt"})
+			core.set_node({x=np.x,y=np.y-1,z=np.z}, {name = "mcl_core:dirt"})
 		end
-		minetest.sound_play("piston_extend", {
+		core.sound_play("piston_extend", {
 			pos = pos,
 			max_hear_distance = 31,
 			gain = 0.3,
@@ -88,17 +88,17 @@ local function piston_on(pos, node)
 end
 
 local function piston_off(pos, node)
-	local pistonspec = minetest.registered_nodes[node.name]._piston_spec
-	minetest.swap_node(pos, {param2 = node.param2, name = pistonspec.offname})
+	local pistonspec = core.registered_nodes[node.name]._piston_spec
+	core.swap_node(pos, {param2 = node.param2, name = pistonspec.offname})
 	piston_remove_pusher(pos, node)
 	if not pistonspec.sticky then
 		return
 	end
 
-	local dir = -minetest.facedir_to_dir(node.param2)
+	local dir = -core.facedir_to_dir(node.param2)
 	local pullpos = vector.add(pos, vector.multiply(dir, 2))
-	if minetest.get_item_group(minetest.get_node(pullpos).name, "unsticky") == 0 then
-		local meta = minetest.get_meta(pos)
+	if core.get_item_group(core.get_node(pullpos).name, "unsticky") == 0 then
+		local meta = core.get_meta(pos)
 		mcl_pistons.push(pullpos, vector.multiply(dir, -1), PISTON_MAXIMUM_PUSH, meta:get_string("owner"), pos)
 	end
 end
@@ -110,16 +110,16 @@ local function piston_orientate(pos, placer)
 	-- placer pitch in degrees
 	local pitch = placer:get_look_vertical() * (180 / math.pi)
 
-	local node = minetest.get_node(pos)
-	local pistonspec = minetest.registered_nodes[node.name]._piston_spec
+	local node = core.get_node(pos)
+	local pistonspec = core.registered_nodes[node.name]._piston_spec
 	if pitch > 55 then
-		minetest.add_node(pos, {name=pistonspec.offname, param2 = minetest.dir_to_facedir(vector.new(0, -1, 0), true)})
+		core.add_node(pos, {name=pistonspec.offname, param2 = core.dir_to_facedir(vector.new(0, -1, 0), true)})
 	elseif pitch < -55 then
-		minetest.add_node(pos, {name=pistonspec.offname, param2 = minetest.dir_to_facedir(vector.new(0, 1, 0), true)})
+		core.add_node(pos, {name=pistonspec.offname, param2 = core.dir_to_facedir(vector.new(0, 1, 0), true)})
 	end
 
 	-- set owner meta after setting node
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local owner = placer and placer.get_player_name and placer:get_player_name()
 	if owner and owner ~= "" then
 		meta:set_string("owner", owner)
@@ -191,7 +191,7 @@ local offdef = {
 			return -core.facedir_to_dir(node.param2) ~= dir
 		end,
 		update = function(pos, node)
-			local dir = -minetest.facedir_to_dir(node.param2)
+			local dir = -core.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
@@ -215,7 +215,7 @@ local ondef = {
 			return -core.facedir_to_dir(node.param2) ~= dir
 		end,
 		update = function(pos, node)
-			local dir = -minetest.facedir_to_dir(node.param2)
+			local dir = -core.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
@@ -256,7 +256,7 @@ local pusherdef = {
 }
 
 -- offstate
-minetest.register_node("mcl_pistons:piston_off", table.merge(normaldef, offdef, {
+core.register_node("mcl_pistons:piston_off", table.merge(normaldef, offdef, {
 	_doc_items_create_entry = true,
 	_tt_help = S("Pushes block when powered by redstone power"),
 	_doc_items_longdesc = S("A piston is a redstone component with a pusher which pushes the block or blocks in front of it when it is supplied with redstone power. Not all blocks can be pushed, however."),
@@ -273,7 +273,7 @@ minetest.register_node("mcl_pistons:piston_off", table.merge(normaldef, offdef, 
 }))
 
 -- onstate
-minetest.register_node("mcl_pistons:piston_on", table.merge(normaldef, ondef, {
+core.register_node("mcl_pistons:piston_on", table.merge(normaldef, ondef, {
 	tiles = {
 		"mesecons_piston_bottom.png^[transformR180",
 		"mesecons_piston_bottom.png",
@@ -287,7 +287,7 @@ minetest.register_node("mcl_pistons:piston_on", table.merge(normaldef, ondef, {
 }))
 
 -- pusher
-minetest.register_node("mcl_pistons:piston_pusher", table.merge(pusherdef, {
+core.register_node("mcl_pistons:piston_pusher", table.merge(pusherdef, {
 	tiles = {
 		"mesecons_piston_pusher_top.png",
 		"mesecons_piston_pusher_bottom.png",
@@ -315,7 +315,7 @@ local stickydef = table.merge(commdef, {
 })
 
 -- offstate
-minetest.register_node("mcl_pistons:piston_sticky_off", table.merge(stickydef, offdef, {
+core.register_node("mcl_pistons:piston_sticky_off", table.merge(stickydef, offdef, {
 	_doc_items_create_entry = true,
 	_tt_help = S("Pushes or pulls block when powered by redstone power"),
 	_doc_items_longdesc = S("A sticky piston is a redstone component with a sticky pusher which can be extended and retracted. It extends when it is supplied with redstone power. When the pusher extends, it pushes the block or blocks in front of it. When it retracts, it pulls back the single block in front of it. Note that not all blocks can be pushed or pulled."),
@@ -332,7 +332,7 @@ minetest.register_node("mcl_pistons:piston_sticky_off", table.merge(stickydef, o
 }))
 
 -- onstate
-minetest.register_node("mcl_pistons:piston_sticky_on", table.merge(stickydef, ondef, {
+core.register_node("mcl_pistons:piston_sticky_on", table.merge(stickydef, ondef, {
 	tiles = {
 		"mesecons_piston_bottom.png^[transformR180",
 		"mesecons_piston_bottom.png",
@@ -346,7 +346,7 @@ minetest.register_node("mcl_pistons:piston_sticky_on", table.merge(stickydef, on
 }))
 
 -- pusher
-minetest.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef, {
+core.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef, {
 	tiles = {
 		"mesecons_piston_pusher_top.png",
 		"mesecons_piston_pusher_bottom.png",
@@ -359,7 +359,7 @@ minetest.register_node("mcl_pistons:piston_pusher_sticky", table.merge(pusherdef
 }))
 
 --craft recipes
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_pistons:piston_off",
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
@@ -368,7 +368,7 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_pistons:piston_sticky_off",
 	recipe = {
 		{"mcl_mobitems:slimeball"},
@@ -383,7 +383,7 @@ doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pist
 doc.add_entry_alias("nodes", "mcl_pistons:piston_sticky_off", "nodes", "mcl_pistons:piston_pusher_sticky")
 
 -- convert old mesecons pistons to mcl_pistons
-minetest.register_lbm(
+core.register_lbm(
 {
 	label = "update legacy mesecons pistons",
 	name = "mcl_pistons:replace_legacy_pistons",
@@ -400,9 +400,9 @@ minetest.register_lbm(
 	action = function(pos, node)
 		local new_param2 = node.param2
 		if string.find(node.name, "up") then
-			new_param2 = minetest.dir_to_facedir(vector.new(0, -1, 0), true)
+			new_param2 = core.dir_to_facedir(vector.new(0, -1, 0), true)
 		elseif string.find(node.name, "down") then
-			new_param2 = minetest.dir_to_facedir(vector.new(0, 1, 0), true)
+			new_param2 = core.dir_to_facedir(vector.new(0, 1, 0), true)
 		end
 
 		local is_sticky = string.find(node.name, "sticky") and true or false
@@ -416,9 +416,9 @@ minetest.register_lbm(
 			nodename = is_sticky and "mcl_pistons:piston_pusher_sticky" or "mcl_pistons:piston_pusher"
 		end
 
-		minetest.set_node(pos, {name = nodename, param2 = new_param2})
+		core.set_node(pos, {name = nodename, param2 = new_param2})
 	end
 })
 
-minetest.register_alias("mesecons_pistons:piston_normal_off", "mcl_pistons:piston_off")
-minetest.register_alias("mesecons_pistons:piston_sticky_off", "mcl_pistons:piston_sticky_off")
+core.register_alias("mesecons_pistons:piston_normal_off", "mcl_pistons:piston_off")
+core.register_alias("mesecons_pistons:piston_sticky_off", "mcl_pistons:piston_sticky_off")

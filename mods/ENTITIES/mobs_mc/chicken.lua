@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -113,8 +113,8 @@ function chicken:do_custom (dtime)
 		self.egg_timer = nil
 
 		local pos = self.object:get_pos ()
-		minetest.add_item (pos, "mcl_throwing:egg")
-		minetest.sound_play ("mobs_mc_chicken_lay_egg", {
+		core.add_item (pos, "mcl_throwing:egg")
+		core.sound_play ("mobs_mc_chicken_lay_egg", {
 			pos = pos,
 			gain = 1.0,
 			max_hear_distance = 16,

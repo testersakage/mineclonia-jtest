@@ -69,7 +69,7 @@ function mcl_serverplayer.update_ammo (state, player, always)
 		return
 	end
 
-	local ammo = minetest.get_item_group (name, "crossbow") > 0
+	local ammo = core.get_item_group (name, "crossbow") > 0
 		and mcl_bows.get_arrow_stack_for_crossbow (player)
 		or mcl_bows.get_arrow_stack_for_bow (player)
 	local count = ammo and ammo:get_count () or 0
@@ -105,9 +105,9 @@ function mcl_serverplayer.release_useitem (state, player, usetime, challenge)
 	local wielditem = player:get_wielded_item ()
 	local name = wielditem:get_name ()
 
-	if minetest.get_item_group (name, "bow") > 0 then
+	if core.get_item_group (name, "bow") > 0 then
 		mcl_bows.player_shoot (player, wielditem, usetime * 1.0e+6)
-	elseif minetest.get_item_group (name, "crossbow") > 0 then
+	elseif core.get_item_group (name, "crossbow") > 0 then
 		mcl_bows.load_crossbow (player, wielditem, usetime * 1.0e+6)
 	end
 
@@ -119,7 +119,7 @@ end
 -- Offhand management.
 ------------------------------------------------------------------------
 
-minetest.register_on_player_inventory_action (function (player, action, inv, inventory_info)
+core.register_on_player_inventory_action (function (player, action, inv, inventory_info)
 	if mcl_serverplayer.is_csm_at_least (player, 1) then
 		if (action == "move"
 			and (inventory_info.from_list == "offhand"
@@ -139,11 +139,11 @@ end)
 -- This is a list defining how items should be placed when something
 -- is being pointed at.
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 
 local handshake_item_defs = mcl_serverplayer.handshake_item_defs
 
-for name, item in pairs (minetest.registered_items) do
+for name, item in pairs (core.registered_items) do
 	-- The following placement classes exist:
 	--   food
 	--   food_edible_whilst_full
@@ -171,7 +171,7 @@ for name, item in pairs (minetest.registered_items) do
 		handshake_item_defs[name] = "bows"
 	elseif core.get_item_group(name, "bow") > 0 then
 		handshake_item_defs[name] = "bows"
-	elseif item.on_place and minetest.registered_nodes[name] then
+	elseif item.on_place and core.registered_nodes[name] then
 		-- Probably a node.  Default to being used on nodes.
 		handshake_item_defs[name] = "node_defaults"
 	elseif rawget (item, "on_secondary_use") then
@@ -189,7 +189,7 @@ local hand = {
 -- Assign "default" to entities and nodes with
 -- right click menus/actions.
 
-for node, def in pairs (minetest.registered_nodes) do
+for node, def in pairs (core.registered_nodes) do
 	if def.on_rightclick
 		or def._configures_formspec
 		or core.get_item_group(node, "container") > 0 then
@@ -197,7 +197,7 @@ for node, def in pairs (minetest.registered_nodes) do
 	end
 end
 
-for entity, def in pairs (minetest.registered_entities) do
+for entity, def in pairs (core.registered_entities) do
 	if def.on_rightclick and not def._unplaceable_by_default then
 		hand[entity] = "default"
 	end
@@ -210,11 +210,11 @@ handshake_item_defs[""] = nil -- Remove this hand.
 local node_defaults = {
 }
 
-for node, _ in pairs (minetest.registered_nodes) do
+for node, _ in pairs (core.registered_nodes) do
 	node_defaults[node] = "default"
 end
 
-for entity, def in pairs (minetest.registered_entities) do
+for entity, def in pairs (core.registered_entities) do
 	if def.on_rightclick and not def._unplaceable_by_default then
 		node_defaults[entity] = "default"
 	end
@@ -233,7 +233,7 @@ handshake_item_defs["placeable_on_any_thing"] = {
 local placeable_on_any_thing = handshake_item_defs["placeable_on_any_thing"]
 
 -- Add all entities.
-for entity, def in pairs (minetest.registered_entities) do
+for entity, def in pairs (core.registered_entities) do
 	placeable_on_any_thing[entity] = "default"
 end
 
@@ -242,7 +242,7 @@ local placeable_on_actionable = {
 
 -- Assign "default" to entities and nodes with
 -- right click menus.
-for node, def in pairs (minetest.registered_nodes) do
+for node, def in pairs (core.registered_nodes) do
 	if def.on_rightclick
 		or def._configures_formspec
 		or core.get_item_group(node, "container") > 0 then
@@ -250,7 +250,7 @@ for node, def in pairs (minetest.registered_nodes) do
 	end
 end
 
-for entity, def in pairs (minetest.registered_entities) do
+for entity, def in pairs (core.registered_entities) do
 	if def.on_rightclick and not def._unplaceable_by_default then
 		placeable_on_actionable[entity] = "default"
 	end

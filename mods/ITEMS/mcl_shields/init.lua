@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator(modname)
 
 mcl_shields = {
@@ -15,14 +15,14 @@ mcl_shields = {
 	players = {},
 }
 
-local interact_priv = minetest.registered_privileges.interact
+local interact_priv = core.registered_privileges.interact
 interact_priv.give_to_singleplayer = false
 interact_priv.give_to_admin = false
 
 local overlay = mcl_enchanting.overlay
 local hud = "mcl_shield_hud.png"
 
-minetest.register_tool("mcl_shields:shield", {
+core.register_tool("mcl_shields:shield", {
 	description = S("Shield"),
 	_doc_items_longdesc = S("A shield is a tool used for protecting the player against attacks."),
 	inventory_image = "mcl_shield_48.png",
@@ -128,7 +128,7 @@ local function set_shield_layers(itemstack, layers)
 	return texture
 end
 
-minetest.register_entity("mcl_shields:shield_entity", {
+core.register_entity("mcl_shields:shield_entity", {
 	initial_properties = {
 		visual = "mesh",
 		mesh = "mcl_shield.obj",
@@ -236,7 +236,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		durability = durability * (unbreaking + 1)
 	end
 
-	if not minetest.is_creative_enabled(obj:get_player_name()) and damage >= 3 then
+	if not core.is_creative_enabled(obj:get_player_name()) and damage >= 3 then
 		shieldstack:add_wear(65535 / durability) ---@diagnostic disable-line: need-check-nil
 		if blocking == 2 then
 			obj:set_wielded_item(shieldstack)
@@ -245,7 +245,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 			mcl_inventory.update_inventory_formspec(obj)
 		end
 	end
-	minetest.sound_play({name = "mcl_block"}, {pos = obj:get_pos(), max_hear_distance = 16})
+	core.sound_play({name = "mcl_block"}, {pos = obj:get_pos(), max_hear_distance = 16})
 	return 0
 end)
 
@@ -285,7 +285,7 @@ end
 
 local function set_interact(player, interact)
 	local player_name = player:get_player_name()
-	local privs = minetest.get_player_privs(player_name)
+	local privs = core.get_player_privs(player_name)
 	if privs.interact == interact then
 		return
 	end
@@ -299,14 +299,14 @@ local function set_interact(player, interact)
 		privs.interact = nil
 	end
 
-	minetest.set_player_privs(player_name, privs)
+	core.set_player_privs(player_name, privs)
 end
 
 -- Prevent player from being able to circumvent interact privilage removal by
 -- using shield.
-minetest.register_on_priv_revoke(function(name, revoker, priv)
+core.register_on_priv_revoke(function(name, revoker, priv)
 	if priv == "interact" and revoker then
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if not player then
 			return
 		end
@@ -333,7 +333,7 @@ local function remove_shield_hud(player)
 end
 
 local function add_shield_entity(player, i)
-	local shield = minetest.add_entity(player:get_pos(), "mcl_shields:shield_entity")
+	local shield = core.add_entity(player:get_pos(), "mcl_shields:shield_entity")
 	if shield and shield:get_pos() then
 		shield:get_luaentity()._shield_number = i
 		mcl_shields.players[player].shields[i] = shield
@@ -354,7 +354,7 @@ local function is_node_stack(itemstack)
 end
 
 local function is_rmb_conflicting_node(nodename)
-	local nodedef = minetest.registered_nodes[nodename]
+	local nodedef = core.registered_nodes[nodename]
 	return nodedef and nodedef.on_rightclick
 end
 
@@ -395,7 +395,7 @@ local function handle_blocking(player)
 
 	if shield_in_hand then
 		if not_blocking then
-			minetest.after(0.05, function()
+			core.after(0.05, function()
 				if (not_blocking or not shield_in_offhand) and shield_in_hand and rmb then
 					if player_shield.blocking ~= 2 then
 						mcl_serverplayer.handle_blocking (player, 2)
@@ -413,12 +413,12 @@ local function handle_blocking(player)
 	elseif shield_in_offhand then
 		local pointed_thing = mcl_util.get_pointed_thing(player, true)
 		local wielded_stack = player:get_wielded_item()
-		local offhand_can_block = (minetest.get_item_group(wielded_item(player), "bow") ~= 1
-		and minetest.get_item_group(wielded_item(player), "crossbow") ~= 1)
+		local offhand_can_block = (core.get_item_group(wielded_item(player), "bow") ~= 1
+		and core.get_item_group(wielded_item(player), "crossbow") ~= 1)
 
 		if pointed_thing and pointed_thing.type == "node" then
-			local pointed_node = minetest.get_node(pointed_thing.under)
-			if minetest.get_item_group(pointed_node.name, "container") > 1
+			local pointed_node = core.get_node(pointed_thing.under)
+			if core.get_item_group(pointed_node.name, "container") > 1
 			or is_rmb_conflicting_node(pointed_node.name)
 			or is_node_stack(wielded_stack)
 			then
@@ -430,7 +430,7 @@ local function handle_blocking(player)
 			return
 		end
 		if not_blocking then
-			minetest.after(0.05, function()
+			core.after(0.05, function()
 				if (not_blocking or not shield_in_hand) and shield_in_offhand and rmb  and offhand_can_block then
 					if player_shield.blocking ~= 1 then
 						mcl_serverplayer.handle_blocking (player, 1)
@@ -537,7 +537,7 @@ local function update_shield_hud(player, blocking, shieldstack)
 	end
 end
 
-minetest.register_globalstep(function()
+core.register_globalstep(function()
 	for player in mcl_util.connected_players() do
 
 		handle_blocking(player)
@@ -556,21 +556,21 @@ minetest.register_globalstep(function()
 	end
 end)
 
-minetest.register_on_dieplayer(function(player)
+core.register_on_dieplayer(function(player)
 	set_interact(player, true)
 	playerphysics.remove_physics_factor(player, "speed", "shield_speed")
-	if not minetest.settings:get_bool("mcl_keepInventory") then
+	if not core.settings:get_bool("mcl_keepInventory") then
 		remove_shield_entity(player, 1)
 		remove_shield_entity(player, 2)
 	end
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	shield_hud[player] = nil
 	mcl_shields.players[player] = nil
 end)
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_shields:shield",
 	recipe = {
 		{"group:wood", "mcl_core:iron_ingot", "group:wood"},
@@ -581,7 +581,7 @@ minetest.register_craft({
 
 for colorkey, colortab in pairs(mcl_banners.colors) do
 	local color = colortab.color_key
-	minetest.register_tool("mcl_shields:shield_" .. color, {
+	core.register_tool("mcl_shields:shield_" .. color, {
 		description = D(colortab.color_name.." Shield"), -- "Purple Shield"
 		_doc_items_longdesc = S("A shield is a tool used for protecting the player against attacks."),
 		inventory_image = "mcl_shield_48.png^(mcl_banners_item_overlay_48.png^[colorize:" .. colortab.rgb ..")",
@@ -612,12 +612,12 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 	})
 
 	local banner = "mcl_banners:banner_item_" .. color
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "mcl_shields:shield_" .. color,
 		recipe = {"mcl_shields:shield", banner},
 	})
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "mcl_shields:shield_" .. color .. "_enchanted",
 		recipe = {"mcl_shields:shield_enchanted", banner},
@@ -670,15 +670,15 @@ local function craft_banner_on_shield(itemstack, player, old_craft_grid, _)
 	itemstack:set_wear(shield_stack:get_wear())
 end
 
-minetest.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
 	return craft_banner_on_shield(itemstack, player, old_craft_grid, craft_inv)
 end)
 
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
 	return craft_banner_on_shield(itemstack, player, old_craft_grid, craft_inv)
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	mcl_shields.players[player] = {
 		shields = {},
 		blocking = 0,

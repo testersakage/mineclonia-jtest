@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -361,8 +361,8 @@ local function box_intersection (box, other_box)
 end
 
 local function is_clear (self, nodepos, objpos, dir, cbox)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	if def and not def.walkable and def.liquidtype == "none" then
 		local cbox = table.copy (cbox)
 		local x1 = dir.x < 0 and dir.x or 0
@@ -383,7 +383,7 @@ local function is_clear (self, nodepos, objpos, dir, cbox)
 		-- Locate intersecting shulkers.
 		local aa = vector.offset (objpos, -1.5, -1.5, -1.5)
 		local bb = vector.offset (objpos, 1.5, 1.5, 1.5)
-		for object in minetest.objects_in_area (aa, bb) do
+		for object in core.objects_in_area (aa, bb) do
 			if object ~= self.object then
 				local entity = object:get_luaentity ()
 				if entity and entity.name == "mobs_mc:shulker" then
@@ -408,13 +408,13 @@ local function is_clear (self, nodepos, objpos, dir, cbox)
 end
 
 local function is_solid (nodepos)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable and def.groups.opaque
 end
 
 local function is_full_node (node_below)
-	local boxes = minetest.get_node_boxes ("collision_box", node_below)
+	local boxes = core.get_node_boxes ("collision_box", node_below)
 	if #boxes ~= 1 then
 		return false
 	end
@@ -438,7 +438,7 @@ function shulker:attachment_valid (face, node_pos, obj_pos)
 	if not is_full_node (node_below) then
 		return false
 	end
-	if minetest.get_node (node_pos).name ~= "air" then
+	if core.get_node (node_pos).name ~= "air" then
 		return false
 	end
 	if not is_clear (self, node_above, obj_pos, forward, self.base_colbox) then
@@ -564,9 +564,9 @@ end
 function shulker:on_rightclick (clicker)
 	if clicker:is_player() then
 		local wstack = clicker:get_wielded_item()
-		if minetest.get_item_group(wstack:get_name(),"dye") > 0 then
-			set_shulker_color(self, minetest.registered_items[wstack:get_name()]._color)
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if core.get_item_group(wstack:get_name(),"dye") > 0 then
+			set_shulker_color(self, core.registered_items[wstack:get_name()]._color)
+			if not core.is_creative_enabled(clicker:get_player_name()) then
 				wstack:take_item()
 				clicker:set_wielded_item(wstack)
 			end
@@ -594,7 +594,7 @@ function shulker:targets_for_attack_default (self_pos, esp)
 		aa = vector.offset (self_pos, -16, -16, -4)
 		bb = vector.offset (self_pos, 16, 16, 4)
 	end
-	return minetest.objects_in_area (aa, bb)
+	return core.objects_in_area (aa, bb)
 end
 
 function shulker:attack_null (self_pos, dtime, target_pos, line_of_sight)
@@ -651,7 +651,7 @@ function shulker:attack_null (self_pos, dtime, target_pos, line_of_sight)
 				end
 
 				local bullet
-					= minetest.add_entity (shoot_pos, "mobs_mc:shulkerbullet")
+					= core.add_entity (shoot_pos, "mobs_mc:shulkerbullet")
 				if bullet then
 					local entity = bullet:get_luaentity ()
 					entity._target = self.attack
@@ -715,7 +715,7 @@ function shulker:attempt_teleport (node_pos)
 		local dy = pr:next (-8, 8)
 		local dz = pr:next (-8, 8)
 		local node = vector.offset (node_pos, dx, dy, dz)
-		local data = minetest.get_node (node)
+		local data = core.get_node (node)
 		if data.name == "air" then
 			table.shuffle (shulker_faces)
 			for _, face in ipairs (shulker_faces) do
@@ -749,7 +749,7 @@ function shulker:maybe_duplicate ()
 		local surviving_shulkers = 0
 		local aa = vector.offset (node_pos, -8, -8, -8)
 		local bb = vector.offset (node_pos, 8, 8, 8)
-		for object in minetest.objects_in_area (aa, bb) do
+		for object in core.objects_in_area (aa, bb) do
 			local entity = object:get_luaentity ()
 			if entity and entity.name == self.name then
 				surviving_shulkers
@@ -761,8 +761,8 @@ function shulker:maybe_duplicate ()
 			local staticdata = {
 				_color = self._color,
 			}
-			local data = minetest.serialize (staticdata)
-			minetest.add_entity (old_pos, self.name, data)
+			local data = core.serialize (staticdata)
+			core.add_entity (old_pos, self.name, data)
 		end
 	end
 end
@@ -868,8 +868,8 @@ function shulker_bullet:on_activate ()
 end
 
 local function is_walkable (nodepos)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable
 end
 
@@ -959,7 +959,7 @@ end
 
 function shulker_bullet:attack_allowed (object)
 	return not object:is_player ()
-		or not minetest.is_creative_enabled (object:get_player_name ())
+		or not core.is_creative_enabled (object:get_player_name ())
 end
 
 function shulker_bullet:hit_object (object)
@@ -970,7 +970,7 @@ end
 function shulker_bullet:check_hit (self_pos, moveresult, v, dtime)
 	for _, item in pairs (moveresult.collisions) do
 		if item.type == "node" then
-			minetest.sound_play("tnt_explode", {
+			core.sound_play("tnt_explode", {
 				pos = self_pos, gain = 1.0,
 				max_hear_distance = 16,
 			}, true)
@@ -992,7 +992,7 @@ function shulker_bullet:check_hit (self_pos, moveresult, v, dtime)
 	cbox[4] = cbox[4] + self_pos.x - v.x * dtime
 	cbox[5] = cbox[5] + self_pos.y - v.y * dtime
 	cbox[6] = cbox[6] + self_pos.z - v.z * dtime
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		local entity = object:get_luaentity ()
 		if ((entity and entity.is_mob) or object:is_player ())
 			and (self._lifetime > 1.0 or object ~= self._shooter) then
@@ -1035,7 +1035,7 @@ function shulker_bullet:on_step (dtime, moveresult)
 		local particle_pos
 			= vector.offset (self_pos, v.x * dtime,
 					 v.y * dtime, v.z * dtime)
-		minetest.add_particle ({
+		core.add_particle ({
 			pos = particle_pos,
 			expirationtime = 5.0,
 			texture = "mcl_particles_smoke_anim.png",
@@ -1091,11 +1091,11 @@ function shulker_bullet:on_step (dtime, moveresult)
 end
 
 function shulker_bullet:on_punch (_, _, _, _, _)
-	minetest.sound_play ("mcl_criticals_hit", {
+	core.sound_play ("mcl_criticals_hit", {
 		object = self.object,
 	}, true)
 	local pos = self.object:get_pos ()
-	minetest.add_particlespawner ({
+	core.add_particlespawner ({
 		amount = 15,
 		time = 0.1,
 		minpos = {x=pos.x-0.5, y=pos.y-0.5, z=pos.z-0.5},
@@ -1116,4 +1116,4 @@ function shulker_bullet:on_punch (_, _, _, _, _)
 	return true
 end
 
-minetest.register_entity ("mobs_mc:shulkerbullet", shulker_bullet)
+core.register_entity ("mobs_mc:shulkerbullet", shulker_bullet)

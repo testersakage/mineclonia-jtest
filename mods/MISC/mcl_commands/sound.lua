@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_chatcommand("playsound",{
+core.register_chatcommand("playsound",{
 	params = S("<sound> <target>"), --TODO:add source
 	description = S("Play a sound. Arguments: <sound>: name of the sound. <target>: Target."),
 	privs = {server = true},
@@ -17,7 +17,7 @@ minetest.register_chatcommand("playsound",{
 		else
 			return false, S("Sound name is invalid!") --TODO: add mc chat message
 		end
-		if P[2] == tostring(P[2]) and minetest.player_exists(P[2]) then
+		if P[2] == tostring(P[2]) and core.player_exists(P[2]) then
 			params.target = P[2]
 		else
 			return false, S("Target is invalid!!")
@@ -37,7 +37,7 @@ minetest.register_chatcommand("playsound",{
 		-- else
 			-- params.pitch = 1.0
 		-- end
-		minetest.sound_play({name = params.name}, {to_player = params.target}, true) --TODO: /stopsound
+		core.sound_play({name = params.name}, {to_player = params.target}, true) --TODO: /stopsound
 		return true
 	end,
 })

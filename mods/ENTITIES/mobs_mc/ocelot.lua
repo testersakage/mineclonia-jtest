@@ -3,9 +3,9 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
-local mobs_spawn = minetest.settings:get_bool ("mobs_spawn", true)
+local mobs_spawn = core.settings:get_bool ("mobs_spawn", true)
 
 --###################
 --################### OCELOT AND CAT
@@ -349,7 +349,7 @@ function ocelot:on_rightclick (clicker)
 		and vector.distance (self_pos, clicker:get_pos ()) < 9.0
 		and table.indexof (food, item:get_name ()) ~= -1 then
 		-- Try to gain trust of ocelot.
-		if not minetest.is_creative_enabled (clicker:get_player_name ()) then
+		if not core.is_creative_enabled (clicker:get_player_name ()) then
 			item:take_item ()
 			clicker:set_wielded_item (item)
 		end
@@ -439,7 +439,7 @@ local cat = table.merge (ocelot, {
 ------------------------------------------------------------------------
 
 function cat:bed_occupied (bedpos)
-	for object in minetest.objects_inside_radius (bedpos, 2.0) do
+	for object in core.objects_inside_radius (bedpos, 2.0) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:cat"
 			and entity ~= self
@@ -489,7 +489,7 @@ local cat_loot_table = {
 local pr = PcgRandom (os.time () + -431)
 
 function cat:give_wakeup_gift (self_pos)
-	local tod = minetest.get_timeofday ()
+	local tod = core.get_timeofday ()
 	if tod >= 0.25 and tod <= 0.30 and math.random () < 0.7 then
 		local rx = math.random (0, 10) - 5
 		local ry = math.random (0, 10) - 5
@@ -518,7 +518,7 @@ local function cat_sleep_with_owner (self, self_pos, dtime)
 	elseif self.order == "sit" then
 		return false
 	elseif self._sleeping_with_owner then
-		local owner = minetest.get_player_by_name (self.owner)
+		local owner = core.get_player_by_name (self.owner)
 		if not owner then
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
@@ -544,7 +544,7 @@ local function cat_sleep_with_owner (self, self_pos, dtime)
 		return true
 	else
 		local owner = self.owner
-			and minetest.get_player_by_name (self.owner)
+			and core.get_player_by_name (self.owner)
 		if not owner then
 			return false
 		end
@@ -558,11 +558,11 @@ local function cat_sleep_with_owner (self, self_pos, dtime)
 			y = math.floor (owner_pos.y + 0.5),
 			z = math.floor (owner_pos.z + 0.5),
 		}
-		local bed = minetest.get_node (pos)
-		if minetest.get_item_group (bed.name, "bed") > 0 then
+		local bed = core.get_node (pos)
+		if core.get_item_group (bed.name, "bed") > 0 then
 			if string.find (bed.name, "_top") then
 				local target_off
-					= minetest.facedir_to_dir (bed.param2)
+					= core.facedir_to_dir (bed.param2)
 				pos.x = -target_off.x + pos.x
 				pos.y = -target_off.y + pos.y
 				pos.z = -target_off.z + pos.z
@@ -582,8 +582,8 @@ local function cat_sit_on_bed (self, self_pos, dtime)
 	if not self.tamed or self.order == "sit" then
 		return false
 	elseif self._target_bed then
-		local node = minetest.get_node (self._target_bed_real)
-		if minetest.get_item_group (node.name, "bed") == 0 then
+		local node = core.get_node (self._target_bed_real)
+		if core.get_item_group (node.name, "bed") == 0 then
 			self._target_block = nil
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
@@ -628,7 +628,7 @@ local function cat_sit_on_bed (self, self_pos, dtime)
 			local aa = vector.offset (self_pos, -3, -1, -3)
 			local bb = vector.offset (self_pos, 3, 1, 3)
 			local bed_groups = {"group:bed"}
-			local nodes = minetest.find_nodes_in_area (aa, bb, bed_groups)
+			local nodes = core.find_nodes_in_area (aa, bb, bed_groups)
 			if #nodes > 0 then
 				table.sort (nodes, function (a, b)
 					return vector.distance (self_pos, a)
@@ -637,8 +637,8 @@ local function cat_sit_on_bed (self, self_pos, dtime)
 				for i = 0, 10 do
 					local node = nodes[math.random (#nodes)]
 					local node_above = vector.offset (node, 0, 1, 0)
-					local above = minetest.get_node (node_above)
-					local def = minetest.registered_nodes[above.name]
+					local above = core.get_node (node_above)
+					local def = core.registered_nodes[above.name]
 					if def and not def.walkable then
 						self._target_bed_real = node
 						self._target_bed = node_above
@@ -657,8 +657,8 @@ local function cat_sit_on_block (self, self_pos, dtime)
 	if not self.tamed or self.order == "sit" then
 		return false
 	elseif self._target_block then
-		local node = minetest.get_node (self._target_block_real)
-		if minetest.get_item_group (node.name, "furnace") == 0
+		local node = core.get_node (self._target_block_real)
+		if core.get_item_group (node.name, "furnace") == 0
 			and node.name ~= "mcl_chests:chest" then
 			self._target_block = nil
 			self:cancel_navigation ()
@@ -707,7 +707,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 				"group:furnace",
 				"mcl_chests:chest",
 			}
-			local nodes = minetest.find_nodes_in_area (aa, bb, block_groups)
+			local nodes = core.find_nodes_in_area (aa, bb, block_groups)
 			if #nodes > 0 then
 				table.sort (nodes, function (a, b)
 					return vector.distance (self_pos, a)
@@ -715,7 +715,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 				end)
 				for i = 0, 10 do
 					local node = nodes[math.random (#nodes)]
-					local name = minetest.get_node (node)
+					local name = core.get_node (node)
 					local open = false
 
 					if name.name == "mcl_chests:chest" then
@@ -723,8 +723,8 @@ local function cat_sit_on_block (self, self_pos, dtime)
 					end
 
 					local node_above = vector.offset (node, 0, 1, 0)
-					local above = minetest.get_node (node_above)
-					local def = minetest.registered_nodes[above.name]
+					local above = core.get_node (node_above)
+					local def = core.registered_nodes[above.name]
 					if def and not def.walkable and not open then
 						self._target_block_real = node
 						self._target_block = node_above
@@ -867,14 +867,14 @@ function cat:on_rightclick (clicker)
 	local self_pos = self.object:get_pos ()
 	local name = item:get_name ()
 	local playername = clicker:get_player_name ()
-	local creative = minetest.is_creative_enabled (playername)
+	local creative = core.is_creative_enabled (playername)
 
 	if self.tamed and self.owner == playername then
-		if minetest.get_item_group (name, "dye") == 1 then
+		if core.get_item_group (name, "dye") == 1 then
 			-- Dye if possible.
 			for group, color in pairs (colors) do
 				-- Check if color is supported
-				if minetest.get_item_group (name, group) == 1 then
+				if core.get_item_group (name, group) == 1 then
 					self._collar_color = color
 				end
 			end
@@ -888,7 +888,7 @@ function cat:on_rightclick (clicker)
 			return
 		elseif table.indexof (cat_food, item:get_name ()) ~= -1 then
 			-- Begin breeding.
-			local heal = minetest.get_item_group (name, "food")
+			local heal = core.get_item_group (name, "food")
 			if self:feed_tame (clicker, heal, true, false, false, nil) then
 				return
 			end
@@ -949,15 +949,15 @@ if mobs_spawn then
 local time_since_spawn_attempt = 0
 
 function is_cat_spawn_position (spawn_pos)
-	local node = minetest.get_node (spawn_pos)
-	local def = minetest.registered_nodes[node.name]
-	local node1 = minetest.get_node (vector.offset (spawn_pos, 0, -1, 0))
-	local def1 = minetest.registered_nodes[node1.name]
+	local node = core.get_node (spawn_pos)
+	local def = core.registered_nodes[node.name]
+	local node1 = core.get_node (vector.offset (spawn_pos, 0, -1, 0))
+	local def1 = core.registered_nodes[node1.name]
 
 	return def and not def.walkable and def1 and def1.walkable
 end
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	time_since_spawn_attempt = time_since_spawn_attempt + dtime
 	if time_since_spawn_attempt < 60 then
 		return
@@ -988,7 +988,7 @@ minetest.register_globalstep (function (dtime)
 			end
 			if count_homes >= 5 then
 				local count_cats = 0
-				for obj in minetest.objects_in_area (aa, bb) do
+				for obj in core.objects_in_area (aa, bb) do
 					local entity = obj:get_luaentity ()
 					if entity and entity.name == "mobs_mc:cat" then
 						count_cats = count_cats + 1
@@ -997,7 +997,7 @@ minetest.register_globalstep (function (dtime)
 
 				if count_cats <= 4 then
 					spawn_pos.x = spawn_pos.x - 0.5
-					minetest.add_entity (spawn_pos, "mobs_mc:cat")
+					core.add_entity (spawn_pos, "mobs_mc:cat")
 				end
 			end
 		end

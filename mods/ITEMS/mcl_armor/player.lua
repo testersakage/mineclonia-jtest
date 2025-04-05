@@ -106,14 +106,14 @@ local function limit_put(_, inventory, index, stack, count)
 end
 
 local function limit_take(player, _, _, stack, count)
-	if mcl_enchanting.has_enchantment(stack, "curse_of_binding") and not minetest.is_creative_enabled(player:get_player_name()) then
+	if mcl_enchanting.has_enchantment(stack, "curse_of_binding") and not core.is_creative_enabled(player:get_player_name()) then
 		return 0
 	end
 
 	return count
 end
 
-minetest.register_allow_player_inventory_action(function(player, action, inventory, inventory_info)
+core.register_allow_player_inventory_action(function(player, action, inventory, inventory_info)
 	if not is_armor_action(inventory_info) then
 		return
 	end
@@ -142,7 +142,7 @@ local function on_put(player, inventory, index, stack)
 	end
 end
 
-minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
+core.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
 	if is_armor_action(inventory_info) then
 		if action == "put" then
 			on_put(player, inventory, inventory_info.index, inventory_info.stack)
@@ -159,19 +159,19 @@ minetest.register_on_player_inventory_action(function(player, action, inventory,
 	end
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	player:get_inventory():set_size("armor", 5)
-	if not minetest.global_exists("mcl_skins") then
+	if not core.global_exists("mcl_skins") then
 		mcl_player.player_set_model(player, "mcl_armor_character.b3d")
 	end
 
-	minetest.after(1, function()
+	core.after(1, function()
 		if player:is_player() then
 			mcl_armor.update(player)
 		end
 	end)
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	mcl_armor.player_view_range_factors[player] = nil
 end)

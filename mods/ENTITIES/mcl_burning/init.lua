@@ -1,4 +1,4 @@
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 
 mcl_burning = {
 	-- the storage table holds a list of objects (players,luaentities) and tables
@@ -18,7 +18,7 @@ mcl_burning = {
 
 dofile(modpath .. "/api.lua")
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		local storage = mcl_burning.storage[player]
 		if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
@@ -26,13 +26,13 @@ minetest.register_globalstep(function(dtime)
 			local burn_time = 0
 
 			for _, pos in pairs(nodes) do
-				local node = minetest.get_node(pos)
-				if minetest.get_item_group(node.name, "puts_out_fire") > 0 then
+				local node = core.get_node(pos)
+				if core.get_item_group(node.name, "puts_out_fire") > 0 then
 					burn_time = 0
 					break
 				end
 
-				local value = minetest.get_item_group(node.name, "set_on_fire")
+				local value = core.get_item_group(node.name, "set_on_fire")
 				if value > burn_time then
 					burn_time = value
 				end
@@ -45,15 +45,15 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-minetest.register_on_respawnplayer(function(player)
+core.register_on_respawnplayer(function(player)
 	mcl_burning.extinguish(player)
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local storage = {}
 	local burn_data = player:get_meta():get_string("mcl_burning:data")
 	if burn_data ~= "" then
-		storage = minetest.deserialize(burn_data) or storage
+		storage = core.deserialize(burn_data) or storage
 	end
 	mcl_burning.storage[player] = storage
 	if storage.burn_time and storage.burn_time > 0 then
@@ -66,28 +66,28 @@ local function on_leaveplayer(player)
 	if not storage then
 		-- For some unexplained reasons, mcl_burning.storage can be `nil` here.
 		-- Logging this exception to assist in finding the cause of this.
-		minetest.log("warning", "on_leaveplayer: missing mcl_burning.storage "
+		core.log("warning", "on_leaveplayer: missing mcl_burning.storage "
 				.. "for player " .. player:get_player_name())
 		storage = {}
 	end
 	storage.fire_hud_id = nil
-	player:get_meta():set_string("mcl_burning:data", minetest.serialize(storage))
+	player:get_meta():set_string("mcl_burning:data", core.serialize(storage))
 	mcl_burning.storage[player] = nil
 end
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	on_leaveplayer(player)
 end)
 
-minetest.register_on_shutdown(function()
+core.register_on_shutdown(function()
 	for player in mcl_util.connected_players() do
 		on_leaveplayer(player)
 	end
 end)
 
-local animation_frames = tonumber(minetest.settings:get("fire_animation_frames")) or 8
+local animation_frames = tonumber(core.settings:get("fire_animation_frames")) or 8
 
-minetest.register_entity("mcl_burning:fire", {
+core.register_entity("mcl_burning:fire", {
 	initial_properties = {
 		physical = false,
 		collisionbox = {0, 0, 0, 0, 0, 0},

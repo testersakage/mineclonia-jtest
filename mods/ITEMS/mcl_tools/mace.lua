@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_tools")
+local S = core.get_translator("mcl_tools")
 mcl_tools.mace_cooldown = {}
 
 --Mace Cooldown
@@ -6,7 +6,7 @@ local cooldown_time = 1.6
 local heavy_core_longdesc = S("Solid Blocks of Steel. These are only forged if those that are brave enough can defeat the trials that await them.")
 local mace_longdesc = S("The mace is a slow melee weapon that deals incredible damage. “dig” key to use it. This weapon has a cooldown of 1.6 seconds, but if you fall the mace will deal more damage than if you are on the ground. The further you fall the more damage done. If you hit a mob or player then you will receive no fall damage, but beware. If you miss you will die. ")
 
-minetest.register_node("mcl_tools:heavy_core", {
+core.register_node("mcl_tools:heavy_core", {
     description = S("Heavy Core"),
 	paramtype = "light",
     _doc_items_longdesc = heavy_core_longdesc,
@@ -28,7 +28,7 @@ minetest.register_node("mcl_tools:heavy_core", {
 })
 
 --Mace
-minetest.register_tool("mcl_tools:mace", {
+core.register_tool("mcl_tools:mace", {
 	description = S("Mace"),
 	_doc_items_longdesc = mace_longdesc,
 	inventory_image = "mcl_tools_mace.png",
@@ -51,7 +51,7 @@ minetest.register_tool("mcl_tools:mace", {
 				if mcl_tools.mace_cooldown[user] == nil then
 					mcl_tools.mace_cooldown[user] = mcl_tools.mace_cooldown[user] or 0
 				end
-				local current_time = minetest.get_gametime()
+				local current_time = core.get_gametime()
 				if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
 					mcl_tools.mace_cooldown[user] = current_time
 					if fall_distance < 0 then
@@ -70,7 +70,7 @@ minetest.register_tool("mcl_tools:mace", {
 					end
 				end
 			end
-			if not minetest.is_creative_enabled(user:get_player_name()) then
+			if not core.is_creative_enabled(user:get_player_name()) then
 				itemstack:add_wear(65535 / 500)
 				return itemstack
 			end
@@ -78,19 +78,19 @@ minetest.register_tool("mcl_tools:mace", {
 	end,
 })
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	mcl_tools.mace_cooldown[player] = nil
 end)
 
 -- By Cora
 mcl_damage.register_modifier(function(obj, damage, reason)
-	if reason.type == "fall" and mcl_tools.mace_cooldown[obj] and minetest.get_gametime() - mcl_tools.mace_cooldown[obj] < 2 then
+	if reason.type == "fall" and mcl_tools.mace_cooldown[obj] and core.get_gametime() - mcl_tools.mace_cooldown[obj] < 2 then
 			return 0
 	end
 end)
 
 --Crafting recipe for mace
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_tools:mace",
 	recipe = {
 		{ "", "mcl_tools:heavy_core" },

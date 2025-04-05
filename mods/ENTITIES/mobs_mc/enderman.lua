@@ -20,7 +20,7 @@ local is_valid = mcl_util.is_valid_objectref
 -- added rain damage.
 -- fixed the grass_with_dirt issue.
 
-minetest.register_entity ("mobs_mc:ender_eyes", {
+core.register_entity ("mobs_mc:ender_eyes", {
 	initial_properties = {
 		visual = "mesh",
 		mesh = "mobs_mc_spider.b3d",
@@ -42,7 +42,7 @@ minetest.register_entity ("mobs_mc:ender_eyes", {
 	end,
 })
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 
 local telesound = function(pos, is_source)
 	local snd
@@ -51,7 +51,7 @@ local telesound = function(pos, is_source)
 	else
 		snd = "mobs_mc_enderman_teleport_dst"
 	end
-	minetest.sound_play(snd, {pos=pos, max_hear_distance=16}, true)
+	core.sound_play(snd, {pos=pos, max_hear_distance=16}, true)
 end
 
 --###################
@@ -66,7 +66,7 @@ local pr = PcgRandom (os.time () * (-334))
 local block_texture_overrides
 do
 	local cbackground = "mobs_mc_enderman_cactus_background.png"
-	local ctiles = minetest.registered_nodes["mcl_core:cactus"].tiles
+	local ctiles = core.registered_nodes["mcl_core:cactus"].tiles
 
 	local ctable = {}
 	local last
@@ -109,7 +109,7 @@ local create_enderman_textures = function(block_type, itemstring)
 	]]
 	-- Regular cube
 	if block_type == "cube" then
-		local tiles = minetest.registered_nodes[itemstring].tiles
+		local tiles = core.registered_nodes[itemstring].tiles
 		local textures = {}
 		local last
 		if block_texture_overrides[itemstring] then
@@ -141,7 +141,7 @@ local create_enderman_textures = function(block_type, itemstring)
 		}
 	-- Node of plantlike drawtype, 45° (recommended)
 	elseif block_type == "plantlike45" then
-		local textures = minetest.registered_nodes[itemstring].tiles
+		local textures = core.registered_nodes[itemstring].tiles
 		return {
 			"blank.png",
 			textures[1],
@@ -155,7 +155,7 @@ local create_enderman_textures = function(block_type, itemstring)
 		}
 	-- Node of plantlike drawtype, 90°
 	elseif block_type == "plantlike90" then
-		local textures = minetest.registered_nodes[itemstring].tiles
+		local textures = core.registered_nodes[itemstring].tiles
 		return {
 			textures[1],
 			"blank.png",
@@ -214,7 +214,7 @@ local select_enderman_animation = function(animation_type)
 	end
 end
 
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
+local mobs_griefing = core.settings:get_bool("mobs_griefing") ~= false
 local psdefs = {{
 	amount = 5,
 	minpos = vector.new(-0.6,0,-0.6),
@@ -276,7 +276,7 @@ local enderman = {
 	animation = select_enderman_animation("normal"),
 	_taken_node = "",
 	can_spawn = function(pos)
-		return #minetest.find_nodes_in_area(vector.offset(pos,0,1,0),vector.offset(pos,0,3,0),{"air"}) > 2
+		return #core.find_nodes_in_area(vector.offset(pos,0,1,0),vector.offset(pos,0,3,0),{"air"}) > 2
 	end,
 	armor = {
 		fleshy = 100,
@@ -305,9 +305,9 @@ function enderman:mob_activate (staticdata, dtime)
 	if not mob_class.mob_activate (self, staticdata, dtime) then
 		return false
 	end
-	minetest.add_entity (self.object:get_pos(), "mobs_mc:ender_eyes")
+	core.add_entity (self.object:get_pos(), "mobs_mc:ender_eyes")
 		:set_attach(self.object, "head.top", vector.new(0,2.54,-1.99), vector.new(90,0,180))
-	minetest.add_entity (self.object:get_pos(), "mobs_mc:ender_eyes")
+	core.add_entity (self.object:get_pos(), "mobs_mc:ender_eyes")
 		:set_attach(self.object, "head.top", vector.new(1,2.54,-1.99), vector.new(90,0,180))
 	return true
 end
@@ -315,7 +315,7 @@ end
 function enderman:on_die (self_pos)
 	-- Drop carried node on death
 	if self._taken_node ~= nil and self._taken_node ~= "" then
-		minetest.add_item (self_pos, self._taken_node)
+		core.add_item (self_pos, self._taken_node)
 	end
 end
 
@@ -325,8 +325,8 @@ function enderman:do_custom (dtime)
 
 	local enderpos = self.object:get_pos()
 	enderpos.y = enderpos.y + 1.5
-	for obj in minetest.objects_inside_radius(enderpos, 2) do
-		if not minetest.is_player(obj) then
+	for obj in core.objects_inside_radius(enderpos, 2) do
+		if not core.is_player(obj) then
 			local lua = obj:get_luaentity()
 			if lua then
 				if lua.name == "mcl_bows:arrow_entity" or lua.name == "mcl_throwing:snowball_entity" then
@@ -341,7 +341,7 @@ function enderman:do_teleport (target)
 	if target ~= nil then
 		local target_pos = target:get_pos()
 		-- Find all solid nodes below air in a 10×10×10 cuboid centered on the target
-		local nodes = minetest.find_nodes_in_area_under_air(vector.subtract(target_pos, 5), vector.add(target_pos, 5), {"group:solid", "group:cracky", "group:crumbly"})
+		local nodes = core.find_nodes_in_area_under_air(vector.subtract(target_pos, 5), vector.add(target_pos, 5), {"group:solid", "group:cracky", "group:crumbly"})
 		local telepos
 		if nodes ~= nil then
 			if #nodes > 0 then
@@ -352,8 +352,8 @@ function enderman:do_teleport (target)
 					local node_ok = true
 					-- Selected node needs to have 3 nodes of free space above
 					for u=1, 3 do
-						local node = minetest.get_node({x=nodepos.x, y=nodepos.y+u, z=nodepos.z})
-						local ndef = minetest.registered_nodes[node.name]
+						local node = core.get_node({x=nodepos.x, y=nodepos.y+u, z=nodepos.z})
+						local ndef = core.registered_nodes[node.name]
 						if ndef and ndef.walkable then
 							node_ok = false
 							break
@@ -381,7 +381,7 @@ function enderman:do_teleport (target)
 			local node_ok = false
 			-- We need to add (or subtract) different random numbers to each vector component, so it couldn't be done with a nice single vector.add() or .subtract():
 			local randomCube = vector.new( pos.x + 8*(pr:next(0,8)-4), pos.y + 8*(pr:next(0,8)-4), pos.z + 8*(pr:next(0,8)-4) )
-			local nodes = minetest.find_nodes_in_area_under_air(vector.subtract(randomCube, 4), vector.add(randomCube, 4), {"group:solid", "group:cracky", "group:crumbly"})
+			local nodes = core.find_nodes_in_area_under_air(vector.subtract(randomCube, 4), vector.add(randomCube, 4), {"group:solid", "group:cracky", "group:crumbly"})
 			if nodes ~= nil then
 				if #nodes > 0 then
 					-- Up to 8 low-level (in total up to 8*8 = 64) attempts to teleport
@@ -390,8 +390,8 @@ function enderman:do_teleport (target)
 						local nodepos = nodes[r]
 						node_ok = true
 						for u=1, 3 do
-							local node = minetest.get_node({x=nodepos.x, y=nodepos.y+u, z=nodepos.z})
-							local ndef = minetest.registered_nodes[node.name]
+							local node = core.get_node({x=nodepos.x, y=nodepos.y+u, z=nodepos.z})
+							local ndef = core.registered_nodes[node.name]
 							if ndef and ndef.walkable then
 								node_ok = false
 								break
@@ -456,10 +456,10 @@ local function enderman_grief (self, self_pos, dtime)
 			y = math.floor (self_pos.y + 0.5 + pr:next (0, 3)),
 			z = math.floor (self_pos.z + 0.5 + pr:next (-2, 2)),
 		}
-		local node = minetest.get_node (take_pos)
+		local node = core.get_node (take_pos)
 		-- Now verify that this is takable and that there is
 		-- line of sight.
-		if minetest.get_item_group (node.name, "enderman_takable") == 0 then
+		if core.get_item_group (node.name, "enderman_takable") == 0 then
 			return false
 		end
 		local los, hit_pos = self:line_of_sight (self_node_pos, take_pos)
@@ -467,13 +467,13 @@ local function enderman_grief (self, self_pos, dtime)
 			return false
 		end
 		-- Don't destroy protected stuff.
-		if not minetest.is_protected(take_pos, "") then
-			minetest.remove_node(take_pos)
-			local dug = minetest.get_node_or_nil(take_pos)
+		if not core.is_protected(take_pos, "") then
+			core.remove_node(take_pos)
+			local dug = core.get_node_or_nil(take_pos)
 			if dug and dug.name == "air" then
 				self._taken_node = node.name
 				self.persistent = true
-				local def = minetest.registered_nodes[self._taken_node]
+				local def = core.registered_nodes[self._taken_node]
 				-- Update animation and texture accordingly (adds visibly carried block)
 				local block_type
 				-- Cube-shaped
@@ -504,7 +504,7 @@ local function enderman_grief (self, self_pos, dtime)
 				self._current_animation = nil
 				self:set_animation ("stand")
 				if def.sounds and def.sounds.dug then
-					minetest.sound_play(def.sounds.dug, {pos = take_pos, max_hear_distance = 16}, true)
+					core.sound_play(def.sounds.dug, {pos = take_pos, max_hear_distance = 16}, true)
 				end
 			end
 		end
@@ -534,20 +534,20 @@ local function enderman_ungrief (self, self_pos, dtime)
 		until place_pos.x ~= self_x or place_pos.z ~= self_z
 
 		-- Also check to see if protected.
-		if minetest.get_node (place_pos).name == "air"
+		if core.get_node (place_pos).name == "air"
 			and core.get_item_group(core.get_node(vector.offset(place_pos, 0, -1, 0)).name, "solid") > 0
-			and not minetest.is_protected (place_pos, "") then
+			and not core.is_protected (place_pos, "") then
 			-- ... but only if there's a free space
-			local success = minetest.place_node(place_pos, {name = self._taken_node})
+			local success = core.place_node(place_pos, {name = self._taken_node})
 			if success then
-				local def = minetest.registered_nodes[self._taken_node]
+				local def = core.registered_nodes[self._taken_node]
 				-- Update animation accordingly (removes visible block)
 				self.persistent = false
 				self.animation = select_enderman_animation("normal")
 				self._current_animation = nil
 				self:set_animation ("stand")
 				if def.sounds and def.sounds.place then
-					minetest.sound_play(def.sounds.place, {pos = place_pos, max_hear_distance = 16}, true)
+					core.sound_play(def.sounds.place, {pos = place_pos, max_hear_distance = 16}, true)
 				end
 				self._taken_node = ""
 			end
@@ -700,7 +700,7 @@ end
 local function mc_light_value (self, self_pos)
 	local brightness, value
 	local pos = self_pos
-	brightness = (minetest.get_node_light (pos) or 0) / 15.0
+	brightness = (core.get_node_light (pos) or 0) / 15.0
 	value = brightness / (4 - 3 * brightness)
 	return value
 end
@@ -721,7 +721,7 @@ function enderman:ai_step (dtime)
 		= math.max (0, self._targeting_delay - dtime)
 	local self_pos = self.object:get_pos ()
 	if mcl_worlds.pos_to_dimension (self_pos) == "overworld"
-		and minetest.get_timeofday () > 0.25 then
+		and core.get_timeofday () > 0.25 then
 		local light = mc_light_value (self, self_pos)
 		if light > 0.5 and mcl_weather.is_outdoor (self_pos)
 			and math.random () * 30 < (light - 0.4) * 2.0 then

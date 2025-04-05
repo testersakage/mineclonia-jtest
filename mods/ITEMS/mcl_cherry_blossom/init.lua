@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 local PARTICLE_DISTANCE = 25
 
 mcl_trees.register_wood("cherry_blossom",{
@@ -70,18 +70,18 @@ for i=1,3 do
 	})
 end
 
-minetest.register_abm({
+core.register_abm({
 	label = "Cherry Blossom Particles",
 	nodenames = {"mcl_trees:leaves_cherry_blossom"},
 	interval = 25,
 	chance = 2,
 	action = function(pos)
-		if minetest.get_node(vector.offset(pos, 0, -1, 0)).name ~= "air" then return end
+		if core.get_node(vector.offset(pos, 0, -1, 0)).name ~= "air" then return end
 		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		for pl in mcl_util.connected_players(pos, PARTICLE_DISTANCE) do
-			minetest.add_particlespawner(table.merge(cherry_particlespawner, {
+			core.add_particlespawner(table.merge(cherry_particlespawner, {
 				minacc = v,
 				maxacc = v,
 				minpos = vector.offset(pos, -0.25, -0.5, -0.25),

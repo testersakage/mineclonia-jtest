@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 -- Fletching Table Code. No use as of current Minecraft Updates. Basically a decor block. As of now, this is complete.
-minetest.register_node("mcl_fletching_table:fletching_table", {
+core.register_node("mcl_fletching_table:fletching_table", {
 	description = S("Fletching Table"),
 	_tt_help = S("A fletching table"),
 	_doc_items_longdesc = S("This is the fletcher villager's work station. It currently has no use beyond decoration."),
@@ -18,7 +18,7 @@ minetest.register_node("mcl_fletching_table:fletching_table", {
 	_mcl_burntime = 15
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_fletching_table:fletching_table",
 	recipe = {
 		{ "mcl_core:flint", "mcl_core:flint", "" },

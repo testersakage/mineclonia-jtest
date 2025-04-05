@@ -27,38 +27,38 @@ end
 flowlib.is_touching = is_touching
 
 local function is_water(pos)
-	return minetest.get_item_group(minetest.get_node(pos).name, "water") ~= 0
+	return core.get_item_group(core.get_node(pos).name, "water") ~= 0
 end
 
 flowlib.is_water = is_water
 
 local function node_is_water(node)
-	return minetest.get_item_group(node.name, "water") ~= 0
+	return core.get_item_group(node.name, "water") ~= 0
 end
 
 flowlib.node_is_water = node_is_water
 
 local function is_lava(pos)
-	return minetest.get_item_group(minetest.get_node(pos).name, "lava") ~= 0
+	return core.get_item_group(core.get_node(pos).name, "lava") ~= 0
 end
 
 flowlib.is_lava = is_lava
 
 local function node_is_lava(node)
-	return minetest.get_item_group(node.name, "lava") ~= 0
+	return core.get_item_group(node.name, "lava") ~= 0
 end
 
 flowlib.node_is_lava = node_is_lava
 
 
 local function is_liquid(pos)
-	return minetest.get_item_group(minetest.get_node(pos).name, "liquid") ~= 0
+	return core.get_item_group(core.get_node(pos).name, "liquid") ~= 0
 end
 
 flowlib.is_liquid = is_liquid
 
 local function node_is_liquid(node)
-	return minetest.get_item_group(node.name, "liquid") ~= 0
+	return core.get_item_group(node.name, "liquid") ~= 0
 end
 
 flowlib.node_is_liquid = node_is_liquid
@@ -66,28 +66,28 @@ flowlib.node_is_liquid = node_is_liquid
 --This code is more efficient
 local function quick_flow_logic(node, pos_testing, direction)
 	local name = node.name
-	if not minetest.registered_nodes[name] then
+	if not core.registered_nodes[name] then
 		return 0
 	end
-	if minetest.registered_nodes[name].liquidtype == "source" then
-		local node_testing = minetest.get_node(pos_testing)
-		if not minetest.registered_nodes[node_testing.name] then
+	if core.registered_nodes[name].liquidtype == "source" then
+		local node_testing = core.get_node(pos_testing)
+		if not core.registered_nodes[node_testing.name] then
 			return 0
 		end
-		if minetest.registered_nodes[node_testing.name].liquidtype ~= "flowing" then
+		if core.registered_nodes[node_testing.name].liquidtype ~= "flowing" then
 			return 0
 		else
 			return direction
 		end
-	elseif minetest.registered_nodes[name].liquidtype == "flowing" then
-		local node_testing = minetest.get_node(pos_testing)
+	elseif core.registered_nodes[name].liquidtype == "flowing" then
+		local node_testing = core.get_node(pos_testing)
 		local param2_testing = node_testing.param2
-		if not minetest.registered_nodes[node_testing.name] then
+		if not core.registered_nodes[node_testing.name] then
 			return 0
 		end
-		if minetest.registered_nodes[node_testing.name].liquidtype == "source" then
+		if core.registered_nodes[node_testing.name].liquidtype == "source" then
 			return -direction
-		elseif minetest.registered_nodes[node_testing.name].liquidtype == "flowing" then
+		elseif core.registered_nodes[node_testing.name].liquidtype == "flowing" then
 			if param2_testing < node.param2 then
 				if (node.param2 - param2_testing) > 6 then
 					return -direction
@@ -108,10 +108,10 @@ end
 
 local function quick_flow_vertical (node)
 	local name = node.name
-	if not minetest.registered_nodes[name] then
+	if not core.registered_nodes[name] then
 		return 0
 	end
-	if minetest.registered_nodes[name].liquidtype == "source" then
+	if core.registered_nodes[name].liquidtype == "source" then
 		return 0
 	end
 	return node.param2 >= 8 and 1 or 0
@@ -136,19 +136,19 @@ flowlib.quick_flow = quick_flow
 local function move_centre(pos, realpos, node, radius)
 	if is_touching(realpos.x, pos.x, radius) then
 		if is_liquid({x = pos.x-1, y = pos.y, z = pos.z}) then
-			node = minetest.get_node({x=pos.x-1, y = pos.y, z = pos.z})
+			node = core.get_node({x=pos.x-1, y = pos.y, z = pos.z})
 			pos = {x = pos.x-1, y = pos.y, z = pos.z}
 		elseif is_liquid({x = pos.x+1, y = pos.y, z = pos.z}) then
-			node = minetest.get_node({x = pos.x+1, y = pos.y, z = pos.z})
+			node = core.get_node({x = pos.x+1, y = pos.y, z = pos.z})
 			pos = {x = pos.x+1, y = pos.y, z = pos.z}
 		end
 	end
 	if is_touching(realpos.z, pos.z, radius) then
 		if is_liquid({x = pos.x, y = pos.y, z = pos.z - 1}) then
-			node = minetest.get_node({x = pos.x, y = pos.y, z = pos.z - 1})
+			node = core.get_node({x = pos.x, y = pos.y, z = pos.z - 1})
 			pos = {x = pos.x, y = pos.y, z = pos.z - 1}
 		elseif is_liquid({x = pos.x, y = pos.y, z = pos.z + 1}) then
-			node = minetest.get_node({x = pos.x, y = pos.y, z = pos.z + 1})
+			node = core.get_node({x = pos.x, y = pos.y, z = pos.z + 1})
 			pos = {x = pos.x, y = pos.y, z = pos.z + 1}
 		end
 	end

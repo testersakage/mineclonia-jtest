@@ -1,5 +1,5 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local C = core.colorize
 
 mcl_jukebox = {}
 mcl_jukebox.registered_records = {}
@@ -14,7 +14,7 @@ mcl_jukebox.active_tracks = active_tracks
 local active_huds = {}
 
 -- Player name-indexed table for the “Now playing” message.
--- Used to make sure that minetest.after only applies to the latest HUD change event
+-- Used to make sure that core.after only applies to the latest HUD change event
 local hud_sequence_numbers = {}
 
 -- get random disc itemstring that is obtainable as creeper loot
@@ -32,7 +32,7 @@ function mcl_jukebox.register_record_definition(def)
 	local entryname = S("Music Disc")
 	local longdesc = S("A music disc holds a single music track which can be used in a jukebox to play music.")
 	local usagehelp = S("Place a music disc into an empty jukebox to play the music. Use the jukebox again to retrieve the music disc. The music can only be heard by you, not by other players.")
-	minetest.register_craftitem(":"..itemstring, {
+	core.register_craftitem(":"..itemstring, {
 		description = S("Music Disc"),
 		_tt_help = C(mcl_colors.GRAY, S("@1—@2", def.author, def.title)),
 		_doc_items_create_entry = true,
@@ -86,9 +86,9 @@ local function now_playing(player, name)
 		})
 		active_huds[playername] = id
 	end
-	minetest.after(5, function(tab)
+	core.after(5, function(tab)
 		local playername = tab[1]
-		local player = minetest.get_player_by_name(playername)
+		local player = core.get_player_by_name(playername)
 		local id = tab[2]
 		local seq = tab[3]
 		if not player or not player:is_player() or not active_huds[playername] or not hud_sequence_numbers[playername] or seq ~= hud_sequence_numbers[playername] then
@@ -103,28 +103,28 @@ end
 
 local function check_active_tracks()
 	for k,v in pairs(active_tracks) do
-		local pos = minetest.get_position_from_hash(k)
+		local pos = core.get_position_from_hash(k)
 		local player_near = false
 		for _ in mcl_util.connected_players(pos, HEAR_DISTANCE) do
 			player_near = true
 			break
 		end
 		if not player_near then
-			minetest.sound_stop(v)
+			core.sound_stop(v)
 			active_tracks[k] = nil
 		end
 	end
 
 end
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	check_active_tracks()
 	active_huds[player:get_player_name()] = nil
 	hud_sequence_numbers[player:get_player_name()] = nil
 end)
 
 -- Jukebox crafting
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_jukebox:jukebox",
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
@@ -136,14 +136,14 @@ minetest.register_craft({
 local function play_record(pos, itemstack, player)
 	local item_name = itemstack:get_name()
 	-- ensure the jukebox uses the new record names for old records
-	local name = minetest.registered_aliases[item_name] or item_name
-	local ph = minetest.hash_node_position(pos)
+	local name = core.registered_aliases[item_name] or item_name
+	local ph = core.hash_node_position(pos)
 	if mcl_jukebox.registered_records[name] then
 		if active_tracks[ph] then
-			minetest.sound_stop(active_tracks[ph])
+			core.sound_stop(active_tracks[ph])
 			active_tracks[ph] = nil
 		end
-		active_tracks[ph] = minetest.sound_play(mcl_jukebox.registered_records[name].sound, {
+		active_tracks[ph] = core.sound_play(mcl_jukebox.registered_records[name].sound, {
 			gain = 1,
 			pos = pos,
 			max_hear_distance = HEAR_DISTANCE,
@@ -155,7 +155,7 @@ local function play_record(pos, itemstack, player)
 end
 
 -- Jukebox
-minetest.register_node("mcl_jukebox:jukebox", {
+core.register_node("mcl_jukebox:jukebox", {
 	description = S("Jukebox"),
 	_tt_help = S("Uses music discs to play music"),
 	_doc_items_longdesc = S("Jukeboxes play music when they're supplied with a music disc."),
@@ -165,35 +165,35 @@ minetest.register_node("mcl_jukebox:jukebox", {
 	groups = {handy=1,axey=1, container=7, deco_block=1, material_wood=1, flammable=-1, unmovable_by_piston = 1},
 	is_ground_content = false,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("main", 1)
 	end,
 	on_rightclick= function(pos, _, clicker, itemstack, _)
 		if not clicker then return itemstack end
 		local cname = clicker:get_player_name()
-		local ph = minetest.hash_node_position(pos)
-		if minetest.is_protected(pos, cname) then
-			minetest.record_protection_violation(pos, cname)
+		local ph = core.hash_node_position(pos)
+		if core.is_protected(pos, cname) then
+			core.record_protection_violation(pos, cname)
 			return itemstack
 		end
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		if not inv:is_empty("main") then
 			-- Jukebox contains a disc: Stop music and remove disc
 			if active_tracks[ph] then
-				minetest.sound_stop(active_tracks[ph])
+				core.sound_stop(active_tracks[ph])
 			end
 			local lx = pos.x
 			local ly = pos.y+1
 			local lz = pos.z
 			local record = inv:get_stack("main", 1)
-			local dropped_item = minetest.add_item({x=lx, y=ly, z=lz}, record)
+			local dropped_item = core.add_item({x=lx, y=ly, z=lz}, record)
 			-- Rotate record to match with “slot” texture
 			dropped_item:set_yaw(math.pi/2)
 			inv:set_stack("main", 1, "")
 			if active_tracks[ph] then
-				minetest.sound_stop(active_tracks[ph])
+				core.sound_stop(active_tracks[ph])
 				active_tracks[ph] = nil
 			end
 			if active_huds[cname] then
@@ -217,8 +217,8 @@ minetest.register_node("mcl_jukebox:jukebox", {
 	end,
 	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return count
@@ -226,8 +226,8 @@ minetest.register_node("mcl_jukebox:jukebox", {
 	end,
 	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -235,8 +235,8 @@ minetest.register_node("mcl_jukebox:jukebox", {
 	end,
 	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -244,19 +244,19 @@ minetest.register_node("mcl_jukebox:jukebox", {
 	end,
 	after_dig_node = function(pos, _, oldmetadata, digger)
 		local name = digger:get_player_name()
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local meta2 = meta
-		local ph = minetest.hash_node_position(pos)
+		local ph = core.hash_node_position(pos)
 		meta:from_table(oldmetadata)
 		local inv = meta:get_inventory()
 		local stack = inv:get_stack("main", 1)
 		if not stack:is_empty() then
 			local p = {x=pos.x+math.random(0, 10)/10-0.5, y=pos.y, z=pos.z+math.random(0, 10)/10-0.5}
-			local dropped_item = minetest.add_item(p, stack)
+			local dropped_item = core.add_item(p, stack)
 			-- Rotate record to match with “slot” texture
 			dropped_item:set_yaw(math.pi/2)
 			if active_tracks[ph] then
-				minetest.sound_stop(active_tracks[ph])
+				core.sound_stop(active_tracks[ph])
 				active_tracks[ph] = nil
 			end
 			if active_huds[name] then
@@ -340,11 +340,11 @@ mcl_jukebox.register_record({
 })
 
 --add backward compatibility
-minetest.register_alias("mcl_jukebox:record_1", "mcl_jukebox:record_13")
-minetest.register_alias("mcl_jukebox:record_2", "mcl_jukebox:record_wait")
-minetest.register_alias("mcl_jukebox:record_3", "mcl_jukebox:record_blocks")
-minetest.register_alias("mcl_jukebox:record_4", "mcl_jukebox:record_far")
-minetest.register_alias("mcl_jukebox:record_5", "mcl_jukebox:record_chirp")
-minetest.register_alias("mcl_jukebox:record_6", "mcl_jukebox:record_strad")
-minetest.register_alias("mcl_jukebox:record_7", "mcl_jukebox:record_mellohi")
-minetest.register_alias("mcl_jukebox:record_8", "mcl_jukebox:record_mall")
+core.register_alias("mcl_jukebox:record_1", "mcl_jukebox:record_13")
+core.register_alias("mcl_jukebox:record_2", "mcl_jukebox:record_wait")
+core.register_alias("mcl_jukebox:record_3", "mcl_jukebox:record_blocks")
+core.register_alias("mcl_jukebox:record_4", "mcl_jukebox:record_far")
+core.register_alias("mcl_jukebox:record_5", "mcl_jukebox:record_chirp")
+core.register_alias("mcl_jukebox:record_6", "mcl_jukebox:record_strad")
+core.register_alias("mcl_jukebox:record_7", "mcl_jukebox:record_mellohi")
+core.register_alias("mcl_jukebox:record_8", "mcl_jukebox:record_mall")

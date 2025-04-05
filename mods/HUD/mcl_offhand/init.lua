@@ -13,13 +13,13 @@ end
 
 function mcl_offhand.place(placer, pointed_thing)
 	local offhand = mcl_offhand.get_offhand(placer)
-	if offhand and minetest.get_item_group(offhand:get_name(), "offhand_placeable") ~= 0 and pointed_thing.above then
+	if offhand and core.get_item_group(offhand:get_name(), "offhand_placeable") ~= 0 and pointed_thing.above then
 		local new_stack
 		local odef = offhand:get_definition()
 		if odef.on_place then
 			new_stack = odef.on_place(offhand, placer,pointed_thing)
 		else
-			new_stack = minetest.item_place_node(offhand, placer, pointed_thing)
+			new_stack = core.item_place_node(offhand, placer, pointed_thing)
 		end
 		if not new_stack then
 			offhand:set_count(offhand:get_count() - 1)
@@ -32,8 +32,8 @@ function mcl_offhand.place(placer, pointed_thing)
 	return false
 end
 
-local old_hand_op = minetest.registered_items[""].on_place
-minetest.override_item("", {
+local old_hand_op = core.registered_items[""].on_place
+core.override_item("", {
 	on_place = function(itemstack, placer, pointed_thing)
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
@@ -94,7 +94,7 @@ mcl_player.register_globalstep(function(player)
 	local offhand_item = itemstack:get_name()
 	local offhand = mcl_offhand[player]
 	local offhand_hud = offhand.hud
-	local item = minetest.registered_items[offhand_item]
+	local item = core.registered_items[offhand_item]
 	if offhand_item ~= "" and item then
 		local meta_texture = itemstack:get_meta():get_string("inventory_overlay")
 		if not meta_texture or meta_texture == "" then meta_texture = item.inventory_image end
@@ -129,7 +129,7 @@ mcl_player.register_globalstep(function(player)
 				offhand_hud.item = nil
 			end
 		end
-		if not offhand_hud.wear_bar_bg and minetest.registered_tools[offhand_item] then
+		if not offhand_hud.wear_bar_bg and core.registered_tools[offhand_item] then
 			if offhand_get_wear(player) > 0 then
 				local texture = "mcl_wear_bar.png^[colorize:#000000"
 				offhand_hud.wear_bar_bg = player:hud_add({
@@ -170,7 +170,7 @@ mcl_player.register_globalstep(function(player)
 				update_wear_bar(player, itemstack)
 				offhand.last_wear = offhand_get_wear(player)
 			end
-			if offhand_get_wear(player) <= 0 or not minetest.registered_tools[offhand_item] then
+			if offhand_get_wear(player) <= 0 or not core.registered_tools[offhand_item] then
 				remove_hud(player, "wear_bar_bg")
 				remove_hud(player, "wear_bar")
 			end
@@ -193,10 +193,10 @@ mcl_player.register_globalstep(function(player)
 	end
 end)
 
-minetest.register_allow_player_inventory_action(function(_, action, inventory, inventory_info)
+core.register_allow_player_inventory_action(function(_, action, inventory, inventory_info)
 	if action == "move" and inventory_info.to_list == "offhand" then
 		local itemstack = inventory:get_stack(inventory_info.from_list, inventory_info.from_index)
-		if minetest.get_item_group(itemstack:get_name(), "offhand_item") <= 0  then
+		if core.get_item_group(itemstack:get_name(), "offhand_item") <= 0  then
 			return 0
 		else
 			return itemstack:get_stack_max()
@@ -204,7 +204,7 @@ minetest.register_allow_player_inventory_action(function(_, action, inventory, i
 	end
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, _, inventory_info)
+core.register_on_player_inventory_action(function(player, action, _, inventory_info)
 	local from_offhand = inventory_info.from_list == "offhand"
 	local to_offhand = inventory_info.to_list == "offhand"
 	if action == "move" and from_offhand or to_offhand then

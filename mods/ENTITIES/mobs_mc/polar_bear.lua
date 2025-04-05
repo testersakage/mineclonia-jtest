@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -91,7 +91,7 @@ local polar_bear = {
 
 function polar_bear.spawn_group_member_data (idx)
 	if idx == 2 then
-		return minetest.serialize ({
+		return core.serialize ({
 			child = true,
 		})
 	end
@@ -231,7 +231,7 @@ function polar_bear:should_attack (object)
 			local bb = vector.offset (self_pos, 8, 4, 8)
 			self._child_nearby = false
 
-			for object in minetest.objects_in_area (aa, bb) do
+			for object in core.objects_in_area (aa, bb) do
 				local entity = object:get_luaentity ()
 				if entity and entity.name == self.name
 					and entity.child then

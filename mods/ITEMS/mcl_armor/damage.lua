@@ -36,7 +36,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		inv = nil
 	end
 
-	if reason.source and mcl_tools.mace_cooldown[reason.source] and mcl_tools.mace_cooldown[reason.source] and minetest.get_gametime() - mcl_tools.mace_cooldown[reason.source] < 2 then
+	if reason.source and mcl_tools.mace_cooldown[reason.source] and mcl_tools.mace_cooldown[reason.source] and core.get_gametime() - mcl_tools.mace_cooldown[reason.source] < 2 then
 		breach_level = mcl_enchanting.get_enchantment(mcl_util.get_wielditem (reason.source), "breach")
 	end
 
@@ -54,10 +54,10 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 				local enchantments = mcl_enchanting.get_enchantments(itemstack)
 
 				if not flags.bypasses_armor
-					and minetest.get_item_group(itemname, "non_combat_armor") == 0
-					and minetest.get_item_group (itemname, "elytra") == 0 then
-					points = points + minetest.get_item_group(itemname, "mcl_armor_points")
-					toughness = toughness + minetest.get_item_group(itemname, "mcl_armor_toughness")
+					and core.get_item_group(itemname, "non_combat_armor") == 0
+					and core.get_item_group (itemname, "elytra") == 0 then
+					points = points + core.get_item_group(itemname, "mcl_armor_points")
+					toughness = toughness + core.get_item_group(itemname, "mcl_armor_toughness")
 
 					use_durability(obj, inv, element.index, itemstack, uses)
 					if is_mob then

@@ -3,11 +3,11 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local illager = mobs_mc.illager
 local posing_humanoid = mcl_mobs.posing_humanoid
-local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
+local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 
 ------------------------------------------------------------------------
 -- Vindicator.
@@ -223,11 +223,11 @@ function vindicator:gwp_open_door (door, nodedef, dtime)
 
 	if mob_griefing and mcl_vars.difficulty >= 2
 		and pr:next (1, 10) == 1
-		and not minetest.is_protected (door, "") then
+		and not core.is_protected (door, "") then
 		self:set_animation ("punch")
 		self._punch_animation_timeout = 1.0
-		minetest.dig_node (door)
-		minetest.sound_play ("default_dig_choppy", {
+		core.dig_node (door)
+		core.sound_play ("default_dig_choppy", {
 			pos = door,
 			gain = 0.5,
 		})

@@ -1,4 +1,4 @@
-local enable_damage = minetest.settings:get_bool("enable_damage")
+local enable_damage = core.settings:get_bool("enable_damage")
 
 local collisionbox_cache = {}
 
@@ -45,7 +45,7 @@ function mcl_burning.get_touching_nodes(obj, nodenames, storage)
 		pos.y = pos.y + 1.5
 	end
 	local minp, maxp = mcl_burning.get_collisionbox(obj, true, storage)
-	local nodes = minetest.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
+	local nodes = core.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
 	return nodes
 end
 
@@ -58,7 +58,7 @@ end
 -- If the fire does not have a fire HUD, initializes the HUD.
 --
 function mcl_burning.update_hud(player)
-	local animation_frames = tonumber(minetest.settings:get("fire_animation_frames")) or 8
+	local animation_frames = tonumber(core.settings:get("fire_animation_frames")) or 8
 	local hud_flame_animated = "mcl_burning_hud_flame_animated.png^[opacity:180^[verticalframe:" .. animation_frames .. ":"
 
 	local storage = mcl_burning.get_storage(player)
@@ -145,7 +145,7 @@ function mcl_burning.set_on_fire(obj, burn_time)
 	size = vector.multiply(size, vector.new(1.1, 1.2, 1.1))
 	size = vector.divide(size, obj:get_properties().visual_size)
 
-	local fire_entity = minetest.add_entity(obj:get_pos(), "mcl_burning:fire")
+	local fire_entity = core.add_entity(obj:get_pos(), "mcl_burning:fire")
 	if fire_entity and fire_entity:get_pos() then
 		fire_entity:set_properties({visual_size = size})
 		fire_entity:set_attach(obj, "", vector.new(0, size.y * 5, 0), vector.new(0, 0, 0))

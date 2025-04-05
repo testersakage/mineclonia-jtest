@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 mcl_clock = {}
 
 mcl_clock.old_time = -1
@@ -24,13 +24,13 @@ local function round(num)
 end
 
 function mcl_clock.get_clock_frame()
-	local t = clock_frames * minetest.get_timeofday()
+	local t = clock_frames * core.get_timeofday()
 	t = round(t)
 	if t == clock_frames then t = 0 end
 	return tostring((t + (clock_frames / 2)) % clock_frames)
 end
 
-minetest.register_craftitem("mcl_clock:clock", {
+core.register_craftitem("mcl_clock:clock", {
 	description = S("Clock"),
 	_tt_help = S("Displays the time of day in the Overworld"),
 	_doc_items_longdesc = S("Clocks are tools which shows the current time of day in the Overworld."),
@@ -57,7 +57,7 @@ minetest.register_craftitem("mcl_clock:clock", {
 -- just in case some clocks in the world go wrong
 local force_clock_update_timer = 0
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	local now = mcl_clock.get_clock_frame()
 	force_clock_update_timer = force_clock_update_timer + dtime
 	random_timer = random_timer + dtime
@@ -79,7 +79,7 @@ minetest.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		local inv = player:get_inventory()
 		for s, stack in pairs(inv:get_list("main")) do
-			if minetest.get_item_group(stack:get_name(), "clock") > 0 then
+			if core.get_item_group(stack:get_name(), "clock") > 0 then
 				stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
 				local frame
 				-- Clocks do not work in certain zones
@@ -98,13 +98,13 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-minetest.register_on_craft(function(itemstack)
+core.register_on_craft(function(itemstack)
 	if itemstack:get_name() == "mcl_clock:clock" then
 		itemstack:get_meta():set_string("inventory_image", mcl_clock.images[mcl_clock.get_clock_frame()])
 	end
 end)
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_clock:clock",
 	recipe = {
 		{"", "mcl_core:gold_ingot", ""},

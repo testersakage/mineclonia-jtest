@@ -1,41 +1,41 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local function temple_placement_callback(pos,def, pr)
 	local hl = def.sidelen / 2
 	local p1 = vector.offset(pos,-hl,-hl,-hl)
 	local p2 = vector.offset(pos,hl,hl,hl)
 	-- Delete cacti leftovers:
-	local cactus_nodes = minetest.find_nodes_in_area_under_air(p1, p2, "mcl_core:cactus")
+	local cactus_nodes = core.find_nodes_in_area_under_air(p1, p2, "mcl_core:cactus")
 	if cactus_nodes and #cactus_nodes > 0 then
 		for _, pos in pairs(cactus_nodes) do
-			local node_below = minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z})
+			local node_below = core.get_node({x=pos.x, y=pos.y-1, z=pos.z})
 			if node_below and node_below.name == "mcl_core:sandstone" then
-				minetest.swap_node(pos, {name="air"})
+				core.swap_node(pos, {name="air"})
 			end
 		end
 	end
 
 	-- Initialize pressure plates and randomly remove up to 5 plates
-	local pplates = minetest.find_nodes_in_area(p1, p2, "mcl_pressureplates:pressure_plate_stone_off")
+	local pplates = core.find_nodes_in_area(p1, p2, "mcl_pressureplates:pressure_plate_stone_off")
 	local pplates_remove = 5
 	for p=1, #pplates do
 		if pplates_remove > 0 and pr:next(1, 100) >= 50 then
 			-- Remove plate
-			minetest.remove_node(pplates[p])
+			core.remove_node(pplates[p])
 			pplates_remove = pplates_remove - 1
 		else
 			-- Initialize plate
-			minetest.registered_nodes["mcl_pressureplates:pressure_plate_stone_off"].on_construct(pplates[p])
+			core.registered_nodes["mcl_pressureplates:pressure_plate_stone_off"].on_construct(pplates[p])
 		end
 	end
-	if minetest.registered_nodes["mcl_sus_nodes:sand"] then
-		local sus_poss = minetest.find_nodes_in_area(vector.offset(p1,0,-5,0), vector.offset(p2,0,-hl+5,0), {"mcl_core:sand","mcl_core:sandstone","mcl_core:redsand","mcl_core:redsandstone"})
+	if core.registered_nodes["mcl_sus_nodes:sand"] then
+		local sus_poss = core.find_nodes_in_area(vector.offset(p1,0,-5,0), vector.offset(p2,0,-hl+5,0), {"mcl_core:sand","mcl_core:sandstone","mcl_core:redsand","mcl_core:redsandstone"})
 		if #sus_poss > 0 then
 			table.shuffle(sus_poss)
 			for i = 1,pr:next(1,math.min(250,#sus_poss)) do
-				minetest.swap_node(sus_poss[i],{name="mcl_sus_nodes:sand"})
-				local meta = minetest.get_meta(sus_poss[i])
+				core.swap_node(sus_poss[i],{name="mcl_sus_nodes:sand"})
+				local meta = core.get_meta(sus_poss[i])
 				meta:set_string("structure","desert_temple")
 			end
 		end

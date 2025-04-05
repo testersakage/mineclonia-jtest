@@ -1,6 +1,6 @@
-local GRAVITY = tonumber(minetest.settings:get("movement_gravity"))
+local GRAVITY = tonumber(core.settings:get("movement_gravity"))
 
-local inv_nodes_movable = minetest.settings:get_bool("mcl_inv_nodes_movable", true)
+local inv_nodes_movable = core.settings:get_bool("mcl_inv_nodes_movable", true)
 
 mcl_pistons.registered_on_move = {}
 
@@ -34,7 +34,7 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	-- table containing nodes to be moved, has the following format:
 	-- pos: position after being moved
 	-- old_pos: position before being moved
-	-- node: node information, courtesy of minetest.get_node
+	-- node: node information, courtesy of core.get_node
 	-- meta: node metadata, nil if dosent have it
 	-- timer: node timer, nil if dosent have it
 	local nodes = {}
@@ -45,24 +45,24 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 	while #frontiers > 0 do
 		local np = frontiers[1]
-		local nn = minetest.get_node(np)
+		local nn = core.get_node(np)
 		if nn.name == "ignore" then
-			minetest.get_voxel_manip():read_from_map(np, np)
-			nn = minetest.get_node(np)
+			core.get_voxel_manip():read_from_map(np, np)
+			nn = core.get_node(np)
 		end
 
-		local def = minetest.registered_nodes[nn.name]
-		if minetest.get_item_group(nn.name, "unmovable_by_piston") == 1
-			or (not inv_nodes_movable and minetest.get_item_group(nn.name, "container") ~= 0)
+		local def = core.registered_nodes[nn.name]
+		if core.get_item_group(nn.name, "unmovable_by_piston") == 1
+			or (not inv_nodes_movable and core.get_item_group(nn.name, "container") ~= 0)
 			or not def then
 			return
 		end
 
-		if minetest.is_protected(np, player_name) then
+		if core.is_protected(np, player_name) then
 			return
 		end
 
-		if minetest.get_item_group(nn.name, "dig_by_piston") == 1 then
+		if core.get_item_group(nn.name, "dig_by_piston") == 1 then
 			-- if we want the node to drop, e.g. sugar cane, do not count towards push limit
 			table.insert(dig_nodes, {node = nn, pos = vector.add(np, movedir), old_pos = vector.copy(np)})
 		else
@@ -80,12 +80,12 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 					-- when pushing a sticky block, push all applicable blocks with it
 					for _, dir in pairs(sixdirs) do
 						offset_pos = np:add(dir:multiply(-1))
-						offset_node = minetest.get_node(offset_pos)
+						offset_node = core.get_node(offset_pos)
 						is_connected = def._mcl_pistons_sticky(nn, offset_node, dir)
 
-						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
-							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0
-							and (inv_nodes_movable or minetest.get_item_group(offset_node.name, "container") == 0) then
+						if is_connected and core.get_item_group(offset_node.name, "unsticky") == 0
+							and core.get_item_group(offset_node.name, "unmovable_by_piston") == 0
+							and (inv_nodes_movable or core.get_item_group(offset_node.name, "container") == 0) then
 
 							-- Only insert as connected if node isn't the piston itself
 							if vector.equals(piston_pos, offset_pos) then
@@ -131,20 +131,20 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	-- dig all nodes
 	for id, n in ipairs(dig_nodes) do
 		-- if current node has already been destroyed (e.g. chain reaction of sugar cane breaking), skip it
-		if minetest.get_node(n.old_pos).name == n.node.name then
-			local def = minetest.registered_nodes[n.node.name]
+		if core.get_node(n.old_pos).name == n.node.name then
+			local def = core.registered_nodes[n.node.name]
 			if def then
-				def.on_dig(n.old_pos, n.node) --no need to check if it exists since all nodes have this via metatable (defaulting to minetest.node_dig which will handle drops)
-				minetest.remove_node(n.old_pos)
+				def.on_dig(n.old_pos, n.node) --no need to check if it exists since all nodes have this via metatable (defaulting to core.node_dig which will handle drops)
+				core.remove_node(n.old_pos)
 			end
 		end
 	end
 
 	-- remove old nodes that are about to be pushed
 	for id, n in ipairs(nodes) do
-		n.meta = minetest.get_meta(n.old_pos) and minetest.get_meta(n.old_pos):to_table()
-		minetest.remove_node(n.old_pos)
-		local node_timer = minetest.get_node_timer(n.old_pos)
+		n.meta = core.get_meta(n.old_pos) and core.get_meta(n.old_pos):to_table()
+		core.remove_node(n.old_pos)
+		local node_timer = core.get_node_timer(n.old_pos)
 		if node_timer:is_started() then
 			n.node_timer = {node_timer:get_timeout(), node_timer:get_elapsed()}
 		end
@@ -153,12 +153,12 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	-- add nodes after being pushed
 	for id, n in ipairs(nodes) do
 		-- local np = newpos[id]
-		minetest.set_node(n.pos, n.node)
+		core.set_node(n.pos, n.node)
 		if n.meta then
-			minetest.get_meta(n.pos):from_table(n.meta)
+			core.get_meta(n.pos):from_table(n.meta)
 		end
 		if n.node_timer then
-			minetest.get_node_timer(n.pos):set(unpack(n.node_timer))
+			core.get_node_timer(n.pos):set(unpack(n.node_timer))
 		end
 		if string.find(n.node.name, "mcl_observers:observer") then
 			-- It also counts as a block update when the observer itself is moved by a piston (Wiki):
@@ -169,9 +169,9 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	local function move_object(obj, n, is_pulled)
 		local entity = obj:get_luaentity()
 		local player = obj:is_player()
-		if (entity or player) and not (entity and minetest.registered_entities[entity.name]._mcl_pistons_unmovable) then
+		if (entity or player) and not (entity and core.registered_entities[entity.name]._mcl_pistons_unmovable) then
 			local new_pos = obj:get_pos():add(movedir)
-			local def = minetest.registered_nodes[minetest.get_node(new_pos).name]
+			local def = core.registered_nodes[core.get_node(new_pos).name]
 			if def and def.walkable then
 				return
 			end
@@ -217,11 +217,11 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 	local moved_objects = {}
 	local processed = {}
 	for id, p in ipairs(move_positions) do
-		local h = minetest.hash_node_position(p.pos)
+		local h = core.hash_node_position(p.pos)
 		if not processed[h] then
 			processed[h] = true
 
-			local objects = minetest.get_objects_inside_radius(p.pos, 0.9)
+			local objects = core.get_objects_inside_radius(p.pos, 0.9)
 			for _, obj in ipairs(objects) do
 				if not moved_objects[obj] then
 					move_object(obj, p.node, p.is_pulled)
@@ -239,13 +239,13 @@ end
 mcl_pistons.register_on_move(function(moved_nodes)
 	for i = 1, #moved_nodes do
 		local moved_node = moved_nodes[i]
-		minetest.after(0, function()
-			minetest.check_for_falling(moved_node.old_pos)
-			minetest.check_for_falling(moved_node.pos)
+		core.after(0, function()
+			core.check_for_falling(moved_node.old_pos)
+			core.check_for_falling(moved_node.pos)
 		end)
 
 		-- Callback for on_move stored in nodedef
-		local node_def = minetest.registered_nodes[moved_node.node.name]
+		local node_def = core.registered_nodes[moved_node.node.name]
 		if node_def and node_def._mcl_piston_on_move then
 			node_def._mcl_piston_on_move(moved_node)
 		end

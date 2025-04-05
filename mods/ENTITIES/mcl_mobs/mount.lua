@@ -20,13 +20,13 @@ local function force_detach(player)
 	player:set_properties({visual_size = {x = 1, y = 1} })
 end
 
-minetest.register_on_shutdown(function()
+core.register_on_shutdown(function()
 	for player in mcl_util.connected_players() do
 		force_detach(player)
 	end
 end)
-minetest.register_on_leaveplayer(force_detach)
-minetest.register_on_dieplayer(force_detach)
+core.register_on_leaveplayer(force_detach)
+core.register_on_dieplayer(force_detach)
 
 function mob_class:attach (player, force_server_side)
 	self.player_rotation = self.player_rotation or {x = 0, y = 0, z = 0}
@@ -71,8 +71,8 @@ function mob_class:attach (player, force_server_side)
 		}
 	})
 
-	minetest.after(0.2, function(name)
-		local player = minetest.get_player_by_name(name)
+	core.after(0.2, function(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_player.player_set_animation(player, "sit_mount" , 30)
 		end

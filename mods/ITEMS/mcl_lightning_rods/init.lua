@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_lightning_rods")
+local S = core.get_translator("mcl_lightning_rods")
 
 local cbox = {
 	type = "fixed",
@@ -33,7 +33,7 @@ local rod_def = {
 
 		local placer_pos = placer:get_pos()
 		if placer_pos then
-			param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
+			param2 = core.dir_to_facedir(vector.subtract(p1, placer_pos))
 		end
 
 		if p0.y - 1 == p1.y then
@@ -48,13 +48,13 @@ local rod_def = {
 			param2 = 4
 		end
 
-		return minetest.item_place(itemstack, placer, pointed_thing, param2)
+		return core.item_place(itemstack, placer, pointed_thing, param2)
 	end,
 
 	_mcl_blast_resistance = 0,
 }
 
-minetest.register_node("mcl_lightning_rods:rod", rod_def)
+core.register_node("mcl_lightning_rods:rod", rod_def)
 
 local rod_def_a = table.copy(rod_def)
 
@@ -69,31 +69,31 @@ rod_def_a._mcl_redstone = {
 }
 
 rod_def_a.on_timer = function(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 
 	if node.name == "mcl_lightning_rods:rod_powered" then --has not been dug
 		node.name = "mcl_lightning_rods:rod"
-		minetest.set_node(pos, node)
+		core.set_node(pos, node)
 	end
 
 	return false
 end
 
-minetest.register_node("mcl_lightning_rods:rod_powered", rod_def_a)
+core.register_node("mcl_lightning_rods:rod_powered", rod_def_a)
 
 mcl_lightning.register_on_strike(function(pos, pos2, objects, for_trap)
 	if for_trap then
 		return false
 	end
-	local lr = minetest.find_nodes_in_area_under_air(vector.offset(pos, -64, -32, -64), vector.offset(pos, 64, 64, 64), { "group:attracts_lightning" }, true)
+	local lr = core.find_nodes_in_area_under_air(vector.offset(pos, -64, -32, -64), vector.offset(pos, 64, 64, 64), { "group:attracts_lightning" }, true)
 	lr = (lr and #lr > 0 and lr[1]) or false
 	if lr then
-		local node = minetest.get_node(lr)
+		local node = core.get_node(lr)
 
 		if node.name == "mcl_lightning_rods:rod" then
 			node.name = "mcl_lightning_rods:rod_powered"
-			minetest.set_node(lr, node)
-			minetest.get_node_timer(lr):start(0.4)
+			core.set_node(lr, node)
+			core.get_node_timer(lr):start(0.4)
 		end
 	end
 

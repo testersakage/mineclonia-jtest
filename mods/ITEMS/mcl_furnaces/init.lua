@@ -1,8 +1,8 @@
 mcl_furnaces = {}
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
-local C = minetest.colorize
-local F = minetest.formspec_escape
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local C = core.colorize
+local F = core.formspec_escape
 
 local LIGHT_ACTIVE_FURNACE = 13
 
@@ -37,7 +37,7 @@ local function get_active_formspec(fuel_percent, item_percent, name)
 		"list[current_player;main;0.375,9.05;9,1;]",
 
 		"image_button[7.85,0.6;1,1;craftguide_book.png;craftguide;]"..
-		"tooltip[craftguide;"..minetest.formspec_escape(S("Recipe book")).."]"..
+		"tooltip[craftguide;"..core.formspec_escape(S("Recipe book")).."]"..
 
 		"listring[context;dst]",
 		"listring[current_player;main]",
@@ -76,7 +76,7 @@ local function get_inactive_formspec(name)
 		"list[current_player;main;0.375,9.05;9,1;]",
 
 		"image_button[7.85,0.6;1,1;craftguide_book.png;craftguide;]"..
-		"tooltip[craftguide;"..minetest.formspec_escape(S("Recipe book")).."]"..
+		"tooltip[craftguide;"..core.formspec_escape(S("Recipe book")).."]"..
 
 		"listring[context;dst]",
 		"listring[current_player;main]",
@@ -97,8 +97,8 @@ function mcl_furnaces.receive_fields(_, _, fields, sender)
 end
 
 function mcl_furnaces.give_xp(pos, player)
-	local meta = minetest.get_meta(pos)
-	local dir = vector.divide(minetest.facedir_to_dir(minetest.get_node(pos).param2), -1.95)
+	local meta = core.get_meta(pos)
+	local dir = vector.divide(core.facedir_to_dir(core.get_node(pos).param2), -1.95)
 	local xp = meta:get_int("xp")
 	if xp > 0 then
 		if player then
@@ -115,15 +115,15 @@ end
 --
 function mcl_furnaces.is_cookable(stack, pos)
 	if pos then
-		local def = minetest.registered_nodes[minetest.get_node(pos).name]
-		if def and def._mcl_furnaces_cook_group and minetest.get_item_group(stack:get_name(), def._mcl_furnaces_cook_group) == 0 then return false end
+		local def = core.registered_nodes[core.get_node(pos).name]
+		if def and def._mcl_furnaces_cook_group and core.get_item_group(stack:get_name(), def._mcl_furnaces_cook_group) == 0 then return false end
 	end
-	return minetest.get_craft_result({method = "cooking", width = 1, items = {stack}}).time ~= 0
+	return core.get_craft_result({method = "cooking", width = 1, items = {stack}}).time ~= 0
 end
 
 local function sort_stack(stack, pos)
 	if mcl_furnaces.is_cookable(stack, pos) then
-		if mcl_util.is_fuel(stack) and not minetest.get_meta(pos):get_inventory():room_for_item("src", stack) then
+		if mcl_util.is_fuel(stack) and not core.get_meta(pos):get_inventory():room_for_item("src", stack) then
 			return "fuel"
 		end
 		return "src"
@@ -134,11 +134,11 @@ end
 
 function mcl_furnaces.allow_metadata_inventory_put(pos, listname, index, stack, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	end
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	if listname == "fuel" then
 		-- Special case: empty bucket (not a fuel, but used for sponge drying)
@@ -149,7 +149,7 @@ function mcl_furnaces.allow_metadata_inventory_put(pos, listname, index, stack, 
 		-- Test stack with size 1 because we burn one fuel at a time
 		local teststack = ItemStack(stack)
 		teststack:set_count(1)
-		local output, decremented_input = minetest.get_craft_result({ method = "fuel", width = 1, items = { teststack } })
+		local output, decremented_input = core.get_craft_result({ method = "fuel", width = 1, items = { teststack } })
 		if output.time ~= 0 then
 			-- Only allow to place 1 item if fuel get replaced by recipe.
 			-- This is the case for lava buckets.
@@ -172,7 +172,7 @@ function mcl_furnaces.allow_metadata_inventory_put(pos, listname, index, stack, 
 	elseif listname == "dst" then
 		return 0
 	elseif listname == "sorter" then
-		local inv = minetest.get_meta(pos):get_inventory()
+		local inv = core.get_meta(pos):get_inventory()
 		local trg = sort_stack(stack, pos)
 		if trg then
 			local stack1 = ItemStack(stack):take_item()
@@ -192,7 +192,7 @@ end
 
 function mcl_furnaces.allow_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, _, player)
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
 	return mcl_furnaces.allow_metadata_inventory_put(pos, to_list, to_index, stack, player)
@@ -201,8 +201,8 @@ end
 function mcl_furnaces.allow_metadata_inventory_take(pos, listname, _, stack, player)
 	if listname == "sorter" then return 0 end
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	end
 	return stack:get_count()
@@ -229,7 +229,7 @@ end
 
 function mcl_furnaces.on_metadata_inventory_put(pos, listname, _, stack, _)
 	if listname == "sorter" then
-		local inv = minetest.get_meta(pos):get_inventory()
+		local inv = core.get_meta(pos):get_inventory()
 		inv:add_item(sort_stack(stack, pos), stack)
 		inv:set_stack("sorter", 1, ItemStack(""))
 	end
@@ -237,22 +237,22 @@ function mcl_furnaces.on_metadata_inventory_put(pos, listname, _, stack, _)
 end
 
 function mcl_furnaces.swap_node(pos, name)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if node.name == name then
 		return
 	end
 	node.name = name
-	minetest.swap_node(pos, node)
+	core.swap_node(pos, node)
 end
 
 function mcl_furnaces.furnace_reset_delta_time(pos)
-	local meta = minetest.get_meta(pos)
-	local time_speed = tonumber(minetest.settings:get("time_speed")) or 72
+	local meta = core.get_meta(pos)
+	local time_speed = tonumber(core.settings:get("time_speed")) or 72
 	if (time_speed < 0.1) then
 		return
 	end
 	local time_multiplier = 86400 / time_speed
-	local current_game_time = .0 + ((minetest.get_day_count() + minetest.get_timeofday()) * time_multiplier)
+	local current_game_time = .0 + ((core.get_day_count() + core.get_timeofday()) * time_multiplier)
 
 	-- TODO: Change meta:get/set_string() to get/set_float() for "last_gametime".
 	-- In Windows *_float() works OK but under Linux it returns rounded unusable values like 449540.000000000
@@ -268,14 +268,14 @@ function mcl_furnaces.furnace_reset_delta_time(pos)
 end
 
 function mcl_furnaces.furnace_get_delta_time(pos, elapsed)
-	local meta = minetest.get_meta(pos)
-	local time_speed = tonumber(minetest.settings:get("time_speed") or 72)
+	local meta = core.get_meta(pos)
+	local time_speed = tonumber(core.settings:get("time_speed") or 72)
 	local current_game_time
 	if (time_speed < 0.1) then
 		return meta, elapsed
 	else
 		local time_multiplier = 86400 / time_speed
-		current_game_time = .0 + ((minetest.get_day_count() + minetest.get_timeofday()) * time_multiplier)
+		current_game_time = .0 + ((core.get_day_count() + core.get_timeofday()) * time_multiplier)
 	end
 
 	local last_game_time = meta:get_string("last_gametime")
@@ -332,10 +332,10 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 
 			-- Check if we have cookable content: cookable
 			local aftercooked
-			cooked, aftercooked = minetest.get_craft_result({ method = "cooking", width = 1, items = srclist })
+			cooked, aftercooked = core.get_craft_result({ method = "cooking", width = 1, items = srclist })
 			cookable = cooked.time ~= 0
 			if group then
-				cookable = cookable and minetest.get_item_group(inv:get_stack("src", 1):get_name(), group) > 0
+				cookable = cookable and core.get_item_group(inv:get_stack("src", 1):get_name(), group) > 0
 			end
 			if cookable then
 				-- Successful cooking requires space in dst slot and time
@@ -353,7 +353,7 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 			if cookable and not active then
 				-- We need to get new fuel
 				local afterfuel
-				fuel, afterfuel = minetest.get_craft_result({ method = "fuel", width = 1, items = fuellist })
+				fuel, afterfuel = core.get_craft_result({ method = "fuel", width = 1, items = fuellist })
 
 				if fuel.time == 0 then
 					-- No valid fuel in fuel list -- stop
@@ -418,7 +418,7 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 			src_time = 0
 		end
 
-		local def = minetest.registered_nodes[node_normal]
+		local def = core.registered_nodes[node_normal]
 		local name = S("Furnace")
 		if def and def.description then
 			name = def._tt_original_description or def.description
@@ -453,7 +453,7 @@ function mcl_furnaces.get_timer_function(node_normal, node_active, factor, group
 		else
 			mcl_furnaces.swap_node(pos, node_normal)
 			-- stop timer on the inactive furnace
-			minetest.get_node_timer(pos):stop()
+			core.get_node_timer(pos):stop()
 		end
 
 		--
@@ -495,7 +495,7 @@ function mcl_furnaces.on_hopper_out(uppos, pos)
 
 	-- Also suck in non-fuel items from furnace fuel slot
 	if not sucked then
-		local finv = minetest.get_inventory({type="node", pos=uppos})
+		local finv = core.get_inventory({type="node", pos=uppos})
 		if finv and not mcl_util.is_fuel(finv:get_stack("fuel", 1)) then
 			sucked = mcl_util.move_item_container(uppos, pos, "fuel")
 		end
@@ -506,8 +506,8 @@ end
 function mcl_furnaces.on_hopper_in(pos, to_pos)
 	if pos.y == to_pos.y then
 		-- Put fuel into fuel slot
-		local sinv = minetest.get_inventory({type="node", pos = pos})
-		local dinv = minetest.get_inventory({type="node", pos = to_pos})
+		local sinv = core.get_inventory({type="node", pos = pos})
+		local dinv = core.get_inventory({type="node", pos = to_pos})
 		local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "main", dinv, "fuel", mcl_furnaces.is_transferrable_fuel)
 		if slot_id then
 			mcl_util.move_item_container(pos, to_pos, nil, slot_id, "fuel")
@@ -548,7 +548,7 @@ mcl_furnaces.tpl_furnace_node_normal = table.merge(mcl_furnaces.tpl_furnace_node
 	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		-- Reset accumulated game time when player works with furnace:
 		mcl_furnaces.furnace_reset_delta_time(pos)
-		minetest.get_node_timer(pos):start(1.0)
+		core.get_node_timer(pos):start(1.0)
 
 		mcl_furnaces.on_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, count, player)
 	end,
@@ -556,7 +556,7 @@ mcl_furnaces.tpl_furnace_node_normal = table.merge(mcl_furnaces.tpl_furnace_node
 		-- Reset accumulated game time when player works with furnace:
 		mcl_furnaces.furnace_reset_delta_time(pos)
 		-- start timer function, it will sort out whether furnace can burn or not.
-		minetest.get_node_timer(pos):start(1.0)
+		core.get_node_timer(pos):start(1.0)
 
 		mcl_furnaces.on_metadata_inventory_put(pos, listname, index, stack, player)
 	end,
@@ -564,7 +564,7 @@ mcl_furnaces.tpl_furnace_node_normal = table.merge(mcl_furnaces.tpl_furnace_node
 		-- Reset accumulated game time when player works with furnace:
 		mcl_furnaces.furnace_reset_delta_time(pos)
 		-- start timer function, it will helpful if player clears dst slot
-		minetest.get_node_timer(pos):start(1.0)
+		core.get_node_timer(pos):start(1.0)
 
 		mcl_furnaces.on_metadata_inventory_take(pos, listname, index, stack, player)
 	end,
@@ -578,11 +578,11 @@ mcl_furnaces.tpl_furnace_node_active = table.merge(mcl_furnaces.tpl_furnace_node
 
 function mcl_furnaces.register_furnace(nodename, def)
 	local timer_func = mcl_furnaces.get_timer_function(nodename, nodename.."_active", (def.factor or 1), def.cook_group)
-	minetest.register_node(nodename, table.merge(mcl_furnaces.tpl_furnace_node_normal,{
+	core.register_node(nodename, table.merge(mcl_furnaces.tpl_furnace_node_normal,{
 		on_construct = function(pos)
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local name = S("Furnace")
-			local def = minetest.registered_nodes[nodename]
+			local def = core.registered_nodes[nodename]
 			if def and def.description then
 				name = def._tt_original_description or def.description
 			end
@@ -602,7 +602,7 @@ function mcl_furnaces.register_furnace(nodename, def)
 		_mcl_furnaces_get_active_formspec = def.get_active_formspec,
 		_mcl_furnaces_get_inactive_formspec = def.get_inactive_formspec,
 	},def.node_normal))
-	minetest.register_node(nodename.."_active", table.merge(mcl_furnaces.tpl_furnace_node_active,{
+	core.register_node(nodename.."_active", table.merge(mcl_furnaces.tpl_furnace_node_active,{
 		on_timer = timer_func,
 		drop = nodename,
 		_mcl_baseitem = nodename,
@@ -637,7 +637,7 @@ mcl_furnaces.register_furnace("mcl_furnaces:furnace",{
 })
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_furnaces:furnace",
 	recipe = {
 		{ "group:cobble", "group:cobble", "group:cobble" },
@@ -648,18 +648,18 @@ minetest.register_craft({
 
 doc.add_entry_alias("nodes", "mcl_furnaces:furnace", "nodes", "mcl_furnaces:furnace_active")
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update Furnace formspecs and invs to allow new sneak+click behavior",
 	name = "mcl_furnaces:update_coolsneak",
 	nodenames = { "group:furnace", "group:furnace_active" },
 	run_at_every_load = false,
 	action = function(pos, node)
-		local m = minetest.get_meta(pos)
+		local m = core.get_meta(pos)
 		local inv = m:get_inventory()
 		inv:set_size("sorter", 1)
 
-		if minetest.get_item_group(node.name, "furnace_active") == 0 then --active furnaces update the formspec every second by themselves
-			local def = minetest.registered_nodes[node.name]
+		if core.get_item_group(node.name, "furnace_active") == 0 then --active furnaces update the formspec every second by themselves
+			local def = core.registered_nodes[node.name]
 			local name = S("Furnace")
 			if def and def.description then
 				name = def._tt_original_description or def.description

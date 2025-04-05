@@ -11,12 +11,12 @@ function mcl_util.select_stack(src_inventory, src_list, dst_inventory, dst_list,
 	return nil
 end
 
-minetest.register_on_mods_loaded(function()
-	for nname, def in pairs(minetest.registered_nodes) do
+core.register_on_mods_loaded(function()
+	for nname, def in pairs(core.registered_nodes) do
 		if not def._on_hopper_out and def._mcl_hoppers_on_try_pull then
-			minetest.override_item(nname, {
+			core.override_item(nname, {
 				_on_hopper_out = function(node_pos, hopper_pos)
-					local hinv = minetest.get_meta(hopper_pos):get_inventory()
+					local hinv = core.get_meta(hopper_pos):get_inventory()
 					local inv, list, stack = def._mcl_hoppers_on_try_pull(node_pos, hopper_pos, hinv, "main")
 					if stack and mcl_util.move_item(inv, list, stack, hinv, "main") then
 						return true
@@ -26,9 +26,9 @@ minetest.register_on_mods_loaded(function()
 			})
 		end
 		if not def._on_hopper_in and def._mcl_hoppers_on_try_push then
-			minetest.override_item(nname, {
+			core.override_item(nname, {
 				_on_hopper_in = function(hopper_pos, node_pos)
-					local hinv = minetest.get_meta(hopper_pos):get_inventory()
+					local hinv = core.get_meta(hopper_pos):get_inventory()
 					local inv, list, stack = def._mcl_hoppers_on_try_push(node_pos, hopper_pos, hinv, "main")
 					if stack and mcl_util.move_item(hinv, "main", stack, inv, list) then
 						return true
@@ -38,12 +38,12 @@ minetest.register_on_mods_loaded(function()
 			})
 		end
 		if not def._after_hopper_out and def._mcl_hoppers_on_after_pull then
-			minetest.override_item(nname, {
+			core.override_item(nname, {
 				_after_hopper_out = def._mcl_hoppers_on_after_pull,
 			})
 		end
 		if not def._after_hopper_in and def._mcl_hoppers_on_after_push then
-			minetest.override_item(nname, {
+			core.override_item(nname, {
 				_after_hopper_in = def._mcl_hoppers_on_after_push,
 			})
 		end

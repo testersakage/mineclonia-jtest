@@ -25,8 +25,8 @@ local psdef= {
 
 function mcl_weather.has_snow(pos)
 	if not mcl_worlds.has_weather(pos) then return false end
-	local bn = minetest.get_biome_name(minetest.get_biome_data(pos).biome)
-	local bd = minetest.registered_biomes[bn]
+	local bn = core.get_biome_name(core.get_biome_data(pos).biome)
+	local bd = core.registered_biomes[bn]
 	if not mcl_weather.can_see_outdoors(pos) then
 		return false
 	end
@@ -67,7 +67,7 @@ function mcl_weather.snow.add_player(player)
 end
 
 local timer = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	if mcl_weather.state ~= "snow" then
 		return false
 	end
@@ -112,7 +112,7 @@ if mcl_weather.reg_weathers.snow == nil then
 end
 
 if mcl_weather.allow_abm then
-	minetest.register_abm({
+	core.register_abm({
 		label = "Snow piles up",
 		nodenames = {"group:opaque","group:leaves","group:snow_cover"},
 		neighbors = {"air"},
@@ -126,7 +126,7 @@ if mcl_weather.allow_abm then
 			or node.name == "mcl_core:snowblock" then
 				return end
 			local above = vector.offset(pos,0,1,0)
-			local above_node = minetest.get_node(above)
+			local above_node = core.get_node(above)
 			if above_node.name == "air" and mcl_weather.is_outdoor(pos) then
 				local nn = nil
 				if node.name:find("snow") then
@@ -139,9 +139,9 @@ if mcl_weather.allow_abm then
 					elseif l and l >= 7 then
 						nn={name = "mcl_core:snowblock"}
 					end
-					if nn then minetest.set_node(pos,nn) end
+					if nn then core.set_node(pos,nn) end
 				else
-					minetest.set_node(above,{name = "mcl_core:snow"})
+					core.set_node(above,{name = "mcl_core:snow"})
 				end
 			end
 		end

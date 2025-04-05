@@ -1,8 +1,8 @@
 -- By EliasFleckenstein03 and Code-Sploit
 
-local S = minetest.get_translator("mcl_smithing_table")
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator("mcl_smithing_table")
+local F = core.formspec_escape
+local C = core.colorize
 
 mcl_smithing_table = {}
 
@@ -104,7 +104,7 @@ function mcl_smithing_table.upgrade_trimmed(itemstack, color_mineral, template)
 	local overlay = template:get_name():gsub("mcl_armor:","")
 
 	--trimming process
-	if minetest.get_item_group(template:get_name(), "smithing_template") > 0 then
+	if core.get_item_group(template:get_name(), "smithing_template") > 0 then
 		mcl_armor.trim(itemstack, overlay, material_name)
 		tt.reload_itemstack_description(itemstack)
 	end
@@ -117,11 +117,11 @@ function mcl_smithing_table.is_smithing_mineral(itemname)
 end
 
 local function reset_upgraded_item(pos)
-	local inv = minetest.get_meta(pos):get_inventory()
+	local inv = core.get_meta(pos):get_inventory()
 	local upgraded_item
 
 	local original_itemname = inv:get_stack("upgrade_item", 1):get_name()
-	local template_present = minetest.get_item_group(inv:get_stack("template",1):get_name(), "smithing_template") > 0
+	local template_present = core.get_item_group(inv:get_stack("template",1):get_name(), "smithing_template") > 0
 	local upgrade_template_present = inv:get_stack("template",1):get_name() == "mcl_nether:netherite_upgrade_template"
 	local is_armor = original_itemname:find("mcl_armor:") ~= nil
 	local is_trimmed = original_itemname:find("_trimmed") ~= nil
@@ -136,19 +136,19 @@ local function reset_upgraded_item(pos)
 end
 
 local function sort_stack(stack, _)
-	if minetest.get_item_group(stack:get_name(), "smithing_template") > 0 or minetest.get_item_group(stack:get_name(), "upgrade_template") > 0 then
+	if core.get_item_group(stack:get_name(), "smithing_template") > 0 or core.get_item_group(stack:get_name(), "upgrade_template") > 0 then
 		return "template"
 	elseif mcl_smithing_table.is_smithing_mineral(stack:get_name()) then
 		return "mineral"
-	elseif (minetest.get_item_group(stack:get_name(),"armor") > 0
-			or minetest.get_item_group(stack:get_name(),"tool") > 0
-			or minetest.get_item_group(stack:get_name(),"sword") > 0)
+	elseif (core.get_item_group(stack:get_name(),"armor") > 0
+			or core.get_item_group(stack:get_name(),"tool") > 0
+			or core.get_item_group(stack:get_name(),"sword") > 0)
 			and not mcl_armor.trims.blacklisted[stack:get_name()] then
 		return "upgrade_item"
 	end
 end
 
-minetest.register_node("mcl_smithing_table:table", {
+core.register_node("mcl_smithing_table:table", {
 	description = S("Smithing Table"),
 	_doc_items_longdesc = S("A smithing table is a utility block used to alter tools and armor at the cost of a smithing template and the appropriate material. This is the only way to obtain trimmed armor or upgrade diamond equipment with netherite. It also serves as a toolsmith's job site block."),
 	_doc_items_usagehelp = S("Rightclick on a smithing table to access its interface. Put armor or tools in the upper left slot. The top right slot is reserved for mineral items. The bottom slot is for smithing templates. To upgrade your diamond armor and tools to netherite, the netherite upgrade template is required.").."\n"..
@@ -168,7 +168,7 @@ minetest.register_node("mcl_smithing_table:table", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_string("formspec", formspec)
 
 		local inv = meta:get_inventory()
@@ -184,15 +184,15 @@ minetest.register_node("mcl_smithing_table:table", {
 
 	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		end
 		local r = 0
 		if listname == "upgrade_item" then
-			if (minetest.get_item_group(stack:get_name(),"armor") > 0
-			or minetest.get_item_group(stack:get_name(),"tool") > 0
-			or minetest.get_item_group(stack:get_name(),"sword") > 0)
+			if (core.get_item_group(stack:get_name(),"armor") > 0
+			or core.get_item_group(stack:get_name(),"tool") > 0
+			or core.get_item_group(stack:get_name(),"sword") > 0)
 			and not mcl_armor.trims.blacklisted[stack:get_name()] then
 				r = stack:get_count()
 			end
@@ -201,11 +201,11 @@ minetest.register_node("mcl_smithing_table:table", {
 				r= stack:get_count()
 			end
 		elseif listname == "template" then
-			if minetest.get_item_group(stack:get_name(),"smithing_template") > 0 or  minetest.get_item_group(stack:get_name(),"upgrade_template") > 0 then
+			if core.get_item_group(stack:get_name(),"smithing_template") > 0 or  core.get_item_group(stack:get_name(),"upgrade_template") > 0 then
 				r = stack:get_count()
 			end
 		elseif listname == "sorter" then
-			local inv = minetest.get_meta(pos):get_inventory()
+			local inv = core.get_meta(pos):get_inventory()
 			local trg = sort_stack(stack, pos)
 			if trg then
 				local stack1 = ItemStack(stack):take_item()
@@ -228,8 +228,8 @@ minetest.register_node("mcl_smithing_table:table", {
 	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		if listname == "sorter" then return 0 end
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -238,14 +238,14 @@ minetest.register_node("mcl_smithing_table:table", {
 
 	on_metadata_inventory_put =  function(pos, listname, _, stack)
 		if listname == "sorter" then
-			local inv = minetest.get_meta(pos):get_inventory()
+			local inv = core.get_meta(pos):get_inventory()
 			inv:add_item(sort_stack(stack, pos), stack)
 			inv:set_stack("sorter", 1, ItemStack(""))
 		end
 		reset_upgraded_item(pos)
 	end,
 	on_metadata_inventory_take = function(pos, listname, _, stack, player)
-		local inv = minetest.get_meta(pos):get_inventory()
+		local inv = core.get_meta(pos):get_inventory()
 
 		local function take_item(listname)
 			local itemstack = inv:get_stack(listname, 1)
@@ -255,7 +255,7 @@ minetest.register_node("mcl_smithing_table:table", {
 
 		if listname == "upgraded_item" then
 			-- ToDo: make epic sound
-			minetest.sound_play("mcl_smithing_table_upgrade", { pos = pos, max_hear_distance = 16 })
+			core.sound_play("mcl_smithing_table_upgrade", { pos = pos, max_hear_distance = 16 })
 
 			if stack:get_name() == "mcl_farming:hoe_netherite" then
 				awards.unlock(player:get_player_name(), "mcl:seriousDedication")
@@ -266,7 +266,7 @@ minetest.register_node("mcl_smithing_table:table", {
 
 				if not mcl_achievements.award_unlocked(playername, "mcl:lots_of_trimming") and achievement_trims[template_name] then
 					local meta = player:get_meta()
-					local used_achievement_trims = minetest.deserialize(meta:get_string("mcl_smithing_table:achievement_trims")) or {}
+					local used_achievement_trims = core.deserialize(meta:get_string("mcl_smithing_table:achievement_trims")) or {}
 					if not used_achievement_trims[template_name] then
 						used_achievement_trims[template_name] = true
 					end
@@ -282,7 +282,7 @@ minetest.register_node("mcl_smithing_table:table", {
 					if used_all then
 						awards.unlock(playername, "mcl:lots_of_trimming")
 					else
-						meta:set_string("mcl_smithing_table:achievement_trims", minetest.serialize(used_achievement_trims))
+						meta:set_string("mcl_smithing_table:achievement_trims", core.serialize(used_achievement_trims))
 					end
 				end
 			end
@@ -300,7 +300,7 @@ minetest.register_node("mcl_smithing_table:table", {
 })
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_smithing_table:table",
 	recipe = {
 		{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "" },
@@ -314,13 +314,13 @@ function mcl_smithing_table.upgrade_item_netherite(itemstack)
 	return mcl_smithing_table.upgrade_item(itemstack)
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update smithing table formspecs and invs to allow new sneak+click behavior",
 	name = "mcl_smithing_table:update_coolsneak",
 	nodenames = { "mcl_smithing_table:table" },
 	run_at_every_load = false,
 	action = function(pos)
-		local m = minetest.get_meta(pos)
+		local m = core.get_meta(pos)
 		m:get_inventory():set_size("sorter", 1)
 		m:set_string("formspec", formspec)
 	end,

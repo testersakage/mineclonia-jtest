@@ -2,7 +2,7 @@ mcl_experience = {
 	on_add_xp = {},
 }
 
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 
 dofile(modpath .. "/command.lua")
 dofile(modpath .. "/orb.lua")
@@ -69,7 +69,7 @@ local function bar_to_xp(bar, level)
 end
 
 local function get_time()
-	return minetest.get_us_time() / 1000000
+	return core.get_us_time() / 1000000
 end
 
 -- api
@@ -116,7 +116,7 @@ function mcl_experience.add_xp(player, xp)
 		local name = player:get_player_name()
 
 		if old_level == cache.level then
-			minetest.sound_play("mcl_experience", {
+			core.sound_play("mcl_experience", {
 				to_player = name,
 				gain = 0.1,
 				pitch = math.random(75, 99) / 100,
@@ -124,7 +124,7 @@ function mcl_experience.add_xp(player, xp)
 
 			cache.last_time = current_time
 		else
-			minetest.sound_play("mcl_experience_level_up", {
+			core.sound_play("mcl_experience_level_up", {
 				to_player = name,
 				gain = 0.2,
 			})
@@ -139,7 +139,7 @@ function mcl_experience.throw_xp(pos, total_xp)
 	local obs = {}
 	while i < total_xp and j < 100 do
 		local xp = math.min(math.random(1, math.min(32767, total_xp - math.floor(i / 2))), total_xp - i)
-		local obj = minetest.add_entity(pos, "mcl_experience:orb", tostring(xp))
+		local obj = core.add_entity(pos, "mcl_experience:orb", tostring(xp))
 
 		if not obj then
 			return false
@@ -176,7 +176,7 @@ function mcl_experience.setup_hud(player)
 		last_time = get_time(),
 	}
 
-	if not minetest.is_creative_enabled(player:get_player_name()) then
+	if not core.is_creative_enabled(player:get_player_name()) then
 		hud_bars[player] = player:hud_add({
 			type = "image",
 			position = {x = 0.5, y = 1},
@@ -202,7 +202,7 @@ function mcl_experience.update(player)
 
 	cache.level = xp_to_level(xp)
 
-	if not minetest.is_creative_enabled(player:get_player_name()) then
+	if not core.is_creative_enabled(player:get_player_name()) then
 		if not hud_bars[player] then
 			mcl_experience.setup_hud(player)
 		end
@@ -226,25 +226,25 @@ end
 
 -- callbacks
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	mcl_experience.setup_hud(player)
 	mcl_experience.update(player)
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
     hud_bars[player] = nil
     hud_levels[player] = nil
     caches[player] = nil
 end)
 
-minetest.register_on_dieplayer(function(player)
-	if not minetest.settings:get_bool("mcl_keepInventory", false) then
+core.register_on_dieplayer(function(player)
+	if not core.settings:get_bool("mcl_keepInventory", false) then
 		mcl_experience.throw_xp(player:get_pos(), mcl_experience.get_xp(player))
 		mcl_experience.set_xp(player, 0)
 	end
 end)
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	table.sort(mcl_experience.on_add_xp, function(a, b) return a.priority < b.priority end)
 end)
 
@@ -257,12 +257,12 @@ mcl_gamemode.register_on_gamemode_change(function(p, _, gm)
 	end
 end)
 
-minetest.register_chatcommand("set_xp", {
+core.register_chatcommand("set_xp", {
 	privs = { debug = true },
 	description = "Set experience of current player",
 	params = "<xp>",
 	func = function(pn,param)
-		local player = minetest.get_player_by_name(pn)
+		local player = core.get_player_by_name(pn)
 		local num = tonumber(param)
 		local rt = false
 		if num then

@@ -1,5 +1,5 @@
 mcl_copper = {}
-local path = minetest.get_modpath("mcl_copper")
+local path = core.get_modpath("mcl_copper")
 
 dofile(path .. "/decaychains.lua")
 dofile(path .. "/nodes.lua")

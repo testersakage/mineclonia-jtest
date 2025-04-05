@@ -1,13 +1,13 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
 
-local command_blocks_activated = minetest.settings:get_bool("mcl_enable_commandblocks", true)
+local command_blocks_activated = core.settings:get_bool("mcl_enable_commandblocks", true)
 local msg_not_activated = S("Command blocks are not enabled on this server")
 
 local function resolve_commands(commands, pos)
-	local players = minetest.get_connected_players()
+	local players = core.get_connected_players()
 
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local commander = meta:get_string("commander")
 
 	-- A non-printable character used while replacing “@@”.
@@ -60,22 +60,22 @@ local function check_commands(commands, player_name)
 		if pos then
 			cmd = command:sub(1, pos - 1)
 		end
-		local cmddef = minetest.chatcommands[cmd]
+		local cmddef = core.chatcommands[cmd]
 		if not cmddef then
 			-- Invalid chat command
 			local msg = S("Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands.", cmd)
 			if string.sub(cmd, 1, 1) == "/" then
 				msg = S("Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash.", cmd)
 			end
-			return false, minetest.colorize(mcl_colors.RED, msg)
+			return false, core.colorize(mcl_colors.RED, msg)
 		end
 		if player_name then
-			local player_privs = minetest.get_player_privs(player_name)
+			local player_privs = core.get_player_privs(player_name)
 
 			for cmd_priv, _ in pairs(cmddef.privs) do
 				if player_privs[cmd_priv] ~= true then
 					local msg = S("Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.", cmd, cmd_priv)
-					return false, minetest.colorize(mcl_colors.RED, msg)
+					return false, core.colorize(mcl_colors.RED, msg)
 				end
 			end
 		end
@@ -88,13 +88,13 @@ local function commandblock_action_on(pos, node)
 		return
 	end
 
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local commander = meta:get_string("commander")
 
 	if not command_blocks_activated then
 		return
 	end
-	minetest.swap_node(pos, {name = "mcl_commandblock:commandblock_on"})
+	core.swap_node(pos, {name = "mcl_commandblock:commandblock_on"})
 
 	local commands = resolve_commands(meta:get_string("commands"), pos)
 	for _, command in pairs(commands:split("\n")) do
@@ -104,7 +104,7 @@ local function commandblock_action_on(pos, node)
 			cmd = command:sub(1, cpos - 1)
 			param = command:sub(cpos + 1)
 		end
-		local cmddef = minetest.chatcommands[cmd]
+		local cmddef = core.chatcommands[cmd]
 		if not cmddef then
 			-- Invalid chat command
 			return
@@ -116,30 +116,30 @@ end
 
 local function commandblock_action_off(pos, node)
 	if node.name == "mcl_commandblock:commandblock_on" then
-		minetest.swap_node(pos, {name = "mcl_commandblock:commandblock_off"})
+		core.swap_node(pos, {name = "mcl_commandblock:commandblock_off"})
 	end
 end
 
 local function show_formspec(pos, player)
 	if not command_blocks_activated then
-		minetest.chat_send_player(player:get_player_name(), msg_not_activated)
+		core.chat_send_player(player:get_player_name(), msg_not_activated)
 		return
 	end
 	local can_edit = true
 	-- Only allow write access in Creative Mode
-	if not minetest.is_creative_enabled(player:get_player_name()) then
+	if not core.is_creative_enabled(player:get_player_name()) then
 		can_edit = false
 	end
 	local pname = player:get_player_name()
-	if minetest.is_protected(pos, pname) then
+	if core.is_protected(pos, pname) then
 		can_edit = false
 	end
-	local privs = minetest.get_player_privs(pname)
+	local privs = core.get_player_privs(pname)
 	if not privs.maphack then
 		can_edit = false
 	end
 
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local commands = meta:get_string("commands")
 	if not commands then
 		commands = ""
@@ -172,7 +172,7 @@ local function show_formspec(pos, player)
 	"image_button[8,4.4;1,1;doc_button_icon_lores.png;doc;]" ..
 	"tooltip[doc;"..F(S("Help")).."]" ..
 	"label[0,4;"..F(commanderstr).."]"
-	minetest.show_formspec(pname, "commandblock_"..pos.x.."_"..pos.y.."_"..pos.z, formspec)
+	core.show_formspec(pname, "commandblock_"..pos.x.."_"..pos.y.."_"..pos.z, formspec)
 end
 
 local commdef = {
@@ -181,7 +181,7 @@ local commdef = {
 	drop = "",
 	is_ground_content = false,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_string("commands", "")
 		meta:set_string("commander", "")
 	end,
@@ -193,17 +193,17 @@ local commdef = {
 		if new_stack then
 			return new_stack
 		end
-		local privs = minetest.get_player_privs(placer and placer:get_player_name() or "")
+		local privs = core.get_player_privs(placer and placer:get_player_name() or "")
 		if not privs.maphack then
-			minetest.chat_send_player(placer:get_player_name(), S("Placement denied. You need the “maphack” privilege to place command blocks."))
+			core.chat_send_player(placer:get_player_name(), S("Placement denied. You need the “maphack” privilege to place command blocks."))
 			return itemstack
 		end
 
-		return minetest.item_place_node(itemstack, placer, pointed_thing)
+		return core.item_place_node(itemstack, placer, pointed_thing)
 	end,
 	after_place_node = function(pos, placer)
 		if placer then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			meta:set_string("commander", placer:get_player_name())
 		end
 	end,
@@ -217,7 +217,7 @@ local commdef = {
 		end,
 		update = function(pos, node)
 			local powered = mcl_redstone.get_power(pos) ~= 0
-			local node = minetest.get_node(pos)
+			local node = core.get_node(pos)
 			if powered then
 				commandblock_action_on(pos, node)
 			else
@@ -229,7 +229,7 @@ local commdef = {
 	_mcl_hardness = -1,
 }
 
-minetest.register_node("mcl_commandblock:commandblock_off", table.merge(commdef, {
+core.register_node("mcl_commandblock:commandblock_off", table.merge(commdef, {
 	_tt_help = S("Executes server commands when powered by redstone power"),
 	_doc_items_longdesc =
 S("Command blocks are mighty redstone components which are able to alter reality itself. In other words, they cause the server to execute server commands when they are supplied with redstone power."),
@@ -256,16 +256,16 @@ S("Example 2:\n    give @@n mcl_core:apple 5\nGives the nearest player 5 apples"
 	tiles = {{name="jeija_commandblock_off.png", animation={type="vertical_frames", aspect_w=32, aspect_h=32, length=2}}},
 }))
 
-minetest.register_node("mcl_commandblock:commandblock_on", table.merge(commdef, {
+core.register_node("mcl_commandblock:commandblock_on", table.merge(commdef, {
 	tiles = {{name="jeija_commandblock_off.png", animation={type="vertical_frames", aspect_w=32, aspect_h=32, length=2}}},
 	groups = table.merge(commdef.groups, {not_in_creative_inventory=1}),
 	_mcl_blast_resistance = 3600000,
 	_mcl_hardness = -1,
 }))
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if string.sub(formname, 1, 13) == "commandblock_" then
-		if fields.doc and minetest.get_modpath("doc") then
+		if fields.doc and core.get_modpath("doc") then
 			doc.show_entry(player:get_player_name(), "nodes", "mcl_commandblock:commandblock_off", true)
 			return
 		end
@@ -273,35 +273,35 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			return
 		end
 
-		local privs = minetest.get_player_privs(player:get_player_name())
+		local privs = core.get_player_privs(player:get_player_name())
 		if not privs.maphack then
-			minetest.chat_send_player(player:get_player_name(), S("Access denied. You need the “maphack” privilege to edit command blocks."))
+			core.chat_send_player(player:get_player_name(), S("Access denied. You need the “maphack” privilege to edit command blocks."))
 			return
 		end
 
 		local index, _, x, y, z = string.find(formname, "commandblock_(-?%d+)_(-?%d+)_(-?%d+)")
 		if index and x and y and z then
 			local pos = {x = tonumber(x), y = tonumber(y), z = tonumber(z)}
-			local meta = minetest.get_meta(pos)
-			if not minetest.is_creative_enabled(player:get_player_name()) then
-				minetest.chat_send_player(player:get_player_name(), S("Editing the command block has failed! You can only change the command block in Creative Mode!"))
+			local meta = core.get_meta(pos)
+			if not core.is_creative_enabled(player:get_player_name()) then
+				core.chat_send_player(player:get_player_name(), S("Editing the command block has failed! You can only change the command block in Creative Mode!"))
 				return
 			end
 			local check, error_message = check_commands(fields.commands, player:get_player_name())
 			if check == false then
 				-- Command block rejected
-				minetest.chat_send_player(player:get_player_name(), error_message)
+				core.chat_send_player(player:get_player_name(), error_message)
 				return
 			else
 				meta:set_string("commands", fields.commands)
 			end
 		else
-			minetest.chat_send_player(player:get_player_name(), S("Editing the command block has failed! The command block is gone."))
+			core.chat_send_player(player:get_player_name(), S("Editing the command block has failed! The command block is gone."))
 		end
 	end
 end)
 
 -- Add entry alias for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_commandblock:commandblock_off", "nodes", "mcl_commandblock:commandblock_on")
 end

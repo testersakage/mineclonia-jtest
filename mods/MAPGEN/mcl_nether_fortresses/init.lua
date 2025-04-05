@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local BLAZE_SPAWNER_MAX_LIGHT = 11
 
@@ -16,7 +16,7 @@ mcl_structures.register_structure("nether_outpost",{
 	filenames = { modpath.."/schematics/mcl_nether_fortresses_nether_outpost.mts" },
 	y_offset = 0,
 	after_place = function(pos)
-		local sp = minetest.find_nodes_in_area(pos,vector.offset(pos,0,20,0),{"mcl_mobspawners:spawner"})
+		local sp = core.find_nodes_in_area(pos,vector.offset(pos,0,20,0),{"mcl_mobspawners:spawner"})
 		if not sp[1] then return end
 		mcl_mobspawners.setup_spawner(sp[1], "mobs_mc:blaze", 0, BLAZE_SPAWNER_MAX_LIGHT, 10, 8, 0)
 	end
@@ -78,14 +78,14 @@ mcl_structures.register_structure("nether_outpost_with_bridges",{
 		},
 	},
 	after_place = function(pos, _, pr)
-		local sp = minetest.find_nodes_in_area(pos,vector.offset(pos,0,20,0),{"mcl_mobspawners:spawner"})
+		local sp = core.find_nodes_in_area(pos,vector.offset(pos,0,20,0),{"mcl_mobspawners:spawner"})
 		if not sp[1] then return end
 		mcl_mobspawners.setup_spawner(sp[1], "mobs_mc:blaze", 0, BLAZE_SPAWNER_MAX_LIGHT, 10, 8, 0)
 
-		local legs = minetest.find_nodes_in_area(vector.offset(pos,-45,-2,-45),vector.offset(pos,45,0,45), "mcl_nether:nether_brick")
+		local legs = core.find_nodes_in_area(vector.offset(pos,-45,-2,-45),vector.offset(pos,45,0,45), "mcl_nether:nether_brick")
 		local bricks = {}
 		for _,leg in pairs(legs) do
-			while minetest.get_item_group(mcl_vars.get_node(vector.offset(leg,0,-1,0)).name, "solid") == 0 do
+			while core.get_item_group(mcl_vars.get_node(vector.offset(leg,0,-1,0)).name, "solid") == 0 do
 				leg = vector.offset(leg,0,-1,0)
 				table.insert(bricks,leg)
 			end

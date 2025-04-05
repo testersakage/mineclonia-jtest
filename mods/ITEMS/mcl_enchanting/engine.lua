@@ -1,5 +1,5 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
 
 function mcl_enchanting.is_book(itemname)
 	return itemname == "mcl_books:book" or itemname == "mcl_enchanting:book_enchanted" or
@@ -10,7 +10,7 @@ function mcl_enchanting.get_enchantments(itemstack)
 	if not itemstack then
 		return {}
 	end
-	return minetest.deserialize(itemstack:get_meta():get_string("mcl_enchanting:enchantments")) or {}
+	return core.deserialize(itemstack:get_meta():get_string("mcl_enchanting:enchantments")) or {}
 end
 
 function mcl_enchanting.is_curse(enchantment)
@@ -45,7 +45,7 @@ function mcl_enchanting.load_enchantments(itemstack, enchantments)
 end
 
 function mcl_enchanting.set_enchantments(itemstack, enchantments)
-	itemstack:get_meta():set_string("mcl_enchanting:enchantments", minetest.serialize(enchantments))
+	itemstack:get_meta():set_string("mcl_enchanting:enchantments", core.serialize(enchantments))
 	mcl_enchanting.load_enchantments(itemstack)
 end
 
@@ -68,14 +68,14 @@ end
 
 function mcl_enchanting.get_colorized_enchantment_description(enchantment, level)
 	if mcl_enchanting.enchantments[enchantment] then
-		return minetest.colorize(mcl_enchanting.enchantments[enchantment].curse and mcl_colors.RED or mcl_colors.GRAY,
+		return core.colorize(mcl_enchanting.enchantments[enchantment].curse and mcl_colors.RED or mcl_colors.GRAY,
 			mcl_enchanting.get_enchantment_description(enchantment, level))
 	end
-	return minetest.colorize(mcl_colors.DARK_GRAY, S("Unknown Enchantment")..": "..tostring(enchantment))
+	return core.colorize(mcl_colors.DARK_GRAY, S("Unknown Enchantment")..": "..tostring(enchantment))
 end
 
 function mcl_enchanting.get_enchanted_itemstring(itemname)
-	local def = minetest.registered_items[itemname]
+	local def = core.registered_items[itemname]
 	return def and def._mcl_enchanting_enchanted_tool
 end
 
@@ -84,7 +84,7 @@ function mcl_enchanting.set_enchanted_itemstring(itemstack)
 end
 
 function mcl_enchanting.is_enchanted(itemname)
-	return minetest.get_item_group(itemname, "enchanted") > 0
+	return core.get_item_group(itemname, "enchanted") > 0
 end
 
 function mcl_enchanting.not_enchantable_on_enchanting_table(itemname)
@@ -101,7 +101,7 @@ function mcl_enchanting.can_enchant_freshly(itemname)
 end
 
 function mcl_enchanting.get_enchantability(itemname)
-	return minetest.get_item_group(itemname, "enchantability")
+	return core.get_item_group(itemname, "enchantability")
 end
 
 function mcl_enchanting.item_supports_enchantment(itemname, enchantment)
@@ -114,22 +114,22 @@ function mcl_enchanting.item_supports_enchantment(itemname, enchantment)
 	if mcl_enchanting.is_book(itemname) then
 		return true, (not enchantment_def.treasure)
 	end
-	local itemdef = minetest.registered_items[itemname]
+	local itemdef = core.registered_items[itemname]
 	if itemdef.type ~= "tool" and enchantment_def.requires_tool then
 		return false
 	end
 	for disallow, _ in pairs(enchantment_def.disallow) do
-		if minetest.get_item_group(itemname, disallow) > 0 then
+		if core.get_item_group(itemname, disallow) > 0 then
 			return false
 		end
 	end
 	for group, _ in pairs(enchantment_def.primary) do
-		if minetest.get_item_group(itemname, group) > 0 then
+		if core.get_item_group(itemname, group) > 0 then
 			return true, true
 		end
 	end
 	for group, _ in pairs(enchantment_def.secondary) do
-		if minetest.get_item_group(itemname, group) > 0 then
+		if core.get_item_group(itemname, group) > 0 then
 			return true, false
 		end
 	end
@@ -294,7 +294,7 @@ local function get_after_use_callback(itemdef)
 	-- If the tool does not have after_use, add wear to the tool as if no
 	-- after_use was registered.
 	return function(itemstack, user, _, digparams)
-		if not minetest.is_creative_enabled(user:get_player_name()) then
+		if not core.is_creative_enabled(user:get_player_name()) then
 			itemstack:add_wear(digparams.wear)
 		end
 
@@ -306,10 +306,10 @@ end
 function mcl_enchanting.initialize()
 	local register_tool_list = {}
 	local register_item_list = {}
-	for itemname, itemdef in pairs(minetest.registered_items) do
+	for itemname, itemdef in pairs(core.registered_items) do
 		if mcl_enchanting.can_enchant_freshly(itemname) and not mcl_enchanting.is_book(itemname) then
 			local new_name = itemname .. "_enchanted"
-			minetest.override_item(itemname, { _mcl_enchanting_enchanted_tool = new_name })
+			core.override_item(itemname, { _mcl_enchanting_enchanted_tool = new_name })
 			local new_def = table.copy(itemdef)
 			new_def.inventory_image = itemdef.inventory_image .. mcl_enchanting.overlay
 			if new_def.wield_image then
@@ -335,10 +335,10 @@ function mcl_enchanting.initialize()
 		end
 	end
 	for new_name, new_def in pairs(register_item_list) do
-		minetest.register_craftitem(new_name, new_def)
+		core.register_craftitem(new_name, new_def)
 	end
 	for new_name, new_def in pairs(register_tool_list) do
-		minetest.register_tool(new_name, new_def)
+		core.register_tool(new_name, new_def)
 	end
 end
 
@@ -385,7 +385,7 @@ function mcl_enchanting.generate_random_enchantments(itemstack, enchantment_leve
 
 	itemstack = ItemStack(itemstack)
 
-	local enchantability = minetest.get_item_group(itemname, "enchantability")
+	local enchantability = core.get_item_group(itemname, "enchantability")
 	enchantability = 1 + mcl_enchanting.random(pr, 0, math.floor(enchantability / 4)) +
 		mcl_enchanting.random(pr, 0, math.floor(enchantability / 4))
 
@@ -515,7 +515,7 @@ function mcl_enchanting.get_table_slots(player, itemstack, num_bookshelves)
 		return { false, false, false }
 	end
 	local meta = player:get_meta()
-	local player_slots = minetest.deserialize(meta:get_string("mcl_enchanting:slots")) or {}
+	local player_slots = core.deserialize(meta:get_string("mcl_enchanting:slots")) or {}
 	local player_bookshelves_slots = player_slots[num_bookshelves] or {}
 	local player_bookshelves_item_slots = player_bookshelves_slots[itemname]
 	if player_bookshelves_item_slots then
@@ -525,7 +525,7 @@ function mcl_enchanting.get_table_slots(player, itemstack, num_bookshelves)
 		if player_bookshelves_item_slots then
 			player_bookshelves_slots[itemname] = player_bookshelves_item_slots
 			player_slots[num_bookshelves] = player_bookshelves_slots
-			meta:set_string("mcl_enchanting:slots", minetest.serialize(player_slots))
+			meta:set_string("mcl_enchanting:slots", core.serialize(player_slots))
 			return player_bookshelves_item_slots
 		else
 			return { false, false, false }
@@ -538,7 +538,7 @@ function mcl_enchanting.reset_table_slots(player)
 end
 
 function mcl_enchanting.show_enchanting_formspec(player)
-	local C = minetest.get_color_escape_sequence
+	local C = core.get_color_escape_sequence
 	local name = player:get_player_name()
 	local meta = player:get_meta()
 	local inv = player:get_inventory()
@@ -573,7 +573,7 @@ function mcl_enchanting.show_enchanting_formspec(player)
 
 	local itemstack = inv:get_stack("enchanting_item", 1)
 	local player_levels = mcl_experience.get_level(player)
-	local is_creative = minetest.is_creative_enabled(name)
+	local is_creative = core.is_creative_enabled(name)
 	local y = 0.65
 	local any_enchantment = false
 	local table_slots = mcl_enchanting.get_table_slots(player, itemstack, num_bookshelves)
@@ -630,7 +630,7 @@ function mcl_enchanting.show_enchanting_formspec(player)
 		",1.2;" ..
 		(any_enchantment and 2 or 0.87) ..
 		",1.43;mcl_enchanting_book_" .. (any_enchantment and "open" or "closed") .. ".png]"
-	minetest.show_formspec(name, "mcl_enchanting:table", formspec)
+	core.show_formspec(name, "mcl_enchanting:table", formspec)
 end
 
 function mcl_enchanting.handle_formspec_fields(player, formname, fields)
@@ -656,7 +656,7 @@ function mcl_enchanting.handle_formspec_fields(player, formname, fields)
 		if not slot then
 			return
 		end
-		if not minetest.is_creative_enabled(name) then
+		if not core.is_creative_enabled(name) then
 			local player_level = mcl_experience.get_level(player)
 			if player_level < slot.level_requirement then
 				return
@@ -667,7 +667,7 @@ function mcl_enchanting.handle_formspec_fields(player, formname, fields)
 		mcl_enchanting.set_enchanted_itemstring(itemstack)
 		mcl_enchanting.set_enchantments(itemstack, slot.enchantments)
 		inv:set_stack("enchanting_item", 1, itemstack)
-		minetest.sound_play("mcl_enchanting_enchant", { to_player = name, gain = 5.0 })
+		core.sound_play("mcl_enchanting_enchant", { to_player = name, gain = 5.0 })
 		mcl_enchanting.reset_table_slots(player)
 		mcl_enchanting.show_enchanting_formspec(player)
 		awards.unlock(player:get_player_name(), "mcl:enchanter")
@@ -776,7 +776,7 @@ function mcl_enchanting.get_bookshelves(pos)
 	for i, rp in ipairs(mcl_enchanting.bookshelf_positions) do
 		local airp = vector.add(pos, mcl_enchanting.air_positions[i])
 		local ap = vector.add(pos, rp)
-		if minetest.get_node(ap).name == "mcl_books:bookshelf" and minetest.get_node(airp).name == "air" then
+		if core.get_node(ap).name == "mcl_books:bookshelf" and core.get_node(airp).name == "air" then
 			table.insert(absolute, ap)
 			table.insert(relative, rp)
 		end

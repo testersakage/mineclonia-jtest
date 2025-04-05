@@ -1,11 +1,11 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function active_brewing_formspec(fuel_percent, brew_percent)
 
 	return "size[9,8.75]"..
 	"background[-0.19,-0.25;9.5,9.5;mcl_brewing_inventory.png]"..
-	"label[4,0;"..minetest.formspec_escape(minetest.colorize("#313131", S("Brewing Stand"))).."]"..
-	"label[0,4.0;"..minetest.formspec_escape(minetest.colorize("#313131", S("Inventory"))).."]"..
+	"label[4,0;"..core.formspec_escape(core.colorize("#313131", S("Brewing Stand"))).."]"..
+	"label[0,4.0;"..core.formspec_escape(core.colorize("#313131", S("Inventory"))).."]"..
 	"list[current_player;main;0,4.5;9,3;9]"..
 	mcl_formspec.get_itemslot_bg(0,4.5,9,3)..
 	"list[current_player;main;0,7.75;9,1;]"..
@@ -40,8 +40,8 @@ end
 
 local brewing_formspec = "size[9,8.75]"..
 	"background[-0.19,-0.25;9.5,9.5;mcl_brewing_inventory.png]"..
-	"label[4,0;"..minetest.formspec_escape(minetest.colorize("#313131", S("Brewing Stand"))).."]"..
-	"label[0,4.0;"..minetest.formspec_escape(minetest.colorize("#313131", S("Inventory"))).."]"..
+	"label[4,0;"..core.formspec_escape(core.colorize("#313131", S("Brewing Stand"))).."]"..
+	"label[0,4.0;"..core.formspec_escape(core.colorize("#313131", S("Inventory"))).."]"..
 	"list[current_player;main;0,4.5;9,3;9]"..
 	mcl_formspec.get_itemslot_bg(0,4.5,9,3)..
 	"list[current_player;main;0,7.75;9,1;]"..
@@ -123,7 +123,7 @@ end
 
 local function brewing_stand_timer(pos, elapsed)
 	-- Inizialize metadata
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 
 	-- Number of seconds of fuel remaining to be consumed.
 	local fuel_timer = meta:get_float ("fuel_timer_new")
@@ -143,7 +143,7 @@ local function brewing_stand_timer(pos, elapsed)
 		fuel_timer = fuel_timer - elapsed
 		stand_timer = stand_timer + elapsed
 		d = 0.5
-		minetest.add_particlespawner({
+		core.add_particlespawner({
 			amount = 4,
 			time = 1,
 			minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
@@ -174,10 +174,10 @@ local function brewing_stand_timer(pos, elapsed)
 
 			for i=1, inv:get_size("stand") do
 			if brew_output[i] then
-				minetest.sound_play("mcl_brewing_complete",
+				core.sound_play("mcl_brewing_complete",
 						{pos=pos, gain=0.4, max_hear_range=6}, true)
 				inv:set_stack ("stand", i, brew_output[i])
-				minetest.sound_play("mcl_potions_bottle_pour",
+				core.sound_play("mcl_potions_bottle_pour",
 						{pos=pos, gain=0.6, max_hear_range=6}, true)
 			end
 			end
@@ -197,7 +197,7 @@ local function brewing_stand_timer(pos, elapsed)
 	-- If the stand becomes inactive, as when no fuel remains or
 	-- no valid recipe exists, cancel the timer.
 	if fuel_timer <= 0 or not brew_output then
-		minetest.get_node_timer (pos):stop ()
+		core.get_node_timer (pos):stop ()
 		value = false
 	end
 
@@ -210,7 +210,7 @@ end
 local drop_contents = mcl_util.drop_items_from_meta_container({"fuel", "input", "stand"})
 
 local on_rotate
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	on_rotate = screwdriver.rotate_simple
 end
 
@@ -234,12 +234,12 @@ local function sort_stack(stack)
 	if stack:get_name() == "mcl_mobitems:blaze_powder" then
 		return "fuel"
 	end
-	if minetest.get_item_group(stack:get_name(), "brewing_ingredient" ) > 0 then
+	if core.get_item_group(stack:get_name(), "brewing_ingredient" ) > 0 then
 		return "input"
 	end
 	for _, g in pairs({"potion", "splash_potion", "ling_potion",
 			   "empty_bottle", "water_bottle"}) do
-		if minetest.get_item_group(stack:get_name(), g ) > 0 then
+		if core.get_item_group(stack:get_name(), g ) > 0 then
 			return "stand"
 		end
 	end
@@ -247,8 +247,8 @@ end
 
 local function allow_put(pos, listname, _, stack, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	end
 	local trg = sort_stack(stack)
@@ -259,7 +259,7 @@ local function allow_put(pos, listname, _, stack, player)
 	elseif listname == "fuel" then
 		if trg ~= "fuel" then return 0 end
 	elseif listname == "sorter" then
-		local inv = minetest.get_meta(pos):get_inventory()
+		local inv = core.get_meta(pos):get_inventory()
 		if trg then
 			local stack1 = ItemStack(stack):take_item()
 			if inv:room_for_item(trg, stack) then
@@ -274,7 +274,7 @@ local function allow_put(pos, listname, _, stack, player)
 end
 
 local function start_stand_if_not_empty(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local str = ""
 	for i=1, inv:get_size("stand") do
@@ -284,13 +284,13 @@ local function start_stand_if_not_empty(pos)
 		else str = str.."0"
 		end
 	end
-	minetest.swap_node(pos, {name = "mcl_brewing:stand_"..str})
-	minetest.get_node_timer(pos):start(1.0)
+	core.swap_node(pos, {name = "mcl_brewing:stand_"..str})
+	core.get_node_timer(pos):start(1.0)
 	mcl_redstone.update_comparators(pos)
 end
 
 local function on_put(pos, listname, _, stack, _)
-	local meta = minetest.get_meta (pos)
+	local meta = core.get_meta (pos)
 	local inv = meta:get_inventory ()
 
 	if listname == "sorter" then
@@ -312,13 +312,13 @@ local function on_put(pos, listname, _, stack, _)
 		start_stand_if_not_empty(pos)
 		return
 	end
-	minetest.get_node_timer (pos):start (1.0)
+	core.get_node_timer (pos):start (1.0)
 	mcl_redstone.update_comparators(pos)
 end
 
 local function allow_move(pos, from_list, from_index, to_list, _, count, _)
 	if from_list == "sorter" or to_list == "sorter" then return 0 end
-	local inv = minetest.get_meta(pos):get_inventory()
+	local inv = core.get_meta(pos):get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
 	local trg = sort_stack(stack)
 	if trg == to_list then return count end
@@ -328,8 +328,8 @@ end
 local function allow_take (pos, listname, _, stack, player)
 	if listname == "sorter" then return 0 end
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	else
 		if listname == "stand" then
@@ -340,39 +340,39 @@ local function allow_take (pos, listname, _, stack, player)
 end
 
 local function hopper_in(pos, to_pos)
-	local sinv = minetest.get_inventory({type="node", pos = pos})
-	local dinv = minetest.get_inventory({type="node", pos = to_pos})
+	local sinv = core.get_inventory({type="node", pos = pos})
+	local dinv = core.get_inventory({type="node", pos = to_pos})
 	if pos.y == to_pos.y then
 		local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "main", dinv, "fuel", function(itemstack)
 			return itemstack:get_name() == "mcl_mobitems:blaze_powder"
 		end)
 		if slot_id then
 			mcl_util.move_item(sinv, "main", slot_id, dinv, "fuel")
-			minetest.get_node_timer(to_pos):start(1.0)
+			core.get_node_timer(to_pos):start(1.0)
 		else
 			local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "main", dinv, "stand", function(itemstack)
 				return sort_stack (itemstack) == "stand"
 			end)
 			if slot_id then
 				mcl_util.move_item(sinv, "main", slot_id, dinv, "stand")
-				minetest.get_node_timer(to_pos):start(1.0)
+				core.get_node_timer(to_pos):start(1.0)
 			end
 		end
 		return true
 	end
 	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "main", dinv, "input", function(itemstack)
-		return minetest.get_item_group(itemstack:get_name(), "brewing_ingredient" ) > 0
+		return core.get_item_group(itemstack:get_name(), "brewing_ingredient" ) > 0
 	end)
 	if slot_id then
 		mcl_util.move_item(sinv, "main", slot_id, dinv, "input")
-		minetest.get_node_timer(to_pos):start(1.0)
+		core.get_node_timer(to_pos):start(1.0)
 	end
 	return true
 end
 
 local function hopper_out(pos, to_pos)
-	local sinv = minetest.get_inventory({type="node", pos = pos})
-	local dinv = minetest.get_inventory({type="node", pos = to_pos})
+	local sinv = core.get_inventory({type="node", pos = pos})
+	local dinv = core.get_inventory({type="node", pos = to_pos})
 	local slot_id,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "stand", dinv, "main", nil)
 	if slot_id then
 		mcl_util.move_item(sinv, "stand", slot_id, dinv, "main")
@@ -406,7 +406,7 @@ local tpl_brewing_stand = {
 	on_metadata_inventory_put = on_put,
 	on_metadata_inventory_take = start_stand_if_not_empty,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
 		inv:set_size("fuel", 1)
@@ -417,8 +417,8 @@ local tpl_brewing_stand = {
 	end,
 	on_receive_fields = function(pos, _, _, sender)
 		local sender_name = sender:get_player_name()
-		if minetest.is_protected(pos, sender_name) then
-			minetest.record_protection_violation(pos, sender_name)
+		if core.is_protected(pos, sender_name) then
+			core.record_protection_violation(pos, sender_name)
 			return
 		end
 	end,
@@ -428,7 +428,7 @@ local tpl_brewing_stand = {
 	_on_hopper_out = hopper_out,
 }
 
-minetest.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
 	_doc_items_longdesc = S("The stand allows you to brew potions!"),
 	_doc_items_create_entry = true,
 	_doc_items_usagehelp = doc_string,
@@ -459,7 +459,7 @@ minetest.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
 		}
 	},
 }))
-minetest.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -492,7 +492,7 @@ minetest.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -526,7 +526,7 @@ minetest.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -555,7 +555,7 @@ minetest.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -594,7 +594,7 @@ minetest.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -629,7 +629,7 @@ minetest.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -664,7 +664,7 @@ minetest.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -706,7 +706,7 @@ minetest.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
 	},
 }))
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_brewing:stand_000",
 	recipe = {
 		{ "", "mcl_mobitems:blaze_rod", "" },
@@ -714,9 +714,9 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_alias("mcl_brewing:stand", "mcl_brewing:stand_000")
+core.register_alias("mcl_brewing:stand", "mcl_brewing:stand_000")
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_001")
 	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_010")
 	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_011")
@@ -726,25 +726,25 @@ if minetest.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_111")
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update brewing stand formspecs and invs to allow new sneak+click behavior",
 	name = "mcl_brewing:update_coolsneak",
 	nodenames = { "group:brewing_stand" },
 	run_at_every_load = false,
 	action = function(pos)
-		local m = minetest.get_meta(pos)
+		local m = core.get_meta(pos)
 		m:get_inventory():set_size("sorter", 1)
 		m:set_string("formspec", brewing_formspec)
 	end,
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update fuel timers to new non-inverted format",
 	name = "mcl_brewing:update_inverted_fueltimer",
 	nodenames = { "group:brewing_stand" },
 	run_at_every_load = false,
 	action = function(pos)
-		local m = minetest.get_meta (pos)
+		local m = core.get_meta (pos)
 		local old_fuel = m:get_int ("fuel")
 		local old_burntime = m:get_int ("fuel_timer")
 

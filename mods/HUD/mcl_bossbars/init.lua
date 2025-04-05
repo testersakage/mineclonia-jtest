@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_bossbars = {
 	bars = {},
@@ -118,13 +118,13 @@ function mcl_bossbars.update_boss(object, name, color)
 	end
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	mcl_bossbars.huds[name] = {}
 	mcl_bossbars.bars[name] = {}
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	mcl_bossbars.huds[name] = nil
 	for _, bar in pairs(mcl_bossbars.bars[name] or {}) do

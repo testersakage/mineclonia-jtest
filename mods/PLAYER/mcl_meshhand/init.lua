@@ -1,4 +1,4 @@
-local mcl_skins_enabled = minetest.global_exists("mcl_skins")
+local mcl_skins_enabled = core.global_exists("mcl_skins")
 mcl_meshhand = { }
 
 -- This is a fake node that should never be placed in the world
@@ -10,10 +10,10 @@ local node_def = {
 	drawtype = "mesh",
 	node_placement_prediction = "",
 	on_construct = function(pos)
-		local name = minetest.get_node(pos).name
-		local message = "[mcl_meshhand] Trying to construct " .. name .. " at " .. minetest.pos_to_string(pos)
-		minetest.log("error", message)
-		minetest.remove_node(pos)
+		local name = core.get_node(pos).name
+		local message = "[mcl_meshhand] Trying to construct " .. name .. " at " .. core.pos_to_string(pos)
+		core.log("error", message)
+		core.remove_node(pos)
 	end,
 	drop = "",
 	on_drop = function(_, _, _) return ItemStack() end,
@@ -40,13 +40,13 @@ local node_def = {
 		shearsy_wool = { speed = 1, level = 0, uses = 0 },
 		shearsy_cobweb = { speed = 1, level = 0, uses = 0 },
 	},
-	range = tonumber(minetest.settings:get("mcl_hand_range")) or 4.5
+	range = tonumber(core.settings:get("mcl_hand_range")) or 4.5
 }
 
 -- This is for _mcl_autogroup to know about the survival hand tool capabilites
 mcl_meshhand.survival_hand_tool_caps = node_def.tool_capabilities
 
-local creative_hand_range = tonumber(minetest.settings:get("mcl_hand_range_creative")) or 10
+local creative_hand_range = tonumber(core.settings:get("mcl_hand_range_creative")) or 10
 if mcl_skins_enabled then
 	-- Generate a node for every skin
 	local list = mcl_skins.get_skin_list()
@@ -56,13 +56,13 @@ if mcl_skins_enabled then
 			female._mcl_hand_id = skin.id
 			female.mesh = "mcl_meshhand_female.b3d"
 			female.tiles = {skin.texture}
-			minetest.register_node("mcl_meshhand:" .. skin.id, female)
+			core.register_node("mcl_meshhand:" .. skin.id, female)
 		else
 			local male = table.copy(node_def)
 			male._mcl_hand_id = skin.id
 			male.mesh = "mcl_meshhand.b3d"
 			male.tiles = {skin.texture}
-			minetest.register_node("mcl_meshhand:" .. skin.id, male)
+			core.register_node("mcl_meshhand:" .. skin.id, male)
 		end
 
 		local node_def = table.copy(node_def)
@@ -74,19 +74,19 @@ if mcl_skins_enabled then
 			node_def.groups.dig_speed_class = 7
 			node_def.tool_capabilities.groupcaps.creative_breakable = { times = { 0 }, uses = 0 }
 		end
-		minetest.register_node("mcl_meshhand:" .. skin.id, node_def)
+		core.register_node("mcl_meshhand:" .. skin.id, node_def)
 	end
 else
 	node_def._mcl_hand_id = "hand"
 	node_def.mesh = "mcl_meshhand.b3d"
 	node_def.tiles = { "character.png" }
-	minetest.register_node("mcl_meshhand:hand_surv", node_def)
+	core.register_node("mcl_meshhand:hand_surv", node_def)
 
 	node_def = table.copy(node_def)
 	node_def.range = creative_hand_range
 	node_def.groups.dig_speed_class = 7
 	node_def.tool_capabilities.groupcaps.creative_breakable = { times = { 0 }, uses = 0 }
-	minetest.register_node("mcl_meshhand:hand_crea", node_def)
+	core.register_node("mcl_meshhand:hand_crea", node_def)
 end
 
 function mcl_meshhand.update_player(player)
@@ -95,7 +95,7 @@ function mcl_meshhand.update_player(player)
 		local node_id = mcl_skins.get_node_id_by_player(player)
 		hand = ItemStack("mcl_meshhand:" .. node_id)
 	else
-		local creative = minetest.is_creative_enabled(player:get_player_name())
+		local creative = core.is_creative_enabled(player:get_player_name())
 		hand = ItemStack("mcl_meshhand:hand" .. (creative and "_crea" or "_surv"))
 	end
 	player:get_inventory():set_stack("hand", 1, mcl_potions.hf_update_internal(hand, player))
@@ -104,23 +104,23 @@ end
 if mcl_skins_enabled then
 	mcl_player.register_on_visual_change(mcl_meshhand.update_player)
 else
-	minetest.register_on_joinplayer(mcl_meshhand.update_player)
+	core.register_on_joinplayer(mcl_meshhand.update_player)
 end
 
 mcl_gamemode.register_on_gamemode_change(mcl_meshhand.update_player)
 
 -- This is needed to deal damage when punching mobs
 -- with random items in hand in survival mode
-minetest.override_item("", {
+core.override_item("", {
 	tool_capabilities = mcl_meshhand.survival_hand_tool_caps,
 	on_place = function(_, placer, pointed_thing)
-		if minetest.is_creative_enabled(placer:get_player_name()) then
-			local name = minetest.get_node(pointed_thing.under).name
+		if core.is_creative_enabled(placer:get_player_name()) then
+			local name = core.get_node(pointed_thing.under).name
 			local stack = ItemStack(name)
 			local def = stack:get_definition()
 			if type(def._mcl_baseitem) == "function" then
 				stack = def._mcl_baseitem(pointed_thing.under)
-			elseif minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
+			elseif core.get_item_group(name, "not_in_creative_inventory") > 0 then
 				if not def.drop and not def._mcl_baseitem then return end
 				name = def._mcl_baseitem or def.drop
 				stack = ItemStack(name)

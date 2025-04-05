@@ -1,7 +1,7 @@
 tsm_railcorridors = {}
 
 -- Load node names
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/gameconfig.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/gameconfig.lua")
 
 -- Settings
 local setting
@@ -15,67 +15,67 @@ end
 -- Minimal and maximal value of path length (forks don't look up this value)
 local way_min = 4;
 local way_max = 7;
-setting = tonumber(minetest.settings:get("tsm_railcorridors_way_min"))
+setting = tonumber(core.settings:get("tsm_railcorridors_way_min"))
 if setting then
 	way_min = setting
 end
-setting = tonumber(minetest.settings:get("tsm_railcorridors_way_max"))
+setting = tonumber(core.settings:get("tsm_railcorridors_way_max"))
 if setting then
 	way_max = setting
 end
 
 -- Probability for every horizontal part of a corridor to be with torches
 local probability_torches_in_segment = P(0.5)
-setting = tonumber(minetest.settings:get("tsm_railcorridors_probability_torches_in_segment"))
+setting = tonumber(core.settings:get("tsm_railcorridors_probability_torches_in_segment"))
 if setting then
 	probability_torches_in_segment = P(setting)
 end
 
 -- Probability for every part of a corridor to go up or down
 local probability_up_or_down = P(0.2)
-setting = tonumber(minetest.settings:get("tsm_railcorridors_probability_up_or_down"))
+setting = tonumber(core.settings:get("tsm_railcorridors_probability_up_or_down"))
 if setting then
 	probability_up_or_down = P(setting)
 end
 
 -- Probability for every part of a corridor to fork – caution, too high values may cause MT to hang on.
 local probability_fork = P(0.04)
-setting = tonumber(minetest.settings:get("tsm_railcorridors_probability_fork"))
+setting = tonumber(core.settings:get("tsm_railcorridors_probability_fork"))
 if setting then
 	probability_fork = P(setting)
 end
 
 -- Probability for every part of a corridor to contain a chest
 local probability_chest = P(0.05)
-setting = tonumber(minetest.settings:get("tsm_railcorridors_probability_chest"))
+setting = tonumber(core.settings:get("tsm_railcorridors_probability_chest"))
 if setting then
 	probability_chest = P(setting)
 end
 
 -- Probability for every part of a corridor to contain a cart
 local probability_cart = P(0.05)
-setting = tonumber(minetest.settings:get("tsm_railcorridors_probability_cart"))
+setting = tonumber(core.settings:get("tsm_railcorridors_probability_cart"))
 if setting then
 	probability_cart = P(setting)
 end
 
 -- Probability for a rail corridor system to be damaged
 local probability_damage = P(1.0)
-setting = tonumber(minetest.settings:get("tsm_railcorridors_probability_damage"))
+setting = tonumber(core.settings:get("tsm_railcorridors_probability_damage"))
 if setting then
 	probability_damage = P(setting)
 end
 
 -- Enable cobwebs
 local place_cobwebs = true
-setting = minetest.settings:get_bool("tsm_railcorridors_place_cobwebs")
+setting = core.settings:get_bool("tsm_railcorridors_place_cobwebs")
 if setting then
 	place_cobwebs = setting
 end
 
 -- Enable mob spawners
 local place_mob_spawners = true
-setting = minetest.settings:get_bool("tsm_railcorridors_place_mob_spawners")
+setting = core.settings:get_bool("tsm_railcorridors_place_mob_spawners")
 if setting then
 	place_mob_spawners = setting
 end
@@ -90,7 +90,7 @@ end
 local height_max = mcl_worlds.layer_to_y(60)
 
 -- Chaos Mode: If enabled, rail corridors don't stop generating when hitting obstacles
-local chaos_mode = minetest.settings:get_bool("tsm_railcorridors_chaos") or false
+local chaos_mode = core.settings:get_bool("tsm_railcorridors_chaos") or false
 
 -- End of parameters
 
@@ -137,8 +137,8 @@ end
 -- or a liquid.
 local function SetNodeIfCanBuild(pos, node, check_above, can_replace_rail)
 	if check_above then
-		local abovename = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name
-		local abovedef = minetest.registered_nodes[abovename]
+		local abovename = core.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name
+		local abovedef = core.registered_nodes[abovename]
 		if abovename == "unknown" or abovename == "ignore" or
 				(abovedef and abovedef.groups and abovedef.groups.attached_node) or
 				-- This is done because cobwebs are often fake liquids
@@ -146,8 +146,8 @@ local function SetNodeIfCanBuild(pos, node, check_above, can_replace_rail)
 			return false
 		end
 	end
-	local name = minetest.get_node(pos).name
-	local def = minetest.registered_nodes[name]
+	local name = core.get_node(pos).name
+	local def = core.registered_nodes[name]
 	if name ~= "unknown" and name ~= "ignore" and
 			((def and def.is_ground_content and def.liquidtype == "none") or
 			name == tsm_railcorridors.nodes.cobweb or
@@ -155,7 +155,7 @@ local function SetNodeIfCanBuild(pos, node, check_above, can_replace_rail)
 			name == tsm_railcorridors.nodes.torch_floor or
 			(can_replace_rail and name == tsm_railcorridors.nodes.rail)
 			) then
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 		return true
 	else
 		return false
@@ -176,25 +176,25 @@ end
 -- Returns true if the node as point can be considered “ground”, that is, a solid material
 -- in which mine shafts can be built into, e.g. stone, but not air or water
 local function IsGround(pos)
-	local nodename = minetest.get_node(pos).name
-	local nodedef = minetest.registered_nodes[nodename]
+	local nodename = core.get_node(pos).name
+	local nodedef = core.registered_nodes[nodename]
 	return nodename ~= "unknown" and nodename ~= "ignore" and nodedef and nodedef.is_ground_content and nodedef.walkable and nodedef.liquidtype == "none"
 end
 
 -- Returns true if rails are allowed to be placed on top of this node
 local function IsRailSurface(pos)
-	local nodename = minetest.get_node(pos).name
-	local nodename_above = minetest.get_node({x=pos.x,y=pos.y+2,z=pos.z}).name
-	local nodedef = minetest.registered_nodes[nodename]
+	local nodename = core.get_node(pos).name
+	local nodename_above = core.get_node({x=pos.x,y=pos.y+2,z=pos.z}).name
+	local nodedef = core.registered_nodes[nodename]
 	return nodename ~= "unknown" and nodename ~= "ignore" and nodedef and nodedef.walkable and (nodedef.node_box == nil or nodedef.node_box.type == "regular") and nodename_above ~= tsm_railcorridors.nodes.rail
 end
 
 -- Checks if the node is empty space which requires to be filled by a platform
 local function NeedsPlatform(pos)
-	local node = minetest.get_node({x=pos.x,y=pos.y-1,z=pos.z})
-	local node2 = minetest.get_node({x=pos.x,y=pos.y-2,z=pos.z})
-	local nodedef = minetest.registered_nodes[node.name]
-	local falling = minetest.get_item_group(node.name, "falling_node") == 1
+	local node = core.get_node({x=pos.x,y=pos.y-1,z=pos.z})
+	local node2 = core.get_node({x=pos.x,y=pos.y-2,z=pos.z})
+	local nodedef = core.registered_nodes[node.name]
+	local falling = core.get_item_group(node.name, "falling_node") == 1
 	return
 		-- Node can be replaced if ground content or rail
 		(node.name ~= "ignore" and node.name ~= "unknown" and nodedef and nodedef.is_ground_content) and
@@ -222,7 +222,7 @@ end
 -- Returns false if setting one or more nodes failed
 local function Cube(p, radius, node, replace_air_only, wood, post)
 	local y_top = p.y+radius
-	local nodedef = minetest.registered_nodes[node.name]
+	local nodedef = core.registered_nodes[node.name]
 	local solid = nodedef.walkable and (nodedef.node_box == nil or nodedef.node_box.type == "regular") and nodedef.liquidtype == "none"
 	-- Check if all the nodes could be set
 	local built_all = true
@@ -234,12 +234,12 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 			local column_last_attached = nil
 			for yi = y_top, p.y-radius, -1 do
 				local ok = false
-				local thisnode = minetest.get_node({x=xi,y=yi,z=zi})
+				local thisnode = core.get_node({x=xi,y=yi,z=zi})
 				if not solid then
 					if yi == y_top then
-						local topnode = minetest.get_node({x=xi,y=yi+1,z=zi})
-						local topdef = minetest.registered_nodes[topnode.name]
-						if minetest.get_item_group(topnode.name, "attached_node") ~= 1 and topdef and topdef.liquidtype == "none" then
+						local topnode = core.get_node({x=xi,y=yi+1,z=zi})
+						local topdef = core.registered_nodes[topnode.name]
+						if core.get_item_group(topnode.name, "attached_node") ~= 1 and topdef and topdef.liquidtype == "none" then
 							ok = true
 						end
 					elseif column_last_attached and yi == column_last_attached - 1 then
@@ -247,7 +247,7 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 					else
 						ok = true
 					end
-					if minetest.get_item_group(thisnode.name, "attached_node") == 1 then
+					if core.get_item_group(thisnode.name, "attached_node") == 1 then
 						column_last_attached = yi
 					end
 				else
@@ -258,13 +258,13 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 					if replace_air_only ~= true then
 						-- Cut into wood structures (post/wood)
 						if post and (xi == p.x or zi == p.z) and thisnode.name == post then
-							minetest.swap_node({x=xi,y=yi,z=zi}, node)
+							core.swap_node({x=xi,y=yi,z=zi}, node)
 							built = true
 						elseif wood and (xi == p.x or zi == p.z) and thisnode.name == wood then
-							local topnode = minetest.get_node({x=xi,y=yi+1,z=zi})
-							local topdef = minetest.registered_nodes[topnode.name]
+							local topnode = core.get_node({x=xi,y=yi+1,z=zi})
+							local topdef = core.registered_nodes[topnode.name]
 							if topdef and topdef.walkable and topnode.name ~= wood then
-								minetest.swap_node({x=xi,y=yi,z=zi}, node)
+								core.swap_node({x=xi,y=yi,z=zi}, node)
 								-- Check for torches around the wood and schedule them
 								-- for removal
 								if node.name == "air" then
@@ -280,7 +280,7 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 							built = SetNodeIfCanBuild({x=xi,y=yi,z=zi}, node)
 						end
 					else
-						if minetest.get_node({x=xi,y=yi,z=zi}).name == "air" then
+						if core.get_node({x=xi,y=yi,z=zi}).name == "air" then
 							built = SetNodeIfCanBuild({x=xi,y=yi,z=zi}, node)
 						end
 					end
@@ -293,9 +293,9 @@ local function Cube(p, radius, node, replace_air_only, wood, post)
 	end
 	-- Remove torches we have detected before
 	for c=1, #cleanup_torches do
-		local check = minetest.get_node(cleanup_torches[c])
+		local check = core.get_node(cleanup_torches[c])
 		if check.name == tsm_railcorridors.nodes.torch_wall or check.name == tsm_railcorridors.nodes.torch_floor then
-			minetest.swap_node(cleanup_torches[c], node)
+			core.swap_node(cleanup_torches[c], node)
 		end
 	end
 	return built_all
@@ -312,13 +312,13 @@ local function DirtRoom(p, radius, height, dirt_mode, decorations_mode)
 	for xi = p.x-radius, p.x+radius do
 		for zi = p.z-radius, p.z+radius do
 			for yi = y_top, y_bottom, -1 do
-				local thisnode = minetest.get_node({x=xi,y=yi,z=zi})
+				local thisnode = core.get_node({x=xi,y=yi,z=zi})
 				local built = false
 				if xi == p.x-radius or xi == p.x+radius or zi == p.z-radius or zi == p.z+radius or yi == y_bottom or yi == y_top then
 					if dirt_mode == 1 or yi == y_bottom then
 						built = SetNodeIfCanBuild({x=xi,y=yi,z=zi}, {name=tsm_railcorridors.nodes.dirt})
 					elseif (dirt_mode == 2 or dirt_mode == 3) and yi == y_top then
-						if minetest.get_item_group(thisnode.name, "falling_node") == 1 then
+						if core.get_item_group(thisnode.name, "falling_node") == 1 then
 							built = SetNodeIfCanBuild({x=xi,y=yi,z=zi}, {name=tsm_railcorridors.nodes.dirt})
 						end
 					end
@@ -357,10 +357,10 @@ local function Platform(p, radius, node, node2)
 			local np, np2 = NeedsPlatform({x=xi,y=p.y,z=zi})
 			if np then
 				if np2 then
-					--minetest.swap_node({x=xi,y=p.y-1,z=zi}, node2)
+					--core.swap_node({x=xi,y=p.y-1,z=zi}, node2)
 					table.insert(n1,{x=xi,y=p.y-1,z=zi})
 				else
-					--minetest.swap_node({x=xi,y=p.y-1,z=zi}, node)
+					--core.swap_node({x=xi,y=p.y-1,z=zi}, node)
 					table.insert(n2,{x=xi,y=p.y-1,z=zi})
 				end
 			end
@@ -374,7 +374,7 @@ end
 local function PlaceChest(pos, param2)
 	if SetNodeIfCanBuild(pos, {name=tsm_railcorridors.nodes.chest, param2=param2}) then
 		mcl_structures.construct_nodes(pos, pos, {"mcl_chests:chest"})
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		local items = tsm_railcorridors.get_treasures(pr)
 		mcl_loot.fill_inventory(inv, "main", items, pr)
@@ -383,24 +383,24 @@ end
 
 
 -- This function checks if a cart has ACTUALLY been spawned.
--- To be calld by minetest.after.
--- This is a workaround thanks to the fact that minetest.add_entity is unreliable as fuck
+-- To be calld by core.after.
+-- This is a workaround thanks to the fact that core.add_entity is unreliable as fuck
 -- See: https://github.com/minetest/minetest/issues/4759
 -- FIXME: Kill this horrible hack with fire as soon you can.
 local function RecheckCartHack(params)
 	local pos = params[1]
 	local cart_id = params[2]
 	-- Find cart
-	for obj in minetest.objects_inside_radius(pos, 1) do
+	for obj in core.objects_inside_radius(pos, 1) do
 		if obj and obj:get_luaentity().name == cart_id then
 			-- Cart found! We can now safely call the callback func.
 			-- (calling it earlier has the danger of failing)
-			minetest.log("info", "[tsm_railcorridors] Cart spawn succeeded: "..minetest.pos_to_string(pos))
+			core.log("info", "[tsm_railcorridors] Cart spawn succeeded: "..core.pos_to_string(pos))
 			tsm_railcorridors.on_construct_cart(pos, obj, pr_carts)
 			return
 		end
 	end
-	minetest.log("info", "[tsm_railcorridors] Cart spawn FAILED: "..minetest.pos_to_string(pos))
+	core.log("info", "[tsm_railcorridors] Cart spawn FAILED: "..core.pos_to_string(pos))
 end
 
 -- Try to place a cobweb.
@@ -421,8 +421,8 @@ local function TryPlaceCobweb(pos, needs_check, side_vector)
 		for c=1, #check_vectors do
 
 			local cpos = vector.add(pos, check_vectors[c])
-			local cname = minetest.get_node(cpos).name
-			local cdef = minetest.registered_nodes[cname]
+			local cname = core.get_node(cpos).name
+			local cdef = core.registered_nodes[cname]
 			if cname ~= "ignore" and cdef and cdef.walkable then
 				check_passed = true
 				break
@@ -477,9 +477,9 @@ local function WoodSupport(p, wood, post, torches, dir, torchdir)
 	]]
 
 	-- Don't place those wood structs below open air
-	if not (minetest.get_node({x=calc[1], y=p.y+2, z=calc[2]}).name == "air" and
-		minetest.get_node({x=calc[3], y=p.y+2, z=calc[4]}).name == "air" and
-		minetest.get_node({x=p.x, y=p.y+2, z=p.z}).name == "air") then
+	if not (core.get_node({x=calc[1], y=p.y+2, z=calc[2]}).name == "air" and
+		core.get_node({x=calc[3], y=p.y+2, z=calc[4]}).name == "air" and
+		core.get_node({x=p.x, y=p.y+2, z=p.z}).name == "air") then
 
 		-- Left post and planks
 		local left_ok
@@ -497,7 +497,7 @@ local function WoodSupport(p, wood, post, torches, dir, torchdir)
 		local top_planks_ok = false
 		if left_ok and right_ok then top_planks_ok = SetNodeIfCanBuild({x=p.x, y=p.y+1, z=p.z}, node_wood) end
 
-		if minetest.get_node({x=p.x,y=p.y-2,z=p.z}).name=="air" then
+		if core.get_node({x=p.x,y=p.y-2,z=p.z}).name=="air" then
 			if left_ok then SetNodeIfCanBuild({x=calc[1], y=p.y-2, z=calc[2]}, node_fence) end
 			if right_ok then SetNodeIfCanBuild({x=calc[3], y=p.y-2, z=calc[4]}, node_fence) end
 		end
@@ -509,13 +509,13 @@ local function WoodSupport(p, wood, post, torches, dir, torchdir)
 		end
 	elseif torches then
 		-- Try to build torches instead of the wood structs
-		local node = {name=tsm_railcorridors.nodes.torch_floor, param2=minetest.dir_to_wallmounted({x=0,y=-1,z=0})}
+		local node = {name=tsm_railcorridors.nodes.torch_floor, param2=core.dir_to_wallmounted({x=0,y=-1,z=0})}
 
 		-- Try two different height levels
 		local pos1 = {x=calc[1], y=p.y-2, z=calc[2]}
 		local pos2 = {x=calc[3], y=p.y-2, z=calc[4]}
-		local nodedef1 = minetest.registered_nodes[minetest.get_node(pos1).name]
-		local nodedef2 = minetest.registered_nodes[minetest.get_node(pos2).name]
+		local nodedef1 = core.registered_nodes[core.get_node(pos1).name]
+		local nodedef2 = core.registered_nodes[core.get_node(pos2).name]
 
 		if nodedef1 and nodedef1.walkable then
 			pos1.y = pos1.y + 1
@@ -695,7 +695,7 @@ local function create_corridor_section(waypoint, axis, sign, up_or_down, up_or_d
 			return vector.add(pos, off), off
 		end
 
-		if (minetest.get_node({x=p.x,y=p.y-1,z=p.z}).name=="air" and minetest.get_node({x=p.x,y=p.y-3,z=p.z}).name~=tsm_railcorridors.nodes.rail) then
+		if (core.get_node({x=p.x,y=p.y-1,z=p.z}).name=="air" and core.get_node({x=p.x,y=p.y-3,z=p.z}).name~=tsm_railcorridors.nodes.rail) then
 			p.y = p.y - 1;
 			if i == chestplace then
 				chestplace = chestplace + 1
@@ -708,17 +708,17 @@ local function create_corridor_section(waypoint, axis, sign, up_or_down, up_or_d
 		-- Chest
 		if i == chestplace then
 			local cpos, offset = left_or_right(p, vek)
-			if minetest.get_node(cpos).name == post or IsInDirtRoom(p) then
+			if core.get_node(cpos).name == post or IsInDirtRoom(p) then
 				chestplace = chestplace + 1
 			else
-				PlaceChest(cpos, minetest.dir_to_facedir(offset))
+				PlaceChest(cpos, core.dir_to_facedir(offset))
 			end
 		end
 
 		-- A rail at the side of the track to put a cart on
 		if i == cartplace and #tsm_railcorridors.carts > 0 then
 			local cpos = left_or_right(p, vek)
-			if minetest.get_node(cpos).name == post then
+			if core.get_node(cpos).name == post then
 				cartplace = cartplace + 1
 			else
 				local placed
@@ -920,7 +920,7 @@ local function spawn_carts()
 	for c=1, #carts_table do
 		local cpos = carts_table[c].pos
 		local cart_type = carts_table[c].cart_type
-		local node = minetest.get_node(cpos)
+		local node = core.get_node(cpos)
 		if node.name == tsm_railcorridors.nodes.rail then
 			-- FIXME: The cart sometimes fails to spawn
 			-- See <https://github.com/minetest/minetest/issues/4759>
@@ -928,13 +928,13 @@ local function spawn_carts()
 			-- I actually enabled chest minecarts and this logic
 			-- actually became necessary ^^
 			local cart_id = tsm_railcorridors.carts[cart_type]
-			minetest.log("info", "[tsm_railcorridors] Cart spawn attempt: "..minetest.pos_to_string(cpos))
-			minetest.add_entity(cpos, cart_id)
-			minetest.after(3, RecheckCartHack, {cpos, cart_id})
+			core.log("info", "[tsm_railcorridors] Cart spawn attempt: "..core.pos_to_string(cpos))
+			core.add_entity(cpos, cart_id)
+			core.after(3, RecheckCartHack, {cpos, cart_id})
 			-- This checks if the cart is actually spawned, it's a giant hack!
 			-- Note that the callback function is also called there.
 			-- TODO: Move callback function to this position when the
-			-- minetest.add_entity bug has been fixed.
+			-- core.add_entity bug has been fixed.
 		end
 	end
 	carts_table = {}
@@ -969,7 +969,7 @@ local function create_corridor_system(main_cave_coords)
 		end
 	end
 
-	local center_node = minetest.get_node(main_cave_coords)
+	local center_node = core.get_node(main_cave_coords)
 
 	local height = pr:next(4, 7)
 	if height > size then
@@ -1129,12 +1129,12 @@ mcl_mapgen_core.register_generator("railcorridors", nil, function(minp, maxp, bl
 			-- Mid point of the mapchunk
 			local p = {x=minp.x+math.floor((maxp.x-minp.x)/2), y=y, z=minp.z+math.floor((maxp.z-minp.z)/2)}
 			-- Start corridor system at p. Might fail if p is in open air
-			minetest.log("verbose", "[tsm_railcorridors] Attempting to start rail corridor system at "..minetest.pos_to_string(p))
+			core.log("verbose", "[tsm_railcorridors] Attempting to start rail corridor system at "..core.pos_to_string(p))
 			if create_corridor_system(p, pr) then
-				minetest.log("info", "[tsm_railcorridors] Generated rail corridor system at "..minetest.pos_to_string(p))
+				core.log("info", "[tsm_railcorridors] Generated rail corridor system at "..core.pos_to_string(p))
 				break
 			else
-				minetest.log("info", "[tsm_railcorridors] Rail corridor system generation attempt failed at "..minetest.pos_to_string(p).. " (try "..t..")")
+				core.log("info", "[tsm_railcorridors] Rail corridor system generation attempt failed at "..core.pos_to_string(p).. " (try "..t..")")
 			end
 		end
 	end

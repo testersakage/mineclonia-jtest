@@ -12,9 +12,9 @@ local mt = {
 	__newindex = function () return false end
 }
 
-minetest.register_on_joinplayer(function(pl)
+core.register_on_joinplayer(function(pl)
 	local pn = pl:get_player_name()
 	mcl_playerinfo[pn] = { player = pl }
 	setmetatable(mcl_playerinfo[pn], mt)
 end)
-minetest.register_on_leaveplayer(function(pl) mcl_playerinfo[pl:get_player_name()] = nil end)
+core.register_on_leaveplayer(function(pl) mcl_playerinfo[pl:get_player_name()] = nil end)

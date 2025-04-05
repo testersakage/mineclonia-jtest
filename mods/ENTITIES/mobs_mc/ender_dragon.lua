@@ -2,12 +2,12 @@
 -- Ender Dragon.
 ------------------------------------------------------------------------
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
-local mobs_griefing = minetest.settings:get_bool ("mobs_griefing") ~= false
+local mobs_griefing = core.settings:get_bool ("mobs_griefing") ~= false
 local dragon_debug
-	= minetest.settings:get_bool ("dragon_debug", false)
+	= core.settings:get_bool ("dragon_debug", false)
 
 local dragon = {
 	description = S("Ender Dragon"),
@@ -126,7 +126,7 @@ function dragon_piece:on_punch (puncher, time_from_last_punch,
 	if not is_valid (self._dragon) then
 		return false
 	end
-	minetest.sound_play ("default_punch", {
+	core.sound_play ("default_punch", {
 		object = self.object,
 		max_hear_distance = 5
 	}, true)
@@ -138,7 +138,7 @@ function dragon_piece:on_punch (puncher, time_from_last_punch,
 	return true
 end
 
-minetest.register_entity ("mobs_mc:dragon_piece", dragon_piece)
+core.register_entity ("mobs_mc:dragon_piece", dragon_piece)
 
 ------------------------------------------------------------------------
 -- Ender Dragon visuals and physics.
@@ -149,21 +149,21 @@ local ZERO_VECTOR = vector.zero ()
 
 function dragon:restore_portal ()
 	local struct = mcl_structures.registered_structures["end_exit_portal_open"]
-	local pr = PseudoRandom (minetest.get_mapgen_setting("seed"))
+	local pr = PseudoRandom (core.get_mapgen_setting("seed"))
 	local podium = mcl_vars.mg_end_exit_portal_pos
 
 	mcl_portals.spawn_gateway_portal ()
 	mcl_structures.place_structure (podium, struct, pr, -1)
 
 	if self._initial then
-		minetest.set_node (vector.add (podium, vector.new (0, 5, 0)), {
+		core.set_node (vector.add (podium, vector.new (0, 5, 0)), {
 			name = "mcl_end:dragon_egg",
 		})
 	end
 
 	-- Free The End Advancement
 	local self_pos = self.object:get_pos ()
-	for players in minetest.objects_inside_radius (self_pos, 64) do
+	for players in core.objects_inside_radius (self_pos, 64) do
 		if players:is_player () then
 			awards.unlock (players:get_player_name (), "mcl:freeTheEnd")
 		end
@@ -183,7 +183,7 @@ function dragon:check_dying (dtime)
 	self._dragon_target = nil
 
 	if t >= 9 and not self._explosion_particles_spawned then
-		minetest.add_particlespawner ({
+		core.add_particlespawner ({
 			amount = 240,
 			time = 6.0,
 			pos = vector.new (0, 1.5, 0),
@@ -235,7 +235,7 @@ end
 
 function dragon:create_part (bb_width, bb_height, part)
 	local self_pos = self.object:get_pos ()
-	local object = minetest.add_entity (self_pos, "mobs_mc:dragon_piece")
+	local object = core.add_entity (self_pos, "mobs_mc:dragon_piece")
 	if not object then
 		self:safe_remove ()
 		return nil
@@ -667,7 +667,7 @@ end
 
 local damage_immune = {}
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	for k, v in pairs (damage_immune) do
 		local t = v - dtime
 		if t <= 0 then
@@ -742,7 +742,7 @@ function dragon:damage_entities_intersecting_part (self_pos, cbox, do_knockback,
 		cbox[6] + 1.0,
 	}
 
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		if object ~= self.object and not damaged[object] then
 			local entity = object:get_luaentity ()
 			if object:is_player () or (entity and entity.is_mob) then
@@ -761,8 +761,8 @@ end
 
 local is_dragon_immune = {}
 
-minetest.register_on_mods_loaded (function ()
-	for name, def in pairs (minetest.registered_nodes) do
+core.register_on_mods_loaded (function ()
+	for name, def in pairs (core.registered_nodes) do
 		if name == "air" or name == "ignore"
 			or name == "mcl_core:barrier"
 			or name == "mcl_core:bedrock"
@@ -800,10 +800,10 @@ function dragon:check_walls (cbox)
 				v.x = x
 				v.y = y
 				v.z = z
-				local node = minetest.get_node (v)
+				local node = core.get_node (v)
 				if not is_dragon_immune[node.name] and
-					not minetest.is_protected (v, "") then
-					minetest.remove_node (v)
+					not core.is_protected (v, "") then
+					core.remove_node (v)
 				end
 			end
 		end
@@ -934,8 +934,8 @@ local function find_end_surface_position (x, z, elevation)
 
 	while node.y > end_min do
 		node.y = node.y - 1
-		local node = minetest.get_node (node)
-		local def = minetest.registered_nodes[node]
+		local node = core.get_node (node)
+		local def = core.registered_nodes[node]
 
 		if def and def.walkable then
 			node.y = node.y + 1 + elevation
@@ -1427,7 +1427,7 @@ function dragon:do_phase_descent (self_pos, dtime)
 		local head_pos
 			= self:get_head_pos (vector.new (0, -0.6, 0), HEAD_POS)
 		local dir = vector.direction (vector.add (self_pos, head_pos), target)
-		minetest.add_particlespawner ({
+		core.add_particlespawner ({
 			pos = {
 				min = vector.offset (head_pos, -0.5, -0.5, -0.5),
 				max = vector.offset (head_pos, 0.5, 0.5, 0.5),
@@ -1535,8 +1535,8 @@ function dragon:do_phase_scan (self_pos, dtime)
 end
 
 local function is_clear (target)
-	local name = minetest.get_node (target).name
-	local def = minetest.registered_nodes[name]
+	local name = core.get_node (target).name
+	local def = core.registered_nodes[name]
 	return def and not def.walkable
 end
 
@@ -1563,7 +1563,7 @@ function dragon:do_phase_bellow_acid (self_pos, dtime)
 		local dir = vector.rotate (vector.new (0, 0, 1), rot)
 		local v = vector.multiply (dir, 12.0)
 		local base_pos = vector.add (self_pos, pos)
-		minetest.add_particlespawner ({
+		core.add_particlespawner ({
 			pos = {
 				min = vector.offset (base_pos, -0.5, -0.5, -0.5),
 				max = vector.offset (base_pos, 0.5, 0.5, 0.5),
@@ -1610,7 +1610,7 @@ function dragon:do_phase_bellow_acid (self_pos, dtime)
 			target.y = target.y - 1
 		end
 		target.y = target.y + 0.5
-		local object = minetest.add_entity (target, "mobs_mc:dragon_effect_cloud")
+		local object = core.add_entity (target, "mobs_mc:dragon_effect_cloud")
 		if object then
 			local entity = object:get_luaentity ()
 			entity:init ({
@@ -1719,7 +1719,7 @@ function dragon:maybe_shoot (self_pos, dtime, target, target_pos)
 					self:mob_sound ("shoot_attack")
 					local dir = vector.direction (pos, target_pos)
 					local vel = vector.multiply (dir, 24)
-					local obj = minetest.add_entity (pos, "mobs_mc:dragon_fireball")
+					local obj = core.add_entity (pos, "mobs_mc:dragon_fireball")
 					if obj then
 						obj:set_velocity (vel)
 					end
@@ -1815,7 +1815,7 @@ function dragon:do_phase_death (self_pos, dtime)
 	self._dragon_target = podium
 
 	if self:check_timer ("death_particles", 0.5) then
-		minetest.add_particlespawner ({
+		core.add_particlespawner ({
 			amount = 120,
 			time = 1.0,
 			pos = vector.new (0, 1.5, 0),
@@ -1899,7 +1899,7 @@ function dragon:refresh_dragon_fight ()
 	local center = vector.new (0, mcl_vars.mg_end_platform_pos.y, 0)
 	local min = vector.offset (center, -128, 0, -128)
 	local max = vector.offset (center, 128, mcl_vars.mg_end_max_official - center.y, 128)
-	for object in minetest.objects_in_area (min, max) do
+	for object in core.objects_in_area (min, max) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mcl_end:crystal" then
 			table.insert (crystals, object)
@@ -1944,7 +1944,7 @@ function dragon:check_crystals (dtime, self_pos)
 		end
 		if nearest then
 			self._current_beam
-				= minetest.add_entity (nearest_pos, "mcl_end:crystal_beam")
+				= core.add_entity (nearest_pos, "mcl_end:crystal_beam")
 			if self._current_beam then
 				local entity = self._current_beam:get_luaentity ()
 				entity:init (self.object, nearest)
@@ -2031,7 +2031,7 @@ end
 
 function dragon_effect_cloud:on_activate (staticdata, dtime)
 	if staticdata then
-		local data = minetest.deserialize (staticdata)
+		local data = core.deserialize (staticdata)
 		if data then
 			self._radius = data.radius or 5.0
 			self._duration = data.duration or 10.0
@@ -2044,7 +2044,7 @@ function dragon_effect_cloud:on_activate (staticdata, dtime)
 end
 
 function dragon_effect_cloud:get_staticdata ()
-	return minetest.serialize ({
+	return core.serialize ({
 		radius = self._radius,
 		duration = self._duration,
 		ttl = self._ttl,
@@ -2082,7 +2082,7 @@ function dragon_effect_cloud:create_particlespawner (self_pos)
 			"mcl_particles_dragon_breath_3.png^[colorize:#ff00ff:127",
 		},
 	}
-	minetest.add_particlespawner (spawner)
+	core.add_particlespawner (spawner)
 end
 
 local function is_mob (object)
@@ -2112,7 +2112,7 @@ function dragon_effect_cloud:on_step (dtime)
 			       cbox[5] + self_pos.y + 2.0,
 			       cbox[6] + self_pos.z + 2.0)
 	offset_cbox (cbox, self_pos, 0.0)
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		if not damage_immune[object]
 			and (object:is_player () or is_mob (object)) then
 			local pos = object:get_pos ()
@@ -2160,7 +2160,7 @@ function dragon_effect_cloud:on_rightclick (clicker)
 		else
 			local pos = clicker:get_pos ()
 			pos.y = pos.y + 0.5
-			minetest.add_item (pos, {
+			core.add_item (pos, {
 				name = "mcl_potions:dragon_breath",
 			})
 		end
@@ -2168,7 +2168,7 @@ function dragon_effect_cloud:on_rightclick (clicker)
 	end
 end
 
-minetest.register_entity ("mobs_mc:dragon_effect_cloud", dragon_effect_cloud)
+core.register_entity ("mobs_mc:dragon_effect_cloud", dragon_effect_cloud)
 
 ------------------------------------------------------------------------
 -- Ender Dragon Fireball.
@@ -2199,7 +2199,7 @@ end
 
 function dragon_fireball:splash_particle (pos)
 	local d = -0.1
-	minetest.add_particlespawner ({
+	core.add_particlespawner ({
 		amount = 50,
 		time = 0.1,
 		minpos = {x=pos.x-d, y=pos.y, z=pos.z-d},
@@ -2226,7 +2226,7 @@ function dragon_fireball:on_step (dtime, moveresult)
 		self:splash_particle (self_pos)
 		self.object:remove ()
 
-		local object = minetest.add_entity (self_pos, "mobs_mc:dragon_effect_cloud")
+		local object = core.add_entity (self_pos, "mobs_mc:dragon_effect_cloud")
 		if object then
 			local entity = object:get_luaentity ()
 			entity:init ({
@@ -2239,4 +2239,4 @@ function dragon_fireball:on_step (dtime, moveresult)
 	end
 end
 
-minetest.register_entity ("mobs_mc:dragon_fireball", dragon_fireball)
+core.register_entity ("mobs_mc:dragon_fireball", dragon_fireball)

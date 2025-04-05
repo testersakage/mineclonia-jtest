@@ -21,21 +21,21 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then return end
 
 	local pos = pointed_thing.above
-	local n = minetest.get_node(pointed_thing.above)
-	local def = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
+	local n = core.get_node(pointed_thing.above)
+	local def = core.registered_nodes[core.get_node(pointed_thing.under).name]
 
 	if ( def and def.buildable_to ) or n.name == "mcl_portals:portal" then
 		pos = pointed_thing.under
-		n = minetest.get_node(pointed_thing.under)
+		n = core.get_node(pointed_thing.under)
 	end
 
 	local fish = itemstack:get_definition()._mcl_buckets_fish
 	if fish_names[fish] then
-		local o = minetest.add_entity(pos, "mobs_mc:" .. fish, minetest.serialize({ persistent = true }))
+		local o = core.add_entity(pos, "mobs_mc:" .. fish, core.serialize({ persistent = true }))
 		if o and o:get_pos() then
 			local props = itemstack:get_meta():get_string("properties")
 			if props ~= "" then
-				o:set_properties(minetest.deserialize(props))
+				o:set_properties(core.deserialize(props))
 			end
 			local water = "mcl_core:water_source"
 			if n.name == "mclx_core:river_water_source" then
@@ -45,12 +45,12 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 			end
 			if mcl_worlds.pos_to_dimension(pos) == "nether" then
 				water = nil ---@diagnostic disable-line: cast-local-type
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 			end
 			if water then
-				minetest.set_node(pos,{name = water})
+				core.set_node(pos,{name = water})
 			end
-			if not placer or not minetest.is_creative_enabled(placer:get_player_name()) then
+			if not placer or not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack = ItemStack("mcl_buckets:bucket_empty")
 			end
 		end
@@ -60,7 +60,7 @@ end
 
 for techname, fishname in pairs(fish_names) do
 	local fish, a_fish, a_fish_dot = fishname[1], fishname[2], fishname[2] .. "."
-	minetest.register_craftitem(fishbucket_prefix .. techname, {
+	core.register_craftitem(fishbucket_prefix .. techname, {
 		description = D("Bucket of " .. fish),
 		_doc_items_longdesc = D("This bucket is filled with water and " .. a_fish_dot),
 		_doc_items_usagehelp = D("Place it to empty the bucket and place " .. a_fish_dot .. " Obtain by right clicking on " .. a_fish .. " with a bucket of water."),
@@ -77,5 +77,5 @@ for techname, fishname in pairs(fish_names) do
 		end,
 	})
 
-	minetest.register_alias("mcl_fishing:bucket_" .. techname, "mcl_buckets:bucket_" .. techname)
+	core.register_alias("mcl_fishing:bucket_" .. techname, "mcl_buckets:bucket_" .. techname)
 end

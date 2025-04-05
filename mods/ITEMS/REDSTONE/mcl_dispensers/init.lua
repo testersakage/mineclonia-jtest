@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local C = core.colorize
+local F = core.formspec_escape
 
 local dispenser_formspec = table.concat({
 	"formspec_version[4]",
@@ -24,7 +24,7 @@ local dispenser_formspec = table.concat({
 })
 
 local function setup_dispenser(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	meta:set_string("formspec", dispenser_formspec)
 	local inv = meta:get_inventory()
 	inv:set_size("main", 9)
@@ -35,11 +35,11 @@ local function orientate(pos, placer, basename)
 
 	local pitch_deg = placer:get_look_vertical() * (180 / math.pi)
 
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if pitch_deg > 55 then
-		minetest.swap_node(pos, { name = "mcl_dispensers:"..basename.."_up", param2 = node.param2 })
+		core.swap_node(pos, { name = "mcl_dispensers:"..basename.."_up", param2 = node.param2 })
 	elseif pitch_deg < -55 then
-		minetest.swap_node(pos, { name = "mcl_dispensers:"..basename.."_down", param2 = node.param2 })
+		core.swap_node(pos, { name = "mcl_dispensers:"..basename.."_down", param2 = node.param2 })
 	end
 end
 
@@ -51,7 +51,7 @@ local function drop(pos, droppos, dropitem, inv, stack_)
 		math.random(-pos_variation, pos_variation) / 1000,
 		math.random(-pos_variation, pos_variation) / 1000
 	)
-	local item_entity = minetest.add_item(droppos, dropitem)
+	local item_entity = core.add_item(droppos, dropitem)
 	if item_entity then
 		local drop_vel = vector.subtract(droppos, pos)
 		local speed = 3
@@ -62,7 +62,7 @@ local function drop(pos, droppos, dropitem, inv, stack_)
 end
 
 local function activate_dropper(pos, droppos, dropdir, inv, stack_)
-	local dropnode = minetest.get_node(droppos)
+	local dropnode = core.get_node(droppos)
 	local dropitem = ItemStack(stack_.stack)
 	dropitem:set_count(1)
 
@@ -74,9 +74,9 @@ local function activate_dropper(pos, droppos, dropdir, inv, stack_)
 end
 
 local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
-	local node = minetest.get_node(pos)
-	local dropnode = minetest.get_node(droppos)
-	local dropnodedef = minetest.registered_nodes[dropnode.name]
+	local node = core.get_node(pos)
+	local dropnode = core.get_node(droppos)
+	local dropnodedef = core.registered_nodes[dropnode.name]
 	local dropitem = ItemStack(stack_.stack)
 	dropitem:set_count(1)
 	local stack = stack_.stack
@@ -105,8 +105,8 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 
 	if igroups.armor then -- Armor, mob heads and pumpkins
 		local droppos_below = vector.offset(droppos, 0, -1, 0)
-		for _, objs in ipairs({ minetest.get_objects_inside_radius(droppos, 1),
-			minetest.get_objects_inside_radius(droppos_below, 1) }) do
+		for _, objs in ipairs({ core.get_objects_inside_radius(droppos, 1),
+			core.get_objects_inside_radius(droppos_below, 1) }) do
 			for _, obj in ipairs(objs) do
 				stack = mcl_armor.equip(stack, obj)
 				if stack:is_empty() then
@@ -122,7 +122,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 		if not stack:is_empty() then
 			if igroups.head or iname == "mcl_farming:pumpkin_face" then
 				if dropnodedef.buildable_to then
-					minetest.set_node(droppos, { name = iname, param2 = node.param2 })
+					core.set_node(droppos, { name = iname, param2 = node.param2 })
 					stack:take_item()
 				end
 			end
@@ -131,7 +131,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 		inv:set_stack("main", stack_id, stack)
 	elseif igroups.spawn_egg then
 		if not dropnodedef.walkable then
-			minetest.add_entity(droppos, stack:get_name())
+			core.add_entity(droppos, stack:get_name())
 
 			stack:take_item()
 			inv:set_stack("main", stack_id, stack)
@@ -163,7 +163,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 						y = droppos.y + math.random(-pos_variation, pos_variation) / 1000,
 						z = droppos.z + math.random(-pos_variation, pos_variation) / 1000,
 					}
-					local item_entity = minetest.add_item(droppos, dropitem)
+					local item_entity = core.add_item(droppos, dropitem)
 					local drop_vel = vector.subtract(droppos, pos)
 					local speed = 3
 					item_entity:set_velocity(vector.multiply(drop_vel, speed))
@@ -172,7 +172,7 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 				stack:take_item()
 				inv:set_stack("main", stack_id, stack)
 			end
-		elseif minetest.get_item_group(dropitem:get_name(), "shears") == 0 then
+		elseif core.get_item_group(dropitem:get_name(), "shears") == 0 then
 			drop(pos, droppos, dropitem, inv, stack_)
 		end
 	end
@@ -180,8 +180,8 @@ local function activate_dispenser(pos, droppos, dropdir, inv, stack_)
 end
 
 local function activate(pos, activate_func)
-	local node = minetest.get_node(pos)
-	local meta = minetest.get_meta(pos)
+	local node = core.get_node(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local droppos, dropdir
 	if node.name:match("_up$") then
@@ -191,7 +191,7 @@ local function activate(pos, activate_func)
 		dropdir = vector.new(0, -1, 0)
 		droppos = vector.offset(pos, 0, -1, 0)
 	else
-		dropdir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
+		dropdir = vector.multiply(core.facedir_to_dir(node.param2), -1)
 		droppos = vector.add(pos, dropdir)
 	end
 	local stacks = {} -- Y
@@ -215,8 +215,8 @@ local commdef  = {
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return count
@@ -224,8 +224,8 @@ local commdef  = {
 	end,
 	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -233,25 +233,25 @@ local commdef  = {
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
 		end
 	end,
 	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff in dispenser at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff in dispenser at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_put = function(pos, listname, _, stack, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff to dispenser at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff to dispenser at " .. core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" takes stuff from dispenser at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" takes stuff from dispenser at " .. core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	on_rotate = screwdriver.rotate_simple,
@@ -265,7 +265,7 @@ local commdef  = {
 			local oldpowered = math.floor(node.param2 / 32) ~= 0
 			local powered = mcl_redstone.get_power(pos) ~= 0
 			if powered and not oldpowered then
-				local is_dispenser = minetest.get_item_group(node.name, "dispenser") ~= 0
+				local is_dispenser = core.get_item_group(node.name, "dispenser") ~= 0
 				activate(pos, is_dispenser and activate_dispenser or activate_dropper)
 			end
 			return {
@@ -282,7 +282,7 @@ do
 		groups = table.merge(commdef.groups, {dispenser = 1})
 	})
 
-	minetest.register_node("mcl_dispensers:dispenser", table.merge(dispenserdef, {
+	core.register_node("mcl_dispensers:dispenser", table.merge(dispenserdef, {
 		description = S("Dispenser"),
 		_tt_help = S("9 inventory slots") .. "\n" .. S("Launches item when powered by redstone power"),
 		_doc_items_longdesc = S("A dispenser is a block which acts as a redstone component which, when powered with redstone power, dispenses an item. It has a container with 9 inventory slots."),
@@ -318,7 +318,7 @@ do
 		end,
 	}))
 
-	minetest.register_node("mcl_dispensers:dispenser_down", table.merge(dispenserdef, {
+	core.register_node("mcl_dispensers:dispenser_down", table.merge(dispenserdef, {
 		description = S("Dispenser"),
 		after_place_node = setup_dispenser,
 		tiles = {
@@ -330,7 +330,7 @@ do
 		_doc_items_create_entry = false,
 		drop = "mcl_dispensers:dispenser",
 	}))
-	minetest.register_node("mcl_dispensers:dispenser_up", table.merge(dispenserdef, {
+	core.register_node("mcl_dispensers:dispenser_up", table.merge(dispenserdef, {
 		description = S("Dispenser"),
 		after_place_node = setup_dispenser,
 		tiles = {
@@ -343,7 +343,7 @@ do
 		drop = "mcl_dispensers:dispenser",
 	}))
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_dispensers:dispenser",
 		recipe = {
 			{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble", },
@@ -362,7 +362,7 @@ do
 		groups = table.merge(commdef.groups, {dropper = 1})
 	})
 
-	minetest.register_node("mcl_dispensers:dropper", table.merge(dropperdef, {
+	core.register_node("mcl_dispensers:dropper", table.merge(dropperdef, {
 		description = S("Dropper"),
 		_tt_help = S("9 inventory slots") .. "\n" .. S("Drops item when powered by redstone power"),
 		_doc_items_longdesc = S("A dropper is a redstone component and a container with 9 inventory slots which, when supplied with redstone power, drops an item or puts it into a container in front of it."),
@@ -379,7 +379,7 @@ do
 		end,
 	}))
 
-	minetest.register_node("mcl_dispensers:dropper_down", table.merge(dropperdef, {
+	core.register_node("mcl_dispensers:dropper_down", table.merge(dropperdef, {
 		description = S("Dropper"),
 		after_place_node = setup_dispenser,
 		tiles = {
@@ -391,7 +391,7 @@ do
 		_doc_items_create_entry = false,
 		drop = "mcl_dispensers:dropper",
 	}))
-	minetest.register_node("mcl_dispensers:dropper_up", table.merge(dropperdef, {
+	core.register_node("mcl_dispensers:dropper_up", table.merge(dropperdef, {
 		description = S("Dropper"),
 		after_place_node = setup_dispenser,
 		tiles = {
@@ -404,7 +404,7 @@ do
 		drop = "mcl_dispensers:dropper",
 	}))
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_dispensers:dropper",
 		recipe = {
 			{ "mcl_core:cobble", "mcl_core:cobble", "mcl_core:cobble", },

@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local has_doc = minetest.get_modpath("doc")
+local has_doc = core.get_modpath("doc")
 mcl_portals.registered_on_beat_game = {}
 function mcl_portals.register_on_beat_game(func)
 	table.insert(mcl_portals.registered_on_beat_game, func)
@@ -9,7 +9,7 @@ end
 --local SPAWN_MIN = mcl_vars.mg_end_min+70
 --local SPAWN_MAX = mcl_vars.mg_end_min+98
 
---local mg_name = minetest.get_mapgen_setting("mg_name")
+--local mg_name = core.get_mapgen_setting("mg_name")
 
 local function destroy_portal(pos)
 	local neighbors = {
@@ -20,8 +20,8 @@ local function destroy_portal(pos)
 	}
 	for n=1, #neighbors do
 		local npos = vector.add(pos, neighbors[n])
-		if minetest.get_node(npos).name == "mcl_portals:portal_end" then
-			minetest.remove_node(npos)
+		if core.get_node(npos).name == "mcl_portals:portal_end" then
+			core.remove_node(npos)
 		end
 	end
 end
@@ -39,7 +39,7 @@ local function check_spawn_space(pos, size, y_offset)
         y = pos.y + y_offset + size - 1,
         z = pos.z + half - (size % 2 == 0 and 1 or 0)
     }
-    local air_nodes = minetest.find_nodes_in_area(pos1, pos2, {"air"})
+    local air_nodes = core.find_nodes_in_area(pos1, pos2, {"air"})
     local required_air = size * size * size
     return #air_nodes == required_air
 end
@@ -51,7 +51,7 @@ local function find_valid_spawn(target, attempts)
 	if attempts > 10 then
 		return mcl_spawn.get_world_spawn_pos()
 	end
-	local nn = minetest.find_nodes_in_area_under_air(minp,maxp,{"group:solid"})
+	local nn = core.find_nodes_in_area_under_air(minp,maxp,{"group:solid"})
 	if #nn > 0 then
 		for _, n in pairs(nn) do
 			if check_spawn_space(n, 2) then
@@ -80,7 +80,7 @@ local ep_scheme = {
 }
 
 -- End portal
-minetest.register_node("mcl_portals:portal_end", {
+core.register_node("mcl_portals:portal_end", {
 	description = S("End Portal"),
 	_tt_help = S("Used to construct end portals"),
 	_doc_items_longdesc = S("An End portal teleports creatures and objects to the mysterious End dimension (and back!)."),
@@ -115,7 +115,7 @@ minetest.register_node("mcl_portals:portal_end", {
 	buildable_to = false,
 	is_ground_content = false,
 	drop = "",
-	light_source = minetest.LIGHT_MAX,
+	light_source = core.LIGHT_MAX,
 	post_effect_color = {a = 192, r = 0, g = 0, b = 0},
 	after_destruct = destroy_portal,
 	-- This prevents “falling through”
@@ -144,7 +144,7 @@ local function check_end_portal_frame(pos)
 		local portal = true
 		for j = 1, 12 do
 			local p = vector.add(pos0, ep_scheme[j].o)
-			local node = minetest.get_node(p)
+			local node = core.get_node(p)
 			if node and node.name == "mcl_portals:end_portal_frame_eye" then
 				node.param2 = ep_scheme[j].p
 				core.swap_node(p, node)
@@ -176,14 +176,14 @@ local function end_portal_area(pos, destroy)
 			table.insert(posses, {x=x,y=pos.y,z=z})
 		end
 	end
-	minetest.bulk_set_node(posses, {name=name})
+	core.bulk_set_node(posses, {name=name})
 end
 
 local function show_credits(player)
 	local meta = player:get_meta()
 	local completed_end = meta:get_int("completed_end")
 
-	if completed_end == 0 and minetest.is_singleplayer() then
+	if completed_end == 0 and core.is_singleplayer() then
 		meta:set_int("completed_end", 1)
 		for _, func in ipairs(mcl_portals.registered_on_beat_game) do
 			func(player)
@@ -194,7 +194,7 @@ end
 
 local function teleport_object(obj, target, original_dim)
 	obj:set_pos(target)
-	minetest.sound_play("mcl_portals_teleport", {pos=target, gain=0.05, max_hear_distance = 16}, true)
+	core.sound_play("mcl_portals_teleport", {pos=target, gain=0.05, max_hear_distance = 16}, true)
 
 	if obj:is_player() then
 		-- Look towards the main End island
@@ -233,13 +233,13 @@ function mcl_portals.end_teleport(obj, pos)
 		-- Teleport to the End at a fixed position.
 		-- The destination is built by mcl_structures.
 		core.load_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8), vector.add(mcl_vars.mg_end_platform_pos, 8))
-		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(minetest.get_mapgen_setting("seed")),-1)
+		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(core.get_mapgen_setting("seed")),-1)
 		teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
 	end
 end
 
 function mcl_portals.end_portal_teleport(pos)
-	for obj in minetest.objects_inside_radius(pos, 1) do
+	for obj in core.objects_inside_radius(pos, 1) do
 		local lua_entity = obj:get_luaentity()
 		if obj:is_player() or lua_entity then
 			local objpos = obj:get_pos()
@@ -249,7 +249,7 @@ function mcl_portals.end_portal_teleport(pos)
 
 			-- Check if object is actually in portal.
 			objpos.y = math.ceil(objpos.y)
-			if minetest.get_node(objpos).name ~= "mcl_portals:portal_end" then
+			if core.get_node(objpos).name ~= "mcl_portals:portal_end" then
 				return
 			end
 
@@ -263,7 +263,7 @@ function mcl_portals.end_portal_teleport(pos)
 	end
 end
 
-minetest.register_abm({
+core.register_abm({
 	label = "End portal teleportation",
 	nodenames = {"mcl_portals:portal_end"},
 	interval = 0.1,
@@ -273,28 +273,28 @@ minetest.register_abm({
 
 local rotate_frame, rotate_frame_eye
 
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	-- Intentionally not rotatable
 	rotate_frame = false
 	rotate_frame_eye = false
 end
 
 local function after_place_node(pos, placer, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if node then
 		node.param2 = (node.param2+2) % 4
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 
 		local ok, ppos = check_end_portal_frame(pos)
 		if ok then
 			-- Epic 'portal open' sound effect that can be heard everywhere
-			minetest.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
+			core.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
 			end_portal_area(ppos)
 		end
 	end
 end
 
-minetest.register_node("mcl_portals:end_portal_frame", {
+core.register_node("mcl_portals:end_portal_frame", {
 	description = S("End Portal Frame"),
 	_tt_help = S("Used to construct end portals"),
 	_doc_items_longdesc = S("End portal frames are used in the construction of End portals. Each block has a socket for an eye of ender.") .. "\n" .. S("NOTE: The End dimension is currently incomplete and might change in future versions."),
@@ -321,7 +321,7 @@ minetest.register_node("mcl_portals:end_portal_frame", {
 	_mcl_hardness = -1,
 })
 
-minetest.register_node("mcl_portals:end_portal_frame_eye", {
+core.register_node("mcl_portals:end_portal_frame_eye", {
 	description = S("End Portal Frame with Eye of Ender"),
 	_tt_help = S("Used to construct end portals"),
 	_doc_items_create_entry = false,
@@ -365,22 +365,22 @@ end
 --[[ ITEM OVERRIDES ]]
 
 -- Portal opener
-local old_on_place = minetest.registered_items["mcl_end:ender_eye"].on_place
-minetest.override_item("mcl_end:ender_eye", {
+local old_on_place = core.registered_items["mcl_end:ender_eye"].on_place
+core.override_item("mcl_end:ender_eye", {
 	on_place = function(itemstack, user, pointed_thing)
 
 		local rc = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
 		if rc then return rc end
 
-		local node = minetest.get_node(pointed_thing.under)
+		local node = core.get_node(pointed_thing.under)
 		-- Place eye of ender into end portal frame
 		if pointed_thing.under and node.name == "mcl_portals:end_portal_frame" then
 			local protname = user:get_player_name()
-			if minetest.is_protected(pointed_thing.under, protname) then
-				minetest.record_protection_violation(pointed_thing.under, protname)
+			if core.is_protected(pointed_thing.under, protname) then
+				core.record_protection_violation(pointed_thing.under, protname)
 				return itemstack
 			end
-			minetest.set_node(pointed_thing.under, { name = "mcl_portals:end_portal_frame_eye", param2 = node.param2 })
+			core.set_node(pointed_thing.under, { name = "mcl_portals:end_portal_frame_eye", param2 = node.param2 })
 
 			if has_doc then
 				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:end_portal_frame")
@@ -388,14 +388,14 @@ minetest.override_item("mcl_end:ender_eye", {
 			core.sound_play(
 				"mcl_portals_place_frame_eye_"..math.random(1,3),
 				{pos = pointed_thing.under, gain = 0.5, max_hear_distance = 16}, true)
-			if not minetest.is_creative_enabled(user:get_player_name()) then
+			if not core.is_creative_enabled(user:get_player_name()) then
 				itemstack:take_item() -- 1 use
 			end
 
 			local ok, ppos = check_end_portal_frame(pointed_thing.under)
 			if ok then
 				-- Epic 'portal open' sound effect that can be heard everywhere
-				minetest.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
+				core.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
 				end_portal_area(ppos)
 				if has_doc then
 					doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:portal_end")

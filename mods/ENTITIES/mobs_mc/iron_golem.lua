@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -205,7 +205,7 @@ local function golem_extend_flower (self, self_pos, dtime)
 			-- sight.
 			local aa = vector.offset (self_pos, -3.0 - 2.0, -1.0, -3.0 - 2.0)
 			local bb = vector.offset (self_pos, 3.0+2.0, 1.0, 3.0+2.0)
-			for object in minetest.objects_in_area (aa, bb) do
+			for object in core.objects_in_area (aa, bb) do
 				local entity = object:get_luaentity ()
 				if entity and entity.name == "mobs_mc:villager"
 					and self:target_visible (self_pos, object) then
@@ -295,7 +295,7 @@ function golem:locate_undesirable (self_pos)
 	local bb = vector.offset (self_pos, 10, 10, 10)
 	local player_rep = {}
 
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:villager" then
 			for name, rep in pairs (entity._reputation) do
@@ -359,8 +359,8 @@ function golem:pacing_target_towards_villager (pos)
 	local villagers = {}
 	local aa = vector.offset (pos, -32, -32, -32)
 	local bb = vector.offset (pos, 32, 32, 32)
-	local gmt = minetest.get_gametime ()
-	for object in minetest.objects_in_area (aa, bb) do
+	local gmt = core.get_gametime ()
+	for object in core.objects_in_area (aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:villager"
 			and not entity:seen_golem_lately (gmt) then
@@ -472,7 +472,7 @@ function golem:on_rightclick (clicker)
 	local item = clicker:get_wielded_item()
 	if item:get_name() == "mcl_core:iron_ingot"
 		and self.health < self.object:get_properties().hp_max then
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			item:take_item()
 			clicker:set_wielded_item(item)
 		end
@@ -575,7 +575,7 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 		-- Check iron block nodes
 		for i=1, 4 do
 			local cpos = vector.add(pos, checks[c][i])
-			local node = minetest.get_node(cpos)
+			local node = core.get_node(cpos)
 			if node.name ~= "mcl_core:ironblock" then
 				ok = false
 				break
@@ -584,7 +584,7 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 		-- Check air nodes
 		for a=5, 8 do
 			local cpos = vector.add(pos, checks[c][a])
-			local node = minetest.get_node(cpos)
+			local node = core.get_node(cpos)
 			if node.name ~= "air" then
 				ok = false
 				break
@@ -593,12 +593,12 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 		-- Pattern found!
 		if ok then
 			-- Remove the nodes
-			minetest.remove_node(pos)
-			minetest.check_for_falling(pos)
+			core.remove_node(pos)
+			core.check_for_falling(pos)
 			for i=1, 4 do
 				local cpos = vector.add(pos, checks[c][i])
-				minetest.remove_node(cpos)
-				minetest.check_for_falling(cpos)
+				core.remove_node(cpos)
+				core.check_for_falling(cpos)
 			end
 			-- Summon iron golem
 			local place
@@ -608,7 +608,7 @@ function mobs_mc.check_iron_golem_summon(pos, player)
 				place = vector.add(pos, checks[c][4])
 			end
 			place.y = place.y - 0.5
-			local o = minetest.add_entity(place, "mobs_mc:iron_golem")
+			local o = core.add_entity(place, "mobs_mc:iron_golem")
 			if o then
 				local l = o:get_luaentity()
 				if l and player then l._creator = player:get_player_name() end

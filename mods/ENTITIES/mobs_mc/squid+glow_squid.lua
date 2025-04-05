@@ -4,7 +4,7 @@
 --################### SQUID
 --###################
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 local squid = {
@@ -130,7 +130,7 @@ function squid:spawn_ink_jet ()
 		collisiondetection = true,
 		object_collision = true,
 	}
-	minetest.add_particlespawner (particlespawner)
+	core.add_particlespawner (particlespawner)
 end
 
 function squid:receive_damage (mcl_reason, damage)
@@ -212,7 +212,7 @@ function squid:motion_step (dtime, moveresult, self_pos)
 	end
 
 	local f = dtime / 0.05
-	if minetest.get_item_group (self.standing_in, "water") > 0 then
+	if core.get_item_group (self.standing_in, "water") > 0 then
 		local progress = movement / math.pi
 		local r_scale = dtime
 		self._was_touching_water = true
@@ -328,8 +328,8 @@ local function squid_move_randomly (self, self_pos, dtime)
 end
 
 local function is_airlike (nodepos)
-	local name = minetest.get_node (nodepos).name
-	local def = minetest.registered_nodes[name]
+	local name = core.get_node (nodepos).name
+	local def = core.registered_nodes[name]
 	return def and def.liquidtype == "none" and not def.walkable
 end
 
@@ -469,7 +469,7 @@ function glow_squid:ai_step (dtime)
 
 		if self._extinguish_for <= 0 then
 			self:set_properties ({
-				glow = minetest.LIGHT_MAX,
+				glow = core.LIGHT_MAX,
 			})
 		end
 	end
@@ -496,7 +496,7 @@ mcl_mobs.spawn_setup({
 	min_height = mobs_mc.water_level - 16,
 	max_height = mobs_mc.water_level + 1,
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX + 1,
+	max_light = core.LIGHT_MAX + 1,
 	aoc = 7,
 	chance = 80,
 })

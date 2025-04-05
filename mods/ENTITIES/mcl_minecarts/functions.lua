@@ -15,9 +15,9 @@ function mcl_minecarts:velocity_to_dir(v)
 end
 
 function mcl_minecarts:is_rail(pos, railtype)
-	local node = minetest.get_node(pos).name
+	local node = core.get_node(pos).name
 	if node == "ignore" then
-		local vm = minetest.get_voxel_manip()
+		local vm = core.get_voxel_manip()
 		local emin, emax = vm:read_from_map(pos, pos)
 		local area = VoxelArea:new{
 			MinEdge = emin,
@@ -25,15 +25,15 @@ function mcl_minecarts:is_rail(pos, railtype)
 		}
 		local data = vm:get_data()
 		local vi = area:indexp(pos)
-		node = minetest.get_name_from_content_id(data[vi])
+		node = core.get_name_from_content_id(data[vi])
 	end
-	if minetest.get_item_group(node, "rail") == 0 then
+	if core.get_item_group(node, "rail") == 0 then
 		return false
 	end
 	if not railtype then
 		return true
 	end
-	return minetest.get_item_group(node, "connect_to_raillike") == railtype
+	return core.get_item_group(node, "connect_to_raillike") == railtype
 end
 
 function mcl_minecarts:check_front_up_down(pos, dir_, check_down, railtype)
@@ -146,11 +146,11 @@ function mcl_minecarts:get_start_direction(pos)
 	local i = 0
 	while (not dir and i < #plane_adjacents) do
 		i = i+1
-		local node = minetest.get_node_or_nil(vector.add(pos, plane_adjacents[i]))
+		local node = core.get_node_or_nil(vector.add(pos, plane_adjacents[i]))
 		if node ~= nil
-		and minetest.get_item_group(node.name, "rail") == 0
-		and minetest.get_item_group(node.name, "solid") == 1
-		and minetest.get_item_group(node.name, "opaque") == 1
+		and core.get_item_group(node.name, "rail") == 0
+		and core.get_item_group(node.name, "solid") == 1
+		and core.get_item_group(node.name, "opaque") == 1
 		then
 			dir = mcl_minecarts:check_front_up_down(pos, vector.multiply(plane_adjacents[i], -1), true)
 		end

@@ -1,10 +1,10 @@
 
 local function check_spawn_pos(pos)
-	return minetest.get_natural_light(pos) < 7
+	return core.get_natural_light(pos) < 7
 end
 
 local function spawn_zombies(self)
-	local nn = minetest.find_nodes_in_area_under_air(vector.offset(self.pos,-16,-16,-16),vector.offset(self.pos,16,16,16),{"group:solid"})
+	local nn = core.find_nodes_in_area_under_air(vector.offset(self.pos,-16,-16,-16),vector.offset(self.pos,16,16,16),{"group:solid"})
 	table.shuffle(nn)
 	for i=1,20 do
 		local p = vector.offset(nn[i%#nn],0,1,0)
@@ -33,8 +33,8 @@ mcl_events.register_event("zombie_siege",{
 	cond_start  = function()
 		local r = {}
 
-		local t = minetest.get_timeofday()
-		local pr = PseudoRandom(minetest.get_day_count())
+		local t = core.get_timeofday()
+		local pr = PseudoRandom(core.get_day_count())
 		local rnd = pr:next(1,10)
 
 		if t < 0.04 and rnd == 1 then
@@ -79,7 +79,7 @@ mcl_events.register_event("zombie_siege",{
 		return self.stage >= self.max_stage and #m < 1
 	end,
 	on_complete = function(self)
-		--minetest.log("SIEGE complete")
+		--core.log("SIEGE complete")
 		awards.unlock(self.player,"mcl:hero_of_the_village")
 	end,
 })

@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local planton = {"mcl_core:dirt_with_grass", "mcl_core:dirt", "mcl_core:podzol", "mcl_core:coarse_dirt", "mcl_farming:soil", "mcl_farming:soil_wet", "mcl_lush_caves:moss"}
 
@@ -16,8 +16,8 @@ for i=0, 3 do
 		orc = function(pos, _, clicker, itemstack)
 			if clicker and clicker:is_player() then
 				local pn = clicker:get_player_name()
-				if minetest.is_protected(pos, pn) then
-					minetest.record_protection_violation(pos, pn)
+				if core.is_protected(pos, pn) then
+					core.record_protection_violation(pos, pn)
 					return itemstack
 				end
 				if itemstack:get_name() == "mcl_bone_meal:bone_meal" then
@@ -26,15 +26,15 @@ for i=0, 3 do
 			end
 			if berries_to_drop then
 				for _ = 1, berries_to_drop[math.random(2)] do
-					minetest.add_item(pos, "mcl_farming:sweet_berry")
+					core.add_item(pos, "mcl_farming:sweet_berry")
 				end
-				minetest.swap_node(pos, {name = "mcl_farming:sweet_berry_bush_1"})
+				core.swap_node(pos, {name = "mcl_farming:sweet_berry_bush_1"})
 			end
 			return itemstack
 		end
 	end
 
-	minetest.register_node(node_name, {
+	core.register_node(node_name, {
 		drawtype = "plantlike",
 		tiles = {texture},
 		description = S("Sweet Berry Bush (Stage @1)", i),
@@ -68,35 +68,35 @@ for i=0, 3 do
 			mcl_farming.on_bone_meal(itemstack,placer,pointed_thing,pos,node,"plant_sweet_berry_bush",1)
 		end,
 	})
-	minetest.register_alias("mcl_sweet_berry:sweet_berry_bush_" .. i, node_name)
+	core.register_alias("mcl_sweet_berry:sweet_berry_bush_" .. i, node_name)
 end
 
-minetest.register_craftitem("mcl_farming:sweet_berry", {
+core.register_craftitem("mcl_farming:sweet_berry", {
 	description = S("Sweet Berry"),
 	inventory_image = "mcl_farming_sweet_berry.png",
 	_mcl_saturation = 0.4,
 	groups = { food = 2, eatable = 1, compostability=30 },
-	on_secondary_use = minetest.item_eat(1),
+	on_secondary_use = core.item_eat(1),
 	on_place = function(itemstack, placer, pointed_thing)
 		local pn = placer:get_player_name()
-		if placer:is_player() and minetest.is_protected(pointed_thing.above, pn or "") then
-			minetest.record_protection_violation(pointed_thing.above, pn)
+		if placer:is_player() and core.is_protected(pointed_thing.above, pn or "") then
+			core.record_protection_violation(pointed_thing.above, pn)
 			return itemstack
 		end
 		if pointed_thing.type == "node" and
-				table.indexof(planton, minetest.get_node(pointed_thing.under).name) ~= -1 and
+				table.indexof(planton, core.get_node(pointed_thing.under).name) ~= -1 and
 				pointed_thing.above.y > pointed_thing.under.y and
-				minetest.get_node(pointed_thing.above).name == "air" then
-			minetest.set_node(pointed_thing.above, {name="mcl_farming:sweet_berry_bush_0"})
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+				core.get_node(pointed_thing.above).name == "air" then
+			core.set_node(pointed_thing.above, {name="mcl_farming:sweet_berry_bush_0"})
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 			return itemstack
 		end
-		return minetest.do_item_eat(1, nil, itemstack, placer, pointed_thing)
+		return core.do_item_eat(1, nil, itemstack, placer, pointed_thing)
 	end,
 })
-minetest.register_alias("mcl_sweet_berry:sweet_berry", "mcl_farming:sweet_berry")
+core.register_alias("mcl_sweet_berry:sweet_berry", "mcl_farming:sweet_berry")
 
 -- TODO: Find proper interval and chance values for sweet berry bushes. Current interval and chance values are copied from mcl_farming:beetroot which has similar growth stages.
 mcl_farming:add_plant("plant_sweet_berry_bush", "mcl_farming:sweet_berry_bush_3", {"mcl_farming:sweet_berry_bush_0", "mcl_farming:sweet_berry_bush_1", "mcl_farming:sweet_berry_bush_2"}, 68, 3)
@@ -104,7 +104,7 @@ mcl_farming:add_plant("plant_sweet_berry_bush", "mcl_farming:sweet_berry_bush_3"
 local function berry_damage_check(obj)
 	local p = obj:get_pos()
 	if not p then return end
-	if not minetest.find_node_near(p,0.4,{"group:sweet_berry_thorny"},true) then return end
+	if not core.find_node_near(p,0.4,{"group:sweet_berry_thorny"},true) then return end
 	local v = obj:get_velocity()
 	if math.abs(v.x) < 0.1 and math.abs(v.y) < 0.1 and math.abs(v.z) < 0.1 then return end
 
@@ -112,14 +112,14 @@ local function berry_damage_check(obj)
 end
 
 local etime = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	etime = dtime + etime
 	if etime < 0.5 then return end
 	etime = 0
 	for pl in mcl_util.connected_players() do
 		berry_damage_check(pl)
 	end
-	for _,ent in pairs(minetest.luaentities) do
+	for _,ent in pairs(core.luaentities) do
 		if ent.is_mob then
 			berry_damage_check(ent.object)
 		end

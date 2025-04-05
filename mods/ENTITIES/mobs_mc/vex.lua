@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -266,8 +266,8 @@ function vex:should_continue_to_attack (object)
 end
 
 local function is_clear (node)
-	local node = minetest.get_node (node)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (node)
+	local def = core.registered_nodes[node.name]
 	return def and not def.walkable and def.liquidtype == "none"
 end
 

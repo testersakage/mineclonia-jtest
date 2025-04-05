@@ -32,10 +32,10 @@ function ringbuffer_class:insert(record)
 		self.position = 0
 	end
 	if self.auto_update_node_meta_key then
-		local pos = minetest.get_position_from_hash(self.auto_update_node_meta_key:sub(1, 16))
+		local pos = core.get_position_from_hash(self.auto_update_node_meta_key:sub(1, 16))
 		local key = self.auto_update_node_meta_key:sub(17)
 		-- auto update node meta data
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_string(key, self:serialize())
 		if self.node_meta_private then
 			meta:mark_as_private(key)
@@ -69,22 +69,22 @@ function ringbuffer_class:serialize()
 	for i = 1, self.position do
 		data[i + wrap - offset] = self.data[i]
 	end
-	return minetest.serialize(data)
+	return core.serialize(data)
 end
 
 function ringbuffer.deserialize(size, serialized_data)
-	local rb_data = minetest.deserialize(serialized_data)
+	local rb_data = core.deserialize(serialized_data)
 	return rb_data and ringbuffer.new(size, rb_data)
 end
 
 local node_meta_rb_cache = setmetatable({}, { __mode = "v" })
 
 function ringbuffer.get_from_node_meta(pos, key, size, private)
-	local node_meta_key = string.format("%0.16d", minetest.hash_node_position(pos)) .. key
+	local node_meta_key = string.format("%0.16d", core.hash_node_position(pos)) .. key
 	local rb = node_meta_rb_cache[node_meta_key]
 	if not rb then
 		-- read from node meta data or intialize new
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		rb = ringbuffer.deserialize(size, meta:get_string(key)) or ringbuffer.new(size)
 		rb.auto_update_node_meta_key = node_meta_key
 		rb.node_meta_private = private

@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 --mcl_walls.register_wall(nodename, description, source, tiles, inventory_image, groups, sounds, overrides)
 

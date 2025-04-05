@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
 
 local messy_textures = { --translator table for the bed texture filenames names not adhering to the common color names of mcl_dyes
@@ -10,7 +10,7 @@ local canonical_color = "red"
 for color, colordef in pairs(mcl_dyes.colors) do
 	local is_canonical =
 
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "mcl_beds:bed_"..color.."_bottom",
 		recipe = { "group:bed", "mcl_dyes:"..color }
@@ -50,10 +50,10 @@ for color, colordef in pairs(mcl_dyes.colors) do
 
 	-- Alias old non-uniform node names
 	if messy_textures[color] then
-		minetest.register_alias("mcl_beds:bed_"..texcol.."_top","mcl_beds:bed_"..color.."_top")
-		minetest.register_alias("mcl_beds:bed_"..texcol.."_bottom","mcl_beds:bed_"..color.."_bottom")
+		core.register_alias("mcl_beds:bed_"..texcol.."_top","mcl_beds:bed_"..color.."_top")
+		core.register_alias("mcl_beds:bed_"..texcol.."_bottom","mcl_beds:bed_"..color.."_bottom")
 	end
 end
 
-minetest.register_alias("beds:bed_bottom", "mcl_beds:bed_red_bottom")
-minetest.register_alias("beds:bed_top", "mcl_beds:bed_red_top")
+core.register_alias("beds:bed_bottom", "mcl_beds:bed_red_bottom")
+core.register_alias("beds:bed_top", "mcl_beds:bed_red_top")

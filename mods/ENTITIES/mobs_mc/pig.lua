@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 local pig = {
@@ -134,19 +134,19 @@ function pig:on_rightclick (clicker)
 			 min = 1,
 			 max = 1,},
 		}
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			local inv = clicker:get_inventory()
 			local stack = inv:get_stack("main", clicker:get_wield_index())
 			stack:take_item()
 			inv:set_stack("main", clicker:get_wield_index(), stack)
 		end
-		minetest.sound_play({name = "mcl_armor_equip_leather"}, {gain=0.5, max_hear_distance=8, pos=self.object:get_pos()}, true)
+		core.sound_play({name = "mcl_armor_equip_leather"}, {gain=0.5, max_hear_distance=8, pos=self.object:get_pos()}, true)
 		return
 	end
 
 	-- Accelerate pig when right clicked with carrot on a stick.
 	if self.driver and clicker == self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
-		if self:hog_boost () and not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if self:hog_boost () and not core.is_creative_enabled(clicker:get_player_name()) then
 			local inv = self.driver:get_inventory()
 			local wielditem = clicker:get_wielded_item ()
 			-- 26 uses
@@ -154,7 +154,7 @@ function pig:on_rightclick (clicker)
 				-- Break carrot on a stick
 				local def = wielditem:get_definition()
 				if def.sounds and def.sounds.breaks then
-					minetest.sound_play(def.sounds.breaks, {pos = clicker:get_pos(), max_hear_distance = 8, gain = 0.5}, true)
+					core.sound_play(def.sounds.breaks, {pos = clicker:get_pos(), max_hear_distance = 8, gain = 0.5}, true)
 				end
 				wielditem = {name = "mcl_fishing:fishing_rod", count = 1}
 			else

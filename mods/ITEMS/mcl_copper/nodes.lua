@@ -1,17 +1,17 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
 
 local function on_lightning_strike(pos, _, pos2)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if vector.distance(pos, pos2) <= 1 then
 		node.name = mcl_copper.get_undecayed(node.name, 4)
 	else
 		node.name = mcl_copper.get_undecayed(node.name, math.random(4))
 	end
-	minetest.swap_node(pos, node)
+	core.swap_node(pos, node)
 end
 
-minetest.register_node("mcl_copper:stone_with_copper", {
+core.register_node("mcl_copper:stone_with_copper", {
 	description = S("Copper Ore"),
 	_doc_items_longdesc = S("Some copper contained in stone, it is pretty common and can be found below sea level."),
 	tiles = {"default_stone.png^mcl_copper_ore.png"},
@@ -33,7 +33,7 @@ minetest.register_node("mcl_copper:stone_with_copper", {
 	_mcl_cooking_output = "mcl_copper:copper_ingot"
 })
 
-minetest.register_node("mcl_copper:block_raw", {
+core.register_node("mcl_copper:block_raw", {
 	description = S("Block of Raw Copper"),
 	_doc_items_longdesc = S("A block used for compact raw copper storage."),
 	tiles = {"mcl_copper_block_raw.png"},
@@ -53,7 +53,7 @@ local n_desc = {
 }
 
 local bulb_light = {
-	[""] = minetest.LIGHT_MAX,
+	[""] = core.LIGHT_MAX,
 	["_exposed"] = 12,
 	["_weathered"] = 8,
 	["_oxidized"] = 4,
@@ -64,7 +64,7 @@ for n, desc in pairs(n_desc) do
 	if n == "" then
 		bdesc = "Block of "
 	end
-	minetest.register_node("mcl_copper:block"..n, {
+	core.register_node("mcl_copper:block"..n, {
 		description = D(bdesc .. "Copper"),
 		_doc_items_longdesc = D(bdesc .. "Copper is mostly a decorative block."),
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) ..".png"},
@@ -80,7 +80,7 @@ for n, desc in pairs(n_desc) do
 		}
 	})
 
-	minetest.register_node("mcl_copper:block"..n.."_cut", {
+	core.register_node("mcl_copper:block"..n.."_cut", {
 		description = D(desc .. "Cut Copper"),
 		_doc_items_longdesc = D(desc .. "Cut Copper is mostly a decorative block."),
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_cut.png"},
@@ -92,7 +92,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n }
 	})
 
-	minetest.register_node("mcl_copper:block"..n.."_chiseled", {
+	core.register_node("mcl_copper:block"..n.."_chiseled", {
 		description = D(desc .. "Chiseled Copper"),
 		_doc_items_longdesc = D(desc .. "Chiseled Copper is mostly a decorative block."),
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_chiseled.png"},
@@ -103,7 +103,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3,
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n, "mcl_copper:block"..n.."_cut" }
 	})
-	minetest.register_node("mcl_copper:block"..n.."_grate", {
+	core.register_node("mcl_copper:block"..n.."_grate", {
 		description = D(desc .. "Copper Grate"),
 		_doc_items_longdesc = D(desc .. "Copper Grate is mostly a decorative block."),
 		drawtype = "allfaces_optional",
@@ -126,7 +126,7 @@ for n, desc in pairs(n_desc) do
 		local powered  = mcl_redstone.get_power(pos) ~= 0
 		local newname = node.name
 		if powered and not oldpowered then
-			newname = minetest.registered_nodes[node.name]._mcl_copper_bulb_switch_to
+			newname = core.registered_nodes[node.name]._mcl_copper_bulb_switch_to
 		end
 		return {
 			name = newname,
@@ -134,7 +134,7 @@ for n, desc in pairs(n_desc) do
 		}
 	end
 
-	minetest.register_node("mcl_copper:bulb"..n.."_on", {
+	core.register_node("mcl_copper:bulb"..n.."_on", {
 		description = D(desc .. "Copper Bulb On"),
 		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
@@ -148,7 +148,7 @@ for n, desc in pairs(n_desc) do
 		_mcl_copper_bulb_switch_to = "mcl_copper:bulb"..n.."_off",
 		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update},
 	})
-	minetest.register_node("mcl_copper:bulb"..n.."_off", {
+	core.register_node("mcl_copper:bulb"..n.."_off", {
 		description = D(desc .. "Copper Bulb"),
 		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
 		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_off.png"},

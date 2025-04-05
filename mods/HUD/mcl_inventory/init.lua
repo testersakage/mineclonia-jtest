@@ -174,7 +174,7 @@ function mcl_inventory.fill_grid(player)
 end
 
 function mcl_inventory.show_inventory(player)
-	minetest.show_formspec(player:get_player_name(), "", player:get_inventory_formspec())
+	core.show_formspec(player:get_player_name(), "", player:get_inventory_formspec())
 end
 
 mcl_player.register_player_settings_button({

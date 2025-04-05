@@ -2,11 +2,11 @@
 -- Poses, animations, physics, and damage, for client-side players.
 ------------------------------------------------------------------------
 
-local S = minetest.get_translator (minetest.get_current_modname ())
+local S = core.get_translator (core.get_current_modname ())
 local client_poses = {}
 local persistent_physics_factors = {}
 
-minetest.register_on_joinplayer (function (player)
+core.register_on_joinplayer (function (player)
 	if not client_poses[player] then
 		client_poses[player] = {}
 	end
@@ -15,7 +15,7 @@ minetest.register_on_joinplayer (function (player)
 	end
 end)
 
-minetest.register_on_leaveplayer (function (player)
+core.register_on_leaveplayer (function (player)
 	client_poses[player] = nil
 	mcl_serverplayer.save_persistent_physics_factors (player)
 	persistent_physics_factors[player] = nil
@@ -171,7 +171,7 @@ function mcl_serverplayer.init_player (client_state, player)
 	local stack = inv:get_stack ("armor", 3)
 	local boots = inv:get_stack ("armor", 5)
 	local can_fall_fly
-		= minetest.get_item_group (stack:get_name (), "elytra") > 0
+		= core.get_item_group (stack:get_name (), "elytra") > 0
 		and mcl_armor.elytra_usable (stack)
 	local level = mcl_enchanting.get_enchantment (boots, "depth_strider")
 	local initial_caps = {
@@ -518,12 +518,12 @@ function mcl_serverplayer.globalstep (player, dtime)
 	end
 	mcl_serverplayer.animate_localplayer (state, player)
 	local name = player:get_player_name ()
-	if state.is_fall_flying and not minetest.is_creative_enabled (name) then
+	if state.is_fall_flying and not core.is_creative_enabled (name) then
 		local fall_flown_ticks = (state.fall_flown_ticks or 0) + dtime
 		if fall_flown_ticks >= 1 then
 			local inv = player:get_inventory ()
 			local elytra = inv:get_stack ("armor", 3)
-			if minetest.get_item_group (elytra:get_name (), "elytra") > 0 then
+			if core.get_item_group (elytra:get_name (), "elytra") > 0 then
 				local penalty = math.floor (fall_flown_ticks)
 				local durability = mcl_util.calculate_durability (elytra)
 				local remaining = math.floor ((65536 - elytra:get_wear ())
@@ -604,8 +604,8 @@ function mcl_serverplayer.handle_damage (player, state, payload)
 		-- Apply `fall_damage_add_percent' node definitions.
 		local greatest = 0.0
 		for _, node in pairs (payload.collisions) do
-			local name = minetest.get_node (node).name
-			local def = minetest.registered_nodes[name]
+			local name = core.get_node (node).name
+			local def = core.registered_nodes[name]
 			if core.get_item_group(name, "fall_damage_add_percent") ~= 0 then
 				local this = def.groups.fall_damage_add_percent
 				if this < 0 then
@@ -623,7 +623,7 @@ function mcl_serverplayer.handle_damage (player, state, payload)
 		-- If payload.riding is set, it should designate a mob
 		-- that is the player's current vehicle.
 		if payload.riding then
-			local object = minetest.object_refs[payload.riding]
+			local object = core.object_refs[payload.riding]
 			if object and object == state.vehicle then
 				mcl_util.deal_damage (object, damage, reason)
 			end
@@ -640,7 +640,7 @@ function mcl_serverplayer.handle_damage (player, state, payload)
 	else
 		local blurb = "Client requesting unknown damage: "
 			.. dump (payload)
-		minetest.log ("warning", blurb)
+		core.log ("warning", blurb)
 	end
 end
 
@@ -703,18 +703,18 @@ end
 function mcl_serverplayer.load_persistent_physics_factors (player)
 	local meta = player:get_meta ()
 	local str = meta:get_string ("mcl_serverplayer:attributes")
-	persistent_physics_factors[player] = minetest.deserialize (str) or {}
+	persistent_physics_factors[player] = core.deserialize (str) or {}
 end
 
 function mcl_serverplayer.save_persistent_physics_factors (player)
 	local meta = player:get_meta ()
 	if persistent_physics_factors[player] then
-		local data = minetest.serialize (persistent_physics_factors[player])
+		local data = core.serialize (persistent_physics_factors[player])
 		meta:set_string ("mcl_serverplayer:attributes", data)
 	end
 end
 
-minetest.register_on_shutdown (function ()
+core.register_on_shutdown (function ()
 	for player in mcl_util.connected_players () do
 		mcl_serverplayer.save_persistent_physics_factors (player)
 	end

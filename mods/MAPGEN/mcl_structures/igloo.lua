@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 function mcl_structures.generate_igloo_top(pos, pr)
 	-- Furnace does ot work atm because apparently meta is not set. Need a bit of help with fixing this for furnaces, bookshelves, and brewing stands.
@@ -14,7 +14,7 @@ function mcl_structures.generate_igloo_top(pos, pr)
 end
 
 local function spawn_mobs(p1,p2,vi,zv)
-	local mc = minetest.find_nodes_in_area_under_air(p1,p2,{"mcl_core:stonebrickmossy"})
+	local mc = core.find_nodes_in_area_under_air(p1,p2,{"mcl_core:stonebrickmossy"})
 	if #mc == 2 then
 		local vp = mc[1]
 		local zp = mc[2]
@@ -25,10 +25,10 @@ local function spawn_mobs(p1,p2,vi,zv)
 		elseif zv and vi then
 			return
 		end
-		vi = minetest.add_entity(vector.offset(vp,0,1,0),"mobs_mc:villager")
-		zv = minetest.add_entity(vector.offset(zp,0,1,0),"mobs_mc:villager_zombie")
+		vi = core.add_entity(vector.offset(vp,0,1,0),"mobs_mc:villager")
+		zv = core.add_entity(vector.offset(zp,0,1,0),"mobs_mc:villager_zombie")
 		if vi and vi:get_pos() and zv and zv:get_pos() then
-			minetest.after(1,spawn_mobs,p1,p2,vi,zv)
+			core.after(1,spawn_mobs,p1,p2,vi,zv)
 		end
 	end
 end
@@ -108,15 +108,15 @@ function mcl_structures.generate_igloo(pos, def, pr)
 					brick = "mcl_core:stonebrick"
 				end
 			end
-			minetest.swap_node(pos, {name=brick})
+			core.swap_node(pos, {name=brick})
 		end
-		local ladder_param2 = minetest.dir_to_wallmounted(tdir)
+		local ladder_param2 = core.dir_to_wallmounted(tdir)
 		local real_depth = 0
 		-- Check how deep we can actuall dig
 		for y=1, depth-5 do
 			real_depth = real_depth + 1
-			local node = minetest.get_node({x=tpos.x,y=tpos.y-y,z=tpos.z})
-			local def = minetest.registered_nodes[node.name]
+			local node = core.get_node({x=tpos.x,y=tpos.y-y,z=tpos.z})
+			local def = core.registered_nodes[node.name]
 			if not (def and def.walkable and def.liquidtype == "none" and def.is_ground_content) then
 				bpos.y = tpos.y-y+1
 				break
@@ -131,13 +131,13 @@ function mcl_structures.generate_igloo(pos, def, pr)
 			set_brick({x=tpos.x+1,y=tpos.y-y,z=tpos.z  })
 			set_brick({x=tpos.x  ,y=tpos.y-y,z=tpos.z-1})
 			set_brick({x=tpos.x  ,y=tpos.y-y,z=tpos.z+1})
-			minetest.swap_node({x=tpos.x,y=tpos.y-y,z=tpos.z}, {name="mcl_core:ladder", param2=ladder_param2})
+			core.swap_node({x=tpos.x,y=tpos.y-y,z=tpos.z}, {name="mcl_core:ladder", param2=ladder_param2})
 		end
 		-- Place basement
 		mcl_structures.generate_igloo_basement(bpos, rotation, def.loot, pr)
 		-- Place hidden trapdoor
-		minetest.after(5, function(tpos, dir)
-			minetest.swap_node(tpos, {name="mcl_doors:trapdoor", param2=20+minetest.dir_to_facedir(dir)}) -- TODO: more reliable param2
+		core.after(5, function(tpos, dir)
+			core.swap_node(tpos, {name="mcl_doors:trapdoor", param2=20+core.dir_to_facedir(dir)}) -- TODO: more reliable param2
 		end, tpos, dir)
 	end
 	return success

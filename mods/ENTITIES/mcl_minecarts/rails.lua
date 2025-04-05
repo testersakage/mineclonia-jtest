@@ -1,8 +1,8 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Template rail function
 local function register_rail(itemstring, tiles, def_extras, creative)
-	local groups = {handy=1,pickaxey=1, attached_node=1,rail=1,connect_to_raillike=minetest.raillike_group("rail"),transport=1}
+	local groups = {handy=1,pickaxey=1, attached_node=1,rail=1,connect_to_raillike=core.raillike_group("rail"),transport=1}
 	if creative == false then
 		groups.not_in_creative_inventory = 1
 	end
@@ -25,7 +25,7 @@ local function register_rail(itemstring, tiles, def_extras, creative)
 		after_destruct = function(pos)
 			-- Scan for minecarts in this pos and force them to execute their "floating" check.
 			-- Normally, this will make them drop.
-			for obj in minetest.objects_inside_radius(pos, 1) do
+			for obj in core.objects_inside_radius(pos, 1) do
 				local le = obj:get_luaentity()
 				if le then
 					-- All entities in this mod are minecarts, so this works
@@ -41,7 +41,7 @@ local function register_rail(itemstring, tiles, def_extras, creative)
 			ndef[k] = v
 		end
 	end
-	minetest.register_node(itemstring, ndef)
+	core.register_node(itemstring, ndef)
 end
 
 local railuse = S("Place them on the ground to build your railway, the rails will automatically connect to each other and will turn into curves, T-junctions, crossings and slopes as needed.")
@@ -60,14 +60,14 @@ register_rail("mcl_minecarts:rail",
 local golden_rail_tab = {}
 local opaque_tab = {}
 
-minetest.register_on_mods_loaded(function()
-	for name, ndef in pairs(minetest.registered_nodes) do
-		local cid = minetest.get_content_id(name)
-		opaque_tab[cid] = minetest.get_item_group(name, "opaque") ~= 0 and true or nil
+core.register_on_mods_loaded(function()
+	for name, ndef in pairs(core.registered_nodes) do
+		local cid = core.get_content_id(name)
+		opaque_tab[cid] = core.get_item_group(name, "opaque") ~= 0 and true or nil
 		if name == "mcl_minecarts:golden_rail" or name == "mcl_minecarts:golden_rail_on" then
 			golden_rail_tab[cid] = {
-				c_on = minetest.get_content_id("mcl_minecarts:golden_rail_on"),
-				c_off = minetest.get_content_id("mcl_minecarts:golden_rail"),
+				c_on = core.get_content_id("mcl_minecarts:golden_rail_on"),
+				c_off = core.get_content_id("mcl_minecarts:golden_rail"),
 			}
 		end
 	end
@@ -92,7 +92,7 @@ local directions = {
 -- of the node if it was updated. 'updates' is a table which get populated with
 -- positions that have been traversed.
 local function propagate_golden_rail_power(pos, new_power, old_power, powered_on)
-	local vm = minetest.get_voxel_manip()
+	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos:offset(-9, -9, -9), pos:offset(9, 9, 9))
 	local a = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
 	local data = vm:get_data()
@@ -194,7 +194,7 @@ local function push_minecart(pos)
 end
 
 local function golden_rail_redstone_update(pos)
-	local oldpower = minetest.get_node(pos).param2
+	local oldpower = core.get_node(pos).param2
 	local newpower = mcl_redstone.get_power(pos) ~= 0 and 8 or 0
 	local powered_on = {}
 	propagate_golden_rail_power(pos, newpower, oldpower, powered_on)
@@ -250,7 +250,7 @@ register_rail("mcl_minecarts:activator_rail",
 		_mcl_redstone = {
 			update = function(pos)
 				if mcl_redstone.get_power(pos) ~= 0 then
-					minetest.swap_node(pos, {name = "mcl_minecarts:activator_rail_on"})
+					core.swap_node(pos, {name = "mcl_minecarts:activator_rail_on"})
 				end
 			end,
 		},
@@ -265,10 +265,10 @@ register_rail("mcl_minecarts:activator_rail_on",
 		_mcl_redstone = {
 			update = function(pos)
 				if mcl_redstone.get_power(pos) == 0 then
-					minetest.swap_node(pos, {name = "mcl_minecarts:activator_rail"})
+					core.swap_node(pos, {name = "mcl_minecarts:activator_rail"})
 				else
 					local pos2 = { x = pos.x, y =pos.y + 1, z = pos.z }
-					for o in minetest.objects_inside_radius(pos2, 1) do
+					for o in core.objects_inside_radius(pos2, 1) do
 						local l = o:get_luaentity()
 						if l and string.sub(l.name, 1, 14) == "mcl_minecarts:" and l.on_activate_by_rail then
 							l:on_activate_by_rail()
@@ -310,7 +310,7 @@ register_rail("mcl_minecarts:detector_rail_on",
 
 
 -- Crafting
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:rail 16",
 	recipe = {
 		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
@@ -319,7 +319,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:golden_rail 6",
 	recipe = {
 		{"mcl_core:gold_ingot", "", "mcl_core:gold_ingot"},
@@ -328,7 +328,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:activator_rail 6",
 	recipe = {
 		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
@@ -337,7 +337,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:detector_rail 6",
 	recipe = {
 		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
@@ -348,7 +348,7 @@ minetest.register_craft({
 
 
 -- Aliases
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_minecarts:golden_rail", "nodes", "mcl_minecarts:golden_rail_on")
 end
 

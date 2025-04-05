@@ -14,7 +14,7 @@ function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 		if pos then
 			dist = 16
 		end
-		minetest.sound_play(snd, {object = obj, pos = pos, gain = 0.5, max_hear_distance = dist}, true)
+		core.sound_play(snd, {object = obj, pos = pos, gain = 0.5, max_hear_distance = dist}, true)
 	end
 end
 
@@ -121,7 +121,7 @@ local function get_armor_texture(textures, name, modname, itemname, itemstring)
 end
 
 function mcl_armor.register_set(def)
-	local modname = minetest.get_current_modname()
+	local modname = core.get_current_modname()
 	local groups = def.groups or {}
 	local on_equip_callbacks = def.on_equip_callbacks or {}
 	local on_unequip_callbacks = def.on_unequip_callbacks or {}
@@ -133,8 +133,8 @@ function mcl_armor.register_set(def)
 	-- backwards compatibility
 	local descriptions = def.descriptions or {}
 	if def.description then
-		minetest.log("warning", "[mcl_armor] using the description field of armor set definitions is deprecated, please provide the localized strings in def.descriptions instead. Currently processing " .. def.name)
-		local S = minetest.get_translator(modname)
+		core.log("warning", "[mcl_armor] using the description field of armor set definitions is deprecated, please provide the localized strings in def.descriptions instead. Currently processing " .. def.name)
+		local S = core.get_translator(modname)
 		for name, element in pairs(mcl_armor.elements) do
 			descriptions[name] = S(def.description .. " " .. (descriptions[name] or element.description))
 		end
@@ -174,7 +174,7 @@ function mcl_armor.register_set(def)
 			end
 		end
 
-		minetest.register_tool(itemstring, {
+		core.register_tool(itemstring, {
 			description = descriptions[name],
 			_doc_items_longdesc = mcl_armor.longdesc,
 			_doc_items_usagehelp = mcl_armor.usage,
@@ -198,7 +198,7 @@ function mcl_armor.register_set(def)
 		})
 
 		if def.craft_material then
-			minetest.register_craft({
+			core.register_craft({
 				output = itemstring,
 				recipe = element.craft(def.craft_material),
 			})
@@ -291,12 +291,12 @@ function mcl_armor.update(obj)
 			local itemstack = inv:get_stack("armor", i)
 
 			local itemname = itemstack:get_name()
-			if minetest.registered_aliases[itemname] then
-				itemname = minetest.registered_aliases[itemname]
+			if core.registered_aliases[itemname] then
+				itemname = core.registered_aliases[itemname]
 			end
 
 			if not itemstack:is_empty() then
-				if minetest.get_item_group (itemname, "elytra") > 0
+				if core.get_item_group (itemname, "elytra") > 0
 					and mcl_armor.elytra_usable (itemstack) then
 					info.elytra_present = true
 				end
@@ -313,7 +313,7 @@ function mcl_armor.update(obj)
 					end
 				end
 
-				info.points = info.points + minetest.get_item_group(itemname, "mcl_armor_points")
+				info.points = info.points + core.get_item_group(itemname, "mcl_armor_points")
 
 				if i == 2 then -- Head Armor; view range code assumes single piece
 					resp_lv = mcl_enchanting.get_enchantments(itemstack).respiration or resp_lv

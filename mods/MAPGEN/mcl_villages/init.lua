@@ -1,7 +1,7 @@
 mcl_villages = {}
-mcl_villages.modpath = minetest.get_modpath(minetest.get_current_modname())
+mcl_villages.modpath = core.get_modpath(core.get_current_modname())
 
-local village_chance = tonumber(minetest.settings:get("mcl_villages_village_chance")) or 100
+local village_chance = tonumber(core.settings:get("mcl_villages_village_chance")) or 100
 local generate_in_singlenode = false
 
 dofile(mcl_villages.modpath.."/const.lua")
@@ -17,10 +17,10 @@ dofile(mcl_villages.modpath.."/api.lua")
 --
 mcl_villages.grundstellungen()
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_alias("mcl_villages:stonebrickcarved", "mcl_core:stonebrickcarved")
-minetest.register_alias("mcl_villages:structblock", "air")
+core.register_alias("mcl_villages:stonebrickcarved", "mcl_core:stonebrickcarved")
+core.register_alias("mcl_villages:structblock", "air")
 
 --
 -- on map generation, try to build a settlement
@@ -41,9 +41,9 @@ local function build_a_settlement(minp, maxp, blockseed)
 	mcl_villages.terraform_new(settlement_info, grid)
 	mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 
-	-- TODO when run here minetest.find_path regularly fails :(
+	-- TODO when run here core.find_path regularly fails :(
 	--mcl_villages.paths_new(blockseed)
-	--minetest.log("info", "Completed village for " .. minetest.pos_to_string(minp))
+	--core.log("info", "Completed village for " .. core.pos_to_string(minp))
 
 	mcl_villages.add_village(blockseed, settlement_info)
 
@@ -59,7 +59,7 @@ local function ecb_village(_, _, calls_remaining, param)
 end
 
 -- Disable natural generation in singlenode.
-local mg_name = minetest.get_mapgen_setting("mg_name")
+local mg_name = core.get_mapgen_setting("mg_name")
 if mg_name ~= "singlenode" or generate_in_singlenode then
 	mcl_mapgen_core.register_generator("villages", nil, function(minp, maxp, blockseed)
 		if maxp.y < 0 then return end
@@ -71,7 +71,7 @@ if mg_name ~= "singlenode" or generate_in_singlenode then
 		if pr:next(1, village_chance) == 1 then
 			local big_minp = vector.offset(minp, -16, -16, -16)
 			local big_maxp = vector.offset(maxp, 16, 16, 16)
-			minetest.emerge_area(
+			core.emerge_area(
 				vector.copy(big_minp),
 				vector.copy(big_maxp),
 				ecb_village,
@@ -81,11 +81,11 @@ if mg_name ~= "singlenode" or generate_in_singlenode then
 	end)
 end
 
-minetest.register_on_mods_loaded(function()
-	local olfunc = minetest.registered_chatcommands["spawnstruct"].func
-	minetest.registered_chatcommands["spawnstruct"].func = function(pn,p)
+core.register_on_mods_loaded(function()
+	local olfunc = core.registered_chatcommands["spawnstruct"].func
+	core.registered_chatcommands["spawnstruct"].func = function(pn,p)
 		if p == "village" then
-			local pl = minetest.get_player_by_name(pn)
+			local pl = core.get_player_by_name(pn)
 			local pos = vector.round(pl:get_pos())
 			local minp = vector.subtract(pos, mcl_villages.half_map_chunk_size)
 			local maxp = vector.add(pos, mcl_villages.half_map_chunk_size)
@@ -94,23 +94,23 @@ minetest.register_on_mods_loaded(function()
 			return olfunc(pn,p)
 		end
 	end
-	minetest.registered_chatcommands["spawnstruct"].params = minetest.registered_chatcommands["spawnstruct"].params .. "|village"
+	core.registered_chatcommands["spawnstruct"].params = core.registered_chatcommands["spawnstruct"].params .. "|village"
 end)
 
 -- This is a light source so that lamps don't get placed near it
-minetest.register_node("mcl_villages:village_block", {
+core.register_node("mcl_villages:village_block", {
 	drawtype = "airlike",
 	groups = { not_in_creative_inventory = 1 },
 	light_source = 14,
 
 	-- Somethings don't work reliably when done in the map building
 	-- so we use a timer to run them later when they work more reliably
-	-- e.g. spawning mobs, running minetest.find_path
+	-- e.g. spawning mobs, running core.find_path
 	on_timer = function(pos, _)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local blockseed = meta:get_string("blockseed")
 		local node_type = meta:get_string("node_type")
-		minetest.swap_node(pos, { name = node_type })
+		core.swap_node(pos, { name = node_type })
 		mcl_villages.post_process_village(blockseed)
 		return false
 	end,
@@ -118,26 +118,26 @@ minetest.register_node("mcl_villages:village_block", {
 
 -- TODO This should be removed in the future once all villages using it have been generated.
 -- This is a light source so that lamps don't get placed near it
-minetest.register_node("mcl_villages:building_block", {
+core.register_node("mcl_villages:building_block", {
 	drawtype = "airlike",
 	groups = { not_in_creative_inventory = 1 },
 	light_source = 14,
 
 	-- Somethings don't work reliably when done in the map building
 	-- so we use a timer to run them later when they work more reliably
-	-- e.g. spawning mobs, running minetest.find_path
+	-- e.g. spawning mobs, running core.find_path
 	on_timer = function(pos, _)
-		local meta = minetest.get_meta(pos)
-		local minp = minetest.string_to_pos(meta:get_string("minp"))
-		local maxp = minetest.string_to_pos(meta:get_string("maxp"))
+		local meta = core.get_meta(pos)
+		local minp = core.string_to_pos(meta:get_string("minp"))
+		local maxp = core.string_to_pos(meta:get_string("maxp"))
 		local node_type = meta:get_string("node_type")
 		local blockseed = meta:get_string("blockseed")
 		local has_beds = meta:get_int("has_beds") > 0 and true or false
 		local has_jobs = meta:get_int("has_jobs") > 0 and true or false
 		local is_belltower = meta:get_int("is_belltower") > 0 and true or false
-		local bell_pos = minetest.string_to_pos(meta:get_string("bell_pos"))
-		minetest.get_node_timer(pos):stop()
-		minetest.swap_node(pos, { name = node_type })
+		local bell_pos = core.string_to_pos(meta:get_string("bell_pos"))
+		core.get_node_timer(pos):stop()
+		core.swap_node(pos, { name = node_type })
 		mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has_jobs, is_belltower, bell_pos)
 		return false
 	end,
@@ -145,25 +145,25 @@ minetest.register_node("mcl_villages:building_block", {
 
 -- This should not run if the timer for the bell is still active
 -- But how we would know that ...
-minetest.register_lbm({
+core.register_lbm({
 	name = "mcl_villages:clear_remains",
 	run_at_every_load = true,
 	nodenames = { "mcl_villages:no_paths" },
-	action = minetest.remove_node,
+	action = core.remove_node,
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "cleanup_forced_blocks",
 	nodenames = { "group:bed" },
 	interval = 180,
 	chance = 2,
 	action = function(pos)
-		local bell_pos = minetest.pos_to_string(pos)
+		local bell_pos = core.pos_to_string(pos)
 		if
 			mcl_villages.forced_blocks[bell_pos]
-			and mcl_villages.forced_blocks[bell_pos] < minetest.get_us_time() - 10000000
+			and mcl_villages.forced_blocks[bell_pos] < core.get_us_time() - 10000000
 		then
-			minetest.forceload_free_block(pos, true)
+			core.forceload_free_block(pos, true)
 			mcl_villages.forced_blocks[bell_pos] = nil
 		end
 	end,
@@ -171,11 +171,11 @@ minetest.register_abm({
 
 -- This makes the temporary node invisble unless in creative mode
 local drawtype = "airlike"
-if minetest.is_creative_enabled("") then
+if core.is_creative_enabled("") then
 	drawtype = "glasslike"
 end
 
-minetest.register_node("mcl_villages:no_paths", {
+core.register_node("mcl_villages:no_paths", {
 	description = S(
 		"Prevent paths from being placed during villager generation. Replaced by air after village path generation"
 	),
@@ -188,7 +188,7 @@ minetest.register_node("mcl_villages:no_paths", {
 	groups = { creative_breakable = 1, not_solid = 1, not_in_creative_inventory = 1 },
 })
 
-minetest.register_node("mcl_villages:path_endpoint", {
+core.register_node("mcl_villages:path_endpoint", {
 	description = S("Mark the node as a good place for paths to connect to"),
 	is_ground_content = false,
 	tiles = { "wool_white.png" },
@@ -430,7 +430,7 @@ mcl_villages.register_building({
 for _, crop_type in pairs(mcl_villages.get_crop_types()) do
 	for count = 1, 8 do
 		local tile = crop_type .. "_" .. count .. ".png"
-		minetest.register_node("mcl_villages:crop_" .. crop_type .. "_" .. count, {
+		core.register_node("mcl_villages:crop_" .. crop_type .. "_" .. count, {
 			description = S("A place to plant @1 crops", crop_type),
 			is_ground_content = false,
 			tiles = { tile },
@@ -527,7 +527,7 @@ mcl_villages.register_crop({
 	},
 })
 
-for name, def in pairs(minetest.registered_nodes) do
+for name, def in pairs(core.registered_nodes) do
 	if def.groups["flower"] and not def.groups["double_plant"] and name ~= "mcl_flowers:wither_rose" then
 		mcl_villages.register_crop({
 			type = "flower",

@@ -2,7 +2,7 @@ local groupcaps_cache = {}
 
 -- Compute a hash value.
 function compute_hash(value)
-	return string.sub(minetest.sha1(minetest.serialize(value)), 1, 8)
+	return string.sub(core.sha1(core.serialize(value)), 1, 8)
 end
 
 -- Get the groupcaps and hash for an enchanted tool.  If this function is called
@@ -47,7 +47,7 @@ end
 -- e.g., haste/fatigue effects.
 function mcl_enchanting.update_groupcaps(itemstack, ignore_hash)
 	local name = itemstack:get_name()
-	if not minetest.registered_tools[name] or not minetest.registered_tools[name].tool_capabilities then
+	if not core.registered_tools[name] or not core.registered_tools[name].tool_capabilities then
 		return
 	end
 

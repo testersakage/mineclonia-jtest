@@ -60,7 +60,7 @@ local no_style = style_to_bits(false, false)
 ---PARAMS SYSTEM
 local player_params = {}
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	--local playername = player:get_player_name()
 	player_params[player] = {
 		stay = mcl_title.defaults.stay,
@@ -101,7 +101,7 @@ minetest.register_on_joinplayer(function(player)
 	})
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local playername = player:get_player_name()
 
 	--remove player params from the list
@@ -165,11 +165,11 @@ function mcl_title.clear(player)
 	mcl_title.remove(player, "actionbar")
 end
 
-minetest.register_on_dieplayer(function(player)
+core.register_on_dieplayer(function(player)
 	mcl_title.clear(player)
 end)
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	local new_timeouts = {
 		title = {},
 		subtitle = {},
@@ -180,7 +180,7 @@ minetest.register_globalstep(function(dtime)
 		for name, timeout in pairs(content) do
 			timeout = timeout - dtime
 			if timeout <= 0 then
-				local player = minetest.get_player_by_name(name)
+				local player = core.get_player_by_name(name)
 				mcl_title.remove(player, element)
 			else
 				new_timeouts[element][name] = timeout
@@ -196,10 +196,10 @@ end)
 --TODO:Proper /title command that can send the title to other players.
 --These commands are just for debugging right now.
 local dbg_msg = "Note that these are just debug commands right now. e.g. the title is only sent to he player issuing the command. Proper /title commands will be added in the future."
-minetest.register_chatcommand("title", {
+core.register_chatcommand("title", {
 	privs = { debug = true },
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_title.set(player, "title", { text = param, color = "gold", bold = true, italic = true })
 			return true, dbg_msg
@@ -209,10 +209,10 @@ minetest.register_chatcommand("title", {
 	end,
 })
 
-minetest.register_chatcommand("subtitle", {
+core.register_chatcommand("subtitle", {
 	privs = { debug = true },
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_title.set(player, "subtitle", { text = param, color = "gold" })
 			return true, dbg_msg
@@ -222,10 +222,10 @@ minetest.register_chatcommand("subtitle", {
 	end,
 })
 
-minetest.register_chatcommand("actionbar", {
+core.register_chatcommand("actionbar", {
 	privs = { debug = true },
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_title.set(player, "actionbar", { text = param, color = "gold", bold = true, italic = true })
 			return true, dbg_msg
@@ -235,10 +235,10 @@ minetest.register_chatcommand("actionbar", {
 	end,
 })
 
-minetest.register_chatcommand("title_timeout", {
+core.register_chatcommand("title_timeout", {
 	privs = { debug = true },
 	func = function(name)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_title.params_set(player, { stay = 600 })
 			return true, dbg_msg
@@ -248,10 +248,10 @@ minetest.register_chatcommand("title_timeout", {
 	end,
 })
 
-minetest.register_chatcommand("title_all", {
+core.register_chatcommand("title_all", {
 	privs = { debug = true },
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_title.params_set(player, { stay = 600 })
 			mcl_title.set(player, "title", { text = param, color = "gold" })
@@ -264,10 +264,10 @@ minetest.register_chatcommand("title_all", {
 	end,
 })
 
-minetest.register_chatcommand("title_all_styles", {
+core.register_chatcommand("title_all_styles", {
 	privs = { debug = true },
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			mcl_title.params_set(player, { stay = 600 })
 			mcl_title.set(player, "title", { text = param, color = "gold" })

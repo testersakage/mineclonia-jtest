@@ -62,9 +62,9 @@ local get_node_raw = mcl_mobs.get_node_raw
 local function get_node (node)
 	if get_node_raw then
 		local content, _, _ = get_node_raw (node.x, node.y, node.z)
-		return minetest.get_name_from_content_id (content)
+		return core.get_name_from_content_id (content)
 	else
-		local data = minetest.get_node (node)
+		local data = core.get_node (node)
 		return data.name
 	end
 end
@@ -74,7 +74,7 @@ local function aabb_clear (node, origin, pos2, direction, dist, typetest)
 	if node_type == "air" then
 		return true
 	else
-		local def = minetest.registered_nodes[node_type]
+		local def = core.registered_nodes[node_type]
 		if def and not def.walkable then
 			return true
 		elseif typetest and typetest (node_type, def) then
@@ -83,7 +83,7 @@ local function aabb_clear (node, origin, pos2, direction, dist, typetest)
 			return false
 		end
 	end
-	local boxes = minetest.get_node_boxes ("collision_box", node)
+	local boxes = core.get_node_boxes ("collision_box", node)
 
 	for _, box in ipairs (boxes) do
 		genbox (box, node)
@@ -263,7 +263,7 @@ function mob_class:check_jump (self_pos, moveresult)
 			dir.x = dir.x + item.old_velocity.x - item.new_velocity.x
 			dir.z = dir.z + item.old_velocity.z - item.new_velocity.z
 			local pos = item.node_pos
-			local boxes = minetest.get_node_boxes ("collision_box", pos)
+			local boxes = core.get_node_boxes ("collision_box", pos)
 			if pos.y + 0.5 > self_pos.y then
 				for _, box in ipairs (boxes) do
 					max_y = math.max (max_y or 0, pos.y + box[2], pos.y + box[5])
@@ -299,7 +299,7 @@ end
 
 local norm_radians = nil
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 		norm_radians = mcl_util.norm_radians
 end)
 
@@ -349,7 +349,7 @@ end
 ------------------------------------------------------------------------
 
 function mob_class:jock_to (mob, relative_pos, rot)
-	local jock = minetest.add_entity (self.object:get_pos (), mob)
+	local jock = core.add_entity (self.object:get_pos (), mob)
 	if not jock then return end
 	return self:jock_to_existing (jock, "", relative_pos, rot)
 end
@@ -404,7 +404,7 @@ function mob_class:check_jockey_status ()
 	if self._jockey_rider and not is_valid (self._jockey_rider) then
 		self._jockey_rider = nil
 		self._jockey_staticdata = nil
-		minetest.log ("warning", "Rider of jockeyed mob "
+		core.log ("warning", "Rider of jockeyed mob "
 			      .. self.name .. " disappeared abruptly")
 	end
 
@@ -412,7 +412,7 @@ function mob_class:check_jockey_status ()
 	if self.jockey_vehicle then
 		local attach = self.object:get_attach ()
 		if not attach or attach ~= self.jockey_vehicle then
-			minetest.log ("warning", "Jockeyed mob controlled by "
+			core.log ("warning", "Jockeyed mob controlled by "
 				      .. self.name .. " disappeared abruptly")
 			self.object:remove ()
 			return true
@@ -485,8 +485,8 @@ function mob_class:restore_jockey ()
 		end
 		-- Don't serialize name.
 		self._jockey_staticdata.name = nil
-		local serialized = minetest.serialize (self._jockey_staticdata)
-		local jock = minetest.add_entity (self.object:get_pos (),
+		local serialized = core.serialize (self._jockey_staticdata)
+		local jock = core.add_entity (self.object:get_pos (),
 						  name, serialized)
 		if jock then
 			local entity = jock:get_luaentity ()
@@ -947,8 +947,8 @@ function mob_class:ascend_in_powder_snow (self_pos, dtime)
 		or self.standing_in == "mcl_powder_snow:powder_snow"
 	if in_powder_snow then
 		local block_above = vector.offset (self_pos, 0, 1, 0)
-		local node = minetest.get_node (block_above)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node (block_above)
+		local def = core.registered_nodes[node.name]
 		if node.name == "mcl_powder_snow:powder_snow"
 			or (def and not def.walkable) then
 			self._jump = true
@@ -959,8 +959,8 @@ function mob_class:ascend_in_powder_snow (self_pos, dtime)
 end
 
 local function convert_top_snow (node)
-	local nodedata = minetest.get_node (node)
-	if minetest.get_item_group (nodedata.name, "top_snow") <= 2 then
+	local nodedata = core.get_node (node)
+	if core.get_item_group (nodedata.name, "top_snow") <= 2 then
 		return node
 	end
 
@@ -972,7 +972,7 @@ end
 function mob_class:pacing_target (pos, width, height, groups)
 	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
-	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, groups)
+	local nodes = core.find_nodes_in_area_under_air (aa, bb, groups)
 
 	if (self._restrict_center or self.acceptable_pacing_target)
 		and #nodes >= 1 then
@@ -996,7 +996,7 @@ function mob_class:target_in_shade (pos, width, height)
 	local groups = {"group:solid", "group:water"}
 	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
-	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, groups)
+	local nodes = core.find_nodes_in_area_under_air (aa, bb, groups)
 
 	-- Minecraft tries ten times every tick.
 	if #nodes < 1 then
@@ -1010,7 +1010,7 @@ function mob_class:target_in_shade (pos, width, height)
 		newnode.y = node.y + 1
 		newnode.z = node.z
 		local sunlight
-			= minetest.get_natural_light (newnode, 0.5)
+			= core.get_natural_light (newnode, 0.5)
 		if sunlight < 15 then
 			return newnode
 		end
@@ -1156,7 +1156,7 @@ function mob_class:check_avoid (self_pos)
 			= table.indexof (runaway_from, "players") ~= -1
 		local runaway_from_monsters
 			= table.indexof (runaway_from, "monsters") ~= -1
-		for object in minetest.objects_inside_radius (self_pos, range) do
+		for object in core.objects_inside_radius (self_pos, range) do
 			local entity = object:get_luaentity ()
 			local eligible = false
 			local view_range = range
@@ -1174,7 +1174,7 @@ function mob_class:check_avoid (self_pos)
 				end
 			elseif object:is_player ()
 				and runaway_from_players
-				and not minetest.is_creative_enabled (object:get_player_name ())
+				and not core.is_creative_enabled (object:get_player_name ())
 				and self:target_visible (self_pos, object) then
 				eligible = true
 				if self._runaway_player_view_range then
@@ -1260,7 +1260,7 @@ function mob_class:check_avoid_sunlight (pos)
 			local eye_height = self.head_eye_height
 			local head_pos = vector.offset (pos, 0, eye_height, 0)
 			self._direct_sunlight
-				= minetest.get_natural_light (head_pos, 0.5)
+				= core.get_natural_light (head_pos, 0.5)
 			self:set_animation ("stand")
 		end
 		return true
@@ -1442,7 +1442,7 @@ end
 local function aquatic_pacing_target (self, pos, width, height, groups)
 	local aa = vector.new (pos.x - width, pos.y - height, pos.z - width)
 	local bb = vector.new (pos.x + width, pos.y + height, pos.z + width)
-	local nodes = minetest.find_nodes_in_area (aa, bb, groups)
+	local nodes = core.find_nodes_in_area (aa, bb, groups)
 
 	if self._restrict_center and #nodes >= 1 then
 		-- Make ten attempts to select a node within the
@@ -1579,7 +1579,7 @@ function mob_class:check_schooling (self_pos, list)
 		self._school = cleaned
 		return false
 	elseif self:check_timer ("form_school", (200 + math.random (20)) / 40) then
-		local nearby = minetest.get_objects_inside_radius (self_pos, 8)
+		local nearby = core.get_objects_inside_radius (self_pos, 8)
 		local cluster = self._school_size or self.spawn_in_group or 4
 		local leader = find_school_leader (nearby, self.name, cluster) or self
 		leader._school = leader._school or {}
@@ -1630,7 +1630,7 @@ function mob_class:pitchswim_do_go_pos (dtime, moveresult)
 		target.y - pos.y,
 		target.z - pos.z
 	local dir = math.atan2 (dz, dx) - math.pi / 2
-	local standin = minetest.registered_nodes[self.standing_in]
+	local standin = core.registered_nodes[self.standing_in]
 	local yaw = self:get_yaw ()
 	local f = dtime / 0.05
 	local target_yaw = clip_rotation (yaw, dir, self.max_yaw_movement * f)

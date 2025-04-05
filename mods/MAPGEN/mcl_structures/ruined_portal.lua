@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local function get_replacements(b,c,pr)
 	local r = {}
@@ -32,18 +32,18 @@ local def = {
 	after_place = function(pos, _, pr)
 		local p1 = vector.offset(pos,-9, -1, -9)
 		local p2 = vector.offset(pos,9, 16 ,9)
-		local gold = minetest.find_nodes_in_area(p1,p2,{"mcl_core:goldblock"})
-		local lava = minetest.find_nodes_in_area(p1,p2,{"mcl_core:lava_source"})
-		local rack = minetest.find_nodes_in_area(p1,p2,{"mcl_nether:netherrack"})
-		local brick = minetest.find_nodes_in_area(p1,p2,{"mcl_core:stonebrick"})
-		local obby = minetest.find_nodes_in_area(p1,p2,{"mcl_core:obsidian"})
+		local gold = core.find_nodes_in_area(p1,p2,{"mcl_core:goldblock"})
+		local lava = core.find_nodes_in_area(p1,p2,{"mcl_core:lava_source"})
+		local rack = core.find_nodes_in_area(p1,p2,{"mcl_nether:netherrack"})
+		local brick = core.find_nodes_in_area(p1,p2,{"mcl_core:stonebrick"})
+		local obby = core.find_nodes_in_area(p1,p2,{"mcl_core:obsidian"})
 		mcl_util.bulk_swap_node(get_replacements(gold,30,pr),{name="air"})
 		mcl_util.bulk_swap_node(get_replacements(lava,20,pr),{name="mcl_nether:magma"})
 		mcl_util.bulk_swap_node(get_replacements(rack,7,pr),{name="mcl_nether:magma"})
 		mcl_util.bulk_swap_node(get_replacements(obby,15,pr),{name="mcl_core:crying_obsidian"})
 		mcl_util.bulk_swap_node(get_replacements(obby,10,pr),{name="air"})
 		mcl_util.bulk_swap_node(get_replacements(brick,50,pr),{name="mcl_core:stonebrickcracked"})
-		brick = minetest.find_nodes_in_area(p1,p2,{"mcl_core:stonebrick"})
+		brick = core.find_nodes_in_area(p1,p2,{"mcl_core:stonebrick"})
 		mcl_util.bulk_swap_node(get_replacements(brick,50,pr),{name="mcl_core:stonebrickmossy"})
 	end,
 	loot = {

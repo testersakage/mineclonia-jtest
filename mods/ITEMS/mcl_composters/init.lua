@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 mcl_composters = {}
 
 --
@@ -24,7 +24,7 @@ local composter_usagehelp = S(
 	"Right-clicking the composter takes out the bone meal empties the composter."
 )
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_composters:composter",
 	recipe = {
 		{"group:wood_slab", "", "group:wood_slab"},
@@ -34,8 +34,8 @@ minetest.register_craft({
 })
 
 local function get_composter_level(pos, node)
-	node = node or minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
+	node = node or core.get_node(pos)
+	local def = core.registered_nodes[node.name]
 	return def and def._mcl_compost_level
 end
 
@@ -49,7 +49,7 @@ local function create_bonemeal(pos, node, no_drop, no_validate)
 	mcl_redstone.swap_node(pos, {name="mcl_composters:composter"})
 	local stack = ItemStack("mcl_bone_meal:bone_meal")
 	if not no_drop then
-		minetest.add_item(pos, stack)
+		core.add_item(pos, stack)
 	end
 	return stack
 end
@@ -65,25 +65,25 @@ local function compost_item(pos, node, itemstack, auto_cycle)
 	-- emptied. To simplify usage by farmer villagers the composter will
 	-- empty automatically when trying to add an item to a full composter.
 	if level >= 7 and auto_cycle then
-		minetest.get_node_timer(pos):stop()
+		core.get_node_timer(pos):stop()
 		create_bonemeal(pos, node, false, true)
 		level = 0
 	end
 
 	if level < 7 then
-		local chance = minetest.get_item_group (itemstack:get_name(), "compostability")
+		local chance = core.get_item_group (itemstack:get_name(), "compostability")
 		if chance >= math.random(1, 100) then
 			-- spawn green particles above new layer
 			mcl_bone_meal.add_bone_meal_particle(vector.offset(pos, 0, level/8, 0))
 			level = level + 1
 			mcl_redstone.swap_node(pos, {name = "mcl_composters:composter_" .. level})
-			minetest.sound_play({name="default_grass_footstep", gain=0.4}, {
+			core.sound_play({name="default_grass_footstep", gain=0.4}, {
 				pos = pos,
 				gain= 0.4,
 				max_hear_distance = 16,
 			}, true)
 			if level == 7 then
-				minetest.get_node_timer(pos):start(1)
+				core.get_node_timer(pos):start(1)
 			end
 		end
 		return chance > 0
@@ -112,16 +112,16 @@ local function composter_add_item(pos, node, player, itemstack, _)
 		return itemstack
 	end
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return itemstack
 	end
 	if not itemstack or itemstack:is_empty() then
 		return itemstack
 	end
-	if compost_item(pos, node, itemstack) and not minetest.is_creative_enabled(name) then
+	if compost_item(pos, node, itemstack) and not core.is_creative_enabled(name) then
 		itemstack:take_item()
-		minetest.sound_play({name="default_gravel_dug", gain=1}, {
+		core.sound_play({name="default_gravel_dug", gain=1}, {
 				pos = pos,
 				max_hear_distance = 16,
 		}, true)
@@ -142,7 +142,7 @@ local function composter_ready(pos, _)
 	if get_composter_level(pos) ~= 7 then return false end
 	mcl_redstone.swap_node(pos, {name = "mcl_composters:composter_ready"})
 	-- maybe spawn particles again?
-	minetest.sound_play({name="default_dig_snappy", gain=1}, {
+	core.sound_play({name="default_dig_snappy", gain=1}, {
 		pos = pos,
 		max_hear_distance = 16,
 	}, true)
@@ -163,8 +163,8 @@ local function composter_harvest(pos, node, player, itemstack, _)
 		return itemstack
 	end
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return itemstack
 	end
 	create_bonemeal(pos, node)
@@ -195,15 +195,15 @@ local function on_hopper_out(uppos, pos)
 	-- Get bonemeal from composter above
 	local stack = create_bonemeal(uppos, nil, true)
 	if stack then
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:add_item("main", "mcl_bone_meal:bone_meal")
 	end
 end
 
 local function on_hopper_in(pos, downpos)
-	local downnode = minetest.get_node(downpos)
-	local meta = minetest.get_meta(pos)
+	local downnode = core.get_node(downpos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 
 	for i = 1, 5 do
@@ -221,7 +221,7 @@ end
 --
 -- This is the craftable base model that can be placed in an inventory.
 --
-minetest.register_node("mcl_composters:composter", {
+core.register_node("mcl_composters:composter", {
 	description = composter_description,
 	_tt_help = S("Converts organic items into bonemeal"),
 	_doc_items_longdesc = composter_longdesc,
@@ -257,7 +257,7 @@ minetest.register_node("mcl_composters:composter", {
 --
 local function register_filled_composter(level)
 	local id = "mcl_composters:composter_"..level
-	minetest.register_node(id, {
+	core.register_node(id, {
 		description = S("Composter") .. " (" .. level .. "/7 " .. S("filled") .. ")",
 		_doc_items_create_entry = false,
 		paramtype = "light",
@@ -289,7 +289,7 @@ local function register_filled_composter(level)
 	})
 
 	-- Add entry aliases for the Help
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", "mcl_composters:composter", "nodes", id)
 	end
 end
@@ -300,20 +300,20 @@ for level = 1, 7 do
 	register_filled_composter(level)
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	name = "mcl_composters:start_composter_7",
 	nodenames = {
 		"mcl_composters:composter_7",
 	},
 	run_at_every_load = true,
 	action = function(pos)
-		minetest.get_node_timer(pos):start(1)
+		core.get_node_timer(pos):start(1)
 	end,
 })
 
 --- Register composter that is ready to be harvested.
 --
-minetest.register_node("mcl_composters:composter_ready", {
+core.register_node("mcl_composters:composter_ready", {
 	description = S("Composter") .. "(" .. S("ready for harvest") .. ")",
 	_doc_items_create_entry = false,
 	paramtype = "light",
@@ -344,7 +344,7 @@ minetest.register_node("mcl_composters:composter_ready", {
 })
 
 -- Add entry aliases for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_composters:composter",
 		"nodes", "mcl_composters:composter_ready" )
 end

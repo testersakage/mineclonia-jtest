@@ -64,12 +64,12 @@ local function valid_object_iterator_in_radius(objects, center, radius)
 end
 
 function mcl_util.connected_players(center, radius)
-	local pls = minetest.get_connected_players()
+	local pls = core.get_connected_players()
 	if not center then return valid_object_iterator(pls) end
 	return valid_object_iterator_in_radius(pls, center, radius or 1)
 end
 
-if not minetest.objects_inside_radius then --polyfill for pre minetest 5.9
+if not core.objects_inside_radius then --polyfill for pre minetest 5.9
 	function core.objects_inside_radius(center, radius)
 		return valid_object_iterator(core.get_objects_inside_radius(center, radius))
 	end
@@ -89,7 +89,7 @@ end
 
 -- Pre-Minetest 5.10.
 
-if not minetest.time_to_day_night_ratio then
+if not core.time_to_day_night_ratio then
 	local tod_values = {
 		{4250.0 + 125.0, 175.0},
 		{4500.0 + 125.0, 175.0},
@@ -101,7 +101,7 @@ if not minetest.time_to_day_night_ratio then
 		{6000.0 + 125.0, 1000.0},
 		{6250.0 + 125.0, 1000.0},
 	}
-	function minetest.time_to_day_night_ratio (tod)
+	function core.time_to_day_night_ratio (tod)
 		local t = tod * 24000
 		if t < 0.0 then
 			t = t + (-math.floor (t) / 24000) * 24000
@@ -131,14 +131,14 @@ if not minetest.time_to_day_night_ratio then
 end
 
 -- Pre minetest 5.9
-if not minetest.get_node_boxes then
+if not core.get_node_boxes then
 --> function(nodename) -> whether node matches
 	local function nodename_matcher(node_or_groupname)
 		if string.sub(node_or_groupname, 1, 6) == "group:" then
 			local groups = string.split(node_or_groupname:sub(("group:"):len() + 1), ",")
 			return function(nodename)
 				for _, groupname in pairs(groups) do
-					if minetest.get_item_group(nodename, groupname) == 0 then
+					if core.get_item_group(nodename, groupname) == 0 then
 						return false
 					end
 				end
@@ -168,9 +168,9 @@ if not minetest.get_node_boxes then
 		back = vector.new(0, 0, 1),
 		right = vector.new(1, 0, 0),
 	}
-	function minetest.get_node_boxes(type, pos)
-		local node = minetest.get_node(pos)
-		local node_def = minetest.registered_nodes[node.name]
+	function core.get_node_boxes(type, pos)
+		local node = core.get_node(pos)
+		local node_def = core.registered_nodes[node.name]
 		if not node_def or node_def[has_boxes_prop[type]] == false then
 			return {}
 		end
@@ -194,7 +194,7 @@ if not minetest.get_node_boxes then
 				box[5] = level
 			end
 		elseif box_type == "wallmounted" then
-			local dir = minetest.wallmounted_to_dir((paramtype2 == "colorwallmounted" and node.param2 % 8 or node.param2) or 0)
+			local dir = core.wallmounted_to_dir((paramtype2 == "colorwallmounted" and node.param2 % 8 or node.param2) or 0)
 			local box
 			-- The (undocumented!) node box defaults below are taken from `NodeBox::reset`
 			if dir.y > 0 then
@@ -244,7 +244,7 @@ if not minetest.get_node_boxes then
 			for _, side in ipairs(connect_sides_order) do
 				if connect_sides[side] then
 					local direction = connect_sides_directions[side]
-					local neighbor = minetest.get_node(vector.add(pos, direction))
+					local neighbor = core.get_node(vector.add(pos, direction))
 					local connects = connects_to(neighbor.name)
 					connected = connected or connects
 					connected_sides = connected_sides or (side ~= "top" and side ~= "bottom")

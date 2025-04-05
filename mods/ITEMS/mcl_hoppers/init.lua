@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 
 local GAMETICK_TIME = 0.05
 local HOPPER_INTERVAL_TIME = 1 * GAMETICK_TIME -- 0.050s
@@ -11,10 +11,10 @@ local FOURDIR_OFFSET = 3
 
 -- Make hoppers collect in dropped items
 local function hopper_collect(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local success = false
-	for object in minetest.objects_inside_radius(pos, 2) do
+	for object in core.objects_inside_radius(pos, 2) do
 		if not object:is_player() and object:get_luaentity() and object:get_luaentity().name == "__builtin:item" and not object:get_luaentity()._removed then
 			if inv and inv:room_for_item("main", ItemStack(object:get_luaentity().itemstring)) then
 				-- Item must get sucked in when the item is above the hopper
@@ -53,11 +53,11 @@ end
 local function hopper_pull(pos)
 	local uppos = vector.offset(pos, 0, 1, 0)
 
-	local upnode = minetest.get_node(uppos)
-	local updef = minetest.registered_nodes[upnode.name]
+	local upnode = core.get_node(uppos)
+	local updef = core.registered_nodes[upnode.name]
 
 	local success = false
-	if updef and minetest.get_item_group(upnode.name, "container") ~= 0 then
+	if updef and core.get_item_group(upnode.name, "container") ~= 0 then
 		if updef._on_hopper_out then
 			success = updef._on_hopper_out(uppos, pos)
 		end
@@ -75,14 +75,14 @@ end
 
 -- Move an item from the hopper into container (bottom or side)
 local function hopper_push(pos, to_pos)
-	local to_node = minetest.get_node(to_pos)
-	local to_def = minetest.registered_nodes[to_node.name]
-	local cgroup = minetest.get_item_group(to_node.name, "container")
+	local to_node = core.get_node(to_pos)
+	local to_def = core.registered_nodes[to_node.name]
+	local cgroup = core.get_item_group(to_node.name, "container")
 
 	local success = false
 	if to_def then
-		local to_empty_hopper = (minetest.get_item_group(to_node.name, "hopper") ~= 0) and
-			minetest.get_meta(to_pos):get_inventory():is_empty("main")
+		local to_empty_hopper = (core.get_item_group(to_node.name, "hopper") ~= 0) and
+			core.get_meta(to_pos):get_inventory():is_empty("main")
 
 		if to_def._on_hopper_in then
 			success = to_def._on_hopper_in(pos, to_pos)
@@ -96,7 +96,7 @@ local function hopper_push(pos, to_pos)
 				to_def._after_hopper_in(to_pos)
 			end
 			if to_empty_hopper then
-				minetest.get_node_timer(to_pos):start(EMPTY_HOPPER_COOLDOWN_TIME)
+				core.get_node_timer(to_pos):start(EMPTY_HOPPER_COOLDOWN_TIME)
 			end
 		end
 	end
@@ -106,14 +106,14 @@ end
 local function check_hopper_pull_from_mc(pos, entity, inv_size)
 	local inv = mcl_entity_invs.load_inv(entity, inv_size)
 	if inv then
-		return inv, minetest.get_meta(pos):get_inventory()
+		return inv, core.get_meta(pos):get_inventory()
 	end
 end
 
 local function check_hopper_push_to_mc(pos, entity, inv_size)
 	local dest_inv = mcl_entity_invs.load_inv(entity, inv_size)
 	if dest_inv then
-		return minetest.get_meta(pos):get_inventory(), dest_inv
+		return core.get_meta(pos):get_inventory(), dest_inv
 	end
 end
 
@@ -144,15 +144,15 @@ local function hopper_and_mc(pos, entity, mc_pos, check_function)
 end
 
 local function hopper_timer(pos, elapsed)
-	local hopper_group = minetest.get_item_group(minetest.get_node(pos).name, "hopper")
+	local hopper_group = core.get_item_group(core.get_node(pos).name, "hopper")
 	local to_pos
 	if hopper_group == 1 then
 		to_pos = vector.offset(pos, 0, -1, 0)
 	elseif hopper_group == 2 then
 		-- Determine to which side the hopper is facing, get nodes
-		to_pos = pos + minetest.fourdir_to_dir((minetest.get_node(pos).param2 + FOURDIR_OFFSET) % 4)
+		to_pos = pos + core.fourdir_to_dir((core.get_node(pos).param2 + FOURDIR_OFFSET) % 4)
 	else
-		minetest.log("error", "[mcl_hoppers] Unsupported hopper_group="..hopper_group.." at "..vector.to_string(pos))
+		core.log("error", "[mcl_hoppers] Unsupported hopper_group="..hopper_group.." at "..vector.to_string(pos))
 		return
 	end
 
@@ -161,7 +161,7 @@ local function hopper_timer(pos, elapsed)
 	local pulled = hopper_pull(pos)
 
 	-- Hopper interacts with minecarts
-	for v in minetest.objects_inside_radius(pos, 3) do
+	for v in core.objects_inside_radius(pos, 3) do
 		local entity = v:get_luaentity()
 		if entity and (
 			entity.name == "mcl_minecarts:hopper_minecart" or
@@ -175,7 +175,7 @@ local function hopper_timer(pos, elapsed)
 		end
 	end
 
-	minetest.get_node_timer(pos):start((pushed or pulled) and HOPPER_COOLDOWN_TIME or HOPPER_INTERVAL_TIME)
+	core.get_node_timer(pos):start((pushed or pulled) and HOPPER_COOLDOWN_TIME or HOPPER_INTERVAL_TIME)
 	return false
 end
 
@@ -205,8 +205,8 @@ local mcl_hoppers_formspec = table.concat({
 local function redstone_update_on(nodename)
 	return function(pos)
 		if mcl_redstone.get_power(pos) ~= 0 then
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, { name = nodename, param2 = node.param2})
+			local node = core.get_node(pos)
+			core.swap_node(pos, { name = nodename, param2 = node.param2})
 		end
 	end
 end
@@ -214,9 +214,9 @@ end
 local function redstone_update_off(nodename)
 	return function(pos)
 		if mcl_redstone.get_power(pos) == 0 then
-			local node = minetest.get_node(pos)
-			minetest.swap_node(pos, { name = nodename, param2 = node.param2})
-			minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
+			local node = core.get_node(pos)
+			core.swap_node(pos, { name = nodename, param2 = node.param2})
+			core.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
 		end
 	end
 end
@@ -258,18 +258,18 @@ local def_hopper = {
 	is_ground_content = false,
 
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_string("formspec", mcl_hoppers_formspec)
 		local inv = meta:get_inventory()
 		inv:set_size("main", 5)
-		minetest.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
+		core.get_node_timer(pos):start(HOPPER_INTERVAL_TIME)
 	end,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 
 	allow_metadata_inventory_move = function(pos, _, _, _, _, count, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return count
@@ -277,8 +277,8 @@ local def_hopper = {
 	end,
 	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -286,25 +286,25 @@ local def_hopper = {
 	end,
 	allow_metadata_inventory_put = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
 		end
 	end,
 	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in mcl_hoppers at "..minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name()..
+				" moves stuff in mcl_hoppers at "..core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_put = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to mcl_hoppers at "..minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name()..
+				" moves stuff to mcl_hoppers at "..core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from mcl_hoppers at "..minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name()..
+				" takes stuff from mcl_hoppers at "..core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	sounds = mcl_sounds.node_sound_metal_defaults(),
@@ -336,8 +336,8 @@ S("• Other containers: Normal interaction.").."\n\n"..
 S("Hoppers can be disabled when supplied with redstone power. Disabled hoppers don't move items.")
 def_hopper_enabled._doc_items_usagehelp = S("To place a hopper vertically, place it on the floor or a ceiling. To place it sideways, place it at the side of a block. Use the hopper to access its inventory.")
 def_hopper_enabled.on_place = function(itemstack, placer, pointed_thing)
-	local uposnode = minetest.get_node(pointed_thing.under)
-	local uposnodedef = minetest.registered_nodes[uposnode.name]
+	local uposnode = core.get_node(pointed_thing.under)
+	local uposnodedef = core.registered_nodes[uposnode.name]
 	if not uposnodedef then return itemstack end
 
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -348,17 +348,17 @@ def_hopper_enabled.on_place = function(itemstack, placer, pointed_thing)
 	local param2
 	if dir.y == 0 then
 		fake_itemstack:set_name("mcl_hoppers:hopper_side")
-		param2 = (minetest.dir_to_fourdir(dir) + FOURDIR_OFFSET ) % 4
+		param2 = (core.dir_to_fourdir(dir) + FOURDIR_OFFSET ) % 4
 	end
 
-	local itemstack,_ = minetest.item_place_node(fake_itemstack, placer, pointed_thing, param2)
+	local itemstack,_ = core.item_place_node(fake_itemstack, placer, pointed_thing, param2)
 	itemstack:set_name("mcl_hoppers:hopper")
 	return itemstack
 end
 def_hopper_enabled._mcl_redstone.update = redstone_update_on("mcl_hoppers:hopper_disabled")
 def_hopper_enabled.on_timer = hopper_timer
 
-minetest.register_node("mcl_hoppers:hopper", def_hopper_enabled)
+core.register_node("mcl_hoppers:hopper", def_hopper_enabled)
 
 -- Disabled downwards hopper
 local def_hopper_disabled = table.copy(def_hopper)
@@ -369,7 +369,7 @@ def_hopper_disabled.groups.not_in_creative_inventory = 1
 def_hopper_disabled.drop = "mcl_hoppers:hopper"
 def_hopper_disabled._mcl_redstone.update = redstone_update_off("mcl_hoppers:hopper")
 
-minetest.register_node("mcl_hoppers:hopper_disabled", def_hopper_disabled)
+core.register_node("mcl_hoppers:hopper_disabled", def_hopper_disabled)
 
 -- Sidewars hopper (base definition)
 local def_hopper_side = table.merge(def_hopper, {
@@ -404,7 +404,7 @@ local def_hopper_side = table.merge(def_hopper, {
 		},
 	},
 
-	on_rotate = minetest.get_modpath("screwdriver") and screwdriver.rotate_simple,
+	on_rotate = core.get_modpath("screwdriver") and screwdriver.rotate_simple,
 })
 
 local def_hopper_side_enabled = table.copy(def_hopper_side)
@@ -412,17 +412,17 @@ def_hopper_side_enabled.description = S("Side Hopper")
 def_hopper_side_enabled._mcl_redstone.update = redstone_update_on("mcl_hoppers:hopper_side_disabled")
 def_hopper_side_enabled.on_timer = hopper_timer
 
-minetest.register_node("mcl_hoppers:hopper_side", def_hopper_side_enabled)
+core.register_node("mcl_hoppers:hopper_side", def_hopper_side_enabled)
 
 local def_hopper_side_disabled = table.copy(def_hopper_side)
 def_hopper_side_disabled.description = S("Disabled Side Hopper")
 def_hopper_side_disabled._mcl_redstone.update = redstone_update_off("mcl_hoppers:hopper_side")
 
-minetest.register_node("mcl_hoppers:hopper_side_disabled", def_hopper_side_disabled)
+core.register_node("mcl_hoppers:hopper_side_disabled", def_hopper_side_disabled)
 
 --[[ END OF NODE DEFINITIONS ]]
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_hoppers:hopper",
 	recipe = {
 		{"mcl_core:iron_ingot","","mcl_core:iron_ingot"},
@@ -432,35 +432,35 @@ minetest.register_craft({
 })
 
 -- Add entry aliases for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_hoppers:hopper", "nodes", "mcl_hoppers:hopper_side")
 end
 
 -- Legacy
-minetest.register_alias("mcl_hoppers:hopper_item", "mcl_hoppers:hopper")
+core.register_alias("mcl_hoppers:hopper_item", "mcl_hoppers:hopper")
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update hopper formspecs (0.60.0",
 	name = "mcl_hoppers:update_formspec_0_60_0",
 	nodenames = { "group:hopper" },
 	run_at_every_load = false,
 	action = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_string("formspec", mcl_hoppers_formspec)
 	end,
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Add timers for older ABM driven hoppers",
 	name = "mcl_hoppers:add_timer",
 	nodenames = { "mcl_hoppers:hopper", "mcl_hoppers:hopper_side" },
 	run_at_every_load = false,
 	action = function(pos)
-		local timer = minetest.get_node_timer(pos)
+		local timer = core.get_node_timer(pos)
 		if not timer:is_started() then
 			timer:start(HOPPER_INTERVAL_TIME)
 		end
 	end
 })
 
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/compat.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/compat.lua")

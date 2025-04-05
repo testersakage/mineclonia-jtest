@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 mcl_campfires = {}
 
 local PARTICLE_DISTANCE = 75
@@ -20,12 +20,12 @@ local function count_table(tbl)
 end
 
 local function drop_items(pos)
-	local ph = minetest.hash_node_position(vector.round(pos))
+	local ph = core.hash_node_position(vector.round(pos))
 	if food_entities[ph] then
 		for _, v in pairs(food_entities[ph]) do
 			if v and v.object and v.object:get_pos() then
 				v.object:remove()
-				minetest.add_item(pos, v._item)
+				core.add_item(pos, v._item)
 			end
 		end
 		food_entities[ph] = nil
@@ -35,12 +35,12 @@ end
 local function campfire_drops(pos, digger, drops, nodename)
 	local wield_item = digger:get_wielded_item()
 	local inv = digger:get_inventory()
-	if not minetest.is_creative_enabled(digger:get_player_name()) then
+	if not core.is_creative_enabled(digger:get_player_name()) then
 		local is_book = wield_item:get_name() == "mcl_enchanting:book_enchanted"
 		if mcl_enchanting.has_enchantment(wield_item, "silk_touch") and not is_book then
-			minetest.add_item(pos, nodename)
+			core.add_item(pos, nodename)
 		else
-			minetest.add_item(pos, drops)
+			core.add_item(pos, drops)
 		end
 	elseif inv:room_for_item("main", nodename) and not inv:contains_item("main", nodename) then
 		inv:add_item("main", nodename)
@@ -49,13 +49,13 @@ end
 
 local function on_blast(pos)
 	drop_items(pos)
-	minetest.remove_node(pos)
+	core.remove_node(pos)
 end
 
 function mcl_campfires.light_campfire(pos)
-	local campfire = minetest.get_node(pos)
+	local campfire = core.get_node(pos)
 	local name = campfire.name .. "_lit"
-	minetest.set_node(pos, {name = name, param2 = campfire.param2})
+	core.set_node(pos, {name = name, param2 = campfire.param2})
 end
 
 local function delete_entities(ph)
@@ -84,26 +84,26 @@ end
 
 -- on_rightclick function to take items that are cookable in a campfire, and put them in the campfire inventory
 function mcl_campfires.take_item(pos, _, player, itemstack)
-	if minetest.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
-		local cookable = minetest.get_craft_result({method = "cooking", width = 1, items = {itemstack}})
+	if core.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
+		local cookable = core.get_craft_result({method = "cooking", width = 1, items = {itemstack}})
 		if cookable then
-			local ph = minetest.hash_node_position(vector.round(pos))
+			local ph = core.hash_node_position(vector.round(pos))
 			local spot = get_free_spot(ph)
 			if not spot then return end
 
-			local o = minetest.add_entity(pos + campfire_spots[spot], "mcl_campfires:food_entity")
+			local o = core.add_entity(pos + campfire_spots[spot], "mcl_campfires:food_entity")
 			o:set_properties({
 				wield_item = itemstack:get_name(),
 			})
 			local l = o:get_luaentity()
 			l._campfire_poshash = ph
-			l._start_time = minetest.get_gametime()
+			l._start_time = core.get_gametime()
 			l._cook_time = cookable.time * 3 --apparently it always takes 30 secs in mc?
 			l._item = itemstack:get_name()
 			l._drop = cookable.item:get_name()
 			l._spot = spot
 			food_entities[ph][spot] = l
-			if not minetest.is_creative_enabled(player:get_player_name()) then
+			if not core.is_creative_enabled(player:get_player_name()) then
 				itemstack:take_item()
 			end
 			return itemstack
@@ -113,7 +113,7 @@ end
 
 function mcl_campfires.register_campfire(name, def)
 	-- Define Campfire
-	minetest.register_node(name, {
+	core.register_node(name, {
 		description = def.description,
 		_tt_help = S("Cooks food and keeps bees happy."),
 		_doc_items_longdesc = S("Campfires have multiple uses, including keeping bees happy, cooking raw meat and fish, and as a trap."),
@@ -160,7 +160,7 @@ function mcl_campfires.register_campfire(name, def)
 	})
 
 	--Define Lit Campfire
-	minetest.register_node(name.."_lit", {
+	core.register_node(name.."_lit", {
 		description = def.description,
 		_tt_help = S("Cooks food and keeps bees happy."),
 		_doc_items_longdesc = S("Campfires have multiple uses, including keeping bees happy, cooking raw meat and fish, and as a trap."),
@@ -198,19 +198,19 @@ function mcl_campfires.register_campfire(name, def)
 		paramtype = "light",
 		paramtype2 = "4dir",
 		on_destruct = function(pos)
-			local ph = minetest.hash_node_position(vector.round(pos))
+			local ph = core.hash_node_position(vector.round(pos))
 			for k,v in pairs(player_particlespawners) do
 				if v[ph] then
-					minetest.delete_particlespawner(v[ph])
+					core.delete_particlespawner(v[ph])
 					player_particlespawners[k][ph] = nil
 				end
 			end
 		end,
 		on_rightclick = function (pos, node, player, itemstack, pointed_thing)
-			if minetest.get_item_group(itemstack:get_name(), "shovel") ~= 0 then
+			if core.get_item_group(itemstack:get_name(), "shovel") ~= 0 then
 				local protected = mcl_util.check_position_protection(pos, player)
 				if not protected then
-					if not minetest.is_creative_enabled(player:get_player_name()) then
+					if not core.is_creative_enabled(player:get_player_name()) then
 						-- Add wear (as if digging a shovely node)
 						local toolname = itemstack:get_name()
 						local wear = mcl_autogroup.get_wear(toolname, "shovely")
@@ -219,13 +219,13 @@ function mcl_campfires.register_campfire(name, def)
 						end
 					end
 					node.name = name
-					minetest.set_node(pos, node)
-					minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+					core.set_node(pos, node)
+					core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				end
-			elseif minetest.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
+			elseif core.get_item_group(itemstack:get_name(), "campfire_cookable") ~= 0 then
 				mcl_campfires.take_item(pos, node, player, itemstack)
 			elseif itemstack and player and pointed_thing then
-				minetest.item_place_node(itemstack, player, pointed_thing)
+				core.item_place_node(itemstack, player, pointed_thing)
 			end
 
 			return itemstack
@@ -257,17 +257,17 @@ end
 function mcl_campfires.generate_smoke(pos)
 	local smoke_timer
 
-	if minetest.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_farming:hay_block" then
+	if core.get_node(vector.offset(pos, 0, -1, 0)).name == "mcl_farming:hay_block" then
 		smoke_timer = 11.5
 	else
 		smoke_timer = 7.25
 	end
 
-	local ph = minetest.hash_node_position(pos)
+	local ph = core.hash_node_position(pos)
 	for pl in mcl_util.connected_players() do
 		if not player_particlespawners[pl] then player_particlespawners[pl] = {} end
 		if not player_particlespawners[pl][ph] and vector.distance(pos, pl:get_pos()) < PARTICLE_DISTANCE then
-			player_particlespawners[pl][ph] = minetest.add_particlespawner({
+			player_particlespawners[pl][ph] = core.add_particlespawner({
 				amount = 4,
 				time = 0,
 				minpos = vector.offset(pos, -0.125, 0.25, -0.125),
@@ -304,9 +304,9 @@ function mcl_campfires.generate_smoke(pos)
 	for pl,pt in pairs(player_particlespawners) do
 		for _,sp in pairs(pt) do
 			if not pl or not pl:get_pos() then
-				minetest.delete_particlespawner(sp)
+				core.delete_particlespawner(sp)
 			elseif player_particlespawners[pl][ph] and vector.distance(pos, pl:get_pos()) > PARTICLE_DISTANCE then
-				minetest.delete_particlespawner(player_particlespawners[pl][ph])
+				core.delete_particlespawner(player_particlespawners[pl][ph])
 				player_particlespawners[pl][ph] = nil
 			end
 		end
@@ -316,17 +316,17 @@ function mcl_campfires.generate_smoke(pos)
 	end
 end
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	if player_particlespawners[player] then
 		for _,v in pairs(player_particlespawners[player]) do
-			minetest.delete_particlespawner(v)
+			core.delete_particlespawner(v)
 		end
 		player_particlespawners[player] = nil
 	end
 end)
 
 -- Register Visual Food Entity
-minetest.register_entity("mcl_campfires:food_entity", {
+core.register_entity("mcl_campfires:food_entity", {
 	initial_properties = {
 		physical = false,
 		visual = "wielditem",
@@ -341,14 +341,14 @@ minetest.register_entity("mcl_campfires:food_entity", {
 			--if self._poshash isn't set that essentially means this campfire entity was migrated. Remove it to let a new one spawn.
 			self.object:remove()
 		end
-		if minetest.get_gametime() - self._start_time > (self._cook_time or 1) then
+		if core.get_gametime() - self._start_time > (self._cook_time or 1) then
 			if food_entities[self._campfire_poshash] then
 				food_entities[self._campfire_poshash][self._spot] = nil
 			end
 			if count_table(food_entities[self._campfire_poshash]) == 0 then
 				delete_entities(self._campfire_poshash or "")
 			end
-			minetest.add_item(self.object:get_pos() + ( campfire_spots[self._spot] / 1.5 ), self._drop) --divide by 1.5 since otherwise items easily clip through walls next to the fire
+			core.add_item(self.object:get_pos() + ( campfire_spots[self._spot] / 1.5 ), self._drop) --divide by 1.5 since otherwise items easily clip through walls next to the fire
 			self.object:remove()
 		end
 	end,
@@ -360,11 +360,11 @@ minetest.register_entity("mcl_campfires:food_entity", {
 				d[k] = self[k]
 			end
 		end
-		return minetest.serialize(d)
+		return core.serialize(d)
 	end,
 	on_activate = function(self, staticdata)
 		if type(staticdata) == "userdata" then return end
-		local s = minetest.deserialize(staticdata)
+		local s = core.deserialize(staticdata)
 		if type(s) == "table" then
 			for k,v in pairs(s) do self[k] = v end
 			self.object:set_properties({ wield_item = self._item })
@@ -383,13 +383,13 @@ minetest.register_entity("mcl_campfires:food_entity", {
 				return
 			end
 		end
-		self._start_time = self._start_time or minetest.get_gametime()
+		self._start_time = self._start_time or core.get_gametime()
 		self.object:set_rotation({x = math.pi / -2, y = 0, z = 0})
 		self.object:set_armor_groups({ immortal = 1 })
 	end,
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Campfire Smoke",
 	nodenames = {"group:lit_campfire"},
 	interval = 4,

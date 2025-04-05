@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local C = minetest.colorize
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local C = core.colorize
+local F = core.formspec_escape
 
 mcl_beacons = {}
 
@@ -32,39 +32,39 @@ end
 
 local function get_beacon_beam(glass_nodename)
 	if glass_nodename == "air" then return 0 end
-	local def = minetest.registered_nodes[glass_nodename]
+	local def = core.registered_nodes[glass_nodename]
 	if def and def._color then
 		return mcl_dyes.colors[def._color].palette_index
 	end
 end
 
 local function set_node_if_clear(pos,node)
-	local tn = minetest.get_node(pos)
-	local def = minetest.registered_nodes[tn.name]
+	local tn = core.get_node(pos)
+	local def = core.registered_nodes[tn.name]
 	if tn.name == "air" or (def and def.buildable_to) then
-		minetest.set_node(pos,node)
+		core.set_node(pos,node)
 	end
 end
 
 local function remove_beacon_beam(pos)
 	stop_beacon_sound(pos)
 	for y=pos.y, pos.y+301 do
-		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+		local node = core.get_node({x=pos.x,y=y,z=pos.z})
 		if node.name ~= "air" and node.name ~= "mcl_core:bedrock" and node.name ~= "mcl_core:void" then
 			if node.name == "ignore" then
-				minetest.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
-				node = minetest.get_node({x=pos.x,y=y,z=pos.z})
+				core.get_voxel_manip():read_from_map({x=pos.x,y=y,z=pos.z}, {x=pos.x,y=y,z=pos.z})
+				node = core.get_node({x=pos.x,y=y,z=pos.z})
 			end
 
 			if node.name == "mcl_beacons:beacon_beam" then
-				minetest.remove_node({x=pos.x,y=y,z=pos.z})
+				core.remove_node({x=pos.x,y=y,z=pos.z})
 			end
 		end
 	end
 end
 
 local function create_beacon_beam(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	if meta:get_int("power_level") == 0 then
 		remove_beacon_beam(pos)
 		return
@@ -73,12 +73,12 @@ local function create_beacon_beam(pos)
 	start_beacon_sound(pos)
 
 	for y = pos.y +1, pos.y + 300 do
-		local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
-		local node_below = minetest.get_node({x=pos.x,y=y-1,z=pos.z})
-		local node_above = minetest.get_node({x=pos.x,y=y+1,z=pos.z})
+		local node = core.get_node({x=pos.x,y=y,z=pos.z})
+		local node_below = core.get_node({x=pos.x,y=y-1,z=pos.z})
+		local node_above = core.get_node({x=pos.x,y=y+1,z=pos.z})
 
-		if node_below.name ~= "mcl_beacons:beacon" and minetest.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
-			if minetest.get_node({x=pos.x,y=y-2,z=pos.z}).name == "mcl_beacons:beacon" then
+		if node_below.name ~= "mcl_beacons:beacon" and core.get_item_group(node_below.name,"material_glass") == 0 and node_below.name ~= "mcl_beacons:beacon_beam" then
+			if core.get_node({x=pos.x,y=y-2,z=pos.z}).name == "mcl_beacons:beacon" then
 				set_node_if_clear({x=pos.x,y=y-1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=0})
 			end
 		end
@@ -87,7 +87,7 @@ local function create_beacon_beam(pos)
 			set_node_if_clear({x=pos.x,y=y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=node.param2})
 		end
 
-		if minetest.get_item_group(node_below.name, "glass") ~= 0 or minetest.get_item_group(node_below.name,"material_glass") ~= 0 then
+		if core.get_item_group(node_below.name, "glass") ~= 0 or core.get_item_group(node_below.name,"material_glass") ~= 0 then
 			set_node_if_clear({x=pos.x,y=y,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
 			set_node_if_clear({x=pos.x,y=y+1,z=pos.z},{name="mcl_beacons:beacon_beam",param2=get_beacon_beam(node_below.name)})
 		end
@@ -95,12 +95,12 @@ local function create_beacon_beam(pos)
 end
 
 local function check_pyramid(pos)
-	local m = minetest.get_meta(pos)
+	local m = core.get_meta(pos)
 	for y_offset = 1,4 do
 		local block_y = pos.y - y_offset
 		for block_x = (pos.x-y_offset),(pos.x+y_offset) do
 			for block_z = (pos.z-y_offset),(pos.z+y_offset) do
-				if minetest.get_item_group(minetest.get_node(vector.new(block_x, block_y, block_z)).name, "beacon_block") == 0 then
+				if core.get_item_group(core.get_node(vector.new(block_x, block_y, block_z)).name, "beacon_block") == 0 then
 					m:set_int("power_level", y_offset -1)
 					return y_offset - 1
 				end
@@ -164,8 +164,8 @@ local function generate_beacon_formspec (meta, pos)
 		"formspec_version[4]",
 		"size[11.75,14.425]",
 		"label[0.375,0.375;" .. F(C(mcl_formspec.label_color, S("Beacon"))) .. "]",
-		"label[0.5,1;"..minetest.formspec_escape(S("Primary Power:")).."]",
-		"label[5.5,1;"..minetest.formspec_escape(S("Secondary Power:")).."]",
+		"label[0.5,1;"..core.formspec_escape(S("Primary Power:")).."]",
+		"label[5.5,1;"..core.formspec_escape(S("Secondary Power:")).."]",
 		"image[1,1.5;1,1;custom_beacon_symbol_4.png]",
 		"image[1,3;1,1;custom_beacon_symbol_3.png]",
 		"image[1,4.5;1,1;custom_beacon_symbol_2.png]",
@@ -206,11 +206,11 @@ end
 
 local function clear_obstructed_beam(pos)
 	for y=pos.y+1, pos.y+100 do
-		local nodename = minetest.get_node({x=pos.x,y=y, z = pos.z}).name
-		local def = minetest.registered_nodes[nodename]
+		local nodename = core.get_node({x=pos.x,y=y, z = pos.z}).name
+		local def = core.registered_nodes[nodename]
 		if def and def.groups.opaque and nodename ~= "mcl_core:bedrock" and nodename ~= "mcl_core:void" and nodename ~= "ignore" then --ignore means not loaded, let's just assume that's air
 			if nodename ~="mcl_beacons:beacon_beam" and nodename ~="mcl_beacons:beacon" then
-				if minetest.get_item_group(nodename,"glass") == 0 and minetest.get_item_group(nodename,"material_glass") == 0  then
+				if core.get_item_group(nodename,"glass") == 0 and core.get_item_group(nodename,"material_glass") == 0  then
 					remove_beacon_beam(pos)
 					return true
 				end
@@ -228,7 +228,7 @@ local function effect_player(effect, pos, power_level, effect_level,player)
 end
 
 local function apply_effects_to_all_players(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local effect_string = meta:get_string("effect")
 	local effect_level = meta:get_int("effect_level")
 	local secondary = meta:get_string ("secondary_effect")
@@ -262,29 +262,29 @@ end
 
 local function allow_metadata_inventory_take_put(pos, _, _, stack, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	end
 	return stack:get_count()
 end
 
 local function add_group(item, group)
-	local def = minetest.registered_items[item]
+	local def = core.registered_items[item]
 	if def then
-		minetest.override_item(item, {
+		core.override_item(item, {
 			groups = table.merge(def.groups or {}, { [group] = 1 })
 		})
 	end
 end
 
 function mcl_beacons.register_beaconblock (itemstring)
-	minetest.log("warning", "[mcl_beacons] mcl_beacons.register_beaconblock is deprecated. Use the \"beacon_block\" item group instead!")
+	core.log("warning", "[mcl_beacons] mcl_beacons.register_beaconblock is deprecated. Use the \"beacon_block\" item group instead!")
 	add_group(itemstring, "beacon_block")
 end
 
 function mcl_beacons.register_beaconfuel(itemstring)
-	minetest.log("warning", "[mcl_beacons] mcl_beacons.register_beaconfuel is deprecated. Use the \"beacon_fuel\" item group instead!")
+	core.log("warning", "[mcl_beacons] mcl_beacons.register_beaconfuel is deprecated. Use the \"beacon_fuel\" item group instead!")
 	add_group(itemstring, "beacon_fuel")
 end
 
@@ -301,12 +301,12 @@ end
 local function apply_beacon_formspec (pos, _, fields, sender)
 	local sender_name = sender:get_player_name ()
 	-- Return if the node is no longer a beacon.
-	if not pos or minetest.get_node (pos).name ~= "mcl_beacons:beacon" then
+	if not pos or core.get_node (pos).name ~= "mcl_beacons:beacon" then
 		return
 	end
 
-	if minetest.is_protected (pos, sender_name) then
-		minetest.record_protection_violation (pos, sender_name)
+	if core.is_protected (pos, sender_name) then
+		core.record_protection_violation (pos, sender_name)
 		return
 	end
 
@@ -315,14 +315,14 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 	or fields.haste) then
 		local power_level = check_pyramid(pos)
 
-		if minetest.is_protected (pos, sender_name) then
-			minetest.record_protection_violation(pos, sender_name)
+		if core.is_protected (pos, sender_name) then
+			core.record_protection_violation(pos, sender_name)
 			return
 		elseif power_level == 0 then
 			return
 		end
 
-		local meta = minetest.get_meta (pos)
+		local meta = core.get_meta (pos)
 		local inv = meta:get_inventory ()
 		local input = inv:get_stack ("input", 1)
 
@@ -332,7 +332,7 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 
 		local valid_item = false
 
-		if minetest.get_item_group(input:get_name(), "beacon_fuel") > 0 then
+		if core.get_item_group(input:get_name(), "beacon_fuel") > 0 then
 			valid_item = true
 		end
 
@@ -393,7 +393,7 @@ local function apply_beacon_formspec (pos, _, fields, sender)
 	end
 end
 
-minetest.register_node("mcl_beacons:beacon", {
+core.register_node("mcl_beacons:beacon", {
 	description = S("Beacon"),
 	drawtype = "mesh",
 	collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
@@ -402,7 +402,7 @@ minetest.register_node("mcl_beacons:beacon", {
 	is_ground_content = false,
 	use_texture_alpha = "clip",
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
 		meta:set_string("formspec", generate_beacon_formspec(meta, pos))
@@ -421,7 +421,7 @@ minetest.register_node("mcl_beacons:beacon", {
 	_configures_formspec = true,
 })
 
-minetest.register_node("mcl_beacons:beacon_beam", {
+core.register_node("mcl_beacons:beacon_beam", {
 	tiles = {"blank.png^[noalpha^[colorize:#b8bab9"},
 	drawtype = "nodebox",
 	node_box = {
@@ -431,7 +431,7 @@ minetest.register_node("mcl_beacons:beacon_beam", {
 		}
 	},
 	pointable= false,
-	light_source = minetest.LIGHT_MAX,
+	light_source = core.LIGHT_MAX,
 	walkable = false,
 	groups = {not_in_creative_inventory=1},
 	_mcl_blast_resistance = 1200,
@@ -440,7 +440,7 @@ minetest.register_node("mcl_beacons:beacon_beam", {
 	buildable_to = true,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_beacons:beacon",
 	recipe = {
 		{"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
@@ -449,7 +449,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_abm{
+core.register_abm{
 	label="apply beacon effects to players",
 	nodenames = {"mcl_beacons:beacon"},
 	interval = 3,
@@ -462,13 +462,13 @@ minetest.register_abm{
 	end,
 }
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Upgrade pre 106.1 beacons data",
 	name = "mcl_beacons:upgrade_beacon_data",
 	nodenames = {"mcl_beacons:beacon"},
 	run_at_every_load = false,
 	action = function(pos)
-		local m = minetest.get_meta(pos)
+		local m = core.get_meta(pos)
 		m:set_string("formspec", generate_beacon_formspec(m, pos))
 
 		if m:get_string ("effect") == "regeneration" then

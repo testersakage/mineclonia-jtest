@@ -30,8 +30,8 @@ awards.register_trigger("chat", {
 	progress = S("@1/@2 chat messages"),
 	auto_description = { S("Send a chat message"), S("Chat @1 times") },
 })
-minetest.register_on_chat_message(function(name, message)
-	local player = minetest.get_player_by_name(name)
+core.register_on_chat_message(function(name, message)
+	local player = core.get_player_by_name(name)
 	if not player_ok(player) or string.find(message, "/")  then
 		return
 	end
@@ -45,7 +45,7 @@ awards.register_trigger("join", {
 	progress = S("@1/@2 joins"),
 	auto_description = { S("Join once"), S("Join @1 times") },
 })
-minetest.register_on_joinplayer(awards.notify_join)
+core.register_on_joinplayer(awards.notify_join)
 
 
 awards.register_trigger("death", {
@@ -57,7 +57,7 @@ awards.register_trigger("death", {
 		return def.trigger.reason
 	end,
 })
-minetest.register_on_dieplayer(function(player, reason)
+core.register_on_dieplayer(function(player, reason)
 	if reason then
 		reason = reason.type
 	else
@@ -73,17 +73,17 @@ awards.register_trigger("dig", {
 	auto_description = { S("Mine: @1"), S("Mine: @1×@2") },
 	auto_description_total = { S("Mine @1 block."), S("Mine @1 blocks.") },
 	get_key = function(_, def)
-		return minetest.registered_aliases[def.trigger.node] or def.trigger.node
+		return core.registered_aliases[def.trigger.node] or def.trigger.node
 	end,
 	key_is_item = true,
 })
-minetest.register_on_dignode(function(pos, node, player)
+core.register_on_dignode(function(pos, node, player)
 	if not player_ok(player) or not pos or not node then
 		return
 	end
 
 	local node_name = node.name
-	node_name = minetest.registered_aliases[node_name] or node_name
+	node_name = core.registered_aliases[node_name] or node_name
 	awards.notify_dig(player, node_name)
 end)
 
@@ -94,17 +94,17 @@ awards.register_trigger("place", {
 	auto_description = { S("Place: @1"), S("Place: @1×@2") },
 	auto_description_total = { S("Place @1 block."), S("Place @1 blocks.") },
 	get_key = function(_, def)
-		return minetest.registered_aliases[def.trigger.node] or def.trigger.node
+		return core.registered_aliases[def.trigger.node] or def.trigger.node
 	end,
 	key_is_item = true,
 })
-minetest.register_on_placenode(function(pos, node, player)
+core.register_on_placenode(function(pos, node, player)
 	if not player_ok(player) or not pos or not node then
 		return
 	end
 
 	local node_name = node.name
-	node_name = minetest.registered_aliases[node_name] or node_name
+	node_name = core.registered_aliases[node_name] or node_name
 	awards.notify_place(player, node_name)
 end)
 
@@ -115,17 +115,17 @@ awards.register_trigger("craft", {
 	auto_description = { S("Craft: @1"), S("Craft: @1×@2") },
 	auto_description_total = { S("Craft @1 item"), S("Craft @1 items.") },
 	get_key = function(_, def)
-		return minetest.registered_aliases[def.trigger.item] or def.trigger.item
+		return core.registered_aliases[def.trigger.item] or def.trigger.item
 	end,
 	key_is_item = true,
 })
-minetest.register_on_craft(function(itemstack, player)
+core.register_on_craft(function(itemstack, player)
 	if not player_ok(player) or itemstack:is_empty() then
 		return
 	end
 
 	local itemname = itemstack:get_name()
-	itemname = minetest.registered_aliases[itemname] or itemname
+	itemname = core.registered_aliases[itemname] or itemname
 	awards.notify_craft(player, itemname, itemstack:get_count())
 end)
 
@@ -136,16 +136,16 @@ awards.register_trigger("eat", {
 	auto_description = { S("Eat @1"), S("Eat @1×@2") },
 	auto_description_total = { S("Eat @1 item"), S("Eat @1 items.") },
 	get_key = function(_, def)
-		return minetest.registered_aliases[def.trigger.item] or def.trigger.item
+		return core.registered_aliases[def.trigger.item] or def.trigger.item
 	end,
 	key_is_item = true,
 })
-minetest.register_on_item_eat(function(_, _, itemstack, player, _)
+core.register_on_item_eat(function(_, _, itemstack, player, _)
 	if not player_ok(player) or itemstack:is_empty() then
 		return
 	end
 
 	local itemname = itemstack:get_name()
-	itemname = minetest.registered_aliases[itemname] or itemname
+	itemname = core.registered_aliases[itemname] or itemname
 	awards.notify_eat(player, itemname)
 end)

@@ -1,19 +1,19 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _)
-	local soil_node = minetest.get_node_or_nil({x=place_pos.x, y=place_pos.y-1, z=place_pos.z})
+	local soil_node = core.get_node_or_nil({x=place_pos.x, y=place_pos.y-1, z=place_pos.z})
 	if not soil_node then return false end
 	local snn = soil_node.name -- soil node name
 
 	-- Placement rules:
 	-- * Always allowed on podzol or mycelimu
 	-- * Otherwise, must be solid, opaque and have daylight light level <= 12
-	local light = minetest.get_node_light(place_pos, 0.5)
+	local light = core.get_node_light(place_pos, 0.5)
 	local light_ok = false
 	if light and light <= 12 then
 		light_ok = true
 	end
-	return (minetest.get_item_group(snn, "supports_mushrooms") == 1 or (light_ok and minetest.get_item_group(snn, "solid") == 1 and minetest.get_item_group(snn, "opaque") == 1))
+	return (core.get_item_group(snn, "supports_mushrooms") == 1 or (light_ok and core.get_item_group(snn, "solid") == 1 and core.get_item_group(snn, "opaque") == 1))
 end)
 
 local longdesc_intro_brown = S("Brown mushrooms are fungi which grow and spread in darkness, but are sensitive to light. They are inedible as such, but they can be used to craft food items.")
@@ -29,8 +29,8 @@ local usagehelp = S("This mushroom can be placed on mycelium and podzol at any l
 local function on_bone_meal(_, _, _, pos, n)
 	if math.random(1, 100) > 40 then return end --40% chance
 
-	local bn = minetest.get_node(vector.offset(pos,0,-1,0)).name
-	if bn ~= "mcl_core:mycelium" and bn ~= "mcl_core:dirt" and minetest.get_item_group(bn, "grass_block") ~= 1 and bn ~= "mcl_core:coarse_dirt" and bn ~= "mcl_core:podzol" then
+	local bn = core.get_node(vector.offset(pos,0,-1,0)).name
+	if bn ~= "mcl_core:mycelium" and bn ~= "mcl_core:dirt" and core.get_item_group(bn, "grass_block") ~= 1 and bn ~= "mcl_core:coarse_dirt" and bn ~= "mcl_core:podzol" then
 		return
 	end
 
@@ -38,11 +38,11 @@ local function on_bone_meal(_, _, _, pos, n)
 	local schematic, stem, wide
 	local schem_height = 5
 	if n.name == "mcl_mushrooms:mushroom_brown" then
-		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_brown.mts"
+		schematic = core.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_brown.mts"
     stem = "mcl_mushrooms:brown_mushroom_block_stem"
     wide = 3
 	elseif n.name == "mcl_mushrooms:mushroom_red" then
-		schematic = minetest.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
+		schematic = core.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
     stem = "mcl_mushrooms:red_mushroom_block_stem"
     wide = 2
 	else
@@ -57,7 +57,7 @@ local function on_bone_meal(_, _, _, pos, n)
   local minp, maxp = vector.offset(pos,-wide,1,-wide), vector.offset(pos,wide,base_height + schem_height,wide)
 
   -- Find lowest possible height
-  local obstacles = minetest.find_nodes_in_area(minp, maxp, {"group:opaque"})
+  local obstacles = core.find_nodes_in_area(minp, maxp, {"group:opaque"})
   local lowest_y = maxp.y
   for _, o in pairs(obstacles) do
     if o.y < lowest_y then
@@ -71,7 +71,7 @@ local function on_bone_meal(_, _, _, pos, n)
   end
 
 	-- Check space requirements
-  local goodnodes = minetest.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
+  local goodnodes = core.find_nodes_in_area(minp, maxp, {"air", "group:leaves"})
   local diff = vector.subtract(maxp, minp)
   local totalnodes = diff.x * diff.y * diff.z
   if #goodnodes < totalnodes then
@@ -79,15 +79,15 @@ local function on_bone_meal(_, _, _, pos, n)
   end
 
   -- Place the huge mushroom
-  minetest.remove_node(pos)
-  local ok = minetest.place_schematic(vector.new(minp.x, maxp.y - schem_height, minp.z), schematic, 0, nil, false)
+  core.remove_node(pos)
+  local ok = core.place_schematic(vector.new(minp.x, maxp.y - schem_height, minp.z), schematic, 0, nil, false)
   for i=0,base_height do
-    minetest.set_node(vector.offset(pos,0,i,0), {name=stem})
+    core.set_node(vector.offset(pos,0,i,0), {name=stem})
   end
   return ok ~= nil
 end
 
-minetest.register_node("mcl_mushrooms:mushroom_brown", {
+core.register_node("mcl_mushrooms:mushroom_brown", {
 	description = S("Brown Mushroom"),
 	_doc_items_longdesc = longdesc_intro_brown .. "\n\n" .. longdesc_append,
 	_doc_items_usagehelp = usagehelp,
@@ -116,7 +116,7 @@ minetest.register_node("mcl_mushrooms:mushroom_brown", {
 	_mcl_blast_resistance = 0,
 })
 
-minetest.register_node("mcl_mushrooms:mushroom_red", {
+core.register_node("mcl_mushrooms:mushroom_red", {
 	description = S("Red Mushroom"),
 	_doc_items_longdesc = longdesc_intro_red .. "\n\n" .. longdesc_append,
 	_doc_items_usagehelp = usagehelp,
@@ -156,18 +156,18 @@ mcl_flowerpots.register_potted_flower("mcl_mushrooms:mushroom_red", {
 	image = "farming_mushroom_red.png",
 })
 
-minetest.register_craftitem("mcl_mushrooms:mushroom_stew", {
+core.register_craftitem("mcl_mushrooms:mushroom_stew", {
 	description = S("Mushroom Stew"),
 	_doc_items_longdesc = S("Mushroom stew is a healthy soup which can be consumed to restore some hunger points."),
 	inventory_image = "farming_mushroom_stew.png",
-	on_place = minetest.item_eat(6, "mcl_core:bowl"),
-	on_secondary_use = minetest.item_eat(6, "mcl_core:bowl"),
+	on_place = core.item_eat(6, "mcl_core:bowl"),
+	on_secondary_use = core.item_eat(6, "mcl_core:bowl"),
 	groups = { food = 3, eatable = 6 },
 	_mcl_saturation = 7.2,
 	stack_max = 1,
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_mushrooms:mushroom_stew",
 	recipe = {"mcl_core:bowl", "mcl_mushrooms:mushroom_brown", "mcl_mushrooms:mushroom_red"}
@@ -177,16 +177,16 @@ minetest.register_craft({
 Code based on information gathered from Minecraft Wiki
 <http://minecraft.gamepedia.com/Tutorials/Mushroom_farming#Videos>
 ]]
-minetest.register_abm({
+core.register_abm({
 	label = "Mushroom spread and death",
 	nodenames = {"mcl_mushrooms:mushroom_brown", "mcl_mushrooms:mushroom_red"},
 	interval = 11,
 	chance = 50,
 	action = function(pos, node)
-		local node_soil = minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z}).name
+		local node_soil = core.get_node({x=pos.x, y=pos.y-1, z=pos.z}).name
 		-- Mushrooms uproot in light except on nodes of the "supports_mushrooms" group
-			if minetest.get_item_group(node_soil, "supports_mushrooms") == 0 and minetest.get_node_light(pos, nil) > 12 then
-				minetest.dig_node(pos)
+			if core.get_item_group(node_soil, "supports_mushrooms") == 0 and core.get_node_light(pos, nil) > 12 then
+				core.dig_node(pos)
 			return
 		end
 
@@ -194,7 +194,7 @@ minetest.register_abm({
 		local pos1 = vector.offset(pos, 4, 1, 4)
 
 		-- Stop mushroom spread if a 9×3×9 box is too crowded
-		if #minetest.find_nodes_in_area(pos0, pos1, {"group:mushroom"}) >= 5 then
+		if #core.find_nodes_in_area(pos0, pos1, {"group:mushroom"}) >= 5 then
 			return
 		end
 
@@ -206,16 +206,16 @@ minetest.register_abm({
 			selected_pos.y + math.random(0, 1) - math.random(0, 1),
 			selected_pos.z + math.random(-1, 1)
 		)
-		local random_node = minetest.get_node_or_nil(rnd)
+		local random_node = core.get_node_or_nil(rnd)
 		if not random_node or random_node.name ~= "air" then
 			return
 		end
-		local node_under = minetest.get_node_or_nil(vector.offset(rnd, 0, -1, 0))
+		local node_under = core.get_node_or_nil(vector.offset(rnd, 0, -1, 0))
 		if not node_under then
 			return
 		end
 
-		if minetest.get_node_light(rnd, 0.5) > 12 or (minetest.get_item_group(node_under.name, "opaque") == 0) then
+		if core.get_node_light(rnd, 0.5) > 12 or (core.get_item_group(node_under.name, "opaque") == 0) then
 			return
 		end
 		local rnd2 = vector.new(
@@ -223,18 +223,18 @@ minetest.register_abm({
 			rnd.y,
 			rnd.z + math.random(-1, 1)
 		)
-		random_node = minetest.get_node_or_nil(rnd2)
+		random_node = core.get_node_or_nil(rnd2)
 		if not random_node or random_node.name ~= "air" then
 			return
 		end
-		node_under = minetest.get_node_or_nil(vector.offset(rnd2, 0, -1, 0))
+		node_under = core.get_node_or_nil(vector.offset(rnd2, 0, -1, 0))
 		if not node_under then
 			return
 		end
-		if minetest.get_node_light(rnd2, 0.5) > 12 or (minetest.get_item_group(node_under.name, "opaque") == 0) or (minetest.get_item_group(node_under.name, "solid") == 0) then
+		if core.get_node_light(rnd2, 0.5) > 12 or (core.get_item_group(node_under.name, "opaque") == 0) or (core.get_item_group(node_under.name, "solid") == 0) then
 			return
 		end
 
-		minetest.set_node(rnd2, {name = node.name})
+		core.set_node(rnd2, {name = node.name})
 	end
 })

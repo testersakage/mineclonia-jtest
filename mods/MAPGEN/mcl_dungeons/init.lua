@@ -2,7 +2,7 @@
 
 mcl_dungeons = {}
 
-local mg_name = minetest.get_mapgen_setting("mg_name")
+local mg_name = core.get_mapgen_setting("mg_name")
 local generate_in_singlenode = false
 
 -- Are dungeons disabled?
@@ -100,8 +100,8 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 	if check then
 		for tx = x+1, x+dim.x do
 		for tz = z+1, z+dim.z do
-			local fdef = minetest.registered_nodes[mcl_vars.get_node({x = tx, y = y_floor  , z = tz}).name]
-			local cdef = minetest.registered_nodes[mcl_vars.get_node({x = tx, y = y_ceiling, z = tz}).name]
+			local fdef = core.registered_nodes[mcl_vars.get_node({x = tx, y = y_floor  , z = tz}).name]
+			local cdef = core.registered_nodes[mcl_vars.get_node({x = tx, y = y_ceiling, z = tz}).name]
 			if not fdef or not fdef.walkable or not cdef or not cdef.walkable then return false end
 		end
 		end
@@ -205,7 +205,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 	-- Check conditions. If okay, start generating
 	if check and (openings_counter < 1 or openings_counter > 5) then return end
 
-	minetest.log("info","[mcl_dungeons] Placing new dungeon at "..minetest.pos_to_string({x=x,y=y,z=z}))
+	core.log("info","[mcl_dungeons] Placing new dungeon at "..core.pos_to_string({x=x,y=y,z=z}))
 	-- Okay! Spawning starts!
 
 	-- Remember spawner chest positions to set metadata later
@@ -239,7 +239,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 
 	-- Calculate the mob spawner position, to be re-used for later
 	local sp = {x = x + math.ceil(dim.x/2), y = y+1, z = z + math.ceil(dim.z/2)}
-	local rn = minetest.registered_nodes[mcl_vars.get_node(sp).name]
+	local rn = core.registered_nodes[mcl_vars.get_node(sp).name]
 	if rn and rn.is_ground_content then
 		table.insert(spawner_posses, sp)
 	end
@@ -255,14 +255,14 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 		-- Do not overwrite nodes with is_ground_content == false (e.g. bedrock)
 		-- Exceptions: cobblestone and mossy cobblestone so neighborings dungeons nicely connect to each other
 		local name = mcl_vars.get_node(p).name
-		local rn = minetest.registered_nodes[name]
+		local rn = core.registered_nodes[name]
 		if rn and rn.is_ground_content or name == "mcl_core:cobble" or name == "mcl_core:mossycobble" then
 			-- Floor
 			if ty == y then
 				if pr:next(1,4) == 1 then
-					minetest.swap_node(p, {name = "mcl_core:cobble"})
+					core.swap_node(p, {name = "mcl_core:cobble"})
 				else
-					minetest.swap_node(p, {name = "mcl_core:mossycobble"})
+					core.swap_node(p, {name = "mcl_core:mossycobble"})
 				end
 
 				-- Generate walls
@@ -274,14 +274,14 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 				-- Check if it's an opening first
 				if (ty == maxy) or (not (openings[tx] and openings[tx][tz]))  then
 					-- Place wall or ceiling
-					minetest.swap_node(p, {name = "mcl_core:cobble"})
+					core.swap_node(p, {name = "mcl_core:cobble"})
 				elseif ty < maxy - 1 then
 					-- Normally the openings are already clear, but not if it is a corner
 					-- widening. Make sure to clear at least the bottom 2 nodes of an opening.
-					if name ~= "air" then minetest.swap_node(p, {name = "air"}) end
+					if name ~= "air" then core.swap_node(p, {name = "air"}) end
 				elseif name ~= "air" then
 					-- This allows for variation between 2-node and 3-node high openings.
-					minetest.swap_node(p, {name = "mcl_core:cobble"})
+					core.swap_node(p, {name = "mcl_core:cobble"})
 				end
 				-- If it was an opening, the lower 3 blocks are not touched at all
 
@@ -291,7 +291,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 					currentChest = currentChest + 1
 					table.insert(chests, {x=tx, y=ty, z=tz})
 				else
-					minetest.swap_node(p, {name = "air"})
+					core.swap_node(p, {name = "air"})
 				end
 
 				local forChest = ty==y+1 and (tx==x+1 or tx==maxx-1 or tz==z+1 or tz==maxz-1)
@@ -301,7 +301,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 					currentChest = currentChest + 1
 					table.insert(chests, {x=tx, y=ty, z=tz})
 				-- else
-					--minetest.swap_node(p, {name = "air"})
+					--core.swap_node(p, {name = "air"})
 				end
 				if forChest then
 					chestSlotCounter = chestSlotCounter + 1
@@ -320,8 +320,8 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 			local wpos = vector.subtract(pos, surround_vectors[s])
 			local nodename = mcl_vars.get_node(spos).name
 			local nodename2 = mcl_vars.get_node(wpos).name
-			local nodedef = minetest.registered_nodes[nodename]
-			local nodedef2 = minetest.registered_nodes[nodename2]
+			local nodedef = core.registered_nodes[nodename]
+			local nodedef2 = core.registered_nodes[nodename2]
 			-- The chest needs an open space in front of it and a walkable node (except chest) behind it
 			if nodedef and nodedef.walkable == false and nodedef2 and nodedef2.walkable == true and nodename2 ~= "mcl_chests:chest" then
 				table.insert(surroundings, spos)
@@ -335,13 +335,13 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 		else
 			-- 1 or multiple possible open directions: Choose random facedir
 			local face_to = surroundings[pr:next(1, #surroundings)]
-			facedir = minetest.dir_to_facedir(vector.subtract(pos, face_to))
+			facedir = core.dir_to_facedir(vector.subtract(pos, face_to))
 		end
 
-		minetest.swap_node(pos, {name="mcl_chests:chest", param2=facedir})
+		core.swap_node(pos, {name="mcl_chests:chest", param2=facedir})
 		mcl_structures.construct_nodes(pos, pos, {"mcl_chests:chest"})
-		local meta = minetest.get_meta(pos)
-		minetest.log("info", "[mcl_dungeons] Filling chest " .. tostring(c) .. " at " .. minetest.pos_to_string(pos))
+		local meta = core.get_meta(pos)
+		core.log("info", "[mcl_dungeons] Filling chest " .. tostring(c) .. " at " .. core.pos_to_string(pos))
 		mcl_loot.fill_inventory(meta:get_inventory(), "main", mcl_loot.get_multi_loot(loottable, pr), pr)
 	end
 
@@ -350,7 +350,7 @@ local function ecb_spawn_dungeon(_, _, calls_remaining, param)
 	for s=#spawner_posses, 1, -1 do
 		local sp = spawner_posses[s]
 		-- ... and place it and select a random mob
-		minetest.swap_node(sp, {name = "mcl_mobspawners:spawner"})
+		core.swap_node(sp, {name = "mcl_mobspawners:spawner"})
 		local mobs = {
 			"mobs_mc:zombie",
 			"mobs_mc:zombie",
@@ -375,8 +375,8 @@ local function dungeons_nodes(minp, maxp, blockseed)
 			local z = pr:next(minp.z, maxp.z-dim.z-1)
 			local p1 = {x=x,y=y,z=z}
 			local p2 = {x = x+dim.x+1, y = y+dim.y+1, z = z+dim.z+1}
-			minetest.log("verbose","[mcl_dungeons] size=" ..minetest.pos_to_string(dim) .. ", emerge from "..minetest.pos_to_string(p1) .. " to " .. minetest.pos_to_string(p2))
-			minetest.emerge_area(p1, p2, ecb_spawn_dungeon, {p1=p1, p2=p2, dim=dim, pr=pr})
+			core.log("verbose","[mcl_dungeons] size=" ..core.pos_to_string(dim) .. ", emerge from "..core.pos_to_string(p1) .. " to " .. core.pos_to_string(p2))
+			core.emerge_area(p1, p2, ecb_spawn_dungeon, {p1=p1, p2=p2, dim=dim, pr=pr})
 		end
 	end
 end
@@ -385,8 +385,8 @@ function mcl_dungeons.spawn_dungeon(p1, _, pr)
 	if not p1 or not pr or not p1.x or not p1.y or not p1.z then return end
 	local dim = dungeonsizes[pr:next(1, #dungeonsizes)]
 	local p2 = {x = p1.x+dim.x+1, y = p1.y+dim.y+1, z = p1.z+dim.z+1}
-	minetest.log("verbose","[mcl_dungeons] size=" ..minetest.pos_to_string(dim) .. ", emerge from "..minetest.pos_to_string(p1) .. " to " .. minetest.pos_to_string(p2))
-	minetest.emerge_area(p1, p2, ecb_spawn_dungeon, {p1=p1, p2=p2, dim=dim, pr=pr, dontcheck=true})
+	core.log("verbose","[mcl_dungeons] size=" ..core.pos_to_string(dim) .. ", emerge from "..core.pos_to_string(p1) .. " to " .. core.pos_to_string(p2))
+	core.emerge_area(p1, p2, ecb_spawn_dungeon, {p1=p1, p2=p2, dim=dim, pr=pr, dontcheck=true})
 end
 
 mcl_mapgen_core.register_generator("dungeons", nil, dungeons_nodes, 999999)

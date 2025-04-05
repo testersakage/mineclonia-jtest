@@ -1,5 +1,5 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local has_doc = minetest.get_modpath("doc")
+local S = core.get_translator(core.get_current_modname())
+local has_doc = core.get_modpath("doc")
 
 mcl_flowerpots = {}
 
@@ -12,7 +12,7 @@ local pot_box = {
 	},
 }
 
-minetest.register_node("mcl_flowerpots:flower_pot", {
+core.register_node("mcl_flowerpots:flower_pot", {
 	description = S("Flower Pot"),
 	_tt_help = S("Can hold a small flower or plant"),
 	_doc_items_longdesc = S("Flower pots are decorative blocks in which flowers and other small plants can be placed."),
@@ -35,14 +35,14 @@ minetest.register_node("mcl_flowerpots:flower_pot", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rightclick = function(pos, _, clicker, itemstack)
 		local name = clicker:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return itemstack
 		end
 		local item = clicker:get_wielded_item():get_name()
 		if mcl_flowerpots.registered_pots[item] then
-			minetest.swap_node(pos, { name = "mcl_flowerpots:flower_pot_" .. mcl_flowerpots.registered_pots[item] })
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			core.swap_node(pos, { name = "mcl_flowerpots:flower_pot_" .. mcl_flowerpots.registered_pots[item] })
+			if not core.is_creative_enabled(clicker:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
@@ -51,7 +51,7 @@ minetest.register_node("mcl_flowerpots:flower_pot", {
 	end,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_flowerpots:flower_pot",
 	recipe = {
 		{ "mcl_core:brick", "", "mcl_core:brick" },
@@ -62,7 +62,7 @@ minetest.register_craft({
 
 function mcl_flowerpots.register_potted_flower(name, def)
 	mcl_flowerpots.registered_pots[name] = def.name
-	minetest.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
+	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
 		description = def.desc .. " " .. S("Flower Pot"),
 		_doc_items_create_entry = false,
 		drawtype = "mesh",
@@ -81,12 +81,12 @@ function mcl_flowerpots.register_potted_flower(name, def)
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		on_rightclick = function(pos, _, clicker)
 			local player_name = clicker:get_player_name()
-			if minetest.is_protected(pos, player_name) then
-				minetest.record_protection_violation(pos, player_name)
+			if core.is_protected(pos, player_name) then
+				core.record_protection_violation(pos, player_name)
 				return
 			end
-			minetest.add_item(vector.offset(pos, 0, 0.5, 0), name)
-			minetest.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
+			core.add_item(vector.offset(pos, 0, 0.5, 0), name)
+			core.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
 		end,
 		drop = {
 			items = {
@@ -102,7 +102,7 @@ end
 
 function mcl_flowerpots.register_potted_cube(name, def)
 	mcl_flowerpots.registered_pots[name] = def.name
-	minetest.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
+	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
 		description = def.desc .. " " .. S("Flower Pot"),
 		_doc_items_create_entry = false,
 		drawtype = "mesh",
@@ -124,12 +124,12 @@ function mcl_flowerpots.register_potted_cube(name, def)
 			if clicker:is_player() then
 				player_name = clicker:get_player_name()
 			end
-			if minetest.is_protected(pos, player_name) then
-				minetest.record_protection_violation(pos, player_name)
+			if core.is_protected(pos, player_name) then
+				core.record_protection_violation(pos, player_name)
 				return
 			end
-			minetest.add_item(vector.offset(pos, 0, 0.5, 0), name)
-			minetest.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
+			core.add_item(vector.offset(pos, 0, 0.5, 0), name)
+			core.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
 		end,
 		drop = {
 			items = {

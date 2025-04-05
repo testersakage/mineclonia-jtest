@@ -1,5 +1,5 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_privilege("maphack", {
+core.register_privilege("maphack", {
 	description = S("Can place and use advanced blocks like mob spawners, command blocks and barriers."),
 })

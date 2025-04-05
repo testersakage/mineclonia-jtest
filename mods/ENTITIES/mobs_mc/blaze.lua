@@ -3,10 +3,10 @@
 -- Model and mobs_blaze.png see https://github.com/22i/minecraft-voxel-blender-models -hi 22i ~jordan4ibanez
 -- blaze.lua partial copy of mobs_mc/ghast.lua
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
-local mod_target = minetest.get_modpath("mcl_target")
+local mod_target = core.get_modpath("mcl_target")
 
 --###################
 --################### BLAZE
@@ -116,7 +116,7 @@ function blaze:do_custom (dtime)
 
 	if not self:check_timer("blaze_particles", mcl_util.float_random(0.5, 2)) then return end
 
-	minetest.add_particle({
+	core.add_particle({
 			pos = {x = pos.x+mcl_util.float_random(-0.7,0.7) * math.random()/2, y = pos.y+mcl_util.float_random(0.7,1.2), z = pos.z+mcl_util.float_random(-0.7,0.7) * math.random()/2},
 			velocity = {x=0, y = mcl_util.float_random(0.5, 2), z=0},
 			expirationtime = math.random(),
@@ -131,7 +131,7 @@ function blaze:do_custom (dtime)
 				length = 2.05,
 			},
 	})
-	minetest.add_particle({
+	core.add_particle({
 			pos = {x = pos.x+mcl_util.float_random(-0.7,0.7)* math.random()/2, y = pos.y+mcl_util.float_random(0.7,1.2), z = pos.z+mcl_util.float_random(-0.7,0.7) * math.random()/2},
 			velocity = {x=0, y = mcl_util.float_random(0.5, 2), z=0},
 			expirationtime = math.random(),
@@ -146,7 +146,7 @@ function blaze:do_custom (dtime)
 				length = 2.05,
 			},
 	})
-	minetest.add_particle({
+	core.add_particle({
 			pos = {x = pos.x+mcl_util.float_random(-0.7,0.7)*math.random()/2, y = pos.y+mcl_util.float_random(0.7,1.2), z = pos.z+mcl_util.float_random(-0.7,0.7)*math.random()/2},
 			velocity = {x=0, y = mcl_util.float_random(0.5,2), z=0},
 			expirationtime = math.random(),
@@ -250,7 +250,7 @@ function blaze:attack_null (self_pos, dtime, target_pos, line_of_sight)
 				z = mcl_util.dist_triangular (dz, 2.297 * scatter),
 			})
 			local pos = vector.offset (self_pos, 0, 0.9, 0)
-			local arrow = minetest.add_entity (pos, self.arrow)
+			local arrow = core.add_entity (pos, self.arrow)
 			if arrow then
 				local luaentity = arrow:get_luaentity ()
 				self:mob_sound ("shoot_attack")
@@ -326,19 +326,19 @@ mcl_mobs.register_arrow ("mobs_mc:blaze_fireball", {
 	-- Node hit, make fire
 	hit_node = function(self, pos, node)
 		if node == "air" then
-			minetest.set_node(pos, {name = "mcl_fire:fire"})
+			core.set_node(pos, {name = "mcl_fire:fire"})
 		else
 			if self._shot_from_dispenser and mod_target and node == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
 			end
 			local v = vector.normalize(self.object:get_velocity())
 			local crashpos = vector.subtract(pos, v)
-			local crashnode = minetest.get_node(crashpos)
-			local cndef = minetest.registered_nodes[crashnode.name]
+			local crashnode = core.get_node(crashpos)
+			local cndef = core.registered_nodes[crashnode.name]
 			-- Set fire if node is air, or a replacable flammable node (e.g. a plant)
 			if crashnode.name == "air" or
-					(cndef and cndef.buildable_to and minetest.get_item_group(crashnode.name, "flammable") >= 1) then
-				minetest.set_node(crashpos, {name = "mcl_fire:fire"})
+					(cndef and cndef.buildable_to and core.get_item_group(crashnode.name, "flammable") >= 1) then
+				core.set_node(crashpos, {name = "mcl_fire:fire"})
 			end
 		end
 	end

@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local spawnon = {"mcl_deepslate:deepslate","mcl_trees:wood_birch","mcl_wool:red_carpet","mcl_wool:brown_carpet"}
 

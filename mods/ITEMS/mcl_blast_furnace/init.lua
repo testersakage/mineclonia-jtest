@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 mcl_furnaces.register_furnace("mcl_blast_furnace:blast_furnace", {
 	cook_group = "blast_furnace_smeltable",
@@ -37,7 +37,7 @@ mcl_furnaces.register_furnace("mcl_blast_furnace:blast_furnace", {
 	},
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_blast_furnace:blast_furnace",
 	recipe = {
 		{ "mcl_core:iron_ingot",   "mcl_core:iron_ingot",   "mcl_core:iron_ingot" },

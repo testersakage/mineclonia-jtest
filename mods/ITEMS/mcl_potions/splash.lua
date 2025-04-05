@@ -1,7 +1,7 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local GRAVITY = tonumber(minetest.settings:get("movement_gravity"))
+local S = core.get_translator(core.get_current_modname())
+local GRAVITY = tonumber(core.settings:get("movement_gravity"))
 
-local mod_target = minetest.get_modpath("mcl_target")
+local mod_target = core.get_modpath("mcl_target")
 
 local function splash_image(colorstring, opacity)
 	if not opacity then
@@ -32,12 +32,12 @@ function mcl_potions.register_splash(name, descr, color, def)
 		local name = placer:get_player_name()
 		pos.y = pos.y + placer:get_properties().eye_height
 		mcl_potions.throw_splash(id, dir, pos, name, potency, plus)
-		if not minetest.is_creative_enabled(name) then
+		if not core.is_creative_enabled(name) then
 			item:take_item()
 		end
 		return item
 	end
-	minetest.register_craftitem(id, {
+	core.register_craftitem(id, {
 		description = descr,
 		_tt_help = def._tt,
 		_dynamic_tt = def._dynamic_tt,
@@ -59,8 +59,8 @@ function mcl_potions.register_splash(name, descr, color, def)
 		_on_dispense = function(item, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
-			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
-			local obj = minetest.add_entity(pos, id.."_flying")
+			core.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+			local obj = core.add_entity(pos, id.."_flying")
 			if obj and obj:get_pos() then
 				local velocity = 22
 				obj:set_velocity({x=dropdir.x*velocity,y=dropdir.y*velocity,z=dropdir.z*velocity})
@@ -76,7 +76,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 
 	local w = 0.7
 
-	minetest.register_entity(id.."_flying",{
+	core.register_entity(id.."_flying",{
 		initial_properties = {
 			textures = {splash_image(color)},
 			hp_max = 1,
@@ -100,7 +100,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 				if val.target and mod_target then
 				mcl_target.hit (val.target, 0.4) --4 redstone ticks
 				end
-				minetest.sound_play("mcl_potions_breaking_glass",
+				core.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})
 				local texture, acc
 				if name == "water" then
@@ -114,7 +114,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 				end
 				acc = {x=0, y=0, z=0}
 				end
-				minetest.add_particlespawner({
+				core.add_particlespawner({
 					amount = 50,
 					time = 0.1,
 					minpos = {x=pos.x-d, y=pos.y, z=pos.z-d},
@@ -136,7 +136,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 				local plus = self._plus or 0
 
 				if def.on_splash then def.on_splash(pos, potency+1) end
-				for obj in minetest.objects_inside_radius(pos, 4) do
+				for obj in core.objects_inside_radius(pos, 4) do
 
 					local entity = obj:get_luaentity()
 					if obj:is_player() or entity and entity.is_mob then
@@ -162,7 +162,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 							local power = (potency+1) * mcl_potions.SPLASH_FACTOR
 							local thrower = self._thrower
 							if type (thrower) == "string" then
-								thrower = minetest.get_player_by_name (thrower)
+								thrower = core.get_player_by_name (thrower)
 							end
 							if rad > 0 then
 								def.custom_effect (obj, redux_map[rad] * power, plus, thrower)
@@ -182,12 +182,12 @@ end
 -- player and is to be serialized properly.
 function mcl_potions.throw_splash (potionname, dir, pos, thrower,
 				   potency, plus)
-	if not minetest.registered_items[potionname] then
-	minetest.log ("action", "Throwing nonexistent potion " .. potionname)
+	if not core.registered_items[potionname] then
+	core.log ("action", "Throwing nonexistent potion " .. potionname)
 	return
 	end
 	local obj
-	= minetest.add_entity ({x=pos.x+dir.x,y=pos.y+dir.y,z=pos.z+dir.z},
+	= core.add_entity ({x=pos.x+dir.x,y=pos.y+dir.y,z=pos.z+dir.z},
 						   potionname .. "_flying")
 	if not obj then
 	return
@@ -199,6 +199,6 @@ function mcl_potions.throw_splash (potionname, dir, pos, thrower,
 	ent._thrower = thrower
 	ent._potency = potency
 	ent._plus = plus
-	ent._effect_list = minetest.registered_items[potionname]._effect_list
-	minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+	ent._effect_list = core.registered_items[potionname]._effect_list
+	core.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
 end

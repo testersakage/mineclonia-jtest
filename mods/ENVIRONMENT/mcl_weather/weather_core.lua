@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- weather states, 'none' is default, other states depends from active mods
 mcl_weather.state = "none"
@@ -35,15 +35,15 @@ mcl_weather.reg_weathers["none"] = {
 	clear = function() end,
 }
 
-local storage = minetest.get_mod_storage()
+local storage = core.get_mod_storage()
 -- Save weather into mod storage, so it can be loaded after restarting the server
 local function save_weather()
 	if not mcl_weather.end_time then return end
 	storage:set_string("mcl_weather_state", mcl_weather.state)
 	storage:set_int("mcl_weather_end_time", mcl_weather.end_time)
-	minetest.log("verbose", "[mcl_weather] Weather data saved: state="..mcl_weather.state.." end_time="..mcl_weather.end_time)
+	core.log("verbose", "[mcl_weather] Weather data saved: state="..mcl_weather.state.." end_time="..mcl_weather.end_time)
 end
-minetest.register_on_shutdown(save_weather)
+core.register_on_shutdown(save_weather)
 
 local particlespawners={}
 function mcl_weather.add_spawner_player(pl,id,ps)
@@ -56,7 +56,7 @@ function mcl_weather.add_spawner_player(pl,id,ps)
 		particlespawners[name] = {}
 		ps.playername =name
 		ps.attached = pl
-		particlespawners[name][id]=minetest.add_particlespawner(ps)
+		particlespawners[name][id]=core.add_particlespawner(ps)
 		return particlespawners[name][id]
 	end
 end
@@ -64,7 +64,7 @@ function mcl_weather.remove_spawners_player(pl)
 	local name=pl:get_player_name()
 	if not particlespawners[name] then return end
 	for _, v in pairs(particlespawners[name]) do
-		minetest.delete_particlespawner(v)
+		core.delete_particlespawner(v)
 	end
 	particlespawners[name] = nil
 	return true
@@ -83,7 +83,7 @@ function mcl_weather.get_rand_end_time(min_duration, max_duration)
 	else
 		r = math.random(mcl_weather.min_duration, mcl_weather.max_duration)
 	end
-	return minetest.get_gametime() + r
+	return core.get_gametime() + r
 end
 
 function mcl_weather.get_current_light_factor()
@@ -100,14 +100,14 @@ end
 function mcl_weather.is_outdoor(pos)
 	local cpos = vector.offset(pos,0,1,0)
 	local dim = mcl_worlds.pos_to_dimension(cpos)
-	if minetest.get_node_light(cpos, 0.5) == 15 and dim == "overworld" then
+	if core.get_node_light(cpos, 0.5) == 15 and dim == "overworld" then
 		return true
 	end
 	return false
 end
 
 function mcl_weather.can_see_outdoors(pos)
-	local light = minetest.get_natural_light(pos, 0.5)
+	local light = core.get_natural_light(pos, 0.5)
 	if light ~= nil and light >= 1 then
 		return true
 	end
@@ -122,7 +122,7 @@ function mcl_weather.is_underwater(player)
 	local player_eye_pos = {x = ppos.x + offset.x,
 				y = ppos.y + offset.y + 1.5,
 				z = ppos.z + offset.z}
-	local node_level = minetest.get_node_level(player_eye_pos)
+	local node_level = core.get_node_level(player_eye_pos)
 	if node_level == 8 or node_level == 7 then
 		return true
 	end
@@ -131,7 +131,7 @@ end
 
 local t = 0
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	t = t + dtime
 	if t < mcl_weather.check_interval then return end
 	t = 0
@@ -140,8 +140,8 @@ minetest.register_globalstep(function(dtime)
 		mcl_weather.end_time = mcl_weather.get_rand_end_time()
 	end
 	-- recalculate weather
-	if mcl_weather.end_time <= minetest.get_gametime() then
-		local changeWeather = minetest.settings:get_bool("mcl_doWeatherCycle")
+	if mcl_weather.end_time <= core.get_gametime() then
+		local changeWeather = core.settings:get_bool("mcl_doWeatherCycle")
 		if changeWeather == nil then
 			changeWeather = true
 		end
@@ -172,7 +172,7 @@ end
 
 -- Change weather to new_weather.
 -- * explicit_end_time is OPTIONAL. If specified, explicitly set the
---   gametime (minetest.get_gametime) in which the weather ends.
+--   gametime (core.get_gametime) in which the weather ends.
 -- * changer is OPTIONAL, for logging purposes.
 function mcl_weather.change_weather(new_weather, explicit_end_time, changer_name)
 	local changer_name = changer_name or debug.getinfo(2).name.."()"
@@ -192,7 +192,7 @@ function mcl_weather.change_weather(new_weather, explicit_end_time, changer_name
 		if new_weather == "none" then
 			new_weather = "clear"
 		end
-		minetest.log("info", "[mcl_weather] " .. changer_name .. " changed the weather from " .. old_weather .. " to " .. new_weather)
+		core.log("info", "[mcl_weather] " .. changer_name .. " changed the weather from " .. old_weather .. " to " .. new_weather)
 
 		local weather_meta = mcl_weather.reg_weathers[mcl_weather.state]
 		if explicit_end_time then
@@ -211,13 +211,13 @@ function mcl_weather.get_weather()
 	return mcl_weather.state
 end
 
-minetest.register_privilege("weather_manager", {
+core.register_privilege("weather_manager", {
 	description = S("Gives ability to control weather"),
 	give_to_singleplayer = false
 })
 
 -- Weather command definition. Set
-minetest.register_chatcommand("weather", {
+core.register_chatcommand("weather", {
 	params = "(clear | rain | snow | thunder) [<duration>]",
 	description = S("Changes the weather to the specified parameter."),
 	privs = {weather_manager = true},
@@ -242,7 +242,7 @@ minetest.register_chatcommand("weather", {
 				if duration < 1 then
 					return false, S("Error: Duration can't be less than 1 second.")
 				end
-				end_time = minetest.get_gametime() + duration
+				end_time = core.get_gametime() + duration
 			end
 		end
 
@@ -255,7 +255,7 @@ minetest.register_chatcommand("weather", {
 	end
 })
 
-minetest.register_chatcommand("toggledownfall", {
+core.register_chatcommand("toggledownfall", {
 	params = "",
 	description = S("Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"),
 	privs = {weather_manager = true},
@@ -275,7 +275,7 @@ minetest.register_chatcommand("toggledownfall", {
 
 -- Configuration setting which allows user to disable ABM for weathers (if they use it).
 -- Weather mods expected to be use this flag before registering ABM.
-local weather_allow_abm = minetest.settings:get_bool("weather_allow_abm")
+local weather_allow_abm = core.settings:get_bool("weather_allow_abm")
 if weather_allow_abm == false then
 	mcl_weather.allow_abm = false
 end
@@ -291,9 +291,9 @@ local function load_weather()
 			-- Fallback in case of corrupted end time
 			mcl_weather.end_time = mcl_weather.min_duration
 		end
-		minetest.log("info", "[mcl_weather] Weather restored.")
+		core.log("info", "[mcl_weather] Weather restored.")
 	else
-		minetest.log("info", "[mcl_weather] No weather data found. Starting with clear weather.")
+		core.log("info", "[mcl_weather] No weather data found. Starting with clear weather.")
 	end
 end
 

@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local template = {
 	groups = {
@@ -52,7 +52,7 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 	stem_full.groups.huge_mushroom = species_id
 	stem_full.groups.huge_mushroom_stem = 2
 	stem_full.groups.compostability = 65
-	minetest.register_node("mcl_mushrooms:"..color.."_mushroom_block_stem_full", stem_full)
+	core.register_node("mcl_mushrooms:"..color.."_mushroom_block_stem_full", stem_full)
 
 	-- Stem
 	local stem = table.copy(template)
@@ -62,19 +62,19 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 	stem.groups.huge_mushroom = species_id
 	stem.groups.huge_mushroom_stem = 1
 	stem.groups.compostability = 65
-	minetest.register_node("mcl_mushrooms:"..color.."_mushroom_block_stem", stem)
+	core.register_node("mcl_mushrooms:"..color.."_mushroom_block_stem", stem)
 
 	-- Mushroom block (cap)
 	local function register_mushroom_cap(block, block_id, index)
 		block.groups.huge_mushroom = species_id
 		block.groups.huge_mushroom_cap = index
 		block._mcl_burntime = 15
-		minetest.register_node(block_id, block)
+		core.register_node(block_id, block)
 	end
 
 	-- Each side can either be the cap or the pores texture.
 	-- Cubes have 6 sides, so there's a total of 2^6 = 64 combinations
-	local has_doc = minetest.get_modpath("doc")
+	local has_doc = core.get_modpath("doc")
 	local full_block = "mcl_mushrooms:"..color.."_mushroom_block_cap_111111"
 	local block_skin = "mcl_mushrooms_mushroom_block_skin_"..color..".png"
 	-- Cap blocks with pores on at least 1 side. These blocks are used internally.
@@ -140,14 +140,14 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 			end
 		end
 
-		local node = minetest.get_node(pos)
-		local species_self = minetest.get_item_group(node.name, "huge_mushroom")
+		local node = core.get_node(pos)
+		local species_self = core.get_item_group(node.name, "huge_mushroom")
 		local node_update = table.copy(node)
 		for i=1, #sides do
 			local neighbor = vector.add(pos, sides[i][1])
-			local neighbor_node = minetest.get_node(neighbor)
+			local neighbor_node = core.get_node(neighbor)
 			local node_set = false
-			if minetest.get_item_group(neighbor_node.name, "huge_mushroom_cap") ~= 0 and minetest.get_item_group(neighbor_node.name, "huge_mushroom") == species_self then
+			if core.get_item_group(neighbor_node.name, "huge_mushroom_cap") ~= 0 and core.get_item_group(neighbor_node.name, "huge_mushroom") == species_self then
 				local i2 = sides[i][2]
 				local node_return = replace_side(pos, node_update, i)
 				if node_return then
@@ -156,11 +156,11 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 				end
 				local new_neighbor = replace_side(neighbor, neighbor_node, i2)
 				if new_neighbor then
-					minetest.set_node(neighbor, new_neighbor)
+					core.set_node(neighbor, new_neighbor)
 				end
 			end
 			if node_set then
-				minetest.set_node(pos, node_update)
+				core.set_node(pos, node_update)
 			end
 		end
 	end
@@ -181,12 +181,12 @@ register_mushroom("brown", 2, brown, S("Huge Brown Mushroom Block"), S("Huge Bro
 local colors = { "red", "brown" }
 for c=1, 2 do
 	local color = colors[c]
-	minetest.register_alias("mcl_mushrooms:"..color.."_mushroom_block_cap_full", "mcl_mushrooms:"..color.."_mushroom_block_cap_111111")
-	minetest.register_alias("mcl_mushrooms:"..color.."_mushroom_block_cap_top", "mcl_mushrooms:"..color.."_mushroom_block_cap_100000")
-	minetest.register_alias("mcl_mushrooms:"..color.."_mushroom_block_pores_full", "mcl_mushrooms:"..color.."_mushroom_block_cap_000000")
+	core.register_alias("mcl_mushrooms:"..color.."_mushroom_block_cap_full", "mcl_mushrooms:"..color.."_mushroom_block_cap_111111")
+	core.register_alias("mcl_mushrooms:"..color.."_mushroom_block_cap_top", "mcl_mushrooms:"..color.."_mushroom_block_cap_100000")
+	core.register_alias("mcl_mushrooms:"..color.."_mushroom_block_pores_full", "mcl_mushrooms:"..color.."_mushroom_block_cap_000000")
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Replace legacy mushroom cap blocks",
 	name = "mcl_mushrooms:replace_legacy_mushroom_caps",
 	nodenames = { "mcl_mushrooms:brown_mushroom_block_cap_corner", "mcl_mushrooms:brown_mushroom_block_cap_side", "mcl_mushrooms:red_mushroom_block_cap_corner", "mcl_mushrooms:red_mushroom_block_cap_side" },
@@ -195,29 +195,29 @@ minetest.register_lbm({
 			local color = colors[c]
 			if node.name == "mcl_mushrooms:"..color.."_mushroom_block_cap_side" then
 				if node.param2 == 0 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100001"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100001"})
 				elseif node.param2 == 1 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100100"}) -- OK
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100100"}) -- OK
 				elseif node.param2 == 2 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100010"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100010"})
 				elseif node.param2 == 3 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101000"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101000"})
 				else
 					-- Fallback
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101111"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101111"})
 				end
 			elseif node.name == "mcl_mushrooms:"..color.."_mushroom_block_cap_corner" then
 				if node.param2 == 0 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101001"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101001"})
 				elseif node.param2 == 1 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100101"}) -- OK
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100101"}) -- OK
 				elseif node.param2 == 2 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100110"}) -- OK
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_100110"}) -- OK
 				elseif node.param2 == 3 then
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101010"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101010"})
 				else
 					-- Fallback
-					minetest.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101111"})
+					core.set_node(pos, {name = "mcl_mushrooms:"..color.."_mushroom_block_cap_101111"})
 				end
 			end
 		end

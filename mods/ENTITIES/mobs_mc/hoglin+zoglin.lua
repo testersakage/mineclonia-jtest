@@ -4,7 +4,7 @@
 --License for code WTFPL and otherwise stated in readmes
 local is_valid = mcl_util.is_valid_objectref
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -126,7 +126,7 @@ function hoglin:step_sensors (self_pos)
 
 	local aa = vector.offset (self_pos, -8, -4, -8)
 	local bb = vector.offset (self_pos, 8, 4, 8)
-	local blocks = minetest.find_nodes_in_area (aa, bb, self.avoid_nodes)
+	local blocks = core.find_nodes_in_area (aa, bb, self.avoid_nodes)
 	if #blocks > 0 then
 		table.sort (blocks, function (a, b)
 				    return vector.distance (self_pos, a)
@@ -143,7 +143,7 @@ function hoglin:step_sensors (self_pos)
 	local piglins = {}
 	local nearest_hoglin, distance_h = nil, 1000
 	local nearest_piglin, distance_p = nil, 1000
-	for object in minetest.objects_inside_radius (self_pos, 16) do
+	for object in core.objects_inside_radius (self_pos, 16) do
 		local entity = object:get_luaentity ()
 		if is_piglin (entity) and self:target_visible (self_pos, object) then
 			table.insert (piglins, object)
@@ -396,7 +396,7 @@ end
 
 function hoglin:on_breed (parent1)
 	local pos = parent1.object:get_pos ()
-	local child = minetest.add_entity (pos, "mobs_mc:baby_hoglin")
+	local child = core.add_entity (pos, "mobs_mc:baby_hoglin")
 	if not child then
 		return
 	end
@@ -473,7 +473,7 @@ mcl_mobs.spawn_setup({
 	type_of_spawning = "ground",
 	dimension = "nether",
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX+1,
+	max_light = core.LIGHT_MAX+1,
 	min_height = mcl_vars.mg_lava_nether_max,
 	aoc = 3,
 	biomes = {

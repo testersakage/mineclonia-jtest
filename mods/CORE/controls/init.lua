@@ -16,7 +16,7 @@ function controls.register_on_hold(func)
 	controls.registered_on_hold[#controls.registered_on_hold+1]=func
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	controls.players[name] = {
 		jump={false},
@@ -34,7 +34,7 @@ minetest.register_on_joinplayer(function(player)
 	}
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	controls.players[name] = nil
 end)

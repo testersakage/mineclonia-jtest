@@ -1,10 +1,10 @@
 -- Cactus and Sugar Cane
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_node("mcl_core:cactus", {
+core.register_node("mcl_core:cactus", {
 	description = S("Cactus"),
-	_tt_help = S("Grows on sand").."\n"..minetest.colorize(mcl_colors.YELLOW, S("Contact damage: @1 per half second", 1)),
+	_tt_help = S("Grows on sand").."\n"..core.colorize(mcl_colors.YELLOW, S("Contact damage: @1 per half second", 1)),
 	_doc_items_longdesc = S("This is a piece of cactus commonly found in dry areas, especially deserts. Over time, cacti will grow up to 3 blocks high on sand or red sand. A cactus hurts living beings touching it with a damage of 1 HP every half second. When a cactus block is broken, all cactus blocks connected above it will break as well."),
 	_doc_items_usagehelp = S("A cactus can only be placed on top of another cactus or any sand."),
 	drawtype = "nodebox",
@@ -40,9 +40,9 @@ minetest.register_node("mcl_core:cactus", {
 	},
 	-- Only allow to place cactus on sand or cactus
 	on_place = mcl_util.generate_on_place_plant_function(function(pos)
-		local node_below = minetest.get_node_or_nil({x=pos.x,y=pos.y-1,z=pos.z})
+		local node_below = core.get_node_or_nil({x=pos.x,y=pos.y-1,z=pos.z})
 		if not node_below then return false end
-		return (node_below.name == "mcl_core:cactus" or minetest.get_item_group(node_below.name, "sand") == 1)
+		return (node_below.name == "mcl_core:cactus" or core.get_item_group(node_below.name, "sand") == 1)
 	end),
 	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
@@ -59,7 +59,7 @@ mcl_flowerpots.register_potted_cube("mcl_core:cactus", {
 mcl_player.register_globalstep_slow(function(player)
 	-- Am I near a cactus?
 	local pos = player:get_pos()
-	local near = minetest.find_node_near(pos, 1, "mcl_core:cactus", true)
+	local near = core.find_node_near(pos, 1, "mcl_core:cactus", true)
 	if near then
 		-- Am I touching the cactus? If so, it hurts
 		local dist = vector.distance(pos, near)
@@ -71,7 +71,7 @@ mcl_player.register_globalstep_slow(function(player)
 	end
 end)
 
-minetest.register_node("mcl_core:reeds", {
+core.register_node("mcl_core:reeds", {
 	description = S("Sugar Canes"),
 	_tt_help = S("Grows on sand or dirt next to water"),
 	_doc_items_longdesc = S("Sugar canes are a plant which has some uses in crafting. Sugar canes will slowly grow up to 3 blocks when they are next to water and are placed on a grass block, dirt, sand, red sand, podzol or coarse dirt. When a sugar cane is broken, all sugar canes connected above will break as well."),
@@ -111,7 +111,7 @@ minetest.register_node("mcl_core:reeds", {
 	drop = "mcl_core:reeds", -- to prevent color inheritation
 	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _)
 		local soil_pos = {x=place_pos.x, y=place_pos.y-1, z=place_pos.z}
-		local soil_node = minetest.get_node_or_nil(soil_pos)
+		local soil_node = core.get_node_or_nil(soil_pos)
 		if not soil_node then return false end
 		local snn = soil_node.name -- soil node name
 
@@ -121,11 +121,11 @@ minetest.register_node("mcl_core:reeds", {
 		-- * Not inside liquid
 		if snn == "mcl_core:reeds" then
 			return true
-		elseif minetest.get_item_group(snn, "soil_sugarcane") == 0 then
+		elseif core.get_item_group(snn, "soil_sugarcane") == 0 then
 			return false
 		end
-		local place_node = minetest.get_node(place_pos)
-		local pdef = minetest.registered_nodes[place_node.name]
+		local place_node = core.get_node(place_pos)
+		local pdef = core.registered_nodes[place_node.name]
 		if pdef and pdef.liquidtype ~= "none" then
 			return false
 		end
@@ -135,7 +135,7 @@ minetest.register_node("mcl_core:reeds", {
 		-- and neighbors 1 layer above.
 		local np1 = {x=soil_pos.x-1, y=soil_pos.y, z=soil_pos.z-1}
 		local np2 = {x=soil_pos.x+1, y=soil_pos.y+1, z=soil_pos.z+1}
-		if #minetest.find_nodes_in_area(np1, np2, {"group:water", "group:frosted_ice"}) > 0 then
+		if #core.find_nodes_in_area(np1, np2, {"group:water", "group:frosted_ice"}) > 0 then
 			-- Water found! Sugar canes are happy! :-)
 			return true
 		end
@@ -145,11 +145,11 @@ minetest.register_node("mcl_core:reeds", {
 
 	end),
 	on_construct = function(pos)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		if node.param2 == 0 then
 			node.param2 = mcl_core.get_grass_palette_index(pos)
 			if node.param2 ~= 0 then
-				minetest.set_node(pos, node)
+				core.set_node(pos, node)
 			end
 		end
 	end,

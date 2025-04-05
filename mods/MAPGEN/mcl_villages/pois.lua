@@ -6,14 +6,14 @@
 --- Minecraft refers to these MapBlock-sized regions as sections, and
 --- this module will utilize the same terminology.
 
-local S = minetest.get_translator (minetest.get_current_modname())
+local S = core.get_translator (core.get_current_modname())
 
 --------------------------------------------------------------------
 -- POI storage.
 --------------------------------------------------------------------
 
 local pois = AreaStore ()
-local mod_storage = minetest.get_mod_storage ()
+local mod_storage = core.get_mod_storage ()
 local str = mod_storage:get_string ("village_pois")
 
 -- Map from section hash to POI heat.
@@ -21,17 +21,17 @@ local poi_heat = {}
 
 if str ~= "" then
 	local decoded_string
-		= minetest.decode_base64 (str)
+		= core.decode_base64 (str)
 	if not decoded_string then
 		local msg = "Village POI data was invalid and has been erased."
-		minetest.log ("warning", "[mcl_villages]: " .. msg)
+		core.log ("warning", "[mcl_villages]: " .. msg)
 		mod_storage:set_string ("village_pois", "")
 	else
 		local heatmap = mod_storage:get_string ("village_poi_heatmap")
 		local clock = os.clock ()
 		pois:from_string (decoded_string)
 		poi_heat = heatmap ~= ""
-			and minetest.deserialize (heatmap) or {}
+			and core.deserialize (heatmap) or {}
 		for _, v in pairs (poi_heat) do
 			v.ticket = nil
 		end
@@ -39,7 +39,7 @@ if str ~= "" then
 		local aa = vector.new (-2048, -2048, -2048)
 		local bb = vector.new (2047, 2047, 2047)
 		local all_pois = pois:get_areas_in_area (aa, bb, true)
-		minetest.log ("action", table.concat ({
+		core.log ("action", table.concat ({
 			"[mcl_villages]: Loaded ",
 			#all_pois,
 			" points of interest in ",
@@ -48,12 +48,12 @@ if str ~= "" then
 		}))
 	end
 else
-	minetest.log ("action", "[mcl_villages]: World was upgraded or is pristine.")
+	core.log ("action", "[mcl_villages]: World was upgraded or is pristine.")
 end
 
-minetest.register_on_shutdown (function ()
+core.register_on_shutdown (function ()
 	local str = pois:to_string ()
-	local encoded = minetest.encode_base64 (str)
+	local encoded = core.encode_base64 (str)
 	mod_storage:set_string ("village_pois", encoded)
 end)
 
@@ -124,7 +124,7 @@ function mcl_villages.insert_poi (nodepos, kind)
 	if areas then
 		-- Replace these POIs but log a warning message.
 		for id, area in pairs (areas) do
-			minetest.log ("warning", "Replacing POI "
+			core.log ("warning", "Replacing POI "
 				      .. area.data
 				      .. "("
 				      .. id
@@ -334,7 +334,7 @@ local function enqueue_in_player_area (player, ticket)
 			local def = registered_pois[poi_type]
 
 			if not def then
-				minetest.log ("warning", "Unknown POI type " .. poi_type)
+				core.log ("warning", "Unknown POI type " .. poi_type)
 				pois:remove_area (poi.id)
 			else
 				if not def.is_valid (poi.min) then
@@ -388,7 +388,7 @@ local dtime_total = 0
 -- local step_total_time = 0
 -- local step_max = 0
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	dtime_total = dtime_total + dtime
 	-- local clock = os.clock ()
 	-- enqueue valid POIs and remove invalid ones near connected
@@ -415,11 +415,11 @@ minetest.register_globalstep (function (dtime)
 	-- end
 end)
 
-minetest.register_on_shutdown (function ()
+core.register_on_shutdown (function ()
 	propagate_poi_deletions (-1)
 	propagate_poi_heat (-1)
 	sweep_poi_deletions (true)
-	local str = minetest.serialize (poi_heat)
+	local str = core.serialize (poi_heat)
 	mod_storage:set_string ("village_poi_heatmap", str)
 end)
 
@@ -429,7 +429,7 @@ end)
 
 mcl_villages.register_poi ("mcl_villages:demo_poi", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		if node.name == "ignore"
 			or node.name == "mcl_villages:demo_poi" then
 			return true
@@ -440,7 +440,7 @@ mcl_villages.register_poi ("mcl_villages:demo_poi", {
 	is_home = true,
 })
 
-minetest.register_node ("mcl_villages:demo_poi", {
+core.register_node ("mcl_villages:demo_poi", {
 	description = S ("Example POI"),
 	tiles = {"blank.png"},
 	sunlight_propagates = true,
@@ -593,7 +593,7 @@ end
 
 mcl_villages.register_poi ("mcl_villages:armorer", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_blast_furnace:blast_furnace")
 	end,
@@ -602,7 +602,7 @@ mcl_villages.register_poi ("mcl_villages:armorer", {
 
 mcl_villages.register_poi ("mcl_villages:butcher", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_smoker:smoker")
 	end,
@@ -611,7 +611,7 @@ mcl_villages.register_poi ("mcl_villages:butcher", {
 
 mcl_villages.register_poi ("mcl_villages:cartographer", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_cartography_table:cartography_table")
 	end,
@@ -620,25 +620,25 @@ mcl_villages.register_poi ("mcl_villages:cartographer", {
 
 mcl_villages.register_poi ("mcl_villages:cleric", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
-			or minetest.get_item_group (node.name, "brewing_stand") > 0)
+			or core.get_item_group (node.name, "brewing_stand") > 0)
 	end,
 	village_center = true,
 })
 
 mcl_villages.register_poi ("mcl_villages:farmer", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
-			or minetest.get_item_group (node.name, "composter") > 0)
+			or core.get_item_group (node.name, "composter") > 0)
 	end,
 	village_center = true,
 })
 
 mcl_villages.register_poi ("mcl_villages:fisherman", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_barrels:barrel_closed"
 			or node.name == "mcl_barrels:barrel_open")
@@ -648,7 +648,7 @@ mcl_villages.register_poi ("mcl_villages:fisherman", {
 
 mcl_villages.register_poi ("mcl_villages:fletcher", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_fletching_table:fletching_table")
 	end,
@@ -657,16 +657,16 @@ mcl_villages.register_poi ("mcl_villages:fletcher", {
 
 mcl_villages.register_poi ("mcl_villages:leatherworker", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
-			or minetest.get_item_group (node.name, "cauldron") > 0)
+			or core.get_item_group (node.name, "cauldron") > 0)
 	end,
 	village_center = true,
 })
 
 mcl_villages.register_poi ("mcl_villages:librarian", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_lectern:lectern"
 			or node.name == "mcl_lectern:lectern_with_book")
@@ -676,7 +676,7 @@ mcl_villages.register_poi ("mcl_villages:librarian", {
 
 mcl_villages.register_poi ("mcl_villages:mason", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_stonecutter:stonecutter")
 	end,
@@ -685,7 +685,7 @@ mcl_villages.register_poi ("mcl_villages:mason", {
 
 mcl_villages.register_poi ("mcl_villages:shepherd", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_loom:loom")
 	end,
@@ -694,7 +694,7 @@ mcl_villages.register_poi ("mcl_villages:shepherd", {
 
 mcl_villages.register_poi ("mcl_villages:toolsmith", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_smithing_table:table")
 	end,
@@ -703,7 +703,7 @@ mcl_villages.register_poi ("mcl_villages:toolsmith", {
 
 mcl_villages.register_poi ("mcl_villages:weaponsmith", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_grindstone:grindstone")
 	end,
@@ -712,9 +712,9 @@ mcl_villages.register_poi ("mcl_villages:weaponsmith", {
 
 mcl_villages.register_poi ("mcl_villages:bed", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
-			or minetest.get_item_group (node.name, "bed") > 0)
+			or core.get_item_group (node.name, "bed") > 0)
 	end,
 	village_center = true,
 	is_home = true,
@@ -722,12 +722,12 @@ mcl_villages.register_poi ("mcl_villages:bed", {
 
 mcl_villages.register_poi ("mcl_villages:bell", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_bells:bell")
 	end,
 	on_destroy = function (nodepos)
-		local meta = minetest.get_meta (nodepos)
+		local meta = core.get_meta (nodepos)
 		if meta then
 			meta:set_int ("mcl_villages:bell_users", 0)
 		end
@@ -737,7 +737,7 @@ mcl_villages.register_poi ("mcl_villages:bell", {
 
 mcl_villages.register_poi ("mcl_villages:provisional_poi", {
 	is_valid = function (nodepos)
-		local node = minetest.get_node (nodepos)
+		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_blast_furnace:blast_furnace"
 			or node.name == "mcl_cartography_table:cartography_table"
@@ -750,9 +750,9 @@ mcl_villages.register_poi ("mcl_villages:provisional_poi", {
 			or node.name == "mcl_stonecutter:stonecutter"
 			or node.name == "mcl_barrels:barrel_closed"
 			or node.name == "mcl_barrels:barrel_open"
-			or minetest.get_item_group (node.name, "composter") > 0
-			or minetest.get_item_group (node.name, "brewing_stand") > 0
-			or minetest.get_item_group (node.name, "cauldron") > 0)
+			or core.get_item_group (node.name, "composter") > 0
+			or core.get_item_group (node.name, "brewing_stand") > 0
+			or core.get_item_group (node.name, "cauldron") > 0)
 	end,
 	village_center = false,
 })

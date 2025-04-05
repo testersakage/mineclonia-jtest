@@ -1,7 +1,7 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local equip_armor
-if minetest.get_modpath("mcl_armor") then
+if core.get_modpath("mcl_armor") then
 	equip_armor = mcl_armor.equip_on_use
 end
 
@@ -52,12 +52,12 @@ end
 
 function mcl_heads.deftemplate.on_rotate(pos, node, user, mode)
 	if mode == screwdriver.ROTATE_AXIS then
-		local dir = minetest.facedir_to_dir(node.param2)
+		local dir = core.facedir_to_dir(node.param2)
 		if dir then
 			node.name = node.name .. "_wall"
-			if minetest.registered_nodes[node.name] then
-				node.param2 = minetest.dir_to_wallmounted(dir)
-				minetest.set_node(pos, node)
+			if core.registered_nodes[node.name] then
+				node.param2 = core.dir_to_wallmounted(dir)
+				core.set_node(pos, node)
 				return true
 			end
 		end
@@ -68,7 +68,7 @@ function mcl_heads.deftemplate.on_rotate(pos, node, user, mode)
 	else
 		node.param2 = normalize_rotation((node.param2 + 15) % 240)
 	end
-	minetest.set_node(pos, node)
+	core.set_node(pos, node)
 	return true
 end
 
@@ -78,8 +78,8 @@ function mcl_heads.deftemplate.on_place(itemstack, placer, pointed_thing)
 	end
 
 	local under = pointed_thing.under
-	local node = minetest.get_node(under)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(under)
+	local def = core.registered_nodes[node.name]
 	if not def then return itemstack end
 
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -87,7 +87,7 @@ function mcl_heads.deftemplate.on_place(itemstack, placer, pointed_thing)
 
 	local above = pointed_thing.above
 	local dir = {x = under.x - above.x, y = under.y - above.y, z = under.z - above.z}
-	local wdir = minetest.dir_to_wallmounted(dir)
+	local wdir = core.dir_to_wallmounted(dir)
 
 	local itemstring = itemstack:get_name()
 	local placestack = ItemStack(itemstack)
@@ -95,14 +95,14 @@ function mcl_heads.deftemplate.on_place(itemstack, placer, pointed_thing)
 	-- place wall head node (elsewhere)
 	if wdir ~= 0 and wdir ~= 1 then
 		placestack:set_name(itemstring .."_wall")
-		itemstack = minetest.item_place_node(placestack, placer, pointed_thing, wdir)
+		itemstack = core.item_place_node(placestack, placer, pointed_thing, wdir)
 	-- place floor head node (floor and ceiling)
 	else
 		if wdir == 0 then
 			placestack:set_name(itemstring .."_ceiling")
 		end
 		local rot = normalize_rotation(placer:get_look_horizontal() * 180 / math.pi / 1.5)
-		itemstack = minetest.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
+		itemstack = core.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
 	end
 
 	-- restore item from angled and wall head nodes
@@ -113,8 +113,8 @@ end
 local function wall_on_rotate(pos, node, _, mode, _)
 	if mode == screwdriver.ROTATE_AXIS then
 		node.name = string.sub(node.name, 1, string.len(node.name)-5)
-		node.param2 = minetest.dir_to_facedir(minetest.wallmounted_to_dir(node.param2))
-		minetest.set_node(pos, node)
+		node.param2 = core.dir_to_facedir(core.wallmounted_to_dir(node.param2))
+		core.set_node(pos, node)
 		return true
 	end
 end
@@ -137,7 +137,7 @@ function mcl_heads.register_head(head_def)
 		end
 	end
 	-- register the floor head node
-	minetest.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
+	core.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
 		description = head_def.description,
 		_doc_items_longdesc = head_def.longdesc,
 		tiles = { head_def.texture },
@@ -147,7 +147,7 @@ function mcl_heads.register_head(head_def)
 		_mcl_armor_texture = "[combine:64x32:32,0=" ..head_def.texture,
 	}))
 
-	minetest.register_node(":"..name.."_ceiling", table.update(table.copy(mcl_heads.deftemplate), {
+	core.register_node(":"..name.."_ceiling", table.update(table.copy(mcl_heads.deftemplate), {
 		mesh = "mcl_heads_ceiling.obj",
 		groups = {
 			handy = 1,
@@ -176,7 +176,7 @@ function mcl_heads.register_head(head_def)
 	}))
 
 	-- register the wall head node
-	minetest.register_node(":"..name .."_wall", table.update(table.copy(mcl_heads.deftemplate), {
+	core.register_node(":"..name .."_wall", table.update(table.copy(mcl_heads.deftemplate), {
 		drawtype = "nodebox",
 		paramtype = "light",
 		paramtype2 = "wallmounted",
@@ -295,7 +295,7 @@ local old_rheads = {
 	"mcl_heads:zombie67_5",
 }
 
-minetest.register_lbm({
+core.register_lbm({
 	name = "mcl_heads:convert_old_angled_heads",
 	nodenames = old_rheads,
 	run_at_every_load = false,
@@ -310,12 +310,12 @@ minetest.register_lbm({
 		end
 		if rt and nn then
 			if ceiling then nn = nn.."_ceiling" end
-			minetest.swap_node(pos,{name=nn,param2=(rt / 1.5)})
+			core.swap_node(pos,{name=nn,param2=(rt / 1.5)})
 		end
 	end,
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	name = "mcl_heads:convert_old_ceiling_heads",
 	nodenames = old_bheads,
 	run_at_every_load = false,
@@ -323,7 +323,7 @@ minetest.register_lbm({
 		local ceiling = node.param2 >= 20
 		if ceiling then
 			node.name = node.name.."_ceiling"
-			minetest.swap_node(pos,node)
+			core.swap_node(pos,node)
 		end
 	end,
 })

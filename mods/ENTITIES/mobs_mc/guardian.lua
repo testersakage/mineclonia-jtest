@@ -2,7 +2,7 @@
 --################### GUARDIAN
 --###################
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -205,7 +205,7 @@ function guardian:check_head_swivel (self_pos, dtime, clear)
 			return
 		end
 		local yaw = self.object:get_yaw ()
-		local forward_vector = minetest.yaw_to_dir (yaw)
+		local forward_vector = core.yaw_to_dir (yaw)
 		local diff = vector.offset (self_pos, 0, self.head_eye_height, 0)
 		local eye_vector = {
 			x = math.cos (yaw) * EYE_LATITUDE,

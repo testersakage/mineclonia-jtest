@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local horse = mobs_mc.horse
 local is_valid = mcl_util.is_valid_objectref
@@ -191,7 +191,7 @@ end
 function llama:is_saddle_item (item)
 	local name = item:get_name ()
 	local def = item:get_definition ()
-	return minetest.get_item_group (name, "carpet") > 0
+	return core.get_item_group (name, "carpet") > 0
 		and def and def._color
 end
 
@@ -211,7 +211,7 @@ function llama:discharge_ranged (self_pos, target_pos)
 	vec.y = vec.y + 0.04 * vector.length (vec)
 	vec = vector.normalize (vec)
 
-	local arrow = minetest.add_entity (s, "mobs_mc:llama_spit")
+	local arrow = core.add_entity (s, "mobs_mc:llama_spit")
 
 	if arrow then
 		local entity = arrow:get_luaentity ()
@@ -328,7 +328,7 @@ function llama:follow_caravan (self_pos, dtime)
 		end
 		local closest_straggler, closest_leashed, d1, d2
 
-		for object in minetest.objects_inside_radius (self_pos, 9) do
+		for object in core.objects_inside_radius (self_pos, 9) do
 			local entity = object:get_luaentity ()
 			if entity and (entity.name == "mobs_mc:llama"
 				       or entity.name == "mobs_mc:trader_llama") then
@@ -384,7 +384,7 @@ function llama:targets_for_attack_default (self_pos, esp)
 	-- The detection range of a llama is reduced with respect to
 	-- wolves, which are the only targets they attack without
 	-- provocation.
-	return minetest.objects_inside_radius (self_pos, self.view_range * 0.25)
+	return core.objects_inside_radius (self_pos, self.view_range * 0.25)
 end
 
 function llama:should_attack (object)
@@ -438,9 +438,9 @@ function llama:generate_inventory_formspec ()
 		return "formspec_version[6]"
 	end
 	local objectname = mcl_util.get_object_name (self.object)
-	objectname = minetest.formspec_escape (objectname)
+	objectname = core.formspec_escape (objectname)
 	local armorname = self._armor_inv_name
-	armorname = minetest.formspec_escape ("detached:" .. armorname)
+	armorname = core.formspec_escape ("detached:" .. armorname)
 	local chest_itemslots
 	if self._chest then
 		chest_itemslots = string.format ("list[detached:%s;main;5.375,0.875;%d,3;]",
@@ -559,7 +559,7 @@ function llama_spit:on_activate (_, _)
 		y = -9.81,
 		z = 0,
 	})
-	self._particlespawner = minetest.add_particlespawner ({
+	self._particlespawner = core.add_particlespawner ({
 		time = 0,
 		amount = 72,
 		vel = {
@@ -592,14 +592,14 @@ function llama_spit:on_activate (_, _)
 end
 
 function llama_spit:on_deactivate (_)
-	minetest.delete_particlespawner (self._particlespawner)
+	core.delete_particlespawner (self._particlespawner)
 end
 
 function llama_spit:on_step (dtime, moveresult)
 	local self_pos = self.object:get_pos ()
 	local prev_pos = self._prev_pos
 
-	local raycast = minetest.raycast (prev_pos, self_pos, true, false)
+	local raycast = core.raycast (prev_pos, self_pos, true, false)
 	for hitpoint in raycast do
 		if hitpoint.type == "object" then
 			local object = hitpoint.ref
@@ -627,7 +627,7 @@ function llama_spit:on_punch (_, _, _, _, _)
 	return
 end
 
-minetest.register_entity ("mobs_mc:llama_spit", llama_spit)
+core.register_entity ("mobs_mc:llama_spit", llama_spit)
 
 ------------------------------------------------------------------------
 -- Obsolete Llama Spit.
@@ -640,4 +640,4 @@ local old_llama_spit = {
 	end,
 }
 
-minetest.register_entity ("mobs_mc:llamaspit", old_llama_spit)
+core.register_entity ("mobs_mc:llamaspit", old_llama_spit)

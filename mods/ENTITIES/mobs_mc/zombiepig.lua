@@ -1,6 +1,6 @@
 -- Backwards compat code for "old" 0.83 and prior pigman. This transforms all
 -- existing pigmen into the new zombified piglins.
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local pigman = {
 	description = S("Zombified Piglin"),
 	textures = {{ "" }},

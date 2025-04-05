@@ -1,17 +1,17 @@
 -- Climbable nodes
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function rotate_climbable(pos, node, _, mode)
 	if mode == screwdriver.ROTATE_FACE then
 		local r = screwdriver.rotate.wallmounted(pos, node, mode)
 		node.param2 = r
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 		return true
 	end
 	return false
 end
 
-minetest.register_node("mcl_core:ladder", {
+core.register_node("mcl_core:ladder", {
 	description = S("Ladder"),
 	_doc_items_longdesc = S("A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."),
 	drawtype = "signlike",
@@ -42,8 +42,8 @@ minetest.register_node("mcl_core:ladder", {
 		end
 
 		local under = pointed_thing.under
-		local node = minetest.get_node(under)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node(under)
+		local def = core.registered_nodes[node.name]
 		if not def then
 			return itemstack
 		end
@@ -64,11 +64,11 @@ minetest.register_node("mcl_core:ladder", {
 			return itemstack
 		end
 		local idef = itemstack:get_definition()
-		local success = minetest.item_place_node(itemstack, placer, pointed_thing)
+		local success = core.item_place_node(itemstack, placer, pointed_thing)
 
 		if success then
 			if idef.sounds and idef.sounds.place then
-				minetest.sound_play(idef.sounds.place, {pos=above, gain=1}, true)
+				core.sound_play(idef.sounds.place, {pos=above, gain=1}, true)
 			end
 		end
 		return itemstack
@@ -80,7 +80,7 @@ minetest.register_node("mcl_core:ladder", {
 	on_rotate = rotate_climbable,
 })
 
-minetest.register_node("mcl_core:vine", {
+core.register_node("mcl_core:vine", {
 	description = S("Vines"),
 	_doc_items_longdesc = S("Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."),
 	drawtype = "signlike",
@@ -113,8 +113,8 @@ minetest.register_node("mcl_core:vine", {
 		end
 
 		local under = pointed_thing.under
-		local node = minetest.get_node(under)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node(under)
+		local def = core.registered_nodes[node.name]
 		if not def then return itemstack end
 
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -132,11 +132,11 @@ minetest.register_node("mcl_core:vine", {
 			return itemstack
 		end
 		local idef = itemstack:get_definition()
-		local itemstack, success = minetest.item_place_node(itemstack, placer, pointed_thing)
+		local itemstack, success = core.item_place_node(itemstack, placer, pointed_thing)
 
 		if success then
 			if idef.sounds and idef.sounds.place then
-				minetest.sound_play(idef.sounds.place, {pos=above, gain=1}, true)
+				core.sound_play(idef.sounds.place, {pos=above, gain=1}, true)
 			end
 		end
 		return itemstack

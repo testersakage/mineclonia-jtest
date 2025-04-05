@@ -1,15 +1,15 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 -- Armor
 tt.register_snippet(function(itemstring, _, itemstack)
 	if core.get_item_group(itemstring, "armor") < 1 then return end
 
 	local final_result = ""
-	local head = minetest.get_item_group(itemstring, "armor_head")
-	local torso = minetest.get_item_group(itemstring, "armor_torso")
-	local legs = minetest.get_item_group(itemstring, "armor_legs")
-	local feet = minetest.get_item_group(itemstring, "armor_feet")
-	local use = minetest.get_item_group(itemstring, "mcl_armor_uses")
-	local pts = minetest.get_item_group(itemstring, "mcl_armor_points")
+	local head = core.get_item_group(itemstring, "armor_head")
+	local torso = core.get_item_group(itemstring, "armor_torso")
+	local legs = core.get_item_group(itemstring, "armor_legs")
+	local feet = core.get_item_group(itemstring, "armor_feet")
+	local use = core.get_item_group(itemstring, "mcl_armor_uses")
+	local pts = core.get_item_group(itemstring, "mcl_armor_points")
 
 	if head > 0 then final_result = final_result .. S("Head armor") end
 	if torso > 0 then final_result = final_result .. S("Torso armor") end
@@ -24,7 +24,7 @@ tt.register_snippet(function(itemstring, _, itemstack)
 		local unbreaking = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
 
 		if unbreaking > 0 then
-			local elytra = minetest.get_item_group(itemstring, "elytra")
+			local elytra = core.get_item_group(itemstring, "elytra")
 
 			if elytra > 0 then
 				use = math.floor(use * (unbreaking + 1))
@@ -42,14 +42,14 @@ tt.register_snippet(function(itemstring, _, itemstack)
 end)
 -- Horse armor
 tt.register_snippet(function(itemstring)
-	local armor_g = minetest.get_item_group(itemstring, "horse_armor")
+	local armor_g = core.get_item_group(itemstring, "horse_armor")
 	if armor_g and armor_g > 0 then
 		return S("Protection: @1%", 100 - armor_g)
 	end
 end)
 
 tt.register_snippet(function(itemstring)
-	local def = minetest.registered_items[itemstring]
+	local def = core.registered_items[itemstring]
 	local s = ""
 	if core.get_item_group(itemstring, "eatable") > 0 then
 		s = s .. S("Hunger points: +@1", def.groups.eatable)
@@ -141,7 +141,7 @@ tt.register_snippet(function(itemstring, _, itemstack)
 			else roman_lvl = "" end
 			s = s.. effect.description.. roman_lvl.. " (".. timestamp.. ")\n"
 			if effect.uses_factor then factor = effect.level_to_factor(ef_level) end
-			if effect.get_tt then ef_tt = minetest.colorize("grey", effect.get_tt(factor)) else ef_tt = "" end
+			if effect.get_tt then ef_tt = core.colorize("grey", effect.get_tt(factor)) else ef_tt = "" end
 			if ef_tt ~= "" then s = s.. ef_tt.. "\n" end
 		end
 	end

@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- local arrows = {
 -- 	["mcl_bows:arrow"] = "mcl_bows:arrow_entity",
@@ -18,19 +18,19 @@ mcl_bows.CROSSBOW_CHARGE_TIME_FULL = BOW_CHARGE_TIME_FULL / 1e+6
 
 -- Factor to multiply with player speed while player uses bow
 -- This emulates the sneak speed.
-local PLAYER_USE_CROSSBOW_SPEED = tonumber(minetest.settings:get("movement_speed_crouch")) / tonumber(minetest.settings:get("movement_speed_walk"))
+local PLAYER_USE_CROSSBOW_SPEED = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
 local BOW_MAX_SPEED = 3.15 * 20
 
 local function play_load_sound(id, pos)
-	minetest.sound_play({name = "mcl_bows_crossbow_drawback_"..id, gain=0.07}, {pos=pos, max_hear_distance=16}, true)
+	core.sound_play({name = "mcl_bows_crossbow_drawback_"..id, gain=0.07}, {pos=pos, max_hear_distance=16}, true)
 end
 
 --[[ Store the charging state of each player.
 keys: player name
 value:
 nil = not charging or player not existing
-number: currently charging, the number is the time from minetest.get_us_time
+number: currently charging, the number is the time from core.get_us_time
              in which the charging has started
 ]]
 local bow_load = {}
@@ -39,7 +39,7 @@ local bow_load = {}
 local bow_index = {}
 
 function shoot_arrow_crossbow_1(arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
-	local obj = minetest.add_entity({x=pos.x,y=pos.y,z=pos.z}, ItemStack(arrow_item):get_name().."_entity")
+	local obj = core.add_entity({x=pos.x,y=pos.y,z=pos.z}, ItemStack(arrow_item):get_name().."_entity")
 	if not obj or not obj:get_pos() then return end
 	if damage == nil then
 		damage = 2
@@ -79,7 +79,7 @@ end
 function mcl_bows.shoot_arrow_crossbow (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
 	local has_multishot_enchantment
 		= crossbow_stack and mcl_enchanting.has_enchantment (crossbow_stack, "multishot")
-	minetest.sound_play({name="mcl_bows_crossbow_shoot", gain=0.035}, {pos=pos, max_hear_distance=32}, true)
+	core.sound_play({name="mcl_bows_crossbow_shoot", gain=0.035}, {pos=pos, max_hear_distance=32}, true)
 	if has_multishot_enchantment then
 		-- calculate rotation by 10 degrees 'left' and 'right' of facing direction
 		local pitch = get_pitch (dir)
@@ -106,7 +106,7 @@ local function get_arrow(player)
 	local arrow_stack, arrow_stack_id
 	for i=1, inv:get_size("main") do
 		local it = inv:get_stack("main", i)
-		if not it:is_empty() and minetest.get_item_group(it:get_name(), "ammo_crossbow") ~= 0 then
+		if not it:is_empty() and core.get_item_group(it:get_name(), "ammo_crossbow") ~= 0 then
 			arrow_stack = it
 			arrow_stack_id = i
 			break
@@ -122,7 +122,7 @@ end
 local function player_shoot_arrow(wielditem, player, is_critical)
 	local arrow_itemstring = wielditem:get_meta():get("arrow")
 	local arrow_item_name = ItemStack(arrow_itemstring):get_name()
-	if not arrow_itemstring or minetest.get_item_group(arrow_item_name, "ammo_crossbow") == 0 then
+	if not arrow_itemstring or core.get_item_group(arrow_item_name, "ammo_crossbow") == 0 then
 		return false
 	end
 
@@ -135,7 +135,7 @@ local function player_shoot_arrow(wielditem, player, is_critical)
 end
 
 -- Bow item, uncharged state
-minetest.register_tool("mcl_bows:crossbow", {
+core.register_tool("mcl_bows:crossbow", {
 	description = S("Crossbow"),
 	_tt_help = S("Launches arrows"),
 	_doc_items_longdesc = S("Crossbows are ranged weapons to shoot arrows at your foes.").."\n"..
@@ -165,7 +165,7 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 	_mcl_burntime = 15
 })
 
-minetest.register_tool("mcl_bows:crossbow_loaded", {
+core.register_tool("mcl_bows:crossbow_loaded", {
 	description = S("Crossbow"),
 	_tt_help = S("Launches arrows"),
 	_doc_items_longdesc = S("Crossbows are ranged weapons to shoot arrows at your foes.").."\n"..
@@ -219,7 +219,7 @@ end
 local function reset_bow_state(player, also_reset_bows)
 	bow_load[player:get_player_name()] = nil
 	bow_index[player:get_player_name()] = nil
-	if minetest.get_modpath("playerphysics") then
+	if core.get_modpath("playerphysics") then
 		playerphysics.remove_physics_factor(player, "speed", "mcl_bows:use_crossbow")
 	end
 	if also_reset_bows then
@@ -229,7 +229,7 @@ end
 
 -- Bow in charging state
 for level=0, 2 do
-	minetest.register_tool("mcl_bows:crossbow_"..level, {
+	core.register_tool("mcl_bows:crossbow_"..level, {
 		description = S("Crossbow"),
 		_doc_items_create_entry = false,
 		inventory_image = "mcl_bows_crossbow_"..level..".png",
@@ -247,7 +247,7 @@ for level=0, 2 do
 			else
 				itemstack:set_name("mcl_bows:crossbow")
 			end
-			minetest.item_drop(itemstack, dropper, pos)
+			core.item_drop(itemstack, dropper, pos)
 			itemstack:take_item()
 			return itemstack
 		end,
@@ -282,7 +282,7 @@ function mcl_bows.load_crossbow (player, wielditem, usetime)
 		return
 	end
 
-	if minetest.is_creative_enabled(player:get_player_name()) then
+	if core.is_creative_enabled(player:get_player_name()) then
 		if arrow_stack then
 			arrow_itemstring = arrow_stack:get_name()
 		else
@@ -309,9 +309,9 @@ controls.register_on_release(function(player, key)
 		return
 	end
 	if key~="RMB" and key~="zoom" then return end
-	--local inv = minetest.get_inventory({type="player", name=player:get_player_name()})
+	--local inv = core.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
-	if wielditem:get_name()=="mcl_bows:crossbow_2" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2" and minetest.is_creative_enabled(player:get_player_name()) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and minetest.is_creative_enabled(player:get_player_name()) then
+	if wielditem:get_name()=="mcl_bows:crossbow_2" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2" and core.is_creative_enabled(player:get_player_name()) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and get_arrow(player) or wielditem:get_name()=="mcl_bows:crossbow_2_enchanted" and core.is_creative_enabled(player:get_player_name()) then
 		local arrow_stack, arrow_stack_id = get_arrow(player)
 		local arrow_itemstring
 
@@ -319,7 +319,7 @@ controls.register_on_release(function(player, key)
 			return
 		end
 
-		if minetest.is_creative_enabled(player:get_player_name()) then
+		if core.is_creative_enabled(player:get_player_name()) then
 			if arrow_stack then
 				arrow_itemstring = arrow_stack:to_string()
 			else
@@ -343,7 +343,7 @@ controls.register_on_release(function(player, key)
 			wielditem:set_name("mcl_bows:crossbow_loaded_enchanted")
 		end
 		player:set_wielded_item(wielditem)
-		minetest.sound_play({name="mcl_bows_crossbow_load", gain=0.07}, {pos=player:get_pos(), max_hear_distance=16}, true)
+		core.sound_play({name="mcl_bows_crossbow_load", gain=0.07}, {pos=player:get_pos(), max_hear_distance=16}, true)
 	else
 		reset_bow_state(player, true)
 	end
@@ -362,7 +362,7 @@ controls.register_on_press(function(player, key)
 			wielditem:set_name("mcl_bows:crossbow")
 		end
 
-		if has_shot and not minetest.is_creative_enabled(player:get_player_name()) then
+		if has_shot and not core.is_creative_enabled(player:get_player_name()) then
 			local durability = BOW_DURABILITY
 			local unbreaking = mcl_enchanting.get_enchantment(wielditem, "unbreaking")
 			local multishot = mcl_enchanting.get_enchantment(wielditem, "multishot")
@@ -384,11 +384,11 @@ controls.register_on_hold(function(player, key)
 		return
 	end
 	local name = player:get_player_name()
-	local creative = minetest.is_creative_enabled(name)
+	local creative = core.is_creative_enabled(name)
 	if key ~= "RMB" and key ~= "zoom" then
 		return
 	end
-	--local inv = minetest.get_inventory({type="player", name=name})
+	--local inv = core.get_inventory({type="player", name=name})
 	local wielditem = player:get_wielded_item()
 	local enchantments = mcl_enchanting.get_enchantments(wielditem)
 	if enchantments.quick_charge then
@@ -411,25 +411,25 @@ controls.register_on_hold(function(player, key)
 				play_load_sound(0, player:get_pos())
 			end
 			player:set_wielded_item(wielditem)
-			if minetest.get_modpath("playerphysics") then
+			if core.get_modpath("playerphysics") then
 				-- Slow player down when using bow
 				playerphysics.add_physics_factor(player, "speed", "mcl_bows:use_crossbow", PLAYER_USE_CROSSBOW_SPEED)
 			end
-			bow_load[name] = minetest.get_us_time()
+			bow_load[name] = core.get_us_time()
 			bow_index[name] = player:get_wield_index()
 	else
 		if player:get_wield_index() == bow_index[name] then
 			if type(bow_load[name]) == "number" then
-				if wielditem:get_name() == "mcl_bows:crossbow_0" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
+				if wielditem:get_name() == "mcl_bows:crossbow_0" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
 					wielditem:set_name("mcl_bows:crossbow_1")
 					play_load_sound(1, player:get_pos())
-				elseif wielditem:get_name() == "mcl_bows:crossbow_0_enchanted" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
+				elseif wielditem:get_name() == "mcl_bows:crossbow_0_enchanted" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_HALF then
 					wielditem:set_name("mcl_bows:crossbow_1_enchanted")
 					play_load_sound(1, player:get_pos())
-				elseif wielditem:get_name() == "mcl_bows:crossbow_1" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
+				elseif wielditem:get_name() == "mcl_bows:crossbow_1" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
 					wielditem:set_name("mcl_bows:crossbow_2")
 					play_load_sound(2, player:get_pos())
-				elseif wielditem:get_name() == "mcl_bows:crossbow_1_enchanted" and minetest.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
+				elseif wielditem:get_name() == "mcl_bows:crossbow_1_enchanted" and core.get_us_time() - bow_load[name] >= BOW_CHARGE_TIME_FULL then
 					wielditem:set_name("mcl_bows:crossbow_2_enchanted")
 					play_load_sound(2, player:get_pos())
 				end
@@ -449,7 +449,7 @@ controls.register_on_hold(function(player, key)
 	end
 end)
 
-minetest.register_globalstep(function()
+core.register_globalstep(function()
 	for player in mcl_util.connected_players() do
 		if not mcl_serverplayer.is_csm_capable (player) then
 			local name = player:get_player_name()
@@ -463,16 +463,16 @@ minetest.register_globalstep(function()
 	end
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	reset_bows(player)
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	reset_bow_state(player, true)
 end)
 
-if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") then
-	minetest.register_craft({
+if core.get_modpath("mcl_core") and core.get_modpath("mcl_mobitems") then
+	core.register_craft({
 		output = "mcl_bows:crossbow",
 		recipe = {
 			{"mcl_core:stick", "mcl_core:iron_ingot", "mcl_core:stick"},
@@ -483,7 +483,7 @@ if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") the
 end
 
 -- Add entry aliases for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_0")
 	doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_1")
 	doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_2")

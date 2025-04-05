@@ -44,12 +44,12 @@ function mcl_weather.is_exposed_to_rain (pos)
 		or not mcl_worlds.has_weather (pos) then
 		return false
 	end
-	local data = minetest.get_biome_data (pos)
+	local data = core.get_biome_data (pos)
 	if not data then
 		return false
 	end
-	local name = minetest.get_biome_name (data.biome)
-	local def = minetest.registered_biomes[name]
+	local name = core.get_biome_name (data.biome)
+	local def = core.registered_biomes[name]
 	return def and def._mcl_biome_type ~= "hot"
 		and mcl_weather.is_outdoor (pos)
 		and not mcl_weather.has_snow (pos)
@@ -57,7 +57,7 @@ end
 
 function mcl_weather.has_rain(pos)
 	if not mcl_worlds.has_weather(pos) then return false end
-	local bd = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]
+	local bd = core.registered_biomes[core.get_biome_name(core.get_biome_data(pos).biome)]
 	if bd and bd._mcl_biome_type == "hot" then return false end
 	if not mcl_weather.can_see_outdoors(pos) then
 		return false
@@ -66,7 +66,7 @@ function mcl_weather.has_rain(pos)
 end
 
 function mcl_weather.rain.sound_handler(player)
-	return minetest.sound_play("weather_rain", {
+	return core.sound_play("weather_rain", {
 		to_player = player:get_player_name(),
 		loop = true,
 	})
@@ -131,20 +131,20 @@ function mcl_weather.rain.update_sound(player)
 	if not update_sound[player:get_player_name()] then return end
 	local player_meta = mcl_weather.players[player:get_player_name()]
 	if player_meta then
-		if player_meta.sound_updated and player_meta.sound_updated + 5 > minetest.get_gametime() then
+		if player_meta.sound_updated and player_meta.sound_updated + 5 > core.get_gametime() then
 			return false
 		end
 
 		if player_meta.sound_handler then
 			if mcl_weather.rain.last_rp_count == 0 then
-				minetest.sound_fade(player_meta.sound_handler, -0.5, 0.0)
+				core.sound_fade(player_meta.sound_handler, -0.5, 0.0)
 				player_meta.sound_handler = nil
 			end
 		elseif mcl_weather.rain.last_rp_count > 0 then
 			player_meta.sound_handler = mcl_weather.rain.sound_handler(player)
 		end
 
-		player_meta.sound_updated = minetest.get_gametime()
+		player_meta.sound_updated = core.get_gametime()
 	end
 	update_sound[player:get_player_name()]=false
 end
@@ -153,7 +153,7 @@ end
 function mcl_weather.rain.remove_sound(player)
 	local player_meta = mcl_weather.players[player:get_player_name()]
 	if player_meta and player_meta.sound_handler then
-		minetest.sound_fade(player_meta.sound_handler, -0.5, 0.0)
+		core.sound_fade(player_meta.sound_handler, -0.5, 0.0)
 		player_meta.sound_handler = nil
 		player_meta.sound_updated = nil
 	end
@@ -173,7 +173,7 @@ function mcl_weather.rain.clear()
 	end
 end
 
-minetest.register_globalstep(function()
+core.register_globalstep(function()
 	if mcl_weather.state ~= "rain" then
 		return false
 	end
@@ -224,7 +224,7 @@ end
 
 if mcl_weather.allow_abm then
 	-- ABM for extinguish fire
-	minetest.register_abm({
+	core.register_abm({
 		label = "Rain extinguishes fire",
 		nodenames = {"mcl_fire:fire"},
 		interval = 2.0,
@@ -242,8 +242,8 @@ if mcl_weather.allow_abm then
 				for a=1, #around do
 					local apos = vector.add(pos, around[a])
 					if mcl_weather.is_outdoor(apos) and mcl_weather.has_rain(apos) then
-						minetest.remove_node(pos)
-						minetest.sound_play("fire_extinguish_flame", {pos = pos, max_hear_distance = 8, gain = 0.1}, true)
+						core.remove_node(pos)
+						core.sound_play("fire_extinguish_flame", {pos = pos, max_hear_distance = 8, gain = 0.1}, true)
 						return
 					end
 				end
@@ -252,7 +252,7 @@ if mcl_weather.allow_abm then
 	})
 
 	-- Slowly fill up cauldrons
-	minetest.register_abm({
+	core.register_abm({
 		label = "Rain fills cauldrons with water",
 		nodenames = {"mcl_cauldrons:cauldron", "mcl_cauldrons:cauldron_1", "mcl_cauldrons:cauldron_2"},
 		interval = 56.0,
@@ -265,7 +265,7 @@ if mcl_weather.allow_abm then
 	})
 
 	-- Wetten the soil
-	minetest.register_abm({
+	core.register_abm({
 		label = "Rain hydrates farmland",
 		nodenames = {"mcl_farming:soil"},
 		interval = 22.0,
@@ -273,7 +273,7 @@ if mcl_weather.allow_abm then
 		action = function(pos, node)
 			if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) and mcl_weather.has_rain(pos) then
 				if node.name == "mcl_farming:soil" then
-					minetest.set_node(pos, {name="mcl_farming:soil_wet"})
+					core.set_node(pos, {name="mcl_farming:soil_wet"})
 				end
 			end
 		end

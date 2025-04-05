@@ -1,6 +1,6 @@
-local S = minetest.get_translator("mcl_barrels")
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator("mcl_barrels")
+local F = core.formspec_escape
+local C = core.colorize
 
 --TODO: fix barrel rotation placement
 
@@ -9,16 +9,16 @@ local open_barrels = {}
 local drop_content = mcl_util.drop_items_from_meta_container({"main"})
 
 local function on_blast(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	drop_content(pos, node)
-	minetest.remove_node(pos)
+	core.remove_node(pos)
 end
 
 -- Simple protection checking functions
 local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	else
 		return count
@@ -27,8 +27,8 @@ end
 
 local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	else
 		return stack:get_count()
@@ -36,7 +36,7 @@ local function protection_check_put_take(pos, _, _, stack, player)
 end
 
 local function barrel_open(pos, node, clicker)
-	local name = minetest.get_meta(pos):get_string("name")
+	local name = core.get_meta(pos):get_string("name")
 
 	if name == "" then
 		name = S("Barrel")
@@ -44,7 +44,7 @@ local function barrel_open(pos, node, clicker)
 
 	local playername = clicker:get_player_name()
 
-	minetest.show_formspec(playername,
+	core.show_formspec(playername,
 		"mcl_barrels:barrel_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z,
 		table.concat({
 			"formspec_version[4]",
@@ -64,25 +64,25 @@ local function barrel_open(pos, node, clicker)
 		})
 	)
 
-	minetest.swap_node(pos, { name = "mcl_barrels:barrel_open", param2 = node.param2 })
+	core.swap_node(pos, { name = "mcl_barrels:barrel_open", param2 = node.param2 })
 	open_barrels[playername] = pos
-	minetest.sound_play({ name = "mcl_barrels_default_barrel_open" }, { pos = pos, gain = 0.5, max_hear_distance = 16 }, true)
+	core.sound_play({ name = "mcl_barrels_default_barrel_open" }, { pos = pos, gain = 0.5, max_hear_distance = 16 }, true)
 	mobs_mc.enrage_piglins (clicker, true)
 end
 
 local function close_forms(pos)
 	local formname = "mcl_barrels:barrel_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z
 	for pl in mcl_util.connected_players(pos, 30) do
-		minetest.close_formspec(pl:get_player_name(), formname)
+		core.close_formspec(pl:get_player_name(), formname)
 	end
 end
 
 local function update_after_close(pos)
-	local node = minetest.get_node_or_nil(pos)
+	local node = core.get_node_or_nil(pos)
 	if not node then return end
 	if node.name == "mcl_barrels:barrel_open" then
-		minetest.swap_node(pos, { name = "mcl_barrels:barrel_closed", param2 = node.param2 })
-		minetest.sound_play({ name = "mcl_barrels_default_barrel_close" }, { pos = pos, gain = 0.5, max_hear_distance = 16 }, true)
+		core.swap_node(pos, { name = "mcl_barrels:barrel_closed", param2 = node.param2 })
+		core.sound_play({ name = "mcl_barrels_default_barrel_close" }, { pos = pos, gain = 0.5, max_hear_distance = 16 }, true)
 	end
 end
 
@@ -98,7 +98,7 @@ local function close_barrel(player)
 	open_barrels[name] = nil
 end
 
-minetest.register_node("mcl_barrels:barrel_closed", {
+core.register_node("mcl_barrels:barrel_closed", {
 	description = S("Barrel"),
 	_tt_help = S("27 inventory slots"),
 	_doc_items_longdesc = S("Barrels are containers which provide 27 inventory slots."),
@@ -111,8 +111,8 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 		if  not placer or not placer:is_player() then
 			return itemstack
 		end
-		minetest.rotate_and_place(itemstack, placer, pointed_thing,
-			minetest.is_creative_enabled(placer and placer:get_player_name() or ""), {}
+		core.rotate_and_place(itemstack, placer, pointed_thing,
+			core.is_creative_enabled(placer and placer:get_player_name() or ""), {}
 			, false)
 		return itemstack
 	end,
@@ -128,28 +128,28 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 		barrel = 1,
 	},
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("main", 9 * 3)
 	end,
 	after_place_node = function(pos, _, itemstack)
-		minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
+		core.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 	end,
 	allow_metadata_inventory_move = protection_check_move,
 	allow_metadata_inventory_take = protection_check_put_take,
 	allow_metadata_inventory_put = protection_check_put_take,
 	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff in barrel at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff in barrel at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_put = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff to barrel at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff to barrel at " .. core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" takes stuff from barrel at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" takes stuff from barrel at " .. core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	after_dig_node = drop_content,
@@ -161,7 +161,7 @@ minetest.register_node("mcl_barrels:barrel_closed", {
 	_mcl_burntime = 15
 })
 
-minetest.register_node("mcl_barrels:barrel_open", {
+core.register_node("mcl_barrels:barrel_open", {
 	description = S("Barrel Open"),
 	_tt_help = S("27 inventory slots"),
 	_doc_items_longdesc = S("Barrels are containers which provide 27 inventory slots."),
@@ -188,17 +188,17 @@ minetest.register_node("mcl_barrels:barrel_open", {
 	allow_metadata_inventory_take = protection_check_put_take,
 	allow_metadata_inventory_put = protection_check_put_take,
 	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff in barrel at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff in barrel at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_put = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff to barrel at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff to barrel at " .. core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" takes stuff from barrel at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" takes stuff from barrel at " .. core.pos_to_string(pos))
 		mcl_redstone.update_comparators(pos)
 	end,
 	after_dig_node = drop_content,
@@ -210,18 +210,18 @@ minetest.register_node("mcl_barrels:barrel_open", {
 	_mcl_baseitem = "mcl_barrels:barrel_closed",
 })
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname:find("mcl_barrels:") == 1 and fields.quit then
 		close_barrel(player)
 	end
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	close_barrel(player)
 end)
 
 --Minecraft Java Edition craft
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_barrels:barrel_closed",
 	recipe = {
 		{ "group:wood", "group:wood_slab", "group:wood" },

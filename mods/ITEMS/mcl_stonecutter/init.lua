@@ -4,9 +4,9 @@
 
 mcl_stonecutter = {}
 
-local S = minetest.get_translator("mcl_stonecutter")
-local C = minetest.colorize
-local F = minetest.formspec_escape
+local S = core.get_translator("mcl_stonecutter")
+local C = core.colorize
+local F = core.formspec_escape
 
 local recipe_yield = { --maps itemgroup to the respective recipe yield, default is 1
 	["slab"] = 2,
@@ -20,12 +20,12 @@ local yields = {}
 function mcl_stonecutter.refresh_recipes()
 	recipes = {}
 	yields = {}
-	for result,resultdef in pairs(minetest.registered_nodes) do
+	for result,resultdef in pairs(core.registered_nodes) do
 		if resultdef._mcl_stonecutter_recipes then
 			local yield = 1
-			for k,v in pairs(recipe_yield) do if minetest.get_item_group(result,k) > 0 then yield = yield * v end end
+			for k,v in pairs(recipe_yield) do if core.get_item_group(result,k) > 0 then yield = yield * v end end
 			for _,recipe in pairs(resultdef._mcl_stonecutter_recipes) do
-				if minetest.get_item_group(recipe,"stonecuttable") > 0 and minetest.get_item_group(result,"not_in_creative_inventory") == 0 then
+				if core.get_item_group(recipe,"stonecuttable") > 0 and core.get_item_group(result,"not_in_creative_inventory") == 0 then
 					if not recipes[recipe] then recipes[recipe] = {} end
 					table.insert(recipes[recipe],result)
 					yields[result] = yield
@@ -35,7 +35,7 @@ function mcl_stonecutter.refresh_recipes()
 	end
 end
 
-minetest.register_on_mods_loaded(mcl_stonecutter.refresh_recipes)
+core.register_on_mods_loaded(mcl_stonecutter.refresh_recipes)
 
 -- formspecs
 local function show_stonecutter_formspec(input)
@@ -93,12 +93,12 @@ end
 
 -- Updates the formspec
 local function update_stonecutter_slots(pos,str)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local input = inv:get_stack("input", 1)
 	local name = input:get_name()
 	core.after(0.1, function ()
-		if minetest.get_item_group(name,"stonecuttable") > 0 then
+		if core.get_item_group(name,"stonecuttable") > 0 then
 			meta:set_string("formspec", show_stonecutter_formspec(name))
 		else
 			meta:set_string("formspec", show_stonecutter_formspec(nil))
@@ -121,7 +121,7 @@ end
 
 -- Fill the output to max
 local function fill_stonecutter_slots(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local input = inv:get_stack("input", 1)
 	local output = inv:get_stack("output", 1)
@@ -138,7 +138,7 @@ local function fill_stonecutter_slots(pos)
 	end
 end
 
-minetest.register_node("mcl_stonecutter:stonecutter", {
+core.register_node("mcl_stonecutter:stonecutter", {
 	description = S("Stone Cutter"),
 	_tt_help = S("Used to cut stone like materials."),
 	_doc_items_longdesc = S("Stonecutters are used to create stairs and slabs from stone like materials. It is also the jobsite for the Stone Mason Villager."),
@@ -186,12 +186,12 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),
 	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			if listname == "output" then
-				local meta = minetest.get_meta(pos)
+				local meta = core.get_meta(pos)
 				local inv = meta:get_inventory()
 				local input = inv:get_stack("input", 1)
 				return math.min((input:get_count() * yields[stack:get_name()]),stack:get_stack_max())
@@ -201,13 +201,13 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		elseif to_list == "output" then
 			return 0
 		elseif from_list == "output" and to_list == "input" then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local inv = meta:get_inventory()
 			if inv:get_stack(to_list, to_index):is_empty() then
 				return count
@@ -219,7 +219,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 		end
 	end,
 	on_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, _)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		if from_list == "output" and to_list == "input" then
 			local inv = meta:get_inventory()
 			for i=1, inv:get_size("input") do
@@ -234,8 +234,8 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	end,
 	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		elseif listname == "output" then
 			return 0
@@ -247,7 +247,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 		update_stonecutter_slots(pos)
 	end,
 	on_metadata_inventory_take = function(pos, listname, _, stack, _)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		if listname == "output" then
 			local inv = meta:get_inventory()
 			local input = inv:get_stack("input", 1)
@@ -257,7 +257,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 		update_stonecutter_slots(pos)
 	end,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
 		inv:set_size("output", 1)
@@ -271,15 +271,15 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	end,
 	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
-		if minetest.is_protected(pos, sender_name) then
-			minetest.record_protection_violation(pos, sender_name)
+		if core.is_protected(pos, sender_name) then
+			core.record_protection_violation(pos, sender_name)
 			return
 		end
 		if fields then
 			for k, _ in pairs(fields) do
 				if tostring(k) then
 					local str = k:gsub("^item_button_","")
-					local def = minetest.registered_nodes[str]
+					local def = core.registered_nodes[str]
 					if def and def._mcl_stonecutter_recipes then
 						update_stonecutter_slots(pos, str)
 					end
@@ -292,7 +292,7 @@ minetest.register_node("mcl_stonecutter:stonecutter", {
 	end,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_stonecutter:stonecutter",
 	recipe = {
 		{ "", "", "" },

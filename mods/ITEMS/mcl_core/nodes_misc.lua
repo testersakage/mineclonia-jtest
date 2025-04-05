@@ -1,14 +1,14 @@
 -- Other nodes
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_screwdriver = minetest.get_modpath("screwdriver")
+local mod_screwdriver = core.get_modpath("screwdriver")
 
 local on_rotate
 if mod_screwdriver then
 	on_rotate = screwdriver.rotate_3way
 end
 
-minetest.register_node("mcl_core:bone_block", {
+core.register_node("mcl_core:bone_block", {
 	description = S("Bone Block"),
 	_doc_items_longdesc = S("Bone blocks are decorative blocks and a compact storage of bone meal."),
 	tiles = {"mcl_core_bone_block_top.png", "mcl_core_bone_block_top.png", "mcl_core_bone_block_side.png"},
@@ -23,7 +23,7 @@ minetest.register_node("mcl_core:bone_block", {
 	_mcl_crafting_output = {single = {output = "mcl_bone_meal:bone_meal 9"}}
 })
 
-minetest.register_node("mcl_core:slimeblock", {
+core.register_node("mcl_core:slimeblock", {
 	description = S("Slime Block"),
 	_doc_items_longdesc = S("Slime blocks are very bouncy and prevent fall damage."),
 	drawtype = "nodebox",
@@ -58,7 +58,7 @@ minetest.register_node("mcl_core:slimeblock", {
 	_mcl_crafting_output = {single = {output = "mcl_mobitems:slimeball 9"}}
 })
 
-minetest.register_node("mcl_core:cobweb", {
+core.register_node("mcl_core:cobweb", {
 	description = S("Cobweb"),
 	_tt_help = S("Slows down movement"),
 	_doc_items_longdesc = S("Cobwebs can be walked through, but significantly slow you down."),
@@ -80,7 +80,7 @@ minetest.register_node("mcl_core:cobweb", {
 })
 
 
-minetest.register_node("mcl_core:deadbush", {
+core.register_node("mcl_core:deadbush", {
 	description = S("Dead Bush"),
 	_doc_items_longdesc = S("Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."),
 	_doc_items_hidden = false,
@@ -125,7 +125,7 @@ mcl_flowerpots.register_potted_flower("mcl_core:deadbush", {
 	image = "default_dry_shrub.png",
 })
 
-minetest.register_node("mcl_core:barrier", {
+core.register_node("mcl_core:barrier", {
 	description = S("Barrier"),
 	_doc_items_longdesc = S("Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."),
 	_doc_items_usagehelp = S("When you hold a barrier in hand, you reveal all placed barriers in a short distance around you."),
@@ -145,7 +145,7 @@ minetest.register_node("mcl_core:barrier", {
 		if placer == nil then
 			return
 		end
-		minetest.add_particle({
+		core.add_particle({
 			pos = pos,
 			expirationtime = 1,
 			size = 8,
@@ -166,12 +166,12 @@ minetest.register_node("mcl_core:barrier", {
 		end
 
 		local name = placer:get_player_name()
-		local privs = minetest.get_player_privs(name)
+		local privs = core.get_player_privs(name)
 		if not privs.maphack then
-			minetest.chat_send_player(name, "Placement denied. You need the “maphack” privilege to place barriers.")
+			core.chat_send_player(name, "Placement denied. You need the “maphack” privilege to place barriers.")
 			return itemstack
 		end
-		local new_itemstack = minetest.item_place_node(itemstack, placer, pointed_thing)
+		local new_itemstack = core.item_place_node(itemstack, placer, pointed_thing)
 		return new_itemstack
 	end,
 })
@@ -180,7 +180,7 @@ minetest.register_node("mcl_core:barrier", {
 -- It must NOT be used for anything else.
 -- This node only exists because Minetest does not have support for “dimensions” yet and needs to
 -- be removed when support for this is implemented.
-minetest.register_node("mcl_core:realm_barrier", {
+core.register_node("mcl_core:realm_barrier", {
 	description = S("Realm Barrier"),
 	_doc_items_create_entry = false,
 	drawtype = "airlike",
@@ -202,8 +202,8 @@ minetest.register_node("mcl_core:realm_barrier", {
 	node_placement_prediction = "",
 	on_place = function(_, placer, _)
 		if placer then
-			minetest.chat_send_player(placer:get_player_name(),
-				minetest.colorize(mcl_colors.RED, "You can't just place a realm barrier by hand!"))
+			core.chat_send_player(placer:get_player_name(),
+				core.colorize(mcl_colors.RED, "You can't just place a realm barrier by hand!"))
 		end
 	end,
 })
@@ -213,8 +213,8 @@ minetest.register_node("mcl_core:realm_barrier", {
 
 local light_block_pattern = "^mcl_core:light_(%d+)$"
 
-for i = 0, 14 do --minetest.LIGHT_MAX
-	minetest.register_node("mcl_core:light_" .. i, {
+for i = 0, 14 do --core.LIGHT_MAX
+	core.register_node("mcl_core:light_" .. i, {
 		description = S("Light"),
 		_doc_items_longdesc = S("Lights are invisible blocks. They are used to light up adventure maps and the like."),
 		_doc_items_usagehelp = S("When you hold a light in hand, you reveal all placed lights in a short distance around you."),
@@ -235,8 +235,8 @@ for i = 0, 14 do --minetest.LIGHT_MAX
 		on_blast = function() end,
 		on_use = function(itemstack, user, pointed_thing)
 			-- user:get_player_control() returns {} for non players, so we don't need user:is_player()
-			if pointed_thing.type == "node" and string.match(minetest.get_node(pointed_thing.under).name, light_block_pattern) and not user:get_player_control().sneak then
-				minetest.dig_node(pointed_thing.under)
+			if pointed_thing.type == "node" and string.match(core.get_node(pointed_thing.under).name, light_block_pattern) and not user:get_player_control().sneak then
+				core.dig_node(pointed_thing.under)
 				return
 			end
 			itemstack:set_name("mcl_core:light_" .. ((i == 14) and 0 or i + 1))
@@ -249,7 +249,7 @@ for i = 0, 14 do --minetest.LIGHT_MAX
 			if not placer then
 				return
 			end
-			minetest.add_particle({
+			core.add_particle({
 				pos = pos,
 				expirationtime = 1,
 				size = 8,
@@ -269,7 +269,7 @@ end
 -- The void below the bedrock. Void damage is handled in mcl_playerplus.
 -- The void does not exist as a block in Minecraft but we register it as a
 -- block here to make things easier for us.
-minetest.register_node("mcl_core:void", {
+core.register_node("mcl_core:void", {
 	description = S("Void"),
 	_doc_items_create_entry = false,
 	drawtype = "airlike",
@@ -286,8 +286,8 @@ minetest.register_node("mcl_core:void", {
 	node_placement_prediction = "",
 	on_place = function(_, placer, _)
 		if placer then
-			minetest.chat_send_player(placer:get_player_name(),
-				minetest.colorize(mcl_colors.RED, "You can't just place the void by hand!"))
+			core.chat_send_player(placer:get_player_name(),
+				core.colorize(mcl_colors.RED, "You can't just place the void by hand!"))
 		end
 	end,
 	drop = "",

@@ -1,13 +1,13 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
 
 local player_in_bed = 0
-local is_sp = minetest.is_singleplayer()
+local is_sp = core.is_singleplayer()
 
 -- Helper functions
 
 local function get_look_yaw(pos)
-	local n = minetest.get_node(pos)
+	local n = core.get_node(pos)
 	local param = n.param2
 	if param == 1 then
 		return math.pi / 2, param
@@ -21,7 +21,7 @@ local function get_look_yaw(pos)
 end
 
 local function players_in_bed_setting()
-	return tonumber(minetest.settings:get("mcl_playersSleepingPercentage")) or 100
+	return tonumber(core.settings:get("mcl_playersSleepingPercentage")) or 100
 end
 
 local function is_night_skip_enabled()
@@ -36,7 +36,7 @@ end
 
 local function check_in_beds(players)
 	if not players then
-		players = minetest.get_connected_players()
+		players = core.get_connected_players()
 	end
 	if player_in_bed <= 0 then
 		return false
@@ -47,7 +47,7 @@ end
 function mcl_beds.is_night(tod)
 	-- Values taken from Minecraft Wiki with offset of +600
 	if not tod then
-		tod = minetest.get_timeofday()
+		tod = core.get_timeofday()
 	end
 	tod = ( tod * 24000 ) % 24000
 	return  tod > 18541 or tod < 5458
@@ -76,13 +76,13 @@ local function lay_down(player, pos, bed_pos, state, skip)
 	local yaw, param2, dir, bed_pos2, bed_center
 	if bed_pos then
 		yaw, param2 = get_look_yaw(bed_pos)
-		dir = minetest.facedir_to_dir(param2)
+		dir = core.facedir_to_dir(param2)
 		bed_pos2 = {x = bed_pos.x - dir.x, y = bed_pos.y, z = bed_pos.z - dir.z}
 		bed_center = {x = bed_pos.x - dir.x/2, y = bed_pos.y + 0.1, z = bed_pos.z - dir.z/2}
 
 		-- save respawn position when entering bed
 		if mcl_spawn.set_spawn_pos(player, bed_pos, nil) then
-			minetest.chat_send_player(name, S("New respawn position set!"))
+			core.chat_send_player(name, S("New respawn position set!"))
 			awards.unlock(player:get_player_name(), "mcl:sweetDreams")
 		end
 
@@ -111,12 +111,12 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		end
 
 		-- No sleeping if monsters nearby.
-		for obj in minetest.objects_inside_radius(bed_pos, 8) do
+		for obj in core.objects_inside_radius(bed_pos, 8) do
 			if obj and not obj:is_player() then
 				local ent = obj:get_luaentity()
 				if ent then
 					local mobname = ent.name
-					local def = minetest.registered_entities[mobname]
+					local def = core.registered_entities[mobname]
 					if def.is_mob and prevents_sleep(def,ent) then
 						if math.abs(bed_pos.y - obj:get_pos().y) <= 5 then
 							return false, S("You can't sleep now, monsters are nearby!")
@@ -159,10 +159,10 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		mcl_serverplayer.override_pose (player, nil)
 	-- lay down
 	else
-		local n1 = minetest.get_node({x = bed_pos.x,	y = bed_pos.y + 1,	z = bed_pos.z})
-		local n2 = minetest.get_node({x = bed_pos2.x,	y = bed_pos2.y + 1,	z = bed_pos2.z})
-		local def1 = minetest.registered_nodes[n1.name]
-		local def2 = minetest.registered_nodes[n2.name]
+		local n1 = core.get_node({x = bed_pos.x,	y = bed_pos.y + 1,	z = bed_pos.z})
+		local n2 = core.get_node({x = bed_pos2.x,	y = bed_pos2.y + 1,	z = bed_pos2.z})
+		local def1 = core.registered_nodes[n1.name]
+		local def2 = core.registered_nodes[n2.name]
 		if def1.walkable or def2.walkable then
 			return false, S("You can't sleep, the bed is obstructed!")
 		elseif (def1.damage_per_second and def1.damage_per_second > 0) or (def2.damage_per_second and def2.damage_per_second > 0) then
@@ -199,7 +199,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 end
 
 local function update_formspecs(finished, players)
-	local ges = players_in_overworld(players or minetest.get_connected_players())
+	local ges = players_in_overworld(players or core.get_connected_players())
 	local form_n = "size[12,5;true]"
 	local all_in_bed = ges and players_in_bed_setting() <= (player_in_bed * 100) / ges or 0
 	local night_skip = is_night_skip_enabled()
@@ -215,7 +215,7 @@ local function update_formspecs(finished, players)
 
 	if finished then
 		for name,_ in pairs(mcl_beds.player) do
-			minetest.close_formspec(name, "mcl_beds_form")
+			core.close_formspec(name, "mcl_beds_form")
 		end
 		return
 	elseif not is_sp then
@@ -256,7 +256,7 @@ local function update_formspecs(finished, players)
 	end
 
 	for name,_ in pairs(mcl_beds.player) do
-		minetest.show_formspec(name, "mcl_beds_form", form_n)
+		core.show_formspec(name, "mcl_beds_form", form_n)
 	end
 end
 
@@ -266,8 +266,8 @@ end
 function mcl_beds.sleep()
 	if is_night_skip_enabled() then
 		if mcl_weather.get_weather() == "thunder" then
-			local endtime = (mcl_weather.end_time - minetest.get_gametime()) * 72 / 24000
-			minetest.set_timeofday((minetest.get_timeofday() + endtime) %1)
+			local endtime = (mcl_weather.end_time - core.get_gametime()) * 72 / 24000
+			core.set_timeofday((core.get_timeofday() + endtime) %1)
 			if mcl_beds.is_night() then
 				mcl_beds.skip_night()
 				mcl_beds.kick_players()
@@ -287,7 +287,7 @@ end
 -- Throw all players out of bed
 function mcl_beds.kick_players()
 	for name, _ in pairs(mcl_beds.player) do
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		lay_down(player, nil, nil, false)
 	end
 	update_formspecs(false)
@@ -299,25 +299,25 @@ function mcl_beds.kick_player(player)
 	if mcl_beds.player[name] then
 		lay_down(player, nil, nil, false)
 		update_formspecs(false)
-		minetest.close_formspec(name, "mcl_beds_form")
+		core.close_formspec(name, "mcl_beds_form")
 	end
 end
 
 function mcl_beds.skip_night()
-	minetest.set_timeofday(0.25) -- tod = 6000
+	core.set_timeofday(0.25) -- tod = 6000
 end
 
 function mcl_beds.get_bed_top (pos)
-	local node = minetest.get_node(pos)
-	local dir = minetest.facedir_to_dir(node.param2)
+	local node = core.get_node(pos)
+	local dir = core.facedir_to_dir(node.param2)
 	local bed_top_pos = vector.add(pos, dir)
 
 	return bed_top_pos
 end
 
 function mcl_beds.get_bed_bottom (pos)
-	local node = minetest.get_node(pos)
-	local dir = minetest.facedir_to_dir(node.param2)
+	local node = core.get_node(pos)
+	local dir = core.facedir_to_dir(node.param2)
 	local bed_bottom = vector.add(pos, -dir)
 	return bed_bottom
 end
@@ -331,7 +331,7 @@ local function recheck_in_beds()
 	-- check again (a player can change the dimension)
 	if player_in_bed > 0 then
 		update_formspecs(false)
-		minetest.after(5, recheck_in_beds)
+		core.after(5, recheck_in_beds)
 	end
 end
 
@@ -343,11 +343,11 @@ function mcl_beds.on_rightclick(pos, player, is_top)
 	local dim = mcl_worlds.pos_to_dimension(pos)
 	if dim == "nether" or dim == "end" then
 		-- Bed goes BOOM in the Nether or End.
-		local node = minetest.get_node(pos)
-		local dir = minetest.facedir_to_dir(node.param2)
+		local node = core.get_node(pos)
+		local dir = core.facedir_to_dir(node.param2)
 
-		minetest.remove_node(pos)
-		minetest.remove_node(string.sub(node.name, -4) == "_top" and vector.subtract(pos, dir) or vector.add(pos, dir))
+		core.remove_node(pos)
+		core.remove_node(string.sub(node.name, -4) == "_top" and vector.subtract(pos, dir) or vector.add(pos, dir))
 		mcl_explosions.explode(pos, 5, {fire = true})
 		return
 	end
@@ -366,7 +366,7 @@ function mcl_beds.on_rightclick(pos, player, is_top)
 		if message then
 			mcl_title.set(player, "actionbar", {text=message, color="white", stay=60})
 		else -- someone just successfully entered a bed
-			local connected_players = minetest.get_connected_players()
+			local connected_players = core.get_connected_players()
 			local ges = players_in_overworld(connected_players)
 			local sleep_hud_message = S("@1/@2 players currently in bed.", player_in_bed, math.ceil(players_in_bed_setting() * ges / 100))
 			for _, player in pairs(connected_players) do
@@ -385,12 +385,12 @@ function mcl_beds.on_rightclick(pos, player, is_top)
 	update_formspecs(false)
 	-- skip the night and let all players stand up
 	if player_in_bed > 0 then
-		minetest.after(5, recheck_in_beds)
+		core.after(5, recheck_in_beds)
 	end
 end
 
 -- Callbacks
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local meta = player:get_meta()
 	if meta:get_string("mcl_beds:sleeping") == "true" then
 		-- Make player awake on joining server
@@ -402,9 +402,9 @@ minetest.register_on_joinplayer(function(player)
 	update_formspecs(false)
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	lay_down(player, nil, nil, false, true)
-	local players = minetest.get_connected_players()
+	local players = core.get_connected_players()
 	local name = player:get_player_name()
 	for n, player in ipairs(players) do
 		if player:get_player_name() == name then
@@ -413,12 +413,12 @@ minetest.register_on_leaveplayer(function(player)
 		end
 	end
 	if player_in_bed > 0 then
-		minetest.after(5, recheck_in_beds)
+		core.after(5, recheck_in_beds)
 	end
 	update_formspecs(false, players)
 end)
 
-local message_rate_limit = tonumber(minetest.settings:get("chat_message_limit_per_10sec")) or 8 --NEVER change this! if this was java, i would've declared it as final
+local message_rate_limit = tonumber(core.settings:get("chat_message_limit_per_10sec")) or 8 --NEVER change this! if this was java, i would've declared it as final
 local playermessagecounter = {}
 --[[
 	This table stores how many messages a player XY has sent (only while being in a bed) within 10 secs
@@ -427,7 +427,7 @@ local playermessagecounter = {}
 
 local chatbuttonused = false
 local globalstep_timer = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	globalstep_timer = globalstep_timer + dtime
 	if globalstep_timer >= 10 then
 		globalstep_timer = 0
@@ -441,7 +441,7 @@ local function exceeded_rate_limit(playername) --Note: will also take care of in
 		playermessagecounter[playername] = 0
 	end
 	if playermessagecounter[playername] >= message_rate_limit then -- == should do as well
-		minetest.chat_send_player(playername,S("You exceeded the maximum number of messages per 10 seconds!") .. " (" .. tostring(message_rate_limit) .. ")")
+		core.chat_send_player(playername,S("You exceeded the maximum number of messages per 10 seconds!") .. " (" .. tostring(message_rate_limit) .. ")")
 		return true
 	end
 	playermessagecounter[playername] = playermessagecounter[playername] + 1
@@ -449,14 +449,14 @@ local function exceeded_rate_limit(playername) --Note: will also take care of in
 end
 
 local function shout_priv_check(player)
-	if not minetest.check_player_privs(player,"shout") then
-		minetest.chat_send_player(player:get_player_name(),S("You are missing the 'shout' privilege! It's required in order to talk in chat..."))
+	if not core.check_player_privs(player,"shout") then
+		core.chat_send_player(player:get_player_name(),S("You are missing the 'shout' privilege! It's required in order to talk in chat..."))
 		return false
 	end
 	return true
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname ~= "mcl_beds_form" then
 		return
 	end
@@ -469,14 +469,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if custom_sleep_message or fields.defaultmessage then
 		if chatbuttonused then
 			local time_to_wait = math.ceil(10-globalstep_timer)
-			minetest.chat_send_player(player:get_player_name(),S("Sorry, but you have to wait @1 seconds until you may use this button again!", tostring(time_to_wait)))
+			core.chat_send_player(player:get_player_name(),S("Sorry, but you have to wait @1 seconds until you may use this button again!", tostring(time_to_wait)))
 			return
 		end
 
 		if (not exceeded_rate_limit(player:get_player_name())) and shout_priv_check(player) then
 			chatbuttonused = true
 			local message = custom_sleep_message or S("Hey! Would you guys mind sleeping?")
-			minetest.chat_send_all(minetest.format_chat_message(player:get_player_name(), message))
+			core.chat_send_all(core.format_chat_message(player:get_player_name(), message))
 		end
 		return
 	end
@@ -492,7 +492,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-minetest.register_on_player_hpchange(function(player, hp_change)
+core.register_on_player_hpchange(function(player, hp_change)
 	if hp_change < 0 then
 		mcl_beds.kick_player(player)
 	end

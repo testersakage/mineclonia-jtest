@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local storage = mcl_portals.storage
 
 local gateway_positions = {
@@ -24,11 +24,11 @@ local gateway_positions = {
 	{x = 91, y = -26925, z = -29},
 }
 
-local path_gateway_portal = minetest.get_modpath("mcl_structures").."/schematics/mcl_structures_end_gateway_portal.mts"
+local path_gateway_portal = core.get_modpath("mcl_structures").."/schematics/mcl_structures_end_gateway_portal.mts"
 
 local function spawn_gateway_portal(pos, dest_str)
 	return mcl_structures.place_schematic(vector.add(pos, vector.new(-1, -2, -1)), path_gateway_portal, "0", nil, true, nil, dest_str and function()
-		minetest.get_meta(pos):set_string("mcl_portals:gateway_destination", dest_str)
+		core.get_meta(pos):set_string("mcl_portals:gateway_destination", dest_str)
 	end)
 end
 
@@ -40,7 +40,7 @@ function mcl_portals.spawn_gateway_portal()
 	spawn_gateway_portal(pos)
 end
 
-local gateway_def = table.copy(minetest.registered_nodes["mcl_portals:portal_end"])
+local gateway_def = table.copy(core.registered_nodes["mcl_portals:portal_end"])
 gateway_def.description = S("End Gateway Portal")
 gateway_def._tt_help = S("Used to construct end gateway portals")
 gateway_def._doc_items_longdesc = S("An End gateway portal teleports creatures and objects to the outer End (and back!).")
@@ -50,16 +50,16 @@ gateway_def.drawtype = "normal"
 gateway_def.node_box = nil
 gateway_def.walkable = true
 gateway_def.tiles[3] = nil
-minetest.register_node("mcl_portals:portal_gateway", gateway_def)
+core.register_node("mcl_portals:portal_gateway", gateway_def)
 
 local function find_destination_pos(minp, maxp)
 	for y = maxp.y, minp.y, -1 do
 		for x = maxp.x, minp.x, -1 do
 			for z = maxp.z, minp.z, -1 do
 				local pos = vector.new(x, y, z)
-				local nn = minetest.get_node(pos).name
+				local nn = core.get_node(pos).name
 				if nn ~= "ignore" and nn ~= "mcl_portals:portal_gateway" and nn ~= "mcl_core:bedrock" then
-					local def = minetest.registered_nodes[nn]
+					local def = core.registered_nodes[nn]
 					if def and def.walkable then
 						return vector.add(pos, vector.new(0, 1.5, 0))
 					end
@@ -72,22 +72,22 @@ end
 local preparing = {}
 
 local function teleport(pos, obj)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local dest_portal
 	local dest_str = meta:get_string("mcl_portals:gateway_destination")
-	local pos_str = minetest.pos_to_string(pos)
+	local pos_str = core.pos_to_string(pos)
 	if dest_str == "" then
 		dest_portal = vector.multiply(vector.direction(vector.new(0, pos.y, 0), pos), math.random(768, 1024))
 		dest_portal.y = -26970
 		spawn_gateway_portal(dest_portal, pos_str)
-		meta:set_string("mcl_portals:gateway_destination", minetest.pos_to_string(dest_portal))
+		meta:set_string("mcl_portals:gateway_destination", core.pos_to_string(dest_portal))
 	else
-		dest_portal = minetest.string_to_pos(dest_str)
+		dest_portal = core.string_to_pos(dest_str)
 	end
 	local minp = vector.subtract(dest_portal, vector.new(5, 40, 5))
 	local maxp = vector.add(dest_portal, vector.new(5, 10, 5))
 	preparing[pos_str] = true
-	minetest.emerge_area(minp, maxp, function(_, _, calls_remaining)
+	core.emerge_area(minp, maxp, function(_, _, calls_remaining)
 		if calls_remaining < 1 then
 			if obj and obj:is_player() or obj:get_luaentity() then
 				obj:set_pos(find_destination_pos(minp, maxp) or vector.add(dest_portal, vector.new(0, 3.5, 0)))
@@ -97,14 +97,14 @@ local function teleport(pos, obj)
 	end)
 end
 
-minetest.register_abm({
+core.register_abm({
 	label = "End gateway portal teleportation",
 	nodenames = {"mcl_portals:portal_gateway"},
 	interval = 0.1,
 	chance = 1,
 	action = function(pos)
-		if preparing[minetest.pos_to_string(pos)] then return end
-		for obj in minetest.objects_inside_radius(pos, 1) do
+		if preparing[core.pos_to_string(pos)] then return end
+		for obj in core.objects_inside_radius(pos, 1) do
 			if obj:get_hp() > 0 then
 				local luaentity = obj:get_luaentity()
 				if luaentity and luaentity.name == "mcl_throwing:ender_pearl" then

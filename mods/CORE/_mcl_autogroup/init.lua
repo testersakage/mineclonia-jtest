@@ -69,7 +69,7 @@ This also means that it is very important that no mod adds _mcl_autogroup as a
 dependency.
 --]]
 
-assert(minetest.get_modpath("mcl_autogroup"), "This mod requires the mod mcl_autogroup to function")
+assert(core.get_modpath("mcl_autogroup"), "This mod requires the mod mcl_autogroup to function")
 
 local groups_mtg2mcl = {
 	["choppy"] = { group = "axey", hardness = 2 },
@@ -117,13 +117,13 @@ end
 
 -- Get new groups and hardness
 local function convert_mtg_groups(nname)
-	local groups = table.copy(minetest.registered_nodes[nname].groups)
-	local hardness = minetest.registered_nodes[nname]._mcl_hardness
+	local groups = table.copy(core.registered_nodes[nname].groups)
+	local hardness = core.registered_nodes[nname]._mcl_hardness
 
 	if not hardness then --if _mcl_hardness is defined the node is clearly intended for mcl specifically, don't mess with the groups in that case
 		for mtg, mcl in pairs(groups_mtg2mcl) do
-			local g_mtg = minetest.get_item_group(nname, mtg)
-			local g_mcl = minetest.get_item_group(nname, mcl.group)
+			local g_mtg = core.get_item_group(nname, mtg)
+			local g_mcl = core.get_item_group(nname, mcl.group)
 			if g_mtg > 0 and g_mcl == 0 then
 				groups[mcl.group] = g_mtg
 				groups[mtg] = nil
@@ -135,10 +135,10 @@ local function convert_mtg_groups(nname)
 	return groups, hardness
 end
 
-for nname, _ in pairs(minetest.registered_nodes) do
+for nname, _ in pairs(core.registered_nodes) do
 	local newgroups, newhardness = convert_mtg_groups(nname)
 
-	minetest.override_item(nname, {
+	core.override_item(nname, {
 		groups = newgroups,
 		_mcl_hardness = newhardness,
 	})
@@ -154,7 +154,7 @@ local function get_hardness_values_for_groups()
 		values[g] = {}
 	end
 
-	for _, ndef in pairs(minetest.registered_nodes) do
+	for _, ndef in pairs(core.registered_nodes) do
 		for g, _ in pairs(mcl_autogroup.registered_diggroups) do
 			if ndef.groups[g] then
 				maps[g][ndef._mcl_hardness or 0] = true
@@ -275,18 +275,18 @@ end
 -- Checks if the given node would drop its useful drop if dug by a given tool.
 -- Returns true if it will yield its useful drop, false otherwise.
 function mcl_autogroup.can_harvest(nodename, toolname, player)
-	local ndef = minetest.registered_nodes[nodename]
+	local ndef = core.registered_nodes[nodename]
 
 	if not ndef then
 		return false
 	end
 
-	if minetest.get_item_group(nodename, "dig_immediate") >= 2 then
+	if core.get_item_group(nodename, "dig_immediate") >= 2 then
 		return true
 	end
 
 	-- Check if it can be dug by tool
-	local tdef = minetest.registered_tools[toolname]
+	local tdef = core.registered_tools[toolname]
 	if tdef and tdef._mcl_diggroups then
 		for g, gdef in pairs(tdef._mcl_diggroups) do
 			if ndef.groups[g] then
@@ -300,7 +300,7 @@ function mcl_autogroup.can_harvest(nodename, toolname, player)
 	-- Check if it can be dug by hand
 	if player and player:is_player() then
 		local name = player:get_inventory():get_stack("hand", 1):get_name()
-		tdef = minetest.registered_items[name]
+		tdef = core.registered_items[name]
 	end
 	if tdef and tdef._mcl_diggroups then
 		for g, gdef in pairs(tdef._mcl_diggroups) do
@@ -353,7 +353,7 @@ end
 -- would have to add _mcl_autogroup as a dependency which would break the mod
 -- loading order.
 function mcl_autogroup.get_groupcaps(toolname, efficiency)
-	local tdef = minetest.registered_items[toolname]
+	local tdef = core.registered_items[toolname]
 	local groupcaps = table.copy(get_tool_capabilities(tdef).groupcaps or {})
 	add_groupcaps(toolname, groupcaps, tdef._mcl_diggroups, efficiency)
 	return groupcaps
@@ -370,7 +370,7 @@ end
 -- would have to add _mcl_autogroup as a dependency which would break the mod
 -- loading order.
 function mcl_autogroup.get_wear(toolname, diggroup)
-	local tdef = minetest.registered_tools[toolname]
+	local tdef = core.registered_tools[toolname]
 	local uses = tdef._mcl_diggroups[diggroup].uses
 	return math.ceil(65535 / uses)
 end
@@ -383,7 +383,7 @@ local function overwrite()
 	-- hardness_value.  Used for quick lookup.
 	local hardness_lookup = get_hardness_lookup_for_groups(hardness_values)
 
-	for nname, ndef in pairs(minetest.registered_nodes) do
+	for nname, ndef in pairs(core.registered_nodes) do
 		local override = {}
 		local newgroups = table.copy(ndef.groups)
 		if (nname ~= "ignore" and ndef.diggable) then
@@ -436,14 +436,14 @@ local function overwrite()
 		end
 	end
 
-	for tname, tdef in pairs(minetest.registered_items) do
+	for tname, tdef in pairs(core.registered_items) do
 		-- Assign groupcaps for digging the registered digging groups
 		-- depending on the _mcl_diggroups in the tool definition
 		if tdef._mcl_diggroups then
 			local toolcaps = table.copy(get_tool_capabilities(tdef))
 			toolcaps.groupcaps = mcl_autogroup.get_groupcaps(tname)
 
-			minetest.override_item(tname, {
+			core.override_item(tname, {
 				tool_capabilities = toolcaps
 			})
 		end
@@ -457,7 +457,7 @@ local function overwrite()
 		end
 
 		if tdef._mcl_burntime and tdef._mcl_burntime > 0 then
-			minetest.register_craft({
+			core.register_craft({
 				type = "fuel",
 				recipe = tname,
 				burntime = tdef._mcl_burntime,
@@ -467,7 +467,7 @@ local function overwrite()
 
 		local cooking_output = tdef._mcl_cooking_output
 		if cooking_output and type(cooking_output) == "string" and cooking_output ~= "" then
-			minetest.register_craft({
+			core.register_craft({
 				type = "cooking",
 				recipe = tname,
 				output = cooking_output,
@@ -480,7 +480,7 @@ local function overwrite()
 		if crafting_output and type(crafting_output) == "table" then
 			for shape, defs in pairs(crafting_output) do
 				if type(defs.output) == "string" and defs.output ~= "" then
-					minetest.register_craft({
+					core.register_craft({
 						output = defs.output,
 						recipe = replace_material_tag(shapes[shape], tname),
 						replacements = defs.replacements

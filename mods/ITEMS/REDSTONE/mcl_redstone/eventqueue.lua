@@ -1,6 +1,6 @@
-mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
-local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
-local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
+mcl_redstone.tick_speed = tonumber(core.settings:get("mcl_redstone_update_tick")) or 0.1
+local MAX_EVENTS = tonumber(core.settings:get("mcl_redstone_max_events")) or 65535
+local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(core.settings:get("mcl_redstone_time_budget")) or 0.2))
 
 mcl_redstone.is_tick_frozen = false
 
@@ -70,7 +70,7 @@ local current_tick = 0
 local update_event_tab = {}
 
 function mcl_redstone._schedule_update(delay, priority, pos, node, oldnode)
-	local h = minetest.hash_node_position(pos)
+	local h = core.hash_node_position(pos)
 	if update_event_tab[h] and priority >= update_event_tab[h].priority then
 		return
 	end
@@ -106,22 +106,22 @@ function mcl_redstone.after(delay, func)
 end
 
 function mcl_redstone._abort_pending_update(pos)
-	local h = minetest.hash_node_position(pos)
+	local h = core.hash_node_position(pos)
 	update_event_tab[h] = nil
 end
 
 local function handle_update_event(event)
-	local h = minetest.hash_node_position(event.pos)
+	local h = core.hash_node_position(event.pos)
 	if update_event_tab[h] ~= event then
 		return
 	end
 
 	update_event_tab[h] = nil
-	local oldnode = minetest.get_node(event.pos)
+	local oldnode = core.get_node(event.pos)
 	if oldnode.name ~= event.oldnode.name or oldnode.param2 ~= event.oldnode.param2 then
 		return
 	end
-	minetest.swap_node(event.pos, event.node)
+	core.swap_node(event.pos, event.node)
 	mcl_redstone._update_neighbours(event.pos, event.oldnode, event.node)
 end
 
@@ -141,17 +141,17 @@ local function clear_all_pending_events()
 end
 
 local function get_time()
-	return minetest.get_us_time() / 1e6
+	return core.get_us_time() / 1e6
 end
 
 local function debug_log(tick, nevents, nupdates, npending, time, aborted)
-	if not minetest.settings:get_bool("mcl_redstone_debug_eventqueue", false)
+	if not core.settings:get_bool("mcl_redstone_debug_eventqueue", false)
 			or (nevents == 0 and nupdates == 0) then
 		return
 	end
 
 	local saborted = aborted and ", was aborted" or ""
-	minetest.log(string.format(
+	core.log(string.format(
 		"[mcl_redstone] tick %d, %d events and %d updates processed, %d pending events, took %f ms%s",
 		tick,
 		nevents,
@@ -164,12 +164,12 @@ end
 
 function mcl_redstone.tick_step()
 	local player_poses = {}
-	for _, player in pairs(minetest.get_connected_players()) do
+	for _, player in pairs(core.get_connected_players()) do
 		table.insert(player_poses, player:get_pos())
 	end
 
 	if eventqueue:size() > MAX_EVENTS then
-		minetest.log("error", string.format("[mcl_redstone]: Maximum number of queued redstone events (%d) exceeded, deleting all of them.", MAX_EVENTS))
+		core.log("error", string.format("[mcl_redstone]: Maximum number of queued redstone events (%d) exceeded, deleting all of them.", MAX_EVENTS))
 		clear_all_pending_events()
 	end
 
@@ -213,7 +213,7 @@ function mcl_redstone.tick_step()
 	current_tick = last_tick + 1
 end
 
-minetest.register_chatcommand("tick",
+core.register_chatcommand("tick",
 {
 	description = "Allows to stop redstone ticking, speed it up, or freezing it. Note that \"ticks\" in this command actually refer to redstone ticks",
 	params = "step [ticks] | sprint <ticks> | freeze | unfreeze | rate <seconds per tick> | query",
@@ -235,7 +235,7 @@ minetest.register_chatcommand("tick",
 			mcl_redstone.is_tick_frozen = false
 			return true
 		elseif operation == "reset" then
-			mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
+			mcl_redstone.tick_speed = tonumber(core.settings:get("mcl_redstone_update_tick")) or 0.1
 			return true
 		elseif operation == "rate" then
 			if tonumber(arg) then
@@ -247,11 +247,11 @@ minetest.register_chatcommand("tick",
 		elseif operation == "sprint" then
 			if mcl_redstone.is_tick_frozen then
 				if tonumber(arg) then
-					local timer = minetest.get_us_time()
+					local timer = core.get_us_time()
 					for i = 1, tonumber(arg) do
 						mcl_redstone.tick_step()
 					end
-					return true, string.format("sprint finished: took %sms", (minetest.get_us_time() - timer) / 1000)
+					return true, string.format("sprint finished: took %sms", (core.get_us_time() - timer) / 1000)
 				else
 					return false, "second argument must be a number"
 				end
@@ -280,7 +280,7 @@ minetest.register_chatcommand("tick",
 })
 
 local timer = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	if not mcl_redstone.is_tick_frozen then
 		timer = timer + dtime
 		if timer < mcl_redstone.tick_speed then

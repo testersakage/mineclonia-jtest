@@ -22,7 +22,7 @@
 ------------------------------------------------------------------------
 
 function mcl_serverplayer.get_id_of_object (object)
-	for id, entity in pairs (minetest.luaentities) do
+	for id, entity in pairs (core.luaentities) do
 		if entity.object == object then
 			return id
 		end
@@ -82,7 +82,7 @@ function mcl_serverplayer.begin_mount (player, vehicle, vehicletype, attach_para
 end
 
 function mcl_serverplayer.handle_refuse_vehicle (player, state, objid)
-	local entity = minetest.luaentities[objid]
+	local entity = core.luaentities[objid]
 	if not entity or entity.object ~= state.pending_vehicle then
 		-- Outdated acknowledgment.
 		return
@@ -100,7 +100,7 @@ function mcl_serverplayer.handle_refuse_vehicle (player, state, objid)
 end
 
 function mcl_serverplayer.handle_acknowledge_vehicle (player, state, objid)
-	local entity = minetest.luaentities[objid]
+	local entity = core.luaentities[objid]
 	if not entity or entity.object ~= state.pending_vehicle then
 		-- Outdated acknowledgment.
 		return
@@ -124,9 +124,9 @@ local COS_5_DEG = math.cos (math.rad (5))
 
 function mcl_serverplayer.handle_move_vehicle (player, state, objid, tsc, pos, vel)
 	if not state.vehicle
-		or minetest.object_refs[objid] ~= state.vehicle
+		or core.object_refs[objid] ~= state.vehicle
 	-- ???
-		or not minetest.object_refs[objid]:is_valid () then
+		or not core.object_refs[objid]:is_valid () then
 		return
 	end
 	-- If a course correction is required, send it to the client.
@@ -217,7 +217,7 @@ end
 
 function mcl_serverplayer.handle_turn_vehicle (player, state, objid, tsc, yaw)
 	if not state.vehicle
-		or minetest.object_refs[objid] ~= state.vehicle then
+		or core.object_refs[objid] ~= state.vehicle then
 		return
 	end
 
@@ -232,7 +232,7 @@ function mcl_serverplayer.handle_configure_vehicle (player, state, config)
 		error ("Invalid vehicle configuration")
 	end
 	if not state.vehicle
-		or minetest.object_refs[config.id] ~= state.vehicle then
+		or core.object_refs[config.id] ~= state.vehicle then
 		return
 	end
 	if config.touching_ground ~= nil then
@@ -245,7 +245,7 @@ function mcl_serverplayer.validate_mounting (state, player, dtime)
 	if state.pending_vehicle
 		and not state.pending_vehicle:is_valid () then
 		state.pending_vehicle = nil
-		minetest.log ("warning", "Pending vehicle disappeared")
+		core.log ("warning", "Pending vehicle disappeared")
 	end
 	if state.vehicle and not state.vehicle:is_valid ()
 	-- Revoke server-side vehicle ownership once it is detached.

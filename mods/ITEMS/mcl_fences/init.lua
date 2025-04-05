@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_fences")
+local S = core.get_translator("mcl_fences")
 
 mcl_fences = {}
 
@@ -21,7 +21,7 @@ local cz1 = { -0.125, -0.5, -0.5, 0.125, 1.01, -0.125 }
 local cz2 = { -0.125, -0.5, 0.125, 0.125, 1.01, 0.5 }
 
 local on_rotate
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	on_rotate = screwdriver.rotate_simple
 end
 
@@ -31,22 +31,22 @@ local function update_gate(pos, node)
 	else
 		node.name = node.name.."_open"
 	end
-	minetest.set_node(pos, node)
+	core.set_node(pos, node)
 end
 
 local function play_sound(pos, node, state)
 	local sounddefs = {}
-	local defs = minetest.registered_nodes[node.name]
+	local defs = core.registered_nodes[node.name]
 	if defs and defs._mcl_fences_sounds then
 		sounddefs = defs._mcl_fences_sounds[state]
 	end
 	local spec = sounddefs.spec or ("doors_fencegate_"..state)
 	local gain = sounddefs.gain or 0.3
-	minetest.sound_play(spec, { gain = gain, max_hear_distance = 16, pos = pos }, true)
+	core.sound_play(spec, { gain = gain, max_hear_distance = 16, pos = pos }, true)
 end
 
 local function punch_gate(pos, node)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local state = meta:get_int("state")
 	if state == 1 then
 		state = 0
@@ -129,7 +129,7 @@ local tpl_fence_gates = {
 		fixed = {{ -0.5, -0.1875, -0.0625, 0.5, 0.5, 0.0625 }}
 	},
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_int("state", 0)
 	end,
 	_mcl_redstone = {
@@ -138,7 +138,7 @@ local tpl_fence_gates = {
 		end,
 		update = function (pos)
 			if mcl_redstone.get_power (pos) ~= 0 then
-				local node = minetest.get_node (pos)
+				local node = core.get_node (pos)
 				punch_gate (pos, node)
 			end
 		end,
@@ -149,7 +149,7 @@ local tpl_fence_gates = {
 		punch_gate(pos, node)
 	end,
 	_on_wind_charge_hit = function(pos)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 			punch_gate(pos, node)
 		return true
 	end
@@ -188,7 +188,7 @@ local tpl_fence_gates_open = {
 		end,
 		update = function (pos)
 			if mcl_redstone.get_power (pos) == 0 then
-				local node = minetest.get_node (pos)
+				local node = core.get_node (pos)
 				punch_gate (pos, node)
 			end
 		end,
@@ -196,7 +196,7 @@ local tpl_fence_gates_open = {
 	},
 	on_rotate = on_rotate,
 	_on_wind_charge_hit = function(pos)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 			punch_gate(pos, node)
 		return true
 	end
@@ -219,7 +219,7 @@ function mcl_fences.register_fence_def(name, definitions)
         handle_textures("fence", definitions)
     end
 
-    minetest.register_node(":"..fence_name, table.merge(tpl_fences, definitions))
+    core.register_node(":"..fence_name, table.merge(tpl_fences, definitions))
 
     if definitions._mcl_fences_baseitem then
         local stick = "mcl_core:stick"
@@ -230,7 +230,7 @@ function mcl_fences.register_fence_def(name, definitions)
 			stick = definitions._mcl_fences_stickreplacer
 		end
 
-		minetest.register_craft({
+		core.register_craft({
 			output = fence_name.." "..tostring(amount),
 			recipe = {
 				{ material, stick, material },
@@ -256,7 +256,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 		handle_textures("fence_gate", definitions)
 	end
 
-    minetest.register_node(":"..fence_gate_name, table.merge(tpl_fence_gates, definitions))
+    core.register_node(":"..fence_gate_name, table.merge(tpl_fence_gates, definitions))
 
 	local opendefinitions = table.copy(definitions)
 	opendefinitions.description = nil
@@ -270,7 +270,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 	opendefinitions.mesecon_ignore_opaque_dig = 1
 	opendefinitions.mesecon_effector_on = 1
 
-    minetest.register_node(":"..fence_gate_name_open, table.merge(tpl_fence_gates_open, {
+    core.register_node(":"..fence_gate_name_open, table.merge(tpl_fence_gates_open, {
 		drop = fence_gate_name
 	}, opendefinitions))
 
@@ -283,7 +283,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 			stick = definitions._mcl_fences_stickreplacer
 		end
 
-		minetest.register_craft({
+		core.register_craft({
 			output = fence_gate_name.." "..tostring(amount),
 			recipe = {
 				{ stick, material, stick },
@@ -292,7 +292,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 		})
 	end
 
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", fence_gate_name, "nodes", fence_gate_name_open)
 	end
 

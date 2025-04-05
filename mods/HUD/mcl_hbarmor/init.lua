@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local mcl_hbarmor = {
     -- HUD statbar values
@@ -12,7 +12,7 @@ local mcl_hbarmor = {
     autohide = true,
 }
 
-local tick_config = minetest.settings:get("mcl_hbarmor_tick")
+local tick_config = core.settings:get("mcl_hbarmor_tick")
 
 if tonumber(tick_config) then
 	mcl_hbarmor.tick = tonumber(tick_config)
@@ -30,10 +30,10 @@ end
 local function custom_hud(player)
 	local name = player:get_player_name()
 
-	if minetest.settings:get_bool("enable_damage") then
+	if core.settings:get_bool("enable_damage") then
 		local ret = mcl_hbarmor.get_armor(player)
 		if ret == false then
-			minetest.log("error", "[mcl_hbarmor] Call to mcl_hbarmor.get_armor in custom_hud returned with false!")
+			core.log("error", "[mcl_hbarmor] Call to mcl_hbarmor.get_armor in custom_hud returned with false!")
 			return
 		end
 		local arm = tonumber(mcl_hbarmor.armor[name])
@@ -90,32 +90,32 @@ local function update_hud(player)
 	end
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	custom_hud(player)
 	mcl_hbarmor.player_active[name] = true
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	mcl_hbarmor.player_active[name] = false
 end)
 
 local main_timer = 0
 local timer = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
     --TODO: replace this by playerglobalstep API then implemented
 	main_timer = main_timer + dtime
 	timer = timer + dtime
 	if main_timer > mcl_hbarmor.tick or timer > 4 then
-		if minetest.settings:get_bool("enable_damage") then
+		if core.settings:get_bool("enable_damage") then
 			if main_timer > mcl_hbarmor.tick then main_timer = 0 end
 			for player in mcl_util.connected_players() do
 				local name = player:get_player_name()
 				if mcl_hbarmor.player_active[name] == true then
 					local ret = mcl_hbarmor.get_armor(player)
 					if ret == false then
-						minetest.log("error", "[mcl_hbarmor] Call to mcl_hbarmor.get_armor in globalstep returned with false!")
+						core.log("error", "[mcl_hbarmor] Call to mcl_hbarmor.get_armor in globalstep returned with false!")
 					end
 					-- update all hud elements
 					update_hud(player)

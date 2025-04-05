@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
 
@@ -276,7 +276,7 @@ end
 function skeleton:reconfigure_attack_type (wielditem)
 	local name = wielditem:get_name ()
 
-	if name ~= "" and minetest.get_item_group (name, "bow") > 0 then
+	if name ~= "" and core.get_item_group (name, "bow") > 0 then
 		self:reset_attack_type ("bowshoot")
 	else
 		self:reset_attack_type ("melee")

@@ -27,7 +27,7 @@ local function xp_to_size(xp)
 end
 
 local max_orb_age = 300 -- seconds
-local gravity = vector.new(0, -((tonumber(minetest.settings:get("movement_gravity"))) or 9.81), 0)
+local gravity = vector.new(0, -((tonumber(core.settings:get("movement_gravity"))) or 9.81), 0)
 
 local collector, pos, pos2
 local direction, distance, player_velocity, goal
@@ -42,7 +42,7 @@ local function xp_step(self, dtime)
 			self.collected = false
 			return
 		end
-		collector = minetest.get_player_by_name(self.collector)
+		collector = core.get_player_by_name(self.collector)
 		if collector and collector:get_hp() > 0 and vector.distance(self.object:get_pos(),collector:get_pos()) < 7.25 then
 			self.object:set_acceleration(vector.new(0,0,0))
 			self.disable_physics(self)
@@ -90,7 +90,7 @@ local function xp_step(self, dtime)
 	pos = self.object:get_pos()
 
 	if pos then
-		node = minetest.get_node_or_nil({
+		node = core.get_node_or_nil({
 			x = pos.x,
 			y = pos.y -0.25,
 			z = pos.z
@@ -111,13 +111,13 @@ local function xp_step(self, dtime)
 
 	-- Slide on slippery nodes
 	vel = self.object:get_velocity()
-	def = node and minetest.registered_nodes[node.name]
+	def = node and core.registered_nodes[node.name]
 	is_moving = (def and not def.walkable) or
 		vel.x ~= 0 or vel.y ~= 0 or vel.z ~= 0
 	is_slippery = false
 
 	if def and def.walkable then
-		slippery = minetest.get_item_group(node.name, "slippery")
+		slippery = core.get_item_group(node.name, "slippery")
 		is_slippery = slippery ~= 0
 		if is_slippery and (math.abs(vel.x) > 0.2 or math.abs(vel.z) > 0.2) then
 			-- Horizontal deceleration
@@ -148,7 +148,7 @@ local function xp_step(self, dtime)
 	end
 end
 
-minetest.register_entity("mcl_experience:orb", {
+core.register_entity("mcl_experience:orb", {
 	initial_properties = {
 		hp_max = 1,
 		physical = true,

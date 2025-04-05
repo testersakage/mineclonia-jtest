@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_bamboo")
+local S = core.get_translator("mcl_bamboo")
 local SCAFFOLD_HEIGHT_LIMIT = 320
 
 mcl_bamboo.bamboo_itemstrings = {
@@ -16,14 +16,14 @@ local boxes = {
 }
 
 function mcl_bamboo.grow(pos)
-	local pr = PseudoRandom(minetest.hash_node_position(pos))
+	local pr = PseudoRandom(core.hash_node_position(pos))
 	local max_height = pr:next(12,16)
 	local bottom = mcl_util.traverse_tower(pos,-1)
 	local top,h = mcl_util.traverse_tower(bottom,1)
 	if h < max_height then
-		local n = minetest.get_node(pos)
-		if minetest.get_node(vector.offset(top,0,1,0)).name ~= "air" then return end
-		minetest.set_node(vector.offset(top,0,1,0),n)
+		local n = core.get_node(pos)
+		if core.get_node(vector.offset(top,0,1,0)).name ~= "air" then return end
+		core.set_node(vector.offset(top,0,1,0),n)
 	end
 end
 
@@ -44,19 +44,19 @@ local bamboo_def = {
 	_mcl_hardness = 1.5,
 	node_placement_prediction = "",
 	on_place = mcl_util.generate_on_place_plant_function(function(pos)
-		local node_below = minetest.get_node(vector.offset(pos,0,-1,0))
-		local bamboo_below = minetest.get_item_group(node_below.name, "bamboo_tree") > 0
-		return (minetest.get_item_group(node_below.name, "soil_bamboo") > 0 or bamboo_below),(bamboo_below and node_below.param2 or math.random(0,3))
+		local node_below = core.get_node(vector.offset(pos,0,-1,0))
+		local bamboo_below = core.get_item_group(node_below.name, "bamboo_tree") > 0
+		return (core.get_item_group(node_below.name, "soil_bamboo") > 0 or bamboo_below),(bamboo_below and node_below.param2 or math.random(0,3))
 	end),
 	after_place_node  = function(pos)
-		local node = minetest.get_node(pos)
-		local node_below = minetest.get_node(vector.offset(pos,0,-1,0))
-		if minetest.get_item_group(node_below.name, "bamboo_tree") > 0 then
+		local node = core.get_node(pos)
+		local node_below = core.get_node(vector.offset(pos,0,-1,0))
+		if core.get_item_group(node_below.name, "bamboo_tree") > 0 then
 			node = node_below
 		else
 			node.name = mcl_bamboo.bamboo_itemstrings[math.random(#mcl_bamboo.bamboo_itemstrings)]
 		end
-		minetest.swap_node(pos,node)
+		core.swap_node(pos,node)
 	end,
 	_on_bone_meal = function(_, _, _, pos)
 		return mcl_bamboo.grow(pos)
@@ -88,7 +88,7 @@ for i,it in pairs(mcl_bamboo.bamboo_itemstrings) do
 			}
 		},
 	})
-	minetest.register_node(it,d)
+	core.register_node(it,d)
 end
 
 mcl_flowerpots.register_potted_flower("mcl_bamboo:bamboo", {
@@ -109,10 +109,10 @@ table.update(bamboo_top,{
 	_on_bone_meal = nil,
 })
 
-minetest.register_node("mcl_bamboo:bamboo_endcap", bamboo_top)
+core.register_node("mcl_bamboo:bamboo_endcap", bamboo_top)
 
 
-minetest.register_node("mcl_bamboo:bamboo_mosaic",  {
+core.register_node("mcl_bamboo:bamboo_mosaic",  {
 	description = S("Bamboo Mosaic Plank"),
 	_doc_items_longdesc = S("Bamboo Mosaic Plank"),
 	_doc_items_hidden = false,
@@ -147,14 +147,14 @@ local adjacents = {
 local allowed_base_groups = { "solid", "slab_top" }
 
 local function can_place_on(node)
-	local def = minetest.registered_nodes[node.name]
+	local def = core.registered_nodes[node.name]
 
 	if not def then
 		return false
 	end
 
 	for _, j in pairs(allowed_base_groups) do
-		if minetest.get_item_group(node.name, j) > 0 then
+		if core.get_item_group(node.name, j) > 0 then
 			return true
 		end
 	end
@@ -162,7 +162,7 @@ local function can_place_on(node)
 	return false
 end
 
-minetest.register_node("mcl_bamboo:scaffolding", {
+core.register_node("mcl_bamboo:scaffolding", {
 	description = S("Scaffolding"),
 	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
 	doc_items_hidden = false,
@@ -199,28 +199,28 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, ptd)
 		if rc then return rc end
 		if not ptd then return end
-		local node = minetest.get_node(ptd.under)
+		local node = core.get_node(ptd.under)
 
-		if minetest.get_item_group(node.name,"scaffolding") > 0 and ctrl and ctrl.sneak then -- count param2 up when placing to the sides. Fall when > 6
+		if core.get_item_group(node.name,"scaffolding") > 0 and ctrl and ctrl.sneak then -- count param2 up when placing to the sides. Fall when > 6
 			local pp2 = node.param2
 			local np2 = pp2 + 1
-			if minetest.get_node(vector.offset(ptd.above,0,-1,0)).name == "air" and minetest.get_node(ptd.above).name == "air" then
+			if core.get_node(vector.offset(ptd.above,0,-1,0)).name == "air" and core.get_node(ptd.above).name == "air" then
 				itemstack = mcl_util.safe_place(ptd.above,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 			end
 			if np2 > 6 then
-				minetest.check_single_for_falling(ptd.above)
+				core.check_single_for_falling(ptd.above)
 			end
 		elseif node.name == "mcl_bamboo:scaffolding" then --tower up
 			local bottom = mcl_util.traverse_tower(ptd.under,-1)
 			local top,h = mcl_util.traverse_tower(bottom,1)
 			local ppos = vector.offset(top,0,1,0)
-			if h <= SCAFFOLD_HEIGHT_LIMIT and can_place_on(minetest.get_node(vector.offset(bottom,0,-1,0))) and minetest.get_node(ppos).name == "air" then
+			if h <= SCAFFOLD_HEIGHT_LIMIT and can_place_on(core.get_node(vector.offset(bottom,0,-1,0))) and core.get_node(ppos).name == "air" then
 				itemstack = mcl_util.safe_place(ppos, node, placer, itemstack) or itemstack
 			end
 
-		elseif can_place_on(node) and minetest.get_node(ptd.above).name == "air" then
+		elseif can_place_on(node) and core.get_node(ptd.above).name == "air" then
 			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding"}, placer, itemstack) or itemstack
-			minetest.check_single_for_falling(ptd.above)
+			core.check_single_for_falling(ptd.above)
 		end
 		return itemstack
 	end,
@@ -229,23 +229,23 @@ minetest.register_node("mcl_bamboo:scaffolding", {
 			if node.name ~= "mcl_bamboo:scaffolding" then return true end
 			if mcl_util.safe_place(pos, {name = "air"}, digger) then
 				local digger_name = digger and digger:get_player_name() or ""
-				if not minetest.is_creative_enabled(digger_name) then
-					minetest.add_item(pos,"mcl_bamboo:scaffolding")
+				if not core.is_creative_enabled(digger_name) then
+					core.add_item(pos,"mcl_bamboo:scaffolding")
 				end
 				for _,v in pairs(adjacents) do
-					minetest.check_for_falling(vector.add(pos,v))
+					core.check_for_falling(vector.add(pos,v))
 				end
 			end
 		end)
 	end,
 	_mcl_after_falling = function(pos, _)
-		if minetest.get_node(pos).name == "mcl_bamboo:scaffolding" then
+		if core.get_node(pos).name == "mcl_bamboo:scaffolding" then
 			mcl_util.safe_place(pos,{name = "mcl_bamboo:scaffolding"})
 		end
 	end,
 })
 
-minetest.register_node("mcl_bamboo:scaffolding_horizontal", {
+core.register_node("mcl_bamboo:scaffolding_horizontal", {
 	description = S("Scaffolding horizontal"),
 	doc_items_longdesc = S("Scaffolding block..."),
 	doc_items_hidden = false,
@@ -267,12 +267,12 @@ minetest.register_node("mcl_bamboo:scaffolding_horizontal", {
 	},
 	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, falling_node = 1, scaffolding = 1 },
 	_mcl_after_falling = function(pos)
-		if minetest.get_node(pos).name == "mcl_bamboo:scaffolding_horizontal" then
+		if core.get_node(pos).name == "mcl_bamboo:scaffolding_horizontal" then
 			local above = vector.offset(pos,0,1,0)
-			if minetest.get_node(pos).name ~= "mcl_bamboo:scaffolding" then
+			if core.get_node(pos).name ~= "mcl_bamboo:scaffolding" then
 				mcl_util.safe_place(pos, {name = "air"})
-				minetest.add_item(pos,"mcl_bamboo:scaffolding")
-			elseif minetest.get_node(above).name == "air" then
+				core.add_item(pos,"mcl_bamboo:scaffolding")
+			elseif core.get_node(above).name == "air" then
 				mcl_util.safe_place(above, {name = "mcl_bamboo:scaffolding"})
 			end
 		end

@@ -5,14 +5,14 @@ mcl_mobs = {}
 ------------------------------------------------------------------------
 
 -- If mcl_mobs is a trusted mod, it may be possible to extract the
--- definition of `get_node_raw' from minetest.get_node and avoid
+-- definition of `get_node_raw' from core.get_node and avoid
 -- garbage collection incurred by table allocation in the loop below.
 
-mcl_mobs.get_node_raw = minetest.get_node_raw
-local env = minetest.request_insecure_environment ()
+mcl_mobs.get_node_raw = core.get_node_raw
+local env = core.request_insecure_environment ()
 
 if env and not mcl_mobs.get_node_raw then
-	local get_node = minetest.get_node
+	local get_node = core.get_node
 	local i = 1
 	while true do
 		local name, upvalue = debug.getupvalue (get_node, i)
@@ -34,12 +34,12 @@ end
 ------------------------------------------------------------------------
 
 mcl_mobs.registered_mobs = {}
-local modname = minetest.get_current_modname()
-local path = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local path = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
-local old_spawn_icons = minetest.settings:get_bool("mcl_old_spawn_icons",false)
-local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
+local old_spawn_icons = core.settings:get_bool("mcl_old_spawn_icons",false)
+local extended_pet_control = core.settings:get_bool("mcl_extended_pet_control",false)
 
 local object_properties = { "hp_max", "breath_max", "zoom_fov", "eye_height", "physical", "collide_with_objects", "collisionbox", "selectionbox", "pointable", "visual", "visual_size", "mesh", "textures", "colors", "use_texture_alpha", "spritediv", "initial_sprite_basepos", "is_visible", "makes_footstep_sound", "automatic_rotate", "stepheight", "automatic_face_movement_dir", "automatic_face_movement_max_rotation_per_sec", "backface_culling", "glow", "nametag", "nametag_color", "nametag_bgcolor", "infotext", "static_save", "damage_texture_modifier", "shaded", "show_on_minimap", }
 
@@ -168,7 +168,7 @@ mcl_mobs.mob_class = {
 	avoids_sunlight = false,
 	tnt_knockback = true,
 	min_light = 7,
-	max_light = minetest.LIGHT_MAX + 1,
+	max_light = core.LIGHT_MAX + 1,
 	does_not_prevent_sleep = false,
 	prevents_sleep_when_hostile = false,
 	persist_in_peaceful = true,
@@ -237,13 +237,13 @@ mcl_mobs.mob_class = {
 	_last_liquidtype = nil,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
-mcl_mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
+mcl_mobs.fallback_node = core.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
 
 -- get node but use fallback for nil or unknown
 function mcl_mobs.node_ok(pos, fallback)
 	fallback = fallback or mcl_mobs.fallback_node
-	local node = minetest.get_node_or_nil(pos)
-	if node and minetest.registered_nodes[node.name] then
+	local node = core.get_node_or_nil(pos)
+	if node and core.registered_nodes[node.name] then
 		return node
 	end
 	return { name = fallback, param1 = 0, param2 = 0 }
@@ -321,10 +321,10 @@ local on_rightclick_prefix = function(self, clicker)
 	end
 
 	local item_name = item:get_name()
-	item_name = minetest.registered_aliases[item_name] or item_name
+	item_name = core.registered_aliases[item_name] or item_name
 
 	if not self.ignores_nametag and item_name == "mcl_mobitems:nametag" then
-		if self:set_nametag(item:get_meta():get_string("name")) and not minetest.is_creative_enabled(playername) then
+		if self:set_nametag(item:get_meta():get_string("name")) and not core.is_creative_enabled(playername) then
 			item:take_item()
 			clicker:set_wielded_item(item)
 		end
@@ -361,7 +361,7 @@ mcl_mobs.spawning_mobs = {}
 function mcl_mobs.register_mob(name, def)
 	local def = table.copy(def)
 	if not def.description then
-		minetest.log("warning","[mcl_mobs] Mob "..name.." registered without description field. This is needed for proper death messages.")
+		core.log("warning","[mcl_mobs] Mob "..name.." registered without description field. This is needed for proper death messages.")
 	end
 
 	mcl_mobs.spawning_mobs[name] = true
@@ -423,7 +423,7 @@ function mcl_mobs.register_mob(name, def)
 					}) or gwp_penalties,
 
 		min_light = def.min_light or (def.spawn_class == "hostile" and 0) or 7,
-		max_light = def.max_light or (def.spawn_class == "hostile" and 7) or minetest.LIGHT_MAX + 1,
+		max_light = def.max_light or (def.spawn_class == "hostile" and 7) or core.LIGHT_MAX + 1,
 		on_blast = def.on_blast or function(self,damage)
 			self.object:punch(self.object, 1.0, {
 				full_punch_interval = 1.0,
@@ -441,7 +441,7 @@ function mcl_mobs.register_mob(name, def)
 	}),mcl_mobs.mob_class_meta)
 
 	mcl_mobs.registered_mobs[name] = final_def
-	minetest.register_entity(":"..name, final_def)
+	core.register_entity(":"..name, final_def)
 
 	doc.sub.identifier.register_object(name, "mobs", name)
 	doc.add_entry("mobs", name, {
@@ -508,7 +508,7 @@ function mcl_mobs.register_arrow(name, def)
 
 	init_props.automatic_face_movement_dir = def.rotate and (def.rotate - (math.pi / 180))
 
-	minetest.register_entity(name, setmetatable(table.merge({
+	core.register_entity(name, setmetatable(table.merge({
 		initial_properties = init_props,
 		on_step = function(self)
 
@@ -524,7 +524,7 @@ function mcl_mobs.register_arrow(name, def)
 
 			-- does arrow have a tail (fireball)
 			if def.tail and def.tail == 1 and def.tail_texture then
-				minetest.add_particle({
+				core.add_particle({
 					pos = pos,
 					velocity = {x = 0, y = 0, z = 0},
 					acceleration = {x = 0, y = 0, z = 0},
@@ -543,12 +543,12 @@ function mcl_mobs.register_arrow(name, def)
 
 			if self.hit_node then
 				local node =  mcl_mobs.node_ok(pos).name
-				if minetest.registered_nodes[node].walkable then
+				if core.registered_nodes[node].walkable then
 					self.hit_node(self, pos, node)
 					if self.drop == true then
 						pos.y = pos.y + 1
 						self.lastpos = (self.lastpos or pos)
-						minetest.add_item(self.lastpos, self.object:get_luaentity().name)
+						core.add_item(self.lastpos, self.object:get_luaentity().name)
 					end
 					self.object:remove()
 					return
@@ -558,7 +558,7 @@ function mcl_mobs.register_arrow(name, def)
 			if self.homing and self._target then
 				local p = self._target:get_pos()
 				if p then
-					if minetest.line_of_sight(self.object:get_pos(), p) then
+					if core.line_of_sight(self.object:get_pos(), p) then
 						self.object:set_velocity(vector.direction(self.object:get_pos(), p) * self.velocity)
 					end
 				else
@@ -568,7 +568,7 @@ function mcl_mobs.register_arrow(name, def)
 
 			if self.hit_player or self.hit_mob or self.hit_object then
 				local raycast
-				= minetest.raycast (pos, pos + self.object:get_velocity () * 0.04)
+				= core.raycast (pos, pos + self.object:get_velocity () * 0.04)
 				local ok = false
 				local closest_object
 				local closest_distance
@@ -639,7 +639,7 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 	if old_spawn_icons then
 		local mobname = mob:gsub("mobs_mc:","")
 		local fn = "mobs_mc_spawn_icon_"..mobname..".png"
-		if mcl_util.file_exists(minetest.get_modpath("mobs_mc").."/textures/"..fn) then
+		if mcl_util.file_exists(core.get_modpath("mobs_mc").."/textures/"..fn) then
 			invimg = fn
 		end
 	end
@@ -649,7 +649,7 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 	end
 
 	-- register old stackable mob egg
-	minetest.register_craftitem(mob, {
+	core.register_craftitem(mob, {
 
 		description = desc,
 		inventory_image = invimg,
@@ -668,25 +668,25 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 
 			if pos
 			and within_limits(pos, 0)
-			and not minetest.is_protected(pos, placer:get_player_name()) then
+			and not core.is_protected(pos, placer:get_player_name()) then
 
 				local name = placer:get_player_name()
-				if not minetest.registered_entities[mob] then
+				if not core.registered_entities[mob] then
 					return itemstack
 				end
 
 				pos.y = pos.y - 0.5
 
-				local mob = minetest.add_entity(pos, mob, minetest.serialize({ persist_in_peaceful = true }))
+				local mob = core.add_entity(pos, mob, core.serialize({ persist_in_peaceful = true }))
 				local entityname = itemstack:get_name()
-				minetest.log("action", "Player " ..name.." spawned "..entityname.." at "..minetest.pos_to_string(pos))
+				core.log("action", "Player " ..name.." spawned "..entityname.." at "..core.pos_to_string(pos))
 				local ent = mob:get_luaentity()
 
 				-- set nametag
 				ent:set_nametag(itemstack:get_meta():get_string("name"))
 
 				-- if not in creative then take item
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
 			end

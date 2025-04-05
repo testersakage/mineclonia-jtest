@@ -10,7 +10,7 @@ of the license, or (at your option) any later version.
 
 --]]
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_lightning = {
 	interval_low = 17,
@@ -40,7 +40,7 @@ local function revertsky(dtime)
 	ps = {}
 end
 
-minetest.register_globalstep(revertsky)
+core.register_globalstep(revertsky)
 
 -- mcl_lightning strike API
 
@@ -57,7 +57,7 @@ end
 -- select a random strike point, midpoint
 local function choose_pos(pos)
 	if not pos then
-		local playerlist = minetest.get_connected_players()
+		local playerlist = core.get_connected_players()
 		local playercount = #playerlist
 
 		-- nobody on
@@ -79,14 +79,14 @@ local function choose_pos(pos)
 		pos.z = math.floor(pos.z - (mcl_lightning.range_h / 2) + rng:next(1, mcl_lightning.range_h))
 	end
 
-	local b, pos2 = minetest.line_of_sight(pos, { x = pos.x, y = pos.y - mcl_lightning.range_v, z = pos.z }, 1)
+	local b, pos2 = core.line_of_sight(pos, { x = pos.x, y = pos.y - mcl_lightning.range_v, z = pos.z }, 1)
 
 	-- nothing but air found
 	if b then
 		return nil, nil
 	end
 
-	local n = minetest.get_node({ x = pos2.x, y = pos2.y - 1/2, z = pos2.z })
+	local n = core.get_node({ x = pos2.x, y = pos2.y - 1/2, z = pos2.z })
 	if n.name == "air" or n.name == "ignore" then
 		return nil, nil
 	end
@@ -98,7 +98,7 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 	local particle_pos = vector.offset(pos2, 0, (mcl_lightning.size / 2) + 0.5, 0)
 	local particle_size = mcl_lightning.size * 10
 	local time = 0.2
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 1,
 		time = time,
 		-- make it hit the top of a block exactly with the bottom
@@ -114,10 +114,10 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 		-- to make the texture mcl_lightning bolt hit exactly in the middle of the
 		-- texture (e.g. 127/128 on a 256x wide texture)
 		texture = "lightning_lightning_" .. rng:next(1,3) .. ".png",
-		glow = minetest.LIGHT_MAX,
+		glow = core.LIGHT_MAX,
 	})
 
-	minetest.sound_play({ name = "lightning_thunder", gain = 10 }, { pos = pos, max_hear_distance = 500 }, true)
+	core.sound_play({ name = "lightning_thunder", gain = 10 }, { pos = pos, max_hear_distance = 500 }, true)
 
 	-- damage nearby objects, transform mobs
 	for _, obj in pairs(objects) do
@@ -132,8 +132,8 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 	end
 
 	--Affect nearby nodes if they define a "_on_lightning_strike" callback
-	for _, npos in pairs(minetest.find_nodes_in_area(vector.offset(pos2, -5,-5,-5), vector.offset(pos2, 5, 5, 5), {"group:affected_by_lightning"})) do
-		local def = minetest.registered_nodes[minetest.get_node(npos).name]
+	for _, npos in pairs(core.find_nodes_in_area(vector.offset(pos2, -5,-5,-5), vector.offset(pos2, 5, 5, 5), {"group:affected_by_lightning"})) do
+		local def = core.registered_nodes[core.get_node(npos).name]
 		if def and def._on_lightning_strike then
 			def._on_lightning_strike(npos, pos, pos2)
 		end
@@ -158,8 +158,8 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 
 	-- Events caused by the lightning strike: Fire, damage, and skeleton trap spawning
 	pos2.y = pos2.y + 1/2
-	if minetest.get_item_group(minetest.get_node({ x = pos2.x, y = pos2.y - 1, z = pos2.z }).name, "liquid") < 1 then
-		if minetest.get_node(pos2).name == "air" then
+	if core.get_item_group(core.get_node({ x = pos2.x, y = pos2.y - 1, z = pos2.z }).name, "liquid") < 1 then
+		if core.get_node(pos2).name == "air" then
 			-- Low chance for a lightning to spawn skeleton trap horse.
 			local difficulty = mcl_worlds.get_regional_difficulty (pos2)
 			local random = rng:next (0, 26000) / 26000
@@ -169,7 +169,7 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 				end
 
 				local entity
-					= minetest.add_entity(pos2, "mobs_mc:skeleton_horse")
+					= core.add_entity(pos2, "mobs_mc:skeleton_horse")
 				if entity then
 					local luaentity = entity:get_luaentity ()
 					luaentity._is_trap = true
@@ -180,7 +180,7 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 				end
 			-- Cause a fire
 			else
-				minetest.set_node(pos2, { name = "mcl_fire:fire" })
+				core.set_node(pos2, { name = "mcl_fire:fire" })
 			end
 		end
 	end
@@ -199,7 +199,7 @@ function mcl_lightning.strike(pos, for_trap)
 	if mcl_lightning.on_strike_functions then
 		for _, func in pairs(mcl_lightning.on_strike_functions) do
 			-- allow on_strike callbacks to destroy entities by re-obtaining objects for each callback
-			local objects = minetest.get_objects_inside_radius(pos2, 3.5)
+			local objects = core.get_objects_inside_radius(pos2, 3.5)
 			local p,stop = func(pos, pos2, objects, for_trap)
 			if p then
 				pos = p
@@ -209,11 +209,11 @@ function mcl_lightning.strike(pos, for_trap)
 		end
 	end
 	if do_strike and pos and pos2 then
-		mcl_lightning.strike_func(pos, pos2, minetest.get_objects_inside_radius (pos2, 3.5), for_trap)
+		mcl_lightning.strike_func(pos, pos2, core.get_objects_inside_radius (pos2, 3.5), for_trap)
 	end
 end
 
-minetest.register_chatcommand("lightning", {
+core.register_chatcommand("lightning", {
 	params = "[<X> <Y> <Z> | <player name>]",
 	description = S("Let lightning strike at the specified position or player. No parameter will strike yourself."),
 	privs = { maphack = true },
@@ -226,9 +226,9 @@ minetest.register_chatcommand("lightning", {
 		local player_to_strike
 		if not (pos.x and pos.y and pos.z) then
 			pos = nil
-			player_to_strike = minetest.get_player_by_name(param)
+			player_to_strike = core.get_player_by_name(param)
 			if not player_to_strike and param == "" then
-				player_to_strike = minetest.get_player_by_name(name)
+				player_to_strike = core.get_player_by_name(name)
 			end
 		end
 		if not player_to_strike and pos == nil then

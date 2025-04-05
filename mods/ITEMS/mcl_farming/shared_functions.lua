@@ -5,8 +5,8 @@ local plant_lists = {}
 local plant_nodename_to_id_list = {}
 
 local function get_intervals_counter(pos, interval, chance)
-	local meta = minetest.get_meta(pos)
-	local time_speed = tonumber(minetest.settings:get("time_speed") or 72)
+	local meta = core.get_meta(pos)
+	local time_speed = tonumber(core.settings:get("time_speed") or 72)
 	local current_game_time
 	if time_speed == nil then
 		return 1
@@ -15,7 +15,7 @@ local function get_intervals_counter(pos, interval, chance)
 		return 1
 	end
 	local time_multiplier = 86400 / time_speed
-	current_game_time = .0 + ((minetest.get_day_count() + minetest.get_timeofday()) * time_multiplier)
+	current_game_time = .0 + ((core.get_day_count() + core.get_timeofday()) * time_multiplier)
 
 	local approx_interval = math.max(interval, 1) * math.max(chance, 1)
 
@@ -37,8 +37,8 @@ local function get_intervals_counter(pos, interval, chance)
 end
 
 local function get_avg_light_level(pos)
-	local node_light = tonumber(minetest.get_node_light(pos) or 0)
-	local meta = minetest.get_meta(pos)
+	local node_light = tonumber(core.get_node_light(pos) or 0)
+	local meta = core.get_meta(pos)
 	local counter = meta:get_int("avg_light_count")
 	local summary = meta:get_int("avg_light_summary")
 	if counter > 99 then
@@ -60,13 +60,13 @@ function mcl_farming:add_plant(identifier, full_grown, names, interval, chance)
 	mcl_farming.plant_lists[identifier].interval = interval
 	mcl_farming.plant_lists[identifier].chance = chance
 	plant_lists = mcl_farming.plant_lists --provide local copy of plant lists (performances)
-	minetest.register_abm({
+	core.register_abm({
 		label = string.format("Farming plant growth (%s)", identifier),
 		nodenames = names,
 		interval = interval,
 		chance = chance,
 		action = function(pos, node)
-			local low_speed = minetest.get_node({ x = pos.x, y = pos.y - 1, z = pos.z }).name ~= "mcl_farming:soil_wet"
+			local low_speed = core.get_node({ x = pos.x, y = pos.y - 1, z = pos.z }).name ~= "mcl_farming:soil_wet"
 			mcl_farming:grow_plant(identifier, pos, node, false, false, low_speed)
 		end,
 	})
@@ -96,10 +96,10 @@ function mcl_farming:grow_plant(identifier, pos, node, stages, ignore_light, low
 			intervals_counter = intervals_counter / 10
 		end
 	end
-	if not minetest.get_node_light(pos) and not ignore_light and intervals_counter < 1.5 then
+	if not core.get_node_light(pos) and not ignore_light and intervals_counter < 1.5 then
 		return false
 	end
-	if minetest.get_node_light(pos) < 10 and not ignore_light and intervals_counter < 1.5 then
+	if core.get_node_light(pos) < 10 and not ignore_light and intervals_counter < 1.5 then
 		return false
 	end
 
@@ -133,7 +133,7 @@ function mcl_farming:grow_plant(identifier, pos, node, stages, ignore_light, low
 	end
 	new_node.param = node.param
 	new_node.param2 = node.param2
-	minetest.set_node(pos, new_node)
+	core.set_node(pos, new_node)
 	return true
 end
 
@@ -150,19 +150,19 @@ function mcl_farming:place_seed(itemstack, placer, pointed_thing, plantname)
 	if rc then return rc end
 
 	local pos = { x = pt.above.x, y = pt.above.y - 1, z = pt.above.z }
-	local farmland = minetest.get_node(pos)
+	local farmland = core.get_node(pos)
 	pos = { x = pt.above.x, y = pt.above.y, z = pt.above.z }
-	local place_s = minetest.get_node(pos)
+	local place_s = core.get_node(pos)
 
 	if string.find(farmland.name, "mcl_farming:soil") and string.find(place_s.name, "air") then
-		minetest.sound_play(minetest.registered_nodes[plantname].sounds.place, { pos = pos }, true)
-		minetest.add_node(pos, { name = plantname, param2 = minetest.registered_nodes[plantname].place_param2 })
+		core.sound_play(core.registered_nodes[plantname].sounds.place, { pos = pos }, true)
+		core.add_node(pos, { name = plantname, param2 = core.registered_nodes[plantname].place_param2 })
 		--local intervals_counter = get_intervals_counter(pos, 1, 1)
 	else
 		return
 	end
 
-	if not minetest.is_creative_enabled(placer:get_player_name()) then
+	if not core.is_creative_enabled(placer:get_player_name()) then
 		itemstack:take_item()
 	end
 	return itemstack
@@ -203,23 +203,23 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 	-- Connect the stem at stempos to the first neighboring gourd block.
 	-- No-op if not a stem or no gourd block found
 	local function try_connect_stem(stempos)
-		local stem = minetest.get_node(stempos)
+		local stem = core.get_node(stempos)
 		if stem.name ~= full_unconnected_stem then
 			return false
 		end
 		for n = 1, #neighbors do
 			local offset = neighbors[n]
 			local blockpos = vector.add(stempos, offset)
-			local block = minetest.get_node(blockpos)
+			local block = core.get_node(blockpos)
 			if block.name == gourd_itemstring then
 				if offset.x == 1 then
-					minetest.set_node(stempos, { name = connected_stem_names[1] })
+					core.set_node(stempos, { name = connected_stem_names[1] })
 				elseif offset.x == -1 then
-					minetest.set_node(stempos, { name = connected_stem_names[2] })
+					core.set_node(stempos, { name = connected_stem_names[2] })
 				elseif offset.z == 1 then
-					minetest.set_node(stempos, { name = connected_stem_names[3] })
+					core.set_node(stempos, { name = connected_stem_names[3] })
 				elseif offset.z == -1 then
-					minetest.set_node(stempos, { name = connected_stem_names[4] })
+					core.set_node(stempos, { name = connected_stem_names[4] })
 				end
 				return true
 			end
@@ -234,9 +234,9 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 				local offset = neighbors[n]
 				local expected_stem = connected_stem_names[n]
 				local stempos = vector.add(blockpos, offset)
-				local stem = minetest.get_node(stempos)
+				local stem = core.get_node(stempos)
 				if stem.name == expected_stem then
-					minetest.add_node(stempos, { name = full_unconnected_stem })
+					core.add_node(stempos, { name = full_unconnected_stem })
 					try_connect_stem(stempos)
 				end
 			end
@@ -255,7 +255,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 			end
 		end
 	end
-	minetest.register_node(gourd_itemstring, gourd_def)
+	core.register_node(gourd_itemstring, gourd_def)
 
 	-- Register unconnected stem
 
@@ -296,7 +296,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 			try_connect_stem(stempos)
 		end
 	end
-	minetest.register_node(stem_itemstring, stem_def)
+	core.register_node(stem_itemstring, stem_def)
 
 	-- Register connected stems
 
@@ -344,7 +344,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 	}
 
 	for i = 1, 4 do
-		minetest.register_node(connected_stem_names[i], {
+		core.register_node(connected_stem_names[i], {
 			_doc_items_create_entry = false,
 			paramtype = "light",
 			sunlight_propagates = true,
@@ -366,19 +366,19 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 			_mcl_blast_resistance = 0,
 		})
 
-		if minetest.get_modpath("doc") then
+		if core.get_modpath("doc") then
 			doc.add_entry_alias("nodes", full_unconnected_stem, "nodes", connected_stem_names[i])
 		end
 	end
 
-	minetest.register_abm({
+	core.register_abm({
 		label = "Grow gourd stem to gourd (" .. full_unconnected_stem .. " → " .. gourd_itemstring .. ")",
 		nodenames = { full_unconnected_stem },
 		neighbors = { "air" },
 		interval = grow_interval,
 		chance = grow_chance,
 		action = function(stempos)
-			local light = minetest.get_node_light(stempos)
+			local light = core.get_node_light(stempos)
 			if light and light > 10 then
 				-- Check the four neighbors and filter out neighbors where gourds can't grow
 				local neighbors = {
@@ -392,10 +392,10 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 					local offset = neighbors[n]
 					local blockpos = vector.add(stempos, offset)
 					floorpos = vector.offset (blockpos, 0, -1,0) -- replaces { x = blockpos.x, y = blockpos.y - 1, z = blockpos.z }
-					floor = minetest.get_node(floorpos)
-					local block = minetest.get_node(blockpos)
-					local soilgroup = minetest.get_item_group(floor.name, "soil")
-					if not ((minetest.get_item_group(floor.name, "grass_block") == 1 or floor.name == "mcl_core:dirt" or soilgroup == 2 or soilgroup == 3) and block.name == "air") then
+					floor = core.get_node(floorpos)
+					local block = core.get_node(blockpos)
+					local soilgroup = core.get_item_group(floor.name, "soil")
+					if not ((core.get_item_group(floor.name, "grass_block") == 1 or floor.name == "mcl_core:dirt" or soilgroup == 2 or soilgroup == 3) and block.name == "air") then
 						table.remove(neighbors, n)
 					end
 				end
@@ -408,23 +408,23 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 					local blockpos = vector.add(stempos, offset)
 					local p2
 					if offset.x == 1 then
-						minetest.set_node(stempos, { name = connected_stem_names[1] })
+						core.set_node(stempos, { name = connected_stem_names[1] })
 						p2 = 3
 					elseif offset.x == -1 then
-						minetest.set_node(stempos, { name = connected_stem_names[2] })
+						core.set_node(stempos, { name = connected_stem_names[2] })
 						p2 = 1
 					elseif offset.z == 1 then
-						minetest.set_node(stempos, { name = connected_stem_names[3] })
+						core.set_node(stempos, { name = connected_stem_names[3] })
 						p2 = 2
 					elseif offset.z == -1 then
-						minetest.set_node(stempos, { name = connected_stem_names[4] })
+						core.set_node(stempos, { name = connected_stem_names[4] })
 						p2 = 0
 					end
 					-- Place the gourd
 					if gourd_def.paramtype2 == "facedir" then
-						minetest.add_node(blockpos, { name = gourd_itemstring, param2 = p2 })
+						core.add_node(blockpos, { name = gourd_itemstring, param2 = p2 })
 					else
-						minetest.add_node(blockpos, { name = gourd_itemstring })
+						core.add_node(blockpos, { name = gourd_itemstring })
 					end
 
 					-- Reset farmland, etc. to dirt when the gourd grows on top
@@ -433,10 +433,10 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 					-- finds the neighbors.)
 					-- FYI - don't factor this out thinking that the loop above is setting the positions correctly.
 					floorpos = vector.offset (blockpos, 0, -1,0) -- replaces { x = blockpos.x, y = blockpos.y - 1, z = blockpos.z }
-					floor = minetest.get_node(floorpos)
+					floor = core.get_node(floorpos)
 					-- END OF FIX -------------------------------------
-					if minetest.get_item_group(floor.name, "dirtifies_below_solid") == 1 then
-						minetest.set_node(floorpos, { name = "mcl_core:dirt" })
+					if core.get_item_group(floor.name, "dirtifies_below_solid") == 1 then
+						core.set_node(floorpos, { name = "mcl_core:dirt" })
 					end
 				end
 			end
@@ -471,7 +471,7 @@ function mcl_farming:get_seed_or_eat_callback(plantname, hp_change)
 		if new then
 			return new
 		else
-			return minetest.do_item_eat(hp_change, nil, itemstack, placer, pointed_thing)
+			return core.do_item_eat(hp_change, nil, itemstack, placer, pointed_thing)
 		end
 	end
 end
@@ -481,7 +481,7 @@ function mcl_farming.on_bone_meal(_, _, _, pos, n, plant,stages)
 	return mcl_farming:grow_plant(plant, pos, n, stages, true)
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Add growth for unloaded farming plants",
 	name = "mcl_farming:growth",
 	nodenames = { "group:plant" },
@@ -491,7 +491,7 @@ minetest.register_lbm({
 		if not identifier then
 			return
 		end
-		local low_speed = minetest.get_node({ x = pos.x, y = pos.y - 1, z = pos.z }).name ~= "mcl_farming:soil_wet"
+		local low_speed = core.get_node({ x = pos.x, y = pos.y - 1, z = pos.z }).name ~= "mcl_farming:soil_wet"
 		mcl_farming:grow_plant(identifier, pos, node, false, false, low_speed)
 	end,
 })

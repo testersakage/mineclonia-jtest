@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_torches.register_torch({
 	name = "torch",
@@ -17,7 +17,7 @@ mcl_torches.register_torch({
 	flame_type = 1,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_torches:torch 4",
 	recipe = {
 		{"group:coal"},

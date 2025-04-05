@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_cocoas = {}
 
@@ -6,18 +6,18 @@ local function cocoa_place(itemstack, placer, pt, plantname)
 	if not pt or pt.type ~= "node" then	return end
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pt)
 	if rc then return rc end
-	local under = minetest.get_node(pt.under)
+	local under = core.get_node(pt.under)
 	if under.name ~= "mcl_trees:tree_jungle"
-	or minetest.get_node(pt.above).name ~= "air" then
+	or core.get_node(pt.above).name ~= "air" then
 		return
 	end
 
 	local clickdir = vector.subtract(pt.under, pt.above)
 	if clickdir.y ~= 0 then return end
 	-- Add the node, set facedir and remove 1 item from the itemstack
-	minetest.set_node(pt.above, {name = plantname, param2 = minetest.dir_to_facedir(clickdir)})
-	minetest.sound_play("default_place_node", {pos = pt.above, gain = 1.0}, true)
-	if not minetest.is_creative_enabled(placer:get_player_name()) then
+	core.set_node(pt.above, {name = plantname, param2 = core.dir_to_facedir(clickdir)})
+	core.sound_play("default_place_node", {pos = pt.above, gain = 1.0}, true)
+	if not core.is_creative_enabled(placer:get_player_name()) then
 		itemstack:take_item()
 	end
 	return itemstack
@@ -26,11 +26,11 @@ end
 -- Attempts to grow a cocoa at pos, returns true when grown, returns false if there's no cocoa
 -- or it is already at full size
 function mcl_cocoas.grow(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if node.name == "mcl_cocoas:cocoa_1" then
-		minetest.set_node(pos, {name = "mcl_cocoas:cocoa_2", param2 = node.param2})
+		core.set_node(pos, {name = "mcl_cocoas:cocoa_2", param2 = node.param2})
 	elseif node.name == "mcl_cocoas:cocoa_2" then
-		minetest.set_node(pos, {name = "mcl_cocoas:cocoa_3", param2 = node.param2})
+		core.set_node(pos, {name = "mcl_cocoas:cocoa_3", param2 = node.param2})
 		return true
 	end
 	return false
@@ -81,7 +81,7 @@ local descs = {
 for i=1,3 do
 	local drop = "mcl_cocoas:cocoa_beans"
 	if i == 3 then drop =  "mcl_cocoas:cocoa_beans 3" end
-	minetest.register_node("mcl_cocoas:cocoa_"..i, table.merge(tpl_cocoa, {
+	core.register_node("mcl_cocoas:cocoa_"..i, table.merge(tpl_cocoa, {
 		description = descs[i],
 		_doc_items_create_entry = false,
 		groups = table.merge(tpl_cocoa.groups, { cocoa = i }),
@@ -99,7 +99,7 @@ for i=1,3 do
 	}))
 end
 
-minetest.register_craftitem("mcl_cocoas:cocoa_beans", {
+core.register_craftitem("mcl_cocoas:cocoa_beans", {
 	description = S("Cocoa Beans"),
 	_tt_help = S("Grows at the side of jungle trees"),
 	_doc_items_longdesc = S("Cocoa beans can be used to plant cocoa, bake cookies or craft brown dye."),
@@ -112,7 +112,7 @@ minetest.register_craftitem("mcl_cocoas:cocoa_beans", {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:brown"}}
 })
 
-minetest.register_abm({
+core.register_abm({
 		label = "Cocoa pod growth",
 		nodenames = {"mcl_cocoas:cocoa_1", "mcl_cocoas:cocoa_2"},
 		-- TODO: Tweak/balance the growth speed

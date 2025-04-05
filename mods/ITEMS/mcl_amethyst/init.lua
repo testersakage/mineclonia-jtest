@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local sounds = mcl_sounds.node_sound_glass_defaults({
 	footstep = {name = "mcl_amethyst_amethyst_walk",  gain = 0.4},
@@ -6,7 +6,7 @@ local sounds = mcl_sounds.node_sound_glass_defaults({
 })
 
 -- Amethyst block
-minetest.register_node("mcl_amethyst:amethyst_block",{
+core.register_node("mcl_amethyst:amethyst_block",{
 	description = S("Block of Amethyst"),
 	_doc_items_longdesc = S("The Block of Amethyst is a decoration block crafted from amethyst shards."),
 	tiles = {"mcl_amethyst_amethyst_block.png"},
@@ -16,7 +16,7 @@ minetest.register_node("mcl_amethyst:amethyst_block",{
 	_mcl_blast_resistance = 1.5,
 })
 
-minetest.register_node("mcl_amethyst:budding_amethyst_block",{
+core.register_node("mcl_amethyst:budding_amethyst_block",{
 	description = S("Budding Amethyst"),
 	_doc_items_longdesc = S("The Budding Amethyst can grow amethyst"),
 	tiles = {"mcl_amethyst_budding_amethyst.png"},
@@ -32,7 +32,7 @@ minetest.register_node("mcl_amethyst:budding_amethyst_block",{
 	_mcl_blast_resistance = 1.5,
 })
 
-minetest.register_craftitem("mcl_amethyst:amethyst_shard",{
+core.register_craftitem("mcl_amethyst:amethyst_shard",{
 	description = S("Amethyst Shard"),
 	_doc_items_longdesc = S("An amethyst shard is a crystalline mineral."),
 	inventory_image = "mcl_amethyst_amethyst_shard.png",
@@ -41,7 +41,7 @@ minetest.register_craftitem("mcl_amethyst:amethyst_shard",{
 })
 
 -- Calcite
-minetest.register_node("mcl_amethyst:calcite",{
+core.register_node("mcl_amethyst:calcite",{
 	description = S("Calcite"),
 	_doc_items_longdesc = S("Calcite can be found as part of amethyst geodes."),
 	tiles = {"mcl_amethyst_calcite_block.png"},
@@ -52,7 +52,7 @@ minetest.register_node("mcl_amethyst:calcite",{
 })
 
 -- Tinted Glass
-minetest.register_node("mcl_amethyst:tinted_glass",{
+core.register_node("mcl_amethyst:tinted_glass",{
 	description = S("Tinted Glass"),
 	_doc_items_longdesc = S("Tinted Glass is a type of glass which blocks lights while it is visually transparent."),
 	tiles = {"mcl_amethyst_tinted_glass.png"},
@@ -101,7 +101,7 @@ local bud_def = {
 }
 
 for size, def in pairs(bud_def) do
-	minetest.register_node("mcl_amethyst:" .. size .. "_amethyst_bud", table.merge(def, {
+	core.register_node("mcl_amethyst:" .. size .. "_amethyst_bud", table.merge(def, {
 		drop = "",
 		tiles = { 	"mcl_amethyst_amethyst_bud_" .. size .. ".png" },
 		inventory_image = "mcl_amethyst_amethyst_bud_" .. size .. ".png",
@@ -126,7 +126,7 @@ for size, def in pairs(bud_def) do
 	}))
 end
 
-minetest.register_node("mcl_amethyst:amethyst_cluster",{
+core.register_node("mcl_amethyst:amethyst_cluster",{
 	description = S("Amethyst Cluster"),
 	paramtype = "light",
 	_doc_items_longdesc = S("Amethyst Cluster is the final growth of amethyst bud."),
@@ -169,7 +169,7 @@ minetest.register_node("mcl_amethyst:amethyst_cluster",{
 })
 
 -- Register Crafts
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_amethyst:tinted_glass 2",
 	recipe = {
 		{"",                            "mcl_amethyst:amethyst_shard", ""},
@@ -178,10 +178,10 @@ minetest.register_craft({
 	},
 })
 
-if minetest.get_modpath("mcl_spyglass") then
-	minetest.clear_craft({output = "mcl_spyglass:spyglass",})
+if core.get_modpath("mcl_spyglass") then
+	core.clear_craft({output = "mcl_spyglass:spyglass",})
 	local function craft_spyglass(ingot)
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_spyglass:spyglass",
 			recipe = {
 				{"mcl_amethyst:amethyst_shard"},
@@ -190,7 +190,7 @@ if minetest.get_modpath("mcl_spyglass") then
 			}
 		})
 	end
-	if minetest.get_modpath("mcl_copper") then
+	if core.get_modpath("mcl_copper") then
 		craft_spyglass("mcl_copper:copper_ingot")
 	else
 		craft_spyglass("mcl_core:iron_ingot")
@@ -198,4 +198,4 @@ if minetest.get_modpath("mcl_spyglass") then
 end
 
 -- Amethyst Growing
-dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/grow.lua")
+dofile(core.get_modpath(core.get_current_modname()) .. "/grow.lua")

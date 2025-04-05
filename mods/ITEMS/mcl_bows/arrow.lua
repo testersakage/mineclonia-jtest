@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local enable_pvp = minetest.settings:get_bool("enable_pvp")
+local enable_pvp = core.settings:get_bool("enable_pvp")
 
 -- Time in seconds after which a stuck arrow is deleted
 local ARROW_TIMEOUT = 60
@@ -31,7 +31,7 @@ local function random_arrow_positions(positions, placement)
 	return 0
 end
 
-minetest.register_craftitem("mcl_bows:arrow", {
+core.register_craftitem("mcl_bows:arrow", {
 	description = S("Arrow"),
 	_tt_help = S("Ammunition").."\n"..S("Damage from bow: 1-10").."\n"..S("Damage from dispenser: 3"),
 	_doc_items_longdesc = S("Arrows are ammunition for bows and dispensers.").."\n"..
@@ -80,12 +80,12 @@ local ARROW_ENTITY={
 
 -- Drop arrow as item at pos
 local function spawn_item(self, pos)
-	if not minetest.is_creative_enabled("") then
+	if not core.is_creative_enabled("") then
 		local itemstring = "mcl_bows:arrow"
-		if self._itemstring and minetest.registered_items[self._itemstring] then
+		if self._itemstring and core.registered_items[self._itemstring] then
 			itemstring = self._itemstring
 		end
-		local item = minetest.add_item(pos, itemstring)
+		local item = core.add_item(pos, itemstring)
 		item:set_velocity(vector.new(0, 0, 0))
 		item:set_yaw(self.object:get_yaw())
 	end
@@ -93,7 +93,7 @@ end
 
 local function damage_particles(pos, is_critical)
 	if is_critical then
-		minetest.add_particlespawner({
+		core.add_particlespawner({
 			amount = 15,
 			time = 0.1,
 			minpos = vector.offset(pos, -0.5, -0.5, -0.5),
@@ -167,7 +167,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 		pos = self_pos
 	end
 	local dpos = vector.round(vector.copy(self_pos)) -- digital pos
-	local node = minetest.get_node(dpos)
+	local node = core.get_node(dpos)
 
 	self._lifetime = self._lifetime + dtime
 	if self._lifetime > ARROW_TIMEOUT then
@@ -183,7 +183,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 		if self._stuckrechecktimer > STUCK_RECHECK_TIME then
 			local stuckin_def
 			if self._stuckin then
-				stuckin_def = minetest.registered_nodes[minetest.get_node(self._stuckin).name]
+				stuckin_def = core.registered_nodes[core.get_node(self._stuckin).name]
 			end
 			-- TODO: In MC, arrow just falls down without turning into an item
 			if stuckin_def and stuckin_def.walkable == false then
@@ -197,12 +197,12 @@ function ARROW_ENTITY.on_step(self, dtime)
 			self._stuckrechecktimer = 0
 		end
 		-- Pickup arrow if player is nearby (not in Creative Mode)
-		for obj in minetest.objects_inside_radius(self_pos, 1) do
+		for obj in core.objects_inside_radius(self_pos, 1) do
 			if obj:is_player() then
-				if self._collectable and not minetest.is_creative_enabled(obj:get_player_name()) then
+				if self._collectable and not core.is_creative_enabled(obj:get_player_name()) then
 					if obj:get_inventory():room_for_item("main", self._itemstring or "mcl_bows:arrow") then
 						obj:get_inventory():add_item("main", self._itemstring or "mcl_bows:arrow")
-						minetest.sound_play("item_drop_pickup", {
+						core.sound_play("item_drop_pickup", {
 							pos = self_pos,
 							max_hear_distance = 16,
 							gain = 1.0,
@@ -219,7 +219,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 	else
 
 		if self._is_critical and self._in_player == false then
-			minetest.add_particlespawner({
+			core.add_particlespawner({
 				amount = 20,
 				time = .2,
 				minpos = vector.new(0,0,0),
@@ -247,7 +247,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 
 		local v = self.object:get_velocity()
 		--create a raycast from the arrow based on the velocity of the arrow to deal with lag
-		local raycast = minetest.raycast(pos, vector.add(self_pos, vector.multiply(v, 0.04)), true, false)
+		local raycast = core.raycast(pos, vector.add(self_pos, vector.multiply(v, 0.04)), true, false)
 		for hitpoint in raycast do
 			if hitpoint.type == "object" then
 				-- find the closest object that is in the way of the arrow
@@ -280,14 +280,14 @@ function ARROW_ENTITY.on_step(self, dtime)
 				and (is_player or (lua and (lua.is_mob or lua._hittable_by_projectile))) then
 				if obj:get_hp() > 0 then
 					-- Check if there is no solid node between arrow and object
-					local ray = minetest.raycast(self.object:get_pos(), obj:get_pos(), true)
+					local ray = core.raycast(self.object:get_pos(), obj:get_pos(), true)
 					for pointed_thing in ray do
 						if pointed_thing.type == "object" and pointed_thing.ref == closest_object then
 							-- Target reached! We can proceed now.
 							break
 						elseif pointed_thing.type == "node" then
-							local nn = minetest.get_node(minetest.get_pointed_thing_position(pointed_thing)).name
-							local def = minetest.registered_nodes[nn]
+							local nn = core.get_node(core.get_pointed_thing_position(pointed_thing)).name
+							local def = core.registered_nodes[nn]
 							if (not def) or def.walkable then
 								-- There's a node in the way. Delete arrow without damage
 								mcl_burning.extinguish(self.object)
@@ -359,7 +359,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 									self._blocked = true
 									self.object:set_velocity(vector.multiply(self.object:get_velocity(), -0.25))
 								end
-								minetest.after(150, function()
+								core.after(150, function()
 									self.object:remove()
 								end)
 							else
@@ -372,12 +372,12 @@ function ARROW_ENTITY.on_step(self, dtime)
 					if is_player then
 						if self._shooter and self._shooter:is_player() and not self._in_player and not self._blocked then
 							-- “Ding” sound for hitting another player
-							minetest.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
+							core.sound_play({name="mcl_bows_hit_player", gain=0.1}, {to_player=self._shooter:get_player_name()}, true)
 						end
 					end
 
 					if not self._in_player and not self._blocked then
-						minetest.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
+						core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
 					end
 				end
 				if not obj:is_player() then
@@ -393,7 +393,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 
 	-- Check for node collision
 	if self._lastpos.x~=nil and not self._stuck then
-		local def = minetest.registered_nodes[node.name]
+		local def = core.registered_nodes[node.name]
 		local vel = self.object:get_velocity()
 		-- Arrow has stopped in one axis, so it probably hit something.
 		-- This detection is a bit clunky, but sadly, MT does not offer a direct collision detection for us. :-(
@@ -407,11 +407,11 @@ function ARROW_ENTITY.on_step(self, dtime)
 					dir = vector.new(0, -1, 0)
 				end
 			else
-				dir = minetest.facedir_to_dir(minetest.dir_to_facedir(minetest.yaw_to_dir(self.object:get_yaw()-YAW_OFFSET)))
+				dir = core.facedir_to_dir(core.dir_to_facedir(core.yaw_to_dir(self.object:get_yaw()-YAW_OFFSET)))
 			end
 			self._stuckin = vector.add(dpos, dir)
-			local snode = minetest.get_node(self._stuckin)
-			local sdef = minetest.registered_nodes[snode.name]
+			local snode = core.get_node(self._stuckin)
+			local sdef = core.registered_nodes[snode.name]
 
 			-- If node is non-walkable, unknown or ignore, don't make arrow stuck.
 			-- This causes a deflection in the engine.
@@ -426,7 +426,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 					self._deflection_cooloff = 1.0
 				end
 				-- Set fire to arrows which pass through lava or fire.
-				if minetest.get_item_group(node.name, "set_on_fire") > 0 then
+				if core.get_item_group(node.name, "set_on_fire") > 0 then
 					mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
 				end
 			else
@@ -439,9 +439,9 @@ function ARROW_ENTITY.on_step(self, dtime)
 				self.object:set_velocity(vector.new(0, 0, 0))
 				self.object:set_acceleration(vector.new(0, 0, 0))
 
-				minetest.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
+				core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self.object:get_pos(), max_hear_distance=16}, true)
 
-				local bdef = minetest.registered_nodes[node.name]
+				local bdef = core.registered_nodes[node.name]
 				if (bdef and bdef._on_arrow_hit) then
 					bdef._on_arrow_hit(dpos, self)
 				elseif (sdef and sdef._on_arrow_hit) then
@@ -469,7 +469,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 				self.object:set_velocity(vel)
 			end
 			-- Set fire to arrows which pass through lava or fire.
-			if minetest.get_item_group(node.name, "set_on_fire") > 0 then
+			if core.get_item_group(node.name, "set_on_fire") > 0 then
 				mcl_burning.set_on_fire (self.object, ARROW_TIMEOUT)
 			end
 		end
@@ -478,7 +478,7 @@ function ARROW_ENTITY.on_step(self, dtime)
 	-- Update yaw
 	if not self._stuck then
 		local vel = self.object:get_velocity()
-		local yaw = minetest.dir_to_yaw(vel)+YAW_OFFSET
+		local yaw = core.dir_to_yaw(vel)+YAW_OFFSET
 		local pitch = dir_to_pitch(vel)
 		self.object:set_rotation({ x = 0, y = yaw, z = pitch })
 	end
@@ -510,19 +510,19 @@ function ARROW_ENTITY.get_staticdata(self)
 	if not self._lifetime then
 		self._lifetime = ARROW_TIMEOUT
 	end
-	out.starttime = minetest.get_gametime() - self._lifetime
+	out.starttime = core.get_gametime() - self._lifetime
 	if self._shooter and self._shooter:is_player() then
 		out.shootername = self._shooter:get_player_name()
 	end
-	return minetest.serialize(out)
+	return core.serialize(out)
 end
 
 function ARROW_ENTITY.on_activate(self, staticdata)
-	local data = minetest.deserialize(staticdata)
+	local data = core.deserialize(staticdata)
 	if data then
 		-- First, check if the arrow is already past its life timer. If
 		-- yes, delete it. If starttime is nil always delete it.
-		self._lifetime = minetest.get_gametime() - (data.starttime or 0)
+		self._lifetime = core.get_gametime() - (data.starttime or 0)
 		if self._lifetime > ARROW_TIMEOUT then
 			mcl_burning.extinguish(self.object)
 			self.object:remove()
@@ -544,7 +544,7 @@ function ARROW_ENTITY.on_activate(self, staticdata)
 		self._itemstring = data.itemstring
 		self._is_arrow = true
 		if data.shootername then
-			local shooter = minetest.get_player_by_name(data.shootername)
+			local shooter = core.get_player_by_name(data.shootername)
 			if shooter and shooter:is_player() then
 				self._shooter = shooter
 			end
@@ -557,7 +557,7 @@ function ARROW_ENTITY.on_activate(self, staticdata)
 	self.object:set_armor_groups({ immortal = 1 })
 end
 
-minetest.register_on_respawnplayer(function(player)
+core.register_on_respawnplayer(function(player)
 	for _, obj in pairs(player:get_children()) do
 		local ent = obj:get_luaentity()
 		if ent and ent.name and string.find(ent.name, "mcl_bows:arrow_entity") then
@@ -566,10 +566,10 @@ minetest.register_on_respawnplayer(function(player)
 	end
 end)
 
-minetest.register_entity("mcl_bows:arrow_entity", ARROW_ENTITY)
+core.register_entity("mcl_bows:arrow_entity", ARROW_ENTITY)
 
-if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") then
-	minetest.register_craft({
+if core.get_modpath("mcl_core") and core.get_modpath("mcl_mobitems") then
+	core.register_craft({
 		output = "mcl_bows:arrow 4",
 		recipe = {
 			{"mcl_core:flint"},
@@ -579,6 +579,6 @@ if minetest.get_modpath("mcl_core") and minetest.get_modpath("mcl_mobitems") the
 	})
 end
 
-if minetest.get_modpath("doc_identifier") then
+if core.get_modpath("doc_identifier") then
 	doc.sub.identifier.register_object("mcl_bows:arrow_entity", "craftitems", "mcl_bows:arrow")
 end

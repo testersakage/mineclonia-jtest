@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_armor.register_set({
 	name = "gold",
@@ -223,7 +223,7 @@ mcl_enchanting.enchantments.thorns = {
 
 -- Elytra
 
-minetest.register_tool("mcl_armor:elytra", {
+core.register_tool("mcl_armor:elytra", {
 	description = S("Elytra"),
 	_doc_items_longdesc = mcl_armor.longdesc,
 	_doc_items_usagehelp = mcl_armor.usage,

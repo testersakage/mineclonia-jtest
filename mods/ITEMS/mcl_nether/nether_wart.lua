@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_node("mcl_nether:nether_wart_0", {
+core.register_node("mcl_nether:nether_wart_0", {
 	description = S("Premature Nether Wart (Stage 1)"),
 	_doc_items_longdesc = S("A premature nether wart has just recently been planted on soul sand. Nether wart slowly grows on soul sand in 4 stages (the second and third stages look identical). Although nether wart is home to the Nether, it grows in any dimension."),
 	paramtype = "light",
@@ -22,7 +22,7 @@ minetest.register_node("mcl_nether:nether_wart_0", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 })
 
-minetest.register_node("mcl_nether:nether_wart_1", {
+core.register_node("mcl_nether:nether_wart_1", {
 	description = S("Premature Nether Wart (Stage 2)"),
 	_doc_items_create_entry = false,
 	paramtype = "light",
@@ -44,7 +44,7 @@ minetest.register_node("mcl_nether:nether_wart_1", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 })
 
-minetest.register_node("mcl_nether:nether_wart_2", {
+core.register_node("mcl_nether:nether_wart_2", {
 	description = S("Premature Nether Wart (Stage 3)"),
 	_doc_items_create_entry = false,
 	paramtype = "light",
@@ -66,7 +66,7 @@ minetest.register_node("mcl_nether:nether_wart_2", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 })
 
-minetest.register_node("mcl_nether:nether_wart", {
+core.register_node("mcl_nether:nether_wart", {
 	description = S("Mature Nether Wart"),
 	_doc_items_longdesc = S("The mature nether wart is a plant from the Nether and reached its full size and won't grow any further. It is ready to be harvested for its items."),
 	paramtype = "light",
@@ -101,7 +101,7 @@ minetest.register_node("mcl_nether:nether_wart", {
 	}
 })
 
-minetest.register_craftitem("mcl_nether:nether_wart_item", {
+core.register_craftitem("mcl_nether:nether_wart_item", {
 	description = S("Nether Wart"),
 	_tt_help = S("Grows on soul sand"),
 	_doc_items_longdesc = S("Nether warts are plants home to the Nether. They can be planted on soul sand and grow in 4 stages."),
@@ -122,15 +122,15 @@ minetest.register_craftitem("mcl_nether:nether_wart_item", {
 		soilpos.y = soilpos.y - 1
 
 		-- Check for correct soil type
-		local chk = minetest.get_item_group(minetest.get_node(soilpos).name, "soil_nether_wart")
+		local chk = core.get_item_group(core.get_node(soilpos).name, "soil_nether_wart")
 		if chk and chk ~= 0 then
 			-- Check if node above soil node allows placement
-			if minetest.registered_items[minetest.get_node(placepos).name].buildable_to then
+			if core.registered_items[core.get_node(placepos).name].buildable_to then
 				-- Place nether wart
-				minetest.sound_play({name="default_place_node", gain=1.0}, {pos=placepos}, true)
-				minetest.set_node(placepos, {name="mcl_nether:nether_wart_0", param2 = 3})
+				core.sound_play({name="default_place_node", gain=1.0}, {pos=placepos}, true)
+				core.set_node(placepos, {name="mcl_nether:nether_wart_0", param2 = 3})
 
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
 				return itemstack
@@ -142,7 +142,7 @@ minetest.register_craftitem("mcl_nether:nether_wart_item", {
 
 local names = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"}
 
-minetest.register_abm({
+core.register_abm({
 	label = "Nether wart growth",
 	nodenames = {"mcl_nether:nether_wart_0", "mcl_nether:nether_wart_1", "mcl_nether:nether_wart_2"},
 	neighbors = {"group:soil_nether_wart"},
@@ -150,7 +150,7 @@ minetest.register_abm({
 	chance = 11,
 	action = function(pos, node)
 		pos.y = pos.y-1
-		if minetest.get_item_group(minetest.get_node(pos).name, "soil_nether_wart") == 0 then
+		if core.get_item_group(core.get_node(pos).name, "soil_nether_wart") == 0 then
 			return
 		end
 		pos.y = pos.y+1
@@ -170,11 +170,11 @@ minetest.register_abm({
 		end
 		new_node.param = node.param
 		new_node.param2 = node.param2
-		minetest.set_node(pos, new_node)
+		core.set_node(pos, new_node)
 	end
 })
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	for i=1,2 do
 		doc.add_entry_alias("nodes", "mcl_nether:nether_wart_0", "nodes", "mcl_nether:nether_wart_"..i)
 	end
