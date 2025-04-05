@@ -106,21 +106,10 @@ local function get_bucket_drop(itemstack, user, take_bucket)
 	end
 end
 
-local function bucket_get_pointed_thing(user)
-	return mcl_util.get_pointed_thing(user, false, true, function(pointed_thing)
-		local name = core.get_node(pointed_thing.under).name
-		local def = core.registered_nodes[name]
-		if not def or def.drawtype == "flowingliquid" then
-			return true
-		end
-	end)
-end
-
-local function on_place_bucket(itemstack, user, ptt)
-	local pointed_thing = bucket_get_pointed_thing(user)
+local function on_place_bucket(itemstack, user, pointed_thing)
 
 	-- Must be pointing to node
-	if not pointed_thing or pointed_thing.type ~= "node" or ptt.type == "object" then
+	if not pointed_thing or pointed_thing.type ~= "node" then
 		return
 	end
 
@@ -163,11 +152,10 @@ local function on_place_bucket(itemstack, user, ptt)
 	return itemstack
 end
 
-local function on_place_bucket_empty(itemstack, user, ptt)
-	local pointed_thing = bucket_get_pointed_thing(user)
+local function on_place_bucket_empty(itemstack, user, pointed_thing)
 
 	-- Must be pointing to node
-	if not pointed_thing or pointed_thing.type ~= "node" or ptt.type == "object" then
+	if not pointed_thing or pointed_thing.type ~= "node" then
 		return itemstack
 	end
 
@@ -272,6 +260,13 @@ core.register_craftitem("mcl_buckets:bucket_empty", {
 	inventory_image = "bucket.png",
 	stack_max = 16,
 	liquids_pointable = false,
+
+  pointabilities = {
+    nodes = {
+      ["group:liquid_source"] = true,
+    },
+  },
+
 	on_place = on_place_bucket_empty,
 	on_secondary_use = on_place_bucket_empty,
 	_placement_def = "placeable_on_any_thing",
