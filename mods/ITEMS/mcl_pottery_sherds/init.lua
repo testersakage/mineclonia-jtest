@@ -134,28 +134,6 @@ local function get_sherd_desc(face)
 	return D(description.." Pottery Sherd")
 end
 
-tt.register_snippet(function(_, _, stack)
-	if not stack then return nil end
-	local meta = stack:get_meta()
-	local faces = minetest.deserialize(meta:get_string("pot_faces"))
-	if not faces then return nil end
-
-	local facedescs = {
-		get_sherd_desc(faces[1]),
-		get_sherd_desc(faces[2]),
-		get_sherd_desc(faces[3]),
-		get_sherd_desc(faces[4]),
-	}
-
-	for k, v in pairs(faces) do
-		faces[k] = "mcl_pottery_sherds_pattern_"..v..".png"
-	end
-	table.insert(faces, 1, "blank.png")
-	meta:set_string("inventory_overlay", core.inventorycube(unpack(faces)))
-
-	return table.concat(facedescs, "\n")
-end)
-
 local function get_itemstack_from_node(pos)
 	local meta = minetest.get_meta(pos)
 	local it = ItemStack("mcl_pottery_sherds:pot")
@@ -189,6 +167,30 @@ minetest.register_node("mcl_pottery_sherds:pot", {
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
 	_mcl_baseitem = get_itemstack_from_node,
+	_mcl_generate_description = function(stack)
+		if not stack then return nil end
+		local meta = stack:get_meta()
+		local faces = minetest.deserialize(meta:get_string("pot_faces"))
+		if not faces then return nil end
+		local def = stack:get_definition()
+
+		local facedescs = {
+			get_sherd_desc(faces[1]),
+			get_sherd_desc(faces[2]),
+			get_sherd_desc(faces[3]),
+			get_sherd_desc(faces[4]),
+		}
+
+		for k, v in pairs(faces) do
+			faces[k] = "mcl_pottery_sherds_pattern_"..v..".png"
+		end
+		table.insert(faces, 1, "blank.png")
+		local img = core.inventorycube(unpack(faces))
+		meta:set_string("inventory_overlay", img)
+		meta:set_string("wield_overlay", img)
+
+		meta:set_string("description", def.description.. "\n" .. table.concat(facedescs, "\n"))
+	end,
 	after_place_node = function(pos, _, itemstack, _)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("pot_faces",itemstack:get_meta():get_string("pot_faces"))
