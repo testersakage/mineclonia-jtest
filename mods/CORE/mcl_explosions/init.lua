@@ -363,7 +363,6 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 	for a = 1, #airs do
 		local p = airs[a]
 		core.check_for_falling(vector.offset(p, 0, 1, 0))
-		liquid.update(p)
 	end
 	for f = 1, #fires do
 		local p = fires[f]
