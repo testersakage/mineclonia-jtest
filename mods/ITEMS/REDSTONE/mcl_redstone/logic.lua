@@ -489,7 +489,8 @@ core.register_on_mods_loaded(function()
 					end)
 				end,
 			})
-		elseif minetest.get_item_group(name, "redstone_wire") == 0 and not ndef._mcl_redstone then
+		elseif minetest.get_item_group(name, "redstone_wire") == 0 and not ndef._mcl_redstone
+		and name ~= "air" then
 			minetest.override_item(name, {
 				on_construct = function(pos)
 					if old_construct then
