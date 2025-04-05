@@ -18,29 +18,27 @@ mcl_burning = {
 
 dofile(modpath .. "/api.lua")
 
-core.register_globalstep(function(dtime)
-	for player in mcl_util.connected_players() do
-		local storage = mcl_burning.storage[player]
-		if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
-			local nodes = mcl_burning.get_touching_nodes(player, {"group:puts_out_fire", "group:set_on_fire"}, storage)
-			local burn_time = 0
+mcl_player.register_globalstep(function(player, dtime)
+	local storage = mcl_burning.storage[player]
+	if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
+		local nodes = mcl_burning.get_touching_nodes(player, {"group:puts_out_fire", "group:set_on_fire"}, storage)
+		local burn_time = 0
 
-			for _, pos in pairs(nodes) do
-				local node = core.get_node(pos)
-				if core.get_item_group(node.name, "puts_out_fire") > 0 then
-					burn_time = 0
-					break
-				end
-
-				local value = core.get_item_group(node.name, "set_on_fire")
-				if value > burn_time then
-					burn_time = value
-				end
+		for _, pos in pairs(nodes) do
+			local node = core.get_node(pos)
+			if core.get_item_group(node.name, "puts_out_fire") > 0 then
+				burn_time = 0
+				break
 			end
 
-			if burn_time > 0 then
-				mcl_burning.set_on_fire(player, burn_time)
+			local value = core.get_item_group(node.name, "set_on_fire")
+			if value > burn_time then
+				burn_time = value
 			end
+		end
+
+		if burn_time > 0 then
+			mcl_burning.set_on_fire(player, burn_time)
 		end
 	end
 end)
