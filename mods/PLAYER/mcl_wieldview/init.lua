@@ -68,10 +68,7 @@ end
 
 core.register_on_leaveplayer(remove_wieldview)
 
-core.register_globalstep(function()
-	local players = core.get_connected_players()
-	for _, player in pairs(players) do
-		update_wieldview_entity(player, "Wield_Item", nil, nil, mcl_serverplayer.get_visual_wielditem)
-		update_wieldview_entity(player, "Arm_Left", vector.new(0, 4.5, 2), vector.new(120, 0, 0), mcl_offhand.get_offhand)
-	end
+mcl_player.register_globalstep(function(player)
+	update_wieldview_entity(player, "Wield_Item", nil, nil, mcl_serverplayer.get_visual_wielditem)
+	update_wieldview_entity(player, "Arm_Left", vector.new(0, 4.5, 2), vector.new(120, 0, 0), mcl_offhand.get_offhand)
 end)
